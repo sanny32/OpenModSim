@@ -26,12 +26,65 @@ INCLUDEPATH += controls \
                dialogs \
 
 SOURCES += \
-    mainwindow.cpp
+    controls/clickablelabel.cpp \
+    controls/customframe.cpp \
+    controls/customlineedit.cpp \
+    controls/mainstatusbar.cpp \
+    controls/numericlineedit.cpp \
+    controls/outputwidget.cpp \
+    controls/pointtypecombobox.cpp \
+    controls/statisticwidget.cpp \
+    dialogs/dialogabout.cpp \
+    dialogs/dialogprintsettings.cpp \
+    dialogs/dialogwritecoilregister.cpp \
+    dialogs/dialogwriteholdingregister.cpp \
+    dialogs/dialogwriteholdingregisterbits.cpp \
+    formmodsim.cpp \
+    main.cpp \
+    mainwindow.cpp \
+    modbusserver.cpp \
+    qfixedsizedialog.cpp \
+    qhexvalidator.cpp \
+    recentfileactionlist.cpp \
+    windowactionlist.cpp
 
 HEADERS += \
-    mainwindow.h
+    controls/clickablelabel.h \
+    controls/customframe.h \
+    controls/customlineedit.h \
+    controls/mainstatusbar.h \
+    controls/numericlineedit.h \
+    controls/outputwidget.h \
+    controls/pointtypecombobox.h \
+    controls/statisticwidget.h \
+    dialogs/dialogabout.h \
+    dialogs/dialogprintsettings.h \
+    dialogs/dialogwritecoilregister.h \
+    dialogs/dialogwriteholdingregister.h \
+    dialogs/dialogwriteholdingregisterbits.h \
+    displaydefinition.h \
+    enums.h \
+    floatutils.h \
+    formmodsim.h \
+    mainwindow.h \
+    modbuslimits.h \
+    modbusserver.h \
+    modbuswriteparams.h \
+    qfixedsizedialog.h \
+    qhexvalidator.h \
+    qrange.h \
+    recentfileactionlist.h \
+    windowactionlist.h
 
 FORMS += \
+    controls/outputwidget.ui \
+    controls/statisticwidget.ui \
+    dialogs/dialogabout.ui \
+    dialogs/dialogprintsettings.ui \
+    dialogs/dialogwritecoilregister.ui \
+    dialogs/dialogwriteholdingregister.ui \
+    dialogs/dialogwriteholdingregisterbits.ui \
+    formmodsim.ui \
     mainwindow.ui
 
 RESOURCES += \

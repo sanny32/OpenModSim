@@ -6,12 +6,12 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1029</width>
-    <height>599</height>
+    <width>1280</width>
+    <height>720</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>Open ModSim</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QHBoxLayout" name="horizontalLayout">
@@ -37,7 +37,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1029</width>
+     <width>1280</width>
      <height>22</height>
     </rect>
    </property>
