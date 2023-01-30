@@ -22,7 +22,7 @@ class FormModSim : public QWidget
     Q_OBJECT
 
 public:
-    explicit FormModSim(int id, ModbusServer& server, MainWindow* parent);
+    explicit FormModSim(int id, MainWindow* parent);
     ~FormModSim();
 
     int formId() const { return _formId; }
@@ -89,7 +89,7 @@ private:
     int _formId;
     QTimer _timer;
     QString _filename;
-    ModbusServer& _modbusServer;
+    ModbusServer _modbusServer;
 };
 
 #endif // FORMMODSIM_H

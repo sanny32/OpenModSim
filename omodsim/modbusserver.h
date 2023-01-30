@@ -12,6 +12,8 @@ public:
 
 signals:
 
+private:
+    QModbusServer* _modbusServer;
 };
 
 #endif // MODBUSSERVER_H

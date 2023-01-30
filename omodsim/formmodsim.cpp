@@ -15,11 +15,10 @@
 /// \param num
 /// \param parent
 ///
-FormModSim::FormModSim(int id, ModbusServer& server, MainWindow* parent) :
+FormModSim::FormModSim(int id, MainWindow* parent) :
     QWidget(parent)
     , ui(new Ui::FormModSim)
     ,_formId(id)
-    ,_modbusServer(server)
 {
     Q_ASSERT(parent != nullptr);
 
@@ -32,7 +31,7 @@ FormModSim::FormModSim(int id, ModbusServer& server, MainWindow* parent) :
     ui->lineEditAddress->setInputRange(ModbusLimits::addressRange());
     ui->lineEditAddress->setValue(1);
 
-    ui->lineEditLength->setInputRange(0, 200);
+    ui->lineEditLength->setInputRange(1, 200);
     ui->lineEditLength->setValue(100);
 
     ui->lineEditDeviceId->setInputRange(ModbusLimits::slaveRange());
