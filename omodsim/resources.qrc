@@ -1,0 +1,13 @@
+<RCC>
+    <qresource prefix="/">
+        <file>res/license.txt</file>
+        <file>res/actionBinary.png</file>
+        <file>res/actionDblFloat.png</file>
+        <file>res/actionFloatingPt.png</file>
+        <file>res/actionHex.png</file>
+        <file>res/actionInteger.png</file>
+        <file>res/actionSwappedDbl.png</file>
+        <file>res/actionSwappedFP.png</file>
+        <file>res/actionUnsignedDecimal.png</file>
+    </qresource>
+</RCC>
