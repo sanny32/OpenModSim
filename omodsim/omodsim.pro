@@ -9,7 +9,7 @@ VERSION = 1.0.0b
 QMAKE_TARGET_COMPANY = "Open ModSim"
 QMAKE_TARGET_PRODUCT = omodsim
 QMAKE_TARGET_DESCRIPTION = "Free modbus rtu/tcp slave (server) utility"
-QMAKE_TARGET_DOMAIN = "com.omodscan.app"
+QMAKE_TARGET_DOMAIN = "com.omodsim.app"
 
 # You can make your code fail to compile if it uses deprecated APIs.
 # In order to do so, uncomment the following line.
@@ -25,11 +25,14 @@ win32:RC_ICONS += res/omodsim.ico
 INCLUDEPATH += controls \
                dialogs \
 
-SOURCES +=
+SOURCES += \
+    mainwindow.cpp
 
-HEADERS +=
+HEADERS += \
+    mainwindow.h
 
-FORMS +=
+FORMS += \
+    mainwindow.ui
 
 RESOURCES += \
     resources.qrc
