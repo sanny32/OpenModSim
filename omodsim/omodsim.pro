@@ -35,7 +35,9 @@ SOURCES += \
     controls/pointtypecombobox.cpp \
     controls/statisticwidget.cpp \
     dialogs/dialogabout.cpp \
+    dialogs/dialogdisplaydefinition.cpp \
     dialogs/dialogprintsettings.cpp \
+    dialogs/dialogwindowsmanager.cpp \
     dialogs/dialogwritecoilregister.cpp \
     dialogs/dialogwriteholdingregister.cpp \
     dialogs/dialogwriteholdingregisterbits.cpp \
@@ -58,7 +60,9 @@ HEADERS += \
     controls/pointtypecombobox.h \
     controls/statisticwidget.h \
     dialogs/dialogabout.h \
+    dialogs/dialogdisplaydefinition.h \
     dialogs/dialogprintsettings.h \
+    dialogs/dialogwindowsmanager.h \
     dialogs/dialogwritecoilregister.h \
     dialogs/dialogwriteholdingregister.h \
     dialogs/dialogwriteholdingregisterbits.h \
@@ -80,7 +84,9 @@ FORMS += \
     controls/outputwidget.ui \
     controls/statisticwidget.ui \
     dialogs/dialogabout.ui \
+    dialogs/dialogdisplaydefinition.ui \
     dialogs/dialogprintsettings.ui \
+    dialogs/dialogwindowsmanager.ui \
     dialogs/dialogwritecoilregister.ui \
     dialogs/dialogwriteholdingregister.ui \
     dialogs/dialogwriteholdingregisterbits.ui \

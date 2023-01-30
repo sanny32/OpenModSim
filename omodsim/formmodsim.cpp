@@ -31,7 +31,7 @@ FormModSim::FormModSim(int id, MainWindow* parent) :
     ui->lineEditAddress->setInputRange(ModbusLimits::addressRange());
     ui->lineEditAddress->setValue(1);
 
-    ui->lineEditLength->setInputRange(1, 200);
+    ui->lineEditLength->setInputRange(ModbusLimits::lengthRange());
     ui->lineEditLength->setValue(100);
 
     ui->lineEditDeviceId->setInputRange(ModbusLimits::slaveRange());
