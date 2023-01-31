@@ -25,6 +25,11 @@ public:
     QModbusDataUnit data() const;
 
 signals:
+    void connected();
+    void disconnected();
+
+private slots:
+    void on_mbStateChanged(QModbusDevice::State state);
 
 private:
     QModbusServer* _modbusServer;

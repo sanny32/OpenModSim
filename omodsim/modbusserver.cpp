@@ -47,6 +47,7 @@ void ModbusServer::create(const ConnectionDetails& cd, const DisplayDefinition& 
             _modbusServer->setServerAddress(dd.DeviceId);
             _modbusServer->setConnectionParameter(QModbusDevice::NetworkPortParameter, cd.TcpParams.ServicePort);
             _modbusServer->setConnectionParameter(QModbusDevice::NetworkAddressParameter, cd.TcpParams.IPAddress);
+            connect(_modbusServer, &QModbusDevice::stateChanged, this, &ModbusServer::on_mbStateChanged);
         }
         break;
 
@@ -69,11 +70,13 @@ void ModbusServer::reconfigure(const DisplayDefinition& dd)
     if(!_modbusServer)
         return;
 
-    QModbusDataUnit data;
-    data.setRegisterType(dd.PointType);
-    data.setStartAddress(dd.PointAddress - 1);
-    data.setValueCount(dd.Length);
-    _modbusServer->setData(data);
+    _modbusServer->setProperty("PointType", dd.PointType);
+    _modbusServer->setProperty("PointAddress",  dd.PointAddress - 1);
+    _modbusServer->setProperty("Length", dd.Length);
+
+    QModbusDataUnitMap mbMap;
+    mbMap.insert(dd.PointType, {dd.PointType, dd.PointAddress - 1, dd.Length});
+    _modbusServer->setMap(mbMap);
 }
 
 ///
@@ -125,8 +128,36 @@ QModbusDataUnit ModbusServer::data() const
     if(!_modbusServer)
         return QModbusDataUnit();
 
+    const auto pointType = _modbusServer->property("PointType").value<QModbusDataUnit::RegisterType>();
+    const auto pointAddress = _modbusServer->property("PointAddress").toUInt();
+    const auto length = _modbusServer->property("Length").toUInt();
+
     QModbusDataUnit data;
+    data.setRegisterType(pointType);
+    data.setStartAddress(pointAddress);
+    data.setValueCount(length);
     _modbusServer->data(&data);
 
     return data;
+}
+
+///
+/// \brief ModbusServer::on_mbStateChanged
+/// \param state
+///
+void ModbusServer::on_mbStateChanged(QModbusDevice::State state)
+{
+    switch(state)
+    {
+        case QModbusDevice::ConnectedState:
+            emit connected();
+        break;
+
+        case QModbusDevice::UnconnectedState:
+            emit disconnected();
+        break;
+
+        default:
+        break;
+    }
 }

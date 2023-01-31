@@ -42,7 +42,9 @@ FormModSim::FormModSim(int id, MainWindow* parent) :
     ui->outputWidget->setup(displayDefinition());
     ui->outputWidget->setFocus();
 
-   connect(&_timer, &QTimer::timeout, this, &FormModSim::on_timeout);
+    connect(&_modbusServer, &ModbusServer::connected, this, &FormModSim::on_mbConnected);
+    connect(&_modbusServer, &ModbusServer::disconnected, this, &FormModSim::on_mbDisconnected);
+    connect(&_timer, &QTimer::timeout, this, &FormModSim::on_timeout);
     _timer.start();
 }
 
@@ -380,6 +382,7 @@ void FormModSim::on_timeout()
         return;
     }
 
+    ui->outputWidget->setStatus(QString());
     ui->outputWidget->updateData(_modbusServer.data());
 }
 
@@ -474,4 +477,20 @@ void FormModSim::on_statisticWidget_numberOfPollsChanged(uint value)
 void FormModSim::on_statisticWidget_validSlaveResposesChanged(uint value)
 {
     emit validSlaveResposesChanged(value);
+}
+
+///
+/// \brief FormModSim::on_mbConnected
+///
+void FormModSim::on_mbConnected()
+{
+    ui->outputWidget->setStatus(QString());
+}
+
+///
+/// \brief FormModSim::on_mbDisconnected
+///
+void FormModSim::on_mbDisconnected()
+{
+    ui->outputWidget->setStatus(tr("NOT CONNECTED!"));
 }

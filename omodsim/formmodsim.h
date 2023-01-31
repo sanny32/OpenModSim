@@ -82,6 +82,8 @@ private slots:
     void on_outputWidget_itemDoubleClicked(quint32 addr, const QVariant& value);
     void on_statisticWidget_numberOfPollsChanged(uint value);
     void on_statisticWidget_validSlaveResposesChanged(uint value);
+    void on_mbConnected();
+    void on_mbDisconnected();
 
 private:
     void reconnectServer();
