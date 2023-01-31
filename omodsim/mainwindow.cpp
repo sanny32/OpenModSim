@@ -264,6 +264,17 @@ void MainWindow::on_connectAction(ConnectionType type, const QString& port)
 }
 
 ///
+/// \brief MainWindow::on_actionDisconnect_triggered
+///
+void MainWindow::on_actionDisconnect_triggered()
+{
+    auto frm = currentMdiChild();
+    if(!frm) return;
+
+    frm->mbDisconnect();
+}
+
+///
 /// \brief MainWindow::on_actionDataDefinition_triggered
 ///
 void MainWindow::on_actionDataDefinition_triggered()
