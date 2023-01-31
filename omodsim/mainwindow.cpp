@@ -253,7 +253,7 @@ void MainWindow::on_connectAction(ConnectionType type, const QString& port)
             DialogSelectServicePort dlg(cd.TcpParams.ServicePort, this);
             if(dlg.exec() == QDialog::Accepted)
             {
-                frm->mbConnect(cd);
+
             }
         }
         break;
@@ -271,7 +271,7 @@ void MainWindow::on_actionDisconnect_triggered()
     auto frm = currentMdiChild();
     if(!frm) return;
 
-    frm->mbDisconnect();
+
 }
 
 ///

@@ -10,11 +10,10 @@ class ModbusServer : public QObject
 {
     Q_OBJECT
 public:
-    explicit ModbusServer(QObject *parent = nullptr);
+    explicit ModbusServer(const ConnectionDetails& cd, QObject *parent = nullptr);
     ~ModbusServer() override;
 
-    void create(const ConnectionDetails& cd, const DisplayDefinition& dd);
-    void reconfigure(const DisplayDefinition& dd);
+    void configure(const DisplayDefinition& dd);
 
     void connectDevice();
     void disconnectDevice();

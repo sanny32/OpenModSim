@@ -32,8 +32,9 @@ public:
 
     QVector<quint16> mbData() const;
     QModbusDevice::State mbState() const;
-    void mbConnect(const ConnectionDetails& cd);
-    void mbDisconnect();
+
+    QSharedPointer<ModbusServer> mbServer() const;
+    void setMbServer(QSharedPointer<ModbusServer> server);
 
     DisplayDefinition displayDefinition() const;
     void setDisplayDefinition(const DisplayDefinition& dd);
@@ -86,14 +87,11 @@ private slots:
     void on_mbDisconnected();
 
 private:
-    void reconnectServer();
-
-private:
     Ui::FormModSim *ui;
     int _formId;
     QTimer _timer;
     QString _filename;
-    ModbusServer _modbusServer;
+    QSharedPointer<ModbusServer> _modbusServer;
 };
 
 #endif // FORMMODSIM_H

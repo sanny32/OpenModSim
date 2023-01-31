@@ -2,7 +2,6 @@
 #include <QPalette>
 #include <QDateTime>
 #include "modbuslimits.h"
-#include "modbusexception.h"
 #include "mainwindow.h"
 #include "dialogwritecoilregister.h"
 #include "dialogwriteholdingregister.h"
@@ -19,6 +18,7 @@ FormModSim::FormModSim(int id, MainWindow* parent) :
     QWidget(parent)
     , ui(new Ui::FormModSim)
     ,_formId(id)
+    ,_modbusServer(nullptr)
 {
     Q_ASSERT(parent != nullptr);
 
@@ -42,8 +42,6 @@ FormModSim::FormModSim(int id, MainWindow* parent) :
     ui->outputWidget->setup(displayDefinition());
     ui->outputWidget->setFocus();
 
-    connect(&_modbusServer, &ModbusServer::connected, this, &FormModSim::on_mbConnected);
-    connect(&_modbusServer, &ModbusServer::disconnected, this, &FormModSim::on_mbDisconnected);
     connect(&_timer, &QTimer::timeout, this, &FormModSim::on_timeout);
     _timer.start();
 }
@@ -89,26 +87,33 @@ QVector<quint16> FormModSim::mbData() const
 ///
 QModbusDevice::State FormModSim::mbState() const
 {
-    return _modbusServer.state();
+    return _modbusServer ? _modbusServer->state() :
+                           QModbusDevice::UnconnectedState;
 }
 
 ///
-/// \brief FormModSim::mbConnect
-/// \param cd
+/// \brief FormModSim::mbServer
+/// \return
 ///
-void FormModSim::mbConnect(const ConnectionDetails& cd)
+QSharedPointer<ModbusServer> FormModSim::mbServer() const
 {
-    _modbusServer.create(cd, displayDefinition());
-    _modbusServer.connectDevice();
+    return _modbusServer;
 }
 
 ///
-/// \brief FormModSim::mbDisconnect
+/// \brief FormModSim::setMbServer
+/// \param server
 ///
-void FormModSim::mbDisconnect()
+void FormModSim::setMbServer(QSharedPointer<ModbusServer> server)
 {
-    _modbusServer.disconnectDevice();
+    _modbusServer = server;
+    if(_modbusServer)
+    {
+        connect(_modbusServer.get(), &ModbusServer::connected, this, &FormModSim::on_mbConnected);
+        connect(_modbusServer.get(), &ModbusServer::disconnected, this, &FormModSim::on_mbDisconnected);
+    }
 }
+
 
 ///
 /// \brief FormModSim::displayDefinition
@@ -139,6 +144,7 @@ void FormModSim::setDisplayDefinition(const DisplayDefinition& dd)
     ui->comboBoxModbusPointType->setCurrentPointType(dd.PointType);
 
     ui->outputWidget->setup(dd);
+    if(_modbusServer) _modbusServer->configure(dd);
 }
 
 ///
@@ -368,8 +374,13 @@ void FormModSim::show()
 ///
 void FormModSim::on_timeout()
 {
-    if(!_modbusServer.isValid()) return;
-    if(_modbusServer.state() != QModbusDevice::ConnectedState)
+    if(!_modbusServer ||
+       !_modbusServer->isValid())
+    {
+        return;
+    }
+
+    if(_modbusServer->state() != QModbusDevice::ConnectedState)
     {
         ui->outputWidget->setStatus(tr("NOT CONNECTED!"));
         return;
@@ -383,7 +394,7 @@ void FormModSim::on_timeout()
     }
 
     ui->outputWidget->setStatus(QString());
-    ui->outputWidget->updateData(_modbusServer.data());
+    ui->outputWidget->updateData(_modbusServer->data());
 }
 
 ///
