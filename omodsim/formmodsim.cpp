@@ -37,6 +37,8 @@ FormModSim::FormModSim(int id, MainWindow* parent) :
     ui->lineEditDeviceId->setInputRange(ModbusLimits::slaveRange());
     ui->lineEditDeviceId->setValue(1);
 
+    ui->comboBoxModbusPointType->setCurrentPointType(QModbusDataUnit::HoldingRegisters);
+
     ui->outputWidget->setup(displayDefinition());
     ui->outputWidget->setFocus();
 
@@ -89,6 +91,24 @@ QModbusDevice::State FormModSim::mbState() const
 }
 
 ///
+/// \brief FormModSim::mbConnect
+/// \param cd
+///
+void FormModSim::mbConnect(const ConnectionDetails& cd)
+{
+    _modbusServer.create(cd, displayDefinition());
+    _modbusServer.connectDevice();
+}
+
+///
+/// \brief FormModSim::mbDisconnect
+///
+void FormModSim::mbDisconnect()
+{
+    _modbusServer.disconnectDevice();
+}
+
+///
 /// \brief FormModSim::displayDefinition
 /// \return
 ///
@@ -116,7 +136,6 @@ void FormModSim::setDisplayDefinition(const DisplayDefinition& dd)
     ui->lineEditLength->setValue(dd.Length);
     ui->comboBoxModbusPointType->setCurrentPointType(dd.PointType);
 
-    ui->outputWidget->setStatus("Data Uninitialized");
     ui->outputWidget->setup(dd);
 }
 
@@ -172,31 +191,6 @@ void FormModSim::setDisplayHexAddresses(bool on)
 void FormModSim::setDataDisplayMode(DataDisplayMode mode)
 {
     ui->outputWidget->setDataDisplayMode(mode);
-}
-
-///
-/// \brief FormModSim::captureMode
-///
-CaptureMode FormModSim::captureMode() const
-{
-    return ui->outputWidget->captureMode();
-}
-
-///
-/// \brief FormModSim::startTextCapture
-/// \param file
-///
-void FormModSim::startTextCapture(const QString& file)
-{
-    ui->outputWidget->startTextCapture(file);
-}
-
-///
-/// \brief FormModSim::stopTextCapture
-///
-void FormModSim::stopTextCapture()
-{
-   ui->outputWidget->stopTextCapture();
 }
 
 ///
@@ -300,16 +294,16 @@ void FormModSim::print(QPrinter* printer)
     const auto textTime = QLocale().toString(QDateTime::currentDateTime(), QLocale::ShortFormat);
     auto rcTime = painter.boundingRect(cx, cy, pageWidth, pageHeight, Qt::TextSingleLine, textTime);
 
-    const auto textDevId = QString("Device Id: %1").arg(ui->lineEditDeviceId->text());
+    const auto textDevId = QString(tr("Device Id: %1")).arg(ui->lineEditDeviceId->text());
     auto rcDevId = painter.boundingRect(cx, cy, pageWidth, pageHeight, Qt::TextSingleLine, textDevId);
 
-    const auto textAddrLen = QString("Address: %1\nLength: %2").arg(ui->lineEditAddress->text(), ui->lineEditLength->text());
+    const auto textAddrLen = QString(tr("Address: %1\nLength: %2")).arg(ui->lineEditAddress->text(), ui->lineEditLength->text());
     auto rcAddrLen = painter.boundingRect(cx, cy, pageWidth, pageHeight, Qt::TextWordWrap, textAddrLen);
 
-    const auto textType = QString("MODBUS Point Type:\n%1").arg(ui->comboBoxModbusPointType->currentText());
+    const auto textType = QString(tr("MODBUS Point Type:\n%1")).arg(ui->comboBoxModbusPointType->currentText());
     auto rcType = painter.boundingRect(cx, cy, pageWidth, pageHeight, Qt::TextWordWrap, textType);
 
-    const auto textStat = QString("Number of Polls: %1\nValid Slave Responses: %2").arg(QString::number(ui->statisticWidget->numberOfPolls()),
+    const auto textStat = QString(tr("Number of Polls: %1\nValid Slave Responses: %2")).arg(QString::number(ui->statisticWidget->numberOfPolls()),
                                                                                         QString::number(ui->statisticWidget->validSlaveResposes()));
     auto rcStat = painter.boundingRect(cx, cy, pageWidth, pageHeight, Qt::TextWordWrap, textStat);
 
@@ -372,21 +366,21 @@ void FormModSim::show()
 ///
 void FormModSim::on_timeout()
 {
-    /*if(!_modbusServer.isValid()) return;
+    if(!_modbusServer.isValid()) return;
     if(_modbusServer.state() != QModbusDevice::ConnectedState)
     {
-        ui->outputWidget->setStatus("Device NOT CONNECTED!");
+        ui->outputWidget->setStatus(tr("NOT CONNECTED!"));
         return;
     }
 
     const auto dd = displayDefinition();
     if(dd.PointAddress + dd.Length - 1 > ModbusLimits::addressRange().to())
     {
-        ui->outputWidget->setStatus("Invalid Data Length Specified");
+        ui->outputWidget->setStatus(tr("Invalid Data Length Specified"));
         return;
     }
 
-    _modbusServer.sendReadRequest(dd.PointType, dd.PointAddress - 1, dd.Length, dd.DeviceId, _formId);*/
+    ui->outputWidget->updateData(_modbusServer.data());
 }
 
 ///

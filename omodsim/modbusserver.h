@@ -3,6 +3,8 @@
 
 #include <QObject>
 #include <QModbusServer>
+#include "displaydefinition.h"
+#include "connectiondetails.h"
 
 class ModbusServer : public QObject
 {
@@ -11,8 +13,16 @@ public:
     explicit ModbusServer(QObject *parent = nullptr);
     ~ModbusServer() override;
 
+    void create(const ConnectionDetails& cd, const DisplayDefinition& dd);
+    void reconfigure(const DisplayDefinition& dd);
+
+    void connectDevice();
+    void disconnectDevice();
+
     bool isValid() const;
     QModbusDevice::State state() const;
+
+    QModbusDataUnit data() const;
 
 signals:
 

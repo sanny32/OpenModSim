@@ -6,7 +6,9 @@
 #include "dialogwindowsmanager.h"
 #include "dialogprintsettings.h"
 #include "dialogdisplaydefinition.h"
+#include "dialogselectserviceport.h"
 #include "mainstatusbar.h"
+#include "menuconnect.h"
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
@@ -23,6 +25,11 @@ MainWindow::MainWindow(QWidget *parent) :
     setWindowTitle(APP_NAME);
     setUnifiedTitleAndToolBarOnMac(true);
     setStatusBar(new MainStatusBar(ui->mdiArea));
+
+    auto menuConnect = new MenuConnect(this);
+    connect(menuConnect, &MenuConnect::connectAction, this, &MainWindow::on_connectAction);
+
+    ui->actionConnect->setMenu(menuConnect);
 
     const auto defaultPrinter = QPrinterInfo::defaultPrinter();
     if(!defaultPrinter.isNull())
@@ -101,6 +108,9 @@ void MainWindow::on_awake()
     ui->actionPrintSetup->setEnabled(_selectedPrinter != nullptr);
     ui->actionPrint->setEnabled(_selectedPrinter != nullptr && frm != nullptr);
     ui->actionRecentFile->setEnabled(!_recentFileActionList->isEmpty());
+
+    ui->actionConnect->setEnabled(frm != nullptr);
+    ui->actionDisconnect->setEnabled(frm != nullptr);
 
     ui->actionDataDefinition->setEnabled(frm != nullptr);
     ui->actionShowData->setEnabled(frm != nullptr);
@@ -223,6 +233,34 @@ void MainWindow::on_actionPrintSetup_triggered()
 void MainWindow::on_actionExit_triggered()
 {
     close();
+}
+
+///
+/// \brief MainWindow::on_connectAction
+/// \param type
+/// \param port
+///
+void MainWindow::on_connectAction(ConnectionType type, const QString& port)
+{
+    auto frm = currentMdiChild();
+    if(!frm) return;
+
+    switch(type)
+    {
+        case ConnectionType::Tcp:
+        {
+            ConnectionDetails cd;
+            DialogSelectServicePort dlg(cd.TcpParams.ServicePort, this);
+            if(dlg.exec() == QDialog::Accepted)
+            {
+                frm->mbConnect(cd);
+            }
+        }
+        break;
+
+        case ConnectionType::Serial:
+        break;
+    }
 }
 
 ///

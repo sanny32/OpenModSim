@@ -33,7 +33,7 @@ OutputWidget::OutputWidget(QWidget *parent) :
     setBackgroundColor(Qt::lightGray);
 
     setStatusColor(Qt::red);
-    setStatus("Data Uninitialized");
+    setStatus(tr("NOT CONNECTED!"));
 }
 
 ///
@@ -80,34 +80,6 @@ void OutputWidget::setDisplayHexAddresses(bool on)
 {
     _displayHexAddreses = on;
     updateDataWidget(_lastData);
-}
-
-///
-/// \brief OutputWidget::captureMode
-/// \return
-///
-CaptureMode OutputWidget::captureMode() const
-{
-    return _fileCapture.isOpen() ? CaptureMode::TextCapture : CaptureMode::Off;
-}
-
-///
-/// \brief OutputWidget::startTextCapture
-/// \param file
-///
-void OutputWidget::startTextCapture(const QString& file)
-{
-    _fileCapture.setFileName(file);
-    _fileCapture.open(QFile::Text | QFile::WriteOnly);
-}
-
-///
-/// \brief OutputWidget::stopTextCapture
-///
-void OutputWidget::stopTextCapture()
-{
-    if(_fileCapture.isOpen())
-        _fileCapture.close();
 }
 
 ///
@@ -202,7 +174,7 @@ void OutputWidget::setStatus(const QString& status)
     }
     else
     {
-        const auto info = QString("** %1 **").arg(status);
+        const auto info = QString("*** %1 ***").arg(status);
         if(info != ui->labelStatus->text())
         {
             ui->labelStatus->setText(info);
@@ -671,9 +643,6 @@ void OutputWidget::updateDataWidget(const QModbusDataUnit& data)
             break;
         }
 
-        if(captureMode() == CaptureMode::TextCapture)
-            capstr.push_back(QString(valstr).remove('<').remove('>'));
-
         auto item = ui->listWidget->item(i);
         if(!item) {
             item = new QListWidgetItem(ui->listWidget);
@@ -682,9 +651,6 @@ void OutputWidget::updateDataWidget(const QModbusDataUnit& data)
         item->setText(QString(format).arg(addr, valstr));
         item->setData(Qt::UserRole, QVariant::fromValue(itemData));
     }
-
-    if(captureMode() == CaptureMode::TextCapture)
-        captureString(capstr.join(' '));
 }
 
 ///

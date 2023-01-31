@@ -37,6 +37,7 @@ SOURCES += \
     dialogs/dialogabout.cpp \
     dialogs/dialogdisplaydefinition.cpp \
     dialogs/dialogprintsettings.cpp \
+    dialogs/dialogselectserviceport.cpp \
     dialogs/dialogwindowsmanager.cpp \
     dialogs/dialogwritecoilregister.cpp \
     dialogs/dialogwriteholdingregister.cpp \
@@ -44,6 +45,7 @@ SOURCES += \
     formmodsim.cpp \
     main.cpp \
     mainwindow.cpp \
+    menuconnect.cpp \
     modbusserver.cpp \
     qfixedsizedialog.cpp \
     qhexvalidator.cpp \
@@ -51,6 +53,7 @@ SOURCES += \
     windowactionlist.cpp
 
 HEADERS += \
+    connectiondetails.h \
     controls/clickablelabel.h \
     controls/customframe.h \
     controls/customlineedit.h \
@@ -62,6 +65,7 @@ HEADERS += \
     dialogs/dialogabout.h \
     dialogs/dialogdisplaydefinition.h \
     dialogs/dialogprintsettings.h \
+    dialogs/dialogselectserviceport.h \
     dialogs/dialogwindowsmanager.h \
     dialogs/dialogwritecoilregister.h \
     dialogs/dialogwriteholdingregister.h \
@@ -71,6 +75,7 @@ HEADERS += \
     floatutils.h \
     formmodsim.h \
     mainwindow.h \
+    menuconnect.h \
     modbuslimits.h \
     modbusserver.h \
     modbuswriteparams.h \
@@ -86,6 +91,7 @@ FORMS += \
     dialogs/dialogabout.ui \
     dialogs/dialogdisplaydefinition.ui \
     dialogs/dialogprintsettings.ui \
+    dialogs/dialogselectserviceport.ui \
     dialogs/dialogwindowsmanager.ui \
     dialogs/dialogwritecoilregister.ui \
     dialogs/dialogwriteholdingregister.ui \

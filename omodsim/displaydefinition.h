@@ -12,8 +12,8 @@ struct DisplayDefinition
     quint32 ScanRate = 1000;
     quint8 DeviceId = 1;
     quint16 PointAddress = 1;
-    QModbusDataUnit::RegisterType PointType = QModbusDataUnit::Coils;
-    quint16 Length = 50;
+    QModbusDataUnit::RegisterType PointType = QModbusDataUnit::HoldingRegisters;
+    quint16 Length = 100;
 
     void normalize()
     {

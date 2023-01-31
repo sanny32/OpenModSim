@@ -21,5 +21,7 @@
         <file>res/actionDisconnect.png</file>
         <file>res/actionSave.png</file>
         <file>res/actionDefineData.png</file>
+        <file>res/omodsim.png</file>
+        <file>res/iconAbout.png</file>
     </qresource>
 </RCC>

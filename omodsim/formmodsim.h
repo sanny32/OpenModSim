@@ -4,7 +4,7 @@
 #include <QWidget>
 #include <QTimer>
 #include <QPrinter>
-#include "enums.h"
+#include "connectiondetails.h"
 #include "modbusserver.h"
 #include "displaydefinition.h"
 
@@ -32,6 +32,8 @@ public:
 
     QVector<quint16> mbData() const;
     QModbusDevice::State mbState() const;
+    void mbConnect(const ConnectionDetails& cd);
+    void mbDisconnect();
 
     DisplayDefinition displayDefinition() const;
     void setDisplayDefinition(const DisplayDefinition& dd);
@@ -44,10 +46,6 @@ public:
 
     bool displayHexAddresses() const;
     void setDisplayHexAddresses(bool on);
-
-    CaptureMode captureMode() const;
-    void startTextCapture(const QString& file);
-    void stopTextCapture();
 
     QColor backgroundColor() const;
     void setBackgroundColor(const QColor& clr);
@@ -84,6 +82,9 @@ private slots:
     void on_outputWidget_itemDoubleClicked(quint32 addr, const QVariant& value);
     void on_statisticWidget_numberOfPollsChanged(uint value);
     void on_statisticWidget_validSlaveResposesChanged(uint value);
+
+private:
+    void reconnectServer();
 
 private:
     Ui::FormModSim *ui;
