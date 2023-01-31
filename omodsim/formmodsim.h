@@ -30,7 +30,8 @@ public:
     QString filename() const;
     void setFilename(const QString& filename);
 
-    QVector<quint16> data() const;
+    QVector<quint16> mbData() const;
+    QModbusDevice::State mbState() const;
 
     DisplayDefinition displayDefinition() const;
     void setDisplayDefinition(const DisplayDefinition& dd);

@@ -74,9 +74,18 @@ void FormModSim::setFilename(const QString& filename)
 /// \brief FormModSim::data
 /// \return
 ///
-QVector<quint16> FormModSim::data() const
+QVector<quint16> FormModSim::mbData() const
 {
     return ui->outputWidget->data();
+}
+
+///
+/// \brief FormModSim::mbState
+/// \return
+///
+QModbusDevice::State FormModSim::mbState() const
+{
+    return _modbusServer.state();
 }
 
 ///

@@ -9,6 +9,10 @@ class ModbusServer : public QObject
     Q_OBJECT
 public:
     explicit ModbusServer(QObject *parent = nullptr);
+    ~ModbusServer() override;
+
+    bool isValid() const;
+    QModbusDevice::State state() const;
 
 signals:
 

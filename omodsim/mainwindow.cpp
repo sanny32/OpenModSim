@@ -3,6 +3,7 @@
 #include <QPrintDialog>
 #include <QPageSetupDialog>
 #include "dialogabout.h"
+#include "dialogwindowsmanager.h"
 #include "dialogprintsettings.h"
 #include "dialogdisplaydefinition.h"
 #include "mainstatusbar.h"
@@ -119,8 +120,9 @@ void MainWindow::on_awake()
 
     if(frm != nullptr)
     {
-        //ui->actionConnect->setEnabled(state == QModbusDevice::UnconnectedState);
-        //ui->actionDisconnect->setEnabled(state == QModbusDevice::ConnectedState);
+        const auto state = frm->mbState();
+        ui->actionConnect->setEnabled(state == QModbusDevice::UnconnectedState);
+        ui->actionDisconnect->setEnabled(state == QModbusDevice::ConnectedState);
 
         const auto ddm = frm->dataDisplayMode();
         ui->actionBinary->setChecked(ddm == DataDisplayMode::Binary);

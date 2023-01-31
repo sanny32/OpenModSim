@@ -35,8 +35,8 @@ private slots:
     void on_actionExit_triggered();
 
     /* Connection menu slots */
-    void on_actionConnect_triggered();
-    void on_actionDisconnect_triggered();
+    //void on_actionConnect_triggered();
+    //void on_actionDisconnect_triggered();
 
     /* Setup menu slots*/
     void on_actionDataDefinition_triggered();
@@ -51,12 +51,6 @@ private slots:
     void on_actionDblFloat_triggered();
     void on_actionSwappedDbl_triggered();
     void on_actionHexAddresses_triggered();
-    void on_actionForceCoils_triggered();
-    void on_actionPresetRegs_triggered();
-    void on_actionMaskWrite_triggered();
-    void on_actionUserMsg_triggered();
-    void on_actionTextCapture_triggered();
-    void on_actionCaptureOff_triggered();
     void on_actionResetCtrs_triggered();
 
     /* View menu slots */
