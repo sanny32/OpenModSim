@@ -52,12 +52,19 @@ FormModSim::FormModSim(int id, MainWindow* parent) :
 FormModSim::~FormModSim()
 {
     if(_modbusServer)
-    {
-        const auto pointType = ui->comboBoxModbusPointType->currentPointType();
-        _modbusServer->removeUnitMap(pointType);
-    }
+        _modbusServer->removeUnitMap(formId());
 
     delete ui;
+}
+
+///
+/// \brief FormModSim::closeEvent
+/// \param event
+///
+void FormModSim::closeEvent(QCloseEvent *event)
+{
+    emit closing();
+    QWidget::closeEvent(event);
 }
 
 ///
@@ -113,12 +120,13 @@ QSharedPointer<ModbusServer> FormModSim::mbServer() const
 void FormModSim::setMbServer(QSharedPointer<ModbusServer> server)
 {
     const auto dd = displayDefinition();
-    if(_modbusServer) _modbusServer->removeUnitMap(dd.PointType);
-    if(server)
+    if(_modbusServer) _modbusServer->removeUnitMap(formId());
+
+    _modbusServer = server;
+    if(_modbusServer)
     {
-        _modbusServer = server;
         _modbusServer->setDeviceId(dd.DeviceId);
-        _modbusServer->addUnitMap(dd.PointType, dd.PointAddress - 1, dd.Length);
+        _modbusServer->addUnitMap(formId(), dd.PointType, dd.PointAddress - 1, dd.Length);
     }
 }
 
@@ -373,7 +381,7 @@ uint FormModSim::validSlaveResposes() const
 void FormModSim::show()
 {
     QWidget::show();
-    emit formShowed();
+    emit showed();
 }
 
 ///
@@ -411,7 +419,7 @@ void FormModSim::on_lineEditAddress_valueChanged(const QVariant&)
 {
     const auto dd = displayDefinition();
     ui->outputWidget->setup(dd);
-    if(_modbusServer) _modbusServer->addUnitMap(dd.PointType, dd.PointAddress - 1, dd.Length);
+    if(_modbusServer) _modbusServer->addUnitMap(formId(), dd.PointType, dd.PointAddress - 1, dd.Length);
 }
 
 ///
@@ -421,7 +429,7 @@ void FormModSim::on_lineEditLength_valueChanged(const QVariant&)
 {
     const auto dd = displayDefinition();
     ui->outputWidget->setup(dd);
-    if(_modbusServer) _modbusServer->addUnitMap(dd.PointType, dd.PointAddress - 1, dd.Length);
+    if(_modbusServer) _modbusServer->addUnitMap(formId(), dd.PointType, dd.PointAddress - 1, dd.Length);
 }
 
 ///
@@ -443,10 +451,7 @@ void FormModSim::on_comboBoxModbusPointType_pointTypeChanged(QModbusDataUnit::Re
 
     ui->outputWidget->setup(dd);
     if(_modbusServer)
-    {
-        _modbusServer->removeUnitMap(oldValue);
-        _modbusServer->addUnitMap(newValue, dd.PointAddress - 1, dd.Length);
-    }
+        _modbusServer->addUnitMap(formId(), newValue, dd.PointAddress - 1, dd.Length);
 }
 
 ///

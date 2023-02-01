@@ -15,8 +15,8 @@ public:
     quint8 deviceId() const;
     void setDeviceId(quint8 deviceId);
 
-    void addUnitMap(QModbusDataUnit::RegisterType pointType, quint16 pointAddress, quint16 length);
-    void removeUnitMap(QModbusDataUnit::RegisterType pointType);
+    void addUnitMap(int id, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, quint16 length);
+    void removeUnitMap(int id);
 
     void connectDevice();
     void disconnectDevice();
@@ -34,7 +34,10 @@ private slots:
     void on_mbStateChanged(QModbusDevice::State state);
 
 private:
-    QModbusDataUnitMap _modbusMap;
+    QModbusDataUnitMap createDataUnitMap();
+
+private:
+    QMap<int, QModbusDataUnit> _modbusMap;
     QModbusServer* _modbusServer;
 };
 

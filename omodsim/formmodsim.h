@@ -4,7 +4,6 @@
 #include <QWidget>
 #include <QTimer>
 #include <QPrinter>
-#include "connectiondetails.h"
 #include "modbusserver.h"
 #include "displaydefinition.h"
 
@@ -66,11 +65,15 @@ public:
     uint numberOfPolls() const;
     uint validSlaveResposes() const;
 
+protected:
+    void closeEvent(QCloseEvent *event) override;
+
 public slots:
     void show();
 
 signals:
-    void formShowed();
+    void showed();
+    void closing();
     void numberOfPollsChanged(uint value);
     void validSlaveResposesChanged(uint value);
 

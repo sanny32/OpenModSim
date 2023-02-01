@@ -255,7 +255,7 @@ void MainWindow::on_connectAction(ConnectionType type, const QString& port)
             DialogSelectServicePort dlg(cd.TcpParams.ServicePort, this);
             if(dlg.exec() == QDialog::Accepted)
             {
-                _connManager.connect(frm, cd);
+                _connManager.connectDevice(frm, cd);
             }
         }
         break;
@@ -273,7 +273,7 @@ void MainWindow::on_actionDisconnect_triggered()
     auto frm = currentMdiChild();
     if(!frm) return;
 
-    _connManager.disconnect(frm);
+    _connManager.disconnectDevice(frm);
 }
 
 ///
@@ -581,7 +581,7 @@ FormModSim* MainWindow::createMdiChild(int id)
     wnd->installEventFilter(this);
     wnd->setAttribute(Qt::WA_DeleteOnClose, true);
 
-    connect(frm, &FormModSim::formShowed, this, [this, wnd]
+    connect(frm, &FormModSim::showed, this, [this, wnd]
     {
         windowActivate(wnd);
     });

@@ -76,22 +76,50 @@ void ModbusServer::setDeviceId(quint8 deviceId)
 /// \param pointAddress
 /// \param length
 ///
-void ModbusServer::addUnitMap(QModbusDataUnit::RegisterType pointType, quint16 pointAddress, quint16 length)
+void ModbusServer::addUnitMap(int id, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, quint16 length)
 {
-    _modbusMap.remove(pointType);
-    _modbusMap.insert(pointType, {pointType, pointAddress, length});
-
-    _modbusServer->setMap(_modbusMap);
+    _modbusMap.insert(id, {pointType, pointAddress, length});
+    _modbusServer->setMap(createDataUnitMap());
 }
 
 ///
 /// \brief ModbusServer::removeUnitMap
 /// \param pointType
 ///
-void ModbusServer::removeUnitMap(QModbusDataUnit::RegisterType pointType)
+void ModbusServer::removeUnitMap(int id)
 {
-    _modbusMap.remove(pointType);
-    _modbusServer->setMap(_modbusMap);
+    _modbusMap.remove(id);
+    _modbusServer->setMap(createDataUnitMap());
+}
+
+///
+/// \brief ModbusServer::createDataUnitMap
+/// \return
+///
+QModbusDataUnitMap ModbusServer::createDataUnitMap()
+{
+    QMultiMap<QModbusDataUnit::RegisterType, QModbusDataUnit> multimap;
+    for(auto&& id : _modbusMap.keys())
+    {
+        const auto unit = _modbusMap[id];
+        multimap.insert(unit.registerType(), unit);
+    }
+
+    QModbusDataUnitMap modbusMap;
+    for(auto&& type: multimap.uniqueKeys())
+    {
+        quint16 startAddress = 65535;
+        quint16 endAddress = 0;
+        for(auto&& unit : multimap.values(type))
+        {
+            startAddress = qMin<quint16>(startAddress, unit.startAddress());
+            endAddress = qMax<quint16>(endAddress, unit.startAddress() + unit.valueCount());
+        }
+
+        const quint16 length = endAddress - startAddress + 1;
+        if(length > 0) modbusMap.insert(type, {type, startAddress, length});
+    }
+    return modbusMap;
 }
 
 ///

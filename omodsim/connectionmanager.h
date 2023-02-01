@@ -8,15 +8,10 @@
 ///
 /// \brief The ConnectionManager class
 ///
-class ConnectionManager
+class ConnectionManager : public QObject
 {
-public:
-    ConnectionManager();
+    Q_OBJECT
 
-    void connect(FormModSim* frm, const ConnectionDetails& cd);
-    void disconnect(FormModSim* frm);
-
-private:
     struct Connection
     {
         ConnectionDetails Details;
@@ -30,6 +25,19 @@ private:
                    c1.Server == c2.Server;
         }
     };
+
+public:
+    ConnectionManager(QObject* parent = nullptr);
+
+    void connectDevice(FormModSim* frm, const ConnectionDetails& cd);
+    void disconnectDevice(FormModSim* frm);
+
+private:
+    void removeForm(FormModSim* frm);
+    QList<Connection>::Iterator findConnection(FormModSim* frm);
+    QList<Connection>::Iterator findConnection(const ConnectionDetails& cd);
+
+private:
     QList<Connection> _connList;
 };
 
