@@ -16,9 +16,10 @@
 /// \brief MainWindow::MainWindow
 /// \param parent
 ///
-MainWindow::MainWindow(QWidget *parent) :
-    QMainWindow(parent),
-    ui(new Ui::MainWindow)
+MainWindow::MainWindow(QWidget *parent)
+    : QMainWindow(parent)
+    , ui(new Ui::MainWindow)
+    ,_windowCounter(0)
 {
     ui->setupUi(this);
 
@@ -30,6 +31,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(menuConnect, &MenuConnect::connectAction, this, &MainWindow::on_connectAction);
 
     ui->actionConnect->setMenu(menuConnect);
+    ((QToolButton*)ui->toolBarMain->widgetForAction(ui->actionConnect))->setPopupMode(QToolButton::InstantPopup);
 
     const auto defaultPrinter = QPrinterInfo::defaultPrinter();
     if(!defaultPrinter.isNull())
@@ -253,7 +255,7 @@ void MainWindow::on_connectAction(ConnectionType type, const QString& port)
             DialogSelectServicePort dlg(cd.TcpParams.ServicePort, this);
             if(dlg.exec() == QDialog::Accepted)
             {
-
+                _connManager.connect(frm, cd);
             }
         }
         break;
@@ -271,7 +273,7 @@ void MainWindow::on_actionDisconnect_triggered()
     auto frm = currentMdiChild();
     if(!frm) return;
 
-
+    _connManager.disconnect(frm);
 }
 
 ///

@@ -51,6 +51,12 @@ FormModSim::FormModSim(int id, MainWindow* parent) :
 ///
 FormModSim::~FormModSim()
 {
+    if(_modbusServer)
+    {
+        const auto pointType = ui->comboBoxModbusPointType->currentPointType();
+        _modbusServer->removeUnitMap(pointType);
+    }
+
     delete ui;
 }
 
@@ -106,11 +112,13 @@ QSharedPointer<ModbusServer> FormModSim::mbServer() const
 ///
 void FormModSim::setMbServer(QSharedPointer<ModbusServer> server)
 {
-    _modbusServer = server;
-    if(_modbusServer)
+    const auto dd = displayDefinition();
+    if(_modbusServer) _modbusServer->removeUnitMap(dd.PointType);
+    if(server)
     {
-        connect(_modbusServer.get(), &ModbusServer::connected, this, &FormModSim::on_mbConnected);
-        connect(_modbusServer.get(), &ModbusServer::disconnected, this, &FormModSim::on_mbDisconnected);
+        _modbusServer = server;
+        _modbusServer->setDeviceId(dd.DeviceId);
+        _modbusServer->addUnitMap(dd.PointType, dd.PointAddress - 1, dd.Length);
     }
 }
 
@@ -144,7 +152,6 @@ void FormModSim::setDisplayDefinition(const DisplayDefinition& dd)
     ui->comboBoxModbusPointType->setCurrentPointType(dd.PointType);
 
     ui->outputWidget->setup(dd);
-    if(_modbusServer) _modbusServer->configure(dd);
 }
 
 ///
@@ -394,7 +401,7 @@ void FormModSim::on_timeout()
     }
 
     ui->outputWidget->setStatus(QString());
-    ui->outputWidget->updateData(_modbusServer->data());
+    ui->outputWidget->updateData(_modbusServer->data(dd.PointType, dd.PointAddress - 1, dd.Length));
 }
 
 ///
@@ -402,7 +409,9 @@ void FormModSim::on_timeout()
 ///
 void FormModSim::on_lineEditAddress_valueChanged(const QVariant&)
 {
-    ui->outputWidget->setup(displayDefinition());
+    const auto dd = displayDefinition();
+    ui->outputWidget->setup(dd);
+    if(_modbusServer) _modbusServer->addUnitMap(dd.PointType, dd.PointAddress - 1, dd.Length);
 }
 
 ///
@@ -410,7 +419,9 @@ void FormModSim::on_lineEditAddress_valueChanged(const QVariant&)
 ///
 void FormModSim::on_lineEditLength_valueChanged(const QVariant&)
 {
-    ui->outputWidget->setup(displayDefinition());
+    const auto dd = displayDefinition();
+    ui->outputWidget->setup(dd);
+    if(_modbusServer) _modbusServer->addUnitMap(dd.PointType, dd.PointAddress - 1, dd.Length);
 }
 
 ///
@@ -418,14 +429,24 @@ void FormModSim::on_lineEditLength_valueChanged(const QVariant&)
 ///
 void FormModSim::on_lineEditDeviceId_valueChanged(const QVariant&)
 {
+    const auto dd = displayDefinition();
+    if(_modbusServer) _modbusServer->setDeviceId(dd.DeviceId);
 }
 
 ///
 /// \brief FormModSim::on_comboBoxModbusPointType_pointTypeChanged
 ///
-void FormModSim::on_comboBoxModbusPointType_pointTypeChanged(QModbusDataUnit::RegisterType)
+void FormModSim::on_comboBoxModbusPointType_pointTypeChanged(QModbusDataUnit::RegisterType oldValue, QModbusDataUnit::RegisterType newValue)
 {
-    ui->outputWidget->setup(displayDefinition());
+    const auto dd = displayDefinition();
+    Q_ASSERT(newValue == dd.PointType);
+
+    ui->outputWidget->setup(dd);
+    if(_modbusServer)
+    {
+        _modbusServer->removeUnitMap(oldValue);
+        _modbusServer->addUnitMap(newValue, dd.PointAddress - 1, dd.Length);
+    }
 }
 
 ///
@@ -488,20 +509,4 @@ void FormModSim::on_statisticWidget_numberOfPollsChanged(uint value)
 void FormModSim::on_statisticWidget_validSlaveResposesChanged(uint value)
 {
     emit validSlaveResposesChanged(value);
-}
-
-///
-/// \brief FormModSim::on_mbConnected
-///
-void FormModSim::on_mbConnected()
-{
-    ui->outputWidget->setStatus(QString());
-}
-
-///
-/// \brief FormModSim::on_mbDisconnected
-///
-void FormModSim::on_mbDisconnected()
-{
-    ui->outputWidget->setStatus(tr("NOT CONNECTED!"));
 }

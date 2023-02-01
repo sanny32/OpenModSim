@@ -39,6 +39,8 @@ ModbusServer::ModbusServer(const ConnectionDetails& cd, QObject *parent)
         }
         break;
     }
+
+    Q_ASSERT(_modbusServer != nullptr);
 }
 
 ///
@@ -47,33 +49,49 @@ ModbusServer::ModbusServer(const ConnectionDetails& cd, QObject *parent)
 ModbusServer::~ModbusServer()
 {
     disconnectDevice();
-
-    if(_modbusServer)
-        delete _modbusServer;
+    delete _modbusServer;
 }
 
 ///
-/// \brief ModbusServer::configure
-/// \param dd
+/// \brief ModbusServer::deviceId
+/// \return
 ///
-void ModbusServer::configure(const DisplayDefinition& dd)
+quint8 ModbusServer::deviceId() const
 {
-    if(!_modbusServer)
-        return;
+    return _modbusServer->serverAddress();
+}
 
-    const bool isConnected = (state() == QModbusDevice::ConnectedState);
-    if(isConnected) disconnectDevice();
+///
+/// \brief ModbusServer::setDeviceId
+/// \param deviceId
+///
+void ModbusServer::setDeviceId(quint8 deviceId)
+{
+    _modbusServer->setServerAddress(deviceId);
+}
 
-    _modbusServer->setServerAddress(dd.DeviceId);
-    _modbusServer->setProperty("PointType", dd.PointType);
-    _modbusServer->setProperty("PointAddress",  dd.PointAddress - 1);
-    _modbusServer->setProperty("Length", dd.Length);
+///
+/// \brief ModbusServer::addUnitMap
+/// \param pointType
+/// \param pointAddress
+/// \param length
+///
+void ModbusServer::addUnitMap(QModbusDataUnit::RegisterType pointType, quint16 pointAddress, quint16 length)
+{
+    _modbusMap.remove(pointType);
+    _modbusMap.insert(pointType, {pointType, pointAddress, length});
 
-    QModbusDataUnitMap mbMap;
-    mbMap.insert(dd.PointType, {dd.PointType, dd.PointAddress - 1, dd.Length});
-    _modbusServer->setMap(mbMap);
+    _modbusServer->setMap(_modbusMap);
+}
 
-    if(isConnected) connectDevice();
+///
+/// \brief ModbusServer::removeUnitMap
+/// \param pointType
+///
+void ModbusServer::removeUnitMap(QModbusDataUnit::RegisterType pointType)
+{
+    _modbusMap.remove(pointType);
+    _modbusServer->setMap(_modbusMap);
 }
 
 ///
@@ -82,8 +100,7 @@ void ModbusServer::configure(const DisplayDefinition& dd)
 ///
 void ModbusServer::connectDevice()
 {
-    if(_modbusServer)
-         _modbusServer->connectDevice();
+    _modbusServer->connectDevice();
 }
 
 ///
@@ -91,8 +108,7 @@ void ModbusServer::connectDevice()
 ///
 void ModbusServer::disconnectDevice()
 {
-    if(_modbusServer)
-        _modbusServer->disconnectDevice();
+    _modbusServer->disconnectDevice();
 }
 
 ///
@@ -110,25 +126,16 @@ bool ModbusServer::isValid() const
 ///
 QModbusDevice::State ModbusServer::state() const
 {
-    if(_modbusServer)
-        return _modbusServer->state();
-
-    return QModbusDevice::UnconnectedState;
+    return _modbusServer->state();
 }
 
 ///
 /// \brief ModbusServer::data
+/// \param dd
 /// \return
 ///
-QModbusDataUnit ModbusServer::data() const
+QModbusDataUnit ModbusServer::data(QModbusDataUnit::RegisterType pointType, quint16 pointAddress, quint16 length) const
 {
-    if(!_modbusServer)
-        return QModbusDataUnit();
-
-    const auto pointType = _modbusServer->property("PointType").value<QModbusDataUnit::RegisterType>();
-    const auto pointAddress = _modbusServer->property("PointAddress").toUInt();
-    const auto length = _modbusServer->property("Length").toUInt();
-
     QModbusDataUnit data;
     data.setRegisterType(pointType);
     data.setStartAddress(pointAddress);

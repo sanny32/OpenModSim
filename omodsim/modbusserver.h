@@ -3,7 +3,6 @@
 
 #include <QObject>
 #include <QModbusServer>
-#include "displaydefinition.h"
 #include "connectiondetails.h"
 
 class ModbusServer : public QObject
@@ -13,7 +12,11 @@ public:
     explicit ModbusServer(const ConnectionDetails& cd, QObject *parent = nullptr);
     ~ModbusServer() override;
 
-    void configure(const DisplayDefinition& dd);
+    quint8 deviceId() const;
+    void setDeviceId(quint8 deviceId);
+
+    void addUnitMap(QModbusDataUnit::RegisterType pointType, quint16 pointAddress, quint16 length);
+    void removeUnitMap(QModbusDataUnit::RegisterType pointType);
 
     void connectDevice();
     void disconnectDevice();
@@ -21,7 +24,7 @@ public:
     bool isValid() const;
     QModbusDevice::State state() const;
 
-    QModbusDataUnit data() const;
+    QModbusDataUnit data(QModbusDataUnit::RegisterType pointType, quint16 pointAddress, quint16 length) const;
 
 signals:
     void connected();
@@ -31,6 +34,7 @@ private slots:
     void on_mbStateChanged(QModbusDevice::State state);
 
 private:
+    QModbusDataUnitMap _modbusMap;
     QModbusServer* _modbusServer;
 };
 

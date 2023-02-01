@@ -21,6 +21,11 @@ struct TcpConnectionParams
         IPAddress = IPAddress.isEmpty() ? "127.0.0.1" : IPAddress;
         ServicePort = qMax<quint16>(1, ServicePort);
     }
+
+    friend bool operator==(const TcpConnectionParams& params1, const TcpConnectionParams& params2) noexcept
+    {
+        return params1.ServicePort == params2.ServicePort && params1.IPAddress == params2.IPAddress;
+    }
 };
 Q_DECLARE_METATYPE(TcpConnectionParams)
 
@@ -102,6 +107,18 @@ struct SerialConnectionParams
         WordLength = qBound(QSerialPort::Data5, WordLength, QSerialPort::Data8);
         Parity = qBound(QSerialPort::NoParity, Parity, QSerialPort::MarkParity);
         FlowControl = qBound(QSerialPort::NoFlowControl, FlowControl, QSerialPort::SoftwareControl);
+    }
+
+    friend bool operator==(const SerialConnectionParams& params1, const SerialConnectionParams& params2) noexcept
+    {
+        return params1.PortName == params2.PortName &&
+               params1.BaudRate == params2.BaudRate &&
+               params1.WordLength == params2.WordLength &&
+               params1.Parity == params2.Parity &&
+               params1.StopBits == params2.StopBits &&
+               params1.FlowControl == params2.FlowControl &&
+               params1.SetDTR == params2.SetDTR &&
+               params1.SetRTS == params2.SetRTS;
     }
 };
 Q_DECLARE_METATYPE(SerialConnectionParams)
@@ -194,6 +211,20 @@ struct ConnectionDetails
     ConnectionType Type = ConnectionType::Tcp;
     TcpConnectionParams TcpParams;
     SerialConnectionParams SerialParams;
+
+    friend bool operator==(const ConnectionDetails& cd1, const ConnectionDetails& cd2) noexcept
+    {
+        switch(cd1.Type)
+        {
+            case ConnectionType::Tcp:
+            return cd2.Type == ConnectionType::Tcp && cd1.TcpParams == cd2.TcpParams;
+
+            case ConnectionType::Serial:
+            return cd2.Type == ConnectionType::Serial && cd1.SerialParams == cd2.SerialParams;
+        }
+
+        return false;
+    }
 };
 Q_DECLARE_METATYPE(ConnectionDetails)
 

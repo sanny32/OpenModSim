@@ -26,6 +26,7 @@ INCLUDEPATH += controls \
                dialogs \
 
 SOURCES += \
+    connectionmanager.cpp \
     controls/clickablelabel.cpp \
     controls/customframe.cpp \
     controls/customlineedit.cpp \
@@ -54,6 +55,7 @@ SOURCES += \
 
 HEADERS += \
     connectiondetails.h \
+    connectionmanager.h \
     controls/clickablelabel.h \
     controls/customframe.h \
     controls/customlineedit.h \
