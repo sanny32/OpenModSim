@@ -28,11 +28,17 @@ MainWindow::MainWindow(QWidget *parent)
     setUnifiedTitleAndToolBarOnMac(true);
     setStatusBar(new MainStatusBar(ui->mdiArea));
 
-    auto menuConnect = new MenuConnect(_mbMultiServer, this);
+    auto menuConnect = new MenuConnect(MenuConnect::ConnectMenu, _mbMultiServer, this);
     connect(menuConnect, &MenuConnect::connectAction, this, &MainWindow::on_connectAction);
 
     ui->actionConnect->setMenu(menuConnect);
     ((QToolButton*)ui->toolBarMain->widgetForAction(ui->actionConnect))->setPopupMode(QToolButton::InstantPopup);
+
+    auto menuDisconnect = new MenuConnect(MenuConnect::DisconnectMenu, _mbMultiServer, this);
+    connect(menuDisconnect, &MenuConnect::disconnectAction, this, &MainWindow::on_disconnectAction);
+
+    ui->actionDisconnect->setMenu(menuDisconnect);
+    ((QToolButton*)ui->toolBarMain->widgetForAction(ui->actionDisconnect))->setPopupMode(QToolButton::InstantPopup);
 
     const auto defaultPrinter = QPrinterInfo::defaultPrinter();
     if(!defaultPrinter.isNull())
@@ -112,9 +118,6 @@ void MainWindow::on_awake()
     ui->actionPrint->setEnabled(_selectedPrinter != nullptr && frm != nullptr);
     ui->actionRecentFile->setEnabled(!_recentFileActionList->isEmpty());
 
-    ui->actionConnect->setEnabled(frm != nullptr);
-    ui->actionDisconnect->setEnabled(frm != nullptr);
-
     ui->actionDataDefinition->setEnabled(frm != nullptr);
     ui->actionShowData->setEnabled(frm != nullptr);
     ui->actionShowTraffic->setEnabled(frm != nullptr);
@@ -133,10 +136,6 @@ void MainWindow::on_awake()
 
     if(frm != nullptr)
     {
-        //const auto state = frm->mbState();
-        //ui->actionConnect->setEnabled(state == QModbusDevice::UnconnectedState);
-        //ui->actionDisconnect->setEnabled(state == QModbusDevice::ConnectedState);
-
         const auto ddm = frm->dataDisplayMode();
         ui->actionBinary->setChecked(ddm == DataDisplayMode::Binary);
         ui->actionUnsignedDecimal->setChecked(ddm == DataDisplayMode::Decimal);
@@ -170,7 +169,7 @@ void MainWindow::on_actionNew_triggered()
 ///
 void MainWindow::on_actionOpen_triggered()
 {
-    const auto filename = QFileDialog::getOpenFileName(this, QString(), QString(), "All files (*)");
+    const auto filename = QFileDialog::getOpenFileName(this, QString(), QString(), tr("All files (*)"));
     if(filename.isEmpty()) return;
 
     openFile(filename);
@@ -198,7 +197,7 @@ void MainWindow::on_actionSaveAs_triggered()
     auto frm = currentMdiChild();
     if(!frm) return;
 
-    const auto filename = QFileDialog::getSaveFileName(this, QString(), frm->windowTitle(), "All files (*)");
+    const auto filename = QFileDialog::getSaveFileName(this, QString(), frm->windowTitle(), tr("All files (*)"));
     if(filename.isEmpty()) return;
 
     frm->setFilename(filename);
@@ -245,9 +244,6 @@ void MainWindow::on_actionExit_triggered()
 ///
 void MainWindow::on_connectAction(ConnectionType type, const QString& port)
 {
-    auto frm = currentMdiChild();
-    if(!frm) return;
-
     switch(type)
     {
         case ConnectionType::Tcp:
@@ -274,14 +270,13 @@ void MainWindow::on_connectAction(ConnectionType type, const QString& port)
 }
 
 ///
-/// \brief MainWindow::on_actionDisconnect_triggered
+/// \brief MainWindow::on_disconnectAction
+/// \param type
+/// \param port
 ///
-void MainWindow::on_actionDisconnect_triggered()
+void MainWindow::on_disconnectAction(ConnectionType type, const QString& port)
 {
-    auto frm = currentMdiChild();
-    if(!frm) return;
-
-    _mbMultiServer.disconnectDevices();
+    _mbMultiServer.disconnectDevice(type, port);
 }
 
 ///

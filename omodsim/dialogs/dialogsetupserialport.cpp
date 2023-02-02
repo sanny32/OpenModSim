@@ -45,3 +45,12 @@ void DialogSetupSerialPort::accept()
     _serialParams.SetRTS = ui->comboBoxRTSControl->currentValue();
     QFixedSizeDialog::accept();
 }
+
+///
+/// \brief DialogConnectionDetails::on_comboBoxFlowControl_currentIndexChanged
+///
+void DialogSetupSerialPort::on_comboBoxFlowControl_currentIndexChanged(int)
+{
+    const auto fc = ui->comboBoxFlowControl->currentFlowControl();
+    ui->comboBoxRTSControl->setEnabled(fc != QSerialPort::HardwareControl);
+}

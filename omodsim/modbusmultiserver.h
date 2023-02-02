@@ -19,12 +19,12 @@ public:
     void removeUnitMap(int id);
 
     void connectDevice(const ConnectionDetails& cd);
-    void disconnectDevice(const ConnectionDetails& cd);
+    void disconnectDevice(ConnectionType type, const QString& port);
     void disconnectDevices();
 
     bool isConnected() const;
-    bool isConnected(const ConnectionDetails& cd) const;
-    QModbusDevice::State state(const ConnectionDetails& cd) const;
+    bool isConnected(ConnectionType type, const QString& port) const;
+    QModbusDevice::State state(ConnectionType type, const QString& port) const;
 
     QModbusDataUnit data(QModbusDataUnit::RegisterType pointType, quint16 pointAddress, quint16 length) const;
 
@@ -38,6 +38,7 @@ private slots:
 private:
     QModbusDataUnitMap createDataUnitMap();
     QModbusServer* findModbusServer(const ConnectionDetails& cd) const;
+    QModbusServer* findModbusServer(ConnectionType type, const QString& port) const;
     QModbusServer* createModbusServer(const ConnectionDetails& cd);
 
     void addModbusServer(QModbusServer* server);

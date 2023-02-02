@@ -18,6 +18,9 @@ public:
 
     void accept() override;
 
+private slots:
+    void on_comboBoxFlowControl_currentIndexChanged(int);
+
 private:
     Ui::DialogSetupSerialPort *ui;
 

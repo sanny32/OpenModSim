@@ -121,6 +121,27 @@ QModbusServer* ModbusMultiServer::findModbusServer(const ConnectionDetails& cd) 
 }
 
 ///
+/// \brief ModbusMultiServer::findModbusServer
+/// \param type
+/// \param port
+/// \return
+///
+QModbusServer* ModbusMultiServer::findModbusServer(ConnectionType type, const QString& port) const
+{
+    for(auto&& s : _modbusServerList)
+    {
+        const auto cd = s->property("ConnectionDetails").value<ConnectionDetails>();
+        if((cd.Type == ConnectionType::Tcp && type == ConnectionType::Tcp) ||
+           (cd.Type == ConnectionType::Serial && type == ConnectionType::Serial && cd.SerialParams.PortName == port))
+        {
+            return s;
+        }
+    }
+
+    return nullptr;
+}
+
+///
 /// \brief ModbusMultiServer::createModbusServer
 /// \param cd
 /// \return
@@ -145,11 +166,14 @@ QModbusServer* ModbusMultiServer::createModbusServer(const ConnectionDetails& cd
             {
                 modbusServer = new QModbusRtuSerialServer(this);
                 modbusServer->setProperty("ConnectionDetails", QVariant::fromValue(cd));
+                modbusServer->setProperty("DTRControl", cd.SerialParams.SetDTR);
+                modbusServer->setProperty("RTSControl", cd.SerialParams.SetRTS);
                 modbusServer->setConnectionParameter(QModbusDevice::SerialPortNameParameter, cd.SerialParams.PortName);
                 modbusServer->setConnectionParameter(QModbusDevice::SerialBaudRateParameter, cd.SerialParams.BaudRate);
                 modbusServer->setConnectionParameter(QModbusDevice::SerialDataBitsParameter, cd.SerialParams.WordLength);
                 modbusServer->setConnectionParameter(QModbusDevice::SerialParityParameter, cd.SerialParams.Parity);
                 modbusServer->setConnectionParameter(QModbusDevice::SerialStopBitsParameter, cd.SerialParams.StopBits);
+                dynamic_cast<QSerialPort*>(modbusServer->device())->setFlowControl(cd.SerialParams.FlowControl);
             }
             break;
         }
@@ -176,11 +200,13 @@ void ModbusMultiServer::connectDevice(const ConnectionDetails& cd)
 }
 
 ///
-/// \brief ModbusServer::disconnectDevice
+/// \brief ModbusMultiServer::disconnectDevice
+/// \param type
+/// \param port
 ///
-void ModbusMultiServer::disconnectDevice(const ConnectionDetails& cd)
+void ModbusMultiServer::disconnectDevice(ConnectionType type, const QString& port)
 {
-    auto modbusServer = findModbusServer(cd);
+    auto modbusServer = findModbusServer(type, port);
     if(modbusServer != nullptr)
     {
         modbusServer->disconnectDevice();
@@ -241,21 +267,24 @@ bool ModbusMultiServer::isConnected() const
 
 ///
 /// \brief ModbusMultiServer::isConnected
-/// \param cd
+/// \param type
+/// \param port
 /// \return
 ///
-bool ModbusMultiServer::isConnected(const ConnectionDetails& cd) const
+bool ModbusMultiServer::isConnected(ConnectionType type, const QString& port) const
 {
-    return state(cd) == QModbusDevice::ConnectedState;
+    return state(type, port) == QModbusDevice::ConnectedState;
 }
 
 ///
-/// \brief ModbusServer::state
+/// \brief ModbusMultiServer::state
+/// \param type
+/// \param port
 /// \return
 ///
-QModbusDevice::State ModbusMultiServer::state(const ConnectionDetails& cd) const
+QModbusDevice::State ModbusMultiServer::state(ConnectionType type, const QString& port) const
 {
-    const auto modbusServer = findModbusServer(cd);
+    const auto modbusServer = findModbusServer(type, port);
     return modbusServer ? modbusServer->state() : QModbusDevice::UnconnectedState;
 }
 
@@ -291,6 +320,19 @@ void ModbusMultiServer::on_stateChanged(QModbusDevice::State state)
     switch(state)
     {
         case QModbusDevice::ConnectedState:
+            if(cd.Type == ConnectionType::Serial)
+            {
+                auto port = (QSerialPort*)server->device();
+
+                const bool setDTR = server->property("DTRControl").toBool();
+                port->setDataTerminalReady(setDTR);
+
+                if(port->flowControl() != QSerialPort::HardwareControl)
+                {
+                    const bool setRTS = server->property("RTSControl").toBool();
+                    port->setRequestToSend(setRTS);
+                }
+            }
             emit connected(cd);
         break;
 
