@@ -80,6 +80,7 @@ private slots:
     void on_outputWidget_itemDoubleClicked(quint32 addr, const QVariant& value);
     void on_statisticWidget_numberOfPollsChanged(uint value);
     void on_statisticWidget_validSlaveResposesChanged(uint value);
+    void on_mbDeviceIdChanged(quint8 deviceId);
 
 private:
     Ui::FormModSim *ui;

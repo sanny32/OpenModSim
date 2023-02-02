@@ -50,6 +50,7 @@ FormModSim::FormModSim(int id, ModbusMultiServer& server, MainWindow* parent) :
         ui->outputWidget->setStatus(_mbMultiServer.isConnected() ? "" : tr("NOT CONNECTED!"));
     }
 
+    connect(&_mbMultiServer, &ModbusMultiServer::deviceIdChanged, this, &FormModSim::on_mbDeviceIdChanged);
     connect(&_timer, &QTimer::timeout, this, &FormModSim::on_timeout);
     _timer.start();
 }
@@ -98,7 +99,7 @@ void FormModSim::setFilename(const QString& filename)
 DisplayDefinition FormModSim::displayDefinition() const
 {
     DisplayDefinition dd;
-    dd.ScanRate = _timer.interval();
+    dd.UpdateRate = _timer.interval();
     dd.DeviceId = ui->lineEditDeviceId->value<int>();
     dd.PointAddress = ui->lineEditAddress->value<int>();
     dd.PointType = ui->comboBoxModbusPointType->currentPointType();
@@ -113,7 +114,7 @@ DisplayDefinition FormModSim::displayDefinition() const
 ///
 void FormModSim::setDisplayDefinition(const DisplayDefinition& dd)
 {
-    _timer.setInterval(qBound(20U, dd.ScanRate, 10000U));
+    _timer.setInterval(qBound(20U, dd.UpdateRate, 10000U));
     ui->lineEditDeviceId->setValue(dd.DeviceId);
     ui->lineEditAddress->setValue(dd.PointAddress);
     ui->lineEditLength->setValue(dd.Length);
@@ -391,8 +392,8 @@ void FormModSim::on_lineEditLength_valueChanged(const QVariant&)
 ///
 void FormModSim::on_lineEditDeviceId_valueChanged(const QVariant&)
 {
-    const auto dd = displayDefinition();
-    _mbMultiServer.setDeviceId(dd.DeviceId);
+    const auto deviceId = ui->lineEditDeviceId->value<int>();
+    _mbMultiServer.setDeviceId(deviceId);
 }
 
 ///
@@ -466,4 +467,15 @@ void FormModSim::on_statisticWidget_numberOfPollsChanged(uint value)
 void FormModSim::on_statisticWidget_validSlaveResposesChanged(uint value)
 {
     emit validSlaveResposesChanged(value);
+}
+
+///
+/// \brief FormModSim::on_mbDeviceIdChanged
+/// \param deviceId
+///
+void FormModSim::on_mbDeviceIdChanged(quint8 deviceId)
+{
+    blockSignals(true);
+    ui->lineEditDeviceId->setValue(deviceId);
+    blockSignals(false);
 }

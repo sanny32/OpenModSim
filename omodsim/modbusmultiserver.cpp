@@ -14,6 +14,7 @@
 ///
 ModbusMultiServer::ModbusMultiServer(QObject *parent)
     : QObject{parent}
+    ,_deviceId(1)
 {
 }
 
@@ -23,10 +24,7 @@ ModbusMultiServer::ModbusMultiServer(QObject *parent)
 ModbusMultiServer::~ModbusMultiServer()
 {
    for(auto&& s : _modbusServerList)
-   {
        s->disconnectDevice();
-       delete s;
-   }
 }
 
 ///
@@ -35,7 +33,7 @@ ModbusMultiServer::~ModbusMultiServer()
 ///
 quint8 ModbusMultiServer::deviceId() const
 {
-    return 0;
+    return _deviceId;
 }
 
 ///
@@ -44,8 +42,12 @@ quint8 ModbusMultiServer::deviceId() const
 ///
 void ModbusMultiServer::setDeviceId(quint8 deviceId)
 {
+    _deviceId = deviceId;
+
     for(auto&& s : _modbusServerList)
         s->setServerAddress(deviceId);
+
+    emit deviceIdChanged(deviceId);
 }
 
 ///
@@ -56,10 +58,8 @@ void ModbusMultiServer::setDeviceId(quint8 deviceId)
 ///
 void ModbusMultiServer::addUnitMap(int id, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, quint16 length)
 {
-    _modbusMap.insert(id, {pointType, pointAddress, length});
-
-    for(auto&& s : _modbusServerList)
-        s->setMap(createDataUnitMap());
+    _modbusDataUnitMap.insert(id, {pointType, pointAddress, length});
+    reconfigureServers();
 }
 
 ///
@@ -68,10 +68,8 @@ void ModbusMultiServer::addUnitMap(int id, QModbusDataUnit::RegisterType pointTy
 ///
 void ModbusMultiServer::removeUnitMap(int id)
 {
-    _modbusMap.remove(id);
-
-    for(auto&& s : _modbusServerList)
-        s->setMap(createDataUnitMap());
+    _modbusDataUnitMap.remove(id);
+    reconfigureServers();
 }
 
 ///
@@ -81,9 +79,9 @@ void ModbusMultiServer::removeUnitMap(int id)
 QModbusDataUnitMap ModbusMultiServer::createDataUnitMap()
 {
     QMultiMap<QModbusDataUnit::RegisterType, QModbusDataUnit> multimap;
-    for(auto&& id : _modbusMap.keys())
+    for(auto&& id : _modbusDataUnitMap.keys())
     {
-        const auto unit = _modbusMap[id];
+        const auto unit = _modbusDataUnitMap[id];
         multimap.insert(unit.registerType(), unit);
     }
 
@@ -109,13 +107,11 @@ QModbusDataUnitMap ModbusMultiServer::createDataUnitMap()
 /// \param cd
 /// \return
 ///
-QModbusServer* ModbusMultiServer::findModbusServer(const ConnectionDetails& cd) const
+QSharedPointer<QModbusServer> ModbusMultiServer::findModbusServer(const ConnectionDetails& cd) const
 {
     for(auto&& s : _modbusServerList)
-    {
         if(s->property("ConnectionDetails").value<ConnectionDetails>() == cd)
             return s;
-    }
 
     return nullptr;
 }
@@ -126,7 +122,7 @@ QModbusServer* ModbusMultiServer::findModbusServer(const ConnectionDetails& cd) 
 /// \param port
 /// \return
 ///
-QModbusServer* ModbusMultiServer::findModbusServer(ConnectionType type, const QString& port) const
+QSharedPointer<QModbusServer> ModbusMultiServer::findModbusServer(ConnectionType type, const QString& port) const
 {
     for(auto&& s : _modbusServerList)
     {
@@ -146,7 +142,7 @@ QModbusServer* ModbusMultiServer::findModbusServer(ConnectionType type, const QS
 /// \param cd
 /// \return
 ///
-QModbusServer* ModbusMultiServer::createModbusServer(const ConnectionDetails& cd)
+QSharedPointer<QModbusServer> ModbusMultiServer::createModbusServer(const ConnectionDetails& cd)
 {
     auto modbusServer = findModbusServer(cd);
     if(modbusServer == nullptr)
@@ -155,7 +151,7 @@ QModbusServer* ModbusMultiServer::createModbusServer(const ConnectionDetails& cd
         {
             case ConnectionType::Tcp:
             {
-                modbusServer = new QModbusTcpServer(this);
+                modbusServer = QSharedPointer<QModbusServer>(new QModbusTcpServer(this));
                 modbusServer->setProperty("ConnectionDetails", QVariant::fromValue(cd));
                 modbusServer->setConnectionParameter(QModbusDevice::NetworkPortParameter, cd.TcpParams.ServicePort);
                 modbusServer->setConnectionParameter(QModbusDevice::NetworkAddressParameter, cd.TcpParams.IPAddress);
@@ -164,7 +160,7 @@ QModbusServer* ModbusMultiServer::createModbusServer(const ConnectionDetails& cd
 
             case ConnectionType::Serial:
             {
-                modbusServer = new QModbusRtuSerialServer(this);
+                modbusServer = QSharedPointer<QModbusServer>(new QModbusRtuSerialServer(this));
                 modbusServer->setProperty("ConnectionDetails", QVariant::fromValue(cd));
                 modbusServer->setProperty("DTRControl", cd.SerialParams.SetDTR);
                 modbusServer->setProperty("RTSControl", cd.SerialParams.SetRTS);
@@ -173,7 +169,7 @@ QModbusServer* ModbusMultiServer::createModbusServer(const ConnectionDetails& cd
                 modbusServer->setConnectionParameter(QModbusDevice::SerialDataBitsParameter, cd.SerialParams.WordLength);
                 modbusServer->setConnectionParameter(QModbusDevice::SerialParityParameter, cd.SerialParams.Parity);
                 modbusServer->setConnectionParameter(QModbusDevice::SerialStopBitsParameter, cd.SerialParams.StopBits);
-                dynamic_cast<QSerialPort*>(modbusServer->device())->setFlowControl(cd.SerialParams.FlowControl);
+                qobject_cast<QSerialPort*>(modbusServer->device())->setFlowControl(cd.SerialParams.FlowControl);
             }
             break;
         }
@@ -195,6 +191,7 @@ void ModbusMultiServer::connectDevice(const ConnectionDetails& cd)
         addModbusServer(modbusServer);
     }
 
+    modbusServer->setServerAddress(_deviceId);
     modbusServer->setMap(createDataUnitMap());
     modbusServer->connectDevice();
 }
@@ -215,27 +212,15 @@ void ModbusMultiServer::disconnectDevice(ConnectionType type, const QString& por
 }
 
 ///
-/// \brief ModbusMultiServer::disconnectDevices
-///
-void ModbusMultiServer::disconnectDevices()
-{
-    for(auto&& s : _modbusServerList)
-    {
-        s->disconnectDevice();
-        removeModbusServer(s);
-    }
-}
-
-///
 /// \brief ModbusMultiServer::addModbusServer
 /// \param server
 ///
-void ModbusMultiServer::addModbusServer(QModbusServer* server)
+void ModbusMultiServer::addModbusServer(QSharedPointer<QModbusServer> server)
 {
     if(server && !_modbusServerList.contains(server))
     {
         _modbusServerList.push_back(server);
-        connect(server, &QModbusDevice::stateChanged, this, &ModbusMultiServer::on_stateChanged);
+        connect(server.get(), &QModbusDevice::stateChanged, this, &ModbusMultiServer::on_stateChanged);
     }
 }
 
@@ -243,12 +228,22 @@ void ModbusMultiServer::addModbusServer(QModbusServer* server)
 /// \brief ModbusMultiServer::removeModbusServer
 /// \param server
 ///
-void ModbusMultiServer::removeModbusServer(QModbusServer* server)
+void ModbusMultiServer::removeModbusServer(QSharedPointer<QModbusServer> server)
 {
     if(server)
-    {
         _modbusServerList.removeOne(server);
-        delete server;
+}
+
+///
+/// \brief ModbusMultiServer::reconfigureServers
+///
+void ModbusMultiServer::reconfigureServers()
+{
+    if(!_modbusServerList.isEmpty())
+    {
+        const auto dataUintMap = createDataUnitMap();
+        for(auto&& s : _modbusServerList)
+            s->setMap(dataUintMap);
     }
 }
 
@@ -300,10 +295,8 @@ QModbusDataUnit ModbusMultiServer::data(QModbusDataUnit::RegisterType pointType,
     data.setStartAddress(pointAddress);
     data.setValueCount(length);
 
-    if(!_modbusServerList.empty())
-    {
+    if(!_modbusServerList.isEmpty())
         _modbusServerList.first()->data(&data);
-    }
 
     return data;
 }
@@ -314,7 +307,7 @@ QModbusDataUnit ModbusMultiServer::data(QModbusDataUnit::RegisterType pointType,
 ///
 void ModbusMultiServer::on_stateChanged(QModbusDevice::State state)
 {
-    auto server = (QModbusServer*)sender();
+    auto server = qobject_cast<QModbusServer*>(sender());
     const auto cd = server->property("ConnectionDetails").value<ConnectionDetails>();
 
     switch(state)
@@ -322,15 +315,15 @@ void ModbusMultiServer::on_stateChanged(QModbusDevice::State state)
         case QModbusDevice::ConnectedState:
             if(cd.Type == ConnectionType::Serial)
             {
-                auto port = (QSerialPort*)server->device();
+                auto serialPort = qobject_cast<QSerialPort*>(server->device());
 
                 const bool setDTR = server->property("DTRControl").toBool();
-                port->setDataTerminalReady(setDTR);
+                serialPort->setDataTerminalReady(setDTR);
 
-                if(port->flowControl() != QSerialPort::HardwareControl)
+                if(serialPort->flowControl() != QSerialPort::HardwareControl)
                 {
                     const bool setRTS = server->property("RTSControl").toBool();
-                    port->setRequestToSend(setRTS);
+                    serialPort->setRequestToSend(setRTS);
                 }
             }
             emit connected(cd);

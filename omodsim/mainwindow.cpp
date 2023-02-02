@@ -699,7 +699,7 @@ FormModSim* MainWindow::loadMdiChild(const QString& filename)
     s >> font;
 
     DisplayDefinition dd;
-    s >> dd.ScanRate;
+    s >> dd.UpdateRate;
     s >> dd.DeviceId;
     s >> dd.PointType;
     s >> dd.PointAddress;
@@ -770,7 +770,7 @@ void MainWindow::saveMdiChild(FormModSim* frm)
     s << frm->font();
 
     const auto dd = frm->displayDefinition();
-    s << dd.ScanRate;
+    s << dd.UpdateRate;
     s << dd.DeviceId;
     s << dd.PointType;
     s << dd.PointAddress;

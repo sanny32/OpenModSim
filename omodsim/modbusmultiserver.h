@@ -20,7 +20,6 @@ public:
 
     void connectDevice(const ConnectionDetails& cd);
     void disconnectDevice(ConnectionType type, const QString& port);
-    void disconnectDevices();
 
     bool isConnected() const;
     bool isConnected(ConnectionType type, const QString& port) const;
@@ -31,22 +30,25 @@ public:
 signals:
     void connected(const ConnectionDetails& cd);
     void disconnected(const ConnectionDetails& cd);
+    void deviceIdChanged(quint8 deviceId);
 
 private slots:
     void on_stateChanged(QModbusDevice::State state);
 
 private:
     QModbusDataUnitMap createDataUnitMap();
-    QModbusServer* findModbusServer(const ConnectionDetails& cd) const;
-    QModbusServer* findModbusServer(ConnectionType type, const QString& port) const;
-    QModbusServer* createModbusServer(const ConnectionDetails& cd);
+    QSharedPointer<QModbusServer> findModbusServer(const ConnectionDetails& cd) const;
+    QSharedPointer<QModbusServer> findModbusServer(ConnectionType type, const QString& port) const;
+    QSharedPointer<QModbusServer> createModbusServer(const ConnectionDetails& cd);
 
-    void addModbusServer(QModbusServer* server);
-    void removeModbusServer(QModbusServer* server);
+    void reconfigureServers();
+    void addModbusServer(QSharedPointer<QModbusServer> server);
+    void removeModbusServer(QSharedPointer<QModbusServer> server);
 
 private:
-    QMap<int, QModbusDataUnit> _modbusMap;
-    QList<QModbusServer*> _modbusServerList;
+    quint8 _deviceId;
+    QMap<int, QModbusDataUnit> _modbusDataUnitMap;
+    QList<QSharedPointer<QModbusServer>> _modbusServerList;
 };
 
 #endif // MODBUSMULTISERVER_H

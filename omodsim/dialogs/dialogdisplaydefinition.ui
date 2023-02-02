@@ -30,14 +30,14 @@
       </spacer>
      </item>
      <item>
-      <widget class="QLabel" name="labelScanRate">
+      <widget class="QLabel" name="labelUpdateRate">
        <property name="text">
-        <string>Scan Rate: </string>
+        <string>Update Rate: </string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="NumericLineEdit" name="lineEditScanRate">
+      <widget class="NumericLineEdit" name="lineEditUpdateRate">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
          <horstretch>0</horstretch>
@@ -239,7 +239,7 @@
   </customwidget>
  </customwidgets>
  <tabstops>
-  <tabstop>lineEditScanRate</tabstop>
+  <tabstop>lineEditUpdateRate</tabstop>
   <tabstop>lineEditSlaveAddress</tabstop>
   <tabstop>comboBoxPointType</tabstop>
   <tabstop>lineEditPointAddress</tabstop>

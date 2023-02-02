@@ -9,7 +9,7 @@
 ///
 struct DisplayDefinition
 {
-    quint32 ScanRate = 1000;
+    quint32 UpdateRate = 1000;
     quint8 DeviceId = 1;
     quint16 PointAddress = 1;
     QModbusDataUnit::RegisterType PointType = QModbusDataUnit::HoldingRegisters;
@@ -17,7 +17,7 @@ struct DisplayDefinition
 
     void normalize()
     {
-        ScanRate = qBound(20U, ScanRate, 10000U);
+        UpdateRate = qBound(20U, UpdateRate, 10000U);
         DeviceId = qBound<quint8>(1, DeviceId, 255);
         PointAddress = qMax<quint16>(1U, PointAddress);
         PointType = qBound(QModbusDataUnit::DiscreteInputs, PointType, QModbusDataUnit::HoldingRegisters);
@@ -28,7 +28,7 @@ Q_DECLARE_METATYPE(DisplayDefinition)
 
 inline QSettings& operator <<(QSettings& out, const DisplayDefinition& dd)
 {
-    out.setValue("DisplayDefinition/ScanRate",      dd.ScanRate);
+    out.setValue("DisplayDefinition/UpdateRate",      dd.UpdateRate);
     out.setValue("DisplayDefinition/DeviceId",      dd.DeviceId);
     out.setValue("DisplayDefinition/PointAddress",  dd.PointAddress);
     out.setValue("DisplayDefinition/PointType",     dd.PointType);
@@ -45,7 +45,7 @@ inline QSettings& operator <<(QSettings& out, const DisplayDefinition& dd)
 ///
 inline QSettings& operator >>(QSettings& in, DisplayDefinition& dd)
 {
-    dd.ScanRate = in.value("DisplayDefinition/ScanRate").toUInt();
+    dd.UpdateRate = in.value("DisplayDefinition/UpdateRate").toUInt();
     dd.DeviceId = in.value("DisplayDefinition/DeviceId").toUInt();
     dd.PointAddress = in.value("DisplayDefinition/PointAddress").toUInt();
     dd.PointType = (QModbusDataUnit::RegisterType)in.value("DisplayDefinition/PointType").toUInt();
