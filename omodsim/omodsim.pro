@@ -26,19 +26,23 @@ INCLUDEPATH += controls \
                dialogs \
 
 SOURCES += \
-    connectionmanager.cpp \
+    controls/booleancombobox.cpp \
     controls/clickablelabel.cpp \
     controls/customframe.cpp \
     controls/customlineedit.cpp \
+    controls/flowcontroltypecombobox.cpp \
     controls/mainstatusbar.cpp \
+    controls/numericcombobox.cpp \
     controls/numericlineedit.cpp \
     controls/outputwidget.cpp \
+    controls/paritytypecombobox.cpp \
     controls/pointtypecombobox.cpp \
     controls/statisticwidget.cpp \
     dialogs/dialogabout.cpp \
     dialogs/dialogdisplaydefinition.cpp \
     dialogs/dialogprintsettings.cpp \
     dialogs/dialogselectserviceport.cpp \
+    dialogs/dialogsetupserialport.cpp \
     dialogs/dialogwindowsmanager.cpp \
     dialogs/dialogwritecoilregister.cpp \
     dialogs/dialogwriteholdingregister.cpp \
@@ -47,7 +51,7 @@ SOURCES += \
     main.cpp \
     mainwindow.cpp \
     menuconnect.cpp \
-    modbusserver.cpp \
+    modbusmultiserver.cpp \
     qfixedsizedialog.cpp \
     qhexvalidator.cpp \
     recentfileactionlist.cpp \
@@ -55,19 +59,23 @@ SOURCES += \
 
 HEADERS += \
     connectiondetails.h \
-    connectionmanager.h \
+    controls/booleancombobox.h \
     controls/clickablelabel.h \
     controls/customframe.h \
     controls/customlineedit.h \
+    controls/flowcontroltypecombobox.h \
     controls/mainstatusbar.h \
+    controls/numericcombobox.h \
     controls/numericlineedit.h \
     controls/outputwidget.h \
+    controls/paritytypecombobox.h \
     controls/pointtypecombobox.h \
     controls/statisticwidget.h \
     dialogs/dialogabout.h \
     dialogs/dialogdisplaydefinition.h \
     dialogs/dialogprintsettings.h \
     dialogs/dialogselectserviceport.h \
+    dialogs/dialogsetupserialport.h \
     dialogs/dialogwindowsmanager.h \
     dialogs/dialogwritecoilregister.h \
     dialogs/dialogwriteholdingregister.h \
@@ -79,7 +87,7 @@ HEADERS += \
     mainwindow.h \
     menuconnect.h \
     modbuslimits.h \
-    modbusserver.h \
+    modbusmultiserver.h \
     modbuswriteparams.h \
     qfixedsizedialog.h \
     qhexvalidator.h \
@@ -94,6 +102,7 @@ FORMS += \
     dialogs/dialogdisplaydefinition.ui \
     dialogs/dialogprintsettings.ui \
     dialogs/dialogselectserviceport.ui \
+    dialogs/dialogsetupserialport.ui \
     dialogs/dialogwindowsmanager.ui \
     dialogs/dialogwritecoilregister.ui \
     dialogs/dialogwriteholdingregister.ui \

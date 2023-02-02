@@ -14,11 +14,11 @@
 /// \param num
 /// \param parent
 ///
-FormModSim::FormModSim(int id, MainWindow* parent) :
+FormModSim::FormModSim(int id, ModbusMultiServer& server, MainWindow* parent) :
     QWidget(parent)
     , ui(new Ui::FormModSim)
     ,_formId(id)
-    ,_modbusServer(nullptr)
+    ,_mbMultiServer(server)
 {
     Q_ASSERT(parent != nullptr);
 
@@ -39,8 +39,16 @@ FormModSim::FormModSim(int id, MainWindow* parent) :
 
     ui->comboBoxModbusPointType->setCurrentPointType(QModbusDataUnit::HoldingRegisters);
 
-    ui->outputWidget->setup(displayDefinition());
-    ui->outputWidget->setFocus();
+    {
+        const auto dd = displayDefinition();
+
+        _mbMultiServer.setDeviceId(dd.DeviceId);
+        _mbMultiServer.addUnitMap(formId(), dd.PointType, dd.PointAddress - 1, dd.Length);
+
+        ui->outputWidget->setup(dd);
+        ui->outputWidget->setFocus();
+        ui->outputWidget->setStatus(_mbMultiServer.isConnected() ? "" : tr("NOT CONNECTED!"));
+    }
 
     connect(&_timer, &QTimer::timeout, this, &FormModSim::on_timeout);
     _timer.start();
@@ -51,9 +59,7 @@ FormModSim::FormModSim(int id, MainWindow* parent) :
 ///
 FormModSim::~FormModSim()
 {
-    if(_modbusServer)
-        _modbusServer->removeUnitMap(formId());
-
+    _mbMultiServer.removeUnitMap(formId());
     delete ui;
 }
 
@@ -84,52 +90,6 @@ void FormModSim::setFilename(const QString& filename)
 {
     _filename = filename;
 }
-
-///
-/// \brief FormModSim::data
-/// \return
-///
-QVector<quint16> FormModSim::mbData() const
-{
-    return ui->outputWidget->data();
-}
-
-///
-/// \brief FormModSim::mbState
-/// \return
-///
-QModbusDevice::State FormModSim::mbState() const
-{
-    return _modbusServer ? _modbusServer->state() :
-                           QModbusDevice::UnconnectedState;
-}
-
-///
-/// \brief FormModSim::mbServer
-/// \return
-///
-QSharedPointer<ModbusServer> FormModSim::mbServer() const
-{
-    return _modbusServer;
-}
-
-///
-/// \brief FormModSim::setMbServer
-/// \param server
-///
-void FormModSim::setMbServer(QSharedPointer<ModbusServer> server)
-{
-    const auto dd = displayDefinition();
-    if(_modbusServer) _modbusServer->removeUnitMap(formId());
-
-    _modbusServer = server;
-    if(_modbusServer)
-    {
-        _modbusServer->setDeviceId(dd.DeviceId);
-        _modbusServer->addUnitMap(formId(), dd.PointType, dd.PointAddress - 1, dd.Length);
-    }
-}
-
 
 ///
 /// \brief FormModSim::displayDefinition
@@ -389,13 +349,7 @@ void FormModSim::show()
 ///
 void FormModSim::on_timeout()
 {
-    if(!_modbusServer ||
-       !_modbusServer->isValid())
-    {
-        return;
-    }
-
-    if(_modbusServer->state() != QModbusDevice::ConnectedState)
+    if(!_mbMultiServer.isConnected())
     {
         ui->outputWidget->setStatus(tr("NOT CONNECTED!"));
         return;
@@ -409,7 +363,7 @@ void FormModSim::on_timeout()
     }
 
     ui->outputWidget->setStatus(QString());
-    ui->outputWidget->updateData(_modbusServer->data(dd.PointType, dd.PointAddress - 1, dd.Length));
+    ui->outputWidget->updateData(_mbMultiServer.data(dd.PointType, dd.PointAddress - 1, dd.Length));
 }
 
 ///
@@ -419,7 +373,7 @@ void FormModSim::on_lineEditAddress_valueChanged(const QVariant&)
 {
     const auto dd = displayDefinition();
     ui->outputWidget->setup(dd);
-    if(_modbusServer) _modbusServer->addUnitMap(formId(), dd.PointType, dd.PointAddress - 1, dd.Length);
+    _mbMultiServer.addUnitMap(formId(), dd.PointType, dd.PointAddress - 1, dd.Length);
 }
 
 ///
@@ -429,7 +383,7 @@ void FormModSim::on_lineEditLength_valueChanged(const QVariant&)
 {
     const auto dd = displayDefinition();
     ui->outputWidget->setup(dd);
-    if(_modbusServer) _modbusServer->addUnitMap(formId(), dd.PointType, dd.PointAddress - 1, dd.Length);
+    _mbMultiServer.addUnitMap(formId(), dd.PointType, dd.PointAddress - 1, dd.Length);
 }
 
 ///
@@ -438,20 +392,18 @@ void FormModSim::on_lineEditLength_valueChanged(const QVariant&)
 void FormModSim::on_lineEditDeviceId_valueChanged(const QVariant&)
 {
     const auto dd = displayDefinition();
-    if(_modbusServer) _modbusServer->setDeviceId(dd.DeviceId);
+    _mbMultiServer.setDeviceId(dd.DeviceId);
 }
 
 ///
 /// \brief FormModSim::on_comboBoxModbusPointType_pointTypeChanged
+/// \param value
 ///
-void FormModSim::on_comboBoxModbusPointType_pointTypeChanged(QModbusDataUnit::RegisterType oldValue, QModbusDataUnit::RegisterType newValue)
+void FormModSim::on_comboBoxModbusPointType_pointTypeChanged(QModbusDataUnit::RegisterType value)
 {
     const auto dd = displayDefinition();
-    Q_ASSERT(newValue == dd.PointType);
-
     ui->outputWidget->setup(dd);
-    if(_modbusServer)
-        _modbusServer->addUnitMap(formId(), newValue, dd.PointAddress - 1, dd.Length);
+    _mbMultiServer.addUnitMap(formId(), value, dd.PointAddress - 1, dd.Length);
 }
 
 ///

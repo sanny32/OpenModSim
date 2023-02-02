@@ -4,7 +4,7 @@
 #include <QWidget>
 #include <QTimer>
 #include <QPrinter>
-#include "modbusserver.h"
+#include "modbusmultiserver.h"
 #include "displaydefinition.h"
 
 class MainWindow;
@@ -21,19 +21,13 @@ class FormModSim : public QWidget
     Q_OBJECT
 
 public:
-    explicit FormModSim(int id, MainWindow* parent);
+    explicit FormModSim(int id, ModbusMultiServer& server, MainWindow* parent);
     ~FormModSim();
 
     int formId() const { return _formId; }
 
     QString filename() const;
     void setFilename(const QString& filename);
-
-    QVector<quint16> mbData() const;
-    QModbusDevice::State mbState() const;
-
-    QSharedPointer<ModbusServer> mbServer() const;
-    void setMbServer(QSharedPointer<ModbusServer> server);
 
     DisplayDefinition displayDefinition() const;
     void setDisplayDefinition(const DisplayDefinition& dd);
@@ -82,7 +76,7 @@ private slots:
     void on_lineEditAddress_valueChanged(const QVariant&);
     void on_lineEditLength_valueChanged(const QVariant&);
     void on_lineEditDeviceId_valueChanged(const QVariant&);
-    void on_comboBoxModbusPointType_pointTypeChanged(QModbusDataUnit::RegisterType oldValue, QModbusDataUnit::RegisterType newValue);
+    void on_comboBoxModbusPointType_pointTypeChanged(QModbusDataUnit::RegisterType value);
     void on_outputWidget_itemDoubleClicked(quint32 addr, const QVariant& value);
     void on_statisticWidget_numberOfPollsChanged(uint value);
     void on_statisticWidget_validSlaveResposesChanged(uint value);
@@ -92,7 +86,7 @@ private:
     int _formId;
     QTimer _timer;
     QString _filename;
-    QSharedPointer<ModbusServer> _modbusServer;
+    ModbusMultiServer& _mbMultiServer;
 };
 
 #endif // FORMMODSIM_H

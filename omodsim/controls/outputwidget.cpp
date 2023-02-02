@@ -33,7 +33,6 @@ OutputWidget::OutputWidget(QWidget *parent) :
     setBackgroundColor(Qt::lightGray);
 
     setStatusColor(Qt::red);
-    setStatus(tr("NOT CONNECTED!"));
 }
 
 ///

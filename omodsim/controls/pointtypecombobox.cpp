@@ -7,7 +7,6 @@
 ///
 PointTypeComboBox::PointTypeComboBox(QWidget *parent)
     : QComboBox(parent)
-    , _oldPointType(QModbusDataUnit::Invalid)
 {
     addItem("01: COIL STATUS", QModbusDataUnit::Coils);
     addItem("02: INPUT STATUS", QModbusDataUnit::DiscreteInputs);
@@ -42,7 +41,5 @@ void PointTypeComboBox::setCurrentPointType(QModbusDataUnit::RegisterType pointT
 ///
 void PointTypeComboBox::on_currentIndexChanged(int index)
 {
-    const auto newPointType = itemData(index).value<QModbusDataUnit::RegisterType>();
-    emit pointTypeChanged(_oldPointType, newPointType);
-    _oldPointType = newPointType;
+    emit pointTypeChanged(itemData(index).value<QModbusDataUnit::RegisterType>());
 }

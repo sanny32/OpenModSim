@@ -17,13 +17,10 @@ public:
     void setCurrentPointType(QModbusDataUnit::RegisterType pointType);
 
 signals:
-    void pointTypeChanged(QModbusDataUnit::RegisterType oldValue, QModbusDataUnit::RegisterType newValue);
+    void pointTypeChanged(QModbusDataUnit::RegisterType value);
 
 private slots:
     void on_currentIndexChanged(int);
-
-private:
-    QModbusDataUnit::RegisterType _oldPointType;
 };
 
 #endif // POINTTYPECOMBOBOX_H

@@ -7,6 +7,7 @@
 #include "dialogprintsettings.h"
 #include "dialogdisplaydefinition.h"
 #include "dialogselectserviceport.h"
+#include "dialogsetupserialport.h"
 #include "mainstatusbar.h"
 #include "menuconnect.h"
 #include "mainwindow.h"
@@ -27,7 +28,7 @@ MainWindow::MainWindow(QWidget *parent)
     setUnifiedTitleAndToolBarOnMac(true);
     setStatusBar(new MainStatusBar(ui->mdiArea));
 
-    auto menuConnect = new MenuConnect(this);
+    auto menuConnect = new MenuConnect(_mbMultiServer, this);
     connect(menuConnect, &MenuConnect::connectAction, this, &MainWindow::on_connectAction);
 
     ui->actionConnect->setMenu(menuConnect);
@@ -132,9 +133,9 @@ void MainWindow::on_awake()
 
     if(frm != nullptr)
     {
-        const auto state = frm->mbState();
-        ui->actionConnect->setEnabled(state == QModbusDevice::UnconnectedState);
-        ui->actionDisconnect->setEnabled(state == QModbusDevice::ConnectedState);
+        //const auto state = frm->mbState();
+        //ui->actionConnect->setEnabled(state == QModbusDevice::UnconnectedState);
+        //ui->actionDisconnect->setEnabled(state == QModbusDevice::ConnectedState);
 
         const auto ddm = frm->dataDisplayMode();
         ui->actionBinary->setChecked(ddm == DataDisplayMode::Binary);
@@ -252,15 +253,22 @@ void MainWindow::on_connectAction(ConnectionType type, const QString& port)
         case ConnectionType::Tcp:
         {
             ConnectionDetails cd;
+            cd.Type = type;
+
             DialogSelectServicePort dlg(cd.TcpParams.ServicePort, this);
-            if(dlg.exec() == QDialog::Accepted)
-            {
-                _connManager.connectDevice(frm, cd);
-            }
+            if(dlg.exec() == QDialog::Accepted) _mbMultiServer.connectDevice(cd);
         }
         break;
 
         case ConnectionType::Serial:
+        {
+            ConnectionDetails cd;
+            cd.Type = type;
+            cd.SerialParams.PortName = port;
+
+            DialogSetupSerialPort dlg(cd.SerialParams, this);
+            if(dlg.exec()) _mbMultiServer.connectDevice(cd);
+        }
         break;
     }
 }
@@ -273,7 +281,7 @@ void MainWindow::on_actionDisconnect_triggered()
     auto frm = currentMdiChild();
     if(!frm) return;
 
-    _connManager.disconnectDevice(frm);
+    _mbMultiServer.disconnectDevices();
 }
 
 ///
@@ -576,7 +584,7 @@ void MainWindow::updateDataDisplayMode(DataDisplayMode mode)
 ///
 FormModSim* MainWindow::createMdiChild(int id)
 {
-    auto frm = new FormModSim(id, this);
+    auto frm = new FormModSim(id, _mbMultiServer, this);
     auto wnd = ui->mdiArea->addSubWindow(frm);
     wnd->installEventFilter(this);
     wnd->setAttribute(Qt::WA_DeleteOnClose, true);

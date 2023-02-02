@@ -3,7 +3,7 @@
 
 #include <QMainWindow>
 #include "formmodsim.h"
-#include "connectionmanager.h"
+#include "modbusmultiserver.h"
 #include "windowactionlist.h"
 #include "recentfileactionlist.h"
 
@@ -100,7 +100,7 @@ private:
 private:
     int _windowCounter;
 
-    ConnectionManager _connManager;
+    ModbusMultiServer _mbMultiServer;
     WindowActionList* _windowActionList;
     RecentFileActionList* _recentFileActionList;
     QSharedPointer<QPrinter> _selectedPrinter;
