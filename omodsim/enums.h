@@ -98,4 +98,17 @@ enum class TransmissionMode
 };
 Q_DECLARE_METATYPE(TransmissionMode);
 
+///
+/// \brief The SimulationMode enum
+///
+enum class SimulationMode
+{
+    No = 0,
+    Random,
+    Increment,
+    Decrement,
+    Toggle
+};
+Q_DECLARE_METATYPE(SimulationMode);
+
 #endif // ENUMS_H

@@ -38,6 +38,7 @@ SOURCES += \
     controls/paritytypecombobox.cpp \
     controls/pointtypecombobox.cpp \
     controls/statisticwidget.cpp \
+    dialogs/dialogcoilsimulation.cpp \
     dialogs/dialogabout.cpp \
     dialogs/dialogdisplaydefinition.cpp \
     dialogs/dialogprintsettings.cpp \
@@ -71,6 +72,7 @@ HEADERS += \
     controls/paritytypecombobox.h \
     controls/pointtypecombobox.h \
     controls/statisticwidget.h \
+    dialogs/dialogcoilsimulation.h \
     dialogs/dialogabout.h \
     dialogs/dialogdisplaydefinition.h \
     dialogs/dialogprintsettings.h \
@@ -88,6 +90,7 @@ HEADERS += \
     menuconnect.h \
     modbuslimits.h \
     modbusmultiserver.h \
+    modbussimulationparams.h \
     modbuswriteparams.h \
     qfixedsizedialog.h \
     qhexvalidator.h \
@@ -98,6 +101,7 @@ HEADERS += \
 FORMS += \
     controls/outputwidget.ui \
     controls/statisticwidget.ui \
+    dialogs/dialogcoilsimulation.ui \
     dialogs/dialogabout.ui \
     dialogs/dialogdisplaydefinition.ui \
     dialogs/dialogprintsettings.ui \

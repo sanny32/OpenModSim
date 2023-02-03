@@ -21,8 +21,13 @@ public:
 
     void accept() override;
 
+private slots:
+    void on_pushButtonSimulation_clicked();
+
 private:
     Ui::DialogWriteCoilRegister *ui;
+
+private:
     ModbusWriteParams& _writeParams;
 };
 

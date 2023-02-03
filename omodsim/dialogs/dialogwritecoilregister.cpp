@@ -1,4 +1,5 @@
 #include "modbuslimits.h"
+#include "dialogcoilsimulation.h"
 #include "dialogwritecoilregister.h"
 #include "ui_dialogwritecoilregister.h"
 
@@ -37,4 +38,13 @@ void DialogWriteCoilRegister::accept()
     _writeParams.Value = ui->radioButtonOn->isChecked();
 
     QFixedSizeDialog::accept();
+}
+
+///
+/// \brief DialogWriteCoilRegister::on_pushButtonSimulation_clicked
+///
+void DialogWriteCoilRegister::on_pushButtonSimulation_clicked()
+{
+    DialogCoilSimulation dlg(_writeParams.SimulationParams, this);
+    dlg.exec();
 }
