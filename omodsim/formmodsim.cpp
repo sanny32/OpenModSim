@@ -415,33 +415,34 @@ void FormModSim::on_comboBoxModbusPointType_pointTypeChanged(QModbusDataUnit::Re
 void FormModSim::on_outputWidget_itemDoubleClicked(quint32 addr, const QVariant& value)
 {
     const auto mode = dataDisplayMode();
-    const quint32 node = ui->lineEditDeviceId->value<int>();
     const auto pointType = ui->comboBoxModbusPointType->currentPointType();
     switch(pointType)
     {
         case QModbusDataUnit::Coils:
+        case QModbusDataUnit::DiscreteInputs:
         {
-            ModbusWriteParams params = { node, addr, value, mode };
+            ModbusWriteParams params = { addr, value, mode };
             DialogWriteCoilRegister dlg(params, this);
-            /*if(dlg.exec() == QDialog::Accepted)
-                _modbusServer.writeRegister(pointType, params, _formId);*/
+            if(dlg.exec() == QDialog::Accepted)
+                _mbMultiServer.writeRegister(pointType, params);
         }
         break;
 
+        case QModbusDataUnit::InputRegisters:
         case QModbusDataUnit::HoldingRegisters:
         {
-            ModbusWriteParams params = { node, addr, value, mode};
+            ModbusWriteParams params = { addr, value, mode };
             if(mode == DataDisplayMode::Binary)
             {
                 DialogWriteHoldingRegisterBits dlg(params, this);
-                /*if(dlg.exec() == QDialog::Accepted)
-                    _modbusServer.writeRegister(pointType, params, _formId);*/
+                if(dlg.exec() == QDialog::Accepted)
+                    _mbMultiServer.writeRegister(pointType, params);
             }
             else
             {
                 DialogWriteHoldingRegister dlg(params, mode, this);
-                /*if(dlg.exec() == QDialog::Accepted)
-                    _modbusServer.writeRegister(pointType, params, _formId);*/
+                if(dlg.exec() == QDialog::Accepted)
+                    _mbMultiServer.writeRegister(pointType, params);
             }
         }
         break;

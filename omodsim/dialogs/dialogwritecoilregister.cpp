@@ -13,9 +13,7 @@ DialogWriteCoilRegister::DialogWriteCoilRegister(ModbusWriteParams& params, QWid
     ,_writeParams(params)
 {
     ui->setupUi(this);
-    ui->lineEditNode->setInputRange(ModbusLimits::slaveRange());
     ui->lineEditAddress->setInputRange(ModbusLimits::addressRange());
-    ui->lineEditNode->setValue(params.Node);
     ui->lineEditAddress->setValue(params.Address);
     ui->radioButtonOn->setChecked(params.Value.toBool());
     ui->radioButtonOff->setChecked(!params.Value.toBool());
@@ -37,7 +35,6 @@ void DialogWriteCoilRegister::accept()
 {
     _writeParams.Address = ui->lineEditAddress->value<int>();
     _writeParams.Value = ui->radioButtonOn->isChecked();
-    _writeParams.Node = ui->lineEditNode->value<int>();
 
     QFixedSizeDialog::accept();
 }

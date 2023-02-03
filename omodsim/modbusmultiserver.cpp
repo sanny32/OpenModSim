@@ -192,7 +192,17 @@ void ModbusMultiServer::connectDevice(const ConnectionDetails& cd)
     }
 
     modbusServer->setServerAddress(_deviceId);
-    modbusServer->setMap(createDataUnitMap());
+
+    const auto dataUintMap = createDataUnitMap();
+    modbusServer->setMap(dataUintMap);
+
+    for(auto&& type : dataUintMap.keys())
+    {
+        auto data = dataUintMap.value(type);
+        _modbusServerList.first()->data(&data);
+        modbusServer->setData(data);
+    }
+
     modbusServer->connectDevice();
 }
 
@@ -220,6 +230,7 @@ void ModbusMultiServer::addModbusServer(QSharedPointer<QModbusServer> server)
     if(server && !_modbusServerList.contains(server))
     {
         _modbusServerList.push_back(server);
+        connect(server.get(), &QModbusServer::dataWritten, this, &ModbusMultiServer::on_dataWritten);
         connect(server.get(), &QModbusDevice::stateChanged, this, &ModbusMultiServer::on_stateChanged);
     }
 }
@@ -302,6 +313,169 @@ QModbusDataUnit ModbusMultiServer::data(QModbusDataUnit::RegisterType pointType,
 }
 
 ///
+/// \brief ModbusMultiServer::setData
+/// \param data
+///
+void ModbusMultiServer::setData(const QModbusDataUnit& data)
+{
+    for(auto&& s : _modbusServerList)
+    {
+        s->blockSignals(true);
+        s->setData(data);
+        s->blockSignals(false);
+    }
+}
+
+///
+/// \brief createDataUnit
+/// \param type
+/// \param newStartAddress
+/// \param values
+/// \return
+///
+QModbusDataUnit createDataUnit(QModbusDataUnit::RegisterType type, int newStartAddress, const QVector<quint16>& values)
+{
+    auto data = QModbusDataUnit(type, newStartAddress, values.count());
+    data.setValues(values);
+
+    return data;
+}
+
+///
+/// \brief createRegistersDataUnit
+/// \param type
+/// \param newStartAddress
+/// \param value
+/// \param inv
+/// \return
+///
+QModbusDataUnit createRegistersDataUnit(QModbusDataUnit::RegisterType type, int newStartAddress, float value, bool inv)
+{
+    union {
+       quint16 asUint16[2];
+       float asFloat;
+    } v;
+    v.asFloat = value;
+
+    auto data = QModbusDataUnit(type, newStartAddress, 2);
+    if(inv)
+    {
+        data.setValue(0, v.asUint16[1]);
+        data.setValue(1, v.asUint16[0]);
+    }
+    else
+    {
+        data.setValue(0, v.asUint16[0]);
+        data.setValue(1, v.asUint16[1]);
+    }
+
+    return data;
+}
+
+///
+/// \brief createRegistersDataUnit
+/// \param type
+/// \param newStartAddress
+/// \param value
+/// \param inv
+/// \return
+///
+QModbusDataUnit createRegistersDataUnit(QModbusDataUnit::RegisterType type, int newStartAddress, double value, bool inv)
+{
+    union {
+       quint16 asUint16[4];
+       double asDouble;
+    } v;
+    v.asDouble = value;
+
+    auto data = QModbusDataUnit(type, newStartAddress, 4);
+    if(inv)
+    {
+        data.setValue(0, v.asUint16[3]);
+        data.setValue(1, v.asUint16[2]);
+        data.setValue(2, v.asUint16[1]);
+        data.setValue(3, v.asUint16[0]);
+    }
+    else
+    {
+        data.setValue(0, v.asUint16[0]);
+        data.setValue(1, v.asUint16[1]);
+        data.setValue(2, v.asUint16[2]);
+        data.setValue(3, v.asUint16[3]);
+    }
+
+    return data;
+}
+
+///
+/// \brief ModbusMultiServer::writeRegister
+/// \param pointType
+/// \param params
+///
+void ModbusMultiServer::writeRegister(QModbusDataUnit::RegisterType pointType, const ModbusWriteParams& params)
+{
+    QModbusDataUnit data;
+    if(params.Value.userType() == qMetaTypeId<QVector<quint16>>())
+    {
+        switch (pointType)
+        {
+            case QModbusDataUnit::Coils:
+            case QModbusDataUnit::DiscreteInputs:
+                data = createDataUnit(pointType, params.Address - 1, params.Value.value<QVector<quint16>>());
+            break;
+
+            case QModbusDataUnit::InputRegisters:
+            case QModbusDataUnit::HoldingRegisters:
+                data = createDataUnit(pointType, params.Address - 1, params.Value.value<QVector<quint16>>());
+            break;
+
+            default:
+            break;
+        }
+    }
+    else
+    {
+        switch (pointType)
+        {
+            case QModbusDataUnit::Coils:
+            case QModbusDataUnit::DiscreteInputs:
+                data = createDataUnit(pointType, params.Address - 1, QVector<quint16>() << params.Value.toBool());
+            break;
+
+            case QModbusDataUnit::InputRegisters:
+            case QModbusDataUnit::HoldingRegisters:
+                switch(params.DisplayMode)
+                {
+                    case DataDisplayMode::Binary:
+                    case DataDisplayMode::Decimal:
+                    case DataDisplayMode::Integer:
+                    case DataDisplayMode::Hex:
+                        data = createDataUnit(pointType, params.Address - 1, QVector<quint16>() << params.Value.toUInt());
+                    break;
+                    case DataDisplayMode::FloatingPt:
+                        data = createRegistersDataUnit(pointType, params.Address - 1, params.Value.toFloat(), false);
+                    break;
+                    case DataDisplayMode::SwappedFP:
+                        data = createRegistersDataUnit(pointType, params.Address - 1, params.Value.toFloat(), true);
+                    break;
+                    case DataDisplayMode::DblFloat:
+                        data = createRegistersDataUnit(pointType, params.Address - 1, params.Value.toDouble(), false);
+                    break;
+                    case DataDisplayMode::SwappedDbl:
+                        data = createRegistersDataUnit(pointType, params.Address - 1, params.Value.toDouble(), true);
+                    break;
+                }
+            break;
+
+            default:
+            break;
+        }
+    }
+
+    setData(data);
+}
+
+///
 /// \brief ModbusServer::on_stateChanged
 /// \param state
 ///
@@ -336,4 +510,31 @@ void ModbusMultiServer::on_stateChanged(QModbusDevice::State state)
         default:
         break;
     }
+}
+
+///
+/// \brief ModbusMultiServer::on_dataWritten
+/// \param table
+/// \param address
+/// \param size
+///
+void ModbusMultiServer::on_dataWritten(QModbusDataUnit::RegisterType table, int address, int size)
+{
+    auto server = qobject_cast<QModbusServer*>(sender());
+
+    QModbusDataUnit data;
+    data.setRegisterType(table);
+    data.setStartAddress(address);
+    data.setValueCount(size);
+    server->data(&data);
+
+    if(table == QModbusDataUnit::Coils ||
+       table == QModbusDataUnit::DiscreteInputs)
+    {
+        auto values = data.values();
+        for(auto& v : values) v = !!v; // force values to bit
+        data.setValues(values);
+    }
+
+    setData(data);
 }

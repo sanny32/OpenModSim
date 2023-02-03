@@ -304,13 +304,13 @@ void OutputWidget::setDataDisplayMode(DataDisplayMode mode)
 }
 
 ///
-/// \brief formatBinatyValue
+/// \brief formatBinaryValue
 /// \param pointType
 /// \param value
 /// \param outValue
 /// \return
 ///
-QString formatBinatyValue(QModbusDataUnit::RegisterType pointType, quint16 value, QVariant& outValue)
+QString formatBinaryValue(QModbusDataUnit::RegisterType pointType, quint16 value, QVariant& outValue)
 {
     QString result;
     switch(pointType)
@@ -606,7 +606,7 @@ void OutputWidget::updateDataWidget(const QModbusDataUnit& data)
         switch(_dataDisplayMode)
         {
             case DataDisplayMode::Binary:
-                valstr = formatBinatyValue(_displayDefinition.PointType, value, itemData.Value);
+                valstr = formatBinaryValue(_displayDefinition.PointType, value, itemData.Value);
             break;
 
             case DataDisplayMode::Decimal:

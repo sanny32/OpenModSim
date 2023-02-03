@@ -14,9 +14,7 @@ DialogWriteHoldingRegisterBits::DialogWriteHoldingRegisterBits(ModbusWriteParams
     ,_writeParams(params)
 {
     ui->setupUi(this);
-    ui->lineEditNode->setInputRange(ModbusLimits::slaveRange());
     ui->lineEditAddress->setInputRange(ModbusLimits::addressRange());
-    ui->lineEditNode->setValue(params.Node);
     ui->lineEditAddress->setValue(params.Address);
 
     quint16 value = params.Value.toUInt();
@@ -49,7 +47,6 @@ void DialogWriteHoldingRegisterBits::accept()
     }
     _writeParams.Value = value;
     _writeParams.Address = ui->lineEditAddress->value<int>();
-    _writeParams.Node = ui->lineEditNode->value<int>();
 
     QFixedSizeDialog::accept();
 }

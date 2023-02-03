@@ -15,9 +15,7 @@ DialogWriteHoldingRegister::DialogWriteHoldingRegister(ModbusWriteParams& params
     ,_writeParams(params)
 {
     ui->setupUi(this);
-    ui->lineEditNode->setInputRange(ModbusLimits::slaveRange());
     ui->lineEditAddress->setInputRange(ModbusLimits::addressRange());
-    ui->lineEditNode->setValue(params.Node);
     ui->lineEditAddress->setValue(params.Address);
 
     switch(mode)
@@ -75,7 +73,6 @@ void DialogWriteHoldingRegister::accept()
 {
     _writeParams.Address = ui->lineEditAddress->value<int>();
     _writeParams.Value = ui->lineEditValue->value<QVariant>();
-    _writeParams.Node = ui->lineEditNode->value<int>();
 
     QFixedSizeDialog::accept();
 }

@@ -32,13 +32,15 @@ MainWindow::MainWindow(QWidget *parent)
     connect(menuConnect, &MenuConnect::connectAction, this, &MainWindow::on_connectAction);
 
     ui->actionConnect->setMenu(menuConnect);
-    ((QToolButton*)ui->toolBarMain->widgetForAction(ui->actionConnect))->setPopupMode(QToolButton::InstantPopup);
+    qobject_cast<QToolButton*>(ui->toolBarMain->widgetForAction(ui->actionConnect))->setPopupMode(QToolButton::InstantPopup);
+    qobject_cast<QToolButton*>(ui->toolBarMain->widgetForAction(ui->actionConnect))->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
 
     auto menuDisconnect = new MenuConnect(MenuConnect::DisconnectMenu, _mbMultiServer, this);
     connect(menuDisconnect, &MenuConnect::disconnectAction, this, &MainWindow::on_disconnectAction);
 
     ui->actionDisconnect->setMenu(menuDisconnect);
-    ((QToolButton*)ui->toolBarMain->widgetForAction(ui->actionDisconnect))->setPopupMode(QToolButton::InstantPopup);
+    qobject_cast<QToolButton*>(ui->toolBarMain->widgetForAction(ui->actionDisconnect))->setPopupMode(QToolButton::InstantPopup);
+    qobject_cast<QToolButton*>(ui->toolBarMain->widgetForAction(ui->actionDisconnect))->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
 
     const auto defaultPrinter = QPrinterInfo::defaultPrinter();
     if(!defaultPrinter.isNull())

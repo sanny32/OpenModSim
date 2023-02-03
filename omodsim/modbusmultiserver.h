@@ -3,9 +3,10 @@
 
 #include <QObject>
 #include <QModbusServer>
+#include "modbuswriteparams.h"
 #include "connectiondetails.h"
 
-class ModbusMultiServer : public QObject
+class ModbusMultiServer final : public QObject
 {
     Q_OBJECT
 public:
@@ -26,6 +27,9 @@ public:
     QModbusDevice::State state(ConnectionType type, const QString& port) const;
 
     QModbusDataUnit data(QModbusDataUnit::RegisterType pointType, quint16 pointAddress, quint16 length) const;
+    void setData(const QModbusDataUnit& data);
+
+    void writeRegister(QModbusDataUnit::RegisterType pointType, const ModbusWriteParams& params);
 
 signals:
     void connected(const ConnectionDetails& cd);
@@ -34,6 +38,7 @@ signals:
 
 private slots:
     void on_stateChanged(QModbusDevice::State state);
+    void on_dataWritten(QModbusDataUnit::RegisterType table, int address, int size);
 
 private:
     QModbusDataUnitMap createDataUnitMap();
