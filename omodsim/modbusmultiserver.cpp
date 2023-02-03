@@ -342,15 +342,18 @@ QModbusDataUnit createDataUnit(QModbusDataUnit::RegisterType type, int newStartA
 }
 
 ///
-/// \brief createRegistersDataUnit
+/// \brief createFloatDataUnit
 /// \param type
 /// \param newStartAddress
 /// \param value
 /// \param inv
 /// \return
 ///
-QModbusDataUnit createRegistersDataUnit(QModbusDataUnit::RegisterType type, int newStartAddress, float value, bool inv)
+QModbusDataUnit createFloatDataUnit(QModbusDataUnit::RegisterType type, int newStartAddress, float value, bool inv)
 {
+    Q_ASSERT(type == QModbusDataUnit::HoldingRegisters
+             || type == QModbusDataUnit::InputRegisters);
+
     union {
        quint16 asUint16[2];
        float asFloat;
@@ -373,15 +376,18 @@ QModbusDataUnit createRegistersDataUnit(QModbusDataUnit::RegisterType type, int 
 }
 
 ///
-/// \brief createRegistersDataUnit
+/// \brief createDoubleDataUnit
 /// \param type
 /// \param newStartAddress
 /// \param value
 /// \param inv
 /// \return
 ///
-QModbusDataUnit createRegistersDataUnit(QModbusDataUnit::RegisterType type, int newStartAddress, double value, bool inv)
+QModbusDataUnit createDoubleDataUnit(QModbusDataUnit::RegisterType type, int newStartAddress, double value, bool inv)
 {
+    Q_ASSERT(type == QModbusDataUnit::HoldingRegisters
+             || type == QModbusDataUnit::InputRegisters);
+
     union {
        quint16 asUint16[4];
        double asDouble;
@@ -453,16 +459,16 @@ void ModbusMultiServer::writeRegister(QModbusDataUnit::RegisterType pointType, c
                         data = createDataUnit(pointType, params.Address - 1, QVector<quint16>() << params.Value.toUInt());
                     break;
                     case DataDisplayMode::FloatingPt:
-                        data = createRegistersDataUnit(pointType, params.Address - 1, params.Value.toFloat(), false);
+                        data = createFloatDataUnit(pointType, params.Address - 1, params.Value.toFloat(), false);
                     break;
                     case DataDisplayMode::SwappedFP:
-                        data = createRegistersDataUnit(pointType, params.Address - 1, params.Value.toFloat(), true);
+                        data = createFloatDataUnit(pointType, params.Address - 1, params.Value.toFloat(), true);
                     break;
                     case DataDisplayMode::DblFloat:
-                        data = createRegistersDataUnit(pointType, params.Address - 1, params.Value.toDouble(), false);
+                        data = createDoubleDataUnit(pointType, params.Address - 1, params.Value.toDouble(), false);
                     break;
                     case DataDisplayMode::SwappedDbl:
-                        data = createRegistersDataUnit(pointType, params.Address - 1, params.Value.toDouble(), true);
+                        data = createDoubleDataUnit(pointType, params.Address - 1, params.Value.toDouble(), true);
                     break;
                 }
             break;
