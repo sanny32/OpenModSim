@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QModbusServer>
+#include "datasimulator.h"
 #include "modbuswriteparams.h"
 #include "connectiondetails.h"
 
@@ -54,6 +55,7 @@ private:
     quint8 _deviceId;
     QMap<int, QModbusDataUnit> _modbusDataUnitMap;
     QList<QSharedPointer<QModbusServer>> _modbusServerList;
+    QSharedPointer<DataSimulator> _simulator;
 };
 
 #endif // MODBUSMULTISERVER_H

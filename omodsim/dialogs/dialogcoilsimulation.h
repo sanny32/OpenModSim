@@ -18,6 +18,10 @@ public:
 
     void accept() override;
 
+private slots:
+    void on_checkBoxEnabled_toggled();
+    void on_comboBoxSimulationType_currentIndexChanged(int);
+
 private:
     Ui::DialogCoilSimulation *ui;
 

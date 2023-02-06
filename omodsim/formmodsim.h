@@ -88,6 +88,7 @@ private:
     QTimer _timer;
     QString _filename;
     ModbusMultiServer& _mbMultiServer;
+    QMap<quint16, ModbusSimulationParams> _simulationMap;
 };
 
 #endif // FORMMODSIM_H

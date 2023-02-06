@@ -13,7 +13,7 @@ public:
     ///
     /// \brief QRange
     ///
-    explicit QRange()
+    QRange()
     {
         _from = std::numeric_limits<T>::min();
         _to = std::numeric_limits<T>::max();

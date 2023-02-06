@@ -1,5 +1,6 @@
 #include <float.h>
 #include "modbuslimits.h"
+#include "dialogautosimulation.h"
 #include "dialogwriteholdingregister.h"
 #include "ui_dialogwriteholdingregister.h"
 
@@ -75,4 +76,13 @@ void DialogWriteHoldingRegister::accept()
     _writeParams.Value = ui->lineEditValue->value<QVariant>();
 
     QFixedSizeDialog::accept();
+}
+
+///
+/// \brief DialogWriteHoldingRegister::on_pushButtonSimulation_clicked
+///
+void DialogWriteHoldingRegister::on_pushButtonSimulation_clicked()
+{
+    DialogAutoSimulation dlg(_writeParams.SimulationParams, this);
+    dlg.exec();
 }

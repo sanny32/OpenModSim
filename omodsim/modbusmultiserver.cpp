@@ -16,6 +16,7 @@ ModbusMultiServer::ModbusMultiServer(QObject *parent)
     : QObject{parent}
     ,_deviceId(1)
 {
+    _simulator = QSharedPointer<DataSimulator>(new DataSimulator(this));
 }
 
 ///
@@ -213,6 +214,7 @@ void ModbusMultiServer::connectDevice(const ConnectionDetails& cd)
 ///
 void ModbusMultiServer::disconnectDevice(ConnectionType type, const QString& port)
 {
+    _simulator->stopSimulations();
     auto modbusServer = findModbusServer(type, port);
     if(modbusServer != nullptr)
     {
@@ -479,6 +481,11 @@ void ModbusMultiServer::writeRegister(QModbusDataUnit::RegisterType pointType, c
     }
 
     setData(data);
+
+    if(params.SimulationParams.Mode != SimulationMode::No)
+        _simulator->startSimulation(pointType, params.Address - 1, params.SimulationParams);
+    else
+        _simulator->stopSimulation(pointType, params.Address - 1);
 }
 
 ///

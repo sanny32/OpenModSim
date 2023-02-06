@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>DialogCoilSimulation</class>
- <widget class="QDialog" name="DialogCoilSimulation">
+ <class>DialogAutoSimulation</class>
+ <widget class="QDialog" name="DialogAutoSimulation">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>265</width>
-    <height>149</height>
+    <width>249</width>
+    <height>246</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Coil Simulation</string>
+   <string>Auto Simulation</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
@@ -59,7 +59,88 @@
        </property>
       </widget>
      </item>
+     <item row="2" column="0">
+      <widget class="QLabel" name="labelStepValue">
+       <property name="text">
+        <string>Step Value: </string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="NumericLineEdit" name="lineEditStepValue">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>80</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>1</string>
+       </property>
+      </widget>
+     </item>
     </layout>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="groupBoxSimulatioRange">
+     <property name="title">
+      <string>Simulation Range</string>
+     </property>
+     <layout class="QFormLayout" name="formLayout_2">
+      <item row="0" column="0">
+       <widget class="QLabel" name="labelLowLimit">
+        <property name="text">
+         <string>Low Limit: </string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="NumericLineEdit" name="lineEditLowLimit">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>80</width>
+          <height>16777215</height>
+         </size>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="labelHighLimit">
+        <property name="text">
+         <string>High Limit: </string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="NumericLineEdit" name="lineEditHighLimit">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>80</width>
+          <height>16777215</height>
+         </size>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
    </item>
    <item>
     <widget class="QDialogButtonBox" name="buttonBox">
@@ -93,7 +174,7 @@
   <connection>
    <sender>buttonBox</sender>
    <signal>accepted()</signal>
-   <receiver>DialogCoilSimulation</receiver>
+   <receiver>DialogAutoSimulation</receiver>
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -109,7 +190,7 @@
   <connection>
    <sender>buttonBox</sender>
    <signal>rejected()</signal>
-   <receiver>DialogCoilSimulation</receiver>
+   <receiver>DialogAutoSimulation</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
