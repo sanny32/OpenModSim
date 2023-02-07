@@ -9,7 +9,7 @@
 ///
 struct ModbusWriteParams
 {
-    quint32 Address;
+    quint16 Address;
     QVariant Value;
     DataDisplayMode DisplayMode;
 };
@@ -20,7 +20,7 @@ Q_DECLARE_METATYPE(ModbusWriteParams)
 ///
 struct ModbusMaskWriteParams
 {
-    quint32 Address;
+    quint16 Address;
     quint16 AndMask;
     quint16 OrMask;
 };

@@ -50,9 +50,10 @@ FormModSim::FormModSim(int id, ModbusMultiServer& server, MainWindow* parent) :
         ui->outputWidget->setStatus(_mbMultiServer.isConnected() ? "" : tr("NOT CONNECTED!"));
     }
 
-    connect(&_mbMultiServer, &ModbusMultiServer::deviceIdChanged, this, &FormModSim::on_mbDeviceIdChanged);
     connect(&_mbMultiServer, &ModbusMultiServer::connected, this, &FormModSim::on_mbConnected);
     connect(&_mbMultiServer, &ModbusMultiServer::disconnected, this, &FormModSim::on_mbDisconnected);
+    connect(&_mbMultiServer, &ModbusMultiServer::deviceIdChanged, this, &FormModSim::on_mbDeviceIdChanged);
+
     connect(&_timer, &QTimer::timeout, this, &FormModSim::on_timeout);
     _timer.start();
 }
@@ -377,8 +378,6 @@ void FormModSim::on_lineEditAddress_valueChanged(const QVariant&)
     const auto dd = displayDefinition();
     ui->outputWidget->setup(dd);
 
-    _simulationMap.clear();
-    _mbMultiServer.stopSimulations();
     _mbMultiServer.addUnitMap(formId(), dd.PointType, dd.PointAddress - 1, dd.Length);
 }
 
@@ -390,8 +389,6 @@ void FormModSim::on_lineEditLength_valueChanged(const QVariant&)
     const auto dd = displayDefinition();
     ui->outputWidget->setup(dd);
 
-    _simulationMap.clear();
-    _mbMultiServer.stopSimulations();
     _mbMultiServer.addUnitMap(formId(), dd.PointType, dd.PointAddress - 1, dd.Length);
 }
 
@@ -413,8 +410,6 @@ void FormModSim::on_comboBoxModbusPointType_pointTypeChanged(QModbusDataUnit::Re
     const auto dd = displayDefinition();
     ui->outputWidget->setup(dd);
 
-    _simulationMap.clear();
-    _mbMultiServer.stopSimulations();
     _mbMultiServer.addUnitMap(formId(), value, dd.PointAddress - 1, dd.Length);
 }
 
@@ -423,14 +418,14 @@ void FormModSim::on_comboBoxModbusPointType_pointTypeChanged(QModbusDataUnit::Re
 /// \param addr
 /// \param value
 ///
-void FormModSim::on_outputWidget_itemDoubleClicked(quint32 addr, const QVariant& value)
+void FormModSim::on_outputWidget_itemDoubleClicked(quint16 addr, const QVariant& value)
 {
     if(!_mbMultiServer.isConnected())
         return;
 
     const auto mode = dataDisplayMode();
-    auto& simParams = _simulationMap[addr];
     const auto pointType = ui->comboBoxModbusPointType->currentPointType();
+    auto& simParams = _simulationMap[{pointType, addr}];
 
     switch(pointType)
     {

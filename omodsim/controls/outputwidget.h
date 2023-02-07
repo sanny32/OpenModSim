@@ -57,7 +57,7 @@ public:
     void updateData(const QModbusDataUnit& data);
 
 signals:
-    void itemDoubleClicked(quint32 address, const QVariant& value);
+    void itemDoubleClicked(quint16 address, const QVariant& value);
 
 private slots:
     void on_listWidget_itemDoubleClicked(QListWidgetItem *item);

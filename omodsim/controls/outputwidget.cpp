@@ -8,7 +8,7 @@
 struct ListItemData
 {
     int Row;
-    quint32 Address;
+    quint16 Address;
     QVariant Value;
 };
 Q_DECLARE_METATYPE(ListItemData)
@@ -576,7 +576,7 @@ void OutputWidget::updateDataWidget(const QModbusDataUnit& data)
     }
 
     QStringList capstr;
-    for(int i = 0; i < _displayDefinition.Length; i++)
+    for(quint16 i = 0; i < _displayDefinition.Length; i++)
     {
         ListItemData itemData;
         itemData.Row = i;

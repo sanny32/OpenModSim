@@ -77,7 +77,7 @@ private slots:
     void on_lineEditLength_valueChanged(const QVariant&);
     void on_lineEditDeviceId_valueChanged(const QVariant&);
     void on_comboBoxModbusPointType_pointTypeChanged(QModbusDataUnit::RegisterType value);
-    void on_outputWidget_itemDoubleClicked(quint32 addr, const QVariant& value);
+    void on_outputWidget_itemDoubleClicked(quint16 addr, const QVariant& value);
     void on_statisticWidget_numberOfPollsChanged(uint value);
     void on_statisticWidget_validSlaveResposesChanged(uint value);
     void on_mbDeviceIdChanged(quint8 deviceId);
@@ -90,7 +90,7 @@ private:
     QTimer _timer;
     QString _filename;
     ModbusMultiServer& _mbMultiServer;
-    QMap<quint16, ModbusSimulationParams> _simulationMap;
+    QMap<QPair<QModbusDataUnit::RegisterType, quint16>, ModbusSimulationParams> _simulationMap;
 };
 
 #endif // FORMMODSIM_H
