@@ -45,7 +45,7 @@ void DialogCoilSimulation::accept()
         _params.Interval = ui->lineEditInterval->value<int>();
 
         if(_params.Mode == SimulationMode::Random)
-            _params.RandomParams.Range = QRange<quint16>(0, 1);
+            _params.RandomParams.Range = QRange<double>(0, 1);
     }
     else
     {

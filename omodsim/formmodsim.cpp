@@ -374,6 +374,9 @@ void FormModSim::on_lineEditAddress_valueChanged(const QVariant&)
 {
     const auto dd = displayDefinition();
     ui->outputWidget->setup(dd);
+
+    _simulationMap.clear();
+    _mbMultiServer.stopSimulations();
     _mbMultiServer.addUnitMap(formId(), dd.PointType, dd.PointAddress - 1, dd.Length);
 }
 
@@ -384,6 +387,9 @@ void FormModSim::on_lineEditLength_valueChanged(const QVariant&)
 {
     const auto dd = displayDefinition();
     ui->outputWidget->setup(dd);
+
+    _simulationMap.clear();
+    _mbMultiServer.stopSimulations();
     _mbMultiServer.addUnitMap(formId(), dd.PointType, dd.PointAddress - 1, dd.Length);
 }
 
@@ -404,6 +410,9 @@ void FormModSim::on_comboBoxModbusPointType_pointTypeChanged(QModbusDataUnit::Re
 {
     const auto dd = displayDefinition();
     ui->outputWidget->setup(dd);
+
+    _simulationMap.clear();
+    _mbMultiServer.stopSimulations();
     _mbMultiServer.addUnitMap(formId(), value, dd.PointAddress - 1, dd.Length);
 }
 
@@ -417,6 +426,7 @@ void FormModSim::on_outputWidget_itemDoubleClicked(quint32 addr, const QVariant&
     const auto mode = dataDisplayMode();
     auto& simParams = _simulationMap[addr];
     const auto pointType = ui->comboBoxModbusPointType->currentPointType();
+
     switch(pointType)
     {
         case QModbusDataUnit::Coils:
@@ -427,7 +437,7 @@ void FormModSim::on_outputWidget_itemDoubleClicked(quint32 addr, const QVariant&
             if(dlg.exec() == QDialog::Accepted)
             {
                 if(simParams.Mode == SimulationMode::No) _mbMultiServer.writeRegister(pointType, params);
-                _mbMultiServer.simulateRegister(pointType, addr, simParams);
+                _mbMultiServer.simulateRegister(mode, pointType, addr, simParams);
             }
         }
         break;
@@ -444,11 +454,11 @@ void FormModSim::on_outputWidget_itemDoubleClicked(quint32 addr, const QVariant&
             }
             else
             {
-                DialogWriteHoldingRegister dlg(params, simParams, mode, this);
+                DialogWriteHoldingRegister dlg(params, simParams, this);
                 if(dlg.exec() == QDialog::Accepted)
                 {
                     if(simParams.Mode == SimulationMode::No) _mbMultiServer.writeRegister(pointType, params);
-                    _mbMultiServer.simulateRegister(pointType, addr, simParams);
+                    _mbMultiServer.simulateRegister(mode, pointType, addr, simParams);
                 }
             }
         }

@@ -9,7 +9,7 @@
 ///
 struct RandomSimulationParams
 {
-    QRange<quint16> Range;
+    QRange<double> Range = QRange<double>(0., 65535.);
 };
 Q_DECLARE_METATYPE(RandomSimulationParams)
 
@@ -18,8 +18,8 @@ Q_DECLARE_METATYPE(RandomSimulationParams)
 ///
 struct IncrementSimulationParams
 {
-    quint16 Step = 1;
-    QRange<quint16> Range;
+    double Step = 1.;
+    QRange<double> Range = QRange<double>(0., 65535.);
 };
 Q_DECLARE_METATYPE(IncrementSimulationParams)
 
@@ -28,8 +28,8 @@ Q_DECLARE_METATYPE(IncrementSimulationParams)
 ///
 struct DecrementSimulationParams
 {
-    quint16 Step = 1;
-    QRange<quint16> Range;
+    double Step = 1.;
+    QRange<double> Range = QRange<double>(0., 65535.);
 };
 Q_DECLARE_METATYPE(DecrementSimulationParams)
 

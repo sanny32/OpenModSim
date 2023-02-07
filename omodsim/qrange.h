@@ -52,6 +52,15 @@ public:
         return num >= _from && num <= _to;
     }
 
+    ///
+    /// \brief length
+    /// \return
+    ///
+    T length() const
+    {
+        return _to - _from;
+    }
+
 private:
     T _from;
     T _to;

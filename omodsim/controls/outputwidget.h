@@ -63,7 +63,6 @@ private slots:
     void on_listWidget_itemDoubleClicked(QListWidgetItem *item);
 
 private:
-    void captureString(const QString& s);
     void updateDataWidget(const QModbusDataUnit& data);
     void updateTrafficWidget(bool request, int server, const QModbusPdu& pdu);
 

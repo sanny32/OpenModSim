@@ -13,6 +13,7 @@ struct ModbusWriteParams
     QVariant Value;
     DataDisplayMode DisplayMode;
 };
+Q_DECLARE_METATYPE(ModbusWriteParams)
 
 ///
 /// \brief The ModbusMaskWriteParams class
@@ -23,5 +24,6 @@ struct ModbusMaskWriteParams
     quint16 AndMask;
     quint16 OrMask;
 };
+Q_DECLARE_METATYPE(ModbusMaskWriteParams)
 
 #endif // MODBUSWRITEPARAMS_H

@@ -30,8 +30,16 @@ public:
     QModbusDataUnit data(QModbusDataUnit::RegisterType pointType, quint16 pointAddress, quint16 length) const;
     void setData(const QModbusDataUnit& data);
 
+    void writeValue(QModbusDataUnit::RegisterType pointType, quint16 pointAddress, quint16 value);
+
+    float readFloat(QModbusDataUnit::RegisterType pointType, quint16 pointAddress, bool swapped);
+    void writeFloat(QModbusDataUnit::RegisterType pointType, quint16 pointAddress, float value, bool swapped);
+
+    double readDouble(QModbusDataUnit::RegisterType pointType, quint16 pointAddress, bool swapped);
+    void writeDouble(QModbusDataUnit::RegisterType pointType, quint16 pointAddress, double value, bool swapped);
+
     void writeRegister(QModbusDataUnit::RegisterType pointType, const ModbusWriteParams& params);
-    void simulateRegister(QModbusDataUnit::RegisterType pointType, quint16 pointAddress, const ModbusSimulationParams& params);
+    void simulateRegister(DataDisplayMode mode, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, const ModbusSimulationParams& params);
     void stopSimulations();
 
 signals:

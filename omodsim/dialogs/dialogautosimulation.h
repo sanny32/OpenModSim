@@ -13,7 +13,7 @@ class DialogAutoSimulation : public QFixedSizeDialog
     Q_OBJECT
 
 public:
-    explicit DialogAutoSimulation(ModbusSimulationParams& params, QWidget *parent = nullptr);
+    explicit DialogAutoSimulation(DataDisplayMode mode, ModbusSimulationParams& params, QWidget *parent = nullptr);
     ~DialogAutoSimulation();
 
     void accept() override;
@@ -21,6 +21,8 @@ public:
 private slots:
     void on_checkBoxEnabled_toggled();
     void on_comboBoxSimulationType_currentIndexChanged(int);
+    void on_lineEditLowLimit_valueChanged(const QVariant&);
+    void on_lineEditHighLimit_valueChanged(const QVariant&);
 
 private:
     void updateLimits();
@@ -30,6 +32,7 @@ private:
 
 private:
     ModbusSimulationParams& _params;
+    DataDisplayMode _displayMode;
 };
 
 #endif // DIALOGAUTOSIMULATION_H

@@ -177,7 +177,6 @@ void OutputWidget::setStatus(const QString& status)
         if(info != ui->labelStatus->text())
         {
             ui->labelStatus->setText(info);
-            captureString(info);
         }
     }
 }
@@ -560,21 +559,6 @@ void OutputWidget::on_listWidget_itemDoubleClicked(QListWidgetItem *item)
     }
 
     emit itemDoubleClicked(itemData.Address, itemData.Value);
-}
-
-///
-/// \brief OutputWidget::captureString
-/// \param s
-///
-void OutputWidget::captureString(const QString& s)
-{
-    if(_fileCapture.isOpen())
-    {
-       QTextStream stream(&_fileCapture);
-       stream << QDateTime::currentDateTime().toString(Qt::ISODateWithMs) << " " <<
-              formatAddress(_displayDefinition.PointType, _displayDefinition.PointAddress, false) << " "
-              << s << "\n";
-    }
 }
 
 ///

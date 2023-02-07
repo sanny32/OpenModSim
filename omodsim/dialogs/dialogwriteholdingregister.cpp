@@ -10,7 +10,7 @@
 /// \param mode
 /// \param parent
 ///
-DialogWriteHoldingRegister::DialogWriteHoldingRegister(ModbusWriteParams& writeParams, ModbusSimulationParams& simParams, DataDisplayMode mode, QWidget* parent)
+DialogWriteHoldingRegister::DialogWriteHoldingRegister(ModbusWriteParams& writeParams, ModbusSimulationParams& simParams, QWidget* parent)
     : QFixedSizeDialog(parent)
     , ui(new Ui::DialogWriteHoldingRegister)
     ,_writeParams(writeParams)
@@ -20,7 +20,7 @@ DialogWriteHoldingRegister::DialogWriteHoldingRegister(ModbusWriteParams& writeP
     ui->lineEditAddress->setInputRange(ModbusLimits::addressRange());
     ui->lineEditAddress->setValue(_writeParams.Address);
 
-    switch(mode)
+    switch(_writeParams.DisplayMode)
     {
         case DataDisplayMode::Binary:
         break;
@@ -84,6 +84,6 @@ void DialogWriteHoldingRegister::accept()
 ///
 void DialogWriteHoldingRegister::on_pushButtonSimulation_clicked()
 {
-    DialogAutoSimulation dlg(_simParams, this);
+    DialogAutoSimulation dlg(_writeParams.DisplayMode, _simParams, this);
     if(dlg.exec() == QDialog::Accepted) accept();
 }
