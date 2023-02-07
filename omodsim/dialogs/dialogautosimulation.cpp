@@ -15,7 +15,12 @@ DialogAutoSimulation::DialogAutoSimulation(ModbusSimulationParams& params, QWidg
     ui->setupUi(this);
     ui->checkBoxEnabled->setChecked(_params.Mode != SimulationMode::No);
     ui->comboBoxSimulationType->setup(QModbusDataUnit::HoldingRegisters);
-    ui->comboBoxSimulationType->setCurrentSimulationMode(_params.Mode);
+
+    if(_params.Mode != SimulationMode::No)
+        ui->comboBoxSimulationType->setCurrentSimulationMode(_params.Mode);
+    else
+        ui->comboBoxSimulationType->setCurrentIndex(0);
+
     ui->lineEditInterval->setInputRange(1, 60000);
     ui->lineEditInterval->setValue(_params.Interval);
 
@@ -81,12 +86,13 @@ void DialogAutoSimulation::accept()
 void DialogAutoSimulation::on_checkBoxEnabled_toggled()
 {
     const bool enabled = ui->checkBoxEnabled->isChecked();
+    const auto mode = ui->comboBoxSimulationType->currentSimulationMode();
     ui->labelSimulationType->setEnabled(enabled);
     ui->comboBoxSimulationType->setEnabled(enabled);
     ui->labelInterval->setEnabled(enabled);
     ui->lineEditInterval->setEnabled(enabled);
-    ui->labelStepValue->setEnabled(enabled);
-    ui->lineEditStepValue->setEnabled(enabled);
+    ui->labelStepValue->setEnabled(enabled && mode != SimulationMode::Random);
+    ui->lineEditStepValue->setEnabled(enabled && mode != SimulationMode::Random);
     ui->groupBoxSimulatioRange->setEnabled(enabled);
 }
 
@@ -108,18 +114,23 @@ void DialogAutoSimulation::updateLimits()
     switch(ui->comboBoxSimulationType->currentSimulationMode())
     {
         case SimulationMode::Random:
+            ui->labelStepValue->setEnabled(false);
             ui->lineEditStepValue->setEnabled(false);
             ui->lineEditLowLimit->setValue(_params.RandomParams.Range.from());
             ui->lineEditHighLimit->setValue(_params.RandomParams.Range.to());
         break;
 
         case SimulationMode::Increment:
+            ui->labelStepValue->setEnabled(true);
+            ui->lineEditStepValue->setEnabled(true);
             ui->lineEditStepValue->setValue(_params.IncrementParams.Step);
             ui->lineEditLowLimit->setValue(_params.IncrementParams.Range.from());
             ui->lineEditHighLimit->setValue(_params.IncrementParams.Range.to());
         break;
 
         case SimulationMode::Decrement:
+            ui->labelStepValue->setEnabled(true);
+            ui->lineEditStepValue->setEnabled(true);
             ui->lineEditStepValue->setValue(_params.DecrementParams.Step);
             ui->lineEditLowLimit->setValue(_params.DecrementParams.Range.from());
             ui->lineEditHighLimit->setValue(_params.DecrementParams.Range.to());

@@ -15,7 +15,12 @@ DialogCoilSimulation::DialogCoilSimulation(ModbusSimulationParams& params, QWidg
     ui->setupUi(this);
     ui->checkBoxEnabled->setChecked(_params.Mode != SimulationMode::No);
     ui->comboBoxSimulationType->setup(QModbusDataUnit::Coils);
-    ui->comboBoxSimulationType->setCurrentSimulationMode(_params.Mode);
+
+    if(_params.Mode != SimulationMode::No)
+        ui->comboBoxSimulationType->setCurrentSimulationMode(_params.Mode);
+    else
+        ui->comboBoxSimulationType->setCurrentIndex(0);
+
     ui->lineEditInterval->setInputRange(1, 60000);
     ui->lineEditInterval->setValue(_params.Interval);
     on_checkBoxEnabled_toggled();

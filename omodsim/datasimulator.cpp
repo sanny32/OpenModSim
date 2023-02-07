@@ -9,8 +9,11 @@
 DataSimulator::DataSimulator(ModbusMultiServer* server)
     : QObject{server}
     ,_mbMultiServer(server)
+    ,_elapsed(0)
 {
     Q_ASSERT(_mbMultiServer != nullptr);
+    connect(&_timer, &QTimer::timeout, this, &DataSimulator::on_timeout);
+    _timer.start(1000);
 }
 
 ///
@@ -29,18 +32,7 @@ DataSimulator::~DataSimulator()
 ///
 void DataSimulator::startSimulation(QModbusDataUnit::RegisterType type, quint16 addr, const ModbusSimulationParams& params)
 {
-    if(_simulationMap.find({ type, addr}) == _simulationMap.end())
-    {
-        _simulationMap[{ type, addr}] = QSharedPointer<QTimer>(new QTimer(this));
-        connect(_simulationMap[{ type, addr}].get(), &QTimer::timeout, this, &DataSimulator::on_timeout);
-    }
-
-    auto timer = _simulationMap[{ type, addr}];
-    timer->setProperty("PointType", type);
-    timer->setProperty("Address", addr);
-    timer->setProperty("SimulationParams", QVariant::fromValue(params));
-    timer->setInterval(params.Interval * 1000);
-    timer->start();
+    _simulationMap[{ type, addr}] = params;
 }
 
 ///
@@ -50,10 +42,7 @@ void DataSimulator::startSimulation(QModbusDataUnit::RegisterType type, quint16 
 ///
 void DataSimulator::stopSimulation(QModbusDataUnit::RegisterType type, quint16 addr)
 {
-    if(_simulationMap.find({ type, addr}) != _simulationMap.end())
-    {
-        _simulationMap[{ type, addr}]->stop();
-    }
+    _simulationMap.remove({ type, addr});
 }
 
 ///
@@ -61,10 +50,6 @@ void DataSimulator::stopSimulation(QModbusDataUnit::RegisterType type, quint16 a
 ///
 void DataSimulator::stopSimulations()
 {
-    for(auto& t : _simulationMap.values())
-    {
-        t->stop();
-    }
     _simulationMap.clear();
 }
 
@@ -73,31 +58,35 @@ void DataSimulator::stopSimulations()
 ///
 void DataSimulator::on_timeout()
 {
-    const auto timer = (QTimer*)sender();
-    const auto addr = timer->property("Address").value<quint16>();
-    const auto type = timer->property("PointType").value<QModbusDataUnit::RegisterType>();
-    const auto params = timer->property("SimulationParams").value<ModbusSimulationParams>();
-
-    switch(params.Mode)
+    _elapsed++;
+    for(auto&& key : _simulationMap.keys())
     {
-        case SimulationMode::Random:
-            randomSimulation(type, addr, params.RandomParams);
-        break;
+        const auto params = _simulationMap[key];
+        const auto interval = params.Interval;
 
-        case SimulationMode::Increment:
-            incrementSimulation(type, addr, params.IncrementParams);
-        break;
+        if(_elapsed % interval) continue;
 
-        case SimulationMode::Decrement:
-            decrementSimailation(type, addr, params.DecrementParams);
-        break;
+        switch(params.Mode)
+        {
+            case SimulationMode::Random:
+                randomSimulation(key.first, key.second, params.RandomParams);
+            break;
 
-        case SimulationMode::Toggle:
-            toggleSimulation(type, addr);
-        break;
+            case SimulationMode::Increment:
+                incrementSimulation(key.first, key.second, params.IncrementParams);
+            break;
 
-        default:
-        break;
+            case SimulationMode::Decrement:
+                decrementSimailation(key.first, key.second, params.DecrementParams);
+            break;
+
+            case SimulationMode::Toggle:
+                toggleSimulation(key.first, key.second);
+            break;
+
+            default:
+            break;
+        }
     }
 }
 
