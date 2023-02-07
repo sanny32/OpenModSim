@@ -215,7 +215,6 @@ void ModbusMultiServer::connectDevice(const ConnectionDetails& cd)
 ///
 void ModbusMultiServer::disconnectDevice(ConnectionType type, const QString& port)
 {
-    _simulator->stopSimulations();
     auto modbusServer = findModbusServer(type, port);
     if(modbusServer != nullptr)
     {
@@ -618,6 +617,9 @@ void ModbusMultiServer::on_stateChanged(QModbusDevice::State state)
         break;
 
         case QModbusDevice::UnconnectedState:
+            if(!isConnected())
+                _simulator->stopSimulations();
+
             emit disconnected(cd);
         break;
 

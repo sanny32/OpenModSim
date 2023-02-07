@@ -51,6 +51,8 @@ FormModSim::FormModSim(int id, ModbusMultiServer& server, MainWindow* parent) :
     }
 
     connect(&_mbMultiServer, &ModbusMultiServer::deviceIdChanged, this, &FormModSim::on_mbDeviceIdChanged);
+    connect(&_mbMultiServer, &ModbusMultiServer::connected, this, &FormModSim::on_mbConnected);
+    connect(&_mbMultiServer, &ModbusMultiServer::disconnected, this, &FormModSim::on_mbDisconnected);
     connect(&_timer, &QTimer::timeout, this, &FormModSim::on_timeout);
     _timer.start();
 }
@@ -423,6 +425,9 @@ void FormModSim::on_comboBoxModbusPointType_pointTypeChanged(QModbusDataUnit::Re
 ///
 void FormModSim::on_outputWidget_itemDoubleClicked(quint32 addr, const QVariant& value)
 {
+    if(!_mbMultiServer.isConnected())
+        return;
+
     const auto mode = dataDisplayMode();
     auto& simParams = _simulationMap[addr];
     const auto pointType = ui->comboBoxModbusPointType->currentPointType();
@@ -496,4 +501,20 @@ void FormModSim::on_mbDeviceIdChanged(quint8 deviceId)
     blockSignals(true);
     ui->lineEditDeviceId->setValue(deviceId);
     blockSignals(false);
+}
+
+///
+/// \brief FormModSim::on_mbConnected
+///
+void FormModSim::on_mbConnected(const ConnectionDetails&)
+{
+}
+
+///
+/// \brief FormModSim::on_mbDisconnected
+///
+void FormModSim::on_mbDisconnected(const ConnectionDetails&)
+{
+    if(!_mbMultiServer.isConnected())
+        _simulationMap.clear();
 }

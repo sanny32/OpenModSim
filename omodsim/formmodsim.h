@@ -81,6 +81,8 @@ private slots:
     void on_statisticWidget_numberOfPollsChanged(uint value);
     void on_statisticWidget_validSlaveResposesChanged(uint value);
     void on_mbDeviceIdChanged(quint8 deviceId);
+    void on_mbConnected(const ConnectionDetails& cd);
+    void on_mbDisconnected(const ConnectionDetails& cd);
 
 private:
     Ui::FormModSim *ui;
