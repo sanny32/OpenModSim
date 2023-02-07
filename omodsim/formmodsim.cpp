@@ -414,26 +414,28 @@ void FormModSim::on_comboBoxModbusPointType_pointTypeChanged(QModbusDataUnit::Re
 ///
 void FormModSim::on_outputWidget_itemDoubleClicked(quint32 addr, const QVariant& value)
 {
-    const auto dd = displayDefinition();
     const auto mode = dataDisplayMode();
-    auto& sim = _simulationMap[addr - dd.PointAddress];
+    auto& simParams = _simulationMap[addr];
     const auto pointType = ui->comboBoxModbusPointType->currentPointType();
     switch(pointType)
     {
         case QModbusDataUnit::Coils:
         case QModbusDataUnit::DiscreteInputs:
         {
-            ModbusWriteParams params = { addr, value, mode, sim };
-            DialogWriteCoilRegister dlg(params, this);
+            ModbusWriteParams params = { addr, value, mode };
+            DialogWriteCoilRegister dlg(params, simParams, this);
             if(dlg.exec() == QDialog::Accepted)
-                _mbMultiServer.writeRegister(pointType, params);
+            {
+                if(simParams.Mode == SimulationMode::No) _mbMultiServer.writeRegister(pointType, params);
+                _mbMultiServer.simulateRegister(pointType, addr, simParams);
+            }
         }
         break;
 
         case QModbusDataUnit::InputRegisters:
         case QModbusDataUnit::HoldingRegisters:
         {
-            ModbusWriteParams params = { addr, value, mode, sim };
+            ModbusWriteParams params = { addr, value, mode };
             if(mode == DataDisplayMode::Binary)
             {
                 DialogWriteHoldingRegisterBits dlg(params, this);
@@ -442,9 +444,12 @@ void FormModSim::on_outputWidget_itemDoubleClicked(quint32 addr, const QVariant&
             }
             else
             {
-                DialogWriteHoldingRegister dlg(params, mode, this);
+                DialogWriteHoldingRegister dlg(params, simParams, mode, this);
                 if(dlg.exec() == QDialog::Accepted)
-                    _mbMultiServer.writeRegister(pointType, params);
+                {
+                    if(simParams.Mode == SimulationMode::No) _mbMultiServer.writeRegister(pointType, params);
+                    _mbMultiServer.simulateRegister(pointType, addr, simParams);
+                }
             }
         }
         break;

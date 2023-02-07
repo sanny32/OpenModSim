@@ -2,7 +2,7 @@
 #define MODBUSWRITEPARAMS_H
 
 #include <QVariant>
-#include "modbussimulationparams.h"
+#include "enums.h"
 
 ///
 /// \brief The ModbusWriteParams class
@@ -12,7 +12,6 @@ struct ModbusWriteParams
     quint32 Address;
     QVariant Value;
     DataDisplayMode DisplayMode;
-    ModbusSimulationParams SimulationParams;
 };
 
 ///

@@ -5,19 +5,21 @@
 
 ///
 /// \brief DialogWriteCoilRegister::DialogWriteCoilRegister
-/// \param params
+/// \param writeParams
+/// \param simParams
 /// \param parent
 ///
-DialogWriteCoilRegister::DialogWriteCoilRegister(ModbusWriteParams& params, QWidget *parent) :
-    QFixedSizeDialog(parent),
-    ui(new Ui::DialogWriteCoilRegister)
-    ,_writeParams(params)
+DialogWriteCoilRegister::DialogWriteCoilRegister(ModbusWriteParams& writeParams, ModbusSimulationParams& simParams, QWidget *parent)
+    : QFixedSizeDialog(parent)
+    , ui(new Ui::DialogWriteCoilRegister)
+    ,_writeParams(writeParams)
+    ,_simParams(simParams)
 {
     ui->setupUi(this);
     ui->lineEditAddress->setInputRange(ModbusLimits::addressRange());
-    ui->lineEditAddress->setValue(params.Address);
-    ui->radioButtonOn->setChecked(params.Value.toBool());
-    ui->radioButtonOff->setChecked(!params.Value.toBool());
+    ui->lineEditAddress->setValue(_writeParams.Address);
+    ui->radioButtonOn->setChecked(_writeParams.Value.toBool());
+    ui->radioButtonOff->setChecked(!_writeParams.Value.toBool());
     ui->buttonBox->setFocus();
 }
 
@@ -45,6 +47,6 @@ void DialogWriteCoilRegister::accept()
 ///
 void DialogWriteCoilRegister::on_pushButtonSimulation_clicked()
 {
-    DialogCoilSimulation dlg(_writeParams.SimulationParams, this);
-    dlg.exec();
+    DialogCoilSimulation dlg(_simParams, this);
+    if(dlg.exec() == QDialog::Accepted) accept();
 }

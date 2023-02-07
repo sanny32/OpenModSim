@@ -481,11 +481,20 @@ void ModbusMultiServer::writeRegister(QModbusDataUnit::RegisterType pointType, c
     }
 
     setData(data);
+}
 
-    if(params.SimulationParams.Mode != SimulationMode::No)
-        _simulator->startSimulation(pointType, params.Address - 1, params.SimulationParams);
+///
+/// \brief ModbusMultiServer::simulateRegister
+/// \param pointType
+/// \param pointAddress
+/// \param params
+///
+void ModbusMultiServer::simulateRegister(QModbusDataUnit::RegisterType pointType, quint16 pointAddress, const ModbusSimulationParams& params)
+{
+    if(params.Mode != SimulationMode::No)
+        _simulator->startSimulation(pointType,pointAddress - 1, params);
     else
-        _simulator->stopSimulation(pointType, params.Address - 1);
+        _simulator->stopSimulation(pointType, pointAddress - 1);
 }
 
 ///

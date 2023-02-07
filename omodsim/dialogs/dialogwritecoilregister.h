@@ -3,6 +3,7 @@
 
 #include "qfixedsizedialog.h"
 #include "modbuswriteparams.h"
+#include "modbussimulationparams.h"
 
 namespace Ui {
 class DialogWriteCoilRegister;
@@ -16,7 +17,7 @@ class DialogWriteCoilRegister : public QFixedSizeDialog
     Q_OBJECT
 
 public:
-    explicit DialogWriteCoilRegister(ModbusWriteParams& params, QWidget *parent = nullptr);
+    explicit DialogWriteCoilRegister(ModbusWriteParams& writeParams, ModbusSimulationParams& simParams, QWidget *parent = nullptr);
     ~DialogWriteCoilRegister();
 
     void accept() override;
@@ -29,6 +30,7 @@ private:
 
 private:
     ModbusWriteParams& _writeParams;
+    ModbusSimulationParams& _simParams;
 };
 
 #endif // DIALOGWRITECOILREGISTER_H
