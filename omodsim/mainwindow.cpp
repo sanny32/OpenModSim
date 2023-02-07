@@ -162,7 +162,14 @@ void MainWindow::on_awake()
 ///
 void MainWindow::on_actionNew_triggered()
 {
+    const auto cur = currentMdiChild();
     auto frm = createMdiChild(++_windowCounter);
+
+    if(cur) {
+        frm->setDisplayMode(cur->displayMode());
+        frm->setDataDisplayMode(cur->dataDisplayMode());
+    }
+
     frm->show();
 }
 
