@@ -22,7 +22,7 @@ OutputWidget::OutputWidget(QWidget *parent) :
    , ui(new Ui::OutputWidget)
    ,_displayHexAddreses(false)
    ,_displayMode(DisplayMode::Data)
-   ,_dataDisplayMode(DataDisplayMode::Binary)
+   ,_dataDisplayMode(DataDisplayMode::Hex)
 {
     ui->setupUi(this);
     ui->stackedWidget->setCurrentIndex(0);
