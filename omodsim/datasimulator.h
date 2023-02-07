@@ -29,7 +29,7 @@ private:
 
 private:
     ModbusMultiServer* _mbMultiServer;
-    QMap<QPair<QModbusDataUnit::RegisterType, quint16>, QTimer*> _simulationMap;
+    QMap<QPair<QModbusDataUnit::RegisterType, quint16>, QSharedPointer<QTimer>> _simulationMap;
 };
 
 #endif // DATASIMULATOR_H

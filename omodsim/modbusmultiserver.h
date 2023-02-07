@@ -32,6 +32,7 @@ public:
 
     void writeRegister(QModbusDataUnit::RegisterType pointType, const ModbusWriteParams& params);
     void simulateRegister(QModbusDataUnit::RegisterType pointType, quint16 pointAddress, const ModbusSimulationParams& params);
+    void stopSimulations();
 
 signals:
     void connected(const ConnectionDetails& cd);

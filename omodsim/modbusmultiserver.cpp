@@ -498,6 +498,14 @@ void ModbusMultiServer::simulateRegister(QModbusDataUnit::RegisterType pointType
 }
 
 ///
+/// \brief ModbusMultiServer::stopSimulations
+///
+void ModbusMultiServer::stopSimulations()
+{
+    _simulator->stopSimulations();
+}
+
+///
 /// \brief ModbusServer::on_stateChanged
 /// \param state
 ///

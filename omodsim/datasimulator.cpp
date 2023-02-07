@@ -31,8 +31,8 @@ void DataSimulator::startSimulation(QModbusDataUnit::RegisterType type, quint16 
 {
     if(_simulationMap.find({ type, addr}) == _simulationMap.end())
     {
-        _simulationMap[{ type, addr}] = new QTimer(this);
-        connect(_simulationMap[{ type, addr}], &QTimer::timeout, this, &DataSimulator::on_timeout);
+        _simulationMap[{ type, addr}] = QSharedPointer<QTimer>(new QTimer(this));
+        connect(_simulationMap[{ type, addr}].get(), &QTimer::timeout, this, &DataSimulator::on_timeout);
     }
 
     auto timer = _simulationMap[{ type, addr}];
@@ -64,7 +64,6 @@ void DataSimulator::stopSimulations()
     for(auto& t : _simulationMap.values())
     {
         t->stop();
-        delete t;
     }
     _simulationMap.clear();
 }
