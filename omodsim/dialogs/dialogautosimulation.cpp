@@ -95,19 +95,19 @@ void DialogAutoSimulation::accept()
         {
             case SimulationMode::Random:
                 _params.RandomParams.Range = QRange<double>(ui->lineEditLowLimit->value<double>(),
-                                                             ui->lineEditHighLimit->value<double>());
+                                                            ui->lineEditHighLimit->value<double>());
             break;
 
             case SimulationMode::Increment:
                 _params.IncrementParams.Step = ui->lineEditStepValue->value<double>();
                 _params.IncrementParams.Range = QRange<double>(ui->lineEditLowLimit->value<double>(),
-                                                                ui->lineEditHighLimit->value<double>());
+                                                               ui->lineEditHighLimit->value<double>());
             break;
 
             case SimulationMode::Decrement:
                 _params.DecrementParams.Step = ui->lineEditStepValue->value<double>();
                 _params.DecrementParams.Range = QRange<double>(ui->lineEditLowLimit->value<double>(),
-                                                                ui->lineEditHighLimit->value<double>());
+                                                               ui->lineEditHighLimit->value<double>());
             break;
 
             default:
