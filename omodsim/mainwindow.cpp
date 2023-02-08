@@ -685,60 +685,26 @@ FormModSim* MainWindow::loadMdiChild(const QString& filename)
     int formId;
     s >> formId;
 
-    bool isMaximized;
-    s >> isMaximized;
-
-    QSize windowSize;
-    s >> windowSize;
-
-    DisplayMode displayMode;
-    s >> displayMode;
-
-    DataDisplayMode dataDisplayMode;
-    s >> dataDisplayMode;
-
-    bool hexAddresses;
-    s >> hexAddresses;
-
-    QColor bkgClr;
-    s >> bkgClr;
-
-    QColor fgClr;
-    s >> fgClr;
-
-    QColor stCrl;
-    s >> stCrl;
-
-    QFont font;
-    s >> font;
-
-    DisplayDefinition dd;
-    s >> dd.UpdateRate;
-    s >> dd.DeviceId;
-    s >> dd.PointType;
-    s >> dd.PointAddress;
-    s >> dd.Length;
-
     if(s.status() != QDataStream::Ok)
         return nullptr;
 
+    bool created = false;
     auto frm = findMdiChild(formId);
-    if(!frm) frm = createMdiChild(formId);
+    if(!frm)
+    {
+        created = true;
+        frm = createMdiChild(formId);
+    }
 
-    auto wnd = frm->parentWidget();
-    wnd->resize(windowSize);
-    if(isMaximized) wnd->setWindowState(Qt::WindowMaximized);
+    s >> frm;
+
+    if(s.status() != QDataStream::Ok)
+    {
+        if(created) frm->close();
+        return nullptr;
+    }
 
     frm->setFilename(filename);
-    frm->setDisplayMode(displayMode);
-    frm->setDataDisplayMode(dataDisplayMode);
-    frm->setDisplayHexAddresses(hexAddresses);
-    frm->setBackgroundColor(bkgClr);
-    frm->setForegroundColor(fgClr);
-    frm->setStatusColor(stCrl);
-    frm->setFont(font);
-    frm->setDisplayDefinition(dd);
-
     addRecentFile(filename);
     _windowCounter = qMax(frm->formId(), _windowCounter);
 
@@ -767,28 +733,8 @@ void MainWindow::saveMdiChild(FormModSim* frm)
     // version number
     s << QVersionNumber(1, 0);
 
-    s << frm->formId();
-
-    const auto wnd = frm->parentWidget();
-    s << wnd->isMaximized();
-    s << ((wnd->isMinimized() || wnd->isMaximized()) ?
-              wnd->sizeHint() : wnd->size());
-
-    s << frm->displayMode();
-    s << frm->dataDisplayMode();
-    s << frm->displayHexAddresses();
-
-    s << frm->backgroundColor();
-    s << frm->foregroundColor();
-    s << frm->statusColor();
-    s << frm->font();
-
-    const auto dd = frm->displayDefinition();
-    s << dd.UpdateRate;
-    s << dd.DeviceId;
-    s << dd.PointType;
-    s << dd.PointAddress;
-    s << dd.Length;
+    // form
+    s << frm;
 
     addRecentFile(frm->filename());
 }
@@ -811,38 +757,7 @@ void MainWindow::loadSettings()
     if(toolbarBreal) addToolBarBreak(toolbarArea);
     addToolBar(toolbarArea, ui->toolBarDisplay);
 
-    auto frm = firstMdiChild();
-    if(frm)
-    {
-        DisplayMode displayMode;
-        m >> displayMode;
-
-        DataDisplayMode dataDisplayMode;
-        m >> dataDisplayMode;
-
-        DisplayDefinition displayDefinition;
-        m >> displayDefinition;
-
-        bool isMaximized;
-        isMaximized = m.value("ViewMaximized").toBool();
-
-        QSize wndSize;
-        wndSize = m.value("ViewSize").toSize();
-
-        frm->setFont(m.value("Font", font()).value<QFont>());
-        frm->setForegroundColor(m.value("ForegroundColor", QColor(Qt::black)).value<QColor>());
-        frm->setBackgroundColor(m.value("BackgroundColor", QColor(Qt::lightGray)).value<QColor>());
-        frm->setStatusColor(m.value("StatusColor", QColor(Qt::red)).value<QColor>());
-
-        auto wnd = frm->parentWidget();
-        wnd->resize(wndSize);
-        if(isMaximized) wnd->setWindowState(Qt::WindowMaximized);
-
-        frm->setDisplayMode(displayMode);
-        frm->setDataDisplayMode(dataDisplayMode);
-        frm->setDisplayDefinition(displayDefinition);
-        frm->setDisplayHexAddresses(m.value("DisplayHexAddresses").toBool());
-    }
+    m >> firstMdiChild();
 }
 
 ///
@@ -859,24 +774,5 @@ void MainWindow::saveSettings()
     m.setValue("DisplayBarArea", toolBarArea(ui->toolBarDisplay));
     m.setValue("DisplayBarBreak", toolBarBreak(ui->toolBarDisplay));
 
-
-    if(frm)
-    {
-        m.setValue("Font", frm->font());
-        m.setValue("ForegroundColor", frm->foregroundColor());
-        m.setValue("BackgroundColor", frm->backgroundColor());
-        m.setValue("StatusColor", frm->statusColor());
-
-        const auto wnd = frm->parentWidget();
-        m.setValue("ViewMaximized", wnd->isMaximized());
-        if(!wnd->isMaximized() && !wnd->isMinimized())
-        {
-            m.setValue("ViewSize", wnd->size());
-        }
-
-        m << frm->displayMode();
-        m << frm->dataDisplayMode();
-        m << frm->displayDefinition();
-        m.setValue("DisplayHexAddresses", frm->displayHexAddresses());
-    }
+    m << frm;
 }
