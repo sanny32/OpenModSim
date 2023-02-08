@@ -20,11 +20,11 @@ MainStatusBar::MainStatusBar(const ModbusMultiServer& server, QWidget* parent)
         switch(cd.Type)
         {
             case ConnectionType::Tcp:
-                label->setText(QString("Modbus/TCP Srv: %1").arg(cd.TcpParams.ServicePort));
+                label->setText(QString(tr("Modbus/TCP Srv: %1")).arg(cd.TcpParams.ServicePort));
             break;
 
             case ConnectionType::Serial:
-                label->setText(QString("Port %1: %2").arg(cd.SerialParams.PortName, QString::number(cd.SerialParams.BaudRate)));
+                label->setText(QString(tr("Port %1: %2")).arg(cd.SerialParams.PortName, QString::number(cd.SerialParams.BaudRate)));
             break;
         }
 
