@@ -17,8 +17,10 @@ public:
 
     explicit MenuConnect(MenuType type, ModbusMultiServer& server, QWidget *parent = nullptr);
 
+    void updateConnectionDetails(const QList<ConnectionDetails>& conns);
+
 signals:
-    void connectAction(ConnectionType type, const QString& port);
+    void connectAction(ConnectionDetails& cd);
     void disconnectAction(ConnectionType type, const QString& port);
 
 private:
@@ -27,6 +29,7 @@ private:
 private:
     MenuType _menuType;
     ModbusMultiServer& _mbMultiServer;
+    QMap<QAction*, ConnectionDetails> _connectionDetailsMap;
 };
 
 #endif // MENUCONNECT_H

@@ -21,6 +21,12 @@ struct TcpConnectionParams
         ServicePort = qMax<quint16>(1, ServicePort);
     }
 
+    TcpConnectionParams& operator=(const TcpConnectionParams& params)
+    {
+        ServicePort = params.ServicePort;
+        return *this;
+    }
+
     friend bool operator==(const TcpConnectionParams& params1, const TcpConnectionParams& params2) noexcept
     {
         return params1.ServicePort == params2.ServicePort && params1.IPAddress == params2.IPAddress;
@@ -98,6 +104,19 @@ struct SerialConnectionParams
         WordLength = qBound(QSerialPort::Data5, WordLength, QSerialPort::Data8);
         Parity = qBound(QSerialPort::NoParity, Parity, QSerialPort::MarkParity);
         FlowControl = qBound(QSerialPort::NoFlowControl, FlowControl, QSerialPort::SoftwareControl);
+    }
+
+    SerialConnectionParams& operator=(const SerialConnectionParams& params)
+    {
+        PortName = params.PortName;
+        BaudRate = params.BaudRate;
+        WordLength = params.WordLength;
+        Parity = params.Parity;
+        StopBits = params.StopBits;
+        FlowControl = params.FlowControl;
+        SetDTR = params.SetDTR;
+        SetRTS = params.SetRTS;
+        return *this;
     }
 
     friend bool operator==(const SerialConnectionParams& params1, const SerialConnectionParams& params2) noexcept
@@ -202,6 +221,14 @@ struct ConnectionDetails
     ConnectionType Type = ConnectionType::Tcp;
     TcpConnectionParams TcpParams;
     SerialConnectionParams SerialParams;
+
+    ConnectionDetails& operator=(const ConnectionDetails& cd) noexcept
+    {
+        Type = cd.Type;
+        TcpParams = cd.TcpParams;
+        SerialParams = cd.SerialParams;
+        return *this;
+    }
 
     friend bool operator==(const ConnectionDetails& cd1, const ConnectionDetails& cd2) noexcept
     {

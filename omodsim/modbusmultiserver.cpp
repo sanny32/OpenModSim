@@ -73,9 +73,8 @@ void ModbusMultiServer::removeUnitMap(int id)
 QModbusDataUnitMap ModbusMultiServer::createDataUnitMap()
 {
     QMultiMap<QModbusDataUnit::RegisterType, QModbusDataUnit> multimap;
-    for(auto&& id : _modbusDataUnitMap.keys())
+    for(auto&& unit : _modbusDataUnitMap)
     {
-        const auto unit = _modbusDataUnitMap[id];
         multimap.insert(unit.registerType(), unit);
     }
 
@@ -215,9 +214,8 @@ void ModbusMultiServer::connectDevice(const ConnectionDetails& cd)
     const auto dataUintMap = createDataUnitMap();
     modbusServer->setMap(dataUintMap);
 
-    for(auto&& type : dataUintMap.keys())
+    for(auto data : dataUintMap)
     {
-        auto data = dataUintMap.value(type);
         _modbusServerList.first()->data(&data);
         modbusServer->setData(data);
     }

@@ -42,6 +42,29 @@ MenuConnect::MenuConnect(MenuType type, ModbusMultiServer& server, QWidget *pare
 }
 
 ///
+/// \brief MenuConnect::updateConnectionDetails
+/// \param conns
+///
+void MenuConnect::updateConnectionDetails(const QList<ConnectionDetails>& conns)
+{
+    if(_menuType != ConnectMenu)
+        return;
+
+    for(auto&& cd : conns)
+    {
+        for(auto& c : _connectionDetailsMap)
+        {
+            if(cd.Type != c.Type) continue;
+            if(c.Type == ConnectionType::Tcp ||
+              (c.Type == ConnectionType::Serial && c.SerialParams.PortName == cd.SerialParams.PortName))
+            {
+                c = cd;
+            }
+        }
+    }
+}
+
+///
 /// \brief MenuConnect::addAction
 /// \param text
 /// \param type
@@ -49,12 +72,24 @@ MenuConnect::MenuConnect(MenuType type, ModbusMultiServer& server, QWidget *pare
 ///
 void MenuConnect::addAction(const QString& text, ConnectionType type, const QString& port)
 {
-    auto action = QMenu::addAction(text, [this, type, port]{
+    auto action = QMenu::addAction(text);
+    connect(action, &QAction::triggered, this, [this, action, type, port]
+    {
         if(_menuType == ConnectMenu)
-            emit connectAction(type, port);
+            emit connectAction(_connectionDetailsMap[action]);
         else
             emit disconnectAction(type, port);
     });
+
+    if(_menuType == ConnectMenu)
+    {
+        ConnectionDetails cd;
+        cd.Type = type;
+        if(type == ConnectionType::Serial)
+            cd.SerialParams.PortName = port;
+
+        _connectionDetailsMap[action] = cd;
+    }
 
     const auto data = QPair<ConnectionType, QString>(type, port);
     action->setData(QVariant::fromValue(data));

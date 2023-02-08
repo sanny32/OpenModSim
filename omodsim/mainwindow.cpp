@@ -290,15 +290,12 @@ void MainWindow::on_actionExit_triggered()
 /// \param type
 /// \param port
 ///
-void MainWindow::on_connectAction(ConnectionType type, const QString& port)
+void MainWindow::on_connectAction(ConnectionDetails& cd)
 {
-    switch(type)
+    switch(cd.Type)
     {
         case ConnectionType::Tcp:
         {
-            ConnectionDetails cd;
-            cd.Type = type;
-
             DialogSelectServicePort dlg(cd.TcpParams.ServicePort, this);
             if(dlg.exec() == QDialog::Accepted) _mbMultiServer.connectDevice(cd);
         }
@@ -306,10 +303,6 @@ void MainWindow::on_connectAction(ConnectionType type, const QString& port)
 
         case ConnectionType::Serial:
         {
-            ConnectionDetails cd;
-            cd.Type = type;
-            cd.SerialParams.PortName = port;
-
             DialogSetupSerialPort dlg(cd.SerialParams, this);
             if(dlg.exec()) _mbMultiServer.connectDevice(cd);
         }
@@ -720,6 +713,9 @@ void MainWindow::loadConfig(const QString& filename)
         if(!filename.isEmpty())
             openFile(filename);
     }
+
+    auto menu = (MenuConnect*)ui->actionConnect->menu();
+    menu->updateConnectionDetails(conns);
 
     for(auto&& cd : conns)
     {

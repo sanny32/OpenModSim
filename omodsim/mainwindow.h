@@ -39,7 +39,7 @@ private slots:
     void on_actionExit_triggered();
 
     /* Connection menu slots */
-    void on_connectAction(ConnectionType type, const QString& port);
+    void on_connectAction(ConnectionDetails& cd);
     void on_disconnectAction(ConnectionType type, const QString& port);
 
     /* Setup menu slots*/
