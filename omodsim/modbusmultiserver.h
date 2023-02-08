@@ -102,6 +102,8 @@ public:
     void connectDevice(const ConnectionDetails& cd);
     void disconnectDevice(ConnectionType type, const QString& port);
 
+    QList<ConnectionDetails> connections() const;
+
     bool isConnected() const;
     bool isConnected(ConnectionType type, const QString& port) const;
     QModbusDevice::State state(ConnectionType type, const QString& port) const;

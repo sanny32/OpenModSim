@@ -232,6 +232,28 @@ void MainWindow::on_actionSaveAs_triggered()
 }
 
 ///
+/// \brief MainWindow::on_actionSaveTestConfig_triggered
+///
+void MainWindow::on_actionSaveTestConfig_triggered()
+{
+    const auto filename = QFileDialog::getSaveFileName(this, QString(), QString(), tr("All files (*)"));
+    if(filename.isEmpty()) return;
+
+    saveConfig(filename);
+}
+
+///
+/// \brief MainWindow::on_actionRestoreTestConfig_triggered
+///
+void MainWindow::on_actionRestoreTestConfig_triggered()
+{
+    const auto filename = QFileDialog::getOpenFileName(this, QString(), QString(), tr("All files (*)"));
+    if(filename.isEmpty()) return;
+
+    loadConfig(filename);
+}
+
+///
 /// \brief MainWindow::on_actionPrint_triggered
 ///
 void MainWindow::on_actionPrint_triggered()
@@ -658,6 +680,94 @@ FormModSim* MainWindow::firstMdiChild() const
 }
 
 ///
+/// \brief MainWindow::loadConfig
+/// \param filename
+///
+void MainWindow::loadConfig(const QString& filename)
+{
+    QFile file(filename);
+    if(!file.open(QFile::ReadOnly))
+        return;
+
+    QDataStream s(&file);
+    s.setByteOrder(QDataStream::BigEndian);
+    s.setVersion(QDataStream::Version::Qt_5_0);
+
+    quint8 magic = 0;
+    s >> magic;
+
+    if(magic != 0x35)
+        return;
+
+    QVersionNumber ver;
+    s >> ver;
+
+    if(ver != QVersionNumber(1, 0))
+        return;
+
+    QStringList listFilename;
+    s >> listFilename;
+
+    QList<ConnectionDetails> conns;
+    s >> conns;
+
+    if(s.status() != QDataStream::Ok)
+        return;
+
+    ui->mdiArea->closeAllSubWindows();
+    for(auto&& filename: listFilename)
+    {
+        if(!filename.isEmpty())
+            openFile(filename);
+    }
+
+    for(auto&& cd : conns)
+    {
+        _mbMultiServer.connectDevice(cd);
+    }
+}
+
+///
+/// \brief MainWindow::saveConfig
+/// \param filename
+///
+void MainWindow::saveConfig(const QString& filename)
+{
+    QFile file(filename);
+    if(!file.open(QFile::WriteOnly))
+        return;
+
+    QStringList listFilename;
+    const auto activeWnd = ui->mdiArea->currentSubWindow();
+    for(auto&& wnd : ui->mdiArea->subWindowList())
+    {
+        windowActivate(wnd);
+        ui->actionSave->trigger();
+
+        const auto frm = dynamic_cast<FormModSim*>(wnd->widget());
+        const auto filename = frm->filename();
+        if(!filename.isEmpty()) listFilename.push_back(filename);
+    }
+    windowActivate(activeWnd);
+
+    QDataStream s(&file);
+    s.setByteOrder(QDataStream::BigEndian);
+    s.setVersion(QDataStream::Version::Qt_5_0);
+
+    // magic number
+    s << (quint8)0x35;
+
+    // version number
+    s << QVersionNumber(1, 0);
+
+    // list of files
+    s << listFilename;
+
+    // connections
+    s << _mbMultiServer.connections();
+}
+
+///
 /// \brief MainWindow::loadMdiChild
 /// \param filename
 /// \return
@@ -675,7 +785,7 @@ FormModSim* MainWindow::loadMdiChild(const QString& filename)
     quint8 magic = 0;
     s >> magic;
 
-    if(magic != 0x32)
+    if(magic != 0x34)
         return nullptr;
 
     QVersionNumber ver;
@@ -730,7 +840,7 @@ void MainWindow::saveMdiChild(FormModSim* frm)
     s.setVersion(QDataStream::Version::Qt_5_0);
 
     // magic number
-    s << (quint8)0x32;
+    s << (quint8)0x34;
 
     // version number
     s << QVersionNumber(1, 0);

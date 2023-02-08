@@ -32,6 +32,8 @@ private slots:
     void on_actionClose_triggered();
     void on_actionSave_triggered();
     void on_actionSaveAs_triggered();
+    void on_actionSaveTestConfig_triggered();
+    void on_actionRestoreTestConfig_triggered();
     void on_actionPrint_triggered();
     void on_actionPrintSetup_triggered();
     void on_actionExit_triggered();

@@ -241,6 +241,21 @@ void ModbusMultiServer::disconnectDevice(ConnectionType type, const QString& por
 }
 
 ///
+/// \brief ModbusMultiServer::connections
+/// \return
+///
+QList<ConnectionDetails> ModbusMultiServer::connections() const
+{
+    QList<ConnectionDetails> conns;
+    for(auto&& s : _modbusServerList)
+    {
+        if(s->state() == QModbusDevice::ConnectedState)
+            conns.append(s->property("ConnectionDetails").value<ConnectionDetails>());
+    }
+    return conns;
+}
+
+///
 /// \brief ModbusMultiServer::addModbusServer
 /// \param server
 ///
