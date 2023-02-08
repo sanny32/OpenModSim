@@ -83,6 +83,8 @@ private slots:
     void on_mbDeviceIdChanged(quint8 deviceId);
     void on_mbConnected(const ConnectionDetails& cd);
     void on_mbDisconnected(const ConnectionDetails& cd);
+    void on_mbRequest(const QModbusRequest& req);
+    void on_mbResponse(const QModbusResponse& resp);
 
 private:
     Ui::FormModSim *ui;

@@ -50,6 +50,8 @@ FormModSim::FormModSim(int id, ModbusMultiServer& server, MainWindow* parent) :
         ui->outputWidget->setStatus(_mbMultiServer.isConnected() ? "" : tr("NOT CONNECTED!"));
     }
 
+    connect(&_mbMultiServer, &ModbusMultiServer::request, this, &FormModSim::on_mbRequest);
+    connect(&_mbMultiServer, &ModbusMultiServer::response, this, &FormModSim::on_mbResponse);
     connect(&_mbMultiServer, &ModbusMultiServer::connected, this, &FormModSim::on_mbConnected);
     connect(&_mbMultiServer, &ModbusMultiServer::disconnected, this, &FormModSim::on_mbDisconnected);
     connect(&_mbMultiServer, &ModbusMultiServer::deviceIdChanged, this, &FormModSim::on_mbDeviceIdChanged);
@@ -512,4 +514,24 @@ void FormModSim::on_mbDisconnected(const ConnectionDetails&)
 {
     if(!_mbMultiServer.isConnected())
         _simulationMap.clear();
+}
+
+///
+/// \brief FormModSim::on_mbRequest
+/// \param req
+///
+void FormModSim::on_mbRequest(const QModbusRequest& req)
+{
+    const auto deviceId = ui->lineEditDeviceId->value<int>();
+    ui->outputWidget->updateTraffic(req, deviceId);
+}
+
+///
+/// \brief FormModSim::on_mbResponse
+/// \param resp
+///
+void FormModSim::on_mbResponse(const QModbusResponse& resp)
+{
+    const auto deviceId = ui->lineEditDeviceId->value<int>();
+    ui->outputWidget->updateTraffic(resp, deviceId);
 }

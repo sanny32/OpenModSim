@@ -3,10 +3,89 @@
 
 #include <QObject>
 #include <QModbusServer>
+#include <QModbusTcpServer>
 #include "datasimulator.h"
 #include "modbuswriteparams.h"
 #include "connectiondetails.h"
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+    #include <QModbusRtuSerialSlave>
+    typedef QModbusRtuSerialSlave QModbusRtuSerialServer;
+#else
+    #include <QModbusRtuSerialServer>
+#endif
+
+///
+/// \brief The ModbusTcpServer class
+///
+class ModbusTcpServer : public QModbusTcpServer
+{
+    Q_OBJECT
+
+public:
+    explicit ModbusTcpServer(QObject *parent = nullptr)
+        : QModbusTcpServer(parent)
+    {
+    }
+
+signals:
+    void request(const QModbusRequest& req);
+    void response(const QModbusResponse& resp);
+
+protected:
+    QModbusResponse processRequest(const QModbusPdu &req) override
+    {
+        emit request(req);
+        auto resp = QModbusServer::processRequest(req);
+        emit response(resp);
+        return resp;
+    }
+    QModbusResponse processPrivateRequest(const QModbusPdu &req) override
+    {
+        emit request(req);
+        auto resp = QModbusServer::processPrivateRequest(req);
+        emit response(resp);
+        return resp;
+    }
+};
+
+///
+/// \brief The ModbusRtuServer class
+///
+class ModbusRtuServer : public QModbusRtuSerialServer
+{
+    Q_OBJECT
+
+public:
+    explicit ModbusRtuServer(QObject *parent = nullptr)
+        : QModbusRtuSerialServer(parent)
+    {
+    }
+
+signals:
+    void request(const QModbusRequest& req);
+    void response(const QModbusResponse& resp);
+
+protected:
+    QModbusResponse processRequest(const QModbusPdu &req) override
+    {
+        emit request(req);
+        auto resp = QModbusServer::processRequest(req);
+        emit response(resp);
+        return resp;
+    }
+    QModbusResponse processPrivateRequest(const QModbusPdu &req) override
+    {
+        emit request(req);
+        auto resp = QModbusServer::processPrivateRequest(req);
+        emit response(resp);
+        return resp;
+    }
+};
+
+///
+/// \brief The ModbusMultiServer class
+///
 class ModbusMultiServer final : public QObject
 {
     Q_OBJECT
@@ -46,6 +125,8 @@ signals:
     void connected(const ConnectionDetails& cd);
     void disconnected(const ConnectionDetails& cd);
     void deviceIdChanged(quint8 deviceId);
+    void request(const QModbusRequest& req);
+    void response(const QModbusResponse& resp);
 
 private slots:
     void on_stateChanged(QModbusDevice::State state);
