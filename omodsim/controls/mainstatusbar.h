@@ -3,7 +3,7 @@
 
 #include <QLabel>
 #include <QStatusBar>
-#include <QMdiArea>
+#include "modbusmultiserver.h"
 
 ///
 /// \brief The MainStatusBar class
@@ -12,7 +12,10 @@ class MainStatusBar : public QStatusBar
 {
     Q_OBJECT
 public:
-    MainStatusBar(QWidget* parent = nullptr);
+    explicit MainStatusBar(const ModbusMultiServer& server, QWidget* parent = nullptr);
+
+private:
+    QList<QLabel*> _labels;
 };
 
 #endif // MAINSTATUSBAR_H

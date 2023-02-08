@@ -26,7 +26,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     setWindowTitle(APP_NAME);
     setUnifiedTitleAndToolBarOnMac(true);
-    setStatusBar(new MainStatusBar(ui->mdiArea));
+    setStatusBar(new MainStatusBar(_mbMultiServer, this));
 
     auto menuConnect = new MenuConnect(MenuConnect::ConnectMenu, _mbMultiServer, this);
     connect(menuConnect, &MenuConnect::connectAction, this, &MainWindow::on_connectAction);
