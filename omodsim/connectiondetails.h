@@ -14,11 +14,10 @@
 struct TcpConnectionParams
 {
     quint16 ServicePort = 502;
-    QString IPAddress = "127.0.0.1";
+    const QString IPAddress = "0.0.0.0";
 
     void normalize()
     {
-        IPAddress = IPAddress.isEmpty() ? "127.0.0.1" : IPAddress;
         ServicePort = qMax<quint16>(1, ServicePort);
     }
 
@@ -37,9 +36,7 @@ Q_DECLARE_METATYPE(TcpConnectionParams)
 ///
 inline QDataStream& operator <<(QDataStream& out, const TcpConnectionParams& params)
 {
-    out << params.IPAddress;
     out << params.ServicePort;
-
     return out;
 }
 
@@ -51,9 +48,7 @@ inline QDataStream& operator <<(QDataStream& out, const TcpConnectionParams& par
 ///
 inline QDataStream& operator >>(QDataStream& in, TcpConnectionParams& params)
 {
-    in >> params.IPAddress;
     in >> params.ServicePort;
-
     params.normalize();
     return in;
 }
@@ -66,9 +61,7 @@ inline QDataStream& operator >>(QDataStream& in, TcpConnectionParams& params)
 ///
 inline QSettings& operator <<(QSettings& out, const TcpConnectionParams& params)
 {
-    out.setValue("TcpParams/IPAddress",     params.IPAddress);
     out.setValue("TcpParams/ServicePort",   params.ServicePort);
-
     return out;
 }
 
@@ -80,9 +73,7 @@ inline QSettings& operator <<(QSettings& out, const TcpConnectionParams& params)
 ///
 inline QSettings& operator >>(QSettings& in, TcpConnectionParams& params)
 {
-    params.IPAddress    = in.value("TcpParams/IPAddress").toString();
-    params.ServicePort  = in.value("TcpParams/ServicePort").toUInt();
-
+    params.ServicePort = in.value("TcpParams/ServicePort", 502).toUInt();
     params.normalize();
     return in;
 }
@@ -192,12 +183,12 @@ inline QSettings& operator <<(QSettings& out, const SerialConnectionParams& para
 inline QSettings& operator >>(QSettings& in, SerialConnectionParams& params)
 {
     params.PortName    = in.value("SerialParams/PortName").toString();
-    params.BaudRate    = (QSerialPort::BaudRate)in.value("SerialParams/BaudRate").toUInt();
-    params.WordLength  = (QSerialPort::DataBits)in.value("SerialParams/WordLength").toUInt();
-    params.Parity      = (QSerialPort::Parity)in.value("SerialParams/Parity").toUInt();
-    params.FlowControl = (QSerialPort::FlowControl)in.value("SerialParams/FlowControl").toUInt();
-    params.SetDTR      = in.value("SerialParams/DTR").toBool();
-    params.SetRTS      = in.value("SerialParams/RTS").toBool();
+    params.BaudRate    = (QSerialPort::BaudRate)in.value("SerialParams/BaudRate", 9600).toUInt();
+    params.WordLength  = (QSerialPort::DataBits)in.value("SerialParams/WordLength", 8).toUInt();
+    params.Parity      = (QSerialPort::Parity)in.value("SerialParams/Parity", 0).toUInt();
+    params.FlowControl = (QSerialPort::FlowControl)in.value("SerialParams/FlowControl", 0).toUInt();
+    params.SetDTR      = in.value("SerialParams/DTR", false).toBool();
+    params.SetRTS      = in.value("SerialParams/RTS", false).toBool();
 
     params.normalize();
     return in;
@@ -281,7 +272,7 @@ inline QSettings& operator <<(QSettings& out, const ConnectionDetails& params)
 ///
 inline QSettings& operator >>(QSettings& in, ConnectionDetails& params)
 {
-    params.Type = (ConnectionType)in.value("ConnectionParams/Type").toUInt();
+    params.Type = (ConnectionType)in.value("ConnectionParams/Type", 0).toUInt();
     in >> params.TcpParams;
     in >> params.SerialParams;
 
