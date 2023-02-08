@@ -1,3 +1,4 @@
+#include <float.h>
 #include <QPushButton>
 #include "dialogautosimulation.h"
 #include "ui_dialogautosimulation.h"
