@@ -55,10 +55,6 @@ public:
 
     void print(QPrinter* painter);
 
-    void resetCtrs();
-    uint numberOfPolls() const;
-    uint validSlaveResposes() const;
-
 protected:
     void closeEvent(QCloseEvent *event) override;
 
@@ -68,8 +64,6 @@ public slots:
 signals:
     void showed();
     void closing();
-    void numberOfPollsChanged(uint value);
-    void validSlaveResposesChanged(uint value);
 
 private slots:
     void on_timeout();
@@ -78,8 +72,6 @@ private slots:
     void on_lineEditDeviceId_valueChanged(const QVariant&);
     void on_comboBoxModbusPointType_pointTypeChanged(QModbusDataUnit::RegisterType value);
     void on_outputWidget_itemDoubleClicked(quint16 addr, const QVariant& value);
-    void on_statisticWidget_numberOfPollsChanged(uint value);
-    void on_statisticWidget_validSlaveResposesChanged(uint value);
     void on_mbDeviceIdChanged(quint8 deviceId);
     void on_mbConnected(const ConnectionDetails& cd);
     void on_mbDisconnected(const ConnectionDetails& cd);

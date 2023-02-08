@@ -96,8 +96,6 @@
     </widget>
     <addaction name="actionDataDefinition"/>
     <addaction name="menuDisplay_Options"/>
-    <addaction name="separator"/>
-    <addaction name="actionResetCtrs"/>
    </widget>
    <widget class="QMenu" name="menuWindow">
     <property name="title">

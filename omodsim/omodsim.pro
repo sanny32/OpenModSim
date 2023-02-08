@@ -38,7 +38,6 @@ SOURCES += \
     controls/paritytypecombobox.cpp \
     controls/pointtypecombobox.cpp \
     controls/simulationmodecombobox.cpp \
-    controls/statisticwidget.cpp \
     datasimulator.cpp \
     dialogs/dialogautosimulation.cpp \
     dialogs/dialogcoilsimulation.cpp \
@@ -75,7 +74,6 @@ HEADERS += \
     controls/paritytypecombobox.h \
     controls/pointtypecombobox.h \
     controls/simulationmodecombobox.h \
-    controls/statisticwidget.h \
     datasimulator.h \
     dialogs/dialogautosimulation.h \
     dialogs/dialogcoilsimulation.h \
@@ -106,7 +104,6 @@ HEADERS += \
 
 FORMS += \
     controls/outputwidget.ui \
-    controls/statisticwidget.ui \
     dialogs/dialogautosimulation.ui \
     dialogs/dialogcoilsimulation.ui \
     dialogs/dialogabout.ui \

@@ -397,15 +397,6 @@ void MainWindow::on_actionHexAddresses_triggered()
 }
 
 ///
-/// \brief MainWindow::on_actionResetCtrs_triggered
-///
-void MainWindow::on_actionResetCtrs_triggered()
-{
-    auto frm = currentMdiChild();
-    if(frm) frm->resetCtrs();
-}
-
-///
 /// \brief MainWindow::on_actionToolbar_triggered
 ///
 void MainWindow::on_actionToolbar_triggered()
@@ -601,16 +592,6 @@ FormModSim* MainWindow::createMdiChild(int id)
     connect(frm, &FormModSim::showed, this, [this, wnd]
     {
         windowActivate(wnd);
-    });
-
-    connect(frm, &FormModSim::numberOfPollsChanged, this, [this](uint)
-    {
-        dynamic_cast<MainStatusBar*>(statusBar())->updateNumberOfPolls();
-    });
-
-    connect(frm, &FormModSim::validSlaveResposesChanged, this, [this](uint)
-    {
-        dynamic_cast<MainStatusBar*>(statusBar())->updateValidSlaveResponses();
     });
 
     _windowActionList->addWindow(wnd);

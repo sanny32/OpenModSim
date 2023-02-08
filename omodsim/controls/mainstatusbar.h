@@ -12,15 +12,7 @@ class MainStatusBar : public QStatusBar
 {
     Q_OBJECT
 public:
-    MainStatusBar(QMdiArea* parent);
-
-    void updateNumberOfPolls();
-    void updateValidSlaveResponses();
-
-private:
-    QMdiArea* _mdiArea;
-    QLabel* _labelPolls;
-    QLabel* _labelResps;
+    MainStatusBar(QWidget* parent = nullptr);
 };
 
 #endif // MAINSTATUSBAR_H

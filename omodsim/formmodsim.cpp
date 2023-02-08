@@ -292,53 +292,20 @@ void FormModSim::print(QPrinter* printer)
     const auto textType = QString(tr("MODBUS Point Type:\n%1")).arg(ui->comboBoxModbusPointType->currentText());
     auto rcType = painter.boundingRect(cx, cy, pageWidth, pageHeight, Qt::TextWordWrap, textType);
 
-    const auto textStat = QString(tr("Number of Polls: %1\nValid Slave Responses: %2")).arg(QString::number(ui->statisticWidget->numberOfPolls()),
-                                                                                        QString::number(ui->statisticWidget->validSlaveResposes()));
-    auto rcStat = painter.boundingRect(cx, cy, pageWidth, pageHeight, Qt::TextWordWrap, textStat);
-
     rcTime.moveTopRight({ pageRect.right(), 10 });
     rcDevId.moveLeft(rcAddrLen.right() + 40);
     rcAddrLen.moveTop(rcDevId.bottom() + 10);
     rcType.moveTopLeft({ rcDevId.left(), rcAddrLen.top() });
-    rcStat.moveLeft(rcType.right() + 40);
 
     painter.drawText(rcTime, Qt::TextSingleLine, textTime);
     painter.drawText(rcDevId, Qt::TextSingleLine, textDevId);
     painter.drawText(rcAddrLen, Qt::TextWordWrap, textAddrLen);
     painter.drawText(rcType, Qt::TextWordWrap, textType);
-    painter.drawText(rcStat, Qt::TextWordWrap, textStat);
-    painter.drawRect(rcStat.adjusted(-2, -2, 40, 2));
 
     auto rcOutput = pageRect;
     rcOutput.setTop(rcAddrLen.bottom() + 20);
 
     ui->outputWidget->paint(rcOutput, painter);
-}
-
-///
-/// \brief FormModSim::resetCtrls
-///
-void FormModSim::resetCtrs()
-{
-    ui->statisticWidget->resetCtrs();
-}
-
-///
-/// \brief FormModSim::numberOfPolls
-/// \return
-///
-uint FormModSim::numberOfPolls() const
-{
-    return ui->statisticWidget->numberOfPolls();
-}
-
-///
-/// \brief FormModSim::validSlaveResposes
-/// \return
-///
-uint FormModSim::validSlaveResposes() const
-{
-    return ui->statisticWidget->validSlaveResposes();
 }
 
 ///
@@ -469,24 +436,6 @@ void FormModSim::on_outputWidget_itemDoubleClicked(quint16 addr, const QVariant&
         default:
         break;
     }
-}
-
-///
-/// \brief FormModSim::on_statisticWidget_numberOfPollsChanged
-/// \param value
-///
-void FormModSim::on_statisticWidget_numberOfPollsChanged(uint value)
-{
-    emit numberOfPollsChanged(value);
-}
-
-///
-/// \brief FormModSim::on_statisticWidget_validSlaveResposesChanged
-/// \param value
-///
-void FormModSim::on_statisticWidget_validSlaveResposesChanged(uint value)
-{
-    emit validSlaveResposesChanged(value);
 }
 
 ///
