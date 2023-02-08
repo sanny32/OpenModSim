@@ -24,7 +24,7 @@ MainStatusBar::MainStatusBar(const ModbusMultiServer& server, QWidget* parent)
             break;
 
             case ConnectionType::Serial:
-                label->setText(QString("Port %1").arg(cd.SerialParams.PortName));
+                label->setText(QString("Port %1: %2").arg(cd.SerialParams.PortName, QString::number(cd.SerialParams.BaudRate)));
             break;
         }
 
