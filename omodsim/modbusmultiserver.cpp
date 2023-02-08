@@ -191,6 +191,7 @@ QSharedPointer<QModbusServer> ModbusMultiServer::createModbusServer(const Connec
     {
         connect(modbusServer.get(), &QModbusServer::dataWritten, this, &ModbusMultiServer::on_dataWritten);
         connect(modbusServer.get(), &QModbusDevice::stateChanged, this, &ModbusMultiServer::on_stateChanged);
+        connect(modbusServer.get(), &QModbusDevice::errorOccurred, this, &ModbusMultiServer::on_errorOccurred);
     }
 
     return modbusServer;
@@ -360,32 +361,23 @@ QModbusDataUnit createDataUnit(QModbusDataUnit::RegisterType type, int newStartA
 /// \param type
 /// \param newStartAddress
 /// \param value
-/// \param inv
+/// \param swapped
 /// \return
 ///
-QModbusDataUnit createFloatDataUnit(QModbusDataUnit::RegisterType type, int newStartAddress, float value, bool inv)
+QModbusDataUnit createFloatDataUnit(QModbusDataUnit::RegisterType type, int newStartAddress, float value, bool swapped)
 {
     Q_ASSERT(type == QModbusDataUnit::HoldingRegisters
              || type == QModbusDataUnit::InputRegisters);
 
-    union {
-       quint16 asUint16[2];
-       float asFloat;
-    } v;
-    v.asFloat = value;
-
+    QVector<quint16> values(2);
     auto data = QModbusDataUnit(type, newStartAddress, 2);
-    if(inv)
-    {
-        data.setValue(0, v.asUint16[1]);
-        data.setValue(1, v.asUint16[0]);
-    }
-    else
-    {
-        data.setValue(0, v.asUint16[0]);
-        data.setValue(1, v.asUint16[1]);
-    }
 
+    if(swapped)
+        breakFloat(value, values[1], values[0]);
+    else
+        breakFloat(value, values[0], values[1]);
+
+    data.setValues(values);
     return data;
 }
 
@@ -394,36 +386,23 @@ QModbusDataUnit createFloatDataUnit(QModbusDataUnit::RegisterType type, int newS
 /// \param type
 /// \param newStartAddress
 /// \param value
-/// \param inv
+/// \param swapped
 /// \return
 ///
-QModbusDataUnit createDoubleDataUnit(QModbusDataUnit::RegisterType type, int newStartAddress, double value, bool inv)
+QModbusDataUnit createDoubleDataUnit(QModbusDataUnit::RegisterType type, int newStartAddress, double value, bool swapped)
 {
     Q_ASSERT(type == QModbusDataUnit::HoldingRegisters
              || type == QModbusDataUnit::InputRegisters);
 
-    union {
-       quint16 asUint16[4];
-       double asDouble;
-    } v;
-    v.asDouble = value;
-
+    QVector<quint16> values(4);
     auto data = QModbusDataUnit(type, newStartAddress, 4);
-    if(inv)
-    {
-        data.setValue(0, v.asUint16[3]);
-        data.setValue(1, v.asUint16[2]);
-        data.setValue(2, v.asUint16[1]);
-        data.setValue(3, v.asUint16[0]);
-    }
-    else
-    {
-        data.setValue(0, v.asUint16[0]);
-        data.setValue(1, v.asUint16[1]);
-        data.setValue(2, v.asUint16[2]);
-        data.setValue(3, v.asUint16[3]);
-    }
 
+    if(swapped)
+        breakDouble(value, values[3], values[2], values[1], values[0]);
+    else
+        breakDouble(value, values[0], values[1], values[2], values[3]);
+
+    data.setValues(values);
     return data;
 }
 
@@ -462,16 +441,7 @@ float ModbusMultiServer::readFloat(QModbusDataUnit::RegisterType pointType, quin
 ///
 void ModbusMultiServer::writeFloat(QModbusDataUnit::RegisterType pointType, quint16 pointAddress, float value, bool swapped)
 {
-    QVector<quint16> values(2);
-    auto data = QModbusDataUnit(pointType, pointAddress, 2);
-
-    if(swapped)
-        breakFloat(value, values[1], values[0]);
-    else
-        breakFloat(value, values[0], values[1]);
-
-    data.setValues(values);
-    setData(data);
+    setData(createFloatDataUnit(pointType, pointAddress, value, swapped));
 }
 
 ///
@@ -497,16 +467,7 @@ double ModbusMultiServer::readDouble(QModbusDataUnit::RegisterType pointType, qu
 ///
 void ModbusMultiServer::writeDouble(QModbusDataUnit::RegisterType pointType, quint16 pointAddress, double value, bool swapped)
 {
-    QVector<quint16> values(4);
-    auto data = QModbusDataUnit(pointType, pointAddress, 4);
-
-    if(swapped)
-        breakDouble(value, values[3], values[2], values[1], values[0]);
-    else
-        breakDouble(value, values[0], values[1], values[2], values[3]);
-
-    data.setValues(values);
-    setData(data);
+    setData(createDoubleDataUnit(pointType, pointAddress, value, swapped));
 }
 
 ///
@@ -637,6 +598,22 @@ void ModbusMultiServer::on_stateChanged(QModbusDevice::State state)
 
         default:
         break;
+    }
+}
+
+///
+/// \brief ModbusMultiServer::on_errorOccured
+/// \param error
+///
+void ModbusMultiServer::on_errorOccurred(QModbusDevice::Error error)
+{
+    if(error == QModbusDevice::ConnectionError)
+    {
+        auto server = qobject_cast<QModbusServer*>(sender());
+        const auto errorString = server->errorString();
+
+        server->disconnectDevice();
+        emit connectionError(QString(tr("Connection error. %1")).arg(errorString));
     }
 }
 

@@ -70,6 +70,8 @@ private slots:
     /* Help menu slots */
     void on_actionAbout_triggered();
 
+    void on_connectionError(const QString& error);
+
     void updateMenuWindow();
     void openFile(const QString& filename);
     void windowActivate(QMdiSubWindow* wnd);

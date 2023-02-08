@@ -127,9 +127,11 @@ signals:
     void deviceIdChanged(quint8 deviceId);
     void request(const QModbusRequest& req);
     void response(const QModbusResponse& resp);
+    void connectionError(const QString& error);
 
 private slots:
     void on_stateChanged(QModbusDevice::State state);
+    void on_errorOccurred(QModbusDevice::Error error);
     void on_dataWritten(QModbusDataUnit::RegisterType table, int address, int size);
 
 private:

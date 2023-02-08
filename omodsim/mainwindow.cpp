@@ -56,6 +56,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(dispatcher, &QAbstractEventDispatcher::awake, this, &MainWindow::on_awake);
 
     connect(ui->mdiArea, &QMdiArea::subWindowActivated, this, &MainWindow::updateMenuWindow);
+    connect(&_mbMultiServer, &ModbusMultiServer::connectionError, this, &MainWindow::on_connectionError);
 
     ui->actionNew->trigger();
     loadSettings();
@@ -512,6 +513,15 @@ void MainWindow::on_actionAbout_triggered()
 {
     DialogAbout dlg(this);
     dlg.exec();
+}
+
+///
+/// \brief MainWindow::on_connectionError
+/// \param error
+///
+void MainWindow::on_connectionError(const QString& error)
+{
+    QMessageBox::warning(this, windowTitle(), error);
 }
 
 ///
