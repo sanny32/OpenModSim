@@ -36,14 +36,14 @@ protected:
     QModbusResponse processRequest(const QModbusPdu &req) override
     {
         emit request(req);
-        auto resp = QModbusServer::processRequest(req);
+        auto resp = QModbusTcpServer::processRequest(req);
         emit response(resp);
         return resp;
     }
     QModbusResponse processPrivateRequest(const QModbusPdu &req) override
     {
         emit request(req);
-        auto resp = QModbusServer::processPrivateRequest(req);
+        auto resp = QModbusTcpServer::processPrivateRequest(req);
         emit response(resp);
         return resp;
     }
@@ -70,14 +70,14 @@ protected:
     QModbusResponse processRequest(const QModbusPdu &req) override
     {
         emit request(req);
-        auto resp = QModbusServer::processRequest(req);
+        auto resp = QModbusRtuSerialServer::processRequest(req);
         emit response(resp);
         return resp;
     }
     QModbusResponse processPrivateRequest(const QModbusPdu &req) override
     {
         emit request(req);
-        auto resp = QModbusServer::processPrivateRequest(req);
+        auto resp = QModbusRtuSerialServer::processPrivateRequest(req);
         emit response(resp);
         return resp;
     }
