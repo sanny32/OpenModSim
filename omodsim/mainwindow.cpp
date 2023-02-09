@@ -96,7 +96,7 @@ bool MainWindow::eventFilter(QObject * obj, QEvent * e)
     switch (e->type())
     {
         case QEvent::Close:
-            _windowActionList->removeWindow(dynamic_cast<QMdiSubWindow*>(obj));
+            _windowActionList->removeWindow(qobject_cast<QMdiSubWindow*>(obj));
         break;
         default:
             qt_noop();
@@ -642,7 +642,7 @@ FormModSim* MainWindow::createMdiChild(int id)
 FormModSim* MainWindow::currentMdiChild() const
 {
     const auto wnd = ui->mdiArea->currentSubWindow();
-    return wnd ? dynamic_cast<FormModSim*>(wnd->widget()) : nullptr;
+    return wnd ? qobject_cast<FormModSim*>(wnd->widget()) : nullptr;
 }
 
 ///
@@ -654,7 +654,7 @@ FormModSim* MainWindow::findMdiChild(int id) const
 {
     for(auto&& wnd : ui->mdiArea->subWindowList())
     {
-        const auto frm = dynamic_cast<FormModSim*>(wnd->widget());
+        const auto frm = qobject_cast<FormModSim*>(wnd->widget());
         if(frm && frm->formId() == id) return frm;
     }
     return nullptr;
@@ -667,7 +667,7 @@ FormModSim* MainWindow::findMdiChild(int id) const
 FormModSim* MainWindow::firstMdiChild() const
 {
     for(auto&& wnd : ui->mdiArea->subWindowList())
-        return dynamic_cast<FormModSim*>(wnd->widget());
+        return qobject_cast<FormModSim*>(wnd->widget());
 
     return nullptr;
 }
@@ -714,12 +714,13 @@ void MainWindow::loadConfig(const QString& filename)
             openFile(filename);
     }
 
-    auto menu = (MenuConnect*)ui->actionConnect->menu();
+    auto menu = qobject_cast<MenuConnect*>(ui->actionConnect->menu());
     menu->updateConnectionDetails(conns);
 
     for(auto&& cd : conns)
     {
-        _mbMultiServer.connectDevice(cd);
+        if(menu->canConnect(cd))
+            _mbMultiServer.connectDevice(cd);
     }
 }
 
@@ -740,7 +741,7 @@ void MainWindow::saveConfig(const QString& filename)
         windowActivate(wnd);
         ui->actionSave->trigger();
 
-        const auto frm = dynamic_cast<FormModSim*>(wnd->widget());
+        const auto frm = qobject_cast<FormModSim*>(wnd->widget());
         const auto filename = frm->filename();
         if(!filename.isEmpty()) listFilename.push_back(filename);
     }
