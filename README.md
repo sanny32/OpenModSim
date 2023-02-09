@@ -1,6 +1,10 @@
 # OpenModSim
 Open ModSim is a free implimentation of modbus slave (server) utilityfor modbus-tcp and modbus-rtu protocols.
+
 ![image](https://user-images.githubusercontent.com/13627951/217724115-6281e1dc-9f62-4b83-a945-156ee190b8c6.png)
+
+![image](https://user-images.githubusercontent.com/13627951/217725531-81d2994c-d40c-474b-90bc-6f40695a6daa.png)
+
 
 ## Features
 
@@ -20,6 +24,19 @@ Registers
     0x06 - Write Single Register
     0x10 - Write Multiple Registers
     0x16 - Mask Write Register
+    
+The following simulations are available:
+
+Discrete Coils/Flags
+
+    Random - simulate flag randomly
+    Toggle - simulate flag on/off periodicaly
+    
+Registers
+
+    Random - simulate register randomly
+    Increment - simulate register from Low Limit to High Limit with a given Step
+    Decrement - simulate register from High Limit to Low Limit with a given Step
 
 ## Building
   Now building is available with Qt/qmake (version 5.15 and above) or Qt Creator. Supports both OS Microsoft Windows and Linux.
