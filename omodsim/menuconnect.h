@@ -17,6 +17,7 @@ public:
 
     explicit MenuConnect(MenuType type, ModbusMultiServer& server, QWidget *parent = nullptr);
 
+    bool canConnect(const ConnectionDetails& cd);
     void updateConnectionDetails(const QList<ConnectionDetails>& conns);
 
 signals:

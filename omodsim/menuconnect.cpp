@@ -42,6 +42,26 @@ MenuConnect::MenuConnect(MenuType type, ModbusMultiServer& server, QWidget *pare
 }
 
 ///
+/// \brief MenuConnect::canConnect
+/// \param cd
+/// \return
+///
+bool MenuConnect::canConnect(const ConnectionDetails& cd)
+{
+    for(auto& c : _connectionDetailsMap)
+    {
+        if(c.Type != cd.Type) continue;
+        if(c.Type == ConnectionType::Tcp ||
+          (c.Type == ConnectionType::Serial && c.SerialParams.PortName == cd.SerialParams.PortName))
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+///
 /// \brief MenuConnect::updateConnectionDetails
 /// \param conns
 ///
