@@ -1,5 +1,5 @@
 # OpenModSim
-Open ModSim is a free implimentation of modbus slave (server) utilityfor modbus-tcp and modbus-rtu protocols.
+Open ModSim is a free implimentation of modbus slave (server) utility for modbus-tcp and modbus-rtu protocols.
 
 ![image](https://user-images.githubusercontent.com/13627951/217724115-6281e1dc-9f62-4b83-a945-156ee190b8c6.png)
 
