@@ -120,3 +120,6 @@ FORMS += \
 
 RESOURCES += \
     resources.qrc
+
+TRANSLATIONS += \
+    translations/omodsim_ru.ts
