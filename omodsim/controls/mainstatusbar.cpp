@@ -11,7 +11,6 @@ MainStatusBar::MainStatusBar(const ModbusMultiServer& server, QWidget* parent)
     connect(&server, &ModbusMultiServer::connected, this, [&](const ConnectionDetails& cd)
     {
         auto label = new QLabel(this);
-        label->setText(QString(tr("Polls: %1")).arg(0));
         label->setFrameShadow(QFrame::Sunken);
         label->setFrameShape(QFrame::Panel);
         label->setMinimumWidth(120);

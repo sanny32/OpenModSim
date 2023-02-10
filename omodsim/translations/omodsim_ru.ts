@@ -6,12 +6,12 @@
     <message>
         <location filename="../controls/booleancombobox.cpp" line="10"/>
         <source>Disable</source>
-        <translation type="unfinished"></translation>
+        <translation>Выкл</translation>
     </message>
     <message>
         <location filename="../controls/booleancombobox.cpp" line="11"/>
         <source>Enable</source>
-        <translation type="unfinished"></translation>
+        <translation>Вкл</translation>
     </message>
 </context>
 <context>
@@ -19,7 +19,7 @@
     <message>
         <location filename="../dialogs/dialogabout.ui" line="14"/>
         <source>About...</source>
-        <translation type="unfinished"></translation>
+        <translation>О программе...</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogabout.ui" line="68"/>
@@ -29,17 +29,17 @@
     <message>
         <location filename="../dialogs/dialogabout.ui" line="75"/>
         <source>Version: 1.0.0</source>
-        <translation type="unfinished"></translation>
+        <translation>Версия: 1.0.0</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogabout.ui" line="112"/>
         <source>About</source>
-        <translation type="unfinished"></translation>
+        <translation>О программе</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogabout.ui" line="118"/>
         <source>An Open Source Modbus Slave (Server) Utility</source>
-        <translation type="unfinished"></translation>
+        <translation>Утилита Modbus Slave (сервер) с открытым исходным кодом</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogabout.ui" line="141"/>
@@ -54,32 +54,32 @@
     <message>
         <location filename="../dialogs/dialogabout.ui" line="177"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;a href=&quot;&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Lecense: The MIT License&lt;span&gt;&lt;/a&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;a href=&quot;&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Лицензия: MIT License&lt;span&gt;&lt;/a&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogabout.ui" line="185"/>
         <source>Libraries</source>
-        <translation type="unfinished"></translation>
+        <translation>Библиотеки</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogabout.cpp" line="16"/>
         <source>About %1...</source>
-        <translation type="unfinished"></translation>
+        <translation>О программе %1...</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogabout.cpp" line="18"/>
         <source>Version: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Версия: %1</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogabout.cpp" line="19"/>
         <source>• Qt %1 (build with version %2)</source>
-        <translation type="unfinished"></translation>
+        <translation>• Qt %1 (собрано на версии %2)</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogabout.cpp" line="46"/>
         <source>License Agreement - %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Лицензионное соглашение - %1</translation>
     </message>
 </context>
 <context>
@@ -659,19 +659,14 @@ Length: %2</source>
 <context>
     <name>MainStatusBar</name>
     <message>
-        <location filename="../controls/mainstatusbar.cpp" line="14"/>
-        <source>Polls: %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../controls/mainstatusbar.cpp" line="23"/>
         <source>Modbus/TCP Srv: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Modbus/TCP сервер: %1</translation>
     </message>
     <message>
         <location filename="../controls/mainstatusbar.cpp" line="27"/>
         <source>Port %1: %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Порт %1: %2</translation>
     </message>
 </context>
 <context>
@@ -931,12 +926,12 @@ Length: %2</source>
     <message>
         <location filename="../menuconnect.cpp" line="15"/>
         <source>Modbus/TCP Srv</source>
-        <translation type="unfinished"></translation>
+        <translation>Modbus/TCP сервер</translation>
     </message>
     <message>
         <location filename="../menuconnect.cpp" line="19"/>
         <source>Port %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Порт %1</translation>
     </message>
 </context>
 <context>
@@ -944,7 +939,7 @@ Length: %2</source>
     <message>
         <location filename="../modbusmultiserver.cpp" line="629"/>
         <source>Connection error. %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Ошибка подключения. %1</translation>
     </message>
 </context>
 <context>
@@ -952,17 +947,17 @@ Length: %2</source>
     <message>
         <location filename="../controls/paritytypecombobox.cpp" line="10"/>
         <source>ODD</source>
-        <translation type="unfinished"></translation>
+        <translation>Чет</translation>
     </message>
     <message>
         <location filename="../controls/paritytypecombobox.cpp" line="11"/>
         <source>EVEN</source>
-        <translation type="unfinished"></translation>
+        <translation>Нечет</translation>
     </message>
     <message>
         <location filename="../controls/paritytypecombobox.cpp" line="12"/>
         <source>NONE</source>
-        <translation type="unfinished"></translation>
+        <translation>Нет</translation>
     </message>
 </context>
 </TS>
