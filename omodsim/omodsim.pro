@@ -123,3 +123,6 @@ RESOURCES += \
 
 TRANSLATIONS += \
     translations/omodsim_ru.ts
+
+DISTFILES += \
+    translations/omodsim_ru.qm

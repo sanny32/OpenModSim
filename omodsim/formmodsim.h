@@ -56,6 +56,7 @@ public:
     void print(QPrinter* painter);
 
 protected:
+    void changeEvent(QEvent* event) override;
     void closeEvent(QCloseEvent *event) override;
 
 public slots:

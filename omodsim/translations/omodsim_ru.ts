@@ -24,7 +24,7 @@
     <message>
         <location filename="../dialogs/dialogabout.ui" line="68"/>
         <source>Open Modsim</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../dialogs/dialogabout.ui" line="75"/>
@@ -44,12 +44,12 @@
     <message>
         <location filename="../dialogs/dialogabout.ui" line="141"/>
         <source>© Alexandr Ananev, 2023</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../dialogs/dialogabout.ui" line="164"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://github.com/sanny32/OpenModScan&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;https://github.com/sanny32/OpenModSim&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../dialogs/dialogabout.ui" line="177"/>
@@ -87,52 +87,52 @@
     <message>
         <location filename="../dialogs/dialogautosimulation.ui" line="14"/>
         <source>Auto Simulation</source>
-        <translation type="unfinished"></translation>
+        <translation>Симуляция</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogautosimulation.ui" line="20"/>
         <source>Enabled</source>
-        <translation type="unfinished"></translation>
+        <translation>Включено</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogautosimulation.ui" line="29"/>
+        <location filename="../dialogs/dialogautosimulation.ui" line="32"/>
         <source>Simulation Type:</source>
-        <translation type="unfinished"></translation>
+        <translation>Тип симуляции:</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogautosimulation.ui" line="51"/>
+        <location filename="../dialogs/dialogautosimulation.ui" line="54"/>
         <source>5</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogautosimulation.ui" line="58"/>
+        <location filename="../dialogs/dialogautosimulation.ui" line="61"/>
         <source>Change Interval (secs):</source>
-        <translation type="unfinished"></translation>
+        <translation>Интервал (сек):</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogautosimulation.ui" line="65"/>
+        <location filename="../dialogs/dialogautosimulation.ui" line="68"/>
         <source>Step Value: </source>
-        <translation type="unfinished"></translation>
+        <translation>Шаг: </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogautosimulation.ui" line="84"/>
+        <location filename="../dialogs/dialogautosimulation.ui" line="87"/>
         <source>1</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogautosimulation.ui" line="93"/>
+        <location filename="../dialogs/dialogautosimulation.ui" line="96"/>
         <source>Simulation Range</source>
-        <translation type="unfinished"></translation>
+        <translation>Диапазон симуляции</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogautosimulation.ui" line="99"/>
+        <location filename="../dialogs/dialogautosimulation.ui" line="102"/>
         <source>Low Limit: </source>
-        <translation type="unfinished"></translation>
+        <translation>Нижний: </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogautosimulation.ui" line="122"/>
+        <location filename="../dialogs/dialogautosimulation.ui" line="125"/>
         <source>High Limit: </source>
-        <translation type="unfinished"></translation>
+        <translation>Верхний: </translation>
     </message>
 </context>
 <context>
@@ -140,27 +140,27 @@
     <message>
         <location filename="../dialogs/dialogcoilsimulation.ui" line="14"/>
         <source>Coil Simulation</source>
-        <translation type="unfinished"></translation>
+        <translation>Симуляци Coil</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogcoilsimulation.ui" line="20"/>
         <source>Enabled</source>
-        <translation type="unfinished"></translation>
+        <translation>Включено</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogcoilsimulation.ui" line="29"/>
         <source>Simulation Type:</source>
-        <translation type="unfinished"></translation>
+        <translation>Тип симуляции:</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogcoilsimulation.ui" line="51"/>
         <source>5</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../dialogs/dialogcoilsimulation.ui" line="58"/>
         <source>Change Interval (secs):</source>
-        <translation type="unfinished"></translation>
+        <translation>Интервал (сек):</translation>
     </message>
 </context>
 <context>
@@ -168,42 +168,42 @@
     <message>
         <location filename="../dialogs/dialogdisplaydefinition.ui" line="14"/>
         <source>Display Definition</source>
-        <translation type="unfinished"></translation>
+        <translation>Настройки отображения</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogdisplaydefinition.ui" line="35"/>
         <source>Update Rate: </source>
-        <translation type="unfinished"></translation>
+        <translation>Частота обновления: </translation>
     </message>
     <message>
         <location filename="../dialogs/dialogdisplaydefinition.ui" line="64"/>
         <source>(msecs)</source>
-        <translation type="unfinished"></translation>
+        <translation>(мсек)</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogdisplaydefinition.ui" line="92"/>
         <source>Modbus Data</source>
-        <translation type="unfinished"></translation>
+        <translation>Настройки Modbus</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogdisplaydefinition.ui" line="104"/>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="107"/>
         <source>Slave Address:</source>
-        <translation type="unfinished"></translation>
+        <translation>Адрес устройства:</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogdisplaydefinition.ui" line="133"/>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="136"/>
         <source>Point Type:</source>
-        <translation type="unfinished"></translation>
+        <translation>Тип регистров:</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogdisplaydefinition.ui" line="156"/>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="159"/>
         <source>Point Address:</source>
-        <translation type="unfinished"></translation>
+        <translation>Начальный адрес:</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogdisplaydefinition.ui" line="185"/>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="188"/>
         <source>Length:</source>
-        <translation type="unfinished"></translation>
+        <translation>Количество:</translation>
     </message>
 </context>
 <context>
@@ -211,82 +211,82 @@
     <message>
         <location filename="../dialogs/dialogprintsettings.ui" line="14"/>
         <source>Print Setup</source>
-        <translation type="unfinished"></translation>
+        <translation>Настройки печати</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogprintsettings.ui" line="23"/>
         <source>Printer</source>
-        <translation type="unfinished"></translation>
+        <translation>Принтер</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogprintsettings.ui" line="41"/>
         <source>Name: </source>
-        <translation type="unfinished"></translation>
+        <translation>Имя: </translation>
     </message>
     <message>
         <location filename="../dialogs/dialogprintsettings.ui" line="70"/>
         <source>Status: </source>
-        <translation type="unfinished"></translation>
+        <translation>Статус: </translation>
     </message>
     <message>
         <location filename="../dialogs/dialogprintsettings.ui" line="84"/>
         <source>Type: </source>
-        <translation type="unfinished"></translation>
+        <translation>Тип: </translation>
     </message>
     <message>
         <location filename="../dialogs/dialogprintsettings.ui" line="94"/>
         <source>Location: </source>
-        <translation type="unfinished"></translation>
+        <translation>Место: </translation>
     </message>
     <message>
         <location filename="../dialogs/dialogprintsettings.ui" line="109"/>
         <source>Paper</source>
-        <translation type="unfinished"></translation>
+        <translation>Бумага</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogprintsettings.ui" line="124"/>
         <source>Size: </source>
-        <translation type="unfinished"></translation>
+        <translation>Размер: </translation>
     </message>
     <message>
         <location filename="../dialogs/dialogprintsettings.ui" line="147"/>
         <source>Source: </source>
-        <translation type="unfinished"></translation>
+        <translation>Подача: </translation>
     </message>
     <message>
         <location filename="../dialogs/dialogprintsettings.ui" line="176"/>
         <source>Orientation</source>
-        <translation type="unfinished"></translation>
+        <translation>Ориентация</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogprintsettings.ui" line="212"/>
         <source>Portrait</source>
-        <translation type="unfinished"></translation>
+        <translation>Книжная</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogprintsettings.ui" line="228"/>
         <source>Landscape</source>
-        <translation type="unfinished"></translation>
+        <translation>Альбомная</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogprintsettings.cpp" line="77"/>
         <source>Ready</source>
-        <translation type="unfinished"></translation>
+        <translation>Готов</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogprintsettings.cpp" line="80"/>
         <source>Printing</source>
-        <translation type="unfinished"></translation>
+        <translation>Печать</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogprintsettings.cpp" line="83"/>
         <source>Aborted</source>
-        <translation type="unfinished"></translation>
+        <translation>Отмена</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogprintsettings.cpp" line="86"/>
         <source>Error</source>
-        <translation type="unfinished"></translation>
+        <translation>Ошибка</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogprintsettings.cpp" line="153"/>
@@ -296,17 +296,17 @@
     <message>
         <location filename="../dialogs/dialogprintsettings.cpp" line="157"/>
         <source>Lower</source>
-        <translation type="unfinished"></translation>
+        <translation>Нижняя</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogprintsettings.cpp" line="161"/>
         <source>Middle</source>
-        <translation type="unfinished"></translation>
+        <translation>Средняя</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogprintsettings.cpp" line="165"/>
         <source>Manual</source>
-        <translation type="unfinished"></translation>
+        <translation>Ручная</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogprintsettings.cpp" line="169"/>
@@ -321,7 +321,7 @@
     <message>
         <location filename="../dialogs/dialogprintsettings.cpp" line="177"/>
         <source>Auto</source>
-        <translation type="unfinished"></translation>
+        <translation>Автоматический выбор</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogprintsettings.cpp" line="181"/>
@@ -364,17 +364,17 @@
     <message>
         <location filename="../dialogs/dialogselectserviceport.ui" line="14"/>
         <source>Select Service Port</source>
-        <translation type="unfinished"></translation>
+        <translation>Установка порта</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogselectserviceport.ui" line="20"/>
         <source>Modbus/TCP Service Port</source>
-        <translation type="unfinished"></translation>
+        <translation>Modbus/TCP порт</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogselectserviceport.ui" line="57"/>
         <source>502</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -382,112 +382,112 @@
     <message>
         <location filename="../dialogs/dialogsetupserialport.ui" line="14"/>
         <source>Setup Serial Port</source>
-        <translation type="unfinished"></translation>
+        <translation>Настройки последовательного порта</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogsetupserialport.ui" line="26"/>
         <source>Port Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Конфигурация</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogsetupserialport.ui" line="32"/>
+        <location filename="../dialogs/dialogsetupserialport.ui" line="35"/>
         <source>Baud Rate: </source>
-        <translation type="unfinished"></translation>
+        <translation>Скорость бит/с: </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogsetupserialport.ui" line="55"/>
+        <location filename="../dialogs/dialogsetupserialport.ui" line="58"/>
         <source>1200</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogsetupserialport.ui" line="60"/>
+        <location filename="../dialogs/dialogsetupserialport.ui" line="63"/>
         <source>2400</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogsetupserialport.ui" line="65"/>
+        <location filename="../dialogs/dialogsetupserialport.ui" line="68"/>
         <source>4800</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogsetupserialport.ui" line="70"/>
+        <location filename="../dialogs/dialogsetupserialport.ui" line="73"/>
         <source>9600</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogsetupserialport.ui" line="75"/>
+        <location filename="../dialogs/dialogsetupserialport.ui" line="78"/>
         <source>19200</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogsetupserialport.ui" line="80"/>
+        <location filename="../dialogs/dialogsetupserialport.ui" line="83"/>
         <source>38400</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogsetupserialport.ui" line="85"/>
+        <location filename="../dialogs/dialogsetupserialport.ui" line="88"/>
         <source>57600</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogsetupserialport.ui" line="90"/>
+        <location filename="../dialogs/dialogsetupserialport.ui" line="93"/>
         <source>115200</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogsetupserialport.ui" line="98"/>
+        <location filename="../dialogs/dialogsetupserialport.ui" line="101"/>
         <source>Word Length: </source>
-        <translation type="unfinished"></translation>
+        <translation>Биты данных: </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogsetupserialport.ui" line="121"/>
+        <location filename="../dialogs/dialogsetupserialport.ui" line="124"/>
         <source>7</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogsetupserialport.ui" line="126"/>
+        <location filename="../dialogs/dialogsetupserialport.ui" line="129"/>
         <source>8</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogsetupserialport.ui" line="134"/>
+        <location filename="../dialogs/dialogsetupserialport.ui" line="137"/>
         <source>Parity: </source>
-        <translation type="unfinished"></translation>
+        <translation>Четность: </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogsetupserialport.ui" line="160"/>
+        <location filename="../dialogs/dialogsetupserialport.ui" line="163"/>
         <source>Stop Bits: </source>
-        <translation type="unfinished"></translation>
+        <translation>Стоповые биты: </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogsetupserialport.ui" line="180"/>
+        <location filename="../dialogs/dialogsetupserialport.ui" line="183"/>
         <source>1</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogsetupserialport.ui" line="185"/>
+        <location filename="../dialogs/dialogsetupserialport.ui" line="188"/>
         <source>2</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogsetupserialport.ui" line="202"/>
+        <location filename="../dialogs/dialogsetupserialport.ui" line="205"/>
         <source>Hardware Flow Control</source>
-        <translation type="unfinished"></translation>
+        <translation>Управление потоком</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogsetupserialport.ui" line="208"/>
+        <location filename="../dialogs/dialogsetupserialport.ui" line="214"/>
         <source>Flow Control Mode: </source>
-        <translation type="unfinished"></translation>
+        <translation>Режим управления: </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogsetupserialport.ui" line="228"/>
+        <location filename="../dialogs/dialogsetupserialport.ui" line="234"/>
         <source>DTR Control: </source>
-        <translation type="unfinished"></translation>
+        <translation>Управление DTR: </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogsetupserialport.ui" line="251"/>
+        <location filename="../dialogs/dialogsetupserialport.ui" line="257"/>
         <source>RTS Control: </source>
-        <translation type="unfinished"></translation>
+        <translation>Управление RTS: </translation>
     </message>
 </context>
 <context>
@@ -495,22 +495,22 @@
     <message>
         <location filename="../dialogs/dialogwindowsmanager.ui" line="14"/>
         <source>Windows</source>
-        <translation type="unfinished"></translation>
+        <translation>Окна</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogwindowsmanager.ui" line="29"/>
         <source>Activate</source>
-        <translation type="unfinished"></translation>
+        <translation>Активировать</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogwindowsmanager.ui" line="36"/>
         <source>Save</source>
-        <translation type="unfinished"></translation>
+        <translation>Сохранить</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogwindowsmanager.ui" line="43"/>
         <source>Close</source>
-        <translation type="unfinished"></translation>
+        <translation>Закрыть</translation>
     </message>
 </context>
 <context>
@@ -518,32 +518,32 @@
     <message>
         <location filename="../dialogs/dialogwritecoilregister.ui" line="14"/>
         <source>Write Coil</source>
-        <translation type="unfinished"></translation>
+        <translation>Запись в регистр Coil</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogwritecoilregister.ui" line="38"/>
         <source>Address: </source>
-        <translation type="unfinished"></translation>
+        <translation>Адрес: </translation>
     </message>
     <message>
         <location filename="../dialogs/dialogwritecoilregister.ui" line="85"/>
         <source>Value</source>
-        <translation type="unfinished"></translation>
+        <translation>Значение</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogwritecoilregister.ui" line="104"/>
         <source>Off</source>
-        <translation type="unfinished"></translation>
+        <translation>Откл</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogwritecoilregister.ui" line="111"/>
         <source>On</source>
-        <translation type="unfinished"></translation>
+        <translation>Вкл</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogwritecoilregister.ui" line="162"/>
         <source>Auto Simulation</source>
-        <translation type="unfinished"></translation>
+        <translation>Симуляция</translation>
     </message>
 </context>
 <context>
@@ -551,22 +551,22 @@
     <message>
         <location filename="../dialogs/dialogwriteholdingregister.ui" line="14"/>
         <source>Write Register</source>
-        <translation type="unfinished"></translation>
+        <translation>Запись в регистр</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogwriteholdingregister.ui" line="26"/>
         <source>Address: </source>
-        <translation type="unfinished"></translation>
+        <translation>Адрес: </translation>
     </message>
     <message>
         <location filename="../dialogs/dialogwriteholdingregister.ui" line="58"/>
         <source>Value: </source>
-        <translation type="unfinished"></translation>
+        <translation>Значение: </translation>
     </message>
     <message>
         <location filename="../dialogs/dialogwriteholdingregister.ui" line="121"/>
         <source>Auto Simulation</source>
-        <translation type="unfinished"></translation>
+        <translation>Симуляция</translation>
     </message>
 </context>
 <context>
@@ -574,17 +574,17 @@
     <message>
         <location filename="../dialogs/dialogwriteholdingregisterbits.ui" line="14"/>
         <source>Write Register</source>
-        <translation type="unfinished"></translation>
+        <translation>Запись в регистр</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogwriteholdingregisterbits.ui" line="38"/>
         <source>Address: </source>
-        <translation type="unfinished"></translation>
+        <translation>Адрес: </translation>
     </message>
     <message>
         <location filename="../dialogs/dialogwriteholdingregisterbits.ui" line="85"/>
         <source>Bit Pattern</source>
-        <translation type="unfinished"></translation>
+        <translation>Битовый шаблон</translation>
     </message>
 </context>
 <context>
@@ -592,17 +592,17 @@
     <message>
         <location filename="../controls/flowcontroltypecombobox.cpp" line="10"/>
         <source>NO CONTROL</source>
-        <translation type="unfinished"></translation>
+        <translation>НЕТ</translation>
     </message>
     <message>
         <location filename="../controls/flowcontroltypecombobox.cpp" line="11"/>
         <source>HARDWARE (RTS/CTS)</source>
-        <translation type="unfinished"></translation>
+        <translation>Аппаратное (RTS/CTS)</translation>
     </message>
     <message>
         <location filename="../controls/flowcontroltypecombobox.cpp" line="12"/>
         <source>SOFTWARE (XON/XOFF)</source>
-        <translation type="unfinished"></translation>
+        <translation>Программное (XON/XOFF)</translation>
     </message>
 </context>
 <context>
@@ -610,61 +610,62 @@
     <message>
         <location filename="../formmodsim.ui" line="80"/>
         <source>Address:</source>
-        <translation type="unfinished"></translation>
+        <translation>Адрес:</translation>
     </message>
     <message>
         <location filename="../formmodsim.ui" line="87"/>
         <source>Length:</source>
-        <translation type="unfinished"></translation>
+        <translation>Количество:</translation>
     </message>
     <message>
         <location filename="../formmodsim.ui" line="179"/>
         <source>Device Id:</source>
-        <translation type="unfinished"></translation>
+        <translation>Узел:</translation>
     </message>
     <message>
         <location filename="../formmodsim.ui" line="232"/>
         <source>MODBUS Point Type</source>
-        <translation type="unfinished"></translation>
+        <translation>Тип регистров MODBUS</translation>
     </message>
     <message>
-        <location filename="../formmodsim.cpp" line="50"/>
-        <location filename="../formmodsim.cpp" line="327"/>
+        <location filename="../formmodsim.cpp" line="340"/>
         <source>NOT CONNECTED!</source>
-        <translation type="unfinished"></translation>
+        <translation>НЕ ПОДКЛЮЧЕНО!</translation>
     </message>
     <message>
-        <location filename="../formmodsim.cpp" line="286"/>
+        <location filename="../formmodsim.cpp" line="299"/>
         <source>Device Id: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Узел: %1</translation>
     </message>
     <message>
-        <location filename="../formmodsim.cpp" line="289"/>
+        <location filename="../formmodsim.cpp" line="302"/>
         <source>Address: %1
 Length: %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Адрес: %1
+Количество: %2</translation>
     </message>
     <message>
-        <location filename="../formmodsim.cpp" line="292"/>
+        <location filename="../formmodsim.cpp" line="305"/>
         <source>MODBUS Point Type:
 %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Тип регистров MODBUS:
+%1</translation>
     </message>
     <message>
-        <location filename="../formmodsim.cpp" line="334"/>
+        <location filename="../formmodsim.cpp" line="347"/>
         <source>Invalid Data Length Specified</source>
-        <translation type="unfinished"></translation>
+        <translation>Указана недопустимая длина данных</translation>
     </message>
 </context>
 <context>
     <name>MainStatusBar</name>
     <message>
-        <location filename="../controls/mainstatusbar.cpp" line="23"/>
+        <location filename="../controls/mainstatusbar.cpp" line="79"/>
         <source>Modbus/TCP Srv: %1</source>
         <translation>Modbus/TCP сервер: %1</translation>
     </message>
     <message>
-        <location filename="../controls/mainstatusbar.cpp" line="27"/>
+        <location filename="../controls/mainstatusbar.cpp" line="83"/>
         <source>Port %1: %2</source>
         <translation>Порт %1: %2</translation>
     </message>
@@ -674,251 +675,257 @@ Length: %2</source>
     <message>
         <location filename="../mainwindow.ui" line="14"/>
         <source>Open ModSim</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="50"/>
         <source>File</source>
-        <translation type="unfinished"></translation>
+        <translation>Файл</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="70"/>
         <source>Connection</source>
-        <translation type="unfinished"></translation>
+        <translation>Подключение</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="77"/>
         <source>Setup</source>
-        <translation type="unfinished"></translation>
+        <translation>Настройка</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="81"/>
         <source>Display Options</source>
-        <translation type="unfinished"></translation>
+        <translation>Параметры отображения</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="102"/>
         <source>Window</source>
-        <translation type="unfinished"></translation>
+        <translation>Окно</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="111"/>
         <source>Help</source>
-        <translation type="unfinished"></translation>
+        <translation>Помощь</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="117"/>
         <source>View</source>
-        <translation type="unfinished"></translation>
+        <translation>Вид</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="121"/>
         <source>Config</source>
-        <translation type="unfinished"></translation>
+        <translation>Конфигурация</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="125"/>
         <source>Colors</source>
-        <translation type="unfinished"></translation>
+        <translation>Цвета</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="150"/>
-        <location filename="../mainwindow.ui" line="174"/>
-        <source>toolBar</source>
-        <translation type="unfinished"></translation>
+        <location filename="../mainwindow.ui" line="136"/>
+        <source>Language</source>
+        <translation>Язык</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="199"/>
+        <location filename="../mainwindow.ui" line="207"/>
         <source>New</source>
-        <translation type="unfinished"></translation>
+        <translation>Новый</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="208"/>
+        <location filename="../mainwindow.ui" line="216"/>
         <source>Open...</source>
-        <translation type="unfinished"></translation>
+        <translation>Открыть...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="213"/>
+        <location filename="../mainwindow.ui" line="221"/>
         <source>Close</source>
-        <translation type="unfinished"></translation>
+        <translation>Закрыть</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="222"/>
+        <location filename="../mainwindow.ui" line="230"/>
         <source>Save</source>
-        <translation type="unfinished"></translation>
+        <translation>Сохранить</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="227"/>
+        <location filename="../mainwindow.ui" line="235"/>
         <source>Save As...</source>
-        <translation type="unfinished"></translation>
+        <translation>Сохранить как...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="232"/>
+        <location filename="../mainwindow.ui" line="240"/>
         <source>Save Test Config</source>
-        <translation type="unfinished"></translation>
+        <translation>Сохранить конфиг</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="237"/>
+        <location filename="../mainwindow.ui" line="245"/>
         <source>Restore Test Config</source>
-        <translation type="unfinished"></translation>
+        <translation>Восстановить конфиг</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="246"/>
+        <location filename="../mainwindow.ui" line="254"/>
         <source>Print...</source>
-        <translation type="unfinished"></translation>
+        <translation>Печать...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="251"/>
+        <location filename="../mainwindow.ui" line="259"/>
         <source>Print Setup...</source>
-        <translation type="unfinished"></translation>
+        <translation>Настройка печати...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="256"/>
+        <location filename="../mainwindow.ui" line="264"/>
         <source>Recent File</source>
-        <translation type="unfinished"></translation>
+        <translation>Последние файлы</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="261"/>
+        <location filename="../mainwindow.ui" line="269"/>
         <source>Exit</source>
-        <translation type="unfinished"></translation>
+        <translation>Выход</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="270"/>
+        <location filename="../mainwindow.ui" line="278"/>
         <source>Connect</source>
-        <translation type="unfinished"></translation>
+        <translation>Подключить</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="279"/>
+        <location filename="../mainwindow.ui" line="287"/>
         <source>Disconnect</source>
-        <translation type="unfinished"></translation>
+        <translation>Отключить</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="291"/>
+        <location filename="../mainwindow.ui" line="299"/>
         <source>Binary</source>
-        <translation type="unfinished"></translation>
+        <translation>Двоичный</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="303"/>
+        <location filename="../mainwindow.ui" line="311"/>
         <source>Unsigned Decimal</source>
-        <translation type="unfinished"></translation>
+        <translation>Беззнаковый десятичный</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="315"/>
+        <location filename="../mainwindow.ui" line="323"/>
         <source>Hex</source>
-        <translation type="unfinished"></translation>
+        <translation>Шестандцатиричный</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="327"/>
+        <location filename="../mainwindow.ui" line="335"/>
         <source>Floating Point</source>
-        <translation type="unfinished"></translation>
+        <translation>С плавающей точкой</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="339"/>
+        <location filename="../mainwindow.ui" line="347"/>
         <source>Swapped FP</source>
-        <translation type="unfinished"></translation>
+        <translation>Перевернутое с плавающей точкой</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="351"/>
+        <location filename="../mainwindow.ui" line="359"/>
         <source>Dbl Float</source>
-        <translation type="unfinished"></translation>
+        <translation>Двойной точности</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="363"/>
+        <location filename="../mainwindow.ui" line="371"/>
         <source>Swapped Dbl</source>
-        <translation type="unfinished"></translation>
+        <translation>Перевернутое двойной точности</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="368"/>
+        <location filename="../mainwindow.ui" line="376"/>
         <source>Cascade</source>
-        <translation type="unfinished"></translation>
+        <translation>Каскадно</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="373"/>
+        <location filename="../mainwindow.ui" line="381"/>
         <source>Tile</source>
-        <translation type="unfinished"></translation>
+        <translation>Замостить</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="382"/>
+        <location filename="../mainwindow.ui" line="390"/>
         <source>About Open ModSim...</source>
-        <translation type="unfinished"></translation>
+        <translation>О программе Open ModSim...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="394"/>
+        <location filename="../mainwindow.ui" line="402"/>
         <source>Integer</source>
-        <translation type="unfinished"></translation>
+        <translation>Целый</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="406"/>
+        <location filename="../mainwindow.ui" line="414"/>
         <source>Show Data</source>
-        <translation type="unfinished"></translation>
+        <translation>Данные</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="418"/>
+        <location filename="../mainwindow.ui" line="426"/>
         <source>Show Traffic</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.ui" line="427"/>
-        <source>Data Definition</source>
-        <translation type="unfinished"></translation>
+        <translation>Трафик</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="435"/>
-        <source>Toolbar</source>
-        <translation type="unfinished"></translation>
+        <source>Data Definition</source>
+        <translation>Настройки отображения</translation>
     </message>
     <message>
+        <location filename="../mainwindow.ui" line="158"/>
         <location filename="../mainwindow.ui" line="443"/>
-        <source>Status Bar</source>
-        <translation type="unfinished"></translation>
+        <source>Toolbar</source>
+        <translation>Панель инструментов</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="451"/>
+        <source>Status Bar</source>
+        <translation>Строка состояния</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="182"/>
+        <location filename="../mainwindow.ui" line="459"/>
         <source>Display Bar</source>
-        <translation type="unfinished"></translation>
+        <translation>Панель отображения</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="456"/>
+        <location filename="../mainwindow.ui" line="464"/>
         <source>Font</source>
-        <translation type="unfinished"></translation>
+        <translation>Шрифт</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="461"/>
+        <location filename="../mainwindow.ui" line="469"/>
         <source>Background</source>
-        <translation type="unfinished"></translation>
+        <translation>Задний план</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="466"/>
+        <location filename="../mainwindow.ui" line="474"/>
         <source>Foreground</source>
-        <translation type="unfinished"></translation>
+        <translation>Передний план</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="471"/>
+        <location filename="../mainwindow.ui" line="479"/>
         <source>Status</source>
-        <translation type="unfinished"></translation>
+        <translation>Статус</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="476"/>
+        <location filename="../mainwindow.ui" line="484"/>
         <source>Windows...</source>
-        <translation type="unfinished"></translation>
+        <translation>Окна...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="481"/>
-        <source>Reset Ctrs</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.ui" line="489"/>
+        <location filename="../mainwindow.ui" line="492"/>
         <source>Hex Addresses</source>
-        <translation type="unfinished"></translation>
+        <translation>Шестнадцатиричные адреса</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="187"/>
-        <location filename="../mainwindow.cpp" line="226"/>
-        <location filename="../mainwindow.cpp" line="239"/>
-        <location filename="../mainwindow.cpp" line="250"/>
+        <location filename="../mainwindow.ui" line="500"/>
+        <source>English</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="508"/>
+        <source>Русский</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cpp" line="225"/>
+        <location filename="../mainwindow.cpp" line="264"/>
+        <location filename="../mainwindow.cpp" line="277"/>
+        <location filename="../mainwindow.cpp" line="288"/>
         <source>All files (*)</source>
-        <translation type="unfinished"></translation>
+        <translation>Все файлы (*)</translation>
     </message>
 </context>
 <context>
@@ -940,6 +947,14 @@ Length: %2</source>
         <location filename="../modbusmultiserver.cpp" line="629"/>
         <source>Connection error. %1</source>
         <translation>Ошибка подключения. %1</translation>
+    </message>
+</context>
+<context>
+    <name>OutputWidget</name>
+    <message>
+        <location filename="../controls/outputwidget.cpp" line="585"/>
+        <source>NOT CONNECTED!</source>
+        <translation>НЕ ПОДКЛЮЧЕНО!</translation>
     </message>
 </context>
 <context>

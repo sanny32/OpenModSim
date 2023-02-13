@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QTranslator>
 #include "formmodsim.h"
 #include "modbusmultiserver.h"
 #include "windowactionlist.h"
@@ -19,7 +20,10 @@ public:
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+    void setLanguage(const QString& lang);
+
 protected:
+    void changeEvent(QEvent* event) override;
     void closeEvent(QCloseEvent *event) override;
     bool eventFilter(QObject * obj, QEvent * e) override;
 
@@ -65,6 +69,10 @@ private slots:
     void on_actionStatus_triggered();
     void on_actionFont_triggered();
 
+    /* Language menu slots */
+    void on_actionEnglish_triggered();
+    void on_actionRussian_triggered();
+
     /* Window menu slots */
     void on_actionCascade_triggered();
     void on_actionTile_triggered();
@@ -99,6 +107,10 @@ private:
 
 private:
     Ui::MainWindow *ui;
+
+    QString _lang;
+    QTranslator _qtTranslator;
+    QTranslator _appTranslator;
 
 private:
     int _windowCounter;

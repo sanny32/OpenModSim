@@ -47,7 +47,6 @@ FormModSim::FormModSim(int id, ModbusMultiServer& server, MainWindow* parent) :
 
         ui->outputWidget->setup(dd);
         ui->outputWidget->setFocus();
-        ui->outputWidget->setStatus(_mbMultiServer.isConnected() ? "" : tr("NOT CONNECTED!"));
     }
 
     connect(&_mbMultiServer, &ModbusMultiServer::request, this, &FormModSim::on_mbRequest);
@@ -67,6 +66,22 @@ FormModSim::~FormModSim()
 {
     _mbMultiServer.removeUnitMap(formId());
     delete ui;
+}
+
+///
+/// \brief FormModSim::changeEvent
+/// \param event
+///
+void FormModSim::changeEvent(QEvent* event)
+{
+    if (event->type() == QEvent::LanguageChange)
+    {
+        ui->retranslateUi(this);
+        if(!_mbMultiServer.isConnected())
+            ui->outputWidget->setStatus(tr("NOT CONNECTED!"));
+    }
+
+    QWidget::changeEvent(event);
 }
 
 ///

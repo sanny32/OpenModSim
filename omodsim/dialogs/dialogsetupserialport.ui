@@ -26,6 +26,9 @@
       <string>Port Settings</string>
      </property>
      <layout class="QFormLayout" name="formLayout">
+      <property name="labelAlignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
       <item row="0" column="0">
        <widget class="QLabel" name="labelBaudRate">
         <property name="text">
@@ -202,6 +205,9 @@
       <string>Hardware Flow Control</string>
      </property>
      <layout class="QFormLayout" name="formLayout_3">
+      <property name="labelAlignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
       <item row="0" column="0">
        <widget class="QLabel" name="labelFlowControl">
         <property name="text">

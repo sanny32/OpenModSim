@@ -23,5 +23,6 @@
         <file>res/actionDefineData.png</file>
         <file>res/omodsim.png</file>
         <file>res/iconAbout.png</file>
+        <file>translations/omodsim_ru.qm</file>
     </qresource>
 </RCC>
