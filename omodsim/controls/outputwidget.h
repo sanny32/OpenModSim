@@ -59,10 +59,14 @@ public:
 signals:
     void itemDoubleClicked(quint16 address, const QVariant& value);
 
+protected:
+    void changeEvent(QEvent* event) override;
+
 private slots:
     void on_listWidget_itemDoubleClicked(QListWidgetItem *item);
 
 private:
+    void setNotConnectedStatus();
     void updateDataWidget(const QModbusDataUnit& data);
     void updateTrafficWidget(bool request, int server, const QModbusPdu& pdu);
 

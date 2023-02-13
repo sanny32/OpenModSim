@@ -12,11 +12,11 @@ MenuConnect::MenuConnect(MenuType type, ModbusMultiServer& server, QWidget *pare
     ,_menuType(type)
     ,_mbMultiServer(server)
 {
-    addAction("Modbus/TCP Srv", ConnectionType::Tcp, QString());
+    addAction(tr("Modbus/TCP Srv"), ConnectionType::Tcp, QString());
 
     for(auto&& port: QSerialPortInfo::availablePorts())
     {
-        const auto text = QString("Port %1").arg(port.portName());
+        const auto text = QString(tr("Port %1")).arg(port.portName());
         addAction(text, ConnectionType::Serial, port.portName());
     }
 
