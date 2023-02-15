@@ -21,14 +21,14 @@ struct DisplayDefinition
         DeviceId = qBound<quint8>(1, DeviceId, 255);
         PointAddress = qMax<quint16>(1U, PointAddress);
         PointType = qBound(QModbusDataUnit::DiscreteInputs, PointType, QModbusDataUnit::HoldingRegisters);
-        Length = qBound<quint16>(1, Length, 128);
+        Length = qBound<quint16>(1, Length, 200);
     }
 };
 Q_DECLARE_METATYPE(DisplayDefinition)
 
 inline QSettings& operator <<(QSettings& out, const DisplayDefinition& dd)
 {
-    out.setValue("DisplayDefinition/UpdateRate",      dd.UpdateRate);
+    out.setValue("DisplayDefinition/UpdateRate",    dd.UpdateRate);
     out.setValue("DisplayDefinition/DeviceId",      dd.DeviceId);
     out.setValue("DisplayDefinition/PointAddress",  dd.PointAddress);
     out.setValue("DisplayDefinition/PointType",     dd.PointType);
