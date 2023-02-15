@@ -8,7 +8,7 @@ VERSION = 1.0.0
 
 QMAKE_TARGET_COMPANY = "Open ModSim"
 QMAKE_TARGET_PRODUCT = omodsim
-QMAKE_TARGET_DESCRIPTION = "Free modbus rtu/tcp slave (server) utility"
+QMAKE_TARGET_DESCRIPTION = "An Open Source Modbus Slave (Server) Utility"
 QMAKE_TARGET_DOMAIN = "com.omodsim.app"
 
 # You can make your code fail to compile if it uses deprecated APIs.
