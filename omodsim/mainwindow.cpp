@@ -20,6 +20,7 @@
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
+    ,_lang("en")
     ,_windowCounter(0)
 {
     ui->setupUi(this);
@@ -68,6 +69,42 @@ MainWindow::MainWindow(QWidget *parent)
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+///
+/// \brief MainWindow::setLanguage
+/// \param lang
+///
+void MainWindow::setLanguage(const QString& lang)
+{
+    if(lang == "en")
+    {
+        _lang = lang;
+        qApp->removeTranslator(&_appTranslator);
+        qApp->removeTranslator(&_qtTranslator);
+    }
+    else if(_appTranslator.load(QString(":/translations/omodsim_%1").arg(lang)))
+    {
+        _lang = lang;
+        qApp->installTranslator(&_appTranslator);
+
+        if(_qtTranslator.load(QString("%1/translations/qt_%2").arg(qApp->applicationDirPath(), lang)))
+            qApp->installTranslator(&_qtTranslator);
+    }
+}
+
+///
+/// \brief MainWindow::changeEvent
+/// \param event
+///
+void MainWindow::changeEvent(QEvent* event)
+{
+    if (event->type() == QEvent::LanguageChange)
+    {
+        ui->retranslateUi(this);
+    }
+
+    QMainWindow::changeEvent(event);
 }
 
 ///
@@ -132,10 +169,11 @@ void MainWindow::on_awake()
     ui->actionSwappedFP->setEnabled(frm != nullptr);
     ui->actionDblFloat->setEnabled(frm != nullptr);
     ui->actionSwappedDbl->setEnabled(frm != nullptr);
-    ui->actionResetCtrs->setEnabled(frm != nullptr);
     ui->actionToolbar->setChecked(ui->toolBarMain->isVisible());
     ui->actionStatusBar->setChecked(statusBar()->isVisible());
     ui->actionDisplayBar->setChecked(ui->toolBarDisplay->isVisible());
+    ui->actionEnglish->setChecked(_lang == "en");
+    ui->actionRussian->setChecked(_lang == "ru");
 
     if(frm != nullptr)
     {
@@ -508,6 +546,22 @@ void MainWindow::on_actionFont_triggered()
 }
 
 ///
+/// \brief MainWindow::on_actionEnglish_triggered
+///
+void MainWindow::on_actionEnglish_triggered()
+{
+    setLanguage("en");
+}
+
+///
+/// \brief MainWindow::on_actionRussian_triggered
+///
+void MainWindow::on_actionRussian_triggered()
+{
+   setLanguage("ru");
+}
+
+///
 /// \brief MainWindow::on_actionCascade_triggered
 ///
 void MainWindow::on_actionCascade_triggered()
@@ -853,9 +907,12 @@ void MainWindow::saveMdiChild(FormModSim* frm)
 ///
 void MainWindow::loadSettings()
 {
-    const auto filepath = QString("%1%2%3.ini").arg(
-                qApp->applicationDirPath(), QDir::separator(),
-                QFileInfo(qApp->applicationFilePath()).baseName());
+    const auto filename = QString("%1.ini").arg(QFileInfo(qApp->applicationFilePath()).baseName());
+    auto filepath = QString("%1%2%3").arg(qApp->applicationDirPath(), QDir::separator(), filename);
+
+    if(!QFile::exists(filepath))
+        filepath = QString("%1%2%3").arg(QStandardPaths::writableLocation(QStandardPaths::ConfigLocation),
+                                         QDir::separator(), filename);
 
     if(!QFile::exists(filepath)) return;
 
@@ -866,7 +923,24 @@ void MainWindow::loadSettings()
     if(toolbarBreal) addToolBarBreak(toolbarArea);
     addToolBar(toolbarArea, ui->toolBarDisplay);
 
+    _lang = m.value("Language", "en").toString();
+    setLanguage(_lang);
+
     m >> firstMdiChild();
+}
+
+///
+/// \brief checkPathIsWritable
+/// \param path
+/// \return
+///
+bool checkPathIsWritable(const QString& path)
+{
+    const auto filepath = QString("%1%2%3").arg(path, QDir::separator(), ".test");
+    if(!QFile(filepath).open(QFile::WriteOnly)) return false;
+
+    QFile::remove(filepath);
+    return true;
 }
 
 ///
@@ -874,14 +948,18 @@ void MainWindow::loadSettings()
 ///
 void MainWindow::saveSettings()
 {
-    const auto frm = firstMdiChild();
-    const auto filepath = QString("%1%2%3.ini").arg(
-                qApp->applicationDirPath(), QDir::separator(),
-                QFileInfo(qApp->applicationFilePath()).baseName());
+    const auto filename = QString("%1.ini").arg(QFileInfo(qApp->applicationFilePath()).baseName());
+    auto filepath = QString("%1%2%3").arg(qApp->applicationDirPath(), QDir::separator(), filename);
+
+    if(!QFileInfo(qApp->applicationDirPath()).isWritable() || !checkPathIsWritable(qApp->applicationDirPath()))
+        filepath = QString("%1%2%3").arg(QStandardPaths::writableLocation(QStandardPaths::ConfigLocation),
+                                         QDir::separator(), filename);
+
     QSettings m(filepath, QSettings::IniFormat, this);
 
     m.setValue("DisplayBarArea", toolBarArea(ui->toolBarDisplay));
     m.setValue("DisplayBarBreak", toolBarBreak(ui->toolBarDisplay));
+    m.setValue("Language", _lang);
 
-    m << frm;
+    m << firstMdiChild();
 }

@@ -33,6 +33,7 @@ OutputWidget::OutputWidget(QWidget *parent) :
     setBackgroundColor(Qt::lightGray);
 
     setStatusColor(Qt::red);
+    setNotConnectedStatus();
 }
 
 ///
@@ -41,6 +42,21 @@ OutputWidget::OutputWidget(QWidget *parent) :
 OutputWidget::~OutputWidget()
 {
     delete ui;
+}
+
+///
+/// \brief OutputWidget::changeEvent
+/// \param event
+///
+void OutputWidget::changeEvent(QEvent* event)
+{
+    if (event->type() == QEvent::LanguageChange)
+    {
+        if(!_lastData.isValid())
+            setNotConnectedStatus();
+    }
+
+    QWidget::changeEvent(event);
 }
 
 ///
@@ -559,6 +575,14 @@ void OutputWidget::on_listWidget_itemDoubleClicked(QListWidgetItem *item)
     }
 
     emit itemDoubleClicked(itemData.Address, itemData.Value);
+}
+
+///
+/// \brief OutputWidget::setNotConnectedStatus
+///
+void OutputWidget::setNotConnectedStatus()
+{
+    setStatus(tr("NOT CONNECTED!"));
 }
 
 ///
