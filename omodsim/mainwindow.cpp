@@ -936,7 +936,7 @@ void MainWindow::loadSettings()
 ///
 bool checkPathIsWritable(const QString& path)
 {
-    const auto filepath = QString("%1%2%3").arg(path, QDir::separator(), "test");
+    const auto filepath = QString("%1%2%3").arg(path, QDir::separator(), ".test");
     if(!QFile(filepath).open(QFile::WriteOnly)) return false;
 
     QFile::remove(filepath);
