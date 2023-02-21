@@ -89,7 +89,7 @@ QModbusDataUnitMap ModbusMultiServer::createDataUnitMap()
             endAddress = qMax<quint16>(endAddress, unit.startAddress() + unit.valueCount());
         }
 
-        const quint16 length = endAddress - startAddress + 1;
+        const quint16 length = endAddress - startAddress;
         if(length > 0) modbusMap.insert(type, {type, startAddress, length});
     }
     return modbusMap;
