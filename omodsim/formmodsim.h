@@ -245,6 +245,7 @@ inline QDataStream& operator >>(QDataStream& in, FormModSim* frm)
 
     auto wnd = frm->parentWidget();
     wnd->resize(windowSize);
+    wnd->setWindowState(Qt::WindowActive);
     if(isMaximized) wnd->setWindowState(Qt::WindowMaximized);
 
     frm->setDisplayMode(displayMode);
