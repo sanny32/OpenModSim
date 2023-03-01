@@ -567,6 +567,16 @@ void ModbusMultiServer::simulateRegister(DataDisplayMode mode, QModbusDataUnit::
 }
 
 ///
+/// \brief ModbusMultiServer::stopSimulation
+/// \param pointType
+/// \param pointAddress
+///
+void ModbusMultiServer::stopSimulation(QModbusDataUnit::RegisterType pointType, quint16 pointAddress)
+{
+    _simulator->stopSimulation(pointType, pointAddress - 1);
+}
+
+///
 /// \brief ModbusMultiServer::stopSimulations
 ///
 void ModbusMultiServer::stopSimulations()

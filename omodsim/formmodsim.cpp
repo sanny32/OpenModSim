@@ -418,10 +418,15 @@ void FormModSim::on_outputWidget_itemDoubleClicked(quint16 addr, const QVariant&
         {
             ModbusWriteParams params = { addr, value, mode };
             DialogWriteCoilRegister dlg(params, simParams, this);
-            if(dlg.exec() == QDialog::Accepted)
+            switch(dlg.exec())
             {
-                if(simParams.Mode == SimulationMode::No) _mbMultiServer.writeRegister(pointType, params);
-                _mbMultiServer.simulateRegister(mode, pointType, addr, simParams);
+                case QDialog::Accepted:
+                    _mbMultiServer.writeRegister(pointType, params);
+                break;
+
+                case 2:
+                    _mbMultiServer.simulateRegister(mode, pointType, addr, simParams);
+                break;
             }
         }
         break;
@@ -439,10 +444,15 @@ void FormModSim::on_outputWidget_itemDoubleClicked(quint16 addr, const QVariant&
             else
             {
                 DialogWriteHoldingRegister dlg(params, simParams, this);
-                if(dlg.exec() == QDialog::Accepted)
+                switch(dlg.exec())
                 {
-                    if(simParams.Mode == SimulationMode::No) _mbMultiServer.writeRegister(pointType, params);
-                    _mbMultiServer.simulateRegister(mode, pointType, addr, simParams);
+                    case QDialog::Accepted:
+                        _mbMultiServer.writeRegister(pointType, params);
+                    break;
+
+                    case 2:
+                        _mbMultiServer.simulateRegister(mode, pointType, addr, simParams);
+                    break;
                 }
             }
         }

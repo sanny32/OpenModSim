@@ -121,6 +121,7 @@ public:
 
     void writeRegister(QModbusDataUnit::RegisterType pointType, const ModbusWriteParams& params);
     void simulateRegister(DataDisplayMode mode, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, const ModbusSimulationParams& params);
+    void stopSimulation(QModbusDataUnit::RegisterType pointType, quint16 pointAddress);
     void stopSimulations();
 
 signals:
