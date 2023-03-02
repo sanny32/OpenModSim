@@ -8,8 +8,8 @@
 ModbusMultiServer::ModbusMultiServer(QObject *parent)
     : QObject{parent}
     ,_deviceId(1)
+    ,_simulator(new DataSimulator(this))
 {
-    _simulator = QSharedPointer<DataSimulator>(new DataSimulator(this));
 }
 
 ///
@@ -45,54 +45,26 @@ void ModbusMultiServer::setDeviceId(quint8 deviceId)
 }
 
 ///
-/// \brief ModbusServer::addUnitMap
+/// \brief ModbusMultiServer::addUnitMap
+/// \param id
 /// \param pointType
 /// \param pointAddress
 /// \param length
 ///
 void ModbusMultiServer::addUnitMap(int id, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, quint16 length)
 {
-    _modbusDataUnitMap.insert(id, {pointType, pointAddress, length});
+    _modbusDataUnitMap.addUnitMap(id, pointType, pointAddress, length);
     reconfigureServers();
 }
 
 ///
-/// \brief ModbusServer::removeUnitMap
-/// \param pointType
+/// \brief ModbusMultiServer::removeUnitMap
+/// \param id
 ///
 void ModbusMultiServer::removeUnitMap(int id)
 {
-    _modbusDataUnitMap.remove(id);
+    _modbusDataUnitMap.removeUnitMap(id);
     reconfigureServers();
-}
-
-///
-/// \brief ModbusServer::createDataUnitMap
-/// \return
-///
-QModbusDataUnitMap ModbusMultiServer::createDataUnitMap()
-{
-    QMultiMap<QModbusDataUnit::RegisterType, QModbusDataUnit> multimap;
-    for(auto&& unit : _modbusDataUnitMap)
-    {
-        multimap.insert(unit.registerType(), unit);
-    }
-
-    QModbusDataUnitMap modbusMap;
-    for(auto&& type: multimap.uniqueKeys())
-    {
-        quint16 startAddress = 65535;
-        quint16 endAddress = 0;
-        for(auto&& unit : multimap.values(type))
-        {
-            startAddress = qMin<quint16>(startAddress, unit.startAddress());
-            endAddress = qMax<quint16>(endAddress, unit.startAddress() + unit.valueCount());
-        }
-
-        const quint16 length = endAddress - startAddress;
-        if(length > 0) modbusMap.insert(type, {type, startAddress, length});
-    }
-    return modbusMap;
 }
 
 ///
@@ -210,11 +182,9 @@ void ModbusMultiServer::connectDevice(const ConnectionDetails& cd)
     }
 
     modbusServer->setServerAddress(_deviceId);
+    modbusServer->setMap(_modbusDataUnitMap);
 
-    const auto dataUintMap = createDataUnitMap();
-    modbusServer->setMap(dataUintMap);
-
-    for(auto data : dataUintMap)
+    for(auto data : _modbusDataUnitMap)
     {
         _modbusServerList.first()->data(&data);
         modbusServer->setData(data);
@@ -280,9 +250,8 @@ void ModbusMultiServer::reconfigureServers()
 {
     if(!_modbusServerList.isEmpty())
     {
-        const auto dataUintMap = createDataUnitMap();
         for(auto&& s : _modbusServerList)
-            s->setMap(dataUintMap);
+            s->setMap(_modbusDataUnitMap);
     }
 }
 
@@ -346,6 +315,7 @@ QModbusDataUnit ModbusMultiServer::data(QModbusDataUnit::RegisterType pointType,
 ///
 void ModbusMultiServer::setData(const QModbusDataUnit& data)
 {
+    _modbusDataUnitMap.setData(data);
     for(auto&& s : _modbusServerList)
     {
         s->blockSignals(true);

@@ -51,6 +51,7 @@ SOURCES += \
     main.cpp \
     mainwindow.cpp \
     menuconnect.cpp \
+    modbusdataunitmap.cpp \
     modbusmultiserver.cpp \
     qfixedsizedialog.cpp \
     qhexvalidator.cpp \
@@ -89,6 +90,7 @@ HEADERS += \
     formmodsim.h \
     mainwindow.h \
     menuconnect.h \
+    modbusdataunitmap.h \
     modbuslimits.h \
     modbusmultiserver.h \
     modbussimulationparams.h \

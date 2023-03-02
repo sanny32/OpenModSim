@@ -5,6 +5,7 @@
 #include <QModbusServer>
 #include <QModbusTcpServer>
 #include "datasimulator.h"
+#include "modbusdataunitmap.h"
 #include "modbuswriteparams.h"
 #include "connectiondetails.h"
 
@@ -138,7 +139,6 @@ private slots:
     void on_dataWritten(QModbusDataUnit::RegisterType table, int address, int size);
 
 private:
-    QModbusDataUnitMap createDataUnitMap();
     QSharedPointer<QModbusServer> findModbusServer(const ConnectionDetails& cd) const;
     QSharedPointer<QModbusServer> findModbusServer(ConnectionType type, const QString& port) const;
     QSharedPointer<QModbusServer> createModbusServer(const ConnectionDetails& cd);
@@ -149,7 +149,7 @@ private:
 
 private:
     quint8 _deviceId;
-    QMap<int, QModbusDataUnit> _modbusDataUnitMap;
+    ModbusDataUnitMap _modbusDataUnitMap;
     QList<QSharedPointer<QModbusServer>> _modbusServerList;
     QSharedPointer<DataSimulator> _simulator;
 };
