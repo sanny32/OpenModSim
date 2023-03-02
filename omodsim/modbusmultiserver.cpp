@@ -248,11 +248,8 @@ void ModbusMultiServer::removeModbusServer(QSharedPointer<QModbusServer> server)
 ///
 void ModbusMultiServer::reconfigureServers()
 {
-    if(!_modbusServerList.isEmpty())
-    {
-        for(auto&& s : _modbusServerList)
-            s->setMap(_modbusDataUnitMap);
-    }
+    for(auto&& s : _modbusServerList)
+        s->setMap(_modbusDataUnitMap);
 }
 
 ///

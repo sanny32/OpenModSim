@@ -360,9 +360,10 @@ void FormModSim::on_timeout()
 void FormModSim::on_lineEditAddress_valueChanged(const QVariant&)
 {
     const auto dd = displayDefinition();
-    ui->outputWidget->setup(dd);
-
     _mbMultiServer.addUnitMap(formId(), dd.PointType, dd.PointAddress - 1, dd.Length);
+
+    ui->outputWidget->setup(dd);
+    ui->outputWidget->updateData(_mbMultiServer.data(dd.PointType, dd.PointAddress - 1, dd.Length));
 }
 
 ///
@@ -371,9 +372,10 @@ void FormModSim::on_lineEditAddress_valueChanged(const QVariant&)
 void FormModSim::on_lineEditLength_valueChanged(const QVariant&)
 {
     const auto dd = displayDefinition();
-    ui->outputWidget->setup(dd);
-
     _mbMultiServer.addUnitMap(formId(), dd.PointType, dd.PointAddress - 1, dd.Length);
+
+    ui->outputWidget->setup(dd);
+    ui->outputWidget->updateData(_mbMultiServer.data(dd.PointType, dd.PointAddress - 1, dd.Length));
 }
 
 ///
@@ -392,9 +394,10 @@ void FormModSim::on_lineEditDeviceId_valueChanged(const QVariant&)
 void FormModSim::on_comboBoxModbusPointType_pointTypeChanged(QModbusDataUnit::RegisterType value)
 {
     const auto dd = displayDefinition();
-    ui->outputWidget->setup(dd);
-
     _mbMultiServer.addUnitMap(formId(), value, dd.PointAddress - 1, dd.Length);
+
+    ui->outputWidget->setup(dd);
+    ui->outputWidget->updateData(_mbMultiServer.data(dd.PointType, dd.PointAddress - 1, dd.Length));
 }
 
 ///
