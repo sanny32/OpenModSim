@@ -2,6 +2,37 @@
 #include "modbusdataunitmap.h"
 
 ///
+/// \brief getDataValue
+/// \param modbusMap
+/// \param pointType
+/// \param pointAddress
+/// \return
+///
+quint16 getDataValue(const QModbusDataUnitMap& modbusMap, QModbusDataUnit::RegisterType pointType, quint16 pointAddress)
+{
+    const auto length = modbusMap[pointType].valueCount();
+    const auto startAddress = modbusMap[pointType].startAddress();
+    if(pointAddress < startAddress || pointAddress > startAddress + length)
+        return 0;
+    else
+        return modbusMap[pointType].value(pointAddress - startAddress);
+}
+
+///
+/// \brief setDataValue
+/// \param modbusMap
+/// \param pointType
+/// \param pointAddress
+/// \param value
+///
+void setDataValue(QModbusDataUnitMap& modbusMap, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, quint16 value)
+{
+    const auto startAddress = modbusMap[pointType].startAddress();
+    const auto idx = pointAddress - startAddress;
+    if(idx >= 0) modbusMap[pointType].setValue(idx, value);
+}
+
+///
 /// \brief ModbusDataUnitMap::addUnitMap
 /// \param id
 /// \param pointType
@@ -40,37 +71,6 @@ QModbusDataUnitMap::ConstIterator ModbusDataUnitMap::begin()
 QModbusDataUnitMap::Iterator ModbusDataUnitMap::end()
 {
     return _modbusDataUnitMap.end();
-}
-
-///
-/// \brief getDataValue
-/// \param modbusMap
-/// \param pointType
-/// \param pointAddress
-/// \return
-///
-quint16 getDataValue(const QModbusDataUnitMap& modbusMap, QModbusDataUnit::RegisterType pointType, quint16 pointAddress)
-{
-    const auto length = modbusMap[pointType].valueCount();
-    const auto startAddress = modbusMap[pointType].startAddress();
-    if(pointAddress < startAddress || pointAddress > startAddress + length)
-        return 0;
-    else
-        return modbusMap[pointType].value(pointAddress - startAddress);
-}
-
-///
-/// \brief setDataValue
-/// \param modbusMap
-/// \param pointType
-/// \param pointAddress
-/// \param value
-///
-void setDataValue(QModbusDataUnitMap& modbusMap, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, quint16 value)
-{
-    const auto startAddress = modbusMap[pointType].startAddress();
-    const auto idx = pointAddress - startAddress;
-    if(idx >= 0) modbusMap[pointType].setValue(idx, value);
 }
 
 ///
