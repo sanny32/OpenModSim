@@ -60,7 +60,9 @@ private slots:
     void on_actionSwappedDbl_triggered();
     void on_actionHexAddresses_triggered();
     void on_actionForceCoils_triggered();
-    void on_actionPresetRegs_triggered();
+    void on_actionForceDiscretes_triggered();
+    void on_actionPresetInputRegs_triggered();
+    void on_actionPresetHoldingRegs_triggered();
 
     /* View menu slots */
     void on_actionToolbar_triggered();
@@ -92,6 +94,9 @@ private slots:
 private:
     void addRecentFile(const QString& filename);
     void updateDataDisplayMode(DataDisplayMode mode);
+
+    void forceCoils(QModbusDataUnit::RegisterType type);
+    void presetRegs(QModbusDataUnit::RegisterType type);
 
     FormModSim* createMdiChild(int id);
     FormModSim* currentMdiChild() const;

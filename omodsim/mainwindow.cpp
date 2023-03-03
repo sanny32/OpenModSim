@@ -184,7 +184,9 @@ void MainWindow::on_awake()
 
     const auto isConnected = _mbMultiServer.isConnected();
     ui->actionForceCoils->setEnabled(isConnected);
-    ui->actionPresetRegs->setEnabled(isConnected);
+    ui->actionForceDiscretes->setEnabled(isConnected);
+    ui->actionPresetInputRegs->setEnabled(isConnected);
+    ui->actionPresetHoldingRegs->setEnabled(isConnected);
 
     ui->actionToolbar->setChecked(ui->toolBarMain->isVisible());
     ui->actionStatusBar->setChecked(statusBar()->isVisible());
@@ -483,63 +485,31 @@ void MainWindow::on_actionHexAddresses_triggered()
 ///
 void MainWindow::on_actionForceCoils_triggered()
 {
-    auto frm = currentMdiChild();
-    if(!frm) return;
-
-    const auto dd = frm->displayDefinition();
-    SetupPresetParams presetParams = { dd.PointAddress, dd.Length };
-
-    {
-        DialogSetupPresetData dlg(presetParams, QModbusDataUnit::Coils, this);
-        if(dlg.exec() != QDialog::Accepted) return;
-    }
-
-    ModbusWriteParams params;
-    params.Address = presetParams.PointAddress;
-
-    if(dd.PointType == QModbusDataUnit::Coils)
-    {
-        params.Value = QVariant::fromValue(frm->data());
-    }
-
-    DialogForceMultipleCoils dlg(params, presetParams.Length, this);
-    if(dlg.exec() == QDialog::Accepted)
-    {
-        _mbMultiServer.writeRegister(QModbusDataUnit::Coils, params);
-    }
+    forceCoils(QModbusDataUnit::Coils);
 }
 
 ///
-/// \brief MainWindow::on_actionPresetRegs_triggered
+/// \brief MainWindow::on_actionForceDiscretes_triggered
 ///
-void MainWindow::on_actionPresetRegs_triggered()
+void MainWindow::on_actionForceDiscretes_triggered()
 {
-    auto frm = currentMdiChild();
-    if(!frm) return;
+   forceCoils(QModbusDataUnit::DiscreteInputs);
+}
 
-    const auto dd = frm->displayDefinition();
-    SetupPresetParams presetParams = { dd.PointAddress, dd.Length };
+///
+/// \brief MainWindow::on_actionPresetInputRegs_triggered
+///
+void MainWindow::on_actionPresetInputRegs_triggered()
+{
+   presetRegs(QModbusDataUnit::InputRegisters);
+}
 
-    {
-        DialogSetupPresetData dlg(presetParams, QModbusDataUnit::HoldingRegisters, this);
-        if(dlg.exec() != QDialog::Accepted) return;
-    }
-
-    ModbusWriteParams params;
-    params.Address = presetParams.PointAddress;
-    params.DisplayMode = frm->dataDisplayMode();
-    params.Order = frm->byteOrder();
-
-    if(dd.PointType == QModbusDataUnit::HoldingRegisters)
-    {
-        params.Value = QVariant::fromValue(frm->data());
-    }
-
-    DialogForceMultipleRegisters dlg(params, presetParams.Length, this);
-    if(dlg.exec() == QDialog::Accepted)
-    {
-        _mbMultiServer.writeRegister(QModbusDataUnit::HoldingRegisters, params);
-    }
+///
+/// \brief MainWindow::on_actionPresetHoldingRegs_triggered
+///
+void MainWindow::on_actionPresetHoldingRegs_triggered()
+{
+    presetRegs(QModbusDataUnit::HoldingRegisters);
 }
 
 ///
@@ -746,6 +716,72 @@ void MainWindow::updateDataDisplayMode(DataDisplayMode mode)
 {
     auto frm = currentMdiChild();
     if(frm) frm->setDataDisplayMode(mode);
+}
+
+///
+/// \brief MainWindow::forceCoils
+/// \param type
+///
+void MainWindow::forceCoils(QModbusDataUnit::RegisterType type)
+{
+    auto frm = currentMdiChild();
+    if(!frm) return;
+
+    const auto dd = frm->displayDefinition();
+    SetupPresetParams presetParams = { dd.PointAddress, dd.Length };
+
+    {
+        DialogSetupPresetData dlg(presetParams, type, this);
+        if(dlg.exec() != QDialog::Accepted) return;
+    }
+
+    ModbusWriteParams params;
+    params.Address = presetParams.PointAddress;
+
+    if(dd.PointType == type)
+    {
+        params.Value = QVariant::fromValue(frm->data());
+    }
+
+    DialogForceMultipleCoils dlg(params, presetParams.Length, this);
+    if(dlg.exec() == QDialog::Accepted)
+    {
+        _mbMultiServer.writeRegister(type, params);
+    }
+}
+
+///
+/// \brief MainWindow::presetRegs
+/// \param type
+///
+void MainWindow::presetRegs(QModbusDataUnit::RegisterType type)
+{
+    auto frm = currentMdiChild();
+    if(!frm) return;
+
+    const auto dd = frm->displayDefinition();
+    SetupPresetParams presetParams = { dd.PointAddress, dd.Length };
+
+    {
+        DialogSetupPresetData dlg(presetParams, type, this);
+        if(dlg.exec() != QDialog::Accepted) return;
+    }
+
+    ModbusWriteParams params;
+    params.Address = presetParams.PointAddress;
+    params.DisplayMode = frm->dataDisplayMode();
+    params.Order = frm->byteOrder();
+
+    if(dd.PointType == type)
+    {
+        params.Value = QVariant::fromValue(frm->data());
+    }
+
+    DialogForceMultipleRegisters dlg(params, presetParams.Length, this);
+    if(dlg.exec() == QDialog::Accepted)
+    {
+        _mbMultiServer.writeRegister(type, params);
+    }
 }
 
 ///

@@ -107,7 +107,9 @@
       <string>Extended</string>
      </property>
      <addaction name="actionForceCoils"/>
-     <addaction name="actionPresetRegs"/>
+     <addaction name="actionForceDiscretes"/>
+     <addaction name="actionPresetInputRegs"/>
+     <addaction name="actionPresetHoldingRegs"/> 
     </widget>
     <addaction name="actionDataDefinition"/>
     <addaction name="menuDisplay_Options"/>
@@ -531,9 +533,9 @@
     <string>Force Coils</string>
    </property>
   </action>
-  <action name="actionPresetRegs">
+  <action name="actionPresetHoldingRegs">
    <property name="text">
-    <string>Preset Regs</string>
+    <string>Preset Holding Regs</string>
    </property>
   </action>
   <action name="actionBigEndian">
@@ -558,6 +560,16 @@
    </property>
    <property name="toolTip">
     <string>Byte Order</string>
+   </property>
+  </action>
+  <action name="actionPresetInputRegs">
+   <property name="text">
+    <string>Preset Input Regs</string>
+   </property>
+  </action>
+  <action name="actionForceDiscretes">
+   <property name="text">
+    <string>Force Discretes</string>
    </property>
   </action>
  </widget>
