@@ -10,6 +10,7 @@ ModbusMultiServer::ModbusMultiServer(QObject *parent)
     ,_deviceId(1)
     ,_simulator(new DataSimulator(this))
 {
+    connect(_simulator.get(), &DataSimulator::dataSimulated, this, &ModbusMultiServer::on_dataSimulated);
 }
 
 ///
@@ -519,7 +520,8 @@ void ModbusMultiServer::writeRegister(QModbusDataUnit::RegisterType pointType, c
         }
     }
 
-    setData(data);
+    if(data.isValid())
+        setData(data);
 }
 
 ///
@@ -556,6 +558,30 @@ void ModbusMultiServer::stopSimulations()
 }
 
 ///
+/// \brief ModbusMultiServer::resumeSimulations
+///
+void ModbusMultiServer::resumeSimulations()
+{
+    _simulator->resumeSimulations();
+}
+
+///
+/// \brief ModbusMultiServer::pauseSimulations
+///
+void ModbusMultiServer::pauseSimulations()
+{
+    _simulator->pauseSimulations();
+}
+
+///
+/// \brief ModbusMultiServer::restartSimulations
+///
+void ModbusMultiServer::restartSimulations()
+{
+    _simulator->restartSimulations();
+}
+
+///
 /// \brief ModbusServer::on_stateChanged
 /// \param state
 ///
@@ -580,12 +606,13 @@ void ModbusMultiServer::on_stateChanged(QModbusDevice::State state)
                     serialPort->setRequestToSend(setRTS);
                 }
             }
+            _simulator->resumeSimulations();
             emit connected(cd);
         break;
 
         case QModbusDevice::UnconnectedState:
             if(!isConnected())
-                _simulator->stopSimulations();
+                _simulator->pauseSimulations();
 
             emit disconnected(cd);
         break;
@@ -636,4 +663,20 @@ void ModbusMultiServer::on_dataWritten(QModbusDataUnit::RegisterType table, int 
     }
 
     setData(data);
+}
+
+///
+/// \brief ModbusMultiServer::on_dataSimulated
+/// \param mode
+/// \param type
+/// \param addr
+/// \param value
+///
+void ModbusMultiServer::on_dataSimulated(DataDisplayMode mode, QModbusDataUnit::RegisterType type, quint16 addr, QVariant value)
+{
+    if(!isConnected())
+        return;
+
+    ModbusWriteParams params = { quint16(addr + 1), value, mode };
+    writeRegister(type, params);
 }

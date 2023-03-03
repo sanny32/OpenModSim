@@ -85,6 +85,7 @@ void ModbusDataUnitMap::updateDataUnitMap()
         if(length > 0)
             modbusMap.insert(type, {type, startAddress, length});
 
+        const auto idx = qAbs(_modbusDataUnitMap[type].startAddress() - startAddress);
         for(int i = 0; i < length; i++)
         {
             modbusMap[type].setValue(i, _modbusDataUnitMap[type].value(i));

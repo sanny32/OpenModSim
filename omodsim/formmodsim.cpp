@@ -359,7 +359,7 @@ void FormModSim::updateStatus()
     const auto dd = displayDefinition();
     if(_mbMultiServer.isConnected())
     {
-        if(isValidLegth(dd))
+        if(dd.PointAddress + dd.Length - 1 <= ModbusLimits::addressRange().to())
             ui->outputWidget->setStatus(QString());
         else
             ui->outputWidget->setInvalidLengthStatus();
@@ -368,16 +368,6 @@ void FormModSim::updateStatus()
     {
         ui->outputWidget->setNotConnectedStatus();
     }
-}
-
-///
-/// \brief FormModSim::isValidLegth
-/// \param dd
-/// \return
-///
-bool FormModSim::isValidLegth(const DisplayDefinition& dd) const
-{
-    return dd.PointAddress + dd.Length - 1 <= ModbusLimits::addressRange().to();
 }
 
 ///

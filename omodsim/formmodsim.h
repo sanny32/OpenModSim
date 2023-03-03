@@ -82,7 +82,6 @@ private slots:
 private:
     void updateStatus();
     void onDefinitionChanged();
-    bool isValidLegth(const DisplayDefinition& dd) const;
 
 private:
     Ui::FormModSim *ui;
