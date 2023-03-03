@@ -3,6 +3,37 @@
 #include "mainstatusbar.h"
 
 ///
+/// \brief Parity_toString
+/// \param parity
+/// \return
+///
+QString Parity_toString(QSerialPort::Parity parity)
+{
+    switch(parity)
+    {
+        case QSerialPort::NoParity:
+        return MainStatusBar::tr("NONE");
+
+        case QSerialPort::EvenParity:
+        return MainStatusBar::tr("EVEN");
+
+        case QSerialPort::OddParity:
+        return MainStatusBar::tr("ODD");
+
+        case QSerialPort::SpaceParity:
+        return MainStatusBar::tr("SPACE");
+
+        case QSerialPort::MarkParity:
+        return MainStatusBar::tr("MARK");
+
+        default:
+        break;
+    }
+
+    return QString();
+}
+
+///
 /// \brief MainStatusBar::MainStatusBar
 /// \param parent
 ///
@@ -80,7 +111,11 @@ void MainStatusBar::updateConnectionInfo(QLabel* label, const ConnectionDetails&
         break;
 
         case ConnectionType::Serial:
-            label->setText(QString(tr("Port %1: %2")).arg(cd.SerialParams.PortName, QString::number(cd.SerialParams.BaudRate)));
+            label->setText(QString(tr("Port %1:%2:%3:%4:%5  ")).arg(cd.SerialParams.PortName,
+                                                                    QString::number(cd.SerialParams.BaudRate),
+                                                                    QString::number(cd.SerialParams.WordLength),
+                                                                    Parity_toString(cd.SerialParams.Parity),
+                                                                    QString::number(cd.SerialParams.StopBits)));
         break;
     }
 }

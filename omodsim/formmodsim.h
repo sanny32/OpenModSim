@@ -67,7 +67,6 @@ signals:
     void closing();
 
 private slots:
-    void on_timeout();
     void on_lineEditAddress_valueChanged(const QVariant&);
     void on_lineEditLength_valueChanged(const QVariant&);
     void on_lineEditDeviceId_valueChanged(const QVariant&);
@@ -78,11 +77,15 @@ private slots:
     void on_mbDisconnected(const ConnectionDetails& cd);
     void on_mbRequest(const QModbusRequest& req);
     void on_mbResponse(const QModbusResponse& resp);
+    void on_mbDataChanged(const QModbusDataUnit& data);
+
+private:
+    void updateStatus();
+    void onDefinitionChanged();
 
 private:
     Ui::FormModSim *ui;
     int _formId;
-    QTimer _timer;
     QString _filename;
     ModbusMultiServer& _mbMultiServer;
     QMap<QPair<QModbusDataUnit::RegisterType, quint16>, ModbusSimulationParams> _simulationMap;
@@ -245,6 +248,7 @@ inline QDataStream& operator >>(QDataStream& in, FormModSim* frm)
 
     auto wnd = frm->parentWidget();
     wnd->resize(windowSize);
+    wnd->setWindowState(Qt::WindowActive);
     if(isMaximized) wnd->setWindowState(Qt::WindowMaximized);
 
     frm->setDisplayMode(displayMode);

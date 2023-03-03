@@ -23,8 +23,6 @@ FormModSim::FormModSim(int id, ModbusMultiServer& server, MainWindow* parent) :
     Q_ASSERT(parent != nullptr);
 
     ui->setupUi(this);
-
-    _timer.setInterval(1000);
     setWindowTitle(QString("ModSim%1").arg(_formId));
 
     ui->lineEditAddress->setPaddingZeroes(true);
@@ -39,24 +37,15 @@ FormModSim::FormModSim(int id, ModbusMultiServer& server, MainWindow* parent) :
 
     ui->comboBoxModbusPointType->setCurrentPointType(QModbusDataUnit::HoldingRegisters);
 
-    {
-        const auto dd = displayDefinition();
-
-        _mbMultiServer.setDeviceId(dd.DeviceId);
-        _mbMultiServer.addUnitMap(formId(), dd.PointType, dd.PointAddress - 1, dd.Length);
-
-        ui->outputWidget->setup(dd);
-        ui->outputWidget->setFocus();
-    }
+    onDefinitionChanged();
+    ui->outputWidget->setFocus();
 
     connect(&_mbMultiServer, &ModbusMultiServer::request, this, &FormModSim::on_mbRequest);
     connect(&_mbMultiServer, &ModbusMultiServer::response, this, &FormModSim::on_mbResponse);
     connect(&_mbMultiServer, &ModbusMultiServer::connected, this, &FormModSim::on_mbConnected);
     connect(&_mbMultiServer, &ModbusMultiServer::disconnected, this, &FormModSim::on_mbDisconnected);
     connect(&_mbMultiServer, &ModbusMultiServer::deviceIdChanged, this, &FormModSim::on_mbDeviceIdChanged);
-
-    connect(&_timer, &QTimer::timeout, this, &FormModSim::on_timeout);
-    _timer.start();
+    connect(&_mbMultiServer, &ModbusMultiServer::dataChanged, this, &FormModSim::on_mbDataChanged);
 }
 
 ///
@@ -119,7 +108,6 @@ void FormModSim::setFilename(const QString& filename)
 DisplayDefinition FormModSim::displayDefinition() const
 {
     DisplayDefinition dd;
-    dd.UpdateRate = _timer.interval();
     dd.DeviceId = ui->lineEditDeviceId->value<int>();
     dd.PointAddress = ui->lineEditAddress->value<int>();
     dd.PointType = ui->comboBoxModbusPointType->currentPointType();
@@ -134,7 +122,6 @@ DisplayDefinition FormModSim::displayDefinition() const
 ///
 void FormModSim::setDisplayDefinition(const DisplayDefinition& dd)
 {
-    _timer.setInterval(qBound(20U, dd.UpdateRate, 10000U));
     ui->lineEditDeviceId->setValue(dd.DeviceId);
     ui->lineEditAddress->setValue(dd.PointAddress);
     ui->lineEditLength->setValue(dd.Length);
@@ -333,36 +320,11 @@ void FormModSim::show()
 }
 
 ///
-/// \brief FormModSim::on_timeout
-///
-void FormModSim::on_timeout()
-{
-    if(!_mbMultiServer.isConnected())
-    {
-        ui->outputWidget->setStatus(tr("NOT CONNECTED!"));
-        return;
-    }
-
-    const auto dd = displayDefinition();
-    if(dd.PointAddress + dd.Length - 1 > ModbusLimits::addressRange().to())
-    {
-        ui->outputWidget->setStatus(tr("Invalid Data Length Specified"));
-        return;
-    }
-
-    ui->outputWidget->setStatus(QString());
-    ui->outputWidget->updateData(_mbMultiServer.data(dd.PointType, dd.PointAddress - 1, dd.Length));
-}
-
-///
 /// \brief FormModSim::on_lineEditAddress_valueChanged
 ///
 void FormModSim::on_lineEditAddress_valueChanged(const QVariant&)
 {
-    const auto dd = displayDefinition();
-    ui->outputWidget->setup(dd);
-
-    _mbMultiServer.addUnitMap(formId(), dd.PointType, dd.PointAddress - 1, dd.Length);
+   onDefinitionChanged();
 }
 
 ///
@@ -370,10 +332,7 @@ void FormModSim::on_lineEditAddress_valueChanged(const QVariant&)
 ///
 void FormModSim::on_lineEditLength_valueChanged(const QVariant&)
 {
-    const auto dd = displayDefinition();
-    ui->outputWidget->setup(dd);
-
-    _mbMultiServer.addUnitMap(formId(), dd.PointType, dd.PointAddress - 1, dd.Length);
+    onDefinitionChanged();
 }
 
 ///
@@ -381,20 +340,47 @@ void FormModSim::on_lineEditLength_valueChanged(const QVariant&)
 ///
 void FormModSim::on_lineEditDeviceId_valueChanged(const QVariant&)
 {
-    const auto deviceId = ui->lineEditDeviceId->value<int>();
-    _mbMultiServer.setDeviceId(deviceId);
+    onDefinitionChanged();
 }
 
 ///
 /// \brief FormModSim::on_comboBoxModbusPointType_pointTypeChanged
-/// \param value
 ///
-void FormModSim::on_comboBoxModbusPointType_pointTypeChanged(QModbusDataUnit::RegisterType value)
+void FormModSim::on_comboBoxModbusPointType_pointTypeChanged(QModbusDataUnit::RegisterType)
+{
+    onDefinitionChanged();
+}
+
+///
+/// \brief FormModSim::updateStatus
+///
+void FormModSim::updateStatus()
 {
     const auto dd = displayDefinition();
-    ui->outputWidget->setup(dd);
+    if(_mbMultiServer.isConnected())
+    {
+        if(dd.PointAddress + dd.Length - 1 <= ModbusLimits::addressRange().to())
+            ui->outputWidget->setStatus(QString());
+        else
+            ui->outputWidget->setInvalidLengthStatus();
+    }
+    else
+    {
+        ui->outputWidget->setNotConnectedStatus();
+    }
+}
 
-    _mbMultiServer.addUnitMap(formId(), value, dd.PointAddress - 1, dd.Length);
+///
+/// \brief FormModSim::onDefinitionChanged
+///
+void FormModSim::onDefinitionChanged()
+{
+    updateStatus();
+
+    const auto dd = displayDefinition();
+    _mbMultiServer.setDeviceId(dd.DeviceId);
+    _mbMultiServer.addUnitMap(formId(), dd.PointType, dd.PointAddress - 1, dd.Length);
+    ui->outputWidget->setup(dd, _mbMultiServer.data(dd.PointType, dd.PointAddress - 1, dd.Length));
 }
 
 ///
@@ -418,10 +404,15 @@ void FormModSim::on_outputWidget_itemDoubleClicked(quint16 addr, const QVariant&
         {
             ModbusWriteParams params = { addr, value, mode };
             DialogWriteCoilRegister dlg(params, simParams, this);
-            if(dlg.exec() == QDialog::Accepted)
+            switch(dlg.exec())
             {
-                if(simParams.Mode == SimulationMode::No) _mbMultiServer.writeRegister(pointType, params);
-                _mbMultiServer.simulateRegister(mode, pointType, addr, simParams);
+                case QDialog::Accepted:
+                    _mbMultiServer.writeRegister(pointType, params);
+                break;
+
+                case 2:
+                    _mbMultiServer.simulateRegister(mode, pointType, addr, simParams);
+                break;
             }
         }
         break;
@@ -439,10 +430,15 @@ void FormModSim::on_outputWidget_itemDoubleClicked(quint16 addr, const QVariant&
             else
             {
                 DialogWriteHoldingRegister dlg(params, simParams, this);
-                if(dlg.exec() == QDialog::Accepted)
+                switch(dlg.exec())
                 {
-                    if(simParams.Mode == SimulationMode::No) _mbMultiServer.writeRegister(pointType, params);
-                    _mbMultiServer.simulateRegister(mode, pointType, addr, simParams);
+                    case QDialog::Accepted:
+                        _mbMultiServer.writeRegister(pointType, params);
+                    break;
+
+                    case 2:
+                        _mbMultiServer.simulateRegister(mode, pointType, addr, simParams);
+                    break;
                 }
             }
         }
@@ -469,6 +465,7 @@ void FormModSim::on_mbDeviceIdChanged(quint8 deviceId)
 ///
 void FormModSim::on_mbConnected(const ConnectionDetails&)
 {
+    updateStatus();
 }
 
 ///
@@ -478,6 +475,8 @@ void FormModSim::on_mbDisconnected(const ConnectionDetails&)
 {
     if(!_mbMultiServer.isConnected())
         _simulationMap.clear();
+
+   updateStatus();
 }
 
 ///
@@ -498,4 +497,13 @@ void FormModSim::on_mbResponse(const QModbusResponse& resp)
 {
     const auto deviceId = ui->lineEditDeviceId->value<int>();
     ui->outputWidget->updateTraffic(resp, deviceId);
+}
+
+///
+/// \brief FormModSim::on_mbDataChanged
+///
+void FormModSim::on_mbDataChanged(const QModbusDataUnit&)
+{
+    const auto dd = displayDefinition();
+    ui->outputWidget->updateData(_mbMultiServer.data(dd.PointType, dd.PointAddress - 1, dd.Length));
 }

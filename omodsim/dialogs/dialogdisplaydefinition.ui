@@ -6,80 +6,14 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>350</width>
-    <height>262</height>
+    <width>321</width>
+    <height>243</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Display Definition</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
-   <item>
-    <layout class="QHBoxLayout" name="horizontalLayout">
-     <item>
-      <spacer name="horizontalSpacer">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>40</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item>
-      <widget class="QLabel" name="labelUpdateRate">
-       <property name="text">
-        <string>Update Rate: </string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="NumericLineEdit" name="lineEditUpdateRate">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="minimumSize">
-        <size>
-         <width>0</width>
-         <height>25</height>
-        </size>
-       </property>
-       <property name="maximumSize">
-        <size>
-         <width>60</width>
-         <height>16777215</height>
-        </size>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLabel" name="label">
-       <property name="text">
-        <string>(msecs)</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <spacer name="horizontalSpacer_2">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>40</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-    </layout>
-   </item>
    <item>
     <widget class="QGroupBox" name="groupBox">
      <property name="sizePolicy">
@@ -242,7 +176,6 @@
   </customwidget>
  </customwidgets>
  <tabstops>
-  <tabstop>lineEditUpdateRate</tabstop>
   <tabstop>lineEditSlaveAddress</tabstop>
   <tabstop>comboBoxPointType</tabstop>
   <tabstop>lineEditPointAddress</tabstop>

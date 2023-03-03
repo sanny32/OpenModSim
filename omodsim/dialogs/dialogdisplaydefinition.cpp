@@ -12,13 +12,11 @@ DialogDisplayDefinition::DialogDisplayDefinition(FormModSim* parent) :
     ui(new Ui::DialogDisplayDefinition)
 {
     ui->setupUi(this);
-    ui->lineEditUpdateRate->setInputRange(20, 10000);
     ui->lineEditPointAddress->setInputRange(ModbusLimits::addressRange());
     ui->lineEditLength->setInputRange(ModbusLimits::lengthRange());
     ui->lineEditSlaveAddress->setInputRange(ModbusLimits::slaveRange());
 
     const auto dd = parent->displayDefinition();
-    ui->lineEditUpdateRate->setValue(dd.UpdateRate);
     ui->lineEditPointAddress->setValue(dd.PointAddress);
     ui->lineEditSlaveAddress->setValue(dd.DeviceId);
     ui->lineEditLength->setValue(dd.Length);
@@ -45,7 +43,6 @@ void DialogDisplayDefinition::accept()
     dd.PointAddress = ui->lineEditPointAddress->value<int>();
     dd.PointType = ui->comboBoxPointType->currentPointType();
     dd.Length = ui->lineEditLength->value<int>();
-    dd.UpdateRate = ui->lineEditUpdateRate->value<int>();
     ((FormModSim*)parentWidget())->setDisplayDefinition(dd);
 
     QFixedSizeDialog::accept();

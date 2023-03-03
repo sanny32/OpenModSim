@@ -8,8 +8,9 @@
 ModbusMultiServer::ModbusMultiServer(QObject *parent)
     : QObject{parent}
     ,_deviceId(1)
+    ,_simulator(new DataSimulator(this))
 {
-    _simulator = QSharedPointer<DataSimulator>(new DataSimulator(this));
+    connect(_simulator.get(), &DataSimulator::dataSimulated, this, &ModbusMultiServer::on_dataSimulated);
 }
 
 ///
@@ -36,6 +37,9 @@ quint8 ModbusMultiServer::deviceId() const
 ///
 void ModbusMultiServer::setDeviceId(quint8 deviceId)
 {
+    if(deviceId == _deviceId)
+        return;
+
     _deviceId = deviceId;
 
     for(auto&& s : _modbusServerList)
@@ -45,54 +49,26 @@ void ModbusMultiServer::setDeviceId(quint8 deviceId)
 }
 
 ///
-/// \brief ModbusServer::addUnitMap
+/// \brief ModbusMultiServer::addUnitMap
+/// \param id
 /// \param pointType
 /// \param pointAddress
 /// \param length
 ///
 void ModbusMultiServer::addUnitMap(int id, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, quint16 length)
 {
-    _modbusDataUnitMap.insert(id, {pointType, pointAddress, length});
+    _modbusDataUnitMap.addUnitMap(id, pointType, pointAddress, length);
     reconfigureServers();
 }
 
 ///
-/// \brief ModbusServer::removeUnitMap
-/// \param pointType
+/// \brief ModbusMultiServer::removeUnitMap
+/// \param id
 ///
 void ModbusMultiServer::removeUnitMap(int id)
 {
-    _modbusDataUnitMap.remove(id);
+    _modbusDataUnitMap.removeUnitMap(id);
     reconfigureServers();
-}
-
-///
-/// \brief ModbusServer::createDataUnitMap
-/// \return
-///
-QModbusDataUnitMap ModbusMultiServer::createDataUnitMap()
-{
-    QMultiMap<QModbusDataUnit::RegisterType, QModbusDataUnit> multimap;
-    for(auto&& unit : _modbusDataUnitMap)
-    {
-        multimap.insert(unit.registerType(), unit);
-    }
-
-    QModbusDataUnitMap modbusMap;
-    for(auto&& type: multimap.uniqueKeys())
-    {
-        quint16 startAddress = 65535;
-        quint16 endAddress = 0;
-        for(auto&& unit : multimap.values(type))
-        {
-            startAddress = qMin<quint16>(startAddress, unit.startAddress());
-            endAddress = qMax<quint16>(endAddress, unit.startAddress() + unit.valueCount());
-        }
-
-        const quint16 length = endAddress - startAddress;
-        if(length > 0) modbusMap.insert(type, {type, startAddress, length});
-    }
-    return modbusMap;
 }
 
 ///
@@ -210,11 +186,9 @@ void ModbusMultiServer::connectDevice(const ConnectionDetails& cd)
     }
 
     modbusServer->setServerAddress(_deviceId);
+    modbusServer->setMap(_modbusDataUnitMap);
 
-    const auto dataUintMap = createDataUnitMap();
-    modbusServer->setMap(dataUintMap);
-
-    for(auto data : dataUintMap)
+    for(auto data : _modbusDataUnitMap)
     {
         _modbusServerList.first()->data(&data);
         modbusServer->setData(data);
@@ -278,12 +252,8 @@ void ModbusMultiServer::removeModbusServer(QSharedPointer<QModbusServer> server)
 ///
 void ModbusMultiServer::reconfigureServers()
 {
-    if(!_modbusServerList.isEmpty())
-    {
-        const auto dataUintMap = createDataUnitMap();
-        for(auto&& s : _modbusServerList)
-            s->setMap(dataUintMap);
-    }
+    for(auto&& s : _modbusServerList)
+        s->setMap(_modbusDataUnitMap);
 }
 
 ///
@@ -346,12 +316,14 @@ QModbusDataUnit ModbusMultiServer::data(QModbusDataUnit::RegisterType pointType,
 ///
 void ModbusMultiServer::setData(const QModbusDataUnit& data)
 {
+    _modbusDataUnitMap.setData(data);
     for(auto&& s : _modbusServerList)
     {
         s->blockSignals(true);
         s->setData(data);
         s->blockSignals(false);
     }
+    emit dataChanged(data);
 }
 
 ///
@@ -548,7 +520,8 @@ void ModbusMultiServer::writeRegister(QModbusDataUnit::RegisterType pointType, c
         }
     }
 
-    setData(data);
+    if(data.isValid())
+        setData(data);
 }
 
 ///
@@ -567,11 +540,45 @@ void ModbusMultiServer::simulateRegister(DataDisplayMode mode, QModbusDataUnit::
 }
 
 ///
+/// \brief ModbusMultiServer::stopSimulation
+/// \param pointType
+/// \param pointAddress
+///
+void ModbusMultiServer::stopSimulation(QModbusDataUnit::RegisterType pointType, quint16 pointAddress)
+{
+    _simulator->stopSimulation(pointType, pointAddress - 1);
+}
+
+///
 /// \brief ModbusMultiServer::stopSimulations
 ///
 void ModbusMultiServer::stopSimulations()
 {
     _simulator->stopSimulations();
+}
+
+///
+/// \brief ModbusMultiServer::resumeSimulations
+///
+void ModbusMultiServer::resumeSimulations()
+{
+    _simulator->resumeSimulations();
+}
+
+///
+/// \brief ModbusMultiServer::pauseSimulations
+///
+void ModbusMultiServer::pauseSimulations()
+{
+    _simulator->pauseSimulations();
+}
+
+///
+/// \brief ModbusMultiServer::restartSimulations
+///
+void ModbusMultiServer::restartSimulations()
+{
+    _simulator->restartSimulations();
 }
 
 ///
@@ -599,12 +606,13 @@ void ModbusMultiServer::on_stateChanged(QModbusDevice::State state)
                     serialPort->setRequestToSend(setRTS);
                 }
             }
+            _simulator->resumeSimulations();
             emit connected(cd);
         break;
 
         case QModbusDevice::UnconnectedState:
             if(!isConnected())
-                _simulator->stopSimulations();
+                _simulator->pauseSimulations();
 
             emit disconnected(cd);
         break;
@@ -655,4 +663,20 @@ void ModbusMultiServer::on_dataWritten(QModbusDataUnit::RegisterType table, int 
     }
 
     setData(data);
+}
+
+///
+/// \brief ModbusMultiServer::on_dataSimulated
+/// \param mode
+/// \param type
+/// \param addr
+/// \param value
+///
+void ModbusMultiServer::on_dataSimulated(DataDisplayMode mode, QModbusDataUnit::RegisterType type, quint16 addr, QVariant value)
+{
+    if(!isConnected())
+        return;
+
+    ModbusWriteParams params = { quint16(addr + 1), value, mode };
+    writeRegister(type, params);
 }

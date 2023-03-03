@@ -1,20 +1,15 @@
 #include <QRandomGenerator>
-#include "floatutils.h"
 #include "datasimulator.h"
-#include "modbusmultiserver.h"
 
 ///
 /// \brief DataSimulator::DataSimulator
 /// \param server
 ///
-DataSimulator::DataSimulator(ModbusMultiServer* server)
-    : QObject{server}
-    ,_mbMultiServer(server)
+DataSimulator::DataSimulator(QObject* parent)
+    : QObject{parent}
     ,_elapsed(0)
 {
-    Q_ASSERT(_mbMultiServer != nullptr);
     connect(&_timer, &QTimer::timeout, this, &DataSimulator::on_timeout);
-    _timer.start(1000);
 }
 
 ///
@@ -34,14 +29,17 @@ DataSimulator::~DataSimulator()
 ///
 void DataSimulator::startSimulation(DataDisplayMode mode, QModbusDataUnit::RegisterType type, quint16 addr, const ModbusSimulationParams& params)
 {
+    QVariant value;
     switch (params.Mode)
     {
         case SimulationMode::Increment:
-            initializeValue(mode, type, addr, params.IncrementParams.Range.from());
+            value = params.IncrementParams.Range.from();
+            emit dataSimulated(mode, type, addr, value);
         break;
 
         case SimulationMode::Decrement:
-            initializeValue(mode, type, addr, params.IncrementParams.Range.to());
+            value = params.IncrementParams.Range.to();
+            emit dataSimulated(mode, type, addr, value);
         break;
 
         default:
@@ -49,6 +47,7 @@ void DataSimulator::startSimulation(DataDisplayMode mode, QModbusDataUnit::Regis
     }
 
     _simulationMap[{ type, addr}] = { mode, params };
+    resumeSimulations();
 }
 
 ///
@@ -66,7 +65,39 @@ void DataSimulator::stopSimulation(QModbusDataUnit::RegisterType type, quint16 a
 ///
 void DataSimulator::stopSimulations()
 {
+    pauseSimulations();
     _simulationMap.clear();
+}
+
+///
+/// \brief DataSimulator::pauseSimulations
+///
+void DataSimulator::pauseSimulations()
+{
+    _timer.stop();
+}
+
+///
+/// \brief DataSimulator::resumeSimulations
+///
+void DataSimulator::resumeSimulations()
+{
+    if(!_timer.isActive())
+        _timer.start(_interval);
+}
+
+///
+/// \brief DataSimulator::restartSimulations
+///
+void DataSimulator::restartSimulations()
+{
+    pauseSimulations();
+    for(auto&& key : _simulationMap.keys())
+    {
+        const auto mode = _simulationMap[key].Mode;
+        const auto params = _simulationMap[key].Params;
+        startSimulation(mode, key.first, key.second, params);
+    }
 }
 
 ///
@@ -77,8 +108,8 @@ void DataSimulator::on_timeout()
     _elapsed++;
     for(auto&& key : _simulationMap.keys())
     {
-        const auto mode = _simulationMap[key].first;
-        const auto params = _simulationMap[key].second;
+        const auto mode = _simulationMap[key].Mode;
+        const auto params = _simulationMap[key].Params;
         const auto interval = params.Interval;
 
         if(_elapsed % interval) continue;
@@ -107,44 +138,6 @@ void DataSimulator::on_timeout()
     }
 }
 
-///
-/// \brief DataSimulator::initializeValue
-/// \param mode
-/// \param type
-/// \param addr
-/// \param value
-///
-void DataSimulator::initializeValue(DataDisplayMode mode, QModbusDataUnit::RegisterType type, quint16 addr, double value)
-{
-    switch(mode)
-    {
-        case DataDisplayMode::Integer:
-            _mbMultiServer->writeValue(type, addr, static_cast<qint16>(value));
-        break;
-
-        case DataDisplayMode::Binary:
-        case DataDisplayMode::Decimal:
-        case DataDisplayMode::Hex:
-            _mbMultiServer->writeValue(type, addr, static_cast<quint16>(value));
-        break;
-
-        case DataDisplayMode::FloatingPt:
-            _mbMultiServer->writeFloat(type, addr, static_cast<float>(value), false);
-        break;
-
-        case DataDisplayMode::SwappedFP:
-            _mbMultiServer->writeFloat(type, addr, static_cast<float>(value), true);
-        break;
-
-        case DataDisplayMode::DblFloat:
-            _mbMultiServer->writeDouble(type, addr, value, false);
-        break;
-
-        case DataDisplayMode::SwappedDbl:
-            _mbMultiServer->writeDouble(type, addr, value, true);
-        break;
-    }
-}
 
 template<typename T>
 T generateRandom(double from, double to)
@@ -166,12 +159,12 @@ T generateRandom(const QRange<double>& range)
 ///
 void DataSimulator::randomSimulation(DataDisplayMode mode, QModbusDataUnit::RegisterType type, quint16 addr, const RandomSimulationParams& params)
 {
-    QVector<quint16> values;
+    auto&& value = _simulationMap[{ type, addr}].CurrentValue;
     switch(type)
     {
         case QModbusDataUnit::Coils:
         case QModbusDataUnit::DiscreteInputs:
-            values.push_back(generateRandom<quint16>(params.Range.from(), params.Range.to() + 1));
+            value = generateRandom<quint16>(params.Range.from(), params.Range.to() + 1);
         break;
 
         case QModbusDataUnit::HoldingRegisters:
@@ -182,27 +175,17 @@ void DataSimulator::randomSimulation(DataDisplayMode mode, QModbusDataUnit::Regi
                 case DataDisplayMode::Integer:
                 case DataDisplayMode::Decimal:
                 case DataDisplayMode::Hex:
-                    values.push_back(generateRandom<quint16>(params.Range.from(), params.Range.to() + 1));
+                    value = generateRandom<quint16>(params.Range.from(), params.Range.to() + 1);
                 break;
 
                 case DataDisplayMode::FloatingPt:
-                    values.resize(2);
-                    breakFloat(generateRandom<float>(params.Range), values[0], values[1]);
-                break;
-
                 case DataDisplayMode::SwappedFP:
-                    values.resize(2);
-                    breakFloat(generateRandom<float>(params.Range), values[1], values[0]);
+                   value = generateRandom<float>(params.Range);
                 break;
 
                 case DataDisplayMode::DblFloat:
-                    values.resize(4);
-                    breakDouble(generateRandom<double>(params.Range), values[0], values[1], values[2], values[3]);
-                break;
-
                 case DataDisplayMode::SwappedDbl:
-                    values.resize(4);
-                    breakDouble(generateRandom<double>(params.Range), values[3], values[2], values[1], values[0]);
+                   value = generateRandom<double>(params.Range);
                 break;
             }
         break;
@@ -211,12 +194,8 @@ void DataSimulator::randomSimulation(DataDisplayMode mode, QModbusDataUnit::Regi
         break;
     }
 
-   if(!values.isEmpty())
-   {
-        auto data = QModbusDataUnit(type, addr, values.size());
-        data.setValues(values);
-        _mbMultiServer->setData(data);
-   }
+    if(value.isValid())
+        emit dataSimulated(mode, type, addr, value);
 }
 
 template<typename T>
@@ -235,52 +214,32 @@ T incrementValue(T value, T step, const QRange<double>& range)
 ///
 void DataSimulator::incrementSimulation(DataDisplayMode mode, QModbusDataUnit::RegisterType type, quint16 addr, const IncrementSimulationParams& params)
 {
+    auto&& value = _simulationMap[{ type, addr}].CurrentValue;
     switch(mode)
     {
         case DataDisplayMode::Integer:
-        {
-            const auto data = _mbMultiServer->data(type, addr, 1);
-            _mbMultiServer->writeValue(type, addr, incrementValue<qint16>(data.value(0), params.Step, params.Range));
-        }
+            value = incrementValue<qint16>(value.toInt(), params.Step, params.Range);
         break;
 
         case DataDisplayMode::Binary:
         case DataDisplayMode::Decimal:
         case DataDisplayMode::Hex:
-        {
-            const auto data = _mbMultiServer->data(type, addr, 1);
-            _mbMultiServer->writeValue(type, addr, incrementValue<quint16>(data.value(0), params.Step, params.Range));
-        }
+            value = incrementValue<quint16>(value.toUInt(), params.Step, params.Range);
         break;
 
         case DataDisplayMode::FloatingPt:
-        {
-            const auto value = _mbMultiServer->readFloat(type, addr, false);
-            _mbMultiServer->writeFloat(type, addr, incrementValue<float>(value, params.Step, params.Range), false);
-        }
-        break;
-
         case DataDisplayMode::SwappedFP:
-        {
-            const auto value = _mbMultiServer->readFloat(type, addr, true);
-            _mbMultiServer->writeFloat(type, addr, incrementValue<float>(value, params.Step, params.Range), true);
-        }
+            value = incrementValue<float>(value.toFloat(), params.Step, params.Range);
         break;
 
         case DataDisplayMode::DblFloat:
-        {
-            const auto value = _mbMultiServer->readDouble(type, addr, false);
-            _mbMultiServer->writeDouble(type, addr, incrementValue<double>(value, params.Step, params.Range), false);
-        }
-        break;
-
         case DataDisplayMode::SwappedDbl:
-        {
-            const auto value = _mbMultiServer->readDouble(type, addr, true);
-            _mbMultiServer->writeDouble(type, addr, incrementValue<double>(value, params.Step, params.Range), true);
-        }
+            value = incrementValue<double>(value.toDouble(), params.Step, params.Range);
         break;
     }
+
+    if(value.isValid())
+        emit dataSimulated(mode, type, addr, value);
 }
 
 template<typename T>
@@ -299,52 +258,32 @@ T decrementValue(T value, T step, const QRange<double>& range)
 ///
 void DataSimulator::decrementSimailation(DataDisplayMode mode, QModbusDataUnit::RegisterType type, quint16 addr, const DecrementSimulationParams& params)
 {
+    auto&& value = _simulationMap[{ type, addr}].CurrentValue;
     switch(mode)
     {
         case DataDisplayMode::Integer:
-        {
-            const auto data = _mbMultiServer->data(type, addr, 1);
-            _mbMultiServer->writeValue(type, addr, decrementValue<qint16>(data.value(0), params.Step, params.Range));
-        }
+            value = decrementValue<qint16>(value.toInt(), params.Step, params.Range);
         break;
 
         case DataDisplayMode::Binary:
         case DataDisplayMode::Decimal:
         case DataDisplayMode::Hex:
-        {
-            const auto data = _mbMultiServer->data(type, addr, 1);
-            _mbMultiServer->writeValue(type, addr, decrementValue<quint16>(data.value(0), params.Step, params.Range));
-        }
+            value = decrementValue<quint16>(value.toUInt(), params.Step, params.Range);
         break;
 
         case DataDisplayMode::FloatingPt:
-        {
-            const auto value = _mbMultiServer->readFloat(type, addr, false);
-            _mbMultiServer->writeFloat(type, addr, decrementValue<float>(value, params.Step, params.Range), false);
-        }
-        break;
-
         case DataDisplayMode::SwappedFP:
-        {
-            const auto value = _mbMultiServer->readFloat(type, addr, true);
-            _mbMultiServer->writeFloat(type, addr, decrementValue<float>(value, params.Step, params.Range), true);
-        }
+            value = decrementValue<float>(value.toFloat(), params.Step, params.Range);
         break;
 
         case DataDisplayMode::DblFloat:
-        {
-            const auto value = _mbMultiServer->readDouble(type, addr, false);
-            _mbMultiServer->writeDouble(type, addr, decrementValue<double>(value, params.Step, params.Range), false);
-        }
-        break;
-
         case DataDisplayMode::SwappedDbl:
-        {
-            const auto value = _mbMultiServer->readDouble(type, addr, true);
-            _mbMultiServer->writeDouble(type, addr, decrementValue<double>(value, params.Step, params.Range), true);
-        }
+            value = decrementValue<double>(value.toDouble(), params.Step, params.Range);
         break;
     }
+
+    if(value.isValid())
+        emit dataSimulated(mode, type, addr, value);
 }
 
 ///
@@ -354,6 +293,8 @@ void DataSimulator::decrementSimailation(DataDisplayMode mode, QModbusDataUnit::
 ///
 void DataSimulator::toggleSimulation(QModbusDataUnit::RegisterType type, quint16 addr)
 {
-    const auto data = _mbMultiServer->data(type, addr, 1);
-    _mbMultiServer->writeValue(type, addr, !data.value(0));
+    auto&& value = _simulationMap[{ type, addr}].CurrentValue;
+    value = !value.toBool();
+
+    emit dataSimulated(DataDisplayMode::Binary, type, addr, value);
 }

@@ -5,6 +5,7 @@
 #include <QModbusServer>
 #include <QModbusTcpServer>
 #include "datasimulator.h"
+#include "modbusdataunitmap.h"
 #include "modbuswriteparams.h"
 #include "connectiondetails.h"
 
@@ -121,7 +122,12 @@ public:
 
     void writeRegister(QModbusDataUnit::RegisterType pointType, const ModbusWriteParams& params);
     void simulateRegister(DataDisplayMode mode, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, const ModbusSimulationParams& params);
+    void stopSimulation(QModbusDataUnit::RegisterType pointType, quint16 pointAddress);
     void stopSimulations();
+
+    void resumeSimulations();
+    void pauseSimulations();
+    void restartSimulations();
 
 signals:
     void connected(const ConnectionDetails& cd);
@@ -130,14 +136,15 @@ signals:
     void request(const QModbusRequest& req);
     void response(const QModbusResponse& resp);
     void connectionError(const QString& error);
+    void dataChanged(const QModbusDataUnit& data);
 
 private slots:
     void on_stateChanged(QModbusDevice::State state);
     void on_errorOccurred(QModbusDevice::Error error);
     void on_dataWritten(QModbusDataUnit::RegisterType table, int address, int size);
+    void on_dataSimulated(DataDisplayMode mode, QModbusDataUnit::RegisterType type, quint16 addr, QVariant value);
 
 private:
-    QModbusDataUnitMap createDataUnitMap();
     QSharedPointer<QModbusServer> findModbusServer(const ConnectionDetails& cd) const;
     QSharedPointer<QModbusServer> findModbusServer(ConnectionType type, const QString& port) const;
     QSharedPointer<QModbusServer> createModbusServer(const ConnectionDetails& cd);
@@ -148,7 +155,7 @@ private:
 
 private:
     quint8 _deviceId;
-    QMap<int, QModbusDataUnit> _modbusDataUnitMap;
+    ModbusDataUnitMap _modbusDataUnitMap;
     QList<QSharedPointer<QModbusServer>> _modbusServerList;
     QSharedPointer<DataSimulator> _simulator;
 };
