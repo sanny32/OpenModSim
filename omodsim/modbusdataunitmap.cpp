@@ -43,6 +43,37 @@ QModbusDataUnitMap::Iterator ModbusDataUnitMap::end()
 }
 
 ///
+/// \brief getDataValue
+/// \param modbusMap
+/// \param pointType
+/// \param pointAddress
+/// \return
+///
+quint16 getDataValue(const QModbusDataUnitMap& modbusMap, QModbusDataUnit::RegisterType pointType, quint16 pointAddress)
+{
+    const auto length = modbusMap[pointType].valueCount();
+    const auto startAddress = modbusMap[pointType].startAddress();
+    if(pointAddress < startAddress || pointAddress > startAddress + length)
+        return 0;
+    else
+        return modbusMap[pointType].value(pointAddress - startAddress);
+}
+
+///
+/// \brief setDataValue
+/// \param modbusMap
+/// \param pointType
+/// \param pointAddress
+/// \param value
+///
+void setDataValue(QModbusDataUnitMap& modbusMap, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, quint16 value)
+{
+    const auto startAddress = modbusMap[pointType].startAddress();
+    const auto idx = pointAddress - startAddress;
+    if(idx >= 0) modbusMap[pointType].setValue(idx, value);
+}
+
+///
 /// \brief ModbusDataUnitMap::setData
 /// \param data
 ///
@@ -52,11 +83,8 @@ void ModbusDataUnitMap::setData(const QModbusDataUnit& data)
     const auto length = data.valueCount();
     const auto type = data.registerType();
 
-    const auto idx = addr - _modbusDataUnitMap[type].startAddress();
     for(int i = 0; i < length; i++)
-    {
-        _modbusDataUnitMap[type].setValue(idx + i, data.value(i));
-    }
+        setDataValue(_modbusDataUnitMap, type, addr + i, data.value(i));
 }
 
 ///
@@ -85,10 +113,10 @@ void ModbusDataUnitMap::updateDataUnitMap()
         if(length > 0)
             modbusMap.insert(type, {type, startAddress, length});
 
-        const auto idx = qAbs(_modbusDataUnitMap[type].startAddress() - startAddress);
         for(int i = 0; i < length; i++)
         {
-            modbusMap[type].setValue(i, _modbusDataUnitMap[type].value(i));
+            const auto value = getDataValue(_modbusDataUnitMap, type, startAddress + i);
+            setDataValue(modbusMap, type, startAddress + i, value);
         }
     }
     _modbusDataUnitMap = modbusMap;
