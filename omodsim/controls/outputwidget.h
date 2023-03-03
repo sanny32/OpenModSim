@@ -25,7 +25,7 @@ public:
 
     QVector<quint16> data() const;
 
-    void setup(const DisplayDefinition& dd);
+    void setup(const DisplayDefinition& dd, const QModbusDataUnit& data = QModbusDataUnit());
 
     DisplayMode displayMode() const;
     void setDisplayMode(DisplayMode mode);
@@ -49,6 +49,8 @@ public:
     void setFont(const QFont& font);
 
     void setStatus(const QString& status);
+    void setNotConnectedStatus();
+    void setInvalidLengthStatus();
 
     void paint(const QRect& rc, QPainter& painter);
 
@@ -66,7 +68,6 @@ private slots:
     void on_listWidget_itemDoubleClicked(QListWidgetItem *item);
 
 private:
-    void setNotConnectedStatus();
     void updateDataWidget(const QModbusDataUnit& data);
     void updateTrafficWidget(bool request, int server, const QModbusPdu& pdu);
 

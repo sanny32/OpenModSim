@@ -132,6 +132,7 @@ signals:
     void request(const QModbusRequest& req);
     void response(const QModbusResponse& resp);
     void connectionError(const QString& error);
+    void dataChanged(const QModbusDataUnit& data);
 
 private slots:
     void on_stateChanged(QModbusDevice::State state);

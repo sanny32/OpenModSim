@@ -8,7 +8,7 @@
 struct ListItemData
 {
     int Row;
-    quint16 Address;
+    quint32 Address;
     QVariant Value;
 };
 Q_DECLARE_METATYPE(ListItemData)
@@ -71,11 +71,12 @@ QVector<quint16> OutputWidget::data() const
 ///
 /// \brief OutputWidget::setup
 /// \param dd
+/// \param data
 ///
-void OutputWidget::setup(const DisplayDefinition& dd)
+void OutputWidget::setup(const DisplayDefinition& dd, const QModbusDataUnit& data)
 {
     _displayDefinition = dd;
-    updateDataWidget(QModbusDataUnit());
+    updateDataWidget(data);
 }
 
 ///
@@ -268,7 +269,6 @@ void OutputWidget::updateTraffic(const QModbusResponse& response, int server)
 void OutputWidget::updateData(const QModbusDataUnit& data)
 {
     updateDataWidget(data);
-    _lastData = data;
 }
 
 ///
@@ -586,6 +586,14 @@ void OutputWidget::setNotConnectedStatus()
 }
 
 ///
+/// \brief OutputWidget::setInvalidLengthStatus
+///
+void OutputWidget::setInvalidLengthStatus()
+{
+    setStatus(tr("Invalid Data Length Specified"));
+}
+
+///
 /// \brief OutputWidget::updateDataWidget
 /// \param data
 ///
@@ -600,7 +608,7 @@ void OutputWidget::updateDataWidget(const QModbusDataUnit& data)
     }
 
     QStringList capstr;
-    for(quint16 i = 0; i < _displayDefinition.Length; i++)
+    for(quint32 i = 0; i < _displayDefinition.Length; i++)
     {
         ListItemData itemData;
         itemData.Row = i;
@@ -658,6 +666,8 @@ void OutputWidget::updateDataWidget(const QModbusDataUnit& data)
         item->setText(QString(format).arg(addr, valstr));
         item->setData(Qt::UserRole, QVariant::fromValue(itemData));
     }
+
+    _lastData = data;
 }
 
 ///

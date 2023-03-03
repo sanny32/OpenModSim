@@ -36,6 +36,9 @@ quint8 ModbusMultiServer::deviceId() const
 ///
 void ModbusMultiServer::setDeviceId(quint8 deviceId)
 {
+    if(deviceId == _deviceId)
+        return;
+
     _deviceId = deviceId;
 
     for(auto&& s : _modbusServerList)
@@ -319,6 +322,7 @@ void ModbusMultiServer::setData(const QModbusDataUnit& data)
         s->setData(data);
         s->blockSignals(false);
     }
+    emit dataChanged(data);
 }
 
 ///
