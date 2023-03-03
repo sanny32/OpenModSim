@@ -1,7 +1,5 @@
 #include <QRandomGenerator>
-#include "floatutils.h"
 #include "datasimulator.h"
-#include "modbusmultiserver.h"
 
 ///
 /// \brief DataSimulator::DataSimulator
