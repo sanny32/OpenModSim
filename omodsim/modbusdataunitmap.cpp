@@ -1,4 +1,3 @@
-#include <QDebug>
 #include "modbusdataunitmap.h"
 
 ///
@@ -30,6 +29,17 @@ void setDataValue(QModbusDataUnitMap& modbusMap, QModbusDataUnit::RegisterType p
     const auto startAddress = modbusMap[pointType].startAddress();
     const auto idx = pointAddress - startAddress;
     if(idx >= 0) modbusMap[pointType].setValue(idx, value);
+}
+
+///
+/// \brief ModbusDataUnitMap::ModbusDataUnitMap
+///
+ModbusDataUnitMap::ModbusDataUnitMap()
+{
+    _modbusDataUnitGlobalMap.insert(QModbusDataUnit::Coils,            { QModbusDataUnit::Coils,               0, 65535 });
+    _modbusDataUnitGlobalMap.insert(QModbusDataUnit::DiscreteInputs,   { QModbusDataUnit::DiscreteInputs,      0, 65535 });
+    _modbusDataUnitGlobalMap.insert(QModbusDataUnit::InputRegisters,   { QModbusDataUnit::InputRegisters,      0, 65535 });
+    _modbusDataUnitGlobalMap.insert(QModbusDataUnit::HoldingRegisters, { QModbusDataUnit::HoldingRegisters,    0, 65535 });
 }
 
 ///
@@ -84,7 +94,10 @@ void ModbusDataUnitMap::setData(const QModbusDataUnit& data)
     const auto type = data.registerType();
 
     for(int i = 0; i < length; i++)
+    {
         setDataValue(_modbusDataUnitMap, type, addr + i, data.value(i));
+        setDataValue(_modbusDataUnitGlobalMap, type, addr + i, data.value(i));
+    }
 }
 
 ///
@@ -115,7 +128,7 @@ void ModbusDataUnitMap::updateDataUnitMap()
 
         for(int i = 0; i < length; i++)
         {
-            const auto value = getDataValue(_modbusDataUnitMap, type, startAddress + i);
+            const auto value = getDataValue(_modbusDataUnitGlobalMap, type, startAddress + i);
             setDataValue(modbusMap, type, startAddress + i, value);
         }
     }

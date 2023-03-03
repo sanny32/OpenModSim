@@ -9,7 +9,7 @@
 class ModbusDataUnitMap
 {
 public:
-    explicit ModbusDataUnitMap() = default;
+    explicit ModbusDataUnitMap();
 
     void addUnitMap(int id, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, quint16 length);
     void removeUnitMap(int id);
@@ -29,6 +29,7 @@ private:
 private:
     QMap<int, QModbusDataUnit> _dataUnits;
     QModbusDataUnitMap _modbusDataUnitMap;
+    QModbusDataUnitMap _modbusDataUnitGlobalMap;
 };
 
 
