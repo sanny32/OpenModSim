@@ -8,6 +8,9 @@
 #include "dialogdisplaydefinition.h"
 #include "dialogselectserviceport.h"
 #include "dialogsetupserialport.h"
+#include "dialogsetuppresetdata.h"
+#include "dialogforcemultiplecoils.h"
+#include "dialogforcemultipleregisters.h"
 #include "mainstatusbar.h"
 #include "menuconnect.h"
 #include "mainwindow.h"
@@ -21,6 +24,8 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
     ,_lang("en")
+    ,_icoBigEndian(":/res/actionBigEndian.png")
+    ,_icoLittleEndian(":/res/actionLittleEndian.png")
     ,_windowCounter(0)
 {
     ui->setupUi(this);
@@ -28,6 +33,13 @@ MainWindow::MainWindow(QWidget *parent)
     setWindowTitle(APP_NAME);
     setUnifiedTitleAndToolBarOnMac(true);
     setStatusBar(new MainStatusBar(_mbMultiServer, this));
+
+    auto menuByteOrder = new QMenu(this);
+    menuByteOrder->addAction(ui->actionLittleEndian);
+    menuByteOrder->addAction(ui->actionBigEndian);
+    ui->actionByteOrder->setMenu(menuByteOrder);
+    ui->actionByteOrder->setIcon(_icoLittleEndian);
+    qobject_cast<QToolButton*>(ui->toolBarDisplay->widgetForAction(ui->actionByteOrder))->setPopupMode(QToolButton::InstantPopup);
 
     auto menuConnect = new MenuConnect(MenuConnect::ConnectMenu, _mbMultiServer, this);
     connect(menuConnect, &MenuConnect::connectAction, this, &MainWindow::on_connectAction);
@@ -169,6 +181,11 @@ void MainWindow::on_awake()
     ui->actionSwappedFP->setEnabled(frm != nullptr);
     ui->actionDblFloat->setEnabled(frm != nullptr);
     ui->actionSwappedDbl->setEnabled(frm != nullptr);
+
+    const auto isConnected = _mbMultiServer.isConnected();
+    ui->actionForceCoils->setEnabled(isConnected);
+    ui->actionPresetRegs->setEnabled(isConnected);
+
     ui->actionToolbar->setChecked(ui->toolBarMain->isVisible());
     ui->actionStatusBar->setChecked(statusBar()->isVisible());
     ui->actionDisplayBar->setChecked(ui->toolBarDisplay->isVisible());
@@ -462,6 +479,70 @@ void MainWindow::on_actionHexAddresses_triggered()
 }
 
 ///
+/// \brief MainWindow::on_actionForceCoils_triggered
+///
+void MainWindow::on_actionForceCoils_triggered()
+{
+    auto frm = currentMdiChild();
+    if(!frm) return;
+
+    const auto dd = frm->displayDefinition();
+    SetupPresetParams presetParams = { dd.PointAddress, dd.Length };
+
+    {
+        DialogSetupPresetData dlg(presetParams, QModbusDataUnit::Coils, this);
+        if(dlg.exec() != QDialog::Accepted) return;
+    }
+
+    ModbusWriteParams params;
+    params.Address = presetParams.PointAddress;
+
+    if(dd.PointType == QModbusDataUnit::Coils)
+    {
+        params.Value = QVariant::fromValue(frm->data());
+    }
+
+    DialogForceMultipleCoils dlg(params, presetParams.Length, this);
+    if(dlg.exec() == QDialog::Accepted)
+    {
+        _mbMultiServer.writeRegister(QModbusDataUnit::Coils, params);
+    }
+}
+
+///
+/// \brief MainWindow::on_actionPresetRegs_triggered
+///
+void MainWindow::on_actionPresetRegs_triggered()
+{
+    auto frm = currentMdiChild();
+    if(!frm) return;
+
+    const auto dd = frm->displayDefinition();
+    SetupPresetParams presetParams = { dd.PointAddress, dd.Length };
+
+    {
+        DialogSetupPresetData dlg(presetParams, QModbusDataUnit::HoldingRegisters, this);
+        if(dlg.exec() != QDialog::Accepted) return;
+    }
+
+    ModbusWriteParams params;
+    params.Address = presetParams.PointAddress;
+    params.DisplayMode = frm->dataDisplayMode();
+    params.Order = frm->byteOrder();
+
+    if(dd.PointType == QModbusDataUnit::HoldingRegisters)
+    {
+        params.Value = QVariant::fromValue(frm->data());
+    }
+
+    DialogForceMultipleRegisters dlg(params, presetParams.Length, this);
+    if(dlg.exec() == QDialog::Accepted)
+    {
+        _mbMultiServer.writeRegister(QModbusDataUnit::HoldingRegisters, params);
+    }
+}
+
+///
 /// \brief MainWindow::on_actionToolbar_triggered
 ///
 void MainWindow::on_actionToolbar_triggered()
@@ -682,6 +763,14 @@ FormModSim* MainWindow::createMdiChild(int id)
     connect(frm, &FormModSim::showed, this, [this, wnd]
     {
         windowActivate(wnd);
+    });
+
+    connect(frm, &FormModSim::byteOrderChanged, this, [this](ByteOrder order)
+    {
+        switch(order){
+        case ByteOrder::BigEndian: ui->actionByteOrder->setIcon(_icoBigEndian); break;
+        case ByteOrder::LittleEndian: ui->actionByteOrder->setIcon(_icoLittleEndian); break;
+        }
     });
 
     _windowActionList->addWindow(wnd);

@@ -59,6 +59,8 @@ private slots:
     void on_actionDblFloat_triggered();
     void on_actionSwappedDbl_triggered();
     void on_actionHexAddresses_triggered();
+    void on_actionForceCoils_triggered();
+    void on_actionPresetRegs_triggered();
 
     /* View menu slots */
     void on_actionToolbar_triggered();
@@ -111,6 +113,9 @@ private:
     QString _lang;
     QTranslator _qtTranslator;
     QTranslator _appTranslator;
+
+    QIcon _icoBigEndian;
+    QIcon _icoLittleEndian;
 
 private:
     int _windowCounter;

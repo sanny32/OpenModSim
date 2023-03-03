@@ -80,6 +80,13 @@
      <property name="title">
       <string>Display Options</string>
      </property>
+     <widget class="QMenu" name="menuByteOrder">
+      <property name="title">
+       <string>Byte Order</string>
+      </property>
+      <addaction name="actionBigEndian"/>
+      <addaction name="actionLittleEndian"/>
+     </widget>
      <addaction name="actionShowData"/>
      <addaction name="actionShowTraffic"/>
      <addaction name="separator"/>
@@ -91,11 +98,20 @@
      <addaction name="actionSwappedFP"/>
      <addaction name="actionDblFloat"/>
      <addaction name="actionSwappedDbl"/>
+     <addaction name="menuByteOrder"/>
      <addaction name="separator"/>
      <addaction name="actionHexAddresses"/>
     </widget>
+    <widget class="QMenu" name="menuExtended">
+     <property name="title">
+      <string>Extended</string>
+     </property>
+     <addaction name="actionForceCoils"/>
+     <addaction name="actionPresetRegs"/>
+    </widget>
     <addaction name="actionDataDefinition"/>
     <addaction name="menuDisplay_Options"/>
+    <addaction name="menuExtended"/>
    </widget>
    <widget class="QMenu" name="menuWindow">
     <property name="title">
@@ -197,6 +213,8 @@
    <addaction name="separator"/>
    <addaction name="actionDblFloat"/>
    <addaction name="actionSwappedDbl"/>
+   <addaction name="separator"/>
+   <addaction name="actionByteOrder"/>
   </widget>
   <action name="actionNew">
    <property name="icon">
@@ -506,6 +524,40 @@
    </property>
    <property name="text">
     <string>Русский</string>
+   </property>
+  </action>
+  <action name="actionForceCoils">
+   <property name="text">
+    <string>Force Coils</string>
+   </property>
+  </action>
+  <action name="actionPresetRegs">
+   <property name="text">
+    <string>Preset Regs</string>
+   </property>
+  </action>
+  <action name="actionBigEndian">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Big-Endian</string>
+   </property>
+  </action>
+  <action name="actionLittleEndian">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Little-Endian</string>
+   </property>
+  </action>
+  <action name="actionByteOrder">
+   <property name="text">
+    <string>Byte Order</string>
+   </property>
+   <property name="toolTip">
+    <string>Byte Order</string>
    </property>
   </action>
  </widget>

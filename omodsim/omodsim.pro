@@ -40,8 +40,11 @@ SOURCES += \
     dialogs/dialogcoilsimulation.cpp \
     dialogs/dialogabout.cpp \
     dialogs/dialogdisplaydefinition.cpp \
+    dialogs/dialogforcemultiplecoils.cpp \
+    dialogs/dialogforcemultipleregisters.cpp \
     dialogs/dialogprintsettings.cpp \
     dialogs/dialogselectserviceport.cpp \
+    dialogs/dialogsetuppresetdata.cpp \
     dialogs/dialogsetupserialport.cpp \
     dialogs/dialogwindowsmanager.cpp \
     dialogs/dialogwritecoilregister.cpp \
@@ -59,6 +62,7 @@ SOURCES += \
     windowactionlist.cpp
 
 HEADERS += \
+    byteorderutils.h \
     connectiondetails.h \
     controls/booleancombobox.h \
     controls/clickablelabel.h \
@@ -77,8 +81,11 @@ HEADERS += \
     dialogs/dialogcoilsimulation.h \
     dialogs/dialogabout.h \
     dialogs/dialogdisplaydefinition.h \
+    dialogs/dialogforcemultiplecoils.h \
+    dialogs/dialogforcemultipleregisters.h \
     dialogs/dialogprintsettings.h \
     dialogs/dialogselectserviceport.h \
+    dialogs/dialogsetuppresetdata.h \
     dialogs/dialogsetupserialport.h \
     dialogs/dialogwindowsmanager.h \
     dialogs/dialogwritecoilregister.h \
@@ -107,8 +114,11 @@ FORMS += \
     dialogs/dialogcoilsimulation.ui \
     dialogs/dialogabout.ui \
     dialogs/dialogdisplaydefinition.ui \
+    dialogs/dialogforcemultiplecoils.ui \
+    dialogs/dialogforcemultipleregisters.ui \
     dialogs/dialogprintsettings.ui \
     dialogs/dialogselectserviceport.ui \
+    dialogs/dialogsetuppresetdata.ui \
     dialogs/dialogsetupserialport.ui \
     dialogs/dialogwindowsmanager.ui \
     dialogs/dialogwritecoilregister.ui \

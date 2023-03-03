@@ -102,6 +102,15 @@ void FormModSim::setFilename(const QString& filename)
 }
 
 ///
+/// \brief FormModSim::data
+/// \return
+///
+QVector<quint16> FormModSim::data() const
+{
+    return ui->outputWidget->data();
+}
+
+///
 /// \brief FormModSim::displayDefinition
 /// \return
 ///
@@ -182,6 +191,25 @@ void FormModSim::setDisplayHexAddresses(bool on)
 void FormModSim::setDataDisplayMode(DataDisplayMode mode)
 {
     ui->outputWidget->setDataDisplayMode(mode);
+}
+
+///
+/// \brief FormModSim::byteOrder
+/// \return
+///
+ByteOrder FormModSim::byteOrder() const
+{
+    return ui->outputWidget->byteOrder();
+}
+
+///
+/// \brief FormModSim::setByteOrder
+/// \param order
+///
+void FormModSim::setByteOrder(ByteOrder order)
+{
+    ui->outputWidget->setByteOrder(order);
+    emit byteOrderChanged(order);
 }
 
 ///

@@ -29,8 +29,13 @@ public:
     QString filename() const;
     void setFilename(const QString& filename);
 
+    QVector<quint16> data() const;
+
     DisplayDefinition displayDefinition() const;
     void setDisplayDefinition(const DisplayDefinition& dd);
+
+    ByteOrder byteOrder() const;
+    void setByteOrder(ByteOrder order);
 
     DisplayMode displayMode() const;
     void setDisplayMode(DisplayMode mode);
@@ -65,6 +70,7 @@ public slots:
 signals:
     void showed();
     void closing();
+    void byteOrderChanged(ByteOrder);
 
 private slots:
     void on_lineEditAddress_valueChanged(const QVariant&);

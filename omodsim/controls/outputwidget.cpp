@@ -23,6 +23,7 @@ OutputWidget::OutputWidget(QWidget *parent) :
    ,_displayHexAddreses(false)
    ,_displayMode(DisplayMode::Data)
    ,_dataDisplayMode(DataDisplayMode::Hex)
+   ,_byteOrder(ByteOrder::LittleEndian)
 {
     ui->setupUi(this);
     ui->stackedWidget->setCurrentIndex(0);
@@ -315,6 +316,25 @@ DataDisplayMode OutputWidget::dataDisplayMode() const
 void OutputWidget::setDataDisplayMode(DataDisplayMode mode)
 {
     _dataDisplayMode = mode;
+    updateDataWidget(_lastData);
+}
+
+///
+/// \brief OutputWidget::byteOrder
+/// \return
+///
+ByteOrder OutputWidget::byteOrder() const
+{
+    return _byteOrder;
+}
+
+///
+/// \brief OutputWidget::setByteOrder
+/// \param order
+///
+void OutputWidget::setByteOrder(ByteOrder order)
+{
+    _byteOrder = order;
     updateDataWidget(_lastData);
 }
 
