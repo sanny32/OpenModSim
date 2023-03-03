@@ -101,6 +101,25 @@ void ModbusDataUnitMap::setData(const QModbusDataUnit& data)
 }
 
 ///
+/// \brief ModbusDataUnitMap::getData
+/// \param pointType
+/// \param pointAddress
+/// \param length
+/// \return
+///
+QModbusDataUnit ModbusDataUnitMap::getData(QModbusDataUnit::RegisterType pointType, quint16 pointAddress, quint16 length) const
+{
+    QModbusDataUnit data(pointType, pointAddress, length);
+    for(int i = 0; i < length; i++)
+    {
+        const auto value = getDataValue(_modbusDataUnitGlobalMap, pointType, pointAddress + i);
+        data.setValue(i, value);
+    }
+
+    return data;
+}
+
+///
 /// \brief ModbusDataUnitMap::updateDataUnitMap
 ///
 void ModbusDataUnitMap::updateDataUnitMap()

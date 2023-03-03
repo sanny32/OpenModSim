@@ -299,15 +299,7 @@ QModbusDevice::State ModbusMultiServer::state(ConnectionType type, const QString
 ///
 QModbusDataUnit ModbusMultiServer::data(QModbusDataUnit::RegisterType pointType, quint16 pointAddress, quint16 length) const
 {
-    QModbusDataUnit data;
-    data.setRegisterType(pointType);
-    data.setStartAddress(pointAddress);
-    data.setValueCount(length);
-
-    if(!_modbusServerList.isEmpty())
-        _modbusServerList.first()->data(&data);
-
-    return data;
+    return _modbusDataUnitMap.getData(pointType, pointAddress, length);
 }
 
 ///
@@ -346,10 +338,11 @@ QModbusDataUnit createDataUnit(QModbusDataUnit::RegisterType type, int newStartA
 /// \param type
 /// \param newStartAddress
 /// \param value
+/// \param order
 /// \param swapped
 /// \return
 ///
-QModbusDataUnit createFloatDataUnit(QModbusDataUnit::RegisterType type, int newStartAddress, float value, bool swapped)
+QModbusDataUnit createFloatDataUnit(QModbusDataUnit::RegisterType type, int newStartAddress, float value, ByteOrder order, bool swapped)
 {
     Q_ASSERT(type == QModbusDataUnit::HoldingRegisters
              || type == QModbusDataUnit::InputRegisters);
@@ -358,9 +351,9 @@ QModbusDataUnit createFloatDataUnit(QModbusDataUnit::RegisterType type, int newS
     auto data = QModbusDataUnit(type, newStartAddress, 2);
 
     if(swapped)
-        breakFloat(value, values[1], values[0]);
+        breakFloat(value, values[1], values[0], order);
     else
-        breakFloat(value, values[0], values[1]);
+        breakFloat(value, values[0], values[1], order);
 
     data.setValues(values);
     return data;
@@ -371,10 +364,11 @@ QModbusDataUnit createFloatDataUnit(QModbusDataUnit::RegisterType type, int newS
 /// \param type
 /// \param newStartAddress
 /// \param value
+/// \param order
 /// \param swapped
 /// \return
 ///
-QModbusDataUnit createDoubleDataUnit(QModbusDataUnit::RegisterType type, int newStartAddress, double value, bool swapped)
+QModbusDataUnit createDoubleDataUnit(QModbusDataUnit::RegisterType type, int newStartAddress, double value, ByteOrder order, bool swapped)
 {
     Q_ASSERT(type == QModbusDataUnit::HoldingRegisters
              || type == QModbusDataUnit::InputRegisters);
@@ -383,9 +377,9 @@ QModbusDataUnit createDoubleDataUnit(QModbusDataUnit::RegisterType type, int new
     auto data = QModbusDataUnit(type, newStartAddress, 4);
 
     if(swapped)
-        breakDouble(value, values[3], values[2], values[1], values[0]);
+        breakDouble(value, values[3], values[2], values[1], values[0], order);
     else
-        breakDouble(value, values[0], values[1], values[2], values[3]);
+        breakDouble(value, values[0], values[1], values[2], values[3], order);
 
     data.setValues(values);
     return data;
@@ -408,13 +402,14 @@ void ModbusMultiServer::writeValue(QModbusDataUnit::RegisterType pointType, quin
 /// \brief ModbusMultiServer::readFloat
 /// \param pointType
 /// \param pointAddress
+/// \param order
 /// \param swapped
 /// \return
 ///
-float ModbusMultiServer::readFloat(QModbusDataUnit::RegisterType pointType, quint16 pointAddress, bool swapped)
+float ModbusMultiServer::readFloat(QModbusDataUnit::RegisterType pointType, quint16 pointAddress, ByteOrder order, bool swapped)
 {
     const auto data = this->data(pointType, pointAddress, 2);
-    return swapped ?  makeFloat(data.value(1), data.value(0)): makeFloat(data.value(0), data.value(1));
+    return swapped ?  makeFloat(data.value(1), data.value(0), order): makeFloat(data.value(0), data.value(1), order);
 }
 
 ///
@@ -424,9 +419,9 @@ float ModbusMultiServer::readFloat(QModbusDataUnit::RegisterType pointType, quin
 /// \param value
 /// \param swapped
 ///
-void ModbusMultiServer::writeFloat(QModbusDataUnit::RegisterType pointType, quint16 pointAddress, float value, bool swapped)
+void ModbusMultiServer::writeFloat(QModbusDataUnit::RegisterType pointType, quint16 pointAddress, float value, ByteOrder order, bool swapped)
 {
-    setData(createFloatDataUnit(pointType, pointAddress, value, swapped));
+    setData(createFloatDataUnit(pointType, pointAddress, value, order, swapped));
 }
 
 ///
@@ -436,11 +431,11 @@ void ModbusMultiServer::writeFloat(QModbusDataUnit::RegisterType pointType, quin
 /// \param swapped
 /// \return
 ///
-double ModbusMultiServer::readDouble(QModbusDataUnit::RegisterType pointType, quint16 pointAddress, bool swapped)
+double ModbusMultiServer::readDouble(QModbusDataUnit::RegisterType pointType, quint16 pointAddress, ByteOrder order, bool swapped)
 {
     const auto data = this->data(pointType, pointAddress, 4);
-    return swapped ?  makeDouble(data.value(3), data.value(2), data.value(1), data.value(0)):
-                      makeDouble(data.value(0), data.value(1), data.value(2), data.value(3));
+    return swapped ?  makeDouble(data.value(3), data.value(2), data.value(1), data.value(0), order):
+                      makeDouble(data.value(0), data.value(1), data.value(2), data.value(3), order);
 }
 
 ///
@@ -450,9 +445,9 @@ double ModbusMultiServer::readDouble(QModbusDataUnit::RegisterType pointType, qu
 /// \param value
 /// \param swapped
 ///
-void ModbusMultiServer::writeDouble(QModbusDataUnit::RegisterType pointType, quint16 pointAddress, double value, bool swapped)
+void ModbusMultiServer::writeDouble(QModbusDataUnit::RegisterType pointType, quint16 pointAddress, double value, ByteOrder order, bool swapped)
 {
-    setData(createDoubleDataUnit(pointType, pointAddress, value, swapped));
+    setData(createDoubleDataUnit(pointType, pointAddress, value, order, swapped));
 }
 
 ///
@@ -501,16 +496,16 @@ void ModbusMultiServer::writeRegister(QModbusDataUnit::RegisterType pointType, c
                         data = createDataUnit(pointType, params.Address - 1, QVector<quint16>() << params.Value.toUInt());
                     break;
                     case DataDisplayMode::FloatingPt:
-                        data = createFloatDataUnit(pointType, params.Address - 1, params.Value.toFloat(), false);
+                        data = createFloatDataUnit(pointType, params.Address - 1, params.Value.toFloat(), params.Order, false);
                     break;
                     case DataDisplayMode::SwappedFP:
-                        data = createFloatDataUnit(pointType, params.Address - 1, params.Value.toFloat(), true);
+                        data = createFloatDataUnit(pointType, params.Address - 1, params.Value.toFloat(), params.Order, true);
                     break;
                     case DataDisplayMode::DblFloat:
-                        data = createDoubleDataUnit(pointType, params.Address - 1, params.Value.toDouble(), false);
+                        data = createDoubleDataUnit(pointType, params.Address - 1, params.Value.toDouble(), params.Order, false);
                     break;
                     case DataDisplayMode::SwappedDbl:
-                        data = createDoubleDataUnit(pointType, params.Address - 1, params.Value.toDouble(), true);
+                        data = createDoubleDataUnit(pointType, params.Address - 1, params.Value.toDouble(), params.Order, true);
                     break;
                 }
             break;

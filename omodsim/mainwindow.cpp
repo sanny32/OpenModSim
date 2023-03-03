@@ -740,7 +740,8 @@ void MainWindow::forceCoils(QModbusDataUnit::RegisterType type)
 
     if(dd.PointType == type)
     {
-        params.Value = QVariant::fromValue(frm->data());
+        const auto data = _mbMultiServer.data(type, presetParams.PointAddress - 1, presetParams.Length);
+        params.Value = QVariant::fromValue(data.values());
     }
 
     DialogForceMultipleCoils dlg(params, presetParams.Length, this);
@@ -774,7 +775,8 @@ void MainWindow::presetRegs(QModbusDataUnit::RegisterType type)
 
     if(dd.PointType == type)
     {
-        params.Value = QVariant::fromValue(frm->data());
+        const auto data = _mbMultiServer.data(type, presetParams.PointAddress - 1, presetParams.Length);
+        params.Value = QVariant::fromValue(data.values());
     }
 
     DialogForceMultipleRegisters dlg(params, presetParams.Length, this);

@@ -114,11 +114,11 @@ public:
 
     void writeValue(QModbusDataUnit::RegisterType pointType, quint16 pointAddress, quint16 value);
 
-    float readFloat(QModbusDataUnit::RegisterType pointType, quint16 pointAddress, bool swapped);
-    void writeFloat(QModbusDataUnit::RegisterType pointType, quint16 pointAddress, float value, bool swapped);
+    float readFloat(QModbusDataUnit::RegisterType pointType, quint16 pointAddress, ByteOrder order, bool swapped);
+    void writeFloat(QModbusDataUnit::RegisterType pointType, quint16 pointAddress, float value, ByteOrder order, bool swapped);
 
-    double readDouble(QModbusDataUnit::RegisterType pointType, quint16 pointAddress, bool swapped);
-    void writeDouble(QModbusDataUnit::RegisterType pointType, quint16 pointAddress, double value, bool swapped);
+    double readDouble(QModbusDataUnit::RegisterType pointType, quint16 pointAddress, ByteOrder order, bool swapped);
+    void writeDouble(QModbusDataUnit::RegisterType pointType, quint16 pointAddress, double value, ByteOrder order, bool swapped);
 
     void writeRegister(QModbusDataUnit::RegisterType pointType, const ModbusWriteParams& params);
     void simulateRegister(DataDisplayMode mode, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, const ModbusSimulationParams& params);
