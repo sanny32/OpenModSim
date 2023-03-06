@@ -29,8 +29,6 @@ public:
     ModbusSimulationMap simulationMap() const;
 
 signals:
-    void dataSimulationStarted(QModbusDataUnit::RegisterType type, quint16 addr, const ModbusSimulationParams& params);
-    void dataSimulationStopped(QModbusDataUnit::RegisterType type, quint16 addr);
     void dataSimulated(DataDisplayMode mode, QModbusDataUnit::RegisterType type, quint16 addr, QVariant value);
 
 private slots:
