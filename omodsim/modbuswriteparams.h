@@ -12,6 +12,7 @@ struct ModbusWriteParams
     quint16 Address;
     QVariant Value;
     DataDisplayMode DisplayMode;
+    ByteOrder Order;
 };
 Q_DECLARE_METATYPE(ModbusWriteParams)
 

@@ -8,6 +8,9 @@
 #include "dialogdisplaydefinition.h"
 #include "dialogselectserviceport.h"
 #include "dialogsetupserialport.h"
+#include "dialogsetuppresetdata.h"
+#include "dialogforcemultiplecoils.h"
+#include "dialogforcemultipleregisters.h"
 #include "mainstatusbar.h"
 #include "menuconnect.h"
 #include "mainwindow.h"
@@ -21,13 +24,23 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
     ,_lang("en")
+    ,_icoBigEndian(":/res/actionBigEndian.png")
+    ,_icoLittleEndian(":/res/actionLittleEndian.png")
     ,_windowCounter(0)
+    ,_dataSimulator(new DataSimulator(this))
 {
     ui->setupUi(this);
 
     setWindowTitle(APP_NAME);
     setUnifiedTitleAndToolBarOnMac(true);
     setStatusBar(new MainStatusBar(_mbMultiServer, this));
+
+    auto menuByteOrder = new QMenu(this);
+    menuByteOrder->addAction(ui->actionLittleEndian);
+    menuByteOrder->addAction(ui->actionBigEndian);
+    ui->actionByteOrder->setMenu(menuByteOrder);
+    ui->actionByteOrder->setIcon(_icoLittleEndian);
+    qobject_cast<QToolButton*>(ui->toolBarDisplay->widgetForAction(ui->actionByteOrder))->setPopupMode(QToolButton::InstantPopup);
 
     auto menuConnect = new MenuConnect(MenuConnect::ConnectMenu, _mbMultiServer, this);
     connect(menuConnect, &MenuConnect::connectAction, this, &MainWindow::on_connectAction);
@@ -57,6 +70,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(dispatcher, &QAbstractEventDispatcher::awake, this, &MainWindow::on_awake);
 
     connect(ui->mdiArea, &QMdiArea::subWindowActivated, this, &MainWindow::updateMenuWindow);
+    connect(_dataSimulator.get(), &DataSimulator::dataSimulated, this, &MainWindow::on_dataSimulated);
     connect(&_mbMultiServer, &ModbusMultiServer::connectionError, this, &MainWindow::on_connectionError);
 
     ui->actionNew->trigger();
@@ -135,6 +149,7 @@ bool MainWindow::eventFilter(QObject * obj, QEvent * e)
         case QEvent::Close:
             _windowActionList->removeWindow(qobject_cast<QMdiSubWindow*>(obj));
         break;
+        break;
         default:
             qt_noop();
     }
@@ -169,6 +184,13 @@ void MainWindow::on_awake()
     ui->actionSwappedFP->setEnabled(frm != nullptr);
     ui->actionDblFloat->setEnabled(frm != nullptr);
     ui->actionSwappedDbl->setEnabled(frm != nullptr);
+
+    const auto isConnected = _mbMultiServer.isConnected();
+    ui->actionForceCoils->setEnabled(isConnected);
+    ui->actionForceDiscretes->setEnabled(isConnected);
+    ui->actionPresetInputRegs->setEnabled(isConnected);
+    ui->actionPresetHoldingRegs->setEnabled(isConnected);
+
     ui->actionToolbar->setChecked(ui->toolBarMain->isVisible());
     ui->actionStatusBar->setChecked(statusBar()->isVisible());
     ui->actionDisplayBar->setChecked(ui->toolBarDisplay->isVisible());
@@ -186,6 +208,10 @@ void MainWindow::on_awake()
         ui->actionSwappedFP->setChecked(ddm == DataDisplayMode::SwappedFP);
         ui->actionDblFloat->setChecked(ddm == DataDisplayMode::DblFloat);
         ui->actionSwappedDbl->setChecked(ddm == DataDisplayMode::SwappedDbl);
+
+        const auto byteOrder = frm->byteOrder();
+        ui->actionLittleEndian->setChecked(byteOrder == ByteOrder::LittleEndian);
+        ui->actionBigEndian->setChecked(byteOrder == ByteOrder::BigEndian);
 
         ui->actionHexAddresses->setChecked(frm->displayHexAddresses());
 
@@ -205,6 +231,7 @@ void MainWindow::on_actionNew_triggered()
     auto frm = createMdiChild(++_windowCounter);
 
     if(cur) {
+        frm->setByteOrder(cur->byteOrder());
         frm->setDisplayMode(cur->displayMode());
         frm->setDataDisplayMode(cur->dataDisplayMode());
 
@@ -437,6 +464,25 @@ void MainWindow::on_actionSwappedFP_triggered()
 }
 
 ///
+/// \brief MainWindow::on_actionLittleEndian_triggered
+///
+void MainWindow::on_actionLittleEndian_triggered()
+{
+    auto frm = currentMdiChild();
+    if(frm) frm->setByteOrder(ByteOrder::LittleEndian);
+}
+
+///
+/// \brief MainWindow::on_actionBigEndian_triggered
+///
+void MainWindow::on_actionBigEndian_triggered()
+{
+    auto frm = currentMdiChild();
+    if(frm) frm->setByteOrder(ByteOrder::BigEndian);
+}
+
+
+///
 /// \brief MainWindow::on_actionDblFloat_triggered
 ///
 void MainWindow::on_actionDblFloat_triggered()
@@ -459,6 +505,38 @@ void MainWindow::on_actionHexAddresses_triggered()
 {
     auto frm = currentMdiChild();
     if(frm) frm->setDisplayHexAddresses(!frm->displayHexAddresses());
+}
+
+///
+/// \brief MainWindow::on_actionForceCoils_triggered
+///
+void MainWindow::on_actionForceCoils_triggered()
+{
+    forceCoils(QModbusDataUnit::Coils);
+}
+
+///
+/// \brief MainWindow::on_actionForceDiscretes_triggered
+///
+void MainWindow::on_actionForceDiscretes_triggered()
+{
+   forceCoils(QModbusDataUnit::DiscreteInputs);
+}
+
+///
+/// \brief MainWindow::on_actionPresetInputRegs_triggered
+///
+void MainWindow::on_actionPresetInputRegs_triggered()
+{
+   presetRegs(QModbusDataUnit::InputRegisters);
+}
+
+///
+/// \brief MainWindow::on_actionPresetHoldingRegs_triggered
+///
+void MainWindow::on_actionPresetHoldingRegs_triggered()
+{
+    presetRegs(QModbusDataUnit::HoldingRegisters);
 }
 
 ///
@@ -605,6 +683,21 @@ void MainWindow::on_connectionError(const QString& error)
 }
 
 ///
+/// \brief MainWindow::on_dataSimulated
+/// \param mode
+/// \param type
+/// \param addr
+/// \param value
+///
+void MainWindow::on_dataSimulated(DataDisplayMode mode, QModbusDataUnit::RegisterType type, quint16 addr, QVariant value)
+{
+    auto frm = currentMdiChild();
+    const auto order = (frm)? frm->byteOrder() : ByteOrder::LittleEndian;
+
+    _mbMultiServer.writeRegister(type, { addr, value, mode, order });
+}
+
+///
 /// \brief MainWindow::updateMenuWindow
 ///
 void MainWindow::updateMenuWindow()
@@ -668,16 +761,103 @@ void MainWindow::updateDataDisplayMode(DataDisplayMode mode)
 }
 
 ///
+/// \brief MainWindow::forceCoils
+/// \param type
+///
+void MainWindow::forceCoils(QModbusDataUnit::RegisterType type)
+{
+    auto frm = currentMdiChild();
+    if(!frm) return;
+
+    const auto dd = frm->displayDefinition();
+    SetupPresetParams presetParams = { dd.PointAddress, dd.Length };
+
+    {
+        DialogSetupPresetData dlg(presetParams, type, this);
+        if(dlg.exec() != QDialog::Accepted) return;
+    }
+
+    ModbusWriteParams params;
+    params.Address = presetParams.PointAddress;
+
+    if(dd.PointType == type)
+    {
+        const auto data = _mbMultiServer.data(type, presetParams.PointAddress - 1, presetParams.Length);
+        params.Value = QVariant::fromValue(data.values());
+    }
+
+    DialogForceMultipleCoils dlg(params, presetParams.Length, this);
+    if(dlg.exec() == QDialog::Accepted)
+    {
+        _mbMultiServer.writeRegister(type, params);
+    }
+}
+
+///
+/// \brief MainWindow::presetRegs
+/// \param type
+///
+void MainWindow::presetRegs(QModbusDataUnit::RegisterType type)
+{
+    auto frm = currentMdiChild();
+    if(!frm) return;
+
+    const auto dd = frm->displayDefinition();
+    SetupPresetParams presetParams = { dd.PointAddress, dd.Length };
+
+    {
+        DialogSetupPresetData dlg(presetParams, type, this);
+        if(dlg.exec() != QDialog::Accepted) return;
+    }
+
+    ModbusWriteParams params;
+    params.Address = presetParams.PointAddress;
+    params.DisplayMode = frm->dataDisplayMode();
+    params.Order = frm->byteOrder();
+
+    if(dd.PointType == type)
+    {
+        const auto data = _mbMultiServer.data(type, presetParams.PointAddress - 1, presetParams.Length);
+        params.Value = QVariant::fromValue(data.values());
+    }
+
+    DialogForceMultipleRegisters dlg(params, presetParams.Length, this);
+    if(dlg.exec() == QDialog::Accepted)
+    {
+        _mbMultiServer.writeRegister(type, params);
+    }
+}
+
+///
 /// \brief MainWindow::createMdiChild
 /// \param id
 /// \return
 ///
 FormModSim* MainWindow::createMdiChild(int id)
 {
-    auto frm = new FormModSim(id, _mbMultiServer, this);
+    auto frm = new FormModSim(id, _mbMultiServer, _dataSimulator, this);
     auto wnd = ui->mdiArea->addSubWindow(frm);
     wnd->installEventFilter(this);
     wnd->setAttribute(Qt::WA_DeleteOnClose, true);
+
+    auto updateIcons = [this](ByteOrder order)
+    {
+        switch(order){
+        case ByteOrder::BigEndian: ui->actionByteOrder->setIcon(_icoBigEndian); break;
+        case ByteOrder::LittleEndian: ui->actionByteOrder->setIcon(_icoLittleEndian); break;
+        }
+    };
+
+    connect(wnd, &QMdiSubWindow::windowStateChanged, this, [frm, updateIcons](Qt::WindowStates, Qt::WindowStates newState)
+    {
+        if(newState == Qt::WindowActive)
+            updateIcons(frm->byteOrder());
+    });
+
+    connect(frm, &FormModSim::byteOrderChanged, this, [updateIcons](ByteOrder order)
+    {
+        updateIcons(order);
+    });
 
     connect(frm, &FormModSim::showed, this, [this, wnd]
     {
@@ -842,7 +1022,7 @@ FormModSim* MainWindow::loadMdiChild(const QString& filename)
     QVersionNumber ver;
     s >> ver;
 
-    if(ver != QVersionNumber(1, 0))
+    if(ver > FormModSim::VERSION)
         return nullptr;
 
     int formId;
@@ -859,6 +1039,10 @@ FormModSim* MainWindow::loadMdiChild(const QString& filename)
         frm = createMdiChild(formId);
     }
 
+    if(!frm)
+        return nullptr;
+
+    frm->setProperty("Version", QVariant::fromValue(ver));
     s >> frm;
 
     if(s.status() != QDataStream::Ok)
@@ -894,7 +1078,7 @@ void MainWindow::saveMdiChild(FormModSim* frm)
     s << (quint8)0x34;
 
     // version number
-    s << QVersionNumber(1, 0);
+    s << FormModSim::VERSION;
 
     // form
     s << frm;

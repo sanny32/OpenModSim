@@ -101,6 +101,31 @@ void DataSimulator::restartSimulations()
 }
 
 ///
+/// \brief DataSimulator::simulationParams
+/// \param type
+/// \param addr
+/// \return
+///
+ModbusSimulationParams DataSimulator::simulationParams(QModbusDataUnit::RegisterType type, quint16 addr) const
+{
+    const auto it = _simulationMap.find({type, addr});
+    return (it != _simulationMap.end()) ? it->Params : ModbusSimulationParams();
+}
+
+///
+/// \brief DataSimulator::simulationMap
+/// \return
+///
+ModbusSimulationMap DataSimulator::simulationMap() const
+{
+    ModbusSimulationMap map;
+    for(auto&& key : _simulationMap.keys())
+        map[key] = _simulationMap[key].Params;
+
+    return map;
+}
+
+///
 /// \brief DataSimulator::on_timeout
 ///
 void DataSimulator::on_timeout()

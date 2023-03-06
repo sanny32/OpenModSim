@@ -58,7 +58,13 @@ private slots:
     void on_actionSwappedFP_triggered();
     void on_actionDblFloat_triggered();
     void on_actionSwappedDbl_triggered();
+    void on_actionLittleEndian_triggered();
+    void on_actionBigEndian_triggered();
     void on_actionHexAddresses_triggered();
+    void on_actionForceCoils_triggered();
+    void on_actionForceDiscretes_triggered();
+    void on_actionPresetInputRegs_triggered();
+    void on_actionPresetHoldingRegs_triggered();
 
     /* View menu slots */
     void on_actionToolbar_triggered();
@@ -82,6 +88,7 @@ private slots:
     void on_actionAbout_triggered();
 
     void on_connectionError(const QString& error);
+    void on_dataSimulated(DataDisplayMode mode, QModbusDataUnit::RegisterType type, quint16 addr, QVariant value);
 
     void updateMenuWindow();
     void openFile(const QString& filename);
@@ -90,6 +97,9 @@ private slots:
 private:
     void addRecentFile(const QString& filename);
     void updateDataDisplayMode(DataDisplayMode mode);
+
+    void forceCoils(QModbusDataUnit::RegisterType type);
+    void presetRegs(QModbusDataUnit::RegisterType type);
 
     FormModSim* createMdiChild(int id);
     FormModSim* currentMdiChild() const;
@@ -112,6 +122,9 @@ private:
     QTranslator _qtTranslator;
     QTranslator _appTranslator;
 
+    QIcon _icoBigEndian;
+    QIcon _icoLittleEndian;
+
 private:
     int _windowCounter;
 
@@ -119,6 +132,7 @@ private:
     WindowActionList* _windowActionList;
     RecentFileActionList* _recentFileActionList;
     QSharedPointer<QPrinter> _selectedPrinter;
+    QSharedPointer<DataSimulator> _dataSimulator;
 };
 
 #endif // MAINWINDOW_H

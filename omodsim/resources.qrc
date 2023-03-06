@@ -24,5 +24,7 @@
         <file>res/omodsim.png</file>
         <file>res/iconAbout.png</file>
         <file>translations/omodsim_ru.qm</file>
+        <file>res/actionBigEndian.png</file>
+        <file>res/actionLittleEndian.png</file>
     </qresource>
 </RCC>

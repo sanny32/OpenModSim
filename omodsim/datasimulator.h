@@ -5,8 +5,11 @@
 #include <QModbusDataUnit>
 #include "modbussimulationparams.h"
 
-class ModbusMultiServer;
+typedef QMap<QPair<QModbusDataUnit::RegisterType, quint16>, ModbusSimulationParams> ModbusSimulationMap;
 
+///
+/// \brief The DataSimulator class
+///
 class DataSimulator : public QObject
 {
     Q_OBJECT
@@ -21,6 +24,9 @@ public:
     void pauseSimulations();
     void resumeSimulations();
     void restartSimulations();
+
+    ModbusSimulationParams simulationParams(QModbusDataUnit::RegisterType type, quint16 addr) const;
+    ModbusSimulationMap simulationMap() const;
 
 signals:
     void dataSimulated(DataDisplayMode mode, QModbusDataUnit::RegisterType type, quint16 addr, QVariant value);
