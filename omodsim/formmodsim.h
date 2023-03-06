@@ -94,7 +94,6 @@ private slots:
     void on_mbRequest(const QModbusRequest& req);
     void on_mbResponse(const QModbusResponse& resp);
     void on_mbDataChanged(const QModbusDataUnit& data);
-    void on_dataSimulated(DataDisplayMode mode, QModbusDataUnit::RegisterType type, quint16 addr, QVariant value);
 
 private:
     void updateStatus();

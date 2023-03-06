@@ -44,7 +44,6 @@ FormModSim::FormModSim(int id, ModbusMultiServer& server, QSharedPointer<DataSim
     onDefinitionChanged();
     ui->outputWidget->setFocus();
 
-    connect(_dataSimulator.get(), &DataSimulator::dataSimulated, this, &FormModSim::on_dataSimulated);
     connect(&_mbMultiServer, &ModbusMultiServer::request, this, &FormModSim::on_mbRequest);
     connect(&_mbMultiServer, &ModbusMultiServer::response, this, &FormModSim::on_mbResponse);
     connect(&_mbMultiServer, &ModbusMultiServer::connected, this, &FormModSim::on_mbConnected);
@@ -71,8 +70,7 @@ void FormModSim::changeEvent(QEvent* event)
     if (event->type() == QEvent::LanguageChange)
     {
         ui->retranslateUi(this);
-        if(!_mbMultiServer.isConnected())
-            ui->outputWidget->setStatus(tr("NOT CONNECTED!"));
+        updateStatus();
     }
 
     QWidget::changeEvent(event);
@@ -570,16 +568,4 @@ void FormModSim::on_mbDataChanged(const QModbusDataUnit&)
 {
     const auto dd = displayDefinition();
     ui->outputWidget->updateData(_mbMultiServer.data(dd.PointType, dd.PointAddress - 1, dd.Length));
-}
-
-///
-/// \brief FormModSim::on_dataSimulated
-/// \param mode
-/// \param type
-/// \param addr
-/// \param value
-///
-void FormModSim::on_dataSimulated(DataDisplayMode mode, QModbusDataUnit::RegisterType type, quint16 addr, QVariant value)
-{
-    _mbMultiServer.writeRegister(type, { addr, value, mode, byteOrder() });
 }
