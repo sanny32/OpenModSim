@@ -206,6 +206,10 @@ void MainWindow::on_awake()
         ui->actionDblFloat->setChecked(ddm == DataDisplayMode::DblFloat);
         ui->actionSwappedDbl->setChecked(ddm == DataDisplayMode::SwappedDbl);
 
+        const auto byteOrder = frm->byteOrder();
+        ui->actionLittleEndian->setChecked(byteOrder == ByteOrder::LittleEndian);
+        ui->actionBigEndian->setChecked(byteOrder == ByteOrder::BigEndian);
+
         ui->actionHexAddresses->setChecked(frm->displayHexAddresses());
 
         const auto dm = frm->displayMode();
@@ -454,6 +458,25 @@ void MainWindow::on_actionSwappedFP_triggered()
 {
     updateDataDisplayMode(DataDisplayMode::SwappedFP);
 }
+
+///
+/// \brief MainWindow::on_actionLittleEndian_triggered
+///
+void MainWindow::on_actionLittleEndian_triggered()
+{
+    auto frm = currentMdiChild();
+    if(frm) frm->setByteOrder(ByteOrder::LittleEndian);
+}
+
+///
+/// \brief MainWindow::on_actionBigEndian_triggered
+///
+void MainWindow::on_actionBigEndian_triggered()
+{
+    auto frm = currentMdiChild();
+    if(frm) frm->setByteOrder(ByteOrder::BigEndian);
+}
+
 
 ///
 /// \brief MainWindow::on_actionDblFloat_triggered
@@ -969,7 +992,7 @@ FormModSim* MainWindow::loadMdiChild(const QString& filename)
     QVersionNumber ver;
     s >> ver;
 
-    if(ver != QVersionNumber(1, 0))
+    if(ver > FormModSim::VERSION)
         return nullptr;
 
     int formId;
@@ -986,6 +1009,10 @@ FormModSim* MainWindow::loadMdiChild(const QString& filename)
         frm = createMdiChild(formId);
     }
 
+    if(!frm)
+        return nullptr;
+
+    frm->setProperty("Version", QVariant::fromValue(ver));
     s >> frm;
 
     if(s.status() != QDataStream::Ok)
@@ -1021,7 +1048,7 @@ void MainWindow::saveMdiChild(FormModSim* frm)
     s << (quint8)0x34;
 
     // version number
-    s << QVersionNumber(1, 0);
+    s << FormModSim::VERSION;
 
     // form
     s << frm;

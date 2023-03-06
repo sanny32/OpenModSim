@@ -4,6 +4,7 @@
 #include <QWidget>
 #include <QTimer>
 #include <QPrinter>
+#include <QVersionNumber>
 #include "modbusmultiserver.h"
 #include "displaydefinition.h"
 
@@ -20,7 +21,12 @@ class FormModSim : public QWidget
 {
     Q_OBJECT
 
+    friend QDataStream& operator <<(QDataStream& out, const FormModSim* frm);
+    friend QDataStream& operator >>(QDataStream& in, FormModSim* frm);
+
 public:
+    static QVersionNumber VERSION;
+
     explicit FormModSim(int id, ModbusMultiServer& server, MainWindow* parent);
     ~FormModSim();
 
@@ -60,6 +66,10 @@ public:
 
     void print(QPrinter* painter);
 
+    void resumeSimulations();
+    void pauseSimulations();
+    void restartSimulations();
+
 protected:
     void changeEvent(QEvent* event) override;
     void closeEvent(QCloseEvent *event) override;
@@ -84,6 +94,7 @@ private slots:
     void on_mbRequest(const QModbusRequest& req);
     void on_mbResponse(const QModbusResponse& resp);
     void on_mbDataChanged(const QModbusDataUnit& data);
+    void on_dataSimulated(DataDisplayMode mode, QModbusDataUnit::RegisterType type, quint16 addr, QVariant value);
 
 private:
     void updateStatus();
@@ -94,6 +105,7 @@ private:
     int _formId;
     QString _filename;
     ModbusMultiServer& _mbMultiServer;
+    QSharedPointer<DataSimulator> _dataSimulator;
     QMap<QPair<QModbusDataUnit::RegisterType, quint16>, ModbusSimulationParams> _simulationMap;
 };
 
@@ -121,6 +133,7 @@ inline QSettings& operator <<(QSettings& out, const FormModSim* frm)
 
     out << frm->displayMode();
     out << frm->dataDisplayMode();
+    out << frm->byteOrder();
     out << frm->displayDefinition();
     out.setValue("DisplayHexAddresses", frm->displayHexAddresses());
 
@@ -143,6 +156,9 @@ inline QSettings& operator >>(QSettings& in, FormModSim* frm)
     DataDisplayMode dataDisplayMode;
     in >> dataDisplayMode;
 
+    ByteOrder byteOrder;
+    in >> byteOrder;
+
     DisplayDefinition displayDefinition;
     in >> displayDefinition;
 
@@ -163,6 +179,7 @@ inline QSettings& operator >>(QSettings& in, FormModSim* frm)
 
     frm->setDisplayMode(displayMode);
     frm->setDataDisplayMode(dataDisplayMode);
+    frm->setByteOrder(byteOrder);
     frm->setDisplayDefinition(displayDefinition);
     frm->setDisplayHexAddresses(in.value("DisplayHexAddresses").toBool());
 
@@ -201,6 +218,9 @@ inline QDataStream& operator <<(QDataStream& out, const FormModSim* frm)
     out << dd.PointType;
     out << dd.PointAddress;
     out << dd.Length;
+
+    out << frm->byteOrder();
+    out << frm->_simulationMap;
 
     return out;
 }
@@ -249,6 +269,14 @@ inline QDataStream& operator >>(QDataStream& in, FormModSim* frm)
     in >> dd.PointAddress;
     in >> dd.Length;
 
+    ByteOrder byteOrder = ByteOrder::LittleEndian;
+    const auto ver = frm->property("Version").value<QVersionNumber>();
+    if(ver >= QVersionNumber(1, 1))
+    {
+        in >> byteOrder;
+        in >> frm->_simulationMap;
+    }
+
     if(in.status() != QDataStream::Ok)
         return in;
 
@@ -265,6 +293,8 @@ inline QDataStream& operator >>(QDataStream& in, FormModSim* frm)
     frm->setStatusColor(stCrl);
     frm->setFont(font);
     frm->setDisplayDefinition(dd);
+    frm->setByteOrder(byteOrder);
+    frm->restartSimulations();
 
     return in;
 }

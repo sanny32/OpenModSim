@@ -2,6 +2,7 @@
 #define QRANGE_H
 
 #include <limits>
+#include <QDataStream>
 
 ///
 /// \brief The QRange class
@@ -9,11 +10,15 @@
 template<class T>
 class QRange
 {
+
+    friend QDataStream& operator <<(QDataStream& out, const QRange<double>& range);
+    friend QDataStream& operator >>(QDataStream& in, QRange<double>& range);
+
 public:
     ///
     /// \brief QRange
     ///
-    QRange()
+    explicit QRange()
     {
         _from = std::numeric_limits<T>::min();
         _to = std::numeric_limits<T>::max();
@@ -52,18 +57,35 @@ public:
         return num >= _from && num <= _to;
     }
 
-    ///
-    /// \brief length
-    /// \return
-    ///
-    T length() const
-    {
-        return _to - _from;
-    }
-
 private:
     T _from;
     T _to;
 };
+
+///
+/// \brief operator <<
+/// \param out
+/// \param range
+/// \return
+///
+inline QDataStream& operator <<(QDataStream& out, const QRange<double>& range)
+{
+    out << range.from();
+    out << range.to();
+    return out;
+}
+
+///
+/// \brief operator >>
+/// \param in
+/// \param range
+/// \return
+///
+inline QDataStream& operator >>(QDataStream& in, QRange<double>& range)
+{
+    in >> range._from;
+    in >> range._to;
+    return in;
+}
 
 #endif // QRANGE_H

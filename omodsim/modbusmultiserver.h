@@ -112,7 +112,7 @@ public:
     QModbusDataUnit data(QModbusDataUnit::RegisterType pointType, quint16 pointAddress, quint16 length) const;
     void setData(const QModbusDataUnit& data);
 
-    void writeValue(QModbusDataUnit::RegisterType pointType, quint16 pointAddress, quint16 value);
+    void writeValue(QModbusDataUnit::RegisterType pointType, quint16 pointAddress, quint16 value, ByteOrder order);
 
     float readFloat(QModbusDataUnit::RegisterType pointType, quint16 pointAddress, ByteOrder order, bool swapped);
     void writeFloat(QModbusDataUnit::RegisterType pointType, quint16 pointAddress, float value, ByteOrder order, bool swapped);
@@ -124,10 +124,6 @@ public:
     void simulateRegister(DataDisplayMode mode, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, const ModbusSimulationParams& params);
     void stopSimulation(QModbusDataUnit::RegisterType pointType, quint16 pointAddress);
     void stopSimulations();
-
-    void resumeSimulations();
-    void pauseSimulations();
-    void restartSimulations();
 
 signals:
     void connected(const ConnectionDetails& cd);
@@ -142,7 +138,6 @@ private slots:
     void on_stateChanged(QModbusDevice::State state);
     void on_errorOccurred(QModbusDevice::Error error);
     void on_dataWritten(QModbusDataUnit::RegisterType table, int address, int size);
-    void on_dataSimulated(DataDisplayMode mode, QModbusDataUnit::RegisterType type, quint16 addr, QVariant value);
 
 private:
     QSharedPointer<QModbusServer> findModbusServer(const ConnectionDetails& cd) const;
@@ -157,7 +152,6 @@ private:
     quint8 _deviceId;
     ModbusDataUnitMap _modbusDataUnitMap;
     QList<QSharedPointer<QModbusServer>> _modbusServerList;
-    QSharedPointer<DataSimulator> _simulator;
 };
 
 #endif // MODBUSMULTISERVER_H

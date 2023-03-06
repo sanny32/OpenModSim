@@ -345,9 +345,11 @@ void OutputWidget::setByteOrder(ByteOrder order)
 /// \param outValue
 /// \return
 ///
-QString formatBinaryValue(QModbusDataUnit::RegisterType pointType, quint16 value, QVariant& outValue)
+QString formatBinaryValue(QModbusDataUnit::RegisterType pointType, quint16 value, ByteOrder order, QVariant& outValue)
 {
     QString result;
+    value = toByteOrderValue(value, order);
+
     switch(pointType)
     {
         case QModbusDataUnit::Coils:
@@ -372,9 +374,11 @@ QString formatBinaryValue(QModbusDataUnit::RegisterType pointType, quint16 value
 /// \param outValue
 /// \return
 ///
-QString formatDecimalValue(QModbusDataUnit::RegisterType pointType, quint16 value, QVariant& outValue)
+QString formatDecimalValue(QModbusDataUnit::RegisterType pointType, quint16 value, ByteOrder order, QVariant& outValue)
 {
     QString result;
+    value = toByteOrderValue(value, order);
+
     switch(pointType)
     {
         case QModbusDataUnit::Coils:
@@ -399,9 +403,11 @@ QString formatDecimalValue(QModbusDataUnit::RegisterType pointType, quint16 valu
 /// \param outValue
 /// \return
 ///
-QString formatIntegerValue(QModbusDataUnit::RegisterType pointType, qint16 value, QVariant& outValue)
+QString formatIntegerValue(QModbusDataUnit::RegisterType pointType, qint16 value ,ByteOrder order, QVariant& outValue)
 {
     QString result;
+    value = toByteOrderValue(value, order);
+
     switch(pointType)
     {
         case QModbusDataUnit::Coils:
@@ -426,9 +432,11 @@ QString formatIntegerValue(QModbusDataUnit::RegisterType pointType, qint16 value
 /// \param outValue
 /// \return
 ///
-QString formatHexValue(QModbusDataUnit::RegisterType pointType, quint16 value, QVariant& outValue)
+QString formatHexValue(QModbusDataUnit::RegisterType pointType, quint16 value, ByteOrder order, QVariant& outValue)
 {
     QString result;
+    value = toByteOrderValue(value, order);
+
     switch(pointType)
     {
         case QModbusDataUnit::Coils:
@@ -642,19 +650,19 @@ void OutputWidget::updateDataWidget(const QModbusDataUnit& data)
         switch(_dataDisplayMode)
         {
             case DataDisplayMode::Binary:
-                valstr = formatBinaryValue(_displayDefinition.PointType, value, itemData.Value);
+                valstr = formatBinaryValue(_displayDefinition.PointType, value, byteOrder(), itemData.Value);
             break;
 
             case DataDisplayMode::Decimal:
-                valstr = formatDecimalValue(_displayDefinition.PointType, value, itemData.Value);
+                valstr = formatDecimalValue(_displayDefinition.PointType, value, byteOrder(), itemData.Value);
             break;
 
             case DataDisplayMode::Integer:
-                valstr = formatIntegerValue(_displayDefinition.PointType, value, itemData.Value);
+                valstr = formatIntegerValue(_displayDefinition.PointType, value, byteOrder(), itemData.Value);
             break;
 
             case DataDisplayMode::Hex:
-                valstr = formatHexValue(_displayDefinition.PointType, value, itemData.Value);
+                valstr = formatHexValue(_displayDefinition.PointType, value, byteOrder(), itemData.Value);
             break;
 
             case DataDisplayMode::FloatingPt:
