@@ -15,6 +15,7 @@ public:
     void removeUnitMap(int id);
 
     void setData(const QModbusDataUnit& data);
+    QModbusDataUnit getData(QModbusDataUnit::RegisterType pointType, quint16 pointAddress, quint16 length) const;
 
     QModbusDataUnitMap::ConstIterator begin();
     QModbusDataUnitMap::Iterator end();

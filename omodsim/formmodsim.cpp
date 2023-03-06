@@ -3,11 +3,14 @@
 #include <QDateTime>
 #include "modbuslimits.h"
 #include "mainwindow.h"
+#include "datasimulator.h"
 #include "dialogwritecoilregister.h"
 #include "dialogwriteholdingregister.h"
 #include "dialogwriteholdingregisterbits.h"
 #include "formmodsim.h"
 #include "ui_formmodsim.h"
+
+QVersionNumber FormModSim::VERSION = QVersionNumber(1, 1);
 
 ///
 /// \brief FormModSim::FormModSim
@@ -19,6 +22,7 @@ FormModSim::FormModSim(int id, ModbusMultiServer& server, MainWindow* parent) :
     , ui(new Ui::FormModSim)
     ,_formId(id)
     ,_mbMultiServer(server)
+    ,_dataSimulator(new DataSimulator(this))
 {
     Q_ASSERT(parent != nullptr);
 
@@ -40,6 +44,7 @@ FormModSim::FormModSim(int id, ModbusMultiServer& server, MainWindow* parent) :
     onDefinitionChanged();
     ui->outputWidget->setFocus();
 
+    connect(_dataSimulator.get(), &DataSimulator::dataSimulated, this, &FormModSim::on_dataSimulated);
     connect(&_mbMultiServer, &ModbusMultiServer::request, this, &FormModSim::on_mbRequest);
     connect(&_mbMultiServer, &ModbusMultiServer::response, this, &FormModSim::on_mbResponse);
     connect(&_mbMultiServer, &ModbusMultiServer::connected, this, &FormModSim::on_mbConnected);
@@ -99,6 +104,15 @@ QString FormModSim::filename() const
 void FormModSim::setFilename(const QString& filename)
 {
     _filename = filename;
+}
+
+///
+/// \brief FormModSim::data
+/// \return
+///
+QVector<quint16> FormModSim::data() const
+{
+    return ui->outputWidget->data();
 }
 
 ///
@@ -182,6 +196,25 @@ void FormModSim::setDisplayHexAddresses(bool on)
 void FormModSim::setDataDisplayMode(DataDisplayMode mode)
 {
     ui->outputWidget->setDataDisplayMode(mode);
+}
+
+///
+/// \brief FormModSim::byteOrder
+/// \return
+///
+ByteOrder FormModSim::byteOrder() const
+{
+    return ui->outputWidget->byteOrder();
+}
+
+///
+/// \brief FormModSim::setByteOrder
+/// \param order
+///
+void FormModSim::setByteOrder(ByteOrder order)
+{
+    ui->outputWidget->setByteOrder(order);
+    emit byteOrderChanged(order);
 }
 
 ///
@@ -311,6 +344,32 @@ void FormModSim::print(QPrinter* printer)
 }
 
 ///
+/// \brief FormModSim::resumeSimulations
+///
+void FormModSim::resumeSimulations()
+{
+    _dataSimulator->resumeSimulations();
+}
+
+///
+/// \brief FormModSim::pauseSimulations
+///
+void FormModSim::pauseSimulations()
+{
+    _dataSimulator->pauseSimulations();
+}
+
+///
+/// \brief FormModSca::restartSimulations
+///
+void FormModSim::restartSimulations()
+{
+    _dataSimulator->stopSimulations();
+    for(auto&& k : _simulationMap.keys())
+        _dataSimulator->startSimulation(dataDisplayMode(), k.first, k.second,  _simulationMap[k]);
+}
+
+///
 /// \brief FormModSim::show
 ///
 void FormModSim::show()
@@ -402,7 +461,7 @@ void FormModSim::on_outputWidget_itemDoubleClicked(quint16 addr, const QVariant&
         case QModbusDataUnit::Coils:
         case QModbusDataUnit::DiscreteInputs:
         {
-            ModbusWriteParams params = { addr, value, mode };
+            ModbusWriteParams params = { addr, value, mode, byteOrder() };
             DialogWriteCoilRegister dlg(params, simParams, this);
             switch(dlg.exec())
             {
@@ -411,7 +470,8 @@ void FormModSim::on_outputWidget_itemDoubleClicked(quint16 addr, const QVariant&
                 break;
 
                 case 2:
-                    _mbMultiServer.simulateRegister(mode, pointType, addr, simParams);
+                    if(simParams.Mode == SimulationMode::No) _dataSimulator->stopSimulation(pointType, addr);
+                    else _dataSimulator->startSimulation(mode, pointType, addr, simParams);
                 break;
             }
         }
@@ -420,7 +480,7 @@ void FormModSim::on_outputWidget_itemDoubleClicked(quint16 addr, const QVariant&
         case QModbusDataUnit::InputRegisters:
         case QModbusDataUnit::HoldingRegisters:
         {
-            ModbusWriteParams params = { addr, value, mode };
+            ModbusWriteParams params = { addr, value, mode, byteOrder() };
             if(mode == DataDisplayMode::Binary)
             {
                 DialogWriteHoldingRegisterBits dlg(params, this);
@@ -437,7 +497,8 @@ void FormModSim::on_outputWidget_itemDoubleClicked(quint16 addr, const QVariant&
                     break;
 
                     case 2:
-                        _mbMultiServer.simulateRegister(mode, pointType, addr, simParams);
+                        if(simParams.Mode == SimulationMode::No) _dataSimulator->stopSimulation(pointType, addr);
+                        else _dataSimulator->startSimulation(mode, pointType, addr, simParams);
                     break;
                 }
             }
@@ -465,6 +526,7 @@ void FormModSim::on_mbDeviceIdChanged(quint8 deviceId)
 ///
 void FormModSim::on_mbConnected(const ConnectionDetails&)
 {
+    _dataSimulator->resumeSimulations();
     updateStatus();
 }
 
@@ -474,7 +536,7 @@ void FormModSim::on_mbConnected(const ConnectionDetails&)
 void FormModSim::on_mbDisconnected(const ConnectionDetails&)
 {
     if(!_mbMultiServer.isConnected())
-        _simulationMap.clear();
+       _dataSimulator->pauseSimulations();
 
    updateStatus();
 }
@@ -506,4 +568,19 @@ void FormModSim::on_mbDataChanged(const QModbusDataUnit&)
 {
     const auto dd = displayDefinition();
     ui->outputWidget->updateData(_mbMultiServer.data(dd.PointType, dd.PointAddress - 1, dd.Length));
+}
+
+///
+/// \brief FormModSim::on_dataSimulated
+/// \param mode
+/// \param type
+/// \param addr
+/// \param value
+///
+void FormModSim::on_dataSimulated(DataDisplayMode mode, QModbusDataUnit::RegisterType type, quint16 addr, QVariant value)
+{
+    if(!_mbMultiServer.isConnected())
+        return;
+
+    _mbMultiServer.writeRegister(type, { addr, value, mode, byteOrder() });
 }
