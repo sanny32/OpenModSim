@@ -70,6 +70,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(dispatcher, &QAbstractEventDispatcher::awake, this, &MainWindow::on_awake);
 
     connect(ui->mdiArea, &QMdiArea::subWindowActivated, this, &MainWindow::updateMenuWindow);
+    connect(_dataSimulator.get(), &DataSimulator::dataSimulated, this, &MainWindow::on_dataSimulated);
     connect(&_mbMultiServer, &ModbusMultiServer::connectionError, this, &MainWindow::on_connectionError);
 
     ui->actionNew->trigger();
@@ -147,6 +148,7 @@ bool MainWindow::eventFilter(QObject * obj, QEvent * e)
     {
         case QEvent::Close:
             _windowActionList->removeWindow(qobject_cast<QMdiSubWindow*>(obj));
+        break;
         break;
         default:
             qt_noop();
@@ -229,6 +231,7 @@ void MainWindow::on_actionNew_triggered()
     auto frm = createMdiChild(++_windowCounter);
 
     if(cur) {
+        frm->setByteOrder(cur->byteOrder());
         frm->setDisplayMode(cur->displayMode());
         frm->setDataDisplayMode(cur->dataDisplayMode());
 
@@ -680,6 +683,21 @@ void MainWindow::on_connectionError(const QString& error)
 }
 
 ///
+/// \brief MainWindow::on_dataSimulated
+/// \param mode
+/// \param type
+/// \param addr
+/// \param value
+///
+void MainWindow::on_dataSimulated(DataDisplayMode mode, QModbusDataUnit::RegisterType type, quint16 addr, QVariant value)
+{
+    auto frm = currentMdiChild();
+    const auto order = (frm)? frm->byteOrder() : ByteOrder::LittleEndian;
+
+    _mbMultiServer.writeRegister(type, { addr, value, mode, order });
+}
+
+///
 /// \brief MainWindow::updateMenuWindow
 ///
 void MainWindow::updateMenuWindow()
@@ -822,17 +840,28 @@ FormModSim* MainWindow::createMdiChild(int id)
     wnd->installEventFilter(this);
     wnd->setAttribute(Qt::WA_DeleteOnClose, true);
 
-    connect(frm, &FormModSim::showed, this, [this, wnd]
-    {
-        windowActivate(wnd);
-    });
-
-    connect(frm, &FormModSim::byteOrderChanged, this, [this](ByteOrder order)
+    auto updateIcons = [this](ByteOrder order)
     {
         switch(order){
         case ByteOrder::BigEndian: ui->actionByteOrder->setIcon(_icoBigEndian); break;
         case ByteOrder::LittleEndian: ui->actionByteOrder->setIcon(_icoLittleEndian); break;
         }
+    };
+
+    connect(wnd, &QMdiSubWindow::windowStateChanged, this, [frm, updateIcons](Qt::WindowStates, Qt::WindowStates newState)
+    {
+        if(newState == Qt::WindowActive)
+            updateIcons(frm->byteOrder());
+    });
+
+    connect(frm, &FormModSim::byteOrderChanged, this, [updateIcons](ByteOrder order)
+    {
+        updateIcons(order);
+    });
+
+    connect(frm, &FormModSim::showed, this, [this, wnd]
+    {
+        windowActivate(wnd);
     });
 
     _windowActionList->addWindow(wnd);
