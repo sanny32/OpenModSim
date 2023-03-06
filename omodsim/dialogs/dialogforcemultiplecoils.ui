@@ -17,7 +17,7 @@
    </size>
   </property>
   <property name="windowTitle">
-   <string>15: FORCE MULTIPLE COILS</string>
+   <string>FORCE MULTIPLE COILS</string>
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout">
    <item>
