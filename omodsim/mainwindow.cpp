@@ -176,6 +176,7 @@ void MainWindow::on_awake()
     ui->actionDataDefinition->setEnabled(frm != nullptr);
     ui->actionShowData->setEnabled(frm != nullptr);
     ui->actionShowTraffic->setEnabled(frm != nullptr);
+    ui->actionShowScript->setEnabled(frm != nullptr);
     ui->actionBinary->setEnabled(frm != nullptr);
     ui->actionUnsignedDecimal->setEnabled(frm != nullptr);
     ui->actionInteger->setEnabled(frm != nullptr);
@@ -218,6 +219,7 @@ void MainWindow::on_awake()
         const auto dm = frm->displayMode();
         ui->actionShowData->setChecked(dm == DisplayMode::Data);
         ui->actionShowTraffic->setChecked(dm == DisplayMode::Traffic);
+        ui->actionShowScript->setChecked(dm == DisplayMode::Script);
         ui->actionPrint->setEnabled(_selectedPrinter != nullptr && dm == DisplayMode::Data);
     }
 }
@@ -413,6 +415,15 @@ void MainWindow::on_actionShowTraffic_triggered()
 {
     auto frm = currentMdiChild();
     if(frm) frm->setDisplayMode(DisplayMode::Traffic);
+}
+
+///
+/// \brief MainWindow::on_actionShowScript_triggered
+///
+void MainWindow::on_actionShowScript_triggered()
+{
+    auto frm = currentMdiChild();
+    if(frm) frm->setDisplayMode(DisplayMode::Script);
 }
 
 ///

@@ -10,7 +10,8 @@
 enum class DisplayMode
 {
     Data = 0,
-    Traffic
+    Traffic,
+    Script
 };
 Q_DECLARE_METATYPE(DisplayMode);
 

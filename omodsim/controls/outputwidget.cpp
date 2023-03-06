@@ -297,6 +297,10 @@ void OutputWidget::setDisplayMode(DisplayMode mode)
         case DisplayMode::Traffic:
             ui->stackedWidget->setCurrentIndex(1);
         break;
+
+        case DisplayMode::Script:
+            ui->stackedWidget->setCurrentIndex(2);
+        break;
     }
 }
 

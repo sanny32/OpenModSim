@@ -89,6 +89,7 @@
      </widget>
      <addaction name="actionShowData"/>
      <addaction name="actionShowTraffic"/>
+     <addaction name="actionShowScript"/>
      <addaction name="separator"/>
      <addaction name="actionBinary"/>
      <addaction name="actionUnsignedDecimal"/>
@@ -109,7 +110,7 @@
      <addaction name="actionForceCoils"/>
      <addaction name="actionForceDiscretes"/>
      <addaction name="actionPresetInputRegs"/>
-     <addaction name="actionPresetHoldingRegs"/> 
+     <addaction name="actionPresetHoldingRegs"/>
     </widget>
     <addaction name="actionDataDefinition"/>
     <addaction name="menuDisplay_Options"/>
@@ -191,6 +192,7 @@
    <addaction name="actionDataDefinition"/>
    <addaction name="actionShowData"/>
    <addaction name="actionShowTraffic"/>
+   <addaction name="actionShowScript"/>
    <addaction name="separator"/>
    <addaction name="actionPrint"/>
    <addaction name="actionAbout"/>
@@ -570,6 +572,18 @@
   <action name="actionForceDiscretes">
    <property name="text">
     <string>Force Discretes</string>
+   </property>
+  </action>
+  <action name="actionShowScript">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/res/actionShowScript.png</normaloff>:/res/actionShowScript.png</iconset>
+   </property>
+   <property name="text">
+    <string>Show Script</string>
    </property>
   </action>
  </widget>

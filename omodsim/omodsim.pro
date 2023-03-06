@@ -25,6 +25,7 @@ INCLUDEPATH += controls \
 SOURCES += \
     controls/booleancombobox.cpp \
     controls/clickablelabel.cpp \
+    controls/codeeditor.cpp \
     controls/customframe.cpp \
     controls/customlineedit.cpp \
     controls/flowcontroltypecombobox.cpp \
@@ -34,6 +35,7 @@ SOURCES += \
     controls/outputwidget.cpp \
     controls/paritytypecombobox.cpp \
     controls/pointtypecombobox.cpp \
+    controls/scriptcontrol.cpp \
     controls/simulationmodecombobox.cpp \
     datasimulator.cpp \
     dialogs/dialogautosimulation.cpp \
@@ -66,6 +68,7 @@ HEADERS += \
     connectiondetails.h \
     controls/booleancombobox.h \
     controls/clickablelabel.h \
+    controls/codeeditor.h \
     controls/customframe.h \
     controls/customlineedit.h \
     controls/flowcontroltypecombobox.h \
@@ -75,6 +78,7 @@ HEADERS += \
     controls/outputwidget.h \
     controls/paritytypecombobox.h \
     controls/pointtypecombobox.h \
+    controls/scriptcontrol.h \
     controls/simulationmodecombobox.h \
     datasimulator.h \
     dialogs/dialogautosimulation.h \
@@ -110,6 +114,7 @@ HEADERS += \
 
 FORMS += \
     controls/outputwidget.ui \
+    controls/scriptcontrol.ui \
     dialogs/dialogautosimulation.ui \
     dialogs/dialogcoilsimulation.ui \
     dialogs/dialogabout.ui \

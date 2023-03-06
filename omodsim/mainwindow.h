@@ -50,6 +50,7 @@ private slots:
     void on_actionDataDefinition_triggered();
     void on_actionShowData_triggered();
     void on_actionShowTraffic_triggered();
+    void on_actionShowScript_triggered();
     void on_actionBinary_triggered();
     void on_actionUnsignedDecimal_triggered();
     void on_actionInteger_triggered();
