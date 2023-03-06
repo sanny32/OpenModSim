@@ -5,6 +5,7 @@
 #include <QTimer>
 #include <QPrinter>
 #include <QVersionNumber>
+#include "datasimulator.h"
 #include "modbusmultiserver.h"
 #include "displaydefinition.h"
 
@@ -27,7 +28,7 @@ class FormModSim : public QWidget
 public:
     static QVersionNumber VERSION;
 
-    explicit FormModSim(int id, ModbusMultiServer& server, MainWindow* parent);
+    explicit FormModSim(int id, ModbusMultiServer& server, QSharedPointer<DataSimulator> simulator, MainWindow* parent);
     ~FormModSim();
 
     int formId() const { return _formId; }
@@ -66,9 +67,8 @@ public:
 
     void print(QPrinter* painter);
 
-    void resumeSimulations();
-    void pauseSimulations();
-    void restartSimulations();
+    ModbusSimulationMap simulationMap() const;
+    void startSimulation(QModbusDataUnit::RegisterType type, quint16 addr, const ModbusSimulationParams& params);
 
 protected:
     void changeEvent(QEvent* event) override;
@@ -106,7 +106,6 @@ private:
     QString _filename;
     ModbusMultiServer& _mbMultiServer;
     QSharedPointer<DataSimulator> _dataSimulator;
-    QMap<QPair<QModbusDataUnit::RegisterType, quint16>, ModbusSimulationParams> _simulationMap;
 };
 
 ///
@@ -220,7 +219,7 @@ inline QDataStream& operator <<(QDataStream& out, const FormModSim* frm)
     out << dd.Length;
 
     out << frm->byteOrder();
-    out << frm->_simulationMap;
+    out << frm->simulationMap();
 
     return out;
 }
@@ -270,11 +269,13 @@ inline QDataStream& operator >>(QDataStream& in, FormModSim* frm)
     in >> dd.Length;
 
     ByteOrder byteOrder = ByteOrder::LittleEndian;
+    ModbusSimulationMap simulationMap;
+
     const auto ver = frm->property("Version").value<QVersionNumber>();
     if(ver >= QVersionNumber(1, 1))
     {
         in >> byteOrder;
-        in >> frm->_simulationMap;
+        in >> simulationMap;
     }
 
     if(in.status() != QDataStream::Ok)
@@ -294,7 +295,9 @@ inline QDataStream& operator >>(QDataStream& in, FormModSim* frm)
     frm->setFont(font);
     frm->setDisplayDefinition(dd);
     frm->setByteOrder(byteOrder);
-    frm->restartSimulations();
+
+    for(auto&& k : simulationMap.keys())
+        frm->startSimulation(k.first, k.second,  simulationMap[k]);
 
     return in;
 }

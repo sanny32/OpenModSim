@@ -47,6 +47,8 @@ void DataSimulator::startSimulation(DataDisplayMode mode, QModbusDataUnit::Regis
     }
 
     _simulationMap[{ type, addr}] = { mode, params };
+    emit dataSimulationStarted(type, addr, params);
+
     resumeSimulations();
 }
 
@@ -58,6 +60,7 @@ void DataSimulator::startSimulation(DataDisplayMode mode, QModbusDataUnit::Regis
 void DataSimulator::stopSimulation(QModbusDataUnit::RegisterType type, quint16 addr)
 {
     _simulationMap.remove({ type, addr});
+    emit dataSimulationStopped(type, addr);
 }
 
 ///
@@ -98,6 +101,31 @@ void DataSimulator::restartSimulations()
         const auto params = _simulationMap[key].Params;
         startSimulation(mode, key.first, key.second, params);
     }
+}
+
+///
+/// \brief DataSimulator::simulationParams
+/// \param type
+/// \param addr
+/// \return
+///
+ModbusSimulationParams DataSimulator::simulationParams(QModbusDataUnit::RegisterType type, quint16 addr) const
+{
+    const auto it = _simulationMap.find({type, addr});
+    return (it != _simulationMap.end()) ? it->Params : ModbusSimulationParams();
+}
+
+///
+/// \brief DataSimulator::simulationMap
+/// \return
+///
+ModbusSimulationMap DataSimulator::simulationMap() const
+{
+    ModbusSimulationMap map;
+    for(auto&& key : _simulationMap.keys())
+        map[key] = _simulationMap[key].Params;
+
+    return map;
 }
 
 ///

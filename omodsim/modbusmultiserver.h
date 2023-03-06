@@ -4,7 +4,6 @@
 #include <QObject>
 #include <QModbusServer>
 #include <QModbusTcpServer>
-#include "datasimulator.h"
 #include "modbusdataunitmap.h"
 #include "modbuswriteparams.h"
 #include "connectiondetails.h"
@@ -113,17 +112,13 @@ public:
     void setData(const QModbusDataUnit& data);
 
     void writeValue(QModbusDataUnit::RegisterType pointType, quint16 pointAddress, quint16 value, ByteOrder order);
+    void writeRegister(QModbusDataUnit::RegisterType pointType, const ModbusWriteParams& params);
 
     float readFloat(QModbusDataUnit::RegisterType pointType, quint16 pointAddress, ByteOrder order, bool swapped);
     void writeFloat(QModbusDataUnit::RegisterType pointType, quint16 pointAddress, float value, ByteOrder order, bool swapped);
 
     double readDouble(QModbusDataUnit::RegisterType pointType, quint16 pointAddress, ByteOrder order, bool swapped);
     void writeDouble(QModbusDataUnit::RegisterType pointType, quint16 pointAddress, double value, ByteOrder order, bool swapped);
-
-    void writeRegister(QModbusDataUnit::RegisterType pointType, const ModbusWriteParams& params);
-    void simulateRegister(DataDisplayMode mode, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, const ModbusSimulationParams& params);
-    void stopSimulation(QModbusDataUnit::RegisterType pointType, quint16 pointAddress);
-    void stopSimulations();
 
 signals:
     void connected(const ConnectionDetails& cd);

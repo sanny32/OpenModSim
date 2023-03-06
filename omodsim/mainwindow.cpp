@@ -27,6 +27,7 @@ MainWindow::MainWindow(QWidget *parent)
     ,_icoBigEndian(":/res/actionBigEndian.png")
     ,_icoLittleEndian(":/res/actionLittleEndian.png")
     ,_windowCounter(0)
+    ,_dataSimulator(new DataSimulator(this))
 {
     ui->setupUi(this);
 
@@ -816,7 +817,7 @@ void MainWindow::presetRegs(QModbusDataUnit::RegisterType type)
 ///
 FormModSim* MainWindow::createMdiChild(int id)
 {
-    auto frm = new FormModSim(id, _mbMultiServer, this);
+    auto frm = new FormModSim(id, _mbMultiServer, _dataSimulator, this);
     auto wnd = ui->mdiArea->addSubWindow(frm);
     wnd->installEventFilter(this);
     wnd->setAttribute(Qt::WA_DeleteOnClose, true);
