@@ -7,6 +7,8 @@
 #include <QStringView>
 #endif
 
+using LanguageData = QMultiHash<char, QLatin1String>;
+
 class JSHighlighter : public QSyntaxHighlighter
 {
     Q_OBJECT
@@ -72,6 +74,13 @@ private:
 #endif
 
     QHash<Token, QTextCharFormat> _formats;
+
+private:
+    static LanguageData keywords;
+    static LanguageData types;
+    static LanguageData literals;
+    static LanguageData builtin;
+    static LanguageData other;
 };
 
 #endif // JSHIGHLIGHTER_H

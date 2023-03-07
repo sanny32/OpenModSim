@@ -1,8 +1,6 @@
 #include "jshighlighter.h"
 
-using LanguageData = QMultiHash<char, QLatin1String>;
-
-static LanguageData js_keywords = {
+LanguageData JSHighlighter::keywords = {
     {('i'), QLatin1String("in")},
     {('o'), QLatin1String("of")},
     {('i'), QLatin1String("if")},
@@ -43,7 +41,7 @@ static LanguageData js_keywords = {
     {('a'), QLatin1String("as")}
 };
 
-static LanguageData js_types = {
+LanguageData JSHighlighter::types = {
     {('v'), QLatin1String("var")},
     {('c'), QLatin1String("class")},
     {('b'), QLatin1String("byte")},
@@ -57,7 +55,7 @@ static LanguageData js_types = {
     {('d'), QLatin1String("double")}
 };
 
-static LanguageData js_literals = {
+LanguageData JSHighlighter::literals = {
     {('f'), QLatin1String("false")},
     {('n'), QLatin1String("null")},
     {('t'), QLatin1String("true")},
@@ -66,7 +64,7 @@ static LanguageData js_literals = {
     {('I'), QLatin1String("Infinity")}
 };
 
-static LanguageData js_builtin = {
+LanguageData JSHighlighter::builtin = {
     {('e'), QLatin1String("eval")},
     {('i'), QLatin1String("isFinite")},
     {('i'), QLatin1String("isNaN")},
@@ -126,7 +124,8 @@ static LanguageData js_builtin = {
     {('P'), QLatin1String("Promise")}
 };
 
-static LanguageData js_other = {};
+LanguageData JSHighlighter::other = {
+};
 
 ///
 /// \brief JSHighlighter::JSHighlighter
@@ -148,31 +147,32 @@ void JSHighlighter::initFormats()
     _formats[Token::CodeBlock] = format;
     format = QTextCharFormat();
 
-    format.setForeground(QColor("#F92672"));
+    format.setForeground(QColor(0xF92672));
     _formats[Token::CodeKeyWord] = format;
     format = QTextCharFormat();
 
-    format.setForeground(QColor("#a39b4e"));
+    format.setForeground(QColor(0xa39b4e));
     _formats[Token::CodeString] = format;
     format = QTextCharFormat();
 
-    format.setForeground(QColor("#75715E"));
+    format.setForeground(QColor(0x75715E));
     _formats[Token::CodeComment] = format;
     format = QTextCharFormat();
 
-    format.setForeground(QColor("#54aebf"));
+    format.setForeground(QColor(0x54aebf));
+    format.setFontWeight(QFont::ExtraBold);
     _formats[Token::CodeType] = format;
 
     format = QTextCharFormat();
-    format.setForeground(QColor("#db8744"));
+    format.setForeground(QColor(0xdb8744));
     _formats[Token::CodeOther] = format;
 
     format = QTextCharFormat();
-    format.setForeground(QColor("#AE81FF"));
+    format.setForeground(QColor(0xAE81FF));
     _formats[Token::CodeNumLiteral] = format;
 
     format = QTextCharFormat();
-    format.setForeground(QColor("#018a0f"));
+    format.setForeground(QColor(0x018a0f));
     _formats[Token::CodeBuiltIn] = format;
 }
 
@@ -308,7 +308,7 @@ void JSHighlighter::highlightSyntax(const QString &text)
         if (i == textLen || !text[i].isLetter()) continue;
 
         /* Highlight Types */
-        i = applyCodeFormat(i, js_types, text, formatType);
+        i = applyCodeFormat(i, types, text, formatType);
         /************************************************
          next letter is usually a space, in that case
          going forward is useless, so continue;
@@ -322,20 +322,20 @@ void JSHighlighter::highlightSyntax(const QString &text)
         if (i == textLen || !text[i].isLetter()) continue;
 
         /* Highlight Keywords */
-        i = applyCodeFormat(i, js_keywords, text, formatKeyword);
+        i = applyCodeFormat(i, keywords, text, formatKeyword);
         if (i == textLen || !text[i].isLetter()) continue;
 
         /* Highlight Literals (true/false/NULL,nullptr) */
-        i = applyCodeFormat(i, js_literals, text, formatNumLit);
+        i = applyCodeFormat(i, literals, text, formatNumLit);
         if (i == textLen || !text[i].isLetter()) continue;
 
         /* Highlight Builtin library stuff */
-        i = applyCodeFormat(i, js_builtin, text, formatBuiltIn);
+        i = applyCodeFormat(i, builtin, text, formatBuiltIn);
         if (i == textLen || !text[i].isLetter()) continue;
 
         /* Highlight other stuff (preprocessor etc.) */
-        if (( i == 0 || !text.at(i-1).isLetter()) && js_other.contains(text[i].toLatin1())) {
-            const QList<QLatin1String> wordList = js_other.values(text[i].toLatin1());
+        if (( i == 0 || !text.at(i-1).isLetter()) && other.contains(text[i].toLatin1())) {
+            const QList<QLatin1String> wordList = other.values(text[i].toLatin1());
             for(const QLatin1String &word : wordList) {
                 if (word == strMidRef(text, i, word.size()) // we have a word match
                         &&

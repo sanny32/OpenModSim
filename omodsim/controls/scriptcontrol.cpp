@@ -2,29 +2,29 @@
 #include "ui_scriptcontrol.h"
 
 ///
-/// \brief ModbusObject::ModbusObject
+/// \brief ModbusDevice::ModbusObject
 ///
-ModbusObject::ModbusObject()
+ModbusDevice::ModbusDevice()
 {
 }
 
 ///
-/// \brief ModbusObject::readValue
+/// \brief ModbusDevice::readValue
 /// \param address
 /// \return
 ///
-quint16 ModbusObject::readValue(quint16 address)
+quint16 ModbusDevice::readValue(quint16 address)
 {
     return 77;
 }
 
 ///
-/// \brief ModbusObject::writeValue
+/// \brief ModbusDevice::writeValue
 /// \param address
 /// \param value
 /// \return
 ///
-bool ModbusObject::writeValue(quint16 address, quint16 value)
+bool ModbusDevice::writeValue(quint16 address, quint16 value)
 {
     return false;
 }
@@ -36,7 +36,7 @@ bool ModbusObject::writeValue(quint16 address, quint16 value)
 ScriptControl::ScriptControl(QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::ScriptControl)
-    ,_mbObject(new ModbusObject)
+    ,_mbDevice(new ModbusDevice)
 {
     ui->setupUi(this);
 
@@ -54,7 +54,7 @@ ScriptControl::ScriptControl(QWidget *parent)
 ScriptControl::~ScriptControl()
 {
     delete ui;
-    delete _mbObject;
+    delete _mbDevice;
 }
 
 ///
@@ -63,7 +63,7 @@ ScriptControl::~ScriptControl()
 void ScriptControl::setupJSEngine()
 {
     _jsEngine.globalObject().setProperty("console", _jsEngine.newQObject(ui->console));
-    _jsEngine.globalObject().setProperty("device", _jsEngine.newQObject(_mbObject));
+    _jsEngine.globalObject().setProperty("device", _jsEngine.newQObject(_mbDevice));
 }
 
 ///

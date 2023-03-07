@@ -10,14 +10,14 @@ class ScriptControl;
 }
 
 ///
-/// \brief The ModbusObject class
+/// \brief The ModbusDevice class
 ///
-class ModbusObject : public QObject
+class ModbusDevice : public QObject
 {
     Q_OBJECT
 
 public:
-    Q_INVOKABLE explicit ModbusObject();
+    Q_INVOKABLE explicit ModbusDevice();
 
     Q_INVOKABLE quint16 readValue(quint16 address);
     Q_INVOKABLE bool writeValue(quint16 address, quint16 value);
@@ -43,7 +43,7 @@ private:
 private:
     Ui::ScriptControl *ui;
     QToolBar* _toolBar;
-    ModbusObject* _mbObject;
+    ModbusDevice* _mbDevice;
     QJSEngine _jsEngine;
 };
 
