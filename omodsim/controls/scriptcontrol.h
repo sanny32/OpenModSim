@@ -9,6 +9,8 @@ namespace Ui {
 class ScriptControl;
 }
 
+class ModbusMultiServer;
+
 ///
 /// \brief The ModbusDevice class
 ///
@@ -17,10 +19,13 @@ class ModbusDevice : public QObject
     Q_OBJECT
 
 public:
-    Q_INVOKABLE explicit ModbusDevice();
+    Q_INVOKABLE explicit ModbusDevice(ModbusMultiServer& server);
 
     Q_INVOKABLE quint16 readValue(quint16 address);
     Q_INVOKABLE bool writeValue(quint16 address, quint16 value);
+
+private:
+    ModbusMultiServer& _mbMultiServer;
 };
 
 ///

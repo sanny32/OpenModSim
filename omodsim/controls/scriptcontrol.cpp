@@ -1,10 +1,12 @@
+#include "modbusmultiserver.h"
 #include "scriptcontrol.h"
 #include "ui_scriptcontrol.h"
 
 ///
 /// \brief ModbusDevice::ModbusObject
 ///
-ModbusDevice::ModbusDevice()
+ModbusDevice::ModbusDevice(ModbusMultiServer& server)
+    :_mbMultiServer(server)
 {
 }
 
@@ -36,7 +38,6 @@ bool ModbusDevice::writeValue(quint16 address, quint16 value)
 ScriptControl::ScriptControl(QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::ScriptControl)
-    ,_mbDevice(new ModbusDevice)
 {
     ui->setupUi(this);
 
@@ -63,7 +64,7 @@ ScriptControl::~ScriptControl()
 void ScriptControl::setupJSEngine()
 {
     _jsEngine.globalObject().setProperty("console", _jsEngine.newQObject(ui->console));
-    _jsEngine.globalObject().setProperty("device", _jsEngine.newQObject(_mbDevice));
+    //_jsEngine.globalObject().setProperty("device", _jsEngine.newQObject(_mbDevice));
 }
 
 ///
