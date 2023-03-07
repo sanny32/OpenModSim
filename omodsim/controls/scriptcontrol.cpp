@@ -54,6 +54,7 @@ ScriptControl::ScriptControl(QWidget *parent)
 ScriptControl::~ScriptControl()
 {
     delete ui;
+    delete _mbObject;
 }
 
 ///
