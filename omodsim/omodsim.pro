@@ -1,4 +1,4 @@
-QT += core gui widgets network printsupport serialbus serialport
+QT += core gui widgets qml network printsupport serialbus serialport
 
 CONFIG += c++17
 CONFIG -= debug_and_release
@@ -26,6 +26,7 @@ SOURCES += \
     controls/booleancombobox.cpp \
     controls/clickablelabel.cpp \
     controls/codeeditor.cpp \
+    controls/console.cpp \
     controls/customframe.cpp \
     controls/customlineedit.cpp \
     controls/flowcontroltypecombobox.cpp \
@@ -53,6 +54,7 @@ SOURCES += \
     dialogs/dialogwriteholdingregister.cpp \
     dialogs/dialogwriteholdingregisterbits.cpp \
     formmodsim.cpp \
+    jshighlighter.cpp \
     main.cpp \
     mainwindow.cpp \
     menuconnect.cpp \
@@ -69,6 +71,7 @@ HEADERS += \
     controls/booleancombobox.h \
     controls/clickablelabel.h \
     controls/codeeditor.h \
+    controls/console.h \
     controls/customframe.h \
     controls/customlineedit.h \
     controls/flowcontroltypecombobox.h \
@@ -99,6 +102,7 @@ HEADERS += \
     enums.h \
     floatutils.h \
     formmodsim.h \
+    jshighlighter.h \
     mainwindow.h \
     menuconnect.h \
     modbusdataunitmap.h \
@@ -137,6 +141,3 @@ RESOURCES += \
 
 TRANSLATIONS += \
     translations/omodsim_ru.ts
-
-DISTFILES += \
-    translations/omodsim_ru.qm

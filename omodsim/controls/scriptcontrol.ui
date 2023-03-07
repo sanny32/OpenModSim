@@ -24,15 +24,58 @@
     <number>0</number>
    </property>
    <item>
-    <widget class="CodeEditor" name="plainTextEdit"/>
+    <widget class="QSplitter" name="splitter">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <widget class="CodeEditor" name="codeEditor">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+        <horstretch>0</horstretch>
+        <verstretch>3</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="plainText">
+       <string notr="true">var val = device.readValue(1);
+console.log(val);</string>
+      </property>
+     </widget>
+     <widget class="Console" name="console">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+        <horstretch>0</horstretch>
+        <verstretch>1</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="undoRedoEnabled">
+       <bool>false</bool>
+      </property>
+      <property name="readOnly">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </widget>
    </item>
   </layout>
+  <action name="actionRun">
+   <property name="text">
+    <string>Run</string>
+   </property>
+   <property name="toolTip">
+    <string>Run Script</string>
+   </property>
+  </action>
  </widget>
  <customwidgets>
   <customwidget>
    <class>CodeEditor</class>
    <extends>QPlainTextEdit</extends>
    <header>codeeditor.h</header>
+  </customwidget>
+  <customwidget>
+   <class>Console</class>
+   <extends>QPlainTextEdit</extends>
+   <header>console.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

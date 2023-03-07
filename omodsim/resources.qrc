@@ -27,5 +27,6 @@
         <file>res/actionBigEndian.png</file>
         <file>res/actionLittleEndian.png</file>
         <file>res/actionShowScript.png</file>
+        <file>fonts/firacode.ttf</file>
     </qresource>
 </RCC>
