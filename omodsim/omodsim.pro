@@ -4,7 +4,7 @@ CONFIG += c++17
 CONFIG -= debug_and_release
 CONFIG -= debug_and_release_target
 
-VERSION = 1.1.0
+VERSION = 1.2.0
 
 QMAKE_TARGET_PRODUCT = "Open ModSim"
 QMAKE_TARGET_DESCRIPTION = "An Open Source Modbus Slave (Server) Utility"
@@ -21,6 +21,7 @@ win32:RC_ICONS += res/omodsim.ico
 
 INCLUDEPATH += controls \
                dialogs \
+               jsobjects
 
 SOURCES += \
     controls/booleancombobox.cpp \
@@ -53,6 +54,8 @@ SOURCES += \
     dialogs/dialogwritecoilregister.cpp \
     dialogs/dialogwriteholdingregister.cpp \
     dialogs/dialogwriteholdingregisterbits.cpp \
+    jsobjects\consoleobject.cpp \
+    jsobjects\modbusserverobject.cpp \
     formmodsim.cpp \
     jshighlighter.cpp \
     main.cpp \
@@ -98,6 +101,8 @@ HEADERS += \
     dialogs/dialogwritecoilregister.h \
     dialogs/dialogwriteholdingregister.h \
     dialogs/dialogwriteholdingregisterbits.h \
+    jsobjects\consoleobject.h \
+    jsobjects\modbusserverobject.h \
     displaydefinition.h \
     enums.h \
     floatutils.h \
