@@ -3,32 +3,95 @@
 #include "ui_scriptcontrol.h"
 
 ///
-/// \brief ModbusDevice::ModbusObject
+/// \brief ModbusServerObject::ModbusObject
 ///
-ModbusDevice::ModbusDevice(ModbusMultiServer& server)
+ModbusServerObject::ModbusServerObject(ModbusMultiServer& server)
     :_mbMultiServer(server)
 {
 }
 
 ///
-/// \brief ModbusDevice::readValue
+/// \brief ModbusServerObject::readHolding
 /// \param address
 /// \return
 ///
-quint16 ModbusDevice::readValue(quint16 address)
+quint16 ModbusServerObject::readHolding(quint16 address)
 {
-    return 77;
+    const auto data = _mbMultiServer.data(QModbusDataUnit::HoldingRegisters, address - 1, 1);
+    return data.value(0);
 }
 
 ///
-/// \brief ModbusDevice::writeValue
+/// \brief ModbusServerObject::writeValue
 /// \param address
 /// \param value
+///
+void ModbusServerObject::writeHolding(quint16 address, quint16 value)
+{
+    _mbMultiServer.writeValue(QModbusDataUnit::HoldingRegisters, address - 1, value, ByteOrder::LittleEndian);
+}
+
+///
+/// \brief ModbusServerObject::readInput
+/// \param address
 /// \return
 ///
-bool ModbusDevice::writeValue(quint16 address, quint16 value)
+quint16 ModbusServerObject::readInput(quint16 address)
 {
-    return false;
+    const auto data = _mbMultiServer.data(QModbusDataUnit::InputRegisters, address - 1, 1);
+    return data.value(0);
+}
+
+///
+/// \brief ModbusServerObject::writeInput
+/// \param address
+/// \param value
+///
+void ModbusServerObject::writeInput(quint16 address, quint16 value)
+{
+    _mbMultiServer.writeValue(QModbusDataUnit::InputRegisters, address - 1, value, ByteOrder::LittleEndian);
+}
+
+///
+/// \brief ModbusServerObject::readDiscrete
+/// \param address
+/// \return
+///
+bool ModbusServerObject::readDiscrete(quint16 address)
+{
+    const auto data = _mbMultiServer.data(QModbusDataUnit::DiscreteInputs, address - 1, 1);
+    return data.value(0);
+}
+
+///
+/// \brief ModbusServerObject::writeDiscrete
+/// \param address
+/// \param value
+///
+void ModbusServerObject::writeDiscrete(quint16 address, bool value)
+{
+    _mbMultiServer.writeValue(QModbusDataUnit::DiscreteInputs, address - 1, value, ByteOrder::LittleEndian);
+}
+
+///
+/// \brief ModbusServerObject::readCoil
+/// \param address
+/// \return
+///
+bool ModbusServerObject::readCoil(quint16 address)
+{
+    const auto data = _mbMultiServer.data(QModbusDataUnit::Coils, address - 1, 1);
+    return data.value(0);
+}
+
+///
+/// \brief ModbusServerObject::writeCoil
+/// \param address
+/// \param value
+///
+void ModbusServerObject::writeCoil(quint16 address, bool value)
+{
+    _mbMultiServer.writeValue(QModbusDataUnit::Coils, address - 1, value, ByteOrder::LittleEndian);
 }
 
 ///
@@ -46,7 +109,6 @@ ScriptControl::ScriptControl(QWidget *parent)
 
     ((QVBoxLayout*)layout())->insertWidget(0, _toolBar);
 
-    setupJSEngine();
 }
 
 ///
@@ -55,16 +117,17 @@ ScriptControl::ScriptControl(QWidget *parent)
 ScriptControl::~ScriptControl()
 {
     delete ui;
-    delete _mbDevice;
+    delete _toolBar;
 }
 
 ///
-/// \brief ScriptControl::setupJSEngine
+/// \brief ScriptControl::initJSEngine
 ///
-void ScriptControl::setupJSEngine()
+void ScriptControl::initJSEngine(ModbusMultiServer& server)
 {
+    _mbServerObject = QSharedPointer<ModbusServerObject>(new ModbusServerObject(server));
     _jsEngine.globalObject().setProperty("console", _jsEngine.newQObject(ui->console));
-    //_jsEngine.globalObject().setProperty("device", _jsEngine.newQObject(_mbDevice));
+    _jsEngine.globalObject().setProperty("Server", _jsEngine.newQObject(_mbServerObject.get()));
 }
 
 ///

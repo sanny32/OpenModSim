@@ -12,17 +12,26 @@ class ScriptControl;
 class ModbusMultiServer;
 
 ///
-/// \brief The ModbusDevice class
+/// \brief The ModbusServerObject class
 ///
-class ModbusDevice : public QObject
+class ModbusServerObject : public QObject
 {
     Q_OBJECT
 
 public:
-    Q_INVOKABLE explicit ModbusDevice(ModbusMultiServer& server);
+    Q_INVOKABLE explicit ModbusServerObject(ModbusMultiServer& server);
 
-    Q_INVOKABLE quint16 readValue(quint16 address);
-    Q_INVOKABLE bool writeValue(quint16 address, quint16 value);
+    Q_INVOKABLE quint16 readHolding(quint16 address);
+    Q_INVOKABLE void writeHolding(quint16 address, quint16 value);
+
+    Q_INVOKABLE quint16 readInput(quint16 address);
+    Q_INVOKABLE void writeInput(quint16 address, quint16 value);
+
+    Q_INVOKABLE bool readDiscrete(quint16 address);
+    Q_INVOKABLE void writeDiscrete(quint16 address, bool value);
+
+    Q_INVOKABLE bool readCoil(quint16 address);
+    Q_INVOKABLE void writeCoil(quint16 address, bool value);
 
 private:
     ModbusMultiServer& _mbMultiServer;
@@ -39,17 +48,16 @@ public:
     explicit ScriptControl(QWidget *parent = nullptr);
     ~ScriptControl();
 
+    void initJSEngine(ModbusMultiServer& server);
+
 private slots:
     void on_actionRun_triggered();
 
 private:
-    void setupJSEngine();
-
-private:
     Ui::ScriptControl *ui;
     QToolBar* _toolBar;
-    ModbusDevice* _mbDevice;
     QJSEngine _jsEngine;
+    QSharedPointer<ModbusServerObject> _mbServerObject;
 };
 
 #endif // SCRIPTCONTROL_H

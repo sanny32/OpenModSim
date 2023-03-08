@@ -29,6 +29,9 @@ FormModSim::FormModSim(int id, ModbusMultiServer& server, QSharedPointer<DataSim
     ui->setupUi(this);
     setWindowTitle(QString("ModSim%1").arg(_formId));
 
+    ui->stackedWidget->setCurrentIndex(0);
+    ui->scriptControl->initJSEngine(server);
+
     ui->lineEditAddress->setPaddingZeroes(true);
     ui->lineEditAddress->setInputRange(ModbusLimits::addressRange());
     ui->lineEditAddress->setValue(1);
@@ -148,7 +151,10 @@ void FormModSim::setDisplayDefinition(const DisplayDefinition& dd)
 ///
 DisplayMode FormModSim::displayMode() const
 {
-    return ui->outputWidget->displayMode();
+    if(ui->stackedWidget->currentIndex() == 1)
+        return DisplayMode::Script;
+    else
+        return ui->outputWidget->displayMode();
 }
 
 ///
@@ -157,7 +163,17 @@ DisplayMode FormModSim::displayMode() const
 ///
 void FormModSim::setDisplayMode(DisplayMode mode)
 {
-    ui->outputWidget->setDisplayMode(mode);
+    switch(mode)
+    {
+        case DisplayMode::Script:
+            ui->stackedWidget->setCurrentIndex(1);
+        break;
+
+        default:
+            ui->stackedWidget->setCurrentIndex(0);
+            ui->outputWidget->setDisplayMode(mode);
+        break;
+    }
 }
 
 ///

@@ -234,7 +234,6 @@ void MainWindow::on_actionNew_triggered()
 
     if(cur) {
         frm->setByteOrder(cur->byteOrder());
-        frm->setDisplayMode(cur->displayMode());
         frm->setDataDisplayMode(cur->dataDisplayMode());
 
         frm->setFont(cur->font());

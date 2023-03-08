@@ -35,10 +35,6 @@
         <verstretch>3</verstretch>
        </sizepolicy>
       </property>
-      <property name="plainText">
-       <string notr="true">var val = device.readValue(1);
-console.log(val);</string>
-      </property>
      </widget>
      <widget class="Console" name="console">
       <property name="sizePolicy">

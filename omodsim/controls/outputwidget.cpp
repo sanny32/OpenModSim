@@ -298,8 +298,7 @@ void OutputWidget::setDisplayMode(DisplayMode mode)
             ui->stackedWidget->setCurrentIndex(1);
         break;
 
-        case DisplayMode::Script:
-            ui->stackedWidget->setCurrentIndex(2);
+        default:
         break;
     }
 }
