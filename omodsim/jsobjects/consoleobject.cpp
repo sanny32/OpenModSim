@@ -23,10 +23,10 @@ void ConsoleObject::log(const QString& msg)
     const auto text = _document->toPlainText();
     if(text.isEmpty())
     {
-        _document->setPlainText(QString(">\t%1").arg(msg));
+        _document->setPlainText(QString(">>\t%1").arg(msg));
     }
     else
     {
-        _document->setPlainText(QString("%1\n>\t%2").arg(text, msg));
+        _document->setPlainText(QString("%1\n>>\t%2").arg(text, msg));
     }
 }

@@ -124,5 +124,6 @@ void ScriptControl::executeScript()
     if(res.isError() && !_jsEngine.isInterrupted())
     {
         _consoleObject->log(res.toString());
+        stopScript();
     }
  }
