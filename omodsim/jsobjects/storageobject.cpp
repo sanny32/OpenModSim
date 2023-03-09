@@ -1,3 +1,4 @@
+#include <QJSValue>
 #include "storageobject.h"
 
 ///
@@ -23,11 +24,11 @@ int StorageObject::length() const
 /// \param index
 /// \return
 ///
-QString StorageObject::key(int index) const
+QJSValue StorageObject::key(int index) const
 {
     const auto it = std::next(_storage.constBegin(), index);
     if(it != _storage.end()) return *it;
-    else return QString();
+    else return QJSValue(QJSValue::NullValue);
 }
 
 ///
@@ -35,11 +36,11 @@ QString StorageObject::key(int index) const
 /// \param key
 /// \return
 ///
-QString StorageObject::getItem(const QString& key) const
+QJSValue StorageObject::getItem(const QString& key) const
 {
     const auto it  = _storage.find(key);
     if(it != _storage.end()) return *it;
-    else return QString();
+    else return QJSValue(QJSValue::NullValue);
 }
 
 ///
@@ -47,7 +48,7 @@ QString StorageObject::getItem(const QString& key) const
 /// \param key
 /// \param value
 ///
-void StorageObject::setItem(const QString& key, const QString& value)
+void StorageObject::setItem(const QString& key, const QJSValue& value)
 {
     _storage[key] = value;
 }

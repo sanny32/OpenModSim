@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QMap>
+#include <QJSValue>
 
 ///
 /// \brief The StorageObject class
@@ -15,16 +16,16 @@ public:
 
     Q_PROPERTY(int length READ length);
 
-    Q_INVOKABLE QString key(int index) const;
-    Q_INVOKABLE QString getItem(const QString& key) const;
-    Q_INVOKABLE void setItem(const QString& key, const QString& value);
+    Q_INVOKABLE QJSValue key(int index) const;
+    Q_INVOKABLE QJSValue getItem(const QString& key) const;
+    Q_INVOKABLE void setItem(const QString& key, const QJSValue& value);
     Q_INVOKABLE void removeItem(const QString& key);
     Q_INVOKABLE void clear();
 
     int length() const;
 
 private:
-    QMap<QString, QString> _storage;
+    QMap<QString, QJSValue> _storage;
 
 };
 
