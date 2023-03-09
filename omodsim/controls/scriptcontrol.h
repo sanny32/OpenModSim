@@ -6,6 +6,7 @@
 #include <QPlainTextEdit>
 #include "consoleobject.h"
 #include "scriptobject.h"
+#include "storageobject.h"
 #include "modbusserverobject.h"
 
 
@@ -50,6 +51,7 @@ private:
 
     QSharedPointer<ScriptObject> _scriptObject;
     QSharedPointer<ConsoleObject> _consoleObject;
+    QSharedPointer<StorageObject> _storageObject;
     QSharedPointer<ModbusServerObject> _mbServerObject;
 };
 

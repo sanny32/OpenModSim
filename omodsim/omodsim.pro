@@ -56,6 +56,7 @@ SOURCES += \
     dialogs/dialogwriteholdingregister.cpp \
     dialogs/dialogwriteholdingregisterbits.cpp \
     jsobjects/scriptobject.cpp \
+    jsobjects/storageobject.cpp \
     jsobjects\consoleobject.cpp \
     jsobjects\modbusserverobject.cpp \
     formmodsim.cpp \
@@ -105,6 +106,7 @@ HEADERS += \
     dialogs/dialogwriteholdingregister.h \
     dialogs/dialogwriteholdingregisterbits.h \
     jsobjects/scriptobject.h \
+    jsobjects/storageobject.h \
     jsobjects\consoleobject.h \
     jsobjects\modbusserverobject.h \
     displaydefinition.h \
