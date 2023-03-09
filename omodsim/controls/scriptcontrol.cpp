@@ -11,12 +11,6 @@ ScriptControl::ScriptControl(QWidget *parent)
     , ui(new Ui::ScriptControl)
 {
     ui->setupUi(this);
-
-    _toolBar = new QToolBar(this);
-    _toolBar->addAction(ui->actionRun);
-
-    ((QVBoxLayout*)layout())->insertWidget(0, _toolBar);
-
 }
 
 ///
@@ -25,7 +19,6 @@ ScriptControl::ScriptControl(QWidget *parent)
 ScriptControl::~ScriptControl()
 {
     delete ui;
-    delete _toolBar;
 }
 
 ///
@@ -40,19 +33,37 @@ void ScriptControl::initJSEngine(ModbusMultiServer& server)
 }
 
 ///
+/// \brief ScriptControl::script
+/// \return
+///
+QString ScriptControl::script() const
+{
+    return ui->codeEditor->toPlainText();
+}
+
+///
+/// \brief ScriptControl::setScript
+/// \param text
+///
+void ScriptControl::setScript(const QString& text)
+{
+    ui->codeEditor->setPlainText(text);
+}
+
+///
 /// \brief ScriptControl::runScript
 ///
 void ScriptControl::runScript()
 {
-    const auto res = _jsEngine.evaluate(ui->codeEditor->toPlainText());
+    _consoleObject->clear();
+    const auto res = _jsEngine.evaluate(script());
     if(res.isError()) _consoleObject->log(res.toString());
 }
 
 ///
-/// \brief ScriptControl::on_actionRun_triggered
+/// \brief ScriptControl::stopScript
 ///
-void ScriptControl::on_actionRun_triggered()
+void ScriptControl::stopScript()
 {
-    _consoleObject->clear();
-    runScript();
+
 }

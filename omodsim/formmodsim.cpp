@@ -10,7 +10,7 @@
 #include "formmodsim.h"
 #include "ui_formmodsim.h"
 
-QVersionNumber FormModSim::VERSION = QVersionNumber(1, 1);
+QVersionNumber FormModSim::VERSION = QVersionNumber(1, 2);
 
 ///
 /// \brief FormModSim::FormModSim
@@ -390,6 +390,59 @@ ModbusSimulationMap FormModSim::simulationMap() const
 void FormModSim::startSimulation(QModbusDataUnit::RegisterType type, quint16 addr, const ModbusSimulationParams& params)
 {
     _dataSimulator->startSimulation(dataDisplayMode(), type, addr, params);
+}
+
+///
+/// \brief FormModSim::script
+/// \return
+///
+QString FormModSim::script() const
+{
+    return ui->scriptControl->script();
+}
+
+///
+/// \brief FormModSim::setScript
+/// \param text
+///
+void FormModSim::setScript(const QString& text)
+{
+    ui->scriptControl->setScript(text);
+}
+
+///
+/// \brief FormModSim::canRunScript
+/// \return
+///
+bool FormModSim::canRunScript() const
+{
+    return !ui->scriptControl->script().isEmpty();
+}
+
+///
+/// \brief FormModSim::canStopScript
+/// \return
+///
+bool FormModSim::canStopScript()
+{
+    return false;
+}
+
+///
+/// \brief FormModSim::runScript
+/// \param interval
+///
+void FormModSim::runScript(int interval)
+{
+    ui->scriptControl->runScript();
+}
+
+///
+/// \brief FormModSim::stopScript
+///
+void FormModSim::stopScript()
+{
+    ui->scriptControl->stopScript();
 }
 
 ///

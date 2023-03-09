@@ -25,16 +25,16 @@ public:
 
     void initJSEngine(ModbusMultiServer& server);
 
-    void runScript();
+    QString script() const;
+    void setScript(const QString& text);
 
-private slots:
-    void on_actionRun_triggered();
+    void runScript();
+    void stopScript();
 
 private:
     Ui::ScriptControl *ui;
-    QToolBar* _toolBar;
-    QJSEngine _jsEngine;
 
+    QJSEngine _jsEngine;
     QSharedPointer<ConsoleObject> _consoleObject;
     QSharedPointer<ModbusServerObject> _mbServerObject;
 };

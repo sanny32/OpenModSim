@@ -112,9 +112,18 @@
      <addaction name="actionPresetInputRegs"/>
      <addaction name="actionPresetHoldingRegs"/>
     </widget>
+    <widget class="QMenu" name="menuScript">
+     <property name="title">
+      <string>Script</string>
+     </property>
+     <addaction name="actionRunScript"/>
+     <addaction name="actionStopScript"/>
+    </widget>
     <addaction name="actionDataDefinition"/>
     <addaction name="menuDisplay_Options"/>
     <addaction name="menuExtended"/>
+    <addaction name="separator"/>
+    <addaction name="menuScript"/>
    </widget>
    <widget class="QMenu" name="menuWindow">
     <property name="title">
@@ -219,6 +228,19 @@
    <addaction name="actionSwappedDbl"/>
    <addaction name="separator"/>
    <addaction name="actionByteOrder"/>
+  </widget>
+  <widget class="QToolBar" name="toolBarScript">
+   <property name="windowTitle">
+    <string>toolBar</string>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="actionRunScript"/>
+   <addaction name="actionStopScript"/>
   </widget>
   <action name="actionNew">
    <property name="icon">
@@ -584,6 +606,22 @@
    </property>
    <property name="text">
     <string>Show Script</string>
+   </property>
+  </action>
+  <action name="actionRunScript">
+   <property name="text">
+    <string>Run</string>
+   </property>
+   <property name="toolTip">
+    <string>Run Script</string>
+   </property>
+  </action>
+  <action name="actionStopScript">
+   <property name="text">
+    <string>Stop</string>
+   </property>
+   <property name="toolTip">
+    <string>Stop Script</string>
    </property>
   </action>
  </widget>

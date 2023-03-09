@@ -70,6 +70,15 @@ public:
     ModbusSimulationMap simulationMap() const;
     void startSimulation(QModbusDataUnit::RegisterType type, quint16 addr, const ModbusSimulationParams& params);
 
+    QString script() const;
+    void setScript(const QString& text);
+
+    bool canRunScript() const;
+    bool canStopScript();
+
+    void runScript(int interval = 0);
+    void stopScript();
+
 protected:
     void changeEvent(QEvent* event) override;
     void closeEvent(QCloseEvent *event) override;
@@ -219,6 +228,7 @@ inline QDataStream& operator <<(QDataStream& out, const FormModSim* frm)
 
     out << frm->byteOrder();
     out << frm->simulationMap();
+    out << frm->script();
 
     return out;
 }
@@ -267,14 +277,20 @@ inline QDataStream& operator >>(QDataStream& in, FormModSim* frm)
     in >> dd.PointAddress;
     in >> dd.Length;
 
+    const auto ver = frm->property("Version").value<QVersionNumber>();
+
     ByteOrder byteOrder = ByteOrder::LittleEndian;
     ModbusSimulationMap simulationMap;
-
-    const auto ver = frm->property("Version").value<QVersionNumber>();
     if(ver >= QVersionNumber(1, 1))
     {
         in >> byteOrder;
         in >> simulationMap;
+    }
+
+    QString script;
+    if(ver >=  QVersionNumber(1, 2))
+    {
+        in >> script;
     }
 
     if(in.status() != QDataStream::Ok)
@@ -294,6 +310,7 @@ inline QDataStream& operator >>(QDataStream& in, FormModSim* frm)
     frm->setFont(font);
     frm->setDisplayDefinition(dd);
     frm->setByteOrder(byteOrder);
+    frm->setScript(script);
 
     for(auto&& k : simulationMap.keys())
         frm->startSimulation(k.first, k.second,  simulationMap[k]);

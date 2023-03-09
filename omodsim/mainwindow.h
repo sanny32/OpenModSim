@@ -88,6 +88,10 @@ private slots:
     /* Help menu slots */
     void on_actionAbout_triggered();
 
+    /* Script menu slots */
+    void on_actionRunScript_triggered();
+    void on_actionStopScript_triggered();
+
     void on_connectionError(const QString& error);
     void on_dataSimulated(DataDisplayMode mode, QModbusDataUnit::RegisterType type, quint16 addr, QVariant value);
 
