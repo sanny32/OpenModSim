@@ -27,7 +27,7 @@ SOURCES += \
     controls/booleancombobox.cpp \
     controls/clickablelabel.cpp \
     controls/codeeditor.cpp \
-    controls/console.cpp \
+    controls/consoleoutput.cpp \
     controls/customframe.cpp \
     controls/customlineedit.cpp \
     controls/flowcontroltypecombobox.cpp \
@@ -55,12 +55,12 @@ SOURCES += \
     dialogs/dialogwritecoilregister.cpp \
     dialogs/dialogwriteholdingregister.cpp \
     dialogs/dialogwriteholdingregisterbits.cpp \
-    jsobjects/scriptobject.cpp \
-    jsobjects/storageobject.cpp \
-    jsobjects\consoleobject.cpp \
-    jsobjects\modbusserverobject.cpp \
+    jsobjects/script.cpp \
+    jsobjects/server.cpp \
+    jsobjects/console.cpp \
     formmodsim.cpp \
     jshighlighter.cpp \
+    jsobjects/storage.cpp \
     main.cpp \
     mainwindow.cpp \
     menuconnect.cpp \
@@ -77,7 +77,7 @@ HEADERS += \
     controls/booleancombobox.h \
     controls/clickablelabel.h \
     controls/codeeditor.h \
-    controls/console.h \
+    controls/consoleoutput.h \
     controls/customframe.h \
     controls/customlineedit.h \
     controls/flowcontroltypecombobox.h \
@@ -105,15 +105,15 @@ HEADERS += \
     dialogs/dialogwritecoilregister.h \
     dialogs/dialogwriteholdingregister.h \
     dialogs/dialogwriteholdingregisterbits.h \
-    jsobjects/scriptobject.h \
-    jsobjects/storageobject.h \
-    jsobjects\consoleobject.h \
-    jsobjects\modbusserverobject.h \
+    jsobjects/script.h \
+    jsobjects/server.h \
+    jsobjects/console.h \
     displaydefinition.h \
     enums.h \
     floatutils.h \
     formmodsim.h \
     jshighlighter.h \
+    jsobjects/storage.h \
     mainwindow.h \
     menuconnect.h \
     modbusdataunitmap.h \

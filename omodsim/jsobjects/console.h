@@ -1,17 +1,17 @@
-#ifndef CONSOLEOBJECT_H
-#define CONSOLEOBJECT_H
+#ifndef CONSOLE_H
+#define CONSOLE_H
 
 #include <QObject>
 #include <QTextDocument>
 
 ///
-/// \brief The ConsoleObject class
+/// \brief The Console class
 ///
-class ConsoleObject : public QObject
+class Console : public QObject
 {
     Q_OBJECT
 public:
-    ConsoleObject(QTextDocument* doc);
+    Console(QTextDocument* doc);
 
     Q_INVOKABLE void clear();
     Q_INVOKABLE void log(const QString& msg);
@@ -20,4 +20,4 @@ private:
     QTextDocument* _document;
 };
 
-#endif // CONSOLEOBJECT_H
+#endif // CONSOLE_H

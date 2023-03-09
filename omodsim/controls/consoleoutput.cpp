@@ -1,24 +1,24 @@
-#include "console.h"
+#include "consoleoutput.h"
 
 ///
-/// \brief Console::Console
+/// \brief ConsoleOutput::ConsoleOutput
 /// \param parent
 ///
-Console::Console(QWidget *parent)
+ConsoleOutput::ConsoleOutput(QWidget *parent)
     : QPlainTextEdit(parent)
 {
     setBackgroundColor(Qt::white);
     setFont(QFont("Fira Code"));
     setTabStopDistance(fontMetrics().horizontalAdvance(' ') * 2);
 
-    connect(this, &QPlainTextEdit::textChanged, this, &Console::on_textChanged);
+    connect(this, &QPlainTextEdit::textChanged, this, &ConsoleOutput::on_textChanged);
 }
 
 ///
-/// \brief Console::setBackgroundColor
+/// \brief ConsoleOutput::setBackgroundColor
 /// \param clr
 ///
-void Console::setBackgroundColor(const QColor& clr)
+void ConsoleOutput::setBackgroundColor(const QColor& clr)
 {
     auto pal = palette();
     pal.setColor(QPalette::Base, clr);
@@ -27,9 +27,9 @@ void Console::setBackgroundColor(const QColor& clr)
 }
 
 ///
-/// \brief Console::on_textChanged
+/// \brief ConsoleOutput::on_textChanged
 ///
-void Console::on_textChanged()
+void ConsoleOutput::on_textChanged()
 {
     moveCursor(QTextCursor::End);
 }

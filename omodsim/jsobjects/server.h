@@ -1,18 +1,18 @@
-#ifndef MODBUSSERVEROBJECT_H
-#define MODBUSSERVEROBJECT_H
+#ifndef SERVER_H
+#define SERVER_H
 
 #include <QObject>
 #include "modbusmultiserver.h"
 
 ///
-/// \brief The ModbusServerObject class
+/// \brief The Modbus Server class
 ///
-class ModbusServerObject : public QObject
+class Server : public QObject
 {
     Q_OBJECT
 
 public:
-    Q_INVOKABLE explicit ModbusServerObject(ModbusMultiServer& server);
+    explicit Server(ModbusMultiServer& server);
 
     Q_INVOKABLE quint16 readHolding(quint16 address);
     Q_INVOKABLE void writeHolding(quint16 address, quint16 value);
@@ -30,4 +30,4 @@ private:
     ModbusMultiServer& _mbMultiServer;
 };
 
-#endif // MODBUSSERVEROBJECT_H
+#endif // SERVER_H

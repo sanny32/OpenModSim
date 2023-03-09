@@ -4,10 +4,10 @@
 #include <QTimer>
 #include <QJSEngine>
 #include <QPlainTextEdit>
-#include "consoleobject.h"
-#include "scriptobject.h"
-#include "storageobject.h"
-#include "modbusserverobject.h"
+#include "console.h"
+#include "script.h"
+#include "storage.h"
+#include "server.h"
 
 
 namespace Ui {
@@ -49,10 +49,10 @@ private:
     QTimer _timer;
     QJSEngine _jsEngine;
 
-    QSharedPointer<ScriptObject> _scriptObject;
-    QSharedPointer<ConsoleObject> _consoleObject;
-    QSharedPointer<StorageObject> _storageObject;
-    QSharedPointer<ModbusServerObject> _mbServerObject;
+    QSharedPointer<Script> _scriptObject;
+    QSharedPointer<Console> _consoleObject;
+    //QSharedPointer<StorageObject> _storageObject;
+    QSharedPointer<Server> _mbServerObject;
 };
 
 #endif // SCRIPTCONTROL_H

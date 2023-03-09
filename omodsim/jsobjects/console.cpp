@@ -1,15 +1,15 @@
-#include "consoleobject.h"
+#include "console.h"
 
 ///
-/// \brief ConsoleObject::ConsoleObject
+/// \brief Console::Console
 /// \param doc
 ///
-ConsoleObject::ConsoleObject(QTextDocument* doc)
+Console::Console(QTextDocument* doc)
     : _document(doc)
 {
 }
 
-void ConsoleObject::clear()
+void Console::clear()
 {
     _document->setPlainText(QString());
 }
@@ -18,7 +18,7 @@ void ConsoleObject::clear()
 /// \brief Console::log
 /// \param msg
 ///
-void ConsoleObject::log(const QString& msg)
+void Console::log(const QString& msg)
 {
     const auto text = _document->toPlainText();
     if(text.isEmpty())

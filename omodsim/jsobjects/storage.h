@@ -1,20 +1,20 @@
-#ifndef STORAGEOBJECT_H
-#define STORAGEOBJECT_H
+#ifndef STORAGE_H
+#define STORAGE_H
 
-#include <QObject>
 #include <QMap>
+#include <QObject>
 #include <QJSValue>
 
 ///
-/// \brief The StorageObject class
+/// \brief The Storage class
 ///
-class StorageObject : public QObject
+class Storage : public QObject
 {
     Q_OBJECT
 public:
-    explicit StorageObject(QObject *parent = nullptr);
+    Q_INVOKABLE explicit Storage();
 
-    Q_PROPERTY(int length READ length);
+    Q_PROPERTY(int length READ length CONSTANT);
 
     Q_INVOKABLE QJSValue key(int index) const;
     Q_INVOKABLE QJSValue getItem(const QString& key) const;
@@ -29,4 +29,4 @@ private:
 
 };
 
-#endif // STORAGEOBJECT_H
+#endif // STORAGE_H
