@@ -13,6 +13,9 @@ class Console : public QPlainTextEdit
 public:
     explicit Console(QWidget *parent = nullptr);
     void setBackgroundColor(const QColor& clr);
+
+private slots:
+    void on_textChanged();
 };
 
 #endif // CONSOLE_H

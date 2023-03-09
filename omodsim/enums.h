@@ -146,4 +146,14 @@ enum class SimulationMode
 };
 Q_DECLARE_METATYPE(SimulationMode);
 
+///
+/// \brief The RunMode enum
+///
+enum class RunMode
+{
+    Once = 0,
+    Periodically
+};
+Q_DECLARE_METATYPE(RunMode)
+
 #endif // ENUMS_H

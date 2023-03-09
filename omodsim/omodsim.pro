@@ -37,6 +37,7 @@ SOURCES += \
     controls/outputwidget.cpp \
     controls/paritytypecombobox.cpp \
     controls/pointtypecombobox.cpp \
+    controls/runmodecombobox.cpp \
     controls/scriptcontrol.cpp \
     controls/simulationmodecombobox.cpp \
     datasimulator.cpp \
@@ -54,6 +55,7 @@ SOURCES += \
     dialogs/dialogwritecoilregister.cpp \
     dialogs/dialogwriteholdingregister.cpp \
     dialogs/dialogwriteholdingregisterbits.cpp \
+    jsobjects/scriptobject.cpp \
     jsobjects\consoleobject.cpp \
     jsobjects\modbusserverobject.cpp \
     formmodsim.cpp \
@@ -84,6 +86,7 @@ HEADERS += \
     controls/outputwidget.h \
     controls/paritytypecombobox.h \
     controls/pointtypecombobox.h \
+    controls/runmodecombobox.h \
     controls/scriptcontrol.h \
     controls/simulationmodecombobox.h \
     datasimulator.h \
@@ -101,6 +104,7 @@ HEADERS += \
     dialogs/dialogwritecoilregister.h \
     dialogs/dialogwriteholdingregister.h \
     dialogs/dialogwriteholdingregisterbits.h \
+    jsobjects/scriptobject.h \
     jsobjects\consoleobject.h \
     jsobjects\modbusserverobject.h \
     displaydefinition.h \

@@ -1,10 +1,11 @@
 #ifndef SCRIPTCONTROL_H
 #define SCRIPTCONTROL_H
 
-#include <QToolBar>
+#include <QTimer>
 #include <QJSEngine>
 #include <QPlainTextEdit>
 #include "consoleobject.h"
+#include "scriptobject.h"
 #include "modbusserverobject.h"
 
 
@@ -28,13 +29,26 @@ public:
     QString script() const;
     void setScript(const QString& text);
 
-    void runScript();
+    bool isRunning() const;
+
+    RunMode runMode() const;
+    void setRunMode(RunMode mode);
+
+public slots:
+    void runScript(int interval = 0);
     void stopScript();
+
+private slots:
+    void executeScript();
 
 private:
     Ui::ScriptControl *ui;
 
+    RunMode _runMode;
+    QTimer _timer;
     QJSEngine _jsEngine;
+
+    QSharedPointer<ScriptObject> _scriptObject;
     QSharedPointer<ConsoleObject> _consoleObject;
     QSharedPointer<ModbusServerObject> _mbServerObject;
 };

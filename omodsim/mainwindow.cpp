@@ -11,6 +11,7 @@
 #include "dialogsetuppresetdata.h"
 #include "dialogforcemultiplecoils.h"
 #include "dialogforcemultipleregisters.h"
+#include "runmodecombobox.h"
 #include "mainstatusbar.h"
 #include "menuconnect.h"
 #include "mainwindow.h"
@@ -55,6 +56,20 @@ MainWindow::MainWindow(QWidget *parent)
     ui->actionDisconnect->setMenu(menuDisconnect);
     qobject_cast<QToolButton*>(ui->toolBarMain->widgetForAction(ui->actionDisconnect))->setPopupMode(QToolButton::InstantPopup);
     qobject_cast<QToolButton*>(ui->toolBarMain->widgetForAction(ui->actionDisconnect))->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+
+    auto comboBoxRunMode = new RunModeComboBox(this);
+    connect(comboBoxRunMode, &RunModeComboBox::runModeChanged, this, &MainWindow::on_runModeChanged);
+
+    _actionRunMode = new QWidgetAction(this);
+    _actionRunMode->setDefaultWidget(comboBoxRunMode);
+    ui->toolBarScript->insertAction(ui->actionRunScript, _actionRunMode);
+    qobject_cast<QToolButton*>(ui->toolBarScript->widgetForAction(ui->actionRunScript))->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+    qobject_cast<QToolButton*>(ui->toolBarScript->widgetForAction(ui->actionStopScript))->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+
+    auto labelJS = new QLabel(this);
+    labelJS->setPixmap(QPixmap(":/res/jslogo.svg"));
+    labelJS->setContentsMargins(2, 0, 6, 0);
+    ui->toolBarScript->insertWidget(_actionRunMode, labelJS);
 
     const auto defaultPrinter = QPrinterInfo::defaultPrinter();
     if(!defaultPrinter.isNull())
@@ -697,7 +712,7 @@ void MainWindow::on_actionRunScript_triggered()
     auto frm = currentMdiChild();
     if(!frm) return;
 
-    frm->runScript();
+    frm->runScript(1000);
 }
 
 ///
@@ -709,6 +724,18 @@ void MainWindow::on_actionStopScript_triggered()
     if(!frm) return;
 
     frm->stopScript();
+}
+
+///
+/// \brief MainWindow::on_runModeChanged
+/// \param mode
+///
+void MainWindow::on_runModeChanged(RunMode mode)
+{
+    auto frm = currentMdiChild();
+    if(!frm) return;
+
+    frm->setRunMode(mode);
 }
 
 ///
@@ -886,15 +913,29 @@ FormModSim* MainWindow::createMdiChild(int id)
         }
     };
 
-    connect(wnd, &QMdiSubWindow::windowStateChanged, this, [frm, updateIcons](Qt::WindowStates, Qt::WindowStates newState)
+    auto updateRunMode = [this](RunMode mode)
+    {
+        auto comboBox = qobject_cast<RunModeComboBox*>(ui->toolBarScript->widgetForAction(_actionRunMode));
+        comboBox->setCurrentRunMode(mode);
+    };
+
+    connect(wnd, &QMdiSubWindow::windowStateChanged, this, [frm, updateIcons, updateRunMode](Qt::WindowStates, Qt::WindowStates newState)
     {
         if(newState == Qt::WindowActive)
+        {
             updateIcons(frm->byteOrder());
+            updateRunMode(frm->runMode());
+        }
     });
 
     connect(frm, &FormModSim::byteOrderChanged, this, [updateIcons](ByteOrder order)
     {
         updateIcons(order);
+    });
+
+    connect(frm, &FormModSim::runModeChanged, this, [updateRunMode](RunMode mode)
+    {
+        updateRunMode(mode);
     });
 
     connect(frm, &FormModSim::showed, this, [this, wnd]

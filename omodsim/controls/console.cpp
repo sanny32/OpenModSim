@@ -9,6 +9,9 @@ Console::Console(QWidget *parent)
 {
     setBackgroundColor(Qt::white);
     setFont(QFont("Fira Code"));
+    setTabStopDistance(fontMetrics().horizontalAdvance(' ') * 2);
+
+    connect(this, &QPlainTextEdit::textChanged, this, &Console::on_textChanged);
 }
 
 ///
@@ -21,4 +24,12 @@ void Console::setBackgroundColor(const QColor& clr)
     pal.setColor(QPalette::Base, clr);
     pal.setColor(QPalette::Window, clr);
     setPalette(pal);
+}
+
+///
+/// \brief Console::on_textChanged
+///
+void Console::on_textChanged()
+{
+    moveCursor(QTextCursor::End);
 }

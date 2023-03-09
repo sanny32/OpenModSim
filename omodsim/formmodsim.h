@@ -50,6 +50,9 @@ public:
     DataDisplayMode dataDisplayMode() const;
     void setDataDisplayMode(DataDisplayMode mode);
 
+    RunMode runMode() const;
+    void setRunMode(RunMode mode);
+
     bool displayHexAddresses() const;
     void setDisplayHexAddresses(bool on);
 
@@ -90,6 +93,7 @@ signals:
     void showed();
     void closing();
     void byteOrderChanged(ByteOrder);
+    void runModeChanged(RunMode);
 
 private slots:
     void on_lineEditAddress_valueChanged(const QVariant&);
@@ -229,6 +233,7 @@ inline QDataStream& operator <<(QDataStream& out, const FormModSim* frm)
     out << frm->byteOrder();
     out << frm->simulationMap();
     out << frm->script();
+    out << frm->runMode();
 
     return out;
 }
@@ -279,8 +284,8 @@ inline QDataStream& operator >>(QDataStream& in, FormModSim* frm)
 
     const auto ver = frm->property("Version").value<QVersionNumber>();
 
-    ByteOrder byteOrder = ByteOrder::LittleEndian;
     ModbusSimulationMap simulationMap;
+    ByteOrder byteOrder = ByteOrder::LittleEndian;
     if(ver >= QVersionNumber(1, 1))
     {
         in >> byteOrder;
@@ -288,9 +293,11 @@ inline QDataStream& operator >>(QDataStream& in, FormModSim* frm)
     }
 
     QString script;
+    RunMode runMode = RunMode::Once;
     if(ver >=  QVersionNumber(1, 2))
     {
         in >> script;
+        in >> runMode;
     }
 
     if(in.status() != QDataStream::Ok)
@@ -311,6 +318,7 @@ inline QDataStream& operator >>(QDataStream& in, FormModSim* frm)
     frm->setDisplayDefinition(dd);
     frm->setByteOrder(byteOrder);
     frm->setScript(script);
+    frm->setRunMode(runMode);
 
     for(auto&& k : simulationMap.keys())
         frm->startSimulation(k.first, k.second,  simulationMap[k]);

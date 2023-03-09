@@ -92,7 +92,6 @@ LanguageData JSHighlighter::builtin = {
     {('M'), QLatin1String("Math")},
     {('D'), QLatin1String("Date")},
     {('S'), QLatin1String("String")},
-    {('S'), QLatin1String("Server")},
     {('R'), QLatin1String("RegExp")},
     {('A'), QLatin1String("Array")},
     {('F'), QLatin1String("Float32Array")},
@@ -125,6 +124,8 @@ LanguageData JSHighlighter::builtin = {
 };
 
 LanguageData JSHighlighter::other = {
+     {('S'), QLatin1String("Server")},
+     {('S'), QLatin1String("Script")}
 };
 
 ///

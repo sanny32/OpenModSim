@@ -609,16 +609,24 @@
    </property>
   </action>
   <action name="actionRunScript">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/res/actionRunScript.png</normaloff>:/res/actionRunScript.png</iconset>
+   </property>
    <property name="text">
-    <string>Run</string>
+    <string>Run Script...</string>
    </property>
    <property name="toolTip">
     <string>Run Script</string>
    </property>
   </action>
   <action name="actionStopScript">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/res/actionStopScript.png</normaloff>:/res/actionStopScript.png</iconset>
+   </property>
    <property name="text">
-    <string>Stop</string>
+    <string>Stop Script</string>
    </property>
    <property name="toolTip">
     <string>Stop Script</string>

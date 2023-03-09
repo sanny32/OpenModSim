@@ -213,6 +213,25 @@ void FormModSim::setDataDisplayMode(DataDisplayMode mode)
 }
 
 ///
+/// \brief FormModSim::runMode
+/// \return
+///
+RunMode FormModSim::runMode() const
+{
+    return ui->scriptControl->runMode();
+}
+
+///
+/// \brief FormModSim::setRunMode
+/// \param mode
+///
+void FormModSim::setRunMode(RunMode mode)
+{
+    ui->scriptControl->setRunMode(mode);
+    emit runModeChanged(mode);
+}
+
+///
 /// \brief FormModSim::byteOrder
 /// \return
 ///
@@ -416,7 +435,8 @@ void FormModSim::setScript(const QString& text)
 ///
 bool FormModSim::canRunScript() const
 {
-    return !ui->scriptControl->script().isEmpty();
+    return !ui->scriptControl->script().isEmpty() &&
+           !ui->scriptControl->isRunning();
 }
 
 ///
@@ -425,7 +445,7 @@ bool FormModSim::canRunScript() const
 ///
 bool FormModSim::canStopScript()
 {
-    return false;
+    return ui->scriptControl->isRunning();
 }
 
 ///
@@ -434,7 +454,7 @@ bool FormModSim::canStopScript()
 ///
 void FormModSim::runScript(int interval)
 {
-    ui->scriptControl->runScript();
+    ui->scriptControl->runScript(interval);
 }
 
 ///
