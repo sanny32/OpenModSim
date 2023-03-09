@@ -34,7 +34,7 @@ void ScriptControl::initJSEngine(ModbusMultiServer& server)
     _mbServerObject = QSharedPointer<ModbusServerObject>(new ModbusServerObject(server));
     _consoleObject = QSharedPointer<ConsoleObject>(new ConsoleObject(ui->console->document()));
 
-    _scriptObject = QSharedPointer<ScriptObject>(new ScriptObject(this));
+    _scriptObject = QSharedPointer<ScriptObject>(new ScriptObject(&_jsEngine));
     connect(_scriptObject.get(), &ScriptObject::stopped, this, &ScriptControl::stopScript);
 
     _jsEngine.globalObject().setProperty("Script", _jsEngine.newQObject(_scriptObject.get()));
@@ -122,5 +122,7 @@ void ScriptControl::executeScript()
 {
     const auto res = _jsEngine.evaluate(script());
     if(res.isError() && !_jsEngine.isInterrupted())
+    {
         _consoleObject->log(res.toString());
-}
+    }
+ }

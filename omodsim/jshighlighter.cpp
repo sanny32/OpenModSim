@@ -161,11 +161,11 @@ void JSHighlighter::initFormats()
     format = QTextCharFormat();
 
     format.setForeground(QColor(0x54aebf));
-    format.setFontWeight(QFont::ExtraBold);
     _formats[Token::CodeType] = format;
 
     format = QTextCharFormat();
     format.setForeground(QColor(0xdb8744));
+    format.setFontWeight(QFont::ExtraBold);
     _formats[Token::CodeOther] = format;
 
     format = QTextCharFormat();

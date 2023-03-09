@@ -1,13 +1,16 @@
+#include <QTimer>
+#include <QJSEngine>
 #include "scriptobject.h"
 
 ///
 /// \brief ScriptObject::ScriptObject
-/// \param parent
+/// \param jsEngine
 ///
-ScriptObject::ScriptObject(QObject *parent)
-    : QObject{parent}
+ScriptObject::ScriptObject(QJSEngine* jsEngine)
+    : QObject(jsEngine)
+    ,_jsEngine(jsEngine)
 {
-
+    Q_ASSERT(jsEngine != nullptr);
 }
 
 ///
