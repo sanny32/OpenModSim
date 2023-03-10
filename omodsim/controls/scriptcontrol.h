@@ -49,10 +49,10 @@ private:
     QTimer _timer;
     QJSEngine _jsEngine;
 
-    QSharedPointer<Script> _scriptObject;
-    QSharedPointer<Console> _consoleObject;
-    //QSharedPointer<StorageObject> _storageObject;
-    QSharedPointer<Server> _mbServerObject;
+    QSharedPointer<Script> _script;
+    QSharedPointer<Console> _console;
+    QSharedPointer<Storage> _storage;
+    QSharedPointer<Server> _server;
 };
 
 #endif // SCRIPTCONTROL_H

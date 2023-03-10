@@ -10,9 +10,9 @@ ScriptControl::ScriptControl(QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::ScriptControl)
     ,_runMode(RunMode::Once)
-    ,_scriptObject(nullptr)
-    ,_consoleObject(nullptr)
-    ,_mbServerObject(nullptr)
+    ,_script(nullptr)
+    ,_console(nullptr)
+    ,_server(nullptr)
 {
     ui->setupUi(this);
     connect(&_timer, &QTimer::timeout, this, &ScriptControl::executeScript);
@@ -31,17 +31,17 @@ ScriptControl::~ScriptControl()
 ///
 void ScriptControl::initJSEngine(ModbusMultiServer& server)
 {
-    _mbServerObject = QSharedPointer<Server>(new Server(server));
-    _consoleObject = QSharedPointer<Console>(new Console(ui->console->document()));
-    //_storageObject = QSharedPointer<StorageObject>(new StorageObject(this));
+    _server = QSharedPointer<Server>(new Server(server));
+    _console = QSharedPointer<Console>(new Console(ui->console));
+    _storage = QSharedPointer<Storage>(new Storage());
 
-    _scriptObject = QSharedPointer<Script>(new Script(&_jsEngine));
-    connect(_scriptObject.get(), &Script::stopped, this, &ScriptControl::stopScript);
+    _script = QSharedPointer<Script>(new Script(&_jsEngine));
+    connect(_script.get(), &Script::stopped, this, &ScriptControl::stopScript);
 
-    _jsEngine.globalObject().setProperty("Script", _jsEngine.newQObject(_scriptObject.get()));
-    _jsEngine.globalObject().setProperty("Server", _jsEngine.newQObject(_mbServerObject.get()));
-    _jsEngine.globalObject().setProperty("console", _jsEngine.newQObject(_consoleObject.get()));
-    _jsEngine.globalObject().setProperty("Storage", _jsEngine.newQMetaObject(&Storage::staticMetaObject));
+    _jsEngine.globalObject().setProperty("Script", _jsEngine.newQObject(_script.get()));
+    _jsEngine.globalObject().setProperty("Server", _jsEngine.newQObject(_server.get()));
+    _jsEngine.globalObject().setProperty("console", _jsEngine.newQObject(_console.get()));
+    _jsEngine.globalObject().setProperty("Storage", _jsEngine.newQObject(_storage.get()));
 }
 
 ///
@@ -94,7 +94,7 @@ void ScriptControl::setRunMode(RunMode mode)
 ///
 void ScriptControl::runScript(int interval)
 {
-    _consoleObject->clear();
+    _console->clear();
     _jsEngine.setInterrupted(false);
     switch(_runMode)
     {
@@ -114,6 +114,7 @@ void ScriptControl::runScript(int interval)
 void ScriptControl::stopScript()
 {
     _timer.stop();
+    _storage->clear();
     _jsEngine.setInterrupted(true);
 }
 
@@ -125,7 +126,7 @@ void ScriptControl::executeScript()
     const auto res = _jsEngine.evaluate(script());
     if(res.isError() && !_jsEngine.isInterrupted())
     {
-        _consoleObject->log(res.toString());
+        _console->error(res.toString());
         stopScript();
     }
  }

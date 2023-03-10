@@ -36,7 +36,7 @@
        </sizepolicy>
       </property>
      </widget>
-     <widget class="ConsoleOutput" name="console">
+     <widget class="QPlainTextEdit" name="console">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
         <horstretch>0</horstretch>
@@ -67,11 +67,6 @@
    <class>CodeEditor</class>
    <extends>QPlainTextEdit</extends>
    <header>codeeditor.h</header>
-  </customwidget>
-  <customwidget>
-   <class>ConsoleOutput</class>
-   <extends>QPlainTextEdit</extends>
-   <header>consoleoutput.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

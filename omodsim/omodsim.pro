@@ -27,7 +27,6 @@ SOURCES += \
     controls/booleancombobox.cpp \
     controls/clickablelabel.cpp \
     controls/codeeditor.cpp \
-    controls/consoleoutput.cpp \
     controls/customframe.cpp \
     controls/customlineedit.cpp \
     controls/flowcontroltypecombobox.cpp \
@@ -77,7 +76,6 @@ HEADERS += \
     controls/booleancombobox.h \
     controls/clickablelabel.h \
     controls/codeeditor.h \
-    controls/consoleoutput.h \
     controls/customframe.h \
     controls/customlineedit.h \
     controls/flowcontroltypecombobox.h \
