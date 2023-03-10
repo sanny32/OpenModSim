@@ -24,6 +24,7 @@ INCLUDEPATH += controls \
                jsobjects
 
 SOURCES += \
+    consolelogger.cpp \
     controls/booleancombobox.cpp \
     controls/clickablelabel.cpp \
     controls/codeeditor.cpp \
@@ -56,7 +57,6 @@ SOURCES += \
     dialogs/dialogwriteholdingregisterbits.cpp \
     jsobjects/script.cpp \
     jsobjects/server.cpp \
-    jsobjects/console.cpp \
     formmodsim.cpp \
     jshighlighter.cpp \
     jsobjects/storage.cpp \
@@ -73,6 +73,7 @@ SOURCES += \
 HEADERS += \
     byteorderutils.h \
     connectiondetails.h \
+    consolelogger.h \
     controls/booleancombobox.h \
     controls/clickablelabel.h \
     controls/codeeditor.h \
@@ -105,7 +106,6 @@ HEADERS += \
     dialogs/dialogwriteholdingregisterbits.h \
     jsobjects/script.h \
     jsobjects/server.h \
-    jsobjects/console.h \
     displaydefinition.h \
     enums.h \
     floatutils.h \

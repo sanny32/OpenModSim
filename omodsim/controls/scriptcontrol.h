@@ -4,11 +4,10 @@
 #include <QTimer>
 #include <QJSEngine>
 #include <QPlainTextEdit>
-#include "console.h"
+#include "consolelogger.h"
 #include "script.h"
 #include "storage.h"
 #include "server.h"
-
 
 namespace Ui {
 class ScriptControl;
@@ -51,9 +50,9 @@ private:
     QString _scriptCode;
 
     QSharedPointer<Script> _script;
-    QSharedPointer<console> _console;
     QSharedPointer<Storage> _storage;
     QSharedPointer<Server> _server;
+    QSharedPointer<ConsoleLogger> _logger;
 };
 
 #endif // SCRIPTCONTROL_H

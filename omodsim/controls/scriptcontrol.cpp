@@ -1,3 +1,4 @@
+#include <QLoggingCategory>
 #include "modbusmultiserver.h"
 #include "scriptcontrol.h"
 #include "ui_scriptcontrol.h"
@@ -10,12 +11,21 @@ ScriptControl::ScriptControl(QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::ScriptControl)
     ,_runMode(RunMode::Once)
-    ,_script(nullptr)
-    ,_console(nullptr)
+    ,_script(new Script)
+    ,_storage(new Storage)
     ,_server(nullptr)
+    ,_logger(nullptr)
 {
     ui->setupUi(this);
+
+    _jsEngine.installExtensions(QJSEngine::ConsoleExtension);
+    _logger = QSharedPointer<ConsoleLogger>(new ConsoleLogger(ui->console));
+
+    _jsEngine.globalObject().setProperty("Script", _jsEngine.newQObject(_script.get()));
+    _jsEngine.globalObject().setProperty("Storage", _jsEngine.newQObject(_storage.get()));
+
     connect(&_timer, &QTimer::timeout, this, &ScriptControl::executeScript);
+    connect(_script.get(), &Script::stopped, this, &ScriptControl::stopScript);
 }
 
 ///
@@ -32,16 +42,7 @@ ScriptControl::~ScriptControl()
 void ScriptControl::initJSEngine(ModbusMultiServer& server)
 {
     _server = QSharedPointer<Server>(new Server(server));
-    _console = QSharedPointer<console>(new console(ui->console));
-    _storage = QSharedPointer<Storage>(new Storage());
-
-    _script = QSharedPointer<Script>(new Script(&_jsEngine));
-    connect(_script.get(), &Script::stopped, this, &ScriptControl::stopScript);
-
-    _jsEngine.globalObject().setProperty("Script", _jsEngine.newQObject(_script.get()));
     _jsEngine.globalObject().setProperty("Server", _jsEngine.newQObject(_server.get()));
-    _jsEngine.globalObject().setProperty("console", _jsEngine.newQObject(_console.get()));
-    _jsEngine.globalObject().setProperty("Storage", _jsEngine.newQObject(_storage.get()));
 }
 
 ///
@@ -94,7 +95,7 @@ void ScriptControl::setRunMode(RunMode mode)
 ///
 void ScriptControl::runScript(int interval)
 {
-    _console->clear();
+    _logger->clear();
     _scriptCode = script();
     _jsEngine.setInterrupted(false);
     switch(_runMode)
@@ -127,7 +128,7 @@ void ScriptControl::executeScript()
     const auto res = _jsEngine.evaluate(_scriptCode);
     if(res.isError() && !_jsEngine.isInterrupted())
     {
-        _console->error(res.toString());
+        qCritical(js).noquote().nospace() << res.toString() << " (line " << res.property("lineNumber").toInt() << ")";
         stopScript();
     }
  }
