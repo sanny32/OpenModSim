@@ -4,7 +4,7 @@
 #include <QTimer>
 #include <QJSEngine>
 #include <QPlainTextEdit>
-#include "consolelogger.h"
+#include "console.h"
 #include "script.h"
 #include "storage.h"
 #include "server.h"
@@ -52,7 +52,7 @@ private:
     QSharedPointer<Script> _script;
     QSharedPointer<Storage> _storage;
     QSharedPointer<Server> _server;
-    QSharedPointer<ConsoleLogger> _logger;
+    QSharedPointer<console> _console;
 };
 
 #endif // SCRIPTCONTROL_H

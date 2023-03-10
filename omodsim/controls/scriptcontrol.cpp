@@ -14,13 +14,12 @@ ScriptControl::ScriptControl(QWidget *parent)
     ,_script(new Script)
     ,_storage(new Storage)
     ,_server(nullptr)
-    ,_logger(nullptr)
+    ,_console(nullptr)
 {
     ui->setupUi(this);
+    _console = QSharedPointer<console>(new console(ui->console));
 
-    _jsEngine.installExtensions(QJSEngine::ConsoleExtension);
-    _logger = QSharedPointer<ConsoleLogger>(new ConsoleLogger(ui->console));
-
+    _jsEngine.globalObject().setProperty("console", _jsEngine.newQObject(_console.get()));
     _jsEngine.globalObject().setProperty("Script", _jsEngine.newQObject(_script.get()));
     _jsEngine.globalObject().setProperty("Storage", _jsEngine.newQObject(_storage.get()));
 
@@ -95,7 +94,7 @@ void ScriptControl::setRunMode(RunMode mode)
 ///
 void ScriptControl::runScript(int interval)
 {
-    _logger->clear();
+    _console->clear();
     _scriptCode = script();
     _jsEngine.setInterrupted(false);
 
@@ -129,7 +128,7 @@ void ScriptControl::executeScript()
     const auto res = _jsEngine.evaluate(_scriptCode);
     if(res.isError() && !_jsEngine.isInterrupted())
     {
-        qCritical(js).noquote().nospace() << res.toString() << " (line " << res.property("lineNumber").toInt() << ")";
+        _console->error(QString("%1 (line %2)").arg(res.toString(), res.property("lineNumber").toString()));
         stopScript();
     }
  }
