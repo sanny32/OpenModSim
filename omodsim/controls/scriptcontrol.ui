@@ -35,6 +35,32 @@
         <verstretch>3</verstretch>
        </sizepolicy>
       </property>
+      <property name="plainText">
+       <string>// This Open ModSim JavaScript
+// © Alexandr Ananev, 2023
+//
+// Built-in objects Math, Date and String are available in this script
+//
+// To output debug information use console object
+//
+// To read and write registers use Server object
+//
+// To read coils use code 						var value = Server.readCoil(addr)
+// To read discrete inputs use code  		var value = Server.readDiscrete(addr)
+// To read input registers use code 		var value = Server.readInput(addr)
+// To read holding registers use code		var value = Server.readHolding(addr)
+//
+// To write coils use code						Server.writeCoil(addr, value)
+// To write discrete inputs use code		Server.writeDiscrete(addr, value)
+// To write input registers use code		Server.writeInput(addr, value)
+// To write holding registers use code	Server.writeHolding(addr, value)
+//
+// To stop script execution use Script.stop() function
+//</string>
+      </property>
+      <property name="tabStopDistance">
+       <double>20.000000000000000</double>
+      </property>
      </widget>
      <widget class="QPlainTextEdit" name="console">
       <property name="sizePolicy">
