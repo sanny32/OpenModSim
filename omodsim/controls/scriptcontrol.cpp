@@ -98,10 +98,11 @@ void ScriptControl::runScript(int interval)
     _logger->clear();
     _scriptCode = script();
     _jsEngine.setInterrupted(false);
+
+    executeScript();
     switch(_runMode)
     {
         case RunMode::Once:
-            executeScript();
         break;
 
         case RunMode::Periodically:
