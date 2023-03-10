@@ -32,7 +32,7 @@ ScriptControl::~ScriptControl()
 void ScriptControl::initJSEngine(ModbusMultiServer& server)
 {
     _server = QSharedPointer<Server>(new Server(server));
-    _console = QSharedPointer<Console>(new Console(ui->console));
+    _console = QSharedPointer<console>(new console(ui->console));
     _storage = QSharedPointer<Storage>(new Storage());
 
     _script = QSharedPointer<Script>(new Script(&_jsEngine));
@@ -95,6 +95,7 @@ void ScriptControl::setRunMode(RunMode mode)
 void ScriptControl::runScript(int interval)
 {
     _console->clear();
+    _scriptCode = script();
     _jsEngine.setInterrupted(false);
     switch(_runMode)
     {
@@ -123,7 +124,7 @@ void ScriptControl::stopScript()
 ///
 void ScriptControl::executeScript()
 {
-    const auto res = _jsEngine.evaluate(script());
+    const auto res = _jsEngine.evaluate(_scriptCode);
     if(res.isError() && !_jsEngine.isInterrupted())
     {
         _console->error(res.toString());

@@ -2,16 +2,17 @@
 #define CONSOLE_H
 
 #include <QObject>
+#include <QJSValue>
 #include <QPlainTextEdit>
 
 ///
-/// \brief The Console class
+/// \brief The console class
 ///
-class Console : public QObject
+class console : public QObject
 {
     Q_OBJECT
 public:
-    Console(QPlainTextEdit* edit);
+    console(QPlainTextEdit* edit);
 
     Q_INVOKABLE void clear();
     Q_INVOKABLE void log(const QString& msg);

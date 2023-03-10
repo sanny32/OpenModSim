@@ -2,10 +2,10 @@
 #include "console.h"
 
 ///
-/// \brief Console::Console
+/// \brief console::console
 /// \param doc
 ///
-Console::Console(QPlainTextEdit* edit)
+console::console(QPlainTextEdit* edit)
     : _edit(edit)
 {
     _edit->setFont(QFont("Fira Code"));
@@ -14,18 +14,18 @@ Console::Console(QPlainTextEdit* edit)
 }
 
 ///
-/// \brief Console::clear
+/// \brief console::clear
 ///
-void Console::clear()
+void console::clear()
 {
     _edit->setPlainText(QString());
 }
 
 ///
-/// \brief Console::log
+/// \brief console::log
 /// \param msg
 ///
-void Console::log(const QString& msg)
+void console::log(const QString& msg)
 {
     QTextCharFormat fmt;
     fmt.setForeground(Qt::black);
@@ -35,10 +35,10 @@ void Console::log(const QString& msg)
 }
 
 ///
-/// \brief Console::error
+/// \brief console::error
 /// \param msg
 ///
-void Console::error(const QString& msg)
+void console::error(const QString& msg)
 {
     QTextCharFormat fmt;
     fmt.setForeground(Qt::red);
@@ -48,20 +48,20 @@ void Console::error(const QString& msg)
 }
 
 ///
-/// \brief Console::addText
+/// \brief console::addText
 /// \param text
 ///
-void Console::addText(const QString& text)
+void console::addText(const QString& text)
 {
     _edit->insertPlainText(QString(_edit->toPlainText().isEmpty() ? ">>\t%1" : "\n>>\t%1").arg(text));
     _edit->moveCursor(QTextCursor::End);
 }
 
 ///
-/// \brief Console::setBackgroundColor
+/// \brief console::setBackgroundColor
 /// \param clr
 ///
-void Console::setBackgroundColor(const QColor& clr)
+void console::setBackgroundColor(const QColor& clr)
 {
     auto pal = _edit->palette();
     pal.setColor(QPalette::Base, clr);

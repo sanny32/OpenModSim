@@ -48,9 +48,10 @@ private:
     RunMode _runMode;
     QTimer _timer;
     QJSEngine _jsEngine;
+    QString _scriptCode;
 
     QSharedPointer<Script> _script;
-    QSharedPointer<Console> _console;
+    QSharedPointer<console> _console;
     QSharedPointer<Storage> _storage;
     QSharedPointer<Server> _server;
 };
