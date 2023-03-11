@@ -54,6 +54,7 @@ SOURCES += \
     dialogs/dialogwritecoilregister.cpp \
     dialogs/dialogwriteholdingregister.cpp \
     dialogs/dialogwriteholdingregisterbits.cpp \
+    jscompleter.cpp \
     jsobjects/console.cpp \
     jsobjects/script.cpp \
     jsobjects/server.cpp \
@@ -103,6 +104,7 @@ HEADERS += \
     dialogs/dialogwritecoilregister.h \
     dialogs/dialogwriteholdingregister.h \
     dialogs/dialogwriteholdingregisterbits.h \
+    jscompleter.h \
     jsobjects/console.h \
     jsobjects/script.h \
     jsobjects/server.h \

@@ -1,6 +1,7 @@
 #ifndef CODEEDITOR_H
 #define CODEEDITOR_H
 
+#include <QCompleter>
 #include <QPlainTextEdit>
 #include "jshighlighter.h"
 
@@ -21,19 +22,28 @@ public:
     void setBackgroundColor(const QColor& clr);
     void setLineColor(const QColor& clr);
 
+    QCompleter* completer() const;
+    void setCompleter(QCompleter* c);
+
 protected:
     void resizeEvent(QResizeEvent *event) override;
+    void keyPressEvent(QKeyEvent *e) override;
+    void focusInEvent(QFocusEvent *e) override;
 
 private slots:
-    void on_textChnaged();
     void updateLineNumberAreaWidth(int newBlockCount);
     void highlightCurrentLine();
-    void updateLineNumberArea(const QRect &rect, int dy);
+    void updateLineNumberArea(const QRect& rect, int dy);
+    void insertCompletion(const QString& completion);
+
+private:
+     QString textUnderCursor() const;
 
 private:
     QColor _lineColor;
     QWidget* _lineNumberArea;
     JSHighlighter* _highlighter;
+    QCompleter* _compliter;
 };
 
 ///

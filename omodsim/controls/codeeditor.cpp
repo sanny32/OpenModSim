@@ -1,5 +1,8 @@
 #include <QPainter>
 #include <QTextBlock>
+#include <QScrollBar>
+#include <QAbstractItemView>
+#include "jscompleter.h"
 #include "codeeditor.h"
 
 ///
@@ -15,13 +18,13 @@ CodeEditor::CodeEditor(QWidget *parent)
     connect(this, &CodeEditor::blockCountChanged, this, &CodeEditor::updateLineNumberAreaWidth);
     connect(this, &CodeEditor::updateRequest, this, &CodeEditor::updateLineNumberArea);
     connect(this, &CodeEditor::cursorPositionChanged, this, &CodeEditor::highlightCurrentLine);
-    connect(this, &CodeEditor::textChanged, this, &CodeEditor::on_textChnaged);
 
     setBackgroundColor(Qt::white);
     setLineColor(QColor(Qt::lightGray).lighter(125));
 
     setFont(QFont("Fira Code"));
     setTabStopDistance(fontMetrics().horizontalAdvance(' ') * 4);
+    setCompleter(new JSCompleter(this));
 
     updateLineNumberAreaWidth(0);
     highlightCurrentLine();
@@ -76,10 +79,30 @@ void CodeEditor::setLineColor(const QColor& clr)
 }
 
 ///
-/// \brief CodeEditor::on_textChnaged
+/// \brief CodeEditor::setCompleter
+/// \param c
 ///
-void CodeEditor::on_textChnaged()
+void CodeEditor::setCompleter(QCompleter* c)
 {
+    if (_compliter)
+        _compliter->disconnect(this);
+
+    _compliter = c;
+
+    if (!_compliter)
+        return;
+
+    _compliter->setWidget(this);
+    QObject::connect(c, QOverload<const QString &>::of(&QCompleter::activated),this, &CodeEditor::insertCompletion);
+}
+
+///
+/// \brief CodeEditor::completer
+/// \return
+///
+QCompleter* CodeEditor::completer() const
+{
+    return _compliter;
 }
 
 ///
@@ -107,6 +130,23 @@ void CodeEditor::updateLineNumberArea(const QRect &rect, int dy)
 }
 
 ///
+/// \brief CodeEditor::insertCompletion
+/// \param completion
+///
+void CodeEditor::insertCompletion(const QString& completion)
+{
+    if (_compliter->widget() != this)
+        return;
+
+    QTextCursor tc = textCursor();
+    int extra = completion.length() - _compliter->completionPrefix().length();
+    tc.movePosition(QTextCursor::Left);
+    tc.movePosition(QTextCursor::EndOfWord);
+    tc.insertText(completion.right(extra));
+    setTextCursor(tc);
+}
+
+///
 /// \brief CodeEditor::resizeEvent
 /// \param e
 ///
@@ -118,6 +158,72 @@ void CodeEditor::resizeEvent(QResizeEvent *e)
     _lineNumberArea->setGeometry(QRect(cr.left(), cr.top(), lineNumberAreaWidth(), cr.height()));
 }
 
+///
+/// \brief CodeEditor::focusInEvent
+/// \param e
+///
+void CodeEditor::focusInEvent(QFocusEvent *e)
+{
+    if (_compliter)
+        _compliter->setWidget(this);
+
+    QPlainTextEdit::focusInEvent(e);
+}
+
+///
+/// \brief CodeEditor::keyPressEvent
+/// \param e
+///
+void CodeEditor::keyPressEvent(QKeyEvent *e)
+{
+    QAbstractItemView* popup = (_compliter) ? _compliter->popup() : nullptr;
+    if (popup && popup->isVisible()) {
+        // The following keys are forwarded by the completer to the widget
+       switch (e->key()) {
+       case Qt::Key_Enter:
+       case Qt::Key_Return:
+       case Qt::Key_Escape:
+       case Qt::Key_Tab:
+       case Qt::Key_Backtab:
+            e->ignore();
+            return; // let the completer do default behavior
+       default:
+           break;
+       }
+    }
+
+    const bool isShortcut = (e->modifiers().testFlag(Qt::ControlModifier) && e->key() == Qt::Key_E); // CTRL+E
+    if (!_compliter || !isShortcut)
+        QPlainTextEdit::keyPressEvent(e);
+
+    const bool ctrlOrShift = e->modifiers().testFlag(Qt::ControlModifier) ||
+                             e->modifiers().testFlag(Qt::ShiftModifier);
+    if (!_compliter || (ctrlOrShift && e->text().isEmpty()))
+        return;
+
+    static QString eow("~!@#$%^&*()_+{}|:\"<>?,./;'[]\\-="); // end of word
+    const bool hasModifier = (e->modifiers() != Qt::NoModifier) && !ctrlOrShift;
+    const QString completionPrefix = textUnderCursor();
+
+    if (popup && !isShortcut && (hasModifier || e->text().isEmpty()|| completionPrefix.length() < 3
+                      || eow.contains(e->text().right(1)))) {
+        popup->hide();
+        return;
+    }
+
+    if (completionPrefix != _compliter->completionPrefix())
+    {
+        _compliter->setCompletionPrefix(completionPrefix);
+        if(popup) popup->setCurrentIndex(_compliter->completionModel()->index(0, 0));
+    }
+
+    if(popup)
+    {
+        QRect cr = cursorRect();
+        cr.setWidth(popup->sizeHintForColumn(0) + popup->verticalScrollBar()->sizeHint().width());
+        _compliter->complete(cr);
+    }
+}
 ///
 /// \brief CodeEditor::highlightCurrentLine
 ///
@@ -167,4 +273,15 @@ void CodeEditor::lineNumberAreaPaintEvent(QPaintEvent *event)
         bottom = top + qRound(blockBoundingRect(block).height());
         ++blockNumber;
     }
+}
+
+///
+/// \brief CodeEditor::textUnderCursor
+/// \return
+///
+QString CodeEditor::textUnderCursor() const
+{
+    QTextCursor tc = textCursor();
+    tc.select(QTextCursor::WordUnderCursor);
+    return tc.selectedText();
 }
