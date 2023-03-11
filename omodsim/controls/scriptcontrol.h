@@ -34,6 +34,8 @@ public:
     RunMode runMode() const;
     void setRunMode(RunMode mode);
 
+    void setFocus();
+
 public slots:
     void runScript(int interval = 0);
     void stopScript();

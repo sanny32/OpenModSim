@@ -17,6 +17,8 @@ ScriptControl::ScriptControl(QWidget *parent)
     ,_console(nullptr)
 {
     ui->setupUi(this);
+    ui->codeEditor->moveCursor(QTextCursor::End);
+
     _console = QSharedPointer<console>(new console(ui->console));
 
     _jsEngine.globalObject().setProperty("console", _jsEngine.newQObject(_console.get()));
@@ -60,6 +62,7 @@ QString ScriptControl::script() const
 void ScriptControl::setScript(const QString& text)
 {
     ui->codeEditor->setPlainText(text);
+    ui->codeEditor->moveCursor(QTextCursor::End);
 }
 
 ///
@@ -86,6 +89,14 @@ RunMode ScriptControl::runMode() const
 void ScriptControl::setRunMode(RunMode mode)
 {
     _runMode = mode;
+}
+
+///
+/// \brief ScriptControl::setFocus
+///
+void ScriptControl::setFocus()
+{
+    ui->codeEditor->setFocus();
 }
 
 ///

@@ -56,7 +56,8 @@
 
  To output debug information use console.log() function
  To break script execution use Script.stop() function
-************************************************************************/</string>
+************************************************************************/
+</string>
       </property>
       <property name="tabStopDistance">
        <double>20.000000000000000</double>

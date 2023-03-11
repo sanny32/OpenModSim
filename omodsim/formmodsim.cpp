@@ -167,6 +167,7 @@ void FormModSim::setDisplayMode(DisplayMode mode)
     {
         case DisplayMode::Script:
             ui->stackedWidget->setCurrentIndex(1);
+            ui->scriptControl->setFocus();
         break;
 
         default:

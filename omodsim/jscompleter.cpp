@@ -1,3 +1,4 @@
+#include <QStringListModel>
 #include "jscompleter.h"
 
 QMultiHash<QString, QString> JSCompleterModel::_completerMap = {
@@ -42,16 +43,21 @@ int JSCompleterModel::columnCount(const QModelIndex&) const
 ///
 QVariant JSCompleterModel::data(const QModelIndex &index, int role) const
 {
-    switch(role)
+    /*switch(role)
     {
-        case Qt::DisplayRole:
+        case Qt::EditRole:
         if(index.row() < 0 || index.row() >= rowCount())
             return QVariant();
         else
             return *std::next(_completerMap.constBegin(), index.row());
     }
 
-    return QVariant();
+    return QVariant();*/
+
+    if(index.row() < 0 || index.row() >= rowCount())
+        return QVariant();
+    else
+        return *std::next(_completerMap.constBegin(), index.row());
 }
 
 ///
@@ -61,7 +67,11 @@ QVariant JSCompleterModel::data(const QModelIndex &index, int role) const
 JSCompleter::JSCompleter(QObject *parent)
     : QCompleter{parent}
 {
-    setModel(new JSCompleterModel(this));
+    //setModel(new JSCompleterModel(this));
+    QStringList list;
+    list << "console" << "console.log()" << "console.debug()";
+    setModel(new QStringListModel (list, this));
+
     setCaseSensitivity(Qt::CaseSensitive);
     setCompletionMode(QCompleter::PopupCompletion);
     setWrapAround(false);

@@ -198,14 +198,14 @@ void CodeEditor::keyPressEvent(QKeyEvent *e)
 
     const bool ctrlOrShift = e->modifiers().testFlag(Qt::ControlModifier) ||
                              e->modifiers().testFlag(Qt::ShiftModifier);
-    if (!_compliter || (ctrlOrShift && e->text().isEmpty()))
+    if (!_compliter || !popup || (ctrlOrShift && e->text().isEmpty()))
         return;
 
     static QString eow("~!@#$%^&*()_+{}|:\"<>?,./;'[]\\-="); // end of word
     const bool hasModifier = (e->modifiers() != Qt::NoModifier) && !ctrlOrShift;
     const QString completionPrefix = textUnderCursor();
 
-    if (popup && !isShortcut && (hasModifier || e->text().isEmpty()|| completionPrefix.length() < 3
+    if (!isShortcut && (hasModifier || e->text().isEmpty() || completionPrefix.length() < 3
                       || eow.contains(e->text().right(1)))) {
         popup->hide();
         return;
@@ -214,7 +214,7 @@ void CodeEditor::keyPressEvent(QKeyEvent *e)
     if (completionPrefix != _compliter->completionPrefix())
     {
         _compliter->setCompletionPrefix(completionPrefix);
-        if(popup) popup->setCurrentIndex(_compliter->completionModel()->index(0, 0));
+        popup->setCurrentIndex(_compliter->completionModel()->index(0, 0));
     }
 
     if(popup)
