@@ -12,7 +12,7 @@ class Server : public QObject
     Q_OBJECT
 
 public:
-    explicit Server(ModbusMultiServer& server);
+    explicit Server(ModbusMultiServer& server, const ByteOrder& order);
 
     Q_INVOKABLE quint16 readHolding(quint16 address);
     Q_INVOKABLE void writeHolding(quint16 address, quint16 value);
@@ -27,6 +27,7 @@ public:
     Q_INVOKABLE void writeCoil(quint16 address, bool value);
 
 private:
+    const ByteOrder& _byteOrder;
     ModbusMultiServer& _mbMultiServer;
 };
 

@@ -1,10 +1,14 @@
 #include "server.h"
+#include "byteorderutils.h"
 
 ///
 /// \brief Server::Server
+/// \param server
+/// \param order
 ///
-Server::Server(ModbusMultiServer& server)
-    :_mbMultiServer(server)
+Server::Server(ModbusMultiServer& server, const ByteOrder& order)
+    :_byteOrder(order)
+    ,_mbMultiServer(server)
 {
 }
 
@@ -16,7 +20,7 @@ Server::Server(ModbusMultiServer& server)
 quint16 Server::readHolding(quint16 address)
 {
     const auto data = _mbMultiServer.data(QModbusDataUnit::HoldingRegisters, address - 1, 1);
-    return data.value(0);
+    return toByteOrderValue(data.value(0), _byteOrder);
 }
 
 ///
@@ -26,7 +30,7 @@ quint16 Server::readHolding(quint16 address)
 ///
 void Server::writeHolding(quint16 address, quint16 value)
 {
-    _mbMultiServer.writeValue(QModbusDataUnit::HoldingRegisters, address - 1, value, ByteOrder::LittleEndian);
+    _mbMultiServer.writeValue(QModbusDataUnit::HoldingRegisters, address - 1, value, _byteOrder);
 }
 
 ///
@@ -37,7 +41,7 @@ void Server::writeHolding(quint16 address, quint16 value)
 quint16 Server::readInput(quint16 address)
 {
     const auto data = _mbMultiServer.data(QModbusDataUnit::InputRegisters, address - 1, 1);
-    return data.value(0);
+    return toByteOrderValue(data.value(0), _byteOrder);
 }
 
 ///
@@ -47,7 +51,7 @@ quint16 Server::readInput(quint16 address)
 ///
 void Server::writeInput(quint16 address, quint16 value)
 {
-    _mbMultiServer.writeValue(QModbusDataUnit::InputRegisters, address - 1, value, ByteOrder::LittleEndian);
+    _mbMultiServer.writeValue(QModbusDataUnit::InputRegisters, address - 1, value, _byteOrder);
 }
 
 ///
@@ -58,7 +62,7 @@ void Server::writeInput(quint16 address, quint16 value)
 bool Server::readDiscrete(quint16 address)
 {
     const auto data = _mbMultiServer.data(QModbusDataUnit::DiscreteInputs, address - 1, 1);
-    return data.value(0);
+    return toByteOrderValue(data.value(0), _byteOrder);
 }
 
 ///
@@ -68,7 +72,7 @@ bool Server::readDiscrete(quint16 address)
 ///
 void Server::writeDiscrete(quint16 address, bool value)
 {
-    _mbMultiServer.writeValue(QModbusDataUnit::DiscreteInputs, address - 1, value, ByteOrder::LittleEndian);
+    _mbMultiServer.writeValue(QModbusDataUnit::DiscreteInputs, address - 1, value, _byteOrder);
 }
 
 ///
@@ -79,7 +83,7 @@ void Server::writeDiscrete(quint16 address, bool value)
 bool Server::readCoil(quint16 address)
 {
     const auto data = _mbMultiServer.data(QModbusDataUnit::Coils, address - 1, 1);
-    return data.value(0);
+    return toByteOrderValue(data.value(0), _byteOrder);
 }
 
 ///
@@ -89,5 +93,5 @@ bool Server::readCoil(quint16 address)
 ///
 void Server::writeCoil(quint16 address, bool value)
 {
-    _mbMultiServer.writeValue(QModbusDataUnit::Coils, address - 1, value, ByteOrder::LittleEndian);
+    _mbMultiServer.writeValue(QModbusDataUnit::Coils, address - 1, value, _byteOrder);
 }

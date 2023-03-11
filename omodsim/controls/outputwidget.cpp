@@ -326,7 +326,7 @@ void OutputWidget::setDataDisplayMode(DataDisplayMode mode)
 /// \brief OutputWidget::byteOrder
 /// \return
 ///
-ByteOrder OutputWidget::byteOrder() const
+const ByteOrder& OutputWidget::byteOrder() const
 {
     return _byteOrder;
 }
@@ -653,38 +653,38 @@ void OutputWidget::updateDataWidget(const QModbusDataUnit& data)
         switch(_dataDisplayMode)
         {
             case DataDisplayMode::Binary:
-                valstr = formatBinaryValue(_displayDefinition.PointType, value, byteOrder(), itemData.Value);
+                valstr = formatBinaryValue(_displayDefinition.PointType, value, _byteOrder, itemData.Value);
             break;
 
             case DataDisplayMode::Decimal:
-                valstr = formatDecimalValue(_displayDefinition.PointType, value, byteOrder(), itemData.Value);
+                valstr = formatDecimalValue(_displayDefinition.PointType, value, _byteOrder, itemData.Value);
             break;
 
             case DataDisplayMode::Integer:
-                valstr = formatIntegerValue(_displayDefinition.PointType, value, byteOrder(), itemData.Value);
+                valstr = formatIntegerValue(_displayDefinition.PointType, value, _byteOrder, itemData.Value);
             break;
 
             case DataDisplayMode::Hex:
-                valstr = formatHexValue(_displayDefinition.PointType, value, byteOrder(), itemData.Value);
+                valstr = formatHexValue(_displayDefinition.PointType, value, _byteOrder, itemData.Value);
             break;
 
             case DataDisplayMode::FloatingPt:
-                valstr = formatFloatValue(_displayDefinition.PointType, value, data.value(i + 1), byteOrder(),
+                valstr = formatFloatValue(_displayDefinition.PointType, value, data.value(i + 1), _byteOrder,
                                           (i%2) || (i+1>=_displayDefinition.Length), itemData.Value);
             break;
 
             case DataDisplayMode::SwappedFP:
-                valstr = formatFloatValue(_displayDefinition.PointType, data.value(i + 1), value, byteOrder(),
+                valstr = formatFloatValue(_displayDefinition.PointType, data.value(i + 1), value, _byteOrder,
                                           (i%2) || (i+1>=_displayDefinition.Length), itemData.Value);
             break;
 
             case DataDisplayMode::DblFloat:
-                valstr = formatDoubleValue(_displayDefinition.PointType, value, data.value(i + 1), data.value(i + 2), data.value(i + 3), byteOrder(),
+                valstr = formatDoubleValue(_displayDefinition.PointType, value, data.value(i + 1), data.value(i + 2), data.value(i + 3), _byteOrder,
                                            (i%4) || (i+3>=_displayDefinition.Length), itemData.Value);
             break;
 
             case DataDisplayMode::SwappedDbl:
-                valstr = formatDoubleValue(_displayDefinition.PointType, data.value(i + 3), data.value(i + 2), data.value(i + 1), value, byteOrder(),
+                valstr = formatDoubleValue(_displayDefinition.PointType, data.value(i + 3), data.value(i + 2), data.value(i + 1), value, _byteOrder,
                                            (i%4) || (i+3>=_displayDefinition.Length), itemData.Value);
             break;
         }

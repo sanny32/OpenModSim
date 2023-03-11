@@ -30,7 +30,7 @@ FormModSim::FormModSim(int id, ModbusMultiServer& server, QSharedPointer<DataSim
     setWindowTitle(QString("ModSim%1").arg(_formId));
 
     ui->stackedWidget->setCurrentIndex(0);
-    ui->scriptControl->initJSEngine(server);
+    ui->scriptControl->initJSEngine(server, ui->outputWidget->byteOrder());
 
     ui->lineEditAddress->setPaddingZeroes(true);
     ui->lineEditAddress->setInputRange(ModbusLimits::addressRange());
