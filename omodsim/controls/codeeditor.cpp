@@ -205,16 +205,24 @@ void CodeEditor::keyPressEvent(QKeyEvent *e)
     const bool hasModifier = (e->modifiers() != Qt::NoModifier) && !ctrlOrShift;
     QString completionPrefix = textUnderCursor();
 
-    qDebug() << completionPrefix;
+    if(e->text() == ".")
+    {
+         QTextCursor tc = textCursor();
+         tc.movePosition(QTextCursor::Left, QTextCursor::MoveAnchor, 2);
+         tc.select(QTextCursor::WordUnderCursor);
+         completionPrefix = tc.selectedText();
+    }
+
     if (!isShortcut && (hasModifier || e->text().isEmpty() || completionPrefix.length() < 3
                       /*|| eow.contains(e->text().right(1))*/)) {
         popup->hide();
         return;
     }
 
-    if (completionPrefix != _compliter->completionPrefix())
+    qDebug() << completionPrefix;
+    if (/*completionPrefix != _compliter->completionPrefix()*/e->text() == ".")
     {
-        _compliter->setCompletionPrefix(completionPrefix);
+        ((JSCompleter*)_compliter)->setCompletionPrefix(completionPrefix);
         popup->setCurrentIndex(_compliter->completionModel()->index(0, 0));
     }
 
@@ -283,7 +291,6 @@ void CodeEditor::lineNumberAreaPaintEvent(QPaintEvent *event)
 QString CodeEditor::textUnderCursor() const
 {
     QTextCursor tc = textCursor();
-    tc.movePosition(QTextCursor::PreviousWord);
     tc.select(QTextCursor::WordUnderCursor);
     return tc.selectedText();
 }
