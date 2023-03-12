@@ -13,6 +13,7 @@ namespace Ui {
 class ScriptControl;
 }
 
+
 ///
 /// \brief The ScriptControl class
 ///
@@ -24,7 +25,7 @@ public:
     explicit ScriptControl(QWidget *parent = nullptr);
     ~ScriptControl();
 
-    void initJSEngine(ModbusMultiServer& server);
+    void initJSEngine(ModbusMultiServer& server, const ByteOrder& order);
 
     QString script() const;
     void setScript(const QString& text);

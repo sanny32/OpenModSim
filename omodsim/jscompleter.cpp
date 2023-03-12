@@ -69,7 +69,7 @@ JSCompleter::JSCompleter(QObject *parent)
 {
     //setModel(new JSCompleterModel(this));
     QStringList list;
-    list << "console" << "console.log()" << "console.debug()";
+    list << "console" << "console.log()" << "console.debug()" << "Server";
     setModel(new QStringListModel (list, this));
 
     setCaseSensitivity(Qt::CaseSensitive);

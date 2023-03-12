@@ -39,10 +39,12 @@ ScriptControl::~ScriptControl()
 
 ///
 /// \brief ScriptControl::initJSEngine
+/// \param server
+/// \param order
 ///
-void ScriptControl::initJSEngine(ModbusMultiServer& server)
+void ScriptControl::initJSEngine(ModbusMultiServer& server, const ByteOrder& order)
 {
-    _server = QSharedPointer<Server>(new Server(server));
+    _server = QSharedPointer<Server>(new Server(server, order));
     _jsEngine.globalObject().setProperty("Server", _jsEngine.newQObject(_server.get()));
 }
 

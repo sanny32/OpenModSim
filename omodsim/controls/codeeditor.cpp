@@ -203,10 +203,11 @@ void CodeEditor::keyPressEvent(QKeyEvent *e)
 
     static QString eow("~!@#$%^&*()_+{}|:\"<>?,./;'[]\\-="); // end of word
     const bool hasModifier = (e->modifiers() != Qt::NoModifier) && !ctrlOrShift;
-    const QString completionPrefix = textUnderCursor();
+    QString completionPrefix = textUnderCursor();
 
+    qDebug() << completionPrefix;
     if (!isShortcut && (hasModifier || e->text().isEmpty() || completionPrefix.length() < 3
-                      || eow.contains(e->text().right(1)))) {
+                      /*|| eow.contains(e->text().right(1))*/)) {
         popup->hide();
         return;
     }
@@ -282,6 +283,7 @@ void CodeEditor::lineNumberAreaPaintEvent(QPaintEvent *event)
 QString CodeEditor::textUnderCursor() const
 {
     QTextCursor tc = textCursor();
+    tc.movePosition(QTextCursor::PreviousWord);
     tc.select(QTextCursor::WordUnderCursor);
     return tc.selectedText();
 }

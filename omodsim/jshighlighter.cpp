@@ -405,16 +405,13 @@ int JSHighlighter::highlightStringLiterals(const QChar strType, const QString &t
             case '7':
             {
                 if (i + 4 <= text.length()) {
-                    bool isCurrentOctal = true;
                     if (!isOctal(text.at(i+2).toLatin1())) {
-                        isCurrentOctal = false;
                         break;
                     }
                     if (!isOctal(text.at(i+3).toLatin1())) {
-                        isCurrentOctal = false;
                         break;
                     }
-                    len = isCurrentOctal ? 4 : 0;
+                    len = 4;
                 }
                 break;
             }
@@ -422,16 +419,13 @@ int JSHighlighter::highlightStringLiterals(const QChar strType, const QString &t
             case 'x':
             {
                 if (i + 3 <= text.length()) {
-                    bool isCurrentHex = true;
                     if (!isHex(text.at(i+2).toLatin1())) {
-                        isCurrentHex = false;
                         break;
                     }
                     if (!isHex(text.at(i+3).toLatin1())) {
-                        isCurrentHex = false;
                         break;
                     }
-                    len = isCurrentHex ? 4 : 0;
+                    len = 4;
                 }
                 break;
             }
