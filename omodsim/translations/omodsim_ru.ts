@@ -1107,12 +1107,14 @@ Length: %2</source>
 <context>
     <name>MenuConnect</name>
     <message>
-        <location filename="../menuconnect.cpp" line="15"/>
+        <location filename="../menuconnect.cpp" line="16"/>
+        <location filename="../menuconnect.cpp" line="59"/>
         <source>Modbus/TCP Srv</source>
         <translation>Modbus/TCP сервер</translation>
     </message>
     <message>
-        <location filename="../menuconnect.cpp" line="19"/>
+        <location filename="../menuconnect.cpp" line="20"/>
+        <location filename="../menuconnect.cpp" line="62"/>
         <source>Port %1</source>
         <translation>Порт %1</translation>
     </message>
