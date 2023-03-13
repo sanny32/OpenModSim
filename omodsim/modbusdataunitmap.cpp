@@ -93,7 +93,7 @@ void ModbusDataUnitMap::setData(const QModbusDataUnit& data)
     const auto length = data.valueCount();
     const auto type = data.registerType();
 
-    for(int i = 0; i < length; i++)
+    for(uint i = 0; i < length; i++)
     {
         setDataValue(_modbusDataUnitMap, type, addr + i, data.value(i));
         setDataValue(_modbusDataUnitGlobalMap, type, addr + i, data.value(i));
