@@ -1,14 +1,47 @@
 #include <QWidget>
+#include <QMetaProperty>
 #include <QStringListModel>
+#include "console.h"
+#include "script.h"
+#include "storage.h"
+#include "server.h"
 #include "jscompleter.h"
 
-QMap<QString, QStringList> _completerMap =
+struct MethodMetaInfo
 {
-    { "console",    {"log", "debug", "warning", "error", "clear"} },
-    { "Script",     {"stop"} },
-    { "Storage",    {"length", "key", "getItem", "setItem", "removeItem", "clear"} },
-    { "Server",     {"readHolding", "readInput", "readDiscrete", "readCoil", "writeHolding", "writeInput", "writeDiscrete", "writeCoil"} }
+    QString Name;
+    bool IsProperty;
 };
+
+QMap<QString, QVector<MethodMetaInfo>> _completerMap;
+
+///
+/// \brief addMetaObject
+/// \param metaObject
+///
+void addMetaObject(const QMetaObject& metaObject)
+{
+    QVector<MethodMetaInfo> vecInfo;
+
+    // add properties
+    for(int i = metaObject.propertyOffset(); i < metaObject.propertyCount(); i++)
+    {
+        const auto name =  QString::fromLatin1(metaObject.property(i).name());
+        vecInfo.push_back({name, true});
+    }
+
+    // add methods
+    for(int i = metaObject.methodOffset(); i < metaObject.methodCount(); i++)
+    {
+        if(metaObject.method(i).methodType() == QMetaMethod::Method)
+        {
+            const auto name =  QString::fromLatin1(metaObject.method(i).name());
+            vecInfo.push_back({name, false});
+        }
+    }
+
+    _completerMap[metaObject.className()] = vecInfo;
+}
 
 ///
 /// \brief JSCompleterModel::JSCompleterModel
@@ -17,6 +50,10 @@ QMap<QString, QStringList> _completerMap =
 JSCompleterModel::JSCompleterModel(QObject *parent)
     :QAbstractListModel(parent)
 {
+    addMetaObject(console::staticMetaObject);
+    addMetaObject(Script::staticMetaObject);
+    addMetaObject(Storage::staticMetaObject);
+    addMetaObject(Server::staticMetaObject);
 }
 
 ///
@@ -45,13 +82,21 @@ int JSCompleterModel::columnCount(const QModelIndex&) const
 ///
 QVariant JSCompleterModel::data(const QModelIndex &index, int role) const
 {
+    if(!_completerMap.contains(_completionKey) ||
+            index.row() < 0 || index.row() >= rowCount())
+    {
+        return QVariant();
+    }
+
     switch(role)
     {
+        case Qt::DecorationRole:
+           return _completerMap[_completionKey].at(index.row()).IsProperty ?
+                        QIcon(":/res/iconProp.png") :
+                        QIcon(":/res/iconFunc.png");
+
         case Qt::DisplayRole:
-            if(index.row() < 0 || index.row() >= rowCount())
-                return QVariant();
-            else
-                return _completerMap.contains(_completionKey) ? _completerMap[_completionKey].at(index.row()) : QString();
+           return _completerMap[_completionKey].at(index.row()).Name;
     }
 
     return QVariant();
@@ -70,10 +115,10 @@ QString JSCompleterModel::completionKey() const
 /// \brief JSCompleterModel::setCompletionKey
 /// \param key
 ///
-void JSCompleterModel::setCompletionKey(const QString& prefix)
+void JSCompleterModel::setCompletionKey(const QString& key)
 {
     beginResetModel();
-    _completionKey = prefix;
+    _completionKey = key;
     endResetModel();
 }
 

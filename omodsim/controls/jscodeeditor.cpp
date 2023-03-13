@@ -147,9 +147,6 @@ void JSCodeEditor::updateLineNumberArea(const QRect &rect, int dy)
 ///
 void JSCodeEditor::insertCompletion(const QString& completion)
 {
-    if (_compliter->widget() != this)
-        return;
-
     QTextCursor tc = textCursor();
     int extra = completion.length() - _compliter->completionPrefix().length();
     tc.insertText(completion.right(extra));
@@ -201,11 +198,13 @@ void JSCodeEditor::keyPressEvent(QKeyEvent *e)
     if (!popup || (ctrlOrShift && e->text().isEmpty()))
         return;
 
+    static QString eow("~!@#$%^&*()_+{}|:\"<>?,./;'[]\\-="); // end of word
+    const bool wordEnds = eow.contains(e->text().right(1));
     const bool hasModifier = (e->modifiers() != Qt::NoModifier) && !ctrlOrShift;
     QString completionPrefix = textUnderCursor();
 
-    if (hasModifier || e->text().isEmpty() ||
-            (!_compliter->completionKey().isEmpty() && completionPrefix.isEmpty()))
+    if (hasModifier || e->text().isEmpty() || e->key() == Qt::Key_Backspace ||
+            (!_compliter->completionKey().isEmpty() && wordEnds))
     {
         _compliter->setCompletionKey(QString());
         popup->hide();
@@ -222,21 +221,24 @@ void JSCodeEditor::keyPressEvent(QKeyEvent *e)
          completionPrefix = QString();
     }
 
-    /*static QString eow("~!@#$%^&*()_+{}|:\"<>?,./;'[]\\-="); // end of word
-    for(int i = 0; i < eow.length(); i++)
-       completionPrefix.remove(eow[i]);*/
-
-    qDebug() << completionPrefix;
-
-    if (completionPrefix != _compliter->completionPrefix())
+    if(!_compliter->completionKey().isEmpty())
     {
-        _compliter->setCompletionPrefix(completionPrefix);
-        popup->setCurrentIndex(_compliter->completionModel()->index(0, 0));
-    }
+        auto model = _compliter->completionModel();
 
-    QRect cr = cursorRect();
-    cr.setWidth(popup->sizeHintForColumn(0) + popup->verticalScrollBar()->sizeHint().width() + 20);
-    _compliter->complete(cr);
+        _compliter->setCompletionPrefix(completionPrefix);
+        popup->setCurrentIndex(model->index(0, 0));
+
+        int width = popup->sizeHintForColumn(0);
+        for(int i = 0; i < model->rowCount(); i++)
+        {
+            const auto text = model->data(model->index(i, 0)).toString();
+            width = qMax(width, fontMetrics().boundingRect(text).width());
+        }
+
+        QRect cr = cursorRect();
+        cr.setWidth(width + popup->verticalScrollBar()->sizeHint().width());
+        _compliter->complete(cr);
+    }
 }
 
 ///
