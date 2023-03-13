@@ -1,3 +1,4 @@
+#include <QEvent>
 #include <QSerialPortInfo>
 #include "menuconnect.h"
 
@@ -39,6 +40,32 @@ MenuConnect::MenuConnect(MenuType type, ModbusMultiServer& server, QWidget *pare
             a->setEnabled(_menuType == ConnectMenu ? !isConnected : isConnected);
         }
     });
+}
+
+///
+/// \brief MenuConnect::changeEvent
+/// \param event
+///
+void MenuConnect::changeEvent(QEvent* event)
+{
+    if (event->type() == QEvent::LanguageChange)
+    {
+        for(auto&& a : actions())
+        {
+            const auto data = a->data().value<QPair<ConnectionType, QString>>();
+            switch(data.first)
+            {
+                case ConnectionType::Tcp:
+                    a->setText(tr("Modbus/TCP Srv"));
+                break;
+                case ConnectionType::Serial:
+                    a->setText(QString(tr("Port %1")).arg(data.second));
+                break;
+            }
+        }
+    }
+
+    QMenu::changeEvent(event);
 }
 
 ///

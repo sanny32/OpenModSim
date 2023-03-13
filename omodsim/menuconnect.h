@@ -24,6 +24,9 @@ signals:
     void connectAction(ConnectionDetails& cd);
     void disconnectAction(ConnectionType type, const QString& port);
 
+protected:
+    void changeEvent(QEvent* event) override;
+
 private:
     void addAction(const QString& text, ConnectionType type, const QString& port);
 
