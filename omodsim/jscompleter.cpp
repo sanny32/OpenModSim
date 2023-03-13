@@ -1,9 +1,10 @@
+#include <QWidget>
 #include <QStringListModel>
 #include "jscompleter.h"
 
 QMap<QString, QStringList> _completerMap =
 {
-    { "console", {"log()", "debug()", "warning()", "error()"} },
+    { "console", {"log()", "debug()", "warning()", "error()", "clear()"} },
 };
 
 ///
@@ -21,7 +22,7 @@ JSCompleterModel::JSCompleterModel(QObject *parent)
 ///
 int JSCompleterModel::rowCount(const QModelIndex&) const
 {
-    return _completerMap[_prefix].size();
+    return _completerMap.contains(_prefix) ? _completerMap[_prefix].size() : 0;
 }
 
 ///
@@ -41,21 +42,16 @@ int JSCompleterModel::columnCount(const QModelIndex&) const
 ///
 QVariant JSCompleterModel::data(const QModelIndex &index, int role) const
 {
-    /*switch(role)
+    switch(role)
     {
-        case Qt::EditRole:
-        if(index.row() < 0 || index.row() >= rowCount())
-            return QVariant();
-        else
-            return *std::next(_completerMap.constBegin(), index.row());
+        case Qt::DisplayRole:
+            if(index.row() < 0 || index.row() >= rowCount())
+                return QVariant();
+            else
+                return _completerMap.contains(_prefix) ? _completerMap[_prefix].at(index.row()) : QString();
     }
 
-    return QVariant();*/
-
-    if(index.row() < 0 || index.row() >= rowCount())
-        return QVariant();
-    else
-        return _completerMap[_prefix].at(index.row());
+    return QVariant();
 }
 
 ///
@@ -73,24 +69,25 @@ QString JSCompleterModel::prefix() const
 ///
 void JSCompleterModel::setPrefix(const QString& prefix)
 {
+    beginResetModel();
     _prefix = prefix;
+    endResetModel();
 }
 
 ///
 /// \brief JSCompleter::JSCompleter
 /// \param parent
 ///
-JSCompleter::JSCompleter(QObject *parent)
-    : QCompleter{parent}
+JSCompleter::JSCompleter(QWidget* parent)
+    : QCompleter(parent)
 {
-    //setModel(new JSCompleterModel(this));
-    /*QStringList list;
-    list << "console" << "console.log()" << "console.debug()" << "Server";
-    setModel(new QStringListModel (list, this));*/
-
+    setWidget(parent);
     setCaseSensitivity(Qt::CaseSensitive);
     setCompletionMode(QCompleter::PopupCompletion);
+    setCompletionRole(Qt::DisplayRole);
     setWrapAround(false);
+
+    setModel(new JSCompleterModel(this));
 }
 
 ///
@@ -100,6 +97,6 @@ JSCompleter::JSCompleter(QObject *parent)
 void JSCompleter::setCompletionPrefix(const QString& prefix)
 {
     //setModel(new QStringListModel (_completerMap[prefix], this));
-    //QCompleter::setCompletionPrefix(prefix);
-    //((JSCompleterModel*)model())->setPrefix(prefix);
+    ((JSCompleterModel*)model())->setPrefix(prefix);
 }
+

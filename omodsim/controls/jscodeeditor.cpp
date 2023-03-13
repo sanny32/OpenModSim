@@ -3,38 +3,50 @@
 #include <QScrollBar>
 #include <QAbstractItemView>
 #include "jscompleter.h"
-#include "codeeditor.h"
+#include "jscodeeditor.h"
 
 ///
-/// \brief CodeEditor::CodeEditor
+/// \brief console::console
 /// \param parent
 ///
-CodeEditor::CodeEditor(QWidget *parent)
+JSCodeEditor::JSCodeEditor(QWidget *parent)
     : QPlainTextEdit(parent)
+    ,_compliter(nullptr)
 {
     _lineNumberArea = new LineNumberArea(this);
     _highlighter = new JSHighlighter(document());
 
-    connect(this, &CodeEditor::blockCountChanged, this, &CodeEditor::updateLineNumberAreaWidth);
-    connect(this, &CodeEditor::updateRequest, this, &CodeEditor::updateLineNumberArea);
-    connect(this, &CodeEditor::cursorPositionChanged, this, &CodeEditor::highlightCurrentLine);
+    connect(this, &JSCodeEditor::blockCountChanged, this, &JSCodeEditor::updateLineNumberAreaWidth);
+    connect(this, &JSCodeEditor::updateRequest, this, &JSCodeEditor::updateLineNumberArea);
+    connect(this, &JSCodeEditor::cursorPositionChanged, this, &JSCodeEditor::highlightCurrentLine);
 
     setBackgroundColor(Qt::white);
     setLineColor(QColor(Qt::lightGray).lighter(125));
 
     setFont(QFont("Fira Code"));
     setTabStopDistance(fontMetrics().horizontalAdvance(' ') * 4);
-    setCompleter(new JSCompleter(this));
 
     updateLineNumberAreaWidth(0);
     highlightCurrentLine();
+
+    enableAutoComplete(true);
 }
 
 ///
-/// \brief CodeEditor::lineNumberAreaWidth
+/// \brief JSCodeEditor::~JSCodeEditor
+///
+JSCodeEditor::~JSCodeEditor()
+{
+    delete _lineNumberArea;
+    delete _highlighter;
+    if(_compliter) delete _compliter;
+}
+
+///
+/// \brief console::lineNumberAreaWidth
 /// \return
 ///
-int CodeEditor::lineNumberAreaWidth()
+int JSCodeEditor::lineNumberAreaWidth()
 {
     int digits = 1;
     int max = qMax(1, blockCount());
@@ -47,10 +59,10 @@ int CodeEditor::lineNumberAreaWidth()
 }
 
 ///
-/// \brief CodeEditor::setForegroundColor
+/// \brief console::setForegroundColor
 /// \param clr
 ///
-void CodeEditor::setForegroundColor(const QColor& clr)
+void JSCodeEditor::setForegroundColor(const QColor& clr)
 {
     auto pal = palette();
     pal.setColor(QPalette::Text, clr);
@@ -58,10 +70,10 @@ void CodeEditor::setForegroundColor(const QColor& clr)
 }
 
 ///
-/// \brief CodeEditor::setBackgroundColor
+/// \brief console::setBackgroundColor
 /// \param clr
 ///
-void CodeEditor::setBackgroundColor(const QColor& clr)
+void JSCodeEditor::setBackgroundColor(const QColor& clr)
 {
     auto pal = palette();
     pal.setColor(QPalette::Base, clr);
@@ -70,55 +82,55 @@ void CodeEditor::setBackgroundColor(const QColor& clr)
 }
 
 ///
-/// \brief CodeEditor::setLineColor
+/// \brief console::setLineColor
 /// \param clr
 ///
-void CodeEditor::setLineColor(const QColor& clr)
+void JSCodeEditor::setLineColor(const QColor& clr)
 {
     _lineColor = clr;
 }
 
 ///
-/// \brief CodeEditor::setCompleter
-/// \param c
-///
-void CodeEditor::setCompleter(QCompleter* c)
-{
-    if (_compliter)
-        _compliter->disconnect(this);
-
-    _compliter = c;
-
-    if (!_compliter)
-        return;
-
-    _compliter->setWidget(this);
-    QObject::connect(c, QOverload<const QString &>::of(&QCompleter::activated),this, &CodeEditor::insertCompletion);
-}
-
-///
-/// \brief CodeEditor::completer
+/// \brief JSCodeEditor::isAutoCompleteEnabled
 /// \return
 ///
-QCompleter* CodeEditor::completer() const
+bool JSCodeEditor::isAutoCompleteEnabled() const
 {
-    return _compliter;
+    return _compliter != nullptr;
 }
 
 ///
-/// \brief CodeEditor::updateLineNumberAreaWidth
+/// \brief JSCodeEditor::enableAutoComplete
+/// \param enable
 ///
-void CodeEditor::updateLineNumberAreaWidth(int)
+void JSCodeEditor::enableAutoComplete(bool enable)
+{
+    if(enable)
+    {
+        _compliter = new JSCompleter(this);
+        connect(_compliter, QOverload<const QString &>::of(&QCompleter::activated),this, &JSCodeEditor::insertCompletion);
+    }
+    else if(_compliter)
+    {
+        delete _compliter;
+        _compliter = nullptr;
+    }
+}
+
+///
+/// \brief console::updateLineNumberAreaWidth
+///
+void JSCodeEditor::updateLineNumberAreaWidth(int)
 {
     setViewportMargins(lineNumberAreaWidth(), 0, 0, 0);
 }
 
 ///
-/// \brief CodeEditor::updateLineNumberArea
+/// \brief console::updateLineNumberArea
 /// \param rect
 /// \param dy
 ///
-void CodeEditor::updateLineNumberArea(const QRect &rect, int dy)
+void JSCodeEditor::updateLineNumberArea(const QRect &rect, int dy)
 {
     if (dy)
         _lineNumberArea->scroll(0, dy);
@@ -130,10 +142,10 @@ void CodeEditor::updateLineNumberArea(const QRect &rect, int dy)
 }
 
 ///
-/// \brief CodeEditor::insertCompletion
+/// \brief console::insertCompletion
 /// \param completion
 ///
-void CodeEditor::insertCompletion(const QString& completion)
+void JSCodeEditor::insertCompletion(const QString& completion)
 {
     if (_compliter->widget() != this)
         return;
@@ -147,10 +159,10 @@ void CodeEditor::insertCompletion(const QString& completion)
 }
 
 ///
-/// \brief CodeEditor::resizeEvent
+/// \brief console::resizeEvent
 /// \param e
 ///
-void CodeEditor::resizeEvent(QResizeEvent *e)
+void JSCodeEditor::resizeEvent(QResizeEvent *e)
 {
     QPlainTextEdit::resizeEvent(e);
 
@@ -159,25 +171,14 @@ void CodeEditor::resizeEvent(QResizeEvent *e)
 }
 
 ///
-/// \brief CodeEditor::focusInEvent
+/// \brief console::keyPressEvent
 /// \param e
 ///
-void CodeEditor::focusInEvent(QFocusEvent *e)
-{
-    if (_compliter)
-        _compliter->setWidget(this);
-
-    QPlainTextEdit::focusInEvent(e);
-}
-
-///
-/// \brief CodeEditor::keyPressEvent
-/// \param e
-///
-void CodeEditor::keyPressEvent(QKeyEvent *e)
+void JSCodeEditor::keyPressEvent(QKeyEvent *e)
 {
     QAbstractItemView* popup = (_compliter) ? _compliter->popup() : nullptr;
-    if (popup && popup->isVisible()) {
+    if (popup && popup->isVisible())
+    {
         // The following keys are forwarded by the completer to the widget
        switch (e->key()) {
        case Qt::Key_Enter:
@@ -192,13 +193,14 @@ void CodeEditor::keyPressEvent(QKeyEvent *e)
        }
     }
 
-    const bool isShortcut = (e->modifiers().testFlag(Qt::ControlModifier) && e->key() == Qt::Key_E); // CTRL+E
-    if (!_compliter || !isShortcut)
-        QPlainTextEdit::keyPressEvent(e);
+    QPlainTextEdit::keyPressEvent(e);
+
+    if(!_compliter)
+        return;
 
     const bool ctrlOrShift = e->modifiers().testFlag(Qt::ControlModifier) ||
                              e->modifiers().testFlag(Qt::ShiftModifier);
-    if (!_compliter || !popup || (ctrlOrShift && e->text().isEmpty()))
+    if (!popup || (ctrlOrShift && e->text().isEmpty()))
         return;
 
     static QString eow("~!@#$%^&*()_+{}|:\"<>?,./;'[]\\-="); // end of word
@@ -213,30 +215,30 @@ void CodeEditor::keyPressEvent(QKeyEvent *e)
          completionPrefix = tc.selectedText();
     }
 
-    if (!isShortcut && (hasModifier || e->text().isEmpty() || completionPrefix.length() < 3
-                      /*|| eow.contains(e->text().right(1))*/)) {
+    if (hasModifier || e->text().isEmpty() || completionPrefix.length() < 3
+                      /*|| eow.contains(e->text().right(1)))*/) {
+        _compliter->setCompletionPrefix(QString());
         popup->hide();
         return;
     }
 
-    qDebug() << completionPrefix;
-    if (/*completionPrefix != _compliter->completionPrefix()*/e->text() == ".")
+    qDebug() << e->text() << completionPrefix;
+    if (e->text() == ".")
     {
-        ((JSCompleter*)_compliter)->setCompletionPrefix(completionPrefix);
+        _compliter->setCompletionPrefix(completionPrefix);
         popup->setCurrentIndex(_compliter->completionModel()->index(0, 0));
     }
 
-    if(popup)
-    {
-        QRect cr = cursorRect();
-        cr.setWidth(popup->sizeHintForColumn(0) + popup->verticalScrollBar()->sizeHint().width());
-        _compliter->complete(cr);
-    }
+
+    QRect cr = cursorRect();
+    cr.setWidth(popup->sizeHintForColumn(0) + popup->verticalScrollBar()->sizeHint().width());
+    _compliter->complete(cr);
+
 }
 ///
-/// \brief CodeEditor::highlightCurrentLine
+/// \brief console::highlightCurrentLine
 ///
-void CodeEditor::highlightCurrentLine()
+void JSCodeEditor::highlightCurrentLine()
 {
     QList<QTextEdit::ExtraSelection> extraSelections;
 
@@ -255,10 +257,10 @@ void CodeEditor::highlightCurrentLine()
 }
 
 ///
-/// \brief CodeEditor::lineNumberAreaPaintEvent
+/// \brief console::lineNumberAreaPaintEvent
 /// \param event
 ///
-void CodeEditor::lineNumberAreaPaintEvent(QPaintEvent *event)
+void JSCodeEditor::lineNumberAreaPaintEvent(QPaintEvent *event)
 {
     QPainter painter(_lineNumberArea);
     painter.fillRect(event->rect(), QColorConstants::Svg::whitesmoke);
@@ -285,10 +287,10 @@ void CodeEditor::lineNumberAreaPaintEvent(QPaintEvent *event)
 }
 
 ///
-/// \brief CodeEditor::textUnderCursor
+/// \brief console::textUnderCursor
 /// \return
 ///
-QString CodeEditor::textUnderCursor() const
+QString JSCodeEditor::textUnderCursor() const
 {
     QTextCursor tc = textCursor();
     tc.select(QTextCursor::WordUnderCursor);

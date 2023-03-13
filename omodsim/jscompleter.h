@@ -29,7 +29,7 @@ private:
 class JSCompleter : public QCompleter
 {
 public:
-    explicit JSCompleter(QObject *parent = nullptr);
+    explicit JSCompleter(QWidget* parent = nullptr);
 
     void setCompletionPrefix(const QString& prefix);
 };

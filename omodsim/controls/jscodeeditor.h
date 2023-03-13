@@ -1,19 +1,21 @@
-#ifndef CODEEDITOR_H
-#define CODEEDITOR_H
+#ifndef JSCODEEDITOR_H
+#define JSCODEEDITOR_H
 
 #include <QCompleter>
 #include <QPlainTextEdit>
+#include "jscompleter.h"
 #include "jshighlighter.h"
 
 ///
-/// \brief The CodeEditor class
+/// \brief The JSCodeEditor class
 ///
-class CodeEditor : public QPlainTextEdit
+class JSCodeEditor : public QPlainTextEdit
 {
     Q_OBJECT
 
 public:
-    explicit CodeEditor(QWidget *parent = nullptr);
+    explicit JSCodeEditor(QWidget *parent = nullptr);
+    ~JSCodeEditor() override;
 
     void lineNumberAreaPaintEvent(QPaintEvent *event);
     int lineNumberAreaWidth();
@@ -22,13 +24,12 @@ public:
     void setBackgroundColor(const QColor& clr);
     void setLineColor(const QColor& clr);
 
-    QCompleter* completer() const;
-    void setCompleter(QCompleter* c);
+    bool isAutoCompleteEnabled() const;
+    void enableAutoComplete(bool enable);
 
 protected:
     void resizeEvent(QResizeEvent *event) override;
     void keyPressEvent(QKeyEvent *e) override;
-    void focusInEvent(QFocusEvent *e) override;
 
 private slots:
     void updateLineNumberAreaWidth(int newBlockCount);
@@ -37,13 +38,13 @@ private slots:
     void insertCompletion(const QString& completion);
 
 private:
-     QString textUnderCursor() const;
+    QString textUnderCursor() const;
 
 private:
     QColor _lineColor;
     QWidget* _lineNumberArea;
     JSHighlighter* _highlighter;
-    QCompleter* _compliter;
+    JSCompleter* _compliter;
 };
 
 ///
@@ -52,7 +53,7 @@ private:
 class LineNumberArea : public QWidget
 {
 public:
-    LineNumberArea(CodeEditor *editor)
+    LineNumberArea(JSCodeEditor *editor)
         : QWidget(editor)
         ,_codeEditor(editor)
     {
@@ -70,7 +71,7 @@ protected:
     }
 
 private:
-    CodeEditor* _codeEditor;
+    JSCodeEditor* _codeEditor;
 };
 
-#endif // CODEEDITOR_H
+#endif // JSCODEEDITOR_H

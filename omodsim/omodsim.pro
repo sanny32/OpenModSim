@@ -26,10 +26,10 @@ INCLUDEPATH += controls \
 SOURCES += \
     controls/booleancombobox.cpp \
     controls/clickablelabel.cpp \
-    controls/codeeditor.cpp \
     controls/customframe.cpp \
     controls/customlineedit.cpp \
     controls/flowcontroltypecombobox.cpp \
+    controls/jscodeeditor.cpp \
     controls/mainstatusbar.cpp \
     controls/numericcombobox.cpp \
     controls/numericlineedit.cpp \
@@ -76,10 +76,10 @@ HEADERS += \
     connectiondetails.h \
     controls/booleancombobox.h \
     controls/clickablelabel.h \
-    controls/codeeditor.h \
     controls/customframe.h \
     controls/customlineedit.h \
     controls/flowcontroltypecombobox.h \
+    controls/jscodeeditor.h \
     controls/mainstatusbar.h \
     controls/numericcombobox.h \
     controls/numericlineedit.h \
