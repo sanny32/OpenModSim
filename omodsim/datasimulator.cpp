@@ -46,7 +46,7 @@ void DataSimulator::startSimulation(DataDisplayMode mode, QModbusDataUnit::Regis
         break;
     }
 
-    _simulationMap[{ type, addr}] = { mode, params };
+    _simulationMap[{ type, addr}] = { mode, params, value };
     resumeSimulations();
 }
 
