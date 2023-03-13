@@ -7,12 +7,18 @@
 #include "server.h"
 #include "jscompleter.h"
 
+///
+/// \brief The MethodMetaInfo class
+///
 struct MethodMetaInfo
 {
     QString Name;
     bool IsProperty;
 };
 
+///
+/// \brief _completerMap
+///
 QMap<QString, QVector<MethodMetaInfo>> _completerMap;
 
 ///
@@ -48,12 +54,17 @@ void addMetaObject(const QMetaObject& metaObject)
 /// \param parent
 ///
 JSCompleterModel::JSCompleterModel(QObject *parent)
-    :QAbstractListModel(parent)
+    : QAbstractListModel(parent)
+    ,_iconProp(":/res/iconProp.png")
+    ,_icomFunc(":/res/iconFunc.png")
 {
-    addMetaObject(console::staticMetaObject);
-    addMetaObject(Script::staticMetaObject);
-    addMetaObject(Storage::staticMetaObject);
-    addMetaObject(Server::staticMetaObject);
+    if(_completerMap.empty())
+    {
+        addMetaObject(console::staticMetaObject);
+        addMetaObject(Script::staticMetaObject);
+        addMetaObject(Storage::staticMetaObject);
+        addMetaObject(Server::staticMetaObject);
+    }
 }
 
 ///
@@ -88,15 +99,14 @@ QVariant JSCompleterModel::data(const QModelIndex &index, int role) const
         return QVariant();
     }
 
+    const auto info = _completerMap[_completionKey].at(index.row());
     switch(role)
     {
         case Qt::DecorationRole:
-           return _completerMap[_completionKey].at(index.row()).IsProperty ?
-                        QIcon(":/res/iconProp.png") :
-                        QIcon(":/res/iconFunc.png");
+           return info.IsProperty ? _iconProp : _icomFunc;
 
         case Qt::DisplayRole:
-           return _completerMap[_completionKey].at(index.row()).Name;
+           return info.Name;
     }
 
     return QVariant();

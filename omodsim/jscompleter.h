@@ -1,6 +1,7 @@
 #ifndef JSCOMPLETER_H
 #define JSCOMPLETER_H
 
+#include <QIcon>
 #include <QCompleter>
 #include <QAbstractItemModel>
 
@@ -20,6 +21,8 @@ public:
     void setCompletionKey(const QString& key);
 
 private:
+    QIcon _iconProp;
+    QIcon _icomFunc;
     QString _completionKey;
 };
 
