@@ -152,8 +152,6 @@ void JSCodeEditor::insertCompletion(const QString& completion)
 
     QTextCursor tc = textCursor();
     int extra = completion.length() - _compliter->completionPrefix().length();
-    tc.movePosition(QTextCursor::Left);
-    tc.movePosition(QTextCursor::EndOfWord);
     tc.insertText(completion.right(extra));
     setTextCursor(tc);
 }
@@ -203,38 +201,44 @@ void JSCodeEditor::keyPressEvent(QKeyEvent *e)
     if (!popup || (ctrlOrShift && e->text().isEmpty()))
         return;
 
-    static QString eow("~!@#$%^&*()_+{}|:\"<>?,./;'[]\\-="); // end of word
     const bool hasModifier = (e->modifiers() != Qt::NoModifier) && !ctrlOrShift;
     QString completionPrefix = textUnderCursor();
+
+    if (hasModifier || e->text().isEmpty() ||
+            (!_compliter->completionKey().isEmpty() && completionPrefix.isEmpty()))
+    {
+        _compliter->setCompletionKey(QString());
+        popup->hide();
+        return;
+    }
 
     if(e->text() == ".")
     {
          QTextCursor tc = textCursor();
          tc.movePosition(QTextCursor::Left, QTextCursor::MoveAnchor, 2);
          tc.select(QTextCursor::WordUnderCursor);
-         completionPrefix = tc.selectedText();
+         _compliter->setCompletionKey(tc.selectedText());
+
+         completionPrefix = QString();
     }
 
-    if (hasModifier || e->text().isEmpty() || completionPrefix.length() < 3
-                      /*|| eow.contains(e->text().right(1)))*/) {
-        _compliter->setCompletionPrefix(QString());
-        popup->hide();
-        return;
-    }
+    /*static QString eow("~!@#$%^&*()_+{}|:\"<>?,./;'[]\\-="); // end of word
+    for(int i = 0; i < eow.length(); i++)
+       completionPrefix.remove(eow[i]);*/
 
-    qDebug() << e->text() << completionPrefix;
-    if (e->text() == ".")
+    qDebug() << completionPrefix;
+
+    if (completionPrefix != _compliter->completionPrefix())
     {
         _compliter->setCompletionPrefix(completionPrefix);
         popup->setCurrentIndex(_compliter->completionModel()->index(0, 0));
     }
 
-
     QRect cr = cursorRect();
-    cr.setWidth(popup->sizeHintForColumn(0) + popup->verticalScrollBar()->sizeHint().width());
+    cr.setWidth(popup->sizeHintForColumn(0) + popup->verticalScrollBar()->sizeHint().width() + 20);
     _compliter->complete(cr);
-
 }
+
 ///
 /// \brief console::highlightCurrentLine
 ///

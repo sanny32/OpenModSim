@@ -16,11 +16,11 @@ public:
     int columnCount(const QModelIndex &parent = QModelIndex()) const override;
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
 
-    QString prefix() const;
-    void setPrefix(const QString& prefix);
+    QString completionKey() const;
+    void setCompletionKey(const QString& key);
 
 private:
-    QString _prefix;
+    QString _completionKey;
 };
 
 ///
@@ -31,7 +31,8 @@ class JSCompleter : public QCompleter
 public:
     explicit JSCompleter(QWidget* parent = nullptr);
 
-    void setCompletionPrefix(const QString& prefix);
+    QString completionKey() const;
+    void setCompletionKey(const QString& key);
 };
 
 #endif // JSCOMPLETER_H

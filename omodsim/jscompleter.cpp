@@ -4,7 +4,10 @@
 
 QMap<QString, QStringList> _completerMap =
 {
-    { "console", {"log()", "debug()", "warning()", "error()", "clear()"} },
+    { "console",    {"log", "debug", "warning", "error", "clear"} },
+    { "Script",     {"stop"} },
+    { "Storage",    {"length", "key", "getItem", "setItem", "removeItem", "clear"} },
+    { "Server",     {"readHolding", "readInput", "readDiscrete", "readCoil", "writeHolding", "writeInput", "writeDiscrete", "writeCoil"} }
 };
 
 ///
@@ -22,7 +25,7 @@ JSCompleterModel::JSCompleterModel(QObject *parent)
 ///
 int JSCompleterModel::rowCount(const QModelIndex&) const
 {
-    return _completerMap.contains(_prefix) ? _completerMap[_prefix].size() : 0;
+    return _completerMap.contains(_completionKey) ? _completerMap[_completionKey].size() : 0;
 }
 
 ///
@@ -48,29 +51,29 @@ QVariant JSCompleterModel::data(const QModelIndex &index, int role) const
             if(index.row() < 0 || index.row() >= rowCount())
                 return QVariant();
             else
-                return _completerMap.contains(_prefix) ? _completerMap[_prefix].at(index.row()) : QString();
+                return _completerMap.contains(_completionKey) ? _completerMap[_completionKey].at(index.row()) : QString();
     }
 
     return QVariant();
 }
 
 ///
-/// \brief JSCompleterModel::prefix
+/// \brief JSCompleterModel::completionKey
 /// \return
 ///
-QString JSCompleterModel::prefix() const
+QString JSCompleterModel::completionKey() const
 {
-    return _prefix;
+    return _completionKey;
 }
 
 ///
-/// \brief JSCompleterModel::setPrefix
-/// \param prefix
+/// \brief JSCompleterModel::setCompletionKey
+/// \param key
 ///
-void JSCompleterModel::setPrefix(const QString& prefix)
+void JSCompleterModel::setCompletionKey(const QString& prefix)
 {
     beginResetModel();
-    _prefix = prefix;
+    _completionKey = prefix;
     endResetModel();
 }
 
@@ -91,12 +94,20 @@ JSCompleter::JSCompleter(QWidget* parent)
 }
 
 ///
+/// \brief JSCompleter::completionKey
+/// \return
+///
+QString JSCompleter::completionKey() const
+{
+    return ((JSCompleterModel*)model())->completionKey();
+}
+
+///
 /// \brief JSCompleter::setCompletionPrefix
 /// \param prefix
 ///
-void JSCompleter::setCompletionPrefix(const QString& prefix)
+void JSCompleter::setCompletionKey(const QString& key)
 {
-    //setModel(new QStringListModel (_completerMap[prefix], this));
-    ((JSCompleterModel*)model())->setPrefix(prefix);
+    ((JSCompleterModel*)model())->setCompletionKey(key);
 }
 
