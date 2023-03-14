@@ -37,9 +37,11 @@ JSCodeEditor::JSCodeEditor(QWidget *parent)
 ///
 JSCodeEditor::~JSCodeEditor()
 {
-    delete _lineNumberArea;
+    if(_compliter)
+        delete _compliter;
+
     delete _highlighter;
-    if(_compliter) delete _compliter;
+    delete _lineNumberArea;
 }
 
 ///

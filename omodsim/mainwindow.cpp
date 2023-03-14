@@ -200,6 +200,7 @@ void MainWindow::on_awake()
     ui->actionRunScript->setEnabled(frm != nullptr);
     ui->actionStopScript->setEnabled(frm != nullptr);
     ui->actionScriptSettings->setEnabled(frm != nullptr);
+    _actionRunMode->setEnabled(frm != nullptr);
 
     const auto isConnected = _mbMultiServer.isConnected();
     ui->actionForceCoils->setEnabled(isConnected);
@@ -239,6 +240,8 @@ void MainWindow::on_awake()
 
         ui->actionRunScript->setEnabled(frm->canRunScript());
         ui->actionStopScript->setEnabled(frm->canStopScript());
+        ui->actionScriptSettings->setEnabled(frm->canRunScript());
+        _actionRunMode->setEnabled(frm->canRunScript());
     }
 }
 

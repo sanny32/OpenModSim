@@ -201,7 +201,9 @@ inline QSettings& operator >>(QSettings& in, FormModSim* frm)
     frm->setDisplayDefinition(displayDefinition);
     frm->setDisplayHexAddresses(in.value("DisplayHexAddresses").toBool());
     frm->setScriptSettings(scriptSettings);
-    frm->setScript(QByteArray::fromBase64(in.value("Script").toString().toUtf8()));
+
+    const auto script = QByteArray::fromBase64(in.value("Script").toString().toUtf8());
+    if(!script.isEmpty()) frm->setScript(script);
 
     return in;
 }
