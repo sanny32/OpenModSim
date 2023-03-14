@@ -110,7 +110,9 @@ void ScriptControl::runScript(RunMode mode, int interval)
     _scriptCode = script();
     _jsEngine.setInterrupted(false);
 
-    executeScript();
+    if(!executeScript())
+        return;
+
     switch(mode)
     {
         case RunMode::Once:
@@ -135,12 +137,15 @@ void ScriptControl::stopScript()
 ///
 /// \brief ScriptControl::executeScript
 ///
-void ScriptControl::executeScript()
+bool ScriptControl::executeScript()
 {
     const auto res = _jsEngine.evaluate(_scriptCode);
     if(res.isError() && !_jsEngine.isInterrupted())
     {
         _console->error(QString("%1 (line %2)").arg(res.toString(), res.property("lineNumber").toString()));
         stopScript();
+
+        return false;
     }
+    return true;
  }

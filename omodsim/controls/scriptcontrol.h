@@ -42,7 +42,7 @@ public slots:
     void stopScript();
 
 private slots:
-    void executeScript();
+    bool executeScript();
 
 private:
     Ui::ScriptControl *ui;

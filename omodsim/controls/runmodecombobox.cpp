@@ -1,3 +1,4 @@
+#include <QEvent>
 #include "runmodecombobox.h"
 
 ///
@@ -10,7 +11,34 @@ RunModeComboBox::RunModeComboBox(QWidget* parent)
     addItem(tr("Once"), QVariant::fromValue(RunMode::Once));
     addItem(tr("Periodically"), QVariant::fromValue(RunMode::Periodically));
 
-    connect(this, SIGNAL(currentIndexChanged(int)), this, SLOT(on_currentIndexChanged(int)));
+    setSizeAdjustPolicy(SizeAdjustPolicy::AdjustToContents);
+    connect(this, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &RunModeComboBox::on_currentIndexChanged);
+}
+
+///
+/// \brief RunModeComboBox::changeEvent
+/// \param event
+///
+void RunModeComboBox::changeEvent(QEvent* event)
+{
+    if (event->type() == QEvent::LanguageChange)
+    {
+        for(int i = 0; i < count(); i++)
+        {
+            switch(itemData(i).value<RunMode>())
+            {
+                case RunMode::Once:
+                    setItemText(i, tr("Once"));
+                break;
+
+                case RunMode::Periodically:
+                    setItemText(i, tr("Periodically"));
+                break;
+            }
+        }
+    }
+
+    QComboBox::changeEvent(event);
 }
 
 ///

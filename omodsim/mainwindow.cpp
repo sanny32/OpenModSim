@@ -67,10 +67,10 @@ MainWindow::MainWindow(QWidget *parent)
     qobject_cast<QToolButton*>(ui->toolBarScript->widgetForAction(ui->actionRunScript))->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
     qobject_cast<QToolButton*>(ui->toolBarScript->widgetForAction(ui->actionStopScript))->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
 
-    auto labelJS = new QLabel(this);
+    /*auto labelJS = new QLabel(this);
     labelJS->setPixmap(QPixmap(":/res/jslogo.svg"));
     labelJS->setContentsMargins(2, 0, 6, 0);
-    ui->toolBarScript->insertWidget(_actionRunMode, labelJS);
+    ui->toolBarScript->insertWidget(_actionRunMode, labelJS);*/
 
     const auto defaultPrinter = QPrinterInfo::defaultPrinter();
     if(!defaultPrinter.isNull())

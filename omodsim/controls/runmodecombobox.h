@@ -16,6 +16,9 @@ public:
     RunMode currentRunMode() const;
     void setCurrentRunMode(RunMode mode);
 
+protected:
+    void changeEvent(QEvent* event) override;
+
 signals:
     void runModeChanged(RunMode value);
 

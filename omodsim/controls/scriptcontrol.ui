@@ -84,14 +84,6 @@
     </widget>
    </item>
   </layout>
-  <action name="actionRun">
-   <property name="text">
-    <string>Run</string>
-   </property>
-   <property name="toolTip">
-    <string>Run Script</string>
-   </property>
-  </action>
  </widget>
  <customwidgets>
   <customwidget>
