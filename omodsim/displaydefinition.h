@@ -52,11 +52,11 @@ inline QSettings& operator <<(QSettings& out, const DisplayDefinition& dd)
 ///
 inline QSettings& operator >>(QSettings& in, DisplayDefinition& dd)
 {
-    dd.UpdateRate = in.value("DisplayDefinition/UpdateRate").toUInt();
-    dd.DeviceId = in.value("DisplayDefinition/DeviceId").toUInt();
-    dd.PointAddress = in.value("DisplayDefinition/PointAddress").toUInt();
-    dd.PointType = (QModbusDataUnit::RegisterType)in.value("DisplayDefinition/PointType").toUInt();
-    dd.Length = in.value("DisplayDefinition/Length").toUInt();
+    dd.UpdateRate = in.value("DisplayDefinition/UpdateRate", 1000).toUInt();
+    dd.DeviceId = in.value("DisplayDefinition/DeviceId", 1).toUInt();
+    dd.PointAddress = in.value("DisplayDefinition/PointAddress", 1).toUInt();
+    dd.PointType = (QModbusDataUnit::RegisterType)in.value("DisplayDefinition/PointType", 4).toUInt();
+    dd.Length = in.value("DisplayDefinition/Length", 100).toUInt();
 
     dd.normalize();
     return in;

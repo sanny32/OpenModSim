@@ -44,8 +44,8 @@ inline QSettings& operator <<(QSettings& out, const ScriptSettings& ss)
 inline QSettings& operator >>(QSettings& in, ScriptSettings& ss)
 {
     ss.Mode = (RunMode)in.value("ScriptSettings/RunMode").toInt();
-    ss.Interval = in.value("ScriptSettings/Interval").toUInt();
-    ss.UseAutoComplete = in.value("ScriptSettings/UseAutoComplete").toBool();
+    ss.Interval = in.value("ScriptSettings/Interval", 1000).toUInt();
+    ss.UseAutoComplete = in.value("ScriptSettings/UseAutoComplete", true).toBool();
 
     ss.normalize();
     return in;
