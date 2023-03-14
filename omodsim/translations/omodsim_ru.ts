@@ -1259,7 +1259,32 @@ Length: %2</source>
  To break script execution use Script.stop() function
 ************************************************************************/
 </source>
-        <translation type="unfinished"></translation>
+        <translation>/***********************************************************************
+ Это редактор Open ModSim JavaScript кода
+ © Alexandr Ananev, 2023
+
+ Встроенные объекты Math, Date and String доступны для использования в коде
+
+ Для чтения и записи регистров используйте объект Server
+
+ var value = Server.readCoil(addr)
+ var value = Server.readDiscrete(addr)		
+ var value = Server.readInput(addr)		
+ var value = Server.readHolding(addr)		
+
+ Server.writeCoil(addr, value)
+ Server.writeDiscrete(addr, value)
+ Server.writeInput(addr, value)	
+ Server.writeHolding(addr, value)	
+
+ Для сохранения значений в периодически запускаемом скрипте используйте объект Storage
+ используйте Storage.setItem(key, value) для сохранения значения
+ используйте Storage.getItem(key) для получения значения 
+ 
+ Для вывода отладочной информации используйте функцию console.log()
+ Для прерывания выполнения скрипта используйте функцию Script.stop()
+************************************************************************/
+</translation>
     </message>
 </context>
 <context>
