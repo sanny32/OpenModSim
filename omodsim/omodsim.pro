@@ -1,10 +1,10 @@
-QT += core gui widgets network printsupport serialbus serialport
+QT += core gui widgets qml network printsupport serialbus serialport
 
 CONFIG += c++17
 CONFIG -= debug_and_release
 CONFIG -= debug_and_release_target
 
-VERSION = 1.1.1
+VERSION = 1.2.0
 
 QMAKE_TARGET_PRODUCT = "Open ModSim"
 QMAKE_TARGET_DESCRIPTION = "An Open Source Modbus Slave (Server) Utility"
@@ -21,6 +21,7 @@ win32:RC_ICONS += res/omodsim.ico
 
 INCLUDEPATH += controls \
                dialogs \
+               jsobjects
 
 SOURCES += \
     controls/booleancombobox.cpp \
@@ -28,12 +29,15 @@ SOURCES += \
     controls/customframe.cpp \
     controls/customlineedit.cpp \
     controls/flowcontroltypecombobox.cpp \
+    controls/jscodeeditor.cpp \
     controls/mainstatusbar.cpp \
     controls/numericcombobox.cpp \
     controls/numericlineedit.cpp \
     controls/outputwidget.cpp \
     controls/paritytypecombobox.cpp \
     controls/pointtypecombobox.cpp \
+    controls/runmodecombobox.cpp \
+    controls/scriptcontrol.cpp \
     controls/simulationmodecombobox.cpp \
     datasimulator.cpp \
     dialogs/dialogautosimulation.cpp \
@@ -43,6 +47,7 @@ SOURCES += \
     dialogs/dialogforcemultiplecoils.cpp \
     dialogs/dialogforcemultipleregisters.cpp \
     dialogs/dialogprintsettings.cpp \
+    dialogs/dialogscriptsettings.cpp \
     dialogs/dialogselectserviceport.cpp \
     dialogs/dialogsetuppresetdata.cpp \
     dialogs/dialogsetupserialport.cpp \
@@ -50,7 +55,13 @@ SOURCES += \
     dialogs/dialogwritecoilregister.cpp \
     dialogs/dialogwriteholdingregister.cpp \
     dialogs/dialogwriteholdingregisterbits.cpp \
+    jscompleter.cpp \
+    jsobjects/console.cpp \
+    jsobjects/script.cpp \
+    jsobjects/server.cpp \
     formmodsim.cpp \
+    jshighlighter.cpp \
+    jsobjects/storage.cpp \
     main.cpp \
     mainwindow.cpp \
     menuconnect.cpp \
@@ -69,12 +80,15 @@ HEADERS += \
     controls/customframe.h \
     controls/customlineedit.h \
     controls/flowcontroltypecombobox.h \
+    controls/jscodeeditor.h \
     controls/mainstatusbar.h \
     controls/numericcombobox.h \
     controls/numericlineedit.h \
     controls/outputwidget.h \
     controls/paritytypecombobox.h \
     controls/pointtypecombobox.h \
+    controls/runmodecombobox.h \
+    controls/scriptcontrol.h \
     controls/simulationmodecombobox.h \
     datasimulator.h \
     dialogs/dialogautosimulation.h \
@@ -84,6 +98,7 @@ HEADERS += \
     dialogs/dialogforcemultiplecoils.h \
     dialogs/dialogforcemultipleregisters.h \
     dialogs/dialogprintsettings.h \
+    dialogs/dialogscriptsettings.h \
     dialogs/dialogselectserviceport.h \
     dialogs/dialogsetuppresetdata.h \
     dialogs/dialogsetupserialport.h \
@@ -91,10 +106,16 @@ HEADERS += \
     dialogs/dialogwritecoilregister.h \
     dialogs/dialogwriteholdingregister.h \
     dialogs/dialogwriteholdingregisterbits.h \
+    jscompleter.h \
+    jsobjects/console.h \
+    jsobjects/script.h \
+    jsobjects/server.h \
     displaydefinition.h \
     enums.h \
     floatutils.h \
     formmodsim.h \
+    jshighlighter.h \
+    jsobjects/storage.h \
     mainwindow.h \
     menuconnect.h \
     modbusdataunitmap.h \
@@ -106,10 +127,12 @@ HEADERS += \
     qhexvalidator.h \
     qrange.h \
     recentfileactionlist.h \
+    scriptsettings.h \
     windowactionlist.h
 
 FORMS += \
     controls/outputwidget.ui \
+    controls/scriptcontrol.ui \
     dialogs/dialogautosimulation.ui \
     dialogs/dialogcoilsimulation.ui \
     dialogs/dialogabout.ui \
@@ -117,6 +140,7 @@ FORMS += \
     dialogs/dialogforcemultiplecoils.ui \
     dialogs/dialogforcemultipleregisters.ui \
     dialogs/dialogprintsettings.ui \
+    dialogs/dialogscriptsettings.ui \
     dialogs/dialogselectserviceport.ui \
     dialogs/dialogsetuppresetdata.ui \
     dialogs/dialogsetupserialport.ui \
@@ -132,6 +156,3 @@ RESOURCES += \
 
 TRANSLATIONS += \
     translations/omodsim_ru.ts
-
-DISTFILES += \
-    translations/omodsim_ru.qm

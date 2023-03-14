@@ -8,6 +8,7 @@
 #include "datasimulator.h"
 #include "modbusmultiserver.h"
 #include "displaydefinition.h"
+#include "scriptsettings.h"
 
 class MainWindow;
 
@@ -50,6 +51,12 @@ public:
     DataDisplayMode dataDisplayMode() const;
     void setDataDisplayMode(DataDisplayMode mode);
 
+    ScriptSettings scriptSettings() const;
+    void setScriptSettings(const ScriptSettings& ss);
+
+    QString script() const;
+    void setScript(const QString& text);
+
     bool displayHexAddresses() const;
     void setDisplayHexAddresses(bool on);
 
@@ -70,6 +77,12 @@ public:
     ModbusSimulationMap simulationMap() const;
     void startSimulation(QModbusDataUnit::RegisterType type, quint16 addr, const ModbusSimulationParams& params);
 
+    bool canRunScript() const;
+    bool canStopScript();
+
+    void runScript();
+    void stopScript();
+
 protected:
     void changeEvent(QEvent* event) override;
     void closeEvent(QCloseEvent *event) override;
@@ -81,6 +94,7 @@ signals:
     void showed();
     void closing();
     void byteOrderChanged(ByteOrder);
+    void scriptSettingsChanged(const ScriptSettings&);
 
 private slots:
     void on_lineEditAddress_valueChanged(const QVariant&);
@@ -103,6 +117,7 @@ private:
     Ui::FormModSim *ui;
     int _formId;
     QString _filename;
+    ScriptSettings _scriptSettings;
     ModbusMultiServer& _mbMultiServer;
     QSharedPointer<DataSimulator> _dataSimulator;
 };
@@ -134,6 +149,8 @@ inline QSettings& operator <<(QSettings& out, const FormModSim* frm)
     out << frm->byteOrder();
     out << frm->displayDefinition();
     out.setValue("DisplayHexAddresses", frm->displayHexAddresses());
+    out << frm->scriptSettings();
+    out.setValue("Script", frm->script().toUtf8().toBase64());
 
     return out;
 }
@@ -160,6 +177,9 @@ inline QSettings& operator >>(QSettings& in, FormModSim* frm)
     DisplayDefinition displayDefinition;
     in >> displayDefinition;
 
+    ScriptSettings scriptSettings;
+    in >> scriptSettings;
+
     bool isMaximized;
     isMaximized = in.value("ViewMaximized").toBool();
 
@@ -180,6 +200,8 @@ inline QSettings& operator >>(QSettings& in, FormModSim* frm)
     frm->setByteOrder(byteOrder);
     frm->setDisplayDefinition(displayDefinition);
     frm->setDisplayHexAddresses(in.value("DisplayHexAddresses").toBool());
+    frm->setScriptSettings(scriptSettings);
+    frm->setScript(QByteArray::fromBase64(in.value("Script").toString().toUtf8()));
 
     return in;
 }
@@ -209,16 +231,11 @@ inline QDataStream& operator <<(QDataStream& out, const FormModSim* frm)
     out << frm->foregroundColor();
     out << frm->statusColor();
     out << frm->font();
-
-    const auto dd = frm->displayDefinition();
-    out << dd.UpdateRate;
-    out << dd.DeviceId;
-    out << dd.PointType;
-    out << dd.PointAddress;
-    out << dd.Length;
-
+    out << frm->displayDefinition();
     out << frm->byteOrder();
     out << frm->simulationMap();
+    out << frm->script();
+    out << frm->scriptSettings();
 
     return out;
 }
@@ -261,20 +278,24 @@ inline QDataStream& operator >>(QDataStream& in, FormModSim* frm)
     in >> font;
 
     DisplayDefinition dd;
-    in >> dd.UpdateRate;
-    in >> dd.DeviceId;
-    in >> dd.PointType;
-    in >> dd.PointAddress;
-    in >> dd.Length;
-
-    ByteOrder byteOrder = ByteOrder::LittleEndian;
-    ModbusSimulationMap simulationMap;
+    in >> dd;
 
     const auto ver = frm->property("Version").value<QVersionNumber>();
+
+    ModbusSimulationMap simulationMap;
+    ByteOrder byteOrder = ByteOrder::LittleEndian;
     if(ver >= QVersionNumber(1, 1))
     {
         in >> byteOrder;
         in >> simulationMap;
+    }
+
+    QString script;
+    ScriptSettings scriptSettings;
+    if(ver >=  QVersionNumber(1, 2))
+    {
+        in >> script;
+        in >> scriptSettings;
     }
 
     if(in.status() != QDataStream::Ok)
@@ -294,6 +315,8 @@ inline QDataStream& operator >>(QDataStream& in, FormModSim* frm)
     frm->setFont(font);
     frm->setDisplayDefinition(dd);
     frm->setByteOrder(byteOrder);
+    frm->setScript(script);
+    frm->setScriptSettings(scriptSettings);
 
     for(auto&& k : simulationMap.keys())
         frm->startSimulation(k.first, k.second,  simulationMap[k]);

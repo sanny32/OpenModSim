@@ -434,6 +434,34 @@
     </message>
 </context>
 <context>
+    <name>DialogScriptSettings</name>
+    <message>
+        <location filename="../dialogs/dialogscriptsettings.ui" line="14"/>
+        <source>Script Settings</source>
+        <translation>Настройки скрипта</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogscriptsettings.ui" line="23"/>
+        <source>Run Mode: </source>
+        <translation>Режим запуска: </translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogscriptsettings.ui" line="40"/>
+        <source>Interval: </source>
+        <translation>Интервал: </translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogscriptsettings.ui" line="65"/>
+        <source>(msec)</source>
+        <translation>(мсек)</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogscriptsettings.ui" line="74"/>
+        <source>Use Auto-completion</source>
+        <translation>Включить автодополнение</translation>
+    </message>
+</context>
+<context>
     <name>DialogSelectServicePort</name>
     <message>
         <location filename="../dialogs/dialogselectserviceport.ui" line="14"/>
@@ -715,22 +743,22 @@
 <context>
     <name>FormModSim</name>
     <message>
-        <location filename="../formmodsim.ui" line="80"/>
+        <location filename="../formmodsim.ui" line="99"/>
         <source>Address:</source>
         <translation>Адрес:</translation>
     </message>
     <message>
-        <location filename="../formmodsim.ui" line="87"/>
+        <location filename="../formmodsim.ui" line="106"/>
         <source>Length:</source>
         <translation>Количество:</translation>
     </message>
     <message>
-        <location filename="../formmodsim.ui" line="179"/>
+        <location filename="../formmodsim.ui" line="198"/>
         <source>Device Id:</source>
         <translation>Узел:</translation>
     </message>
     <message>
-        <location filename="../formmodsim.ui" line="232"/>
+        <location filename="../formmodsim.ui" line="251"/>
         <source>MODBUS Point Type</source>
         <translation>Тип регистров MODBUS</translation>
     </message>
@@ -739,19 +767,19 @@
         <translation type="vanished">НЕ ПОДКЛЮЧЕНО!</translation>
     </message>
     <message>
-        <location filename="../formmodsim.cpp" line="319"/>
+        <location filename="../formmodsim.cpp" line="356"/>
         <source>Device Id: %1</source>
         <translation>Узел: %1</translation>
     </message>
     <message>
-        <location filename="../formmodsim.cpp" line="322"/>
+        <location filename="../formmodsim.cpp" line="359"/>
         <source>Address: %1
 Length: %2</source>
         <translation>Адрес: %1
 Количество: %2</translation>
     </message>
     <message>
-        <location filename="../formmodsim.cpp" line="325"/>
+        <location filename="../formmodsim.cpp" line="362"/>
         <source>MODBUS Point Type:
 %1</source>
         <translation>Тип регистров MODBUS:
@@ -833,273 +861,305 @@ Length: %2</source>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="85"/>
-        <location filename="../mainwindow.ui" line="559"/>
-        <location filename="../mainwindow.ui" line="562"/>
+        <location filename="../mainwindow.ui" line="585"/>
+        <location filename="../mainwindow.ui" line="588"/>
         <source>Byte Order</source>
         <translation>Порядок байтов</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="107"/>
+        <location filename="../mainwindow.ui" line="108"/>
         <source>Extended</source>
         <translation>Расширенные параметры</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="120"/>
+        <location filename="../mainwindow.ui" line="117"/>
+        <source>Script</source>
+        <translation>Скрипт</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="132"/>
         <source>Window</source>
         <translation>Окно</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="129"/>
+        <location filename="../mainwindow.ui" line="141"/>
         <source>Help</source>
         <translation>Помощь</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="135"/>
+        <location filename="../mainwindow.ui" line="147"/>
         <source>View</source>
         <translation>Вид</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="139"/>
+        <location filename="../mainwindow.ui" line="151"/>
         <source>Config</source>
         <translation>Конфигурация</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="143"/>
+        <location filename="../mainwindow.ui" line="155"/>
         <source>Colors</source>
         <translation>Цвета</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="154"/>
+        <location filename="../mainwindow.ui" line="166"/>
         <source>Language</source>
         <translation>Язык</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="227"/>
+        <location filename="../mainwindow.ui" line="253"/>
         <source>New</source>
         <translation>Новый</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="236"/>
+        <location filename="../mainwindow.ui" line="262"/>
         <source>Open...</source>
         <translation>Открыть...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="241"/>
+        <location filename="../mainwindow.ui" line="267"/>
         <source>Close</source>
         <translation>Закрыть</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="250"/>
+        <location filename="../mainwindow.ui" line="276"/>
         <source>Save</source>
         <translation>Сохранить</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="255"/>
+        <location filename="../mainwindow.ui" line="281"/>
         <source>Save As...</source>
         <translation>Сохранить как...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="260"/>
+        <location filename="../mainwindow.ui" line="286"/>
         <source>Save Test Config</source>
         <translation>Сохранить конфиг</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="265"/>
+        <location filename="../mainwindow.ui" line="291"/>
         <source>Restore Test Config</source>
         <translation>Восстановить конфиг</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="274"/>
+        <location filename="../mainwindow.ui" line="300"/>
         <source>Print...</source>
         <translation>Печать...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="279"/>
+        <location filename="../mainwindow.ui" line="305"/>
         <source>Print Setup...</source>
         <translation>Настройка печати...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="284"/>
+        <location filename="../mainwindow.ui" line="310"/>
         <source>Recent File</source>
         <translation>Последние файлы</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="289"/>
+        <location filename="../mainwindow.ui" line="315"/>
         <source>Exit</source>
         <translation>Выход</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="298"/>
+        <location filename="../mainwindow.ui" line="324"/>
         <source>Connect</source>
         <translation>Подключить</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="307"/>
+        <location filename="../mainwindow.ui" line="333"/>
         <source>Disconnect</source>
         <translation>Отключить</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="319"/>
+        <location filename="../mainwindow.ui" line="345"/>
         <source>Binary</source>
         <translation>Двоичный</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="331"/>
+        <location filename="../mainwindow.ui" line="357"/>
         <source>Unsigned Decimal</source>
         <translation>Беззнаковый десятичный</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="343"/>
+        <location filename="../mainwindow.ui" line="369"/>
         <source>Hex</source>
         <translation>Шестандцатиричный</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="355"/>
+        <location filename="../mainwindow.ui" line="381"/>
         <source>Floating Point</source>
         <translation>С плавающей точкой</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="367"/>
+        <location filename="../mainwindow.ui" line="393"/>
         <source>Swapped FP</source>
         <translation>Перевернутое с плавающей точкой</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="379"/>
+        <location filename="../mainwindow.ui" line="405"/>
         <source>Dbl Float</source>
         <translation>Двойной точности</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="391"/>
+        <location filename="../mainwindow.ui" line="417"/>
         <source>Swapped Dbl</source>
         <translation>Перевернутое двойной точности</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="396"/>
+        <location filename="../mainwindow.ui" line="422"/>
         <source>Cascade</source>
         <translation>Каскадно</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="401"/>
+        <location filename="../mainwindow.ui" line="427"/>
         <source>Tile</source>
         <translation>Замостить</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="410"/>
+        <location filename="../mainwindow.ui" line="436"/>
         <source>About Open ModSim...</source>
         <translation>О программе Open ModSim...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="422"/>
+        <location filename="../mainwindow.ui" line="448"/>
         <source>Integer</source>
         <translation>Целый</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="434"/>
+        <location filename="../mainwindow.ui" line="460"/>
         <source>Show Data</source>
         <translation>Данные</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="446"/>
+        <location filename="../mainwindow.ui" line="472"/>
         <source>Show Traffic</source>
         <translation>Трафик</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="455"/>
+        <location filename="../mainwindow.ui" line="481"/>
         <source>Data Definition</source>
         <translation>Настройки отображения</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="533"/>
+        <location filename="../mainwindow.ui" line="559"/>
         <source>Force Coils</source>
         <translation>Предустановка coils</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="538"/>
+        <location filename="../mainwindow.ui" line="564"/>
         <source>Preset Holding Regs</source>
         <translation>Предустановка holding регистров</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="546"/>
+        <location filename="../mainwindow.ui" line="572"/>
         <source>Big-Endian</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="554"/>
+        <location filename="../mainwindow.ui" line="580"/>
         <source>Little-Endian</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="567"/>
+        <location filename="../mainwindow.ui" line="593"/>
         <source>Preset Input Regs</source>
         <translation>Предустановка input регистров</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="572"/>
+        <location filename="../mainwindow.ui" line="598"/>
         <source>Force Discretes</source>
         <translation>Предустановка discretes</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="176"/>
-        <location filename="../mainwindow.ui" line="463"/>
+        <location filename="../mainwindow.ui" line="610"/>
+        <source>Show Script</source>
+        <translation>Показать скрипт</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="619"/>
+        <location filename="../mainwindow.ui" line="622"/>
+        <source>Run Script</source>
+        <translation>Запуск</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="631"/>
+        <location filename="../mainwindow.ui" line="634"/>
+        <source>Stop Script</source>
+        <translation>Останов</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="639"/>
+        <source>Script Settings</source>
+        <translation>Настройки скрипта</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="188"/>
+        <location filename="../mainwindow.ui" line="489"/>
         <source>Toolbar</source>
         <translation>Панель инструментов</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="471"/>
+        <location filename="../mainwindow.ui" line="497"/>
         <source>Status Bar</source>
         <translation>Строка состояния</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="200"/>
-        <location filename="../mainwindow.ui" line="479"/>
+        <location filename="../mainwindow.ui" line="213"/>
+        <location filename="../mainwindow.ui" line="505"/>
         <source>Display Bar</source>
         <translation>Панель отображения</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="484"/>
+        <location filename="../mainwindow.ui" line="236"/>
+        <source>Script Bar</source>
+        <translation>Панель управления скриптом</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="510"/>
         <source>Font</source>
         <translation>Шрифт</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="489"/>
+        <location filename="../mainwindow.ui" line="515"/>
         <source>Background</source>
         <translation>Задний план</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="494"/>
+        <location filename="../mainwindow.ui" line="520"/>
         <source>Foreground</source>
         <translation>Передний план</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="499"/>
+        <location filename="../mainwindow.ui" line="525"/>
         <source>Status</source>
         <translation>Статус</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="504"/>
+        <location filename="../mainwindow.ui" line="530"/>
         <source>Windows...</source>
         <translation>Окна...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="512"/>
+        <location filename="../mainwindow.ui" line="538"/>
         <source>Hex Addresses</source>
         <translation>Шестнадцатиричные адреса</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="520"/>
+        <location filename="../mainwindow.ui" line="546"/>
         <source>English</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="528"/>
+        <location filename="../mainwindow.ui" line="554"/>
         <source>Русский</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="246"/>
-        <location filename="../mainwindow.cpp" line="285"/>
-        <location filename="../mainwindow.cpp" line="298"/>
-        <location filename="../mainwindow.cpp" line="309"/>
+        <location filename="../mainwindow.cpp" line="276"/>
+        <location filename="../mainwindow.cpp" line="315"/>
+        <location filename="../mainwindow.cpp" line="328"/>
+        <location filename="../mainwindow.cpp" line="339"/>
         <source>All files (*)</source>
         <translation>Все файлы (*)</translation>
     </message>
@@ -1130,12 +1190,12 @@ Length: %2</source>
 <context>
     <name>OutputWidget</name>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="613"/>
+        <location filename="../controls/outputwidget.cpp" line="616"/>
         <source>NOT CONNECTED!</source>
         <translation>НЕ ПОДКЛЮЧЕНО!</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="621"/>
+        <location filename="../controls/outputwidget.cpp" line="624"/>
         <source>Invalid Data Length Specified</source>
         <translation>Указана недопустимая длина данных</translation>
     </message>
@@ -1156,6 +1216,101 @@ Length: %2</source>
         <location filename="../controls/paritytypecombobox.cpp" line="12"/>
         <source>NONE</source>
         <translation>Нет</translation>
+    </message>
+</context>
+<context>
+    <name>RunModeComboBox</name>
+    <message>
+        <location filename="../controls/runmodecombobox.cpp" line="10"/>
+        <source>Once</source>
+        <translation>Однократно</translation>
+    </message>
+    <message>
+        <location filename="../controls/runmodecombobox.cpp" line="11"/>
+        <source>Periodically</source>
+        <translation>Периодически</translation>
+    </message>
+</context>
+<context>
+    <name>ScriptControl</name>
+    <message>
+        <location filename="../controls/scriptcontrol.ui" line="39"/>
+        <source>/***********************************************************************
+ This is Open ModSim JavaScript code editor
+ © Alexandr Ananev, 2023
+
+ Built-in objects Math, Date and String are available in this script
+
+ To read and write registers use Server object
+
+ var value = Server.readCoil(addr)
+ var value = Server.readDiscrete(addr)		
+ var value = Server.readInput(addr)		
+ var value = Server.readHolding(addr)		
+
+ Server.writeCoil(addr, value)
+ Server.writeDiscrete(addr, value)
+ Server.writeInput(addr, value)	
+ Server.writeHolding(addr, value)	
+
+ To store values through periodically script execution use Storage object
+ use Storage.setItem(key, value) to store value
+ use Storage.getItem(key) to get stored value 
+ 
+ To output debug information use console.log() function
+ To break script execution use Script.stop() function
+************************************************************************/
+</source>
+        <translation>/***********************************************************************
+ Это редактор Open ModSim JavaScript кода
+ © Alexandr Ananev, 2023
+
+ Встроенные объекты Math, Date and String доступны для использования в коде
+
+ Для чтения и записи регистров используйте объект Server
+
+ var value = Server.readCoil(addr)
+ var value = Server.readDiscrete(addr)		
+ var value = Server.readInput(addr)		
+ var value = Server.readHolding(addr)		
+
+ Server.writeCoil(addr, value)
+ Server.writeDiscrete(addr, value)
+ Server.writeInput(addr, value)	
+ Server.writeHolding(addr, value)	
+
+ Для сохранения значений в периодически запускаемом скрипте используйте объект Storage
+ используйте Storage.setItem(key, value) для сохранения значения
+ используйте Storage.getItem(key) для получения значения 
+ 
+ Для вывода отладочной информации используйте функцию console.log()
+ Для прерывания выполнения скрипта используйте функцию Script.stop()
+************************************************************************/
+</translation>
+    </message>
+</context>
+<context>
+    <name>SimulationModeComboBox</name>
+    <message>
+        <location filename="../controls/simulationmodecombobox.cpp" line="42"/>
+        <location filename="../controls/simulationmodecombobox.cpp" line="48"/>
+        <source>Random</source>
+        <translation>Случайное</translation>
+    </message>
+    <message>
+        <location filename="../controls/simulationmodecombobox.cpp" line="43"/>
+        <source>Toggle</source>
+        <translation>Переключение</translation>
+    </message>
+    <message>
+        <location filename="../controls/simulationmodecombobox.cpp" line="49"/>
+        <source>Increment</source>
+        <translation>Увеличение</translation>
+    </message>
+    <message>
+        <location filename="../controls/simulationmodecombobox.cpp" line="50"/>
+        <source>Decrement</source>
+        <translation>Уменьшение</translation>
     </message>
 </context>
 </TS>

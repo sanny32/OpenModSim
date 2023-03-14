@@ -89,6 +89,7 @@
      </widget>
      <addaction name="actionShowData"/>
      <addaction name="actionShowTraffic"/>
+     <addaction name="actionShowScript"/>
      <addaction name="separator"/>
      <addaction name="actionBinary"/>
      <addaction name="actionUnsignedDecimal"/>
@@ -109,11 +110,22 @@
      <addaction name="actionForceCoils"/>
      <addaction name="actionForceDiscretes"/>
      <addaction name="actionPresetInputRegs"/>
-     <addaction name="actionPresetHoldingRegs"/> 
+     <addaction name="actionPresetHoldingRegs"/>
+    </widget>
+    <widget class="QMenu" name="menuScript">
+     <property name="title">
+      <string>Script</string>
+     </property>
+     <addaction name="actionRunScript"/>
+     <addaction name="actionStopScript"/>
+     <addaction name="separator"/>
+     <addaction name="actionScriptSettings"/>
     </widget>
     <addaction name="actionDataDefinition"/>
     <addaction name="menuDisplay_Options"/>
     <addaction name="menuExtended"/>
+    <addaction name="separator"/>
+    <addaction name="menuScript"/>
    </widget>
    <widget class="QMenu" name="menuWindow">
     <property name="title">
@@ -191,6 +203,7 @@
    <addaction name="actionDataDefinition"/>
    <addaction name="actionShowData"/>
    <addaction name="actionShowTraffic"/>
+   <addaction name="actionShowScript"/>
    <addaction name="separator"/>
    <addaction name="actionPrint"/>
    <addaction name="actionAbout"/>
@@ -217,6 +230,20 @@
    <addaction name="actionSwappedDbl"/>
    <addaction name="separator"/>
    <addaction name="actionByteOrder"/>
+  </widget>
+  <widget class="QToolBar" name="toolBarScript">
+   <property name="windowTitle">
+    <string>Script Bar</string>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="actionScriptSettings"/>
+   <addaction name="actionRunScript"/>
+   <addaction name="actionStopScript"/>
   </widget>
   <action name="actionNew">
    <property name="icon">
@@ -570,6 +597,51 @@
   <action name="actionForceDiscretes">
    <property name="text">
     <string>Force Discretes</string>
+   </property>
+  </action>
+  <action name="actionShowScript">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/res/actionShowScript.png</normaloff>:/res/actionShowScript.png</iconset>
+   </property>
+   <property name="text">
+    <string>Show Script</string>
+   </property>
+  </action>
+  <action name="actionRunScript">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/res/actionRunScript.png</normaloff>:/res/actionRunScript.png</iconset>
+   </property>
+   <property name="text">
+    <string>Run Script</string>
+   </property>
+   <property name="toolTip">
+    <string>Run Script</string>
+   </property>
+  </action>
+  <action name="actionStopScript">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/res/actionStopScript.png</normaloff>:/res/actionStopScript.png</iconset>
+   </property>
+   <property name="text">
+    <string>Stop Script</string>
+   </property>
+   <property name="toolTip">
+    <string>Stop Script</string>
+   </property>
+  </action>
+  <action name="actionScriptSettings">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/res/actionScriptSettings.png</normaloff>:/res/actionScriptSettings.png</iconset>
+   </property>
+   <property name="text">
+    <string>Script Settings</string>
    </property>
   </action>
  </widget>

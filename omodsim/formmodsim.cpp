@@ -10,7 +10,7 @@
 #include "formmodsim.h"
 #include "ui_formmodsim.h"
 
-QVersionNumber FormModSim::VERSION = QVersionNumber(1, 1);
+QVersionNumber FormModSim::VERSION = QVersionNumber(1, 2);
 
 ///
 /// \brief FormModSim::FormModSim
@@ -28,6 +28,9 @@ FormModSim::FormModSim(int id, ModbusMultiServer& server, QSharedPointer<DataSim
 
     ui->setupUi(this);
     setWindowTitle(QString("ModSim%1").arg(_formId));
+
+    ui->stackedWidget->setCurrentIndex(0);
+    ui->scriptControl->initJSEngine(server, ui->outputWidget->byteOrder());
 
     ui->lineEditAddress->setPaddingZeroes(true);
     ui->lineEditAddress->setInputRange(ModbusLimits::addressRange());
@@ -148,7 +151,10 @@ void FormModSim::setDisplayDefinition(const DisplayDefinition& dd)
 ///
 DisplayMode FormModSim::displayMode() const
 {
-    return ui->outputWidget->displayMode();
+    if(ui->stackedWidget->currentIndex() == 1)
+        return DisplayMode::Script;
+    else
+        return ui->outputWidget->displayMode();
 }
 
 ///
@@ -157,7 +163,18 @@ DisplayMode FormModSim::displayMode() const
 ///
 void FormModSim::setDisplayMode(DisplayMode mode)
 {
-    ui->outputWidget->setDisplayMode(mode);
+    switch(mode)
+    {
+        case DisplayMode::Script:
+            ui->stackedWidget->setCurrentIndex(1);
+            ui->scriptControl->setFocus();
+        break;
+
+        default:
+            ui->stackedWidget->setCurrentIndex(0);
+            ui->outputWidget->setDisplayMode(mode);
+        break;
+    }
 }
 
 ///
@@ -194,6 +211,26 @@ void FormModSim::setDisplayHexAddresses(bool on)
 void FormModSim::setDataDisplayMode(DataDisplayMode mode)
 {
     ui->outputWidget->setDataDisplayMode(mode);
+}
+
+///
+/// \brief FormModSim::scriptSettings
+/// \return
+///
+ScriptSettings FormModSim::scriptSettings() const
+{
+    return _scriptSettings;
+}
+
+///
+/// \brief FormModSim::setScriptSettings
+/// \param ss
+///
+void FormModSim::setScriptSettings(const ScriptSettings& ss)
+{
+    _scriptSettings = ss;
+    ui->scriptControl->enableAutoComplete(ss.UseAutoComplete);
+    emit scriptSettingsChanged(ss);
 }
 
 ///
@@ -374,6 +411,60 @@ ModbusSimulationMap FormModSim::simulationMap() const
 void FormModSim::startSimulation(QModbusDataUnit::RegisterType type, quint16 addr, const ModbusSimulationParams& params)
 {
     _dataSimulator->startSimulation(dataDisplayMode(), type, addr, params);
+}
+
+///
+/// \brief FormModSim::script
+/// \return
+///
+QString FormModSim::script() const
+{
+    return ui->scriptControl->script();
+}
+
+///
+/// \brief FormModSim::setScript
+/// \param text
+///
+void FormModSim::setScript(const QString& text)
+{
+    ui->scriptControl->setScript(text);
+}
+
+///
+/// \brief FormModSim::canRunScript
+/// \return
+///
+bool FormModSim::canRunScript() const
+{
+    return !ui->scriptControl->script().isEmpty() &&
+           !ui->scriptControl->isRunning();
+}
+
+///
+/// \brief FormModSim::canStopScript
+/// \return
+///
+bool FormModSim::canStopScript()
+{
+    return ui->scriptControl->isRunning();
+}
+
+///
+/// \brief FormModSim::runScript
+/// \param interval
+///
+void FormModSim::runScript()
+{
+    ui->scriptControl->runScript(_scriptSettings.Mode, _scriptSettings.Interval);
+}
+
+///
+/// \brief FormModSim::stopScript
+///
+void FormModSim::stopScript()
+{
+    ui->scriptControl->stopScript();
 }
 
 ///

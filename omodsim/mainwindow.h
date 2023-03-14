@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QTranslator>
+#include <QWidgetAction>
 #include "formmodsim.h"
 #include "modbusmultiserver.h"
 #include "windowactionlist.h"
@@ -50,6 +51,7 @@ private slots:
     void on_actionDataDefinition_triggered();
     void on_actionShowData_triggered();
     void on_actionShowTraffic_triggered();
+    void on_actionShowScript_triggered();
     void on_actionBinary_triggered();
     void on_actionUnsignedDecimal_triggered();
     void on_actionInteger_triggered();
@@ -87,6 +89,13 @@ private slots:
     /* Help menu slots */
     void on_actionAbout_triggered();
 
+    /* Script menu slots */
+    void on_actionRunScript_triggered();
+    void on_actionStopScript_triggered();
+    void on_actionScriptSettings_triggered();
+
+    void on_runModeChanged(RunMode mode);
+
     void on_connectionError(const QString& error);
     void on_dataSimulated(DataDisplayMode mode, QModbusDataUnit::RegisterType type, quint16 addr, QVariant value);
 
@@ -117,6 +126,7 @@ private:
 
 private:
     Ui::MainWindow *ui;
+    QWidgetAction* _actionRunMode;
 
     QString _lang;
     QTranslator _qtTranslator;

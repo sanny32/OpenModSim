@@ -9,8 +9,10 @@
 #include "dialogselectserviceport.h"
 #include "dialogsetupserialport.h"
 #include "dialogsetuppresetdata.h"
+#include "dialogscriptsettings.h"
 #include "dialogforcemultiplecoils.h"
 #include "dialogforcemultipleregisters.h"
+#include "runmodecombobox.h"
 #include "mainstatusbar.h"
 #include "menuconnect.h"
 #include "mainwindow.h"
@@ -55,6 +57,15 @@ MainWindow::MainWindow(QWidget *parent)
     ui->actionDisconnect->setMenu(menuDisconnect);
     qobject_cast<QToolButton*>(ui->toolBarMain->widgetForAction(ui->actionDisconnect))->setPopupMode(QToolButton::InstantPopup);
     qobject_cast<QToolButton*>(ui->toolBarMain->widgetForAction(ui->actionDisconnect))->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+
+    auto comboBoxRunMode = new RunModeComboBox(this);
+    connect(comboBoxRunMode, &RunModeComboBox::runModeChanged, this, &MainWindow::on_runModeChanged);
+
+    _actionRunMode = new QWidgetAction(this);
+    _actionRunMode->setDefaultWidget(comboBoxRunMode);
+    ui->toolBarScript->insertAction(ui->actionRunScript, _actionRunMode);
+    qobject_cast<QToolButton*>(ui->toolBarScript->widgetForAction(ui->actionRunScript))->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+    qobject_cast<QToolButton*>(ui->toolBarScript->widgetForAction(ui->actionStopScript))->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
 
     const auto defaultPrinter = QPrinterInfo::defaultPrinter();
     if(!defaultPrinter.isNull())
@@ -176,6 +187,7 @@ void MainWindow::on_awake()
     ui->actionDataDefinition->setEnabled(frm != nullptr);
     ui->actionShowData->setEnabled(frm != nullptr);
     ui->actionShowTraffic->setEnabled(frm != nullptr);
+    ui->actionShowScript->setEnabled(frm != nullptr);
     ui->actionBinary->setEnabled(frm != nullptr);
     ui->actionUnsignedDecimal->setEnabled(frm != nullptr);
     ui->actionInteger->setEnabled(frm != nullptr);
@@ -184,6 +196,16 @@ void MainWindow::on_awake()
     ui->actionSwappedFP->setEnabled(frm != nullptr);
     ui->actionDblFloat->setEnabled(frm != nullptr);
     ui->actionSwappedDbl->setEnabled(frm != nullptr);
+
+    ui->actionRunScript->setEnabled(frm != nullptr);
+    ui->actionStopScript->setEnabled(frm != nullptr);
+    ui->actionScriptSettings->setEnabled(frm != nullptr);
+
+    const auto isConnected = _mbMultiServer.isConnected();
+    ui->actionForceCoils->setEnabled(isConnected);
+    ui->actionForceDiscretes->setEnabled(isConnected);
+    ui->actionPresetInputRegs->setEnabled(isConnected);
+    ui->actionPresetHoldingRegs->setEnabled(isConnected);
 
     ui->actionToolbar->setChecked(ui->toolBarMain->isVisible());
     ui->actionStatusBar->setChecked(statusBar()->isVisible());
@@ -212,7 +234,11 @@ void MainWindow::on_awake()
         const auto dm = frm->displayMode();
         ui->actionShowData->setChecked(dm == DisplayMode::Data);
         ui->actionShowTraffic->setChecked(dm == DisplayMode::Traffic);
+        ui->actionShowScript->setChecked(dm == DisplayMode::Script);
         ui->actionPrint->setEnabled(_selectedPrinter != nullptr && dm == DisplayMode::Data);
+
+        ui->actionRunScript->setEnabled(frm->canRunScript());
+        ui->actionStopScript->setEnabled(frm->canStopScript());
     }
 }
 
@@ -226,7 +252,6 @@ void MainWindow::on_actionNew_triggered()
 
     if(cur) {
         frm->setByteOrder(cur->byteOrder());
-        frm->setDisplayMode(cur->displayMode());
         frm->setDataDisplayMode(cur->dataDisplayMode());
 
         frm->setFont(cur->font());
@@ -407,6 +432,15 @@ void MainWindow::on_actionShowTraffic_triggered()
 {
     auto frm = currentMdiChild();
     if(frm) frm->setDisplayMode(DisplayMode::Traffic);
+}
+
+///
+/// \brief MainWindow::on_actionShowScript_triggered
+///
+void MainWindow::on_actionShowScript_triggered()
+{
+    auto frm = currentMdiChild();
+    if(frm) frm->setDisplayMode(DisplayMode::Script);
 }
 
 ///
@@ -668,6 +702,58 @@ void MainWindow::on_actionAbout_triggered()
 }
 
 ///
+/// \brief MainWindow::on_actionRunScript_triggered
+///
+void MainWindow::on_actionRunScript_triggered()
+{
+    auto frm = currentMdiChild();
+    if(!frm) return;
+
+    frm->runScript();
+}
+
+///
+/// \brief MainWindow::on_actionStopScript_triggered
+///
+void MainWindow::on_actionStopScript_triggered()
+{
+    auto frm = currentMdiChild();
+    if(!frm) return;
+
+    frm->stopScript();
+}
+
+///
+/// \brief MainWindow::on_actionScriptSettings_triggered
+///
+void MainWindow::on_actionScriptSettings_triggered()
+{
+    auto frm = currentMdiChild();
+    if(!frm) return;
+
+    auto ss = frm->scriptSettings();
+    DialogScriptSettings dlg(ss, this);
+
+    if(dlg.exec() == QDialog::Accepted)
+        frm->setScriptSettings(ss);
+}
+
+///
+/// \brief MainWindow::on_runModeChanged
+/// \param mode
+///
+void MainWindow::on_runModeChanged(RunMode mode)
+{
+    auto frm = currentMdiChild();
+    if(!frm) return;
+
+    auto ss = frm->scriptSettings();
+
+    ss.Mode = mode;
+    frm->setScriptSettings(ss);
+}
+
+///
 /// \brief MainWindow::on_connectionError
 /// \param error
 ///
@@ -842,15 +928,29 @@ FormModSim* MainWindow::createMdiChild(int id)
         }
     };
 
-    connect(wnd, &QMdiSubWindow::windowStateChanged, this, [frm, updateIcons](Qt::WindowStates, Qt::WindowStates newState)
+    auto updateRunMode = [this](RunMode mode)
+    {
+        auto comboBox = qobject_cast<RunModeComboBox*>(ui->toolBarScript->widgetForAction(_actionRunMode));
+        comboBox->setCurrentRunMode(mode);
+    };
+
+    connect(wnd, &QMdiSubWindow::windowStateChanged, this, [frm, updateIcons, updateRunMode](Qt::WindowStates, Qt::WindowStates newState)
     {
         if(newState == Qt::WindowActive)
+        {
             updateIcons(frm->byteOrder());
+            updateRunMode(frm->scriptSettings().Mode);
+        }
     });
 
     connect(frm, &FormModSim::byteOrderChanged, this, [updateIcons](ByteOrder order)
     {
         updateIcons(order);
+    });
+
+    connect(frm, &FormModSim::scriptSettingsChanged, this, [updateRunMode](const ScriptSettings& ss)
+    {
+        updateRunMode(ss.Mode);
     });
 
     connect(frm, &FormModSim::showed, this, [this, wnd]
@@ -1096,10 +1196,15 @@ void MainWindow::loadSettings()
 
     QSettings m(filepath, QSettings::IniFormat, this);
 
-    const auto toolbarArea = (Qt::ToolBarArea)qBound(0, m.value("DisplayBarArea").toInt(), 0xf);
-    const auto toolbarBreal = m.value("DisplayBarBreak").toBool();
-    if(toolbarBreal) addToolBarBreak(toolbarArea);
-    addToolBar(toolbarArea, ui->toolBarDisplay);
+    const auto displaybarArea = (Qt::ToolBarArea)qBound(0, m.value("DisplayBarArea", 0x4).toInt(), 0xf);
+    const auto displaybarBreak = m.value("DisplayBarBreak").toBool();
+    if(displaybarBreak) addToolBarBreak(displaybarArea);
+    addToolBar(displaybarArea, ui->toolBarDisplay);
+
+    const auto scriptbarArea = (Qt::ToolBarArea)qBound(0, m.value("ScriptBarArea", 0x4).toInt(), 0xf);
+    const auto scriptbarBreak = m.value("ScriptBarBreak").toBool();
+    if(scriptbarBreak) addToolBarBreak(scriptbarArea);
+    addToolBar(scriptbarArea, ui->toolBarScript);
 
     _lang = m.value("Language", "en").toString();
     setLanguage(_lang);
@@ -1137,6 +1242,8 @@ void MainWindow::saveSettings()
 
     m.setValue("DisplayBarArea", toolBarArea(ui->toolBarDisplay));
     m.setValue("DisplayBarBreak", toolBarBreak(ui->toolBarDisplay));
+    m.setValue("ScriptBarArea", toolBarArea(ui->toolBarScript));
+    m.setValue("ScriptBarBreak", toolBarBreak(ui->toolBarScript));
     m.setValue("Language", _lang);
 
     m << firstMdiChild();
