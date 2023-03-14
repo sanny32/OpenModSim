@@ -1,6 +1,7 @@
 #ifndef SCRIPTSETTINGS_H
 #define SCRIPTSETTINGS_H
 
+#include <QDataStream>
 #include "enums.h"
 
 ///
