@@ -228,14 +228,8 @@ void JSCodeEditor::keyPressEvent(QKeyEvent *e)
         _compliter->setCompletionPrefix(completionPrefix);
         popup->setCurrentIndex(model->index(0, 0));
 
-        int width = popup->sizeHintForColumn(0);
-        for(int i = 0; i < model->rowCount(); i++)
-        {
-            const auto text = model->data(model->index(i, 0)).toString();
-            width = qMax(width, fontMetrics().boundingRect(text).width());
-        }
-
         QRect cr = cursorRect();
+        const int width = popup->sizeHintForColumn(0) + 8;
         cr.setWidth(width + popup->verticalScrollBar()->sizeHint().width());
         _compliter->complete(cr);
     }

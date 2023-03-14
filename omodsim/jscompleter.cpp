@@ -14,12 +14,29 @@ struct MethodMetaInfo
 {
     QString Name;
     bool IsProperty;
-};
 
-///
-/// \brief _completerMap
-///
-QMap<QString, QVector<MethodMetaInfo>> _completerMap;
+    bool operator==(const MethodMetaInfo& mi) const {
+        return Name == mi.Name && IsProperty == mi.IsProperty;
+    }
+};
+QMap<QString, QVector<MethodMetaInfo>> _completerMap = {
+    { "Math",
+      {
+          {"E", 1}, {"LN10", 1}, {"LN2", 1}, {"LOG10E", 1}, {"LOG2E", 1}, {"PI", 1}, {"SQRT1_2", 1}, {"SQRT2", 1},
+          {"abs", 0}, {"acos", 0}, {"acosh", 0}, {"asin", 0}, {"asinh", 0}, {"atan", 0}, {"atanh", 0}, {"atan2", 0},
+          {"cbrt", 0}, {"ceil", 0}, {"clz32", 0}, {"cos", 0}, {"cosh", 0}, {"exp", 0}, {"expm1", 0}, {"floor", 0},
+          {"fround", 0}, {"hypot", 0}, {"imul", 0}, {"log", 0}, {"log1p", 0}, {"log10", 0}, {"log2", 0}, {"max", 0},
+          {"min", 0}, {"pow", 0}, {"random", 0}, {"round", 0}, {"sign", 0}, {"sin", 0}, {"sinh", 0}, {"sqrt", 0},
+          {"tan", 0}, {"tanh", 0}, {"trunc", 0}
+      }
+    },
+    { "Date",
+      {
+          {"prototype", 1},
+          {"now", 0}, {"parse", 0}, {"UTC", 0}
+      }
+    }
+};
 
 ///
 /// \brief addMetaObject
@@ -42,7 +59,7 @@ void addMetaObject(const QMetaObject& metaObject)
         if(metaObject.method(i).methodType() == QMetaMethod::Method)
         {
             const auto name =  QString::fromLatin1(metaObject.method(i).name());
-            vecInfo.push_back({name, false});
+            if(!vecInfo.contains({name, false})) vecInfo.push_back({name, false});
         }
     }
 
@@ -58,7 +75,7 @@ JSCompleterModel::JSCompleterModel(QObject *parent)
     ,_iconProp(":/res/iconProp.png")
     ,_icomFunc(":/res/iconFunc.png")
 {
-    if(_completerMap.empty())
+    if(!_completerMap.contains(console::staticMetaObject.className()))
     {
         addMetaObject(console::staticMetaObject);
         addMetaObject(Script::staticMetaObject);
