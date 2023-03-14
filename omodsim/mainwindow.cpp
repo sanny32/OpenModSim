@@ -9,6 +9,7 @@
 #include "dialogselectserviceport.h"
 #include "dialogsetupserialport.h"
 #include "dialogsetuppresetdata.h"
+#include "dialogscriptsettings.h"
 #include "dialogforcemultiplecoils.h"
 #include "dialogforcemultipleregisters.h"
 #include "runmodecombobox.h"
@@ -203,6 +204,7 @@ void MainWindow::on_awake()
 
     ui->actionRunScript->setEnabled(frm != nullptr);
     ui->actionStopScript->setEnabled(frm != nullptr);
+    ui->actionScriptSettings->setEnabled(frm != nullptr);
 
     const auto isConnected = _mbMultiServer.isConnected();
     ui->actionForceCoils->setEnabled(isConnected);
@@ -712,7 +714,7 @@ void MainWindow::on_actionRunScript_triggered()
     auto frm = currentMdiChild();
     if(!frm) return;
 
-    frm->runScript(1000);
+    frm->runScript();
 }
 
 ///
@@ -727,6 +729,21 @@ void MainWindow::on_actionStopScript_triggered()
 }
 
 ///
+/// \brief MainWindow::on_actionScriptSettings_triggered
+///
+void MainWindow::on_actionScriptSettings_triggered()
+{
+    auto frm = currentMdiChild();
+    if(!frm) return;
+
+    auto ss = frm->scriptSettings();
+    DialogScriptSettings dlg(ss, this);
+
+    if(dlg.exec() == QDialog::Accepted)
+        frm->setScriptSettings(ss);
+}
+
+///
 /// \brief MainWindow::on_runModeChanged
 /// \param mode
 ///
@@ -735,7 +752,10 @@ void MainWindow::on_runModeChanged(RunMode mode)
     auto frm = currentMdiChild();
     if(!frm) return;
 
-    frm->setRunMode(mode);
+    auto ss = frm->scriptSettings();
+
+    ss.Mode = mode;
+    frm->setScriptSettings(ss);
 }
 
 ///
@@ -924,7 +944,7 @@ FormModSim* MainWindow::createMdiChild(int id)
         if(newState == Qt::WindowActive)
         {
             updateIcons(frm->byteOrder());
-            updateRunMode(frm->runMode());
+            updateRunMode(frm->scriptSettings().Mode);
         }
     });
 
@@ -933,9 +953,9 @@ FormModSim* MainWindow::createMdiChild(int id)
         updateIcons(order);
     });
 
-    connect(frm, &FormModSim::runModeChanged, this, [updateRunMode](RunMode mode)
+    connect(frm, &FormModSim::scriptSettingsChanged, this, [updateRunMode](const ScriptSettings& ss)
     {
-        updateRunMode(mode);
+        updateRunMode(ss.Mode);
     });
 
     connect(frm, &FormModSim::showed, this, [this, wnd]

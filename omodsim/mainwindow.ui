@@ -118,6 +118,8 @@
      </property>
      <addaction name="actionRunScript"/>
      <addaction name="actionStopScript"/>
+     <addaction name="separator"/>
+     <addaction name="actionScriptSettings"/>
     </widget>
     <addaction name="actionDataDefinition"/>
     <addaction name="menuDisplay_Options"/>
@@ -630,6 +632,11 @@
    </property>
    <property name="toolTip">
     <string>Stop Script</string>
+   </property>
+  </action>
+  <action name="actionScriptSettings">
+   <property name="text">
+    <string>Script Settings</string>
    </property>
   </action>
  </widget>

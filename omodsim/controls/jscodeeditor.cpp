@@ -107,8 +107,11 @@ void JSCodeEditor::enableAutoComplete(bool enable)
 {
     if(enable)
     {
-        _compliter = new JSCompleter(this);
-        connect(_compliter, QOverload<const QString &>::of(&QCompleter::activated),this, &JSCodeEditor::insertCompletion);
+        if(!_compliter)
+        {
+            _compliter = new JSCompleter(this);
+            connect(_compliter, QOverload<const QString &>::of(&QCompleter::activated),this, &JSCodeEditor::insertCompletion);
+        }
     }
     else if(_compliter)
     {

@@ -47,6 +47,7 @@ SOURCES += \
     dialogs/dialogforcemultiplecoils.cpp \
     dialogs/dialogforcemultipleregisters.cpp \
     dialogs/dialogprintsettings.cpp \
+    dialogs/dialogscriptsettings.cpp \
     dialogs/dialogselectserviceport.cpp \
     dialogs/dialogsetuppresetdata.cpp \
     dialogs/dialogsetupserialport.cpp \
@@ -97,6 +98,7 @@ HEADERS += \
     dialogs/dialogforcemultiplecoils.h \
     dialogs/dialogforcemultipleregisters.h \
     dialogs/dialogprintsettings.h \
+    dialogs/dialogscriptsettings.h \
     dialogs/dialogselectserviceport.h \
     dialogs/dialogsetuppresetdata.h \
     dialogs/dialogsetupserialport.h \
@@ -125,6 +127,7 @@ HEADERS += \
     qhexvalidator.h \
     qrange.h \
     recentfileactionlist.h \
+    scriptsettings.h \
     windowactionlist.h
 
 FORMS += \
@@ -137,6 +140,7 @@ FORMS += \
     dialogs/dialogforcemultiplecoils.ui \
     dialogs/dialogforcemultipleregisters.ui \
     dialogs/dialogprintsettings.ui \
+    dialogs/dialogscriptsettings.ui \
     dialogs/dialogselectserviceport.ui \
     dialogs/dialogsetuppresetdata.ui \
     dialogs/dialogsetupserialport.ui \

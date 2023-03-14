@@ -10,7 +10,6 @@
 ScriptControl::ScriptControl(QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::ScriptControl)
-    ,_runMode(RunMode::Once)
     ,_script(new Script)
     ,_storage(new Storage)
     ,_server(nullptr)
@@ -49,6 +48,24 @@ void ScriptControl::initJSEngine(ModbusMultiServer& server, const ByteOrder& ord
 }
 
 ///
+/// \brief ScriptControl::isAutoCompleteEnabled
+/// \return
+///
+bool ScriptControl::isAutoCompleteEnabled() const
+{
+    return ui->codeEditor->isAutoCompleteEnabled();
+}
+
+///
+/// \brief ScriptControl::enableAutoComplete
+/// \param enable
+///
+void ScriptControl::enableAutoComplete(bool enable)
+{
+    ui->codeEditor->enableAutoComplete(enable);
+}
+
+///
 /// \brief ScriptControl::script
 /// \return
 ///
@@ -76,24 +93,6 @@ bool ScriptControl::isRunning() const
 }
 
 ///
-/// \brief ScriptControl::runMode
-/// \return
-///
-RunMode ScriptControl::runMode() const
-{
-    return _runMode;
-}
-
-///
-/// \brief ScriptControl::setRunMode
-/// \param mode
-///
-void ScriptControl::setRunMode(RunMode mode)
-{
-    _runMode = mode;
-}
-
-///
 /// \brief ScriptControl::setFocus
 ///
 void ScriptControl::setFocus()
@@ -105,14 +104,14 @@ void ScriptControl::setFocus()
 /// \brief ScriptControl::runScript
 /// \param interval
 ///
-void ScriptControl::runScript(int interval)
+void ScriptControl::runScript(RunMode mode, int interval)
 {
     _console->clear();
     _scriptCode = script();
     _jsEngine.setInterrupted(false);
 
     executeScript();
-    switch(_runMode)
+    switch(mode)
     {
         case RunMode::Once:
         break;

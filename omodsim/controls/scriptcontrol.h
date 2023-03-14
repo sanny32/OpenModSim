@@ -27,18 +27,18 @@ public:
 
     void initJSEngine(ModbusMultiServer& server, const ByteOrder& order);
 
+    bool isAutoCompleteEnabled() const;
+    void enableAutoComplete(bool enable);
+
     QString script() const;
     void setScript(const QString& text);
 
     bool isRunning() const;
 
-    RunMode runMode() const;
-    void setRunMode(RunMode mode);
-
     void setFocus();
 
 public slots:
-    void runScript(int interval = 0);
+    void runScript(RunMode mode, int interval = 0);
     void stopScript();
 
 private slots:
@@ -47,7 +47,6 @@ private slots:
 private:
     Ui::ScriptControl *ui;
 
-    RunMode _runMode;
     QTimer _timer;
     QJSEngine _jsEngine;
     QString _scriptCode;

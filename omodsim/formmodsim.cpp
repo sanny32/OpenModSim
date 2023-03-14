@@ -214,22 +214,23 @@ void FormModSim::setDataDisplayMode(DataDisplayMode mode)
 }
 
 ///
-/// \brief FormModSim::runMode
+/// \brief FormModSim::scriptSettings
 /// \return
 ///
-RunMode FormModSim::runMode() const
+ScriptSettings FormModSim::scriptSettings() const
 {
-    return ui->scriptControl->runMode();
+    return _scriptSettings;
 }
 
 ///
-/// \brief FormModSim::setRunMode
-/// \param mode
+/// \brief FormModSim::setScriptSettings
+/// \param ss
 ///
-void FormModSim::setRunMode(RunMode mode)
+void FormModSim::setScriptSettings(const ScriptSettings& ss)
 {
-    ui->scriptControl->setRunMode(mode);
-    emit runModeChanged(mode);
+    _scriptSettings = ss;
+    ui->scriptControl->enableAutoComplete(ss.UseAutoComplete);
+    emit scriptSettingsChanged(ss);
 }
 
 ///
@@ -453,9 +454,9 @@ bool FormModSim::canStopScript()
 /// \brief FormModSim::runScript
 /// \param interval
 ///
-void FormModSim::runScript(int interval)
+void FormModSim::runScript()
 {
-    ui->scriptControl->runScript(interval);
+    ui->scriptControl->runScript(_scriptSettings.Mode, _scriptSettings.Interval);
 }
 
 ///
