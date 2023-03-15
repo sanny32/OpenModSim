@@ -105,7 +105,7 @@
       </size>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="tabAbout">
       <attribute name="title">
@@ -186,7 +186,7 @@
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_4">
        <property name="leftMargin">
-        <number>80</number>
+        <number>60</number>
        </property>
        <item>
         <widget class="QLabel" name="labelFont">
