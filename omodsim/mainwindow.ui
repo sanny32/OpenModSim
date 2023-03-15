@@ -171,6 +171,7 @@
     <addaction name="actionToolbar"/>
     <addaction name="actionStatusBar"/>
     <addaction name="actionDisplayBar"/>
+    <addaction name="actionScriptBar"/>
     <addaction name="separator"/>
     <addaction name="menuConfig"/>
     <addaction name="menuLanguage"/>
@@ -642,6 +643,14 @@
    </property>
    <property name="text">
     <string>Script Settings</string>
+   </property>
+  </action>
+  <action name="actionScriptBar">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Script Bar</string>
    </property>
   </action>
  </widget>

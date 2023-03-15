@@ -861,8 +861,8 @@ Length: %2</source>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="85"/>
-        <location filename="../mainwindow.ui" line="585"/>
-        <location filename="../mainwindow.ui" line="588"/>
+        <location filename="../mainwindow.ui" line="587"/>
+        <location filename="../mainwindow.ui" line="590"/>
         <source>Byte Order</source>
         <translation>Порядок байтов</translation>
     </message>
@@ -907,259 +907,260 @@ Length: %2</source>
         <translation>Язык</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="253"/>
+        <location filename="../mainwindow.ui" line="255"/>
         <source>New</source>
         <translation>Новый</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="262"/>
+        <location filename="../mainwindow.ui" line="264"/>
         <source>Open...</source>
         <translation>Открыть...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="267"/>
+        <location filename="../mainwindow.ui" line="269"/>
         <source>Close</source>
         <translation>Закрыть</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="276"/>
+        <location filename="../mainwindow.ui" line="278"/>
         <source>Save</source>
         <translation>Сохранить</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="281"/>
+        <location filename="../mainwindow.ui" line="283"/>
         <source>Save As...</source>
         <translation>Сохранить как...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="286"/>
+        <location filename="../mainwindow.ui" line="288"/>
         <source>Save Test Config</source>
         <translation>Сохранить конфиг</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="291"/>
+        <location filename="../mainwindow.ui" line="293"/>
         <source>Restore Test Config</source>
         <translation>Восстановить конфиг</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="300"/>
+        <location filename="../mainwindow.ui" line="302"/>
         <source>Print...</source>
         <translation>Печать...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="305"/>
+        <location filename="../mainwindow.ui" line="307"/>
         <source>Print Setup...</source>
         <translation>Настройка печати...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="310"/>
+        <location filename="../mainwindow.ui" line="312"/>
         <source>Recent File</source>
         <translation>Последние файлы</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="315"/>
+        <location filename="../mainwindow.ui" line="317"/>
         <source>Exit</source>
         <translation>Выход</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="324"/>
+        <location filename="../mainwindow.ui" line="326"/>
         <source>Connect</source>
         <translation>Подключить</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="333"/>
+        <location filename="../mainwindow.ui" line="335"/>
         <source>Disconnect</source>
         <translation>Отключить</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="345"/>
+        <location filename="../mainwindow.ui" line="347"/>
         <source>Binary</source>
         <translation>Двоичный</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="357"/>
+        <location filename="../mainwindow.ui" line="359"/>
         <source>Unsigned Decimal</source>
         <translation>Беззнаковый десятичный</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="369"/>
+        <location filename="../mainwindow.ui" line="371"/>
         <source>Hex</source>
         <translation>Шестандцатиричный</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="381"/>
+        <location filename="../mainwindow.ui" line="383"/>
         <source>Floating Point</source>
         <translation>С плавающей точкой</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="393"/>
+        <location filename="../mainwindow.ui" line="395"/>
         <source>Swapped FP</source>
         <translation>Перевернутое с плавающей точкой</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="405"/>
+        <location filename="../mainwindow.ui" line="407"/>
         <source>Dbl Float</source>
         <translation>Двойной точности</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="417"/>
+        <location filename="../mainwindow.ui" line="419"/>
         <source>Swapped Dbl</source>
         <translation>Перевернутое двойной точности</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="422"/>
+        <location filename="../mainwindow.ui" line="424"/>
         <source>Cascade</source>
         <translation>Каскадно</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="427"/>
+        <location filename="../mainwindow.ui" line="429"/>
         <source>Tile</source>
         <translation>Замостить</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="436"/>
+        <location filename="../mainwindow.ui" line="438"/>
         <source>About Open ModSim...</source>
         <translation>О программе Open ModSim...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="448"/>
+        <location filename="../mainwindow.ui" line="450"/>
         <source>Integer</source>
         <translation>Целый</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="460"/>
+        <location filename="../mainwindow.ui" line="462"/>
         <source>Show Data</source>
         <translation>Данные</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="472"/>
+        <location filename="../mainwindow.ui" line="474"/>
         <source>Show Traffic</source>
         <translation>Трафик</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="481"/>
+        <location filename="../mainwindow.ui" line="483"/>
         <source>Data Definition</source>
         <translation>Настройки отображения</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="559"/>
+        <location filename="../mainwindow.ui" line="561"/>
         <source>Force Coils</source>
         <translation>Предустановка coils</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="564"/>
+        <location filename="../mainwindow.ui" line="566"/>
         <source>Preset Holding Regs</source>
         <translation>Предустановка holding регистров</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="572"/>
+        <location filename="../mainwindow.ui" line="574"/>
         <source>Big-Endian</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="580"/>
+        <location filename="../mainwindow.ui" line="582"/>
         <source>Little-Endian</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="593"/>
+        <location filename="../mainwindow.ui" line="595"/>
         <source>Preset Input Regs</source>
         <translation>Предустановка input регистров</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="598"/>
+        <location filename="../mainwindow.ui" line="600"/>
         <source>Force Discretes</source>
         <translation>Предустановка discretes</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="610"/>
+        <location filename="../mainwindow.ui" line="612"/>
         <source>Show Script</source>
         <translation>Показать скрипт</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="619"/>
-        <location filename="../mainwindow.ui" line="622"/>
+        <location filename="../mainwindow.ui" line="621"/>
+        <location filename="../mainwindow.ui" line="624"/>
         <source>Run Script</source>
         <translation>Запуск</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="631"/>
-        <location filename="../mainwindow.ui" line="634"/>
+        <location filename="../mainwindow.ui" line="633"/>
+        <location filename="../mainwindow.ui" line="636"/>
         <source>Stop Script</source>
         <translation>Останов</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="639"/>
+        <location filename="../mainwindow.ui" line="645"/>
         <source>Script Settings</source>
         <translation>Настройки скрипта</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="188"/>
-        <location filename="../mainwindow.ui" line="489"/>
+        <location filename="../mainwindow.ui" line="189"/>
+        <location filename="../mainwindow.ui" line="491"/>
         <source>Toolbar</source>
         <translation>Панель инструментов</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="497"/>
+        <location filename="../mainwindow.ui" line="499"/>
         <source>Status Bar</source>
         <translation>Строка состояния</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="213"/>
-        <location filename="../mainwindow.ui" line="505"/>
+        <location filename="../mainwindow.ui" line="214"/>
+        <location filename="../mainwindow.ui" line="507"/>
         <source>Display Bar</source>
         <translation>Панель отображения</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="236"/>
+        <location filename="../mainwindow.ui" line="237"/>
+        <location filename="../mainwindow.ui" line="653"/>
         <source>Script Bar</source>
         <translation>Панель управления скриптом</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="510"/>
+        <location filename="../mainwindow.ui" line="512"/>
         <source>Font</source>
         <translation>Шрифт</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="515"/>
+        <location filename="../mainwindow.ui" line="517"/>
         <source>Background</source>
         <translation>Задний план</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="520"/>
+        <location filename="../mainwindow.ui" line="522"/>
         <source>Foreground</source>
         <translation>Передний план</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="525"/>
+        <location filename="../mainwindow.ui" line="527"/>
         <source>Status</source>
         <translation>Статус</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="530"/>
+        <location filename="../mainwindow.ui" line="532"/>
         <source>Windows...</source>
         <translation>Окна...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="538"/>
+        <location filename="../mainwindow.ui" line="540"/>
         <source>Hex Addresses</source>
         <translation>Шестнадцатиричные адреса</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="546"/>
+        <location filename="../mainwindow.ui" line="548"/>
         <source>English</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="554"/>
+        <location filename="../mainwindow.ui" line="556"/>
         <source>Русский</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="276"/>
-        <location filename="../mainwindow.cpp" line="315"/>
-        <location filename="../mainwindow.cpp" line="328"/>
-        <location filename="../mainwindow.cpp" line="339"/>
+        <location filename="../mainwindow.cpp" line="275"/>
+        <location filename="../mainwindow.cpp" line="314"/>
+        <location filename="../mainwindow.cpp" line="327"/>
+        <location filename="../mainwindow.cpp" line="338"/>
         <source>All files (*)</source>
         <translation>Все файлы (*)</translation>
     </message>
@@ -1221,12 +1222,14 @@ Length: %2</source>
 <context>
     <name>RunModeComboBox</name>
     <message>
-        <location filename="../controls/runmodecombobox.cpp" line="10"/>
+        <location filename="../controls/runmodecombobox.cpp" line="11"/>
+        <location filename="../controls/runmodecombobox.cpp" line="31"/>
         <source>Once</source>
         <translation>Однократно</translation>
     </message>
     <message>
-        <location filename="../controls/runmodecombobox.cpp" line="11"/>
+        <location filename="../controls/runmodecombobox.cpp" line="12"/>
+        <location filename="../controls/runmodecombobox.cpp" line="35"/>
         <source>Periodically</source>
         <translation>Периодически</translation>
     </message>

@@ -211,6 +211,7 @@ void MainWindow::on_awake()
     ui->actionToolbar->setChecked(ui->toolBarMain->isVisible());
     ui->actionStatusBar->setChecked(statusBar()->isVisible());
     ui->actionDisplayBar->setChecked(ui->toolBarDisplay->isVisible());
+    ui->actionScriptBar->setChecked(ui->toolBarScript->isVisible());
     ui->actionEnglish->setChecked(_lang == "en");
     ui->actionRussian->setChecked(_lang == "ru");
 
@@ -592,6 +593,14 @@ void MainWindow::on_actionStatusBar_triggered()
 void MainWindow::on_actionDisplayBar_triggered()
 {
     ui->toolBarDisplay->setVisible(!ui->toolBarDisplay->isVisible());
+}
+
+///
+/// \brief MainWindow::on_actionScriptBar_triggered
+///
+void MainWindow::on_actionScriptBar_triggered()
+{
+    ui->toolBarScript->setVisible(!ui->toolBarScript->isVisible());
 }
 
 ///
