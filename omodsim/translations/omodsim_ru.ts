@@ -77,7 +77,12 @@
         <translation>• Qt %1 (собрано на версии %2)</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="46"/>
+        <location filename="../dialogs/dialogabout.cpp" line="20"/>
+        <source>• Fira Code 6.2 Font</source>
+        <translation>• Fira Code 6.2 шрифт</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogabout.cpp" line="48"/>
         <source>License Agreement - %1</source>
         <translation>Лицензионное соглашение - %1</translation>
     </message>

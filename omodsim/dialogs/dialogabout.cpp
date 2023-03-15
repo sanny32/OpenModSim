@@ -17,6 +17,8 @@ DialogAbout::DialogAbout(QWidget *parent) :
     ui->labelName->setText(APP_NAME);
     ui->labelVersion->setText(QString(tr("Version: %1")).arg(APP_VERSION));
     ui->labelQtFramework->setText(QString(tr("• Qt %1 (build with version %2)")).arg(qVersion(), QT_VERSION_STR));
+    ui->labelFont->setText(tr("• Fira Code 6.2 Font"));
+    ui->tabWidget->setCurrentIndex(0);
 }
 
 ///
