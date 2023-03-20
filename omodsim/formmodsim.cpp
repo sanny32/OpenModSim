@@ -53,6 +53,9 @@ FormModSim::FormModSim(int id, ModbusMultiServer& server, QSharedPointer<DataSim
     connect(&_mbMultiServer, &ModbusMultiServer::disconnected, this, &FormModSim::on_mbDisconnected);
     connect(&_mbMultiServer, &ModbusMultiServer::deviceIdChanged, this, &FormModSim::on_mbDeviceIdChanged);
     connect(&_mbMultiServer, &ModbusMultiServer::dataChanged, this, &FormModSim::on_mbDataChanged);
+
+    connect(_dataSimulator.get(), &DataSimulator::simulationStarted, this, &FormModSim::on_simulationStarted);
+    connect(_dataSimulator.get(), &DataSimulator::simulationStopped, this, &FormModSim::on_simulationStopped);
 }
 
 ///
@@ -142,7 +145,7 @@ void FormModSim::setDisplayDefinition(const DisplayDefinition& dd)
     ui->lineEditLength->setValue(dd.Length);
     ui->comboBoxModbusPointType->setCurrentPointType(dd.PointType);
 
-    ui->outputWidget->setup(dd);
+    ui->outputWidget->setup(dd, _dataSimulator->simulationMap());
 }
 
 ///
@@ -537,7 +540,7 @@ void FormModSim::onDefinitionChanged()
     const auto dd = displayDefinition();
     _mbMultiServer.setDeviceId(dd.DeviceId);
     _mbMultiServer.addUnitMap(formId(), dd.PointType, dd.PointAddress - 1, dd.Length);
-    ui->outputWidget->setup(dd, _mbMultiServer.data(dd.PointType, dd.PointAddress - 1, dd.Length));
+    ui->outputWidget->setup(dd, _dataSimulator->simulationMap(), _mbMultiServer.data(dd.PointType, dd.PointAddress - 1, dd.Length));
 }
 
 ///
@@ -659,4 +662,24 @@ void FormModSim::on_mbDataChanged(const QModbusDataUnit&)
 {
     const auto dd = displayDefinition();
     ui->outputWidget->updateData(_mbMultiServer.data(dd.PointType, dd.PointAddress - 1, dd.Length));
+}
+
+///
+/// \brief FormModSim::on_simulationStarted
+/// \param type
+/// \param addr
+///
+void FormModSim::on_simulationStarted(QModbusDataUnit::RegisterType type, quint16 addr)
+{
+    ui->outputWidget->setSimulated(type, addr, true);
+}
+
+///
+/// \brief FormModSim::on_simulationStopped
+/// \param type
+/// \param addr
+///
+void FormModSim::on_simulationStopped(QModbusDataUnit::RegisterType type, quint16 addr)
+{
+    ui->outputWidget->setSimulated(type, addr, false);
 }

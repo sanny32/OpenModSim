@@ -33,5 +33,7 @@
         <file>res/iconFunc.png</file>
         <file>res/iconProp.png</file>
         <file>res/actionScriptSettings.png</file>
+        <file>res/pointEmpty.png</file>
+        <file>res/pointGreen.png</file>
     </qresource>
 </RCC>

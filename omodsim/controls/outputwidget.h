@@ -6,6 +6,7 @@
 #include <QListWidgetItem>
 #include <QModbusReply>
 #include "enums.h"
+#include "datasimulator.h"
 #include "displaydefinition.h"
 
 namespace Ui {
@@ -25,7 +26,7 @@ public:
 
     QVector<quint16> data() const;
 
-    void setup(const DisplayDefinition& dd, const QModbusDataUnit& data = QModbusDataUnit());
+    void setup(const DisplayDefinition& dd,const ModbusSimulationMap& simulations, const QModbusDataUnit& data = QModbusDataUnit());
 
     DisplayMode displayMode() const;
     void setDisplayMode(DisplayMode mode);
@@ -61,6 +62,8 @@ public:
     void updateTraffic(const QModbusResponse& response, int server);
     void updateData(const QModbusDataUnit& data);
 
+    void setSimulated(QModbusDataUnit::RegisterType type, quint16 addr, bool on);
+
 signals:
     void itemDoubleClicked(quint16 address, const QVariant& value);
 
@@ -73,6 +76,7 @@ private slots:
 private:
     void updateDataWidget(const QModbusDataUnit& data);
     void updateTrafficWidget(bool request, int server, const QModbusPdu& pdu);
+    const QIcon& listWidgetItemIcon(QModbusDataUnit::RegisterType type, quint16 addr) const;
 
 private:
     Ui::OutputWidget *ui;
@@ -85,6 +89,9 @@ private:
     DisplayDefinition _displayDefinition;
     QModbusDataUnit _lastData;
     QFile _fileCapture;
+    QIcon _iconPointGreen;
+    QIcon _iconPointEmpty;
+    QMap<QPair<QModbusDataUnit::RegisterType, quint16>, bool> _simulatedItems;
 };
 
 #endif // OUTPUTWIDGET_H
