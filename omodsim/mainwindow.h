@@ -98,7 +98,6 @@ private slots:
     void on_runModeChanged(RunMode mode);
 
     void on_connectionError(const QString& error);
-    void on_dataSimulated(DataDisplayMode mode, QModbusDataUnit::RegisterType type, quint16 addr, QVariant value);
 
     void updateMenuWindow();
     void openFile(const QString& filename);

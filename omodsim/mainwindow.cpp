@@ -81,7 +81,6 @@ MainWindow::MainWindow(QWidget *parent)
     connect(dispatcher, &QAbstractEventDispatcher::awake, this, &MainWindow::on_awake);
 
     connect(ui->mdiArea, &QMdiArea::subWindowActivated, this, &MainWindow::updateMenuWindow);
-    connect(_dataSimulator.get(), &DataSimulator::dataSimulated, this, &MainWindow::on_dataSimulated);
     connect(&_mbMultiServer, &ModbusMultiServer::connectionError, this, &MainWindow::on_connectionError);
 
     ui->actionNew->trigger();
@@ -772,21 +771,6 @@ void MainWindow::on_runModeChanged(RunMode mode)
 void MainWindow::on_connectionError(const QString& error)
 {
     QMessageBox::warning(this, windowTitle(), error);
-}
-
-///
-/// \brief MainWindow::on_dataSimulated
-/// \param mode
-/// \param type
-/// \param addr
-/// \param value
-///
-void MainWindow::on_dataSimulated(DataDisplayMode mode, QModbusDataUnit::RegisterType type, quint16 addr, QVariant value)
-{
-    auto frm = currentMdiChild();
-    const auto order = (frm)? frm->byteOrder() : ByteOrder::LittleEndian;
-
-    _mbMultiServer.writeRegister(type, { addr, value, mode, order });
 }
 
 ///

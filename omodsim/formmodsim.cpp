@@ -56,6 +56,8 @@ FormModSim::FormModSim(int id, ModbusMultiServer& server, QSharedPointer<DataSim
 
     connect(_dataSimulator.get(), &DataSimulator::simulationStarted, this, &FormModSim::on_simulationStarted);
     connect(_dataSimulator.get(), &DataSimulator::simulationStopped, this, &FormModSim::on_simulationStopped);
+    connect(_dataSimulator.get(), &DataSimulator::dataSimulated, this, &FormModSim::on_dataSimulated);
+
 }
 
 ///
@@ -682,4 +684,20 @@ void FormModSim::on_simulationStarted(QModbusDataUnit::RegisterType type, quint1
 void FormModSim::on_simulationStopped(QModbusDataUnit::RegisterType type, quint16 addr)
 {
     ui->outputWidget->setSimulated(type, addr, false);
+}
+
+///
+/// \brief FormModSim::on_dataSimulated
+/// \param mode
+/// \param type
+/// \param addr
+/// \param value
+///
+void FormModSim::on_dataSimulated(DataDisplayMode mode, QModbusDataUnit::RegisterType type, quint16 addr, QVariant value)
+{
+    const auto dd = displayDefinition();
+    if(type == dd.PointType && addr >= dd.PointAddress && addr < dd.PointAddress + dd.Length)
+    {
+        _mbMultiServer.writeRegister(type, { addr, value, mode, byteOrder() });
+    }
 }

@@ -110,6 +110,7 @@ private slots:
     void on_mbDataChanged(const QModbusDataUnit& data);
     void on_simulationStarted(QModbusDataUnit::RegisterType type, quint16 addr);
     void on_simulationStopped(QModbusDataUnit::RegisterType type, quint16 addr);
+    void on_dataSimulated(DataDisplayMode mode, QModbusDataUnit::RegisterType type, quint16 addr, QVariant value);
 
 private:
     void updateStatus();
