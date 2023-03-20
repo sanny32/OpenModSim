@@ -254,6 +254,9 @@
    <property name="text">
     <string>New</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+N</string>
+   </property>
   </action>
   <action name="actionOpen">
    <property name="icon">
@@ -262,6 +265,9 @@
    </property>
    <property name="text">
     <string>Open...</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+O</string>
    </property>
   </action>
   <action name="actionClose">
@@ -276,6 +282,9 @@
    </property>
    <property name="text">
     <string>Save</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+S</string>
    </property>
   </action>
   <action name="actionSaveAs">
@@ -300,6 +309,9 @@
    </property>
    <property name="text">
     <string>Print...</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+P</string>
    </property>
   </action>
   <action name="actionPrintSetup">
@@ -346,6 +358,9 @@
    <property name="text">
     <string>Binary</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+1</string>
+   </property>
   </action>
   <action name="actionUnsignedDecimal">
    <property name="checkable">
@@ -357,6 +372,9 @@
    </property>
    <property name="text">
     <string>Unsigned Decimal</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+2</string>
    </property>
   </action>
   <action name="actionHex">
@@ -370,6 +388,9 @@
    <property name="text">
     <string>Hex</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+4</string>
+   </property>
   </action>
   <action name="actionFloatingPt">
    <property name="checkable">
@@ -381,6 +402,9 @@
    </property>
    <property name="text">
     <string>Floating Point</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+5</string>
    </property>
   </action>
   <action name="actionSwappedFP">
@@ -394,6 +418,9 @@
    <property name="text">
     <string>Swapped FP</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+5</string>
+   </property>
   </action>
   <action name="actionDblFloat">
    <property name="checkable">
@@ -406,6 +433,9 @@
    <property name="text">
     <string>Dbl Float</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+6</string>
+   </property>
   </action>
   <action name="actionSwappedDbl">
    <property name="checkable">
@@ -417,6 +447,9 @@
    </property>
    <property name="text">
     <string>Swapped Dbl</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+6</string>
    </property>
   </action>
   <action name="actionCascade">
@@ -448,6 +481,9 @@
    </property>
    <property name="text">
     <string>Integer</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+3</string>
    </property>
   </action>
   <action name="actionShowData">
@@ -623,6 +659,9 @@
    <property name="toolTip">
     <string>Run Script</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+R</string>
+   </property>
   </action>
   <action name="actionStopScript">
    <property name="icon">
@@ -634,6 +673,9 @@
    </property>
    <property name="toolTip">
     <string>Stop Script</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+B</string>
    </property>
   </action>
   <action name="actionScriptSettings">
