@@ -7,10 +7,11 @@
 SearchLineEdit::SearchLineEdit(QWidget* parent)
     :QLineEdit(parent)
 {
-    setPlaceholderText(tr("Type to search..."));
+    setPlaceholderText(tr("Type text to search..."));
     setClearButtonEnabled(true);
     setMaximumWidth(200);
 
+    connect(this, &QLineEdit::textEdited, this, &SearchLineEdit::on_textEdited);
     connect(this, &QLineEdit::returnPressed, this, &SearchLineEdit::on_returnPressed);
 }
 
@@ -20,4 +21,13 @@ SearchLineEdit::SearchLineEdit(QWidget* parent)
 void SearchLineEdit::on_returnPressed()
 {
     emit searchText(text());
+}
+
+///
+/// \brief SearchLineEdit::on_textEdited
+/// \param text
+///
+void SearchLineEdit::on_textEdited(const QString& text)
+{
+    emit searchText(text);
 }

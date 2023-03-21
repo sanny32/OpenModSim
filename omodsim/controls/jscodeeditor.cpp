@@ -11,6 +11,7 @@
 ///
 JSCodeEditor::JSCodeEditor(QWidget *parent)
     : QPlainTextEdit(parent)
+    ,_lineColor(200,200,200,70)
     ,_compliter(nullptr)
 {
     _lineNumberArea = new LineNumberArea(this);
@@ -21,7 +22,6 @@ JSCodeEditor::JSCodeEditor(QWidget *parent)
     connect(this, &JSCodeEditor::cursorPositionChanged, this, &JSCodeEditor::highlightCurrentLine);
 
     setBackgroundColor(Qt::white);
-    setLineColor(QColor(Qt::lightGray).lighter(125));
 
     setFont(QFont("Fira Code"));
     setTabStopDistance(fontMetrics().horizontalAdvance(' ') * 4);
@@ -84,15 +84,6 @@ void JSCodeEditor::setBackgroundColor(const QColor& clr)
 }
 
 ///
-/// \brief console::setLineColor
-/// \param clr
-///
-void JSCodeEditor::setLineColor(const QColor& clr)
-{
-    _lineColor = clr;
-}
-
-///
 /// \brief JSCodeEditor::isAutoCompleteEnabled
 /// \return
 ///
@@ -120,6 +111,31 @@ void JSCodeEditor::enableAutoComplete(bool enable)
         delete _compliter;
         _compliter = nullptr;
     }
+}
+
+///
+/// \brief JSCodeEditor::search
+/// \param text
+///
+void JSCodeEditor::search(const QString& text)
+{
+    QList<QTextEdit::ExtraSelection> extraSelections;
+
+    const auto cur = textCursor();
+    moveCursor(QTextCursor::Start);
+
+    while(find(text))
+    {
+        QTextEdit::ExtraSelection extra;
+        extra.format.setBackground(Qt::yellow);
+
+        extra.cursor = textCursor();
+        extraSelections.append(extra);
+    }
+    setExtraSelections(extraSelections);
+
+    setTextCursor(cur);
+    highlightCurrentLine();
 }
 
 ///
@@ -245,18 +261,31 @@ void JSCodeEditor::keyPressEvent(QKeyEvent *e)
 ///
 void JSCodeEditor::highlightCurrentLine()
 {
-    QList<QTextEdit::ExtraSelection> extraSelections;
+    if (isReadOnly())
+        return;
 
-    if (!isReadOnly())
+    auto extraSelections = this->extraSelections();
+    extraSelections.removeIf([this](const QTextEdit::ExtraSelection& s)
     {
-        QTextEdit::ExtraSelection selection;
+        return s.format.background().color() == _lineColor;
+    });
 
-        selection.format.setBackground(_lineColor);
-        selection.format.setProperty(QTextFormat::FullWidthSelection, true);
-        selection.cursor = textCursor();
-        selection.cursor.clearSelection();
-        extraSelections.append(selection);
-    }
+    auto tc = textCursor();
+   /* auto res = std::find_if(extraSelections.begin(), extraSelections.end(), [tc](const QTextEdit::ExtraSelection& s)
+    {
+        return s.cursor.selectionStart() == tc.selectionStart();
+    });*/
+
+   // qDebug() << extraSelections.size() << (res == extraSelections.end());
+
+
+    QTextEdit::ExtraSelection selection;
+    selection.format.setBackground(_lineColor);
+    selection.format.setProperty(QTextFormat::FullWidthSelection, true);
+    selection.cursor = tc;
+    selection.cursor.clearSelection();
+    extraSelections.append(selection);
+
 
     setExtraSelections(extraSelections);
 }

@@ -29,6 +29,7 @@ signals:
     void cut();
     void copy();
     void paste();
+    void selectAll();
     void search(const QString& text);
 
 protected:
@@ -57,6 +58,7 @@ private slots:
     void on_actionCut_triggered();
     void on_actionCopy_triggered();
     void on_actionPaste_triggered();
+    void on_actionSelectAll_triggered();
 
     /* Connection menu slots */
     void on_connectAction(ConnectionDetails& cd);

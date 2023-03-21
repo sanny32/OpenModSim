@@ -426,6 +426,14 @@ void MainWindow::on_actionPaste_triggered()
 }
 
 ///
+/// \brief MainWindow::on_actionSelectAll_triggered
+///
+void MainWindow::on_actionSelectAll_triggered()
+{
+    emit selectAll();
+}
+
+///
 /// \brief MainWindow::on_connectAction
 /// \param type
 /// \param port
@@ -1018,7 +1026,7 @@ FormModSim* MainWindow::createMdiChild(int id)
         updateRunMode(ss.Mode);
     });
 
-    connect(frm, &FormModSim::showed, this, [this, wnd, frm]
+    connect(frm, &FormModSim::showed, this, [this, wnd]
     {
         windowActivate(wnd);
     });

@@ -22,10 +22,11 @@ public:
 
     void setForegroundColor(const QColor& clr);
     void setBackgroundColor(const QColor& clr);
-    void setLineColor(const QColor& clr);
 
     bool isAutoCompleteEnabled() const;
     void enableAutoComplete(bool enable);
+
+    void search(const QString& text);
 
 protected:
     void resizeEvent(QResizeEvent *event) override;

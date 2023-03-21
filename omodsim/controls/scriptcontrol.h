@@ -43,6 +43,7 @@ public slots:
     void cut();
     void copy();
     void paste();
+    void selectAll();
     void search(const QString& text);
     void runScript(RunMode mode, int interval = 0);
     void stopScript();

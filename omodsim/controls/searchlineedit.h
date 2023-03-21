@@ -17,6 +17,7 @@ signals:
 
 private slots:
     void on_returnPressed();
+    void on_textEdited(const QString& text);
 };
 
 #endif // SEARCHLINEEDIT_H

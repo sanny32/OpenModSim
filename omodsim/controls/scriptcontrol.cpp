@@ -125,12 +125,20 @@ void ScriptControl::paste()
 }
 
 ///
+/// \brief ScriptControl::selectAll
+///
+void ScriptControl::selectAll()
+{
+    ui->codeEditor->selectAll();
+}
+
+///
 /// \brief ScriptControl::search
 /// \param text
 ///
 void ScriptControl::search(const QString& text)
 {
-
+    ui->codeEditor->search(text);
 }
 
 ///

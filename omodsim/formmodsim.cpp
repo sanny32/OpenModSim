@@ -729,6 +729,7 @@ void FormModSim::connectEditSlots()
     connect(_parent, &MainWindow::cut, ui->scriptControl, &ScriptControl::cut);
     connect(_parent, &MainWindow::copy, ui->scriptControl, &ScriptControl::copy);
     connect(_parent, &MainWindow::paste, ui->scriptControl, &ScriptControl::paste);
+    connect(_parent, &MainWindow::selectAll, ui->scriptControl, &ScriptControl::selectAll);
     connect(_parent, &MainWindow::search, ui->scriptControl, &ScriptControl::search);
 }
 
@@ -742,5 +743,6 @@ void FormModSim::disconnectEditSlots()
     disconnect(_parent, &MainWindow::cut, ui->scriptControl, &ScriptControl::cut);
     disconnect(_parent, &MainWindow::copy, ui->scriptControl, &ScriptControl::copy);
     disconnect(_parent, &MainWindow::paste, ui->scriptControl, &ScriptControl::paste);
+    disconnect(_parent, &MainWindow::selectAll, ui->scriptControl, &ScriptControl::selectAll);
     disconnect(_parent, &MainWindow::search, ui->scriptControl, &ScriptControl::search);
 }
