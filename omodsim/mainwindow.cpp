@@ -13,6 +13,7 @@
 #include "dialogforcemultiplecoils.h"
 #include "dialogforcemultipleregisters.h"
 #include "runmodecombobox.h"
+#include "searchlineedit.h"
 #include "mainstatusbar.h"
 #include "menuconnect.h"
 #include "mainwindow.h"
@@ -66,6 +67,13 @@ MainWindow::MainWindow(QWidget *parent)
     ui->toolBarScript->insertAction(ui->actionRunScript, _actionRunMode);
     qobject_cast<QToolButton*>(ui->toolBarScript->widgetForAction(ui->actionRunScript))->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
     qobject_cast<QToolButton*>(ui->toolBarScript->widgetForAction(ui->actionStopScript))->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+
+    auto serachEdit = new SearchLineEdit(this);
+    connect(serachEdit, &SearchLineEdit::searchText, this, &MainWindow::on_searchText);
+
+    _actionSearch = new QWidgetAction(this);
+    _actionSearch->setDefaultWidget(serachEdit);
+    ui->toolBarEdit->addAction(_actionSearch);
 
     const auto defaultPrinter = QPrinterInfo::defaultPrinter();
     if(!defaultPrinter.isNull())
@@ -214,6 +222,9 @@ void MainWindow::on_awake()
     ui->actionEnglish->setChecked(_lang == "en");
     ui->actionRussian->setChecked(_lang == "ru");
 
+    ui->toolBarEdit->setVisible(frm != nullptr);
+    ui->menuEdit->menuAction()->setVisible(frm != nullptr);
+
     if(frm != nullptr)
     {
         const auto ddm = frm->dataDisplayMode();
@@ -236,6 +247,8 @@ void MainWindow::on_awake()
         ui->actionShowData->setChecked(dm == DisplayMode::Data);
         ui->actionShowTraffic->setChecked(dm == DisplayMode::Traffic);
         ui->actionShowScript->setChecked(dm == DisplayMode::Script);
+        ui->toolBarEdit->setVisible(dm == DisplayMode::Script);
+        ui->menuEdit->menuAction()->setVisible(dm == DisplayMode::Script);
         ui->actionPrint->setEnabled(_selectedPrinter != nullptr && dm == DisplayMode::Data);
 
         ui->actionRunScript->setEnabled(frm->canRunScript());
@@ -370,6 +383,46 @@ void MainWindow::on_actionPrintSetup_triggered()
 void MainWindow::on_actionExit_triggered()
 {
     close();
+}
+
+///
+/// \brief MainWindow::on_actionUndo_triggered
+///
+void MainWindow::on_actionUndo_triggered()
+{
+    emit undo();
+}
+
+///
+/// \brief MainWindow::on_actionRedo_triggered
+///
+void MainWindow::on_actionRedo_triggered()
+{
+    emit redo();
+}
+
+///
+/// \brief MainWindow::on_actionCut_triggered
+///
+void MainWindow::on_actionCut_triggered()
+{
+    emit cut();
+}
+
+///
+/// \brief MainWindow::on_actionCopy_triggered
+///
+void MainWindow::on_actionCopy_triggered()
+{
+    emit copy();
+}
+
+///
+/// \brief MainWindow::on_actionPaste_triggered
+///
+void MainWindow::on_actionPaste_triggered()
+{
+    emit paste();
 }
 
 ///
@@ -765,6 +818,15 @@ void MainWindow::on_runModeChanged(RunMode mode)
 }
 
 ///
+/// \brief MainWindow::on_searchText
+/// \param text
+///
+void MainWindow::on_searchText(const QString& text)
+{
+   emit search(text);
+}
+
+///
 /// \brief MainWindow::on_connectionError
 /// \param error
 ///
@@ -932,10 +994,17 @@ FormModSim* MainWindow::createMdiChild(int id)
 
     connect(wnd, &QMdiSubWindow::windowStateChanged, this, [frm, updateIcons, updateRunMode](Qt::WindowStates, Qt::WindowStates newState)
     {
-        if(newState == Qt::WindowActive)
+        switch(newState & ~Qt::WindowMaximized & ~Qt::WindowMinimized)
         {
-            updateIcons(frm->byteOrder());
-            updateRunMode(frm->scriptSettings().Mode);
+            case Qt::WindowActive:
+                updateIcons(frm->byteOrder());
+                updateRunMode(frm->scriptSettings().Mode);
+                frm->connectEditSlots();
+            break;
+
+            case Qt::WindowNoState:
+                frm->disconnectEditSlots();
+            break;
         }
     });
 
@@ -949,7 +1018,7 @@ FormModSim* MainWindow::createMdiChild(int id)
         updateRunMode(ss.Mode);
     });
 
-    connect(frm, &FormModSim::showed, this, [this, wnd]
+    connect(frm, &FormModSim::showed, this, [this, wnd, frm]
     {
         windowActivate(wnd);
     });
@@ -1202,6 +1271,11 @@ void MainWindow::loadSettings()
     if(scriptbarBreak) addToolBarBreak(scriptbarArea);
     addToolBar(scriptbarArea, ui->toolBarScript);
 
+    const auto editbarArea = (Qt::ToolBarArea)qBound(0, m.value("EditBarArea", 0x4).toInt(), 0xf);
+    const auto editbarBreak = m.value("EditBarBreak").toBool();
+    if(editbarBreak) addToolBarBreak(editbarArea);
+    addToolBar(editbarArea, ui->toolBarEdit);
+
     _lang = m.value("Language", "en").toString();
     setLanguage(_lang);
 
@@ -1240,6 +1314,8 @@ void MainWindow::saveSettings()
     m.setValue("DisplayBarBreak", toolBarBreak(ui->toolBarDisplay));
     m.setValue("ScriptBarArea", toolBarArea(ui->toolBarScript));
     m.setValue("ScriptBarBreak", toolBarBreak(ui->toolBarScript));
+    m.setValue("EditBarArea", toolBarArea(ui->toolBarEdit));
+    m.setValue("EditBarBreak", toolBarBreak(ui->toolBarEdit));
     m.setValue("Language", _lang);
 
     m << firstMdiChild();

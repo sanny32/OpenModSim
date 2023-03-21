@@ -38,12 +38,17 @@ public:
     void setFocus();
 
 public slots:
+    void undo();
+    void redo();
+    void cut();
+    void copy();
+    void paste();
+    void search(const QString& text);
     void runScript(RunMode mode, int interval = 0);
     void stopScript();
 
 private slots:
     bool executeScript();
-
 private:
     Ui::ScriptControl *ui;
 

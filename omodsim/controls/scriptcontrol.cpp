@@ -85,6 +85,55 @@ void ScriptControl::setScript(const QString& text)
 }
 
 ///
+/// \brief ScriptControl::undo
+///
+void ScriptControl::undo()
+{
+    ui->codeEditor->undo();
+}
+
+///
+/// \brief ScriptControl::redo
+///
+void ScriptControl::redo()
+{
+    ui->codeEditor->redo();
+}
+
+///
+/// \brief ScriptControl::cut
+///
+void ScriptControl::cut()
+{
+    ui->codeEditor->cut();
+}
+
+///
+/// \brief ScriptControl::copy
+///
+void ScriptControl::copy()
+{
+    ui->codeEditor->copy();
+}
+
+///
+/// \brief ScriptControl::paste
+///
+void ScriptControl::paste()
+{
+    ui->codeEditor->paste();
+}
+
+///
+/// \brief ScriptControl::search
+/// \param text
+///
+void ScriptControl::search(const QString& text)
+{
+
+}
+
+///
 /// \brief ScriptControl::isRunning
 ///
 bool ScriptControl::isRunning() const

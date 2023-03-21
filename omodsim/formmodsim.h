@@ -89,6 +89,8 @@ protected:
 
 public slots:
     void show();
+    void connectEditSlots();
+    void disconnectEditSlots();
 
 signals:
     void showed();
@@ -118,6 +120,7 @@ private:
 
 private:
     Ui::FormModSim *ui;
+    MainWindow* _parent;
     int _formId;
     QString _filename;
     ScriptSettings _scriptSettings;

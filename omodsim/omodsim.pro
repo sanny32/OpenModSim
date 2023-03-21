@@ -38,6 +38,7 @@ SOURCES += \
     controls/pointtypecombobox.cpp \
     controls/runmodecombobox.cpp \
     controls/scriptcontrol.cpp \
+    controls/searchlineedit.cpp \
     controls/simulationmodecombobox.cpp \
     datasimulator.cpp \
     dialogs/dialogautosimulation.cpp \
@@ -89,6 +90,7 @@ HEADERS += \
     controls/pointtypecombobox.h \
     controls/runmodecombobox.h \
     controls/scriptcontrol.h \
+    controls/searchlineedit.h \
     controls/simulationmodecombobox.h \
     datasimulator.h \
     dialogs/dialogautosimulation.h \

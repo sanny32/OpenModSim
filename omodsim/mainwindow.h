@@ -23,6 +23,14 @@ public:
 
     void setLanguage(const QString& lang);
 
+signals:
+    void undo();
+    void redo();
+    void cut();
+    void copy();
+    void paste();
+    void search(const QString& text);
+
 protected:
     void changeEvent(QEvent* event) override;
     void closeEvent(QCloseEvent *event) override;
@@ -42,6 +50,13 @@ private slots:
     void on_actionPrint_triggered();
     void on_actionPrintSetup_triggered();
     void on_actionExit_triggered();
+
+    /* Edit menu slots */
+    void on_actionUndo_triggered();
+    void on_actionRedo_triggered();
+    void on_actionCut_triggered();
+    void on_actionCopy_triggered();
+    void on_actionPaste_triggered();
 
     /* Connection menu slots */
     void on_connectAction(ConnectionDetails& cd);
@@ -96,6 +111,7 @@ private slots:
     void on_actionScriptSettings_triggered();
 
     void on_runModeChanged(RunMode mode);
+    void on_searchText(const QString& text);
 
     void on_connectionError(const QString& error);
 
@@ -127,6 +143,7 @@ private:
 private:
     Ui::MainWindow *ui;
     QWidgetAction* _actionRunMode;
+    QWidgetAction* _actionSearch;
 
     QString _lang;
     QTranslator _qtTranslator;

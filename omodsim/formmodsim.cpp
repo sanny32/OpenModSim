@@ -17,9 +17,10 @@ QVersionNumber FormModSim::VERSION = QVersionNumber(1, 2);
 /// \param num
 /// \param parent
 ///
-FormModSim::FormModSim(int id, ModbusMultiServer& server, QSharedPointer<DataSimulator> simulator, MainWindow* parent) :
-    QWidget(parent)
+FormModSim::FormModSim(int id, ModbusMultiServer& server, QSharedPointer<DataSimulator> simulator, MainWindow* parent)
+    : QWidget(parent)
     , ui(new Ui::FormModSim)
+    ,_parent(parent)
     ,_formId(id)
     ,_mbMultiServer(server)
     ,_dataSimulator(simulator)
@@ -57,7 +58,6 @@ FormModSim::FormModSim(int id, ModbusMultiServer& server, QSharedPointer<DataSim
     connect(_dataSimulator.get(), &DataSimulator::simulationStarted, this, &FormModSim::on_simulationStarted);
     connect(_dataSimulator.get(), &DataSimulator::simulationStopped, this, &FormModSim::on_simulationStopped);
     connect(_dataSimulator.get(), &DataSimulator::dataSimulated, this, &FormModSim::on_dataSimulated);
-
 }
 
 ///
@@ -71,17 +71,31 @@ FormModSim::~FormModSim()
 
 ///
 /// \brief FormModSim::changeEvent
-/// \param event
+/// \param e
 ///
-void FormModSim::changeEvent(QEvent* event)
+void FormModSim::changeEvent(QEvent* e)
 {
-    if (event->type() == QEvent::LanguageChange)
+    if (e->type() == QEvent::LanguageChange)
     {
         ui->retranslateUi(this);
         updateStatus();
     }
+    else if(e->type() == QEvent::ActivationChange )
+    {
+        qDebug() << formId() << isActiveWindow();
+        /*switch(windowState() & ~Qt::WindowMaximized & ~Qt::WindowMinimized)
+        {
+            case Qt::WindowActive:
+                connectEditSlots();
+            break;
+            case Qt::WindowNoState:
+                disconnectEditSlots();
+            break;
+        }*/
 
-    QWidget::changeEvent(event);
+    }
+
+    QWidget::changeEvent(e);
 }
 
 ///
@@ -478,6 +492,8 @@ void FormModSim::stopScript()
 void FormModSim::show()
 {
     QWidget::show();
+    connectEditSlots();
+
     emit showed();
 }
 
@@ -700,4 +716,31 @@ void FormModSim::on_dataSimulated(DataDisplayMode mode, QModbusDataUnit::Registe
     {
         _mbMultiServer.writeRegister(type, { addr, value, mode, byteOrder() });
     }
+}
+
+///
+/// \brief FormModSim::connectEditSlots
+///
+void FormModSim::connectEditSlots()
+{
+    disconnectEditSlots();
+    connect(_parent, &MainWindow::undo, ui->scriptControl, &ScriptControl::undo);
+    connect(_parent, &MainWindow::redo, ui->scriptControl, &ScriptControl::redo);
+    connect(_parent, &MainWindow::cut, ui->scriptControl, &ScriptControl::cut);
+    connect(_parent, &MainWindow::copy, ui->scriptControl, &ScriptControl::copy);
+    connect(_parent, &MainWindow::paste, ui->scriptControl, &ScriptControl::paste);
+    connect(_parent, &MainWindow::search, ui->scriptControl, &ScriptControl::search);
+}
+
+///
+/// \brief FormModSim::disconnectEditSlots
+///
+void FormModSim::disconnectEditSlots()
+{
+    disconnect(_parent, &MainWindow::undo, ui->scriptControl, &ScriptControl::undo);
+    disconnect(_parent, &MainWindow::redo, ui->scriptControl, &ScriptControl::redo);
+    disconnect(_parent, &MainWindow::cut, ui->scriptControl, &ScriptControl::cut);
+    disconnect(_parent, &MainWindow::copy, ui->scriptControl, &ScriptControl::copy);
+    disconnect(_parent, &MainWindow::paste, ui->scriptControl, &ScriptControl::paste);
+    disconnect(_parent, &MainWindow::search, ui->scriptControl, &ScriptControl::search);
 }

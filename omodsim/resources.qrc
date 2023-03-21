@@ -35,5 +35,11 @@
         <file>res/actionScriptSettings.png</file>
         <file>res/pointEmpty.png</file>
         <file>res/pointGreen.png</file>
+        <file>res/actionCopy.png</file>
+        <file>res/actionCut.png</file>
+        <file>res/actionFind.png</file>
+        <file>res/actionPaste.png</file>
+        <file>res/actionRedo.png</file>
+        <file>res/actionUndo.png</file>
     </qresource>
 </RCC>
