@@ -262,7 +262,7 @@
   </widget>
   <widget class="QToolBar" name="toolBarEdit">
    <property name="windowTitle">
-    <string>toolBar</string>
+    <string>Edit Bar</string>
    </property>
    <attribute name="toolBarArea">
     <enum>TopToolBarArea</enum>
