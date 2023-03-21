@@ -277,7 +277,6 @@ void JSCodeEditor::highlightCurrentLine()
     selection.cursor.clearSelection();
     extraSelections.append(selection);
 
-
     setExtraSelections(extraSelections);
 }
 
