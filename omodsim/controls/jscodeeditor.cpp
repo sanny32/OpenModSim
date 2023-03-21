@@ -265,24 +265,15 @@ void JSCodeEditor::highlightCurrentLine()
         return;
 
     auto extraSelections = this->extraSelections();
-    extraSelections.removeIf([this](const QTextEdit::ExtraSelection& s)
-    {
-        return s.format.background().color() == _lineColor;
-    });
-
-    auto tc = textCursor();
-   /* auto res = std::find_if(extraSelections.begin(), extraSelections.end(), [tc](const QTextEdit::ExtraSelection& s)
-    {
-        return s.cursor.selectionStart() == tc.selectionStart();
-    });*/
-
-   // qDebug() << extraSelections.size() << (res == extraSelections.end());
-
+    QMutableListIterator<QTextEdit::ExtraSelection> i(extraSelections);
+    while (i.hasNext())
+        if(i.next().format.background().color() == _lineColor)
+            i.remove();
 
     QTextEdit::ExtraSelection selection;
     selection.format.setBackground(_lineColor);
     selection.format.setProperty(QTextFormat::FullWidthSelection, true);
-    selection.cursor = tc;
+    selection.cursor = textCursor();
     selection.cursor.clearSelection();
     extraSelections.append(selection);
 
