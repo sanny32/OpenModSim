@@ -33,6 +33,8 @@ public:
     QString script() const;
     void setScript(const QString& text);
 
+    QString searchText() const;
+
     bool isRunning() const;
 
     void setFocus();
@@ -56,6 +58,7 @@ private:
     QTimer _timer;
     QJSEngine _jsEngine;
     QString _scriptCode;
+    QString _searchText;
 
     QSharedPointer<Script> _script;
     QSharedPointer<Storage> _storage;

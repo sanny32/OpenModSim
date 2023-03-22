@@ -194,6 +194,8 @@ void FormModSim::setDisplayMode(DisplayMode mode)
             ui->outputWidget->setDisplayMode(mode);
         break;
     }
+
+    emit displayModeChanged(mode);
 }
 
 ///
@@ -448,6 +450,15 @@ QString FormModSim::script() const
 void FormModSim::setScript(const QString& text)
 {
     ui->scriptControl->setScript(text);
+}
+
+///
+/// \brief FormModSim::searchText
+/// \return
+///
+QString FormModSim::searchText() const
+{
+    return ui->scriptControl->searchText();
 }
 
 ///

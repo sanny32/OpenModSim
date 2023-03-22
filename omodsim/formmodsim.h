@@ -57,6 +57,8 @@ public:
     QString script() const;
     void setScript(const QString& text);
 
+    QString searchText() const;
+
     bool displayHexAddresses() const;
     void setDisplayHexAddresses(bool on);
 
@@ -96,6 +98,7 @@ signals:
     void showed();
     void closing();
     void byteOrderChanged(ByteOrder);
+    void displayModeChanged(DisplayMode mode);
     void scriptSettingsChanged(const ScriptSettings&);
 
 private slots:

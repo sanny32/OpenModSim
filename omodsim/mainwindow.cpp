@@ -160,7 +160,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
 /// \param e
 /// \return
 ///
-bool MainWindow::eventFilter(QObject * obj, QEvent * e)
+bool MainWindow::eventFilter(QObject* obj, QEvent* e)
 {
     switch (e->type())
     {
@@ -219,11 +219,23 @@ void MainWindow::on_awake()
     ui->actionStatusBar->setChecked(statusBar()->isVisible());
     ui->actionDisplayBar->setChecked(ui->toolBarDisplay->isVisible());
     ui->actionScriptBar->setChecked(ui->toolBarScript->isVisible());
+    ui->actionEditBar->setChecked(ui->toolBarEdit->isVisible());
     ui->actionEnglish->setChecked(_lang == "en");
     ui->actionRussian->setChecked(_lang == "ru");
 
-    ui->toolBarEdit->setVisible(frm != nullptr);
-    ui->menuEdit->menuAction()->setVisible(frm != nullptr);
+    ui->actionUndo->setEnabled(frm != nullptr);
+    ui->actionRedo->setEnabled(frm != nullptr);
+    ui->actionCut->setEnabled(frm != nullptr);
+    ui->actionCopy->setEnabled(frm != nullptr);
+    ui->actionPaste->setEnabled(frm != nullptr);
+    ui->actionSelectAll->setEnabled(frm != nullptr);
+    _actionSearch->setEnabled(frm != nullptr);
+
+    if(ui->mdiArea->subWindowList().empty())
+    {
+        ui->toolBarEdit->setVisible(false);
+        ui->menuEdit->menuAction()->setVisible(false);
+    }
 
     if(frm != nullptr)
     {
@@ -247,9 +259,15 @@ void MainWindow::on_awake()
         ui->actionShowData->setChecked(dm == DisplayMode::Data);
         ui->actionShowTraffic->setChecked(dm == DisplayMode::Traffic);
         ui->actionShowScript->setChecked(dm == DisplayMode::Script);
-        ui->toolBarEdit->setVisible(dm == DisplayMode::Script);
-        ui->menuEdit->menuAction()->setVisible(dm == DisplayMode::Script);
         ui->actionPrint->setEnabled(_selectedPrinter != nullptr && dm == DisplayMode::Data);
+
+        ui->actionUndo->setEnabled(dm == DisplayMode::Script);
+        ui->actionRedo->setEnabled(dm == DisplayMode::Script);
+        ui->actionCut->setEnabled(dm == DisplayMode::Script);
+        ui->actionCopy->setEnabled(dm == DisplayMode::Script);
+        ui->actionPaste->setEnabled(dm == DisplayMode::Script);
+        ui->actionSelectAll->setEnabled(dm == DisplayMode::Script);
+        _actionSearch->setEnabled(dm == DisplayMode::Script);
 
         ui->actionRunScript->setEnabled(frm->canRunScript());
         ui->actionStopScript->setEnabled(frm->canStopScript());
@@ -664,6 +682,16 @@ void MainWindow::on_actionScriptBar_triggered()
 }
 
 ///
+/// \brief MainWindow::on_actionEditBar_triggered
+///
+void MainWindow::on_actionEditBar_triggered()
+{
+    const bool isVisible = ui->toolBarEdit->isVisible();
+    ui->toolBarEdit->setVisible(!isVisible);
+    ui->toolBarEdit->setProperty("Hidden", isVisible);
+}
+
+///
 /// \brief MainWindow::on_actionBackground_triggered
 ///
 void MainWindow::on_actionBackground_triggered()
@@ -1000,12 +1028,28 @@ FormModSim* MainWindow::createMdiChild(int id)
         comboBox->setCurrentRunMode(mode);
     };
 
-    connect(wnd, &QMdiSubWindow::windowStateChanged, this, [frm, updateIcons, updateRunMode](Qt::WindowStates, Qt::WindowStates newState)
+    auto updateEditTools = [this](DisplayMode mode)
+    {
+        if(!ui->toolBarEdit->property("Hidden").toBool())
+            ui->toolBarEdit->setVisible(mode == DisplayMode::Script);
+        ui->menuEdit->menuAction()->setVisible(mode == DisplayMode::Script);
+    };
+
+    auto updateSearch = [this](const QString& text)
+    {
+        auto edit = qobject_cast<SearchLineEdit*>(_actionSearch->defaultWidget());
+        edit->setText(text);
+    };
+
+    connect(wnd, &QMdiSubWindow::windowStateChanged, this,
+            [frm, updateIcons, updateRunMode, updateEditTools, updateSearch](Qt::WindowStates, Qt::WindowStates newState)
     {
         switch(newState & ~Qt::WindowMaximized & ~Qt::WindowMinimized)
         {
             case Qt::WindowActive:
                 updateIcons(frm->byteOrder());
+                updateSearch(frm->searchText());
+                updateEditTools(frm->displayMode());
                 updateRunMode(frm->scriptSettings().Mode);
                 frm->connectEditSlots();
             break;
@@ -1026,9 +1070,15 @@ FormModSim* MainWindow::createMdiChild(int id)
         updateRunMode(ss.Mode);
     });
 
-    connect(frm, &FormModSim::showed, this, [this, wnd]
+    connect(frm, &FormModSim::displayModeChanged, this, [updateEditTools](DisplayMode mode)
+    {
+        updateEditTools(mode);
+    });
+
+    connect(frm, &FormModSim::showed, this, [this, frm, wnd, updateEditTools]
     {
         windowActivate(wnd);
+        updateEditTools(frm->displayMode());
     });
 
     _windowActionList->addWindow(wnd);

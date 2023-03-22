@@ -85,6 +85,15 @@ void ScriptControl::setScript(const QString& text)
 }
 
 ///
+/// \brief ScriptControl::searchText
+/// \return
+///
+QString ScriptControl::searchText() const
+{
+    return _searchText;
+}
+
+///
 /// \brief ScriptControl::undo
 ///
 void ScriptControl::undo()
@@ -138,6 +147,7 @@ void ScriptControl::selectAll()
 ///
 void ScriptControl::search(const QString& text)
 {
+    _searchText = text;
     ui->codeEditor->search(text);
 }
 

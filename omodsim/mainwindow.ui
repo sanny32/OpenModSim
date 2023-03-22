@@ -10,6 +10,9 @@
     <height>720</height>
    </rect>
   </property>
+  <property name="contextMenuPolicy">
+   <enum>Qt::NoContextMenu</enum>
+  </property>
   <property name="windowTitle">
    <string>Open ModSim</string>
   </property>
@@ -185,6 +188,7 @@
     <addaction name="actionStatusBar"/>
     <addaction name="actionDisplayBar"/>
     <addaction name="actionScriptBar"/>
+    <addaction name="actionEditBar"/>
     <addaction name="separator"/>
     <addaction name="menuConfig"/>
     <addaction name="menuLanguage"/>
@@ -793,6 +797,14 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+A</string>
+   </property>
+  </action>
+  <action name="actionEditBar">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Edit Bar</string>
    </property>
   </action>
  </widget>
