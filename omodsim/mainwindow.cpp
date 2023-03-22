@@ -209,12 +209,6 @@ void MainWindow::on_awake()
     ui->actionScriptSettings->setEnabled(frm != nullptr);
     _actionRunMode->setEnabled(frm != nullptr);
 
-    const auto isConnected = _mbMultiServer.isConnected();
-    ui->actionForceCoils->setEnabled(isConnected);
-    ui->actionForceDiscretes->setEnabled(isConnected);
-    ui->actionPresetInputRegs->setEnabled(isConnected);
-    ui->actionPresetHoldingRegs->setEnabled(isConnected);
-
     ui->actionToolbar->setChecked(ui->toolBarMain->isVisible());
     ui->actionStatusBar->setChecked(statusBar()->isVisible());
     ui->actionDisplayBar->setChecked(ui->toolBarDisplay->isVisible());
