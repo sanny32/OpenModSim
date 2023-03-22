@@ -261,11 +261,11 @@ void MainWindow::on_awake()
         ui->actionShowScript->setChecked(dm == DisplayMode::Script);
         ui->actionPrint->setEnabled(_selectedPrinter != nullptr && dm == DisplayMode::Data);
 
-        ui->actionUndo->setEnabled(dm == DisplayMode::Script);
-        ui->actionRedo->setEnabled(dm == DisplayMode::Script);
+        ui->actionUndo->setEnabled(dm == DisplayMode::Script && frm->canUndo());
+        ui->actionRedo->setEnabled(dm == DisplayMode::Script && frm->canRedo());
         ui->actionCut->setEnabled(dm == DisplayMode::Script);
         ui->actionCopy->setEnabled(dm == DisplayMode::Script);
-        ui->actionPaste->setEnabled(dm == DisplayMode::Script);
+        ui->actionPaste->setEnabled(dm == DisplayMode::Script && frm->canPaste());
         ui->actionSelectAll->setEnabled(dm == DisplayMode::Script);
         _actionSearch->setEnabled(dm == DisplayMode::Script);
 

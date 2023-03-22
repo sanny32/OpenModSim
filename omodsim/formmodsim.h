@@ -80,7 +80,11 @@ public:
     void startSimulation(QModbusDataUnit::RegisterType type, quint16 addr, const ModbusSimulationParams& params);
 
     bool canRunScript() const;
-    bool canStopScript();
+    bool canStopScript() const;
+
+    bool canUndo() const;
+    bool canRedo() const;
+    bool canPaste() const;
 
     void runScript();
     void stopScript();

@@ -39,6 +39,10 @@ public:
 
     void setFocus();
 
+    bool canUndo() const;
+    bool canRedo() const;
+    bool canPaste() const;
+
 public slots:
     void undo();
     void redo();

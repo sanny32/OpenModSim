@@ -475,9 +475,36 @@ bool FormModSim::canRunScript() const
 /// \brief FormModSim::canStopScript
 /// \return
 ///
-bool FormModSim::canStopScript()
+bool FormModSim::canStopScript() const
 {
     return ui->scriptControl->isRunning();
+}
+
+///
+/// \brief FormModSim::canUndo
+/// \return
+///
+bool FormModSim::canUndo() const
+{
+    return ui->scriptControl->canUndo();
+}
+
+///
+/// \brief FormModSim::canRedo
+/// \return
+///
+bool FormModSim::canRedo() const
+{
+    return ui->scriptControl->canRedo();
+}
+
+///
+/// \brief FormModSim::canPaste
+/// \return
+///
+bool FormModSim::canPaste() const
+{
+    return ui->scriptControl->canPaste();
 }
 
 ///

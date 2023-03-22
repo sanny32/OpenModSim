@@ -168,6 +168,33 @@ void ScriptControl::setFocus()
 }
 
 ///
+/// \brief ScriptControl::canUndo
+/// \return
+///
+bool ScriptControl::canUndo() const
+{
+    return true;
+}
+
+///
+/// \brief ScriptControl::canRedo
+/// \return
+///
+bool ScriptControl::canRedo() const
+{
+    return true;
+}
+
+///
+/// \brief ScriptControl::canPaste
+/// \return
+///
+bool ScriptControl::canPaste() const
+{
+    return ui->codeEditor->canPaste();
+}
+
+///
 /// \brief ScriptControl::runScript
 /// \param interval
 ///
