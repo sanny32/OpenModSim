@@ -1,3 +1,4 @@
+#include <QEvent>
 #include "searchlineedit.h"
 
 ///
@@ -13,6 +14,20 @@ SearchLineEdit::SearchLineEdit(QWidget* parent)
 
     connect(this, &QLineEdit::textEdited, this, &SearchLineEdit::on_textEdited);
     connect(this, &QLineEdit::returnPressed, this, &SearchLineEdit::on_returnPressed);
+}
+
+///
+/// \brief SearchLineEdit::changeEvent
+/// \param event
+///
+void SearchLineEdit::changeEvent(QEvent* event)
+{
+    if (event->type() == QEvent::LanguageChange)
+    {
+        setPlaceholderText(tr("Type text to search..."));
+    }
+
+    QLineEdit::changeEvent(event);
 }
 
 ///

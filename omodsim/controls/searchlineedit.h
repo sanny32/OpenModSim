@@ -15,6 +15,9 @@ public:
 signals:
     void searchText(const QString& text);
 
+protected:
+    void changeEvent(QEvent* event) override;
+
 private slots:
     void on_returnPressed();
     void on_textEdited(const QString& text);
