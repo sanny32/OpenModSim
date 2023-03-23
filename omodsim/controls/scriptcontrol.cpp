@@ -213,7 +213,7 @@ void ScriptControl::runScript(RunMode mode, int interval)
         break;
 
         case RunMode::Periodically:
-            _timer.start(qMax(1000, interval));
+            _timer.start(interval);
         break;
     }
 }

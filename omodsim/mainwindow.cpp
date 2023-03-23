@@ -188,7 +188,7 @@ void MainWindow::on_awake()
     ui->actionSave->setEnabled(frm != nullptr);
     ui->actionSaveAs->setEnabled(frm != nullptr);
     ui->actionPrintSetup->setEnabled(_selectedPrinter != nullptr);
-    ui->actionPrint->setEnabled(_selectedPrinter != nullptr && frm != nullptr);
+    ui->actionPrint->setEnabled(_selectedPrinter != nullptr && frm && frm->displayMode() == DisplayMode::Data);
     ui->actionRecentFile->setEnabled(!_recentFileActionList->isEmpty());
 
     ui->actionDataDefinition->setEnabled(frm != nullptr);
@@ -203,11 +203,12 @@ void MainWindow::on_awake()
     ui->actionSwappedFP->setEnabled(frm != nullptr);
     ui->actionDblFloat->setEnabled(frm != nullptr);
     ui->actionSwappedDbl->setEnabled(frm != nullptr);
+    ui->actionByteOrder->setEnabled(frm != nullptr);
 
-    ui->actionRunScript->setEnabled(frm != nullptr);
-    ui->actionStopScript->setEnabled(frm != nullptr);
-    ui->actionScriptSettings->setEnabled(frm != nullptr);
-    _actionRunMode->setEnabled(frm != nullptr);
+    ui->actionRunScript->setEnabled(frm && frm->canRunScript());
+    ui->actionStopScript->setEnabled(frm && frm->canStopScript());
+    ui->actionScriptSettings->setEnabled(frm && frm->canRunScript());
+    _actionRunMode->setEnabled(frm && frm->canRunScript());
 
     ui->actionToolbar->setChecked(ui->toolBarMain->isVisible());
     ui->actionStatusBar->setChecked(statusBar()->isVisible());
@@ -216,14 +217,6 @@ void MainWindow::on_awake()
     ui->actionEditBar->setChecked(ui->toolBarEdit->isVisible());
     ui->actionEnglish->setChecked(_lang == "en");
     ui->actionRussian->setChecked(_lang == "ru");
-
-    ui->actionUndo->setEnabled(frm != nullptr);
-    ui->actionRedo->setEnabled(frm != nullptr);
-    ui->actionCut->setEnabled(frm != nullptr);
-    ui->actionCopy->setEnabled(frm != nullptr);
-    ui->actionPaste->setEnabled(frm != nullptr);
-    ui->actionSelectAll->setEnabled(frm != nullptr);
-    _actionSearch->setEnabled(frm != nullptr);
 
     if(ui->mdiArea->subWindowList().empty())
     {
@@ -253,7 +246,6 @@ void MainWindow::on_awake()
         ui->actionShowData->setChecked(dm == DisplayMode::Data);
         ui->actionShowTraffic->setChecked(dm == DisplayMode::Traffic);
         ui->actionShowScript->setChecked(dm == DisplayMode::Script);
-        ui->actionPrint->setEnabled(_selectedPrinter != nullptr && dm == DisplayMode::Data);
 
         ui->actionUndo->setEnabled(dm == DisplayMode::Script && frm->canUndo());
         ui->actionRedo->setEnabled(dm == DisplayMode::Script && frm->canRedo());
@@ -262,11 +254,6 @@ void MainWindow::on_awake()
         ui->actionPaste->setEnabled(dm == DisplayMode::Script && frm->canPaste());
         ui->actionSelectAll->setEnabled(dm == DisplayMode::Script);
         _actionSearch->setEnabled(dm == DisplayMode::Script);
-
-        ui->actionRunScript->setEnabled(frm->canRunScript());
-        ui->actionStopScript->setEnabled(frm->canStopScript());
-        ui->actionScriptSettings->setEnabled(frm->canRunScript());
-        _actionRunMode->setEnabled(frm->canRunScript());
     }
 }
 
