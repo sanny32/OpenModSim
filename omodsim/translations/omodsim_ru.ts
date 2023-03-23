@@ -1303,10 +1303,10 @@ Length: %2</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="305"/>
-        <location filename="../mainwindow.cpp" line="344"/>
-        <location filename="../mainwindow.cpp" line="357"/>
-        <location filename="../mainwindow.cpp" line="368"/>
+        <location filename="../mainwindow.cpp" line="286"/>
+        <location filename="../mainwindow.cpp" line="325"/>
+        <location filename="../mainwindow.cpp" line="338"/>
+        <location filename="../mainwindow.cpp" line="349"/>
         <source>All files (*)</source>
         <translation>Все файлы (*)</translation>
     </message>
@@ -1337,12 +1337,17 @@ Length: %2</source>
 <context>
     <name>OutputWidget</name>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="640"/>
+        <location filename="../controls/outputwidget.cpp" line="824"/>
+        <source>%1: Enter Description</source>
+        <translation>%1: Введите описание</translation>
+    </message>
+    <message>
+        <location filename="../controls/outputwidget.cpp" line="884"/>
         <source>NOT CONNECTED!</source>
         <translation>НЕ ПОДКЛЮЧЕНО!</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="648"/>
+        <location filename="../controls/outputwidget.cpp" line="892"/>
         <source>Invalid Data Length Specified</source>
         <translation>Указана недопустимая длина данных</translation>
     </message>
@@ -1441,7 +1446,8 @@ Length: %2</source>
 <context>
     <name>SearchLineEdit</name>
     <message>
-        <location filename="../controls/searchlineedit.cpp" line="10"/>
+        <location filename="../controls/searchlineedit.cpp" line="11"/>
+        <location filename="../controls/searchlineedit.cpp" line="27"/>
         <source>Type text to search...</source>
         <translation>Поиск...</translation>
     </message>
