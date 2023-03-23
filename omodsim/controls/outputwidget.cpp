@@ -311,7 +311,7 @@ bool OutputListModel::setData(const QModelIndex &index, const QVariant &value, i
     {
         case SimulationRole:
         {
-            if(_mapItems.find(index.row()) != _mapItems.end())
+            if(_mapItems.contains(index.row()))
             {
                 _mapItems[index.row()].Simulated = value.toBool();
 
