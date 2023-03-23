@@ -1,6 +1,7 @@
 #include <QDateTime>
 #include <QPainter>
 #include <QTextStream>
+#include <QInputDialog>
 #include "floatutils.h"
 #include "outputwidget.h"
 #include "ui_outputwidget.h"
@@ -14,6 +15,16 @@ const int SimulationRole = Qt::UserRole + 1;
 /// \brief CaptureRole
 ///
 const int CaptureRole = Qt::UserRole + 2;
+
+///
+/// \brief DescriptionRole
+///
+const int DescriptionRole = Qt::UserRole + 3;
+
+///
+/// \brief AddressRole
+///
+const int AddressRole = Qt::UserRole + 4;
 
 ///
 /// \brief formatBinaryValue
@@ -280,10 +291,23 @@ QVariant OutputListModel::data(const QModelIndex& index, int role) const
     switch(role)
     {
         case Qt::DisplayRole:
-            return QString("%1: %2                ").arg(addrstr, itemData.ValueStr);
+        {
+            auto str = QString("%1: %2").arg(addrstr, itemData.ValueStr);
+            const int length = str.length();
+            const auto descr = itemData.Description.length() > 20 ?
+                        QString("%1...").arg(itemData.Description.left(18)): itemData.Description;
+            if(!descr.isEmpty()) str += QString("; %1").arg(descr);
+            return str.leftJustified(length + 16, ' ');
+        }
 
         case CaptureRole:
             return QString(itemData.ValueStr).remove('<').remove('>');
+
+        case AddressRole:
+            return addrstr;
+
+        case DescriptionRole:
+            return itemData.Description;
 
         case Qt::DecorationRole:
             return itemData.Simulated ? _iconPointGreen : _iconPointEmpty;
@@ -304,28 +328,28 @@ QVariant OutputListModel::data(const QModelIndex& index, int role) const
 ///
 bool OutputListModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
-    if(!index.isValid())
+    if(!index.isValid() ||
+       !_mapItems.contains(index.row()))
+    {
         return false;
+    }
 
     switch (role)
     {
         case SimulationRole:
-        {
-            if(_mapItems.contains(index.row()))
-            {
-                _mapItems[index.row()].Simulated = value.toBool();
+            _mapItems[index.row()].Simulated = value.toBool();
+            emit dataChanged(index, index, QList<int>() << role);
+        return true;
 
-                emit dataChanged(index, index, QList<int>() << role);
-                return true;
-            }
-        }
-        break;
+
+        case DescriptionRole:
+            _mapItems[index.row()].Description = value.toString();
+            emit dataChanged(index, index, QList<int>() << role);
+        return true;
 
         default:
-        break;
+        return false;
     }
-
-    return false;
 }
 
 ///
@@ -787,6 +811,23 @@ void OutputWidget::setByteOrder(ByteOrder order)
     _listModel->update();
 }
 
+///
+/// \brief OutputWidget::on_listView_customContextMenuRequested
+/// \param pos
+///
+void OutputWidget::on_listView_customContextMenuRequested(const QPoint &pos)
+{
+    const auto index = ui->listView->indexAt(pos);
+    if(!index.isValid()) return;
+
+    QInputDialog dlg(this);
+    dlg.setLabelText(QString(tr("%1: Enter Description")).arg(_listModel->data(index, AddressRole).toString()));
+    dlg.setTextValue(_listModel->data(index, DescriptionRole).toString());
+    if(dlg.exec() == QDialog::Accepted)
+    {
+        _listModel->setData(index, dlg.textValue(), DescriptionRole);
+    }
+}
 
 ///
 /// \brief OutputWidget::on_listView_doubleClicked
