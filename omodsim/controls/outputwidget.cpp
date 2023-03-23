@@ -854,9 +854,6 @@ void OutputWidget::setInvalidLengthStatus()
 }
 
 ///
-
-
-///
 /// \brief OutputWidget::updateTrafficWidget
 /// \param request
 /// \param pdu
