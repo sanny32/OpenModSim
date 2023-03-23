@@ -13,12 +13,57 @@ namespace Ui {
 class OutputWidget;
 }
 
+class OutputWidget;
+
+///
+/// \brief The OutputListModel class
+///
+class OutputListModel : public QAbstractListModel
+{
+    Q_OBJECT
+
+    friend class OutputWidget;
+
+public:
+    explicit OutputListModel(OutputWidget* parent);
+
+    int rowCount(const QModelIndex& parent = QModelIndex()) const override;
+    QVariant data(const QModelIndex& index, int role) const override;
+    bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole) override;
+
+    bool isValid() const;
+    QVector<quint16> values() const;
+
+    void clear();
+    void update();
+    void updateData(const QModbusDataUnit& data);
+
+    QModelIndex find(QModbusDataUnit::RegisterType type, quint16 addr) const;
+
+private:
+    struct ItemData
+    {
+        quint32 Address = 0;
+        QVariant Value;
+        QString ValueStr;
+        bool Simulated = false;
+    };
+
+    OutputWidget* _parentWidget;
+    QModbusDataUnit _lastData;
+    QIcon _iconPointGreen;
+    QIcon _iconPointEmpty;
+    QMap<int, ItemData> _mapItems;
+};
+
 ///
 /// \brief The OutputWidget class
 ///
 class OutputWidget : public QWidget
 {
     Q_OBJECT
+
+    friend class OutputListModel;
 
 public:  
     explicit OutputWidget(QWidget *parent = nullptr);
@@ -71,12 +116,10 @@ protected:
     void changeEvent(QEvent* event) override;
 
 private slots:
-    void on_listWidget_itemDoubleClicked(QListWidgetItem *item);
+    void on_listView_doubleClicked(const QModelIndex& index);
 
 private:
-    void updateDataWidget(const QModbusDataUnit& data);
     void updateTrafficWidget(bool request, int server, const QModbusPdu& pdu);
-    const QIcon& listWidgetItemIcon(QModbusDataUnit::RegisterType type, quint16 addr) const;
 
 private:
     Ui::OutputWidget *ui;
@@ -87,11 +130,7 @@ private:
     DataDisplayMode _dataDisplayMode;
     ByteOrder _byteOrder;
     DisplayDefinition _displayDefinition;
-    QModbusDataUnit _lastData;
-    QFile _fileCapture;
-    QIcon _iconPointGreen;
-    QIcon _iconPointEmpty;
-    QMap<QPair<QModbusDataUnit::RegisterType, quint16>, bool> _simulatedItems;
+    QSharedPointer<OutputListModel> _listModel;
 };
 
 #endif // OUTPUTWIDGET_H

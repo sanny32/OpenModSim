@@ -29,7 +29,7 @@
    <item>
     <widget class="QStackedWidget" name="stackedWidget">
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="page1">
       <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -62,7 +62,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QListWidget" name="listWidget">
+        <widget class="QListView" name="listView">
          <property name="focusPolicy">
           <enum>Qt::NoFocus</enum>
          </property>
