@@ -546,11 +546,16 @@ QVector<quint16> OutputWidget::data() const
 ///
 void OutputWidget::setup(const DisplayDefinition& dd, const ModbusSimulationMap& simulations, const QModbusDataUnit& data)
 {
+    _descriptionMap.insert(descriptionMap());
     _displayDefinition = dd;
 
     _listModel->clear();
+
     for(auto&& key : simulations.keys())
         _listModel->setData(_listModel->find(key.first, key.second), true, SimulationRole);
+
+    for(auto&& key : _descriptionMap.keys())
+        setDescription(key.first, key.second, _descriptionMap[key]);
 
     updateData(data);
 }

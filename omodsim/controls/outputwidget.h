@@ -137,6 +137,7 @@ private:
     DataDisplayMode _dataDisplayMode;
     ByteOrder _byteOrder;
     DisplayDefinition _displayDefinition;
+    AddressDescriptionMap _descriptionMap;
     QSharedPointer<OutputListModel> _listModel;
 };
 
