@@ -10,7 +10,7 @@
 #include "formmodsim.h"
 #include "ui_formmodsim.h"
 
-QVersionNumber FormModSim::VERSION = QVersionNumber(1, 2);
+QVersionNumber FormModSim::VERSION = QVersionNumber(1, 3);
 
 ///
 /// \brief FormModSim::FormModSim
@@ -432,6 +432,26 @@ ModbusSimulationMap FormModSim::simulationMap() const
 void FormModSim::startSimulation(QModbusDataUnit::RegisterType type, quint16 addr, const ModbusSimulationParams& params)
 {
     _dataSimulator->startSimulation(dataDisplayMode(), type, addr, params);
+}
+
+///
+/// \brief FormModSim::descriptionMap
+/// \return
+///
+AddressDescriptionMap FormModSim::descriptionMap() const
+{
+    return ui->outputWidget->descriptionMap();
+}
+
+///
+/// \brief FormModSim::setDescription
+/// \param type
+/// \param addr
+/// \param desc
+///
+void FormModSim::setDescription(QModbusDataUnit::RegisterType type, quint16 addr, const QString& desc)
+{
+    ui->outputWidget->setDescription(type, addr, desc);
 }
 
 ///

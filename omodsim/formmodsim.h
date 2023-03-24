@@ -8,6 +8,7 @@
 #include "datasimulator.h"
 #include "modbusmultiserver.h"
 #include "displaydefinition.h"
+#include "outputwidget.h"
 #include "scriptsettings.h"
 
 class MainWindow;
@@ -78,6 +79,9 @@ public:
 
     ModbusSimulationMap simulationMap() const;
     void startSimulation(QModbusDataUnit::RegisterType type, quint16 addr, const ModbusSimulationParams& params);
+
+    AddressDescriptionMap descriptionMap() const;
+    void setDescription(QModbusDataUnit::RegisterType type, quint16 addr, const QString& desc);
 
     bool canRunScript() const;
     bool canStopScript() const;
@@ -251,6 +255,7 @@ inline QDataStream& operator <<(QDataStream& out, const FormModSim* frm)
     out << frm->simulationMap();
     out << frm->script();
     out << frm->scriptSettings();
+    out << frm->descriptionMap();
 
     return out;
 }
@@ -313,6 +318,12 @@ inline QDataStream& operator >>(QDataStream& in, FormModSim* frm)
         in >> scriptSettings;
     }
 
+    AddressDescriptionMap descriptionMap;
+    if(ver >=  QVersionNumber(1, 3))
+    {
+        in >> descriptionMap;
+    }
+
     if(in.status() != QDataStream::Ok)
         return in;
 
@@ -335,6 +346,9 @@ inline QDataStream& operator >>(QDataStream& in, FormModSim* frm)
 
     for(auto&& k : simulationMap.keys())
         frm->startSimulation(k.first, k.second,  simulationMap[k]);
+
+    for(auto&& k : descriptionMap.keys())
+        frm->setDescription(k.first, k.second, descriptionMap[k]);
 
     return in;
 }
