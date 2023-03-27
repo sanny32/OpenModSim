@@ -26,6 +26,7 @@ INCLUDEPATH += controls \
 SOURCES += \
     controls/booleancombobox.cpp \
     controls/clickablelabel.cpp \
+    controls/consoleoutput.cpp \
     controls/customframe.cpp \
     controls/customlineedit.cpp \
     controls/flowcontroltypecombobox.cpp \
@@ -78,6 +79,7 @@ HEADERS += \
     connectiondetails.h \
     controls/booleancombobox.h \
     controls/clickablelabel.h \
+    controls/consoleoutput.h \
     controls/customframe.h \
     controls/customlineedit.h \
     controls/flowcontroltypecombobox.h \

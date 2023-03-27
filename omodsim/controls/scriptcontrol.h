@@ -56,6 +56,7 @@ public slots:
 
 private slots:
     bool executeScript();
+
 private:
     Ui::ScriptControl *ui;
 

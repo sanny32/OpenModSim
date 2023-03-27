@@ -67,7 +67,7 @@
        <double>20.000000000000000</double>
       </property>
      </widget>
-     <widget class="QPlainTextEdit" name="console">
+     <widget class="ConsoleOutput" name="console">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
         <horstretch>0</horstretch>
@@ -90,6 +90,11 @@
    <class>JSCodeEditor</class>
    <extends>QPlainTextEdit</extends>
    <header>jscodeeditor.h</header>
+  </customwidget>
+  <customwidget>
+   <class>ConsoleOutput</class>
+   <extends>QPlainTextEdit</extends>
+   <header>consoleoutput.h</header>
   </customwidget>
  </customwidgets>
  <resources/>
