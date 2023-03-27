@@ -15,6 +15,14 @@
     </message>
 </context>
 <context>
+    <name>ConsoleOutput</name>
+    <message>
+        <location filename="../controls/consoleoutput.cpp" line="22"/>
+        <source>Clear</source>
+        <translation>Очистить</translation>
+    </message>
+</context>
+<context>
     <name>DialogAbout</name>
     <message>
         <location filename="../dialogs/dialogabout.ui" line="14"/>
@@ -45,11 +53,6 @@
         <location filename="../dialogs/dialogabout.ui" line="141"/>
         <source>© Alexandr Ananev, 2023</source>
         <translation></translation>
-    </message>
-    <message>
-        <location filename="../dialogs/dialogabout.ui" line="164"/>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://github.com/sanny32/OpenModSim&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;https://github.com/sanny32/OpenModSim&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../dialogs/dialogabout.ui" line="177"/>
@@ -1337,17 +1340,17 @@ Length: %2</source>
 <context>
     <name>OutputWidget</name>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="824"/>
+        <location filename="../controls/outputwidget.cpp" line="869"/>
         <source>%1: Enter Description</source>
         <translation>%1: Введите описание</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="884"/>
+        <location filename="../controls/outputwidget.cpp" line="926"/>
         <source>NOT CONNECTED!</source>
         <translation>НЕ ПОДКЛЮЧЕНО!</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="892"/>
+        <location filename="../controls/outputwidget.cpp" line="934"/>
         <source>Invalid Data Length Specified</source>
         <translation>Указана недопустимая длина данных</translation>
     </message>
