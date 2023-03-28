@@ -200,9 +200,11 @@ bool ScriptControl::canPaste() const
 ///
 void ScriptControl::runScript(RunMode mode, int interval)
 {
+    _execCount = 0;
     _console->clear();
     _scriptCode = script();
     _jsEngine.setInterrupted(false);
+    _script->setPeriod(interval);
 
     if(!executeScript())
         return;
@@ -233,6 +235,7 @@ void ScriptControl::stopScript()
 ///
 bool ScriptControl::executeScript()
 {
+    _script->setRunCount(_execCount++);
     const auto res = _jsEngine.evaluate(_scriptCode);
     if(res.isError() && !_jsEngine.isInterrupted())
     {

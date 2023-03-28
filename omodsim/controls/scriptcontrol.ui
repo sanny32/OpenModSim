@@ -59,7 +59,10 @@
  use Storage.getItem(key) to get stored value 
  
  To output debug information use console.log() function
+
  To break script execution use Script.stop() function
+ To get execution run count of  the script use Script.runCount property. On Script start this property equals 0
+ To get execution script period use Script.period property
 ************************************************************************/
 </string>
       </property>

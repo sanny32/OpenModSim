@@ -64,6 +64,7 @@ private:
     QJSEngine _jsEngine;
     QString _scriptCode;
     QString _searchText;
+    int _execCount = 0;
 
     QSharedPointer<Script> _script;
     QSharedPointer<Storage> _storage;
