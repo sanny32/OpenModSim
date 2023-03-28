@@ -41,5 +41,6 @@
         <file>res/actionPaste.png</file>
         <file>res/actionRedo.png</file>
         <file>res/actionUndo.png</file>
+        <file>res/iconEnum.png</file>
     </qresource>
 </RCC>

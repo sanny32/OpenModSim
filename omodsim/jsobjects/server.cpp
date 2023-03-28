@@ -17,7 +17,7 @@ Server::Server(ModbusMultiServer& server, const ByteOrder& order)
 /// \param address
 /// \return
 ///
-quint16 Server::readHolding(quint16 address)
+quint16 Server::readHolding(quint16 address) const
 {
     const auto data = _mbMultiServer.data(QModbusDataUnit::HoldingRegisters, address - 1, 1);
     return toByteOrderValue(data.value(0), _byteOrder);
@@ -38,7 +38,7 @@ void Server::writeHolding(quint16 address, quint16 value)
 /// \param address
 /// \return
 ///
-quint16 Server::readInput(quint16 address)
+quint16 Server::readInput(quint16 address) const
 {
     const auto data = _mbMultiServer.data(QModbusDataUnit::InputRegisters, address - 1, 1);
     return toByteOrderValue(data.value(0), _byteOrder);
@@ -59,7 +59,7 @@ void Server::writeInput(quint16 address, quint16 value)
 /// \param address
 /// \return
 ///
-bool Server::readDiscrete(quint16 address)
+bool Server::readDiscrete(quint16 address) const
 {
     const auto data = _mbMultiServer.data(QModbusDataUnit::DiscreteInputs, address - 1, 1);
     return toByteOrderValue(data.value(0), _byteOrder);
@@ -80,7 +80,7 @@ void Server::writeDiscrete(quint16 address, bool value)
 /// \param address
 /// \return
 ///
-bool Server::readCoil(quint16 address)
+bool Server::readCoil(quint16 address) const
 {
     const auto data = _mbMultiServer.data(QModbusDataUnit::Coils, address - 1, 1);
     return toByteOrderValue(data.value(0), _byteOrder);
@@ -94,4 +94,52 @@ bool Server::readCoil(quint16 address)
 void Server::writeCoil(quint16 address, bool value)
 {
     _mbMultiServer.writeValue(QModbusDataUnit::Coils, address - 1, value, _byteOrder);
+}
+
+///
+/// \brief Server::readFloat
+/// \param reg
+/// \param address
+/// \param swapped
+/// \return
+///
+float Server::readFloat(Register::Type reg, quint16 address, bool swapped) const
+{
+    return _mbMultiServer.readFloat((QModbusDataUnit::RegisterType)reg, address - 1, _byteOrder, swapped);
+}
+
+///
+/// \brief Server::writeFloat
+/// \param reg
+/// \param address
+/// \param value
+/// \param swapped
+///
+void Server::writeFloat(Register::Type reg, quint16 address, float value, bool swapped)
+{
+    _mbMultiServer.writeFloat((QModbusDataUnit::RegisterType)reg, address - 1, value, _byteOrder, swapped);
+}
+
+///
+/// \brief Server::readDouble
+/// \param reg
+/// \param address
+/// \param swapped
+/// \return
+///
+double Server::readDouble(Register::Type reg, quint16 address, bool swapped) const
+{
+    return _mbMultiServer.readDouble((QModbusDataUnit::RegisterType)reg, address - 1, _byteOrder, swapped);
+}
+
+///
+/// \brief Server::writeDouble
+/// \param reg
+/// \param address
+/// \param value
+/// \param swapped
+///
+void Server::writeDouble(Register::Type reg, quint16 address, double value, bool swapped)
+{
+    _mbMultiServer.writeDouble((QModbusDataUnit::RegisterType)reg, address - 1, value, _byteOrder, swapped);
 }

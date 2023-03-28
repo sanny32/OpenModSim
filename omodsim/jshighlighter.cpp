@@ -124,6 +124,7 @@ LanguageData JSHighlighter::builtin = {
 };
 
 LanguageData JSHighlighter::other = {
+     {('R'), QLatin1String("Register")},
      {('S'), QLatin1String("Server")},
      {('S'), QLatin1String("Script")},
      {('S'), QLatin1String("Storage")}

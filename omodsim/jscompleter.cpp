@@ -8,32 +8,43 @@
 #include "jscompleter.h"
 
 ///
+/// \brief The MethodMetaType enum
+///
+enum class MethodMetaType
+{
+    Method = 0,
+    Property,
+    Enumerator
+};
+
+///
 /// \brief The MethodMetaInfo class
 ///
 struct MethodMetaInfo
 {
     QString Name;
-    bool IsProperty;
+    MethodMetaType MetaType = MethodMetaType::Method;
 
     bool operator==(const MethodMetaInfo& mi) const {
-        return Name == mi.Name && IsProperty == mi.IsProperty;
+        return Name == mi.Name && MetaType == mi.MetaType;
     }
 };
 QMap<QString, QVector<MethodMetaInfo>> _completerMap = {
     { "Math",
       {
-          {"E", 1}, {"LN10", 1}, {"LN2", 1}, {"LOG10E", 1}, {"LOG2E", 1}, {"PI", 1}, {"SQRT1_2", 1}, {"SQRT2", 1},
-          {"abs", 0}, {"acos", 0}, {"acosh", 0}, {"asin", 0}, {"asinh", 0}, {"atan", 0}, {"atanh", 0}, {"atan2", 0},
-          {"cbrt", 0}, {"ceil", 0}, {"clz32", 0}, {"cos", 0}, {"cosh", 0}, {"exp", 0}, {"expm1", 0}, {"floor", 0},
-          {"fround", 0}, {"hypot", 0}, {"imul", 0}, {"log", 0}, {"log1p", 0}, {"log10", 0}, {"log2", 0}, {"max", 0},
-          {"min", 0}, {"pow", 0}, {"random", 0}, {"round", 0}, {"sign", 0}, {"sin", 0}, {"sinh", 0}, {"sqrt", 0},
-          {"tan", 0}, {"tanh", 0}, {"trunc", 0}
+          {"E", MethodMetaType::Property}, {"LN10", MethodMetaType::Property}, {"LN2", MethodMetaType::Property}, {"LOG10E", MethodMetaType::Property},
+          {"LOG2E", MethodMetaType::Property}, {"PI", MethodMetaType::Property}, {"SQRT1_2", MethodMetaType::Property}, {"SQRT2", MethodMetaType::Property},
+          {"abs"}, {"acos"}, {"acosh"}, {"asin"}, {"asinh"}, {"atan"}, {"atanh"}, {"atan2"},
+          {"cbrt"}, {"ceil"}, {"clz32"}, {"cos"}, {"cosh"}, {"exp"}, {"expm1"}, {"floor"},
+          {"fround"}, {"hypot"}, {"imul"}, {"log"}, {"log1p"}, {"log10"}, {"log2"}, {"max"},
+          {"min"}, {"pow"}, {"random"}, {"round"}, {"sign"}, {"sin"}, {"sinh"}, {"sqrt"},
+          {"tan"}, {"tanh"}, {"trunc"}
       }
     },
     { "Date",
       {
-          {"prototype", 1},
-          {"now", 0}, {"parse", 0}, {"UTC", 0}
+          {"prototype", MethodMetaType::Property},
+          {"now"}, {"parse"}, {"UTC"}
       }
     }
 };
@@ -50,7 +61,18 @@ void addMetaObject(const QMetaObject& metaObject)
     for(int i = metaObject.propertyOffset(); i < metaObject.propertyCount(); i++)
     {
         const auto name =  QString::fromLatin1(metaObject.property(i).name());
-        vecInfo.push_back({name, true});
+        vecInfo.push_back({name, MethodMetaType::Property});
+    }
+
+    // add enums
+    for(int i = metaObject.enumeratorOffset(); i < metaObject.enumeratorCount(); i++)
+    {
+        const auto enumerator = metaObject.enumerator(i);
+        for(int j = 0; j < enumerator.keyCount(); j++)
+        {
+            const auto name =  QString::fromLatin1(enumerator.key(j));
+            vecInfo.push_back({name, MethodMetaType::Enumerator});
+        }
     }
 
     // add methods
@@ -59,7 +81,7 @@ void addMetaObject(const QMetaObject& metaObject)
         if(metaObject.method(i).methodType() == QMetaMethod::Method)
         {
             const auto name =  QString::fromLatin1(metaObject.method(i).name());
-            if(!vecInfo.contains({name, false})) vecInfo.push_back({name, false});
+            if(!vecInfo.contains({name})) vecInfo.push_back({name});
         }
     }
 
@@ -73,7 +95,8 @@ void addMetaObject(const QMetaObject& metaObject)
 JSCompleterModel::JSCompleterModel(QObject *parent)
     : QAbstractListModel(parent)
     ,_iconProp(":/res/iconProp.png")
-    ,_icomFunc(":/res/iconFunc.png")
+    ,_iconFunc(":/res/iconFunc.png")
+    ,_iconEnum(":/res/iconEnum.png")
 {
     if(!_completerMap.contains(console::staticMetaObject.className()))
     {
@@ -81,6 +104,7 @@ JSCompleterModel::JSCompleterModel(QObject *parent)
         addMetaObject(Script::staticMetaObject);
         addMetaObject(Storage::staticMetaObject);
         addMetaObject(Server::staticMetaObject);
+        addMetaObject(Register::staticMetaObject);
     }
 }
 
@@ -120,7 +144,16 @@ QVariant JSCompleterModel::data(const QModelIndex &index, int role) const
     switch(role)
     {
         case Qt::DecorationRole:
-           return info.IsProperty ? _iconProp : _icomFunc;
+            switch(info.MetaType)
+            {
+                case MethodMetaType::Method:
+                return _iconFunc;
+                case MethodMetaType::Property:
+                return _iconProp;
+                case MethodMetaType::Enumerator:
+                return _iconEnum;
+            }
+        break;
 
         case Qt::DisplayRole:
            return info.Name;

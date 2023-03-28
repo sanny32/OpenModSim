@@ -45,6 +45,7 @@ void ScriptControl::initJSEngine(ModbusMultiServer& server, const ByteOrder& ord
 {
     _server = QSharedPointer<Server>(new Server(server, order));
     _jsEngine.globalObject().setProperty("Server", _jsEngine.newQObject(_server.get()));
+    _jsEngine.globalObject().setProperty("Register", _jsEngine.newQMetaObject(&Register::staticMetaObject));
 }
 
 ///

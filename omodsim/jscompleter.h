@@ -22,7 +22,8 @@ public:
 
 private:
     QIcon _iconProp;
-    QIcon _icomFunc;
+    QIcon _iconFunc;
+    QIcon _iconEnum;
     QString _completionKey;
 };
 

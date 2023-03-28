@@ -26,7 +26,6 @@ public:
 
 private:
     QMap<QString, QJSValue> _storage;
-
 };
 
 #endif // STORAGE_H
