@@ -161,7 +161,7 @@ void FormModSim::setDisplayDefinition(const DisplayDefinition& dd)
     ui->lineEditLength->setValue(dd.Length);
     ui->comboBoxModbusPointType->setCurrentPointType(dd.PointType);
 
-    ui->outputWidget->setup(dd, _dataSimulator->simulationMap());
+    onDefinitionChanged();
 }
 
 ///
@@ -411,7 +411,7 @@ ModbusSimulationMap FormModSim::simulationMap() const
 
     ModbusSimulationMap result;
     const auto simulationMap = _dataSimulator->simulationMap();
-    for(auto&& key : _dataSimulator->simulationMap().keys())
+    for(auto&& key : simulationMap.keys())
     {
         if(key.first == dd.PointType &&
            key.second >= startAddr && key.second < endAddr)
