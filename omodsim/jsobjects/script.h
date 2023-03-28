@@ -2,6 +2,7 @@
 #define SCRIPT_H
 
 #include <QObject>
+#include <QJSValue>
 
 ///
 /// \brief The Script class
@@ -15,6 +16,7 @@ public:
     Q_PROPERTY(int runCount READ runCount CONSTANT);
     Q_PROPERTY(int  period READ period CONSTANT)
     Q_INVOKABLE void stop();
+    Q_INVOKABLE void onTimeout(int timeout, QJSValue func);
 
     int runCount() const;
     void setRunCount(int cnt);

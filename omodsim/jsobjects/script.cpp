@@ -18,6 +18,21 @@ void Script::stop()
 }
 
 ///
+/// \brief Script::onTimeout
+/// \param timeout
+/// \param func
+///
+void Script::onTimeout(int timeout, QJSValue func)
+{
+   if(!func.isCallable())
+       return;
+
+   const auto time = _runCount * _period;
+   if(time >= timeout && time <= timeout + _period)
+       func.call();
+}
+
+///
 /// \brief Script::runCount
 /// \return
 ///
