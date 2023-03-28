@@ -224,7 +224,8 @@ void JSCodeEditor::keyPressEvent(QKeyEvent *e)
     const bool hasModifier = (e->modifiers() != Qt::NoModifier) && !ctrlOrShift;
     QString completionPrefix = textUnderCursor();
 
-    if (hasModifier || e->text().isEmpty() || e->key() == Qt::Key_Backspace ||
+    if (hasModifier || e->text().isEmpty() ||
+            e->key() == Qt::Key_Backspace || e->key() == Qt::Key_Delete ||
             (!_compliter->completionKey().isEmpty() && wordEnds))
     {
         _compliter->setCompletionKey(QString());
