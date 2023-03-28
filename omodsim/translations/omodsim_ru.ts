@@ -1445,7 +1445,6 @@ Length: %2</source>
 </translation>
     </message>
     <message>
-        <location filename="../controls/scriptcontrol.ui" line="39"/>
         <source>/***********************************************************************
  This is Open ModSim JavaScript code editor
  © Alexandr Ananev, 2023
@@ -1475,7 +1474,7 @@ Length: %2</source>
  To get execution script period use Script.period property
 ************************************************************************/
 </source>
-        <translation>/***********************************************************************
+        <translation type="vanished">/***********************************************************************
  Это редактор Open ModSim JavaScript кода
  © Alexandr Ananev, 2023
 
@@ -1492,6 +1491,74 @@ Length: %2</source>
  Server.writeDiscrete(addr, value)
  Server.writeInput(addr, value)	
  Server.writeHolding(addr, value)	
+
+ Для сохранения значений в периодически запускаемом скрипте используйте объект Storage
+ используйте Storage.setItem(key, value) для сохранения значения
+ используйте Storage.getItem(key) для получения значения 
+ 
+ Для вывода отладочной информации используйте функцию console.log()
+ Для прерывания выполнения скрипта используйте функцию Script.stop()
+ Для получения информации о количестве выполнений скрипта используйте свойство Script.runCount. При старте скрипта оно равно 0
+ Для получения информации о периоде выполнения скрипта используйте свойство Script.period
+************************************************************************/
+</translation>
+    </message>
+    <message>
+        <location filename="../controls/scriptcontrol.ui" line="39"/>
+        <source>/***********************************************************************
+ This is Open ModSim JavaScript code editor
+ © Alexandr Ananev, 2023
+
+ Built-in objects Math, Date and String are available in this script
+
+ To read and write registers use Server object
+
+ var value = Server.readCoil(addr)
+ var value = Server.readDiscrete(addr)		
+ var value = Server.readInput(addr)		
+ var value = Server.readHolding(addr)
+ var value = Server.readFloat(Register.Holding, addr, swapped)
+ var value = Server.readDouble(Register.Holding , addr, swapped)		
+
+ Server.writeCoil(addr, value)
+ Server.writeDiscrete(addr, value)
+ Server.writeInput(addr, value)	
+ Server.writeHolding(addr, value)
+ Server.writeFloat(Register.Holding, addr, value, swapped)
+ Server.writeDouble(Register.Holding, addr, value, swapped)	
+
+ To store values through periodically script execution use Storage object
+ use Storage.setItem(key, value) to store value
+ use Storage.getItem(key) to get stored value 
+ 
+ To output debug information use console.log() function
+
+ To break script execution use Script.stop() function
+ To get execution run count of  the script use Script.runCount property. On Script start this property equals 0
+ To get execution script period use Script.period property
+************************************************************************/
+</source>
+        <translation>/***********************************************************************
+ Это редактор Open ModSim JavaScript кода
+ © Alexandr Ananev, 2023
+
+ Встроенные объекты Math, Date and String доступны для использования в коде
+
+ Для чтения и записи регистров используйте объект Server
+
+ var value = Server.readCoil(addr)
+ var value = Server.readDiscrete(addr)		
+ var value = Server.readInput(addr)		
+ var value = Server.readHolding(addr)		
+ var value = Server.readFloat(Register.Holding, addr, swapped)
+ var value = Server.readDouble(Register.Holding , addr, swapped)
+
+ Server.writeCoil(addr, value)
+ Server.writeDiscrete(addr, value)
+ Server.writeInput(addr, value)	
+ Server.writeHolding(addr, value)
+ Server.writeFloat(Register.Holding, addr, value, swapped)
+ Server.writeDouble(Register.Holding, addr, value, swapped)		
 
  Для сохранения значений в периодически запускаемом скрипте используйте объект Storage
  используйте Storage.setItem(key, value) для сохранения значения
