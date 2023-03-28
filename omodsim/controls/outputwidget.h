@@ -74,7 +74,7 @@ public:
 
     QVector<quint16> data() const;
 
-    void setup(const DisplayDefinition& dd,const ModbusSimulationMap& simulations, const QModbusDataUnit& data = QModbusDataUnit());
+    void setup(const DisplayDefinition& dd,const ModbusSimulationMap& simulations, const QModbusDataUnit& data);
 
     DisplayMode displayMode() const;
     void setDisplayMode(DisplayMode mode);
