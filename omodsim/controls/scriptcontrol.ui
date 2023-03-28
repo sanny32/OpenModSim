@@ -47,12 +47,16 @@
  var value = Server.readCoil(addr)
  var value = Server.readDiscrete(addr)		
  var value = Server.readInput(addr)		
- var value = Server.readHolding(addr)		
+ var value = Server.readHolding(addr)
+ var value = Server.readFloat(Register.Holding, addr, swapped)
+ var value = Server.readDouble(Register.Holding , addr, swapped)		
 
  Server.writeCoil(addr, value)
  Server.writeDiscrete(addr, value)
  Server.writeInput(addr, value)	
- Server.writeHolding(addr, value)	
+ Server.writeHolding(addr, value)
+ Server.writeFloat(Register.Holding, addr, value, swapped)
+ Server.writeDouble(Register.Holding, addr, value, swapped)	
 
  To store values through periodically script execution use Storage object
  use Storage.setItem(key, value) to store value
