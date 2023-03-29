@@ -1,6 +1,7 @@
 #ifndef SCRIPT_H
 #define SCRIPT_H
 
+#include <QSet>
 #include <QObject>
 #include <QJSValue>
 
@@ -11,25 +12,25 @@ class Script : public QObject
 {
     Q_OBJECT
 public:
-    explicit Script(QObject* parent = nullptr);
+    explicit Script(int period, QObject* parent = nullptr);
 
     Q_PROPERTY(int runCount READ runCount CONSTANT);
     Q_PROPERTY(int  period READ period CONSTANT)
     Q_INVOKABLE void stop();
-    Q_INVOKABLE void onTimeout(int timeout, QJSValue func);
+    Q_INVOKABLE void onInit(const QJSValue& func);
+    Q_INVOKABLE void setTimeout(const QJSValue& func, int timeout);
 
     int runCount() const;
-    void setRunCount(int cnt);
-
     int period() const;
-    void setPeriod(int period);
+
+    QJSValue run(QJSEngine& jsEngine, const QString& script);
 
 signals:
     void stopped();
 
 private:
+    int _period;
     int _runCount = 0;
-    int _period = 1000;
 };
 
 #endif // SCRIPT_H

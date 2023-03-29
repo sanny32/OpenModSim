@@ -6,10 +6,22 @@
 /// \param server
 /// \param order
 ///
-Server::Server(ModbusMultiServer& server, const ByteOrder& order)
+Server::Server(ModbusMultiServer* server, const ByteOrder* order)
     :_byteOrder(order)
     ,_mbMultiServer(server)
 {
+    Q_ASSERT(_byteOrder != nullptr);
+    Q_ASSERT(_mbMultiServer != nullptr);
+
+    connect(_mbMultiServer, &ModbusMultiServer::dataChanged, this, &Server::on_dataChanged);
+}
+
+///
+/// \brief Server::~Server
+///
+Server::~Server()
+{
+    disconnect(_mbMultiServer, &ModbusMultiServer::dataChanged, this, &Server::on_dataChanged);
 }
 
 ///
@@ -19,8 +31,8 @@ Server::Server(ModbusMultiServer& server, const ByteOrder& order)
 ///
 quint16 Server::readHolding(quint16 address) const
 {
-    const auto data = _mbMultiServer.data(QModbusDataUnit::HoldingRegisters, address - 1, 1);
-    return toByteOrderValue(data.value(0), _byteOrder);
+    const auto data = _mbMultiServer->data(QModbusDataUnit::HoldingRegisters, address - 1, 1);
+    return toByteOrderValue(data.value(0), *_byteOrder);
 }
 
 ///
@@ -30,7 +42,7 @@ quint16 Server::readHolding(quint16 address) const
 ///
 void Server::writeHolding(quint16 address, quint16 value)
 {
-    _mbMultiServer.writeValue(QModbusDataUnit::HoldingRegisters, address - 1, value, _byteOrder);
+    _mbMultiServer->writeValue(QModbusDataUnit::HoldingRegisters, address - 1, value, *_byteOrder);
 }
 
 ///
@@ -40,8 +52,8 @@ void Server::writeHolding(quint16 address, quint16 value)
 ///
 quint16 Server::readInput(quint16 address) const
 {
-    const auto data = _mbMultiServer.data(QModbusDataUnit::InputRegisters, address - 1, 1);
-    return toByteOrderValue(data.value(0), _byteOrder);
+    const auto data = _mbMultiServer->data(QModbusDataUnit::InputRegisters, address - 1, 1);
+    return toByteOrderValue(data.value(0), *_byteOrder);
 }
 
 ///
@@ -51,7 +63,7 @@ quint16 Server::readInput(quint16 address) const
 ///
 void Server::writeInput(quint16 address, quint16 value)
 {
-    _mbMultiServer.writeValue(QModbusDataUnit::InputRegisters, address - 1, value, _byteOrder);
+    _mbMultiServer->writeValue(QModbusDataUnit::InputRegisters, address - 1, value, *_byteOrder);
 }
 
 ///
@@ -61,8 +73,8 @@ void Server::writeInput(quint16 address, quint16 value)
 ///
 bool Server::readDiscrete(quint16 address) const
 {
-    const auto data = _mbMultiServer.data(QModbusDataUnit::DiscreteInputs, address - 1, 1);
-    return toByteOrderValue(data.value(0), _byteOrder);
+    const auto data = _mbMultiServer->data(QModbusDataUnit::DiscreteInputs, address - 1, 1);
+    return toByteOrderValue(data.value(0), *_byteOrder);
 }
 
 ///
@@ -72,7 +84,7 @@ bool Server::readDiscrete(quint16 address) const
 ///
 void Server::writeDiscrete(quint16 address, bool value)
 {
-    _mbMultiServer.writeValue(QModbusDataUnit::DiscreteInputs, address - 1, value, _byteOrder);
+    _mbMultiServer->writeValue(QModbusDataUnit::DiscreteInputs, address - 1, value, *_byteOrder);
 }
 
 ///
@@ -82,8 +94,8 @@ void Server::writeDiscrete(quint16 address, bool value)
 ///
 bool Server::readCoil(quint16 address) const
 {
-    const auto data = _mbMultiServer.data(QModbusDataUnit::Coils, address - 1, 1);
-    return toByteOrderValue(data.value(0), _byteOrder);
+    const auto data = _mbMultiServer->data(QModbusDataUnit::Coils, address - 1, 1);
+    return toByteOrderValue(data.value(0), *_byteOrder);
 }
 
 ///
@@ -93,7 +105,7 @@ bool Server::readCoil(quint16 address) const
 ///
 void Server::writeCoil(quint16 address, bool value)
 {
-    _mbMultiServer.writeValue(QModbusDataUnit::Coils, address - 1, value, _byteOrder);
+    _mbMultiServer->writeValue(QModbusDataUnit::Coils, address - 1, value, *_byteOrder);
 }
 
 ///
@@ -105,7 +117,7 @@ void Server::writeCoil(quint16 address, bool value)
 ///
 float Server::readFloat(Register::Type reg, quint16 address, bool swapped) const
 {
-    return _mbMultiServer.readFloat((QModbusDataUnit::RegisterType)reg, address - 1, _byteOrder, swapped);
+    return _mbMultiServer->readFloat((QModbusDataUnit::RegisterType)reg, address - 1, *_byteOrder, swapped);
 }
 
 ///
@@ -117,7 +129,7 @@ float Server::readFloat(Register::Type reg, quint16 address, bool swapped) const
 ///
 void Server::writeFloat(Register::Type reg, quint16 address, float value, bool swapped)
 {
-    _mbMultiServer.writeFloat((QModbusDataUnit::RegisterType)reg, address - 1, value, _byteOrder, swapped);
+    _mbMultiServer->writeFloat((QModbusDataUnit::RegisterType)reg, address - 1, value, *_byteOrder, swapped);
 }
 
 ///
@@ -129,7 +141,7 @@ void Server::writeFloat(Register::Type reg, quint16 address, float value, bool s
 ///
 double Server::readDouble(Register::Type reg, quint16 address, bool swapped) const
 {
-    return _mbMultiServer.readDouble((QModbusDataUnit::RegisterType)reg, address - 1, _byteOrder, swapped);
+    return _mbMultiServer->readDouble((QModbusDataUnit::RegisterType)reg, address - 1, *_byteOrder, swapped);
 }
 
 ///
@@ -141,5 +153,37 @@ double Server::readDouble(Register::Type reg, quint16 address, bool swapped) con
 ///
 void Server::writeDouble(Register::Type reg, quint16 address, double value, bool swapped)
 {
-    _mbMultiServer.writeDouble((QModbusDataUnit::RegisterType)reg, address - 1, value, _byteOrder, swapped);
+    _mbMultiServer->writeDouble((QModbusDataUnit::RegisterType)reg, address - 1, value, *_byteOrder, swapped);
+}
+
+///
+/// \brief Server::onChange
+/// \param reg
+/// \param address
+/// \param func
+///
+void Server::onChange(Register::Type reg, quint16 address, const QJSValue& func)
+{
+    if(!func.isCallable())
+        return;
+
+    if(!_mapOnChange.contains({reg, address}))
+        _mapOnChange[{reg, address}] = func;
+}
+
+///
+/// \brief Server::on_dataChanged
+/// \param data
+///
+void Server::on_dataChanged(const QModbusDataUnit& data)
+{
+    const auto reg = (Register::Type)data.registerType();
+    for(int  i = 0; i < data.valueCount(); i++)
+    {
+        const auto address = data.startAddress() + i + 1;
+        if(_mapOnChange.contains({reg, address}))
+        {
+            _mapOnChange[{reg, address}].call(QJSValueList() << data.value(i));
+        }
+    }
 }

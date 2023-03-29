@@ -31,7 +31,8 @@ FormModSim::FormModSim(int id, ModbusMultiServer& server, QSharedPointer<DataSim
     setWindowTitle(QString("ModSim%1").arg(_formId));
 
     ui->stackedWidget->setCurrentIndex(0);
-    ui->scriptControl->initJSEngine(server, ui->outputWidget->byteOrder());
+    ui->scriptControl->setModbusMultiServer(&_mbMultiServer);
+    ui->scriptControl->setByteOrder(ui->outputWidget->byteOrder());
 
     ui->lineEditAddress->setPaddingZeroes(true);
     ui->lineEditAddress->setInputRange(ModbusLimits::addressRange());
@@ -79,20 +80,6 @@ void FormModSim::changeEvent(QEvent* e)
     {
         ui->retranslateUi(this);
         updateStatus();
-    }
-    else if(e->type() == QEvent::ActivationChange )
-    {
-        qDebug() << formId() << isActiveWindow();
-        /*switch(windowState() & ~Qt::WindowMaximized & ~Qt::WindowMinimized)
-        {
-            case Qt::WindowActive:
-                connectEditSlots();
-            break;
-            case Qt::WindowNoState:
-                disconnectEditSlots();
-            break;
-        }*/
-
     }
 
     QWidget::changeEvent(e);
@@ -260,7 +247,7 @@ void FormModSim::setScriptSettings(const ScriptSettings& ss)
 ///
 ByteOrder FormModSim::byteOrder() const
 {
-    return ui->outputWidget->byteOrder();
+    return *ui->outputWidget->byteOrder();
 }
 
 ///

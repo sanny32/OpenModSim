@@ -2,13 +2,16 @@
 #define SERVER_H
 
 #include <QObject>
+#include <QJSValue>
 #include "modbusmultiserver.h"
 
 namespace Register
 {
     Q_NAMESPACE
     enum class Type {
-        Input = 3,
+        DiscreteInputs = 1,
+        Coils,
+        Input,
         Holding
     };
     Q_ENUM_NS(Type)
@@ -23,7 +26,8 @@ class Server : public QObject
     Q_OBJECT
 
 public:
-    explicit Server(ModbusMultiServer& server, const ByteOrder& order);
+    explicit Server(ModbusMultiServer* server, const ByteOrder* order);
+    ~Server() override;
 
     Q_INVOKABLE quint16 readHolding(quint16 address) const;
     Q_INVOKABLE void writeHolding(quint16 address, quint16 value);
@@ -43,9 +47,15 @@ public:
     Q_INVOKABLE double readDouble(Register::Type reg, quint16 address, bool swapped) const;
     Q_INVOKABLE void writeDouble(Register::Type reg, quint16 address, double value, bool swapped);
 
+    Q_INVOKABLE void onChange(Register::Type reg, quint16 address, const QJSValue& func);
+
+private slots:
+    void on_dataChanged(const QModbusDataUnit& data);
+
 private:
-    const ByteOrder& _byteOrder;
-    ModbusMultiServer& _mbMultiServer;
+    const ByteOrder* _byteOrder;
+    ModbusMultiServer* _mbMultiServer;
+    QMap<QPair<Register::Type, quint16>, QJSValue> _mapOnChange;
 };
 
 #endif // SERVER_H

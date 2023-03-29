@@ -82,7 +82,7 @@ public:
     DataDisplayMode dataDisplayMode() const;
     void setDataDisplayMode(DataDisplayMode mode);
 
-    const ByteOrder& byteOrder() const;
+    const ByteOrder* byteOrder() const;
     void setByteOrder(ByteOrder order);
 
     bool displayHexAddresses() const;

@@ -13,7 +13,6 @@ namespace Ui {
 class ScriptControl;
 }
 
-
 ///
 /// \brief The ScriptControl class
 ///
@@ -25,7 +24,8 @@ public:
     explicit ScriptControl(QWidget *parent = nullptr);
     ~ScriptControl();
 
-    void initJSEngine(ModbusMultiServer& server, const ByteOrder& order);
+    void setModbusMultiServer(ModbusMultiServer* server);
+    void setByteOrder(const ByteOrder* order);
 
     bool isAutoCompleteEnabled() const;
     void enableAutoComplete(bool enable);
@@ -64,12 +64,14 @@ private:
     QJSEngine _jsEngine;
     QString _scriptCode;
     QString _searchText;
-    int _execCount = 0;
 
     QSharedPointer<Script> _script;
     QSharedPointer<Storage> _storage;
     QSharedPointer<Server> _server;
     QSharedPointer<console> _console;
+
+    ByteOrder* _byteOrder = nullptr;
+    ModbusMultiServer* _mbMultiServer = nullptr;
 };
 
 #endif // SCRIPTCONTROL_H

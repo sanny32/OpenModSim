@@ -410,7 +410,7 @@ void OutputListModel::updateData(const QModbusDataUnit& data)
 
     const auto mode = _parentWidget->dataDisplayMode();
     const auto pointType = _parentWidget->_displayDefinition.PointType;
-    const auto byteOrder = _parentWidget->byteOrder();
+    const auto byteOrder = *_parentWidget->byteOrder();
 
     for(int i = 0; i < rowCount(); i++)
     {
@@ -841,9 +841,9 @@ void OutputWidget::setDataDisplayMode(DataDisplayMode mode)
 /// \brief OutputWidget::byteOrder
 /// \return
 ///
-const ByteOrder& OutputWidget::byteOrder() const
+const ByteOrder* OutputWidget::byteOrder() const
 {
-    return _byteOrder;
+    return &_byteOrder;
 }
 
 ///

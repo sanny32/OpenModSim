@@ -10,8 +10,8 @@
 ScriptControl::ScriptControl(QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::ScriptControl)
-    ,_script(new Script)
-    ,_storage(new Storage)
+    ,_script(nullptr)
+    ,_storage(nullptr)
     ,_server(nullptr)
     ,_console(nullptr)
 {
@@ -21,11 +21,9 @@ ScriptControl::ScriptControl(QWidget *parent)
     _console = QSharedPointer<console>(new console(ui->console));
 
     _jsEngine.globalObject().setProperty("console", _jsEngine.newQObject(_console.get()));
-    _jsEngine.globalObject().setProperty("Script", _jsEngine.newQObject(_script.get()));
-    _jsEngine.globalObject().setProperty("Storage", _jsEngine.newQObject(_storage.get()));
+    _jsEngine.globalObject().setProperty("Register", _jsEngine.newQMetaObject(&Register::staticMetaObject));
 
     connect(&_timer, &QTimer::timeout, this, &ScriptControl::executeScript);
-    connect(_script.get(), &Script::stopped, this, &ScriptControl::stopScript);
 }
 
 ///
@@ -37,15 +35,21 @@ ScriptControl::~ScriptControl()
 }
 
 ///
-/// \brief ScriptControl::initJSEngine
+/// \brief ScriptControl::setModbusMultiServer
 /// \param server
+///
+void ScriptControl::setModbusMultiServer(ModbusMultiServer* server)
+{
+    _mbMultiServer = server;
+}
+
+///
+/// \brief ScriptControl::setByteOrder
 /// \param order
 ///
-void ScriptControl::initJSEngine(ModbusMultiServer& server, const ByteOrder& order)
+void ScriptControl::setByteOrder(const ByteOrder* order)
 {
-    _server = QSharedPointer<Server>(new Server(server, order));
-    _jsEngine.globalObject().setProperty("Server", _jsEngine.newQObject(_server.get()));
-    _jsEngine.globalObject().setProperty("Register", _jsEngine.newQMetaObject(&Register::staticMetaObject));
+    _byteOrder = const_cast<ByteOrder*>(order);
 }
 
 ///
@@ -201,11 +205,18 @@ bool ScriptControl::canPaste() const
 ///
 void ScriptControl::runScript(RunMode mode, int interval)
 {
-    _execCount = 0;
     _console->clear();
     _scriptCode = script();
+
+    _storage = QSharedPointer<Storage>(new Storage);
+    _server = QSharedPointer<Server>(new Server(_mbMultiServer, _byteOrder));
+    _script = QSharedPointer<Script>(new Script(interval));
+    connect(_script.get(), &Script::stopped, this, &ScriptControl::stopScript);
+
+    _jsEngine.globalObject().setProperty("Storage", _jsEngine.newQObject(_storage.get()));
+    _jsEngine.globalObject().setProperty("Script", _jsEngine.newQObject(_script.get()));
+    _jsEngine.globalObject().setProperty("Server", _jsEngine.newQObject(_server.get()));
     _jsEngine.setInterrupted(false);
-    _script->setPeriod(interval);
 
     if(!executeScript())
         return;
@@ -213,6 +224,7 @@ void ScriptControl::runScript(RunMode mode, int interval)
     switch(mode)
     {
         case RunMode::Once:
+            _script->stop();
         break;
 
         case RunMode::Periodically:
@@ -227,8 +239,17 @@ void ScriptControl::runScript(RunMode mode, int interval)
 void ScriptControl::stopScript()
 {
     _timer.stop();
-    _storage->clear();
+
     _jsEngine.setInterrupted(true);
+    _jsEngine.globalObject().deleteProperty("Storage");
+    _jsEngine.globalObject().deleteProperty("Script");
+    _jsEngine.globalObject().deleteProperty("Server");
+
+    disconnect(_script.get(), &Script::stopped, this, &ScriptControl::stopScript);
+
+    _storage = nullptr;
+    _server = nullptr;
+    _script = nullptr;
 }
 
 ///
@@ -236,14 +257,12 @@ void ScriptControl::stopScript()
 ///
 bool ScriptControl::executeScript()
 {
-    _script->setRunCount(_execCount++);
-    const auto res = _jsEngine.evaluate(_scriptCode);
+    const auto res = _script->run(_jsEngine, _scriptCode);
     if(res.isError() && !_jsEngine.isInterrupted())
     {
         _console->error(QString("%1 (line %2)").arg(res.toString(), res.property("lineNumber").toString()));
-        stopScript();
-
+        _script->stop();
         return false;
     }
     return true;
- }
+}
