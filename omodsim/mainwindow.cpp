@@ -1056,10 +1056,11 @@ FormModSim* MainWindow::createMdiChild(int id)
         updateEditTools(mode);
     });
 
-    connect(frm, &FormModSim::showed, this, [this, frm, wnd, updateEditTools]
+    connect(frm, &FormModSim::showed, this, [this, frm, wnd, updateRunMode, updateEditTools]
     {
         windowActivate(wnd);
         updateEditTools(frm->displayMode());
+        updateRunMode(frm->scriptSettings().Mode);
     });
 
     _windowActionList->addWindow(wnd);
