@@ -10,6 +10,7 @@
 #include "displaydefinition.h"
 #include "outputwidget.h"
 #include "scriptsettings.h"
+#include "scriptcontrol.h"
 
 class MainWindow;
 
@@ -24,6 +25,8 @@ class FormModSim : public QWidget
 {
     Q_OBJECT
 
+    friend QSettings& operator <<(QSettings& out, const FormModSim* frm);
+    friend QSettings& operator >>(QSettings& in, FormModSim* frm);
     friend QDataStream& operator <<(QDataStream& out, const FormModSim* frm);
     friend QDataStream& operator >>(QDataStream& in, FormModSim* frm);
 
@@ -128,6 +131,7 @@ private slots:
 private:
     void updateStatus();
     void onDefinitionChanged();
+    ScriptControl* scriptControl();
 
 private:
     Ui::FormModSim *ui;
@@ -167,7 +171,8 @@ inline QSettings& operator <<(QSettings& out, const FormModSim* frm)
     out << frm->displayDefinition();
     out.setValue("DisplayHexAddresses", frm->displayHexAddresses());
     out << frm->scriptSettings();
-    out.setValue("Script", frm->script().toUtf8().toBase64());
+    out << frm->scriptControl();
+    //out.setValue("Script", frm->script().toUtf8().toBase64());
 
     return out;
 }
@@ -197,6 +202,8 @@ inline QSettings& operator >>(QSettings& in, FormModSim* frm)
     ScriptSettings scriptSettings;
     in >> scriptSettings;
 
+    in >> frm->scriptControl();
+
     bool isMaximized;
     isMaximized = in.value("ViewMaximized").toBool();
 
@@ -219,8 +226,8 @@ inline QSettings& operator >>(QSettings& in, FormModSim* frm)
     frm->setDisplayHexAddresses(in.value("DisplayHexAddresses").toBool());
     frm->setScriptSettings(scriptSettings);
 
-    const auto script = QByteArray::fromBase64(in.value("Script").toString().toUtf8());
-    if(!script.isEmpty()) frm->setScript(script);
+    //const auto script = QByteArray::fromBase64(in.value("Script").toString().toUtf8());
+    //if(!script.isEmpty()) frm->setScript(script);
 
     return in;
 }

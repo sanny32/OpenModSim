@@ -24,19 +24,29 @@
     <number>0</number>
    </property>
    <item>
-    <widget class="QSplitter" name="splitter">
+    <widget class="QSplitter" name="horizontalSplitter">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
      </property>
-     <widget class="JSCodeEditor" name="codeEditor">
+     <widget class="QSplitter" name="verticalSplitter">
       <property name="sizePolicy">
-       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+       <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
         <horstretch>0</horstretch>
-        <verstretch>3</verstretch>
+        <verstretch>4</verstretch>
        </sizepolicy>
       </property>
-      <property name="plainText">
-       <string>/***********************************************************************
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+      <widget class="JSCodeEditor" name="codeEditor">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+         <horstretch>4</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="plainText">
+        <string>/***********************************************************************
  This is Open ModSim JavaScript code editor
  © Alexandr Ananev, 2023
 
@@ -69,13 +79,22 @@
  To get execution script period use Script.period property
 ************************************************************************/
 </string>
-      </property>
-      <property name="tabStopDistance">
-       <double>20.000000000000000</double>
-      </property>
-      <property name="placeholderText">
-       <string/>
-      </property>
+       </property>
+       <property name="tabStopDistance">
+        <double>20.000000000000000</double>
+       </property>
+       <property name="placeholderText">
+        <string/>
+       </property>
+      </widget>
+      <widget class="QTextBrowser" name="helper">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+         <horstretch>1</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+      </widget>
      </widget>
      <widget class="ConsoleOutput" name="console">
       <property name="sizePolicy">

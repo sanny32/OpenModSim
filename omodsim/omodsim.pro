@@ -31,6 +31,7 @@ SOURCES += \
     controls/customlineedit.cpp \
     controls/flowcontroltypecombobox.cpp \
     controls/jscodeeditor.cpp \
+    controls/jshelpcontrol.cpp \
     controls/mainstatusbar.cpp \
     controls/numericcombobox.cpp \
     controls/numericlineedit.cpp \
@@ -84,6 +85,7 @@ HEADERS += \
     controls/customlineedit.h \
     controls/flowcontroltypecombobox.h \
     controls/jscodeeditor.h \
+    controls/jshelpcontrol.h \
     controls/mainstatusbar.h \
     controls/numericcombobox.h \
     controls/numericlineedit.h \
