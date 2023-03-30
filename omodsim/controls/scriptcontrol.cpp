@@ -17,7 +17,7 @@ ScriptControl::ScriptControl(QWidget *parent)
 {
     ui->setupUi(this);
     ui->codeEditor->moveCursor(QTextCursor::End);
-    ui->helpWidget->setHelp(QApplication::applicationDirPath() + "/documentation/jshelp.qhc");
+    ui->helpWidget->setHelp(QApplication::applicationDirPath() + "/docs/jshelp.qhc");
 
     connect(&_timer, &QTimer::timeout, this, &ScriptControl::executeScript);
 }

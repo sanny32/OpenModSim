@@ -1,6 +1,7 @@
 QT += core gui widgets qml network printsupport serialbus serialport help
 
 CONFIG += c++17
+CONFIG += file_copies
 CONFIG -= debug_and_release
 CONFIG -= debug_and_release_target
 
@@ -164,3 +165,21 @@ RESOURCES += \
 
 TRANSLATIONS += \
     translations/omodsim_ru.ts
+
+DISTFILES += \
+    docs/jshelp.qhcp \
+    docs/jshelp.qhp
+
+INPUT = $$quote($$PWD/docs/jshelp.qhcp)
+helpgenerator.input = INPUT
+helpgenerator.depends = $$quote($$PWD/docs/jshelp.qhcp)
+helpgenerator.output = $$quote($$PWD/docs/jshelp.qhc)
+helpgenerator.commands = qhelpgenerator $$quote($$PWD/docs/jshelp.qhcp)
+helpgenerator.CONFIG += target_predeps no_link
+QMAKE_EXTRA_COMPILERS += helpgenerator
+
+#COPIES += docs
+docs.files = $$PWD/docs/jshelp.qhc $$PWD/docs/jshelp.qch
+#docs.files = $$files(text/docs/*.qhc)
+docs.path = $$OUT_PWD/docs
+INSTALLS += docs
