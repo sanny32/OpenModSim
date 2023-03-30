@@ -167,8 +167,7 @@ void Server::onChange(Register::Type reg, quint16 address, const QJSValue& func)
     if(!func.isCallable())
         return;
 
-    if(!_mapOnChange.contains({reg, address}))
-        _mapOnChange[{reg, address}] = func;
+    _mapOnChange[{reg, address}] = func;
 }
 
 ///

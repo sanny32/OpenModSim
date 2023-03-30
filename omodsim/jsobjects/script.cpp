@@ -38,13 +38,13 @@ QJSValue Script::run(QJSEngine& jsEngine, const QString& script)
 /// \brief Script::onInit
 /// \param func
 ///
-void Script::onInit(QJSValue& func)
+void Script::onInit(const QJSValue& func)
 {
     if(!func.isCallable())
         return;
 
     if(_runCount == 1)
-        func.call();
+        const_cast<QJSValue&>(func).call();
 }
 
 ///
@@ -52,14 +52,14 @@ void Script::onInit(QJSValue& func)
 /// \param func
 /// \param timeout
 ///
-void Script::setTimeout(QJSValue& func, int timeout)
+void Script::setTimeout(const QJSValue& func, int timeout)
 {
     if(!func.isCallable())
        return;
 
-    QTimer::singleShot(timeout, this, [&func]
+    QTimer::singleShot(timeout, this, [func]
     {
-        func.call();
+        const_cast<QJSValue&>(func).call();
     });
 }
 
