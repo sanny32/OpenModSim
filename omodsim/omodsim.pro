@@ -1,4 +1,4 @@
-QT += core gui widgets qml network printsupport serialbus serialport
+QT += core gui widgets qml network printsupport serialbus serialport help
 
 CONFIG += c++17
 CONFIG -= debug_and_release
@@ -30,8 +30,9 @@ SOURCES += \
     controls/customframe.cpp \
     controls/customlineedit.cpp \
     controls/flowcontroltypecombobox.cpp \
+    controls/helpbrowser.cpp \
+    controls/helpwidget.cpp \
     controls/jscodeeditor.cpp \
-    controls/jshelpcontrol.cpp \
     controls/mainstatusbar.cpp \
     controls/numericcombobox.cpp \
     controls/numericlineedit.cpp \
@@ -84,8 +85,9 @@ HEADERS += \
     controls/customframe.h \
     controls/customlineedit.h \
     controls/flowcontroltypecombobox.h \
+    controls/helpbrowser.h \
+    controls/helpwidget.h \
     controls/jscodeeditor.h \
-    controls/jshelpcontrol.h \
     controls/mainstatusbar.h \
     controls/numericcombobox.h \
     controls/numericlineedit.h \

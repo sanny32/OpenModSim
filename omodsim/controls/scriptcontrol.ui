@@ -46,39 +46,7 @@
         </sizepolicy>
        </property>
        <property name="plainText">
-        <string>/***********************************************************************
- This is Open ModSim JavaScript code editor
- © Alexandr Ananev, 2023
-
- Built-in objects Math, Date and String are available in this script
-
- To read and write registers use Server object
-
- var value = Server.readCoil(addr)
- var value = Server.readDiscrete(addr)		
- var value = Server.readInput(addr)		
- var value = Server.readHolding(addr)
- var value = Server.readFloat(Register.Holding, addr, swapped)
- var value = Server.readDouble(Register.Holding , addr, swapped)		
-
- Server.writeCoil(addr, value)
- Server.writeDiscrete(addr, value)
- Server.writeInput(addr, value)	
- Server.writeHolding(addr, value)
- Server.writeFloat(Register.Holding, addr, value, swapped)
- Server.writeDouble(Register.Holding, addr, value, swapped)	
-
- To store values through periodically script execution use Storage object
- use Storage.setItem(key, value) to store value
- use Storage.getItem(key) to get stored value 
- 
- To output debug information use console.log() function
-
- To break script execution use Script.stop() function
- To get execution run count of  the script use Script.runCount property. On Script start this property equals 0
- To get execution script period use Script.period property
-************************************************************************/
-</string>
+        <string/>
        </property>
        <property name="tabStopDistance">
         <double>20.000000000000000</double>
@@ -87,14 +55,7 @@
         <string/>
        </property>
       </widget>
-      <widget class="QTextBrowser" name="helper">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-         <horstretch>1</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-      </widget>
+      <widget class="HelpWidget" name="helpWidget"/>
      </widget>
      <widget class="ConsoleOutput" name="console">
       <property name="sizePolicy">
@@ -124,6 +85,12 @@
    <class>ConsoleOutput</class>
    <extends>QPlainTextEdit</extends>
    <header>consoleoutput.h</header>
+  </customwidget>
+  <customwidget>
+   <class>HelpWidget</class>
+   <extends>QStackedWidget</extends>
+   <header>helpwidget.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources/>

@@ -20,7 +20,10 @@ class ScriptControl : public QWidget
 {
     Q_OBJECT
 
-public:
+    friend QSettings& operator <<(QSettings& out, const ScriptControl* ctrl);
+    friend QSettings& operator >>(QSettings& in, ScriptControl* ctrl);
+
+public:  
     explicit ScriptControl(QWidget *parent = nullptr);
     ~ScriptControl();
 
@@ -73,16 +76,5 @@ private:
     ByteOrder* _byteOrder = nullptr;
     ModbusMultiServer* _mbMultiServer = nullptr;
 };
-
-///
-/// \brief operator <<
-/// \param out
-/// \param frm
-/// \return
-///
-inline QSettings& operator <<(QSettings& out, const ScriptControl* frm)
-{
-    return out;
-}
 
 #endif // SCRIPTCONTROL_H

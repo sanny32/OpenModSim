@@ -1,6 +1,8 @@
 #include <QPainter>
 #include <QPalette>
 #include <QDateTime>
+#include <QHelpEngine>
+#include <QHelpContentWidget>
 #include "modbuslimits.h"
 #include "mainwindow.h"
 #include "datasimulator.h"
@@ -604,6 +606,15 @@ void FormModSim::onDefinitionChanged()
     _mbMultiServer.setDeviceId(dd.DeviceId);
     _mbMultiServer.addUnitMap(formId(), dd.PointType, dd.PointAddress - 1, dd.Length);
     ui->outputWidget->setup(dd, _dataSimulator->simulationMap(), _mbMultiServer.data(dd.PointType, dd.PointAddress - 1, dd.Length));
+}
+
+///
+/// \brief FormModSim::scriptControl
+/// \return
+///
+ScriptControl* FormModSim::scriptControl()
+{
+    return ui->scriptControl;
 }
 
 ///

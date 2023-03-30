@@ -17,8 +17,8 @@ public:
     Q_PROPERTY(int runCount READ runCount CONSTANT);
     Q_PROPERTY(int  period READ period CONSTANT)
     Q_INVOKABLE void stop();
-    Q_INVOKABLE void onInit(const QJSValue& func);
-    Q_INVOKABLE void setTimeout(const QJSValue& func, int timeout);
+    Q_INVOKABLE void onInit(QJSValue& func);
+    Q_INVOKABLE void setTimeout(QJSValue& func, int timeout);
 
     int runCount() const;
     int period() const;
