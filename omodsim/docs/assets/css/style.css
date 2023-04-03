@@ -1,0 +1,31 @@
+h1.title {
+    margin-top: 30px;
+    margin-left: 6px;
+    padding: 6px;
+}
+h2, p.h2 {
+    padding: 4px;
+    margin: 30px 0px 20px 10px;
+}
+h3 {
+    margin: 30px 0px 30px 6px;
+}
+a:link {
+    color: #007330;
+    text-decoration: none;
+    text-align: left;
+}
+ul li, ol li {
+    margin-bottom: 4px;
+}
+ul > li {
+    list-style-type: disc;
+}
+li {
+    list-style: inside;
+    text-align: left;
+}
+code {
+    font-family: Courier, monospace;
+    font-weight: 400;
+}

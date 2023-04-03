@@ -27,7 +27,6 @@ HelpWidget::~HelpWidget()
 ///
 QVariant HelpWidget::loadResource (int type, const QUrl& name)
 {
-    qDebug() << name;
     if (name.scheme() == "qthelp" && _helpEngine)
         return QVariant(_helpEngine->fileData(name));
     else
