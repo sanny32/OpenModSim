@@ -1,6 +1,5 @@
 #include <QVBoxLayout>
 #include <QHelpContentWidget>
-#include "helpbrowser.h"
 #include "helpwidget.h"
 
 ///
@@ -8,8 +7,7 @@
 /// \param parent
 ///
 HelpWidget::HelpWidget(QWidget *parent)
-    : QStackedWidget(parent)
-    ,_helpView(nullptr)
+    : QTextBrowser(parent)
     ,_helpEngine(nullptr)
 {
 }
@@ -22,29 +20,28 @@ HelpWidget::~HelpWidget()
 }
 
 ///
+/// \brief HelpWidget::loadResource
+/// \param type
+/// \param name
+/// \return
+///
+QVariant HelpWidget::loadResource (int type, const QUrl& name)
+{
+    qDebug() << name;
+    if (name.scheme() == "qthelp" && _helpEngine)
+        return QVariant(_helpEngine->fileData(name));
+    else
+        return QTextBrowser::loadResource(type, name);
+}
+
+///
 /// \brief HelpWidget::setHelp
 /// \param helpFile
 ///
 void HelpWidget::setHelp(const QString& helpFile)
 {
-    if(_helpEngine)
-    {
-        removeWidget(_helpView.get());
-        removeWidget(_helpEngine->contentWidget());
-    }
-
     _helpEngine = QSharedPointer<QHelpEngine>(new QHelpEngine(helpFile, this));
     _helpEngine->setupData();
 
-    _helpView = QSharedPointer<HelpBrowser>(new HelpBrowser(_helpEngine.get(), this));
-
-    addWidget(_helpEngine->contentWidget());
-    addWidget(_helpView.get());
-
-    connect(_helpEngine->contentWidget(), &QHelpContentWidget::linkActivated, this,
-            [this](const QUrl& link)
-            {
-                _helpView->setSource(link);
-                setCurrentIndex(1);
-            });
+    setSource(QUrl("qthelp://omodsim/doc/index.html"));
 }

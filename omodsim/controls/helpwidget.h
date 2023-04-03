@@ -2,13 +2,12 @@
 #define HELPWIDGET_H
 
 #include <QHelpEngine>
-#include <QStackedWidget>
-#include "helpbrowser.h"
+#include <QTextBrowser>
 
 ///
 /// \brief The HelpWidget class
 ///
-class HelpWidget : public QStackedWidget
+class HelpWidget : public QTextBrowser
 {
     Q_OBJECT
 
@@ -17,9 +16,9 @@ public:
     ~HelpWidget();
 
     void setHelp(const QString& helpFile);
+    QVariant loadResource (int type, const QUrl& name) override;
 
 private:
-    QSharedPointer<HelpBrowser> _helpView;
     QSharedPointer<QHelpEngine> _helpEngine;
 };
 

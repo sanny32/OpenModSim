@@ -30,7 +30,6 @@ SOURCES += \
     controls/customframe.cpp \
     controls/customlineedit.cpp \
     controls/flowcontroltypecombobox.cpp \
-    controls/helpbrowser.cpp \
     controls/helpwidget.cpp \
     controls/jscodeeditor.cpp \
     controls/mainstatusbar.cpp \
@@ -85,7 +84,6 @@ HEADERS += \
     controls/customframe.h \
     controls/customlineedit.h \
     controls/flowcontroltypecombobox.h \
-    controls/helpbrowser.h \
     controls/helpwidget.h \
     controls/jscodeeditor.h \
     controls/mainstatusbar.h \

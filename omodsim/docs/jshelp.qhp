@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <QtHelpProject version="1.0">
-    <virtualFolder>omodsim</virtualFolder>
-    <namespace>jsdoc</namespace>
+    <namespace>omodsim</namespace>
+    <virtualFolder>doc</virtualFolder>
     <filterSection>
         <toc>
             <section title="Functions">
-                <section title="Date">
-                    <section title="constructor" ref="date.html#constructor" />
-                    <section title="prototype" ref="date.html#prototype" />
-                    <section title="now" ref="date.html#now" />
-                    <section title="parse" ref="date.html#parse" />
-                    <section title="UTC" ref="date.html#UTC" />
+                <section title="Date" ref="index.html#date">
+                    <section title="constructor" ref="index.html#date.constructor" />
+                    <section title="prototype" ref="index.html#date.prototype" />
+                    <section title="now" ref="index.html#date.now" />
+                    <section title="parse" ref="index.html#date.parse" />
+                    <section title="UTC" ref="index.html#date.utc" />
                 </section>
             </section>
             <section title="Examples">
             </section>
         </toc>
         <files>
-            <file>css/*.css</file>
-            <file>img/*.png</file>
+            <file>assets/css/*.css</file>
+            <file>assets/img/*.png</file>
             <file>*.html</file>
         </files>
     </filterSection>

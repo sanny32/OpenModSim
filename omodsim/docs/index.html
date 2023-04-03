@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+	
+<head>
+	<title>Open ModSim Java Script Documentation</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+</head>
+
+<body>
+	<article class="article-content" lang="en-US">
+		<div class="article-header">
+			<h1 id="date">Date</h1>
+		</div>
+		<div class="section-content"><p>A JavaScript date is fundamentally specified as the number of milliseconds that have elapsed since the ECMAScript epoch, which is defined as the midnight at the beginning of January 1, 1970, UTC (equivalent to the UNIX epoch).</p></div>
+		<section aria-labelledby="constructor"><h2 id="date.constructor">Constructor</h2><div class="section-content"><dl>
+			<dt id="date"><code>Date()</code></a></dt>
+			<dd>
+			<p>When called as a function, returns a string representation of the current date and time. All arguments are ignored. The result is the same as executing <code>new Date().toString()</code>.</p>
+			</dd>
+			<dt id="new_date"><code>new Date()</code></a></dt>
+			<dd>
+			<p>When called as a constructor, returns a new <code>Date</code> object.</p>
+			</dd>
+		</dl></div></section>
+		<section aria-labelledby="static_methods"><h2 id="static_methods">Static methods</h2><div class="section-content"><dl></dl>
+			<dt id="date.now"><code>Date.now()</code></dt>
+  			<dd>
+    		<p>Returns the numeric value corresponding to the current time — the number of milliseconds elapsed since January 1, 1970 00:00:00 UTC, with leap seconds ignored.</p>
+  			</dd>
+  			<dt id="date.parse"><code>Date.parse()</code></dt>
+  			<dd>
+    		<p>Parses a string representation of a date and returns the number of milliseconds since 1 January, 1970, 00:00:00 UTC, with leap seconds ignored.</p>
+    		<div class="notecard note" id="sect3">
+      		<p><strong>Note:</strong> Parsing of strings with <code>Date.parse</code> is strongly discouraged due to browser differences and inconsistencies.</p>
+    		</div>
+  			</dd>
+  			<dt id="date.utc"><code>Date.UTC()</code></dt>
+  			<dd>
+    		<p>Accepts the same parameters as the longest form of the constructor (i.e. 2 to 7) and returns the number of milliseconds since January 1, 1970, 00:00:00 UTC, with leap seconds ignored.</p>
+  			</dd>
+		</dl></div></section>
+	  </article>
+</body>
+
+</html>
