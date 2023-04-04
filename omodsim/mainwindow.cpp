@@ -207,8 +207,8 @@ void MainWindow::on_awake()
 
     ui->actionRunScript->setEnabled(frm && frm->canRunScript());
     ui->actionStopScript->setEnabled(frm && frm->canStopScript());
-    ui->actionScriptSettings->setEnabled(frm && frm->canRunScript());
-    _actionRunMode->setEnabled(frm && frm->canRunScript());
+    ui->actionScriptSettings->setEnabled(frm && !frm->canStopScript());
+    _actionRunMode->setEnabled(frm && !frm->canStopScript());
 
     ui->actionToolbar->setChecked(ui->toolBarMain->isVisible());
     ui->actionStatusBar->setChecked(statusBar()->isVisible());
