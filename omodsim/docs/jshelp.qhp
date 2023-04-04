@@ -3,23 +3,10 @@
     <namespace>omodsim</namespace>
     <virtualFolder>doc</virtualFolder>
     <filterSection>
-        <toc>
-            <!--<section title="Functions">
-                <section title="Date" ref="index.html#date">
-                    <section title="constructor" ref="index.html#date.constructor" />
-                    <section title="prototype" ref="index.html#date.prototype" />
-                    <section title="now" ref="index.html#date.now" />
-                    <section title="parse" ref="index.html#date.parse" />
-                    <section title="UTC" ref="index.html#date.utc" />
-                </section>
-            </section>
-            <section title="Examples">
-            </section>-->
-        </toc>
+        <toc/>
         <files>
             <file>assets/css/*.css</file>
-            <file>assets/img/*.png</file>
-            <file>*.html</file>
+            <file>index.html</file>
         </files>
     </filterSection>
 </QtHelpProject>

@@ -263,6 +263,11 @@ void ScriptControl::stopScript()
 ///
 void ScriptControl::showHelp(const QString& helpKey)
 {
+    if(ui->verticalSplitter->sizes().at(1) == 0)
+    {
+        const int w = size().width();
+        ui->verticalSplitter->setSizes(QList<int>() << w * 4 / 5 << w / 5);
+    }
     ui->helpWidget->showHelp(helpKey);
 }
 
