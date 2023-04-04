@@ -18,6 +18,8 @@ public:
     void setHelp(const QString& helpFile);
     QVariant loadResource (int type, const QUrl& name) override;
 
+    void showHelp(const QString& helpKey);
+
 private:
     QSharedPointer<QHelpEngine> _helpEngine;
 };

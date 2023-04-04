@@ -44,3 +44,13 @@ void HelpWidget::setHelp(const QString& helpFile)
 
     setSource(QUrl("qthelp://omodsim/doc/index.html"));
 }
+
+///
+/// \brief HelpWidget::showHelp
+/// \param helpKey
+///
+void HelpWidget::showHelp(const QString& helpKey)
+{
+    const auto url = QString("qthelp://omodsim/doc/index.html#%1").arg(helpKey.toLower());
+    setSource(QUrl(url));
+}

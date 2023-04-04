@@ -4,7 +4,7 @@
     <virtualFolder>doc</virtualFolder>
     <filterSection>
         <toc>
-            <section title="Functions">
+            <!--<section title="Functions">
                 <section title="Date" ref="index.html#date">
                     <section title="constructor" ref="index.html#date.constructor" />
                     <section title="prototype" ref="index.html#date.prototype" />
@@ -14,7 +14,7 @@
                 </section>
             </section>
             <section title="Examples">
-            </section>
+            </section>-->
         </toc>
         <files>
             <file>assets/css/*.css</file>

@@ -20,6 +20,7 @@ ScriptControl::ScriptControl(QWidget *parent)
     ui->helpWidget->setHelp(QApplication::applicationDirPath() + "/docs/jshelp.qhc");
 
     connect(&_timer, &QTimer::timeout, this, &ScriptControl::executeScript);
+    connect(ui->codeEditor, &JSCodeEditor::helpContext, this, &ScriptControl::showHelp);
 }
 
 ///
@@ -254,6 +255,15 @@ void ScriptControl::stopScript()
     _server = nullptr;
     _script = nullptr;
     _console = nullptr;
+}
+
+///
+/// \brief ScriptControl::showHelp
+/// \param helpKey
+///
+void ScriptControl::showHelp(const QString& helpKey)
+{
+    ui->helpWidget->showHelp(helpKey);
 }
 
 ///

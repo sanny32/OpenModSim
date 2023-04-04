@@ -79,28 +79,28 @@
 		</li>
 		<li><a href="#script">Script</a>
 			<ul class="level2">
-				<li><a href="#script.runCount">Script.runCount</a></li>
+				<li><a href="#script.runcount">Script.runCount</a></li>
 				<li><a href="#script.period">Script.period</a></li>
-				<li><a href="#script.onInit">Script.onInit</a></li>
-				<li><a href="#script.setTimeout">Script.setTimeout</a></li>
+				<li><a href="#script.oninit">Script.onInit</a></li>
+				<li><a href="#script.settimeout">Script.setTimeout</a></li>
 				<li><a href="#script.stop">Script.stop</a></li>
 			</ul>
 		</li>
 		<li><a href="#server">Server</a>
 			<ul class="level2">
-				<li><a href="#server.onChange">Server.onChange</a></li>
-				<li><a href="#server.readCoil">Server.readCoil</a></li>
-				<li><a href="#server.readDiscrete">Server.readDiscrete</a></li>
-				<li><a href="#server.readInput">Server.readInput</a></li>
-				<li><a href="#server.readHolding">Server.readHolding</a></li>
-				<li><a href="#server.readDouble">Server.readDouble</a></li>
-				<li><a href="#server.readFloat">Server.readFloat</a></li>
-				<li><a href="#server.writeCoil">Server.writeCoil</a></li>
-				<li><a href="#server.writeDiscrete">Server.writeDiscrete</a></li>
-				<li><a href="#server.writeInput">Server.writeInput</a></li>
-				<li><a href="#server.writeHolding">Server.writeHolding</a></li>
-				<li><a href="#server.writeDouble">Server.writeDouble</a></li>
-				<li><a href="#server.writeFloat">Server.writeFloat</a></li>
+				<li><a href="#server.onchange">Server.onChange</a></li>
+				<li><a href="#server.readcoil">Server.readCoil</a></li>
+				<li><a href="#server.readdiscrete">Server.readDiscrete</a></li>
+				<li><a href="#server.readinput">Server.readInput</a></li>
+				<li><a href="#server.readholding">Server.readHolding</a></li>
+				<li><a href="#server.readdouble">Server.readDouble</a></li>
+				<li><a href="#server.readfloat">Server.readFloat</a></li>
+				<li><a href="#server.writecoil">Server.writeCoil</a></li>
+				<li><a href="#server.writediscrete">Server.writeDiscrete</a></li>
+				<li><a href="#server.writeinput">Server.writeInput</a></li>
+				<li><a href="#server.writeholding">Server.writeHolding</a></li>
+				<li><a href="#server.writedouble">Server.writeDouble</a></li>
+				<li><a href="#server.writefloat">Server.writeFloat</a></li>
 			</ul>
 		</li>
 		<li><a href="#storage">Storage</a>
@@ -108,15 +108,9 @@
 				<li><a href="#storage.length">Storage.length</a></li>
 				<li><a href="#storage.clear">Storage.clear</a></li>
 				<li><a href="#storage.key">Storage.key</a></li>
-				<li><a href="#storage.getItem">Storage.getItem</a></li>
-				<li><a href="#storage.setItem">Storage.setItem</a></li>
-				<li><a href="#storage.removeItem">Storage.removeItem</a></li>
-			</ul>
-		</li>
-		<li><a href="#examples">Examples</a>
-			<ul class="level2">
-				<li><a href="#example1">Example1</a></li>
-				<li><a href="#example2">Example2</a></li>
+				<li><a href="#storage.getitem">Storage.getItem</a></li>
+				<li><a href="#storage.setitem">Storage.setItem</a></li>
+				<li><a href="#storage.removeitem">Storage.removeItem</a></li>
 			</ul>
 		</li>
 	</ul>
@@ -379,11 +373,11 @@
 			</dd>
 		</dl></div></section>
 		<section aria-labelledby="static_methods"><h2 id="script.static_methods">Static methods</h2><div class="section-content"><dl>
-			<dt id="script.onInit"><code>Script.onInit(functionRef)</code></dt>
+			<dt id="script.oninit"><code>Script.onInit(functionRef)</code></dt>
 			<dd>
 				<p>Execute a function on first script run.</p>
 			</dd>
-			<dt id="script.setTimeout"><code>Script.setTimeout(functionRef, delay)</code></dt>
+			<dt id="script.settimeout"><code>Script.setTimeout(functionRef, delay)</code></dt>
 			<dd>
 				<p>The method sets a timer which executes a function once the timer expires.</p>
 			</dd>
@@ -399,64 +393,64 @@
 		</div>
 		<div class="section-content"><p>The <strong><code>Server</code></strong> object provides access to the MODBUS server functionality.</p></div>
 		<section aria-labelledby="static_methods"><h2 id="server.static_methods">Static methods</h2><div class="section-content"><dl>
-			<dt id="server.onChange"><code>Server.onChange(Register, address, functionRef)</code></dt>
+			<dt id="server.onchange"><code>Server.onChange(Register, address, functionRef)</code></dt>
 			<dd>
 				<p>Execute a <code>functionRef(value)</code> when a <code>Register</code> value at <code>address</code> was changed.</p>
 			</dd>
-			<dt id="server.readCoil"><code>Server.readCoil(address)</code></dt>
+			<dt id="server.readcoil"><code>Server.readCoil(address)</code></dt>
 			<dd>
 				<p>Returns a Coil register value at <code>address</code>.</p>
 			</dd>
-			<dt id="server.readDiscrete"><code>Server.readDiscrete(address)</code></dt>
+			<dt id="server.readdiscrete"><code>Server.readDiscrete(address)</code></dt>
 			<dd>
 				<p>Returns a Discrete register value at <code>address</code>.</p>
 			</dd>
-			<dt id="server.readInput"><code>Server.readInput(address)</code></dt>
+			<dt id="server.readinput"><code>Server.readInput(address)</code></dt>
 			<dd>
 				<p>Returns a Input register value at <code>address</code>.</p>
 			</dd>
-			<dt id="server.readHolding"><code>Server.readHolding(address)</code></dt>
+			<dt id="server.readholding"><code>Server.readHolding(address)</code></dt>
 			<dd>
 				<p>Returns a Holding register value at <code>address</code>.</p>
 			</dd>
-			<dt id="server.readDouble"><code>Server.readDouble(Register, address, swapped)</code></dt>
+			<dt id="server.readdouble"><code>Server.readDouble(Register, address, swapped)</code></dt>
 			<dd>
 				<p>Returns a double value from <code>address</code> to <code>address + 3</code> registers. The <code>swapped</code> parameter change the registers order, when function convert set of registers to a double value.</p>
 				<div class="notecard note">
 					<p><strong>Note:</strong> This function is available only for Input and Holding registers.</p>
 				</div>
 			</dd>
-			<dt id="server.readFloat"><code>Server.readFloat()</code></dt>
+			<dt id="server.readfloat"><code>Server.readFloat()</code></dt>
 			<dd>
 				<p>Returns a float value from <code>address</code> to <code>address + 1</code> registers. The <code>swapped</code> parameter change the registers order, when function convert set of registers to a float value.</p>
 				<div class="notecard note">
 					<p><strong>Note:</strong> This function is available only for Input and Holding registers.</p>
 				</div>
 			</dd>
-			<dt id="server.writeCoil"><code>Server.writeCoil(address, value)</code></dt>
+			<dt id="server.writecoil"><code>Server.writeCoil(address, value)</code></dt>
 			<dd>
 				<p>Write a <code>value</code> to the Coil register at <code>address</code>.</p>
 			</dd>
-			<dt id="server.writeDiscrete"><code>Server.writeDiscrete(address, value)</code></dt>
+			<dt id="server.writediscrete"><code>Server.writeDiscrete(address, value)</code></dt>
 			<dd>
 				<p>Write a <code>value</code> to the Discrete register at <code>address</code>.</p>
 			</dd>
-			<dt id="server.writeInput"><code>Server.writeInput(address, value)</code></dt>
+			<dt id="server.writeinput"><code>Server.writeInput(address, value)</code></dt>
 			<dd>
 				<p>Write a <code>value</code> to the Input register at <code>address</code>.</p>
 			</dd>
-			<dt id="server.writeHolding"><code>Server.writeHolding(address, value)</code></dt>
+			<dt id="server.writeholding"><code>Server.writeHolding(address, value)</code></dt>
 			<dd>
 				<p>Write a <code>value</code> to the Holding register at <code>address</code>.</p>
 			</dd>
-			<dt id="server.writeDouble"><code>Server.writeDouble(Register, address, value, swapped)</code></dt>
+			<dt id="server.writedouble"><code>Server.writeDouble(Register, address, value, swapped)</code></dt>
 			<dd>
 				<p>Write a double <code>value</code> to the <code>Register</code> addresses. The <code>swapped</code> parameter change the registers order, when function convert a double value to the set of registers.</p>
 				<div class="notecard note">
 					<p><strong>Note:</strong> This function is available only for Input and Holding registers.</p>
 				</div>
 			</dd>
-			<dt id="server.writeFloat"><code>Server.writeFloat(Register, address, value, swapped)</code></dt>
+			<dt id="server.writefloat"><code>Server.writeFloat(Register, address, value, swapped)</code></dt>
 			<dd>
 				<p>Write a float <code>value</code> to the <code>Register</code> addresses. The <code>swapped</code> parameter change the registers order, when function convert a float value to the set of registers.</p>
 				<div class="notecard note">
@@ -484,15 +478,15 @@
 			<dd>
 				<p>Return the name of the nth key by <code>index</code> in the storage.</p>
 			</dd>
-			<dt id="storage.getItem"><code>Storage.getItem(key)</code></dt>
+			<dt id="storage.getitem"><code>Storage.getItem(key)</code></dt>
 			<dd>
 				<p>When passed a <code>key</code> name, will return that key's value.</p>
 			</dd>
-			<dt id="storage.setItem"><code>Storage.setItem(key, value)</code></dt>
+			<dt id="storage.setitem"><code>Storage.setItem(key, value)</code></dt>
 			<dd>
 				<p>When passed a <code>key</code> name and value, will add that key to the storage, or update that key's <code>value</code> if it already exists.</p>
 			</dd>
-			<dt id="storage.removeItem"><code>Storage.removeItem(key)</code></dt>
+			<dt id="storage.removeitem"><code>Storage.removeItem(key)</code></dt>
 			<dd>
 				<p>When passed a <code>key</code> name, will remove that key from the storage.</p>
 			</dd>
@@ -502,6 +496,7 @@
 			</dd>
 		</dl></div></section>
 	</article>
+
 </body>
 
 </html>

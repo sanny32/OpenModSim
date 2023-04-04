@@ -56,6 +56,7 @@ public slots:
     void search(const QString& text);
     void runScript(RunMode mode, int interval = 0);
     void stopScript();
+    void showHelp(const QString& helpKey);
 
 private slots:
     bool executeScript();
