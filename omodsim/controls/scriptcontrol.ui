@@ -46,7 +46,14 @@
         </sizepolicy>
        </property>
        <property name="plainText">
-        <string/>
+        <string>Script.onInit(()=&gt;{
+	Server.onChange(Register.Holding, 1, (value)=&gt;
+	{
+		/* write your code on register value change */
+	});
+
+	/* write your init code here */
+});</string>
        </property>
        <property name="tabStopDistance">
         <double>20.000000000000000</double>

@@ -4,14 +4,25 @@
 <head>
 	<title>Open ModSim JavaScript Documentation</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<link rel="stylesheet" type="text/css" href="assets/css/reset.css">
 	<link rel="stylesheet" type="text/css" href="assets/css/style.css">
 </head>
 
 <body>
 	<h1 class="title">JavaScript Doc</h1>
+	<p>This is Open ModSim JavaScript documentation.</p>
 	<ul>
+		<li><a href="#console">console</a>
+			<ul class="level2">
+				<li><a href="#console.clear">console.clear</a></li>
+				<li><a href="#console.log">console.log</a></li>
+				<li><a href="#console.debug">console.debug</a></li>
+				<li><a href="#console.warning">console.warning</a></li>
+				<li><a href="#console.error">console.error</a></li>
+			</ul>
+		</li>
 		<li><a href="#date">Date</a>
-			<ul>
+			<ul class="level2">
 				<li><a href="#date.constructor">Constructor</a></li>
 				<li><a href="#date.prototype">Date.prototype</a></li>
 				<li><a href="#date.now">Date.now</a></li>
@@ -19,9 +30,8 @@
 				<li><a href="#date.utc">Date.UTC</a></li>
 			</ul>
 		</li>
-		<li>
-			<a href="#math">Math</a>
-			<ul>
+		<li><a href="#math">Math</a>
+			<ul class="level2">
 				<li><a href="#math.e">Math.E</a></li>
 				<li><a href="#math.ln10">Math.LN10</a></li>
 				<li><a href="#math.ln2">Math.LN2</a></li>
@@ -67,7 +77,77 @@
 				<li><a href="#math.trunc">Math.trunc</a></li>
 			</ul>
 		</li>
+		<li><a href="#script">Script</a>
+			<ul class="level2">
+				<li><a href="#script.runCount">Script.runCount</a></li>
+				<li><a href="#script.period">Script.period</a></li>
+				<li><a href="#script.onInit">Script.onInit</a></li>
+				<li><a href="#script.setTimeout">Script.setTimeout</a></li>
+				<li><a href="#script.stop">Script.stop</a></li>
+			</ul>
+		</li>
+		<li><a href="#server">Server</a>
+			<ul class="level2">
+				<li><a href="#server.onChange">Server.onChange</a></li>
+				<li><a href="#server.readCoil">Server.readCoil</a></li>
+				<li><a href="#server.readDiscrete">Server.readDiscrete</a></li>
+				<li><a href="#server.readInput">Server.readInput</a></li>
+				<li><a href="#server.readHolding">Server.readHolding</a></li>
+				<li><a href="#server.readDouble">Server.readDouble</a></li>
+				<li><a href="#server.readFloat">Server.readFloat</a></li>
+				<li><a href="#server.writeCoil">Server.writeCoil</a></li>
+				<li><a href="#server.writeDiscrete">Server.writeDiscrete</a></li>
+				<li><a href="#server.writeInput">Server.writeInput</a></li>
+				<li><a href="#server.writeHolding">Server.writeHolding</a></li>
+				<li><a href="#server.writeDouble">Server.writeDouble</a></li>
+				<li><a href="#server.writeFloat">Server.writeFloat</a></li>
+			</ul>
+		</li>
+		<li><a href="#storage">Storage</a>
+			<ul class="level2">
+				<li><a href="#storage.length">Storage.length</a></li>
+				<li><a href="#storage.clear">Storage.clear</a></li>
+				<li><a href="#storage.key">Storage.key</a></li>
+				<li><a href="#storage.getItem">Storage.getItem</a></li>
+				<li><a href="#storage.setItem">Storage.setItem</a></li>
+				<li><a href="#storage.removeItem">Storage.removeItem</a></li>
+			</ul>
+		</li>
+		<li><a href="#examples">Examples</a>
+			<ul class="level2">
+				<li><a href="#example1">Example1</a></li>
+				<li><a href="#example2">Example2</a></li>
+			</ul>
+		</li>
 	</ul>
+	<article class="article-content">
+		<div class="article-header">
+			<h1 id="console">console</h1>
+		</div>
+		<div class="section-content"><p>The <strong><code>console</code></strong> object provides access to debugging console.</p></div>
+		<section aria-labelledby="instance_methods"><h2 id="console.instance_methods">Instance methods</h2><div class="section-content"><dl>
+			<dt id="console.clear"><code>console.clear()</code></dt>
+			<dd>
+			  <p>Clear the console.</p>
+			</dd>
+			<dt id="console.debug"><code>console.debug()</code></dt>
+			<dd>
+				<p>Outputs a message to the console with the log level <code>debug</code>.</p>
+			</dd>
+			<dt id="console.error"><code>console.error()</code></dt>
+			<dd>
+				<p>Outputs an error message.</p>
+			</dd>
+			<dt id="console.log"><code>console.log()</code></dt>
+			<dd>
+				<p>For general output of logging information.</p>
+			</dd>
+			<dt id="console.warning"><code>console.warning()</code></dt>
+			<dd>
+			  <p>Outputs a warning message.</p>
+			</dd>
+		</dl></div></section>
+	</article>
 	<article class="article-content">
 		<div class="article-header">
 			<h1 id="date">Date</h1>
@@ -83,7 +163,7 @@
 			<p>When called as a constructor, returns a new <code>Date</code> object.</p>
 			</dd>
 		</dl></div></section>
-		<section aria-labelledby="static_methods"><h2 id="static_methods">Static methods</h2><div class="section-content"><dl></dl>
+		<section aria-labelledby="static_methods"><h2 id="date.static_methods">Static methods</h2><div class="section-content"><dl></dl>
 			<dt id="date.now"><code>Date.now()</code></dt>
   			<dd>
     		<p>Returns the numeric value corresponding to the current time — the number of milliseconds elapsed since January 1, 1970 00:00:00 UTC, with leap seconds ignored.</p>
@@ -91,7 +171,7 @@
   			<dt id="date.parse"><code>Date.parse()</code></dt>
   			<dd>
     		<p>Parses a string representation of a date and returns the number of milliseconds since 1 January, 1970, 00:00:00 UTC, with leap seconds ignored.</p>
-    		<div class="notecard note" id="sect3">
+    		<div class="notecard note">
       		<p><strong>Note:</strong> Parsing of strings with <code>Date.parse</code> is strongly discouraged due to browser differences and inconsistencies.</p>
     		</div>
   			</dd>
@@ -101,6 +181,327 @@
   			</dd>
 		</dl></div></section>
 	  </article>
+	  <article class="article-content">
+		<div class="article-header">
+			<h1 id="math">Math</h1>
+		</div>
+		<div class="section-content"><p><strong><code>Math</code></strong> is a built-in object that has properties and methods for mathematical constants and functions. It's not a function object.</p>
+		<p><code>Math</code> works with the <code>Number</code> type. It doesn't work with <code>BigInt</code>.</p></div><section aria-labelledby="description"><h2 id="math.description">Description</h2><div class="section-content"><p>Unlike many other global objects, <code>Math</code> is not a constructor. All properties and methods of <code>Math</code> are static. You refer to the constant pi as <code>Math.PI</code> and you call the sine function as <code>Math.sin(x)</code>, where <code>x</code> is the method's argument. Constants are defined with the full precision of real numbers in JavaScript.</p></div></section>  
+		<section aria-labelledby="static_properties"><h2 id="math.static_properties">Static properties</h2><div class="section-content"><dl>
+		  <dt id="math.e"><code>Math.E</code></dt>
+		  <dd>
+			<p>Euler's number and the base of natural logarithms; approximately <code>2.718</code>.</p>
+		  </dd>
+		  <dt id="math.ln2"><code>Math.LN2</code></dt>
+		  <dd>
+			<p>Natural logarithm of <code>2</code>; approximately <code>0.693</code>.</p>
+		  </dd>
+		  <dt id="math.ln10"><code>Math.LN10</code></dt>
+		  <dd>
+			<p>Natural logarithm of <code>10</code>; approximately <code>2.303</code>.</p>
+		  </dd>
+		  <dt id="math.log2e"><code>Math.LOG2E</code></dt>
+		  <dd>
+			<p>Base-2 logarithm of <code>E</code>; approximately <code>1.443</code>.</p>
+		  </dd>
+		  <dt id="math.log10e"><code>Math.LOG10E</code></dt>
+		  <dd>
+			<p>Base-10 logarithm of <code>E</code>; approximately <code>0.434</code>.</p>
+		  </dd>
+		  <dt id="math.pi"><code>Math.PI</code></dt>
+		  <dd>
+			<p>Ratio of a circle's circumference to its diameter; approximately <code>3.14159</code>.</p>
+		  </dd>
+		  <dt id="math.sqrt1_2"><code>Math.SQRT1_2</code></dt>
+		  <dd>
+			<p>Square root of ½; approximately <code>0.707</code>.</p>
+		  </dd>
+		  <dt id="math.sqrt2"><code>Math.SQRT2</code></dt>
+		  <dd>
+			<p>Square root of <code>2</code>; approximately <code>1.414</code>.</p>
+		  </dd>
+		</dl></div></section><section aria-labelledby="static_methods"><h2 id="math.static_methods">Static methods</h2><div class="section-content"><dl>
+		  <dt id="math.abs"><code>Math.abs()</code></dt>
+		  <dd>
+			<p>Returns the absolute value of <code>x</code>.</p>
+		  </dd>
+		  <dt id="math.acos"><code>Math.acos()</code></dt>
+		  <dd>
+			<p>Returns the arccosine of <code>x</code>.</p>
+		  </dd>
+		  <dt id="math.acosh"><code>Math.acosh()</code></dt>
+		  <dd>
+			<p>Returns the hyperbolic arccosine of <code>x</code>.</p>
+		  </dd>
+		  <dt id="math.asin"><code>Math.asin()</code></dt>
+		  <dd>
+			<p>Returns the arcsine of <code>x</code>.</p>
+		  </dd>
+		  <dt id="math.asinh"><code>Math.asinh()</code></dt>
+		  <dd>
+			<p>Returns the hyperbolic arcsine of a number.</p>
+		  </dd>
+		  <dt id="math.atan"><code>Math.atan()</code></dt>
+		  <dd>
+			<p>Returns the arctangent of <code>x</code>.</p>
+		  </dd>
+		  <dt id="math.atanh"><code>Math.atanh()</code></dt>
+		  <dd>
+			<p>Returns the hyperbolic arctangent of <code>x</code>.</p>
+		  </dd>
+		  <dt id="math.atan2"><code>Math.atan2()</code></dt>
+		  <dd>
+			<p>Returns the arctangent of the quotient of its arguments.</p>
+		  </dd>
+		  <dt id="math.cbrt"><code>Math.cbrt()</code></dt>
+		  <dd>
+			<p>Returns the cube root of <code>x</code>.</p>
+		  </dd>
+		  <dt id="math.ceil"><code>Math.ceil()</code></dt>
+		  <dd>
+			<p>Returns the smallest integer greater than or equal to <code>x</code>.</p>
+		  </dd>
+		  <dt id="math.clz32"><code>Math.clz32()</code></dt>
+		  <dd>
+			<p>Returns the number of leading zero bits of the 32-bit integer <code>x</code>.</p>
+		  </dd>
+		  <dt id="math.cos"><code>Math.cos()</code></dt>
+		  <dd>
+			<p>Returns the cosine of <code>x</code>.</p>
+		  </dd>
+		  <dt id="math.cosh"><code>Math.cosh()</code></dt>
+		  <dd>
+			<p>Returns the hyperbolic cosine of <code>x</code>.</p>
+		  </dd>
+		  <dt id="math.exp"><code>Math.exp()</code></dt>
+		  <dd>
+			<p>Returns e<sup>x</sup>, where x is the argument, and e is Euler's number (<code>2.718</code>…, the base of the natural logarithm).</p>
+		  </dd>
+		  <dt id="math.expm1"><code>Math.expm1()</code></dt>
+		  <dd>
+			<p>Returns subtracting <code>1</code> from <code>exp(x)</code>.</p>
+		  </dd>
+		  <dt id="math.floor"><code>Math.floor()</code></dt>
+		  <dd>
+			<p>Returns the largest integer less than or equal to <code>x</code>.</p>
+		  </dd>
+		  <dt id="math.fround"><code>Math.fround()</code></dt>
+		  <dd>
+			<p>Returns the nearest single precision float representation of <code>x</code>.</p>
+		  </dd>
+		  <dt id="math.hypot"><code>Math.hypot()</code></dt>
+		  <dd>
+			<p>Returns the square root of the sum of squares of its arguments.</p>
+		  </dd>
+		  <dt id="math.imul"><code>Math.imul()</code></dt>
+		  <dd>
+			<p>Returns the result of the 32-bit integer multiplication of <code>x</code> and <code>y</code>.</p>
+		  </dd>
+		  <dt id="math.log"><code>Math.log()</code></dt>
+		  <dd>
+			<p>Returns the natural logarithm (㏒<sub>e</sub>; also, ㏑) of <code>x</code>.</p>
+		  </dd>
+		  <dt id="math.log1p"><code>Math.log1p()</code></dt>
+		  <dd>
+			<p>Returns the natural logarithm (㏒<sub>e</sub>; also ㏑) of <code>1 + x</code> for the number <code>x</code>.</p>
+		  </dd>
+		  <dt id="math.log10"><code>Math.log10()</code></dt>
+		  <dd>
+			<p>Returns the base-10 logarithm of <code>x</code>.</p>
+		  </dd>
+		  <dt id="math.log2"><code>Math.log2()</code></dt>
+		  <dd>
+			<p>Returns the base-2 logarithm of <code>x</code>.</p>
+		  </dd>
+		  <dt id="math.max"><code>Math.max()</code></dt>
+		  <dd>
+			<p>Returns the largest of zero or more numbers.</p>
+		  </dd>
+		  <dt id="math.min"><code>Math.min()</code></dt>
+		  <dd>
+			<p>Returns the smallest of zero or more numbers.</p>
+		  </dd>
+		  <dt id="math.pow"><code>Math.pow()</code></dt>
+		  <dd>
+			<p>Returns base <code>x</code> to the exponent power <code>y</code> (that is, <code>x</code><sup><code>y</code></sup>).</p>
+		  </dd>
+		  <dt id="math.random"><code>Math.random()</code></dt>
+		  <dd>
+			<p>Returns a pseudo-random number between <code>0</code> and <code>1</code>.</p>
+		  </dd>
+		  <dt id="math.round"><code>Math.round()</code></dt>
+		  <dd>
+			<p>Returns the value of the number <code>x</code> rounded to the nearest integer.</p>
+		  </dd>
+		  <dt id="math.sign"><code>Math.sign()</code></dt>
+		  <dd>
+			<p>Returns the sign of the <code>x</code>, indicating whether <code>x</code> is positive, negative, or zero.</p>
+		  </dd>
+		  <dt id="math.sin"><code>Math.sin()</code></dt>
+		  <dd>
+			<p>Returns the sine of <code>x</code>.</p>
+		  </dd>
+		  <dt id="math.sinh"><code>Math.sinh()</code></dt>
+		  <dd>
+			<p>Returns the hyperbolic sine of <code>x</code>.</p>
+		  </dd>
+		  <dt id="math.sqrt"><code>Math.sqrt()</code></dt>
+		  <dd>
+			<p>Returns the positive square root of <code>x</code>.</p>
+		  </dd>
+		  <dt id="math.tan"><code>Math.tan()</code></dt>
+		  <dd>
+			<p>Returns the tangent of <code>x</code>.</p>
+		  </dd>
+		  <dt id="math.tanh"><code>Math.tanh()</code></dt>
+		  <dd>
+			<p>Returns the hyperbolic tangent of <code>x</code>.</p>
+		  </dd>
+		  <dt id="math.trunc"><code>Math.trunc()</code></dt>
+		  <dd>
+			<p>Returns the integer portion of <code>x</code>, removing any fractional digits.</p>
+		  </dd>
+		</dl></div></section>
+	</article>
+	<article class="article-content">
+		<div class="article-header">
+			<h1 id="script">Script</h1>
+		</div>
+		<div class="section-content"><p>The <strong><code>Script</code></strong> object provides access to the script features.</p></div>
+		<section aria-labelledby="static_properties"><h2 id="script.static_properties">Static properties</h2><div class="section-content"><dl>
+			<dt id="script.runCount"><code>Script.runCount</code></dt>
+			<dd>
+			  <p>Returns the number of script execution in Periodically mode.</p>
+			</dd>
+			<dt id="script.period"><code>Script.period</code></dt>
+			<dd>
+			  <p>Returns the number of milliseconds between script runs in Periodically mode.</p>
+			</dd>
+		</dl></div></section>
+		<section aria-labelledby="static_methods"><h2 id="script.static_methods">Static methods</h2><div class="section-content"><dl>
+			<dt id="script.onInit"><code>Script.onInit(functionRef)</code></dt>
+			<dd>
+				<p>Execute a function on first script run.</p>
+			</dd>
+			<dt id="script.setTimeout"><code>Script.setTimeout(functionRef, delay)</code></dt>
+			<dd>
+				<p>The method sets a timer which executes a function once the timer expires.</p>
+			</dd>
+			<dt id="script.stop"><code>Script.stop()</code></dt>
+			<dd>
+			  <p>Stop the script execution.</p>
+			</dd>
+		</dl></div></section>
+	</article>
+	<article class="article-content">
+		<div class="article-header">
+			<h1 id="server">Server</h1>
+		</div>
+		<div class="section-content"><p>The <strong><code>Server</code></strong> object provides access to the MODBUS server functionality.</p></div>
+		<section aria-labelledby="static_methods"><h2 id="server.static_methods">Static methods</h2><div class="section-content"><dl>
+			<dt id="server.onChange"><code>Server.onChange(Register, address, functionRef)</code></dt>
+			<dd>
+				<p>Execute a <code>functionRef(value)</code> when a <code>Register</code> value at <code>address</code> was changed.</p>
+			</dd>
+			<dt id="server.readCoil"><code>Server.readCoil(address)</code></dt>
+			<dd>
+				<p>Returns a Coil register value at <code>address</code>.</p>
+			</dd>
+			<dt id="server.readDiscrete"><code>Server.readDiscrete(address)</code></dt>
+			<dd>
+				<p>Returns a Discrete register value at <code>address</code>.</p>
+			</dd>
+			<dt id="server.readInput"><code>Server.readInput(address)</code></dt>
+			<dd>
+				<p>Returns a Input register value at <code>address</code>.</p>
+			</dd>
+			<dt id="server.readHolding"><code>Server.readHolding(address)</code></dt>
+			<dd>
+				<p>Returns a Holding register value at <code>address</code>.</p>
+			</dd>
+			<dt id="server.readDouble"><code>Server.readDouble(Register, address, swapped)</code></dt>
+			<dd>
+				<p>Returns a double value from <code>address</code> to <code>address + 3</code> registers. The <code>swapped</code> parameter change the registers order, when function convert set of registers to a double value.</p>
+				<div class="notecard note">
+					<p><strong>Note:</strong> This function is available only for Input and Holding registers.</p>
+				</div>
+			</dd>
+			<dt id="server.readFloat"><code>Server.readFloat()</code></dt>
+			<dd>
+				<p>Returns a float value from <code>address</code> to <code>address + 1</code> registers. The <code>swapped</code> parameter change the registers order, when function convert set of registers to a float value.</p>
+				<div class="notecard note">
+					<p><strong>Note:</strong> This function is available only for Input and Holding registers.</p>
+				</div>
+			</dd>
+			<dt id="server.writeCoil"><code>Server.writeCoil(address, value)</code></dt>
+			<dd>
+				<p>Write a <code>value</code> to the Coil register at <code>address</code>.</p>
+			</dd>
+			<dt id="server.writeDiscrete"><code>Server.writeDiscrete(address, value)</code></dt>
+			<dd>
+				<p>Write a <code>value</code> to the Discrete register at <code>address</code>.</p>
+			</dd>
+			<dt id="server.writeInput"><code>Server.writeInput(address, value)</code></dt>
+			<dd>
+				<p>Write a <code>value</code> to the Input register at <code>address</code>.</p>
+			</dd>
+			<dt id="server.writeHolding"><code>Server.writeHolding(address, value)</code></dt>
+			<dd>
+				<p>Write a <code>value</code> to the Holding register at <code>address</code>.</p>
+			</dd>
+			<dt id="server.writeDouble"><code>Server.writeDouble(Register, address, value, swapped)</code></dt>
+			<dd>
+				<p>Write a double <code>value</code> to the <code>Register</code> addresses. The <code>swapped</code> parameter change the registers order, when function convert a double value to the set of registers.</p>
+				<div class="notecard note">
+					<p><strong>Note:</strong> This function is available only for Input and Holding registers.</p>
+				</div>
+			</dd>
+			<dt id="server.writeFloat"><code>Server.writeFloat(Register, address, value, swapped)</code></dt>
+			<dd>
+				<p>Write a float <code>value</code> to the <code>Register</code> addresses. The <code>swapped</code> parameter change the registers order, when function convert a float value to the set of registers.</p>
+				<div class="notecard note">
+					<p><strong>Note:</strong> This function is available only for Input and Holding registers.</p>
+				</div>
+			</dd>
+		</dl></div></section>
+	</article>
+	<article class="article-content">
+		<div class="article-header">
+			<h1 id="storage">Storage</h1>
+		</div>
+		<div class="section-content">
+			<p>The <strong><code>Storage</code></strong> provides access to a script local storage. It allows, for example, the addition, modification, or deletion of stored data items.</p>
+			<p>The <strong><code>Storage</code></strong> object store items while script is running (Once or Periodically). When a script is started the <code>Storage</code> object has no items.</p>
+		</div>
+		<section aria-labelledby="static_properties"><h2 id="storage.static_properties">Static properties</h2><div class="section-content"><dl>
+			<dt id="storage.length"><code>Storage.length</code></dt>
+			<dd>
+			  <p>Returns an integer representing the number of data items stored in the <code>Storage</code> object.</p>
+			</dd>
+		</dl></div></section>
+		<section aria-labelledby="static_methods"><h2 id="storage.static_methods">Static methods</h2><div class="section-content"><dl>
+			<dt id="storage.key"><code>Storage.key(index)</code></dt>
+			<dd>
+				<p>Return the name of the nth key by <code>index</code> in the storage.</p>
+			</dd>
+			<dt id="storage.getItem"><code>Storage.getItem(key)</code></dt>
+			<dd>
+				<p>When passed a <code>key</code> name, will return that key's value.</p>
+			</dd>
+			<dt id="storage.setItem"><code>Storage.setItem(key, value)</code></dt>
+			<dd>
+				<p>When passed a <code>key</code> name and value, will add that key to the storage, or update that key's <code>value</code> if it already exists.</p>
+			</dd>
+			<dt id="storage.removeItem"><code>Storage.removeItem(key)</code></dt>
+			<dd>
+				<p>When passed a <code>key</code> name, will remove that key from the storage.</p>
+			</dd>
+			<dt id="storage.clear"><code>Storage.clear()</code></dt>
+			<dd>
+				<p>When invoked, will empty all keys out of the storage.</p>
+			</dd>
+		</dl></div></section>
+	</article>
 </body>
 
 </html>
