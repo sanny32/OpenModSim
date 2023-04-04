@@ -167,8 +167,7 @@ void Server::onChange(Register::Type reg, quint16 address, const QJSValue& func)
     if(!func.isCallable())
         return;
 
-    if(!_mapOnChange.contains({reg, address}))
-        _mapOnChange[{reg, address}] = func;
+    _mapOnChange[{reg, address}] = func;
 }
 
 ///
@@ -178,9 +177,9 @@ void Server::onChange(Register::Type reg, quint16 address, const QJSValue& func)
 void Server::on_dataChanged(const QModbusDataUnit& data)
 {
     const auto reg = (Register::Type)data.registerType();
-    for(int  i = 0; i < data.valueCount(); i++)
+    for(uint i = 0; i < data.valueCount(); i++)
     {
-        const auto address = data.startAddress() + i + 1;
+        const quint16 address = data.startAddress() + i + 1;
         if(_mapOnChange.contains({reg, address}))
         {
             _mapOnChange[{reg, address}].call(QJSValueList() << data.value(i));

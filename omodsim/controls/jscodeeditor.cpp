@@ -211,6 +211,34 @@ void JSCodeEditor::keyPressEvent(QKeyEvent *e)
 
     QPlainTextEdit::keyPressEvent(e);
 
+    if(e->key() == Qt::Key_F1)
+    {
+        QStringList keyList;
+
+        QTextCursor tc = textCursor();
+        tc.select(QTextCursor::WordUnderCursor);
+        keyList << tc.selectedText();
+
+        tc.movePosition(QTextCursor::PreviousWord, QTextCursor::MoveAnchor, 2);
+        tc.select(QTextCursor::WordUnderCursor);
+        if(tc.selectedText() == ".")
+        {
+            keyList << ".";
+            tc.movePosition(QTextCursor::PreviousWord, QTextCursor::MoveAnchor, 2);
+            tc.select(QTextCursor::WordUnderCursor);
+            keyList << tc.selectedText();
+        }
+
+        QString helpKey;
+        for(auto it = keyList.rbegin(); it != keyList.rend(); ++it)
+            helpKey+= it->trimmed();
+
+        if(!helpKey.isEmpty())
+            emit helpContext(helpKey);
+
+        return;
+    }
+
     if(!_compliter)
         return;
 

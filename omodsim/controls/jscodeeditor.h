@@ -28,6 +28,9 @@ public:
 
     void search(const QString& text);
 
+signals:
+    void helpContext(const QString& key);
+
 protected:
     void resizeEvent(QResizeEvent *event) override;
     void keyPressEvent(QKeyEvent *e) override;

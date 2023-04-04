@@ -1,0 +1,52 @@
+h1.title {
+    /* top | right | bottom | left */
+    margin: 1.5em 0 .5em .25em;
+    padding: .25em;
+    font-weight: 600;
+}
+h2, p.h2 {
+    padding: .2em;
+    margin: 1.5em 0 1.2em .3em;
+    font-weight: 600;
+}
+h3 {
+    margin: 1.5em 0 1.5em .25em;
+}
+p {
+    margin: 1em 0 1em .5em;
+}
+p > strong{
+    font-weight: 800;
+}
+a:link {
+    color: #007330;
+    text-decoration: none;
+    text-align: left;
+}
+ul li, ol li {
+    margin-bottom: 0.5em;
+}
+ul > li {
+    list-style-type: disc;
+}
+li {
+    list-style: inside;
+    text-align: left;
+}
+ul.level2 {
+    margin-bottom: 1em;
+}
+ul.level2 li {
+    margin-left: -1.9em;
+}
+code {
+    font-family: Courier, monospace;
+    font-weight: 400;
+    color: #007330;
+    padding: 0.125em 0.25em;
+    width: fit-content;
+}
+.article-header h1{
+    font-weight: 600;
+}
+   

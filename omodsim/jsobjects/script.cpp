@@ -1,4 +1,5 @@
 #include <QTimer>
+#include <QJSValue>
 #include <QJSEngine>
 #include "script.h"
 
@@ -43,7 +44,7 @@ void Script::onInit(const QJSValue& func)
         return;
 
     if(_runCount == 1)
-        func.call();
+        const_cast<QJSValue&>(func).call();
 }
 
 ///
@@ -58,7 +59,7 @@ void Script::setTimeout(const QJSValue& func, int timeout)
 
     QTimer::singleShot(timeout, this, [func]
     {
-        func.call();
+        const_cast<QJSValue&>(func).call();
     });
 }
 

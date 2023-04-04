@@ -1,4 +1,4 @@
-QT += core gui widgets qml network printsupport serialbus serialport
+QT += core gui widgets qml network printsupport serialbus serialport help
 
 CONFIG += c++17
 CONFIG -= debug_and_release
@@ -30,6 +30,7 @@ SOURCES += \
     controls/customframe.cpp \
     controls/customlineedit.cpp \
     controls/flowcontroltypecombobox.cpp \
+    controls/helpwidget.cpp \
     controls/jscodeeditor.cpp \
     controls/mainstatusbar.cpp \
     controls/numericcombobox.cpp \
@@ -83,6 +84,7 @@ HEADERS += \
     controls/customframe.h \
     controls/customlineedit.h \
     controls/flowcontroltypecombobox.h \
+    controls/helpwidget.h \
     controls/jscodeeditor.h \
     controls/mainstatusbar.h \
     controls/numericcombobox.h \
@@ -160,3 +162,30 @@ RESOURCES += \
 
 TRANSLATIONS += \
     translations/omodsim_ru.ts
+
+DISTFILES += \
+    docs/jshelp.qhcp \
+    docs/jshelp.qhp
+
+# Genreate docs files
+INPUT = $$quote($$PWD/docs/jshelp.qhcp)
+helpgenerator.commands = $$quote($$[QT_INSTALL_BINS]/qhelpgenerator) $$INPUT
+QMAKE_EXTRA_TARGETS += helpgenerator
+PRE_TARGETDEPS += helpgenerator
+
+# Create outpus docs directory
+OUT_DOCS = $$OUT_PWD/docs
+win32:OUT_DOCS ~= s,/,\\,g
+create_dir.commands = $$sprintf($$QMAKE_MKDIR_CMD, $$quote($$OUT_DOCS))
+QMAKE_EXTRA_TARGETS += create_dir
+POST_TARGETDEPS += create_dir
+
+# Copy doc files
+DOC_FILES = $$PWD/docs/jshelp.qhc \
+            $$PWD/docs/jshelp.qch
+for(file, DOC_FILES) {
+    win32:file ~= s,/,\\,g
+    !isEmpty(QMAKE_POST_LINK) QMAKE_POST_LINK += &&
+    QMAKE_POST_LINK += $$QMAKE_MOVE $$quote($$file) $$quote($$OUT_DOCS)
+}
+

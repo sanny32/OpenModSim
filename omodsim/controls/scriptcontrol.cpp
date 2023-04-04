@@ -17,13 +17,10 @@ ScriptControl::ScriptControl(QWidget *parent)
 {
     ui->setupUi(this);
     ui->codeEditor->moveCursor(QTextCursor::End);
-
-    _console = QSharedPointer<console>(new console(ui->console));
-
-    _jsEngine.globalObject().setProperty("console", _jsEngine.newQObject(_console.get()));
-    _jsEngine.globalObject().setProperty("Register", _jsEngine.newQMetaObject(&Register::staticMetaObject));
+    ui->helpWidget->setHelp(QApplication::applicationDirPath() + "/docs/jshelp.qhc");
 
     connect(&_timer, &QTimer::timeout, this, &ScriptControl::executeScript);
+    connect(ui->codeEditor, &JSCodeEditor::helpContext, this, &ScriptControl::showHelp);
 }
 
 ///
@@ -205,18 +202,22 @@ bool ScriptControl::canPaste() const
 ///
 void ScriptControl::runScript(RunMode mode, int interval)
 {
-    _console->clear();
     _scriptCode = script();
 
     _storage = QSharedPointer<Storage>(new Storage);
     _server = QSharedPointer<Server>(new Server(_mbMultiServer, _byteOrder));
     _script = QSharedPointer<Script>(new Script(interval));
-    connect(_script.get(), &Script::stopped, this, &ScriptControl::stopScript);
+    _console = QSharedPointer<console>(new console(ui->console));
+    connect(_script.get(), &Script::stopped, this, &ScriptControl::stopScript, Qt::QueuedConnection);
 
     _jsEngine.globalObject().setProperty("Storage", _jsEngine.newQObject(_storage.get()));
-    _jsEngine.globalObject().setProperty("Script", _jsEngine.newQObject(_script.get()));
-    _jsEngine.globalObject().setProperty("Server", _jsEngine.newQObject(_server.get()));
+    _jsEngine.globalObject().setProperty("Script",  _jsEngine.newQObject(_script.get()));
+    _jsEngine.globalObject().setProperty("Server",  _jsEngine.newQObject(_server.get()));
+    _jsEngine.globalObject().setProperty("console", _jsEngine.newQObject(_console.get()));
+    _jsEngine.globalObject().setProperty("Register", _jsEngine.newQMetaObject(&Register::staticMetaObject));
     _jsEngine.setInterrupted(false);
+
+    _console->clear();
 
     if(!executeScript())
         return;
@@ -240,16 +241,34 @@ void ScriptControl::stopScript()
 {
     _timer.stop();
 
+    if(_script != nullptr)
+        disconnect(_script.get(), &Script::stopped, this, &ScriptControl::stopScript);
+
     _jsEngine.setInterrupted(true);
     _jsEngine.globalObject().deleteProperty("Storage");
     _jsEngine.globalObject().deleteProperty("Script");
     _jsEngine.globalObject().deleteProperty("Server");
-
-    disconnect(_script.get(), &Script::stopped, this, &ScriptControl::stopScript);
+    _jsEngine.globalObject().deleteProperty("console");
+    _jsEngine.globalObject().deleteProperty("Register");
 
     _storage = nullptr;
     _server = nullptr;
     _script = nullptr;
+    _console = nullptr;
+}
+
+///
+/// \brief ScriptControl::showHelp
+/// \param helpKey
+///
+void ScriptControl::showHelp(const QString& helpKey)
+{
+    if(ui->verticalSplitter->sizes().at(1) == 0)
+    {
+        const int w = size().width();
+        ui->verticalSplitter->setSizes(QList<int>() << w * 4 / 5 << w / 5);
+    }
+    ui->helpWidget->showHelp(helpKey);
 }
 
 ///
@@ -265,4 +284,29 @@ bool ScriptControl::executeScript()
         return false;
     }
     return true;
+}
+
+///
+/// \brief operator <<
+/// \param out
+/// \param frm
+/// \return
+///
+QSettings& operator <<(QSettings& out, const ScriptControl* ctrl)
+{
+    out.setValue("Script", ctrl->script().toUtf8().toBase64());
+    return out;
+}
+
+///
+/// \brief operator >>
+/// \param in
+/// \param ctrl
+/// \return
+///
+QSettings& operator >>(QSettings& in, ScriptControl* ctrl)
+{
+    const auto script = QByteArray::fromBase64(in.value("Script").toString().toUtf8());
+    ctrl->setScript(script);
+    return in;
 }

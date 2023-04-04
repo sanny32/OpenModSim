@@ -1,7 +1,6 @@
 #ifndef SCRIPT_H
 #define SCRIPT_H
 
-#include <QSet>
 #include <QObject>
 #include <QJSValue>
 
