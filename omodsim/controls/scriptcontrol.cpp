@@ -294,7 +294,9 @@ bool ScriptControl::executeScript()
 ///
 QSettings& operator <<(QSettings& out, const ScriptControl* ctrl)
 {
-    out.setValue("Script", ctrl->script().toUtf8().toBase64());
+    out.setValue("ScriptControl/Script", ctrl->script().toUtf8().toBase64());
+    out.setValue("ScriptControl/VSplitter", ctrl->ui->verticalSplitter->saveState());
+    out.setValue("ScriptControl/HSplitter", ctrl->ui->horizontalSplitter->saveState());
     return out;
 }
 
@@ -306,7 +308,13 @@ QSettings& operator <<(QSettings& out, const ScriptControl* ctrl)
 ///
 QSettings& operator >>(QSettings& in, ScriptControl* ctrl)
 {
-    const auto script = QByteArray::fromBase64(in.value("Script").toString().toUtf8());
+    const auto script = QByteArray::fromBase64(in.value("ScriptControl/Script").toString().toUtf8());
     ctrl->setScript(script);
+
+    const auto vstate = in.value("ScriptControl/VSplitter").toByteArray();
+    ctrl->ui->verticalSplitter->restoreState(vstate);
+
+    const auto hstate = in.value("ScriptControl/HSplitter").toByteArray();
+    ctrl->ui->horizontalSplitter->restoreState(hstate);
     return in;
 }
