@@ -168,8 +168,12 @@ DISTFILES += \
     docs/jshelp.qhp
 
 # Genreate docs files
-INPUT = $$quote($$PWD/docs/jshelp.qhcp)
-helpgenerator.commands = $$quote($$[QT_INSTALL_BINS]/qhelpgenerator) $$INPUT
+INPUT = $$PWD/docs/jshelp.qhcp
+HELPGENERATOR = $$[QT_INSTALL_BINS]/qhelpgenerator
+greaterThan(QT_MAJOR_VERSION, 5) {
+unix:HELPGENERATOR = $$[QT_INSTALL_LIBEXECS]/qhelpgenerator
+}
+helpgenerator.commands = $$quote($$HELPGENERATOR) $$quote($$INPUT)
 QMAKE_EXTRA_TARGETS += helpgenerator
 PRE_TARGETDEPS += helpgenerator
 
