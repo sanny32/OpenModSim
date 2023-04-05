@@ -1,8 +1,9 @@
 h1.title {
     /* top | right | bottom | left */
-    margin: 1.5em 0 .5em .25em;
+    margin: 1.5em 0 .5em .5em;
     padding: .25em;
     font-weight: 600;
+    flex: 1;
 }
 h2, p.h2 {
     padding: .2em;
@@ -15,7 +16,7 @@ h3 {
 p {
     margin: 1em 0 1em .5em;
 }
-p > strong{
+strong{
     font-weight: 800;
 }
 sub {
@@ -26,6 +27,10 @@ a:link {
     color: #007330;
     text-decoration: none;
     text-align: left;
+}
+a > strong{
+    font-weight: 800;
+    font-size: large;
 }
 ul li, ol li {
     margin-bottom: 0.5em;
@@ -40,10 +45,7 @@ li {
 li.object{
     list-style: none;
 }
-strong > a{
-    font-weight: 800;
-    font-size: large;
-}
+
 ul.level2 {
     margin-bottom: 1em;
 }

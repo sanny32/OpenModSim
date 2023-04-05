@@ -102,9 +102,8 @@
   </customwidget>
   <customwidget>
    <class>HelpWidget</class>
-   <extends>QStackedWidget</extends>
+   <extends>QTextBrowser</extends>
    <header>helpwidget.h</header>
-   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources/>
