@@ -10,7 +10,7 @@
 
 <body>
 	<h1 class="title">JavaScript Doc</h1>
-	<p>This is Open ModSim JavaScript documentation.</p>
+	<p>Built-in objects</p>
 	<ul>
 		<li><a href="#console">console</a>
 			<ul class="level2">
@@ -24,7 +24,53 @@
 		<li><a href="#date">Date</a>
 			<ul class="level2">
 				<li><a href="#date.constructor">Constructor</a></li>
-				<li><a href="#date.prototype">Date.prototype</a></li>
+				<li><a href="#date.instance_methods">Date.prototype</a>
+					<ul class="level3">
+						<li><a href="#date.prototype.getdate">Date.prototype.getDate</a></li>
+						<li><a href="#date.prototype.getday">Date.prototype.getDay</a></li>
+						<li><a href="#date.prototype.getfullyear">Date.prototype.getFullYear</a></li>
+						<li><a href="#date.prototype.gethours">Date.prototype.getHours</a></li>
+						<li><a href="#date.prototype.getmilliseconds">Date.prototype.getMilliseconds</a></li>
+						<li><a href="#date.prototype.getminutes">Date.prototype.getMinutes</a></li>
+						<li><a href="#date.prototype.getmonth">Date.prototype.getMonth</a></li>
+						<li><a href="#date.prototype.getseconds">Date.prototype.getSeconds</a></li>
+						<li><a href="#date.prototype.gettime">Date.prototype.getTime</a></li>
+						<li><a href="#date.prototype.gettimezoneoffset">Date.prototype.getTimezoneOffset</a></li>
+						<li><a href="#date.prototype.getutcdate">Date.prototype.getUTCDate</a></li>
+						<li><a href="#date.prototype.getutcday">Date.prototype.getUTCDay</a></li>
+						<li><a href="#date.prototype.getutcfullyear">Date.prototype.getUTCFullYear</a></li>
+						<li><a href="#date.prototype.getutchours">Date.prototype.getUTCHours</a></li>
+						<li><a href="#date.prototype.getutcmilliseconds">Date.prototype.getUTCMilliseconds</a></li>
+						<li><a href="#date.prototype.getutcminutes">Date.prototype.getUTCMinutes</a></li>
+						<li><a href="#date.prototype.getutcmonth">Date.prototype.getUTCMonth</a></li>
+						<li><a href="#date.prototype.getutcseconds">Date.prototype.getUTCSeconds</a></li>
+						<li><a href="#date.prototype.setdate">Date.prototype.setDate</a></li>
+						<li><a href="#date.prototype.setfullyear">Date.prototype.setFullYear</a></li>
+						<li><a href="#date.prototype.sethours">Date.prototype.setHours</a></li>
+						<li><a href="#date.prototype.setmilliseconds">Date.prototype.setMilliseconds</a></li>
+						<li><a href="#date.prototype.setminutes">Date.prototype.setMinutes</a></li>
+						<li><a href="#date.prototype.setmonth">Date.prototype.setMonth</a></li>
+						<li><a href="#date.prototype.setseconds">Date.prototype.setSeconds</a></li>
+						<li><a href="#date.prototype.settime">Date.prototype.setTime</a></li>
+						<li><a href="#date.prototype.setutcdate">Date.prototype.setUTCDate</a></li>
+						<li><a href="#date.prototype.setutcfullyear">Date.prototype.setUTCFullYear</a></li>
+						<li><a href="#date.prototype.setutchours">Date.prototype.setUTCHours</a></li>
+						<li><a href="#date.prototype.setutcmilliseconds">Date.prototype.setUTCMilliseconds</a></li>
+						<li><a href="#date.prototype.setutcminutes">Date.prototype.setUTCMinutes</a></li>
+						<li><a href="#date.prototype.setutcmonth">Date.prototype.setUTCMonth</a></li>
+						<li><a href="#date.prototype.setutcseconds">Date.prototype.setUTCSeconds</a></li>
+						<li><a href="#date.prototype.todatestring">Date.prototype.toDateString</a></li>
+						<li><a href="#date.prototype.toisostring">Date.prototype.toISOString</a></li>
+						<li><a href="#date.prototype.tojson">Date.prototype.toJSON</a></li>
+						<li><a href="#date.prototype.tolocaledatestring">Date.prototype.toLocaleDateString</a></li>
+						<li><a href="#date.prototype.tolocalestring">Date.prototype.toLocaleString</a></li>
+						<li><a href="#date.prototype.tolocaletimestring">Date.prototype.toLocaleTimeString</a></li>
+						<li><a href="#date.prototype.tostring">Date.prototype.toString</a></li>
+						<li><a href="#date.prototype.totimestring">Date.prototype.toTimeString</a></li>
+						<li><a href="#date.prototype.toutcstring">Date.prototype.toUTCString</a></li>
+						<li><a href="#date.prototype.valueof">Date.prototype.valueOf</a></li>
+					</ul>
+				</li>
 				<li><a href="#date.now">Date.now</a></li>
 				<li><a href="#date.parse">Date.parse</a></li>
 				<li><a href="#date.utc">Date.UTC</a></li>
@@ -174,6 +220,180 @@
     		<p>Accepts the same parameters as the longest form of the constructor (i.e. 2 to 7) and returns the number of milliseconds since January 1, 1970, 00:00:00 UTC, with leap seconds ignored.</p>
   			</dd>
 		</dl></div></section>
+		<section aria-labelledby="instance_methods"><h2 id="date.instance_methods">Instance methods</h2><div class="section-content"><dl>
+			<dt id="date.prototype.getdate"><code>Date.prototype.getDate()</a></dt>
+			<dd>
+			  <p>Returns the day of the month (<code>1</code> – <code>31</code>) for the specified date according to local time.</p>
+			</dd>
+			<dt id="date.prototype.getday"><code>Date.prototype.getDay()</code></dt>
+			<dd>
+			  <p>Returns the day of the week (<code>0</code> – <code>6</code>) for the specified date according to local time.</p>
+			</dd>
+			<dt id="date.prototype.getfullyear"><code>Date.prototype.getFullYear()</code></dt>
+			<dd>
+			  <p>Returns the year (4 digits for 4-digit years) of the specified date according to local time.</p>
+			</dd>
+			<dt id="date.prototype.gethours"><code>Date.prototype.getHours()</code></dt>
+			<dd>
+			  <p>Returns the hour (<code>0</code> – <code>23</code>) in the specified date according to local time.</p>
+			</dd>
+			<dt id="date.prototype.getmilliseconds"><code>Date.prototype.getMilliseconds()</code></dt>
+			<dd>
+			  <p>Returns the milliseconds (<code>0</code> – <code>999</code>) in the specified date according to local time.</p>
+			</dd>
+			<dt id="date.prototype.getminutes"><code>Date.prototype.getMinutes()</code></dt>
+			<dd>
+			  <p>Returns the minutes (<code>0</code> – <code>59</code>) in the specified date according to local time.</p>
+			</dd>
+			<dt id="date.prototype.getmonth"><code>Date.prototype.getMonth()</code></dt>
+			<dd>
+			  <p>Returns the month (<code>0</code> – <code>11</code>) in the specified date according to local time.</p>
+			</dd>
+			<dt id="date.prototype.getseconds"><code>Date.prototype.getSeconds()</code></dt>
+			<dd>
+			  <p>Returns the seconds (<code>0</code> – <code>59</code>) in the specified date according to local time.</p>
+			</dd>
+			<dt id="date.prototype.gettime"><code>Date.prototype.getTime()</code></dt>
+			<dd>
+			  <p>Returns the numeric value of the specified date as the number of milliseconds since January 1, 1970, 00:00:00 UTC. (Negative values are returned for prior times.)</p>
+			</dd>
+			<dt id="date.prototype.gettimezoneoffset"><code>Date.prototype.getTimezoneOffset()</code></dt>
+			<dd>
+			  <p>Returns the time-zone offset in minutes for the current locale.</p>
+			</dd>
+			<dt id="date.prototype.getutcdate"><code>Date.prototype.getUTCDate()</code></dt>
+			<dd>
+			  <p>Returns the day (date) of the month (<code>1</code> – <code>31</code>) in the specified date according to universal time.</p>
+			</dd>
+			<dt id="date.prototype.getutcday"><code>Date.prototype.getUTCDay()</code></dt>
+			<dd>
+			  <p>Returns the day of the week (<code>0</code> – <code>6</code>) in the specified date according to universal time.</p>
+			</dd>
+			<dt id="date.prototype.getutcfullyear"><code>Date.prototype.getUTCFullYear()</code></dt>
+			<dd>
+			  <p>Returns the year (4 digits for 4-digit years) in the specified date according to universal time.</p>
+			</dd>
+			<dt id="date.prototype.getutchours"><code>Date.prototype.getUTCHours()</code></dt>
+			<dd>
+			  <p>Returns the hours (<code>0</code> – <code>23</code>) in the specified date according to universal time.</p>
+			</dd>
+			<dt id="date.prototype.getutcmilliseconds"><code>Date.prototype.getUTCMilliseconds()</code></dt>
+			<dd>
+			  <p>Returns the milliseconds (<code>0</code> – <code>999</code>) in the specified date according to universal time.</p>
+			</dd>
+			<dt id="date.prototype.getutcminutes"><code>Date.prototype.getUTCMinutes()</code></dt>
+			<dd>
+			  <p>Returns the minutes (<code>0</code> – <code>59</code>) in the specified date according to universal time.</p>
+			</dd>
+			<dt id="date.prototype.getutcmonth"><code>Date.prototype.getUTCMonth()</code></dt>
+			<dd>
+			  <p>Returns the month (<code>0</code> – <code>11</code>) in the specified date according to universal time.</p>
+			</dd>
+			<dt id="date.prototype.getutcseconds"><code>Date.prototype.getUTCSeconds()</code></dt>
+			<dd>
+			  <p>Returns the seconds (<code>0</code> – <code>59</code>) in the specified date according to universal time.</p>
+			</dd>
+			<dt id="date.prototype.setdate"><code>Date.prototype.setDate()</code></dt>
+			<dd>
+			  <p>Sets the day of the month for a specified date according to local time.</p>
+			</dd>
+			<dt id="date.prototype.setfullyear"><code>Date.prototype.setFullYear()</code></dt>
+			<dd>
+			  <p>Sets the full year (e.g. 4 digits for 4-digit years) for a specified date according to local time.</p>
+			</dd>
+			<dt id="date.prototype.sethours"><code>Date.prototype.setHours()</code></dt>
+			<dd>
+			  <p>Sets the hours for a specified date according to local time.</p>
+			</dd>
+			<dt id="date.prototype.setmilliseconds"><code>Date.prototype.setMilliseconds()</code></dt>
+			<dd>
+			  <p>Sets the milliseconds for a specified date according to local time.</p>
+			</dd>
+			<dt id="date.prototype.setminutes"><code>Date.prototype.setMinutes()</code></dt>
+			<dd>
+			  <p>Sets the minutes for a specified date according to local time.</p>
+			</dd>
+			<dt id="date.prototype.setmonth"><code>Date.prototype.setMonth()</code></dt>
+			<dd>
+			  <p>Sets the month for a specified date according to local time.</p>
+			</dd>
+			<dt id="date.prototype.setseconds"><code>Date.prototype.setSeconds()</code></dt>
+			<dd>
+			  <p>Sets the seconds for a specified date according to local time.</p>
+			</dd>
+			<dt id="date.prototype.settime"><code>Date.prototype.setTime()</code></dt>
+			<dd>
+			  <p>Sets the <code>Date</code> object to the time represented by a number of milliseconds since January 1, 1970, 00:00:00 UTC. Use negative numbers for times prior.</p>
+			</dd>
+			<dt id="date.prototype.setutcdate"><code>Date.prototype.setUTCDate()</code></dt>
+			<dd>
+			  <p>Sets the day of the month for a specified date according to universal time.</p>
+			</dd>
+			<dt id="date.prototype.setutcfullyear"><code>Date.prototype.setUTCFullYear()</code></dt>
+			<dd>
+			  <p>Sets the full year (e.g. 4 digits for 4-digit years) for a specified date according to universal time.</p>
+			</dd>
+			<dt id="date.prototype.setutchours"><code>Date.prototype.setUTCHours()</code></dt>
+			<dd>
+			  <p>Sets the hour for a specified date according to universal time.</p>
+			</dd>
+			<dt id="date.prototype.setutcmilliseconds"><code>Date.prototype.setUTCMilliseconds()</code></dt>
+			<dd>
+			  <p>Sets the milliseconds for a specified date according to universal time.</p>
+			</dd>
+			<dt id="date.prototype.setutcminutes"><code>Date.prototype.setUTCMinutes()</code></dt>
+			<dd>
+			  <p>Sets the minutes for a specified date according to universal time.</p>
+			</dd>
+			<dt id="date.prototype.setutcmonth"><code>Date.prototype.setUTCMonth()</code></dt>
+			<dd>
+			  <p>Sets the month for a specified date according to universal time.</p>
+			</dd>
+			<dt id="date.prototype.setutcseconds"><code>Date.prototype.setUTCSeconds()</code></dt>
+			<dd>
+			  <p>Sets the seconds for a specified date according to universal time.</p>
+			</dd>
+			<dt id="date.prototype.todatestring"><code>Date.prototype.toDateString()</code></dt>
+			<dd>
+			  <p>Returns the "date" portion of the <code>Date</code> as a human-readable string like <code>'Thu Apr 12 2018'</code>.</p>
+			</dd>
+			<dt id="date.prototype.toisostring"><code>Date.prototype.toISOString()</code></dt>
+			<dd>
+			  <p>Converts a date to a string following the ISO 8601 Extended Format.</p>
+			</dd>
+			<dt id="date.prototype.tojson"><code>Date.prototype.toJSON()</code></dt>
+			<dd>
+			  <p>Returns a string representing the <code>Date</code> using <code>toISOString()</code>.</p>
+			</dd>
+			<dt id="date.prototype.tolocaledatestring"><code>Date.prototype.toLocaleDateString()</code></dt>
+			<dd>
+			  <p>Returns a string with a locality sensitive representation of the date portion of this date based on system settings.</p>
+			</dd>
+			<dt id="date.prototype.tolocalestring"><code>Date.prototype.toLocaleString()</code></dt>
+			<dd>
+			  <p>Returns a string with a locality-sensitive representation of this date.</p>
+			</dd>
+			<dt id="date.prototype.tolocaletimestring"><code>Date.prototype.toLocaleTimeString()</code></dt>
+			<dd>
+			  <p>Returns a string with a locality-sensitive representation of the time portion of this date, based on system settings.</p>
+			</dd>
+			<dt id="date.prototype.tostring"><code>Date.prototype.toString()</code></dt>
+			<dd>
+			  <p>Returns a string representing the specified <code>Date</code> object.</p>
+			</dd>
+			<dt id="date.prototype.totimestring"><code>Date.prototype.toTimeString()</code></dt>
+			<dd>
+			  <p>Returns the "time" portion of the <code>Date</code> as a human-readable string.</p>
+			</dd>
+			<dt id="date.prototype.toutcstring"><code>Date.prototype.toUTCString()</code></dt>
+			<dd>
+			  <p>Converts a date to a string using the UTC timezone.</p>
+			</dd>
+			<dt id="date.prototype.valueof"><code>Date.prototype.valueOf()</code></dt>
+			<dd>
+			  <p>Returns the primitive value of a <code>Date</code> object.</p>
+			</dd>
+		  </dl></div></section>
 	  </article>
 	  <article class="article-content">
 		<div class="article-header">

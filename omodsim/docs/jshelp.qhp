@@ -6,7 +6,7 @@
         <toc/>
         <files>
             <file>assets/css/*.css</file>
-            <file>index.html</file>
+            <file>*.html</file>
         </files>
     </filterSection>
 </QtHelpProject>

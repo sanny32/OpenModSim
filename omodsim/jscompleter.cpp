@@ -43,7 +43,6 @@ QMap<QString, QVector<MethodMetaInfo>> _completerMap = {
     },
     { "Date",
       {
-          {"prototype", MethodMetaType::Property},
           {"now"}, {"parse"}, {"UTC"}
       }
     }
