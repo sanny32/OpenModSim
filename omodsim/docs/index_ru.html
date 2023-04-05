@@ -637,7 +637,7 @@
                     <p><strong>Примечание.</strong> Эта функция доступна только для регистров типа <code>Register.Input</code> и <code>Register.Holding</code>.</p>
                 </div>
 			</dd>
-			<dt id="server.readfloat"><code>Server.readFloat()</code></dt>
+			<dt id="server.readfloat"><code>Server.readFloat(Register, address, swapped)</code></dt>
 			<dd>
 				<p>Возвращает значение с плавающей запятой (float) из регистров типа <code>Register</code> с адресами от <code>address</code> до <code>address + 1</code>. Параметр <code>swapped</code> изменяет порядок регистров, когда функция преобразует набор регистров в значение с плавающей запятой (float).</p>
 				<div class="notecard note">
