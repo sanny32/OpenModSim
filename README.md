@@ -1,9 +1,10 @@
 # Open ModSim
 Open ModSim is a free implimentation of modbus slave (server) utility for modbus-tcp and modbus-rtu protocols.
 
-![image](https://user-images.githubusercontent.com/13627951/217724115-6281e1dc-9f62-4b83-a945-156ee190b8c6.png)
+![image](https://user-images.githubusercontent.com/13627951/230102997-d6578945-bac0-4ca4-9210-da80e4f8783c.png)
 
-![image](https://user-images.githubusercontent.com/13627951/217725531-81d2994c-d40c-474b-90bc-6f40695a6daa.png)
+![image](https://user-images.githubusercontent.com/13627951/230103505-f446cf6d-a925-4a51-bbde-8bb77d3da5b1.png)
+
 
 
 ## Features
@@ -37,6 +38,56 @@ Registers
     Random - simulate register randomly
     Increment - simulate register from Low Limit to High Limit with a given Step
     Decrement - simulate register from High Limit to Low Limit with a given Step
+    
+## Scripting
+  From version 1.2.0 Open ModSim supports scripting. Qt runtime implements the [ECMAScript Language Specification](http://www.ecma-international.org/publications/standards/Ecma-262.htm) standard, so Javascript is used to write code.
+  
+  ![image](https://user-images.githubusercontent.com/13627951/230098131-55b4ef69-e01f-459f-a6d4-11f755978bcb.png)
+  
+  Scripts can be launched in two modes: Once or Periodically. If you run script in Once mode the script will stop after it finishes executing. In Periodically mode, the script will start after a certain period of time until the user stops it or the method is called
+  ```javascript
+  Script.stop();
+  ```
+Here is an example of using the script in the Periodically mode
+```javascript
+/**************************************************************************/
+/*
+/* Example script that store value after 3 seconds
+/* © Alexandr Ananev, 2023
+/*
+***************************************************************************/
+
+function clear()
+{
+    /* Write to a Holding register at address 1 zero value */
+    Server.writeHolding(1, 0);
+}
+
+/* init function */
+function init()
+{
+    clear();
+    
+    /* Runs when Hodling register value at address 1 was changed */
+    Server.onChange(Register.Holding, 1, (value)=>
+    {
+        if(value === 1)
+        {
+            /* Runs after 3 seconds and increase Holding register value at address 10 
+             * Then stop script execution
+             */
+            Script.setTimeout(function()
+            {
+                Server.writeHolding(10, Server.readHolding(10) + 1);
+                Script.stop();
+            }, 3000);
+        }
+     });
+}
+
+/* Runs once when script started */
+Script.onInit(init);
+```
 
 ## Building
   Now building is available with Qt/qmake (version 5.15 and above) or Qt Creator. Supports both OS Microsoft Windows and Linux.
