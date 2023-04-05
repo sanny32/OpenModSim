@@ -165,10 +165,10 @@
 			<h1 id="console">console</h1>
 		</div>
 		<div class="section-content"><p>The <strong><code>console</code></strong> object provides access to debugging console.</p></div>
-		<section aria-labelledby="instance_methods"><h2 id="console.instance_methods">Instance methods</h2><div class="section-content"><dl>
+		<section aria-labelledby="static_methods"><h2 id="console.static_methods">Static methods</h2><div class="section-content"><dl>
 			<dt id="console.clear"><code>console.clear()</code></dt>
 			<dd>
-			  <p>Clear the console.</p>
+				<p>Clear the console.</p>
 			</dd>
 			<dt id="console.debug"><code>console.debug()</code></dt>
 			<dd>
@@ -184,7 +184,7 @@
 			</dd>
 			<dt id="console.warning"><code>console.warning()</code></dt>
 			<dd>
-			  <p>Outputs a warning message.</p>
+			  	<p>Outputs a warning message.</p>
 			</dd>
 		</dl></div></section>
 	</article>
@@ -196,86 +196,83 @@
 		<section aria-labelledby="constructor"><h2 id="date.constructor">Constructor</h2><div class="section-content"><dl>
 			<dt id="date"><code>Date()</code></a></dt>
 			<dd>
-			<p>When called as a function, returns a string representation of the current date and time. All arguments are ignored. The result is the same as executing <code>new Date().toString()</code>.</p>
+				<p>When called as a function, returns a string representation of the current date and time. All arguments are ignored. The result is the same as executing <code>new Date().toString()</code>.</p>
 			</dd>
 			<dt id="new_date"><code>new Date()</code></a></dt>
 			<dd>
-			<p>When called as a constructor, returns a new <code>Date</code> object.</p>
+				<p>When called as a constructor, returns a new <code>Date</code> object.</p>
 			</dd>
 		</dl></div></section>
 		<section aria-labelledby="static_methods"><h2 id="date.static_methods">Static methods</h2><div class="section-content"><dl></dl>
 			<dt id="date.now"><code>Date.now()</code></dt>
   			<dd>
-    		<p>Returns the numeric value corresponding to the current time — the number of milliseconds elapsed since January 1, 1970 00:00:00 UTC, with leap seconds ignored.</p>
+    			<p>Returns the numeric value corresponding to the current time — the number of milliseconds elapsed since January 1, 1970 00:00:00 UTC, with leap seconds ignored.</p>
   			</dd>
   			<dt id="date.parse"><code>Date.parse()</code></dt>
   			<dd>
-    		<p>Parses a string representation of a date and returns the number of milliseconds since 1 January, 1970, 00:00:00 UTC, with leap seconds ignored.</p>
-    		<div class="notecard note">
-      		<p><strong>Note:</strong> Parsing of strings with <code>Date.parse</code> is strongly discouraged due to browser differences and inconsistencies.</p>
-    		</div>
+    			<p>Parses a string representation of a date and returns the number of milliseconds since 1 January, 1970, 00:00:00 UTC, with leap seconds ignored.</p>
   			</dd>
   			<dt id="date.utc"><code>Date.UTC()</code></dt>
   			<dd>
-    		<p>Accepts the same parameters as the longest form of the constructor (i.e. 2 to 7) and returns the number of milliseconds since January 1, 1970, 00:00:00 UTC, with leap seconds ignored.</p>
+    			<p>Accepts the same parameters as the longest form of the constructor (i.e. 2 to 7) and returns the number of milliseconds since January 1, 1970, 00:00:00 UTC, with leap seconds ignored.</p>
   			</dd>
 		</dl></div></section>
 		<section aria-labelledby="instance_methods"><h2 id="date.instance_methods">Instance methods</h2><div class="section-content"><dl>
 			<dt id="date.prototype.getdate"><code>Date.prototype.getDate()</a></dt>
 			<dd>
-			  <p>Returns the day of the month (<code>1</code> – <code>31</code>) for the specified date according to local time.</p>
+			  	<p>Returns the day of the month (<code>1</code> – <code>31</code>) for the specified date according to local time.</p>
 			</dd>
 			<dt id="date.prototype.getday"><code>Date.prototype.getDay()</code></dt>
 			<dd>
-			  <p>Returns the day of the week (<code>0</code> – <code>6</code>) for the specified date according to local time.</p>
+			  	<p>Returns the day of the week (<code>0</code> – <code>6</code>) for the specified date according to local time.</p>
 			</dd>
 			<dt id="date.prototype.getfullyear"><code>Date.prototype.getFullYear()</code></dt>
 			<dd>
-			  <p>Returns the year (4 digits for 4-digit years) of the specified date according to local time.</p>
+			  	<p>Returns the year (4 digits for 4-digit years) of the specified date according to local time.</p>
 			</dd>
 			<dt id="date.prototype.gethours"><code>Date.prototype.getHours()</code></dt>
 			<dd>
-			  <p>Returns the hour (<code>0</code> – <code>23</code>) in the specified date according to local time.</p>
+			  	<p>Returns the hour (<code>0</code> – <code>23</code>) in the specified date according to local time.</p>
 			</dd>
 			<dt id="date.prototype.getmilliseconds"><code>Date.prototype.getMilliseconds()</code></dt>
 			<dd>
-			  <p>Returns the milliseconds (<code>0</code> – <code>999</code>) in the specified date according to local time.</p>
+			  	<p>Returns the milliseconds (<code>0</code> – <code>999</code>) in the specified date according to local time.</p>
 			</dd>
 			<dt id="date.prototype.getminutes"><code>Date.prototype.getMinutes()</code></dt>
 			<dd>
-			  <p>Returns the minutes (<code>0</code> – <code>59</code>) in the specified date according to local time.</p>
+			  	<p>Returns the minutes (<code>0</code> – <code>59</code>) in the specified date according to local time.</p>
 			</dd>
 			<dt id="date.prototype.getmonth"><code>Date.prototype.getMonth()</code></dt>
 			<dd>
-			  <p>Returns the month (<code>0</code> – <code>11</code>) in the specified date according to local time.</p>
+			  	<p>Returns the month (<code>0</code> – <code>11</code>) in the specified date according to local time.</p>
 			</dd>
 			<dt id="date.prototype.getseconds"><code>Date.prototype.getSeconds()</code></dt>
 			<dd>
-			  <p>Returns the seconds (<code>0</code> – <code>59</code>) in the specified date according to local time.</p>
+			  	<p>Returns the seconds (<code>0</code> – <code>59</code>) in the specified date according to local time.</p>
 			</dd>
 			<dt id="date.prototype.gettime"><code>Date.prototype.getTime()</code></dt>
 			<dd>
-			  <p>Returns the numeric value of the specified date as the number of milliseconds since January 1, 1970, 00:00:00 UTC. (Negative values are returned for prior times.)</p>
+			  	<p>Returns the numeric value of the specified date as the number of milliseconds since January 1, 1970, 00:00:00 UTC. (Negative values are returned for prior times.)</p>
 			</dd>
 			<dt id="date.prototype.gettimezoneoffset"><code>Date.prototype.getTimezoneOffset()</code></dt>
 			<dd>
-			  <p>Returns the time-zone offset in minutes for the current locale.</p>
+			  	<p>Returns the time-zone offset in minutes for the current locale.</p>
 			</dd>
 			<dt id="date.prototype.getutcdate"><code>Date.prototype.getUTCDate()</code></dt>
 			<dd>
-			  <p>Returns the day (date) of the month (<code>1</code> – <code>31</code>) in the specified date according to universal time.</p>
+			  	<p>Returns the day (date) of the month (<code>1</code> – <code>31</code>) in the specified date according to universal time.</p>
 			</dd>
 			<dt id="date.prototype.getutcday"><code>Date.prototype.getUTCDay()</code></dt>
 			<dd>
-			  <p>Returns the day of the week (<code>0</code> – <code>6</code>) in the specified date according to universal time.</p>
+			  	<p>Returns the day of the week (<code>0</code> – <code>6</code>) in the specified date according to universal time.</p>
 			</dd>
 			<dt id="date.prototype.getutcfullyear"><code>Date.prototype.getUTCFullYear()</code></dt>
 			<dd>
-			  <p>Returns the year (4 digits for 4-digit years) in the specified date according to universal time.</p>
+			  	<p>Returns the year (4 digits for 4-digit years) in the specified date according to universal time.</p>
 			</dd>
 			<dt id="date.prototype.getutchours"><code>Date.prototype.getUTCHours()</code></dt>
 			<dd>
-			  <p>Returns the hours (<code>0</code> – <code>23</code>) in the specified date according to universal time.</p>
+			  	<p>Returns the hours (<code>0</code> – <code>23</code>) in the specified date according to universal time.</p>
 			</dd>
 			<dt id="date.prototype.getutcmilliseconds"><code>Date.prototype.getUTCMilliseconds()</code></dt>
 			<dd>
@@ -283,115 +280,115 @@
 			</dd>
 			<dt id="date.prototype.getutcminutes"><code>Date.prototype.getUTCMinutes()</code></dt>
 			<dd>
-			  <p>Returns the minutes (<code>0</code> – <code>59</code>) in the specified date according to universal time.</p>
+			  	<p>Returns the minutes (<code>0</code> – <code>59</code>) in the specified date according to universal time.</p>
 			</dd>
 			<dt id="date.prototype.getutcmonth"><code>Date.prototype.getUTCMonth()</code></dt>
 			<dd>
-			  <p>Returns the month (<code>0</code> – <code>11</code>) in the specified date according to universal time.</p>
+			  	<p>Returns the month (<code>0</code> – <code>11</code>) in the specified date according to universal time.</p>
 			</dd>
 			<dt id="date.prototype.getutcseconds"><code>Date.prototype.getUTCSeconds()</code></dt>
 			<dd>
-			  <p>Returns the seconds (<code>0</code> – <code>59</code>) in the specified date according to universal time.</p>
+			  	<p>Returns the seconds (<code>0</code> – <code>59</code>) in the specified date according to universal time.</p>
 			</dd>
 			<dt id="date.prototype.setdate"><code>Date.prototype.setDate()</code></dt>
 			<dd>
-			  <p>Sets the day of the month for a specified date according to local time.</p>
+			  	<p>Sets the day of the month for a specified date according to local time.</p>
 			</dd>
 			<dt id="date.prototype.setfullyear"><code>Date.prototype.setFullYear()</code></dt>
 			<dd>
-			  <p>Sets the full year (e.g. 4 digits for 4-digit years) for a specified date according to local time.</p>
+			  	<p>Sets the full year (e.g. 4 digits for 4-digit years) for a specified date according to local time.</p>
 			</dd>
 			<dt id="date.prototype.sethours"><code>Date.prototype.setHours()</code></dt>
 			<dd>
-			  <p>Sets the hours for a specified date according to local time.</p>
+			  	<p>Sets the hours for a specified date according to local time.</p>
 			</dd>
 			<dt id="date.prototype.setmilliseconds"><code>Date.prototype.setMilliseconds()</code></dt>
 			<dd>
-			  <p>Sets the milliseconds for a specified date according to local time.</p>
+				<p>Sets the milliseconds for a specified date according to local time.</p>
 			</dd>
 			<dt id="date.prototype.setminutes"><code>Date.prototype.setMinutes()</code></dt>
 			<dd>
-			  <p>Sets the minutes for a specified date according to local time.</p>
+			  	<p>Sets the minutes for a specified date according to local time.</p>
 			</dd>
 			<dt id="date.prototype.setmonth"><code>Date.prototype.setMonth()</code></dt>
 			<dd>
-			  <p>Sets the month for a specified date according to local time.</p>
+			  	<p>Sets the month for a specified date according to local time.</p>
 			</dd>
 			<dt id="date.prototype.setseconds"><code>Date.prototype.setSeconds()</code></dt>
 			<dd>
-			  <p>Sets the seconds for a specified date according to local time.</p>
+			  	<p>Sets the seconds for a specified date according to local time.</p>
 			</dd>
 			<dt id="date.prototype.settime"><code>Date.prototype.setTime()</code></dt>
 			<dd>
-			  <p>Sets the <code>Date</code> object to the time represented by a number of milliseconds since January 1, 1970, 00:00:00 UTC. Use negative numbers for times prior.</p>
+			  	<p>Sets the <code>Date</code> object to the time represented by a number of milliseconds since January 1, 1970, 00:00:00 UTC. Use negative numbers for times prior.</p>
 			</dd>
 			<dt id="date.prototype.setutcdate"><code>Date.prototype.setUTCDate()</code></dt>
 			<dd>
-			  <p>Sets the day of the month for a specified date according to universal time.</p>
+			  	<p>Sets the day of the month for a specified date according to universal time.</p>
 			</dd>
 			<dt id="date.prototype.setutcfullyear"><code>Date.prototype.setUTCFullYear()</code></dt>
 			<dd>
-			  <p>Sets the full year (e.g. 4 digits for 4-digit years) for a specified date according to universal time.</p>
+			  	<p>Sets the full year (e.g. 4 digits for 4-digit years) for a specified date according to universal time.</p>
 			</dd>
 			<dt id="date.prototype.setutchours"><code>Date.prototype.setUTCHours()</code></dt>
 			<dd>
-			  <p>Sets the hour for a specified date according to universal time.</p>
+			  	<p>Sets the hour for a specified date according to universal time.</p>
 			</dd>
 			<dt id="date.prototype.setutcmilliseconds"><code>Date.prototype.setUTCMilliseconds()</code></dt>
 			<dd>
-			  <p>Sets the milliseconds for a specified date according to universal time.</p>
+			  	<p>Sets the milliseconds for a specified date according to universal time.</p>
 			</dd>
 			<dt id="date.prototype.setutcminutes"><code>Date.prototype.setUTCMinutes()</code></dt>
 			<dd>
-			  <p>Sets the minutes for a specified date according to universal time.</p>
+			  	<p>Sets the minutes for a specified date according to universal time.</p>
 			</dd>
 			<dt id="date.prototype.setutcmonth"><code>Date.prototype.setUTCMonth()</code></dt>
 			<dd>
-			  <p>Sets the month for a specified date according to universal time.</p>
+			  	<p>Sets the month for a specified date according to universal time.</p>
 			</dd>
 			<dt id="date.prototype.setutcseconds"><code>Date.prototype.setUTCSeconds()</code></dt>
 			<dd>
-			  <p>Sets the seconds for a specified date according to universal time.</p>
+			  	<p>Sets the seconds for a specified date according to universal time.</p>
 			</dd>
 			<dt id="date.prototype.todatestring"><code>Date.prototype.toDateString()</code></dt>
 			<dd>
-			  <p>Returns the "date" portion of the <code>Date</code> as a human-readable string like <code>'Thu Apr 12 2018'</code>.</p>
+			  	<p>Returns the "date" portion of the <code>Date</code> as a human-readable string like <code>'Thu Apr 12 2018'</code>.</p>
 			</dd>
 			<dt id="date.prototype.toisostring"><code>Date.prototype.toISOString()</code></dt>
 			<dd>
-			  <p>Converts a date to a string following the ISO 8601 Extended Format.</p>
+			  	<p>Converts a date to a string following the ISO 8601 Extended Format.</p>
 			</dd>
 			<dt id="date.prototype.tojson"><code>Date.prototype.toJSON()</code></dt>
 			<dd>
-			  <p>Returns a string representing the <code>Date</code> using <code>toISOString()</code>.</p>
+			  	<p>Returns a string representing the <code>Date</code> using <code>toISOString()</code>.</p>
 			</dd>
 			<dt id="date.prototype.tolocaledatestring"><code>Date.prototype.toLocaleDateString()</code></dt>
 			<dd>
-			  <p>Returns a string with a locality sensitive representation of the date portion of this date based on system settings.</p>
+			  	<p>Returns a string with a locality sensitive representation of the date portion of this date based on system settings.</p>
 			</dd>
 			<dt id="date.prototype.tolocalestring"><code>Date.prototype.toLocaleString()</code></dt>
 			<dd>
-			  <p>Returns a string with a locality-sensitive representation of this date.</p>
+			  	<p>Returns a string with a locality-sensitive representation of this date.</p>
 			</dd>
 			<dt id="date.prototype.tolocaletimestring"><code>Date.prototype.toLocaleTimeString()</code></dt>
 			<dd>
-			  <p>Returns a string with a locality-sensitive representation of the time portion of this date, based on system settings.</p>
+			  	<p>Returns a string with a locality-sensitive representation of the time portion of this date, based on system settings.</p>
 			</dd>
 			<dt id="date.prototype.tostring"><code>Date.prototype.toString()</code></dt>
 			<dd>
-			  <p>Returns a string representing the specified <code>Date</code> object.</p>
+			  	<p>Returns a string representing the specified <code>Date</code> object.</p>
 			</dd>
 			<dt id="date.prototype.totimestring"><code>Date.prototype.toTimeString()</code></dt>
 			<dd>
-			  <p>Returns the "time" portion of the <code>Date</code> as a human-readable string.</p>
+			  	<p>Returns the "time" portion of the <code>Date</code> as a human-readable string.</p>
 			</dd>
 			<dt id="date.prototype.toutcstring"><code>Date.prototype.toUTCString()</code></dt>
 			<dd>
-			  <p>Converts a date to a string using the UTC timezone.</p>
+			  	<p>Converts a date to a string using the UTC timezone.</p>
 			</dd>
 			<dt id="date.prototype.valueof"><code>Date.prototype.valueOf()</code></dt>
 			<dd>
-			  <p>Returns the primitive value of a <code>Date</code> object.</p>
+			  	<p>Returns the primitive value of a <code>Date</code> object.</p>
 			</dd>
 		  </dl></div></section>
 	  </article>
@@ -595,7 +592,7 @@
 		<section aria-labelledby="static_methods"><h2 id="script.static_methods">Static methods</h2><div class="section-content"><dl>
 			<dt id="script.oninit"><code>Script.onInit(functionRef)</code></dt>
 			<dd>
-				<p>Execute a function on first script run.</p>
+				<p>Executes a function on first script run.</p>
 			</dd>
 			<dt id="script.settimeout"><code>Script.setTimeout(functionRef, delay)</code></dt>
 			<dd>
@@ -603,7 +600,7 @@
 			</dd>
 			<dt id="script.stop"><code>Script.stop()</code></dt>
 			<dd>
-			  <p>Stop the script execution.</p>
+			  <p>Stops the script execution.</p>
 			</dd>
 		</dl></div></section>
 	</article>
@@ -615,7 +612,7 @@
 		<section aria-labelledby="static_methods"><h2 id="server.static_methods">Static methods</h2><div class="section-content"><dl>
 			<dt id="server.onchange"><code>Server.onChange(Register, address, functionRef)</code></dt>
 			<dd>
-				<p>Execute a <code>functionRef(value)</code> when a <code>Register</code> value at <code>address</code> was changed.</p>
+				<p>Executes a <code>functionRef(value)</code> when a <code>Register</code> value at <code>address</code> was changed.</p>
 			</dd>
 			<dt id="server.readcoil"><code>Server.readCoil(address)</code></dt>
 			<dd>
@@ -635,46 +632,46 @@
 			</dd>
 			<dt id="server.readdouble"><code>Server.readDouble(Register, address, swapped)</code></dt>
 			<dd>
-				<p>Returns a double value from <code>address</code> to <code>address + 3</code> registers. The <code>swapped</code> parameter change the registers order, when function convert set of registers to a double value.</p>
+				<p>Returns a double value from <code>address</code> to <code>address + 3</code> registers type <code>Register</code>. The <code>swapped</code> parameter change the registers order, when function convert set of registers to a double value.</p>
 				<div class="notecard note">
-					<p><strong>Note:</strong> This function is available only for Input and Holding registers.</p>
+					<p><strong>Note:</strong> This function is available only for <code>Register.Input</code> and <code>Register.Holding</code> registers.</p>
 				</div>
 			</dd>
 			<dt id="server.readfloat"><code>Server.readFloat()</code></dt>
 			<dd>
-				<p>Returns a float value from <code>address</code> to <code>address + 1</code> registers. The <code>swapped</code> parameter change the registers order, when function convert set of registers to a float value.</p>
+				<p>Returns a float value from <code>address</code> to <code>address + 1</code> registers type <code>Register</code>. The <code>swapped</code> parameter change the registers order, when function convert set of registers to a float value.</p>
 				<div class="notecard note">
-					<p><strong>Note:</strong> This function is available only for Input and Holding registers.</p>
+					<p><strong>Note:</strong> This function is available only for <code>Register.Input</code> and <code>Register.Holding</code> registers.</p>
 				</div>
 			</dd>
 			<dt id="server.writecoil"><code>Server.writeCoil(address, value)</code></dt>
 			<dd>
-				<p>Write a <code>value</code> to the Coil register at <code>address</code>.</p>
+				<p>Writes a <code>value</code> to the Coil register at <code>address</code>.</p>
 			</dd>
 			<dt id="server.writediscrete"><code>Server.writeDiscrete(address, value)</code></dt>
 			<dd>
-				<p>Write a <code>value</code> to the Discrete register at <code>address</code>.</p>
+				<p>Writes a <code>value</code> to the Discrete register at <code>address</code>.</p>
 			</dd>
 			<dt id="server.writeinput"><code>Server.writeInput(address, value)</code></dt>
 			<dd>
-				<p>Write a <code>value</code> to the Input register at <code>address</code>.</p>
+				<p>Writes a <code>value</code> to the Input register at <code>address</code>.</p>
 			</dd>
 			<dt id="server.writeholding"><code>Server.writeHolding(address, value)</code></dt>
 			<dd>
-				<p>Write a <code>value</code> to the Holding register at <code>address</code>.</p>
+				<p>Writes a <code>value</code> to the Holding register at <code>address</code>.</p>
 			</dd>
 			<dt id="server.writedouble"><code>Server.writeDouble(Register, address, value, swapped)</code></dt>
 			<dd>
-				<p>Write a double <code>value</code> to the <code>Register</code> addresses. The <code>swapped</code> parameter change the registers order, when function convert a double value to the set of registers.</p>
+				<p>Writes a double <code>value</code> to the <code>Register</code> addresses. The <code>swapped</code> parameter change the registers order, when function convert a double value to the set of registers.</p>
 				<div class="notecard note">
-					<p><strong>Note:</strong> This function is available only for Input and Holding registers.</p>
+					<p><strong>Note:</strong> This function is available only for <code>Register.Input</code> and <code>Register.Holding</code> registers.</p>
 				</div>
 			</dd>
 			<dt id="server.writefloat"><code>Server.writeFloat(Register, address, value, swapped)</code></dt>
 			<dd>
-				<p>Write a float <code>value</code> to the <code>Register</code> addresses. The <code>swapped</code> parameter change the registers order, when function convert a float value to the set of registers.</p>
+				<p>Writes a float <code>value</code> to the <code>Register</code> addresses. The <code>swapped</code> parameter change the registers order, when function convert a float value to the set of registers.</p>
 				<div class="notecard note">
-					<p><strong>Note:</strong> This function is available only for Input and Holding registers.</p>
+					<p><strong>Note:</strong> This function is available only for <code>Register.Input</code> and <code>Register.Holding</code> registers.</p>
 				</div>
 			</dd>
 		</dl></div></section>

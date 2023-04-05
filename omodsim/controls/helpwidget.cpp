@@ -1,4 +1,4 @@
-#include <QVBoxLayout>
+#include <QEvent>
 #include <QHelpContentWidget>
 #include "helpwidget.h"
 
@@ -17,6 +17,20 @@ HelpWidget::HelpWidget(QWidget *parent)
 ///
 HelpWidget::~HelpWidget()
 {
+}
+
+///
+/// \brief SearchLineEdit::changeEvent
+/// \param event
+///
+void HelpWidget::changeEvent(QEvent* event)
+{
+    if (event->type() == QEvent::LanguageChange)
+    {
+        setSource(QUrl(tr("qthelp://omodsim/doc/index.html")));
+    }
+
+    QTextBrowser::changeEvent(event);
 }
 
 ///
@@ -42,7 +56,7 @@ void HelpWidget::setHelp(const QString& helpFile)
     _helpEngine = QSharedPointer<QHelpEngine>(new QHelpEngine(helpFile, this));
     _helpEngine->setupData();
 
-    setSource(QUrl("qthelp://omodsim/doc/index.html"));
+    setSource(QUrl(tr("qthelp://omodsim/doc/index.html")));
 }
 
 ///
@@ -51,6 +65,6 @@ void HelpWidget::setHelp(const QString& helpFile)
 ///
 void HelpWidget::showHelp(const QString& helpKey)
 {
-    const auto url = QString("qthelp://omodsim/doc/index.html#%1").arg(helpKey.toLower());
+    const auto url = QString(tr("qthelp://omodsim/doc/index.html#%1")).arg(helpKey.toLower());
     setSource(QUrl(url));
 }

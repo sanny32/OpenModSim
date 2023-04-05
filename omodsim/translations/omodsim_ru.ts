@@ -799,6 +799,20 @@ Length: %2</source>
     </message>
 </context>
 <context>
+    <name>HelpWidget</name>
+    <message>
+        <location filename="../controls/helpwidget.cpp" line="30"/>
+        <location filename="../controls/helpwidget.cpp" line="59"/>
+        <source>qthelp://omodsim/doc/index.html</source>
+        <translation>qthelp://omodsim/doc/index_ru.html</translation>
+    </message>
+    <message>
+        <location filename="../controls/helpwidget.cpp" line="68"/>
+        <source>qthelp://omodsim/doc/index.html#%1</source>
+        <translation>qthelp://omodsim/doc/index_ru.html#%1</translation>
+    </message>
+</context>
+<context>
     <name>MainStatusBar</name>
     <message>
         <location filename="../controls/mainstatusbar.cpp" line="15"/>

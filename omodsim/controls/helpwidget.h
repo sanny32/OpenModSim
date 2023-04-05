@@ -20,6 +20,9 @@ public:
 
     void showHelp(const QString& helpKey);
 
+protected:
+    void changeEvent(QEvent* event) override;
+
 private:
     QSharedPointer<QHelpEngine> _helpEngine;
 };
