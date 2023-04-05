@@ -33,6 +33,13 @@ li {
     list-style: inside;
     text-align: left;
 }
+li.object{
+    list-style: none;
+}
+strong > a{
+    font-weight: 800;
+    font-size: large;
+}
 ul.level2 {
     margin-bottom: 1em;
 }
