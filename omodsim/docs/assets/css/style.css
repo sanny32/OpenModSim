@@ -18,6 +18,10 @@ p {
 p > strong{
     font-weight: 800;
 }
+sub {
+    vertical-align: sub;
+    font-size: smaller;
+}
 a:link {
     color: #007330;
     text-decoration: none;
