@@ -9,7 +9,7 @@
 ///
 struct ScriptSettings
 {
-    RunMode Mode = RunMode::Once;
+    RunMode Mode = RunMode::Periodically;
     uint Interval = 1000;
     bool UseAutoComplete = true;
 
