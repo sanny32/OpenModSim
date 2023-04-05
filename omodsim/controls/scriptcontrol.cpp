@@ -266,7 +266,7 @@ void ScriptControl::showHelp(const QString& helpKey)
     if(ui->verticalSplitter->sizes().at(1) == 0)
     {
         const int w = size().width();
-        ui->verticalSplitter->setSizes(QList<int>() << w * 4 / 5 << w / 5 + 25);
+        ui->verticalSplitter->setSizes(QList<int>() << w * 5 / 7 << w * 2 / 7);
     }
     ui->helpWidget->showHelp(helpKey);
 }
