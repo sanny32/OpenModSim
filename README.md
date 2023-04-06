@@ -53,7 +53,6 @@ Here is an example of using the script in the Periodically mode
 /**************************************************************************/
 /*
 /* Example script that store value after 3 seconds
-/* © Alexandr Ananev, 2023
 /*
 ***************************************************************************/
 
