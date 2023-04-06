@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QTranslator>
+#include <QWidgetAction>
 #include "formmodsim.h"
 #include "modbusmultiserver.h"
 #include "windowactionlist.h"
@@ -21,6 +22,15 @@ public:
     ~MainWindow();
 
     void setLanguage(const QString& lang);
+
+signals:
+    void undo();
+    void redo();
+    void cut();
+    void copy();
+    void paste();
+    void selectAll();
+    void search(const QString& text);
 
 protected:
     void changeEvent(QEvent* event) override;
@@ -42,6 +52,14 @@ private slots:
     void on_actionPrintSetup_triggered();
     void on_actionExit_triggered();
 
+    /* Edit menu slots */
+    void on_actionUndo_triggered();
+    void on_actionRedo_triggered();
+    void on_actionCut_triggered();
+    void on_actionCopy_triggered();
+    void on_actionPaste_triggered();
+    void on_actionSelectAll_triggered();
+
     /* Connection menu slots */
     void on_connectAction(ConnectionDetails& cd);
     void on_disconnectAction(ConnectionType type, const QString& port);
@@ -50,6 +68,7 @@ private slots:
     void on_actionDataDefinition_triggered();
     void on_actionShowData_triggered();
     void on_actionShowTraffic_triggered();
+    void on_actionShowScript_triggered();
     void on_actionBinary_triggered();
     void on_actionUnsignedDecimal_triggered();
     void on_actionInteger_triggered();
@@ -70,6 +89,8 @@ private slots:
     void on_actionToolbar_triggered();
     void on_actionStatusBar_triggered();
     void on_actionDisplayBar_triggered();
+    void on_actionScriptBar_triggered();
+    void on_actionEditBar_triggered();
     void on_actionBackground_triggered();
     void on_actionForeground_triggered();
     void on_actionStatus_triggered();
@@ -87,8 +108,15 @@ private slots:
     /* Help menu slots */
     void on_actionAbout_triggered();
 
+    /* Script menu slots */
+    void on_actionRunScript_triggered();
+    void on_actionStopScript_triggered();
+    void on_actionScriptSettings_triggered();
+
+    void on_runModeChanged(RunMode mode);
+    void on_searchText(const QString& text);
+
     void on_connectionError(const QString& error);
-    void on_dataSimulated(DataDisplayMode mode, QModbusDataUnit::RegisterType type, quint16 addr, QVariant value);
 
     void updateMenuWindow();
     void openFile(const QString& filename);
@@ -117,6 +145,8 @@ private:
 
 private:
     Ui::MainWindow *ui;
+    QWidgetAction* _actionRunMode;
+    QWidgetAction* _actionSearch;
 
     QString _lang;
     QTranslator _qtTranslator;

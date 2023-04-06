@@ -10,7 +10,8 @@
 enum class DisplayMode
 {
     Data = 0,
-    Traffic
+    Traffic,
+    Script
 };
 Q_DECLARE_METATYPE(DisplayMode);
 
@@ -144,5 +145,15 @@ enum class SimulationMode
     Toggle
 };
 Q_DECLARE_METATYPE(SimulationMode);
+
+///
+/// \brief The RunMode enum
+///
+enum class RunMode
+{
+    Once = 0,
+    Periodically
+};
+Q_DECLARE_METATYPE(RunMode)
 
 #endif // ENUMS_H

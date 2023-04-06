@@ -27,6 +27,12 @@ struct DisplayDefinition
 };
 Q_DECLARE_METATYPE(DisplayDefinition)
 
+///
+/// \brief operator <<
+/// \param out
+/// \param dd
+/// \return
+///
 inline QSettings& operator <<(QSettings& out, const DisplayDefinition& dd)
 {
     out.setValue("DisplayDefinition/UpdateRate",    dd.UpdateRate);
@@ -46,13 +52,47 @@ inline QSettings& operator <<(QSettings& out, const DisplayDefinition& dd)
 ///
 inline QSettings& operator >>(QSettings& in, DisplayDefinition& dd)
 {
-    dd.UpdateRate = in.value("DisplayDefinition/UpdateRate").toUInt();
-    dd.DeviceId = in.value("DisplayDefinition/DeviceId").toUInt();
-    dd.PointAddress = in.value("DisplayDefinition/PointAddress").toUInt();
-    dd.PointType = (QModbusDataUnit::RegisterType)in.value("DisplayDefinition/PointType").toUInt();
-    dd.Length = in.value("DisplayDefinition/Length").toUInt();
+    dd.UpdateRate = in.value("DisplayDefinition/UpdateRate", 1000).toUInt();
+    dd.DeviceId = in.value("DisplayDefinition/DeviceId", 1).toUInt();
+    dd.PointAddress = in.value("DisplayDefinition/PointAddress", 1).toUInt();
+    dd.PointType = (QModbusDataUnit::RegisterType)in.value("DisplayDefinition/PointType", 4).toUInt();
+    dd.Length = in.value("DisplayDefinition/Length", 100).toUInt();
 
     dd.normalize();
+    return in;
+}
+
+///
+/// \brief operator <<
+/// \param out
+/// \param dd
+/// \return
+///
+inline QDataStream& operator <<(QDataStream& out, const DisplayDefinition& dd)
+{
+    out << dd.UpdateRate;
+    out << dd.DeviceId;
+    out << dd.PointType;
+    out << dd.PointAddress;
+    out << dd.Length;
+
+    return out;
+}
+
+///
+/// \brief operator >>
+/// \param in
+/// \param dd
+/// \return
+///
+inline QDataStream& operator >>(QDataStream& in, DisplayDefinition& dd)
+{
+    in >> dd.UpdateRate;
+    in >> dd.DeviceId;
+    in >> dd.PointType;
+    in >> dd.PointAddress;
+    in >> dd.Length;
+
     return in;
 }
 

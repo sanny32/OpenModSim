@@ -1,10 +1,10 @@
-QT += core gui widgets network printsupport serialbus serialport
+QT += core gui widgets qml network printsupport serialbus serialport help
 
 CONFIG += c++17
 CONFIG -= debug_and_release
 CONFIG -= debug_and_release_target
 
-VERSION = 1.1.1
+VERSION = 1.2.0
 
 QMAKE_TARGET_PRODUCT = "Open ModSim"
 QMAKE_TARGET_DESCRIPTION = "An Open Source Modbus Slave (Server) Utility"
@@ -21,19 +21,26 @@ win32:RC_ICONS += res/omodsim.ico
 
 INCLUDEPATH += controls \
                dialogs \
+               jsobjects
 
 SOURCES += \
     controls/booleancombobox.cpp \
     controls/clickablelabel.cpp \
+    controls/consoleoutput.cpp \
     controls/customframe.cpp \
     controls/customlineedit.cpp \
     controls/flowcontroltypecombobox.cpp \
+    controls/helpwidget.cpp \
+    controls/jscodeeditor.cpp \
     controls/mainstatusbar.cpp \
     controls/numericcombobox.cpp \
     controls/numericlineedit.cpp \
     controls/outputwidget.cpp \
     controls/paritytypecombobox.cpp \
     controls/pointtypecombobox.cpp \
+    controls/runmodecombobox.cpp \
+    controls/scriptcontrol.cpp \
+    controls/searchlineedit.cpp \
     controls/simulationmodecombobox.cpp \
     datasimulator.cpp \
     dialogs/dialogautosimulation.cpp \
@@ -43,6 +50,7 @@ SOURCES += \
     dialogs/dialogforcemultiplecoils.cpp \
     dialogs/dialogforcemultipleregisters.cpp \
     dialogs/dialogprintsettings.cpp \
+    dialogs/dialogscriptsettings.cpp \
     dialogs/dialogselectserviceport.cpp \
     dialogs/dialogsetuppresetdata.cpp \
     dialogs/dialogsetupserialport.cpp \
@@ -50,7 +58,13 @@ SOURCES += \
     dialogs/dialogwritecoilregister.cpp \
     dialogs/dialogwriteholdingregister.cpp \
     dialogs/dialogwriteholdingregisterbits.cpp \
+    jscompleter.cpp \
+    jsobjects/console.cpp \
+    jsobjects/script.cpp \
+    jsobjects/server.cpp \
     formmodsim.cpp \
+    jshighlighter.cpp \
+    jsobjects/storage.cpp \
     main.cpp \
     mainwindow.cpp \
     menuconnect.cpp \
@@ -66,15 +80,21 @@ HEADERS += \
     connectiondetails.h \
     controls/booleancombobox.h \
     controls/clickablelabel.h \
+    controls/consoleoutput.h \
     controls/customframe.h \
     controls/customlineedit.h \
     controls/flowcontroltypecombobox.h \
+    controls/helpwidget.h \
+    controls/jscodeeditor.h \
     controls/mainstatusbar.h \
     controls/numericcombobox.h \
     controls/numericlineedit.h \
     controls/outputwidget.h \
     controls/paritytypecombobox.h \
     controls/pointtypecombobox.h \
+    controls/runmodecombobox.h \
+    controls/scriptcontrol.h \
+    controls/searchlineedit.h \
     controls/simulationmodecombobox.h \
     datasimulator.h \
     dialogs/dialogautosimulation.h \
@@ -84,6 +104,7 @@ HEADERS += \
     dialogs/dialogforcemultiplecoils.h \
     dialogs/dialogforcemultipleregisters.h \
     dialogs/dialogprintsettings.h \
+    dialogs/dialogscriptsettings.h \
     dialogs/dialogselectserviceport.h \
     dialogs/dialogsetuppresetdata.h \
     dialogs/dialogsetupserialport.h \
@@ -91,10 +112,16 @@ HEADERS += \
     dialogs/dialogwritecoilregister.h \
     dialogs/dialogwriteholdingregister.h \
     dialogs/dialogwriteholdingregisterbits.h \
+    jscompleter.h \
+    jsobjects/console.h \
+    jsobjects/script.h \
+    jsobjects/server.h \
     displaydefinition.h \
     enums.h \
     floatutils.h \
     formmodsim.h \
+    jshighlighter.h \
+    jsobjects/storage.h \
     mainwindow.h \
     menuconnect.h \
     modbusdataunitmap.h \
@@ -106,10 +133,12 @@ HEADERS += \
     qhexvalidator.h \
     qrange.h \
     recentfileactionlist.h \
+    scriptsettings.h \
     windowactionlist.h
 
 FORMS += \
     controls/outputwidget.ui \
+    controls/scriptcontrol.ui \
     dialogs/dialogautosimulation.ui \
     dialogs/dialogcoilsimulation.ui \
     dialogs/dialogabout.ui \
@@ -117,6 +146,7 @@ FORMS += \
     dialogs/dialogforcemultiplecoils.ui \
     dialogs/dialogforcemultipleregisters.ui \
     dialogs/dialogprintsettings.ui \
+    dialogs/dialogscriptsettings.ui \
     dialogs/dialogselectserviceport.ui \
     dialogs/dialogsetuppresetdata.ui \
     dialogs/dialogsetupserialport.ui \
@@ -134,4 +164,32 @@ TRANSLATIONS += \
     translations/omodsim_ru.ts
 
 DISTFILES += \
-    translations/omodsim_ru.qm
+    docs/jshelp.qhcp \
+    docs/jshelp.qhp
+
+# Genreate docs files
+INPUT = $$PWD/docs/jshelp.qhcp
+HELPGENERATOR = $$[QT_INSTALL_BINS]/qhelpgenerator
+greaterThan(QT_MAJOR_VERSION, 5) {
+unix:HELPGENERATOR = $$[QT_INSTALL_LIBEXECS]/qhelpgenerator
+}
+helpgenerator.commands = $$quote($$HELPGENERATOR) $$quote($$INPUT)
+QMAKE_EXTRA_TARGETS += helpgenerator
+PRE_TARGETDEPS += helpgenerator
+
+# Create outpus docs directory
+OUT_DOCS = $$OUT_PWD/docs
+win32:OUT_DOCS ~= s,/,\\,g
+create_dir.commands = $$sprintf($$QMAKE_MKDIR_CMD, $$quote($$OUT_DOCS))
+QMAKE_EXTRA_TARGETS += create_dir
+POST_TARGETDEPS += create_dir
+
+# Copy doc files
+DOC_FILES = $$PWD/docs/jshelp.qhc \
+            $$PWD/docs/jshelp.qch
+for(file, DOC_FILES) {
+    win32:file ~= s,/,\\,g
+    !isEmpty(QMAKE_POST_LINK) QMAKE_POST_LINK += &&
+    QMAKE_POST_LINK += $$QMAKE_MOVE $$quote($$file) $$quote($$OUT_DOCS)
+}
+

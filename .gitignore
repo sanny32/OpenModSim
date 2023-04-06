@@ -28,6 +28,8 @@ qrc_*.cpp
 ui_*.h
 *.qmlc
 *.jsc
+*.qch
+*.qhc
 Makefile*
 *build-*
 debug

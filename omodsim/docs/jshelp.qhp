@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<QtHelpProject version="1.0">
+    <namespace>omodsim</namespace>
+    <virtualFolder>doc</virtualFolder>
+    <filterSection>
+        <toc/>
+        <files>
+            <file>assets/css/*.css</file>
+            <file>*.html</file>
+        </files>
+    </filterSection>
+</QtHelpProject>

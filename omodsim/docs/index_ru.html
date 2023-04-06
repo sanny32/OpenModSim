@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html>
+	
+<head>
+	<title>Open ModSim JavaScript Документация</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<link rel="stylesheet" type="text/css" href="assets/css/reset.css">
+	<link rel="stylesheet" type="text/css" href="assets/css/style.css">
+</head>
+
+<body>
+	<h1 class="title">Справка по JavaScript</h1>
+	<p>Встроенные объекты</p>
+	<ul class="level1">
+		<li class="object"><a href="#console"><strong>console</strong></a>
+			<ul class="level2">
+				<li><a href="#console.clear">console.clear</a></li>
+				<li><a href="#console.log">console.log</a></li>
+				<li><a href="#console.debug">console.debug</a></li>
+				<li><a href="#console.warning">console.warning</a></li>
+				<li><a href="#console.error">console.error</a></li>
+			</ul>
+		</li>
+		<li class="object"><a href="#date"><strong>Date</strong></a>
+			<ul class="level2">
+				<li><a href="#date.constructor">Constructor</a></li>
+				<li><a href="#date.instance_methods">Date.prototype</a>
+					<ul class="level3">
+						<li><a href="#date.prototype.getdate">Date.prototype.getDate</a></li>
+						<li><a href="#date.prototype.getday">Date.prototype.getDay</a></li>
+						<li><a href="#date.prototype.getfullyear">Date.prototype.getFullYear</a></li>
+						<li><a href="#date.prototype.gethours">Date.prototype.getHours</a></li>
+						<li><a href="#date.prototype.getmilliseconds">Date.prototype.getMilliseconds</a></li>
+						<li><a href="#date.prototype.getminutes">Date.prototype.getMinutes</a></li>
+						<li><a href="#date.prototype.getmonth">Date.prototype.getMonth</a></li>
+						<li><a href="#date.prototype.getseconds">Date.prototype.getSeconds</a></li>
+						<li><a href="#date.prototype.gettime">Date.prototype.getTime</a></li>
+						<li><a href="#date.prototype.gettimezoneoffset">Date.prototype.getTimezoneOffset</a></li>
+						<li><a href="#date.prototype.getutcdate">Date.prototype.getUTCDate</a></li>
+						<li><a href="#date.prototype.getutcday">Date.prototype.getUTCDay</a></li>
+						<li><a href="#date.prototype.getutcfullyear">Date.prototype.getUTCFullYear</a></li>
+						<li><a href="#date.prototype.getutchours">Date.prototype.getUTCHours</a></li>
+						<li><a href="#date.prototype.getutcmilliseconds">Date.prototype.getUTCMilliseconds</a></li>
+						<li><a href="#date.prototype.getutcminutes">Date.prototype.getUTCMinutes</a></li>
+						<li><a href="#date.prototype.getutcmonth">Date.prototype.getUTCMonth</a></li>
+						<li><a href="#date.prototype.getutcseconds">Date.prototype.getUTCSeconds</a></li>
+						<li><a href="#date.prototype.setdate">Date.prototype.setDate</a></li>
+						<li><a href="#date.prototype.setfullyear">Date.prototype.setFullYear</a></li>
+						<li><a href="#date.prototype.sethours">Date.prototype.setHours</a></li>
+						<li><a href="#date.prototype.setmilliseconds">Date.prototype.setMilliseconds</a></li>
+						<li><a href="#date.prototype.setminutes">Date.prototype.setMinutes</a></li>
+						<li><a href="#date.prototype.setmonth">Date.prototype.setMonth</a></li>
+						<li><a href="#date.prototype.setseconds">Date.prototype.setSeconds</a></li>
+						<li><a href="#date.prototype.settime">Date.prototype.setTime</a></li>
+						<li><a href="#date.prototype.setutcdate">Date.prototype.setUTCDate</a></li>
+						<li><a href="#date.prototype.setutcfullyear">Date.prototype.setUTCFullYear</a></li>
+						<li><a href="#date.prototype.setutchours">Date.prototype.setUTCHours</a></li>
+						<li><a href="#date.prototype.setutcmilliseconds">Date.prototype.setUTCMilliseconds</a></li>
+						<li><a href="#date.prototype.setutcminutes">Date.prototype.setUTCMinutes</a></li>
+						<li><a href="#date.prototype.setutcmonth">Date.prototype.setUTCMonth</a></li>
+						<li><a href="#date.prototype.setutcseconds">Date.prototype.setUTCSeconds</a></li>
+						<li><a href="#date.prototype.todatestring">Date.prototype.toDateString</a></li>
+						<li><a href="#date.prototype.toisostring">Date.prototype.toISOString</a></li>
+						<li><a href="#date.prototype.tojson">Date.prototype.toJSON</a></li>
+						<li><a href="#date.prototype.tolocaledatestring">Date.prototype.toLocaleDateString</a></li>
+						<li><a href="#date.prototype.tolocalestring">Date.prototype.toLocaleString</a></li>
+						<li><a href="#date.prototype.tolocaletimestring">Date.prototype.toLocaleTimeString</a></li>
+						<li><a href="#date.prototype.tostring">Date.prototype.toString</a></li>
+						<li><a href="#date.prototype.totimestring">Date.prototype.toTimeString</a></li>
+						<li><a href="#date.prototype.toutcstring">Date.prototype.toUTCString</a></li>
+						<li><a href="#date.prototype.valueof">Date.prototype.valueOf</a></li>
+					</ul>
+				</li>
+				<li><a href="#date.now">Date.now</a></li>
+				<li><a href="#date.parse">Date.parse</a></li>
+				<li><a href="#date.utc">Date.UTC</a></li>
+			</ul>
+		</li>
+		<li class="object"><a href="#math"><strong>Math</strong></a>
+			<ul class="level2">
+				<li><a href="#math.e">Math.E</a></li>
+				<li><a href="#math.ln10">Math.LN10</a></li>
+				<li><a href="#math.ln2">Math.LN2</a></li>
+				<li><a href="#math.log10e">Math.LOG10E</a></li>
+				<li><a href="#math.log2e">Math.LOG2E</a></li>
+				<li><a href="#math.pi">Math.PI</a></li>
+				<li><a href="#math.sqrt1_2">Math.SQRT1_2</a></li>
+				<li><a href="#math.sqrt2">Math.SQRT2</a></li>
+				<li><a href="#math.abs">Math.abs</a></li>
+				<li><a href="#math.acos">Math.acos</a></li>
+				<li><a href="#math.acosh">Math.acosh</a></li>
+				<li><a href="#math.asin">Math.asin</a></li>
+				<li><a href="#math.asinh">Math.asinh</a></li>
+				<li><a href="#math.atan">Math.atan</a></li>
+				<li><a href="#math.atanh">Math.atanh</a></li>
+				<li><a href="#math.atan2">Math.atan2</a></li>
+				<li><a href="#math.cbrt">Math.cbrt</a></li>
+				<li><a href="#math.ceil">Math.ceil</a></li>
+				<li><a href="#math.clz32">Math.clz32</a></li>
+				<li><a href="#math.cos">Math.cos</a></li>
+				<li><a href="#math.cosh">Math.cosh</a></li>
+				<li><a href="#math.exp">Math.exp</a></li>
+				<li><a href="#math.expm1">Math.expm1</a></li>
+				<li><a href="#math.floor">Math.floor</a></li>
+				<li><a href="#math.fround">Math.fround</a></li>
+				<li><a href="#math.hypot">Math.hypot</a></li>
+				<li><a href="#math.imul">Math.imul</a></li>
+				<li><a href="#math.log">Math.log</a></li>
+				<li><a href="#math.log1p">Math.log1p</a></li>
+				<li><a href="#math.log10">Math.log10</a></li>
+				<li><a href="#math.log2">Math.log2</a></li>
+				<li><a href="#math.max">Math.max</a></li>
+				<li><a href="#math.min">Math.min</a></li>
+				<li><a href="#math.pow">Math.pow</a></li>
+				<li><a href="#math.random">Math.random</a></li>
+				<li><a href="#math.round">Math.round</a></li>
+				<li><a href="#math.sign">Math.sign</a></li>
+				<li><a href="#math.sin">Math.sin</a></li>
+				<li><a href="#math.sinh">Math.sinh</a></li>
+				<li><a href="#math.sqrt">Math.sqrt</a></li>
+				<li><a href="#math.tan">Math.tan</a></li>
+				<li><a href="#math.tanh">Math.tanh</a></li>
+				<li><a href="#math.trunc">Math.trunc</a></li>
+			</ul>
+		</li>
+		<li class="object"><a href="#script"><strong>Script</strong></a>
+			<ul class="level2">
+				<li><a href="#script.runcount">Script.runCount</a></li>
+				<li><a href="#script.period">Script.period</a></li>
+				<li><a href="#script.oninit">Script.onInit</a></li>
+				<li><a href="#script.settimeout">Script.setTimeout</a></li>
+				<li><a href="#script.stop">Script.stop</a></li>
+			</ul>
+		</li>
+		<li class="object"><a href="#server"><strong>Server</strong></a>
+			<ul class="level2">
+				<li><a href="#server.onchange">Server.onChange</a></li>
+				<li><a href="#server.readcoil">Server.readCoil</a></li>
+				<li><a href="#server.readdiscrete">Server.readDiscrete</a></li>
+				<li><a href="#server.readinput">Server.readInput</a></li>
+				<li><a href="#server.readholding">Server.readHolding</a></li>
+				<li><a href="#server.readdouble">Server.readDouble</a></li>
+				<li><a href="#server.readfloat">Server.readFloat</a></li>
+				<li><a href="#server.writecoil">Server.writeCoil</a></li>
+				<li><a href="#server.writediscrete">Server.writeDiscrete</a></li>
+				<li><a href="#server.writeinput">Server.writeInput</a></li>
+				<li><a href="#server.writeholding">Server.writeHolding</a></li>
+				<li><a href="#server.writedouble">Server.writeDouble</a></li>
+				<li><a href="#server.writefloat">Server.writeFloat</a></li>
+			</ul>
+		</li>
+		<li class="object"><a href="#storage"><strong>Storage</strong></a>
+			<ul class="level2">
+				<li><a href="#storage.length">Storage.length</a></li>
+				<li><a href="#storage.clear">Storage.clear</a></li>
+				<li><a href="#storage.key">Storage.key</a></li>
+				<li><a href="#storage.getitem">Storage.getItem</a></li>
+				<li><a href="#storage.setitem">Storage.setItem</a></li>
+				<li><a href="#storage.removeitem">Storage.removeItem</a></li>
+			</ul>
+		</li>
+	</ul>
+	<article class="article-content">
+		<div class="article-header">
+			<h1 id="console">console</h1>
+		</div>
+		<div class="section-content"><p>Объект <strong><code>console</code></strong> предоставляет доступ к консоли отладки.</p></div>
+		<section aria-labelledby="static_methods"><h2 id="console.static_methods">Статические методы</h2><div class="section-content"><dl>
+			<dt id="console.clear"><code>console.clear()</code></dt>
+			<dd>
+                <p>Очистить консоль.</p>
+			</dd>
+			<dt id="console.debug"><code>console.debug()</code></dt>
+			<dd>
+				<p>Выводит сообщение на консоль с уровнем журнала <code>debug</code>.</p>
+			</dd>
+			<dt id="console.error"><code>console.error()</code></dt>
+			<dd>
+				<p>Выводит сообщение об ошибке.</p>
+			</dd>
+			<dt id="console.log"><code>console.log()</code></dt>
+			<dd>
+				<p>Для общего вывода информации в журнал.</p>
+			</dd>
+			<dt id="console.warning"><code>console.warning()</code></dt>
+			<dd>
+                <p>Выводит предупреждающее сообщение.</p>
+			</dd>
+		</dl></div></section>
+	</article>
+	<article class="article-content">
+		<div class="article-header">
+			<h1 id="date">Date</h1>
+		</div>
+		<div class="section-content"><p>Дата JavaScript в основном определяется как количество миллисекунд, прошедших с эпохи ECMAScript, которая определяется как полночь в начале 1 января 1970 года по Гринвичу (эквивалентно эпохе UNIX).</p></div>
+		<section aria-labelledby="constructor"><h2 id="date.constructor">Конструктор</h2><div class="section-content"><dl>
+			<dt id="date"><code>Date()</code></a></dt>
+			<dd>
+                <p>При вызове в качестве функции возвращает строковое представление текущей даты и времени. Все аргументы игнорируются. Результат такой же, как при выполнении <code>new Date().toString()</code>.</p>
+			</dd>
+			<dt id="new_date"><code>new Date()</code></a></dt>
+			<dd>
+                <p>При вызове в качестве конструктора возвращает новый объект <code>Date</code>.</p>
+			</dd>
+		</dl></div></section>
+		<section aria-labelledby="static_methods"><h2 id="date.static_methods">Статические методы</h2><div class="section-content"><dl></dl>
+			<dt id="date.now"><code>Date.now()</code></dt>
+  			<dd>
+                <p>Возвращает числовое значение, соответствующее текущему времени — количество миллисекунд, прошедших с 00:00:00 UTC 1 января 1970 года, без учета дополнительных секунд.</p>
+  			</dd>
+  			<dt id="date.parse"><code>Date.parse()</code></dt>
+  			<dd>
+                <p>Анализирует строковое представление даты и возвращает количество миллисекунд с 1 января 1970 года, 00:00:00 UTC, при этом дополнительные секунды игнорируются.</p>
+  			</dd>
+  			<dt id="date.utc"><code>Date.UTC()</code></dt>
+  			<dd>
+                <p>Принимает те же параметры, что и самая длинная форма конструктора (т. е. от 2 до 7), и возвращает количество миллисекунд с 1 января 1970 года, 00:00:00 UTC, при этом дополнительные секунды игнорируются.</p>
+  			</dd>
+		</dl></div></section>
+		<section aria-labelledby="instance_methods"><h2 id="date.instance_methods">Методы экземпляра</h2><div class="section-content"><dl>
+			<dt id="date.prototype.getdate"><code>Date.prototype.getDate()</a></dt>
+			<dd>
+                <p>Возвращает день месяца (<code>1</code> – <code>31</code>) для указанной даты по местному времени.</p>
+			</dd>
+			<dt id="date.prototype.getday"><code>Date.prototype.getDay()</code></dt>
+			<dd>
+                <p>Возвращает день недели (<code>0</code> – <code>6</code>) для указанной даты по местному времени.</p>
+			</dd>
+			<dt id="date.prototype.getfullyear"><code>Date.prototype.getFullYear()</code></dt>
+			<dd>
+                <p>Возвращает год (4 цифры для 4-значного года) указанной даты по местному времени.</p>
+			</dd>
+			<dt id="date.prototype.gethours"><code>Date.prototype.getHours()</code></dt>
+			<dd>
+                <p>Возвращает час (<code>0</code> – <code>23</code>) указанной даты по местному времени.</p>
+			</dd>
+			<dt id="date.prototype.getmilliseconds"><code>Date.prototype.getMilliseconds()</code></dt>
+			<dd>
+                <p>Возвращает миллисекунды (<code>0</code> – <code>999</code>) указанной даты по местному времени.</p>
+			</dd>
+			<dt id="date.prototype.getminutes"><code>Date.prototype.getMinutes()</code></dt>
+			<dd>
+                <p>Возвращает минуты (<code>0</code> – <code>59</code>) указанной даты по местному времени.</p>
+			</dd>
+			<dt id="date.prototype.getmonth"><code>Date.prototype.getMonth()</code></dt>
+			<dd>
+                <p>Возвращает месяц (<code>0</code> – <code>11</code>) указанной даты по местному времени.</p>
+			</dd>
+			<dt id="date.prototype.getseconds"><code>Date.prototype.getSeconds()</code></dt>
+			<dd>
+                <p>Возвращает секунды (<code>0</code> – <code>59</code>) указанной даты по местному времени.</p>
+			</dd>
+			<dt id="date.prototype.gettime"><code>Date.prototype.getTime()</code></dt>
+			<dd>
+                <p>Возвращает числовое значение указанной даты в виде количества миллисекунд с 1 января 1970 года, 00:00:00 UTC. (Отрицательные значения возвращаются для предыдущего времени.)</p>
+			</dd>
+			<dt id="date.prototype.gettimezoneoffset"><code>Date.prototype.getTimezoneOffset()</code></dt>
+			<dd>
+                <p>Возвращает смещение часового пояса в минутах для текущей локали.</p>
+			</dd>
+			<dt id="date.prototype.getutcdate"><code>Date.prototype.getUTCDate()</code></dt>
+			<dd>
+                <p>Возвращает день (число) месяца (<code>1</code> – <code>31</code>) в указанную дату по всемирному времени.</p>
+			</dd>
+			<dt id="date.prototype.getutcday"><code>Date.prototype.getUTCDay()</code></dt>
+			<dd>
+                <p>Возвращает день недели (<code>0</code> – <code>6</code>) в указанную дату по всемирному времени.</p>
+			</dd>
+			<dt id="date.prototype.getutcfullyear"><code>Date.prototype.getUTCFullYear()</code></dt>
+			<dd>
+                <p>Возвращает год (4 цифры для 4-значного года) в указанную дату по всемирному времени.</p>
+			</dd>
+			<dt id="date.prototype.getutchours"><code>Date.prototype.getUTCHours()</code></dt>
+			<dd>
+                <p>Возвращает часы (<code>0</code> – <code>23</code>) указанной даты по всемирному времени.</p>
+			</dd>
+			<dt id="date.prototype.getutcmilliseconds"><code>Date.prototype.getUTCMilliseconds()</code></dt>
+			<dd>
+                <p>Возвращает миллисекунды (<code>0</code> – <code>999</code>) указанной даты по всемирному времени.</p>
+			</dd>
+			<dt id="date.prototype.getutcminutes"><code>Date.prototype.getUTCMinutes()</code></dt>
+			<dd>
+                <p>Возвращает минуты (<code>0</code> – <code>59</code>) указанной даты по всемирному времени.</p>
+			</dd>
+			<dt id="date.prototype.getutcmonth"><code>Date.prototype.getUTCMonth()</code></dt>
+			<dd>
+                <p>Возвращает месяц (<code>0</code> – <code>11</code>) указанной даты по всемирному времени.</p>
+			</dd>
+			<dt id="date.prototype.getutcseconds"><code>Date.prototype.getUTCSeconds()</code></dt>
+			<dd>
+                <p>Возвращает секунды (<code>0</code> – <code>59</code>) указанной даты по всемирному времени.</p>
+			</dd>
+			<dt id="date.prototype.setdate"><code>Date.prototype.setDate()</code></dt>
+			<dd>
+                <p>Устанавливает день месяца для указанной даты по местному времени.</p>
+			</dd>
+			<dt id="date.prototype.setfullyear"><code>Date.prototype.setFullYear()</code></dt>
+			<dd>
+                <p>Устанавливает полный год (например, 4 цифры для 4-значного года) для указанной даты по местному времени.</p>
+			</dd>
+			<dt id="date.prototype.sethours"><code>Date.prototype.setHours()</code></dt>
+			<dd>
+                <p>Устанавливает часы для указанной даты по местному времени.</p>
+			</dd>
+			<dt id="date.prototype.setmilliseconds"><code>Date.prototype.setMilliseconds()</code></dt>
+			<dd>
+                <p>Устанавливает миллисекунды для указанной даты по местному времени.</p>
+			</dd>
+			<dt id="date.prototype.setminutes"><code>Date.prototype.setMinutes()</code></dt>
+			<dd>
+			  <p>Sets the minutes for a specified date according to local time.</p>
+			</dd>
+			<dt id="date.prototype.setmonth"><code>Date.prototype.setMonth()</code></dt>
+			<dd>
+                <p>Устанавливает месяц для указанной даты по местному времени.</p>
+			</dd>
+			<dt id="date.prototype.setseconds"><code>Date.prototype.setSeconds()</code></dt>
+			<dd>
+                <p>Устанавливает секунды для указанной даты по местному времени.</p>
+			</dd>
+			<dt id="date.prototype.settime"><code>Date.prototype.setTime()</code></dt>
+			<dd>
+                <p>Задает для объекта <code>Date</code> время, представленное числом миллисекунд с 1 января 1970 года, 00:00:00 UTC. Используйте отрицательные числа для числа, предшествующего времени.</p>
+			</dd>
+			<dt id="date.prototype.setutcdate"><code>Date.prototype.setUTCDate()</code></dt>
+			<dd>
+                <p>Устанавливает день месяца для указанной даты по всемирному времени.</p>
+			</dd>
+			<dt id="date.prototype.setutcfullyear"><code>Date.prototype.setUTCFullYear()</code></dt>
+			<dd>
+                <p>Устанавливает полный год (например, 4 цифры для 4-значного года) для указанной даты по всемирному времени.</p>
+			</dd>
+			<dt id="date.prototype.setutchours"><code>Date.prototype.setUTCHours()</code></dt>
+			<dd>
+                <p>Устанавливает час для указанной даты по всемирному времени.</p>
+			</dd>
+			<dt id="date.prototype.setutcmilliseconds"><code>Date.prototype.setUTCMilliseconds()</code></dt>
+			<dd>
+                <p>Устанавливает миллисекунды для указанной даты по всемирному времени.</p>
+			</dd>
+			<dt id="date.prototype.setutcminutes"><code>Date.prototype.setUTCMinutes()</code></dt>
+			<dd>
+                <p>Устанавливает минуты для указанной даты по всемирному времени.</p>
+			</dd>
+			<dt id="date.prototype.setutcmonth"><code>Date.prototype.setUTCMonth()</code></dt>
+			<dd>
+                <p>Устанавливает месяц для указанной даты по всемирному времени.</p>
+			</dd>
+			<dt id="date.prototype.setutcseconds"><code>Date.prototype.setUTCSeconds()</code></dt>
+			<dd>
+                <p>Устанавливает секунды для указанной даты по всемирному времени.</p>
+			</dd>
+			<dt id="date.prototype.todatestring"><code>Date.prototype.toDateString()</code></dt>
+			<dd>
+                <p>Возвращает "дату" части <code>Date</code> в виде удобочитаемой строки, например <code>'Четверг, 12 апреля 2018 года'</code>.</p>
+			</dd>
+			<dt id="date.prototype.toisostring"><code>Date.prototype.toISOString()</code></dt>
+			<dd>
+                <p>Преобразует дату в строку, соответствующую расширенному формату ISO 8601.</p>
+			</dd>
+			<dt id="date.prototype.tojson"><code>Date.prototype.toJSON()</code></dt>
+			<dd>
+                <p>Возвращает строку, представляющую <code>Дату</code>, используя <code>toISOString()</code>.</p>
+			</dd>
+			<dt id="date.prototype.tolocaledatestring"><code>Date.prototype.toLocaleDateString()</code></dt>
+			<dd>
+                <p>Возвращает строку с представлением части этой даты с учетом местонахождения на основе системных настроек.</p>
+			</dd>
+			<dt id="date.prototype.tolocalestring"><code>Date.prototype.toLocaleString()</code></dt>
+			<dd>
+                <p>Возвращает строку с представлением этой даты с учетом местоположения.</p>
+			</dd>
+			<dt id="date.prototype.tolocaletimestring"><code>Date.prototype.toLocaleTimeString()</code></dt>
+			<dd>
+                <p>Возвращает строку с представлением временной части этой даты с учетом местоположения на основе системных настроек.</p>
+			</dd>
+			<dt id="date.prototype.tostring"><code>Date.prototype.toString()</code></dt>
+			<dd>
+			  <p>Returns a string representing the specified <code>Date</code> object.</p>
+			</dd>
+			<dt id="date.prototype.totimestring"><code>Date.prototype.toTimeString()</code></dt>
+			<dd>
+                <p>Возвращает строку, представляющую указанный объект <code>Date</code>.</p>
+			</dd>
+			<dt id="date.prototype.toutcstring"><code>Date.prototype.toUTCString()</code></dt>
+			<dd>
+                <p>Преобразует дату в строку, используя часовой пояс UTC.</p>
+			</dd>
+			<dt id="date.prototype.valueof"><code>Date.prototype.valueOf()</code></dt>
+			<dd>
+                <p>Возвращает примитивное значение объекта <code>Date</code>.</p>
+			</dd>
+		  </dl></div></section>
+	  </article>
+	  <article class="article-content">
+		<div class="article-header">
+			<h1 id="math">Math</h1>
+		</div>
+		<div class="section-content"><p><strong><code>Math</code></strong> – это встроенный объект со свойствами и методами для математических констант и функций. Это не функциональный объект.</p>
+            <p><code>Math</code> работает только с типом <code>Number</code>. Объект <code>Math</code> не работает с типом <code>BigInt</code>.</p></div><section aria-labeledby="description"><h2 id="math.description">Описание</h2><div class="section-content"><p>В отличие от многих других глобальных объектов, <code>Math</code> не является конструктором. Все свойства и методы <code>Math</code> являются статическими. Вы ссылаетесь на константу pi как <code>Math.PI</code> и вызываете функцию синуса как <code>Math.sin(x)</code>, где <code>x</code> — это значение метода. аргумент. Константы определяются с полной точностью действительных чисел в JavaScript.</p></div></section>
+        <section aria-labelledby="static_properties"><h2 id="math.static_properties">Статические свойства</h2><div class="section-content"><dl>
+		  <dt id="math.e"><code>Math.E</code></dt>
+		  <dd>
+			<p>Число Эйлера и основание натуральных логарифмов; примерно <code>2,718</code>.</p>
+		  </dd>
+		  <dt id="math.ln2"><code>Math.LN2</code></dt>
+		  <dd>
+			<p>Натуральный логарифм <code>2</code>; примерно <code>0,693</code>.</p>
+		  </dd>
+		  <dt id="math.ln10"><code>Math.LN10</code></dt>
+		  <dd>
+			<p>Натуральный логарифм <code>10</code>; примерно <code>2,303</code>.</p>
+		  </dd>
+		  <dt id="math.log2e"><code>Math.LOG2E</code></dt>
+		  <dd>
+			<p>Логарифм <code>E</code> по основанию 2; примерно <code>1,443</code>.</p>
+		  </dd>
+		  <dt id="math.log10e"><code>Math.LOG10E</code></dt>
+		  <dd>
+			<p>Логарифм <code>E</code> по основанию 10; примерно <code>0,434</code>.</p>
+		  </dd>
+		  <dt id="math.pi"><code>Math.PI</code></dt>
+		  <dd>
+			<p>Отношение длины окружности к ее диаметру; примерно <code>3,14159</code>.</p>
+		  </dd>
+		  <dt id="math.sqrt1_2"><code>Math.SQRT1_2</code></dt>
+		  <dd>
+			<p>Квадратный корень из ½; примерно <code>0,707</code>.</p>
+		  </dd>
+		  <dt id="math.sqrt2"><code>Math.SQRT2</code></dt>
+		  <dd>
+			<p>Квадратный корень из <code>2</code>; примерно <code>1,414</code>.</p>
+		  </dd>
+		</dl></div></section><section aria-labelledby="static_methods"><h2 id="math.static_methods">Статические методы</h2><div class="section-content"><dl>
+		  <dt id="math.abs"><code>Math.abs()</code></dt>
+		  <dd>
+			<p>Возвращает абсолютное значение <code>x</code>.</p>
+		  </dd>
+		  <dt id="math.acos"><code>Math.acos()</code></dt>
+		  <dd>
+			<p>Возвращает арккосинус <code>x</code>.</p>
+		  </dd>
+		  <dt id="math.acosh"><code>Math.acosh()</code></dt>
+		  <dd>
+			<p>Возвращает гиперболический арккосинус <code>x</code>.</p>
+		  </dd>
+		  <dt id="math.asin"><code>Math.asin()</code></dt>
+		  <dd>
+			<p>Возвращает арксинус <code>x</code>.</p>
+		  </dd>
+		  <dt id="math.asinh"><code>Math.asinh()</code></dt>
+		  <dd>
+			<p>Возвращает гиперболический арксинус числа.</p>
+		  </dd>
+		  <dt id="math.atan"><code>Math.atan()</code></dt>
+		  <dd>
+			<p>Возвращает арктангенс <code>x</code>.</p>
+		  </dd>
+		  <dt id="math.atanh"><code>Math.atanh()</code></dt>
+		  <dd>
+			<p>Возвращает гиперболический арктангенс <code>x</code>.</p>
+		  </dd>
+		  <dt id="math.atan2"><code>Math.atan2()</code></dt>
+		  <dd>
+			<p>Возвращает арктангенс частного своих аргументов.</p>
+		  </dd>
+		  <dt id="math.cbrt"><code>Math.cbrt()</code></dt>
+		  <dd>
+			<p>Возвращает кубический корень <code>x</code>.</p>
+		  </dd>
+		  <dt id="math.ceil"><code>Math.ceil()</code></dt>
+		  <dd>
+			<p>Возвращает наименьшее целое число, большее или равное <code>x</code>.</p>
+		  </dd>
+		  <dt id="math.clz32"><code>Math.clz32()</code></dt>
+		  <dd>
+			<p>Возвращает количество начальных нулевых битов 32-битного целого числа <code>x</code>.</p>
+		  </dd>
+		  <dt id="math.cos"><code>Math.cos()</code></dt>
+		  <dd>
+			<p>Возвращает косинус <code>x</code>.</p>
+		  </dd>
+		  <dt id="math.cosh"><code>Math.cosh()</code></dt>
+		  <dd>
+			<p>Возвращает гиперболический косинус <code>x</code>.</p>
+		  </dd>
+		  <dt id="math.exp"><code>Math.exp()</code></dt>
+		  <dd>
+			<p>Возвращает e<sup>x</sup>, где x — аргумент, а e — число Эйлера (<code>2,718</code>…, основание натурального логарифма).</p>
+		  </dd>
+		  <dt id="math.expm1"><code>Math.expm1()</code></dt>
+		  <dd>
+			<p>Возвращает вычитание <code>1</code> из <code>exp(x)</code>.</p>
+		  </dd>
+		  <dt id="math.floor"><code>Math.floor()</code></dt>
+		  <dd>
+			<p>Возвращает наибольшее целое число, меньшее или равное <code>x</code>.</p>
+		  </dd>
+		  <dt id="math.fround"><code>Math.fround()</code></dt>
+		  <dd>
+			<p>Возвращает ближайшее представление <code>x</code> с плавающей запятой одинарной точности.</p>
+		  </dd>
+		  <dt id="math.hypot"><code>Math.hypot()</code></dt>
+		  <dd>
+			<p>Возвращает квадратный корень из суммы квадратов своих аргументов.</p>
+		  </dd>
+		  <dt id="math.imul"><code>Math.imul()</code></dt>
+		  <dd>
+			<p>Возвращает результат 32-битного целочисленного умножения <code>x</code> и <code>y</code>.</p>
+		  </dd>
+		  <dt id="math.log"><code>Math.log()</code></dt>
+		  <dd>
+			<p>Возвращает натуральный логарифм (log<sub>e</sub>; также ln) числа <code>x</code>.</p>
+		  </dd>
+		  <dt id="math.log1p"><code>Math.log1p()</code></dt>
+		  <dd>
+			<p>Возвращает натуральный логарифм (log<sub>e</sub>; также ln) <code>1 + x</code> для числа <code>x</code>.</p>
+		  </dd>
+		  <dt id="math.log10"><code>Math.log10()</code></dt>
+		  <dd>
+			<p>Возвращает логарифм <code>x</code> по основанию 10.</p>
+		  </dd>
+		  <dt id="math.log2"><code>Math.log2()</code></dt>
+		  <dd>
+			<p>Возвращает логарифм <code>x</code> по основанию 2.</p>
+		  </dd>
+		  <dt id="math.max"><code>Math.max()</code></dt>
+		  <dd>
+			<p>Возвращает наибольшее из нуля или более чисел.</p>
+		  </dd>
+		  <dt id="math.min"><code>Math.min()</code></dt>
+		  <dd>
+			<p>Возвращает наименьшее из нуля или более чисел.</p>
+		  </dd>
+		  <dt id="math.pow"><code>Math.pow()</code></dt>
+		  <dd>
+			<p>Возвращает основание <code>x</code> в степень степени <code>y</code> (то есть <code>x</code><sup><code>y</code></ суп>).</p>
+		  </dd>
+		  <dt id="math.random"><code>Math.random()</code></dt>
+		  <dd>
+			<p>Возвращает псевдослучайное число между <code>0</code> и <code>1</code>.</p>
+		  </dd>
+		  <dt id="math.round"><code>Math.round()</code></dt>
+		  <dd>
+			<p>Возвращает значение числа <code>x</code>, округленное до ближайшего целого числа.</p>
+		  </dd>
+		  <dt id="math.sign"><code>Math.sign()</code></dt>
+		  <dd>
+			<p>Возвращает знак <code>x</code>, указывающий, является ли <code>x</code> положительным, отрицательным или нулевым.</p>
+		  </dd>
+		  <dt id="math.sin"><code>Math.sin()</code></dt>
+		  <dd>
+			<p>Возвращает синус <code>x</code>.</p>
+		  </dd>
+		  <dt id="math.sinh"><code>Math.sinh()</code></dt>
+		  <dd>
+			<p>Возвращает гиперболический синус <code>x</code>.</p>
+		  </dd>
+		  <dt id="math.sqrt"><code>Math.sqrt()</code></dt>
+		  <dd>
+			<p>Возвращает положительный квадратный корень из <code>x</code>.</p>
+		  </dd>
+		  <dt id="math.tan"><code>Math.tan()</code></dt>
+		  <dd>
+			<p>Возвращает тангенс <code>x</code>.</p>
+		  </dd>
+		  <dt id="math.tanh"><code>Math.tanh()</code></dt>
+		  <dd>
+			<p>Возвращает гиперболический тангенс <code>x</code>.</p>
+		  </dd>
+		  <dt id="math.trunc"><code>Math.trunc()</code></dt>
+		  <dd>
+			<p>Возвращает целую часть <code>x</code>, удаляя все дробные цифры.</p>
+		  </dd>
+		</dl></div></section>
+	</article>
+	<article class="article-content">
+		<div class="article-header">
+			<h1 id="script">Script</h1>
+		</div>
+		<div class="section-content"><p>Объект <strong><code>Script</code></strong> предоставляет доступ к функциям скрипта.</p></div>
+		<section aria-labelledby="static_properties"><h2 id="script.static_properties">Статические свойства</h2><div class="section-content"><dl>
+			<dt id="script.runcount"><code>Script.runCount</code></dt>
+			<dd>
+                <p>Возвращает количество выполнений скрипта в периодическом режиме.</p>
+			</dd>
+			<dt id="script.period"><code>Script.period</code></dt>
+			<dd>
+                <p>Возвращает количество миллисекунд между запусками скрипта в периодическом режиме.</p>
+			</dd>
+		</dl></div></section>
+		<section aria-labelledby="static_methods"><h2 id="script.static_methods">Статические методы</h2><div class="section-content"><dl>
+			<dt id="script.oninit"><code>Script.onInit(functionRef)</code></dt>
+			<dd>
+				<p>Выполняет функцию при первом запуске скрипта.</p>
+			</dd>
+			<dt id="script.settimeout"><code>Script.setTimeout(functionRef, delay)</code></dt>
+			<dd>
+				<p>Метод устанавливает таймер, который выполняет функцию по истечении времени таймера.</p>
+			</dd>
+			<dt id="script.stop"><code>Script.stop()</code></dt>
+			<dd>
+                <p>Останавливает выполнения скрипта.</p>
+			</dd>
+		</dl></div></section>
+	</article>
+	<article class="article-content">
+		<div class="article-header">
+			<h1 id="server">Server</h1>
+		</div>
+		<div class="section-content"><p>Объект <strong><code>Server</code></strong> обеспечивает доступ к функциям сервера MODBUS.</p></div>
+		<section aria-labelledby="static_methods"><h2 id="server.static_methods">Статические методы</h2><div class="section-content"><dl>
+			<dt id="server.onchange"><code>Server.onChange(Register, address, functionRef)</code></dt>
+			<dd>
+				<p>Выполняет функцию <code>functionRef(value)</code> при изменении значения регистра тип <code>Register</code> с адресом <code>address</code>.</p>
+			</dd>
+			<dt id="server.readcoil"><code>Server.readCoil(address)</code></dt>
+			<dd>
+				<p>Возвращает значение регистра Coil по адресу <code>address</code>.</p>
+			</dd>
+			<dt id="server.readdiscrete"><code>Server.readDiscrete(address)</code></dt>
+			<dd>
+				<p>Возвращает значение регистра Discrete по адресу <code>address</code>.</p>
+			</dd>
+			<dt id="server.readinput"><code>Server.readInput(address)</code></dt>
+			<dd>
+				<p>Возвращает значение регистра Input по адресу <code>address</code>.</p>
+			</dd>
+			<dt id="server.readholding"><code>Server.readHolding(address)</code></dt>
+			<dd>
+				<p>Возвращает значение регистра Holding по адресу <code>address</code>.</p>
+			</dd>
+			<dt id="server.readdouble"><code>Server.readDouble(Register, address, swapped)</code></dt>
+			<dd>
+				<p>Возвращает значение двойной точности (double) из регистров типа <code>Register</code> c адресами от <code>address</code> до <code>address + 3</code>. Параметр <code>swapped</code> изменяет порядок регистров, когда функция преобразует набор регистров в значение двойной точночти (double).</p>
+                <div class="notecard note">
+                    <p><strong>Примечание.</strong> Эта функция доступна только для регистров типа <code>Register.Input</code> и <code>Register.Holding</code>.</p>
+                </div>
+			</dd>
+			<dt id="server.readfloat"><code>Server.readFloat(Register, address, swapped)</code></dt>
+			<dd>
+				<p>Возвращает значение с плавающей запятой (float) из регистров типа <code>Register</code> с адресами от <code>address</code> до <code>address + 1</code>. Параметр <code>swapped</code> изменяет порядок регистров, когда функция преобразует набор регистров в значение с плавающей запятой (float).</p>
+				<div class="notecard note">
+                    <p><strong>Примечание.</strong> Эта функция доступна только для регистров типа <code>Register.Input</code> и <code>Register.Holding</code>.</p>
+                </div>
+			</dd>
+			<dt id="server.writecoil"><code>Server.writeCoil(address, value)</code></dt>
+			<dd>
+				<p>Записывает <code>value</code> в регистр Coil по адресу <code>address</code>.</p>
+			</dd>
+			<dt id="server.writediscrete"><code>Server.writeDiscrete(address, value)</code></dt>
+			<dd>
+				<p>Записывает <code>value</code> в регистр Discrete по адресу <code>address</code>.</p>
+			</dd>
+			<dt id="server.writeinput"><code>Server.writeInput(address, value)</code></dt>
+			<dd>
+				<p>Записывает <code>value</code> в регистр Input по адресу <code>address</code>.</p>
+			</dd>
+			<dt id="server.writeholding"><code>Server.writeHolding(address, value)</code></dt>
+			<dd>
+				<p>Записывает <code>value</code> в регистр Holding по адресу <code>address</code>.</p>
+			</dd>
+			<dt id="server.writedouble"><code>Server.writeDouble(Register, address, value, swapped)</code></dt>
+			<dd>
+				<p>Записывает значение <code>value</code> двойной точночности (double) в адреса регистров типа <code>Register</code>. Параметр <code>swapped</code> изменяет порядок регистров, когда функция преобразует значение двойной точности (double) в набор регистров.</p>
+                <div class="notecard note">
+                    <p><strong>Примечание.</strong> Эта функция доступна только для регистров типа <code>Register.Input</code> и <code>Register.Holding</code>.</p>
+                </div>
+			</dd>
+			<dt id="server.writefloat"><code>Server.writeFloat(Register, address, value, swapped)</code></dt>
+			<dd>
+				<p>Записывает число с плавающей запятой (float) <code>value</code> в адреса регистров типа <code>Register</code>. Параметр <code>swapped</code> изменяет порядок регистров, когда функция преобразует значение с плавающей запятой (float) в набор регистров.</p>
+                <div class="notecard note">
+                    <p><strong>Примечание.</strong> Эта функция доступна только для регистров типа <code>Register.Input</code> и <code>Register.Holding</code>.</p>
+                </div>
+			</dd>
+		</dl></div></section>
+	</article>
+	<article class="article-content">
+		<div class="article-header">
+			<h1 id="storage">Storage</h1>
+		</div>
+		<div class="section-content">
+			<p><strong><code>Storage</code></strong> обеспечивает доступ к локальному хранилищу скриптов. Это позволяет, например, добавлять, изменять или удалять сохраненные элементы данных.</p>
+            <p>Объект <strong><code>Storage</code></strong> хранит элементы во время выполнения скрипта (однократно или периодически). При запуске скрипта в объекте <code>Storage</code> нет элементов.</p>
+		</div>
+		<section aria-labelledby="static_properties"><h2 id="storage.static_properties">Статические свойства</h2><div class="section-content"><dl>
+			<dt id="storage.length"><code>Storage.length</code></dt>
+			<dd>
+                <p>Возвращает целое число, представляющее количество элементов данных, хранящихся в объекте <code>Storage</code>.</p>
+			</dd>
+		</dl></div></section>
+		<section aria-labelledby="static_methods"><h2 id="storage.static_methods">Статические методы</h2><div class="section-content"><dl>
+			<dt id="storage.key"><code>Storage.key(index)</code></dt>
+			<dd>
+				<p>Вернуть имя n-го ключа по <code>index</code> в хранилище.</p>
+			</dd>
+			<dt id="storage.getitem"><code>Storage.getItem(key)</code></dt>
+			<dd>
+				<p>При передаче имени ключа <code>key</code> будет возвращено значение этого ключа.</p>
+			</dd>
+			<dt id="storage.setitem"><code>Storage.setItem(key, value)</code></dt>
+			<dd>
+				<p>При передаче имени ключа <code>key</code> и значения этот ключ будет добавлен в хранилище или обновлен <code>value</code> этого ключа, если он уже существует.</p>
+			</dd>
+			<dt id="storage.removeitem"><code>Storage.removeItem(key)</code></dt>
+			<dd>
+				<p>При передаче имени ключа <code>key</code> этот ключ будет удален из хранилища.</p>
+			</dd>
+			<dt id="storage.clear"><code>Storage.clear()</code></dt>
+			<dd>
+				<p>При вызове все ключи удаляются из хранилища.</p>
+			</dd>
+		</dl></div></section>
+	</article>
+
+</body>
+
+</html>

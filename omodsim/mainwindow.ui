@@ -10,6 +10,9 @@
     <height>720</height>
    </rect>
   </property>
+  <property name="contextMenuPolicy">
+   <enum>Qt::NoContextMenu</enum>
+  </property>
   <property name="windowTitle">
    <string>Open ModSim</string>
   </property>
@@ -65,6 +68,19 @@
     <addaction name="separator"/>
     <addaction name="actionExit"/>
    </widget>
+   <widget class="QMenu" name="menuEdit">
+    <property name="title">
+     <string>Edit</string>
+    </property>
+    <addaction name="actionUndo"/>
+    <addaction name="actionRedo"/>
+    <addaction name="separator"/>
+    <addaction name="actionCut"/>
+    <addaction name="actionCopy"/>
+    <addaction name="actionPaste"/>
+    <addaction name="separator"/>
+    <addaction name="actionSelectAll"/>
+   </widget>
    <widget class="QMenu" name="menuConnection">
     <property name="title">
      <string>Connection</string>
@@ -89,6 +105,7 @@
      </widget>
      <addaction name="actionShowData"/>
      <addaction name="actionShowTraffic"/>
+     <addaction name="actionShowScript"/>
      <addaction name="separator"/>
      <addaction name="actionBinary"/>
      <addaction name="actionUnsignedDecimal"/>
@@ -109,11 +126,22 @@
      <addaction name="actionForceCoils"/>
      <addaction name="actionForceDiscretes"/>
      <addaction name="actionPresetInputRegs"/>
-     <addaction name="actionPresetHoldingRegs"/> 
+     <addaction name="actionPresetHoldingRegs"/>
+    </widget>
+    <widget class="QMenu" name="menuScript">
+     <property name="title">
+      <string>Script</string>
+     </property>
+     <addaction name="actionRunScript"/>
+     <addaction name="actionStopScript"/>
+     <addaction name="separator"/>
+     <addaction name="actionScriptSettings"/>
     </widget>
     <addaction name="actionDataDefinition"/>
     <addaction name="menuDisplay_Options"/>
     <addaction name="menuExtended"/>
+    <addaction name="separator"/>
+    <addaction name="menuScript"/>
    </widget>
    <widget class="QMenu" name="menuWindow">
     <property name="title">
@@ -159,11 +187,14 @@
     <addaction name="actionToolbar"/>
     <addaction name="actionStatusBar"/>
     <addaction name="actionDisplayBar"/>
+    <addaction name="actionScriptBar"/>
+    <addaction name="actionEditBar"/>
     <addaction name="separator"/>
     <addaction name="menuConfig"/>
     <addaction name="menuLanguage"/>
    </widget>
    <addaction name="menuFile"/>
+   <addaction name="menuEdit"/>
    <addaction name="menuConnection"/>
    <addaction name="menuSetup"/>
    <addaction name="menuView"/>
@@ -191,6 +222,7 @@
    <addaction name="actionDataDefinition"/>
    <addaction name="actionShowData"/>
    <addaction name="actionShowTraffic"/>
+   <addaction name="actionShowScript"/>
    <addaction name="separator"/>
    <addaction name="actionPrint"/>
    <addaction name="actionAbout"/>
@@ -218,6 +250,38 @@
    <addaction name="separator"/>
    <addaction name="actionByteOrder"/>
   </widget>
+  <widget class="QToolBar" name="toolBarScript">
+   <property name="windowTitle">
+    <string>Script Bar</string>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="actionScriptSettings"/>
+   <addaction name="actionRunScript"/>
+   <addaction name="actionStopScript"/>
+  </widget>
+  <widget class="QToolBar" name="toolBarEdit">
+   <property name="windowTitle">
+    <string>Edit Bar</string>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>true</bool>
+   </attribute>
+   <addaction name="actionUndo"/>
+   <addaction name="actionRedo"/>
+   <addaction name="separator"/>
+   <addaction name="actionCut"/>
+   <addaction name="actionCopy"/>
+   <addaction name="actionPaste"/>
+   <addaction name="separator"/>
+  </widget>
   <action name="actionNew">
    <property name="icon">
     <iconset resource="resources.qrc">
@@ -225,6 +289,9 @@
    </property>
    <property name="text">
     <string>New</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+N</string>
    </property>
   </action>
   <action name="actionOpen">
@@ -234,6 +301,9 @@
    </property>
    <property name="text">
     <string>Open...</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+O</string>
    </property>
   </action>
   <action name="actionClose">
@@ -248,6 +318,9 @@
    </property>
    <property name="text">
     <string>Save</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+S</string>
    </property>
   </action>
   <action name="actionSaveAs">
@@ -272,6 +345,9 @@
    </property>
    <property name="text">
     <string>Print...</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+P</string>
    </property>
   </action>
   <action name="actionPrintSetup">
@@ -318,6 +394,9 @@
    <property name="text">
     <string>Binary</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+1</string>
+   </property>
   </action>
   <action name="actionUnsignedDecimal">
    <property name="checkable">
@@ -329,6 +408,9 @@
    </property>
    <property name="text">
     <string>Unsigned Decimal</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+2</string>
    </property>
   </action>
   <action name="actionHex">
@@ -342,6 +424,9 @@
    <property name="text">
     <string>Hex</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+4</string>
+   </property>
   </action>
   <action name="actionFloatingPt">
    <property name="checkable">
@@ -353,6 +438,9 @@
    </property>
    <property name="text">
     <string>Floating Point</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+5</string>
    </property>
   </action>
   <action name="actionSwappedFP">
@@ -366,6 +454,9 @@
    <property name="text">
     <string>Swapped FP</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+5</string>
+   </property>
   </action>
   <action name="actionDblFloat">
    <property name="checkable">
@@ -378,6 +469,9 @@
    <property name="text">
     <string>Dbl Float</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+6</string>
+   </property>
   </action>
   <action name="actionSwappedDbl">
    <property name="checkable">
@@ -389,6 +483,9 @@
    </property>
    <property name="text">
     <string>Swapped Dbl</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+6</string>
    </property>
   </action>
   <action name="actionCascade">
@@ -420,6 +517,9 @@
    </property>
    <property name="text">
     <string>Integer</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+3</string>
    </property>
   </action>
   <action name="actionShowData">
@@ -570,6 +670,141 @@
   <action name="actionForceDiscretes">
    <property name="text">
     <string>Force Discretes</string>
+   </property>
+  </action>
+  <action name="actionShowScript">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/res/actionShowScript.png</normaloff>:/res/actionShowScript.png</iconset>
+   </property>
+   <property name="text">
+    <string>Show Script</string>
+   </property>
+  </action>
+  <action name="actionRunScript">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/res/actionRunScript.png</normaloff>:/res/actionRunScript.png</iconset>
+   </property>
+   <property name="text">
+    <string>Run Script</string>
+   </property>
+   <property name="toolTip">
+    <string>Run Script</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+R</string>
+   </property>
+  </action>
+  <action name="actionStopScript">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/res/actionStopScript.png</normaloff>:/res/actionStopScript.png</iconset>
+   </property>
+   <property name="text">
+    <string>Stop Script</string>
+   </property>
+   <property name="toolTip">
+    <string>Stop Script</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+B</string>
+   </property>
+  </action>
+  <action name="actionScriptSettings">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/res/actionScriptSettings.png</normaloff>:/res/actionScriptSettings.png</iconset>
+   </property>
+   <property name="text">
+    <string>Script Settings</string>
+   </property>
+  </action>
+  <action name="actionScriptBar">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Script Bar</string>
+   </property>
+  </action>
+  <action name="actionUndo">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/res/actionUndo.png</normaloff>:/res/actionUndo.png</iconset>
+   </property>
+   <property name="text">
+    <string>Undo</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Z</string>
+   </property>
+  </action>
+  <action name="actionRedo">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/res/actionRedo.png</normaloff>:/res/actionRedo.png</iconset>
+   </property>
+   <property name="text">
+    <string>Redo</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Y</string>
+   </property>
+  </action>
+  <action name="actionCut">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/res/actionCut.png</normaloff>:/res/actionCut.png</iconset>
+   </property>
+   <property name="text">
+    <string>Cut</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+X</string>
+   </property>
+  </action>
+  <action name="actionCopy">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/res/actionCopy.png</normaloff>:/res/actionCopy.png</iconset>
+   </property>
+   <property name="text">
+    <string>Copy</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+C</string>
+   </property>
+  </action>
+  <action name="actionPaste">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/res/actionPaste.png</normaloff>:/res/actionPaste.png</iconset>
+   </property>
+   <property name="text">
+    <string>Paste</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+V</string>
+   </property>
+  </action>
+  <action name="actionSelectAll">
+   <property name="text">
+    <string>Select All</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+A</string>
+   </property>
+  </action>
+  <action name="actionEditBar">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Edit Bar</string>
    </property>
   </action>
  </widget>
