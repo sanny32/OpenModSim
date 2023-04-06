@@ -27,7 +27,7 @@ class FormModSim : public QWidget
 
     friend QSettings& operator <<(QSettings& out, FormModSim* frm);
     friend QSettings& operator >>(QSettings& in, FormModSim* frm);
-    friend QDataStream& operator <<(QDataStream& out, const FormModSim* frm);
+    friend QDataStream& operator <<(QDataStream& out, FormModSim* frm);
     friend QDataStream& operator >>(QDataStream& in, FormModSim* frm);
 
 public:
@@ -234,7 +234,7 @@ inline QSettings& operator >>(QSettings& in, FormModSim* frm)
 /// \param frm
 /// \return
 ///
-inline QDataStream& operator <<(QDataStream& out, const FormModSim* frm)
+inline QDataStream& operator <<(QDataStream& out, FormModSim* frm)
 {
     if(!frm) return out;
 
@@ -256,7 +256,7 @@ inline QDataStream& operator <<(QDataStream& out, const FormModSim* frm)
     out << frm->displayDefinition();
     out << frm->byteOrder();
     out << frm->simulationMap();
-    out << frm->script();
+    out << frm->scriptControl();
     out << frm->scriptSettings();
     out << frm->descriptionMap();
 
@@ -313,11 +313,10 @@ inline QDataStream& operator >>(QDataStream& in, FormModSim* frm)
         in >> simulationMap;
     }
 
-    QString script;
     ScriptSettings scriptSettings;
     if(ver >=  QVersionNumber(1, 2))
     {
-        in >> script;
+        in >> frm->scriptControl();
         in >> scriptSettings;
     }
 
@@ -344,7 +343,6 @@ inline QDataStream& operator >>(QDataStream& in, FormModSim* frm)
     frm->setFont(font);
     frm->setDisplayDefinition(dd);
     frm->setByteOrder(byteOrder);
-    frm->setScript(script);
     frm->setScriptSettings(scriptSettings);
 
     for(auto&& k : simulationMap.keys())

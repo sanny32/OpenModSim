@@ -312,9 +312,49 @@ QSettings& operator >>(QSettings& in, ScriptControl* ctrl)
     ctrl->setScript(script);
 
     const auto vstate = in.value("ScriptControl/VSplitter").toByteArray();
-    ctrl->ui->verticalSplitter->restoreState(vstate);
+    if(!vstate.isEmpty()) ctrl->ui->verticalSplitter->restoreState(vstate);
 
     const auto hstate = in.value("ScriptControl/HSplitter").toByteArray();
-    ctrl->ui->horizontalSplitter->restoreState(hstate);
+    if(!hstate.isEmpty()) ctrl->ui->horizontalSplitter->restoreState(hstate);
+
+    return in;
+}
+
+///
+/// \brief operator <<
+/// \param out
+/// \param ctrl
+/// \return
+///
+QDataStream& operator <<(QDataStream& out, const ScriptControl* ctrl)
+{
+    QMap<QString, QVariant> m;
+    m["script"] = ctrl->script();
+    m["vsplitter"] = ctrl->ui->verticalSplitter->saveState();
+    m["hsplitter"] = ctrl->ui->horizontalSplitter->saveState();
+
+    out << m;
+    return out;
+}
+
+///
+/// \brief operator >>
+/// \param in
+/// \param ctrl
+/// \return
+///
+QDataStream& operator >>(QDataStream& in, ScriptControl* ctrl)
+{
+    QMap<QString, QVariant> m;
+    in >> m;
+
+    ctrl->setScript(m["script"].toString());
+
+    const auto vstate = m["vsplitter"].toByteArray();
+    if(!vstate.isEmpty()) ctrl->ui->verticalSplitter->restoreState(vstate);
+
+    const auto hstate = m["hsplitter"].toByteArray();
+    if(!hstate.isEmpty()) ctrl->ui->horizontalSplitter->restoreState(hstate);
+
     return in;
 }

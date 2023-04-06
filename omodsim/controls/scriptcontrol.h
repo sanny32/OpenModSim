@@ -22,6 +22,8 @@ class ScriptControl : public QWidget
 
     friend QSettings& operator <<(QSettings& out, const ScriptControl* ctrl);
     friend QSettings& operator >>(QSettings& in, ScriptControl* ctrl);
+    friend QDataStream& operator <<(QDataStream& out, const ScriptControl* ctrl);
+    friend QDataStream& operator >>(QDataStream& in, ScriptControl* ctrl);
 
 public:  
     explicit ScriptControl(QWidget *parent = nullptr);
