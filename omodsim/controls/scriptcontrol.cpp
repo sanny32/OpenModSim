@@ -1,4 +1,4 @@
-#include <QLoggingCategory>
+#include <QFile>
 #include "modbusmultiserver.h"
 #include "scriptcontrol.h"
 #include "ui_scriptcontrol.h"
@@ -17,7 +17,12 @@ ScriptControl::ScriptControl(QWidget *parent)
 {
     ui->setupUi(this);
     ui->codeEditor->moveCursor(QTextCursor::End);
-    ui->helpWidget->setHelp(QApplication::applicationDirPath() + "/docs/jshelp.qhc");
+
+    auto helpfile = QApplication::applicationDirPath() + "/docs/jshelp.qhc";
+    if(!QFile::exists(helpfile)){
+        helpfile = QApplication::applicationDirPath() + "/../docs/jshelp.qhc";
+    }
+    ui->helpWidget->setHelp(helpfile);
 
     connect(&_timer, &QTimer::timeout, this, &ScriptControl::executeScript);
     connect(ui->codeEditor, &JSCodeEditor::helpContext, this, &ScriptControl::showHelp);
