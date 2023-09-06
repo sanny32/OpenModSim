@@ -357,6 +357,32 @@ QModbusDataUnit createDataUnit(QModbusDataUnit::RegisterType type, int newStartA
 }
 
 ///
+/// \brief createLongDataUnit
+/// \param type
+/// \param newStartAddress
+/// \param value
+/// \param order
+/// \param swapped
+/// \return
+///
+QModbusDataUnit createLongDataUnit(QModbusDataUnit::RegisterType type, int newStartAddress, qint32 value, ByteOrder order, bool swapped)
+{
+    Q_ASSERT(type == QModbusDataUnit::HoldingRegisters
+             || type == QModbusDataUnit::InputRegisters);
+
+    QVector<quint16> values(2);
+    auto data = QModbusDataUnit(type, newStartAddress, 2);
+
+    if(swapped)
+        breakLong(value, values[1], values[0], order);
+    else
+        breakLong(value, values[0], values[1], order);
+
+    data.setValues(values);
+    return data;
+}
+
+///
 /// \brief createFloatDataUnit
 /// \param type
 /// \param newStartAddress
@@ -530,6 +556,16 @@ void ModbusMultiServer::writeRegister(QModbusDataUnit::RegisterType pointType, c
                     break;
                     case DataDisplayMode::SwappedDbl:
                         data = createDoubleDataUnit(pointType, params.Address - 1, params.Value.toDouble(), params.Order, true);
+                    break;
+
+                    case DataDisplayMode::LongInteger:
+                    case DataDisplayMode::UnsignedLongInteger:
+                        data = createLongDataUnit(pointType, params.Address - 1, params.Value.toInt(), params.Order, false);
+                    break;
+
+                    case DataDisplayMode::SwappedLI:
+                    case DataDisplayMode::SwappedUnsignedLI:
+                        data = createLongDataUnit(pointType, params.Address - 1, params.Value.toInt(), params.Order, true);
                     break;
                 }
             break;

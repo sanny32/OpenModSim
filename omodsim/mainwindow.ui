@@ -110,6 +110,10 @@
      <addaction name="actionBinary"/>
      <addaction name="actionUnsignedDecimal"/>
      <addaction name="actionInteger"/>
+     <addaction name="actionLongInteger"/>
+     <addaction name="actionSwappedLI"/>
+     <addaction name="actionUnsignedLongInteger"/>
+     <addaction name="actionSwappedUnsignedLI"/>
      <addaction name="actionHex"/>
      <addaction name="actionFloatingPt"/>
      <addaction name="actionSwappedFP"/>
@@ -242,6 +246,12 @@
    <addaction name="actionInteger"/>
    <addaction name="actionHex"/>
    <addaction name="separator"/>
+   <addaction name="actionLongInteger"/>
+   <addaction name="actionSwappedLI"/>
+   <addaction name="separator"/>
+   <addaction name="actionUnsignedLongInteger"/>
+   <addaction name="actionSwappedUnsignedLI"/>
+   <addaction name="separator"/>
    <addaction name="actionFloatingPt"/>
    <addaction name="actionSwappedFP"/>
    <addaction name="separator"/>
@@ -291,7 +301,7 @@
     <string>New</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+N</string>
+    <string notr="true">Ctrl+N</string>
    </property>
   </action>
   <action name="actionOpen">
@@ -303,7 +313,7 @@
     <string>Open...</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+O</string>
+    <string notr="true">Ctrl+O</string>
    </property>
   </action>
   <action name="actionClose">
@@ -320,7 +330,7 @@
     <string>Save</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+S</string>
+    <string notr="true">Ctrl+S</string>
    </property>
   </action>
   <action name="actionSaveAs">
@@ -347,7 +357,7 @@
     <string>Print...</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+P</string>
+    <string notr="true">Ctrl+P</string>
    </property>
   </action>
   <action name="actionPrintSetup">
@@ -395,7 +405,7 @@
     <string>Binary</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+1</string>
+    <string notr="true">Ctrl+1</string>
    </property>
   </action>
   <action name="actionUnsignedDecimal">
@@ -410,7 +420,7 @@
     <string>Unsigned Decimal</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+2</string>
+    <string notr="true">Ctrl+2</string>
    </property>
   </action>
   <action name="actionHex">
@@ -425,7 +435,7 @@
     <string>Hex</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+4</string>
+    <string notr="true">Ctrl+4</string>
    </property>
   </action>
   <action name="actionFloatingPt">
@@ -440,7 +450,7 @@
     <string>Floating Point</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+5</string>
+    <string notr="true">Ctrl+7</string>
    </property>
   </action>
   <action name="actionSwappedFP">
@@ -455,7 +465,7 @@
     <string>Swapped FP</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+Shift+5</string>
+    <string>Ctrl+Shift+7</string>
    </property>
   </action>
   <action name="actionDblFloat">
@@ -470,7 +480,7 @@
     <string>Dbl Float</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+6</string>
+    <string notr="true">Ctrl+8</string>
    </property>
   </action>
   <action name="actionSwappedDbl">
@@ -485,7 +495,7 @@
     <string>Swapped Dbl</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+Shift+6</string>
+    <string notr="true">Ctrl+Shift+8</string>
    </property>
   </action>
   <action name="actionCascade">
@@ -519,7 +529,7 @@
     <string>Integer</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+3</string>
+    <string notr="true">Ctrl+3</string>
    </property>
   </action>
   <action name="actionShowData">
@@ -696,7 +706,7 @@
     <string>Run Script</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+R</string>
+    <string notr="true">Ctrl+R</string>
    </property>
   </action>
   <action name="actionStopScript">
@@ -711,7 +721,7 @@
     <string>Stop Script</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+B</string>
+    <string notr="true">Ctrl+B</string>
    </property>
   </action>
   <action name="actionScriptSettings">
@@ -740,7 +750,7 @@
     <string>Undo</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+Z</string>
+    <string notr="true">Ctrl+Z</string>
    </property>
   </action>
   <action name="actionRedo">
@@ -752,7 +762,7 @@
     <string>Redo</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+Y</string>
+    <string notr="true">Ctrl+Y</string>
    </property>
   </action>
   <action name="actionCut">
@@ -764,7 +774,7 @@
     <string>Cut</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+X</string>
+    <string notr="true">Ctrl+X</string>
    </property>
   </action>
   <action name="actionCopy">
@@ -776,7 +786,7 @@
     <string>Copy</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+C</string>
+    <string notr="true">Ctrl+C</string>
    </property>
   </action>
   <action name="actionPaste">
@@ -788,7 +798,7 @@
     <string>Paste</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+V</string>
+    <string notr="true">Ctrl+V</string>
    </property>
   </action>
   <action name="actionSelectAll">
@@ -796,7 +806,7 @@
     <string>Select All</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+A</string>
+    <string notr="true">Ctrl+A</string>
    </property>
   </action>
   <action name="actionEditBar">
@@ -805,6 +815,66 @@
    </property>
    <property name="text">
     <string>Edit Bar</string>
+   </property>
+  </action>
+  <action name="actionLongInteger">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/res/actionLongInteger.png</normaloff>:/res/actionLongInteger.png</iconset>
+   </property>
+   <property name="text">
+    <string>Long Integer</string>
+   </property>
+   <property name="shortcut">
+    <string notr="true">Ctrl+4</string>
+   </property>
+  </action>
+  <action name="actionSwappedLI">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/res/actionSwappedLI.png</normaloff>:/res/actionSwappedLI.png</iconset>
+   </property>
+   <property name="text">
+    <string>Swapped LI</string>
+   </property>
+   <property name="shortcut">
+    <string notr="true">Ctrl+Shift+4</string>
+   </property>
+  </action>
+  <action name="actionUnsignedLongInteger">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/res/actionUnsignedLI.png</normaloff>:/res/actionUnsignedLI.png</iconset>
+   </property>
+   <property name="text">
+    <string>Unsigned Long Integer</string>
+   </property>
+   <property name="shortcut">
+    <string notr="true">Ctrl+5</string>
+   </property>
+  </action>
+  <action name="actionSwappedUnsignedLI">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/res/actionSwappedUnsignedLI.png</normaloff>:/res/actionSwappedUnsignedLI.png</iconset>
+   </property>
+   <property name="text">
+    <string>Swapped Unsigned LI</string>
+   </property>
+   <property name="shortcut">
+    <string notr="true">Ctrl+Shift+5</string>
    </property>
   </action>
  </widget>

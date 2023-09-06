@@ -4,7 +4,7 @@ CONFIG += c++17
 CONFIG -= debug_and_release
 CONFIG -= debug_and_release_target
 
-VERSION = 1.2.0
+VERSION = 1.3.0
 
 QMAKE_TARGET_PRODUCT = "Open ModSim"
 QMAKE_TARGET_DESCRIPTION = "An Open Source Modbus Slave (Server) Utility"
@@ -72,6 +72,7 @@ SOURCES += \
     modbusmultiserver.cpp \
     qfixedsizedialog.cpp \
     qhexvalidator.cpp \
+    quintvalidator.cpp \
     recentfileactionlist.cpp \
     windowactionlist.cpp
 
@@ -132,6 +133,7 @@ HEADERS += \
     qfixedsizedialog.h \
     qhexvalidator.h \
     qrange.h \
+    quintvalidator.h \
     recentfileactionlist.h \
     scriptsettings.h \
     windowactionlist.h
