@@ -1,9 +1,9 @@
 # Open ModSim
 Open ModSim is a free implimentation of modbus slave (server) utility for modbus-tcp and modbus-rtu protocols.
 
-![image](https://user-images.githubusercontent.com/13627951/230102997-d6578945-bac0-4ca4-9210-da80e4f8783c.png)
+![image](https://github.com/sanny32/OpenModSim/assets/13627951/43d1b90d-b56b-400d-8dca-2903e23e56a9)
 
-![image](https://user-images.githubusercontent.com/13627951/230103505-f446cf6d-a925-4a51-bbde-8bb77d3da5b1.png)
+![image](https://github.com/sanny32/OpenModSim/assets/13627951/e805d429-7657-4355-869b-7559f11ea3d9)
 
 
 
@@ -42,8 +42,8 @@ Registers
 ## Scripting
   From version 1.2.0 Open ModSim supports scripting. Qt runtime implements the [ECMAScript Language Specification](http://www.ecma-international.org/publications/standards/Ecma-262.htm) standard, so Javascript is used to write code.
   
-  ![image](https://user-images.githubusercontent.com/13627951/230098131-55b4ef69-e01f-459f-a6d4-11f755978bcb.png)
-  
+  ![image](https://github.com/sanny32/OpenModSim/assets/13627951/c03a7d23-3c69-43aa-a1d3-ae5096da4f54)
+
   Scripts can be launched in two modes: Once or Periodically. If you run script in Once mode the script will stop after it finishes executing. In Periodically mode, the script will start after a certain period of time until the user stops it or the method is called
   ```javascript
   Script.stop();
