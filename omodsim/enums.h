@@ -51,7 +51,11 @@ enum class DataDisplayMode
     FloatingPt,
     SwappedFP,
     DblFloat,
-    SwappedDbl
+    SwappedDbl,
+    LongInteger,
+    SwappedLI,
+    UnsignedLongInteger,
+    SwappedUnsignedLI
 };
 Q_DECLARE_METATYPE(DataDisplayMode);
 
