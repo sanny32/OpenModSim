@@ -449,6 +449,59 @@ void ModbusMultiServer::writeValue(QModbusDataUnit::RegisterType pointType, quin
 }
 
 ///
+/// \brief ModbusMultiServer::readLong
+/// \param pointType
+/// \param pointAddress
+/// \param order
+/// \param swapped
+/// \return
+///
+qint32 ModbusMultiServer::readLong(QModbusDataUnit::RegisterType pointType, quint16 pointAddress, ByteOrder order, bool swapped)
+{
+    const auto data = this->data(pointType, pointAddress, 2);
+    return swapped ?  makeLong(data.value(1), data.value(0), order): makeLong(data.value(0), data.value(1), order);
+}
+
+///
+/// \brief ModbusMultiServer::writeLong
+/// \param pointType
+/// \param pointAddress
+/// \param value
+/// \param order
+/// \param swapped
+///
+void ModbusMultiServer::writeLong(QModbusDataUnit::RegisterType pointType, quint16 pointAddress, qint32 value, ByteOrder order, bool swapped)
+{
+    setData(createLongDataUnit(pointType, pointAddress, value, order, swapped));
+}
+
+///
+/// \brief ModbusMultiServer::readUnsignedLong
+/// \param pointType
+/// \param pointAddress
+/// \param order
+/// \param swapped
+/// \return
+///
+quint32 ModbusMultiServer::readUnsignedLong(QModbusDataUnit::RegisterType pointType, quint16 pointAddress, ByteOrder order, bool swapped)
+{
+    return (quint32)readLong(pointType, pointAddress, order, swapped);
+}
+
+///
+/// \brief ModbusMultiServer::writeUnsignedLong
+/// \param pointType
+/// \param pointAddress
+/// \param value
+/// \param order
+/// \param swapped
+///
+void ModbusMultiServer::writeUnsignedLong(QModbusDataUnit::RegisterType pointType, quint16 pointAddress, quint32 value, ByteOrder order, bool swapped)
+{
+    writeLong(pointType, pointAddress, value, order, swapped);
+}
+
+///
 /// \brief ModbusMultiServer::readFloat
 /// \param pointType
 /// \param pointAddress
