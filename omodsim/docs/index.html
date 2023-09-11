@@ -139,12 +139,16 @@
 				<li><a href="#server.readdiscrete">Server.readDiscrete</a></li>
 				<li><a href="#server.readinput">Server.readInput</a></li>
 				<li><a href="#server.readholding">Server.readHolding</a></li>
+				<li><a href="#server.readlong">Server.readLong</a></li>
+				<li><a href="#server.readunsignedlong">Server.readUnsignedLong</a></li>
 				<li><a href="#server.readdouble">Server.readDouble</a></li>
 				<li><a href="#server.readfloat">Server.readFloat</a></li>
 				<li><a href="#server.writecoil">Server.writeCoil</a></li>
 				<li><a href="#server.writediscrete">Server.writeDiscrete</a></li>
 				<li><a href="#server.writeinput">Server.writeInput</a></li>
 				<li><a href="#server.writeholding">Server.writeHolding</a></li>
+				<li><a href="#server.writelong">Server.writeLong</a></li>
+				<li><a href="#server.writeunsignedlong">Server.writeUnsignedLong</a></li>
 				<li><a href="#server.writedouble">Server.writeDouble</a></li>
 				<li><a href="#server.writefloat">Server.writeFloat</a></li>
 			</ul>
@@ -630,6 +634,20 @@
 			<dd>
 				<p>Returns a Holding register value at <code>address</code>.</p>
 			</dd>
+			<dt id="server.readlong"><code>Server.readLong(Register, address, swapped)</code></dt>
+			<dd>
+				<p>Returns a 32-bit long value from <code>address</code> to <code>address + 1</code> registers type <code>Register</code>. The <code>swapped</code> parameter change the registers order, when function convert set of registers to a long value.</p>
+				<div class="notecard note">
+					<p><strong>Note:</strong> This function is available only for <code>Register.Input</code> and <code>Register.Holding</code> registers.</p>
+				</div>
+			</dd>
+			<dt id="server.readunsignedlong"><code>Server.readUnsignedLong(Register, address, swapped)</code></dt>
+			<dd>
+				<p>Returns a 32-bit unsigned long value from <code>address</code> to <code>address + 1</code> registers type <code>Register</code>. The <code>swapped</code> parameter change the registers order, when function convert set of registers to a unsigned long value.</p>
+				<div class="notecard note">
+					<p><strong>Note:</strong> This function is available only for <code>Register.Input</code> and <code>Register.Holding</code> registers.</p>
+				</div>
+			</dd>
 			<dt id="server.readdouble"><code>Server.readDouble(Register, address, swapped)</code></dt>
 			<dd>
 				<p>Returns a double value from <code>address</code> to <code>address + 3</code> registers type <code>Register</code>. The <code>swapped</code> parameter change the registers order, when function convert set of registers to a double value.</p>
@@ -659,6 +677,20 @@
 			<dt id="server.writeholding"><code>Server.writeHolding(address, value)</code></dt>
 			<dd>
 				<p>Writes a <code>value</code> to the Holding register at <code>address</code>.</p>
+			</dd>
+			<dt id="server.writelong"><code>Server.writeLong(Register, address, value, swapped)</code></dt>
+			<dd>
+				<p>Writes a 32-bit long <code>value</code> to the <code>Register</code> addresses. The <code>swapped</code> parameter change the registers order, when function convert a long value to the set of registers.</p>
+				<div class="notecard note">
+					<p><strong>Note:</strong> This function is available only for <code>Register.Input</code> and <code>Register.Holding</code> registers.</p>
+				</div>
+			</dd>
+			<dt id="server.writeunsignedlong"><code>Server.writeUnsignedLong(Register, address, value, swapped)</code></dt>
+			<dd>
+				<p>Writes a 32-bit unsigned long <code>value</code> to the <code>Register</code> addresses. The <code>swapped</code> parameter change the registers order, when function convert a unsigned long value to the set of registers.</p>
+				<div class="notecard note">
+					<p><strong>Note:</strong> This function is available only for <code>Register.Input</code> and <code>Register.Holding</code> registers.</p>
+				</div>
 			</dd>
 			<dt id="server.writedouble"><code>Server.writeDouble(Register, address, value, swapped)</code></dt>
 			<dd>
