@@ -66,6 +66,10 @@ public:
     bool displayHexAddresses() const;
     void setDisplayHexAddresses(bool on);
 
+    CaptureMode captureMode() const;
+    void startTextCapture(const QString& file);
+    void stopTextCapture();
+
     QColor backgroundColor() const;
     void setBackgroundColor(const QColor& clr);
 

@@ -215,6 +215,31 @@ void FormModSim::setDisplayHexAddresses(bool on)
 }
 
 ///
+/// \brief FormModSca::captureMode
+///
+CaptureMode FormModSim::captureMode() const
+{
+    return ui->outputWidget->captureMode();
+}
+
+///
+/// \brief FormModSca::startTextCapture
+/// \param file
+///
+void FormModSim::startTextCapture(const QString& file)
+{
+    ui->outputWidget->startTextCapture(file);
+}
+
+///
+/// \brief FormModSca::stopTextCapture
+///
+void FormModSim::stopTextCapture()
+{
+    ui->outputWidget->stopTextCapture();
+}
+
+///
 /// \brief FormModSim::setDataDisplayMode
 /// \param mode
 ///

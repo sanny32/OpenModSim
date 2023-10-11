@@ -664,6 +664,33 @@ void MainWindow::on_actionPresetHoldingRegs_triggered()
 }
 
 ///
+/// \brief MainWindow::on_actionTextCapture_triggered
+///
+void MainWindow::on_actionTextCapture_triggered()
+{
+    auto frm = currentMdiChild();
+    if(!frm) return;
+
+    auto filename = QFileDialog::getSaveFileName(this, QString(), QString(), "Text files (*.txt)");
+    if(!filename.isEmpty())
+    {
+        if(!filename.endsWith(".txt", Qt::CaseInsensitive)) filename += ".txt";
+        frm->startTextCapture(filename);
+    }
+}
+
+///
+/// \brief MainWindow::on_actionCaptureOff_triggered
+///
+void MainWindow::on_actionCaptureOff_triggered()
+{
+    auto frm = currentMdiChild();
+    if(!frm) return;
+
+    frm->stopTextCapture();
+}
+
+///
 /// \brief MainWindow::on_actionToolbar_triggered
 ///
 void MainWindow::on_actionToolbar_triggered()

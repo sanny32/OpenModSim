@@ -145,6 +145,9 @@
     <addaction name="menuDisplay_Options"/>
     <addaction name="menuExtended"/>
     <addaction name="separator"/>
+    <addaction name="actionTextCapture"/>
+    <addaction name="actionCaptureOff"/>
+    <addaction name="separator"/>
     <addaction name="menuScript"/>
    </widget>
    <widget class="QMenu" name="menuWindow">
@@ -875,6 +878,16 @@
    </property>
    <property name="shortcut">
     <string notr="true">Ctrl+Shift+5</string>
+   </property>
+  </action>
+  <action name="actionTextCapture">
+   <property name="text">
+    <string>Text Capture</string>
+   </property>
+  </action>
+  <action name="actionCaptureOff">
+   <property name="text">
+    <string>Capture Off</string>
    </property>
   </action>
  </widget>
