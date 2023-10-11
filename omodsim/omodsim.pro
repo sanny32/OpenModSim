@@ -53,6 +53,7 @@ SOURCES += \
     dialogs/dialogdisplaydefinition.cpp \
     dialogs/dialogforcemultiplecoils.cpp \
     dialogs/dialogforcemultipleregisters.cpp \
+    dialogs/dialogmsgparser.cpp \
     dialogs/dialogprintsettings.cpp \
     dialogs/dialogscriptsettings.cpp \
     dialogs/dialogselectserviceport.cpp \
@@ -113,6 +114,7 @@ HEADERS += \
     dialogs/dialogdisplaydefinition.h \
     dialogs/dialogforcemultiplecoils.h \
     dialogs/dialogforcemultipleregisters.h \
+    dialogs/dialogmsgparser.h \
     dialogs/dialogprintsettings.h \
     dialogs/dialogscriptsettings.h \
     dialogs/dialogselectserviceport.h \
@@ -179,6 +181,7 @@ FORMS += \
     dialogs/dialogdisplaydefinition.ui \
     dialogs/dialogforcemultiplecoils.ui \
     dialogs/dialogforcemultipleregisters.ui \
+    dialogs/dialogmsgparser.ui \
     dialogs/dialogprintsettings.ui \
     dialogs/dialogscriptsettings.ui \
     dialogs/dialogselectserviceport.ui \

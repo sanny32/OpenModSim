@@ -131,6 +131,8 @@
      <addaction name="actionForceDiscretes"/>
      <addaction name="actionPresetInputRegs"/>
      <addaction name="actionPresetHoldingRegs"/>
+     <addaction name="separator"/>
+     <addaction name="actionMsgParser"/>
     </widget>
     <widget class="QMenu" name="menuScript">
      <property name="title">
@@ -888,6 +890,14 @@
   <action name="actionCaptureOff">
    <property name="text">
     <string>Capture Off</string>
+   </property>
+  </action>
+  <action name="actionMsgParser">
+   <property name="text">
+    <string>Msg Parser</string>
+   </property>
+   <property name="shortcut">
+    <string>F9</string>
    </property>
   </action>
  </widget>

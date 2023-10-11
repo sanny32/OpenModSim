@@ -88,6 +88,7 @@ private slots:
     void on_actionForceDiscretes_triggered();
     void on_actionPresetInputRegs_triggered();
     void on_actionPresetHoldingRegs_triggered();
+    void on_actionMsgParser_triggered();
     void on_actionTextCapture_triggered();
     void on_actionCaptureOff_triggered();
 

@@ -3,6 +3,7 @@
 
 #include <QDialog>
 #include <QTableWidgetItem>
+#include <QModbusDataUnit>
 #include "modbuswriteparams.h"
 
 namespace Ui {
@@ -14,7 +15,7 @@ class DialogForceMultipleCoils : public QDialog
     Q_OBJECT
 
 public:
-    explicit DialogForceMultipleCoils(ModbusWriteParams& params, int length, QWidget *parent = nullptr);
+    explicit DialogForceMultipleCoils(ModbusWriteParams& params, QModbusDataUnit::RegisterType type, int length, QWidget *parent = nullptr);
     ~DialogForceMultipleCoils();
 
     void accept() override;

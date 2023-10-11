@@ -3,6 +3,7 @@
 #include <QPrintDialog>
 #include <QPageSetupDialog>
 #include "dialogabout.h"
+#include "dialogmsgparser.h"
 #include "dialogwindowsmanager.h"
 #include "dialogprintsettings.h"
 #include "dialogdisplaydefinition.h"
@@ -665,6 +666,19 @@ void MainWindow::on_actionPresetHoldingRegs_triggered()
 }
 
 ///
+/// \brief MainWindow::on_actionMsgParser_triggered
+///
+void MainWindow::on_actionMsgParser_triggered()
+{
+    auto frm = currentMdiChild();
+    const auto mode = frm ? frm->dataDisplayMode() : DataDisplayMode::Hex;
+
+    auto dlg = new DialogMsgParser(mode, this);
+    dlg->setAttribute(Qt::WA_DeleteOnClose, true);
+    dlg->show();
+}
+
+///
 /// \brief MainWindow::on_actionTextCapture_triggered
 ///
 void MainWindow::on_actionTextCapture_triggered()
@@ -1002,7 +1016,7 @@ void MainWindow::forceCoils(QModbusDataUnit::RegisterType type)
         params.Value = QVariant::fromValue(data.values());
     }
 
-    DialogForceMultipleCoils dlg(params, presetParams.Length, this);
+    DialogForceMultipleCoils dlg(params, type, presetParams.Length, this);
     if(dlg.exec() == QDialog::Accepted)
     {
         _mbMultiServer.writeRegister(type, params);
@@ -1037,7 +1051,7 @@ void MainWindow::presetRegs(QModbusDataUnit::RegisterType type)
         params.Value = QVariant::fromValue(data.values());
     }
 
-    DialogForceMultipleRegisters dlg(params, presetParams.Length, this);
+    DialogForceMultipleRegisters dlg(params, type, presetParams.Length, this);
     if(dlg.exec() == QDialog::Accepted)
     {
         _mbMultiServer.writeRegister(type, params);

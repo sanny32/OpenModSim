@@ -1,14 +1,17 @@
 #include <QtMath>
 #include <QLineEdit>
+#include "formatutils.h"
 #include "dialogforcemultiplecoils.h"
 #include "ui_dialogforcemultiplecoils.h"
 
 ///
 /// \brief DialogForceMultipleCoils::DialogForceMultipleCoils
 /// \param params
+/// \param type
+/// \param length
 /// \param parent
 ///
-DialogForceMultipleCoils::DialogForceMultipleCoils(ModbusWriteParams& params, int length, QWidget *parent) :
+DialogForceMultipleCoils::DialogForceMultipleCoils(ModbusWriteParams& params, QModbusDataUnit::RegisterType type, int length, QWidget *parent) :
       QDialog(parent)
     , ui(new Ui::DialogForceMultipleCoils)
     ,_writeParams(params)
@@ -18,8 +21,8 @@ DialogForceMultipleCoils::DialogForceMultipleCoils(ModbusWriteParams& params, in
                    Qt::CustomizeWindowHint |
                    Qt::WindowTitleHint);
 
-    ui->labelAddress->setText(QString(tr("Address: %1")).arg(params.Address, 5, 10, QLatin1Char('0')));
-    ui->labelLength->setText(QString(tr("Length: %1")).arg(length, 3, 10, QLatin1Char('0')));
+    ui->labelAddress->setText(QString(tr("Address: <b>%1</b>")).arg(formatAddress(type, params.Address, false)));
+    ui->labelLength->setText(QString(tr("Length: <b>%1</b>")).arg(length, 3, 10, QLatin1Char('0')));
 
     _data = params.Value.value<QVector<quint16>>();
     if(_data.length() != length) _data.resize(length);

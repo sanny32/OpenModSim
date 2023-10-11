@@ -1,5 +1,6 @@
 #include <QtMath>
 #include <QRandomGenerator>
+#include "formatutils.h"
 #include "numericutils.h"
 #include "numericlineedit.h"
 #include "dialogforcemultipleregisters.h"
@@ -8,10 +9,11 @@
 ///
 /// \brief DialogForceMultipleRegisters::DialogForceMultipleRegisters
 /// \param params
+/// \param type
 /// \param length
 /// \param parent
 ///
-DialogForceMultipleRegisters::DialogForceMultipleRegisters(ModbusWriteParams& params, int length, QWidget *parent) :
+DialogForceMultipleRegisters::DialogForceMultipleRegisters(ModbusWriteParams& params, QModbusDataUnit::RegisterType type, int length, QWidget *parent) :
       QDialog(parent)
     , ui(new Ui::DialogForceMultipleRegisters)
     ,_writeParams(params)
@@ -21,8 +23,8 @@ DialogForceMultipleRegisters::DialogForceMultipleRegisters(ModbusWriteParams& pa
                    Qt::CustomizeWindowHint |
                    Qt::WindowTitleHint);
 
-    ui->labelAddress->setText(QString(tr("Address: %1")).arg(params.Address, 5, 10, QLatin1Char('0')));
-    ui->labelLength->setText(QString(tr("Length: %1")).arg(length, 3, 10, QLatin1Char('0')));
+    ui->labelAddress->setText(QString(tr("Address: <b>%1</b>")).arg(formatAddress(type, params.Address, false)));
+    ui->labelLength->setText(QString(tr("Length: <b>%1</b>")).arg(length, 3, 10, QLatin1Char('0')));
 
     _data = params.Value.value<QVector<quint16>>();
     if(_data.length() != length) _data.resize(length);
