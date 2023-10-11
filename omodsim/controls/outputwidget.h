@@ -88,6 +88,10 @@ public:
     bool displayHexAddresses() const;
     void setDisplayHexAddresses(bool on);
 
+    CaptureMode captureMode() const;
+    void startTextCapture(const QString& file);
+    void stopTextCapture();
+
     QColor backgroundColor() const;
     void setBackgroundColor(const QColor& clr);
 
@@ -99,6 +103,9 @@ public:
 
     QFont font() const;
     void setFont(const QFont& font);
+
+    int logViewLimit() const;
+    void setLogViewLimit(int l);
 
     void setStatus(const QString& status);
     void setNotConnectedStatus();
@@ -126,7 +133,9 @@ private slots:
     void on_listView_customContextMenuRequested(const QPoint &pos);
 
 private:
-    void updateTrafficWidget(bool request, int server, const QModbusPdu& pdu);
+    void captureString(const QString& s);
+    void showModbusMessage(const QModelIndex& index);
+    void updateLogView(bool request, int deviceId, const QModbusPdu& pdu);
 
 private:
     Ui::OutputWidget *ui;
@@ -137,6 +146,7 @@ private:
     DataDisplayMode _dataDisplayMode;
     ByteOrder _byteOrder;
     DisplayDefinition _displayDefinition;
+    QFile _fileCapture;
     AddressDescriptionMap _descriptionMap;
     QSharedPointer<OutputListModel> _listModel;
 };

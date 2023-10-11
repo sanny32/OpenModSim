@@ -66,6 +66,10 @@ public:
     bool displayHexAddresses() const;
     void setDisplayHexAddresses(bool on);
 
+    CaptureMode captureMode() const;
+    void startTextCapture(const QString& file);
+    void stopTextCapture();
+
     QColor backgroundColor() const;
     void setBackgroundColor(const QColor& clr);
 
@@ -253,7 +257,14 @@ inline QDataStream& operator <<(QDataStream& out, FormModSim* frm)
     out << frm->foregroundColor();
     out << frm->statusColor();
     out << frm->font();
-    out << frm->displayDefinition();
+
+    const auto dd = frm->displayDefinition();
+    out << dd.DeviceId;
+    out << dd.PointType;
+    out << dd.PointAddress;
+    out << dd.Length;
+    out << dd.LogViewLimit;
+
     out << frm->byteOrder();
     out << frm->simulationMap();
     out << frm->scriptControl();
@@ -272,6 +283,7 @@ inline QDataStream& operator <<(QDataStream& out, FormModSim* frm)
 inline QDataStream& operator >>(QDataStream& in, FormModSim* frm)
 {
     if(!frm) return in;
+    const auto ver = frm->property("Version").value<QVersionNumber>();
 
     bool isMaximized;
     in >> isMaximized;
@@ -301,9 +313,14 @@ inline QDataStream& operator >>(QDataStream& in, FormModSim* frm)
     in >> font;
 
     DisplayDefinition dd;
-    in >> dd;
-
-    const auto ver = frm->property("Version").value<QVersionNumber>();
+    if(ver >= QVersionNumber(1, 5))
+    {
+        in >> dd.DeviceId;
+        in >> dd.PointType;
+        in >> dd.PointAddress;
+        in >> dd.Length;
+        in >> dd.LogViewLimit;
+    }
 
     ModbusSimulationMap simulationMap;
     ByteOrder byteOrder = ByteOrder::LittleEndian;

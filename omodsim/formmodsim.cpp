@@ -12,7 +12,7 @@
 #include "formmodsim.h"
 #include "ui_formmodsim.h"
 
-QVersionNumber FormModSim::VERSION = QVersionNumber(1, 4);
+QVersionNumber FormModSim::VERSION = QVersionNumber(1, 5);
 
 ///
 /// \brief FormModSim::FormModSim
@@ -212,6 +212,31 @@ bool FormModSim::displayHexAddresses() const
 void FormModSim::setDisplayHexAddresses(bool on)
 {
     ui->outputWidget->setDisplayHexAddresses(on);
+}
+
+///
+/// \brief FormModSca::captureMode
+///
+CaptureMode FormModSim::captureMode() const
+{
+    return ui->outputWidget->captureMode();
+}
+
+///
+/// \brief FormModSca::startTextCapture
+/// \param file
+///
+void FormModSim::startTextCapture(const QString& file)
+{
+    ui->outputWidget->startTextCapture(file);
+}
+
+///
+/// \brief FormModSca::stopTextCapture
+///
+void FormModSim::stopTextCapture()
+{
+    ui->outputWidget->stopTextCapture();
 }
 
 ///

@@ -131,6 +131,8 @@
      <addaction name="actionForceDiscretes"/>
      <addaction name="actionPresetInputRegs"/>
      <addaction name="actionPresetHoldingRegs"/>
+     <addaction name="separator"/>
+     <addaction name="actionMsgParser"/>
     </widget>
     <widget class="QMenu" name="menuScript">
      <property name="title">
@@ -144,6 +146,9 @@
     <addaction name="actionDataDefinition"/>
     <addaction name="menuDisplay_Options"/>
     <addaction name="menuExtended"/>
+    <addaction name="separator"/>
+    <addaction name="actionTextCapture"/>
+    <addaction name="actionCaptureOff"/>
     <addaction name="separator"/>
     <addaction name="menuScript"/>
    </widget>
@@ -875,6 +880,24 @@
    </property>
    <property name="shortcut">
     <string notr="true">Ctrl+Shift+5</string>
+   </property>
+  </action>
+  <action name="actionTextCapture">
+   <property name="text">
+    <string>Text Capture</string>
+   </property>
+  </action>
+  <action name="actionCaptureOff">
+   <property name="text">
+    <string>Capture Off</string>
+   </property>
+  </action>
+  <action name="actionMsgParser">
+   <property name="text">
+    <string>Msg Parser</string>
+   </property>
+   <property name="shortcut">
+    <string>F9</string>
    </property>
   </action>
  </widget>

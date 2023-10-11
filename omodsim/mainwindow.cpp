@@ -3,6 +3,7 @@
 #include <QPrintDialog>
 #include <QPageSetupDialog>
 #include "dialogabout.h"
+#include "dialogmsgparser.h"
 #include "dialogwindowsmanager.h"
 #include "dialogprintsettings.h"
 #include "dialogdisplaydefinition.h"
@@ -479,8 +480,9 @@ void MainWindow::on_actionDataDefinition_triggered()
     auto frm = currentMdiChild();
     if(!frm) return;
 
-    DialogDisplayDefinition dlg(frm);
-    dlg.exec();
+    DialogDisplayDefinition dlg(frm->displayDefinition(), this);
+    if(dlg.exec() == QDialog::Accepted)
+            frm->setDisplayDefinition(dlg.displayDefinition());
 }
 
 ///
@@ -661,6 +663,46 @@ void MainWindow::on_actionPresetInputRegs_triggered()
 void MainWindow::on_actionPresetHoldingRegs_triggered()
 {
     presetRegs(QModbusDataUnit::HoldingRegisters);
+}
+
+///
+/// \brief MainWindow::on_actionMsgParser_triggered
+///
+void MainWindow::on_actionMsgParser_triggered()
+{
+    auto frm = currentMdiChild();
+    const auto mode = frm ? frm->dataDisplayMode() : DataDisplayMode::Hex;
+
+    auto dlg = new DialogMsgParser(mode, this);
+    dlg->setAttribute(Qt::WA_DeleteOnClose, true);
+    dlg->show();
+}
+
+///
+/// \brief MainWindow::on_actionTextCapture_triggered
+///
+void MainWindow::on_actionTextCapture_triggered()
+{
+    auto frm = currentMdiChild();
+    if(!frm) return;
+
+    auto filename = QFileDialog::getSaveFileName(this, QString(), QString(), "Text files (*.txt)");
+    if(!filename.isEmpty())
+    {
+        if(!filename.endsWith(".txt", Qt::CaseInsensitive)) filename += ".txt";
+        frm->startTextCapture(filename);
+    }
+}
+
+///
+/// \brief MainWindow::on_actionCaptureOff_triggered
+///
+void MainWindow::on_actionCaptureOff_triggered()
+{
+    auto frm = currentMdiChild();
+    if(!frm) return;
+
+    frm->stopTextCapture();
 }
 
 ///
@@ -974,7 +1016,7 @@ void MainWindow::forceCoils(QModbusDataUnit::RegisterType type)
         params.Value = QVariant::fromValue(data.values());
     }
 
-    DialogForceMultipleCoils dlg(params, presetParams.Length, this);
+    DialogForceMultipleCoils dlg(params, type, presetParams.Length, this);
     if(dlg.exec() == QDialog::Accepted)
     {
         _mbMultiServer.writeRegister(type, params);
@@ -1009,7 +1051,7 @@ void MainWindow::presetRegs(QModbusDataUnit::RegisterType type)
         params.Value = QVariant::fromValue(data.values());
     }
 
-    DialogForceMultipleRegisters dlg(params, presetParams.Length, this);
+    DialogForceMultipleRegisters dlg(params, type, presetParams.Length, this);
     if(dlg.exec() == QDialog::Accepted)
     {
         _mbMultiServer.writeRegister(type, params);
