@@ -17,6 +17,7 @@ DialogForceMultipleRegisters::DialogForceMultipleRegisters(ModbusWriteParams& pa
       QDialog(parent)
     , ui(new Ui::DialogForceMultipleRegisters)
     ,_writeParams(params)
+    ,_type(type)
 {
     ui->setupUi(this);
     setWindowFlags(Qt::Dialog |
@@ -356,8 +357,8 @@ void DialogForceMultipleRegisters::updateTableWidget()
 
     for(int i = 0; i < ui->tableWidget->rowCount(); i++)
     {
-        const auto addressFrom = QString("%1").arg(_writeParams.Address + i * columns, 5, 10, QLatin1Char('0'));
-        const auto addressTo = QString("%1").arg(_writeParams.Address + qMin(length - 1, (i + 1) * columns - 1), 5, 10, QLatin1Char('0'));
+        const auto addressFrom = formatAddress(QModbusDataUnit::HoldingRegisters, _writeParams.Address + i * columns, _hexView);
+        const auto addressTo = formatAddress(QModbusDataUnit::HoldingRegisters, _writeParams.Address + qMin(length - 1, (i + 1) * columns - 1), _hexView);
         ui->tableWidget->setVerticalHeaderItem(i, new QTableWidgetItem(QString("%1-%2").arg(addressFrom, addressTo)));
 
         for(int j = 0; j < columns; j++)

@@ -32,6 +32,7 @@ private:
     Ui::DialogForceMultipleCoils *ui;
     QVector<quint16> _data;
     ModbusWriteParams& _writeParams;
+    QModbusDataUnit::RegisterType _type;
 };
 
 #endif // DIALOGFORCEMULTIPLECOILS_H

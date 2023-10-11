@@ -37,6 +37,8 @@ private:
     Ui::DialogForceMultipleRegisters *ui;
     QVector<quint16> _data;
     ModbusWriteParams& _writeParams;
+    QModbusDataUnit::RegisterType _type;
+    bool _hexView = false;
 };
 
 #endif // DIALOGFORCEMULTIPLEREGISTERS_H
