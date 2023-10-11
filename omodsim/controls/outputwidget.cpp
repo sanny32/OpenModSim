@@ -356,6 +356,8 @@ void OutputWidget::setup(const DisplayDefinition& dd, const ModbusSimulationMap&
     _descriptionMap.insert(descriptionMap());
     _displayDefinition = dd;
 
+    setLogViewLimit(dd.LogViewLimit);
+
     _listModel->clear();
 
     for(auto&& key : simulations.keys())
@@ -473,6 +475,7 @@ void OutputWidget::setStatusColor(const QColor& clr)
     auto pal = ui->labelStatus->palette();
     pal.setColor(QPalette::WindowText, clr);
     ui->labelStatus->setPalette(pal);
+    ui->modbusMsg->setStatusColor(clr);
 }
 
 ///
@@ -492,6 +495,26 @@ void OutputWidget::setFont(const QFont& font)
 {
     ui->listView->setFont(font);
     ui->labelStatus->setFont(font);
+    ui->logView->setFont(font);
+    ui->modbusMsg->setFont(font);
+}
+
+///
+/// \brief OutputWidget::logViewLimit
+/// \return
+///
+int OutputWidget::logViewLimit() const
+{
+    return ui->logView->rowLimit();
+}
+
+///
+/// \brief OutputWidget::setLogViewLimit
+/// \param l
+///
+void OutputWidget::setLogViewLimit(int l)
+{
+    ui->logView->setRowLimit(l);
 }
 
 ///
@@ -669,6 +692,9 @@ DataDisplayMode OutputWidget::dataDisplayMode() const
 void OutputWidget::setDataDisplayMode(DataDisplayMode mode)
 {
     _dataDisplayMode = mode;
+    ui->logView->setDataDisplayMode(mode);
+    ui->modbusMsg->setDataDisplayMode(mode);
+
     _listModel->update();
 }
 
@@ -688,6 +714,8 @@ const ByteOrder* OutputWidget::byteOrder() const
 void OutputWidget::setByteOrder(ByteOrder order)
 {
     _byteOrder = order;
+    ui->modbusMsg->setByteOrder(order);
+
     _listModel->update();
 }
 

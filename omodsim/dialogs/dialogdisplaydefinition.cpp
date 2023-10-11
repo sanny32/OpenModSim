@@ -5,21 +5,24 @@
 
 ///
 /// \brief DialogDisplayDefinition::DialogDisplayDefinition
+/// \param dd
 /// \param parent
 ///
-DialogDisplayDefinition::DialogDisplayDefinition(FormModSim* parent) :
-    QFixedSizeDialog(parent),
-    ui(new Ui::DialogDisplayDefinition)
+DialogDisplayDefinition::DialogDisplayDefinition(DisplayDefinition dd, QWidget* parent)
+    : QFixedSizeDialog(parent)
+    ,_displayDefinition(dd)
+    , ui(new Ui::DialogDisplayDefinition)
 {
     ui->setupUi(this);
     ui->lineEditPointAddress->setInputRange(ModbusLimits::addressRange());
     ui->lineEditLength->setInputRange(ModbusLimits::lengthRange());
     ui->lineEditSlaveAddress->setInputRange(ModbusLimits::slaveRange());
+    ui->lineEditLogLimit->setInputRange(4, 1000);
 
-    const auto dd = parent->displayDefinition();
     ui->lineEditPointAddress->setValue(dd.PointAddress);
     ui->lineEditSlaveAddress->setValue(dd.DeviceId);
     ui->lineEditLength->setValue(dd.Length);
+    ui->lineEditLogLimit->setValue(dd.LogViewLimit);
     ui->comboBoxPointType->setCurrentPointType(dd.PointType);
 
     ui->buttonBox->setFocus();
@@ -38,12 +41,11 @@ DialogDisplayDefinition::~DialogDisplayDefinition()
 ///
 void DialogDisplayDefinition::accept()
 {
-    DisplayDefinition dd;
-    dd.DeviceId = ui->lineEditSlaveAddress->value<int>();
-    dd.PointAddress = ui->lineEditPointAddress->value<int>();
-    dd.PointType = ui->comboBoxPointType->currentPointType();
-    dd.Length = ui->lineEditLength->value<int>();
-    ((FormModSim*)parentWidget())->setDisplayDefinition(dd);
+    _displayDefinition.DeviceId = ui->lineEditSlaveAddress->value<int>();
+    _displayDefinition.PointAddress = ui->lineEditPointAddress->value<int>();
+    _displayDefinition.PointType = ui->comboBoxPointType->currentPointType();
+    _displayDefinition.Length = ui->lineEditLength->value<int>();
+    _displayDefinition.LogViewLimit = ui->lineEditLogLimit->value<int>();
 
     QFixedSizeDialog::accept();
 }

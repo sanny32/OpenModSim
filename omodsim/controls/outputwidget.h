@@ -104,6 +104,9 @@ public:
     QFont font() const;
     void setFont(const QFont& font);
 
+    int logViewLimit() const;
+    void setLogViewLimit(int l);
+
     void setStatus(const QString& status);
     void setNotConnectedStatus();
     void setInvalidLengthStatus();
