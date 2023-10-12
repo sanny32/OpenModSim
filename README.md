@@ -1,10 +1,10 @@
 # Open ModSim
 Open ModSim is a free implimentation of modbus slave (server) utility for modbus-tcp and modbus-rtu protocols.
 
-![image](https://github.com/sanny32/OpenModSim/assets/13627951/43d1b90d-b56b-400d-8dca-2903e23e56a9)
+![image](https://github.com/sanny32/OpenModSim/assets/13627951/3912005f-df9b-41b4-b6f5-33ebc76a908c)
 
-![image](https://github.com/sanny32/OpenModSim/assets/13627951/e805d429-7657-4355-869b-7559f11ea3d9)
 
+![image](https://github.com/sanny32/OpenModSim/assets/13627951/b40eca28-7a34-46dc-9a50-9b16dc1becf1)
 
 
 ## Features
@@ -38,7 +38,18 @@ Registers
     Random - simulate register randomly
     Increment - simulate register from Low Limit to High Limit with a given Step
     Decrement - simulate register from High Limit to Low Limit with a given Step
-    
+
+Modbus Logging
+
+![image](https://github.com/sanny32/OpenModSim/assets/13627951/1ebf4973-44a5-4464-aada-26aa751f65da)
+
+
+## Extended Featues
+
+Modbus Message Parser
+
+  ![image](https://github.com/sanny32/OpenModScan/assets/13627951/86a82340-015e-4ee9-a483-b5ab83527cc1)
+  
 ## Scripting
   From version 1.2.0 Open ModSim supports scripting. Qt runtime implements the [ECMAScript Language Specification](http://www.ecma-international.org/publications/standards/Ecma-262.htm) standard, so Javascript is used to write code.
   

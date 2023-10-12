@@ -1,6 +1,7 @@
 #include <QtMath>
 #include <QRandomGenerator>
-#include "floatutils.h"
+#include "formatutils.h"
+#include "numericutils.h"
 #include "numericlineedit.h"
 #include "dialogforcemultipleregisters.h"
 #include "ui_dialogforcemultipleregisters.h"
@@ -8,21 +9,23 @@
 ///
 /// \brief DialogForceMultipleRegisters::DialogForceMultipleRegisters
 /// \param params
+/// \param type
 /// \param length
 /// \param parent
 ///
-DialogForceMultipleRegisters::DialogForceMultipleRegisters(ModbusWriteParams& params, int length, QWidget *parent) :
+DialogForceMultipleRegisters::DialogForceMultipleRegisters(ModbusWriteParams& params, QModbusDataUnit::RegisterType type, int length, QWidget *parent) :
       QDialog(parent)
     , ui(new Ui::DialogForceMultipleRegisters)
     ,_writeParams(params)
+    ,_type(type)
 {
     ui->setupUi(this);
     setWindowFlags(Qt::Dialog |
                    Qt::CustomizeWindowHint |
                    Qt::WindowTitleHint);
 
-    ui->labelAddress->setText(QString(tr("Address: %1")).arg(params.Address, 5, 10, QLatin1Char('0')));
-    ui->labelLength->setText(QString(tr("Length: %1")).arg(length, 3, 10, QLatin1Char('0')));
+    ui->labelAddress->setText(QString(tr("Address: <b>%1</b>")).arg(formatAddress(type, params.Address, false)));
+    ui->labelLength->setText(QString(tr("Length: <b>%1</b>")).arg(length, 3, 10, QLatin1Char('0')));
 
     _data = params.Value.value<QVector<quint16>>();
     if(_data.length() != length) _data.resize(length);
@@ -354,8 +357,8 @@ void DialogForceMultipleRegisters::updateTableWidget()
 
     for(int i = 0; i < ui->tableWidget->rowCount(); i++)
     {
-        const auto addressFrom = QString("%1").arg(_writeParams.Address + i * columns, 5, 10, QLatin1Char('0'));
-        const auto addressTo = QString("%1").arg(_writeParams.Address + qMin(length - 1, (i + 1) * columns - 1), 5, 10, QLatin1Char('0'));
+        const auto addressFrom = formatAddress(QModbusDataUnit::HoldingRegisters, _writeParams.Address + i * columns, _hexView);
+        const auto addressTo = formatAddress(QModbusDataUnit::HoldingRegisters, _writeParams.Address + qMin(length - 1, (i + 1) * columns - 1), _hexView);
         ui->tableWidget->setVerticalHeaderItem(i, new QTableWidgetItem(QString("%1-%2").arg(addressFrom, addressTo)));
 
         for(int j = 0; j < columns; j++)

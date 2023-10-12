@@ -2,7 +2,7 @@
 #include <QPainter>
 #include <QTextStream>
 #include <QInputDialog>
-#include "floatutils.h"
+#include "formatutils.h"
 #include "outputwidget.h"
 #include "ui_outputwidget.h"
 
@@ -35,298 +35,6 @@ const int AddressRole = Qt::UserRole + 5;
 /// \brief ValueRole
 ///
 const int ValueRole = Qt::UserRole + 6;
-
-///
-/// \brief formatBinaryValue
-/// \param pointType
-/// \param value
-/// \param outValue
-/// \return
-///
-QString formatBinaryValue(QModbusDataUnit::RegisterType pointType, quint16 value, ByteOrder order, QVariant& outValue)
-{
-    QString result;
-    value = toByteOrderValue(value, order);
-
-    switch(pointType)
-    {
-        case QModbusDataUnit::Coils:
-        case QModbusDataUnit::DiscreteInputs:
-            result = QString("<%1>").arg(value);
-        break;
-        case QModbusDataUnit::HoldingRegisters:
-        case QModbusDataUnit::InputRegisters:
-            result = QStringLiteral("<%1>").arg(value, 16, 2, QLatin1Char('0'));
-        break;
-        default:
-        break;
-    }
-    outValue = value;
-    return result;
-}
-
-///
-/// \brief formatDecimalValue
-/// \param pointType
-/// \param value
-/// \param outValue
-/// \return
-///
-QString formatDecimalValue(QModbusDataUnit::RegisterType pointType, quint16 value, ByteOrder order, QVariant& outValue)
-{
-    QString result;
-    value = toByteOrderValue(value, order);
-
-    switch(pointType)
-    {
-        case QModbusDataUnit::Coils:
-        case QModbusDataUnit::DiscreteInputs:
-            result = QStringLiteral("<%1>").arg(value, 1, 10, QLatin1Char('0'));
-        break;
-        case QModbusDataUnit::HoldingRegisters:
-        case QModbusDataUnit::InputRegisters:
-            result = QStringLiteral("<%1>").arg(value, 5, 10, QLatin1Char('0'));
-        break;
-        default:
-        break;
-    }
-    outValue = value;
-    return result;
-}
-
-///
-/// \brief formatIntegerValue
-/// \param pointType
-/// \param value
-/// \param outValue
-/// \return
-///
-QString formatIntegerValue(QModbusDataUnit::RegisterType pointType, qint16 value ,ByteOrder order, QVariant& outValue)
-{
-    QString result;
-    value = toByteOrderValue(value, order);
-
-    switch(pointType)
-    {
-        case QModbusDataUnit::Coils:
-        case QModbusDataUnit::DiscreteInputs:
-            result = QString("<%1>").arg(value);
-        break;
-        case QModbusDataUnit::HoldingRegisters:
-        case QModbusDataUnit::InputRegisters:
-            result = QStringLiteral("<%1>").arg(value, 5, 10, QLatin1Char(' '));
-        break;
-        default:
-        break;
-    }
-    outValue = value;
-    return result;
-}
-
-///
-/// \brief formatHexValue
-/// \param pointType
-/// \param value
-/// \param outValue
-/// \return
-///
-QString formatHexValue(QModbusDataUnit::RegisterType pointType, quint16 value, ByteOrder order, QVariant& outValue)
-{
-    QString result;
-    value = toByteOrderValue(value, order);
-
-    switch(pointType)
-    {
-        case QModbusDataUnit::Coils:
-        case QModbusDataUnit::DiscreteInputs:
-            result = QString("<%1>").arg(value);
-        break;
-        case QModbusDataUnit::HoldingRegisters:
-        case QModbusDataUnit::InputRegisters:
-            result = QStringLiteral("<%1H>").arg(value, 4, 16, QLatin1Char('0'));
-        break;
-        default:
-        break;
-    }
-    outValue = value;
-    return result.toUpper();
-}
-
-///
-/// \brief formatLongValue
-/// \param pointType
-/// \param value1
-/// \param value2
-/// \param order
-/// \param flag
-/// \param outValue
-/// \return
-///
-QString formatLongValue(QModbusDataUnit::RegisterType pointType, quint16 value1, quint16 value2, ByteOrder order, bool flag, QVariant& outValue)
-{
-    QString result;
-    switch(pointType)
-    {
-    case QModbusDataUnit::Coils:
-    case QModbusDataUnit::DiscreteInputs:
-        outValue = value1;
-        result = QString("<%1>").arg(value1);
-        break;
-    case QModbusDataUnit::HoldingRegisters:
-    case QModbusDataUnit::InputRegisters:
-    {
-        if(flag) break;
-
-        const qint32 value = makeLong(value1, value2, order);
-        outValue = value;
-        result = result = QString("<%1>").arg(value, 10, 10, QLatin1Char(' '));
-    }
-    break;
-    default:
-        break;
-    }
-    return result;
-}
-
-///
-/// \brief formatUnsignedLongValue
-/// \param pointType
-/// \param value1
-/// \param value2
-/// \param order
-/// \param flag
-/// \param outValue
-/// \return
-///
-QString formatUnsignedLongValue(QModbusDataUnit::RegisterType pointType, quint16 value1, quint16 value2, ByteOrder order, bool flag, QVariant& outValue)
-{
-    QString result;
-    switch(pointType)
-    {
-    case QModbusDataUnit::Coils:
-    case QModbusDataUnit::DiscreteInputs:
-        outValue = value1;
-        result = QString("<%1>").arg(value1);
-        break;
-    case QModbusDataUnit::HoldingRegisters:
-    case QModbusDataUnit::InputRegisters:
-    {
-        if(flag) break;
-
-        const quint32 value = makeULong(value1, value2, order);
-        outValue = value;
-        result = result = QString("<%1>").arg(value, 10, 10, QLatin1Char('0'));
-    }
-    break;
-    default:
-        break;
-    }
-    return result;
-}
-
-///
-/// \brief formatFloatValue
-/// \param pointType
-/// \param value1
-/// \param value2
-/// \param flag
-/// \param outValue
-/// \return
-///
-QString formatFloatValue(QModbusDataUnit::RegisterType pointType, quint16 value1, quint16 value2, ByteOrder order, bool flag, QVariant& outValue)
-{
-    QString result;
-    switch(pointType)
-    {
-        case QModbusDataUnit::Coils:
-        case QModbusDataUnit::DiscreteInputs:
-            outValue = value1;
-            result = QString("<%1>").arg(value1);
-        break;
-        case QModbusDataUnit::HoldingRegisters:
-        case QModbusDataUnit::InputRegisters:
-        {
-            if(flag) break;
-
-            const float value = makeFloat(value1, value2, order);
-            outValue = value;
-            result = QLocale().toString(value);
-        }
-        break;
-        default:
-        break;
-    }
-    return result;
-}
-
-///
-/// \brief formatDoubleValue
-/// \param pointType
-/// \param value1
-/// \param value2
-/// \param value3
-/// \param value4
-/// \param flag
-/// \param outValue
-/// \return
-///
-QString formatDoubleValue(QModbusDataUnit::RegisterType pointType, quint16 value1, quint16 value2, quint16 value3, quint16 value4, ByteOrder order, bool flag, QVariant& outValue)
-{
-    QString result;
-    switch(pointType)
-    {
-        case QModbusDataUnit::Coils:
-        case QModbusDataUnit::DiscreteInputs:
-            outValue = value1;
-            result = QString("<%1>").arg(value1);
-        break;
-        case QModbusDataUnit::HoldingRegisters:
-        case QModbusDataUnit::InputRegisters:
-        {
-            if(flag) break;
-
-            const double value = makeDouble(value1, value2, value3, value4, order);
-            outValue = value;
-            result = QLocale().toString(value, 'g', 16);
-        }
-        break;
-        default:
-        break;
-    }
-    return result;
-}
-
-///
-/// \brief formatAddress
-/// \param pointType
-/// \param address
-/// \param hexFormat
-/// \return
-///
-QString formatAddress(QModbusDataUnit::RegisterType pointType, int address, bool hexFormat)
-{
-    QString prefix;
-    switch(pointType)
-    {
-        case QModbusDataUnit::Coils:
-            prefix = "0";
-        break;
-        case QModbusDataUnit::DiscreteInputs:
-            prefix = "1";
-        break;
-        case QModbusDataUnit::HoldingRegisters:
-            prefix = "4";
-        break;
-        case QModbusDataUnit::InputRegisters:
-            prefix = "3";
-        break;
-        default:
-        break;
-    }
-
-    return hexFormat ? QStringLiteral("%1H").arg(address, 4, 16, QLatin1Char('0')) :
-               prefix + QStringLiteral("%1").arg(address, 4, 10, QLatin1Char('0'));
-}
 
 ///
 /// \brief OutputListModel::OutputListModel
@@ -596,6 +304,13 @@ OutputWidget::OutputWidget(QWidget *parent) :
 
     setStatusColor(Qt::red);
     setNotConnectedStatus();
+
+    connect(ui->logView->selectionModel(),
+            &QItemSelectionModel::selectionChanged,
+            this, [&](const QItemSelection& sel) {
+                if(!sel.indexes().isEmpty())
+                    showModbusMessage(sel.indexes().first());
+            });
 }
 
 ///
@@ -641,6 +356,8 @@ void OutputWidget::setup(const DisplayDefinition& dd, const ModbusSimulationMap&
     _descriptionMap.insert(descriptionMap());
     _displayDefinition = dd;
 
+    setLogViewLimit(dd.LogViewLimit);
+
     _listModel->clear();
 
     for(auto&& key : simulations.keys())
@@ -669,6 +386,34 @@ void OutputWidget::setDisplayHexAddresses(bool on)
 {
     _displayHexAddreses = on;
     _listModel->update();
+}
+
+///
+/// \brief OutputWidget::captureMode
+/// \return
+///
+CaptureMode OutputWidget::captureMode() const
+{
+    return _fileCapture.isOpen() ? CaptureMode::TextCapture : CaptureMode::Off;
+}
+
+///
+/// \brief OutputWidget::startTextCapture
+/// \param file
+///
+void OutputWidget::startTextCapture(const QString& file)
+{
+    _fileCapture.setFileName(file);
+    _fileCapture.open(QFile::Text | QFile::WriteOnly);
+}
+
+///
+/// \brief OutputWidget::stopTextCapture
+///
+void OutputWidget::stopTextCapture()
+{
+    if(_fileCapture.isOpen())
+        _fileCapture.close();
 }
 
 ///
@@ -730,6 +475,7 @@ void OutputWidget::setStatusColor(const QColor& clr)
     auto pal = ui->labelStatus->palette();
     pal.setColor(QPalette::WindowText, clr);
     ui->labelStatus->setPalette(pal);
+    ui->modbusMsg->setStatusColor(clr);
 }
 
 ///
@@ -749,6 +495,26 @@ void OutputWidget::setFont(const QFont& font)
 {
     ui->listView->setFont(font);
     ui->labelStatus->setFont(font);
+    ui->logView->setFont(font);
+    ui->modbusMsg->setFont(font);
+}
+
+///
+/// \brief OutputWidget::logViewLimit
+/// \return
+///
+int OutputWidget::logViewLimit() const
+{
+    return ui->logView->rowLimit();
+}
+
+///
+/// \brief OutputWidget::setLogViewLimit
+/// \param l
+///
+void OutputWidget::setLogViewLimit(int l)
+{
+    ui->logView->setRowLimit(l);
 }
 
 ///
@@ -820,7 +586,7 @@ void OutputWidget::paint(const QRect& rc, QPainter& painter)
 ///
 void OutputWidget::updateTraffic(const QModbusRequest& request, int server)
 {
-    updateTrafficWidget(true, server, request);
+    updateLogView(true, server, request);
 }
 
 ///
@@ -830,7 +596,7 @@ void OutputWidget::updateTraffic(const QModbusRequest& request, int server)
 ///
 void OutputWidget::updateTraffic(const QModbusResponse& response, int server)
 {
-    updateTrafficWidget(false, server, response);
+    updateLogView(false, server, response);
 }
 
 ///
@@ -926,6 +692,9 @@ DataDisplayMode OutputWidget::dataDisplayMode() const
 void OutputWidget::setDataDisplayMode(DataDisplayMode mode)
 {
     _dataDisplayMode = mode;
+    ui->logView->setDataDisplayMode(mode);
+    ui->modbusMsg->setDataDisplayMode(mode);
+
     _listModel->update();
 }
 
@@ -945,6 +714,8 @@ const ByteOrder* OutputWidget::byteOrder() const
 void OutputWidget::setByteOrder(ByteOrder order)
 {
     _byteOrder = order;
+    ui->modbusMsg->setByteOrder(order);
+
     _listModel->update();
 }
 
@@ -1031,44 +802,43 @@ void OutputWidget::setInvalidLengthStatus()
 }
 
 ///
-/// \brief OutputWidget::updateTrafficWidget
+/// \brief OutputWidget::captureString
+/// \param s
+///
+void OutputWidget::captureString(const QString& s)
+{
+    if(_fileCapture.isOpen())
+    {
+        QTextStream stream(&_fileCapture);
+        stream << s << "\n";
+    }
+}
+
+///
+/// \brief OutputWidget::showModbusMessage
+/// \param index
+///
+void OutputWidget::showModbusMessage(const QModelIndex& index)
+{
+    const auto msg = ui->logView->itemAt(index);
+    ui->modbusMsg->setModbusMessage(msg);
+}
+
+///
+/// \brief OutputWidget::updateLogView
 /// \param request
 /// \param pdu
 ///
-void OutputWidget::updateTrafficWidget(bool request, int server, const QModbusPdu& pdu)
+void OutputWidget::updateLogView(bool request, int server, const QModbusPdu& pdu)
 {
-    QByteArray rawData;
-    rawData.push_back(server);
-    rawData.push_back(pdu.functionCode() | ( pdu.isException() ? QModbusPdu::ExceptionByte : 0));
-    rawData.push_back(pdu.data());
-
-    QString text;
-    for(auto&& c : rawData)
+    auto msg = ui->logView->addItem(pdu, server, QDateTime::currentDateTime(), request);
+    if(captureMode() == CaptureMode::TextCapture && msg != nullptr)
     {
-        switch(_dataDisplayMode)
-        {
-            case DataDisplayMode::Decimal:
-            case DataDisplayMode::Integer:
-                text+= QString("[%1]").arg(QString::number((uchar)c), 3, '0');
-            break;
-
-            default:
-                text+= QString("[%1]").arg(QString::number((uchar)c, 16), 2, '0');
-            break;
-        }
+        const auto str = QString("%1: %2 %3 %4").arg(
+            (msg->isRequest()?  "Tx" : "Rx"),
+            msg->timestamp().toString(Qt::ISODateWithMs),
+            (msg->isRequest()?  "<<" : ">>"),
+            msg->toString(DataDisplayMode::Hex));
+        captureString(str);
     }
-    if(text.isEmpty()) return;
-
-    ui->plainTextEdit->moveCursor(QTextCursor::End);
-
-    QTextCharFormat fmt;
-    fmt.setForeground(request? foregroundColor() : Qt::white);
-    fmt.setBackground(request? Qt::transparent : Qt::black);
-    ui->plainTextEdit->mergeCurrentCharFormat(fmt);
-
-    if(request && ui->plainTextEdit->toPlainText().length() > 22000)
-        ui->plainTextEdit->clear();
-
-    ui->plainTextEdit->insertPlainText(text);
-    ui->plainTextEdit->moveCursor(QTextCursor::End);
 }

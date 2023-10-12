@@ -4,7 +4,7 @@ CONFIG += c++17
 CONFIG -= debug_and_release
 CONFIG -= debug_and_release_target
 
-VERSION = 1.3.1
+VERSION = 1.4.0
 
 QMAKE_TARGET_PRODUCT = "Open ModSim"
 QMAKE_TARGET_DESCRIPTION = "An Open Source Modbus Slave (Server) Utility"
@@ -21,10 +21,12 @@ win32:RC_ICONS += res/omodsim.ico
 
 INCLUDEPATH += controls \
                dialogs \
-               jsobjects
+               jsobjects \
+               modbusmessages \
 
 SOURCES += \
     controls/booleancombobox.cpp \
+    controls/bytelisttextedit.cpp \
     controls/clickablelabel.cpp \
     controls/consoleoutput.cpp \
     controls/customframe.cpp \
@@ -33,6 +35,8 @@ SOURCES += \
     controls/helpwidget.cpp \
     controls/jscodeeditor.cpp \
     controls/mainstatusbar.cpp \
+    controls/modbuslogwidget.cpp \
+    controls/modbusmessagewidget.cpp \
     controls/numericcombobox.cpp \
     controls/numericlineedit.cpp \
     controls/outputwidget.cpp \
@@ -49,6 +53,7 @@ SOURCES += \
     dialogs/dialogdisplaydefinition.cpp \
     dialogs/dialogforcemultiplecoils.cpp \
     dialogs/dialogforcemultipleregisters.cpp \
+    dialogs/dialogmsgparser.cpp \
     dialogs/dialogprintsettings.cpp \
     dialogs/dialogscriptsettings.cpp \
     dialogs/dialogselectserviceport.cpp \
@@ -58,6 +63,7 @@ SOURCES += \
     dialogs/dialogwritecoilregister.cpp \
     dialogs/dialogwriteholdingregister.cpp \
     dialogs/dialogwriteholdingregisterbits.cpp \
+    htmldelegate.cpp \
     jscompleter.cpp \
     jsobjects/console.cpp \
     jsobjects/script.cpp \
@@ -69,6 +75,7 @@ SOURCES += \
     mainwindow.cpp \
     menuconnect.cpp \
     modbusdataunitmap.cpp \
+    modbusmessages/modbusmessage.cpp \
     modbusmultiserver.cpp \
     qfixedsizedialog.cpp \
     qhexvalidator.cpp \
@@ -80,6 +87,7 @@ HEADERS += \
     byteorderutils.h \
     connectiondetails.h \
     controls/booleancombobox.h \
+    controls/bytelisttextedit.h \
     controls/clickablelabel.h \
     controls/consoleoutput.h \
     controls/customframe.h \
@@ -88,6 +96,8 @@ HEADERS += \
     controls/helpwidget.h \
     controls/jscodeeditor.h \
     controls/mainstatusbar.h \
+    controls/modbuslogwidget.h \
+    controls/modbusmessagewidget.h \
     controls/numericcombobox.h \
     controls/numericlineedit.h \
     controls/outputwidget.h \
@@ -104,6 +114,7 @@ HEADERS += \
     dialogs/dialogdisplaydefinition.h \
     dialogs/dialogforcemultiplecoils.h \
     dialogs/dialogforcemultipleregisters.h \
+    dialogs/dialogmsgparser.h \
     dialogs/dialogprintsettings.h \
     dialogs/dialogscriptsettings.h \
     dialogs/dialogselectserviceport.h \
@@ -113,13 +124,14 @@ HEADERS += \
     dialogs/dialogwritecoilregister.h \
     dialogs/dialogwriteholdingregister.h \
     dialogs/dialogwriteholdingregisterbits.h \
+    formatutils.h \
+    htmldelegate.h \
     jscompleter.h \
     jsobjects/console.h \
     jsobjects/script.h \
     jsobjects/server.h \
     displaydefinition.h \
     enums.h \
-    floatutils.h \
     formmodsim.h \
     jshighlighter.h \
     jsobjects/storage.h \
@@ -127,11 +139,33 @@ HEADERS += \
     menuconnect.h \
     modbusdataunitmap.h \
     modbuslimits.h \
+    modbusmessages/diagnostics.h \
+    modbusmessages/getcommeventcounter.h \
+    modbusmessages/getcommeventlog.h \
+    modbusmessages/maskwriteregister.h \
+    modbusmessages/modbusmessage.h \
+    modbusmessages/modbusmessages.h \
+    modbusmessages/readcoils.h \
+    modbusmessages/readdiscreteinputs.h \
+    modbusmessages/readexceptionstatus.h \
+    modbusmessages/readfifoqueue.h \
+    modbusmessages/readfilerecord.h \
+    modbusmessages/readholdingregisters.h \
+    modbusmessages/readinputregisters.h \
+    modbusmessages/readwritemultipleregisters.h \
+    modbusmessages/reportserverid.h \
+    modbusmessages/writefilerecord.h \
+    modbusmessages/writemultiplecoils.h \
+    modbusmessages/writemultipleregisters.h \
+    modbusmessages/writesinglecoil.h \
+    modbusmessages/writesingleregister.h \
     modbusmultiserver.h \
     modbussimulationparams.h \
     modbuswriteparams.h \
+    numericutils.h \
     qfixedsizedialog.h \
     qhexvalidator.h \
+    qmodbusadu.h \
     qrange.h \
     quintvalidator.h \
     recentfileactionlist.h \
@@ -147,6 +181,7 @@ FORMS += \
     dialogs/dialogdisplaydefinition.ui \
     dialogs/dialogforcemultiplecoils.ui \
     dialogs/dialogforcemultipleregisters.ui \
+    dialogs/dialogmsgparser.ui \
     dialogs/dialogprintsettings.ui \
     dialogs/dialogscriptsettings.ui \
     dialogs/dialogselectserviceport.ui \
