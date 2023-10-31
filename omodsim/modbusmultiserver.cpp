@@ -125,11 +125,11 @@ QSharedPointer<QModbusServer> ModbusMultiServer::createModbusServer(const Connec
 
                 connect((ModbusTcpServer*)modbusServer.get(), &ModbusTcpServer::request, this, [&](const QModbusRequest& req)
                 {
-                    emit request(req);
+                    emit request(req, ModbusMessage::Tcp, ++_transactionId);
                 });
                 connect((ModbusTcpServer*)modbusServer.get(), &ModbusTcpServer::response, this, [&](const QModbusResponse& resp)
                 {
-                    emit response(resp);
+                    emit response(resp, ModbusMessage::Tcp, _transactionId);
                 });
             }
             break;
@@ -149,11 +149,11 @@ QSharedPointer<QModbusServer> ModbusMultiServer::createModbusServer(const Connec
 
                 connect((ModbusRtuServer*)modbusServer.get(), &ModbusRtuServer::request, this, [&](const QModbusRequest& req)
                 {
-                    emit request(req);
+                    emit request(req, ModbusMessage::Rtu, 0);
                 });
                 connect((ModbusRtuServer*)modbusServer.get(), &ModbusRtuServer::response, this, [&](const QModbusResponse& resp)
                 {
-                    emit response(resp);
+                    emit response(resp, ModbusMessage::Rtu, 0);
                 });
             }
             break;

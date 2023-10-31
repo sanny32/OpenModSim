@@ -7,6 +7,7 @@
 #include "modbusdataunitmap.h"
 #include "modbuswriteparams.h"
 #include "connectiondetails.h"
+#include "modbusmessage.h"
 
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     #include <QModbusRtuSerialSlave>
@@ -130,8 +131,8 @@ signals:
     void connected(const ConnectionDetails& cd);
     void disconnected(const ConnectionDetails& cd);
     void deviceIdChanged(quint8 deviceId);
-    void request(const QModbusRequest& req);
-    void response(const QModbusResponse& resp);
+    void request(const QModbusRequest& req, ModbusMessage::ProtocolType protocol, int transactionId);
+    void response(const QModbusResponse& resp, ModbusMessage::ProtocolType protocol, int transactionId);
     void connectionError(const QString& error);
     void dataChanged(const QModbusDataUnit& data);
 
@@ -151,6 +152,7 @@ private:
 
 private:
     quint8 _deviceId;
+    quint8 _transactionId = -1;
     ModbusDataUnitMap _modbusDataUnitMap;
     QList<QSharedPointer<QModbusServer>> _modbusServerList;
 };

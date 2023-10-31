@@ -737,21 +737,25 @@ void FormModSim::on_mbDisconnected(const ConnectionDetails&)
 ///
 /// \brief FormModSim::on_mbRequest
 /// \param req
+/// \param protocol
+/// \param transactionId
 ///
-void FormModSim::on_mbRequest(const QModbusRequest& req)
+void FormModSim::on_mbRequest(const QModbusRequest& req, ModbusMessage::ProtocolType protocol, int transactionId)
 {
     const auto deviceId = ui->lineEditDeviceId->value<int>();
-    ui->outputWidget->updateTraffic(req, deviceId);
+    ui->outputWidget->updateTraffic(req, deviceId, transactionId, protocol);
 }
 
 ///
 /// \brief FormModSim::on_mbResponse
 /// \param resp
+/// \param protocol
+/// \param transactionId
 ///
-void FormModSim::on_mbResponse(const QModbusResponse& resp)
+void FormModSim::on_mbResponse(const QModbusResponse& resp, ModbusMessage::ProtocolType protocol, int transactionId)
 {
     const auto deviceId = ui->lineEditDeviceId->value<int>();
-    ui->outputWidget->updateTraffic(resp, deviceId);
+    ui->outputWidget->updateTraffic(resp, deviceId, transactionId, protocol);
 }
 
 ///
