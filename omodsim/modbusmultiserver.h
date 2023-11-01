@@ -23,7 +23,6 @@
 class ModbusTcpServer : public QModbusTcpServer
 {
     Q_OBJECT
-    friend class ModbusTcpConnectionObserver;
 
 public:
     explicit ModbusTcpServer(QObject *parent = nullptr)
