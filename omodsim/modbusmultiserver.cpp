@@ -123,13 +123,13 @@ QSharedPointer<QModbusServer> ModbusMultiServer::createModbusServer(const Connec
                 modbusServer->setConnectionParameter(QModbusDevice::NetworkPortParameter, cd.TcpParams.ServicePort);
                 modbusServer->setConnectionParameter(QModbusDevice::NetworkAddressParameter, cd.TcpParams.IPAddress);
 
-                connect((ModbusTcpServer*)modbusServer.get(), &ModbusTcpServer::request, this, [&](const QModbusRequest& req)
+                connect((ModbusTcpServer*)modbusServer.get(), &ModbusTcpServer::request, this, [&](const QModbusRequest& req, int transactionId)
                 {
-                    emit request(req, ModbusMessage::Tcp, ++_transactionId);
+                    emit request(req, ModbusMessage::Tcp, transactionId);
                 });
-                connect((ModbusTcpServer*)modbusServer.get(), &ModbusTcpServer::response, this, [&](const QModbusResponse& resp)
+                connect((ModbusTcpServer*)modbusServer.get(), &ModbusTcpServer::response, this, [&](const QModbusResponse& resp, int transactionId)
                 {
-                    emit response(resp, ModbusMessage::Tcp, _transactionId);
+                    emit response(resp, ModbusMessage::Tcp, transactionId);
                 });
             }
             break;

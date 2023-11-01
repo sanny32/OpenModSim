@@ -2,6 +2,7 @@
 #define MODBUSMULTISERVER_H
 
 #include <QObject>
+#include <QTcpSocket>
 #include <QModbusServer>
 #include <QModbusTcpServer>
 #include "modbusdataunitmap.h"
@@ -22,6 +23,7 @@
 class ModbusTcpServer : public QModbusTcpServer
 {
     Q_OBJECT
+    friend class ModbusTcpConnectionObserver;
 
 public:
     explicit ModbusTcpServer(QObject *parent = nullptr)
@@ -30,22 +32,22 @@ public:
     }
 
 signals:
-    void request(const QModbusRequest& req);
-    void response(const QModbusResponse& resp);
+    void request(const QModbusRequest& req, int transactionId);
+    void response(const QModbusResponse& resp, int transactionId);
 
 protected:
     QModbusResponse processRequest(const QModbusPdu &req) override
     {
-        emit request(req);
+        emit request(req, 0);
         auto resp = QModbusTcpServer::processRequest(req);
-        emit response(resp);
+        emit response(resp, 0);
         return resp;
     }
     QModbusResponse processPrivateRequest(const QModbusPdu &req) override
     {
-        emit request(req);
+        emit request(req, 0);
         auto resp = QModbusTcpServer::processPrivateRequest(req);
-        emit response(resp);
+        emit response(resp, 0);
         return resp;
     }
 };
@@ -152,7 +154,6 @@ private:
 
 private:
     quint8 _deviceId;
-    quint8 _transactionId = -1;
     ModbusDataUnitMap _modbusDataUnitMap;
     QList<QSharedPointer<QModbusServer>> _modbusServerList;
 };
