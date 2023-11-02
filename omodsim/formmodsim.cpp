@@ -32,6 +32,9 @@ FormModSim::FormModSim(int id, ModbusMultiServer& server, QSharedPointer<DataSim
     ui->setupUi(this);
     setWindowTitle(QString("ModSim%1").arg(_formId));
 
+    ui->lineEditDeviceId->setInputRange(ModbusLimits::slaveRange());
+    ui->lineEditDeviceId->setValue(server.deviceId());
+
     ui->stackedWidget->setCurrentIndex(0);
     ui->scriptControl->setModbusMultiServer(&_mbMultiServer);
     ui->scriptControl->setByteOrder(ui->outputWidget->byteOrder());
@@ -42,9 +45,6 @@ FormModSim::FormModSim(int id, ModbusMultiServer& server, QSharedPointer<DataSim
 
     ui->lineEditLength->setInputRange(ModbusLimits::lengthRange());
     ui->lineEditLength->setValue(100);
-
-    ui->lineEditDeviceId->setInputRange(ModbusLimits::slaveRange());
-    ui->lineEditDeviceId->setValue(1);
 
     ui->comboBoxModbusPointType->setCurrentPointType(QModbusDataUnit::HoldingRegisters);
 
