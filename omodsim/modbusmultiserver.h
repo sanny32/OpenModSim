@@ -2,11 +2,13 @@
 #define MODBUSMULTISERVER_H
 
 #include <QObject>
+#include <QTcpSocket>
 #include <QModbusServer>
 #include <QModbusTcpServer>
 #include "modbusdataunitmap.h"
 #include "modbuswriteparams.h"
 #include "connectiondetails.h"
+#include "modbusmessage.h"
 
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     #include <QModbusRtuSerialSlave>
@@ -29,22 +31,22 @@ public:
     }
 
 signals:
-    void request(const QModbusRequest& req);
-    void response(const QModbusResponse& resp);
+    void request(const QModbusRequest& req, int transactionId);
+    void response(const QModbusResponse& resp, int transactionId);
 
 protected:
     QModbusResponse processRequest(const QModbusPdu &req) override
     {
-        emit request(req);
+        emit request(req, 0);
         auto resp = QModbusTcpServer::processRequest(req);
-        emit response(resp);
+        emit response(resp, 0);
         return resp;
     }
     QModbusResponse processPrivateRequest(const QModbusPdu &req) override
     {
-        emit request(req);
+        emit request(req, 0);
         auto resp = QModbusTcpServer::processPrivateRequest(req);
-        emit response(resp);
+        emit response(resp, 0);
         return resp;
     }
 };
@@ -130,8 +132,8 @@ signals:
     void connected(const ConnectionDetails& cd);
     void disconnected(const ConnectionDetails& cd);
     void deviceIdChanged(quint8 deviceId);
-    void request(const QModbusRequest& req);
-    void response(const QModbusResponse& resp);
+    void request(const QModbusRequest& req, ModbusMessage::ProtocolType protocol, int transactionId);
+    void response(const QModbusResponse& resp, ModbusMessage::ProtocolType protocol, int transactionId);
     void connectionError(const QString& error);
     void dataChanged(const QModbusDataUnit& data);
 

@@ -6,6 +6,7 @@
 #include <QListWidgetItem>
 #include <QModbusReply>
 #include "enums.h"
+#include "modbusmessage.h"
 #include "datasimulator.h"
 #include "displaydefinition.h"
 
@@ -113,8 +114,8 @@ public:
 
     void paint(const QRect& rc, QPainter& painter);
 
-    void updateTraffic(const QModbusRequest& request, int server);
-    void updateTraffic(const QModbusResponse& response, int server);
+    void updateTraffic(const QModbusRequest& request, int server, int transactionId, ModbusMessage::ProtocolType protocol);
+    void updateTraffic(const QModbusResponse& response, int server, int transactionId, ModbusMessage::ProtocolType protocol);
     void updateData(const QModbusDataUnit& data);
 
     AddressDescriptionMap descriptionMap() const;
@@ -135,7 +136,7 @@ private slots:
 private:
     void captureString(const QString& s);
     void showModbusMessage(const QModelIndex& index);
-    void updateLogView(bool request, int deviceId, const QModbusPdu& pdu);
+    void updateLogView(bool request, int deviceId, int transactionId, ModbusMessage::ProtocolType protocol, const QModbusPdu& pdu);
 
 private:
     Ui::OutputWidget *ui;

@@ -1,3 +1,4 @@
+#include <QEvent>
 #include "htmldelegate.h"
 #include "modbuslogwidget.h"
 
@@ -132,6 +133,19 @@ ModbusLogWidget::ModbusLogWidget(QWidget* parent)
 }
 
 ///
+/// \brief ModbusLogWidget::changeEvent
+/// \param event
+///
+void ModbusLogWidget::changeEvent(QEvent* event)
+{
+    if (event->type() == QEvent::LanguageChange)
+    {
+        update();
+    }
+    QListView::changeEvent(event);
+}
+
+///
 /// \brief ModbusLogWidget::clear
 ///
 void ModbusLogWidget::clear()
@@ -162,17 +176,22 @@ QModelIndex ModbusLogWidget::index(int row)
 ///
 /// \brief ModbusLogWidget::addItem
 /// \param pdu
+/// \param protocol
 /// \param deviceId
+/// \param transactionId
 /// \param timestamp
 /// \param request
 /// \return
 ///
-const ModbusMessage* ModbusLogWidget::addItem(const QModbusPdu& pdu, int deviceId, const QDateTime& timestamp, bool request)
+const ModbusMessage* ModbusLogWidget::addItem(const QModbusPdu& pdu, ModbusMessage::ProtocolType protocol, int deviceId, int transactionId, const QDateTime& timestamp, bool request)
 {
     const ModbusMessage* msg = nullptr;
     if(model())
     {
-        msg = ModbusMessage::create(pdu, (QModbusAdu::Type)-1, deviceId, timestamp, request);
+        msg = ModbusMessage::create(pdu, protocol, deviceId, timestamp, request);
+        if(protocol == ModbusMessage::Tcp)
+            ((QModbusAduTcp*)msg->adu())->setTransactionId(transactionId);
+
         ((ModbusLogModel*)model())->append(msg);
     }
     return msg;

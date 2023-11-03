@@ -583,20 +583,24 @@ void OutputWidget::paint(const QRect& rc, QPainter& painter)
 /// \brief OutputWidget::updateTraffic
 /// \param request
 /// \param server
+/// \param transactionId
+/// \param protocol
 ///
-void OutputWidget::updateTraffic(const QModbusRequest& request, int server)
+void OutputWidget::updateTraffic(const QModbusRequest& request, int server, int transactionId, ModbusMessage::ProtocolType protocol)
 {
-    updateLogView(true, server, request);
+    updateLogView(true, server, transactionId, protocol, request);
 }
 
 ///
 /// \brief OutputWidget::updateTraffic
 /// \param response
 /// \param server
+/// \param transactionId
+/// \param protocol
 ///
-void OutputWidget::updateTraffic(const QModbusResponse& response, int server)
+void OutputWidget::updateTraffic(const QModbusResponse& response, int server, int transactionId, ModbusMessage::ProtocolType protocol)
 {
-    updateLogView(false, server, response);
+    updateLogView(false, server, transactionId, protocol, response);
 }
 
 ///
@@ -827,11 +831,14 @@ void OutputWidget::showModbusMessage(const QModelIndex& index)
 ///
 /// \brief OutputWidget::updateLogView
 /// \param request
+/// \param server
+/// \param transactionId
+/// \param protocol
 /// \param pdu
 ///
-void OutputWidget::updateLogView(bool request, int server, const QModbusPdu& pdu)
+void OutputWidget::updateLogView(bool request, int server, int transactionId, ModbusMessage::ProtocolType protocol, const QModbusPdu& pdu)
 {
-    auto msg = ui->logView->addItem(pdu, server, QDateTime::currentDateTime(), request);
+    auto msg = ui->logView->addItem(pdu, protocol, server, transactionId, QDateTime::currentDateTime(), request);
     if(captureMode() == CaptureMode::TextCapture && msg != nullptr)
     {
         const auto str = QString("%1: %2 %3 %4").arg(

@@ -41,19 +41,20 @@ Registers
 
 Modbus Logging
 
-![image](https://github.com/sanny32/OpenModSim/assets/13627951/1ebf4973-44a5-4464-aada-26aa751f65da)
+![image](https://github.com/sanny32/OpenModSim/assets/13627951/23ae888d-4722-4065-a394-64e28f68ea62)
 
 
 ## Extended Featues
 
 Modbus Message Parser
 
-  ![image](https://github.com/sanny32/OpenModScan/assets/13627951/86a82340-015e-4ee9-a483-b5ab83527cc1)
+![image](https://github.com/sanny32/OpenModSim/assets/13627951/7e9744b8-f4b3-439a-a312-79cbdc426dc2)
+
   
 ## Scripting
   From version 1.2.0 Open ModSim supports scripting. Qt runtime implements the [ECMAScript Language Specification](http://www.ecma-international.org/publications/standards/Ecma-262.htm) standard, so Javascript is used to write code.
   
-  ![image](https://github.com/sanny32/OpenModSim/assets/13627951/c03a7d23-3c69-43aa-a1d3-ae5096da4f54)
+![image](https://github.com/sanny32/OpenModSim/assets/13627951/c03a7d23-3c69-43aa-a1d3-ae5096da4f54)
 
   Scripts can be launched in two modes: Once or Periodically. If you run script in Once mode the script will stop after it finishes executing. In Periodically mode, the script will start after a certain period of time until the user stops it or the method is called
   ```javascript
