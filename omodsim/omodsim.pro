@@ -4,7 +4,7 @@ CONFIG += c++17
 CONFIG -= debug_and_release
 CONFIG -= debug_and_release_target
 
-VERSION = 1.4.1
+VERSION = 1.5.0
 
 QMAKE_TARGET_PRODUCT = "Open ModSim"
 QMAKE_TARGET_DESCRIPTION = "An Open Source Modbus Slave (Server) Utility"
