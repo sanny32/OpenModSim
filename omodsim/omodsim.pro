@@ -79,6 +79,7 @@ SOURCES += \
     modbusmultiserver.cpp \
     qfixedsizedialog.cpp \
     qhexvalidator.cpp \
+    qint64validator.cpp \
     quintvalidator.cpp \
     recentfileactionlist.cpp \
     windowactionlist.cpp
@@ -165,6 +166,7 @@ HEADERS += \
     numericutils.h \
     qfixedsizedialog.h \
     qhexvalidator.h \
+    qint64validator.h \
     qmodbusadu.h \
     qmodbusadurtu.h \
     qmodbusadutcp.h \

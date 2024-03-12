@@ -1,6 +1,6 @@
 MIT License
 
-Copyright (c) 2023 Alexandr Ananev [mail@ananev.org]
+Copyright (c) 2024 Alexandr Ananev [mail@ananev.org]
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

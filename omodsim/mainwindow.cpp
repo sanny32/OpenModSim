@@ -197,8 +197,8 @@ void MainWindow::on_awake()
     ui->actionShowTraffic->setEnabled(frm != nullptr);
     ui->actionShowScript->setEnabled(frm != nullptr);
     ui->actionBinary->setEnabled(frm != nullptr);
-    ui->actionUnsignedDecimal->setEnabled(frm != nullptr);
-    ui->actionInteger->setEnabled(frm != nullptr);
+    ui->actionUInt16->setEnabled(frm != nullptr);
+    ui->actionInt16->setEnabled(frm != nullptr);
     ui->actionHex->setEnabled(frm != nullptr);
     ui->actionFloatingPt->setEnabled(frm != nullptr);
     ui->actionSwappedFP->setEnabled(frm != nullptr);
@@ -229,12 +229,16 @@ void MainWindow::on_awake()
     {
         const auto ddm = frm->dataDisplayMode();
         ui->actionBinary->setChecked(ddm == DataDisplayMode::Binary);
-        ui->actionUnsignedDecimal->setChecked(ddm == DataDisplayMode::Decimal);
-        ui->actionInteger->setChecked(ddm == DataDisplayMode::Integer);
-        ui->actionLongInteger->setChecked(ddm == DataDisplayMode::LongInteger);
-        ui->actionSwappedLI->setChecked(ddm == DataDisplayMode::SwappedLI);
-        ui->actionUnsignedLongInteger->setChecked(ddm == DataDisplayMode::UnsignedLongInteger);
-        ui->actionSwappedUnsignedLI->setChecked(ddm == DataDisplayMode::SwappedUnsignedLI);
+        ui->actionUInt16->setChecked(ddm == DataDisplayMode::Decimal);
+        ui->actionInt16->setChecked(ddm == DataDisplayMode::Integer);
+        ui->actionInt32->setChecked(ddm == DataDisplayMode::Int32);
+        ui->actionSwappedInt32->setChecked(ddm == DataDisplayMode::SwappedInt32);
+        ui->actionUInt32->setChecked(ddm == DataDisplayMode::UInt32);
+        ui->actionSwappedUInt32->setChecked(ddm == DataDisplayMode::SwappedUInt32);
+        ui->actionInt64->setChecked(ddm == DataDisplayMode::Int64);
+        ui->actionSwappedInt64->setChecked(ddm == DataDisplayMode::SwappedInt64);
+        ui->actionUInt64->setChecked(ddm == DataDisplayMode::UInt64);
+        ui->actionSwappedUInt64->setChecked(ddm == DataDisplayMode::SwappedUInt64);
         ui->actionHex->setChecked(ddm == DataDisplayMode::Hex);
         ui->actionFloatingPt->setChecked(ddm == DataDisplayMode::FloatingPt);
         ui->actionSwappedFP->setChecked(ddm == DataDisplayMode::SwappedFP);
@@ -521,48 +525,80 @@ void MainWindow::on_actionBinary_triggered()
 }
 
 ///
-/// \brief MainWindow::on_actionUnsignedDecimal_triggered
+/// \brief MainWindow::on_actionUInt16_triggered
 ///
-void MainWindow::on_actionUnsignedDecimal_triggered()
+void MainWindow::on_actionUInt16_triggered()
 {
     updateDataDisplayMode(DataDisplayMode::Decimal);
 }
 
 ///
-/// \brief MainWindow::on_actionInteger_triggered
+/// \brief MainWindow::on_actionInt16_triggered
 ///
-void MainWindow::on_actionInteger_triggered()
+void MainWindow::on_actionInt16_triggered()
 {
     updateDataDisplayMode(DataDisplayMode::Integer);
 }
 
 ///
-/// \brief MainWindow::on_actionLongInteger_triggered
+/// \brief MainWindow::on_actionInt32_triggered
 ///
-void MainWindow::on_actionLongInteger_triggered()
+void MainWindow::on_actionInt32_triggered()
 {
-    updateDataDisplayMode(DataDisplayMode::LongInteger);
+    updateDataDisplayMode(DataDisplayMode::Int32);
 }
 
 ///
-/// \brief MainWindow::on_actionSwappedLI_triggered
+/// \brief MainWindow::on_actionSwappedInt32_triggered
 ///
-void MainWindow::on_actionSwappedLI_triggered()
+void MainWindow::on_actionSwappedInt32_triggered()
 {
-    updateDataDisplayMode(DataDisplayMode::SwappedLI);
+    updateDataDisplayMode(DataDisplayMode::SwappedInt32);
 }
 
 ///
-/// \brief MainWindow::on_actionUnsignedLongInteger_triggered
+/// \brief MainWindow::on_actionUInt32_triggered
 ///
-void MainWindow::on_actionUnsignedLongInteger_triggered()
+void MainWindow::on_actionUInt32_triggered()
 {
-    updateDataDisplayMode(DataDisplayMode::UnsignedLongInteger);
+    updateDataDisplayMode(DataDisplayMode::UInt32);
 }
 
-void MainWindow::on_actionSwappedUnsignedLI_triggered()
+void MainWindow::on_actionSwappedUInt32_triggered()
 {
-    updateDataDisplayMode(DataDisplayMode::SwappedUnsignedLI);
+    updateDataDisplayMode(DataDisplayMode::SwappedUInt32);
+}
+
+///
+/// \brief MainWindow::on_actionInt64_triggered
+///
+void MainWindow::on_actionInt64_triggered()
+{
+    updateDataDisplayMode(DataDisplayMode::Int64);
+}
+
+///
+/// \brief MainWindow::on_actionSwappedInt64_triggered
+///
+void MainWindow::on_actionSwappedInt64_triggered()
+{
+    updateDataDisplayMode(DataDisplayMode::SwappedInt64);
+}
+
+///
+/// \brief MainWindow::on_actionUInt64_triggered
+///
+void MainWindow::on_actionUInt64_triggered()
+{
+    updateDataDisplayMode(DataDisplayMode::UInt64);
+}
+
+///
+/// \brief MainWindow::on_actionSwappedUInt64_triggered
+///
+void MainWindow::on_actionSwappedUInt64_triggered()
+{
+    updateDataDisplayMode(DataDisplayMode::SwappedUInt64);
 }
 
 ///
