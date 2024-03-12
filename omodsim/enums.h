@@ -52,10 +52,14 @@ enum class DataDisplayMode
     SwappedFP,
     DblFloat,
     SwappedDbl,
-    LongInteger,
-    SwappedLI,
-    UnsignedLongInteger,
-    SwappedUnsignedLI
+    Int32,
+    SwappedInt32,
+    UInt32,
+    SwappedUInt32,
+    Int64,
+    SwappedInt64,
+    UInt64,
+    SwappedUInt64
 };
 Q_DECLARE_METATYPE(DataDisplayMode);
 

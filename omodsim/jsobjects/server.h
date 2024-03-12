@@ -41,11 +41,17 @@ public:
     Q_INVOKABLE bool readCoil(quint16 address) const;
     Q_INVOKABLE void writeCoil(quint16 address, bool value);
 
-    Q_INVOKABLE qint32 readLong(Register::Type reg, quint16 address, bool swapped) const;
-    Q_INVOKABLE void writeLong(Register::Type reg, quint16 address, qint32 value, bool swapped);
+    Q_INVOKABLE qint32 readInt32(Register::Type reg, quint16 address, bool swapped) const;
+    Q_INVOKABLE void writeInt32(Register::Type reg, quint16 address, qint32 value, bool swapped);
 
-    Q_INVOKABLE quint32 readUnsignedLong(Register::Type reg, quint16 address, bool swapped) const;
-    Q_INVOKABLE void writeUnsignedLong(Register::Type reg, quint16 address, quint32 value, bool swapped);
+    Q_INVOKABLE quint32 readUInt32(Register::Type reg, quint16 address, bool swapped) const;
+    Q_INVOKABLE void writeUInt32(Register::Type reg, quint16 address, quint32 value, bool swapped);
+
+    Q_INVOKABLE qint64 readInt64(Register::Type reg, quint16 address, bool swapped) const;
+    Q_INVOKABLE void writeInt64(Register::Type reg, quint16 address, qint64 value, bool swapped);
+
+    Q_INVOKABLE quint64 readUInt64(Register::Type reg, quint16 address, bool swapped) const;
+    Q_INVOKABLE void writeUInt64(Register::Type reg, quint16 address, quint64 value, bool swapped);
 
     Q_INVOKABLE float readFloat(Register::Type reg, quint16 address, bool swapped) const;
     Q_INVOKABLE void writeFloat(Register::Type reg, quint16 address, float value, bool swapped);

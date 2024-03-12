@@ -116,11 +116,17 @@ public:
     void writeValue(QModbusDataUnit::RegisterType pointType, quint16 pointAddress, quint16 value, ByteOrder order);
     void writeRegister(QModbusDataUnit::RegisterType pointType, const ModbusWriteParams& params);
 
-    qint32 readLong(QModbusDataUnit::RegisterType pointType, quint16 pointAddress, ByteOrder order, bool swapped);
-    void writeLong(QModbusDataUnit::RegisterType pointType, quint16 pointAddress, qint32 value, ByteOrder order, bool swapped);
+    qint32 readInt32(QModbusDataUnit::RegisterType pointType, quint16 pointAddress, ByteOrder order, bool swapped);
+    void writeInt32(QModbusDataUnit::RegisterType pointType, quint16 pointAddress, qint32 value, ByteOrder order, bool swapped);
 
-    quint32 readUnsignedLong(QModbusDataUnit::RegisterType pointType, quint16 pointAddress, ByteOrder order, bool swapped);
-    void writeUnsignedLong(QModbusDataUnit::RegisterType pointType, quint16 pointAddress, quint32 value, ByteOrder order, bool swapped);
+    quint32 readUInt32(QModbusDataUnit::RegisterType pointType, quint16 pointAddress, ByteOrder order, bool swapped);
+    void writeUInt32(QModbusDataUnit::RegisterType pointType, quint16 pointAddress, quint32 value, ByteOrder order, bool swapped);
+
+    qint64 readInt64(QModbusDataUnit::RegisterType pointType, quint16 pointAddress, ByteOrder order, bool swapped);
+    void writeInt64(QModbusDataUnit::RegisterType pointType, quint16 pointAddress, qint64 value, ByteOrder order, bool swapped);
+
+    quint64 readUInt64(QModbusDataUnit::RegisterType pointType, quint16 pointAddress, ByteOrder order, bool swapped);
+    void writeUInt64(QModbusDataUnit::RegisterType pointType, quint16 pointAddress, quint64 value, ByteOrder order, bool swapped);
 
     float readFloat(QModbusDataUnit::RegisterType pointType, quint16 pointAddress, ByteOrder order, bool swapped);
     void writeFloat(QModbusDataUnit::RegisterType pointType, quint16 pointAddress, float value, ByteOrder order, bool swapped);
