@@ -357,7 +357,7 @@ QModbusDataUnit createDataUnit(QModbusDataUnit::RegisterType type, int newStartA
 }
 
 ///
-/// \brief createLongDataUnit
+/// \brief createInt32DataUnit
 /// \param type
 /// \param newStartAddress
 /// \param value
@@ -365,7 +365,7 @@ QModbusDataUnit createDataUnit(QModbusDataUnit::RegisterType type, int newStartA
 /// \param swapped
 /// \return
 ///
-QModbusDataUnit createLongDataUnit(QModbusDataUnit::RegisterType type, int newStartAddress, qint32 value, ByteOrder order, bool swapped)
+QModbusDataUnit createInt32DataUnit(QModbusDataUnit::RegisterType type, int newStartAddress, qint32 value, ByteOrder order, bool swapped)
 {
     Q_ASSERT(type == QModbusDataUnit::HoldingRegisters
              || type == QModbusDataUnit::InputRegisters);
@@ -374,9 +374,32 @@ QModbusDataUnit createLongDataUnit(QModbusDataUnit::RegisterType type, int newSt
     auto data = QModbusDataUnit(type, newStartAddress, 2);
 
     if(swapped)
-        breakLong(value, values[1], values[0], order);
+        breakInt32(value, values[1], values[0], order);
     else
-        breakLong(value, values[0], values[1], order);
+        breakInt32(value, values[0], values[1], order);
+
+    data.setValues(values);
+    return data;
+}
+
+///
+/// \brief createInt64DataUnit
+/// \param type
+/// \param newStartAddress
+/// \param value
+/// \param order
+/// \param swapped
+/// \return
+///
+QModbusDataUnit createInt64DataUnit(QModbusDataUnit::RegisterType type, int newStartAddress, qint64 value, ByteOrder order, bool swapped)
+{
+    QVector<quint16> values(4);
+    auto data = QModbusDataUnit(type, newStartAddress, 4);
+
+    if(swapped)
+        breakInt64(value, values[3], values[2], values[1], values[0], order);
+    else
+        breakInt64(value, values[0], values[1], values[2], values[3], order);
 
     data.setValues(values);
     return data;
@@ -449,56 +472,110 @@ void ModbusMultiServer::writeValue(QModbusDataUnit::RegisterType pointType, quin
 }
 
 ///
-/// \brief ModbusMultiServer::readLong
+/// \brief ModbusMultiServer::readInt32
 /// \param pointType
 /// \param pointAddress
 /// \param order
 /// \param swapped
 /// \return
 ///
-qint32 ModbusMultiServer::readLong(QModbusDataUnit::RegisterType pointType, quint16 pointAddress, ByteOrder order, bool swapped)
+qint32 ModbusMultiServer::readInt32(QModbusDataUnit::RegisterType pointType, quint16 pointAddress, ByteOrder order, bool swapped)
 {
     const auto data = this->data(pointType, pointAddress, 2);
-    return swapped ?  makeLong(data.value(1), data.value(0), order): makeLong(data.value(0), data.value(1), order);
+    return swapped ?  makeInt32(data.value(1), data.value(0), order): makeInt32(data.value(0), data.value(1), order);
 }
 
 ///
-/// \brief ModbusMultiServer::writeLong
+/// \brief ModbusMultiServer::writeInt32
 /// \param pointType
 /// \param pointAddress
 /// \param value
 /// \param order
 /// \param swapped
 ///
-void ModbusMultiServer::writeLong(QModbusDataUnit::RegisterType pointType, quint16 pointAddress, qint32 value, ByteOrder order, bool swapped)
+void ModbusMultiServer::writeInt32(QModbusDataUnit::RegisterType pointType, quint16 pointAddress, qint32 value, ByteOrder order, bool swapped)
 {
-    setData(createLongDataUnit(pointType, pointAddress, value, order, swapped));
+    setData(createInt32DataUnit(pointType, pointAddress, value, order, swapped));
 }
 
 ///
-/// \brief ModbusMultiServer::readUnsignedLong
+/// \brief ModbusMultiServer::readUInt32
 /// \param pointType
 /// \param pointAddress
 /// \param order
 /// \param swapped
 /// \return
 ///
-quint32 ModbusMultiServer::readUnsignedLong(QModbusDataUnit::RegisterType pointType, quint16 pointAddress, ByteOrder order, bool swapped)
+quint32 ModbusMultiServer::readUInt32(QModbusDataUnit::RegisterType pointType, quint16 pointAddress, ByteOrder order, bool swapped)
 {
-    return (quint32)readLong(pointType, pointAddress, order, swapped);
+    return (quint32)readInt32(pointType, pointAddress, order, swapped);
 }
 
 ///
-/// \brief ModbusMultiServer::writeUnsignedLong
+/// \brief ModbusMultiServer::writeUInt32
 /// \param pointType
 /// \param pointAddress
 /// \param value
 /// \param order
 /// \param swapped
 ///
-void ModbusMultiServer::writeUnsignedLong(QModbusDataUnit::RegisterType pointType, quint16 pointAddress, quint32 value, ByteOrder order, bool swapped)
+void ModbusMultiServer::writeUInt32(QModbusDataUnit::RegisterType pointType, quint16 pointAddress, quint32 value, ByteOrder order, bool swapped)
 {
-    writeLong(pointType, pointAddress, value, order, swapped);
+    writeInt32(pointType, pointAddress, value, order, swapped);
+}
+
+///
+/// \brief ModbusMultiServer::readInt64
+/// \param pointType
+/// \param pointAddress
+/// \param order
+/// \param swapped
+/// \return
+///
+qint64 ModbusMultiServer::readInt64(QModbusDataUnit::RegisterType pointType, quint16 pointAddress, ByteOrder order, bool swapped)
+{
+    const auto data = this->data(pointType, pointAddress, 4);
+    return swapped ?  makeInt64(data.value(3), data.value(2), data.value(1), data.value(0), order):
+               makeInt64(data.value(0), data.value(1), data.value(2), data.value(3), order);
+}
+
+///
+/// \brief ModbusMultiServer::writeInt64
+/// \param pointType
+/// \param pointAddress
+/// \param value
+/// \param order
+/// \param swapped
+///
+void ModbusMultiServer::writeInt64(QModbusDataUnit::RegisterType pointType, quint16 pointAddress, qint64 value, ByteOrder order, bool swapped)
+{
+    setData(createInt64DataUnit(pointType, pointAddress, value, order, swapped));
+}
+
+///
+/// \brief ModbusMultiServer::readUInt64
+/// \param pointType
+/// \param pointAddress
+/// \param order
+/// \param swapped
+/// \return
+///
+quint64 ModbusMultiServer::readUInt64(QModbusDataUnit::RegisterType pointType, quint16 pointAddress, ByteOrder order, bool swapped)
+{
+    return (quint64)readInt64(pointType, pointAddress, order, swapped);
+}
+
+///
+/// \brief ModbusMultiServer::writeUInt64
+/// \param pointType
+/// \param pointAddress
+/// \param value
+/// \param order
+/// \param swapped
+///
+void ModbusMultiServer::writeUInt64(QModbusDataUnit::RegisterType pointType, quint16 pointAddress, quint64 value, ByteOrder order, bool swapped)
+{
+    writeInt64(pointType, pointAddress, value, order, swapped);
 }
 
 ///
@@ -610,15 +687,25 @@ void ModbusMultiServer::writeRegister(QModbusDataUnit::RegisterType pointType, c
                     case DataDisplayMode::SwappedDbl:
                         data = createDoubleDataUnit(pointType, params.Address - 1, params.Value.toDouble(), params.Order, true);
                     break;
-
-                    case DataDisplayMode::LongInteger:
-                    case DataDisplayMode::UnsignedLongInteger:
-                        data = createLongDataUnit(pointType, params.Address - 1, params.Value.toInt(), params.Order, false);
+                        
+                    case DataDisplayMode::Int32:
+                    case DataDisplayMode::UInt32:
+                        data = createInt32DataUnit(pointType, params.Address - 1, params.Value.toInt(), params.Order, false);
                     break;
 
-                    case DataDisplayMode::SwappedLI:
-                    case DataDisplayMode::SwappedUnsignedLI:
-                        data = createLongDataUnit(pointType, params.Address - 1, params.Value.toInt(), params.Order, true);
+                    case DataDisplayMode::SwappedInt32:
+                    case DataDisplayMode::SwappedUInt32:
+                        data = createInt32DataUnit(pointType, params.Address - 1, params.Value.toInt(), params.Order, true);
+                    break;
+
+                    case DataDisplayMode::Int64:
+                    case DataDisplayMode::UInt64:
+                        data = createInt64DataUnit(pointType, params.Address - 1, params.Value.toLongLong(), params.Order, false);
+                        break;
+
+                    case DataDisplayMode::SwappedInt64:
+                    case DataDisplayMode::SwappedUInt64:
+                        data = createInt64DataUnit(pointType, params.Address - 1, params.Value.toLongLong(), params.Order, true);
                     break;
                 }
             break;

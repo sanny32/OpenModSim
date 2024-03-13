@@ -1,10 +1,11 @@
 # Open ModSim
 Open ModSim is a free implimentation of modbus slave (server) utility for modbus-tcp and modbus-rtu protocols.
 
-![image](https://github.com/sanny32/OpenModSim/assets/13627951/3912005f-df9b-41b4-b6f5-33ebc76a908c)
+![image](https://github.com/sanny32/OpenModSim/assets/13627951/3788824d-cf3f-4e98-9f5f-856e99106f6c)
 
 
-![image](https://github.com/sanny32/OpenModSim/assets/13627951/b40eca28-7a34-46dc-9a50-9b16dc1becf1)
+
+![image](https://github.com/sanny32/OpenModSim/assets/13627951/f5dd90b6-2301-495b-ae86-409b2afd4eaf)
 
 
 ## Features
@@ -41,7 +42,8 @@ Registers
 
 Modbus Logging
 
-![image](https://github.com/sanny32/OpenModSim/assets/13627951/23ae888d-4722-4065-a394-64e28f68ea62)
+![image](https://github.com/sanny32/OpenModSim/assets/13627951/72cb3860-b672-41fd-8ec6-3399170a28df)
+
 
 
 ## Extended Featues
@@ -54,7 +56,7 @@ Modbus Message Parser
 ## Scripting
   From version 1.2.0 Open ModSim supports scripting. Qt runtime implements the [ECMAScript Language Specification](http://www.ecma-international.org/publications/standards/Ecma-262.htm) standard, so Javascript is used to write code.
   
-![image](https://github.com/sanny32/OpenModSim/assets/13627951/c03a7d23-3c69-43aa-a1d3-ae5096da4f54)
+![image](https://github.com/sanny32/OpenModSim/assets/13627951/ab115064-877f-4f6f-a1b9-4ac6c2feb042)
 
   Scripts can be launched in two modes: Once or Periodically. If you run script in Once mode the script will stop after it finishes executing. In Periodically mode, the script will start after a certain period of time until the user stops it or the method is called
   ```javascript
@@ -104,7 +106,7 @@ Script.onInit(init);
   Now building is available with Qt/qmake (version 5.15 and above) or Qt Creator. Supports both OS Microsoft Windows and Linux.
   
 ## MIT License
-Copyright 2023 Alexandr Ananev [mail@ananev.org]
+Copyright 2024 Alexandr Ananev [mail@ananev.org]
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 

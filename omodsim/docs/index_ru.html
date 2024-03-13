@@ -139,16 +139,20 @@
 				<li><a href="#server.readdiscrete">Server.readDiscrete</a></li>
 				<li><a href="#server.readinput">Server.readInput</a></li>
 				<li><a href="#server.readholding">Server.readHolding</a></li>
-				<li><a href="#server.readlong">Server.readLong</a></li>
-				<li><a href="#server.readunsignedlong">Server.readUnsignedLong</a></li>
+				<li><a href="#server.readint32">Server.readInt32</a></li>
+				<li><a href="#server.readint64">Server.readInt64</a></li>
+				<li><a href="#server.readuint32">Server.readUInt32</a></li>
+				<li><a href="#server.readuint64">Server.readUInt64</a></li>
 				<li><a href="#server.readdouble">Server.readDouble</a></li>
 				<li><a href="#server.readfloat">Server.readFloat</a></li>
 				<li><a href="#server.writecoil">Server.writeCoil</a></li>
 				<li><a href="#server.writediscrete">Server.writeDiscrete</a></li>
 				<li><a href="#server.writeinput">Server.writeInput</a></li>
 				<li><a href="#server.writeholding">Server.writeHolding</a></li>
-				<li><a href="#server.writelong">Server.writeLong</a></li>
-				<li><a href="#server.writeunsignedlong">Server.writeUnsignedLong</a></li>
+				<li><a href="#server.writeint32">Server.writeInt32</a></li>
+				<li><a href="#server.writeint64">Server.writeInt64</a></li>
+				<li><a href="#server.writeunint32">Server.writeUInt32</a></li>
+				<li><a href="#server.writeunint64">Server.writeUInt64</a></li>
 				<li><a href="#server.writedouble">Server.writeDouble</a></li>
 				<li><a href="#server.writefloat">Server.writeFloat</a></li>
 			</ul>
@@ -634,16 +638,30 @@
 			<dd>
 				<p>Возвращает значение регистра Holding по адресу <code>address</code>.</p>
 			</dd>
-			<dt id="server.readlong"><code>Server.readLong(Register, address, swapped)</code></dt>
+			<dt id="server.readint32"><code>Server.readInt32(Register, address, swapped)</code></dt>
 			<dd>
-				<p>Возвращает 32-битное целое значение (long) из регистров типа <code>Register</code> с адресами от <code>address</code> до <code>address + 1</code>. Параметр <code>swapped</code> изменяет порядок регистров, когда функция преобразует набор регистров в длинное целое значение (long).</p>
+				<p>Возвращает 32-битное целое значение из регистров типа <code>Register</code> с адресами от <code>address</code> до <code>address + 1</code>. Параметр <code>swapped</code> изменяет порядок регистров, когда функция преобразует набор регистров в 32-битное целое значение.</p>
 				<div class="notecard note">
                     <p><strong>Примечание.</strong> Эта функция доступна только для регистров типа <code>Register.Input</code> и <code>Register.Holding</code>.</p>
                 </div>
 			</dd>
-			<dt id="server.readunsignedlong"><code>Server.readUnsignedLong(Register, address, swapped)</code></dt>
+			<dt id="server.readint64"><code>Server.readInt64(Register, address, swapped)</code></dt>
 			<dd>
-				<p>Возвращает беззнаковое 32-битное целое значение (unsigned long) из регистров типа <code>Register</code> с адресами от <code>address</code> до <code>address + 1</code>. Параметр <code>swapped</code> изменяет порядок регистров, когда функция преобразует набор регистров в беззнаковое длинное целое значение (unsigned long).</p>
+				<p>Возвращает 64-битное целое значение из регистров типа <code>Register</code> с адресами от <code>address</code> до <code>address + 3</code>. Параметр <code>swapped</code> изменяет порядок регистров, когда функция преобразует набор регистров в 64-битное целое значение.</p>
+				<div class="notecard note">
+                    <p><strong>Примечание.</strong> Эта функция доступна только для регистров типа <code>Register.Input</code> и <code>Register.Holding</code>.</p>
+                </div>
+			</dd>
+			<dt id="server.readuint32"><code>Server.readUInt32(Register, address, swapped)</code></dt>
+			<dd>
+				<p>Возвращает беззнаковое 32-битное целое значение из регистров типа <code>Register</code> с адресами от <code>address</code> до <code>address + 1</code>. Параметр <code>swapped</code> изменяет порядок регистров, когда функция преобразует набор регистров в беззнаковое 32-битное целое значение.</p>
+				<div class="notecard note">
+                    <p><strong>Примечание.</strong> Эта функция доступна только для регистров типа <code>Register.Input</code> и <code>Register.Holding</code>.</p>
+                </div>
+			</dd>
+			<dt id="server.readuint64"><code>Server.readUInt64(Register, address, swapped)</code></dt>
+			<dd>
+				<p>Возвращает беззнаковое 64-битное целое значение из регистров типа <code>Register</code> с адресами от <code>address</code> до <code>address + 3</code>. Параметр <code>swapped</code> изменяет порядок регистров, когда функция преобразует набор регистров в беззнаковое 64-битное целое значение.</p>
 				<div class="notecard note">
                     <p><strong>Примечание.</strong> Эта функция доступна только для регистров типа <code>Register.Input</code> и <code>Register.Holding</code>.</p>
                 </div>
@@ -678,16 +696,30 @@
 			<dd>
 				<p>Записывает <code>value</code> в регистр Holding по адресу <code>address</code>.</p>
 			</dd>
-			<dt id="server.writelong"><code>Server.writeLong(Register, address, value, swapped)</code></dt>
+			<dt id="server.writeint32"><code>Server.writeInt32(Register, address, value, swapped)</code></dt>
 			<dd>
-				<p>Записывает 32-битное целое число (long) <code>value</code> в адреса регистров типа <code>Register</code>. Параметр <code>swapped</code> изменяет порядок регистров, когда функция преобразует длинное целое значение (long) в набор регистров.</p>
+				<p>Записывает 32-битное целое число <code>value</code> в адреса регистров типа <code>Register</code>. Параметр <code>swapped</code> изменяет порядок регистров, когда функция преобразует 32-битное целое значение в набор регистров.</p>
                 <div class="notecard note">
                     <p><strong>Примечание.</strong> Эта функция доступна только для регистров типа <code>Register.Input</code> и <code>Register.Holding</code>.</p>
                 </div>
 			</dd>
-			<dt id="server.writeunsignedlong"><code>Server.writeUnsignedLong(Register, address, value, swapped)</code></dt>
+			<dt id="server.writeint64"><code>Server.writeInt64(Register, address, value, swapped)</code></dt>
 			<dd>
-				<p>Записывает 32-битное беззнаковое целое число (unsigned long) <code>value</code> в адреса регистров типа <code>Register</code>. Параметр <code>swapped</code> изменяет порядок регистров, когда функция преобразует беззнаковое длинное целое значение (unsigned long) в набор регистров.</p>
+				<p>Записывает 64-битное целое число <code>value</code> в адреса регистров типа <code>Register</code>. Параметр <code>swapped</code> изменяет порядок регистров, когда функция преобразует 64-битное целое значение в набор регистров.</p>
+                <div class="notecard note">
+                    <p><strong>Примечание.</strong> Эта функция доступна только для регистров типа <code>Register.Input</code> и <code>Register.Holding</code>.</p>
+                </div>
+			</dd>
+			<dt id="server.writeuint32"><code>Server.writeUInt32(Register, address, value, swapped)</code></dt>
+			<dd>
+				<p>Записывает 32-битное беззнаковое целое число <code>value</code> в адреса регистров типа <code>Register</code>. Параметр <code>swapped</code> изменяет порядок регистров, когда функция преобразует беззнаковое 32-битное целое значение в набор регистров.</p>
+                <div class="notecard note">
+                    <p><strong>Примечание.</strong> Эта функция доступна только для регистров типа <code>Register.Input</code> и <code>Register.Holding</code>.</p>
+                </div>
+			</dd>
+			<dt id="server.writeuint64"><code>Server.writeUInt64(Register, address, value, swapped)</code></dt>
+			<dd>
+				<p>Записывает 64-битное беззнаковое целое число <code>value</code> в адреса регистров типа <code>Register</code>. Параметр <code>swapped</code> изменяет порядок регистров, когда функция преобразует беззнаковое 64-битное целое значение в набор регистров.</p>
                 <div class="notecard note">
                     <p><strong>Примечание.</strong> Эта функция доступна только для регистров типа <code>Register.Input</code> и <code>Register.Holding</code>.</p>
                 </div>

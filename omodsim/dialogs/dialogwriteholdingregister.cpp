@@ -20,6 +20,27 @@ DialogWriteHoldingRegister::DialogWriteHoldingRegister(ModbusWriteParams& writeP
     ui->lineEditAddress->setInputRange(ModbusLimits::addressRange());
     ui->lineEditAddress->setValue(_writeParams.Address);
 
+    if(simParams.Mode != SimulationMode::No)
+    {
+        QLabel* iconLabel = new QLabel(ui->pushButtonSimulation);
+        iconLabel->setPixmap(QIcon(":/res/pointGreen.png").pixmap(4, 4));
+        iconLabel->setAttribute(Qt::WA_TransparentForMouseEvents, true);
+
+        QLabel* textLabel = new QLabel(ui->pushButtonSimulation->text(), ui->pushButtonSimulation);
+        textLabel->setAlignment(Qt::AlignCenter);
+        textLabel->setAttribute(Qt::WA_TransparentForMouseEvents, true);
+
+        auto layout = new QHBoxLayout(ui->pushButtonSimulation);
+        layout->setContentsMargins(4,0,4,0);
+        layout->addWidget(iconLabel);
+        layout->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Expanding));
+        layout->addWidget(textLabel);
+        layout->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Expanding));
+
+        ui->pushButtonSimulation->setText(QString());
+        ui->pushButtonSimulation->setLayout(layout);
+    }
+
     switch(_writeParams.DisplayMode)
     {
         case DataDisplayMode::Binary:
@@ -56,19 +77,33 @@ DialogWriteHoldingRegister::DialogWriteHoldingRegister(ModbusWriteParams& writeP
             ui->lineEditValue->setInputMode(NumericLineEdit::DoubleMode);
             ui->lineEditValue->setValue(_writeParams.Value.toDouble());
         break;
-
-        case DataDisplayMode::LongInteger:
-        case DataDisplayMode::SwappedLI:
+            
+        case DataDisplayMode::Int32:
+        case DataDisplayMode::SwappedInt32:
             ui->lineEditValue->setInputRange(INT_MIN, INT_MAX);
             ui->lineEditValue->setValue(_writeParams.Value.toInt());
-            break;
+        break;
 
-        case DataDisplayMode::UnsignedLongInteger:
-        case DataDisplayMode::SwappedUnsignedLI:
+        case DataDisplayMode::UInt32:
+        case DataDisplayMode::SwappedUInt32:
             ui->lineEditValue->setInputRange(0U, UINT_MAX);
-            ui->lineEditValue->setInputMode(NumericLineEdit::UnsignedMode);
+            ui->lineEditValue->setInputMode(NumericLineEdit::UInt32Mode);
             ui->lineEditValue->setValue(_writeParams.Value.toUInt());
-            break;
+        break;
+
+        case DataDisplayMode::Int64:
+        case DataDisplayMode::SwappedInt64:
+            ui->lineEditValue->setInputRange(INT64_MIN, INT64_MAX);
+            ui->lineEditValue->setInputMode(NumericLineEdit::Int64Mode);
+            ui->lineEditValue->setValue(_writeParams.Value.toLongLong());
+        break;
+
+        case DataDisplayMode::UInt64:
+        case DataDisplayMode::SwappedUInt64:
+            ui->lineEditValue->setInputRange<quint64>(0, UINT64_MAX);
+            ui->lineEditValue->setInputMode(NumericLineEdit::UInt64Mode);
+            ui->lineEditValue->setValue(_writeParams.Value.toULongLong());
+        break;
     }
     ui->buttonBox->setFocus();
 }

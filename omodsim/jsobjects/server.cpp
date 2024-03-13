@@ -109,51 +109,99 @@ void Server::writeCoil(quint16 address, bool value)
 }
 
 ///
-/// \brief Server::readLong
+/// \brief Server::readInt32
 /// \param reg
 /// \param address
 /// \param swapped
 /// \return
 ///
-qint32 Server::readLong(Register::Type reg, quint16 address, bool swapped) const
+qint32 Server::readInt32(Register::Type reg, quint16 address, bool swapped) const
 {
-    return _mbMultiServer->readLong((QModbusDataUnit::RegisterType)reg, address - 1, *_byteOrder, swapped);
+    return _mbMultiServer->readInt32((QModbusDataUnit::RegisterType)reg, address - 1, *_byteOrder, swapped);
 }
 
 ///
-/// \brief Server::writeLong
+/// \brief Server::writeInt32
 /// \param reg
 /// \param address
 /// \param value
 /// \param swapped
 ///
-void Server::writeLong(Register::Type reg, quint16 address, qint32 value, bool swapped)
+void Server::writeInt32(Register::Type reg, quint16 address, qint32 value, bool swapped)
 {
-    _mbMultiServer->writeLong((QModbusDataUnit::RegisterType)reg, address - 1, value, *_byteOrder, swapped);
+    _mbMultiServer->writeInt32((QModbusDataUnit::RegisterType)reg, address - 1, value, *_byteOrder, swapped);
 }
 
 ///
-/// \brief Server::readUnsignedLong
+/// \brief Server::readUInt32
 /// \param reg
 /// \param address
 /// \param swapped
 /// \return
 ///
-quint32 Server::readUnsignedLong(Register::Type reg, quint16 address, bool swapped) const
+quint32 Server::readUInt32(Register::Type reg, quint16 address, bool swapped) const
 {
-    return _mbMultiServer->readUnsignedLong((QModbusDataUnit::RegisterType)reg, address - 1, *_byteOrder, swapped);
+    return _mbMultiServer->readUInt32((QModbusDataUnit::RegisterType)reg, address - 1, *_byteOrder, swapped);
 }
 
 ///
-/// \brief Server::writeUnsignedLong
+/// \brief Server::writeUInt32
 /// \param reg
 /// \param address
 /// \param value
 /// \param swapped
 ///
-void Server::writeUnsignedLong(Register::Type reg, quint16 address, quint32 value, bool swapped)
+void Server::writeUInt32(Register::Type reg, quint16 address, quint32 value, bool swapped)
 {
-    _mbMultiServer->writeUnsignedLong((QModbusDataUnit::RegisterType)reg, address - 1, value, *_byteOrder, swapped);
+    _mbMultiServer->writeUInt32((QModbusDataUnit::RegisterType)reg, address - 1, value, *_byteOrder, swapped);
+}
+
+///
+/// \brief Server::readInt64
+/// \param reg
+/// \param address
+/// \param swapped
+/// \return
+///
+qint64 Server::readInt64(Register::Type reg, quint16 address, bool swapped) const
+{
+    return _mbMultiServer->readInt64((QModbusDataUnit::RegisterType)reg, address - 1, *_byteOrder, swapped);
+}
+
+///
+/// \brief Server::writeInt64
+/// \param reg
+/// \param address
+/// \param value
+/// \param swapped
+///
+void Server::writeInt64(Register::Type reg, quint16 address, qint64 value, bool swapped)
+{
+    _mbMultiServer->writeInt64((QModbusDataUnit::RegisterType)reg, address - 1, value, *_byteOrder, swapped);
+}
+
+///
+/// \brief Server::readUInt64
+/// \param reg
+/// \param address
+/// \param swapped
+/// \return
+///
+quint64 Server::readUInt64(Register::Type reg, quint16 address, bool swapped) const
+{
+    return _mbMultiServer->readUInt64((QModbusDataUnit::RegisterType)reg, address - 1, *_byteOrder, swapped);
+}
+
+///
+/// \brief Server::writeUInt64
+/// \param reg
+/// \param address
+/// \param value
+/// \param swapped
+///
+void Server::writeUInt64(Register::Type reg, quint16 address, quint64 value, bool swapped)
+{
+    _mbMultiServer->writeUInt64((QModbusDataUnit::RegisterType)reg, address - 1, value, *_byteOrder, swapped);
 }
 
 ///
