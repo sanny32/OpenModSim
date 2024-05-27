@@ -246,8 +246,9 @@ inline QDataStream& operator <<(QDataStream& out, FormModSim* frm)
 
     const auto wnd = frm->parentWidget();
     out << wnd->isMaximized();
-    out << ((wnd->isMinimized() || wnd->isMaximized()) ?
-              wnd->sizeHint() : wnd->size());
+
+    const auto windowSize = (wnd->isMinimized() || wnd->isMaximized()) ? wnd->sizeHint() : wnd->size();
+    out << windowSize;
 
     out << frm->displayMode();
     out << frm->dataDisplayMode();
@@ -350,6 +351,7 @@ inline QDataStream& operator >>(QDataStream& in, FormModSim* frm)
     wnd->resize(windowSize);
     wnd->setWindowState(Qt::WindowActive);
     if(isMaximized) wnd->setWindowState(Qt::WindowMaximized);
+    else wnd->resize(windowSize);
 
     frm->setDisplayMode(displayMode);
     frm->setDataDisplayMode(dataDisplayMode);
