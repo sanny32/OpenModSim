@@ -15,6 +15,29 @@
     </message>
 </context>
 <context>
+    <name>CmdLineParser</name>
+    <message>
+        <location filename="../cmdlineparser.cpp" line="8"/>
+        <source>Displays this help.</source>
+        <translation>Пказать эту справку.</translation>
+    </message>
+    <message>
+        <location filename="../cmdlineparser.cpp" line="11"/>
+        <source>Displays version information.</source>
+        <translation>Пказать информацию о версии.</translation>
+    </message>
+    <message>
+        <location filename="../cmdlineparser.cpp" line="14"/>
+        <source>Setup test config file.</source>
+        <translation>Задать файл конфига.</translation>
+    </message>
+    <message>
+        <location filename="../cmdlineparser.cpp" line="14"/>
+        <source>file path</source>
+        <translation>файл</translation>
+    </message>
+</context>
+<context>
     <name>ConsoleOutput</name>
     <message>
         <location filename="../controls/consoleoutput.cpp" line="22"/>
@@ -48,11 +71,6 @@
         <location filename="../dialogs/dialogabout.ui" line="118"/>
         <source>An Open Source Modbus Slave (Server) Utility</source>
         <translation>Утилита Modbus Slave (сервер) с открытым исходным кодом</translation>
-    </message>
-    <message>
-        <location filename="../dialogs/dialogabout.ui" line="141"/>
-        <source>© Alexandr Ananev, 2023</source>
-        <translation></translation>
     </message>
     <message>
         <location filename="../dialogs/dialogabout.ui" line="177"/>

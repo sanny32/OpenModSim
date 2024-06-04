@@ -23,6 +23,9 @@ public:
 
     void setLanguage(const QString& lang);
 
+    void loadConfig(const QString& filename);
+    void saveConfig(const QString& filename);
+
 signals:
     void undo();
     void redo();
@@ -147,9 +150,6 @@ private:
 
     FormModSim* loadMdiChild(const QString& filename);
     void saveMdiChild(FormModSim* frm);
-
-    void loadConfig(const QString& filename);
-    void saveConfig(const QString& filename);
 
     void loadSettings();
     void saveSettings();
