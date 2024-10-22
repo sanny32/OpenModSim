@@ -4,7 +4,7 @@ CONFIG += c++17
 CONFIG -= debug_and_release
 CONFIG -= debug_and_release_target
 
-VERSION = 1.5.2
+VERSION = 1.6.0
 
 QMAKE_TARGET_PRODUCT = "Open ModSim"
 QMAKE_TARGET_DESCRIPTION = "An Open Source Modbus Slave (Server) Utility"
@@ -26,6 +26,7 @@ INCLUDEPATH += controls \
 
 SOURCES += \
     cmdlineparser.cpp \
+    controls/addressbasecombobox.cpp \
     controls/booleancombobox.cpp \
     controls/bytelisttextedit.cpp \
     controls/clickablelabel.cpp \
@@ -89,6 +90,7 @@ HEADERS += \
     byteorderutils.h \
     cmdlineparser.h \
     connectiondetails.h \
+    controls/addressbasecombobox.h \
     controls/booleancombobox.h \
     controls/bytelisttextedit.h \
     controls/clickablelabel.h \

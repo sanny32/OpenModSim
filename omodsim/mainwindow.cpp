@@ -277,6 +277,7 @@ void MainWindow::on_actionNew_triggered()
     if(cur) {
         frm->setByteOrder(cur->byteOrder());
         frm->setDataDisplayMode(cur->dataDisplayMode());
+        frm->setDisplayDefinition(cur->displayDefinition());
 
         frm->setFont(cur->font());
         frm->setStatusColor(cur->statusColor());
@@ -1036,7 +1037,7 @@ void MainWindow::forceCoils(QModbusDataUnit::RegisterType type)
     if(!frm) return;
 
     const auto dd = frm->displayDefinition();
-    SetupPresetParams presetParams = { dd.PointAddress, dd.Length };
+    SetupPresetParams presetParams = { dd.PointAddress, dd.Length, dd.ZeroBasedAddress };
 
     {
         DialogSetupPresetData dlg(presetParams, type, this);
@@ -1045,10 +1046,11 @@ void MainWindow::forceCoils(QModbusDataUnit::RegisterType type)
 
     ModbusWriteParams params;
     params.Address = presetParams.PointAddress;
+    params.ZeroBasedAddress = dd.ZeroBasedAddress;
 
     if(dd.PointType == type)
     {
-        const auto data = _mbMultiServer.data(type, presetParams.PointAddress - 1, presetParams.Length);
+        const auto data = _mbMultiServer.data(type, presetParams.PointAddress - (dd.ZeroBasedAddress ? 0 : 1), presetParams.Length);
         params.Value = QVariant::fromValue(data.values());
     }
 
@@ -1069,7 +1071,7 @@ void MainWindow::presetRegs(QModbusDataUnit::RegisterType type)
     if(!frm) return;
 
     const auto dd = frm->displayDefinition();
-    SetupPresetParams presetParams = { dd.PointAddress, dd.Length };
+    SetupPresetParams presetParams = { dd.PointAddress, dd.Length, dd.ZeroBasedAddress };
 
     {
         DialogSetupPresetData dlg(presetParams, type, this);
@@ -1080,10 +1082,11 @@ void MainWindow::presetRegs(QModbusDataUnit::RegisterType type)
     params.Address = presetParams.PointAddress;
     params.DisplayMode = frm->dataDisplayMode();
     params.Order = frm->byteOrder();
+    params.ZeroBasedAddress = dd.ZeroBasedAddress;
 
     if(dd.PointType == type)
     {
-        const auto data = _mbMultiServer.data(type, presetParams.PointAddress - 1, presetParams.Length);
+        const auto data = _mbMultiServer.data(type, presetParams.PointAddress - (dd.ZeroBasedAddress ? 0 : 1), presetParams.Length);
         params.Value = QVariant::fromValue(data.values());
     }
 

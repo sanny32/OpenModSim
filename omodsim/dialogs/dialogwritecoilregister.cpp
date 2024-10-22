@@ -16,7 +16,7 @@ DialogWriteCoilRegister::DialogWriteCoilRegister(ModbusWriteParams& writeParams,
     ,_simParams(simParams)
 {
     ui->setupUi(this);
-    ui->lineEditAddress->setInputRange(ModbusLimits::addressRange());
+    ui->lineEditAddress->setInputRange(ModbusLimits::addressRange(writeParams.ZeroBasedAddress));
     ui->lineEditAddress->setValue(_writeParams.Address);
     ui->radioButtonOn->setChecked(_writeParams.Value.toBool());
     ui->radioButtonOff->setChecked(!_writeParams.Value.toBool());

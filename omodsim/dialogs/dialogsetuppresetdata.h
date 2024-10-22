@@ -8,6 +8,7 @@ struct SetupPresetParams
 {
     quint16 PointAddress;
     quint16 Length;
+    bool ZeroBasedAddress;
 };
 
 namespace Ui {

@@ -120,6 +120,7 @@ private slots:
     void on_lineEditAddress_valueChanged(const QVariant&);
     void on_lineEditLength_valueChanged(const QVariant&);
     void on_lineEditDeviceId_valueChanged(const QVariant&);
+    void on_comboBoxAddressBase_addressBaseChanged(AddressBase base);
     void on_comboBoxModbusPointType_pointTypeChanged(QModbusDataUnit::RegisterType value);
     void on_outputWidget_itemDoubleClicked(quint16 addr, const QVariant& value);
     void on_mbDeviceIdChanged(quint8 deviceId);
@@ -265,6 +266,7 @@ inline QDataStream& operator <<(QDataStream& out, FormModSim* frm)
     out << dd.PointAddress;
     out << dd.Length;
     out << dd.LogViewLimit;
+    out << dd.ZeroBasedAddress;
 
     out << frm->byteOrder();
     out << frm->simulationMap();
@@ -321,6 +323,10 @@ inline QDataStream& operator >>(QDataStream& in, FormModSim* frm)
         in >> dd.PointAddress;
         in >> dd.Length;
         in >> dd.LogViewLimit;
+    }
+    if(ver >= QVersionNumber(1, 6))
+    {
+        in >> dd.ZeroBasedAddress;
     }
 
     ModbusSimulationMap simulationMap;

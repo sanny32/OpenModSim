@@ -14,7 +14,7 @@ DialogWriteHoldingRegisterBits::DialogWriteHoldingRegisterBits(ModbusWriteParams
     ,_writeParams(params)
 {
     ui->setupUi(this);
-    ui->lineEditAddress->setInputRange(ModbusLimits::addressRange());
+    ui->lineEditAddress->setInputRange(ModbusLimits::addressRange(params.ZeroBasedAddress));
     ui->lineEditAddress->setValue(params.Address);
 
     quint16 value = params.Value.toUInt();
