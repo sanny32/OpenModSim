@@ -31,6 +31,7 @@ public:
 
     void setModbusMultiServer(ModbusMultiServer* server);
     void setByteOrder(const ByteOrder* order);
+    void setAddressBase(AddressBase base);
 
     bool isAutoCompleteEnabled() const;
     void enableAutoComplete(bool enable);
@@ -77,6 +78,7 @@ private:
     QSharedPointer<console> _console;
 
     ByteOrder* _byteOrder = nullptr;
+    AddressBase _addressBase = AddressBase::Base1;
     ModbusMultiServer* _mbMultiServer = nullptr;
 };
 

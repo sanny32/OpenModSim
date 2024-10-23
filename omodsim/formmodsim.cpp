@@ -660,6 +660,8 @@ void FormModSim::onDefinitionChanged()
     const auto addr = dd.PointAddress - (dd.ZeroBasedAddress ? 0 : 1);
     _mbMultiServer.setDeviceId(dd.DeviceId);
     _mbMultiServer.addUnitMap(formId(), dd.PointType, addr, dd.Length);
+
+    ui->scriptControl->setAddressBase(dd.ZeroBasedAddress ? AddressBase::Base0 : AddressBase::Base1);
     ui->outputWidget->setup(dd, _dataSimulator->simulationMap(), _mbMultiServer.data(dd.PointType, addr, dd.Length));
 }
 

@@ -18,6 +18,17 @@ namespace Register
 }
 Q_DECLARE_METATYPE(Register::Type)
 
+namespace Address
+{
+    Q_NAMESPACE
+    enum class Base {
+        Base0 = 0,
+        Base1
+    };
+    Q_ENUM_NS(Base)
+}
+Q_DECLARE_METATYPE(Address::Base)
+
 ///
 /// \brief The Modbus Server class
 ///
@@ -26,8 +37,12 @@ class Server : public QObject
     Q_OBJECT
 
 public:
-    explicit Server(ModbusMultiServer* server, const ByteOrder* order);
+    explicit Server(ModbusMultiServer* server, const ByteOrder* order, AddressBase base);
     ~Server() override;
+
+    Q_PROPERTY(Address::Base addressBase READ addressBase WRITE setAddressBase);
+
+    Address::Base addressBase() const;
 
     Q_INVOKABLE quint16 readHolding(quint16 address) const;
     Q_INVOKABLE void writeHolding(quint16 address, quint16 value);
@@ -61,10 +76,14 @@ public:
 
     Q_INVOKABLE void onChange(Register::Type reg, quint16 address, const QJSValue& func);
 
+public slots:
+    void setAddressBase(Address::Base base);
+
 private slots:
     void on_dataChanged(const QModbusDataUnit& data);
 
 private:
+    Address::Base _addressBase;
     const ByteOrder* _byteOrder;
     ModbusMultiServer* _mbMultiServer;
     QMap<QPair<Register::Type, quint16>, QJSValue> _mapOnChange;
