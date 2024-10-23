@@ -682,6 +682,7 @@ void FormModSim::on_outputWidget_itemDoubleClicked(quint16 addr, const QVariant&
     const auto mode = dataDisplayMode();
     const auto pointType = ui->comboBoxModbusPointType->currentPointType();
     const auto zeroBasedAddress = displayDefinition().ZeroBasedAddress;
+    const auto simAddr = addr - (zeroBasedAddress ? 0 : 1);
     auto simParams = _dataSimulator->simulationParams(pointType, addr);
 
     switch(pointType)
@@ -698,8 +699,8 @@ void FormModSim::on_outputWidget_itemDoubleClicked(quint16 addr, const QVariant&
                 break;
 
                 case 2:
-                    if(simParams.Mode == SimulationMode::No) _dataSimulator->stopSimulation(pointType, addr);
-                    else _dataSimulator->startSimulation(mode, pointType, addr, simParams);
+                    if(simParams.Mode == SimulationMode::No) _dataSimulator->stopSimulation(pointType, simAddr);
+                    else _dataSimulator->startSimulation(mode, pointType, simAddr, simParams);
                 break;
             }
         }
@@ -725,8 +726,8 @@ void FormModSim::on_outputWidget_itemDoubleClicked(quint16 addr, const QVariant&
                     break;
 
                     case 2:
-                        if(simParams.Mode == SimulationMode::No) _dataSimulator->stopSimulation(pointType, addr);
-                        else _dataSimulator->startSimulation(mode, pointType, addr, simParams);
+                        if(simParams.Mode == SimulationMode::No) _dataSimulator->stopSimulation(pointType, simAddr);
+                        else _dataSimulator->startSimulation(mode, pointType, simAddr, simParams);
                     break;
                 }
             }
@@ -795,7 +796,8 @@ void FormModSim::on_mbResponse(const QModbusResponse& resp, ModbusMessage::Proto
 void FormModSim::on_mbDataChanged(const QModbusDataUnit&)
 {
     const auto dd = displayDefinition();
-    ui->outputWidget->updateData(_mbMultiServer.data(dd.PointType, dd.PointAddress - 1, dd.Length));
+    const auto addr = dd.PointAddress - (dd.ZeroBasedAddress ? 0 : 1);
+    ui->outputWidget->updateData(_mbMultiServer.data(dd.PointType, addr, dd.Length));
 }
 
 ///
@@ -828,9 +830,10 @@ void FormModSim::on_simulationStopped(QModbusDataUnit::RegisterType type, quint1
 void FormModSim::on_dataSimulated(DataDisplayMode mode, QModbusDataUnit::RegisterType type, quint16 addr, QVariant value)
 {
     const auto dd = displayDefinition();
-    if(type == dd.PointType && addr >= dd.PointAddress && addr < dd.PointAddress + dd.Length)
+    const auto pointAddr = dd.PointAddress - (dd.ZeroBasedAddress ? 0 : 1);
+    if(type == dd.PointType && addr >= pointAddr && addr <= pointAddr + dd.Length)
     {
-        _mbMultiServer.writeRegister(type, { addr, value, mode, byteOrder() });
+        _mbMultiServer.writeRegister(type, { addr, value, mode, byteOrder(), true });
     }
 }
 
