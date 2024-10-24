@@ -167,6 +167,20 @@
 				<li><a href="#storage.removeitem">Storage.removeItem</a></li>
 			</ul>
 		</li>
+		<li class="object"><a href="#register"><strong>Register</strong></a>
+			<ul class="level2">
+				<li><a href="#register.discreteinputs">Register.DiscreteInputs</a></li>
+				<li><a href="#register.coils">Register.Coils</a></li>
+				<li><a href="#register.input">Register.Input</a></li>
+				<li><a href="#register.holding">Register.Holding</a></li>
+			</ul>
+		</li>
+		<li class="object"><a href="#addressbase"><strong>AddressBase</strong></a>
+			<ul class="level2">
+				<li><a href="#addressbase.base0">AddressBase.Base0</a></li>
+				<li><a href="#addressbase.base1">AddressBase.Base1</a></li>
+			</ul>
+		</li>
 	</ul>
 	<article class="article-content">
 		<div class="article-header">
@@ -777,7 +791,50 @@
 			</dd>
 		</dl></div></section>
 	</article>
-
+	<article class="article-content">
+		<div class="article-header">
+			<h1 id="register">Register</h1>
+		</div>
+		<div class="section-content">
+			<p><strong><code>Register</code></strong>— это объект перечисления, содержащий типы регистров Modbus.</p>
+		</div>
+		<section aria-labelledby="static_properties"><h2 id="">Константы перечисления</h2><div class="section-content"><dl>
+			<dt id="register.discreteinputs"><code>Register.DiscreteInputs</code></dt>
+			<dd>
+			  <p>Описывает флаги Modbus DiscreteInputs (0x).</p>
+			</dd>
+			<dt id="register.coils"><code>Register.Coils</code></dt>
+			<dd>
+			  <p>Описывает флаги Modbus Coil (1x).</p>
+			</dd>
+			<dt id="register.input"><code>Register.Input</code></dt>
+			<dd>
+			  <p>Описывает регистры Modbus Input (3x).</p>
+			</dd>
+			<dt id="register.holding"><code>Register.Holding</code></dt>
+			<dd>
+			  <p>Описывает регистры Modbus Holding (4x).</p>
+			</dd>
+		</dl></div></section>
+	</article>
+	<article class="article-content">
+		<div class="article-header">
+			<h1 id="addressbase">AddressBase</h1>
+		</div>
+		<div class="section-content">
+			<p><strong><code>AddressBase</code></strong> представляет собой объект перечисления, содержащий значения, описывающие, с какого значения начинается адресное пространство Modbus (ноль или единица).</p>
+		</div>
+		<section aria-labelledby="static_properties"><h2 id="">Константы перечисления</h2><div class="section-content"><dl>
+			<dt id="addressbase.base0"><code>AddressBase.Base0</code></dt>
+			<dd>
+			  <p>Это значение означает, что адресное пространство Modbus начинается с нуля.</p>
+			</dd>
+			<dt id="addressbase.base1"><code>AddressBase.Base1</code></dt>
+			<dd>
+			  <p>Это значение означает, что адресное пространство Modbus начинается с единицы.</p>
+			</dd>
+		</dl></div></section>
+	</article>
 </body>
 
 </html>

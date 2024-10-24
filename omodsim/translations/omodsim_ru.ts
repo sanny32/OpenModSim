@@ -2,6 +2,19 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="ru_RU">
 <context>
+    <name>AddressBaseComboBox</name>
+    <message>
+        <location filename="../controls/addressbasecombobox.cpp" line="10"/>
+        <source>0-based</source>
+        <translation>0-первый</translation>
+    </message>
+    <message>
+        <location filename="../controls/addressbasecombobox.cpp" line="11"/>
+        <source>1-based</source>
+        <translation>1-первый</translation>
+    </message>
+</context>
+<context>
     <name>BooleanComboBox</name>
     <message>
         <location filename="../controls/booleancombobox.cpp" line="10"/>
@@ -220,24 +233,29 @@
         <translation>Настройки Modbus</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogdisplaydefinition.ui" line="103"/>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="106"/>
         <source>Slave Address:</source>
         <translation>Адрес устройства:</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogdisplaydefinition.ui" line="132"/>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="135"/>
         <source>Point Type:</source>
         <translation>Тип регистров:</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogdisplaydefinition.ui" line="155"/>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="158"/>
         <source>Point Address:</source>
         <translation>Начальный адрес:</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogdisplaydefinition.ui" line="184"/>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="165"/>
         <source>Length:</source>
         <translation>Количество:</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="216"/>
+        <source>Address Base:</source>
+        <translation>Адресация:</translation>
     </message>
 </context>
 <context>
@@ -491,7 +509,7 @@
     <message>
         <location filename="../dialogs/dialogprintsettings.cpp" line="169"/>
         <source>Envelope</source>
-        <translation type="unfinished"></translation>
+        <translation>Конверт</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogprintsettings.cpp" line="173"/>
@@ -506,17 +524,17 @@
     <message>
         <location filename="../dialogs/dialogprintsettings.cpp" line="181"/>
         <source>Tractor</source>
-        <translation type="unfinished"></translation>
+        <translation>Трактор</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogprintsettings.cpp" line="185"/>
         <source>Small Format</source>
-        <translation type="unfinished"></translation>
+        <translation>Малый формат</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogprintsettings.cpp" line="189"/>
         <source>Large Format</source>
-        <translation type="unfinished"></translation>
+        <translation>Большой формат</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogprintsettings.cpp" line="193"/>
@@ -526,7 +544,7 @@
     <message>
         <location filename="../dialogs/dialogprintsettings.cpp" line="197"/>
         <source>Cassette</source>
-        <translation type="unfinished"></translation>
+        <translation>Кассета</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogprintsettings.cpp" line="201"/>
@@ -536,7 +554,7 @@
     <message>
         <location filename="../dialogs/dialogprintsettings.cpp" line="205"/>
         <source>Custom Source</source>
-        <translation type="unfinished"></translation>
+        <translation>Пользовательский</translation>
     </message>
 </context>
 <context>
@@ -636,97 +654,97 @@
         <translation>Скорость бит/с: </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogsetupserialport.ui" line="58"/>
+        <location filename="../dialogs/dialogsetupserialport.ui" line="61"/>
         <source>1200</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogsetupserialport.ui" line="63"/>
+        <location filename="../dialogs/dialogsetupserialport.ui" line="66"/>
         <source>2400</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogsetupserialport.ui" line="68"/>
+        <location filename="../dialogs/dialogsetupserialport.ui" line="71"/>
         <source>4800</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogsetupserialport.ui" line="73"/>
+        <location filename="../dialogs/dialogsetupserialport.ui" line="76"/>
         <source>9600</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogsetupserialport.ui" line="78"/>
+        <location filename="../dialogs/dialogsetupserialport.ui" line="81"/>
         <source>19200</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogsetupserialport.ui" line="83"/>
+        <location filename="../dialogs/dialogsetupserialport.ui" line="86"/>
         <source>38400</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogsetupserialport.ui" line="88"/>
+        <location filename="../dialogs/dialogsetupserialport.ui" line="91"/>
         <source>57600</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogsetupserialport.ui" line="93"/>
+        <location filename="../dialogs/dialogsetupserialport.ui" line="96"/>
         <source>115200</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogsetupserialport.ui" line="101"/>
+        <location filename="../dialogs/dialogsetupserialport.ui" line="104"/>
         <source>Word Length: </source>
         <translation>Биты данных: </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogsetupserialport.ui" line="124"/>
+        <location filename="../dialogs/dialogsetupserialport.ui" line="127"/>
         <source>7</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogsetupserialport.ui" line="129"/>
+        <location filename="../dialogs/dialogsetupserialport.ui" line="132"/>
         <source>8</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogsetupserialport.ui" line="137"/>
+        <location filename="../dialogs/dialogsetupserialport.ui" line="140"/>
         <source>Parity: </source>
         <translation>Четность: </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogsetupserialport.ui" line="163"/>
+        <location filename="../dialogs/dialogsetupserialport.ui" line="166"/>
         <source>Stop Bits: </source>
         <translation>Стоповые биты: </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogsetupserialport.ui" line="183"/>
+        <location filename="../dialogs/dialogsetupserialport.ui" line="186"/>
         <source>1</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogsetupserialport.ui" line="188"/>
+        <location filename="../dialogs/dialogsetupserialport.ui" line="191"/>
         <source>2</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogsetupserialport.ui" line="205"/>
+        <location filename="../dialogs/dialogsetupserialport.ui" line="208"/>
         <source>Hardware Flow Control</source>
         <translation>Управление потоком</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogsetupserialport.ui" line="214"/>
+        <location filename="../dialogs/dialogsetupserialport.ui" line="217"/>
         <source>Flow Control Mode: </source>
         <translation>Режим управления: </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogsetupserialport.ui" line="234"/>
+        <location filename="../dialogs/dialogsetupserialport.ui" line="237"/>
         <source>DTR Control: </source>
         <translation>Управление DTR: </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogsetupserialport.ui" line="257"/>
+        <location filename="../dialogs/dialogsetupserialport.ui" line="260"/>
         <source>RTS Control: </source>
         <translation>Управление RTS: </translation>
     </message>
@@ -849,22 +867,31 @@
 <context>
     <name>FormModSim</name>
     <message>
-        <location filename="../formmodsim.ui" line="99"/>
         <source>Address:</source>
+        <translation type="vanished">Адрес:</translation>
+    </message>
+    <message>
+        <location filename="../formmodsim.ui" line="105"/>
+        <source>Start Address:</source>
         <translation>Адрес:</translation>
     </message>
     <message>
-        <location filename="../formmodsim.ui" line="106"/>
+        <location filename="../formmodsim.ui" line="112"/>
         <source>Length:</source>
         <translation>Количество:</translation>
     </message>
     <message>
-        <location filename="../formmodsim.ui" line="198"/>
+        <location filename="../formmodsim.ui" line="175"/>
+        <source>Address Base:</source>
+        <translation>Адресация:</translation>
+    </message>
+    <message>
+        <location filename="../formmodsim.ui" line="228"/>
         <source>Device Id:</source>
         <translation>Узел:</translation>
     </message>
     <message>
-        <location filename="../formmodsim.ui" line="251"/>
+        <location filename="../formmodsim.ui" line="297"/>
         <source>MODBUS Point Type</source>
         <translation>Тип регистров MODBUS</translation>
     </message>
@@ -873,27 +900,42 @@
         <translation type="vanished">НЕ ПОДКЛЮЧЕНО!</translation>
     </message>
     <message>
-        <location filename="../formmodsim.cpp" line="391"/>
         <source>Device Id: %1</source>
-        <translation>Узел: %1</translation>
+        <translation type="vanished">Узел: %1</translation>
     </message>
     <message>
-        <location filename="../formmodsim.cpp" line="394"/>
         <source>Address: %1
 Length: %2</source>
-        <translation>Адрес: %1
+        <translation type="vanished">Адрес: %1
 Количество: %2</translation>
     </message>
     <message>
-        <location filename="../formmodsim.cpp" line="397"/>
         <source>MODBUS Point Type:
 %1</source>
-        <translation>Тип регистров MODBUS:
+        <translation type="vanished">Тип регистров MODBUS:
 %1</translation>
     </message>
     <message>
         <source>Invalid Data Length Specified</source>
         <translation type="vanished">Указана недопустимая длина данных</translation>
+    </message>
+    <message>
+        <location filename="../formmodsim.cpp" line="407"/>
+        <source>Address Base: %1
+Start Address: %2
+Length: %3</source>
+        <translation>Адресация: %1
+Адрес: %2
+Количество: %3</translation>
+    </message>
+    <message>
+        <location filename="../formmodsim.cpp" line="410"/>
+        <source>Device Id: %1
+MODBUS Point Type:
+%2</source>
+        <translation>Узел: %1
+Тип регистров MODBUS:
+%2</translation>
     </message>
 </context>
 <context>
@@ -1405,10 +1447,10 @@ Length: %2</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="295"/>
-        <location filename="../mainwindow.cpp" line="334"/>
-        <location filename="../mainwindow.cpp" line="347"/>
-        <location filename="../mainwindow.cpp" line="358"/>
+        <location filename="../mainwindow.cpp" line="296"/>
+        <location filename="../mainwindow.cpp" line="335"/>
+        <location filename="../mainwindow.cpp" line="348"/>
+        <location filename="../mainwindow.cpp" line="359"/>
         <source>All files (*)</source>
         <translation>Все файлы (*)</translation>
     </message>
@@ -1512,7 +1554,7 @@ Length: %2</source>
     <message>
         <location filename="../controls/modbusmessagewidget.cpp" line="196"/>
         <source>(0-based)</source>
-        <translation type="unfinished"></translation>
+        <translation>(адресация с 0)</translation>
     </message>
     <message>
         <location filename="../controls/modbusmessagewidget.cpp" line="206"/>
@@ -1759,7 +1801,7 @@ Length: %2</source>
 <context>
     <name>ModbusMultiServer</name>
     <message>
-        <location filename="../modbusmultiserver.cpp" line="771"/>
+        <location filename="../modbusmultiserver.cpp" line="772"/>
         <source>Connection error. %1</source>
         <translation>Ошибка подключения. %1</translation>
     </message>
@@ -1767,17 +1809,17 @@ Length: %2</source>
 <context>
     <name>OutputWidget</name>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="759"/>
+        <location filename="../controls/outputwidget.cpp" line="760"/>
         <source>%1: Enter Description</source>
         <translation>%1: Введите описание</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="824"/>
+        <location filename="../controls/outputwidget.cpp" line="825"/>
         <source>NOT CONNECTED!</source>
         <translation>НЕ ПОДКЛЮЧЕНО!</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="832"/>
+        <location filename="../controls/outputwidget.cpp" line="833"/>
         <source>Invalid Data Length Specified</source>
         <translation>Указана недопустимая длина данных</translation>
     </message>
@@ -1818,7 +1860,6 @@ Length: %2</source>
 <context>
     <name>ScriptControl</name>
     <message>
-        <location filename="../controls/scriptcontrol.ui" line="49"/>
         <source>Script.onInit(()=&gt;{
 	Server.onChange(Register.Holding, 1, (value)=&gt;
 	{
@@ -1827,7 +1868,28 @@ Length: %2</source>
 
 	/* write your init code here */
 });</source>
+        <translation type="vanished">Script.onInit(()=&gt;{
+	Server.onChange(Register.Holding, 1, (value)=&gt;
+	{
+		/* обработка изменения значения регистра */
+	});
+
+	/* инициализация */
+});</translation>
+    </message>
+    <message>
+        <location filename="../controls/scriptcontrol.ui" line="49"/>
+        <source>Script.onInit(()=&gt;{
+	Server.addressBase = AddressBase.Base1;
+	Server.onChange(Register.Holding, 1, (value)=&gt;
+	{
+		/* write your code on register value change */
+	});
+
+	/* write your init code here */
+});</source>
         <translation>Script.onInit(()=&gt;{
+	Server.addressBase = AddressBase.Base1;
 	Server.onChange(Register.Holding, 1, (value)=&gt;
 	{
 		/* обработка изменения значения регистра */
