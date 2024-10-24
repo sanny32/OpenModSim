@@ -40,8 +40,8 @@ FormModSim::FormModSim(int id, ModbusMultiServer& server, QSharedPointer<DataSim
     ui->scriptControl->setByteOrder(ui->outputWidget->byteOrder());
 
     ui->lineEditAddress->setPaddingZeroes(true);
-    ui->lineEditAddress->setInputRange(ModbusLimits::addressRange());
-    ui->lineEditAddress->setValue(1);
+    ui->lineEditAddress->setInputRange(ModbusLimits::addressRange(true));
+    ui->lineEditAddress->setValue(0);
 
     ui->lineEditLength->setInputRange(ModbusLimits::lengthRange());
     ui->lineEditLength->setValue(100);

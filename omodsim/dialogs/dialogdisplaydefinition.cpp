@@ -19,8 +19,8 @@ DialogDisplayDefinition::DialogDisplayDefinition(DisplayDefinition dd, QWidget* 
     ui->lineEditSlaveAddress->setInputRange(ModbusLimits::slaveRange());
     ui->lineEditLogLimit->setInputRange(4, 1000);
 
-    ui->lineEditPointAddress->setValue(dd.PointAddress);
     ui->comboBoxAddressBase->setCurrentIndex(dd.ZeroBasedAddress ? 0 : 1);
+    ui->lineEditPointAddress->setValue(dd.PointAddress);
     ui->lineEditSlaveAddress->setValue(dd.DeviceId);
     ui->lineEditLength->setValue(dd.Length);
     ui->lineEditLogLimit->setValue(dd.LogViewLimit);
