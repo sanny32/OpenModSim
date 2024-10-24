@@ -1,11 +1,9 @@
 # Open ModSim
 Open ModSim is a free implimentation of modbus slave (server) utility for modbus-tcp and modbus-rtu protocols.
 
-![image](https://github.com/sanny32/OpenModSim/assets/13627951/3788824d-cf3f-4e98-9f5f-856e99106f6c)
+![image](https://github.com/user-attachments/assets/b57d329f-02c9-42c2-957c-295a67efcf67)
 
-
-
-![image](https://github.com/sanny32/OpenModSim/assets/13627951/f5dd90b6-2301-495b-ae86-409b2afd4eaf)
+![image](https://github.com/user-attachments/assets/730900fb-c8b4-4675-ba8b-cee5d7e9dd9e)
 
 
 ## Features
@@ -40,15 +38,15 @@ Registers
     Increment - simulate register from Low Limit to High Limit with a given Step
     Decrement - simulate register from High Limit to Low Limit with a given Step
 
-Modbus Logging
+## Modbus Logging
 
-![image](https://github.com/sanny32/OpenModSim/assets/13627951/72cb3860-b672-41fd-8ec6-3399170a28df)
 
+![image](https://github.com/user-attachments/assets/d8dc67fc-efce-4d40-81df-5ed54a958952)
 
 
 ## Extended Featues
 
-Modbus Message Parser
+- Modbus Message Parser
 
 ![image](https://github.com/sanny32/OpenModSim/assets/13627951/7e9744b8-f4b3-439a-a312-79cbdc426dc2)
 
@@ -56,7 +54,8 @@ Modbus Message Parser
 ## Scripting
   From version 1.2.0 Open ModSim supports scripting. Qt runtime implements the [ECMAScript Language Specification](http://www.ecma-international.org/publications/standards/Ecma-262.htm) standard, so Javascript is used to write code.
   
-![image](https://github.com/sanny32/OpenModSim/assets/13627951/ab115064-877f-4f6f-a1b9-4ac6c2feb042)
+![image](https://github.com/user-attachments/assets/e8d31089-345a-4c26-bb0c-fe2ea92f85d4)
+
 
   Scripts can be launched in two modes: Once or Periodically. If you run script in Once mode the script will stop after it finishes executing. In Periodically mode, the script will start after a certain period of time until the user stops it or the method is called
   ```javascript
@@ -79,6 +78,9 @@ function clear()
 /* init function */
 function init()
 {
+    /* Set the server address base starts from one (1-based) */
+    Server.addressBase = AddressBase.Base1;
+
     clear();
     
     /* Runs when Hodling register value at address 1 was changed */
