@@ -13,6 +13,7 @@ struct ModbusWriteParams
     QVariant Value;
     DataDisplayMode DisplayMode;
     ByteOrder Order;
+    bool ZeroBasedAddress;
 };
 Q_DECLARE_METATYPE(ModbusWriteParams)
 
@@ -24,6 +25,7 @@ struct ModbusMaskWriteParams
     quint16 Address;
     quint16 AndMask;
     quint16 OrMask;
+    bool ZeroBasedAddress;
 };
 Q_DECLARE_METATYPE(ModbusMaskWriteParams)
 

@@ -12,7 +12,7 @@
 #include "formmodsim.h"
 #include "ui_formmodsim.h"
 
-QVersionNumber FormModSim::VERSION = QVersionNumber(1, 5);
+QVersionNumber FormModSim::VERSION = QVersionNumber(1, 6);
 
 ///
 /// \brief FormModSim::FormModSim
@@ -40,12 +40,13 @@ FormModSim::FormModSim(int id, ModbusMultiServer& server, QSharedPointer<DataSim
     ui->scriptControl->setByteOrder(ui->outputWidget->byteOrder());
 
     ui->lineEditAddress->setPaddingZeroes(true);
-    ui->lineEditAddress->setInputRange(ModbusLimits::addressRange());
-    ui->lineEditAddress->setValue(1);
+    ui->lineEditAddress->setInputRange(ModbusLimits::addressRange(true));
+    ui->lineEditAddress->setValue(0);
 
     ui->lineEditLength->setInputRange(ModbusLimits::lengthRange());
     ui->lineEditLength->setValue(100);
 
+    ui->comboBoxAddressBase->setCurrentAddressBase(AddressBase::Base1);
     ui->comboBoxModbusPointType->setCurrentPointType(QModbusDataUnit::HoldingRegisters);
 
     onDefinitionChanged();
@@ -135,6 +136,7 @@ DisplayDefinition FormModSim::displayDefinition() const
     dd.PointAddress = ui->lineEditAddress->value<int>();
     dd.PointType = ui->comboBoxModbusPointType->currentPointType();
     dd.Length = ui->lineEditLength->value<int>();
+    dd.ZeroBasedAddress = ui->lineEditAddress->range<int>().from() == 0;
 
     return dd;
 }
@@ -146,9 +148,23 @@ DisplayDefinition FormModSim::displayDefinition() const
 void FormModSim::setDisplayDefinition(const DisplayDefinition& dd)
 {
     ui->lineEditDeviceId->setValue(dd.DeviceId);
+
+    ui->comboBoxAddressBase->blockSignals(true);
+    ui->comboBoxAddressBase->setCurrentAddressBase(dd.ZeroBasedAddress ? AddressBase::Base0 : AddressBase::Base1);
+    ui->comboBoxAddressBase->blockSignals(false);
+
+    ui->lineEditAddress->blockSignals(true);
+    ui->lineEditAddress->setInputRange(ModbusLimits::addressRange(dd.ZeroBasedAddress));
     ui->lineEditAddress->setValue(dd.PointAddress);
+    ui->lineEditAddress->blockSignals(false);
+
+    ui->lineEditLength->blockSignals(true);
     ui->lineEditLength->setValue(dd.Length);
+    ui->lineEditLength->blockSignals(false);
+
+    ui->comboBoxModbusPointType->blockSignals(true);
     ui->comboBoxModbusPointType->setCurrentPointType(dd.PointType);
+    ui->comboBoxModbusPointType->blockSignals(false);
 
     onDefinitionChanged();
 }
@@ -388,24 +404,18 @@ void FormModSim::print(QPrinter* printer)
     const auto textTime = QLocale().toString(QDateTime::currentDateTime(), QLocale::ShortFormat);
     auto rcTime = painter.boundingRect(cx, cy, pageWidth, pageHeight, Qt::TextSingleLine, textTime);
 
-    const auto textDevId = QString(tr("Device Id: %1")).arg(ui->lineEditDeviceId->text());
-    auto rcDevId = painter.boundingRect(cx, cy, pageWidth, pageHeight, Qt::TextSingleLine, textDevId);
-
-    const auto textAddrLen = QString(tr("Address: %1\nLength: %2")).arg(ui->lineEditAddress->text(), ui->lineEditLength->text());
+    const auto textAddrLen = QString(tr("Address Base: %1\nStart Address: %2\nLength: %3")).arg(ui->comboBoxAddressBase->currentText(), ui->lineEditAddress->text(), ui->lineEditLength->text());
     auto rcAddrLen = painter.boundingRect(cx, cy, pageWidth, pageHeight, Qt::TextWordWrap, textAddrLen);
 
-    const auto textType = QString(tr("MODBUS Point Type:\n%1")).arg(ui->comboBoxModbusPointType->currentText());
-    auto rcType = painter.boundingRect(cx, cy, pageWidth, pageHeight, Qt::TextWordWrap, textType);
+    const auto textDevIdType = QString(tr("Device Id: %1\nMODBUS Point Type:\n%2")).arg(ui->lineEditDeviceId->text(), ui->comboBoxModbusPointType->currentText());
+    auto rcDevIdType = painter.boundingRect(cx, cy, pageWidth, pageHeight, Qt::TextWordWrap, textDevIdType);
 
     rcTime.moveTopRight({ pageRect.right(), 10 });
-    rcDevId.moveLeft(rcAddrLen.right() + 40);
-    rcAddrLen.moveTop(rcDevId.bottom() + 10);
-    rcType.moveTopLeft({ rcDevId.left(), rcAddrLen.top() });
+    rcDevIdType.moveTopLeft({ rcAddrLen.right() + 40, rcAddrLen.top()});
 
     painter.drawText(rcTime, Qt::TextSingleLine, textTime);
-    painter.drawText(rcDevId, Qt::TextSingleLine, textDevId);
     painter.drawText(rcAddrLen, Qt::TextWordWrap, textAddrLen);
-    painter.drawText(rcType, Qt::TextWordWrap, textType);
+    painter.drawText(rcDevIdType, Qt::TextWordWrap, textDevIdType);
 
     auto rcOutput = pageRect;
     rcOutput.setTop(rcAddrLen.bottom() + 20);
@@ -594,6 +604,18 @@ void FormModSim::on_lineEditDeviceId_valueChanged(const QVariant&)
 }
 
 ///
+/// \brief FormModSim::on_comboBoxAddressBase_addressBaseChanged
+/// \param base
+///
+void FormModSim::on_comboBoxAddressBase_addressBaseChanged(AddressBase base)
+{
+    auto dd = displayDefinition();
+    dd.PointAddress = (base == AddressBase::Base1 ? qMax(1, dd.PointAddress + 1) : qMax(0, dd.PointAddress - 1));
+    dd.ZeroBasedAddress = (base == AddressBase::Base0);
+    setDisplayDefinition(dd);
+}
+
+///
 /// \brief FormModSim::on_comboBoxModbusPointType_pointTypeChanged
 ///
 void FormModSim::on_comboBoxModbusPointType_pointTypeChanged(QModbusDataUnit::RegisterType)
@@ -609,7 +631,8 @@ void FormModSim::updateStatus()
     const auto dd = displayDefinition();
     if(_mbMultiServer.isConnected())
     {
-        if(dd.PointAddress + dd.Length - 1 <= ModbusLimits::addressRange().to())
+        const auto addr = dd.PointAddress - (dd.ZeroBasedAddress ? 0 : 1);
+        if(addr + dd.Length <= ModbusLimits::addressRange().to())
             ui->outputWidget->setStatus(QString());
         else
             ui->outputWidget->setInvalidLengthStatus();
@@ -628,9 +651,12 @@ void FormModSim::onDefinitionChanged()
     updateStatus();
 
     const auto dd = displayDefinition();
+    const auto addr = dd.PointAddress - (dd.ZeroBasedAddress ? 0 : 1);
     _mbMultiServer.setDeviceId(dd.DeviceId);
-    _mbMultiServer.addUnitMap(formId(), dd.PointType, dd.PointAddress - 1, dd.Length);
-    ui->outputWidget->setup(dd, _dataSimulator->simulationMap(), _mbMultiServer.data(dd.PointType, dd.PointAddress - 1, dd.Length));
+    _mbMultiServer.addUnitMap(formId(), dd.PointType, addr, dd.Length);
+
+    ui->scriptControl->setAddressBase(dd.ZeroBasedAddress ? AddressBase::Base0 : AddressBase::Base1);
+    ui->outputWidget->setup(dd, _dataSimulator->simulationMap(), _mbMultiServer.data(dd.PointType, addr, dd.Length));
 }
 
 ///
@@ -651,6 +677,8 @@ void FormModSim::on_outputWidget_itemDoubleClicked(quint16 addr, const QVariant&
 {
     const auto mode = dataDisplayMode();
     const auto pointType = ui->comboBoxModbusPointType->currentPointType();
+    const auto zeroBasedAddress = displayDefinition().ZeroBasedAddress;
+    const auto simAddr = addr - (zeroBasedAddress ? 0 : 1);
     auto simParams = _dataSimulator->simulationParams(pointType, addr);
 
     switch(pointType)
@@ -658,7 +686,7 @@ void FormModSim::on_outputWidget_itemDoubleClicked(quint16 addr, const QVariant&
         case QModbusDataUnit::Coils:
         case QModbusDataUnit::DiscreteInputs:
         {
-            ModbusWriteParams params = { addr, value, mode, byteOrder() };
+            ModbusWriteParams params = { addr, value, mode, byteOrder(), zeroBasedAddress };
             DialogWriteCoilRegister dlg(params, simParams, this);
             switch(dlg.exec())
             {
@@ -667,8 +695,8 @@ void FormModSim::on_outputWidget_itemDoubleClicked(quint16 addr, const QVariant&
                 break;
 
                 case 2:
-                    if(simParams.Mode == SimulationMode::No) _dataSimulator->stopSimulation(pointType, addr);
-                    else _dataSimulator->startSimulation(mode, pointType, addr, simParams);
+                    if(simParams.Mode == SimulationMode::No) _dataSimulator->stopSimulation(pointType, simAddr);
+                    else _dataSimulator->startSimulation(mode, pointType, simAddr, simParams);
                 break;
             }
         }
@@ -677,7 +705,7 @@ void FormModSim::on_outputWidget_itemDoubleClicked(quint16 addr, const QVariant&
         case QModbusDataUnit::InputRegisters:
         case QModbusDataUnit::HoldingRegisters:
         {
-            ModbusWriteParams params = { addr, value, mode, byteOrder() };
+            ModbusWriteParams params = { addr, value, mode, byteOrder(), zeroBasedAddress };
             if(mode == DataDisplayMode::Binary)
             {
                 DialogWriteHoldingRegisterBits dlg(params, this);
@@ -694,8 +722,8 @@ void FormModSim::on_outputWidget_itemDoubleClicked(quint16 addr, const QVariant&
                     break;
 
                     case 2:
-                        if(simParams.Mode == SimulationMode::No) _dataSimulator->stopSimulation(pointType, addr);
-                        else _dataSimulator->startSimulation(mode, pointType, addr, simParams);
+                        if(simParams.Mode == SimulationMode::No) _dataSimulator->stopSimulation(pointType, simAddr);
+                        else _dataSimulator->startSimulation(mode, pointType, simAddr, simParams);
                     break;
                 }
             }
@@ -764,7 +792,8 @@ void FormModSim::on_mbResponse(const QModbusResponse& resp, ModbusMessage::Proto
 void FormModSim::on_mbDataChanged(const QModbusDataUnit&)
 {
     const auto dd = displayDefinition();
-    ui->outputWidget->updateData(_mbMultiServer.data(dd.PointType, dd.PointAddress - 1, dd.Length));
+    const auto addr = dd.PointAddress - (dd.ZeroBasedAddress ? 0 : 1);
+    ui->outputWidget->updateData(_mbMultiServer.data(dd.PointType, addr, dd.Length));
 }
 
 ///
@@ -797,9 +826,10 @@ void FormModSim::on_simulationStopped(QModbusDataUnit::RegisterType type, quint1
 void FormModSim::on_dataSimulated(DataDisplayMode mode, QModbusDataUnit::RegisterType type, quint16 addr, QVariant value)
 {
     const auto dd = displayDefinition();
-    if(type == dd.PointType && addr >= dd.PointAddress && addr < dd.PointAddress + dd.Length)
+    const auto pointAddr = dd.PointAddress - (dd.ZeroBasedAddress ? 0 : 1);
+    if(type == dd.PointType && addr >= pointAddr && addr <= pointAddr + dd.Length)
     {
-        _mbMultiServer.writeRegister(type, { addr, value, mode, byteOrder() });
+        _mbMultiServer.writeRegister(type, { addr, value, mode, byteOrder(), true });
     }
 }
 

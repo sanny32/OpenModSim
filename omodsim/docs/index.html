@@ -167,6 +167,20 @@
 				<li><a href="#storage.removeitem">Storage.removeItem</a></li>
 			</ul>
 		</li>
+		<li class="object"><a href="#register"><strong>Register</strong></a>
+			<ul class="level2">
+				<li><a href="#register.discreteinputs">Register.DiscreteInputs</a></li>
+				<li><a href="#register.coils">Register.Coils</a></li>
+				<li><a href="#register.input">Register.Input</a></li>
+				<li><a href="#register.holding">Register.Holding</a></li>
+			</ul>
+		</li>
+		<li class="object"><a href="#addressbase"><strong>AddressBase</strong></a>
+			<ul class="level2">
+				<li><a href="#addressbase.base0">AddressBase.Base0</a></li>
+				<li><a href="#addressbase.base1">AddressBase.Base1</a></li>
+			</ul>
+		</li>
 	</ul>
 	<article class="article-content">
 		<div class="article-header">
@@ -777,7 +791,50 @@
 			</dd>
 		</dl></div></section>
 	</article>
-
+	<article class="article-content">
+		<div class="article-header">
+			<h1 id="register">Register</h1>
+		</div>
+		<div class="section-content">
+			<p>The <strong><code>Register</code></strong> is a enum object that contains modbus register types.</p>
+		</div>
+		<section aria-labelledby="static_properties"><h2 id="">Enum constants</h2><div class="section-content"><dl>
+			<dt id="register.discreteinputs"><code>Register.DiscreteInputs</code></dt>
+			<dd>
+			  <p>Describes the modbus Discrete Input (0x) flags.</p>
+			</dd>
+			<dt id="register.coils"><code>Register.Coils</code></dt>
+			<dd>
+			  <p>Describes the modbus Coil (1x) flags.</p>
+			</dd>
+			<dt id="register.input"><code>Register.Input</code></dt>
+			<dd>
+			  <p>Describes the modbus Input (3x) registers.</p>
+			</dd>
+			<dt id="register.holding"><code>Register.Holding</code></dt>
+			<dd>
+			  <p>Describes the modbus Holding (4x) registers.</p>
+			</dd>
+		</dl></div></section>
+	</article>
+	<article class="article-content">
+		<div class="article-header">
+			<h1 id="addressbase">AddressBase</h1>
+		</div>
+		<div class="section-content">
+			<p>The <strong><code>AddressBase</code></strong> is a enum object that contains values that describes from what value the modbus address space starts (zero or one).</p>
+		</div>
+		<section aria-labelledby="static_properties"><h2 id="">Enum constants</h2><div class="section-content"><dl>
+			<dt id="addressbase.base0"><code>AddressBase.Base0</code></dt>
+			<dd>
+			  <p>This value means that the modbus address space starts from zero (0-based).</p>
+			</dd>
+			<dt id="addressbase.base1"><code>AddressBase.Base1</code></dt>
+			<dd>
+			  <p>This value means that the modbus address space starts from one (1-based).</p>
+			</dd>
+		</dl></div></section>
+	</article>
 </body>
 
 </html>

@@ -78,6 +78,9 @@
              <property name="spacing">
               <number>16</number>
              </property>
+             <property name="bottomMargin">
+              <number>6</number>
+             </property>
              <item>
               <widget class="QFrame" name="frame_5">
                <property name="frameShape">
@@ -90,24 +93,27 @@
                 <property name="leftMargin">
                  <number>0</number>
                 </property>
+                <property name="topMargin">
+                 <number>0</number>
+                </property>
                 <property name="rightMargin">
                  <number>0</number>
                 </property>
-                <item row="0" column="0">
+                <item row="1" column="0">
                  <widget class="QLabel" name="labelAddress">
                   <property name="text">
-                   <string>Address:</string>
+                   <string>Start Address:</string>
                   </property>
                  </widget>
                 </item>
-                <item row="1" column="0">
+                <item row="2" column="0">
                  <widget class="QLabel" name="labelLength">
                   <property name="text">
                    <string>Length:</string>
                   </property>
                  </widget>
                 </item>
-                <item row="1" column="1">
+                <item row="2" column="1">
                  <widget class="NumericLineEdit" name="lineEditLength">
                   <property name="sizePolicy">
                    <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -123,7 +129,7 @@
                   </property>
                   <property name="maximumSize">
                    <size>
-                    <width>80</width>
+                    <width>90</width>
                     <height>16777215</height>
                    </size>
                   </property>
@@ -135,7 +141,7 @@
                   </property>
                  </widget>
                 </item>
-                <item row="0" column="1">
+                <item row="1" column="1">
                  <widget class="NumericLineEdit" name="lineEditAddress">
                   <property name="sizePolicy">
                    <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -151,7 +157,7 @@
                   </property>
                   <property name="maximumSize">
                    <size>
-                    <width>80</width>
+                    <width>90</width>
                     <height>16777215</height>
                    </size>
                   </property>
@@ -163,7 +169,31 @@
                   </property>
                  </widget>
                 </item>
+                <item row="0" column="0">
+                 <widget class="QLabel" name="labelAddressBase">
+                  <property name="text">
+                   <string>Address Base:</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="1">
+                 <widget class="AddressBaseComboBox" name="comboBoxAddressBase">
+                  <property name="minimumSize">
+                   <size>
+                    <width>0</width>
+                    <height>24</height>
+                   </size>
+                  </property>
+                 </widget>
+                </item>
                </layout>
+              </widget>
+             </item>
+             <item>
+              <widget class="Line" name="line">
+               <property name="orientation">
+                <enum>Qt::Vertical</enum>
+               </property>
               </widget>
              </item>
              <item>
@@ -244,6 +274,22 @@
                    </spacer>
                   </item>
                  </layout>
+                </item>
+                <item>
+                 <spacer name="verticalSpacer_2">
+                  <property name="orientation">
+                   <enum>Qt::Vertical</enum>
+                  </property>
+                  <property name="sizeType">
+                   <enum>QSizePolicy::Fixed</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>20</width>
+                    <height>5</height>
+                   </size>
+                  </property>
+                 </spacer>
                 </item>
                 <item>
                  <widget class="QLabel" name="labelMobusPointType">
@@ -396,15 +442,19 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>ScriptControl</class>
-   <extends>QWidget</extends>
-   <header>scriptcontrol.h</header>
-   <container>1</container>
+   <class>NumericLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header>numericlineedit.h</header>
   </customwidget>
   <customwidget>
    <class>PointTypeComboBox</class>
    <extends>QComboBox</extends>
    <header>pointtypecombobox.h</header>
+  </customwidget>
+  <customwidget>
+   <class>AddressBaseComboBox</class>
+   <extends>QComboBox</extends>
+   <header>addressbasecombobox.h</header>
   </customwidget>
   <customwidget>
    <class>OutputWidget</class>
@@ -413,9 +463,10 @@
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>NumericLineEdit</class>
-   <extends>QLineEdit</extends>
-   <header>numericlineedit.h</header>
+   <class>ScriptControl</class>
+   <extends>QWidget</extends>
+   <header>scriptcontrol.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <tabstops>

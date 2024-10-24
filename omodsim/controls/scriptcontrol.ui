@@ -26,7 +26,7 @@
    <item>
     <widget class="QSplitter" name="verticalSplitter">
      <property name="orientation">
-      <enum>Qt::Horizontal</enum>
+      <enum>Qt::Orientation::Horizontal</enum>
      </property>
      <widget class="QSplitter" name="horizontalSplitter">
       <property name="sizePolicy">
@@ -36,17 +36,18 @@
        </sizepolicy>
       </property>
       <property name="orientation">
-       <enum>Qt::Vertical</enum>
+       <enum>Qt::Orientation::Vertical</enum>
       </property>
       <widget class="JSCodeEditor" name="codeEditor">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-         <horstretch>0</horstretch>
+         <horstretch>2</horstretch>
          <verstretch>4</verstretch>
         </sizepolicy>
        </property>
        <property name="plainText">
         <string>Script.onInit(()=&gt;{
+	Server.addressBase = AddressBase.Base1;
 	Server.onChange(Register.Holding, 1, (value)=&gt;
 	{
 		/* write your code on register value change */

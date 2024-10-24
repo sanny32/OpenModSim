@@ -55,6 +55,15 @@ void ScriptControl::setByteOrder(const ByteOrder* order)
 }
 
 ///
+/// \brief ScriptControl::setAddressBase
+/// \param base
+///
+void ScriptControl::setAddressBase(AddressBase base)
+{
+    _addressBase = base;
+}
+
+///
 /// \brief ScriptControl::isAutoCompleteEnabled
 /// \return
 ///
@@ -210,7 +219,7 @@ void ScriptControl::runScript(RunMode mode, int interval)
     _scriptCode = script();
 
     _storage = QSharedPointer<Storage>(new Storage);
-    _server = QSharedPointer<Server>(new Server(_mbMultiServer, _byteOrder));
+    _server = QSharedPointer<Server>(new Server(_mbMultiServer, _byteOrder, _addressBase));
     _script = QSharedPointer<Script>(new Script(interval));
     _console = QSharedPointer<console>(new console(ui->console));
     connect(_script.get(), &Script::stopped, this, &ScriptControl::stopScript, Qt::QueuedConnection);
@@ -220,6 +229,7 @@ void ScriptControl::runScript(RunMode mode, int interval)
     _jsEngine.globalObject().setProperty("Server",  _jsEngine.newQObject(_server.get()));
     _jsEngine.globalObject().setProperty("console", _jsEngine.newQObject(_console.get()));
     _jsEngine.globalObject().setProperty("Register", _jsEngine.newQMetaObject(&Register::staticMetaObject));
+    _jsEngine.globalObject().setProperty("AddressBase", _jsEngine.newQMetaObject(&Address::staticMetaObject));
     _jsEngine.setInterrupted(false);
 
     _console->clear();
@@ -255,6 +265,7 @@ void ScriptControl::stopScript()
     _jsEngine.globalObject().deleteProperty("Server");
     _jsEngine.globalObject().deleteProperty("console");
     _jsEngine.globalObject().deleteProperty("Register");
+    _jsEngine.globalObject().deleteProperty("AddressBase");
 
     _storage = nullptr;
     _server = nullptr;

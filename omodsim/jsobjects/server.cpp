@@ -5,9 +5,11 @@
 /// \brief Server::Server
 /// \param server
 /// \param order
+/// \param base
 ///
-Server::Server(ModbusMultiServer* server, const ByteOrder* order)
-    :_byteOrder(order)
+Server::Server(ModbusMultiServer* server, const ByteOrder* order, AddressBase base)
+    :_addressBase((Address::Base)base)
+    ,_byteOrder(order)
     ,_mbMultiServer(server)
 {
     Q_ASSERT(_byteOrder != nullptr);
@@ -25,13 +27,32 @@ Server::~Server()
 }
 
 ///
+/// \brief Server::addressBase
+/// \return
+///
+Address::Base Server::addressBase() const
+{
+    return _addressBase;
+}
+
+///
+/// \brief Server::setAddressBase
+/// \param base
+///
+void Server::setAddressBase(Address::Base base)
+{
+    _addressBase = base;
+}
+
+///
 /// \brief Server::readHolding
 /// \param address
 /// \return
 ///
 quint16 Server::readHolding(quint16 address) const
 {
-    const auto data = _mbMultiServer->data(QModbusDataUnit::HoldingRegisters, address - 1, 1);
+    address -= _addressBase == Address::Base::Base0 ? 0 : 1;
+    const auto data = _mbMultiServer->data(QModbusDataUnit::HoldingRegisters, address, 1);
     return toByteOrderValue(data.value(0), *_byteOrder);
 }
 
@@ -42,7 +63,8 @@ quint16 Server::readHolding(quint16 address) const
 ///
 void Server::writeHolding(quint16 address, quint16 value)
 {
-    _mbMultiServer->writeValue(QModbusDataUnit::HoldingRegisters, address - 1, value, *_byteOrder);
+    address -= _addressBase == Address::Base::Base0 ? 0 : 1;
+    _mbMultiServer->writeValue(QModbusDataUnit::HoldingRegisters, address, value, *_byteOrder);
 }
 
 ///
@@ -52,7 +74,8 @@ void Server::writeHolding(quint16 address, quint16 value)
 ///
 quint16 Server::readInput(quint16 address) const
 {
-    const auto data = _mbMultiServer->data(QModbusDataUnit::InputRegisters, address - 1, 1);
+    address -= _addressBase == Address::Base::Base0 ? 0 : 1;
+    const auto data = _mbMultiServer->data(QModbusDataUnit::InputRegisters, address, 1);
     return toByteOrderValue(data.value(0), *_byteOrder);
 }
 
@@ -63,7 +86,8 @@ quint16 Server::readInput(quint16 address) const
 ///
 void Server::writeInput(quint16 address, quint16 value)
 {
-    _mbMultiServer->writeValue(QModbusDataUnit::InputRegisters, address - 1, value, *_byteOrder);
+    address -= _addressBase == Address::Base::Base0 ? 0 : 1;
+    _mbMultiServer->writeValue(QModbusDataUnit::InputRegisters, address, value, *_byteOrder);
 }
 
 ///
@@ -73,7 +97,8 @@ void Server::writeInput(quint16 address, quint16 value)
 ///
 bool Server::readDiscrete(quint16 address) const
 {
-    const auto data = _mbMultiServer->data(QModbusDataUnit::DiscreteInputs, address - 1, 1);
+    address -= _addressBase == Address::Base::Base0 ? 0 : 1;
+    const auto data = _mbMultiServer->data(QModbusDataUnit::DiscreteInputs, address, 1);
     return toByteOrderValue(data.value(0), *_byteOrder);
 }
 
@@ -84,7 +109,8 @@ bool Server::readDiscrete(quint16 address) const
 ///
 void Server::writeDiscrete(quint16 address, bool value)
 {
-    _mbMultiServer->writeValue(QModbusDataUnit::DiscreteInputs, address - 1, value, *_byteOrder);
+    address -= _addressBase == Address::Base::Base0 ? 0 : 1;
+    _mbMultiServer->writeValue(QModbusDataUnit::DiscreteInputs, address, value, *_byteOrder);
 }
 
 ///
@@ -94,7 +120,8 @@ void Server::writeDiscrete(quint16 address, bool value)
 ///
 bool Server::readCoil(quint16 address) const
 {
-    const auto data = _mbMultiServer->data(QModbusDataUnit::Coils, address - 1, 1);
+    address -= _addressBase == Address::Base::Base0 ? 0 : 1;
+    const auto data = _mbMultiServer->data(QModbusDataUnit::Coils, address, 1);
     return toByteOrderValue(data.value(0), *_byteOrder);
 }
 
@@ -105,7 +132,8 @@ bool Server::readCoil(quint16 address) const
 ///
 void Server::writeCoil(quint16 address, bool value)
 {
-    _mbMultiServer->writeValue(QModbusDataUnit::Coils, address - 1, value, *_byteOrder);
+    address -= _addressBase == Address::Base::Base0 ? 0 : 1;
+    _mbMultiServer->writeValue(QModbusDataUnit::Coils, address, value, *_byteOrder);
 }
 
 ///
@@ -117,7 +145,8 @@ void Server::writeCoil(quint16 address, bool value)
 ///
 qint32 Server::readInt32(Register::Type reg, quint16 address, bool swapped) const
 {
-    return _mbMultiServer->readInt32((QModbusDataUnit::RegisterType)reg, address - 1, *_byteOrder, swapped);
+    address -= _addressBase == Address::Base::Base0 ? 0 : 1;
+    return _mbMultiServer->readInt32((QModbusDataUnit::RegisterType)reg, address, *_byteOrder, swapped);
 }
 
 ///
@@ -129,7 +158,8 @@ qint32 Server::readInt32(Register::Type reg, quint16 address, bool swapped) cons
 ///
 void Server::writeInt32(Register::Type reg, quint16 address, qint32 value, bool swapped)
 {
-    _mbMultiServer->writeInt32((QModbusDataUnit::RegisterType)reg, address - 1, value, *_byteOrder, swapped);
+    address -= _addressBase == Address::Base::Base0 ? 0 : 1;
+    _mbMultiServer->writeInt32((QModbusDataUnit::RegisterType)reg, address, value, *_byteOrder, swapped);
 }
 
 ///
@@ -141,7 +171,8 @@ void Server::writeInt32(Register::Type reg, quint16 address, qint32 value, bool 
 ///
 quint32 Server::readUInt32(Register::Type reg, quint16 address, bool swapped) const
 {
-    return _mbMultiServer->readUInt32((QModbusDataUnit::RegisterType)reg, address - 1, *_byteOrder, swapped);
+    address -= _addressBase == Address::Base::Base0 ? 0 : 1;
+    return _mbMultiServer->readUInt32((QModbusDataUnit::RegisterType)reg, address, *_byteOrder, swapped);
 }
 
 ///
@@ -153,7 +184,8 @@ quint32 Server::readUInt32(Register::Type reg, quint16 address, bool swapped) co
 ///
 void Server::writeUInt32(Register::Type reg, quint16 address, quint32 value, bool swapped)
 {
-    _mbMultiServer->writeUInt32((QModbusDataUnit::RegisterType)reg, address - 1, value, *_byteOrder, swapped);
+    address -= _addressBase == Address::Base::Base0 ? 0 : 1;
+    _mbMultiServer->writeUInt32((QModbusDataUnit::RegisterType)reg, address, value, *_byteOrder, swapped);
 }
 
 ///
@@ -165,7 +197,8 @@ void Server::writeUInt32(Register::Type reg, quint16 address, quint32 value, boo
 ///
 qint64 Server::readInt64(Register::Type reg, quint16 address, bool swapped) const
 {
-    return _mbMultiServer->readInt64((QModbusDataUnit::RegisterType)reg, address - 1, *_byteOrder, swapped);
+    address -= _addressBase == Address::Base::Base0 ? 0 : 1;
+    return _mbMultiServer->readInt64((QModbusDataUnit::RegisterType)reg, address, *_byteOrder, swapped);
 }
 
 ///
@@ -177,7 +210,8 @@ qint64 Server::readInt64(Register::Type reg, quint16 address, bool swapped) cons
 ///
 void Server::writeInt64(Register::Type reg, quint16 address, qint64 value, bool swapped)
 {
-    _mbMultiServer->writeInt64((QModbusDataUnit::RegisterType)reg, address - 1, value, *_byteOrder, swapped);
+    address -= _addressBase == Address::Base::Base0 ? 0 : 1;
+    _mbMultiServer->writeInt64((QModbusDataUnit::RegisterType)reg, address, value, *_byteOrder, swapped);
 }
 
 ///
@@ -189,7 +223,8 @@ void Server::writeInt64(Register::Type reg, quint16 address, qint64 value, bool 
 ///
 quint64 Server::readUInt64(Register::Type reg, quint16 address, bool swapped) const
 {
-    return _mbMultiServer->readUInt64((QModbusDataUnit::RegisterType)reg, address - 1, *_byteOrder, swapped);
+    address -= _addressBase == Address::Base::Base0 ? 0 : 1;
+    return _mbMultiServer->readUInt64((QModbusDataUnit::RegisterType)reg, address, *_byteOrder, swapped);
 }
 
 ///
@@ -201,7 +236,8 @@ quint64 Server::readUInt64(Register::Type reg, quint16 address, bool swapped) co
 ///
 void Server::writeUInt64(Register::Type reg, quint16 address, quint64 value, bool swapped)
 {
-    _mbMultiServer->writeUInt64((QModbusDataUnit::RegisterType)reg, address - 1, value, *_byteOrder, swapped);
+    address -= _addressBase == Address::Base::Base0 ? 0 : 1;
+    _mbMultiServer->writeUInt64((QModbusDataUnit::RegisterType)reg, address, value, *_byteOrder, swapped);
 }
 
 ///
@@ -213,7 +249,8 @@ void Server::writeUInt64(Register::Type reg, quint16 address, quint64 value, boo
 ///
 float Server::readFloat(Register::Type reg, quint16 address, bool swapped) const
 {
-    return _mbMultiServer->readFloat((QModbusDataUnit::RegisterType)reg, address - 1, *_byteOrder, swapped);
+    address -= _addressBase == Address::Base::Base0 ? 0 : 1;
+    return _mbMultiServer->readFloat((QModbusDataUnit::RegisterType)reg, address, *_byteOrder, swapped);
 }
 
 ///
@@ -225,7 +262,8 @@ float Server::readFloat(Register::Type reg, quint16 address, bool swapped) const
 ///
 void Server::writeFloat(Register::Type reg, quint16 address, float value, bool swapped)
 {
-    _mbMultiServer->writeFloat((QModbusDataUnit::RegisterType)reg, address - 1, value, *_byteOrder, swapped);
+    address -= _addressBase == Address::Base::Base0 ? 0 : 1;
+    _mbMultiServer->writeFloat((QModbusDataUnit::RegisterType)reg, address, value, *_byteOrder, swapped);
 }
 
 ///
@@ -237,7 +275,8 @@ void Server::writeFloat(Register::Type reg, quint16 address, float value, bool s
 ///
 double Server::readDouble(Register::Type reg, quint16 address, bool swapped) const
 {
-    return _mbMultiServer->readDouble((QModbusDataUnit::RegisterType)reg, address - 1, *_byteOrder, swapped);
+    address -= _addressBase == Address::Base::Base0 ? 0 : 1;
+    return _mbMultiServer->readDouble((QModbusDataUnit::RegisterType)reg, address, *_byteOrder, swapped);
 }
 
 ///
@@ -249,7 +288,8 @@ double Server::readDouble(Register::Type reg, quint16 address, bool swapped) con
 ///
 void Server::writeDouble(Register::Type reg, quint16 address, double value, bool swapped)
 {
-    _mbMultiServer->writeDouble((QModbusDataUnit::RegisterType)reg, address - 1, value, *_byteOrder, swapped);
+    address -= _addressBase == Address::Base::Base0 ? 0 : 1;
+    _mbMultiServer->writeDouble((QModbusDataUnit::RegisterType)reg, address, value, *_byteOrder, swapped);
 }
 
 ///
@@ -275,7 +315,7 @@ void Server::on_dataChanged(const QModbusDataUnit& data)
     const auto reg = (Register::Type)data.registerType();
     for(uint i = 0; i < data.valueCount(); i++)
     {
-        const quint16 address = data.startAddress() + i + 1;
+        const quint16 address = data.startAddress() + i + (_addressBase == Address::Base::Base0 ? 0 : 1);
         if(_mapOnChange.contains({reg, address}))
         {
             _mapOnChange[{reg, address}].call(QJSValueList() << data.value(i));

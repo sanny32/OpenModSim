@@ -638,18 +638,19 @@ void ModbusMultiServer::writeDouble(QModbusDataUnit::RegisterType pointType, qui
 void ModbusMultiServer::writeRegister(QModbusDataUnit::RegisterType pointType, const ModbusWriteParams& params)
 {
     QModbusDataUnit data;
+    const auto addr = params.Address - (params.ZeroBasedAddress ? 0 : 1);
     if(params.Value.userType() == qMetaTypeId<QVector<quint16>>())
     {
         switch (pointType)
         {
             case QModbusDataUnit::Coils:
             case QModbusDataUnit::DiscreteInputs:
-                data = createDataUnit(pointType, params.Address - 1, params.Value.value<QVector<quint16>>(), params.Order);
+                data = createDataUnit(pointType, addr, params.Value.value<QVector<quint16>>(), params.Order);
             break;
 
             case QModbusDataUnit::InputRegisters:
             case QModbusDataUnit::HoldingRegisters:
-                data = createDataUnit(pointType, params.Address - 1, params.Value.value<QVector<quint16>>(), params.Order);
+                data = createDataUnit(pointType, addr, params.Value.value<QVector<quint16>>(), params.Order);
             break;
 
             default:
@@ -662,7 +663,7 @@ void ModbusMultiServer::writeRegister(QModbusDataUnit::RegisterType pointType, c
         {
             case QModbusDataUnit::Coils:
             case QModbusDataUnit::DiscreteInputs:
-                data = createDataUnit(pointType, params.Address - 1, params.Value.toBool(), params.Order);
+                data = createDataUnit(pointType, addr, params.Value.toBool(), params.Order);
             break;
 
             case QModbusDataUnit::InputRegisters:
@@ -673,39 +674,39 @@ void ModbusMultiServer::writeRegister(QModbusDataUnit::RegisterType pointType, c
                     case DataDisplayMode::Decimal:
                     case DataDisplayMode::Integer:
                     case DataDisplayMode::Hex:
-                        data = createDataUnit(pointType, params.Address - 1, params.Value.toUInt(), params.Order);
+                        data = createDataUnit(pointType, addr, params.Value.toUInt(), params.Order);
                     break;
                     case DataDisplayMode::FloatingPt:
-                        data = createFloatDataUnit(pointType, params.Address - 1, params.Value.toFloat(), params.Order, false);
+                        data = createFloatDataUnit(pointType, addr, params.Value.toFloat(), params.Order, false);
                     break;
                     case DataDisplayMode::SwappedFP:
-                        data = createFloatDataUnit(pointType, params.Address - 1, params.Value.toFloat(), params.Order, true);
+                        data = createFloatDataUnit(pointType, addr, params.Value.toFloat(), params.Order, true);
                     break;
                     case DataDisplayMode::DblFloat:
-                        data = createDoubleDataUnit(pointType, params.Address - 1, params.Value.toDouble(), params.Order, false);
+                        data = createDoubleDataUnit(pointType, addr, params.Value.toDouble(), params.Order, false);
                     break;
                     case DataDisplayMode::SwappedDbl:
-                        data = createDoubleDataUnit(pointType, params.Address - 1, params.Value.toDouble(), params.Order, true);
+                        data = createDoubleDataUnit(pointType, addr, params.Value.toDouble(), params.Order, true);
                     break;
                         
                     case DataDisplayMode::Int32:
                     case DataDisplayMode::UInt32:
-                        data = createInt32DataUnit(pointType, params.Address - 1, params.Value.toInt(), params.Order, false);
+                        data = createInt32DataUnit(pointType, addr, params.Value.toInt(), params.Order, false);
                     break;
 
                     case DataDisplayMode::SwappedInt32:
                     case DataDisplayMode::SwappedUInt32:
-                        data = createInt32DataUnit(pointType, params.Address - 1, params.Value.toInt(), params.Order, true);
+                        data = createInt32DataUnit(pointType, addr, params.Value.toInt(), params.Order, true);
                     break;
 
                     case DataDisplayMode::Int64:
                     case DataDisplayMode::UInt64:
-                        data = createInt64DataUnit(pointType, params.Address - 1, params.Value.toLongLong(), params.Order, false);
+                        data = createInt64DataUnit(pointType, addr, params.Value.toLongLong(), params.Order, false);
                         break;
 
                     case DataDisplayMode::SwappedInt64:
                     case DataDisplayMode::SwappedUInt64:
-                        data = createInt64DataUnit(pointType, params.Address - 1, params.Value.toLongLong(), params.Order, true);
+                        data = createInt64DataUnit(pointType, addr, params.Value.toLongLong(), params.Order, true);
                     break;
                 }
             break;

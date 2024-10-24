@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>350</width>
-    <height>271</height>
+    <height>285</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,10 +17,10 @@
    <item>
     <layout class="QFormLayout" name="formLayout_2">
      <property name="labelAlignment">
-      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
      </property>
      <property name="formAlignment">
-      <set>Qt::AlignHCenter|Qt::AlignTop</set>
+      <set>Qt::AlignmentFlag::AlignHCenter|Qt::AlignmentFlag::AlignTop</set>
      </property>
      <property name="leftMargin">
       <number>40</number>
@@ -89,13 +89,16 @@
      </property>
      <layout class="QFormLayout" name="formLayout">
       <property name="labelAlignment">
-       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+      </property>
+      <property name="formAlignment">
+       <set>Qt::AlignmentFlag::AlignHCenter|Qt::AlignmentFlag::AlignTop</set>
       </property>
       <property name="verticalSpacing">
        <number>12</number>
       </property>
       <property name="leftMargin">
-       <number>40</number>
+       <number>9</number>
       </property>
       <item row="0" column="0">
        <widget class="QLabel" name="labelSlaveAddress">
@@ -156,6 +159,35 @@
         </property>
        </widget>
       </item>
+      <item row="4" column="0">
+       <widget class="QLabel" name="labelLength">
+        <property name="text">
+         <string>Length:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="1">
+       <widget class="NumericLineEdit" name="lineEditLength">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>60</width>
+          <height>16777215</height>
+         </size>
+        </property>
+       </widget>
+      </item>
       <item row="2" column="1">
        <widget class="NumericLineEdit" name="lineEditPointAddress">
         <property name="sizePolicy">
@@ -179,14 +211,14 @@
        </widget>
       </item>
       <item row="3" column="0">
-       <widget class="QLabel" name="labelLength">
+       <widget class="QLabel" name="labelAddressBase">
         <property name="text">
-         <string>Length:</string>
+         <string>Address Base:</string>
         </property>
        </widget>
       </item>
       <item row="3" column="1">
-       <widget class="NumericLineEdit" name="lineEditLength">
+       <widget class="AddressBaseComboBox" name="comboBoxAddressBase">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
           <horstretch>0</horstretch>
@@ -195,14 +227,8 @@
         </property>
         <property name="minimumSize">
          <size>
-          <width>0</width>
+          <width>100</width>
           <height>25</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>60</width>
-          <height>16777215</height>
          </size>
         </property>
        </widget>
@@ -213,10 +239,10 @@
    <item>
     <widget class="QDialogButtonBox" name="buttonBox">
      <property name="orientation">
-      <enum>Qt::Horizontal</enum>
+      <enum>Qt::Orientation::Horizontal</enum>
      </property>
      <property name="standardButtons">
-      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+      <set>QDialogButtonBox::StandardButton::Cancel|QDialogButtonBox::StandardButton::Ok</set>
      </property>
      <property name="centerButtons">
       <bool>true</bool>
@@ -236,11 +262,15 @@
    <extends>QComboBox</extends>
    <header>pointtypecombobox.h</header>
   </customwidget>
+  <customwidget>
+   <class>AddressBaseComboBox</class>
+   <extends>QComboBox</extends>
+   <header>addressbasecombobox.h</header>
+  </customwidget>
  </customwidgets>
  <tabstops>
   <tabstop>lineEditSlaveAddress</tabstop>
   <tabstop>comboBoxPointType</tabstop>
-  <tabstop>lineEditPointAddress</tabstop>
   <tabstop>lineEditLength</tabstop>
  </tabstops>
  <resources/>

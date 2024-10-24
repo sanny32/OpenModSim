@@ -17,7 +17,7 @@ DialogWriteHoldingRegister::DialogWriteHoldingRegister(ModbusWriteParams& writeP
     ,_simParams(simParams)
 {
     ui->setupUi(this);
-    ui->lineEditAddress->setInputRange(ModbusLimits::addressRange());
+    ui->lineEditAddress->setInputRange(ModbusLimits::addressRange(writeParams.ZeroBasedAddress));
     ui->lineEditAddress->setValue(_writeParams.Address);
 
     if(simParams.Mode != SimulationMode::No)

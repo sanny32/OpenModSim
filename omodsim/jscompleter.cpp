@@ -104,6 +104,7 @@ JSCompleterModel::JSCompleterModel(QObject *parent)
         addMetaObject(Storage::staticMetaObject);
         addMetaObject(Server::staticMetaObject);
         addMetaObject(Register::staticMetaObject);
+        addMetaObject(Address::staticMetaObject);
     }
 }
 
