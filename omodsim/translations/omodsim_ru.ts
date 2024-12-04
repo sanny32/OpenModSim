@@ -1478,19 +1478,20 @@ MODBUS Point Type:
     <name>MenuConnect</name>
     <message>
         <location filename="../menuconnect.cpp" line="18"/>
-        <location filename="../menuconnect.cpp" line="94"/>
+        <location filename="../menuconnect.cpp" line="95"/>
         <source>Modbus/TCP Srv</source>
         <translation>Modbus/TCP сервер</translation>
     </message>
     <message>
         <location filename="../menuconnect.cpp" line="21"/>
         <location filename="../menuconnect.cpp" line="40"/>
-        <location filename="../menuconnect.cpp" line="97"/>
+        <location filename="../menuconnect.cpp" line="100"/>
         <source>Port %1</source>
         <translation>Порт %1</translation>
     </message>
     <message>
         <location filename="../menuconnect.cpp" line="35"/>
+        <location filename="../menuconnect.cpp" line="97"/>
         <source>Modbus/TCP Srv %1</source>
         <translation type="unfinished"></translation>
     </message>
