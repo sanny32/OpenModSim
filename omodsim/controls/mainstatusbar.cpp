@@ -45,7 +45,7 @@ MainStatusBar::MainStatusBar(const ModbusMultiServer& server, QWidget* parent)
         auto label = new QLabel(this);
         label->setFrameShadow(QFrame::Sunken);
         label->setFrameShape(QFrame::Panel);
-        label->setMinimumWidth(120);
+        label->setMinimumWidth(80);
         label->setProperty("ConnectionDetails", QVariant::fromValue(cd));
 
         updateConnectionInfo(label, cd);
@@ -60,9 +60,8 @@ MainStatusBar::MainStatusBar(const ModbusMultiServer& server, QWidget* parent)
         {
             if(cd == label->property("ConnectionDetails").value<ConnectionDetails>())
             {
-                _labels.removeOne(label);
                 removeWidget(label);
-                delete label;
+                _labels.removeOne(label);
 
                 break;
             }
@@ -107,15 +106,15 @@ void MainStatusBar::updateConnectionInfo(QLabel* label, const ConnectionDetails&
     switch(cd.Type)
     {
         case ConnectionType::Tcp:
-            label->setText(QString(tr("TCP/IP %1:%2")).arg(cd.TcpParams.IPAddress, QString::number(cd.TcpParams.ServicePort)));
+            label->setText(QString(tr("Modbus/TCP Srv %1:%2")).arg(cd.TcpParams.IPAddress, QString::number(cd.TcpParams.ServicePort)));
         break;
 
         case ConnectionType::Serial:
-            label->setText(QString(tr("Port %1:%2:%3:%4:%5  ")).arg(cd.SerialParams.PortName,
-                                                                    QString::number(cd.SerialParams.BaudRate),
-                                                                    QString::number(cd.SerialParams.WordLength),
-                                                                    Parity_toString(cd.SerialParams.Parity),
-                                                                    QString::number(cd.SerialParams.StopBits)));
+            label->setText(QString(tr("Port %1:%2:%3:%4:%5")).arg(cd.SerialParams.PortName,
+                                                                QString::number(cd.SerialParams.BaudRate),
+                                                                QString::number(cd.SerialParams.WordLength),
+                                                                Parity_toString(cd.SerialParams.Parity),
+                                                                QString::number(cd.SerialParams.StopBits)));
         break;
     }
 }
