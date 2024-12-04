@@ -91,7 +91,10 @@ void MenuConnect::changeEvent(QEvent* event)
             switch(data.first)
             {
                 case ConnectionType::Tcp:
-                    a->setText(tr("Modbus/TCP Srv"));
+                    if(data.second.isEmpty())
+                        a->setText(tr("Modbus/TCP Srv"));
+                    else
+                         a->setText(QString(tr("Modbus/TCP Srv %1").arg(data.second)));
                 break;
                 case ConnectionType::Serial:
                     a->setText(QString(tr("Port %1")).arg(data.second));
