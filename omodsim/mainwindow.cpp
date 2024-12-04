@@ -1255,11 +1255,6 @@ void MainWindow::loadConfig(const QString& filename)
         return;
 
     ui->mdiArea->closeAllSubWindows();
-    for(auto&& filename: listFilename)
-    {
-        if(!filename.isEmpty())
-            openFile(filename);
-    }
 
     auto menu = qobject_cast<MenuConnect*>(ui->actionConnect->menu());
     menu->updateConnectionDetails(conns);
@@ -1268,6 +1263,12 @@ void MainWindow::loadConfig(const QString& filename)
     {
         if(menu->canConnect(cd))
             _mbMultiServer.connectDevice(cd);
+    }
+
+    for(auto&& filename: listFilename)
+    {
+        if(!filename.isEmpty())
+            openFile(filename);
     }
 }
 
