@@ -596,7 +596,7 @@
     <message>
         <location filename="../dialogs/dialogselectserviceport.ui" line="14"/>
         <source>Select Service IP Address and Port</source>
-        <translation type="unfinished"></translation>
+        <translation>Установка IP адреса и порта</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogselectserviceport.ui" line="44"/>
@@ -606,7 +606,7 @@
     <message>
         <location filename="../dialogs/dialogselectserviceport.ui" line="57"/>
         <source>Service IP Address</source>
-        <translation type="unfinished"></translation>
+        <translation>IP адрес</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogselectserviceport.ui" line="37"/>
@@ -993,12 +993,12 @@ MODBUS Point Type:
     <message>
         <location filename="../controls/mainstatusbar.cpp" line="109"/>
         <source>Modbus/TCP Srv %1:%2</source>
-        <translation type="unfinished"></translation>
+        <translation>Modbus/TCP сервер %1:%2</translation>
     </message>
     <message>
         <location filename="../controls/mainstatusbar.cpp" line="113"/>
         <source>Port %1:%2:%3:%4:%5</source>
-        <translation type="unfinished">Порт %1:%2:%3:%4:%5</translation>
+        <translation>Порт %1:%2:%3:%4:%5</translation>
     </message>
     <message>
         <source>Modbus/TCP Srv: %1</source>
@@ -1493,7 +1493,7 @@ MODBUS Point Type:
         <location filename="../menuconnect.cpp" line="35"/>
         <location filename="../menuconnect.cpp" line="97"/>
         <source>Modbus/TCP Srv %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Modbus/TCP сервер %1</translation>
     </message>
 </context>
 <context>
