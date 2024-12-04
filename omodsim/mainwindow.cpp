@@ -453,7 +453,7 @@ void MainWindow::on_connectAction(ConnectionDetails& cd)
     {
         case ConnectionType::Tcp:
         {
-            DialogSelectServicePort dlg(cd.TcpParams.ServicePort, this);
+            DialogSelectServicePort dlg(cd.TcpParams, this);
             if(dlg.exec() == QDialog::Accepted) _mbMultiServer.connectDevice(cd);
         }
         break;
