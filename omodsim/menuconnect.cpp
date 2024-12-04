@@ -1,5 +1,5 @@
 #include <QEvent>
-#include <QSerialPortInfo>
+#include "serialportutils.h"
 #include "menuconnect.h"
 
 ///
@@ -15,10 +15,10 @@ MenuConnect::MenuConnect(MenuType type, ModbusMultiServer& server, QWidget *pare
 {
     addAction(tr("Modbus/TCP Srv"), ConnectionType::Tcp, QString());
 
-    for(auto&& port: QSerialPortInfo::availablePorts())
+    for(auto&& port: getAvailableSerialPorts())
     {
-        const auto text = QString(tr("Port %1")).arg(port.portName());
-        addAction(text, ConnectionType::Serial, port.portName());
+        const auto text = QString(tr("Port %1")).arg(port);
+        addAction(text, ConnectionType::Serial, port);
     }
 
     connect(&_mbMultiServer, &ModbusMultiServer::connected, this, [&](const ConnectionDetails&)

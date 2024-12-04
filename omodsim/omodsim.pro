@@ -178,6 +178,7 @@ HEADERS += \
     quintvalidator.h \
     recentfileactionlist.h \
     scriptsettings.h \
+    serialportutils.h \
     windowactionlist.h
 
 FORMS += \
