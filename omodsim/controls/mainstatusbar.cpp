@@ -107,7 +107,7 @@ void MainStatusBar::updateConnectionInfo(QLabel* label, const ConnectionDetails&
     switch(cd.Type)
     {
         case ConnectionType::Tcp:
-            label->setText(QString(tr("Modbus/TCP Srv: %1")).arg(cd.TcpParams.ServicePort));
+            label->setText(QString(tr("TCP/IP %1:%2")).arg(cd.TcpParams.IPAddress, QString::number(cd.TcpParams.ServicePort)));
         break;
 
         case ConnectionType::Serial:

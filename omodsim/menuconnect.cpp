@@ -79,7 +79,7 @@ bool MenuConnect::canConnect(const ConnectionDetails& cd)
     {
         if(c.Type != cd.Type) continue;
         if(c.Type == ConnectionType::Tcp ||
-          (c.Type == ConnectionType::Serial && c.SerialParams.PortName == cd.SerialParams.PortName))
+           (c.Type == ConnectionType::Serial && c.SerialParams.PortName == cd.SerialParams.PortName))
         {
             return true;
         }
