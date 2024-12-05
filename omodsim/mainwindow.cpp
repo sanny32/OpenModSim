@@ -453,7 +453,7 @@ void MainWindow::on_connectAction(ConnectionDetails& cd)
     {
         case ConnectionType::Tcp:
         {
-            DialogSelectServicePort dlg(cd.TcpParams.ServicePort, this);
+            DialogSelectServicePort dlg(cd.TcpParams, this);
             if(dlg.exec() == QDialog::Accepted) _mbMultiServer.connectDevice(cd);
         }
         break;
@@ -1255,11 +1255,6 @@ void MainWindow::loadConfig(const QString& filename)
         return;
 
     ui->mdiArea->closeAllSubWindows();
-    for(auto&& filename: listFilename)
-    {
-        if(!filename.isEmpty())
-            openFile(filename);
-    }
 
     auto menu = qobject_cast<MenuConnect*>(ui->actionConnect->menu());
     menu->updateConnectionDetails(conns);
@@ -1268,6 +1263,12 @@ void MainWindow::loadConfig(const QString& filename)
     {
         if(menu->canConnect(cd))
             _mbMultiServer.connectDevice(cd);
+    }
+
+    for(auto&& filename: listFilename)
+    {
+        if(!filename.isEmpty())
+            openFile(filename);
     }
 }
 

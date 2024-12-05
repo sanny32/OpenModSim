@@ -94,8 +94,8 @@ QSharedPointer<QModbusServer> ModbusMultiServer::findModbusServer(ConnectionType
     for(auto&& s : _modbusServerList)
     {
         const auto cd = s->property("ConnectionDetails").value<ConnectionDetails>();
-        if((cd.Type == ConnectionType::Tcp && type == ConnectionType::Tcp) ||
-           (cd.Type == ConnectionType::Serial && type == ConnectionType::Serial && cd.SerialParams.PortName == port))
+        if((cd.Type == ConnectionType::Tcp && type == ConnectionType::Tcp && port == QString("%1:%2").arg(cd.TcpParams.IPAddress, QString::number(cd.TcpParams.ServicePort))) ||
+           (cd.Type == ConnectionType::Serial && type == ConnectionType::Serial && port == cd.SerialParams.PortName))
         {
             return s;
         }

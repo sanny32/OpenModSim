@@ -4,7 +4,7 @@ CONFIG += c++17
 CONFIG -= debug_and_release
 CONFIG -= debug_and_release_target
 
-VERSION = 1.6.0
+VERSION = 1.7.0
 
 QMAKE_TARGET_PRODUCT = "Open ModSim"
 QMAKE_TARGET_DESCRIPTION = "An Open Source Modbus Slave (Server) Utility"
@@ -178,6 +178,7 @@ HEADERS += \
     quintvalidator.h \
     recentfileactionlist.h \
     scriptsettings.h \
+    serialportutils.h \
     windowactionlist.h
 
 FORMS += \

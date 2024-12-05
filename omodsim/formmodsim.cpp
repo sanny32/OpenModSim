@@ -69,7 +69,6 @@ FormModSim::FormModSim(int id, ModbusMultiServer& server, QSharedPointer<DataSim
 ///
 FormModSim::~FormModSim()
 {
-    _mbMultiServer.removeUnitMap(formId());
     delete ui;
 }
 
@@ -94,6 +93,8 @@ void FormModSim::changeEvent(QEvent* e)
 ///
 void FormModSim::closeEvent(QCloseEvent *event)
 {
+    _mbMultiServer.removeUnitMap(formId());
+
     emit closing();
     QWidget::closeEvent(event);
 }

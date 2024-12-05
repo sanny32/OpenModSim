@@ -4,12 +4,14 @@
 <context>
     <name>AddressBaseComboBox</name>
     <message>
-        <location filename="../controls/addressbasecombobox.cpp" line="10"/>
+        <location filename="../controls/addressbasecombobox.cpp" line="11"/>
+        <location filename="../controls/addressbasecombobox.cpp" line="30"/>
         <source>0-based</source>
         <translation>0-первый</translation>
     </message>
     <message>
-        <location filename="../controls/addressbasecombobox.cpp" line="11"/>
+        <location filename="../controls/addressbasecombobox.cpp" line="12"/>
+        <location filename="../controls/addressbasecombobox.cpp" line="34"/>
         <source>1-based</source>
         <translation>1-первый</translation>
     </message>
@@ -588,17 +590,26 @@
 <context>
     <name>DialogSelectServicePort</name>
     <message>
-        <location filename="../dialogs/dialogselectserviceport.ui" line="14"/>
         <source>Select Service Port</source>
-        <translation>Установка порта</translation>
+        <translation type="vanished">Установка порта</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogselectserviceport.ui" line="20"/>
+        <location filename="../dialogs/dialogselectserviceport.ui" line="14"/>
+        <source>Select Service IP Address and Port</source>
+        <translation>Установка IP адреса и порта</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogselectserviceport.ui" line="44"/>
         <source>Modbus/TCP Service Port</source>
         <translation>Modbus/TCP порт</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogselectserviceport.ui" line="57"/>
+        <source>Service IP Address</source>
+        <translation>IP адрес</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogselectserviceport.ui" line="37"/>
         <source>502</source>
         <translation></translation>
     </message>
@@ -920,7 +931,7 @@ Length: %2</source>
         <translation type="vanished">Указана недопустимая длина данных</translation>
     </message>
     <message>
-        <location filename="../formmodsim.cpp" line="407"/>
+        <location filename="../formmodsim.cpp" line="408"/>
         <source>Address Base: %1
 Start Address: %2
 Length: %3</source>
@@ -929,7 +940,7 @@ Length: %3</source>
 Количество: %3</translation>
     </message>
     <message>
-        <location filename="../formmodsim.cpp" line="410"/>
+        <location filename="../formmodsim.cpp" line="411"/>
         <source>Device Id: %1
 MODBUS Point Type:
 %2</source>
@@ -980,14 +991,22 @@ MODBUS Point Type:
         <translation>Маркер</translation>
     </message>
     <message>
-        <location filename="../controls/mainstatusbar.cpp" line="110"/>
-        <source>Modbus/TCP Srv: %1</source>
-        <translation>Modbus/TCP сервер: %1</translation>
+        <location filename="../controls/mainstatusbar.cpp" line="109"/>
+        <source>Modbus/TCP Srv %1:%2</source>
+        <translation>Modbus/TCP сервер %1:%2</translation>
     </message>
     <message>
-        <location filename="../controls/mainstatusbar.cpp" line="114"/>
+        <location filename="../controls/mainstatusbar.cpp" line="113"/>
+        <source>Port %1:%2:%3:%4:%5</source>
+        <translation>Порт %1:%2:%3:%4:%5</translation>
+    </message>
+    <message>
+        <source>Modbus/TCP Srv: %1</source>
+        <translation type="vanished">Modbus/TCP сервер: %1</translation>
+    </message>
+    <message>
         <source>Port %1:%2:%3:%4:%5  </source>
-        <translation>Порт %1:%2:%3:%4:%5  </translation>
+        <translation type="vanished">Порт %1:%2:%3:%4:%5  </translation>
     </message>
     <message>
         <source>Port %1: %2</source>
@@ -1458,16 +1477,23 @@ MODBUS Point Type:
 <context>
     <name>MenuConnect</name>
     <message>
-        <location filename="../menuconnect.cpp" line="16"/>
-        <location filename="../menuconnect.cpp" line="59"/>
+        <location filename="../menuconnect.cpp" line="18"/>
+        <location filename="../menuconnect.cpp" line="95"/>
         <source>Modbus/TCP Srv</source>
         <translation>Modbus/TCP сервер</translation>
     </message>
     <message>
-        <location filename="../menuconnect.cpp" line="20"/>
-        <location filename="../menuconnect.cpp" line="62"/>
+        <location filename="../menuconnect.cpp" line="21"/>
+        <location filename="../menuconnect.cpp" line="40"/>
+        <location filename="../menuconnect.cpp" line="100"/>
         <source>Port %1</source>
         <translation>Порт %1</translation>
+    </message>
+    <message>
+        <location filename="../menuconnect.cpp" line="35"/>
+        <location filename="../menuconnect.cpp" line="97"/>
+        <source>Modbus/TCP Srv %1</source>
+        <translation>Modbus/TCP сервер %1</translation>
     </message>
 </context>
 <context>

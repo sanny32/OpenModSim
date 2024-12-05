@@ -14,15 +14,18 @@
 struct TcpConnectionParams
 {
     quint16 ServicePort = 502;
-    const QString IPAddress = "0.0.0.0";
+    QString IPAddress = "0.0.0.0";
 
     void normalize()
     {
+        const auto addr = QHostAddress(IPAddress);
+        IPAddress = addr.isNull() ? "0.0.0.0" : addr.toString();
         ServicePort = qMax<quint16>(1, ServicePort);
     }
 
     TcpConnectionParams& operator=(const TcpConnectionParams& params)
     {
+        IPAddress = params.IPAddress;
         ServicePort = params.ServicePort;
         return *this;
     }
@@ -43,6 +46,7 @@ Q_DECLARE_METATYPE(TcpConnectionParams)
 inline QDataStream& operator <<(QDataStream& out, const TcpConnectionParams& params)
 {
     out << params.ServicePort;
+    out << params.IPAddress;
     return out;
 }
 
@@ -55,6 +59,7 @@ inline QDataStream& operator <<(QDataStream& out, const TcpConnectionParams& par
 inline QDataStream& operator >>(QDataStream& in, TcpConnectionParams& params)
 {
     in >> params.ServicePort;
+    in >> params.IPAddress;
     params.normalize();
     return in;
 }
