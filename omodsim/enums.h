@@ -79,8 +79,8 @@ inline QSettings& operator >>(QSettings& in, DisplayMode& mode)
 enum class DataDisplayMode
 {
     Binary = 0,
-    Decimal,
-    Integer,
+    UInt16,
+    Int16,
     Hex,
     FloatingPt,
     SwappedFP,

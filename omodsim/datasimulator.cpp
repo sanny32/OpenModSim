@@ -200,8 +200,8 @@ void DataSimulator::randomSimulation(DataDisplayMode mode, QModbusDataUnit::Regi
             switch(mode)
             {
                 case DataDisplayMode::Binary:
-                case DataDisplayMode::Integer:
-                case DataDisplayMode::Decimal:
+                case DataDisplayMode::Int16:
+                case DataDisplayMode::UInt16:
                 case DataDisplayMode::Hex:
                     value = generateRandom<quint16>(params.Range.from(), params.Range.to() + 1);
                 break;
@@ -265,12 +265,12 @@ void DataSimulator::incrementSimulation(DataDisplayMode mode, QModbusDataUnit::R
     auto&& value = _simulationMap[{ type, addr}].CurrentValue;
     switch(mode)
     {
-        case DataDisplayMode::Integer:
+        case DataDisplayMode::Int16:
             value = incrementValue<qint16>(value.toInt(), params.Step, params.Range);
         break;
 
         case DataDisplayMode::Binary:
-        case DataDisplayMode::Decimal:
+        case DataDisplayMode::UInt16:
         case DataDisplayMode::Hex:
             value = incrementValue<quint16>(value.toUInt(), params.Step, params.Range);
         break;
@@ -329,12 +329,12 @@ void DataSimulator::decrementSimailation(DataDisplayMode mode, QModbusDataUnit::
     auto&& value = _simulationMap[{ type, addr}].CurrentValue;
     switch(mode)
     {
-        case DataDisplayMode::Integer:
+        case DataDisplayMode::Int16:
             value = decrementValue<qint16>(value.toInt(), params.Step, params.Range);
         break;
 
         case DataDisplayMode::Binary:
-        case DataDisplayMode::Decimal:
+        case DataDisplayMode::UInt16:
         case DataDisplayMode::Hex:
             value = decrementValue<quint16>(value.toUInt(), params.Step, params.Range);
         break;

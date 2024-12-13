@@ -31,13 +31,13 @@ DialogAutoSimulation::DialogAutoSimulation(DataDisplayMode mode, ModbusSimulatio
         case DataDisplayMode::Binary:
         break;
 
-        case DataDisplayMode::Decimal:
+        case DataDisplayMode::UInt16:
             ui->lineEditStepValue->setInputRange(1, USHRT_MAX - 1);
             ui->lineEditLowLimit->setInputRange(0, USHRT_MAX);
             ui->lineEditHighLimit->setInputRange(0, USHRT_MAX);
         break;
 
-        case DataDisplayMode::Integer:
+        case DataDisplayMode::Int16:
             ui->lineEditStepValue->setInputRange(1, SHRT_MAX - 1);
             ui->lineEditLowLimit->setInputRange(SHRT_MIN, SHRT_MAX);
             ui->lineEditHighLimit->setInputRange(SHRT_MIN, SHRT_MAX);

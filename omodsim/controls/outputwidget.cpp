@@ -205,11 +205,11 @@ void OutputListModel::updateData(const QModbusDataUnit& data)
                 itemData.ValueStr = formatBinaryValue(pointType, value, byteOrder, itemData.Value);
             break;
 
-            case DataDisplayMode::Decimal:
+            case DataDisplayMode::UInt16:
                 itemData.ValueStr = formatUInt16Value(pointType, value, byteOrder, itemData.Value);
             break;
 
-            case DataDisplayMode::Integer:
+            case DataDisplayMode::Int16:
                 itemData.ValueStr = formatInt16Value(pointType, value, byteOrder, itemData.Value);
             break;
 

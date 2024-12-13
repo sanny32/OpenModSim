@@ -46,12 +46,12 @@ DialogWriteHoldingRegister::DialogWriteHoldingRegister(ModbusWriteParams& writeP
         case DataDisplayMode::Binary:
         break;
 
-        case DataDisplayMode::Decimal:
+        case DataDisplayMode::UInt16:
             ui->lineEditValue->setInputRange(0, USHRT_MAX);
             ui->lineEditValue->setValue(_writeParams.Value.toUInt());
         break;
 
-        case DataDisplayMode::Integer:
+        case DataDisplayMode::Int16:
             ui->lineEditValue->setInputRange(SHRT_MIN, SHRT_MAX);
             ui->lineEditValue->setValue(_writeParams.Value.toInt());
         break;

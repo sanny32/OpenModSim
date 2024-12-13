@@ -229,8 +229,8 @@ void MainWindow::on_awake()
     {
         const auto ddm = frm->dataDisplayMode();
         ui->actionBinary->setChecked(ddm == DataDisplayMode::Binary);
-        ui->actionUInt16->setChecked(ddm == DataDisplayMode::Decimal);
-        ui->actionInt16->setChecked(ddm == DataDisplayMode::Integer);
+        ui->actionUInt16->setChecked(ddm == DataDisplayMode::UInt16);
+        ui->actionInt16->setChecked(ddm == DataDisplayMode::Int16);
         ui->actionInt32->setChecked(ddm == DataDisplayMode::Int32);
         ui->actionSwappedInt32->setChecked(ddm == DataDisplayMode::SwappedInt32);
         ui->actionUInt32->setChecked(ddm == DataDisplayMode::UInt32);
@@ -530,7 +530,7 @@ void MainWindow::on_actionBinary_triggered()
 ///
 void MainWindow::on_actionUInt16_triggered()
 {
-    updateDataDisplayMode(DataDisplayMode::Decimal);
+    updateDataDisplayMode(DataDisplayMode::UInt16);
 }
 
 ///
@@ -538,7 +538,7 @@ void MainWindow::on_actionUInt16_triggered()
 ///
 void MainWindow::on_actionInt16_triggered()
 {
-    updateDataDisplayMode(DataDisplayMode::Integer);
+    updateDataDisplayMode(DataDisplayMode::Int16);
 }
 
 ///
