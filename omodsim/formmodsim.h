@@ -87,6 +87,13 @@ public:
     ModbusSimulationMap simulationMap() const;
     void startSimulation(QModbusDataUnit::RegisterType type, quint16 addr, const ModbusSimulationParams& params);
 
+    QModbusDataUnit serializeModbusDataUnit(QModbusDataUnit::RegisterType pointType,
+                                            quint16 pointAddress,
+                                            quint16 length) const;
+    void configureModbusDataUnit(QModbusDataUnit::RegisterType type,
+                                             quint16 startAddress,
+                                             const QVector<quint16>& values) const;
+
     AddressDescriptionMap descriptionMap() const;
     void setDescription(QModbusDataUnit::RegisterType type, quint16 addr, const QString& desc);
 
@@ -274,6 +281,11 @@ inline QDataStream& operator <<(QDataStream& out, FormModSim* frm)
     out << frm->scriptSettings();
     out << frm->descriptionMap();
 
+    const auto unit = frm->serializeModbusDataUnit(dd.PointType, dd.PointAddress, dd.Length);
+    out << unit.registerType();
+    out << unit.startAddress();
+    out << unit.values();
+
     return out;
 }
 
@@ -375,6 +387,16 @@ inline QDataStream& operator >>(QDataStream& in, FormModSim* frm)
 
     for(auto&& k : descriptionMap.keys())
         frm->setDescription(k.first, k.second, descriptionMap[k]);
+
+    QModbusDataUnit::RegisterType type;
+    int startAddress;
+    QVector<quint16> values;
+
+    in >> type;
+    in >> startAddress;
+    in >> values;
+
+    frm->configureModbusDataUnit(type, startAddress, values);
 
     return in;
 }
