@@ -448,6 +448,34 @@ ModbusSimulationMap FormModSim::simulationMap() const
     return result;
 }
 
+
+QModbusDataUnit FormModSim::serializeModbusDataUnit(QModbusDataUnit::RegisterType type,
+                                                    quint16 startAddress,
+                                                    quint16 length) const
+{
+    QModbusDataUnit dataUnit;
+
+    const auto serverData = _mbMultiServer.data(type, startAddress, length);
+
+    const auto& unit = serverData;
+
+    if (startAddress >= unit.startAddress() &&
+        (startAddress + length) <= (unit.startAddress() + unit.valueCount())) {
+
+        int offset = startAddress - unit.startAddress();
+
+        QVector<quint16> values;
+        for (int i = 0; i < length; ++i) {
+            values.append(unit.value(offset + i));
+        }
+
+        dataUnit.setValues(values);
+        dataUnit.setRegisterType(type);
+        dataUnit.setStartAddress(startAddress);
+    }
+
+    return dataUnit;
+}
 ///
 /// \brief FormModSim::startSimulation
 /// \param type
@@ -458,6 +486,18 @@ void FormModSim::startSimulation(QModbusDataUnit::RegisterType type, quint16 add
 {
     _dataSimulator->startSimulation(dataDisplayMode(), type, addr, params);
 }
+
+void FormModSim::configureModbusDataUnit(QModbusDataUnit::RegisterType type,
+                                         quint16 startAddress,
+                                         const QVector<quint16>& values) const
+{
+    QModbusDataUnit unit;
+    unit.setRegisterType(type);
+    unit.setStartAddress(startAddress);
+    unit.setValues(values);
+    _mbMultiServer.setData(unit);
+}
+
 
 ///
 /// \brief FormModSim::descriptionMap
