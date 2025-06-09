@@ -32,22 +32,22 @@
 <context>
     <name>CmdLineParser</name>
     <message>
-        <location filename="../cmdlineparser.cpp" line="8"/>
+        <location filename="../cmdlineparser.cpp" line="9"/>
         <source>Displays this help.</source>
         <translation>Пказать эту справку.</translation>
     </message>
     <message>
-        <location filename="../cmdlineparser.cpp" line="11"/>
+        <location filename="../cmdlineparser.cpp" line="12"/>
         <source>Displays version information.</source>
         <translation>Пказать информацию о версии.</translation>
     </message>
     <message>
-        <location filename="../cmdlineparser.cpp" line="14"/>
+        <location filename="../cmdlineparser.cpp" line="15"/>
         <source>Setup test config file.</source>
         <translation>Задать файл конфига.</translation>
     </message>
     <message>
-        <location filename="../cmdlineparser.cpp" line="14"/>
+        <location filename="../cmdlineparser.cpp" line="15"/>
         <source>file path</source>
         <translation>файл</translation>
     </message>
