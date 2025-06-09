@@ -55,3 +55,4 @@ CMakeLists.txt.user*
 *.idx
 *.rc
 *.qtds
+*.ts text eol=lf
