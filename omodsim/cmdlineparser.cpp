@@ -4,6 +4,7 @@
 /// \brief CmdLineParser::CmdLineParser
 ///
 CmdLineParser::CmdLineParser()
+    : QCommandLineParser()
 {
     QCommandLineOption helpOption(QStringList() << _help, tr("Displays this help."));
     addOption(helpOption);
