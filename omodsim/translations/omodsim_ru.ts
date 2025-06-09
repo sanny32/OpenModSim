@@ -1874,6 +1874,21 @@ MODBUS Point Type:
     </message>
 </context>
 <context>
+    <name>QObject</name>
+    <message>
+        <source>Displays this help.</source>
+        <translation type="obsolete">Пказать эту справку.</translation>
+    </message>
+    <message>
+        <source>Displays version information.</source>
+        <translation type="obsolete">Пказать информацию о версии.</translation>
+    </message>
+    <message>
+        <source>Setup test config file.</source>
+        <translation type="obsolete">Задать файл конфига.</translation>
+    </message>
+</context>
+<context>
     <name>RunModeComboBox</name>
     <message>
         <location filename="../controls/runmodecombobox.cpp" line="11"/>
