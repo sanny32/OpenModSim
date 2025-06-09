@@ -17,6 +17,16 @@ if (NOT Qt6_FOUND)
     find_package(Qt5 COMPONENTS Core Gui Widgets Network PrintSupport SerialBus SerialPort Qml Help LinguistTools QUIET)
 endif()
 
+if(Qt6_FOUND)
+    get_target_property(QT_BINARY_DIR Qt6::qmake IMPORTED_LOCATION)
+    get_filename_component(QT_BINARY_DIR "${QT_BINARY_DIR}" DIRECTORY)
+    get_filename_component(QT_LIBEXEC_DIR "${QT_BINARY_DIR}/../libexec" REALPATH)
+else()
+    get_target_property(QT_BINARY_DIR Qt5::qmake IMPORTED_LOCATION)
+    get_filename_component(QT_BINARY_DIR "${QT_BINARY_DIR}" DIRECTORY)
+    set(QT_LIBEXEC_DIR "${QT_BINARY_DIR}")
+endif()
+
 # Define target
 add_executable(omodsim)
 
@@ -230,7 +240,7 @@ set(JSHELP_QHC "${CMAKE_BINARY_DIR}/docs/jshelp.qhc")
 file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/docs)
 
 find_program(QHELP_GENERATOR_EXECUTABLE qhelpgenerator
-             HINTS "${QT_BIN_DIR}"
+             HINTS "${QT_BINARY_DIR}" "${QT_LIBEXEC_DIR}"
              NO_DEFAULT_PATH)
 if(NOT QHELP_GENERATOR_EXECUTABLE)
     find_program(QHELP_GENERATOR_EXECUTABLE qhelpgenerator)
