@@ -314,22 +314,27 @@
         <translation>Предустановка регистров</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="28"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="35"/>
+        <source>Set Value to</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="42"/>
         <source>Length: </source>
         <translation>Количество: </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="35"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="83"/>
         <source>Set Random Values</source>
         <translation>Установить случайные</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="55"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="28"/>
         <source>Set Values to 0</source>
         <translation>Установить в 0</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="62"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="103"/>
         <source>Address: </source>
         <translation>Адрес: </translation>
     </message>
