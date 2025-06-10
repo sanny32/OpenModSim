@@ -12,7 +12,7 @@
 #include "formmodsim.h"
 #include "ui_formmodsim.h"
 
-QVersionNumber FormModSim::VERSION = QVersionNumber(1, 6);
+QVersionNumber FormModSim::VERSION = QVersionNumber(1, 7);
 
 ///
 /// \brief FormModSim::FormModSim
@@ -747,7 +747,7 @@ void FormModSim::on_outputWidget_itemDoubleClicked(quint16 addr, const QVariant&
         case QModbusDataUnit::Coils:
         case QModbusDataUnit::DiscreteInputs:
         {
-            ModbusWriteParams params = { addr, value, mode, byteOrder(), zeroBasedAddress };
+            ModbusWriteParams params = { addr, value, mode, byteOrder(), codepage(), zeroBasedAddress };
             DialogWriteCoilRegister dlg(params, simParams, this);
             switch(dlg.exec())
             {
@@ -766,7 +766,7 @@ void FormModSim::on_outputWidget_itemDoubleClicked(quint16 addr, const QVariant&
         case QModbusDataUnit::InputRegisters:
         case QModbusDataUnit::HoldingRegisters:
         {
-            ModbusWriteParams params = { addr, value, mode, byteOrder(), zeroBasedAddress };
+            ModbusWriteParams params = { addr, value, mode, byteOrder(), codepage(), zeroBasedAddress };
             if(mode == DataDisplayMode::Binary)
             {
                 DialogWriteHoldingRegisterBits dlg(params, this);
@@ -890,7 +890,7 @@ void FormModSim::on_dataSimulated(DataDisplayMode mode, QModbusDataUnit::Registe
     const auto pointAddr = dd.PointAddress - (dd.ZeroBasedAddress ? 0 : 1);
     if(type == dd.PointType && addr >= pointAddr && addr <= pointAddr + dd.Length)
     {
-        _mbMultiServer.writeRegister(type, { addr, value, mode, byteOrder(), true });
+        _mbMultiServer.writeRegister(type, { addr, value, mode, byteOrder(), codepage(), true });
     }
 }
 

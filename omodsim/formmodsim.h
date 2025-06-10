@@ -187,6 +187,7 @@ inline QSettings& operator <<(QSettings& out, FormModSim* frm)
     out << frm->byteOrder();
     out << frm->displayDefinition();
     out.setValue("DisplayHexAddresses", frm->displayHexAddresses());
+    out.setValue("Codepage", frm->codepage());
     out << frm->scriptSettings();
     out << frm->scriptControl();
 
@@ -240,6 +241,7 @@ inline QSettings& operator >>(QSettings& in, FormModSim* frm)
     frm->setByteOrder(byteOrder);
     frm->setDisplayDefinition(displayDefinition);
     frm->setDisplayHexAddresses(in.value("DisplayHexAddresses").toBool());
+    frm->setCodepage(in.value("Codepage").toString());
     frm->setScriptSettings(scriptSettings);
 
     return in;
@@ -285,6 +287,7 @@ inline QDataStream& operator <<(QDataStream& out, FormModSim* frm)
     out << frm->scriptControl();
     out << frm->scriptSettings();
     out << frm->descriptionMap();
+    out << frm->codepage();
 
     const auto unit = frm->serializeModbusDataUnit(dd.PointType, dd.PointAddress, dd.Length);
     out << unit.registerType();
@@ -367,6 +370,12 @@ inline QDataStream& operator >>(QDataStream& in, FormModSim* frm)
         in >> descriptionMap;
     }
 
+    QString codepage;
+    if(ver >= QVersionNumber(1, 7))
+    {
+        in >> codepage;
+    }
+
     if(in.status() != QDataStream::Ok)
         return in;
 
@@ -385,6 +394,7 @@ inline QDataStream& operator >>(QDataStream& in, FormModSim* frm)
     frm->setFont(font);
     frm->setDisplayDefinition(dd);
     frm->setByteOrder(byteOrder);
+    frm->setCodepage(codepage);
     frm->setScriptSettings(scriptSettings);
 
     for(auto&& k : simulationMap.keys())

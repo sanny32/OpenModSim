@@ -64,6 +64,13 @@ DialogWriteHoldingRegister::DialogWriteHoldingRegister(ModbusWriteParams& writeP
             ui->lineEditValue->setValue(_writeParams.Value.toUInt());
         break;
 
+        case DataDisplayMode::Ansi:
+            ui->labelValue->setText(tr("Value, (ANSI): "));
+            ui->lineEditValue->setInputMode(NumericLineEdit::AnsiMode);
+            ui->lineEditValue->setCodepage(_writeParams.Codepage);
+            ui->lineEditValue->setValue(_writeParams.Value.toUInt());
+        break;
+
         case DataDisplayMode::FloatingPt:
         case DataDisplayMode::SwappedFP:
             ui->lineEditValue->setInputMode(NumericLineEdit::FloatMode);

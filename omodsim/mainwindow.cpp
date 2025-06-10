@@ -196,6 +196,7 @@ void MainWindow::on_awake()
     ui->actionUInt16->setEnabled(frm != nullptr);
     ui->actionInt16->setEnabled(frm != nullptr);
     ui->actionHex->setEnabled(frm != nullptr);
+    ui->actionAnsi->setEnabled(frm != nullptr);
     ui->actionFloatingPt->setEnabled(frm != nullptr);
     ui->actionSwappedFP->setEnabled(frm != nullptr);
     ui->actionDblFloat->setEnabled(frm != nullptr);
@@ -255,6 +256,7 @@ void MainWindow::on_awake()
         ui->actionUInt64->setChecked(ddm == DataDisplayMode::UInt64);
         ui->actionSwappedUInt64->setChecked(ddm == DataDisplayMode::SwappedUInt64);
         ui->actionHex->setChecked(ddm == DataDisplayMode::Hex);
+        ui->actionAnsi->setChecked(ddm == DataDisplayMode::Ansi);
         ui->actionFloatingPt->setChecked(ddm == DataDisplayMode::FloatingPt);
         ui->actionSwappedFP->setChecked(ddm == DataDisplayMode::SwappedFP);
         ui->actionDblFloat->setChecked(ddm == DataDisplayMode::DblFloat);
@@ -1115,6 +1117,7 @@ void MainWindow::presetRegs(QModbusDataUnit::RegisterType type)
     params.Address = presetParams.PointAddress;
     params.DisplayMode = frm->dataDisplayMode();
     params.Order = frm->byteOrder();
+    params.Codepage = frm->codepage();
     params.ZeroBasedAddress = dd.ZeroBasedAddress;
 
     if(dd.PointType == type)

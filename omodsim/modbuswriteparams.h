@@ -13,6 +13,7 @@ struct ModbusWriteParams
     QVariant Value;
     DataDisplayMode DisplayMode;
     ByteOrder Order;
+    QString Codepage;
     bool ZeroBasedAddress;
 };
 Q_DECLARE_METATYPE(ModbusWriteParams)

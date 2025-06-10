@@ -1,6 +1,7 @@
-#include <QKeyEvent>
 #include <float.h>
+#include <QKeyEvent>
 #include <QIntValidator>
+#include "ansiutils.h"
 #include "qhexvalidator.h"
 #include "quintvalidator.h"
 #include "qint64validator.h"
@@ -79,11 +80,12 @@ void NumericLineEdit::setInputMode(InputMode mode)
         switch(mode)
         {
             case HexMode:
+            case AnsiMode:
                 _minValue = (ushort)0;
                 _maxValue = USHRT_MAX;
             break;
 
-            case Int32Mode:
+            case Int32Mode:            
                 _minValue = INT_MIN;
                 _maxValue = INT_MAX;
             break;
@@ -119,6 +121,23 @@ void NumericLineEdit::setInputMode(InputMode mode)
 }
 
 ///
+/// \brief NumericLineEdit::codepage
+///
+QString NumericLineEdit::codepage() const
+{
+    return _codepage;
+}
+
+///
+/// \brief NumericLineEdit::setCodepage
+/// \param name
+///
+void NumericLineEdit::setCodepage(const QString& name)
+{
+    _codepage = name;
+}
+
+///
 /// \brief NumericLineEdit::setText
 /// \param text
 ///
@@ -150,7 +169,7 @@ void NumericLineEdit::internalSetValue(QVariant value)
                 if(text != QLineEdit::text())
                     QLineEdit::setText(text);
             }
-            break;
+        break;
 
         case UInt32Mode:
             value = qBound(_minValue.toUInt(), value.toUInt(), _maxValue.toUInt());
@@ -166,7 +185,7 @@ void NumericLineEdit::internalSetValue(QVariant value)
                 if(text != QLineEdit::text())
                     QLineEdit::setText(text);
             }
-            break;
+        break;
 
         case HexMode:
         {
@@ -184,6 +203,15 @@ void NumericLineEdit::internalSetValue(QVariant value)
                 if(text != QLineEdit::text())
                     QLineEdit::setText(text);
             }
+        }
+        break;
+
+        case AnsiMode:
+        {
+            value = qBound(_minValue.toInt() > 0 ? _minValue.toUInt() : 0, value.toUInt(), _maxValue.toUInt());
+            const auto text = printableAnsi(uint16ToAnsi(value.value<quint16>()), _codepage);
+            if(text != QLineEdit::text())
+                QLineEdit::setText(text);
         }
         break;
 
@@ -280,6 +308,15 @@ void NumericLineEdit::updateValue()
             const auto value = text().toUInt(&ok, 16);
             if(ok) internalSetValue(value);
             else internalSetValue(_value);
+        }
+        break;
+
+        case AnsiMode:
+        {
+            auto codec = QTextCodec::codecForName(_codepage.toUtf8());
+            if(codec == nullptr) codec = QTextCodec::codecForLocale();
+            const auto value = uint16FromAnsi(codec->fromUnicode(text()));
+            internalSetValue(value);
         }
         break;
 
@@ -390,6 +427,13 @@ void NumericLineEdit::on_textChanged(const QString& text)
         }
         break;
 
+        case AnsiMode:
+        {
+            const uint valueUInt = uint16FromAnsi(text.toLocal8Bit());
+            value = qBound(_minValue.toUInt(), valueUInt, _maxValue.toUInt());
+        }
+        break;
+
         case FloatMode:
         {
             bool ok;
@@ -469,11 +513,15 @@ void NumericLineEdit::on_rangeChanged(const QVariant& bottom, const QVariant& to
         }
         break;
 
+        case AnsiMode:
+            setMaxLength(2);
+        break;
+
         case FloatMode:
         case DoubleMode:
             setMaxLength(INT16_MAX);
             setValidator(new QDoubleValidator(bottom.toDouble(), top.toDouble(), 6, this));
-            break;
+        break;
 
         case Int64Mode:
         {
