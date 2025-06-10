@@ -56,6 +56,9 @@ public:
     Q_INVOKABLE bool readCoil(quint16 address) const;
     Q_INVOKABLE void writeCoil(quint16 address, bool value);
 
+    Q_INVOKABLE QString readAnsi(Register::Type reg, quint16 address, const QString& codepage) const;
+    Q_INVOKABLE void writeAnsi(Register::Type reg, quint16 address, const QString& value, const QString& codepage);
+
     Q_INVOKABLE qint32 readInt32(Register::Type reg, quint16 address, bool swapped) const;
     Q_INVOKABLE void writeInt32(Register::Type reg, quint16 address, qint32 value, bool swapped);
 
