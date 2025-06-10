@@ -96,19 +96,13 @@
      <property name="title">
       <string>Display Options</string>
      </property>
-     <widget class="QMenu" name="menuByteOrder">
-      <property name="title">
-       <string>Byte Order</string>
-      </property>
-      <addaction name="actionBigEndian"/>
-      <addaction name="actionLittleEndian"/>
-     </widget>
      <addaction name="actionShowData"/>
      <addaction name="actionShowTraffic"/>
      <addaction name="actionShowScript"/>
      <addaction name="separator"/>
      <addaction name="actionBinary"/>
      <addaction name="actionHex"/>
+     <addaction name="actionAnsi"/>
      <addaction name="actionInt16"/>
      <addaction name="actionUInt16"/>
      <addaction name="actionInt32"/>
@@ -123,7 +117,8 @@
      <addaction name="actionSwappedFP"/>
      <addaction name="actionDblFloat"/>
      <addaction name="actionSwappedDbl"/>
-     <addaction name="menuByteOrder"/>
+     <addaction name="separator"/>
+     <addaction name="actionSwapBytes"/>
      <addaction name="separator"/>
      <addaction name="actionHexAddresses"/>
     </widget>
@@ -150,7 +145,6 @@
     <addaction name="actionDataDefinition"/>
     <addaction name="menuDisplay_Options"/>
     <addaction name="menuExtended"/>
-    <addaction name="separator"/>
     <addaction name="actionTextCapture"/>
     <addaction name="actionCaptureOff"/>
     <addaction name="separator"/>
