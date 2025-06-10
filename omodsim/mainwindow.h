@@ -24,7 +24,7 @@ public:
 
     void setLanguage(const QString& lang);
 
-    void loadConfig(const QString& filename);
+    void loadConfig(const QString& filename, bool startup = false);
     void saveConfig(const QString& filename);
 
 signals:

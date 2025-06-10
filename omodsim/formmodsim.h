@@ -244,6 +244,10 @@ inline QSettings& operator >>(QSettings& in, FormModSim* frm)
     frm->setCodepage(in.value("Codepage").toString());
     frm->setScriptSettings(scriptSettings);
 
+    if(scriptSettings.RunOnStartup) {
+        frm->runScript();
+    }
+
     return in;
 }
 

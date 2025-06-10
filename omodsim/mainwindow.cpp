@@ -195,8 +195,17 @@ void MainWindow::on_awake()
     ui->actionBinary->setEnabled(frm != nullptr);
     ui->actionUInt16->setEnabled(frm != nullptr);
     ui->actionInt16->setEnabled(frm != nullptr);
+    ui->actionInt32->setEnabled(frm != nullptr);
+    ui->actionSwappedInt32->setEnabled(frm != nullptr);
+    ui->actionUInt32->setEnabled(frm != nullptr);
+    ui->actionSwappedUInt32->setEnabled(frm != nullptr);
+    ui->actionInt64->setEnabled(frm != nullptr);
+    ui->actionSwappedInt64->setEnabled(frm != nullptr);
+    ui->actionUInt64->setEnabled(frm != nullptr);
+    ui->actionSwappedUInt64->setEnabled(frm != nullptr);
     ui->actionHex->setEnabled(frm != nullptr);
     ui->actionAnsi->setEnabled(frm != nullptr);
+    ui->actionHex->setEnabled(frm != nullptr);
     ui->actionFloatingPt->setEnabled(frm != nullptr);
     ui->actionSwappedFP->setEnabled(frm != nullptr);
     ui->actionDblFloat->setEnabled(frm != nullptr);
@@ -1280,7 +1289,7 @@ FormModSim* MainWindow::firstMdiChild() const
 /// \brief MainWindow::loadConfig
 /// \param filename
 ///
-void MainWindow::loadConfig(const QString& filename)
+void MainWindow::loadConfig(const QString& filename, bool startup)
 {
     QFile file(filename);
     if(!file.open(QFile::ReadOnly))
@@ -1326,6 +1335,15 @@ void MainWindow::loadConfig(const QString& filename)
     {
         if(!filename.isEmpty())
             openFile(filename);
+    }
+
+    if(startup) {
+        for(auto&& wnd : ui->mdiArea->subWindowList()) {
+            const auto frm = qobject_cast<FormModSim*>(wnd->widget());
+            if(frm->scriptSettings().RunOnStartup) {
+                frm->runScript();
+            }
+        }
     }
 }
 
