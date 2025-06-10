@@ -147,7 +147,7 @@
     <message>
         <location filename="../dialogs/dialogautosimulation.ui" line="61"/>
         <source>Change Interval (msecs):</source>
-        <translation type="unfinished"></translation>
+        <translation>Интервал (мсек):</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogautosimulation.ui" line="68"/>
@@ -315,7 +315,7 @@
     <message>
         <location filename="../dialogs/dialogforcemultipleregisters.ui" line="35"/>
         <source>Set Value to</source>
-        <translation type="unfinished"></translation>
+        <translation>Установить значение</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogforcemultipleregisters.ui" line="42"/>
@@ -845,7 +845,7 @@
     <message>
         <location filename="../dialogs/dialogwriteholdingregister.cpp" line="68"/>
         <source>Value, (ANSI): </source>
-        <translation type="unfinished"></translation>
+        <translation>Знвчение, (ANSI): </translation>
     </message>
 </context>
 <context>
@@ -1113,7 +1113,7 @@ MODBUS Point Type:
         <location filename="../mainwindow.ui" line="693"/>
         <location filename="../mainwindow.ui" line="696"/>
         <source>Swap Bytes (0xAB → 0xBA)</source>
-        <translation type="unfinished"></translation>
+        <translation>Порядок байт (0xAB → 0xBA)</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="853"/>
@@ -1158,7 +1158,7 @@ MODBUS Point Type:
     <message>
         <location filename="../mainwindow.ui" line="991"/>
         <source>ANSI</source>
-        <translation type="unfinished"></translation>
+        <translation>ANSI</translation>
     </message>
     <message>
         <source>Long Integer</source>
