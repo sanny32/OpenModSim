@@ -232,7 +232,7 @@ void FormModSim::setDisplayHexAddresses(bool on)
 }
 
 ///
-/// \brief FormModSca::captureMode
+/// \brief FormModSim::captureMode
 ///
 CaptureMode FormModSim::captureMode() const
 {
@@ -240,7 +240,7 @@ CaptureMode FormModSim::captureMode() const
 }
 
 ///
-/// \brief FormModSca::startTextCapture
+/// \brief FormModSim::startTextCapture
 /// \param file
 ///
 void FormModSim::startTextCapture(const QString& file)
@@ -249,7 +249,7 @@ void FormModSim::startTextCapture(const QString& file)
 }
 
 ///
-/// \brief FormModSca::stopTextCapture
+/// \brief FormModSim::stopTextCapture
 ///
 void FormModSim::stopTextCapture()
 {
@@ -302,6 +302,25 @@ void FormModSim::setByteOrder(ByteOrder order)
 {
     ui->outputWidget->setByteOrder(order);
     emit byteOrderChanged(order);
+}
+
+///
+/// \brief FormModSim::codepage
+/// \return
+///
+QString FormModSim::codepage() const
+{
+    return ui->outputWidget->codepage();
+}
+
+///
+/// \brief FormModSim::setCodepage
+/// \param name
+///
+void FormModSim::setCodepage(const QString& name)
+{
+    ui->outputWidget->setCodepage(name);
+    emit codepageChanged(name);
 }
 
 ///
@@ -659,9 +678,10 @@ void FormModSim::on_comboBoxAddressBase_addressBaseChanged(AddressBase base)
 ///
 /// \brief FormModSim::on_comboBoxModbusPointType_pointTypeChanged
 ///
-void FormModSim::on_comboBoxModbusPointType_pointTypeChanged(QModbusDataUnit::RegisterType)
+void FormModSim::on_comboBoxModbusPointType_pointTypeChanged(QModbusDataUnit::RegisterType type)
 {
     onDefinitionChanged();
+    emit pointTypeChanged(type);
 }
 
 ///

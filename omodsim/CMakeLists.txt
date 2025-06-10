@@ -18,7 +18,9 @@ if (NOT Qt6_FOUND)
 endif()
 
 # Define target
-add_executable(omodsim)
+add_executable(omodsim
+    ansiutils.h
+    ansimenu.cpp ansimenu.h)
 
 # Define compile definitions
 add_compile_definitions(APP_NAME="${PRODUCT_NAME}")

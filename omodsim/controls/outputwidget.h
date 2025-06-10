@@ -86,6 +86,9 @@ public:
     const ByteOrder* byteOrder() const;
     void setByteOrder(ByteOrder order);
 
+    QString codepage() const;
+    void setCodepage(const QString& name);
+
     bool displayHexAddresses() const;
     void setDisplayHexAddresses(bool on);
 
@@ -146,6 +149,7 @@ private:
     DisplayMode _displayMode;
     DataDisplayMode _dataDisplayMode;
     ByteOrder _byteOrder;
+    QString _codepage;
     DisplayDefinition _displayDefinition;
     QFile _fileCapture;
     AddressDescriptionMap _descriptionMap;

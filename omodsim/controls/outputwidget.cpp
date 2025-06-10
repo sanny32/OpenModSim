@@ -191,6 +191,7 @@ void OutputListModel::updateData(const QModbusDataUnit& data)
     const auto mode = _parentWidget->dataDisplayMode();
     const auto pointType = _parentWidget->_displayDefinition.PointType;
     const auto byteOrder = *_parentWidget->byteOrder();
+    const auto codepage = _parentWidget->codepage();
 
     for(int i = 0; i < rowCount(); i++)
     {
@@ -216,6 +217,10 @@ void OutputListModel::updateData(const QModbusDataUnit& data)
             case DataDisplayMode::Hex:
                 itemData.ValueStr = formatHexValue(pointType, value, byteOrder, itemData.Value);
             break;
+
+            case DataDisplayMode::Ansi:
+                itemData.ValueStr = formatAnsiValue(pointType, value, byteOrder, codepage, itemData.Value);
+                break;
 
             case DataDisplayMode::FloatingPt:
                 itemData.ValueStr = formatFloatValue(pointType, value, _lastData.value(i+1), byteOrder,
@@ -312,7 +317,7 @@ OutputWidget::OutputWidget(QWidget *parent) :
    ,_displayHexAddreses(false)
    ,_displayMode(DisplayMode::Data)
    ,_dataDisplayMode(DataDisplayMode::Hex)
-   ,_byteOrder(ByteOrder::LittleEndian)
+   ,_byteOrder(ByteOrder::Direct)
    ,_listModel(new OutputListModel(this))
 {
     ui->setupUi(this);
@@ -744,6 +749,25 @@ void OutputWidget::setByteOrder(ByteOrder order)
     _byteOrder = order;
     ui->modbusMsg->setByteOrder(order);
 
+    _listModel->update();
+}
+
+///
+/// \brief OutputWidget::codepage
+/// \return
+///
+QString OutputWidget::codepage() const
+{
+    return _codepage;
+}
+
+///
+/// \brief OutputWidget::setCodepage
+/// \param name
+///
+void OutputWidget::setCodepage(const QString& name)
+{
+    _codepage = name;
     _listModel->update();
 }
 

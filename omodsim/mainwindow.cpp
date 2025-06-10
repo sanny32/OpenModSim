@@ -28,8 +28,6 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
     ,_lang("en")
-    ,_icoBigEndian(":/res/actionBigEndian.png")
-    ,_icoLittleEndian(":/res/actionLittleEndian.png")
     ,_windowCounter(0)
     ,_dataSimulator(new DataSimulator(this))
 {
@@ -39,12 +37,10 @@ MainWindow::MainWindow(QWidget *parent)
     setUnifiedTitleAndToolBarOnMac(true);
     setStatusBar(new MainStatusBar(_mbMultiServer, this));
 
-    auto menuByteOrder = new QMenu(this);
-    menuByteOrder->addAction(ui->actionLittleEndian);
-    menuByteOrder->addAction(ui->actionBigEndian);
-    ui->actionByteOrder->setMenu(menuByteOrder);
-    ui->actionByteOrder->setIcon(_icoLittleEndian);
-    qobject_cast<QToolButton*>(ui->toolBarDisplay->widgetForAction(ui->actionByteOrder))->setPopupMode(QToolButton::InstantPopup);
+    _ansiMenu = new AnsiMenu(this);
+    connect(_ansiMenu, &AnsiMenu::codepageSelected, this, &MainWindow::setCodepage);
+    ui->actionAnsi->setMenu(_ansiMenu);
+    qobject_cast<QToolButton*>(ui->toolBarDisplay->widgetForAction(ui->actionAnsi))->setPopupMode(QToolButton::DelayedPopup);
 
     auto menuConnect = new MenuConnect(MenuConnect::ConnectMenu, _mbMultiServer, this);
     connect(menuConnect, &MenuConnect::connectAction, this, &MainWindow::on_connectAction);
@@ -204,7 +200,7 @@ void MainWindow::on_awake()
     ui->actionSwappedFP->setEnabled(frm != nullptr);
     ui->actionDblFloat->setEnabled(frm != nullptr);
     ui->actionSwappedDbl->setEnabled(frm != nullptr);
-    ui->actionByteOrder->setEnabled(frm != nullptr);
+    ui->actionSwapBytes->setEnabled(frm != nullptr);
 
     ui->actionRunScript->setEnabled(frm && frm->canRunScript());
     ui->actionStopScript->setEnabled(frm && frm->canStopScript());
@@ -227,6 +223,25 @@ void MainWindow::on_awake()
 
     if(frm != nullptr)
     {
+        const auto dd = frm->displayDefinition();
+        ui->actionUInt16->setEnabled(dd.PointType > QModbusDataUnit::Coils);
+        ui->actionInt16->setEnabled(dd.PointType > QModbusDataUnit::Coils);
+        ui->actionHex->setEnabled(dd.PointType > QModbusDataUnit::Coils);
+        ui->actionInt32->setEnabled(dd.PointType > QModbusDataUnit::Coils);
+        ui->actionSwappedInt32->setEnabled(dd.PointType > QModbusDataUnit::Coils);
+        ui->actionUInt32->setEnabled(dd.PointType > QModbusDataUnit::Coils);
+        ui->actionSwappedUInt32->setEnabled(dd.PointType > QModbusDataUnit::Coils);
+        ui->actionInt64->setEnabled(dd.PointType > QModbusDataUnit::Coils);
+        ui->actionSwappedInt64->setEnabled(dd.PointType > QModbusDataUnit::Coils);
+        ui->actionUInt64->setEnabled(dd.PointType > QModbusDataUnit::Coils);
+        ui->actionSwappedUInt64->setEnabled(dd.PointType > QModbusDataUnit::Coils);
+        ui->actionAnsi->setEnabled(dd.PointType > QModbusDataUnit::Coils);
+        ui->actionFloatingPt->setEnabled(dd.PointType > QModbusDataUnit::Coils);
+        ui->actionSwappedFP->setEnabled(dd.PointType > QModbusDataUnit::Coils);
+        ui->actionDblFloat->setEnabled(dd.PointType > QModbusDataUnit::Coils);
+        ui->actionSwappedDbl->setEnabled(dd.PointType > QModbusDataUnit::Coils);
+        ui->actionSwapBytes->setEnabled(dd.PointType > QModbusDataUnit::Coils);
+
         const auto ddm = frm->dataDisplayMode();
         ui->actionBinary->setChecked(ddm == DataDisplayMode::Binary);
         ui->actionUInt16->setChecked(ddm == DataDisplayMode::UInt16);
@@ -246,8 +261,7 @@ void MainWindow::on_awake()
         ui->actionSwappedDbl->setChecked(ddm == DataDisplayMode::SwappedDbl);
 
         const auto byteOrder = frm->byteOrder();
-        ui->actionLittleEndian->setChecked(byteOrder == ByteOrder::LittleEndian);
-        ui->actionBigEndian->setChecked(byteOrder == ByteOrder::BigEndian);
+        ui->actionSwapBytes->setChecked(byteOrder == ByteOrder::Swapped);
 
         ui->actionHexAddresses->setChecked(frm->displayHexAddresses());
 
@@ -611,6 +625,14 @@ void MainWindow::on_actionHex_triggered()
 }
 
 ///
+/// \brief MainWindow::on_actionAnsi_triggered
+///
+void MainWindow::on_actionAnsi_triggered()
+{
+    updateDataDisplayMode(DataDisplayMode::Ansi);
+}
+
+///
 /// \brief MainWindow::on_actionFloatingPt_triggered
 ///
 void MainWindow::on_actionFloatingPt_triggered()
@@ -627,23 +649,22 @@ void MainWindow::on_actionSwappedFP_triggered()
 }
 
 ///
-/// \brief MainWindow::on_actionLittleEndian_triggered
+/// \brief MainWindow::on_actionSwapBytes_triggered
 ///
-void MainWindow::on_actionLittleEndian_triggered()
+void MainWindow::on_actionSwapBytes_triggered()
 {
     auto frm = currentMdiChild();
-    if(frm) frm->setByteOrder(ByteOrder::LittleEndian);
-}
+    if(!frm) return;
 
-///
-/// \brief MainWindow::on_actionBigEndian_triggered
-///
-void MainWindow::on_actionBigEndian_triggered()
-{
-    auto frm = currentMdiChild();
-    if(frm) frm->setByteOrder(ByteOrder::BigEndian);
+    switch (frm->byteOrder()) {
+    case ByteOrder::Swapped:
+        frm->setByteOrder(ByteOrder::Direct);
+        break;
+    case ByteOrder::Direct:
+        frm->setByteOrder(ByteOrder::Swapped);
+        break;
+    }
 }
-
 
 ///
 /// \brief MainWindow::on_actionDblFloat_triggered
@@ -987,6 +1008,18 @@ void MainWindow::windowActivate(QMdiSubWindow* wnd)
 }
 
 ///
+/// \brief MainWindow::setCodepage
+/// \param name
+///
+void MainWindow::setCodepage(const QString& name)
+{
+    auto frm = currentMdiChild();
+    if(!frm) return;
+
+    frm->setCodepage(name);
+}
+
+///
 /// \brief MainWindow::openFile
 /// \param filename
 ///
@@ -1109,12 +1142,9 @@ FormModSim* MainWindow::createMdiChild(int id)
     wnd->installEventFilter(this);
     wnd->setAttribute(Qt::WA_DeleteOnClose, true);
 
-    auto updateIcons = [this](ByteOrder order)
+    auto updateCodepage = [this](const QString& name)
     {
-        switch(order){
-        case ByteOrder::BigEndian: ui->actionByteOrder->setIcon(_icoBigEndian); break;
-        case ByteOrder::LittleEndian: ui->actionByteOrder->setIcon(_icoLittleEndian); break;
-        }
+        _ansiMenu->selectCodepage(name);
     };
 
     auto updateRunMode = [this](RunMode mode)
@@ -1136,13 +1166,18 @@ FormModSim* MainWindow::createMdiChild(int id)
         edit->setText(text);
     };
 
+    connect(frm, &FormModSim::codepageChanged, this, [updateCodepage](const QString& name)
+    {
+        updateCodepage(name);
+    });
+
     connect(wnd, &QMdiSubWindow::windowStateChanged, this,
-            [frm, updateIcons, updateRunMode, updateEditTools, updateSearch](Qt::WindowStates, Qt::WindowStates newState)
+            [frm, updateCodepage, updateRunMode, updateEditTools, updateSearch](Qt::WindowStates, Qt::WindowStates newState)
     {
         switch(newState & ~Qt::WindowMaximized & ~Qt::WindowMinimized)
         {
             case Qt::WindowActive:
-                updateIcons(frm->byteOrder());
+                updateCodepage(frm->codepage());
                 updateSearch(frm->searchText());
                 updateEditTools(frm->displayMode());
                 updateRunMode(frm->scriptSettings().Mode);
@@ -1155,9 +1190,28 @@ FormModSim* MainWindow::createMdiChild(int id)
         }
     });
 
-    connect(frm, &FormModSim::byteOrderChanged, this, [updateIcons](ByteOrder order)
+    connect(frm, &FormModSim::pointTypeChanged, this, [frm](QModbusDataUnit::RegisterType type)
     {
-        updateIcons(order);
+        switch(type)
+        {
+            case QModbusDataUnit::Coils:
+            case QModbusDataUnit::DiscreteInputs:
+                frm->setProperty("PrevDataDisplayMode", QVariant::fromValue(frm->dataDisplayMode()));
+                frm->setDataDisplayMode(DataDisplayMode::Binary);
+                break;
+
+            case QModbusDataUnit::HoldingRegisters:
+            case QModbusDataUnit::InputRegisters:
+            {
+                const auto mode = frm->property("PrevDataDisplayMode");
+                if(mode.isValid())
+                    frm->setDataDisplayMode(mode.value<DataDisplayMode>());
+            }
+            break;
+
+            default:
+                break;
+        }
     });
 
     connect(frm, &FormModSim::scriptSettingsChanged, this, [updateRunMode](const ScriptSettings& ss)

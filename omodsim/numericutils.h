@@ -18,8 +18,8 @@ inline quint16 makeUInt16(quint8 lo, quint8 hi, ByteOrder order)
         quint16 asUint16;
     } v;
 
-    v.asUint8[0] = (order == ByteOrder::LittleEndian) ? lo : hi;
-    v.asUint8[1] = (order == ByteOrder::LittleEndian) ? hi : lo;
+    v.asUint8[0] = (order == ByteOrder::Direct) ? lo : hi;
+    v.asUint8[1] = (order == ByteOrder::Direct) ? hi : lo;
 
     return v.asUint16;
 }
@@ -39,8 +39,8 @@ inline void breakUInt16(quint16 value, quint8& lo, quint8& hi, ByteOrder order)
     } v;
     v.asUint16 = value;
 
-    lo = (order == ByteOrder::LittleEndian) ? v.asUint8[0] : v.asUint8[1];
-    hi = (order == ByteOrder::LittleEndian) ? v.asUint8[1] : v.asUint8[0];
+    lo = (order == ByteOrder::Direct) ? v.asUint8[0] : v.asUint8[1];
+    hi = (order == ByteOrder::Direct) ? v.asUint8[1] : v.asUint8[0];
 }
 
 ///
@@ -53,8 +53,8 @@ inline void breakUInt16(quint16 value, quint8& lo, quint8& hi, ByteOrder order)
 inline void breakFloat(float value, quint16& lo, quint16& hi, ByteOrder order)
 {
     union {
-       quint16 asUint16[2];
-       float asFloat;
+        quint16 asUint16[2];
+        float asFloat;
     } v;
     v.asFloat = value;
 
@@ -72,8 +72,8 @@ inline void breakFloat(float value, quint16& lo, quint16& hi, ByteOrder order)
 inline void breakInt32(qint32 value, quint16& lo, quint16& hi, ByteOrder order)
 {
     union {
-       quint16 asUint16[2];
-       qint32 asInt32;
+        quint16 asUint16[2];
+        qint32 asInt32;
     } v;
     v.asInt32 = value;
 
@@ -142,8 +142,8 @@ inline void breakUInt64(quint64 value, quint16& lolo, quint16& lohi, quint16& hi
 inline void breakDouble(double value, quint16& lolo, quint16& lohi, quint16& hilo, quint16& hihi, ByteOrder order)
 {
     union {
-       quint16 asUint16[4];
-       double asDouble;
+        quint16 asUint16[4];
+        double asDouble;
     } v;
     v.asDouble = value;
 
@@ -163,8 +163,8 @@ inline void breakDouble(double value, quint16& lolo, quint16& lohi, quint16& hil
 inline float makeFloat(quint16 lo, quint16 hi, ByteOrder order)
 {
     union {
-       quint16 asUint16[2];
-       float asFloat;
+        quint16 asUint16[2];
+        float asFloat;
     } v;
 
     v.asUint16[0] = toByteOrderValue(lo, order);
@@ -183,8 +183,8 @@ inline float makeFloat(quint16 lo, quint16 hi, ByteOrder order)
 inline qint32 makeInt32(quint16 lo, quint16 hi, ByteOrder order)
 {
     union {
-       quint16 asUint16[2];
-       qint32 asInt32;
+        quint16 asUint16[2];
+        qint32 asInt32;
     } v;
 
     v.asUint16[0] = toByteOrderValue(lo, order);
@@ -255,8 +255,8 @@ inline qint64 makeUInt64(quint16 lolo, quint16 lohi, quint16 hilo, quint16 hihi,
 inline double makeDouble(quint16 lolo, quint16 lohi, quint16 hilo, quint16 hihi, ByteOrder order)
 {
     union {
-       quint16 asUint16[4];
-       double asDouble;
+        quint16 asUint16[4];
+        double asDouble;
     } v;
 
     v.asUint16[0] = toByteOrderValue(lolo, order);

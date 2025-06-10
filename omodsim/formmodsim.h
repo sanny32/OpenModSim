@@ -49,6 +49,9 @@ public:
     ByteOrder byteOrder() const;
     void setByteOrder(ByteOrder order);
 
+    QString codepage() const;
+    void setCodepage(const QString& name);
+
     DisplayMode displayMode() const;
     void setDisplayMode(DisplayMode mode);
 
@@ -120,6 +123,8 @@ signals:
     void showed();
     void closing();
     void byteOrderChanged(ByteOrder);
+    void codepageChanged(const QString&);
+    void pointTypeChanged(QModbusDataUnit::RegisterType);
     void displayModeChanged(DisplayMode mode);
     void scriptSettingsChanged(const ScriptSettings&);
 
@@ -342,7 +347,7 @@ inline QDataStream& operator >>(QDataStream& in, FormModSim* frm)
     }
 
     ModbusSimulationMap simulationMap;
-    ByteOrder byteOrder = ByteOrder::LittleEndian;
+    ByteOrder byteOrder = ByteOrder::Direct;
     if(ver >= QVersionNumber(1, 1))
     {
         in >> byteOrder;
