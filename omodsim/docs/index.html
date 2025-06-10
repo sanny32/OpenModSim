@@ -139,6 +139,7 @@
 				<li><a href="#server.readdiscrete">Server.readDiscrete</a></li>
 				<li><a href="#server.readinput">Server.readInput</a></li>
 				<li><a href="#server.readholding">Server.readHolding</a></li>
+				<li><a href="#server.readansi">Server.readAnsi</a></li>
 				<li><a href="#server.readint32">Server.readInt32</a></li>
 				<li><a href="#server.readint64">Server.readInt64</a></li>
 				<li><a href="#server.readuint32">Server.readUInt32</a></li>
@@ -149,6 +150,7 @@
 				<li><a href="#server.writediscrete">Server.writeDiscrete</a></li>
 				<li><a href="#server.writeinput">Server.writeInput</a></li>
 				<li><a href="#server.writeholding">Server.writeHolding</a></li>
+				<li><a href="#server.writeansi">Server.writeAnsi</a></li>
 				<li><a href="#server.writeint32">Server.writeInt32</a></li>
 				<li><a href="#server.writeint64">Server.writeInt64</a></li>
 				<li><a href="#server.writeunint32">Server.writeUInt32</a></li>
@@ -652,6 +654,10 @@
 			<dd>
 				<p>Returns a Holding register value at <code>address</code>.</p>
 			</dd>
+			<dt id="server.readansi"><code>Server.readAnsi(Register, address, codepage)</code></dt>
+			<dd>
+				<p>Returns a register value at <code>address</code> as 2 ANSI symbols with <code>codepage</code>.</p>
+			</dd>
 			<dt id="server.readint32"><code>Server.readInt32(Register, address, swapped)</code></dt>
 			<dd>
 				<p>Returns a 32-bit integer value from <code>address</code> to <code>address + 1</code> registers type <code>Register</code>. The <code>swapped</code> parameter change the registers order, when function convert set of registers to a 32-bit integer value.</p>
@@ -709,6 +715,10 @@
 			<dt id="server.writeholding"><code>Server.writeHolding(address, value)</code></dt>
 			<dd>
 				<p>Writes a <code>value</code> to the Holding register at <code>address</code>.</p>
+			</dd>
+			<dt id="server.writeansi"><code>Server.writeAnsi(Register, address, value, codepage)</code></dt>
+			<dd>
+				<p>Writes a <code>value</code> to the register at <code>address</code> as 2 ANSI symbols coded with <code>codepage</code>.</p>
 			</dd>
 			<dt id="server.writeint32"><code>Server.writeInt32(Register, address, value, swapped)</code></dt>
 			<dd>

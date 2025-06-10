@@ -139,6 +139,7 @@
 				<li><a href="#server.readdiscrete">Server.readDiscrete</a></li>
 				<li><a href="#server.readinput">Server.readInput</a></li>
 				<li><a href="#server.readholding">Server.readHolding</a></li>
+				<li><a href="#server.readansi">Server.readAnsi</a></li>
 				<li><a href="#server.readint32">Server.readInt32</a></li>
 				<li><a href="#server.readint64">Server.readInt64</a></li>
 				<li><a href="#server.readuint32">Server.readUInt32</a></li>
@@ -149,6 +150,7 @@
 				<li><a href="#server.writediscrete">Server.writeDiscrete</a></li>
 				<li><a href="#server.writeinput">Server.writeInput</a></li>
 				<li><a href="#server.writeholding">Server.writeHolding</a></li>
+				<li><a href="#server.writeansi">Server.writeAnsi</a></li>
 				<li><a href="#server.writeint32">Server.writeInt32</a></li>
 				<li><a href="#server.writeint64">Server.writeInt64</a></li>
 				<li><a href="#server.writeunint32">Server.writeUInt32</a></li>
@@ -652,6 +654,10 @@
 			<dd>
 				<p>Возвращает значение регистра Holding по адресу <code>address</code>.</p>
 			</dd>
+			<dt id="server.readansi"><code>Server.readAnsi(Register, address, codepage)</code></dt>
+			<dd>
+				<p>Возвращает значение регистра по адресу <code>address</code> как 2 ANSI символа в кодировке <code>codepage</code>.</p>
+			</dd>
 			<dt id="server.readint32"><code>Server.readInt32(Register, address, swapped)</code></dt>
 			<dd>
 				<p>Возвращает 32-битное целое значение из регистров типа <code>Register</code> с адресами от <code>address</code> до <code>address + 1</code>. Параметр <code>swapped</code> изменяет порядок регистров, когда функция преобразует набор регистров в 32-битное целое значение.</p>
@@ -709,6 +715,10 @@
 			<dt id="server.writeholding"><code>Server.writeHolding(address, value)</code></dt>
 			<dd>
 				<p>Записывает <code>value</code> в регистр Holding по адресу <code>address</code>.</p>
+			</dd>
+			<dt id="server.writeansi"><code>Server.writeAnsi(Register, address, value, codepage)</code></dt>
+			<dd>
+				<p>Записывает <code>value</code> в регистр по алресу <code>address</code> как 2 ANSI символа в кодировке <code>codepage</code>.</p>
 			</dd>
 			<dt id="server.writeint32"><code>Server.writeInt32(Register, address, value, swapped)</code></dt>
 			<dd>
