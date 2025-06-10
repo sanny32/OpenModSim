@@ -289,7 +289,7 @@ inline QDataStream& operator <<(QDataStream& out, FormModSim* frm)
     out << frm->descriptionMap();
     out << frm->codepage();
 
-    const auto unit = frm->serializeModbusDataUnit(dd.PointType, dd.PointAddress, dd.Length);
+    const auto unit = frm->serializeModbusDataUnit(dd.PointType, dd.PointAddress - (dd.ZeroBasedAddress ? 0 : 1), dd.Length);
     out << unit.registerType();
     out << unit.startAddress();
     out << unit.values();
@@ -403,15 +403,18 @@ inline QDataStream& operator >>(QDataStream& in, FormModSim* frm)
     for(auto&& k : descriptionMap.keys())
         frm->setDescription(k.first, k.second, descriptionMap[k]);
 
-    QModbusDataUnit::RegisterType type;
-    int startAddress;
-    QVector<quint16> values;
+    if(ver >= QVersionNumber(1, 7))
+    {
+        QModbusDataUnit::RegisterType type;
+        int startAddress;
+        QVector<quint16> values;
 
-    in >> type;
-    in >> startAddress;
-    in >> values;
+        in >> type;
+        in >> startAddress;
+        in >> values;
 
-    frm->configureModbusDataUnit(type, startAddress, values);
+        frm->configureModbusDataUnit(type, startAddress, values);
+    }
 
     return in;
 }

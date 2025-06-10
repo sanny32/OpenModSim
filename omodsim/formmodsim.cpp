@@ -450,7 +450,7 @@ void FormModSim::print(QPrinter* printer)
 ModbusSimulationMap FormModSim::simulationMap() const
 {
     const auto dd = displayDefinition();
-    const auto startAddr = dd.PointAddress - 1;
+    const auto startAddr = dd.PointAddress - (dd.ZeroBasedAddress ? 0 : 1);
     const auto endAddr = startAddr + dd.Length;
 
     ModbusSimulationMap result;
@@ -467,25 +467,26 @@ ModbusSimulationMap FormModSim::simulationMap() const
     return result;
 }
 
-
-QModbusDataUnit FormModSim::serializeModbusDataUnit(QModbusDataUnit::RegisterType type,
-                                                    quint16 startAddress,
-                                                    quint16 length) const
+///
+/// \brief FormModSim::serializeModbusDataUnit
+/// \param type
+/// \param startAddress
+/// \param length
+/// \return
+///
+QModbusDataUnit FormModSim::serializeModbusDataUnit(QModbusDataUnit::RegisterType type, quint16 startAddress, quint16 length) const
 {
     QModbusDataUnit dataUnit;
-
     const auto serverData = _mbMultiServer.data(type, startAddress, length);
 
-    const auto& unit = serverData;
+    if (startAddress >= serverData.startAddress() &&
+        (startAddress + length) <= (serverData.startAddress() + serverData.valueCount())) {
 
-    if (startAddress >= unit.startAddress() &&
-        (startAddress + length) <= (unit.startAddress() + unit.valueCount())) {
-
-        int offset = startAddress - unit.startAddress();
+        const int offset = startAddress - serverData.startAddress();
 
         QVector<quint16> values;
         for (int i = 0; i < length; ++i) {
-            values.append(unit.value(offset + i));
+            values.append(serverData.value(offset + i));
         }
 
         dataUnit.setValues(values);
@@ -506,9 +507,13 @@ void FormModSim::startSimulation(QModbusDataUnit::RegisterType type, quint16 add
     _dataSimulator->startSimulation(dataDisplayMode(), type, addr, params);
 }
 
-void FormModSim::configureModbusDataUnit(QModbusDataUnit::RegisterType type,
-                                         quint16 startAddress,
-                                         const QVector<quint16>& values) const
+///
+/// \brief FormModSim::configureModbusDataUnit
+/// \param type
+/// \param startAddress
+/// \param values
+///
+void FormModSim::configureModbusDataUnit(QModbusDataUnit::RegisterType type, quint16 startAddress, const QVector<quint16>& values) const
 {
     QModbusDataUnit unit;
     unit.setRegisterType(type);
