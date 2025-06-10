@@ -590,6 +590,11 @@
         <source>Use Auto-completion</source>
         <translation>Включить автодополнение</translation>
     </message>
+    <message>
+        <location filename="../dialogs/dialogscriptsettings.ui" line="94"/>
+        <source>Run script on startup</source>
+        <translation>Запускать скрипт при старте</translation>
+    </message>
 </context>
 <context>
     <name>DialogSelectServicePort</name>
@@ -1483,10 +1488,10 @@ MODBUS Point Type:
         <translation></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="312"/>
-        <location filename="../mainwindow.cpp" line="351"/>
-        <location filename="../mainwindow.cpp" line="364"/>
-        <location filename="../mainwindow.cpp" line="375"/>
+        <location filename="../mainwindow.cpp" line="321"/>
+        <location filename="../mainwindow.cpp" line="360"/>
+        <location filename="../mainwindow.cpp" line="373"/>
+        <location filename="../mainwindow.cpp" line="384"/>
         <source>All files (*)</source>
         <translation>Все файлы (*)</translation>
     </message>
