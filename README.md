@@ -105,7 +105,7 @@ Script.onInit(init);
 ```
 
 ## Building
-  Now building is available with Qt/qmake (version 5.15 and above) or Qt Creator. Supports both OS Microsoft Windows and Linux.
+  Now building is available via cmake (with installed Qt version 5.15 and above) or Qt Creator. Supports both OS Microsoft Windows and Linux.
   
 ## MIT License
 Copyright 2024 Alexandr Ananev [mail@ananev.org]
