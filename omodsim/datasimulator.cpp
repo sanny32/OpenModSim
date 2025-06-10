@@ -140,7 +140,7 @@ void DataSimulator::on_timeout()
         const auto params = _simulationMap[key].Params;
         const auto interval = params.Interval;
 
-        if(_elapsed % interval) continue;
+        if((_elapsed * _interval) % interval) continue;
 
         switch(params.Mode)
         {
@@ -203,6 +203,7 @@ void DataSimulator::randomSimulation(DataDisplayMode mode, QModbusDataUnit::Regi
                 case DataDisplayMode::Int16:
                 case DataDisplayMode::UInt16:
                 case DataDisplayMode::Hex:
+                case DataDisplayMode::Ansi:
                     value = generateRandom<quint16>(params.Range.from(), params.Range.to() + 1);
                 break;
                     

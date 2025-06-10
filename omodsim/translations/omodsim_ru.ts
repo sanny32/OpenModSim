@@ -141,14 +141,13 @@
         <translation>Тип симуляции:</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogautosimulation.ui" line="54"/>
-        <source>5</source>
-        <translation></translation>
+        <source>Change Interval (secs):</source>
+        <translation type="vanished">Интервал (сек):</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogautosimulation.ui" line="61"/>
-        <source>Change Interval (secs):</source>
-        <translation>Интервал (сек):</translation>
+        <source>Change Interval (msecs):</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../dialogs/dialogautosimulation.ui" line="68"/>

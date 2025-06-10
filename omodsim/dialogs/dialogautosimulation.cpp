@@ -23,7 +23,7 @@ DialogAutoSimulation::DialogAutoSimulation(DataDisplayMode mode, ModbusSimulatio
     else
         ui->comboBoxSimulationType->setCurrentIndex(0);
 
-    ui->lineEditInterval->setInputRange(1, 60000);
+    ui->lineEditInterval->setInputRange(100, 6000000);
     ui->lineEditInterval->setValue(_params.Interval);
 
     switch(_displayMode)
@@ -61,6 +61,12 @@ DialogAutoSimulation::DialogAutoSimulation(DataDisplayMode mode, ModbusSimulatio
         break;
 
         case DataDisplayMode::Hex:
+            ui->lineEditStepValue->setInputRange(1, USHRT_MAX - 1);
+            ui->lineEditLowLimit->setInputRange(0, USHRT_MAX);
+            ui->lineEditHighLimit->setInputRange(0, USHRT_MAX);
+        break;
+
+        case DataDisplayMode::Ansi:
             ui->lineEditStepValue->setInputRange(1, USHRT_MAX - 1);
             ui->lineEditLowLimit->setInputRange(0, USHRT_MAX);
             ui->lineEditHighLimit->setInputRange(0, USHRT_MAX);
