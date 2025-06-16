@@ -263,7 +263,6 @@ if(Qt6_FOUND)
     qt_add_lupdate(omodsim
         TS_FILES ${TS_FILES}
         SOURCES ${SOURCES} ${HEADERS} ${UI_FILES}
-        OUTPUT_DIR ${CMAKE_CURRENT_SOURCE_DIR}/translations
     )
     target_link_libraries(omodsim PRIVATE Qt::Core5Compat)
 else()
