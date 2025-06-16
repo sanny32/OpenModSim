@@ -276,7 +276,7 @@ else()
         COMMENT "Updating translation files..."
     )
     add_custom_target(update_translations ALL DEPENDS ${TS_FILES})
-    add_dependencies(omodsim update_translations)
+
 endif()
 
 if(WIN32)
@@ -310,3 +310,4 @@ add_custom_command(
 
 add_custom_target(helpgenerator ALL DEPENDS ${JSHELP_QCH} ${JSHELP_QHC})
 add_dependencies(omodsim helpgenerator)
+add_dependencies(omodsim update_translations)
