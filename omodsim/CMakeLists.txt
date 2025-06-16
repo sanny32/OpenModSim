@@ -299,9 +299,14 @@ endif()
 add_custom_command(
     OUTPUT ${JSHELP_QCH} ${JSHELP_QHC}
     COMMAND ${QHELP_GENERATOR_EXECUTABLE} ${JSHELP_INPUT}
-    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/docs
-    COMMENT "Generating help files..."
+    WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/docs
+    COMMAND ${CMAKE_COMMAND} -E rename
+            ${CMAKE_SOURCE_DIR}/docs/jshelp.qch ${JSHELP_QCH}
+    COMMAND ${CMAKE_COMMAND} -E rename
+            ${CMAKE_SOURCE_DIR}/docs/jshelp.qhc ${JSHELP_QHC}
+    COMMENT "Generating and moving help files..."
     VERBATIM
 )
+
 add_custom_target(helpgenerator ALL DEPENDS ${JSHELP_QCH} ${JSHELP_QHC})
 add_dependencies(omodsim helpgenerator)
