@@ -17,6 +17,99 @@
     </message>
 </context>
 <context>
+    <name>AnsiMenu</name>
+    <message>
+        <location filename="../ansimenu.cpp" line="12"/>
+        <location filename="../ansimenu.cpp" line="53"/>
+        <source>Arabic</source>
+        <translation>Арабский</translation>
+    </message>
+    <message>
+        <location filename="../ansimenu.cpp" line="13"/>
+        <location filename="../ansimenu.cpp" line="54"/>
+        <source>Baltic</source>
+        <translation>Балтийский</translation>
+    </message>
+    <message>
+        <location filename="../ansimenu.cpp" line="14"/>
+        <location filename="../ansimenu.cpp" line="55"/>
+        <source>Celtic</source>
+        <translation>Кельтский</translation>
+    </message>
+    <message>
+        <location filename="../ansimenu.cpp" line="15"/>
+        <location filename="../ansimenu.cpp" line="56"/>
+        <source>Cyrillic</source>
+        <translation>Кириллица</translation>
+    </message>
+    <message>
+        <location filename="../ansimenu.cpp" line="16"/>
+        <location filename="../ansimenu.cpp" line="57"/>
+        <source>Central European</source>
+        <translation>Центрально-Европейский</translation>
+    </message>
+    <message>
+        <location filename="../ansimenu.cpp" line="17"/>
+        <location filename="../ansimenu.cpp" line="58"/>
+        <source>Chinese</source>
+        <translation>Китайский</translation>
+    </message>
+    <message>
+        <location filename="../ansimenu.cpp" line="18"/>
+        <location filename="../ansimenu.cpp" line="59"/>
+        <source>Eastern European</source>
+        <translation>Восточно-Европейский</translation>
+    </message>
+    <message>
+        <location filename="../ansimenu.cpp" line="19"/>
+        <location filename="../ansimenu.cpp" line="60"/>
+        <source>Greek</source>
+        <translation>Греческий</translation>
+    </message>
+    <message>
+        <location filename="../ansimenu.cpp" line="20"/>
+        <location filename="../ansimenu.cpp" line="61"/>
+        <source>Hebrew</source>
+        <translation>Иврит</translation>
+    </message>
+    <message>
+        <location filename="../ansimenu.cpp" line="21"/>
+        <location filename="../ansimenu.cpp" line="62"/>
+        <source>Japanese</source>
+        <translation>Японский</translation>
+    </message>
+    <message>
+        <location filename="../ansimenu.cpp" line="22"/>
+        <location filename="../ansimenu.cpp" line="63"/>
+        <source>Korean</source>
+        <translation>Корейский</translation>
+    </message>
+    <message>
+        <location filename="../ansimenu.cpp" line="23"/>
+        <location filename="../ansimenu.cpp" line="64"/>
+        <source>Thai</source>
+        <translation>Тайский</translation>
+    </message>
+    <message>
+        <location filename="../ansimenu.cpp" line="24"/>
+        <location filename="../ansimenu.cpp" line="65"/>
+        <source>Turkish</source>
+        <translation>Турецкий</translation>
+    </message>
+    <message>
+        <location filename="../ansimenu.cpp" line="25"/>
+        <location filename="../ansimenu.cpp" line="66"/>
+        <source>Western European</source>
+        <translation>Западно-Европейский</translation>
+    </message>
+    <message>
+        <location filename="../ansimenu.cpp" line="26"/>
+        <location filename="../ansimenu.cpp" line="67"/>
+        <source>Vietnamese</source>
+        <translation>Вьетнамский</translation>
+    </message>
+</context>
+<context>
     <name>BooleanComboBox</name>
     <message>
         <location filename="../controls/booleancombobox.cpp" line="10"/>
