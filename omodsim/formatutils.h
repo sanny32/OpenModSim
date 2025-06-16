@@ -6,9 +6,9 @@
 #include <QModbusPdu>
 #include <QModbusDataUnit>
 #include "enums.h"
+#include "ansiutils.h"
 #include "numericutils.h"
 #include "byteorderutils.h"
-
 
 ///
 /// \brief formatUInt8Value
@@ -20,8 +20,8 @@ inline QString formatUInt8Value(DataDisplayMode mode, quint8 c)
 {
     switch(mode)
     {
-        case DataDisplayMode::Decimal:
-        case DataDisplayMode::Integer:
+        case DataDisplayMode::UInt16:
+        case DataDisplayMode::Int16:
             return QString("%1").arg(QString::number(c), 3, '0');
 
         default:
@@ -41,8 +41,8 @@ inline QString formatUInt8Array(DataDisplayMode mode, const QByteArray& ar)
     for(quint8 i : ar)
         switch(mode)
         {
-            case DataDisplayMode::Decimal:
-            case DataDisplayMode::Integer:
+            case DataDisplayMode::UInt16:
+            case DataDisplayMode::Int16:
                 values += QString("%1").arg(QString::number(i), 3, '0');
             break;
 
@@ -69,8 +69,8 @@ inline QString formatUInt16Array(DataDisplayMode mode, const QByteArray& ar, Byt
         const quint16 value = makeUInt16(ar[i+1], ar[i], order);
         switch(mode)
         {
-            case DataDisplayMode::Decimal:
-            case DataDisplayMode::Integer:
+            case DataDisplayMode::UInt16:
+            case DataDisplayMode::Int16:
                 values += QString("%1").arg(QString::number(value), 5, '0');
                 break;
 
@@ -93,8 +93,8 @@ inline QString formatUInt16Value(DataDisplayMode mode, quint16 v)
 {
     switch(mode)
     {
-        case DataDisplayMode::Decimal:
-        case DataDisplayMode::Integer:
+        case DataDisplayMode::UInt16:
+        case DataDisplayMode::Int16:
             return QString("%1").arg(QString::number(v), 5, '0');
 
         default:
@@ -112,8 +112,6 @@ inline QString formatUInt16Value(DataDisplayMode mode, quint16 v)
 inline QString formatBinaryValue(QModbusDataUnit::RegisterType pointType, quint16 value, ByteOrder order, QVariant& outValue)
 {
     QString result;
-    value = toByteOrderValue(value, order);
-
     switch(pointType)
     {
         case QModbusDataUnit::Coils:
@@ -122,6 +120,7 @@ inline QString formatBinaryValue(QModbusDataUnit::RegisterType pointType, quint1
             break;
         case QModbusDataUnit::HoldingRegisters:
         case QModbusDataUnit::InputRegisters:
+            value = toByteOrderValue(value, order);
             result = QStringLiteral("<%1>").arg(value, 16, 2, QLatin1Char('0'));
             break;
         default:
@@ -141,8 +140,6 @@ inline QString formatBinaryValue(QModbusDataUnit::RegisterType pointType, quint1
 inline QString formatUInt16Value(QModbusDataUnit::RegisterType pointType, quint16 value, ByteOrder order, QVariant& outValue)
 {
     QString result;
-    value = toByteOrderValue(value, order);
-
     switch(pointType)
     {
         case QModbusDataUnit::Coils:
@@ -151,6 +148,7 @@ inline QString formatUInt16Value(QModbusDataUnit::RegisterType pointType, quint1
             break;
         case QModbusDataUnit::HoldingRegisters:
         case QModbusDataUnit::InputRegisters:
+            value = toByteOrderValue(value, order);
             result = QStringLiteral("<%1>").arg(value, 5, 10, QLatin1Char('0'));
             break;
         default:
@@ -170,8 +168,6 @@ inline QString formatUInt16Value(QModbusDataUnit::RegisterType pointType, quint1
 inline QString formatInt16Value(QModbusDataUnit::RegisterType pointType, qint16 value, ByteOrder order, QVariant& outValue)
 {
     QString result;
-    value = toByteOrderValue(value, order);
-
     switch(pointType)
     {
         case QModbusDataUnit::Coils:
@@ -180,6 +176,7 @@ inline QString formatInt16Value(QModbusDataUnit::RegisterType pointType, qint16 
             break;
         case QModbusDataUnit::HoldingRegisters:
         case QModbusDataUnit::InputRegisters:
+            value = toByteOrderValue(value, order);
             result = QStringLiteral("<%1>").arg(value, 5, 10, QLatin1Char(' '));
             break;
         default:
@@ -199,8 +196,6 @@ inline QString formatInt16Value(QModbusDataUnit::RegisterType pointType, qint16 
 inline QString formatHexValue(QModbusDataUnit::RegisterType pointType, quint16 value, ByteOrder order, QVariant& outValue)
 {
     QString result;
-    value = toByteOrderValue(value, order);
-
     switch(pointType)
     {
         case QModbusDataUnit::Coils:
@@ -209,7 +204,38 @@ inline QString formatHexValue(QModbusDataUnit::RegisterType pointType, quint16 v
             break;
         case QModbusDataUnit::HoldingRegisters:
         case QModbusDataUnit::InputRegisters:
+            value = toByteOrderValue(value, order);
             result = QString("<0x%1>").arg(QString::number(value, 16).toUpper(), 4, '0');
+            break;
+        default:
+            break;
+    }
+    outValue = value;
+    return result;
+}
+
+///
+/// \brief formatAnsiValue
+/// \param pointType
+/// \param value
+/// \param order
+/// \param codepage
+/// \param outValue
+/// \return
+///
+inline QString formatAnsiValue(QModbusDataUnit::RegisterType pointType, quint16 value, ByteOrder order, const QString& codepage, QVariant& outValue)
+{
+    QString result;
+    switch(pointType)
+    {
+        case QModbusDataUnit::Coils:
+        case QModbusDataUnit::DiscreteInputs:
+            result = QString("<%1>").arg(value);
+            break;
+        case QModbusDataUnit::HoldingRegisters:
+        case QModbusDataUnit::InputRegisters:
+            value = toByteOrderValue(value, order);
+            result = QString("<%1>").arg(printableAnsi(uint16ToAnsi(value), codepage));
             break;
         default:
             break;
@@ -381,22 +407,22 @@ inline QString formatInt64Value(QModbusDataUnit::RegisterType pointType, quint16
     QString result;
     switch(pointType)
     {
-    case QModbusDataUnit::Coils:
-    case QModbusDataUnit::DiscreteInputs:
-        outValue = value1;
-        result = QString("<%1>").arg(value1);
-        break;
-    case QModbusDataUnit::HoldingRegisters:
-    case QModbusDataUnit::InputRegisters:
-    {
-        if(flag) break;
+        case QModbusDataUnit::Coils:
+        case QModbusDataUnit::DiscreteInputs:
+            outValue = value1;
+            result = QString("<%1>").arg(value1);
+            break;
+        case QModbusDataUnit::HoldingRegisters:
+        case QModbusDataUnit::InputRegisters:
+        {
+            if(flag) break;
 
-        const qint64 value = makeInt64(value1, value2, value3, value4, order);
-        outValue = value;
-        result = QString("<%1>").arg(value, 20, 10, QLatin1Char(' '));
-    }
-    break;
-    default:
+            const qint64 value = makeInt64(value1, value2, value3, value4, order);
+            outValue = value;
+            result = QString("<%1>").arg(value, 20, 10, QLatin1Char(' '));
+        }
+        break;
+        default:
         break;
     }
     return result;
@@ -419,22 +445,22 @@ inline QString formatUInt64Value(QModbusDataUnit::RegisterType pointType, quint1
     QString result;
     switch(pointType)
     {
-    case QModbusDataUnit::Coils:
-    case QModbusDataUnit::DiscreteInputs:
-        outValue = value1;
-        result = QString("<%1>").arg(value1);
-        break;
-    case QModbusDataUnit::HoldingRegisters:
-    case QModbusDataUnit::InputRegisters:
-    {
-        if(flag) break;
+        case QModbusDataUnit::Coils:
+        case QModbusDataUnit::DiscreteInputs:
+            outValue = value1;
+            result = QString("<%1>").arg(value1);
+            break;
+        case QModbusDataUnit::HoldingRegisters:
+        case QModbusDataUnit::InputRegisters:
+        {
+            if(flag) break;
 
-        const quint64 value = makeUInt64(value1, value2, value3, value4, order);
-        outValue = value;
-        result = QString("<%1>").arg(value, 20, 10, QLatin1Char('0'));
-    }
-    break;
-    default:
+            const quint64 value = makeUInt64(value1, value2, value3, value4, order);
+            outValue = value;
+            result = QString("<%1>").arg(value, 20, 10, QLatin1Char('0'));
+        }
+        break;
+        default:
         break;
     }
     return result;

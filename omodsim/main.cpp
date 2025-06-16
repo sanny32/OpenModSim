@@ -71,7 +71,7 @@ int main(int argc, char *argv[])
     MainWindow w;
     if(!cfg.isEmpty())
     {
-        w.loadConfig(cfg);
+        w.loadConfig(cfg, true);
     }
     w.show();
 

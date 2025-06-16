@@ -46,12 +46,12 @@ DialogWriteHoldingRegister::DialogWriteHoldingRegister(ModbusWriteParams& writeP
         case DataDisplayMode::Binary:
         break;
 
-        case DataDisplayMode::Decimal:
+        case DataDisplayMode::UInt16:
             ui->lineEditValue->setInputRange(0, USHRT_MAX);
             ui->lineEditValue->setValue(_writeParams.Value.toUInt());
         break;
 
-        case DataDisplayMode::Integer:
+        case DataDisplayMode::Int16:
             ui->lineEditValue->setInputRange(SHRT_MIN, SHRT_MAX);
             ui->lineEditValue->setValue(_writeParams.Value.toInt());
         break;
@@ -64,43 +64,45 @@ DialogWriteHoldingRegister::DialogWriteHoldingRegister(ModbusWriteParams& writeP
             ui->lineEditValue->setValue(_writeParams.Value.toUInt());
         break;
 
+        case DataDisplayMode::Ansi:
+            ui->labelValue->setText(tr("Value, (ANSI): "));
+            ui->lineEditValue->setInputMode(NumericLineEdit::AnsiMode);
+            ui->lineEditValue->setCodepage(_writeParams.Codepage);
+            ui->lineEditValue->setValue(_writeParams.Value.toUInt());
+        break;
+
         case DataDisplayMode::FloatingPt:
         case DataDisplayMode::SwappedFP:
-            ui->lineEditValue->setInputRange(-FLT_MAX, FLT_MAX);
             ui->lineEditValue->setInputMode(NumericLineEdit::FloatMode);
             ui->lineEditValue->setValue(_writeParams.Value.toFloat());
         break;
 
         case DataDisplayMode::DblFloat:
         case DataDisplayMode::SwappedDbl:
-            ui->lineEditValue->setInputRange(-DBL_MAX, DBL_MAX);
             ui->lineEditValue->setInputMode(NumericLineEdit::DoubleMode);
             ui->lineEditValue->setValue(_writeParams.Value.toDouble());
         break;
             
         case DataDisplayMode::Int32:
         case DataDisplayMode::SwappedInt32:
-            ui->lineEditValue->setInputRange(INT_MIN, INT_MAX);
+            ui->lineEditValue->setInputMode(NumericLineEdit::Int32Mode);
             ui->lineEditValue->setValue(_writeParams.Value.toInt());
         break;
 
         case DataDisplayMode::UInt32:
         case DataDisplayMode::SwappedUInt32:
-            ui->lineEditValue->setInputRange(0U, UINT_MAX);
             ui->lineEditValue->setInputMode(NumericLineEdit::UInt32Mode);
             ui->lineEditValue->setValue(_writeParams.Value.toUInt());
         break;
 
         case DataDisplayMode::Int64:
         case DataDisplayMode::SwappedInt64:
-            ui->lineEditValue->setInputRange(INT64_MIN, INT64_MAX);
             ui->lineEditValue->setInputMode(NumericLineEdit::Int64Mode);
             ui->lineEditValue->setValue(_writeParams.Value.toLongLong());
         break;
 
         case DataDisplayMode::UInt64:
         case DataDisplayMode::SwappedUInt64:
-            ui->lineEditValue->setInputRange<quint64>(0, UINT64_MAX);
             ui->lineEditValue->setInputMode(NumericLineEdit::UInt64Mode);
             ui->lineEditValue->setValue(_writeParams.Value.toULongLong());
         break;

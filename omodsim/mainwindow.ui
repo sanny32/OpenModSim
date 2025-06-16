@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="contextMenuPolicy">
-   <enum>Qt::NoContextMenu</enum>
+   <enum>Qt::ContextMenuPolicy::NoContextMenu</enum>
   </property>
   <property name="windowTitle">
    <string>Open ModSim</string>
@@ -96,19 +96,13 @@
      <property name="title">
       <string>Display Options</string>
      </property>
-     <widget class="QMenu" name="menuByteOrder">
-      <property name="title">
-       <string>Byte Order</string>
-      </property>
-      <addaction name="actionBigEndian"/>
-      <addaction name="actionLittleEndian"/>
-     </widget>
      <addaction name="actionShowData"/>
      <addaction name="actionShowTraffic"/>
      <addaction name="actionShowScript"/>
      <addaction name="separator"/>
      <addaction name="actionBinary"/>
      <addaction name="actionHex"/>
+     <addaction name="actionAnsi"/>
      <addaction name="actionInt16"/>
      <addaction name="actionUInt16"/>
      <addaction name="actionInt32"/>
@@ -123,7 +117,8 @@
      <addaction name="actionSwappedFP"/>
      <addaction name="actionDblFloat"/>
      <addaction name="actionSwappedDbl"/>
-     <addaction name="menuByteOrder"/>
+     <addaction name="separator"/>
+     <addaction name="actionSwapBytes"/>
      <addaction name="separator"/>
      <addaction name="actionHexAddresses"/>
     </widget>
@@ -150,7 +145,6 @@
     <addaction name="actionDataDefinition"/>
     <addaction name="menuDisplay_Options"/>
     <addaction name="menuExtended"/>
-    <addaction name="separator"/>
     <addaction name="actionTextCapture"/>
     <addaction name="actionCaptureOff"/>
     <addaction name="separator"/>
@@ -252,6 +246,7 @@
    </attribute>
    <addaction name="actionBinary"/>
    <addaction name="actionHex"/>
+   <addaction name="actionAnsi"/>
    <addaction name="separator"/>
    <addaction name="actionInt16"/>
    <addaction name="actionUInt16"/>
@@ -274,7 +269,7 @@
    <addaction name="actionDblFloat"/>
    <addaction name="actionSwappedDbl"/>
    <addaction name="separator"/>
-   <addaction name="actionByteOrder"/>
+   <addaction name="actionSwapBytes"/>
   </widget>
   <widget class="QToolBar" name="toolBarScript">
    <property name="windowTitle">
@@ -686,12 +681,19 @@
     <string notr="true">Little-Endian</string>
    </property>
   </action>
-  <action name="actionByteOrder">
+  <action name="actionSwapBytes">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/res/actionSwapBytes.png</normaloff>:/res/actionSwapBytes.png</iconset>
+   </property>
    <property name="text">
-    <string>Byte Order</string>
+    <string>Swap Bytes (0xAB → 0xBA)</string>
    </property>
    <property name="toolTip">
-    <string>Byte Order</string>
+    <string>Swap Bytes (0xAB → 0xBA)</string>
    </property>
   </action>
   <action name="actionPresetInputRegs">
@@ -975,6 +977,21 @@
    </property>
    <property name="shortcut">
     <string notr="true">Ctrl+Alt+8</string>
+   </property>
+  </action>
+  <action name="actionAnsi">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/res/actionAnsi.png</normaloff>:/res/actionAnsi.png</iconset>
+   </property>
+   <property name="text">
+    <string>ANSI</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::MenuRole::NoRole</enum>
    </property>
   </action>
  </widget>

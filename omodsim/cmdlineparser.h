@@ -3,8 +3,10 @@
 
 #include <QCommandLineParser>
 
-class CmdLineParser : public QCommandLineParser
+class CmdLineParser : public QObject, public QCommandLineParser
 {
+    Q_OBJECT
+
 public:
     explicit CmdLineParser();
 

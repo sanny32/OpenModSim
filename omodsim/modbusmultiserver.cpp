@@ -671,9 +671,10 @@ void ModbusMultiServer::writeRegister(QModbusDataUnit::RegisterType pointType, c
                 switch(params.DisplayMode)
                 {
                     case DataDisplayMode::Binary:
-                    case DataDisplayMode::Decimal:
-                    case DataDisplayMode::Integer:
+                    case DataDisplayMode::UInt16:
+                    case DataDisplayMode::Int16:
                     case DataDisplayMode::Hex:
+                    case DataDisplayMode::Ansi:
                         data = createDataUnit(pointType, addr, params.Value.toUInt(), params.Order);
                     break;
                     case DataDisplayMode::FloatingPt:

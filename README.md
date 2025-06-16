@@ -1,9 +1,10 @@
 # Open ModSim
 Open ModSim is a free implimentation of modbus slave (server) utility for modbus-tcp and modbus-rtu protocols.
 
-![image](https://github.com/user-attachments/assets/b57d329f-02c9-42c2-957c-295a67efcf67)
+![image](https://github.com/user-attachments/assets/cfa669f5-4018-4db4-bc43-ca060d469182)
 
-![image](https://github.com/user-attachments/assets/730900fb-c8b4-4675-ba8b-cee5d7e9dd9e)
+![image](https://github.com/user-attachments/assets/16653017-d479-466a-8302-5960a2e47fc4)
+
 
 
 ## Features
@@ -40,8 +41,7 @@ Registers
 
 ## Modbus Logging
 
-
-![image](https://github.com/user-attachments/assets/d8dc67fc-efce-4d40-81df-5ed54a958952)
+![image](https://github.com/user-attachments/assets/f62d721f-dd0b-4db7-a239-2a22045e99cd)
 
 
 ## Extended Featues
@@ -54,7 +54,7 @@ Registers
 ## Scripting
   From version 1.2.0 Open ModSim supports scripting. Qt runtime implements the [ECMAScript Language Specification](http://www.ecma-international.org/publications/standards/Ecma-262.htm) standard, so Javascript is used to write code.
   
-![image](https://github.com/user-attachments/assets/e8d31089-345a-4c26-bb0c-fe2ea92f85d4)
+![image](https://github.com/user-attachments/assets/5b448fcd-1ca7-4cfc-af0f-175fbb660f80)
 
 
   Scripts can be launched in two modes: Once or Periodically. If you run script in Once mode the script will stop after it finishes executing. In Periodically mode, the script will start after a certain period of time until the user stops it or the method is called
@@ -105,7 +105,7 @@ Script.onInit(init);
 ```
 
 ## Building
-  Now building is available with Qt/qmake (version 5.15 and above) or Qt Creator. Supports both OS Microsoft Windows and Linux.
+  Now building is available via cmake (with installed Qt version 5.15 and above) or Qt Creator. Supports both OS Microsoft Windows and Linux.
   
 ## MIT License
 Copyright 2024 Alexandr Ananev [mail@ananev.org]

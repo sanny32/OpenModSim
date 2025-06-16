@@ -49,6 +49,9 @@ public:
     ByteOrder byteOrder() const;
     void setByteOrder(ByteOrder order);
 
+    QString codepage() const;
+    void setCodepage(const QString& name);
+
     DisplayMode displayMode() const;
     void setDisplayMode(DisplayMode mode);
 
@@ -87,6 +90,13 @@ public:
     ModbusSimulationMap simulationMap() const;
     void startSimulation(QModbusDataUnit::RegisterType type, quint16 addr, const ModbusSimulationParams& params);
 
+    QModbusDataUnit serializeModbusDataUnit(QModbusDataUnit::RegisterType pointType,
+                                            quint16 pointAddress,
+                                            quint16 length) const;
+    void configureModbusDataUnit(QModbusDataUnit::RegisterType type,
+                                             quint16 startAddress,
+                                             const QVector<quint16>& values) const;
+
     AddressDescriptionMap descriptionMap() const;
     void setDescription(QModbusDataUnit::RegisterType type, quint16 addr, const QString& desc);
 
@@ -113,6 +123,8 @@ signals:
     void showed();
     void closing();
     void byteOrderChanged(ByteOrder);
+    void codepageChanged(const QString&);
+    void pointTypeChanged(QModbusDataUnit::RegisterType);
     void displayModeChanged(DisplayMode mode);
     void scriptSettingsChanged(const ScriptSettings&);
 
@@ -175,6 +187,7 @@ inline QSettings& operator <<(QSettings& out, FormModSim* frm)
     out << frm->byteOrder();
     out << frm->displayDefinition();
     out.setValue("DisplayHexAddresses", frm->displayHexAddresses());
+    out.setValue("Codepage", frm->codepage());
     out << frm->scriptSettings();
     out << frm->scriptControl();
 
@@ -228,7 +241,12 @@ inline QSettings& operator >>(QSettings& in, FormModSim* frm)
     frm->setByteOrder(byteOrder);
     frm->setDisplayDefinition(displayDefinition);
     frm->setDisplayHexAddresses(in.value("DisplayHexAddresses").toBool());
+    frm->setCodepage(in.value("Codepage").toString());
     frm->setScriptSettings(scriptSettings);
+
+    if(scriptSettings.RunOnStartup) {
+        frm->runScript();
+    }
 
     return in;
 }
@@ -273,6 +291,12 @@ inline QDataStream& operator <<(QDataStream& out, FormModSim* frm)
     out << frm->scriptControl();
     out << frm->scriptSettings();
     out << frm->descriptionMap();
+    out << frm->codepage();
+
+    const auto unit = frm->serializeModbusDataUnit(dd.PointType, dd.PointAddress - (dd.ZeroBasedAddress ? 0 : 1), dd.Length);
+    out << unit.registerType();
+    out << unit.startAddress();
+    out << unit.values();
 
     return out;
 }
@@ -330,7 +354,7 @@ inline QDataStream& operator >>(QDataStream& in, FormModSim* frm)
     }
 
     ModbusSimulationMap simulationMap;
-    ByteOrder byteOrder = ByteOrder::LittleEndian;
+    ByteOrder byteOrder = ByteOrder::Direct;
     if(ver >= QVersionNumber(1, 1))
     {
         in >> byteOrder;
@@ -348,6 +372,12 @@ inline QDataStream& operator >>(QDataStream& in, FormModSim* frm)
     if(ver >=  QVersionNumber(1, 3))
     {
         in >> descriptionMap;
+    }
+
+    QString codepage;
+    if(ver >= QVersionNumber(1, 7))
+    {
+        in >> codepage;
     }
 
     if(in.status() != QDataStream::Ok)
@@ -368,6 +398,7 @@ inline QDataStream& operator >>(QDataStream& in, FormModSim* frm)
     frm->setFont(font);
     frm->setDisplayDefinition(dd);
     frm->setByteOrder(byteOrder);
+    frm->setCodepage(codepage);
     frm->setScriptSettings(scriptSettings);
 
     for(auto&& k : simulationMap.keys())
@@ -375,6 +406,19 @@ inline QDataStream& operator >>(QDataStream& in, FormModSim* frm)
 
     for(auto&& k : descriptionMap.keys())
         frm->setDescription(k.first, k.second, descriptionMap[k]);
+
+    if(ver >= QVersionNumber(1, 7))
+    {
+        QModbusDataUnit::RegisterType type;
+        int startAddress;
+        QVector<quint16> values;
+
+        in >> type;
+        in >> startAddress;
+        in >> values;
+
+        frm->configureModbusDataUnit(type, startAddress, values);
+    }
 
     return in;
 }

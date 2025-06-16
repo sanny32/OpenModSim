@@ -1,4 +1,5 @@
 #include "server.h"
+#include "ansiutils.h"
 #include "byteorderutils.h"
 
 ///
@@ -134,6 +135,35 @@ void Server::writeCoil(quint16 address, bool value)
 {
     address -= _addressBase == Address::Base::Base0 ? 0 : 1;
     _mbMultiServer->writeValue(QModbusDataUnit::Coils, address, value, *_byteOrder);
+}
+
+///
+/// \brief Server::readAnsi
+/// \param reg
+/// \param address
+/// \param swapped
+/// \return
+///
+QString Server::readAnsi(Register::Type reg, quint16 address, const QString& codepage) const
+{
+    address -= _addressBase == Address::Base::Base0 ? 0 : 1;
+    const auto data = _mbMultiServer->data((QModbusDataUnit::RegisterType)reg, address, 1);
+    return printableAnsi(uint16ToAnsi(toByteOrderValue(data.value(0), *_byteOrder)), codepage);
+}
+
+///
+/// \brief Server::writeAnsi
+/// \param reg
+/// \param address
+/// \param value
+/// \param swapped
+///
+void Server::writeAnsi(Register::Type reg, quint16 address, const QString& value, const QString& codepage)
+{
+    address -= _addressBase == Address::Base::Base0 ? 0 : 1;
+    auto codec = QTextCodec::codecForName(codepage.toUtf8());
+    if(codec == nullptr) codec = QTextCodec::codecForLocale();
+    _mbMultiServer->writeValue(QModbusDataUnit::HoldingRegisters, address, uint16FromAnsi(codec->fromUnicode(value)), *_byteOrder);
 }
 
 ///

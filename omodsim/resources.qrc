@@ -22,8 +22,6 @@
         <file>res/omodsim.png</file>
         <file>res/iconAbout.png</file>
         <file>translations/omodsim_ru.qm</file>
-        <file>res/actionBigEndian.png</file>
-        <file>res/actionLittleEndian.png</file>
         <file>res/actionShowScript.png</file>
         <file>fonts/firacode.ttf</file>
         <file>res/actionRunScript.png</file>
@@ -50,5 +48,7 @@
         <file>res/actionUInt16.png</file>
         <file>res/actionUInt32.png</file>
         <file>res/actionUInt64.png</file>
+        <file>res/actionSwapBytes.png</file>
+        <file>res/actionAnsi.png</file>
     </qresource>
 </RCC>

@@ -5,6 +5,7 @@
 #include <QTranslator>
 #include <QWidgetAction>
 #include "formmodsim.h"
+#include "ansimenu.h"
 #include "modbusmultiserver.h"
 #include "windowactionlist.h"
 #include "recentfileactionlist.h"
@@ -23,7 +24,7 @@ public:
 
     void setLanguage(const QString& lang);
 
-    void loadConfig(const QString& filename);
+    void loadConfig(const QString& filename, bool startup = false);
     void saveConfig(const QString& filename);
 
 signals:
@@ -84,12 +85,12 @@ private slots:
     void on_actionUInt64_triggered();
     void on_actionSwappedUInt64_triggered();
     void on_actionHex_triggered();
+    void on_actionAnsi_triggered();
     void on_actionFloatingPt_triggered();
     void on_actionSwappedFP_triggered();
     void on_actionDblFloat_triggered();
     void on_actionSwappedDbl_triggered();
-    void on_actionLittleEndian_triggered();
-    void on_actionBigEndian_triggered();
+    void on_actionSwapBytes_triggered();
     void on_actionHexAddresses_triggered();
     void on_actionForceCoils_triggered();
     void on_actionForceDiscretes_triggered();
@@ -135,6 +136,7 @@ private slots:
     void updateMenuWindow();
     void openFile(const QString& filename);
     void windowActivate(QMdiSubWindow* wnd);
+    void setCodepage(const QString& name);
 
 private:
     void addRecentFile(const QString& filename);
@@ -163,13 +165,12 @@ private:
     QTranslator _qtTranslator;
     QTranslator _appTranslator;
 
-    QIcon _icoBigEndian;
-    QIcon _icoLittleEndian;
-
 private:
     int _windowCounter;
 
     ModbusMultiServer _mbMultiServer;
+
+    AnsiMenu* _ansiMenu;
     WindowActionList* _windowActionList;
     RecentFileActionList* _recentFileActionList;
     QSharedPointer<QPrinter> _selectedPrinter;

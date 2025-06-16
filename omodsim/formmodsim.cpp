@@ -12,7 +12,7 @@
 #include "formmodsim.h"
 #include "ui_formmodsim.h"
 
-QVersionNumber FormModSim::VERSION = QVersionNumber(1, 6);
+QVersionNumber FormModSim::VERSION = QVersionNumber(1, 7);
 
 ///
 /// \brief FormModSim::FormModSim
@@ -232,7 +232,7 @@ void FormModSim::setDisplayHexAddresses(bool on)
 }
 
 ///
-/// \brief FormModSca::captureMode
+/// \brief FormModSim::captureMode
 ///
 CaptureMode FormModSim::captureMode() const
 {
@@ -240,7 +240,7 @@ CaptureMode FormModSim::captureMode() const
 }
 
 ///
-/// \brief FormModSca::startTextCapture
+/// \brief FormModSim::startTextCapture
 /// \param file
 ///
 void FormModSim::startTextCapture(const QString& file)
@@ -249,7 +249,7 @@ void FormModSim::startTextCapture(const QString& file)
 }
 
 ///
-/// \brief FormModSca::stopTextCapture
+/// \brief FormModSim::stopTextCapture
 ///
 void FormModSim::stopTextCapture()
 {
@@ -302,6 +302,25 @@ void FormModSim::setByteOrder(ByteOrder order)
 {
     ui->outputWidget->setByteOrder(order);
     emit byteOrderChanged(order);
+}
+
+///
+/// \brief FormModSim::codepage
+/// \return
+///
+QString FormModSim::codepage() const
+{
+    return ui->outputWidget->codepage();
+}
+
+///
+/// \brief FormModSim::setCodepage
+/// \param name
+///
+void FormModSim::setCodepage(const QString& name)
+{
+    ui->outputWidget->setCodepage(name);
+    emit codepageChanged(name);
 }
 
 ///
@@ -431,7 +450,7 @@ void FormModSim::print(QPrinter* printer)
 ModbusSimulationMap FormModSim::simulationMap() const
 {
     const auto dd = displayDefinition();
-    const auto startAddr = dd.PointAddress - 1;
+    const auto startAddr = dd.PointAddress - (dd.ZeroBasedAddress ? 0 : 1);
     const auto endAddr = startAddr + dd.Length;
 
     ModbusSimulationMap result;
@@ -449,6 +468,35 @@ ModbusSimulationMap FormModSim::simulationMap() const
 }
 
 ///
+/// \brief FormModSim::serializeModbusDataUnit
+/// \param type
+/// \param startAddress
+/// \param length
+/// \return
+///
+QModbusDataUnit FormModSim::serializeModbusDataUnit(QModbusDataUnit::RegisterType type, quint16 startAddress, quint16 length) const
+{
+    QModbusDataUnit dataUnit;
+    const auto serverData = _mbMultiServer.data(type, startAddress, length);
+
+    if (startAddress >= serverData.startAddress() &&
+        (startAddress + length) <= (serverData.startAddress() + serverData.valueCount())) {
+
+        const int offset = startAddress - serverData.startAddress();
+
+        QVector<quint16> values;
+        for (int i = 0; i < length; ++i) {
+            values.append(serverData.value(offset + i));
+        }
+
+        dataUnit.setValues(values);
+        dataUnit.setRegisterType(type);
+        dataUnit.setStartAddress(startAddress);
+    }
+
+    return dataUnit;
+}
+///
 /// \brief FormModSim::startSimulation
 /// \param type
 /// \param addr
@@ -458,6 +506,22 @@ void FormModSim::startSimulation(QModbusDataUnit::RegisterType type, quint16 add
 {
     _dataSimulator->startSimulation(dataDisplayMode(), type, addr, params);
 }
+
+///
+/// \brief FormModSim::configureModbusDataUnit
+/// \param type
+/// \param startAddress
+/// \param values
+///
+void FormModSim::configureModbusDataUnit(QModbusDataUnit::RegisterType type, quint16 startAddress, const QVector<quint16>& values) const
+{
+    QModbusDataUnit unit;
+    unit.setRegisterType(type);
+    unit.setStartAddress(startAddress);
+    unit.setValues(values);
+    _mbMultiServer.setData(unit);
+}
+
 
 ///
 /// \brief FormModSim::descriptionMap
@@ -619,9 +683,10 @@ void FormModSim::on_comboBoxAddressBase_addressBaseChanged(AddressBase base)
 ///
 /// \brief FormModSim::on_comboBoxModbusPointType_pointTypeChanged
 ///
-void FormModSim::on_comboBoxModbusPointType_pointTypeChanged(QModbusDataUnit::RegisterType)
+void FormModSim::on_comboBoxModbusPointType_pointTypeChanged(QModbusDataUnit::RegisterType type)
 {
     onDefinitionChanged();
+    emit pointTypeChanged(type);
 }
 
 ///
@@ -687,7 +752,7 @@ void FormModSim::on_outputWidget_itemDoubleClicked(quint16 addr, const QVariant&
         case QModbusDataUnit::Coils:
         case QModbusDataUnit::DiscreteInputs:
         {
-            ModbusWriteParams params = { addr, value, mode, byteOrder(), zeroBasedAddress };
+            ModbusWriteParams params = { addr, value, mode, byteOrder(), codepage(), zeroBasedAddress };
             DialogWriteCoilRegister dlg(params, simParams, this);
             switch(dlg.exec())
             {
@@ -706,7 +771,7 @@ void FormModSim::on_outputWidget_itemDoubleClicked(quint16 addr, const QVariant&
         case QModbusDataUnit::InputRegisters:
         case QModbusDataUnit::HoldingRegisters:
         {
-            ModbusWriteParams params = { addr, value, mode, byteOrder(), zeroBasedAddress };
+            ModbusWriteParams params = { addr, value, mode, byteOrder(), codepage(), zeroBasedAddress };
             if(mode == DataDisplayMode::Binary)
             {
                 DialogWriteHoldingRegisterBits dlg(params, this);
@@ -830,7 +895,7 @@ void FormModSim::on_dataSimulated(DataDisplayMode mode, QModbusDataUnit::Registe
     const auto pointAddr = dd.PointAddress - (dd.ZeroBasedAddress ? 0 : 1);
     if(type == dd.PointType && addr >= pointAddr && addr <= pointAddr + dd.Length)
     {
-        _mbMultiServer.writeRegister(type, { addr, value, mode, byteOrder(), true });
+        _mbMultiServer.writeRegister(type, { addr, value, mode, byteOrder(), codepage(), true });
     }
 }
 
