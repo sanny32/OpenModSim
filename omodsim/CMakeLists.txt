@@ -28,9 +28,7 @@ else()
 endif()
 
 # Define target
-add_executable(omodsim
-    ansiutils.h
-    ansimenu.cpp ansimenu.h)
+add_executable(omodsim)
 
 # Define compile definitions
 add_compile_definitions(APP_NAME="${PRODUCT_NAME}")
@@ -48,6 +46,7 @@ target_include_directories(omodsim PRIVATE
 
 # Source files
 set(SOURCES
+    ansimenu.cpp
     cmdlineparser.cpp
     controls/addressbasecombobox.cpp
     controls/booleancombobox.cpp
@@ -112,6 +111,8 @@ set(SOURCES
 
 # Header files
 set(HEADERS
+    ansimenu.h
+    ansiutils.h
     byteorderutils.h
     cmdlineparser.h
     connectiondetails.h
@@ -262,7 +263,7 @@ if(Qt6_FOUND)
     qt_add_lupdate(omodsim
         TS_FILES ${TS_FILES}
         SOURCES ${SOURCES} ${HEADERS} ${UI_FILES}
-        OUTPUT_DIR translations
+        OUTPUT_DIR ${CMAKE_CURRENT_SOURCE_DIR}/translations
     )
     target_link_libraries(omodsim PRIVATE Qt::Core5Compat)
 else()
