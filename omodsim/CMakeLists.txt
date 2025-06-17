@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.25)
 
-project(OpenModSim 
+project(omodsim
         VERSION 1.8.0
         LANGUAGES CXX)
 
