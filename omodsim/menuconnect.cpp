@@ -15,11 +15,11 @@ MenuConnect::MenuConnect(MenuType type, ModbusMultiServer& server, QWidget *pare
 {
     if(_menuType == MenuType::ConnectMenu)
     {
-        addAction(tr("Modbus/TCP Srv"), ConnectionType::Tcp, QString());
+        addAction(tr("Modbus/TCP Srv"), ConnectionType::Tcp, QString(), "Modbus/TCP Srv");
         for(auto&& port: getAvailableSerialPorts())
         {
             const auto text = QString(tr("Port %1")).arg(port);
-            addAction(text, ConnectionType::Serial, port);
+            addAction(text, ConnectionType::Serial, port, QString("Port %1").arg(port));
         }
     }
 
@@ -32,12 +32,12 @@ MenuConnect::MenuConnect(MenuType type, ModbusMultiServer& server, QWidget *pare
                 case ConnectionType::Tcp:
                 {
                     const auto port = QString("%1:%2").arg(cd.TcpParams.IPAddress, QString::number(cd.TcpParams.ServicePort));
-                    addAction(QString(tr("Modbus/TCP Srv %1")).arg(port), ConnectionType::Tcp, port);
+                    addAction(QString(tr("Modbus/TCP Srv %1")).arg(port), ConnectionType::Tcp, port, QString("Modbus/TCP Srv %1").arg(port));
                 }
                 break;
 
                 case ConnectionType::Serial:
-                    addAction(QString(tr("Port %1")).arg(cd.SerialParams.PortName), ConnectionType::Serial, cd.SerialParams.PortName);
+                    addAction(QString(tr("Port %1")).arg(cd.SerialParams.PortName), ConnectionType::Serial, cd.SerialParams.PortName, QString("Port %1").arg(cd.SerialParams.PortName));
                 break;
             }
         }
@@ -94,7 +94,7 @@ void MenuConnect::changeEvent(QEvent* event)
                     if(data.second.isEmpty())
                         a->setText(tr("Modbus/TCP Srv"));
                     else
-                         a->setText(QString(tr("Modbus/TCP Srv %1").arg(data.second)));
+                        a->setText(QString(tr("Modbus/TCP Srv %1").arg(data.second)));
                 break;
                 case ConnectionType::Serial:
                     a->setText(QString(tr("Port %1")).arg(data.second));
@@ -154,8 +154,9 @@ void MenuConnect::updateConnectionDetails(const QList<ConnectionDetails>& conns)
 /// \param text
 /// \param type
 /// \param port
+/// \param id
 ///
-void MenuConnect::addAction(const QString& text, ConnectionType type, const QString& port)
+void MenuConnect::addAction(const QString& text, ConnectionType type, const QString& port, const QString& id)
 {
     auto action = QMenu::addAction(text);
     connect(action, &QAction::triggered, this, [this, action, type, port]
@@ -178,6 +179,7 @@ void MenuConnect::addAction(const QString& text, ConnectionType type, const QStr
 
     const auto data = QPair<ConnectionType, QString>(type, port);
     action->setData(QVariant::fromValue(data));
+    action->setProperty("id", id);
 }
 
 ///
@@ -201,7 +203,8 @@ QSettings& operator <<(QSettings& out, const MenuConnect* menu)
         QByteArray a;
         QDataStream ds(&a, QIODeviceBase::WriteOnly);
         ds << cd;
-        out.setValue("MenuConnect/" + action->text(), a);
+
+        out.setValue("MenuConnect/" + action->property("id").toString(), a);
     }
 
     return out;
@@ -224,7 +227,7 @@ QSettings& operator >>(QSettings& in, MenuConnect* menu)
         auto&& item = it.next();
         QAction* action = it.key();
 
-        const QByteArray a = in.value("MenuConnect/" + action->text()).toByteArray();
+        const QByteArray a = in.value("MenuConnect/" + action->property("id").toString()).toByteArray();
         if(!a.isEmpty())
         {
             QDataStream ds(a);

@@ -31,7 +31,7 @@ protected:
     void changeEvent(QEvent* event) override;
 
 private:
-    void addAction(const QString& text, ConnectionType type, const QString& port);
+    void addAction(const QString& text, ConnectionType type, const QString& port, const QString& id);
 
 private:
     MenuType _menuType;
