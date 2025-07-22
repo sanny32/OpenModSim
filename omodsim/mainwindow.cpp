@@ -1510,6 +1510,7 @@ void MainWindow::loadSettings()
     setLanguage(_lang);
 
     m >> firstMdiChild();
+    m >> qobject_cast<MenuConnect*>(ui->actionConnect->menu());
 }
 
 ///
@@ -1549,4 +1550,5 @@ void MainWindow::saveSettings()
     m.setValue("Language", _lang);
 
     m << firstMdiChild();
+    m << qobject_cast<MenuConnect*>(ui->actionConnect->menu());
 }

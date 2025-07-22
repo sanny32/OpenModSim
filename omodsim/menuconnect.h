@@ -20,6 +20,9 @@ public:
     bool canConnect(const ConnectionDetails& cd);
     void updateConnectionDetails(const QList<ConnectionDetails>& conns);
 
+    friend QSettings& operator <<(QSettings& out, const MenuConnect* menu);
+    friend QSettings& operator >>(QSettings& in, MenuConnect* menu);
+
 signals:
     void connectAction(ConnectionDetails& cd);
     void disconnectAction(ConnectionType type, const QString& port);

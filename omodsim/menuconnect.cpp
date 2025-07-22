@@ -13,7 +13,7 @@ MenuConnect::MenuConnect(MenuType type, ModbusMultiServer& server, QWidget *pare
     ,_menuType(type)
     ,_mbMultiServer(server)
 {
-    if(type == MenuType::ConnectMenu)
+    if(_menuType == MenuType::ConnectMenu)
     {
         addAction(tr("Modbus/TCP Srv"), ConnectionType::Tcp, QString());
         for(auto&& port: getAvailableSerialPorts())
@@ -178,4 +178,62 @@ void MenuConnect::addAction(const QString& text, ConnectionType type, const QStr
 
     const auto data = QPair<ConnectionType, QString>(type, port);
     action->setData(QVariant::fromValue(data));
+}
+
+///
+/// \brief operator <<
+/// \param out
+/// \param menu
+/// \return
+///
+QSettings& operator <<(QSettings& out, const MenuConnect* menu)
+{
+    if(!menu)
+        return out;
+
+    QMapIterator it(menu->_connectionDetailsMap);
+    while(it.hasNext())
+    {
+        const auto item = it.next();
+        const QAction* action = it.key();
+        const ConnectionDetails& cd = it.value();
+
+        QByteArray a;
+        QDataStream ds(&a, QIODeviceBase::WriteOnly);
+        ds << cd;
+        out.setValue("MenuConnect/" + action->text(), a);
+    }
+
+    return out;
+}
+
+///
+/// \brief operator >>
+/// \param in
+/// \param menu
+/// \return
+///
+QSettings& operator >>(QSettings& in, MenuConnect* menu)
+{
+    if(!menu)
+        return in;
+
+    QMapIterator it(menu->_connectionDetailsMap);
+    while(it.hasNext())
+    {
+        auto&& item = it.next();
+        QAction* action = it.key();
+
+        const QByteArray a = in.value("MenuConnect/" + action->text()).toByteArray();
+        if(!a.isEmpty())
+        {
+            QDataStream ds(a);
+            ConnectionDetails cd;
+            ds >> cd;
+
+            menu->_connectionDetailsMap[action] = cd;
+        }
+    }
+
+    return in;
 }
