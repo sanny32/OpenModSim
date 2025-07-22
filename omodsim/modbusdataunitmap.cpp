@@ -35,6 +35,7 @@ void setDataValue(QModbusDataUnitMap& modbusMap, QModbusDataUnit::RegisterType p
 /// \brief ModbusDataUnitMap::ModbusDataUnitMap
 ///
 ModbusDataUnitMap::ModbusDataUnitMap()
+    :_isGlobal(false)
 {
     _modbusDataUnitGlobalMap.insert(QModbusDataUnit::Coils,            { QModbusDataUnit::Coils,               0, 65535 });
     _modbusDataUnitGlobalMap.insert(QModbusDataUnit::DiscreteInputs,   { QModbusDataUnit::DiscreteInputs,      0, 65535 });
@@ -51,6 +52,9 @@ ModbusDataUnitMap::ModbusDataUnitMap()
 ///
 void ModbusDataUnitMap::addUnitMap(int id, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, quint16 length)
 {
+    if(_isGlobal)
+        return;
+
     _dataUnits.insert(id, {pointType, pointAddress, length});
     updateDataUnitMap();
 }
@@ -66,12 +70,30 @@ void ModbusDataUnitMap::removeUnitMap(int id)
 }
 
 ///
+/// \brief ModbusDataUnitMap::isGlobalMap
+/// \return
+///
+bool ModbusDataUnitMap::isGlobalMap() const
+{
+    return _isGlobal;
+}
+
+///
+/// \brief ModbusDataUnitMap::setGlobalMap
+/// \param set
+///
+void ModbusDataUnitMap::setGlobalMap(bool set)
+{
+    _isGlobal = set;
+}
+
+///
 /// \brief ModbusDataUnitMap::begin
 /// \return
 ///
 QModbusDataUnitMap::ConstIterator ModbusDataUnitMap::begin()
 {
-    return _modbusDataUnitMap.begin();
+    return _isGlobal ? _modbusDataUnitGlobalMap.begin() : _modbusDataUnitMap.begin();
 }
 
 ///
@@ -80,7 +102,7 @@ QModbusDataUnitMap::ConstIterator ModbusDataUnitMap::begin()
 ///
 QModbusDataUnitMap::Iterator ModbusDataUnitMap::end()
 {
-    return _modbusDataUnitMap.end();
+    return _isGlobal ? _modbusDataUnitGlobalMap.end() : _modbusDataUnitMap.end();
 }
 
 ///

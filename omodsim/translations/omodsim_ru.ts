@@ -337,17 +337,22 @@
         <translation>Тип регистров:</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogdisplaydefinition.ui" line="158"/>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="242"/>
+        <source>Use Global Address Map (Unallocated registers will be zero)</source>
+        <translation>Использовать глобальную карту адресов</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="181"/>
         <source>Point Address:</source>
         <translation>Начальный адрес:</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogdisplaydefinition.ui" line="165"/>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="210"/>
         <source>Length:</source>
         <translation>Количество:</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogdisplaydefinition.ui" line="216"/>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="158"/>
         <source>Address Base:</source>
         <translation>Адресация:</translation>
     </message>
@@ -1038,7 +1043,7 @@ Length: %2</source>
         <translation type="vanished">Указана недопустимая длина данных</translation>
     </message>
     <message>
-        <location filename="../formmodsim.cpp" line="427"/>
+        <location filename="../formmodsim.cpp" line="430"/>
         <source>Address Base: %1
 Start Address: %2
 Length: %3</source>
@@ -1047,7 +1052,7 @@ Length: %3</source>
 Количество: %3</translation>
     </message>
     <message>
-        <location filename="../formmodsim.cpp" line="430"/>
+        <location filename="../formmodsim.cpp" line="433"/>
         <source>Device Id: %1
 MODBUS Point Type:
 %2</source>
@@ -1942,7 +1947,7 @@ MODBUS Point Type:
 <context>
     <name>ModbusMultiServer</name>
     <message>
-        <location filename="../modbusmultiserver.cpp" line="773"/>
+        <location filename="../modbusmultiserver.cpp" line="792"/>
         <source>Connection error. %1</source>
         <translation>Ошибка подключения. %1</translation>
     </message>
