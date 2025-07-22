@@ -201,7 +201,7 @@ QSettings& operator <<(QSettings& out, const MenuConnect* menu)
         const ConnectionDetails& cd = it.value();
 
         QByteArray a;
-        QDataStream ds(&a, QIODeviceBase::WriteOnly);
+        QDataStream ds(&a, QIODevice::WriteOnly);
         ds << cd;
 
         out.setValue("MenuConnect/" + action->property("id").toString(), a);
