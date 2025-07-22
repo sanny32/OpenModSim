@@ -197,8 +197,8 @@ QSettings& operator <<(QSettings& out, const MenuConnect* menu)
     while(it.hasNext())
     {
         const auto item = it.next();
-        const QAction* action = it.key();
-        const ConnectionDetails& cd = it.value();
+        const QAction* action = item.key();
+        const ConnectionDetails& cd = item.value();
 
         QByteArray a;
         QDataStream ds(&a, QIODevice::WriteOnly);
@@ -224,8 +224,8 @@ QSettings& operator >>(QSettings& in, MenuConnect* menu)
     QMapIterator it(menu->_connectionDetailsMap);
     while(it.hasNext())
     {
-        auto&& item = it.next();
-        QAction* action = it.key();
+        const auto item = it.next();
+        QAction* action = item.key();
 
         const QByteArray a = in.value("MenuConnect/" + action->property("id").toString()).toByteArray();
         if(!a.isEmpty())
