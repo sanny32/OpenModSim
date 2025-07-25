@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.25)
 
 project(omodsim
-        VERSION 1.8.0
+        VERSION 1.8.1
         LANGUAGES CXX)
 
 set(CMAKE_AUTOUIC ON)
@@ -234,6 +234,7 @@ set(UI_FILES
 
 set(TS_FILES
     translations/omodsim_ru.ts
+    translations/omodsim_zh.ts
 )
 
 set(JSHELP_INPUT "${CMAKE_SOURCE_DIR}/docs/jshelp.qhcp")

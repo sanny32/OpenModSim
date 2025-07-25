@@ -893,6 +893,14 @@ void MainWindow::on_actionRussian_triggered()
 }
 
 ///
+/// \brief MainWindow::on_actionChineseZh_triggered
+///
+void MainWindow::on_actionChineseZh_triggered()
+{
+    setLanguage("zh");
+}
+
+///
 /// \brief MainWindow::on_actionCascade_triggered
 ///
 void MainWindow::on_actionCascade_triggered()
