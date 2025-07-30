@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="contextMenuPolicy">
-   <enum>Qt::NoContextMenu</enum>
+   <enum>Qt::ContextMenuPolicy::NoContextMenu</enum>
   </property>
   <property name="windowTitle">
    <string>Open ModSim</string>
@@ -992,10 +992,13 @@
     <string>ANSI</string>
    </property>
    <property name="menuRole">
-    <enum>QAction::NoRole</enum>
+    <enum>QAction::MenuRole::NoRole</enum>
    </property>
   </action>
   <action name="actionChineseZh">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="text">
     <string notr="true">中國人</string>
    </property>
