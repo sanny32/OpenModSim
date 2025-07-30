@@ -41,8 +41,10 @@ public:
     ~Server() override;
 
     Q_PROPERTY(Address::Base addressBase READ addressBase WRITE setAddressBase);
+    Q_PROPERTY(bool useGlobalUnitMap READ useGlobalUnitMap WRITE setUseGlobalUnitMap);
 
     Address::Base addressBase() const;
+    bool useGlobalUnitMap() const;
 
     Q_INVOKABLE quint16 readHolding(quint16 address) const;
     Q_INVOKABLE void writeHolding(quint16 address, quint16 value);
@@ -81,6 +83,7 @@ public:
 
 public slots:
     void setAddressBase(Address::Base base);
+    void setUseGlobalUnitMap(bool value);
 
 private slots:
     void on_dataChanged(const QModbusDataUnit& data);

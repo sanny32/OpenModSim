@@ -46,6 +46,24 @@ void Server::setAddressBase(Address::Base base)
 }
 
 ///
+/// \brief Server::useGlobalUnitMap
+/// \return
+///
+bool Server::useGlobalUnitMap() const
+{
+    return _mbMultiServer->useGlobalUnitMap();
+}
+
+///
+/// \brief Server::setUseGlobalUnitMap
+/// \param value
+///
+void Server::setUseGlobalUnitMap(bool value)
+{
+    _mbMultiServer->setUseGlobalUnitMap(value);
+}
+
+///
 /// \brief Server::readHolding
 /// \param address
 /// \return

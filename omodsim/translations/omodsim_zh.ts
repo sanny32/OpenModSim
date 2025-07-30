@@ -1067,12 +1067,12 @@ MODBUS Point Type:
         <location filename="../controls/helpwidget.cpp" line="30"/>
         <location filename="../controls/helpwidget.cpp" line="59"/>
         <source>qthelp://omodsim/doc/index.html</source>
-        <translation>qthelp://omodsim/doc/index_cn.html</translation>
+        <translation>qthelp://omodsim/doc/index.html</translation>
     </message>
     <message>
         <location filename="../controls/helpwidget.cpp" line="68"/>
         <source>qthelp://omodsim/doc/index.html#%1</source>
-        <translation>qthelp://omodsim/doc/index_cn.html#%1</translation>
+        <translation>qthelp://omodsim/doc/index.html#%1</translation>
     </message>
 </context>
 <context>
