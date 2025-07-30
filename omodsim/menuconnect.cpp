@@ -13,13 +13,13 @@ MenuConnect::MenuConnect(MenuType type, ModbusMultiServer& server, QWidget *pare
     ,_menuType(type)
     ,_mbMultiServer(server)
 {
-    if(type == MenuType::ConnectMenu)
+    if(_menuType == MenuType::ConnectMenu)
     {
-        addAction(tr("Modbus/TCP Srv"), ConnectionType::Tcp, QString());
+        addAction(tr("Modbus/TCP Srv"), ConnectionType::Tcp, QString(), "Modbus/TCP Srv");
         for(auto&& port: getAvailableSerialPorts())
         {
             const auto text = QString(tr("Port %1")).arg(port);
-            addAction(text, ConnectionType::Serial, port);
+            addAction(text, ConnectionType::Serial, port, QString("Port %1").arg(port));
         }
     }
 
@@ -32,12 +32,12 @@ MenuConnect::MenuConnect(MenuType type, ModbusMultiServer& server, QWidget *pare
                 case ConnectionType::Tcp:
                 {
                     const auto port = QString("%1:%2").arg(cd.TcpParams.IPAddress, QString::number(cd.TcpParams.ServicePort));
-                    addAction(QString(tr("Modbus/TCP Srv %1")).arg(port), ConnectionType::Tcp, port);
+                    addAction(QString(tr("Modbus/TCP Srv %1")).arg(port), ConnectionType::Tcp, port, QString("Modbus/TCP Srv %1").arg(port));
                 }
                 break;
 
                 case ConnectionType::Serial:
-                    addAction(QString(tr("Port %1")).arg(cd.SerialParams.PortName), ConnectionType::Serial, cd.SerialParams.PortName);
+                    addAction(QString(tr("Port %1")).arg(cd.SerialParams.PortName), ConnectionType::Serial, cd.SerialParams.PortName, QString("Port %1").arg(cd.SerialParams.PortName));
                 break;
             }
         }
@@ -94,7 +94,7 @@ void MenuConnect::changeEvent(QEvent* event)
                     if(data.second.isEmpty())
                         a->setText(tr("Modbus/TCP Srv"));
                     else
-                         a->setText(QString(tr("Modbus/TCP Srv %1").arg(data.second)));
+                        a->setText(QString(tr("Modbus/TCP Srv %1").arg(data.second)));
                 break;
                 case ConnectionType::Serial:
                     a->setText(QString(tr("Port %1")).arg(data.second));
@@ -154,8 +154,9 @@ void MenuConnect::updateConnectionDetails(const QList<ConnectionDetails>& conns)
 /// \param text
 /// \param type
 /// \param port
+/// \param id
 ///
-void MenuConnect::addAction(const QString& text, ConnectionType type, const QString& port)
+void MenuConnect::addAction(const QString& text, ConnectionType type, const QString& port, const QString& id)
 {
     auto action = QMenu::addAction(text);
     connect(action, &QAction::triggered, this, [this, action, type, port]
@@ -178,4 +179,64 @@ void MenuConnect::addAction(const QString& text, ConnectionType type, const QStr
 
     const auto data = QPair<ConnectionType, QString>(type, port);
     action->setData(QVariant::fromValue(data));
+    action->setProperty("id", id);
+}
+
+///
+/// \brief operator <<
+/// \param out
+/// \param menu
+/// \return
+///
+QSettings& operator <<(QSettings& out, const MenuConnect* menu)
+{
+    if(!menu)
+        return out;
+
+    QMapIterator it(menu->_connectionDetailsMap);
+    while(it.hasNext())
+    {
+        const auto item = it.next();
+        const QAction* action = item.key();
+        const ConnectionDetails& cd = item.value();
+
+        QByteArray a;
+        QDataStream ds(&a, QIODevice::WriteOnly);
+        ds << cd;
+
+        out.setValue("MenuConnect/" + action->property("id").toString(), a);
+    }
+
+    return out;
+}
+
+///
+/// \brief operator >>
+/// \param in
+/// \param menu
+/// \return
+///
+QSettings& operator >>(QSettings& in, MenuConnect* menu)
+{
+    if(!menu)
+        return in;
+
+    QMapIterator it(menu->_connectionDetailsMap);
+    while(it.hasNext())
+    {
+        const auto item = it.next();
+        QAction* action = item.key();
+
+        const QByteArray a = in.value("MenuConnect/" + action->property("id").toString()).toByteArray();
+        if(!a.isEmpty())
+        {
+            QDataStream ds(a);
+            ConnectionDetails cd;
+            ds >> cd;
+
+            menu->_connectionDetailsMap[action] = cd;
+        }
+    }
+
+    return in;
 }

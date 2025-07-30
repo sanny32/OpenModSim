@@ -98,6 +98,9 @@ public:
     quint8 deviceId() const;
     void setDeviceId(quint8 deviceId);
 
+    bool useGlobalUnitMap() const;
+    void setUseGlobalUnitMap(bool use);
+
     void addUnitMap(int id, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, quint16 length);
     void removeUnitMap(int id);
 

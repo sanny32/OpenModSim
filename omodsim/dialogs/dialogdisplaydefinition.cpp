@@ -26,6 +26,8 @@ DialogDisplayDefinition::DialogDisplayDefinition(DisplayDefinition dd, QWidget* 
     ui->lineEditLogLimit->setValue(dd.LogViewLimit);
     ui->comboBoxPointType->setCurrentPointType(dd.PointType);
 
+    ui->checkBoxGlobalMap->setChecked(dd.UseGlobalUnitMap);
+
     ui->buttonBox->setFocus();
 }
 
@@ -48,10 +50,10 @@ void DialogDisplayDefinition::accept()
     _displayDefinition.Length = ui->lineEditLength->value<int>();
     _displayDefinition.LogViewLimit = ui->lineEditLogLimit->value<int>();
     _displayDefinition.ZeroBasedAddress = (ui->comboBoxAddressBase->currentAddressBase() == AddressBase::Base0);
+    _displayDefinition.UseGlobalUnitMap = ui->checkBoxGlobalMap->isChecked();
 
     QFixedSizeDialog::accept();
 }
-
 
 ///
 /// \brief DialogDisplayDefinition::on_comboBoxAddressBase_currentIndexChanged

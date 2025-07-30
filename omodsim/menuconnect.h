@@ -20,6 +20,9 @@ public:
     bool canConnect(const ConnectionDetails& cd);
     void updateConnectionDetails(const QList<ConnectionDetails>& conns);
 
+    friend QSettings& operator <<(QSettings& out, const MenuConnect* menu);
+    friend QSettings& operator >>(QSettings& in, MenuConnect* menu);
+
 signals:
     void connectAction(ConnectionDetails& cd);
     void disconnectAction(ConnectionType type, const QString& port);
@@ -28,7 +31,7 @@ protected:
     void changeEvent(QEvent* event) override;
 
 private:
-    void addAction(const QString& text, ConnectionType type, const QString& port);
+    void addAction(const QString& text, ConnectionType type, const QString& port, const QString& id);
 
 private:
     MenuType _menuType;

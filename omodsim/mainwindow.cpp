@@ -893,6 +893,14 @@ void MainWindow::on_actionRussian_triggered()
 }
 
 ///
+/// \brief MainWindow::on_actionChineseZh_triggered
+///
+void MainWindow::on_actionChineseZh_triggered()
+{
+    setLanguage("zh");
+}
+
+///
 /// \brief MainWindow::on_actionCascade_triggered
 ///
 void MainWindow::on_actionCascade_triggered()
@@ -1510,6 +1518,7 @@ void MainWindow::loadSettings()
     setLanguage(_lang);
 
     m >> firstMdiChild();
+    m >> qobject_cast<MenuConnect*>(ui->actionConnect->menu());
 }
 
 ///
@@ -1549,4 +1558,5 @@ void MainWindow::saveSettings()
     m.setValue("Language", _lang);
 
     m << firstMdiChild();
+    m << qobject_cast<MenuConnect*>(ui->actionConnect->menu());
 }

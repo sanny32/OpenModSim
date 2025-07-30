@@ -16,6 +16,7 @@ struct DisplayDefinition
     quint16 Length = 100;
     quint16 LogViewLimit = 30;
     bool ZeroBasedAddress = false;
+    bool UseGlobalUnitMap = false;
 
     void normalize()
     {
@@ -42,6 +43,7 @@ inline QSettings& operator <<(QSettings& out, const DisplayDefinition& dd)
     out.setValue("DisplayDefinition/Length",            dd.Length);
     out.setValue("DisplayDefinition/LogViewLimit",      dd.LogViewLimit);
     out.setValue("DisplayDefinition/ZeroBasedAddress",  dd.ZeroBasedAddress);
+    out.setValue("DisplayDefinition/UseGlobalUnitMap",  dd.UseGlobalUnitMap);
 
     return out;
 }
@@ -60,6 +62,7 @@ inline QSettings& operator >>(QSettings& in, DisplayDefinition& dd)
     dd.Length = in.value("DisplayDefinition/Length", 100).toUInt();
     dd.LogViewLimit = in.value("DisplayDefinition/LogViewLimit", 30).toUInt();
     dd.ZeroBasedAddress = in.value("DisplayDefinition/ZeroBasedAddress").toBool();
+    dd.UseGlobalUnitMap = in.value("DisplayDefinition/UseGlobalUnitMap").toBool();
 
     dd.normalize();
     return in;

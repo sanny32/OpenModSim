@@ -190,6 +190,7 @@
      </property>
      <addaction name="actionEnglish"/>
      <addaction name="actionRussian"/>
+     <addaction name="actionChineseZh"/>
     </widget>
     <addaction name="actionToolbar"/>
     <addaction name="actionStatusBar"/>
@@ -644,7 +645,7 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>English</string>
+    <string notr="true">English</string>
    </property>
   </action>
   <action name="actionRussian">
@@ -652,7 +653,7 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Русский</string>
+    <string notr="true">Русский</string>
    </property>
   </action>
   <action name="actionForceCoils">
@@ -992,6 +993,14 @@
    </property>
    <property name="menuRole">
     <enum>QAction::MenuRole::NoRole</enum>
+   </property>
+  </action>
+  <action name="actionChineseZh">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string notr="true">中國人</string>
    </property>
   </action>
  </widget>

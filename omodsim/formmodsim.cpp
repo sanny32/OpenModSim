@@ -138,6 +138,7 @@ DisplayDefinition FormModSim::displayDefinition() const
     dd.PointType = ui->comboBoxModbusPointType->currentPointType();
     dd.Length = ui->lineEditLength->value<int>();
     dd.ZeroBasedAddress = ui->lineEditAddress->range<int>().from() == 0;
+    dd.UseGlobalUnitMap = _mbMultiServer.useGlobalUnitMap();
 
     return dd;
 }
@@ -166,6 +167,8 @@ void FormModSim::setDisplayDefinition(const DisplayDefinition& dd)
     ui->comboBoxModbusPointType->blockSignals(true);
     ui->comboBoxModbusPointType->setCurrentPointType(dd.PointType);
     ui->comboBoxModbusPointType->blockSignals(false);
+
+    _mbMultiServer.setUseGlobalUnitMap(dd.UseGlobalUnitMap);
 
     onDefinitionChanged();
 }

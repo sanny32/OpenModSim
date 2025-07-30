@@ -7,13 +7,13 @@
         <location filename="../controls/addressbasecombobox.cpp" line="11"/>
         <location filename="../controls/addressbasecombobox.cpp" line="30"/>
         <source>0-based</source>
-        <translation>0-первый</translation>
+        <translation>基地址为-0</translation>
     </message>
     <message>
         <location filename="../controls/addressbasecombobox.cpp" line="12"/>
         <location filename="../controls/addressbasecombobox.cpp" line="34"/>
         <source>1-based</source>
-        <translation>1-первый</translation>
+        <translation>基地址为-1</translation>
     </message>
 </context>
 <context>
@@ -22,91 +22,91 @@
         <location filename="../ansimenu.cpp" line="12"/>
         <location filename="../ansimenu.cpp" line="53"/>
         <source>Arabic</source>
-        <translation>Арабский</translation>
+        <translation>阿拉伯语</translation>
     </message>
     <message>
         <location filename="../ansimenu.cpp" line="13"/>
         <location filename="../ansimenu.cpp" line="54"/>
         <source>Baltic</source>
-        <translation>Балтийский</translation>
+        <translation>波罗的语</translation>
     </message>
     <message>
         <location filename="../ansimenu.cpp" line="14"/>
         <location filename="../ansimenu.cpp" line="55"/>
         <source>Celtic</source>
-        <translation>Кельтский</translation>
+        <translation>凯尔特语</translation>
     </message>
     <message>
         <location filename="../ansimenu.cpp" line="15"/>
         <location filename="../ansimenu.cpp" line="56"/>
         <source>Cyrillic</source>
-        <translation>Кириллица</translation>
+        <translation>古代斯拉夫语</translation>
     </message>
     <message>
         <location filename="../ansimenu.cpp" line="16"/>
         <location filename="../ansimenu.cpp" line="57"/>
         <source>Central European</source>
-        <translation>Центрально-Европейский</translation>
+        <translation>中欧语</translation>
     </message>
     <message>
         <location filename="../ansimenu.cpp" line="17"/>
         <location filename="../ansimenu.cpp" line="58"/>
         <source>Chinese</source>
-        <translation>Китайский</translation>
+        <translation>中文</translation>
     </message>
     <message>
         <location filename="../ansimenu.cpp" line="18"/>
         <location filename="../ansimenu.cpp" line="59"/>
         <source>Eastern European</source>
-        <translation>Восточно-Европейский</translation>
+        <translation>东欧语</translation>
     </message>
     <message>
         <location filename="../ansimenu.cpp" line="19"/>
         <location filename="../ansimenu.cpp" line="60"/>
         <source>Greek</source>
-        <translation>Греческий</translation>
+        <translation>希腊语</translation>
     </message>
     <message>
         <location filename="../ansimenu.cpp" line="20"/>
         <location filename="../ansimenu.cpp" line="61"/>
         <source>Hebrew</source>
-        <translation>Иврит</translation>
+        <translation>希伯来语</translation>
     </message>
     <message>
         <location filename="../ansimenu.cpp" line="21"/>
         <location filename="../ansimenu.cpp" line="62"/>
         <source>Japanese</source>
-        <translation>Японский</translation>
+        <translation>日语</translation>
     </message>
     <message>
         <location filename="../ansimenu.cpp" line="22"/>
         <location filename="../ansimenu.cpp" line="63"/>
         <source>Korean</source>
-        <translation>Корейский</translation>
+        <translation>韩语</translation>
     </message>
     <message>
         <location filename="../ansimenu.cpp" line="23"/>
         <location filename="../ansimenu.cpp" line="64"/>
         <source>Thai</source>
-        <translation>Тайский</translation>
+        <translation>泰语</translation>
     </message>
     <message>
         <location filename="../ansimenu.cpp" line="24"/>
         <location filename="../ansimenu.cpp" line="65"/>
         <source>Turkish</source>
-        <translation>Турецкий</translation>
+        <translation>土耳其语</translation>
     </message>
     <message>
         <location filename="../ansimenu.cpp" line="25"/>
         <location filename="../ansimenu.cpp" line="66"/>
         <source>Western European</source>
-        <translation>Западно-Европейский</translation>
+        <translation>西欧语</translation>
     </message>
     <message>
         <location filename="../ansimenu.cpp" line="26"/>
         <location filename="../ansimenu.cpp" line="67"/>
         <source>Vietnamese</source>
-        <translation>Вьетнамский</translation>
+        <translation>越南语</translation>
     </message>
 </context>
 <context>
@@ -114,12 +114,12 @@
     <message>
         <location filename="../controls/booleancombobox.cpp" line="10"/>
         <source>Disable</source>
-        <translation>Выкл</translation>
+        <translation>禁用</translation>
     </message>
     <message>
         <location filename="../controls/booleancombobox.cpp" line="11"/>
         <source>Enable</source>
-        <translation>Вкл</translation>
+        <translation>启用</translation>
     </message>
 </context>
 <context>
@@ -127,22 +127,22 @@
     <message>
         <location filename="../cmdlineparser.cpp" line="9"/>
         <source>Displays this help.</source>
-        <translation>Пказать эту справку.</translation>
+        <translation>显示此帮助。</translation>
     </message>
     <message>
         <location filename="../cmdlineparser.cpp" line="12"/>
         <source>Displays version information.</source>
-        <translation>Пказать информацию о версии.</translation>
+        <translation>显示版本信息。</translation>
     </message>
     <message>
         <location filename="../cmdlineparser.cpp" line="15"/>
         <source>Setup test config file.</source>
-        <translation>Задать файл конфига.</translation>
+        <translation>设置测试配置文件。</translation>
     </message>
     <message>
         <location filename="../cmdlineparser.cpp" line="15"/>
         <source>file path</source>
-        <translation>файл</translation>
+        <translation>文件路径</translation>
     </message>
 </context>
 <context>
@@ -150,7 +150,7 @@
     <message>
         <location filename="../controls/consoleoutput.cpp" line="22"/>
         <source>Clear</source>
-        <translation>Очистить</translation>
+        <translation>清除</translation>
     </message>
 </context>
 <context>
@@ -158,62 +158,62 @@
     <message>
         <location filename="../dialogs/dialogabout.ui" line="14"/>
         <source>About...</source>
-        <translation>О программе...</translation>
+        <translation>关于...</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogabout.ui" line="68"/>
         <source>Open Modsim</source>
-        <translation></translation>
+        <translation>Open Modsim</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogabout.ui" line="75"/>
         <source>Version: 1.0.0</source>
-        <translation>Версия: 1.0.0</translation>
+        <translation>版本：1.0.0</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogabout.ui" line="112"/>
         <source>About</source>
-        <translation>О программе</translation>
+        <translation>关于</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogabout.ui" line="118"/>
         <source>An Open Source Modbus Slave (Server) Utility</source>
-        <translation>Утилита Modbus Slave (сервер) с открытым исходным кодом</translation>
+        <translation>一个开源的 Modbus 从站（服务器）工具</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogabout.ui" line="177"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;a href=&quot;&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Lecense: The MIT License&lt;span&gt;&lt;/a&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;a href=&quot;&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Лицензия: MIT License&lt;span&gt;&lt;/a&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;a href=&quot;&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;许可证: MIT 许可证&lt;span&gt;&lt;/a&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogabout.ui" line="185"/>
         <source>Libraries</source>
-        <translation>Библиотеки</translation>
+        <translation>库</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogabout.cpp" line="16"/>
         <source>About %1...</source>
-        <translation>О программе %1...</translation>
+        <translation>关于 %1...</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogabout.cpp" line="18"/>
         <source>Version: %1</source>
-        <translation>Версия: %1</translation>
+        <translation>版本: %1</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogabout.cpp" line="19"/>
         <source>• Qt %1 (build with version %2)</source>
-        <translation>• Qt %1 (собрано на версии %2)</translation>
+        <translation>• Qt %1（基于版本 %2 构建）</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogabout.cpp" line="20"/>
         <source>• Fira Code 6.2 Font</source>
-        <translation>• Fira Code 6.2 шрифт</translation>
+        <translation>• Fira Code 6.2 字体</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogabout.cpp" line="48"/>
         <source>License Agreement - %1</source>
-        <translation>Лицензионное соглашение - %1</translation>
+        <translation>许可协议 - %1</translation>
     </message>
 </context>
 <context>
@@ -221,17 +221,17 @@
     <message>
         <location filename="../dialogs/dialogautosimulation.ui" line="14"/>
         <source>Auto Simulation</source>
-        <translation>Симуляция</translation>
+        <translation>自动仿真</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogautosimulation.ui" line="20"/>
         <source>Enabled</source>
-        <translation>Включено</translation>
+        <translation>启用</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogautosimulation.ui" line="32"/>
         <source>Simulation Type:</source>
-        <translation>Тип симуляции:</translation>
+        <translation>仿真类型：</translation>
     </message>
     <message>
         <source>Change Interval (secs):</source>
@@ -240,12 +240,12 @@
     <message>
         <location filename="../dialogs/dialogautosimulation.ui" line="61"/>
         <source>Change Interval (msecs):</source>
-        <translation>Интервал (мсек):</translation>
+        <translation>更改间隔（毫秒）：</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogautosimulation.ui" line="68"/>
         <source>Step Value: </source>
-        <translation>Шаг: </translation>
+        <translation>步长值： </translation>
     </message>
     <message>
         <location filename="../dialogs/dialogautosimulation.ui" line="87"/>
@@ -255,17 +255,17 @@
     <message>
         <location filename="../dialogs/dialogautosimulation.ui" line="96"/>
         <source>Simulation Range</source>
-        <translation>Диапазон симуляции</translation>
+        <translation>仿真范围</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogautosimulation.ui" line="102"/>
         <source>Low Limit: </source>
-        <translation>Нижний: </translation>
+        <translation>下限： </translation>
     </message>
     <message>
         <location filename="../dialogs/dialogautosimulation.ui" line="125"/>
         <source>High Limit: </source>
-        <translation>Верхний: </translation>
+        <translation>上限： </translation>
     </message>
 </context>
 <context>
@@ -273,17 +273,17 @@
     <message>
         <location filename="../dialogs/dialogcoilsimulation.ui" line="14"/>
         <source>Coil Simulation</source>
-        <translation>Симуляци Coil</translation>
+        <translation>线圈仿真</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogcoilsimulation.ui" line="20"/>
         <source>Enabled</source>
-        <translation>Включено</translation>
+        <translation>启用</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogcoilsimulation.ui" line="29"/>
         <source>Simulation Type:</source>
-        <translation>Тип симуляции:</translation>
+        <translation>仿真类型:</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogcoilsimulation.ui" line="51"/>
@@ -293,7 +293,7 @@
     <message>
         <location filename="../dialogs/dialogcoilsimulation.ui" line="58"/>
         <source>Change Interval (secs):</source>
-        <translation>Интервал (сек):</translation>
+        <translation>更改间隔（秒）：</translation>
     </message>
 </context>
 <context>
@@ -301,7 +301,7 @@
     <message>
         <location filename="../dialogs/dialogdisplaydefinition.ui" line="14"/>
         <source>Display Definition</source>
-        <translation>Настройки отображения</translation>
+        <translation>显示定义</translation>
     </message>
     <message>
         <source>Update Rate: </source>
@@ -314,47 +314,47 @@
     <message>
         <location filename="../dialogs/dialogdisplaydefinition.ui" line="40"/>
         <source>Log View Limit:</source>
-        <translation>Лимит лога:</translation>
+        <translation>日志查看限制：</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogdisplaydefinition.ui" line="71"/>
         <source>(rows)</source>
-        <translation>(строки)</translation>
+        <translation>（行）</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogdisplaydefinition.ui" line="88"/>
         <source>Modbus Data</source>
-        <translation>Настройки Modbus</translation>
+        <translation>Modbus 数据</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogdisplaydefinition.ui" line="106"/>
         <source>Slave Address:</source>
-        <translation>Адрес устройства:</translation>
+        <translation>从站地址：</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogdisplaydefinition.ui" line="135"/>
         <source>Point Type:</source>
-        <translation>Тип регистров:</translation>
-    </message>
-    <message>
-        <location filename="../dialogs/dialogdisplaydefinition.ui" line="242"/>
-        <source>Use Global Address Map (Unallocated registers will be zero)</source>
-        <translation>Использовать глобальную карту адресов</translation>
+        <translation>类型：</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogdisplaydefinition.ui" line="181"/>
         <source>Point Address:</source>
-        <translation>Начальный адрес:</translation>
+        <translation>地址：</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogdisplaydefinition.ui" line="210"/>
         <source>Length:</source>
-        <translation>Количество:</translation>
+        <translation>长度:</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="242"/>
+        <source>Use Global Address Map (Unallocated registers will be zero)</source>
+        <translation>使用全局地址映射（未分配的寄存器将为零）</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogdisplaydefinition.ui" line="158"/>
         <source>Address Base:</source>
-        <translation>Адресация:</translation>
+        <translation>基地址：</translation>
     </message>
 </context>
 <context>
@@ -362,27 +362,27 @@
     <message>
         <location filename="../dialogs/dialogforcemultiplecoils.ui" line="20"/>
         <source>FORCE MULTIPLE COILS</source>
-        <translation>Предустановка дискретный регистров</translation>
+        <translation>强制多个线圈</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogforcemultiplecoils.ui" line="28"/>
         <source>Address: </source>
-        <translation>Адрес: </translation>
+        <translation>地址: </translation>
     </message>
     <message>
         <location filename="../dialogs/dialogforcemultiplecoils.ui" line="82"/>
         <source>Set Values to 0</source>
-        <translation>Установить в 0</translation>
+        <translation>将值设置为0</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogforcemultiplecoils.ui" line="89"/>
         <source>Set Values to 1</source>
-        <translation>Установить в 1</translation>
+        <translation>将值设置为1</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogforcemultiplecoils.ui" line="96"/>
         <source>Length: </source>
-        <translation>Количество: </translation>
+        <translation>长度: </translation>
     </message>
     <message>
         <source>Address: %1</source>
@@ -395,12 +395,12 @@
     <message>
         <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="25"/>
         <source>Address: &lt;b&gt;%1&lt;/b&gt;</source>
-        <translation>Адрес: &lt;b&gt;%1&lt;/b&gt;</translation>
+        <translation>地址: &lt;b&gt;%1&lt;/b&gt;</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="26"/>
         <source>Length: &lt;b&gt;%1&lt;/b&gt;</source>
-        <translation>Количество: &lt;b&gt;%1&lt;/b&gt;</translation>
+        <translation>长度: &lt;b&gt;%1&lt;/b&gt;</translation>
     </message>
 </context>
 <context>
@@ -408,32 +408,32 @@
     <message>
         <location filename="../dialogs/dialogforcemultipleregisters.ui" line="20"/>
         <source>PRESET MULTIPLE REGISTERS</source>
-        <translation>Предустановка регистров</translation>
+        <translation>预设多个寄存器</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogforcemultipleregisters.ui" line="35"/>
         <source>Set Value to</source>
-        <translation>Установить значение</translation>
+        <translation>将值设置为</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogforcemultipleregisters.ui" line="42"/>
         <source>Length: </source>
-        <translation>Количество: </translation>
+        <translation>长度: </translation>
     </message>
     <message>
         <location filename="../dialogs/dialogforcemultipleregisters.ui" line="83"/>
         <source>Set Random Values</source>
-        <translation>Установить случайные</translation>
+        <translation>设置随机值</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogforcemultipleregisters.ui" line="28"/>
         <source>Set Values to 0</source>
-        <translation>Установить в 0</translation>
+        <translation>将值设置为0</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogforcemultipleregisters.ui" line="103"/>
         <source>Address: </source>
-        <translation>Адрес: </translation>
+        <translation>地址: </translation>
     </message>
     <message>
         <source>Address: %1</source>
@@ -446,12 +446,12 @@
     <message>
         <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="27"/>
         <source>Address: &lt;b&gt;%1&lt;/b&gt;</source>
-        <translation>Адрес: &lt;b&gt;%1&lt;/b&gt;</translation>
+        <translation>地址: &lt;b&gt;%1&lt;/b&gt;</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="28"/>
         <source>Length: &lt;b&gt;%1&lt;/b&gt;</source>
-        <translation>Количество: &lt;b&gt;%1&lt;/b&gt;</translation>
+        <translation>长度: &lt;b&gt;%1&lt;/b&gt;</translation>
     </message>
 </context>
 <context>
@@ -459,7 +459,7 @@
     <message>
         <location filename="../dialogs/dialogmsgparser.ui" line="14"/>
         <source>Modbus Message Parser</source>
-        <translation>Анализатор сообщений Modbus</translation>
+        <translation>Modbus 报文解析</translation>
     </message>
     <message>
         <source>PDU Message</source>
@@ -472,22 +472,22 @@
     <message>
         <location filename="../dialogs/dialogmsgparser.ui" line="25"/>
         <source>RTU Message</source>
-        <translation>RTU сообщение</translation>
+        <translation>RTU 报文</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogmsgparser.ui" line="64"/>
         <source>TCP Message</source>
-        <translation>TCP сообщение</translation>
+        <translation>TCP 报文</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogmsgparser.ui" line="103"/>
         <source>Hex View</source>
-        <translation>Шестнадцатиричный режим</translation>
+        <translation>十六进制视图</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogmsgparser.ui" line="123"/>
         <source>Request</source>
-        <translation>Запрос</translation>
+        <translation>请求</translation>
     </message>
     <message>
         <source>Device Id included</source>
@@ -500,12 +500,12 @@
     <message>
         <location filename="../dialogs/dialogmsgparser.ui" line="142"/>
         <source>Enter bytes value  separated by spaces</source>
-        <translation>Введите значение в байтах, разделенное пробелами</translation>
+        <translation>输入用空格分隔的字节值</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogmsgparser.ui" line="191"/>
         <source>Parse</source>
-        <translation>Анализ</translation>
+        <translation>解析</translation>
     </message>
 </context>
 <context>
@@ -513,152 +513,152 @@
     <message>
         <location filename="../dialogs/dialogprintsettings.ui" line="14"/>
         <source>Print Setup</source>
-        <translation>Настройки печати</translation>
+        <translation>打印设置</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogprintsettings.ui" line="23"/>
         <source>Printer</source>
-        <translation>Принтер</translation>
+        <translation>打印机</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogprintsettings.ui" line="41"/>
         <source>Name: </source>
-        <translation>Имя: </translation>
+        <translation>名称: </translation>
     </message>
     <message>
         <location filename="../dialogs/dialogprintsettings.ui" line="70"/>
         <source>Status: </source>
-        <translation>Статус: </translation>
+        <translation>状态: </translation>
     </message>
     <message>
         <location filename="../dialogs/dialogprintsettings.ui" line="84"/>
         <source>Type: </source>
-        <translation>Тип: </translation>
+        <translation>类型: </translation>
     </message>
     <message>
         <location filename="../dialogs/dialogprintsettings.ui" line="94"/>
         <source>Location: </source>
-        <translation>Место: </translation>
+        <translation>位置: </translation>
     </message>
     <message>
         <location filename="../dialogs/dialogprintsettings.ui" line="109"/>
         <source>Paper</source>
-        <translation>Бумага</translation>
+        <translation>纸张</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogprintsettings.ui" line="124"/>
         <source>Size: </source>
-        <translation>Размер: </translation>
+        <translation>尺寸: </translation>
     </message>
     <message>
         <location filename="../dialogs/dialogprintsettings.ui" line="147"/>
         <source>Source: </source>
-        <translation>Подача: </translation>
+        <translation>来源： </translation>
     </message>
     <message>
         <location filename="../dialogs/dialogprintsettings.ui" line="176"/>
         <source>Orientation</source>
-        <translation>Ориентация</translation>
+        <translation>方向</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogprintsettings.ui" line="212"/>
         <source>Portrait</source>
-        <translation>Книжная</translation>
+        <translation>描述</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogprintsettings.ui" line="228"/>
         <source>Landscape</source>
-        <translation>Альбомная</translation>
+        <translation>横向打印格式</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogprintsettings.cpp" line="77"/>
         <source>Ready</source>
-        <translation>Готов</translation>
+        <translation>已完成</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogprintsettings.cpp" line="80"/>
         <source>Printing</source>
-        <translation>Печать</translation>
+        <translation>打印</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogprintsettings.cpp" line="83"/>
         <source>Aborted</source>
-        <translation>Отмена</translation>
+        <translation>中止</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogprintsettings.cpp" line="86"/>
         <source>Error</source>
-        <translation>Ошибка</translation>
+        <translation>错误</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogprintsettings.cpp" line="153"/>
         <source>Only One</source>
-        <translation type="unfinished"></translation>
+        <translation>只有一个</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogprintsettings.cpp" line="157"/>
         <source>Lower</source>
-        <translation>Нижняя</translation>
+        <translation>底部</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogprintsettings.cpp" line="161"/>
         <source>Middle</source>
-        <translation>Средняя</translation>
+        <translation>中间</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogprintsettings.cpp" line="165"/>
         <source>Manual</source>
-        <translation>Ручная</translation>
+        <translation>手册</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogprintsettings.cpp" line="169"/>
         <source>Envelope</source>
-        <translation>Конверт</translation>
+        <translation>信封</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogprintsettings.cpp" line="173"/>
         <source>Envelope Manual</source>
-        <translation type="unfinished"></translation>
+        <translation>信封手册</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogprintsettings.cpp" line="177"/>
         <source>Auto</source>
-        <translation>Автоматический выбор</translation>
+        <translation>自动</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogprintsettings.cpp" line="181"/>
         <source>Tractor</source>
-        <translation>Трактор</translation>
+        <translation>牵引机</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogprintsettings.cpp" line="185"/>
         <source>Small Format</source>
-        <translation>Малый формат</translation>
+        <translation>小尺寸格式</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogprintsettings.cpp" line="189"/>
         <source>Large Format</source>
-        <translation>Большой формат</translation>
+        <translation>大尺寸格式</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogprintsettings.cpp" line="193"/>
         <source>Large Capacity</source>
-        <translation type="unfinished"></translation>
+        <translation>大容量</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogprintsettings.cpp" line="197"/>
         <source>Cassette</source>
-        <translation>Кассета</translation>
+        <translation>纸盒</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogprintsettings.cpp" line="201"/>
         <source>Max Page Source</source>
-        <translation type="unfinished"></translation>
+        <translation>最大页面来源</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogprintsettings.cpp" line="205"/>
         <source>Custom Source</source>
-        <translation>Пользовательский</translation>
+        <translation>自定义源</translation>
     </message>
 </context>
 <context>
@@ -666,32 +666,32 @@
     <message>
         <location filename="../dialogs/dialogscriptsettings.ui" line="14"/>
         <source>Script Settings</source>
-        <translation>Настройки скрипта</translation>
+        <translation>脚本设置</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogscriptsettings.ui" line="23"/>
         <source>Run Mode: </source>
-        <translation>Режим запуска: </translation>
+        <translation>运行模式： </translation>
     </message>
     <message>
         <location filename="../dialogs/dialogscriptsettings.ui" line="40"/>
         <source>Interval: </source>
-        <translation>Интервал: </translation>
+        <translation>间隔： </translation>
     </message>
     <message>
         <location filename="../dialogs/dialogscriptsettings.ui" line="65"/>
         <source>(msec)</source>
-        <translation>(мсек)</translation>
+        <translation>(毫秒)</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogscriptsettings.ui" line="74"/>
         <source>Use Auto-completion</source>
-        <translation>Включить автодополнение</translation>
+        <translation>使用自动完成功能</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogscriptsettings.ui" line="94"/>
         <source>Run script on startup</source>
-        <translation>Запускать скрипт при старте</translation>
+        <translation>在系统启动时运行脚本</translation>
     </message>
 </context>
 <context>
@@ -703,17 +703,17 @@
     <message>
         <location filename="../dialogs/dialogselectserviceport.ui" line="14"/>
         <source>Select Service IP Address and Port</source>
-        <translation>Установка IP адреса и порта</translation>
+        <translation>选择服务器IP地址和端口</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogselectserviceport.ui" line="44"/>
         <source>Modbus/TCP Service Port</source>
-        <translation>Modbus/TCP порт</translation>
+        <translation>Modbus/TCP 服务器端口</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogselectserviceport.ui" line="57"/>
         <source>Service IP Address</source>
-        <translation>IP адрес</translation>
+        <translation>服务器IP地址</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogselectserviceport.ui" line="37"/>
@@ -726,32 +726,32 @@
     <message>
         <location filename="../dialogs/dialogsetuppresetdata.ui" line="23"/>
         <source>Address: </source>
-        <translation>Адрес: </translation>
+        <translation>地址: </translation>
     </message>
     <message>
         <location filename="../dialogs/dialogsetuppresetdata.ui" line="46"/>
         <source>Number of Points: </source>
-        <translation>Количество точек: </translation>
+        <translation>点数： </translation>
     </message>
     <message>
         <location filename="../dialogs/dialogsetuppresetdata.cpp" line="25"/>
         <source>PRESET COILS</source>
-        <translation>Предустановка Coils</translation>
+        <translation>预设线圈</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogsetuppresetdata.cpp" line="28"/>
         <source>PRESET DISCRETE INPUTS</source>
-        <translation>Предустановка Discretes</translation>
+        <translation>预设离散输入</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogsetuppresetdata.cpp" line="31"/>
         <source>PRESET INPUT REGISTERS</source>
-        <translation>Предустановка Input регистров</translation>
+        <translation>预设输入寄存器</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogsetuppresetdata.cpp" line="34"/>
         <source>PRESET HOLDING REGISTERS</source>
-        <translation>Предустановка Holding регистров</translation>
+        <translation>预设保持寄存器</translation>
     </message>
 </context>
 <context>
@@ -759,17 +759,17 @@
     <message>
         <location filename="../dialogs/dialogsetupserialport.ui" line="14"/>
         <source>Setup Serial Port</source>
-        <translation>Настройки последовательного порта</translation>
+        <translation>串口设置</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogsetupserialport.ui" line="26"/>
         <source>Port Settings</source>
-        <translation>Конфигурация</translation>
+        <translation>端口设置</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogsetupserialport.ui" line="35"/>
         <source>Baud Rate: </source>
-        <translation>Скорость бит/с: </translation>
+        <translation>波特率: </translation>
     </message>
     <message>
         <location filename="../dialogs/dialogsetupserialport.ui" line="61"/>
@@ -814,7 +814,7 @@
     <message>
         <location filename="../dialogs/dialogsetupserialport.ui" line="104"/>
         <source>Word Length: </source>
-        <translation>Биты данных: </translation>
+        <translation>字长： </translation>
     </message>
     <message>
         <location filename="../dialogs/dialogsetupserialport.ui" line="127"/>
@@ -829,12 +829,12 @@
     <message>
         <location filename="../dialogs/dialogsetupserialport.ui" line="140"/>
         <source>Parity: </source>
-        <translation>Четность: </translation>
+        <translation>奇偶校验： </translation>
     </message>
     <message>
         <location filename="../dialogs/dialogsetupserialport.ui" line="166"/>
         <source>Stop Bits: </source>
-        <translation>Стоповые биты: </translation>
+        <translation>停止位： </translation>
     </message>
     <message>
         <location filename="../dialogs/dialogsetupserialport.ui" line="186"/>
@@ -849,22 +849,22 @@
     <message>
         <location filename="../dialogs/dialogsetupserialport.ui" line="208"/>
         <source>Hardware Flow Control</source>
-        <translation>Управление потоком</translation>
+        <translation>硬件流量控制</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogsetupserialport.ui" line="217"/>
         <source>Flow Control Mode: </source>
-        <translation>Режим управления: </translation>
+        <translation>流量控制模式： </translation>
     </message>
     <message>
         <location filename="../dialogs/dialogsetupserialport.ui" line="237"/>
         <source>DTR Control: </source>
-        <translation>Управление DTR: </translation>
+        <translation>DTR 控制： </translation>
     </message>
     <message>
         <location filename="../dialogs/dialogsetupserialport.ui" line="260"/>
         <source>RTS Control: </source>
-        <translation>Управление RTS: </translation>
+        <translation>RTS 控制： </translation>
     </message>
 </context>
 <context>
@@ -872,22 +872,22 @@
     <message>
         <location filename="../dialogs/dialogwindowsmanager.ui" line="14"/>
         <source>Windows</source>
-        <translation>Окна</translation>
+        <translation>窗口</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogwindowsmanager.ui" line="29"/>
         <source>Activate</source>
-        <translation>Активировать</translation>
+        <translation>激活</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogwindowsmanager.ui" line="36"/>
         <source>Save</source>
-        <translation>Сохранить</translation>
+        <translation>保存</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogwindowsmanager.ui" line="43"/>
         <source>Close</source>
-        <translation>Закрыть</translation>
+        <translation>关闭</translation>
     </message>
 </context>
 <context>
@@ -895,32 +895,32 @@
     <message>
         <location filename="../dialogs/dialogwritecoilregister.ui" line="14"/>
         <source>Write Coil</source>
-        <translation>Запись в регистр Coil</translation>
+        <translation>写线圈</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogwritecoilregister.ui" line="38"/>
         <source>Address: </source>
-        <translation>Адрес: </translation>
+        <translation>地址： </translation>
     </message>
     <message>
         <location filename="../dialogs/dialogwritecoilregister.ui" line="85"/>
         <source>Value</source>
-        <translation>Значение</translation>
+        <translation>值</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogwritecoilregister.ui" line="104"/>
         <source>Off</source>
-        <translation>Откл</translation>
+        <translation>关</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogwritecoilregister.ui" line="111"/>
         <source>On</source>
-        <translation>Вкл</translation>
+        <translation>开</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogwritecoilregister.ui" line="162"/>
         <source>Auto Simulation</source>
-        <translation>Симуляция</translation>
+        <translation>自动仿真</translation>
     </message>
 </context>
 <context>
@@ -928,27 +928,27 @@
     <message>
         <location filename="../dialogs/dialogwriteholdingregister.ui" line="14"/>
         <source>Write Register</source>
-        <translation>Запись в регистр</translation>
+        <translation>写寄存器</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogwriteholdingregister.ui" line="26"/>
         <source>Address: </source>
-        <translation>Адрес: </translation>
+        <translation>地址： </translation>
     </message>
     <message>
         <location filename="../dialogs/dialogwriteholdingregister.ui" line="58"/>
         <source>Value: </source>
-        <translation>Значение: </translation>
+        <translation>值： </translation>
     </message>
     <message>
         <location filename="../dialogs/dialogwriteholdingregister.ui" line="115"/>
         <source>Auto Simulation</source>
-        <translation>Симуляция</translation>
+        <translation>自动仿真</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogwriteholdingregister.cpp" line="68"/>
         <source>Value, (ANSI): </source>
-        <translation>Знвчение, (ANSI): </translation>
+        <translation>值，（ANSI）： </translation>
     </message>
 </context>
 <context>
@@ -956,17 +956,17 @@
     <message>
         <location filename="../dialogs/dialogwriteholdingregisterbits.ui" line="14"/>
         <source>Write Register</source>
-        <translation>Запись в регистр</translation>
+        <translation>写寄存器</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogwriteholdingregisterbits.ui" line="38"/>
         <source>Address: </source>
-        <translation>Адрес: </translation>
+        <translation>地址： </translation>
     </message>
     <message>
         <location filename="../dialogs/dialogwriteholdingregisterbits.ui" line="85"/>
         <source>Bit Pattern</source>
-        <translation>Битовый шаблон</translation>
+        <translation>位模式</translation>
     </message>
 </context>
 <context>
@@ -974,17 +974,17 @@
     <message>
         <location filename="../controls/flowcontroltypecombobox.cpp" line="10"/>
         <source>NO CONTROL</source>
-        <translation>НЕТ</translation>
+        <translation>无控制</translation>
     </message>
     <message>
         <location filename="../controls/flowcontroltypecombobox.cpp" line="11"/>
         <source>HARDWARE (RTS/CTS)</source>
-        <translation>Аппаратное (RTS/CTS)</translation>
+        <translation>硬件（RTS/CTS）</translation>
     </message>
     <message>
         <location filename="../controls/flowcontroltypecombobox.cpp" line="12"/>
         <source>SOFTWARE (XON/XOFF)</source>
-        <translation>Программное (XON/XOFF)</translation>
+        <translation>软件（XON/XOFF）</translation>
     </message>
 </context>
 <context>
@@ -996,27 +996,27 @@
     <message>
         <location filename="../formmodsim.ui" line="105"/>
         <source>Start Address:</source>
-        <translation>Адрес:</translation>
+        <translation>起始地址:</translation>
     </message>
     <message>
         <location filename="../formmodsim.ui" line="112"/>
         <source>Length:</source>
-        <translation>Количество:</translation>
+        <translation>长度:</translation>
     </message>
     <message>
         <location filename="../formmodsim.ui" line="175"/>
         <source>Address Base:</source>
-        <translation>Адресация:</translation>
+        <translation>基地址：</translation>
     </message>
     <message>
         <location filename="../formmodsim.ui" line="228"/>
         <source>Device Id:</source>
-        <translation>Узел:</translation>
+        <translation>设备地址:</translation>
     </message>
     <message>
         <location filename="../formmodsim.ui" line="297"/>
         <source>MODBUS Point Type</source>
-        <translation>Тип регистров MODBUS</translation>
+        <translation>寄存器类型</translation>
     </message>
     <message>
         <source>NOT CONNECTED!</source>
@@ -1047,17 +1047,17 @@ Length: %2</source>
         <source>Address Base: %1
 Start Address: %2
 Length: %3</source>
-        <translation>Адресация: %1
-Адрес: %2
-Количество: %3</translation>
+        <translation>基地址: %1
+起始地址: %2
+长度: %3</translation>
     </message>
     <message>
         <location filename="../formmodsim.cpp" line="433"/>
         <source>Device Id: %1
 MODBUS Point Type:
 %2</source>
-        <translation>Узел: %1
-Тип регистров MODBUS:
+        <translation>设备地址：%1
+寄存器类型：
 %2</translation>
     </message>
 </context>
@@ -1067,12 +1067,12 @@ MODBUS Point Type:
         <location filename="../controls/helpwidget.cpp" line="30"/>
         <location filename="../controls/helpwidget.cpp" line="59"/>
         <source>qthelp://omodsim/doc/index.html</source>
-        <translation>qthelp://omodsim/doc/index_ru.html</translation>
+        <translation>qthelp://omodsim/doc/index.html</translation>
     </message>
     <message>
         <location filename="../controls/helpwidget.cpp" line="68"/>
         <source>qthelp://omodsim/doc/index.html#%1</source>
-        <translation>qthelp://omodsim/doc/index_ru.html#%1</translation>
+        <translation>qthelp://omodsim/doc/index.html#%1</translation>
     </message>
 </context>
 <context>
@@ -1080,37 +1080,37 @@ MODBUS Point Type:
     <message>
         <location filename="../controls/mainstatusbar.cpp" line="15"/>
         <source>NONE</source>
-        <translation>Нет</translation>
+        <translation>无校验</translation>
     </message>
     <message>
         <location filename="../controls/mainstatusbar.cpp" line="18"/>
         <source>EVEN</source>
-        <translation>Нечет</translation>
+        <translation>偶校验</translation>
     </message>
     <message>
         <location filename="../controls/mainstatusbar.cpp" line="21"/>
         <source>ODD</source>
-        <translation>Чет</translation>
+        <translation>奇校验</translation>
     </message>
     <message>
         <location filename="../controls/mainstatusbar.cpp" line="24"/>
         <source>SPACE</source>
-        <translation>Пробел</translation>
+        <translation>空</translation>
     </message>
     <message>
         <location filename="../controls/mainstatusbar.cpp" line="27"/>
         <source>MARK</source>
-        <translation>Маркер</translation>
+        <translation>标记</translation>
     </message>
     <message>
         <location filename="../controls/mainstatusbar.cpp" line="109"/>
         <source>Modbus/TCP Srv %1:%2</source>
-        <translation>Modbus/TCP сервер %1:%2</translation>
+        <translation>modbus/TCP 服务器%1:%2</translation>
     </message>
     <message>
         <location filename="../controls/mainstatusbar.cpp" line="113"/>
         <source>Port %1:%2:%3:%4:%5</source>
-        <translation>Порт %1:%2:%3:%4:%5</translation>
+        <translation>端口 %1:%2:%3:%4:%5</translation>
     </message>
     <message>
         <source>Modbus/TCP Srv: %1</source>
@@ -1135,27 +1135,27 @@ MODBUS Point Type:
     <message>
         <location filename="../mainwindow.ui" line="53"/>
         <source>File</source>
-        <translation>Файл</translation>
+        <translation>文件</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="73"/>
         <source>Edit</source>
-        <translation>Правка</translation>
+        <translation>编辑</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="86"/>
         <source>Connection</source>
-        <translation>Подключение</translation>
+        <translation>连接</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="93"/>
         <source>Setup</source>
-        <translation>Настройка</translation>
+        <translation>设置</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="97"/>
         <source>Display Options</source>
-        <translation>Параметры отображения</translation>
+        <translation>显示选项</translation>
     </message>
     <message>
         <source>Byte Order</source>
@@ -1164,99 +1164,99 @@ MODBUS Point Type:
     <message>
         <location filename="../mainwindow.ui" line="127"/>
         <source>Extended</source>
-        <translation>Расширенные параметры</translation>
+        <translation>高级选项</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="138"/>
         <source>Script</source>
-        <translation>Скрипт</translation>
+        <translation>脚本</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="155"/>
         <source>Window</source>
-        <translation>Окно</translation>
+        <translation>窗口</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="164"/>
         <source>Help</source>
-        <translation>Помощь</translation>
+        <translation>帮助</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="170"/>
         <source>View</source>
-        <translation>Вид</translation>
+        <translation>视图</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="174"/>
         <source>Config</source>
-        <translation>Конфигурация</translation>
+        <translation>配置</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="178"/>
         <source>Colors</source>
-        <translation>Цвета</translation>
+        <translation>颜色</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="189"/>
         <source>Language</source>
-        <translation>Язык</translation>
+        <translation>语言</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="291"/>
         <location filename="../mainwindow.ui" line="842"/>
         <source>Edit Bar</source>
-        <translation>Панель редактирования</translation>
+        <translation>编辑栏</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="313"/>
         <source>New</source>
-        <translation>Новый</translation>
+        <translation>新的</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="694"/>
         <location filename="../mainwindow.ui" line="697"/>
         <source>Swap Bytes (0xAB → 0xBA)</source>
-        <translation>Порядок байт (0xAB → 0xBA)</translation>
+        <translation>交换字节（0xAB → 0xBA）</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="854"/>
         <source>32-bit Integer</source>
-        <translation>32-бит целое</translation>
+        <translation>32位整数</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="869"/>
         <source>Swapped 32-bit Integer</source>
-        <translation>Перевернутое 32-бит целое</translation>
+        <translation>32位整数（字节交换）</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="884"/>
         <source>Unsigned 32-bit Integer</source>
-        <translation>Беззнаковое 32-бит целое</translation>
+        <translation>无符号32位整数</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="899"/>
         <source>Swapped Unsigned 32-bit Integer</source>
-        <translation>Перевернутое беззнаковое 32-бит целое</translation>
+        <translation>无符号32位整数（字节交换）</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="932"/>
         <source>64-bit Integer</source>
-        <translation>64-бит целое</translation>
+        <translation>64位整数</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="947"/>
         <source>Swapped 64-bit Integer</source>
-        <translation>Перевернутое 64-бит целое</translation>
+        <translation>64位整数（字节交换）</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="962"/>
         <source>Unsigned 64-bit Integer</source>
-        <translation>Беззнаковое 64-бит целое</translation>
+        <translation>无符号64位整数</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="977"/>
         <source>Swapped Unsigned 64-bit Integer</source>
-        <translation>Перевернутое беззнаковое 64-бит целое</translation>
+        <translation>无符号64位整数（字节交换）</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="992"/>
@@ -1282,82 +1282,82 @@ MODBUS Point Type:
     <message>
         <location filename="../mainwindow.ui" line="907"/>
         <source>Text Capture</source>
-        <translation>Захват в файл</translation>
+        <translation>文本捕获</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="912"/>
         <source>Capture Off</source>
-        <translation>Остановить захват</translation>
+        <translation>捕获关闭</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="917"/>
         <source>Msg Parser</source>
-        <translation>Анализатор сообщений</translation>
+        <translation>报文解析</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="325"/>
         <source>Open...</source>
-        <translation>Открыть...</translation>
+        <translation>打开...</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="333"/>
         <source>Close</source>
-        <translation>Закрыть</translation>
+        <translation>关闭</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="342"/>
         <source>Save</source>
-        <translation>Сохранить</translation>
+        <translation>保存</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="350"/>
         <source>Save As...</source>
-        <translation>Сохранить как...</translation>
+        <translation>另存为...</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="355"/>
         <source>Save Test Config</source>
-        <translation>Сохранить конфиг</translation>
+        <translation>保存测试配置</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="360"/>
         <source>Restore Test Config</source>
-        <translation>Восстановить конфиг</translation>
+        <translation>恢复测试配置</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="369"/>
         <source>Print...</source>
-        <translation>Печать...</translation>
+        <translation>打印...</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="377"/>
         <source>Print Setup...</source>
-        <translation>Настройка печати...</translation>
+        <translation>打印设置...</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="382"/>
         <source>Recent File</source>
-        <translation>Последние файлы</translation>
+        <translation>最近文件</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="387"/>
         <source>Exit</source>
-        <translation>Выход</translation>
+        <translation>退出</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="396"/>
         <source>Connect</source>
-        <translation>Подключить</translation>
+        <translation>连接</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="405"/>
         <source>Disconnect</source>
-        <translation>Отключить</translation>
+        <translation>断开连接</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="417"/>
         <source>Binary</source>
-        <translation>Двоичный</translation>
+        <translation>二进制</translation>
     </message>
     <message>
         <source>Unsigned Decimal</source>
@@ -1366,7 +1366,7 @@ MODBUS Point Type:
     <message>
         <location filename="../mainwindow.ui" line="447"/>
         <source>Hex</source>
-        <translation>Шестандцатиричный</translation>
+        <translation>十六进制</translation>
     </message>
     <message>
         <source>Floating Point</source>
@@ -1387,17 +1387,17 @@ MODBUS Point Type:
     <message>
         <location filename="../mainwindow.ui" line="521"/>
         <source>Cascade</source>
-        <translation>Каскадно</translation>
+        <translation>级联</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="526"/>
         <source>Tile</source>
-        <translation>Замостить</translation>
+        <translation>标题</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="535"/>
         <source>About Open ModSim...</source>
-        <translation>О программе Open ModSim...</translation>
+        <translation>关于 Open ModSim...</translation>
     </message>
     <message>
         <source>Integer</source>
@@ -1406,174 +1406,182 @@ MODBUS Point Type:
     <message>
         <location filename="../mainwindow.ui" line="562"/>
         <source>Show Data</source>
-        <translation>Данные</translation>
+        <translation>显示数据</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="574"/>
         <source>Show Traffic</source>
-        <translation>Трафик</translation>
+        <translation>显示流量</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="583"/>
         <source>Data Definition</source>
-        <translation>Настройки отображения</translation>
+        <translation>数据定义</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="661"/>
         <source>Force Coils</source>
-        <translation>Предустановка coils</translation>
+        <translation>强制线圈</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="666"/>
         <source>Preset Holding Regs</source>
-        <translation>Предустановка holding регистров</translation>
+        <translation>预设保持寄存器</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="702"/>
         <source>Preset Input Regs</source>
-        <translation>Предустановка input регистров</translation>
+        <translation>预设输入寄存器</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="707"/>
         <source>Force Discretes</source>
-        <translation>Предустановка discretes</translation>
+        <translation>强制离散值</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="719"/>
         <source>Show Script</source>
-        <translation>Показать скрипт</translation>
+        <translation>显示脚本</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="728"/>
         <location filename="../mainwindow.ui" line="731"/>
         <source>Run Script</source>
-        <translation>Запуск</translation>
+        <translation>运行脚本</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="743"/>
         <location filename="../mainwindow.ui" line="746"/>
         <source>Stop Script</source>
-        <translation>Останов</translation>
+        <translation>停止脚本</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="758"/>
         <source>Script Settings</source>
-        <translation>Настройки скрипта</translation>
+        <translation>脚本设置</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="775"/>
         <source>Undo</source>
-        <translation>Отменить</translation>
+        <translation>取消</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="787"/>
         <source>Redo</source>
-        <translation>Повторить</translation>
+        <translation>恢复</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="799"/>
         <source>Cut</source>
-        <translation>Вырезать</translation>
+        <translation>剪切</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="811"/>
         <source>Copy</source>
-        <translation>Копировать</translation>
+        <translation>复制</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="823"/>
         <source>Paste</source>
-        <translation>Вставить</translation>
+        <translation>粘贴</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="831"/>
         <source>Select All</source>
-        <translation>Выделить всё</translation>
+        <translation>选择所有</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="215"/>
         <location filename="../mainwindow.ui" line="591"/>
         <source>Toolbar</source>
-        <translation>Панель инструментов</translation>
+        <translation>工具栏</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="599"/>
         <source>Status Bar</source>
-        <translation>Строка состояния</translation>
+        <translation>状态栏</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="240"/>
         <location filename="../mainwindow.ui" line="607"/>
         <source>Display Bar</source>
-        <translation>Панель отображения</translation>
+        <translation>显示栏</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="277"/>
         <location filename="../mainwindow.ui" line="766"/>
         <source>Script Bar</source>
-        <translation>Панель управления скриптом</translation>
+        <translation>脚本栏</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="432"/>
         <source>Unsigned 16-bit Intger</source>
-        <translation>Беззнаковое 16-бит целое</translation>
+        <translation>无符号16位整数</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="462"/>
         <source>Float</source>
-        <translation>С плавающей точкой</translation>
+        <translation>浮点数</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="477"/>
         <source>Swapped Float</source>
-        <translation>Перевернутое с плавающей точкой</translation>
+        <translation>单精度浮点数（字节交换）</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="492"/>
         <location filename="../mainwindow.ui" line="495"/>
         <location filename="../mainwindow.ui" line="498"/>
         <source>Double</source>
-        <translation>Двойной точности</translation>
+        <translation>双精度</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="513"/>
         <source>Swapped Double</source>
-        <translation>Перевернутое двойной точности</translation>
+        <translation>双精度浮点数（字节交换）</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="547"/>
         <source>16-bit Integer</source>
-        <translation>16-бит целое</translation>
+        <translation>16位整数</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="612"/>
         <source>Font</source>
-        <translation>Шрифт</translation>
+        <translation>字体</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="617"/>
         <source>Background</source>
-        <translation>Задний план</translation>
+        <translation>背景</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="622"/>
         <source>Foreground</source>
-        <translation>Передний план</translation>
+        <translation>前景</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="627"/>
         <source>Status</source>
-        <translation>Статус</translation>
+        <translation>状态</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="632"/>
         <source>Windows...</source>
-        <translation>Окна...</translation>
+        <translation>窗口...</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="640"/>
         <source>Hex Addresses</source>
-        <translation>Шестнадцатиричные адреса</translation>
+        <translation>十六进制地址</translation>
+    </message>
+    <message>
+        <source>English</source>
+        <translation type="vanished">英语</translation>
+    </message>
+    <message>
+        <source>Русский</source>
+        <translation type="vanished">俄罗斯</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="321"/>
@@ -1581,7 +1589,7 @@ MODBUS Point Type:
         <location filename="../mainwindow.cpp" line="373"/>
         <location filename="../mainwindow.cpp" line="384"/>
         <source>All files (*)</source>
-        <translation>Все файлы (*)</translation>
+        <translation>所有文件 (*)</translation>
     </message>
 </context>
 <context>
@@ -1590,20 +1598,20 @@ MODBUS Point Type:
         <location filename="../menuconnect.cpp" line="18"/>
         <location filename="../menuconnect.cpp" line="95"/>
         <source>Modbus/TCP Srv</source>
-        <translation>Modbus/TCP сервер</translation>
+        <translation>Modbus/TCP 服务器</translation>
     </message>
     <message>
         <location filename="../menuconnect.cpp" line="21"/>
         <location filename="../menuconnect.cpp" line="40"/>
         <location filename="../menuconnect.cpp" line="100"/>
         <source>Port %1</source>
-        <translation>Порт %1</translation>
+        <translation>端口 %1</translation>
     </message>
     <message>
         <location filename="../menuconnect.cpp" line="35"/>
         <location filename="../menuconnect.cpp" line="97"/>
         <source>Modbus/TCP Srv %1</source>
-        <translation>Modbus/TCP сервер %1</translation>
+        <translation>Modbus/TCP 服务器 %1</translation>
     </message>
 </context>
 <context>
@@ -1611,52 +1619,52 @@ MODBUS Point Type:
     <message>
         <location filename="../controls/modbusmessagewidget.cpp" line="144"/>
         <source>&lt;span style=&apos;color:%1&apos;&gt;*** INVALID MODBUS REQUEST ***&lt;/span&gt;</source>
-        <translation>&lt;span style=&apos;color:%1&apos;&gt;*** НЕКОРРЕКТНЫЙ MODBUS ЗАПРОС ***&lt;/span&gt;</translation>
+        <translation>&lt;span style=&apos;color:%1&apos;&gt;*** MODBUS 请求无效 ***&lt;/span&gt;</translation>
     </message>
     <message>
         <location filename="../controls/modbusmessagewidget.cpp" line="146"/>
         <source>&lt;span style=&apos;color:%1&apos;&gt;*** INVALID MODBUS RESPONSE ***&lt;/span&gt;</source>
-        <translation>&lt;span style=&apos;color:%1&apos;&gt;*** НЕКОРРЕКТНЫЙ MODBUS ОТВЕТ ***&lt;/span&gt;</translation>
+        <translation>&lt;span style=&apos;color:%1&apos;&gt;*** MODBUS 响应无效 ***&lt;/span&gt;</translation>
     </message>
     <message>
         <location filename="../controls/modbusmessagewidget.cpp" line="156"/>
         <source>&lt;b&gt;Checksum:&lt;/b&gt; %1</source>
-        <translation>&lt;b&gt;Контрольная сумма:&lt;/b&gt; %1</translation>
+        <translation>&lt;b&gt;校验和:&lt;/b&gt; %1</translation>
     </message>
     <message>
         <location filename="../controls/modbusmessagewidget.cpp" line="161"/>
         <source>&lt;b&gt;Checksum:&lt;/b&gt; &lt;span style=&apos;color:%3&apos;&gt;%1&lt;/span&gt; (Expected: %2)</source>
-        <translation>&lt;b&gt;Контрольная сумма:&lt;/b&gt; &lt;span style=&apos;color:%3&apos;&gt;%1&lt;/span&gt; (ожидается: %2)</translation>
+        <translation>&lt;b&gt;校验和:&lt;/b&gt; &lt;span style=&apos;color:%3&apos;&gt;%1&lt;/span&gt; (预期: %2)</translation>
     </message>
     <message>
         <location filename="../controls/modbusmessagewidget.cpp" line="166"/>
         <source>&lt;b&gt;Type:&lt;/b&gt; %1</source>
-        <translation>&lt;b&gt;Тип:&lt;/b&gt; %1</translation>
+        <translation>&lt;b&gt;类型:&lt;/b&gt; %1</translation>
     </message>
     <message>
         <location filename="../controls/modbusmessagewidget.cpp" line="166"/>
         <source>Request (Tx)</source>
-        <translation>Запрос (Tx)</translation>
+        <translation>请求 (Tx)</translation>
     </message>
     <message>
         <location filename="../controls/modbusmessagewidget.cpp" line="166"/>
         <source>Response (Rx)</source>
-        <translation>Ответ (Rx)</translation>
+        <translation>响应 (Rx)</translation>
     </message>
     <message>
         <location filename="../controls/modbusmessagewidget.cpp" line="167"/>
         <source>&lt;b&gt;Timestamp:&lt;/b&gt; %1</source>
-        <translation>&lt;b&gt;Метка времени:&lt;/b&gt; %1</translation>
+        <translation>&lt;b&gt;时间戳:&lt;/b&gt; %1</translation>
     </message>
     <message>
         <location filename="../controls/modbusmessagewidget.cpp" line="175"/>
         <source>&lt;b&gt;Transaction ID:&lt;/b&gt; %1</source>
-        <translation>&lt;b&gt;Идентификатор транзакции:&lt;/b&gt; %1</translation>
+        <translation>&lt;b&gt;处理ID:&lt;/b&gt; %1</translation>
     </message>
     <message>
         <location filename="../controls/modbusmessagewidget.cpp" line="176"/>
         <source>&lt;b&gt;Protocol ID:&lt;/b&gt; %1</source>
-        <translation>&lt;b&gt;Идентификатор протокола:&lt;/b&gt; %1</translation>
+        <translation>&lt;b&gt;协议ID:&lt;/b&gt; %1</translation>
     </message>
     <message>
         <location filename="../controls/modbusmessagewidget.cpp" line="177"/>
@@ -1665,32 +1673,32 @@ MODBUS Point Type:
         <location filename="../controls/modbusmessagewidget.cpp" line="245"/>
         <location filename="../controls/modbusmessagewidget.cpp" line="264"/>
         <source>&lt;b&gt;Length:&lt;/b&gt; %1</source>
-        <translation>&lt;b&gt;Длина:&lt;/b&gt; %1</translation>
+        <translation>&lt;b&gt;长度:&lt;/b&gt; %1</translation>
     </message>
     <message>
         <location filename="../controls/modbusmessagewidget.cpp" line="180"/>
         <source>&lt;b&gt;Device ID:&lt;/b&gt; %1</source>
-        <translation>&lt;b&gt;Устройство:&lt;/b&gt; %1</translation>
+        <translation>&lt;b&gt;设备地址:&lt;/b&gt; %1</translation>
     </message>
     <message>
         <location filename="../controls/modbusmessagewidget.cpp" line="185"/>
         <source>&lt;b&gt;Error Code:&lt;/b&gt; %1</source>
-        <translation>&lt;b&gt;Код ошибки:&lt;/b&gt; %1</translation>
+        <translation>&lt;b&gt;错误代码:&lt;/b&gt; %1</translation>
     </message>
     <message>
         <location filename="../controls/modbusmessagewidget.cpp" line="186"/>
         <source>&lt;b&gt;Exception Code:&lt;/b&gt; %1</source>
-        <translation>&lt;b&gt;Код исключения:&lt;/b&gt; %1</translation>
+        <translation>&lt;b&gt;异常代码:&lt;/b&gt; %1</translation>
     </message>
     <message>
         <location filename="../controls/modbusmessagewidget.cpp" line="195"/>
         <source>&lt;b&gt;Function Code:&lt;/b&gt; %1</source>
-        <translation>&lt;b&gt;Код функции:&lt;/b&gt; %1</translation>
+        <translation>&lt;b&gt;功能代码:&lt;/b&gt; %1</translation>
     </message>
     <message>
         <location filename="../controls/modbusmessagewidget.cpp" line="196"/>
         <source>(0-based)</source>
-        <translation>(адресация с 0)</translation>
+        <translation>（基地址为-0）</translation>
     </message>
     <message>
         <location filename="../controls/modbusmessagewidget.cpp" line="206"/>
@@ -1698,19 +1706,19 @@ MODBUS Point Type:
         <location filename="../controls/modbusmessagewidget.cpp" line="244"/>
         <location filename="../controls/modbusmessagewidget.cpp" line="263"/>
         <source>&lt;b&gt;Start Address:&lt;/b&gt; %1 %2</source>
-        <translation>&lt;b&gt;Адрес:&lt;/b&gt; %1 %2</translation>
+        <translation>&lt;b&gt;起始地址:&lt;/b&gt; %1 %2</translation>
     </message>
     <message>
         <location filename="../controls/modbusmessagewidget.cpp" line="282"/>
         <location filename="../controls/modbusmessagewidget.cpp" line="290"/>
         <source>&lt;b&gt;Output Address:&lt;/b&gt; %1 %2</source>
-        <translation>&lt;b&gt;Адрес:&lt;/b&gt; %1 %2</translation>
+        <translation>&lt;b&gt;输出地址:&lt;/b&gt; %1 %2</translation>
     </message>
     <message>
         <location filename="../controls/modbusmessagewidget.cpp" line="301"/>
         <location filename="../controls/modbusmessagewidget.cpp" line="309"/>
         <source>&lt;b&gt;Register Address:&lt;/b&gt; %1 %2</source>
-        <translation>&lt;b&gt;Адрес:&lt;/b&gt; %1 %2</translation>
+        <translation>&lt;b&gt;寄存器地址:&lt;/b&gt; %1 %2</translation>
     </message>
     <message>
         <location filename="../controls/modbusmessagewidget.cpp" line="378"/>
@@ -1718,28 +1726,28 @@ MODBUS Point Type:
         <location filename="../controls/modbusmessagewidget.cpp" line="401"/>
         <location filename="../controls/modbusmessagewidget.cpp" line="411"/>
         <source>&lt;b&gt;Starting Address:&lt;/b&gt; %1 %2</source>
-        <translation>&lt;b&gt;Начальный адрес:&lt;/b&gt; %1 %2</translation>
+        <translation>&lt;b&gt;起始地址:&lt;/b&gt; %1 %2</translation>
     </message>
     <message>
         <location filename="../controls/modbusmessagewidget.cpp" line="472"/>
         <location filename="../controls/modbusmessagewidget.cpp" line="482"/>
         <source>&lt;b&gt;Address:&lt;/b&gt; %1 %2</source>
-        <translation>&lt;b&gt;Адрес:&lt;/b&gt; %1 %2</translation>
+        <translation>&lt;b&gt;地址:&lt;/b&gt; %1 %2</translation>
     </message>
     <message>
         <location filename="../controls/modbusmessagewidget.cpp" line="498"/>
         <source>&lt;b&gt;Read Starting Address:&lt;/b&gt; %1 %2</source>
-        <translation>&lt;b&gt;Адрес чтения регистров:&lt;/b&gt; %1 %2</translation>
+        <translation>&lt;b&gt;读起始地址:&lt;/b&gt; %1 %2</translation>
     </message>
     <message>
         <location filename="../controls/modbusmessagewidget.cpp" line="500"/>
         <source>&lt;b&gt;Write Starting Address:&lt;/b&gt; %1 %2</source>
-        <translation>&lt;b&gt;Адрес записи регистров:&lt;/b&gt; %1 %2</translation>
+        <translation>&lt;b&gt;写起始地址:&lt;/b&gt; %1 %2</translation>
     </message>
     <message>
         <location filename="../controls/modbusmessagewidget.cpp" line="520"/>
         <source>&lt;b&gt;FIFO Point Address:&lt;/b&gt; %1 %2</source>
-        <translation>&lt;b&gt;Адрес точки FIFO:&lt;/b&gt; %1 %2</translation>
+        <translation>&lt;b&gt;FIFO点地址:&lt;/b&gt; %1 %2</translation>
     </message>
     <message>
         <source>&lt;b&gt;Start Address:&lt;/b&gt; %1</source>
@@ -1759,29 +1767,29 @@ MODBUS Point Type:
         <location filename="../controls/modbusmessagewidget.cpp" line="510"/>
         <location filename="../controls/modbusmessagewidget.cpp" line="528"/>
         <source>&lt;b&gt;Byte Count:&lt;/b&gt; %1</source>
-        <translation>&lt;b&gt;Количество байт:&lt;/b&gt; %1</translation>
+        <translation>&lt;b&gt;字节数:&lt;/b&gt; %1</translation>
     </message>
     <message>
         <location filename="../controls/modbusmessagewidget.cpp" line="215"/>
         <source>&lt;b&gt;Coil Status:&lt;/b&gt; %1</source>
-        <translation>&lt;b&gt;Статусы coil:&lt;/b&gt; %1</translation>
+        <translation>&lt;b&gt;线圈状态:&lt;/b&gt; %1</translation>
     </message>
     <message>
         <location filename="../controls/modbusmessagewidget.cpp" line="234"/>
         <source>&lt;b&gt;Input Status:&lt;/b&gt; %1</source>
-        <translation>&lt;b&gt;Статусы input:&lt;/b&gt; %1</translation>
+        <translation>&lt;b&gt;输入状态:&lt;/b&gt; %1</translation>
     </message>
     <message>
         <location filename="../controls/modbusmessagewidget.cpp" line="253"/>
         <location filename="../controls/modbusmessagewidget.cpp" line="302"/>
         <location filename="../controls/modbusmessagewidget.cpp" line="310"/>
         <source>&lt;b&gt;Register Value:&lt;/b&gt; %1</source>
-        <translation>&lt;b&gt;Значения регистров:&lt;/b&gt; %1</translation>
+        <translation>&lt;b&gt;寄存器值:&lt;/b&gt; %1</translation>
     </message>
     <message>
         <location filename="../controls/modbusmessagewidget.cpp" line="272"/>
         <source>&lt;b&gt;Input Registers:&lt;/b&gt; %1</source>
-        <translation>&lt;b&gt;Значения реистров:&lt;/b&gt; %1</translation>
+        <translation>&lt;b&gt;输入寄存器:&lt;/b&gt; %1</translation>
     </message>
     <message>
         <source>&lt;b&gt;Output Address:&lt;/b&gt; %1</source>
@@ -1792,7 +1800,7 @@ MODBUS Point Type:
         <location filename="../controls/modbusmessagewidget.cpp" line="291"/>
         <location filename="../controls/modbusmessagewidget.cpp" line="381"/>
         <source>&lt;b&gt;Output Value:&lt;/b&gt; %1</source>
-        <translation>&lt;b&gt;Значение:&lt;/b&gt; %1</translation>
+        <translation>&lt;b&gt;输出值:&lt;/b&gt; %1</translation>
     </message>
     <message>
         <source>&lt;b&gt;Register Address:&lt;/b&gt; %1</source>
@@ -1801,13 +1809,13 @@ MODBUS Point Type:
     <message>
         <location filename="../controls/modbusmessagewidget.cpp" line="319"/>
         <source>&lt;b&gt;Output Data:&lt;/b&gt; %1</source>
-        <translation>&lt;b&gt;Данные:&lt;/b&gt; %1</translation>
+        <translation>&lt;b&gt;输出数据:&lt;/b&gt; %1</translation>
     </message>
     <message>
         <location filename="../controls/modbusmessagewidget.cpp" line="329"/>
         <location filename="../controls/modbusmessagewidget.cpp" line="337"/>
         <source>&lt;b&gt;Sub-function:&lt;/b&gt; %1</source>
-        <translation>&lt;b&gt;Подфункция:&lt;/b&gt; %1</translation>
+        <translation>&lt;b&gt;子函数:&lt;/b&gt; %1</translation>
     </message>
     <message>
         <location filename="../controls/modbusmessagewidget.cpp" line="330"/>
@@ -1819,29 +1827,29 @@ MODBUS Point Type:
         <location filename="../controls/modbusmessagewidget.cpp" line="461"/>
         <location filename="../controls/modbusmessagewidget.cpp" line="537"/>
         <source>&lt;b&gt;Data:&lt;/b&gt; %1</source>
-        <translation>&lt;b&gt;Данные:&lt;/b&gt; %1</translation>
+        <translation>&lt;b&gt;数据:&lt;/b&gt; %1</translation>
     </message>
     <message>
         <location filename="../controls/modbusmessagewidget.cpp" line="348"/>
         <location filename="../controls/modbusmessagewidget.cpp" line="363"/>
         <source>&lt;b&gt;Status:&lt;/b&gt; %1</source>
-        <translation>&lt;b&gt;Статус:&lt;/b&gt; %1</translation>
+        <translation>&lt;b&gt;状态:&lt;/b&gt; %1</translation>
     </message>
     <message>
         <location filename="../controls/modbusmessagewidget.cpp" line="349"/>
         <location filename="../controls/modbusmessagewidget.cpp" line="364"/>
         <source>&lt;b&gt;Event Count:&lt;/b&gt; %1</source>
-        <translation>&lt;b&gt;Количество событий:&lt;/b&gt; %1</translation>
+        <translation>&lt;b&gt;事件计数:&lt;/b&gt; %1</translation>
     </message>
     <message>
         <location filename="../controls/modbusmessagewidget.cpp" line="365"/>
         <source>&lt;b&gt;Message Count:&lt;/b&gt; %1</source>
-        <translation>&lt;b&gt;Количество сообщений:&lt;/b&gt; %1</translation>
+        <translation>&lt;b&gt;报文数量:&lt;/b&gt; %1</translation>
     </message>
     <message>
         <location filename="../controls/modbusmessagewidget.cpp" line="366"/>
         <source>&lt;b&gt;Events:&lt;/b&gt; %1</source>
-        <translation>&lt;b&gt;События:&lt;/b&gt; %1</translation>
+        <translation>&lt;b&gt;事件:&lt;/b&gt; %1</translation>
     </message>
     <message>
         <source>&lt;b&gt;Starting Address:&lt;/b&gt; %1</source>
@@ -1851,29 +1859,29 @@ MODBUS Point Type:
         <location filename="../controls/modbusmessagewidget.cpp" line="379"/>
         <location filename="../controls/modbusmessagewidget.cpp" line="389"/>
         <source>&lt;b&gt;Quantity of Outputs:&lt;/b&gt; %1</source>
-        <translation>&lt;b&gt;Количество:&lt;/b&gt; %1</translation>
+        <translation>&lt;b&gt;输出数量:&lt;/b&gt; %1</translation>
     </message>
     <message>
         <location filename="../controls/modbusmessagewidget.cpp" line="402"/>
         <location filename="../controls/modbusmessagewidget.cpp" line="412"/>
         <source>&lt;b&gt;Quantity of Registers:&lt;/b&gt; %1</source>
-        <translation>&lt;b&gt;Количество регистров:&lt;/b&gt; %1</translation>
+        <translation>&lt;b&gt;寄存器数量:&lt;/b&gt; %1</translation>
     </message>
     <message>
         <location filename="../controls/modbusmessagewidget.cpp" line="404"/>
         <location filename="../controls/modbusmessagewidget.cpp" line="511"/>
         <source>&lt;b&gt;Registers Value:&lt;/b&gt; %1</source>
-        <translation>&lt;b&gt;Значения регистров:&lt;/b&gt; %1</translation>
+        <translation>&lt;b&gt;寄存器值:&lt;/b&gt; %1</translation>
     </message>
     <message>
         <location filename="../controls/modbusmessagewidget.cpp" line="452"/>
         <source>&lt;b&gt;Request Data Length:&lt;/b&gt; %1</source>
-        <translation>&lt;b&gt;Длина данных запроса:&lt;/b&gt; %1</translation>
+        <translation>&lt;b&gt;请求数据长度:&lt;/b&gt; %1</translation>
     </message>
     <message>
         <location filename="../controls/modbusmessagewidget.cpp" line="460"/>
         <source>&lt;b&gt;Response Data Length:&lt;/b&gt; %1</source>
-        <translation>&lt;b&gt;Длина данных ответа:&lt;/b&gt; %1</translation>
+        <translation>&lt;b&gt;响应数据长度:&lt;/b&gt; %1</translation>
     </message>
     <message>
         <source>&lt;b&gt;Address:&lt;/b&gt; %1</source>
@@ -1883,13 +1891,13 @@ MODBUS Point Type:
         <location filename="../controls/modbusmessagewidget.cpp" line="473"/>
         <location filename="../controls/modbusmessagewidget.cpp" line="483"/>
         <source>&lt;b&gt;And Mask:&lt;/b&gt; %1</source>
-        <translation>&lt;b&gt;Маска «И»:&lt;/b&gt; %1</translation>
+        <translation>&lt;b&gt;And 掩码:&lt;/b&gt; %1</translation>
     </message>
     <message>
         <location filename="../controls/modbusmessagewidget.cpp" line="474"/>
         <location filename="../controls/modbusmessagewidget.cpp" line="484"/>
         <source>&lt;b&gt;Or Mask:&lt;/b&gt; %1</source>
-        <translation>&lt;b&gt;Маска «ИЛИ»:&lt;/b&gt; %1</translation>
+        <translation>&lt;b&gt;Or 掩码:&lt;/b&gt; %1</translation>
     </message>
     <message>
         <source>&lt;b&gt;Read Starting Address:&lt;/b&gt; %1</source>
@@ -1898,7 +1906,7 @@ MODBUS Point Type:
     <message>
         <location filename="../controls/modbusmessagewidget.cpp" line="499"/>
         <source>&lt;b&gt;Quantity to Read:&lt;/b&gt; %1</source>
-        <translation>&lt;b&gt;Количество регистров для чтения:&lt;/b&gt; %1</translation>
+        <translation>&lt;b&gt;读数量:&lt;/b&gt; %1</translation>
     </message>
     <message>
         <source>&lt;b&gt;Write Starting Address:&lt;/b&gt; %1</source>
@@ -1907,17 +1915,17 @@ MODBUS Point Type:
     <message>
         <location filename="../controls/modbusmessagewidget.cpp" line="501"/>
         <source>&lt;b&gt;Quantity to Write:&lt;/b&gt; %1</source>
-        <translation>&lt;b&gt;Количество регистров для записи:&lt;/b&gt; %1</translation>
+        <translation>&lt;b&gt;写数量:&lt;/b&gt; %1</translation>
     </message>
     <message>
         <location filename="../controls/modbusmessagewidget.cpp" line="502"/>
         <source>&lt;b&gt;Write Byte Count:&lt;/b&gt; %1</source>
-        <translation>&lt;b&gt;Количество байт записи:&lt;/b&gt; %1</translation>
+        <translation>&lt;b&gt;写字节数:&lt;/b&gt; %1</translation>
     </message>
     <message>
         <location filename="../controls/modbusmessagewidget.cpp" line="503"/>
         <source>&lt;b&gt;Write Registers Value:&lt;/b&gt; %1</source>
-        <translation>&lt;b&gt;Значения регистров записи:&lt;/b&gt; %1</translation>
+        <translation>&lt;b&gt;写寄存器值:&lt;/b&gt; %1</translation>
     </message>
     <message>
         <source>&lt;b&gt;FIFO Point Address:&lt;/b&gt; %1</source>
@@ -1926,12 +1934,12 @@ MODBUS Point Type:
     <message>
         <location filename="../controls/modbusmessagewidget.cpp" line="529"/>
         <source>&lt;b&gt;FIFO Count:&lt;/b&gt; %1</source>
-        <translation>&lt;b&gt;Количество FIFO:&lt;/b&gt; %1</translation>
+        <translation>&lt;b&gt;FIFO计数:&lt;/b&gt; %1</translation>
     </message>
     <message>
         <location filename="../controls/modbusmessagewidget.cpp" line="530"/>
         <source>&lt;b&gt;FIFO Value Register:&lt;/b&gt; %1</source>
-        <translation>&lt;b&gt;Значения регистров FIFO:&lt;/b&gt; %1</translation>
+        <translation>&lt;b&gt;FIFO值寄存器:&lt;/b&gt; %1</translation>
     </message>
 </context>
 <context>
@@ -1939,7 +1947,7 @@ MODBUS Point Type:
     <message>
         <location filename="../modbusmultiserver.cpp" line="792"/>
         <source>Connection error. %1</source>
-        <translation>Ошибка подключения. %1</translation>
+        <translation>连接错误 %1</translation>
     </message>
 </context>
 <context>
@@ -1947,17 +1955,17 @@ MODBUS Point Type:
     <message>
         <location filename="../controls/outputwidget.cpp" line="784"/>
         <source>%1: Enter Description</source>
-        <translation>%1: Введите описание</translation>
+        <translation>%1：输入描述</translation>
     </message>
     <message>
         <location filename="../controls/outputwidget.cpp" line="849"/>
         <source>NOT CONNECTED!</source>
-        <translation>НЕ ПОДКЛЮЧЕНО!</translation>
+        <translation>未连接！</translation>
     </message>
     <message>
         <location filename="../controls/outputwidget.cpp" line="857"/>
         <source>Invalid Data Length Specified</source>
-        <translation>Указана недопустимая длина данных</translation>
+        <translation>指定的数据长度无效</translation>
     </message>
 </context>
 <context>
@@ -1965,17 +1973,17 @@ MODBUS Point Type:
     <message>
         <location filename="../controls/paritytypecombobox.cpp" line="10"/>
         <source>ODD</source>
-        <translation>Нечет</translation>
+        <translation>奇校验</translation>
     </message>
     <message>
         <location filename="../controls/paritytypecombobox.cpp" line="11"/>
         <source>EVEN</source>
-        <translation>Чёт</translation>
+        <translation>偶校验</translation>
     </message>
     <message>
         <location filename="../controls/paritytypecombobox.cpp" line="12"/>
         <source>NONE</source>
-        <translation>Нет</translation>
+        <translation>无校验</translation>
     </message>
 </context>
 <context>
@@ -1999,13 +2007,13 @@ MODBUS Point Type:
         <location filename="../controls/runmodecombobox.cpp" line="11"/>
         <location filename="../controls/runmodecombobox.cpp" line="31"/>
         <source>Once</source>
-        <translation>Однократно</translation>
+        <translation>一次</translation>
     </message>
     <message>
         <location filename="../controls/runmodecombobox.cpp" line="12"/>
         <location filename="../controls/runmodecombobox.cpp" line="35"/>
         <source>Periodically</source>
-        <translation>Периодически</translation>
+        <translation>周期</translation>
     </message>
 </context>
 <context>
@@ -2043,10 +2051,10 @@ MODBUS Point Type:
 	Server.addressBase = AddressBase.Base1;
 	Server.onChange(Register.Holding, 1, (value)=&gt;
 	{
-		/* обработка изменения значения регистра */
+		/* 在寄存器值更改时编写代码 */
 	});
 
-	/* инициализация */
+	/* 在此处编写您的初始化代码 */
 });</translation>
     </message>
 </context>
@@ -2056,7 +2064,7 @@ MODBUS Point Type:
         <location filename="../controls/searchlineedit.cpp" line="11"/>
         <location filename="../controls/searchlineedit.cpp" line="27"/>
         <source>Type text to search...</source>
-        <translation>Поиск...</translation>
+        <translation>输入文字进行搜索...</translation>
     </message>
 </context>
 <context>
@@ -2065,22 +2073,22 @@ MODBUS Point Type:
         <location filename="../controls/simulationmodecombobox.cpp" line="42"/>
         <location filename="../controls/simulationmodecombobox.cpp" line="48"/>
         <source>Random</source>
-        <translation>Случайное</translation>
+        <translation>随机数</translation>
     </message>
     <message>
         <location filename="../controls/simulationmodecombobox.cpp" line="43"/>
         <source>Toggle</source>
-        <translation>Переключение</translation>
+        <translation>切换</translation>
     </message>
     <message>
         <location filename="../controls/simulationmodecombobox.cpp" line="49"/>
         <source>Increment</source>
-        <translation>Увеличение</translation>
+        <translation>自增</translation>
     </message>
     <message>
         <location filename="../controls/simulationmodecombobox.cpp" line="50"/>
         <source>Decrement</source>
-        <translation>Уменьшение</translation>
+        <translation>自减</translation>
     </message>
 </context>
 </TS>

@@ -50,5 +50,6 @@
         <file>res/actionUInt64.png</file>
         <file>res/actionSwapBytes.png</file>
         <file>res/actionAnsi.png</file>
+        <file>translations/omodsim_zh.qm</file>
     </qresource>
 </RCC>

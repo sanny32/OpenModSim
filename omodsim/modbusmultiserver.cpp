@@ -47,6 +47,25 @@ void ModbusMultiServer::setDeviceId(quint8 deviceId)
 }
 
 ///
+/// \brief ModbusMultiServer::useGlobalUnitMap
+/// \return
+///
+bool ModbusMultiServer::useGlobalUnitMap() const
+{
+    return _modbusDataUnitMap.isGlobalMap();
+}
+
+///
+/// \brief ModbusMultiServer::setUseGlobalUnitMap
+/// \param use
+///
+void ModbusMultiServer::setUseGlobalUnitMap(bool use)
+{
+    _modbusDataUnitMap.setGlobalMap(use);
+    reconfigureServers();
+}
+
+///
 /// \brief ModbusMultiServer::addUnitMap
 /// \param id
 /// \param pointType

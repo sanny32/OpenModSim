@@ -134,6 +134,7 @@
 		</li>
 		<li class="object"><a href="#server"><strong>Server</strong></a>
 			<ul class="level2">
+				<li><a href="#server.addressbase">Server.addressBase</a></li>
 				<li><a href="#server.onchange">Server.onChange</a></li>
 				<li><a href="#server.readcoil">Server.readCoil</a></li>
 				<li><a href="#server.readdiscrete">Server.readDiscrete</a></li>
@@ -157,6 +158,7 @@
 				<li><a href="#server.writeunint64">Server.writeUInt64</a></li>
 				<li><a href="#server.writedouble">Server.writeDouble</a></li>
 				<li><a href="#server.writefloat">Server.writeFloat</a></li>
+				<li><a href="#server.useglobalunitmap">Server.useGlobalUnitMap</a></li>
 			</ul>
 		</li>
 		<li class="object"><a href="#storage"><strong>Storage</strong></a>
@@ -633,6 +635,16 @@
 			<h1 id="server">Server</h1>
 		</div>
 		<div class="section-content"><p>Объект <strong><code>Server</code></strong> обеспечивает доступ к функциям сервера MODBUS.</p></div>
+		<section aria-labelledby="static_properties"><h2 id="script.static_properties">Статические свойства</h2><div class="section-content"><dl>
+			<dt id="server.addressbase"><code>Server.addressBase</code></dt>
+			<dd>
+			  <p>Возвращает или устанавливает нумерацию <a href="#addressbase">адресного пространства</a> сервера.</p>
+			</dd>
+			<dt id="server.useglobalunitmap"><code>Server.useGlobalUnitMap</code></dt>
+			<dd>
+			  <p>Возвращает или устанавливает использование глобальной карты адресов. Неразмеченные регистры будут занулены.</p>
+			</dd>
+		</dl>
 		<section aria-labelledby="static_methods"><h2 id="server.static_methods">Статические методы</h2><div class="section-content"><dl>
 			<dt id="server.onchange"><code>Server.onChange(Register, address, functionRef)</code></dt>
 			<dd>
