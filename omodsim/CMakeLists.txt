@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.25)
 
 project(omodsim
-        VERSION 1.8.1
+        VERSION 1.8.2
         LANGUAGES CXX)
 
 set(CMAKE_AUTOUIC ON)
