@@ -393,12 +393,12 @@
         <translation type="vanished">Количество: %1</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="25"/>
+        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="27"/>
         <source>Address: &lt;b&gt;%1&lt;/b&gt;</source>
         <translation>地址: &lt;b&gt;%1&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="26"/>
+        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="28"/>
         <source>Length: &lt;b&gt;%1&lt;/b&gt;</source>
         <translation>长度: &lt;b&gt;%1&lt;/b&gt;</translation>
     </message>
@@ -444,12 +444,12 @@
         <translation type="vanished">Количество: %1</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="27"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="29"/>
         <source>Address: &lt;b&gt;%1&lt;/b&gt;</source>
         <translation>地址: &lt;b&gt;%1&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="28"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="30"/>
         <source>Length: &lt;b&gt;%1&lt;/b&gt;</source>
         <translation>长度: &lt;b&gt;%1&lt;/b&gt;</translation>
     </message>
@@ -734,22 +734,22 @@
         <translation>点数: </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogsetuppresetdata.cpp" line="25"/>
+        <location filename="../dialogs/dialogsetuppresetdata.cpp" line="27"/>
         <source>PRESET COILS</source>
         <translation>预设线圈</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogsetuppresetdata.cpp" line="28"/>
+        <location filename="../dialogs/dialogsetuppresetdata.cpp" line="30"/>
         <source>PRESET DISCRETE INPUTS</source>
         <translation>预设离散输入</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogsetuppresetdata.cpp" line="31"/>
+        <location filename="../dialogs/dialogsetuppresetdata.cpp" line="33"/>
         <source>PRESET INPUT REGISTERS</source>
         <translation>预设输入寄存器</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogsetuppresetdata.cpp" line="34"/>
+        <location filename="../dialogs/dialogsetuppresetdata.cpp" line="36"/>
         <source>PRESET HOLDING REGISTERS</source>
         <translation>预设保持寄存器</translation>
     </message>
@@ -946,7 +946,7 @@
         <translation>自动仿真</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwriteholdingregister.cpp" line="68"/>
+        <location filename="../dialogs/dialogwriteholdingregister.cpp" line="70"/>
         <source>Value, (ANSI): </source>
         <translation>值,(ANSI): </translation>
     </message>
@@ -1043,7 +1043,7 @@ Length: %2</source>
         <translation type="vanished">Указана недопустимая длина данных</translation>
     </message>
     <message>
-        <location filename="../formmodsim.cpp" line="430"/>
+        <location filename="../formmodsim.cpp" line="442"/>
         <source>Address Base: %1
 Start Address: %2
 Length: %3</source>
@@ -1052,7 +1052,7 @@ Length: %3</source>
 长度: %3</translation>
     </message>
     <message>
-        <location filename="../formmodsim.cpp" line="433"/>
+        <location filename="../formmodsim.cpp" line="445"/>
         <source>Device Id: %1
 MODBUS Point Type:
 %2</source>

@@ -6,14 +6,16 @@
 ///
 /// \brief DialogWriteHoldingRegisterBits::DialogWriteHoldingRegisterBits
 /// \param params
+/// \param hexAddress
 /// \param parent
 ///
-DialogWriteHoldingRegisterBits::DialogWriteHoldingRegisterBits(ModbusWriteParams& params, QWidget *parent) :
+DialogWriteHoldingRegisterBits::DialogWriteHoldingRegisterBits(ModbusWriteParams& params, bool hexAddress, QWidget *parent) :
       QFixedSizeDialog(parent)
     , ui(new Ui::DialogWriteHoldingRegisterBits)
     ,_writeParams(params)
 {
     ui->setupUi(this);
+    ui->lineEditAddress->setInputMode(hexAddress ? NumericLineEdit::HexMode : NumericLineEdit::Int32Mode);
     ui->lineEditAddress->setInputRange(ModbusLimits::addressRange(params.ZeroBasedAddress));
     ui->lineEditAddress->setValue(params.Address);
 

@@ -139,6 +139,7 @@ DisplayDefinition FormModSim::displayDefinition() const
     dd.Length = ui->lineEditLength->value<int>();
     dd.ZeroBasedAddress = ui->lineEditAddress->range<int>().from() == 0;
     dd.UseGlobalUnitMap = _mbMultiServer.useGlobalUnitMap();
+    dd.HexAddress = displayHexAddresses();
 
     return dd;
 }
@@ -169,6 +170,8 @@ void FormModSim::setDisplayDefinition(const DisplayDefinition& dd)
     ui->comboBoxModbusPointType->blockSignals(false);
 
     _mbMultiServer.setUseGlobalUnitMap(dd.UseGlobalUnitMap);
+
+    setDisplayHexAddresses(dd.HexAddress);
 
     onDefinitionChanged();
 }
@@ -232,6 +235,15 @@ bool FormModSim::displayHexAddresses() const
 void FormModSim::setDisplayHexAddresses(bool on)
 {
     ui->outputWidget->setDisplayHexAddresses(on);
+
+    if(on)
+    {
+        ui->lineEditAddress->setInputMode(NumericLineEdit::HexMode);
+    }
+    else
+    {
+        ui->lineEditAddress->setInputMode(NumericLineEdit::Int32Mode);
+    }
 }
 
 ///
@@ -756,7 +768,7 @@ void FormModSim::on_outputWidget_itemDoubleClicked(quint16 addr, const QVariant&
         case QModbusDataUnit::DiscreteInputs:
         {
             ModbusWriteParams params = { addr, value, mode, byteOrder(), codepage(), zeroBasedAddress };
-            DialogWriteCoilRegister dlg(params, simParams, this);
+            DialogWriteCoilRegister dlg(params, simParams, displayHexAddresses(), this);
             switch(dlg.exec())
             {
                 case QDialog::Accepted:
@@ -777,13 +789,13 @@ void FormModSim::on_outputWidget_itemDoubleClicked(quint16 addr, const QVariant&
             ModbusWriteParams params = { addr, value, mode, byteOrder(), codepage(), zeroBasedAddress };
             if(mode == DataDisplayMode::Binary)
             {
-                DialogWriteHoldingRegisterBits dlg(params, this);
+                DialogWriteHoldingRegisterBits dlg(params, displayHexAddresses(), this);
                 if(dlg.exec() == QDialog::Accepted)
                     _mbMultiServer.writeRegister(pointType, params);
             }
             else
             {
-                DialogWriteHoldingRegister dlg(params, simParams, this);
+                DialogWriteHoldingRegister dlg(params, simParams, displayHexAddresses(), this);
                 switch(dlg.exec())
                 {
                     case QDialog::Accepted:

@@ -11,20 +11,22 @@
 /// \param params
 /// \param type
 /// \param length
+/// \param hexAddress
 /// \param parent
 ///
-DialogForceMultipleRegisters::DialogForceMultipleRegisters(ModbusWriteParams& params, QModbusDataUnit::RegisterType type, int length, QWidget *parent) :
+DialogForceMultipleRegisters::DialogForceMultipleRegisters(ModbusWriteParams& params, QModbusDataUnit::RegisterType type, int length, bool hexAddress, QWidget *parent) :
       QDialog(parent)
     , ui(new Ui::DialogForceMultipleRegisters)
     ,_writeParams(params)
     ,_type(type)
+    ,_hexAddress(hexAddress)
 {
     ui->setupUi(this);
     setWindowFlags(Qt::Dialog |
                    Qt::CustomizeWindowHint |
                    Qt::WindowTitleHint);
 
-    ui->labelAddress->setText(QString(tr("Address: <b>%1</b>")).arg(formatAddress(type, params.Address, false)));
+    ui->labelAddress->setText(QString(tr("Address: <b>%1</b>")).arg(formatAddress(type, params.Address, _hexAddress)));
     ui->labelLength->setText(QString(tr("Length: <b>%1</b>")).arg(length, 3, 10, QLatin1Char('0')));
 
     switch(_writeParams.DisplayMode)
@@ -33,7 +35,13 @@ DialogForceMultipleRegisters::DialogForceMultipleRegisters(ModbusWriteParams& pa
             ui->lineEditValue->setPaddingZeroes(true);
             ui->lineEditValue->setInputMode(NumericLineEdit::HexMode);
             ui->lineEditValue->setInputRange(0, USHRT_MAX);
-            break;
+        break;
+
+        case DataDisplayMode::Ansi:
+            ui->lineEditValue->setInputMode(NumericLineEdit::AnsiMode);
+            ui->lineEditValue->setCodepage(params.Codepage);
+            ui->lineEditValue->setInputRange(0, USHRT_MAX);
+        break;
 
         case DataDisplayMode::Int16:
             ui->lineEditValue->setInputMode(NumericLineEdit::Int32Mode);
@@ -110,6 +118,7 @@ void DialogForceMultipleRegisters::accept()
             {
                 case DataDisplayMode::Binary:
                 case DataDisplayMode::Hex:
+                case DataDisplayMode::Ansi:
                 case DataDisplayMode::UInt16:
                 case DataDisplayMode::Int16:
                 {
@@ -245,6 +254,7 @@ void DialogForceMultipleRegisters::on_pushButtonRandom_clicked()
         {
             case DataDisplayMode::Binary:
             case DataDisplayMode::Hex:
+            case DataDisplayMode::Ansi:
             case DataDisplayMode::UInt16:
                 _data[i] = QRandomGenerator::global()->bounded(0, USHRT_MAX);
             break;
@@ -328,6 +338,7 @@ void DialogForceMultipleRegisters::on_pushButtonValue_clicked()
         switch(_writeParams.DisplayMode)
         {
             case DataDisplayMode::Hex:
+            case DataDisplayMode::Ansi:
             case DataDisplayMode::Binary:
             case DataDisplayMode::UInt16:
                 _data[i] = ui->lineEditValue->value<quint16>();
@@ -419,6 +430,13 @@ NumericLineEdit* DialogForceMultipleRegisters::createNumEdit(int idx)
             numEdit->setPaddingZeroes(true);
             numEdit->setValue(toByteOrderValue(_data[idx], _writeParams.Order));
         break;
+
+        case DataDisplayMode::Ansi:
+            numEdit = new NumericLineEdit(NumericLineEdit::AnsiMode, ui->tableWidget);
+            numEdit->setInputRange(0, USHRT_MAX);
+            numEdit->setCodepage(_writeParams.Codepage);
+            numEdit->setValue(toByteOrderValue(_data[idx], _writeParams.Order));
+            break;
 
         case DataDisplayMode::UInt16:
             numEdit = new NumericLineEdit(NumericLineEdit::Int32Mode, ui->tableWidget);
@@ -575,8 +593,8 @@ void DialogForceMultipleRegisters::updateTableWidget()
 
     for(int i = 0; i < ui->tableWidget->rowCount(); i++)
     {
-        const auto addressFrom = formatAddress(QModbusDataUnit::HoldingRegisters, _writeParams.Address + i * columns, _hexView);
-        const auto addressTo = formatAddress(QModbusDataUnit::HoldingRegisters, _writeParams.Address + qMin(length - 1, (i + 1) * columns - 1), _hexView);
+        const auto addressFrom = formatAddress(QModbusDataUnit::HoldingRegisters, _writeParams.Address + i * columns, _hexAddress);
+        const auto addressTo = formatAddress(QModbusDataUnit::HoldingRegisters, _writeParams.Address + qMin(length - 1, (i + 1) * columns - 1), _hexAddress);
         ui->tableWidget->setVerticalHeaderItem(i, new QTableWidgetItem(QString("%1-%2").arg(addressFrom, addressTo)));
 
         for(int j = 0; j < columns; j++)
