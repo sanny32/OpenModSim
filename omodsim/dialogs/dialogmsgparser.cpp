@@ -35,7 +35,6 @@ DialogMsgParser::DialogMsgParser(DataDisplayMode mode, ModbusMessage::ProtocolTy
 DialogMsgParser::~DialogMsgParser()
 {
     delete ui;
-    if(_mm) delete _mm;
 }
 
 ///
@@ -97,7 +96,6 @@ void DialogMsgParser::on_pushButtonParse_clicked()
     if(ui->buttonTcp->isChecked())
         protocol = ModbusMessage::Tcp;
 
-    if(_mm) delete _mm;
     _mm = ModbusMessage::create(data, protocol, QDateTime::currentDateTime(), ui->request->isChecked());
     ui->info->setModbusMessage(_mm);
 }

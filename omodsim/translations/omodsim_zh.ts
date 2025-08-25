@@ -40,7 +40,7 @@
         <location filename="../ansimenu.cpp" line="15"/>
         <location filename="../ansimenu.cpp" line="56"/>
         <source>Cyrillic</source>
-        <translation>古代斯拉夫语</translation>
+        <translation>西里尔语</translation>
     </message>
     <message>
         <location filename="../ansimenu.cpp" line="16"/>
@@ -168,7 +168,7 @@
     <message>
         <location filename="../dialogs/dialogabout.ui" line="75"/>
         <source>Version: 1.0.0</source>
-        <translation>版本：1.0.0</translation>
+        <translation>版本:1.0.0</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogabout.ui" line="112"/>
@@ -240,12 +240,12 @@
     <message>
         <location filename="../dialogs/dialogautosimulation.ui" line="61"/>
         <source>Change Interval (msecs):</source>
-        <translation>更改间隔（毫秒）：</translation>
+        <translation>更改间隔(毫秒):</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogautosimulation.ui" line="68"/>
         <source>Step Value: </source>
-        <translation>步长值： </translation>
+        <translation>步长值: </translation>
     </message>
     <message>
         <location filename="../dialogs/dialogautosimulation.ui" line="87"/>
@@ -260,12 +260,12 @@
     <message>
         <location filename="../dialogs/dialogautosimulation.ui" line="102"/>
         <source>Low Limit: </source>
-        <translation>下限： </translation>
+        <translation>下限: </translation>
     </message>
     <message>
         <location filename="../dialogs/dialogautosimulation.ui" line="125"/>
         <source>High Limit: </source>
-        <translation>上限： </translation>
+        <translation>上限: </translation>
     </message>
 </context>
 <context>
@@ -293,7 +293,7 @@
     <message>
         <location filename="../dialogs/dialogcoilsimulation.ui" line="58"/>
         <source>Change Interval (secs):</source>
-        <translation>更改间隔（秒）：</translation>
+        <translation>更改间隔(秒):</translation>
     </message>
 </context>
 <context>
@@ -301,7 +301,7 @@
     <message>
         <location filename="../dialogs/dialogdisplaydefinition.ui" line="14"/>
         <source>Display Definition</source>
-        <translation>显示定义</translation>
+        <translation>显示设置</translation>
     </message>
     <message>
         <source>Update Rate: </source>
@@ -314,32 +314,32 @@
     <message>
         <location filename="../dialogs/dialogdisplaydefinition.ui" line="40"/>
         <source>Log View Limit:</source>
-        <translation>日志查看限制：</translation>
+        <translation>日志视图：</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogdisplaydefinition.ui" line="71"/>
         <source>(rows)</source>
-        <translation>（行）</translation>
+        <translation>(行)</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogdisplaydefinition.ui" line="88"/>
         <source>Modbus Data</source>
-        <translation>Modbus 数据</translation>
+        <translation>Modbus数据</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogdisplaydefinition.ui" line="106"/>
         <source>Slave Address:</source>
-        <translation>从站地址：</translation>
+        <translation>从设备地址：</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogdisplaydefinition.ui" line="135"/>
         <source>Point Type:</source>
-        <translation>类型：</translation>
+        <translation>寄存器类型：</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogdisplaydefinition.ui" line="181"/>
         <source>Point Address:</source>
-        <translation>地址：</translation>
+        <translation>寄存器地址：</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogdisplaydefinition.ui" line="210"/>
@@ -349,7 +349,7 @@
     <message>
         <location filename="../dialogs/dialogdisplaydefinition.ui" line="242"/>
         <source>Use Global Address Map (Unallocated registers will be zero)</source>
-        <translation>使用全局地址映射（未分配的寄存器将为零）</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../dialogs/dialogdisplaydefinition.ui" line="158"/>
@@ -393,12 +393,12 @@
         <translation type="vanished">Количество: %1</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="25"/>
+        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="27"/>
         <source>Address: &lt;b&gt;%1&lt;/b&gt;</source>
         <translation>地址: &lt;b&gt;%1&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="26"/>
+        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="28"/>
         <source>Length: &lt;b&gt;%1&lt;/b&gt;</source>
         <translation>长度: &lt;b&gt;%1&lt;/b&gt;</translation>
     </message>
@@ -444,12 +444,12 @@
         <translation type="vanished">Количество: %1</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="27"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="29"/>
         <source>Address: &lt;b&gt;%1&lt;/b&gt;</source>
         <translation>地址: &lt;b&gt;%1&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="28"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="30"/>
         <source>Length: &lt;b&gt;%1&lt;/b&gt;</source>
         <translation>长度: &lt;b&gt;%1&lt;/b&gt;</translation>
     </message>
@@ -459,7 +459,7 @@
     <message>
         <location filename="../dialogs/dialogmsgparser.ui" line="14"/>
         <source>Modbus Message Parser</source>
-        <translation>Modbus 报文解析</translation>
+        <translation>Modbus报文解析</translation>
     </message>
     <message>
         <source>PDU Message</source>
@@ -472,12 +472,12 @@
     <message>
         <location filename="../dialogs/dialogmsgparser.ui" line="25"/>
         <source>RTU Message</source>
-        <translation>RTU 报文</translation>
+        <translation>RTU报文</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogmsgparser.ui" line="64"/>
         <source>TCP Message</source>
-        <translation>TCP 报文</translation>
+        <translation>TCP报文</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogmsgparser.ui" line="103"/>
@@ -548,12 +548,12 @@
     <message>
         <location filename="../dialogs/dialogprintsettings.ui" line="124"/>
         <source>Size: </source>
-        <translation>尺寸: </translation>
+        <translation>大小: </translation>
     </message>
     <message>
         <location filename="../dialogs/dialogprintsettings.ui" line="147"/>
         <source>Source: </source>
-        <translation>来源： </translation>
+        <translation>来源: </translation>
     </message>
     <message>
         <location filename="../dialogs/dialogprintsettings.ui" line="176"/>
@@ -563,17 +563,17 @@
     <message>
         <location filename="../dialogs/dialogprintsettings.ui" line="212"/>
         <source>Portrait</source>
-        <translation>描述</translation>
+        <translation>纵向</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogprintsettings.ui" line="228"/>
         <source>Landscape</source>
-        <translation>横向打印格式</translation>
+        <translation>横向</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogprintsettings.cpp" line="77"/>
         <source>Ready</source>
-        <translation>已完成</translation>
+        <translation>就绪</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogprintsettings.cpp" line="80"/>
@@ -671,12 +671,12 @@
     <message>
         <location filename="../dialogs/dialogscriptsettings.ui" line="23"/>
         <source>Run Mode: </source>
-        <translation>运行模式： </translation>
+        <translation>运行模式: </translation>
     </message>
     <message>
         <location filename="../dialogs/dialogscriptsettings.ui" line="40"/>
         <source>Interval: </source>
-        <translation>间隔： </translation>
+        <translation>间隔: </translation>
     </message>
     <message>
         <location filename="../dialogs/dialogscriptsettings.ui" line="65"/>
@@ -708,7 +708,7 @@
     <message>
         <location filename="../dialogs/dialogselectserviceport.ui" line="44"/>
         <source>Modbus/TCP Service Port</source>
-        <translation>Modbus/TCP 服务器端口</translation>
+        <translation>Modbus/TCP服务器端口</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogselectserviceport.ui" line="57"/>
@@ -731,25 +731,25 @@
     <message>
         <location filename="../dialogs/dialogsetuppresetdata.ui" line="46"/>
         <source>Number of Points: </source>
-        <translation>点数： </translation>
+        <translation>点数: </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogsetuppresetdata.cpp" line="25"/>
+        <location filename="../dialogs/dialogsetuppresetdata.cpp" line="27"/>
         <source>PRESET COILS</source>
         <translation>预设线圈</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogsetuppresetdata.cpp" line="28"/>
+        <location filename="../dialogs/dialogsetuppresetdata.cpp" line="30"/>
         <source>PRESET DISCRETE INPUTS</source>
         <translation>预设离散输入</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogsetuppresetdata.cpp" line="31"/>
+        <location filename="../dialogs/dialogsetuppresetdata.cpp" line="33"/>
         <source>PRESET INPUT REGISTERS</source>
         <translation>预设输入寄存器</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogsetuppresetdata.cpp" line="34"/>
+        <location filename="../dialogs/dialogsetuppresetdata.cpp" line="36"/>
         <source>PRESET HOLDING REGISTERS</source>
         <translation>预设保持寄存器</translation>
     </message>
@@ -814,7 +814,7 @@
     <message>
         <location filename="../dialogs/dialogsetupserialport.ui" line="104"/>
         <source>Word Length: </source>
-        <translation>字长： </translation>
+        <translation>字长: </translation>
     </message>
     <message>
         <location filename="../dialogs/dialogsetupserialport.ui" line="127"/>
@@ -829,12 +829,12 @@
     <message>
         <location filename="../dialogs/dialogsetupserialport.ui" line="140"/>
         <source>Parity: </source>
-        <translation>奇偶校验： </translation>
+        <translation>奇偶校验: </translation>
     </message>
     <message>
         <location filename="../dialogs/dialogsetupserialport.ui" line="166"/>
         <source>Stop Bits: </source>
-        <translation>停止位： </translation>
+        <translation>停止位: </translation>
     </message>
     <message>
         <location filename="../dialogs/dialogsetupserialport.ui" line="186"/>
@@ -849,22 +849,22 @@
     <message>
         <location filename="../dialogs/dialogsetupserialport.ui" line="208"/>
         <source>Hardware Flow Control</source>
-        <translation>硬件流量控制</translation>
+        <translation>硬流控</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogsetupserialport.ui" line="217"/>
         <source>Flow Control Mode: </source>
-        <translation>流量控制模式： </translation>
+        <translation>流控模式: </translation>
     </message>
     <message>
         <location filename="../dialogs/dialogsetupserialport.ui" line="237"/>
         <source>DTR Control: </source>
-        <translation>DTR 控制： </translation>
+        <translation>DTR控制: </translation>
     </message>
     <message>
         <location filename="../dialogs/dialogsetupserialport.ui" line="260"/>
         <source>RTS Control: </source>
-        <translation>RTS 控制： </translation>
+        <translation>RTS控制: </translation>
     </message>
 </context>
 <context>
@@ -900,7 +900,7 @@
     <message>
         <location filename="../dialogs/dialogwritecoilregister.ui" line="38"/>
         <source>Address: </source>
-        <translation>地址： </translation>
+        <translation>地址: </translation>
     </message>
     <message>
         <location filename="../dialogs/dialogwritecoilregister.ui" line="85"/>
@@ -933,12 +933,12 @@
     <message>
         <location filename="../dialogs/dialogwriteholdingregister.ui" line="26"/>
         <source>Address: </source>
-        <translation>地址： </translation>
+        <translation>地址: </translation>
     </message>
     <message>
         <location filename="../dialogs/dialogwriteholdingregister.ui" line="58"/>
         <source>Value: </source>
-        <translation>值： </translation>
+        <translation>值: </translation>
     </message>
     <message>
         <location filename="../dialogs/dialogwriteholdingregister.ui" line="115"/>
@@ -946,9 +946,9 @@
         <translation>自动仿真</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwriteholdingregister.cpp" line="68"/>
+        <location filename="../dialogs/dialogwriteholdingregister.cpp" line="70"/>
         <source>Value, (ANSI): </source>
-        <translation>值，（ANSI）： </translation>
+        <translation>值,(ANSI): </translation>
     </message>
 </context>
 <context>
@@ -961,7 +961,7 @@
     <message>
         <location filename="../dialogs/dialogwriteholdingregisterbits.ui" line="38"/>
         <source>Address: </source>
-        <translation>地址： </translation>
+        <translation>地址: </translation>
     </message>
     <message>
         <location filename="../dialogs/dialogwriteholdingregisterbits.ui" line="85"/>
@@ -979,12 +979,12 @@
     <message>
         <location filename="../controls/flowcontroltypecombobox.cpp" line="11"/>
         <source>HARDWARE (RTS/CTS)</source>
-        <translation>硬件（RTS/CTS）</translation>
+        <translation>硬件(RTS/CTS)</translation>
     </message>
     <message>
         <location filename="../controls/flowcontroltypecombobox.cpp" line="12"/>
         <source>SOFTWARE (XON/XOFF)</source>
-        <translation>软件（XON/XOFF）</translation>
+        <translation>软件(XON/XOFF)</translation>
     </message>
 </context>
 <context>
@@ -1043,7 +1043,7 @@ Length: %2</source>
         <translation type="vanished">Указана недопустимая длина данных</translation>
     </message>
     <message>
-        <location filename="../formmodsim.cpp" line="430"/>
+        <location filename="../formmodsim.cpp" line="436"/>
         <source>Address Base: %1
 Start Address: %2
 Length: %3</source>
@@ -1052,12 +1052,12 @@ Length: %3</source>
 长度: %3</translation>
     </message>
     <message>
-        <location filename="../formmodsim.cpp" line="433"/>
+        <location filename="../formmodsim.cpp" line="439"/>
         <source>Device Id: %1
 MODBUS Point Type:
 %2</source>
-        <translation>设备地址：%1
-寄存器类型：
+        <translation>设备地址:%1
+寄存器类型:
 %2</translation>
     </message>
 </context>
@@ -1067,12 +1067,12 @@ MODBUS Point Type:
         <location filename="../controls/helpwidget.cpp" line="30"/>
         <location filename="../controls/helpwidget.cpp" line="59"/>
         <source>qthelp://omodsim/doc/index.html</source>
-        <translation>qthelp://omodsim/doc/index.html</translation>
+        <translation type="unfinished">qthelp://omodsim/doc/index.html</translation>
     </message>
     <message>
         <location filename="../controls/helpwidget.cpp" line="68"/>
         <source>qthelp://omodsim/doc/index.html#%1</source>
-        <translation>qthelp://omodsim/doc/index.html#%1</translation>
+        <translation>qthelp://omodsim/doc/index_cn.html#%1</translation>
     </message>
 </context>
 <context>
@@ -1105,7 +1105,7 @@ MODBUS Point Type:
     <message>
         <location filename="../controls/mainstatusbar.cpp" line="109"/>
         <source>Modbus/TCP Srv %1:%2</source>
-        <translation>modbus/TCP 服务器%1:%2</translation>
+        <translation>modbus/TCP服务器%1:%2</translation>
     </message>
     <message>
         <location filename="../controls/mainstatusbar.cpp" line="113"/>
@@ -1155,7 +1155,7 @@ MODBUS Point Type:
     <message>
         <location filename="../mainwindow.ui" line="97"/>
         <source>Display Options</source>
-        <translation>显示选项</translation>
+        <translation>显示格式设置</translation>
     </message>
     <message>
         <source>Byte Order</source>
@@ -1210,13 +1210,13 @@ MODBUS Point Type:
     <message>
         <location filename="../mainwindow.ui" line="313"/>
         <source>New</source>
-        <translation>新的</translation>
+        <translation>新建</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="694"/>
         <location filename="../mainwindow.ui" line="697"/>
         <source>Swap Bytes (0xAB → 0xBA)</source>
-        <translation>交换字节（0xAB → 0xBA）</translation>
+        <translation>交换字节(0xAB → 0xBA)</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="854"/>
@@ -1226,7 +1226,7 @@ MODBUS Point Type:
     <message>
         <location filename="../mainwindow.ui" line="869"/>
         <source>Swapped 32-bit Integer</source>
-        <translation>32位整数（字节交换）</translation>
+        <translation>32位整数(字节交换)</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="884"/>
@@ -1236,7 +1236,7 @@ MODBUS Point Type:
     <message>
         <location filename="../mainwindow.ui" line="899"/>
         <source>Swapped Unsigned 32-bit Integer</source>
-        <translation>无符号32位整数（字节交换）</translation>
+        <translation>无符号32位整数(字节交换)</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="932"/>
@@ -1246,7 +1246,7 @@ MODBUS Point Type:
     <message>
         <location filename="../mainwindow.ui" line="947"/>
         <source>Swapped 64-bit Integer</source>
-        <translation>64位整数（字节交换）</translation>
+        <translation>64位整数(字节交换)</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="962"/>
@@ -1256,7 +1256,7 @@ MODBUS Point Type:
     <message>
         <location filename="../mainwindow.ui" line="977"/>
         <source>Swapped Unsigned 64-bit Integer</source>
-        <translation>无符号64位整数（字节交换）</translation>
+        <translation>无符号64位整数(字节交换)</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="992"/>
@@ -1387,17 +1387,17 @@ MODBUS Point Type:
     <message>
         <location filename="../mainwindow.ui" line="521"/>
         <source>Cascade</source>
-        <translation>级联</translation>
+        <translation>层叠</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="526"/>
         <source>Tile</source>
-        <translation>标题</translation>
+        <translation>平铺</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="535"/>
         <source>About Open ModSim...</source>
-        <translation>关于 Open ModSim...</translation>
+        <translation>关于Open ModSim...</translation>
     </message>
     <message>
         <source>Integer</source>
@@ -1416,7 +1416,7 @@ MODBUS Point Type:
     <message>
         <location filename="../mainwindow.ui" line="583"/>
         <source>Data Definition</source>
-        <translation>数据定义</translation>
+        <translation>数据格式</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="661"/>
@@ -1505,7 +1505,7 @@ MODBUS Point Type:
         <location filename="../mainwindow.ui" line="240"/>
         <location filename="../mainwindow.ui" line="607"/>
         <source>Display Bar</source>
-        <translation>显示栏</translation>
+        <translation>格式栏</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="277"/>
@@ -1526,19 +1526,19 @@ MODBUS Point Type:
     <message>
         <location filename="../mainwindow.ui" line="477"/>
         <source>Swapped Float</source>
-        <translation>单精度浮点数（字节交换）</translation>
+        <translation>浮点数(字节交换)</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="492"/>
         <location filename="../mainwindow.ui" line="495"/>
         <location filename="../mainwindow.ui" line="498"/>
         <source>Double</source>
-        <translation>双精度</translation>
+        <translation>双精度浮点数</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="513"/>
         <source>Swapped Double</source>
-        <translation>双精度浮点数（字节交换）</translation>
+        <translation>双精度浮点数(字节交换)</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="547"/>
@@ -1581,7 +1581,7 @@ MODBUS Point Type:
     </message>
     <message>
         <source>Русский</source>
-        <translation type="vanished">俄罗斯</translation>
+        <translation type="vanished">俄语</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="321"/>
@@ -1598,7 +1598,7 @@ MODBUS Point Type:
         <location filename="../menuconnect.cpp" line="18"/>
         <location filename="../menuconnect.cpp" line="95"/>
         <source>Modbus/TCP Srv</source>
-        <translation>Modbus/TCP 服务器</translation>
+        <translation>Modbus/TCP服务器</translation>
     </message>
     <message>
         <location filename="../menuconnect.cpp" line="21"/>
@@ -1611,7 +1611,7 @@ MODBUS Point Type:
         <location filename="../menuconnect.cpp" line="35"/>
         <location filename="../menuconnect.cpp" line="97"/>
         <source>Modbus/TCP Srv %1</source>
-        <translation>Modbus/TCP 服务器 %1</translation>
+        <translation>Modbus/TCP服务器 %1</translation>
     </message>
 </context>
 <context>
@@ -1619,12 +1619,12 @@ MODBUS Point Type:
     <message>
         <location filename="../controls/modbusmessagewidget.cpp" line="144"/>
         <source>&lt;span style=&apos;color:%1&apos;&gt;*** INVALID MODBUS REQUEST ***&lt;/span&gt;</source>
-        <translation>&lt;span style=&apos;color:%1&apos;&gt;*** MODBUS 请求无效 ***&lt;/span&gt;</translation>
+        <translation>&lt;span style=&apos;color:%1&apos;&gt;*** MODBUS请求无效 ***&lt;/span&gt;</translation>
     </message>
     <message>
         <location filename="../controls/modbusmessagewidget.cpp" line="146"/>
         <source>&lt;span style=&apos;color:%1&apos;&gt;*** INVALID MODBUS RESPONSE ***&lt;/span&gt;</source>
-        <translation>&lt;span style=&apos;color:%1&apos;&gt;*** MODBUS 响应无效 ***&lt;/span&gt;</translation>
+        <translation>&lt;span style=&apos;color:%1&apos;&gt;*** MODBUS响应无效 ***&lt;/span&gt;</translation>
     </message>
     <message>
         <location filename="../controls/modbusmessagewidget.cpp" line="156"/>
@@ -1644,12 +1644,12 @@ MODBUS Point Type:
     <message>
         <location filename="../controls/modbusmessagewidget.cpp" line="166"/>
         <source>Request (Tx)</source>
-        <translation>请求 (Tx)</translation>
+        <translation>请求(Tx)</translation>
     </message>
     <message>
         <location filename="../controls/modbusmessagewidget.cpp" line="166"/>
         <source>Response (Rx)</source>
-        <translation>响应 (Rx)</translation>
+        <translation>响应(Rx)</translation>
     </message>
     <message>
         <location filename="../controls/modbusmessagewidget.cpp" line="167"/>
@@ -1659,12 +1659,12 @@ MODBUS Point Type:
     <message>
         <location filename="../controls/modbusmessagewidget.cpp" line="175"/>
         <source>&lt;b&gt;Transaction ID:&lt;/b&gt; %1</source>
-        <translation>&lt;b&gt;处理ID:&lt;/b&gt; %1</translation>
+        <translation>&lt;b&gt;处理编号:&lt;/b&gt; %1</translation>
     </message>
     <message>
         <location filename="../controls/modbusmessagewidget.cpp" line="176"/>
         <source>&lt;b&gt;Protocol ID:&lt;/b&gt; %1</source>
-        <translation>&lt;b&gt;协议ID:&lt;/b&gt; %1</translation>
+        <translation>&lt;b&gt;协议编号:&lt;/b&gt; %1</translation>
     </message>
     <message>
         <location filename="../controls/modbusmessagewidget.cpp" line="177"/>
@@ -1698,7 +1698,7 @@ MODBUS Point Type:
     <message>
         <location filename="../controls/modbusmessagewidget.cpp" line="196"/>
         <source>(0-based)</source>
-        <translation>（基地址为-0）</translation>
+        <translation>(基地址为-0)</translation>
     </message>
     <message>
         <location filename="../controls/modbusmessagewidget.cpp" line="206"/>
@@ -1747,7 +1747,7 @@ MODBUS Point Type:
     <message>
         <location filename="../controls/modbusmessagewidget.cpp" line="520"/>
         <source>&lt;b&gt;FIFO Point Address:&lt;/b&gt; %1 %2</source>
-        <translation>&lt;b&gt;FIFO点地址:&lt;/b&gt; %1 %2</translation>
+        <translation>&lt;b&gt;FIFO点位地址:&lt;/b&gt; %1 %2</translation>
     </message>
     <message>
         <source>&lt;b&gt;Start Address:&lt;/b&gt; %1</source>
@@ -1815,7 +1815,7 @@ MODBUS Point Type:
         <location filename="../controls/modbusmessagewidget.cpp" line="329"/>
         <location filename="../controls/modbusmessagewidget.cpp" line="337"/>
         <source>&lt;b&gt;Sub-function:&lt;/b&gt; %1</source>
-        <translation>&lt;b&gt;子函数:&lt;/b&gt; %1</translation>
+        <translation>&lt;b&gt;子功能:&lt;/b&gt; %1</translation>
     </message>
     <message>
         <location filename="../controls/modbusmessagewidget.cpp" line="330"/>
@@ -1891,13 +1891,13 @@ MODBUS Point Type:
         <location filename="../controls/modbusmessagewidget.cpp" line="473"/>
         <location filename="../controls/modbusmessagewidget.cpp" line="483"/>
         <source>&lt;b&gt;And Mask:&lt;/b&gt; %1</source>
-        <translation>&lt;b&gt;And 掩码:&lt;/b&gt; %1</translation>
+        <translation>&lt;b&gt;And掩码:&lt;/b&gt; %1</translation>
     </message>
     <message>
         <location filename="../controls/modbusmessagewidget.cpp" line="474"/>
         <location filename="../controls/modbusmessagewidget.cpp" line="484"/>
         <source>&lt;b&gt;Or Mask:&lt;/b&gt; %1</source>
-        <translation>&lt;b&gt;Or 掩码:&lt;/b&gt; %1</translation>
+        <translation>&lt;b&gt;Or掩码:&lt;/b&gt; %1</translation>
     </message>
     <message>
         <source>&lt;b&gt;Read Starting Address:&lt;/b&gt; %1</source>
@@ -1955,7 +1955,7 @@ MODBUS Point Type:
     <message>
         <location filename="../controls/outputwidget.cpp" line="784"/>
         <source>%1: Enter Description</source>
-        <translation>%1：输入描述</translation>
+        <translation>%1:输入描述</translation>
     </message>
     <message>
         <location filename="../controls/outputwidget.cpp" line="849"/>
@@ -2051,7 +2051,7 @@ MODBUS Point Type:
 	Server.addressBase = AddressBase.Base1;
 	Server.onChange(Register.Holding, 1, (value)=&gt;
 	{
-		/* 在寄存器值更改时编写代码 */
+		/* 在寄存器值更改时写入代码 */
 	});
 
 	/* 在此处编写您的初始化代码 */
