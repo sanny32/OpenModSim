@@ -138,6 +138,7 @@ DisplayDefinition FormModSim::displayDefinition() const
     dd.PointType = ui->comboBoxModbusPointType->currentPointType();
     dd.Length = ui->lineEditLength->value<int>();
     dd.ZeroBasedAddress = ui->lineEditAddress->range<int>().from() == 0;
+    dd.LogViewLimit = ui->outputWidget->logViewLimit();
     dd.UseGlobalUnitMap = _mbMultiServer.useGlobalUnitMap();
     dd.HexAddress = displayHexAddresses();
 
@@ -168,6 +169,8 @@ void FormModSim::setDisplayDefinition(const DisplayDefinition& dd)
     ui->comboBoxModbusPointType->blockSignals(true);
     ui->comboBoxModbusPointType->setCurrentPointType(dd.PointType);
     ui->comboBoxModbusPointType->blockSignals(false);
+
+    ui->outputWidget->setLogViewLimit(dd.LogViewLimit);
 
     _mbMultiServer.setUseGlobalUnitMap(dd.UseGlobalUnitMap);
 
