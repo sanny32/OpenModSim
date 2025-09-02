@@ -18,6 +18,7 @@ struct DisplayDefinition
     bool ZeroBasedAddress = false;
     bool UseGlobalUnitMap = false;
     bool HexAddress = false;
+    bool AutoscrollLog = false;
 
     void normalize()
     {
@@ -46,6 +47,7 @@ inline QSettings& operator <<(QSettings& out, const DisplayDefinition& dd)
     out.setValue("DisplayDefinition/ZeroBasedAddress",  dd.ZeroBasedAddress);
     out.setValue("DisplayDefinition/UseGlobalUnitMap",  dd.UseGlobalUnitMap);
     out.setValue("DisplayDefinition/HexAddress",        dd.HexAddress);
+    out.setValue("DisplayDefinition/AutoscrollLog",     dd.AutoscrollLog);
 
     return out;
 }
@@ -66,6 +68,7 @@ inline QSettings& operator >>(QSettings& in, DisplayDefinition& dd)
     dd.ZeroBasedAddress = in.value("DisplayDefinition/ZeroBasedAddress").toBool();
     dd.UseGlobalUnitMap = in.value("DisplayDefinition/UseGlobalUnitMap").toBool();
     dd.HexAddress = in.value("DisplayDefinition/HexAddress").toBool();
+    dd.AutoscrollLog = in.value("DisplayDefinition/AutoscrollLog").toBool();
 
     dd.normalize();
     return in;

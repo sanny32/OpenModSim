@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.25)
 
 project(omodsim
-        VERSION 1.8.2
+        VERSION 1.9.0
         LANGUAGES CXX)
 
 set(CMAKE_AUTOUIC ON)
@@ -155,6 +155,7 @@ set(HEADERS
     dialogs/dialogwritecoilregister.h
     dialogs/dialogwriteholdingregister.h
     dialogs/dialogwriteholdingregisterbits.h
+    fontutils.h
     formatutils.h
     htmldelegate.h
     jscompleter.h

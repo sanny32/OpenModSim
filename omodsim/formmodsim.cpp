@@ -12,7 +12,7 @@
 #include "formmodsim.h"
 #include "ui_formmodsim.h"
 
-QVersionNumber FormModSim::VERSION = QVersionNumber(1, 7);
+QVersionNumber FormModSim::VERSION = QVersionNumber(1, 8);
 
 ///
 /// \brief FormModSim::FormModSim
@@ -139,6 +139,7 @@ DisplayDefinition FormModSim::displayDefinition() const
     dd.Length = ui->lineEditLength->value<int>();
     dd.ZeroBasedAddress = ui->lineEditAddress->range<int>().from() == 0;
     dd.LogViewLimit = ui->outputWidget->logViewLimit();
+    dd.AutoscrollLog = ui->outputWidget->autoscrollLogView();
     dd.UseGlobalUnitMap = _mbMultiServer.useGlobalUnitMap();
     dd.HexAddress = displayHexAddresses();
 
@@ -171,6 +172,7 @@ void FormModSim::setDisplayDefinition(const DisplayDefinition& dd)
     ui->comboBoxModbusPointType->blockSignals(false);
 
     ui->outputWidget->setLogViewLimit(dd.LogViewLimit);
+    ui->outputWidget->setAutosctollLogView(dd.AutoscrollLog);
 
     _mbMultiServer.setUseGlobalUnitMap(dd.UseGlobalUnitMap);
 
@@ -240,7 +242,7 @@ void FormModSim::setDisplayHexAddresses(bool on)
     ui->outputWidget->setDisplayHexAddresses(on);
 
     ui->lineEditAddress->setInputMode(on ? NumericLineEdit::HexMode : NumericLineEdit::Int32Mode);
-    ui->lineEditAddress->setInputRange(ModbusLimits::addressRange(true));
+    ui->lineEditAddress->setInputRange(ModbusLimits::addressRange(ui->comboBoxAddressBase->currentAddressBase() == AddressBase::Base0));
 }
 
 ///
