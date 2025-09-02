@@ -344,6 +344,24 @@ void ModbusLogWidget::setBackGroundColor(const QColor& clr)
 }
 
 ///
+/// \brief ModbusLogWidget::state
+/// \return
+///
+LogViewState ModbusLogWidget::state() const
+{
+    return _state;
+}
+
+///
+/// \brief ModbusLogWidget::setState
+/// \param state
+///
+void ModbusLogWidget::setState(LogViewState state)
+{
+    _state = state;
+}
+
+///
 /// \brief ModbusLogWidget::on_customContextMenuRequested
 /// \param pos
 ///

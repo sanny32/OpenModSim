@@ -14,7 +14,7 @@ set(PRODUCT_NAME "Open ModSim")
 # Find Qt6 or fallback to Qt5
 find_package(Qt6 COMPONENTS Core Gui Widgets Network PrintSupport SerialBus SerialPort Core5Compat Qml Help LinguistTools QUIET)
 if (NOT Qt6_FOUND)
-    find_package(Qt5 COMPONENTS Core Gui Widgets Network PrintSupport SerialBus SerialPort Qml Help LinguistTools QUIET)
+    find_package(Qt5 COMPONENTS Core Gui Widgets Network PrintSupport SerialBus SerialPort Qml Help LinguistTools QUIET REQUIRED)
 endif()
 
 if(Qt6_FOUND)
@@ -70,6 +70,7 @@ set(SOURCES
     controls/scriptcontrol.cpp
     controls/searchlineedit.cpp
     controls/simulationmodecombobox.cpp
+    controls/statisticwidget.cpp
     datasimulator.cpp
     dialogs/dialogautosimulation.cpp
     dialogs/dialogcoilsimulation.cpp
@@ -138,6 +139,7 @@ set(HEADERS
     controls/scriptcontrol.h
     controls/searchlineedit.h
     controls/simulationmodecombobox.h
+    controls/statisticwidget.h
     datasimulator.h
     dialogs/dialogautosimulation.h
     dialogs/dialogcoilsimulation.h
@@ -213,6 +215,7 @@ set(HEADERS
 set(UI_FILES
     controls/outputwidget.ui
     controls/scriptcontrol.ui
+    controls/statisticwidget.ui
     dialogs/dialogautosimulation.ui
     dialogs/dialogcoilsimulation.ui
     dialogs/dialogabout.ui

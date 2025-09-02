@@ -68,6 +68,9 @@ public:
     QColor backgroundColor() const;
     void setBackGroundColor(const QColor& clr);
 
+    LogViewState state() const;
+    void setState(LogViewState state);
+
 protected:
     void changeEvent(QEvent* event) override;
 
@@ -78,6 +81,7 @@ private:
     bool _autoscroll;
     QAction* _copyAct;
     QAction* _copyBytesAct;
+    LogViewState _state = Running;
     DataDisplayMode _dataDisplayMode;
 };
 

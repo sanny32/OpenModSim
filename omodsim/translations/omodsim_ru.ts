@@ -974,7 +974,7 @@
         <translation>Адрес: </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwriteholdingregisterbits.ui" line="85"/>
+        <location filename="../dialogs/dialogwriteholdingregisterbits.ui" line="88"/>
         <source>Bit Pattern</source>
         <translation>Битовый шаблон</translation>
     </message>
@@ -2298,6 +2298,50 @@ MODBUS Point Type:
         <location filename="../controls/simulationmodecombobox.cpp" line="50"/>
         <source>Decrement</source>
         <translation>Уменьшение</translation>
+    </message>
+</context>
+<context>
+    <name>StatisticWidget</name>
+    <message>
+        <location filename="../controls/statisticwidget.ui" line="44"/>
+        <source>Requests: 0</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../controls/statisticwidget.ui" line="51"/>
+        <source>Responses: 0</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../controls/statisticwidget.ui" line="75"/>
+        <source>Reset Ctrs</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../controls/statisticwidget.ui" line="97"/>
+        <source>Pause</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../controls/statisticwidget.cpp" line="97"/>
+        <location filename="../controls/statisticwidget.cpp" line="101"/>
+        <source>Pause Logging</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../controls/statisticwidget.cpp" line="105"/>
+        <source>Resume Logging</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../controls/statisticwidget.cpp" line="138"/>
+        <source>Requests: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../controls/statisticwidget.cpp" line="139"/>
+        <source>Responses: %1</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>
