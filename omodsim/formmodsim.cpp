@@ -53,7 +53,7 @@ FormModSim::FormModSim(int id, ModbusMultiServer& server, QSharedPointer<DataSim
     onDefinitionChanged();
     ui->outputWidget->setFocus();
 
-    setLogViewState(Running);
+    setLogViewState(Unknown);
     connect(ui->statisticWidget, &StatisticWidget::ctrsReseted, ui->outputWidget, &OutputWidget::clearLogView);
     connect(ui->statisticWidget, &StatisticWidget::logStateChanged, ui->outputWidget, &OutputWidget::setLogViewState);
 
@@ -855,6 +855,11 @@ void FormModSim::on_mbDeviceIdChanged(quint8 deviceId)
 void FormModSim::on_mbConnected(const ConnectionDetails&)
 {
     updateStatus();
+    ui->outputWidget->clearLogView();
+
+    if(logViewState() == Unknown) {
+        setLogViewState(Running);
+    }
 }
 
 ///
@@ -862,7 +867,10 @@ void FormModSim::on_mbConnected(const ConnectionDetails&)
 ///
 void FormModSim::on_mbDisconnected(const ConnectionDetails&)
 {
-   updateStatus();
+    updateStatus();
+    if(!_mbMultiServer.isConnected()) {
+        setLogViewState(Unknown);
+    }
 }
 
 ///
