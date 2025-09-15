@@ -30,13 +30,20 @@ public:
     int rowLimit() const;
     void setRowLimit(int val);
 
+    bool isBufferingMode() const {
+        return _bufferingMode;
+    }
+    void setBufferingMode(bool value);
+
 private:
     void deleteItems();
 
 private:
     int _rowLimit = 30;
+    bool _bufferingMode = false;
     ModbusLogWidget* _parentWidget;
     QQueue<QSharedPointer<const ModbusMessage>> _items;
+    QQueue<QSharedPointer<const ModbusMessage>> _bufferingItems;
 };
 
 ///

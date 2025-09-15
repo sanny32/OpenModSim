@@ -1619,14 +1619,14 @@ MODBUS Point Type:
 <context>
     <name>ModbusLogWidget</name>
     <message>
-        <location filename="../controls/modbuslogwidget.cpp" line="146"/>
-        <location filename="../controls/modbuslogwidget.cpp" line="192"/>
+        <location filename="../controls/modbuslogwidget.cpp" line="173"/>
+        <location filename="../controls/modbuslogwidget.cpp" line="219"/>
         <source>Copy Text</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/modbuslogwidget.cpp" line="161"/>
-        <location filename="../controls/modbuslogwidget.cpp" line="193"/>
+        <location filename="../controls/modbuslogwidget.cpp" line="188"/>
+        <location filename="../controls/modbuslogwidget.cpp" line="220"/>
         <source>Copy Bytes</source>
         <translation type="unfinished"></translation>
     </message>

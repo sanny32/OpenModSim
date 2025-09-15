@@ -153,7 +153,7 @@ private:
     void updateStatus();
     void onDefinitionChanged();
     ScriptControl* scriptControl();
-    bool isLoggedRequest(const QModbusRequest& req, ModbusMessage::ProtocolType protocol) const;
+    bool isLoggingRequest(const QModbusRequest& req, ModbusMessage::ProtocolType protocol) const;
 
 private:
     Ui::FormModSim *ui;

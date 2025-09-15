@@ -79,6 +79,27 @@ void ModbusLogModel::clear()
 }
 
 ///
+/// \brief ModbusLogModel::setBufferingMode
+/// \param freeze
+///
+void ModbusLogModel::setBufferingMode(bool freeze)
+{
+    _bufferingMode = freeze;
+    if(!_bufferingMode)
+    {
+        for(auto&& data : _bufferingItems) {
+            _items.push_back(data);
+
+            while(_items.size() >= _rowLimit) {
+                _items.removeFirst();
+            }
+        }
+        _bufferingItems.clear();
+        update();
+    }
+}
+
+///
 /// \brief ModbusLogModel::append
 /// \param data
 ///
@@ -86,16 +107,21 @@ void ModbusLogModel::append(QSharedPointer<const ModbusMessage> data)
 {
     if(data == nullptr) return;
 
-    while(rowCount() >= _rowLimit)
-    {
-        beginRemoveRows(QModelIndex(), 0, 0);
-        _items.removeFirst();
-        endRemoveRows();
+    if(_bufferingMode) {
+        _bufferingItems.push_back(data);
     }
+    else {
+        while(rowCount() >= _rowLimit)
+        {
+            beginRemoveRows(QModelIndex(), 0, 0);
+            _items.removeFirst();
+            endRemoveRows();
+        }
 
-    beginInsertRows(QModelIndex(), rowCount(), rowCount());
-    _items.push_back(data);
-    endInsertRows();
+        beginInsertRows(QModelIndex(), rowCount(), rowCount());
+        _items.push_back(data);
+        endInsertRows();
+    }
 }
 
 ///
@@ -122,6 +148,7 @@ void ModbusLogModel::setRowLimit(int val)
 void ModbusLogModel::deleteItems()
 {
     _items.clear();
+    _bufferingItems.clear();
 }
 
 ///
@@ -361,12 +388,11 @@ void ModbusLogWidget::setState(LogViewState state)
     _state = state;
     switch (state) {
         case Paused:
-            model()->blockSignals(true);
+            ((ModbusLogModel*)model())->setBufferingMode(true);
         break;
 
         case Running:
-            model()->blockSignals(false);
-            update();
+            ((ModbusLogModel*)model())->setBufferingMode(false);
         break;
 
         default:

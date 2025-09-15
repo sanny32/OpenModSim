@@ -866,12 +866,12 @@ void FormModSim::on_mbDisconnected(const ConnectionDetails&)
 }
 
 ///
-/// \brief FormModSim::isLoggedRequest
+/// \brief FormModSim::isLoggingRequest
 /// \param req
 /// \param protocol
 /// \return
 ///
-bool FormModSim::isLoggedRequest(const QModbusRequest& req, ModbusMessage::ProtocolType protocol) const
+bool FormModSim::isLoggingRequest(const QModbusRequest& req, ModbusMessage::ProtocolType protocol) const
 {
     const auto dd = displayDefinition();
     const auto startAddress = dd.PointAddress - (dd.ZeroBasedAddress ? 0 : 1);
@@ -931,7 +931,7 @@ bool FormModSim::isLoggedRequest(const QModbusRequest& req, ModbusMessage::Proto
 ///
 void FormModSim::on_mbRequest(const QModbusRequest& req, ModbusMessage::ProtocolType protocol, int transactionId)
 {
-    if(isLoggedRequest(req, protocol)) {
+    if(isLoggingRequest(req, protocol)) {
         ui->statisticWidget->increaseRequests();
         ui->outputWidget->updateTraffic(req,  ui->lineEditDeviceId->value<int>(), transactionId, protocol);
     }
@@ -946,7 +946,7 @@ void FormModSim::on_mbRequest(const QModbusRequest& req, ModbusMessage::Protocol
 ///
 void FormModSim::on_mbResponse(const QModbusRequest& req, const QModbusResponse& resp, ModbusMessage::ProtocolType protocol, int transactionId)
 {
-    if(isLoggedRequest(req, protocol)) {
+    if(isLoggingRequest(req, protocol)) {
         ui->statisticWidget->increaseResponses();
         ui->outputWidget->updateTraffic(resp,  ui->lineEditDeviceId->value<int>(), transactionId, protocol);
     }
