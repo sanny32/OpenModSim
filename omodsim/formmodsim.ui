@@ -352,22 +352,6 @@
             <widget class="StatisticWidget" name="statisticWidget" native="true"/>
            </item>
            <item>
-            <spacer name="horizontalSpacer_3">
-             <property name="orientation">
-              <enum>Qt::Orientation::Horizontal</enum>
-             </property>
-             <property name="sizeType">
-              <enum>QSizePolicy::Policy::Fixed</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>318</width>
-               <height>20</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-           <item>
             <spacer name="horizontalSpacer">
              <property name="orientation">
               <enum>Qt::Orientation::Horizontal</enum>

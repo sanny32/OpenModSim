@@ -5,6 +5,7 @@
 #include <QHelpContentWidget>
 #include "modbuslimits.h"
 #include "mainwindow.h"
+#include "modbusmessages.h"
 #include "datasimulator.h"
 #include "dialogwritecoilregister.h"
 #include "dialogwriteholdingregister.h"
@@ -865,6 +866,64 @@ void FormModSim::on_mbDisconnected(const ConnectionDetails&)
 }
 
 ///
+/// \brief FormModSim::isLoggedRequest
+/// \param req
+/// \param protocol
+/// \return
+///
+bool FormModSim::isLoggedRequest(const QModbusRequest& req, ModbusMessage::ProtocolType protocol) const
+{
+    const auto dd = displayDefinition();
+    const auto startAddress = dd.PointAddress - (dd.ZeroBasedAddress ? 0 : 1);
+    auto msg = ModbusMessage::create(req, protocol, dd.DeviceId, QDateTime::currentDateTime(), true);
+
+    switch(req.functionCode()) {
+        case QModbusPdu::ReadCoils: {
+            auto req = reinterpret_cast<const ReadCoilsRequest*>(msg.get());
+            return (req->startAddress() >= startAddress) && (dd.PointType == QModbusDataUnit::Coils);
+        }
+        case QModbusPdu::ReadDiscreteInputs: {
+            auto req = reinterpret_cast<const ReadDiscreteInputsRequest*>(msg.get());
+            return (req->startAddress() >= startAddress) && (dd.PointType == QModbusDataUnit::DiscreteInputs);
+        }
+        case QModbusPdu::ReadHoldingRegisters: {
+            auto req = reinterpret_cast<const ReadHoldingRegistersRequest*>(msg.get());
+            return (req->startAddress() >= startAddress) && (dd.PointType == QModbusDataUnit::HoldingRegisters);
+        }
+        case QModbusPdu::ReadInputRegisters: {
+            auto req = reinterpret_cast<const ReadInputRegistersRequest*>(msg.get());
+            return (req->startAddress() >= startAddress) && (dd.PointType == QModbusDataUnit::InputRegisters);
+        }
+        case QModbusPdu::WriteSingleCoil: {
+            auto req = reinterpret_cast<const WriteSingleCoilRequest*>(msg.get());
+            return (req->address() >= startAddress) && (dd.PointType == QModbusDataUnit::Coils);
+        }
+        case QModbusPdu::WriteSingleRegister: {
+            auto req = reinterpret_cast<const WriteSingleRegisterRequest*>(msg.get());
+            return (req->address() >= startAddress) && (dd.PointType == QModbusDataUnit::HoldingRegisters);
+        }
+        case QModbusPdu::WriteMultipleCoils: {
+            auto req = reinterpret_cast<const WriteMultipleCoilsRequest*>(msg.get());
+            return (req->startAddress() >= startAddress) && (dd.PointType == QModbusDataUnit::Coils);
+        }
+        case QModbusPdu::WriteMultipleRegisters: {
+            auto req = reinterpret_cast<const WriteMultipleRegistersRequest*>(msg.get());
+            return (req->startAddress() >= startAddress) && (dd.PointType == QModbusDataUnit::HoldingRegisters);
+        }
+        case QModbusPdu::MaskWriteRegister: {
+            auto req = reinterpret_cast<const MaskWriteRegisterRequest*>(msg.get());
+            return (req->address() >= startAddress) && (dd.PointType == QModbusDataUnit::HoldingRegisters);
+        }
+        case QModbusPdu::ReadWriteMultipleRegisters: {
+            auto req = reinterpret_cast<const ReadWriteMultipleRegistersRequest*>(msg.get());
+            return ((req->readStartAddress() >= startAddress) || (req->writeStartAddress() >= startAddress)) && (dd.PointType == QModbusDataUnit::HoldingRegisters);
+        }
+        default:
+            return true;
+    }
+}
+
+///
 /// \brief FormModSim::on_mbRequest
 /// \param req
 /// \param protocol
@@ -872,20 +931,25 @@ void FormModSim::on_mbDisconnected(const ConnectionDetails&)
 ///
 void FormModSim::on_mbRequest(const QModbusRequest& req, ModbusMessage::ProtocolType protocol, int transactionId)
 {
-    const auto deviceId = ui->lineEditDeviceId->value<int>();
-    ui->outputWidget->updateTraffic(req, deviceId, transactionId, protocol);
+    if(isLoggedRequest(req, protocol)) {
+        ui->statisticWidget->increaseRequests();
+        ui->outputWidget->updateTraffic(req,  ui->lineEditDeviceId->value<int>(), transactionId, protocol);
+    }
 }
 
 ///
 /// \brief FormModSim::on_mbResponse
+/// \param req
 /// \param resp
 /// \param protocol
 /// \param transactionId
 ///
-void FormModSim::on_mbResponse(const QModbusResponse& resp, ModbusMessage::ProtocolType protocol, int transactionId)
+void FormModSim::on_mbResponse(const QModbusRequest& req, const QModbusResponse& resp, ModbusMessage::ProtocolType protocol, int transactionId)
 {
-    const auto deviceId = ui->lineEditDeviceId->value<int>();
-    ui->outputWidget->updateTraffic(resp, deviceId, transactionId, protocol);
+    if(isLoggedRequest(req, protocol)) {
+        ui->statisticWidget->increaseResponses();
+        ui->outputWidget->updateTraffic(resp,  ui->lineEditDeviceId->value<int>(), transactionId, protocol);
+    }
 }
 
 ///

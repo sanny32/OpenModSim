@@ -143,7 +143,7 @@ private slots:
     void on_mbConnected(const ConnectionDetails& cd);
     void on_mbDisconnected(const ConnectionDetails& cd);
     void on_mbRequest(const QModbusRequest& req, ModbusMessage::ProtocolType protocol, int transactionId);
-    void on_mbResponse(const QModbusResponse& resp, ModbusMessage::ProtocolType protocol, int transactionId);
+    void on_mbResponse(const QModbusRequest& req, const QModbusResponse& resp, ModbusMessage::ProtocolType protocol, int transactionId);
     void on_mbDataChanged(const QModbusDataUnit& data);
     void on_simulationStarted(QModbusDataUnit::RegisterType type, quint16 addr);
     void on_simulationStopped(QModbusDataUnit::RegisterType type, quint16 addr);
@@ -153,6 +153,7 @@ private:
     void updateStatus();
     void onDefinitionChanged();
     ScriptControl* scriptControl();
+    bool isLoggedRequest(const QModbusRequest& req, ModbusMessage::ProtocolType protocol) const;
 
 private:
     Ui::FormModSim *ui;

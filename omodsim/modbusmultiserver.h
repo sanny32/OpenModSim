@@ -32,23 +32,29 @@ public:
 
 signals:
     void request(const QModbusRequest& req, int transactionId);
-    void response(const QModbusResponse& resp, int transactionId);
+    void response(const QModbusRequest& req, const QModbusResponse& resp, int transactionId);
 
 protected:
     QModbusResponse processRequest(const QModbusPdu &req) override
     {
-        emit request(req, 0);
+        _transactionId++;
+
+        emit request(req, _transactionId);
         auto resp = QModbusTcpServer::processRequest(req);
-        emit response(resp, 0);
+        emit response(req, resp, _transactionId);
         return resp;
     }
     QModbusResponse processPrivateRequest(const QModbusPdu &req) override
     {
-        emit request(req, 0);
+        _transactionId++;
+
+        emit request(req, _transactionId);
         auto resp = QModbusTcpServer::processPrivateRequest(req);
-        emit response(resp, 0);
+        emit response(req, resp, _transactionId);
         return resp;
     }
+
+    int _transactionId = 0;
 };
 
 ///
@@ -66,21 +72,21 @@ public:
 
 signals:
     void request(const QModbusRequest& req);
-    void response(const QModbusResponse& resp);
+    void response(const QModbusRequest& req, const QModbusResponse& resp);
 
 protected:
     QModbusResponse processRequest(const QModbusPdu &req) override
     {
         emit request(req);
         auto resp = QModbusRtuSerialServer::processRequest(req);
-        emit response(resp);
+        emit response(req, resp);
         return resp;
     }
     QModbusResponse processPrivateRequest(const QModbusPdu &req) override
     {
         emit request(req);
         auto resp = QModbusRtuSerialServer::processPrivateRequest(req);
-        emit response(resp);
+        emit response(req, resp);
         return resp;
     }
 };
@@ -145,7 +151,7 @@ signals:
     void disconnected(const ConnectionDetails& cd);
     void deviceIdChanged(quint8 deviceId);
     void request(const QModbusRequest& req, ModbusMessage::ProtocolType protocol, int transactionId);
-    void response(const QModbusResponse& resp, ModbusMessage::ProtocolType protocol, int transactionId);
+    void response(const QModbusRequest& req, const QModbusResponse& resp, ModbusMessage::ProtocolType protocol, int transactionId);
     void connectionError(const QString& error);
     void dataChanged(const QModbusDataUnit& data);
 
