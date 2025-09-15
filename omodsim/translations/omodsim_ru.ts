@@ -1053,7 +1053,7 @@ Length: %2</source>
         <translation type="vanished">Указана недопустимая длина данных</translation>
     </message>
     <message>
-        <location filename="../formmodsim.cpp" line="441"/>
+        <location filename="../formmodsim.cpp" line="445"/>
         <source>Address Base: %1
 Start Address: %2
 Length: %3</source>
@@ -1062,7 +1062,7 @@ Length: %3</source>
 Количество: %3</translation>
     </message>
     <message>
-        <location filename="../formmodsim.cpp" line="444"/>
+        <location filename="../formmodsim.cpp" line="448"/>
         <source>Device Id: %1
 MODBUS Point Type:
 %2</source>
@@ -2154,7 +2154,7 @@ MODBUS Point Type:
 <context>
     <name>ModbusMultiServer</name>
     <message>
-        <location filename="../modbusmultiserver.cpp" line="792"/>
+        <location filename="../modbusmultiserver.cpp" line="814"/>
         <source>Connection error. %1</source>
         <translation>Ошибка подключения. %1</translation>
     </message>
@@ -2162,17 +2162,17 @@ MODBUS Point Type:
 <context>
     <name>OutputWidget</name>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="817"/>
+        <location filename="../controls/outputwidget.cpp" line="826"/>
         <source>%1: Enter Description</source>
         <translation>%1: Введите описание</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="882"/>
+        <location filename="../controls/outputwidget.cpp" line="891"/>
         <source>NOT CONNECTED!</source>
         <translation>НЕ ПОДКЛЮЧЕНО!</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="890"/>
+        <location filename="../controls/outputwidget.cpp" line="899"/>
         <source>Invalid Data Length Specified</source>
         <translation>Указана недопустимая длина данных</translation>
     </message>

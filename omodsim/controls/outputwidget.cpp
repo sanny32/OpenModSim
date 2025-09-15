@@ -550,6 +550,15 @@ void OutputWidget::setLogViewLimit(int l)
 }
 
 ///
+/// \brief OutputWidget::pauseLogView
+/// \param pause
+///
+void OutputWidget::setLogViewState(LogViewState state)
+{
+    ui->logView->setState(state);
+}
+
+///
 /// \brief OutputWidget::autoscrollLogView
 /// \return
 ///

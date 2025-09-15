@@ -349,7 +349,7 @@
             </widget>
            </item>
            <item>
-            <widget class="StatisticWidget" name="widget" native="true"/>
+            <widget class="StatisticWidget" name="statisticWidget" native="true"/>
            </item>
            <item>
             <spacer name="horizontalSpacer_3">

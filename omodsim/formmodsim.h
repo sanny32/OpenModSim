@@ -111,6 +111,9 @@ public:
     void runScript();
     void stopScript();
 
+    LogViewState logViewState() const;
+    void setLogViewState(LogViewState state);
+
 protected:
     void changeEvent(QEvent* event) override;
     void closeEvent(QCloseEvent *event) override;

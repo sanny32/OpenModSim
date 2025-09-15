@@ -47,6 +47,28 @@ void ModbusMultiServer::setDeviceId(quint8 deviceId)
 }
 
 ///
+/// \brief ModbusMultiServer::isBusy
+/// \return
+///
+bool ModbusMultiServer::isBusy() const
+{
+    if(_modbusServerList.isEmpty())
+        return false;
+
+    return _modbusServerList.first()->value(QModbusServer::DeviceBusy) == 0xffff;
+}
+
+///
+/// \brief ModbusMultiServer::setBusy
+/// \param busy
+///
+void ModbusMultiServer::setBusy(bool busy)
+{
+     for(auto&& s : _modbusServerList)
+        s->setValue(QModbusServer::DeviceBusy, busy ? 0xffff : 0x0000);
+}
+
+///
 /// \brief ModbusMultiServer::useGlobalUnitMap
 /// \return
 ///

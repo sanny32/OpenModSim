@@ -98,6 +98,9 @@ public:
     quint8 deviceId() const;
     void setDeviceId(quint8 deviceId);
 
+    bool isBusy() const;
+    void setBusy(bool busy);
+
     bool useGlobalUnitMap() const;
     void setUseGlobalUnitMap(bool use);
 

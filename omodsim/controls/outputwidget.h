@@ -131,6 +131,7 @@ public:
 
 public slots:
     void clearLogView();
+    void setLogViewState(LogViewState state);
 
 signals:
     void itemDoubleClicked(quint16 address, const QVariant& value);

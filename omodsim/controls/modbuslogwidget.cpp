@@ -359,6 +359,19 @@ LogViewState ModbusLogWidget::state() const
 void ModbusLogWidget::setState(LogViewState state)
 {
     _state = state;
+    switch (state) {
+        case Paused:
+            model()->blockSignals(true);
+        break;
+
+        case Running:
+            model()->blockSignals(false);
+            update();
+        break;
+
+        default:
+        break;
+    }
 }
 
 ///

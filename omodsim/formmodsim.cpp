@@ -52,6 +52,10 @@ FormModSim::FormModSim(int id, ModbusMultiServer& server, QSharedPointer<DataSim
     onDefinitionChanged();
     ui->outputWidget->setFocus();
 
+    setLogViewState(Running);
+    connect(ui->statisticWidget, &StatisticWidget::ctrsReseted, ui->outputWidget, &OutputWidget::clearLogView);
+    connect(ui->statisticWidget, &StatisticWidget::logStateChanged, ui->outputWidget, &OutputWidget::setLogViewState);
+
     connect(&_mbMultiServer, &ModbusMultiServer::request, this, &FormModSim::on_mbRequest);
     connect(&_mbMultiServer, &ModbusMultiServer::response, this, &FormModSim::on_mbResponse);
     connect(&_mbMultiServer, &ModbusMultiServer::connected, this, &FormModSim::on_mbConnected);
@@ -645,6 +649,24 @@ void FormModSim::runScript()
 void FormModSim::stopScript()
 {
     ui->scriptControl->stopScript();
+}
+
+///
+/// \brief FormModSim::logViewState
+/// \return
+///
+LogViewState FormModSim::logViewState() const
+{
+    return ui->statisticWidget->logState();
+}
+
+///
+/// \brief FormModSim::setLogViewState
+/// \param state
+///
+void FormModSim::setLogViewState(LogViewState state)
+{
+    ui->statisticWidget->setLogState(state);
 }
 
 ///
