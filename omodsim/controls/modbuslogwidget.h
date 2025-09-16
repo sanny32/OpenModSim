@@ -88,7 +88,7 @@ private:
     bool _autoscroll;
     QAction* _copyAct;
     QAction* _copyBytesAct;
-    LogViewState _state = Running;
+    LogViewState _state = LogViewState::Running;
     DataDisplayMode _dataDisplayMode;
 };
 

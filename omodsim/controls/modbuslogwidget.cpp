@@ -387,11 +387,11 @@ void ModbusLogWidget::setState(LogViewState state)
 {
     _state = state;
     switch (state) {
-        case Paused:
+        case LogViewState::Paused:
             ((ModbusLogModel*)model())->setBufferingMode(true);
         break;
 
-        case Running:
+        case LogViewState::Running:
             ((ModbusLogModel*)model())->setBufferingMode(false);
         break;
 

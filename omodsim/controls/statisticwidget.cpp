@@ -92,15 +92,15 @@ void StatisticWidget::setLogState(LogViewState state)
     _logState = state;
     switch (state)
     {
-        case Unknown:
+        case LogViewState::Unknown:
             ui->pushButtonPause->setEnabled(false);
             ui->pushButtonPause->setText(tr("Pause Logging"));
         break;
-        case Running:
+        case LogViewState::Running:
             ui->pushButtonPause->setEnabled(true);
             ui->pushButtonPause->setText(tr("Pause Logging"));
         break;
-        case Paused:
+        case LogViewState::Paused:
             ui->pushButtonPause->setEnabled(true);
             ui->pushButtonPause->setText(tr("Resume Logging"));
         break;
@@ -122,9 +122,9 @@ void StatisticWidget::on_pushButtonResetCtrs_clicked()
 void StatisticWidget::on_pushButtonPause_clicked()
 {
     switch (_logState) {
-    case Unknown: break;
-    case Running: setLogState(Paused); break;
-    case Paused: setLogState(Running); break;
+    case LogViewState::Unknown: break;
+    case LogViewState::Running: setLogState(LogViewState::Paused); break;
+    case LogViewState::Paused: setLogState(LogViewState::Running); break;
     }
 
     emit logStateChanged(_logState);

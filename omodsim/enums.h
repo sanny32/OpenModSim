@@ -212,7 +212,7 @@ Q_DECLARE_METATYPE(RunMode)
 ///
 /// \brief The LogViewState enum
 ///
-enum LogViewState {
+enum class LogViewState {
     Unknown,
     Running,
     Paused

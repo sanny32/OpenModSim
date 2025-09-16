@@ -178,5 +178,7 @@ private:
     ModbusDataUnitMap _modbusDataUnitMap;
     QList<QSharedPointer<QModbusServer>> _modbusServerList;
 };
+Q_DECLARE_METATYPE(QModbusRequest)
+Q_DECLARE_METATYPE(QModbusResponse)
 
 #endif // MODBUSMULTISERVER_H

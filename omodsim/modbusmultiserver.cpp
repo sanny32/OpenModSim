@@ -10,6 +10,16 @@ ModbusMultiServer::ModbusMultiServer(QObject *parent)
     ,_deviceId(1)
     ,_workerThread(new QThread(this))
 {
+    {
+        static int reg = qRegisterMetaType<QModbusRequest>();
+        Q_UNUSED(reg);
+    }
+
+    {
+        static int reg = qRegisterMetaType<QModbusResponse>();
+        Q_UNUSED(reg);
+    }
+
     moveToThread(_workerThread);
     _workerThread->start();
 
