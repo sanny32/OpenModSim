@@ -10,33 +10,37 @@ Open ModSim is a free implimentation of modbus slave (server) utility for modbus
 
 The following Modbus functions are available:
 
-Discrete Coils/Flags
-
+- Discrete Coils/Flags
+```
     0x01 - Read Coils
     0x02 - Read Discrete Inputs
     0x05 - Write Single Coil
     0x0F - Write Multiple Coils
+```
 
-Registers
-
+- Registers
+```
     0x03 - Read Holding Registers
     0x04 - Read Input Registers
     0x06 - Write Single Register
     0x10 - Write Multiple Registers
     0x16 - Mask Write Register
+```
     
 The following simulations are available:
 
-Discrete Coils/Flags
-
+- Discrete Coils/Flags
+```
     Random - simulate flag randomly
     Toggle - simulate flag on/off periodicaly
-    
-Registers
+```
 
+- Registers
+```
     Random - simulate register randomly
     Increment - simulate register from Low Limit to High Limit with a given Step
     Decrement - simulate register from High Limit to Low Limit with a given Step
+```
 
 ## Modbus Logging
 
