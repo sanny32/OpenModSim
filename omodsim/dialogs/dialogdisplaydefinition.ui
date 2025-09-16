@@ -85,6 +85,13 @@
         </property>
        </widget>
       </item>
+      <item row="3" column="0" colspan="2">
+       <widget class="QCheckBox" name="checkBoxVerboseLogging">
+        <property name="text">
+         <string>Verbose Logging</string>
+        </property>
+       </widget>
+      </item>
       <item row="2" column="0" colspan="2">
        <widget class="QCheckBox" name="checkBoxAutoscrollLog">
         <property name="text">

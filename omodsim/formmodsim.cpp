@@ -13,7 +13,7 @@
 #include "formmodsim.h"
 #include "ui_formmodsim.h"
 
-QVersionNumber FormModSim::VERSION = QVersionNumber(1, 8);
+QVersionNumber FormModSim::VERSION = QVersionNumber(1, 9);
 
 ///
 /// \brief FormModSim::FormModSim
@@ -27,6 +27,7 @@ FormModSim::FormModSim(int id, ModbusMultiServer& server, QSharedPointer<DataSim
     ,_formId(id)
     ,_mbMultiServer(server)
     ,_dataSimulator(simulator)
+    ,_verboseLogging(true)
 {
     Q_ASSERT(parent != nullptr);
 
@@ -145,6 +146,7 @@ DisplayDefinition FormModSim::displayDefinition() const
     dd.ZeroBasedAddress = ui->lineEditAddress->range<int>().from() == 0;
     dd.LogViewLimit = ui->outputWidget->logViewLimit();
     dd.AutoscrollLog = ui->outputWidget->autoscrollLogView();
+    dd.VerboseLogging = _verboseLogging;
     dd.UseGlobalUnitMap = _mbMultiServer.useGlobalUnitMap();
     dd.HexAddress = displayHexAddresses();
 
@@ -178,6 +180,7 @@ void FormModSim::setDisplayDefinition(const DisplayDefinition& dd)
 
     ui->outputWidget->setLogViewLimit(dd.LogViewLimit);
     ui->outputWidget->setAutosctollLogView(dd.AutoscrollLog);
+    _verboseLogging = dd.VerboseLogging;
 
     _mbMultiServer.setUseGlobalUnitMap(dd.UseGlobalUnitMap);
 
@@ -939,7 +942,7 @@ bool FormModSim::isLoggingRequest(const QModbusRequest& req, ModbusMessage::Prot
 ///
 void FormModSim::on_mbRequest(const QModbusRequest& req, ModbusMessage::ProtocolType protocol, int transactionId)
 {
-    if(isLoggingRequest(req, protocol)) {
+    if(_verboseLogging || isLoggingRequest(req, protocol)) {
         ui->statisticWidget->increaseRequests();
         ui->outputWidget->updateTraffic(req,  ui->lineEditDeviceId->value<int>(), transactionId, protocol);
     }
@@ -954,7 +957,7 @@ void FormModSim::on_mbRequest(const QModbusRequest& req, ModbusMessage::Protocol
 ///
 void FormModSim::on_mbResponse(const QModbusRequest& req, const QModbusResponse& resp, ModbusMessage::ProtocolType protocol, int transactionId)
 {
-    if(isLoggingRequest(req, protocol)) {
+    if(_verboseLogging || isLoggingRequest(req, protocol)) {
         ui->statisticWidget->increaseResponses();
         ui->outputWidget->updateTraffic(resp,  ui->lineEditDeviceId->value<int>(), transactionId, protocol);
     }

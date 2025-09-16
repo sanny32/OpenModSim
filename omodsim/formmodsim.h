@@ -160,6 +160,7 @@ private:
     MainWindow* _parent;
     int _formId;
     QString _filename;
+    bool _verboseLogging;
     ScriptSettings _scriptSettings;
     ModbusMultiServer& _mbMultiServer;
     QSharedPointer<DataSimulator> _dataSimulator;
@@ -296,6 +297,9 @@ inline QDataStream& operator <<(QDataStream& out, FormModSim* frm)
     out << dd.Length;
     out << dd.LogViewLimit;
     out << dd.ZeroBasedAddress;
+    out << dd.UseGlobalUnitMap;
+    out << dd.AutoscrollLog;
+    out << dd.VerboseLogging;
 
     out << frm->byteOrder();
     out << frm->simulationMap();
@@ -362,6 +366,13 @@ inline QDataStream& operator >>(QDataStream& in, FormModSim* frm)
     if(ver >= QVersionNumber(1, 6))
     {
         in >> dd.ZeroBasedAddress;
+    }
+
+    if(ver >= QVersionNumber(1, 9))
+    {
+        in >> dd.UseGlobalUnitMap;
+        in >> dd.AutoscrollLog;
+        in >> dd.VerboseLogging;
     }
 
     ModbusSimulationMap simulationMap;
