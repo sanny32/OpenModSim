@@ -2,6 +2,7 @@
 #define MODBUSMULTISERVER_H
 
 #include <QObject>
+#include <QThread>
 #include <QTcpSocket>
 #include <QModbusServer>
 #include <QModbusTcpServer>
@@ -116,6 +117,7 @@ public:
 
     void connectDevice(const ConnectionDetails& cd);
     void disconnectDevice(ConnectionType type, const QString& port);
+    void closeConnections();
 
     QList<ConnectionDetails> connections() const;
 
@@ -172,6 +174,7 @@ private:
 
 private:
     quint8 _deviceId;
+    QThread* _workerThread;
     ModbusDataUnitMap _modbusDataUnitMap;
     QList<QSharedPointer<QModbusServer>> _modbusServerList;
 };
