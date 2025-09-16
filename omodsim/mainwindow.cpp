@@ -212,6 +212,9 @@ void MainWindow::on_awake()
     ui->actionSwappedDbl->setEnabled(frm != nullptr);
     ui->actionSwapBytes->setEnabled(frm != nullptr);
 
+    ui->actionTextCapture->setEnabled(frm && frm->captureMode() == CaptureMode::Off);
+    ui->actionCaptureOff->setEnabled(frm && frm->captureMode() == CaptureMode::TextCapture);
+
     ui->actionRunScript->setEnabled(frm && frm->canRunScript());
     ui->actionStopScript->setEnabled(frm && frm->canStopScript());
     ui->actionScriptSettings->setEnabled(frm && !frm->canStopScript());

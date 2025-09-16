@@ -30,13 +30,20 @@ public:
     int rowLimit() const;
     void setRowLimit(int val);
 
+    bool isBufferingMode() const {
+        return _bufferingMode;
+    }
+    void setBufferingMode(bool value);
+
 private:
     void deleteItems();
 
 private:
     int _rowLimit = 30;
+    bool _bufferingMode = false;
     ModbusLogWidget* _parentWidget;
     QQueue<QSharedPointer<const ModbusMessage>> _items;
+    QQueue<QSharedPointer<const ModbusMessage>> _bufferingItems;
 };
 
 ///
@@ -65,11 +72,23 @@ public:
     bool autoscroll() const;
     void setAutoscroll(bool on);
 
+    QColor backgroundColor() const;
+    void setBackGroundColor(const QColor& clr);
+
+    LogViewState state() const;
+    void setState(LogViewState state);
+
 protected:
     void changeEvent(QEvent* event) override;
 
+private slots:
+    void on_customContextMenuRequested(const QPoint &pos);
+
 private:
     bool _autoscroll;
+    QAction* _copyAct;
+    QAction* _copyBytesAct;
+    LogViewState _state = LogViewState::Running;
     DataDisplayMode _dataDisplayMode;
 };
 

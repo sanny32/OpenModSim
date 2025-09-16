@@ -111,6 +111,9 @@ public:
     int logViewLimit() const;
     void setLogViewLimit(int l);
 
+    bool autoscrollLogView() const;
+    void setAutosctollLogView(bool on);
+
     void setStatus(const QString& status);
     void setNotConnectedStatus();
     void setInvalidLengthStatus();
@@ -126,6 +129,10 @@ public:
 
     void setSimulated(QModbusDataUnit::RegisterType type, quint16 addr, bool on);
 
+public slots:
+    void clearLogView();
+    void setLogViewState(LogViewState state);
+
 signals:
     void itemDoubleClicked(quint16 address, const QVariant& value);
 
@@ -139,6 +146,7 @@ private slots:
 private:
     void captureString(const QString& s);
     void showModbusMessage(const QModelIndex& index);
+    void hideModbusMessage();
     void updateLogView(bool request, int deviceId, int transactionId, ModbusMessage::ProtocolType protocol, const QModbusPdu& pdu);
 
 private:

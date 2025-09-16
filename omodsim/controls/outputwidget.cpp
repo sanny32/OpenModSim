@@ -2,6 +2,7 @@
 #include <QPainter>
 #include <QTextStream>
 #include <QInputDialog>
+#include "fontutils.h"
 #include "formatutils.h"
 #include "outputwidget.h"
 #include "ui_outputwidget.h"
@@ -325,12 +326,15 @@ OutputWidget::OutputWidget(QWidget *parent) :
     ui->listView->setModel(_listModel.get());
     ui->labelStatus->setAutoFillBackground(true);
 
+    setFont(defaultMonospaceFont());
     setAutoFillBackground(true);
     setForegroundColor(Qt::black);
-    setBackgroundColor(Qt::lightGray);
+    setBackgroundColor(Qt::white);
 
     setStatusColor(Qt::red);
     setNotConnectedStatus();
+
+    hideModbusMessage();
 
     connect(ui->logView->selectionModel(),
             &QItemSelectionModel::selectionChanged,
@@ -384,6 +388,7 @@ void OutputWidget::setup(const DisplayDefinition& dd, const ModbusSimulationMap&
     _displayDefinition = dd;
 
     setLogViewLimit(dd.LogViewLimit);
+    setAutosctollLogView(dd.AutoscrollLog);
 
     _listModel->clear();
 
@@ -542,6 +547,43 @@ int OutputWidget::logViewLimit() const
 void OutputWidget::setLogViewLimit(int l)
 {
     ui->logView->setRowLimit(l);
+}
+
+///
+/// \brief OutputWidget::pauseLogView
+/// \param pause
+///
+void OutputWidget::setLogViewState(LogViewState state)
+{
+    ui->logView->setState(state);
+}
+
+///
+/// \brief OutputWidget::autoscrollLogView
+/// \return
+///
+bool OutputWidget::autoscrollLogView() const
+{
+    return ui->logView->autoscroll();
+}
+
+///
+/// \brief OutputWidget::setAutosctollLogView
+/// \param on
+///
+void OutputWidget::setAutosctollLogView(bool on)
+{
+    ui->logView->setAutoscroll(on);
+}
+
+///
+/// \brief OutputWidget::clearLogView
+///
+void OutputWidget::clearLogView()
+{
+    ui->logView->clear();
+    ui->modbusMsg->clear();
+    hideModbusMessage();
 }
 
 ///
@@ -877,7 +919,22 @@ void OutputWidget::captureString(const QString& s)
 void OutputWidget::showModbusMessage(const QModelIndex& index)
 {
     const auto msg = ui->logView->itemAt(index);
-    ui->modbusMsg->setModbusMessage(msg);
+    if(msg) {
+        if(ui->splitter->widget(1)->isHidden()) {
+            ui->splitter->setSizes({1, 1});
+            ui->splitter->widget(1)->show();
+        }
+        ui->modbusMsg->setModbusMessage(msg);
+    }
+}
+
+///
+/// \brief OutputWidget::hideModbusMessage
+///
+void OutputWidget::hideModbusMessage()
+{
+    ui->splitter->setSizes({1, 0});
+    ui->splitter->widget(1)->hide();
 }
 
 ///

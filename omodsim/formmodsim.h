@@ -5,6 +5,7 @@
 #include <QTimer>
 #include <QPrinter>
 #include <QVersionNumber>
+#include "fontutils.h"
 #include "datasimulator.h"
 #include "modbusmultiserver.h"
 #include "displaydefinition.h"
@@ -110,6 +111,9 @@ public:
     void runScript();
     void stopScript();
 
+    LogViewState logViewState() const;
+    void setLogViewState(LogViewState state);
+
 protected:
     void changeEvent(QEvent* event) override;
     void closeEvent(QCloseEvent *event) override;
@@ -139,7 +143,7 @@ private slots:
     void on_mbConnected(const ConnectionDetails& cd);
     void on_mbDisconnected(const ConnectionDetails& cd);
     void on_mbRequest(const QModbusRequest& req, ModbusMessage::ProtocolType protocol, int transactionId);
-    void on_mbResponse(const QModbusResponse& resp, ModbusMessage::ProtocolType protocol, int transactionId);
+    void on_mbResponse(const QModbusRequest& req, const QModbusResponse& resp, ModbusMessage::ProtocolType protocol, int transactionId);
     void on_mbDataChanged(const QModbusDataUnit& data);
     void on_simulationStarted(QModbusDataUnit::RegisterType type, quint16 addr);
     void on_simulationStopped(QModbusDataUnit::RegisterType type, quint16 addr);
@@ -149,6 +153,7 @@ private:
     void updateStatus();
     void onDefinitionChanged();
     ScriptControl* scriptControl();
+    bool isLoggingRequest(const QModbusRequest& req, ModbusMessage::ProtocolType protocol) const;
 
 private:
     Ui::FormModSim *ui;
@@ -170,6 +175,7 @@ inline QSettings& operator <<(QSettings& out, FormModSim* frm)
 {
     if(!frm) return out;
 
+    out.setValue("FormVersion", FormModSim::VERSION.toString());
     out.setValue("Font", frm->font());
     out.setValue("ForegroundColor", frm->foregroundColor());
     out.setValue("BackgroundColor", frm->backgroundColor());
@@ -204,6 +210,9 @@ inline QSettings& operator >>(QSettings& in, FormModSim* frm)
 {
     if(!frm) return in;
 
+    QVersionNumber version;
+    version = QVersionNumber::fromString(in.value("FormVersion").toString());
+
     DisplayMode displayMode;
     in >> displayMode;
 
@@ -228,10 +237,12 @@ inline QSettings& operator >>(QSettings& in, FormModSim* frm)
     wndSize = in.value("ViewSize").toSize();
 
     auto wnd = frm->parentWidget();
-    frm->setFont(in.value("Font", wnd->font()).value<QFont>());
-    frm->setForegroundColor(in.value("ForegroundColor", QColor(Qt::black)).value<QColor>());
-    frm->setBackgroundColor(in.value("BackgroundColor", QColor(Qt::lightGray)).value<QColor>());
-    frm->setStatusColor(in.value("StatusColor", QColor(Qt::red)).value<QColor>());
+    if(!version.isNull() || version >= QVersionNumber(1, 8)) {
+        frm->setFont(in.value("Font", defaultMonospaceFont()).value<QFont>());
+        frm->setForegroundColor(in.value("ForegroundColor", QColor(Qt::black)).value<QColor>());
+        frm->setBackgroundColor(in.value("BackgroundColor", QColor(Qt::white)).value<QColor>());
+        frm->setStatusColor(in.value("StatusColor", QColor(Qt::red)).value<QColor>());
+    }
 
     wnd->resize(wndSize);
     if(isMaximized) wnd->setWindowState(Qt::WindowMaximized);

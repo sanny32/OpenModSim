@@ -5,6 +5,7 @@
 #include <QHelpContentWidget>
 #include "modbuslimits.h"
 #include "mainwindow.h"
+#include "modbusmessages.h"
 #include "datasimulator.h"
 #include "dialogwritecoilregister.h"
 #include "dialogwriteholdingregister.h"
@@ -12,7 +13,7 @@
 #include "formmodsim.h"
 #include "ui_formmodsim.h"
 
-QVersionNumber FormModSim::VERSION = QVersionNumber(1, 7);
+QVersionNumber FormModSim::VERSION = QVersionNumber(1, 8);
 
 ///
 /// \brief FormModSim::FormModSim
@@ -51,6 +52,10 @@ FormModSim::FormModSim(int id, ModbusMultiServer& server, QSharedPointer<DataSim
 
     onDefinitionChanged();
     ui->outputWidget->setFocus();
+
+    setLogViewState(LogViewState::Unknown);
+    connect(ui->statisticWidget, &StatisticWidget::ctrsReseted, ui->outputWidget, &OutputWidget::clearLogView);
+    connect(ui->statisticWidget, &StatisticWidget::logStateChanged, ui->outputWidget, &OutputWidget::setLogViewState);
 
     connect(&_mbMultiServer, &ModbusMultiServer::request, this, &FormModSim::on_mbRequest);
     connect(&_mbMultiServer, &ModbusMultiServer::response, this, &FormModSim::on_mbResponse);
@@ -138,6 +143,8 @@ DisplayDefinition FormModSim::displayDefinition() const
     dd.PointType = ui->comboBoxModbusPointType->currentPointType();
     dd.Length = ui->lineEditLength->value<int>();
     dd.ZeroBasedAddress = ui->lineEditAddress->range<int>().from() == 0;
+    dd.LogViewLimit = ui->outputWidget->logViewLimit();
+    dd.AutoscrollLog = ui->outputWidget->autoscrollLogView();
     dd.UseGlobalUnitMap = _mbMultiServer.useGlobalUnitMap();
     dd.HexAddress = displayHexAddresses();
 
@@ -168,6 +175,9 @@ void FormModSim::setDisplayDefinition(const DisplayDefinition& dd)
     ui->comboBoxModbusPointType->blockSignals(true);
     ui->comboBoxModbusPointType->setCurrentPointType(dd.PointType);
     ui->comboBoxModbusPointType->blockSignals(false);
+
+    ui->outputWidget->setLogViewLimit(dd.LogViewLimit);
+    ui->outputWidget->setAutosctollLogView(dd.AutoscrollLog);
 
     _mbMultiServer.setUseGlobalUnitMap(dd.UseGlobalUnitMap);
 
@@ -237,7 +247,7 @@ void FormModSim::setDisplayHexAddresses(bool on)
     ui->outputWidget->setDisplayHexAddresses(on);
 
     ui->lineEditAddress->setInputMode(on ? NumericLineEdit::HexMode : NumericLineEdit::Int32Mode);
-    ui->lineEditAddress->setInputRange(ModbusLimits::addressRange(true));
+    ui->lineEditAddress->setInputRange(ModbusLimits::addressRange(ui->comboBoxAddressBase->currentAddressBase() == AddressBase::Base0));
 }
 
 ///
@@ -643,6 +653,24 @@ void FormModSim::stopScript()
 }
 
 ///
+/// \brief FormModSim::logViewState
+/// \return
+///
+LogViewState FormModSim::logViewState() const
+{
+    return ui->statisticWidget->logState();
+}
+
+///
+/// \brief FormModSim::setLogViewState
+/// \param state
+///
+void FormModSim::setLogViewState(LogViewState state)
+{
+    ui->statisticWidget->setLogState(state);
+}
+
+///
 /// \brief FormModSim::show
 ///
 void FormModSim::show()
@@ -827,6 +855,11 @@ void FormModSim::on_mbDeviceIdChanged(quint8 deviceId)
 void FormModSim::on_mbConnected(const ConnectionDetails&)
 {
     updateStatus();
+    ui->outputWidget->clearLogView();
+
+    if(logViewState() == LogViewState::Unknown) {
+        setLogViewState(LogViewState::Running);
+    }
 }
 
 ///
@@ -834,7 +867,68 @@ void FormModSim::on_mbConnected(const ConnectionDetails&)
 ///
 void FormModSim::on_mbDisconnected(const ConnectionDetails&)
 {
-   updateStatus();
+    updateStatus();
+    if(!_mbMultiServer.isConnected()) {
+        setLogViewState(LogViewState::Unknown);
+    }
+}
+
+///
+/// \brief FormModSim::isLoggingRequest
+/// \param req
+/// \param protocol
+/// \return
+///
+bool FormModSim::isLoggingRequest(const QModbusRequest& req, ModbusMessage::ProtocolType protocol) const
+{
+    const auto dd = displayDefinition();
+    const auto startAddress = dd.PointAddress - (dd.ZeroBasedAddress ? 0 : 1);
+    auto msg = ModbusMessage::create(req, protocol, dd.DeviceId, QDateTime::currentDateTime(), true);
+
+    switch(req.functionCode()) {
+        case QModbusPdu::ReadCoils: {
+            auto req = reinterpret_cast<const ReadCoilsRequest*>(msg.get());
+            return (req->startAddress() >= startAddress) && (dd.PointType == QModbusDataUnit::Coils);
+        }
+        case QModbusPdu::ReadDiscreteInputs: {
+            auto req = reinterpret_cast<const ReadDiscreteInputsRequest*>(msg.get());
+            return (req->startAddress() >= startAddress) && (dd.PointType == QModbusDataUnit::DiscreteInputs);
+        }
+        case QModbusPdu::ReadHoldingRegisters: {
+            auto req = reinterpret_cast<const ReadHoldingRegistersRequest*>(msg.get());
+            return (req->startAddress() >= startAddress) && (dd.PointType == QModbusDataUnit::HoldingRegisters);
+        }
+        case QModbusPdu::ReadInputRegisters: {
+            auto req = reinterpret_cast<const ReadInputRegistersRequest*>(msg.get());
+            return (req->startAddress() >= startAddress) && (dd.PointType == QModbusDataUnit::InputRegisters);
+        }
+        case QModbusPdu::WriteSingleCoil: {
+            auto req = reinterpret_cast<const WriteSingleCoilRequest*>(msg.get());
+            return (req->address() >= startAddress) && (dd.PointType == QModbusDataUnit::Coils);
+        }
+        case QModbusPdu::WriteSingleRegister: {
+            auto req = reinterpret_cast<const WriteSingleRegisterRequest*>(msg.get());
+            return (req->address() >= startAddress) && (dd.PointType == QModbusDataUnit::HoldingRegisters);
+        }
+        case QModbusPdu::WriteMultipleCoils: {
+            auto req = reinterpret_cast<const WriteMultipleCoilsRequest*>(msg.get());
+            return (req->startAddress() >= startAddress) && (dd.PointType == QModbusDataUnit::Coils);
+        }
+        case QModbusPdu::WriteMultipleRegisters: {
+            auto req = reinterpret_cast<const WriteMultipleRegistersRequest*>(msg.get());
+            return (req->startAddress() >= startAddress) && (dd.PointType == QModbusDataUnit::HoldingRegisters);
+        }
+        case QModbusPdu::MaskWriteRegister: {
+            auto req = reinterpret_cast<const MaskWriteRegisterRequest*>(msg.get());
+            return (req->address() >= startAddress) && (dd.PointType == QModbusDataUnit::HoldingRegisters);
+        }
+        case QModbusPdu::ReadWriteMultipleRegisters: {
+            auto req = reinterpret_cast<const ReadWriteMultipleRegistersRequest*>(msg.get());
+            return ((req->readStartAddress() >= startAddress) || (req->writeStartAddress() >= startAddress)) && (dd.PointType == QModbusDataUnit::HoldingRegisters);
+        }
+        default:
+            return true;
+    }
 }
 
 ///
@@ -845,20 +939,25 @@ void FormModSim::on_mbDisconnected(const ConnectionDetails&)
 ///
 void FormModSim::on_mbRequest(const QModbusRequest& req, ModbusMessage::ProtocolType protocol, int transactionId)
 {
-    const auto deviceId = ui->lineEditDeviceId->value<int>();
-    ui->outputWidget->updateTraffic(req, deviceId, transactionId, protocol);
+    if(isLoggingRequest(req, protocol)) {
+        ui->statisticWidget->increaseRequests();
+        ui->outputWidget->updateTraffic(req,  ui->lineEditDeviceId->value<int>(), transactionId, protocol);
+    }
 }
 
 ///
 /// \brief FormModSim::on_mbResponse
+/// \param req
 /// \param resp
 /// \param protocol
 /// \param transactionId
 ///
-void FormModSim::on_mbResponse(const QModbusResponse& resp, ModbusMessage::ProtocolType protocol, int transactionId)
+void FormModSim::on_mbResponse(const QModbusRequest& req, const QModbusResponse& resp, ModbusMessage::ProtocolType protocol, int transactionId)
 {
-    const auto deviceId = ui->lineEditDeviceId->value<int>();
-    ui->outputWidget->updateTraffic(resp, deviceId, transactionId, protocol);
+    if(isLoggingRequest(req, protocol)) {
+        ui->statisticWidget->increaseResponses();
+        ui->outputWidget->updateTraffic(resp,  ui->lineEditDeviceId->value<int>(), transactionId, protocol);
+    }
 }
 
 ///

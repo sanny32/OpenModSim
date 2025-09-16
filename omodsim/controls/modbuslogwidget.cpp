@@ -1,4 +1,10 @@
+#include <QMenu>
 #include <QEvent>
+#include <QStyle>
+#include <QClipboard>
+#include <QTextDocument>
+#include <QApplication>
+#include "fontutils.h"
 #include "htmldelegate.h"
 #include "modbuslogwidget.h"
 
@@ -41,13 +47,19 @@ QVariant ModbusLogModel::data(const QModelIndex& index, int role) const
     if(!index.isValid() || index.row() >= rowCount())
         return QVariant();
 
-    const auto& item = _items.at(index.row());
+    const auto item = _items.at(index.row());
     switch(role)
     {
         case Qt::DisplayRole:
-            return QString("<b>%1</b> %2 %3").arg(item->timestamp().toString(Qt::ISODateWithMs),
-                                                  (item->isRequest()?  "&larr;" : "&rarr;"),
-                                                  item->toString(_parentWidget->dataDisplayMode()));
+            return QString(R"(
+                    <span style="color:#444444">%1</span>
+                    <b style="color:%2">%3</b>
+                    <span>%4</span>
+                )")
+                .arg(item->timestamp().toString(Qt::ISODateWithMs),
+                     item->isRequest() ? "#0066cc" : "#009933",
+                     item->isRequest() ? "[Tx] ←" : "[Rx] →",
+                     item->toString(_parentWidget->dataDisplayMode()));
 
         case Qt::UserRole:
             return QVariant::fromValue(item);
@@ -67,6 +79,27 @@ void ModbusLogModel::clear()
 }
 
 ///
+/// \brief ModbusLogModel::setBufferingMode
+/// \param freeze
+///
+void ModbusLogModel::setBufferingMode(bool freeze)
+{
+    _bufferingMode = freeze;
+    if(!_bufferingMode)
+    {
+        for(auto&& data : _bufferingItems) {
+            _items.push_back(data);
+
+            while(_items.size() >= _rowLimit) {
+                _items.removeFirst();
+            }
+        }
+        _bufferingItems.clear();
+        update();
+    }
+}
+
+///
 /// \brief ModbusLogModel::append
 /// \param data
 ///
@@ -74,14 +107,21 @@ void ModbusLogModel::append(QSharedPointer<const ModbusMessage> data)
 {
     if(data == nullptr) return;
 
-    while(rowCount() >= _rowLimit)
-    {
-        _items.removeFirst();
+    if(_bufferingMode) {
+        _bufferingItems.push_back(data);
     }
+    else {
+        while(rowCount() >= _rowLimit)
+        {
+            beginRemoveRows(QModelIndex(), 0, 0);
+            _items.removeFirst();
+            endRemoveRows();
+        }
 
-    beginInsertRows(QModelIndex(), rowCount(), rowCount());
-    _items.push_back(data);
-    endInsertRows();
+        beginInsertRows(QModelIndex(), rowCount(), rowCount());
+        _items.push_back(data);
+        endInsertRows();
+    }
 }
 
 ///
@@ -108,6 +148,7 @@ void ModbusLogModel::setRowLimit(int val)
 void ModbusLogModel::deleteItems()
 {
     _items.clear();
+    _bufferingItems.clear();
 }
 
 ///
@@ -118,13 +159,51 @@ ModbusLogWidget::ModbusLogWidget(QWidget* parent)
     : QListView(parent)
     , _autoscroll(false)
 {
+    setFocusPolicy(Qt::StrongFocus);
+    setFont(defaultMonospaceFont());
+    setContextMenuPolicy(Qt::CustomContextMenu);
     setItemDelegate(new HtmlDelegate(this));
     setModel(new ModbusLogModel(this));
 
+    QIcon copyIcon = QIcon::fromTheme("edit-copy");
+    if (copyIcon.isNull()) {
+        copyIcon = style()->standardIcon(QStyle::SP_FileIcon);
+    }
+
+    _copyAct = new QAction(copyIcon, tr("Copy Text"), this);
+    _copyAct->setShortcut(QKeySequence::Copy);
+    _copyAct->setShortcutContext(Qt::WidgetShortcut);
+    _copyAct->setShortcutVisibleInContextMenu(true);
+    addAction(_copyAct);
+
+    connect(_copyAct, &QAction::triggered, this, [this]() {
+        QModelIndex index = currentIndex();
+        if (index.isValid()) {
+            QTextDocument doc;
+            doc.setHtml(index.data(Qt::DisplayRole).toString());
+            QApplication::clipboard()->setText(doc.toPlainText());
+        }
+    });
+
+    _copyBytesAct = new QAction(tr("Copy Bytes"), this);
+    _copyBytesAct->setShortcut(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_C));
+    _copyBytesAct->setShortcutContext(Qt::WidgetShortcut);
+    _copyBytesAct->setShortcutVisibleInContextMenu(true);
+    addAction(_copyBytesAct);
+
+    connect(_copyBytesAct, &QAction::triggered, this, [this]() {
+        QModelIndex index = currentIndex();
+        if (index.isValid()) {
+            auto msg = index.data(Qt::UserRole).value<QSharedPointer<const ModbusMessage>>();
+            if (msg) QApplication::clipboard()->setText(msg->toString(dataDisplayMode()));
+        }
+    });
+
+    connect(this, &QWidget::customContextMenuRequested,
+            this, &ModbusLogWidget::on_customContextMenuRequested);
     connect(model(), &ModbusLogModel::rowsInserted,
             this, [&]{
         if(_autoscroll) scrollToBottom();
-        setCurrentIndex(QModelIndex());
     });
 }
 
@@ -137,6 +216,8 @@ void ModbusLogWidget::changeEvent(QEvent* event)
     if (event->type() == QEvent::LanguageChange)
     {
         update();
+        _copyAct->setText(tr("Copy Text"));
+        _copyBytesAct->setText(tr("Copy Bytes"));
     }
     QListView::changeEvent(event);
 }
@@ -266,4 +347,67 @@ bool ModbusLogWidget::autoscroll() const
 void ModbusLogWidget::setAutoscroll(bool on)
 {
     _autoscroll = on;
+}
+
+///
+/// \brief ModbusLogWidget::backgroundColor
+/// \return
+///
+QColor ModbusLogWidget::backgroundColor() const
+{
+    return palette().color(QPalette::Base);
+}
+
+///
+/// \brief ModbusLogWidget::setBackGroundColor
+/// \param clr
+///
+void ModbusLogWidget::setBackGroundColor(const QColor& clr)
+{
+    auto pal = palette();
+    pal.setColor(QPalette::Base, clr);
+    pal.setColor(QPalette::Window, clr);
+    setPalette(pal);
+}
+
+///
+/// \brief ModbusLogWidget::state
+/// \return
+///
+LogViewState ModbusLogWidget::state() const
+{
+    return _state;
+}
+
+///
+/// \brief ModbusLogWidget::setState
+/// \param state
+///
+void ModbusLogWidget::setState(LogViewState state)
+{
+    _state = state;
+    switch (state) {
+        case LogViewState::Paused:
+            ((ModbusLogModel*)model())->setBufferingMode(true);
+        break;
+
+        case LogViewState::Running:
+            ((ModbusLogModel*)model())->setBufferingMode(false);
+        break;
+
+        default:
+        break;
+    }
+}
+
+///
+/// \brief ModbusLogWidget::on_customContextMenuRequested
+/// \param pos
+///
+void ModbusLogWidget::on_customContextMenuRequested(const QPoint &pos)
+{
+    QMenu menu(this);
+    menu.addAction(_copyAct);
+    menu.addAction(_copyBytesAct);
+    menu.exec(viewport()->mapToGlobal(pos));
 }

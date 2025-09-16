@@ -1,54 +1,57 @@
 # Open ModSim
 Open ModSim is a free implimentation of modbus slave (server) utility for modbus-tcp and modbus-rtu protocols.
 
-![image](https://github.com/user-attachments/assets/cfa669f5-4018-4db4-bc43-ca060d469182)
+<img width="1292" height="759" alt="image" src="https://github.com/user-attachments/assets/993501d6-bb1e-4dee-91c4-6d9b7a53df8b" />
 
-![image](https://github.com/user-attachments/assets/16653017-d479-466a-8302-5960a2e47fc4)
-
+<img width="1292" height="760" alt="image" src="https://github.com/user-attachments/assets/1383d93f-03f2-42f5-abb5-0ee1b5dbd10b" />
 
 
 ## Features
 
 The following Modbus functions are available:
 
-Discrete Coils/Flags
-
+- Discrete Coils/Flags
+```
     0x01 - Read Coils
     0x02 - Read Discrete Inputs
     0x05 - Write Single Coil
     0x0F - Write Multiple Coils
+```
 
-Registers
-
+- Registers
+```
     0x03 - Read Holding Registers
     0x04 - Read Input Registers
     0x06 - Write Single Register
     0x10 - Write Multiple Registers
     0x16 - Mask Write Register
+```
     
 The following simulations are available:
 
-Discrete Coils/Flags
-
+- Discrete Coils/Flags
+```
     Random - simulate flag randomly
     Toggle - simulate flag on/off periodicaly
-    
-Registers
+```
 
+- Registers
+```
     Random - simulate register randomly
     Increment - simulate register from Low Limit to High Limit with a given Step
     Decrement - simulate register from High Limit to Low Limit with a given Step
+```
 
 ## Modbus Logging
 
-![image](https://github.com/user-attachments/assets/f62d721f-dd0b-4db7-a239-2a22045e99cd)
+<img width="1292" height="759" alt="image" src="https://github.com/user-attachments/assets/b097a1b7-ee3f-4cd8-b0f2-c087cea25c00" />
 
 
 ## Extended Featues
 
 - Modbus Message Parser
 
-![image](https://github.com/sanny32/OpenModSim/assets/13627951/7e9744b8-f4b3-439a-a312-79cbdc426dc2)
+<img width="674" height="463" alt="image" src="https://github.com/user-attachments/assets/774e3ff1-1bf2-46a6-a685-e6702e2e7fe5" />
 
   
 ## Scripting

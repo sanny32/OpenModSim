@@ -8,7 +8,22 @@
 ModbusMultiServer::ModbusMultiServer(QObject *parent)
     : QObject{parent}
     ,_deviceId(1)
+    ,_workerThread(new QThread(this))
 {
+    {
+        static int reg = qRegisterMetaType<QModbusRequest>();
+        Q_UNUSED(reg);
+    }
+
+    {
+        static int reg = qRegisterMetaType<QModbusResponse>();
+        Q_UNUSED(reg);
+    }
+
+    moveToThread(_workerThread);
+    _workerThread->start();
+
+    connect(this, &QObject::destroyed, _workerThread, &QThread::quit);
 }
 
 ///
@@ -16,8 +31,12 @@ ModbusMultiServer::ModbusMultiServer(QObject *parent)
 ///
 ModbusMultiServer::~ModbusMultiServer()
 {
-   for(auto&& s : _modbusServerList)
-       s->disconnectDevice();
+    closeConnections();
+    if(_workerThread && _workerThread->isRunning())
+    {
+       _workerThread->quit();
+       _workerThread->wait();
+    }
 }
 
 ///
@@ -38,12 +57,50 @@ void ModbusMultiServer::setDeviceId(quint8 deviceId)
     if(deviceId == _deviceId)
         return;
 
+    if(QThread::currentThread() != _workerThread)
+    {
+        QMetaObject::invokeMethod(this, [this, deviceId]() {
+            setDeviceId(deviceId);
+        }, Qt::BlockingQueuedConnection);
+        return;
+    }
+
     _deviceId = deviceId;
 
     for(auto&& s : _modbusServerList)
         s->setServerAddress(deviceId);
 
     emit deviceIdChanged(deviceId);
+}
+
+///
+/// \brief ModbusMultiServer::isBusy
+/// \return
+///
+bool ModbusMultiServer::isBusy() const
+{
+    if(_modbusServerList.isEmpty())
+        return false;
+
+    return _modbusServerList.first()->value(QModbusServer::DeviceBusy) == 0xffff;
+}
+
+///
+/// \brief ModbusMultiServer::setBusy
+/// \param busy
+///
+void ModbusMultiServer::setBusy(bool busy)
+{
+    if(QThread::currentThread() != _workerThread)
+    {
+        QMetaObject::invokeMethod(this, [this, busy]() {
+            setBusy(busy);
+        }, Qt::BlockingQueuedConnection);
+        return;
+    }
+
+    for(auto&& s : _modbusServerList)
+        s->setValue(QModbusServer::DeviceBusy, busy ? 0xffff : 0x0000);
 }
 
 ///
@@ -61,6 +118,14 @@ bool ModbusMultiServer::useGlobalUnitMap() const
 ///
 void ModbusMultiServer::setUseGlobalUnitMap(bool use)
 {
+    if(QThread::currentThread() != _workerThread)
+    {
+        QMetaObject::invokeMethod(this, [this, use]() {
+            setUseGlobalUnitMap(use);
+        }, Qt::BlockingQueuedConnection);
+        return;
+    }
+
     _modbusDataUnitMap.setGlobalMap(use);
     reconfigureServers();
 }
@@ -74,6 +139,14 @@ void ModbusMultiServer::setUseGlobalUnitMap(bool use)
 ///
 void ModbusMultiServer::addUnitMap(int id, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, quint16 length)
 {
+    if(QThread::currentThread() != _workerThread)
+    {
+        QMetaObject::invokeMethod(this, [this, id, pointType, pointAddress, length]() {
+            addUnitMap(id, pointType, pointAddress, length);
+        }, Qt::BlockingQueuedConnection);
+        return;
+    }
+
     _modbusDataUnitMap.addUnitMap(id, pointType, pointAddress, length);
     reconfigureServers();
 }
@@ -84,6 +157,14 @@ void ModbusMultiServer::addUnitMap(int id, QModbusDataUnit::RegisterType pointTy
 ///
 void ModbusMultiServer::removeUnitMap(int id)
 {
+    if(QThread::currentThread() != _workerThread)
+    {
+        QMetaObject::invokeMethod(this, [this, id]() {
+            removeUnitMap(id);
+        }, Qt::BlockingQueuedConnection);
+        return;
+    }
+
     _modbusDataUnitMap.removeUnitMap(id);
     reconfigureServers();
 }
@@ -130,6 +211,16 @@ QSharedPointer<QModbusServer> ModbusMultiServer::findModbusServer(ConnectionType
 ///
 QSharedPointer<QModbusServer> ModbusMultiServer::createModbusServer(const ConnectionDetails& cd)
 {
+    if(QThread::currentThread() != _workerThread)
+    {
+        QSharedPointer<QModbusServer> result;
+        QMetaObject::invokeMethod(this, [&]() {
+            result = createModbusServer(cd);
+        }, Qt::BlockingQueuedConnection);
+
+        return result;
+    }
+
     auto modbusServer = findModbusServer(cd);
     if(modbusServer == nullptr)
     {
@@ -137,7 +228,7 @@ QSharedPointer<QModbusServer> ModbusMultiServer::createModbusServer(const Connec
         {
             case ConnectionType::Tcp:
             {
-                modbusServer = QSharedPointer<QModbusServer>(new ModbusTcpServer(this));
+                modbusServer = QSharedPointer<QModbusServer>(new ModbusTcpServer());
                 modbusServer->setProperty("ConnectionDetails", QVariant::fromValue(cd));
                 modbusServer->setConnectionParameter(QModbusDevice::NetworkPortParameter, cd.TcpParams.ServicePort);
                 modbusServer->setConnectionParameter(QModbusDevice::NetworkAddressParameter, cd.TcpParams.IPAddress);
@@ -146,9 +237,9 @@ QSharedPointer<QModbusServer> ModbusMultiServer::createModbusServer(const Connec
                 {
                     emit request(req, ModbusMessage::Tcp, transactionId);
                 });
-                connect((ModbusTcpServer*)modbusServer.get(), &ModbusTcpServer::response, this, [&](const QModbusResponse& resp, int transactionId)
+                connect((ModbusTcpServer*)modbusServer.get(), &ModbusTcpServer::response, this, [&](const QModbusRequest& req, const QModbusResponse& resp, int transactionId)
                 {
-                    emit response(resp, ModbusMessage::Tcp, transactionId);
+                    emit response(req, resp, ModbusMessage::Tcp, transactionId);
                 });
             }
             break;
@@ -170,9 +261,9 @@ QSharedPointer<QModbusServer> ModbusMultiServer::createModbusServer(const Connec
                 {
                     emit request(req, ModbusMessage::Rtu, 0);
                 });
-                connect((ModbusRtuServer*)modbusServer.get(), &ModbusRtuServer::response, this, [&](const QModbusResponse& resp)
+                connect((ModbusRtuServer*)modbusServer.get(), &ModbusRtuServer::response, this, [&](const QModbusRequest& req, const QModbusResponse& resp)
                 {
-                    emit response(resp, ModbusMessage::Rtu, 0);
+                    emit response(req, resp, ModbusMessage::Rtu, 0);
                 });
             }
             break;
@@ -195,6 +286,14 @@ QSharedPointer<QModbusServer> ModbusMultiServer::createModbusServer(const Connec
 ///
 void ModbusMultiServer::connectDevice(const ConnectionDetails& cd)
 {
+    if(QThread::currentThread() != _workerThread)
+    {
+        QMetaObject::invokeMethod(this, [this, cd]() {
+            connectDevice(cd);
+        }, Qt::BlockingQueuedConnection);
+        return;
+    }
+
     auto modbusServer = findModbusServer(cd);
     if(modbusServer == nullptr)
     {
@@ -221,12 +320,37 @@ void ModbusMultiServer::connectDevice(const ConnectionDetails& cd)
 ///
 void ModbusMultiServer::disconnectDevice(ConnectionType type, const QString& port)
 {
+    if(QThread::currentThread() != _workerThread)
+    {
+        QMetaObject::invokeMethod(this, [this, type, port]() {
+            disconnectDevice(type, port);
+        }, Qt::BlockingQueuedConnection);
+        return;
+    }
+
     auto modbusServer = findModbusServer(type, port);
     if(modbusServer != nullptr)
     {
         modbusServer->disconnectDevice();
         removeModbusServer(modbusServer);
     }
+}
+
+///
+/// \brief ModbusMultiServer::closeConnections
+///
+void ModbusMultiServer::closeConnections()
+{
+    if(QThread::currentThread() != _workerThread)
+    {
+        QMetaObject::invokeMethod(this, [this]() {
+            closeConnections();
+        }, Qt::BlockingQueuedConnection);
+        return;
+    }
+
+    for(auto&& s : _modbusServerList)
+        s->disconnectDevice();
 }
 
 ///
@@ -269,6 +393,14 @@ void ModbusMultiServer::removeModbusServer(QSharedPointer<QModbusServer> server)
 ///
 void ModbusMultiServer::reconfigureServers()
 {
+    if(QThread::currentThread() != _workerThread)
+    {
+        QMetaObject::invokeMethod(this, [this]() {
+            reconfigureServers();
+        }, Qt::BlockingQueuedConnection);
+        return;
+    }
+
     for(auto&& s : _modbusServerList)
         s->setMap(_modbusDataUnitMap);
 }
@@ -325,6 +457,14 @@ QModbusDataUnit ModbusMultiServer::data(QModbusDataUnit::RegisterType pointType,
 ///
 void ModbusMultiServer::setData(const QModbusDataUnit& data)
 {
+    if(QThread::currentThread() != _workerThread)
+    {
+        QMetaObject::invokeMethod(this, [this, data]() {
+            setData(data);
+        }, Qt::BlockingQueuedConnection);
+        return;
+    }
+
     _modbusDataUnitMap.setData(data);
     for(auto&& s : _modbusServerList)
     {

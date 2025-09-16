@@ -26,6 +26,18 @@ DialogForceMultipleRegisters::DialogForceMultipleRegisters(ModbusWriteParams& pa
                    Qt::CustomizeWindowHint |
                    Qt::WindowTitleHint);
 
+    switch(type)
+    {
+        case QModbusDataUnit::InputRegisters:
+            setWindowTitle(tr("PRESET INPUT REGISTERS"));
+        break;
+        case QModbusDataUnit::HoldingRegisters:
+            setWindowTitle(tr("PRESET HOLDING REGISTERS"));
+        break;
+        default:
+            break;
+    }
+
     ui->labelAddress->setText(QString(tr("Address: <b>%1</b>")).arg(formatAddress(type, params.Address, _hexAddress)));
     ui->labelLength->setText(QString(tr("Length: <b>%1</b>")).arg(length, 3, 10, QLatin1Char('0')));
 

@@ -1,5 +1,8 @@
 #include "modbusmessages.h"
 
+namespace {
+static const int reg = qRegisterMetaType<ModbusMessage::ProtocolType>();
+}
 
 ///
 /// \brief ModbusMessage::create

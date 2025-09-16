@@ -10,7 +10,7 @@
     <height>300</height>
    </rect>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout">
+  <layout class="QHBoxLayout" name="horizontalLayout_2">
    <property name="spacing">
     <number>0</number>
    </property>
@@ -110,33 +110,36 @@
       </layout>
      </widget>
      <widget class="QWidget" name="page2">
-      <layout class="QVBoxLayout" name="verticalLayout_3">
+      <layout class="QHBoxLayout" name="horizontalLayout_3">
+       <property name="spacing">
+        <number>2</number>
+       </property>
        <property name="leftMargin">
-        <number>0</number>
+        <number>2</number>
        </property>
        <property name="topMargin">
-        <number>0</number>
+        <number>2</number>
        </property>
        <property name="rightMargin">
         <number>0</number>
        </property>
        <property name="bottomMargin">
-        <number>0</number>
+        <number>2</number>
        </property>
        <item>
         <widget class="QSplitter" name="splitter">
          <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="opaqueResize">
-          <bool>true</bool>
+          <enum>Qt::Horizontal</enum>
          </property>
          <widget class="ModbusLogWidget" name="logView">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-            <horstretch>0</horstretch>
-            <verstretch>3</verstretch>
+            <horstretch>3</horstretch>
+            <verstretch>0</verstretch>
            </sizepolicy>
+          </property>
+          <property name="frameShape">
+           <enum>QFrame::NoFrame</enum>
           </property>
           <property name="autoScroll">
            <bool>true</bool>
@@ -153,6 +156,9 @@
           <property name="defaultDropAction">
            <enum>Qt::IgnoreAction</enum>
           </property>
+          <property name="alternatingRowColors">
+           <bool>true</bool>
+          </property>
           <property name="selectionMode">
            <enum>QAbstractItemView::SingleSelection</enum>
           </property>
@@ -166,25 +172,47 @@
            <bool>true</bool>
           </property>
          </widget>
-         <widget class="ModbusMessageWidget" name="modbusMsg">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-            <horstretch>0</horstretch>
-            <verstretch>2</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="focusPolicy">
-           <enum>Qt::NoFocus</enum>
-          </property>
-          <property name="editTriggers">
-           <set>QAbstractItemView::NoEditTriggers</set>
-          </property>
-          <property name="selectionMode">
-           <enum>QAbstractItemView::NoSelection</enum>
-          </property>
-          <property name="wordWrap">
-           <bool>true</bool>
-          </property>
+         <widget class="QWidget" name="layoutWidget">
+          <layout class="QHBoxLayout" name="horizontalLayout">
+           <property name="spacing">
+            <number>2</number>
+           </property>
+           <item>
+            <widget class="Line" name="line">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="ModbusMessageWidget" name="modbusMsg">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+               <horstretch>0</horstretch>
+               <verstretch>2</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>280</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="frameShape">
+              <enum>QFrame::NoFrame</enum>
+             </property>
+             <property name="editTriggers">
+              <set>QAbstractItemView::NoEditTriggers</set>
+             </property>
+             <property name="selectionMode">
+              <enum>QAbstractItemView::NoSelection</enum>
+             </property>
+             <property name="wordWrap">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+          </layout>
          </widget>
         </widget>
        </item>

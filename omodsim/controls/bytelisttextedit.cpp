@@ -1,7 +1,26 @@
 #include <QRegularExpressionValidator>
 #include <QMimeData>
+#include "fontutils.h"
 #include "formatutils.h"
 #include "bytelisttextedit.h"
+
+///
+/// \brief splitBySep
+/// \param str
+/// \param sep
+/// \return
+///
+QString splitBySep(const QString& str, QChar sep)
+{
+    QString s;
+    for(int i = 0; i < str.length() - 1; i+=2)
+    {
+        s.append(str[i]);
+        s.append(str[i+1]);
+        if(i + 3 < str.length()) s.append(sep);
+    }
+    return s;
+}
 
 ///
 /// \brief ByteListTextEdit::ByteListTextEdit
@@ -13,6 +32,7 @@ ByteListTextEdit::ByteListTextEdit(QWidget* parent)
     ,_validator(nullptr)
 {
     setInputMode(DecMode);
+    setFont(defaultMonospaceFont());
     connect(this, &QPlainTextEdit::textChanged, this, &ByteListTextEdit::on_textChanged);
 }
 
@@ -27,6 +47,7 @@ ByteListTextEdit::ByteListTextEdit(InputMode mode, QWidget *parent)
     ,_validator(nullptr)
 {
     setInputMode(mode);
+    setFont(defaultMonospaceFont());
     connect(this, &QPlainTextEdit::textChanged, this, &ByteListTextEdit::on_textChanged);
 }
 
@@ -182,8 +203,11 @@ void ByteListTextEdit::keyPressEvent(QKeyEvent *e)
 ///
 bool ByteListTextEdit::canInsertFromMimeData(const QMimeData* source) const
 {
+    if (!source->hasText())
+        return false;
+
     int pos = 0;
-    auto text = source->text().trimmed();
+    auto text = source->text().remove("0x").trimmed();
     const auto state = _validator->validate(text, pos);
 
     return state == QValidator::Acceptable;
@@ -195,13 +219,18 @@ bool ByteListTextEdit::canInsertFromMimeData(const QMimeData* source) const
 ///
 void ByteListTextEdit::insertFromMimeData(const QMimeData* source)
 {
-    int pos = 0;
-    auto text = source->text().trimmed();
-    const auto state = _validator->validate(text, pos);
+    if (!source->hasText())
+        return;
 
+    int pos = 0;
+    auto text = source->text().remove("0x").trimmed();
+    if(text.length() > 2 && !text.contains(_separator))
+        text = splitBySep(text, _separator);
+
+    const auto state = _validator->validate(text, pos);
     if(state == QValidator::Acceptable)
     {
-        QPlainTextEdit::insertFromMimeData(source);
+        textCursor().insertText(text);
         updateValue();
     }
 }
