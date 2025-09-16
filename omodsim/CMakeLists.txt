@@ -1,7 +1,8 @@
-cmake_minimum_required(VERSION 3.25)
+cmake_minimum_required(VERSION 3.16)
 
 project(omodsim
         VERSION 1.9.0
+        DESCRIPTION "An Open Source Modbus Slave (Server) Utility"
         LANGUAGES CXX)
 
 set(CMAKE_AUTOUIC ON)
@@ -10,11 +11,22 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(PRODUCT_NAME "Open ModSim")
+set(EXECUTABLE_PATH "${CMAKE_INSTALL_PREFIX}/bin/${PROJECT_NAME}")
+
+# Split version to major, minor, patch
+string(REPLACE "." ";" VERSION_LIST ${PROJECT_VERSION})
+list(GET VERSION_LIST 0 VERSION_MAJOR)
+list(GET VERSION_LIST 1 VERSION_MINOR)
+list(GET VERSION_LIST 2 VERSION_PATCH)
 
 # Find Qt6 or fallback to Qt5
 find_package(Qt6 COMPONENTS Core Gui Widgets Network PrintSupport SerialBus SerialPort Core5Compat Qml Help LinguistTools QUIET)
 if (NOT Qt6_FOUND)
-    find_package(Qt5 COMPONENTS Core Gui Widgets Network PrintSupport SerialBus SerialPort Qml Help LinguistTools QUIET REQUIRED)
+    find_package(Qt5 COMPONENTS Core Gui Widgets Network PrintSupport SerialBus SerialPort Qml Help LinguistTools QUIET)
+endif()
+
+if (NOT Qt6_FOUND AND NOT Qt5_FOUND)
+    message(FATAL_ERROR "One or more Qt development packages not found. Please install Qt5 or Qt6 development packages.")
 endif()
 
 if(Qt6_FOUND)
@@ -29,6 +41,21 @@ endif()
 
 # Define target
 add_executable(${PROJECT_NAME})
+
+find_package(Git QUIET)
+if(GIT_FOUND)
+    execute_process(COMMAND ${GIT_EXECUTABLE} rev-parse --abbrev-ref HEAD
+        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/../.git
+        OUTPUT_VARIABLE GIT_BRANCH
+        OUTPUT_STRIP_TRAILING_WHITESPACE
+        ERROR_QUIET)
+
+    if(${GIT_BRANCH} MATCHES dev)
+        set(PROJECT_VERSION ${VERSION_MAJOR}.${VERSION_MINOR}-dev)
+    endif()
+else()
+    message(STATUS "Git not found - skipping branch detection")
+endif()
 
 # Define compile definitions
 add_compile_definitions(APP_NAME="${PRODUCT_NAME}")
@@ -285,23 +312,18 @@ else()
         COMMENT "Updating translation files..."
     )
     add_custom_target(update_translations ALL DEPENDS ${TS_FILES})
-
 endif()
 
 if(WIN32)
-    string(REPLACE "." ";" VERSION_LIST ${PROJECT_VERSION})
-    list(GET VERSION_LIST 0 VERSION_MAJOR)
-    list(GET VERSION_LIST 1 VERSION_MINOR)
-    list(GET VERSION_LIST 2 VERSION_PATCH)
-
-    set(EXECUTABLE_NAME "omodsim")
     set(ICON_FILE "${CMAKE_CURRENT_SOURCE_DIR}/res/omodsim.ico")
-    set(RC_TEMPLATE "${CMAKE_CURRENT_SOURCE_DIR}/omodsim.rc.in")
-    set(GENERATED_RC "${CMAKE_BINARY_DIR}/omodsim.rc")
 
-    configure_file(${RC_TEMPLATE} ${GENERATED_RC} @ONLY)
+    configure_file(
+            "${CMAKE_CURRENT_SOURCE_DIR}/omodsim.rc.in"
+            "${CMAKE_BINARY_DIR}/omodsim.rc"
+            @ONLY
+        )
 
-    target_sources(${PROJECT_NAME} PRIVATE ${ICON_PATH} ${GENERATED_RC})
+    target_sources(${PROJECT_NAME} PRIVATE ${ICON_PATH} "${CMAKE_BINARY_DIR}/omodsim.rc")
     set_target_properties(${PROJECT_NAME} PROPERTIES WIN32_EXECUTABLE ON)
 endif()
 
