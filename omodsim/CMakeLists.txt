@@ -28,7 +28,7 @@ else()
 endif()
 
 # Define target
-add_executable(omodsim)
+add_executable(${PROJECT_NAME})
 
 # Define compile definitions
 add_compile_definitions(APP_NAME="${PRODUCT_NAME}")
@@ -36,7 +36,7 @@ add_compile_definitions(APP_DESCRIPTION="${PROJECT_DESCRIPTION}")
 add_compile_definitions(APP_VERSION="${PROJECT_VERSION}")
 
 # Include directories
-target_include_directories(omodsim PRIVATE
+target_include_directories(${PROJECT_NAME} PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${CMAKE_CURRENT_SOURCE_DIR}/controls
     ${CMAKE_CURRENT_SOURCE_DIR}/dialogs
@@ -261,15 +261,19 @@ else()
 endif()
 
 # Link libraries
-target_sources(omodsim PRIVATE resources.qrc ${HEADERS} ${SOURCES} ${UI_FILES} ${TS_FILES})
-target_link_libraries(omodsim PRIVATE Qt::Widgets Qt::Network Qt::PrintSupport Qt::SerialBus Qt::SerialPort Qt::Qml Qt::Help)
+target_sources(${PROJECT_NAME} PRIVATE resources.qrc ${HEADERS} ${SOURCES} ${UI_FILES} ${TS_FILES})
+target_link_libraries(${PROJECT_NAME} PRIVATE Qt::Widgets Qt::Network Qt::PrintSupport Qt::SerialBus Qt::SerialPort Qt::Qml Qt::Help)
+
+if(TARGET update_translations)
+    add_dependencies(${PROJECT_NAME} update_translations)
+endif()
 
 if(Qt6_FOUND)
-    qt_add_lupdate(omodsim
+    qt_add_lupdate(${PROJECT_NAME}
         TS_FILES ${TS_FILES}
         SOURCES ${SOURCES} ${HEADERS} ${UI_FILES}
     )
-    target_link_libraries(omodsim PRIVATE Qt::Core5Compat)
+    target_link_libraries(${PROJECT_NAME} PRIVATE Qt::Core5Compat)
 else()
     add_custom_command(
         OUTPUT ${TS_FILES}
@@ -297,8 +301,8 @@ if(WIN32)
 
     configure_file(${RC_TEMPLATE} ${GENERATED_RC} @ONLY)
 
-    target_sources(omodsim PRIVATE ${ICON_PATH} ${GENERATED_RC})
-    set_target_properties(omodsim PROPERTIES WIN32_EXECUTABLE ON)
+    target_sources(${PROJECT_NAME} PRIVATE ${ICON_PATH} ${GENERATED_RC})
+    set_target_properties(${PROJECT_NAME} PROPERTIES WIN32_EXECUTABLE ON)
 endif()
 
 add_custom_command(
@@ -314,5 +318,4 @@ add_custom_command(
 )
 
 add_custom_target(helpgenerator ALL DEPENDS ${JSHELP_QCH} ${JSHELP_QHC})
-add_dependencies(omodsim helpgenerator)
-add_dependencies(omodsim update_translations)
+add_dependencies(${PROJECT_NAME} helpgenerator)
