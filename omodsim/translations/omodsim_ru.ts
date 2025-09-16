@@ -312,12 +312,12 @@
         <translation type="vanished">(мсек)</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogdisplaydefinition.ui" line="35"/>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="84"/>
         <source>Log View Limit:</source>
         <translation>Лимит лога:</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogdisplaydefinition.ui" line="69"/>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="62"/>
         <source>(rows)</source>
         <translation>(строки)</translation>
     </message>

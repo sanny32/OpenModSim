@@ -317,12 +317,12 @@
         <translation>日誌</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogdisplaydefinition.ui" line="35"/>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="84"/>
         <source>Log View Limit:</source>
         <translation>日志视图：</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogdisplaydefinition.ui" line="69"/>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="62"/>
         <source>(rows)</source>
         <translation>(行)</translation>
     </message>
