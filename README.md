@@ -6,7 +6,7 @@ Open ModSim is a free implimentation of modbus slave (server) utility for modbus
 <img width="1292" height="760" alt="image" src="https://github.com/user-attachments/assets/1383d93f-03f2-42f5-abb5-0ee1b5dbd10b" />
 
 
-## Features
+# Features
 
 The following Modbus functions are available:
 
@@ -42,19 +42,19 @@ The following simulations are available:
     Decrement - simulate register from High Limit to Low Limit with a given Step
 ```
 
-## Modbus Logging
+# Modbus Logging
 
 <img width="1292" height="759" alt="image" src="https://github.com/user-attachments/assets/b097a1b7-ee3f-4cd8-b0f2-c087cea25c00" />
 
 
-## Extended Featues
+# Extended Featues
 
 - Modbus Message Parser
 
 <img width="674" height="463" alt="image" src="https://github.com/user-attachments/assets/774e3ff1-1bf2-46a6-a685-e6702e2e7fe5" />
 
   
-## Scripting
+# Scripting
   From version 1.2.0 Open ModSim supports scripting. Qt runtime implements the [ECMAScript Language Specification](http://www.ecma-international.org/publications/standards/Ecma-262.htm) standard, so Javascript is used to write code.
   
 ![image](https://github.com/user-attachments/assets/5b448fcd-1ca7-4cfc-af0f-175fbb660f80)
@@ -107,8 +107,95 @@ function init()
 Script.onInit(init);
 ```
 
-## Building
+# Building
   Now building is available via cmake (with installed Qt version 5.15 and above) or Qt Creator. Supports both OS Microsoft Windows and Linux.
+
+# About supported operating systems
+
+The following minimum operating system versions are supported for OpenModSim:
+- Microsoft Windows 7
+- Debian Linux 11
+- Ubuntu Linux 22.04
+- Mint Linux 22
+- Fedora Linux 41
+- OpenSuse Linux 15.6
+- Alt Linux 11
+- Astra Linux 1.7
+- RedOS 8
+
+# Install from binary distributions
+
+Below are the methods for installing the OpenModSim for different OS
+
+## Microsoft Windows
+Run the installer:
+
+- For 32-bit Windows: `qt5-omodsim_1.9.0-1_x86.exe`
+- For 64-bit Windows: `qt5-omodsim_1.9.0-1_amd64.exe` or `qt6-omodsim_1.9.0-1_amd64.exe`
+
+## Debian/Ubintu/Mint/Astra Linux
+### Install
+Install the DEB package from the command line:
+```bash
+sudo apt install -f ./qt6-omodsim_1.9.0-1_amd64.deb
+```
+or if you want to use Qt5 libraries:
+```bash
+sudo apt install -f ./qt5-omodsim_1.9.0-1_amd64.deb
+```
+
+### Remove
+To remove the DEB package run:
+```bash
+sudo apt remove qt6-omodsim
+```
+or for Qt5 package:
+```bash
+sudo apt remove qt5-omodsim
+```
+
+## RedHat/Fedora/RedOS Linux
+### Install
+Install the RPM package from the command line:
+```bash
+sudo dnf install ./qt6-omodsim_1.9.0-1.x86_64.rpm
+```
+
+### Remove
+To remove the RPM package run:
+```bash
+sudo dnf remove qt6-omodsim
+```
+
+## Alt Linux
+### Install
+Install the RPM package from the command line as root user:
+```bash
+apt-get install ./qt6-omodsim_1.9.0-1.x86_64.rpm
+```
+
+### Remove
+To remove the RPM package run as root user:
+```bash
+apt-get remove qt6-omodsim
+```
+
+## SUSE/OpenSUSE Linux
+### Install
+Import qt6-omodsim.rpm.pubkey to rpm repository:
+```bash
+sudo rpm --import qt6-omodsim.rpm.pubkey
+```
+Install the RPM package using Zypper:
+```bash
+sudo zypper install ./qt6-omodsim_1.9.0-1.x86_64.rpm
+```
+
+### Remove
+To remove the RPM package run:
+```bash
+sudo zypper remove qt6-omodsim
+```
   
 ## MIT License
 Copyright 2025 Alexandr Ananev [mail@ananev.org]
