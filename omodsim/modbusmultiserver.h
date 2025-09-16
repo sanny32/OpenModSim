@@ -54,6 +54,7 @@ protected:
         return resp;
     }
 
+private:
     int _transactionId = 0;
 };
 
