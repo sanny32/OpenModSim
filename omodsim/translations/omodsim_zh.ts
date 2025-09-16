@@ -2327,22 +2327,22 @@ MODBUS Point Type:
 <context>
     <name>StatisticWidget</name>
     <message>
-        <location filename="../controls/statisticwidget.ui" line="44"/>
+        <location filename="../controls/statisticwidget.ui" line="40"/>
         <source>Requests: 0</source>
         <translation>请求：0</translation>
     </message>
     <message>
-        <location filename="../controls/statisticwidget.ui" line="51"/>
+        <location filename="../controls/statisticwidget.ui" line="47"/>
         <source>Responses: 0</source>
         <translation>回应：0</translation>
     </message>
     <message>
-        <location filename="../controls/statisticwidget.ui" line="75"/>
+        <location filename="../controls/statisticwidget.ui" line="69"/>
         <source>Reset Ctrs</source>
         <translation>重設計數器</translation>
     </message>
     <message>
-        <location filename="../controls/statisticwidget.ui" line="97"/>
+        <location filename="../controls/statisticwidget.ui" line="104"/>
         <source>Pause</source>
         <translation>暫停</translation>
     </message>
