@@ -24,6 +24,18 @@ DialogForceMultipleCoils::DialogForceMultipleCoils(ModbusWriteParams& params, QM
                    Qt::CustomizeWindowHint |
                    Qt::WindowTitleHint);
 
+    switch(type)
+    {
+        case QModbusDataUnit::Coils:
+            setWindowTitle(tr("FORCE MULTIPLE COILS"));
+            break;
+        case QModbusDataUnit::DiscreteInputs:
+            setWindowTitle(tr("FORCE DISCRETE INPUTS"));
+            break;
+        default:
+            break;
+    }
+
     ui->labelAddress->setText(QString(tr("Address: <b>%1</b>")).arg(formatAddress(type, params.Address, _hexAddress)));
     ui->labelLength->setText(QString(tr("Length: <b>%1</b>")).arg(length, 3, 10, QLatin1Char('0')));
 
