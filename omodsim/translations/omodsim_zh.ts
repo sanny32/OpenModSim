@@ -337,32 +337,32 @@
         <translation>Modbus数据</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogdisplaydefinition.ui" line="122"/>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="125"/>
         <source>Slave Address:</source>
         <translation>从设备地址：</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogdisplaydefinition.ui" line="151"/>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="154"/>
         <source>Point Type:</source>
         <translation>寄存器类型：</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogdisplaydefinition.ui" line="197"/>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="200"/>
         <source>Point Address:</source>
         <translation>寄存器地址：</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogdisplaydefinition.ui" line="248"/>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="251"/>
         <source>Length:</source>
         <translation>长度:</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogdisplaydefinition.ui" line="258"/>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="261"/>
         <source>Use Global Address Map (Unallocated registers will be zero)</source>
         <translation>使用全局地址映射（未分配的寄存器将为零）</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogdisplaydefinition.ui" line="174"/>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="177"/>
         <source>Address Base:</source>
         <translation>基地址：</translation>
     </message>

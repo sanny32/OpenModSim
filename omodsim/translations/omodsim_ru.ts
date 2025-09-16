@@ -332,22 +332,22 @@
         <translation>Настройки Modbus</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogdisplaydefinition.ui" line="122"/>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="125"/>
         <source>Slave Address:</source>
         <translation>Адрес устройства:</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogdisplaydefinition.ui" line="151"/>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="154"/>
         <source>Point Type:</source>
         <translation>Тип регистров:</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogdisplaydefinition.ui" line="258"/>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="261"/>
         <source>Use Global Address Map (Unallocated registers will be zero)</source>
         <translation>Использовать глобальную карту адресов</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogdisplaydefinition.ui" line="197"/>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="200"/>
         <source>Point Address:</source>
         <translation>Начальный адрес:</translation>
     </message>
@@ -357,12 +357,12 @@
         <translation>Журнал</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogdisplaydefinition.ui" line="248"/>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="251"/>
         <source>Length:</source>
         <translation>Количество:</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogdisplaydefinition.ui" line="174"/>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="177"/>
         <source>Address Base:</source>
         <translation>Адресация:</translation>
     </message>
