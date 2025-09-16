@@ -371,6 +371,7 @@
     <name>DialogForceMultipleCoils</name>
     <message>
         <location filename="../dialogs/dialogforcemultiplecoils.ui" line="20"/>
+        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="30"/>
         <source>FORCE MULTIPLE COILS</source>
         <translation>强制多个线圈</translation>
     </message>
@@ -403,12 +404,17 @@
         <translation type="vanished">Количество: %1</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="27"/>
+        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="33"/>
+        <source>FORCE DISCRETE INPUTS</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="39"/>
         <source>Address: &lt;b&gt;%1&lt;/b&gt;</source>
         <translation>地址: &lt;b&gt;%1&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="28"/>
+        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="40"/>
         <source>Length: &lt;b&gt;%1&lt;/b&gt;</source>
         <translation>长度: &lt;b&gt;%1&lt;/b&gt;</translation>
     </message>
@@ -454,12 +460,22 @@
         <translation type="vanished">Количество: %1</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="29"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="32"/>
+        <source>PRESET INPUT REGISTERS</source>
+        <translation type="unfinished">预设输入寄存器</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="35"/>
+        <source>PRESET HOLDING REGISTERS</source>
+        <translation type="unfinished">预设保持寄存器</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="41"/>
         <source>Address: &lt;b&gt;%1&lt;/b&gt;</source>
         <translation>地址: &lt;b&gt;%1&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="30"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="42"/>
         <source>Length: &lt;b&gt;%1&lt;/b&gt;</source>
         <translation>长度: &lt;b&gt;%1&lt;/b&gt;</translation>
     </message>
@@ -2162,7 +2178,7 @@ MODBUS Point Type:
 <context>
     <name>ModbusMultiServer</name>
     <message>
-        <location filename="../modbusmultiserver.cpp" line="814"/>
+        <location filename="../modbusmultiserver.cpp" line="922"/>
         <source>Connection error. %1</source>
         <translation>连接错误 %1</translation>
     </message>
