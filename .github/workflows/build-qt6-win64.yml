@@ -23,7 +23,7 @@ env:
   CMAKE_ARCH: "x64"
 
 jobs:
-  build-windows:
+  build-qt6-win64:
     runs-on: windows-latest
 
     steps:
@@ -59,7 +59,7 @@ jobs:
 
       - name: Deploy Qt dependencies using windeployqt
         run: |
-          "C:\Qt\${{ env.QT_VERSION }}\${{ env.CMAKE_COMPILER }}\bin\windeployqt.exe" build-omodsim-Qt_${{ env.QT_VERSION }}_${{ env.CMAKE_COMPILER }}bit-Release\omodsim.exe --release
+          "C:\Qt\${{ env.QT_VERSION }}\${{ env.CMAKE_COMPILER }}\bin\windeployqt.exe" omodsim.exe --release
         shell: cmd
 
       - name: Upload Executable
