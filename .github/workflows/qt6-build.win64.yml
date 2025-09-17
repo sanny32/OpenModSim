@@ -3,11 +3,11 @@ name: Build OpenModSim (Windows x64)
 on:
   push:
     tags:
-      - "*"   
+      - "*"
   workflow_dispatch:
     inputs:
       version:
-        description: "1.9.0"
+        description: "Версия сборки, например 1.9.0"
         required: true
         default: "test-build"
 
@@ -32,22 +32,26 @@ jobs:
           python-version: "3.11"
 
       - name: Install aqtinstall
+        shell: pwsh
         run: pip install aqtinstall
 
       - name: Install Qt
+        shell: pwsh
         run: |
-          aqt install-qt windows desktop %QT_VERSION% %QT_ARCH% -O C:\Qt -m qttools qt5compat qtpdf qtserialport qtserialbus
+          aqt install-qt windows desktop $env:QT_VERSION $env:QT_ARCH -O C:\Qt -m qttools qt5compat qtpdf qtserialport qtserialbus
 
       - name: Configure CMake
-        run: cmake -B build -G %CMAKE_GENERATOR% -A %CMAKE_ARCH% -DCMAKE_PREFIX_PATH="C:/Qt/%QT_VERSION%/%CMAKE_COMPILER%"
+        shell: pwsh
+        run: cmake -B build -G "$env:CMAKE_GENERATOR" -A $env:CMAKE_ARCH -DCMAKE_PREFIX_PATH="C:/Qt/$env:QT_VERSION/$env:CMAKE_COMPILER"
 
       - name: Build
+        shell: pwsh
         run: cmake --build build --config Release --parallel
 
       - name: Deploy Qt dependencies using windeployqt
-        shell: cmd
+        shell: pwsh
         run: |
-          "C:\Qt\%QT_VERSION%\%CMAKE_COMPILER%\bin\windeployqt.exe" build\omodsim.exe --release
+          "C:\Qt\$env:QT_VERSION\$env:CMAKE_COMPILER\bin\windeployqt.exe" build\omodsim.exe --release
 
       - name: Upload Executable
         uses: actions/upload-artifact@v4
