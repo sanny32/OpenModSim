@@ -8,12 +8,12 @@ on:
       - main
       - dev
       
-#  workflow_dispatch:
-#    inputs:
-#      version:
-#        description: "1.9.0"
-#        required: true
-#        default: "test-build"
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "1.9.0"
+        required: true
+        default: "test-build"
 
 env:
   QT_VERSION: "6.9.2"
@@ -48,7 +48,7 @@ jobs:
 
       - name: Configure CMake
         run: |
-          cmake -B build -G ${{ env.CMAKE_GENERATOR }} -A ${{ env.CMAKE_ARCH }} -DCMAKE_PREFIX_PATH="C:/Qt/${{ env.QT_VERSION }}/${{ env.CMAKE_COMPILER }}"
+          cmake -B build -G "${{ env.CMAKE_GENERATOR }}" -A ${{ env.CMAKE_ARCH }} -DCMAKE_PREFIX_PATH="C:/Qt/${{ env.QT_VERSION }}/${{ env.CMAKE_COMPILER }}"
         shell: cmd
 
       - name: Build
