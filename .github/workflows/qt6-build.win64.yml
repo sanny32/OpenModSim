@@ -1,0 +1,64 @@
+name: Build OpenModSim (Windows x64)
+
+on:
+  push:
+    tags:
+      - "*"
+    workflow_dispatch:
+    inputs:
+      version:
+        description: "1.9.0"
+        required: true
+        default: "test-build"
+        
+env:
+  QT_VERSION: 6.9.2
+  QT_ARCH: win64_msvc2022_64
+  CMAKE_COMPILER: msvc2022_64
+  CMAKE_GENERATOR: "Visual Studio 17 2022"
+  CMAKE_ARCH: x64
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Python (for aqtinstall)
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install aqtinstall
+        run: pip install aqtinstall
+
+      - name: Install Qt
+        run: |
+          aqt install-qt windows desktop $env:QT_VERSION $env:QT_ARCH -m qttools qt5compat qtpdf qtserialport qtserialbus
+
+      - name: Configure CMake
+        run: cmake -B build -G "$env:CMAKE_GENERATOR" -A $env:CMAKE_ARCH -DCMAKE_PREFIX_PATH="C:/Qt/$env:QT_VERSION/$env:CMAKE_COMPILER"
+
+      - name: Build
+        run: cmake --build build --config Release --parallel
+
+      - name: Deploy Qt dependencies using windeployqt
+        shell: cmd
+        run: |
+          "C:\Qt\${{ env:QT_VERSION }}\${{ env:CMAKE_COMPILER }}\bin\windeployqt.exe" build\omodsim.exe --release
+
+      - name: Upload Executable
+        uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          name: qt6-omodsim_${{ github.event.inputs.version }}_amd64
+          path: |
+            ./build/omodsim.exe
+            ./build/*.dll
+            ./build/platforms/
+            ./build/docs/
+            ./build/plugins/
+            ./build/translations/
+            !**/*.pdb
