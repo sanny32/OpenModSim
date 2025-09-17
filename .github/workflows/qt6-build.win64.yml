@@ -38,8 +38,7 @@ jobs:
         run: pip install aqtinstall
 
       - name: Install Qt
-        run: |
-          python -m aqt install-qt windows desktop ${{ env.QT_VERSION }} ${{ env.QT_ARCH }} -O C:\Qt -m qttools qt5compat qtpdf qtserialport qtserialbus
+        run: python -m aqt install-qt windows desktop ${{ env.QT_VERSION }} ${{ env.QT_ARCH }} -O C:\Qt -m qttools qt5compat qtpdf qtserialport qtserialbus
         shell: cmd
 
       - name: Configure CMake
