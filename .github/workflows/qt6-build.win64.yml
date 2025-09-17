@@ -36,7 +36,7 @@ jobs:
 
       - name: Install Qt
         run: |
-          aqt install-qt windows desktop %QT_VERSION% %QT_ARCH% -m qttools qt5compat qtpdf qtserialport qtserialbus
+          aqt install-qt windows desktop %QT_VERSION% %QT_ARCH% -O C:\Qt -m qttools qt5compat qtpdf qtserialport qtserialbus
 
       - name: Configure CMake
         run: cmake -B build -G %CMAKE_GENERATOR% -A %CMAKE_ARCH% -DCMAKE_PREFIX_PATH="C:/Qt/%QT_VERSION%/%CMAKE_COMPILER%"
