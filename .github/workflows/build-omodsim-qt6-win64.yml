@@ -50,7 +50,7 @@ jobs:
 
       - name: Set BUILD_DIR
         run: |
-          echo BUILD_DIR=build-omodsim-Qt_${{ env.QT_VERSION }}_${{ env.CMAKE_COMPILER }}bit-${{ env.BUILD_TYPE }} >> %GITHUB_ENV%
+          echo BUILD_DIR=build-omodsim-Qt_${{ env.QT_VERSION }}_${{ env.CMAKE_COMPILER }}bit-${{ env.BUILD_TYPE }}>>%GITHUB_ENV%
         shell: cmd
 
       - name: Configure CMake
