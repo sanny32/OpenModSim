@@ -63,7 +63,9 @@ jobs:
             --release ^
             --no-compiler-runtime ^
             --no-opengl-sw ^
-            --plugindir "%CD%\${{ env.BUILD_DIR }}\${{ env.BUILD_TYPE }}\plugins"
+            --plugindir "%CD%\${{ env.BUILD_DIR }}\${{ env.BUILD_TYPE }}\plugins" ^
+            --skip-plugin-types help,generic,networkinformation,qmltooling,tls ^
+            --exclude-plugins qsqlibase,qsqlmimer,qsqloci,qsqlodbc,qsqlpsql
         shell: cmd
 
       - name: Upload Executable
