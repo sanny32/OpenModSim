@@ -328,41 +328,46 @@
     </message>
     <message>
         <location filename="../dialogs/dialogdisplaydefinition.ui" line="91"/>
+        <source>Verbose Logging</source>
+        <translation>详细日志记录</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="98"/>
         <source>Autoscroll Log View</source>
         <translation>自動滾動日誌視圖</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogdisplaydefinition.ui" line="107"/>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="114"/>
         <source>Modbus Data</source>
         <translation>Modbus数据</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogdisplaydefinition.ui" line="125"/>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="132"/>
         <source>Slave Address:</source>
         <translation>从设备地址：</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogdisplaydefinition.ui" line="154"/>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="161"/>
         <source>Point Type:</source>
         <translation>寄存器类型：</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogdisplaydefinition.ui" line="200"/>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="207"/>
         <source>Point Address:</source>
         <translation>寄存器地址：</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogdisplaydefinition.ui" line="251"/>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="258"/>
         <source>Length:</source>
         <translation>长度:</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogdisplaydefinition.ui" line="261"/>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="268"/>
         <source>Use Global Address Map (Unallocated registers will be zero)</source>
         <translation>使用全局地址映射（未分配的寄存器将为零）</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogdisplaydefinition.ui" line="177"/>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="184"/>
         <source>Address Base:</source>
         <translation>基地址：</translation>
     </message>
@@ -1069,7 +1074,7 @@ Length: %2</source>
         <translation type="vanished">Указана недопустимая длина данных</translation>
     </message>
     <message>
-        <location filename="../formmodsim.cpp" line="446"/>
+        <location filename="../formmodsim.cpp" line="449"/>
         <source>Address Base: %1
 Start Address: %2
 Length: %3</source>
@@ -1078,7 +1083,7 @@ Length: %3</source>
 长度: %3</translation>
     </message>
     <message>
-        <location filename="../formmodsim.cpp" line="449"/>
+        <location filename="../formmodsim.cpp" line="452"/>
         <source>Device Id: %1
 MODBUS Point Type:
 %2</source>

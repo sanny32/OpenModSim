@@ -323,31 +323,36 @@
     </message>
     <message>
         <location filename="../dialogs/dialogdisplaydefinition.ui" line="91"/>
+        <source>Verbose Logging</source>
+        <translation>Подробное логирование</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="98"/>
         <source>Autoscroll Log View</source>
         <translation>Автопрокрутка текста</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogdisplaydefinition.ui" line="107"/>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="114"/>
         <source>Modbus Data</source>
         <translation>Настройки Modbus</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogdisplaydefinition.ui" line="125"/>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="132"/>
         <source>Slave Address:</source>
         <translation>Адрес устройства:</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogdisplaydefinition.ui" line="154"/>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="161"/>
         <source>Point Type:</source>
         <translation>Тип регистров:</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogdisplaydefinition.ui" line="261"/>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="268"/>
         <source>Use Global Address Map (Unallocated registers will be zero)</source>
         <translation>Использовать глобальную карту адресов</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogdisplaydefinition.ui" line="200"/>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="207"/>
         <source>Point Address:</source>
         <translation>Начальный адрес:</translation>
     </message>
@@ -357,12 +362,12 @@
         <translation>Журнал</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogdisplaydefinition.ui" line="251"/>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="258"/>
         <source>Length:</source>
         <translation>Количество:</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogdisplaydefinition.ui" line="177"/>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="184"/>
         <source>Address Base:</source>
         <translation>Адресация:</translation>
     </message>
@@ -1069,7 +1074,7 @@ Length: %2</source>
         <translation type="vanished">Указана недопустимая длина данных</translation>
     </message>
     <message>
-        <location filename="../formmodsim.cpp" line="446"/>
+        <location filename="../formmodsim.cpp" line="449"/>
         <source>Address Base: %1
 Start Address: %2
 Length: %3</source>
@@ -1078,7 +1083,7 @@ Length: %3</source>
 Количество: %3</translation>
     </message>
     <message>
-        <location filename="../formmodsim.cpp" line="449"/>
+        <location filename="../formmodsim.cpp" line="452"/>
         <source>Device Id: %1
 MODBUS Point Type:
 %2</source>
