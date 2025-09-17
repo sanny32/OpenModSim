@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
     inputs:
       version:
-        description: "Версия сборки, например 1.9.0"
+        description: "1.9.0"
         required: true
         default: "test-build"
 
@@ -36,16 +36,16 @@ jobs:
         run: pip install aqtinstall
 
       - name: Install Qt
-        shell: pwsh
+      #  shell: pwsh
         run: |
           aqt install-qt windows desktop $env:QT_VERSION $env:QT_ARCH -O C:\Qt -m qttools qt5compat qtpdf qtserialport qtserialbus
 
       - name: Configure CMake
-        shell: pwsh
+      #  shell: pwsh
         run: cmake -B build -G "$env:CMAKE_GENERATOR" -A $env:CMAKE_ARCH -DCMAKE_PREFIX_PATH="C:/Qt/$env:QT_VERSION/$env:CMAKE_COMPILER"
 
       - name: Build
-        shell: pwsh
+      #  shell: pwsh
         run: cmake --build build --config Release --parallel
 
       - name: Deploy Qt dependencies using windeployqt
