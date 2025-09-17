@@ -40,15 +40,23 @@ jobs:
         run: |
           aqt install-qt windows desktop ${{ env.QT_VERSION }} $ {{ env.QT_ARCH }} -O C:\Qt -m qttools qt5compat qtpdf qtserialport qtserialbus
 
+      - name: Install Build Tools
+        run: |
+          choco install -y ninja
+        shell: cmd
+
       - name: Configure CMake
         run: cmake -B build -G "${{ env.CMAKE_GENERATOR }}" -A $ {{ env.CMAKE_ARCH }} -DCMAKE_PREFIX_PATH="C:/Qt/${{ env.QT_VERSION }}/${{ env.CMAKE_COMPILER }}"
+        shell: cmd
 
       - name: Build
         run: cmake --build build --config Release --parallel
+        shell: cmd
 
       - name: Deploy Qt dependencies using windeployqt
         run: |
-          "C:\Qt\$env:QT_VERSION\$env:CMAKE_COMPILER\bin\windeployqt.exe" build\omodsim.exe --release
+          "C:\Qt\${{ env.QT_VERSION }}\${{ env.CMAKE_COMPILER }}\bin\windeployqt.exe" build\omodsim.exe --release
+        shell: cmd
 
       - name: Upload Executable
         uses: actions/upload-artifact@v4
