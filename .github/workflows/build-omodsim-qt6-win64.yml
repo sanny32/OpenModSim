@@ -63,6 +63,7 @@ jobs:
             --release ^
             --no-compiler-runtime ^
             --no-opengl-sw ^
+            --plugindir "%CD%\${{ env.BUILD_DIR }}\${{ env.BUILD_TYPE }}\plugins" ^
             --add-plugin-types platforms,imageformats,styles,printsupport,serialport,serialbus
         shell: cmd
 
@@ -74,7 +75,6 @@ jobs:
           path: |
             ./${{ env.BUILD_DIR }}\${{ env.BUILD_TYPE }}/omodsim.exe
             ./${{ env.BUILD_DIR }}\${{ env.BUILD_TYPE }}/*.dll
-            ./${{ env.BUILD_DIR }}\${{ env.BUILD_TYPE }}/platforms/
             ./${{ env.BUILD_DIR }}\${{ env.BUILD_TYPE }}/docs/
             ./${{ env.BUILD_DIR }}\${{ env.BUILD_TYPE }}/plugins/
             ./${{ env.BUILD_DIR }}\${{ env.BUILD_TYPE }}/translations/
