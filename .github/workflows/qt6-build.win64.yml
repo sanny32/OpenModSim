@@ -3,14 +3,14 @@ name: Build OpenModSim (Windows x64)
 on:
   push:
     tags:
-      - "*"
-    workflow_dispatch:
+      - "*"   
+  workflow_dispatch:
     inputs:
       version:
         description: "1.9.0"
         required: true
         default: "test-build"
-        
+
 env:
   QT_VERSION: 6.9.2
   QT_ARCH: win64_msvc2022_64
@@ -47,13 +47,13 @@ jobs:
       - name: Deploy Qt dependencies using windeployqt
         shell: cmd
         run: |
-          "C:\Qt\${{ env:QT_VERSION }}\${{ env:CMAKE_COMPILER }}\bin\windeployqt.exe" build\omodsim.exe --release
+          "C:\Qt\${{ env.QT_VERSION }}\${{ env.CMAKE_COMPILER }}\bin\windeployqt.exe" build\omodsim.exe --release
 
       - name: Upload Executable
         uses: actions/upload-artifact@v4
         if: success()
         with:
-          name: qt6-omodsim_${{ github.event.inputs.version }}_amd64
+          name: qt6-omodsim-${{ github.event.inputs.version || github.ref_name }}-amd64
           path: |
             ./build/omodsim.exe
             ./build/*.dll
