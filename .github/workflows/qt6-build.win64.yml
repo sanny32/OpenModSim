@@ -54,7 +54,7 @@ jobs:
 
       - name: Build
         run: |
-          cmake --build build --config Release --parallel
+          cmake --build build-omodsim-Qt_${{ env.QT_VERSION }}_${{ env.CMAKE_COMPILER }}bit-Release --config Release --parallel
         shell: cmd
 
       - name: Deploy Qt dependencies using windeployqt
