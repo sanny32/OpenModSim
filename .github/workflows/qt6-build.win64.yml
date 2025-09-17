@@ -3,7 +3,10 @@ name: Build OpenModSim (Windows x64)
 on:
   push:
     tags:
-      - "*"
+      - 'v*.*.*'
+    branches: 
+      - main
+      - dev
       
 #  workflow_dispatch:
 #    inputs:
