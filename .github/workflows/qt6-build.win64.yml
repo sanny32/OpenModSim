@@ -49,7 +49,7 @@ jobs:
       - name: Configure CMake
         run: |
 
-          cmake "../omodsim" -B build-omodsim-Qt_${{ env.QT_VERSION }}_${{ env.CMAKE_COMPILER }}bit-Release -G "${{ env.CMAKE_GENERATOR }}" -A ${{ env.CMAKE_ARCH }} -DCMAKE_PREFIX_PATH="C:/Qt/${{ env.QT_VERSION }}/${{ env.CMAKE_COMPILER }}"
+          cmake omodsim -B build-omodsim-Qt_${{ env.QT_VERSION }}_${{ env.CMAKE_COMPILER }}bit-Release -G "${{ env.CMAKE_GENERATOR }}" -A ${{ env.CMAKE_ARCH }} -DCMAKE_PREFIX_PATH="C:/Qt/${{ env.QT_VERSION }}/${{ env.CMAKE_COMPILER }}"
         shell: cmd
 
       - name: Build
