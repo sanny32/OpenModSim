@@ -57,7 +57,7 @@ jobs:
         shell: cmd
 
       - name: Show dirs
-        run: dir %CD%
+        run: dir %CD%\${{ env.BUILD_DIR }}
         shell: cmd
 
       - name: Deploy Qt dependencies using windeployqt
