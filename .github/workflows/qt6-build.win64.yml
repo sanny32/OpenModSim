@@ -35,18 +35,22 @@ jobs:
           python-version: "3.11"
 
       - name: Install aqtinstall
-        run: pip install aqtinstall
+        run: |
+          python -m pip install aqtinstall
 
       - name: Install Qt
-        run: python -m aqt install-qt windows desktop ${{ env.QT_VERSION }} ${{ env.QT_ARCH }} -O C:\Qt -m qttools qt5compat qtpdf qtserialport qtserialbus
+        run: |
+          python -m aqt install-qt windows desktop ${{ env.QT_VERSION }} ${{ env.QT_ARCH }} -O C:\Qt -m qttools qt5compat qtpdf qtserialport qtserialbus
         shell: cmd
 
       - name: Configure CMake
-        run: cmake -B build -G ${{ env.CMAKE_GENERATOR }} -A ${{ env.CMAKE_ARCH }} -DCMAKE_PREFIX_PATH="C:/Qt/${{ env.QT_VERSION }}/${{ env.CMAKE_COMPILER }}"
+        run: |
+          cmake -B build -G ${{ env.CMAKE_GENERATOR }} -A ${{ env.CMAKE_ARCH }} -DCMAKE_PREFIX_PATH="C:/Qt/${{ env.QT_VERSION }}/${{ env.CMAKE_COMPILER }}"
         shell: cmd
 
       - name: Build
-        run: cmake --build build --config Release --parallel
+        run: |
+          cmake --build build --config Release --parallel
         shell: cmd
 
       - name: Deploy Qt dependencies using windeployqt
