@@ -28,9 +28,6 @@ jobs:
     name: Build OpenModSim version ${{ github.event.inputs.version || github.ref_name }}
     runs-on: windows-latest
 
-    env:
-      BUILD_DIR: build-omodsim-Qt_${{ env.QT_VERSION }}_${{ env.CMAKE_COMPILER }}bit-${{ env.BUILD_TYPE }}
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -50,6 +47,10 @@ jobs:
         run: |
           python -m aqt install-qt windows desktop ${{ env.QT_VERSION }} ${{ env.QT_ARCH }} -O C:\Qt -m qt5compat qtpdf qtserialport qtserialbus
         shell: cmd
+
+      - name: Set BUILD_DIR
+        run: |
+          echo "BUILD_DIR=build-omodsim-Qt_${{ env.QT_VERSION }}_${{ env.CMAKE_COMPILER }}bit-${{ env.BUILD_TYPE }}" >> $GITHUB_ENV
 
       - name: Configure CMake
         run: |
