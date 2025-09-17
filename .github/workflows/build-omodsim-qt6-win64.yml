@@ -70,10 +70,10 @@ jobs:
         with:
           name: qt6-omodsim_${{ github.event.inputs.version || github.ref_name }}_x64
           path: |
-            ./build/omodsim.exe
-            ./build/*.dll
-            ./build/platforms/
-            ./build/docs/
-            ./build/plugins/
-            ./build/translations/
+            ./build-omodsim-Qt_${{ env.QT_VERSION }}_${{ env.CMAKE_COMPILER }}bit-${{ env.BUILD_TYPE }}\${{ env.BUILD_TYPE }}/omodsim.exe
+            ./build-omodsim-Qt_${{ env.QT_VERSION }}_${{ env.CMAKE_COMPILER }}bit-${{ env.BUILD_TYPE }}\${{ env.BUILD_TYPE }}/*.dll
+            ./build-omodsim-Qt_${{ env.QT_VERSION }}_${{ env.CMAKE_COMPILER }}bit-${{ env.BUILD_TYPE }}\${{ env.BUILD_TYPE }}/platforms/
+            ./build-omodsim-Qt_${{ env.QT_VERSION }}_${{ env.CMAKE_COMPILER }}bit-${{ env.BUILD_TYPE }}\${{ env.BUILD_TYPE }}/docs/
+            ./build-omodsim-Qt_${{ env.QT_VERSION }}_${{ env.CMAKE_COMPILER }}bit-${{ env.BUILD_TYPE }}\${{ env.BUILD_TYPE }}/plugins/
+            ./build-omodsim-Qt_${{ env.QT_VERSION }}_${{ env.CMAKE_COMPILER }}bit-${{ env.BUILD_TYPE }}\${{ env.BUILD_TYPE }}/translations/
             !**/*.pdb
