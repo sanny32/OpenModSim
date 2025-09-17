@@ -47,7 +47,7 @@ jobs:
       - name: Deploy Qt dependencies using windeployqt
         shell: cmd
         run: |
-          "C:\Qt\${{ env.QT_VERSION }}\${{ env.CMAKE_COMPILER }}\bin\windeployqt.exe" build\omodsim.exe --release
+          "C:\Qt\${{ env:QT_VERSION }}\${{ env.CMAKE_COMPILER }}\bin\windeployqt.exe" build\omodsim.exe --release
 
       - name: Upload Executable
         uses: actions/upload-artifact@v4
