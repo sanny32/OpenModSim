@@ -24,7 +24,7 @@ env:
 
 jobs:
   build-omodsim:
-    name: Build OpenModSim (Qt ${{ env.QT_VERSION }}) - ${{ github.event.inputs.version || github.ref_name }}
+    name: Build OpenModSim version ${{ github.event.inputs.version || github.ref_name }}
     runs-on: windows-latest
 
     steps:
