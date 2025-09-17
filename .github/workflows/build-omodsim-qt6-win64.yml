@@ -63,8 +63,7 @@ jobs:
             --release ^
             --no-compiler-runtime ^
             --no-opengl-sw ^
-            --plugindir "%CD%\${{ env.BUILD_DIR }}\${{ env.BUILD_TYPE }}\plugins" ^
-            --add-plugin-types platforms,imageformats,styles,printsupport,serialport,serialbus
+            --plugindir "%CD%\${{ env.BUILD_DIR }}\${{ env.BUILD_TYPE }}\plugins"
         shell: cmd
 
       - name: Upload Executable
