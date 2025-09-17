@@ -39,7 +39,7 @@ jobs:
       - name: Install Qt
         run: |
           python -m aqt install-qt windows desktop ${{ env.QT_VERSION }} $ {{ env.QT_ARCH }} -O C:\Qt -m qttools qt5compat qtpdf qtserialport qtserialbus
-        shell: cmd
+        shell: cmd1
 
       - name: Configure CMake
         run: cmake -B build -G "${{ env.CMAKE_GENERATOR }}" -A $ {{ env.CMAKE_ARCH }} -DCMAKE_PREFIX_PATH="C:/Qt/${{ env.QT_VERSION }}/${{ env.CMAKE_COMPILER }}"
