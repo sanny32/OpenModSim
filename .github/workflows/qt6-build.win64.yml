@@ -5,12 +5,12 @@ on:
     tags:
       - "*"
       
-  workflow_dispatch:
-    inputs:
-      version:
-        description: "1.9.0"
-        required: true
-        default: "test-build"
+#  workflow_dispatch:
+#    inputs:
+#      version:
+#        description: "1.9.0"
+#        required: true
+#        default: "test-build"
 
 env:
   QT_VERSION: "6.9.2"
