@@ -32,7 +32,7 @@ jobs:
           python-version: "3.11"
 
       - name: Install aqtinstall
-        shell: pwsh
+        #shell: pwsh
         run: pip install aqtinstall
 
       - name: Install Qt
@@ -49,7 +49,7 @@ jobs:
         run: cmake --build build --config Release --parallel
 
       - name: Deploy Qt dependencies using windeployqt
-        shell: pwsh
+        #shell: pwsh
         run: |
           "C:\Qt\$env:QT_VERSION\$env:CMAKE_COMPILER\bin\windeployqt.exe" build\omodsim.exe --release
 
