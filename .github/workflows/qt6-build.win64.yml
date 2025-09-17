@@ -57,7 +57,7 @@ jobs:
         uses: actions/upload-artifact@v4
         if: success()
         with:
-          name: qt6-omodsim-${{ github.event.inputs.version || github.ref_name }}-amd64
+          name: qt6-omodsim_${{ github.event.inputs.version || github.ref_name }}_amd64
           path: |
             ./build/omodsim.exe
             ./build/*.dll
