@@ -25,6 +25,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.inputs.version || github.ref_name }}
 
       - name: Install Python (for aqtinstall)
         uses: actions/setup-python@v5
