@@ -56,6 +56,10 @@ jobs:
           cmake --build ${{ env.BUILD_DIR }} --config ${{ env.BUILD_TYPE }} --parallel
         shell: cmd
 
+      - name: Show dirs
+        run: dir %CD%
+        shell: cmd
+
       - name: Deploy Qt dependencies using windeployqt
         run: |
           "C:\Qt\${{ env.QT_VERSION }}\${{ env.CMAKE_COMPILER }}\bin\windeployqt.exe" ^
