@@ -36,12 +36,6 @@ static bool isConsoleAvailable()
         setvbuf(stdout, nullptr, _IONBF, 0);
         setvbuf(stderr, nullptr, _IONBF, 0);
 
-        HANDLE hPipeRead, hPipeWrite;
-        SECURITY_ATTRIBUTES sa{sizeof(sa), nullptr, TRUE};
-        CreatePipe(&hPipeRead, &hPipeWrite, &sa, 0);
-        SetStdHandle(STD_OUTPUT_HANDLE, hPipeWrite);
-        SetStdHandle(STD_ERROR_HANDLE, hPipeWrite);
-
         return true;
     }
     else {
@@ -62,7 +56,7 @@ static void freeConsoleIfAttached()
 {
 #ifdef Q_OS_WIN
     if(g_consoleAttached) {
-        FreeConsole();
+        //FreeConsole();
         g_consoleAttached = false;
     }
  #endif
