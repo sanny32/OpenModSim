@@ -3,7 +3,7 @@ name: Build OpenModSim (Windows x64)
 on:
   push:
     tags:
-      - *
+      - "*"
     branches: 
       - dev
 
