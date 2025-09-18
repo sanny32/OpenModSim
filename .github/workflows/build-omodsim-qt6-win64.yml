@@ -28,7 +28,7 @@ jobs:
 
       - name: Extract version from CMakeLists.txt
         run: |
-          for /f "tokens=3" %%i in ('findstr "project(OpenModSim VERSION" omodsim\CMakeLists.txt') do echo VERSION=%%i>>%GITHUB_ENV%
+          for /f "tokens=2" %%i in ('findstr /R /C:"VERSION [0-9]*\.[0-9]*\.[0-9]*" omodsim\CMakeLists.txt') do echo VERSION=%%i>>%GITHUB_ENV%
         shell: cmd
 
       - name: Convert version for dev branch
