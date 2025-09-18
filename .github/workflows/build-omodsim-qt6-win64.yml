@@ -82,7 +82,7 @@ jobs:
 
       - name: Deploy Qt dependencies using windeployqt
         run: |
-          call "%VS_PATH%\Common7\Tools\VsDevCmd.bat" -arch=amd64
+          call "%VS_PATH%\VC\Auxiliary\Build\vcvars64.bat"
           "C:\Qt\${{ env.QT_VERSION }}\${{ env.CMAKE_COMPILER }}\bin\windeployqt.exe" ^
             "%CD%\${{ env.BUILD_DIR }}\${{ env.BUILD_TYPE }}\omodsim.exe" ^
             --release ^
