@@ -92,4 +92,5 @@ jobs:
         uses: actions/upload-artifact@v4
         if: success()
         with:
+          name: qt6-omodsim-${{ env.CMAKE_ARCH }}-${{ github.event.inputs.version || github.ref_name }}.exe
           path: qt6-omodsim*.exe
