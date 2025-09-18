@@ -11,7 +11,7 @@ env:
   QT_VERSION: 5.15.2
   QT_ARCH: win64_msvc2019_64
   CMAKE_COMPILER: msvc2019_64
-  CMAKE_GENERATOR: "Visual Studio 16 2019"
+  CMAKE_GENERATOR: "Visual Studio 17 2022"
   CMAKE_ARCH: x64
   BUILD_TYPE: Release
 
@@ -65,7 +65,7 @@ jobs:
 
       - name: Configure CMake
         run: |
-          cmake omodsim -B ${{ env.BUILD_DIR }} -G "${{ env.CMAKE_GENERATOR }}" -A ${{ env.CMAKE_ARCH }} -DCMAKE_PREFIX_PATH="C:/Qt/${{ env.QT_VERSION }}/${{ env.CMAKE_COMPILER }}"
+          cmake omodsim -B ${{ env.BUILD_DIR }} -G "${{ env.CMAKE_GENERATOR }}" -A ${{ env.CMAKE_ARCH }} -T v142 -DCMAKE_PREFIX_PATH="C:/Qt/${{ env.QT_VERSION }}/${{ env.CMAKE_COMPILER }}"
         shell: cmd
 
       - name: Build
