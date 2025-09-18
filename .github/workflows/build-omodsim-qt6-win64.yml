@@ -80,13 +80,9 @@ jobs:
           Write-Host "VS_PATH=$vsPath" >> $env:GITHUB_ENV
         shell: powershell
 
-      - name: Setup Visual Studio environment
-        run: |
-          call "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
-        shell: cmd
-
       - name: Deploy Qt dependencies using windeployqt
         run: |
+          call "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
           "C:\Qt\${{ env.QT_VERSION }}\${{ env.CMAKE_COMPILER }}\bin\windeployqt.exe" ^
             "%CD%\${{ env.BUILD_DIR }}\${{ env.BUILD_TYPE }}\omodsim.exe" ^
             --release ^
