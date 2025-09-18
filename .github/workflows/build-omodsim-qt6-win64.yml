@@ -55,8 +55,6 @@ jobs:
 
       - name: Setup MSVC environment
         uses: microsoft/setup-msbuild@v1
-        with:
-          vs-version: ${{ env.CMAKE_COMPILER }}
 
       - name: Set BUILD_DIR
         run: |
