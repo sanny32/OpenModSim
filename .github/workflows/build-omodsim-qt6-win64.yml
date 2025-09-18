@@ -84,6 +84,7 @@ jobs:
            /DBUILD_PATH="%CD%\${{ env.BUILD_DIR }}\${{ env.BUILD_TYPE }}" ^
            /DICON_FILE="%CD%\omodsim\res\omodsim.ico" ^
            /DLICENSE_FILE="%CD%\omodsim\res\license.txt" ^
+           /DOUTPUT_FILE="%CD%\qt6-omodsim-${{ env.CMAKE_ARCH }}-${{ github.event.inputs.version || github.ref_name }}.exe" ^
            %CD%\.github\workflows\qt6-omodsim-${{ env.CMAKE_ARCH }}.nsi
         shell: cmd
 
