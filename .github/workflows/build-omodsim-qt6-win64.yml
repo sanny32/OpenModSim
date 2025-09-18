@@ -81,8 +81,8 @@ jobs:
         run: |
           "C:\Program Files (x86)\NSIS\makensis.exe" ^
            /DVERSION="${{ github.event.inputs.version || github.ref_name }}" ^
-           /DBUILD_PATH=""%CD%\${{ env.BUILD_DIR }}\${{ env.BUILD_TYPE }}" ^
-           /DMUI_ICON="%CD%\omodsim\res\omodsim.ico" ^
+           /DBUILD_PATH="%CD%\${{ env.BUILD_DIR }}\${{ env.BUILD_TYPE }}" ^
+           /DICON_FILE="%CD%\omodsim\res\omodsim.ico" ^
            /DLICENSE_FILE="%CD%\omodsim\res\license.txt" ^
            %CD%\.github\workflows\qt6-omodsim-${{ env.CMAKE_ARCH }}.nsi
         shell: cmd
