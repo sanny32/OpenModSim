@@ -77,7 +77,6 @@ jobs:
           "C:\Qt\${{ env.QT_VERSION }}\${{ env.CMAKE_COMPILER }}\bin\windeployqt.exe" ^
             "%CD%\${{ env.BUILD_DIR }}\${{ env.BUILD_TYPE }}\omodsim.exe" ^
             --release ^
-            --no-compiler-runtime ^
             --no-opengl-sw ^
             --plugindir "%CD%\${{ env.BUILD_DIR }}\${{ env.BUILD_TYPE }}\plugins" ^
             --skip-plugin-types help,generic,networkinformation,qmltooling,tls ^
