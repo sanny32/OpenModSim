@@ -86,14 +86,12 @@ jobs:
 
       - name: Deploy Qt dependencies using windeployqt
         run: |
-          call "${{ env.VS_PATH }}\VC\Auxiliary\Build\vcvars64.bat"
+          call "${{ env.VS_PATH }}\VC\Auxiliary\Build\vcvars64.bat" -vcvars_ver=14.29
           "C:\Qt\${{ env.QT_VERSION }}\${{ env.CMAKE_COMPILER }}\bin\windeployqt.exe" ^
             "%CD%\${{ env.BUILD_DIR }}\${{ env.BUILD_TYPE }}\omodsim.exe" ^
             --release ^
             --no-opengl-sw ^
-            --plugindir "%CD%\${{ env.BUILD_DIR }}\${{ env.BUILD_TYPE }}\plugins" ^
-            --skip-plugin-types help,generic,networkinformation,qmltooling,tls ^
-            --exclude-plugins qsqlibase,qsqlmimer,qsqloci,qsqlodbc,qsqlpsql
+            --plugindir "%CD%\${{ env.BUILD_DIR }}\${{ env.BUILD_TYPE }}\plugins"
         shell: cmd
 
       - name: Install NSIS
