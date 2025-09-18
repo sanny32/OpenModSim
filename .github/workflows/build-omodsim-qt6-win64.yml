@@ -74,7 +74,7 @@ jobs:
 
       - name: Deploy Qt dependencies using windeployqt
         run: |
-          call "%PROGRAMFILES%\Microsoft Visual Studio\2022\BuildTools\Common7\Tools\VsDevCmd.bat" -arch=amd64
+          call "C:\Program Files\Microsoft Visual Studio\2022\BuildTools\Common7\Tools\VsDevCmd.bat" -arch=amd64
           "C:\Qt\${{ env.QT_VERSION }}\${{ env.CMAKE_COMPILER }}\bin\windeployqt.exe" ^
             "%CD%\${{ env.BUILD_DIR }}\${{ env.BUILD_TYPE }}\omodsim.exe" ^
             --release ^
