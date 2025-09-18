@@ -7,7 +7,6 @@
 
 #--------------------------------
 # Custom defines
-  !define MUI_ICON "omodsim.ico"
   !define NAME "Open ModSim"
   !define PUBLISHER "Alexandr Ananev"
   !define APPFILE "omodsim.exe"
@@ -28,7 +27,7 @@
 # Pages
   
   # Installer pages
-  !insertmacro MUI_PAGE_LICENSE "license.txt"
+  !insertmacro MUI_PAGE_LICENSE ${LICENSE_FILE}
   !insertmacro MUI_PAGE_DIRECTORY
   !insertmacro MUI_PAGE_INSTFILES
 
