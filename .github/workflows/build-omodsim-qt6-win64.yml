@@ -28,14 +28,14 @@ jobs:
 
       - name: Extract version from CMakeLists.txt
         run: |
-          for /f "tokens=2" %%i in ('findstr /R /C:"VERSION [0-9]*\.[0-9]*\.[0-9]*" omodsim\CMakeLists.txt') do echo VERSION=%%i>>%GITHUB_ENV%
+          for /f "tokens=2" %%i in ('findstr /R /C:"APP_VERSION [0-9]*\.[0-9]*\.[0-9]*" omodsim\CMakeLists.txt') do echo APP_VERSION=%%i>>%GITHUB_ENV%
         shell: cmd
 
       - name: Convert version for dev branch
         if: ${{ github.ref_name == 'dev' }}
         run: |
-          for /f "tokens=1,2 delims=." %%a in ("%VERSION%") do (
-            echo VERSION=%%a.%%b-dev>>%GITHUB_ENV%
+          for /f "tokens=1,2 delims=." %%a in ("%APP_VERSION%") do (
+            echo APP_VERSION=%%a.%%b-dev>>%GITHUB_ENV%
           )
         shell: cmd
 
@@ -72,9 +72,17 @@ jobs:
         run: xcopy %CD%\${{ env.BUILD_DIR }}\docs %CD%\${{ env.BUILD_DIR }}\${{ env.BUILD_TYPE }}\docs /E /I /Y
         shell: cmd
 
+    - name: Get Visual Studio path
+        run: |
+          $vsPath = & "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe" `
+            -latest -products * -requires Microsoft.Component.MSBuild -property installationPath
+          if (-not $vsPath) { throw "Visual Studio not found" }
+          Write-Host "VS_PATH=$vsPath" >> $env:GITHUB_ENV
+        shell: powershell
+
       - name: Deploy Qt dependencies using windeployqt
         run: |
-          call "C:\Program Files\Microsoft Visual Studio\2022\BuildTools\Common7\Tools\VsDevCmd.bat" -arch=amd64
+          call "%VS_PATH%\Common7\Tools\VsDevCmd.bat" -arch=amd64
           "C:\Qt\${{ env.QT_VERSION }}\${{ env.CMAKE_COMPILER }}\bin\windeployqt.exe" ^
             "%CD%\${{ env.BUILD_DIR }}\${{ env.BUILD_TYPE }}\omodsim.exe" ^
             --release ^
@@ -92,11 +100,11 @@ jobs:
       - name: Build NSIS installer
         run: |
           "C:\Program Files (x86)\NSIS\makensis.exe" ^
-           /DVERSION="${{ env.VERSION }}" ^
+           /DVERSION="${{ env.APP_VERSION }}" ^
            /DBUILD_PATH="%CD%\${{ env.BUILD_DIR }}\${{ env.BUILD_TYPE }}" ^
            /DICON_FILE="%CD%\omodsim\res\omodsim.ico" ^
            /DLICENSE_FILE="%CD%\omodsim\res\license.txt" ^
-           /DOUTPUT_FILE="%CD%\qt6-omodsim-${{ env.VERSION }}_${{ env.CMAKE_ARCH }}.exe" ^
+           /DOUTPUT_FILE="%CD%\qt6-omodsim-${{ env.APP_VERSION }}_${{ env.CMAKE_ARCH }}.exe" ^
            %CD%\.github\workflows\qt6-omodsim-${{ env.CMAKE_ARCH }}.nsi
         shell: cmd
 
@@ -104,5 +112,5 @@ jobs:
         uses: actions/upload-artifact@v4
         if: success()
         with:
-          name: qt6-omodsim-${{ env.VERSION }}_${{ env.CMAKE_ARCH }}
-          path: qt6-omodsim-${{ env.VERSION }}_${{ env.CMAKE_ARCH }}.exe
+          name: qt6-omodsim-${{ env.APP_VERSION }}_${{ env.CMAKE_ARCH }}
+          path: qt6-omodsim-${{ env.APP_VERSION }}_${{ env.CMAKE_ARCH }}.exe
