@@ -72,7 +72,7 @@ jobs:
         run: xcopy %CD%\${{ env.BUILD_DIR }}\docs %CD%\${{ env.BUILD_DIR }}\${{ env.BUILD_TYPE }}\docs /E /I /Y
         shell: cmd
 
-    - name: Get Visual Studio path
+      - name: Get Visual Studio path
         run: |
           $vsPath = & "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe" `
             -latest -products * -requires Microsoft.Component.MSBuild -property installationPath
