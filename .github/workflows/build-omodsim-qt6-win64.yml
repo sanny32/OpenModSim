@@ -3,9 +3,8 @@ name: Build OpenModSim (Windows x64)
 on:
   push:
     tags:
-      - 'v*.*.*'
+      - *
     branches: 
-      - main
       - dev
 
 env:
@@ -26,6 +25,19 @@ jobs:
         uses: actions/checkout@v4
         with:
           ref: ${{ github.event.inputs.version || github.ref_name }}
+
+      - name: Extract version from CMakeLists.txt
+        run: |
+          for /f "tokens=3" %%i in ('findstr "project(OpenModSim VERSION" omodsim\CMakeLists.txt') do echo VERSION=%%i>>%GITHUB_ENV%
+        shell: cmd
+
+      - name: Convert version for dev branch
+        if: ${{ github.ref_name == 'dev' }}
+        run: |
+          for /f "tokens=1,2 delims=." %%a in ("%VERSION%") do (
+            echo VERSION=%%a.%%b-dev>>%GITHUB_ENV%
+          )
+        shell: cmd
 
       - name: Install Python (for aqtinstall)
         uses: actions/setup-python@v5
@@ -80,11 +92,11 @@ jobs:
       - name: Build NSIS installer
         run: |
           "C:\Program Files (x86)\NSIS\makensis.exe" ^
-           /DVERSION="${{ github.event.inputs.version || github.ref_name }}" ^
+           /DVERSION="${{ end.VERSION }}" ^
            /DBUILD_PATH="%CD%\${{ env.BUILD_DIR }}\${{ env.BUILD_TYPE }}" ^
            /DICON_FILE="%CD%\omodsim\res\omodsim.ico" ^
            /DLICENSE_FILE="%CD%\omodsim\res\license.txt" ^
-           /DOUTPUT_FILE="%CD%\qt6-omodsim-${{ github.event.inputs.version || github.ref_name }}_${{ env.CMAKE_ARCH }}.exe" ^
+           /DOUTPUT_FILE="%CD%\qt6-omodsim-${{ env.VERSION }}_${{ env.CMAKE_ARCH }}.exe" ^
            %CD%\.github\workflows\qt6-omodsim-${{ env.CMAKE_ARCH }}.nsi
         shell: cmd
 
@@ -92,5 +104,5 @@ jobs:
         uses: actions/upload-artifact@v4
         if: success()
         with:
-          name: qt6-omodsim-${{ github.event.inputs.version || github.ref_name }}_${{ env.CMAKE_ARCH }}
-          path: qt6-omodsim-${{ github.event.inputs.version || github.ref_name }}_${{ env.CMAKE_ARCH }}.exe
+          name: qt6-omodsim-${{ env.VERSION }}_${{ env.CMAKE_ARCH }}
+          path: qt6-omodsim-${{ env.VERSION }}_${{ env.CMAKE_ARCH }}.exe
