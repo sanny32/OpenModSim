@@ -17,14 +17,14 @@ env:
 
 jobs:
   build-omodsim:
-    name: Build OpenModSim version ${{ github.event.inputs.version || github.ref_name }}
+    name: Build OpenModSim version ${{ github.ref_name }}
     runs-on: windows-latest
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.inputs.version || github.ref_name }}
+          ref: ${{ github.ref_name }}
 
       - name: Extract version from CMakeLists.txt
         run: |
@@ -92,7 +92,7 @@ jobs:
       - name: Build NSIS installer
         run: |
           "C:\Program Files (x86)\NSIS\makensis.exe" ^
-           /DVERSION="${{ end.VERSION }}" ^
+           /DVERSION="${{ env.VERSION }}" ^
            /DBUILD_PATH="%CD%\${{ env.BUILD_DIR }}\${{ env.BUILD_TYPE }}" ^
            /DICON_FILE="%CD%\omodsim\res\omodsim.ico" ^
            /DLICENSE_FILE="%CD%\omodsim\res\license.txt" ^
