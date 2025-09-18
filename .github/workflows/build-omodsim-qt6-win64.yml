@@ -76,7 +76,7 @@ jobs:
         run: |
           for /f "usebackq tokens=*" %%i in (`"%ProgramFiles(x86)%\Microsoft Visual Studio\Installer\vswhere.exe" ^
            -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath`) do set VS_PATH=%%i
-          echo VS_PATH=%VS_PATH% >> %GITHUB_ENV%
+          echo VS_PATH=%VS_PATH%>>%GITHUB_ENV%
         shell: cmd
 
       - name: Deploy Qt dependencies using windeployqt
