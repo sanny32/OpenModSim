@@ -71,7 +71,7 @@
 
  Section "Visual Studio Runtime"
     SetOutPath "$INSTDIR"
-    ExecWait "$INSTDIR\vcredist_msvc2022_x64.exe /install /quiet"
+    ExecWait "$INSTDIR\vc_redist.x64.exe /install /quiet"
  SectionEnd
 
 #--------------------------------
