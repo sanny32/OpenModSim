@@ -79,7 +79,10 @@ jobs:
 
       - name: Build NSIS installer
         run: |
-          makensis /DVERSION="${{ github.event.inputs.version || github.ref_name }}" /DBUILD_PATH="${{ env.BUILD_DIR }}\${{ env.BUILD_TYPE }}" .github\workflows\qt6-omodsim-${{ env.CMAKE_ARCH }}.nsi
+          "C:\Program Files (x86)\NSIS\makensis.exe" ^
+           /DVERSION="${{ github.event.inputs.version || github.ref_name }}" ^
+           /DBUILD_PATH="${{ env.BUILD_DIR }}\${{ env.BUILD_TYPE }}" ^
+           %CD%\.github\workflows\qt6-omodsim-${{ env.CMAKE_ARCH }}.nsi
         shell: cmd
 
       - name: Upload Installer
