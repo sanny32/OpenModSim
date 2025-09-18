@@ -4,8 +4,6 @@ on:
   push:
     tags:
       - "*"
-    branches: 
-      - dev 
       
 env:
   QT_VERSION: 6.9.2

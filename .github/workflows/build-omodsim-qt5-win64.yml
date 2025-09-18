@@ -18,7 +18,7 @@ env:
 jobs:
   build-omodsim:
     name: Build OpenModSim version ${{ github.ref_name }} with Qt5 on Windows x64
-    runs-on: windows-2019
+    runs-on: windows-latest
 
     steps:
       - name: Checkout repository
@@ -57,6 +57,11 @@ jobs:
         run: |
           echo BUILD_DIR=build-omodsim-Qt_${{ env.QT_VERSION }}_${{ env.CMAKE_COMPILER }}bit-${{ env.BUILD_TYPE }}>>%GITHUB_ENV%
         shell: cmd
+
+      - name: Setup MSBuild
+        uses: microsoft/setup-msbuild@v1.3.2
+        with:
+          vs-version: '16.11'
 
       - name: Configure CMake
         run: |
