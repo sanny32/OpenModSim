@@ -107,7 +107,7 @@ jobs:
            /DICON_FILE="%CD%\omodsim\res\omodsim.ico" ^
            /DLICENSE_FILE="%CD%\omodsim\res\license.txt" ^
            /DOUTPUT_FILE="%CD%\qt5-omodsim-${{ env.APP_VERSION }}_${{ env.ARCH }}.exe" ^
-           %CD%\.github\workflows\omodsim-${{ env.ARCH }}.nsi
+           %CD%\.github\workflows\installer-win32.nsi
         shell: cmd
 
       - name: Upload Installer
