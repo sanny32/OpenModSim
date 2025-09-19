@@ -22,9 +22,7 @@ private slots:
     void onBytesWritten(qint64 bytes);
 
 private:
-    void processModbusMessage(const QByteArray &data);
-    quint16 readUInt16(const QByteArray &data, int offset) const;
-    void writeUInt16(QByteArray &data, int offset, quint16 value) const;
+    void processModbusMessage();
 
 private:
     QTcpSocket* _socket = nullptr;

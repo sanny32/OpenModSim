@@ -5,12 +5,10 @@
 #include <QThread>
 #include <QTcpSocket>
 #include <QModbusServer>
-#include <QModbusTcpServer>
 #include "modbusdataunitmap.h"
 #include "modbuswriteparams.h"
 #include "connectiondetails.h"
 #include "modbusmessage.h"
-#include "modbustcpconnection.h"
 
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     #include <QModbusRtuSerialSlave>

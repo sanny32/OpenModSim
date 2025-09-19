@@ -1,4 +1,5 @@
 #include "numericutils.h"
+#include "modbustcpserver.h"
 #include "modbusmultiserver.h"
 
 ///
@@ -246,7 +247,7 @@ QSharedPointer<QModbusServer> ModbusMultiServer::createModbusServer(const Connec
 
             case ConnectionType::Serial:
             {
-                modbusServer = QSharedPointer<QModbusServer>(new ModbusRtuServer(this));
+                modbusServer = QSharedPointer<QModbusServer>(new ModbusRtuServer());
                 modbusServer->setProperty("ConnectionDetails", QVariant::fromValue(cd));
                 modbusServer->setProperty("DTRControl", cd.SerialParams.SetDTR);
                 modbusServer->setProperty("RTSControl", cd.SerialParams.SetRTS);

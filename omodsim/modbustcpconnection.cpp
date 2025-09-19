@@ -18,12 +18,12 @@ ModbusTcpConnection::ModbusTcpConnection(qintptr socketDescriptor, ModbusTcpServ
     connect(_socket, &QTcpSocket::bytesWritten, this, &ModbusTcpConnection::onBytesWritten);
 
     if (!_socket->setSocketDescriptor(socketDescriptor)) {
-        qWarning() << "Failed to set socket descriptor";
+        qWarning() << "(TCP server) Failed to set socket descriptor";
         deleteLater();
         return;
     }
 
-    qDebug() << "New Modbus TCP connection from" << _socket->peerAddress().toString();
+    qDebug() << "(TCP server) New Modbus TCP connection from" << _socket->peerAddress().toString();
 }
 
 ///
@@ -35,32 +35,14 @@ void ModbusTcpConnection::onReadyRead()
 
     _buffer.append(_socket->readAll());
 
-    while (_buffer.size() >= 6) // MBAP header size
+     while (!_buffer.isEmpty())
     {
-        quint16 transactionId = readUInt16(_buffer, 0);
-        quint16 protocolId    = readUInt16(_buffer, 2);
-        quint16 length        = readUInt16(_buffer, 4);
-
-        if (protocolId != 0) {
-            qWarning() << "Invalid Modbus protocol ID:" << protocolId;
-            _socket->close();
+        if (_buffer.size() < mbpaHeaderSize) {
+            qDebug() << "(TCP server) MBPA header too short. Waiting for more data.";
             return;
         }
 
-        if (_buffer.size() < 6 + length) {
-            return;
-        }
-
-        if (length < 2) {
-            qWarning() << "Invalid Modbus PDU length";
-            _socket->close();
-            return;
-        }
-
-        QByteArray message = _buffer.left(6 + length);
-        _buffer.remove(0, 6 + length);
-
-        processModbusMessage(message);
+        processModbusMessage();
     }
 }
 
@@ -68,12 +50,12 @@ void ModbusTcpConnection::onReadyRead()
 /// \brief ModbusTcpConnection::processModbusMessage
 /// \param rawMessage
 ///
-void ModbusTcpConnection::processModbusMessage(const QByteArray& rawMessage)
+void ModbusTcpConnection::processModbusMessage()
 {
     quint8 unitId;
     quint16 transactionId, bytesPdu, protocolId;
 
-    QDataStream input(rawMessage);
+    QDataStream input(_buffer);
     input >> transactionId >> protocolId >> bytesPdu >> unitId;
 
     qDebug() << "(TCP server) Request MBPA:" << "Transaction Id:"
@@ -83,13 +65,15 @@ void ModbusTcpConnection::processModbusMessage(const QByteArray& rawMessage)
     bytesPdu--;
 
     const quint16 current = mbpaHeaderSize + bytesPdu;
-    if (rawMessage.size() < current) {
+    if (_buffer.size() < current) {
         qDebug() << "(TCP server) PDU too short. Waiting for more data";
         return;
     }
 
     QModbusRequest request;
     input >> request;
+
+    _buffer.remove(0, current);
 
     QModbusResponse response;
     if (_backend->value(QModbusServer::DeviceBusy).value<quint16>() == 0xffff) {
@@ -125,7 +109,7 @@ void ModbusTcpConnection::processModbusMessage(const QByteArray& rawMessage)
 ///
 void ModbusTcpConnection::onDisconnected()
 {
-    qDebug() << "Client disconnected";
+    qDebug() << "(TCP server) Client disconnected";
     deleteLater();
 }
 
