@@ -96,7 +96,7 @@ jobs:
       - name: Install NSIS
         run: |
           choco install nsis -y
-        shell: powershell
+        shell: cmd
 
       - name: Build NSIS installer
         run: |
