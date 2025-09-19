@@ -1,5 +1,6 @@
 #include <QTcpSocket>
 #include "modbustcpconnection.h"
+#include "modbustcpserver.h"
 
 ///
 /// \brief ModbusTcpConnection::ModbusTcpConnection
@@ -7,7 +8,7 @@
 /// \param backend
 /// \param parent
 ///
-ModbusTcpConnection::ModbusTcpConnection(qintptr socketDescriptor, QModbusTcpServer* backend, QObject* parent)
+ModbusTcpConnection::ModbusTcpConnection(qintptr socketDescriptor, ModbusTcpServer* backend, QObject* parent)
     : QObject{parent}
     ,_backend(backend)
 {
@@ -69,45 +70,54 @@ void ModbusTcpConnection::onReadyRead()
 ///
 void ModbusTcpConnection::processModbusMessage(const QByteArray& rawMessage)
 {
-    if (rawMessage.size() < 7) return;
+    quint8 unitId;
+    quint16 transactionId, bytesPdu, protocolId;
 
-    quint8 unitId = static_cast<quint8>(rawMessage[6]);
+    QDataStream input(rawMessage);
+    input >> transactionId >> protocolId >> bytesPdu >> unitId;
 
-    // 🔁 Ваша логика вместо matchingServerAddress!
-    bool shouldProcess = true; // ✅ Замените на свою логику
+    qDebug() << "(TCP server) Request MBPA:" << "Transaction Id:"
+                << Qt::hex << transactionId << "Protocol Id:" << protocolId << "PDU bytes:"
+                << bytesPdu << "Unit Id:" << unitId;
 
-    // Примеры:
-    // shouldProcess = (unitId != 0); // игнорировать broadcast
-    // shouldProcess = (unitId == 1 || unitId == 2); // только определённые адреса
-    // shouldProcess = true; // принимать всё
+    bytesPdu--;
 
-    qDebug() << "Modbus Unit ID:" << unitId << "→" << (shouldProcess ? "ACCEPT" : "REJECT");
-
-    if (!shouldProcess) {
-        // 🚫 Отклоняем запрос — просто ничего не делаем
-        // Можно отправить exception response, если нужно
+    const quint16 current = mbpaHeaderSize + bytesPdu;
+    if (rawMessage.size() < current) {
+        qDebug() << "(TCP server) PDU too short. Waiting for more data";
         return;
     }
 
-    // ✅ Передаём запрос внутреннему QModbusTcpServer
-    // Но: QModbusTcpServer не имеет публичного API для "принудительной обработки запроса"
+    QModbusRequest request;
+    input >> request;
 
-    // ❗ Проблема: QModbusTcpServer ожидает, что запрос придёт через его QTcpServer
-    // → Нам нужно "подсунуть" запрос так, будто он пришёл по сети
+    QModbusResponse response;
+    if (_backend->value(QModbusServer::DeviceBusy).value<quint16>() == 0xffff) {
+        response = QModbusExceptionResponse(request.functionCode(), QModbusExceptionResponse::ServerDeviceBusy);
+    }
+    else {
+        response = _backend->processRequest(request);
+    }
 
-    // 💡 Решение: создать "виртуальное соединение" — но это сложно
+    QByteArray result;
+    QDataStream output(&result, QIODevice::WriteOnly);
 
-    // ⚠️ Альтернатива: использовать QModbusServer::processRequest() — но он protected!
+    // The length field is the byte count of the following fields, including the Unit
+    // Identifier and PDU fields, so we add one byte to the response size.
+    output << transactionId << protocolId << quint16(response.size() + 1)
+           << unitId << response;
 
-    // 😡 Значит, нужно либо наследовать QModbusTcpServer и открыть processRequest,
-    // либо использовать дружественный класс, либо... хак с d_ptr (но мы же хотим избежать!)
+    if (!_socket->isOpen()) {
+        qDebug() << "(TCP server) Requesting socket has closed.";
+        _backend->setError(QModbusTcpServer::tr("Requesting socket is closed"), QModbusDevice::WriteError);
+        return;
+    }
 
-    // → Давайте сделаем простой выход: если запрос принят — передадим его "как есть"
-    // во внутренний сервер через его слушающий сокет? Нет, это зациклит.
-
-    // 🤔 Лучший вариант: создать наследника QModbusTcpServer с открытым processRequest
-
-    // Переходим к ШАГУ 3 👇
+    qint64 writtenBytes = _socket->write(result);
+    if (writtenBytes == -1 || writtenBytes < result.size()) {
+        qDebug() << "(TCP server) Cannot write requested response to socket.";
+        _backend->setError(QModbusTcpServer::tr("Could not write response to client"), QModbusDevice::WriteError);
+    }
 }
 
 ///
@@ -128,28 +138,4 @@ void ModbusTcpConnection::onBytesWritten(qint64 bytes)
     Q_UNUSED(bytes)
 }
 
-///
-/// \brief ModbusTcpConnection::readUInt16
-/// \param data
-/// \param offset
-/// \return
-///
-quint16 ModbusTcpConnection::readUInt16(const QByteArray& data, int offset) const
-{
-    if (offset + 1 >= data.size()) return 0;
-    return static_cast<quint16>((static_cast<quint8>(data[offset]) << 8) |
-                                static_cast<quint8>(data[offset + 1]));
-}
 
-///
-/// \brief ModbusTcpConnection::writeUInt16
-/// \param data
-/// \param offset
-/// \param value
-///
-void ModbusTcpConnection::writeUInt16(QByteArray& data, int offset, quint16 value) const
-{
-    if (offset + 1 >= data.size()) return;
-    data[offset]     = static_cast<char>((value >> 8) & 0xFF);
-    data[offset + 1] = static_cast<char>(value & 0xFF);
-}

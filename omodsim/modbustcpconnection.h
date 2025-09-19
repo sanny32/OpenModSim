@@ -4,6 +4,8 @@
 #include <QTimer>
 #include <QModbusTcpServer>
 
+class ModbusTcpServer;
+
 ///
 /// \brief The ModbusTcpConnection class
 ///
@@ -12,7 +14,7 @@ class ModbusTcpConnection : public QObject
     Q_OBJECT
 
 public:
-    explicit ModbusTcpConnection(qintptr socketDescriptor, QModbusTcpServer* backend, QObject* parent = nullptr);
+    explicit ModbusTcpConnection(qintptr socketDescriptor, ModbusTcpServer* backend, QObject* parent = nullptr);
 
 private slots:
     void onReadyRead();
@@ -26,12 +28,15 @@ private:
 
 private:
     QTcpSocket* _socket = nullptr;
-    QModbusTcpServer* _backend = nullptr;
+    ModbusTcpServer* _backend = nullptr;
 
     QByteArray _buffer;
     bool _isProcessing = false;
 
     QTimer _responseTimer;
+
+    static const qint8 mbpaHeaderSize = 7;
+    static const qint16 maxBytesModbusADU = 260;
 };
 
 #endif // MODBUSTCPCONNECTION_H

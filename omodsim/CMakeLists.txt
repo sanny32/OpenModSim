@@ -228,6 +228,7 @@ set(HEADERS
     modbustcpconnection.h
     modbustcpproxyserver.h
     modbusmultiserver.h
+    modbustcpserver.h
     modbussimulationparams.h
     modbuswriteparams.h
     numericutils.h

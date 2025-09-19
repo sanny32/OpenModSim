@@ -5,6 +5,8 @@
 #include <QTcpServer>
 #include <QModbusTcpServer>
 
+class ModbusTcpServer;
+
 ///
 /// \brief The ModbusTcpProxyServer class
 ///
@@ -17,13 +19,13 @@ public:
     ~ModbusTcpProxyServer();
 
     bool startProxy(quint16 port = 502, const QHostAddress& address = QHostAddress::Any);
-    void setBackendServer(QModbusTcpServer* server);
+    void setBackendServer(ModbusTcpServer* server);
 
 protected:
     void incomingConnection(qintptr socketDescriptor) override;
 
 private:
-    QModbusTcpServer* _backendServer = nullptr;
+    ModbusTcpServer* _backendServer = nullptr;
 };
 
 #endif // MODBUSTCPPROXYSERVER_H

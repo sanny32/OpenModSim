@@ -1,5 +1,6 @@
 #include "modbustcpconnection.h"
 #include "modbustcpproxyserver.h"
+#include "modbustcpserver.h"
 
 ///
 /// \brief ModbusTcpProxyServer::ModbusTcpProxyServer
@@ -35,7 +36,7 @@ bool ModbusTcpProxyServer::startProxy(quint16 port, const QHostAddress& address)
 /// \brief ModbusTcpProxyServer::setBackendServer
 /// \param server
 ///
-void ModbusTcpProxyServer::setBackendServer(QModbusTcpServer* server)
+void ModbusTcpProxyServer::setBackendServer(ModbusTcpServer* server)
 {
     _backendServer = server;
 }

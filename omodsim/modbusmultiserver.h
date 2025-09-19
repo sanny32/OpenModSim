@@ -10,6 +10,7 @@
 #include "modbuswriteparams.h"
 #include "connectiondetails.h"
 #include "modbusmessage.h"
+#include "modbustcpconnection.h"
 
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     #include <QModbusRtuSerialSlave>
@@ -17,47 +18,6 @@
 #else
     #include <QModbusRtuSerialServer>
 #endif
-
-///
-/// \brief The ModbusTcpServer class
-///
-class ModbusTcpServer : public QModbusTcpServer
-{
-    Q_OBJECT
-
-public:
-    explicit ModbusTcpServer(QObject *parent = nullptr)
-        : QModbusTcpServer(parent)
-    {                    
-    }
-
-signals:
-    void request(const QModbusRequest& req, int transactionId);
-    void response(const QModbusRequest& req, const QModbusResponse& resp, int transactionId);
-
-protected:
-    QModbusResponse processRequest(const QModbusPdu &req) override
-    {
-        _transactionId++;
-
-        emit request(req, _transactionId);
-        auto resp = QModbusTcpServer::processRequest(req);
-        emit response(req, resp, _transactionId);
-        return resp;
-    }
-    QModbusResponse processPrivateRequest(const QModbusPdu &req) override
-    {
-        _transactionId++;
-
-        emit request(req, _transactionId);
-        auto resp = QModbusTcpServer::processPrivateRequest(req);
-        emit response(req, resp, _transactionId);
-        return resp;
-    }
-
-private:
-    int _transactionId = 0;
-};
 
 ///
 /// \brief The ModbusRtuServer class
