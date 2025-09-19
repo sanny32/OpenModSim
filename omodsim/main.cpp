@@ -1,7 +1,22 @@
 #include <QApplication>
 #include <QFontDatabase>
+#include <QMessageBox>
 #include "mainwindow.h"
 #include "cmdlineparser.h"
+#include "fontutils.h"
+
+///
+/// \brief isConsoleOutputAvailable
+/// \return
+///
+static inline bool isConsoleOutputAvailable()
+{
+#ifdef Q_OS_WIN
+    return false;
+#else
+    return true;
+#endif
+}
 
 ///
 /// \brief showVersion
@@ -9,7 +24,15 @@
 static inline void showVersion()
 {
     const auto version = QString("%1\n").arg(APP_VERSION);
-    fputs(qPrintable(version), stdout);
+    if(!isConsoleOutputAvailable()){
+        QMessageBox msg(QMessageBox::Information, APP_NAME, qPrintable(version));
+        msg.setFont(defaultMonospaceFont());
+        msg.exec();
+    }
+    else {
+        fputs(qPrintable(version), stdout);
+        fflush(stdout);
+    }
 }
 
 ///
@@ -18,7 +41,15 @@ static inline void showVersion()
 ///
 static inline void showHelp(const QString& helpText)
 {
-    fputs(qPrintable(helpText), stdout);
+    if(!isConsoleOutputAvailable()){
+        QMessageBox msg(QMessageBox::Information, APP_NAME, qPrintable(helpText));
+        msg.setFont(defaultMonospaceFont());
+        msg.exec();
+    }
+    else {
+        fputs(qPrintable(helpText), stdout);
+        fflush(stdout);
+    }
 }
 
 ///
@@ -27,7 +58,15 @@ static inline void showHelp(const QString& helpText)
 ///
 static void showErrorMessage(const QString &message)
 {
-    fputs(qPrintable(message), stderr);
+    if(!isConsoleOutputAvailable()){
+        QMessageBox msg(QMessageBox::Critical, APP_NAME, qPrintable(message));
+        msg.setFont(defaultMonospaceFont());
+        msg.exec();
+    }
+    else {
+        fputs(qPrintable(message), stderr);
+        fflush(stderr);
+    }
 }
 
 ///
