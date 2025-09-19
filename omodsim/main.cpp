@@ -3,63 +3,19 @@
 #include <QMessageBox>
 #include "mainwindow.h"
 #include "cmdlineparser.h"
-
-#ifdef Q_OS_WIN
-#include <qt_windows.h>
-#include <io.h>
-#include <fcntl.h>
-#endif
+#include "fontutils.h"
 
 ///
-/// \brief g_consoleAttached
-///
-static bool g_consoleAttached = false;
-
-
-///
-/// \brief isConsoleAvailable
+/// \brief isConsoleOutputAvailable
 /// \return
 ///
-static bool isConsoleAvailable()
+static inline bool isConsoleOutputAvailable()
 {
 #ifdef Q_OS_WIN
-    if (GetConsoleWindow()){
-        return true;
-    }
-    else if (AttachConsole(ATTACH_PARENT_PROCESS)){
-        g_consoleAttached = true;
-
-        FILE* fDummy;
-        freopen_s(&fDummy, "CONOUT$", "w", stdout);
-        freopen_s(&fDummy, "CONOUT$", "w", stderr);
-
-        setvbuf(stdout, nullptr, _IONBF, 0);
-        setvbuf(stderr, nullptr, _IONBF, 0);
-
-        return true;
-    }
-    else {
-        STARTUPINFO startupInfo;
-        startupInfo.cb = sizeof(STARTUPINFO);
-        GetStartupInfo(&startupInfo);
-        return (startupInfo.dwFlags & STARTF_USESTDHANDLES);
-    }
+    return false;
 #else
     return true;
 #endif
-}
-
-///
-/// \brief freeConsoleIfAttached
-///
-static void freeConsoleIfAttached()
-{
-#ifdef Q_OS_WIN
-    if(g_consoleAttached) {
-        //FreeConsole();
-        g_consoleAttached = false;
-    }
- #endif
 }
 
 ///
@@ -68,8 +24,10 @@ static void freeConsoleIfAttached()
 static inline void showVersion()
 {
     const auto version = QString("%1\n").arg(APP_VERSION);
-    if(!isConsoleAvailable()){
-        QMessageBox::information(nullptr, APP_NAME, qPrintable(version));
+    if(!isConsoleOutputAvailable()){
+        QMessageBox msg(QMessageBox::Information, APP_NAME, qPrintable(version));
+        msg.setFont(defaultMonospaceFont());
+        msg.exec();
     }
     else {
         fputs(qPrintable(version), stdout);
@@ -83,8 +41,10 @@ static inline void showVersion()
 ///
 static inline void showHelp(const QString& helpText)
 {
-    if(!isConsoleAvailable()){
-        QMessageBox::information(nullptr, APP_NAME, qPrintable(helpText));
+    if(!isConsoleOutputAvailable()){
+        QMessageBox msg(QMessageBox::Information, APP_NAME, qPrintable(helpText));
+        msg.setFont(defaultMonospaceFont());
+        msg.exec();
     }
     else {
         fputs(qPrintable(helpText), stdout);
@@ -98,16 +58,16 @@ static inline void showHelp(const QString& helpText)
 ///
 static void showErrorMessage(const QString &message)
 {
-    if(!isConsoleAvailable()){
-        QMessageBox::critical(nullptr, APP_NAME, qPrintable(message));
+    if(!isConsoleOutputAvailable()){
+        QMessageBox msg(QMessageBox::Critical, APP_NAME, qPrintable(message));
+        msg.setFont(defaultMonospaceFont());
+        msg.exec();
     }
     else {
         fputs(qPrintable(message), stderr);
         fflush(stderr);
     }
 }
-
-
 
 ///
 /// \brief main
@@ -117,8 +77,6 @@ static void showErrorMessage(const QString &message)
 ///
 int main(int argc, char *argv[])
 {
-    std::atexit(freeConsoleIfAttached);
-
     QApplication a(argc, argv);
     a.setApplicationName(APP_NAME);
     a.setApplicationVersion(APP_VERSION);
