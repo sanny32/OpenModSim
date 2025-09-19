@@ -28,7 +28,7 @@ class ModbusTcpServer : public QModbusTcpServer
 public:
     explicit ModbusTcpServer(QObject *parent = nullptr)
         : QModbusTcpServer(parent)
-    {
+    {                    
     }
 
 signals:
