@@ -9,7 +9,7 @@ on:
       
 env:
   QT_VERSION: 6.9.2
-  QT_ARCH: win64_msvc2022_arm64
+  QT_ARCH:  win64_msvc2022_arm64_cross_compiled
   CMAKE_COMPILER: msvc2022_arm64
   CMAKE_GENERATOR: "Visual Studio 17 2022"
   CMAKE_ARCH: arm64
