@@ -4,6 +4,8 @@ on:
   push:
     tags:
       - "*"
+    branches:
+      - dev
       
 env:
   QT_VERSION: 6.9.2
@@ -102,7 +104,7 @@ jobs:
            /DICON_FILE="%CD%\omodsim\res\omodsim.ico" ^
            /DLICENSE_FILE="%CD%\omodsim\res\license.txt" ^
            /DOUTPUT_FILE="%CD%\qt6-omodsim-${{ env.APP_VERSION }}_${{ env.CMAKE_ARCH }}.exe" ^
-           %CD%\.github\workflows\installer-win64.nsi
+           %CD%\.nsis\installer-win64.nsi
         shell: cmd
 
       - name: Upload Installer
