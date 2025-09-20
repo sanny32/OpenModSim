@@ -1,4 +1,4 @@
-name: Build OpenModSim (Windows x64, Qt6)
+name: Build OpenModSim Installer (Windows x64, Qt6)
 
 on:
   push:
@@ -15,7 +15,7 @@ env:
 
 jobs:
   build-omodsim:
-    name: Build OpenModSim version ${{ github.ref_name }} with Qt6
+    name: Build OpenModSim installer version ${{ github.ref_name }} with Qt6
     runs-on: windows-latest
 
     steps:
@@ -92,7 +92,7 @@ jobs:
       - name: Install NSIS
         run: |
           choco install nsis -y
-        shell: powershell
+        shell: cmd
 
       - name: Build NSIS installer
         run: |
@@ -102,7 +102,7 @@ jobs:
            /DICON_FILE="%CD%\omodsim\res\omodsim.ico" ^
            /DLICENSE_FILE="%CD%\omodsim\res\license.txt" ^
            /DOUTPUT_FILE="%CD%\qt6-omodsim-${{ env.APP_VERSION }}_${{ env.CMAKE_ARCH }}.exe" ^
-           %CD%\.github\workflows\omodsim-${{ env.CMAKE_ARCH }}.nsi
+           %CD%\.nsis\installer-win64.nsi
         shell: cmd
 
       - name: Upload Installer
