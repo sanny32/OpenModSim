@@ -1,11 +1,9 @@
-name: Build OpenModSim (Windows x64, Qt6)
+name: Build OpenModSim Installer (Windows x64, Qt6)
 
 on:
   push:
     tags:
       - "*"
-    branches:
-      - dev
       
 env:
   QT_VERSION: 6.9.2
@@ -17,7 +15,7 @@ env:
 
 jobs:
   build-omodsim:
-    name: Build OpenModSim version ${{ github.ref_name }} with Qt6
+    name: Build OpenModSim installer version ${{ github.ref_name }} with Qt6
     runs-on: windows-latest
 
     steps:
