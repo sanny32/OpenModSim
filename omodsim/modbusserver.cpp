@@ -185,6 +185,92 @@ bool ModbusServer::data(QModbusDataUnit::RegisterType table, quint16 address, qu
 }
 
 ///
+/// \brief ModbusServer::connectDevice
+/// \return
+///
+bool ModbusServer::connectDevice()
+{
+    if (_state != QModbusDevice::UnconnectedState)
+        return false;
+
+    setState(ConnectingState);
+
+    if (!open()) {
+        setState(UnconnectedState);
+        return false;
+    }
+
+    //Connected is set by backend -> might be delayed by event loop
+    return true;
+}
+
+///
+/// \brief ModbusServer::disconnectDevice
+///
+void ModbusServer::disconnectDevice()
+{
+    if (state() == QModbusDevice::UnconnectedState)
+        return;
+
+    setState(QModbusDevice::ClosingState);
+
+    //Unconnected is set by backend -> might be delayed by event loop
+    close();
+}
+
+///
+/// \brief ModbusServer::setState
+/// \param newState
+///
+void ModbusServer::setState(QModbusDevice::State newState)
+{
+    if (newState == _state)
+        return;
+
+    _state = newState;
+    emit stateChanged(newState);
+}
+
+///
+/// \brief ModbusServer::state
+/// \return
+///
+QModbusServer::State ModbusServer::state() const
+{
+    return _state;
+}
+
+///
+/// \brief ModbusServer::setError
+/// \param errorText
+/// \param error
+///
+void ModbusServer::setError(const QString &errorText, QModbusDevice::Error error)
+{
+    _error = error;
+    _errorString = errorText;
+    emit errorOccurred(error);
+}
+
+///
+/// \brief ModbusServer::error
+/// \return
+///
+QModbusServer::Error ModbusServer::error() const
+{
+    return _error;
+}
+
+///
+/// \brief ModbusServer::errorString
+/// \return
+///
+QString ModbusServer::errorString() const
+{
+    return _errorString;
+}
+
+///
 /// \brief ModbusServer::data
 /// \param newData
 /// \return

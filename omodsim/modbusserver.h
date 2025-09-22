@@ -50,11 +50,10 @@ public:
     int serverAddress() const;
     void setServerAddress(int serverAddress);
 
-    virtual bool setMap(const QModbusDataUnitMap &map);
-    virtual bool processesBroadcast() const { return false; }
+    bool setMap(const QModbusDataUnitMap &map) override;
 
-    virtual QVariant value(int option) const;
-    virtual bool setValue(int option, const QVariant &value);
+    QVariant value(int option) const override;
+    bool setValue(int option, const QVariant &value) override;
 
     bool data(QModbusDataUnit *newData) const;
     bool setData(const QModbusDataUnit &unit);
@@ -64,6 +63,16 @@ public:
 
     virtual QVariant connectionParameter(ConnectionParameter parameter) const = 0;
     virtual void setConnectionParameter(ConnectionParameter parameter, const QVariant &value) = 0;
+
+    bool connectDevice();
+    void disconnectDevice();
+
+    State state() const;
+
+    Error error() const;
+    QString errorString() const;
+
+    virtual QIODevice *device() const = 0;
 
 protected:
     enum Counter {
@@ -84,11 +93,14 @@ protected:
     ///
     explicit ModbusServer(QObject *parent = nullptr);
 
-    virtual bool writeData(const QModbusDataUnit &unit);
-    virtual bool readData(QModbusDataUnit *newData) const;
+    void setState(QModbusDevice::State newState);
+    void setError(const QString &errorText, QModbusDevice::Error error);
 
-    virtual QModbusResponse processRequest(const QModbusPdu &request);
-    virtual QModbusResponse processPrivateRequest(const QModbusPdu &request);
+    bool writeData(const QModbusDataUnit &unit) override;
+    bool readData(QModbusDataUnit *newData) const override;
+
+    QModbusResponse processRequest(const QModbusPdu &request) override;
+    QModbusResponse processPrivateRequest(const QModbusPdu &request) override;
 
     void resetCommunicationCounters() { _counters.fill(0u); }
     void incrementCounter(ModbusServer::Counter counter) { _counters[counter]++; }
@@ -125,6 +137,10 @@ private:
     QHash<int, QVariant> _serverOptions;
     QModbusDataUnitMap _modbusDataUnitMap;
     std::deque<quint8> _commEventLog;
+
+    QModbusDevice::State _state = QModbusDevice::UnconnectedState;
+    QModbusDevice::Error _error = QModbusDevice::NoError;
+    QString _errorString;
 };
 
 ///

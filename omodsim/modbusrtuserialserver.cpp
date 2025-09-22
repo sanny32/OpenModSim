@@ -20,43 +20,43 @@ public:
     };
 
     inline QModbusSerialAdu(Type type, const QByteArray &data)
-        : m_type(type), m_data(data), m_rawData(data)
+        : _type(type), _data(data), _rawData(data)
     {
-        if (m_type == Ascii)
-            m_data = QByteArray::fromHex(m_data.mid(1, m_data.size() - 3));
+        if (_type == Ascii)
+            _data = QByteArray::fromHex(_data.mid(1, _data.size() - 3));
     }
 
     inline int size() const {
-        if (m_type == Ascii)
-            return m_data.size() - 1; // one byte, LRC
-        return m_data.size() - 2; // two bytes, CRC
+        if (_type == Ascii)
+            return _data.size() - 1; // one byte, LRC
+        return _data.size() - 2; // two bytes, CRC
     }
-    inline QByteArray data() const { return m_data.left(size()); }
+    inline QByteArray data() const { return _data.left(size()); }
 
-    inline int rawSize() const { return m_rawData.size(); }
-    inline QByteArray rawData() const { return m_rawData; }
+    inline int rawSize() const { return _rawData.size(); }
+    inline QByteArray rawData() const { return _rawData; }
 
     inline int serverAddress() const {
-        Q_ASSERT_X(!m_data.isEmpty(), "QModbusAdu::serverAddress()", "Empty ADU.");
-        return quint8(m_data.at(0));
+        Q_ASSERT_X(!_data.isEmpty(), "QModbusAdu::serverAddress()", "Empty ADU.");
+        return quint8(_data.at(0));
     }
 
     inline QModbusPdu pdu() const {
-        Q_ASSERT_X(!m_data.isEmpty(), "QModbusAdu::pdu()", "Empty ADU.");
-        return QModbusPdu(QModbusPdu::FunctionCode(m_data.at(1)), m_data.mid(2, size() - 2));
+        Q_ASSERT_X(!_data.isEmpty(), "QModbusAdu::pdu()", "Empty ADU.");
+        return QModbusPdu(QModbusPdu::FunctionCode(_data.at(1)), _data.mid(2, size() - 2));
     }
 
     template <typename T>
     auto checksum() const -> decltype(T()) {
-        Q_ASSERT_X(!m_data.isEmpty(), "QModbusAdu::checksum()", "Empty ADU.");
-        if (m_type == Ascii)
-            return quint8(m_data[m_data.size() - 1]);
-        return quint16(quint8(m_data[m_data.size() - 2]) << 8 | quint8(m_data[m_data.size() - 1]));
+        Q_ASSERT_X(!_data.isEmpty(), "QModbusAdu::checksum()", "Empty ADU.");
+        if (_type == Ascii)
+            return quint8(_data[_data.size() - 1]);
+        return quint16(quint8(_data[_data.size() - 2]) << 8 | quint8(_data[_data.size() - 1]));
     }
 
     inline bool matchingChecksum() const {
-        Q_ASSERT_X(!m_data.isEmpty(), "QModbusAdu::matchingChecksum()", "Empty ADU.");
-        if (m_type == Ascii)
+        Q_ASSERT_X(!_data.isEmpty(), "QModbusAdu::matchingChecksum()", "Empty ADU.");
+        if (_type == Ascii)
             return QModbusSerialAdu::calculateLRC(data(), size()) == checksum<quint8>();
         return QModbusSerialAdu::calculateCRC(data(), size()) == checksum<quint16>();
     }
@@ -140,9 +140,9 @@ private:
     }
 
 private:
-    Type m_type = Rtu;
-    QByteArray m_data;
-    QByteArray m_rawData;
+    Type _type = Rtu;
+    QByteArray _data;
+    QByteArray _rawData;
 };
 
 ///
@@ -156,6 +156,14 @@ ModbusRtuSerialServer::ModbusRtuSerialServer(QObject *parent)
     QObject::connect(_serialPort, &QSerialPort::readyRead, this, &ModbusRtuSerialServer::on_readyRead);
     QObject::connect(_serialPort, &QSerialPort::errorOccurred, this, &ModbusRtuSerialServer::on_errorOccurred);
     QObject::connect(_serialPort, &QSerialPort::aboutToClose, this, &ModbusRtuSerialServer::on_aboutToClose);
+}
+
+///
+/// \brief ModbusRtuSerialServer::~ModbusRtuSerialServer
+///
+ModbusRtuSerialServer::~ModbusRtuSerialServer()
+{
+    close();
 }
 
 ///
@@ -265,7 +273,7 @@ void ModbusRtuSerialServer::on_readyRead()
         // or broadcast, that the remote device has processed since its last restart,
         // clear counters operation, or power-up.
         incrementCounter(ModbusServer::Counter::ServerMessage);
-        response = processRequest(req);
+        response = forwardProcessRequest(req);
     }
     qCDebug(QT_MODBUS) << "(RTU server) Response PDU:" << response;
 
@@ -579,11 +587,11 @@ void ModbusRtuSerialServer::close()
 }
 
 ///
-/// \brief ModbusRtuSerialServer::processRequest
+/// \brief ModbusRtuSerialServer::forwardProcessRequest
 /// \param req
 /// \return
 ///
-QModbusResponse ModbusRtuSerialServer::processRequest(const QModbusPdu &req)
+QModbusResponse ModbusRtuSerialServer::forwardProcessRequest(const QModbusPdu &req)
 {
     emit request(req);
 

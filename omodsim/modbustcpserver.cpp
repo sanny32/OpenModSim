@@ -15,6 +15,14 @@ ModbusTcpServer::ModbusTcpServer(QObject *parent)
 }
 
 ///
+/// \brief ModbusTcpServer::~ModbusTcpServer
+///
+ModbusTcpServer::~ModbusTcpServer()
+{
+    close();
+}
+
+///
 /// \brief ModbusTcpServer::connectionParameter
 /// \param parameter
 /// \return
@@ -96,12 +104,12 @@ void ModbusTcpServer::on_newConnection()
             }
 
             quint8 unitId;
-            quint16 bytesPdu, protocolId;
+            quint16 transactionId, bytesPdu, protocolId;
             QDataStream input(*buffer);
-            input >> _transactionId >> protocolId >> bytesPdu >> unitId;
+            input >> transactionId >> protocolId >> bytesPdu >> unitId;
 
             qCDebug(QT_MODBUS_LOW) << "(TCP server) Request MBPA:" << "Transaction Id:"
-                                   << Qt::hex << _transactionId << "Protocol Id:" << protocolId << "PDU bytes:"
+                                   << Qt::hex << transactionId << "Protocol Id:" << protocolId << "PDU bytes:"
                                    << bytesPdu << "Unit Id:" << unitId;
 
             // The length field is the byte count of the following fields, including the Unit
@@ -123,14 +131,14 @@ void ModbusTcpServer::on_newConnection()
                 continue;
 
             qCDebug(QT_MODBUS) << "(TCP server) Request PDU:" << request;
-            const QModbusResponse response = forwardProcessRequest(request);
+            const QModbusResponse response = forwardProcessRequest(request, transactionId);
             qCDebug(QT_MODBUS) << "(TCP server) Response PDU:" << response;
 
             QByteArray result;
             QDataStream output(&result, QIODevice::WriteOnly);
             // The length field is the byte count of the following fields, including the Unit
             // Identifier and PDU fields, so we add one byte to the response size.
-            output << _transactionId << protocolId << quint16(response.size() + 1)
+            output << transactionId << protocolId << quint16(response.size() + 1)
                    << unitId << response;
 
             if (!socket->isOpen()) {
@@ -164,13 +172,31 @@ void ModbusTcpServer::on_acceptError(QAbstractSocket::SocketError)
 /// \param r
 /// \return
 ///
-QModbusResponse ModbusTcpServer::forwardProcessRequest(const QModbusRequest &r)
+QModbusResponse ModbusTcpServer::forwardProcessRequest(const QModbusRequest &r, int transactionId)
 {
     if (value(QModbusServer::DeviceBusy).value<quint16>() == 0xffff) {
         // If the device is busy, send an exception response without processing.
         return QModbusExceptionResponse(r.functionCode(), QModbusExceptionResponse::ServerDeviceBusy);
     }
-    return processRequest(r);
+
+    emit request(r, transactionId);
+
+    QModbusResponse resp;
+    switch (r.functionCode()) {
+    case QModbusRequest::ReadExceptionStatus:
+    case QModbusRequest::Diagnostics:
+    case QModbusRequest::GetCommEventCounter:
+    case QModbusRequest::GetCommEventLog:
+    case QModbusRequest::ReportServerId:
+        resp = QModbusExceptionResponse(r.functionCode(), QModbusExceptionResponse::IllegalFunction);
+        break;
+    default:
+        resp = ModbusServer::processRequest(r);
+        break;
+    }
+
+    emit response(r, resp, transactionId);
+    return resp;
 }
 
 ///
@@ -205,8 +231,7 @@ bool ModbusTcpServer::open()
     const QUrl url = QUrl::fromUserInput(_networkAddress + QStringLiteral(":") + QString::number(_networkPort));
 
     if (!url.isValid()) {
-        setError(tr("Invalid connection settings for TCP communication specified."),
-                 QModbusDevice::ConnectionError);
+        setError(tr("Invalid connection settings for TCP communication specified."), QModbusDevice::ConnectionError);
         qCWarning(QT_MODBUS) << "(TCP server) Invalid host:" << url.host() << "or port:"
                              << url.port();
         return false;
@@ -237,31 +262,4 @@ void ModbusTcpServer::close()
         socket->disconnectFromHost();
 
     setState(QModbusDevice::UnconnectedState);
-}
-
-////
-/// \brief QModbusTcpServer::processRequest
-/// \param request
-/// \return
-///
-QModbusResponse ModbusTcpServer::processRequest(const QModbusPdu &req)
-{
-    emit request(req, _transactionId);
-
-    QModbusResponse resp;
-    switch (req.functionCode()) {
-    case QModbusRequest::ReadExceptionStatus:
-    case QModbusRequest::Diagnostics:
-    case QModbusRequest::GetCommEventCounter:
-    case QModbusRequest::GetCommEventLog:
-    case QModbusRequest::ReportServerId:
-        resp = QModbusExceptionResponse(req.functionCode(), QModbusExceptionResponse::IllegalFunction);
-        break;
-    default:
-        resp = ModbusServer::processRequest(req);
-        break;
-    }
-
-    emit response(req, resp, _transactionId);
-    return resp;
 }

@@ -248,7 +248,7 @@ QSharedPointer<ModbusServer> ModbusMultiServer::createModbusServer(const Connect
 
             case ConnectionType::Serial:
             {
-                modbusServer = QSharedPointer<ModbusServer>(new ModbusRtuSerialServer(this));
+                modbusServer = QSharedPointer<ModbusServer>(new ModbusRtuSerialServer());
                 modbusServer->setProperty("ConnectionDetails", QVariant::fromValue(cd));
                 modbusServer->setProperty("DTRControl", cd.SerialParams.SetDTR);
                 modbusServer->setProperty("RTSControl", cd.SerialParams.SetRTS);

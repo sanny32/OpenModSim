@@ -14,9 +14,12 @@ class ModbusTcpServer : public ModbusServer
 
 public:
     explicit ModbusTcpServer(QObject *parent = nullptr);
+    ~ModbusTcpServer();
 
     QVariant connectionParameter(ConnectionParameter parameter) const override;
     void setConnectionParameter(ConnectionParameter parameter, const QVariant &value) override;
+
+    QIODevice *device() const override {return nullptr; }
 
 signals:
     void request(const QModbusRequest& req, int transactionId);
@@ -31,17 +34,14 @@ protected:
     bool open() override;
     void close() override;
 
-    QModbusResponse processRequest(const QModbusPdu &req) override;
-
 private:
     bool matchingServerAddress(quint8 unitId) const;
-    QModbusResponse forwardProcessRequest(const QModbusRequest &r);
+    QModbusResponse forwardProcessRequest(const QModbusRequest &r, int transactionId);
 
 private:
     int _networkPort = 502;
     QString _networkAddress = QStringLiteral("127.0.0.1");
 
-    int _transactionId = 0;
     QTcpServer* _server = nullptr;
     QModbusTcpConnectionObserver* _observer = nullptr;
 

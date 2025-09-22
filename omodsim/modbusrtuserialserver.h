@@ -13,6 +13,7 @@ class ModbusRtuSerialServer : public ModbusServer
     Q_OBJECT
 public:
     explicit ModbusRtuSerialServer(QObject *parent = nullptr);
+    ~ModbusRtuSerialServer();
 
     bool processesBroadcast() const override;
 
@@ -21,6 +22,8 @@ public:
 
     QVariant connectionParameter(ConnectionParameter parameter) const override;
     void setConnectionParameter(ConnectionParameter parameter, const QVariant &value) override;
+
+    QIODevice *device() const override { return _serialPort; }
 
 signals:
     void request(const QModbusRequest& req);
@@ -35,12 +38,11 @@ protected:
     bool open() override;
     void close() override;
 
-    QModbusResponse processRequest(const QModbusPdu &req) override;
-
 private:
     void setupEnvironment();
     void calculateInterFrameDelay();
     bool matchingServerAddress(quint8 unitId) const;
+    QModbusResponse forwardProcessRequest(const QModbusPdu &req);
 
 private:
     QString _comPort;
