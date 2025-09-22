@@ -139,7 +139,6 @@ private slots:
     void on_comboBoxAddressBase_addressBaseChanged(AddressBase base);
     void on_comboBoxModbusPointType_pointTypeChanged(QModbusDataUnit::RegisterType value);
     void on_outputWidget_itemDoubleClicked(quint16 addr, const QVariant& value);
-    void on_mbDeviceIdChanged(quint8 deviceId);
     void on_mbConnected(const ConnectionDetails& cd);
     void on_mbDisconnected(const ConnectionDetails& cd);
     void on_mbRequest(const QModbusRequest& req, ModbusMessage::ProtocolType protocol, int transactionId);

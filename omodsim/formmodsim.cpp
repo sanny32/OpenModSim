@@ -62,7 +62,6 @@ FormModSim::FormModSim(int id, ModbusMultiServer& server, QSharedPointer<DataSim
     connect(&_mbMultiServer, &ModbusMultiServer::response, this, &FormModSim::on_mbResponse);
     connect(&_mbMultiServer, &ModbusMultiServer::connected, this, &FormModSim::on_mbConnected);
     connect(&_mbMultiServer, &ModbusMultiServer::disconnected, this, &FormModSim::on_mbDisconnected);
-    connect(&_mbMultiServer, &ModbusMultiServer::deviceIdChanged, this, &FormModSim::on_mbDeviceIdChanged);
     connect(&_mbMultiServer, &ModbusMultiServer::dataChanged, this, &FormModSim::on_mbDataChanged);
 
     connect(_dataSimulator.get(), &DataSimulator::simulationStarted, this, &FormModSim::on_simulationStarted);
@@ -782,6 +781,7 @@ ScriptControl* FormModSim::scriptControl()
 void FormModSim::on_outputWidget_itemDoubleClicked(quint16 addr, const QVariant& value)
 {
     const auto mode = dataDisplayMode();
+    const auto deviceId = ui->lineEditDeviceId->value<int>();
     const auto pointType = ui->comboBoxModbusPointType->currentPointType();
     const auto zeroBasedAddress = displayDefinition().ZeroBasedAddress;
     const auto simAddr = addr - (zeroBasedAddress ? 0 : 1);
@@ -797,7 +797,7 @@ void FormModSim::on_outputWidget_itemDoubleClicked(quint16 addr, const QVariant&
             switch(dlg.exec())
             {
                 case QDialog::Accepted:
-                    _mbMultiServer.writeRegister(pointType, params);
+                    _mbMultiServer.writeRegister(deviceId, pointType, params);
                 break;
 
                 case 2:
@@ -816,7 +816,7 @@ void FormModSim::on_outputWidget_itemDoubleClicked(quint16 addr, const QVariant&
             {
                 DialogWriteHoldingRegisterBits dlg(params, displayHexAddresses(), this);
                 if(dlg.exec() == QDialog::Accepted)
-                    _mbMultiServer.writeRegister(pointType, params);
+                    _mbMultiServer.writeRegister(deviceId, pointType, params);
             }
             else
             {
@@ -824,7 +824,7 @@ void FormModSim::on_outputWidget_itemDoubleClicked(quint16 addr, const QVariant&
                 switch(dlg.exec())
                 {
                     case QDialog::Accepted:
-                        _mbMultiServer.writeRegister(pointType, params);
+                        _mbMultiServer.writeRegister(deviceId, pointType, params);
                     break;
 
                     case 2:
@@ -839,17 +839,6 @@ void FormModSim::on_outputWidget_itemDoubleClicked(quint16 addr, const QVariant&
         default:
         break;
     }
-}
-
-///
-/// \brief FormModSim::on_mbDeviceIdChanged
-/// \param deviceId
-///
-void FormModSim::on_mbDeviceIdChanged(quint8 deviceId)
-{
-    blockSignals(true);
-    //ui->lineEditDeviceId->setValue(deviceId);
-    blockSignals(false);
 }
 
 ///
@@ -970,7 +959,7 @@ void FormModSim::on_mbDataChanged(const QModbusDataUnit&)
 {
     const auto dd = displayDefinition();
     const auto addr = dd.PointAddress - (dd.ZeroBasedAddress ? 0 : 1);
-    ui->outputWidget->updateData(_mbMultiServer.data(dd.PointType, addr, dd.Length));
+    ui->outputWidget->updateData(_mbMultiServer.data(dd.DeviceId, dd.PointType, addr, dd.Length));
 }
 
 ///

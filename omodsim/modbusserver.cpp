@@ -22,7 +22,8 @@ ModbusServer::ModbusServer(QObject* parent)
 ///
 void ModbusServer::addServerAddress(int serverAddress)
 {
-    _serverAddresses.append(serverAddress);
+    if(!_serverAddresses.contains(serverAddress))
+        _serverAddresses.insert(serverAddress);
 }
 
 ///
@@ -31,11 +32,14 @@ void ModbusServer::addServerAddress(int serverAddress)
 ///
 void ModbusServer::removeServerAddress(int serverAddress)
 {
-    _serverAddresses.removeOne(serverAddress);
-    _serversOptions.remove(serverAddress);
-    _modbusDataUnitMaps.remove(serverAddress);
-    _errors.remove(serverAddress);
-    _errorsString.remove(serverAddress);
+    _serverAddresses.remove(serverAddress);
+    if(_serverAddresses.contains(serverAddress))
+    {
+        _serversOptions.remove(serverAddress);
+        _modbusDataUnitMaps.remove(serverAddress);
+        _errors.remove(serverAddress);
+        _errorsString.remove(serverAddress);
+    }
 }
 
 ///
@@ -44,7 +48,7 @@ void ModbusServer::removeServerAddress(int serverAddress)
 ///
 QList<int> ModbusServer::serverAddresses() const
 {
-    return _serverAddresses;
+    return _serverAddresses.values();
 }
 
 ///

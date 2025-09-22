@@ -42,67 +42,69 @@ ModbusMultiServer::~ModbusMultiServer()
 }
 
 ///
-/// \brief ModbusServer::deviceId
-/// \return
-///
-quint8 ModbusMultiServer::deviceId() const
-{
-    return _deviceId;
-}
-
-///
 /// \brief ModbusServer::setDeviceId
 /// \param deviceId
 ///
-void ModbusMultiServer::setDeviceId(quint8 deviceId)
+void ModbusMultiServer::addDeviceId(quint8 deviceId)
 {
-    if(deviceId == _deviceId)
-        return;
-
     if(QThread::currentThread() != _workerThread)
     {
         QMetaObject::invokeMethod(this, [this, deviceId]() {
-            setDeviceId(deviceId);
+            addDeviceId(deviceId);
         }, Qt::BlockingQueuedConnection);
         return;
     }
 
-    _deviceId = deviceId;
+    for(auto&& s : _modbusServerList)
+        s->addServerAddress(deviceId);
+}
+
+///
+/// \brief ModbusMultiServer::removeDeviceId
+/// \param deviceId
+///
+void ModbusMultiServer::removeDeviceId(quint8 deviceId)
+{
+    if(QThread::currentThread() != _workerThread)
+    {
+        QMetaObject::invokeMethod(this, [this, deviceId]() {
+            removeDeviceId(deviceId);
+        }, Qt::BlockingQueuedConnection);
+        return;
+    }
 
     for(auto&& s : _modbusServerList)
-        s->setServerAddress(deviceId);
-
-    emit deviceIdChanged(deviceId);
+        s->removeServerAddress(deviceId);
 }
 
 ///
 /// \brief ModbusMultiServer::isBusy
 /// \return
 ///
-bool ModbusMultiServer::isBusy() const
+bool ModbusMultiServer::isBusy(quint8 deviceId) const
 {
     if(_modbusServerList.isEmpty())
         return false;
 
-    return _modbusServerList.first()->value(ModbusServer::DeviceBusy) == 0xffff;
+    return _modbusServerList.first()->value(ModbusServer::DeviceBusy, deviceId) == 0xffff;
 }
 
 ///
 /// \brief ModbusMultiServer::setBusy
 /// \param busy
 ///
-void ModbusMultiServer::setBusy(bool busy)
+void ModbusMultiServer::setBusy(bool busy, quint8 deviceId)
 {
     if(QThread::currentThread() != _workerThread)
     {
-        QMetaObject::invokeMethod(this, [this, busy]() {
-            setBusy(busy);
+        QMetaObject::invokeMethod(this, [this, busy, deviceId]() {
+            setBusy(busy, deviceId);
         }, Qt::BlockingQueuedConnection);
         return;
     }
 
     for(auto&& s : _modbusServerList)
-        s->setValue(QModbusServer::DeviceBusy, busy ? 0xffff : 0x0000);
+        s->setValue(QModbusServer::DeviceBusy, busy ? 0xffff : 0x0000, deviceId);
 }
 
 ///

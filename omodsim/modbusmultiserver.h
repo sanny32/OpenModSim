@@ -21,11 +21,11 @@ public:
     explicit ModbusMultiServer(QObject *parent = nullptr);
     ~ModbusMultiServer() override;
 
-    quint8 deviceId() const;
-    void setDeviceId(quint8 deviceId);
+    void addDeviceId(quint8 deviceId);
+    void removeDeviceId(quint8 deviceId);
 
-    bool isBusy() const;
-    void setBusy(bool busy);
+    bool isBusy(quint8 deviceId) const;
+    void setBusy(bool busy, quint8 deviceId);
 
     bool useGlobalUnitMap() const;
     void setUseGlobalUnitMap(bool use);
@@ -43,34 +43,33 @@ public:
     bool isConnected(ConnectionType type, const QString& port) const;
     QModbusDevice::State state(ConnectionType type, const QString& port) const;
 
-    QModbusDataUnit data(QModbusDataUnit::RegisterType pointType, quint16 pointAddress, quint16 length) const;
-    void setData(const QModbusDataUnit& data);
+    QModbusDataUnit data(quint8 deviceId, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, quint16 length) const;
+    void setData(quint8 deviceId, const QModbusDataUnit& data);
 
-    void writeValue(QModbusDataUnit::RegisterType pointType, quint16 pointAddress, quint16 value, ByteOrder order);
-    void writeRegister(QModbusDataUnit::RegisterType pointType, const ModbusWriteParams& params);
+    void writeValue(quint8 deviceId, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, quint16 value, ByteOrder order);
+    void writeRegister(quint8 deviceId, QModbusDataUnit::RegisterType pointType, const ModbusWriteParams& params);
 
-    qint32 readInt32(QModbusDataUnit::RegisterType pointType, quint16 pointAddress, ByteOrder order, bool swapped);
-    void writeInt32(QModbusDataUnit::RegisterType pointType, quint16 pointAddress, qint32 value, ByteOrder order, bool swapped);
+    qint32 readInt32(quint8 deviceId, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, ByteOrder order, bool swapped);
+    void writeInt32(quint8 deviceId, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, qint32 value, ByteOrder order, bool swapped);
 
-    quint32 readUInt32(QModbusDataUnit::RegisterType pointType, quint16 pointAddress, ByteOrder order, bool swapped);
-    void writeUInt32(QModbusDataUnit::RegisterType pointType, quint16 pointAddress, quint32 value, ByteOrder order, bool swapped);
+    quint32 readUInt32(quint8 deviceId, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, ByteOrder order, bool swapped);
+    void writeUInt32(quint8 deviceId, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, quint32 value, ByteOrder order, bool swapped);
 
-    qint64 readInt64(QModbusDataUnit::RegisterType pointType, quint16 pointAddress, ByteOrder order, bool swapped);
-    void writeInt64(QModbusDataUnit::RegisterType pointType, quint16 pointAddress, qint64 value, ByteOrder order, bool swapped);
+    qint64 readInt64(quint8 deviceId, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, ByteOrder order, bool swapped);
+    void writeInt64(quint8 deviceId, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, qint64 value, ByteOrder order, bool swapped);
 
-    quint64 readUInt64(QModbusDataUnit::RegisterType pointType, quint16 pointAddress, ByteOrder order, bool swapped);
-    void writeUInt64(QModbusDataUnit::RegisterType pointType, quint16 pointAddress, quint64 value, ByteOrder order, bool swapped);
+    quint64 readUInt64(quint8 deviceId, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, ByteOrder order, bool swapped);
+    void writeUInt64(quint8 deviceId, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, quint64 value, ByteOrder order, bool swapped);
 
-    float readFloat(QModbusDataUnit::RegisterType pointType, quint16 pointAddress, ByteOrder order, bool swapped);
-    void writeFloat(QModbusDataUnit::RegisterType pointType, quint16 pointAddress, float value, ByteOrder order, bool swapped);
+    float readFloat(quint8 deviceId, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, ByteOrder order, bool swapped);
+    void writeFloat(quint8 deviceId, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, float value, ByteOrder order, bool swapped);
 
-    double readDouble(QModbusDataUnit::RegisterType pointType, quint16 pointAddress, ByteOrder order, bool swapped);
-    void writeDouble(QModbusDataUnit::RegisterType pointType, quint16 pointAddress, double value, ByteOrder order, bool swapped);
+    double readDouble(quint8 deviceId, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, ByteOrder order, bool swapped);
+    void writeDouble(quint8 deviceId, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, double value, ByteOrder order, bool swapped);
 
 signals:
     void connected(const ConnectionDetails& cd);
     void disconnected(const ConnectionDetails& cd);
-    void deviceIdChanged(quint8 deviceId);
     void request(const QModbusRequest& req, ModbusMessage::ProtocolType protocol, int transactionId);
     void response(const QModbusRequest& req, const QModbusResponse& resp, ModbusMessage::ProtocolType protocol, int transactionId);
     void connectionError(const QString& error);
@@ -91,7 +90,6 @@ private:
     void removeModbusServer(QSharedPointer<ModbusServer> server);
 
 private:
-    quint8 _deviceId;
     QThread* _workerThread;
     ModbusDataUnitMap _modbusDataUnitMap;
     QList<QSharedPointer<ModbusServer>> _modbusServerList;
