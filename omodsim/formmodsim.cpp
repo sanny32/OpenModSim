@@ -848,7 +848,7 @@ void FormModSim::on_outputWidget_itemDoubleClicked(quint16 addr, const QVariant&
 void FormModSim::on_mbDeviceIdChanged(quint8 deviceId)
 {
     blockSignals(true);
-    ui->lineEditDeviceId->setValue(deviceId);
+    //ui->lineEditDeviceId->setValue(deviceId);
     blockSignals(false);
 }
 

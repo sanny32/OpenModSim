@@ -42,7 +42,7 @@ private:
     void setupEnvironment();
     void calculateInterFrameDelay();
     bool matchingServerAddress(quint8 unitId) const;
-    QModbusResponse forwardProcessRequest(const QModbusPdu &req);
+    QModbusResponse forwardProcessRequest(const QModbusPdu &req, int serverAddress);
 
 private:
     QString _comPort;
@@ -55,6 +55,7 @@ private:
     bool _processesBroadcast = false;
     QSerialPort* _serialPort = nullptr;
     QElapsedTimer _interFrameTimer;
+
     static constexpr int RecommendedDelay = 2; // A approximated value of 1.750 msec.
     int _interFrameDelayMilliseconds = RecommendedDelay;
 };

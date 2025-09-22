@@ -17,75 +17,91 @@ ModbusServer::ModbusServer(QObject* parent)
 }
 
 ///
-/// \brief ModbusServer::setServerAddress
+/// \brief ModbusServer::addServerAddress
 /// \param serverAddress
 ///
-void ModbusServer::setServerAddress(int serverAddress)
+void ModbusServer::addServerAddress(int serverAddress)
 {
-    _serverAddress = serverAddress;
+    _serverAddresses.append(serverAddress);
+}
+
+///
+/// \brief ModbusServer::removeServerAddress
+/// \param serverAddress
+///
+void ModbusServer::removeServerAddress(int serverAddress)
+{
+    _serverAddresses.removeOne(serverAddress);
+    _serversOptions.remove(serverAddress);
+    _modbusDataUnitMaps.remove(serverAddress);
+    _errors.remove(serverAddress);
+    _errorsString.remove(serverAddress);
 }
 
 ///
 /// \brief ModbusServer::serverAddress
 /// \return
 ///
-int ModbusServer::serverAddress() const
+QList<int> ModbusServer::serverAddresses() const
 {
-    return _serverAddress;
+    return _serverAddresses;
 }
 
 ///
-/// \brief QModbusServer::setMap
+/// \brief ModbusServer::setMap
 /// \param map
+/// \param serverAddress
 /// \return
 ///
-bool ModbusServer::setMap(const QModbusDataUnitMap &map)
+bool ModbusServer::setMap(const QModbusDataUnitMap &map, int serverAddress)
 {
-    _modbusDataUnitMap = map;
+    _modbusDataUnitMaps[serverAddress] = map;
     return true;
 }
 
 ///
 /// \brief ModbusServer::value
 /// \param option
+/// \param serverAddress
 /// \return
 ///
-QVariant ModbusServer::value(int option) const
+QVariant ModbusServer::value(int option, int serverAddress) const
 {
     switch (option) {
     case DiagnosticRegister:
-        return _serverOptions.value(option, quint16(0x0000));
+        return _serversOptions[serverAddress].value(option, quint16(0x0000));
     case ExceptionStatusOffset:
-        return _serverOptions.value(option, quint16(0x0000));
+        return _serversOptions[serverAddress].value(option, quint16(0x0000));
     case DeviceBusy:
-        return _serverOptions.value(option, quint16(0x0000));
+        return _serversOptions[serverAddress].value(option, quint16(0x0000));
     case AsciiInputDelimiter:
-        return _serverOptions.value(option, '\n');
+        return _serversOptions[serverAddress].value(option, '\n');
     case ListenOnlyMode:
-        return _serverOptions.value(option, false);
+        return _serversOptions[serverAddress].value(option, false);
     case ServerIdentifier:
-        return _serverOptions.value(option, quint8(0x0a));
+        return _serversOptions[serverAddress].value(option, quint8(0x0a));
     case RunIndicatorStatus:
-        return _serverOptions.value(option, quint8(0xff));
+        return _serversOptions[serverAddress].value(option, quint8(0xff));
     case AdditionalData:
-        return _serverOptions.value(option, QByteArray("Qt Modbus Server"));
+        return _serversOptions[serverAddress].value(option, QByteArray("Qt Modbus Server"));
     case DeviceIdentification:
-        return _serverOptions.value(option, QVariant());
+        return _serversOptions[serverAddress].value(option, QVariant());
     };
 
     if (option < UserOption)
         return QVariant();
 
-    return _serverOptions.value(option, QVariant());
+    return _serversOptions[serverAddress].value(option, QVariant());
 }
 
 ///
 /// \brief ModbusServer::setValue
 /// \param option
 /// \param newValue
+/// \param serverAddress
 /// \return
 ///
-bool ModbusServer::setValue(int option, const QVariant &newValue)
+bool ModbusServer::setValue(int option, const QVariant &newValue, int serverAddress)
 {
 #define CHECK_INT_OR_UINT(val) \
     do { \
@@ -96,15 +112,15 @@ bool ModbusServer::setValue(int option, const QVariant &newValue)
     switch (option) {
     case DiagnosticRegister:
         CHECK_INT_OR_UINT(newValue);
-        _serverOptions.insert(option, newValue);
+        _serversOptions[serverAddress].insert(option, newValue);
         return true;
     case ExceptionStatusOffset: {
         CHECK_INT_OR_UINT(newValue);
         const quint16 tmp = newValue.value<quint16>();
         QModbusDataUnit coils(QModbusDataUnit::Coils, tmp, 8);
-        if (!data(&coils))
+        if (!data(&coils, serverAddress))
             return false;
-        _serverOptions.insert(option, tmp);
+        _serversOptions[serverAddress].insert(option, tmp);
         return true;
     }
     case DeviceBusy: {
@@ -112,7 +128,7 @@ bool ModbusServer::setValue(int option, const QVariant &newValue)
         const quint16 tmp = newValue.value<quint16>();
         if ((tmp != 0x0000) && (tmp != 0xffff))
             return false;
-        _serverOptions.insert(option, tmp);
+        _serversOptions[serverAddress].insert(option, tmp);
         return true;
     }
     case AsciiInputDelimiter: {
@@ -120,25 +136,25 @@ bool ModbusServer::setValue(int option, const QVariant &newValue)
         bool ok = false;
         if (newValue.toUInt(&ok) > 0xff || !ok)
             return false;
-        _serverOptions.insert(option, newValue);
+        _serversOptions[serverAddress].insert(option, newValue);
         return true;
     }
     case ListenOnlyMode: {
         if (newValue.typeId() != QMetaType::Type::Bool)
             return false;
-        _serverOptions.insert(option, newValue);
+        _serversOptions[serverAddress].insert(option, newValue);
         return true;
     }
     case ServerIdentifier:
         CHECK_INT_OR_UINT(newValue);
-        _serverOptions.insert(option, newValue);
+        _serversOptions[serverAddress].insert(option, newValue);
         return true;
     case RunIndicatorStatus: {
         CHECK_INT_OR_UINT(newValue);
         const quint8 tmp = newValue.value<quint8>();
         if ((tmp != 0x00) && (tmp != 0xff))
             return false;
-        _serverOptions.insert(option, tmp);
+        _serversOptions[serverAddress].insert(option, tmp);
         return true;
     }
     case AdditionalData: {
@@ -147,13 +163,13 @@ bool ModbusServer::setValue(int option, const QVariant &newValue)
         const QByteArray additionalData = newValue.toByteArray();
         if (additionalData.size() > 249)
             return false;
-        _serverOptions.insert(option, additionalData);
+        _serversOptions[serverAddress].insert(option, additionalData);
         return true;
     }
     case DeviceIdentification:
         if (!newValue.canConvert<QModbusDeviceIdentification>())
             return false;
-        _serverOptions.insert(option, newValue);
+        _serversOptions[serverAddress].insert(option, newValue);
         return true;
     default:
         break;
@@ -161,7 +177,7 @@ bool ModbusServer::setValue(int option, const QVariant &newValue)
 
     if (option < UserOption)
         return false;
-    _serverOptions.insert(option, newValue);
+    _serversOptions[serverAddress].insert(option, newValue);
     return true;
 
 #undef CHECK_INT_OR_UINT
@@ -172,12 +188,13 @@ bool ModbusServer::setValue(int option, const QVariant &newValue)
 /// \param table
 /// \param address
 /// \param data
+/// \param serverAddress
 /// \return
 ///
-bool ModbusServer::data(QModbusDataUnit::RegisterType table, quint16 address, quint16 *data) const
+bool ModbusServer::data(QModbusDataUnit::RegisterType table, quint16 address, quint16 *data, int serverAddress) const
 {
     QModbusDataUnit unit(table, address, 1u);
-    if (data && readData(&unit)) {
+    if (data && readData(&unit, serverAddress)) {
         *data = unit.value(0);
         return true;
     }
@@ -247,37 +264,51 @@ QModbusServer::State ModbusServer::state() const
 ///
 void ModbusServer::setError(const QString &errorText, QModbusDevice::Error error)
 {
-    _error = error;
-    _errorString = errorText;
-    emit errorOccurred(error);
+    setError(errorText, error, 0);
+}
+
+///
+/// \brief ModbusServer::setError
+/// \param errorText
+/// \param error
+/// \param serverAddress
+///
+void ModbusServer::setError(const QString &errorText, QModbusDevice::Error error, int serverAddress)
+{
+    _errors[serverAddress] = error;
+    _errorsString[serverAddress] = errorText;
+    emit errorOccurred(error, serverAddress);
 }
 
 ///
 /// \brief ModbusServer::error
+/// \param serverAddress
 /// \return
 ///
-QModbusServer::Error ModbusServer::error() const
+QModbusServer::Error ModbusServer::error(int serverAddress) const
 {
-    return _error;
+    return _errors[serverAddress];
 }
 
 ///
 /// \brief ModbusServer::errorString
+/// \param serverAddress
 /// \return
 ///
-QString ModbusServer::errorString() const
+QString ModbusServer::errorString(int serverAddress) const
 {
-    return _errorString;
+    return _errorsString[serverAddress];
 }
 
 ///
 /// \brief ModbusServer::data
 /// \param newData
+/// \param serverAddress
 /// \return
 ///
-bool ModbusServer::data(QModbusDataUnit *newData) const
+bool ModbusServer::data(QModbusDataUnit *newData, int serverAddress) const
 {
-    return readData(newData);
+    return readData(newData, serverAddress);
 }
 
 ///
@@ -285,34 +316,37 @@ bool ModbusServer::data(QModbusDataUnit *newData) const
 /// \param table
 /// \param address
 /// \param data
+/// \param serverAddress
 /// \return
 ///
-bool ModbusServer::setData(QModbusDataUnit::RegisterType table, quint16 address, quint16 data)
+bool ModbusServer::setData(QModbusDataUnit::RegisterType table, quint16 address, quint16 data, int serverAddress)
 {
-    return writeData(QModbusDataUnit(table, address, QList<quint16> { data }));
+    return writeData(QModbusDataUnit(table, address, QList<quint16> { data }), serverAddress);
 }
 
 ///
 /// \brief ModbusServer::setData
 /// \param newData
+/// \param serverAddress
 /// \return
 ///
-bool ModbusServer::setData(const QModbusDataUnit &newData)
+bool ModbusServer::setData(const QModbusDataUnit &newData, int serverAddress)
 {
-    return writeData(newData);
+    return writeData(newData, serverAddress);
 }
 
 ///
 /// \brief ModbusServer::writeData
 /// \param newData
+/// \param serverAddress
 /// \return
 ///
-bool ModbusServer::writeData(const QModbusDataUnit &newData)
+bool ModbusServer::writeData(const QModbusDataUnit &newData, int serverAddress)
 {
-    if (!_modbusDataUnitMap.contains(newData.registerType()))
+    if (!_modbusDataUnitMaps[serverAddress].contains(newData.registerType()))
         return false;
 
-    QModbusDataUnit &current = _modbusDataUnitMap[newData.registerType()];
+    QModbusDataUnit &current = _modbusDataUnitMaps[serverAddress][newData.registerType()];
     if (!current.isValid())
         return false;
 
@@ -344,14 +378,15 @@ bool ModbusServer::writeData(const QModbusDataUnit &newData)
 ///
 /// \brief ModbusServer::readData
 /// \param newData
+/// \param serverAddress
 /// \return
 ///
-bool ModbusServer::readData(QModbusDataUnit *newData) const
+bool ModbusServer::readData(QModbusDataUnit *newData, int serverAddress) const
 {
-    if ((!newData) || (!_modbusDataUnitMap.contains(newData->registerType())))
+    if ((!newData) || (!_modbusDataUnitMaps[serverAddress].contains(newData->registerType())))
         return false;
 
-    const QModbusDataUnit &current = _modbusDataUnitMap.value(newData->registerType());
+    const QModbusDataUnit &current = _modbusDataUnitMaps[serverAddress].value(newData->registerType());
     if (!current.isValid())
         return false;
 
@@ -380,49 +415,50 @@ bool ModbusServer::readData(QModbusDataUnit *newData) const
 ///
 /// \brief ModbusServer::processRequest
 /// \param request
+/// \param serverAddress
 /// \return
 ///
-QModbusResponse ModbusServer::processRequest(const QModbusPdu &request)
+QModbusResponse ModbusServer::processRequest(const QModbusPdu &request, int serverAddress)
 {
     switch (request.functionCode()) {
     case QModbusRequest::ReadCoils:
-        return processReadCoilsRequest(request);
+        return processReadCoilsRequest(request, serverAddress);
     case QModbusRequest::ReadDiscreteInputs:
-        return processReadDiscreteInputsRequest(request);
+        return processReadDiscreteInputsRequest(request, serverAddress);
     case QModbusRequest::ReadHoldingRegisters:
-        return processReadHoldingRegistersRequest(request);
+        return processReadHoldingRegistersRequest(request, serverAddress);
     case QModbusRequest::ReadInputRegisters:
-        return processReadInputRegistersRequest(request);
+        return processReadInputRegistersRequest(request, serverAddress);
     case QModbusRequest::WriteSingleCoil:
-        return processWriteSingleCoilRequest(request);
+        return processWriteSingleCoilRequest(request, serverAddress);
     case QModbusRequest::WriteSingleRegister:
-        return processWriteSingleRegisterRequest(request);
+        return processWriteSingleRegisterRequest(request, serverAddress);
     case QModbusRequest::ReadExceptionStatus:
-        return processReadExceptionStatusRequest(request);
+        return processReadExceptionStatusRequest(request, serverAddress);
     case QModbusRequest::Diagnostics:
-        return processDiagnosticsRequest(request);
+        return processDiagnosticsRequest(request, serverAddress);
     case QModbusRequest::GetCommEventCounter:
-        return processGetCommEventCounterRequest(request);
+        return processGetCommEventCounterRequest(request, serverAddress);
     case QModbusRequest::GetCommEventLog:
-        return processGetCommEventLogRequest(request);
+        return processGetCommEventLogRequest(request, serverAddress);
     case QModbusRequest::WriteMultipleCoils:
-        return processWriteMultipleCoilsRequest(request);
+        return processWriteMultipleCoilsRequest(request, serverAddress);
     case QModbusRequest::WriteMultipleRegisters:
-        return processWriteMultipleRegistersRequest(request);
+        return processWriteMultipleRegistersRequest(request, serverAddress);
     case QModbusRequest::ReportServerId:
-        return processReportServerIdRequest(request);
+        return processReportServerIdRequest(request, serverAddress);
     case QModbusRequest::ReadFileRecord:    // TODO: Implement.
     case QModbusRequest::WriteFileRecord:   // TODO: Implement.
         return QModbusExceptionResponse(request.functionCode(),
                                         QModbusExceptionResponse::IllegalFunction);
     case QModbusRequest::MaskWriteRegister:
-        return processMaskWriteRegisterRequest(request);
+        return processMaskWriteRegisterRequest(request, serverAddress);
     case QModbusRequest::ReadWriteMultipleRegisters:
-        return processReadWriteMultipleRegistersRequest(request);
+        return processReadWriteMultipleRegistersRequest(request, serverAddress);
     case QModbusRequest::ReadFifoQueue:
-        return processReadFifoQueueRequest(request);
+        return processReadFifoQueueRequest(request, serverAddress);
     case QModbusRequest::EncapsulatedInterfaceTransport:
-        return processEncapsulatedInterfaceTransportRequest(request);
+        return processEncapsulatedInterfaceTransportRequest(request, serverAddress);
     default:
         break;
     }
@@ -432,9 +468,10 @@ QModbusResponse ModbusServer::processRequest(const QModbusPdu &request)
 ///
 /// \brief ModbusServer::processPrivateRequest
 /// \param request
+/// \param serverAddress
 /// \return
 ///
-QModbusResponse ModbusServer::processPrivateRequest(const QModbusPdu &request)
+QModbusResponse ModbusServer::processPrivateRequest(const QModbusPdu &request, int serverAddress)
 {
     return QModbusExceptionResponse(request.functionCode(),
                                     QModbusExceptionResponse::IllegalFunction);
@@ -443,21 +480,23 @@ QModbusResponse ModbusServer::processPrivateRequest(const QModbusPdu &request)
 ///
 /// \brief ModbusServer::processReadCoilsRequest
 /// \param request
+/// \param serverAddress
 /// \return
 ///
-QModbusResponse ModbusServer::processReadCoilsRequest(const QModbusRequest &request)
+QModbusResponse ModbusServer::processReadCoilsRequest(const QModbusRequest &request, int serverAddress)
 {
-    return readBits(request, QModbusDataUnit::Coils);
+    return readBits(request, QModbusDataUnit::Coils, serverAddress);
 }
 
 ///
 /// \brief ModbusServer::processReadDiscreteInputsRequest
 /// \param request
+/// \param serverAddress
 /// \return
 ///
-QModbusResponse ModbusServer::processReadDiscreteInputsRequest(const QModbusRequest &request)
+QModbusResponse ModbusServer::processReadDiscreteInputsRequest(const QModbusRequest &request, int serverAddress)
 {
-    return readBits(request, QModbusDataUnit::DiscreteInputs);
+    return readBits(request, QModbusDataUnit::DiscreteInputs, serverAddress);
 }
 
 #define CHECK_SIZE_EQUALS(req) \
@@ -482,9 +521,10 @@ do { \
 /// \brief ModbusServer::readBits
 /// \param request
 /// \param unitType
+/// \param serverAddress
 /// \return
 ///
-QModbusResponse ModbusServer::readBits(const QModbusPdu &request, QModbusDataUnit::RegisterType unitType)
+QModbusResponse ModbusServer::readBits(const QModbusPdu &request, QModbusDataUnit::RegisterType unitType, int serverAddress)
 {
     CHECK_SIZE_EQUALS(request);
     quint16 address, count;
@@ -497,7 +537,7 @@ QModbusResponse ModbusServer::readBits(const QModbusPdu &request, QModbusDataUni
 
     // Get the requested range out of the registers.
     QModbusDataUnit unit(unitType, address, count);
-    if (!data(&unit)) {
+    if (!data(&unit, serverAddress)) {
         return QModbusExceptionResponse(request.functionCode(),
                                         QModbusExceptionResponse::IllegalDataAddress);
     }
@@ -524,30 +564,33 @@ QModbusResponse ModbusServer::readBits(const QModbusPdu &request, QModbusDataUni
 ///
 /// \brief ModbusServer::processReadHoldingRegistersRequest
 /// \param request
+/// \param serverAddress
 /// \return
 ///
-QModbusResponse ModbusServer::processReadHoldingRegistersRequest(const QModbusRequest &request)
+QModbusResponse ModbusServer::processReadHoldingRegistersRequest(const QModbusRequest &request, int serverAddress)
 {
-    return readBytes(request, QModbusDataUnit::HoldingRegisters);
+    return readBytes(request, QModbusDataUnit::HoldingRegisters, serverAddress);
 }
 
 ///
 /// \brief ModbusServer::processReadInputRegistersRequest
 /// \param request
+/// \param serverAddress
 /// \return
 ///
-QModbusResponse ModbusServer::processReadInputRegistersRequest(const QModbusRequest &request)
+QModbusResponse ModbusServer::processReadInputRegistersRequest(const QModbusRequest &request, int serverAddress)
 {
-    return readBytes(request, QModbusDataUnit::InputRegisters);
+    return readBytes(request, QModbusDataUnit::InputRegisters, serverAddress);
 }
 
 ///
 /// \brief ModbusServer::readBytes
 /// \param request
 /// \param unitType
+/// \param serverAddress
 /// \return
 ///
-QModbusResponse ModbusServer::readBytes(const QModbusPdu &request, QModbusDataUnit::RegisterType unitType)
+QModbusResponse ModbusServer::readBytes(const QModbusPdu &request, QModbusDataUnit::RegisterType unitType, int serverAddress)
 {
     CHECK_SIZE_EQUALS(request);
     quint16 address, count;
@@ -560,7 +603,7 @@ QModbusResponse ModbusServer::readBytes(const QModbusPdu &request, QModbusDataUn
 
     // Get the requested range out of the registers.
     QModbusDataUnit unit(unitType, address, count);
-    if (!data(&unit)) {
+    if (!data(&unit, serverAddress)) {
         return QModbusExceptionResponse(request.functionCode(),
                                         QModbusExceptionResponse::IllegalDataAddress);
     }
@@ -571,21 +614,23 @@ QModbusResponse ModbusServer::readBytes(const QModbusPdu &request, QModbusDataUn
 ///
 /// \brief ModbusServer::processWriteSingleCoilRequest
 /// \param request
+/// \param serverAddress
 /// \return
 ///
-QModbusResponse ModbusServer::processWriteSingleCoilRequest(const QModbusRequest &request)
+QModbusResponse ModbusServer::processWriteSingleCoilRequest(const QModbusRequest &request, int serverAddress)
 {
-    return writeSingle(request, QModbusDataUnit::Coils);
+    return writeSingle(request, QModbusDataUnit::Coils, serverAddress);
 }
 
 ///
 /// \brief ModbusServer::processWriteSingleRegisterRequest
 /// \param request
+/// \param serverAddress
 /// \return
 ///
-QModbusResponse ModbusServer::processWriteSingleRegisterRequest(const QModbusRequest &request)
+QModbusResponse ModbusServer::processWriteSingleRegisterRequest(const QModbusRequest &request, int serverAddress)
 {
-    return writeSingle(request, QModbusDataUnit::HoldingRegisters);
+    return writeSingle(request, QModbusDataUnit::HoldingRegisters, serverAddress);
 }
 
 ///
@@ -594,7 +639,7 @@ QModbusResponse ModbusServer::processWriteSingleRegisterRequest(const QModbusReq
 /// \param unitType
 /// \return
 ///
-QModbusResponse ModbusServer::writeSingle(const QModbusPdu &request, QModbusDataUnit::RegisterType unitType)
+QModbusResponse ModbusServer::writeSingle(const QModbusPdu &request, QModbusDataUnit::RegisterType unitType, int serverAddress)
 {
     CHECK_SIZE_EQUALS(request);
     quint16 address, value;
@@ -606,12 +651,12 @@ QModbusResponse ModbusServer::writeSingle(const QModbusPdu &request, QModbusData
     }
 
     quint16 reg;   // Get the requested register, but deliberately ignore.
-    if (!data(unitType, address, &reg)) {
+    if (!data(unitType, address, &reg, serverAddress)) {
         return QModbusExceptionResponse(request.functionCode(),
                                         QModbusExceptionResponse::IllegalDataAddress);
     }
 
-    if (!setData(unitType, address, value)) {
+    if (!setData(unitType, address, value, serverAddress)) {
         return QModbusExceptionResponse(request.functionCode(),
                                         QModbusExceptionResponse::ServerDeviceFailure);
     }
@@ -622,21 +667,22 @@ QModbusResponse ModbusServer::writeSingle(const QModbusPdu &request, QModbusData
 ///
 /// \brief ModbusServer::processReadExceptionStatusRequest
 /// \param request
+/// \param serverAddress
 /// \return
 ///
-QModbusResponse ModbusServer::processReadExceptionStatusRequest(const QModbusRequest &request)
+QModbusResponse ModbusServer::processReadExceptionStatusRequest(const QModbusRequest &request, int serverAddress)
 {
     CHECK_SIZE_EQUALS(request);
 
     // Get the requested range out of the registers.
-    const QVariant tmp = value(QModbusServer::ExceptionStatusOffset);
+    const QVariant tmp = value(QModbusServer::ExceptionStatusOffset, serverAddress);
     if (tmp.isNull() || (!tmp.isValid())) {
         return QModbusExceptionResponse(request.functionCode(),
                                         QModbusExceptionResponse::ServerDeviceFailure);
     }
     const quint16 exceptionStatusOffset = tmp.value<quint16>();
     QModbusDataUnit coils(QModbusDataUnit::Coils, exceptionStatusOffset, 8);
-    if (!data(&coils)) {
+    if (!data(&coils, serverAddress)) {
         return QModbusExceptionResponse(request.functionCode(),
                                         QModbusExceptionResponse::IllegalDataAddress);
     }
@@ -653,9 +699,10 @@ QModbusResponse ModbusServer::processReadExceptionStatusRequest(const QModbusReq
 ///
 /// \brief ModbusServer::processDiagnosticsRequest
 /// \param request
+/// \param serverAddress
 /// \return
 ///
-QModbusResponse ModbusServer::processDiagnosticsRequest(const QModbusRequest &request)
+QModbusResponse ModbusServer::processDiagnosticsRequest(const QModbusRequest &request, int serverAddress)
 {
 #define CHECK_SIZE_AND_CONDITION(req, condition) \
     CHECK_SIZE_EQUALS(req); \
@@ -683,8 +730,8 @@ QModbusResponse ModbusServer::processDiagnosticsRequest(const QModbusRequest &re
         if (data == 0xff00)
             _commEventLog.clear();
 
-        resetCommunicationCounters();
-        setValue(QModbusServer::ListenOnlyMode, false);
+        resetCommunicationCounters(serverAddress);
+        setValue(QModbusServer::ListenOnlyMode, false, serverAddress);
         storeModbusCommEvent(QModbusCommEvent::InitiatedCommunicationRestart);
 
         if (!connectDevice()) {
@@ -698,20 +745,20 @@ QModbusResponse ModbusServer::processDiagnosticsRequest(const QModbusRequest &re
     case Diagnostics::ChangeAsciiInputDelimiter: {
         const QByteArray data = request.data().mid(2, 2);
         CHECK_SIZE_AND_CONDITION(request, (data[1] != 0x00));
-        setValue(QModbusServer::AsciiInputDelimiter, data[0]);
+        setValue(QModbusServer::AsciiInputDelimiter, data[0], serverAddress);
         return QModbusResponse(request.functionCode(), request.data());
     }   break;
 
     case Diagnostics::ForceListenOnlyMode:
         CHECK_SIZE_AND_CONDITION(request, (data != 0x0000));
-        setValue(QModbusServer::ListenOnlyMode, true);
+        setValue(QModbusServer::ListenOnlyMode, true, serverAddress);
         storeModbusCommEvent(QModbusCommEvent::EnteredListenOnlyMode);
         return QModbusResponse();
 
     case Diagnostics::ClearCountersAndDiagnosticRegister:
         CHECK_SIZE_AND_CONDITION(request, (data != 0x0000));
-        resetCommunicationCounters();
-        setValue(QModbusServer::DiagnosticRegister, 0x0000);
+        resetCommunicationCounters(serverAddress);
+        setValue(QModbusServer::DiagnosticRegister, 0x0000, serverAddress);
         return QModbusResponse(request.functionCode(), request.data());
 
     case Diagnostics::ReturnDiagnosticRegister:
@@ -725,13 +772,13 @@ QModbusResponse ModbusServer::processDiagnosticsRequest(const QModbusRequest &re
     case Diagnostics::ReturnBusCharacterOverrunCount:
         CHECK_SIZE_AND_CONDITION(request, (data != 0x0000));
         return QModbusResponse(request.functionCode(), subFunctionCode,
-                               _counters[static_cast<Counter> (subFunctionCode)]);
+                               _counters[serverAddress][static_cast<Counter> (subFunctionCode)]);
 
     case Diagnostics::ClearOverrunCounterAndFlag: {
         CHECK_SIZE_AND_CONDITION(request, (data != 0x0000));
-        _counters[Diagnostics::ReturnBusCharacterOverrunCount] = 0;
-        quint16 reg = value(QModbusServer::DiagnosticRegister).value<quint16>();
-        setValue(QModbusServer::DiagnosticRegister, reg &~ 1); // clear first bit
+        _counters[serverAddress][Diagnostics::ReturnBusCharacterOverrunCount] = 0;
+        quint16 reg = value(QModbusServer::DiagnosticRegister, serverAddress).value<quint16>();
+        setValue(QModbusServer::DiagnosticRegister, reg &~ 1, serverAddress); // clear first bit
         return QModbusResponse(request.functionCode(), request.data());
     }
     }
@@ -744,29 +791,31 @@ QModbusResponse ModbusServer::processDiagnosticsRequest(const QModbusRequest &re
 ///
 /// \brief ModbusServer::processGetCommEventCounterRequest
 /// \param request
+/// \param serverAddress
 /// \return
 ///
-QModbusResponse ModbusServer::processGetCommEventCounterRequest(const QModbusRequest &request)
+QModbusResponse ModbusServer::processGetCommEventCounterRequest(const QModbusRequest &request, int serverAddress)
 {
     CHECK_SIZE_EQUALS(request);
-    const QVariant tmp = value(QModbusServer::DeviceBusy);
+    const QVariant tmp = value(QModbusServer::DeviceBusy, serverAddress);
     if (tmp.isNull() || (!tmp.isValid())) {
         return QModbusExceptionResponse(request.functionCode(),
                                         QModbusExceptionResponse::ServerDeviceFailure);
     }
     const quint16 deviceBusy = tmp.value<quint16>();
-    return QModbusResponse(request.functionCode(), deviceBusy, _counters[Counter::CommEvent]);
+    return QModbusResponse(request.functionCode(), deviceBusy, _counters[serverAddress][Counter::CommEvent]);
 }
 
 ///
 /// \brief ModbusServer::processGetCommEventLogRequest
 /// \param request
+/// \param serverAddress
 /// \return
 ///
-QModbusResponse ModbusServer::processGetCommEventLogRequest(const QModbusRequest &request)
+QModbusResponse ModbusServer::processGetCommEventLogRequest(const QModbusRequest &request,int serverAddress)
 {
     CHECK_SIZE_EQUALS(request);
-    const QVariant tmp = value(QModbusServer::DeviceBusy);
+    const QVariant tmp = value(QModbusServer::DeviceBusy, serverAddress);
     if (tmp.isNull() || (!tmp.isValid())) {
         return QModbusExceptionResponse(request.functionCode(),
                                         QModbusExceptionResponse::ServerDeviceFailure);
@@ -778,15 +827,16 @@ QModbusResponse ModbusServer::processGetCommEventLogRequest(const QModbusRequest
 
     // 6 -> 3 x 2 Bytes (Status, Event Count and Message Count)
     return QModbusResponse(request.functionCode(), quint8(eventLog.size() + 6), deviceBusy,
-                           _counters[Counter::CommEvent], _counters[Counter::BusMessage], eventLog);
+                           _counters[serverAddress][Counter::CommEvent], _counters[serverAddress][Counter::BusMessage], eventLog);
 }
 
 ///
 /// \brief ModbusServer::processWriteMultipleCoilsRequest
 /// \param request
+/// \param serverAddress
 /// \return
 ///
-QModbusResponse ModbusServer::processWriteMultipleCoilsRequest(const QModbusRequest &request)
+QModbusResponse ModbusServer::processWriteMultipleCoilsRequest(const QModbusRequest &request, int serverAddress)
 {
     CHECK_SIZE_LESS_THAN(request);
     quint16 address, numberOfCoils;
@@ -810,7 +860,7 @@ QModbusResponse ModbusServer::processWriteMultipleCoilsRequest(const QModbusRequ
 
     // Get the requested range out of the registers.
     QModbusDataUnit coils(QModbusDataUnit::Coils, address, numberOfCoils);
-    if (!data(&coils)) {
+    if (!data(&coils, serverAddress)) {
         return QModbusExceptionResponse(request.functionCode(),
                                         QModbusExceptionResponse::IllegalDataAddress);
     }
@@ -830,7 +880,7 @@ QModbusResponse ModbusServer::processWriteMultipleCoilsRequest(const QModbusRequ
         currentBit = 8;
     }
 
-    if (!setData(coils)) {
+    if (!setData(coils, serverAddress)) {
         return QModbusExceptionResponse(request.functionCode(),
                                         QModbusExceptionResponse::ServerDeviceFailure);
     }
@@ -841,9 +891,10 @@ QModbusResponse ModbusServer::processWriteMultipleCoilsRequest(const QModbusRequ
 ///
 /// \brief ModbusServer::processWriteMultipleRegistersRequest
 /// \param request
+/// \param serverAddress
 /// \return
 ///
-QModbusResponse ModbusServer::processWriteMultipleRegistersRequest(const QModbusRequest &request)
+QModbusResponse ModbusServer::processWriteMultipleRegistersRequest(const QModbusRequest &request, int serverAddress)
 {
     CHECK_SIZE_LESS_THAN(request);
     quint16 address, numberOfRegisters;
@@ -863,7 +914,7 @@ QModbusResponse ModbusServer::processWriteMultipleRegistersRequest(const QModbus
 
     // Get the requested range out of the registers.
     QModbusDataUnit registers(QModbusDataUnit::HoldingRegisters, address, numberOfRegisters);
-    if (!data(&registers)) {
+    if (!data(&registers, serverAddress)) {
         return QModbusExceptionResponse(request.functionCode(),
                                         QModbusExceptionResponse::IllegalDataAddress);
     }
@@ -880,7 +931,7 @@ QModbusResponse ModbusServer::processWriteMultipleRegistersRequest(const QModbus
 
     registers.setValues(values);
 
-    if (!setData(registers)) {
+    if (!setData(registers, serverAddress)) {
         return QModbusExceptionResponse(request.functionCode(),
                                         QModbusExceptionResponse::ServerDeviceFailure);
     }
@@ -891,28 +942,29 @@ QModbusResponse ModbusServer::processWriteMultipleRegistersRequest(const QModbus
 ///
 /// \brief ModbusServer::processReportServerIdRequest
 /// \param request
+/// \param serverAddress
 /// \return
 ///
-QModbusResponse ModbusServer::processReportServerIdRequest(const QModbusRequest &request)
+QModbusResponse ModbusServer::processReportServerIdRequest(const QModbusRequest &request, int serverAddress)
 {
     CHECK_SIZE_EQUALS(request);
 
     QByteArray data;
-    QVariant tmp = value(QModbusServer::ServerIdentifier);
+    QVariant tmp = value(QModbusServer::ServerIdentifier, serverAddress);
     if (tmp.isNull() || (!tmp.isValid())) {
         return QModbusExceptionResponse(request.functionCode(),
                                         QModbusExceptionResponse::ServerDeviceFailure);
     }
     data.append(tmp.value<quint8>());
 
-    tmp = value(QModbusServer::RunIndicatorStatus);
+    tmp = value(QModbusServer::RunIndicatorStatus, serverAddress);
     if (tmp.isNull() || (!tmp.isValid())) {
         return QModbusExceptionResponse(request.functionCode(),
                                         QModbusExceptionResponse::ServerDeviceFailure);
     }
     data.append(tmp.value<quint8>());
 
-    tmp = value(QModbusServer::AdditionalData);
+    tmp = value(QModbusServer::AdditionalData, serverAddress);
     if (!tmp.isNull() && tmp.isValid())
         data.append(tmp.toByteArray());
 
@@ -923,22 +975,23 @@ QModbusResponse ModbusServer::processReportServerIdRequest(const QModbusRequest 
 ///
 /// \brief ModbusServer::processMaskWriteRegisterRequest
 /// \param request
+/// \param serverAddress
 /// \return
 ///
-QModbusResponse ModbusServer::processMaskWriteRegisterRequest(const QModbusRequest &request)
+QModbusResponse ModbusServer::processMaskWriteRegisterRequest(const QModbusRequest &request, int serverAddress)
 {
     CHECK_SIZE_EQUALS(request);
     quint16 address, andMask, orMask;
     request.decodeData(&address, &andMask, &orMask);
 
     quint16 reg;
-    if (!data(QModbusDataUnit::HoldingRegisters, address, &reg)) {
+    if (!data(QModbusDataUnit::HoldingRegisters, address, &reg, serverAddress)) {
         return QModbusExceptionResponse(request.functionCode(),
                                         QModbusExceptionResponse::IllegalDataAddress);
     }
 
     const quint16 result = (reg & andMask) | (orMask & (~ andMask));
-    if (!setData(QModbusDataUnit::HoldingRegisters, address, result)) {
+    if (!setData(QModbusDataUnit::HoldingRegisters, address, result, serverAddress)) {
         return QModbusExceptionResponse(request.functionCode(),
                                         QModbusExceptionResponse::ServerDeviceFailure);
     }
@@ -948,9 +1001,10 @@ QModbusResponse ModbusServer::processMaskWriteRegisterRequest(const QModbusReque
 ///
 /// \brief ModbusServer::processReadWriteMultipleRegistersRequest
 /// \param request
+/// \param serverAddress
 /// \return
 ///
-QModbusResponse ModbusServer::processReadWriteMultipleRegistersRequest(const QModbusRequest &request)
+QModbusResponse ModbusServer::processReadWriteMultipleRegistersRequest(const QModbusRequest &request, int serverAddress)
 {
     CHECK_SIZE_LESS_THAN(request);
     quint16 readStartAddress, readQuantity, writeStartAddress, writeQuantity;
@@ -974,7 +1028,7 @@ QModbusResponse ModbusServer::processReadWriteMultipleRegistersRequest(const QMo
     // Get the requested range out of the registers.
     QModbusDataUnit writeRegisters(QModbusDataUnit::HoldingRegisters, writeStartAddress,
                                    writeQuantity);
-    if (!data(&writeRegisters)) {
+    if (!data(&writeRegisters, serverAddress)) {
         return QModbusExceptionResponse(request.functionCode(),
                                         QModbusExceptionResponse::IllegalDataAddress);
     }
@@ -991,7 +1045,7 @@ QModbusResponse ModbusServer::processReadWriteMultipleRegistersRequest(const QMo
 
     writeRegisters.setValues(values);
 
-    if (!setData(writeRegisters)) {
+    if (!setData(writeRegisters, serverAddress)) {
         return QModbusExceptionResponse(request.functionCode(),
                                         QModbusExceptionResponse::ServerDeviceFailure);
     }
@@ -999,7 +1053,7 @@ QModbusResponse ModbusServer::processReadWriteMultipleRegistersRequest(const QMo
     // Get the requested range out of the registers.
     QModbusDataUnit readRegisters(QModbusDataUnit::HoldingRegisters, readStartAddress,
                                   readQuantity);
-    if (!data(&readRegisters)) {
+    if (!data(&readRegisters, serverAddress)) {
         return QModbusExceptionResponse(request.functionCode(),
                                         QModbusExceptionResponse::IllegalDataAddress);
     }
@@ -1011,16 +1065,17 @@ QModbusResponse ModbusServer::processReadWriteMultipleRegistersRequest(const QMo
 ///
 /// \brief ModbusServer::processReadFifoQueueRequest
 /// \param request
+/// \param serverAddress
 /// \return
 ///
-QModbusResponse ModbusServer::processReadFifoQueueRequest(const QModbusRequest &request)
+QModbusResponse ModbusServer::processReadFifoQueueRequest(const QModbusRequest &request, int serverAddress)
 {
     CHECK_SIZE_LESS_THAN(request);
     quint16 address;
     request.decodeData(&address);
 
     quint16 fifoCount;
-    if (!data(QModbusDataUnit::HoldingRegisters, address, &fifoCount)) {
+    if (!data(QModbusDataUnit::HoldingRegisters, address, &fifoCount, serverAddress)) {
         return QModbusExceptionResponse(request.functionCode(),
                                         QModbusExceptionResponse::IllegalDataAddress);
     }
@@ -1031,7 +1086,7 @@ QModbusResponse ModbusServer::processReadFifoQueueRequest(const QModbusRequest &
     }
 
     QModbusDataUnit fifoRegisters(QModbusDataUnit::HoldingRegisters, address + 1u, fifoCount);
-    if (!data(&fifoRegisters)) {
+    if (!data(&fifoRegisters, serverAddress)) {
         return QModbusExceptionResponse(request.functionCode(),
                                         QModbusExceptionResponse::IllegalDataAddress);
     }
@@ -1043,9 +1098,10 @@ QModbusResponse ModbusServer::processReadFifoQueueRequest(const QModbusRequest &
 ///
 /// \brief ModbusServer::processEncapsulatedInterfaceTransportRequest
 /// \param request
+/// \param serverAddress
 /// \return
 ///
-QModbusResponse ModbusServer::processEncapsulatedInterfaceTransportRequest(const QModbusRequest &request)
+QModbusResponse ModbusServer::processEncapsulatedInterfaceTransportRequest(const QModbusRequest &request, int serverAddress)
 {
     CHECK_SIZE_LESS_THAN(request);
     quint8 MEIType;
@@ -1060,7 +1116,7 @@ QModbusResponse ModbusServer::processEncapsulatedInterfaceTransportRequest(const
                                             QModbusExceptionResponse::IllegalDataValue);
         }
 
-        const QVariant tmp = value(QModbusServer::DeviceIdentification);
+        const QVariant tmp = value(QModbusServer::DeviceIdentification, serverAddress);
         if (tmp.isNull() || (!tmp.isValid())) {
             // TODO: Is this correct?
             return QModbusExceptionResponse(request.functionCode(),

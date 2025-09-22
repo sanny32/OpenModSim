@@ -36,7 +36,7 @@ protected:
 
 private:
     bool matchingServerAddress(quint8 unitId) const;
-    QModbusResponse forwardProcessRequest(const QModbusRequest &r, int transactionId);
+    QModbusResponse forwardProcessRequest(const QModbusRequest &r, int serverAddress, int transactionId);
 
 private:
     int _networkPort = 502;

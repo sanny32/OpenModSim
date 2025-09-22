@@ -131,7 +131,7 @@ void ModbusTcpServer::on_newConnection()
                 continue;
 
             qCDebug(QT_MODBUS) << "(TCP server) Request PDU:" << request;
-            const QModbusResponse response = forwardProcessRequest(request, transactionId);
+            const QModbusResponse response = forwardProcessRequest(request, unitId, transactionId);
             qCDebug(QT_MODBUS) << "(TCP server) Response PDU:" << response;
 
             QByteArray result;
@@ -172,9 +172,9 @@ void ModbusTcpServer::on_acceptError(QAbstractSocket::SocketError)
 /// \param r
 /// \return
 ///
-QModbusResponse ModbusTcpServer::forwardProcessRequest(const QModbusRequest &r, int transactionId)
+QModbusResponse ModbusTcpServer::forwardProcessRequest(const QModbusRequest &r, int serverAddress, int transactionId)
 {
-    if (value(QModbusServer::DeviceBusy).value<quint16>() == 0xffff) {
+    if (value(QModbusServer::DeviceBusy, serverAddress).value<quint16>() == 0xffff) {
         // If the device is busy, send an exception response without processing.
         return QModbusExceptionResponse(r.functionCode(), QModbusExceptionResponse::ServerDeviceBusy);
     }
@@ -191,7 +191,7 @@ QModbusResponse ModbusTcpServer::forwardProcessRequest(const QModbusRequest &r, 
         resp = QModbusExceptionResponse(r.functionCode(), QModbusExceptionResponse::IllegalFunction);
         break;
     default:
-        resp = ModbusServer::processRequest(r);
+        resp = ModbusServer::processRequest(r, serverAddress);
         break;
     }
 

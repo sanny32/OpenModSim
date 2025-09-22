@@ -47,19 +47,20 @@ class ModbusServer : public QModbusServer
     Q_OBJECT
 
 public:
-    int serverAddress() const;
-    void setServerAddress(int serverAddress);
+    QList<int> serverAddresses() const;
+    void addServerAddress(int serverAddress);
+    void removeServerAddress(int serverAddress);
 
-    bool setMap(const QModbusDataUnitMap &map) override;
+    bool setMap(const QModbusDataUnitMap &map, int serverAddress);
 
-    QVariant value(int option) const override;
-    bool setValue(int option, const QVariant &value) override;
+    QVariant value(int option, int serverAddress) const;
+    bool setValue(int option, const QVariant &value, int serverAddress);
 
-    bool data(QModbusDataUnit *newData) const;
-    bool setData(const QModbusDataUnit &unit);
+    bool data(QModbusDataUnit *newData, int serverAddress) const;
+    bool setData(const QModbusDataUnit &unit, int serverAddress);
 
-    bool setData(QModbusDataUnit::RegisterType table, quint16 address, quint16 data);
-    bool data(QModbusDataUnit::RegisterType table, quint16 address, quint16 *data) const;
+    bool setData(QModbusDataUnit::RegisterType table, quint16 address, quint16 data, int serverAddress);
+    bool data(QModbusDataUnit::RegisterType table, quint16 address, quint16 *data, int serverAddress) const;
 
     virtual QVariant connectionParameter(ConnectionParameter parameter) const = 0;
     virtual void setConnectionParameter(ConnectionParameter parameter, const QVariant &value) = 0;
@@ -69,10 +70,13 @@ public:
 
     State state() const;
 
-    Error error() const;
-    QString errorString() const;
+    Error error(int serverAddress) const;
+    QString errorString(int serverAddress) const;
 
     virtual QIODevice *device() const = 0;
+
+signals:
+    void errorOccurred(QModbusDevice::Error error, int serverAddress);
 
 protected:
     enum Counter {
@@ -95,52 +99,53 @@ protected:
 
     void setState(QModbusDevice::State newState);
     void setError(const QString &errorText, QModbusDevice::Error error);
+    void setError(const QString &errorText, QModbusDevice::Error error, int serverAddress);
 
-    bool writeData(const QModbusDataUnit &unit) override;
-    bool readData(QModbusDataUnit *newData) const override;
+    virtual bool writeData(const QModbusDataUnit &unit, int serverAddress);
+    virtual bool readData(QModbusDataUnit *newData, int serverAddress) const;
 
-    QModbusResponse processRequest(const QModbusPdu &request) override;
-    QModbusResponse processPrivateRequest(const QModbusPdu &request) override;
+    virtual QModbusResponse processRequest(const QModbusPdu &request, int serverAddress);
+    virtual QModbusResponse processPrivateRequest(const QModbusPdu &request, int serverAddress);
 
-    void resetCommunicationCounters() { _counters.fill(0u); }
-    void incrementCounter(ModbusServer::Counter counter) { _counters[counter]++; }
+    void resetCommunicationCounters(int serverAddress) { _counters[serverAddress].fill(0u); }
+    void incrementCounter(ModbusServer::Counter counter, int serverAddress) { _counters[serverAddress][counter]++; }
 
-    QModbusResponse processReadCoilsRequest(const QModbusRequest &request);
-    QModbusResponse processReadDiscreteInputsRequest(const QModbusRequest &request);
-    QModbusResponse readBits(const QModbusPdu &request, QModbusDataUnit::RegisterType unitType);
+    QModbusResponse processReadCoilsRequest(const QModbusRequest &request, int serverAddress);
+    QModbusResponse processReadDiscreteInputsRequest(const QModbusRequest &request, int serverAddress);
+    QModbusResponse readBits(const QModbusPdu &request, QModbusDataUnit::RegisterType unitType, int serverAddress);
 
-    QModbusResponse processReadHoldingRegistersRequest(const QModbusRequest &request);
-    QModbusResponse processReadInputRegistersRequest(const QModbusRequest &request);
-    QModbusResponse readBytes(const QModbusPdu &request, QModbusDataUnit::RegisterType unitType);
+    QModbusResponse processReadHoldingRegistersRequest(const QModbusRequest &request, int serverAddress);
+    QModbusResponse processReadInputRegistersRequest(const QModbusRequest &request, int serverAddress);
+    QModbusResponse readBytes(const QModbusPdu &request, QModbusDataUnit::RegisterType unitType, int serverAddress);
 
-    QModbusResponse processWriteSingleCoilRequest(const QModbusRequest &request);
-    QModbusResponse processWriteSingleRegisterRequest(const QModbusRequest &request);
-    QModbusResponse writeSingle(const QModbusPdu &request, QModbusDataUnit::RegisterType unitType);
+    QModbusResponse processWriteSingleCoilRequest(const QModbusRequest &request, int serverAddress);
+    QModbusResponse processWriteSingleRegisterRequest(const QModbusRequest &request, int serverAddress);
+    QModbusResponse writeSingle(const QModbusPdu &request, QModbusDataUnit::RegisterType unitType, int serverAddress);
 
-    QModbusResponse processReadExceptionStatusRequest(const QModbusRequest &request);
-    QModbusResponse processDiagnosticsRequest(const QModbusRequest &request);
-    QModbusResponse processGetCommEventCounterRequest(const QModbusRequest &request);
-    QModbusResponse processGetCommEventLogRequest(const QModbusRequest &request);
-    QModbusResponse processWriteMultipleCoilsRequest(const QModbusRequest &request);
-    QModbusResponse processWriteMultipleRegistersRequest(const QModbusRequest &request);
-    QModbusResponse processReportServerIdRequest(const QModbusRequest &request);
-    QModbusResponse processMaskWriteRegisterRequest(const QModbusRequest &request);
-    QModbusResponse processReadWriteMultipleRegistersRequest(const QModbusRequest &request);
-    QModbusResponse processReadFifoQueueRequest(const QModbusRequest &request);
-    QModbusResponse processEncapsulatedInterfaceTransportRequest(const QModbusRequest &request);
+    QModbusResponse processReadExceptionStatusRequest(const QModbusRequest &request, int serverAddress);
+    QModbusResponse processDiagnosticsRequest(const QModbusRequest &request, int serverAddress);
+    QModbusResponse processGetCommEventCounterRequest(const QModbusRequest &request, int serverAddress);
+    QModbusResponse processGetCommEventLogRequest(const QModbusRequest &request, int serverAddress);
+    QModbusResponse processWriteMultipleCoilsRequest(const QModbusRequest &request, int serverAddress);
+    QModbusResponse processWriteMultipleRegistersRequest(const QModbusRequest &request, int serverAddress);
+    QModbusResponse processReportServerIdRequest(const QModbusRequest &request, int serverAddress);
+    QModbusResponse processMaskWriteRegisterRequest(const QModbusRequest &request, int serverAddress);
+    QModbusResponse processReadWriteMultipleRegistersRequest(const QModbusRequest &request, int serverAddress);
+    QModbusResponse processReadFifoQueueRequest(const QModbusRequest &request, int serverAddress);
+    QModbusResponse processEncapsulatedInterfaceTransportRequest(const QModbusRequest &request, int serverAddress);
 
     void storeModbusCommEvent(const QModbusCommEvent &eventByte);
 
 private:
-    int _serverAddress = 1;
-    std::array<quint16, 20> _counters;
-    QHash<int, QVariant> _serverOptions;
-    QModbusDataUnitMap _modbusDataUnitMap;
+    QList<int> _serverAddresses;
+    QHash<int, std::array<quint16, 20>> _counters;
+    QHash<int, QHash<int, QVariant>> _serversOptions;
+    QHash<int, QModbusDataUnitMap> _modbusDataUnitMaps;
     std::deque<quint8> _commEventLog;
 
     QModbusDevice::State _state = QModbusDevice::UnconnectedState;
-    QModbusDevice::Error _error = QModbusDevice::NoError;
-    QString _errorString;
+    QHash<int, QModbusDevice::Error> _errors;
+    QHash<int, QString> _errorsString;
 };
 
 ///
@@ -176,28 +181,28 @@ public:
     };
 
     constexpr QModbusCommEvent(QModbusCommEvent::EventByte byte) noexcept
-        : m_eventByte(byte) {}
+        : _eventByte(byte) {}
 
-    operator quint8() const { return m_eventByte; }
+    operator quint8() const { return _eventByte; }
     operator QModbusCommEvent::EventByte() const {
-        return static_cast<QModbusCommEvent::EventByte> (m_eventByte);
+        return static_cast<QModbusCommEvent::EventByte> (_eventByte);
     }
 
     inline QModbusCommEvent &operator=(QModbusCommEvent::EventByte byte) {
-        m_eventByte = byte;
+        _eventByte = byte;
         return *this;
     }
     inline QModbusCommEvent &operator|=(QModbusCommEvent::SendFlag sf) {
-        m_eventByte |= quint8(sf);
+        _eventByte |= quint8(sf);
         return *this;
     }
     inline QModbusCommEvent &operator|=(QModbusCommEvent::ReceiveFlag rf) {
-        m_eventByte |= quint8(rf);
+        _eventByte |= quint8(rf);
         return *this;
     }
 
 private:
-    quint8 m_eventByte;
+    quint8 _eventByte;
 };
 
 inline QModbusCommEvent::EventByte operator|(QModbusCommEvent::EventByte b,

@@ -41,8 +41,7 @@ else()
 endif()
 
 # Define target
-add_executable(${PROJECT_NAME}
-    modbusserver.cpp)
+add_executable(${PROJECT_NAME})
 
 target_link_libraries(omodsim PRIVATE Qt6::Core)
 find_package(Git QUIET)
@@ -132,6 +131,7 @@ set(SOURCES
     modbusdataunitmap.cpp
     modbusmessages/modbusmessage.cpp
     modbusrtuserialserver.cpp
+    modbusserver.cpp
     modbustcpserver.cpp
     modbusmultiserver.cpp
     qfixedsizedialog.cpp

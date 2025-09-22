@@ -197,7 +197,7 @@ void ModbusRtuSerialServer::on_readyRead()
     // FunctionCode specific content -> 0-252 bytes
     // CRC                           -> 2 bytes
     QModbusCommEvent event = QModbusCommEvent::ReceiveEvent;
-    if (value(QModbusServer::ListenOnlyMode).toBool())
+    if (value(QModbusServer::ListenOnlyMode, adu.serverAddress()).toBool())
         event |= QModbusCommEvent::ReceiveFlag::CurrentlyInListenOnlyMode;
 
     // We expect at least the server address, function code and CRC.
@@ -207,7 +207,7 @@ void ModbusRtuSerialServer::on_readyRead()
         // The quantity of CRC errors encountered by the remote device since its last
         // restart, clear counters operation, or power-up. In case of a message
         // length < 4 bytes, the receiving device is not able to calculate the CRC.
-        incrementCounter(ModbusServer::Counter::BusCommunicationError);
+        incrementCounter(ModbusServer::Counter::BusCommunicationError, adu.serverAddress());
         storeModbusCommEvent(event | QModbusCommEvent::ReceiveFlag::CommunicationError);
         return;
     }
@@ -227,7 +227,7 @@ void ModbusRtuSerialServer::on_readyRead()
         // counters operation, or power-up. A character overrun is caused by data
         // characters arriving at the port faster than they can be stored, or by the loss
         // of a character due to a hardware malfunction.
-        incrementCounter(ModbusServer::Counter::BusCharacterOverrun);
+        incrementCounter(ModbusServer::Counter::BusCharacterOverrun, adu.serverAddress());
         storeModbusCommEvent(event | QModbusCommEvent::ReceiveFlag::CharacterOverrun);
         return;
     }
@@ -242,14 +242,14 @@ void ModbusRtuSerialServer::on_readyRead()
                              << QModbusSerialAdu::calculateCRC(adu.data(), adu.size());
         // The quantity of CRC errors encountered by the remote device since its last
         // restart, clear counters operation, or power-up.
-        incrementCounter(ModbusServer::Counter::BusCommunicationError);
+        incrementCounter(ModbusServer::Counter::BusCommunicationError, adu.serverAddress());
         storeModbusCommEvent(event | QModbusCommEvent::ReceiveFlag::CommunicationError);
         return;
     }
 
     // The quantity of messages that the remote device has detected on the communications
     // system since its last restart, clear counters operation, or power-up.
-    incrementCounter(ModbusServer::Counter::BusMessage);
+    incrementCounter(ModbusServer::Counter::BusMessage, adu.serverAddress());
 
     // If we do not process a Broadcast ...
     if (!processesBroadcast() && !matchingServerAddress(adu.serverAddress())) {
@@ -261,33 +261,33 @@ void ModbusRtuSerialServer::on_readyRead()
     const QModbusRequest req = adu.pdu();
     qCDebug(QT_MODBUS) << "(RTU server) Request PDU:" << req;
     QModbusResponse response; // If the device ...
-    if (value(QModbusServer::DeviceBusy).value<quint16>() == 0xffff) {
+    if (value(QModbusServer::DeviceBusy, adu.serverAddress()).value<quint16>() == 0xffff) {
         // is busy, update the quantity of messages addressed to the remote device for
         // which it returned a Server Device Busy exception response, since its last
         // restart, clear counters operation, or power-up.
-        incrementCounter(ModbusServer::Counter::ServerBusy);
+        incrementCounter(ModbusServer::Counter::ServerBusy, adu.serverAddress());
         response = QModbusExceptionResponse(req.functionCode(),
                                             QModbusExceptionResponse::ServerDeviceBusy);
     } else {
         // is not busy, update the quantity of messages addressed to the remote device,
         // or broadcast, that the remote device has processed since its last restart,
         // clear counters operation, or power-up.
-        incrementCounter(ModbusServer::Counter::ServerMessage);
-        response = forwardProcessRequest(req);
+        incrementCounter(ModbusServer::Counter::ServerMessage, adu.serverAddress());
+        response = forwardProcessRequest(req, adu.serverAddress());
     }
     qCDebug(QT_MODBUS) << "(RTU server) Response PDU:" << response;
 
     event = QModbusCommEvent::SentEvent; // reset event after processing
-    if (value(QModbusServer::ListenOnlyMode).toBool())
+    if (value(QModbusServer::ListenOnlyMode, adu.serverAddress()).toBool())
         event |= QModbusCommEvent::SendFlag::CurrentlyInListenOnlyMode;
 
     if ((!response.isValid())
         || processesBroadcast()
-        || value(QModbusServer::ListenOnlyMode).toBool()) {
+        || value(QModbusServer::ListenOnlyMode, adu.serverAddress()).toBool()) {
         // The quantity of messages addressed to the remote device for which it has
         // returned no response (neither a normal response nor an exception response),
         // since its last restart, clear counters operation, or power-up.
-        incrementCounter(ModbusServer::Counter::ServerNoResponse);
+        incrementCounter(ModbusServer::Counter::ServerNoResponse, adu.serverAddress());
         storeModbusCommEvent(event);
         return;
     }
@@ -299,7 +299,7 @@ void ModbusRtuSerialServer::on_readyRead()
     if (!_serialPort->isOpen()) {
         qCDebug(QT_MODBUS) << "(RTU server) Requesting serial port has closed.";
         setError(QModbusRtuSerialServer::tr("Requesting serial port is closed"), QModbusDevice::WriteError);
-        incrementCounter(ModbusServer::Counter::ServerNoResponse);
+        incrementCounter(ModbusServer::Counter::ServerNoResponse, adu.serverAddress());
         storeModbusCommEvent(event);
         return;
     }
@@ -308,7 +308,7 @@ void ModbusRtuSerialServer::on_readyRead()
     if ((writtenBytes == -1) || (writtenBytes < result.size())) {
         qCDebug(QT_MODBUS) << "(RTU server) Cannot write requested response to serial port.";
         setError(QModbusRtuSerialServer::tr("Could not write response to client"), QModbusDevice::WriteError);
-        incrementCounter(ModbusServer::Counter::ServerNoResponse);
+        incrementCounter(ModbusServer::Counter::ServerNoResponse, adu.serverAddress());
         storeModbusCommEvent(event);
         _serialPort->clear(QSerialPort::Output);
         return;
@@ -330,7 +330,7 @@ void ModbusRtuSerialServer::on_readyRead()
             // The quantity of messages addressed to the remote device for which it
             // returned a server device busy exception response, since its last restart,
             // clear counters operation, or power-up.
-            incrementCounter(ModbusServer::Counter::ServerBusy);
+            incrementCounter(ModbusServer::Counter::ServerBusy, adu.serverAddress());
             event |= QModbusCommEvent::SendFlag::ServerBusyExceptionSent;
             break;
 
@@ -338,7 +338,7 @@ void ModbusRtuSerialServer::on_readyRead()
             // The quantity of messages addressed to the remote device for which it
             // returned a negative acknowledge (NAK) exception response, since its last
             // restart, clear counters operation, or power-up.
-            incrementCounter(ModbusServer::Counter::ServerNAK);
+            incrementCounter(ModbusServer::Counter::ServerNAK, adu.serverAddress());
             event |= QModbusCommEvent::SendFlag::ServerProgramNAKExceptionSent;
             break;
 
@@ -347,7 +347,7 @@ void ModbusRtuSerialServer::on_readyRead()
         }
         // The quantity of Modbus exception responses returned by the remote device since
         // its last restart, clear counters operation, or power-up.
-        incrementCounter(ModbusServer::Counter::BusExceptionError);
+        incrementCounter(ModbusServer::Counter::BusExceptionError, adu.serverAddress());
     } else {
         switch (quint16(req.functionCode())) {
         case 0x0a: // Poll 484 (not in the official Modbus specification) *1
@@ -358,7 +358,7 @@ void ModbusRtuSerialServer::on_readyRead()
             // The device's event counter is incremented once for each successful message
             // completion. Do not increment for exception responses, poll commands, or fetch
             // event counter commands.            *1 but mentioned here ^^^
-            incrementCounter(ModbusServer::Counter::CommEvent);
+            incrementCounter(ModbusServer::Counter::CommEvent, adu.serverAddress());
             break;
         }
     }
@@ -591,7 +591,7 @@ void ModbusRtuSerialServer::close()
 /// \param req
 /// \return
 ///
-QModbusResponse ModbusRtuSerialServer::forwardProcessRequest(const QModbusPdu &req)
+QModbusResponse ModbusRtuSerialServer::forwardProcessRequest(const QModbusPdu &req, int serverAddress)
 {
     emit request(req);
 
