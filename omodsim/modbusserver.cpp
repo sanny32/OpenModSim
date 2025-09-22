@@ -17,6 +17,281 @@ ModbusServer::ModbusServer(QObject* parent)
 }
 
 ///
+/// \brief ModbusServer::setServerAddress
+/// \param serverAddress
+///
+void ModbusServer::setServerAddress(int serverAddress)
+{
+    _serverAddress = serverAddress;
+}
+
+///
+/// \brief ModbusServer::serverAddress
+/// \return
+///
+int ModbusServer::serverAddress() const
+{
+    return _serverAddress;
+}
+
+///
+/// \brief QModbusServer::setMap
+/// \param map
+/// \return
+///
+bool ModbusServer::setMap(const QModbusDataUnitMap &map)
+{
+    _modbusDataUnitMap = map;
+    return true;
+}
+
+///
+/// \brief ModbusServer::value
+/// \param option
+/// \return
+///
+QVariant ModbusServer::value(int option) const
+{
+    switch (option) {
+    case DiagnosticRegister:
+        return _serverOptions.value(option, quint16(0x0000));
+    case ExceptionStatusOffset:
+        return _serverOptions.value(option, quint16(0x0000));
+    case DeviceBusy:
+        return _serverOptions.value(option, quint16(0x0000));
+    case AsciiInputDelimiter:
+        return _serverOptions.value(option, '\n');
+    case ListenOnlyMode:
+        return _serverOptions.value(option, false);
+    case ServerIdentifier:
+        return _serverOptions.value(option, quint8(0x0a));
+    case RunIndicatorStatus:
+        return _serverOptions.value(option, quint8(0xff));
+    case AdditionalData:
+        return _serverOptions.value(option, QByteArray("Qt Modbus Server"));
+    case DeviceIdentification:
+        return _serverOptions.value(option, QVariant());
+    };
+
+    if (option < UserOption)
+        return QVariant();
+
+    return _serverOptions.value(option, QVariant());
+}
+
+///
+/// \brief ModbusServer::setValue
+/// \param option
+/// \param newValue
+/// \return
+///
+bool ModbusServer::setValue(int option, const QVariant &newValue)
+{
+#define CHECK_INT_OR_UINT(val) \
+    do { \
+            if ((val.typeId() != QMetaType::Type::Int) && (val.typeId() != QMetaType::Type::UInt)) \
+            return false; \
+    } while (0)
+
+    switch (option) {
+    case DiagnosticRegister:
+        CHECK_INT_OR_UINT(newValue);
+        _serverOptions.insert(option, newValue);
+        return true;
+    case ExceptionStatusOffset: {
+        CHECK_INT_OR_UINT(newValue);
+        const quint16 tmp = newValue.value<quint16>();
+        QModbusDataUnit coils(QModbusDataUnit::Coils, tmp, 8);
+        if (!data(&coils))
+            return false;
+        _serverOptions.insert(option, tmp);
+        return true;
+    }
+    case DeviceBusy: {
+        CHECK_INT_OR_UINT(newValue);
+        const quint16 tmp = newValue.value<quint16>();
+        if ((tmp != 0x0000) && (tmp != 0xffff))
+            return false;
+        _serverOptions.insert(option, tmp);
+        return true;
+    }
+    case AsciiInputDelimiter: {
+        CHECK_INT_OR_UINT(newValue);
+        bool ok = false;
+        if (newValue.toUInt(&ok) > 0xff || !ok)
+            return false;
+        _serverOptions.insert(option, newValue);
+        return true;
+    }
+    case ListenOnlyMode: {
+        if (newValue.typeId() != QMetaType::Type::Bool)
+            return false;
+        _serverOptions.insert(option, newValue);
+        return true;
+    }
+    case ServerIdentifier:
+        CHECK_INT_OR_UINT(newValue);
+        _serverOptions.insert(option, newValue);
+        return true;
+    case RunIndicatorStatus: {
+        CHECK_INT_OR_UINT(newValue);
+        const quint8 tmp = newValue.value<quint8>();
+        if ((tmp != 0x00) && (tmp != 0xff))
+            return false;
+        _serverOptions.insert(option, tmp);
+        return true;
+    }
+    case AdditionalData: {
+        if (newValue.typeId() != QMetaType::Type::QByteArray)
+            return false;
+        const QByteArray additionalData = newValue.toByteArray();
+        if (additionalData.size() > 249)
+            return false;
+        _serverOptions.insert(option, additionalData);
+        return true;
+    }
+    case DeviceIdentification:
+        if (!newValue.canConvert<QModbusDeviceIdentification>())
+            return false;
+        _serverOptions.insert(option, newValue);
+        return true;
+    default:
+        break;
+    };
+
+    if (option < UserOption)
+        return false;
+    _serverOptions.insert(option, newValue);
+    return true;
+
+#undef CHECK_INT_OR_UINT
+}
+
+///
+/// \brief ModbusServer::data
+/// \param table
+/// \param address
+/// \param data
+/// \return
+///
+bool ModbusServer::data(QModbusDataUnit::RegisterType table, quint16 address, quint16 *data) const
+{
+    QModbusDataUnit unit(table, address, 1u);
+    if (data && readData(&unit)) {
+        *data = unit.value(0);
+        return true;
+    }
+    return false;
+}
+
+///
+/// \brief ModbusServer::data
+/// \param newData
+/// \return
+///
+bool ModbusServer::data(QModbusDataUnit *newData) const
+{
+    return readData(newData);
+}
+
+///
+/// \brief ModbusServer::setData
+/// \param table
+/// \param address
+/// \param data
+/// \return
+///
+bool ModbusServer::setData(QModbusDataUnit::RegisterType table, quint16 address, quint16 data)
+{
+    return writeData(QModbusDataUnit(table, address, QList<quint16> { data }));
+}
+
+///
+/// \brief ModbusServer::setData
+/// \param newData
+/// \return
+///
+bool ModbusServer::setData(const QModbusDataUnit &newData)
+{
+    return writeData(newData);
+}
+
+///
+/// \brief ModbusServer::writeData
+/// \param newData
+/// \return
+///
+bool ModbusServer::writeData(const QModbusDataUnit &newData)
+{
+    if (!_modbusDataUnitMap.contains(newData.registerType()))
+        return false;
+
+    QModbusDataUnit &current = _modbusDataUnitMap[newData.registerType()];
+    if (!current.isValid())
+        return false;
+
+    // check range start is within internal map range
+    int internalRangeEndAddress = current.startAddress() + current.valueCount() - 1;
+    if (newData.startAddress() < current.startAddress()
+        || newData.startAddress() > internalRangeEndAddress) {
+        return false;
+    }
+
+    // check range end is within internal map range
+    int rangeEndAddress = newData.startAddress() + newData.valueCount() - 1;
+    if (rangeEndAddress < current.startAddress() || rangeEndAddress > internalRangeEndAddress)
+        return false;
+
+    bool changeRequired = false;
+    for (qsizetype i = 0; i < newData.valueCount(); i++) {
+        const quint16 newValue = newData.value(i);
+        const qsizetype translatedIndex = newData.startAddress() - current.startAddress() + i;
+        changeRequired |= (current.value(translatedIndex) != newValue);
+        current.setValue(translatedIndex, newValue);
+    }
+
+    if (changeRequired)
+        emit dataWritten(newData.registerType(), newData.startAddress(), newData.valueCount());
+    return true;
+}
+
+///
+/// \brief ModbusServer::readData
+/// \param newData
+/// \return
+///
+bool ModbusServer::readData(QModbusDataUnit *newData) const
+{
+    if ((!newData) || (!_modbusDataUnitMap.contains(newData->registerType())))
+        return false;
+
+    const QModbusDataUnit &current = _modbusDataUnitMap.value(newData->registerType());
+    if (!current.isValid())
+        return false;
+
+    // return entire map for given type
+    if (newData->startAddress() < 0) {
+        *newData = current;
+        return true;
+    }
+
+    // check range start is within internal map range
+    int internalRangeEndAddress = current.startAddress() + current.valueCount() - 1;
+    if (newData->startAddress() < current.startAddress()
+        || newData->startAddress() > internalRangeEndAddress) {
+        return false;
+    }
+
+    // check range end is within internal map range
+    const int rangeEndAddress = newData->startAddress() + newData->valueCount() - 1;
+    if (rangeEndAddress < current.startAddress() || rangeEndAddress > internalRangeEndAddress)
+        return false;
+
+    newData->setValues(current.values().mid(newData->startAddress() - current.startAddress(), newData->valueCount()));
+    return true;
+}
+
+///
 /// \brief ModbusServer::processRequest
 /// \param request
 /// \return
@@ -66,6 +341,17 @@ QModbusResponse ModbusServer::processRequest(const QModbusPdu &request)
         break;
     }
     return QModbusServer::processPrivateRequest(request);
+}
+
+///
+/// \brief ModbusServer::processPrivateRequest
+/// \param request
+/// \return
+///
+QModbusResponse ModbusServer::processPrivateRequest(const QModbusPdu &request)
+{
+    return QModbusExceptionResponse(request.functionCode(),
+                                    QModbusExceptionResponse::IllegalFunction);
 }
 
 ///

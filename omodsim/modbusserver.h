@@ -47,6 +47,21 @@ class ModbusServer : public QModbusServer
     Q_OBJECT
 
 public:
+    int serverAddress() const;
+    void setServerAddress(int serverAddress);
+
+    virtual bool setMap(const QModbusDataUnitMap &map);
+    virtual bool processesBroadcast() const { return false; }
+
+    virtual QVariant value(int option) const;
+    virtual bool setValue(int option, const QVariant &value);
+
+    bool data(QModbusDataUnit *newData) const;
+    bool setData(const QModbusDataUnit &unit);
+
+    bool setData(QModbusDataUnit::RegisterType table, quint16 address, quint16 data);
+    bool data(QModbusDataUnit::RegisterType table, quint16 address, quint16 *data) const;
+
     virtual QVariant connectionParameter(ConnectionParameter parameter) const = 0;
     virtual void setConnectionParameter(ConnectionParameter parameter, const QVariant &value) = 0;
 
@@ -69,10 +84,14 @@ protected:
     ///
     explicit ModbusServer(QObject *parent = nullptr);
 
+    virtual bool writeData(const QModbusDataUnit &unit);
+    virtual bool readData(QModbusDataUnit *newData) const;
+
+    virtual QModbusResponse processRequest(const QModbusPdu &request);
+    virtual QModbusResponse processPrivateRequest(const QModbusPdu &request);
+
     void resetCommunicationCounters() { _counters.fill(0u); }
     void incrementCounter(ModbusServer::Counter counter) { _counters[counter]++; }
-
-    QModbusResponse processRequest(const QModbusPdu &request);
 
     QModbusResponse processReadCoilsRequest(const QModbusRequest &request);
     QModbusResponse processReadDiscreteInputsRequest(const QModbusRequest &request);
@@ -104,6 +123,7 @@ private:
     int _serverAddress = 1;
     std::array<quint16, 20> _counters;
     QHash<int, QVariant> _serverOptions;
+    QModbusDataUnitMap _modbusDataUnitMap;
     std::deque<quint8> _commEventLog;
 };
 
