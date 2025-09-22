@@ -1,4 +1,4 @@
-name: Build OpenModSim (Windows x64, Qt5)
+name: Build OpenModSim Installer (Windows x86, Qt5)
 
 on:
   push:
@@ -7,15 +7,16 @@ on:
 
 env:
   QT_VERSION: 5.15.2
-  QT_ARCH: win64_msvc2019_64
-  CMAKE_COMPILER: msvc2019_64
+  QT_ARCH: win32_msvc2019
+  CMAKE_COMPILER: msvc2019
   CMAKE_GENERATOR: "Visual Studio 17 2022"
-  CMAKE_ARCH: x64
+  CMAKE_ARCH: Win32
+  ARCH: x86
   BUILD_TYPE: Release
 
 jobs:
   build-omodsim:
-    name: Build OpenModSim version ${{ github.ref_name }} with Qt5 on Windows x64
+    name: Build OpenModSim installer version ${{ github.ref_name }} with Qt5 on Windows x86
     runs-on: windows-latest
 
     steps:
@@ -96,7 +97,7 @@ jobs:
       - name: Install NSIS
         run: |
           choco install nsis -y
-        shell: powershell
+        shell: cmd
 
       - name: Build NSIS installer
         run: |
@@ -105,13 +106,13 @@ jobs:
            /DBUILD_PATH="%CD%\${{ env.BUILD_DIR }}\${{ env.BUILD_TYPE }}" ^
            /DICON_FILE="%CD%\omodsim\res\omodsim.ico" ^
            /DLICENSE_FILE="%CD%\omodsim\res\license.txt" ^
-           /DOUTPUT_FILE="%CD%\qt5-omodsim-${{ env.APP_VERSION }}_${{ env.CMAKE_ARCH }}.exe" ^
-           %CD%\.github\workflows\omodsim-${{ env.CMAKE_ARCH }}.nsi
+           /DOUTPUT_FILE="%CD%\qt5-omodsim-${{ env.APP_VERSION }}_${{ env.ARCH }}.exe" ^
+           %CD%\.nsis\installer-win32.nsi
         shell: cmd
 
       - name: Upload Installer
         uses: actions/upload-artifact@v4
         if: success()
         with:
-          name: qt5-omodsim-${{ env.APP_VERSION }}_${{ env.CMAKE_ARCH }}
-          path: qt5-omodsim-${{ env.APP_VERSION }}_${{ env.CMAKE_ARCH }}.exe
+          name: qt5-omodsim-${{ env.APP_VERSION }}_${{ env.ARCH }}
+          path: qt5-omodsim-${{ env.APP_VERSION }}_${{ env.ARCH }}.exe
