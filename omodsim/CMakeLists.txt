@@ -41,8 +41,8 @@ else()
 endif()
 
 # Define target
-add_executable(${PROJECT_NAME})
-
+add_executable(${PROJECT_NAME}
+    modbusserver.cpp)
 
 target_link_libraries(omodsim PRIVATE Qt6::Core)
 find_package(Git QUIET)
@@ -131,8 +131,8 @@ set(SOURCES
     menuconnect.cpp
     modbusdataunitmap.cpp
     modbusmessages/modbusmessage.cpp
-    modbustcpconnection.cpp
-    modbustcpproxyserver.cpp
+    modbusrtuserialserver.cpp
+    modbustcpserver.cpp
     modbusmultiserver.cpp
     qfixedsizedialog.cpp
     qhexvalidator.cpp
@@ -198,6 +198,7 @@ set(HEADERS
     jsobjects/server.h
     displaydefinition.h
     enums.h
+    modbusserver.h
     formmodsim.h
     jshighlighter.h
     jsobjects/storage.h
@@ -225,9 +226,8 @@ set(HEADERS
     modbusmessages/writemultipleregisters.h
     modbusmessages/writesinglecoil.h
     modbusmessages/writesingleregister.h
-    modbustcpconnection.h
-    modbustcpproxyserver.h
     modbusmultiserver.h
+    modbusrtuserialserver.h
     modbustcpserver.h
     modbussimulationparams.h
     modbuswriteparams.h

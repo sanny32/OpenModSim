@@ -1,5 +1,6 @@
 #include "numericutils.h"
 #include "modbustcpserver.h"
+#include "modbusrtuserialserver.h"
 #include "modbusmultiserver.h"
 
 ///
@@ -83,7 +84,7 @@ bool ModbusMultiServer::isBusy() const
     if(_modbusServerList.isEmpty())
         return false;
 
-    return _modbusServerList.first()->value(QModbusServer::DeviceBusy) == 0xffff;
+    return _modbusServerList.first()->value(ModbusServer::DeviceBusy) == 0xffff;
 }
 
 ///
@@ -175,7 +176,7 @@ void ModbusMultiServer::removeUnitMap(int id)
 /// \param cd
 /// \return
 ///
-QSharedPointer<QModbusServer> ModbusMultiServer::findModbusServer(const ConnectionDetails& cd) const
+QSharedPointer<ModbusServer> ModbusMultiServer::findModbusServer(const ConnectionDetails& cd) const
 {
     for(auto&& s : _modbusServerList)
         if(s->property("ConnectionDetails").value<ConnectionDetails>() == cd)
@@ -190,7 +191,7 @@ QSharedPointer<QModbusServer> ModbusMultiServer::findModbusServer(const Connecti
 /// \param port
 /// \return
 ///
-QSharedPointer<QModbusServer> ModbusMultiServer::findModbusServer(ConnectionType type, const QString& port) const
+QSharedPointer<ModbusServer> ModbusMultiServer::findModbusServer(ConnectionType type, const QString& port) const
 {
     for(auto&& s : _modbusServerList)
     {
@@ -210,11 +211,11 @@ QSharedPointer<QModbusServer> ModbusMultiServer::findModbusServer(ConnectionType
 /// \param cd
 /// \return
 ///
-QSharedPointer<QModbusServer> ModbusMultiServer::createModbusServer(const ConnectionDetails& cd)
+QSharedPointer<ModbusServer> ModbusMultiServer::createModbusServer(const ConnectionDetails& cd)
 {
     if(QThread::currentThread() != _workerThread)
     {
-        QSharedPointer<QModbusServer> result;
+        QSharedPointer<ModbusServer> result;
         QMetaObject::invokeMethod(this, [&]() {
             result = createModbusServer(cd);
         }, Qt::BlockingQueuedConnection);
@@ -229,7 +230,7 @@ QSharedPointer<QModbusServer> ModbusMultiServer::createModbusServer(const Connec
         {
             case ConnectionType::Tcp:
             {
-                modbusServer = QSharedPointer<QModbusServer>(new ModbusTcpServer());
+                modbusServer = QSharedPointer<ModbusServer>(new ModbusTcpServer());
                 modbusServer->setProperty("ConnectionDetails", QVariant::fromValue(cd));
                 modbusServer->setConnectionParameter(QModbusDevice::NetworkPortParameter, cd.TcpParams.ServicePort);
                 modbusServer->setConnectionParameter(QModbusDevice::NetworkAddressParameter, cd.TcpParams.IPAddress);
@@ -247,7 +248,7 @@ QSharedPointer<QModbusServer> ModbusMultiServer::createModbusServer(const Connec
 
             case ConnectionType::Serial:
             {
-                modbusServer = QSharedPointer<QModbusServer>(new ModbusRtuServer());
+                modbusServer = QSharedPointer<ModbusServer>(new ModbusRtuSerialServer(this));
                 modbusServer->setProperty("ConnectionDetails", QVariant::fromValue(cd));
                 modbusServer->setProperty("DTRControl", cd.SerialParams.SetDTR);
                 modbusServer->setProperty("RTSControl", cd.SerialParams.SetRTS);
@@ -258,11 +259,11 @@ QSharedPointer<QModbusServer> ModbusMultiServer::createModbusServer(const Connec
                 modbusServer->setConnectionParameter(QModbusDevice::SerialStopBitsParameter, cd.SerialParams.StopBits);
                 qobject_cast<QSerialPort*>(modbusServer->device())->setFlowControl(cd.SerialParams.FlowControl);
 
-                connect((ModbusRtuServer*)modbusServer.get(), &ModbusRtuServer::request, this, [&](const QModbusRequest& req)
+                connect((ModbusRtuSerialServer*)modbusServer.get(), &ModbusRtuSerialServer::request, this, [&](const QModbusRequest& req)
                 {
                     emit request(req, ModbusMessage::Rtu, 0);
                 });
-                connect((ModbusRtuServer*)modbusServer.get(), &ModbusRtuServer::response, this, [&](const QModbusRequest& req, const QModbusResponse& resp)
+                connect((ModbusRtuSerialServer*)modbusServer.get(), &ModbusRtuSerialServer::response, this, [&](const QModbusRequest& req, const QModbusResponse& resp)
                 {
                     emit response(req, resp, ModbusMessage::Rtu, 0);
                 });
@@ -373,7 +374,7 @@ QList<ConnectionDetails> ModbusMultiServer::connections() const
 /// \brief ModbusMultiServer::addModbusServer
 /// \param server
 ///
-void ModbusMultiServer::addModbusServer(QSharedPointer<QModbusServer> server)
+void ModbusMultiServer::addModbusServer(QSharedPointer<ModbusServer> server)
 {
     if(server && !_modbusServerList.contains(server))
         _modbusServerList.push_back(server);
@@ -383,7 +384,7 @@ void ModbusMultiServer::addModbusServer(QSharedPointer<QModbusServer> server)
 /// \brief ModbusMultiServer::removeModbusServer
 /// \param server
 ///
-void ModbusMultiServer::removeModbusServer(QSharedPointer<QModbusServer> server)
+void ModbusMultiServer::removeModbusServer(QSharedPointer<ModbusServer> server)
 {
     if(server)
         _modbusServerList.removeOne(server);
@@ -887,7 +888,7 @@ void ModbusMultiServer::writeRegister(QModbusDataUnit::RegisterType pointType, c
 ///
 void ModbusMultiServer::on_stateChanged(QModbusDevice::State state)
 {
-    auto server = qobject_cast<QModbusServer*>(sender());
+    auto server = qobject_cast<ModbusServer*>(sender());
     const auto cd = server->property("ConnectionDetails").value<ConnectionDetails>();
 
     switch(state)
@@ -926,7 +927,7 @@ void ModbusMultiServer::on_errorOccurred(QModbusDevice::Error error)
 {
     if(error == QModbusDevice::ConnectionError)
     {
-        auto server = qobject_cast<QModbusServer*>(sender());
+        auto server = qobject_cast<ModbusServer*>(sender());
         const auto errorString = server->errorString();
 
         server->disconnectDevice();
@@ -942,7 +943,7 @@ void ModbusMultiServer::on_errorOccurred(QModbusDevice::Error error)
 ///
 void ModbusMultiServer::on_dataWritten(QModbusDataUnit::RegisterType table, int address, int size)
 {
-    auto server = qobject_cast<QModbusServer*>(sender());
+    auto server = qobject_cast<ModbusServer*>(sender());
 
     QModbusDataUnit data;
     data.setRegisterType(table);

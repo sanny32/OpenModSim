@@ -9,47 +9,7 @@
 #include "modbuswriteparams.h"
 #include "connectiondetails.h"
 #include "modbusmessage.h"
-
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-    #include <QModbusRtuSerialSlave>
-    typedef QModbusRtuSerialSlave QModbusRtuSerialServer;
-#else
-    #include <QModbusRtuSerialServer>
-#endif
-
-///
-/// \brief The ModbusRtuServer class
-///
-class ModbusRtuServer : public QModbusRtuSerialServer
-{
-    Q_OBJECT
-
-public:
-    explicit ModbusRtuServer(QObject *parent = nullptr)
-        : QModbusRtuSerialServer(parent)
-    {
-    }
-
-signals:
-    void request(const QModbusRequest& req);
-    void response(const QModbusRequest& req, const QModbusResponse& resp);
-
-protected:
-    QModbusResponse processRequest(const QModbusPdu &req) override
-    {
-        emit request(req);
-        auto resp = QModbusRtuSerialServer::processRequest(req);
-        emit response(req, resp);
-        return resp;
-    }
-    QModbusResponse processPrivateRequest(const QModbusPdu &req) override
-    {
-        emit request(req);
-        auto resp = QModbusRtuSerialServer::processPrivateRequest(req);
-        emit response(req, resp);
-        return resp;
-    }
-};
+#include "modbusserver.h"
 
 ///
 /// \brief The ModbusMultiServer class
@@ -122,19 +82,19 @@ private slots:
     void on_dataWritten(QModbusDataUnit::RegisterType table, int address, int size);
 
 private:
-    QSharedPointer<QModbusServer> findModbusServer(const ConnectionDetails& cd) const;
-    QSharedPointer<QModbusServer> findModbusServer(ConnectionType type, const QString& port) const;
-    QSharedPointer<QModbusServer> createModbusServer(const ConnectionDetails& cd);
+    QSharedPointer<ModbusServer> findModbusServer(const ConnectionDetails& cd) const;
+    QSharedPointer<ModbusServer> findModbusServer(ConnectionType type, const QString& port) const;
+    QSharedPointer<ModbusServer> createModbusServer(const ConnectionDetails& cd);
 
     void reconfigureServers();
-    void addModbusServer(QSharedPointer<QModbusServer> server);
-    void removeModbusServer(QSharedPointer<QModbusServer> server);
+    void addModbusServer(QSharedPointer<ModbusServer> server);
+    void removeModbusServer(QSharedPointer<ModbusServer> server);
 
 private:
     quint8 _deviceId;
     QThread* _workerThread;
     ModbusDataUnitMap _modbusDataUnitMap;
-    QList<QSharedPointer<QModbusServer>> _modbusServerList;
+    QList<QSharedPointer<ModbusServer>> _modbusServerList;
 };
 Q_DECLARE_METATYPE(QModbusRequest)
 Q_DECLARE_METATYPE(QModbusResponse)
