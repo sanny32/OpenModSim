@@ -32,7 +32,7 @@ void ModbusServer::addServerAddress(int serverAddress)
 void ModbusServer::removeServerAddress(int serverAddress)
 {
     _serverAddresses.remove(serverAddress);
-    if(!_serverAddresses.contains(serverAddress))
+    if(!hasServerAddress(serverAddress))
     {
         _serversOptions.remove(serverAddress);
         _modbusDataUnitMaps.remove(serverAddress);
@@ -51,6 +51,16 @@ void ModbusServer::removeAllServerAddresses()
     _modbusDataUnitMaps.clear();
     _errors.clear();
     _errorsString.clear();
+}
+
+///
+/// \brief ModbusServer::hasServerAddress
+/// \param serverAddress
+/// \return
+///
+bool ModbusServer::hasServerAddress(int serverAddress)
+{
+    return _serverAddresses.contains(serverAddress);
 }
 
 ///

@@ -30,8 +30,8 @@ public:
     bool useGlobalUnitMap() const;
     void setUseGlobalUnitMap(bool use);
 
-    void addUnitMap(int id, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, quint16 length);
-    void removeUnitMap(int id);
+    void addUnitMap(int id, quint8 deviceId, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, quint16 length);
+    void removeUnitMap(int id, quint8 deviceId);
 
     void connectDevice(const ConnectionDetails& cd);
     void disconnectDevice(ConnectionType type, const QString& port);
@@ -92,7 +92,7 @@ private:
 private:
     QList<int> _deviceIds;
     QThread* _workerThread;
-    ModbusDataUnitMap _modbusDataUnitMap;
+    QMap<int, ModbusDataUnitMap> _modbusDataUnitMaps;
     QList<QSharedPointer<ModbusServer>> _modbusServerList;
 };
 Q_DECLARE_METATYPE(QModbusRequest)

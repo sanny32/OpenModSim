@@ -66,6 +66,7 @@ public:
     void addServerAddress(int serverAddress);
     void removeServerAddress(int serverAddress);
     void removeAllServerAddresses();
+    bool hasServerAddress(int serverAddress);
 
     virtual bool setMap(const QModbusDataUnitMap &map, int serverAddress);
     virtual bool processesBroadcast() const { return false; }

@@ -99,7 +99,9 @@ void FormModSim::changeEvent(QEvent* e)
 ///
 void FormModSim::closeEvent(QCloseEvent *event)
 {
-    _mbMultiServer.removeUnitMap(formId());
+    const auto deviceId = ui->lineEditDeviceId->value<quint8>();
+    _mbMultiServer.removeDeviceId(deviceId);
+    _mbMultiServer.removeUnitMap(formId(), deviceId);
 
     emit closing();
     QWidget::closeEvent(event);
@@ -159,6 +161,8 @@ DisplayDefinition FormModSim::displayDefinition() const
 ///
 void FormModSim::setDisplayDefinition(const DisplayDefinition& dd)
 {
+    _mbMultiServer.setUseGlobalUnitMap(dd.UseGlobalUnitMap);
+
     ui->lineEditDeviceId->setValue(dd.DeviceId);
 
     ui->comboBoxAddressBase->blockSignals(true);
@@ -181,8 +185,6 @@ void FormModSim::setDisplayDefinition(const DisplayDefinition& dd)
     ui->outputWidget->setLogViewLimit(dd.LogViewLimit);
     ui->outputWidget->setAutosctollLogView(dd.AutoscrollLog);
     _verboseLogging = dd.VerboseLogging;
-
-    _mbMultiServer.setUseGlobalUnitMap(dd.UseGlobalUnitMap);
 
     setDisplayHexAddresses(dd.HexAddress);
 
@@ -764,7 +766,7 @@ void FormModSim::onDefinitionChanged()
 
     const auto dd = displayDefinition();
     const auto addr = dd.PointAddress - (dd.ZeroBasedAddress ? 0 : 1);
-    _mbMultiServer.addUnitMap(formId(), dd.PointType, addr, dd.Length);
+    _mbMultiServer.addUnitMap(formId(), dd.DeviceId, dd.PointType, addr, dd.Length);
 
     ui->scriptControl->setAddressBase(dd.ZeroBasedAddress ? AddressBase::Base0 : AddressBase::Base1);
     ui->outputWidget->setup(dd, _dataSimulator->simulationMap(), _mbMultiServer.data(dd.DeviceId, dd.PointType, addr, dd.Length));
