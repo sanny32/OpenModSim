@@ -70,15 +70,15 @@ public:
 signals:
     void connected(const ConnectionDetails& cd);
     void disconnected(const ConnectionDetails& cd);
-    void request(const QModbusRequest& req, ModbusMessage::ProtocolType protocol, int transactionId);
-    void response(const QModbusRequest& req, const QModbusResponse& resp, ModbusMessage::ProtocolType protocol, int transactionId);
+    void request(quint8 deviceId, const QModbusRequest& req, ModbusMessage::ProtocolType protocol, int transactionId);
+    void response(quint8 deviceId, const QModbusRequest& req, const QModbusResponse& resp, ModbusMessage::ProtocolType protocol, int transactionId);
     void connectionError(const QString& error);
-    void dataChanged(const QModbusDataUnit& data);
+    void dataChanged(quint8 deviceId, const QModbusDataUnit& data);
 
 private slots:
     void on_stateChanged(QModbusDevice::State state);
-    void on_errorOccurred(QModbusDevice::Error error);
-    void on_dataWritten(QModbusDataUnit::RegisterType table, int address, int size);
+    void on_errorOccurred(QModbusDevice::Error error, int deviceId);
+    void on_dataWritten(int deviceId, QModbusDataUnit::RegisterType table, int address, int size);
 
 private:
     QSharedPointer<ModbusServer> findModbusServer(const ConnectionDetails& cd) const;
@@ -90,6 +90,7 @@ private:
     void removeModbusServer(QSharedPointer<ModbusServer> server);
 
 private:
+    QList<int> _deviceIds;
     QThread* _workerThread;
     ModbusDataUnitMap _modbusDataUnitMap;
     QList<QSharedPointer<ModbusServer>> _modbusServerList;

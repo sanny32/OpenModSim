@@ -469,8 +469,11 @@ void NumericLineEdit::on_textChanged(const QString& text)
 
     if(value.isValid() && value != _value)
     {
+        auto oldValue = value;
         _value = value;
+
         emit valueChanged(_value);
+        emit valueChanged(oldValue, _value);
     }
 }
 

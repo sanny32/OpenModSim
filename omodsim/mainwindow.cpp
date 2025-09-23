@@ -1105,14 +1105,14 @@ void MainWindow::forceCoils(QModbusDataUnit::RegisterType type)
 
     if(dd.PointType == type)
     {
-        const auto data = _mbMultiServer.data(type, presetParams.PointAddress - (dd.ZeroBasedAddress ? 0 : 1), presetParams.Length);
+        const auto data = _mbMultiServer.data(dd.DeviceId, type, presetParams.PointAddress - (dd.ZeroBasedAddress ? 0 : 1), presetParams.Length);
         params.Value = QVariant::fromValue(data.values());
     }
 
     DialogForceMultipleCoils dlg(params, type, presetParams.Length, dd.HexAddress, this);
     if(dlg.exec() == QDialog::Accepted)
     {
-        _mbMultiServer.writeRegister(type, params);
+        _mbMultiServer.writeRegister(dd.DeviceId, type, params);
     }
 }
 
@@ -1142,14 +1142,14 @@ void MainWindow::presetRegs(QModbusDataUnit::RegisterType type)
 
     if(dd.PointType == type)
     {
-        const auto data = _mbMultiServer.data(type, presetParams.PointAddress - (dd.ZeroBasedAddress ? 0 : 1), presetParams.Length);
+        const auto data = _mbMultiServer.data(dd.DeviceId, type, presetParams.PointAddress - (dd.ZeroBasedAddress ? 0 : 1), presetParams.Length);
         params.Value = QVariant::fromValue(data.values());
     }
 
     DialogForceMultipleRegisters dlg(params, type, presetParams.Length, dd.HexAddress, this);
     if(dlg.exec() == QDialog::Accepted)
     {
-        _mbMultiServer.writeRegister(type, params);
+        _mbMultiServer.writeRegister(dd.DeviceId, type, params);
     }
 }
 

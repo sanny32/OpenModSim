@@ -20,14 +20,14 @@ public:
     int interFrameDelay() const;
     void setInterFrameDelay(int microseconds);
 
-    QVariant connectionParameter(ConnectionParameter parameter) const override;
-    void setConnectionParameter(ConnectionParameter parameter, const QVariant &value) override;
+    QVariant connectionParameter(QModbusDevice::ConnectionParameter parameter) const override;
+    void setConnectionParameter(QModbusDevice::ConnectionParameter parameter, const QVariant &value) override;
 
     QIODevice *device() const override { return _serialPort; }
 
 signals:
-    void request(const QModbusRequest& req);
-    void response(const QModbusRequest& req, const QModbusResponse& resp);
+    void request(int serverAddress, const QModbusRequest& req);
+    void response(int serverAddress, const QModbusRequest& req, const QModbusResponse& resp);
 
 private slots:
     void on_readyRead();
@@ -41,7 +41,6 @@ protected:
 private:
     void setupEnvironment();
     void calculateInterFrameDelay();
-    bool matchingServerAddress(quint8 unitId) const;
     QModbusResponse forwardProcessRequest(const QModbusPdu &req, int serverAddress);
 
 private:

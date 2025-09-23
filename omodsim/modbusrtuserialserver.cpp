@@ -292,7 +292,7 @@ void ModbusRtuSerialServer::on_readyRead()
         return;
     }
 
-    const QByteArray result = QModbusSerialAdu::create(QModbusSerialAdu::Rtu, serverAddress(), response);
+    const QByteArray result = QModbusSerialAdu::create(QModbusSerialAdu::Rtu, adu.serverAddress(), response);
 
     qCDebug(QT_MODBUS_LOW) << "(RTU server) Response ADU:" << result.toHex();
 
@@ -454,18 +454,18 @@ void ModbusRtuSerialServer::setInterFrameDelay(int microseconds)
 /// \param parameter
 /// \return
 ///
-QVariant ModbusRtuSerialServer::connectionParameter(ConnectionParameter parameter) const
+QVariant ModbusRtuSerialServer::connectionParameter(QModbusDevice::ConnectionParameter parameter) const
 {
     switch (parameter) {
-    case SerialPortNameParameter:
+    case QModbusDevice::SerialPortNameParameter:
         return _comPort;
-    case SerialDataBitsParameter:
+    case QModbusDevice::SerialDataBitsParameter:
         return _dataBits;
-    case SerialParityParameter:
+    case QModbusDevice::SerialParityParameter:
         return _parity;
-    case SerialStopBitsParameter:
+    case QModbusDevice::SerialStopBitsParameter:
         return _stopBits;
-    case SerialBaudRateParameter:
+    case QModbusDevice::SerialBaudRateParameter:
         return _baudRate;
     default:
         return {};
@@ -477,22 +477,22 @@ QVariant ModbusRtuSerialServer::connectionParameter(ConnectionParameter paramete
 /// \param parameter
 /// \param value
 ///
-void ModbusRtuSerialServer::setConnectionParameter(ConnectionParameter parameter, const QVariant &value)
+void ModbusRtuSerialServer::setConnectionParameter(QModbusDevice::ConnectionParameter parameter, const QVariant &value)
 {
     switch (parameter) {
-    case SerialPortNameParameter:
+    case QModbusDevice::SerialPortNameParameter:
         _comPort = value.toString();
         break;
-    case SerialDataBitsParameter:
+    case QModbusDevice::SerialDataBitsParameter:
         _dataBits = QSerialPort::DataBits(value.toInt());
         break;
-    case SerialParityParameter:
+    case QModbusDevice::SerialParityParameter:
         _parity = QSerialPort::Parity(value.toInt());
         break;
-    case SerialStopBitsParameter:
+    case QModbusDevice::SerialStopBitsParameter:
         _stopBits = QSerialPort::StopBits(value.toInt());
         break;
-    case SerialBaudRateParameter:
+    case QModbusDevice::SerialBaudRateParameter:
         _baudRate = QSerialPort::BaudRate(value.toInt());
         break;
     default:
@@ -537,23 +537,6 @@ void ModbusRtuSerialServer::calculateInterFrameDelay()
 }
 
 ///
-/// \brief ModbusRtuSerialServer::matchingServerAddress
-/// \param unitId
-/// \return
-///
-bool ModbusRtuSerialServer::matchingServerAddress(quint8 unitId) const
-{
-    if (serverAddress() == unitId)
-        return true;
-
-    // no, not our address! Ignore!
-    qCDebug(QT_MODBUS) << "(RTU server) Wrong server address, expected"
-                      << serverAddress() << "got" << unitId;
-
-    return false;
-}
-
-///
 /// \brief ModbusRtuSerialServer::open
 /// \return
 ///
@@ -593,7 +576,7 @@ void ModbusRtuSerialServer::close()
 ///
 QModbusResponse ModbusRtuSerialServer::forwardProcessRequest(const QModbusPdu &req, int serverAddress)
 {
-    emit request(req);
+    emit request(serverAddress, req);
 
     QModbusResponse resp;
     if (req.functionCode() == QModbusRequest::EncapsulatedInterfaceTransport) {
@@ -605,8 +588,8 @@ QModbusResponse ModbusRtuSerialServer::forwardProcessRequest(const QModbusPdu &r
     }
 
     if(!resp.isValid())
-        resp = QModbusServer::processRequest(req);
+        resp = ModbusServer::processRequest(req, serverAddress);
 
-    emit response(req, resp);
+    emit response(serverAddress, req, resp);
     return resp;
 }

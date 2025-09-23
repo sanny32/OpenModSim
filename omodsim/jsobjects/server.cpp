@@ -3,6 +3,17 @@
 #include "byteorderutils.h"
 
 ///
+/// \brief qHash
+/// \param key
+/// \param seed
+/// \return
+///
+uint qHash(const Server::KeyOnChange &key, uint seed)
+{
+    return qHashMulti(seed, key.DeviceId, key.Type, key.Address);
+}
+
+///
 /// \brief Server::Server
 /// \param server
 /// \param order
@@ -68,10 +79,10 @@ void Server::setUseGlobalUnitMap(bool value)
 /// \param address
 /// \return
 ///
-quint16 Server::readHolding(quint16 address) const
+quint16 Server::readHolding(quint16 address, quint8 deviceId) const
 {
     address -= _addressBase == Address::Base::Base0 ? 0 : 1;
-    const auto data = _mbMultiServer->data(QModbusDataUnit::HoldingRegisters, address, 1);
+    const auto data = _mbMultiServer->data(deviceId, QModbusDataUnit::HoldingRegisters, address, 1);
     return toByteOrderValue(data.value(0), *_byteOrder);
 }
 
@@ -80,10 +91,10 @@ quint16 Server::readHolding(quint16 address) const
 /// \param address
 /// \param value
 ///
-void Server::writeHolding(quint16 address, quint16 value)
+void Server::writeHolding(quint16 address, quint16 value, quint8 deviceId)
 {
     address -= _addressBase == Address::Base::Base0 ? 0 : 1;
-    _mbMultiServer->writeValue(QModbusDataUnit::HoldingRegisters, address, value, *_byteOrder);
+    _mbMultiServer->writeValue(deviceId, QModbusDataUnit::HoldingRegisters, address, value, *_byteOrder);
 }
 
 ///
@@ -91,10 +102,10 @@ void Server::writeHolding(quint16 address, quint16 value)
 /// \param address
 /// \return
 ///
-quint16 Server::readInput(quint16 address) const
+quint16 Server::readInput(quint16 address, quint8 deviceId) const
 {
     address -= _addressBase == Address::Base::Base0 ? 0 : 1;
-    const auto data = _mbMultiServer->data(QModbusDataUnit::InputRegisters, address, 1);
+    const auto data = _mbMultiServer->data(deviceId, QModbusDataUnit::InputRegisters, address, 1);
     return toByteOrderValue(data.value(0), *_byteOrder);
 }
 
@@ -103,10 +114,10 @@ quint16 Server::readInput(quint16 address) const
 /// \param address
 /// \param value
 ///
-void Server::writeInput(quint16 address, quint16 value)
+void Server::writeInput(quint16 address, quint16 value, quint8 deviceId)
 {
     address -= _addressBase == Address::Base::Base0 ? 0 : 1;
-    _mbMultiServer->writeValue(QModbusDataUnit::InputRegisters, address, value, *_byteOrder);
+    _mbMultiServer->writeValue(deviceId, QModbusDataUnit::InputRegisters, address, value, *_byteOrder);
 }
 
 ///
@@ -114,10 +125,10 @@ void Server::writeInput(quint16 address, quint16 value)
 /// \param address
 /// \return
 ///
-bool Server::readDiscrete(quint16 address) const
+bool Server::readDiscrete(quint16 address, quint8 deviceId) const
 {
     address -= _addressBase == Address::Base::Base0 ? 0 : 1;
-    const auto data = _mbMultiServer->data(QModbusDataUnit::DiscreteInputs, address, 1);
+    const auto data = _mbMultiServer->data(deviceId, QModbusDataUnit::DiscreteInputs, address, 1);
     return toByteOrderValue(data.value(0), *_byteOrder);
 }
 
@@ -126,10 +137,10 @@ bool Server::readDiscrete(quint16 address) const
 /// \param address
 /// \param value
 ///
-void Server::writeDiscrete(quint16 address, bool value)
+void Server::writeDiscrete(quint16 address, bool value, quint8 deviceId)
 {
     address -= _addressBase == Address::Base::Base0 ? 0 : 1;
-    _mbMultiServer->writeValue(QModbusDataUnit::DiscreteInputs, address, value, *_byteOrder);
+    _mbMultiServer->writeValue(deviceId, QModbusDataUnit::DiscreteInputs, address, value, *_byteOrder);
 }
 
 ///
@@ -137,10 +148,10 @@ void Server::writeDiscrete(quint16 address, bool value)
 /// \param address
 /// \return
 ///
-bool Server::readCoil(quint16 address) const
+bool Server::readCoil(quint16 address, quint8 deviceId) const
 {
     address -= _addressBase == Address::Base::Base0 ? 0 : 1;
-    const auto data = _mbMultiServer->data(QModbusDataUnit::Coils, address, 1);
+    const auto data = _mbMultiServer->data(deviceId, QModbusDataUnit::Coils, address, 1);
     return toByteOrderValue(data.value(0), *_byteOrder);
 }
 
@@ -149,10 +160,10 @@ bool Server::readCoil(quint16 address) const
 /// \param address
 /// \param value
 ///
-void Server::writeCoil(quint16 address, bool value)
+void Server::writeCoil(quint16 address, bool value, quint8 deviceId)
 {
     address -= _addressBase == Address::Base::Base0 ? 0 : 1;
-    _mbMultiServer->writeValue(QModbusDataUnit::Coils, address, value, *_byteOrder);
+    _mbMultiServer->writeValue(deviceId, QModbusDataUnit::Coils, address, value, *_byteOrder);
 }
 
 ///
@@ -162,10 +173,10 @@ void Server::writeCoil(quint16 address, bool value)
 /// \param swapped
 /// \return
 ///
-QString Server::readAnsi(Register::Type reg, quint16 address, const QString& codepage) const
+QString Server::readAnsi(Register::Type reg, quint16 address, const QString& codepage, quint8 deviceId) const
 {
     address -= _addressBase == Address::Base::Base0 ? 0 : 1;
-    const auto data = _mbMultiServer->data((QModbusDataUnit::RegisterType)reg, address, 1);
+    const auto data = _mbMultiServer->data(deviceId, (QModbusDataUnit::RegisterType)reg, address, 1);
     return printableAnsi(uint16ToAnsi(toByteOrderValue(data.value(0), *_byteOrder)), codepage);
 }
 
@@ -176,12 +187,12 @@ QString Server::readAnsi(Register::Type reg, quint16 address, const QString& cod
 /// \param value
 /// \param swapped
 ///
-void Server::writeAnsi(Register::Type reg, quint16 address, const QString& value, const QString& codepage)
+void Server::writeAnsi(Register::Type reg, quint16 address, const QString& value, const QString& codepage, quint8 deviceId)
 {
     address -= _addressBase == Address::Base::Base0 ? 0 : 1;
     auto codec = QTextCodec::codecForName(codepage.toUtf8());
     if(codec == nullptr) codec = QTextCodec::codecForLocale();
-    _mbMultiServer->writeValue(QModbusDataUnit::HoldingRegisters, address, uint16FromAnsi(codec->fromUnicode(value)), *_byteOrder);
+    _mbMultiServer->writeValue(deviceId, QModbusDataUnit::HoldingRegisters, address, uint16FromAnsi(codec->fromUnicode(value)), *_byteOrder);
 }
 
 ///
@@ -191,10 +202,10 @@ void Server::writeAnsi(Register::Type reg, quint16 address, const QString& value
 /// \param swapped
 /// \return
 ///
-qint32 Server::readInt32(Register::Type reg, quint16 address, bool swapped) const
+qint32 Server::readInt32(Register::Type reg, quint16 address, bool swapped, quint8 deviceId) const
 {
     address -= _addressBase == Address::Base::Base0 ? 0 : 1;
-    return _mbMultiServer->readInt32((QModbusDataUnit::RegisterType)reg, address, *_byteOrder, swapped);
+    return _mbMultiServer->readInt32(deviceId, (QModbusDataUnit::RegisterType)reg, address, *_byteOrder, swapped);
 }
 
 ///
@@ -204,10 +215,10 @@ qint32 Server::readInt32(Register::Type reg, quint16 address, bool swapped) cons
 /// \param value
 /// \param swapped
 ///
-void Server::writeInt32(Register::Type reg, quint16 address, qint32 value, bool swapped)
+void Server::writeInt32(Register::Type reg, quint16 address, qint32 value, bool swapped, quint8 deviceId)
 {
     address -= _addressBase == Address::Base::Base0 ? 0 : 1;
-    _mbMultiServer->writeInt32((QModbusDataUnit::RegisterType)reg, address, value, *_byteOrder, swapped);
+    _mbMultiServer->writeInt32(deviceId, (QModbusDataUnit::RegisterType)reg, address, value, *_byteOrder, swapped);
 }
 
 ///
@@ -217,10 +228,10 @@ void Server::writeInt32(Register::Type reg, quint16 address, qint32 value, bool 
 /// \param swapped
 /// \return
 ///
-quint32 Server::readUInt32(Register::Type reg, quint16 address, bool swapped) const
+quint32 Server::readUInt32(Register::Type reg, quint16 address, bool swapped, quint8 deviceId) const
 {
     address -= _addressBase == Address::Base::Base0 ? 0 : 1;
-    return _mbMultiServer->readUInt32((QModbusDataUnit::RegisterType)reg, address, *_byteOrder, swapped);
+    return _mbMultiServer->readUInt32(deviceId, (QModbusDataUnit::RegisterType)reg, address, *_byteOrder, swapped);
 }
 
 ///
@@ -230,10 +241,10 @@ quint32 Server::readUInt32(Register::Type reg, quint16 address, bool swapped) co
 /// \param value
 /// \param swapped
 ///
-void Server::writeUInt32(Register::Type reg, quint16 address, quint32 value, bool swapped)
+void Server::writeUInt32(Register::Type reg, quint16 address, quint32 value, bool swapped, quint8 deviceId)
 {
     address -= _addressBase == Address::Base::Base0 ? 0 : 1;
-    _mbMultiServer->writeUInt32((QModbusDataUnit::RegisterType)reg, address, value, *_byteOrder, swapped);
+    _mbMultiServer->writeUInt32(deviceId, (QModbusDataUnit::RegisterType)reg, address, value, *_byteOrder, swapped);
 }
 
 ///
@@ -243,10 +254,10 @@ void Server::writeUInt32(Register::Type reg, quint16 address, quint32 value, boo
 /// \param swapped
 /// \return
 ///
-qint64 Server::readInt64(Register::Type reg, quint16 address, bool swapped) const
+qint64 Server::readInt64(Register::Type reg, quint16 address, bool swapped, quint8 deviceId) const
 {
     address -= _addressBase == Address::Base::Base0 ? 0 : 1;
-    return _mbMultiServer->readInt64((QModbusDataUnit::RegisterType)reg, address, *_byteOrder, swapped);
+    return _mbMultiServer->readInt64(deviceId, (QModbusDataUnit::RegisterType)reg, address, *_byteOrder, swapped);
 }
 
 ///
@@ -256,10 +267,10 @@ qint64 Server::readInt64(Register::Type reg, quint16 address, bool swapped) cons
 /// \param value
 /// \param swapped
 ///
-void Server::writeInt64(Register::Type reg, quint16 address, qint64 value, bool swapped)
+void Server::writeInt64(Register::Type reg, quint16 address, qint64 value, bool swapped, quint8 deviceId)
 {
     address -= _addressBase == Address::Base::Base0 ? 0 : 1;
-    _mbMultiServer->writeInt64((QModbusDataUnit::RegisterType)reg, address, value, *_byteOrder, swapped);
+    _mbMultiServer->writeInt64(deviceId, (QModbusDataUnit::RegisterType)reg, address, value, *_byteOrder, swapped);
 }
 
 ///
@@ -269,10 +280,10 @@ void Server::writeInt64(Register::Type reg, quint16 address, qint64 value, bool 
 /// \param swapped
 /// \return
 ///
-quint64 Server::readUInt64(Register::Type reg, quint16 address, bool swapped) const
+quint64 Server::readUInt64(Register::Type reg, quint16 address, bool swapped, quint8 deviceId) const
 {
     address -= _addressBase == Address::Base::Base0 ? 0 : 1;
-    return _mbMultiServer->readUInt64((QModbusDataUnit::RegisterType)reg, address, *_byteOrder, swapped);
+    return _mbMultiServer->readUInt64(deviceId, (QModbusDataUnit::RegisterType)reg, address, *_byteOrder, swapped);
 }
 
 ///
@@ -282,10 +293,10 @@ quint64 Server::readUInt64(Register::Type reg, quint16 address, bool swapped) co
 /// \param value
 /// \param swapped
 ///
-void Server::writeUInt64(Register::Type reg, quint16 address, quint64 value, bool swapped)
+void Server::writeUInt64(Register::Type reg, quint16 address, quint64 value, bool swapped, quint8 deviceId)
 {
     address -= _addressBase == Address::Base::Base0 ? 0 : 1;
-    _mbMultiServer->writeUInt64((QModbusDataUnit::RegisterType)reg, address, value, *_byteOrder, swapped);
+    _mbMultiServer->writeUInt64(deviceId, (QModbusDataUnit::RegisterType)reg, address, value, *_byteOrder, swapped);
 }
 
 ///
@@ -295,10 +306,10 @@ void Server::writeUInt64(Register::Type reg, quint16 address, quint64 value, boo
 /// \param swapped
 /// \return
 ///
-float Server::readFloat(Register::Type reg, quint16 address, bool swapped) const
+float Server::readFloat(Register::Type reg, quint16 address, bool swapped, quint8 deviceId) const
 {
     address -= _addressBase == Address::Base::Base0 ? 0 : 1;
-    return _mbMultiServer->readFloat((QModbusDataUnit::RegisterType)reg, address, *_byteOrder, swapped);
+    return _mbMultiServer->readFloat(deviceId, (QModbusDataUnit::RegisterType)reg, address, *_byteOrder, swapped);
 }
 
 ///
@@ -308,10 +319,10 @@ float Server::readFloat(Register::Type reg, quint16 address, bool swapped) const
 /// \param value
 /// \param swapped
 ///
-void Server::writeFloat(Register::Type reg, quint16 address, float value, bool swapped)
+void Server::writeFloat(Register::Type reg, quint16 address, float value, bool swapped, quint8 deviceId)
 {
     address -= _addressBase == Address::Base::Base0 ? 0 : 1;
-    _mbMultiServer->writeFloat((QModbusDataUnit::RegisterType)reg, address, value, *_byteOrder, swapped);
+    _mbMultiServer->writeFloat(deviceId, (QModbusDataUnit::RegisterType)reg, address, value, *_byteOrder, swapped);
 }
 
 ///
@@ -321,10 +332,10 @@ void Server::writeFloat(Register::Type reg, quint16 address, float value, bool s
 /// \param swapped
 /// \return
 ///
-double Server::readDouble(Register::Type reg, quint16 address, bool swapped) const
+double Server::readDouble(Register::Type reg, quint16 address, bool swapped, quint8 deviceId) const
 {
     address -= _addressBase == Address::Base::Base0 ? 0 : 1;
-    return _mbMultiServer->readDouble((QModbusDataUnit::RegisterType)reg, address, *_byteOrder, swapped);
+    return _mbMultiServer->readDouble(deviceId, (QModbusDataUnit::RegisterType)reg, address, *_byteOrder, swapped);
 }
 
 ///
@@ -334,10 +345,10 @@ double Server::readDouble(Register::Type reg, quint16 address, bool swapped) con
 /// \param value
 /// \param swapped
 ///
-void Server::writeDouble(Register::Type reg, quint16 address, double value, bool swapped)
+void Server::writeDouble(Register::Type reg, quint16 address, double value, bool swapped, quint8 deviceId)
 {
     address -= _addressBase == Address::Base::Base0 ? 0 : 1;
-    _mbMultiServer->writeDouble((QModbusDataUnit::RegisterType)reg, address, value, *_byteOrder, swapped);
+    _mbMultiServer->writeDouble(deviceId, (QModbusDataUnit::RegisterType)reg, address, value, *_byteOrder, swapped);
 }
 
 ///
@@ -346,27 +357,27 @@ void Server::writeDouble(Register::Type reg, quint16 address, double value, bool
 /// \param address
 /// \param func
 ///
-void Server::onChange(Register::Type reg, quint16 address, const QJSValue& func)
+void Server::onChange(quint8 deviceId, Register::Type reg, quint16 address, const QJSValue& func)
 {
     if(!func.isCallable())
         return;
 
-    _mapOnChange[{reg, address}] = func;
+    _mapOnChange[{deviceId, reg, address}] = func;
 }
 
 ///
 /// \brief Server::on_dataChanged
 /// \param data
 ///
-void Server::on_dataChanged(const QModbusDataUnit& data)
+void Server::on_dataChanged(quint8 deviceId, const QModbusDataUnit& data)
 {
     const auto reg = (Register::Type)data.registerType();
     for(uint i = 0; i < data.valueCount(); i++)
     {
         const quint16 address = data.startAddress() + i + (_addressBase == Address::Base::Base0 ? 0 : 1);
-        if(_mapOnChange.contains({reg, address}))
+        if(_mapOnChange.contains({deviceId, reg, address}))
         {
-            _mapOnChange[{reg, address}].call(QJSValueList() << data.value(i));
+            _mapOnChange[{deviceId, reg, address}].call(QJSValueList() << data.value(i));
         }
     }
 }

@@ -61,7 +61,8 @@ public:
     void setText(const QString& text);
 
 signals:
-    void valueChanged(const QVariant& value);
+    void valueChanged(const QVariant& newValue);
+    void valueChanged(const QVariant& oldValue, const QVariant& newValue);
     void rangeChanged(const QVariant& bottom, const QVariant& top);
 
 protected:

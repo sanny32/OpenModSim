@@ -237,6 +237,8 @@ set(HEADERS
     qint64validator.h
     qmodbusadu.h
     qmodbusadurtu.h
+    qcountedset.h
+    qmodbuscommevent.h
     qmodbusadutcp.h
     qrange.h
     quintvalidator.h

@@ -4,6 +4,8 @@
 #include <deque>
 #include <QLoggingCategory>
 #include <QModbusServer>
+#include "qcountedset.h"
+#include "qmodbuscommevent.h"
 
 enum Coil {
     On = 0xff00,
@@ -37,66 +39,36 @@ enum SubFunctionCode {
 };
 }
 
-class QModbusCommEvent;
-
-///
-/// \brief The QCountedSet class
-template<typename T>
-class QCountedSet
-{
-public:
-    void insert(int value) {
-        _counts[value]++;
-    }
-
-    bool remove(int value) {
-        auto it = _counts.find(value);
-        if (it == _counts.end())
-            return false;
-
-        it.value()--;
-        if (it.value() == 0)
-            _counts.erase(it);
-        return true;
-    }
-
-    int count(int value) const {
-        return _counts.value(value, 0);
-    }
-
-    bool contains(int value) const {
-        return _counts.contains(value);
-    }
-
-    QList<int> values() const {
-        return _counts.keys();
-    }
-
-    int size() const {
-        return _counts.size();
-    }
-
-    bool isEmpty() const {
-        return _counts.isEmpty();
-    }
-
-private:
-    QHash<T, int> _counts;
-};
-
 ///
 /// \brief The ModbusServer class
 ///
-class ModbusServer : public QModbusServer
+class ModbusServer : public QObject
 {
     Q_OBJECT
 
 public:
+    enum Option {
+        DiagnosticRegister,
+        ExceptionStatusOffset,
+        DeviceBusy,
+        AsciiInputDelimiter,
+        ListenOnlyMode,
+        ServerIdentifier,
+        RunIndicatorStatus,
+        AdditionalData,
+        DeviceIdentification,
+        // Reserved
+        UserOption = 0x100
+    };
+    Q_ENUM(Option)
+
     QList<int> serverAddresses() const;
     void addServerAddress(int serverAddress);
     void removeServerAddress(int serverAddress);
+    void removeAllServerAddresses();
 
-    bool setMap(const QModbusDataUnitMap &map, int serverAddress);
+    virtual bool setMap(const QModbusDataUnitMap &map, int serverAddress);
+    virtual bool processesBroadcast() const { return false; }
 
     QVariant value(int option, int serverAddress) const;
     bool setValue(int option, const QVariant &value, int serverAddress);
@@ -107,21 +79,23 @@ public:
     bool setData(QModbusDataUnit::RegisterType table, quint16 address, quint16 data, int serverAddress);
     bool data(QModbusDataUnit::RegisterType table, quint16 address, quint16 *data, int serverAddress) const;
 
-    virtual QVariant connectionParameter(ConnectionParameter parameter) const = 0;
-    virtual void setConnectionParameter(ConnectionParameter parameter, const QVariant &value) = 0;
+    virtual QVariant connectionParameter(QModbusDevice::ConnectionParameter parameter) const = 0;
+    virtual void setConnectionParameter(QModbusDevice::ConnectionParameter parameter, const QVariant &value) = 0;
 
     bool connectDevice();
     void disconnectDevice();
 
-    State state() const;
+    QModbusDevice::State state() const;
 
-    Error error(int serverAddress) const;
+    QModbusDevice::Error error(int serverAddress) const;
     QString errorString(int serverAddress) const;
 
     virtual QIODevice *device() const = 0;
 
 signals:
+    void stateChanged(QModbusDevice::State state);
     void errorOccurred(QModbusDevice::Error error, int serverAddress);
+    void dataWritten(int serverAddress, QModbusDataUnit::RegisterType table, int address, int size);
 
 protected:
     enum Counter {
@@ -143,11 +117,15 @@ protected:
     explicit ModbusServer(QObject *parent = nullptr);
 
     void setState(QModbusDevice::State newState);
-    void setError(const QString &errorText, QModbusDevice::Error error);
-    void setError(const QString &errorText, QModbusDevice::Error error, int serverAddress);
+    void setError(const QString &errorText, QModbusDevice::Error error, int serverAddress = 0);
+
+    virtual bool open() = 0;
+    virtual void close() = 0;
 
     virtual bool writeData(const QModbusDataUnit &unit, int serverAddress);
     virtual bool readData(QModbusDataUnit *newData, int serverAddress) const;
+
+    virtual bool matchingServerAddress(quint8 unitId) const;
 
     virtual QModbusResponse processRequest(const QModbusPdu &request, int serverAddress);
     virtual QModbusResponse processPrivateRequest(const QModbusPdu &request, int serverAddress);
@@ -192,72 +170,6 @@ private:
     QHash<int, QModbusDevice::Error> _errors;
     QHash<int, QString> _errorsString;
 };
-
-///
-/// \brief The QModbusCommEvent class
-///
-class QModbusCommEvent
-{
-public:
-    enum struct SendFlag : quint8 {
-        ReadExceptionSent = 0x01,
-        ServerAbortExceptionSent = 0x02,
-        ServerBusyExceptionSent = 0x04,
-        ServerProgramNAKExceptionSent = 0x08,
-        WriteTimeoutErrorOccurred = 0x10,
-        CurrentlyInListenOnlyMode = 0x20,
-    };
-
-    enum struct ReceiveFlag : quint8 {
-        /* Unused */
-        CommunicationError = 0x02,
-        /* Unused */
-        /* Unused */
-        CharacterOverrun = 0x10,
-        CurrentlyInListenOnlyMode = 0x20,
-        BroadcastReceived = 0x40
-    };
-
-    enum EventByte {
-        SentEvent = 0x40,
-        ReceiveEvent = 0x80,
-        EnteredListenOnlyMode = 0x04,
-        InitiatedCommunicationRestart = 0x00
-    };
-
-    constexpr QModbusCommEvent(QModbusCommEvent::EventByte byte) noexcept
-        : _eventByte(byte) {}
-
-    operator quint8() const { return _eventByte; }
-    operator QModbusCommEvent::EventByte() const {
-        return static_cast<QModbusCommEvent::EventByte> (_eventByte);
-    }
-
-    inline QModbusCommEvent &operator=(QModbusCommEvent::EventByte byte) {
-        _eventByte = byte;
-        return *this;
-    }
-    inline QModbusCommEvent &operator|=(QModbusCommEvent::SendFlag sf) {
-        _eventByte |= quint8(sf);
-        return *this;
-    }
-    inline QModbusCommEvent &operator|=(QModbusCommEvent::ReceiveFlag rf) {
-        _eventByte |= quint8(rf);
-        return *this;
-    }
-
-private:
-    quint8 _eventByte;
-};
-
-inline QModbusCommEvent::EventByte operator|(QModbusCommEvent::EventByte b,
-                                             QModbusCommEvent::SendFlag sf) { return QModbusCommEvent::EventByte(quint8(b) | quint8(sf)); }
-inline QModbusCommEvent::EventByte operator|(QModbusCommEvent::SendFlag sf,
-                                             QModbusCommEvent::EventByte b) { return operator|(b, sf); }
-inline QModbusCommEvent::EventByte operator|(QModbusCommEvent::EventByte b,
-                                             QModbusCommEvent::ReceiveFlag rf) { return QModbusCommEvent::EventByte(quint8(b) | quint8(rf)); }
-inline QModbusCommEvent::EventByte operator|(QModbusCommEvent::ReceiveFlag rf,
-                                             QModbusCommEvent::EventByte b) { return operator|(b, rf); }
 
 Q_DECLARE_LOGGING_CATEGORY(QT_MODBUS)
 Q_DECLARE_LOGGING_CATEGORY(QT_MODBUS_LOW)

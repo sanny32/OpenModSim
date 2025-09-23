@@ -27,12 +27,12 @@ ModbusTcpServer::~ModbusTcpServer()
 /// \param parameter
 /// \return
 ///
-QVariant ModbusTcpServer::connectionParameter(ConnectionParameter parameter) const
+QVariant ModbusTcpServer::connectionParameter(QModbusDevice::ConnectionParameter parameter) const
 {
     switch (parameter) {
-    case NetworkPortParameter:
+    case QModbusDevice::NetworkPortParameter:
         return _networkPort;
-    case NetworkAddressParameter:
+    case QModbusDevice::NetworkAddressParameter:
         return _networkAddress;
     default:
         break;
@@ -45,13 +45,13 @@ QVariant ModbusTcpServer::connectionParameter(ConnectionParameter parameter) con
 /// \param parameter
 /// \param value
 ///
-void ModbusTcpServer::setConnectionParameter(ConnectionParameter parameter, const QVariant &value)
+void ModbusTcpServer::setConnectionParameter(QModbusDevice::ConnectionParameter parameter, const QVariant &value)
 {
     switch (parameter) {
-    case NetworkPortParameter:
+    case QModbusDevice::NetworkPortParameter:
         _networkPort = value.toInt();
         break;
-    case NetworkAddressParameter:
+    case QModbusDevice::NetworkAddressParameter:
         _networkAddress = value.toString();
         break;
     default:
@@ -179,7 +179,7 @@ QModbusResponse ModbusTcpServer::forwardProcessRequest(const QModbusRequest &r, 
         return QModbusExceptionResponse(r.functionCode(), QModbusExceptionResponse::ServerDeviceBusy);
     }
 
-    emit request(r, transactionId);
+    emit request(serverAddress, r, transactionId);
 
     QModbusResponse resp;
     switch (r.functionCode()) {
@@ -195,25 +195,8 @@ QModbusResponse ModbusTcpServer::forwardProcessRequest(const QModbusRequest &r, 
         break;
     }
 
-    emit response(r, resp, transactionId);
+    emit response(serverAddress, r, resp, transactionId);
     return resp;
-}
-
-///
-/// \brief ModbusTcpServer::matchingServerAddress
-/// \param unitId
-/// \return
-///
-bool ModbusTcpServer::matchingServerAddress(quint8 unitId) const
-{
-    if (serverAddress() == unitId)
-        return true;
-
-    // No, not our address! Ignore!
-    qCDebug(QT_MODBUS) << "(TCP server) Wrong server unit identifier address, expected"
-                       << serverAddress() << "got" << unitId;
-
-    return false;
 }
 
 ///

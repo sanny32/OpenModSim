@@ -48,7 +48,7 @@
        <property name="plainText">
         <string>Script.onInit(()=&gt;{
 	Server.addressBase = AddressBase.Base1;
-	Server.onChange(Register.Holding, 1, (value)=&gt;
+	Server.onChange(1/* deviceId */, Register.Holding, 1, (value)=&gt;
 	{
 		/* write your code on register value change */
 	});

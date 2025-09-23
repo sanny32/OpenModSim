@@ -11,7 +11,7 @@ Q_LOGGING_CATEGORY(QT_MODBUS_LOW, "qt.modbus.lowlevel")
 /// \param parent
 ///
 ModbusServer::ModbusServer(QObject* parent)
-    : QModbusServer(parent)
+    : QObject(parent)
     ,_counters()
 {
 }
@@ -22,8 +22,7 @@ ModbusServer::ModbusServer(QObject* parent)
 ///
 void ModbusServer::addServerAddress(int serverAddress)
 {
-    if(!_serverAddresses.contains(serverAddress))
-        _serverAddresses.insert(serverAddress);
+    _serverAddresses.insert(serverAddress);
 }
 
 ///
@@ -33,13 +32,25 @@ void ModbusServer::addServerAddress(int serverAddress)
 void ModbusServer::removeServerAddress(int serverAddress)
 {
     _serverAddresses.remove(serverAddress);
-    if(_serverAddresses.contains(serverAddress))
+    if(!_serverAddresses.contains(serverAddress))
     {
         _serversOptions.remove(serverAddress);
         _modbusDataUnitMaps.remove(serverAddress);
         _errors.remove(serverAddress);
         _errorsString.remove(serverAddress);
     }
+}
+
+///
+/// \brief ModbusServer::removeAllServerAddresses
+///
+void ModbusServer::removeAllServerAddresses()
+{
+    _serverAddresses.clear();
+    _serversOptions.clear();
+    _modbusDataUnitMaps.clear();
+    _errors.clear();
+    _errorsString.clear();
 }
 
 ///
@@ -214,10 +225,10 @@ bool ModbusServer::connectDevice()
     if (_state != QModbusDevice::UnconnectedState)
         return false;
 
-    setState(ConnectingState);
+    setState(QModbusDevice::ConnectingState);
 
     if (!open()) {
-        setState(UnconnectedState);
+        setState(QModbusDevice::UnconnectedState);
         return false;
     }
 
@@ -259,16 +270,6 @@ void ModbusServer::setState(QModbusDevice::State newState)
 QModbusServer::State ModbusServer::state() const
 {
     return _state;
-}
-
-///
-/// \brief ModbusServer::setError
-/// \param errorText
-/// \param error
-///
-void ModbusServer::setError(const QString &errorText, QModbusDevice::Error error)
-{
-    setError(errorText, error, 0);
 }
 
 ///
@@ -375,7 +376,7 @@ bool ModbusServer::writeData(const QModbusDataUnit &newData, int serverAddress)
     }
 
     if (changeRequired)
-        emit dataWritten(newData.registerType(), newData.startAddress(), newData.valueCount());
+        emit dataWritten(serverAddress, newData.registerType(), newData.startAddress(), newData.valueCount());
     return true;
 }
 
@@ -414,6 +415,21 @@ bool ModbusServer::readData(QModbusDataUnit *newData, int serverAddress) const
 
     newData->setValues(current.values().mid(newData->startAddress() - current.startAddress(), newData->valueCount()));
     return true;
+}
+
+///
+/// \brief ModbusServer::matchingServerAddress
+/// \param unitId
+/// \return
+///
+bool ModbusServer::matchingServerAddress(quint8 unitId) const
+{
+    if(_serverAddresses.contains(unitId))
+        return true;
+
+    qCDebug(QT_MODBUS) << "(server) Wrong server unit identifier address, expected one of"
+                       << _serverAddresses.values() << "got" << unitId;
+    return false;
 }
 
 ///
@@ -466,7 +482,7 @@ QModbusResponse ModbusServer::processRequest(const QModbusPdu &request, int serv
     default:
         break;
     }
-    return QModbusServer::processPrivateRequest(request);
+    return processPrivateRequest(request, serverAddress);
 }
 
 ///
@@ -477,8 +493,7 @@ QModbusResponse ModbusServer::processRequest(const QModbusPdu &request, int serv
 ///
 QModbusResponse ModbusServer::processPrivateRequest(const QModbusPdu &request, int serverAddress)
 {
-    return QModbusExceptionResponse(request.functionCode(),
-                                    QModbusExceptionResponse::IllegalFunction);
+    return QModbusExceptionResponse(request.functionCode(), QModbusExceptionResponse::IllegalFunction);
 }
 
 ///

@@ -16,14 +16,14 @@ public:
     explicit ModbusTcpServer(QObject *parent = nullptr);
     ~ModbusTcpServer();
 
-    QVariant connectionParameter(ConnectionParameter parameter) const override;
-    void setConnectionParameter(ConnectionParameter parameter, const QVariant &value) override;
+    QVariant connectionParameter(QModbusDevice::ConnectionParameter parameter) const override;
+    void setConnectionParameter(QModbusDevice::ConnectionParameter parameter, const QVariant &value) override;
 
     QIODevice *device() const override {return nullptr; }
 
 signals:
-    void request(const QModbusRequest& req, int transactionId);
-    void response(const QModbusRequest& req, const QModbusResponse& resp, int transactionId);
+    void request(int serverAddress, const QModbusRequest& req, int transactionId);
+    void response(int serverAddress, const QModbusRequest& req, const QModbusResponse& resp, int transactionId);
     void modbusClientDisconnected(QTcpSocket* modbusClient);
 
 private slots:
@@ -35,7 +35,6 @@ protected:
     void close() override;
 
 private:
-    bool matchingServerAddress(quint8 unitId) const;
     QModbusResponse forwardProcessRequest(const QModbusRequest &r, int serverAddress, int transactionId);
 
 private:
