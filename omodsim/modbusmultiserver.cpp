@@ -76,9 +76,6 @@ void ModbusMultiServer::removeDeviceId(quint8 deviceId)
     _deviceIds.removeOne(deviceId);
     for(auto&& s : _modbusServerList) {
         s->removeServerAddress(deviceId);
-        if(!s->hasServerAddress(deviceId)) {
-            _modbusDataUnitMaps.remove(deviceId);
-        }
     }
 }
 
