@@ -2183,7 +2183,7 @@ MODBUS Point Type:
 <context>
     <name>ModbusMultiServer</name>
     <message>
-        <location filename="../modbusmultiserver.cpp" line="948"/>
+        <location filename="../modbusmultiserver.cpp" line="938"/>
         <source>Connection error. %1</source>
         <translation>连接错误 %1</translation>
     </message>

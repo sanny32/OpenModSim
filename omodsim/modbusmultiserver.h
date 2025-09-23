@@ -1,9 +1,7 @@
 #ifndef MODBUSMULTISERVER_H
 #define MODBUSMULTISERVER_H
 
-#include <QObject>
 #include <QThread>
-#include <QTcpSocket>
 #include <QModbusServer>
 #include "modbusdataunitmap.h"
 #include "modbuswriteparams.h"
@@ -95,7 +93,5 @@ private:
     QMap<int, ModbusDataUnitMap> _modbusDataUnitMaps;
     QList<QSharedPointer<ModbusServer>> _modbusServerList;
 };
-Q_DECLARE_METATYPE(QModbusRequest)
-Q_DECLARE_METATYPE(QModbusResponse)
 
 #endif // MODBUSMULTISERVER_H

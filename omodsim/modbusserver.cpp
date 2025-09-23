@@ -14,6 +14,20 @@ ModbusServer::ModbusServer(QObject* parent)
     : QObject(parent)
     ,_counters()
 {
+    {
+        static int reg = qRegisterMetaType<QModbusRequest>();
+        Q_UNUSED(reg);
+    }
+
+    {
+        static int reg = qRegisterMetaType<QModbusResponse>();
+        Q_UNUSED(reg);
+    }
+
+    {
+        static int reg = qRegisterMetaType<QModbusDataUnit>();
+        Q_UNUSED(reg);
+    }
 }
 
 ///
