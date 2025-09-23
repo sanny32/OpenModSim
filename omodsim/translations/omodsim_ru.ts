@@ -1074,7 +1074,7 @@ Length: %2</source>
         <translation type="vanished">Указана недопустимая длина данных</translation>
     </message>
     <message>
-        <location filename="../formmodsim.cpp" line="449"/>
+        <location filename="../formmodsim.cpp" line="451"/>
         <source>Address Base: %1
 Start Address: %2
 Length: %3</source>
@@ -1083,7 +1083,7 @@ Length: %3</source>
 Количество: %3</translation>
     </message>
     <message>
-        <location filename="../formmodsim.cpp" line="452"/>
+        <location filename="../formmodsim.cpp" line="454"/>
         <source>Device Id: %1
 MODBUS Point Type:
 %2</source>
@@ -1607,10 +1607,10 @@ MODBUS Point Type:
         <translation>Шестнадцатиричные адреса</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="324"/>
-        <location filename="../mainwindow.cpp" line="363"/>
-        <location filename="../mainwindow.cpp" line="376"/>
-        <location filename="../mainwindow.cpp" line="387"/>
+        <location filename="../mainwindow.cpp" line="323"/>
+        <location filename="../mainwindow.cpp" line="362"/>
+        <location filename="../mainwindow.cpp" line="375"/>
+        <location filename="../mainwindow.cpp" line="386"/>
         <source>All files (*)</source>
         <translation>Все файлы (*)</translation>
     </message>
@@ -2175,9 +2175,17 @@ MODBUS Point Type:
 <context>
     <name>ModbusMultiServer</name>
     <message>
-        <location filename="../modbusmultiserver.cpp" line="932"/>
+        <location filename="../modbusmultiserver.cpp" line="948"/>
         <source>Connection error. %1</source>
         <translation>Ошибка подключения. %1</translation>
+    </message>
+</context>
+<context>
+    <name>ModbusTcpServer</name>
+    <message>
+        <location filename="../modbustcpserver.cpp" line="217"/>
+        <source>Invalid connection settings for TCP communication specified.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2214,6 +2222,80 @@ MODBUS Point Type:
         <location filename="../controls/paritytypecombobox.cpp" line="12"/>
         <source>NONE</source>
         <translation>Нет</translation>
+    </message>
+</context>
+<context>
+    <name>QModbusDevice</name>
+    <message>
+        <location filename="../modbusrtuserialserver.cpp" line="390"/>
+        <source>Referenced serial device does not exist.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../modbusrtuserialserver.cpp" line="393"/>
+        <source>Cannot open serial device due to permissions.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../modbusrtuserialserver.cpp" line="397"/>
+        <source>Cannot open serial device.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../modbusrtuserialserver.cpp" line="400"/>
+        <source>Write error.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../modbusrtuserialserver.cpp" line="403"/>
+        <source>Read error.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../modbusrtuserialserver.cpp" line="406"/>
+        <source>Resource error.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../modbusrtuserialserver.cpp" line="409"/>
+        <source>Device operation is not supported error.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../modbusrtuserialserver.cpp" line="413"/>
+        <source>Timeout error.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../modbusrtuserialserver.cpp" line="416"/>
+        <source>Unknown error.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>QModbusRtuSerialServer</name>
+    <message>
+        <location filename="../modbusrtuserialserver.cpp" line="301"/>
+        <source>Requesting serial port is closed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../modbusrtuserialserver.cpp" line="310"/>
+        <source>Could not write response to client</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>QModbusTcpServer</name>
+    <message>
+        <location filename="../modbustcpserver.cpp" line="146"/>
+        <source>Requesting socket is closed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../modbustcpserver.cpp" line="154"/>
+        <source>Could not write response to client</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2267,7 +2349,6 @@ MODBUS Point Type:
 });</translation>
     </message>
     <message>
-        <location filename="../controls/scriptcontrol.ui" line="49"/>
         <source>Script.onInit(()=&gt;{
 	Server.addressBase = AddressBase.Base1;
 	Server.onChange(Register.Holding, 1, (value)=&gt;
@@ -2277,7 +2358,7 @@ MODBUS Point Type:
 
 	/* write your init code here */
 });</source>
-        <translation>Script.onInit(()=&gt;{
+        <translation type="vanished">Script.onInit(()=&gt;{
 	Server.addressBase = AddressBase.Base1;
 	Server.onChange(Register.Holding, 1, (value)=&gt;
 	{
@@ -2286,6 +2367,19 @@ MODBUS Point Type:
 
 	/* инициализация */
 });</translation>
+    </message>
+    <message>
+        <location filename="../controls/scriptcontrol.ui" line="49"/>
+        <source>Script.onInit(()=&gt;{
+	Server.addressBase = AddressBase.Base1;
+	Server.onChange(1/* deviceId */, Register.Holding, 1, (value)=&gt;
+	{
+		/* write your code on register value change */
+	});
+
+	/* write your init code here */
+});</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
