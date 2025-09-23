@@ -1531,6 +1531,9 @@ void MainWindow::loadSettings()
             m.endGroup();
         }
     }
+
+    if(_windowCounter == 0)
+        ui->actionNew->trigger();
 }
 
 ///
