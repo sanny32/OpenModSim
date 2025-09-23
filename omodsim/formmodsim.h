@@ -91,12 +91,8 @@ public:
     ModbusSimulationMap simulationMap() const;
     void startSimulation(QModbusDataUnit::RegisterType type, quint16 addr, const ModbusSimulationParams& params);
 
-    QModbusDataUnit serializeModbusDataUnit(QModbusDataUnit::RegisterType pointType,
-                                            quint16 pointAddress,
-                                            quint16 length) const;
-    void configureModbusDataUnit(QModbusDataUnit::RegisterType type,
-                                             quint16 startAddress,
-                                             const QVector<quint16>& values) const;
+    QModbusDataUnit serializeModbusDataUnit(quint8 deviceId, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, quint16 length) const;
+    void configureModbusDataUnit(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 startAddress, const QVector<quint16>& values) const;
 
     AddressDescriptionMap descriptionMap() const;
     void setDescription(QModbusDataUnit::RegisterType type, quint16 addr, const QString& desc);
@@ -135,16 +131,15 @@ signals:
 private slots:
     void on_lineEditAddress_valueChanged(const QVariant&);
     void on_lineEditLength_valueChanged(const QVariant&);
-    void on_lineEditDeviceId_valueChanged(const QVariant&);
+    void on_lineEditDeviceId_valueChanged(const QVariant&, const QVariant&);
     void on_comboBoxAddressBase_addressBaseChanged(AddressBase base);
     void on_comboBoxModbusPointType_pointTypeChanged(QModbusDataUnit::RegisterType value);
     void on_outputWidget_itemDoubleClicked(quint16 addr, const QVariant& value);
-    void on_mbDeviceIdChanged(quint8 deviceId);
     void on_mbConnected(const ConnectionDetails& cd);
     void on_mbDisconnected(const ConnectionDetails& cd);
-    void on_mbRequest(const QModbusRequest& req, ModbusMessage::ProtocolType protocol, int transactionId);
-    void on_mbResponse(const QModbusRequest& req, const QModbusResponse& resp, ModbusMessage::ProtocolType protocol, int transactionId);
-    void on_mbDataChanged(const QModbusDataUnit& data);
+    void on_mbRequest(quint8 deviceId, const QModbusRequest& req, ModbusMessage::ProtocolType protocol, int transactionId);
+    void on_mbResponse(quint8 deviceId, const QModbusRequest& req, const QModbusResponse& resp, ModbusMessage::ProtocolType protocol, int transactionId);
+    void on_mbDataChanged(quint8 deviceId, const QModbusDataUnit& data);
     void on_simulationStarted(QModbusDataUnit::RegisterType type, quint16 addr);
     void on_simulationStopped(QModbusDataUnit::RegisterType type, quint16 addr);
     void on_dataSimulated(DataDisplayMode mode, QModbusDataUnit::RegisterType type, quint16 addr, QVariant value);
@@ -153,7 +148,7 @@ private:
     void updateStatus();
     void onDefinitionChanged();
     ScriptControl* scriptControl();
-    bool isLoggingRequest(const QModbusRequest& req, ModbusMessage::ProtocolType protocol) const;
+    bool isLoggingRequest(quint8 deviceId, const QModbusRequest& req, ModbusMessage::ProtocolType protocol) const;
 
 private:
     Ui::FormModSim *ui;
@@ -308,7 +303,7 @@ inline QDataStream& operator <<(QDataStream& out, FormModSim* frm)
     out << frm->descriptionMap();
     out << frm->codepage();
 
-    const auto unit = frm->serializeModbusDataUnit(dd.PointType, dd.PointAddress - (dd.ZeroBasedAddress ? 0 : 1), dd.Length);
+    const auto unit = frm->serializeModbusDataUnit(dd.DeviceId, dd.PointType, dd.PointAddress - (dd.ZeroBasedAddress ? 0 : 1), dd.Length);
     out << unit.registerType();
     out << unit.startAddress();
     out << unit.values();
@@ -439,7 +434,7 @@ inline QDataStream& operator >>(QDataStream& in, FormModSim* frm)
         in >> startAddress;
         in >> values;
 
-        frm->configureModbusDataUnit(type, startAddress, values);
+        frm->configureModbusDataUnit(dd.DeviceId, type, startAddress, values);
     }
 
     return in;

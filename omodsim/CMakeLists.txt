@@ -21,6 +21,7 @@ list(GET VERSION_LIST 2 VERSION_PATCH)
 
 # Find Qt6 or fallback to Qt5
 find_package(Qt6 COMPONENTS Core Gui Widgets Network PrintSupport SerialBus SerialPort Core5Compat Qml Help LinguistTools QUIET)
+find_package(Qt6 REQUIRED COMPONENTS Core)
 if (NOT Qt6_FOUND)
     find_package(Qt5 COMPONENTS Core Gui Widgets Network PrintSupport SerialBus SerialPort Qml Help LinguistTools QUIET)
 endif()
@@ -42,6 +43,7 @@ endif()
 # Define target
 add_executable(${PROJECT_NAME})
 
+target_link_libraries(omodsim PRIVATE Qt6::Core)
 find_package(Git QUIET)
 if(GIT_FOUND)
     execute_process(COMMAND ${GIT_EXECUTABLE} rev-parse --abbrev-ref HEAD
@@ -128,6 +130,9 @@ set(SOURCES
     menuconnect.cpp
     modbusdataunitmap.cpp
     modbusmessages/modbusmessage.cpp
+    modbusrtuserialserver.cpp
+    modbusserver.cpp
+    modbustcpserver.cpp
     modbusmultiserver.cpp
     qfixedsizedialog.cpp
     qhexvalidator.cpp
@@ -193,6 +198,7 @@ set(HEADERS
     jsobjects/server.h
     displaydefinition.h
     enums.h
+    modbusserver.h
     formmodsim.h
     jshighlighter.h
     jsobjects/storage.h
@@ -221,6 +227,8 @@ set(HEADERS
     modbusmessages/writesinglecoil.h
     modbusmessages/writesingleregister.h
     modbusmultiserver.h
+    modbusrtuserialserver.h
+    modbustcpserver.h
     modbussimulationparams.h
     modbuswriteparams.h
     numericutils.h
@@ -229,6 +237,8 @@ set(HEADERS
     qint64validator.h
     qmodbusadu.h
     qmodbusadurtu.h
+    qcountedset.h
+    qmodbuscommevent.h
     qmodbusadutcp.h
     qrange.h
     quintvalidator.h

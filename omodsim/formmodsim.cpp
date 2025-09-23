@@ -35,7 +35,8 @@ FormModSim::FormModSim(int id, ModbusMultiServer& server, QSharedPointer<DataSim
     setWindowTitle(QString("ModSim%1").arg(_formId));
 
     ui->lineEditDeviceId->setInputRange(ModbusLimits::slaveRange());
-    ui->lineEditDeviceId->setValue(server.deviceId());
+    ui->lineEditDeviceId->setValue(1);
+    server.addDeviceId(ui->lineEditDeviceId->value<int>());
 
     ui->stackedWidget->setCurrentIndex(0);
     ui->scriptControl->setModbusMultiServer(&_mbMultiServer);
@@ -54,7 +55,7 @@ FormModSim::FormModSim(int id, ModbusMultiServer& server, QSharedPointer<DataSim
     onDefinitionChanged();
     ui->outputWidget->setFocus();
 
-    setLogViewState(LogViewState::Unknown);
+    setLogViewState(server.isConnected() ? LogViewState::Running : LogViewState::Unknown);
     connect(ui->statisticWidget, &StatisticWidget::ctrsReseted, ui->outputWidget, &OutputWidget::clearLogView);
     connect(ui->statisticWidget, &StatisticWidget::logStateChanged, ui->outputWidget, &OutputWidget::setLogViewState);
 
@@ -62,7 +63,6 @@ FormModSim::FormModSim(int id, ModbusMultiServer& server, QSharedPointer<DataSim
     connect(&_mbMultiServer, &ModbusMultiServer::response, this, &FormModSim::on_mbResponse);
     connect(&_mbMultiServer, &ModbusMultiServer::connected, this, &FormModSim::on_mbConnected);
     connect(&_mbMultiServer, &ModbusMultiServer::disconnected, this, &FormModSim::on_mbDisconnected);
-    connect(&_mbMultiServer, &ModbusMultiServer::deviceIdChanged, this, &FormModSim::on_mbDeviceIdChanged);
     connect(&_mbMultiServer, &ModbusMultiServer::dataChanged, this, &FormModSim::on_mbDataChanged);
 
     connect(_dataSimulator.get(), &DataSimulator::simulationStarted, this, &FormModSim::on_simulationStarted);
@@ -99,7 +99,9 @@ void FormModSim::changeEvent(QEvent* e)
 ///
 void FormModSim::closeEvent(QCloseEvent *event)
 {
-    _mbMultiServer.removeUnitMap(formId());
+    const auto deviceId = ui->lineEditDeviceId->value<quint8>();
+    _mbMultiServer.removeDeviceId(deviceId);
+    _mbMultiServer.removeUnitMap(formId(), deviceId);
 
     emit closing();
     QWidget::closeEvent(event);
@@ -159,6 +161,8 @@ DisplayDefinition FormModSim::displayDefinition() const
 ///
 void FormModSim::setDisplayDefinition(const DisplayDefinition& dd)
 {
+    _mbMultiServer.setUseGlobalUnitMap(dd.UseGlobalUnitMap);
+
     ui->lineEditDeviceId->setValue(dd.DeviceId);
 
     ui->comboBoxAddressBase->blockSignals(true);
@@ -181,8 +185,6 @@ void FormModSim::setDisplayDefinition(const DisplayDefinition& dd)
     ui->outputWidget->setLogViewLimit(dd.LogViewLimit);
     ui->outputWidget->setAutosctollLogView(dd.AutoscrollLog);
     _verboseLogging = dd.VerboseLogging;
-
-    _mbMultiServer.setUseGlobalUnitMap(dd.UseGlobalUnitMap);
 
     setDisplayHexAddresses(dd.HexAddress);
 
@@ -491,15 +493,16 @@ ModbusSimulationMap FormModSim::simulationMap() const
 
 ///
 /// \brief FormModSim::serializeModbusDataUnit
+/// \param deviceId
 /// \param type
 /// \param startAddress
 /// \param length
 /// \return
 ///
-QModbusDataUnit FormModSim::serializeModbusDataUnit(QModbusDataUnit::RegisterType type, quint16 startAddress, quint16 length) const
+QModbusDataUnit FormModSim::serializeModbusDataUnit(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 startAddress, quint16 length) const
 {
     QModbusDataUnit dataUnit;
-    const auto serverData = _mbMultiServer.data(type, startAddress, length);
+    const auto serverData = _mbMultiServer.data(deviceId, type, startAddress, length);
 
     if (startAddress >= serverData.startAddress() &&
         (startAddress + length) <= (serverData.startAddress() + serverData.valueCount())) {
@@ -518,6 +521,7 @@ QModbusDataUnit FormModSim::serializeModbusDataUnit(QModbusDataUnit::RegisterTyp
 
     return dataUnit;
 }
+
 ///
 /// \brief FormModSim::startSimulation
 /// \param type
@@ -531,17 +535,18 @@ void FormModSim::startSimulation(QModbusDataUnit::RegisterType type, quint16 add
 
 ///
 /// \brief FormModSim::configureModbusDataUnit
+/// \param deviceId
 /// \param type
 /// \param startAddress
 /// \param values
 ///
-void FormModSim::configureModbusDataUnit(QModbusDataUnit::RegisterType type, quint16 startAddress, const QVector<quint16>& values) const
+void FormModSim::configureModbusDataUnit(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 startAddress, const QVector<quint16>& values) const
 {
     QModbusDataUnit unit;
     unit.setRegisterType(type);
     unit.setStartAddress(startAddress);
     unit.setValues(values);
-    _mbMultiServer.setData(unit);
+    _mbMultiServer.setData(deviceId, unit);
 }
 
 
@@ -703,8 +708,11 @@ void FormModSim::on_lineEditLength_valueChanged(const QVariant&)
 ///
 /// \brief FormModSim::on_lineEditDeviceId_valueChanged
 ///
-void FormModSim::on_lineEditDeviceId_valueChanged(const QVariant&)
+void FormModSim::on_lineEditDeviceId_valueChanged(const QVariant& oldValue, const QVariant& newValue)
 {
+    _mbMultiServer.removeDeviceId(oldValue.toInt());
+    _mbMultiServer.addDeviceId(newValue.toInt());
+
     onDefinitionChanged();
 }
 
@@ -758,11 +766,10 @@ void FormModSim::onDefinitionChanged()
 
     const auto dd = displayDefinition();
     const auto addr = dd.PointAddress - (dd.ZeroBasedAddress ? 0 : 1);
-    _mbMultiServer.setDeviceId(dd.DeviceId);
-    _mbMultiServer.addUnitMap(formId(), dd.PointType, addr, dd.Length);
+    _mbMultiServer.addUnitMap(formId(), dd.DeviceId, dd.PointType, addr, dd.Length);
 
     ui->scriptControl->setAddressBase(dd.ZeroBasedAddress ? AddressBase::Base0 : AddressBase::Base1);
-    ui->outputWidget->setup(dd, _dataSimulator->simulationMap(), _mbMultiServer.data(dd.PointType, addr, dd.Length));
+    ui->outputWidget->setup(dd, _dataSimulator->simulationMap(), _mbMultiServer.data(dd.DeviceId, dd.PointType, addr, dd.Length));
 }
 
 ///
@@ -782,6 +789,7 @@ ScriptControl* FormModSim::scriptControl()
 void FormModSim::on_outputWidget_itemDoubleClicked(quint16 addr, const QVariant& value)
 {
     const auto mode = dataDisplayMode();
+    const auto deviceId = ui->lineEditDeviceId->value<int>();
     const auto pointType = ui->comboBoxModbusPointType->currentPointType();
     const auto zeroBasedAddress = displayDefinition().ZeroBasedAddress;
     const auto simAddr = addr - (zeroBasedAddress ? 0 : 1);
@@ -797,7 +805,7 @@ void FormModSim::on_outputWidget_itemDoubleClicked(quint16 addr, const QVariant&
             switch(dlg.exec())
             {
                 case QDialog::Accepted:
-                    _mbMultiServer.writeRegister(pointType, params);
+                    _mbMultiServer.writeRegister(deviceId, pointType, params);
                 break;
 
                 case 2:
@@ -816,7 +824,7 @@ void FormModSim::on_outputWidget_itemDoubleClicked(quint16 addr, const QVariant&
             {
                 DialogWriteHoldingRegisterBits dlg(params, displayHexAddresses(), this);
                 if(dlg.exec() == QDialog::Accepted)
-                    _mbMultiServer.writeRegister(pointType, params);
+                    _mbMultiServer.writeRegister(deviceId, pointType, params);
             }
             else
             {
@@ -824,7 +832,7 @@ void FormModSim::on_outputWidget_itemDoubleClicked(quint16 addr, const QVariant&
                 switch(dlg.exec())
                 {
                     case QDialog::Accepted:
-                        _mbMultiServer.writeRegister(pointType, params);
+                        _mbMultiServer.writeRegister(deviceId, pointType, params);
                     break;
 
                     case 2:
@@ -839,17 +847,6 @@ void FormModSim::on_outputWidget_itemDoubleClicked(quint16 addr, const QVariant&
         default:
         break;
     }
-}
-
-///
-/// \brief FormModSim::on_mbDeviceIdChanged
-/// \param deviceId
-///
-void FormModSim::on_mbDeviceIdChanged(quint8 deviceId)
-{
-    blockSignals(true);
-    ui->lineEditDeviceId->setValue(deviceId);
-    blockSignals(false);
 }
 
 ///
@@ -882,9 +879,12 @@ void FormModSim::on_mbDisconnected(const ConnectionDetails&)
 /// \param protocol
 /// \return
 ///
-bool FormModSim::isLoggingRequest(const QModbusRequest& req, ModbusMessage::ProtocolType protocol) const
+bool FormModSim::isLoggingRequest(quint8 deviceId, const QModbusRequest& req, ModbusMessage::ProtocolType protocol) const
 {
     const auto dd = displayDefinition();
+    if(dd.DeviceId != deviceId)
+        return false;
+
     const auto startAddress = dd.PointAddress - (dd.ZeroBasedAddress ? 0 : 1);
     auto msg = ModbusMessage::create(req, protocol, dd.DeviceId, QDateTime::currentDateTime(), true);
 
@@ -940,11 +940,11 @@ bool FormModSim::isLoggingRequest(const QModbusRequest& req, ModbusMessage::Prot
 /// \param protocol
 /// \param transactionId
 ///
-void FormModSim::on_mbRequest(const QModbusRequest& req, ModbusMessage::ProtocolType protocol, int transactionId)
+void FormModSim::on_mbRequest(quint8 deviceId, const QModbusRequest& req, ModbusMessage::ProtocolType protocol, int transactionId)
 {
-    if(_verboseLogging || isLoggingRequest(req, protocol)) {
+    if(_verboseLogging || isLoggingRequest(deviceId, req, protocol)) {
         ui->statisticWidget->increaseRequests();
-        ui->outputWidget->updateTraffic(req,  ui->lineEditDeviceId->value<int>(), transactionId, protocol);
+        ui->outputWidget->updateTraffic(req,  deviceId, transactionId, protocol);
     }
 }
 
@@ -955,22 +955,25 @@ void FormModSim::on_mbRequest(const QModbusRequest& req, ModbusMessage::Protocol
 /// \param protocol
 /// \param transactionId
 ///
-void FormModSim::on_mbResponse(const QModbusRequest& req, const QModbusResponse& resp, ModbusMessage::ProtocolType protocol, int transactionId)
+void FormModSim::on_mbResponse(quint8 deviceId, const QModbusRequest& req, const QModbusResponse& resp, ModbusMessage::ProtocolType protocol, int transactionId)
 {
-    if(_verboseLogging || isLoggingRequest(req, protocol)) {
+    if(_verboseLogging || isLoggingRequest(deviceId, req, protocol)) {
         ui->statisticWidget->increaseResponses();
-        ui->outputWidget->updateTraffic(resp,  ui->lineEditDeviceId->value<int>(), transactionId, protocol);
+        ui->outputWidget->updateTraffic(resp, deviceId, transactionId, protocol);
     }
 }
 
 ///
 /// \brief FormModSim::on_mbDataChanged
 ///
-void FormModSim::on_mbDataChanged(const QModbusDataUnit&)
+void FormModSim::on_mbDataChanged(quint8 deviceId, const QModbusDataUnit&)
 {
     const auto dd = displayDefinition();
-    const auto addr = dd.PointAddress - (dd.ZeroBasedAddress ? 0 : 1);
-    ui->outputWidget->updateData(_mbMultiServer.data(dd.PointType, addr, dd.Length));
+    if(deviceId == dd.DeviceId)
+    {
+        const auto addr = dd.PointAddress - (dd.ZeroBasedAddress ? 0 : 1);
+        ui->outputWidget->updateData(_mbMultiServer.data(deviceId, dd.PointType, addr, dd.Length));
+    }
 }
 
 ///
@@ -1006,7 +1009,7 @@ void FormModSim::on_dataSimulated(DataDisplayMode mode, QModbusDataUnit::Registe
     const auto pointAddr = dd.PointAddress - (dd.ZeroBasedAddress ? 0 : 1);
     if(type == dd.PointType && addr >= pointAddr && addr <= pointAddr + dd.Length)
     {
-        _mbMultiServer.writeRegister(type, { addr, value, mode, byteOrder(), codepage(), true });
+        _mbMultiServer.writeRegister(dd.DeviceId, type, { addr, value, mode, byteOrder(), codepage(), true });
     }
 }
 

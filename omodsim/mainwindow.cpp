@@ -88,7 +88,6 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->mdiArea, &QMdiArea::subWindowActivated, this, &MainWindow::updateMenuWindow);
     connect(&_mbMultiServer, &ModbusMultiServer::connectionError, this, &MainWindow::on_connectionError);
 
-    ui->actionNew->trigger();
     loadSettings();
 }
 
@@ -1105,14 +1104,14 @@ void MainWindow::forceCoils(QModbusDataUnit::RegisterType type)
 
     if(dd.PointType == type)
     {
-        const auto data = _mbMultiServer.data(type, presetParams.PointAddress - (dd.ZeroBasedAddress ? 0 : 1), presetParams.Length);
+        const auto data = _mbMultiServer.data(dd.DeviceId, type, presetParams.PointAddress - (dd.ZeroBasedAddress ? 0 : 1), presetParams.Length);
         params.Value = QVariant::fromValue(data.values());
     }
 
     DialogForceMultipleCoils dlg(params, type, presetParams.Length, dd.HexAddress, this);
     if(dlg.exec() == QDialog::Accepted)
     {
-        _mbMultiServer.writeRegister(type, params);
+        _mbMultiServer.writeRegister(dd.DeviceId, type, params);
     }
 }
 
@@ -1142,14 +1141,14 @@ void MainWindow::presetRegs(QModbusDataUnit::RegisterType type)
 
     if(dd.PointType == type)
     {
-        const auto data = _mbMultiServer.data(type, presetParams.PointAddress - (dd.ZeroBasedAddress ? 0 : 1), presetParams.Length);
+        const auto data = _mbMultiServer.data(dd.DeviceId, type, presetParams.PointAddress - (dd.ZeroBasedAddress ? 0 : 1), presetParams.Length);
         params.Value = QVariant::fromValue(data.values());
     }
 
     DialogForceMultipleRegisters dlg(params, type, presetParams.Length, dd.HexAddress, this);
     if(dlg.exec() == QDialog::Accepted)
     {
-        _mbMultiServer.writeRegister(type, params);
+        _mbMultiServer.writeRegister(dd.DeviceId, type, params);
     }
 }
 
@@ -1520,8 +1519,21 @@ void MainWindow::loadSettings()
     _lang = m.value("Language", "en").toString();
     setLanguage(_lang);
 
-    m >> firstMdiChild();
     m >> qobject_cast<MenuConnect*>(ui->actionConnect->menu());
+
+    const QStringList groups = m.childGroups();
+    for (const QString& g : groups) {
+        if (g.startsWith("Form_")) {
+            m.beginGroup(g);
+            const auto id = m.value("FromId", ++_windowCounter).toInt();
+            auto frm = createMdiChild(id);
+            m >> frm;
+            m.endGroup();
+        }
+    }
+
+    if(_windowCounter == 0)
+        ui->actionNew->trigger();
 }
 
 ///
@@ -1552,6 +1564,9 @@ void MainWindow::saveSettings()
 
     QSettings m(filepath, QSettings::IniFormat, this);
 
+    m.clear();
+    m.sync();
+
     m.setValue("DisplayBarArea", toolBarArea(ui->toolBarDisplay));
     m.setValue("DisplayBarBreak", toolBarBreak(ui->toolBarDisplay));
     m.setValue("ScriptBarArea", toolBarArea(ui->toolBarScript));
@@ -1560,6 +1575,16 @@ void MainWindow::saveSettings()
     m.setValue("EditBarBreak", toolBarBreak(ui->toolBarEdit));
     m.setValue("Language", _lang);
 
-    m << firstMdiChild();
     m << qobject_cast<MenuConnect*>(ui->actionConnect->menu());
+
+    const auto subWindowList = ui->mdiArea->subWindowList();
+    for(int i = 0; i < subWindowList.size(); ++i) {
+        const auto frm = qobject_cast<FormModSim*>(subWindowList[i]->widget());
+        if(frm) {
+            m.beginGroup("Form_" + QString::number(i + 1));
+            m.setValue("FromId", frm->formId());
+            m << frm;
+            m.endGroup();
+        }
+    }
 }
