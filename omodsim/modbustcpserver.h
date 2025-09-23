@@ -42,6 +42,7 @@ private:
     QString _networkAddress = QStringLiteral("127.0.0.1");
 
     QTcpServer* _server = nullptr;
+    QVector<QTcpSocket*> _connections;
     QModbusTcpConnectionObserver* _observer = nullptr;
 
     static const qint8 mbpaHeaderSize = 7;

@@ -10,7 +10,9 @@
 ///
 uint qHash(const Server::KeyOnChange &key, uint seed)
 {
-    return qHashMulti(seed, key.DeviceId, key.Type, key.Address);
+    return ::qHash(static_cast<uint>(key.DeviceId), seed) ^
+           ::qHash(static_cast<int>(key.Type), seed) ^
+           ::qHash(key.Address, seed);
 }
 
 ///

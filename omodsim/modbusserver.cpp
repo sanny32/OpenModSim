@@ -130,8 +130,21 @@ bool ModbusServer::setValue(int option, const QVariant &newValue, int serverAddr
 {
 #define CHECK_INT_OR_UINT(val) \
     do { \
-            if ((val.typeId() != QMetaType::Type::Int) && (val.typeId() != QMetaType::Type::UInt)) \
-            return false; \
+            const int type = val.userType(); \
+            if (type != QMetaType::Int && type != QMetaType::UInt) \
+                return false; \
+    } while (0)
+
+#define CHECK_BOOL(val) \
+    do { \
+            if (!val.canConvert(QMetaType::Bool)) \
+                return false; \
+    } while (0)
+
+#define CHECK_BYTEARRAY(val) \
+        do { \
+            if (!val.canConvert(QMetaType::QByteArray)) \
+                return false; \
     } while (0)
 
     switch (option) {
@@ -165,8 +178,7 @@ bool ModbusServer::setValue(int option, const QVariant &newValue, int serverAddr
         return true;
     }
     case ListenOnlyMode: {
-        if (newValue.typeId() != QMetaType::Type::Bool)
-            return false;
+        CHECK_BOOL(newValue);
         _serversOptions[serverAddress].insert(option, newValue);
         return true;
     }
@@ -183,8 +195,7 @@ bool ModbusServer::setValue(int option, const QVariant &newValue, int serverAddr
         return true;
     }
     case AdditionalData: {
-        if (newValue.typeId() != QMetaType::Type::QByteArray)
-            return false;
+        CHECK_BYTEARRAY(newValue);
         const QByteArray additionalData = newValue.toByteArray();
         if (additionalData.size() > 249)
             return false;
@@ -336,7 +347,7 @@ bool ModbusServer::data(QModbusDataUnit *newData, int serverAddress) const
 ///
 bool ModbusServer::setData(QModbusDataUnit::RegisterType table, quint16 address, quint16 data, int serverAddress)
 {
-    return writeData(QModbusDataUnit(table, address, QList<quint16> { data }), serverAddress);
+    return writeData(QModbusDataUnit(table, address, QVector<quint16>() << data), serverAddress);
 }
 
 ///
@@ -857,7 +868,7 @@ QModbusResponse ModbusServer::processGetCommEventLogRequest(const QModbusRequest
     }
     const quint16 deviceBusy = tmp.value<quint16>();
 
-    QList<quint8> eventLog(int(_commEventLog.size()));
+    QVector<quint8> eventLog(int(_commEventLog.size()));
     std::copy(_commEventLog.cbegin(), _commEventLog.cend(), eventLog.begin());
 
     // 6 -> 3 x 2 Bytes (Status, Event Count and Message Count)
@@ -957,7 +968,7 @@ QModbusResponse ModbusServer::processWriteMultipleRegistersRequest(const QModbus
     const QByteArray pduData = request.data().remove(0,5);
     QDataStream stream(pduData);
 
-    QList<quint16> values;
+    QVector<quint16> values;
     quint16 tmp;
     for (int i = 0; i < numberOfRegisters; i++) {
         stream >> tmp;
@@ -1071,7 +1082,7 @@ QModbusResponse ModbusServer::processReadWriteMultipleRegistersRequest(const QMo
     const QByteArray pduData = request.data().remove(0,9);
     QDataStream stream(pduData);
 
-    QList<quint16> values;
+    QVector<quint16> values;
     quint16 tmp;
     for (int i = 0; i < writeQuantity; i++) {
         stream >> tmp;

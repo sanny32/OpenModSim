@@ -2191,7 +2191,7 @@ MODBUS Point Type:
 <context>
     <name>ModbusTcpServer</name>
     <message>
-        <location filename="../modbustcpserver.cpp" line="217"/>
+        <location filename="../modbustcpserver.cpp" line="220"/>
         <source>Invalid connection settings for TCP communication specified.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2235,47 +2235,47 @@ MODBUS Point Type:
 <context>
     <name>QModbusDevice</name>
     <message>
-        <location filename="../modbusrtuserialserver.cpp" line="390"/>
+        <location filename="../modbusrtuserialserver.cpp" line="391"/>
         <source>Referenced serial device does not exist.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../modbusrtuserialserver.cpp" line="393"/>
+        <location filename="../modbusrtuserialserver.cpp" line="394"/>
         <source>Cannot open serial device due to permissions.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../modbusrtuserialserver.cpp" line="397"/>
+        <location filename="../modbusrtuserialserver.cpp" line="398"/>
         <source>Cannot open serial device.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../modbusrtuserialserver.cpp" line="400"/>
+        <location filename="../modbusrtuserialserver.cpp" line="401"/>
         <source>Write error.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../modbusrtuserialserver.cpp" line="403"/>
+        <location filename="../modbusrtuserialserver.cpp" line="404"/>
         <source>Read error.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../modbusrtuserialserver.cpp" line="406"/>
+        <location filename="../modbusrtuserialserver.cpp" line="407"/>
         <source>Resource error.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../modbusrtuserialserver.cpp" line="409"/>
+        <location filename="../modbusrtuserialserver.cpp" line="410"/>
         <source>Device operation is not supported error.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../modbusrtuserialserver.cpp" line="413"/>
+        <location filename="../modbusrtuserialserver.cpp" line="414"/>
         <source>Timeout error.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../modbusrtuserialserver.cpp" line="416"/>
+        <location filename="../modbusrtuserialserver.cpp" line="417"/>
         <source>Unknown error.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2283,12 +2283,12 @@ MODBUS Point Type:
 <context>
     <name>QModbusRtuSerialServer</name>
     <message>
-        <location filename="../modbusrtuserialserver.cpp" line="301"/>
+        <location filename="../modbusrtuserialserver.cpp" line="302"/>
         <source>Requesting serial port is closed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../modbusrtuserialserver.cpp" line="310"/>
+        <location filename="../modbusrtuserialserver.cpp" line="311"/>
         <source>Could not write response to client</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2296,12 +2296,12 @@ MODBUS Point Type:
 <context>
     <name>QModbusTcpServer</name>
     <message>
-        <location filename="../modbustcpserver.cpp" line="146"/>
+        <location filename="../modbustcpserver.cpp" line="149"/>
         <source>Requesting socket is closed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../modbustcpserver.cpp" line="154"/>
+        <location filename="../modbustcpserver.cpp" line="157"/>
         <source>Could not write response to client</source>
         <translation type="unfinished"></translation>
     </message>

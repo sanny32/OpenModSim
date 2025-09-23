@@ -2,6 +2,7 @@
 #define IMODBUSSERVER_H
 
 #include <deque>
+#include <array>
 #include <QLoggingCategory>
 #include <QModbusServer>
 #include "qcountedset.h"

@@ -79,6 +79,8 @@ void ModbusTcpServer::on_newConnection()
         return;
     }
 
+    _connections.append(socket);
+
     auto buffer = new QByteArray();
 
     QObject::connect(socket, &QObject::destroyed, socket, [buffer]() {
@@ -86,6 +88,7 @@ void ModbusTcpServer::on_newConnection()
         delete buffer;
     });
     QObject::connect(socket, &QTcpSocket::disconnected, this, [socket, this]() {
+        _connections.removeAll(socket);
         emit modbusClientDisconnected(socket);
         socket->deleteLater();
     });
@@ -239,9 +242,7 @@ void ModbusTcpServer::close()
     if (_server->isListening())
         _server->close();
 
-    const auto childSockets =
-        _server->findChildren<QTcpSocket *>(Qt::FindDirectChildrenOnly);
-    for (auto socket : childSockets)
+    for (auto socket : qAsConst(_connections))
         socket->disconnectFromHost();
 
     setState(QModbusDevice::UnconnectedState);
