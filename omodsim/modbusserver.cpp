@@ -559,16 +559,18 @@ QModbusResponse ModbusServer::readBits(const QModbusPdu &request, QModbusDataUni
     quint16 address, count;
     request.decodeData(&address, &count);
 
+    if(!_modbusDataUnitMaps[serverAddress].contains(unitType)) {
+        return QModbusExceptionResponse(request.functionCode(), QModbusExceptionResponse::IllegalFunction);
+    }
+
     if ((count < 0x0001) || (count > 0x07D0)) {
-        return QModbusExceptionResponse(request.functionCode(),
-                                        QModbusExceptionResponse::IllegalDataValue);
+        return QModbusExceptionResponse(request.functionCode(), QModbusExceptionResponse::IllegalDataValue);
     }
 
     // Get the requested range out of the registers.
     QModbusDataUnit unit(unitType, address, count);
     if (!data(&unit, serverAddress)) {
-        return QModbusExceptionResponse(request.functionCode(),
-                                        QModbusExceptionResponse::IllegalDataAddress);
+        return QModbusExceptionResponse(request.functionCode(), QModbusExceptionResponse::IllegalDataAddress);
     }
 
     quint8 byteCount = quint8(count / 8);
@@ -625,6 +627,10 @@ QModbusResponse ModbusServer::readBytes(const QModbusPdu &request, QModbusDataUn
     quint16 address, count;
     request.decodeData(&address, &count);
 
+    if(!_modbusDataUnitMaps[serverAddress].contains(unitType)) {
+        return QModbusExceptionResponse(request.functionCode(), QModbusExceptionResponse::IllegalFunction);
+    }
+
     if ((count < 0x0001) || (count > 0x007D)) {
         return QModbusExceptionResponse(request.functionCode(),
                                         QModbusExceptionResponse::IllegalDataValue);
@@ -674,20 +680,21 @@ QModbusResponse ModbusServer::writeSingle(const QModbusPdu &request, QModbusData
     quint16 address, value;
     request.decodeData(&address, &value);
 
+    if(!_modbusDataUnitMaps[serverAddress].contains(unitType)) {
+        return QModbusExceptionResponse(request.functionCode(), QModbusExceptionResponse::IllegalFunction);
+    }
+
     if ((unitType == QModbusDataUnit::Coils) && ((value != Coil::Off) && (value != Coil::On))) {
-        return QModbusExceptionResponse(request.functionCode(),
-                                        QModbusExceptionResponse::IllegalDataValue);
+        return QModbusExceptionResponse(request.functionCode(), QModbusExceptionResponse::IllegalDataValue);
     }
 
     quint16 reg;   // Get the requested register, but deliberately ignore.
     if (!data(unitType, address, &reg, serverAddress)) {
-        return QModbusExceptionResponse(request.functionCode(),
-                                        QModbusExceptionResponse::IllegalDataAddress);
+        return QModbusExceptionResponse(request.functionCode(), QModbusExceptionResponse::IllegalDataAddress);
     }
 
     if (!setData(unitType, address, value, serverAddress)) {
-        return QModbusExceptionResponse(request.functionCode(),
-                                        QModbusExceptionResponse::ServerDeviceFailure);
+        return QModbusExceptionResponse(request.functionCode(), QModbusExceptionResponse::ServerDeviceFailure);
     }
 
     return QModbusResponse(request.functionCode(), address, value);
@@ -706,8 +713,7 @@ QModbusResponse ModbusServer::processReadExceptionStatusRequest(const QModbusReq
     // Get the requested range out of the registers.
     const QVariant tmp = value(QModbusServer::ExceptionStatusOffset, serverAddress);
     if (tmp.isNull() || (!tmp.isValid())) {
-        return QModbusExceptionResponse(request.functionCode(),
-                                        QModbusExceptionResponse::ServerDeviceFailure);
+        return QModbusExceptionResponse(request.functionCode(), QModbusExceptionResponse::ServerDeviceFailure);
     }
     const quint16 exceptionStatusOffset = tmp.value<quint16>();
     QModbusDataUnit coils(QModbusDataUnit::Coils, exceptionStatusOffset, 8);
