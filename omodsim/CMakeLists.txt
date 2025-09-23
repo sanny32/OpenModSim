@@ -21,7 +21,6 @@ list(GET VERSION_LIST 2 VERSION_PATCH)
 
 # Find Qt6 or fallback to Qt5
 find_package(Qt6 COMPONENTS Core Gui Widgets Network PrintSupport SerialBus SerialPort Core5Compat Qml Help LinguistTools QUIET)
-find_package(Qt6 REQUIRED COMPONENTS Core)
 if (NOT Qt6_FOUND)
     find_package(Qt5 COMPONENTS Core Gui Widgets Network PrintSupport SerialBus SerialPort Qml Help LinguistTools QUIET)
 endif()
@@ -43,7 +42,6 @@ endif()
 # Define target
 add_executable(${PROJECT_NAME})
 
-target_link_libraries(omodsim PRIVATE Qt6::Core)
 find_package(Git QUIET)
 if(GIT_FOUND)
     execute_process(COMMAND ${GIT_EXECUTABLE} rev-parse --abbrev-ref HEAD
