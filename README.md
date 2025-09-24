@@ -72,31 +72,42 @@ Here is an example of using the script in the Periodically mode
 /*
 ***************************************************************************/
 
-function clear()
+/* Set the server address base starts from one (1-based) */
+Server.addressBase = AddressBase.Base1;
+
+let deviceId = 1;
+let address1 = 1;
+let address10 = 10;
+
+function reset()
 {
-    /* Write to a Holding register at address 1 zero value */
-    Server.writeHolding(1, 0);
+    /* Write to a Holding register at address1 zero value */
+    Server.writeHolding(address1, 0, deviceId);
 }
 
 /* init function */
 function init()
 {
-    /* Set the server address base starts from one (1-based) */
-    Server.addressBase = AddressBase.Base1;
+    reset();
 
-    clear();
-    
-    /* Runs when Hodling register value at address 1 was changed */
-    Server.onChange(Register.Holding, 1, (value)=>
+	/* Print server error if occured and stop script execution */
+	Server.onError(deviceId, (error)=> {
+		console.error(error);
+ 		Script.stop();
+	});   
+
+    /* Runs when Hodling register value at address1 was changed */
+    Server.onChange(deviceId, Register.Holding, address1, (value)=>
     {
         if(value === 1)
         {
-            /* Runs after 3 seconds and increase Holding register value at address 10 
-             * Then stop script execution
+            /* Runs after 3 seconds and increase Holding register value at address10 
+             * Then reset register value at address1 and stop script execution
              */
             Script.setTimeout(function()
             {
-                Server.writeHolding(10, Server.readHolding(10) + 1);
+                Server.writeHolding(address10, Server.readHolding(10, deviceId) + 1, deviceId);
+					  reset();
                 Script.stop();
             }, 3000);
         }
