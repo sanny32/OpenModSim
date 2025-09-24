@@ -2175,7 +2175,12 @@ MODBUS Point Type:
 <context>
     <name>ModbusMultiServer</name>
     <message>
-        <location filename="../modbusmultiserver.cpp" line="938"/>
+        <location filename="../modbusmultiserver.cpp" line="474"/>
+        <source>An incorrect device id was specified (%1)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../modbusmultiserver.cpp" line="951"/>
         <source>Connection error. %1</source>
         <translation>Ошибка подключения. %1</translation>
     </message>
@@ -2371,8 +2376,10 @@ MODBUS Point Type:
     <message>
         <location filename="../controls/scriptcontrol.ui" line="49"/>
         <source>Script.onInit(()=&gt;{
+	let deviceId = 1;
+	let address = 1;
 	Server.addressBase = AddressBase.Base1;
-	Server.onChange(1/* deviceId */, Register.Holding, 1, (value)=&gt;
+	Server.onChange(deviceId, Register.Holding, address, (value)=&gt;
 	{
 		/* write your code on register value change */
 	});
