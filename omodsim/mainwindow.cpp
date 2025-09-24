@@ -1501,6 +1501,15 @@ void MainWindow::loadSettings()
 
     QSettings m(filepath, QSettings::IniFormat, this);
 
+    const bool isMaximized = m.value("WindowMaximized").toBool();
+    if(isMaximized) {
+        showMaximized();
+    }
+    else {
+        const auto geometry = m.value("WindowGeometry", this->geometry()).toRect();
+        setGeometry(geometry);
+    }
+
     const auto displaybarArea = (Qt::ToolBarArea)qBound(0, m.value("DisplayBarArea", 0x4).toInt(), 0xf);
     const auto displaybarBreak = m.value("DisplayBarBreak").toBool();
     if(displaybarBreak) addToolBarBreak(displaybarArea);
@@ -1566,6 +1575,14 @@ void MainWindow::saveSettings()
 
     m.clear();
     m.sync();
+
+    if(isMaximized()) {
+        m.setValue("WindowMaximized", true);
+    }
+    else {
+        m.setValue("WindowMaximized", false);
+        m.setValue("WindowGeometry", geometry());
+    }
 
     m.setValue("DisplayBarArea", toolBarArea(ui->toolBarDisplay));
     m.setValue("DisplayBarBreak", toolBarBreak(ui->toolBarDisplay));

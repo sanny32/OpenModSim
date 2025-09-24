@@ -30,6 +30,7 @@ Server::Server(ModbusMultiServer* server, const ByteOrder* order, AddressBase ba
     Q_ASSERT(_mbMultiServer != nullptr);
 
     connect(_mbMultiServer, &ModbusMultiServer::dataChanged, this, &Server::on_dataChanged);
+    connect(_mbMultiServer, &ModbusMultiServer::errorOccured, this, &Server::on_errorOccured);
 }
 
 ///
@@ -368,6 +369,19 @@ void Server::onChange(quint8 deviceId, Register::Type reg, quint16 address, cons
 }
 
 ///
+/// \brief Server::onError
+/// \param deviceId
+/// \param func
+///
+void Server::onError(quint8 deviceId, const QJSValue& func)
+{
+    if(!func.isCallable())
+        return;
+
+    _mapOnError[deviceId] = func;
+}
+
+///
 /// \brief Server::on_dataChanged
 /// \param data
 ///
@@ -382,4 +396,17 @@ void Server::on_dataChanged(quint8 deviceId, const QModbusDataUnit& data)
             _mapOnChange[{deviceId, reg, address}].call(QJSValueList() << data.value(i));
         }
     }
+}
+
+///
+/// \brief Server::on_errorOccured
+/// \param deviceId
+/// \param error
+///
+void Server::on_errorOccured(quint8 deviceId, const QString& error)
+{
+    if(error.isEmpty())
+        return;
+
+    _mapOnError[deviceId].call(QJSValueList() << error);
 }

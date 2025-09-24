@@ -47,8 +47,10 @@
        </property>
        <property name="plainText">
         <string>Script.onInit(()=&gt;{
+	let deviceId = 1;
+	let address = 1;
 	Server.addressBase = AddressBase.Base1;
-	Server.onChange(1/* deviceId */, Register.Holding, 1, (value)=&gt;
+	Server.onChange(deviceId, Register.Holding, address, (value)=&gt;
 	{
 		/* write your code on register value change */
 	});

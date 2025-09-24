@@ -470,14 +470,28 @@ void ModbusMultiServer::setData(quint8 deviceId, const QModbusDataUnit& data)
         return;
     }
 
+    if(!_modbusDataUnitMaps.contains(deviceId)) {
+        emit errorOccured(deviceId, tr("An incorrect device id was specified (%1)").arg(deviceId));
+        return;
+    }
+
     _modbusDataUnitMaps[deviceId].setData(data);
+
+    QString error;
     for(auto&& s : _modbusServerList)
     {
         s->blockSignals(true);
-        s->setData(data, deviceId);
+
+        if(!s->setData(data, deviceId))
+            error = s->errorString(deviceId);
+
         s->blockSignals(false);
     }
-    emit dataChanged(deviceId, data);
+
+    if(error.isEmpty())
+        emit dataChanged(deviceId, data);
+    else
+        emit errorOccured(deviceId, error);
 }
 
 ///
@@ -929,13 +943,15 @@ void ModbusMultiServer::on_stateChanged(QModbusDevice::State state)
 ///
 void ModbusMultiServer::on_errorOccurred(QModbusDevice::Error error, int deviceId)
 {
-    if(error == QModbusDevice::ConnectionError)
-    {
-        auto server = qobject_cast<ModbusServer*>(sender());
-        const auto errorString = server->errorString(deviceId);
+    auto server = qobject_cast<ModbusServer*>(sender());
+    const auto errorString = server->errorString(deviceId);
 
+    if(error == QModbusDevice::ConnectionError) {
         server->disconnectDevice();
         emit connectionError(QString(tr("Connection error. %1")).arg(errorString));
+    }
+    else {
+        emit errorOccured(deviceId, errorString);
     }
 }
 

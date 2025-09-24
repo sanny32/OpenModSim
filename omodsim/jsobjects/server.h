@@ -80,12 +80,17 @@ public:
     Q_INVOKABLE void writeDouble(Register::Type reg, quint16 address, double value, bool swapped, quint8 deviceId = 1);
 
     Q_INVOKABLE void onChange(quint8 deviceId, Register::Type reg, quint16 address, const QJSValue& func);
+    Q_INVOKABLE void onError(quint8 deviceId, const QJSValue& func);
+
+signals:
+    void errorOccured(quint8 deviceId, const QString& error);
 
 public slots:
     void setAddressBase(Address::Base base);
     void setUseGlobalUnitMap(bool value);
 
 private slots:
+    void on_errorOccured(quint8 deviceId, const QString& error);
     void on_dataChanged(quint8 deviceId, const QModbusDataUnit& data);
 
 private:
@@ -101,6 +106,8 @@ private:
     Address::Base _addressBase;
     const ByteOrder* _byteOrder;
     ModbusMultiServer* _mbMultiServer;
+
+    QHash<int, QJSValue> _mapOnError;
     QHash<KeyOnChange, QJSValue> _mapOnChange;
 
     friend uint qHash(const KeyOnChange &key, uint seed);
