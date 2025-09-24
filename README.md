@@ -107,7 +107,7 @@ function init()
             Script.setTimeout(function()
             {
                 Server.writeHolding(address10, Server.readHolding(10, deviceId) + 1, deviceId);
-					  reset();
+				reset();
                 Script.stop();
             }, 3000);
         }
