@@ -57,8 +57,7 @@ The following simulations are available:
 # Scripting
   From version 1.2.0 Open ModSim supports scripting. Qt runtime implements the [ECMAScript Language Specification](http://www.ecma-international.org/publications/standards/Ecma-262.htm) standard, so Javascript is used to write code.
   
-![image](https://github.com/user-attachments/assets/5b448fcd-1ca7-4cfc-af0f-175fbb660f80)
-
+<img width="1292" height="759" alt="image" src="https://github.com/user-attachments/assets/f31100b1-6197-444b-9b1e-f39f71a667d5" />
 
   Scripts can be launched in two modes: Once or Periodically. If you run script in Once mode the script will stop after it finishes executing. In Periodically mode, the script will start after a certain period of time until the user stops it or the method is called
   ```javascript
@@ -141,8 +140,8 @@ Below are the methods for installing the OpenModSim for different OS
 ## Microsoft Windows
 Run the installer:
 
-- For 32-bit Windows: `qt5-omodsim_1.9.1-1_x86.exe`
-- For 64-bit Windows: `qt5-omodsim_1.9.1-1_amd64.exe` or `qt6-omodsim_1.9.1-1_amd64.exe`
+- For 32-bit Windows: `qt5-omodsim_1.9.1_x86.exe`
+- For 64-bit Windows: `qt5-omodsim_1.9.1_x64.exe` or `qt6-omodsim_1.9.1_x64.exe`
 
 ## Debian/Ubintu/Mint/Astra Linux
 ### Install
