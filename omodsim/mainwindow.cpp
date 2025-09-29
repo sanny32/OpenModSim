@@ -1159,6 +1159,11 @@ void MainWindow::presetRegs(QModbusDataUnit::RegisterType type)
 ///
 FormModSim* MainWindow::createMdiChild(int id)
 {
+    for(auto&& wnd : ui->mdiArea->subWindowList()) {
+        const auto frm = qobject_cast<FormModSim*>(wnd->widget());
+        if(frm->formId() == id) id++;
+    }
+
     auto frm = new FormModSim(id, _mbMultiServer, _dataSimulator, this);
     auto wnd = ui->mdiArea->addSubWindow(frm);
     wnd->installEventFilter(this);
@@ -1537,6 +1542,7 @@ void MainWindow::loadSettings()
             const auto id = m.value("FromId", ++_windowCounter).toInt();
             auto frm = createMdiChild(id);
             m >> frm;
+            frm->show();
             m.endGroup();
         }
     }
