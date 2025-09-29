@@ -393,7 +393,7 @@ void OutputWidget::setup(const DisplayDefinition& dd, const ModbusSimulationMap&
     _listModel->clear();
 
     for(auto&& key : simulations.keys())
-        _listModel->setData(_listModel->find(key.first, key.second), true, SimulationRole);
+        _listModel->setData(_listModel->find(key.Type, key.Address), true, SimulationRole);
 
     for(auto&& key : _descriptionMap.keys())
         setDescription(key.first, key.second, _descriptionMap[key]);

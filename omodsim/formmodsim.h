@@ -140,9 +140,9 @@ private slots:
     void on_mbRequest(quint8 deviceId, const QModbusRequest& req, ModbusMessage::ProtocolType protocol, int transactionId);
     void on_mbResponse(quint8 deviceId, const QModbusRequest& req, const QModbusResponse& resp, ModbusMessage::ProtocolType protocol, int transactionId);
     void on_mbDataChanged(quint8 deviceId, const QModbusDataUnit& data);
-    void on_simulationStarted(QModbusDataUnit::RegisterType type, quint16 addr);
-    void on_simulationStopped(QModbusDataUnit::RegisterType type, quint16 addr);
-    void on_dataSimulated(DataDisplayMode mode, QModbusDataUnit::RegisterType type, quint16 addr, QVariant value);
+    void on_simulationStarted(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr);
+    void on_simulationStopped(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr);
+    void on_dataSimulated(DataDisplayMode mode, quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr, QVariant value);
 
 private:
     void updateStatus();
@@ -419,7 +419,7 @@ inline QDataStream& operator >>(QDataStream& in, FormModSim* frm)
     frm->setScriptSettings(scriptSettings);
 
     for(auto&& k : simulationMap.keys())
-        frm->startSimulation(k.first, k.second,  simulationMap[k]);
+        frm->startSimulation(k.Type, k.Address, simulationMap[k]);
 
     for(auto&& k : descriptionMap.keys())
         frm->setDescription(k.first, k.second, descriptionMap[k]);

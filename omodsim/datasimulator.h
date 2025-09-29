@@ -5,7 +5,21 @@
 #include <QModbusDataUnit>
 #include "modbussimulationparams.h"
 
-typedef QMap<QPair<QModbusDataUnit::RegisterType, quint16>, ModbusSimulationParams> ModbusSimulationMap;
+struct ModbusSimulationMapKey {
+    quint8 DeviceId;
+    QModbusDataUnit::RegisterType Type;
+    quint16 Address;
+
+    bool operator<(const ModbusSimulationMapKey &other) const {
+        if (DeviceId != other.DeviceId)
+            return DeviceId < other.DeviceId;
+        if (Type != other.Type)
+            return Type < other.Type;
+        return Address < other.Address;
+    }
+};
+
+typedef QMap<ModbusSimulationMapKey, ModbusSimulationParams> ModbusSimulationMap;
 
 ///
 /// \brief The DataSimulator class
@@ -17,30 +31,30 @@ public:
     explicit DataSimulator(QObject* parent = nullptr);
     ~DataSimulator() override;
 
-    void startSimulation(DataDisplayMode mode, QModbusDataUnit::RegisterType type, quint16 addr, const ModbusSimulationParams& params);
-    void stopSimulation(QModbusDataUnit::RegisterType type, quint16 addr);
+    void startSimulation(DataDisplayMode mode, quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr, const ModbusSimulationParams& params);
+    void stopSimulation(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr);
     void stopSimulations();
 
     void pauseSimulations();
     void resumeSimulations();
     void restartSimulations();
 
-    ModbusSimulationParams simulationParams(QModbusDataUnit::RegisterType type, quint16 addr) const;
+    ModbusSimulationParams simulationParams(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr) const;
     ModbusSimulationMap simulationMap() const;
 
 signals:
-    void simulationStarted(QModbusDataUnit::RegisterType type, quint16 addr);
-    void simulationStopped(QModbusDataUnit::RegisterType type, quint16 addr);
-    void dataSimulated(DataDisplayMode mode, QModbusDataUnit::RegisterType type, quint16 addr, QVariant value);
+    void simulationStarted(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr);
+    void simulationStopped(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr);
+    void dataSimulated(DataDisplayMode mode, quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr, QVariant value);
 
 private slots:
     void on_timeout();
 
 private:
-    void randomSimulation(DataDisplayMode mode, QModbusDataUnit::RegisterType type, quint16 addr, const RandomSimulationParams& params);
-    void incrementSimulation(DataDisplayMode mode, QModbusDataUnit::RegisterType type, quint16 addr, const IncrementSimulationParams& params);
-    void decrementSimailation(DataDisplayMode mode, QModbusDataUnit::RegisterType type, quint16 addr, const DecrementSimulationParams& params);
-    void toggleSimulation(QModbusDataUnit::RegisterType type, quint16 addr);
+    void randomSimulation(DataDisplayMode mode, quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr, const RandomSimulationParams& params);
+    void incrementSimulation(DataDisplayMode mode, quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr, const IncrementSimulationParams& params);
+    void decrementSimailation(DataDisplayMode mode, quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr, const DecrementSimulationParams& params);
+    void toggleSimulation(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr);
 
 private:
     QTimer _timer;
@@ -52,7 +66,37 @@ private:
         ModbusSimulationParams Params;
         QVariant CurrentValue;
     };
-    QMap<QPair<QModbusDataUnit::RegisterType, quint16>, SimulationParams> _simulationMap;
+
+    QMap<ModbusSimulationMapKey, SimulationParams> _simulationMap;
 };
+
+///
+/// \brief operator <<
+/// \param out
+/// \param key
+/// \return
+///
+inline QDataStream& operator <<(QDataStream& out, const ModbusSimulationMapKey& key)
+{
+    out << key.DeviceId;
+    out << key.Type;
+    out << key.Address;
+
+    return out;
+}
+
+///
+/// \brief operator >>
+/// \param in
+/// \param params
+/// \return
+///
+inline QDataStream& operator >>(QDataStream& in, ModbusSimulationMapKey& key)
+{
+    in >> key.DeviceId;
+    in >> key.Type;
+    in >> key.Address;
+    return in;
+}
 
 #endif // DATASIMULATOR_H

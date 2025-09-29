@@ -481,8 +481,9 @@ ModbusSimulationMap FormModSim::simulationMap() const
     const auto simulationMap = _dataSimulator->simulationMap();
     for(auto&& key : simulationMap.keys())
     {
-        if(key.first == dd.PointType &&
-           key.second >= startAddr && key.second < endAddr)
+        if(key.DeviceId == dd.DeviceId &&
+           key.Type == dd.PointType &&
+           key.Address >= startAddr && key.Address < endAddr)
         {
             result[key] = simulationMap[key];
         }
@@ -530,7 +531,8 @@ QModbusDataUnit FormModSim::serializeModbusDataUnit(quint8 deviceId, QModbusData
 ///
 void FormModSim::startSimulation(QModbusDataUnit::RegisterType type, quint16 addr, const ModbusSimulationParams& params)
 {
-    _dataSimulator->startSimulation(dataDisplayMode(), type, addr, params);
+    const auto deviceId = ui->lineEditDeviceId->value<quint8>();
+    _dataSimulator->startSimulation(dataDisplayMode(), deviceId, type, addr, params);
 }
 
 ///
@@ -789,11 +791,11 @@ ScriptControl* FormModSim::scriptControl()
 void FormModSim::on_outputWidget_itemDoubleClicked(quint16 addr, const QVariant& value)
 {
     const auto mode = dataDisplayMode();
-    const auto deviceId = ui->lineEditDeviceId->value<int>();
+    const auto deviceId = ui->lineEditDeviceId->value<quint8>();
     const auto pointType = ui->comboBoxModbusPointType->currentPointType();
     const auto zeroBasedAddress = displayDefinition().ZeroBasedAddress;
     const auto simAddr = addr - (zeroBasedAddress ? 0 : 1);
-    auto simParams = _dataSimulator->simulationParams(pointType, addr);
+    auto simParams = _dataSimulator->simulationParams(deviceId, pointType, addr);
 
     switch(pointType)
     {
@@ -809,8 +811,8 @@ void FormModSim::on_outputWidget_itemDoubleClicked(quint16 addr, const QVariant&
                 break;
 
                 case 2:
-                    if(simParams.Mode == SimulationMode::No) _dataSimulator->stopSimulation(pointType, simAddr);
-                    else _dataSimulator->startSimulation(mode, pointType, simAddr, simParams);
+                    if(simParams.Mode == SimulationMode::No) _dataSimulator->stopSimulation(deviceId, pointType, simAddr);
+                    else _dataSimulator->startSimulation(mode, deviceId, pointType, simAddr, simParams);
                 break;
             }
         }
@@ -836,8 +838,8 @@ void FormModSim::on_outputWidget_itemDoubleClicked(quint16 addr, const QVariant&
                     break;
 
                     case 2:
-                        if(simParams.Mode == SimulationMode::No) _dataSimulator->stopSimulation(pointType, simAddr);
-                        else _dataSimulator->startSimulation(mode, pointType, simAddr, simParams);
+                        if(simParams.Mode == SimulationMode::No) _dataSimulator->stopSimulation(deviceId, pointType, simAddr);
+                        else _dataSimulator->startSimulation(mode, deviceId, pointType, simAddr, simParams);
                     break;
                 }
             }
@@ -981,8 +983,11 @@ void FormModSim::on_mbDataChanged(quint8 deviceId, const QModbusDataUnit&)
 /// \param type
 /// \param addr
 ///
-void FormModSim::on_simulationStarted(QModbusDataUnit::RegisterType type, quint16 addr)
+void FormModSim::on_simulationStarted(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr)
 {
+    if(deviceId != ui->lineEditDeviceId->value<quint8>())
+        return;
+
     ui->outputWidget->setSimulated(type, addr, true);
 }
 
@@ -991,8 +996,11 @@ void FormModSim::on_simulationStarted(QModbusDataUnit::RegisterType type, quint1
 /// \param type
 /// \param addr
 ///
-void FormModSim::on_simulationStopped(QModbusDataUnit::RegisterType type, quint16 addr)
+void FormModSim::on_simulationStopped(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr)
 {
+    if(deviceId != ui->lineEditDeviceId->value<quint8>())
+        return;
+
     ui->outputWidget->setSimulated(type, addr, false);
 }
 
@@ -1003,11 +1011,11 @@ void FormModSim::on_simulationStopped(QModbusDataUnit::RegisterType type, quint1
 /// \param addr
 /// \param value
 ///
-void FormModSim::on_dataSimulated(DataDisplayMode mode, QModbusDataUnit::RegisterType type, quint16 addr, QVariant value)
+void FormModSim::on_dataSimulated(DataDisplayMode mode, quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr, QVariant value)
 {
     const auto dd = displayDefinition();
     const auto pointAddr = dd.PointAddress - (dd.ZeroBasedAddress ? 0 : 1);
-    if(type == dd.PointType && addr >= pointAddr && addr <= pointAddr + dd.Length)
+    if(deviceId == dd.DeviceId && type == dd.PointType && addr >= pointAddr && addr <= pointAddr + dd.Length)
     {
         _mbMultiServer.writeRegister(dd.DeviceId, type, { addr, value, mode, byteOrder(), codepage(), true });
     }
