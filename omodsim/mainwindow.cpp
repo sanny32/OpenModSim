@@ -320,7 +320,7 @@ void MainWindow::on_actionNew_triggered()
 ///
 void MainWindow::on_actionOpen_triggered()
 {
-    const auto filename = QFileDialog::getOpenFileName(this, QString(), QString(), tr("All files (*)"));
+    const auto filename = QFileDialog::getOpenFileName(this, QString(), _savePath, tr("All files (*)"));
     if(filename.isEmpty()) return;
 
     openFile(filename);
