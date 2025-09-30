@@ -13,7 +13,7 @@
 #include "formmodsim.h"
 #include "ui_formmodsim.h"
 
-QVersionNumber FormModSim::VERSION = QVersionNumber(1, 9);
+QVersionNumber FormModSim::VERSION = QVersionNumber(1, 10);
 
 ///
 /// \brief FormModSim::FormModSim
@@ -471,13 +471,13 @@ void FormModSim::print(QPrinter* printer)
 /// \brief FormModSim::simulationMap
 /// \return
 ///
-ModbusSimulationMap FormModSim::simulationMap() const
+ModbusSimulationMap2 FormModSim::simulationMap() const
 {
     const auto dd = displayDefinition();
     const auto startAddr = dd.PointAddress - (dd.ZeroBasedAddress ? 0 : 1);
     const auto endAddr = startAddr + dd.Length;
 
-    ModbusSimulationMap result;
+    ModbusSimulationMap2 result;
     const auto simulationMap = _dataSimulator->simulationMap();
     for(auto&& key : simulationMap.keys())
     {
@@ -556,20 +556,21 @@ void FormModSim::configureModbusDataUnit(quint8 deviceId, QModbusDataUnit::Regis
 /// \brief FormModSim::descriptionMap
 /// \return
 ///
-AddressDescriptionMap FormModSim::descriptionMap() const
+AddressDescriptionMap2 FormModSim::descriptionMap() const
 {
     return ui->outputWidget->descriptionMap();
 }
 
 ///
 /// \brief FormModSim::setDescription
+/// \param deviceId
 /// \param type
 /// \param addr
 /// \param desc
 ///
-void FormModSim::setDescription(QModbusDataUnit::RegisterType type, quint16 addr, const QString& desc)
+void FormModSim::setDescription(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr, const QString& desc)
 {
-    ui->outputWidget->setDescription(type, addr, desc);
+    ui->outputWidget->setDescription(deviceId, type, addr, desc);
 }
 
 ///
@@ -988,7 +989,7 @@ void FormModSim::on_simulationStarted(quint8 deviceId, QModbusDataUnit::Register
     if(deviceId != ui->lineEditDeviceId->value<quint8>())
         return;
 
-    ui->outputWidget->setSimulated(type, addr, true);
+    ui->outputWidget->setSimulated(deviceId, type, addr, true);
 }
 
 ///
@@ -1001,7 +1002,7 @@ void FormModSim::on_simulationStopped(quint8 deviceId, QModbusDataUnit::Register
     if(deviceId != ui->lineEditDeviceId->value<quint8>())
         return;
 
-    ui->outputWidget->setSimulated(type, addr, false);
+    ui->outputWidget->setSimulated(deviceId, type, addr, false);
 }
 
 ///

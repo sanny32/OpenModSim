@@ -121,9 +121,9 @@ ModbusSimulationParams DataSimulator::simulationParams(quint8 deviceId, QModbusD
 /// \brief DataSimulator::simulationMap
 /// \return
 ///
-ModbusSimulationMap DataSimulator::simulationMap() const
+ModbusSimulationMap2 DataSimulator::simulationMap() const
 {
-    ModbusSimulationMap map;
+    ModbusSimulationMap2 map;
     for(auto&& key : _simulationMap.keys())
         map[key] = _simulationMap[key].Params;
 

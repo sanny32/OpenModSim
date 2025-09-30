@@ -15,6 +15,22 @@ class OutputWidget;
 }
 
 class OutputWidget;
+
+struct AddressDescriptionMapKey {
+    quint8 DeviceId;
+    QModbusDataUnit::RegisterType Type;
+    quint16 Address;
+
+    bool operator<(const  AddressDescriptionMapKey &other) const {
+        if (DeviceId != other.DeviceId)
+            return DeviceId < other.DeviceId;
+        if (Type != other.Type)
+            return Type < other.Type;
+        return Address < other.Address;
+    }
+};
+
+typedef QMap<AddressDescriptionMapKey, QString> AddressDescriptionMap2;
 typedef QMap<QPair<QModbusDataUnit::RegisterType, quint16>, QString> AddressDescriptionMap;
 
 ///
@@ -40,7 +56,7 @@ public:
     void update();
     void updateData(const QModbusDataUnit& data);
 
-    QModelIndex find(QModbusDataUnit::RegisterType type, quint16 addr) const;
+    QModelIndex find(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr) const;
 
 private:
     struct ItemData
@@ -69,13 +85,13 @@ class OutputWidget : public QWidget
 
     friend class OutputListModel;
 
-public:  
+public:
     explicit OutputWidget(QWidget *parent = nullptr);
     ~OutputWidget();
 
     QVector<quint16> data() const;
 
-    void setup(const DisplayDefinition& dd,const ModbusSimulationMap& simulations, const QModbusDataUnit& data);
+    void setup(const DisplayDefinition& dd,const ModbusSimulationMap2& simulations, const QModbusDataUnit& data);
 
     DisplayMode displayMode() const;
     void setDisplayMode(DisplayMode mode);
@@ -124,10 +140,10 @@ public:
     void updateTraffic(const QModbusResponse& response, int server, int transactionId, ModbusMessage::ProtocolType protocol);
     void updateData(const QModbusDataUnit& data);
 
-    AddressDescriptionMap descriptionMap() const;
-    void setDescription(QModbusDataUnit::RegisterType type, quint16 addr, const QString& desc);
+    AddressDescriptionMap2 descriptionMap() const;
+    void setDescription(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr, const QString& desc);
 
-    void setSimulated(QModbusDataUnit::RegisterType type, quint16 addr, bool on);
+    void setSimulated(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr, bool on);
 
 public slots:
     void clearLogView();
@@ -160,8 +176,38 @@ private:
     QString _codepage;
     DisplayDefinition _displayDefinition;
     QFile _fileCapture;
-    AddressDescriptionMap _descriptionMap;
+    AddressDescriptionMap2 _descriptionMap;
     QSharedPointer<OutputListModel> _listModel;
 };
+
+
+///
+/// \brief operator <<
+/// \param out
+/// \param key
+/// \return
+///
+inline QDataStream& operator <<(QDataStream& out, const AddressDescriptionMapKey& key)
+{
+    out << key.DeviceId;
+    out << key.Type;
+    out << key.Address;
+
+    return out;
+}
+
+///
+/// \brief operator >>
+/// \param in
+/// \param params
+/// \return
+///
+inline QDataStream& operator >>(QDataStream& in, AddressDescriptionMapKey& key)
+{
+    in >> key.DeviceId;
+    in >> key.Type;
+    in >> key.Address;
+    return in;
+}
 
 #endif // OUTPUTWIDGET_H

@@ -88,14 +88,14 @@ public:
 
     void print(QPrinter* painter);
 
-    ModbusSimulationMap simulationMap() const;
+    ModbusSimulationMap2 simulationMap() const;
     void startSimulation(QModbusDataUnit::RegisterType type, quint16 addr, const ModbusSimulationParams& params);
 
     QModbusDataUnit serializeModbusDataUnit(quint8 deviceId, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, quint16 length) const;
     void configureModbusDataUnit(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 startAddress, const QVector<quint16>& values) const;
 
-    AddressDescriptionMap descriptionMap() const;
-    void setDescription(QModbusDataUnit::RegisterType type, quint16 addr, const QString& desc);
+    AddressDescriptionMap2 descriptionMap() const;
+    void setDescription(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr, const QString& desc);
 
     bool canRunScript() const;
     bool canStopScript() const;
@@ -371,11 +371,18 @@ inline QDataStream& operator >>(QDataStream& in, FormModSim* frm)
     }
 
     ModbusSimulationMap simulationMap;
+    ModbusSimulationMap2 simulationMap2;
     ByteOrder byteOrder = ByteOrder::Direct;
     if(ver >= QVersionNumber(1, 1))
     {
         in >> byteOrder;
-        in >> simulationMap;
+
+        if(ver >= QVersionNumber(1, 10)) {
+            in >> simulationMap2;
+        }
+        else {
+            in >> simulationMap;
+        }
     }
 
     ScriptSettings scriptSettings;
@@ -386,9 +393,15 @@ inline QDataStream& operator >>(QDataStream& in, FormModSim* frm)
     }
 
     AddressDescriptionMap descriptionMap;
+    AddressDescriptionMap2 descriptionMap2;
     if(ver >=  QVersionNumber(1, 3))
     {
-        in >> descriptionMap;
+        if(ver >= QVersionNumber(1, 10)) {
+            in >> descriptionMap2;
+        }
+        else {
+            in >> descriptionMap;
+        }
     }
 
     QString codepage;
@@ -418,11 +431,20 @@ inline QDataStream& operator >>(QDataStream& in, FormModSim* frm)
     frm->setCodepage(codepage);
     frm->setScriptSettings(scriptSettings);
 
-    for(auto&& k : simulationMap.keys())
-        frm->startSimulation(k.Type, k.Address, simulationMap[k]);
+    if(ver >= QVersionNumber(1,10)) {
+        for(auto&& k : simulationMap2.keys())
+            frm->startSimulation(k.Type, k.Address, simulationMap2[k]);
 
-    for(auto&& k : descriptionMap.keys())
-        frm->setDescription(k.first, k.second, descriptionMap[k]);
+        for(auto&& k : descriptionMap2.keys())
+            frm->setDescription(k.DeviceId, k.Type, k.Address, descriptionMap2[k]);
+    }
+    else {
+        for(auto&& k : simulationMap.keys())
+            frm->startSimulation(k.first, k.second, simulationMap[k]);
+
+        for(auto&& k : descriptionMap.keys())
+            frm->setDescription(dd.DeviceId, k.first, k.second, descriptionMap[k]);
+    }
 
     if(ver >= QVersionNumber(1, 7))
     {

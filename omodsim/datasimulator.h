@@ -19,7 +19,8 @@ struct ModbusSimulationMapKey {
     }
 };
 
-typedef QMap<ModbusSimulationMapKey, ModbusSimulationParams> ModbusSimulationMap;
+typedef QMap<QPair<QModbusDataUnit::RegisterType, quint16>, ModbusSimulationParams> ModbusSimulationMap;
+typedef QMap<ModbusSimulationMapKey, ModbusSimulationParams> ModbusSimulationMap2;
 
 ///
 /// \brief The DataSimulator class
@@ -40,7 +41,7 @@ public:
     void restartSimulations();
 
     ModbusSimulationParams simulationParams(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr) const;
-    ModbusSimulationMap simulationMap() const;
+    ModbusSimulationMap2 simulationMap() const;
 
 signals:
     void simulationStarted(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr);

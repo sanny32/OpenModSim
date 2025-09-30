@@ -291,13 +291,14 @@ void OutputListModel::updateData(const QModbusDataUnit& data)
 
 ///
 /// \brief OutputListModel::find
+/// \param deviceId
 /// \param type
 /// \param addr
 /// \return
 ///
-QModelIndex OutputListModel::find(QModbusDataUnit::RegisterType type, quint16 addr) const
+QModelIndex OutputListModel::find(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr) const
 {
-    if(_parentWidget->_displayDefinition.PointType != type)
+    if(_parentWidget->_displayDefinition.PointType != type || _parentWidget->_displayDefinition.DeviceId != deviceId)
         return QModelIndex();
 
     const auto dd =  _parentWidget->_displayDefinition;
@@ -382,7 +383,7 @@ QVector<quint16> OutputWidget::data() const
 /// \param simulations
 /// \param data
 ///
-void OutputWidget::setup(const DisplayDefinition& dd, const ModbusSimulationMap& simulations, const QModbusDataUnit& data)
+void OutputWidget::setup(const DisplayDefinition& dd, const ModbusSimulationMap2& simulations, const QModbusDataUnit& data)
 {
     _descriptionMap.insert(descriptionMap());
     _displayDefinition = dd;
@@ -393,10 +394,10 @@ void OutputWidget::setup(const DisplayDefinition& dd, const ModbusSimulationMap&
     _listModel->clear();
 
     for(auto&& key : simulations.keys())
-        _listModel->setData(_listModel->find(key.Type, key.Address), true, SimulationRole);
+        _listModel->setData(_listModel->find(key.DeviceId, key.Type, key.Address), true, SimulationRole);
 
     for(auto&& key : _descriptionMap.keys())
-        setDescription(key.first, key.second, _descriptionMap[key]);
+        setDescription(key.DeviceId, key.Type, key.Address, _descriptionMap[key]);
 
     updateData(data);
 }
@@ -686,38 +687,40 @@ void OutputWidget::updateData(const QModbusDataUnit& data)
 /// \brief OutputWidget::descriptionMap
 /// \return
 ///
-AddressDescriptionMap OutputWidget::descriptionMap() const
+AddressDescriptionMap2 OutputWidget::descriptionMap() const
 {
-    AddressDescriptionMap descriptionMap;
+    AddressDescriptionMap2 descriptionMap;
     for(int i = 0; i < _listModel->rowCount(); i++)
     {
         const auto desc = _listModel->data(_listModel->index(i), DescriptionRole).toString();
         const quint16 addr = _listModel->data(_listModel->index(i), AddressRole).toUInt() - (_displayDefinition.ZeroBasedAddress ? 0 : 1);
-        descriptionMap[{_displayDefinition.PointType, addr }] = desc;
+        descriptionMap[{_displayDefinition.DeviceId, _displayDefinition.PointType, addr }] = desc;
     }
     return descriptionMap;
 }
 
 ///
 /// \brief OutputWidget::setDescription
+/// \param deviceId
 /// \param type
 /// \param addr
 /// \param desc
 ///
-void OutputWidget::setDescription(QModbusDataUnit::RegisterType type, quint16 addr, const QString& desc)
+void OutputWidget::setDescription(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr, const QString& desc)
 {
-    _listModel->setData(_listModel->find(type, addr), desc, DescriptionRole);
+    _listModel->setData(_listModel->find(deviceId, type, addr), desc, DescriptionRole);
 }
 
 ///
 /// \brief OutputWidget::setSimulated
+/// \param deviceId
 /// \param type
 /// \param addr
 /// \param on
 ///
-void OutputWidget::setSimulated(QModbusDataUnit::RegisterType type, quint16 addr, bool on)
+void OutputWidget::setSimulated(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr, bool on)
 {
-    _listModel->setData(_listModel->find(type, addr), on, SimulationRole);
+    _listModel->setData(_listModel->find(deviceId, type, addr), on, SimulationRole);
 }
 
 ///
