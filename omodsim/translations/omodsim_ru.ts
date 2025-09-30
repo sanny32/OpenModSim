@@ -1608,9 +1608,9 @@ MODBUS Point Type:
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="323"/>
-        <location filename="../mainwindow.cpp" line="362"/>
-        <location filename="../mainwindow.cpp" line="375"/>
-        <location filename="../mainwindow.cpp" line="386"/>
+        <location filename="../mainwindow.cpp" line="363"/>
+        <location filename="../mainwindow.cpp" line="377"/>
+        <location filename="../mainwindow.cpp" line="389"/>
         <source>All files (*)</source>
         <translation>Все файлы (*)</translation>
     </message>
@@ -2196,17 +2196,17 @@ MODBUS Point Type:
 <context>
     <name>OutputWidget</name>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="826"/>
+        <location filename="../controls/outputwidget.cpp" line="829"/>
         <source>%1: Enter Description</source>
         <translation>%1: Введите описание</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="891"/>
+        <location filename="../controls/outputwidget.cpp" line="894"/>
         <source>NOT CONNECTED!</source>
         <translation>НЕ ПОДКЛЮЧЕНО!</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="899"/>
+        <location filename="../controls/outputwidget.cpp" line="902"/>
         <source>Invalid Data Length Specified</source>
         <translation>Указана недопустимая длина данных</translation>
     </message>
@@ -2375,10 +2375,12 @@ MODBUS Point Type:
     </message>
     <message>
         <location filename="../controls/scriptcontrol.ui" line="49"/>
-        <source>Script.onInit(()=&gt;{
-	let deviceId = 1;
-	let address = 1;
-	Server.addressBase = AddressBase.Base1;
+        <source>Server.addressBase = AddressBase.Base1;
+
+let deviceId = 1;
+let address = 1;
+
+Script.onInit(()=&gt;{
 	Server.onChange(deviceId, Register.Holding, address, (value)=&gt;
 	{
 		/* write your code on register value change */
