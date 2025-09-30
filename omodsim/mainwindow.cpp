@@ -359,9 +359,11 @@ void MainWindow::on_actionSaveAs_triggered()
     auto frm = currentMdiChild();
     if(!frm) return;
 
-    const auto filename = QFileDialog::getSaveFileName(this, QString(), frm->windowTitle(), tr("All files (*)"));
+    const auto dir = QString("%1%2%3").arg(_savePath, QDir::separator(), frm->windowTitle());
+    const auto filename = QFileDialog::getSaveFileName(this, QString(), dir, tr("All files (*)"));
     if(filename.isEmpty()) return;
 
+    _savePath = QFileInfo(filename).absoluteDir().absolutePath();
     frm->setFilename(filename);
 
     saveMdiChild(frm);
@@ -372,9 +374,10 @@ void MainWindow::on_actionSaveAs_triggered()
 ///
 void MainWindow::on_actionSaveTestConfig_triggered()
 {
-    const auto filename = QFileDialog::getSaveFileName(this, QString(), QString(), tr("All files (*)"));
+    const auto filename = QFileDialog::getSaveFileName(this, QString(), _savePath, tr("All files (*)"));
     if(filename.isEmpty()) return;
 
+    _savePath = QFileInfo(filename).absoluteDir().absolutePath();
     saveConfig(filename);
 }
 
@@ -383,9 +386,10 @@ void MainWindow::on_actionSaveTestConfig_triggered()
 ///
 void MainWindow::on_actionRestoreTestConfig_triggered()
 {
-    const auto filename = QFileDialog::getOpenFileName(this, QString(), QString(), tr("All files (*)"));
+    const auto filename = QFileDialog::getOpenFileName(this, QString(), _savePath, tr("All files (*)"));
     if(filename.isEmpty()) return;
 
+    _savePath = QFileInfo(filename).absoluteDir().absolutePath();
     loadConfig(filename);
 }
 
@@ -1533,6 +1537,8 @@ void MainWindow::loadSettings()
     _lang = m.value("Language", "en").toString();
     setLanguage(_lang);
 
+    _savePath = m.value("SavePath").toString();
+
     m >> qobject_cast<MenuConnect*>(ui->actionConnect->menu());
 
     const QStringList groups = m.childGroups();
@@ -1597,6 +1603,7 @@ void MainWindow::saveSettings()
     m.setValue("EditBarArea", toolBarArea(ui->toolBarEdit));
     m.setValue("EditBarBreak", toolBarBreak(ui->toolBarEdit));
     m.setValue("Language", _lang);
+    m.setValue("SavePath", _savePath);
 
     m << qobject_cast<MenuConnect*>(ui->actionConnect->menu());
 
