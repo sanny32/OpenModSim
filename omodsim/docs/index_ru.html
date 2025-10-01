@@ -136,6 +136,7 @@
 			<ul class="level2">
 				<li><a href="#server.addressbase">Server.addressBase</a></li>
 				<li><a href="#server.onchange">Server.onChange</a></li>
+				<li><a href="#server.onError">Server.onError</a></li>
 				<li><a href="#server.readcoil">Server.readCoil</a></li>
 				<li><a href="#server.readdiscrete">Server.readDiscrete</a></li>
 				<li><a href="#server.readinput">Server.readInput</a></li>
@@ -646,130 +647,134 @@
 			</dd>
 		</dl>
 		<section aria-labelledby="static_methods"><h2 id="server.static_methods">Статические методы</h2><div class="section-content"><dl>
-			<dt id="server.onchange"><code>Server.onChange(Register, address, functionRef)</code></dt>
+			<dt id="server.onchange"><code>Server.onChange(deviceId, Register, address, functionRef)</code></dt>
 			<dd>
-				<p>Выполняет функцию <code>functionRef(value)</code> при изменении значения регистра тип <code>Register</code> с адресом <code>address</code>.</p>
+				<p>Выполняет функцию <code>functionRef(value)</code> при изменении значения регистра тип <code>Register</code> с адресом <code>address</code> и номером устройства <code>deviceId</code>.</p>
 			</dd>
-			<dt id="server.readcoil"><code>Server.readCoil(address)</code></dt>
+			<dt id="server.onError"><code>Server.onError(deviceId, functionRef)</code></dt>
 			<dd>
-				<p>Возвращает значение регистра Coil по адресу <code>address</code>.</p>
+				<p>Выполняет функцию <code>functionRef(error)</code> когда произошла ошибка на сервере с номером устройства <code>deviceId</code>.</p>
 			</dd>
-			<dt id="server.readdiscrete"><code>Server.readDiscrete(address)</code></dt>
+			<dt id="server.readcoil"><code>Server.readCoil(address, deviceId)</code></dt>
 			<dd>
-				<p>Возвращает значение регистра Discrete по адресу <code>address</code>.</p>
+				<p>Возвращает значение регистра Coil по адресу <code>address</code> для устройства <code>deviceId</code>.</p>
 			</dd>
-			<dt id="server.readinput"><code>Server.readInput(address)</code></dt>
+			<dt id="server.readdiscrete"><code>Server.readDiscrete(address, deviceId)</code></dt>
 			<dd>
-				<p>Возвращает значение регистра Input по адресу <code>address</code>.</p>
+				<p>Возвращает значение регистра Discrete по адресу <code>address</code> для устройства <code>deviceId</code>.</p>
 			</dd>
-			<dt id="server.readholding"><code>Server.readHolding(address)</code></dt>
+			<dt id="server.readinput"><code>Server.readInput(address, deviceId)</code></dt>
 			<dd>
-				<p>Возвращает значение регистра Holding по адресу <code>address</code>.</p>
+				<p>Возвращает значение регистра Input по адресу <code>address</code> для устройства <code>deviceId</code>.</p>
 			</dd>
-			<dt id="server.readansi"><code>Server.readAnsi(Register, address, codepage)</code></dt>
+			<dt id="server.readholding"><code>Server.readHolding(address, deviceId)</code></dt>
 			<dd>
-				<p>Возвращает значение регистра по адресу <code>address</code> как 2 ANSI символа в кодировке <code>codepage</code>.</p>
+				<p>Возвращает значение регистра Holding по адресу <code>address</code> для устройства <code>deviceId</code>.</p>
 			</dd>
-			<dt id="server.readint32"><code>Server.readInt32(Register, address, swapped)</code></dt>
+			<dt id="server.readansi"><code>Server.readAnsi(Register, address, codepage, deviceId)</code></dt>
 			<dd>
-				<p>Возвращает 32-битное целое значение из регистров типа <code>Register</code> с адресами от <code>address</code> до <code>address + 1</code>. Параметр <code>swapped</code> изменяет порядок регистров, когда функция преобразует набор регистров в 32-битное целое значение.</p>
+				<p>Возвращает значение регистра по адресу <code>address</code> как 2 ANSI символа в кодировке <code>codepage</code> для устройства <code>deviceId</code>.</p>
+			</dd>
+			<dt id="server.readint32"><code>Server.readInt32(Register, address, swapped, deviceId)</code></dt>
+			<dd>
+				<p>Возвращает 32-битное целое значение из регистров типа <code>Register</code> с адресами от <code>address</code> до <code>address + 1</code> для устройства <code>deviceId</code>. Параметр <code>swapped</code> изменяет порядок регистров, когда функция преобразует набор регистров в 32-битное целое значение.</p>
 				<div class="notecard note">
                     <p><strong>Примечание.</strong> Эта функция доступна только для регистров типа <code>Register.Input</code> и <code>Register.Holding</code>.</p>
                 </div>
 			</dd>
-			<dt id="server.readint64"><code>Server.readInt64(Register, address, swapped)</code></dt>
+			<dt id="server.readint64"><code>Server.readInt64(Register, address, swapped, deviceId)</code></dt>
 			<dd>
-				<p>Возвращает 64-битное целое значение из регистров типа <code>Register</code> с адресами от <code>address</code> до <code>address + 3</code>. Параметр <code>swapped</code> изменяет порядок регистров, когда функция преобразует набор регистров в 64-битное целое значение.</p>
+				<p>Возвращает 64-битное целое значение из регистров типа <code>Register</code> с адресами от <code>address</code> до <code>address + 3</code> для устройства <code>deviceId</code>. Параметр <code>swapped</code> изменяет порядок регистров, когда функция преобразует набор регистров в 64-битное целое значение.</p>
 				<div class="notecard note">
                     <p><strong>Примечание.</strong> Эта функция доступна только для регистров типа <code>Register.Input</code> и <code>Register.Holding</code>.</p>
                 </div>
 			</dd>
-			<dt id="server.readuint32"><code>Server.readUInt32(Register, address, swapped)</code></dt>
+			<dt id="server.readuint32"><code>Server.readUInt32(Register, address, swapped, deviceId)</code></dt>
 			<dd>
-				<p>Возвращает беззнаковое 32-битное целое значение из регистров типа <code>Register</code> с адресами от <code>address</code> до <code>address + 1</code>. Параметр <code>swapped</code> изменяет порядок регистров, когда функция преобразует набор регистров в беззнаковое 32-битное целое значение.</p>
+				<p>Возвращает беззнаковое 32-битное целое значение из регистров типа <code>Register</code> с адресами от <code>address</code> до <code>address + 1</code> для устройства <code>deviceId</code>. Параметр <code>swapped</code> изменяет порядок регистров, когда функция преобразует набор регистров в беззнаковое 32-битное целое значение.</p>
 				<div class="notecard note">
                     <p><strong>Примечание.</strong> Эта функция доступна только для регистров типа <code>Register.Input</code> и <code>Register.Holding</code>.</p>
                 </div>
 			</dd>
-			<dt id="server.readuint64"><code>Server.readUInt64(Register, address, swapped)</code></dt>
+			<dt id="server.readuint64"><code>Server.readUInt64(Register, address, swapped, deviceId)</code></dt>
 			<dd>
-				<p>Возвращает беззнаковое 64-битное целое значение из регистров типа <code>Register</code> с адресами от <code>address</code> до <code>address + 3</code>. Параметр <code>swapped</code> изменяет порядок регистров, когда функция преобразует набор регистров в беззнаковое 64-битное целое значение.</p>
+				<p>Возвращает беззнаковое 64-битное целое значение из регистров типа <code>Register</code> с адресами от <code>address</code> до <code>address + 3</code> для устройства <code>deviceId</code>. Параметр <code>swapped</code> изменяет порядок регистров, когда функция преобразует набор регистров в беззнаковое 64-битное целое значение.</p>
 				<div class="notecard note">
                     <p><strong>Примечание.</strong> Эта функция доступна только для регистров типа <code>Register.Input</code> и <code>Register.Holding</code>.</p>
                 </div>
 			</dd>
-			<dt id="server.readdouble"><code>Server.readDouble(Register, address, swapped)</code></dt>
+			<dt id="server.readdouble"><code>Server.readDouble(Register, address, swapped, deviceId)</code></dt>
 			<dd>
-				<p>Возвращает значение двойной точности (double) из регистров типа <code>Register</code> c адресами от <code>address</code> до <code>address + 3</code>. Параметр <code>swapped</code> изменяет порядок регистров, когда функция преобразует набор регистров в значение двойной точночти (double).</p>
+				<p>Возвращает значение двойной точности (double) из регистров типа <code>Register</code> c адресами от <code>address</code> до <code>address + 3</code> для устройства <code>deviceId</code>. Параметр <code>swapped</code> изменяет порядок регистров, когда функция преобразует набор регистров в значение двойной точночти (double).</p>
                 <div class="notecard note">
                     <p><strong>Примечание.</strong> Эта функция доступна только для регистров типа <code>Register.Input</code> и <code>Register.Holding</code>.</p>
                 </div>
 			</dd>
-			<dt id="server.readfloat"><code>Server.readFloat(Register, address, swapped)</code></dt>
+			<dt id="server.readfloat"><code>Server.readFloat(Register, address, swapped, deviceId)</code></dt>
 			<dd>
-				<p>Возвращает значение с плавающей запятой (float) из регистров типа <code>Register</code> с адресами от <code>address</code> до <code>address + 1</code>. Параметр <code>swapped</code> изменяет порядок регистров, когда функция преобразует набор регистров в значение с плавающей запятой (float).</p>
+				<p>Возвращает значение с плавающей запятой (float) из регистров типа <code>Register</code> с адресами от <code>address</code> до <code>address + 1</code> для устройства <code>deviceId</code>. Параметр <code>swapped</code> изменяет порядок регистров, когда функция преобразует набор регистров в значение с плавающей запятой (float).</p>
 				<div class="notecard note">
                     <p><strong>Примечание.</strong> Эта функция доступна только для регистров типа <code>Register.Input</code> и <code>Register.Holding</code>.</p>
                 </div>
 			</dd>
-			<dt id="server.writecoil"><code>Server.writeCoil(address, value)</code></dt>
+			<dt id="server.writecoil"><code>Server.writeCoil(address, value, deviceId)</code></dt>
 			<dd>
-				<p>Записывает <code>value</code> в регистр Coil по адресу <code>address</code>.</p>
+				<p>Записывает <code>value</code> в регистр Coil по адресу <code>address</code> для устройства <code>deviceId</code>.</p>
 			</dd>
-			<dt id="server.writediscrete"><code>Server.writeDiscrete(address, value)</code></dt>
+			<dt id="server.writediscrete"><code>Server.writeDiscrete(address, value, deviceId)</code></dt>
 			<dd>
-				<p>Записывает <code>value</code> в регистр Discrete по адресу <code>address</code>.</p>
+				<p>Записывает <code>value</code> в регистр Discrete по адресу <code>address</code> для устройства <code>deviceId</code>.</p>
 			</dd>
-			<dt id="server.writeinput"><code>Server.writeInput(address, value)</code></dt>
+			<dt id="server.writeinput"><code>Server.writeInput(address, value, deviceId)</code></dt>
 			<dd>
-				<p>Записывает <code>value</code> в регистр Input по адресу <code>address</code>.</p>
+				<p>Записывает <code>value</code> в регистр Input по адресу <code>address</code> для устройства <code>deviceId</code>.</p>
 			</dd>
-			<dt id="server.writeholding"><code>Server.writeHolding(address, value)</code></dt>
+			<dt id="server.writeholding"><code>Server.writeHolding(address, value, deviceId)</code></dt>
 			<dd>
-				<p>Записывает <code>value</code> в регистр Holding по адресу <code>address</code>.</p>
+				<p>Записывает <code>value</code> в регистр Holding по адресу <code>address</code> для устройства <code>deviceId</code>.</p>
 			</dd>
-			<dt id="server.writeansi"><code>Server.writeAnsi(Register, address, value, codepage)</code></dt>
+			<dt id="server.writeansi"><code>Server.writeAnsi(Register, address, value, codepage, deviceId)</code></dt>
 			<dd>
-				<p>Записывает <code>value</code> в регистр по алресу <code>address</code> как 2 ANSI символа в кодировке <code>codepage</code>.</p>
+				<p>Записывает <code>value</code> в регистр по алресу <code>address</code> как 2 ANSI символа в кодировке <code>codepage</code> для устройства <code>deviceId</code>.</p>
 			</dd>
-			<dt id="server.writeint32"><code>Server.writeInt32(Register, address, value, swapped)</code></dt>
+			<dt id="server.writeint32"><code>Server.writeInt32(Register, address, value, swapped, deviceId)</code></dt>
 			<dd>
-				<p>Записывает 32-битное целое число <code>value</code> в адреса регистров типа <code>Register</code>. Параметр <code>swapped</code> изменяет порядок регистров, когда функция преобразует 32-битное целое значение в набор регистров.</p>
+				<p>Записывает 32-битное целое число <code>value</code> в адреса регистров типа <code>Register</code> для устройства <code>deviceId</code>. Параметр <code>swapped</code> изменяет порядок регистров, когда функция преобразует 32-битное целое значение в набор регистров.</p>
                 <div class="notecard note">
                     <p><strong>Примечание.</strong> Эта функция доступна только для регистров типа <code>Register.Input</code> и <code>Register.Holding</code>.</p>
                 </div>
 			</dd>
-			<dt id="server.writeint64"><code>Server.writeInt64(Register, address, value, swapped)</code></dt>
+			<dt id="server.writeint64"><code>Server.writeInt64(Register, address, value, swapped, deviceId)</code></dt>
 			<dd>
-				<p>Записывает 64-битное целое число <code>value</code> в адреса регистров типа <code>Register</code>. Параметр <code>swapped</code> изменяет порядок регистров, когда функция преобразует 64-битное целое значение в набор регистров.</p>
+				<p>Записывает 64-битное целое число <code>value</code> в адреса регистров типа <code>Register</code> для устройства <code>deviceId</code>. Параметр <code>swapped</code> изменяет порядок регистров, когда функция преобразует 64-битное целое значение в набор регистров.</p>
                 <div class="notecard note">
                     <p><strong>Примечание.</strong> Эта функция доступна только для регистров типа <code>Register.Input</code> и <code>Register.Holding</code>.</p>
                 </div>
 			</dd>
-			<dt id="server.writeuint32"><code>Server.writeUInt32(Register, address, value, swapped)</code></dt>
+			<dt id="server.writeuint32"><code>Server.writeUInt32(Register, address, value, swapped, deviceId)</code></dt>
 			<dd>
-				<p>Записывает 32-битное беззнаковое целое число <code>value</code> в адреса регистров типа <code>Register</code>. Параметр <code>swapped</code> изменяет порядок регистров, когда функция преобразует беззнаковое 32-битное целое значение в набор регистров.</p>
+				<p>Записывает 32-битное беззнаковое целое число <code>value</code> в адреса регистров типа <code>Register</code> для устройства <code>deviceId</code>. Параметр <code>swapped</code> изменяет порядок регистров, когда функция преобразует беззнаковое 32-битное целое значение в набор регистров.</p>
                 <div class="notecard note">
                     <p><strong>Примечание.</strong> Эта функция доступна только для регистров типа <code>Register.Input</code> и <code>Register.Holding</code>.</p>
                 </div>
 			</dd>
-			<dt id="server.writeuint64"><code>Server.writeUInt64(Register, address, value, swapped)</code></dt>
+			<dt id="server.writeuint64"><code>Server.writeUInt64(Register, address, value, swapped, deviceId)</code></dt>
 			<dd>
-				<p>Записывает 64-битное беззнаковое целое число <code>value</code> в адреса регистров типа <code>Register</code>. Параметр <code>swapped</code> изменяет порядок регистров, когда функция преобразует беззнаковое 64-битное целое значение в набор регистров.</p>
+				<p>Записывает 64-битное беззнаковое целое число <code>value</code> в адреса регистров типа <code>Register</code> для устройства <code>deviceId</code>. Параметр <code>swapped</code> изменяет порядок регистров, когда функция преобразует беззнаковое 64-битное целое значение в набор регистров.</p>
                 <div class="notecard note">
                     <p><strong>Примечание.</strong> Эта функция доступна только для регистров типа <code>Register.Input</code> и <code>Register.Holding</code>.</p>
                 </div>
 			</dd>
-			<dt id="server.writedouble"><code>Server.writeDouble(Register, address, value, swapped)</code></dt>
+			<dt id="server.writedouble"><code>Server.writeDouble(Register, address, value, swapped, deviceId)</code></dt>
 			<dd>
-				<p>Записывает значение <code>value</code> двойной точночности (double) в адреса регистров типа <code>Register</code>. Параметр <code>swapped</code> изменяет порядок регистров, когда функция преобразует значение двойной точности (double) в набор регистров.</p>
+				<p>Записывает значение <code>value</code> двойной точночности (double) в адреса регистров типа <code>Register</code> для устройства <code>deviceId</code>. Параметр <code>swapped</code> изменяет порядок регистров, когда функция преобразует значение двойной точности (double) в набор регистров.</p>
                 <div class="notecard note">
                     <p><strong>Примечание.</strong> Эта функция доступна только для регистров типа <code>Register.Input</code> и <code>Register.Holding</code>.</p>
                 </div>
 			</dd>
-			<dt id="server.writefloat"><code>Server.writeFloat(Register, address, value, swapped)</code></dt>
+			<dt id="server.writefloat"><code>Server.writeFloat(Register, address, value, swapped, deviceId)</code></dt>
 			<dd>
-				<p>Записывает число с плавающей запятой (float) <code>value</code> в адреса регистров типа <code>Register</code>. Параметр <code>swapped</code> изменяет порядок регистров, когда функция преобразует значение с плавающей запятой (float) в набор регистров.</p>
+				<p>Записывает число с плавающей запятой (float) <code>value</code> в адреса регистров типа <code>Register</code> для устройства <code>deviceId</code>. Параметр <code>swapped</code> изменяет порядок регистров, когда функция преобразует значение с плавающей запятой (float) в набор регистров.</p>
                 <div class="notecard note">
                     <p><strong>Примечание.</strong> Эта функция доступна только для регистров типа <code>Register.Input</code> и <code>Register.Holding</code>.</p>
                 </div>
