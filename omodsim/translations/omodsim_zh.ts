@@ -2185,7 +2185,7 @@ MODBUS Point Type:
     <message>
         <location filename="../modbusmultiserver.cpp" line="474"/>
         <source>An incorrect device id was specified (%1)</source>
-        <translation type="unfinished"></translation>
+        <translation>指定了錯誤的設備 ID（%1）</translation>
     </message>
     <message>
         <location filename="../modbusmultiserver.cpp" line="951"/>
@@ -2198,7 +2198,7 @@ MODBUS Point Type:
     <message>
         <location filename="../modbustcpserver.cpp" line="220"/>
         <source>Invalid connection settings for TCP communication specified.</source>
-        <translation type="unfinished"></translation>
+        <translation>指定的 TCP 通訊連線設定無效。</translation>
     </message>
 </context>
 <context>
@@ -2242,47 +2242,47 @@ MODBUS Point Type:
     <message>
         <location filename="../modbusrtuserialserver.cpp" line="391"/>
         <source>Referenced serial device does not exist.</source>
-        <translation type="unfinished"></translation>
+        <translation>引用的串行設備不存在。</translation>
     </message>
     <message>
         <location filename="../modbusrtuserialserver.cpp" line="394"/>
         <source>Cannot open serial device due to permissions.</source>
-        <translation type="unfinished"></translation>
+        <translation>由於權限問題，無法開啟串行設備。</translation>
     </message>
     <message>
         <location filename="../modbusrtuserialserver.cpp" line="398"/>
         <source>Cannot open serial device.</source>
-        <translation type="unfinished"></translation>
+        <translation>無法開啟串行設備。</translation>
     </message>
     <message>
         <location filename="../modbusrtuserialserver.cpp" line="401"/>
         <source>Write error.</source>
-        <translation type="unfinished"></translation>
+        <translation>寫入錯誤。</translation>
     </message>
     <message>
         <location filename="../modbusrtuserialserver.cpp" line="404"/>
         <source>Read error.</source>
-        <translation type="unfinished"></translation>
+        <translation>讀取錯誤。</translation>
     </message>
     <message>
         <location filename="../modbusrtuserialserver.cpp" line="407"/>
         <source>Resource error.</source>
-        <translation type="unfinished"></translation>
+        <translation>資源錯誤。</translation>
     </message>
     <message>
         <location filename="../modbusrtuserialserver.cpp" line="410"/>
         <source>Device operation is not supported error.</source>
-        <translation type="unfinished"></translation>
+        <translation>設備操作不支援錯誤。</translation>
     </message>
     <message>
         <location filename="../modbusrtuserialserver.cpp" line="414"/>
         <source>Timeout error.</source>
-        <translation type="unfinished"></translation>
+        <translation>超時錯誤。</translation>
     </message>
     <message>
         <location filename="../modbusrtuserialserver.cpp" line="417"/>
         <source>Unknown error.</source>
-        <translation type="unfinished"></translation>
+        <translation>未知錯誤。</translation>
     </message>
 </context>
 <context>
@@ -2290,12 +2290,12 @@ MODBUS Point Type:
     <message>
         <location filename="../modbusrtuserialserver.cpp" line="302"/>
         <source>Requesting serial port is closed</source>
-        <translation type="unfinished"></translation>
+        <translation>請求串口已關閉</translation>
     </message>
     <message>
         <location filename="../modbusrtuserialserver.cpp" line="311"/>
         <source>Could not write response to client</source>
-        <translation type="unfinished"></translation>
+        <translation>無法寫入對客戶端的回應</translation>
     </message>
 </context>
 <context>
@@ -2303,12 +2303,12 @@ MODBUS Point Type:
     <message>
         <location filename="../modbustcpserver.cpp" line="149"/>
         <source>Requesting socket is closed</source>
-        <translation type="unfinished"></translation>
+        <translation>請求套接字已關閉</translation>
     </message>
     <message>
         <location filename="../modbustcpserver.cpp" line="157"/>
         <source>Could not write response to client</source>
-        <translation type="unfinished"></translation>
+        <translation>無法寫入對客戶端的回應</translation>
     </message>
 </context>
 <context>
@@ -2396,7 +2396,19 @@ Script.onInit(()=&gt;{
 
 	/* write your init code here */
 });</source>
-        <translation type="unfinished"></translation>
+        <translation>Server.addressBase = AddressBase.Base1;
+
+let deviceId = 1;
+let address = 1;
+
+Script.onInit(()=&gt;{
+	Server.onChange(deviceId, Register.Holding, address, (value)=&gt;
+	{
+		/* 在暫存器值改變時編寫程式碼 */
+	});
+
+	/* 在這裡寫入你的初始化程式碼 */
+});</translation>
     </message>
 </context>
 <context>

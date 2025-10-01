@@ -2177,7 +2177,7 @@ MODBUS Point Type:
     <message>
         <location filename="../modbusmultiserver.cpp" line="474"/>
         <source>An incorrect device id was specified (%1)</source>
-        <translation type="unfinished"></translation>
+        <translation>Некорректно знаяение номера устройства (%1)</translation>
     </message>
     <message>
         <location filename="../modbusmultiserver.cpp" line="951"/>
@@ -2190,7 +2190,7 @@ MODBUS Point Type:
     <message>
         <location filename="../modbustcpserver.cpp" line="220"/>
         <source>Invalid connection settings for TCP communication specified.</source>
-        <translation type="unfinished"></translation>
+        <translation>Указаны некорректные настройки для TCP соединения.</translation>
     </message>
 </context>
 <context>
@@ -2234,47 +2234,47 @@ MODBUS Point Type:
     <message>
         <location filename="../modbusrtuserialserver.cpp" line="391"/>
         <source>Referenced serial device does not exist.</source>
-        <translation type="unfinished"></translation>
+        <translation>Указанное устройство не существует.</translation>
     </message>
     <message>
         <location filename="../modbusrtuserialserver.cpp" line="394"/>
         <source>Cannot open serial device due to permissions.</source>
-        <translation type="unfinished"></translation>
+        <translation>Невозможно открыть устройство из-за разрешений доступа.</translation>
     </message>
     <message>
         <location filename="../modbusrtuserialserver.cpp" line="398"/>
         <source>Cannot open serial device.</source>
-        <translation type="unfinished"></translation>
+        <translation>Невозможно открыть устройство.</translation>
     </message>
     <message>
         <location filename="../modbusrtuserialserver.cpp" line="401"/>
         <source>Write error.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ошибка записи.</translation>
     </message>
     <message>
         <location filename="../modbusrtuserialserver.cpp" line="404"/>
         <source>Read error.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ошибка чтения.</translation>
     </message>
     <message>
         <location filename="../modbusrtuserialserver.cpp" line="407"/>
         <source>Resource error.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ошибка ресурса.</translation>
     </message>
     <message>
         <location filename="../modbusrtuserialserver.cpp" line="410"/>
         <source>Device operation is not supported error.</source>
-        <translation type="unfinished"></translation>
+        <translation>Работа устройства не поддерживается.</translation>
     </message>
     <message>
         <location filename="../modbusrtuserialserver.cpp" line="414"/>
         <source>Timeout error.</source>
-        <translation type="unfinished"></translation>
+        <translation>Время ожидания истекло.</translation>
     </message>
     <message>
         <location filename="../modbusrtuserialserver.cpp" line="417"/>
         <source>Unknown error.</source>
-        <translation type="unfinished"></translation>
+        <translation>Неизвестная ошибка.</translation>
     </message>
 </context>
 <context>
@@ -2282,12 +2282,12 @@ MODBUS Point Type:
     <message>
         <location filename="../modbusrtuserialserver.cpp" line="302"/>
         <source>Requesting serial port is closed</source>
-        <translation type="unfinished"></translation>
+        <translation>Запрашиваемый последовательный порт закрыт</translation>
     </message>
     <message>
         <location filename="../modbusrtuserialserver.cpp" line="311"/>
         <source>Could not write response to client</source>
-        <translation type="unfinished"></translation>
+        <translation>Не удалось создать ответ клиенту</translation>
     </message>
 </context>
 <context>
@@ -2295,12 +2295,12 @@ MODBUS Point Type:
     <message>
         <location filename="../modbustcpserver.cpp" line="149"/>
         <source>Requesting socket is closed</source>
-        <translation type="unfinished"></translation>
+        <translation>Запрашивающий сокет закрыт</translation>
     </message>
     <message>
         <location filename="../modbustcpserver.cpp" line="157"/>
         <source>Could not write response to client</source>
-        <translation type="unfinished"></translation>
+        <translation>Не удалось создать ответ клиенту</translation>
     </message>
 </context>
 <context>
@@ -2388,7 +2388,19 @@ Script.onInit(()=&gt;{
 
 	/* write your init code here */
 });</source>
-        <translation type="unfinished"></translation>
+        <translation>Server.addressBase = AddressBase.Base1;
+
+let deviceId = 1;
+let address = 1;
+
+Script.onInit(()=&gt;{
+	Server.onChange(deviceId, Register.Holding, address, (value)=&gt;
+	{
+		/* здесь должен быть код реакции на изменение значения регистра */
+	});
+
+	/* здесь должен быть ваш код инициализации */
+});</translation>
     </message>
 </context>
 <context>
