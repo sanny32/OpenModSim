@@ -323,6 +323,7 @@ void MainWindow::on_actionOpen_triggered()
     const auto filename = QFileDialog::getOpenFileName(this, QString(), _savePath, tr("All files (*)"));
     if(filename.isEmpty()) return;
 
+    _savePath = QFileInfo(filename).absoluteDir().absolutePath();
     openFile(filename);
 }
 
