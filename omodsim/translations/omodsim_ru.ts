@@ -1608,9 +1608,9 @@ MODBUS Point Type:
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="323"/>
-        <location filename="../mainwindow.cpp" line="363"/>
-        <location filename="../mainwindow.cpp" line="377"/>
-        <location filename="../mainwindow.cpp" line="389"/>
+        <location filename="../mainwindow.cpp" line="364"/>
+        <location filename="../mainwindow.cpp" line="378"/>
+        <location filename="../mainwindow.cpp" line="390"/>
         <source>All files (*)</source>
         <translation>Все файлы (*)</translation>
     </message>
