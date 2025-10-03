@@ -6,7 +6,7 @@ on:
       - "*"
       
 env:
-  QT_VERSION: 6.9.2
+  QT_VERSION: 6.9.3
   QT_ARCH: win64_msvc2022_64
   CMAKE_COMPILER: msvc2022_64
   CMAKE_GENERATOR: "Visual Studio 17 2022"
