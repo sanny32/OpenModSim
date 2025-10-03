@@ -389,7 +389,15 @@ inline QDataStream& operator >>(QDataStream& in, FormModSim* frm)
     if(ver >=  QVersionNumber(1, 2))
     {
         in >> frm->scriptControl();
-        in >> scriptSettings;
+
+        if(ver >= QVersionNumber(1, 8)) {
+            in >> scriptSettings;
+        }
+        else {
+            in >> scriptSettings.Mode;
+            in >> scriptSettings.Interval;
+            in >> scriptSettings.UseAutoComplete;
+        }
     }
 
     AddressDescriptionMap descriptionMap;
