@@ -142,24 +142,44 @@ QVariant ModbusServer::value(int option, int serverAddress) const
 ///
 bool ModbusServer::setValue(int option, const QVariant &newValue, int serverAddress)
 {
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
 #define CHECK_INT_OR_UINT(val) \
     do { \
-            const int type = val.userType(); \
-            if (type != QMetaType::Int && type != QMetaType::UInt) \
-                return false; \
+        if ((val.typeId() != QMetaType::Int) && (val.typeId() != QMetaType::UInt)) \
+            return false; \
     } while (0)
 
 #define CHECK_BOOL(val) \
-    do { \
-            if (!val.canConvert(QMetaType::Bool)) \
+        do { \
+            if(val.metaType().id() != QMetaType::Bool) \
                 return false; \
     } while (0)
 
 #define CHECK_BYTEARRAY(val) \
         do { \
-            if (!val.canConvert(QMetaType::QByteArray)) \
+            if(val.metaType().id() != QMetaType::QByteArray) \
+                return false; \
+        } while (0)
+#else
+// Qt5
+#define CHECK_INT_OR_UINT(val) \
+    do { \
+        if ((val.type() != QVariant::Int) && (val.type() != QVariant::UInt)) \
+            return false; \
+    } while (0)
+
+#define CHECK_BOOL(val) \
+        do { \
+            if (val.type() != QVariant::Bool) \
                 return false; \
     } while (0)
+
+#define CHECK_BYTEARRAY(val) \
+        do { \
+                if (val.type() != QVariant::ByteArray) \
+                    return false; \
+        } while (0)
+#endif
 
     switch (option) {
     case DiagnosticRegister:

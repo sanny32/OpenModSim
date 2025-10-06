@@ -242,7 +242,7 @@ void ModbusTcpServer::close()
     if (_server->isListening())
         _server->close();
 
-    for (auto socket : qAsConst(_connections))
+    for (auto socket : std::as_const(_connections))
         socket->disconnectFromHost();
 
     setState(QModbusDevice::UnconnectedState);
