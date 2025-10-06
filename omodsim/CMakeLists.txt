@@ -333,6 +333,8 @@ if(WIN32)
 
     target_sources(${PROJECT_NAME} PRIVATE ${ICON_PATH} "${CMAKE_BINARY_DIR}/omodsim.rc")
     set_target_properties(${PROJECT_NAME} PROPERTIES WIN32_EXECUTABLE ON)
+elseif(LINUX)
+    set(CMAKE_CXX_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -static-libgcc -static-libstdc++")
 endif()
 
 add_custom_command(
