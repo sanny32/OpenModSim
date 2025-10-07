@@ -176,6 +176,7 @@ private:
     RecentFileActionList* _recentFileActionList;
     QSharedPointer<QPrinter> _selectedPrinter;
     QSharedPointer<DataSimulator> _dataSimulator;
+    QString _savePath;
 };
 
 #endif // MAINWINDOW_H

@@ -88,8 +88,10 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->mdiArea, &QMdiArea::subWindowActivated, this, &MainWindow::updateMenuWindow);
     connect(&_mbMultiServer, &ModbusMultiServer::connectionError, this, &MainWindow::on_connectionError);
 
-    ui->actionNew->trigger();
     loadSettings();
+
+    if(_windowCounter == 0)
+        ui->actionNew->trigger();
 }
 
 ///
@@ -321,9 +323,10 @@ void MainWindow::on_actionNew_triggered()
 ///
 void MainWindow::on_actionOpen_triggered()
 {
-    const auto filename = QFileDialog::getOpenFileName(this, QString(), QString(), tr("All files (*)"));
+    const auto filename = QFileDialog::getOpenFileName(this, QString(), _savePath, tr("All files (*)"));
     if(filename.isEmpty()) return;
 
+    _savePath = QFileInfo(filename).absoluteDir().absolutePath();
     openFile(filename);
 }
 
@@ -360,9 +363,11 @@ void MainWindow::on_actionSaveAs_triggered()
     auto frm = currentMdiChild();
     if(!frm) return;
 
-    const auto filename = QFileDialog::getSaveFileName(this, QString(), frm->windowTitle(), tr("All files (*)"));
+    const auto dir = QString("%1%2%3").arg(_savePath, QDir::separator(), frm->windowTitle());
+    const auto filename = QFileDialog::getSaveFileName(this, QString(), dir, tr("All files (*)"));
     if(filename.isEmpty()) return;
 
+    _savePath = QFileInfo(filename).absoluteDir().absolutePath();
     frm->setFilename(filename);
 
     saveMdiChild(frm);
@@ -373,9 +378,10 @@ void MainWindow::on_actionSaveAs_triggered()
 ///
 void MainWindow::on_actionSaveTestConfig_triggered()
 {
-    const auto filename = QFileDialog::getSaveFileName(this, QString(), QString(), tr("All files (*)"));
+    const auto filename = QFileDialog::getSaveFileName(this, QString(), _savePath, tr("All files (*)"));
     if(filename.isEmpty()) return;
 
+    _savePath = QFileInfo(filename).absoluteDir().absolutePath();
     saveConfig(filename);
 }
 
@@ -384,9 +390,10 @@ void MainWindow::on_actionSaveTestConfig_triggered()
 ///
 void MainWindow::on_actionRestoreTestConfig_triggered()
 {
-    const auto filename = QFileDialog::getOpenFileName(this, QString(), QString(), tr("All files (*)"));
+    const auto filename = QFileDialog::getOpenFileName(this, QString(), _savePath, tr("All files (*)"));
     if(filename.isEmpty()) return;
 
+    _savePath = QFileInfo(filename).absoluteDir().absolutePath();
     loadConfig(filename);
 }
 
@@ -1105,14 +1112,14 @@ void MainWindow::forceCoils(QModbusDataUnit::RegisterType type)
 
     if(dd.PointType == type)
     {
-        const auto data = _mbMultiServer.data(type, presetParams.PointAddress - (dd.ZeroBasedAddress ? 0 : 1), presetParams.Length);
+        const auto data = _mbMultiServer.data(dd.DeviceId, type, presetParams.PointAddress - (dd.ZeroBasedAddress ? 0 : 1), presetParams.Length);
         params.Value = QVariant::fromValue(data.values());
     }
 
     DialogForceMultipleCoils dlg(params, type, presetParams.Length, dd.HexAddress, this);
     if(dlg.exec() == QDialog::Accepted)
     {
-        _mbMultiServer.writeRegister(type, params);
+        _mbMultiServer.writeRegister(dd.DeviceId, type, params);
     }
 }
 
@@ -1142,14 +1149,14 @@ void MainWindow::presetRegs(QModbusDataUnit::RegisterType type)
 
     if(dd.PointType == type)
     {
-        const auto data = _mbMultiServer.data(type, presetParams.PointAddress - (dd.ZeroBasedAddress ? 0 : 1), presetParams.Length);
+        const auto data = _mbMultiServer.data(dd.DeviceId, type, presetParams.PointAddress - (dd.ZeroBasedAddress ? 0 : 1), presetParams.Length);
         params.Value = QVariant::fromValue(data.values());
     }
 
     DialogForceMultipleRegisters dlg(params, type, presetParams.Length, dd.HexAddress, this);
     if(dlg.exec() == QDialog::Accepted)
     {
-        _mbMultiServer.writeRegister(type, params);
+        _mbMultiServer.writeRegister(dd.DeviceId, type, params);
     }
 }
 
@@ -1160,6 +1167,11 @@ void MainWindow::presetRegs(QModbusDataUnit::RegisterType type)
 ///
 FormModSim* MainWindow::createMdiChild(int id)
 {
+    for(auto&& wnd : ui->mdiArea->subWindowList()) {
+        const auto frm = qobject_cast<FormModSim*>(wnd->widget());
+        if(frm->formId() == id) id++;
+    }
+
     auto frm = new FormModSim(id, _mbMultiServer, _dataSimulator, this);
     auto wnd = ui->mdiArea->addSubWindow(frm);
     wnd->installEventFilter(this);
@@ -1502,6 +1514,15 @@ void MainWindow::loadSettings()
 
     QSettings m(filepath, QSettings::IniFormat, this);
 
+    const bool isMaximized = m.value("WindowMaximized").toBool();
+    if(isMaximized) {
+        showMaximized();
+    }
+    else {
+        const auto geometry = m.value("WindowGeometry", this->geometry()).toRect();
+        setGeometry(geometry);
+    }
+
     const auto displaybarArea = (Qt::ToolBarArea)qBound(0, m.value("DisplayBarArea", 0x4).toInt(), 0xf);
     const auto displaybarBreak = m.value("DisplayBarBreak").toBool();
     if(displaybarBreak) addToolBarBreak(displaybarArea);
@@ -1520,8 +1541,21 @@ void MainWindow::loadSettings()
     _lang = m.value("Language", "en").toString();
     setLanguage(_lang);
 
-    m >> firstMdiChild();
+    _savePath = m.value("SavePath").toString();
+
     m >> qobject_cast<MenuConnect*>(ui->actionConnect->menu());
+
+    const QStringList groups = m.childGroups();
+    for (const QString& g : groups) {
+        if (g.startsWith("Form_")) {
+            m.beginGroup(g);
+            const auto id = m.value("FromId", ++_windowCounter).toInt();
+            auto frm = createMdiChild(id);
+            m >> frm;
+            frm->show();
+            m.endGroup();
+        }
+    }
 }
 
 ///
@@ -1552,6 +1586,17 @@ void MainWindow::saveSettings()
 
     QSettings m(filepath, QSettings::IniFormat, this);
 
+    m.clear();
+    m.sync();
+
+    if(isMaximized()) {
+        m.setValue("WindowMaximized", true);
+    }
+    else {
+        m.setValue("WindowMaximized", false);
+        m.setValue("WindowGeometry", geometry());
+    }
+
     m.setValue("DisplayBarArea", toolBarArea(ui->toolBarDisplay));
     m.setValue("DisplayBarBreak", toolBarBreak(ui->toolBarDisplay));
     m.setValue("ScriptBarArea", toolBarArea(ui->toolBarScript));
@@ -1559,7 +1604,18 @@ void MainWindow::saveSettings()
     m.setValue("EditBarArea", toolBarArea(ui->toolBarEdit));
     m.setValue("EditBarBreak", toolBarBreak(ui->toolBarEdit));
     m.setValue("Language", _lang);
+    m.setValue("SavePath", _savePath);
 
-    m << firstMdiChild();
     m << qobject_cast<MenuConnect*>(ui->actionConnect->menu());
+
+    const auto subWindowList = ui->mdiArea->subWindowList();
+    for(int i = 0; i < subWindowList.size(); ++i) {
+        const auto frm = qobject_cast<FormModSim*>(subWindowList[i]->widget());
+        if(frm) {
+            m.beginGroup("Form_" + QString::number(i + 1));
+            m.setValue("FromId", frm->formId());
+            m << frm;
+            m.endGroup();
+        }
+    }
 }

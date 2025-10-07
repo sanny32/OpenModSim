@@ -46,9 +46,13 @@
         </sizepolicy>
        </property>
        <property name="plainText">
-        <string>Script.onInit(()=&gt;{
-	Server.addressBase = AddressBase.Base1;
-	Server.onChange(Register.Holding, 1, (value)=&gt;
+        <string>Server.addressBase = AddressBase.Base1;
+
+let deviceId = 1;
+let address = 1;
+
+Script.onInit(()=&gt;{
+	Server.onChange(deviceId, Register.Holding, address, (value)=&gt;
 	{
 		/* write your code on register value change */
 	});

@@ -328,41 +328,46 @@
     </message>
     <message>
         <location filename="../dialogs/dialogdisplaydefinition.ui" line="91"/>
+        <source>Verbose Logging</source>
+        <translation>详细日志记录</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="98"/>
         <source>Autoscroll Log View</source>
         <translation>自動滾動日誌視圖</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogdisplaydefinition.ui" line="107"/>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="114"/>
         <source>Modbus Data</source>
         <translation>Modbus数据</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogdisplaydefinition.ui" line="125"/>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="132"/>
         <source>Slave Address:</source>
         <translation>从设备地址：</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogdisplaydefinition.ui" line="154"/>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="161"/>
         <source>Point Type:</source>
         <translation>寄存器类型：</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogdisplaydefinition.ui" line="200"/>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="207"/>
         <source>Point Address:</source>
         <translation>寄存器地址：</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogdisplaydefinition.ui" line="251"/>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="258"/>
         <source>Length:</source>
         <translation>长度:</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogdisplaydefinition.ui" line="261"/>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="268"/>
         <source>Use Global Address Map (Unallocated registers will be zero)</source>
         <translation>使用全局地址映射（未分配的寄存器将为零）</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogdisplaydefinition.ui" line="177"/>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="184"/>
         <source>Address Base:</source>
         <translation>基地址：</translation>
     </message>
@@ -1069,7 +1074,7 @@ Length: %2</source>
         <translation type="vanished">Указана недопустимая длина данных</translation>
     </message>
     <message>
-        <location filename="../formmodsim.cpp" line="446"/>
+        <location filename="../formmodsim.cpp" line="451"/>
         <source>Address Base: %1
 Start Address: %2
 Length: %3</source>
@@ -1078,7 +1083,7 @@ Length: %3</source>
 长度: %3</translation>
     </message>
     <message>
-        <location filename="../formmodsim.cpp" line="449"/>
+        <location filename="../formmodsim.cpp" line="454"/>
         <source>Device Id: %1
 MODBUS Point Type:
 %2</source>
@@ -1610,10 +1615,10 @@ MODBUS Point Type:
         <translation type="vanished">俄语</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="324"/>
-        <location filename="../mainwindow.cpp" line="363"/>
-        <location filename="../mainwindow.cpp" line="376"/>
-        <location filename="../mainwindow.cpp" line="387"/>
+        <location filename="../mainwindow.cpp" line="323"/>
+        <location filename="../mainwindow.cpp" line="364"/>
+        <location filename="../mainwindow.cpp" line="378"/>
+        <location filename="../mainwindow.cpp" line="390"/>
         <source>All files (*)</source>
         <translation>所有文件 (*)</translation>
     </message>
@@ -2178,25 +2183,38 @@ MODBUS Point Type:
 <context>
     <name>ModbusMultiServer</name>
     <message>
-        <location filename="../modbusmultiserver.cpp" line="932"/>
+        <location filename="../modbusmultiserver.cpp" line="474"/>
+        <source>An incorrect device id was specified (%1)</source>
+        <translation>指定了錯誤的設備 ID（%1）</translation>
+    </message>
+    <message>
+        <location filename="../modbusmultiserver.cpp" line="951"/>
         <source>Connection error. %1</source>
         <translation>连接错误 %1</translation>
     </message>
 </context>
 <context>
+    <name>ModbusTcpServer</name>
+    <message>
+        <location filename="../modbustcpserver.cpp" line="220"/>
+        <source>Invalid connection settings for TCP communication specified.</source>
+        <translation>指定的 TCP 通訊連線設定無效。</translation>
+    </message>
+</context>
+<context>
     <name>OutputWidget</name>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="826"/>
+        <location filename="../controls/outputwidget.cpp" line="829"/>
         <source>%1: Enter Description</source>
         <translation>%1:输入描述</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="891"/>
+        <location filename="../controls/outputwidget.cpp" line="894"/>
         <source>NOT CONNECTED!</source>
         <translation>未连接！</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="899"/>
+        <location filename="../controls/outputwidget.cpp" line="902"/>
         <source>Invalid Data Length Specified</source>
         <translation>指定的数据长度无效</translation>
     </message>
@@ -2217,6 +2235,80 @@ MODBUS Point Type:
         <location filename="../controls/paritytypecombobox.cpp" line="12"/>
         <source>NONE</source>
         <translation>无校验</translation>
+    </message>
+</context>
+<context>
+    <name>QModbusDevice</name>
+    <message>
+        <location filename="../modbusrtuserialserver.cpp" line="391"/>
+        <source>Referenced serial device does not exist.</source>
+        <translation>引用的串行設備不存在。</translation>
+    </message>
+    <message>
+        <location filename="../modbusrtuserialserver.cpp" line="394"/>
+        <source>Cannot open serial device due to permissions.</source>
+        <translation>由於權限問題，無法開啟串行設備。</translation>
+    </message>
+    <message>
+        <location filename="../modbusrtuserialserver.cpp" line="398"/>
+        <source>Cannot open serial device.</source>
+        <translation>無法開啟串行設備。</translation>
+    </message>
+    <message>
+        <location filename="../modbusrtuserialserver.cpp" line="401"/>
+        <source>Write error.</source>
+        <translation>寫入錯誤。</translation>
+    </message>
+    <message>
+        <location filename="../modbusrtuserialserver.cpp" line="404"/>
+        <source>Read error.</source>
+        <translation>讀取錯誤。</translation>
+    </message>
+    <message>
+        <location filename="../modbusrtuserialserver.cpp" line="407"/>
+        <source>Resource error.</source>
+        <translation>資源錯誤。</translation>
+    </message>
+    <message>
+        <location filename="../modbusrtuserialserver.cpp" line="410"/>
+        <source>Device operation is not supported error.</source>
+        <translation>設備操作不支援錯誤。</translation>
+    </message>
+    <message>
+        <location filename="../modbusrtuserialserver.cpp" line="414"/>
+        <source>Timeout error.</source>
+        <translation>超時錯誤。</translation>
+    </message>
+    <message>
+        <location filename="../modbusrtuserialserver.cpp" line="417"/>
+        <source>Unknown error.</source>
+        <translation>未知錯誤。</translation>
+    </message>
+</context>
+<context>
+    <name>QModbusRtuSerialServer</name>
+    <message>
+        <location filename="../modbusrtuserialserver.cpp" line="302"/>
+        <source>Requesting serial port is closed</source>
+        <translation>請求串口已關閉</translation>
+    </message>
+    <message>
+        <location filename="../modbusrtuserialserver.cpp" line="311"/>
+        <source>Could not write response to client</source>
+        <translation>無法寫入對客戶端的回應</translation>
+    </message>
+</context>
+<context>
+    <name>QModbusTcpServer</name>
+    <message>
+        <location filename="../modbustcpserver.cpp" line="149"/>
+        <source>Requesting socket is closed</source>
+        <translation>請求套接字已關閉</translation>
+    </message>
+    <message>
+        <location filename="../modbustcpserver.cpp" line="157"/>
+        <source>Could not write response to client</source>
+        <translation>無法寫入對客戶端的回應</translation>
     </message>
 </context>
 <context>
@@ -2270,7 +2362,6 @@ MODBUS Point Type:
 });</translation>
     </message>
     <message>
-        <location filename="../controls/scriptcontrol.ui" line="49"/>
         <source>Script.onInit(()=&gt;{
 	Server.addressBase = AddressBase.Base1;
 	Server.onChange(Register.Holding, 1, (value)=&gt;
@@ -2280,7 +2371,7 @@ MODBUS Point Type:
 
 	/* write your init code here */
 });</source>
-        <translation>Script.onInit(()=&gt;{
+        <translation type="vanished">Script.onInit(()=&gt;{
 	Server.addressBase = AddressBase.Base1;
 	Server.onChange(Register.Holding, 1, (value)=&gt;
 	{
@@ -2288,6 +2379,35 @@ MODBUS Point Type:
 	});
 
 	/* 在此处编写您的初始化代码 */
+});</translation>
+    </message>
+    <message>
+        <location filename="../controls/scriptcontrol.ui" line="49"/>
+        <source>Server.addressBase = AddressBase.Base1;
+
+let deviceId = 1;
+let address = 1;
+
+Script.onInit(()=&gt;{
+	Server.onChange(deviceId, Register.Holding, address, (value)=&gt;
+	{
+		/* write your code on register value change */
+	});
+
+	/* write your init code here */
+});</source>
+        <translation>Server.addressBase = AddressBase.Base1;
+
+let deviceId = 1;
+let address = 1;
+
+Script.onInit(()=&gt;{
+	Server.onChange(deviceId, Register.Holding, address, (value)=&gt;
+	{
+		/* 在暫存器值改變時編寫程式碼 */
+	});
+
+	/* 在這裡寫入你的初始化程式碼 */
 });</translation>
     </message>
 </context>

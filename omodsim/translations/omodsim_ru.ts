@@ -323,31 +323,36 @@
     </message>
     <message>
         <location filename="../dialogs/dialogdisplaydefinition.ui" line="91"/>
+        <source>Verbose Logging</source>
+        <translation>Подробное логирование</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="98"/>
         <source>Autoscroll Log View</source>
         <translation>Автопрокрутка текста</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogdisplaydefinition.ui" line="107"/>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="114"/>
         <source>Modbus Data</source>
         <translation>Настройки Modbus</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogdisplaydefinition.ui" line="125"/>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="132"/>
         <source>Slave Address:</source>
         <translation>Адрес устройства:</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogdisplaydefinition.ui" line="154"/>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="161"/>
         <source>Point Type:</source>
         <translation>Тип регистров:</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogdisplaydefinition.ui" line="261"/>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="268"/>
         <source>Use Global Address Map (Unallocated registers will be zero)</source>
         <translation>Использовать глобальную карту адресов</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogdisplaydefinition.ui" line="200"/>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="207"/>
         <source>Point Address:</source>
         <translation>Начальный адрес:</translation>
     </message>
@@ -357,12 +362,12 @@
         <translation>Журнал</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogdisplaydefinition.ui" line="251"/>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="258"/>
         <source>Length:</source>
         <translation>Количество:</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogdisplaydefinition.ui" line="177"/>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="184"/>
         <source>Address Base:</source>
         <translation>Адресация:</translation>
     </message>
@@ -1069,7 +1074,7 @@ Length: %2</source>
         <translation type="vanished">Указана недопустимая длина данных</translation>
     </message>
     <message>
-        <location filename="../formmodsim.cpp" line="446"/>
+        <location filename="../formmodsim.cpp" line="451"/>
         <source>Address Base: %1
 Start Address: %2
 Length: %3</source>
@@ -1078,7 +1083,7 @@ Length: %3</source>
 Количество: %3</translation>
     </message>
     <message>
-        <location filename="../formmodsim.cpp" line="449"/>
+        <location filename="../formmodsim.cpp" line="454"/>
         <source>Device Id: %1
 MODBUS Point Type:
 %2</source>
@@ -1602,10 +1607,10 @@ MODBUS Point Type:
         <translation>Шестнадцатиричные адреса</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="324"/>
-        <location filename="../mainwindow.cpp" line="363"/>
-        <location filename="../mainwindow.cpp" line="376"/>
-        <location filename="../mainwindow.cpp" line="387"/>
+        <location filename="../mainwindow.cpp" line="323"/>
+        <location filename="../mainwindow.cpp" line="364"/>
+        <location filename="../mainwindow.cpp" line="378"/>
+        <location filename="../mainwindow.cpp" line="390"/>
         <source>All files (*)</source>
         <translation>Все файлы (*)</translation>
     </message>
@@ -2170,25 +2175,38 @@ MODBUS Point Type:
 <context>
     <name>ModbusMultiServer</name>
     <message>
-        <location filename="../modbusmultiserver.cpp" line="932"/>
+        <location filename="../modbusmultiserver.cpp" line="474"/>
+        <source>An incorrect device id was specified (%1)</source>
+        <translation>Некорректно знаяение номера устройства (%1)</translation>
+    </message>
+    <message>
+        <location filename="../modbusmultiserver.cpp" line="951"/>
         <source>Connection error. %1</source>
         <translation>Ошибка подключения. %1</translation>
     </message>
 </context>
 <context>
+    <name>ModbusTcpServer</name>
+    <message>
+        <location filename="../modbustcpserver.cpp" line="220"/>
+        <source>Invalid connection settings for TCP communication specified.</source>
+        <translation>Указаны некорректные настройки для TCP соединения.</translation>
+    </message>
+</context>
+<context>
     <name>OutputWidget</name>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="826"/>
+        <location filename="../controls/outputwidget.cpp" line="829"/>
         <source>%1: Enter Description</source>
         <translation>%1: Введите описание</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="891"/>
+        <location filename="../controls/outputwidget.cpp" line="894"/>
         <source>NOT CONNECTED!</source>
         <translation>НЕ ПОДКЛЮЧЕНО!</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="899"/>
+        <location filename="../controls/outputwidget.cpp" line="902"/>
         <source>Invalid Data Length Specified</source>
         <translation>Указана недопустимая длина данных</translation>
     </message>
@@ -2209,6 +2227,80 @@ MODBUS Point Type:
         <location filename="../controls/paritytypecombobox.cpp" line="12"/>
         <source>NONE</source>
         <translation>Нет</translation>
+    </message>
+</context>
+<context>
+    <name>QModbusDevice</name>
+    <message>
+        <location filename="../modbusrtuserialserver.cpp" line="391"/>
+        <source>Referenced serial device does not exist.</source>
+        <translation>Указанное устройство не существует.</translation>
+    </message>
+    <message>
+        <location filename="../modbusrtuserialserver.cpp" line="394"/>
+        <source>Cannot open serial device due to permissions.</source>
+        <translation>Невозможно открыть устройство из-за разрешений доступа.</translation>
+    </message>
+    <message>
+        <location filename="../modbusrtuserialserver.cpp" line="398"/>
+        <source>Cannot open serial device.</source>
+        <translation>Невозможно открыть устройство.</translation>
+    </message>
+    <message>
+        <location filename="../modbusrtuserialserver.cpp" line="401"/>
+        <source>Write error.</source>
+        <translation>Ошибка записи.</translation>
+    </message>
+    <message>
+        <location filename="../modbusrtuserialserver.cpp" line="404"/>
+        <source>Read error.</source>
+        <translation>Ошибка чтения.</translation>
+    </message>
+    <message>
+        <location filename="../modbusrtuserialserver.cpp" line="407"/>
+        <source>Resource error.</source>
+        <translation>Ошибка ресурса.</translation>
+    </message>
+    <message>
+        <location filename="../modbusrtuserialserver.cpp" line="410"/>
+        <source>Device operation is not supported error.</source>
+        <translation>Работа устройства не поддерживается.</translation>
+    </message>
+    <message>
+        <location filename="../modbusrtuserialserver.cpp" line="414"/>
+        <source>Timeout error.</source>
+        <translation>Время ожидания истекло.</translation>
+    </message>
+    <message>
+        <location filename="../modbusrtuserialserver.cpp" line="417"/>
+        <source>Unknown error.</source>
+        <translation>Неизвестная ошибка.</translation>
+    </message>
+</context>
+<context>
+    <name>QModbusRtuSerialServer</name>
+    <message>
+        <location filename="../modbusrtuserialserver.cpp" line="302"/>
+        <source>Requesting serial port is closed</source>
+        <translation>Запрашиваемый последовательный порт закрыт</translation>
+    </message>
+    <message>
+        <location filename="../modbusrtuserialserver.cpp" line="311"/>
+        <source>Could not write response to client</source>
+        <translation>Не удалось создать ответ клиенту</translation>
+    </message>
+</context>
+<context>
+    <name>QModbusTcpServer</name>
+    <message>
+        <location filename="../modbustcpserver.cpp" line="149"/>
+        <source>Requesting socket is closed</source>
+        <translation>Запрашивающий сокет закрыт</translation>
+    </message>
+    <message>
+        <location filename="../modbustcpserver.cpp" line="157"/>
+        <source>Could not write response to client</source>
+        <translation>Не удалось создать ответ клиенту</translation>
     </message>
 </context>
 <context>
@@ -2262,7 +2354,6 @@ MODBUS Point Type:
 });</translation>
     </message>
     <message>
-        <location filename="../controls/scriptcontrol.ui" line="49"/>
         <source>Script.onInit(()=&gt;{
 	Server.addressBase = AddressBase.Base1;
 	Server.onChange(Register.Holding, 1, (value)=&gt;
@@ -2272,7 +2363,7 @@ MODBUS Point Type:
 
 	/* write your init code here */
 });</source>
-        <translation>Script.onInit(()=&gt;{
+        <translation type="vanished">Script.onInit(()=&gt;{
 	Server.addressBase = AddressBase.Base1;
 	Server.onChange(Register.Holding, 1, (value)=&gt;
 	{
@@ -2280,6 +2371,35 @@ MODBUS Point Type:
 	});
 
 	/* инициализация */
+});</translation>
+    </message>
+    <message>
+        <location filename="../controls/scriptcontrol.ui" line="49"/>
+        <source>Server.addressBase = AddressBase.Base1;
+
+let deviceId = 1;
+let address = 1;
+
+Script.onInit(()=&gt;{
+	Server.onChange(deviceId, Register.Holding, address, (value)=&gt;
+	{
+		/* write your code on register value change */
+	});
+
+	/* write your init code here */
+});</source>
+        <translation>Server.addressBase = AddressBase.Base1;
+
+let deviceId = 1;
+let address = 1;
+
+Script.onInit(()=&gt;{
+	Server.onChange(deviceId, Register.Holding, address, (value)=&gt;
+	{
+		/* здесь должен быть код реакции на изменение значения регистра */
+	});
+
+	/* здесь должен быть ваш код инициализации */
 });</translation>
     </message>
 </context>

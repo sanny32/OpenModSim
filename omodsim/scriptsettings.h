@@ -82,10 +82,8 @@ inline QDataStream& operator >>(QDataStream& in, ScriptSettings& ss)
     in >> ss.Mode;
     in >> ss.Interval;
     in >> ss.UseAutoComplete;
+    in >> ss.RunOnStartup;
 
-    if(!in.atEnd()) {
-        in >> ss.RunOnStartup;
-    }
 
     return in;
 }

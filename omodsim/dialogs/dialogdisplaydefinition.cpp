@@ -20,6 +20,7 @@ DialogDisplayDefinition::DialogDisplayDefinition(DisplayDefinition dd, QWidget* 
     ui->lineEditSlaveAddress->setInputRange(ModbusLimits::slaveRange());
     ui->lineEditLogLimit->setInputRange(4, 1000);
     ui->checkBoxAutoscrollLog->setChecked(dd.AutoscrollLog);
+    ui->checkBoxVerboseLogging->setChecked(dd.VerboseLogging);
 
     ui->comboBoxAddressBase->setCurrentIndex(dd.ZeroBasedAddress ? 0 : 1);
     ui->lineEditPointAddress->setValue(dd.PointAddress);
@@ -52,6 +53,7 @@ void DialogDisplayDefinition::accept()
     _displayDefinition.Length = ui->lineEditLength->value<int>();
     _displayDefinition.LogViewLimit = ui->lineEditLogLimit->value<int>();
     _displayDefinition.AutoscrollLog = ui->checkBoxAutoscrollLog->isChecked();
+    _displayDefinition.VerboseLogging = ui->checkBoxVerboseLogging->isChecked();
     _displayDefinition.ZeroBasedAddress = (ui->comboBoxAddressBase->currentAddressBase() == AddressBase::Base0);
     _displayDefinition.UseGlobalUnitMap = ui->checkBoxGlobalMap->isChecked();
 

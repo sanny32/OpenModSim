@@ -88,18 +88,14 @@ public:
 
     void print(QPrinter* painter);
 
-    ModbusSimulationMap simulationMap() const;
+    ModbusSimulationMap2 simulationMap() const;
     void startSimulation(QModbusDataUnit::RegisterType type, quint16 addr, const ModbusSimulationParams& params);
 
-    QModbusDataUnit serializeModbusDataUnit(QModbusDataUnit::RegisterType pointType,
-                                            quint16 pointAddress,
-                                            quint16 length) const;
-    void configureModbusDataUnit(QModbusDataUnit::RegisterType type,
-                                             quint16 startAddress,
-                                             const QVector<quint16>& values) const;
+    QModbusDataUnit serializeModbusDataUnit(quint8 deviceId, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, quint16 length) const;
+    void configureModbusDataUnit(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 startAddress, const QVector<quint16>& values) const;
 
-    AddressDescriptionMap descriptionMap() const;
-    void setDescription(QModbusDataUnit::RegisterType type, quint16 addr, const QString& desc);
+    AddressDescriptionMap2 descriptionMap() const;
+    void setDescription(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr, const QString& desc);
 
     bool canRunScript() const;
     bool canStopScript() const;
@@ -135,31 +131,31 @@ signals:
 private slots:
     void on_lineEditAddress_valueChanged(const QVariant&);
     void on_lineEditLength_valueChanged(const QVariant&);
-    void on_lineEditDeviceId_valueChanged(const QVariant&);
+    void on_lineEditDeviceId_valueChanged(const QVariant&, const QVariant&);
     void on_comboBoxAddressBase_addressBaseChanged(AddressBase base);
     void on_comboBoxModbusPointType_pointTypeChanged(QModbusDataUnit::RegisterType value);
     void on_outputWidget_itemDoubleClicked(quint16 addr, const QVariant& value);
-    void on_mbDeviceIdChanged(quint8 deviceId);
     void on_mbConnected(const ConnectionDetails& cd);
     void on_mbDisconnected(const ConnectionDetails& cd);
-    void on_mbRequest(const QModbusRequest& req, ModbusMessage::ProtocolType protocol, int transactionId);
-    void on_mbResponse(const QModbusRequest& req, const QModbusResponse& resp, ModbusMessage::ProtocolType protocol, int transactionId);
-    void on_mbDataChanged(const QModbusDataUnit& data);
-    void on_simulationStarted(QModbusDataUnit::RegisterType type, quint16 addr);
-    void on_simulationStopped(QModbusDataUnit::RegisterType type, quint16 addr);
-    void on_dataSimulated(DataDisplayMode mode, QModbusDataUnit::RegisterType type, quint16 addr, QVariant value);
+    void on_mbRequest(quint8 deviceId, const QModbusRequest& req, ModbusMessage::ProtocolType protocol, int transactionId);
+    void on_mbResponse(quint8 deviceId, const QModbusRequest& req, const QModbusResponse& resp, ModbusMessage::ProtocolType protocol, int transactionId);
+    void on_mbDataChanged(quint8 deviceId, const QModbusDataUnit& data);
+    void on_simulationStarted(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr);
+    void on_simulationStopped(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr);
+    void on_dataSimulated(DataDisplayMode mode, quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr, QVariant value);
 
 private:
     void updateStatus();
     void onDefinitionChanged();
     ScriptControl* scriptControl();
-    bool isLoggingRequest(const QModbusRequest& req, ModbusMessage::ProtocolType protocol) const;
+    bool isLoggingRequest(quint8 deviceId, const QModbusRequest& req, ModbusMessage::ProtocolType protocol) const;
 
 private:
     Ui::FormModSim *ui;
     MainWindow* _parent;
     int _formId;
     QString _filename;
+    bool _verboseLogging;
     ScriptSettings _scriptSettings;
     ModbusMultiServer& _mbMultiServer;
     QSharedPointer<DataSimulator> _dataSimulator;
@@ -296,6 +292,9 @@ inline QDataStream& operator <<(QDataStream& out, FormModSim* frm)
     out << dd.Length;
     out << dd.LogViewLimit;
     out << dd.ZeroBasedAddress;
+    out << dd.UseGlobalUnitMap;
+    out << dd.AutoscrollLog;
+    out << dd.VerboseLogging;
 
     out << frm->byteOrder();
     out << frm->simulationMap();
@@ -304,7 +303,7 @@ inline QDataStream& operator <<(QDataStream& out, FormModSim* frm)
     out << frm->descriptionMap();
     out << frm->codepage();
 
-    const auto unit = frm->serializeModbusDataUnit(dd.PointType, dd.PointAddress - (dd.ZeroBasedAddress ? 0 : 1), dd.Length);
+    const auto unit = frm->serializeModbusDataUnit(dd.DeviceId, dd.PointType, dd.PointAddress - (dd.ZeroBasedAddress ? 0 : 1), dd.Length);
     out << unit.registerType();
     out << unit.startAddress();
     out << unit.values();
@@ -364,25 +363,53 @@ inline QDataStream& operator >>(QDataStream& in, FormModSim* frm)
         in >> dd.ZeroBasedAddress;
     }
 
+    if(ver >= QVersionNumber(1, 9))
+    {
+        in >> dd.UseGlobalUnitMap;
+        in >> dd.AutoscrollLog;
+        in >> dd.VerboseLogging;
+    }
+
     ModbusSimulationMap simulationMap;
+    ModbusSimulationMap2 simulationMap2;
     ByteOrder byteOrder = ByteOrder::Direct;
     if(ver >= QVersionNumber(1, 1))
     {
         in >> byteOrder;
-        in >> simulationMap;
+
+        if(ver >= QVersionNumber(1, 10)) {
+            in >> simulationMap2;
+        }
+        else {
+            in >> simulationMap;
+        }
     }
 
     ScriptSettings scriptSettings;
     if(ver >=  QVersionNumber(1, 2))
     {
         in >> frm->scriptControl();
-        in >> scriptSettings;
+
+        if(ver >= QVersionNumber(1, 8)) {
+            in >> scriptSettings;
+        }
+        else {
+            in >> scriptSettings.Mode;
+            in >> scriptSettings.Interval;
+            in >> scriptSettings.UseAutoComplete;
+        }
     }
 
     AddressDescriptionMap descriptionMap;
+    AddressDescriptionMap2 descriptionMap2;
     if(ver >=  QVersionNumber(1, 3))
     {
-        in >> descriptionMap;
+        if(ver >= QVersionNumber(1, 10)) {
+            in >> descriptionMap2;
+        }
+        else {
+            in >> descriptionMap;
+        }
     }
 
     QString codepage;
@@ -412,11 +439,20 @@ inline QDataStream& operator >>(QDataStream& in, FormModSim* frm)
     frm->setCodepage(codepage);
     frm->setScriptSettings(scriptSettings);
 
-    for(auto&& k : simulationMap.keys())
-        frm->startSimulation(k.first, k.second,  simulationMap[k]);
+    if(ver >= QVersionNumber(1,10)) {
+        for(auto&& k : simulationMap2.keys())
+            frm->startSimulation(k.Type, k.Address, simulationMap2[k]);
 
-    for(auto&& k : descriptionMap.keys())
-        frm->setDescription(k.first, k.second, descriptionMap[k]);
+        for(auto&& k : descriptionMap2.keys())
+            frm->setDescription(k.DeviceId, k.Type, k.Address, descriptionMap2[k]);
+    }
+    else {
+        for(auto&& k : simulationMap.keys())
+            frm->startSimulation(k.first, k.second, simulationMap[k]);
+
+        for(auto&& k : descriptionMap.keys())
+            frm->setDescription(dd.DeviceId, k.first, k.second, descriptionMap[k]);
+    }
 
     if(ver >= QVersionNumber(1, 7))
     {
@@ -428,7 +464,7 @@ inline QDataStream& operator >>(QDataStream& in, FormModSim* frm)
         in >> startAddress;
         in >> values;
 
-        frm->configureModbusDataUnit(type, startAddress, values);
+        frm->configureModbusDataUnit(dd.DeviceId, type, startAddress, values);
     }
 
     return in;

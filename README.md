@@ -57,8 +57,7 @@ The following simulations are available:
 # Scripting
   From version 1.2.0 Open ModSim supports scripting. Qt runtime implements the [ECMAScript Language Specification](http://www.ecma-international.org/publications/standards/Ecma-262.htm) standard, so Javascript is used to write code.
   
-![image](https://github.com/user-attachments/assets/5b448fcd-1ca7-4cfc-af0f-175fbb660f80)
-
+<img width="1292" height="759" alt="image" src="https://github.com/user-attachments/assets/a5df0923-8015-4ddd-82c1-c744dc9e0584" />
 
   Scripts can be launched in two modes: Once or Periodically. If you run script in Once mode the script will stop after it finishes executing. In Periodically mode, the script will start after a certain period of time until the user stops it or the method is called
   ```javascript
@@ -72,31 +71,42 @@ Here is an example of using the script in the Periodically mode
 /*
 ***************************************************************************/
 
-function clear()
+/* Set the server address base starts from one (1-based) */
+Server.addressBase = AddressBase.Base1;
+
+let deviceId = 1;
+let address1 = 1;
+let address10 = 10;
+
+function reset()
 {
-    /* Write to a Holding register at address 1 zero value */
-    Server.writeHolding(1, 0);
+    /* Write to a Holding register at address1 zero value */
+    Server.writeHolding(address1, 0, deviceId);
 }
 
 /* init function */
 function init()
 {
-    /* Set the server address base starts from one (1-based) */
-    Server.addressBase = AddressBase.Base1;
+    reset();
 
-    clear();
-    
-    /* Runs when Hodling register value at address 1 was changed */
-    Server.onChange(Register.Holding, 1, (value)=>
+	/* Print server error if occured and stop script execution */
+	Server.onError(deviceId, (error)=> {
+		console.error(error);
+ 		Script.stop();
+	});   
+
+    /* Runs when Hodling register value at address1 was changed */
+    Server.onChange(deviceId, Register.Holding, address1, (value)=>
     {
         if(value === 1)
         {
-            /* Runs after 3 seconds and increase Holding register value at address 10 
-             * Then stop script execution
+            /* Runs after 3 seconds and increase Holding register value at address10 
+             * Then reset register value at address1 and stop script execution
              */
             Script.setTimeout(function()
             {
-                Server.writeHolding(10, Server.readHolding(10) + 1);
+                Server.writeHolding(address10, Server.readHolding(10, deviceId) + 1, deviceId);
+				reset();
                 Script.stop();
             }, 3000);
         }
@@ -130,18 +140,18 @@ Below are the methods for installing the OpenModSim for different OS
 ## Microsoft Windows
 Run the installer:
 
-- For 32-bit Windows: `qt5-omodsim_1.9.0-1_x86.exe`
-- For 64-bit Windows: `qt5-omodsim_1.9.0-1_amd64.exe` or `qt6-omodsim_1.9.0-1_amd64.exe`
+- For 32-bit Windows: `qt5-omodsim_1.9.1_x86.exe`
+- For 64-bit Windows: `qt5-omodsim_1.9.1_x64.exe` or `qt6-omodsim_1.9.1_x64.exe`
 
 ## Debian/Ubintu/Mint/Astra Linux
 ### Install
 Install the DEB package from the command line:
 ```bash
-sudo apt install -f ./qt6-omodsim_1.9.0-1_amd64.deb
+sudo apt install -f ./qt6-omodsim_1.9.1-1_amd64.deb
 ```
 or if you want to use Qt5 libraries:
 ```bash
-sudo apt install -f ./qt5-omodsim_1.9.0-1_amd64.deb
+sudo apt install -f ./qt5-omodsim_1.9.1-1_amd64.deb
 ```
 
 ### Remove
@@ -158,7 +168,7 @@ sudo apt remove qt5-omodsim
 ### Install
 Install the RPM package from the command line:
 ```bash
-sudo dnf install ./qt6-omodsim_1.9.0-1.x86_64.rpm
+sudo dnf install ./qt6-omodsim_1.9.1-1.x86_64.rpm
 ```
 
 ### Remove
@@ -171,7 +181,7 @@ sudo dnf remove qt6-omodsim
 ### Install
 Install the RPM package from the command line as root user:
 ```bash
-apt-get install ./qt6-omodsim_1.9.0-1.x86_64.rpm
+apt-get install ./qt6-omodsim_1.9.1-1.x86_64.rpm
 ```
 
 ### Remove
@@ -188,7 +198,7 @@ sudo rpm --import qt6-omodsim.rpm.pubkey
 ```
 Install the RPM package using Zypper:
 ```bash
-sudo zypper install ./qt6-omodsim_1.9.0-1.x86_64.rpm
+sudo zypper install ./qt6-omodsim_1.9.1-1.x86_64.rpm
 ```
 
 ### Remove

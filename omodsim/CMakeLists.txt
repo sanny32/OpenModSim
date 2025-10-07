@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.16)
 
 project(omodsim
-        VERSION 1.9.0
+        VERSION 1.9.1
         DESCRIPTION "An Open Source Modbus Slave (Server) Utility"
         LANGUAGES CXX)
 
@@ -128,6 +128,9 @@ set(SOURCES
     menuconnect.cpp
     modbusdataunitmap.cpp
     modbusmessages/modbusmessage.cpp
+    modbusrtuserialserver.cpp
+    modbusserver.cpp
+    modbustcpserver.cpp
     modbusmultiserver.cpp
     qfixedsizedialog.cpp
     qhexvalidator.cpp
@@ -193,6 +196,7 @@ set(HEADERS
     jsobjects/server.h
     displaydefinition.h
     enums.h
+    modbusserver.h
     formmodsim.h
     jshighlighter.h
     jsobjects/storage.h
@@ -221,6 +225,8 @@ set(HEADERS
     modbusmessages/writesinglecoil.h
     modbusmessages/writesingleregister.h
     modbusmultiserver.h
+    modbusrtuserialserver.h
+    modbustcpserver.h
     modbussimulationparams.h
     modbuswriteparams.h
     numericutils.h
@@ -229,6 +235,8 @@ set(HEADERS
     qint64validator.h
     qmodbusadu.h
     qmodbusadurtu.h
+    qcountedset.h
+    qmodbuscommevent.h
     qmodbusadutcp.h
     qrange.h
     quintvalidator.h
@@ -325,6 +333,8 @@ if(WIN32)
 
     target_sources(${PROJECT_NAME} PRIVATE ${ICON_PATH} "${CMAKE_BINARY_DIR}/omodsim.rc")
     set_target_properties(${PROJECT_NAME} PROPERTIES WIN32_EXECUTABLE ON)
+elseif(LINUX)
+    set(CMAKE_CXX_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -static-libgcc -static-libstdc++")
 endif()
 
 add_custom_command(
