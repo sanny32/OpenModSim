@@ -89,6 +89,9 @@ MainWindow::MainWindow(QWidget *parent)
     connect(&_mbMultiServer, &ModbusMultiServer::connectionError, this, &MainWindow::on_connectionError);
 
     loadSettings();
+
+    if(_windowCounter == 0)
+        ui->actionNew->trigger();
 }
 
 ///
@@ -1553,9 +1556,6 @@ void MainWindow::loadSettings()
             m.endGroup();
         }
     }
-
-    if(_windowCounter == 0)
-        ui->actionNew->trigger();
 }
 
 ///
