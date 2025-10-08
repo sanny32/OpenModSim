@@ -109,6 +109,7 @@ set(SOURCES
     dialogs/dialogprintsettings.cpp
     dialogs/dialogscriptsettings.cpp
     dialogs/dialogselectserviceport.cpp
+    dialogs/dialogserversettings.cpp
     dialogs/dialogsetuppresetdata.cpp
     dialogs/dialogsetupserialport.cpp
     dialogs/dialogwindowsmanager.cpp
@@ -180,6 +181,7 @@ set(HEADERS
     dialogs/dialogmsgparser.h
     dialogs/dialogprintsettings.h
     dialogs/dialogscriptsettings.h
+    dialogs/dialogserversettings.h
     dialogs/dialogselectserviceport.h
     dialogs/dialogsetuppresetdata.h
     dialogs/dialogsetupserialport.h
@@ -261,6 +263,7 @@ set(UI_FILES
     dialogs/dialogprintsettings.ui
     dialogs/dialogscriptsettings.ui
     dialogs/dialogselectserviceport.ui
+    dialogs/dialogserversettings.ui
     dialogs/dialogsetuppresetdata.ui
     dialogs/dialogsetupserialport.ui
     dialogs/dialogwindowsmanager.ui

@@ -87,6 +87,8 @@
     </property>
     <addaction name="actionConnect"/>
     <addaction name="actionDisconnect"/>
+    <addaction name="separator"/>
+    <addaction name="actionSrvSettings"/>
    </widget>
    <widget class="QMenu" name="menuSetup">
     <property name="title">
@@ -226,6 +228,8 @@
    <addaction name="separator"/>
    <addaction name="actionConnect"/>
    <addaction name="actionDisconnect"/>
+   <addaction name="separator"/>
+   <addaction name="actionSrvSettings"/>
    <addaction name="separator"/>
    <addaction name="actionDataDefinition"/>
    <addaction name="actionShowData"/>
@@ -1001,6 +1005,15 @@
    </property>
    <property name="text">
     <string notr="true">中國人</string>
+   </property>
+  </action>
+  <action name="actionSrvSettings">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/res/actionSrvSettings.png</normaloff>:/res/actionSrvSettings.png</iconset>
+   </property>
+   <property name="text">
+    <string>Server Settings</string>
    </property>
   </action>
  </widget>

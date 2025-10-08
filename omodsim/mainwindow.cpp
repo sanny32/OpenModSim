@@ -13,6 +13,7 @@
 #include "dialogscriptsettings.h"
 #include "dialogforcemultiplecoils.h"
 #include "dialogforcemultipleregisters.h"
+#include "dialogserversettings.h"
 #include "runmodecombobox.h"
 #include "searchlineedit.h"
 #include "mainstatusbar.h"
@@ -189,6 +190,8 @@ void MainWindow::on_awake()
     ui->actionPrintSetup->setEnabled(_selectedPrinter != nullptr);
     ui->actionPrint->setEnabled(_selectedPrinter != nullptr && frm && frm->displayMode() == DisplayMode::Data);
     ui->actionRecentFile->setEnabled(!_recentFileActionList->isEmpty());
+
+    ui->actionSrvSettings->setEnabled(_mbMultiServer.isConnected());
 
     ui->actionDataDefinition->setEnabled(frm != nullptr);
     ui->actionShowData->setEnabled(frm != nullptr);
@@ -510,6 +513,15 @@ void MainWindow::on_connectAction(ConnectionDetails& cd)
 void MainWindow::on_disconnectAction(ConnectionType type, const QString& port)
 {
     _mbMultiServer.disconnectDevice(type, port);
+}
+
+///
+/// \brief MainWindow::on_actionSrvSettings_triggered
+///
+void MainWindow::on_actionSrvSettings_triggered()
+{
+    DialogServerSettings dlg(_mbMultiServer, this);
+    dlg.exec();
 }
 
 ///
