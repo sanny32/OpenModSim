@@ -13,7 +13,7 @@
 #include "formmodsim.h"
 #include "ui_formmodsim.h"
 
-QVersionNumber FormModSim::VERSION = QVersionNumber(1, 10);
+QVersionNumber FormModSim::VERSION = QVersionNumber(1, 11);
 
 ///
 /// \brief FormModSim::FormModSim

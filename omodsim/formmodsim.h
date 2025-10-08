@@ -286,6 +286,7 @@ inline QDataStream& operator <<(QDataStream& out, FormModSim* frm)
     out << frm->font();
 
     const auto dd = frm->displayDefinition();
+    out << dd.FormName;
     out << dd.DeviceId;
     out << dd.PointType;
     out << dd.PointAddress;
@@ -350,6 +351,10 @@ inline QDataStream& operator >>(QDataStream& in, FormModSim* frm)
     in >> font;
 
     DisplayDefinition dd;
+    if(ver >= QVersionNumber(1,11))
+    {
+        in >> dd.FormName;
+    }
     if(ver >= QVersionNumber(1, 5))
     {
         in >> dd.DeviceId;
