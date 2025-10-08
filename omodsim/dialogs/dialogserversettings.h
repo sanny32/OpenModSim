@@ -3,13 +3,14 @@
 
 #include <QDialog>
 #include <QListWidgetItem>
+#include "qfixedsizedialog.h"
 #include "modbusmultiserver.h"
 
 namespace Ui {
 class DialogServerSettings;
 }
 
-class DialogServerSettings : public QDialog
+class DialogServerSettings : public QFixedSizeDialog
 {
     Q_OBJECT
 
