@@ -141,6 +141,7 @@ QVector<quint16> FormModSim::data() const
 DisplayDefinition FormModSim::displayDefinition() const
 {
     DisplayDefinition dd;
+    dd.FormName = windowTitle();
     dd.DeviceId = ui->lineEditDeviceId->value<int>();
     dd.PointAddress = ui->lineEditAddress->value<int>();
     dd.PointType = ui->comboBoxModbusPointType->currentPointType();
@@ -162,6 +163,9 @@ DisplayDefinition FormModSim::displayDefinition() const
 void FormModSim::setDisplayDefinition(const DisplayDefinition& dd)
 {
     _mbMultiServer.setUseGlobalUnitMap(dd.UseGlobalUnitMap);
+
+    if(!dd.FormName.isEmpty())
+        setWindowTitle(dd.FormName);
 
     ui->lineEditDeviceId->setValue(dd.DeviceId);
 

@@ -14,6 +14,7 @@ DialogDisplayDefinition::DialogDisplayDefinition(DisplayDefinition dd, QWidget* 
     , ui(new Ui::DialogDisplayDefinition)
 {
     ui->setupUi(this);
+    ui->lineEditFormName->setText(dd.FormName);
     ui->lineEditPointAddress->setInputMode(dd.HexAddress ? NumericLineEdit::HexMode : NumericLineEdit::Int32Mode);
     ui->lineEditPointAddress->setInputRange(ModbusLimits::addressRange(dd.ZeroBasedAddress));
     ui->lineEditLength->setInputRange(ModbusLimits::lengthRange());
@@ -47,6 +48,7 @@ DialogDisplayDefinition::~DialogDisplayDefinition()
 ///
 void DialogDisplayDefinition::accept()
 {
+    _displayDefinition.FormName = ui->lineEditFormName->text();
     _displayDefinition.DeviceId = ui->lineEditSlaveAddress->value<int>();
     _displayDefinition.PointAddress = ui->lineEditPointAddress->value<int>();
     _displayDefinition.PointType = ui->comboBoxPointType->currentPointType();
