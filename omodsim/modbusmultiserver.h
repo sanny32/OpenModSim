@@ -22,9 +22,6 @@ public:
     void addDeviceId(quint8 deviceId);
     void removeDeviceId(quint8 deviceId);
 
-    bool isBusy(quint8 deviceId) const;
-    void setBusy(bool busy, quint8 deviceId);
-
     bool useGlobalUnitMap() const;
     void setUseGlobalUnitMap(bool use);
 
@@ -36,6 +33,9 @@ public:
     void closeConnections();
 
     QList<ConnectionDetails> connections() const;
+
+    ModbusDefinitions getModbusDefinitions(const ConnectionDetails& cd) const;
+    void setModbusDefinitions(const ConnectionDetails& cd, const ModbusDefinitions& md);
 
     bool isConnected() const;
     bool isConnected(ConnectionType type, const QString& port) const;

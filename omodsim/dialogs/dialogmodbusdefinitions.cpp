@@ -53,6 +53,7 @@ void DialogModbusDefinitions::on_listServers_currentRowChanged(int row)
     }
 
     const auto cd = item->data(Qt::UserRole).value<ConnectionDetails>();
+    updateModbusDefinitions(_mbMultiServer.getModbusDefinitions(cd));
 
     switch(cd.Type) {
     case ConnectionType::Tcp:
@@ -69,4 +70,25 @@ void DialogModbusDefinitions::on_listServers_currentRowChanged(int row)
                                                                     QString::number(cd.SerialParams.StopBits)));
         break;
     }
+}
+
+///
+/// \brief DialogModbusDefinitions::updateModbusDefinitions
+/// \param md
+///
+void DialogModbusDefinitions::updateModbusDefinitions(const ModbusDefinitions& md)
+{
+    ui->checkBoxGlobalMap->setChecked(md.UseGlobalUnitMap);
+
+    ui->checkBoxErrIncorrentId->setChecked(md.ErrorSimulations.responseIncorrectId());
+    ui->checkBoxIllegalFunc->setChecked(md.ErrorSimulations.responseIllegalFunction());
+    ui->checkBoxBusy->setChecked(md.ErrorSimulations.responseDeviceBusy());
+    ui->checkBoxCrcErr->setChecked(md.ErrorSimulations.responseIncorrectCrc());
+    ui->checkBoxDelay->setChecked(md.ErrorSimulations.responseDelay());
+    ui->checkBoxRandomDelay->setChecked(md.ErrorSimulations.responseRandomDelay());
+    ui->checkBoxNoResponse->setChecked(md.ErrorSimulations.noResponse());
+
+    ui->spinBoxDelay->setValue(md.ErrorSimulations.responseDelayTime());
+    ui->spinBoxUpToTime->setValue(md.ErrorSimulations.responseRandomDelayUpToTime());
+
 }

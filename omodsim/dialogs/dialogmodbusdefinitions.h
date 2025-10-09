@@ -4,6 +4,7 @@
 #include <QDialog>
 #include <QListWidgetItem>
 #include "qfixedsizedialog.h"
+#include "modbusdefinitions.h"
 #include "modbusmultiserver.h"
 
 namespace Ui {
@@ -20,6 +21,9 @@ public:
 
 private slots:
     void on_listServers_currentRowChanged(int row);
+
+private:
+    void updateModbusDefinitions(const ModbusDefinitions& md);
 
 private:
     Ui::DialogModbusDefinitions *ui;

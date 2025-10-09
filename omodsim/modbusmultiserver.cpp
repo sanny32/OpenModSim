@@ -70,36 +70,6 @@ void ModbusMultiServer::removeDeviceId(quint8 deviceId)
 }
 
 ///
-/// \brief ModbusMultiServer::isBusy
-/// \return
-///
-bool ModbusMultiServer::isBusy(quint8 deviceId) const
-{
-    if(_modbusServerList.isEmpty())
-        return false;
-
-    return _modbusServerList.first()->value(ModbusServer::DeviceBusy, deviceId) == 0xffff;
-}
-
-///
-/// \brief ModbusMultiServer::setBusy
-/// \param busy
-///
-void ModbusMultiServer::setBusy(bool busy, quint8 deviceId)
-{
-    if(QThread::currentThread() != _workerThread)
-    {
-        QMetaObject::invokeMethod(this, [this, busy, deviceId]() {
-            setBusy(busy, deviceId);
-        }, Qt::BlockingQueuedConnection);
-        return;
-    }
-
-    for(auto&& s : _modbusServerList)
-        s->setValue(QModbusServer::DeviceBusy, busy ? 0xffff : 0x0000, deviceId);
-}
-
-///
 /// \brief ModbusMultiServer::useGlobalUnitMap
 /// \return
 ///
@@ -368,6 +338,53 @@ QList<ConnectionDetails> ModbusMultiServer::connections() const
             conns.append(s->property("ConnectionDetails").value<ConnectionDetails>());
     }
     return conns;
+}
+
+///
+/// \brief ModbusMultiServer::getModbusDefinitions
+/// \param cd
+/// \return
+///
+ModbusDefinitions ModbusMultiServer::getModbusDefinitions(const ConnectionDetails& cd) const
+{
+    if(QThread::currentThread() != _workerThread)
+    {
+        ModbusDefinitions md;
+        QMetaObject::invokeMethod(const_cast<ModbusMultiServer*>(this), [this, &md, cd]() {
+            md = getModbusDefinitions(cd);
+        }, Qt::BlockingQueuedConnection);
+        return md;
+    }
+
+    auto modbusServer = findModbusServer(cd);
+    if(modbusServer == nullptr) {
+        return ModbusDefinitions();
+    }
+
+    return modbusServer->getDefinitions();
+}
+
+///
+/// \brief ModbusMultiServer::setModbusDefinitions
+/// \param cd
+/// \param md
+///
+void ModbusMultiServer::setModbusDefinitions(const ConnectionDetails& cd, const ModbusDefinitions& md)
+{
+    if(QThread::currentThread() != _workerThread)
+    {
+        QMetaObject::invokeMethod(this, [this, cd, md]() {
+            setModbusDefinitions(cd, md);
+        }, Qt::BlockingQueuedConnection);
+        return;
+    }
+
+    auto modbusServer = findModbusServer(cd);
+    if(modbusServer == nullptr) {
+        return;
+    }
+
+    modbusServer->setDefinitions(md);
 }
 
 ///
