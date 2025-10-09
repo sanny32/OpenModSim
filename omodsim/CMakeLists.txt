@@ -40,10 +40,7 @@ else()
 endif()
 
 # Define target
-add_executable(${PROJECT_NAME}
-    modbusdefinitions.h
-    modbuserrorsimulations.h modbuserrorsimulations.cpp
-)
+add_executable(${PROJECT_NAME})
 
 find_package(Git QUIET)
 if(GIT_FOUND)
@@ -131,6 +128,7 @@ set(SOURCES
     mainwindow.cpp
     menuconnect.cpp
     modbusdataunitmap.cpp
+    modbuserrorsimulations.cpp
     modbusmessages/modbusmessage.cpp
     modbusrtuserialserver.cpp
     modbusserver.cpp
@@ -208,6 +206,8 @@ set(HEADERS
     mainwindow.h
     menuconnect.h
     modbusdataunitmap.h
+    modbusdefinitions.h
+    modbuserrorsimulations.h
     modbuslimits.h
     modbusmessages/diagnostics.h
     modbusmessages/getcommeventcounter.h
