@@ -39,6 +39,15 @@ inline QSettings& operator >>(QSettings& in, AddressBase& base)
 }
 
 ///
+/// \brief The AddressSpace enum
+///
+enum class AddressSpace
+{
+    Addr6Digits = 0,
+    Addr5Digits
+};
+
+///
 /// \brief The DisplayMode enum
 ///
 enum class DisplayMode

@@ -1,15 +1,15 @@
 #include "serialportutils.h"
-#include "dialogserversettings.h"
-#include "ui_dialogserversettings.h"
+#include "dialogmodbusdefinitions.h"
+#include "ui_dialogmodbusdefinitions.h"
 
 ///
-/// \brief DialogServerSettings::DialogServerSettings
+/// \brief DialogModbusDefinitions::DialogModbusDefinitions
 /// \param srv
 /// \param parent
 ///
-DialogServerSettings::DialogServerSettings(ModbusMultiServer& srv, QWidget *parent)
+DialogModbusDefinitions::DialogModbusDefinitions(ModbusMultiServer& srv, QWidget *parent)
     : QFixedSizeDialog(parent)
-    , ui(new Ui::DialogServerSettings)
+    , ui(new Ui::DialogModbusDefinitions)
     ,_mbMultiServer(srv)
 {
     ui->setupUi(this);
@@ -34,18 +34,18 @@ DialogServerSettings::DialogServerSettings(ModbusMultiServer& srv, QWidget *pare
 }
 
 ///
-/// \brief DialogServerSettings::~DialogServerSettings
+/// \brief DialogModbusDefinitions::~DialogModbusDefinitions
 ///
-DialogServerSettings::~DialogServerSettings()
+DialogModbusDefinitions::~DialogModbusDefinitions()
 {
     delete ui;
 }
 
 ///
-/// \brief DialogServerSettings::on_listServers_currentRowChanged
+/// \brief DialogModbusDefinitions::on_listServers_currentRowChanged
 /// \param row
 ///
-void DialogServerSettings::on_listServers_currentRowChanged(int row)
+void DialogModbusDefinitions::on_listServers_currentRowChanged(int row)
 {
     const auto item = ui->listServers->item(row);
     if(item == nullptr) {

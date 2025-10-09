@@ -17,7 +17,6 @@ struct DisplayDefinition
     quint16 Length = 100;
     quint16 LogViewLimit = 30;
     bool ZeroBasedAddress = false;
-    bool UseGlobalUnitMap = false;
     bool HexAddress = false;
     bool AutoscrollLog = false;
     bool VerboseLogging = true;
@@ -48,7 +47,6 @@ inline QSettings& operator <<(QSettings& out, const DisplayDefinition& dd)
     out.setValue("DisplayDefinition/Length",            dd.Length);
     out.setValue("DisplayDefinition/LogViewLimit",      dd.LogViewLimit);
     out.setValue("DisplayDefinition/ZeroBasedAddress",  dd.ZeroBasedAddress);
-    out.setValue("DisplayDefinition/UseGlobalUnitMap",  dd.UseGlobalUnitMap);
     out.setValue("DisplayDefinition/HexAddress",        dd.HexAddress);
     out.setValue("DisplayDefinition/AutoscrollLog",     dd.AutoscrollLog);
     out.setValue("DisplayDefinition/VerboseLogging",    dd.VerboseLogging);
@@ -72,7 +70,6 @@ inline QSettings& operator >>(QSettings& in, DisplayDefinition& dd)
     dd.Length = in.value("DisplayDefinition/Length", 100).toUInt();
     dd.LogViewLimit = in.value("DisplayDefinition/LogViewLimit", 30).toUInt();
     dd.ZeroBasedAddress = in.value("DisplayDefinition/ZeroBasedAddress").toBool();
-    dd.UseGlobalUnitMap = in.value("DisplayDefinition/UseGlobalUnitMap").toBool();
     dd.HexAddress = in.value("DisplayDefinition/HexAddress").toBool();
     dd.AutoscrollLog = in.value("DisplayDefinition/AutoscrollLog").toBool();
     dd.VerboseLogging = in.value("DisplayDefinition/VerboseLogging").toBool();

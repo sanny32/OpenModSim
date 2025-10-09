@@ -293,7 +293,6 @@ inline QDataStream& operator <<(QDataStream& out, FormModSim* frm)
     out << dd.Length;
     out << dd.LogViewLimit;
     out << dd.ZeroBasedAddress;
-    out << dd.UseGlobalUnitMap;
     out << dd.AutoscrollLog;
     out << dd.VerboseLogging;
 
@@ -351,6 +350,8 @@ inline QDataStream& operator >>(QDataStream& in, FormModSim* frm)
     in >> font;
 
     DisplayDefinition dd;
+    bool UseGlobalUnitMap;
+
     if(ver >= QVersionNumber(1,11))
     {
         in >> dd.FormName;
@@ -370,7 +371,10 @@ inline QDataStream& operator >>(QDataStream& in, FormModSim* frm)
 
     if(ver >= QVersionNumber(1, 9))
     {
-        in >> dd.UseGlobalUnitMap;
+        if(ver < QVersionNumber(1, 11)) {
+            in >> UseGlobalUnitMap;
+        }
+
         in >> dd.AutoscrollLog;
         in >> dd.VerboseLogging;
     }

@@ -67,7 +67,7 @@ private slots:
     /* Connection menu slots */
     void on_connectAction(ConnectionDetails& cd);
     void on_disconnectAction(ConnectionType type, const QString& port);
-    void on_actionSrvSettings_triggered();
+    void on_actionMbDefinitions_triggered();
 
     /* Setup menu slots*/
     void on_actionDataDefinition_triggered();

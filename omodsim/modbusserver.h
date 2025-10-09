@@ -7,6 +7,7 @@
 #include <QModbusServer>
 #include "qcountedset.h"
 #include "qmodbuscommevent.h"
+#include "modbusdefinitions.h"
 
 enum Coil {
     On = 0xff00,
@@ -71,6 +72,9 @@ public:
 
     virtual bool setMap(const QModbusDataUnitMap &map, int serverAddress);
     virtual bool processesBroadcast() const { return false; }
+
+    ModbusDefinitions getDefinitions() const { return _definitions; }
+    void setDefinitions(const ModbusDefinitions& md) { _definitions = md; }
 
     QVariant value(int option, int serverAddress) const;
     bool setValue(int option, const QVariant &value, int serverAddress);
@@ -162,6 +166,7 @@ protected:
     void storeModbusCommEvent(const QModbusCommEvent &eventByte);
 
 private:
+    ModbusDefinitions _definitions;
     QCountedSet<int> _serverAddresses;
     QHash<int, std::array<quint16, 20>> _counters;
     QHash<int, QHash<int, QVariant>> _serversOptions;

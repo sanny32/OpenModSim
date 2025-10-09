@@ -150,7 +150,6 @@ DisplayDefinition FormModSim::displayDefinition() const
     dd.LogViewLimit = ui->outputWidget->logViewLimit();
     dd.AutoscrollLog = ui->outputWidget->autoscrollLogView();
     dd.VerboseLogging = _verboseLogging;
-    dd.UseGlobalUnitMap = _mbMultiServer.useGlobalUnitMap();
     dd.HexAddress = displayHexAddresses();
 
     return dd;
@@ -162,8 +161,6 @@ DisplayDefinition FormModSim::displayDefinition() const
 ///
 void FormModSim::setDisplayDefinition(const DisplayDefinition& dd)
 {
-    _mbMultiServer.setUseGlobalUnitMap(dd.UseGlobalUnitMap);
-
     if(!dd.FormName.isEmpty())
         setWindowTitle(dd.FormName);
 
