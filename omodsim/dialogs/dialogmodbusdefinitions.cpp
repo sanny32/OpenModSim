@@ -42,6 +42,33 @@ DialogModbusDefinitions::~DialogModbusDefinitions()
 }
 
 ///
+/// \brief DialogModbusDefinitions::accept
+///
+void DialogModbusDefinitions::accept()
+{
+    ModbusDefinitions md;
+    md.AddrSpace = ui->comboBoxAddrSpace->currentAddressSpace();
+    md.UseGlobalUnitMap = ui->checkBoxGlobalMap->isChecked();
+    md.ErrorSimulations.setResponseIncorrectId(ui->checkBoxErrIncorrentId->isChecked());
+    md.ErrorSimulations.setResponseIllegalFunction(ui->checkBoxIllegalFunc->isChecked());
+    md.ErrorSimulations.setResponseDeviceBusy(ui->checkBoxBusy->isChecked());
+    md.ErrorSimulations.setResponseIncorrectCrc(ui->checkBoxCrcErr->isChecked());
+    md.ErrorSimulations.setResponseDelay(ui->checkBoxDelay->isChecked());
+    md.ErrorSimulations.setResponseDelayTime(ui->spinBoxDelay->value());
+    md.ErrorSimulations.setResponseRandomDelay(ui->checkBoxRandomDelay->isChecked());
+    md.ErrorSimulations.setResponseRandomDelayUpToTime(ui->spinBoxUpToTime->value());
+    md.ErrorSimulations.setNoResponse(ui->checkBoxNoResponse->isChecked());
+
+    const auto item = ui->listServers->currentItem();
+    if(item != nullptr) {
+        const auto cd = item->data(Qt::UserRole).value<ConnectionDetails>();
+        _mbMultiServer.setModbusDefinitions(cd, md);
+    }
+
+    QFixedSizeDialog::accept();
+}
+
+///
 /// \brief DialogModbusDefinitions::on_listServers_currentRowChanged
 /// \param row
 ///

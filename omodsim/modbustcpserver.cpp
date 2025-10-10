@@ -96,7 +96,9 @@ void ModbusTcpServer::on_newConnection()
         if (!socket)
             return;
 
+        ModbusDefinitions mbDef = getDefinitions();
         buffer->append(socket->readAll());
+
         while (!buffer->isEmpty()) {
             qCDebug(QT_MODBUS_LOW).noquote() << "(TCP server) Read buffer: 0x"
                                                     + buffer->toHex();
@@ -134,8 +136,15 @@ void ModbusTcpServer::on_newConnection()
                 continue;
 
             qCDebug(QT_MODBUS) << "(TCP server) Request PDU:" << request;
-            const QModbusResponse response = forwardProcessRequest(request, unitId, transactionId);
+            emit this->request(unitId, request, transactionId);
+
+            if(mbDef.ErrorSimulations.noResponse())
+                return;
+
+            const QModbusResponse response = forwardProcessRequest(request, unitId);
+
             qCDebug(QT_MODBUS) << "(TCP server) Response PDU:" << response;
+            emit this->response(unitId, request, response, transactionId);
 
             QByteArray result;
             QDataStream output(&result, QIODevice::WriteOnly);
@@ -173,16 +182,15 @@ void ModbusTcpServer::on_acceptError(QAbstractSocket::SocketError)
 ///
 /// \brief ModbusTcpServer::forwardProcessRequest
 /// \param r
+/// \param serverAddress
 /// \return
 ///
-QModbusResponse ModbusTcpServer::forwardProcessRequest(const QModbusRequest &r, int serverAddress, int transactionId)
+QModbusResponse ModbusTcpServer::forwardProcessRequest(const QModbusRequest &r, int serverAddress)
 {
     if (value(QModbusServer::DeviceBusy, serverAddress).value<quint16>() == 0xffff) {
         // If the device is busy, send an exception response without processing.
         return QModbusExceptionResponse(r.functionCode(), QModbusExceptionResponse::ServerDeviceBusy);
     }
-
-    emit request(serverAddress, r, transactionId);
 
     QModbusResponse resp;
     switch (r.functionCode()) {
@@ -198,7 +206,6 @@ QModbusResponse ModbusTcpServer::forwardProcessRequest(const QModbusRequest &r, 
         break;
     }
 
-    emit response(serverAddress, r, resp, transactionId);
     return resp;
 }
 

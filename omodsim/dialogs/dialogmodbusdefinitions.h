@@ -19,6 +19,8 @@ public:
     explicit DialogModbusDefinitions(ModbusMultiServer& srv, QWidget *parent = nullptr);
     ~DialogModbusDefinitions();
 
+    void accept() override;
+
 private slots:
     void on_listServers_currentRowChanged(int row);
 

@@ -35,7 +35,7 @@ protected:
     void close() override;
 
 private:
-    QModbusResponse forwardProcessRequest(const QModbusRequest &r, int serverAddress, int transactionId);
+    QModbusResponse forwardProcessRequest(const QModbusRequest &r, int serverAddress);
 
 private:
     int _networkPort = 502;
