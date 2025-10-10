@@ -1,5 +1,7 @@
 #include <QUrl>
+#include <QTimer>
 #include <QTcpSocket>
+#include <QRandomGenerator>
 #include "modbustcpserver.h"
 
 ///
@@ -143,32 +145,44 @@ void ModbusTcpServer::on_newConnection()
 
             const QModbusResponse response = forwardProcessRequest(request, unitId);
 
-             if(mbDef.ErrorSimulations.responseIncorrectId())
+            if(mbDef.ErrorSimulations.responseIncorrectId())
                 unitId++;
 
-            qCDebug(QT_MODBUS) << "(TCP server) Response PDU:" << response;
-            emit modbusResponse(unitId, request, response, transactionId);
-
-            QByteArray result;
-            QDataStream output(&result, QIODevice::WriteOnly);
-            // The length field is the byte count of the following fields, including the Unit
-            // Identifier and PDU fields, so we add one byte to the response size.
-            output << transactionId << protocolId << quint16(response.size() + 1)
-                   << unitId << response;
-
-            if (!socket->isOpen()) {
-                qCDebug(QT_MODBUS) << "(TCP server) Requesting socket has closed.";
-                setError(QModbusTcpServer::tr("Requesting socket is closed"),
-                             QModbusDevice::WriteError);
-                return;
+            int responseDelay = 0;
+            if(mbDef.ErrorSimulations.responseDelay()) {
+                responseDelay = mbDef.ErrorSimulations.responseDelayTime();
+            }
+            else if(mbDef.ErrorSimulations.responseRandomDelay()) {
+                responseDelay = QRandomGenerator::global()->bounded(mbDef.ErrorSimulations.responseRandomDelayUpToTime());
             }
 
-            qint64 writtenBytes = socket->write(result);
-            if (writtenBytes == -1 || writtenBytes < result.size()) {
-                qCDebug(QT_MODBUS) << "(TCP server) Cannot write requested response to socket.";
-                setError(QModbusTcpServer::tr("Could not write response to client"),
-                             QModbusDevice::WriteError);
-            }
+            QTimer::singleShot(responseDelay, this,
+                               [this, socket, transactionId, protocolId, unitId, response, request]()
+            {
+                qCDebug(QT_MODBUS) << "(TCP server) Response PDU:" << response;
+                emit modbusResponse(unitId, request, response, transactionId);
+
+                QByteArray result;
+                QDataStream output(&result, QIODevice::WriteOnly);
+                // The length field is the byte count of the following fields, including the Unit
+                // Identifier and PDU fields, so we add one byte to the response size.
+                output << transactionId << protocolId << quint16(response.size() + 1)
+                       << unitId << response;
+
+                if (!socket->isOpen()) {
+                    qCDebug(QT_MODBUS) << "(TCP server) Requesting socket has closed.";
+                    setError(QModbusTcpServer::tr("Requesting socket is closed"),
+                                 QModbusDevice::WriteError);
+                    return;
+                }
+
+                qint64 writtenBytes = socket->write(result);
+                if (writtenBytes == -1 || writtenBytes < result.size()) {
+                    qCDebug(QT_MODBUS) << "(TCP server) Cannot write requested response to socket.";
+                    setError(QModbusTcpServer::tr("Could not write response to client"),
+                                 QModbusDevice::WriteError);
+                }
+            });
         }
     });
 }
