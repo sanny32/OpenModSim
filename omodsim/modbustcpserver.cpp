@@ -96,7 +96,7 @@ void ModbusTcpServer::on_newConnection()
         if (!socket)
             return;
 
-        ModbusDefinitions mbDef = getDefinitions();
+        const ModbusDefinitions mbDef = getDefinitions();
         buffer->append(socket->readAll());
 
         while (!buffer->isEmpty()) {
@@ -190,7 +190,13 @@ void ModbusTcpServer::on_acceptError(QAbstractSocket::SocketError)
 ///
 QModbusResponse ModbusTcpServer::forwardProcessRequest(const QModbusRequest &r, int serverAddress)
 {
-    if (value(QModbusServer::DeviceBusy, serverAddress).value<quint16>() == 0xffff) {
+    const ModbusDefinitions mbDef = getDefinitions();
+
+    if(mbDef.ErrorSimulations.responseIllegalFunction()) {
+        return QModbusExceptionResponse(r.functionCode(), QModbusExceptionResponse::IllegalFunction);
+    }
+
+    if (mbDef.ErrorSimulations.responseDeviceBusy() || value(QModbusServer::DeviceBusy, serverAddress).value<quint16>() == 0xffff) {
         // If the device is busy, send an exception response without processing.
         return QModbusExceptionResponse(r.functionCode(), QModbusExceptionResponse::ServerDeviceBusy);
     }
