@@ -1,4 +1,9 @@
 # Open ModSim
+
+[![GitHub all releases](https://img.shields.io/github/downloads/sanny32/OpenModSim/total?logo=github)](https://github.com/sanny32/OpenModSim/releases)
+[![GitHub release (latest by date)](https://img.shields.io/github/v/release/sanny32/OpenModSim?logo=github)](https://github.com/sanny32/OpenModSim/releases/latest)
+[![License](https://img.shields.io/github/license/sanny32/OpenModSim)](LICENSE)
+
 Open ModSim is a free implimentation of modbus slave (server) utility for modbus-tcp and modbus-rtu protocols.
 
 <img width="1292" height="759" alt="image" src="https://github.com/user-attachments/assets/993501d6-bb1e-4dee-91c4-6d9b7a53df8b" />
@@ -105,7 +110,7 @@ function init()
              */
             Script.setTimeout(function()
             {
-                Server.writeHolding(address10, Server.readHolding(10, deviceId) + 1, deviceId);
+                Server.writeHolding(address10, Server.readHolding(address10, deviceId) + 1, deviceId);
 				reset();
                 Script.stop();
             }, 3000);
@@ -140,18 +145,18 @@ Below are the methods for installing the OpenModSim for different OS
 ## Microsoft Windows
 Run the installer:
 
-- For 32-bit Windows: `qt5-omodsim_1.9.1_x86.exe`
-- For 64-bit Windows: `qt5-omodsim_1.9.1_x64.exe` or `qt6-omodsim_1.9.1_x64.exe`
+- For 32-bit Windows: `qt5-omodsim_1.10.0_x86.exe`
+- For 64-bit Windows: `qt5-omodsim_1.10.0_x64.exe` or `qt6-omodsim_1.10.0_x64.exe`
 
 ## Debian/Ubintu/Mint/Astra Linux
 ### Install
 Install the DEB package from the command line:
 ```bash
-sudo apt install -f ./qt6-omodsim_1.9.1-1_amd64.deb
+sudo apt install -f ./qt6-omodsim_1.10.0-1_amd64.deb
 ```
 or if you want to use Qt5 libraries:
 ```bash
-sudo apt install -f ./qt5-omodsim_1.9.1-1_amd64.deb
+sudo apt install -f ./qt5-omodsim_1.10.0-1_amd64.deb
 ```
 
 ### Remove
@@ -168,7 +173,7 @@ sudo apt remove qt5-omodsim
 ### Install
 Install the RPM package from the command line:
 ```bash
-sudo dnf install ./qt6-omodsim_1.9.1-1.x86_64.rpm
+sudo dnf install ./qt6-omodsim_1.10.0-1.x86_64.rpm
 ```
 
 ### Remove
@@ -181,7 +186,7 @@ sudo dnf remove qt6-omodsim
 ### Install
 Install the RPM package from the command line as root user:
 ```bash
-apt-get install ./qt6-omodsim_1.9.1-1.x86_64.rpm
+apt-get install ./qt6-omodsim_1.10.0-1.x86_64.rpm
 ```
 
 ### Remove
@@ -198,7 +203,7 @@ sudo rpm --import qt6-omodsim.rpm.pubkey
 ```
 Install the RPM package using Zypper:
 ```bash
-sudo zypper install ./qt6-omodsim_1.9.1-1.x86_64.rpm
+sudo zypper install ./qt6-omodsim_1.10.0-1.x86_64.rpm
 ```
 
 ### Remove
