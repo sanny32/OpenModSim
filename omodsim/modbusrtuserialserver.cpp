@@ -172,6 +172,8 @@ ModbusRtuSerialServer::~ModbusRtuSerialServer()
 ///
 void ModbusRtuSerialServer::on_readyRead()
 {
+    ModbusDefinitions mbDef = getDefinitions();
+
     if (_interFrameTimer.isValid()
         && _interFrameTimer.elapsed() > _interFrameDelayMilliseconds
         && !_requestBuffer.isEmpty()) {
@@ -577,7 +579,7 @@ void ModbusRtuSerialServer::close()
 ///
 QModbusResponse ModbusRtuSerialServer::forwardProcessRequest(const QModbusPdu &req, int serverAddress)
 {
-    emit request(serverAddress, req);
+    emit modbusRequest(serverAddress, req);
 
     QModbusResponse resp;
     if (req.functionCode() == QModbusRequest::EncapsulatedInterfaceTransport) {
@@ -591,6 +593,6 @@ QModbusResponse ModbusRtuSerialServer::forwardProcessRequest(const QModbusPdu &r
     if(!resp.isValid())
         resp = ModbusServer::processRequest(req, serverAddress);
 
-    emit response(serverAddress, req, resp);
+    emit modbusResponse(serverAddress, req, resp);
     return resp;
 }

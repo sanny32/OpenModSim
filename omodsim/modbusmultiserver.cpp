@@ -203,11 +203,11 @@ QSharedPointer<ModbusServer> ModbusMultiServer::createModbusServer(const Connect
                 modbusServer->setConnectionParameter(QModbusDevice::NetworkPortParameter, cd.TcpParams.ServicePort);
                 modbusServer->setConnectionParameter(QModbusDevice::NetworkAddressParameter, cd.TcpParams.IPAddress);
 
-                connect((ModbusTcpServer*)modbusServer.get(), &ModbusTcpServer::request, this, [&](int serverAddress, const QModbusRequest& req, int transactionId)
+                connect((ModbusTcpServer*)modbusServer.get(), &ModbusTcpServer::modbusRequest, this, [&](int serverAddress, const QModbusRequest& req, int transactionId)
                 {
                     emit request(serverAddress, req, ModbusMessage::Tcp, transactionId);
                 });
-                connect((ModbusTcpServer*)modbusServer.get(), &ModbusTcpServer::response, this, [&](int serverAddress, const QModbusRequest& req, const QModbusResponse& resp, int transactionId)
+                connect((ModbusTcpServer*)modbusServer.get(), &ModbusTcpServer::modbusResponse, this, [&](int serverAddress, const QModbusRequest& req, const QModbusResponse& resp, int transactionId)
                 {
                     emit response(serverAddress, req, resp, ModbusMessage::Tcp, transactionId);
                 });
@@ -227,11 +227,11 @@ QSharedPointer<ModbusServer> ModbusMultiServer::createModbusServer(const Connect
                 modbusServer->setConnectionParameter(QModbusDevice::SerialStopBitsParameter, cd.SerialParams.StopBits);
                 qobject_cast<QSerialPort*>(modbusServer->device())->setFlowControl(cd.SerialParams.FlowControl);
 
-                connect((ModbusRtuSerialServer*)modbusServer.get(), &ModbusRtuSerialServer::request, this, [&](int serverAddress, const QModbusRequest& req)
+                connect((ModbusRtuSerialServer*)modbusServer.get(), &ModbusRtuSerialServer::modbusRequest, this, [&](int serverAddress, const QModbusRequest& req)
                 {
                     emit request(serverAddress, req, ModbusMessage::Rtu, 0);
                 });
-                connect((ModbusRtuSerialServer*)modbusServer.get(), &ModbusRtuSerialServer::response, this, [&](int serverAddress, const QModbusRequest& req, const QModbusResponse& resp)
+                connect((ModbusRtuSerialServer*)modbusServer.get(), &ModbusRtuSerialServer::modbusResponse, this, [&](int serverAddress, const QModbusRequest& req, const QModbusResponse& resp)
                 {
                     emit response(serverAddress, req, resp, ModbusMessage::Rtu, 0);
                 });

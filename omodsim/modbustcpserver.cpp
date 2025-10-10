@@ -136,15 +136,18 @@ void ModbusTcpServer::on_newConnection()
                 continue;
 
             qCDebug(QT_MODBUS) << "(TCP server) Request PDU:" << request;
-            emit this->request(unitId, request, transactionId);
+            emit modbusRequest(unitId, request, transactionId);
 
             if(mbDef.ErrorSimulations.noResponse())
                 return;
 
             const QModbusResponse response = forwardProcessRequest(request, unitId);
 
+             if(mbDef.ErrorSimulations.responseIncorrectId())
+                unitId++;
+
             qCDebug(QT_MODBUS) << "(TCP server) Response PDU:" << response;
-            emit this->response(unitId, request, response, transactionId);
+            emit modbusResponse(unitId, request, response, transactionId);
 
             QByteArray result;
             QDataStream output(&result, QIODevice::WriteOnly);
