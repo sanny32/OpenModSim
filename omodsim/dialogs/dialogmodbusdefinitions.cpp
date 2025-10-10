@@ -79,6 +79,7 @@ void DialogModbusDefinitions::on_listServers_currentRowChanged(int row)
 void DialogModbusDefinitions::updateModbusDefinitions(const ModbusDefinitions& md)
 {
     ui->checkBoxGlobalMap->setChecked(md.UseGlobalUnitMap);
+    ui->comboBoxAddrSpace->setCurrentAddressSpace(md.AddrSpace);
 
     ui->checkBoxErrIncorrentId->setChecked(md.ErrorSimulations.responseIncorrectId());
     ui->checkBoxIllegalFunc->setChecked(md.ErrorSimulations.responseIllegalFunction());

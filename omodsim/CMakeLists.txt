@@ -76,6 +76,7 @@ set(SOURCES
     ansimenu.cpp
     cmdlineparser.cpp
     controls/addressbasecombobox.cpp
+    controls/addressspacecombobox.cpp
     controls/booleancombobox.cpp
     controls/bytelisttextedit.cpp
     controls/clickablelabel.cpp
@@ -150,6 +151,7 @@ set(HEADERS
     cmdlineparser.h
     connectiondetails.h
     controls/addressbasecombobox.h
+    controls/addressspacecombobox.h
     controls/booleancombobox.h
     controls/bytelisttextedit.h
     controls/clickablelabel.h

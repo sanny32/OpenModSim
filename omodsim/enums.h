@@ -12,12 +12,12 @@ enum class AddressBase
     Base0 = 0,
     Base1
 };
-Q_DECLARE_METATYPE(AddressBase);
+Q_DECLARE_METATYPE(AddressBase)
 
 ///
 /// \brief operator <<
 /// \param out
-/// \param params
+/// \param base
 /// \return
 ///
 inline QSettings& operator <<(QSettings& out, const AddressBase& base)
@@ -29,7 +29,7 @@ inline QSettings& operator <<(QSettings& out, const AddressBase& base)
 ///
 /// \brief operator >>
 /// \param in
-/// \param params
+/// \param base
 /// \return
 ///
 inline QSettings& operator >>(QSettings& in, AddressBase& base)
@@ -46,6 +46,31 @@ enum class AddressSpace
     Addr6Digits = 0,
     Addr5Digits
 };
+Q_DECLARE_METATYPE(AddressSpace)
+
+///
+/// \brief operator <<
+/// \param out
+/// \param asp
+/// \return
+///
+inline QSettings& operator <<(QSettings& out, const AddressSpace& asp)
+{
+    out.setValue("AddressSpace", (uint)asp);
+    return out;
+}
+
+///
+/// \brief operator >>
+/// \param in
+/// \param asp
+/// \return
+///
+inline QSettings& operator >>(QSettings& in, AddressSpace& asp)
+{
+    asp = (AddressSpace)in.value("AddressSpace").toUInt();
+    return in;
+}
 
 ///
 /// \brief The DisplayMode enum
@@ -56,7 +81,7 @@ enum class DisplayMode
     Traffic,
     Script
 };
-Q_DECLARE_METATYPE(DisplayMode);
+Q_DECLARE_METATYPE(DisplayMode)
 
 ///
 /// \brief operator <<
@@ -105,7 +130,7 @@ enum class DataDisplayMode
     SwappedUInt64,
     Ansi
 };
-Q_DECLARE_METATYPE(DataDisplayMode);
+Q_DECLARE_METATYPE(DataDisplayMode)
 
 ///
 /// \brief operator <<
@@ -173,7 +198,7 @@ enum class ConnectionType
     Tcp = 0,
     Serial
 };
-Q_DECLARE_METATYPE(ConnectionType);
+Q_DECLARE_METATYPE(ConnectionType)
 
 ///
 /// \brief The TransmissionMode enum
@@ -183,7 +208,7 @@ enum class TransmissionMode
     ASCII = 0,
     RTU
 };
-Q_DECLARE_METATYPE(TransmissionMode);
+Q_DECLARE_METATYPE(TransmissionMode)
 
 ///
 /// \brief The CaptureMode enum
@@ -193,7 +218,7 @@ enum class CaptureMode
     Off = 0,
     TextCapture
 };
-Q_DECLARE_METATYPE(CaptureMode);
+Q_DECLARE_METATYPE(CaptureMode)
 
 ///
 /// \brief The SimulationMode enum
@@ -206,7 +231,7 @@ enum class SimulationMode
     Decrement,
     Toggle
 };
-Q_DECLARE_METATYPE(SimulationMode);
+Q_DECLARE_METATYPE(SimulationMode)
 
 ///
 /// \brief The RunMode enum
@@ -226,6 +251,6 @@ enum class LogViewState {
     Running,
     Paused
 };
-Q_DECLARE_METATYPE(LogViewState);
+Q_DECLARE_METATYPE(LogViewState)
 
 #endif // ENUMS_H
