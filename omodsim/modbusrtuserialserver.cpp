@@ -127,6 +127,27 @@ public:
         return result;
     }
 
+    inline static QByteArray createWithIncorrectCrc(Type type, int serverAddress, const QModbusPdu &pdu,
+                                                    char delimiter = '\n') {
+        QByteArray result;
+        QDataStream out(&result, QIODevice::WriteOnly);
+        out << quint8(serverAddress) << pdu;
+
+        if (type == Ascii) {
+            quint8 lrc = calculateLRC(result, result.size());
+            lrc ^= 0xFF; // spoil LRC
+            out << lrc;
+            return ":" + result.toHex() + "\r" + delimiter;
+        } else {
+            quint16 crc = calculateCRC(result, result.size());
+            crc ^= 0xFFFF; // spoil CRC
+            out << crc;
+        }
+
+        return result;
+    }
+
+
 private:
     inline static quint16 crc_reflect(quint16 data, qint32 len)
     {
@@ -274,7 +295,7 @@ void ModbusRtuSerialServer::on_readyRead()
     QModbusResponse response; // If the device ...
     if(mbDef.ErrorSimulations.responseIllegalFunction()) {
         incrementCounter(ModbusServer::Counter::ServerMessage, adu.serverAddress());
-        response= QModbusExceptionResponse(req.functionCode(), QModbusExceptionResponse::IllegalFunction);
+        response = QModbusExceptionResponse(req.functionCode(), QModbusExceptionResponse::IllegalFunction);
     }
     else if (mbDef.ErrorSimulations.responseDeviceBusy() || value(QModbusServer::DeviceBusy, adu.serverAddress()).value<quint16>() == 0xffff) {
         // is busy, update the quantity of messages addressed to the remote device for
@@ -311,7 +332,13 @@ void ModbusRtuSerialServer::on_readyRead()
         return;
     }
 
-    const QByteArray result = QModbusSerialAdu::create(QModbusSerialAdu::Rtu, adu.serverAddress() + serverAddressDelta, response);
+    QByteArray result;
+    if(mbDef.ErrorSimulations.responseIncorrectCrc()) {
+        result = QModbusSerialAdu::createWithIncorrectCrc(QModbusSerialAdu::Rtu, adu.serverAddress() + serverAddressDelta, response);
+    }
+    else {
+        result = QModbusSerialAdu::create(QModbusSerialAdu::Rtu, adu.serverAddress() + serverAddressDelta, response);
+    }
 
     qCDebug(QT_MODBUS_LOW) << "(RTU server) Response ADU:" << result.toHex();
 
