@@ -262,7 +262,13 @@ void ModbusRtuSerialServer::on_readyRead()
     storeModbusCommEvent(event); // store the final event before processing
 
     const QModbusRequest req = adu.pdu();
+
     qCDebug(QT_MODBUS) << "(RTU server) Request PDU:" << req;
+    emit modbusRequest(adu.serverAddress(), req);
+
+    if(mbDef.ErrorSimulations.noResponse())
+        return;
+
     QModbusResponse response; // If the device ...
     if (value(QModbusServer::DeviceBusy, adu.serverAddress()).value<quint16>() == 0xffff) {
         // is busy, update the quantity of messages addressed to the remote device for
@@ -278,7 +284,11 @@ void ModbusRtuSerialServer::on_readyRead()
         incrementCounter(ModbusServer::Counter::ServerMessage, adu.serverAddress());
         response = forwardProcessRequest(req, adu.serverAddress());
     }
+
+    const int serverAddressDelta = (mbDef.ErrorSimulations.responseIncorrectId() ? 1 : 0);
+
     qCDebug(QT_MODBUS) << "(RTU server) Response PDU:" << response;
+    emit modbusResponse(adu.serverAddress() + serverAddressDelta, req, response);
 
     event = QModbusCommEvent::SentEvent; // reset event after processing
     if (value(QModbusServer::ListenOnlyMode, adu.serverAddress()).toBool())
@@ -295,7 +305,7 @@ void ModbusRtuSerialServer::on_readyRead()
         return;
     }
 
-    const QByteArray result = QModbusSerialAdu::create(QModbusSerialAdu::Rtu, adu.serverAddress(), response);
+    const QByteArray result = QModbusSerialAdu::create(QModbusSerialAdu::Rtu, adu.serverAddress() + serverAddressDelta, response);
 
     qCDebug(QT_MODBUS_LOW) << "(RTU server) Response ADU:" << result.toHex();
 
@@ -579,8 +589,6 @@ void ModbusRtuSerialServer::close()
 ///
 QModbusResponse ModbusRtuSerialServer::forwardProcessRequest(const QModbusPdu &req, int serverAddress)
 {
-    emit modbusRequest(serverAddress, req);
-
     QModbusResponse resp;
     if (req.functionCode() == QModbusRequest::EncapsulatedInterfaceTransport) {
         quint8 meiType;
@@ -593,6 +601,5 @@ QModbusResponse ModbusRtuSerialServer::forwardProcessRequest(const QModbusPdu &r
     if(!resp.isValid())
         resp = ModbusServer::processRequest(req, serverAddress);
 
-    emit modbusResponse(serverAddress, req, resp);
     return resp;
 }
