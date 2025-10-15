@@ -879,18 +879,18 @@ void FormModSim::on_mbDisconnected(const ConnectionDetails&)
 
 ///
 /// \brief FormModSim::isLoggingRequest
-/// \param req
-/// \param protocol
+/// \param msgReq
 /// \return
 ///
-bool FormModSim::isLoggingRequest(quint8 deviceId, const QModbusRequest& req, ModbusMessage::ProtocolType protocol) const
+bool FormModSim::isLoggingRequest(QSharedPointer<const ModbusMessage> msgReq) const
 {
     const auto dd = displayDefinition();
-    if(dd.DeviceId != deviceId)
+    if(dd.DeviceId != msgReq->deviceId())
         return false;
 
+    const QModbusRequest req = msgReq->adu()->pdu();
     const auto startAddress = dd.PointAddress - (dd.ZeroBasedAddress ? 0 : 1);
-    auto msg = ModbusMessage::create(req, protocol, dd.DeviceId, QDateTime::currentDateTime(), true);
+    auto msg = ModbusMessage::create(req, msgReq->protocolType(), dd.DeviceId, QDateTime::currentDateTime(), true);
 
     switch(req.functionCode()) {
         case QModbusPdu::ReadCoils: {
@@ -940,30 +940,26 @@ bool FormModSim::isLoggingRequest(quint8 deviceId, const QModbusRequest& req, Mo
 
 ///
 /// \brief FormModSim::on_mbRequest
-/// \param req
-/// \param protocol
-/// \param transactionId
+/// \param msg
 ///
-void FormModSim::on_mbRequest(quint8 deviceId, const QModbusRequest& req, ModbusMessage::ProtocolType protocol, int transactionId)
+void FormModSim::on_mbRequest(QSharedPointer<const ModbusMessage> msg)
 {
-    if(_verboseLogging || isLoggingRequest(deviceId, req, protocol)) {
+    if(_verboseLogging || isLoggingRequest(msg)) {
         ui->statisticWidget->increaseRequests();
-        ui->outputWidget->updateTraffic(req,  deviceId, transactionId, protocol);
+        ui->outputWidget->updateTraffic(msg);
     }
 }
 
 ///
 /// \brief FormModSim::on_mbResponse
-/// \param req
-/// \param resp
-/// \param protocol
-/// \param transactionId
+/// \param msgReq
+/// \param msgResp
 ///
-void FormModSim::on_mbResponse(quint8 deviceId, const QModbusRequest& req, const QModbusResponse& resp, ModbusMessage::ProtocolType protocol, int transactionId)
+void FormModSim::on_mbResponse(QSharedPointer<const ModbusMessage> msgReq, QSharedPointer<const ModbusMessage> msgResp)
 {
-    if(_verboseLogging || isLoggingRequest(deviceId, req, protocol)) {
+    if(_verboseLogging || isLoggingRequest(msgReq)) {
         ui->statisticWidget->increaseResponses();
-        ui->outputWidget->updateTraffic(resp, deviceId, transactionId, protocol);
+        ui->outputWidget->updateTraffic(msgResp);
     }
 }
 

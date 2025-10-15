@@ -137,8 +137,8 @@ private slots:
     void on_outputWidget_itemDoubleClicked(quint16 addr, const QVariant& value);
     void on_mbConnected(const ConnectionDetails& cd);
     void on_mbDisconnected(const ConnectionDetails& cd);
-    void on_mbRequest(quint8 deviceId, const QModbusRequest& req, ModbusMessage::ProtocolType protocol, int transactionId);
-    void on_mbResponse(quint8 deviceId, const QModbusRequest& req, const QModbusResponse& resp, ModbusMessage::ProtocolType protocol, int transactionId);
+    void on_mbRequest(QSharedPointer<const ModbusMessage> msg);
+    void on_mbResponse(QSharedPointer<const ModbusMessage> msgReq, QSharedPointer<const ModbusMessage> msgResp);
     void on_mbDataChanged(quint8 deviceId, const QModbusDataUnit& data);
     void on_simulationStarted(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr);
     void on_simulationStopped(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr);
@@ -148,7 +148,7 @@ private:
     void updateStatus();
     void onDefinitionChanged();
     ScriptControl* scriptControl();
-    bool isLoggingRequest(quint8 deviceId, const QModbusRequest& req, ModbusMessage::ProtocolType protocol) const;
+    bool isLoggingRequest(QSharedPointer<const ModbusMessage> msgReq) const;
 
 private:
     Ui::FormModSim *ui;

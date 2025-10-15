@@ -25,10 +25,6 @@ public:
 
     QIODevice *device() const override { return _serialPort; }
 
-signals:
-    void modbusRequest(int serverAddress, const QModbusRequest& req);
-    void modbusResponse(int serverAddress, const QModbusRequest& req, const QModbusResponse& resp);
-
 private slots:
     void on_readyRead();
     void on_aboutToClose();

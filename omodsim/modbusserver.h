@@ -8,6 +8,7 @@
 #include "qcountedset.h"
 #include "qmodbuscommevent.h"
 #include "modbusdefinitions.h"
+#include "modbusmessage.h"
 
 enum Coil {
     On = 0xff00,
@@ -99,6 +100,9 @@ public:
     virtual QIODevice *device() const = 0;
 
 signals:
+    void modbusRequest(QSharedPointer<const ModbusMessage> msg);
+    void modbusResponse(QSharedPointer<const ModbusMessage> msgReq, QSharedPointer<const ModbusMessage> msgResp);
+
     void stateChanged(QModbusDevice::State state);
     void errorOccurred(QModbusDevice::Error error, int serverAddress);
     void dataWritten(int serverAddress, QModbusDataUnit::RegisterType table, int address, int size);

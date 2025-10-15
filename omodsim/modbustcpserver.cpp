@@ -138,7 +138,9 @@ void ModbusTcpServer::on_newConnection()
                 continue;
 
             qCDebug(QT_MODBUS) << "(TCP server) Request PDU:" << request;
-            emit modbusRequest(unitId, request, transactionId);
+
+            const auto msgReq = ModbusMessage::create(request, ModbusMessage::Rtu, unitId, QDateTime::currentDateTime(), true);
+            emit modbusRequest(msgReq);
 
             if(mbDef.ErrorSimulations.noResponse())
                 return;
@@ -157,10 +159,12 @@ void ModbusTcpServer::on_newConnection()
             }
 
             QTimer::singleShot(responseDelay, this,
-                               [this, socket, transactionId, protocolId, unitId, response, request]()
+                               [this, socket, transactionId, protocolId, unitId, response, request, msgReq]()
             {
                 qCDebug(QT_MODBUS) << "(TCP server) Response PDU:" << response;
-                emit modbusResponse(unitId, request, response, transactionId);
+
+                const auto msgResp = ModbusMessage::create(response, ModbusMessage::Rtu, unitId, QDateTime::currentDateTime(), false);
+                emit modbusResponse(msgReq, msgResp);
 
                 QByteArray result;
                 QDataStream output(&result, QIODevice::WriteOnly);

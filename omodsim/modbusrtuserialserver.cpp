@@ -287,7 +287,9 @@ void ModbusRtuSerialServer::on_readyRead()
     const QModbusRequest req = adu.pdu();
 
     qCDebug(QT_MODBUS) << "(RTU server) Request PDU:" << req;
-    emit modbusRequest(adu.serverAddress(), req);
+
+    const auto msgReq = ModbusMessage::create(req, ModbusMessage::Rtu, adu.serverAddress(), QDateTime::currentDateTime(), true);
+    emit modbusRequest(msgReq);
 
     if(mbDef.ErrorSimulations.noResponse())
         return;
@@ -315,7 +317,6 @@ void ModbusRtuSerialServer::on_readyRead()
     const int serverAddressDelta = (mbDef.ErrorSimulations.responseIncorrectId() ? 1 : 0);
 
     qCDebug(QT_MODBUS) << "(RTU server) Response PDU:" << response;
-    emit modbusResponse(adu.serverAddress() + serverAddressDelta, req, response);
 
     event = QModbusCommEvent::SentEvent; // reset event after processing
     if (value(QModbusServer::ListenOnlyMode, adu.serverAddress()).toBool())
@@ -341,6 +342,9 @@ void ModbusRtuSerialServer::on_readyRead()
     }
 
     qCDebug(QT_MODBUS_LOW) << "(RTU server) Response ADU:" << result.toHex();
+
+    const auto msgResp = ModbusMessage::create(result, ModbusMessage::Rtu, QDateTime::currentDateTime(), false);
+    emit modbusResponse(msgReq, msgResp);
 
     if (!_serialPort->isOpen()) {
         qCDebug(QT_MODBUS) << "(RTU server) Requesting serial port has closed.";

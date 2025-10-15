@@ -68,8 +68,8 @@ public:
 signals:
     void connected(const ConnectionDetails& cd);
     void disconnected(const ConnectionDetails& cd);
-    void request(quint8 deviceId, const QModbusRequest& req, ModbusMessage::ProtocolType protocol, int transactionId);
-    void response(quint8 deviceId, const QModbusRequest& req, const QModbusResponse& resp, ModbusMessage::ProtocolType protocol, int transactionId);
+    void request(QSharedPointer<const ModbusMessage> msg);
+    void response(QSharedPointer<const ModbusMessage> msgReq, QSharedPointer<const ModbusMessage> msgResp);
     void connectionError(const QString& error);
     void errorOccured(quint8 deviceId, const QString& error);
     void dataChanged(quint8 deviceId, const QModbusDataUnit& data);
