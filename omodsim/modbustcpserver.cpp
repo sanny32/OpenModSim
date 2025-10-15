@@ -139,7 +139,7 @@ void ModbusTcpServer::on_newConnection()
 
             qCDebug(QT_MODBUS) << "(TCP server) Request PDU:" << request;
 
-            const auto msgReq = ModbusMessage::create(request, ModbusMessage::Rtu, unitId, QDateTime::currentDateTime(), true);
+            const auto msgReq = ModbusMessage::create(request, ModbusMessage::Tcp, unitId, QDateTime::currentDateTime(), true);
             emit modbusRequest(msgReq);
 
             if(mbDef.ErrorSimulations.noResponse())
@@ -163,9 +163,6 @@ void ModbusTcpServer::on_newConnection()
             {
                 qCDebug(QT_MODBUS) << "(TCP server) Response PDU:" << response;
 
-                const auto msgResp = ModbusMessage::create(response, ModbusMessage::Rtu, unitId, QDateTime::currentDateTime(), false);
-                emit modbusResponse(msgReq, msgResp);
-
                 QByteArray result;
                 QDataStream output(&result, QIODevice::WriteOnly);
                 // The length field is the byte count of the following fields, including the Unit
@@ -185,6 +182,10 @@ void ModbusTcpServer::on_newConnection()
                     qCDebug(QT_MODBUS) << "(TCP server) Cannot write requested response to socket.";
                     setError(QModbusTcpServer::tr("Could not write response to client"),
                                  QModbusDevice::WriteError);
+                }
+                else {
+                    const auto msgResp = ModbusMessage::create(result, ModbusMessage::Tcp, QDateTime::currentDateTime(), false);
+                    emit modbusResponse(msgReq, msgResp);
                 }
             });
         }

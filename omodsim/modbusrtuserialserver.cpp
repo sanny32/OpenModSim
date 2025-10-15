@@ -343,9 +343,6 @@ void ModbusRtuSerialServer::on_readyRead()
 
     qCDebug(QT_MODBUS_LOW) << "(RTU server) Response ADU:" << result.toHex();
 
-    const auto msgResp = ModbusMessage::create(result, ModbusMessage::Rtu, QDateTime::currentDateTime(), false);
-    emit modbusResponse(msgReq, msgResp);
-
     if (!_serialPort->isOpen()) {
         qCDebug(QT_MODBUS) << "(RTU server) Requesting serial port has closed.";
         setError(QModbusRtuSerialServer::tr("Requesting serial port is closed"), QModbusDevice::WriteError);
@@ -363,7 +360,7 @@ void ModbusRtuSerialServer::on_readyRead()
     }
 
     QTimer::singleShot(responseDelay, this,
-                       [this, result, &event, req, response, adu]()
+                       [this, result, &event, req, response, adu, msgReq]()
     {
         qint64 writtenBytes = _serialPort->write(result);
         if ((writtenBytes == -1) || (writtenBytes < result.size())) {
@@ -374,6 +371,9 @@ void ModbusRtuSerialServer::on_readyRead()
             _serialPort->clear(QSerialPort::Output);
             return;
         }
+
+        const auto msgResp = ModbusMessage::create(result, ModbusMessage::Rtu, QDateTime::currentDateTime(), false);
+        emit modbusResponse(msgReq, msgResp);
 
         if (response.isException()) {
             switch (response.exceptionCode()) {
