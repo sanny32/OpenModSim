@@ -16,13 +16,20 @@ class ModbusMultiServer final : public QObject
 {
     Q_OBJECT
 public:
+    enum class GlobalUnitMapStatus {
+        NotSet = 0,
+        CompletelySet = 1,
+        PartiallySet,
+    };
+    Q_ENUM(GlobalUnitMapStatus)
+
     explicit ModbusMultiServer(QObject *parent = nullptr);
     ~ModbusMultiServer() override;
 
     void addDeviceId(quint8 deviceId);
     void removeDeviceId(quint8 deviceId);
 
-    bool useGlobalUnitMap() const;
+    GlobalUnitMapStatus useGlobalUnitMap() const;
     void setUseGlobalUnitMap(bool use);
 
     void addUnitMap(int id, quint8 deviceId, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, quint16 length);

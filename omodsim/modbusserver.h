@@ -6,6 +6,7 @@
 #include <QLoggingCategory>
 #include <QModbusServer>
 #include "qcountedset.h"
+#include "modbusdataunitmap.h"
 #include "qmodbuscommevent.h"
 #include "modbusdefinitions.h"
 #include "modbusmessage.h"
@@ -71,11 +72,14 @@ public:
     void removeAllServerAddresses();
     bool hasServerAddress(int serverAddress);
 
-    virtual bool setMap(const QModbusDataUnitMap &map, int serverAddress);
+    virtual bool setMap(const ModbusDataUnitMap &map, int serverAddress);
     virtual bool processesBroadcast() const { return false; }
 
     ModbusDefinitions getDefinitions() const { return _definitions; }
-    void setDefinitions(const ModbusDefinitions& md) { _definitions = md; }
+    void setDefinitions(const ModbusDefinitions& md) {
+        _definitions = md;
+        processDefinitionsChanges();
+    }
 
     QVariant value(int option, int serverAddress) const;
     bool setValue(int option, const QVariant &value, int serverAddress);
@@ -137,6 +141,8 @@ protected:
 
     virtual bool matchingServerAddress(quint8 unitId) const;
 
+    virtual void processDefinitionsChanges();
+
     virtual QModbusResponse processRequest(const QModbusPdu &request, int serverAddress);
     virtual QModbusResponse processPrivateRequest(const QModbusPdu &request, int serverAddress);
 
@@ -174,7 +180,7 @@ private:
     QCountedSet<int> _serverAddresses;
     QHash<int, std::array<quint16, 20>> _counters;
     QHash<int, QHash<int, QVariant>> _serversOptions;
-    QHash<int, QModbusDataUnitMap> _modbusDataUnitMaps;
+    QHash<int, ModbusDataUnitMap> _modbusDataUnitMaps;
     std::deque<quint8> _commEventLog;
 
     QModbusDevice::State _state = QModbusDevice::UnconnectedState;

@@ -65,7 +65,7 @@ void Server::setAddressBase(Address::Base base)
 ///
 bool Server::useGlobalUnitMap() const
 {
-    return _mbMultiServer->useGlobalUnitMap();
+    return _mbMultiServer->useGlobalUnitMap() == ModbusMultiServer::GlobalUnitMapStatus::CompletelySet;
 }
 
 ///

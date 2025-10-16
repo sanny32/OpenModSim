@@ -73,9 +73,21 @@ void ModbusMultiServer::removeDeviceId(quint8 deviceId)
 /// \brief ModbusMultiServer::useGlobalUnitMap
 /// \return
 ///
-bool ModbusMultiServer::useGlobalUnitMap() const
+ModbusMultiServer::GlobalUnitMapStatus ModbusMultiServer::useGlobalUnitMap() const
 {
-    return _modbusDataUnitMaps.isEmpty() ? false : _modbusDataUnitMaps.first().isGlobalMap();
+    int count = 0;
+
+    for (const auto &map : _modbusDataUnitMaps) {
+        if (map.isGlobalMap()) ++count;
+    }
+
+    if (count == 0)
+        return GlobalUnitMapStatus::NotSet;
+
+    if (count == _modbusDataUnitMaps.size())
+        return GlobalUnitMapStatus::CompletelySet;
+
+    return GlobalUnitMapStatus::PartiallySet;
 }
 
 ///
