@@ -149,6 +149,7 @@ public slots:
     void setLogViewState(LogViewState state);
 
 signals:
+    void startTextCaptureError(const QString& error);
     void itemDoubleClicked(quint16 address, const QVariant& value);
 
 protected:
