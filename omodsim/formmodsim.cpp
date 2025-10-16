@@ -54,6 +54,7 @@ FormModSim::FormModSim(int id, ModbusMultiServer& server, QSharedPointer<DataSim
 
     onDefinitionChanged();
     ui->outputWidget->setFocus();
+    connect(ui->outputWidget, &OutputWidget::startTextCaptureError, this, &FormModSim::captureError);
 
     setLogViewState(server.isConnected() ? LogViewState::Running : LogViewState::Unknown);
     connect(ui->statisticWidget, &StatisticWidget::ctrsReseted, ui->outputWidget, &OutputWidget::clearLogView);

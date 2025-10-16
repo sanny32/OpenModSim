@@ -127,6 +127,7 @@ signals:
     void pointTypeChanged(QModbusDataUnit::RegisterType);
     void displayModeChanged(DisplayMode mode);
     void scriptSettingsChanged(const ScriptSettings&);
+    void captureError(const QString& error);
 
 private slots:
     void on_lineEditAddress_valueChanged(const QVariant&);
