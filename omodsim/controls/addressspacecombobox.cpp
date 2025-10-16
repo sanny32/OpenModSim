@@ -46,7 +46,7 @@ void AddressSpaceComboBox::changeEvent(QEvent* event)
 ///
 AddressSpace AddressSpaceComboBox::currentAddressSpace() const
 {
-    return currentData().value<AddressSpace>();
+    return _currentValue;
 }
 
 ///
@@ -72,5 +72,8 @@ void AddressSpaceComboBox::setCurrentAddressSpace(AddressSpace asp)
 ///
 void AddressSpaceComboBox::on_currentIndexChanged(int index)
 {
-    emit addressSpaceChanged(itemData(index).value<AddressSpace>());
+    if(_currentValue != itemData(index).value<AddressSpace>()) {
+        _currentValue = itemData(index).value<AddressSpace>();
+        emit addressSpaceChanged(_currentValue);
+    }
 }

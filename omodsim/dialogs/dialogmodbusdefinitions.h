@@ -3,6 +3,7 @@
 
 #include <QDialog>
 #include <QListWidgetItem>
+#include <QAbstractButton>
 #include "qfixedsizedialog.h"
 #include "modbusdefinitions.h"
 #include "modbusmultiserver.h"
@@ -23,8 +24,11 @@ public:
 
 private slots:
     void on_listServers_currentRowChanged(int row);
+    void on_buttonBox_clicked(QAbstractButton* btn);
+    void on_comboBoxAddrSpace_addressSpaceChanged(AddressSpace);
 
 private:
+    void apply();
     void updateModbusDefinitions(const ModbusDefinitions& md);
 
 private:

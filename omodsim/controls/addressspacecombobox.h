@@ -21,6 +21,9 @@ protected:
 
 private slots:
     void on_currentIndexChanged(int);
+
+private:
+    AddressSpace _currentValue;
 };
 
 #endif // ADDRESSSPACECOMBOBOX_H
