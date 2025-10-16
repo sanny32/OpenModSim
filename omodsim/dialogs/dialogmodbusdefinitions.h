@@ -25,7 +25,6 @@ public:
 private slots:
     void on_listServers_currentRowChanged(int row);
     void on_buttonBox_clicked(QAbstractButton* btn);
-    void on_comboBoxAddrSpace_addressSpaceChanged(AddressSpace);
 
 private:
     void apply();

@@ -33,8 +33,7 @@ DialogModbusDefinitions::DialogModbusDefinitions(ModbusMultiServer& srv, QWidget
     }
     ui->listServers->setCurrentRow(0);
 
-    QList<QCheckBox*> allCheckBoxes;
-    allCheckBoxes << ui->tabGeneral->findChildren<QCheckBox*>() << ui->tabErrSimulation->findChildren<QCheckBox*>();
+    const QList<QCheckBox*> allCheckBoxes = findChildren<QCheckBox*>();
     for (QCheckBox* checkBox : allCheckBoxes) {
         #if QT_VERSION >= QT_VERSION_CHECK(6, 10, 0)
             connect(checkBox, &QCheckBox::checkStateChanged, this, [this] {
@@ -51,9 +50,16 @@ DialogModbusDefinitions::DialogModbusDefinitions(ModbusMultiServer& srv, QWidget
         #endif
     }
 
-    const auto allSpinBoxes = ui->tabErrSimulation->findChildren<QSpinBox*>();
+    const QList<QSpinBox*> allSpinBoxes = findChildren<QSpinBox*>();
     for (QSpinBox* spinBox : allSpinBoxes) {
         connect(spinBox, &QSpinBox::valueChanged, this, [this] {
+            ui->buttonBox->button(QDialogButtonBox::Apply)->setEnabled(true);
+        });
+    }
+
+    const QList<QComboBox*> allComboBoxes = findChildren<QComboBox*>();
+    for (QComboBox* comboBox : allComboBoxes) {
+        connect(comboBox, &QComboBox::currentIndexChanged, this, [this] {
             ui->buttonBox->button(QDialogButtonBox::Apply)->setEnabled(true);
         });
     }
@@ -117,14 +123,6 @@ void DialogModbusDefinitions::on_buttonBox_clicked(QAbstractButton* btn)
     if(ui->buttonBox->buttonRole(btn) == QDialogButtonBox::ApplyRole) {
         apply();
     }
-}
-
-///
-/// \brief DialogModbusDefinitions::on_comboBoxAddrSpace_addressSpaceChanged
-///
-void DialogModbusDefinitions::on_comboBoxAddrSpace_addressSpaceChanged(AddressSpace)
-{
-    ui->buttonBox->button(QDialogButtonBox::Apply)->setEnabled(true);
 }
 
 ///
