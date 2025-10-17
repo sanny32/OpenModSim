@@ -230,6 +230,7 @@ void ScriptControl::runScript(RunMode mode, int interval)
     _jsEngine.globalObject().setProperty("console", _jsEngine.newQObject(_console.get()));
     _jsEngine.globalObject().setProperty("Register", _jsEngine.newQMetaObject(&Register::staticMetaObject));
     _jsEngine.globalObject().setProperty("AddressBase", _jsEngine.newQMetaObject(&Address::staticMetaObject));
+    _jsEngine.globalObject().setProperty("AddressSpace", _jsEngine.newQMetaObject(&Address::staticMetaObject));
     _jsEngine.setInterrupted(false);
 
     _console->clear();
@@ -266,6 +267,7 @@ void ScriptControl::stopScript()
     _jsEngine.globalObject().deleteProperty("console");
     _jsEngine.globalObject().deleteProperty("Register");
     _jsEngine.globalObject().deleteProperty("AddressBase");
+    _jsEngine.globalObject().deleteProperty("AddressSpace");
 
     _storage = nullptr;
     _server = nullptr;
