@@ -17,6 +17,21 @@
     </message>
 </context>
 <context>
+    <name>AddressSpaceComboBox</name>
+    <message>
+        <location filename="../controls/addressspacecombobox.cpp" line="11"/>
+        <location filename="../controls/addressspacecombobox.cpp" line="30"/>
+        <source>5-digits</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../controls/addressspacecombobox.cpp" line="12"/>
+        <location filename="../controls/addressspacecombobox.cpp" line="34"/>
+        <source>6-digits</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>AnsiMenu</name>
     <message>
         <location filename="../ansimenu.cpp" line="12"/>
@@ -312,62 +327,66 @@
         <translation type="vanished">(мсек)</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogdisplaydefinition.ui" line="20"/>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="64"/>
         <source>Log View</source>
         <translation>日誌</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogdisplaydefinition.ui" line="84"/>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="128"/>
         <source>Log View Limit:</source>
         <translation>日志视图：</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogdisplaydefinition.ui" line="62"/>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="106"/>
         <source>(rows)</source>
         <translation>(行)</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogdisplaydefinition.ui" line="91"/>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="25"/>
+        <source>Form Name: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="135"/>
         <source>Verbose Logging</source>
         <translation>详细日志记录</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogdisplaydefinition.ui" line="98"/>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="142"/>
         <source>Autoscroll Log View</source>
         <translation>自動滾動日誌視圖</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogdisplaydefinition.ui" line="114"/>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="158"/>
         <source>Modbus Data</source>
         <translation>Modbus数据</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogdisplaydefinition.ui" line="132"/>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="176"/>
         <source>Slave Address:</source>
         <translation>从设备地址：</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogdisplaydefinition.ui" line="161"/>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="205"/>
         <source>Point Type:</source>
         <translation>寄存器类型：</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogdisplaydefinition.ui" line="207"/>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="251"/>
         <source>Point Address:</source>
         <translation>寄存器地址：</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogdisplaydefinition.ui" line="258"/>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="302"/>
         <source>Length:</source>
         <translation>长度:</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogdisplaydefinition.ui" line="268"/>
         <source>Use Global Address Map (Unallocated registers will be zero)</source>
-        <translation>使用全局地址映射（未分配的寄存器将为零）</translation>
+        <translation type="vanished">使用全局地址映射（未分配的寄存器将为零）</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogdisplaydefinition.ui" line="184"/>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="228"/>
         <source>Address Base:</source>
         <translation>基地址：</translation>
     </message>
@@ -483,6 +502,75 @@
         <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="42"/>
         <source>Length: &lt;b&gt;%1&lt;/b&gt;</source>
         <translation>长度: &lt;b&gt;%1&lt;/b&gt;</translation>
+    </message>
+</context>
+<context>
+    <name>DialogModbusDefinitions</name>
+    <message>
+        <location filename="../dialogs/dialogmodbusdefinitions.ui" line="14"/>
+        <source>Modbus Definitions</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogmodbusdefinitions.ui" line="24"/>
+        <source>General</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogmodbusdefinitions.ui" line="30"/>
+        <source>Address Space: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogmodbusdefinitions.ui" line="47"/>
+        <source>Use Global Address Map (Unallocated registers will be zero)</source>
+        <translation type="unfinished">使用全局地址映射（未分配的寄存器将为零）</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogmodbusdefinitions.ui" line="55"/>
+        <source>Error Simulation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogmodbusdefinitions.ui" line="67"/>
+        <source>Response with incorrect IDs</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogmodbusdefinitions.ui" line="80"/>
+        <source>Response with ILLEGAL FUNCTION</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogmodbusdefinitions.ui" line="93"/>
+        <source>Response with DEVICE BUSY</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogmodbusdefinitions.ui" line="106"/>
+        <source>Response with incorrect CRC (Serial Line only)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogmodbusdefinitions.ui" line="118"/>
+        <source>Response with delay</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogmodbusdefinitions.ui" line="154"/>
+        <location filename="../dialogs/dialogmodbusdefinitions.ui" line="220"/>
+        <source>ms</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogmodbusdefinitions.ui" line="181"/>
+        <source>Response with random delay from 0 to</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogmodbusdefinitions.ui" line="248"/>
+        <source>No response</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1074,7 +1162,7 @@ Length: %2</source>
         <translation type="vanished">Указана недопустимая длина данных</translation>
     </message>
     <message>
-        <location filename="../formmodsim.cpp" line="451"/>
+        <location filename="../formmodsim.cpp" line="460"/>
         <source>Address Base: %1
 Start Address: %2
 Length: %3</source>
@@ -1083,7 +1171,7 @@ Length: %3</source>
 长度: %3</translation>
     </message>
     <message>
-        <location filename="../formmodsim.cpp" line="454"/>
+        <location filename="../formmodsim.cpp" line="463"/>
         <source>Device Id: %1
 MODBUS Point Type:
 %2</source>
@@ -1109,37 +1197,32 @@ MODBUS Point Type:
 <context>
     <name>MainStatusBar</name>
     <message>
-        <location filename="../controls/mainstatusbar.cpp" line="15"/>
         <source>NONE</source>
-        <translation>无校验</translation>
+        <translation type="vanished">无校验</translation>
     </message>
     <message>
-        <location filename="../controls/mainstatusbar.cpp" line="18"/>
         <source>EVEN</source>
-        <translation>偶校验</translation>
+        <translation type="vanished">偶校验</translation>
     </message>
     <message>
-        <location filename="../controls/mainstatusbar.cpp" line="21"/>
         <source>ODD</source>
-        <translation>奇校验</translation>
+        <translation type="vanished">奇校验</translation>
     </message>
     <message>
-        <location filename="../controls/mainstatusbar.cpp" line="24"/>
         <source>SPACE</source>
-        <translation>空</translation>
+        <translation type="vanished">空</translation>
     </message>
     <message>
-        <location filename="../controls/mainstatusbar.cpp" line="27"/>
         <source>MARK</source>
-        <translation>标记</translation>
+        <translation type="vanished">标记</translation>
     </message>
     <message>
-        <location filename="../controls/mainstatusbar.cpp" line="109"/>
+        <location filename="../controls/mainstatusbar.cpp" line="79"/>
         <source>Modbus/TCP Srv %1:%2</source>
         <translation>modbus/TCP服务器%1:%2</translation>
     </message>
     <message>
-        <location filename="../controls/mainstatusbar.cpp" line="113"/>
+        <location filename="../controls/mainstatusbar.cpp" line="83"/>
         <source>Port %1:%2:%3:%4:%5</source>
         <translation>端口 %1:%2:%3:%4:%5</translation>
     </message>
@@ -1179,12 +1262,12 @@ MODBUS Point Type:
         <translation>连接</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="93"/>
+        <location filename="../mainwindow.ui" line="95"/>
         <source>Setup</source>
         <translation>设置</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="97"/>
+        <location filename="../mainwindow.ui" line="99"/>
         <source>Display Options</source>
         <translation>显示格式设置</translation>
     </message>
@@ -1193,106 +1276,112 @@ MODBUS Point Type:
         <translation type="vanished">Порядок байт</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="127"/>
+        <location filename="../mainwindow.ui" line="129"/>
         <source>Extended</source>
         <translation>高级选项</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="138"/>
+        <location filename="../mainwindow.ui" line="140"/>
         <source>Script</source>
         <translation>脚本</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="155"/>
+        <location filename="../mainwindow.ui" line="157"/>
         <source>Window</source>
         <translation>窗口</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="164"/>
+        <location filename="../mainwindow.ui" line="166"/>
         <source>Help</source>
         <translation>帮助</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="170"/>
+        <location filename="../mainwindow.ui" line="172"/>
         <source>View</source>
         <translation>视图</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="174"/>
+        <location filename="../mainwindow.ui" line="176"/>
         <source>Config</source>
         <translation>配置</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="178"/>
+        <location filename="../mainwindow.ui" line="180"/>
         <source>Colors</source>
         <translation>颜色</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="189"/>
+        <location filename="../mainwindow.ui" line="191"/>
         <source>Language</source>
         <translation>语言</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="291"/>
-        <location filename="../mainwindow.ui" line="842"/>
+        <location filename="../mainwindow.ui" line="295"/>
+        <location filename="../mainwindow.ui" line="846"/>
         <source>Edit Bar</source>
         <translation>编辑栏</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="313"/>
+        <location filename="../mainwindow.ui" line="317"/>
         <source>New</source>
         <translation>新建</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="694"/>
-        <location filename="../mainwindow.ui" line="697"/>
+        <location filename="../mainwindow.ui" line="698"/>
+        <location filename="../mainwindow.ui" line="701"/>
         <source>Swap Bytes (0xAB → 0xBA)</source>
         <translation>交换字节(0xAB → 0xBA)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="854"/>
+        <location filename="../mainwindow.ui" line="858"/>
         <source>32-bit Integer</source>
         <translation>32位整数</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="869"/>
+        <location filename="../mainwindow.ui" line="873"/>
         <source>Swapped 32-bit Integer</source>
         <translation>32位整数(字节交换)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="884"/>
+        <location filename="../mainwindow.ui" line="888"/>
         <source>Unsigned 32-bit Integer</source>
         <translation>无符号32位整数</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="899"/>
+        <location filename="../mainwindow.ui" line="903"/>
         <source>Swapped Unsigned 32-bit Integer</source>
         <translation>无符号32位整数(字节交换)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="932"/>
+        <location filename="../mainwindow.ui" line="936"/>
         <source>64-bit Integer</source>
         <translation>64位整数</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="947"/>
+        <location filename="../mainwindow.ui" line="951"/>
         <source>Swapped 64-bit Integer</source>
         <translation>64位整数(字节交换)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="962"/>
+        <location filename="../mainwindow.ui" line="966"/>
         <source>Unsigned 64-bit Integer</source>
         <translation>无符号64位整数</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="977"/>
+        <location filename="../mainwindow.ui" line="981"/>
         <source>Swapped Unsigned 64-bit Integer</source>
         <translation>无符号64位整数(字节交换)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="992"/>
+        <location filename="../mainwindow.ui" line="996"/>
         <source>ANSI</source>
         <translation>ANSI</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="1016"/>
+        <location filename="../mainwindow.ui" line="1019"/>
+        <source>Modbus Definitions</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Long Integer</source>
@@ -1311,82 +1400,82 @@ MODBUS Point Type:
         <translation type="vanished">Перевернутое беззнаковое ДЦ</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="907"/>
+        <location filename="../mainwindow.ui" line="911"/>
         <source>Text Capture</source>
         <translation>文本捕获</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="912"/>
+        <location filename="../mainwindow.ui" line="916"/>
         <source>Capture Off</source>
         <translation>捕获关闭</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="917"/>
+        <location filename="../mainwindow.ui" line="921"/>
         <source>Msg Parser</source>
         <translation>报文解析</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="325"/>
+        <location filename="../mainwindow.ui" line="329"/>
         <source>Open...</source>
         <translation>打开...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="333"/>
+        <location filename="../mainwindow.ui" line="337"/>
         <source>Close</source>
         <translation>关闭</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="342"/>
+        <location filename="../mainwindow.ui" line="346"/>
         <source>Save</source>
         <translation>保存</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="350"/>
+        <location filename="../mainwindow.ui" line="354"/>
         <source>Save As...</source>
         <translation>另存为...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="355"/>
+        <location filename="../mainwindow.ui" line="359"/>
         <source>Save Test Config</source>
         <translation>保存测试配置</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="360"/>
+        <location filename="../mainwindow.ui" line="364"/>
         <source>Restore Test Config</source>
         <translation>恢复测试配置</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="369"/>
+        <location filename="../mainwindow.ui" line="373"/>
         <source>Print...</source>
         <translation>打印...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="377"/>
+        <location filename="../mainwindow.ui" line="381"/>
         <source>Print Setup...</source>
         <translation>打印设置...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="382"/>
+        <location filename="../mainwindow.ui" line="386"/>
         <source>Recent File</source>
         <translation>最近文件</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="387"/>
+        <location filename="../mainwindow.ui" line="391"/>
         <source>Exit</source>
         <translation>退出</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="396"/>
+        <location filename="../mainwindow.ui" line="400"/>
         <source>Connect</source>
         <translation>连接</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="405"/>
+        <location filename="../mainwindow.ui" line="409"/>
         <source>Disconnect</source>
         <translation>断开连接</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="417"/>
+        <location filename="../mainwindow.ui" line="421"/>
         <source>Binary</source>
         <translation>二进制</translation>
     </message>
@@ -1395,7 +1484,7 @@ MODBUS Point Type:
         <translation type="vanished">Беззнаковый десятичный</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="447"/>
+        <location filename="../mainwindow.ui" line="451"/>
         <source>Hex</source>
         <translation>十六进制</translation>
     </message>
@@ -1416,17 +1505,17 @@ MODBUS Point Type:
         <translation type="vanished">Перевернутое двойной точности</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="521"/>
+        <location filename="../mainwindow.ui" line="525"/>
         <source>Cascade</source>
         <translation>层叠</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="526"/>
+        <location filename="../mainwindow.ui" line="530"/>
         <source>Tile</source>
         <translation>平铺</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="535"/>
+        <location filename="../mainwindow.ui" line="539"/>
         <source>About Open ModSim...</source>
         <translation>关于Open ModSim...</translation>
     </message>
@@ -1435,174 +1524,174 @@ MODBUS Point Type:
         <translation type="vanished">Целый</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="562"/>
+        <location filename="../mainwindow.ui" line="566"/>
         <source>Show Data</source>
         <translation>显示数据</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="574"/>
+        <location filename="../mainwindow.ui" line="578"/>
         <source>Show Traffic</source>
         <translation>显示流量</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="583"/>
+        <location filename="../mainwindow.ui" line="587"/>
         <source>Data Definition</source>
         <translation>数据格式</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="661"/>
+        <location filename="../mainwindow.ui" line="665"/>
         <source>Force Coils</source>
         <translation>强制线圈</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="666"/>
+        <location filename="../mainwindow.ui" line="670"/>
         <source>Preset Holding Regs</source>
         <translation>预设保持寄存器</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="702"/>
+        <location filename="../mainwindow.ui" line="706"/>
         <source>Preset Input Regs</source>
         <translation>预设输入寄存器</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="707"/>
+        <location filename="../mainwindow.ui" line="711"/>
         <source>Force Discretes</source>
         <translation>强制离散值</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="719"/>
+        <location filename="../mainwindow.ui" line="723"/>
         <source>Show Script</source>
         <translation>显示脚本</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="728"/>
-        <location filename="../mainwindow.ui" line="731"/>
+        <location filename="../mainwindow.ui" line="732"/>
+        <location filename="../mainwindow.ui" line="735"/>
         <source>Run Script</source>
         <translation>运行脚本</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="743"/>
-        <location filename="../mainwindow.ui" line="746"/>
+        <location filename="../mainwindow.ui" line="747"/>
+        <location filename="../mainwindow.ui" line="750"/>
         <source>Stop Script</source>
         <translation>停止脚本</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="758"/>
+        <location filename="../mainwindow.ui" line="762"/>
         <source>Script Settings</source>
         <translation>脚本设置</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="775"/>
+        <location filename="../mainwindow.ui" line="779"/>
         <source>Undo</source>
         <translation>取消</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="787"/>
+        <location filename="../mainwindow.ui" line="791"/>
         <source>Redo</source>
         <translation>恢复</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="799"/>
+        <location filename="../mainwindow.ui" line="803"/>
         <source>Cut</source>
         <translation>剪切</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="811"/>
+        <location filename="../mainwindow.ui" line="815"/>
         <source>Copy</source>
         <translation>复制</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="823"/>
+        <location filename="../mainwindow.ui" line="827"/>
         <source>Paste</source>
         <translation>粘贴</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="831"/>
+        <location filename="../mainwindow.ui" line="835"/>
         <source>Select All</source>
         <translation>选择所有</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="215"/>
-        <location filename="../mainwindow.ui" line="591"/>
+        <location filename="../mainwindow.ui" line="217"/>
+        <location filename="../mainwindow.ui" line="595"/>
         <source>Toolbar</source>
         <translation>工具栏</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="599"/>
+        <location filename="../mainwindow.ui" line="603"/>
         <source>Status Bar</source>
         <translation>状态栏</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="240"/>
-        <location filename="../mainwindow.ui" line="607"/>
+        <location filename="../mainwindow.ui" line="244"/>
+        <location filename="../mainwindow.ui" line="611"/>
         <source>Display Bar</source>
         <translation>格式栏</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="277"/>
-        <location filename="../mainwindow.ui" line="766"/>
+        <location filename="../mainwindow.ui" line="281"/>
+        <location filename="../mainwindow.ui" line="770"/>
         <source>Script Bar</source>
         <translation>脚本栏</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="432"/>
+        <location filename="../mainwindow.ui" line="436"/>
         <source>Unsigned 16-bit Intger</source>
         <translation>无符号16位整数</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="462"/>
+        <location filename="../mainwindow.ui" line="466"/>
         <source>Float</source>
         <translation>浮点数</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="477"/>
+        <location filename="../mainwindow.ui" line="481"/>
         <source>Swapped Float</source>
         <translation>浮点数(字节交换)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="492"/>
-        <location filename="../mainwindow.ui" line="495"/>
-        <location filename="../mainwindow.ui" line="498"/>
+        <location filename="../mainwindow.ui" line="496"/>
+        <location filename="../mainwindow.ui" line="499"/>
+        <location filename="../mainwindow.ui" line="502"/>
         <source>Double</source>
         <translation>双精度浮点数</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="513"/>
+        <location filename="../mainwindow.ui" line="517"/>
         <source>Swapped Double</source>
         <translation>双精度浮点数(字节交换)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="547"/>
+        <location filename="../mainwindow.ui" line="551"/>
         <source>16-bit Integer</source>
         <translation>16位整数</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="612"/>
+        <location filename="../mainwindow.ui" line="616"/>
         <source>Font</source>
         <translation>字体</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="617"/>
+        <location filename="../mainwindow.ui" line="621"/>
         <source>Background</source>
         <translation>背景</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="622"/>
+        <location filename="../mainwindow.ui" line="626"/>
         <source>Foreground</source>
         <translation>前景</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="627"/>
+        <location filename="../mainwindow.ui" line="631"/>
         <source>Status</source>
         <translation>状态</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="632"/>
+        <location filename="../mainwindow.ui" line="636"/>
         <source>Windows...</source>
         <translation>窗口...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="640"/>
+        <location filename="../mainwindow.ui" line="644"/>
         <source>Hex Addresses</source>
         <translation>十六进制地址</translation>
     </message>
@@ -1615,12 +1704,18 @@ MODBUS Point Type:
         <translation type="vanished">俄语</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="323"/>
-        <location filename="../mainwindow.cpp" line="364"/>
-        <location filename="../mainwindow.cpp" line="378"/>
-        <location filename="../mainwindow.cpp" line="390"/>
+        <location filename="../mainwindow.cpp" line="327"/>
+        <location filename="../mainwindow.cpp" line="368"/>
+        <location filename="../mainwindow.cpp" line="382"/>
+        <location filename="../mainwindow.cpp" line="394"/>
         <source>All files (*)</source>
         <translation>所有文件 (*)</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cpp" line="1283"/>
+        <source>Capture Error:<byte value="xd"/>
+ %1</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2183,12 +2278,12 @@ MODBUS Point Type:
 <context>
     <name>ModbusMultiServer</name>
     <message>
-        <location filename="../modbusmultiserver.cpp" line="474"/>
+        <location filename="../modbusmultiserver.cpp" line="468"/>
         <source>An incorrect device id was specified (%1)</source>
         <translation>指定了錯誤的設備 ID（%1）</translation>
     </message>
     <message>
-        <location filename="../modbusmultiserver.cpp" line="951"/>
+        <location filename="../modbusmultiserver.cpp" line="945"/>
         <source>Connection error. %1</source>
         <translation>连接错误 %1</translation>
     </message>
@@ -2196,7 +2291,7 @@ MODBUS Point Type:
 <context>
     <name>ModbusTcpServer</name>
     <message>
-        <location filename="../modbustcpserver.cpp" line="220"/>
+        <location filename="../modbustcpserver.cpp" line="255"/>
         <source>Invalid connection settings for TCP communication specified.</source>
         <translation>指定的 TCP 通訊連線設定無效。</translation>
     </message>
@@ -2204,17 +2299,17 @@ MODBUS Point Type:
 <context>
     <name>OutputWidget</name>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="829"/>
+        <location filename="../controls/outputwidget.cpp" line="815"/>
         <source>%1: Enter Description</source>
         <translation>%1:输入描述</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="894"/>
+        <location filename="../controls/outputwidget.cpp" line="880"/>
         <source>NOT CONNECTED!</source>
         <translation>未连接！</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="902"/>
+        <location filename="../controls/outputwidget.cpp" line="888"/>
         <source>Invalid Data Length Specified</source>
         <translation>指定的数据长度无效</translation>
     </message>
@@ -2240,47 +2335,47 @@ MODBUS Point Type:
 <context>
     <name>QModbusDevice</name>
     <message>
-        <location filename="../modbusrtuserialserver.cpp" line="391"/>
+        <location filename="../modbusrtuserialserver.cpp" line="452"/>
         <source>Referenced serial device does not exist.</source>
         <translation>引用的串行設備不存在。</translation>
     </message>
     <message>
-        <location filename="../modbusrtuserialserver.cpp" line="394"/>
+        <location filename="../modbusrtuserialserver.cpp" line="455"/>
         <source>Cannot open serial device due to permissions.</source>
         <translation>由於權限問題，無法開啟串行設備。</translation>
     </message>
     <message>
-        <location filename="../modbusrtuserialserver.cpp" line="398"/>
+        <location filename="../modbusrtuserialserver.cpp" line="459"/>
         <source>Cannot open serial device.</source>
         <translation>無法開啟串行設備。</translation>
     </message>
     <message>
-        <location filename="../modbusrtuserialserver.cpp" line="401"/>
+        <location filename="../modbusrtuserialserver.cpp" line="462"/>
         <source>Write error.</source>
         <translation>寫入錯誤。</translation>
     </message>
     <message>
-        <location filename="../modbusrtuserialserver.cpp" line="404"/>
+        <location filename="../modbusrtuserialserver.cpp" line="465"/>
         <source>Read error.</source>
         <translation>讀取錯誤。</translation>
     </message>
     <message>
-        <location filename="../modbusrtuserialserver.cpp" line="407"/>
+        <location filename="../modbusrtuserialserver.cpp" line="468"/>
         <source>Resource error.</source>
         <translation>資源錯誤。</translation>
     </message>
     <message>
-        <location filename="../modbusrtuserialserver.cpp" line="410"/>
+        <location filename="../modbusrtuserialserver.cpp" line="471"/>
         <source>Device operation is not supported error.</source>
         <translation>設備操作不支援錯誤。</translation>
     </message>
     <message>
-        <location filename="../modbusrtuserialserver.cpp" line="414"/>
+        <location filename="../modbusrtuserialserver.cpp" line="475"/>
         <source>Timeout error.</source>
         <translation>超時錯誤。</translation>
     </message>
     <message>
-        <location filename="../modbusrtuserialserver.cpp" line="417"/>
+        <location filename="../modbusrtuserialserver.cpp" line="478"/>
         <source>Unknown error.</source>
         <translation>未知錯誤。</translation>
     </message>
@@ -2288,12 +2383,12 @@ MODBUS Point Type:
 <context>
     <name>QModbusRtuSerialServer</name>
     <message>
-        <location filename="../modbusrtuserialserver.cpp" line="302"/>
+        <location filename="../modbusrtuserialserver.cpp" line="348"/>
         <source>Requesting serial port is closed</source>
         <translation>請求串口已關閉</translation>
     </message>
     <message>
-        <location filename="../modbusrtuserialserver.cpp" line="311"/>
+        <location filename="../modbusrtuserialserver.cpp" line="368"/>
         <source>Could not write response to client</source>
         <translation>無法寫入對客戶端的回應</translation>
     </message>
@@ -2301,12 +2396,12 @@ MODBUS Point Type:
 <context>
     <name>QModbusTcpServer</name>
     <message>
-        <location filename="../modbustcpserver.cpp" line="149"/>
+        <location filename="../modbustcpserver.cpp" line="175"/>
         <source>Requesting socket is closed</source>
         <translation>請求套接字已關閉</translation>
     </message>
     <message>
-        <location filename="../modbustcpserver.cpp" line="157"/>
+        <location filename="../modbustcpserver.cpp" line="183"/>
         <source>Could not write response to client</source>
         <translation>無法寫入對客戶端的回應</translation>
     </message>
@@ -2324,6 +2419,34 @@ MODBUS Point Type:
     <message>
         <source>Setup test config file.</source>
         <translation type="obsolete">Задать файл конфига.</translation>
+    </message>
+</context>
+<context>
+    <name>QSerialPort</name>
+    <message>
+        <location filename="../serialportutils.h" line="19"/>
+        <source>NONE</source>
+        <translation type="unfinished">无校验</translation>
+    </message>
+    <message>
+        <location filename="../serialportutils.h" line="22"/>
+        <source>EVEN</source>
+        <translation type="unfinished">偶校验</translation>
+    </message>
+    <message>
+        <location filename="../serialportutils.h" line="25"/>
+        <source>ODD</source>
+        <translation type="unfinished">奇校验</translation>
+    </message>
+    <message>
+        <location filename="../serialportutils.h" line="28"/>
+        <source>SPACE</source>
+        <translation type="unfinished">空</translation>
+    </message>
+    <message>
+        <location filename="../serialportutils.h" line="31"/>
+        <source>MARK</source>
+        <translation type="unfinished">标记</translation>
     </message>
 </context>
 <context>
