@@ -88,6 +88,30 @@ void addMetaObject(const QMetaObject& metaObject)
 }
 
 ///
+/// \brief addMetaEnum
+/// \param metaObject
+/// \param enumName
+///
+void addMetaEnum(const QMetaObject& metaObject, const char* enumName)
+{
+    int index = metaObject.indexOfEnumerator(enumName);
+    if (index < 0)
+        return;
+
+    const QMetaEnum enumerator = metaObject.enumerator(index);
+    QVector<MethodMetaInfo> vecInfo;
+
+    for(int j = 0; j < enumerator.keyCount(); j++)
+    {
+        const QString keyName = QString::fromLatin1(enumerator.key(j));
+        vecInfo.push_back({keyName, MethodMetaType::Enumerator});
+    }
+
+    _completerMap[QString("%1%2").arg(metaObject.className(), enumName)] = vecInfo;
+}
+
+
+///
 /// \brief JSCompleterModel::JSCompleterModel
 /// \param parent
 ///
@@ -104,7 +128,8 @@ JSCompleterModel::JSCompleterModel(QObject *parent)
         addMetaObject(Storage::staticMetaObject);
         addMetaObject(Server::staticMetaObject);
         addMetaObject(Register::staticMetaObject);
-        addMetaObject(Address::staticMetaObject);
+        addMetaEnum(Address::staticMetaObject, "Base");
+        addMetaEnum(Address::staticMetaObject, "Space");
     }
 }
 

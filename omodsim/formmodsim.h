@@ -10,7 +10,7 @@
 #include "modbusmultiserver.h"
 #include "displaydefinition.h"
 #include "outputwidget.h"
-#include "scriptcontrol.h"
+#include "jscriptcontrol.h"
 #include "scriptsettings.h"
 
 class MainWindow;
@@ -149,7 +149,7 @@ private slots:
 private:
     void updateStatus();
     void onDefinitionChanged();
-    ScriptControl* scriptControl();
+    JScriptControl* scriptControl();
     bool isLoggingRequest(QSharedPointer<const ModbusMessage> msgReq) const;
 
 private:

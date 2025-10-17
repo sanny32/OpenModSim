@@ -1,15 +1,16 @@
 #include <QFile>
+#include <QMetaEnum>
 #include "modbusmultiserver.h"
-#include "scriptcontrol.h"
-#include "ui_scriptcontrol.h"
+#include "jscriptcontrol.h"
+#include "ui_jscriptcontrol.h"
 
 ///
-/// \brief ScriptControl::ScriptControl
+/// \brief JScriptControl::JScriptControl
 /// \param parent
 ///
-ScriptControl::ScriptControl(QWidget *parent)
+JScriptControl::JScriptControl(QWidget *parent)
     : QWidget(parent)
-    , ui(new Ui::ScriptControl)
+    , ui(new Ui::JScriptControl)
     ,_script(nullptr)
     ,_storage(nullptr)
     ,_server(nullptr)
@@ -24,197 +25,197 @@ ScriptControl::ScriptControl(QWidget *parent)
     }
     ui->helpWidget->setHelp(helpfile);
 
-    connect(&_timer, &QTimer::timeout, this, &ScriptControl::executeScript);
-    connect(ui->codeEditor, &JSCodeEditor::helpContext, this, &ScriptControl::showHelp);
+    connect(&_timer, &QTimer::timeout, this, &JScriptControl::executeScript);
+    connect(ui->codeEditor, &JSCodeEditor::helpContext, this, &JScriptControl::showHelp);
 }
 
 ///
-/// \brief ScriptControl::~ScriptControl
+/// \brief JScriptControl::~JScriptControl
 ///
-ScriptControl::~ScriptControl()
+JScriptControl::~JScriptControl()
 {
     delete ui;
 }
 
 ///
-/// \brief ScriptControl::setModbusMultiServer
+/// \brief JScriptControl::setModbusMultiServer
 /// \param server
 ///
-void ScriptControl::setModbusMultiServer(ModbusMultiServer* server)
+void JScriptControl::setModbusMultiServer(ModbusMultiServer* server)
 {
     _mbMultiServer = server;
 }
 
 ///
-/// \brief ScriptControl::setByteOrder
+/// \brief JScriptControl::setByteOrder
 /// \param order
 ///
-void ScriptControl::setByteOrder(const ByteOrder* order)
+void JScriptControl::setByteOrder(const ByteOrder* order)
 {
     _byteOrder = const_cast<ByteOrder*>(order);
 }
 
 ///
-/// \brief ScriptControl::setAddressBase
+/// \brief JScriptControl::setAddressBase
 /// \param base
 ///
-void ScriptControl::setAddressBase(AddressBase base)
+void JScriptControl::setAddressBase(AddressBase base)
 {
     _addressBase = base;
 }
 
 ///
-/// \brief ScriptControl::isAutoCompleteEnabled
+/// \brief JScriptControl::isAutoCompleteEnabled
 /// \return
 ///
-bool ScriptControl::isAutoCompleteEnabled() const
+bool JScriptControl::isAutoCompleteEnabled() const
 {
     return ui->codeEditor->isAutoCompleteEnabled();
 }
 
 ///
-/// \brief ScriptControl::enableAutoComplete
+/// \brief JScriptControl::enableAutoComplete
 /// \param enable
 ///
-void ScriptControl::enableAutoComplete(bool enable)
+void JScriptControl::enableAutoComplete(bool enable)
 {
     ui->codeEditor->enableAutoComplete(enable);
 }
 
 ///
-/// \brief ScriptControl::script
+/// \brief JScriptControl::script
 /// \return
 ///
-QString ScriptControl::script() const
+QString JScriptControl::script() const
 {
     return ui->codeEditor->toPlainText();
 }
 
 ///
-/// \brief ScriptControl::setScript
+/// \brief JScriptControl::setScript
 /// \param text
 ///
-void ScriptControl::setScript(const QString& text)
+void JScriptControl::setScript(const QString& text)
 {
     ui->codeEditor->setPlainText(text);
     ui->codeEditor->moveCursor(QTextCursor::End);
 }
 
 ///
-/// \brief ScriptControl::searchText
+/// \brief JScriptControl::searchText
 /// \return
 ///
-QString ScriptControl::searchText() const
+QString JScriptControl::searchText() const
 {
     return _searchText;
 }
 
 ///
-/// \brief ScriptControl::undo
+/// \brief JScriptControl::undo
 ///
-void ScriptControl::undo()
+void JScriptControl::undo()
 {
     ui->codeEditor->undo();
 }
 
 ///
-/// \brief ScriptControl::redo
+/// \brief JScriptControl::redo
 ///
-void ScriptControl::redo()
+void JScriptControl::redo()
 {
     ui->codeEditor->redo();
 }
 
 ///
-/// \brief ScriptControl::cut
+/// \brief JScriptControl::cut
 ///
-void ScriptControl::cut()
+void JScriptControl::cut()
 {
     ui->codeEditor->cut();
 }
 
 ///
-/// \brief ScriptControl::copy
+/// \brief JScriptControl::copy
 ///
-void ScriptControl::copy()
+void JScriptControl::copy()
 {
     ui->codeEditor->copy();
 }
 
 ///
-/// \brief ScriptControl::paste
+/// \brief JScriptControl::paste
 ///
-void ScriptControl::paste()
+void JScriptControl::paste()
 {
     ui->codeEditor->paste();
 }
 
 ///
-/// \brief ScriptControl::selectAll
+/// \brief JScriptControl::selectAll
 ///
-void ScriptControl::selectAll()
+void JScriptControl::selectAll()
 {
     ui->codeEditor->selectAll();
 }
 
 ///
-/// \brief ScriptControl::search
+/// \brief JScriptControl::search
 /// \param text
 ///
-void ScriptControl::search(const QString& text)
+void JScriptControl::search(const QString& text)
 {
     _searchText = text;
     ui->codeEditor->search(text);
 }
 
 ///
-/// \brief ScriptControl::isRunning
+/// \brief JScriptControl::isRunning
 ///
-bool ScriptControl::isRunning() const
+bool JScriptControl::isRunning() const
 {
    return _timer.isActive();
 }
 
 ///
-/// \brief ScriptControl::setFocus
+/// \brief JScriptControl::setFocus
 ///
-void ScriptControl::setFocus()
+void JScriptControl::setFocus()
 {
     ui->codeEditor->setFocus();
 }
 
 ///
-/// \brief ScriptControl::canUndo
+/// \brief JScriptControl::canUndo
 /// \return
 ///
-bool ScriptControl::canUndo() const
+bool JScriptControl::canUndo() const
 {
     return true;
 }
 
 ///
-/// \brief ScriptControl::canRedo
+/// \brief JScriptControl::canRedo
 /// \return
 ///
-bool ScriptControl::canRedo() const
+bool JScriptControl::canRedo() const
 {
     return true;
 }
 
 ///
-/// \brief ScriptControl::canPaste
+/// \brief JScriptControl::canPaste
 /// \return
 ///
-bool ScriptControl::canPaste() const
+bool JScriptControl::canPaste() const
 {
     return ui->codeEditor->canPaste();
 }
 
 ///
-/// \brief ScriptControl::runScript
+/// \brief JScriptControl::runScript
 /// \param interval
 ///
-void ScriptControl::runScript(RunMode mode, int interval)
+void JScriptControl::runScript(RunMode mode, int interval)
 {
     _scriptCode = script();
 
@@ -222,15 +223,30 @@ void ScriptControl::runScript(RunMode mode, int interval)
     _server = QSharedPointer<Server>(new Server(_mbMultiServer, _byteOrder, _addressBase));
     _script = QSharedPointer<Script>(new Script(interval));
     _console = QSharedPointer<console>(new console(ui->console));
-    connect(_script.get(), &Script::stopped, this, &ScriptControl::stopScript, Qt::QueuedConnection);
+    connect(_script.get(), &Script::stopped, this, &JScriptControl::stopScript, Qt::QueuedConnection);
 
     _jsEngine.globalObject().setProperty("Storage", _jsEngine.newQObject(_storage.get()));
     _jsEngine.globalObject().setProperty("Script",  _jsEngine.newQObject(_script.get()));
     _jsEngine.globalObject().setProperty("Server",  _jsEngine.newQObject(_server.get()));
     _jsEngine.globalObject().setProperty("console", _jsEngine.newQObject(_console.get()));
     _jsEngine.globalObject().setProperty("Register", _jsEngine.newQMetaObject(&Register::staticMetaObject));
-    _jsEngine.globalObject().setProperty("AddressBase", _jsEngine.newQMetaObject(&Address::staticMetaObject));
-    _jsEngine.globalObject().setProperty("AddressSpace", _jsEngine.newQMetaObject(&Address::staticMetaObject));
+
+    const QMetaObject &mo = Address::staticMetaObject;
+
+    QMetaEnum baseEnum = mo.enumerator(mo.indexOfEnumerator("Base"));
+    QMetaEnum spaceEnum = mo.enumerator(mo.indexOfEnumerator("Space"));
+
+    QJSValue jsBase = _jsEngine.newObject();
+    for (int i = 0; i < baseEnum.keyCount(); ++i)
+        jsBase.setProperty(baseEnum.key(i), baseEnum.value(i));
+
+    QJSValue jsSpace = _jsEngine.newObject();
+    for (int i = 0; i < spaceEnum.keyCount(); ++i)
+        jsSpace.setProperty(spaceEnum.key(i), spaceEnum.value(i));
+
+    _jsEngine.globalObject().setProperty("AddressBase", jsBase);
+    _jsEngine.globalObject().setProperty("AddressSpace", jsSpace);
+
     _jsEngine.setInterrupted(false);
 
     _console->clear();
@@ -251,14 +267,14 @@ void ScriptControl::runScript(RunMode mode, int interval)
 }
 
 ///
-/// \brief ScriptControl::stopScript
+/// \brief JScriptControl::stopScript
 ///
-void ScriptControl::stopScript()
+void JScriptControl::stopScript()
 {
     _timer.stop();
 
     if(_script != nullptr)
-        disconnect(_script.get(), &Script::stopped, this, &ScriptControl::stopScript);
+        disconnect(_script.get(), &Script::stopped, this, &JScriptControl::stopScript);
 
     _jsEngine.setInterrupted(true);
     _jsEngine.globalObject().deleteProperty("Storage");
@@ -276,10 +292,10 @@ void ScriptControl::stopScript()
 }
 
 ///
-/// \brief ScriptControl::showHelp
+/// \brief JScriptControl::showHelp
 /// \param helpKey
 ///
-void ScriptControl::showHelp(const QString& helpKey)
+void JScriptControl::showHelp(const QString& helpKey)
 {
     if(ui->verticalSplitter->sizes().at(1) == 0)
     {
@@ -290,9 +306,9 @@ void ScriptControl::showHelp(const QString& helpKey)
 }
 
 ///
-/// \brief ScriptControl::executeScript
+/// \brief JScriptControl::executeScript
 ///
-bool ScriptControl::executeScript()
+bool JScriptControl::executeScript()
 {
     const auto res = _script->run(_jsEngine, _scriptCode);
     if(res.isError() && !_jsEngine.isInterrupted())
@@ -310,7 +326,7 @@ bool ScriptControl::executeScript()
 /// \param frm
 /// \return
 ///
-QSettings& operator <<(QSettings& out, const ScriptControl* ctrl)
+QSettings& operator <<(QSettings& out, const JScriptControl* ctrl)
 {
     out.setValue("ScriptControl/Script", ctrl->script().toUtf8().toBase64());
     out.setValue("ScriptControl/VSplitter", ctrl->ui->verticalSplitter->saveState());
@@ -324,7 +340,7 @@ QSettings& operator <<(QSettings& out, const ScriptControl* ctrl)
 /// \param ctrl
 /// \return
 ///
-QSettings& operator >>(QSettings& in, ScriptControl* ctrl)
+QSettings& operator >>(QSettings& in, JScriptControl* ctrl)
 {
     const auto script = QByteArray::fromBase64(in.value("ScriptControl/Script").toString().toUtf8());
     ctrl->setScript(script);
@@ -344,7 +360,7 @@ QSettings& operator >>(QSettings& in, ScriptControl* ctrl)
 /// \param ctrl
 /// \return
 ///
-QDataStream& operator <<(QDataStream& out, const ScriptControl* ctrl)
+QDataStream& operator <<(QDataStream& out, const JScriptControl* ctrl)
 {
     QMap<QString, QVariant> m;
     m["script"] = ctrl->script();
@@ -361,7 +377,7 @@ QDataStream& operator <<(QDataStream& out, const ScriptControl* ctrl)
 /// \param ctrl
 /// \return
 ///
-QDataStream& operator >>(QDataStream& in, ScriptControl* ctrl)
+QDataStream& operator >>(QDataStream& in, JScriptControl* ctrl)
 {
     QMap<QString, QVariant> m;
     in >> m;

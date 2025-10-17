@@ -86,6 +86,7 @@ set(SOURCES
     controls/flowcontroltypecombobox.cpp
     controls/helpwidget.cpp
     controls/jscodeeditor.cpp
+    controls/jscriptcontrol.cpp
     controls/mainstatusbar.cpp
     controls/modbuslogwidget.cpp
     controls/modbusmessagewidget.cpp
@@ -95,7 +96,6 @@ set(SOURCES
     controls/paritytypecombobox.cpp
     controls/pointtypecombobox.cpp
     controls/runmodecombobox.cpp
-    controls/scriptcontrol.cpp
     controls/searchlineedit.cpp
     controls/simulationmodecombobox.cpp
     controls/statisticwidget.cpp
@@ -161,6 +161,7 @@ set(HEADERS
     controls/flowcontroltypecombobox.h
     controls/helpwidget.h
     controls/jscodeeditor.h
+    controls/jscriptcontrol.h
     controls/mainstatusbar.h
     controls/modbuslogwidget.h
     controls/modbusmessagewidget.h
@@ -170,7 +171,6 @@ set(HEADERS
     controls/paritytypecombobox.h
     controls/pointtypecombobox.h
     controls/runmodecombobox.h
-    controls/scriptcontrol.h
     controls/searchlineedit.h
     controls/simulationmodecombobox.h
     controls/statisticwidget.h
@@ -255,8 +255,8 @@ set(HEADERS
 
 # UI Forms
 set(UI_FILES
+    controls/jscriptcontrol.ui
     controls/outputwidget.ui
-    controls/scriptcontrol.ui
     controls/statisticwidget.ui
     dialogs/dialogautosimulation.ui
     dialogs/dialogcoilsimulation.ui
