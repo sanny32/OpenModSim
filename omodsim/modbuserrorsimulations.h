@@ -2,6 +2,7 @@
 #define MODBUSERRORSIMULATIONS_H
 
 #include <QSettings>
+#include <QDataStream>
 #include <QVersionNumber>
 
 ///

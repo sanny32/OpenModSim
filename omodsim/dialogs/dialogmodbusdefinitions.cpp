@@ -33,14 +33,14 @@ DialogModbusDefinitions::DialogModbusDefinitions(ModbusMultiServer& srv, QWidget
 
     const QList<QSpinBox*> allSpinBoxes = findChildren<QSpinBox*>();
     for (QSpinBox* spinBox : allSpinBoxes) {
-        connect(spinBox, &QSpinBox::valueChanged, this, [this] {
+        connect(spinBox, QOverload<int>::of(&QSpinBox::valueChanged), this, [this] {
             ui->buttonBox->button(QDialogButtonBox::Apply)->setEnabled(true);
         });
     }
 
     const QList<QComboBox*> allComboBoxes = findChildren<QComboBox*>();
     for (QComboBox* comboBox : allComboBoxes) {
-        connect(comboBox, &QComboBox::currentIndexChanged, this, [this] {
+        connect(comboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, [this](int) {
             ui->buttonBox->button(QDialogButtonBox::Apply)->setEnabled(true);
         });
     }
