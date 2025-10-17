@@ -16,20 +16,13 @@ class ModbusMultiServer final : public QObject
 {
     Q_OBJECT
 public:
-    enum class GlobalUnitMapStatus {
-        NotSet = 0,
-        CompletelySet = 1,
-        PartiallySet,
-    };
-    Q_ENUM(GlobalUnitMapStatus)
-
     explicit ModbusMultiServer(QObject *parent = nullptr);
     ~ModbusMultiServer() override;
 
     void addDeviceId(quint8 deviceId);
     void removeDeviceId(quint8 deviceId);
 
-    GlobalUnitMapStatus useGlobalUnitMap() const;
+    bool useGlobalUnitMap() const;
     void setUseGlobalUnitMap(bool use);
 
     void addUnitMap(int id, quint8 deviceId, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, quint16 length);
@@ -41,8 +34,8 @@ public:
 
     QList<ConnectionDetails> connections() const;
 
-    ModbusDefinitions getModbusDefinitions(const ConnectionDetails& cd) const;
-    void setModbusDefinitions(const ConnectionDetails& cd, const ModbusDefinitions& md);
+    ModbusDefinitions getModbusDefinitions() const;
+    void setModbusDefinitions(const ModbusDefinitions& md);
 
     bool isConnected() const;
     bool isConnected(ConnectionType type, const QString& port) const;
@@ -98,6 +91,7 @@ private:
 private:
     QList<int> _deviceIds;
     QThread* _workerThread;
+    ModbusDefinitions _definitions;
     QMap<int, ModbusDataUnitMap> _modbusDataUnitMaps;
     QList<QSharedPointer<ModbusServer>> _modbusServerList;
 };

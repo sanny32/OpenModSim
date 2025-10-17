@@ -51,6 +51,6 @@
         <file>res/actionSwapBytes.png</file>
         <file>res/actionAnsi.png</file>
         <file>translations/omodsim_zh.qm</file>
-        <file>res/actionSrvSettings.png</file>
+        <file>res/actionMbDefinitions.png</file>
     </qresource>
 </RCC>

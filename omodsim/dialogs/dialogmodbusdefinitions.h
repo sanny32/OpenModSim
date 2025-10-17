@@ -23,7 +23,6 @@ public:
     void accept() override;
 
 private slots:
-    void on_listServers_currentRowChanged(int row);
     void on_buttonBox_clicked(QAbstractButton* btn);
 
 private:

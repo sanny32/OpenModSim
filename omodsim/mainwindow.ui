@@ -1010,7 +1010,7 @@
   <action name="actionMbDefinitions">
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/res/actionSrvSettings.png</normaloff>:/res/actionSrvSettings.png</iconset>
+     <normaloff>:/res/actionMbDefinitions.png</normaloff>:/res/actionMbDefinitions.png</iconset>
    </property>
    <property name="text">
     <string>Modbus Definitions</string>

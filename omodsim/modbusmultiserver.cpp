@@ -73,21 +73,12 @@ void ModbusMultiServer::removeDeviceId(quint8 deviceId)
 /// \brief ModbusMultiServer::useGlobalUnitMap
 /// \return
 ///
-ModbusMultiServer::GlobalUnitMapStatus ModbusMultiServer::useGlobalUnitMap() const
+bool ModbusMultiServer::useGlobalUnitMap() const
 {
-    int count = 0;
+    if(_modbusDataUnitMaps.isEmpty())
+        return false;
 
-    for (const auto &map : _modbusDataUnitMaps) {
-        if (map.isGlobalMap()) ++count;
-    }
-
-    if (count == 0)
-        return GlobalUnitMapStatus::NotSet;
-
-    if (count == _modbusDataUnitMaps.size())
-        return GlobalUnitMapStatus::CompletelySet;
-
-    return GlobalUnitMapStatus::PartiallySet;
+    return _modbusDataUnitMaps.first().isGlobalMap();
 }
 
 ///
@@ -279,6 +270,7 @@ void ModbusMultiServer::connectDevice(const ConnectionDetails& cd)
         }
     }
 
+    modbusServer->setDefinitions(_definitions);
     modbusServer->connectDevice();
 }
 
@@ -339,49 +331,32 @@ QList<ConnectionDetails> ModbusMultiServer::connections() const
 
 ///
 /// \brief ModbusMultiServer::getModbusDefinitions
-/// \param cd
 /// \return
 ///
-ModbusDefinitions ModbusMultiServer::getModbusDefinitions(const ConnectionDetails& cd) const
+ModbusDefinitions ModbusMultiServer::getModbusDefinitions() const
 {
-    if(QThread::currentThread() != _workerThread)
-    {
-        ModbusDefinitions md;
-        QMetaObject::invokeMethod(const_cast<ModbusMultiServer*>(this), [this, &md, cd]() {
-            md = getModbusDefinitions(cd);
-        }, Qt::BlockingQueuedConnection);
-        return md;
-    }
-
-    auto modbusServer = findModbusServer(cd);
-    if(modbusServer == nullptr) {
-        return ModbusDefinitions();
-    }
-
-    return modbusServer->getDefinitions();
+    return _definitions;
 }
 
 ///
 /// \brief ModbusMultiServer::setModbusDefinitions
-/// \param cd
 /// \param md
 ///
-void ModbusMultiServer::setModbusDefinitions(const ConnectionDetails& cd, const ModbusDefinitions& md)
+void ModbusMultiServer::setModbusDefinitions(const ModbusDefinitions& md)
 {
     if(QThread::currentThread() != _workerThread)
     {
-        QMetaObject::invokeMethod(this, [this, cd, md]() {
-            setModbusDefinitions(cd, md);
+        QMetaObject::invokeMethod(this, [this, md]() {
+            setModbusDefinitions(md);
         }, Qt::BlockingQueuedConnection);
         return;
     }
 
-    auto modbusServer = findModbusServer(cd);
-    if(modbusServer == nullptr) {
-        return;
-    }
+    _definitions = md;
 
-    modbusServer->setDefinitions(md);
+    for(auto&& s : _modbusServerList) {
+        s->setDefinitions(md);
+    }
 }
 
 ///
@@ -390,8 +365,9 @@ void ModbusMultiServer::setModbusDefinitions(const ConnectionDetails& cd, const 
 ///
 void ModbusMultiServer::addModbusServer(QSharedPointer<ModbusServer> server)
 {
-    if(server && !_modbusServerList.contains(server))
+    if(server && !_modbusServerList.contains(server)) {
         _modbusServerList.push_back(server);
+    }
 }
 
 ///
@@ -400,8 +376,9 @@ void ModbusMultiServer::addModbusServer(QSharedPointer<ModbusServer> server)
 ///
 void ModbusMultiServer::removeModbusServer(QSharedPointer<ModbusServer> server)
 {
-    if(server)
+    if(server) {
         _modbusServerList.removeOne(server);
+    }
 }
 
 ///
@@ -418,6 +395,7 @@ void ModbusMultiServer::reconfigureServers()
     }
 
     for(auto&& s : _modbusServerList) {
+        s->setDefinitions(_definitions);
         for(auto addr : s->serverAddresses()) {
             s->setMap(_modbusDataUnitMaps[addr], addr);
         }
