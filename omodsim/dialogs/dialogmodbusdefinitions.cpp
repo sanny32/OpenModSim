@@ -16,7 +16,7 @@ DialogModbusDefinitions::DialogModbusDefinitions(ModbusMultiServer& srv, QWidget
 
     const QList<QCheckBox*> allCheckBoxes = findChildren<QCheckBox*>();
     for (QCheckBox* checkBox : allCheckBoxes) {
-        #if QT_VERSION >= QT_VERSION_CHECK(6, 10, 0)
+        #if QT_VERSION >= QT_VERSION_CHECK(6, 9, 0)
             connect(checkBox, &QCheckBox::checkStateChanged, this, [this] {
                 ui->buttonBox->button(QDialogButtonBox::Apply)->setEnabled(true);
                 ui->spinBoxDelay->setEnabled(ui->checkBoxDelay->isChecked());
