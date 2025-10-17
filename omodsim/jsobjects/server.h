@@ -26,8 +26,15 @@ namespace Address
         Base1
     };
     Q_ENUM_NS(Base)
+
+    enum class Space {
+        Digits6 = 0,
+        Digits5
+    };
+    Q_ENUM_NS(Space)
 }
 Q_DECLARE_METATYPE(Address::Base)
+Q_DECLARE_METATYPE(Address::Space)
 
 ///
 /// \brief The Modbus Server class
@@ -41,9 +48,11 @@ public:
     ~Server() override;
 
     Q_PROPERTY(Address::Base addressBase READ addressBase WRITE setAddressBase);
+    Q_PROPERTY(Address::Space addressSpace READ addressSpace WRITE setAddressSpace);
     Q_PROPERTY(bool useGlobalUnitMap READ useGlobalUnitMap WRITE setUseGlobalUnitMap);
 
     Address::Base addressBase() const;
+    Address::Space addressSpace() const;
     bool useGlobalUnitMap() const;
 
     Q_INVOKABLE quint16 readHolding(quint16 address, quint8 deviceId = 1) const;
@@ -87,6 +96,7 @@ signals:
 
 public slots:
     void setAddressBase(Address::Base base);
+    void setAddressSpace(Address::Space space);
     void setUseGlobalUnitMap(bool value);
 
 private slots:

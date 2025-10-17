@@ -60,6 +60,26 @@ void Server::setAddressBase(Address::Base base)
 }
 
 ///
+/// \brief Server::addressSpace
+/// \return
+///
+Address::Space Server::addressSpace() const
+{
+    return (Address::Space)_mbMultiServer->getModbusDefinitions().AddrSpace;
+}
+
+///
+/// \brief Server::setAddressSpace
+/// \param space
+///
+void Server::setAddressSpace(Address::Space space)
+{
+    auto defs = _mbMultiServer->getModbusDefinitions();
+    defs.AddrSpace = (AddressSpace)space;
+    _mbMultiServer->setModbusDefinitions(defs);
+}
+
+///
 /// \brief Server::useGlobalUnitMap
 /// \return
 ///
