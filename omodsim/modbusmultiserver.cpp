@@ -340,23 +340,25 @@ ModbusDefinitions ModbusMultiServer::getModbusDefinitions() const
 
 ///
 /// \brief ModbusMultiServer::setModbusDefinitions
-/// \param md
+/// \param defs
 ///
-void ModbusMultiServer::setModbusDefinitions(const ModbusDefinitions& md)
+void ModbusMultiServer::setModbusDefinitions(const ModbusDefinitions& defs)
 {
     if(QThread::currentThread() != _workerThread)
     {
-        QMetaObject::invokeMethod(this, [this, md]() {
-            setModbusDefinitions(md);
+        QMetaObject::invokeMethod(this, [this, defs]() {
+            setModbusDefinitions(defs);
         }, Qt::BlockingQueuedConnection);
         return;
     }
 
-    _definitions = md;
+    _definitions = defs;
 
     for(auto&& s : _modbusServerList) {
-        s->setDefinitions(md);
+        s->setDefinitions(defs);
     }
+
+    emit definitionsChanged(_definitions);
 }
 
 ///

@@ -16,7 +16,7 @@ DialogDisplayDefinition::DialogDisplayDefinition(DisplayDefinition dd, QWidget* 
     ui->setupUi(this);
     ui->lineEditFormName->setText(dd.FormName);
     ui->lineEditPointAddress->setInputMode(dd.HexAddress ? NumericLineEdit::HexMode : NumericLineEdit::Int32Mode);
-    ui->lineEditPointAddress->setInputRange(ModbusLimits::addressRange(dd.ZeroBasedAddress));
+    ui->lineEditPointAddress->setInputRange(ModbusLimits::addressRange(dd.AddrSpace, dd.ZeroBasedAddress));
     ui->lineEditLength->setInputRange(ModbusLimits::lengthRange());
     ui->lineEditSlaveAddress->setInputRange(ModbusLimits::slaveRange());
     ui->lineEditLogLimit->setInputRange(4, 1000);
@@ -67,6 +67,6 @@ void DialogDisplayDefinition::on_comboBoxAddressBase_addressBaseChanged(AddressB
 {
     const auto addr = ui->lineEditPointAddress->value<int>();
 
-    ui->lineEditPointAddress->setInputRange(ModbusLimits::addressRange(base == AddressBase::Base0));
+    ui->lineEditPointAddress->setInputRange(ModbusLimits::addressRange(_displayDefinition.AddrSpace, base == AddressBase::Base0));
     ui->lineEditPointAddress->setValue(base == AddressBase::Base1 ? qMax(1, addr + 1) : qMax(0, addr - 1));
 }

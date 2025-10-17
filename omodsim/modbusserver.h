@@ -76,8 +76,8 @@ public:
     virtual bool processesBroadcast() const { return false; }
 
     ModbusDefinitions getDefinitions() const { return _definitions; }
-    void setDefinitions(const ModbusDefinitions& md) {
-        _definitions = md;
+    void setDefinitions(const ModbusDefinitions& defs) {
+        _definitions = defs;
         processDefinitionsChanges();
     }
 

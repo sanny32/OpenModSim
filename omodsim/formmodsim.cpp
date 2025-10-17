@@ -42,8 +42,10 @@ FormModSim::FormModSim(int id, ModbusMultiServer& server, QSharedPointer<DataSim
     ui->scriptControl->setModbusMultiServer(&_mbMultiServer);
     ui->scriptControl->setByteOrder(ui->outputWidget->byteOrder());
 
+    const auto mbDefs = _mbMultiServer.getModbusDefinitions();
+
     ui->lineEditAddress->setPaddingZeroes(true);
-    ui->lineEditAddress->setInputRange(ModbusLimits::addressRange(true));
+    ui->lineEditAddress->setInputRange(ModbusLimits::addressRange(mbDefs.AddrSpace, true));
     ui->lineEditAddress->setValue(0);
 
     ui->lineEditLength->setInputRange(ModbusLimits::lengthRange());
@@ -65,6 +67,7 @@ FormModSim::FormModSim(int id, ModbusMultiServer& server, QSharedPointer<DataSim
     connect(&_mbMultiServer, &ModbusMultiServer::connected, this, &FormModSim::on_mbConnected);
     connect(&_mbMultiServer, &ModbusMultiServer::disconnected, this, &FormModSim::on_mbDisconnected);
     connect(&_mbMultiServer, &ModbusMultiServer::dataChanged, this, &FormModSim::on_mbDataChanged);
+    connect(&_mbMultiServer, &ModbusMultiServer::definitionsChanged, this, &FormModSim::on_mbDefinitionsChanged);
 
     connect(_dataSimulator.get(), &DataSimulator::simulationStarted, this, &FormModSim::on_simulationStarted);
     connect(_dataSimulator.get(), &DataSimulator::simulationStopped, this, &FormModSim::on_simulationStopped);
@@ -152,6 +155,7 @@ DisplayDefinition FormModSim::displayDefinition() const
     dd.AutoscrollLog = ui->outputWidget->autoscrollLogView();
     dd.VerboseLogging = _verboseLogging;
     dd.HexAddress = displayHexAddresses();
+    dd.AddrSpace = _mbMultiServer.getModbusDefinitions().AddrSpace;
 
     return dd;
 }
@@ -165,6 +169,8 @@ void FormModSim::setDisplayDefinition(const DisplayDefinition& dd)
     if(!dd.FormName.isEmpty())
         setWindowTitle(dd.FormName);
 
+    const auto defs = _mbMultiServer.getModbusDefinitions();
+
     ui->lineEditDeviceId->setValue(dd.DeviceId);
 
     ui->comboBoxAddressBase->blockSignals(true);
@@ -172,7 +178,7 @@ void FormModSim::setDisplayDefinition(const DisplayDefinition& dd)
     ui->comboBoxAddressBase->blockSignals(false);
 
     ui->lineEditAddress->blockSignals(true);
-    ui->lineEditAddress->setInputRange(ModbusLimits::addressRange(dd.ZeroBasedAddress));
+    ui->lineEditAddress->setInputRange(ModbusLimits::addressRange(defs.AddrSpace, dd.ZeroBasedAddress));
     ui->lineEditAddress->setValue(dd.PointAddress);
     ui->lineEditAddress->blockSignals(false);
 
@@ -253,8 +259,9 @@ void FormModSim::setDisplayHexAddresses(bool on)
 {
     ui->outputWidget->setDisplayHexAddresses(on);
 
+    const auto defs = _mbMultiServer.getModbusDefinitions();
     ui->lineEditAddress->setInputMode(on ? NumericLineEdit::HexMode : NumericLineEdit::Int32Mode);
-    ui->lineEditAddress->setInputRange(ModbusLimits::addressRange(ui->comboBoxAddressBase->currentAddressBase() == AddressBase::Base0));
+    ui->lineEditAddress->setInputRange(ModbusLimits::addressRange(defs.AddrSpace, ui->comboBoxAddressBase->currentAddressBase() == AddressBase::Base0));
 }
 
 ///
@@ -750,8 +757,9 @@ void FormModSim::updateStatus()
     const auto dd = displayDefinition();
     if(_mbMultiServer.isConnected())
     {
+        const auto defs = _mbMultiServer.getModbusDefinitions();
         const auto addr = dd.PointAddress - (dd.ZeroBasedAddress ? 0 : 1);
-        if(addr + dd.Length <= ModbusLimits::addressRange().to())
+        if(addr + dd.Length <= ModbusLimits::addressRange(defs.AddrSpace).to())
             ui->outputWidget->setStatus(QString());
         else
             ui->outputWidget->setInvalidLengthStatus();
@@ -798,6 +806,7 @@ void FormModSim::on_outputWidget_itemDoubleClicked(quint16 addr, const QVariant&
     const auto pointType = ui->comboBoxModbusPointType->currentPointType();
     const auto zeroBasedAddress = displayDefinition().ZeroBasedAddress;
     const auto simAddr = addr - (zeroBasedAddress ? 0 : 1);
+    const auto addrSpace = _mbMultiServer.getModbusDefinitions().AddrSpace;
     auto simParams = _dataSimulator->simulationParams(deviceId, pointType, addr);
 
     switch(pointType)
@@ -805,7 +814,7 @@ void FormModSim::on_outputWidget_itemDoubleClicked(quint16 addr, const QVariant&
         case QModbusDataUnit::Coils:
         case QModbusDataUnit::DiscreteInputs:
         {
-            ModbusWriteParams params = { addr, value, mode, byteOrder(), codepage(), zeroBasedAddress };
+            ModbusWriteParams params = { addr, value, mode, byteOrder(), codepage(), zeroBasedAddress, addrSpace };
             DialogWriteCoilRegister dlg(params, simParams, displayHexAddresses(), this);
             switch(dlg.exec())
             {
@@ -824,7 +833,7 @@ void FormModSim::on_outputWidget_itemDoubleClicked(quint16 addr, const QVariant&
         case QModbusDataUnit::InputRegisters:
         case QModbusDataUnit::HoldingRegisters:
         {
-            ModbusWriteParams params = { addr, value, mode, byteOrder(), codepage(), zeroBasedAddress };
+            ModbusWriteParams params = { addr, value, mode, byteOrder(), codepage(), zeroBasedAddress, addrSpace };
             if(mode == DataDisplayMode::Binary)
             {
                 DialogWriteHoldingRegisterBits dlg(params, displayHexAddresses(), this);
@@ -975,6 +984,16 @@ void FormModSim::on_mbDataChanged(quint8 deviceId, const QModbusDataUnit&)
         const auto addr = dd.PointAddress - (dd.ZeroBasedAddress ? 0 : 1);
         ui->outputWidget->updateData(_mbMultiServer.data(deviceId, dd.PointType, addr, dd.Length));
     }
+}
+
+///
+/// \brief FormModSim::on_mbDefinitionsChanged
+/// \param defs
+///
+void FormModSim::on_mbDefinitionsChanged(const ModbusDefinitions& defs)
+{
+    const auto dd = displayDefinition();
+    ui->lineEditAddress->setInputRange(ModbusLimits::addressRange(defs.AddrSpace, dd.ZeroBasedAddress));
 }
 
 ///

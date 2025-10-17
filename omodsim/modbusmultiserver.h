@@ -35,7 +35,7 @@ public:
     QList<ConnectionDetails> connections() const;
 
     ModbusDefinitions getModbusDefinitions() const;
-    void setModbusDefinitions(const ModbusDefinitions& md);
+    void setModbusDefinitions(const ModbusDefinitions& defs);
 
     bool isConnected() const;
     bool isConnected(ConnectionType type, const QString& port) const;
@@ -73,6 +73,7 @@ signals:
     void connectionError(const QString& error);
     void errorOccured(quint8 deviceId, const QString& error);
     void dataChanged(quint8 deviceId, const QModbusDataUnit& data);
+    void definitionsChanged(const ModbusDefinitions& defs);
 
 private slots:
     void on_stateChanged(QModbusDevice::State state);

@@ -20,11 +20,12 @@ struct DisplayDefinition
     bool HexAddress = false;
     bool AutoscrollLog = false;
     bool VerboseLogging = true;
+    AddressSpace AddrSpace;
 
     void normalize()
     {
         DeviceId = qMax<quint8>(ModbusLimits::slaveRange().from(), DeviceId);
-        PointAddress = qMax<quint16>(ModbusLimits::addressRange(ZeroBasedAddress).from(), PointAddress);
+        PointAddress = qMax<quint16>(ModbusLimits::addressRange(AddrSpace, ZeroBasedAddress).from(), PointAddress);
         PointType = qBound(QModbusDataUnit::DiscreteInputs, PointType, QModbusDataUnit::HoldingRegisters);
         Length = qBound<quint16>(ModbusLimits::lengthRange().from(), Length, ModbusLimits::lengthRange().to());
         LogViewLimit = qBound<quint16>(4, LogViewLimit, 1000);

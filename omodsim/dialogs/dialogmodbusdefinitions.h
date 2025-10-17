@@ -27,7 +27,7 @@ private slots:
 
 private:
     void apply();
-    void updateModbusDefinitions(const ModbusDefinitions& md);
+    void updateModbusDefinitions(const ModbusDefinitions& defs);
 
 private:
     Ui::DialogModbusDefinitions *ui;

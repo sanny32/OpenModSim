@@ -18,7 +18,7 @@ DialogWriteCoilRegister::DialogWriteCoilRegister(ModbusWriteParams& writeParams,
 {
     ui->setupUi(this);
     ui->lineEditAddress->setInputMode(hexAddress ? NumericLineEdit::HexMode : NumericLineEdit::Int32Mode);
-    ui->lineEditAddress->setInputRange(ModbusLimits::addressRange(writeParams.ZeroBasedAddress));
+    ui->lineEditAddress->setInputRange(ModbusLimits::addressRange(writeParams.AddrSpace, writeParams.ZeroBasedAddress));
     ui->lineEditAddress->setValue(_writeParams.Address);
     ui->radioButtonOn->setChecked(_writeParams.Value.toBool());
     ui->radioButtonOff->setChecked(!_writeParams.Value.toBool());

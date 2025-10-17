@@ -45,8 +45,8 @@ DialogModbusDefinitions::DialogModbusDefinitions(ModbusMultiServer& srv, QWidget
         });
     }
 
-    const auto md = _mbMultiServer.getModbusDefinitions();
-    updateModbusDefinitions(md);
+    const auto defs = _mbMultiServer.getModbusDefinitions();
+    updateModbusDefinitions(defs);
 }
 
 
@@ -83,45 +83,45 @@ void DialogModbusDefinitions::on_buttonBox_clicked(QAbstractButton* btn)
 ///
 void DialogModbusDefinitions::apply()
 {
-    ModbusDefinitions md;
-    md.AddrSpace = ui->comboBoxAddrSpace->currentAddressSpace();
-    md.UseGlobalUnitMap = ui->checkBoxGlobalMap->isChecked();
-    md.ErrorSimulations.setResponseIncorrectId(ui->checkBoxErrIncorrentId->isChecked());
-    md.ErrorSimulations.setResponseIllegalFunction(ui->checkBoxIllegalFunc->isChecked());
-    md.ErrorSimulations.setResponseDeviceBusy(ui->checkBoxBusy->isChecked());
-    md.ErrorSimulations.setResponseIncorrectCrc(ui->checkBoxCrcErr->isChecked());
-    md.ErrorSimulations.setResponseDelay(ui->checkBoxDelay->isChecked());
-    md.ErrorSimulations.setResponseDelayTime(ui->spinBoxDelay->value());
-    md.ErrorSimulations.setResponseRandomDelay(ui->checkBoxRandomDelay->isChecked());
-    md.ErrorSimulations.setResponseRandomDelayUpToTime(ui->spinBoxUpToTime->value());
-    md.ErrorSimulations.setNoResponse(ui->checkBoxNoResponse->isChecked());
+    ModbusDefinitions defs;
+    defs.AddrSpace = ui->comboBoxAddrSpace->currentAddressSpace();
+    defs.UseGlobalUnitMap = ui->checkBoxGlobalMap->isChecked();
+    defs.ErrorSimulations.setResponseIncorrectId(ui->checkBoxErrIncorrentId->isChecked());
+    defs.ErrorSimulations.setResponseIllegalFunction(ui->checkBoxIllegalFunc->isChecked());
+    defs.ErrorSimulations.setResponseDeviceBusy(ui->checkBoxBusy->isChecked());
+    defs.ErrorSimulations.setResponseIncorrectCrc(ui->checkBoxCrcErr->isChecked());
+    defs.ErrorSimulations.setResponseDelay(ui->checkBoxDelay->isChecked());
+    defs.ErrorSimulations.setResponseDelayTime(ui->spinBoxDelay->value());
+    defs.ErrorSimulations.setResponseRandomDelay(ui->checkBoxRandomDelay->isChecked());
+    defs.ErrorSimulations.setResponseRandomDelayUpToTime(ui->spinBoxUpToTime->value());
+    defs.ErrorSimulations.setNoResponse(ui->checkBoxNoResponse->isChecked());
 
-    _mbMultiServer.setModbusDefinitions(md);
+    _mbMultiServer.setModbusDefinitions(defs);
 
     ui->buttonBox->button(QDialogButtonBox::Apply)->setEnabled(false);
 }
 
 ///
 /// \brief DialogModbusDefinitions::updateModbusDefinitions
-/// \param md
+/// \param defs
 ///
-void DialogModbusDefinitions::updateModbusDefinitions(const ModbusDefinitions& md)
+void DialogModbusDefinitions::updateModbusDefinitions(const ModbusDefinitions& defs)
 {
-    ui->checkBoxGlobalMap->setChecked(md.UseGlobalUnitMap);
-    ui->comboBoxAddrSpace->setCurrentAddressSpace(md.AddrSpace);
+    ui->checkBoxGlobalMap->setChecked(defs.UseGlobalUnitMap);
+    ui->comboBoxAddrSpace->setCurrentAddressSpace(defs.AddrSpace);
 
-    ui->checkBoxErrIncorrentId->setChecked(md.ErrorSimulations.responseIncorrectId());
-    ui->checkBoxIllegalFunc->setChecked(md.ErrorSimulations.responseIllegalFunction());
-    ui->checkBoxBusy->setChecked(md.ErrorSimulations.responseDeviceBusy());
-    ui->checkBoxCrcErr->setChecked(md.ErrorSimulations.responseIncorrectCrc());
-    ui->checkBoxDelay->setChecked(md.ErrorSimulations.responseDelay());
-    ui->checkBoxRandomDelay->setChecked(md.ErrorSimulations.responseRandomDelay());
-    ui->checkBoxNoResponse->setChecked(md.ErrorSimulations.noResponse());
+    ui->checkBoxErrIncorrentId->setChecked(defs.ErrorSimulations.responseIncorrectId());
+    ui->checkBoxIllegalFunc->setChecked(defs.ErrorSimulations.responseIllegalFunction());
+    ui->checkBoxBusy->setChecked(defs.ErrorSimulations.responseDeviceBusy());
+    ui->checkBoxCrcErr->setChecked(defs.ErrorSimulations.responseIncorrectCrc());
+    ui->checkBoxDelay->setChecked(defs.ErrorSimulations.responseDelay());
+    ui->checkBoxRandomDelay->setChecked(defs.ErrorSimulations.responseRandomDelay());
+    ui->checkBoxNoResponse->setChecked(defs.ErrorSimulations.noResponse());
 
-    ui->spinBoxDelay->setValue(md.ErrorSimulations.responseDelayTime());
-    ui->spinBoxDelay->setEnabled(md.ErrorSimulations.responseDelay());
-    ui->spinBoxUpToTime->setValue(md.ErrorSimulations.responseRandomDelayUpToTime());
-    ui->spinBoxUpToTime->setEnabled(md.ErrorSimulations.responseRandomDelay());
+    ui->spinBoxDelay->setValue(defs.ErrorSimulations.responseDelayTime());
+    ui->spinBoxDelay->setEnabled(defs.ErrorSimulations.responseDelay());
+    ui->spinBoxUpToTime->setValue(defs.ErrorSimulations.responseRandomDelayUpToTime());
+    ui->spinBoxUpToTime->setEnabled(defs.ErrorSimulations.responseRandomDelay());
 
     ui->buttonBox->button(QDialogButtonBox::Apply)->setEnabled(false);
 }

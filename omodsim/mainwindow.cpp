@@ -1109,7 +1109,7 @@ void MainWindow::forceCoils(QModbusDataUnit::RegisterType type)
     if(!frm) return;
 
     const auto dd = frm->displayDefinition();
-    SetupPresetParams presetParams = { dd.PointAddress, dd.Length, dd.ZeroBasedAddress };
+    SetupPresetParams presetParams = { dd.PointAddress, dd.Length, dd.ZeroBasedAddress, dd.AddrSpace };
 
     {
         DialogSetupPresetData dlg(presetParams, type, dd.HexAddress, this);
@@ -1119,6 +1119,7 @@ void MainWindow::forceCoils(QModbusDataUnit::RegisterType type)
     ModbusWriteParams params;
     params.Address = presetParams.PointAddress;
     params.ZeroBasedAddress = dd.ZeroBasedAddress;
+    params.AddrSpace = dd.AddrSpace;
 
     if(dd.PointType == type)
     {
@@ -1143,7 +1144,7 @@ void MainWindow::presetRegs(QModbusDataUnit::RegisterType type)
     if(!frm) return;
 
     const auto dd = frm->displayDefinition();
-    SetupPresetParams presetParams = { dd.PointAddress, dd.Length, dd.ZeroBasedAddress };
+    SetupPresetParams presetParams = { dd.PointAddress, dd.Length, dd.ZeroBasedAddress, dd.AddrSpace };
 
     {
         DialogSetupPresetData dlg(presetParams, type, dd.HexAddress, this);
@@ -1156,6 +1157,7 @@ void MainWindow::presetRegs(QModbusDataUnit::RegisterType type)
     params.Order = frm->byteOrder();
     params.Codepage = frm->codepage();
     params.ZeroBasedAddress = dd.ZeroBasedAddress;
+    params.AddrSpace = dd.AddrSpace;
 
     if(dd.PointType == type)
     {
