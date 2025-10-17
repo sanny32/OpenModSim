@@ -1348,7 +1348,7 @@ void MainWindow::loadConfig(const QString& filename, bool startup)
     QVersionNumber ver;
     s >> ver;
 
-    if(ver != QVersionNumber(1, 0))
+    if(ver < QVersionNumber(1, 0))
         return;
 
     QStringList listFilename;
@@ -1356,6 +1356,14 @@ void MainWindow::loadConfig(const QString& filename, bool startup)
 
     QList<ConnectionDetails> conns;
     s >> conns;
+
+    if(ver >= QVersionNumber(1, 1)) {
+        ModbusDefinitions defs;
+        s >> defs.AddrSpace;
+        s >> defs.UseGlobalUnitMap;
+        s >> defs.ErrorSimulations;
+        _mbMultiServer.setModbusDefinitions(defs);
+    }
 
     if(s.status() != QDataStream::Ok)
         return;
@@ -1418,13 +1426,19 @@ void MainWindow::saveConfig(const QString& filename)
     s << (quint8)0x35;
 
     // version number
-    s << QVersionNumber(1, 0);
+    s << QVersionNumber(1, 1);
 
     // list of files
     s << listFilename;
 
     // connections
     s << _mbMultiServer.connections();
+
+    // modbus definitions
+    ModbusDefinitions defs = _mbMultiServer.getModbusDefinitions();
+    s << defs.AddrSpace;
+    s << defs.UseGlobalUnitMap;
+    s << defs.ErrorSimulations;
 }
 
 ///

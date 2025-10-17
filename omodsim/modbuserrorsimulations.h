@@ -2,6 +2,7 @@
 #define MODBUSERRORSIMULATIONS_H
 
 #include <QSettings>
+#include <QVersionNumber>
 
 ///
 /// \brief The ModbusErrorSimulations class
@@ -94,6 +95,81 @@ inline QSettings& operator >>(QSettings& in, ModbusErrorSimulations& errsim)
     errsim.setResponseRandomDelay(in.value("ResponseRandomDelay").toBool());
     errsim.setResponseRandomDelayUpToTime(in.value("ResponseRandomDelayUpToTime", 1000).toInt());
     in.endGroup();
+
+    return in;
+}
+
+///
+/// \brief operator <<
+/// \param out
+/// \param errsim
+/// \return
+///
+inline QDataStream& operator <<(QDataStream& out, const ModbusErrorSimulations& errsim)
+{
+    out << QVersionNumber(1, 0);
+    out << errsim.noResponse();
+    out << errsim.responseIncorrectId();
+    out << errsim.responseIllegalFunction();
+    out << errsim.responseDeviceBusy();
+    out << errsim.responseIncorrectCrc();
+    out << errsim.responseDelay();
+    out << errsim.responseDelayTime();
+    out << errsim.responseRandomDelay();
+    out << errsim.responseRandomDelayUpToTime();
+
+    return out;
+}
+
+///
+/// \brief operator >>
+/// \param in
+/// \param errsim
+/// \return
+///
+inline QDataStream& operator >>(QDataStream& in, ModbusErrorSimulations& errsim)
+{
+    QVersionNumber ver;
+    in >> ver;
+
+    if(ver < QVersionNumber(1, 0))
+        return in;
+
+    bool noResponse = false;
+    in >> noResponse;
+    errsim.setNoResponse(noResponse);
+
+    bool responseIncorrectId = false;
+    in >> responseIncorrectId;
+    errsim.setResponseIncorrectId(responseIncorrectId);
+
+    bool responseIllegalFunction = false;
+    in >> responseIllegalFunction;
+    errsim.setResponseIllegalFunction(responseIllegalFunction);
+
+    bool responseDeviceBusy = false;
+    in >> responseDeviceBusy;
+    errsim.setResponseDeviceBusy(responseDeviceBusy);
+
+    bool responseIncorrectCrc = false;
+    in >> responseIncorrectCrc;
+    errsim.setResponseIncorrectCrc(responseIncorrectCrc);
+
+    bool responseDelay = false;
+    in >> responseDelay;
+    errsim.setResponseDelay(responseDelay);
+
+    int responseDelayTime = 0;
+    in >> responseDelayTime;
+    errsim.setResponseDelayTime(responseDelayTime);
+
+    bool responseRandomDelay = false;
+    in >> responseRandomDelay;
+    errsim.setResponseRandomDelay(responseRandomDelay);
+
+    int responseRandomDelayUpToTime = 1000;
+    in >> responseRandomDelayUpToTime;
+    errsim.setResponseRandomDelayUpToTime(responseRandomDelayUpToTime);
 
     return in;
 }
