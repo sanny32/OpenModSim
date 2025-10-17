@@ -87,8 +87,6 @@
     </property>
     <addaction name="actionConnect"/>
     <addaction name="actionDisconnect"/>
-    <addaction name="separator"/>
-    <addaction name="actionMbDefinitions"/>
    </widget>
    <widget class="QMenu" name="menuSetup">
     <property name="title">
@@ -144,6 +142,8 @@
      <addaction name="separator"/>
      <addaction name="actionScriptSettings"/>
     </widget>
+    <addaction name="actionMbDefinitions"/>
+    <addaction name="separator"/>
     <addaction name="actionDataDefinition"/>
     <addaction name="menuDisplay_Options"/>
     <addaction name="menuExtended"/>
