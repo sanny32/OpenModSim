@@ -120,6 +120,7 @@ set(SOURCES
     htmldelegate.cpp
     jscompleter.cpp
     jsobjects/console.cpp
+    jsobjects/errorsimulations.cpp
     jsobjects/script.cpp
     jsobjects/server.cpp
     formmodsim.cpp
@@ -197,6 +198,7 @@ set(HEADERS
     htmldelegate.h
     jscompleter.h
     jsobjects/console.h
+    jsobjects/errorsimulations.h
     jsobjects/script.h
     jsobjects/server.h
     displaydefinition.h

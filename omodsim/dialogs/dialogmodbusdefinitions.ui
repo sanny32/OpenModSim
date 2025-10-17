@@ -50,9 +50,9 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="tabErrSimulation">
+     <widget class="QWidget" name="tabErrSimulations">
       <attribute name="title">
-       <string>Error Simulation</string>
+       <string>Error Simulations</string>
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_2">
        <item>

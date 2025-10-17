@@ -212,6 +212,24 @@ bool JScriptControl::canPaste() const
 }
 
 ///
+/// \brief JScriptControl::newEnumObject
+/// \param metaObj
+/// \param enumName
+/// \return
+///
+QJSValue JScriptControl::newEnumObject(const QMetaObject& metaObj, const QString& enumName)
+{
+    QMetaEnum baseEnum = metaObj.enumerator(metaObj.indexOfEnumerator(enumName.toUtf8()));
+
+    QJSValue jsObj = _jsEngine.newObject();
+    for (int i = 0; i < baseEnum.keyCount(); ++i) {
+        jsObj.setProperty(baseEnum.key(i), baseEnum.value(i));
+    }
+
+    return jsObj;
+}
+
+///
 /// \brief JScriptControl::runScript
 /// \param interval
 ///
@@ -223,6 +241,7 @@ void JScriptControl::runScript(RunMode mode, int interval)
     _server = QSharedPointer<Server>(new Server(_mbMultiServer, _byteOrder, _addressBase));
     _script = QSharedPointer<Script>(new Script(interval));
     _console = QSharedPointer<console>(new console(ui->console));
+    _errSim =  QSharedPointer<ErrorSimulations>(new ErrorSimulations(_mbMultiServer));
     connect(_script.get(), &Script::stopped, this, &JScriptControl::stopScript, Qt::QueuedConnection);
 
     _jsEngine.globalObject().setProperty("Storage", _jsEngine.newQObject(_storage.get()));
@@ -230,23 +249,9 @@ void JScriptControl::runScript(RunMode mode, int interval)
     _jsEngine.globalObject().setProperty("Server",  _jsEngine.newQObject(_server.get()));
     _jsEngine.globalObject().setProperty("console", _jsEngine.newQObject(_console.get()));
     _jsEngine.globalObject().setProperty("Register", _jsEngine.newQMetaObject(&Register::staticMetaObject));
-
-    const QMetaObject &mo = Address::staticMetaObject;
-
-    QMetaEnum baseEnum = mo.enumerator(mo.indexOfEnumerator("Base"));
-    QMetaEnum spaceEnum = mo.enumerator(mo.indexOfEnumerator("Space"));
-
-    QJSValue jsBase = _jsEngine.newObject();
-    for (int i = 0; i < baseEnum.keyCount(); ++i)
-        jsBase.setProperty(baseEnum.key(i), baseEnum.value(i));
-
-    QJSValue jsSpace = _jsEngine.newObject();
-    for (int i = 0; i < spaceEnum.keyCount(); ++i)
-        jsSpace.setProperty(spaceEnum.key(i), spaceEnum.value(i));
-
-    _jsEngine.globalObject().setProperty("AddressBase", jsBase);
-    _jsEngine.globalObject().setProperty("AddressSpace", jsSpace);
-
+    _jsEngine.globalObject().setProperty("AddressBase", newEnumObject(Address::staticMetaObject, "Base"));
+    _jsEngine.globalObject().setProperty("AddressSpace", newEnumObject(Address::staticMetaObject, "Space"));
+    _jsEngine.globalObject().setProperty("ErrorSimulations", _jsEngine.newQObject(_errSim.get()));
     _jsEngine.setInterrupted(false);
 
     _console->clear();
@@ -284,11 +289,13 @@ void JScriptControl::stopScript()
     _jsEngine.globalObject().deleteProperty("Register");
     _jsEngine.globalObject().deleteProperty("AddressBase");
     _jsEngine.globalObject().deleteProperty("AddressSpace");
+    _jsEngine.globalObject().deleteProperty("ErrorSimulations");
 
     _storage = nullptr;
     _server = nullptr;
     _script = nullptr;
     _console = nullptr;
+    _errSim = nullptr;
 }
 
 ///
