@@ -1560,6 +1560,10 @@ void MainWindow::loadSettings()
 
     _savePath = m.value("SavePath").toString();
 
+    ModbusDefinitions defs;
+    m >> defs;
+    _mbMultiServer.setModbusDefinitions(defs);
+
     m >> qobject_cast<MenuConnect*>(ui->actionConnect->menu());
 
     const QStringList groups = m.childGroups();
@@ -1622,6 +1626,8 @@ void MainWindow::saveSettings()
     m.setValue("EditBarBreak", toolBarBreak(ui->toolBarEdit));
     m.setValue("Language", _lang);
     m.setValue("SavePath", _savePath);
+
+    m << _mbMultiServer.getModbusDefinitions();
 
     m << qobject_cast<MenuConnect*>(ui->actionConnect->menu());
 

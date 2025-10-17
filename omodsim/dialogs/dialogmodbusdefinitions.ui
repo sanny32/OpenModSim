@@ -103,7 +103,7 @@
           </sizepolicy>
          </property>
          <property name="text">
-          <string>Response with incorrect CRC</string>
+          <string>Response with incorrect CRC (Serial Line only)</string>
          </property>
         </widget>
        </item>
