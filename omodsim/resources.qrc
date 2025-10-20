@@ -53,5 +53,9 @@
         <file>translations/omodsim_zh.qm</file>
         <file>res/actionMbDefinitions.png</file>
         <file>res/actionMsgParser.png</file>
+        <file>res/actionForceCoils.png</file>
+        <file>res/actionForceDiscretes.png</file>
+        <file>res/actionPresetInputRegs.png</file>
+        <file>res/actionPresetHoldingRegs.png</file>
     </qresource>
 </RCC>

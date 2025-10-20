@@ -227,6 +227,8 @@
    <addaction name="actionOpen"/>
    <addaction name="actionSave"/>
    <addaction name="separator"/>
+   <addaction name="actionPrint"/>
+   <addaction name="separator"/>
    <addaction name="actionConnect"/>
    <addaction name="actionDisconnect"/>
    <addaction name="separator"/>
@@ -236,13 +238,14 @@
    <addaction name="actionShowScript"/>
    <addaction name="separator"/>
    <addaction name="actionMbDefinitions"/>
+   <addaction name="separator"/>
    <addaction name="actionForceCoils"/>
    <addaction name="actionForceDiscretes"/>
    <addaction name="actionPresetInputRegs"/>
    <addaction name="actionPresetHoldingRegs"/>
+   <addaction name="separator"/>
    <addaction name="actionMsgParser"/>
    <addaction name="separator"/>
-   <addaction name="actionPrint"/>
    <addaction name="actionAbout"/>
   </widget>
   <widget class="QToolBar" name="toolBarDisplay">
@@ -667,11 +670,19 @@
    </property>
   </action>
   <action name="actionForceCoils">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/res/actionForceCoils.png</normaloff>:/res/actionForceCoils.png</iconset>
+   </property>
    <property name="text">
     <string>Force Coils</string>
    </property>
   </action>
   <action name="actionPresetHoldingRegs">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/res/actionPresetHoldingRegs.png</normaloff>:/res/actionPresetHoldingRegs.png</iconset>
+   </property>
    <property name="text">
     <string>Preset Holding Regs</string>
    </property>
@@ -708,11 +719,19 @@
    </property>
   </action>
   <action name="actionPresetInputRegs">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/res/actionPresetInputRegs.png</normaloff>:/res/actionPresetInputRegs.png</iconset>
+   </property>
    <property name="text">
     <string>Preset Input Regs</string>
    </property>
   </action>
   <action name="actionForceDiscretes">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/res/actionForceDiscretes.png</normaloff>:/res/actionForceDiscretes.png</iconset>
+   </property>
    <property name="text">
     <string>Force Discretes</string>
    </property>
