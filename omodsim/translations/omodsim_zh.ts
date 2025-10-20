@@ -517,58 +517,58 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusdefinitions.ui" line="30"/>
+        <location filename="../dialogs/dialogmodbusdefinitions.ui" line="33"/>
         <source>Address Space: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusdefinitions.ui" line="47"/>
+        <location filename="../dialogs/dialogmodbusdefinitions.ui" line="50"/>
         <source>Use Global Address Map (Unallocated registers will be zero)</source>
         <translation type="unfinished">使用全局地址映射（未分配的寄存器将为零）</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusdefinitions.ui" line="55"/>
-        <source>Error Simulation</source>
+        <location filename="../dialogs/dialogmodbusdefinitions.ui" line="58"/>
+        <source>Error Simulations</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusdefinitions.ui" line="67"/>
+        <location filename="../dialogs/dialogmodbusdefinitions.ui" line="70"/>
         <source>Response with incorrect IDs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusdefinitions.ui" line="80"/>
+        <location filename="../dialogs/dialogmodbusdefinitions.ui" line="83"/>
         <source>Response with ILLEGAL FUNCTION</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusdefinitions.ui" line="93"/>
+        <location filename="../dialogs/dialogmodbusdefinitions.ui" line="96"/>
         <source>Response with DEVICE BUSY</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusdefinitions.ui" line="106"/>
+        <location filename="../dialogs/dialogmodbusdefinitions.ui" line="109"/>
         <source>Response with incorrect CRC (Serial Line only)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusdefinitions.ui" line="118"/>
+        <location filename="../dialogs/dialogmodbusdefinitions.ui" line="121"/>
         <source>Response with delay</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusdefinitions.ui" line="154"/>
-        <location filename="../dialogs/dialogmodbusdefinitions.ui" line="220"/>
+        <location filename="../dialogs/dialogmodbusdefinitions.ui" line="157"/>
+        <location filename="../dialogs/dialogmodbusdefinitions.ui" line="223"/>
         <source>ms</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusdefinitions.ui" line="181"/>
+        <location filename="../dialogs/dialogmodbusdefinitions.ui" line="184"/>
         <source>Response with random delay from 0 to</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusdefinitions.ui" line="248"/>
+        <location filename="../dialogs/dialogmodbusdefinitions.ui" line="251"/>
         <source>No response</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1195,6 +1195,38 @@ MODBUS Point Type:
     </message>
 </context>
 <context>
+    <name>JScriptControl</name>
+    <message>
+        <location filename="../controls/jscriptcontrol.ui" line="49"/>
+        <source>Server.addressBase = AddressBase.Base1;
+
+let deviceId = 1;
+let address = 1;
+
+Script.onInit(()=&gt;{
+	Server.onChange(deviceId, Register.Holding, address, (value)=&gt;
+	{
+		/* write your code on register value change */
+	});
+
+	/* write your init code here */
+});</source>
+        <translation type="unfinished">Server.addressBase = AddressBase.Base1;
+
+let deviceId = 1;
+let address = 1;
+
+Script.onInit(()=&gt;{
+	Server.onChange(deviceId, Register.Holding, address, (value)=&gt;
+	{
+		/* 在暫存器值改變時編寫程式碼 */
+	});
+
+	/* 在這裡寫入你的初始化程式碼 */
+});</translation>
+    </message>
+</context>
+<context>
     <name>MainStatusBar</name>
     <message>
         <source>NONE</source>
@@ -1262,12 +1294,12 @@ MODBUS Point Type:
         <translation>连接</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="95"/>
+        <location filename="../mainwindow.ui" line="93"/>
         <source>Setup</source>
         <translation>设置</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="99"/>
+        <location filename="../mainwindow.ui" line="97"/>
         <source>Display Options</source>
         <translation>显示格式设置</translation>
     </message>
@@ -1276,12 +1308,12 @@ MODBUS Point Type:
         <translation type="vanished">Порядок байт</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="129"/>
+        <location filename="../mainwindow.ui" line="127"/>
         <source>Extended</source>
         <translation>高级选项</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="140"/>
+        <location filename="../mainwindow.ui" line="138"/>
         <source>Script</source>
         <translation>脚本</translation>
     </message>
@@ -1714,7 +1746,7 @@ MODBUS Point Type:
     <message>
         <location filename="../mainwindow.cpp" line="1283"/>
         <source>Capture Error:<byte value="xd"/>
- %1</source>
+%1</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2505,7 +2537,6 @@ MODBUS Point Type:
 });</translation>
     </message>
     <message>
-        <location filename="../controls/scriptcontrol.ui" line="49"/>
         <source>Server.addressBase = AddressBase.Base1;
 
 let deviceId = 1;
@@ -2519,7 +2550,7 @@ Script.onInit(()=&gt;{
 
 	/* write your init code here */
 });</source>
-        <translation>Server.addressBase = AddressBase.Base1;
+        <translation type="vanished">Server.addressBase = AddressBase.Base1;
 
 let deviceId = 1;
 let address = 1;

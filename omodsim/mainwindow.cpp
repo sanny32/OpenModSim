@@ -1280,7 +1280,7 @@ FormModSim* MainWindow::createMdiChild(int id)
 
     connect(frm, &FormModSim::captureError, this, [this](const QString& error)
     {
-        QMessageBox::critical(this, windowTitle(), tr("Capture Error:\r\n %1").arg(error));
+        QMessageBox::critical(this, windowTitle(), tr("Capture Error:\r\n%1").arg(error));
     });
 
     _windowActionList->addWindow(wnd);

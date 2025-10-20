@@ -22,13 +22,13 @@
         <location filename="../controls/addressspacecombobox.cpp" line="11"/>
         <location filename="../controls/addressspacecombobox.cpp" line="30"/>
         <source>5-digits</source>
-        <translation type="unfinished"></translation>
+        <translation>5-цифровой</translation>
     </message>
     <message>
         <location filename="../controls/addressspacecombobox.cpp" line="12"/>
         <location filename="../controls/addressspacecombobox.cpp" line="34"/>
         <source>6-digits</source>
-        <translation type="unfinished"></translation>
+        <translation>6-цифровой</translation>
     </message>
 </context>
 <context>
@@ -339,7 +339,7 @@
     <message>
         <location filename="../dialogs/dialogdisplaydefinition.ui" line="25"/>
         <source>Form Name: </source>
-        <translation type="unfinished"></translation>
+        <translation>Имя формы: </translation>
     </message>
     <message>
         <location filename="../dialogs/dialogdisplaydefinition.ui" line="135"/>
@@ -509,68 +509,68 @@
     <message>
         <location filename="../dialogs/dialogmodbusdefinitions.ui" line="14"/>
         <source>Modbus Definitions</source>
-        <translation type="unfinished"></translation>
+        <translation>Настройки MODBUS</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogmodbusdefinitions.ui" line="24"/>
         <source>General</source>
-        <translation type="unfinished"></translation>
+        <translation>Основные</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusdefinitions.ui" line="30"/>
+        <location filename="../dialogs/dialogmodbusdefinitions.ui" line="33"/>
         <source>Address Space: </source>
-        <translation type="unfinished"></translation>
+        <translation>Адресное пространство: </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusdefinitions.ui" line="47"/>
+        <location filename="../dialogs/dialogmodbusdefinitions.ui" line="50"/>
         <source>Use Global Address Map (Unallocated registers will be zero)</source>
-        <translation type="unfinished">Использовать глобальную карту адресов</translation>
+        <translation>Использовать глобальную карту адресов</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusdefinitions.ui" line="55"/>
-        <source>Error Simulation</source>
-        <translation type="unfinished"></translation>
+        <location filename="../dialogs/dialogmodbusdefinitions.ui" line="58"/>
+        <source>Error Simulations</source>
+        <translation>Симуляция ошибок</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusdefinitions.ui" line="67"/>
+        <location filename="../dialogs/dialogmodbusdefinitions.ui" line="70"/>
         <source>Response with incorrect IDs</source>
-        <translation type="unfinished"></translation>
+        <translation>Отвечать некорректным ID</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusdefinitions.ui" line="80"/>
+        <location filename="../dialogs/dialogmodbusdefinitions.ui" line="83"/>
         <source>Response with ILLEGAL FUNCTION</source>
-        <translation type="unfinished"></translation>
+        <translation>Отвечать ошибкой ILLEGAL FUNCTION</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusdefinitions.ui" line="93"/>
+        <location filename="../dialogs/dialogmodbusdefinitions.ui" line="96"/>
         <source>Response with DEVICE BUSY</source>
-        <translation type="unfinished"></translation>
+        <translation>Отвечать ошибкой DEVICE BUSY</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusdefinitions.ui" line="106"/>
+        <location filename="../dialogs/dialogmodbusdefinitions.ui" line="109"/>
         <source>Response with incorrect CRC (Serial Line only)</source>
-        <translation type="unfinished"></translation>
+        <translation>Отвечать с некорректной CRC (только для последовательного интерфейса)</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusdefinitions.ui" line="118"/>
+        <location filename="../dialogs/dialogmodbusdefinitions.ui" line="121"/>
         <source>Response with delay</source>
-        <translation type="unfinished"></translation>
+        <translation>Отвечать с задержкой</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusdefinitions.ui" line="154"/>
-        <location filename="../dialogs/dialogmodbusdefinitions.ui" line="220"/>
+        <location filename="../dialogs/dialogmodbusdefinitions.ui" line="157"/>
+        <location filename="../dialogs/dialogmodbusdefinitions.ui" line="223"/>
         <source>ms</source>
-        <translation type="unfinished"></translation>
+        <translation>мс</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusdefinitions.ui" line="181"/>
+        <location filename="../dialogs/dialogmodbusdefinitions.ui" line="184"/>
         <source>Response with random delay from 0 to</source>
-        <translation type="unfinished"></translation>
+        <translation>Отвечать со случайной задержкой от 0 до</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusdefinitions.ui" line="248"/>
+        <location filename="../dialogs/dialogmodbusdefinitions.ui" line="251"/>
         <source>No response</source>
-        <translation type="unfinished"></translation>
+        <translation>Не отвечать на запросы</translation>
     </message>
 </context>
 <context>
@@ -1195,6 +1195,38 @@ MODBUS Point Type:
     </message>
 </context>
 <context>
+    <name>JScriptControl</name>
+    <message>
+        <location filename="../controls/jscriptcontrol.ui" line="49"/>
+        <source>Server.addressBase = AddressBase.Base1;
+
+let deviceId = 1;
+let address = 1;
+
+Script.onInit(()=&gt;{
+	Server.onChange(deviceId, Register.Holding, address, (value)=&gt;
+	{
+		/* write your code on register value change */
+	});
+
+	/* write your init code here */
+});</source>
+        <translation>Server.addressBase = AddressBase.Base1;
+
+let deviceId = 1;
+let address = 1;
+
+Script.onInit(()=&gt;{
+	Server.onChange(deviceId, Register.Holding, address, (value)=&gt;
+	{
+		/* здесь должен быть код реакции на изменение значения регистра */
+	});
+
+	/* здесь должен быть ваш код инициализации */
+});</translation>
+    </message>
+</context>
+<context>
     <name>MainStatusBar</name>
     <message>
         <source>NONE</source>
@@ -1262,12 +1294,12 @@ MODBUS Point Type:
         <translation>Подключение</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="95"/>
+        <location filename="../mainwindow.ui" line="93"/>
         <source>Setup</source>
         <translation>Настройка</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="99"/>
+        <location filename="../mainwindow.ui" line="97"/>
         <source>Display Options</source>
         <translation>Параметры отображения</translation>
     </message>
@@ -1276,12 +1308,12 @@ MODBUS Point Type:
         <translation type="vanished">Порядок байт</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="129"/>
+        <location filename="../mainwindow.ui" line="127"/>
         <source>Extended</source>
         <translation>Расширенные параметры</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="140"/>
+        <location filename="../mainwindow.ui" line="138"/>
         <source>Script</source>
         <translation>Скрипт</translation>
     </message>
@@ -1381,7 +1413,7 @@ MODBUS Point Type:
         <location filename="../mainwindow.ui" line="1016"/>
         <location filename="../mainwindow.ui" line="1019"/>
         <source>Modbus Definitions</source>
-        <translation type="unfinished"></translation>
+        <translation>Настройки MODBUS</translation>
     </message>
     <message>
         <source>Long Integer</source>
@@ -1706,8 +1738,15 @@ MODBUS Point Type:
     <message>
         <location filename="../mainwindow.cpp" line="1283"/>
         <source>Capture Error:<byte value="xd"/>
+%1</source>
+        <translation>Ошибка захвата:
+%1</translation>
+    </message>
+    <message>
+        <source>Capture Error:<byte value="xd"/>
  %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">Ошибка захвата:
+%1</translation>
     </message>
 </context>
 <context>
@@ -2418,27 +2457,27 @@ MODBUS Point Type:
     <message>
         <location filename="../serialportutils.h" line="19"/>
         <source>NONE</source>
-        <translation type="unfinished">Нет</translation>
+        <translation>Нет</translation>
     </message>
     <message>
         <location filename="../serialportutils.h" line="22"/>
         <source>EVEN</source>
-        <translation type="unfinished"></translation>
+        <translation>ЧЕТ</translation>
     </message>
     <message>
         <location filename="../serialportutils.h" line="25"/>
         <source>ODD</source>
-        <translation type="unfinished"></translation>
+        <translation>НЕЧЕТ</translation>
     </message>
     <message>
         <location filename="../serialportutils.h" line="28"/>
         <source>SPACE</source>
-        <translation type="unfinished">Пробел</translation>
+        <translation>ПРОБЕЛ</translation>
     </message>
     <message>
         <location filename="../serialportutils.h" line="31"/>
         <source>MARK</source>
-        <translation type="unfinished">Маркер</translation>
+        <translation>МАРКЕР</translation>
     </message>
 </context>
 <context>
@@ -2497,7 +2536,6 @@ MODBUS Point Type:
 });</translation>
     </message>
     <message>
-        <location filename="../controls/scriptcontrol.ui" line="49"/>
         <source>Server.addressBase = AddressBase.Base1;
 
 let deviceId = 1;
@@ -2511,7 +2549,7 @@ Script.onInit(()=&gt;{
 
 	/* write your init code here */
 });</source>
-        <translation>Server.addressBase = AddressBase.Base1;
+        <translation type="vanished">Server.addressBase = AddressBase.Base1;
 
 let deviceId = 1;
 let address = 1;
