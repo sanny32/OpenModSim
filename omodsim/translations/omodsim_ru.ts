@@ -22,13 +22,13 @@
         <location filename="../controls/addressspacecombobox.cpp" line="11"/>
         <location filename="../controls/addressspacecombobox.cpp" line="30"/>
         <source>5-digits</source>
-        <translation>5-цифровой</translation>
+        <translation>5-цифровое</translation>
     </message>
     <message>
         <location filename="../controls/addressspacecombobox.cpp" line="12"/>
         <location filename="../controls/addressspacecombobox.cpp" line="34"/>
         <source>6-digits</source>
-        <translation>6-цифровой</translation>
+        <translation>6-цифровое</translation>
     </message>
 </context>
 <context>
@@ -517,58 +517,58 @@
         <translation>Основные</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusdefinitions.ui" line="33"/>
+        <location filename="../dialogs/dialogmodbusdefinitions.ui" line="30"/>
         <source>Address Space: </source>
         <translation>Адресное пространство: </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusdefinitions.ui" line="50"/>
+        <location filename="../dialogs/dialogmodbusdefinitions.ui" line="47"/>
         <source>Use Global Address Map (Unallocated registers will be zero)</source>
         <translation>Использовать глобальную карту адресов</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusdefinitions.ui" line="58"/>
+        <location filename="../dialogs/dialogmodbusdefinitions.ui" line="55"/>
         <source>Error Simulations</source>
         <translation>Симуляция ошибок</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusdefinitions.ui" line="70"/>
+        <location filename="../dialogs/dialogmodbusdefinitions.ui" line="67"/>
         <source>Response with incorrect IDs</source>
         <translation>Отвечать некорректным ID</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusdefinitions.ui" line="83"/>
+        <location filename="../dialogs/dialogmodbusdefinitions.ui" line="80"/>
         <source>Response with ILLEGAL FUNCTION</source>
         <translation>Отвечать ошибкой ILLEGAL FUNCTION</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusdefinitions.ui" line="96"/>
+        <location filename="../dialogs/dialogmodbusdefinitions.ui" line="93"/>
         <source>Response with DEVICE BUSY</source>
         <translation>Отвечать ошибкой DEVICE BUSY</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusdefinitions.ui" line="109"/>
+        <location filename="../dialogs/dialogmodbusdefinitions.ui" line="106"/>
         <source>Response with incorrect CRC (Serial Line only)</source>
         <translation>Отвечать с некорректной CRC (только для последовательного интерфейса)</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusdefinitions.ui" line="121"/>
+        <location filename="../dialogs/dialogmodbusdefinitions.ui" line="118"/>
         <source>Response with delay</source>
         <translation>Отвечать с задержкой</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusdefinitions.ui" line="157"/>
-        <location filename="../dialogs/dialogmodbusdefinitions.ui" line="223"/>
+        <location filename="../dialogs/dialogmodbusdefinitions.ui" line="154"/>
+        <location filename="../dialogs/dialogmodbusdefinitions.ui" line="220"/>
         <source>ms</source>
         <translation>мс</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusdefinitions.ui" line="184"/>
+        <location filename="../dialogs/dialogmodbusdefinitions.ui" line="181"/>
         <source>Response with random delay from 0 to</source>
         <translation>Отвечать со случайной задержкой от 0 до</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusdefinitions.ui" line="251"/>
+        <location filename="../dialogs/dialogmodbusdefinitions.ui" line="248"/>
         <source>No response</source>
         <translation>Не отвечать на запросы</translation>
     </message>
