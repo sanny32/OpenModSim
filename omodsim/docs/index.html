@@ -655,6 +655,42 @@
 			<dd>
 			  <p>Returns or sets the address space (6-digits or 5-digits) configuration for the Server object.</p>
 			</dd>
+			<dt id="server.noresponse"><code>Server.noResponse</code></dt>
+			<dd>
+			  <p>Returns or sets whether the server should not respond to requests.</p>
+			</dd>
+			<dt id="server.responsedelay"><code>Server.responseDelay</code></dt>
+			<dd>
+			  <p>Returns or sets the whether the server should with <a href="#server.responsedelaytime">fixed delay time</a>.</p>
+			</dd>
+			<dt id="server.responsedelaytime"><code>Server.responseDelayTime</code></dt>
+			<dd>
+			  <p>Returns or sets the specific delay time for server responses.</p>
+			</dd>
+			<dt id="server.responsedevicebusy"><code>Server.responseDeviceBusy</code></dt>
+			<dd>
+			  <p>Returns or sets whether the server should respond with device busy errors.</p>
+			</dd>
+			<dt id="server.responseillegalfunction"><code>Server.responseIllegalFunction</code></dt>
+			<dd>
+			  <p>Returns or sets whether the server should respond with illegal function errors.</p>
+			</dd>
+			<dt id="server.responseincorrectcrc"><code>Server.responseIncorrectCrc</code></dt>
+			<dd>
+			  <p>Returns or sets whether the server should respond with incorrect CRC.</p>
+			</dd>
+			<dt id="server.responseincorrectid"><code>Server.responseIncorrectId</code></dt>
+			<dd>
+			  <p>Returns or sets whether the server should respond with incorrect ID.</p>
+			</dd>
+			<dt id="server.responserandomdelay"><code>Server.responseRandomDelay</code></dt>
+			<dd>
+			  <p>Returns or sets whether the server should use random response delays.</p>
+			</dd>
+			<dt id="server.responserandomdelayuptotime"><code>Server.responseRandomDelayUpToTime</code></dt>
+			<dd>
+			  <p>Returns or sets the maximum time for random response delays up to <a href="#server.responserandomdelayuptotime">maximum delay time</a>.</p>
+			</dd>
 			<dt id="server.useglobalunitmap"><code>Server.useGlobalUnitMap</code></dt>
 			<dd>
 			  <p>Returns or sets global address map usage. Unallocated registers will be zero.</p>
@@ -668,10 +704,6 @@
 			<dt id="server.onerror"><code>Server.onError(deviceId, functionRef)</code></dt>
 			<dd>
 				<p>Executes a <code>functionRef(error)</code> when an error occurred for <code>deviceId</code>.</p>
-			</dd>
-			<dt id="server.noresponse"><code>Server.noResponse</code></dt>
-			<dd>
-			  <p>Returns or sets whether the server should not respond to requests.</p>
 			</dd>
 			<dt id="server.readcoil"><code>Server.readCoil(address, deviceId)</code></dt>
 			<dd>
@@ -734,38 +766,6 @@
 				<div class="notecard note">
 					<p><strong>Note:</strong> This function is available only for <code>Register.Input</code> and <code>Register.Holding</code> registers.</p>
 				</div>
-			</dd>
-			<dt id="server.responsedelay"><code>Server.responseDelay</code></dt>
-			<dd>
-			  <p>Returns or sets the whether the server should with <a href="#server.responsedelaytime">fixed delay time</a>.</p>
-			</dd>
-			<dt id="server.responsedelaytime"><code>Server.responseDelayTime</code></dt>
-			<dd>
-			  <p>Returns or sets the specific delay time for server responses.</p>
-			</dd>
-			<dt id="server.responsedevicebusy"><code>Server.responseDeviceBusy</code></dt>
-			<dd>
-			  <p>Returns or sets whether the server should respond with device busy errors.</p>
-			</dd>
-			<dt id="server.responseillegalfunction"><code>Server.responseIllegalFunction</code></dt>
-			<dd>
-			  <p>Returns or sets whether the server should respond with illegal function errors.</p>
-			</dd>
-			<dt id="server.responseincorrectcrc"><code>Server.responseIncorrectCrc</code></dt>
-			<dd>
-			  <p>Returns or sets whether the server should respond with incorrect CRC.</p>
-			</dd>
-			<dt id="server.responseincorrectid"><code>Server.responseIncorrectId</code></dt>
-			<dd>
-			  <p>Returns or sets whether the server should respond with incorrect ID.</p>
-			</dd>
-			<dt id="server.responserandomdelay"><code>Server.responseRandomDelay</code></dt>
-			<dd>
-			  <p>Returns or sets whether the server should use random response delays.</p>
-			</dd>
-			<dt id="server.responserandomdelayuptotime"><code>Server.responseRandomDelayUpToTime</code></dt>
-			<dd>
-			  <p>Returns or sets the maximum time for random response delays up to <a href="#server.responserandomdelayuptotime">maximum delay time</a>.</p>
 			</dd>
 			<dt id="server.writecoil"><code>Server.writeCoil(address, value, deviceId)</code></dt>
 			<dd>

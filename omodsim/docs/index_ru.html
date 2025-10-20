@@ -655,6 +655,42 @@
 			<dd>
 			  <p>Возвращает или задает конфигурацию адресного пространства (6-цифровую или 5-цифровую) для объекта сервера.</p>
 			</dd>
+			<dt id="server.noresponse"><code>Server.noResponse</code></dt>
+			<dd>
+			  <p>Возвращает или задает, должен ли сервер отвечать на запросы.</p>
+			</dd>
+			<dt id="server.responsedelay"><code>Server.responseDelay</code></dt>
+			<dd>
+			  <p>Возвращает или задает, должен ли сервер отвечать с заданной задержкой в миллисекундах.</p>
+			</dd>
+			<dt id="server.responsedelaytime"><code>Server.responseDelayTime</code></dt>
+			<dd>
+			  <p>Возвращает или задает конкретное время задержки для ответов сервера.</p>
+			</dd>
+			<dt id="server.responsedevicebusy"><code>Server.responseDeviceBusy</code></dt>
+			<dd>
+			  <p>Возвращает или задает, должен ли сервер отвечать ошибками "устройство занято".</p>
+			</dd>
+			<dt id="server.responseillegalfunction"><code>Server.responseIllegalFunction</code></dt>
+			<dd>
+			  <p>Возвращает или задает, должен ли сервер отвечать ошибками "недопустимая функция".</p>
+			</dd>
+			<dt id="server.responseincorrectcrc"><code>Server.responseIncorrectCrc</code></dt>
+			<dd>
+			  <p>Возвращает или задает, должен ли сервер отвечать "некорректным CRC".</p>
+			</dd>
+			<dt id="server.responseincorrectid"><code>Server.responseIncorrectId</code></dt>
+			<dd>
+			  <p>Возвращает или задает, должен ли сервер отвечать "некорректным ID".</p>
+			</dd>
+			<dt id="server.responserandomdelay"><code>Server.responseRandomDelay</code></dt>
+			<dd>
+			  <p>Возвращает или задает, должен ли сервер использовать случайные задержки ответов.</p>
+			</dd>
+			<dt id="server.responserandomdelayuptotime"><code>Server.responseRandomDelayUpToTime</code></dt>
+			<dd>
+			  <p>Возвращает или задает максимальное время для случайных задержек ответов.</p>
+			</dd>
 			<dt id="server.useglobalunitmap"><code>Server.useGlobalUnitMap</code></dt>
 			<dd>
 			  <p>Возвращает или устанавливает использование глобальной карты адресов. Неразмеченные регистры будут занулены.</p>
@@ -668,10 +704,6 @@
 			<dt id="server.onerror"><code>Server.onError(deviceId, functionRef)</code></dt>
 			<dd>
 				<p>Выполняет функцию <code>functionRef(error)</code> когда произошла ошибка на сервере с номером устройства <code>deviceId</code>.</p>
-			</dd>
-			<dt id="server.noresponse"><code>Server.noResponse</code></dt>
-			<dd>
-			  <p>Возвращает или задает, не должен ли сервер отвечать на запросы.</p>
 			</dd>
 			<dt id="server.readcoil"><code>Server.readCoil(address, deviceId)</code></dt>
 			<dd>
@@ -734,38 +766,6 @@
 				<div class="notecard note">
                     <p><strong>Примечание.</strong> Эта функция доступна только для регистров типа <code>Register.Input</code> и <code>Register.Holding</code>.</p>
                 </div>
-			</dd>
-			<dt id="server.responsedelay"><code>Server.responseDelay</code></dt>
-			<dd>
-			  <p>Возвращает или задает, должен ли сервер отвечать с заданной задержкой в миллисекундах.</p>
-			</dd>
-			<dt id="server.responsedelaytime"><code>Server.responseDelayTime</code></dt>
-			<dd>
-			  <p>Возвращает или задает конкретное время задержки для ответов сервера.</p>
-			</dd>
-			<dt id="server.responsedevicebusy"><code>Server.responseDeviceBusy</code></dt>
-			<dd>
-			  <p>Возвращает или задает, должен ли сервер отвечать ошибками "устройство занято".</p>
-			</dd>
-			<dt id="server.responseillegalfunction"><code>Server.responseIllegalFunction</code></dt>
-			<dd>
-			  <p>Возвращает или задает, должен ли сервер отвечать ошибками "недопустимая функция".</p>
-			</dd>
-			<dt id="server.responseincorrectcrc"><code>Server.responseIncorrectCrc</code></dt>
-			<dd>
-			  <p>Возвращает или задает, должен ли сервер отвечать "некорректным CRC".</p>
-			</dd>
-			<dt id="server.responseincorrectid"><code>Server.responseIncorrectId</code></dt>
-			<dd>
-			  <p>Возвращает или задает, должен ли сервер отвечать "некорректным ID".</p>
-			</dd>
-			<dt id="server.responserandomdelay"><code>Server.responseRandomDelay</code></dt>
-			<dd>
-			  <p>Возвращает или задает, должен ли сервер использовать случайные задержки ответов.</p>
-			</dd>
-			<dt id="server.responserandomdelayuptotime"><code>Server.responseRandomDelayUpToTime</code></dt>
-			<dd>
-			  <p>Возвращает или задает максимальное время для случайных задержек ответов.</p>
 			</dd>
 			<dt id="server.writecoil"><code>Server.writeCoil(address, value, deviceId)</code></dt>
 			<dd>
