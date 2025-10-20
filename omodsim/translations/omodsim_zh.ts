@@ -22,13 +22,13 @@
         <location filename="../controls/addressspacecombobox.cpp" line="11"/>
         <location filename="../controls/addressspacecombobox.cpp" line="30"/>
         <source>5-digits</source>
-        <translation type="unfinished"></translation>
+        <translation>5位数字</translation>
     </message>
     <message>
         <location filename="../controls/addressspacecombobox.cpp" line="12"/>
         <location filename="../controls/addressspacecombobox.cpp" line="34"/>
         <source>6-digits</source>
-        <translation type="unfinished"></translation>
+        <translation>6位数字</translation>
     </message>
 </context>
 <context>
@@ -344,7 +344,7 @@
     <message>
         <location filename="../dialogs/dialogdisplaydefinition.ui" line="25"/>
         <source>Form Name: </source>
-        <translation type="unfinished"></translation>
+        <translation>表单名称： </translation>
     </message>
     <message>
         <location filename="../dialogs/dialogdisplaydefinition.ui" line="135"/>
@@ -509,68 +509,68 @@
     <message>
         <location filename="../dialogs/dialogmodbusdefinitions.ui" line="14"/>
         <source>Modbus Definitions</source>
-        <translation type="unfinished"></translation>
+        <translation>Modbus定义</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogmodbusdefinitions.ui" line="24"/>
         <source>General</source>
-        <translation type="unfinished"></translation>
+        <translation>一般的</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogmodbusdefinitions.ui" line="33"/>
         <source>Address Space: </source>
-        <translation type="unfinished"></translation>
+        <translation>地址空间： </translation>
     </message>
     <message>
         <location filename="../dialogs/dialogmodbusdefinitions.ui" line="50"/>
         <source>Use Global Address Map (Unallocated registers will be zero)</source>
-        <translation type="unfinished">使用全局地址映射（未分配的寄存器将为零）</translation>
+        <translation>使用全局地址映射（未分配的寄存器将为零）</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogmodbusdefinitions.ui" line="58"/>
         <source>Error Simulations</source>
-        <translation type="unfinished"></translation>
+        <translation>错误模拟</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogmodbusdefinitions.ui" line="70"/>
         <source>Response with incorrect IDs</source>
-        <translation type="unfinished"></translation>
+        <translation>带有错误 ID 的响应</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogmodbusdefinitions.ui" line="83"/>
         <source>Response with ILLEGAL FUNCTION</source>
-        <translation type="unfinished"></translation>
+        <translation>响应非法功能</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogmodbusdefinitions.ui" line="96"/>
         <source>Response with DEVICE BUSY</source>
-        <translation type="unfinished"></translation>
+        <translation>响应 DEVICE BUSY</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogmodbusdefinitions.ui" line="109"/>
         <source>Response with incorrect CRC (Serial Line only)</source>
-        <translation type="unfinished"></translation>
+        <translation>响应带有错误的 CRC（仅限串行线路）</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogmodbusdefinitions.ui" line="121"/>
         <source>Response with delay</source>
-        <translation type="unfinished"></translation>
+        <translation>延迟响应</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogmodbusdefinitions.ui" line="157"/>
         <location filename="../dialogs/dialogmodbusdefinitions.ui" line="223"/>
         <source>ms</source>
-        <translation type="unfinished"></translation>
+        <translation>毫秒</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogmodbusdefinitions.ui" line="184"/>
         <source>Response with random delay from 0 to</source>
-        <translation type="unfinished"></translation>
+        <translation>响应随机延迟从 0 到</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogmodbusdefinitions.ui" line="251"/>
         <source>No response</source>
-        <translation type="unfinished"></translation>
+        <translation>没有回应</translation>
     </message>
 </context>
 <context>
@@ -1211,7 +1211,7 @@ Script.onInit(()=&gt;{
 
 	/* write your init code here */
 });</source>
-        <translation type="unfinished">Server.addressBase = AddressBase.Base1;
+        <translation>Server.addressBase = AddressBase.Base1;
 
 let deviceId = 1;
 let address = 1;
@@ -1413,7 +1413,7 @@ Script.onInit(()=&gt;{
         <location filename="../mainwindow.ui" line="1016"/>
         <location filename="../mainwindow.ui" line="1019"/>
         <source>Modbus Definitions</source>
-        <translation type="unfinished"></translation>
+        <translation>Modbus定义</translation>
     </message>
     <message>
         <source>Long Integer</source>
@@ -1747,7 +1747,8 @@ Script.onInit(()=&gt;{
         <location filename="../mainwindow.cpp" line="1283"/>
         <source>Capture Error:<byte value="xd"/>
 %1</source>
-        <translation type="unfinished"></translation>
+        <translation>捕获错误：
+%1</translation>
     </message>
 </context>
 <context>
@@ -2458,27 +2459,27 @@ Script.onInit(()=&gt;{
     <message>
         <location filename="../serialportutils.h" line="19"/>
         <source>NONE</source>
-        <translation type="unfinished">无校验</translation>
+        <translation>无校验</translation>
     </message>
     <message>
         <location filename="../serialportutils.h" line="22"/>
         <source>EVEN</source>
-        <translation type="unfinished">偶校验</translation>
+        <translation>偶校验</translation>
     </message>
     <message>
         <location filename="../serialportutils.h" line="25"/>
         <source>ODD</source>
-        <translation type="unfinished">奇校验</translation>
+        <translation>奇校验</translation>
     </message>
     <message>
         <location filename="../serialportutils.h" line="28"/>
         <source>SPACE</source>
-        <translation type="unfinished">空</translation>
+        <translation>空</translation>
     </message>
     <message>
         <location filename="../serialportutils.h" line="31"/>
         <source>MARK</source>
-        <translation type="unfinished">标记</translation>
+        <translation>标记</translation>
     </message>
 </context>
 <context>
