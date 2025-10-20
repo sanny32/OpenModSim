@@ -923,11 +923,15 @@
    </property>
   </action>
   <action name="actionMsgParser">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/res/actionMsgParser.png</normaloff>:/res/actionMsgParser.png</iconset>
+   </property>
    <property name="text">
     <string>Msg Parser</string>
    </property>
    <property name="shortcut">
-    <string notr="true">F9</string>
+    <string>F9</string>
    </property>
   </action>
   <action name="actionInt64">
