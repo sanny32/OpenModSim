@@ -45,7 +45,7 @@
      <x>0</x>
      <y>0</y>
      <width>1280</width>
-     <height>22</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -126,6 +126,8 @@
      <property name="title">
       <string>Extended</string>
      </property>
+     <addaction name="actionMbDefinitions"/>
+     <addaction name="separator"/>
      <addaction name="actionForceCoils"/>
      <addaction name="actionForceDiscretes"/>
      <addaction name="actionPresetInputRegs"/>
@@ -142,7 +144,6 @@
      <addaction name="separator"/>
      <addaction name="actionScriptSettings"/>
     </widget>
-    <addaction name="actionMbDefinitions"/>
     <addaction name="separator"/>
     <addaction name="actionDataDefinition"/>
     <addaction name="menuDisplay_Options"/>
@@ -229,12 +230,17 @@
    <addaction name="actionConnect"/>
    <addaction name="actionDisconnect"/>
    <addaction name="separator"/>
-   <addaction name="actionMbDefinitions"/>
-   <addaction name="separator"/>
    <addaction name="actionDataDefinition"/>
    <addaction name="actionShowData"/>
    <addaction name="actionShowTraffic"/>
    <addaction name="actionShowScript"/>
+   <addaction name="separator"/>
+   <addaction name="actionMbDefinitions"/>
+   <addaction name="actionForceCoils"/>
+   <addaction name="actionForceDiscretes"/>
+   <addaction name="actionPresetInputRegs"/>
+   <addaction name="actionPresetHoldingRegs"/>
+   <addaction name="actionMsgParser"/>
    <addaction name="separator"/>
    <addaction name="actionPrint"/>
    <addaction name="actionAbout"/>
