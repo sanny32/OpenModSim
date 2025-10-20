@@ -120,12 +120,11 @@ set(SOURCES
     htmldelegate.cpp
     jscompleter.cpp
     jsobjects/console.cpp
-    jsobjects/errorsimulations.cpp
     jsobjects/script.cpp
     jsobjects/server.cpp
+    jsobjects/storage.cpp
     formmodsim.cpp
     jshighlighter.cpp
-    jsobjects/storage.cpp
     main.cpp
     mainwindow.cpp
     menuconnect.cpp
@@ -198,15 +197,14 @@ set(HEADERS
     htmldelegate.h
     jscompleter.h
     jsobjects/console.h
-    jsobjects/errorsimulations.h
     jsobjects/script.h
     jsobjects/server.h
+    jsobjects/storage.h
     displaydefinition.h
     enums.h
     modbusserver.h
     formmodsim.h
     jshighlighter.h
-    jsobjects/storage.h
     mainwindow.h
     menuconnect.h
     modbusdataunitmap.h

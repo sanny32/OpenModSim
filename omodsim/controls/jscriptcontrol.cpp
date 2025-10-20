@@ -241,7 +241,6 @@ void JScriptControl::runScript(RunMode mode, int interval)
     _server = QSharedPointer<Server>(new Server(_mbMultiServer, _byteOrder, _addressBase));
     _script = QSharedPointer<Script>(new Script(interval));
     _console = QSharedPointer<console>(new console(ui->console));
-    _errSim =  QSharedPointer<ErrorSimulations>(new ErrorSimulations(_mbMultiServer));
     connect(_script.get(), &Script::stopped, this, &JScriptControl::stopScript, Qt::QueuedConnection);
 
     _jsEngine.globalObject().setProperty("Storage", _jsEngine.newQObject(_storage.get()));
@@ -251,7 +250,6 @@ void JScriptControl::runScript(RunMode mode, int interval)
     _jsEngine.globalObject().setProperty("Register", _jsEngine.newQMetaObject(&Register::staticMetaObject));
     _jsEngine.globalObject().setProperty("AddressBase", newEnumObject(Address::staticMetaObject, "Base"));
     _jsEngine.globalObject().setProperty("AddressSpace", newEnumObject(Address::staticMetaObject, "Space"));
-    _jsEngine.globalObject().setProperty("ErrorSimulations", _jsEngine.newQObject(_errSim.get()));
     _jsEngine.setInterrupted(false);
 
     _console->clear();
@@ -289,13 +287,11 @@ void JScriptControl::stopScript()
     _jsEngine.globalObject().deleteProperty("Register");
     _jsEngine.globalObject().deleteProperty("AddressBase");
     _jsEngine.globalObject().deleteProperty("AddressSpace");
-    _jsEngine.globalObject().deleteProperty("ErrorSimulations");
 
     _storage = nullptr;
     _server = nullptr;
     _script = nullptr;
     _console = nullptr;
-    _errSim = nullptr;
 }
 
 ///

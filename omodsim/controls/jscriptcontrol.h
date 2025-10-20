@@ -8,7 +8,6 @@
 #include "script.h"
 #include "storage.h"
 #include "server.h"
-#include "errorsimulations.h"
 
 namespace Ui {
 class JScriptControl;
@@ -80,7 +79,6 @@ private:
     QSharedPointer<Storage> _storage;
     QSharedPointer<Server> _server;
     QSharedPointer<console> _console;
-    QSharedPointer<ErrorSimulations> _errSim;
 
     ByteOrder* _byteOrder = nullptr;
     AddressBase _addressBase = AddressBase::Base1;

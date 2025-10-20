@@ -5,7 +5,6 @@
 #include "script.h"
 #include "storage.h"
 #include "server.h"
-#include "errorsimulations.h"
 #include "jscompleter.h"
 
 ///
@@ -131,7 +130,6 @@ JSCompleterModel::JSCompleterModel(QObject *parent)
         addMetaObject(Register::staticMetaObject);
         addMetaEnum(Address::staticMetaObject, "Base");
         addMetaEnum(Address::staticMetaObject, "Space");
-        addMetaObject(ErrorSimulations::staticMetaObject);
     }
 }
 
