@@ -104,11 +104,7 @@ jobs:
       - name: Bundle Qt libraries and plugins
         run: |
           mkdir -p ${{ env.DEB_PACKAGE_DIR }}/opt/OpenModSim/lib ${{ env.DEB_PACKAGE_DIR }}/opt/OpenModSim/plugins
-          linuxdeployqt ${{ env.DEB_PACKAGE_DIR }}/opt/OpenModSim/bin/omodsim \
-            -no-translations \
-            -bundle-non-qt-libs \
-            -appimage \
-            -executable=${{ env.DEB_PACKAGE_DIR }}/OpenModSim/bin/omodsim
+          linuxdeployqt ${{ env.DEB_PACKAGE_DIR }}/opt/OpenModSim/bin/omodsim
           echo "Bundled Qt libs and plugins:"
           ls -laR ${{ env.DEB_PACKAGE_DIR }}/opt/OpenModSim
 
