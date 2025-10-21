@@ -74,10 +74,11 @@ QVariant OutputListModel::data(const QModelIndex& index, int role) const
 
     const auto row = index.row();
     const auto pointType = _parentWidget->_displayDefinition.PointType;
+    const auto addrSpace = _parentWidget->_displayDefinition.AddrSpace;
     const auto hexAddresses = _parentWidget->displayHexAddresses();
 
     const ItemData& itemData = _mapItems[row];
-    const auto addrstr = formatAddress(pointType, itemData.Address, hexAddresses);
+    const auto addrstr = formatAddress(pointType, itemData.Address, addrSpace, hexAddresses);
 
     switch(role)
     {
@@ -271,7 +272,6 @@ void OutputListModel::updateData(const QModbusDataUnit& data)
             case DataDisplayMode::SwappedInt64:
                 itemData.ValueStr = formatInt64Value(pointType, _lastData.value(i+3), _lastData.value(i+2), _lastData.value(i+1), value,
                                                      byteOrder, (i%4) || (i+3>=rowCount()), itemData.Value);
-
             break;
 
             case DataDisplayMode::UInt64:

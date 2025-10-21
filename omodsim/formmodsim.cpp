@@ -993,7 +993,9 @@ void FormModSim::on_mbDataChanged(quint8 deviceId, const QModbusDataUnit&)
 void FormModSim::on_mbDefinitionsChanged(const ModbusDefinitions& defs)
 {
     const auto dd = displayDefinition();
+    const auto addr = dd.PointAddress - (dd.ZeroBasedAddress ? 0 : 1);
     ui->lineEditAddress->setInputRange(ModbusLimits::addressRange(defs.AddrSpace, dd.ZeroBasedAddress));
+    ui->outputWidget->setup(dd, _dataSimulator->simulationMap(), _mbMultiServer.data(dd.DeviceId, dd.PointType, addr, dd.Length));
 }
 
 ///
