@@ -1,4 +1,5 @@
 #include "modbuslimits.h"
+#include "quintvalidator.h"
 #include "displaydefinition.h"
 #include "dialogdisplaydefinition.h"
 #include "ui_dialogdisplaydefinition.h"
@@ -14,7 +15,12 @@ DialogDisplayDefinition::DialogDisplayDefinition(DisplayDefinition dd, QWidget* 
     , ui(new Ui::DialogDisplayDefinition)
 {
     ui->setupUi(this);
+
     ui->lineEditFormName->setText(dd.FormName);
+
+    ui->comboBoxRowSpace->setValidator(new QUIntValidator(1, 32, this));
+    ui->comboBoxRowSpace->setEditText(QString::number(dd.DataViewRowSpace));
+
     ui->lineEditPointAddress->setInputMode(dd.HexAddress ? NumericLineEdit::HexMode : NumericLineEdit::Int32Mode);
     ui->lineEditPointAddress->setInputRange(ModbusLimits::addressRange(dd.AddrSpace, dd.ZeroBasedAddress));
     ui->lineEditLength->setInputRange(ModbusLimits::lengthRange());
@@ -55,6 +61,7 @@ void DialogDisplayDefinition::accept()
     _displayDefinition.AutoscrollLog = ui->checkBoxAutoscrollLog->isChecked();
     _displayDefinition.VerboseLogging = ui->checkBoxVerboseLogging->isChecked();
     _displayDefinition.ZeroBasedAddress = (ui->comboBoxAddressBase->currentAddressBase() == AddressBase::Base0);
+    _displayDefinition.DataViewRowSpace = ui->comboBoxRowSpace->currentText().toUInt();
 
     QFixedSizeDialog::accept();
 }

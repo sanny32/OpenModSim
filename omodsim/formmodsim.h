@@ -297,6 +297,7 @@ inline QDataStream& operator <<(QDataStream& out, FormModSim* frm)
     out << dd.ZeroBasedAddress;
     out << dd.AutoscrollLog;
     out << dd.VerboseLogging;
+    out << dd.DataViewRowSpace;
 
     out << frm->byteOrder();
     out << frm->simulationMap();
@@ -379,6 +380,10 @@ inline QDataStream& operator >>(QDataStream& in, FormModSim* frm)
 
         in >> dd.AutoscrollLog;
         in >> dd.VerboseLogging;
+
+        if(ver >= QVersionNumber(1, 11)) {
+            in >> dd.DataViewRowSpace;
+        }
     }
 
     ModbusSimulationMap simulationMap;

@@ -21,6 +21,7 @@ struct DisplayDefinition
     bool AutoscrollLog = false;
     bool VerboseLogging = true;
     AddressSpace AddrSpace;
+    quint16 DataViewRowSpace = 16;
 
     void normalize()
     {
@@ -29,6 +30,7 @@ struct DisplayDefinition
         PointType = qBound(QModbusDataUnit::DiscreteInputs, PointType, QModbusDataUnit::HoldingRegisters);
         Length = qBound<quint16>(ModbusLimits::lengthRange().from(), Length, ModbusLimits::lengthRange().to());
         LogViewLimit = qBound<quint16>(4, LogViewLimit, 1000);
+        DataViewRowSpace = qBound<quint16>(1, DataViewRowSpace, 32);
     }
 };
 Q_DECLARE_METATYPE(DisplayDefinition)
@@ -47,6 +49,7 @@ inline QSettings& operator <<(QSettings& out, const DisplayDefinition& dd)
     out.setValue("DisplayDefinition/PointType",         dd.PointType);
     out.setValue("DisplayDefinition/Length",            dd.Length);
     out.setValue("DisplayDefinition/LogViewLimit",      dd.LogViewLimit);
+    out.setValue("DisplayDefinition/DataViewRowSpace",  dd.DataViewRowSpace);
     out.setValue("DisplayDefinition/ZeroBasedAddress",  dd.ZeroBasedAddress);
     out.setValue("DisplayDefinition/HexAddress",        dd.HexAddress);
     out.setValue("DisplayDefinition/AutoscrollLog",     dd.AutoscrollLog);
@@ -70,6 +73,7 @@ inline QSettings& operator >>(QSettings& in, DisplayDefinition& dd)
     dd.PointType = (QModbusDataUnit::RegisterType)in.value("DisplayDefinition/PointType", 4).toUInt();
     dd.Length = in.value("DisplayDefinition/Length", 100).toUInt();
     dd.LogViewLimit = in.value("DisplayDefinition/LogViewLimit", 30).toUInt();
+    dd.DataViewRowSpace = in.value("DisplayDefinition/DataViewRowSpace", 16).toUInt();
     dd.ZeroBasedAddress = in.value("DisplayDefinition/ZeroBasedAddress").toBool();
     dd.HexAddress = in.value("DisplayDefinition/HexAddress").toBool();
     dd.AutoscrollLog = in.value("DisplayDefinition/AutoscrollLog").toBool();

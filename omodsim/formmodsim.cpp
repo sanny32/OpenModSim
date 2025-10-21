@@ -156,6 +156,7 @@ DisplayDefinition FormModSim::displayDefinition() const
     dd.VerboseLogging = _verboseLogging;
     dd.HexAddress = displayHexAddresses();
     dd.AddrSpace = _mbMultiServer.getModbusDefinitions().AddrSpace;
+    dd.DataViewRowSpace = ui->outputWidget->dataViewRowSpace();
 
     return dd;
 }
@@ -191,6 +192,7 @@ void FormModSim::setDisplayDefinition(const DisplayDefinition& dd)
     ui->comboBoxModbusPointType->blockSignals(false);
 
     ui->outputWidget->setLogViewLimit(dd.LogViewLimit);
+    ui->outputWidget->setDataViewRowSpace(dd.DataViewRowSpace);
     ui->outputWidget->setAutosctollLogView(dd.AutoscrollLog);
     _verboseLogging = dd.VerboseLogging;
 
