@@ -116,14 +116,14 @@ DialogForceMultipleRegisters::DialogForceMultipleRegisters(ModbusWriteParams& pa
         break;
 
         case DataDisplayMode::UInt64:
-            setupLineEdit<quint64>(ui->lineEditValue, NumericLineEdit::UInt64Mode, true);
-            setupLineEdit<quint64>(ui->lineEditStartValue, NumericLineEdit::UInt64Mode, true);
+            setupLineEdit<quint64>(ui->lineEditValue, NumericLineEdit::UInt64Mode);
+            setupLineEdit<quint64>(ui->lineEditStartValue, NumericLineEdit::UInt64Mode);
             setupLineEdit<qint64>(ui->lineEditStep, NumericLineEdit::Int64Mode);
             ui->lineEditStartValue->setValue(makeInt64(_data[0], _data[1], _data[2], _data[3], _writeParams.Order));
         break;
         case DataDisplayMode::SwappedUInt64:
-            setupLineEdit<quint64>(ui->lineEditValue, NumericLineEdit::UInt64Mode, true);
-            setupLineEdit<quint64>(ui->lineEditStartValue, NumericLineEdit::UInt64Mode, true);
+            setupLineEdit<quint64>(ui->lineEditValue, NumericLineEdit::UInt64Mode);
+            setupLineEdit<quint64>(ui->lineEditStartValue, NumericLineEdit::UInt64Mode);
             setupLineEdit<qint64>(ui->lineEditStep, NumericLineEdit::Int64Mode);
             ui->lineEditStartValue->setValue(makeUInt64(_data[3], _data[2], _data[1], _data[0], _writeParams.Order));
         break;
@@ -474,6 +474,115 @@ void DialogForceMultipleRegisters::on_pushButtonValue_clicked()
             case DataDisplayMode::SwappedDbl:
                 if(!(i % 4) && (i + 3 < _data.size()))
                     breakDouble(ui->lineEditValue->value<double>(), _data[i + 3], _data[i + 2], _data[i + 1], _data[i], _writeParams.Order);
+            break;
+        }
+    }
+
+    updateTableWidget();
+}
+
+///
+/// \brief DialogForceMultipleRegisters::on_pushButtonInc_clicked
+///
+void DialogForceMultipleRegisters::on_pushButtonInc_clicked()
+{
+    for(int i = 0; i < _data.size(); i++)
+    {
+        switch(_writeParams.DisplayMode)
+        {
+            case DataDisplayMode::Hex:
+            case DataDisplayMode::Ansi:
+            case DataDisplayMode::Binary:
+            case DataDisplayMode::UInt16:
+                _data[i] = ui->lineEditStartValue->value<quint16>() + i * ui->lineEditStep->value<qint16>();
+            break;
+
+            case DataDisplayMode::Int16:
+                _data[i] = ui->lineEditStartValue->value<qint16>() + i * ui->lineEditStep->value<qint16>();
+            break;
+
+            case DataDisplayMode::Int32:
+                if(!(i % 2) && (i + 1 < _data.size())) {
+                    const qint32 value = ui->lineEditStartValue->value<qint32>() + (i / 2) * ui->lineEditStep->value<qint32>();
+                    breakInt32(value, _data[i], _data[i + 1], _writeParams.Order);
+                }
+            break;
+
+            case DataDisplayMode::SwappedInt32:
+                if(!(i % 2) && (i + 1 < _data.size())) {
+                    const qint32 value = ui->lineEditStartValue->value<qint32>() + (i / 2) * ui->lineEditStep->value<qint32>();
+                    breakInt32(value, _data[i + 1], _data[i], _writeParams.Order);
+                }
+            break;
+
+            case DataDisplayMode::UInt32:
+                if(!(i % 2) && (i + 1 < _data.size())) {
+                    const quint32 value = ui->lineEditStartValue->value<quint32>() + (i / 2) * ui->lineEditStep->value<qint32>();
+                    breakUInt32(value, _data[i], _data[i + 1], _writeParams.Order);
+                }
+            break;
+
+            case DataDisplayMode::SwappedUInt32:
+                if(!(i % 2) && (i + 1 < _data.size())) {
+                    const quint32 value = ui->lineEditStartValue->value<quint32>() + (i / 2) * ui->lineEditStep->value<qint32>();
+                    breakUInt32(value, _data[i + 1], _data[i], _writeParams.Order);
+                }
+            break;
+
+            case DataDisplayMode::Int64:
+                if(!(i % 4) && (i + 3 < _data.size())) {
+                    const qint64 value = ui->lineEditStartValue->value<qint64>() + (i / 4) * ui->lineEditStep->value<qint64>();
+                    breakInt64(value, _data[i], _data[i + 1], _data[i + 2], _data[i + 3], _writeParams.Order);
+                }
+            break;
+
+            case DataDisplayMode::SwappedInt64:
+                if(!(i % 4) && (i + 3 < _data.size())) {
+                    const qint64 value = ui->lineEditStartValue->value<qint64>() + (i / 4) * ui->lineEditStep->value<qint64>();
+                    breakInt64(value, _data[i + 3], _data[i + 2], _data[i + 1], _data[i], _writeParams.Order);
+                }
+            break;
+
+            case DataDisplayMode::UInt64:
+                if(!(i % 4) && (i + 3 < _data.size())) {
+                    const quint64 value = ui->lineEditStartValue->value<quint64>() + (i / 4) * ui->lineEditStep->value<qint64>();
+                    breakUInt64(value, _data[i], _data[i + 1], _data[i + 2], _data[i + 3], _writeParams.Order);
+                }
+            break;
+
+            case DataDisplayMode::SwappedUInt64:
+                if(!(i % 4) && (i + 3 < _data.size())) {
+                    const quint64 value = ui->lineEditStartValue->value<quint64>() + (i / 4) * ui->lineEditStep->value<qint64>();
+                    breakUInt64(value, _data[i + 3], _data[i + 2], _data[i + 1], _data[i], _writeParams.Order);
+                }
+            break;
+
+            case DataDisplayMode::FloatingPt:
+                if(!(i % 2) && (i + 1 < _data.size())) {
+                    const float value = ui->lineEditStartValue->value<float>() + (i / 2) * ui->lineEditStep->value<float>();
+                    breakFloat(value, _data[i], _data[i + 1], _writeParams.Order);
+                }
+            break;
+
+            case DataDisplayMode::SwappedFP:
+                if(!(i % 2) && (i + 1 < _data.size())) {
+                    const float value = ui->lineEditStartValue->value<float>() + (i / 2) * ui->lineEditStep->value<float>();
+                    breakFloat(value, _data[i + 1], _data[i], _writeParams.Order);
+                }
+            break;
+
+            case DataDisplayMode::DblFloat:
+                if(!(i % 4) && (i + 3 < _data.size())) {
+                    const double value = ui->lineEditStartValue->value<double>() + (i / 4) * ui->lineEditStep->value<double>();
+                    breakDouble(value, _data[i], _data[i + 1], _data[i + 2], _data[i + 3], _writeParams.Order);
+                }
+            break;
+
+            case DataDisplayMode::SwappedDbl:
+                if(!(i % 4) && (i + 3 < _data.size())) {
+                    const double value = ui->lineEditStartValue->value<double>() + (i / 4) * ui->lineEditStep->value<double>();
+                    breakDouble(value, _data[i + 3], _data[i + 2], _data[i + 1], _data[i], _writeParams.Order);
+                }
             break;
         }
     }
