@@ -1,0 +1,71 @@
+name: Build Debian package (Ubuntu x64, Qt6)
+
+on:
+  push:
+    branches: [ dev ]
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+
+    env:
+      QT_VERSION: "6.9.3"
+      QT_HOST: "linux"
+      QT_TARGET: "desktop"
+      QT_ARCH: "linux_gcc_64"
+      QT_INSTALL_DIR: "/opt/Qt"
+      CMAKE_COMPILER: "gcc_64"
+      CMAKE_GENERATOR: "Ninja"
+      BUILD_TYPE: "Release"
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            build-essential ninja-build cmake python3-pip \
+            libgl1-mesa-dev libxkbcommon-x11-0 \
+            libxcb-xinerama0 libxcb-cursor0 libxcb-keysyms1 libxcb-xfixes0 \
+            libxcb-shape0 libxcb-render-util0 libxcb-icccm4 libxcb-image0 \
+            zlib1g-dev libpng-dev libjpeg-dev
+
+      - name: Install aqtinstall
+        run: |
+          python3 -m pip install -U pip aqtinstall
+
+      - name: Download Qt ${{ env.QT_VERSION }} via aqt
+        run: |
+          sudo mkdir -p ${{ env.QT_INSTALL_DIR }}
+          sudo chown $USER ${{ env.QT_INSTALL_DIR }}
+          aqt install-qt \
+            ${{ env.QT_HOST }} \
+            ${{ env.QT_TARGET }} \
+            ${{ env.QT_VERSION }} \
+            ${{ env.QT_ARCH }} \
+            -m qt5compat qtpdf qtserialport qtserialbus \
+            -O ${{ env.QT_INSTALL_DIR }}
+
+      - name: Show Qt path
+        run: |
+          ls -la ${{ env.QT_INSTALL_DIR }}
+          echo "Qt installed to: ${{ env.QT_INSTALL_DIR }}/${{ env.QT_VERSION }}/${{ env.CMAKE_COMPILER }}"
+
+      - name: Add Qt to PATH
+        run: echo "${{ env.QT_INSTALL_DIR }}/${{ env.QT_VERSION }}/${{ env.CMAKE_COMPILER }}/bin" >> $GITHUB_PATH
+
+      - name: Set BUILD_DIR
+        run: echo "BUILD_DIR=build-omodsim-Qt_${{ env.QT_VERSION }}_${{ env.CMAKE_COMPILER }}bit-${{ env.BUILD_TYPE }}" >> $GITHUB_ENV
+
+      - name: Configure project
+        run: |
+            cmake omodsim -B ${{ env.BUILD_DIR }} \
+            -G "${{ env.CMAKE_GENERATOR }}" \
+            -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} \
+            -DCMAKE_PREFIX_PATH=${{ env.QT_INSTALL_DIR }}/${{ env.QT_VERSION }}/${{ env.CMAKE_COMPILER }} \
+            -DCMAKE_INSTALL_PREFIX=/usr \
+
+      - name: Build
+        run: cmake --build ${{ env.BUILD_DIR }} --config ${{ env.BUILD_TYPE }} --parallel
