@@ -14,6 +14,7 @@ jobs:
       QT_TARGET: "desktop"
       QT_ARCH: "linux_gcc_64"
       QT_INSTALL_DIR: "/opt/Qt"
+      CMAKE_COMPILER: "gcc_64"
       BUILD_TYPE: "Release"
 
     steps:
@@ -52,7 +53,7 @@ jobs:
           echo "Qt installed to: ${{ env.QT_INSTALL_DIR }}/${{ env.QT_VERSION }}/gcc_64"
 
       - name: Add Qt to PATH
-        run: echo "${{ env.QT_INSTALL_DIR }}/${{ env.QT_VERSION }}/${{ env.QT_ARCH }}/bin" >> $GITHUB_PATH
+        run: echo "${{ env.QT_INSTALL_DIR }}/${{ env.QT_VERSION }}/${{ env.CMAKE_COMPILER }}/bin" >> $GITHUB_PATH
 
       - name: Configure project
         run: |
@@ -61,7 +62,7 @@ jobs:
           cmake .. \
             -G Ninja \
             -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} \
-            -DCMAKE_PREFIX_PATH=${{ env.QT_INSTALL_DIR }}/${{ env.QT_VERSION }}/${{ env.QT_ARCH }} \
+            -DCMAKE_PREFIX_PATH=${{ env.QT_INSTALL_DIR }}/${{ env.QT_VERSION }}/${{ env.CMAKE_COMPILER }} \
             -DCMAKE_INSTALL_PREFIX=/usr \
 
       - name: Build
