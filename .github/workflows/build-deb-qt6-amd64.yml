@@ -86,7 +86,7 @@ jobs:
       - name: Create DEB build directories
         run: |
           mkdir -p ${{ env.BUILD_DEB_DIR }}/qt6-omodsim-${{ env.APP_VERSION }}-1_amd64
-          echo "DEB_PACKAGE_DIR=${{ env.BUILD_DEB_DIR }}/qt6-omodsim-${{ env.APP_VERSION }}-1_adm64" >> $GITHUB_ENV
+          echo "DEB_PACKAGE_DIR=${{ env.BUILD_DEB_DIR }}/qt6-omodsim-${{ env.APP_VERSION }}-1_amd64" >> $GITHUB_ENV
 
       - name: Copy files to DEB_PACKAGE_DIR
         run: cp -r $(pwd)/.deb/* ${{ env.DEB_PACKAGE_DIR }} && ls -la ${{ env.DEB_PACKAGE_DIR }}
