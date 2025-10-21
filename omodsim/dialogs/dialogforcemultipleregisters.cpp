@@ -90,14 +90,14 @@ DialogForceMultipleRegisters::DialogForceMultipleRegisters(ModbusWriteParams& pa
         break;
 
         case DataDisplayMode::UInt32:
-            setupLineEdit<quint32>(ui->lineEditValue, NumericLineEdit::UInt32Mode, true);
-            setupLineEdit<quint32>(ui->lineEditStartValue, NumericLineEdit::UInt32Mode, true);
-            setupLineEdit<qint32>(ui->lineEditStep, NumericLineEdit::UInt32Mode);
+            setupLineEdit<quint32>(ui->lineEditValue, NumericLineEdit::UInt32Mode);
+            setupLineEdit<quint32>(ui->lineEditStartValue, NumericLineEdit::UInt32Mode);
+            setupLineEdit<qint32>(ui->lineEditStep, NumericLineEdit::Int32Mode);
             ui->lineEditStartValue->setValue(makeUInt32(_data[0], _data[1], _writeParams.Order));
         break;
         case DataDisplayMode::SwappedUInt32:
-            setupLineEdit<quint32>(ui->lineEditValue, NumericLineEdit::UInt32Mode, true);
-            setupLineEdit<quint32>(ui->lineEditStartValue, NumericLineEdit::UInt32Mode, true);
+            setupLineEdit<quint32>(ui->lineEditValue, NumericLineEdit::UInt32Mode);
+            setupLineEdit<quint32>(ui->lineEditStartValue, NumericLineEdit::UInt32Mode);
             setupLineEdit<qint32>(ui->lineEditStep, NumericLineEdit::Int32Mode);
             ui->lineEditStartValue->setValue(makeUInt32(_data[1], _data[0], _writeParams.Order));
         break;
