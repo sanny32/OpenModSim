@@ -72,7 +72,7 @@ DialogForceMultipleRegisters::DialogForceMultipleRegisters(ModbusWriteParams& pa
         case DataDisplayMode::UInt16:
             setupLineEdit<quint16>(ui->lineEditValue, NumericLineEdit::UInt32Mode, true);
             setupLineEdit<quint16>(ui->lineEditStartValue, NumericLineEdit::UInt32Mode, true);
-            setupLineEdit<quint16>(ui->lineEditStep, NumericLineEdit::Int32Mode);
+            setupLineEdit<qint16>(ui->lineEditStep, NumericLineEdit::Int32Mode);
             ui->lineEditStartValue->setValue(toByteOrderValue(_data[0], _writeParams.Order));
             break;
 
