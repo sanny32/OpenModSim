@@ -90,8 +90,8 @@ jobs:
 
       - name: Copy files to DEB_PACKAGE_DIR
         run: |
-          cp -r "$(pwd)/.deb/*" ${{ env.DEB_PACKAGE_DIR }}
-          cp "${{ env.BUILD_DIR }}/omodsim" "$(pwd)/.deb/opt/OpenModSim/bin/"
+          cp -r .deb/* ${{ env.DEB_PACKAGE_DIR }}
+          cp ${{ env.BUILD_DIR }}/omodsim ${{ env.DEB_PACKAGE_DIR }}/opt/OpenModSim/bin/
          
       - name: Install linuxdeployqt
         run: |
@@ -101,13 +101,13 @@ jobs:
 
       - name: Bundle Qt libraries and plugins
         run: |
-          mkdir -p "$(pwd)/.deb/opt/OpenModSim/lib" "$(pwd)/.deb/opt/OpenModSim/plugins"
-          linuxdeployqt "$(pwd)/.deb/opt/OpenModSim/bin/omodsim" \
+          mkdir -p ${{ env.DEB_PACKAGE_DIR }}/opt/OpenModSim/lib ${{ env.DEB_PACKAGE_DIR }}/opt/OpenModSim/plugins
+          linuxdeployqt ${{ env.DEB_PACKAGE_DIR }}/opt/OpenModSim/bin/omodsim \
             -no-translations \
             -bundle-non-qt-libs \
             -qmldir=omodsim \
             -appimage \
-            -executable="$(pwd)/.deb/opt/OpenModSim/bin/omodsim"
+            -executable=${{ env.DEB_PACKAGE_DIR }}/OpenModSim/bin/omodsim
           echo "Bundled Qt libs and plugins:"
-          ls -laR $(pwd).deb/opt/OpenModSim
+          ls -laR ${{ env.DEB_PACKAGE_DIR }}/opt/OpenModSim
 
