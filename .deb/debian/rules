@@ -1,0 +1,20 @@
+#!/usr/bin/make -f
+
+%:
+	dh $@
+
+override_dh_dwz:
+
+
+override_dh_shlibdeps:
+	dh_shlibdeps --dpkg-shlibdeps-params=--ignore-missing-info
+
+override_dh_strip:
+	dh_strip --no-automatic-dbgsym
+
+override_dh_gencontrol:
+	dh_gencontrol -- -Vshlibs:Depends=
+
+override_dh_clean:
+	dh_clean
+	rm -rf debian/qt6-omodsim/ debian/.debhelper debian/files
