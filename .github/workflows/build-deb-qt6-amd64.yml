@@ -51,7 +51,7 @@ jobs:
         run: |
           python3 -m pip install -U pip aqtinstall
 
-      - name: Download Qt ${{ env.QT_VERSION }} via aqt
+      - name: Download Qt
         run: |
           sudo mkdir -p ${{ env.QT_INSTALL_DIR }}
           sudo chown $USER ${{ env.QT_INSTALL_DIR }}
@@ -62,11 +62,6 @@ jobs:
             ${{ env.QT_ARCH }} \
             -m qt5compat qtpdf qtserialport qtserialbus \
             -O ${{ env.QT_INSTALL_DIR }}
-
-      - name: Show Qt path
-        run: |
-          ls -la ${{ env.QT_INSTALL_DIR }}
-          echo "Qt installed to: ${{ env.QT_INSTALL_DIR }}/${{ env.QT_VERSION }}/${{ env.CMAKE_COMPILER }}"
 
       - name: Add Qt to PATH
         run: echo "${{ env.QT_INSTALL_DIR }}/${{ env.QT_VERSION }}/${{ env.CMAKE_COMPILER }}/bin" >> $GITHUB_PATH
@@ -94,7 +89,7 @@ jobs:
           echo "DEB_PACKAGE_DIR=${{ env.BUILD_DEB_DIR }}/qt6-omodsim-${{ env.APP_VERSION }}-1_adm64" >> $GITHUB_ENV
 
       - name: Copy files to DEB_PACKAGE_DIR
-        run: cp -r ./deb/* ${{ env.DEB_PACKAGE_DIR }} && ls -la ${{ env.DEB_PACKAGE_DIR }}
+        run: cp -r $(pwd)/deb/* ${{ env.DEB_PACKAGE_DIR }} && ls -la ${{ env.DEB_PACKAGE_DIR }}
          
           
 
