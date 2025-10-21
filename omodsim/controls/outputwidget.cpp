@@ -89,7 +89,7 @@ QVariant OutputListModel::data(const QModelIndex& index, int role) const
             const auto descr = itemData.Description.length() > 20 ?
                         QString("%1...").arg(itemData.Description.left(18)): itemData.Description;
             if(!descr.isEmpty()) str += QString("; %1").arg(descr);
-            return str.leftJustified(length + _rowSpace, ' ');
+            return str.leftJustified(length + _columnsDistance, ' ');
         }
 
         case CaptureRole:
@@ -390,7 +390,7 @@ void OutputWidget::setup(const DisplayDefinition& dd, const ModbusSimulationMap2
 
     setLogViewLimit(dd.LogViewLimit);
     setAutosctollLogView(dd.AutoscrollLog);
-    setDataViewRowSpace(dd.DataViewRowSpace);
+    setDataViewColumnsDistance(dd.DataViewColumnsDistance);
 
     _listModel->clear();
 
@@ -535,21 +535,21 @@ void OutputWidget::setFont(const QFont& font)
 }
 
 ///
-/// \brief OutputWidget::dataViewRowSpace
+/// \brief OutputWidget::dataViewColumnsDistance
 /// \return
 ///
-int OutputWidget::dataViewRowSpace() const
+int OutputWidget::dataViewColumnsDistance() const
 {
-    return _listModel->rowSpace();
+    return _listModel->columnsDistance();
 }
 
 ///
-/// \brief OutputWidget::setDataViewRowSpace
+/// \brief OutputWidget::setDataViewColumnsDistance
 /// \param value
 ///
-void OutputWidget::setDataViewRowSpace(int value)
+void OutputWidget::setDataViewColumnsDistance(int value)
 {
-    _listModel->setRowSpace(value);
+    _listModel->setColumnsDistance(value);
 }
 
 ///

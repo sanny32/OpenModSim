@@ -56,11 +56,11 @@ public:
     void update();
     void updateData(const QModbusDataUnit& data);
 
-    int rowSpace() const {
-        return _rowSpace;
+    int columnsDistance() const {
+        return _columnsDistance;
     }
-    void setRowSpace(int value) {
-        _rowSpace = qMax(1, value);
+    void setColumnsDistance(int value) {
+        _columnsDistance = qMax(1, value);
     }
 
     QModelIndex find(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr) const;
@@ -79,7 +79,7 @@ private:
     QModbusDataUnit _lastData;
     QIcon _iconPointGreen;
     QIcon _iconPointEmpty;
-    int _rowSpace = 16;
+    int _columnsDistance = 16;
     QMap<int, ItemData> _mapItems;
 };
 
@@ -132,8 +132,8 @@ public:
     QFont font() const;
     void setFont(const QFont& font);
 
-    int dataViewRowSpace() const;
-    void setDataViewRowSpace(int value);
+    int dataViewColumnsDistance() const;
+    void setDataViewColumnsDistance(int value);
 
     int logViewLimit() const;
     void setLogViewLimit(int l);
