@@ -70,42 +70,15 @@ void ModbusMultiServer::removeDeviceId(quint8 deviceId)
 }
 
 ///
-/// \brief ModbusMultiServer::isBusy
-/// \return
-///
-bool ModbusMultiServer::isBusy(quint8 deviceId) const
-{
-    if(_modbusServerList.isEmpty())
-        return false;
-
-    return _modbusServerList.first()->value(ModbusServer::DeviceBusy, deviceId) == 0xffff;
-}
-
-///
-/// \brief ModbusMultiServer::setBusy
-/// \param busy
-///
-void ModbusMultiServer::setBusy(bool busy, quint8 deviceId)
-{
-    if(QThread::currentThread() != _workerThread)
-    {
-        QMetaObject::invokeMethod(this, [this, busy, deviceId]() {
-            setBusy(busy, deviceId);
-        }, Qt::BlockingQueuedConnection);
-        return;
-    }
-
-    for(auto&& s : _modbusServerList)
-        s->setValue(QModbusServer::DeviceBusy, busy ? 0xffff : 0x0000, deviceId);
-}
-
-///
 /// \brief ModbusMultiServer::useGlobalUnitMap
 /// \return
 ///
 bool ModbusMultiServer::useGlobalUnitMap() const
 {
-    return _modbusDataUnitMaps.isEmpty() ? false : _modbusDataUnitMaps.first().isGlobalMap();
+    if(_modbusDataUnitMaps.isEmpty())
+        return false;
+
+    return _modbusDataUnitMaps.first().isGlobalMap();
 }
 
 ///
@@ -232,15 +205,6 @@ QSharedPointer<ModbusServer> ModbusMultiServer::createModbusServer(const Connect
                 modbusServer->setProperty("ConnectionDetails", QVariant::fromValue(cd));
                 modbusServer->setConnectionParameter(QModbusDevice::NetworkPortParameter, cd.TcpParams.ServicePort);
                 modbusServer->setConnectionParameter(QModbusDevice::NetworkAddressParameter, cd.TcpParams.IPAddress);
-
-                connect((ModbusTcpServer*)modbusServer.get(), &ModbusTcpServer::request, this, [&](int serverAddress, const QModbusRequest& req, int transactionId)
-                {
-                    emit request(serverAddress, req, ModbusMessage::Tcp, transactionId);
-                });
-                connect((ModbusTcpServer*)modbusServer.get(), &ModbusTcpServer::response, this, [&](int serverAddress, const QModbusRequest& req, const QModbusResponse& resp, int transactionId)
-                {
-                    emit response(serverAddress, req, resp, ModbusMessage::Tcp, transactionId);
-                });
             }
             break;
 
@@ -257,14 +221,6 @@ QSharedPointer<ModbusServer> ModbusMultiServer::createModbusServer(const Connect
                 modbusServer->setConnectionParameter(QModbusDevice::SerialStopBitsParameter, cd.SerialParams.StopBits);
                 qobject_cast<QSerialPort*>(modbusServer->device())->setFlowControl(cd.SerialParams.FlowControl);
 
-                connect((ModbusRtuSerialServer*)modbusServer.get(), &ModbusRtuSerialServer::request, this, [&](int serverAddress, const QModbusRequest& req)
-                {
-                    emit request(serverAddress, req, ModbusMessage::Rtu, 0);
-                });
-                connect((ModbusRtuSerialServer*)modbusServer.get(), &ModbusRtuSerialServer::response, this, [&](int serverAddress, const QModbusRequest& req, const QModbusResponse& resp)
-                {
-                    emit response(serverAddress, req, resp, ModbusMessage::Rtu, 0);
-                });
             }
             break;
         }
@@ -272,6 +228,8 @@ QSharedPointer<ModbusServer> ModbusMultiServer::createModbusServer(const Connect
 
     if(modbusServer)
     {
+        connect(modbusServer.get(), &ModbusServer::modbusRequest, this, &ModbusMultiServer::request);
+        connect(modbusServer.get(), &ModbusServer::modbusResponse, this, &ModbusMultiServer::response);
         connect(modbusServer.get(), &ModbusServer::dataWritten, this, &ModbusMultiServer::on_dataWritten);
         connect(modbusServer.get(), &ModbusServer::stateChanged, this, &ModbusMultiServer::on_stateChanged);
         connect(modbusServer.get(), &ModbusServer::errorOccurred, this, &ModbusMultiServer::on_errorOccurred);
@@ -312,6 +270,7 @@ void ModbusMultiServer::connectDevice(const ConnectionDetails& cd)
         }
     }
 
+    modbusServer->setDefinitions(_definitions);
     modbusServer->connectDevice();
 }
 
@@ -371,13 +330,46 @@ QList<ConnectionDetails> ModbusMultiServer::connections() const
 }
 
 ///
+/// \brief ModbusMultiServer::getModbusDefinitions
+/// \return
+///
+ModbusDefinitions ModbusMultiServer::getModbusDefinitions() const
+{
+    return _definitions;
+}
+
+///
+/// \brief ModbusMultiServer::setModbusDefinitions
+/// \param defs
+///
+void ModbusMultiServer::setModbusDefinitions(const ModbusDefinitions& defs)
+{
+    if(QThread::currentThread() != _workerThread)
+    {
+        QMetaObject::invokeMethod(this, [this, defs]() {
+            setModbusDefinitions(defs);
+        }, Qt::BlockingQueuedConnection);
+        return;
+    }
+
+    _definitions = defs;
+
+    for(auto&& s : _modbusServerList) {
+        s->setDefinitions(defs);
+    }
+
+    emit definitionsChanged(_definitions);
+}
+
+///
 /// \brief ModbusMultiServer::addModbusServer
 /// \param server
 ///
 void ModbusMultiServer::addModbusServer(QSharedPointer<ModbusServer> server)
 {
-    if(server && !_modbusServerList.contains(server))
+    if(server && !_modbusServerList.contains(server)) {
         _modbusServerList.push_back(server);
+    }
 }
 
 ///
@@ -386,8 +378,9 @@ void ModbusMultiServer::addModbusServer(QSharedPointer<ModbusServer> server)
 ///
 void ModbusMultiServer::removeModbusServer(QSharedPointer<ModbusServer> server)
 {
-    if(server)
+    if(server) {
         _modbusServerList.removeOne(server);
+    }
 }
 
 ///
@@ -404,6 +397,7 @@ void ModbusMultiServer::reconfigureServers()
     }
 
     for(auto&& s : _modbusServerList) {
+        s->setDefinitions(_definitions);
         for(auto addr : s->serverAddresses()) {
             s->setMap(_modbusDataUnitMaps[addr], addr);
         }

@@ -1,8 +1,41 @@
 #ifndef SERIALPORTUTILS_H
 #define SERIALPORTUTILS_H
 
+#include <QSerialPort>
 #include <QSerialPortInfo>
 #include <QRegularExpression>
+
+
+///
+/// \brief Parity_toString
+/// \param parity
+/// \return
+///
+inline QString Parity_toString(QSerialPort::Parity parity)
+{
+    switch(parity)
+    {
+    case QSerialPort::NoParity:
+        return QSerialPort::tr("NONE");
+
+    case QSerialPort::EvenParity:
+        return QSerialPort::tr("EVEN");
+
+    case QSerialPort::OddParity:
+        return QSerialPort::tr("ODD");
+
+    case QSerialPort::SpaceParity:
+        return QSerialPort::tr("SPACE");
+
+    case QSerialPort::MarkParity:
+        return QSerialPort::tr("MARK");
+
+    default:
+        break;
+    }
+
+    return QString();
+}
 
 ///
 /// \brief getAvailableSerialPorts

@@ -74,10 +74,11 @@ QVariant OutputListModel::data(const QModelIndex& index, int role) const
 
     const auto row = index.row();
     const auto pointType = _parentWidget->_displayDefinition.PointType;
+    const auto addrSpace = _parentWidget->_displayDefinition.AddrSpace;
     const auto hexAddresses = _parentWidget->displayHexAddresses();
 
     const ItemData& itemData = _mapItems[row];
-    const auto addrstr = formatAddress(pointType, itemData.Address, hexAddresses);
+    const auto addrstr = formatAddress(pointType, itemData.Address, addrSpace, hexAddresses);
 
     switch(role)
     {
@@ -88,7 +89,7 @@ QVariant OutputListModel::data(const QModelIndex& index, int role) const
             const auto descr = itemData.Description.length() > 20 ?
                         QString("%1...").arg(itemData.Description.left(18)): itemData.Description;
             if(!descr.isEmpty()) str += QString("; %1").arg(descr);
-            return str.leftJustified(length + 16, ' ');
+            return str.leftJustified(length + _columnsDistance, ' ');
         }
 
         case CaptureRole:
@@ -271,7 +272,6 @@ void OutputListModel::updateData(const QModbusDataUnit& data)
             case DataDisplayMode::SwappedInt64:
                 itemData.ValueStr = formatInt64Value(pointType, _lastData.value(i+3), _lastData.value(i+2), _lastData.value(i+1), value,
                                                      byteOrder, (i%4) || (i+3>=rowCount()), itemData.Value);
-
             break;
 
             case DataDisplayMode::UInt64:
@@ -390,6 +390,7 @@ void OutputWidget::setup(const DisplayDefinition& dd, const ModbusSimulationMap2
 
     setLogViewLimit(dd.LogViewLimit);
     setAutosctollLogView(dd.AutoscrollLog);
+    setDataViewColumnsDistance(dd.DataViewColumnsDistance);
 
     _listModel->clear();
 
@@ -437,7 +438,8 @@ CaptureMode OutputWidget::captureMode() const
 void OutputWidget::startTextCapture(const QString& file)
 {
     _fileCapture.setFileName(file);
-    _fileCapture.open(QFile::Text | QFile::WriteOnly);
+    if(!_fileCapture.open(QFile::Text | QFile::WriteOnly))
+        emit startTextCaptureError(_fileCapture.errorString());
 }
 
 ///
@@ -530,6 +532,24 @@ void OutputWidget::setFont(const QFont& font)
     ui->labelStatus->setFont(font);
     ui->logView->setFont(font);
     ui->modbusMsg->setFont(font);
+}
+
+///
+/// \brief OutputWidget::dataViewColumnsDistance
+/// \return
+///
+int OutputWidget::dataViewColumnsDistance() const
+{
+    return _listModel->columnsDistance();
+}
+
+///
+/// \brief OutputWidget::setDataViewColumnsDistance
+/// \param value
+///
+void OutputWidget::setDataViewColumnsDistance(int value)
+{
+    _listModel->setColumnsDistance(value);
 }
 
 ///
@@ -653,26 +673,11 @@ void OutputWidget::paint(const QRect& rc, QPainter& painter)
 
 ///
 /// \brief OutputWidget::updateTraffic
-/// \param request
-/// \param server
-/// \param transactionId
-/// \param protocol
+/// \param msg
 ///
-void OutputWidget::updateTraffic(const QModbusRequest& request, int server, int transactionId, ModbusMessage::ProtocolType protocol)
+void OutputWidget::updateTraffic(QSharedPointer<const ModbusMessage> msg)
 {
-    updateLogView(true, server, transactionId, protocol, request);
-}
-
-///
-/// \brief OutputWidget::updateTraffic
-/// \param response
-/// \param server
-/// \param transactionId
-/// \param protocol
-///
-void OutputWidget::updateTraffic(const QModbusResponse& response, int server, int transactionId, ModbusMessage::ProtocolType protocol)
-{
-    updateLogView(false, server, transactionId, protocol, response);
+    updateLogView(msg);
 }
 
 ///
@@ -942,15 +947,11 @@ void OutputWidget::hideModbusMessage()
 
 ///
 /// \brief OutputWidget::updateLogView
-/// \param request
-/// \param server
-/// \param transactionId
-/// \param protocol
-/// \param pdu
+/// \param msg
 ///
-void OutputWidget::updateLogView(bool request, int server, int transactionId, ModbusMessage::ProtocolType protocol, const QModbusPdu& pdu)
+void OutputWidget::updateLogView(QSharedPointer<const ModbusMessage> msg)
 {
-    auto msg = ui->logView->addItem(pdu, protocol, server, transactionId, QDateTime::currentDateTime(), request);
+    ui->logView->addItem(msg);
     if(captureMode() == CaptureMode::TextCapture && msg != nullptr)
     {
         const auto str = QString("%1: %2 %3 %4").arg(

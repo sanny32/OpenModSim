@@ -60,6 +60,26 @@ void Server::setAddressBase(Address::Base base)
 }
 
 ///
+/// \brief Server::addressSpace
+/// \return
+///
+Address::Space Server::addressSpace() const
+{
+    return (Address::Space)_mbMultiServer->getModbusDefinitions().AddrSpace;
+}
+
+///
+/// \brief Server::setAddressSpace
+/// \param space
+///
+void Server::setAddressSpace(Address::Space space)
+{
+    auto defs = _mbMultiServer->getModbusDefinitions();
+    defs.AddrSpace = (AddressSpace)space;
+    _mbMultiServer->setModbusDefinitions(defs);
+}
+
+///
 /// \brief Server::useGlobalUnitMap
 /// \return
 ///
@@ -75,6 +95,186 @@ bool Server::useGlobalUnitMap() const
 void Server::setUseGlobalUnitMap(bool value)
 {
     _mbMultiServer->setUseGlobalUnitMap(value);
+}
+
+///
+/// \brief Server::responseDelayTime
+/// \return
+///
+int  Server::responseDelayTime() const
+{
+    return _mbMultiServer->getModbusDefinitions().ErrorSimulations.responseDelayTime();
+}
+
+///
+/// \brief Server::responseRandomDelayUpToTime
+/// \return
+///
+int  Server::responseRandomDelayUpToTime() const
+{
+    return _mbMultiServer->getModbusDefinitions().ErrorSimulations.responseRandomDelayUpToTime();
+}
+
+///
+/// \brief Server::noResponse
+/// \return
+///
+bool Server::noResponse() const
+{
+    return _mbMultiServer->getModbusDefinitions().ErrorSimulations.noResponse();
+}
+
+///
+/// \brief Server::responseIncorrectId
+/// \return
+///
+bool Server::responseIncorrectId() const
+{
+    return _mbMultiServer->getModbusDefinitions().ErrorSimulations.responseIncorrectId();
+}
+
+///
+/// \brief Server::responseIllegalFunction
+/// \return
+///
+bool Server::responseIllegalFunction() const
+{
+    return _mbMultiServer->getModbusDefinitions().ErrorSimulations.responseIllegalFunction();
+}
+
+///
+/// \brief Server::responseDeviceBusy
+/// \return
+///
+bool Server::responseDeviceBusy() const
+{
+    return _mbMultiServer->getModbusDefinitions().ErrorSimulations.responseDeviceBusy();
+}
+
+///
+/// \brief Server::responseIncorrectCrc
+/// \return
+///
+bool Server::responseIncorrectCrc() const
+{
+    return _mbMultiServer->getModbusDefinitions().ErrorSimulations.responseIncorrectCrc();
+}
+
+///
+/// \brief Server::responseDelay
+/// \return
+///
+bool Server::responseDelay() const
+{
+    return _mbMultiServer->getModbusDefinitions().ErrorSimulations.responseDelay();
+}
+
+///
+/// \brief Server::responseRandomDelay
+/// \return
+///
+bool Server::responseRandomDelay() const
+{
+    return _mbMultiServer->getModbusDefinitions().ErrorSimulations.responseRandomDelay();
+}
+
+///
+/// \brief Server::setResponseDelayTime
+/// \param value
+///
+void Server::setResponseDelayTime(int value)
+{
+    auto defs = _mbMultiServer->getModbusDefinitions();
+    defs.ErrorSimulations.setResponseDelayTime(value);
+    _mbMultiServer->setModbusDefinitions(defs);
+}
+
+///
+/// \brief Server::setResponseRandomDelayUpToTime
+/// \param value
+///
+void Server::setResponseRandomDelayUpToTime(int value)
+{
+    auto defs = _mbMultiServer->getModbusDefinitions();
+    defs.ErrorSimulations.setResponseRandomDelayUpToTime(value);
+    _mbMultiServer->setModbusDefinitions(defs);
+}
+
+///
+/// \brief Server::setNoResponse
+/// \param value
+///
+void Server::setNoResponse(bool value)
+{
+    auto defs = _mbMultiServer->getModbusDefinitions();
+    defs.ErrorSimulations.setNoResponse(value);
+    _mbMultiServer->setModbusDefinitions(defs);
+}
+
+///
+/// \brief Server::setResponseIncorrectId
+/// \param value
+///
+void Server::setResponseIncorrectId(bool value)
+{
+    auto defs = _mbMultiServer->getModbusDefinitions();
+    defs.ErrorSimulations.setResponseIncorrectId(value);
+    _mbMultiServer->setModbusDefinitions(defs);
+}
+
+///
+/// \brief Server::setResponseIllegalFunction
+/// \param value
+///
+void Server::setResponseIllegalFunction(bool value)
+{
+    auto defs = _mbMultiServer->getModbusDefinitions();
+    defs.ErrorSimulations.setResponseIllegalFunction(value);
+    _mbMultiServer->setModbusDefinitions(defs);
+}
+
+///
+/// \brief Server::setResponseDeviceBusy
+/// \param value
+///
+void Server::setResponseDeviceBusy(bool value)
+{
+    auto defs = _mbMultiServer->getModbusDefinitions();
+    defs.ErrorSimulations.setResponseDeviceBusy(value);
+    _mbMultiServer->setModbusDefinitions(defs);
+}
+
+///
+/// \brief Server::setResponseIncorrectCrc
+/// \param value
+///
+void Server::setResponseIncorrectCrc(bool value)
+{
+    auto defs = _mbMultiServer->getModbusDefinitions();
+    defs.ErrorSimulations.setResponseIncorrectCrc(value);
+    _mbMultiServer->setModbusDefinitions(defs);
+}
+
+///
+/// \brief Server::setResponseDelay
+/// \param value
+///
+void Server::setResponseDelay(bool value)
+{
+    auto defs = _mbMultiServer->getModbusDefinitions();
+    defs.ErrorSimulations.setResponseDelay(value);
+    _mbMultiServer->setModbusDefinitions(defs);
+}
+
+///
+/// \brief Server::setResponseRandomDelay
+/// \param value
+///
+void Server::setResponseRandomDelay(bool value)
+{
+    auto defs = _mbMultiServer->getModbusDefinitions();
+    defs.ErrorSimulations.setResponseRandomDelay(value);
+    _mbMultiServer->setModbusDefinitions(defs);
 }
 
 ///

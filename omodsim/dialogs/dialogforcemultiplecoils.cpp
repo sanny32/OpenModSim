@@ -36,7 +36,7 @@ DialogForceMultipleCoils::DialogForceMultipleCoils(ModbusWriteParams& params, QM
             break;
     }
 
-    ui->labelAddress->setText(QString(tr("Address: <b>%1</b>")).arg(formatAddress(type, params.Address, _hexAddress)));
+    ui->labelAddress->setText(QString(tr("Address: <b>%1</b>")).arg(formatAddress(type, params.Address, params.AddrSpace, _hexAddress)));
     ui->labelLength->setText(QString(tr("Length: <b>%1</b>")).arg(length, 3, 10, QLatin1Char('0')));
 
     _data = params.Value.value<QVector<quint16>>();
@@ -125,8 +125,8 @@ void DialogForceMultipleCoils::updateTableWidget()
 
     for(int i = 0; i < ui->tableWidget->rowCount(); i++)
     {
-        const auto addressFrom = formatAddress(_type, _writeParams.Address + i * columns, _hexAddress);
-        const auto addressTo = formatAddress(_type, _writeParams.Address + qMin(length - 1, (i + 1) * columns - 1), _hexAddress);
+        const auto addressFrom = formatAddress(_type, _writeParams.Address + i * columns, _writeParams.AddrSpace, _hexAddress);
+        const auto addressTo = formatAddress(_type, _writeParams.Address + qMin(length - 1, (i + 1) * columns - 1), _writeParams.AddrSpace, _hexAddress);
         ui->tableWidget->setVerticalHeaderItem(i, new QTableWidgetItem(QString("%1-%2").arg(addressFrom, addressTo)));
 
         for(int j = 0; j < columns; j++)
@@ -137,7 +137,7 @@ void DialogForceMultipleCoils::updateTableWidget()
                 auto item = new QTableWidgetItem(QString::number(_data[idx]));
                 item->setData(Qt::UserRole, idx);
                 item->setTextAlignment(Qt::AlignCenter);
-                item->setToolTip(formatAddress(_type,_writeParams.Address + idx, _hexAddress));
+                item->setToolTip(formatAddress(_type,_writeParams.Address + idx, _writeParams.AddrSpace, _hexAddress));
                 ui->tableWidget->setItem(i, j, item);
             }
             else

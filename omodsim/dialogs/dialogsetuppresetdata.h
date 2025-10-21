@@ -3,12 +3,14 @@
 
 #include <QModbusDataUnit>
 #include "qfixedsizedialog.h"
+#include "enums.h"
 
 struct SetupPresetParams
 {
     quint16 PointAddress;
     quint16 Length;
     bool ZeroBasedAddress;
+    AddressSpace AddrSpace;
 };
 
 namespace Ui {

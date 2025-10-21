@@ -1,37 +1,7 @@
 #include <QEvent>
 #include <QMdiSubWindow>
 #include "mainstatusbar.h"
-
-///
-/// \brief Parity_toString
-/// \param parity
-/// \return
-///
-QString Parity_toString(QSerialPort::Parity parity)
-{
-    switch(parity)
-    {
-        case QSerialPort::NoParity:
-        return MainStatusBar::tr("NONE");
-
-        case QSerialPort::EvenParity:
-        return MainStatusBar::tr("EVEN");
-
-        case QSerialPort::OddParity:
-        return MainStatusBar::tr("ODD");
-
-        case QSerialPort::SpaceParity:
-        return MainStatusBar::tr("SPACE");
-
-        case QSerialPort::MarkParity:
-        return MainStatusBar::tr("MARK");
-
-        default:
-        break;
-    }
-
-    return QString();
-}
+#include "serialportutils.h"
 
 ///
 /// \brief MainStatusBar::MainStatusBar
@@ -106,11 +76,11 @@ void MainStatusBar::updateConnectionInfo(QLabel* label, const ConnectionDetails&
     switch(cd.Type)
     {
         case ConnectionType::Tcp:
-            label->setText(QString(tr("Modbus/TCP Srv %1:%2")).arg(cd.TcpParams.IPAddress, QString::number(cd.TcpParams.ServicePort)));
+            label->setText(tr("Modbus/TCP Srv %1:%2").arg(cd.TcpParams.IPAddress, QString::number(cd.TcpParams.ServicePort)));
         break;
 
         case ConnectionType::Serial:
-            label->setText(QString(tr("Port %1:%2:%3:%4:%5")).arg(cd.SerialParams.PortName,
+            label->setText(tr("Port %1:%2:%3:%4:%5").arg(cd.SerialParams.PortName,
                                                                 QString::number(cd.SerialParams.BaudRate),
                                                                 QString::number(cd.SerialParams.WordLength),
                                                                 Parity_toString(cd.SerialParams.Parity),

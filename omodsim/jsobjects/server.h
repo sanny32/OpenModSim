@@ -26,8 +26,15 @@ namespace Address
         Base1
     };
     Q_ENUM_NS(Base)
+
+    enum class Space {
+        Digits6 = 0,
+        Digits5
+    };
+    Q_ENUM_NS(Space)
 }
 Q_DECLARE_METATYPE(Address::Base)
+Q_DECLARE_METATYPE(Address::Space)
 
 ///
 /// \brief The Modbus Server class
@@ -41,10 +48,32 @@ public:
     ~Server() override;
 
     Q_PROPERTY(Address::Base addressBase READ addressBase WRITE setAddressBase);
+    Q_PROPERTY(Address::Space addressSpace READ addressSpace WRITE setAddressSpace);
     Q_PROPERTY(bool useGlobalUnitMap READ useGlobalUnitMap WRITE setUseGlobalUnitMap);
+    Q_PROPERTY(int responseDelayTime READ responseDelayTime WRITE setResponseDelayTime)
+    Q_PROPERTY(int responseRandomDelayUpToTime READ responseRandomDelayUpToTime WRITE setResponseRandomDelayUpToTime)
+    Q_PROPERTY(bool noResponse READ noResponse WRITE setNoResponse)
+    Q_PROPERTY(bool responseIncorrectId READ responseIncorrectId WRITE setResponseIncorrectId)
+    Q_PROPERTY(bool responseIllegalFunction READ responseIllegalFunction WRITE setResponseIllegalFunction)
+    Q_PROPERTY(bool responseDeviceBusy READ responseDeviceBusy WRITE setResponseDeviceBusy)
+    Q_PROPERTY(bool responseIncorrectCrc READ responseIncorrectCrc WRITE setResponseIncorrectCrc)
+    Q_PROPERTY(bool responseDelay READ responseDelay WRITE setResponseDelay)
+    Q_PROPERTY(bool responseRandomDelay READ responseRandomDelay WRITE setResponseRandomDelay)
 
     Address::Base addressBase() const;
+    Address::Space addressSpace() const;
     bool useGlobalUnitMap() const;
+
+    int  responseDelayTime() const;
+    int  responseRandomDelayUpToTime() const;
+
+    bool noResponse() const;
+    bool responseIncorrectId() const;
+    bool responseIllegalFunction() const;
+    bool responseDeviceBusy() const;
+    bool responseIncorrectCrc() const;
+    bool responseDelay() const;
+    bool responseRandomDelay() const;
 
     Q_INVOKABLE quint16 readHolding(quint16 address, quint8 deviceId = 1) const;
     Q_INVOKABLE void writeHolding(quint16 address, quint16 value, quint8 deviceId = 1);
@@ -87,7 +116,17 @@ signals:
 
 public slots:
     void setAddressBase(Address::Base base);
+    void setAddressSpace(Address::Space space);
     void setUseGlobalUnitMap(bool value);
+    void setResponseDelayTime(int value);
+    void setResponseRandomDelayUpToTime(int value);
+    void setNoResponse(bool value);
+    void setResponseIncorrectId(bool value);
+    void setResponseIllegalFunction(bool value);
+    void setResponseDeviceBusy(bool value);
+    void setResponseIncorrectCrc(bool value);
+    void setResponseDelay(bool value);
+    void setResponseRandomDelay(bool value);
 
 private slots:
     void on_errorOccured(quint8 deviceId, const QString& error);

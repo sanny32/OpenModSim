@@ -16,7 +16,7 @@ DialogSetupPresetData::DialogSetupPresetData(SetupPresetParams& params,  QModbus
 {
     ui->setupUi(this);
     ui->lineEditAddress->setInputMode(hexAddress ? NumericLineEdit::HexMode : NumericLineEdit::Int32Mode);
-    ui->lineEditAddress->setInputRange(ModbusLimits::addressRange(params.ZeroBasedAddress));
+    ui->lineEditAddress->setInputRange(ModbusLimits::addressRange(params.AddrSpace, params.ZeroBasedAddress));
     ui->lineEditNumberOfPoints->setInputRange(ModbusLimits::lengthRange());
     ui->lineEditAddress->setValue(params.PointAddress);
     ui->lineEditNumberOfPoints->setValue(params.Length);

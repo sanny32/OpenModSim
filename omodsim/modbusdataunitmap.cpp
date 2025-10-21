@@ -36,6 +36,7 @@ void setDataValue(QModbusDataUnitMap& modbusMap, QModbusDataUnit::RegisterType p
 ///
 ModbusDataUnitMap::ModbusDataUnitMap()
     :_isGlobal(false)
+    ,_addressSpace(AddressSpace::Addr6Digits)
 {
     _modbusDataUnitGlobalMap.insert(QModbusDataUnit::Coils,            { QModbusDataUnit::Coils,               0, 65535 });
     _modbusDataUnitGlobalMap.insert(QModbusDataUnit::DiscreteInputs,   { QModbusDataUnit::DiscreteInputs,      0, 65535 });
@@ -67,6 +68,53 @@ void ModbusDataUnitMap::removeUnitMap(int id)
 {
     _dataUnits.remove(id);
     updateDataUnitMap();
+}
+
+///
+/// \brief ModbusDataUnitMap::addressSpace
+/// \return
+///
+AddressSpace ModbusDataUnitMap::addressSpace() const
+{
+    return _addressSpace;
+}
+
+///
+/// \brief ModbusDataUnitMap::setAddressSpace
+/// \param space
+///
+void ModbusDataUnitMap::setAddressSpace(AddressSpace space)
+{
+    if(_addressSpace != space)
+    {
+        _addressSpace = space;
+
+        const int count = _addressSpace == AddressSpace::Addr6Digits ? 65535 : 9999;
+        _modbusDataUnitGlobalMap[QModbusDataUnit::Coils].setValueCount(count);
+        _modbusDataUnitGlobalMap[QModbusDataUnit::DiscreteInputs].setValueCount(count);
+        _modbusDataUnitGlobalMap[QModbusDataUnit::InputRegisters].setValueCount(count);
+        _modbusDataUnitGlobalMap[QModbusDataUnit::HoldingRegisters].setValueCount(count);
+    }
+}
+
+///
+/// \brief ModbusDataUnitMap::contains
+/// \param pointType
+/// \return
+///
+bool ModbusDataUnitMap::contains(QModbusDataUnit::RegisterType pointType) const
+{
+    return _isGlobal ? true : _modbusDataUnitMap.contains(pointType);
+}
+
+///
+/// \brief ModbusDataUnitMap::value
+/// \param pointType
+/// \return
+///
+QModbusDataUnit ModbusDataUnitMap::value(QModbusDataUnit::RegisterType pointType) const
+{
+    return _isGlobal ? _modbusDataUnitGlobalMap[pointType] : _modbusDataUnitMap[pointType];
 }
 
 ///

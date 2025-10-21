@@ -135,8 +135,10 @@
 		<li class="object"><a href="#server"><strong>Server</strong></a>
 			<ul class="level2">
 				<li><a href="#server.addressbase">Server.addressBase</a></li>
+				<li><a href="#server.addressspace">Server.addressSpace</a></li>
+				<li><a href="#server.noresponse">Server.noResponse</a></li>
 				<li><a href="#server.onchange">Server.onChange</a></li>
-				<li><a href="#server.onError">Server.onError</a></li>
+				<li><a href="#server.onerror">Server.onError</a></li>
 				<li><a href="#server.readcoil">Server.readCoil</a></li>
 				<li><a href="#server.readdiscrete">Server.readDiscrete</a></li>
 				<li><a href="#server.readinput">Server.readInput</a></li>
@@ -148,6 +150,14 @@
 				<li><a href="#server.readuint64">Server.readUInt64</a></li>
 				<li><a href="#server.readdouble">Server.readDouble</a></li>
 				<li><a href="#server.readfloat">Server.readFloat</a></li>
+				<li><a href="#server.responsedelay">Server.responseDelay</a></li>
+				<li><a href="#server.responsedelaytime">Server.responseDelayTime</a></li>
+				<li><a href="#server.responsedevicebusy">Server.responseDeviceBusy</a></li>
+				<li><a href="#server.responseillegalfunction">Server.responseIllegalFunction</a></li>
+				<li><a href="#server.responseincorrectcrc">Server.responseIncorrectCrc</a></li>
+				<li><a href="#server.responseincorrectid">Server.responseIncorrectId</a></li>
+				<li><a href="#server.responserandomdelay">Server.responseRandomDelay</a></li>
+				<li><a href="#server.responserandomdelayuptotime">Server.responseRandomDelayUpToTime</a></li>
 				<li><a href="#server.writecoil">Server.writeCoil</a></li>
 				<li><a href="#server.writediscrete">Server.writeDiscrete</a></li>
 				<li><a href="#server.writeinput">Server.writeInput</a></li>
@@ -641,6 +651,46 @@
 			<dd>
 			  <p>Возвращает или устанавливает нумерацию <a href="#addressbase">адресного пространства</a> сервера.</p>
 			</dd>
+			<dt id="server.addressspace"><code>Server.addressSpace</code></dt>
+			<dd>
+			  <p>Возвращает или задает конфигурацию адресного пространства (6-цифровую или 5-цифровую) для объекта сервера.</p>
+			</dd>
+			<dt id="server.noresponse"><code>Server.noResponse</code></dt>
+			<dd>
+			  <p>Возвращает или задает, должен ли сервер отвечать на запросы.</p>
+			</dd>
+			<dt id="server.responsedelay"><code>Server.responseDelay</code></dt>
+			<dd>
+			  <p>Возвращает или задает, должен ли сервер отвечать с заданной задержкой в миллисекундах.</p>
+			</dd>
+			<dt id="server.responsedelaytime"><code>Server.responseDelayTime</code></dt>
+			<dd>
+			  <p>Возвращает или задает конкретное время задержки для ответов сервера.</p>
+			</dd>
+			<dt id="server.responsedevicebusy"><code>Server.responseDeviceBusy</code></dt>
+			<dd>
+			  <p>Возвращает или задает, должен ли сервер отвечать ошибками "устройство занято".</p>
+			</dd>
+			<dt id="server.responseillegalfunction"><code>Server.responseIllegalFunction</code></dt>
+			<dd>
+			  <p>Возвращает или задает, должен ли сервер отвечать ошибками "недопустимая функция".</p>
+			</dd>
+			<dt id="server.responseincorrectcrc"><code>Server.responseIncorrectCrc</code></dt>
+			<dd>
+			  <p>Возвращает или задает, должен ли сервер отвечать "некорректным CRC".</p>
+			</dd>
+			<dt id="server.responseincorrectid"><code>Server.responseIncorrectId</code></dt>
+			<dd>
+			  <p>Возвращает или задает, должен ли сервер отвечать "некорректным ID".</p>
+			</dd>
+			<dt id="server.responserandomdelay"><code>Server.responseRandomDelay</code></dt>
+			<dd>
+			  <p>Возвращает или задает, должен ли сервер использовать случайные задержки ответов.</p>
+			</dd>
+			<dt id="server.responserandomdelayuptotime"><code>Server.responseRandomDelayUpToTime</code></dt>
+			<dd>
+			  <p>Возвращает или задает максимальное время для случайных задержек ответов.</p>
+			</dd>
 			<dt id="server.useglobalunitmap"><code>Server.useGlobalUnitMap</code></dt>
 			<dd>
 			  <p>Возвращает или устанавливает использование глобальной карты адресов. Неразмеченные регистры будут занулены.</p>
@@ -651,7 +701,7 @@
 			<dd>
 				<p>Выполняет функцию <code>functionRef(value)</code> при изменении значения регистра тип <code>Register</code> с адресом <code>address</code> и номером устройства <code>deviceId</code>.</p>
 			</dd>
-			<dt id="server.onError"><code>Server.onError(deviceId, functionRef)</code></dt>
+			<dt id="server.onerror"><code>Server.onError(deviceId, functionRef)</code></dt>
 			<dd>
 				<p>Выполняет функцию <code>functionRef(error)</code> когда произошла ошибка на сервере с номером устройства <code>deviceId</code>.</p>
 			</dd>

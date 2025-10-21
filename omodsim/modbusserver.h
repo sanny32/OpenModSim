@@ -6,7 +6,10 @@
 #include <QLoggingCategory>
 #include <QModbusServer>
 #include "qcountedset.h"
+#include "modbusdataunitmap.h"
 #include "qmodbuscommevent.h"
+#include "modbusdefinitions.h"
+#include "modbusmessage.h"
 
 enum Coil {
     On = 0xff00,
@@ -69,8 +72,14 @@ public:
     void removeAllServerAddresses();
     bool hasServerAddress(int serverAddress);
 
-    virtual bool setMap(const QModbusDataUnitMap &map, int serverAddress);
+    virtual bool setMap(const ModbusDataUnitMap &map, int serverAddress);
     virtual bool processesBroadcast() const { return false; }
+
+    ModbusDefinitions getDefinitions() const { return _definitions; }
+    void setDefinitions(const ModbusDefinitions& defs) {
+        _definitions = defs;
+        processDefinitionsChanges();
+    }
 
     QVariant value(int option, int serverAddress) const;
     bool setValue(int option, const QVariant &value, int serverAddress);
@@ -95,6 +104,9 @@ public:
     virtual QIODevice *device() const = 0;
 
 signals:
+    void modbusRequest(QSharedPointer<const ModbusMessage> msg);
+    void modbusResponse(QSharedPointer<const ModbusMessage> msgReq, QSharedPointer<const ModbusMessage> msgResp);
+
     void stateChanged(QModbusDevice::State state);
     void errorOccurred(QModbusDevice::Error error, int serverAddress);
     void dataWritten(int serverAddress, QModbusDataUnit::RegisterType table, int address, int size);
@@ -129,6 +141,8 @@ protected:
 
     virtual bool matchingServerAddress(quint8 unitId) const;
 
+    virtual void processDefinitionsChanges();
+
     virtual QModbusResponse processRequest(const QModbusPdu &request, int serverAddress);
     virtual QModbusResponse processPrivateRequest(const QModbusPdu &request, int serverAddress);
 
@@ -162,10 +176,11 @@ protected:
     void storeModbusCommEvent(const QModbusCommEvent &eventByte);
 
 private:
+    ModbusDefinitions _definitions;
     QCountedSet<int> _serverAddresses;
     QHash<int, std::array<quint16, 20>> _counters;
     QHash<int, QHash<int, QVariant>> _serversOptions;
-    QHash<int, QModbusDataUnitMap> _modbusDataUnitMaps;
+    QHash<int, ModbusDataUnitMap> _modbusDataUnitMaps;
     std::deque<quint8> _commEventLog;
 
     QModbusDevice::State _state = QModbusDevice::UnconnectedState;
