@@ -25,10 +25,13 @@ jobs:
       - name: Extract version from CMakeLists.txt
         id: extract_version
         run: |
-          APP_VERSION=$(grep -oP 'VERSION\s+\K[0-9]+\.[0-9]+\.[0-9]+' omodsim/CMakeLists.txt)
-          
+          FULL_VERSION=$(grep -oP 'VERSION\s+\K[0-9]+\.[0-9]+\.[0-9]+' omodsim/CMakeLists.txt)
+
           if [[ "${GITHUB_REF_NAME}" == "dev" ]]; then
-            APP_VERSION="${APP_VERSION}-dev"
+            MAJOR_MINOR=$(echo "$FULL_VERSION" | cut -d. -f1,2)
+            APP_VERSION="${MAJOR_MINOR}-dev"
+          else
+            APP_VERSION="$FULL_VERSION"
           fi
 
           echo "APP_VERSION=$APP_VERSION" >> $GITHUB_ENV
