@@ -97,7 +97,9 @@ jobs:
         run: |
           wget -q https://github.com/probonopd/linuxdeployqt/releases/download/11/linuxdeployqt-continuous-x86_64.AppImage
           chmod +x linuxdeployqt-continuous-x86_64.AppImage
-          sudo mv linuxdeployqt-continuous-x86_64.AppImage /usr/local/bin/linuxdeployqt      
+          ./linuxdeployqt-continuous-x86_64.AppImage --appimage-extract
+          sudo mv squashfs-root /opt/linuxdeployqt
+          sudo ln -s /opt/linuxdeployqt/AppRun /usr/local/bin/linuxdeployqt
 
       - name: Bundle Qt libraries and plugins
         run: |
