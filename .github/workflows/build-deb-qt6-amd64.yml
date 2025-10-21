@@ -12,7 +12,7 @@ jobs:
       QT_VERSION: "6.9.3"
       QT_HOST: "linux"
       QT_TARGET: "desktop"
-      QT_ARCH: "gcc_64"
+      QT_ARCH: "linux_gcc_64"
       QT_INSTALL_DIR: "/opt/Qt"
       BUILD_TYPE: "Release"
 
