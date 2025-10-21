@@ -1,4 +1,4 @@
-name: Build Debian package (Qt via aqt)
+name: Build Debian package (Ubuntu x64, Qt6)
 
 on:
   push:
@@ -15,6 +15,7 @@ jobs:
       QT_ARCH: "linux_gcc_64"
       QT_INSTALL_DIR: "/opt/Qt"
       CMAKE_COMPILER: "gcc_64"
+      CMAKE_GENERATOR: "Ninja"
       BUILD_TYPE: "Release"
 
     steps:
@@ -50,21 +51,22 @@ jobs:
       - name: Show Qt path
         run: |
           ls -la ${{ env.QT_INSTALL_DIR }}
-          echo "Qt installed to: ${{ env.QT_INSTALL_DIR }}/${{ env.QT_VERSION }}/gcc_64"
+          echo "Qt installed to: ${{ env.QT_INSTALL_DIR }}/${{ env.QT_VERSION }}/${{ env.CMAKE_COMPILER }}"
 
       - name: Add Qt to PATH
         run: echo "${{ env.QT_INSTALL_DIR }}/${{ env.QT_VERSION }}/${{ env.CMAKE_COMPILER }}/bin" >> $GITHUB_PATH
 
+      - name: Set BUILD_DIR
+        run: echo "BUILD_DIR=build-omodsim-Qt_${{ env.QT_VERSION }}_${{ env.CMAKE_COMPILER }}bit-${{ env.BUILD_TYPE }}" >> $GITHUB_ENV
+
       - name: Configure project
         run: |
-          mkdir build
-          cd build
-          cmake .. \
-            -G Ninja \
+            cmake omodsim -B ${{ env.BUILD_DIR }} \
+            -G "${{ env.CMAKE_GENERATOR }}" \
             -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} \
             -DCMAKE_PREFIX_PATH=${{ env.QT_INSTALL_DIR }}/${{ env.QT_VERSION }}/${{ env.CMAKE_COMPILER }} \
             -DCMAKE_INSTALL_PREFIX=/usr \
 
       - name: Build
         working-directory: build
-        run: cmake --build . --parallel
+        run: cmake --build ${{ env.BUILD_DIR }} --config ${{ env.BUILD_TYPE }} --parallel
