@@ -68,5 +68,4 @@ jobs:
             -DCMAKE_INSTALL_PREFIX=/usr \
 
       - name: Build
-        working-directory: build
         run: cmake --build ${{ env.BUILD_DIR }} --config ${{ env.BUILD_TYPE }} --parallel
