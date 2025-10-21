@@ -1,7 +1,6 @@
 name: Build Debian package (Qt via aqt)
 
 on:
-  workflow_dispatch:
   push:
     branches: [ dev ]
 
@@ -44,12 +43,13 @@ jobs:
             ${{ env.QT_TARGET }} \
             ${{ env.QT_VERSION }} \
             ${{ env.QT_ARCH }} \
+            -m qt5compat qtpdf qtserialport qtserialbus \
             -O ${{ env.QT_INSTALL_DIR }}
 
       - name: Show Qt path
         run: |
           ls -la ${{ env.QT_INSTALL_DIR }}
-          echo "Qt installed to: ${{ env.QT_INSTALL_DIR }}/6.7.2/gcc_64"
+          echo "Qt installed to: ${{ env.QT_INSTALL_DIR }}/${{ env.QT_VERSION }}/gcc_64"
 
       - name: Add Qt to PATH
         run: echo "${{ env.QT_INSTALL_DIR }}/${{ env.QT_VERSION }}/${{ env.QT_ARCH }}/bin" >> $GITHUB_PATH
