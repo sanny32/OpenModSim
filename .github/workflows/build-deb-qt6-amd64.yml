@@ -111,6 +111,8 @@ jobs:
         run: |
           cqtdeployer -bin ${{ env.BUILD_DIR }}/omodsim \
             -targetDir ${DEB_SRC_DIR}/opt/OpenModSim
+          
+          ls -la ${DEB_SRC_DIR}/opt/OpenModSim/lib
 
       - name: Create Debian changelog
         run: |
