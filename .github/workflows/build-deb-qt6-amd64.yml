@@ -85,10 +85,11 @@ jobs:
       - name: Set BUILD_DEB_DIR
         run: echo "BUILD_DEB_DIR=build-deb-package-Qt_${{ env.QT_VERSION }}_${{ env.CMAKE_COMPILER }}bit" >> $GITHUB_ENV
 
+      - name: Set DEB_SRC_DIR
+        run: echo "DEB_SRC_DIR=${{ env.BUILD_DEB_DIR }}/qt6-omodsim-${{ env.APP_VERSION }}-${{ env.DEB_REVISION }}_${{ env.DEB_ARCH }}" >> $GITHUB_ENV
+
       - name: Create DEB build directories
-        run: |
-          echo "DEB_SRC_DIR=${{ env.BUILD_DEB_DIR }}/qt6-omodsim-${{ env.APP_VERSION }}-${{ env.DEB_REVISION }}_${{ env.DEB_ARCH }}" >> $GITHUB_ENV
-          mkdir -p ${{ env.DEB_SRC_DIR }}
+        run: mkdir -p ${{ env.DEB_SRC_DIR }}
           
       - name: Copy files to DEB_SRC_DIR
         run: cp -r .deb/* ${{ env.DEB_SRC_DIR }}/
