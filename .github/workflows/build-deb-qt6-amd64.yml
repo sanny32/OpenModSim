@@ -165,5 +165,5 @@ jobs:
         uses: actions/upload-artifact@v4
         if: success()
         with:
-          name: qt6-omodsim-${{ env.APP_VERSION }}-${{ env.DEB_REVISION }}_${{ env.DEB_ARCH }}
-          path: ${{ env.BUILD_DEB_DIR }}/qt6-omodsim-${{ env.APP_VERSION }}-${{ env.DEB_REVISION }}_${{ env.DEB_ARCH }}.deb
+          name: qt6-omodsim_${{ env.APP_VERSION }}-${{ env.DEB_REVISION }}_${{ env.DEB_ARCH }}
+          path: qt6-omodsim_${{ env.APP_VERSION }}-${{ env.DEB_REVISION }}_${{ env.DEB_ARCH }}.deb
