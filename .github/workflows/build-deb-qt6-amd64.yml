@@ -159,7 +159,7 @@ jobs:
         run: dpkg-buildpackage -us -uc -tc -b
 
       - name: Debug view cuurent directory (action must be removed after developing ended)
-        run: ls -la ${DEB_SRC_DIR}
+        run: ls -la ${BUILD_DEB_DIR}
 
       - name: Upload DEB package
         uses: actions/upload-artifact@v4
