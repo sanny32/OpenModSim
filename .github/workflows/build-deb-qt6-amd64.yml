@@ -108,11 +108,12 @@ jobs:
           rm CQtDeployer_1.6.2365.7cce7f3_Linux_x86_64.deb
 
       - name: Bundle Qt libraries and plugins throught cqtdeployer
-        run: cqtdeployer -bin ${{ env.BUILD_DIR }}/omodsim \
-              -targetDir ${DEB_SRC_DIR}/opt/OpenModSim \
-              -ignore libcrypto.so.3,libmysqlclient.so.21,libpq.so.5,libssl.so.3 \
-              -libDir ${{ env.QT_INSTALL_DIR }}/${{ env.QT_VERSION }}/${{ env.CMAKE_COMPILER }}/lib \
-              -extraLibs icudata,icui18n,icuuc
+        run: |
+          cqtdeployer -bin ${{ env.BUILD_DIR }}/omodsim \
+            -targetDir ${{ env.DEB_SRC_DIR }}/opt/OpenModSim \
+            -libDir ${{ env.QT_INSTALL_DIR }}/${{ env.QT_VERSION }}/${{ env.CMAKE_COMPILER }}/lib \
+            -ignore libcrypto.so.3,libmysqlclient.so.21,libpq.so.5,libssl.so.3 \
+            -extraLibs icudata,icui18n,icuuc
 
       #- name: Copy some libraries that the cqtdeployer missed
       #  run: |
@@ -124,14 +125,14 @@ jobs:
       #    done
 
       - name: Debug view OpenModSim/lib directory (action must be removed after developing ended)
-        run: ls -la ${DEB_SRC_DIR}/opt/OpenModSim/lib
+        run: ls -la ${{ env.DEB_SRC_DIR }}/opt/OpenModSim/lib
 
       - name: Create Debian changelog
         run: |
           cat > "${{ env.DEB_SRC_DIR }}/debian/changelog" <<EOF
-          qt6-omodsim (${APP_VERSION}-${DEB_REVISION}) stable; urgency=medium
+          qt6-omodsim (${{ env.APP_VERSION }}-${{ env.DEB_REVISION }}) stable; urgency=medium
 
-            * Version ${APP_VERSION}
+            * Version ${{ env.APP_VERSION }}
 
            -- Alexandr Ananev <mail@ananev.org>  $(date -R)
           EOF
