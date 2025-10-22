@@ -97,7 +97,7 @@ jobs:
             ${{ env.QT_TARGET }} \
             ${{ env.QT_VERSION }} \
             ${{ env.QT_ARCH }} \
-            -m qt5compat qtpdf qtserialport qtserialbus \
+            -m qt5compat qtpdf qtserialport qtserialbus qtwebengine \
             -O ${{ env.QT_INSTALL_DIR }}
 
       - name: Add Qt to PATH
@@ -143,13 +143,12 @@ jobs:
           git submodule update --init --recursive
           cmake -B build -DCMAKE_BUILD_TYPE=Release \
             -DCMAKE_PREFIX_PATH=${{ env.QT_INSTALL_DIR }}/${{ env.QT_VERSION }}/${{ env.CMAKE_COMPILER }} \
+            -DBUILD_SHARED_LIBS=0
             -DCQT_DEPLOYER_TESTS=OFF \
             -DCMAKE_INSTALL_PREFIX=/usr/local \
             -Wno-dev
-          ls -la build/
-          cd build
-          make -j$(nproc)
-          make install
+          cmake --build build --parallel
+          cmake --install build
 
       - name: Bundle Qt libraries and plugins throught cqtdeployer
         run: |
