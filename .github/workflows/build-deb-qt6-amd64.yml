@@ -77,8 +77,7 @@ jobs:
         run: |
           update-alternatives --install /usr/bin/python3 python3 /usr/local/bin/python3.12 2
           update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.8 1
-          echo 2 | update-alternatives --config python3
-          python3 --version
+          update-alternatives --auto python3
 
       - name: Upgrade pip
         run: |
@@ -102,6 +101,13 @@ jobs:
 
       - name: Add Qt to PATH
         run: echo "${{ env.QT_INSTALL_DIR }}/${{ env.QT_VERSION }}/${{ env.CMAKE_COMPILER }}/bin" >> $GITHUB_PATH
+
+      - name: Install cmake 3.26
+        run: |
+          apt-get remove -y cmake
+          wget https://github.com/Kitware/CMake/releases/download/v3.26.5/cmake-3.26.5-linux-x86_64.sh
+          sh cmake-3.26.5-linux-x86_64.sh --skip-license --prefix=/usr/local
+          cmake --version
 
       - name: Set BUILD_DIR
         run: echo "BUILD_DIR=build-omodsim-Qt_${{ env.QT_VERSION }}_${{ env.CMAKE_COMPILER }}bit-${{ env.BUILD_TYPE }}" >> $GITHUB_ENV
