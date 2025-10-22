@@ -143,12 +143,12 @@ jobs:
           git submodule update --init --recursive
           cmake -B build -DCMAKE_BUILD_TYPE=Release \
             -DCMAKE_PREFIX_PATH=${{ env.QT_INSTALL_DIR }}/${{ env.QT_VERSION }}/${{ env.CMAKE_COMPILER }} \
+            -DBUILD_SHARED_LIBS=0
             -DCQT_DEPLOYER_TESTS=OFF \
             -DCMAKE_INSTALL_PREFIX=/usr/local \
             -Wno-dev
           cmake --build build --parallel
           cmake --install build
-          ls -la build
 
       - name: Bundle Qt libraries and plugins throught cqtdeployer
         run: |
