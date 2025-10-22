@@ -155,7 +155,8 @@ jobs:
         run: patchelf --set-rpath /opt/OpenModSim/lib "${{ env.DEB_SRC_DIR }}/opt/OpenModSim/bin/omodsim"
 
       - name: Build DEB package
-        run: dpkg-buildpackage -us -uc -tc -b -C ${{ env.DEB_SRC_DIR }}
+        working-directory: ${{ env.DEB_SRC_DIR }}
+        run: dpkg-buildpackage -us -uc -tc -b
 
       - name: Debug view cuurent directory (action must be removed after developing ended)
         run: ls -la ${DEB_SRC_DIR}
