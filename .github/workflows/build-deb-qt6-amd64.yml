@@ -36,7 +36,7 @@ jobs:
 
           if [[ "${GITHUB_REF_NAME}" == "dev" ]]; then
             MAJOR_MINOR=$(echo "$FULL_VERSION" | cut -d. -f1,2)
-            APP_VERSION="${MAJOR_MINOR}~dev"
+            APP_VERSION="${MAJOR_MINOR}-dev"
           else
             APP_VERSION="$FULL_VERSION"
           fi
