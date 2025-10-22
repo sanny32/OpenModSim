@@ -107,12 +107,18 @@ jobs:
           sudo dpkg -i CQtDeployer_1.6.2365.7cce7f3_Linux_x86_64.deb
           rm CQtDeployer_1.6.2365.7cce7f3_Linux_x86_64.deb
 
-      - name: Bundle Qt libraries and plugins
+      - name: Bundle Qt libraries and plugins throught cqtdeployer
         run: |
           cqtdeployer -bin ${{ env.BUILD_DIR }}/omodsim -targetDir ${DEB_SRC_DIR}/opt/OpenModSim
-          cp ${QT_INSTALL_DIR}/${QT_VERSION}/${CMAKE_COMPILER}/lib/libicu*.so* ${DEB_SRC_DIR}/opt/OpenModSim/lib/
-          
-          ls -la ${DEB_SRC_DIR}/opt/OpenModSim/lib
+
+      - name: Copy some libraries that the cqtdeployer missed
+        run: |
+          for lib in ${{ env.QT_INSTALL_DIR }}/${{ env.QT_VERSION }}/${{ env.CMAKE_COMPILER }}/lib/libicu*.so.*; do
+            cp "$lib" ${DEB_SRC_DIR}/opt/OpenModSim/lib/
+          done
+
+      - name: Debug view OpenModSim/lib directory (action must be removed after developing ended)
+        run: ls -la ${DEB_SRC_DIR}/opt/OpenModSim/lib
 
       - name: Create Debian changelog
         run: |
