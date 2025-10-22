@@ -163,8 +163,7 @@ jobs:
 
       - name: Upload DEB package
         uses: actions/upload-artifact@v4
-        working-directory: ${{ env.BUILD_DEB_DIR }}
         if: success()
         with:
           name: qt6-omodsim-${{ env.APP_VERSION }}-${{ env.DEB_REVISION }}_${{ env.DEB_ARCH }}
-          path: qt6-omodsim-${{ env.APP_VERSION }}-${{ env.DEB_REVISION }}_${{ env.DEB_ARCH }}.deb
+          path: ${{ env.BUILD_DEB_DIR }}/qt6-omodsim-${{ env.APP_VERSION }}-${{ env.DEB_REVISION }}_${{ env.DEB_ARCH }}.deb
