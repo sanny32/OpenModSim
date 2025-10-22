@@ -2,11 +2,13 @@ name: Build Debian package (Ubuntu x64, Qt6)
 
 on:
   push:
+    tags:
+      - "*"
     branches: [ dev ]
 
 jobs:
   build-omodsim:
-    name: Build OpenModSim deb package version ${{ github.ref_name }} with Qt6
+    name: Build OpenModSim deb package version '${{ github.ref_name }}' with Qt6
     runs-on: ubuntu-22.04
 
     env:
@@ -24,6 +26,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
 
       - name: Extract version from CMakeLists.txt
         id: extract_version
@@ -113,7 +117,7 @@ jobs:
 
             * Version ${APP_VERSION}
 
-          -- Alexandr Ananev <mail@ananev.org>  $(date -R)
+           -- Alexandr Ananev <mail@ananev.org>  $(date -R)
           EOF
 
           echo "Created changelog:"
