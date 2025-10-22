@@ -110,7 +110,8 @@ jobs:
       - name: Bundle Qt libraries and plugins
         run: |
           cqtdeployer -bin ${{ env.BUILD_DIR }}/omodsim \
-            -targetDir ${DEB_SRC_DIR}/opt/OpenModSim
+            -targetDir ${DEB_SRC_DIR}/opt/OpenModSim \
+            -extraLibs  libicu
           
           ls -la ${DEB_SRC_DIR}/opt/OpenModSim/lib
 
