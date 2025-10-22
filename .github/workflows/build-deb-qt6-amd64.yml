@@ -51,7 +51,7 @@ jobs:
           export DEBIAN_FRONTEND=noninteractive
           apt-get update
           apt-get install -y \
-            build-essential ninja-build cmake \
+            git build-essential ninja-build cmake \
             dh-make debhelper debhelper-compat lintian fakeroot \
             libglu1-mesa libgl1-mesa-dev libxkbcommon0 libxkbcommon-x11-0 \
             libxcb1 libxcb-xinerama0 libxcb-cursor0 libxcb-keysyms1 libxcb-xfixes0 \
