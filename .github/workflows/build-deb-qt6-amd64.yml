@@ -9,7 +9,7 @@ on:
 jobs:
   build-omodsim:
     name: Build OpenModSim deb package version '${{ github.ref_name }}' with Qt6
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-20.04
 
     env:
       QT_VERSION: "6.9.3"
