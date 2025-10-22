@@ -89,22 +89,21 @@ jobs:
           echo "DEB_PACKAGE_DIR=${{ env.BUILD_DEB_DIR }}/qt6-omodsim-${{ env.APP_VERSION }}-1_amd64" >> $GITHUB_ENV
 
       - name: Copy files to DEB_PACKAGE_DIR
-        run: |
-          cp -r .deb/* ${{ env.DEB_PACKAGE_DIR }}
-          cp ${{ env.BUILD_DIR }}/omodsim ${{ env.DEB_PACKAGE_DIR }}/opt/OpenModSim/bin/
+        run: cp -r .deb/* ${{ env.DEB_PACKAGE_DIR }}
          
-      - name: Install linuxdeployqt
+      - name: Install cqtdeployer
         run: |
-          wget -q https://github.com/probonopd/linuxdeployqt/releases/download/11/linuxdeployqt-continuous-x86_64.AppImage
-          chmod +x linuxdeployqt-continuous-x86_64.AppImage
-          ./linuxdeployqt-continuous-x86_64.AppImage --appimage-extract
-          sudo mv squashfs-root /opt/linuxdeployqt
-          sudo ln -s /opt/linuxdeployqt/AppRun /usr/local/bin/linuxdeployqt
+          wget -q https://github.com/QuasarApp/CQtDeployer/releases/download/v1.6.2365/CQtDeployer_1.6.2365.7cce7f3_Linux_x86_64.deb
+          sudo dpkg -i CQtDeployer_1.6.2365.7cce7f3_Linux_x86_64.deb
+          rm CQtDeployer_1.6.2365.7cce7f3_Linux_x86_64.deb
+          cqtdeployer --version
 
       - name: Bundle Qt libraries and plugins
         run: |
-          mkdir -p ${{ env.DEB_PACKAGE_DIR }}/opt/OpenModSim/lib ${{ env.DEB_PACKAGE_DIR }}/opt/OpenModSim/plugins
-          linuxdeployqt ${{ env.DEB_PACKAGE_DIR }}/opt/OpenModSim/bin/omodsim
+          cqtdeployer -bin ${{ env.BUILD_DIR }}/omodsim \
+            -libDir ${DEB_PACKAGE_DIR}/opt/OpenModSim/lib \
+            -deployDir ${DEB_PACKAGE_DIR}/opt/OpenModSim
+
           echo "Bundled Qt libs and plugins:"
           ls -laR ${{ env.DEB_PACKAGE_DIR }}/opt/OpenModSim
 
