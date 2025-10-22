@@ -87,11 +87,11 @@ jobs:
 
       - name: Create DEB build directories
         run: |
-          mkdir -p ${{ env.BUILD_DEB_DIR }}/qt6-omodsim_${{ env.APP_VERSION }}-${{ env.DEB_REVISION }}_${{ env.DEB_ARCH}}
-          echo "DEB_PACKAGE_DIR=${{ env.BUILD_DEB_DIR }}/qt6-omodsim-${{ env.APP_VERSION }}-${{ env.DEB_REVISION }}_${{ env.DEB_ARCH}}" >> $GITHUB_ENV
-
-      - name: Copy files to DEB_PACKAGE_DIR
-        run: cp -r .deb/* ${{ env.DEB_PACKAGE_DIR }}
+          echo "DEB_SRC_DIR=${{ env.BUILD_DEB_DIR }}/qt6-omodsim-${{ env.APP_VERSION }}-${{ env.DEB_REVISION }}_${{ env.DEB_ARCH }}" >> $GITHUB_ENV
+          mkdir -p ${{ env.DEB_SRC_DIR }}
+          
+      - name: Copy files to DEB_SRC_DIR
+        run: cp -r .deb/* ${{ env.DEB_SRC_DIR }}/
          
       - name: Install cqtdeployer
         run: |
@@ -102,11 +102,11 @@ jobs:
       - name: Bundle Qt libraries and plugins
         run: |
           cqtdeployer -bin ${{ env.BUILD_DIR }}/omodsim \
-            -targetDir ${DEB_PACKAGE_DIR}/opt/OpenModSim
+            -targetDir ${DEB_SRC_DIR}/opt/OpenModSim
 
       - name: Create Debian changelog
         run: |
-          cat > "${{ env.DEB_PACKAGE_DIR }}/debian/changelog" <<EOF
+          cat > "${{ env.DEB_SRC_DIR }}/debian/changelog" <<EOF
           qt6-omodsim (${APP_VERSION}-${DEB_REVISION}) stable; urgency=medium
 
             * Version ${APP_VERSION}
@@ -115,11 +115,11 @@ jobs:
           EOF
 
           echo "Created changelog:"
-          cat "${{ env.DEB_PACKAGE_DIR }}/debian/changelog"
+          cat "${{ env.DEB_SRC_DIR }}/debian/changelog"
 
       - name: Create Debian copyrigth
         run: |
-          cat > "${{ env.DEB_PACKAGE_DIR }}/debian/copyrigth" <<EOF
+          cat > "${{ env.DEB_SRC_DIR }}/debian/copyrigth" <<EOF
           Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
           Upstream-Name: qt6-omodsim
           Source: none
@@ -130,4 +130,4 @@ jobs:
           EOF
 
           echo "Created copyright:"
-          cat "${{ env.DEB_PACKAGE_DIR }}/debian/copyright"
+          cat "${{ env.DEB_SRC_DIR }}/debian/copyright"
