@@ -146,6 +146,7 @@ jobs:
             -DCQT_DEPLOYER_TESTS=OFF \
             -DCMAKE_INSTALL_PREFIX=/usr/local \
             -Wno-dev
+          cd build
           make -j$(nproc)
           make install
 
