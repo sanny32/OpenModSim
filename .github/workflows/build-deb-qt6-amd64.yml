@@ -113,8 +113,8 @@ jobs:
 
       - name: Copy some libraries that the cqtdeployer missed
         run: |
-           find ${{ env.QT_INSTALL_DIR }}/${{ env.QT_VERSION }}/${{ env.CMAKE_COMPILER }}/lib/ -maxdepth 1 \
-            -type f -name 'libicu*.so.[0-9]*' ! -name '*.*.*' \
+          find ${{ env.QT_INSTALL_DIR }}/${{ env.QT_VERSION }}/${{ env.CMAKE_COMPILER }}/lib/ -maxdepth 1 \
+            -type f -regex '.*/libicu[^/]*\.so\.[0-9]+' \
             -exec cp {} ${DEB_SRC_DIR}/opt/OpenModSim/lib/ \;
 
       - name: Debug view OpenModSim/lib directory (action must be removed after developing ended)
