@@ -138,7 +138,7 @@ jobs:
 
       - name: Build DEB package
         run: |
-          cd ${{ env.BUILD_DEB_DIR }}
+          cd ${{ env.DEB_SRC_DIR }}
           dpkg-buildpackage -us -uc -tc -b
 
       - name: Upload DEB package
