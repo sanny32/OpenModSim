@@ -1,7 +1,0 @@
-Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
-Upstream-Name: qt6-omodsim
-Source: none
-
-Files: *
-Copyright: 2025 Alexandr Ananev <mail@ananev.org>
-License: MIT
