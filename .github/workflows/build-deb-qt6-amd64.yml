@@ -141,12 +141,12 @@ jobs:
           cd CQtDeployer
           git checkout v1.6.2365
           git submodule update --init --recursive
-          mkdir build && cd build
-          cmake .. -DCMAKE_BUILD_TYPE=Release \
+          cmake -B build -DCMAKE_BUILD_TYPE=Release \
             -DCMAKE_PREFIX_PATH=${{ env.QT_INSTALL_DIR }}/${{ env.QT_VERSION }}/${{ env.CMAKE_COMPILER }} \
+            -DBUILD_TESTS=OFF \
             -DCMAKE_INSTALL_PREFIX=/usr/local
-          cmake --build . --parallel
-          cmake --install .
+          cmake --build build --parallel
+          cmake --install build
 
       - name: Bundle Qt libraries and plugins throught cqtdeployer
         run: |
