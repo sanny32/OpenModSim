@@ -96,7 +96,6 @@ jobs:
           wget -q https://github.com/QuasarApp/CQtDeployer/releases/download/v1.6.2365/CQtDeployer_1.6.2365.7cce7f3_Linux_x86_64.deb
           sudo dpkg -i CQtDeployer_1.6.2365.7cce7f3_Linux_x86_64.deb
           rm CQtDeployer_1.6.2365.7cce7f3_Linux_x86_64.deb
-          cqtdeployer -v
 
       - name: Bundle Qt libraries and plugins
         run: |
