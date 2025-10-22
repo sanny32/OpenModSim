@@ -65,7 +65,6 @@ jobs:
       - name: Download Qt
         run: |
           mkdir -p ${{ env.QT_INSTALL_DIR }}
-          chown $USER ${{ env.QT_INSTALL_DIR }}
           aqt install-qt \
             ${{ env.QT_HOST }} \
             ${{ env.QT_TARGET }} \
