@@ -1,4 +1,4 @@
-name: Build Debian package (Ubuntu amd64, Qt6)
+name: Build Debian package (Ubuntu x64, Qt6)
 
 on:
   push:
@@ -17,6 +17,8 @@ jobs:
       CMAKE_COMPILER: "gcc_64"
       CMAKE_GENERATOR: "Ninja"
       BUILD_TYPE: "Release"
+      DEB_REVISION: "1"
+      DEB_ARCH: "amd64"
 
     steps:
       - name: Checkout repository
@@ -81,12 +83,12 @@ jobs:
         run: cmake --build ${{ env.BUILD_DIR }} --config ${{ env.BUILD_TYPE }} --parallel
 
       - name: Set BUILD_DEB_DIR
-        run: echo "BUILD_DEB_DIR=build-deb-Qt_${{ env.QT_VERSION }}_${{ env.CMAKE_COMPILER }}bit" >> $GITHUB_ENV
+        run: echo "BUILD_DEB_DIR=build-deb-package-Qt_${{ env.QT_VERSION }}_${{ env.CMAKE_COMPILER }}bit" >> $GITHUB_ENV
 
       - name: Create DEB build directories
         run: |
-          mkdir -p ${{ env.BUILD_DEB_DIR }}/qt6-omodsim-${{ env.APP_VERSION }}-1_amd64
-          echo "DEB_PACKAGE_DIR=${{ env.BUILD_DEB_DIR }}/qt6-omodsim-${{ env.APP_VERSION }}-1_amd64" >> $GITHUB_ENV
+          mkdir -p ${{ env.BUILD_DEB_DIR }}/qt6-omodsim_${{ env.APP_VERSION }}-${{ env.DEB_REVISION }}_${{ env.DEB_ARCH}}
+          echo "DEB_PACKAGE_DIR=${{ env.BUILD_DEB_DIR }}/qt6-omodsim-${{ env.APP_VERSION }}-${{ env.DEB_REVISION }}_${{ env. EB_ARCH}}" >> $GITHUB_ENV
 
       - name: Copy files to DEB_PACKAGE_DIR
         run: cp -r .deb/* ${{ env.DEB_PACKAGE_DIR }}
@@ -102,6 +104,16 @@ jobs:
           cqtdeployer -bin ${{ env.BUILD_DIR }}/omodsim \
             -targetDir ${DEB_PACKAGE_DIR}/opt/OpenModSim
 
-          echo "Bundled Qt libs and plugins:"
-          ls -laR ${{ env.DEB_PACKAGE_DIR }}/opt/OpenModSim
+      - name: Create Debian changelog
+        run: |
+          cat > "${{ env.DEB_PACKAGE_DIR }}/debian/changelog" <<EOF
+          qt6-omodsim (${APP_VERSION}-${DEB_REVISION}) stable; urgency=medium
+
+            * Version ${APP_VERSION}
+
+          -- Alexandr Ananev <mail@ananev.org>  $(date -R)
+          EOF
+
+          echo "Created changelog:"
+          cat "${{ env.DEB_PACKAGE_DIR }}/debian/changelog"
 
