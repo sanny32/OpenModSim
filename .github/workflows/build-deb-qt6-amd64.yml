@@ -111,7 +111,8 @@ jobs:
         run: |
           cqtdeployer -bin ${{ env.BUILD_DIR }}/omodsim \
             -targetDir ${DEB_SRC_DIR}/opt/OpenModSim \
-            -extraLibs  libicu
+            -libdir ${QT_INSTALL_DIR}/${QT_VERSION}/${CMAKE_COMPILER}/lib \
+            -extraLibs libicu
           
           ls -la ${DEB_SRC_DIR}/opt/OpenModSim/lib
 
