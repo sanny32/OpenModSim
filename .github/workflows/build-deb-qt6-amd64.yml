@@ -114,7 +114,9 @@ jobs:
       - name: Copy some libraries that the cqtdeployer missed
         run: |
           for lib in ${{ env.QT_INSTALL_DIR }}/${{ env.QT_VERSION }}/${{ env.CMAKE_COMPILER }}/lib/libicu*.so.*; do
-            cp "$lib" ${DEB_SRC_DIR}/opt/OpenModSim/lib/
+            if [ -f "$lib" ] && [[ "$lib" != *.*.* ]]; then
+              cp "$lib" ${DEB_SRC_DIR}/opt/OpenModSim/lib/
+            fi
           done
 
       - name: Debug view OpenModSim/lib directory (action must be removed after developing ended)
