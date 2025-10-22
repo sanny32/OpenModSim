@@ -53,9 +53,10 @@ jobs:
           apt-get install -y \
             build-essential ninja-build cmake \
             dh-make debhelper debhelper-compat lintian fakeroot \
-            libgl1-mesa-dev libxkbcommon-x11-0 \
-            libxcb-xinerama0 libxcb-cursor0 libxcb-keysyms1 libxcb-xfixes0 \
+            libglu1-mesa libgl1-mesa-dev libxkbcommon0 libxkbcommon-x11-0 \
+            libxcb1 libxcb-xinerama0 libxcb-cursor0 libxcb-keysyms1 libxcb-xfixes0 \
             libxcb-shape0 libxcb-render-util0 libxcb-icccm4 libxcb-image0 \
+            libfontconfig1 libfreetype6 libx11-6 libxext6 libxrender1 \
             zlib1g-dev libpng-dev libjpeg-dev
 
       - name: Install Python 3.12 from sources
