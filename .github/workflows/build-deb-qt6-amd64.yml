@@ -113,9 +113,12 @@ jobs:
 
       - name: Copy some libraries that the cqtdeployer missed
         run: |
-          find ${{ env.QT_INSTALL_DIR }}/${{ env.QT_VERSION }}/${{ env.CMAKE_COMPILER }}/lib/ -maxdepth 1 \
-            -type l -regex '.*/libicu[^/]*\.so\.[0-9]+$' \
-            -exec cp -L -v {} ${DEB_SRC_DIR}/opt/OpenModSim/lib/ \;
+          libraries=("libicudata" "libicui18n" "libicuuc")
+          for lib in "${libraries[@]}"; do
+            find ${{ env.QT_INSTALL_DIR }}/${{ env.QT_VERSION }}/${{ env.CMAKE_COMPILER }}/lib/ -maxdepth 1 \
+              -type l -regex ".*/${lib}\.so\.[0-9]+\$" \
+              -exec cp -L -v {} ${DEB_SRC_DIR}/opt/OpenModSim/lib/ \;
+          done
 
       - name: Debug view OpenModSim/lib directory (action must be removed after developing ended)
         run: ls -la ${DEB_SRC_DIR}/opt/OpenModSim/lib
@@ -152,9 +155,10 @@ jobs:
         run: patchelf --set-rpath /opt/OpenModSim/lib "${{ env.DEB_SRC_DIR }}/opt/OpenModSim/bin/omodsim"
 
       - name: Build DEB package
-        run: |
-          cd ${{ env.DEB_SRC_DIR }}
-          dpkg-buildpackage -us -uc -tc -b
+        run: dpkg-buildpackage -us -uc -tc -b -C ${{ env.DEB_SRC_DIR }}
+
+      - name: Debug view cuurent directory (action must be removed after developing ended)
+        run: ls -la ${DEB_SRC_DIR}
 
       - name: Upload DEB package
         uses: actions/upload-artifact@v4
