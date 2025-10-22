@@ -162,6 +162,7 @@ jobs:
         run: ls -la ${BUILD_DEB_DIR}
 
       - name: Upload DEB package
+        working-directory: ${{ env.BUILD_DEB_DIR }}
         uses: actions/upload-artifact@v4
         if: success()
         with:
