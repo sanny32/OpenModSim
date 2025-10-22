@@ -36,7 +36,7 @@ jobs:
 
           if [[ "${GITHUB_REF_NAME}" == "dev" ]]; then
             MAJOR_MINOR=$(echo "$FULL_VERSION" | cut -d. -f1,2)
-            APP_VERSION="${MAJOR_MINOR}-dev"
+            APP_VERSION="${MAJOR_MINOR}~dev"
             APP_VERSION="$FULL_VERSION"
           else
             APP_VERSION="$FULL_VERSION"
@@ -83,8 +83,7 @@ jobs:
             cmake omodsim -B ${{ env.BUILD_DIR }} \
             -G "${{ env.CMAKE_GENERATOR }}" \
             -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} \
-            -DCMAKE_PREFIX_PATH=${{ env.QT_INSTALL_DIR }}/${{ env.QT_VERSION }}/${{ env.CMAKE_COMPILER }} \
-            -DCMAKE_INSTALL_PREFIX=/usr \
+            -DCMAKE_PREFIX_PATH=${{ env.QT_INSTALL_DIR }}/${{ env.QT_VERSION }}/${{ env.CMAKE_COMPILER }}
 
       - name: Build
         run: cmake --build ${{ env.BUILD_DIR }} --config ${{ env.BUILD_TYPE }} --parallel
@@ -115,15 +114,6 @@ jobs:
             -ignore libcrypto.so.3,libmysqlclient.so.21,libpq.so.5,libssl.so.3 \
             -extraLibs icudata,icui18n,icuuc
 
-      #- name: Copy some libraries that the cqtdeployer missed
-      #  run: |
-      #    libraries=("libicudata" "libicui18n" "libicuuc")
-      #    for lib in "${libraries[@]}"; do
-      #      find ${{ env.QT_INSTALL_DIR }}/${{ env.QT_VERSION }}/${{ env.CMAKE_COMPILER }}/lib/ -maxdepth 1 \
-      #        -type l -regex ".*/${lib}\.so\.[0-9]+\$" \
-      #        -exec cp -L -v {} ${DEB_SRC_DIR}/opt/OpenModSim/lib/ \;
-      #    done
-
       - name: Debug view OpenModSim/lib directory (action must be removed after developing ended)
         run: ls -la ${{ env.DEB_SRC_DIR }}/opt/OpenModSim/lib
 
@@ -137,9 +127,6 @@ jobs:
            -- Alexandr Ananev <mail@ananev.org>  $(date -R)
           EOF
 
-          echo "Created changelog:"
-          cat "${{ env.DEB_SRC_DIR }}/debian/changelog"
-
       - name: Create Debian copyrigth
         run: |
           cat > "${{ env.DEB_SRC_DIR }}/debian/copyright" <<EOF
@@ -151,9 +138,6 @@ jobs:
           Copyright: $(date +%Y) Alexandr Ananev <mail@ananev.org>
           License: MIT
           EOF
-
-          echo "Created copyright:"
-          cat "${{ env.DEB_SRC_DIR }}/debian/copyright"
 
       - name: Patch binary file
         run: patchelf --set-rpath /opt/OpenModSim/lib "${{ env.DEB_SRC_DIR }}/opt/OpenModSim/bin/omodsim"
