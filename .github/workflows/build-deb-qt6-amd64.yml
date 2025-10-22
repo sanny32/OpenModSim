@@ -151,7 +151,7 @@ jobs:
 
       - name: Bundle Qt libraries and plugins throught cqtdeployer
         run: |
-          cqtdeployer -bin ${{ env.BUILD_DIR }}/omodsim \
+          CQtDeployer -bin ${{ env.BUILD_DIR }}/omodsim \
             -targetDir ${{ env.DEB_SRC_DIR }}/opt/OpenModSim \
             -libDir ${{ env.QT_INSTALL_DIR }}/${{ env.QT_VERSION }}/${{ env.CMAKE_COMPILER }}/lib \
             -ignore libcrypto.so.3,libmysqlclient.so.21,libpq.so.5,libssl.so.3 \
