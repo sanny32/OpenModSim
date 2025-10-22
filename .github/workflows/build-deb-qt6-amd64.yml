@@ -166,4 +166,4 @@ jobs:
         if: success()
         with:
           name: qt6-omodsim_${{ env.APP_VERSION }}-${{ env.DEB_REVISION }}_${{ env.DEB_ARCH }}
-          path: ${BUILD_DEB_DIR}/qt6-omodsim_${{ env.APP_VERSION }}-${{ env.DEB_REVISION }}_${{ env.DEB_ARCH }}.deb
+          path: ${{ env.BUILD_DEB_DIR }}/qt6-omodsim_${{ env.APP_VERSION }}-${{ env.DEB_REVISION }}_${{ env.DEB_ARCH }}.deb
