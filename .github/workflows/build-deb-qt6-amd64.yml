@@ -50,6 +50,7 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y \
             build-essential ninja-build cmake python3-pip \
+            dh-make debhelper debhelper-compat lintian fakeroot \
             libgl1-mesa-dev libxkbcommon-x11-0 \
             libxcb-xinerama0 libxcb-cursor0 libxcb-keysyms1 libxcb-xfixes0 \
             libxcb-shape0 libxcb-render-util0 libxcb-icccm4 libxcb-image0 \
