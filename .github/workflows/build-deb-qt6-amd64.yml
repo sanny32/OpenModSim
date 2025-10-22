@@ -139,7 +139,7 @@ jobs:
         run: |
           git clone https://github.com/QuasarApp/CQtDeployer.git
           cd CQtDeployer
-          git checkout 1.6.2365
+          git checkout v1.6.2365
           mkdir build && cd build
           cmake .. -DCMAKE_BUILD_TYPE=Release \
             -DCMAKE_PREFIX_PATH=${{ env.QT_INSTALL_DIR }}/${{ env.QT_VERSION }}/${{ env.CMAKE_COMPILER }} \
