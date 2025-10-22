@@ -145,8 +145,8 @@ jobs:
             -DCMAKE_PREFIX_PATH=${{ env.QT_INSTALL_DIR }}/${{ env.QT_VERSION }}/${{ env.CMAKE_COMPILER }} \
             -DBUILD_SHARED_LIBS=OFF \
             -DCQT_DEPLOYER_TESTS=OFF \
-            -DCQT_DEPLOYER_EXAMPLES=OFF \
             -DCMAKE_INSTALL_PREFIX=/usr/local \
+            -DCMAKE_INSTALL_RPATH=${{ env.QT_INSTALL_DIR }}/${{ env.QT_VERSION }}/${{ env.CMAKE_COMPILER }}/lib \
             -Wno-dev
           cmake --build build --parallel
           cmake --install build
