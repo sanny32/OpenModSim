@@ -108,17 +108,16 @@ jobs:
           rm CQtDeployer_1.6.2365.7cce7f3_Linux_x86_64.deb
 
       - name: Bundle Qt libraries and plugins throught cqtdeployer
-        run: |
-          cqtdeployer -bin ${{ env.BUILD_DIR }}/omodsim -targetDir ${DEB_SRC_DIR}/opt/OpenModSim
+        run: cqtdeployer -bin ${{ env.BUILD_DIR }}/omodsim -targetDir ${DEB_SRC_DIR}/opt/OpenModSim -extraLibs libicudata,libicui18n,libicuuc
 
-      - name: Copy some libraries that the cqtdeployer missed
-        run: |
-          libraries=("libicudata" "libicui18n" "libicuuc")
-          for lib in "${libraries[@]}"; do
-            find ${{ env.QT_INSTALL_DIR }}/${{ env.QT_VERSION }}/${{ env.CMAKE_COMPILER }}/lib/ -maxdepth 1 \
-              -type l -regex ".*/${lib}\.so\.[0-9]+\$" \
-              -exec cp -L -v {} ${DEB_SRC_DIR}/opt/OpenModSim/lib/ \;
-          done
+      #- name: Copy some libraries that the cqtdeployer missed
+      #  run: |
+      #    libraries=("libicudata" "libicui18n" "libicuuc")
+      #    for lib in "${libraries[@]}"; do
+      #      find ${{ env.QT_INSTALL_DIR }}/${{ env.QT_VERSION }}/${{ env.CMAKE_COMPILER }}/lib/ -maxdepth 1 \
+      #        -type l -regex ".*/${lib}\.so\.[0-9]+\$" \
+      #        -exec cp -L -v {} ${DEB_SRC_DIR}/opt/OpenModSim/lib/ \;
+      #    done
 
       - name: Debug view OpenModSim/lib directory (action must be removed after developing ended)
         run: ls -la ${DEB_SRC_DIR}/opt/OpenModSim/lib
@@ -157,9 +156,6 @@ jobs:
       - name: Build DEB package
         working-directory: ${{ env.DEB_SRC_DIR }}
         run: dpkg-buildpackage -us -uc -tc -b
-
-      - name: Debug view cuurent directory (action must be removed after developing ended)
-        run: ls -la ${BUILD_DEB_DIR}
 
       - name: Upload DEB package
         uses: actions/upload-artifact@v4
