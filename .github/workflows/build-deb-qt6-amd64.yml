@@ -108,7 +108,11 @@ jobs:
           rm CQtDeployer_1.6.2365.7cce7f3_Linux_x86_64.deb
 
       - name: Bundle Qt libraries and plugins throught cqtdeployer
-        run: cqtdeployer -bin ${{ env.BUILD_DIR }}/omodsim -targetDir ${DEB_SRC_DIR}/opt/OpenModSim -recursiveDepth 1 -extraLibs "icudata,icui18n,icuuc"
+        run: cqtdeployer -bin ${{ env.BUILD_DIR }}/omodsim \
+              -targetDir ${DEB_SRC_DIR}/opt/OpenModSim \
+              -ignore libcrypto.so.3,libmysqlclient.so.21,libpq.so.5,libssl.so.3
+              -libDir ${{ env.QT_INSTALL_DIR }}/${{ env.QT_VERSION }}/${{ env.CMAKE_COMPILER }}/lib
+              -extraLibs "icudata,icui18n,icuuc"
 
       #- name: Copy some libraries that the cqtdeployer missed
       #  run: |
