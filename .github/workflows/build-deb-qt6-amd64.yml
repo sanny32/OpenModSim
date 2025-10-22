@@ -5,7 +5,8 @@ on:
     branches: [ dev ]
 
 jobs:
-  build:
+  build-omodsim:
+    name: Build OpenModSim deb package version ${{ github.ref_name }} with Qt6
     runs-on: ubuntu-22.04
 
     env:
@@ -31,7 +32,7 @@ jobs:
 
           if [[ "${GITHUB_REF_NAME}" == "dev" ]]; then
             MAJOR_MINOR=$(echo "$FULL_VERSION" | cut -d. -f1,2)
-            APP_VERSION="${MAJOR_MINOR}-dev"
+            APP_VERSION="${MAJOR_MINOR}~dev"
           else
             APP_VERSION="$FULL_VERSION"
           fi
