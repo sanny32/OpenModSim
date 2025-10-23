@@ -32,11 +32,6 @@ jobs:
         with:
           ref: ${{ github.ref_name }}
 
-      - name: Import GPG keys
-        env:
-          GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
-        run: echo "$GPG_PRIVATE_KEY" | gpg --batch --import
-
       - name: Extract version from CMakeLists.txt
         id: extract_version
         run: |
@@ -58,7 +53,7 @@ jobs:
           apt-get update
           apt-get install -y \
             git build-essential ninja-build cmake patchelf rsync \
-            rpm \
+            rpm gpg \
             libglu1-mesa libgl1-mesa-dev libxkbcommon0 libxkbcommon-x11-0 \
             libxcb1 libxcb-xinerama0 libxcb-cursor0 libxcb-keysyms1 libxcb-xfixes0 \
             libxcb-shape0 libxcb-render-util0 libxcb-icccm4 libxcb-image0 \
@@ -187,6 +182,11 @@ jobs:
 
       - name: Patch binary file
         run: patchelf --set-rpath /opt/OpenModSim/lib "${{ env.BUILD_RPM_DIR }}/SOURCES/omodsim/opt/OpenModSim/bin/omodsim"
+
+      - name: Import GPG keys
+        env:
+          GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
+        run: echo "$GPG_PRIVATE_KEY" | gpg --batch --import
 
       - name: Build RPM package
         working-directory: ${{ env.BUILD_RPM_DIR }}
