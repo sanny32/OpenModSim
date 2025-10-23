@@ -175,7 +175,7 @@ jobs:
               -e "s|@PACKAGE_SOURCE@|${{ env.DEB_PACKAGE_NAME }}|g" \
               ${{ env.DEB_SRC_DIR }}/debian/control.in > ${{ env.DEB_SRC_DIR }}/debian/control
           rm ${{ env.DEB_SRC_DIR }}/debian/control.in
-          cat ${{ env.DEB_SRC_DIR }}/debian/control
+          cat -n ${{ env.DEB_SRC_DIR }}/debian/control
 
       - name: Create Debian changelog file
         run: |
@@ -185,7 +185,7 @@ jobs:
               -e "s|@RELEASE_DATE@|$(date -R)|g" \
               ${{ env.DEB_SRC_DIR }}/debian/changelog.in > ${{ env.DEB_SRC_DIR }}/debian/changelog
           rm ${{ env.DEB_SRC_DIR }}/debian/changelog.in
-          cat ${{ env.DEB_SRC_DIR }}/debian/changelog
+          cat -n ${{ env.DEB_SRC_DIR }}/debian/changelog
 
       - name: Create Debian copyrigth file
         run: |
@@ -193,14 +193,14 @@ jobs:
               -e "s|@RELEASE_YEAR@|$(date +%Y)|g" \
               ${{ env.DEB_SRC_DIR }}/debian/copyrigth.in > ${{ env.DEB_SRC_DIR }}/debian/copyrigth
           rm ${{ env.DEB_SRC_DIR }}/debian/copyrigth.in
-          cat ${{ env.DEB_SRC_DIR }}/debian/copyrigth
+          cat -n ${{ env.DEB_SRC_DIR }}/debian/copyrigth
 
       - name: Create Debian rules file
         run: |
           sed -e "s|@QT_LIB_PATH@|${{ env.QT_INSTALL_DIR }}/${{ env.QT_VERSION }}/${{ env.CMAKE_COMPILER }}/lib|g" \
               ${{ env.DEB_SRC_DIR }}/debian/rules.in > ${{ env.DEB_SRC_DIR }}/debian/rules
           rm ${{ env.DEB_SRC_DIR }}/debian/rules.in
-          cat ${{ env.DEB_SRC_DIR }}/debian/rules
+          cat -n ${{ env.DEB_SRC_DIR }}/debian/rules
 
       - name: Patch binary file
         run: patchelf --set-rpath /opt/OpenModSim/lib "${{ env.DEB_SRC_DIR }}/opt/OpenModSim/bin/omodsim"
