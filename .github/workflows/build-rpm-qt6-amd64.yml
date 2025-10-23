@@ -184,6 +184,10 @@ jobs:
       - name: Patch binary file
         run: patchelf --set-rpath /opt/OpenModSim/lib "${{ env.BUILD_RPM_DIR }}/SOURCES/omodism/opt/OpenModSim/bin/omodsim"
 
+      - name: List SOURCES/omodism content (Debug View)
+        run: |
+          ls -laR ${{ env.BUILD_RPM_DIR }}/SOURCES/omodism/
+
       - name: Build RPM package
         working-directory: ${{ env.BUILD_RPM_DIR }}
         run: |
