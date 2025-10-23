@@ -49,7 +49,7 @@ if(GIT_FOUND)
         OUTPUT_VARIABLE GIT_BRANCH
         OUTPUT_STRIP_TRAILING_WHITESPACE)
 
-    message(STATUS "Working directory: ${WORKING_DIRECTORY}")
+    message(STATUS "CMake source directory: ${CMAKE_SOURCE_DIR}")
     if(${GIT_BRANCH} MATCHES dev)
         set(PROJECT_VERSION ${VERSION_MAJOR}.${VERSION_MINOR}-dev)
     endif()
