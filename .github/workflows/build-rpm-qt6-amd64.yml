@@ -196,7 +196,7 @@ jobs:
         working-directory: ${{ env.BUILD_RPM_DIR }}
         run: |
           RPM_FILE="${{ env.RPM_PACKAGE_NAME }}-${{ env.APP_VERSION }}-${{ env.RPM_REVISION }}.${{ env.RPM_ARCH }}.rpm" 
-          SAFE_RPM_FILE="${RPM_FILE//~/-}"
+          SAFE_RPM_FILE=$(echo "$RPM_FILE" | sed 's/~/−/g')
           mv "RPMS/${RPM_ARCH}/$RPM_FILE" "RPMS/${RPM_ARCH}/$SAFE_RPM_FILE"
           rpmsign --addsign --define "_gpg_name 841A6E73CED20603737BDCBA457ECBB2757E57F1" "RPMS/${RPM_ARCH}/$SAFE_RPM_FILE"
           mv "RPMS/${RPM_ARCH}/$SAFE_RPM_FILE" "RPMS/${RPM_ARCH}/$RPM_FILE"
