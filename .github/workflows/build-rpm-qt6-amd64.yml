@@ -193,5 +193,5 @@ jobs:
         uses: actions/upload-artifact@v4
         if: success()
         with:
-          name: ${{ env.RPM_PACKAGE_NAME }}_${{ env.APP_VERSION }}-${{ env.RPM_REVISION }}_${{ env.RPM_ARCH }}
-          path: ${{ env.BUILD_RPM_DIR }}/RPMS/${{ env.RPM_ARCH }}/${{ env.RPM_PACKAGE_NAME }}_${{ env.APP_VERSION }}-${{ env.RPM_REVISION }}_${{ env.RPM_ARCH }}.rpm
+          name: ${{ env.RPM_PACKAGE_NAME }}-${{ env.APP_VERSION }}-${{ env.RPM_REVISION }}.${{ env.RPM_ARCH }}
+          path: ${{ env.BUILD_RPM_DIR }}/RPMS/${{ env.RPM_ARCH }}/${{ env.RPM_PACKAGE_NAME }}-${{ env.APP_VERSION }}-${{ env.RPM_REVISION }}.${{ env.RPM_ARCH }}.rpm
