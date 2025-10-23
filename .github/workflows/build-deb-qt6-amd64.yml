@@ -161,8 +161,7 @@ jobs:
           CQtDeployer -bin ${{ env.BUILD_DIR }}/omodsim \
             -targetDir ${{ env.DEB_SRC_DIR }}/opt/OpenModSim \
             -libDir ${{ env.QT_INSTALL_DIR }}/${{ env.QT_VERSION }}/${{ env.CMAKE_COMPILER }}/lib \
-            -ignore libcrypto.so.3,libmysqlclient.so.21,libpq.so.5,libssl.so.3 \
-            -disablePlugins qsqlmimer qsqlmysql qsqlodbc qsqlpsql \
+            -ignore libcrypto.so.3,libmysqlclient.so.21,libpq.so.5,libssl.so.3,libqsqlmimer.so,libqsqlmysql.so,libqsqlodbc.so,libqsqlpsql.so \
             -extraLibs icudata,icui18n,icuuc
 
       - name: Debug view OpenModSim/lib directory (action must be removed after developing ended)
