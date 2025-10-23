@@ -185,6 +185,7 @@ jobs:
         run: patchelf --set-rpath /opt/OpenModSim/lib "${{ env.BUILD_RPM_DIR }}/SOURCES/omodism/opt/OpenModSim/bin/omodsim"
 
       - name: Build RPM package
+        working-directory: ${{ env.BUILD_RPM_DIR }}
         run: |
           rpmbuild --define "_topdir `pwd`" -v -ba SPECS/omodsim.spec
 
