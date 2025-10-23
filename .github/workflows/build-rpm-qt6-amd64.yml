@@ -193,7 +193,7 @@ jobs:
         run: |
           rpmbuild --define "_topdir `pwd`" -v -ba SPECS/omodsim.spec
           rpmsign --addsign --define "_gpg_name 841A6E73CED20603737BDCBA457ECBB2757E57F1" \
-            "${{ env.BUILD_RPM_DIR }}/RPMS/${{ env.RPM_ARCH }}/${{ env.RPM_PACKAGE_NAME }}-${{ env.APP_VERSION }}-${{ env.RPM_REVISION }}.${{ env.RPM_ARCH }}.rpm"
+            '${{ env.BUILD_RPM_DIR }}/RPMS/${{ env.RPM_ARCH }}/${{ env.RPM_PACKAGE_NAME }}-${{ env.APP_VERSION }}-${{ env.RPM_REVISION }}.${{ env.RPM_ARCH }}.rpm'
 
       - name: Upload RPM package
         uses: actions/upload-artifact@v4
