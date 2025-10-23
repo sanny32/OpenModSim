@@ -137,14 +137,14 @@ jobs:
         run: |
           mkdir -p ${{ env.BUILD_RPM_DIR }}/BUILD
           mkdir -p ${{ env.BUILD_RPM_DIR }}/RPMS
-          mkdir -p ${{ env.BUILD_RPM_DIR }}/SOURCES/omodism
+          mkdir -p ${{ env.BUILD_RPM_DIR }}/SOURCES/omodsim
           mkdir -p ${{ env.BUILD_RPM_DIR }}/SPECS
           mkdir -p ${{ env.BUILD_RPM_DIR }}/SRPMS
           
       - name: Copy files to BUILD_RPM_DIR
         run: |
           rsync -a .pkg/rpm/* ${{ env.BUILD_RPM_DIR }}/SPECS
-          rsync -a .pkg/usr/* ${{ env.BUILD_RPM_DIR }}/SOURCES/omodism/usr
+          rsync -a .pkg/usr/* ${{ env.BUILD_RPM_DIR }}/SOURCES/omodsim/usr
          
       - name: Install cqtdeployer from sources
         run: |
@@ -165,13 +165,13 @@ jobs:
       - name: Bundle Qt libraries and plugins throught cqtdeployer
         run: |
           CQtDeployer -bin ${{ env.BUILD_DIR }}/omodsim \
-            -targetDir ${{ env.BUILD_RPM_DIR }}/SOURCES/omodism/opt/OpenModSim \
+            -targetDir ${{ env.BUILD_RPM_DIR }}/SOURCES/omodsim/opt/OpenModSim \
             -libDir ${{ env.QT_INSTALL_DIR }}/${{ env.QT_VERSION }}/${{ env.CMAKE_COMPILER }}/lib \
             -ignore libcrypto.so.3,libmysqlclient.so.21,libpq.so.5,libssl.so.3,libqsqlmimer.so,libqsqlmysql.so,libqsqlodbc.so,libqsqlpsql.so \
             -extraLibs icudata,icui18n,icuuc
 
       - name: Copy OpenModsim docs
-        run: rsync -a "${{ env.BUILD_DIR }}/docs/" "${{ env.BUILD_RPM_DIR }}/SOURCES/omodism/opt/OpenModSim/docs/"
+        run: rsync -a "${{ env.BUILD_DIR }}/docs/" "${{ env.BUILD_RPM_DIR }}/SOURCES/omodsim/opt/OpenModSim/docs/"
 
       - name: Create RPM spec file
         run: |
@@ -182,11 +182,7 @@ jobs:
           cat -n ${{ env.BUILD_RPM_DIR }}/SPECS/omodsim.spec
 
       - name: Patch binary file
-        run: patchelf --set-rpath /opt/OpenModSim/lib "${{ env.BUILD_RPM_DIR }}/SOURCES/omodism/opt/OpenModSim/bin/omodsim"
-
-      - name: List SOURCES/omodism content (Debug View)
-        run: |
-          ls -laR ${{ env.BUILD_RPM_DIR }}/SOURCES/omodism/
+        run: patchelf --set-rpath /opt/OpenModSim/lib "${{ env.BUILD_RPM_DIR }}/SOURCES/omodsim/opt/OpenModSim/bin/omodsim"
 
       - name: Build RPM package
         working-directory: ${{ env.BUILD_RPM_DIR }}
