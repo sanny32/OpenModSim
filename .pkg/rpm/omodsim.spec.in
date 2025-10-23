@@ -1,5 +1,5 @@
 Name:           @PACKAGE_NAME@
-Version:        1.9.0
+Version:        @APP_VERSION@
 Release:        1%{?dist}
 Summary:        An Open Source Modbus Slave (Server) Utility
 Group:          Applications/Utility
