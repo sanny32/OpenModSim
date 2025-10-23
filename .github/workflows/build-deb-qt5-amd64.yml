@@ -4,6 +4,7 @@ on:
   push:
     tags:
       - "*"
+    branches: [ dev ]
 
 jobs:
   build-omodsim:
@@ -112,10 +113,14 @@ jobs:
         run: echo "DEB_SRC_DIR=${{ env.BUILD_DEB_DIR }}/${{ env.DEB_PACKAGE_NAME }}-${{ env.APP_VERSION }}-${{ env.DEB_REVISION }}_${{ env.DEB_ARCH }}" >> $GITHUB_ENV
 
       - name: Create DEB build directories
-        run: mkdir -p ${{ env.DEB_SRC_DIR }}
+        run: |
+          mkdir -p ${{ env.DEB_SRC_DIR }}/debian
+          mkdir -p ${{ env.DEB_SRC_DIR }}/usr
           
       - name: Copy files to DEB_SRC_DIR
-        run: cp -r .deb/* ${{ env.DEB_SRC_DIR }}/
+        run: |
+          cp -r .pkg/deb/* ${{ env.DEB_SRC_DIR }}/debian
+          cp -r .pkg/usr/* ${{ env.DEB_SRC_DIR }}/usr
          
       - name: Install cqtdeployer from sources
         run: |
