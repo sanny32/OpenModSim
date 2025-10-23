@@ -4,6 +4,7 @@ on:
   push:
     tags:
       - "*"
+    branches: [ dev ]
 
 jobs:
   build-omodsim:
@@ -194,7 +195,9 @@ jobs:
 
       - name: Build DEB package
         working-directory: ${{ env.DEB_SRC_DIR }}
-        run: dpkg-buildpackage -us -uc -tc -b
+        run: |
+          export ICU_LIB_PATH=${{ env.QT_INSTALL_DIR }}/${{ env.QT_VERSION }}/${{ env.CMAKE_COMPILER }}/lib
+          dpkg-buildpackage -us -uc -tc -b
 
       - name: Upload DEB package
         uses: actions/upload-artifact@v4

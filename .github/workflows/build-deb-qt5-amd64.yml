@@ -109,7 +109,7 @@ jobs:
         run: echo "BUILD_DEB_DIR=build-deb-package-Qt_${{ env.QT_VERSION }}_${{ env.CMAKE_COMPILER }}bit" >> $GITHUB_ENV
 
       - name: Set DEB_SRC_DIR
-        run: echo "DEB_SRC_DIR=${{ env.BUILD_DEB_DIR }}/qt6-omodsim-${{ env.APP_VERSION }}-${{ env.DEB_REVISION }}_${{ env.DEB_ARCH }}" >> $GITHUB_ENV
+        run: echo "DEB_SRC_DIR=${{ env.BUILD_DEB_DIR }}/qt5-omodsim-${{ env.APP_VERSION }}-${{ env.DEB_REVISION }}_${{ env.DEB_ARCH }}" >> $GITHUB_ENV
 
       - name: Create DEB build directories
         run: mkdir -p ${{ env.DEB_SRC_DIR }}
@@ -150,7 +150,7 @@ jobs:
       - name: Create Debian changelog
         run: |
           cat > "${{ env.DEB_SRC_DIR }}/debian/changelog" <<EOF
-          qt6-omodsim (${{ env.APP_VERSION }}-${{ env.DEB_REVISION }}) stable; urgency=medium
+          qt5-omodsim (${{ env.APP_VERSION }}-${{ env.DEB_REVISION }}) stable; urgency=medium
 
             * Version ${{ env.APP_VERSION }}
 
@@ -161,7 +161,7 @@ jobs:
         run: |
           cat > "${{ env.DEB_SRC_DIR }}/debian/copyright" <<EOF
           Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
-          Upstream-Name: qt6-omodsim
+          Upstream-Name: qt5-omodsim
           Source: none
 
           Files: *
@@ -174,11 +174,13 @@ jobs:
 
       - name: Build DEB package
         working-directory: ${{ env.DEB_SRC_DIR }}
-        run: dpkg-buildpackage -us -uc -tc -b
+        run: |
+          export ICU_LIB_PATH=${{ env.QT_INSTALL_DIR }}/${{ env.QT_VERSION }}/${{ env.CMAKE_COMPILER }}/lib
+          dpkg-buildpackage -us -uc -tc -b
 
       - name: Upload DEB package
         uses: actions/upload-artifact@v4
         if: success()
         with:
-          name: qt6-omodsim_${{ env.APP_VERSION }}-${{ env.DEB_REVISION }}_${{ env.DEB_ARCH }}
-          path: ${{ env.BUILD_DEB_DIR }}/qt6-omodsim_${{ env.APP_VERSION }}-${{ env.DEB_REVISION }}_${{ env.DEB_ARCH }}.deb
+          name: qt5-omodsim_${{ env.APP_VERSION }}-${{ env.DEB_REVISION }}_${{ env.DEB_ARCH }}
+          path: ${{ env.BUILD_DEB_DIR }}/qt5-omodsim_${{ env.APP_VERSION }}-${{ env.DEB_REVISION }}_${{ env.DEB_ARCH }}.deb
