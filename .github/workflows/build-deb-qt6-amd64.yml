@@ -4,6 +4,7 @@ on:
   push:
     tags:
       - "*"
+    branches: [ dev ]
 
 jobs:
   build-omodsim:
@@ -29,7 +30,6 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0
           ref: ${{ github.ref_name }}
 
       - name: Extract version from CMakeLists.txt
