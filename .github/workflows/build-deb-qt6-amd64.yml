@@ -51,7 +51,7 @@ jobs:
           export DEBIAN_FRONTEND=noninteractive
           apt-get update
           apt-get install -y \
-            git build-essential ninja-build cmake patchelf \
+            git build-essential ninja-build cmake patchelf rsync \
             dh-make debhelper debhelper-compat lintian fakeroot \
             libglu1-mesa libgl1-mesa-dev libxkbcommon0 libxkbcommon-x11-0 \
             libxcb1 libxcb-xinerama0 libxcb-cursor0 libxcb-keysyms1 libxcb-xfixes0 \
@@ -168,8 +168,11 @@ jobs:
       - name: Debug view OpenModSim/lib directory (action must be removed after developing ended)
         run: ls -la ${{ env.DEB_SRC_DIR }}/opt/OpenModSim/lib
 
+      - name: Debug view OpenModSim/plugins directory (action must be removed after developing ended)
+        run: ls -laR ${{ env.DEB_SRC_DIR }}/opt/OpenModSim/plugins
+
       - name: Copy OpenModsim docs
-        run: cp -r --parents "${{ env.BUILD_DIR }}/docs/." "${{ env.DEB_SRC_DIR }}/opt/OpenModSim/docs/"
+        run: rsync -a "${{ env.BUILD_DIR }}/docs/" "${{ env.DEB_SRC_DIR }}/opt/OpenModSim/docs/"
 
       - name: Create Debian changelog
         run: |
