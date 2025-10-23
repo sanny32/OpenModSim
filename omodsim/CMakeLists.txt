@@ -50,6 +50,7 @@ if(GIT_FOUND)
         OUTPUT_STRIP_TRAILING_WHITESPACE
         ERROR_QUIET)
 
+    message(STATUS "Using git branch: ${GIT_BRANCH}")
     if(${GIT_BRANCH} MATCHES dev)
         set(PROJECT_VERSION ${VERSION_MAJOR}.${VERSION_MINOR}-dev)
     endif()

@@ -120,9 +120,7 @@ jobs:
 
       - name: Configure project
         run: |
-            mkdir -p ${{ env.BUILD_DIR }}
-            cd ${{ env.BUILD_DIR }}
-            cmake ../omodsim  \
+            cmake omodsim -B ${{ env.BUILD_DIR }} \
             -G "${{ env.CMAKE_GENERATOR }}" \
             -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} \
             -DCMAKE_PREFIX_PATH=${{ env.QT_INSTALL_DIR }}/${{ env.QT_VERSION }}/${{ env.CMAKE_COMPILER }}
