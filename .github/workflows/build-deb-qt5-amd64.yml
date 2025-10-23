@@ -17,7 +17,7 @@ jobs:
       QT_VERSION: "5.15.2"
       QT_HOST: "linux"
       QT_TARGET: "desktop"
-      QT_ARCH: "linux_gcc_64"
+      QT_ARCH: "gcc_64"
       QT_INSTALL_DIR: "/opt/Qt"
       CMAKE_COMPILER: "gcc_64"
       CMAKE_GENERATOR: "Ninja"
@@ -52,7 +52,7 @@ jobs:
           export DEBIAN_FRONTEND=noninteractive
           apt-get update
           apt-get install -y \
-            git build-essential ninja-build cmake patchelf rsync \
+            git build-essential ninja-build cmake python3-pip patchelf rsync \
             dh-make debhelper debhelper-compat lintian fakeroot \
             libglu1-mesa libgl1-mesa-dev libxkbcommon0 libxkbcommon-x11-0 \
             libxcb1 libxcb-xinerama0 libxcb-cursor0 libxcb-keysyms1 libxcb-xfixes0 \
@@ -64,27 +64,6 @@ jobs:
             libcups2 \
             odbcinst libodbc1 \
             libpq5 libmysqlclient21
-
-      - name: Install Python 3.12 from sources
-        run: |
-          apt-get install -y wget libssl-dev \
-            libncurses5-dev libncursesw5-dev libreadline-dev libsqlite3-dev \
-            libffi-dev libbz2-dev liblzma-dev libgdbm-dev libnss3-dev \
-            libncurses-dev libgdbm-compat-dev xz-utils
-
-          wget https://www.python.org/ftp/python/3.12.2/Python-3.12.2.tgz
-          tar xvf Python-3.12.2.tgz
-          cd Python-3.12.2
-
-          ./configure
-          make -j$(nproc)
-          make altinstall
-
-      - name: Set Python 3.12 as default
-        run: |
-          update-alternatives --install /usr/bin/python3 python3 /usr/local/bin/python3.12 2
-          update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.8 1
-          update-alternatives --auto python3
 
       - name: Upgrade pip
         run: |
