@@ -4,7 +4,8 @@ on:
   push:
     tags:
       - "*"
-      
+    branches: [ dev ]
+
 jobs:
   build-omodsim:
     name: Build OpenModSim deb package version '${{ github.ref_name }}' with Qt6
@@ -103,7 +104,7 @@ jobs:
             ${{ env.QT_TARGET }} \
             ${{ env.QT_VERSION }} \
             ${{ env.QT_ARCH }} \
-            -m qt5compat qtpdf qtserialport qtserialbus qtwebengine \
+            -m qt5compat qtpdf qtserialport qtserialbus \
             -O ${{ env.QT_INSTALL_DIR }}
 
       - name: Add Qt to PATH
