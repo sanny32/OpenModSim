@@ -217,4 +217,5 @@ jobs:
       - name: Upload public GPG key
         uses: actions/upload-artifact@v4
         with:
+          name: ${{ env.RPM_PACKAGE_NAME }}.rpm.pubkey
           path: ${{ env.RPM_PACKAGE_NAME }}.rpm.pubkey
