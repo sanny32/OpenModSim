@@ -24,6 +24,7 @@ jobs:
       BUILD_TYPE: "Release"
       DEB_REVISION: "1"
       DEB_ARCH: "amd64"
+      DEB_PACKAGE_NAME: "qt6-omodsim"
 
     steps:
       - name: Checkout repository
@@ -133,7 +134,7 @@ jobs:
         run: echo "BUILD_DEB_DIR=build-deb-package-Qt_${{ env.QT_VERSION }}_${{ env.CMAKE_COMPILER }}bit" >> $GITHUB_ENV
 
       - name: Set DEB_SRC_DIR
-        run: echo "DEB_SRC_DIR=${{ env.BUILD_DEB_DIR }}/qt6-omodsim-${{ env.APP_VERSION }}-${{ env.DEB_REVISION }}_${{ env.DEB_ARCH }}" >> $GITHUB_ENV
+        run: echo "DEB_SRC_DIR=${{ env.BUILD_DEB_DIR }}/${{ env.DEB_PACKAGE_NAME }}-${{ env.APP_VERSION }}-${{ env.DEB_REVISION }}_${{ env.DEB_ARCH }}" >> $GITHUB_ENV
 
       - name: Create DEB build directories
         run: mkdir -p ${{ env.DEB_SRC_DIR }}
@@ -168,21 +169,28 @@ jobs:
       - name: Copy OpenModsim docs
         run: rsync -a "${{ env.BUILD_DIR }}/docs/" "${{ env.DEB_SRC_DIR }}/opt/OpenModSim/docs/"
 
-      - name: Create Debian changelog
+      - name: Create Debian control file
+        run: |
+          sed -e "s|@PACKAGE_NAME@|${{ env.DEB_PACKAGE_NAME }}|g" \
+              -e "s|@PACKAGE_SOURCE@|${{ env.DEB_PACKAGE_NAME }}|g" \
+              ${{ env.DEB_SRC_DIR }}/debian/control.in > ${{ env.DEB_SRC_DIR }}/debian/control
+          rm ${{ env.DEB_SRC_DIR }}/debian/control.in
+
+      - name: Create Debian changelog file
         run: |
           cat > "${{ env.DEB_SRC_DIR }}/debian/changelog" <<EOF
-          qt6-omodsim (${{ env.APP_VERSION }}-${{ env.DEB_REVISION }}) stable; urgency=medium
+          ${{ env.DEB_PACKAGE_NAME }} (${{ env.APP_VERSION }}-${{ env.DEB_REVISION }}) stable; urgency=medium
 
             * Version ${{ env.APP_VERSION }}
 
            -- Alexandr Ananev <mail@ananev.org>  $(date -R)
           EOF
 
-      - name: Create Debian copyrigth
+      - name: Create Debian copyrigth file
         run: |
           cat > "${{ env.DEB_SRC_DIR }}/debian/copyright" <<EOF
           Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
-          Upstream-Name: qt6-omodsim
+          Upstream-Name: ${{ env.DEB_PACKAGE_NAME }}
           Source: none
 
           Files: *
@@ -190,18 +198,22 @@ jobs:
           License: MIT
           EOF
 
+      - name: Create Debian rules file
+        run: |
+          sed -e "s|@QT_LIB_PATH@|${{ env.QT_INSTALL_DIR }}/${{ env.QT_VERSION }}/${{ env.CMAKE_COMPILER }}/lib|g" \
+              ${{ env.DEB_SRC_DIR }}/debian/rules.in > ${{ env.DEB_SRC_DIR }}/debian/rules
+          rm ${{ env.DEB_SRC_DIR }}/debian/rules.in
+
       - name: Patch binary file
         run: patchelf --set-rpath /opt/OpenModSim/lib "${{ env.DEB_SRC_DIR }}/opt/OpenModSim/bin/omodsim"
 
       - name: Build DEB package
         working-directory: ${{ env.DEB_SRC_DIR }}
-        run: |
-          export ICU_LIB_PATH=${{ env.QT_INSTALL_DIR }}/${{ env.QT_VERSION }}/${{ env.CMAKE_COMPILER }}/lib
-          dpkg-buildpackage -us -uc -tc -b
+        run: dpkg-buildpackage -us -uc -tc -b
 
       - name: Upload DEB package
         uses: actions/upload-artifact@v4
         if: success()
         with:
-          name: qt6-omodsim_${{ env.APP_VERSION }}-${{ env.DEB_REVISION }}_${{ env.DEB_ARCH }}
-          path: ${{ env.BUILD_DEB_DIR }}/qt6-omodsim_${{ env.APP_VERSION }}-${{ env.DEB_REVISION }}_${{ env.DEB_ARCH }}.deb
+          name: ${{ env.DEB_PACKAGE_NAME }}_${{ env.APP_VERSION }}-${{ env.DEB_REVISION }}_${{ env.DEB_ARCH }}
+          path: ${{ env.BUILD_DEB_DIR }}/${{ env.DEB_PACKAGE_NAME }}_${{ env.APP_VERSION }}-${{ env.DEB_REVISION }}_${{ env.DEB_ARCH }}.deb
