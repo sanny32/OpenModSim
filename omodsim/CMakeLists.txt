@@ -42,27 +42,27 @@ endif()
 # Define target
 add_executable(${PROJECT_NAME})
 
-find_package(Git QUIET)
-if(GIT_FOUND)
-    message(STATUS "Git found: ${GIT_EXECUTABLE}")
-    message(STATUS "Working directory: ${CMAKE_SOURCE_DIR}/../.git")
-
-    execute_process(COMMAND ${GIT_EXECUTABLE} rev-parse --abbrev-ref HEAD
-        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/../.git
-        OUTPUT_VARIABLE GIT_BRANCH
-        RESULT_VARIABLE GIT_RESULT
-        OUTPUT_STRIP_TRAILING_WHITESPACE
-        ERROR_VARIABLE GIT_ERROR)
-
-    message(STATUS "Git result: ${GIT_RESULT}")
-    message(STATUS "Git branch: '${GIT_BRANCH}'")
-    message(STATUS "Git error: '${GIT_ERROR}'")
-
-    if(${GIT_BRANCH} MATCHES dev)
-        set(PROJECT_VERSION ${VERSION_MAJOR}.${VERSION_MINOR}-dev)
+if(DEFINED ENV{GITHUB_REF})
+    string(REGEX MATCH "refs/heads/(.*)" MATCH_RESULT $ENV{GITHUB_REF})
+    if(MATCH_RESULT AND CMAKE_MATCH_1)
+        set(GIT_BRANCH ${CMAKE_MATCH_1})
+        message(STATUS "Using GitHub branch: ${GIT_BRANCH}")
     endif()
 else()
-    message(STATUS "Git not found - skipping branch detection")
+    find_package(Git QUIET)
+    if(GIT_FOUND)
+        execute_process(COMMAND ${GIT_EXECUTABLE} rev-parse --abbrev-ref HEAD
+            WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/../.git
+            OUTPUT_VARIABLE GIT_BRANCH
+            OUTPUT_STRIP_TRAILING_WHITESPACE
+            ERROR_QUIET)
+    else()
+        message(STATUS "Git not found - branch detection is not possible")
+    endif()
+endif()
+
+if(${GIT_BRANCH} MATCHES dev)
+    set(PROJECT_VERSION ${VERSION_MAJOR}.${VERSION_MINOR}-dev)
 endif()
 
 # Define compile definitions
