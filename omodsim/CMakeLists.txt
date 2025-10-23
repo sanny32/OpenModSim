@@ -44,10 +44,12 @@ add_executable(${PROJECT_NAME})
 
 find_package(Git QUIET)
 if(GIT_FOUND)
-    execute_process(COMMAND ${GIT_EXECUTABLE} rev-parse --abbrev-ref HEAD
-        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/../.git
-        OUTPUT_VARIABLE GIT_BRANCH
-        OUTPUT_STRIP_TRAILING_WHITESPACE)
+    if(NOT DEFINED GIT_BRANCH)
+        execute_process(COMMAND ${GIT_EXECUTABLE} rev-parse --abbrev-ref HEAD
+            WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/../.git
+            OUTPUT_VARIABLE GIT_BRANCH
+            OUTPUT_STRIP_TRAILING_WHITESPACE)
+    endif()
 
     message(STATUS "Using git branch: ${GIT_BRANCH}")
     if(${GIT_BRANCH} MATCHES dev)
