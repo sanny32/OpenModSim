@@ -66,13 +66,10 @@ jobs:
             libpq5 libmysqlclient21
 
       - name: Upgrade pip
-        run: |
-          python3 -m ensurepip --upgrade
-          python3 -m pip install --upgrade pip
+        run: python3 -m pip install --upgrade pip
 
       - name: Install aqtinstall
-        run: |
-          python3 -m pip install aqtinstall
+        run: python3 -m pip install aqtinstall
 
       - name: Download Qt
         run: |
