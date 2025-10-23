@@ -122,6 +122,7 @@ jobs:
         run: |
             cmake omodsim -B ${{ env.BUILD_DIR }} \
             -G "${{ env.CMAKE_GENERATOR }}" \
+            -DGIT_BRANCH=${{ github.ref_name }} \
             -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} \
             -DCMAKE_PREFIX_PATH=${{ env.QT_INSTALL_DIR }}/${{ env.QT_VERSION }}/${{ env.CMAKE_COMPILER }}
             exit 1
