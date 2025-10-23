@@ -4,8 +4,7 @@ on:
   push:
     tags:
       - "*"
-    branches: [ dev ]
-
+      
 jobs:
   build-omodsim:
     name: Build OpenModSim deb package version '${{ github.ref_name }}' with Qt6
