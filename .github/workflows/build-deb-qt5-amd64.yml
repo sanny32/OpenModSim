@@ -4,7 +4,7 @@ on:
   push:
     tags:
       - "*"
-    workflow_dispatch:
+  workflow_dispatch:
     inputs:
       branch:
         description: 'Checkout branch'
@@ -44,7 +44,9 @@ jobs:
         run: |
           FULL_VERSION=$(grep -oP 'VERSION\s+\K[0-9]+\.[0-9]+\.[0-9]+' omodsim/CMakeLists.txt)
 
-          if [ "${GITHUB_REF_NAME}" = "dev" ]; then
+          if [ ! -z "${{ github.event.inputs.tag }}" ]; then
+            APP_VERSION="${{ github.event.inputs.tag }}"
+          elif [ "${GITHUB_REF_NAME}" = "dev" ]; then
             MAJOR_MINOR=$(echo "$FULL_VERSION" | cut -d. -f1,2)
             APP_VERSION="${MAJOR_MINOR}~dev"
           else
