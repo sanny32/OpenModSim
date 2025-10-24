@@ -4,7 +4,15 @@ on:
   push:
     tags:
       - "*"
-
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: 'Checkout branch'
+        required: false
+        default: 'main'
+      tag:
+        description: 'Checkout tag'
+        required: false
 jobs:
   build-omodsim:
     name: Build OpenModSim rpm package version '${{ github.ref_name }}' with Qt6
@@ -29,14 +37,16 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          ref: ${{ github.ref_name }}
+          ref: ${{ github.event.inputs.tag || github.event.inputs.branch || github.ref_name }}
 
       - name: Extract version from CMakeLists.txt
         id: extract_version
         run: |
           FULL_VERSION=$(grep -oP 'VERSION\s+\K[0-9]+\.[0-9]+\.[0-9]+' omodsim/CMakeLists.txt)
 
-          if [ "${GITHUB_REF_NAME}" = "dev" ]; then
+          if [ ! -z "${{ github.event.inputs.tag }}" ]; then
+            APP_VERSION="${{ github.event.inputs.tag }}"
+          elif [ "${GITHUB_REF_NAME}" = "dev" ]; then
             MAJOR_MINOR=$(echo "$FULL_VERSION" | cut -d. -f1,2)
             APP_VERSION="${MAJOR_MINOR}~dev"
           else
