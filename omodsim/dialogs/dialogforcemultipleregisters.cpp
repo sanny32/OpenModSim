@@ -157,6 +157,7 @@ DialogForceMultipleRegisters::DialogForceMultipleRegisters(ModbusWriteParams& pa
 
     ui->lineEditStep->setValue(1);
     updateTableWidget();
+    adjustSize();
 }
 
 ///

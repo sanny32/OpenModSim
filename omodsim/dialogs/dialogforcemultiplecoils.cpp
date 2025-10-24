@@ -43,6 +43,7 @@ DialogForceMultipleCoils::DialogForceMultipleCoils(ModbusWriteParams& params, QM
     if(_data.length() != length) _data.resize(length);
 
     updateTableWidget();
+    adjustSize();
 }
 
 ///
