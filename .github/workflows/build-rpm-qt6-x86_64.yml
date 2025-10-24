@@ -9,13 +9,13 @@ on:
       branch:
         description: 'Checkout branch'
         required: false
-        default: 'main'
       tag:
         description: 'Checkout tag'
         required: false
+
 jobs:
   build-omodsim:
-    name: Build OpenModSim rpm package version '${{ github.ref_name }}' with Qt6
+    name: Build OpenModSim rpm package version '${{ github.event.inputs.tag || github.event.inputs.branch || github.ref_name }}' with Qt6
     runs-on: ubuntu-latest
     container:
       image: ubuntu:20.04
