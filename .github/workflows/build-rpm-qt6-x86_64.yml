@@ -1,4 +1,4 @@
-name: Build Debian package (Ubuntu x64, Qt6)
+name: Build RPM package (Ubuntu x64, Qt6)
 
 on:
   push:
