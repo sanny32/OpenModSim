@@ -4,6 +4,7 @@ on:
   push:
     tags:
       - "*"
+    branches: [ dev ]
 
 jobs:
   build-omodsim:
@@ -142,7 +143,7 @@ jobs:
             -targetDir ${{ env.DEB_SRC_DIR }}/opt/OpenModSim \
             -libDir ${{ env.QT_INSTALL_DIR }}/${{ env.QT_VERSION }}/${{ env.CMAKE_COMPILER }}/lib \
             -ignore libcrypto.so.3,libmysqlclient.so.21,libpq.so.5,libssl.so.3,libqsqlmimer.so,libqsqlmysql.so,libqsqlodbc.so,libqsqlpsql.so \
-            -extraLibs icudata,icui18n,icuuc
+            -extraLibs icudata,icui18n,icuuc,libxcb-util
 
       - name: Copy OpenModsim docs
         run: rsync -a "${{ env.BUILD_DIR }}/docs/" "${{ env.DEB_SRC_DIR }}/opt/OpenModSim/docs/"
