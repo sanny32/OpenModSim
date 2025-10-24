@@ -181,7 +181,7 @@ sudo apt remove qt5-omodsim
 ### Install
 Install the RPM package from the command line:
 ```bash
-sudo dnf install ./qt6-omodsim_1.10.0-1.x86_64.rpm
+sudo dnf install ./qt6-omodsim-1.10.0-1.x86_64.rpm
 ```
 
 ### Remove
@@ -194,7 +194,7 @@ sudo dnf remove qt6-omodsim
 ### Install
 Install the RPM package from the command line as root user:
 ```bash
-apt-get install ./qt6-omodsim_1.10.0-1.x86_64.rpm
+apt-get install ./qt6-omodsim-1.10.0-1.x86_64.rpm
 ```
 
 ### Remove
@@ -211,7 +211,7 @@ sudo rpm --import qt6-omodsim.rpm.pubkey
 ```
 Install the RPM package using Zypper:
 ```bash
-sudo zypper install ./qt6-omodsim_1.10.0-1.x86_64.rpm
+sudo zypper install ./qt6-omodsim-1.10.0-1.x86_64.rpm
 ```
 
 ### Remove
