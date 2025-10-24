@@ -22,8 +22,6 @@ public:
     QIODevice *device() const override {return nullptr; }
 
 signals:
-    void request(int serverAddress, const QModbusRequest& req, int transactionId);
-    void response(int serverAddress, const QModbusRequest& req, const QModbusResponse& resp, int transactionId);
     void modbusClientDisconnected(QTcpSocket* modbusClient);
 
 private slots:
@@ -35,7 +33,7 @@ protected:
     void close() override;
 
 private:
-    QModbusResponse forwardProcessRequest(const QModbusRequest &r, int serverAddress, int transactionId);
+    QModbusResponse forwardProcessRequest(const QModbusRequest &r, int serverAddress);
 
 private:
     int _networkPort = 502;

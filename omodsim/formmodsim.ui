@@ -426,7 +426,7 @@
         <number>0</number>
        </property>
        <item>
-        <widget class="ScriptControl" name="scriptControl" native="true"/>
+        <widget class="JScriptControl" name="scriptControl" native="true"/>
        </item>
       </layout>
      </widget>
@@ -457,15 +457,15 @@
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>ScriptControl</class>
-   <extends>QWidget</extends>
-   <header>scriptcontrol.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
    <class>StatisticWidget</class>
    <extends>QWidget</extends>
    <header>statisticwidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>JScriptControl</class>
+   <extends>QWidget</extends>
+   <header>jscriptcontrol.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

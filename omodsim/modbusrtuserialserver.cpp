@@ -1,4 +1,6 @@
+#include <QTimer>
 #include <QSerialPort>
+#include <QRandomGenerator>
 #include "modbusrtuserialserver.h"
 
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
@@ -125,6 +127,27 @@ public:
         return result;
     }
 
+    inline static QByteArray createWithIncorrectCrc(Type type, int serverAddress, const QModbusPdu &pdu,
+                                                    char delimiter = '\n') {
+        QByteArray result;
+        QDataStream out(&result, QIODevice::WriteOnly);
+        out << quint8(serverAddress) << pdu;
+
+        if (type == Ascii) {
+            quint8 lrc = calculateLRC(result, result.size());
+            lrc ^= 0xFF; // spoil LRC
+            out << lrc;
+            return ":" + result.toHex() + "\r" + delimiter;
+        } else {
+            quint16 crc = calculateCRC(result, result.size());
+            crc ^= 0xFFFF; // spoil CRC
+            out << crc;
+        }
+
+        return result;
+    }
+
+
 private:
     inline static quint16 crc_reflect(quint16 data, qint32 len)
     {
@@ -172,6 +195,8 @@ ModbusRtuSerialServer::~ModbusRtuSerialServer()
 ///
 void ModbusRtuSerialServer::on_readyRead()
 {
+    ModbusDefinitions mbDef = getDefinitions();
+
     if (_interFrameTimer.isValid()
         && _interFrameTimer.elapsed() > _interFrameDelayMilliseconds
         && !_requestBuffer.isEmpty()) {
@@ -260,9 +285,21 @@ void ModbusRtuSerialServer::on_readyRead()
     storeModbusCommEvent(event); // store the final event before processing
 
     const QModbusRequest req = adu.pdu();
+
     qCDebug(QT_MODBUS) << "(RTU server) Request PDU:" << req;
+
+    const auto msgReq = ModbusMessage::create(req, ModbusMessage::Rtu, adu.serverAddress(), QDateTime::currentDateTime(), true);
+    emit modbusRequest(msgReq);
+
+    if(mbDef.ErrorSimulations.noResponse())
+        return;
+
     QModbusResponse response; // If the device ...
-    if (value(QModbusServer::DeviceBusy, adu.serverAddress()).value<quint16>() == 0xffff) {
+    if(mbDef.ErrorSimulations.responseIllegalFunction()) {
+        incrementCounter(ModbusServer::Counter::ServerMessage, adu.serverAddress());
+        response = QModbusExceptionResponse(req.functionCode(), QModbusExceptionResponse::IllegalFunction);
+    }
+    else if (mbDef.ErrorSimulations.responseDeviceBusy() || value(QModbusServer::DeviceBusy, adu.serverAddress()).value<quint16>() == 0xffff) {
         // is busy, update the quantity of messages addressed to the remote device for
         // which it returned a Server Device Busy exception response, since its last
         // restart, clear counters operation, or power-up.
@@ -276,6 +313,9 @@ void ModbusRtuSerialServer::on_readyRead()
         incrementCounter(ModbusServer::Counter::ServerMessage, adu.serverAddress());
         response = forwardProcessRequest(req, adu.serverAddress());
     }
+
+    const int serverAddressDelta = (mbDef.ErrorSimulations.responseIncorrectId() ? 1 : 0);
+
     qCDebug(QT_MODBUS) << "(RTU server) Response PDU:" << response;
 
     event = QModbusCommEvent::SentEvent; // reset event after processing
@@ -293,7 +333,13 @@ void ModbusRtuSerialServer::on_readyRead()
         return;
     }
 
-    const QByteArray result = QModbusSerialAdu::create(QModbusSerialAdu::Rtu, adu.serverAddress(), response);
+    QByteArray result;
+    if(mbDef.ErrorSimulations.responseIncorrectCrc()) {
+        result = QModbusSerialAdu::createWithIncorrectCrc(QModbusSerialAdu::Rtu, adu.serverAddress() + serverAddressDelta, response);
+    }
+    else {
+        result = QModbusSerialAdu::create(QModbusSerialAdu::Rtu, adu.serverAddress() + serverAddressDelta, response);
+    }
 
     qCDebug(QT_MODBUS_LOW) << "(RTU server) Response ADU:" << result.toHex();
 
@@ -305,65 +351,80 @@ void ModbusRtuSerialServer::on_readyRead()
         return;
     }
 
-    qint64 writtenBytes = _serialPort->write(result);
-    if ((writtenBytes == -1) || (writtenBytes < result.size())) {
-        qCDebug(QT_MODBUS) << "(RTU server) Cannot write requested response to serial port.";
-        setError(QModbusRtuSerialServer::tr("Could not write response to client"), QModbusDevice::WriteError);
-        incrementCounter(ModbusServer::Counter::ServerNoResponse, adu.serverAddress());
-        storeModbusCommEvent(event);
-        _serialPort->clear(QSerialPort::Output);
-        return;
+    int responseDelay = 0;
+    if(mbDef.ErrorSimulations.responseDelay()) {
+        responseDelay = mbDef.ErrorSimulations.responseDelayTime();
+    }
+    else if(mbDef.ErrorSimulations.responseRandomDelay()) {
+        responseDelay = QRandomGenerator::global()->bounded(mbDef.ErrorSimulations.responseRandomDelayUpToTime());
     }
 
-    if (response.isException()) {
-        switch (response.exceptionCode()) {
-        case QModbusExceptionResponse::IllegalFunction:
-        case QModbusExceptionResponse::IllegalDataAddress:
-        case QModbusExceptionResponse::IllegalDataValue:
-            event |= QModbusCommEvent::SendFlag::ReadExceptionSent;
-            break;
-
-        case QModbusExceptionResponse::ServerDeviceFailure:
-            event |= QModbusCommEvent::SendFlag::ServerAbortExceptionSent;
-            break;
-
-        case QModbusExceptionResponse::ServerDeviceBusy:
-            // The quantity of messages addressed to the remote device for which it
-            // returned a server device busy exception response, since its last restart,
-            // clear counters operation, or power-up.
-            incrementCounter(ModbusServer::Counter::ServerBusy, adu.serverAddress());
-            event |= QModbusCommEvent::SendFlag::ServerBusyExceptionSent;
-            break;
-
-        case  QModbusExceptionResponse::NegativeAcknowledge:
-            // The quantity of messages addressed to the remote device for which it
-            // returned a negative acknowledge (NAK) exception response, since its last
-            // restart, clear counters operation, or power-up.
-            incrementCounter(ModbusServer::Counter::ServerNAK, adu.serverAddress());
-            event |= QModbusCommEvent::SendFlag::ServerProgramNAKExceptionSent;
-            break;
-
-        default:
-            break;
+    QTimer::singleShot(responseDelay, this,
+                       [this, result, &event, req, response, adu, msgReq]()
+    {
+        qint64 writtenBytes = _serialPort->write(result);
+        if ((writtenBytes == -1) || (writtenBytes < result.size())) {
+            qCDebug(QT_MODBUS) << "(RTU server) Cannot write requested response to serial port.";
+            setError(QModbusRtuSerialServer::tr("Could not write response to client"), QModbusDevice::WriteError);
+            incrementCounter(ModbusServer::Counter::ServerNoResponse, adu.serverAddress());
+            storeModbusCommEvent(event);
+            _serialPort->clear(QSerialPort::Output);
+            return;
         }
-        // The quantity of Modbus exception responses returned by the remote device since
-        // its last restart, clear counters operation, or power-up.
-        incrementCounter(ModbusServer::Counter::BusExceptionError, adu.serverAddress());
-    } else {
-        switch (quint16(req.functionCode())) {
-        case 0x0a: // Poll 484 (not in the official Modbus specification) *1
-        case 0x0e: // Poll Controller (not in the official Modbus specification) *1
-        case QModbusRequest::GetCommEventCounter: // fall through and bail out
-            break;
-        default:
-            // The device's event counter is incremented once for each successful message
-            // completion. Do not increment for exception responses, poll commands, or fetch
-            // event counter commands.            *1 but mentioned here ^^^
-            incrementCounter(ModbusServer::Counter::CommEvent, adu.serverAddress());
-            break;
+
+        const auto msgResp = ModbusMessage::create(result, ModbusMessage::Rtu, QDateTime::currentDateTime(), false);
+        emit modbusResponse(msgReq, msgResp);
+
+        if (response.isException()) {
+            switch (response.exceptionCode()) {
+            case QModbusExceptionResponse::IllegalFunction:
+            case QModbusExceptionResponse::IllegalDataAddress:
+            case QModbusExceptionResponse::IllegalDataValue:
+                event |= QModbusCommEvent::SendFlag::ReadExceptionSent;
+                break;
+
+            case QModbusExceptionResponse::ServerDeviceFailure:
+                event |= QModbusCommEvent::SendFlag::ServerAbortExceptionSent;
+                break;
+
+            case QModbusExceptionResponse::ServerDeviceBusy:
+                // The quantity of messages addressed to the remote device for which it
+                // returned a server device busy exception response, since its last restart,
+                // clear counters operation, or power-up.
+                incrementCounter(ModbusServer::Counter::ServerBusy, adu.serverAddress());
+                event |= QModbusCommEvent::SendFlag::ServerBusyExceptionSent;
+                break;
+
+            case  QModbusExceptionResponse::NegativeAcknowledge:
+                // The quantity of messages addressed to the remote device for which it
+                // returned a negative acknowledge (NAK) exception response, since its last
+                // restart, clear counters operation, or power-up.
+                incrementCounter(ModbusServer::Counter::ServerNAK, adu.serverAddress());
+                event |= QModbusCommEvent::SendFlag::ServerProgramNAKExceptionSent;
+                break;
+
+            default:
+                break;
+            }
+            // The quantity of Modbus exception responses returned by the remote device since
+            // its last restart, clear counters operation, or power-up.
+            incrementCounter(ModbusServer::Counter::BusExceptionError, adu.serverAddress());
+        } else {
+            switch (quint16(req.functionCode())) {
+            case 0x0a: // Poll 484 (not in the official Modbus specification) *1
+            case 0x0e: // Poll Controller (not in the official Modbus specification) *1
+            case QModbusRequest::GetCommEventCounter: // fall through and bail out
+                break;
+            default:
+                // The device's event counter is incremented once for each successful message
+                // completion. Do not increment for exception responses, poll commands, or fetch
+                // event counter commands.            *1 but mentioned here ^^^
+                incrementCounter(ModbusServer::Counter::CommEvent, adu.serverAddress());
+                break;
+            }
         }
-    }
-    storeModbusCommEvent(event); // store the final event after processing
+        storeModbusCommEvent(event); // store the final event after processing
+    });
 }
 
 ///
@@ -577,8 +638,6 @@ void ModbusRtuSerialServer::close()
 ///
 QModbusResponse ModbusRtuSerialServer::forwardProcessRequest(const QModbusPdu &req, int serverAddress)
 {
-    emit request(serverAddress, req);
-
     QModbusResponse resp;
     if (req.functionCode() == QModbusRequest::EncapsulatedInterfaceTransport) {
         quint8 meiType;
@@ -591,6 +650,5 @@ QModbusResponse ModbusRtuSerialServer::forwardProcessRequest(const QModbusPdu &r
     if(!resp.isValid())
         resp = ModbusServer::processRequest(req, serverAddress);
 
-    emit response(serverAddress, req, resp);
     return resp;
 }

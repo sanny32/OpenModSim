@@ -56,6 +56,13 @@ public:
     void update();
     void updateData(const QModbusDataUnit& data);
 
+    int columnsDistance() const {
+        return _columnsDistance;
+    }
+    void setColumnsDistance(int value) {
+        _columnsDistance = qMax(1, value);
+    }
+
     QModelIndex find(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr) const;
 
 private:
@@ -72,6 +79,7 @@ private:
     QModbusDataUnit _lastData;
     QIcon _iconPointGreen;
     QIcon _iconPointEmpty;
+    int _columnsDistance = 16;
     QMap<int, ItemData> _mapItems;
 };
 
@@ -124,6 +132,9 @@ public:
     QFont font() const;
     void setFont(const QFont& font);
 
+    int dataViewColumnsDistance() const;
+    void setDataViewColumnsDistance(int value);
+
     int logViewLimit() const;
     void setLogViewLimit(int l);
 
@@ -136,8 +147,7 @@ public:
 
     void paint(const QRect& rc, QPainter& painter);
 
-    void updateTraffic(const QModbusRequest& request, int server, int transactionId, ModbusMessage::ProtocolType protocol);
-    void updateTraffic(const QModbusResponse& response, int server, int transactionId, ModbusMessage::ProtocolType protocol);
+    void updateTraffic(QSharedPointer<const ModbusMessage> msg);
     void updateData(const QModbusDataUnit& data);
 
     AddressDescriptionMap2 descriptionMap() const;
@@ -150,6 +160,7 @@ public slots:
     void setLogViewState(LogViewState state);
 
 signals:
+    void startTextCaptureError(const QString& error);
     void itemDoubleClicked(quint16 address, const QVariant& value);
 
 protected:
@@ -163,7 +174,7 @@ private:
     void captureString(const QString& s);
     void showModbusMessage(const QModelIndex& index);
     void hideModbusMessage();
-    void updateLogView(bool request, int deviceId, int transactionId, ModbusMessage::ProtocolType protocol, const QModbusPdu& pdu);
+    void updateLogView(QSharedPointer<const ModbusMessage> msg);
 
 private:
     Ui::OutputWidget *ui;

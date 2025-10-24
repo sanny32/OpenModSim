@@ -13,6 +13,7 @@
 #include "dialogscriptsettings.h"
 #include "dialogforcemultiplecoils.h"
 #include "dialogforcemultipleregisters.h"
+#include "dialogmodbusdefinitions.h"
 #include "runmodecombobox.h"
 #include "searchlineedit.h"
 #include "mainstatusbar.h"
@@ -510,6 +511,15 @@ void MainWindow::on_connectAction(ConnectionDetails& cd)
 void MainWindow::on_disconnectAction(ConnectionType type, const QString& port)
 {
     _mbMultiServer.disconnectDevice(type, port);
+}
+
+///
+/// \brief MainWindow::on_actionMbDefinitions_triggered
+///
+void MainWindow::on_actionMbDefinitions_triggered()
+{
+    DialogModbusDefinitions dlg(_mbMultiServer, this);
+    dlg.exec();
 }
 
 ///
@@ -1099,7 +1109,7 @@ void MainWindow::forceCoils(QModbusDataUnit::RegisterType type)
     if(!frm) return;
 
     const auto dd = frm->displayDefinition();
-    SetupPresetParams presetParams = { dd.PointAddress, dd.Length, dd.ZeroBasedAddress };
+    SetupPresetParams presetParams = { dd.PointAddress, dd.Length, dd.ZeroBasedAddress, dd.AddrSpace };
 
     {
         DialogSetupPresetData dlg(presetParams, type, dd.HexAddress, this);
@@ -1109,6 +1119,7 @@ void MainWindow::forceCoils(QModbusDataUnit::RegisterType type)
     ModbusWriteParams params;
     params.Address = presetParams.PointAddress;
     params.ZeroBasedAddress = dd.ZeroBasedAddress;
+    params.AddrSpace = dd.AddrSpace;
 
     if(dd.PointType == type)
     {
@@ -1133,7 +1144,7 @@ void MainWindow::presetRegs(QModbusDataUnit::RegisterType type)
     if(!frm) return;
 
     const auto dd = frm->displayDefinition();
-    SetupPresetParams presetParams = { dd.PointAddress, dd.Length, dd.ZeroBasedAddress };
+    SetupPresetParams presetParams = { dd.PointAddress, dd.Length, dd.ZeroBasedAddress, dd.AddrSpace };
 
     {
         DialogSetupPresetData dlg(presetParams, type, dd.HexAddress, this);
@@ -1146,6 +1157,7 @@ void MainWindow::presetRegs(QModbusDataUnit::RegisterType type)
     params.Order = frm->byteOrder();
     params.Codepage = frm->codepage();
     params.ZeroBasedAddress = dd.ZeroBasedAddress;
+    params.AddrSpace = dd.AddrSpace;
 
     if(dd.PointType == type)
     {
@@ -1266,6 +1278,11 @@ FormModSim* MainWindow::createMdiChild(int id)
         updateRunMode(frm->scriptSettings().Mode);
     });
 
+    connect(frm, &FormModSim::captureError, this, [this](const QString& error)
+    {
+        QMessageBox::critical(this, windowTitle(), tr("Capture Error:\r\n%1").arg(error));
+    });
+
     _windowActionList->addWindow(wnd);
 
     return frm;
@@ -1331,7 +1348,7 @@ void MainWindow::loadConfig(const QString& filename, bool startup)
     QVersionNumber ver;
     s >> ver;
 
-    if(ver != QVersionNumber(1, 0))
+    if(ver < QVersionNumber(1, 0))
         return;
 
     QStringList listFilename;
@@ -1339,6 +1356,14 @@ void MainWindow::loadConfig(const QString& filename, bool startup)
 
     QList<ConnectionDetails> conns;
     s >> conns;
+
+    if(ver >= QVersionNumber(1, 1)) {
+        ModbusDefinitions defs;
+        s >> defs.AddrSpace;
+        s >> defs.UseGlobalUnitMap;
+        s >> defs.ErrorSimulations;
+        _mbMultiServer.setModbusDefinitions(defs);
+    }
 
     if(s.status() != QDataStream::Ok)
         return;
@@ -1401,13 +1426,19 @@ void MainWindow::saveConfig(const QString& filename)
     s << (quint8)0x35;
 
     // version number
-    s << QVersionNumber(1, 0);
+    s << QVersionNumber(1, 1);
 
     // list of files
     s << listFilename;
 
     // connections
     s << _mbMultiServer.connections();
+
+    // modbus definitions
+    ModbusDefinitions defs = _mbMultiServer.getModbusDefinitions();
+    s << defs.AddrSpace;
+    s << defs.UseGlobalUnitMap;
+    s << defs.ErrorSimulations;
 }
 
 ///
@@ -1543,6 +1574,10 @@ void MainWindow::loadSettings()
 
     _savePath = m.value("SavePath").toString();
 
+    ModbusDefinitions defs;
+    m >> defs;
+    _mbMultiServer.setModbusDefinitions(defs);
+
     m >> qobject_cast<MenuConnect*>(ui->actionConnect->menu());
 
     const QStringList groups = m.childGroups();
@@ -1605,6 +1640,8 @@ void MainWindow::saveSettings()
     m.setValue("EditBarBreak", toolBarBreak(ui->toolBarEdit));
     m.setValue("Language", _lang);
     m.setValue("SavePath", _savePath);
+
+    m << _mbMultiServer.getModbusDefinitions();
 
     m << qobject_cast<MenuConnect*>(ui->actionConnect->menu());
 

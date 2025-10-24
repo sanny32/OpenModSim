@@ -22,9 +22,6 @@ public:
     void addDeviceId(quint8 deviceId);
     void removeDeviceId(quint8 deviceId);
 
-    bool isBusy(quint8 deviceId) const;
-    void setBusy(bool busy, quint8 deviceId);
-
     bool useGlobalUnitMap() const;
     void setUseGlobalUnitMap(bool use);
 
@@ -36,6 +33,9 @@ public:
     void closeConnections();
 
     QList<ConnectionDetails> connections() const;
+
+    ModbusDefinitions getModbusDefinitions() const;
+    void setModbusDefinitions(const ModbusDefinitions& defs);
 
     bool isConnected() const;
     bool isConnected(ConnectionType type, const QString& port) const;
@@ -68,11 +68,12 @@ public:
 signals:
     void connected(const ConnectionDetails& cd);
     void disconnected(const ConnectionDetails& cd);
-    void request(quint8 deviceId, const QModbusRequest& req, ModbusMessage::ProtocolType protocol, int transactionId);
-    void response(quint8 deviceId, const QModbusRequest& req, const QModbusResponse& resp, ModbusMessage::ProtocolType protocol, int transactionId);
+    void request(QSharedPointer<const ModbusMessage> msg);
+    void response(QSharedPointer<const ModbusMessage> msgReq, QSharedPointer<const ModbusMessage> msgResp);
     void connectionError(const QString& error);
     void errorOccured(quint8 deviceId, const QString& error);
     void dataChanged(quint8 deviceId, const QModbusDataUnit& data);
+    void definitionsChanged(const ModbusDefinitions& defs);
 
 private slots:
     void on_stateChanged(QModbusDevice::State state);
@@ -91,6 +92,7 @@ private:
 private:
     QList<int> _deviceIds;
     QThread* _workerThread;
+    ModbusDefinitions _definitions;
     QMap<int, ModbusDataUnitMap> _modbusDataUnitMaps;
     QList<QSharedPointer<ModbusServer>> _modbusServerList;
 };

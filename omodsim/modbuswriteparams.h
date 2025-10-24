@@ -15,6 +15,7 @@ struct ModbusWriteParams
     ByteOrder Order;
     QString Codepage;
     bool ZeroBasedAddress;
+    AddressSpace AddrSpace;
 };
 Q_DECLARE_METATYPE(ModbusWriteParams)
 
@@ -27,6 +28,7 @@ struct ModbusMaskWriteParams
     quint16 AndMask;
     quint16 OrMask;
     bool ZeroBasedAddress;
+    AddressSpace AddrSpace;
 };
 Q_DECLARE_METATYPE(ModbusMaskWriteParams)
 

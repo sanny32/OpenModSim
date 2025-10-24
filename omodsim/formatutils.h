@@ -481,7 +481,7 @@ inline QString formatUInt64Value(QModbusDataUnit::RegisterType pointType, quint1
 /// \param hexFormat
 /// \return
 ///
-inline QString formatAddress(QModbusDataUnit::RegisterType pointType, int address, bool hexFormat)
+inline QString formatAddress(QModbusDataUnit::RegisterType pointType, int address, AddressSpace space, bool hexFormat)
 {
     QString prefix;
     switch(pointType)
@@ -502,8 +502,9 @@ inline QString formatAddress(QModbusDataUnit::RegisterType pointType, int addres
             break;
     }
 
+    const int width = space == AddressSpace::Addr6Digits ? 5 : 4;
     return hexFormat ? QString("0x%1").arg(QString::number(address, 16).toUpper(), 4, '0') :
-               prefix + QStringLiteral("%1").arg(address, 4, 10, QLatin1Char('0'));
+               prefix + QStringLiteral("%1").arg(address, width, 10, QLatin1Char('0'));
 }
 
 #endif // FORMATUTILS_H

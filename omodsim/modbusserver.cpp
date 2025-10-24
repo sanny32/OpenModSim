@@ -92,7 +92,7 @@ QList<int> ModbusServer::serverAddresses() const
 /// \param serverAddress
 /// \return
 ///
-bool ModbusServer::setMap(const QModbusDataUnitMap &map, int serverAddress)
+bool ModbusServer::setMap(const ModbusDataUnitMap &map, int serverAddress)
 {
     _modbusDataUnitMaps[serverAddress] = map;
     return true;
@@ -485,6 +485,17 @@ bool ModbusServer::matchingServerAddress(quint8 unitId) const
     qCDebug(QT_MODBUS) << "(server) Wrong server unit identifier address, expected one of"
                        << _serverAddresses.values() << "got" << unitId;
     return false;
+}
+
+///
+/// \brief ModbusServer::processDefinitionsChanges
+///
+void ModbusServer::processDefinitionsChanges()
+{
+    for(auto serverAddress : _serverAddresses.values()) {
+        _modbusDataUnitMaps[serverAddress].setAddressSpace(_definitions.AddrSpace);
+        _modbusDataUnitMaps[serverAddress].setGlobalMap(_definitions.UseGlobalUnitMap);
+    }
 }
 
 ///

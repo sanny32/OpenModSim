@@ -1,7 +1,8 @@
 #include "modbusmessages.h"
 
 namespace {
-static const int reg = qRegisterMetaType<ModbusMessage::ProtocolType>();
+static const int reg1 = qRegisterMetaType<ModbusMessage::ProtocolType>();
+static const int reg2 = qRegisterMetaType<QSharedPointer<const ModbusMessage>>();
 }
 
 ///

@@ -32,12 +32,12 @@ MenuConnect::MenuConnect(MenuType type, ModbusMultiServer& server, QWidget *pare
                 case ConnectionType::Tcp:
                 {
                     const auto port = QString("%1:%2").arg(cd.TcpParams.IPAddress, QString::number(cd.TcpParams.ServicePort));
-                    addAction(QString(tr("Modbus/TCP Srv %1")).arg(port), ConnectionType::Tcp, port, QString("Modbus/TCP Srv %1").arg(port));
+                    addAction(tr("Modbus/TCP Srv %1").arg(port), ConnectionType::Tcp, port, QString("Modbus/TCP Srv %1").arg(port));
                 }
                 break;
 
                 case ConnectionType::Serial:
-                    addAction(QString(tr("Port %1")).arg(cd.SerialParams.PortName), ConnectionType::Serial, cd.SerialParams.PortName, QString("Port %1").arg(cd.SerialParams.PortName));
+                    addAction(tr("Port %1").arg(cd.SerialParams.PortName), ConnectionType::Serial, cd.SerialParams.PortName, QString("Port %1").arg(cd.SerialParams.PortName));
                 break;
             }
         }

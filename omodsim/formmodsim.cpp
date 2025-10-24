@@ -13,7 +13,7 @@
 #include "formmodsim.h"
 #include "ui_formmodsim.h"
 
-QVersionNumber FormModSim::VERSION = QVersionNumber(1, 10);
+QVersionNumber FormModSim::VERSION = QVersionNumber(1, 11);
 
 ///
 /// \brief FormModSim::FormModSim
@@ -42,8 +42,10 @@ FormModSim::FormModSim(int id, ModbusMultiServer& server, QSharedPointer<DataSim
     ui->scriptControl->setModbusMultiServer(&_mbMultiServer);
     ui->scriptControl->setByteOrder(ui->outputWidget->byteOrder());
 
+    const auto mbDefs = _mbMultiServer.getModbusDefinitions();
+
     ui->lineEditAddress->setPaddingZeroes(true);
-    ui->lineEditAddress->setInputRange(ModbusLimits::addressRange(true));
+    ui->lineEditAddress->setInputRange(ModbusLimits::addressRange(mbDefs.AddrSpace, true));
     ui->lineEditAddress->setValue(0);
 
     ui->lineEditLength->setInputRange(ModbusLimits::lengthRange());
@@ -54,6 +56,7 @@ FormModSim::FormModSim(int id, ModbusMultiServer& server, QSharedPointer<DataSim
 
     onDefinitionChanged();
     ui->outputWidget->setFocus();
+    connect(ui->outputWidget, &OutputWidget::startTextCaptureError, this, &FormModSim::captureError);
 
     setLogViewState(server.isConnected() ? LogViewState::Running : LogViewState::Unknown);
     connect(ui->statisticWidget, &StatisticWidget::ctrsReseted, ui->outputWidget, &OutputWidget::clearLogView);
@@ -64,6 +67,7 @@ FormModSim::FormModSim(int id, ModbusMultiServer& server, QSharedPointer<DataSim
     connect(&_mbMultiServer, &ModbusMultiServer::connected, this, &FormModSim::on_mbConnected);
     connect(&_mbMultiServer, &ModbusMultiServer::disconnected, this, &FormModSim::on_mbDisconnected);
     connect(&_mbMultiServer, &ModbusMultiServer::dataChanged, this, &FormModSim::on_mbDataChanged);
+    connect(&_mbMultiServer, &ModbusMultiServer::definitionsChanged, this, &FormModSim::on_mbDefinitionsChanged);
 
     connect(_dataSimulator.get(), &DataSimulator::simulationStarted, this, &FormModSim::on_simulationStarted);
     connect(_dataSimulator.get(), &DataSimulator::simulationStopped, this, &FormModSim::on_simulationStopped);
@@ -141,6 +145,7 @@ QVector<quint16> FormModSim::data() const
 DisplayDefinition FormModSim::displayDefinition() const
 {
     DisplayDefinition dd;
+    dd.FormName = windowTitle();
     dd.DeviceId = ui->lineEditDeviceId->value<int>();
     dd.PointAddress = ui->lineEditAddress->value<int>();
     dd.PointType = ui->comboBoxModbusPointType->currentPointType();
@@ -149,8 +154,9 @@ DisplayDefinition FormModSim::displayDefinition() const
     dd.LogViewLimit = ui->outputWidget->logViewLimit();
     dd.AutoscrollLog = ui->outputWidget->autoscrollLogView();
     dd.VerboseLogging = _verboseLogging;
-    dd.UseGlobalUnitMap = _mbMultiServer.useGlobalUnitMap();
     dd.HexAddress = displayHexAddresses();
+    dd.AddrSpace = _mbMultiServer.getModbusDefinitions().AddrSpace;
+    dd.DataViewColumnsDistance = ui->outputWidget->dataViewColumnsDistance();
 
     return dd;
 }
@@ -161,7 +167,10 @@ DisplayDefinition FormModSim::displayDefinition() const
 ///
 void FormModSim::setDisplayDefinition(const DisplayDefinition& dd)
 {
-    _mbMultiServer.setUseGlobalUnitMap(dd.UseGlobalUnitMap);
+    if(!dd.FormName.isEmpty())
+        setWindowTitle(dd.FormName);
+
+    const auto defs = _mbMultiServer.getModbusDefinitions();
 
     ui->lineEditDeviceId->setValue(dd.DeviceId);
 
@@ -170,7 +179,7 @@ void FormModSim::setDisplayDefinition(const DisplayDefinition& dd)
     ui->comboBoxAddressBase->blockSignals(false);
 
     ui->lineEditAddress->blockSignals(true);
-    ui->lineEditAddress->setInputRange(ModbusLimits::addressRange(dd.ZeroBasedAddress));
+    ui->lineEditAddress->setInputRange(ModbusLimits::addressRange(defs.AddrSpace, dd.ZeroBasedAddress));
     ui->lineEditAddress->setValue(dd.PointAddress);
     ui->lineEditAddress->blockSignals(false);
 
@@ -183,6 +192,7 @@ void FormModSim::setDisplayDefinition(const DisplayDefinition& dd)
     ui->comboBoxModbusPointType->blockSignals(false);
 
     ui->outputWidget->setLogViewLimit(dd.LogViewLimit);
+    ui->outputWidget->setDataViewColumnsDistance(dd.DataViewColumnsDistance);
     ui->outputWidget->setAutosctollLogView(dd.AutoscrollLog);
     _verboseLogging = dd.VerboseLogging;
 
@@ -251,8 +261,9 @@ void FormModSim::setDisplayHexAddresses(bool on)
 {
     ui->outputWidget->setDisplayHexAddresses(on);
 
+    const auto defs = _mbMultiServer.getModbusDefinitions();
     ui->lineEditAddress->setInputMode(on ? NumericLineEdit::HexMode : NumericLineEdit::Int32Mode);
-    ui->lineEditAddress->setInputRange(ModbusLimits::addressRange(ui->comboBoxAddressBase->currentAddressBase() == AddressBase::Base0));
+    ui->lineEditAddress->setInputRange(ModbusLimits::addressRange(defs.AddrSpace, ui->comboBoxAddressBase->currentAddressBase() == AddressBase::Base0));
 }
 
 ///
@@ -748,8 +759,9 @@ void FormModSim::updateStatus()
     const auto dd = displayDefinition();
     if(_mbMultiServer.isConnected())
     {
+        const auto defs = _mbMultiServer.getModbusDefinitions();
         const auto addr = dd.PointAddress - (dd.ZeroBasedAddress ? 0 : 1);
-        if(addr + dd.Length <= ModbusLimits::addressRange().to())
+        if(addr + dd.Length <= ModbusLimits::addressRange(defs.AddrSpace).to())
             ui->outputWidget->setStatus(QString());
         else
             ui->outputWidget->setInvalidLengthStatus();
@@ -779,7 +791,7 @@ void FormModSim::onDefinitionChanged()
 /// \brief FormModSim::scriptControl
 /// \return
 ///
-ScriptControl* FormModSim::scriptControl()
+JScriptControl* FormModSim::scriptControl()
 {
     return ui->scriptControl;
 }
@@ -796,6 +808,7 @@ void FormModSim::on_outputWidget_itemDoubleClicked(quint16 addr, const QVariant&
     const auto pointType = ui->comboBoxModbusPointType->currentPointType();
     const auto zeroBasedAddress = displayDefinition().ZeroBasedAddress;
     const auto simAddr = addr - (zeroBasedAddress ? 0 : 1);
+    const auto addrSpace = _mbMultiServer.getModbusDefinitions().AddrSpace;
     auto simParams = _dataSimulator->simulationParams(deviceId, pointType, addr);
 
     switch(pointType)
@@ -803,7 +816,7 @@ void FormModSim::on_outputWidget_itemDoubleClicked(quint16 addr, const QVariant&
         case QModbusDataUnit::Coils:
         case QModbusDataUnit::DiscreteInputs:
         {
-            ModbusWriteParams params = { addr, value, mode, byteOrder(), codepage(), zeroBasedAddress };
+            ModbusWriteParams params = { addr, value, mode, byteOrder(), codepage(), zeroBasedAddress, addrSpace };
             DialogWriteCoilRegister dlg(params, simParams, displayHexAddresses(), this);
             switch(dlg.exec())
             {
@@ -822,7 +835,7 @@ void FormModSim::on_outputWidget_itemDoubleClicked(quint16 addr, const QVariant&
         case QModbusDataUnit::InputRegisters:
         case QModbusDataUnit::HoldingRegisters:
         {
-            ModbusWriteParams params = { addr, value, mode, byteOrder(), codepage(), zeroBasedAddress };
+            ModbusWriteParams params = { addr, value, mode, byteOrder(), codepage(), zeroBasedAddress, addrSpace };
             if(mode == DataDisplayMode::Binary)
             {
                 DialogWriteHoldingRegisterBits dlg(params, displayHexAddresses(), this);
@@ -878,18 +891,18 @@ void FormModSim::on_mbDisconnected(const ConnectionDetails&)
 
 ///
 /// \brief FormModSim::isLoggingRequest
-/// \param req
-/// \param protocol
+/// \param msgReq
 /// \return
 ///
-bool FormModSim::isLoggingRequest(quint8 deviceId, const QModbusRequest& req, ModbusMessage::ProtocolType protocol) const
+bool FormModSim::isLoggingRequest(QSharedPointer<const ModbusMessage> msgReq) const
 {
     const auto dd = displayDefinition();
-    if(dd.DeviceId != deviceId)
+    if(dd.DeviceId != msgReq->deviceId())
         return false;
 
+    const QModbusRequest req = msgReq->adu()->pdu();
     const auto startAddress = dd.PointAddress - (dd.ZeroBasedAddress ? 0 : 1);
-    auto msg = ModbusMessage::create(req, protocol, dd.DeviceId, QDateTime::currentDateTime(), true);
+    auto msg = ModbusMessage::create(req, msgReq->protocolType(), dd.DeviceId, QDateTime::currentDateTime(), true);
 
     switch(req.functionCode()) {
         case QModbusPdu::ReadCoils: {
@@ -939,30 +952,26 @@ bool FormModSim::isLoggingRequest(quint8 deviceId, const QModbusRequest& req, Mo
 
 ///
 /// \brief FormModSim::on_mbRequest
-/// \param req
-/// \param protocol
-/// \param transactionId
+/// \param msg
 ///
-void FormModSim::on_mbRequest(quint8 deviceId, const QModbusRequest& req, ModbusMessage::ProtocolType protocol, int transactionId)
+void FormModSim::on_mbRequest(QSharedPointer<const ModbusMessage> msg)
 {
-    if(_verboseLogging || isLoggingRequest(deviceId, req, protocol)) {
+    if(_verboseLogging || isLoggingRequest(msg)) {
         ui->statisticWidget->increaseRequests();
-        ui->outputWidget->updateTraffic(req,  deviceId, transactionId, protocol);
+        ui->outputWidget->updateTraffic(msg);
     }
 }
 
 ///
 /// \brief FormModSim::on_mbResponse
-/// \param req
-/// \param resp
-/// \param protocol
-/// \param transactionId
+/// \param msgReq
+/// \param msgResp
 ///
-void FormModSim::on_mbResponse(quint8 deviceId, const QModbusRequest& req, const QModbusResponse& resp, ModbusMessage::ProtocolType protocol, int transactionId)
+void FormModSim::on_mbResponse(QSharedPointer<const ModbusMessage> msgReq, QSharedPointer<const ModbusMessage> msgResp)
 {
-    if(_verboseLogging || isLoggingRequest(deviceId, req, protocol)) {
+    if(_verboseLogging || isLoggingRequest(msgReq)) {
         ui->statisticWidget->increaseResponses();
-        ui->outputWidget->updateTraffic(resp, deviceId, transactionId, protocol);
+        ui->outputWidget->updateTraffic(msgResp);
     }
 }
 
@@ -977,6 +986,18 @@ void FormModSim::on_mbDataChanged(quint8 deviceId, const QModbusDataUnit&)
         const auto addr = dd.PointAddress - (dd.ZeroBasedAddress ? 0 : 1);
         ui->outputWidget->updateData(_mbMultiServer.data(deviceId, dd.PointType, addr, dd.Length));
     }
+}
+
+///
+/// \brief FormModSim::on_mbDefinitionsChanged
+/// \param defs
+///
+void FormModSim::on_mbDefinitionsChanged(const ModbusDefinitions& defs)
+{
+    const auto dd = displayDefinition();
+    const auto addr = dd.PointAddress - (dd.ZeroBasedAddress ? 0 : 1);
+    ui->lineEditAddress->setInputRange(ModbusLimits::addressRange(defs.AddrSpace, dd.ZeroBasedAddress));
+    ui->outputWidget->setup(dd, _dataSimulator->simulationMap(), _mbMultiServer.data(dd.DeviceId, dd.PointType, addr, dd.Length));
 }
 
 ///
@@ -1028,13 +1049,13 @@ void FormModSim::on_dataSimulated(DataDisplayMode mode, quint8 deviceId, QModbus
 void FormModSim::connectEditSlots()
 {
     disconnectEditSlots();
-    connect(_parent, &MainWindow::undo, ui->scriptControl, &ScriptControl::undo);
-    connect(_parent, &MainWindow::redo, ui->scriptControl, &ScriptControl::redo);
-    connect(_parent, &MainWindow::cut, ui->scriptControl, &ScriptControl::cut);
-    connect(_parent, &MainWindow::copy, ui->scriptControl, &ScriptControl::copy);
-    connect(_parent, &MainWindow::paste, ui->scriptControl, &ScriptControl::paste);
-    connect(_parent, &MainWindow::selectAll, ui->scriptControl, &ScriptControl::selectAll);
-    connect(_parent, &MainWindow::search, ui->scriptControl, &ScriptControl::search);
+    connect(_parent, &MainWindow::undo, ui->scriptControl, &JScriptControl::undo);
+    connect(_parent, &MainWindow::redo, ui->scriptControl, &JScriptControl::redo);
+    connect(_parent, &MainWindow::cut, ui->scriptControl, &JScriptControl::cut);
+    connect(_parent, &MainWindow::copy, ui->scriptControl, &JScriptControl::copy);
+    connect(_parent, &MainWindow::paste, ui->scriptControl, &JScriptControl::paste);
+    connect(_parent, &MainWindow::selectAll, ui->scriptControl, &JScriptControl::selectAll);
+    connect(_parent, &MainWindow::search, ui->scriptControl, &JScriptControl::search);
 }
 
 ///
@@ -1042,11 +1063,11 @@ void FormModSim::connectEditSlots()
 ///
 void FormModSim::disconnectEditSlots()
 {
-    disconnect(_parent, &MainWindow::undo, ui->scriptControl, &ScriptControl::undo);
-    disconnect(_parent, &MainWindow::redo, ui->scriptControl, &ScriptControl::redo);
-    disconnect(_parent, &MainWindow::cut, ui->scriptControl, &ScriptControl::cut);
-    disconnect(_parent, &MainWindow::copy, ui->scriptControl, &ScriptControl::copy);
-    disconnect(_parent, &MainWindow::paste, ui->scriptControl, &ScriptControl::paste);
-    disconnect(_parent, &MainWindow::selectAll, ui->scriptControl, &ScriptControl::selectAll);
-    disconnect(_parent, &MainWindow::search, ui->scriptControl, &ScriptControl::search);
+    disconnect(_parent, &MainWindow::undo, ui->scriptControl, &JScriptControl::undo);
+    disconnect(_parent, &MainWindow::redo, ui->scriptControl, &JScriptControl::redo);
+    disconnect(_parent, &MainWindow::cut, ui->scriptControl, &JScriptControl::cut);
+    disconnect(_parent, &MainWindow::copy, ui->scriptControl, &JScriptControl::copy);
+    disconnect(_parent, &MainWindow::paste, ui->scriptControl, &JScriptControl::paste);
+    disconnect(_parent, &MainWindow::selectAll, ui->scriptControl, &JScriptControl::selectAll);
+    disconnect(_parent, &MainWindow::search, ui->scriptControl, &JScriptControl::search);
 }

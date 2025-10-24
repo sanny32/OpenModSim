@@ -1,5 +1,7 @@
 #include <QUrl>
+#include <QTimer>
 #include <QTcpSocket>
+#include <QRandomGenerator>
 #include "modbustcpserver.h"
 
 ///
@@ -96,7 +98,9 @@ void ModbusTcpServer::on_newConnection()
         if (!socket)
             return;
 
+        const ModbusDefinitions mbDef = getDefinitions();
         buffer->append(socket->readAll());
+
         while (!buffer->isEmpty()) {
             qCDebug(QT_MODBUS_LOW).noquote() << "(TCP server) Read buffer: 0x"
                                                     + buffer->toHex();
@@ -134,29 +138,56 @@ void ModbusTcpServer::on_newConnection()
                 continue;
 
             qCDebug(QT_MODBUS) << "(TCP server) Request PDU:" << request;
-            const QModbusResponse response = forwardProcessRequest(request, unitId, transactionId);
-            qCDebug(QT_MODBUS) << "(TCP server) Response PDU:" << response;
 
-            QByteArray result;
-            QDataStream output(&result, QIODevice::WriteOnly);
-            // The length field is the byte count of the following fields, including the Unit
-            // Identifier and PDU fields, so we add one byte to the response size.
-            output << transactionId << protocolId << quint16(response.size() + 1)
-                   << unitId << response;
+            const auto msgReq = ModbusMessage::create(request, ModbusMessage::Tcp, unitId, QDateTime::currentDateTime(), true);
+            emit modbusRequest(msgReq);
 
-            if (!socket->isOpen()) {
-                qCDebug(QT_MODBUS) << "(TCP server) Requesting socket has closed.";
-                setError(QModbusTcpServer::tr("Requesting socket is closed"),
-                             QModbusDevice::WriteError);
+            if(mbDef.ErrorSimulations.noResponse())
                 return;
+
+            const QModbusResponse response = forwardProcessRequest(request, unitId);
+
+            if(mbDef.ErrorSimulations.responseIncorrectId())
+                unitId++;
+
+            int responseDelay = 0;
+            if(mbDef.ErrorSimulations.responseDelay()) {
+                responseDelay = mbDef.ErrorSimulations.responseDelayTime();
+            }
+            else if(mbDef.ErrorSimulations.responseRandomDelay()) {
+                responseDelay = QRandomGenerator::global()->bounded(mbDef.ErrorSimulations.responseRandomDelayUpToTime());
             }
 
-            qint64 writtenBytes = socket->write(result);
-            if (writtenBytes == -1 || writtenBytes < result.size()) {
-                qCDebug(QT_MODBUS) << "(TCP server) Cannot write requested response to socket.";
-                setError(QModbusTcpServer::tr("Could not write response to client"),
-                             QModbusDevice::WriteError);
-            }
+            QTimer::singleShot(responseDelay, this,
+                               [this, socket, transactionId, protocolId, unitId, response, request, msgReq]()
+            {
+                qCDebug(QT_MODBUS) << "(TCP server) Response PDU:" << response;
+
+                QByteArray result;
+                QDataStream output(&result, QIODevice::WriteOnly);
+                // The length field is the byte count of the following fields, including the Unit
+                // Identifier and PDU fields, so we add one byte to the response size.
+                output << transactionId << protocolId << quint16(response.size() + 1)
+                       << unitId << response;
+
+                if (!socket->isOpen()) {
+                    qCDebug(QT_MODBUS) << "(TCP server) Requesting socket has closed.";
+                    setError(QModbusTcpServer::tr("Requesting socket is closed"),
+                                 QModbusDevice::WriteError);
+                    return;
+                }
+
+                qint64 writtenBytes = socket->write(result);
+                if (writtenBytes == -1 || writtenBytes < result.size()) {
+                    qCDebug(QT_MODBUS) << "(TCP server) Cannot write requested response to socket.";
+                    setError(QModbusTcpServer::tr("Could not write response to client"),
+                                 QModbusDevice::WriteError);
+                }
+                else {
+                    const auto msgResp = ModbusMessage::create(result, ModbusMessage::Tcp, QDateTime::currentDateTime(), false);
+                    emit modbusResponse(msgReq, msgResp);
+                }
+            });
         }
     });
 }
@@ -173,16 +204,21 @@ void ModbusTcpServer::on_acceptError(QAbstractSocket::SocketError)
 ///
 /// \brief ModbusTcpServer::forwardProcessRequest
 /// \param r
+/// \param serverAddress
 /// \return
 ///
-QModbusResponse ModbusTcpServer::forwardProcessRequest(const QModbusRequest &r, int serverAddress, int transactionId)
+QModbusResponse ModbusTcpServer::forwardProcessRequest(const QModbusRequest &r, int serverAddress)
 {
-    if (value(QModbusServer::DeviceBusy, serverAddress).value<quint16>() == 0xffff) {
+    const ModbusDefinitions mbDef = getDefinitions();
+
+    if(mbDef.ErrorSimulations.responseIllegalFunction()) {
+        return QModbusExceptionResponse(r.functionCode(), QModbusExceptionResponse::IllegalFunction);
+    }
+
+    if (mbDef.ErrorSimulations.responseDeviceBusy() || value(QModbusServer::DeviceBusy, serverAddress).value<quint16>() == 0xffff) {
         // If the device is busy, send an exception response without processing.
         return QModbusExceptionResponse(r.functionCode(), QModbusExceptionResponse::ServerDeviceBusy);
     }
-
-    emit request(serverAddress, r, transactionId);
 
     QModbusResponse resp;
     switch (r.functionCode()) {
@@ -198,7 +234,6 @@ QModbusResponse ModbusTcpServer::forwardProcessRequest(const QModbusRequest &r, 
         break;
     }
 
-    emit response(serverAddress, r, resp, transactionId);
     return resp;
 }
 

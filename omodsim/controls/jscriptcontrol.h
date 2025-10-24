@@ -1,5 +1,5 @@
-#ifndef SCRIPTCONTROL_H
-#define SCRIPTCONTROL_H
+#ifndef JSCRIPTCONTROL_H
+#define JSCRIPTCONTROL_H
 
 #include <QTimer>
 #include <QJSEngine>
@@ -10,24 +10,24 @@
 #include "server.h"
 
 namespace Ui {
-class ScriptControl;
+class JScriptControl;
 }
 
 ///
-/// \brief The ScriptControl class
+/// \brief The JScriptControl class
 ///
-class ScriptControl : public QWidget
+class JScriptControl : public QWidget
 {
     Q_OBJECT
 
-    friend QSettings& operator <<(QSettings& out, const ScriptControl* ctrl);
-    friend QSettings& operator >>(QSettings& in, ScriptControl* ctrl);
-    friend QDataStream& operator <<(QDataStream& out, const ScriptControl* ctrl);
-    friend QDataStream& operator >>(QDataStream& in, ScriptControl* ctrl);
+    friend QSettings& operator <<(QSettings& out, const JScriptControl* ctrl);
+    friend QSettings& operator >>(QSettings& in, JScriptControl* ctrl);
+    friend QDataStream& operator <<(QDataStream& out, const JScriptControl* ctrl);
+    friend QDataStream& operator >>(QDataStream& in, JScriptControl* ctrl);
 
 public:  
-    explicit ScriptControl(QWidget *parent = nullptr);
-    ~ScriptControl();
+    explicit JScriptControl(QWidget *parent = nullptr);
+    ~JScriptControl();
 
     void setModbusMultiServer(ModbusMultiServer* server);
     void setByteOrder(const ByteOrder* order);
@@ -65,7 +65,10 @@ private slots:
     bool executeScript();
 
 private:
-    Ui::ScriptControl *ui;
+    QJSValue newEnumObject(const QMetaObject& metaObj, const QString& enumName);
+
+private:
+    Ui::JScriptControl *ui;
 
     QTimer _timer;
     QJSEngine _jsEngine;
@@ -82,4 +85,4 @@ private:
     ModbusMultiServer* _mbMultiServer = nullptr;
 };
 
-#endif // SCRIPTCONTROL_H
+#endif // JSCRIPTCONTROL_H

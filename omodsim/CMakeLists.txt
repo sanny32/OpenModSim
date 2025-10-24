@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.16)
 
 project(omodsim
-        VERSION 1.9.1
+        VERSION 1.10.0
         DESCRIPTION "An Open Source Modbus Slave (Server) Utility"
         LANGUAGES CXX)
 
@@ -42,19 +42,26 @@ endif()
 # Define target
 add_executable(${PROJECT_NAME})
 
-find_package(Git QUIET)
-if(GIT_FOUND)
-    execute_process(COMMAND ${GIT_EXECUTABLE} rev-parse --abbrev-ref HEAD
-        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/../.git
-        OUTPUT_VARIABLE GIT_BRANCH
-        OUTPUT_STRIP_TRAILING_WHITESPACE
-        ERROR_QUIET)
-
-    if(${GIT_BRANCH} MATCHES dev)
-        set(PROJECT_VERSION ${VERSION_MAJOR}.${VERSION_MINOR}-dev)
+if(DEFINED ENV{GITHUB_REF})
+    string(REGEX MATCH "refs/heads/(.*)" MATCH_RESULT $ENV{GITHUB_REF})
+    if(MATCH_RESULT AND CMAKE_MATCH_1)
+        set(GIT_BRANCH ${CMAKE_MATCH_1})
     endif()
 else()
-    message(STATUS "Git not found - skipping branch detection")
+    find_package(Git QUIET)
+    if(GIT_FOUND)
+        execute_process(COMMAND ${GIT_EXECUTABLE} rev-parse --abbrev-ref HEAD
+            WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/../.git
+            OUTPUT_VARIABLE GIT_BRANCH
+            OUTPUT_STRIP_TRAILING_WHITESPACE
+            ERROR_QUIET)
+    else()
+        message(STATUS "Git not found - branch detection is not possible")
+    endif()
+endif()
+
+if(${GIT_BRANCH} MATCHES dev)
+    set(PROJECT_VERSION ${VERSION_MAJOR}.${VERSION_MINOR}-dev)
 endif()
 
 # Define compile definitions
@@ -76,6 +83,7 @@ set(SOURCES
     ansimenu.cpp
     cmdlineparser.cpp
     controls/addressbasecombobox.cpp
+    controls/addressspacecombobox.cpp
     controls/booleancombobox.cpp
     controls/bytelisttextedit.cpp
     controls/clickablelabel.cpp
@@ -85,6 +93,7 @@ set(SOURCES
     controls/flowcontroltypecombobox.cpp
     controls/helpwidget.cpp
     controls/jscodeeditor.cpp
+    controls/jscriptcontrol.cpp
     controls/mainstatusbar.cpp
     controls/modbuslogwidget.cpp
     controls/modbusmessagewidget.cpp
@@ -94,7 +103,6 @@ set(SOURCES
     controls/paritytypecombobox.cpp
     controls/pointtypecombobox.cpp
     controls/runmodecombobox.cpp
-    controls/scriptcontrol.cpp
     controls/searchlineedit.cpp
     controls/simulationmodecombobox.cpp
     controls/statisticwidget.cpp
@@ -109,6 +117,7 @@ set(SOURCES
     dialogs/dialogprintsettings.cpp
     dialogs/dialogscriptsettings.cpp
     dialogs/dialogselectserviceport.cpp
+    dialogs/dialogmodbusdefinitions.cpp
     dialogs/dialogsetuppresetdata.cpp
     dialogs/dialogsetupserialport.cpp
     dialogs/dialogwindowsmanager.cpp
@@ -120,13 +129,14 @@ set(SOURCES
     jsobjects/console.cpp
     jsobjects/script.cpp
     jsobjects/server.cpp
+    jsobjects/storage.cpp
     formmodsim.cpp
     jshighlighter.cpp
-    jsobjects/storage.cpp
     main.cpp
     mainwindow.cpp
     menuconnect.cpp
     modbusdataunitmap.cpp
+    modbuserrorsimulations.cpp
     modbusmessages/modbusmessage.cpp
     modbusrtuserialserver.cpp
     modbusserver.cpp
@@ -148,6 +158,7 @@ set(HEADERS
     cmdlineparser.h
     connectiondetails.h
     controls/addressbasecombobox.h
+    controls/addressspacecombobox.h
     controls/booleancombobox.h
     controls/bytelisttextedit.h
     controls/clickablelabel.h
@@ -157,6 +168,7 @@ set(HEADERS
     controls/flowcontroltypecombobox.h
     controls/helpwidget.h
     controls/jscodeeditor.h
+    controls/jscriptcontrol.h
     controls/mainstatusbar.h
     controls/modbuslogwidget.h
     controls/modbusmessagewidget.h
@@ -166,7 +178,6 @@ set(HEADERS
     controls/paritytypecombobox.h
     controls/pointtypecombobox.h
     controls/runmodecombobox.h
-    controls/scriptcontrol.h
     controls/searchlineedit.h
     controls/simulationmodecombobox.h
     controls/statisticwidget.h
@@ -180,6 +191,7 @@ set(HEADERS
     dialogs/dialogmsgparser.h
     dialogs/dialogprintsettings.h
     dialogs/dialogscriptsettings.h
+    dialogs/dialogmodbusdefinitions.h
     dialogs/dialogselectserviceport.h
     dialogs/dialogsetuppresetdata.h
     dialogs/dialogsetupserialport.h
@@ -194,15 +206,17 @@ set(HEADERS
     jsobjects/console.h
     jsobjects/script.h
     jsobjects/server.h
+    jsobjects/storage.h
     displaydefinition.h
     enums.h
     modbusserver.h
     formmodsim.h
     jshighlighter.h
-    jsobjects/storage.h
     mainwindow.h
     menuconnect.h
     modbusdataunitmap.h
+    modbusdefinitions.h
+    modbuserrorsimulations.h
     modbuslimits.h
     modbusmessages/diagnostics.h
     modbusmessages/getcommeventcounter.h
@@ -248,8 +262,8 @@ set(HEADERS
 
 # UI Forms
 set(UI_FILES
+    controls/jscriptcontrol.ui
     controls/outputwidget.ui
-    controls/scriptcontrol.ui
     controls/statisticwidget.ui
     dialogs/dialogautosimulation.ui
     dialogs/dialogcoilsimulation.ui
@@ -261,6 +275,7 @@ set(UI_FILES
     dialogs/dialogprintsettings.ui
     dialogs/dialogscriptsettings.ui
     dialogs/dialogselectserviceport.ui
+    dialogs/dialogmodbusdefinitions.ui
     dialogs/dialogsetuppresetdata.ui
     dialogs/dialogsetupserialport.ui
     dialogs/dialogwindowsmanager.ui

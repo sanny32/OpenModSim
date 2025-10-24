@@ -10,7 +10,7 @@
 #include "modbusmultiserver.h"
 #include "displaydefinition.h"
 #include "outputwidget.h"
-#include "scriptcontrol.h"
+#include "jscriptcontrol.h"
 #include "scriptsettings.h"
 
 class MainWindow;
@@ -127,6 +127,7 @@ signals:
     void pointTypeChanged(QModbusDataUnit::RegisterType);
     void displayModeChanged(DisplayMode mode);
     void scriptSettingsChanged(const ScriptSettings&);
+    void captureError(const QString& error);
 
 private slots:
     void on_lineEditAddress_valueChanged(const QVariant&);
@@ -137,9 +138,10 @@ private slots:
     void on_outputWidget_itemDoubleClicked(quint16 addr, const QVariant& value);
     void on_mbConnected(const ConnectionDetails& cd);
     void on_mbDisconnected(const ConnectionDetails& cd);
-    void on_mbRequest(quint8 deviceId, const QModbusRequest& req, ModbusMessage::ProtocolType protocol, int transactionId);
-    void on_mbResponse(quint8 deviceId, const QModbusRequest& req, const QModbusResponse& resp, ModbusMessage::ProtocolType protocol, int transactionId);
+    void on_mbRequest(QSharedPointer<const ModbusMessage> msg);
+    void on_mbResponse(QSharedPointer<const ModbusMessage> msgReq, QSharedPointer<const ModbusMessage> msgResp);
     void on_mbDataChanged(quint8 deviceId, const QModbusDataUnit& data);
+    void on_mbDefinitionsChanged(const ModbusDefinitions& defs);
     void on_simulationStarted(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr);
     void on_simulationStopped(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr);
     void on_dataSimulated(DataDisplayMode mode, quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr, QVariant value);
@@ -147,8 +149,8 @@ private slots:
 private:
     void updateStatus();
     void onDefinitionChanged();
-    ScriptControl* scriptControl();
-    bool isLoggingRequest(quint8 deviceId, const QModbusRequest& req, ModbusMessage::ProtocolType protocol) const;
+    JScriptControl* scriptControl();
+    bool isLoggingRequest(QSharedPointer<const ModbusMessage> msgReq) const;
 
 private:
     Ui::FormModSim *ui;
@@ -286,15 +288,16 @@ inline QDataStream& operator <<(QDataStream& out, FormModSim* frm)
     out << frm->font();
 
     const auto dd = frm->displayDefinition();
+    out << dd.FormName;
     out << dd.DeviceId;
     out << dd.PointType;
     out << dd.PointAddress;
     out << dd.Length;
     out << dd.LogViewLimit;
     out << dd.ZeroBasedAddress;
-    out << dd.UseGlobalUnitMap;
     out << dd.AutoscrollLog;
     out << dd.VerboseLogging;
+    out << dd.DataViewColumnsDistance;
 
     out << frm->byteOrder();
     out << frm->simulationMap();
@@ -350,6 +353,12 @@ inline QDataStream& operator >>(QDataStream& in, FormModSim* frm)
     in >> font;
 
     DisplayDefinition dd;
+    bool UseGlobalUnitMap;
+
+    if(ver >= QVersionNumber(1,11))
+    {
+        in >> dd.FormName;
+    }
     if(ver >= QVersionNumber(1, 5))
     {
         in >> dd.DeviceId;
@@ -365,9 +374,16 @@ inline QDataStream& operator >>(QDataStream& in, FormModSim* frm)
 
     if(ver >= QVersionNumber(1, 9))
     {
-        in >> dd.UseGlobalUnitMap;
+        if(ver < QVersionNumber(1, 11)) {
+            in >> UseGlobalUnitMap;
+        }
+
         in >> dd.AutoscrollLog;
         in >> dd.VerboseLogging;
+
+        if(ver >= QVersionNumber(1, 11)) {
+            in >> dd.DataViewColumnsDistance;
+        }
     }
 
     ModbusSimulationMap simulationMap;

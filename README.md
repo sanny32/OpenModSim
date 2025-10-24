@@ -1,9 +1,14 @@
 # Open ModSim
+
+[![GitHub all releases](https://img.shields.io/github/downloads/sanny32/OpenModSim/total?logo=github)](https://github.com/sanny32/OpenModSim/releases)
+[![GitHub release (latest by date)](https://img.shields.io/github/v/release/sanny32/OpenModSim?logo=github)](https://github.com/sanny32/OpenModSim/releases/latest)
+[![License](https://img.shields.io/github/license/sanny32/OpenModSim)](LICENSE.md)
+
 Open ModSim is a free implimentation of modbus slave (server) utility for modbus-tcp and modbus-rtu protocols.
 
-<img width="1292" height="759" alt="image" src="https://github.com/user-attachments/assets/993501d6-bb1e-4dee-91c4-6d9b7a53df8b" />
+<img width="1292" height="759" alt="image" src="https://github.com/user-attachments/assets/f740a180-6f2b-40fc-9e79-fd93a08353c9" />
 
-<img width="1292" height="760" alt="image" src="https://github.com/user-attachments/assets/1383d93f-03f2-42f5-abb5-0ee1b5dbd10b" />
+<img width="1292" height="759" alt="image" src="https://github.com/user-attachments/assets/ec3f02a6-2504-4f32-b22a-e22318afe0e4" />
 
 
 # Features
@@ -44,7 +49,7 @@ The following simulations are available:
 
 # Modbus Logging
 
-<img width="1292" height="759" alt="image" src="https://github.com/user-attachments/assets/b097a1b7-ee3f-4cd8-b0f2-c087cea25c00" />
+<img width="1292" height="759" alt="image" src="https://github.com/user-attachments/assets/66c32a67-1db7-46b3-8c99-6d738a91557f" />
 
 
 # Extended Featues
@@ -53,11 +58,19 @@ The following simulations are available:
 
 <img width="674" height="463" alt="image" src="https://github.com/user-attachments/assets/774e3ff1-1bf2-46a6-a685-e6702e2e7fe5" />
 
+- Modbus Definitions
+  
+<img width="416" height="346" alt="image" src="https://github.com/user-attachments/assets/2dc6c13e-e4be-434b-9266-1de4f3ccda4a" />
+
+- Error Simualtions
+
+<img width="416" height="346" alt="image" src="https://github.com/user-attachments/assets/af1701d9-d576-4f1f-9bf9-7e70e85cd9da" />
+
   
 # Scripting
   From version 1.2.0 Open ModSim supports scripting. Qt runtime implements the [ECMAScript Language Specification](http://www.ecma-international.org/publications/standards/Ecma-262.htm) standard, so Javascript is used to write code.
   
-<img width="1292" height="759" alt="image" src="https://github.com/user-attachments/assets/a5df0923-8015-4ddd-82c1-c744dc9e0584" />
+<img width="1292" height="759" alt="image" src="https://github.com/user-attachments/assets/54c0994c-4a24-4425-9b7b-cbbc6b8656b1" />
 
   Scripts can be launched in two modes: Once or Periodically. If you run script in Once mode the script will stop after it finishes executing. In Periodically mode, the script will start after a certain period of time until the user stops it or the method is called
   ```javascript
@@ -105,7 +118,7 @@ function init()
              */
             Script.setTimeout(function()
             {
-                Server.writeHolding(address10, Server.readHolding(10, deviceId) + 1, deviceId);
+                Server.writeHolding(address10, Server.readHolding(address10, deviceId) + 1, deviceId);
 				reset();
                 Script.stop();
             }, 3000);
@@ -140,18 +153,18 @@ Below are the methods for installing the OpenModSim for different OS
 ## Microsoft Windows
 Run the installer:
 
-- For 32-bit Windows: `qt5-omodsim_1.9.1_x86.exe`
-- For 64-bit Windows: `qt5-omodsim_1.9.1_x64.exe` or `qt6-omodsim_1.9.1_x64.exe`
+- For 32-bit Windows: `qt5-omodsim_1.10.0_x86.exe`
+- For 64-bit Windows: `qt5-omodsim_1.10.0_x64.exe` or `qt6-omodsim_1.10.0_x64.exe`
 
 ## Debian/Ubintu/Mint/Astra Linux
 ### Install
 Install the DEB package from the command line:
 ```bash
-sudo apt install -f ./qt6-omodsim_1.9.1-1_amd64.deb
+sudo apt install -f ./qt6-omodsim_1.10.0-1_amd64.deb
 ```
 or if you want to use Qt5 libraries:
 ```bash
-sudo apt install -f ./qt5-omodsim_1.9.1-1_amd64.deb
+sudo apt install -f ./qt5-omodsim_1.10.0-1_amd64.deb
 ```
 
 ### Remove
@@ -168,7 +181,7 @@ sudo apt remove qt5-omodsim
 ### Install
 Install the RPM package from the command line:
 ```bash
-sudo dnf install ./qt6-omodsim_1.9.1-1.x86_64.rpm
+sudo dnf install ./qt6-omodsim_1.10.0-1.x86_64.rpm
 ```
 
 ### Remove
@@ -181,7 +194,7 @@ sudo dnf remove qt6-omodsim
 ### Install
 Install the RPM package from the command line as root user:
 ```bash
-apt-get install ./qt6-omodsim_1.9.1-1.x86_64.rpm
+apt-get install ./qt6-omodsim_1.10.0-1.x86_64.rpm
 ```
 
 ### Remove
@@ -198,7 +211,7 @@ sudo rpm --import qt6-omodsim.rpm.pubkey
 ```
 Install the RPM package using Zypper:
 ```bash
-sudo zypper install ./qt6-omodsim_1.9.1-1.x86_64.rpm
+sudo zypper install ./qt6-omodsim_1.10.0-1.x86_64.rpm
 ```
 
 ### Remove
