@@ -4,6 +4,14 @@ on:
   push:
     tags:
       - "*"
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: 'Checkout branch'
+        required: false
+      tag:
+        description: 'Checkout tag'
+        required: false
 
 env:
   QT_VERSION: 5.15.2
@@ -15,14 +23,14 @@ env:
 
 jobs:
   build-omodsim:
-    name: Build OpenModSim installer version '${{ github.ref_name }}' with Qt5 on Windows x64
+    name: Build OpenModSim installer version '${{ github.event.inputs.tag || github.event.inputs.branch || github.ref_name }}' with Qt5 on Windows x64
     runs-on: windows-latest
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          ref: ${{ github.ref_name }}
+          ref: ${{ github.event.inputs.tag || github.event.inputs.branch || github.ref_name }}
 
       - name: Extract version from CMakeLists.txt
         run: |
@@ -30,7 +38,7 @@ jobs:
         shell: cmd
 
       - name: Convert version for dev branch
-        if: ${{ github.ref_name == 'dev' }}
+        if: ${{ github.ref_name == 'dev' || github.event.inputs.branch == 'dev' }}
         run: |
           for /f "tokens=1,2 delims=." %%a in ("%APP_VERSION%") do (
             echo APP_VERSION=%%a.%%b-dev>>%GITHUB_ENV%
