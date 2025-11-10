@@ -3,6 +3,7 @@
 
 #include <QTimer>
 #include <QModbusDataUnit>
+#include <QXmlStreamWriter>
 #include "modbussimulationparams.h"
 
 struct ModbusSimulationMapKey {
@@ -98,6 +99,88 @@ inline QDataStream& operator >>(QDataStream& in, ModbusSimulationMapKey& key)
     in >> key.Type;
     in >> key.Address;
     return in;
+}
+
+///
+/// \brief operator <<
+/// \param xml
+/// \param simulationMap
+/// \return
+///
+inline QXmlStreamWriter& operator <<(QXmlStreamWriter& xml, const ModbusSimulationMap2& simulationMap)
+{
+    xml.writeStartElement("ModbusSimulationMap2");
+
+    for (auto it = simulationMap.constBegin(); it != simulationMap.constEnd(); ++it) {
+        const ModbusSimulationMapKey& key = it.key();
+        const ModbusSimulationParams& params = it.value();
+
+        xml.writeStartElement("SimulationItem");
+        xml.writeAttribute("DeviceId", QString::number(key.DeviceId));
+        xml.writeAttribute("Type", enumToString<QModbusDataUnit::RegisterType>(key.Type));
+        xml.writeAttribute("Address", QString::number(key.Address));
+        xml << params;
+        xml.writeEndElement();
+    }
+
+    xml.writeEndElement();
+    return xml;
+}
+
+///
+/// \brief operator >>
+/// \param xml
+/// \param simulationMap
+/// \return
+///
+inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, ModbusSimulationMap2& simulationMap)
+{
+    simulationMap.clear();
+
+    if (xml.readNextStartElement() && xml.name() == QLatin1String("ModbusSimulationMap2")) {
+        while (xml.readNextStartElement()) {
+            if (xml.name() == QLatin1String("SimulationItem")) {
+                ModbusSimulationMapKey key;
+                ModbusSimulationParams params;
+
+                const QXmlStreamAttributes attributes = xml.attributes();
+
+                // DeviceId
+                if (attributes.hasAttribute("DeviceId")) {
+                    bool ok;
+                    const quint8 deviceId = attributes.value("DeviceId").toUShort(&ok);
+                    if (ok) key.DeviceId = deviceId;
+                }
+
+                // Type
+                if (attributes.hasAttribute("Type")) {
+                    key.Type = enumFromString<QModbusDataUnit::RegisterType>(attributes.value("Type").toString());
+                }
+
+                // Address
+                if (attributes.hasAttribute("Address")) {
+                    bool ok;
+                    const quint16 address = attributes.value("Address").toUShort(&ok);
+                    if (ok) key.Address = address;
+                }
+
+                // Params
+                xml >> params;
+
+                if (key.DeviceId > 0 && key.Type != QModbusDataUnit::Invalid) {
+                    simulationMap.insert(key, params);
+                }
+
+                xml.skipCurrentElement();
+            } else {
+                xml.skipCurrentElement();
+            }
+        }
+
+        xml.skipCurrentElement();
+    }
+
+    return xml;
 }
 
 #endif // DATASIMULATOR_H

@@ -221,4 +221,87 @@ inline QDataStream& operator >>(QDataStream& in, AddressDescriptionMapKey& key)
     return in;
 }
 
+///
+/// \brief operator <<
+/// \param xml
+/// \param descriptionMap
+/// \return
+///
+inline QXmlStreamWriter& operator <<(QXmlStreamWriter& xml, const AddressDescriptionMap2& descriptionMap)
+{
+    xml.writeStartElement("AddressDescriptionMap2");
+
+    for (auto it = descriptionMap.constBegin(); it != descriptionMap.constEnd(); ++it) {
+        const AddressDescriptionMapKey& key = it.key();
+        const QString& description = it.value();
+
+        xml.writeStartElement("DescriptionItem");
+
+        xml.writeAttribute("DeviceId", QString::number(key.DeviceId));
+        xml.writeAttribute("Type", enumToString<QModbusDataUnit::RegisterType>(key.Type));
+        xml.writeAttribute("Address", QString::number(key.Address));
+
+        if (!description.isEmpty()) {
+            xml.writeCDATA(description);
+        }
+
+        xml.writeEndElement(); // DescriptionItem
+    }
+
+    xml.writeEndElement(); // AddressDescriptionMap2
+    return xml;
+}
+
+///
+/// \brief operator >>
+/// \param xml
+/// \param descriptionMap
+/// \return
+///
+inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, AddressDescriptionMap2& descriptionMap)
+{
+    descriptionMap.clear();
+
+    if (xml.readNextStartElement() && xml.name() == QLatin1String("AddressDescriptionMap2")) {
+        while (xml.readNextStartElement()) {
+            if (xml.name() == QLatin1String("DescriptionItem")) {
+                AddressDescriptionMapKey key;
+                QString description;
+
+                const QXmlStreamAttributes attributes = xml.attributes();
+
+                if (attributes.hasAttribute("DeviceId")) {
+                    bool ok; const quint8 deviceId = attributes.value("DeviceId").toUShort(&ok);
+                    if (ok) key.DeviceId = deviceId;
+                }
+
+                if (attributes.hasAttribute("Type")) {
+                    key.Type = enumFromString<QModbusDataUnit::RegisterType>(attributes.value("Type").toString());
+                }
+
+                if (attributes.hasAttribute("Address")) {
+                    bool ok; const quint16 address = attributes.value("Address").toUShort(&ok);
+                    if (ok) key.Address = address;
+                }
+
+                if (xml.isCDATA()) {
+                    description = xml.readElementText(QXmlStreamReader::IncludeChildElements);
+                } else {
+                    description = xml.readElementText();
+                }
+
+                if (key.DeviceId > 0 && key.Type != QModbusDataUnit::Invalid) {
+                    descriptionMap.insert(key, description);
+                }
+            } else {
+                xml.skipCurrentElement();
+            }
+        }
+
+        xml.skipCurrentElement();
+    }
+
+    return xml;
+}
+
 #endif // OUTPUTWIDGET_H
