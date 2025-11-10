@@ -153,7 +153,7 @@ private:
     FormModSim* firstMdiChild() const;
 
     FormModSim* loadMdiChild(const QString& filename);
-    void saveMdiChild(FormModSim* frm);
+    void saveMdiChild(FormModSim* frm, SerializationFormat format);
 
     void loadSettings();
     void saveSettings();

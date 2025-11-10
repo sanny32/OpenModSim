@@ -353,7 +353,7 @@ void MainWindow::on_actionSave_triggered()
     if(frm->filename().isEmpty())
         ui->actionSaveAs->trigger();
     else
-        saveMdiChild(frm);
+        saveMdiChild(frm, SerializationFormat::Binary);
 }
 
 ///
@@ -365,13 +365,23 @@ void MainWindow::on_actionSaveAs_triggered()
     if(!frm) return;
 
     const auto dir = QString("%1%2%3").arg(_savePath, QDir::separator(), frm->windowTitle());
-    const auto filename = QFileDialog::getSaveFileName(this, QString(), dir, tr("All files (*)"));
+
+    QString selectedFilter;
+    auto filename = QFileDialog::getSaveFileName(this, QString(), dir, tr("XML files (*.xml);;All files (*)"), &selectedFilter);
     if(filename.isEmpty()) return;
 
     _savePath = QFileInfo(filename).absoluteDir().absolutePath();
     frm->setFilename(filename);
 
-    saveMdiChild(frm);
+    if(selectedFilter == "XML files (*.xml)") {
+        if(!filename.endsWith(".xml")) {
+            filename.append(".xml");
+            frm->setFilename(filename);
+        }
+        saveMdiChild(frm, SerializationFormat::Xml);
+    }
+    else
+        saveMdiChild(frm, SerializationFormat::Binary);
 }
 
 ///
@@ -1504,8 +1514,9 @@ FormModSim* MainWindow::loadMdiChild(const QString& filename)
 ///
 /// \brief MainWindow::saveMdiChild
 /// \param frm
+/// \param format
 ///
-void MainWindow::saveMdiChild(FormModSim* frm)
+void MainWindow::saveMdiChild(FormModSim* frm, SerializationFormat format)
 {
     if(!frm) return;
 
@@ -1513,18 +1524,32 @@ void MainWindow::saveMdiChild(FormModSim* frm)
     if(!file.open(QFile::WriteOnly))
         return;
 
-    QDataStream s(&file);
-    s.setByteOrder(QDataStream::BigEndian);
-    s.setVersion(QDataStream::Version::Qt_5_0);
+    switch(format)
+    {
+        case SerializationFormat::Binary:
+        {
+            QDataStream s(&file);
+            s.setByteOrder(QDataStream::BigEndian);
+            s.setVersion(QDataStream::Version::Qt_5_0);
 
-    // magic number
-    s << (quint8)0x34;
+            // magic number
+            s << (quint8)0x34;
 
-    // version number
-    s << FormModSim::VERSION;
+            // version number
+            s << FormModSim::VERSION;
 
-    // form
-    s << frm;
+            // form
+            s << frm;
+        }
+        break;
+
+        case SerializationFormat::Xml:
+        {
+            QXmlStreamWriter w(&file);
+            w << frm;
+        }
+        break;
+    }
 
     addRecentFile(frm->filename());
 }
