@@ -32,8 +32,8 @@ enum class AddressBase
 };
 Q_DECLARE_METATYPE(AddressBase)
 DECLARE_ENUM_STRINGS(AddressBase,
-                     {AddressBase::Base0, "Base0"},
-                     {AddressBase::Base1, "Base1"}
+                {   AddressBase::Base0, "Base0" },
+                {   AddressBase::Base1, "Base1" }
 )
 
 ///
@@ -70,8 +70,8 @@ enum class AddressSpace
 };
 Q_DECLARE_METATYPE(AddressSpace)
 DECLARE_ENUM_STRINGS(AddressSpace,
-                     {AddressSpace::Addr6Digits, "Addr6Digits"},
-                     {AddressSpace::Addr5Digits, "Addr5Digits"}
+                {   AddressSpace::Addr6Digits, "Addr6Digits"    },
+                {   AddressSpace::Addr5Digits, "Addr5Digits"    }
 )
 
 ///
@@ -109,9 +109,9 @@ enum class DisplayMode
 };
 Q_DECLARE_METATYPE(DisplayMode)
 DECLARE_ENUM_STRINGS(DisplayMode,
-                     {DisplayMode::Data, "Data"},
-                     {DisplayMode::Traffic, "Traffic"},
-                     {DisplayMode::Script, "Script"}
+                {   DisplayMode::Data,      "Data"      },
+                {   DisplayMode::Traffic,   "Traffic"   },
+                {   DisplayMode::Script,    "Script"    }
 )
 
 ///
@@ -163,23 +163,23 @@ enum class DataDisplayMode
 };
 Q_DECLARE_METATYPE(DataDisplayMode)
 DECLARE_ENUM_STRINGS(DataDisplayMode,
-                     {DataDisplayMode::Binary,          "Binary"        },
-                     {DataDisplayMode::UInt16,          "UInt16"        },
-                     {DataDisplayMode::Int16,           "Int16"         },
-                     {DataDisplayMode::Hex,             "Hex"           },
-                     {DataDisplayMode::FloatingPt,      "FloatingPt"    },
-                     {DataDisplayMode::SwappedFP,       "SwappedFP"     },
-                     {DataDisplayMode::DblFloat,        "DblFloat"      },
-                     {DataDisplayMode::SwappedDbl,      "SwappedDbl"    },
-                     {DataDisplayMode::Int32,           "Int32"         },
-                     {DataDisplayMode::SwappedInt32,    "SwappedInt32"  },
-                     {DataDisplayMode::UInt32,          "UInt32"        },
-                     {DataDisplayMode::SwappedUInt32,   "SwappedUInt32" },
-                     {DataDisplayMode::Int64,           "Int64"         },
-                     {DataDisplayMode::SwappedInt64,    "SwappedInt64"  },
-                     {DataDisplayMode::UInt64,          "UInt64"        },
-                     {DataDisplayMode::SwappedUInt64,   "SwappedUInt64" },
-                     {DataDisplayMode::Ansi,            "Ansi"          },
+                {   DataDisplayMode::Binary,          "Binary"        },
+                {   DataDisplayMode::UInt16,          "UInt16"        },
+                {   DataDisplayMode::Int16,           "Int16"         },
+                {   DataDisplayMode::Hex,             "Hex"           },
+                {   DataDisplayMode::FloatingPt,      "FloatingPt"    },
+                {   DataDisplayMode::SwappedFP,       "SwappedFP"     },
+                {   DataDisplayMode::DblFloat,        "DblFloat"      },
+                {   DataDisplayMode::SwappedDbl,      "SwappedDbl"    },
+                {   DataDisplayMode::Int32,           "Int32"         },
+                {   DataDisplayMode::SwappedInt32,    "SwappedInt32"  },
+                {   DataDisplayMode::UInt32,          "UInt32"        },
+                {   DataDisplayMode::SwappedUInt32,   "SwappedUInt32" },
+                {   DataDisplayMode::Int64,           "Int64"         },
+                {   DataDisplayMode::SwappedInt64,    "SwappedInt64"  },
+                {   DataDisplayMode::UInt64,          "UInt64"        },
+                {   DataDisplayMode::SwappedUInt64,   "SwappedUInt64" },
+                {   DataDisplayMode::Ansi,            "Ansi"          },
 )
 
 ///
@@ -216,8 +216,8 @@ enum class ByteOrder
 };
 Q_DECLARE_METATYPE(ByteOrder);
 DECLARE_ENUM_STRINGS(ByteOrder,
-                     {ByteOrder::Direct,    "Direct"    },
-                     {ByteOrder::Swapped,   "Swapped"   }
+                {   ByteOrder::Direct,    "Direct"    },
+                {   ByteOrder::Swapped,   "Swapped"   }
 )
 
 ///
@@ -254,8 +254,8 @@ enum class ConnectionType
 };
 Q_DECLARE_METATYPE(ConnectionType)
 DECLARE_ENUM_STRINGS(ConnectionType,
-                     {ConnectionType::Tcp,      "Tcp"    },
-                     {ConnectionType::Serial,   "Serial" }
+                {   ConnectionType::Tcp,      "Tcp"    },
+                {   ConnectionType::Serial,   "Serial" }
 )
 
 ///
@@ -268,8 +268,8 @@ enum class TransmissionMode
 };
 Q_DECLARE_METATYPE(TransmissionMode)
 DECLARE_ENUM_STRINGS(TransmissionMode,
-                     {TransmissionMode::ASCII, "ASCII"  },
-                     {TransmissionMode::RTU,   "RTU"    }
+                {   TransmissionMode::ASCII, "ASCII"  },
+                {   TransmissionMode::RTU,   "RTU"    }
 )
 
 ///
@@ -282,8 +282,8 @@ enum class CaptureMode
 };
 Q_DECLARE_METATYPE(CaptureMode)
 DECLARE_ENUM_STRINGS(CaptureMode,
-                     {CaptureMode::Off,         "Off"           },
-                     {CaptureMode::TextCapture, "TextCapture"   }
+                {   CaptureMode::Off,         "Off"           },
+                {   CaptureMode::TextCapture, "TextCapture"   }
 )
 
 ///
@@ -299,11 +299,11 @@ enum class SimulationMode
 };
 Q_DECLARE_METATYPE(SimulationMode)
 DECLARE_ENUM_STRINGS(SimulationMode,
-                     {SimulationMode::No,           "No"        },
-                     {SimulationMode::Random,       "Random"    },
-                     {SimulationMode::Increment,   "Increment"  },
-                     {SimulationMode::Decrement,   "Decrement"  },
-                     {SimulationMode::Toggle,       "Toggle"    }
+                {   SimulationMode::No,           "No"        },
+                {   SimulationMode::Random,       "Random"    },
+                {   SimulationMode::Increment,   "Increment"  },
+                {   SimulationMode::Decrement,   "Decrement"  },
+                {   SimulationMode::Toggle,       "Toggle"    }
 )
 
 ///
@@ -316,8 +316,8 @@ enum class RunMode
 };
 Q_DECLARE_METATYPE(RunMode)
 DECLARE_ENUM_STRINGS(RunMode,
-                     {RunMode::Once,         "Once"           },
-                     {RunMode::Periodically, "Periodically"   }
+                {   RunMode::Once,         "Once"           },
+                {   RunMode::Periodically, "Periodically"   }
 )
 
 ///
@@ -330,9 +330,9 @@ enum class LogViewState {
 };
 Q_DECLARE_METATYPE(LogViewState)
 DECLARE_ENUM_STRINGS(LogViewState,
-                     {LogViewState::Unknown,    "Unknown"   },
-                     {LogViewState::Running,    "Running"   },
-                     {LogViewState::Paused,     "Paused"    }
+                {   LogViewState::Unknown,    "Unknown"   },
+                {   LogViewState::Running,    "Running"   },
+                {   LogViewState::Paused,     "Paused"    }
 )
 
 ///
