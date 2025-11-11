@@ -1,6 +1,7 @@
 #ifndef MODBUSSIMULATIONPARAMS_H
 #define MODBUSSIMULATIONPARAMS_H
 
+#include <QDebug>
 #include <QDataStream>
 #include <QXmlStreamWriter>
 #include "qrange.h"
@@ -313,8 +314,7 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, ModbusSimulationPara
         }
 
         if (attributes.hasAttribute("Interval")) {
-            bool ok;
-            quint32 interval = attributes.value("Interval").toUInt(&ok);
+            bool ok; quint32 interval = attributes.value("Interval").toUInt(&ok);
             if (ok) {
                 params.Interval = interval;
             }
@@ -325,10 +325,10 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, ModbusSimulationPara
                 params.Mode == SimulationMode::Random) {
                 xml >> params.RandomParams;
             } else if (xml.name() == QLatin1String("IncrementSimulationParams") &&
-                       params.Mode == SimulationMode::Increment) {
+                params.Mode == SimulationMode::Increment) {
                 xml >> params.IncrementParams;
             } else if (xml.name() == QLatin1String("DecrementSimulationParams") &&
-                       params.Mode == SimulationMode::Decrement) {
+                params.Mode == SimulationMode::Decrement) {
                 xml >> params.DecrementParams;
             } else {
                 xml.skipCurrentElement();

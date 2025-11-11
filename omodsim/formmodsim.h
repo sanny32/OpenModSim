@@ -539,7 +539,26 @@ inline QXmlStreamWriter& operator <<(QXmlStreamWriter& xml, FormModSim* frm)
     const auto dd = frm->displayDefinition();
     xml << dd;
 
-    xml << frm->simulationMap();
+    {
+        const auto simulationMap = frm->simulationMap();
+        xml.writeStartElement("ModbusSimulationMap");
+
+        for (auto it = simulationMap.constBegin(); it != simulationMap.constEnd(); ++it) {
+            const ModbusSimulationMapKey& key = it.key();
+            const ModbusSimulationParams& params = it.value();
+
+            if(params.Mode != SimulationMode::No && key.DeviceId == dd.DeviceId && key.Type == dd.PointType)
+            {
+                xml.writeStartElement("Simulation");
+                xml.writeAttribute("Address", QString::number(key.Address));
+                xml << params;
+                xml.writeEndElement();
+            }
+        }
+
+        xml.writeEndElement(); // ModbusSimulationMap
+    }
+
     xml << frm->scriptControl();
     xml << frm->scriptSettings();
 
@@ -601,6 +620,7 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, FormModSim* frm)
         DisplayDefinition dd;
         QHash<quint16, quint16> map;
         QHash<quint16, QString> descriptions;
+        QHash<quint16, ModbusSimulationParams> simulations;
 
         const QXmlStreamAttributes attributes = xml.attributes();
 
@@ -704,11 +724,28 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, FormModSim* frm)
                 xml >> dd;
                 frm->setDisplayDefinition(dd);
             }
-            else if (xml.name() == QLatin1String("ModbusSimulationMap2")) {
-                ModbusSimulationMap2 simulationMap;
-                xml >> simulationMap;
-                for(auto&& k : simulationMap.keys())
-                    frm->startSimulation(k.Type, k.Address, simulationMap[k]);
+            else if (xml.name() == QLatin1String("ModbusSimulationMap")) {
+                while (xml.readNextStartElement()) {
+                    if (xml.name() == QLatin1String("Simulation")) {
+
+                        const QXmlStreamAttributes attributes = xml.attributes();
+                        bool ok; const quint16 address = attributes.value("Address").toUShort(&ok);
+
+                        if(ok) {
+                            xml.readNextStartElement();
+
+                            ModbusSimulationParams params;
+                            xml >> params;
+
+                            simulations[address] = params;
+                        }
+
+                        xml.skipCurrentElement();
+
+                    } else {
+                        xml.skipCurrentElement();
+                    }
+                }
             }
             else if (xml.name() == QLatin1String("JScriptControl")) {
                 auto scriptControl = frm->scriptControl();
@@ -762,6 +799,22 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, FormModSim* frm)
             }
         }
 
+        if(dd.PointType != QModbusDataUnit::Invalid && !simulations.isEmpty()) {
+            QHashIterator it(simulations);
+            while(it.hasNext()) {
+                const auto item = it.next();
+                frm->startSimulation(dd.PointType, item.key() - (dd.ZeroBasedAddress ? 0 : 1), item.value());
+            }
+        }
+
+        if(dd.PointType != QModbusDataUnit::Invalid && !descriptions.isEmpty()) {
+            QHashIterator it(descriptions);
+            while(it.hasNext()) {
+                const auto item = it.next();
+                frm->setDescription(dd.DeviceId, dd.PointType, item.key(), item.value());
+            }
+        }
+
         if (dd.PointType != QModbusDataUnit::Invalid && !map.isEmpty()) {
             QVector<quint16> values(dd.Length);
 
@@ -775,13 +828,7 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, FormModSim* frm)
             frm->configureModbusDataUnit(dd.DeviceId, dd.PointType, dd.PointAddress - (dd.ZeroBasedAddress ? 0 : 1), values);
         }
 
-        if(dd.PointType != QModbusDataUnit::Invalid && !descriptions.isEmpty()) {
-            QHashIterator it(descriptions);
-            while(it.hasNext()) {
-                const auto item = it.next();
-                frm->setDescription(dd.DeviceId, dd.PointType, item.key(), item.value());
-            }
-        }
+
     }
     else {
         xml.skipCurrentElement();
