@@ -550,7 +550,7 @@ inline QXmlStreamWriter& operator <<(QXmlStreamWriter& xml, FormModSim* frm)
             if(params.Mode != SimulationMode::No && key.DeviceId == dd.DeviceId && key.Type == dd.PointType)
             {
                 xml.writeStartElement("Simulation");
-                xml.writeAttribute("Address", QString::number(key.Address));
+                xml.writeAttribute("Address", QString::number(key.Address + (dd.ZeroBasedAddress ? 0 : 1)));
                 xml << params;
                 xml.writeEndElement();
             }

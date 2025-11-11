@@ -116,7 +116,7 @@ inline QXmlStreamWriter& operator <<(QXmlStreamWriter& xml, const DisplayDefinit
 ///
 inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, DisplayDefinition& dd)
 {
-    if (xml.readNextStartElement() && xml.name() == QLatin1String("DisplayDefinition")) {
+    if (xml.isStartElement() && xml.name() == QLatin1String("DisplayDefinition")) {
         const QXmlStreamAttributes attributes = xml.attributes();
 
         if (attributes.hasAttribute("FormName")) {
