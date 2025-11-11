@@ -1,7 +1,7 @@
 # Open ModSim
 
 [![GitHub all releases](https://img.shields.io/github/downloads/sanny32/OpenModSim/total?logo=github)](https://github.com/sanny32/OpenModSim/releases)
-[![GitHub release (latest by date)](https://img.shields.io/github/v/release/sanny32/OpenModSim?logo=github)](https://github.com/sanny32/OpenModSim/releases/latest)
+[![GitHub release (latest by date)](https://img.shields.io/github/v/release/sanny32/OpenModsim?cacheSeconds=3600&logo=github)](https://github.com/sanny32/OpenModSim/releases/latest)
 [![License](https://img.shields.io/github/license/sanny32/OpenModSim)](LICENSE.md)
 
 Open ModSim is a free implimentation of modbus slave (server) utility for modbus-tcp and modbus-rtu protocols.
