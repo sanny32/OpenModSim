@@ -435,37 +435,33 @@ QXmlStreamWriter& operator <<(QXmlStreamWriter& xml, const JScriptControl* ctrl)
 /// \param ctrl
 /// \return
 ///
-QXmlStreamReader& operator >>(QXmlStreamReader& xml, JScriptControl* ctrl)
+QXmlStreamReader& operator>>(QXmlStreamReader& xml, JScriptControl* ctrl)
 {
-    if(!ctrl) return xml;
+    if (!ctrl)
+        return xml;
 
-    if(xml.readNextStartElement() && xml.name() == QLatin1String("JScriptControl")) {
-        while(xml.readNextStartElement()) {
-            if(xml.name() == QLatin1String("Script")) {
-                QString scriptText;
-                if(xml.isCDATA()) {
-                    scriptText = xml.readElementText(QXmlStreamReader::IncludeChildElements);
-                } else {
-                    scriptText = xml.readElementText();
-                }
+    if (xml.isStartElement() && xml.name() == QLatin1String("JScriptControl")) {
+        while (xml.readNextStartElement()) {
+            const QStringRef name = xml.name();
+
+            if (name == QLatin1String("Script")) {
+                const QString scriptText = xml.readElementText(QXmlStreamReader::IncludeChildElements);
                 ctrl->setScript(scriptText);
             }
-            else if(xml.name() == QLatin1String("VerticalSplitter")) {
-                const auto state = QByteArray::fromBase64(xml.readElementText().toLatin1());
-                if(!state.isEmpty()) {
+            else if (name == QLatin1String("VerticalSplitter")) {
+                const QByteArray state = QByteArray::fromBase64(xml.readElementText().toLatin1());
+                if (!state.isEmpty())
                     ctrl->ui->verticalSplitter->restoreState(state);
-                }
             }
-            else if(xml.name() == QLatin1String("HorizontalSplitter")) {
-                const auto state = QByteArray::fromBase64(xml.readElementText().toLatin1());
-                if(!state.isEmpty()) {
+            else if (name == QLatin1String("HorizontalSplitter")) {
+                const QByteArray state = QByteArray::fromBase64(xml.readElementText().toLatin1());
+                if (!state.isEmpty())
                     ctrl->ui->horizontalSplitter->restoreState(state);
-                }
             }
-            else if(xml.name() == QLatin1String("AutoComplete")) {
-                QXmlStreamAttributes attributes = xml.attributes();
-                if(attributes.hasAttribute("Enabled")) {
-                    bool enabled = stringToBool(attributes.value("Enabled").toString());
+            else if (name == QLatin1String("AutoComplete")) {
+                const QXmlStreamAttributes attrs = xml.attributes();
+                if (attrs.hasAttribute("Enabled")) {
+                    const bool enabled = stringToBool(attrs.value("Enabled").toString());
                     ctrl->enableAutoComplete(enabled);
                 }
                 xml.skipCurrentElement();
@@ -475,9 +471,7 @@ QXmlStreamReader& operator >>(QXmlStreamReader& xml, JScriptControl* ctrl)
             }
         }
     }
-    else {
-        xml.skipCurrentElement();
-    }
 
     return xml;
 }
+

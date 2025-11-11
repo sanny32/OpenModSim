@@ -62,7 +62,7 @@ inline QXmlStreamWriter& operator <<(QXmlStreamWriter& xml, const RandomSimulati
 ///
 inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, RandomSimulationParams& params)
 {
-    if (xml.readNextStartElement() && xml.name() == QLatin1String("RandomSimulationParams")) {
+    if (xml.isStartElement() && xml.name() == QLatin1String("RandomSimulationParams")) {
         xml >> params.Range;
         xml.skipCurrentElement();
     }
@@ -130,7 +130,7 @@ inline QXmlStreamWriter& operator <<(QXmlStreamWriter& xml, const IncrementSimul
 ///
 inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, IncrementSimulationParams& params)
 {
-    if (xml.readNextStartElement() && xml.name() == QLatin1String("IncrementSimulationParams")) {
+    if (xml.isStartElement() && xml.name() == QLatin1String("IncrementSimulationParams")) {
         const QXmlStreamAttributes attributes = xml.attributes();
         if (attributes.hasAttribute("Step")) {
             bool ok;
@@ -207,7 +207,7 @@ inline QXmlStreamWriter& operator <<(QXmlStreamWriter& xml, const DecrementSimul
 ///
 inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, DecrementSimulationParams& params)
 {
-    if (xml.readNextStartElement() && xml.name() == QLatin1String("DecrementSimulationParams")) {
+    if (xml.isStartElement() && xml.name() == QLatin1String("DecrementSimulationParams")) {
         const QXmlStreamAttributes attributes = xml.attributes();
         if (attributes.hasAttribute("Step")) {
             bool ok;
@@ -305,7 +305,7 @@ inline QXmlStreamWriter& operator <<(QXmlStreamWriter& xml, const ModbusSimulati
 ///
 inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, ModbusSimulationParams& params)
 {
-    if (xml.readNextStartElement() && xml.name() == QLatin1String("ModbusSimulationParams")) {
+    if (xml.isStartElement() && xml.name() == QLatin1String("ModbusSimulationParams")) {
         const QXmlStreamAttributes attributes = xml.attributes();
 
         if (attributes.hasAttribute("Mode")) {
@@ -334,8 +334,6 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, ModbusSimulationPara
                 xml.skipCurrentElement();
             }
         }
-
-        xml.skipCurrentElement();
     }
 
     return xml;

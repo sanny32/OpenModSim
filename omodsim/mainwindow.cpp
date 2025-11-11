@@ -324,7 +324,7 @@ void MainWindow::on_actionNew_triggered()
 ///
 void MainWindow::on_actionOpen_triggered()
 {
-    const auto filename = QFileDialog::getOpenFileName(this, QString(), _savePath, tr("All files (*)"));
+    const auto filename = QFileDialog::getOpenFileName(this, QString(), _savePath, tr("XML files (*.xml);;All files (*)"));
     if(filename.isEmpty()) return;
 
     _savePath = QFileInfo(filename).absoluteDir().absolutePath();
@@ -350,10 +350,14 @@ void MainWindow::on_actionSave_triggered()
     auto frm = currentMdiChild();
     if(!frm) return;
 
-    if(frm->filename().isEmpty())
+    const auto filename = frm->filename();
+    if(filename.isEmpty()) {
         ui->actionSaveAs->trigger();
-    else
-        saveMdiChild(frm, SerializationFormat::Binary);
+    }
+    else {
+        const auto format = filename.endsWith(".xml", Qt::CaseInsensitive) ? SerializationFormat::Xml : SerializationFormat::Binary;
+        saveMdiChild(frm, format);
+    }
 }
 
 ///
@@ -368,20 +372,21 @@ void MainWindow::on_actionSaveAs_triggered()
 
     QString selectedFilter;
     auto filename = QFileDialog::getSaveFileName(this, QString(), dir, tr("XML files (*.xml);;All files (*)"), &selectedFilter);
+
     if(filename.isEmpty()) return;
+
+    auto format = SerializationFormat::Binary;
+    if(selectedFilter == "XML files (*.xml)") {
+        format = SerializationFormat::Xml;
+        if(!filename.endsWith(".xml", Qt::CaseInsensitive)) {
+            filename.append(".xml");
+        }
+    }
 
     _savePath = QFileInfo(filename).absoluteDir().absolutePath();
     frm->setFilename(filename);
 
-    if(selectedFilter == "XML files (*.xml)") {
-        if(!filename.endsWith(".xml")) {
-            filename.append(".xml");
-            frm->setFilename(filename);
-        }
-        saveMdiChild(frm, SerializationFormat::Xml);
-    }
-    else
-        saveMdiChild(frm, SerializationFormat::Binary);
+    saveMdiChild(frm, format);
 }
 
 ///
@@ -1458,55 +1463,76 @@ void MainWindow::saveConfig(const QString& filename)
 ///
 FormModSim* MainWindow::loadMdiChild(const QString& filename)
 {
+    const auto format = filename.endsWith(".xml", Qt::CaseInsensitive) ? SerializationFormat::Xml : SerializationFormat::Binary;
+
     QFile file(filename);
     if(!file.open(QFile::ReadOnly))
         return nullptr;
 
-    QDataStream s(&file);
-    s.setByteOrder(QDataStream::BigEndian);
-    s.setVersion(QDataStream::Version::Qt_5_0);
-
-    quint8 magic = 0;
-    s >> magic;
-
-    if(magic != 0x34)
-        return nullptr;
-
-    QVersionNumber ver;
-    s >> ver;
-
-    if(ver > FormModSim::VERSION)
-        return nullptr;
-
-    int formId;
-    s >> formId;
-
-    if(s.status() != QDataStream::Ok)
-        return nullptr;
-
-    bool created = false;
-    auto frm = findMdiChild(formId);
-    if(!frm)
+    FormModSim* frm = nullptr;
+    switch(format)
     {
-        created = true;
-        frm = createMdiChild(formId);
+        case SerializationFormat::Binary:
+        {
+            QDataStream s(&file);
+            s.setByteOrder(QDataStream::BigEndian);
+            s.setVersion(QDataStream::Version::Qt_5_0);
+
+            quint8 magic = 0;
+            s >> magic;
+
+            if(magic != 0x34)
+                return nullptr;
+
+            QVersionNumber ver;
+            s >> ver;
+
+            if(ver > FormModSim::VERSION)
+                return nullptr;
+
+            int formId;
+            s >> formId;
+
+            if(s.status() != QDataStream::Ok)
+                return nullptr;
+
+            bool created = false;
+            frm = findMdiChild(formId);
+            if(!frm)
+            {
+                created = true;
+                frm = createMdiChild(formId);
+            }
+
+            if(frm)
+            {
+                frm->setProperty("Version", QVariant::fromValue(ver));
+                s >> frm;
+
+                if(s.status() != QDataStream::Ok && created)
+                {
+                    frm->close();
+                }
+            }
+        }
+        break;
+
+        case SerializationFormat::Xml:
+        {
+            QXmlStreamReader r(&file);
+            frm = createMdiChild(_windowCounter + 1);
+            if(frm) r >> frm;
+        }
+        break;
     }
 
-    if(!frm)
-        return nullptr;
-
-    frm->setProperty("Version", QVariant::fromValue(ver));
-    s >> frm;
-
-    if(s.status() != QDataStream::Ok)
+    if(frm)
     {
-        if(created) frm->close();
-        return nullptr;
-    }
+        frm->setFilename(filename);
 
-    frm->setFilename(filename);
-    addRecentFile(filename);
-    _windowCounter = qMax(frm->formId(), _windowCounter);
+        addRecentFile(filename);
+        _windowCounter = qMax(frm->formId(), _windowCounter);
+    }
 
     return frm;
 }
@@ -1546,6 +1572,7 @@ void MainWindow::saveMdiChild(FormModSim* frm, SerializationFormat format)
         case SerializationFormat::Xml:
         {
             QXmlStreamWriter w(&file);
+            w.setAutoFormatting(true);
             w << frm;
         }
         break;

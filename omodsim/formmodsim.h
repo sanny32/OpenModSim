@@ -543,17 +543,22 @@ inline QXmlStreamWriter& operator <<(QXmlStreamWriter& xml, FormModSim* frm)
     xml << frm->descriptionMap();
 
     const auto dd = frm->displayDefinition();
-    const auto unit = frm->serializeModbusDataUnit(dd.DeviceId, dd.PointType,
-                                                   dd.PointAddress - (dd.ZeroBasedAddress ? 0 : 1), dd.Length);
+    const auto unit = frm->serializeModbusDataUnit(dd.DeviceId, dd.PointType, dd.PointAddress - (dd.ZeroBasedAddress ? 0 : 1), dd.Length);
+
     xml.writeStartElement("ModbusDataUnit");
-    xml.writeStartElement("Values");
+
+    quint16 address = dd.PointAddress;
     const auto values = unit.values();
     for (const auto& value : values) {
-        xml.writeStartElement("Value");
-        xml.writeCharacters(QString::number(value));
-        xml.writeEndElement();
+        if(value != 0) {
+            xml.writeStartElement("Value");
+            xml.writeAttribute("Address", QString::number(address));
+            xml.writeCharacters(QString::number(value));
+            xml.writeEndElement();
+        }
+        address++;
     }
-    xml.writeEndElement(); // Values
+
     xml.writeEndElement(); // ModbusDataUnit
 
     xml.writeEndElement(); // FormModSim
@@ -573,7 +578,7 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, FormModSim* frm)
 
     if (xml.readNextStartElement() && xml.name() == QLatin1String("FormModSim")) {
         DisplayDefinition dd;
-        QVector<quint16> values;
+        QHash<quint16, quint16> map;
 
         const QXmlStreamAttributes attributes = xml.attributes();
 
@@ -699,25 +704,21 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, FormModSim* frm)
                     frm->setDescription(k.DeviceId, k.Type, k.Address, descriptionMap[k]);
             }
             else if (xml.name() == QLatin1String("ModbusDataUnit")) {
-                const QXmlStreamAttributes unitAttrs = xml.attributes();
-
                 while (xml.readNextStartElement()) {
-                    if (xml.name() == QLatin1String("Values")) {
-                        while (xml.readNextStartElement()) {
-                            if (xml.name() == QLatin1String("Value")) {
-                                bool ok; const quint16 value = xml.readElementText().toUShort(&ok);
-                                if (ok) {
-                                    values.append(value);
-                                }
-                            } else {
-                                xml.skipCurrentElement();
+                    if (xml.name() == QLatin1String("Value")) {
+                        QXmlStreamAttributes valueAttrs = xml.attributes();
+                        bool ok;
+                        const auto address = valueAttrs.value("Address").toUShort(&ok);
+                        if(ok) {
+                            const quint16 value = xml.readElementText().toUShort(&ok);
+                            if (ok) {
+                                map[address] = value;
                             }
                         }
                     } else {
                         xml.skipCurrentElement();
                     }
                 }
-
                 xml.skipCurrentElement();
             }
             else {
@@ -725,8 +726,17 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, FormModSim* frm)
             }
         }
 
-        if (dd.PointType != QModbusDataUnit::Invalid && !values.isEmpty()) {
-            frm->configureModbusDataUnit(dd.DeviceId, dd.PointType, dd.PointAddress, values);
+        if (dd.PointType != QModbusDataUnit::Invalid && !map.isEmpty()) {
+            QVector<quint16> values(dd.Length);
+
+            QHashIterator it(map);
+            while(it.hasNext()) {
+                const auto item = it.next();
+                const auto index = item.key() - dd.PointAddress;
+                values[index] = item.value();
+            }
+
+            frm->configureModbusDataUnit(dd.DeviceId, dd.PointType, dd.PointAddress - (dd.ZeroBasedAddress ? 0 : 1), values);
         }
     }
     else {

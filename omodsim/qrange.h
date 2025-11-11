@@ -113,7 +113,7 @@ inline QXmlStreamWriter& operator <<(QXmlStreamWriter& xml, const QRange<double>
 ///
 inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, QRange<double>& range)
 {
-    if (xml.readNextStartElement() && xml.name() == QLatin1String("Range")) {
+    if (xml.isStartElement() && xml.name() == QLatin1String("Range")) {
         const QXmlStreamAttributes attributes = xml.attributes();
 
         bool okFrom, okTo;

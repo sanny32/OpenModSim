@@ -115,12 +115,15 @@ inline QXmlStreamWriter& operator <<(QXmlStreamWriter& xml, const ModbusSimulati
         const ModbusSimulationMapKey& key = it.key();
         const ModbusSimulationParams& params = it.value();
 
-        xml.writeStartElement("SimulationItem");
-        xml.writeAttribute("DeviceId", QString::number(key.DeviceId));
-        xml.writeAttribute("Type", enumToString<QModbusDataUnit::RegisterType>(key.Type));
-        xml.writeAttribute("Address", QString::number(key.Address));
-        xml << params;
-        xml.writeEndElement();
+        if(params.Mode != SimulationMode::No)
+        {
+            xml.writeStartElement("SimulationItem");
+            xml.writeAttribute("DeviceId", QString::number(key.DeviceId));
+            xml.writeAttribute("Type", enumToString<QModbusDataUnit::RegisterType>(key.Type));
+            xml.writeAttribute("Address", QString::number(key.Address));
+            xml << params;
+            xml.writeEndElement();
+        }
     }
 
     xml.writeEndElement();
@@ -137,7 +140,7 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, ModbusSimulationMap2
 {
     simulationMap.clear();
 
-    if (xml.readNextStartElement() && xml.name() == QLatin1String("ModbusSimulationMap2")) {
+    if (xml.isStartElement() && xml.name() == QLatin1String("ModbusSimulationMap2")) {
         while (xml.readNextStartElement()) {
             if (xml.name() == QLatin1String("SimulationItem")) {
                 ModbusSimulationMapKey key;
@@ -167,17 +170,16 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, ModbusSimulationMap2
                 // Params
                 xml >> params;
 
+                xml.skipCurrentElement();
+
                 if (key.DeviceId > 0 && key.Type != QModbusDataUnit::Invalid) {
                     simulationMap.insert(key, params);
                 }
 
-                xml.skipCurrentElement();
             } else {
                 xml.skipCurrentElement();
             }
         }
-
-        xml.skipCurrentElement();
     }
 
     return xml;

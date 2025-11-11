@@ -235,17 +235,20 @@ inline QXmlStreamWriter& operator <<(QXmlStreamWriter& xml, const AddressDescrip
         const AddressDescriptionMapKey& key = it.key();
         const QString& description = it.value();
 
-        xml.writeStartElement("DescriptionItem");
+        if(!description.isEmpty())
+        {
+            xml.writeStartElement("DescriptionItem");
 
-        xml.writeAttribute("DeviceId", QString::number(key.DeviceId));
-        xml.writeAttribute("Type", enumToString<QModbusDataUnit::RegisterType>(key.Type));
-        xml.writeAttribute("Address", QString::number(key.Address));
+            xml.writeAttribute("DeviceId", QString::number(key.DeviceId));
+            xml.writeAttribute("Type", enumToString<QModbusDataUnit::RegisterType>(key.Type));
+            xml.writeAttribute("Address", QString::number(key.Address));
 
-        if (!description.isEmpty()) {
-            xml.writeCDATA(description);
+            if (!description.isEmpty()) {
+                xml.writeCDATA(description);
+            }
+
+            xml.writeEndElement(); // DescriptionItem
         }
-
-        xml.writeEndElement(); // DescriptionItem
     }
 
     xml.writeEndElement(); // AddressDescriptionMap2
@@ -262,7 +265,7 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, AddressDescriptionMa
 {
     descriptionMap.clear();
 
-    if (xml.readNextStartElement() && xml.name() == QLatin1String("AddressDescriptionMap2")) {
+    if (xml.isStartElement() && xml.name() == QLatin1String("AddressDescriptionMap2")) {
         while (xml.readNextStartElement()) {
             if (xml.name() == QLatin1String("DescriptionItem")) {
                 AddressDescriptionMapKey key;
@@ -297,8 +300,6 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, AddressDescriptionMa
                 xml.skipCurrentElement();
             }
         }
-
-        xml.skipCurrentElement();
     }
 
     return xml;
