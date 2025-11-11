@@ -809,7 +809,7 @@ void FormModSim::on_outputWidget_itemDoubleClicked(quint16 addr, const QVariant&
     const auto zeroBasedAddress = displayDefinition().ZeroBasedAddress;
     const auto simAddr = addr - (zeroBasedAddress ? 0 : 1);
     const auto addrSpace = _mbMultiServer.getModbusDefinitions().AddrSpace;
-    auto simParams = _dataSimulator->simulationParams(deviceId, pointType, addr);
+    auto simParams = _dataSimulator->simulationParams(deviceId, pointType, simAddr);
 
     switch(pointType)
     {
