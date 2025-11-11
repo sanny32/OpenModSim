@@ -191,6 +191,13 @@ private:
 Q_DECLARE_METATYPE(QModbusRequest)
 Q_DECLARE_METATYPE(QModbusResponse)
 Q_DECLARE_METATYPE(QModbusDataUnit)
+DECLARE_ENUM_STRINGS(QModbusDataUnit::RegisterType,
+                     {   QModbusDataUnit::Invalid,          "Invalid"           },
+                     {   QModbusDataUnit::DiscreteInputs,   "DiscreteInputs"    },
+                     {   QModbusDataUnit::Coils,            "Coils"             },
+                     {   QModbusDataUnit::DiscreteInputs,   "InputRegisters"    },
+                     {   QModbusDataUnit::HoldingRegisters, "HoldingRegisters"  }
+)
 
 Q_DECLARE_LOGGING_CATEGORY(QT_MODBUS)
 Q_DECLARE_LOGGING_CATEGORY(QT_MODBUS_LOW)
