@@ -1,6 +1,6 @@
 # Open ModSim
 
-[![GitHub all releases](https://img.shields.io/github/downloads/sanny32/OpenModSim/total?logo=github)](https://github.com/sanny32/OpenModSim/releases)
+[![GitHub all releases](https://img.shields.io/github/downloads/sanny32/OpenModSim/total?logo=github&cacheSeconds=3600)](https://github.com/sanny32/OpenModSim/releases)
 [![GitHub release (latest by date)](https://img.shields.io/github/v/release/sanny32/OpenModSim?logo=github&cacheSeconds=3600)](https://github.com/sanny32/OpenModSim/releases/latest)
 [![License](https://img.shields.io/github/license/sanny32/OpenModSim)](LICENSE.md)
 
