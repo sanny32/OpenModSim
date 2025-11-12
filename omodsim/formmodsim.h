@@ -616,7 +616,7 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, FormModSim* frm)
 {
     if (!frm) return xml;
 
-    if (xml.readNextStartElement() && xml.name() == QLatin1String("FormModSim")) {
+    if (xml.isStartElement() && xml.name() == QLatin1String("FormModSim")) {
         DataDisplayMode ddm;
         DisplayDefinition dd;
         QHash<quint16, quint16> data;

@@ -1359,58 +1359,117 @@ FormModSim* MainWindow::firstMdiChild() const
 ///
 void MainWindow::loadConfig(const QString& filename, bool startup)
 {
+    const auto format = filename.endsWith(".xml", Qt::CaseInsensitive) ?
+                            SerializationFormat::Xml :
+                            SerializationFormat::Binary;
+
     QFile file(filename);
     if(!file.open(QFile::ReadOnly))
         return;
 
-    QDataStream s(&file);
-    s.setByteOrder(QDataStream::BigEndian);
-    s.setVersion(QDataStream::Version::Qt_5_0);
-
-    quint8 magic = 0;
-    s >> magic;
-
-    if(magic != 0x35)
-        return;
-
-    QVersionNumber ver;
-    s >> ver;
-
-    if(ver < QVersionNumber(1, 0))
-        return;
-
-    QStringList listFilename;
-    s >> listFilename;
-
+    ModbusDefinitions defs;
     QList<ConnectionDetails> conns;
-    s >> conns;
+    switch(format)
+    {
+        case SerializationFormat::Binary:
+        {
+            QDataStream s(&file);
+            s.setByteOrder(QDataStream::BigEndian);
+            s.setVersion(QDataStream::Version::Qt_5_0);
 
-    if(ver >= QVersionNumber(1, 1)) {
-        ModbusDefinitions defs;
-        s >> defs.AddrSpace;
-        s >> defs.UseGlobalUnitMap;
-        s >> defs.ErrorSimulations;
-        _mbMultiServer.setModbusDefinitions(defs);
+            quint8 magic = 0;
+            s >> magic;
+
+            if(magic != 0x35)
+                return;
+
+            QVersionNumber ver;
+            s >> ver;
+
+            if(ver < QVersionNumber(1, 0))
+                return;
+
+            QStringList listFilename;
+            s >> listFilename;
+
+            ui->mdiArea->closeAllSubWindows();
+            for(auto&& filename: listFilename)
+            {
+                if(!filename.isEmpty())
+                    openFile(filename);
+            }
+
+            s >> conns;
+
+            if(ver >= QVersionNumber(1, 1)) {
+                s >> defs.AddrSpace;
+                s >> defs.UseGlobalUnitMap;
+                s >> defs.ErrorSimulations;
+            }
+
+            if(s.status() != QDataStream::Ok)
+                return;
+        }
+        break;
+
+        case SerializationFormat::Xml:
+        {
+            QXmlStreamReader xml(&file);
+            while (xml.readNextStartElement()) {
+                if (xml.name() == QLatin1String("OpenModSim")) {
+                    while (xml.readNextStartElement()) {
+                        if (xml.name() == QLatin1String("ModbusDefinitions")) {
+                            xml >> defs;
+                        }
+                        else if (xml.name() == QLatin1String("Connections")) {
+                            while (xml.readNextStartElement()) {
+                                if (xml.name() == QLatin1String("ConnectionDetails")) {
+                                    ConnectionDetails cd;
+                                    xml >> cd;
+                                    conns.append(cd);
+                                } else {
+                                    xml.skipCurrentElement();
+                                }
+                            }
+                        }
+                        else if (xml.name() == QLatin1String("Forms")) {
+                            ui->mdiArea->closeAllSubWindows();
+                            while (xml.readNextStartElement()) {
+                                if (xml.name() == QLatin1String("FormModSim")) {
+                                    auto frm = createMdiChild(++_windowCounter);
+                                    if (frm) {
+                                        xml >> frm;
+                                        frm->show();
+                                    }
+                                } else {
+                                    xml.skipCurrentElement();
+                                }
+                            }
+                        }
+                        else {
+                            xml.skipCurrentElement();
+                        }
+                    }
+                }
+                else {
+                    xml.skipCurrentElement();
+                }
+            }
+
+        }
+        break;
     }
-
-    if(s.status() != QDataStream::Ok)
-        return;
-
-    ui->mdiArea->closeAllSubWindows();
 
     auto menu = qobject_cast<MenuConnect*>(ui->actionConnect->menu());
     menu->updateConnectionDetails(conns);
+
+    // setup definitions
+    _mbMultiServer.setModbusDefinitions(defs);
 
     for(auto&& cd : conns)
     {
         if(menu->canConnect(cd))
             _mbMultiServer.connectDevice(cd);
-    }
-
-    for(auto&& filename: listFilename)
-    {
-        if(!filename.isEmpty())
-            openFile(filename);
     }
 
     if(startup) {
@@ -1433,8 +1492,6 @@ void MainWindow::saveConfig(const QString& filename, SerializationFormat format)
     QFile file(filename);
     if(!file.open(QFile::WriteOnly))
         return;
-
-    qDebug() << (int)format;
 
     switch(format)
     {
@@ -1514,7 +1571,9 @@ void MainWindow::saveConfig(const QString& filename, SerializationFormat format)
 ///
 FormModSim* MainWindow::loadMdiChild(const QString& filename)
 {
-    const auto format = filename.endsWith(".xml", Qt::CaseInsensitive) ? SerializationFormat::Xml : SerializationFormat::Binary;
+    const auto format = filename.endsWith(".xml", Qt::CaseInsensitive) ?
+                            SerializationFormat::Xml :
+                            SerializationFormat::Binary;
 
     QFile file(filename);
     if(!file.open(QFile::ReadOnly))
@@ -1549,19 +1608,16 @@ FormModSim* MainWindow::loadMdiChild(const QString& filename)
 
             bool created = false;
             frm = findMdiChild(formId);
-            if(!frm)
-            {
+            if(!frm) {
                 frm = createMdiChild(formId);
                 created = true;
             }
 
-            if(frm)
-            {
+            if(frm) {
                 frm->setProperty("Version", QVariant::fromValue(ver));
                 s >> frm;
 
-                if(s.status() != QDataStream::Ok && created)
-                {
+                if(s.status() != QDataStream::Ok && created) {
                     closeMdiChild(frm);
                 }
             }
@@ -1570,18 +1626,18 @@ FormModSim* MainWindow::loadMdiChild(const QString& filename)
 
         case SerializationFormat::Xml:
         {
-            QXmlStreamReader r(&file);
+            QXmlStreamReader xml(&file);
+            if(xml.readNextStartElement() && xml.name() == QLatin1String("FormModSim")) {
+                frm = createMdiChild(++_windowCounter);
+                if(frm) {
+                    xml >> frm;
 
-            frm = createMdiChild(++_windowCounter);
-            if(frm)
-            {
-                r >> frm;
-
-                // close windows with the same title
-                for(auto&& wnd : ui->mdiArea->subWindowList()) {
-                    const auto f = qobject_cast<FormModSim*>(wnd->widget());
-                    if(f != nullptr && f != frm && f->windowTitle() == frm->windowTitle()) {
-                        wnd->close();
+                    // close windows with the same title
+                    for(auto&& wnd : ui->mdiArea->subWindowList()) {
+                        const auto f = qobject_cast<FormModSim*>(wnd->widget());
+                        if(f != nullptr && f != frm && f->windowTitle() == frm->windowTitle()) {
+                            wnd->close();
+                        }
                     }
                 }
             }
@@ -1589,8 +1645,7 @@ FormModSim* MainWindow::loadMdiChild(const QString& filename)
         break;
     }
 
-    if(frm)
-    {
+    if(frm) {
         frm->setFilename(filename);
 
         addRecentFile(filename);

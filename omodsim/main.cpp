@@ -12,6 +12,7 @@ namespace {
     static const int reg3 = qRegisterMetaType<QModbusDataUnit>();
     static const int reg4 = qRegisterMetaType<ModbusMessage::ProtocolType>();
     static const int reg5 = qRegisterMetaType<QSharedPointer<const ModbusMessage>>();
+    static const int reg6 = qRegisterMetaType<ModbusDefinitions>();
 }
 #endif
 
