@@ -196,7 +196,7 @@ void DataSimulator::randomSimulation(DataDisplayMode mode, quint8 deviceId, QMod
     {
         case QModbusDataUnit::Coils:
         case QModbusDataUnit::DiscreteInputs:
-            value = generateRandom<quint16>(params.Range.from(), params.Range.to() + 1);
+            value = generateRandom<quint16>(0, 2);
         break;
 
         case QModbusDataUnit::HoldingRegisters:
