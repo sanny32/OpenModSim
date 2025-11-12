@@ -803,7 +803,19 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, FormModSim* frm)
             QHashIterator it(simulations);
             while(it.hasNext()) {
                 const auto item = it.next();
-                frm->startSimulation(dd.PointType, item.key() - (dd.ZeroBasedAddress ? 0 : 1), item.value());
+                switch(dd.PointType) {
+                    case QModbusDataUnit::Coils:
+                    case QModbusDataUnit::DiscreteInputs:
+                        if(item->Mode == SimulationMode::Toggle || item->Mode == SimulationMode::Random)
+                            frm->startSimulation(dd.PointType, item.key() - (dd.ZeroBasedAddress ? 0 : 1), item.value());
+                        break;
+                    case QModbusDataUnit::InputRegisters:
+                    case QModbusDataUnit::HoldingRegisters:
+                        if(item->Mode != SimulationMode::No && item->Mode != SimulationMode::Toggle)
+                            frm->startSimulation(dd.PointType, item.key() - (dd.ZeroBasedAddress ? 0 : 1), item.value());
+                        break;
+                    default: break;
+                }
             }
         }
 
@@ -822,7 +834,18 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, FormModSim* frm)
             while(it.hasNext()) {
                 const auto item = it.next();
                 const auto index = item.key() - dd.PointAddress;
-                values[index] = item.value();
+                switch(dd.PointType) {
+                    case QModbusDataUnit::Coils:
+                    case QModbusDataUnit::DiscreteInputs:
+                        values[index] = qBound<quint16>(0, item.value(), 1);
+                        break;
+                    case QModbusDataUnit::InputRegisters:
+                    case QModbusDataUnit::HoldingRegisters:
+                        values[index] = item.value();
+                        break;
+                    default: break;
+                }
+                if(index >= values.length()) break;
             }
 
             frm->configureModbusDataUnit(dd.DeviceId, dd.PointType, dd.PointAddress - (dd.ZeroBasedAddress ? 0 : 1), values);
