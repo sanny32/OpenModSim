@@ -1761,19 +1761,19 @@ Script.onInit(()=&gt;{
         <translation type="vanished">俄语</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="397"/>
-        <location filename="../mainwindow.cpp" line="409"/>
+        <location filename="../mainwindow.cpp" line="400"/>
+        <location filename="../mainwindow.cpp" line="412"/>
         <source>All files (*)</source>
         <translation>所有文件 (*)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="327"/>
-        <location filename="../mainwindow.cpp" line="374"/>
+        <location filename="../mainwindow.cpp" line="330"/>
+        <location filename="../mainwindow.cpp" line="377"/>
         <source>XML files (*.xml);;All files (*)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1298"/>
+        <location filename="../mainwindow.cpp" line="1301"/>
         <source>Capture Error:<byte value="xd"/>
 %1</source>
         <translation>捕获错误：

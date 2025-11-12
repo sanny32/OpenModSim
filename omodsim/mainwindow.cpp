@@ -308,7 +308,10 @@ void MainWindow::on_actionNew_triggered()
     if(cur) {
         frm->setByteOrder(cur->byteOrder());
         frm->setDataDisplayMode(cur->dataDisplayMode());
-        frm->setDisplayDefinition(cur->displayDefinition());
+
+        auto dd = cur->displayDefinition();
+        dd.FormName = frm->displayDefinition().FormName;
+        frm->setDisplayDefinition(dd);
 
         frm->setFont(cur->font());
         frm->setStatusColor(cur->statusColor());
@@ -1500,8 +1503,8 @@ FormModSim* MainWindow::loadMdiChild(const QString& filename)
             frm = findMdiChild(formId);
             if(!frm)
             {
-                created = true;
                 frm = createMdiChild(formId);
+                created = true;
             }
 
             if(frm)
@@ -1511,7 +1514,7 @@ FormModSim* MainWindow::loadMdiChild(const QString& filename)
 
                 if(s.status() != QDataStream::Ok && created)
                 {
-                    frm->close();
+                    closeMdiChild(frm);
                 }
             }
         }
@@ -1520,8 +1523,20 @@ FormModSim* MainWindow::loadMdiChild(const QString& filename)
         case SerializationFormat::Xml:
         {
             QXmlStreamReader r(&file);
-            frm = createMdiChild(_windowCounter + 1);
-            if(frm) r >> frm;
+
+            frm = createMdiChild(++_windowCounter);
+            if(frm)
+            {
+                r >> frm;
+
+                // close windows with the same title
+                for(auto&& wnd : ui->mdiArea->subWindowList()) {
+                    const auto f = qobject_cast<FormModSim*>(wnd->widget());
+                    if(f != nullptr && f != frm && f->windowTitle() == frm->windowTitle()) {
+                        wnd->close();
+                    }
+                }
+            }
         }
         break;
     }
@@ -1573,12 +1588,26 @@ void MainWindow::saveMdiChild(FormModSim* frm, SerializationFormat format)
         {
             QXmlStreamWriter w(&file);
             w.setAutoFormatting(true);
+            w.writeStartDocument();
             w << frm;
+            w.writeEndDocument();
         }
         break;
     }
 
     addRecentFile(frm->filename());
+}
+
+///
+/// \brief MainWindow::closeMdiChild
+/// \param frm
+///
+void MainWindow::closeMdiChild(FormModSim* frm)
+{
+    for(auto&& wnd : ui->mdiArea->subWindowList()) {
+        const auto f = qobject_cast<FormModSim*>(wnd->widget());
+        if(f == frm) wnd->close();
+    }
 }
 
 ///

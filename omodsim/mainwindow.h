@@ -154,6 +154,7 @@ private:
 
     FormModSim* loadMdiChild(const QString& filename);
     void saveMdiChild(FormModSim* frm, SerializationFormat format);
+    void closeMdiChild(FormModSim* frm);
 
     void loadSettings();
     void saveSettings();
