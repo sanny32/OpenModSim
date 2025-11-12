@@ -189,20 +189,17 @@ DECLARE_ENUM_STRINGS(QSerialPort::Parity,
                      {   QSerialPort::EvenParity,   "EVEN"      },
                      {   QSerialPort::OddParity,    "ODD"       },
                      {   QSerialPort::SpaceParity,  "SPACE"     },
-                     {   QSerialPort::MarkParity,   "MARK"      },
-                     {   QSerialPort::UnknownParity,"UNKNOWN"   }
+                     {   QSerialPort::MarkParity,   "MARK"      }
 )
 DECLARE_ENUM_STRINGS(QSerialPort::StopBits,
                      {   QSerialPort::OneStop,          "1"         },
                      {   QSerialPort::OneAndHalfStop,   "1.5"       },
-                     {   QSerialPort::TwoStop,          "2"         },
-                     {   QSerialPort::UnknownStopBits,  "UNKNOWN"   },
-                     )
+                     {   QSerialPort::TwoStop,          "2"         }
+)
 DECLARE_ENUM_STRINGS(QSerialPort::FlowControl,
                      {   QSerialPort::NoFlowControl,        "NO"        },
                      {   QSerialPort::HardwareControl,      "HARDWARE"  },
-                     {   QSerialPort::SoftwareControl,      "SOFTWARE"  },
-                     {   QSerialPort::UnknownFlowControl,   "UNKNOWN"   },
+                     {   QSerialPort::SoftwareControl,      "SOFTWARE"  }
 )
 
 ///

@@ -442,23 +442,21 @@ QXmlStreamReader& operator>>(QXmlStreamReader& xml, JScriptControl* ctrl)
 
     if (xml.isStartElement() && xml.name() == QLatin1String("JScriptControl")) {
         while (xml.readNextStartElement()) {
-            const QStringRef name = xml.name();
-
-            if (name == QLatin1String("Script")) {
+            if (xml.name() == QLatin1String("Script")) {
                 const QString scriptText = xml.readElementText(QXmlStreamReader::IncludeChildElements);
                 ctrl->setScript(scriptText);
             }
-            else if (name == QLatin1String("VerticalSplitter")) {
+            else if (xml.name() == QLatin1String("VerticalSplitter")) {
                 const QByteArray state = QByteArray::fromBase64(xml.readElementText().toLatin1());
                 if (!state.isEmpty())
                     ctrl->ui->verticalSplitter->restoreState(state);
             }
-            else if (name == QLatin1String("HorizontalSplitter")) {
+            else if (xml.name() == QLatin1String("HorizontalSplitter")) {
                 const QByteArray state = QByteArray::fromBase64(xml.readElementText().toLatin1());
                 if (!state.isEmpty())
                     ctrl->ui->horizontalSplitter->restoreState(state);
             }
-            else if (name == QLatin1String("AutoComplete")) {
+            else if (xml.name() == QLatin1String("AutoComplete")) {
                 const QXmlStreamAttributes attrs = xml.attributes();
                 if (attrs.hasAttribute("Enabled")) {
                     const bool enabled = stringToBool(attrs.value("Enabled").toString());
