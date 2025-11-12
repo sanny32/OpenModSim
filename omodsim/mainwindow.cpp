@@ -379,7 +379,7 @@ void MainWindow::on_actionSaveAs_triggered()
     if(filename.isEmpty()) return;
 
     auto format = SerializationFormat::Binary;
-    if(selectedFilter == "XML files (*.xml)") {
+    if(selectedFilter == tr("XML files (*.xml)")) {
         format = SerializationFormat::Xml;
         if(!filename.endsWith(".xml", Qt::CaseInsensitive)) {
             filename.append(".xml");
@@ -397,11 +397,21 @@ void MainWindow::on_actionSaveAs_triggered()
 ///
 void MainWindow::on_actionSaveTestConfig_triggered()
 {
-    const auto filename = QFileDialog::getSaveFileName(this, QString(), _savePath, tr("All files (*)"));
+    QString selectedFilter;
+    auto filename = QFileDialog::getSaveFileName(this, QString(), _savePath, tr("XML files (*.xml);;All files (*)"), &selectedFilter);
+
     if(filename.isEmpty()) return;
 
+    auto format = SerializationFormat::Binary;
+    if(selectedFilter == tr("XML files (*.xml)")) {
+        format = SerializationFormat::Xml;
+        if(!filename.endsWith(".xml", Qt::CaseInsensitive)) {
+            filename.append(".xml");
+        }
+    }
+
     _savePath = QFileInfo(filename).absoluteDir().absolutePath();
-    saveConfig(filename);
+    saveConfig(filename, format);
 }
 
 ///
@@ -409,7 +419,7 @@ void MainWindow::on_actionSaveTestConfig_triggered()
 ///
 void MainWindow::on_actionRestoreTestConfig_triggered()
 {
-    const auto filename = QFileDialog::getOpenFileName(this, QString(), _savePath, tr("All files (*)"));
+    const auto filename = QFileDialog::getOpenFileName(this, QString(), _savePath, tr("XML files (*.xml);;All files (*)"));
     if(filename.isEmpty()) return;
 
     _savePath = QFileInfo(filename).absoluteDir().absolutePath();
@@ -1416,47 +1426,85 @@ void MainWindow::loadConfig(const QString& filename, bool startup)
 ///
 /// \brief MainWindow::saveConfig
 /// \param filename
+/// \param format
 ///
-void MainWindow::saveConfig(const QString& filename)
+void MainWindow::saveConfig(const QString& filename, SerializationFormat format)
 {
     QFile file(filename);
     if(!file.open(QFile::WriteOnly))
         return;
 
-    QStringList listFilename;
-    const auto activeWnd = ui->mdiArea->currentSubWindow();
-    for(auto&& wnd : ui->mdiArea->subWindowList())
+    qDebug() << (int)format;
+
+    switch(format)
     {
-        windowActivate(wnd);
-        ui->actionSave->trigger();
+        case SerializationFormat::Binary:
+        {
+            QStringList listFilename;
+            const auto activeWnd = ui->mdiArea->currentSubWindow();
+            for(auto&& wnd : ui->mdiArea->subWindowList())
+            {
+                windowActivate(wnd);
+                ui->actionSave->trigger();
 
-        const auto frm = qobject_cast<FormModSim*>(wnd->widget());
-        const auto filename = frm->filename();
-        if(!filename.isEmpty()) listFilename.push_back(filename);
+                const auto frm = qobject_cast<FormModSim*>(wnd->widget());
+                const auto filename = frm->filename();
+                if(!filename.isEmpty()) listFilename.push_back(filename);
+            }
+            windowActivate(activeWnd);
+
+            QDataStream s(&file);
+            s.setByteOrder(QDataStream::BigEndian);
+            s.setVersion(QDataStream::Version::Qt_5_0);
+
+            // magic number
+            s << (quint8)0x35;
+
+            // version number
+            s << QVersionNumber(1, 1);
+
+            // list of files
+            s << listFilename;
+
+            // connections
+            s << _mbMultiServer.connections();
+
+            // modbus definitions
+            ModbusDefinitions defs = _mbMultiServer.getModbusDefinitions();
+            s << defs.AddrSpace;
+            s << defs.UseGlobalUnitMap;
+            s << defs.ErrorSimulations;
+        }
+        break;
+
+        case SerializationFormat::Xml:
+        {
+            QXmlStreamWriter w(&file);
+            w.setAutoFormatting(true);
+
+            w.writeStartDocument();
+            w.writeStartElement("OpenModSim");
+            w.writeAttribute("Version", qApp->applicationVersion());
+
+            w << _mbMultiServer.getModbusDefinitions();
+
+            w.writeStartElement("Connections");
+            for(auto&& cd : _mbMultiServer.connections()) {
+                w << cd;
+            }
+            w.writeEndElement(); // Connections
+
+            w.writeStartElement("Forms");
+            for(auto&& wnd : ui->mdiArea->subWindowList()) {
+                w << qobject_cast<FormModSim*>(wnd->widget());
+            }
+            w.writeEndElement(); // Forms
+
+            w.writeEndElement(); // OpenModSim
+            w.writeEndDocument();
+        }
+        break;
     }
-    windowActivate(activeWnd);
-
-    QDataStream s(&file);
-    s.setByteOrder(QDataStream::BigEndian);
-    s.setVersion(QDataStream::Version::Qt_5_0);
-
-    // magic number
-    s << (quint8)0x35;
-
-    // version number
-    s << QVersionNumber(1, 1);
-
-    // list of files
-    s << listFilename;
-
-    // connections
-    s << _mbMultiServer.connections();
-
-    // modbus definitions
-    ModbusDefinitions defs = _mbMultiServer.getModbusDefinitions();
-    s << defs.AddrSpace;
-    s << defs.UseGlobalUnitMap;
-    s << defs.ErrorSimulations;
 }
 
 ///

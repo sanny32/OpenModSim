@@ -1158,7 +1158,7 @@
         <translation>Узел:</translation>
     </message>
     <message>
-        <location filename="../formmodsim.ui" line="297"/>
+        <location filename="../formmodsim.ui" line="294"/>
         <source>MODBUS Point Type</source>
         <translation>Тип регистров MODBUS</translation>
     </message>
@@ -1187,7 +1187,7 @@ Length: %2</source>
         <translation type="vanished">Указана недопустимая длина данных</translation>
     </message>
     <message>
-        <location filename="../formmodsim.cpp" line="473"/>
+        <location filename="../formmodsim.cpp" line="474"/>
         <source>Address Base: %1
 Start Address: %2
 Length: %3</source>
@@ -1196,7 +1196,7 @@ Length: %3</source>
 Количество: %3</translation>
     </message>
     <message>
-        <location filename="../formmodsim.cpp" line="476"/>
+        <location filename="../formmodsim.cpp" line="477"/>
         <source>Device Id: %1
 MODBUS Point Type:
 %2</source>
@@ -1753,19 +1753,25 @@ Script.onInit(()=&gt;{
         <translation>Шестнадцатиричные адреса</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="400"/>
-        <location filename="../mainwindow.cpp" line="412"/>
         <source>All files (*)</source>
-        <translation>Все файлы (*)</translation>
+        <translation type="vanished">Все файлы (*)</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="330"/>
         <location filename="../mainwindow.cpp" line="377"/>
+        <location filename="../mainwindow.cpp" line="401"/>
+        <location filename="../mainwindow.cpp" line="422"/>
         <source>XML files (*.xml);;All files (*)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1301"/>
+        <location filename="../mainwindow.cpp" line="382"/>
+        <location filename="../mainwindow.cpp" line="406"/>
+        <source>XML files (*.xml)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cpp" line="1311"/>
         <source>Capture Error:<byte value="xd"/>
 %1</source>
         <translation>Ошибка захвата:

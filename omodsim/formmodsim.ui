@@ -245,7 +245,7 @@
                     </property>
                     <property name="maximumSize">
                      <size>
-                      <width>40</width>
+                      <width>36</width>
                       <height>16777215</height>
                      </size>
                     </property>
@@ -254,9 +254,6 @@
                     </property>
                     <property name="acceptDrops">
                      <bool>false</bool>
-                    </property>
-                    <property name="alignment">
-                     <set>Qt::AlignCenter</set>
                     </property>
                    </widget>
                   </item>

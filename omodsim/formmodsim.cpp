@@ -36,6 +36,7 @@ FormModSim::FormModSim(int id, ModbusMultiServer& server, QSharedPointer<DataSim
 
     ui->lineEditDeviceId->setInputRange(ModbusLimits::slaveRange());
     ui->lineEditDeviceId->setValue(1);
+    ui->lineEditDeviceId->setPaddingZeroes(true);
     server.addDeviceId(ui->lineEditDeviceId->value<int>());
 
     ui->stackedWidget->setCurrentIndex(0);

@@ -4,6 +4,8 @@
 #include <QSettings>
 #include <QDataStream>
 #include <QVersionNumber>
+#include <QXmlStreamReader>
+#include "enums.h"
 
 ///
 /// \brief The ModbusErrorSimulations class
@@ -173,6 +175,91 @@ inline QDataStream& operator >>(QDataStream& in, ModbusErrorSimulations& errsim)
     errsim.setResponseRandomDelayUpToTime(responseRandomDelayUpToTime);
 
     return in;
+}
+
+///
+/// \brief operator <<
+/// \param xml
+/// \param errors
+/// \return
+///
+inline QXmlStreamWriter& operator <<(QXmlStreamWriter& xml, const ModbusErrorSimulations& errors)
+{
+    xml.writeStartElement("ModbusErrorSimulations");
+
+    xml.writeAttribute("NoResponse", boolToString(errors.noResponse()));
+    xml.writeAttribute("ResponseIncorrectId", boolToString(errors.responseIncorrectId()));
+    xml.writeAttribute("ResponseIllegalFunction", boolToString(errors.responseIllegalFunction()));
+    xml.writeAttribute("ResponseDeviceBusy", boolToString(errors.responseDeviceBusy()));
+    xml.writeAttribute("ResponseIncorrectCrc", boolToString(errors.responseIncorrectCrc()));
+    xml.writeAttribute("ResponseDelay", boolToString(errors.responseDelay()));
+    xml.writeAttribute("ResponseRandomDelay", boolToString(errors.responseRandomDelay()));
+    xml.writeAttribute("ResponseDelayTime", QString::number(errors.responseDelayTime()));
+    xml.writeAttribute("ResponseRandomDelayUpToTime", QString::number(errors.responseRandomDelayUpToTime()));
+
+    xml.writeEndElement();
+    return xml;
+}
+
+///
+/// \brief operator >>
+/// \param xml
+/// \param errors
+/// \return
+///
+inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, ModbusErrorSimulations& errors)
+{
+    if (xml.isStartElement() && xml.name() == QLatin1String("ModbusErrorSimulations")) {
+        QXmlStreamAttributes attributes = xml.attributes();
+
+        if (attributes.hasAttribute("NoResponse")) {
+            errors.setNoResponse(stringToBool(attributes.value("NoResponse").toString()));
+        }
+
+        if (attributes.hasAttribute("ResponseIncorrectId")) {
+            errors.setResponseIncorrectId(stringToBool(attributes.value("ResponseIncorrectId").toString()));
+        }
+
+        if (attributes.hasAttribute("ResponseIllegalFunction")) {
+            errors.setResponseIllegalFunction(stringToBool(attributes.value("ResponseIllegalFunction").toString()));
+        }
+
+        if (attributes.hasAttribute("ResponseDeviceBusy")) {
+            errors.setResponseDeviceBusy(stringToBool(attributes.value("ResponseDeviceBusy").toString()));
+        }
+
+        if (attributes.hasAttribute("ResponseIncorrectCrc")) {
+            errors.setResponseIncorrectCrc(stringToBool(attributes.value("ResponseIncorrectCrc").toString()));
+        }
+
+        if (attributes.hasAttribute("ResponseDelay")) {
+            errors.setResponseDelay(stringToBool(attributes.value("ResponseDelay").toString()));
+        }
+
+        if (attributes.hasAttribute("ResponseRandomDelay")) {
+            errors.setResponseRandomDelay(stringToBool(attributes.value("ResponseRandomDelay").toString()));
+        }
+
+        if (attributes.hasAttribute("ResponseDelayTime")) {
+            bool ok;
+            const int delayTime = attributes.value("ResponseDelayTime").toInt(&ok);
+            if (ok && delayTime >= 0) {
+                errors.setResponseDelayTime(delayTime);
+            }
+        }
+
+        if (attributes.hasAttribute("ResponseRandomDelayUpToTime")) {
+            bool ok;
+            const int randomDelayTime = attributes.value("ResponseRandomDelayUpToTime").toInt(&ok);
+            if (ok && randomDelayTime >= 0) {
+                errors.setResponseRandomDelayUpToTime(randomDelayTime);
+            }
+        }
+
+        xml.skipCurrentElement();
+    }
+
+    return xml;
 }
 
 #endif // MODBUSERRORSIMULATIONS_H
