@@ -4,6 +4,7 @@
 #include <QTimer>
 #include <QJSEngine>
 #include <QPlainTextEdit>
+#include <QXmlStreamWriter>
 #include "console.h"
 #include "script.h"
 #include "storage.h"
@@ -22,8 +23,12 @@ class JScriptControl : public QWidget
 
     friend QSettings& operator <<(QSettings& out, const JScriptControl* ctrl);
     friend QSettings& operator >>(QSettings& in, JScriptControl* ctrl);
+
     friend QDataStream& operator <<(QDataStream& out, const JScriptControl* ctrl);
     friend QDataStream& operator >>(QDataStream& in, JScriptControl* ctrl);
+
+    friend QXmlStreamWriter& operator <<(QXmlStreamWriter& xml, const JScriptControl* ctrl);
+    friend QXmlStreamReader& operator >>(QXmlStreamReader& xml, JScriptControl* ctrl);
 
 public:  
     explicit JScriptControl(QWidget *parent = nullptr);

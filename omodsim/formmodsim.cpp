@@ -36,6 +36,7 @@ FormModSim::FormModSim(int id, ModbusMultiServer& server, QSharedPointer<DataSim
 
     ui->lineEditDeviceId->setInputRange(ModbusLimits::slaveRange());
     ui->lineEditDeviceId->setValue(1);
+    ui->lineEditDeviceId->setPaddingZeroes(true);
     server.addDeviceId(ui->lineEditDeviceId->value<int>());
 
     ui->stackedWidget->setCurrentIndex(0);
@@ -297,7 +298,18 @@ void FormModSim::stopTextCapture()
 ///
 void FormModSim::setDataDisplayMode(DataDisplayMode mode)
 {
-    ui->outputWidget->setDataDisplayMode(mode);
+    const auto dd = displayDefinition();
+    switch(dd.PointType) {
+        case QModbusDataUnit::Coils:
+        case QModbusDataUnit::DiscreteInputs:
+            ui->outputWidget->setDataDisplayMode(DataDisplayMode::Binary);
+            break;
+        case QModbusDataUnit::InputRegisters:
+        case QModbusDataUnit::HoldingRegisters:
+            ui->outputWidget->setDataDisplayMode(mode);
+            break;
+        default: break;
+    }
 }
 
 ///
@@ -809,7 +821,7 @@ void FormModSim::on_outputWidget_itemDoubleClicked(quint16 addr, const QVariant&
     const auto zeroBasedAddress = displayDefinition().ZeroBasedAddress;
     const auto simAddr = addr - (zeroBasedAddress ? 0 : 1);
     const auto addrSpace = _mbMultiServer.getModbusDefinitions().AddrSpace;
-    auto simParams = _dataSimulator->simulationParams(deviceId, pointType, addr);
+    auto simParams = _dataSimulator->simulationParams(deviceId, pointType, simAddr);
 
     switch(pointType)
     {

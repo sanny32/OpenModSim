@@ -1158,7 +1158,7 @@
         <translation>设备地址:</translation>
     </message>
     <message>
-        <location filename="../formmodsim.ui" line="297"/>
+        <location filename="../formmodsim.ui" line="294"/>
         <source>MODBUS Point Type</source>
         <translation>寄存器类型</translation>
     </message>
@@ -1187,7 +1187,7 @@ Length: %2</source>
         <translation type="vanished">Указана недопустимая длина данных</translation>
     </message>
     <message>
-        <location filename="../formmodsim.cpp" line="462"/>
+        <location filename="../formmodsim.cpp" line="474"/>
         <source>Address Base: %1
 Start Address: %2
 Length: %3</source>
@@ -1196,7 +1196,7 @@ Length: %3</source>
 长度: %3</translation>
     </message>
     <message>
-        <location filename="../formmodsim.cpp" line="465"/>
+        <location filename="../formmodsim.cpp" line="477"/>
         <source>Device Id: %1
 MODBUS Point Type:
 %2</source>
@@ -1761,15 +1761,25 @@ Script.onInit(()=&gt;{
         <translation type="vanished">俄语</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="327"/>
-        <location filename="../mainwindow.cpp" line="368"/>
-        <location filename="../mainwindow.cpp" line="382"/>
-        <location filename="../mainwindow.cpp" line="394"/>
         <source>All files (*)</source>
-        <translation>所有文件 (*)</translation>
+        <translation type="vanished">所有文件 (*)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1283"/>
+        <location filename="../mainwindow.cpp" line="330"/>
+        <location filename="../mainwindow.cpp" line="377"/>
+        <location filename="../mainwindow.cpp" line="401"/>
+        <location filename="../mainwindow.cpp" line="422"/>
+        <source>XML files (*.xml);;All files (*)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cpp" line="382"/>
+        <location filename="../mainwindow.cpp" line="406"/>
+        <source>XML files (*.xml)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cpp" line="1311"/>
         <source>Capture Error:<byte value="xd"/>
 %1</source>
         <translation>捕获错误：

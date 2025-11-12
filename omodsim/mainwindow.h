@@ -25,7 +25,7 @@ public:
     void setLanguage(const QString& lang);
 
     void loadConfig(const QString& filename, bool startup = false);
-    void saveConfig(const QString& filename);
+    void saveConfig(const QString& filename, SerializationFormat format);
 
 signals:
     void undo();
@@ -153,7 +153,8 @@ private:
     FormModSim* firstMdiChild() const;
 
     FormModSim* loadMdiChild(const QString& filename);
-    void saveMdiChild(FormModSim* frm);
+    void saveMdiChild(FormModSim* frm, SerializationFormat format);
+    void closeMdiChild(FormModSim* frm);
 
     void loadSettings();
     void saveSettings();

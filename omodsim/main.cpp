@@ -5,6 +5,17 @@
 #include "cmdlineparser.h"
 #include "fontutils.h"
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+namespace {
+    static const int reg1 = qRegisterMetaType<QModbusRequest>();
+    static const int reg2 = qRegisterMetaType<QModbusResponse>();
+    static const int reg3 = qRegisterMetaType<QModbusDataUnit>();
+    static const int reg4 = qRegisterMetaType<ModbusMessage::ProtocolType>();
+    static const int reg5 = qRegisterMetaType<QSharedPointer<const ModbusMessage>>();
+    static const int reg6 = qRegisterMetaType<ModbusDefinitions>();
+}
+#endif
+
 ///
 /// \brief isConsoleOutputAvailable
 /// \return
