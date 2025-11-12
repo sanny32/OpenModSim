@@ -654,24 +654,24 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, FormModSim* frm)
 
                 const auto wnd = frm->parentWidget();
                 if (wnd) {
-                    if (windowAttrs.hasAttribute("Maximized")) {
-                        bool maximized = stringToBool(windowAttrs.value("Maximized").toString());
-                        if (maximized) wnd->showMaximized();
-                    }
-
-                    if (windowAttrs.hasAttribute("Minimized")) {
-                        bool minimized = stringToBool(windowAttrs.value("Minimized").toString());
-                        if (minimized) wnd->showMinimized();
-                    }
-
                     if (windowAttrs.hasAttribute("Width") && windowAttrs.hasAttribute("Height")) {
                         bool okWidth, okHeight;
-                        int width = windowAttrs.value("Width").toInt(&okWidth);
-                        int height = windowAttrs.value("Height").toInt(&okHeight);
+                        const int width = windowAttrs.value("Width").toInt(&okWidth);
+                        const int height = windowAttrs.value("Height").toInt(&okHeight);
 
                         if (okWidth && okHeight && !wnd->isMaximized() && !wnd->isMinimized()) {
                             wnd->resize(width, height);
                         }
+                    }
+
+                    if (windowAttrs.hasAttribute("Maximized")) {
+                        const bool maximized = stringToBool(windowAttrs.value("Maximized").toString());
+                        if (maximized) wnd->showMaximized();
+                    }
+
+                    if (windowAttrs.hasAttribute("Minimized")) {
+                        const bool minimized = stringToBool(windowAttrs.value("Minimized").toString());
+                        if (minimized) wnd->showMinimized();
                     }
                 }
                 xml.skipCurrentElement();

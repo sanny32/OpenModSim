@@ -195,7 +195,7 @@ DECLARE_ENUM_STRINGS(QModbusDataUnit::RegisterType,
                      {   QModbusDataUnit::Invalid,          "Invalid"           },
                      {   QModbusDataUnit::DiscreteInputs,   "DiscreteInputs"    },
                      {   QModbusDataUnit::Coils,            "Coils"             },
-                     {   QModbusDataUnit::DiscreteInputs,   "InputRegisters"    },
+                     {   QModbusDataUnit::InputRegisters,   "InputRegisters"    },
                      {   QModbusDataUnit::HoldingRegisters, "HoldingRegisters"  }
 )
 
