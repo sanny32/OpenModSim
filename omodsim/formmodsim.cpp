@@ -297,7 +297,18 @@ void FormModSim::stopTextCapture()
 ///
 void FormModSim::setDataDisplayMode(DataDisplayMode mode)
 {
-    ui->outputWidget->setDataDisplayMode(mode);
+    const auto dd = displayDefinition();
+    switch(dd.PointType) {
+        case QModbusDataUnit::Coils:
+        case QModbusDataUnit::DiscreteInputs:
+            ui->outputWidget->setDataDisplayMode(DataDisplayMode::Binary);
+            break;
+        case QModbusDataUnit::InputRegisters:
+        case QModbusDataUnit::HoldingRegisters:
+            ui->outputWidget->setDataDisplayMode(mode);
+            break;
+        default: break;
+    }
 }
 
 ///

@@ -617,8 +617,9 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, FormModSim* frm)
     if (!frm) return xml;
 
     if (xml.readNextStartElement() && xml.name() == QLatin1String("FormModSim")) {
+        DataDisplayMode ddm;
         DisplayDefinition dd;
-        QHash<quint16, quint16> map;
+        QHash<quint16, quint16> data;
         QHash<quint16, QString> descriptions;
         QHash<quint16, ModbusSimulationParams> simulations;
 
@@ -630,8 +631,7 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, FormModSim* frm)
         }
 
         if (attributes.hasAttribute("DataDisplayMode")) {
-            const DataDisplayMode mode = enumFromString<DataDisplayMode>(attributes.value("DataDisplayMode").toString());
-            frm->setDataDisplayMode(mode);
+            ddm = enumFromString<DataDisplayMode>(attributes.value("DataDisplayMode").toString());
         }
 
         if (attributes.hasAttribute("DisplayHexAddresses")) {
@@ -786,7 +786,7 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, FormModSim* frm)
                         if(ok) {
                             const quint16 value = xml.readElementText().toUShort(&ok);
                             if (ok) {
-                                map[address] = value;
+                                data[address] = value;
                             }
                         }
                     } else {
@@ -799,59 +799,61 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, FormModSim* frm)
             }
         }
 
-        if(dd.PointType != QModbusDataUnit::Invalid && !simulations.isEmpty()) {
-            QHashIterator it(simulations);
-            while(it.hasNext()) {
-                const auto item = it.next();
-                switch(dd.PointType) {
-                    case QModbusDataUnit::Coils:
-                    case QModbusDataUnit::DiscreteInputs:
-                        if(item->Mode == SimulationMode::Toggle || item->Mode == SimulationMode::Random)
-                            frm->startSimulation(dd.PointType, item.key() - (dd.ZeroBasedAddress ? 0 : 1), item.value());
-                        break;
-                    case QModbusDataUnit::InputRegisters:
-                    case QModbusDataUnit::HoldingRegisters:
-                        if(item->Mode != SimulationMode::No && item->Mode != SimulationMode::Toggle)
-                            frm->startSimulation(dd.PointType, item.key() - (dd.ZeroBasedAddress ? 0 : 1), item.value());
-                        break;
-                    default: break;
+        if(dd.PointType != QModbusDataUnit::Invalid) {
+            frm->setDataDisplayMode(ddm);
+
+            if(!simulations.isEmpty()) {
+                QHashIterator it(simulations);
+                while(it.hasNext()) {
+                    const auto item = it.next();
+                    switch(dd.PointType) {
+                        case QModbusDataUnit::Coils:
+                        case QModbusDataUnit::DiscreteInputs:
+                            if(item->Mode == SimulationMode::Toggle || item->Mode == SimulationMode::Random)
+                                frm->startSimulation(dd.PointType, item.key() - (dd.ZeroBasedAddress ? 0 : 1), item.value());
+                            break;
+                        case QModbusDataUnit::InputRegisters:
+                        case QModbusDataUnit::HoldingRegisters:
+                            if(item->Mode != SimulationMode::No && item->Mode != SimulationMode::Toggle)
+                                frm->startSimulation(dd.PointType, item.key() - (dd.ZeroBasedAddress ? 0 : 1), item.value());
+                            break;
+                        default: break;
+                    }
                 }
             }
-        }
 
-        if(dd.PointType != QModbusDataUnit::Invalid && !descriptions.isEmpty()) {
-            QHashIterator it(descriptions);
-            while(it.hasNext()) {
-                const auto item = it.next();
-                frm->setDescription(dd.DeviceId, dd.PointType, item.key(), item.value());
-            }
-        }
-
-        if (dd.PointType != QModbusDataUnit::Invalid && !map.isEmpty()) {
-            QVector<quint16> values(dd.Length);
-
-            QHashIterator it(map);
-            while(it.hasNext()) {
-                const auto item = it.next();
-                const auto index = item.key() - dd.PointAddress;
-                switch(dd.PointType) {
-                    case QModbusDataUnit::Coils:
-                    case QModbusDataUnit::DiscreteInputs:
-                        values[index] = qBound<quint16>(0, item.value(), 1);
-                        break;
-                    case QModbusDataUnit::InputRegisters:
-                    case QModbusDataUnit::HoldingRegisters:
-                        values[index] = item.value();
-                        break;
-                    default: break;
+            if(!descriptions.isEmpty()) {
+                QHashIterator it(descriptions);
+                while(it.hasNext()) {
+                    const auto item = it.next();
+                    frm->setDescription(dd.DeviceId, dd.PointType, item.key(), item.value());
                 }
-                if(index >= values.length()) break;
             }
 
-            frm->configureModbusDataUnit(dd.DeviceId, dd.PointType, dd.PointAddress - (dd.ZeroBasedAddress ? 0 : 1), values);
+            if (!data.isEmpty()) {
+                QVector<quint16> values(dd.Length);
+
+                QHashIterator it(data);
+                while(it.hasNext()) {
+                    const auto item = it.next();
+                    const auto index = item.key() - dd.PointAddress;
+                    switch(dd.PointType) {
+                        case QModbusDataUnit::Coils:
+                        case QModbusDataUnit::DiscreteInputs:
+                            values[index] = qBound<quint16>(0, item.value(), 1);
+                            break;
+                        case QModbusDataUnit::InputRegisters:
+                        case QModbusDataUnit::HoldingRegisters:
+                            values[index] = item.value();
+                            break;
+                        default: break;
+                    }
+                    if(index >= values.length()) break;
+                }
+
+                frm->configureModbusDataUnit(dd.DeviceId, dd.PointType, dd.PointAddress - (dd.ZeroBasedAddress ? 0 : 1), values);
+            }
         }
-
-
     }
     else {
         xml.skipCurrentElement();

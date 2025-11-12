@@ -1187,7 +1187,7 @@ Length: %2</source>
         <translation type="vanished">Указана недопустимая длина данных</translation>
     </message>
     <message>
-        <location filename="../formmodsim.cpp" line="462"/>
+        <location filename="../formmodsim.cpp" line="473"/>
         <source>Address Base: %1
 Start Address: %2
 Length: %3</source>
@@ -1196,7 +1196,7 @@ Length: %3</source>
 长度: %3</translation>
     </message>
     <message>
-        <location filename="../formmodsim.cpp" line="465"/>
+        <location filename="../formmodsim.cpp" line="476"/>
         <source>Device Id: %1
 MODBUS Point Type:
 %2</source>
