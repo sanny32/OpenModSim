@@ -70,8 +70,8 @@ enum class AddressSpace
 };
 Q_DECLARE_METATYPE(AddressSpace)
 DECLARE_ENUM_STRINGS(AddressSpace,
-                {   AddressSpace::Addr6Digits, "Addr6Digits"    },
-                {   AddressSpace::Addr5Digits, "Addr5Digits"    }
+                {   AddressSpace::Addr6Digits, "6-Digits"    },
+                {   AddressSpace::Addr5Digits, "5-Digits"    }
 )
 
 ///
