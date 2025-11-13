@@ -20,6 +20,7 @@ DialogDisplayDefinition::DialogDisplayDefinition(DisplayDefinition dd, QWidget* 
 
     ui->comboBoxColumnsDistance->setValidator(new QUIntValidator(1, 32, this));
     ui->comboBoxColumnsDistance->setEditText(QString::number(dd.DataViewColumnsDistance));
+    ui->checkBoxLeadingZeros->setChecked(dd.LeadingZeros);
 
     ui->lineEditPointAddress->setInputMode(dd.HexAddress ? NumericLineEdit::HexMode : NumericLineEdit::Int32Mode);
     ui->lineEditPointAddress->setInputRange(ModbusLimits::addressRange(dd.AddrSpace, dd.ZeroBasedAddress));
@@ -62,6 +63,7 @@ void DialogDisplayDefinition::accept()
     _displayDefinition.VerboseLogging = ui->checkBoxVerboseLogging->isChecked();
     _displayDefinition.ZeroBasedAddress = (ui->comboBoxAddressBase->currentAddressBase() == AddressBase::Base0);
     _displayDefinition.DataViewColumnsDistance = ui->comboBoxColumnsDistance->currentText().toUInt();
+    _displayDefinition.LeadingZeros = ui->checkBoxLeadingZeros->isChecked();
 
     QFixedSizeDialog::accept();
 }

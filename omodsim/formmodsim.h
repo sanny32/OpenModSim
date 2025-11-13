@@ -306,6 +306,7 @@ inline QDataStream& operator <<(QDataStream& out, FormModSim* frm)
     out << dd.AutoscrollLog;
     out << dd.VerboseLogging;
     out << dd.DataViewColumnsDistance;
+    out << dd.LeadingZeros;
 
     out << frm->byteOrder();
     out << frm->simulationMap();
@@ -391,6 +392,10 @@ inline QDataStream& operator >>(QDataStream& in, FormModSim* frm)
 
         if(ver >= QVersionNumber(1, 11)) {
             in >> dd.DataViewColumnsDistance;
+        }
+
+        if(ver >= QVersionNumber(1, 12)) {
+            in >> dd.LeadingZeros;
         }
     }
 

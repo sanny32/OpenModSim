@@ -191,6 +191,7 @@ void OutputListModel::updateData(const QModbusDataUnit& data)
     _lastData = data;
 
     const auto mode = _parentWidget->dataDisplayMode();
+    const auto leadingZeros = _parentWidget->_displayDefinition.LeadingZeros;
     const auto pointType = _parentWidget->_displayDefinition.PointType;
     const auto byteOrder = *_parentWidget->byteOrder();
     const auto codepage = _parentWidget->codepage();
@@ -209,7 +210,7 @@ void OutputListModel::updateData(const QModbusDataUnit& data)
             break;
 
             case DataDisplayMode::UInt16:
-                itemData.ValueStr = formatUInt16Value(pointType, value, byteOrder, itemData.Value);
+                itemData.ValueStr = formatUInt16Value(pointType, value, byteOrder, leadingZeros, itemData.Value);
             break;
 
             case DataDisplayMode::Int16:
@@ -255,12 +256,12 @@ void OutputListModel::updateData(const QModbusDataUnit& data)
             break;
 
             case DataDisplayMode::UInt32:
-                itemData.ValueStr = formatUInt32Value(pointType, value, _lastData.value(i+1), byteOrder,
+                itemData.ValueStr = formatUInt32Value(pointType, value, _lastData.value(i+1), byteOrder, leadingZeros,
                                                             (i%2) || (i+1>=rowCount()), itemData.Value);
             break;
 
             case DataDisplayMode::SwappedUInt32:
-                itemData.ValueStr = formatUInt32Value(pointType, _lastData.value(i+1), value, byteOrder,
+                itemData.ValueStr = formatUInt32Value(pointType, _lastData.value(i+1), value, byteOrder, leadingZeros,
                                                             (i%2) || (i+1>=rowCount()), itemData.Value);
             break;
 
@@ -276,12 +277,12 @@ void OutputListModel::updateData(const QModbusDataUnit& data)
 
             case DataDisplayMode::UInt64:
                 itemData.ValueStr = formatUInt64Value(pointType, value, _lastData.value(i+1), _lastData.value(i+2), _lastData.value(i+3),
-                                                      byteOrder, (i%4) || (i+3>=rowCount()), itemData.Value);
+                                                      byteOrder, leadingZeros, (i%4) || (i+3>=rowCount()), itemData.Value);
             break;
 
             case DataDisplayMode::SwappedUInt64:
                 itemData.ValueStr = formatUInt64Value(pointType, _lastData.value(i+3), _lastData.value(i+2), _lastData.value(i+1), value,
-                                                      byteOrder, (i%4) || (i+3>=rowCount()), itemData.Value);
+                                                      byteOrder, leadingZeros, (i%4) || (i+3>=rowCount()), itemData.Value);
             break;
         }
     }
@@ -391,6 +392,8 @@ void OutputWidget::setup(const DisplayDefinition& dd, const ModbusSimulationMap2
     setLogViewLimit(dd.LogViewLimit);
     setAutosctollLogView(dd.AutoscrollLog);
     setDataViewColumnsDistance(dd.DataViewColumnsDistance);
+    ui->logView->setShowLeadingZeros(dd.LeadingZeros);
+    ui->modbusMsg->setShowLeadingZeros(dd.LeadingZeros);
 
     _listModel->clear();
 
@@ -958,7 +961,7 @@ void OutputWidget::updateLogView(QSharedPointer<const ModbusMessage> msg)
             (msg->isRequest()?  "Tx" : "Rx"),
             msg->timestamp().toString(Qt::ISODateWithMs),
             (msg->isRequest()?  "<<" : ">>"),
-            msg->toString(DataDisplayMode::Hex));
+            msg->toString(DataDisplayMode::Hex, _displayDefinition.LeadingZeros));
         captureString(str);
     }
 }

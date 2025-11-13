@@ -66,6 +66,9 @@ public:
     DataDisplayMode dataDisplayMode() const;
     void setDataDisplayMode(DataDisplayMode mode);
 
+    bool showLeadingZeros() const;
+    void setShowLeadingZeros(bool value);
+
     int rowLimit() const;
     void setRowLimit(int val);
 
@@ -90,6 +93,7 @@ private:
     QAction* _copyBytesAct;
     LogViewState _state = LogViewState::Running;
     DataDisplayMode _dataDisplayMode;
+    bool _showLeadingZeros = true;
 };
 
 #endif // MODBUSLOGWIDGET_H

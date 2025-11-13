@@ -13,7 +13,7 @@
 #include "formmodsim.h"
 #include "ui_formmodsim.h"
 
-QVersionNumber FormModSim::VERSION = QVersionNumber(1, 11);
+QVersionNumber FormModSim::VERSION = QVersionNumber(1, 12);
 
 ///
 /// \brief FormModSim::FormModSim
@@ -158,6 +158,7 @@ DisplayDefinition FormModSim::displayDefinition() const
     dd.HexAddress = displayHexAddresses();
     dd.AddrSpace = _mbMultiServer.getModbusDefinitions().AddrSpace;
     dd.DataViewColumnsDistance = ui->outputWidget->dataViewColumnsDistance();
+    dd.LeadingZeros = ui->lineEditDeviceId->leadingZeroes();
 
     return dd;
 }
@@ -173,6 +174,7 @@ void FormModSim::setDisplayDefinition(const DisplayDefinition& dd)
 
     const auto defs = _mbMultiServer.getModbusDefinitions();
 
+    ui->lineEditDeviceId->setLeadingZeroes(dd.LeadingZeros);
     ui->lineEditDeviceId->setValue(dd.DeviceId);
 
     ui->comboBoxAddressBase->blockSignals(true);
@@ -180,11 +182,13 @@ void FormModSim::setDisplayDefinition(const DisplayDefinition& dd)
     ui->comboBoxAddressBase->blockSignals(false);
 
     ui->lineEditAddress->blockSignals(true);
+    ui->lineEditAddress->setLeadingZeroes(dd.LeadingZeros);
     ui->lineEditAddress->setInputRange(ModbusLimits::addressRange(defs.AddrSpace, dd.ZeroBasedAddress));
     ui->lineEditAddress->setValue(dd.PointAddress);
     ui->lineEditAddress->blockSignals(false);
 
     ui->lineEditLength->blockSignals(true);
+    ui->lineEditLength->setLeadingZeroes(dd.LeadingZeros);
     ui->lineEditLength->setValue(dd.Length);
     ui->lineEditLength->blockSignals(false);
 

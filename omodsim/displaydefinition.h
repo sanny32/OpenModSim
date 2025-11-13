@@ -23,6 +23,7 @@ struct DisplayDefinition
     bool VerboseLogging = true;
     AddressSpace AddrSpace;
     quint16 DataViewColumnsDistance = 16;
+    bool LeadingZeros = true;
 
     void normalize()
     {
@@ -51,6 +52,7 @@ inline QSettings& operator <<(QSettings& out, const DisplayDefinition& dd)
     out.setValue("DisplayDefinition/Length",                dd.Length);
     out.setValue("DisplayDefinition/LogViewLimit",          dd.LogViewLimit);
     out.setValue("DisplayDefinition/DataViewColumnSpace",   dd.DataViewColumnsDistance);
+    out.setValue("DisplayDefinition/LeadingZeros",          dd.LeadingZeros);
     out.setValue("DisplayDefinition/ZeroBasedAddress",      dd.ZeroBasedAddress);
     out.setValue("DisplayDefinition/HexAddress",            dd.HexAddress);
     out.setValue("DisplayDefinition/AutoscrollLog",         dd.AutoscrollLog);
@@ -75,6 +77,7 @@ inline QSettings& operator >>(QSettings& in, DisplayDefinition& dd)
     dd.Length = in.value("DisplayDefinition/Length", 100).toUInt();
     dd.LogViewLimit = in.value("DisplayDefinition/LogViewLimit", 30).toUInt();
     dd.DataViewColumnsDistance = in.value("DisplayDefinition/DataViewColumnSpace", 16).toUInt();
+    dd.LeadingZeros = in.value("DisplayDefinition/LeadingZeros").toBool();
     dd.ZeroBasedAddress = in.value("DisplayDefinition/ZeroBasedAddress").toBool();
     dd.HexAddress = in.value("DisplayDefinition/HexAddress").toBool();
     dd.AutoscrollLog = in.value("DisplayDefinition/AutoscrollLog").toBool();
@@ -103,6 +106,7 @@ inline QXmlStreamWriter& operator <<(QXmlStreamWriter& xml, const DisplayDefinit
     xml.writeAttribute("AutoscrollLog", boolToString(dd.AutoscrollLog));
     xml.writeAttribute("VerboseLogging", boolToString(dd.VerboseLogging));
     xml.writeAttribute("DataViewColumnsDistance", QString::number(dd.DataViewColumnsDistance));
+    xml.writeAttribute("LeadingZeros", boolToString(dd.LeadingZeros));
     xml.writeEndElement();
 
     return xml;
@@ -162,6 +166,10 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, DisplayDefinition& d
         if (attributes.hasAttribute("DataViewColumnsDistance")) {
             bool ok; const quint16 distance = attributes.value("DataViewColumnsDistance").toUShort(&ok);
             if (ok) dd.DataViewColumnsDistance = distance;
+        }
+
+        if (attributes.hasAttribute("LeadingZeros")) {
+            dd.LeadingZeros = stringToBool(attributes.value("LeadingZeros").toString());
         }
 
         xml.skipCurrentElement();
