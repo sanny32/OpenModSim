@@ -102,6 +102,7 @@ private slots:
     void on_actionCaptureOff_triggered();
 
     /* View menu slots */
+    void on_actionTabbedView_triggered();
     void on_actionToolbar_triggered();
     void on_actionStatusBar_triggered();
     void on_actionDisplayBar_triggered();

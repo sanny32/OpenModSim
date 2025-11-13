@@ -223,6 +223,7 @@ void MainWindow::on_awake()
     ui->actionScriptSettings->setEnabled(frm && !frm->canStopScript());
     _actionRunMode->setEnabled(frm && !frm->canStopScript());
 
+    ui->actionTabbedView->setChecked(ui->mdiArea->viewMode() == QMdiArea::TabbedView);
     ui->actionToolbar->setChecked(ui->toolBarMain->isVisible());
     ui->actionStatusBar->setChecked(statusBar()->isVisible());
     ui->actionDisplayBar->setChecked(ui->toolBarDisplay->isVisible());
@@ -230,6 +231,9 @@ void MainWindow::on_awake()
     ui->actionEditBar->setChecked(ui->toolBarEdit->isVisible());
     ui->actionEnglish->setChecked(_lang == "en");
     ui->actionRussian->setChecked(_lang == "ru");
+
+    ui->actionTile->setEnabled(ui->mdiArea->viewMode() == QMdiArea::SubWindowView);
+    ui->actionCascade->setEnabled(ui->mdiArea->viewMode() == QMdiArea::SubWindowView);
 
     if(ui->mdiArea->subWindowList().empty())
     {
@@ -863,6 +867,19 @@ void MainWindow::on_actionCaptureOff_triggered()
     if(!frm) return;
 
     frm->stopTextCapture();
+}
+
+///
+/// \brief MainWindow::on_actionTabbedView_triggered
+///
+void MainWindow::on_actionTabbedView_triggered()
+{
+    if(ui->mdiArea->viewMode() == QMdiArea::SubWindowView) {
+        ui->mdiArea->setViewMode(QMdiArea::TabbedView);
+    }
+    else {
+        ui->mdiArea->setViewMode(QMdiArea::SubWindowView);
+    }
 }
 
 ///
@@ -1782,17 +1799,20 @@ void MainWindow::loadSettings()
         setGeometry(geometry);
     }
 
-    const auto displaybarArea = (Qt::ToolBarArea)qBound(0, m.value("DisplayBarArea", 0x4).toInt(), 0xf);
+    const auto viewMode = (QMdiArea::ViewMode)qBound(0, m.value("ViewMode", QMdiArea::SubWindowView).toInt(), 1);
+    ui->mdiArea->setViewMode(viewMode);
+
+    const auto displaybarArea = (Qt::ToolBarArea)qBound(0, m.value("DisplayBarArea", Qt::TopToolBarArea).toInt(), 0xf);
     const auto displaybarBreak = m.value("DisplayBarBreak").toBool();
     if(displaybarBreak) addToolBarBreak(displaybarArea);
     addToolBar(displaybarArea, ui->toolBarDisplay);
 
-    const auto scriptbarArea = (Qt::ToolBarArea)qBound(0, m.value("ScriptBarArea", 0x4).toInt(), 0xf);
+    const auto scriptbarArea = (Qt::ToolBarArea)qBound(0, m.value("ScriptBarArea", Qt::TopToolBarArea).toInt(), 0xf);
     const auto scriptbarBreak = m.value("ScriptBarBreak").toBool();
     if(scriptbarBreak) addToolBarBreak(scriptbarArea);
     addToolBar(scriptbarArea, ui->toolBarScript);
 
-    const auto editbarArea = (Qt::ToolBarArea)qBound(0, m.value("EditBarArea", 0x4).toInt(), 0xf);
+    const auto editbarArea = (Qt::ToolBarArea)qBound(0, m.value("EditBarArea", Qt::TopToolBarArea).toInt(), 0xf);
     const auto editbarBreak = m.value("EditBarBreak").toBool();
     if(editbarBreak) addToolBarBreak(editbarArea);
     addToolBar(editbarArea, ui->toolBarEdit);
@@ -1817,6 +1837,19 @@ void MainWindow::loadSettings()
             m >> frm;
             frm->show();
             m.endGroup();
+        }
+    }
+
+    // activate window
+    const auto activeWindowTitle = m.value("ActiveWindow").toString();
+    if(!activeWindowTitle.isEmpty()) {
+        for(auto&& wnd : ui->mdiArea->subWindowList())
+        {
+            const auto frm = qobject_cast<FormModSim*>(wnd->widget());
+            if(frm && frm->windowTitle() == activeWindowTitle) {
+                ui->mdiArea->setActiveSubWindow(wnd);
+                break;
+            }
         }
     }
 }
@@ -1860,6 +1893,10 @@ void MainWindow::saveSettings()
         m.setValue("WindowGeometry", geometry());
     }
 
+    const auto frm = currentMdiChild();
+    if(frm) m.setValue("ActiveWindow", frm->windowTitle());
+
+    m.setValue("ViewMode", ui->mdiArea->viewMode());
     m.setValue("DisplayBarArea", toolBarArea(ui->toolBarDisplay));
     m.setValue("DisplayBarBreak", toolBarBreak(ui->toolBarDisplay));
     m.setValue("ScriptBarArea", toolBarArea(ui->toolBarScript));
