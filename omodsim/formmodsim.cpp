@@ -36,7 +36,7 @@ FormModSim::FormModSim(int id, ModbusMultiServer& server, QSharedPointer<DataSim
 
     ui->lineEditDeviceId->setInputRange(ModbusLimits::slaveRange());
     ui->lineEditDeviceId->setValue(1);
-    ui->lineEditDeviceId->setPaddingZeroes(true);
+    ui->lineEditDeviceId->setLeadingZeroes(true);
     server.addDeviceId(ui->lineEditDeviceId->value<int>());
 
     ui->stackedWidget->setCurrentIndex(0);
@@ -45,7 +45,7 @@ FormModSim::FormModSim(int id, ModbusMultiServer& server, QSharedPointer<DataSim
 
     const auto mbDefs = _mbMultiServer.getModbusDefinitions();
 
-    ui->lineEditAddress->setPaddingZeroes(true);
+    ui->lineEditAddress->setLeadingZeroes(true);
     ui->lineEditAddress->setInputRange(ModbusLimits::addressRange(mbDefs.AddrSpace, true));
     ui->lineEditAddress->setValue(0);
 

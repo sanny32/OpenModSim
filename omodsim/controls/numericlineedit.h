@@ -33,8 +33,8 @@ public:
     void setValue(T value)
     { internalSetValue(value); }
 
-    bool paddingZeroes() const;
-    void setPaddingZeroes(bool on);
+    bool leadingZeroes() const;
+    void setLeadingZeroes(bool on);
 
     template<typename T>
     QRange<T> range() const
@@ -84,8 +84,8 @@ private:
     QVariant _minValue;
     QVariant _maxValue;
     InputMode _inputMode;
-    bool _paddingZeroes;
-    int _paddingZeroWidth;
+    bool _leadingZeroes;
+    int _leadingZeroWidth;
     QString _codepage;
 };
 
