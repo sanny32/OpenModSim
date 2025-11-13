@@ -359,7 +359,7 @@
     <message>
         <location filename="../dialogs/dialogdisplaydefinition.ui" line="134"/>
         <source>Show leading zeros for unsigned values</source>
-        <translation type="unfinished"></translation>
+        <translation>无符号值显示前导零</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogdisplaydefinition.ui" line="215"/>
@@ -1448,7 +1448,7 @@ Script.onInit(()=&gt;{
     <message>
         <location filename="../mainwindow.ui" line="1065"/>
         <source>Tabbed View</source>
-        <translation type="unfinished"></translation>
+        <translation>标签页视图</translation>
     </message>
     <message>
         <source>Long Integer</source>
@@ -1786,7 +1786,7 @@ Script.onInit(()=&gt;{
         <location filename="../mainwindow.cpp" line="440"/>
         <location filename="../mainwindow.cpp" line="466"/>
         <source>XML files (*.xml)</source>
-        <translation type="unfinished"></translation>
+        <translation>XML 文件(*.xml)</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="1371"/>
