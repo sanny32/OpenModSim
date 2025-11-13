@@ -77,11 +77,11 @@ inline QSettings& operator >>(QSettings& in, DisplayDefinition& dd)
     dd.Length = in.value("DisplayDefinition/Length", 100).toUInt();
     dd.LogViewLimit = in.value("DisplayDefinition/LogViewLimit", 30).toUInt();
     dd.DataViewColumnsDistance = in.value("DisplayDefinition/DataViewColumnSpace", 16).toUInt();
-    dd.LeadingZeros = in.value("DisplayDefinition/LeadingZeros").toBool();
+    dd.LeadingZeros = in.value("DisplayDefinition/LeadingZeros", true).toBool();
     dd.ZeroBasedAddress = in.value("DisplayDefinition/ZeroBasedAddress").toBool();
     dd.HexAddress = in.value("DisplayDefinition/HexAddress").toBool();
     dd.AutoscrollLog = in.value("DisplayDefinition/AutoscrollLog").toBool();
-    dd.VerboseLogging = in.value("DisplayDefinition/VerboseLogging").toBool();
+    dd.VerboseLogging = in.value("DisplayDefinition/VerboseLogging", true).toBool();
 
     dd.normalize();
     return in;
