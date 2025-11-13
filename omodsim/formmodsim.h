@@ -506,6 +506,7 @@ inline QXmlStreamWriter& operator <<(QXmlStreamWriter& xml, FormModSim* frm)
 
     xml.writeStartElement("FormModSim");
 
+    xml.writeAttribute("Version", FormModSim::VERSION.toString());
     xml.writeAttribute("DisplayMode", enumToString<DisplayMode>(frm->displayMode()));
     xml.writeAttribute("DataDisplayMode", enumToString<DataDisplayMode>(frm->dataDisplayMode()));
     xml.writeAttribute("DisplayHexAddresses", boolToString(frm->displayHexAddresses()));

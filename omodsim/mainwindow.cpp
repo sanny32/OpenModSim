@@ -327,7 +327,11 @@ void MainWindow::on_actionNew_triggered()
 ///
 void MainWindow::on_actionOpen_triggered()
 {
-    const auto filename = QFileDialog::getOpenFileName(this, QString(), _savePath, tr("XML files (*.xml);;All files (*)"));
+    QStringList filters;
+    filters << tr("XML files (*.xml)");
+    filters << tr("All files (*)");
+
+    const auto filename = QFileDialog::getOpenFileName(this, QString(), _savePath, filters.join(";;"));
     if(filename.isEmpty()) return;
 
     _savePath = QFileInfo(filename).absoluteDir().absolutePath();
@@ -371,15 +375,19 @@ void MainWindow::on_actionSaveAs_triggered()
     auto frm = currentMdiChild();
     if(!frm) return;
 
+    QStringList filters;
+    filters << tr("XML files (*.xml)");
+    filters << tr("All files (*)");
+
     const auto dir = QString("%1%2%3").arg(_savePath, QDir::separator(), frm->windowTitle());
 
     QString selectedFilter;
-    auto filename = QFileDialog::getSaveFileName(this, QString(), dir, tr("XML files (*.xml);;All files (*)"), &selectedFilter);
+    auto filename = QFileDialog::getSaveFileName(this, QString(), dir, filters.join(";;"), &selectedFilter);
 
     if(filename.isEmpty()) return;
 
     auto format = SerializationFormat::Binary;
-    if(selectedFilter == tr("XML files (*.xml)")) {
+    if(selectedFilter == filters[0]) {
         format = SerializationFormat::Xml;
         if(!filename.endsWith(".xml", Qt::CaseInsensitive)) {
             filename.append(".xml");
@@ -397,13 +405,17 @@ void MainWindow::on_actionSaveAs_triggered()
 ///
 void MainWindow::on_actionSaveTestConfig_triggered()
 {
+    QStringList filters;
+    filters << tr("XML files (*.xml)");
+    filters << tr("All files (*)");
+
     QString selectedFilter;
-    auto filename = QFileDialog::getSaveFileName(this, QString(), _savePath, tr("XML files (*.xml);;All files (*)"), &selectedFilter);
+    auto filename = QFileDialog::getSaveFileName(this, QString(), _savePath, filters.join(";;"), &selectedFilter);
 
     if(filename.isEmpty()) return;
 
     auto format = SerializationFormat::Binary;
-    if(selectedFilter == tr("XML files (*.xml)")) {
+    if(selectedFilter == filters[0]) {
         format = SerializationFormat::Xml;
         if(!filename.endsWith(".xml", Qt::CaseInsensitive)) {
             filename.append(".xml");
@@ -419,7 +431,11 @@ void MainWindow::on_actionSaveTestConfig_triggered()
 ///
 void MainWindow::on_actionRestoreTestConfig_triggered()
 {
-    const auto filename = QFileDialog::getOpenFileName(this, QString(), _savePath, tr("XML files (*.xml);;All files (*)"));
+    QStringList filters;
+    filters << tr("XML files (*.xml)");
+    filters << tr("All files (*)");
+
+    const auto filename = QFileDialog::getOpenFileName(this, QString(), _savePath, filters.join(";;"));
     if(filename.isEmpty()) return;
 
     _savePath = QFileInfo(filename).absoluteDir().absolutePath();
