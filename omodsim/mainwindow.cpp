@@ -375,24 +375,51 @@ void MainWindow::on_actionSaveAs_triggered()
     auto frm = currentMdiChild();
     if(!frm) return;
 
-    QStringList filters;
-    filters << tr("XML files (*.xml)");
-    filters << tr("All files (*)");
+    saveAs(frm, static_cast<SerializationFormat>(-1));
+}
+
+///
+/// \brief MainWindow::saveAs
+/// \param frm
+/// \param format
+///
+void MainWindow::saveAs(FormModSim* frm, SerializationFormat format)
+{
+    if(!frm) return;
 
     const auto dir = QString("%1%2%3").arg(_savePath, QDir::separator(), frm->windowTitle());
 
-    QString selectedFilter;
-    auto filename = QFileDialog::getSaveFileName(this, QString(), dir, filters.join(";;"), &selectedFilter);
+    QString filename;
+    QStringList filters;
+    switch (format) {
+        case SerializationFormat::Binary:
+            filters << tr("All files (*)");
+            filename = QFileDialog::getSaveFileName(this, QString(), dir, filters.join(";;"));
+            break;
+        case SerializationFormat::Xml:
+            filters << tr("XML files (*.xml)");
+            filename = QFileDialog::getSaveFileName(this, QString(), dir, filters.join(";;"));
+            break;
+        default:
+        {
+            filters << tr("XML files (*.xml)");
+            filters << tr("All files (*)");
+
+            QString selectedFilter;
+            filename = QFileDialog::getSaveFileName(this, QString(), dir, filters.join(";;"), &selectedFilter);
+
+            format = SerializationFormat::Binary;
+            if(selectedFilter == filters[0]) {
+                format = SerializationFormat::Xml;
+                if(!filename.endsWith(".xml", Qt::CaseInsensitive)) {
+                    filename.append(".xml");
+                }
+            }
+        }
+        break;
+    }
 
     if(filename.isEmpty()) return;
-
-    auto format = SerializationFormat::Binary;
-    if(selectedFilter == filters[0]) {
-        format = SerializationFormat::Xml;
-        if(!filename.endsWith(".xml", Qt::CaseInsensitive)) {
-            filename.append(".xml");
-        }
-    }
 
     _savePath = QFileInfo(filename).absoluteDir().absolutePath();
     frm->setFilename(filename);
@@ -1517,10 +1544,11 @@ void MainWindow::saveConfig(const QString& filename, SerializationFormat format)
             const auto activeWnd = ui->mdiArea->currentSubWindow();
             for(auto&& wnd : ui->mdiArea->subWindowList())
             {
-                windowActivate(wnd);
-                ui->actionSave->trigger();
-
                 const auto frm = qobject_cast<FormModSim*>(wnd->widget());
+
+                windowActivate(wnd);
+                saveAs(frm, format);
+
                 const auto filename = frm->filename();
                 if(!filename.isEmpty()) listFilename.push_back(filename);
             }

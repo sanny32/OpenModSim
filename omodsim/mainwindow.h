@@ -159,6 +159,8 @@ private:
     void loadSettings();
     void saveSettings();
 
+    void saveAs(FormModSim* frm, SerializationFormat format);
+
 private:
     Ui::MainWindow *ui;
     QWidgetAction* _actionRunMode;
