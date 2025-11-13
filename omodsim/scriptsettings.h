@@ -2,6 +2,7 @@
 #define SCRIPTSETTINGS_H
 
 #include <QDataStream>
+#include <QXmlStreamWriter>
 #include "enums.h"
 
 ///
@@ -86,6 +87,59 @@ inline QDataStream& operator >>(QDataStream& in, ScriptSettings& ss)
 
 
     return in;
+}
+
+///
+/// \brief operator <<
+/// \param xml
+/// \param settings
+/// \return
+///
+inline QXmlStreamWriter& operator <<(QXmlStreamWriter& xml, const ScriptSettings& settings)
+{
+    xml.writeStartElement("ScriptSettings");
+    xml.writeAttribute("Mode", enumToString<RunMode>(settings.Mode));
+    xml.writeAttribute("Interval", QString::number(settings.Interval));
+    xml.writeAttribute("UseAutoComplete", boolToString(settings.UseAutoComplete));
+    xml.writeAttribute("RunOnStartup", boolToString(settings.RunOnStartup));
+    xml.writeEndElement();
+    return xml;
+}
+
+///
+/// \brief operator >>
+/// \param xml
+/// \param settings
+/// \return
+///
+inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, ScriptSettings& settings)
+{
+    if (xml.readNextStartElement() && xml.name() == QLatin1String("ScriptSettings")) {
+        const QXmlStreamAttributes attributes = xml.attributes();
+
+        if (attributes.hasAttribute("Mode")) {
+            settings.Mode = enumFromString<RunMode>(attributes.value("Mode").toString());
+        }
+
+        if (attributes.hasAttribute("Interval")) {
+            bool ok; const uint interval = attributes.value("Interval").toUInt(&ok);
+            if (ok) settings.Interval = interval;
+        }
+
+        if (attributes.hasAttribute("UseAutoComplete")) {
+            settings.UseAutoComplete = stringToBool(attributes.value("UseAutoComplete").toString());
+        }
+
+        if (attributes.hasAttribute("RunOnStartup")) {
+            settings.RunOnStartup = stringToBool(attributes.value("RunOnStartup").toString());
+        }
+
+        xml.skipCurrentElement();
+
+        settings.normalize();
+    }
+
+    return xml;
 }
 
 #endif // SCRIPTSETTINGS_H

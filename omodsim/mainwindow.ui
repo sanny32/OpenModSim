@@ -35,7 +35,14 @@
      <number>0</number>
     </property>
     <item>
-     <widget class="QMdiArea" name="mdiArea"/>
+     <widget class="QMdiArea" name="mdiArea">
+      <property name="tabsClosable">
+       <bool>true</bool>
+      </property>
+      <property name="tabsMovable">
+       <bool>true</bool>
+      </property>
+     </widget>
     </item>
    </layout>
   </widget>
@@ -195,6 +202,8 @@
      <addaction name="actionRussian"/>
      <addaction name="actionChineseZh"/>
     </widget>
+    <addaction name="actionTabbedView"/>
+    <addaction name="separator"/>
     <addaction name="actionToolbar"/>
     <addaction name="actionStatusBar"/>
     <addaction name="actionDisplayBar"/>
@@ -1046,6 +1055,14 @@
    </property>
    <property name="toolTip">
     <string>Modbus Definitions</string>
+   </property>
+  </action>
+  <action name="actionTabbedView">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Tabbed View</string>
    </property>
   </action>
  </widget>

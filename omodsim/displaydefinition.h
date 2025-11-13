@@ -3,6 +3,7 @@
 
 #include <QSettings>
 #include <QModbusDataUnit>
+#include <QXmlStreamWriter>
 #include "modbuslimits.h"
 
 ///
@@ -22,6 +23,7 @@ struct DisplayDefinition
     bool VerboseLogging = true;
     AddressSpace AddrSpace;
     quint16 DataViewColumnsDistance = 16;
+    bool LeadingZeros = true;
 
     void normalize()
     {
@@ -50,6 +52,7 @@ inline QSettings& operator <<(QSettings& out, const DisplayDefinition& dd)
     out.setValue("DisplayDefinition/Length",                dd.Length);
     out.setValue("DisplayDefinition/LogViewLimit",          dd.LogViewLimit);
     out.setValue("DisplayDefinition/DataViewColumnSpace",   dd.DataViewColumnsDistance);
+    out.setValue("DisplayDefinition/LeadingZeros",          dd.LeadingZeros);
     out.setValue("DisplayDefinition/ZeroBasedAddress",      dd.ZeroBasedAddress);
     out.setValue("DisplayDefinition/HexAddress",            dd.HexAddress);
     out.setValue("DisplayDefinition/AutoscrollLog",         dd.AutoscrollLog);
@@ -74,13 +77,107 @@ inline QSettings& operator >>(QSettings& in, DisplayDefinition& dd)
     dd.Length = in.value("DisplayDefinition/Length", 100).toUInt();
     dd.LogViewLimit = in.value("DisplayDefinition/LogViewLimit", 30).toUInt();
     dd.DataViewColumnsDistance = in.value("DisplayDefinition/DataViewColumnSpace", 16).toUInt();
+    dd.LeadingZeros = in.value("DisplayDefinition/LeadingZeros", true).toBool();
     dd.ZeroBasedAddress = in.value("DisplayDefinition/ZeroBasedAddress").toBool();
     dd.HexAddress = in.value("DisplayDefinition/HexAddress").toBool();
     dd.AutoscrollLog = in.value("DisplayDefinition/AutoscrollLog").toBool();
-    dd.VerboseLogging = in.value("DisplayDefinition/VerboseLogging").toBool();
+    dd.VerboseLogging = in.value("DisplayDefinition/VerboseLogging", true).toBool();
 
     dd.normalize();
     return in;
+}
+
+///
+/// \brief operator <<
+/// \param xml
+/// \param dd
+/// \return
+///
+inline QXmlStreamWriter& operator <<(QXmlStreamWriter& xml, const DisplayDefinition& dd)
+{
+    xml.writeStartElement("DisplayDefinition");
+    xml.writeAttribute("FormName", dd.FormName);
+    xml.writeAttribute("DeviceId", QString::number(dd.DeviceId));
+    xml.writeAttribute("PointType", enumToString<QModbusDataUnit::RegisterType>(dd.PointType));
+    xml.writeAttribute("PointAddress", QString::number(dd.PointAddress));
+    xml.writeAttribute("Length", QString::number(dd.Length));
+    xml.writeAttribute("LogViewLimit", QString::number(dd.LogViewLimit));
+    xml.writeAttribute("ZeroBasedAddress", boolToString(dd.ZeroBasedAddress));
+    xml.writeAttribute("AutoscrollLog", boolToString(dd.AutoscrollLog));
+    xml.writeAttribute("VerboseLogging", boolToString(dd.VerboseLogging));
+    xml.writeAttribute("DataViewColumnsDistance", QString::number(dd.DataViewColumnsDistance));
+    xml.writeAttribute("LeadingZeros", boolToString(dd.LeadingZeros));
+    xml.writeEndElement();
+
+    return xml;
+}
+
+///
+/// \brief operator >>
+/// \param xml
+/// \param dd
+/// \return
+///
+inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, DisplayDefinition& dd)
+{
+    if (xml.isStartElement() && xml.name() == QLatin1String("DisplayDefinition")) {
+        const QXmlStreamAttributes attributes = xml.attributes();
+
+        if (attributes.hasAttribute("FormName")) {
+            dd.FormName = attributes.value("FormName").toString();
+        }
+
+        if (attributes.hasAttribute("DeviceId")) {
+            bool ok; const quint8 deviceId = attributes.value("DeviceId").toUShort(&ok);
+            if (ok) dd.DeviceId = deviceId;
+        }
+
+        if (attributes.hasAttribute("PointType")) {
+            dd.PointType = enumFromString<QModbusDataUnit::RegisterType>(attributes.value("PointType").toString());
+        }
+
+        if (attributes.hasAttribute("PointAddress")) {
+            bool ok; const quint16 pointAddress = attributes.value("PointAddress").toUShort(&ok);
+            if (ok) dd.PointAddress = pointAddress;
+        }
+
+        if (attributes.hasAttribute("Length")) {
+            bool ok; const quint16 length = attributes.value("Length").toUShort(&ok);
+            if (ok) dd.Length = length;
+        }
+
+        if (attributes.hasAttribute("LogViewLimit")) {
+            bool ok; const quint16 logViewLimit = attributes.value("LogViewLimit").toUShort(&ok);
+            if (ok) dd.LogViewLimit = logViewLimit;
+        }
+
+        if (attributes.hasAttribute("ZeroBasedAddress")) {
+            dd.ZeroBasedAddress = stringToBool(attributes.value("ZeroBasedAddress").toString());
+        }
+
+        if (attributes.hasAttribute("AutoscrollLog")) {
+            dd.AutoscrollLog = stringToBool(attributes.value("AutoscrollLog").toString());
+        }
+
+        if (attributes.hasAttribute("VerboseLogging")) {
+            dd.VerboseLogging = stringToBool(attributes.value("VerboseLogging").toString());
+        }
+
+        if (attributes.hasAttribute("DataViewColumnsDistance")) {
+            bool ok; const quint16 distance = attributes.value("DataViewColumnsDistance").toUShort(&ok);
+            if (ok) dd.DataViewColumnsDistance = distance;
+        }
+
+        if (attributes.hasAttribute("LeadingZeros")) {
+            dd.LeadingZeros = stringToBool(attributes.value("LeadingZeros").toString());
+        }
+
+        xml.skipCurrentElement();
+
+        dd.normalize();
+    }
+
+    return xml;
 }
 
 #endif // DISPLAYDEFINITION_H

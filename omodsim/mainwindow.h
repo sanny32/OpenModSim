@@ -25,7 +25,7 @@ public:
     void setLanguage(const QString& lang);
 
     void loadConfig(const QString& filename, bool startup = false);
-    void saveConfig(const QString& filename);
+    void saveConfig(const QString& filename, SerializationFormat format);
 
 signals:
     void undo();
@@ -102,6 +102,7 @@ private slots:
     void on_actionCaptureOff_triggered();
 
     /* View menu slots */
+    void on_actionTabbedView_triggered();
     void on_actionToolbar_triggered();
     void on_actionStatusBar_triggered();
     void on_actionDisplayBar_triggered();
@@ -153,10 +154,13 @@ private:
     FormModSim* firstMdiChild() const;
 
     FormModSim* loadMdiChild(const QString& filename);
-    void saveMdiChild(FormModSim* frm);
+    void saveMdiChild(FormModSim* frm, SerializationFormat format);
+    void closeMdiChild(FormModSim* frm);
 
     void loadSettings();
     void saveSettings();
+
+    void saveAs(FormModSim* frm, SerializationFormat format);
 
 private:
     Ui::MainWindow *ui;

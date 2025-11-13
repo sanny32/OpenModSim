@@ -40,7 +40,7 @@ private:
     void setupLineEdit(NumericLineEdit* edit, NumericLineEdit::InputMode mode,
                        bool padding = false, T min = std::numeric_limits<T>::lowest() , T max = std::numeric_limits<T>::max())
     {
-        edit->setPaddingZeroes(padding);
+        edit->setLeadingZeroes(padding);
         edit->setInputMode(mode);
 
         const QVariant minValue = QVariant::fromValue<T>(min);

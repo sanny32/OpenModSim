@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.16)
 
 project(omodsim
-        VERSION 1.10.0
+        VERSION 1.11.0
         DESCRIPTION "An Open Source Modbus Slave (Server) Utility"
         LANGUAGES CXX)
 
@@ -20,9 +20,9 @@ list(GET VERSION_LIST 1 VERSION_MINOR)
 list(GET VERSION_LIST 2 VERSION_PATCH)
 
 # Find Qt6 or fallback to Qt5
-find_package(Qt6 COMPONENTS Core Gui Widgets Network PrintSupport SerialBus SerialPort Core5Compat Qml Help LinguistTools QUIET)
+find_package(Qt6 COMPONENTS Core Gui Widgets Network Xml PrintSupport SerialBus SerialPort Core5Compat Qml Help LinguistTools QUIET)
 if (NOT Qt6_FOUND)
-    find_package(Qt5 COMPONENTS Core Gui Widgets Network PrintSupport SerialBus SerialPort Qml Help LinguistTools QUIET)
+    find_package(Qt5 COMPONENTS Core Gui Widgets Network Xml PrintSupport SerialBus SerialPort Qml Help LinguistTools QUIET)
 endif()
 
 if (NOT Qt6_FOUND AND NOT Qt5_FOUND)
@@ -312,7 +312,7 @@ endif()
 
 # Link libraries
 target_sources(${PROJECT_NAME} PRIVATE resources.qrc ${HEADERS} ${SOURCES} ${UI_FILES} ${TS_FILES})
-target_link_libraries(${PROJECT_NAME} PRIVATE Qt::Widgets Qt::Network Qt::PrintSupport Qt::SerialBus Qt::SerialPort Qt::Qml Qt::Help)
+target_link_libraries(${PROJECT_NAME} PRIVATE Qt::Widgets Qt::Network Qt::Xml Qt::PrintSupport Qt::SerialBus Qt::SerialPort Qt::Qml Qt::Help)
 
 if(TARGET update_translations)
     add_dependencies(${PROJECT_NAME} update_translations)

@@ -605,7 +605,7 @@ NumericLineEdit* DialogForceMultipleRegisters::createNumEdit(int idx)
         case DataDisplayMode::Hex:
             numEdit = new NumericLineEdit(NumericLineEdit::HexMode, ui->tableWidget);
             numEdit->setInputRange(0, USHRT_MAX);
-            numEdit->setPaddingZeroes(true);
+            numEdit->setLeadingZeroes(true);
             numEdit->setValue(toByteOrderValue(_data[idx], _writeParams.Order));
         break;
 
@@ -619,7 +619,7 @@ NumericLineEdit* DialogForceMultipleRegisters::createNumEdit(int idx)
         case DataDisplayMode::UInt16:
             numEdit = new NumericLineEdit(NumericLineEdit::UInt32Mode, ui->tableWidget);
             numEdit->setInputRange(0, USHRT_MAX);
-            numEdit->setPaddingZeroes(true);
+            numEdit->setLeadingZeroes(true);
             numEdit->setValue(toByteOrderValue(_data[idx], _writeParams.Order));
         break;
 

@@ -5,6 +5,7 @@
 #include <QTimer>
 #include <QPrinter>
 #include <QVersionNumber>
+#include <QXmlStreamWriter>
 #include "fontutils.h"
 #include "datasimulator.h"
 #include "modbusmultiserver.h"
@@ -13,6 +14,9 @@
 #include "jscriptcontrol.h"
 #include "scriptsettings.h"
 
+///
+/// \brief Forward declaration of the MainWindow
+///
 class MainWindow;
 
 namespace Ui {
@@ -28,8 +32,12 @@ class FormModSim : public QWidget
 
     friend QSettings& operator <<(QSettings& out, FormModSim* frm);
     friend QSettings& operator >>(QSettings& in, FormModSim* frm);
+
     friend QDataStream& operator <<(QDataStream& out, FormModSim* frm);
     friend QDataStream& operator >>(QDataStream& in, FormModSim* frm);
+
+    friend QXmlStreamWriter& operator <<(QXmlStreamWriter& xml, FormModSim* frm);
+    friend QXmlStreamReader& operator >>(QXmlStreamReader& xml, FormModSim* frm);
 
 public:
     static QVersionNumber VERSION;
@@ -298,6 +306,7 @@ inline QDataStream& operator <<(QDataStream& out, FormModSim* frm)
     out << dd.AutoscrollLog;
     out << dd.VerboseLogging;
     out << dd.DataViewColumnsDistance;
+    out << dd.LeadingZeros;
 
     out << frm->byteOrder();
     out << frm->simulationMap();
@@ -383,6 +392,10 @@ inline QDataStream& operator >>(QDataStream& in, FormModSim* frm)
 
         if(ver >= QVersionNumber(1, 11)) {
             in >> dd.DataViewColumnsDistance;
+        }
+
+        if(ver >= QVersionNumber(1, 12)) {
+            in >> dd.LeadingZeros;
         }
     }
 
@@ -484,6 +497,375 @@ inline QDataStream& operator >>(QDataStream& in, FormModSim* frm)
     }
 
     return in;
+}
+
+///
+/// \brief operator <<
+/// \param xml
+/// \param frm
+/// \return
+///
+inline QXmlStreamWriter& operator <<(QXmlStreamWriter& xml, FormModSim* frm)
+{
+    if (!frm) return xml;
+
+    xml.writeStartElement("FormModSim");
+
+    xml.writeAttribute("Version", FormModSim::VERSION.toString());
+    xml.writeAttribute("DisplayMode", enumToString<DisplayMode>(frm->displayMode()));
+    xml.writeAttribute("DataDisplayMode", enumToString<DataDisplayMode>(frm->dataDisplayMode()));
+    xml.writeAttribute("DisplayHexAddresses", boolToString(frm->displayHexAddresses()));
+    xml.writeAttribute("Codepage", frm->codepage());
+    xml.writeAttribute("ByteOrder", enumToString<ByteOrder>(frm->byteOrder()));
+
+    const auto wnd = frm->parentWidget();
+    xml.writeStartElement("Window");
+    xml.writeAttribute("Maximized", boolToString(wnd->isMaximized()));
+    xml.writeAttribute("Minimized", boolToString(wnd->isMinimized()));
+
+    const auto windowSize = (wnd->isMinimized() || wnd->isMaximized()) ? wnd->sizeHint() : wnd->size();
+    xml.writeAttribute("Width", QString::number(windowSize.width()));
+    xml.writeAttribute("Height", QString::number(windowSize.height()));
+    xml.writeEndElement();
+
+    xml.writeStartElement("Colors");
+    xml.writeAttribute("Background", frm->backgroundColor().name());
+    xml.writeAttribute("Foreground", frm->foregroundColor().name());
+    xml.writeAttribute("Status", frm->statusColor().name());
+    xml.writeEndElement();
+
+    xml.writeStartElement("Font");
+    const QFont font = frm->font();
+    xml.writeAttribute("Family", font.family());
+    xml.writeAttribute("Size", QString::number(font.pointSize()));
+    xml.writeAttribute("Bold", boolToString(font.bold()));
+    xml.writeAttribute("Italic", boolToString(font.italic()));
+    xml.writeEndElement();
+
+    const auto dd = frm->displayDefinition();
+    xml << dd;
+
+    {
+        const auto simulationMap = frm->simulationMap();
+        xml.writeStartElement("ModbusSimulationMap");
+
+        for (auto it = simulationMap.constBegin(); it != simulationMap.constEnd(); ++it) {
+            const ModbusSimulationMapKey& key = it.key();
+            const ModbusSimulationParams& params = it.value();
+
+            if(params.Mode != SimulationMode::No && key.DeviceId == dd.DeviceId && key.Type == dd.PointType)
+            {
+                xml.writeStartElement("Simulation");
+                xml.writeAttribute("Address", QString::number(key.Address + (dd.ZeroBasedAddress ? 0 : 1)));
+                xml << params;
+                xml.writeEndElement();
+            }
+        }
+
+        xml.writeEndElement(); // ModbusSimulationMap
+    }
+
+    xml << frm->scriptControl();
+    xml << frm->scriptSettings();
+
+    {
+        const auto descriptionMap = frm->descriptionMap();
+        xml.writeStartElement("AddressDescriptionMap");
+
+        for (auto it = descriptionMap.constBegin(); it != descriptionMap.constEnd(); ++it) {
+            const AddressDescriptionMapKey& key = it.key();
+            const QString& description = it.value();
+
+            if(!description.isEmpty() && key.DeviceId == dd.DeviceId && key.Type == dd.PointType)
+            {
+                xml.writeStartElement("Description");
+                xml.writeAttribute("Address", QString::number(key.Address));
+                xml.writeCDATA(description);
+                xml.writeEndElement();
+            }
+        }
+
+        xml.writeEndElement(); // AddressDescriptionMap
+    }
+
+    {
+        const auto unit = frm->serializeModbusDataUnit(dd.DeviceId, dd.PointType, dd.PointAddress - (dd.ZeroBasedAddress ? 0 : 1), dd.Length);
+        xml.writeStartElement("ModbusDataUnit");
+
+        quint16 address = dd.PointAddress;
+        const auto values = unit.values();
+        for (const auto& value : values) {
+            if(value != 0) {
+                xml.writeStartElement("Value");
+                xml.writeAttribute("Address", QString::number(address));
+                xml.writeCharacters(QString::number(value));
+                xml.writeEndElement();
+            }
+            address++;
+        }
+
+        xml.writeEndElement(); // ModbusDataUnit
+    }
+
+    xml.writeEndElement(); // FormModSim
+
+    return xml;
+}
+
+///
+/// \brief operator >>
+/// \param xml
+/// \param frm
+/// \return
+///
+inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, FormModSim* frm)
+{
+    if (!frm) return xml;
+
+    if (xml.isStartElement() && xml.name() == QLatin1String("FormModSim")) {
+        DataDisplayMode ddm;
+        DisplayDefinition dd;
+        QHash<quint16, quint16> data;
+        QHash<quint16, QString> descriptions;
+        QHash<quint16, ModbusSimulationParams> simulations;
+
+        const QXmlStreamAttributes attributes = xml.attributes();
+
+        if (attributes.hasAttribute("DisplayMode")) {
+            const DisplayMode mode = enumFromString<DisplayMode>(attributes.value("DisplayMode").toString());
+            frm->setDisplayMode(mode);
+        }
+
+        if (attributes.hasAttribute("DataDisplayMode")) {
+            ddm = enumFromString<DataDisplayMode>(attributes.value("DataDisplayMode").toString());
+        }
+
+        if (attributes.hasAttribute("DisplayHexAddresses")) {
+            const bool displayHex = stringToBool(attributes.value("DisplayHexAddresses").toString());
+            frm->setDisplayHexAddresses(displayHex);
+        }
+
+        if (attributes.hasAttribute("Codepage")) {
+            frm->setCodepage(attributes.value("Codepage").toString());
+        }
+
+        if (attributes.hasAttribute("ByteOrder")) {
+            const ByteOrder order = enumFromString<ByteOrder>(attributes.value("ByteOrder").toString());
+            frm->setByteOrder(order);
+        }
+
+        while (xml.readNextStartElement()) {
+            if (xml.name() == QLatin1String("Window")) {
+                const QXmlStreamAttributes windowAttrs = xml.attributes();
+
+                const auto wnd = frm->parentWidget();
+                if (wnd) {
+                    if (windowAttrs.hasAttribute("Width") && windowAttrs.hasAttribute("Height")) {
+                        bool okWidth, okHeight;
+                        const int width = windowAttrs.value("Width").toInt(&okWidth);
+                        const int height = windowAttrs.value("Height").toInt(&okHeight);
+
+                        if (okWidth && okHeight && !wnd->isMaximized() && !wnd->isMinimized()) {
+                            wnd->resize(width, height);
+                        }
+                    }
+
+                    if (windowAttrs.hasAttribute("Maximized")) {
+                        const bool maximized = stringToBool(windowAttrs.value("Maximized").toString());
+                        if (maximized) wnd->showMaximized();
+                    }
+
+                    if (windowAttrs.hasAttribute("Minimized")) {
+                        const bool minimized = stringToBool(windowAttrs.value("Minimized").toString());
+                        if (minimized) wnd->showMinimized();
+                    }
+                }
+                xml.skipCurrentElement();
+            }
+            else if (xml.name() == QLatin1String("Colors")) {
+                const QXmlStreamAttributes colorAttrs = xml.attributes();
+
+                if (colorAttrs.hasAttribute("Background")) {
+                    QColor color(colorAttrs.value("Background").toString());
+                    if (color.isValid()) frm->setBackgroundColor(color);
+                }
+
+                if (colorAttrs.hasAttribute("Foreground")) {
+                    QColor color(colorAttrs.value("Foreground").toString());
+                    if (color.isValid()) frm->setForegroundColor(color);
+                }
+
+                if (colorAttrs.hasAttribute("Status")) {
+                    QColor color(colorAttrs.value("Status").toString());
+                    if (color.isValid()) frm->setStatusColor(color);
+                }
+                xml.skipCurrentElement();
+            }
+            else if (xml.name() == QLatin1String("Font")) {
+                const QXmlStreamAttributes fontAttrs = xml.attributes();
+
+                QFont font = frm->font();
+
+                if (fontAttrs.hasAttribute("Family")) {
+                    font.setFamily(fontAttrs.value("Family").toString());
+                }
+
+                if (fontAttrs.hasAttribute("Size")) {
+                    bool ok; const int size = fontAttrs.value("Size").toInt(&ok);
+                    if (ok && size > 0) font.setPointSize(size);
+                }
+
+                if (fontAttrs.hasAttribute("Bold")) {
+                    font.setBold(stringToBool(fontAttrs.value("Bold").toString()));
+                }
+
+                if (fontAttrs.hasAttribute("Italic")) {
+                    font.setItalic(stringToBool(fontAttrs.value("Italic").toString()));
+                }
+
+                frm->setFont(font);
+                xml.skipCurrentElement();
+            }
+            else if (xml.name() == QLatin1String("DisplayDefinition")) {
+                xml >> dd;
+                frm->setDisplayDefinition(dd);
+            }
+            else if (xml.name() == QLatin1String("ModbusSimulationMap")) {
+                while (xml.readNextStartElement()) {
+                    if (xml.name() == QLatin1String("Simulation")) {
+
+                        const QXmlStreamAttributes attributes = xml.attributes();
+                        bool ok; const quint16 address = attributes.value("Address").toUShort(&ok);
+
+                        if(ok) {
+                            xml.readNextStartElement();
+
+                            ModbusSimulationParams params;
+                            xml >> params;
+
+                            simulations[address] = params;
+                        }
+
+                        xml.skipCurrentElement();
+
+                    } else {
+                        xml.skipCurrentElement();
+                    }
+                }
+            }
+            else if (xml.name() == QLatin1String("JScriptControl")) {
+                auto scriptControl = frm->scriptControl();
+                xml >> scriptControl;
+            }
+            else if (xml.name() == QLatin1String("ScriptSettings")) {
+                ScriptSettings settings;
+                xml >> settings;
+                frm->setScriptSettings(settings);
+            }
+            else if (xml.name() == QLatin1String("AddressDescriptionMap")) {
+                while (xml.readNextStartElement()) {
+                    if (xml.name() == QLatin1String("Description")) {
+
+                        const QXmlStreamAttributes attributes = xml.attributes();
+                        bool ok; const quint16 address = attributes.value("Address").toUShort(&ok);
+
+                        if(ok) {
+                            QString description;
+                            if (xml.isCDATA()) {
+                                description = xml.readElementText(QXmlStreamReader::IncludeChildElements);
+                            } else {
+                                description = xml.readElementText();
+                            }
+                            descriptions[address] = description;
+                        }
+
+                    } else {
+                        xml.skipCurrentElement();
+                    }
+                }
+            }
+            else if (xml.name() == QLatin1String("ModbusDataUnit")) {
+                while (xml.readNextStartElement()) {
+                    if (xml.name() == QLatin1String("Value")) {
+                        QXmlStreamAttributes attributes = xml.attributes();
+                        bool ok; const quint16 address = attributes.value("Address").toUShort(&ok);
+                        if(ok) {
+                            const quint16 value = xml.readElementText().toUShort(&ok);
+                            if (ok) {
+                                data[address] = value;
+                            }
+                        }
+                    } else {
+                        xml.skipCurrentElement();
+                    }
+                }
+            }
+            else {
+                xml.skipCurrentElement();
+            }
+        }
+
+        if(dd.PointType != QModbusDataUnit::Invalid) {
+            frm->setDataDisplayMode(ddm);
+
+            if(!simulations.isEmpty()) {
+                QHashIterator it(simulations);
+                while(it.hasNext()) {
+                    const auto item = it.next();
+                    switch(dd.PointType) {
+                        case QModbusDataUnit::Coils:
+                        case QModbusDataUnit::DiscreteInputs:
+                            if(item->Mode == SimulationMode::Toggle || item->Mode == SimulationMode::Random)
+                                frm->startSimulation(dd.PointType, item.key() - (dd.ZeroBasedAddress ? 0 : 1), item.value());
+                            break;
+                        case QModbusDataUnit::InputRegisters:
+                        case QModbusDataUnit::HoldingRegisters:
+                            if(item->Mode != SimulationMode::No && item->Mode != SimulationMode::Toggle)
+                                frm->startSimulation(dd.PointType, item.key() - (dd.ZeroBasedAddress ? 0 : 1), item.value());
+                            break;
+                        default: break;
+                    }
+                }
+            }
+
+            if(!descriptions.isEmpty()) {
+                QHashIterator it(descriptions);
+                while(it.hasNext()) {
+                    const auto item = it.next();
+                    frm->setDescription(dd.DeviceId, dd.PointType, item.key(), item.value());
+                }
+            }
+
+            if (!data.isEmpty()) {
+                QVector<quint16> values(dd.Length);
+
+                QHashIterator it(data);
+                while(it.hasNext()) {
+                    const auto item = it.next();
+                    const auto index = item.key() - dd.PointAddress;
+                    switch(dd.PointType) {
+                        case QModbusDataUnit::Coils:
+                        case QModbusDataUnit::DiscreteInputs:
+                            values[index] = qBound<quint16>(0, item.value(), 1);
+                            break;
+                        case QModbusDataUnit::InputRegisters:
+                        case QModbusDataUnit::HoldingRegisters:
+                            values[index] = item.value();
+                            break;
+                        default: break;
+                    }
+                    if(index >= values.length()) break;
+                }
+
+                frm->configureModbusDataUnit(dd.DeviceId, dd.PointType, dd.PointAddress - (dd.ZeroBasedAddress ? 0 : 1), values);
+            }
+        }
+    }
+    else {
+        xml.skipCurrentElement();
+    }
+
+    return xml;
 }
 
 #endif // FORMMODSIM_H

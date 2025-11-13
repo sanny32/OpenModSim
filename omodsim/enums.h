@@ -2,7 +2,25 @@
 #define ENUMS_H
 
 #include <QMetaType>
+#include <QMetaEnum>
 #include <QSettings>
+
+template<typename Enum>
+struct EnumStrings {
+    static const QMap<Enum, QString>& mapping() {
+        static const QMap<Enum, QString> map;
+        return map;
+    }
+};
+
+#define DECLARE_ENUM_STRINGS(EnumType, ...) \
+template<> \
+    struct EnumStrings<EnumType> { \
+        static const QMap<EnumType, QString>& mapping() { \
+            static const QMap<EnumType, QString> map = { __VA_ARGS__ }; \
+            return map; \
+    } \
+};
 
 ///
 /// \brief The AddressBase enum
@@ -13,6 +31,10 @@ enum class AddressBase
     Base1
 };
 Q_DECLARE_METATYPE(AddressBase)
+DECLARE_ENUM_STRINGS(AddressBase,
+                {   AddressBase::Base0, "Base0" },
+                {   AddressBase::Base1, "Base1" }
+)
 
 ///
 /// \brief operator <<
@@ -47,6 +69,10 @@ enum class AddressSpace
     Addr5Digits
 };
 Q_DECLARE_METATYPE(AddressSpace)
+DECLARE_ENUM_STRINGS(AddressSpace,
+                {   AddressSpace::Addr6Digits, "6-Digits"    },
+                {   AddressSpace::Addr5Digits, "5-Digits"    }
+)
 
 ///
 /// \brief operator <<
@@ -82,6 +108,11 @@ enum class DisplayMode
     Script
 };
 Q_DECLARE_METATYPE(DisplayMode)
+DECLARE_ENUM_STRINGS(DisplayMode,
+                {   DisplayMode::Data,      "Data"      },
+                {   DisplayMode::Traffic,   "Traffic"   },
+                {   DisplayMode::Script,    "Script"    }
+)
 
 ///
 /// \brief operator <<
@@ -131,6 +162,25 @@ enum class DataDisplayMode
     Ansi
 };
 Q_DECLARE_METATYPE(DataDisplayMode)
+DECLARE_ENUM_STRINGS(DataDisplayMode,
+                {   DataDisplayMode::Binary,          "Binary"        },
+                {   DataDisplayMode::UInt16,          "UInt16"        },
+                {   DataDisplayMode::Int16,           "Int16"         },
+                {   DataDisplayMode::Hex,             "Hex"           },
+                {   DataDisplayMode::FloatingPt,      "FloatingPt"    },
+                {   DataDisplayMode::SwappedFP,       "SwappedFP"     },
+                {   DataDisplayMode::DblFloat,        "DblFloat"      },
+                {   DataDisplayMode::SwappedDbl,      "SwappedDbl"    },
+                {   DataDisplayMode::Int32,           "Int32"         },
+                {   DataDisplayMode::SwappedInt32,    "SwappedInt32"  },
+                {   DataDisplayMode::UInt32,          "UInt32"        },
+                {   DataDisplayMode::SwappedUInt32,   "SwappedUInt32" },
+                {   DataDisplayMode::Int64,           "Int64"         },
+                {   DataDisplayMode::SwappedInt64,    "SwappedInt64"  },
+                {   DataDisplayMode::UInt64,          "UInt64"        },
+                {   DataDisplayMode::SwappedUInt64,   "SwappedUInt64" },
+                {   DataDisplayMode::Ansi,            "Ansi"          },
+)
 
 ///
 /// \brief operator <<
@@ -165,6 +215,10 @@ enum class ByteOrder
     Swapped
 };
 Q_DECLARE_METATYPE(ByteOrder);
+DECLARE_ENUM_STRINGS(ByteOrder,
+                {   ByteOrder::Direct,    "Direct"    },
+                {   ByteOrder::Swapped,   "Swapped"   }
+)
 
 ///
 /// \brief operator <<
@@ -174,7 +228,7 @@ Q_DECLARE_METATYPE(ByteOrder);
 ///
 inline QSettings& operator <<(QSettings& out, const ByteOrder& order)
 {
-    out.setValue("ByteOrder", (uint)order);
+    out.setValue("ByteOrder", static_cast<uint>(order));
     return out;
 }
 
@@ -199,6 +253,10 @@ enum class ConnectionType
     Serial
 };
 Q_DECLARE_METATYPE(ConnectionType)
+DECLARE_ENUM_STRINGS(ConnectionType,
+                {   ConnectionType::Tcp,      "Tcp"    },
+                {   ConnectionType::Serial,   "Serial" }
+)
 
 ///
 /// \brief The TransmissionMode enum
@@ -209,6 +267,10 @@ enum class TransmissionMode
     RTU
 };
 Q_DECLARE_METATYPE(TransmissionMode)
+DECLARE_ENUM_STRINGS(TransmissionMode,
+                {   TransmissionMode::ASCII, "ASCII"  },
+                {   TransmissionMode::RTU,   "RTU"    }
+)
 
 ///
 /// \brief The CaptureMode enum
@@ -219,6 +281,10 @@ enum class CaptureMode
     TextCapture
 };
 Q_DECLARE_METATYPE(CaptureMode)
+DECLARE_ENUM_STRINGS(CaptureMode,
+                {   CaptureMode::Off,         "Off"           },
+                {   CaptureMode::TextCapture, "TextCapture"   }
+)
 
 ///
 /// \brief The SimulationMode enum
@@ -232,6 +298,13 @@ enum class SimulationMode
     Toggle
 };
 Q_DECLARE_METATYPE(SimulationMode)
+DECLARE_ENUM_STRINGS(SimulationMode,
+                {   SimulationMode::No,           "No"        },
+                {   SimulationMode::Random,       "Random"    },
+                {   SimulationMode::Increment,   "Increment"  },
+                {   SimulationMode::Decrement,   "Decrement"  },
+                {   SimulationMode::Toggle,       "Toggle"    }
+)
 
 ///
 /// \brief The RunMode enum
@@ -242,6 +315,10 @@ enum class RunMode
     Periodically
 };
 Q_DECLARE_METATYPE(RunMode)
+DECLARE_ENUM_STRINGS(RunMode,
+                {   RunMode::Once,         "Once"           },
+                {   RunMode::Periodically, "Periodically"   }
+)
 
 ///
 /// \brief The LogViewState enum
@@ -252,5 +329,77 @@ enum class LogViewState {
     Paused
 };
 Q_DECLARE_METATYPE(LogViewState)
+DECLARE_ENUM_STRINGS(LogViewState,
+                {   LogViewState::Unknown,    "Unknown"   },
+                {   LogViewState::Running,    "Running"   },
+                {   LogViewState::Paused,     "Paused"    }
+)
+
+///
+/// \brief QString
+///
+enum class SerializationFormat {
+    Binary = 0,
+    Xml
+};
+Q_DECLARE_METATYPE(SerializationFormat)
+DECLARE_ENUM_STRINGS(SerializationFormat,
+                {   SerializationFormat::Binary,    "Binary"    },
+                {   SerializationFormat::Xml,       "Xml"       },
+)
+
+///
+/// \brief boolToString
+/// \param value
+/// \return
+///
+inline QString boolToString(bool value)
+{
+    return value ? "true" : "false";
+}
+
+///
+/// \brief stringToBool
+/// \param str
+/// \return
+///
+inline bool stringToBool(const QString& str)
+{
+    const QString lower = str.toLower();
+    return (lower == "true" || lower == "1" || lower == "yes" || lower == "on");
+}
+
+///
+/// \brief enumToString
+/// \param value
+/// \return
+///
+template<typename Enum>
+inline QString enumToString(Enum value) {
+    const auto& map = EnumStrings<Enum>::mapping();
+    if (auto it = map.find(value); it != map.end())
+        return it.value();
+    return QString::number(static_cast<int>(value));
+}
+
+///
+/// \brief enumFromString
+/// \param str
+/// \param defaultValue
+/// \return
+///
+template<typename Enum>
+inline Enum enumFromString(const QString& str, Enum defaultValue = static_cast<Enum>(0)) {
+    const auto& map = EnumStrings<Enum>::mapping();
+    for (auto it = map.begin(); it != map.end(); ++it) {
+        if (it.value().compare(str, Qt::CaseInsensitive) == 0)
+            return it.key();
+    }
+    bool ok;
+    int val = str.toInt(&ok);
+    if (ok)
+        return static_cast<Enum>(val);
+    return defaultValue;
+}
 
 #endif // ENUMS_H

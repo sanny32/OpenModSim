@@ -3,6 +3,7 @@
 
 #include <QTimer>
 #include <QModbusDataUnit>
+#include <QXmlStreamWriter>
 #include "modbussimulationparams.h"
 
 struct ModbusSimulationMapKey {
