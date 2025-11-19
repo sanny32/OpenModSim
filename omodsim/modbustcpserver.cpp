@@ -139,7 +139,7 @@ void ModbusTcpServer::on_newConnection()
 
             qCDebug(QT_MODBUS) << "(TCP server) Request PDU:" << request;
 
-            const auto msgReq = ModbusMessage::create(request, ModbusMessage::Tcp, unitId, QDateTime::currentDateTime(), true);
+            const auto msgReq = ModbusMessage::create(request, ModbusMessage::Tcp, unitId, transactionId, QDateTime::currentDateTime(), true);
             emit modbusRequest(msgReq);
 
             if(mbDef.ErrorSimulations.noResponse())
