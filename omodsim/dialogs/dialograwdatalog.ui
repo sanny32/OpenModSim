@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>Raw Data Log Dialog</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
@@ -24,7 +24,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QComboBox" name="comboBoxServer"/>
+      <widget class="QComboBox" name="comboBoxServers"/>
      </item>
      <item>
       <widget class="QPushButton" name="pushButtonPause">
@@ -45,6 +45,13 @@
         </size>
        </property>
       </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushButtonClear">
+       <property name="text">
+        <string>Clear</string>
+       </property>
+      </widget>
      </item>
      <item>
       <widget class="QPushButton" name="pushButtonExport">

@@ -12,8 +12,10 @@ ModbusTcpServer::ModbusTcpServer(QObject *parent)
     : ModbusServer(parent)
 {
     _server = new QTcpServer(this);
+
     QObject::connect(_server, &QTcpServer::newConnection, this, &ModbusTcpServer::on_newConnection);
     QObject::connect(_server, &QTcpServer::acceptError, this, &ModbusTcpServer::on_acceptError);
+    QObject::connect(this, &ModbusServer::rawDataReceived, this, &ModbusTcpServer::on_rawDataReceived);
 }
 
 ///
@@ -102,8 +104,9 @@ void ModbusTcpServer::on_newConnection()
         buffer->append(socket->readAll());
 
         while (!buffer->isEmpty()) {
-            qCDebug(QT_MODBUS_LOW).noquote() << "(TCP server) Read buffer: 0x"
-                                                    + buffer->toHex();
+
+            // emit raw data received
+            emit rawDataReceived(*buffer);
 
             if (buffer->size() < mbpaHeaderSize) {
                 qCDebug(QT_MODBUS) << "(TCP server) MBPA header too short. Waiting for more data.";
@@ -190,6 +193,15 @@ void ModbusTcpServer::on_newConnection()
             });
         }
     });
+}
+
+///
+/// \brief ModbusTcpServer::on_rawDataReceived
+/// \param data
+///
+void ModbusTcpServer::on_rawDataReceived(const QByteArray& data)
+{
+    qCDebug(QT_MODBUS_LOW).noquote() << "(TCP server) Received data: 0x" + data.toHex();
 }
 
 ///

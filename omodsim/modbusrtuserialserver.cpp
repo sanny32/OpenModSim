@@ -180,6 +180,7 @@ ModbusRtuSerialServer::ModbusRtuSerialServer(QObject *parent)
     QObject::connect(_serialPort, &QSerialPort::readyRead, this, &ModbusRtuSerialServer::on_readyRead);
     QObject::connect(_serialPort, &QSerialPort::errorOccurred, this, &ModbusRtuSerialServer::on_errorOccurred);
     QObject::connect(_serialPort, &QSerialPort::aboutToClose, this, &ModbusRtuSerialServer::on_aboutToClose);
+    QObject::connect(this, &ModbusServer::rawDataReceived, this, &ModbusRtuSerialServer::on_rawDataReceived);
 }
 
 ///
@@ -214,8 +215,10 @@ void ModbusRtuSerialServer::on_readyRead()
     const qint64 size = _serialPort->size();
     _requestBuffer += _serialPort->read(size);
 
+    // emit raw data received
+    emit rawDataReceived(_requestBuffer);
+
     const QModbusSerialAdu adu(QModbusSerialAdu::Rtu, _requestBuffer);
-    qCDebug(QT_MODBUS_LOW) << "(RTU server) Received ADU:" << adu.rawData().toHex();
 
     // Index                         -> description
     // Server address                -> 1 byte
@@ -425,6 +428,15 @@ void ModbusRtuSerialServer::on_readyRead()
         }
         storeModbusCommEvent(event); // store the final event after processing
     });
+}
+
+///
+/// \brief ModbusRtuSerialServer::on_rawDataReceived
+/// \param data
+///
+void ModbusRtuSerialServer::on_rawDataReceived(const QByteArray& data)
+{
+    qCDebug(QT_MODBUS_LOW).noquote() << "(RTU server) Received data: 0x" + data.toHex();
 }
 
 ///

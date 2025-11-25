@@ -115,6 +115,7 @@ set(SOURCES
     dialogs/dialogforcemultipleregisters.cpp
     dialogs/dialogmsgparser.cpp
     dialogs/dialogprintsettings.cpp
+    dialogs/dialograwdatalog.cpp
     dialogs/dialogscriptsettings.cpp
     dialogs/dialogselectserviceport.cpp
     dialogs/dialogmodbusdefinitions.cpp
@@ -154,6 +155,7 @@ set(SOURCES
 set(HEADERS
     ansimenu.h
     ansiutils.h
+    bufferinglistmodel.h
     byteorderutils.h
     cmdlineparser.h
     connectiondetails.h
@@ -190,6 +192,7 @@ set(HEADERS
     dialogs/dialogforcemultipleregisters.h
     dialogs/dialogmsgparser.h
     dialogs/dialogprintsettings.h
+    dialogs/dialograwdatalog.h
     dialogs/dialogscriptsettings.h
     dialogs/dialogmodbusdefinitions.h
     dialogs/dialogselectserviceport.h
@@ -273,6 +276,7 @@ set(UI_FILES
     dialogs/dialogforcemultipleregisters.ui
     dialogs/dialogmsgparser.ui
     dialogs/dialogprintsettings.ui
+    dialogs/dialograwdatalog.ui
     dialogs/dialogscriptsettings.ui
     dialogs/dialogselectserviceport.ui
     dialogs/dialogmodbusdefinitions.ui

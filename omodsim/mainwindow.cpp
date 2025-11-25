@@ -4,6 +4,7 @@
 #include <QPageSetupDialog>
 #include "dialogabout.h"
 #include "dialogmsgparser.h"
+#include "dialograwdatalog.h"
 #include "dialogwindowsmanager.h"
 #include "dialogprintsettings.h"
 #include "dialogdisplaydefinition.h"
@@ -838,6 +839,16 @@ void MainWindow::on_actionMsgParser_triggered()
     const auto mode = frm ? frm->dataDisplayMode() : DataDisplayMode::Hex;
 
     auto dlg = new DialogMsgParser(mode, ModbusMessage::Rtu, this);
+    dlg->setAttribute(Qt::WA_DeleteOnClose, true);
+    dlg->show();
+}
+
+///
+/// \brief MainWindow::on_actionRawDataLog_triggered
+///
+void MainWindow::on_actionRawDataLog_triggered()
+{
+    auto dlg = new DialogRawDataLog(_mbMultiServer, this);
     dlg->setAttribute(Qt::WA_DeleteOnClose, true);
     dlg->show();
 }

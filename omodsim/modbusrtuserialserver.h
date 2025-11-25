@@ -28,6 +28,7 @@ public:
 private slots:
     void on_readyRead();
     void on_aboutToClose();
+    void on_rawDataReceived(const QByteArray& data);
     void on_errorOccurred(QSerialPort::SerialPortError);
 
 protected:

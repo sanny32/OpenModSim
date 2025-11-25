@@ -233,6 +233,7 @@ QSharedPointer<ModbusServer> ModbusMultiServer::createModbusServer(const Connect
         connect(modbusServer.get(), &ModbusServer::dataWritten, this, &ModbusMultiServer::on_dataWritten);
         connect(modbusServer.get(), &ModbusServer::stateChanged, this, &ModbusMultiServer::on_stateChanged);
         connect(modbusServer.get(), &ModbusServer::errorOccurred, this, &ModbusMultiServer::on_errorOccurred);
+        connect(modbusServer.get(), &ModbusServer::rawDataReceived, this, &ModbusMultiServer::on_rawDataReceived);
     }
 
     return modbusServer;
@@ -891,6 +892,18 @@ void ModbusMultiServer::writeRegister(quint8 deviceId, QModbusDataUnit::Register
 
     if(data.isValid())
         setData(deviceId, data);
+}
+
+///
+/// \brief ModbusMultiServer::on_rawDataReceived
+/// \param data
+///
+void ModbusMultiServer::on_rawDataReceived(const QByteArray& data)
+{
+    auto server = qobject_cast<ModbusServer*>(sender());
+    const auto cd = server->property("ConnectionDetails").value<ConnectionDetails>();
+
+    emit rawDataReceived(cd, data);
 }
 
 ///
