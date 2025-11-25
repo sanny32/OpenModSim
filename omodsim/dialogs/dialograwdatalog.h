@@ -35,6 +35,8 @@ public:
 
 private slots:
     void on_rawDataReceived(const ConnectionDetails& cd, const QByteArray& data);
+    void on_pushButtonPause_clicked();
+    void on_pushButtonClear_clicked();
 
 private:
     Ui::DialogRawDataLog *ui;

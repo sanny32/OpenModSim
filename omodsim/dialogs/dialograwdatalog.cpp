@@ -1,3 +1,4 @@
+#include "fontutils.h"
 #include "dialograwdatalog.h"
 #include "ui_dialograwdatalog.h"
 
@@ -44,6 +45,8 @@ DialogRawDataLog::DialogRawDataLog(const ModbusMultiServer& server, QWidget *par
     , ui(new Ui::DialogRawDataLog)
 {
     ui->setupUi(this);
+
+    ui->listViewLog->setFont(defaultMonospaceFont());
     ui->listViewLog->setModel(new RawDataLogModel(this));
 
     for(auto&& cd : server.connections())
@@ -84,4 +87,22 @@ void DialogRawDataLog::on_rawDataReceived(const ConnectionDetails& cd, const QBy
     if(cd == ui->comboBoxServers->currentData().value<ConnectionDetails>()) {
         ((RawDataLogModel*)ui->listViewLog->model())->append(data);
     }
+}
+
+///
+/// \brief DialogRawDataLog::on_pushButtonPause_clicked
+///
+void DialogRawDataLog::on_pushButtonPause_clicked()
+{
+    auto model = ((RawDataLogModel*)ui->listViewLog->model());
+    model->setBufferingMode(!model->isBufferingMode());
+    ui->pushButtonPause->setText(model->isBufferingMode() ? tr("Resume") : tr("Pause"));
+}
+
+///
+/// \brief DialogRawDataLog::on_pushButtonClear_clicked
+///
+void DialogRawDataLog::on_pushButtonClear_clicked()
+{
+    ((RawDataLogModel*)ui->listViewLog->model())->clear();
 }
