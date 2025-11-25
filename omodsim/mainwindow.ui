@@ -1073,6 +1073,9 @@
    <property name="text">
     <string>Raw Data Log</string>
    </property>
+   <property name="shortcut">
+    <string>F6</string>
+   </property>
   </action>
  </widget>
  <resources>

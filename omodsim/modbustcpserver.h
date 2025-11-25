@@ -26,7 +26,7 @@ signals:
 
 private slots:
     void on_newConnection();
-    void on_rawDataReceived(const QByteArray& data);
+    void on_rawDataReceived(const QDateTime& time, const QByteArray& data);
     void on_acceptError(QAbstractSocket::SocketError);
 
 protected:

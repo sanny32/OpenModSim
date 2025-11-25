@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>640</width>
+    <width>900</width>
     <height>480</height>
    </rect>
   </property>
@@ -24,7 +24,14 @@
       </widget>
      </item>
      <item>
-      <widget class="QComboBox" name="comboBoxServers"/>
+      <widget class="QComboBox" name="comboBoxServers">
+       <property name="minimumSize">
+        <size>
+         <width>100</width>
+         <height>0</height>
+        </size>
+       </property>
+      </widget>
      </item>
      <item>
       <widget class="QPushButton" name="pushButtonPause">

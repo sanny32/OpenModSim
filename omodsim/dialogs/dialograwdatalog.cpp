@@ -1,4 +1,5 @@
 #include "fontutils.h"
+#include "htmldelegate.h"
 #include "dialograwdatalog.h"
 #include "ui_dialograwdatalog.h"
 
@@ -26,7 +27,14 @@ QVariant RawDataLogModel::data(const QModelIndex& index, int role) const
     switch(role)
     {
         case Qt::DisplayRole:
-            return item.toHex(' ').toUpper();
+            return QString(R"(
+                    <span style="color:#444444">%1</span>
+                    <b style="color:%2">%3</b>
+                    <span>%4</span>
+                )").arg(item.Time.toString(Qt::ISODateWithMs),
+                        item.Direction == RawData::Tx ? "#0066cc" : "#009933",
+                        item.Direction == RawData::Tx ? "[Tx]" : "[Rx]",
+                        item.Data.toHex(' ').toUpper());
 
         case Qt::UserRole:
             return QVariant::fromValue(item);
@@ -48,6 +56,7 @@ DialogRawDataLog::DialogRawDataLog(const ModbusMultiServer& server, QWidget *par
 
     ui->listViewLog->setFont(defaultMonospaceFont());
     ui->listViewLog->setModel(new RawDataLogModel(this));
+    ui->listViewLog->setItemDelegate(new HtmlDelegate(this));
 
     for(auto&& cd : server.connections())
     {
@@ -66,6 +75,7 @@ DialogRawDataLog::DialogRawDataLog(const ModbusMultiServer& server, QWidget *par
         }
     }
 
+    connect(&server, &ModbusMultiServer::rawDataSended, this, &DialogRawDataLog::on_rawDataSended);
     connect(&server, &ModbusMultiServer::rawDataReceived, this, &DialogRawDataLog::on_rawDataReceived);
 }
 
@@ -80,12 +90,28 @@ DialogRawDataLog::~DialogRawDataLog()
 ///
 /// \brief DialogRawDataLog::on_rawDataReceived
 /// \param cd
+/// \param time
 /// \param data
 ///
-void DialogRawDataLog::on_rawDataReceived(const ConnectionDetails& cd, const QByteArray& data)
+void DialogRawDataLog::on_rawDataReceived(const ConnectionDetails& cd, const QDateTime& time, const QByteArray& data)
 {
     if(cd == ui->comboBoxServers->currentData().value<ConnectionDetails>()) {
-        ((RawDataLogModel*)ui->listViewLog->model())->append(data);
+        RawData raw { RawData::Tx, time, data };
+        ((RawDataLogModel*)ui->listViewLog->model())->append(raw);
+    }
+}
+
+///
+/// \brief DialogRawDataLog::on_rawDataSended
+/// \param cd
+/// \param time
+/// \param data
+///
+void DialogRawDataLog::on_rawDataSended(const ConnectionDetails& cd, const QDateTime& time, const QByteArray& data)
+{
+    if(cd == ui->comboBoxServers->currentData().value<ConnectionDetails>()) {
+        RawData raw { RawData::Rx, time, data };
+        ((RawDataLogModel*)ui->listViewLog->model())->append(raw);
     }
 }
 

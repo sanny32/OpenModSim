@@ -10,10 +10,21 @@ namespace Ui {
 class DialogRawDataLog;
 }
 
+struct RawData {
+    enum Communication {
+        Tx = 0,
+        Rx
+    };
+
+    Communication Direction;
+    QDateTime Time;
+    QByteArray Data;
+};
+
 ///
 /// \brief The RawDataLogModel class
 ///
-class  RawDataLogModel : public BufferingListModel<QByteArray>
+class  RawDataLogModel : public BufferingListModel<RawData>
 {
     Q_OBJECT
 
@@ -34,7 +45,8 @@ public:
     ~DialogRawDataLog();
 
 private slots:
-    void on_rawDataReceived(const ConnectionDetails& cd, const QByteArray& data);
+    void on_rawDataReceived(const ConnectionDetails& cd, const QDateTime& time, const QByteArray& data);
+    void on_rawDataSended(const ConnectionDetails& cd, const QDateTime& time, const QByteArray& data);
     void on_pushButtonPause_clicked();
     void on_pushButtonClear_clicked();
 

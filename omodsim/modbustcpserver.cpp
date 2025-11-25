@@ -105,8 +105,8 @@ void ModbusTcpServer::on_newConnection()
 
         while (!buffer->isEmpty()) {
 
-            // emit raw data received
-            emit rawDataReceived(*buffer);
+            const QDateTime time = QDateTime::currentDateTime();
+            emit rawDataReceived(time, *buffer);
 
             if (buffer->size() < mbpaHeaderSize) {
                 qCDebug(QT_MODBUS) << "(TCP server) MBPA header too short. Waiting for more data.";
@@ -142,7 +142,7 @@ void ModbusTcpServer::on_newConnection()
 
             qCDebug(QT_MODBUS) << "(TCP server) Request PDU:" << request;
 
-            const auto msgReq = ModbusMessage::create(request, ModbusMessage::Tcp, unitId, transactionId, QDateTime::currentDateTime(), true);
+            const auto msgReq = ModbusMessage::create(request, ModbusMessage::Tcp, unitId, transactionId, time, true);
             emit modbusRequest(msgReq);
 
             if(mbDef.ErrorSimulations.noResponse())
@@ -187,7 +187,10 @@ void ModbusTcpServer::on_newConnection()
                                  QModbusDevice::WriteError);
                 }
                 else {
-                    const auto msgResp = ModbusMessage::create(result, ModbusMessage::Tcp, QDateTime::currentDateTime(), false);
+                    const QDateTime sndTime = QDateTime::currentDateTime();
+                    emit rawDataSended(sndTime, result);
+
+                    const auto msgResp = ModbusMessage::create(result, ModbusMessage::Tcp, sndTime, false);
                     emit modbusResponse(msgReq, msgResp);
                 }
             });
@@ -197,9 +200,10 @@ void ModbusTcpServer::on_newConnection()
 
 ///
 /// \brief ModbusTcpServer::on_rawDataReceived
+/// \param time
 /// \param data
 ///
-void ModbusTcpServer::on_rawDataReceived(const QByteArray& data)
+void ModbusTcpServer::on_rawDataReceived(const QDateTime& time, const QByteArray& data)
 {
     qCDebug(QT_MODBUS_LOW).noquote() << "(TCP server) Received data: 0x" + data.toHex();
 }

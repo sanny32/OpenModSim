@@ -70,14 +70,16 @@ signals:
     void disconnected(const ConnectionDetails& cd);
     void request(QSharedPointer<const ModbusMessage> msg);
     void response(QSharedPointer<const ModbusMessage> msgReq, QSharedPointer<const ModbusMessage> msgResp);
-    void rawDataReceived(const ConnectionDetails& cd, const QByteArray& data);
+    void rawDataReceived(const ConnectionDetails& cd, const QDateTime& time, const QByteArray& data);
+    void rawDataSended(const ConnectionDetails& cd, const QDateTime& time, const QByteArray& data);
     void connectionError(const QString& error);
     void errorOccured(quint8 deviceId, const QString& error);
     void dataChanged(quint8 deviceId, const QModbusDataUnit& data);
     void definitionsChanged(const ModbusDefinitions& defs);
 
 private slots:
-    void on_rawDataReceived(const QByteArray& data);
+    void on_rawDataReceived(const QDateTime& time, const QByteArray& data);
+    void on_rawDataSended(const QDateTime& time, const QByteArray& data);
     void on_stateChanged(QModbusDevice::State state);
     void on_errorOccurred(QModbusDevice::Error error, int deviceId);
     void on_dataWritten(int deviceId, QModbusDataUnit::RegisterType table, int address, int size);

@@ -848,7 +848,7 @@ void MainWindow::on_actionMsgParser_triggered()
 ///
 void MainWindow::on_actionRawDataLog_triggered()
 {
-    auto dlg = new DialogRawDataLog(_mbMultiServer, this);
+    auto dlg = new DialogRawDataLog(_mbMultiServer);
     dlg->setAttribute(Qt::WA_DeleteOnClose, true);
     dlg->show();
 }
