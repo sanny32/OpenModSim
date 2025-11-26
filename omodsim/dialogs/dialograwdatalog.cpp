@@ -15,6 +15,7 @@
 RawDataLogModel::RawDataLogModel(QObject* parent)
     : BufferingListModel(parent)
 {
+    setRowLimit(100);
 }
 
 ///
