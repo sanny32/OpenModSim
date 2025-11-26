@@ -19,6 +19,7 @@ struct RawData {
     Communication Direction;
     QDateTime Time;
     QByteArray Data;
+    bool Valid;
 };
 Q_DECLARE_METATYPE(RawData)
 
@@ -45,7 +46,11 @@ public:
     explicit DialogRawDataLog(const ModbusMultiServer& server, QWidget *parent = nullptr);
     ~DialogRawDataLog();
 
+    LogViewState logViewState() const;
+    void setLogViewState(LogViewState state);
+
 private slots:
+    void on_connected(const ConnectionDetails& cd);
     void on_rawDataReceived(const ConnectionDetails& cd, const QDateTime& time, const QByteArray& data);
     void on_rawDataSended(const ConnectionDetails& cd, const QDateTime& time, const QByteArray& data);
     void on_comboBoxServers_currentIndexChanged(int index);
@@ -53,6 +58,9 @@ private slots:
     void on_pushButtonPause_clicked();
     void on_pushButtonClear_clicked();
     void on_pushButtonExport_clicked();
+
+private:
+    void comboBoxServers_addConnection(const ConnectionDetails& cd);
 
 private:
     Ui::DialogRawDataLog *ui;

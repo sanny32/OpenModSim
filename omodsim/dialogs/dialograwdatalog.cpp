@@ -2,6 +2,7 @@
 #include <QMessageBox>
 #include "fontutils.h"
 #include "htmldelegate.h"
+#include "modbusmessage.h"
 #include "dialograwdatalog.h"
 #include "ui_dialograwdatalog.h"
 
@@ -26,16 +27,18 @@ QVariant RawDataLogModel::data(const QModelIndex& index, int role) const
         return QVariant();
 
     const auto item = itemAt(index.row());
+
     switch(role)
     {
         case Qt::DisplayRole:
             return QString(R"(
                     <span style="color:#444444">%1</span>
                     <b style="color:%2">%3</b>
-                    <span>%4</span>
+                    <span style="color:%4">%5</span>
                 )").arg(item.Time.toString(Qt::ISODateWithMs),
                         item.Direction == RawData::Tx ? "#0066cc" : "#009933",
                         item.Direction == RawData::Tx ? "[Tx]" : "[Rx]",
+                        item.Valid ? "#000000" : "#cc0000",
                         item.Data.toHex(' ').toUpper());
 
         case Qt::UserRole:
@@ -69,21 +72,8 @@ DialogRawDataLog::DialogRawDataLog(const ModbusMultiServer& server, QWidget *par
     ui->listViewLog->setItemDelegate(new HtmlDelegate(this));
     ui->comboBoxRowLimit->setCurrentText(QString::number(model->rowLimit()));
 
-    for(auto&& cd : server.connections())
-    {
-        switch(cd.Type)
-        {
-            case ConnectionType::Tcp:
-            {
-                const auto port = QString("%1:%2").arg(cd.TcpParams.IPAddress, QString::number(cd.TcpParams.ServicePort));
-                ui->comboBoxServers->addItem(tr("Modbus/TCP Srv %1").arg(port), QVariant::fromValue(cd));
-            }
-            break;
-
-            case ConnectionType::Serial:
-                ui->comboBoxServers->addItem(tr("Port %1").arg(cd.SerialParams.PortName), QVariant::fromValue(cd));
-            break;
-        }
+    for(auto&& cd : server.connections()) {
+        comboBoxServers_addConnection(cd);
     }
 
     connect(model, &RawDataLogModel::rowsInserted,
@@ -93,6 +83,7 @@ DialogRawDataLog::DialogRawDataLog(const ModbusMultiServer& server, QWidget *par
                 }
             });
 
+    connect(&server, &ModbusMultiServer::connected, this, &DialogRawDataLog::on_connected);
     connect(&server, &ModbusMultiServer::rawDataSended, this, &DialogRawDataLog::on_rawDataSended);
     connect(&server, &ModbusMultiServer::rawDataReceived, this, &DialogRawDataLog::on_rawDataReceived);
 }
@@ -106,6 +97,39 @@ DialogRawDataLog::~DialogRawDataLog()
 }
 
 ///
+/// \brief DialogRawDataLog::on_connected
+/// \param cd
+///
+void DialogRawDataLog::on_connected(const ConnectionDetails& cd)
+{
+    const auto index = ui->comboBoxServers->findData(QVariant::fromValue(cd));
+    if(index == -1) {
+        comboBoxServers_addConnection(cd);
+    }
+}
+
+///
+/// \brief DialogRawDataLog::comboBoxServers_addConnection
+/// \param cd
+///
+void DialogRawDataLog::comboBoxServers_addConnection(const ConnectionDetails& cd)
+{
+    switch(cd.Type)
+    {
+        case ConnectionType::Tcp:
+        {
+            const auto port = QString("%1:%2").arg(cd.TcpParams.IPAddress, QString::number(cd.TcpParams.ServicePort));
+            ui->comboBoxServers->addItem(tr("Modbus/TCP Srv %1").arg(port), QVariant::fromValue(cd));
+        }
+        break;
+
+        case ConnectionType::Serial:
+            ui->comboBoxServers->addItem(tr("Port %1").arg(cd.SerialParams.PortName), QVariant::fromValue(cd));
+            break;
+    }
+}
+
+///
 /// \brief DialogRawDataLog::on_rawDataReceived
 /// \param cd
 /// \param time
@@ -114,7 +138,10 @@ DialogRawDataLog::~DialogRawDataLog()
 void DialogRawDataLog::on_rawDataReceived(const ConnectionDetails& cd, const QDateTime& time, const QByteArray& data)
 {
     if(cd == ui->comboBoxServers->currentData().value<ConnectionDetails>()) {
-        RawData raw { RawData::Tx, time, data };
+        const auto protocol = cd.Type == ConnectionType::Serial ? ModbusMessage::Rtu : ModbusMessage::Tcp;
+        const bool valid = ModbusMessage::create(data, protocol, time, true)->isValid();
+
+        RawData raw { RawData::Tx, time, data, valid };
         ((RawDataLogModel*)ui->listViewLog->model())->append(raw);
     }
 }
@@ -128,7 +155,10 @@ void DialogRawDataLog::on_rawDataReceived(const ConnectionDetails& cd, const QDa
 void DialogRawDataLog::on_rawDataSended(const ConnectionDetails& cd, const QDateTime& time, const QByteArray& data)
 {
     if(cd == ui->comboBoxServers->currentData().value<ConnectionDetails>()) {
-        RawData raw { RawData::Rx, time, data };
+        const auto protocol = cd.Type == ConnectionType::Serial ? ModbusMessage::Rtu : ModbusMessage::Tcp;
+        const bool valid = ModbusMessage::create(data, protocol, time, false)->isValid();
+
+        RawData raw { RawData::Rx, time, data, valid };
         ((RawDataLogModel*)ui->listViewLog->model())->append(raw);
     }
 }
@@ -138,9 +168,51 @@ void DialogRawDataLog::on_rawDataSended(const ConnectionDetails& cd, const QDate
 ///
 void DialogRawDataLog::on_pushButtonPause_clicked()
 {
+    if(logViewState() == LogViewState::Paused) {
+        setLogViewState(LogViewState::Running);
+    }
+    else {
+        setLogViewState(LogViewState::Paused);
+    }
+}
+
+///
+/// \brief DialogRawDataLog::logViewState
+/// \return
+///
+LogViewState DialogRawDataLog::logViewState() const
+{
     auto model = ((RawDataLogModel*)ui->listViewLog->model());
-    model->setBufferingMode(!model->isBufferingMode());
-    ui->pushButtonPause->setText(model->isBufferingMode() ? tr("Resume") : tr("Pause"));
+    if(model->isBufferingMode()) {
+        return LogViewState::Paused;
+    }
+    else {
+        return LogViewState::Running;
+    }
+}
+
+///
+/// \brief DialogRawDataLog::setLogViewState
+/// \param state
+///
+void DialogRawDataLog::setLogViewState(LogViewState state)
+{
+    auto model = ((RawDataLogModel*)ui->listViewLog->model());
+    switch(state)
+    {
+        case LogViewState::Paused:
+            model->setBufferingMode(true);
+            ui->pushButtonPause->setText(tr("Resume"));
+        break;
+
+        case LogViewState::Running:
+            model->setBufferingMode(false);
+            ui->pushButtonPause->setText(tr("Pause"));
+        break;
+
+        default:
+        break;
+    }
 }
 
 ///
@@ -180,6 +252,10 @@ void DialogRawDataLog::on_pushButtonExport_clicked()
 void DialogRawDataLog::on_comboBoxServers_currentIndexChanged(int)
 {
     ((RawDataLogModel*)ui->listViewLog->model())->clear();
+
+    if(logViewState() == LogViewState::Paused) {
+        setLogViewState(LogViewState::Running);
+    }
 }
 
 ///
