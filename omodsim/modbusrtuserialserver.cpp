@@ -180,6 +180,7 @@ ModbusRtuSerialServer::ModbusRtuSerialServer(QObject *parent)
     QObject::connect(_serialPort, &QSerialPort::readyRead, this, &ModbusRtuSerialServer::on_readyRead);
     QObject::connect(_serialPort, &QSerialPort::errorOccurred, this, &ModbusRtuSerialServer::on_errorOccurred);
     QObject::connect(_serialPort, &QSerialPort::aboutToClose, this, &ModbusRtuSerialServer::on_aboutToClose);
+    QObject::connect(this, &ModbusServer::rawDataReceived, this, &ModbusRtuSerialServer::on_rawDataReceived);
 }
 
 ///
@@ -214,8 +215,10 @@ void ModbusRtuSerialServer::on_readyRead()
     const qint64 size = _serialPort->size();
     _requestBuffer += _serialPort->read(size);
 
+    const QDateTime recvTime = QDateTime::currentDateTime();
+    emit rawDataReceived(recvTime, _requestBuffer);
+
     const QModbusSerialAdu adu(QModbusSerialAdu::Rtu, _requestBuffer);
-    qCDebug(QT_MODBUS_LOW) << "(RTU server) Received ADU:" << adu.rawData().toHex();
 
     // Index                         -> description
     // Server address                -> 1 byte
@@ -288,7 +291,7 @@ void ModbusRtuSerialServer::on_readyRead()
 
     qCDebug(QT_MODBUS) << "(RTU server) Request PDU:" << req;
 
-    const auto msgReq = ModbusMessage::create(req, ModbusMessage::Rtu, adu.serverAddress(), 0, QDateTime::currentDateTime(), true);
+    const auto msgReq = ModbusMessage::create(req, ModbusMessage::Rtu, adu.serverAddress(), 0, recvTime, true);
     emit modbusRequest(msgReq);
 
     if(mbDef.ErrorSimulations.noResponse())
@@ -372,7 +375,10 @@ void ModbusRtuSerialServer::on_readyRead()
             return;
         }
 
-        const auto msgResp = ModbusMessage::create(result, ModbusMessage::Rtu, QDateTime::currentDateTime(), false);
+        const QDateTime sndTime = QDateTime::currentDateTime();
+        emit rawDataSended(sndTime, result);
+
+        const auto msgResp = ModbusMessage::create(result, ModbusMessage::Rtu, sndTime, false);
         emit modbusResponse(msgReq, msgResp);
 
         if (response.isException()) {
@@ -425,6 +431,16 @@ void ModbusRtuSerialServer::on_readyRead()
         }
         storeModbusCommEvent(event); // store the final event after processing
     });
+}
+
+///
+/// \brief ModbusRtuSerialServer::on_rawDataReceived
+/// \param time
+/// \param data
+///
+void ModbusRtuSerialServer::on_rawDataReceived(const QDateTime& time, const QByteArray& data)
+{
+    qCDebug(QT_MODBUS_LOW).noquote() << "(RTU server) Received data: 0x" + data.toHex();
 }
 
 ///

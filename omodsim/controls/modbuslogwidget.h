@@ -3,6 +3,7 @@
 
 #include <QQueue>
 #include <QListView>
+#include "bufferinglistmodel.h"
 #include "modbusmessage.h"
 
 class ModbusLogWidget;
@@ -10,40 +11,16 @@ class ModbusLogWidget;
 ///
 /// \brief The ModbusLogModel class
 ///
-class  ModbusLogModel : public QAbstractListModel
+class  ModbusLogModel : public BufferingListModel<QSharedPointer<const ModbusMessage>>
 {
     Q_OBJECT
 
 public:
     explicit ModbusLogModel(ModbusLogWidget* parent);
-    ~ModbusLogModel();
-
-    int rowCount(const QModelIndex& parent = QModelIndex()) const override;
     QVariant data(const QModelIndex& index, int role) const override;
 
-    void clear();
-    void append(QSharedPointer<const ModbusMessage> data);
-    void update(){
-        emit dataChanged(index(0), index(_items.size() - 1));
-    }
-
-    int rowLimit() const;
-    void setRowLimit(int val);
-
-    bool isBufferingMode() const {
-        return _bufferingMode;
-    }
-    void setBufferingMode(bool value);
-
 private:
-    void deleteItems();
-
-private:
-    int _rowLimit = 30;
-    bool _bufferingMode = false;
     ModbusLogWidget* _parentWidget;
-    QQueue<QSharedPointer<const ModbusMessage>> _items;
-    QQueue<QSharedPointer<const ModbusMessage>> _bufferingItems;
 };
 
 ///

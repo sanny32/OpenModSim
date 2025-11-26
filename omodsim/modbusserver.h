@@ -104,6 +104,8 @@ public:
     virtual QIODevice *device() const = 0;
 
 signals:
+    void rawDataReceived(const QDateTime& time, const QByteArray& data);
+    void rawDataSended(const QDateTime& time, const QByteArray& data);
     void modbusRequest(QSharedPointer<const ModbusMessage> msg);
     void modbusResponse(QSharedPointer<const ModbusMessage> msgReq, QSharedPointer<const ModbusMessage> msgResp);
 

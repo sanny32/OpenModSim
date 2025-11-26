@@ -12,8 +12,10 @@ ModbusTcpServer::ModbusTcpServer(QObject *parent)
     : ModbusServer(parent)
 {
     _server = new QTcpServer(this);
+
     QObject::connect(_server, &QTcpServer::newConnection, this, &ModbusTcpServer::on_newConnection);
     QObject::connect(_server, &QTcpServer::acceptError, this, &ModbusTcpServer::on_acceptError);
+    QObject::connect(this, &ModbusServer::rawDataReceived, this, &ModbusTcpServer::on_rawDataReceived);
 }
 
 ///
@@ -102,8 +104,9 @@ void ModbusTcpServer::on_newConnection()
         buffer->append(socket->readAll());
 
         while (!buffer->isEmpty()) {
-            qCDebug(QT_MODBUS_LOW).noquote() << "(TCP server) Read buffer: 0x"
-                                                    + buffer->toHex();
+
+            const QDateTime time = QDateTime::currentDateTime();
+            emit rawDataReceived(time, *buffer);
 
             if (buffer->size() < mbpaHeaderSize) {
                 qCDebug(QT_MODBUS) << "(TCP server) MBPA header too short. Waiting for more data.";
@@ -139,7 +142,7 @@ void ModbusTcpServer::on_newConnection()
 
             qCDebug(QT_MODBUS) << "(TCP server) Request PDU:" << request;
 
-            const auto msgReq = ModbusMessage::create(request, ModbusMessage::Tcp, unitId, transactionId, QDateTime::currentDateTime(), true);
+            const auto msgReq = ModbusMessage::create(request, ModbusMessage::Tcp, unitId, transactionId, time, true);
             emit modbusRequest(msgReq);
 
             if(mbDef.ErrorSimulations.noResponse())
@@ -184,12 +187,25 @@ void ModbusTcpServer::on_newConnection()
                                  QModbusDevice::WriteError);
                 }
                 else {
-                    const auto msgResp = ModbusMessage::create(result, ModbusMessage::Tcp, QDateTime::currentDateTime(), false);
+                    const QDateTime sndTime = QDateTime::currentDateTime();
+                    emit rawDataSended(sndTime, result);
+
+                    const auto msgResp = ModbusMessage::create(result, ModbusMessage::Tcp, sndTime, false);
                     emit modbusResponse(msgReq, msgResp);
                 }
             });
         }
     });
+}
+
+///
+/// \brief ModbusTcpServer::on_rawDataReceived
+/// \param time
+/// \param data
+///
+void ModbusTcpServer::on_rawDataReceived(const QDateTime& time, const QByteArray& data)
+{
+    qCDebug(QT_MODBUS_LOW).noquote() << "(TCP server) Received data: 0x" + data.toHex();
 }
 
 ///
