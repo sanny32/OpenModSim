@@ -24,13 +24,15 @@
 
 ///
 /// \brief MainWindow::MainWindow
+/// \param useSession
 /// \param parent
 ///
-MainWindow::MainWindow(QWidget *parent)
+MainWindow::MainWindow(bool useSession, QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
     ,_lang("en")
     ,_windowCounter(0)
+    ,_useSession(useSession)
     ,_dataSimulator(new DataSimulator(this))
 {
     ui->setupUi(this);
@@ -90,7 +92,9 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->mdiArea, &QMdiArea::subWindowActivated, this, &MainWindow::updateMenuWindow);
     connect(&_mbMultiServer, &ModbusMultiServer::connectionError, this, &MainWindow::on_connectionError);
 
-    loadSettings();
+    if(_useSession) {
+        loadSettings();
+    }
 
     if(_windowCounter == 0)
         ui->actionNew->trigger();
@@ -146,7 +150,9 @@ void MainWindow::changeEvent(QEvent* event)
 ///
 void MainWindow::closeEvent(QCloseEvent *event)
 {
-    saveSettings();
+    if(_useSession) {
+        saveSettings();
+    }
 
     ui->mdiArea->closeAllSubWindows();
     if (ui->mdiArea->currentSubWindow())

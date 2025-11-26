@@ -14,12 +14,15 @@ namespace Ui {
 class MainWindow;
 }
 
+///
+/// \brief The MainWindow class
+///
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
 
 public:
-    explicit MainWindow(QWidget *parent = nullptr);
+    explicit MainWindow(bool useSession, QWidget *parent = nullptr);
     ~MainWindow();
 
     void setLanguage(const QString& lang);
@@ -175,6 +178,7 @@ private:
 
 private:
     int _windowCounter;
+    bool _useSession;
 
     ModbusMultiServer _mbMultiServer;
 

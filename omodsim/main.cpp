@@ -143,7 +143,9 @@ int main(int argc, char *argv[])
         cfg = parser.value(CmdLineParser::_config);
     }
 
-    MainWindow w;
+    const bool noSession = parser.isSet(CmdLineParser::_no_session);
+
+    MainWindow w(!noSession);
     if(!cfg.isEmpty())
     {
         w.loadConfig(cfg, true);
