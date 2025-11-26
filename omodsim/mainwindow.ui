@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="contextMenuPolicy">
-   <enum>Qt::NoContextMenu</enum>
+   <enum>Qt::ContextMenuPolicy::NoContextMenu</enum>
   </property>
   <property name="windowTitle">
    <string>Open ModSim</string>
@@ -62,6 +62,7 @@
     <addaction name="actionNew"/>
     <addaction name="actionOpen"/>
     <addaction name="actionClose"/>
+    <addaction name="actionCloseAll"/>
     <addaction name="actionSave"/>
     <addaction name="actionSaveAs"/>
     <addaction name="separator"/>
@@ -353,6 +354,9 @@
   <action name="actionClose">
    <property name="text">
     <string>Close</string>
+   </property>
+   <property name="shortcut">
+    <string notr="true">Ctrl+W</string>
    </property>
   </action>
   <action name="actionSave">
@@ -1034,7 +1038,7 @@
     <string>ANSI</string>
    </property>
    <property name="menuRole">
-    <enum>QAction::NoRole</enum>
+    <enum>QAction::MenuRole::NoRole</enum>
    </property>
   </action>
   <action name="actionChineseZh">
@@ -1063,6 +1067,17 @@
    </property>
    <property name="text">
     <string>Tabbed View</string>
+   </property>
+  </action>
+  <action name="actionCloseAll">
+   <property name="text">
+    <string notr="true">Close All</string>
+   </property>
+   <property name="toolTip">
+    <string>Close All Windows</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+W</string>
    </property>
   </action>
  </widget>
