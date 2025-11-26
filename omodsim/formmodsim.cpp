@@ -73,6 +73,8 @@ FormModSim::FormModSim(int id, ModbusMultiServer& server, QSharedPointer<DataSim
     connect(_dataSimulator.get(), &DataSimulator::simulationStarted, this, &FormModSim::on_simulationStarted);
     connect(_dataSimulator.get(), &DataSimulator::simulationStopped, this, &FormModSim::on_simulationStopped);
     connect(_dataSimulator.get(), &DataSimulator::dataSimulated, this, &FormModSim::on_dataSimulated);
+
+    ui->frameDataDefinition->installEventFilter(this);
 }
 
 ///
@@ -102,7 +104,7 @@ void FormModSim::changeEvent(QEvent* e)
 /// \brief FormModSim::closeEvent
 /// \param event
 ///
-void FormModSim::closeEvent(QCloseEvent *event)
+void FormModSim::closeEvent(QCloseEvent* event)
 {
     const auto deviceId = ui->lineEditDeviceId->value<quint8>();
     _mbMultiServer.removeDeviceId(deviceId);
@@ -110,6 +112,24 @@ void FormModSim::closeEvent(QCloseEvent *event)
 
     emit closing();
     QWidget::closeEvent(event);
+}
+
+///
+/// \brief FormModSim::eventFilter
+/// \param watched
+/// \param event
+/// \return
+///
+bool FormModSim::eventFilter(QObject* watched, QEvent* event)
+{
+    if (watched == ui->frameDataDefinition && event->type() == QEvent::MouseButtonDblClick) {
+        auto* me = static_cast<QMouseEvent*>(event);
+        if(me->pos().x() > ui->statisticWidget->geometry().right()) {
+            emit doubleClicked();
+            return true;
+        }
+    }
+    return QWidget::eventFilter(watched, event);
 }
 
 ///

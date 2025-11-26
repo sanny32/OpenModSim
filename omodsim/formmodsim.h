@@ -120,7 +120,8 @@ public:
 
 protected:
     void changeEvent(QEvent* event) override;
-    void closeEvent(QCloseEvent *event) override;
+    void closeEvent(QCloseEvent* event) override;
+    bool eventFilter(QObject* watched, QEvent* event) override;
 
 public slots:
     void show();
@@ -136,6 +137,7 @@ signals:
     void displayModeChanged(DisplayMode mode);
     void scriptSettingsChanged(const ScriptSettings&);
     void captureError(const QString& error);
+    void doubleClicked();
 
 private slots:
     void on_lineEditAddress_valueChanged(const QVariant&);
