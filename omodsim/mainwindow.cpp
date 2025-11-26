@@ -355,6 +355,14 @@ void MainWindow::on_actionClose_triggered()
 }
 
 ///
+/// \brief MainWindow::on_actionCloseAll_triggered
+///
+void MainWindow::on_actionCloseAll_triggered()
+{
+    ui->mdiArea->closeAllSubWindows();
+}
+
+///
 /// \brief MainWindow::on_actionSave_triggered
 ///
 void MainWindow::on_actionSave_triggered()
@@ -1380,6 +1388,11 @@ FormModSim* MainWindow::createMdiChild(int id)
     connect(frm, &FormModSim::captureError, this, [this](const QString& error)
     {
         QMessageBox::critical(this, windowTitle(), tr("Capture Error:\r\n%1").arg(error));
+    });
+
+    connect(frm, &FormModSim::doubleClicked, this, [this]()
+    {
+        ui->actionDataDefinition->trigger();
     });
 
     _windowActionList->addWindow(wnd);

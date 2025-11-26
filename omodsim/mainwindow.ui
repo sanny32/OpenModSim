@@ -62,6 +62,7 @@
     <addaction name="actionNew"/>
     <addaction name="actionOpen"/>
     <addaction name="actionClose"/>
+    <addaction name="actionCloseAll"/>
     <addaction name="actionSave"/>
     <addaction name="actionSaveAs"/>
     <addaction name="separator"/>
@@ -354,6 +355,9 @@
   <action name="actionClose">
    <property name="text">
     <string>Close</string>
+   </property>
+   <property name="shortcut">
+    <string notr="true">Ctrl+W</string>
    </property>
   </action>
   <action name="actionSave">
@@ -1066,6 +1070,15 @@
     <string>Tabbed View</string>
    </property>
   </action>
+  <action name="actionCloseAll">
+   <property name="text">
+    <string notr="true">Close All</string>
+   </property>
+   <property name="toolTip">
+    <string>Close All Windows</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+W</string>
   <action name="actionRawDataLog">
    <property name="checkable">
     <bool>true</bool>
