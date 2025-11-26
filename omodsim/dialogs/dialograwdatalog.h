@@ -49,21 +49,28 @@ public:
     LogViewState logViewState() const;
     void setLogViewState(LogViewState state);
 
+protected:
+    void changeEvent(QEvent* event) override;
+
 private slots:
     void on_connected(const ConnectionDetails& cd);
     void on_rawDataReceived(const ConnectionDetails& cd, const QDateTime& time, const QByteArray& data);
     void on_rawDataSended(const ConnectionDetails& cd, const QDateTime& time, const QByteArray& data);
+    void on_customContextMenuRequested(const QPoint &pos);
     void on_comboBoxServers_currentIndexChanged(int index);
     void on_comboBoxRowLimit_currentTextChanged(const QString& text);
     void on_pushButtonPause_clicked();
     void on_pushButtonClear_clicked();
     void on_pushButtonExport_clicked();
 
+
 private:
     void comboBoxServers_addConnection(const ConnectionDetails& cd);
 
 private:
     Ui::DialogRawDataLog *ui;
+    QAction* _copyAct;
+    QAction* _copyBytesAct;
 };
 
 #endif // DIALOGRAWDATALOG_H
