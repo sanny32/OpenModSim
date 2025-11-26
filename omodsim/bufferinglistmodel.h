@@ -1,6 +1,7 @@
 #ifndef BUFFERINGLISTMODEL_H
 #define BUFFERINGLISTMODEL_H
 
+#include <QFile>
 #include <QQueue>
 #include <QAbstractListModel>
 
@@ -118,6 +119,27 @@ public:
             _bufferingItems.clear();
             update();
         }
+    }
+
+    ///
+    /// \brief exportToTextFile
+    /// \param filePath
+    /// \param formatter
+    /// \return
+    ///
+    bool exportToTextFile(const QString& filePath, std::function<QString(const T&)> formatter)
+    {
+        QFile file(filePath);
+        if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
+            return false;
+
+        QTextStream out(&file);
+
+        for (int i = 0; i < rowCount(); ++i) {
+            out << formatter(itemAt(i)) << "\n";
+        }
+
+        return true;
     }
 
 private:

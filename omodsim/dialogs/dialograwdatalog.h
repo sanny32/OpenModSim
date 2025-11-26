@@ -20,6 +20,7 @@ struct RawData {
     QDateTime Time;
     QByteArray Data;
 };
+Q_DECLARE_METATYPE(RawData)
 
 ///
 /// \brief The RawDataLogModel class
@@ -47,8 +48,11 @@ public:
 private slots:
     void on_rawDataReceived(const ConnectionDetails& cd, const QDateTime& time, const QByteArray& data);
     void on_rawDataSended(const ConnectionDetails& cd, const QDateTime& time, const QByteArray& data);
+    void on_comboBoxServers_currentIndexChanged(int index);
+    void on_comboBoxRowLimit_currentTextChanged(const QString& text);
     void on_pushButtonPause_clicked();
     void on_pushButtonClear_clicked();
+    void on_pushButtonExport_clicked();
 
 private:
     Ui::DialogRawDataLog *ui;

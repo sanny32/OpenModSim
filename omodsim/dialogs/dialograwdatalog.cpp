@@ -1,3 +1,5 @@
+#include <QFileDialog>
+#include <QMessageBox>
 #include "fontutils.h"
 #include "htmldelegate.h"
 #include "dialograwdatalog.h"
@@ -54,9 +56,18 @@ DialogRawDataLog::DialogRawDataLog(const ModbusMultiServer& server, QWidget *par
 {
     ui->setupUi(this);
 
+    setWindowFlags(
+        Qt::Window
+        | Qt::WindowMinimizeButtonHint
+        | Qt::WindowMaximizeButtonHint
+        | Qt::WindowCloseButtonHint
+    );
+
+    auto model = new RawDataLogModel(this);
     ui->listViewLog->setFont(defaultMonospaceFont());
-    ui->listViewLog->setModel(new RawDataLogModel(this));
+    ui->listViewLog->setModel(model);
     ui->listViewLog->setItemDelegate(new HtmlDelegate(this));
+    ui->comboBoxRowLimit->setCurrentText(QString::number(model->rowLimit()));
 
     for(auto&& cd : server.connections())
     {
@@ -74,6 +85,13 @@ DialogRawDataLog::DialogRawDataLog(const ModbusMultiServer& server, QWidget *par
             break;
         }
     }
+
+    connect(model, &RawDataLogModel::rowsInserted,
+            this, [this]{
+                if(ui->checkBoxAutoScroll->isChecked()) {
+                    ui->listViewLog->scrollToBottom();
+                }
+            });
 
     connect(&server, &ModbusMultiServer::rawDataSended, this, &DialogRawDataLog::on_rawDataSended);
     connect(&server, &ModbusMultiServer::rawDataReceived, this, &DialogRawDataLog::on_rawDataReceived);
@@ -131,4 +149,52 @@ void DialogRawDataLog::on_pushButtonPause_clicked()
 void DialogRawDataLog::on_pushButtonClear_clicked()
 {
     ((RawDataLogModel*)ui->listViewLog->model())->clear();
+}
+
+///
+/// \brief DialogRawDataLog::on_pushButtonExport_clicked
+///
+void DialogRawDataLog::on_pushButtonExport_clicked()
+{
+    const auto filename = QFileDialog::getSaveFileName(this, QString(), QString(), "Text files (*.txt)");
+    if(!filename.isEmpty()) {
+        const bool result = ((RawDataLogModel*)ui->listViewLog->model())->exportToTextFile(filename, [](const RawData& r){
+            return QString("%1 %2 %3").arg(
+                    r.Time.toString(Qt::ISODateWithMs),
+                    r.Direction == RawData::Tx ? "[Tx]" : "[Rx]",
+                    r.Data.toHex(' ').toUpper()
+                    );
+        });
+        if(result) {
+            QMessageBox::information(this, windowTitle(), tr("Log exported successfully to file %1").arg(filename));
+        }
+        else {
+            QMessageBox::critical(this, windowTitle(), tr("Export log error!"));
+        }
+    }
+}
+
+///
+/// \brief DialogRawDataLog::on_comboBoxServers_currentIndexChanged
+///
+void DialogRawDataLog::on_comboBoxServers_currentIndexChanged(int)
+{
+    ((RawDataLogModel*)ui->listViewLog->model())->clear();
+}
+
+///
+/// \brief DialogRawDataLog::on_comboBoxRowLimit_currentTextChanged
+/// \param text
+///
+void DialogRawDataLog::on_comboBoxRowLimit_currentTextChanged(const QString& text)
+{
+    auto model = ((RawDataLogModel*)ui->listViewLog->model());
+
+    bool ok;
+    const int limit = text.toInt(&ok);
+    if(ok) {
+        model->setRowLimit(qBound(10, limit, 10000));
+    }
+
+    ui->comboBoxRowLimit->setCurrentText(QString::number(model->rowLimit()));
 }

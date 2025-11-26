@@ -966,6 +966,12 @@
    <property name="shortcut">
     <string notr="true">F9</string>
    </property>
+   <property name="shortcutContext">
+    <enum>Qt::ShortcutContext::ApplicationShortcut</enum>
+   </property>
+   <property name="autoRepeat">
+    <bool>false</bool>
+   </property>
   </action>
   <action name="actionInt64">
    <property name="checkable">
@@ -1078,7 +1084,9 @@
     <string>Close All Windows</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+Shift+W</string>
+    <string notr="true">Ctrl+Shift+W</string>
+   </property>
+  </action>
   <action name="actionRawDataLog">
    <property name="checkable">
     <bool>true</bool>
@@ -1088,6 +1096,12 @@
    </property>
    <property name="shortcut">
     <string>F6</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ShortcutContext::ApplicationShortcut</enum>
+   </property>
+   <property name="autoRepeat">
+    <bool>false</bool>
    </property>
   </action>
  </widget>
