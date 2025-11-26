@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.16)
 
 project(omodsim
-        VERSION 1.11.0
+        VERSION 1.11.1
         DESCRIPTION "An Open Source Modbus Slave (Server) Utility"
         LANGUAGES CXX)
 
