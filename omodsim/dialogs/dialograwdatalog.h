@@ -63,8 +63,8 @@ private slots:
     void on_pushButtonClear_clicked();
     void on_pushButtonExport_clicked();
 
-
 private:
+    void createCopyActions();
     void comboBoxServers_addConnection(const ConnectionDetails& cd);
 
 private:

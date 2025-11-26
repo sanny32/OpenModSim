@@ -78,6 +78,8 @@ DialogRawDataLog::DialogRawDataLog(const ModbusMultiServer& server, QWidget *par
         comboBoxServers_addConnection(cd);
     }
 
+    createCopyActions();
+
     connect(model, &RawDataLogModel::rowsInserted,
             this, [this]{
                 if(ui->checkBoxAutoScroll->isChecked()) {
@@ -85,45 +87,10 @@ DialogRawDataLog::DialogRawDataLog(const ModbusMultiServer& server, QWidget *par
                 }
             });
 
-    QIcon copyIcon = QIcon::fromTheme("edit-copy");
-    if (copyIcon.isNull()) {
-        copyIcon = style()->standardIcon(QStyle::SP_FileIcon);
-    }
-
-    _copyAct = new QAction(copyIcon, tr("Copy Text"), this);
-    _copyAct->setShortcut(QKeySequence::Copy);
-    _copyAct->setShortcutContext(Qt::WidgetShortcut);
-    _copyAct->setShortcutVisibleInContextMenu(true);
-    addAction(_copyAct);
-
-    connect(_copyAct, &QAction::triggered, this, [this]() {
-        const auto index = ui->listViewLog->currentIndex();
-        if (index.isValid()) {
-            QTextDocument doc;
-            doc.setHtml(index.data(Qt::DisplayRole).toString());
-            QApplication::clipboard()->setText(doc.toPlainText());
-        }
-    });
-
-    _copyBytesAct = new QAction(tr("Copy Bytes"), this);
-    _copyBytesAct->setShortcut(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_C));
-    _copyBytesAct->setShortcutContext(Qt::WidgetShortcut);
-    _copyBytesAct->setShortcutVisibleInContextMenu(true);
-    addAction(_copyBytesAct);
-
-    connect(_copyBytesAct, &QAction::triggered, this, [this]() {
-        const auto index = ui->listViewLog->currentIndex();
-        if (index.isValid()) {
-            const auto r = index.data(Qt::UserRole).value<RawData>();
-            QApplication::clipboard()->setText(r.Data.toHex(' ').toUpper());
-        }
-    });
-
-    connect(ui->listViewLog, &QListView::customContextMenuRequested, this, &DialogRawDataLog::on_customContextMenuRequested);
-
     connect(&server, &ModbusMultiServer::connected, this, &DialogRawDataLog::on_connected);
     connect(&server, &ModbusMultiServer::rawDataSended, this, &DialogRawDataLog::on_rawDataSended);
     connect(&server, &ModbusMultiServer::rawDataReceived, this, &DialogRawDataLog::on_rawDataReceived);
+    connect(ui->listViewLog, &QListView::customContextMenuRequested, this, &DialogRawDataLog::on_customContextMenuRequested);
 }
 
 ///
@@ -146,6 +113,46 @@ void DialogRawDataLog::changeEvent(QEvent* event)
         _copyBytesAct->setText(tr("Copy Bytes"));
     }
     QDialog::changeEvent(event);
+}
+
+///
+/// \brief DialogRawDataLog::createCopyActions
+///
+void DialogRawDataLog::createCopyActions()
+{
+    QIcon copyIcon = QIcon::fromTheme("edit-copy");
+    if (copyIcon.isNull()) {
+        copyIcon = style()->standardIcon(QStyle::SP_FileIcon);
+    }
+
+    _copyAct = new QAction(copyIcon, tr("Copy Text"), this);
+    _copyAct->setShortcut(QKeySequence::Copy);
+    _copyAct->setShortcutContext(Qt::WidgetShortcut);
+    _copyAct->setShortcutVisibleInContextMenu(true);
+    ui->listViewLog->addAction(_copyAct);
+
+    connect(_copyAct, &QAction::triggered, this, [this]() {
+        const auto index = ui->listViewLog->currentIndex();
+        if (index.isValid()) {
+            QTextDocument doc;
+            doc.setHtml(index.data(Qt::DisplayRole).toString());
+            QApplication::clipboard()->setText(doc.toPlainText());
+        }
+    });
+
+    _copyBytesAct = new QAction(tr("Copy Bytes"), this);
+    _copyBytesAct->setShortcut(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_C));
+    _copyBytesAct->setShortcutContext(Qt::WidgetShortcut);
+    _copyBytesAct->setShortcutVisibleInContextMenu(true);
+    ui->listViewLog->addAction(_copyBytesAct);
+
+    connect(_copyBytesAct, &QAction::triggered, this, [this]() {
+        const auto index = ui->listViewLog->currentIndex();
+        if (index.isValid()) {
+            const auto r = index.data(Qt::UserRole).value<RawData>();
+            QApplication::clipboard()->setText(r.Data.toHex(' ').toUpper());
+        }
+    });
 }
 
 ///
