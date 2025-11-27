@@ -159,6 +159,11 @@
         <source>file path</source>
         <translation>файл</translation>
     </message>
+    <message>
+        <location filename="../cmdlineparser.cpp" line="18"/>
+        <source>Do not use program session.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ConsoleOutput</name>
@@ -823,64 +828,86 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/dialograwdatalog.ui" line="39"/>
-        <location filename="../dialogs/dialograwdatalog.cpp" line="134"/>
+        <location filename="../dialogs/dialograwdatalog.ui" line="42"/>
+        <location filename="../dialogs/dialograwdatalog.cpp" line="283"/>
         <source>Pause</source>
         <translation type="unfinished">Пауза</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialograwdatalog.ui" line="53"/>
-        <source>Log Row Limit: </source>
+        <location filename="../dialogs/dialograwdatalog.ui" line="56"/>
+        <source>Log View Limit: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/dialograwdatalog.ui" line="64"/>
+        <location filename="../dialogs/dialograwdatalog.ui" line="67"/>
         <source>10</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/dialograwdatalog.ui" line="69"/>
+        <location filename="../dialogs/dialograwdatalog.ui" line="72"/>
         <source>20</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/dialograwdatalog.ui" line="74"/>
+        <location filename="../dialogs/dialograwdatalog.ui" line="77"/>
         <source>50</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/dialograwdatalog.ui" line="79"/>
+        <location filename="../dialogs/dialograwdatalog.ui" line="82"/>
         <source>100</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/dialograwdatalog.ui" line="94"/>
+        <location filename="../dialogs/dialograwdatalog.ui" line="97"/>
         <source>Autoscroll</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/dialograwdatalog.ui" line="117"/>
+        <location filename="../dialogs/dialograwdatalog.ui" line="120"/>
         <source>Clear</source>
         <translation type="unfinished">Очистить</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialograwdatalog.ui" line="124"/>
+        <location filename="../dialogs/dialograwdatalog.ui" line="127"/>
         <source>Export Log</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/dialograwdatalog.cpp" line="70"/>
+        <location filename="../dialogs/dialograwdatalog.cpp" line="114"/>
+        <location filename="../dialogs/dialograwdatalog.cpp" line="130"/>
+        <source>Copy Text</source>
+        <translation type="unfinished">Копировать текст</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialograwdatalog.cpp" line="115"/>
+        <location filename="../dialogs/dialograwdatalog.cpp" line="145"/>
+        <source>Copy Bytes</source>
+        <translation type="unfinished">Копировать байты</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialograwdatalog.cpp" line="195"/>
         <source>Modbus/TCP Srv %1</source>
         <translation type="unfinished">Modbus/TCP сервер %1</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialograwdatalog.cpp" line="75"/>
+        <location filename="../dialogs/dialograwdatalog.cpp" line="200"/>
         <source>Port %1</source>
         <translation type="unfinished">Порт %1</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialograwdatalog.cpp" line="134"/>
+        <location filename="../dialogs/dialograwdatalog.cpp" line="278"/>
         <source>Resume</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialograwdatalog.cpp" line="314"/>
+        <source>Log exported successfully to file %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialograwdatalog.cpp" line="317"/>
+        <source>Export log error!</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1489,59 +1516,54 @@ Script.onInit(()=&gt;{
         <translation>Перевернутое беззнаковое 32-бит целое</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="979"/>
+        <location filename="../mainwindow.ui" line="985"/>
         <source>64-bit Integer</source>
         <translation>64-бит целое</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="994"/>
+        <location filename="../mainwindow.ui" line="1000"/>
         <source>Swapped 64-bit Integer</source>
         <translation>Перевернутое 64-бит целое</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1009"/>
+        <location filename="../mainwindow.ui" line="1015"/>
         <source>Unsigned 64-bit Integer</source>
         <translation>Беззнаковое 64-бит целое</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1024"/>
+        <location filename="../mainwindow.ui" line="1030"/>
         <source>Swapped Unsigned 64-bit Integer</source>
         <translation>Перевернутое беззнаковое 64-бит целое</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1039"/>
+        <location filename="../mainwindow.ui" line="1045"/>
         <source>ANSI</source>
         <translation>ANSI</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1059"/>
-        <location filename="../mainwindow.ui" line="1062"/>
+        <location filename="../mainwindow.ui" line="1065"/>
+        <location filename="../mainwindow.ui" line="1068"/>
         <source>Modbus Definitions</source>
         <translation>Настройки MODBUS</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1070"/>
+        <location filename="../mainwindow.ui" line="1076"/>
         <source>Tabbed View</source>
         <translation>Вид с вкладками</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1078"/>
+        <location filename="../mainwindow.ui" line="1084"/>
         <source>Close All Windows</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1081"/>
-        <source>Ctrl+Shift+W</source>
+        <location filename="../mainwindow.ui" line="1098"/>
+        <source>F10</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1089"/>
+        <location filename="../mainwindow.ui" line="1095"/>
         <source>Raw Data Log</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.ui" line="1092"/>
-        <source>F6</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1857,25 +1879,25 @@ Script.onInit(()=&gt;{
         <translation>Шестнадцатиричные адреса</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="337"/>
-        <location filename="../mainwindow.cpp" line="409"/>
-        <location filename="../mainwindow.cpp" line="419"/>
-        <location filename="../mainwindow.cpp" line="450"/>
-        <location filename="../mainwindow.cpp" line="476"/>
+        <location filename="../mainwindow.cpp" line="346"/>
+        <location filename="../mainwindow.cpp" line="418"/>
+        <location filename="../mainwindow.cpp" line="428"/>
+        <location filename="../mainwindow.cpp" line="459"/>
+        <location filename="../mainwindow.cpp" line="485"/>
         <source>All files (*)</source>
         <translation>Все файлы (*)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="336"/>
-        <location filename="../mainwindow.cpp" line="413"/>
-        <location filename="../mainwindow.cpp" line="418"/>
-        <location filename="../mainwindow.cpp" line="449"/>
-        <location filename="../mainwindow.cpp" line="475"/>
+        <location filename="../mainwindow.cpp" line="345"/>
+        <location filename="../mainwindow.cpp" line="422"/>
+        <location filename="../mainwindow.cpp" line="427"/>
+        <location filename="../mainwindow.cpp" line="458"/>
+        <location filename="../mainwindow.cpp" line="484"/>
         <source>XML files (*.xml)</source>
         <translation>XML файлы (*.xml)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1390"/>
+        <location filename="../mainwindow.cpp" line="1413"/>
         <source>Capture Error:<byte value="xd"/>
 %1</source>
         <translation>Ошибка захвата:
@@ -1913,14 +1935,14 @@ Script.onInit(()=&gt;{
 <context>
     <name>ModbusLogWidget</name>
     <message>
-        <location filename="../controls/modbuslogwidget.cpp" line="73"/>
-        <location filename="../controls/modbuslogwidget.cpp" line="119"/>
+        <location filename="../controls/modbuslogwidget.cpp" line="74"/>
+        <location filename="../controls/modbuslogwidget.cpp" line="120"/>
         <source>Copy Text</source>
         <translation>Копировать текст</translation>
     </message>
     <message>
-        <location filename="../controls/modbuslogwidget.cpp" line="88"/>
-        <location filename="../controls/modbuslogwidget.cpp" line="120"/>
+        <location filename="../controls/modbuslogwidget.cpp" line="89"/>
+        <location filename="../controls/modbuslogwidget.cpp" line="121"/>
         <source>Copy Bytes</source>
         <translation>Копировать байты</translation>
     </message>
