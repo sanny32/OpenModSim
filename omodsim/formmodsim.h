@@ -525,6 +525,10 @@ inline QXmlStreamWriter& operator <<(QXmlStreamWriter& xml, FormModSim* frm)
     xml.writeAttribute("Maximized", boolToString(wnd->isMaximized()));
     xml.writeAttribute("Minimized", boolToString(wnd->isMinimized()));
 
+    const auto windowPos = wnd->pos();
+    xml.writeAttribute("Left", QString::number(windowPos.x()));
+    xml.writeAttribute("Top", QString::number(windowPos.y()));
+
     const auto windowSize = (wnd->isMinimized() || wnd->isMaximized()) ? wnd->sizeHint() : wnd->size();
     xml.writeAttribute("Width", QString::number(windowSize.width()));
     xml.writeAttribute("Height", QString::number(windowSize.height()));
@@ -662,6 +666,15 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, FormModSim* frm)
 
                 const auto wnd = frm->parentWidget();
                 if (wnd) {
+                    if(windowAttrs.hasAttribute("Left") && windowAttrs.hasAttribute("Top")) {
+                        bool okLeft, okTop;
+                        const int left = windowAttrs.value("Left").toInt(&okLeft);
+                        const int top = windowAttrs.value("Top").toInt(&okTop);
+                        if(okLeft && okTop) {
+                            wnd->move(left, top);
+                        }
+                    }
+
                     if (windowAttrs.hasAttribute("Width") && windowAttrs.hasAttribute("Height")) {
                         bool okWidth, okHeight;
                         const int width = windowAttrs.value("Width").toInt(&okWidth);
@@ -681,6 +694,8 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, FormModSim* frm)
                         const bool minimized = stringToBool(windowAttrs.value("Minimized").toString());
                         if (minimized) wnd->showMinimized();
                     }
+
+
                 }
                 xml.skipCurrentElement();
             }
