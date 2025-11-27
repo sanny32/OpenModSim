@@ -1,7 +1,6 @@
 #ifndef MODBUSSIMULATIONPARAMS_H
 #define MODBUSSIMULATIONPARAMS_H
 
-#include <QDebug>
 #include <QDataStream>
 #include <QXmlStreamWriter>
 #include "qrange.h"
