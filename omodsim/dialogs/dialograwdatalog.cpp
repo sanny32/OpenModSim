@@ -2,6 +2,7 @@
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QClipboard>
+#include <QTextDocument>
 #include "fontutils.h"
 #include "htmldelegate.h"
 #include "modbusmessage.h"
