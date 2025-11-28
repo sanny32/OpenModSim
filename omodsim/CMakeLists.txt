@@ -383,7 +383,7 @@ if(LINUX)
     install(FILES res/omodsim32.png DESTINATION share/icons/hicolor/32x32/apps RENAME omodsim.png)
     install(FILES res/omodsim64.png DESTINATION share/icons/hicolor/64x64/apps RENAME omodsim.png)
     install(FILES res/omodsim128.png DESTINATION share/icons/hicolor/128x128/apps RENAME omodsim.png)
-    install(FILES "${CMAKE_CURRENT_BINARY_DIR}/omodscan.desktop" DESTINATION share/applications)
+    install(FILES "${CMAKE_CURRENT_BINARY_DIR}/omodsim.desktop" DESTINATION share/applications)
 
     install(CODE "execute_process(COMMAND update-desktop-database -q ${CMAKE_INSTALL_PREFIX}/share/applications)")
     install(CODE "execute_process(COMMAND gtk-update-icon-cache -q -t -f ${CMAKE_INSTALL_PREFIX}/share/icons/hicolor)")
