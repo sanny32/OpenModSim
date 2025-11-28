@@ -96,8 +96,9 @@ MainWindow::MainWindow(bool useSession, QWidget *parent)
         loadSettings();
     }
 
-    if(_windowCounter == 0)
+    if(_windowCounter == 0) {
         ui->actionNew->trigger();
+    }
 }
 
 ///
@@ -125,8 +126,9 @@ void MainWindow::setLanguage(const QString& lang)
         _lang = lang;
         qApp->installTranslator(&_appTranslator);
 
-        if(_qtTranslator.load(QString("%1/translations/qt_%2").arg(qApp->applicationDirPath(), lang)))
+        if(_qtTranslator.load(QString("%1/translations/qt_%2").arg(qApp->applicationDirPath(), lang))) {
             qApp->installTranslator(&_qtTranslator);
+        }
     }
 }
 
@@ -624,8 +626,9 @@ void MainWindow::on_actionDataDefinition_triggered()
     if(!frm) return;
 
     DialogDisplayDefinition dlg(frm->displayDefinition(), this);
-    if(dlg.exec() == QDialog::Accepted)
+    if(dlg.exec() == QDialog::Accepted) {
             frm->setDisplayDefinition(dlg.displayDefinition());
+    }
 }
 
 ///
