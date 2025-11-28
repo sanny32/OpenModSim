@@ -162,7 +162,7 @@
     <message>
         <location filename="../cmdlineparser.cpp" line="18"/>
         <source>Do not use program session.</source>
-        <translation type="unfinished"></translation>
+        <translation>Не использовать сессии приложения.</translation>
     </message>
 </context>
 <context>
@@ -820,95 +820,75 @@
     <message>
         <location filename="../dialogs/dialograwdatalog.ui" line="14"/>
         <source>Raw Data Log Dialog</source>
-        <translation type="unfinished"></translation>
+        <translation>Лог необработанных данных</translation>
     </message>
     <message>
         <location filename="../dialogs/dialograwdatalog.ui" line="22"/>
         <source>Connection:</source>
-        <translation type="unfinished"></translation>
+        <translation>Соединение:</translation>
     </message>
     <message>
         <location filename="../dialogs/dialograwdatalog.ui" line="42"/>
         <location filename="../dialogs/dialograwdatalog.cpp" line="283"/>
         <source>Pause</source>
-        <translation type="unfinished">Пауза</translation>
+        <translation>Пауза</translation>
     </message>
     <message>
         <location filename="../dialogs/dialograwdatalog.ui" line="56"/>
         <source>Log View Limit: </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../dialogs/dialograwdatalog.ui" line="67"/>
-        <source>10</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../dialogs/dialograwdatalog.ui" line="72"/>
-        <source>20</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../dialogs/dialograwdatalog.ui" line="77"/>
-        <source>50</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../dialogs/dialograwdatalog.ui" line="82"/>
-        <source>100</source>
-        <translation type="unfinished"></translation>
+        <translation>Лимит лога: </translation>
     </message>
     <message>
         <location filename="../dialogs/dialograwdatalog.ui" line="97"/>
         <source>Autoscroll</source>
-        <translation type="unfinished"></translation>
+        <translation>Автопрокрутка</translation>
     </message>
     <message>
         <location filename="../dialogs/dialograwdatalog.ui" line="120"/>
         <source>Clear</source>
-        <translation type="unfinished">Очистить</translation>
+        <translation>Очистить</translation>
     </message>
     <message>
         <location filename="../dialogs/dialograwdatalog.ui" line="127"/>
         <source>Export Log</source>
-        <translation type="unfinished"></translation>
+        <translation>Экспорт</translation>
     </message>
     <message>
         <location filename="../dialogs/dialograwdatalog.cpp" line="114"/>
         <location filename="../dialogs/dialograwdatalog.cpp" line="130"/>
         <source>Copy Text</source>
-        <translation type="unfinished">Копировать текст</translation>
+        <translation>Копировать текст</translation>
     </message>
     <message>
         <location filename="../dialogs/dialograwdatalog.cpp" line="115"/>
         <location filename="../dialogs/dialograwdatalog.cpp" line="145"/>
         <source>Copy Bytes</source>
-        <translation type="unfinished">Копировать байты</translation>
+        <translation>Копировать байты</translation>
     </message>
     <message>
         <location filename="../dialogs/dialograwdatalog.cpp" line="195"/>
         <source>Modbus/TCP Srv %1</source>
-        <translation type="unfinished">Modbus/TCP сервер %1</translation>
+        <translation>Modbus/TCP сервер %1</translation>
     </message>
     <message>
         <location filename="../dialogs/dialograwdatalog.cpp" line="200"/>
         <source>Port %1</source>
-        <translation type="unfinished">Порт %1</translation>
+        <translation>Порт %1</translation>
     </message>
     <message>
         <location filename="../dialogs/dialograwdatalog.cpp" line="278"/>
         <source>Resume</source>
-        <translation type="unfinished"></translation>
+        <translation>Возобновить</translation>
     </message>
     <message>
         <location filename="../dialogs/dialograwdatalog.cpp" line="314"/>
         <source>Log exported successfully to file %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Лог успешно экспортирован в файл %1</translation>
     </message>
     <message>
         <location filename="../dialogs/dialograwdatalog.cpp" line="317"/>
         <source>Export log error!</source>
-        <translation type="unfinished"></translation>
+        <translation>Ошибка экспорта лога!</translation>
     </message>
 </context>
 <context>
@@ -1554,17 +1534,12 @@ Script.onInit(()=&gt;{
     <message>
         <location filename="../mainwindow.ui" line="1084"/>
         <source>Close All Windows</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.ui" line="1098"/>
-        <source>F10</source>
-        <translation type="unfinished"></translation>
+        <translation>Закрыть все окна</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="1095"/>
         <source>Raw Data Log</source>
-        <translation type="unfinished"></translation>
+        <translation>Необработанные данные</translation>
     </message>
     <message>
         <source>Long Integer</source>

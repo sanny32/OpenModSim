@@ -1095,7 +1095,7 @@
     <string>Raw Data Log</string>
    </property>
    <property name="shortcut">
-    <string>F10</string>
+    <string notr="true">F10</string>
    </property>
    <property name="shortcutContext">
     <enum>Qt::ShortcutContext::ApplicationShortcut</enum>
