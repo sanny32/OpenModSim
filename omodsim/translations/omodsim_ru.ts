@@ -747,7 +747,7 @@
     <message>
         <location filename="../dialogs/dialogprintsettings.cpp" line="153"/>
         <source>Only One</source>
-        <translation type="unfinished"></translation>
+        <translation>Одиночная подача</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogprintsettings.cpp" line="157"/>
@@ -772,7 +772,7 @@
     <message>
         <location filename="../dialogs/dialogprintsettings.cpp" line="173"/>
         <source>Envelope Manual</source>
-        <translation type="unfinished"></translation>
+        <translation>Ручная подача конверта</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogprintsettings.cpp" line="177"/>
@@ -797,7 +797,7 @@
     <message>
         <location filename="../dialogs/dialogprintsettings.cpp" line="193"/>
         <source>Large Capacity</source>
-        <translation type="unfinished"></translation>
+        <translation>Лоток большой ёмкости</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogprintsettings.cpp" line="197"/>
@@ -806,11 +806,6 @@
     </message>
     <message>
         <location filename="../dialogs/dialogprintsettings.cpp" line="201"/>
-        <source>Max Page Source</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../dialogs/dialogprintsettings.cpp" line="205"/>
         <source>Custom Source</source>
         <translation>Пользовательский</translation>
     </message>
@@ -825,7 +820,7 @@
     <message>
         <location filename="../dialogs/dialograwdatalog.ui" line="22"/>
         <source>Connection:</source>
-        <translation>Соединение:</translation>
+        <translation>Подключение:</translation>
     </message>
     <message>
         <location filename="../dialogs/dialograwdatalog.ui" line="42"/>
