@@ -12,7 +12,10 @@ on:
       tag:
         description: 'Checkout tag'
         required: false
-      
+
+permissions:
+  contents: write
+        
 env:
   QT_VERSION: 6.9.3
   QT_ARCH: win64_msvc2022_64
