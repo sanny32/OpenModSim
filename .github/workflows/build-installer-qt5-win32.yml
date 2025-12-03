@@ -15,7 +15,7 @@ on:
 
 permissions:
   contents: write
-  
+
 env:
   QT_VERSION: 5.15.2
   QT_ARCH: win32_msvc2019
@@ -134,7 +134,7 @@ jobs:
         with:
           draft: true
           tag_name: ${{ github.ref_name }}
-          name: Release ${{ github.ref_name }}
+          name: Open ModSim ${{ env.APP_VERSION }}
           files: |
             qt5-omodsim-${{ env.APP_VERSION }}_${{ env.ARCH }}.exe
         env:

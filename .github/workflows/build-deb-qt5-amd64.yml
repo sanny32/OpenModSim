@@ -211,7 +211,7 @@ jobs:
         with:
           draft: true
           tag_name: ${{ github.ref_name }}
-          name: Release ${{ github.ref_name }}
+          name: Open ModSim ${{ env.APP_VERSION }}
           files: |
             ${{ env.BUILD_DEB_DIR }}/${{ env.DEB_PACKAGE_NAME }}_${{ env.APP_VERSION }}-${{ env.DEB_REVISION }}_${{ env.DEB_ARCH }}.deb
         env:

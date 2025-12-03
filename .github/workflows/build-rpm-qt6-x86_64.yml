@@ -242,7 +242,7 @@ jobs:
         with:
           draft: true
           tag_name: ${{ github.ref_name }}
-          name: Release ${{ github.ref_name }}
+          name: Open ModSim ${{ env.APP_VERSION }}
           files: |
             ${{ env.BUILD_RPM_DIR }}/RPMS/${{ env.RPM_ARCH }}/${{ env.RPM_PACKAGE_NAME }}-${{ env.APP_VERSION }}-${{ env.RPM_REVISION }}.${{ env.RPM_ARCH }}.rpm
             ${{ env.RPM_PACKAGE_NAME }}.rpm.pubkey
