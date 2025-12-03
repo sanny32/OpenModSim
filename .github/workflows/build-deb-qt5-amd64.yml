@@ -201,3 +201,16 @@ jobs:
         with:
           name: ${{ env.DEB_PACKAGE_NAME }}_${{ env.APP_VERSION }}-${{ env.DEB_REVISION }}_${{ env.DEB_ARCH }}
           path: ${{ env.BUILD_DEB_DIR }}/${{ env.DEB_PACKAGE_NAME }}_${{ env.APP_VERSION }}-${{ env.DEB_REVISION }}_${{ env.DEB_ARCH }}.deb
+
+      - name: Create or update GitHub Release and upload DEB
+        if: success() && github.event_name == 'push' && github.ref_type == 'tag'
+        uses: softprops/action-gh-release@v2
+        with:
+          draft: true
+          tag_name: ${{ github.ref_name }}
+          name: Release ${{ github.ref_name }}
+          files: |
+            ${{ env.BUILD_DEB_DIR }}/${{ env.DEB_PACKAGE_NAME }}_${{ env.APP_VERSION }}-${{ env.DEB_REVISION }}_${{ env.DEB_ARCH }}.deb
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+

@@ -232,3 +232,17 @@ jobs:
         with:
           name: ${{ env.RPM_PACKAGE_NAME }}.rpm.pubkey
           path: ${{ env.RPM_PACKAGE_NAME }}.rpm.pubkey
+
+      - name: Create or update GitHub Release and upload RPM
+        if: success() && github.event_name == 'push' && github.ref_type == 'tag'
+        uses: softprops/action-gh-release@v2
+        with:
+          draft: true
+          tag_name: ${{ github.ref_name }}
+          name: Release ${{ github.ref_name }}
+          files: |
+            ${{ env.BUILD_RPM_DIR }}/RPMS/${{ env.RPM_ARCH }}/${{ env.RPM_PACKAGE_NAME }}-${{ env.APP_VERSION }}-${{ env.RPM_REVISION }}.${{ env.RPM_ARCH }}.rpm
+            ${{ env.RPM_PACKAGE_NAME }}.rpm.pubkey
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      

@@ -119,3 +119,15 @@ jobs:
         with:
           name: qt6-omodsim-${{ env.APP_VERSION }}_${{ env.CMAKE_ARCH }}
           path: qt6-omodsim-${{ env.APP_VERSION }}_${{ env.CMAKE_ARCH }}.exe
+
+      - name: Create or update GitHub Release and upload EXE
+        if: success() && github.event_name == 'push' && github.ref_type == 'tag'
+        uses: softprops/action-gh-release@v2
+        with:
+          draft: true
+          tag_name: ${{ github.ref_name }}
+          name: Release ${{ github.ref_name }}
+          files: |
+            qt6-omodsim-${{ env.APP_VERSION }}_${{ env.CMAKE_ARCH }}.exe
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
