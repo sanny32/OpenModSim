@@ -21,10 +21,10 @@ jobs:
     name: Build OpenModSim rpm package version '${{ github.event.inputs.tag || github.event.inputs.branch || github.ref_name }}' with Qt6
     runs-on: ubuntu-latest
     container:
-      image: ubuntu:22.04
+      image: ubuntu:20.04
 
     env:
-      QT_VERSION: "6.10.1"
+      QT_VERSION: "6.9.3"
       QT_HOST: "linux"
       QT_TARGET: "desktop"
       QT_ARCH: "linux_gcc_64"
