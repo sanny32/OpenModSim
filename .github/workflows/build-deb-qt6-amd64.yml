@@ -170,6 +170,9 @@ jobs:
           cmake --build build --parallel
           cmake --install build
 
+      - name: List of Qt plugins
+        run: ls -l ${{ env.QT_INSTALL_DIR }}/${{ env.QT_VERSION }}/${{ env.CMAKE_COMPILER }}/plugins/platforms
+
       - name: Bundle Qt libraries and plugins throught cqtdeployer
         run: |
           CQtDeployer -bin ${{ env.BUILD_DIR }}/omodsim \
