@@ -18,8 +18,7 @@ override_dh_shlibdeps:
 
 	sed -i '/shlibs:Depends=/ s/libgcc-s1 ([^)]*)//g' debian/*.substvars
 	sed -i '/shlibs:Depends=/ s/,,/,/g' debian/*.substvars
-	sed -i '/shlibs:Depends=/ s/, /, /g' debian/*.substvars
-	sed -i '/shlibs:Depends=/ s/,\s*$//' debian/*.substvars
+	sed -i '/shlibs:Depends=/ s/, $//' debian/*.substvars
 
 override_dh_strip:
 	dh_strip --no-automatic-dbgsym
