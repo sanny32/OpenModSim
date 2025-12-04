@@ -160,7 +160,7 @@ jobs:
           git clone https://github.com/QuasarApp/CQtDeployer.git
           cd CQtDeployer
           git checkout v1.6.2365
-          curl -L https://github.com/QuasarApp/CQtDeployer/pull/846.patch | git apply
+          wget -qO- https://github.com/QuasarApp/CQtDeployer/pull/846.patch | git apply
           git submodule update --init --recursive
           cmake -B build -DCMAKE_BUILD_TYPE=Release \
             -DCMAKE_PREFIX_PATH=${{ env.QT_INSTALL_DIR }}/${{ env.QT_VERSION }}/${{ env.CMAKE_COMPILER }} \
