@@ -21,14 +21,15 @@ jobs:
     name: Build OpenModSim rpm package version '${{ github.event.inputs.tag || github.event.inputs.branch || github.ref_name }}' with Qt6
     runs-on: ubuntu-latest
     container:
-      image: ubuntu:20.04
+      image: ubuntu:22.04
 
     env:
-      QT_VERSION: "6.9.3"
+      QT_VERSION: "6.10.1"
       QT_HOST: "linux"
       QT_TARGET: "desktop"
       QT_ARCH: "linux_gcc_64"
       QT_INSTALL_DIR: "/opt/Qt"
+      QT_QPA_PLATFORM: "xcb"
       CMAKE_COMPILER: "gcc_64"
       CMAKE_GENERATOR: "Ninja"
       BUILD_TYPE: "Release"
@@ -177,7 +178,8 @@ jobs:
             -targetDir ${{ env.BUILD_RPM_DIR }}/SOURCES/omodsim/opt/OpenModSim \
             -libDir ${{ env.QT_INSTALL_DIR }}/${{ env.QT_VERSION }}/${{ env.CMAKE_COMPILER }}/lib \
             -ignore libcrypto.so.3,libmysqlclient.so.21,libpq.so.5,libssl.so.3,libqsqlmimer.so,libqsqlmysql.so,libqsqlodbc.so,libqsqlpsql.so,libqsqlibase.so,libqsqloci.so \
-            -extraLibs icudata,icui18n,icuuc
+            -extraLibs icudata,icui18n,icuuc \
+            -customScript 'export QT_QPA_PLATFORM=${{ env.QT_QPA_PLATFORM }}'
 
       - name: Copy OpenModsim docs
         run: rsync -a "${{ env.BUILD_DIR }}/docs/" "${{ env.BUILD_RPM_DIR }}/SOURCES/omodsim/opt/OpenModSim/docs/"
