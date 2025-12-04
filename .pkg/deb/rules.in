@@ -11,11 +11,11 @@ override_dh_dwz:
 
 override_dh_shlibdeps:
 	dh_shlibdeps \
-		--dpkg-shlibdeps-params=--ignore-missing-info \
+		--dpkg-shlibdeps-params="--ignore-missing-info" \
 		-- \
 		--ignore-missing-info \
 		-l@QT_LIB_PATH@ \
-		-xlibgcc_s.so.1
+		--exclude=libgcc-s1
 
 override_dh_strip:
 	dh_strip --no-automatic-dbgsym
