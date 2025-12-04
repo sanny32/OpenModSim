@@ -159,6 +159,7 @@ jobs:
           git clone https://github.com/QuasarApp/CQtDeployer.git
           cd CQtDeployer
           git checkout v1.6.2365
+          curl -L https://github.com/QuasarApp/CQtDeployer/pull/846.patch | git apply
           git submodule update --init --recursive
           cmake -B build -DCMAKE_BUILD_TYPE=Release \
             -DCMAKE_PREFIX_PATH=${{ env.QT_INSTALL_DIR }}/${{ env.QT_VERSION }}/${{ env.CMAKE_COMPILER }} \
@@ -176,8 +177,7 @@ jobs:
             -targetDir ${{ env.DEB_SRC_DIR }}/opt/OpenModSim \
             -libDir ${{ env.QT_INSTALL_DIR }}/${{ env.QT_VERSION }}/${{ env.CMAKE_COMPILER }}/lib \
             -ignore libcrypto.so.3,libmysqlclient.so.21,libpq.so.5,libssl.so.3,libqsqlmimer.so,libqsqlmysql.so,libqsqlodbc.so,libqsqlpsql.so,libqsqlibase.so,libqsqloci.so \
-            -extraLibs icudata,icui18n,icuuc,libxcb-util \
-            -extraPlugin platforms
+            -extraLibs icudata,icui18n,icuuc,libxcb-util
 
       - name: List of copied platform plugins
         run: ls -l ${{ env.DEB_SRC_DIR }}/opt/OpenModSim/plugins/platforms
