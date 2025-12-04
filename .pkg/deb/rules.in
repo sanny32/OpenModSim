@@ -10,12 +10,13 @@ override_dh_dwz:
 	:
 
 override_dh_shlibdeps:
+	find debian/tmp -name "*.so*" -type f | xargs -I {} ldd {} 2>/dev/null | grep -i gcc | head -5
 	dh_shlibdeps \
 		--dpkg-shlibdeps-params="--ignore-missing-info" \
 		-- \
 		--ignore-missing-info \
 		-l@QT_LIB_PATH@ \
-		--exclude=libgcc-s1
+		-xlibgcc_s.so.1
 
 override_dh_strip:
 	dh_strip --no-automatic-dbgsym
