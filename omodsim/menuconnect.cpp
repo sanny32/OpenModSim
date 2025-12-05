@@ -15,11 +15,16 @@ MenuConnect::MenuConnect(MenuType type, ModbusMultiServer& server, QWidget *pare
 {
     if(_menuType == MenuType::ConnectMenu)
     {
-        addAction(tr("Modbus/TCP Srv"), ConnectionType::Tcp, QString(), "Modbus/TCP Srv");
-        for(auto&& port: getAvailableSerialPorts())
-        {
-            const auto text = QString(tr("Port %1")).arg(port);
-            addAction(text, ConnectionType::Serial, port, QString("Port %1").arg(port));
+        addAction(this, tr("Modbus/TCP Srv"), ConnectionType::Tcp, QString(), "Modbus/TCP Srv");
+
+        const auto availablePorts = getAvailableSerialPorts();
+        if(!availablePorts.isEmpty()) {
+            auto serialMenu = new QMenu(tr("Modbus/RTU Srv"), parent);
+            for(auto&& port: availablePorts) {
+                const auto text = QString(tr("Port %1")).arg(port);
+                addAction(serialMenu, text, ConnectionType::Serial, port, QString("Port %1").arg(port));
+            }
+            addMenu(serialMenu);
         }
     }
 
@@ -32,18 +37,18 @@ MenuConnect::MenuConnect(MenuType type, ModbusMultiServer& server, QWidget *pare
                 case ConnectionType::Tcp:
                 {
                     const auto port = QString("%1:%2").arg(cd.TcpParams.IPAddress, QString::number(cd.TcpParams.ServicePort));
-                    addAction(tr("Modbus/TCP Srv %1").arg(port), ConnectionType::Tcp, port, QString("Modbus/TCP Srv %1").arg(port));
+                    addAction(this, tr("Modbus/TCP Srv %1").arg(port), ConnectionType::Tcp, port, QString("Modbus/TCP Srv %1").arg(port));
                 }
                 break;
 
                 case ConnectionType::Serial:
-                    addAction(tr("Port %1").arg(cd.SerialParams.PortName), ConnectionType::Serial, cd.SerialParams.PortName, QString("Port %1").arg(cd.SerialParams.PortName));
+                    addAction(this, tr("Port %1").arg(cd.SerialParams.PortName), ConnectionType::Serial, cd.SerialParams.PortName, QString("Port %1").arg(cd.SerialParams.PortName));
                 break;
             }
         }
         else
         {
-            for(auto&& a : actions())
+            for(auto&& a : actions(this))
             {
                 const auto data = a->data().value<QPair<ConnectionType, QString>>();
                 const bool isConnected = _mbMultiServer.isConnected(data.first, data.second);
@@ -54,7 +59,7 @@ MenuConnect::MenuConnect(MenuType type, ModbusMultiServer& server, QWidget *pare
 
     connect(&_mbMultiServer, &ModbusMultiServer::disconnected, this, [&](const ConnectionDetails& cd)
     {
-        for(auto&& a : actions())
+        for(auto&& a : actions(this))
         {
             const auto data = a->data().value<QPair<ConnectionType, QString>>();
             if(_menuType == MenuType::DisconnectMenu)
@@ -85,7 +90,7 @@ void MenuConnect::changeEvent(QEvent* event)
 {
     if (event->type() == QEvent::LanguageChange)
     {
-        for(auto&& a : actions())
+        for(auto&& a : actions(this))
         {
             const auto data = a->data().value<QPair<ConnectionType, QString>>();
             switch(data.first)
@@ -150,15 +155,37 @@ void MenuConnect::updateConnectionDetails(const QList<ConnectionDetails>& conns)
 }
 
 ///
+/// \brief MenuConnect::actions
+/// \param menu
+/// \return
+///
+QList<QAction*> MenuConnect::actions(const QMenu* menu) const
+{
+    QList<QAction*> listActions;
+    for(auto a: menu->actions())
+    {
+        if(auto* subMenu = a->menu()) {
+            listActions.append(actions(subMenu));
+        }
+        else {
+            listActions.append(a);
+        }
+    }
+
+    return listActions;
+}
+
+///
 /// \brief MenuConnect::addAction
+/// \param menu
 /// \param text
 /// \param type
 /// \param port
 /// \param id
 ///
-void MenuConnect::addAction(const QString& text, ConnectionType type, const QString& port, const QString& id)
+void MenuConnect::addAction(QMenu* menu, const QString& text, ConnectionType type, const QString& port, const QString& id)
 {
-    auto action = QMenu::addAction(text);
+    auto action = menu->addAction(text);
     connect(action, &QAction::triggered, this, [this, action, type, port]
     {
         if(_menuType == ConnectMenu)
