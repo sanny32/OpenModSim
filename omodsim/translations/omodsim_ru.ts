@@ -1884,20 +1884,25 @@ Script.onInit(()=&gt;{
     <name>MenuConnect</name>
     <message>
         <location filename="../menuconnect.cpp" line="18"/>
-        <location filename="../menuconnect.cpp" line="95"/>
+        <location filename="../menuconnect.cpp" line="100"/>
         <source>Modbus/TCP Srv</source>
         <translation>Modbus/TCP сервер</translation>
     </message>
     <message>
-        <location filename="../menuconnect.cpp" line="21"/>
-        <location filename="../menuconnect.cpp" line="40"/>
-        <location filename="../menuconnect.cpp" line="100"/>
+        <location filename="../menuconnect.cpp" line="22"/>
+        <source>Modbus/RTU Srv</source>
+        <translation>Modbus/RTU сервер</translation>
+    </message>
+    <message>
+        <location filename="../menuconnect.cpp" line="24"/>
+        <location filename="../menuconnect.cpp" line="45"/>
+        <location filename="../menuconnect.cpp" line="105"/>
         <source>Port %1</source>
         <translation>Порт %1</translation>
     </message>
     <message>
-        <location filename="../menuconnect.cpp" line="35"/>
-        <location filename="../menuconnect.cpp" line="97"/>
+        <location filename="../menuconnect.cpp" line="40"/>
+        <location filename="../menuconnect.cpp" line="102"/>
         <source>Modbus/TCP Srv %1</source>
         <translation>Modbus/TCP сервер %1</translation>
     </message>
