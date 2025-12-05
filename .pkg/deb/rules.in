@@ -14,16 +14,10 @@ override_dh_shlibdeps:
 		--dpkg-shlibdeps-params="--ignore-missing-info" \
 		-l@QT_LIB_PATH@
 
-	sed -i '/libgcc-s1/d' debian/@PACKAGE_NAME@.substvars
-
 	echo "---- substvars BEFORE ----"
 	ls debian/*.substvars || true
 	cat debian/*.substvars || true
 
-	sed -i '/libgcc-s1/d' debian/@PACKAGE_NAME@.substvars
-
-	echo "---- substvars AFTER ----"
-	cat debian/*.substvars || true
 
 override_dh_strip:
 	dh_strip --no-automatic-dbgsym
