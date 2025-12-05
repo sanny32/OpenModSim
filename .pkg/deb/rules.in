@@ -17,6 +17,7 @@ override_dh_shlibdeps:
 		-l@QT_LIB_PATH@
 
 	sed -i '/libgcc-s1/d' debian/@PACKAGE_NAME@.substvars
+	cat debian/@PACKAGE_NAME@.substvars
 
 override_dh_strip:
 	dh_strip --no-automatic-dbgsym
