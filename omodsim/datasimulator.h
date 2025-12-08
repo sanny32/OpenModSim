@@ -63,7 +63,6 @@ private:
 private:
     QTimer _timer;
     QElapsedTimer _masterTimer;
-    const int _interval = 100;
 
     struct SimulationParams {
         DataDisplayMode Mode;
