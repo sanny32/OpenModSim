@@ -73,6 +73,8 @@ FormModSim::FormModSim(int id, ModbusMultiServer& server, QSharedPointer<DataSim
     connect(_dataSimulator.get(), &DataSimulator::simulationStarted, this, &FormModSim::on_simulationStarted);
     connect(_dataSimulator.get(), &DataSimulator::simulationStopped, this, &FormModSim::on_simulationStopped);
     connect(_dataSimulator.get(), &DataSimulator::dataSimulated, this, &FormModSim::on_dataSimulated);
+
+    ui->frameDataDefinition->installEventFilter(this);
 }
 
 ///
@@ -102,7 +104,7 @@ void FormModSim::changeEvent(QEvent* e)
 /// \brief FormModSim::closeEvent
 /// \param event
 ///
-void FormModSim::closeEvent(QCloseEvent *event)
+void FormModSim::closeEvent(QCloseEvent* event)
 {
     const auto deviceId = ui->lineEditDeviceId->value<quint8>();
     _mbMultiServer.removeDeviceId(deviceId);
@@ -110,6 +112,24 @@ void FormModSim::closeEvent(QCloseEvent *event)
 
     emit closing();
     QWidget::closeEvent(event);
+}
+
+///
+/// \brief FormModSim::eventFilter
+/// \param watched
+/// \param event
+/// \return
+///
+bool FormModSim::eventFilter(QObject* watched, QEvent* event)
+{
+    if (watched == ui->frameDataDefinition && event->type() == QEvent::MouseButtonDblClick) {
+        auto* me = static_cast<QMouseEvent*>(event);
+        if(me->pos().x() > ui->statisticWidget->geometry().right()) {
+            emit doubleClicked();
+            return true;
+        }
+    }
+    return QWidget::eventFilter(watched, event);
 }
 
 ///
@@ -912,53 +932,54 @@ void FormModSim::on_mbDisconnected(const ConnectionDetails&)
 ///
 bool FormModSim::isLoggingRequest(QSharedPointer<const ModbusMessage> msgReq) const
 {
+    if(!msgReq)
+        return false;
+
     const auto dd = displayDefinition();
     if(dd.DeviceId != msgReq->deviceId())
         return false;
 
-    const QModbusRequest req = msgReq->adu()->pdu();
     const auto startAddress = dd.PointAddress - (dd.ZeroBasedAddress ? 0 : 1);
-    auto msg = ModbusMessage::create(req, msgReq->protocolType(), dd.DeviceId, QDateTime::currentDateTime(), true);
 
-    switch(req.functionCode()) {
+    switch(msgReq->functionCode()) {
         case QModbusPdu::ReadCoils: {
-            auto req = reinterpret_cast<const ReadCoilsRequest*>(msg.get());
+            auto req = reinterpret_cast<const ReadCoilsRequest*>(msgReq.get());
             return (req->startAddress() >= startAddress) && (dd.PointType == QModbusDataUnit::Coils);
         }
         case QModbusPdu::ReadDiscreteInputs: {
-            auto req = reinterpret_cast<const ReadDiscreteInputsRequest*>(msg.get());
+            auto req = reinterpret_cast<const ReadDiscreteInputsRequest*>(msgReq.get());
             return (req->startAddress() >= startAddress) && (dd.PointType == QModbusDataUnit::DiscreteInputs);
         }
         case QModbusPdu::ReadHoldingRegisters: {
-            auto req = reinterpret_cast<const ReadHoldingRegistersRequest*>(msg.get());
+            auto req = reinterpret_cast<const ReadHoldingRegistersRequest*>(msgReq.get());
             return (req->startAddress() >= startAddress) && (dd.PointType == QModbusDataUnit::HoldingRegisters);
         }
         case QModbusPdu::ReadInputRegisters: {
-            auto req = reinterpret_cast<const ReadInputRegistersRequest*>(msg.get());
+            auto req = reinterpret_cast<const ReadInputRegistersRequest*>(msgReq.get());
             return (req->startAddress() >= startAddress) && (dd.PointType == QModbusDataUnit::InputRegisters);
         }
         case QModbusPdu::WriteSingleCoil: {
-            auto req = reinterpret_cast<const WriteSingleCoilRequest*>(msg.get());
+            auto req = reinterpret_cast<const WriteSingleCoilRequest*>(msgReq.get());
             return (req->address() >= startAddress) && (dd.PointType == QModbusDataUnit::Coils);
         }
         case QModbusPdu::WriteSingleRegister: {
-            auto req = reinterpret_cast<const WriteSingleRegisterRequest*>(msg.get());
+            auto req = reinterpret_cast<const WriteSingleRegisterRequest*>(msgReq.get());
             return (req->address() >= startAddress) && (dd.PointType == QModbusDataUnit::HoldingRegisters);
         }
         case QModbusPdu::WriteMultipleCoils: {
-            auto req = reinterpret_cast<const WriteMultipleCoilsRequest*>(msg.get());
+            auto req = reinterpret_cast<const WriteMultipleCoilsRequest*>(msgReq.get());
             return (req->startAddress() >= startAddress) && (dd.PointType == QModbusDataUnit::Coils);
         }
         case QModbusPdu::WriteMultipleRegisters: {
-            auto req = reinterpret_cast<const WriteMultipleRegistersRequest*>(msg.get());
+            auto req = reinterpret_cast<const WriteMultipleRegistersRequest*>(msgReq.get());
             return (req->startAddress() >= startAddress) && (dd.PointType == QModbusDataUnit::HoldingRegisters);
         }
         case QModbusPdu::MaskWriteRegister: {
-            auto req = reinterpret_cast<const MaskWriteRegisterRequest*>(msg.get());
+            auto req = reinterpret_cast<const MaskWriteRegisterRequest*>(msgReq.get());
             return (req->address() >= startAddress) && (dd.PointType == QModbusDataUnit::HoldingRegisters);
         }
         case QModbusPdu::ReadWriteMultipleRegisters: {
-            auto req = reinterpret_cast<const ReadWriteMultipleRegistersRequest*>(msg.get());
+            auto req = reinterpret_cast<const ReadWriteMultipleRegistersRequest*>(msgReq.get());
             return ((req->readStartAddress() >= startAddress) || (req->writeStartAddress() >= startAddress)) && (dd.PointType == QModbusDataUnit::HoldingRegisters);
         }
         default:

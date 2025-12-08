@@ -14,6 +14,7 @@
 #include "dialogforcemultiplecoils.h"
 #include "dialogforcemultipleregisters.h"
 #include "dialogmodbusdefinitions.h"
+#include "dialograwdatalog.h"
 #include "runmodecombobox.h"
 #include "searchlineedit.h"
 #include "mainstatusbar.h"
@@ -23,13 +24,15 @@
 
 ///
 /// \brief MainWindow::MainWindow
+/// \param useSession
 /// \param parent
 ///
-MainWindow::MainWindow(QWidget *parent)
+MainWindow::MainWindow(bool useSession, QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
     ,_lang("en")
     ,_windowCounter(0)
+    ,_useSession(useSession)
     ,_dataSimulator(new DataSimulator(this))
 {
     ui->setupUi(this);
@@ -89,10 +92,13 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->mdiArea, &QMdiArea::subWindowActivated, this, &MainWindow::updateMenuWindow);
     connect(&_mbMultiServer, &ModbusMultiServer::connectionError, this, &MainWindow::on_connectionError);
 
-    loadSettings();
+    if(_useSession) {
+        loadSettings();
+    }
 
-    if(_windowCounter == 0)
+    if(_windowCounter == 0) {
         ui->actionNew->trigger();
+    }
 }
 
 ///
@@ -120,8 +126,9 @@ void MainWindow::setLanguage(const QString& lang)
         _lang = lang;
         qApp->installTranslator(&_appTranslator);
 
-        if(_qtTranslator.load(QString("%1/translations/qt_%2").arg(qApp->applicationDirPath(), lang)))
+        if(_qtTranslator.load(QString("%1/translations/qt_%2").arg(qApp->applicationDirPath(), lang))) {
             qApp->installTranslator(&_qtTranslator);
+        }
     }
 }
 
@@ -145,7 +152,9 @@ void MainWindow::changeEvent(QEvent* event)
 ///
 void MainWindow::closeEvent(QCloseEvent *event)
 {
-    saveSettings();
+    if(_useSession) {
+        saveSettings();
+    }
 
     ui->mdiArea->closeAllSubWindows();
     if (ui->mdiArea->currentSubWindow())
@@ -214,6 +223,9 @@ void MainWindow::on_awake()
     ui->actionDblFloat->setEnabled(frm != nullptr);
     ui->actionSwappedDbl->setEnabled(frm != nullptr);
     ui->actionSwapBytes->setEnabled(frm != nullptr);
+
+    ui->actionRawDataLog->setEnabled(_mbMultiServer.isConnected());
+    ui->actionRawDataLog->setChecked(ui->actionRawDataLog->data().isValid());
 
     ui->actionTextCapture->setEnabled(frm && frm->captureMode() == CaptureMode::Off);
     ui->actionCaptureOff->setEnabled(frm && frm->captureMode() == CaptureMode::TextCapture);
@@ -351,6 +363,14 @@ void MainWindow::on_actionClose_triggered()
     if(!wnd) return;
 
     wnd->close();
+}
+
+///
+/// \brief MainWindow::on_actionCloseAll_triggered
+///
+void MainWindow::on_actionCloseAll_triggered()
+{
+    ui->mdiArea->closeAllSubWindows();
 }
 
 ///
@@ -606,8 +626,9 @@ void MainWindow::on_actionDataDefinition_triggered()
     if(!frm) return;
 
     DialogDisplayDefinition dlg(frm->displayDefinition(), this);
-    if(dlg.exec() == QDialog::Accepted)
+    if(dlg.exec() == QDialog::Accepted) {
             frm->setDisplayDefinition(dlg.displayDefinition());
+    }
 }
 
 ///
@@ -837,9 +858,33 @@ void MainWindow::on_actionMsgParser_triggered()
     auto frm = currentMdiChild();
     const auto mode = frm ? frm->dataDisplayMode() : DataDisplayMode::Hex;
 
-    auto dlg = new DialogMsgParser(mode, ModbusMessage::Rtu, this);
+    auto dlg = new DialogMsgParser(mode, ModbusMessage::Rtu);
     dlg->setAttribute(Qt::WA_DeleteOnClose, true);
     dlg->show();
+}
+
+///
+/// \brief MainWindow::on_actionRawDataLog_triggered
+///
+void MainWindow::on_actionRawDataLog_triggered()
+{
+    auto dlg = ui->actionRawDataLog->data().value<DialogRawDataLog*>();
+    if(dlg != nullptr) {
+        dlg->close();
+        return;
+    }
+    else
+    {
+        dlg = new DialogRawDataLog(_mbMultiServer);
+        dlg->setAttribute(Qt::WA_DeleteOnClose, true);
+        ui->actionRawDataLog->setData(QVariant::fromValue(dlg));
+
+        connect(dlg, &DialogRawDataLog::destroyed, this, [this](){
+            ui->actionRawDataLog->setData(QVariant());
+        });
+
+        dlg->show();
+    }
 }
 
 ///
@@ -1369,6 +1414,11 @@ FormModSim* MainWindow::createMdiChild(int id)
     connect(frm, &FormModSim::captureError, this, [this](const QString& error)
     {
         QMessageBox::critical(this, windowTitle(), tr("Capture Error:\r\n%1").arg(error));
+    });
+
+    connect(frm, &FormModSim::doubleClicked, this, [this]()
+    {
+        ui->actionDataDefinition->trigger();
     });
 
     _windowActionList->addWindow(wnd);

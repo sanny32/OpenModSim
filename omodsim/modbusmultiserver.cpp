@@ -233,6 +233,8 @@ QSharedPointer<ModbusServer> ModbusMultiServer::createModbusServer(const Connect
         connect(modbusServer.get(), &ModbusServer::dataWritten, this, &ModbusMultiServer::on_dataWritten);
         connect(modbusServer.get(), &ModbusServer::stateChanged, this, &ModbusMultiServer::on_stateChanged);
         connect(modbusServer.get(), &ModbusServer::errorOccurred, this, &ModbusMultiServer::on_errorOccurred);
+        connect(modbusServer.get(), &ModbusServer::rawDataReceived, this, &ModbusMultiServer::on_rawDataReceived);
+        connect(modbusServer.get(), &ModbusServer::rawDataSended, this, &ModbusMultiServer::on_rawDataSended);
     }
 
     return modbusServer;
@@ -260,7 +262,7 @@ void ModbusMultiServer::connectDevice(const ConnectionDetails& cd)
     }
 
     modbusServer->removeAllServerAddresses();
-    for(auto deviceId: _deviceIds) {
+    for(auto&& deviceId: _deviceIds) {
         modbusServer->addServerAddress(deviceId);
         modbusServer->setMap(_modbusDataUnitMaps[deviceId], deviceId);
 
@@ -891,6 +893,32 @@ void ModbusMultiServer::writeRegister(quint8 deviceId, QModbusDataUnit::Register
 
     if(data.isValid())
         setData(deviceId, data);
+}
+
+///
+/// \brief ModbusMultiServer::on_rawDataReceived
+/// \param time
+/// \param data
+///
+void ModbusMultiServer::on_rawDataReceived(const QDateTime& time, const QByteArray& data)
+{
+    auto server = qobject_cast<ModbusServer*>(sender());
+    const auto cd = server->property("ConnectionDetails").value<ConnectionDetails>();
+
+    emit rawDataReceived(cd, time, data);
+}
+
+///
+/// \brief ModbusMultiServer::on_rawDataSended
+/// \param time
+/// \param data
+///
+void ModbusMultiServer::on_rawDataSended(const QDateTime& time, const QByteArray& data)
+{
+    auto server = qobject_cast<ModbusServer*>(sender());
+    const auto cd = server->property("ConnectionDetails").value<ConnectionDetails>();
+
+    emit rawDataSended(cd, time, data);
 }
 
 ///

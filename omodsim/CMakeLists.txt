@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.16)
 
 project(omodsim
-        VERSION 1.11.0
+        VERSION 1.11.1
         DESCRIPTION "An Open Source Modbus Slave (Server) Utility"
         LANGUAGES CXX)
 
@@ -115,6 +115,7 @@ set(SOURCES
     dialogs/dialogforcemultipleregisters.cpp
     dialogs/dialogmsgparser.cpp
     dialogs/dialogprintsettings.cpp
+    dialogs/dialograwdatalog.cpp
     dialogs/dialogscriptsettings.cpp
     dialogs/dialogselectserviceport.cpp
     dialogs/dialogmodbusdefinitions.cpp
@@ -154,6 +155,7 @@ set(SOURCES
 set(HEADERS
     ansimenu.h
     ansiutils.h
+    bufferinglistmodel.h
     byteorderutils.h
     cmdlineparser.h
     connectiondetails.h
@@ -190,6 +192,7 @@ set(HEADERS
     dialogs/dialogforcemultipleregisters.h
     dialogs/dialogmsgparser.h
     dialogs/dialogprintsettings.h
+    dialogs/dialograwdatalog.h
     dialogs/dialogscriptsettings.h
     dialogs/dialogmodbusdefinitions.h
     dialogs/dialogselectserviceport.h
@@ -273,6 +276,7 @@ set(UI_FILES
     dialogs/dialogforcemultipleregisters.ui
     dialogs/dialogmsgparser.ui
     dialogs/dialogprintsettings.ui
+    dialogs/dialograwdatalog.ui
     dialogs/dialogscriptsettings.ui
     dialogs/dialogselectserviceport.ui
     dialogs/dialogmodbusdefinitions.ui
@@ -314,10 +318,6 @@ endif()
 target_sources(${PROJECT_NAME} PRIVATE resources.qrc ${HEADERS} ${SOURCES} ${UI_FILES} ${TS_FILES})
 target_link_libraries(${PROJECT_NAME} PRIVATE Qt::Widgets Qt::Network Qt::Xml Qt::PrintSupport Qt::SerialBus Qt::SerialPort Qt::Qml Qt::Help)
 
-if(TARGET update_translations)
-    add_dependencies(${PROJECT_NAME} update_translations)
-endif()
-
 if(Qt6_FOUND)
     qt_add_lupdate(${PROJECT_NAME}
         TS_FILES ${TS_FILES}
@@ -337,6 +337,10 @@ else()
     add_custom_target(update_translations ALL DEPENDS ${TS_FILES})
 endif()
 
+if(TARGET update_translations)
+    add_dependencies(${PROJECT_NAME} update_translations)
+endif()
+
 if(WIN32)
     set(ICON_FILE "${CMAKE_CURRENT_SOURCE_DIR}/res/omodsim.ico")
 
@@ -349,7 +353,7 @@ if(WIN32)
     target_sources(${PROJECT_NAME} PRIVATE ${ICON_PATH} "${CMAKE_BINARY_DIR}/omodsim.rc")
     set_target_properties(${PROJECT_NAME} PROPERTIES WIN32_EXECUTABLE ON)
 elseif(LINUX)
-    set(CMAKE_CXX_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -static-libgcc -static-libstdc++")
+    target_link_options(${PROJECT_NAME} PRIVATE -static-libgcc -static-libstdc++)
 endif()
 
 add_custom_command(
@@ -366,3 +370,21 @@ add_custom_command(
 
 add_custom_target(helpgenerator ALL DEPENDS ${JSHELP_QCH} ${JSHELP_QHC})
 add_dependencies(${PROJECT_NAME} helpgenerator)
+
+if(LINUX)
+    configure_file(
+        "${CMAKE_CURRENT_SOURCE_DIR}/omodsim.desktop.in"
+        "${CMAKE_CURRENT_BINARY_DIR}/omodsim.desktop"
+        @ONLY
+    )
+
+    install(TARGETS ${PROJECT_NAME} RUNTIME DESTINATION bin)
+    install(FILES res/omodsim16.png DESTINATION share/icons/hicolor/16x16/apps RENAME omodsim.png)
+    install(FILES res/omodsim32.png DESTINATION share/icons/hicolor/32x32/apps RENAME omodsim.png)
+    install(FILES res/omodsim64.png DESTINATION share/icons/hicolor/64x64/apps RENAME omodsim.png)
+    install(FILES res/omodsim128.png DESTINATION share/icons/hicolor/128x128/apps RENAME omodsim.png)
+    install(FILES "${CMAKE_CURRENT_BINARY_DIR}/omodsim.desktop" DESTINATION share/applications)
+
+    install(CODE "execute_process(COMMAND update-desktop-database -q ${CMAKE_INSTALL_PREFIX}/share/applications)")
+    install(CODE "execute_process(COMMAND gtk-update-icon-cache -q -t -f ${CMAKE_INSTALL_PREFIX}/share/icons/hicolor)")
+endif()

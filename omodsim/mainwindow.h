@@ -14,12 +14,15 @@ namespace Ui {
 class MainWindow;
 }
 
+///
+/// \brief The MainWindow class
+///
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
 
 public:
-    explicit MainWindow(QWidget *parent = nullptr);
+    explicit MainWindow(bool useSession, QWidget *parent = nullptr);
     ~MainWindow();
 
     void setLanguage(const QString& lang);
@@ -48,6 +51,7 @@ private slots:
     void on_actionNew_triggered();
     void on_actionOpen_triggered();
     void on_actionClose_triggered();
+    void on_actionCloseAll_triggered();
     void on_actionSave_triggered();
     void on_actionSaveAs_triggered();
     void on_actionSaveTestConfig_triggered();
@@ -98,6 +102,7 @@ private slots:
     void on_actionPresetInputRegs_triggered();
     void on_actionPresetHoldingRegs_triggered();
     void on_actionMsgParser_triggered();
+    void on_actionRawDataLog_triggered();
     void on_actionTextCapture_triggered();
     void on_actionCaptureOff_triggered();
 
@@ -173,6 +178,7 @@ private:
 
 private:
     int _windowCounter;
+    bool _useSession;
 
     ModbusMultiServer _mbMultiServer;
 

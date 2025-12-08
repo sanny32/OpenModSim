@@ -13,27 +13,9 @@
 /// \param parent
 ///
 ModbusLogModel::ModbusLogModel(ModbusLogWidget* parent)
-    : QAbstractListModel(parent)
+    : BufferingListModel(parent)
     ,_parentWidget(parent)
 {
-}
-
-///
-/// \brief ModbusLogModel::~ModbusLogModel
-///
-ModbusLogModel::~ModbusLogModel()
-{
-    deleteItems();
-}
-
-///
-/// \brief ModbusLogModel::rowCount
-/// \param parent
-/// \return
-///
-int ModbusLogModel::rowCount(const QModelIndex&) const
-{
-    return _items.size();
 }
 
 ///
@@ -47,18 +29,19 @@ QVariant ModbusLogModel::data(const QModelIndex& index, int role) const
     if(!index.isValid() || index.row() >= rowCount())
         return QVariant();
 
-    const auto item = _items.at(index.row());
+    const auto item = itemAt(index.row());
     switch(role)
     {
         case Qt::DisplayRole:
             return QString(R"(
                     <span style="color:#444444">%1</span>
                     <b style="color:%2">%3</b>
-                    <span>%4</span>
+                    <span style="color:%4">%5</span>
                 )")
                 .arg(item->timestamp().toString(Qt::ISODateWithMs),
                      item->isRequest() ? "#0066cc" : "#009933",
                      item->isRequest() ? "[Tx] ←" : "[Rx] →",
+                     (item->isException() || !item->isValid()) ? "#cc0000" : "#000000",
                      item->toString(_parentWidget->dataDisplayMode(), _parentWidget->showLeadingZeros()));
 
         case Qt::UserRole:
@@ -66,89 +49,6 @@ QVariant ModbusLogModel::data(const QModelIndex& index, int role) const
     }
 
     return QVariant();
-}
-
-///
-/// \brief ModbusLogModel::clear
-///
-void ModbusLogModel::clear()
-{
-    beginResetModel();
-    deleteItems();
-    endResetModel();
-}
-
-///
-/// \brief ModbusLogModel::setBufferingMode
-/// \param freeze
-///
-void ModbusLogModel::setBufferingMode(bool freeze)
-{
-    _bufferingMode = freeze;
-    if(!_bufferingMode)
-    {
-        for(auto&& data : _bufferingItems) {
-            _items.push_back(data);
-
-            while(_items.size() >= _rowLimit) {
-                _items.removeFirst();
-            }
-        }
-        _bufferingItems.clear();
-        update();
-    }
-}
-
-///
-/// \brief ModbusLogModel::append
-/// \param data
-///
-void ModbusLogModel::append(QSharedPointer<const ModbusMessage> data)
-{
-    if(data == nullptr) return;
-
-    if(_bufferingMode) {
-        _bufferingItems.push_back(data);
-    }
-    else {
-        while(rowCount() >= _rowLimit)
-        {
-            beginRemoveRows(QModelIndex(), 0, 0);
-            _items.removeFirst();
-            endRemoveRows();
-        }
-
-        beginInsertRows(QModelIndex(), rowCount(), rowCount());
-        _items.push_back(data);
-        endInsertRows();
-    }
-}
-
-///
-/// \brief ModbusLogModel::rowLimit
-/// \return
-///
-int ModbusLogModel::rowLimit() const
-{
-    return _rowLimit;
-}
-
-///
-/// \brief ModbusLogModel::setRowLimit
-/// \param val
-///
-void ModbusLogModel::setRowLimit(int val)
-{
-    _rowLimit = qMax(1, val);
-}
-
-///
-/// \brief ModbusLogModel::deleteItems
-///
-void ModbusLogModel::deleteItems()
-{
-    _items.clear();
-    _bufferingItems.clear();
 }
 
 ///

@@ -14,4 +14,7 @@ CmdLineParser::CmdLineParser()
 
     QCommandLineOption configOption(QStringList() << _config, tr("Setup test config file."), tr("file path"));
     addOption(configOption);
+
+    QCommandLineOption noSessionOption(QStringList() << _no_session, tr("Do not use program session."));
+    addOption(noSessionOption);
 }

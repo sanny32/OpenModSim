@@ -1,7 +1,6 @@
 #ifndef MODBUSSIMULATIONPARAMS_H
 #define MODBUSSIMULATIONPARAMS_H
 
-#include <QDebug>
 #include <QDataStream>
 #include <QXmlStreamWriter>
 #include "qrange.h"
@@ -64,6 +63,7 @@ inline QXmlStreamWriter& operator <<(QXmlStreamWriter& xml, const RandomSimulati
 inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, RandomSimulationParams& params)
 {
     if (xml.isStartElement() && xml.name() == QLatin1String("RandomSimulationParams")) {
+        xml.readNextStartElement();
         xml >> params.Range;
         xml.skipCurrentElement();
     }
@@ -141,6 +141,7 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, IncrementSimulationP
             }
         }
 
+        xml.readNextStartElement();
         xml >> params.Range;
         xml.skipCurrentElement();
     }
@@ -218,6 +219,7 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, DecrementSimulationP
             }
         }
 
+        xml.readNextStartElement();
         xml >> params.Range;
         xml.skipCurrentElement();
     }
