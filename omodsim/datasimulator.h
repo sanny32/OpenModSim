@@ -2,6 +2,7 @@
 #define DATASIMULATOR_H
 
 #include <QTimer>
+#include <QElapsedTimer>
 #include <QModbusDataUnit>
 #include <QXmlStreamWriter>
 #include "modbussimulationparams.h"
@@ -53,6 +54,7 @@ private slots:
     void on_timeout();
 
 private:
+    void scheduleNextRun();
     void randomSimulation(DataDisplayMode mode, quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr, const RandomSimulationParams& params);
     void incrementSimulation(DataDisplayMode mode, quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr, const IncrementSimulationParams& params);
     void decrementSimailation(DataDisplayMode mode, quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr, const DecrementSimulationParams& params);
@@ -60,13 +62,14 @@ private:
 
 private:
     QTimer _timer;
-    quint32 _elapsed;
-    const int _interval = 1;
+    QElapsedTimer _masterTimer;
+    const int _interval = 100;
 
     struct SimulationParams {
         DataDisplayMode Mode;
         ModbusSimulationParams Params;
         QVariant CurrentValue;
+        qint64 NextRunTime;
     };
 
     QMap<ModbusSimulationMapKey, SimulationParams> _simulationMap;
