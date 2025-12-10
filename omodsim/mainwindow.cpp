@@ -1840,13 +1840,12 @@ void MainWindow::loadSettings()
 
     QSettings m(filepath, QSettings::IniFormat, this);
 
+    const auto geometry = m.value("WindowGeometry", this->geometry()).toRect();
+    setGeometry(geometry);
+
     const bool isMaximized = m.value("WindowMaximized").toBool();
     if(isMaximized) {
         showMaximized();
-    }
-    else {
-        const auto geometry = m.value("WindowGeometry", this->geometry()).toRect();
-        setGeometry(geometry);
     }
 
     const auto viewMode = (QMdiArea::ViewMode)qBound(0, m.value("ViewMode", QMdiArea::SubWindowView).toInt(), 1);
@@ -1935,13 +1934,8 @@ void MainWindow::saveSettings()
     m.clear();
     m.sync();
 
-    if(isMaximized()) {
-        m.setValue("WindowMaximized", true);
-    }
-    else {
-        m.setValue("WindowMaximized", false);
-        m.setValue("WindowGeometry", geometry());
-    }
+    m.setValue("WindowMaximized", isMaximized());
+    m.setValue("WindowGeometry", isMaximized()? normalGeometry() : geometry());
 
     const auto frm = currentMdiChild();
     if(frm) m.setValue("ActiveWindow", frm->windowTitle());
