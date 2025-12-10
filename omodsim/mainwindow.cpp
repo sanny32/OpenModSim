@@ -94,10 +94,10 @@ MainWindow::MainWindow(bool useSession, QWidget *parent)
 
     if(_useSession) {
         loadSettings();
-    }
 
-    if(_windowCounter == 0) {
-        ui->actionNew->trigger();
+        if(_windowCounter == 0) {
+            ui->actionNew->trigger();
+        }
     }
 }
 
