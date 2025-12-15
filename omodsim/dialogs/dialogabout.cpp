@@ -5,6 +5,25 @@
 #include "ui_dialogabout.h"
 
 ///
+/// \brief arch
+/// \return
+///
+QString arch()
+{
+#if defined(Q_PROCESSOR_X86_64)
+    return "x64";
+#elif defined(Q_PROCESSOR_X86)
+    return "x86";
+#elif defined(Q_PROCESSOR_ARM)
+    return "ARM";
+#elif defined(Q_PROCESSOR_ARM64)
+    return "ARM64";
+#else
+    return DialogAbout::tr("Unknown");
+#endif
+}
+
+///
 /// \brief DialogAbout::DialogAbout
 /// \param parent
 ///
@@ -13,11 +32,14 @@ DialogAbout::DialogAbout(QWidget *parent) :
     ui(new Ui::DialogAbout)
 {
     ui->setupUi(this);
-    setWindowTitle(QString(tr("About %1...")).arg(APP_NAME));
+    setWindowTitle(tr("About %1...").arg(APP_NAME));
     ui->labelName->setText(APP_NAME);
-    ui->labelVersion->setText(QString(tr("Version: %1")).arg(APP_VERSION));
-    ui->labelQtFramework->setText(QString(tr("• Qt %1 (build with version %2)")).arg(qVersion(), QT_VERSION_STR));
-    ui->labelFont->setText(tr("• Fira Code 6.2 Font"));
+    ui->labelVersion->setText(tr("Version: %1").arg(APP_VERSION));
+
+    ui->labelArch->setText(tr("• Architecture: %1").arg(arch()));
+    ui->labelPlatform->setText(tr("• Platform: %1 %2").arg(QApplication::platformName(), QSysInfo::currentCpuArchitecture()));
+    ui->labelQtFramework->setText(tr("• Qt %1 (build with version %2)").arg(qVersion(), QT_VERSION_STR));
+    ui->labelFont->setText(tr("<html><head/><body><span>• Script Font: <a href=\"https://github.com/tonsky/FiraCode\"><span style=\"text-decoration: underline; color:#0000ff;\">Fira Code 6.2</span></a></span></body></html>"));
     ui->tabWidget->setCurrentIndex(0);
 }
 

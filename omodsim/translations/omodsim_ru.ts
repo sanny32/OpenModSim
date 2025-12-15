@@ -207,31 +207,54 @@
     </message>
     <message>
         <location filename="../dialogs/dialogabout.ui" line="185"/>
-        <source>Libraries</source>
-        <translation>Библиотеки</translation>
+        <source>Info</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="16"/>
+        <source>Libraries</source>
+        <translation type="vanished">Библиотеки</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogabout.cpp" line="22"/>
+        <source>Unknown</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogabout.cpp" line="35"/>
         <source>About %1...</source>
         <translation>О программе %1...</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="18"/>
+        <location filename="../dialogs/dialogabout.cpp" line="37"/>
         <source>Version: %1</source>
         <translation>Версия: %1</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="19"/>
+        <location filename="../dialogs/dialogabout.cpp" line="39"/>
+        <source>• Architecture: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogabout.cpp" line="40"/>
+        <source>• Platform: %1 %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogabout.cpp" line="41"/>
         <source>• Qt %1 (build with version %2)</source>
         <translation>• Qt %1 (собрано на версии %2)</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="20"/>
-        <source>• Fira Code 6.2 Font</source>
-        <translation>• Fira Code 6.2 шрифт</translation>
+        <location filename="../dialogs/dialogabout.cpp" line="42"/>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;span&gt;• Script Font: &lt;a href=&quot;https://github.com/tonsky/FiraCode&quot;&gt;&lt;span style=&quot;text-decoration: underline; color:#0000ff;&quot;&gt;Fira Code 6.2&lt;/span&gt;&lt;/a&gt;&lt;/span&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="48"/>
+        <source>• Fira Code 6.2 Font</source>
+        <translation type="vanished">• Fira Code 6.2 шрифт</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogabout.cpp" line="70"/>
         <source>License Agreement - %1</source>
         <translation>Лицензионное соглашение - %1</translation>
     </message>
