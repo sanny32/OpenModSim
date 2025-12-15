@@ -208,7 +208,7 @@
     <message>
         <location filename="../dialogs/dialogabout.ui" line="185"/>
         <source>Info</source>
-        <translation type="unfinished"></translation>
+        <translation>Информация</translation>
     </message>
     <message>
         <source>Libraries</source>
@@ -217,7 +217,7 @@
     <message>
         <location filename="../dialogs/dialogabout.cpp" line="22"/>
         <source>Unknown</source>
-        <translation type="unfinished"></translation>
+        <translation>Неизвестно</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogabout.cpp" line="35"/>
@@ -232,12 +232,12 @@
     <message>
         <location filename="../dialogs/dialogabout.cpp" line="39"/>
         <source>• Architecture: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>• Архитектура: %1</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogabout.cpp" line="40"/>
         <source>• Platform: %1 %2</source>
-        <translation type="unfinished"></translation>
+        <translation>• Платформа: %1 %2</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogabout.cpp" line="41"/>
@@ -247,7 +247,7 @@
     <message>
         <location filename="../dialogs/dialogabout.cpp" line="42"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;span&gt;• Script Font: &lt;a href=&quot;https://github.com/tonsky/FiraCode&quot;&gt;&lt;span style=&quot;text-decoration: underline; color:#0000ff;&quot;&gt;Fira Code 6.2&lt;/span&gt;&lt;/a&gt;&lt;/span&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;span&gt;• Шрифт скрипта: &lt;a href=&quot;https://github.com/tonsky/FiraCode&quot;&gt;&lt;span style=&quot;text-decoration: underline; color:#0000ff;&quot;&gt;Fira Code 6.2&lt;/span&gt;&lt;/a&gt;&lt;/span&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <source>• Fira Code 6.2 Font</source>
