@@ -232,12 +232,12 @@
     <message>
         <location filename="../dialogs/dialogabout.cpp" line="39"/>
         <source>• Architecture: %1</source>
-        <translation>• 架構：%1</translation>
+        <translation>• 架構： %1</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogabout.cpp" line="40"/>
         <source>• Platform: %1 %2</source>
-        <translation>• 平台：%1 %2</translation>
+        <translation>• 平台： %1 %2</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogabout.cpp" line="41"/>
