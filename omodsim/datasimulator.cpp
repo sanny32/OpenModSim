@@ -1,3 +1,4 @@
+#include <QDateTime>
 #include <QRandomGenerator>
 #include "datasimulator.h"
 
@@ -7,9 +8,11 @@
 ///
 DataSimulator::DataSimulator(QObject* parent)
     : QObject{parent}
-    ,_elapsed(0)
 {
+    _timer.setSingleShot(true);
+    _timer.setTimerType(Qt::PreciseTimer);
     connect(&_timer, &QTimer::timeout, this, &DataSimulator::on_timeout);
+    _masterTimer.start();
 }
 
 ///
@@ -48,8 +51,8 @@ void DataSimulator::startSimulation(DataDisplayMode mode, quint8 deviceId, QModb
     }
 
     _simulationMap[{ deviceId, type, addr}] = { mode, params, value };
-    resumeSimulations();
 
+    scheduleNextRun();
     emit simulationStarted(deviceId, type, addr);
 }
 
@@ -63,6 +66,8 @@ void DataSimulator::stopSimulation(quint8 deviceId, QModbusDataUnit::RegisterTyp
 {
     _simulationMap.remove({ deviceId, type, addr});
      emit simulationStopped(deviceId, type, addr);
+
+    scheduleNextRun();
 }
 
 ///
@@ -87,8 +92,7 @@ void DataSimulator::pauseSimulations()
 ///
 void DataSimulator::resumeSimulations()
 {
-    if(!_timer.isActive())
-        _timer.start(_interval);
+    scheduleNextRun();
 }
 
 ///
@@ -131,41 +135,77 @@ ModbusSimulationMap2 DataSimulator::simulationMap() const
 }
 
 ///
+/// \brief DataSimulator::scheduleNextRun
+///
+void DataSimulator::scheduleNextRun()
+{
+    if (_simulationMap.isEmpty()) {
+        _timer.stop();
+        return;
+    }
+
+    const qint64 currentTime = _masterTimer.elapsed();
+    qint64 minNextTime = -1;
+
+    for (auto it = _simulationMap.constBegin(); it != _simulationMap.constEnd(); ++it) {
+        const qint64 nextTime = it.value().NextRunTime;
+
+        if (minNextTime == -1 || nextTime < minNextTime) {
+            minNextTime = nextTime;
+        }
+    }
+
+    const qint64 delay = qMax<qint64>(0, minNextTime - currentTime);
+
+    _timer.start(delay);
+}
+
+///
 /// \brief DataSimulator::on_timeout
 ///
 void DataSimulator::on_timeout()
 {
-    _elapsed++;
-    for(auto&& key : _simulationMap.keys())
+    const qint64 currentTime = _masterTimer.elapsed();
+
+    QMutableMapIterator it(_simulationMap);
+    while(it.hasNext())
     {
-        const auto mode = _simulationMap[key].Mode;
-        const auto params = _simulationMap[key].Params;
+        it.next();
+
+        auto& sim = it.value();
+        const auto& key = it.key();
+        const auto mode = sim.Mode;
+        const auto params = sim.Params;
         const auto interval = params.Interval;
 
-        if((_elapsed * _interval) % interval) continue;
+        if (interval <= 0 || sim.NextRunTime > currentTime) continue;
 
         switch(params.Mode)
         {
             case SimulationMode::Random:
                 randomSimulation(mode, key.DeviceId, key.Type, key.Address, params.RandomParams);
-            break;
+                break;
 
             case SimulationMode::Increment:
                 incrementSimulation(mode, key.DeviceId, key.Type, key.Address, params.IncrementParams);
-            break;
+                break;
 
             case SimulationMode::Decrement:
                 decrementSimailation(mode, key.DeviceId, key.Type, key.Address, params.DecrementParams);
-            break;
+                break;
 
             case SimulationMode::Toggle:
                 toggleSimulation(key.DeviceId, key.Type, key.Address);
-            break;
+                break;
 
             default:
-            break;
+                break;
         }
+
+        sim.NextRunTime = currentTime + interval;
     }
+
+    scheduleNextRun();
 }
 
 

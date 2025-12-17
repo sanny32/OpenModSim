@@ -207,31 +207,54 @@
     </message>
     <message>
         <location filename="../dialogs/dialogabout.ui" line="185"/>
-        <source>Libraries</source>
-        <translation>库</translation>
+        <source>Info</source>
+        <translation>資訊</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="16"/>
+        <source>Libraries</source>
+        <translation type="vanished">库</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogabout.cpp" line="22"/>
+        <source>Unknown</source>
+        <translation>未知</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogabout.cpp" line="35"/>
         <source>About %1...</source>
         <translation>关于 %1...</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="18"/>
+        <location filename="../dialogs/dialogabout.cpp" line="37"/>
         <source>Version: %1</source>
         <translation>版本: %1</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="19"/>
+        <location filename="../dialogs/dialogabout.cpp" line="39"/>
+        <source>• Architecture: %1</source>
+        <translation>• 架構： %1</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogabout.cpp" line="40"/>
+        <source>• Platform: %1 %2</source>
+        <translation>• 平台： %1 %2</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogabout.cpp" line="41"/>
         <source>• Qt %1 (build with version %2)</source>
         <translation>• Qt %1（基于版本 %2 构建）</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="20"/>
-        <source>• Fira Code 6.2 Font</source>
-        <translation>• Fira Code 6.2 字体</translation>
+        <location filename="../dialogs/dialogabout.cpp" line="42"/>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;span&gt;• Script Font: &lt;a href=&quot;https://github.com/tonsky/FiraCode&quot;&gt;&lt;span style=&quot;text-decoration: underline; color:#0000ff;&quot;&gt;Fira Code 6.2&lt;/span&gt;&lt;/a&gt;&lt;/span&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;span&gt;• 手寫字體： &lt;a href=&quot;https://github.com/tonsky/FiraCode&quot;&gt;&lt;span style=&quot;text-decoration: underline; color:#0000ff;&quot;&gt;Fira Code 6.2&lt;/span&gt;&lt;/a&gt;&lt;/span&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="48"/>
+        <source>• Fira Code 6.2 Font</source>
+        <translation type="vanished">• Fira Code 6.2 字体</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogabout.cpp" line="70"/>
         <source>License Agreement - %1</source>
         <translation>许可协议 - %1</translation>
     </message>

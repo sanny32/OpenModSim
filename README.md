@@ -141,12 +141,13 @@ The following minimum operating system versions are supported for OpenModSim:
 - Ubuntu Linux 22.04
 - Mint Linux 22
 - Fedora Linux 41
+- Rocky Linux 9.7
 - OpenSuse Linux 15.6
 - Alt Linux 11
 - Astra Linux 1.7
 - RedOS 8
 
-# Install from binary distributions
+# Install from [binary distributions](https://github.com/sanny32/OpenModSim/releases/latest)
 
 Below are the methods for installing the OpenModSim for different OS
 
@@ -177,7 +178,7 @@ or for Qt5 package:
 sudo apt remove qt5-omodsim
 ```
 
-## RedHat/Fedora/RedOS Linux
+## RedHat/Fedora/Rocky/RedOS Linux
 ### Install
 Install the RPM package from the command line:
 ```bash
