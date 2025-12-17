@@ -154,18 +154,18 @@ Below are the methods for installing the OpenModSim for different OS
 ## Microsoft Windows
 Run the installer:
 
-- For 32-bit Windows: `qt5-omodsim_1.11.1_x86.exe`
-- For 64-bit Windows: `qt5-omodsim_1.11.1_x64.exe` or `qt6-omodsim_1.11.1_x64.exe`
+- For 32-bit Windows: `qt5-omodsim_1.11.2_x86.exe`
+- For 64-bit Windows: `qt5-omodsim_1.11.2_x64.exe` or `qt6-omodsim_1.11.2_x64.exe`
 
 ## Debian/Ubintu/Mint/Astra Linux
 ### Install
 Install the DEB package from the command line:
 ```bash
-sudo apt install ./qt6-omodsim_1.11.1-1_amd64.deb
+sudo apt install ./qt6-omodsim_1.11.2-1_amd64.deb
 ```
 or if you want to use Qt5 libraries:
 ```bash
-sudo apt install ./qt5-omodsim_1.11.1-1_amd64.deb
+sudo apt install ./qt5-omodsim_1.11.2-1_amd64.deb
 ```
 
 ### Remove
@@ -182,7 +182,7 @@ sudo apt remove qt5-omodsim
 ### Install
 Install the RPM package from the command line:
 ```bash
-sudo dnf install ./qt6-omodsim-1.11.1-1.x86_64.rpm
+sudo dnf install ./qt6-omodsim-1.11.2-1.x86_64.rpm
 ```
 
 ### Remove
@@ -195,7 +195,7 @@ sudo dnf remove qt6-omodsim
 ### Install
 Install the RPM package from the command line as root user:
 ```bash
-apt-get install ./qt6-omodsim-1.11.1-1.x86_64.rpm
+apt-get install ./qt6-omodsim-1.11.2-1.x86_64.rpm
 ```
 
 ### Remove
@@ -212,7 +212,7 @@ sudo rpm --import qt6-omodsim.rpm.pubkey
 ```
 Install the RPM package using Zypper:
 ```bash
-sudo zypper install ./qt6-omodsim-1.11.1-1.x86_64.rpm
+sudo zypper install ./qt6-omodsim-1.11.2-1.x86_64.rpm
 ```
 
 ### Remove
