@@ -940,7 +940,7 @@ void MainWindow::on_actionToolbar_triggered()
 ///
 void MainWindow::on_actionStatusBar_triggered()
 {
-    ui->statusbar->setVisible(!ui->statusbar->isVisible());
+    statusBar()->setVisible(!statusBar()->isVisible());
 }
 
 ///
@@ -1851,6 +1851,8 @@ void MainWindow::loadSettings()
     const auto viewMode = (QMdiArea::ViewMode)qBound(0, m.value("ViewMode", QMdiArea::SubWindowView).toInt(), 1);
     ui->mdiArea->setViewMode(viewMode);
 
+    statusBar()->setVisible(m.value("StatusBar", true).toBool());
+
     const auto displaybarArea = (Qt::ToolBarArea)qBound(0, m.value("DisplayBarArea", Qt::TopToolBarArea).toInt(), 0xf);
     const auto displaybarBreak = m.value("DisplayBarBreak").toBool();
     if(displaybarBreak) addToolBarBreak(displaybarArea);
@@ -1941,6 +1943,7 @@ void MainWindow::saveSettings()
     if(frm) m.setValue("ActiveWindow", frm->windowTitle());
 
     m.setValue("ViewMode", ui->mdiArea->viewMode());
+    m.setValue("StatusBar", statusBar()->isVisible());
     m.setValue("DisplayBarArea", toolBarArea(ui->toolBarDisplay));
     m.setValue("DisplayBarBreak", toolBarBreak(ui->toolBarDisplay));
     m.setValue("ScriptBarArea", toolBarArea(ui->toolBarScript));
