@@ -118,6 +118,9 @@ public:
     LogViewState logViewState() const;
     void setLogViewState(LogViewState state);
 
+    QRect parentGeometry() const;
+    void setParentGeometry(const QRect& geometry);
+
 protected:
     void changeEvent(QEvent* event) override;
     void closeEvent(QCloseEvent* event) override;
@@ -171,6 +174,7 @@ private:
     ScriptSettings _scriptSettings;
     ModbusMultiServer& _mbMultiServer;
     QSharedPointer<DataSimulator> _dataSimulator;
+    QRect _parentGeometry;
 };
 
 ///
@@ -190,11 +194,9 @@ inline QSettings& operator <<(QSettings& out, FormModSim* frm)
     out.setValue("StatusColor", frm->statusColor());
 
     const auto wnd = frm->parentWidget();
+    out.setValue("ViewMinimized", wnd->isMinimized());
     out.setValue("ViewMaximized", wnd->isMaximized());
-    if(!wnd->isMaximized() && !wnd->isMinimized())
-    {
-        out.setValue("ViewSize", wnd->size());
-    }
+    out.setValue("ViewRect", frm->parentGeometry());
 
     out << frm->displayMode();
     out << frm->dataDisplayMode();
@@ -238,11 +240,13 @@ inline QSettings& operator >>(QSettings& in, FormModSim* frm)
 
     in >> frm->scriptControl();
 
+    bool isMinimized;
+    isMinimized = in.value("ViewMinimized").toBool();
     bool isMaximized;
     isMaximized = in.value("ViewMaximized").toBool();
 
-    QSize wndSize;
-    wndSize = in.value("ViewSize").toSize();
+    QRect wndRect;
+    wndRect = in.value("ViewRect").toRect();
 
     auto wnd = frm->parentWidget();
     if(!version.isNull() || version >= QVersionNumber(1, 8)) {
@@ -252,7 +256,8 @@ inline QSettings& operator >>(QSettings& in, FormModSim* frm)
         frm->setStatusColor(in.value("StatusColor", QColor(Qt::red)).value<QColor>());
     }
 
-    wnd->resize(wndSize);
+    frm->setParentGeometry(wndRect);
+    if(isMinimized) wnd->setWindowState(Qt::WindowMinimized);
     if(isMaximized) wnd->setWindowState(Qt::WindowMaximized);
 
     frm->setDisplayMode(displayMode);

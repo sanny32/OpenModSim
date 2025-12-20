@@ -729,6 +729,34 @@ void FormModSim::setLogViewState(LogViewState state)
 }
 
 ///
+/// \brief FormModSim::parentGeometry
+/// \return
+///
+QRect FormModSim::parentGeometry() const
+{
+    auto wnd = parentWidget();
+    return (!wnd->isMaximized() && !wnd->isMinimized()) ? wnd->geometry() : _parentGeometry;
+}
+
+///
+/// \brief FormModSim::setParentGeometry
+/// \param geometry
+///
+void FormModSim::setParentGeometry(const QRect& geometry)
+{
+    if(geometry.isValid())
+    {
+        _parentGeometry = geometry;
+
+        auto wnd = parentWidget();
+        if(wnd->geometry() != geometry)
+        {
+            wnd->setGeometry(geometry);
+        }
+    }
+}
+
+///
 /// \brief FormModSim::show
 ///
 void FormModSim::show()

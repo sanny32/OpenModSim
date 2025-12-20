@@ -176,6 +176,17 @@ bool MainWindow::eventFilter(QObject* obj, QEvent* e)
         case QEvent::Close:
             _windowActionList->removeWindow(qobject_cast<QMdiSubWindow*>(obj));
         break;
+        case QEvent::Move:
+            if(auto wnd = qobject_cast<const QMdiSubWindow*>(obj))
+            {
+                if(auto frm = qobject_cast<FormModSim*>(wnd->widget()))
+                {
+                    if (!wnd->isMinimized() && !wnd->isMaximized())
+                    {
+                        frm->setParentGeometry(wnd->geometry());
+                    }
+                }
+            }
         break;
         default:
             qt_noop();
