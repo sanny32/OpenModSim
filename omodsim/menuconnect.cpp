@@ -220,6 +220,7 @@ QSettings& operator <<(QSettings& out, const MenuConnect* menu)
     if(!menu)
         return out;
 
+    QMap<QString, QByteArray> items;
     QMapIterator it(menu->_connectionDetailsMap);
     while(it.hasNext())
     {
@@ -229,9 +230,15 @@ QSettings& operator <<(QSettings& out, const MenuConnect* menu)
 
         QByteArray a;
         QDataStream ds(&a, QIODevice::WriteOnly);
+        ds.setVersion(QDataStream::Qt_5_15);
         ds << cd;
 
-        out.setValue("MenuConnect/" + action->property("id").toString(), a);
+        items["MenuConnect/" + action->property("id").toString()] = a;
+    }
+    // Sorted output
+    for(auto i = items.cbegin(); i != items.cend(); ++i)
+    {
+        out.setValue(i.key(), i.value());
     }
 
     return out;
@@ -258,6 +265,7 @@ QSettings& operator >>(QSettings& in, MenuConnect* menu)
         if(!a.isEmpty())
         {
             QDataStream ds(a);
+            ds.setVersion(QDataStream::Qt_5_15);
             ConnectionDetails cd;
             ds >> cd;
 
