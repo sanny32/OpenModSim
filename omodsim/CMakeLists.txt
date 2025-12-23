@@ -10,6 +10,7 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_INTERPROCEDURAL_OPTIMIZATION ON)
 set(PRODUCT_NAME "Open ModSim")
 set(EXECUTABLE_PATH "${CMAKE_INSTALL_PREFIX}/bin/${PROJECT_NAME}")
 
@@ -247,6 +248,7 @@ set(HEADERS
     modbussimulationparams.h
     modbuswriteparams.h
     numericutils.h
+    pch.h
     qfixedsizedialog.h
     qhexvalidator.h
     qint64validator.h
@@ -296,6 +298,8 @@ set(TS_FILES
 )
 
 set(JSHELP_INPUT "${CMAKE_SOURCE_DIR}/docs/jshelp.qhcp")
+set(JSHELP_QHCP "${CMAKE_BINARY_DIR}/docs/jshelp.qhcp")
+set(JSHELP_QHP "${CMAKE_SOURCE_DIR}/docs/jshelp.qhp")
 set(JSHELP_QCH "${CMAKE_BINARY_DIR}/docs/jshelp.qch")
 set(JSHELP_QHC "${CMAKE_BINARY_DIR}/docs/jshelp.qhc")
 
@@ -314,7 +318,7 @@ else()
     message(FATAL_ERROR "qhelpgenerator not found")
 endif()
 
-# Link libraries
+target_precompile_headers(${PROJECT_NAME} PRIVATE pch.h)
 target_sources(${PROJECT_NAME} PRIVATE resources.qrc ${HEADERS} ${SOURCES} ${UI_FILES} ${TS_FILES})
 target_link_libraries(${PROJECT_NAME} PRIVATE Qt::Widgets Qt::Network Qt::Xml Qt::PrintSupport Qt::SerialBus Qt::SerialPort Qt::Qml Qt::Help)
 
@@ -358,12 +362,12 @@ endif()
 
 add_custom_command(
     OUTPUT ${JSHELP_QCH} ${JSHELP_QHC}
-    COMMAND ${QHELP_GENERATOR_EXECUTABLE} ${JSHELP_INPUT}
+    COMMAND ${CMAKE_COMMAND} -E copy ${JSHELP_INPUT} ${JSHELP_QHCP}
+    COMMAND ${QHELP_GENERATOR_EXECUTABLE} ${JSHELP_QHP} -o ${JSHELP_QCH}
+    COMMAND ${QHELP_GENERATOR_EXECUTABLE} ${JSHELP_QHCP} -o ${JSHELP_QHC}
+    COMMAND ${CMAKE_COMMAND} -E remove ${JSHELP_QHCP}
+    DEPENDS ${JSHELP_QHP} ${JSHELP_INPUT}
     WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/docs
-    COMMAND ${CMAKE_COMMAND} -E rename
-            ${CMAKE_SOURCE_DIR}/docs/jshelp.qch ${JSHELP_QCH}
-    COMMAND ${CMAKE_COMMAND} -E rename
-            ${CMAKE_SOURCE_DIR}/docs/jshelp.qhc ${JSHELP_QHC}
     COMMENT "Generating and moving help files..."
     VERBATIM
 )

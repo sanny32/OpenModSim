@@ -56,3 +56,9 @@ CMakeLists.txt.user*
 *.rc
 *.qtds
 *.ts text eol=lf
+
+# Visual Studio
+.vs
+out
+CMakePresets.json
+CMakeUserPresets.json
