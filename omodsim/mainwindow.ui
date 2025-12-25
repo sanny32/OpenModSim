@@ -202,7 +202,8 @@
      </property>
      <addaction name="actionEnglish"/>
      <addaction name="actionRussian"/>
-     <addaction name="actionChineseZh"/>
+     <addaction name="actionChineseCN"/>
+     <addaction name="actionChineseTW"/>
     </widget>
     <addaction name="actionTabbedView"/>
     <addaction name="separator"/>
@@ -1044,15 +1045,18 @@
     <string>ANSI</string>
    </property>
    <property name="menuRole">
-    <enum>QAction::MenuRole::NoRole</enum>
+    <enum>QAction::MenuRole::TextHeuristicRole</enum>
    </property>
   </action>
-  <action name="actionChineseZh">
+  <action name="actionChineseCN">
    <property name="checkable">
     <bool>true</bool>
    </property>
    <property name="text">
-    <string notr="true">中國人</string>
+    <string>简体中文</string>
+   </property>
+   <property name="toolTip">
+    <string>简体中文</string>
    </property>
   </action>
   <action name="actionMbDefinitions">
@@ -1101,6 +1105,17 @@
    </property>
    <property name="autoRepeat">
     <bool>false</bool>
+   </property>
+  </action>
+  <action name="actionChineseTW">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>繁體中文</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::MenuRole::TextHeuristicRole</enum>
    </property>
   </action>
  </widget>

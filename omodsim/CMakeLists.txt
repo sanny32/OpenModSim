@@ -294,7 +294,8 @@ set(UI_FILES
 
 set(TS_FILES
     translations/omodsim_ru.ts
-    translations/omodsim_zh.ts
+    translations/omodsim_zh_CN.ts
+    translations/omodsim_zh_TW.ts
 )
 
 set(JSHELP_INPUT "${CMAKE_SOURCE_DIR}/docs/jshelp.qhcp")

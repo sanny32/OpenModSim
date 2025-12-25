@@ -254,7 +254,8 @@ void MainWindow::on_awake()
     ui->actionEditBar->setChecked(ui->toolBarEdit->isVisible());
     ui->actionEnglish->setChecked(_lang == "en");
     ui->actionRussian->setChecked(_lang == "ru");
-    ui->actionChineseZh->setChecked(_lang == "zh");
+    ui->actionChineseCN->setChecked(_lang == "zh_CN");
+    ui->actionChineseTW->setChecked(_lang == "zh_TW");
 
     ui->actionTile->setEnabled(ui->mdiArea->viewMode() == QMdiArea::SubWindowView);
     ui->actionCascade->setEnabled(ui->mdiArea->viewMode() == QMdiArea::SubWindowView);
@@ -1058,11 +1059,19 @@ void MainWindow::on_actionRussian_triggered()
 }
 
 ///
-/// \brief MainWindow::on_actionChineseZh_triggered
+/// \brief MainWindow::on_actionChineseCN_triggered
 ///
-void MainWindow::on_actionChineseZh_triggered()
+void MainWindow::on_actionChineseCN_triggered()
 {
-    setLanguage("zh");
+    setLanguage("zh_CN");
+}
+
+///
+/// \brief MainWindow::on_actionChineseTW_triggered
+///
+void MainWindow::on_actionChineseTW_triggered()
+{
+    setLanguage("zh_TW");
 }
 
 ///
