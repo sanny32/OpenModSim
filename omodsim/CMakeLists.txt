@@ -88,6 +88,7 @@ set(SOURCES
     controls/booleancombobox.cpp
     controls/bytelisttextedit.cpp
     controls/clickablelabel.cpp
+    controls/componentinfocontrol.cpp
     controls/consoleoutput.cpp
     controls/customframe.cpp
     controls/customlineedit.cpp
@@ -165,6 +166,7 @@ set(HEADERS
     controls/booleancombobox.h
     controls/bytelisttextedit.h
     controls/clickablelabel.h
+    controls/componentinfocontrol.h
     controls/consoleoutput.h
     controls/customframe.h
     controls/customlineedit.h

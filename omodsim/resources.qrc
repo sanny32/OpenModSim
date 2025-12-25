@@ -58,5 +58,6 @@
         <file>res/actionPresetHoldingRegs.png</file>
         <file>translations/omodsim_zh_CN.qm</file>
         <file>translations/omodsim_zh_TW.qm</file>
+        <file>res/github.svg</file>
     </qresource>
 </RCC>
