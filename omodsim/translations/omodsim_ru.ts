@@ -1872,25 +1872,25 @@ Script.onInit(()=&gt;{
         <translation>Шестнадцатиричные адреса</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="359"/>
-        <location filename="../mainwindow.cpp" line="431"/>
-        <location filename="../mainwindow.cpp" line="441"/>
-        <location filename="../mainwindow.cpp" line="472"/>
-        <location filename="../mainwindow.cpp" line="498"/>
+        <location filename="../mainwindow.cpp" line="360"/>
+        <location filename="../mainwindow.cpp" line="432"/>
+        <location filename="../mainwindow.cpp" line="442"/>
+        <location filename="../mainwindow.cpp" line="473"/>
+        <location filename="../mainwindow.cpp" line="499"/>
         <source>All files (*)</source>
         <translation>Все файлы (*)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="358"/>
-        <location filename="../mainwindow.cpp" line="435"/>
-        <location filename="../mainwindow.cpp" line="440"/>
-        <location filename="../mainwindow.cpp" line="471"/>
-        <location filename="../mainwindow.cpp" line="497"/>
+        <location filename="../mainwindow.cpp" line="359"/>
+        <location filename="../mainwindow.cpp" line="436"/>
+        <location filename="../mainwindow.cpp" line="441"/>
+        <location filename="../mainwindow.cpp" line="472"/>
+        <location filename="../mainwindow.cpp" line="498"/>
         <source>XML files (*.xml)</source>
         <translation>XML файлы (*.xml)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1427"/>
+        <location filename="../mainwindow.cpp" line="1428"/>
         <source>Capture Error:<byte value="xd"/>
 %1</source>
         <translation>Ошибка захвата:

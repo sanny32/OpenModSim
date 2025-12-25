@@ -254,6 +254,7 @@ void MainWindow::on_awake()
     ui->actionEditBar->setChecked(ui->toolBarEdit->isVisible());
     ui->actionEnglish->setChecked(_lang == "en");
     ui->actionRussian->setChecked(_lang == "ru");
+    ui->actionChineseZh->setChecked(_lang == "zh");
 
     ui->actionTile->setEnabled(ui->mdiArea->viewMode() == QMdiArea::SubWindowView);
     ui->actionCascade->setEnabled(ui->mdiArea->viewMode() == QMdiArea::SubWindowView);
