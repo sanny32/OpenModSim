@@ -206,55 +206,139 @@
         <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;a href=&quot;&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Лицензия: MIT License&lt;span&gt;&lt;/a&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.ui" line="185"/>
+        <location filename="../dialogs/dialogabout.ui" line="198"/>
+        <source>Components</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogabout.ui" line="203"/>
+        <source>Authors</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogabout.ui" line="208"/>
+        <source>Translation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Info</source>
-        <translation>Информация</translation>
+        <translation type="vanished">Информация</translation>
     </message>
     <message>
         <source>Libraries</source>
         <translation type="vanished">Библиотеки</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="22"/>
+        <location filename="../dialogs/dialogabout.cpp" line="62"/>
         <source>Unknown</source>
         <translation>Неизвестно</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="35"/>
+        <location filename="../dialogs/dialogabout.cpp" line="75"/>
         <source>About %1...</source>
         <translation>О программе %1...</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="37"/>
+        <location filename="../dialogs/dialogabout.cpp" line="78"/>
+        <source>Version: %1 %2</source>
+        <translation type="unfinished">Версия: %1 %2</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogabout.cpp" line="86"/>
+        <source>Using %1 and built against %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogabout.cpp" line="87"/>
+        <source>Cross-platform application development framework.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogabout.cpp" line="120"/>
+        <source>Author and Maintainer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogabout.cpp" line="191"/>
+        <source>Visit component&apos;s homepage
+%1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogabout.cpp" line="212"/>
+        <source>Email contributer: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogabout.cpp" line="221"/>
+        <source>Visit user&apos;s homepage
+%1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogabout.cpp" line="93"/>
+        <source>Free monospaced font with programming ligatures.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogabout.cpp" line="43"/>
+        <source>%1 build %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogabout.cpp" line="100"/>
+        <location filename="../dialogs/dialogabout.cpp" line="107"/>
+        <source>Underlying platform.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogabout.cpp" line="143"/>
+        <source>Russian</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogabout.cpp" line="148"/>
+        <source>Simplified Chinese and Traditional Chinese</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogabout.cpp" line="217"/>
+        <source>Visit github user&apos;s homepage
+%1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogabout.cpp" line="125"/>
+        <location filename="../dialogs/dialogabout.cpp" line="130"/>
+        <source>Contributer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Version: %1</source>
-        <translation>Версия: %1</translation>
+        <translation type="vanished">Версия: %1</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="39"/>
         <source>• Architecture: %1</source>
-        <translation>• Архитектура: %1</translation>
+        <translation type="vanished">• Архитектура: %1</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="40"/>
         <source>• Platform: %1 %2</source>
-        <translation>• Платформа: %1 %2</translation>
+        <translation type="vanished">• Платформа: %1 %2</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="41"/>
         <source>• Qt %1 (build with version %2)</source>
-        <translation>• Qt %1 (собрано на версии %2)</translation>
+        <translation type="vanished">• Qt %1 (собрано на версии %2)</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="42"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;span&gt;• Script Font: &lt;a href=&quot;https://github.com/tonsky/FiraCode&quot;&gt;&lt;span style=&quot;text-decoration: underline; color:#0000ff;&quot;&gt;Fira Code 6.2&lt;/span&gt;&lt;/a&gt;&lt;/span&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;span&gt;• Шрифт скрипта: &lt;a href=&quot;https://github.com/tonsky/FiraCode&quot;&gt;&lt;span style=&quot;text-decoration: underline; color:#0000ff;&quot;&gt;Fira Code 6.2&lt;/span&gt;&lt;/a&gt;&lt;/span&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation type="vanished">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;span&gt;• Шрифт скрипта: &lt;a href=&quot;https://github.com/tonsky/FiraCode&quot;&gt;&lt;span style=&quot;text-decoration: underline; color:#0000ff;&quot;&gt;Fira Code 6.2&lt;/span&gt;&lt;/a&gt;&lt;/span&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <source>• Fira Code 6.2 Font</source>
         <translation type="vanished">• Fira Code 6.2 шрифт</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="70"/>
+        <location filename="../dialogs/dialogabout.cpp" line="243"/>
         <source>License Agreement - %1</source>
         <translation>Лицензионное соглашение - %1</translation>
     </message>
@@ -1883,25 +1967,25 @@ Script.onInit(()=&gt;{
         <translation>Шестнадцатиричные адреса</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="362"/>
-        <location filename="../mainwindow.cpp" line="434"/>
-        <location filename="../mainwindow.cpp" line="444"/>
-        <location filename="../mainwindow.cpp" line="475"/>
-        <location filename="../mainwindow.cpp" line="501"/>
+        <location filename="../mainwindow.cpp" line="361"/>
+        <location filename="../mainwindow.cpp" line="433"/>
+        <location filename="../mainwindow.cpp" line="443"/>
+        <location filename="../mainwindow.cpp" line="474"/>
+        <location filename="../mainwindow.cpp" line="500"/>
         <source>All files (*)</source>
         <translation>Все файлы (*)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="361"/>
-        <location filename="../mainwindow.cpp" line="438"/>
-        <location filename="../mainwindow.cpp" line="443"/>
-        <location filename="../mainwindow.cpp" line="474"/>
-        <location filename="../mainwindow.cpp" line="500"/>
+        <location filename="../mainwindow.cpp" line="360"/>
+        <location filename="../mainwindow.cpp" line="437"/>
+        <location filename="../mainwindow.cpp" line="442"/>
+        <location filename="../mainwindow.cpp" line="473"/>
+        <location filename="../mainwindow.cpp" line="499"/>
         <source>XML files (*.xml)</source>
         <translation>XML файлы (*.xml)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1438"/>
+        <location filename="../mainwindow.cpp" line="1437"/>
         <source>Capture Error:<byte value="xd"/>
 %1</source>
         <translation>Ошибка захвата:
