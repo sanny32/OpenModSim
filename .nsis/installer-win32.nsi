@@ -23,11 +23,38 @@
   !define MUI_FINISHPAGE_RUN_TEXT "Launch ${NAME}"
   !define MUI_FINISHPAGE_RUN_CHECKED
 
+  !searchparse /noerrors ${VERSION} "" VERSIONMAJOR "." VERSIONMINOR "." VERSIONPATCH "." VERSIONBUILD
+  !ifndef VERSIONBUILD
+    !define VERSIONBUILD "0"
+  !endif
+  !ifndef VERSIONPATCH
+    !define VERSIONPATCH "0"
+    !searchparse ${VERSION} "" VERSIONMAJOR "." VERSIONMINOR "-"
+  !endif
+  !searchparse /file ${LICENSE_FILE} "Copyright " COPYRIGHT
+
 #--------------------------------
 # Variables
 
   Var /GLOBAL DISPLAYNAME
   Var RebootRequired
+
+#--------------------------------
+# General
+
+  Name "${NAME} v${VERSION} (x86)"
+  OutFile "${OUTPUT_FILE}"
+  InstallDir "$PROGRAMFILES\${NAME}"
+  RequestExecutionLevel admin
+  SetCompressor /SOLID lzma
+  SetCompressorDictSize 64
+  VIProductVersion "${VERSIONMAJOR}.${VERSIONMINOR}.${VERSIONPATCH}.${VERSIONBUILD}"
+  VIFileVersion    "${VERSIONMAJOR}.${VERSIONMINOR}.${VERSIONPATCH}.${VERSIONBUILD}"
+  VIAddVersionKey /LANG=0 "ProductVersion"   "${VERSION}"
+  VIAddVersionKey /LANG=0 "FileVersion"      "${VERSION}"
+  VIAddVersionKey /LANG=0 "ProductName"      "${NAME}"
+  VIAddVersionKey /LANG=0 "FileDescription"  "${NAME}"
+  VIAddVersionKey /LANG=0 "LegalCopyright"   "Copyright (c) ${COPYRIGHT}"
 
 #--------------------------------
 
@@ -53,14 +80,6 @@ Function un.onInit
 FunctionEnd
 
 #--------------------------------
-# General
-
-  Name "${NAME} v${VERSION} (x86)"
-  OutFile "${OUTPUT_FILE}"
-  InstallDir "$PROGRAMFILES\${NAME}"
-  RequestExecutionLevel admin
-
-#--------------------------------
 # Pages
   
   # Installer pages
@@ -81,7 +100,7 @@ FunctionEnd
 
   Section
     SetOutPath $INSTDIR
-    File /r "${BUILD_PATH}\*"
+    File /r /x bearer /x canbus /x qgif.dll /x qicns.dll /x qjpeg.dll /x qtga.dll /x qtiff.dll /x qwbmp.dll /x qwebp.dll /x qsqlodbc.dll /x qsqlpsql.dll "${BUILD_PATH}\*"
     WriteUninstaller $INSTDIR\uninstall.exe
   SectionEnd
 
@@ -109,6 +128,7 @@ FunctionEnd
  Section "Visual Studio Runtime"
     SetOutPath "$INSTDIR"
     ExecWait '"$INSTDIR\vc_redist.x86.exe" /install /quiet /norestart' $0
+    Delete "$TEMP\dd_vcredist*"
 
     ; 3010 = reboot required
     ${If} $0 == 3010
