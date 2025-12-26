@@ -11,7 +11,11 @@ class QFixedSizeDialog : public QDialog
     Q_OBJECT
 
 public:
-    QFixedSizeDialog(QWidget *parent = nullptr, Qt::WindowFlags f = Qt::WindowFlags());
+    QFixedSizeDialog(QWidget *parent = nullptr, Qt::WindowFlags f =
+                     Qt::Dialog |
+                     Qt::CustomizeWindowHint |
+                     Qt::WindowCloseButtonHint |
+                     Qt::WindowTitleHint);
 
 protected:
     void showEvent(QShowEvent* e) override;
