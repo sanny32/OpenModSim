@@ -239,9 +239,8 @@
         <translation>О программе %1...</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="78"/>
         <source>Version: %1 %2</source>
-        <translation type="unfinished">Версия: %1 %2</translation>
+        <translation type="obsolete">Версия: %1 %2</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogabout.cpp" line="86"/>
@@ -283,6 +282,11 @@
     <message>
         <location filename="../dialogs/dialogabout.cpp" line="43"/>
         <source>%1 build %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogabout.cpp" line="78"/>
+        <source>Version: &lt;b&gt;%1&lt;/b&gt; %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
