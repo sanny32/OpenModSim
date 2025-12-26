@@ -93,9 +93,7 @@ MainWindow::MainWindow(bool useSession, QWidget *parent)
     connect(&_mbMultiServer, &ModbusMultiServer::connectionError, this, &MainWindow::on_connectionError);
 
     if(_useSession) {
-        loadSettings();
-
-        if(_windowCounter == 0) {
+        if(!loadSettings()) {
             ui->actionNew->trigger();
         }
     }
@@ -1848,7 +1846,7 @@ void MainWindow::closeMdiChild(FormModSim* frm)
 ///
 /// \brief MainWindow::loadSettings
 ///
-void MainWindow::loadSettings()
+bool MainWindow::loadSettings()
 {
     const auto filename = QString("%1.ini").arg(QFileInfo(qApp->applicationFilePath()).baseName());
     auto filepath = QString("%1%2%3").arg(qApp->applicationDirPath(), QDir::separator(), filename);
@@ -1857,7 +1855,7 @@ void MainWindow::loadSettings()
         filepath = QString("%1%2%3").arg(QStandardPaths::writableLocation(QStandardPaths::ConfigLocation),
                                          QDir::separator(), filename);
 
-    if(!QFile::exists(filepath)) return;
+    if(!QFile::exists(filepath)) return false;
 
     QSettings m(filepath, QSettings::IniFormat, this);
 
@@ -1920,6 +1918,8 @@ void MainWindow::loadSettings()
     }
 
     restoreState(m.value("WindowState").toByteArray());
+
+    return true;
 }
 
 ///

@@ -163,7 +163,7 @@ private:
     void saveMdiChild(FormModSim* frm, SerializationFormat format);
     void closeMdiChild(FormModSim* frm);
 
-    void loadSettings();
+    bool loadSettings();
     void saveSettings();
 
     void saveAs(FormModSim* frm, SerializationFormat format);
