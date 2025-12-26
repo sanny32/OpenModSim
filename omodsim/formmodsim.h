@@ -124,7 +124,7 @@ public:
 protected:
     void changeEvent(QEvent* event) override;
     void closeEvent(QCloseEvent* event) override;
-    bool eventFilter(QObject* watched, QEvent* event) override;
+    void mouseDoubleClickEvent(QMouseEvent* event) override;
 
 public slots:
     void show();
