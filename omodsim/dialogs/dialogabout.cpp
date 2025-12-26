@@ -5,7 +5,6 @@
 #include "dialogabout.h"
 #include "ui_dialogabout.h"
 
-
 #ifdef Q_OS_WIN
 #include <windows.h>
 
@@ -108,7 +107,7 @@ DialogAbout::DialogAbout(QWidget *parent) :
     #endif
 
         vboxLayout->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Minimum, QSizePolicy::Expanding));
-        ui->tabComponents->setLayout(vboxLayout);
+        ui->scrollAreaComponentsWidget->setLayout(vboxLayout);
     }
 
     {
@@ -131,7 +130,7 @@ DialogAbout::DialogAbout(QWidget *parent) :
                   "mailto: raspopov@cherubicsoft.com");
 
         vboxLayout->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Minimum, QSizePolicy::Expanding));
-        ui->tabAuthors->setLayout(vboxLayout);
+        ui->scrollAreaAuthorsWidget->setLayout(vboxLayout);
     }
 
     {
@@ -149,7 +148,7 @@ DialogAbout::DialogAbout(QWidget *parent) :
                   "https://github.com/CWZ7605");
 
         vboxLayout->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Minimum, QSizePolicy::Expanding));
-        ui->tabTranslation->setLayout(vboxLayout);
+        ui->scrollAreaTranslationWidget->setLayout(vboxLayout);
     }
 
     ui->tabWidget->setCurrentIndex(0);
