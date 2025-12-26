@@ -1,17 +1,17 @@
-#ifndef COMPONENTINFOCONTROL_H
-#define COMPONENTINFOCONTROL_H
+#ifndef ABOUTDATAWIDGET_H
+#define ABOUTDATAWIDGET_H
 
 #include <QWidget>
 
 ///
-/// \brief The ComponentInfoControl class
+/// \brief The AboutDataWidget class
 ///
-class ComponentInfoControl : public QWidget
+class AboutDataWidget : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit ComponentInfoControl(QWidget *parent = nullptr);
+    explicit AboutDataWidget(QWidget *parent = nullptr);
 
     void setTitle(const QString &title);
     void setVersion(const QString &version);
@@ -42,4 +42,4 @@ private:
     QUrl _linkUrl;
 };
 
-#endif // COMPONENTINFOCONTROL_H
+#endif // ABOUTDATAWIDGET_H

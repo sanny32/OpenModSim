@@ -1,10 +1,10 @@
-#include "componentinfocontrol.h"
+#include "aboutdatawidget.h"
 
 ///
-/// \brief ComponentInfoControl::ComponentInfoControl
+/// \brief AboutDataWidget::AboutDataWidget
 /// \param parent
 ///
-ComponentInfoControl::ComponentInfoControl(QWidget *parent)
+AboutDataWidget::AboutDataWidget(QWidget *parent)
     : QWidget(parent)
     ,_titleLabel(new QLabel(this))
     ,_versionLabel(new QLabel(this))
@@ -14,13 +14,12 @@ ComponentInfoControl::ComponentInfoControl(QWidget *parent)
     ,_linkUrl()
 {
     setupUI();
-    setLinkIcon(QIcon::fromTheme("applications-internet"));
 }
 
 ///
-/// \brief ComponentInfoControl::setupUI
+/// \brief AboutDataWidget::setupUI
 ///
-void ComponentInfoControl::setupUI()
+void AboutDataWidget::setupUI()
 {
     auto mainLayout = new QVBoxLayout(this);
     auto infoLayout = new QHBoxLayout();
@@ -49,7 +48,7 @@ void ComponentInfoControl::setupUI()
     _underline->setLineWidth(1);
     _underline->setMidLineWidth(0);
 
-    connect(_linkButton, &QPushButton::clicked, this, &ComponentInfoControl::on_linkClicked);
+    connect(_linkButton, &QPushButton::clicked, this, &AboutDataWidget::on_linkClicked);
 
     titleLayout->addWidget(_titleLabel);
     titleLayout->addWidget(_versionLabel);
@@ -70,74 +69,74 @@ void ComponentInfoControl::setupUI()
 }
 
 ///
-/// \brief ComponentInfoControl::setTitle
+/// \brief AboutDataWidget::setTitle
 /// \param title
 ///
-void ComponentInfoControl::setTitle(const QString &title)
+void AboutDataWidget::setTitle(const QString &title)
 {
     _titleLabel->setText(title);
 }
 
 ///
-/// \brief ComponentInfoControl::setVersion
+/// \brief AboutDataWidget::setVersion
 /// \param version
 ///
-void ComponentInfoControl::setVersion(const QString &version)
+void AboutDataWidget::setVersion(const QString &version)
 {
     _versionLabel->setText(QString("(%1)").arg(version));
 }
 
 ///
-/// \brief ComponentInfoControl::setDescription
+/// \brief AboutDataWidget::setDescription
 /// \param description
 ///
-void ComponentInfoControl::setDescription(const QString &description)
+void AboutDataWidget::setDescription(const QString &description)
 {
     _descriptionLabel->setText(description);
 }
 
 ///
-/// \brief ComponentInfoControl::setLinkUrl
+/// \brief AboutDataWidget::setLinkUrl
 /// \param url
 ///
-void ComponentInfoControl::setLinkUrl(const QUrl &url)
+void AboutDataWidget::setLinkUrl(const QUrl &url)
 {
     _linkUrl = url;
     updateLinkButton();
 }
 
 ///
-/// \brief ComponentInfoControl::setLinkIcon
+/// \brief AboutDataWidget::setLinkIcon
 /// \param icon
 ///
-void ComponentInfoControl::setLinkIcon(const QIcon &icon)
+void AboutDataWidget::setLinkIcon(const QIcon &icon)
 {
     _linkButton->setIcon(icon);
 }
 
 ///
-/// \brief ComponentInfoControl::setLinkToolTip
+/// \brief AboutDataWidget::setLinkToolTip
 /// \param toolTip
 ///
-void ComponentInfoControl::setLinkToolTip(const QString &toolTip)
+void AboutDataWidget::setLinkToolTip(const QString &toolTip)
 {
     _linkButton->setToolTip(toolTip);
 }
 
 ///
-/// \brief ComponentInfoControl::title
+/// \brief AboutDataWidget::title
 /// \return
 ///
-QString ComponentInfoControl::title() const
+QString AboutDataWidget::title() const
 {
     return _titleLabel->text();
 }
 
 ///
-/// \brief ComponentInfoControl::version
+/// \brief AboutDataWidget::version
 /// \return
 ///
-QString ComponentInfoControl::version() const
+QString AboutDataWidget::version() const
 {
     QString versionText = _versionLabel->text();
     if (versionText.startsWith('(') && versionText.endsWith(')')) {
@@ -147,36 +146,36 @@ QString ComponentInfoControl::version() const
 }
 
 ///
-/// \brief ComponentInfoControl::description
+/// \brief AboutDataWidget::description
 /// \return
 ///
-QString ComponentInfoControl::description() const
+QString AboutDataWidget::description() const
 {
     return _descriptionLabel->text();
 }
 
 ///
-/// \brief ComponentInfoControl::linkUrl
+/// \brief AboutDataWidget::linkUrl
 /// \return
 ///
-QUrl ComponentInfoControl::linkUrl() const
+QUrl AboutDataWidget::linkUrl() const
 {
     return _linkUrl;
 }
 
 ///
-/// \brief ComponentInfoControl::linkToolTip
+/// \brief AboutDataWidget::linkToolTip
 /// \return
 ///
-QString ComponentInfoControl::linkToolTip() const
+QString AboutDataWidget::linkToolTip() const
 {
     return _linkButton->toolTip();
 }
 
 ///
-/// \brief ComponentInfoControl::on_linkClicked
+/// \brief AboutDataWidget::on_linkClicked
 ///
-void ComponentInfoControl::on_linkClicked()
+void AboutDataWidget::on_linkClicked()
 {
     if (_linkUrl.isValid()) {
         QDesktopServices::openUrl(_linkUrl);
@@ -184,9 +183,9 @@ void ComponentInfoControl::on_linkClicked()
 }
 
 ///
-/// \brief ComponentInfoControl::updateLinkButton
+/// \brief AboutDataWidget::updateLinkButton
 ///
-void ComponentInfoControl::updateLinkButton()
+void AboutDataWidget::updateLinkButton()
 {
     const bool shouldBeVisible = _linkUrl.isValid() && !_linkUrl.isEmpty();
     _linkButton->setVisible(shouldBeVisible);
