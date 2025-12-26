@@ -75,7 +75,7 @@ DialogAbout::DialogAbout(QWidget *parent) :
     setWindowTitle(tr("About %1...").arg(APP_NAME));
 
     ui->labelName->setText(APP_NAME);
-    ui->labelVersion->setText(tr("Version: %1 %2").arg(APP_VERSION, arch()));
+    ui->labelVersion->setText(tr("Version: <b>%1</b> %2").arg(APP_VERSION, arch()));
 
     {
         auto vboxLayout = new QVBoxLayout();
