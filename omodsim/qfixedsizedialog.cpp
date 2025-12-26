@@ -8,9 +8,6 @@
 QFixedSizeDialog::QFixedSizeDialog(QWidget *parent, Qt::WindowFlags f)
     :QDialog(parent, f)
 {
-    setWindowFlags(Qt::Dialog |
-                   Qt::CustomizeWindowHint |
-                   Qt::WindowTitleHint);
     setWindowModality(Qt::WindowModal);
 }
 
