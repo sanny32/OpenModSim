@@ -99,7 +99,7 @@ jobs:
             --no-system-dxc-compiler ^
             --plugindir "%CD%\${{ env.BUILD_DIR }}\${{ env.BUILD_TYPE }}\plugins" ^
             --skip-plugin-types help,generic,networkinformation,qmltooling,tls ^
-            --exclude-plugins qgif,qjpeg,qpdf,qsqlibase,qsqlmimer,qsqloci,qsqlodbc,qsqlpsql,qsvg,qsvgicon
+            --exclude-plugins qgif,qjpeg,qpdf,qsqlibase,qsqlmimer,qsqloci,qsqlodbc,qsqlpsql
         shell: cmd
 
       - name: Install NSIS
