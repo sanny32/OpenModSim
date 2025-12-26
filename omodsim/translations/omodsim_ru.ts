@@ -208,17 +208,17 @@
     <message>
         <location filename="../dialogs/dialogabout.ui" line="198"/>
         <source>Components</source>
-        <translation type="unfinished"></translation>
+        <translation>Компоненты</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogabout.ui" line="240"/>
         <source>Authors</source>
-        <translation type="unfinished"></translation>
+        <translation>Авторы</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogabout.ui" line="282"/>
         <source>Translation</source>
-        <translation type="unfinished"></translation>
+        <translation>Перевод</translation>
     </message>
     <message>
         <source>Info</source>
@@ -245,77 +245,80 @@
     <message>
         <location filename="../dialogs/dialogabout.cpp" line="85"/>
         <source>Using %1 and built against %2</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 (собрано с версией %2)</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogabout.cpp" line="86"/>
         <source>Cross-platform application development framework.</source>
-        <translation type="unfinished"></translation>
+        <translation>Среда для разработки кросс-платформенных приложений.</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogabout.cpp" line="119"/>
         <source>Author and Maintainer</source>
-        <translation type="unfinished"></translation>
+        <translation>Автор</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogabout.cpp" line="190"/>
         <source>Visit component&apos;s homepage
 %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Посетить домашнюю страницу компонента
+%1</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogabout.cpp" line="211"/>
         <source>Email contributer: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Написать участнику: %1</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogabout.cpp" line="220"/>
         <source>Visit user&apos;s homepage
 %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Посетить домашнюю страницу пользователя на github
+%1</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogabout.cpp" line="92"/>
         <source>Free monospaced font with programming ligatures.</source>
-        <translation type="unfinished"></translation>
+        <translation>Свободный моноширинный шрифт с программными лигатурами.</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogabout.cpp" line="42"/>
         <source>%1 build %2</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 сборка %2</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogabout.cpp" line="77"/>
         <source>Version: &lt;b&gt;%1&lt;/b&gt; %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Версия: &lt;b&gt;%1&lt;/b&gt; %2</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogabout.cpp" line="99"/>
         <location filename="../dialogs/dialogabout.cpp" line="106"/>
         <source>Underlying platform.</source>
-        <translation type="unfinished"></translation>
+        <translation>Базовая платформа.</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogabout.cpp" line="142"/>
         <source>Russian</source>
-        <translation type="unfinished"></translation>
+        <translation>Русский</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogabout.cpp" line="147"/>
         <source>Simplified Chinese and Traditional Chinese</source>
-        <translation type="unfinished"></translation>
+        <translation>Упрощенный китайский и традиционный китайский</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogabout.cpp" line="216"/>
         <source>Visit github user&apos;s homepage
 %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Посетить домашнюю страницу пользователя на github
+%1</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogabout.cpp" line="124"/>
         <location filename="../dialogs/dialogabout.cpp" line="129"/>
         <source>Contributer</source>
-        <translation type="unfinished"></translation>
+        <translation>Сопровождение</translation>
     </message>
     <message>
         <source>Version: %1</source>
