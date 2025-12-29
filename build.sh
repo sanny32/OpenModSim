@@ -185,7 +185,7 @@ get_qt6_packages() {
             case "$ID-${VERSION_ID%%.*}" in
                 ubuntu-22)
                     echo "qt6-base-dev qt6-base-dev-tools qt6-declarative-dev qt6-tools-dev qt6-tools-dev-tools qt6-l10n-tools libqt6serialport6-dev \
-                            libqt6serialbus6-bin libqt6serialbus6-dev libqt6core5compat6-dev qt6-documentation-tools"
+                            libqt6serialbus6-bin libqt6serialbus6-dev libqt6core5compat6-dev qt6-documentation-tools libqt6svg6"
                 ;;
                 *)
                     echo "qt6-base-dev qt6-base-dev-tools qt6-declarative-dev qt6-tools-dev qt6-tools-dev-tools qt6-serialport-dev qt6-serialbus-dev \
