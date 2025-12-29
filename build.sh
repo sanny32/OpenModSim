@@ -162,7 +162,7 @@ fi
 get_qt5_packages() {
     case "$DISTRO" in
         debian-based)
-            echo "qtbase5-dev qtbase5-dev-tools qttools5-dev qttools5-dev-tools libqt5serialport5-dev libqt5serialbus5-dev"
+            echo "qtbase5-dev qtbase5-dev-tools qttools5-dev qttools5-dev-tools qtdeclarative5-dev libqt5serialport5-dev libqt5serialbus5-dev"
             ;;
         rhel-based)
             echo "qt5-qtbase-devel qt5-qttools-devel qt5-qtserialport-devel qt5-qtserialbus-devel"
@@ -184,8 +184,8 @@ get_qt6_packages() {
         debian-based)
             case "$ID-${VERSION_ID%%.*}" in
                 ubuntu-22)
-                    echo "qt6-base-dev qt6-base-dev-tools qt6-tools-dev qt6-tools-dev-tools qt6-l10n-tools libqt6serialport6-dev \
-                            libqt6serialbus6-bin libqt6serialbus6-dev libqt6core5compat6-dev"
+                    echo "qt6-base-dev qt6-base-dev-tools qt6-declarative-dev qt6-tools-dev qt6-tools-dev-tools qt6-l10n-tools libqt6serialport6-dev \
+                            libqt6serialbus6-bin libqt6serialbus6-dev libqt6core5compat6-dev qt6-documentation-tools"
                 ;;
                 *)
                     echo "qt6-base-dev qt6-base-dev-tools qt6-declarative-dev qt6-tools-dev qt6-tools-dev-tools qt6-serialport-dev qt6-serialbus-dev \
@@ -246,7 +246,7 @@ get_packages() {
 install_pkg() {
     local pkg_groups=("$@")
     local missing=()
-  
+
     for group in "${pkg_groups[@]}"; do
         printf "Checking for %-30s... " "$group"
         if $CHECK_CMD "$group" >/dev/null 2>&1; then
