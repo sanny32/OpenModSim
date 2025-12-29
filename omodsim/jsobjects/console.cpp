@@ -3,14 +3,11 @@
 
 ///
 /// \brief console::console
-/// \param doc
+/// \param console
 ///
-console::console(QPlainTextEdit* edit)
-    : _edit(edit)
+console::console(ConsoleOutput* console)
+    : _console(console)
 {
-    _edit->setFont(QFont("Fira Code"));
-    _edit->setTabStopDistance(_edit->fontMetrics().horizontalAdvance(' ') * 2);
-    setBackgroundColor(Qt::white);
 }
 
 ///
@@ -18,7 +15,7 @@ console::console(QPlainTextEdit* edit)
 ///
 void console::clear()
 {
-    _edit->setPlainText(QString());
+    _console->clear();
 }
 
 ///
@@ -27,11 +24,7 @@ void console::clear()
 ///
 void console::log(const QString& msg)
 {
-    QTextCharFormat fmt;
-    fmt.setForeground(Qt::black);
-    _edit->mergeCurrentCharFormat(fmt);
-
-    addText(msg);
+    _console->addText(msg, Qt::black);
 }
 
 ///
@@ -49,11 +42,7 @@ void console::debug(const QString& msg)
 ///
 void console::warning(const QString& msg)
 {
-    QTextCharFormat fmt;
-    fmt.setForeground(Qt::yellow);
-    _edit->mergeCurrentCharFormat(fmt);
-
-    addText(msg);
+    _console->addText(msg, "#F7C600");
 }
 
 ///
@@ -62,32 +51,6 @@ void console::warning(const QString& msg)
 ///
 void console::error(const QString& msg)
 {
-    QTextCharFormat fmt;
-    fmt.setForeground(Qt::red);
-    _edit->mergeCurrentCharFormat(fmt);
-
-    addText(msg);
-}
-
-///
-/// \brief console::addText
-/// \param text
-///
-void console::addText(const QString& text)
-{
-    _edit->insertPlainText(QString(_edit->toPlainText().isEmpty() ? ">>\t%1" : "\n>>\t%1").arg(text));
-    _edit->moveCursor(QTextCursor::End);
-}
-
-///
-/// \brief console::setBackgroundColor
-/// \param clr
-///
-void console::setBackgroundColor(const QColor& clr)
-{
-    auto pal = _edit->palette();
-    pal.setColor(QPalette::Base, clr);
-    pal.setColor(QPalette::Window, clr);
-    _edit->setPalette(pal);
+    _console->addText(msg, Qt::red);
 }
 

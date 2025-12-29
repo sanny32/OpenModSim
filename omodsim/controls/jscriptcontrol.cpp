@@ -27,6 +27,7 @@ JScriptControl::JScriptControl(QWidget *parent)
 
     connect(&_timer, &QTimer::timeout, this, &JScriptControl::executeScript);
     connect(ui->codeEditor, &JSCodeEditor::helpContext, this, &JScriptControl::showHelp);
+    connect(ui->console, &ConsoleOutput::collapse, this, &JScriptControl::hideConsole);
 }
 
 ///
@@ -309,6 +310,26 @@ void JScriptControl::showHelp(const QString& helpKey)
 }
 
 ///
+/// \brief JScriptControl::showConsole
+///
+void JScriptControl::showConsole()
+{
+    if(ui->horizontalSplitter->sizes().at(1) == 0)
+    {
+        const int h = size().height();
+        ui->horizontalSplitter->setSizes(QList<int>() << h * 6 / 7 << h * 1 / 7);
+    }
+}
+
+///
+/// \brief JScriptControl::hideConsole
+///
+void JScriptControl::hideConsole()
+{
+    ui->horizontalSplitter->setSizes(QList<int>() << 1 << 0);
+}
+
+///
 /// \brief JScriptControl::executeScript
 ///
 bool JScriptControl::executeScript()
@@ -316,7 +337,9 @@ bool JScriptControl::executeScript()
     const auto res = _script->run(_jsEngine, _scriptCode);
     if(res.isError() && !_jsEngine.isInterrupted())
     {
+        showConsole();
         _console->error(QString("%1 (line %2)").arg(res.toString(), res.property("lineNumber").toString()));
+
         _script->stop();
         return false;
     }

@@ -65,6 +65,8 @@ public slots:
     void runScript(RunMode mode, int interval = 0);
     void stopScript();
     void showHelp(const QString& helpKey);
+    void showConsole();
+    void hideConsole();
 
 private slots:
     bool executeScript();

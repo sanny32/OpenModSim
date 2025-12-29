@@ -74,12 +74,6 @@ Script.onInit(()=&gt;{
          <verstretch>1</verstretch>
         </sizepolicy>
        </property>
-       <property name="undoRedoEnabled">
-        <bool>false</bool>
-       </property>
-       <property name="readOnly">
-        <bool>true</bool>
-       </property>
       </widget>
      </widget>
      <widget class="HelpWidget" name="helpWidget">
@@ -102,7 +96,7 @@ Script.onInit(()=&gt;{
   </customwidget>
   <customwidget>
    <class>ConsoleOutput</class>
-   <extends>QPlainTextEdit</extends>
+   <extends>QWidget</extends>
    <header>consoleoutput.h</header>
   </customwidget>
   <customwidget>

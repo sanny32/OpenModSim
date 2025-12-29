@@ -2,7 +2,7 @@
 #define CONSOLE_H
 
 #include <QObject>
-#include <QPlainTextEdit>
+#include "consoleoutput.h"
 
 ///
 /// \brief The console class
@@ -11,7 +11,7 @@ class console : public QObject
 {
     Q_OBJECT
 public:
-    explicit console(QPlainTextEdit* edit);
+    explicit console(ConsoleOutput* console);
 
     Q_INVOKABLE void clear();
     Q_INVOKABLE void log(const QString& msg);
@@ -20,11 +20,7 @@ public:
     Q_INVOKABLE void error(const QString& msg);
 
 private:
-    void addText(const QString& text);
-    void setBackgroundColor(const QColor& clr);
-
-private:
-    QPlainTextEdit* _edit;
+    ConsoleOutput* _console;
 };
 
 #endif // CONSOLE_H
