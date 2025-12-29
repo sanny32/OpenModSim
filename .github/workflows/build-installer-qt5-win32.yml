@@ -102,7 +102,6 @@ jobs:
             --release ^
             --no-angle ^
             --no-quick ^
-            --no-svg ^
             --no-opengl-sw ^
             --no-system-d3d-compiler ^
             --plugindir "%CD%\${{ env.BUILD_DIR }}\${{ env.BUILD_TYPE }}\plugins"
