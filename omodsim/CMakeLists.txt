@@ -311,8 +311,8 @@ set(JSHELP_QHC "${CMAKE_BINARY_DIR}/docs/jshelp.qhc")
 file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/docs)
 
 find_program(QHELP_GENERATOR_EXECUTABLE qhelpgenerator
-             HINTS "${QT_BINARY_DIR}" "${QT_LIBEXEC_DIR}"
-             NO_DEFAULT_PATH)
+             HINTS "${QT_BINARY_DIR}" "${QT_LIBEXEC_DIR}")
+
 if(NOT QHELP_GENERATOR_EXECUTABLE)
     find_program(QHELP_GENERATOR_EXECUTABLE qhelpgenerator)
 endif()
