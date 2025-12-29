@@ -218,12 +218,7 @@ get_packages() {
             general_packages="build-essential cmake ninja-build libxcb-cursor-dev libgl1-mesa-dev pkg-config"
             ;;
         rhel-based)
-            general_packages="gcc gcc-c++ cmake ninja-build pkgconf-pkg-config xcb-util-cursor-devel"
-            case "$ID" in
-                redos)
-                    general_packages="$general_packages libstdc++-static"
-                ;;
-            esac
+            general_packages="gcc gcc-c++ libstdc++-static cmake ninja-build pkgconf-pkg-config xcb-util-cursor-devel"
             ;;
         altlinux)
             general_packages="gcc gcc-c++ cmake ninja-build pkg-config libxcbutil-cursor"
