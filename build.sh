@@ -194,7 +194,7 @@ get_qt6_packages() {
             esac
             ;;
         rhel-based)
-            echo "qt6-qtbase-devel qt6-qttools-devel qt6-qtserialport-devel qt6-qtserialbus-devel qt6-qt5compat-devel"
+            echo "qt6-qtbase-devel qt6-qttools-devel qt6-declarative-devel qt6-qtserialport-devel qt6-qtserialbus-devel qt6-qt5compat-devel"
             ;;
         altlinux)
             echo "qt6-base-devel qt6-tools-devel qt6-serialport-devel qt6-serialbus-devel qt6-5compat-devel"
