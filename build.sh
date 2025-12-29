@@ -219,7 +219,7 @@ get_packages() {
             ;;
         rhel-based)
             general_packages="gcc gcc-c++ cmake ninja-build pkgconf-pkg-config xcb-util-cursor-devel"
-            case "$ID"
+            case "$ID" in
                 redos)
                     general_packages="$general_packages libstdc++-static"
                 ;;
