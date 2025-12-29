@@ -19,7 +19,7 @@ ConsoleOutput::ConsoleOutput(QWidget* parent)
     auto headerLayout = new QHBoxLayout(_header);
     headerLayout->setContentsMargins(4, 0, 4, 2);
 
-    _clearButton = createToolButton(QString(), QIcon::fromTheme("edit-delete", QIcon(":/res/edit-delete.svg")), tr("Clear console"));
+    _clearButton = createToolButton(QString(), QIcon(":/res/edit-delete.svg"), tr("Clear console"));
     _collapseButton = createToolButton("✕");
 
     headerLayout->addWidget(_clearButton);
