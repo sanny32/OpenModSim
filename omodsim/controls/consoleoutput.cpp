@@ -66,7 +66,7 @@ void ConsoleOutput::addText(const QString& text, const QColor& clr)
 {
     QTextCharFormat fmt;
     fmt.setForeground(clr);
-    fmt.setFontWeight(600);
+    fmt.setFontWeight(800);
     _textEdit->mergeCurrentCharFormat(fmt);
     _textEdit->insertPlainText(">>\t");
 
