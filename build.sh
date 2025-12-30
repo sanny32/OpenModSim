@@ -197,7 +197,7 @@ get_qt6_packages() {
             echo "qt6-qtbase-devel qt6-qttools-devel qt6-qtdeclarative-devel qt6-qtserialport-devel qt6-qtserialbus-devel qt6-qt5compat-devel"
             ;;
         altlinux)
-            echo "qt6-base-devel qt6-tools-devel qt6-declarative-devel qt6-serialport-devel qt6-serialbus-devel qt6-5compat-devel"
+            echo "qt6-base-devel qt6-tools-devel qt6-declarative-devel qt6-serialport-devel qt6-serialbus-devel qt6-5compat-devel libqt6-sql"
             ;;
         suse-based)
             echo "qt6-base-devel qt6-tools-devel qt6-declarative-devel qt6-serialport-devel qt6-serialbus-devel qt6-qt5compat-devel qt6-help-devel qt6-linguist-devel"
@@ -221,7 +221,7 @@ get_packages() {
             general_packages="gcc gcc-c++ libstdc++-static cmake ninja-build pkgconf-pkg-config xcb-util-cursor-devel"
             ;;
         altlinux)
-            general_packages="gcc gcc-c++ libstdc++-devel-static cmake ninja-build pkg-config libxcbutil-cursor"
+            general_packages="gcc gcc-c++ libstdc++-devel-static cmake ninja-build pkg-config libxcbutil-cursor libcups-devel"
             ;;
         suse-based)
             general_packages="gcc gcc-c++ cmake ninja pkg-config libxcb-cursor0"
