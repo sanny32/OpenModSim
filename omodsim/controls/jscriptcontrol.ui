@@ -67,7 +67,7 @@ Script.onInit(()=&gt;{
         <string/>
        </property>
       </widget>
-      <widget class="ConsoleOutput" name="console">
+      <widget class="ConsoleOutput" name="console" native="true">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
          <horstretch>0</horstretch>
@@ -76,10 +76,10 @@ Script.onInit(()=&gt;{
        </property>
       </widget>
      </widget>
-     <widget class="HelpWidget" name="helpWidget">
+     <widget class="HelpWidget" name="helpWidget" native="true">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-        <horstretch>2</horstretch>
+        <horstretch>1</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
       </property>
