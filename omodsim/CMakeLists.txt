@@ -5,6 +5,9 @@ project(omodsim
         DESCRIPTION "An Open Source Modbus Slave (Server) Utility"
         LANGUAGES CXX)
 
+option(USE_QT5 "Force Qt5 usage" OFF)
+option(USE_QT6 "Force Qt6 usage" OFF)
+
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
@@ -20,10 +23,16 @@ list(GET VERSION_LIST 0 VERSION_MAJOR)
 list(GET VERSION_LIST 1 VERSION_MINOR)
 list(GET VERSION_LIST 2 VERSION_PATCH)
 
-# Find Qt6 or fallback to Qt5
-find_package(Qt6 COMPONENTS Core Gui Widgets Network Xml PrintSupport SerialBus SerialPort Core5Compat Qml Help LinguistTools QUIET)
-if (NOT Qt6_FOUND)
-    find_package(Qt5 COMPONENTS Core Gui Widgets Network Xml PrintSupport SerialBus SerialPort Qml Help LinguistTools QUIET)
+if(USE_QT5)
+    find_package(Qt5 COMPONENTS Core Gui Widgets Network Xml PrintSupport SerialBus SerialPort Qml Help LinguistTools REQUIRED)
+elseif(USE_QT6)
+    find_package(Qt6 COMPONENTS Core Gui Widgets Network Xml PrintSupport SerialBus SerialPort Core5Compat Qml Help LinguistTools REQUIRED)
+else()
+    # fallback: Qt6 preferred
+    find_package(Qt6 COMPONENTS Core Gui Widgets Network Xml PrintSupport SerialBus SerialPort Core5Compat Qml Help LinguistTools QUIET)
+    if (NOT Qt6_FOUND)
+        find_package(Qt5 COMPONENTS Core Gui Widgets Network Xml PrintSupport SerialBus SerialPort Qml Help LinguistTools REQUIRED)
+    endif()
 endif()
 
 if (NOT Qt6_FOUND AND NOT Qt5_FOUND)
