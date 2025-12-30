@@ -181,47 +181,47 @@
 <context>
     <name>DialogAbout</name>
     <message>
-        <location filename="../dialogs/dialogabout.ui" line="20"/>
+        <location filename="../dialogs/dialogabout.ui" line="14"/>
         <source>About...</source>
         <translation>О программе...</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.ui" line="74"/>
+        <location filename="../dialogs/dialogabout.ui" line="68"/>
         <source>Open Modsim</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.ui" line="81"/>
+        <location filename="../dialogs/dialogabout.ui" line="75"/>
         <source>Version: 1.0.0</source>
         <translation>Версия: 1.0.0</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.ui" line="109"/>
+        <location filename="../dialogs/dialogabout.ui" line="106"/>
         <source>About</source>
         <translation>О программе</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.ui" line="115"/>
+        <location filename="../dialogs/dialogabout.ui" line="112"/>
         <source>An Open Source Modbus Slave (Server) Utility</source>
         <translation>Утилита Modbus Slave (сервер) с открытым исходным кодом</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.ui" line="177"/>
+        <location filename="../dialogs/dialogabout.ui" line="174"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;a href=&quot;&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Lecense: The MIT License&lt;span&gt;&lt;/a&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;a href=&quot;&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Лицензия: MIT License&lt;span&gt;&lt;/a&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.ui" line="198"/>
+        <location filename="../dialogs/dialogabout.ui" line="195"/>
         <source>Components</source>
         <translation>Компоненты</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.ui" line="240"/>
+        <location filename="../dialogs/dialogabout.ui" line="237"/>
         <source>Authors</source>
         <translation>Авторы</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.ui" line="282"/>
+        <location filename="../dialogs/dialogabout.ui" line="279"/>
         <source>Translation</source>
         <translation>Перевод</translation>
     </message>
@@ -263,19 +263,19 @@
         <translation>Автор</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="190"/>
+        <location filename="../dialogs/dialogabout.cpp" line="216"/>
         <source>Visit component&apos;s homepage
 %1</source>
         <translation>Посетить домашнюю страницу компонента
 %1</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="211"/>
+        <location filename="../dialogs/dialogabout.cpp" line="237"/>
         <source>Email contributer: %1</source>
         <translation>Написать участнику: %1</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="220"/>
+        <location filename="../dialogs/dialogabout.cpp" line="246"/>
         <source>Visit user&apos;s homepage
 %1</source>
         <translation>Посетить домашнюю страницу пользователя на github
@@ -313,7 +313,7 @@
         <translation>Упрощенный китайский и традиционный китайский</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="216"/>
+        <location filename="../dialogs/dialogabout.cpp" line="242"/>
         <source>Visit github user&apos;s homepage
 %1</source>
         <translation>Посетить домашнюю страницу пользователя на github
@@ -350,7 +350,7 @@
         <translation type="vanished">• Fira Code 6.2 шрифт</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="242"/>
+        <location filename="../dialogs/dialogabout.cpp" line="268"/>
         <source>License Agreement - %1</source>
         <translation>Лицензионное соглашение - %1</translation>
     </message>
