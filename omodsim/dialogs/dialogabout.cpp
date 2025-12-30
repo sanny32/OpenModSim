@@ -151,6 +151,7 @@ DialogAbout::DialogAbout(QWidget *parent) :
         ui->scrollAreaTranslationWidget->setLayout(vboxLayout);
     }
 
+    adjustSize();
     ui->tabWidget->setCurrentIndex(0);
 }
 
@@ -163,12 +164,37 @@ DialogAbout::~DialogAbout()
 }
 
 ///
-/// \brief DialogAbout::sizeHint
-/// \return
+/// \brief DialogAbout::adjustSize
 ///
-QSize DialogAbout::sizeHint() const
+void DialogAbout::adjustSize()
 {
-    return minimumSize();
+    ensurePolished();
+
+    QSize maxContentSize(0, 0);
+    for (int i = 0; i < ui->tabWidget->count(); ++i) {
+        auto tab = ui->tabWidget->widget(i);
+        auto scroll = tab->findChild<QScrollArea*>();
+
+        if (scroll && scroll->widget()) {
+            if(scroll->widget()->layout()) {
+                scroll->widget()->layout()->activate();
+            }
+
+            QSize contentSize = scroll->widget()->sizeHint();
+            contentSize.rheight() += ui->tabWidget->tabBar()->height();
+            contentSize.rwidth() += qApp->style()->pixelMetric(QStyle::PM_ScrollBarExtent) + 10;
+
+            maxContentSize = maxContentSize.expandedTo(contentSize);
+        }
+    }
+
+    const int tabBarWidth = ui->tabWidget->tabBar()->sizeHint().width() + 40;
+    if (maxContentSize.width() < tabBarWidth) {
+        maxContentSize.setWidth(tabBarWidth);
+    }
+
+    ui->tabWidget->setMinimumSize(maxContentSize);
+    QFixedSizeDialog::adjustSize();
 }
 
 ///
