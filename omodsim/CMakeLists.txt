@@ -8,12 +8,6 @@ project(omodsim
 option(USE_QT5 "Force Qt5 usage" OFF)
 option(USE_QT6 "Force Qt6 usage" OFF)
 
-# Print all cmake variables
-get_cmake_property(_variableNames CACHE_VARIABLES)
-foreach(_variableName ${_variableNames})
-    message(STATUS "${_variableName}=${${_variableName}}")
-endforeach()
-
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
@@ -414,3 +408,4 @@ if(LINUX)
     install(CODE "execute_process(COMMAND update-desktop-database -q ${CMAKE_INSTALL_PREFIX}/share/applications)")
     install(CODE "execute_process(COMMAND gtk-update-icon-cache -q -t -f ${CMAKE_INSTALL_PREFIX}/share/icons/hicolor)")
 endif()
+
