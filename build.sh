@@ -489,6 +489,11 @@ select_max_gpp() {
 CXX_COMPILER=$(select_max_gpp)
 
 # ==========================
+# Build type
+# ==========================
+BUILD_TYPE=Release
+
+# ==========================
 # Setup cmake options
 # ==========================
 CMAKE_QT_OPTION="-DUSE_QT5=OFF -DUSE_QT6=OFF"
@@ -497,11 +502,6 @@ if [ "$QT_CHOICE" = "qt5" ]; then
 elif [ "$QT_CHOICE" = "qt6" ]; then
     CMAKE_QT_OPTION="-DUSE_QT6=ON"
 fi
-
-# ==========================
-# Build type
-# ==========================
-BUILD_TYPE=Release
 
 # ==========================
 # Build project
