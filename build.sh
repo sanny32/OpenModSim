@@ -215,7 +215,7 @@ get_packages() {
 
     case "$DISTRO" in
         debian-based)
-            general_packages="build-essential cmake ninja-build libxcb-cursor-dev libgl1-mesa-dev pkg-config"
+            general_packages="build-essential cmake ninja-build libxcb-cursor-dev libgl1-mesa-dev pkg-config libcups2-dev"
             ;;
         rhel-based)
             general_packages="gcc gcc-c++ libstdc++-static cmake ninja-build pkgconf-pkg-config xcb-util-cursor-devel"
