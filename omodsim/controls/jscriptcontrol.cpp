@@ -28,6 +28,7 @@ JScriptControl::JScriptControl(QWidget *parent)
     connect(&_timer, &QTimer::timeout, this, &JScriptControl::executeScript);
     connect(ui->codeEditor, &JSCodeEditor::helpContext, this, &JScriptControl::showHelp);
     connect(ui->console, &ConsoleOutput::collapse, this, &JScriptControl::hideConsole);
+    connect(ui->helpWidget, &HelpWidget::collapse, this, &JScriptControl::hideHelp);
 }
 
 ///
@@ -307,6 +308,14 @@ void JScriptControl::showHelp(const QString& helpKey)
         ui->verticalSplitter->setSizes(QList<int>() << w * 5 / 7 << w * 2 / 7);
     }
     ui->helpWidget->showHelp(helpKey);
+}
+
+///
+/// \brief JScriptControl::hideHelp
+///
+void JScriptControl::hideHelp()
+{
+     ui->verticalSplitter->setSizes(QList<int>() << 1 << 0);
 }
 
 ///

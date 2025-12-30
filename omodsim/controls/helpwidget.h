@@ -2,29 +2,34 @@
 #define HELPWIDGET_H
 
 #include <QHelpEngine>
-#include <QTextBrowser>
+#include "helpbrowser.h"
 
 ///
 /// \brief The HelpWidget class
 ///
-class HelpWidget : public QTextBrowser
+class HelpWidget : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit HelpWidget(QWidget *parent = nullptr);
-    ~HelpWidget();
+    explicit HelpWidget(QWidget* parent = nullptr);
 
     void setHelp(const QString& helpFile);
-    QVariant loadResource (int type, const QUrl& name) override;
-
     void showHelp(const QString& helpKey);
 
-protected:
-    void changeEvent(QEvent* event) override;
+signals:
+    void collapse();
 
 private:
-    QSharedPointer<QHelpEngine> _helpEngine;
+    QToolButton* createToolButton(QWidget* parent,
+                                  const QString& text,
+                                  const QIcon& icon = QIcon(),
+                                  const QString& toolTip = QString(),
+                                  const QSize& size = {24, 24},
+                                  const QSize& iconSize = {12, 12});
+
+private:
+    HelpBrowser*    _helpBrowser;
 };
 
 #endif // HELPWIDGET_H

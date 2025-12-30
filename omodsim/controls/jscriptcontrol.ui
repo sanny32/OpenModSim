@@ -101,7 +101,7 @@ Script.onInit(()=&gt;{
   </customwidget>
   <customwidget>
    <class>HelpWidget</class>
-   <extends>QTextBrowser</extends>
+   <extends>QWidget</extends>
    <header>helpwidget.h</header>
   </customwidget>
  </customwidgets>

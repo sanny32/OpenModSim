@@ -7,44 +7,60 @@
 /// \param parent
 ///
 HelpWidget::HelpWidget(QWidget *parent)
-    : QTextBrowser(parent)
-    ,_helpEngine(nullptr)
+    : QWidget(parent)
+    ,_helpBrowser(new HelpBrowser(this))
 {
-}
+    auto header = new QWidget(this);
 
-///
-/// \brief HelpWidget::~HelpWidget
-///
-HelpWidget::~HelpWidget()
-{
-}
+    auto headerLayout = new QHBoxLayout(header);
+    headerLayout->setContentsMargins(2, 2, 4, 2);
 
-///
-/// \brief SearchLineEdit::changeEvent
-/// \param event
-///
-void HelpWidget::changeEvent(QEvent* event)
-{
-    if (event->type() == QEvent::LanguageChange)
-    {
-        setSource(QUrl(tr("qthelp://omodsim/doc/index.html")));
-    }
+    auto collapseButton = createToolButton(header, "✕");
 
-    QTextBrowser::changeEvent(event);
-}
+    auto findLabel = new QLabel(tr("Find:"), header);
+    findLabel->setAlignment(Qt::AlignVCenter);
 
-///
-/// \brief HelpWidget::loadResource
-/// \param type
-/// \param name
-/// \return
-///
-QVariant HelpWidget::loadResource (int type, const QUrl& name)
-{
-    if (name.scheme() == "qthelp" && _helpEngine)
-        return QVariant(_helpEngine->fileData(name));
-    else
-        return QTextBrowser::loadResource(type, name);
+    auto searchEdit = new QLineEdit(header);
+    searchEdit->setClearButtonEnabled(true);
+
+    auto findPrevButton = createToolButton(header, tr("Find Previous"), QIcon(), QString(), QSize());
+    auto findNextButton = createToolButton(header, tr("Find Next"), QIcon(), QString(), QSize());
+
+    headerLayout->addWidget(findLabel);
+    headerLayout->addWidget(searchEdit, 1);
+    headerLayout->addWidget(findPrevButton);
+    headerLayout->addWidget(findNextButton);
+    headerLayout->addSpacerItem(new QSpacerItem(10, 0, QSizePolicy::Fixed));
+    headerLayout->addWidget(collapseButton);
+
+    auto pal = _helpBrowser->palette();
+    pal.setColor(QPalette::Base, Qt::white);
+    pal.setColor(QPalette::Window, Qt::white);
+    _helpBrowser->setPalette(pal);
+
+    auto mainLayout = new QVBoxLayout(this);
+    mainLayout->setContentsMargins(0, 0, 0, 0);
+    mainLayout->setSpacing(0);
+
+    mainLayout->addWidget(header);
+    mainLayout->addWidget(_helpBrowser);
+
+    header->setFixedHeight(header->sizeHint().height());
+
+    connect(collapseButton, &QToolButton::clicked, this, &HelpWidget::collapse);
+
+    connect(searchEdit, &QLineEdit::returnPressed, this, [=] {
+        _helpBrowser->find(searchEdit->text());
+    });
+
+    connect(findNextButton, &QToolButton::clicked, this, [=] {
+        _helpBrowser->find(searchEdit->text());
+    });
+
+    connect(findPrevButton, &QToolButton::clicked, this, [=] {
+        _helpBrowser->find(searchEdit->text(),
+                           QTextDocument::FindBackward);
+    });
 }
 
 ///
@@ -53,10 +69,7 @@ QVariant HelpWidget::loadResource (int type, const QUrl& name)
 ///
 void HelpWidget::setHelp(const QString& helpFile)
 {
-    _helpEngine = QSharedPointer<QHelpEngine>(new QHelpEngine(helpFile, this));
-    _helpEngine->setupData();
-
-    setSource(QUrl(tr("qthelp://omodsim/doc/index.html")));
+    _helpBrowser->setHelp(helpFile);
 }
 
 ///
@@ -65,6 +78,43 @@ void HelpWidget::setHelp(const QString& helpFile)
 ///
 void HelpWidget::showHelp(const QString& helpKey)
 {
-    const auto url = QString(tr("qthelp://omodsim/doc/index.html#%1")).arg(helpKey.toLower());
-    setSource(QUrl(url));
+    _helpBrowser->showHelp(helpKey);
+}
+
+///
+/// \brief HelpWidget::createToolButton
+/// \param parent
+/// \param text
+/// \param icon
+/// \param toolTip
+/// \param size
+/// \param iconSize
+/// \return
+///
+QToolButton* HelpWidget::createToolButton(QWidget* parent, const QString& text, const QIcon& icon, const QString& toolTip, const QSize& size, const QSize& iconSize)
+{
+    auto btn = new QToolButton(parent);
+    btn->setText(text);
+    btn->setIcon(icon);
+
+    if(!iconSize.isEmpty())
+        btn->setIconSize(iconSize);
+
+    if(!size.isEmpty())
+        btn->setFixedSize(size);
+
+    btn->setToolTip(toolTip);
+    btn->setAutoRaise(true);
+
+    if(text.isEmpty() && !icon.isNull()) {
+        btn->setToolButtonStyle(Qt::ToolButtonIconOnly);
+    }
+    else if(!text.isEmpty() && !icon.isNull()) {
+        btn->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+    }
+    else if(!text.isEmpty() && icon.isNull()) {
+        btn->setToolButtonStyle(Qt::ToolButtonTextOnly);
+    }
+
+    return btn;
 }

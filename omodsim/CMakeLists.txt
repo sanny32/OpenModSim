@@ -173,6 +173,7 @@ set(HEADERS
     controls/customframe.h
     controls/customlineedit.h
     controls/flowcontroltypecombobox.h
+    controls/helpbrowser.h
     controls/helpwidget.h
     controls/jscodeeditor.h
     controls/jscriptcontrol.h
