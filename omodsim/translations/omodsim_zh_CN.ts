@@ -181,47 +181,47 @@
 <context>
     <name>DialogAbout</name>
     <message>
-        <location filename="../dialogs/dialogabout.ui" line="14"/>
+        <location filename="../dialogs/dialogabout.ui" line="20"/>
         <source>About...</source>
         <translation>关于...</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.ui" line="68"/>
+        <location filename="../dialogs/dialogabout.ui" line="74"/>
         <source>Open Modsim</source>
         <translation>Open Modsim</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.ui" line="75"/>
+        <location filename="../dialogs/dialogabout.ui" line="81"/>
         <source>Version: 1.0.0</source>
         <translation>版本:1.0.0</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.ui" line="112"/>
+        <location filename="../dialogs/dialogabout.ui" line="109"/>
         <source>About</source>
         <translation>关于</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.ui" line="118"/>
+        <location filename="../dialogs/dialogabout.ui" line="115"/>
         <source>An Open Source Modbus Slave (Server) Utility</source>
         <translation>一个开源的 Modbus 从站（服务器）工具</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.ui" line="180"/>
+        <location filename="../dialogs/dialogabout.ui" line="177"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;a href=&quot;&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Lecense: The MIT License&lt;span&gt;&lt;/a&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;a href=&quot;&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;许可证: MIT 许可证&lt;span&gt;&lt;/a&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.ui" line="201"/>
+        <location filename="../dialogs/dialogabout.ui" line="198"/>
         <source>Components</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.ui" line="243"/>
+        <location filename="../dialogs/dialogabout.ui" line="240"/>
         <source>Authors</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.ui" line="285"/>
+        <location filename="../dialogs/dialogabout.ui" line="282"/>
         <source>Translation</source>
         <translation type="unfinished"></translation>
     </message>

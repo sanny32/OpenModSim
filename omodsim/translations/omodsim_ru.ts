@@ -181,47 +181,47 @@
 <context>
     <name>DialogAbout</name>
     <message>
-        <location filename="../dialogs/dialogabout.ui" line="14"/>
+        <location filename="../dialogs/dialogabout.ui" line="20"/>
         <source>About...</source>
         <translation>О программе...</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.ui" line="68"/>
+        <location filename="../dialogs/dialogabout.ui" line="74"/>
         <source>Open Modsim</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.ui" line="75"/>
+        <location filename="../dialogs/dialogabout.ui" line="81"/>
         <source>Version: 1.0.0</source>
         <translation>Версия: 1.0.0</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.ui" line="112"/>
+        <location filename="../dialogs/dialogabout.ui" line="109"/>
         <source>About</source>
         <translation>О программе</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.ui" line="118"/>
+        <location filename="../dialogs/dialogabout.ui" line="115"/>
         <source>An Open Source Modbus Slave (Server) Utility</source>
         <translation>Утилита Modbus Slave (сервер) с открытым исходным кодом</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.ui" line="180"/>
+        <location filename="../dialogs/dialogabout.ui" line="177"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;a href=&quot;&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Lecense: The MIT License&lt;span&gt;&lt;/a&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;a href=&quot;&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Лицензия: MIT License&lt;span&gt;&lt;/a&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.ui" line="201"/>
+        <location filename="../dialogs/dialogabout.ui" line="198"/>
         <source>Components</source>
         <translation>Компоненты</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.ui" line="243"/>
+        <location filename="../dialogs/dialogabout.ui" line="240"/>
         <source>Authors</source>
         <translation>Авторы</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.ui" line="285"/>
+        <location filename="../dialogs/dialogabout.ui" line="282"/>
         <source>Translation</source>
         <translation>Перевод</translation>
     </message>
