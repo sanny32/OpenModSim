@@ -165,7 +165,7 @@ get_qt5_packages() {
             echo "qtbase5-dev qtbase5-dev-tools qttools5-dev qttools5-dev-tools qtdeclarative5-dev libqt5serialport5-dev libqt5serialbus5-dev"
             ;;
         rhel-based)
-            echo "qt5-qtbase-devel qt5-qttools-devel qt5-qtserialport-devel qt5-qtserialbus-devel"
+            echo "qt5-qtbase-devel qt5-qttools-devel qt5-qtdeclarative-devel qt5-qtserialport-devel qt5-qtserialbus-devel"
             ;;
         altlinux)
             echo "qt5-base-devel qt5-tools-devel qt5-serialport-devel qt5-serialbus-devel"
