@@ -170,6 +170,10 @@ void DialogAbout::adjustSize()
 {
     ensurePolished();
 
+    auto s = style();
+    const int sbWidth = s->pixelMetric(QStyle::PM_ScrollBarExtent);
+    const int frameWidth = s->pixelMetric(QStyle::PM_DefaultFrameWidth) * 2;
+
     QSize maxContentSize(0, 0);
     for (int i = 0; i < ui->tabWidget->count(); ++i) {
         auto tab = ui->tabWidget->widget(i);
@@ -180,15 +184,24 @@ void DialogAbout::adjustSize()
                 scroll->widget()->layout()->activate();
             }
 
+            int marginH = 0;
+            int marginV = 0;
+            if (tab->layout()) {
+                marginH = tab->layout()->contentsMargins().left() + tab->layout()->contentsMargins().right();
+                marginV = tab->layout()->contentsMargins().top() + tab->layout()->contentsMargins().bottom();
+            }
+
             QSize contentSize = scroll->widget()->sizeHint();
-            contentSize.rheight() += ui->tabWidget->tabBar()->height();
-            contentSize.rwidth() += qApp->style()->pixelMetric(QStyle::PM_ScrollBarExtent) + 10;
+            contentSize.rwidth() += marginH + sbWidth + frameWidth;
+            contentSize.rheight() += marginV + ui->tabWidget->tabBar()->sizeHint().height() + frameWidth;
 
             maxContentSize = maxContentSize.expandedTo(contentSize);
         }
     }
 
-    const int tabBarWidth = ui->tabWidget->tabBar()->sizeHint().width() + 40;
+    int tabBarWidth = ui->tabWidget->tabBar()->sizeHint().width();
+    tabBarWidth += 40 + s->pixelMetric(QStyle::PM_TabBarBaseOverlap);
+
     if (maxContentSize.width() < tabBarWidth) {
         maxContentSize.setWidth(tabBarWidth);
     }
