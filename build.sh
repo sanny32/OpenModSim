@@ -221,7 +221,7 @@ get_packages() {
             general_packages="gcc gcc-c++ libstdc++-static cmake ninja-build pkgconf-pkg-config xcb-util-cursor-devel"
             ;;
         altlinux)
-            general_packages="gcc gcc-c++ cmake ninja-build pkg-config libxcbutil-cursor"
+            general_packages="gcc gcc-c++ libstdc++-devel-static cmake ninja-build pkg-config libxcbutil-cursor"
             ;;
         suse-based)
             general_packages="gcc gcc-c++ cmake ninja pkg-config libxcb-cursor0"
