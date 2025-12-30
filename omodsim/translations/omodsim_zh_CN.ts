@@ -263,18 +263,18 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="216"/>
+        <location filename="../dialogs/dialogabout.cpp" line="229"/>
         <source>Visit component&apos;s homepage
 %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="237"/>
+        <location filename="../dialogs/dialogabout.cpp" line="250"/>
         <source>Email contributer: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="246"/>
+        <location filename="../dialogs/dialogabout.cpp" line="259"/>
         <source>Visit user&apos;s homepage
 %1</source>
         <translation type="unfinished"></translation>
@@ -311,7 +311,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="242"/>
+        <location filename="../dialogs/dialogabout.cpp" line="255"/>
         <source>Visit github user&apos;s homepage
 %1</source>
         <translation type="unfinished"></translation>
@@ -347,7 +347,7 @@
         <translation type="vanished">• Fira Code 6.2 字体</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="268"/>
+        <location filename="../dialogs/dialogabout.cpp" line="281"/>
         <source>License Agreement - %1</source>
         <translation>许可协议 - %1</translation>
     </message>
