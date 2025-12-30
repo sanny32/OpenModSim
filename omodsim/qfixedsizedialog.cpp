@@ -22,5 +22,11 @@ void QFixedSizeDialog::showEvent(QShowEvent* e)
     if(!_shown) {
         _shown = true;
         setFixedSize(sizeHint());
+
+        if(parentWidget() != nullptr)
+        {
+            const auto rc = parentWidget()->frameGeometry();
+            move(rc.center() - rect().center());
+        }
     }
 }
