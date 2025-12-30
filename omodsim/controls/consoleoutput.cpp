@@ -13,20 +13,20 @@
 ///
 ConsoleOutput::ConsoleOutput(QWidget* parent)
     : QWidget(parent)
+    ,_textEdit(new QPlainTextEdit(this))
 {
-    _header = new QWidget(this);
+    auto header = new QWidget(this);
 
-    auto headerLayout = new QHBoxLayout(_header);
+    auto headerLayout = new QHBoxLayout(header);
     headerLayout->setContentsMargins(4, 0, 4, 2);
 
-    _clearButton = createToolButton(QString(), QIcon(":/res/edit-delete.svg"), tr("Clear console"));
-    _collapseButton = createToolButton("✕");
+    auto clearButton = createToolButton(header, QString(), QIcon(":/res/edit-delete.svg"), tr("Clear console"));
+    auto collapseButton = createToolButton(header, "✕");
 
-    headerLayout->addWidget(_clearButton);
+    headerLayout->addWidget(clearButton);
     headerLayout->addSpacerItem(new QSpacerItem(10, 0, QSizePolicy::Expanding));
-    headerLayout->addWidget(_collapseButton);
+    headerLayout->addWidget(collapseButton);
 
-    _textEdit = new QPlainTextEdit(this);
     _textEdit->setReadOnly(true);
     _textEdit->setUndoRedoEnabled(true);
     _textEdit->setFont(QFont("Fira Code"));
@@ -42,18 +42,18 @@ ConsoleOutput::ConsoleOutput(QWidget* parent)
     mainLayout->setContentsMargins(0, 0, 0, 0);
     mainLayout->setSpacing(0);
 
-    mainLayout->addWidget(_header);
+    mainLayout->addWidget(header);
     mainLayout->addWidget(_textEdit);
 
-    _header->setFixedHeight(_header->sizeHint().height());
+    header->setFixedHeight(header->sizeHint().height());
 
     const int lineHeight = _textEdit->fontMetrics().lineSpacing() * 2;
     const int extraHeight = _textEdit->frameWidth() * 2;
-    const int minHeight = _header->height() + lineHeight + extraHeight;
+    const int minHeight = header->height() + lineHeight + extraHeight;
     setMinimumHeight(minHeight);
 
-    connect(_clearButton, &QPushButton::clicked, this, &ConsoleOutput::clear);
-    connect(_collapseButton, &QPushButton::clicked, this, &ConsoleOutput::collapse);
+    connect(clearButton, &QToolButton::clicked, this, &ConsoleOutput::clear);
+    connect(collapseButton, &QToolButton::clicked, this, &ConsoleOutput::collapse);
     connect(_textEdit, &QWidget::customContextMenuRequested, this, &ConsoleOutput::on_customContextMenuRequested);
 }
 
@@ -95,21 +95,26 @@ bool ConsoleOutput::isEmpty() const
 
 ///
 /// \brief ConsoleOutput::createToolButton
+/// \param parent
 /// \param text
 /// \param icon
 /// \param toolTip
+/// \param size
+/// \param iconSize
 /// \return
 ///
-QToolButton* ConsoleOutput::createToolButton(const QString& text, const QIcon& icon, const QString& toolTip)
+QToolButton* ConsoleOutput::createToolButton(QWidget* parent, const QString& text, const QIcon& icon, const QString& toolTip, const QSize& size, const QSize& iconSize)
 {
-    const QSize iconSize = { 12, 12 };
-    const QSize toolButtonSize = { 24, 24 };
-
-    auto btn = new QToolButton(_header);
+    auto btn = new QToolButton(parent);
     btn->setText(text);
     btn->setIcon(icon);
-    btn->setIconSize(iconSize);
-    btn->setFixedSize(toolButtonSize);
+
+    if(!iconSize.isEmpty())
+        btn->setIconSize(iconSize);
+
+    if(!size.isEmpty())
+        btn->setFixedSize(size);
+
     btn->setToolTip(toolTip);
     btn->setAutoRaise(true);
 

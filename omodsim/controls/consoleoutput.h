@@ -25,12 +25,14 @@ private slots:
     void on_customContextMenuRequested(const QPoint &pos);
 
 private:
-    QToolButton* createToolButton(const QString& text, const QIcon& icon = QIcon(), const QString& toolTip = QString());
+    QToolButton* createToolButton(QWidget* parent,
+                                  const QString& text,
+                                  const QIcon& icon = QIcon(),
+                                  const QString& toolTip = QString(),
+                                  const QSize& size = {24, 24},
+                                  const QSize& iconSize = {12, 12});
 
 private:
-    QWidget*        _header;
-    QToolButton*    _clearButton;
-    QToolButton*    _collapseButton;
     QPlainTextEdit* _textEdit;
 };
 #endif // CONSOLEOUTPUT_H
