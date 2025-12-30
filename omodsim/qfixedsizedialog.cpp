@@ -18,5 +18,9 @@ QFixedSizeDialog::QFixedSizeDialog(QWidget *parent, Qt::WindowFlags f)
 void QFixedSizeDialog::showEvent(QShowEvent* e)
 {
     QDialog::showEvent(e);
-    setFixedSize(sizeHint());
+
+    if(!_shown) {
+        _shown = true;
+        setFixedSize(sizeHint());
+    }
 }

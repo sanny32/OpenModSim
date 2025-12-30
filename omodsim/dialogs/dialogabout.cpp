@@ -168,7 +168,7 @@ DialogAbout::~DialogAbout()
 ///
 QSize DialogAbout::sizeHint() const
 {
-    return QSize(400, 380);
+    return minimumSize();
 }
 
 ///

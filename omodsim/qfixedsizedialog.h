@@ -19,6 +19,9 @@ public:
 
 protected:
     void showEvent(QShowEvent* e) override;
+
+private:
+    bool _shown = false;
 };
 
 #endif // QFIXEDSIZEDIALOG_H
