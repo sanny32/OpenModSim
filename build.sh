@@ -168,7 +168,7 @@ get_qt5_packages() {
             echo "qt5-qtbase-devel qt5-qttools-devel qt5-qtdeclarative-devel qt5-qtserialport-devel qt5-qtserialbus-devel"
             ;;
         altlinux)
-            echo "qt5-base-devel qt5-tools-devel qt5-qtdeclarative-devel qt5-serialport-devel qt5-serialbus-devel"
+            echo "qt5-base-devel qt5-tools-devel qt5-declarative-devel qt5-serialport-devel qt5-serialbus-devel"
             ;;
         suse-based)
             echo "libqt5-qtbase-devel libqt5-qttools-devel libqt5-qtdeclarative-devel libqt5-qtserialport-devel libqt5-qtserialbus libqt5-qtserialbus-devel"
@@ -197,10 +197,10 @@ get_qt6_packages() {
             echo "qt6-qtbase-devel qt6-qttools-devel qt6-qtdeclarative-devel qt6-qtserialport-devel qt6-qtserialbus-devel qt6-qt5compat-devel"
             ;;
         altlinux)
-            echo "qt6-base-devel qt6-tools-devel qt6-qtdeclarative-devel qt6-serialport-devel qt6-serialbus-devel qt6-5compat-devel"
+            echo "qt6-base-devel qt6-tools-devel qt6-declarative-devel qt6-serialport-devel qt6-serialbus-devel qt6-5compat-devel"
             ;;
         suse-based)
-            echo "qt6-base-devel qt6-tools-devel qt6-qtdeclarative-devel qt6-serialport-devel qt6-serialbus-devel qt6-qt5compat-devel qt6-linguist-devel"
+            echo "qt6-base-devel qt6-tools-devel qt6-declarative-devel qt6-serialport-devel qt6-serialbus-devel qt6-qt5compat-devel qt6-linguist-devel"
             ;;
     esac
 }
