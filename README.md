@@ -140,6 +140,7 @@ The following minimum operating system versions are supported for OpenModSim:
 - Debian Linux 11
 - Ubuntu Linux 22.04
 - Mint Linux 22
+- Zorin OS 18
 - Fedora Linux 41
 - Rocky Linux 9.7
 - OpenSuse Linux 15.6
@@ -157,7 +158,7 @@ Run the installer:
 - For 32-bit Windows: `qt5-omodsim_1.11.3_x86.exe`
 - For 64-bit Windows: `qt5-omodsim_1.11.3_x64.exe` or `qt6-omodsim_1.11.3_x64.exe`
 
-## Debian/Ubintu/Mint/Astra Linux
+## Debian/Ubintu/Mint/Zorin/Astra Linux
 ### Install
 Install the DEB package from the command line:
 ```bash
