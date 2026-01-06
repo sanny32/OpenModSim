@@ -170,7 +170,7 @@
     <message>
         <location filename="../controls/consoleoutput.cpp" line="23"/>
         <source>Clear console</source>
-        <translation type="unfinished"></translation>
+        <translation>清除控制台</translation>
     </message>
     <message>
         <location filename="../controls/consoleoutput.cpp" line="142"/>
@@ -213,17 +213,17 @@
     <message>
         <location filename="../dialogs/dialogabout.ui" line="195"/>
         <source>Components</source>
-        <translation type="unfinished"></translation>
+        <translation>成分</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogabout.ui" line="237"/>
         <source>Authors</source>
-        <translation type="unfinished"></translation>
+        <translation>作者</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogabout.ui" line="279"/>
         <source>Translation</source>
-        <translation type="unfinished"></translation>
+        <translation>翻譯</translation>
     </message>
     <message>
         <source>Info</source>
@@ -250,77 +250,84 @@
     <message>
         <location filename="../dialogs/dialogabout.cpp" line="85"/>
         <source>Using %1 and built against %2</source>
-        <translation type="unfinished"></translation>
+        <translation>使用 %1 並針對 %2 構建</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogabout.cpp" line="86"/>
         <source>Cross-platform application development framework.</source>
-        <translation type="unfinished"></translation>
+        <translation>跨平台應用程式開發框架。</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogabout.cpp" line="119"/>
         <source>Author and Maintainer</source>
-        <translation type="unfinished"></translation>
+        <translation>作者和維護者</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogabout.cpp" line="229"/>
         <source>Visit component&apos;s homepage
 %1</source>
-        <translation type="unfinished"></translation>
+        <translation>存取元件主頁
+%1</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogabout.cpp" line="250"/>
         <source>Email contributer: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>電子郵件貢獻者：%1</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogabout.cpp" line="259"/>
         <source>Visit user&apos;s homepage
 %1</source>
-        <translation type="unfinished"></translation>
+        <translation>訪問用戶主頁
+%1</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogabout.cpp" line="92"/>
         <source>Free monospaced font with programming ligatures.</source>
-        <translation type="unfinished"></translation>
+        <translation>免費等寬字體，附有程式設計連字。</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogabout.cpp" line="42"/>
         <source>%1 build %2</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 構建 %2</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogabout.cpp" line="77"/>
         <source>Version: &lt;b&gt;%1&lt;/b&gt; %2</source>
-        <translation type="unfinished"></translation>
+        <translation>版本：&lt;b&gt;%1&lt;/b&gt; %2</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogabout.cpp" line="99"/>
         <location filename="../dialogs/dialogabout.cpp" line="106"/>
         <source>Underlying platform.</source>
-        <translation type="unfinished"></translation>
+        <translation>底層平台。</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogabout.cpp" line="124"/>
+        <location filename="../dialogs/dialogabout.cpp" line="129"/>
+        <source>Contributor</source>
+        <translation>貢獻者</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogabout.cpp" line="142"/>
         <source>Russian</source>
-        <translation type="unfinished"></translation>
+        <translation>俄文</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogabout.cpp" line="147"/>
         <source>Simplified Chinese and Traditional Chinese</source>
-        <translation type="unfinished"></translation>
+        <translation>簡體中文和繁體中文</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogabout.cpp" line="255"/>
         <source>Visit github user&apos;s homepage
 %1</source>
-        <translation type="unfinished"></translation>
+        <translation>造訪 GitHub 用戶首頁
+%1</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="124"/>
-        <location filename="../dialogs/dialogabout.cpp" line="129"/>
         <source>Contributer</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">貢獻者</translation>
     </message>
     <message>
         <source>Version: %1</source>
@@ -1412,12 +1419,12 @@ MODBUS Point Type:
         <location filename="../controls/helpbrowser.h" line="21"/>
         <location filename="../controls/helpbrowser.h" line="39"/>
         <source>qthelp://omodsim/doc/index.html</source>
-        <translation type="unfinished">qthelp://omodsim/doc/index.html</translation>
+        <translation>qthelp://omodsim/doc/index.html</translation>
     </message>
     <message>
         <location filename="../controls/helpbrowser.h" line="32"/>
         <source>qthelp://omodsim/doc/index.html#%1</source>
-        <translation type="unfinished">qthelp://omodsim/doc/index.html#%1</translation>
+        <translation>qthelp://omodsim/doc/index.html#%1</translation>
     </message>
 </context>
 <context>
@@ -1433,17 +1440,17 @@ MODBUS Point Type:
     <message>
         <location filename="../controls/helpwidget.cpp" line="20"/>
         <source>Find:</source>
-        <translation type="unfinished"></translation>
+        <translation>尋找：</translation>
     </message>
     <message>
         <location filename="../controls/helpwidget.cpp" line="26"/>
         <source>Find Previous</source>
-        <translation type="unfinished"></translation>
+        <translation>找上一個</translation>
     </message>
     <message>
         <location filename="../controls/helpwidget.cpp" line="27"/>
         <source>Find Next</source>
-        <translation type="unfinished"></translation>
+        <translation>尋找下一個</translation>
     </message>
 </context>
 <context>

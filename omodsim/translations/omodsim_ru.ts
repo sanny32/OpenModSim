@@ -303,6 +303,12 @@
         <translation>Базовая платформа.</translation>
     </message>
     <message>
+        <location filename="../dialogs/dialogabout.cpp" line="124"/>
+        <location filename="../dialogs/dialogabout.cpp" line="129"/>
+        <source>Contributor</source>
+        <translation>Сопровождение</translation>
+    </message>
+    <message>
         <location filename="../dialogs/dialogabout.cpp" line="142"/>
         <source>Russian</source>
         <translation>Русский</translation>
@@ -320,10 +326,8 @@
 %1</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="124"/>
-        <location filename="../dialogs/dialogabout.cpp" line="129"/>
         <source>Contributer</source>
-        <translation>Сопровождение</translation>
+        <translation type="vanished">Сопровождение</translation>
     </message>
     <message>
         <source>Version: %1</source>
@@ -1432,17 +1436,17 @@ MODBUS Point Type:
     <message>
         <location filename="../controls/helpwidget.cpp" line="20"/>
         <source>Find:</source>
-        <translation type="unfinished"></translation>
+        <translation>Искать:</translation>
     </message>
     <message>
         <location filename="../controls/helpwidget.cpp" line="26"/>
         <source>Find Previous</source>
-        <translation type="unfinished"></translation>
+        <translation>Пред</translation>
     </message>
     <message>
         <location filename="../controls/helpwidget.cpp" line="27"/>
         <source>Find Next</source>
-        <translation type="unfinished"></translation>
+        <translation>Далее</translation>
     </message>
 </context>
 <context>

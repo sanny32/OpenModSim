@@ -121,12 +121,12 @@ DialogAbout::DialogAbout(QWidget *parent) :
 
         addAuthor(vboxLayout,
                   "Pedro Cobucci",
-                  tr("Contributer"),
+                  tr("Contributor"),
                   "https://github.com/PedroCobucci");
 
         addAuthor(vboxLayout,
                   "Nikolay Raspopov",
-                  tr("Contributer"),
+                  tr("Contributor"),
                   "mailto: raspopov@cherubicsoft.com");
 
         vboxLayout->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Minimum, QSizePolicy::Expanding));
