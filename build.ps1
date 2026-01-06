@@ -463,8 +463,17 @@ if (Test-Path $exePath) {
         $currentDir = Get-Location
         Set-Location $exeDir
         
-        # Run windeployqt
-        & $windeployqtPath --release --no-compiler-runtime --no-opengl-sw "omodsim.exe" | Out-Null
+       # Run windeployqt
+        & $windeployqtPath `
+            --release `
+            --plugindir ".\plugins" `
+            --no-compiler-runtime `
+            --no-opengl-sw `
+            --skip-plugin-types help,generic,networkinformation,qmltooling,tls `
+            --exclude-plugins qsqlibase,qsqlmimer,qsqloci,qsqlodbc,qsqlpsql `
+            "omodsim.exe" `
+        | Out-Null
+
         
         if ($LASTEXITCODE -eq 0) {
             Write-Host "windeployqt completed successfully"
