@@ -463,18 +463,32 @@ if (Test-Path $exePath) {
         $currentDir = Get-Location
         Set-Location $exeDir
         
-       # Run windeployqt
-        & $windeployqtPath `
-            --release `
-            --plugindir ".\plugins" `
-            --no-compiler-runtime `
-            --no-opengl-sw `
-            --skip-plugin-types help,generic,networkinformation,qmltooling,tls `
-            --exclude-plugins qsqlibase,qsqlmimer,qsqloci,qsqlodbc,qsqlpsql `
-            "omodsim.exe" `
-        | Out-Null
+        # Common windeployqt arguments
+        $windeployArgs = @(
+            "--release"
+            "--plugindir", ".\plugins"
+            "--no-compiler-runtime"
+            "--no-opengl-sw"
+        )
 
-        
+        if ($QtMajorVersion -eq "6") {
+            # Qt 6 specific options
+            $windeployArgs += @(
+                "--skip-plugin-types", "help,generic,networkinformation,qmltooling,tls"
+                "--exclude-plugins", "qsqlibase,qsqlmimer,qsqloci,qsqlodbc,qsqlpsql"
+            )
+        }
+        elseif ($QtMajorVersion -eq "5") {
+            # Qt 5 specific options
+            $windeployArgs += "--no-system-d3d-compiler"
+        }
+
+        # Executable
+        $windeployArgs += "omodsim.exe"
+
+        # Run windeployqt
+        & $windeployqtPath @windeployArgs | Out-Null
+
         if ($LASTEXITCODE -eq 0) {
             Write-Host "windeployqt completed successfully"
             
