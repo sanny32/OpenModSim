@@ -131,7 +131,50 @@ Script.onInit(init);
 ```
 
 # Building
-  Now building is available via cmake (with installed Qt version 5.15 and above) or Qt Creator. Supports both OS Microsoft Windows and Linux.
+  Building is available via cmake (with installed Qt version 5.15 and above) or Qt Creator. Supports both OS Microsoft Windows and Linux.
+
+## Microsoft Windows Building
+
+The minimum supported version of Microsoft Windows for building OpenModSim from sources is Windows 10.
+
+1. Install latest [git](https://git-scm.com/downloads/win) version
+2. Run Windows PowerShell terminal as an Administrator
+3. Clone OpenModSim sources from github repository
+```powershell
+git clone https://github.com/sanny32/OpenModSim.git
+```
+4. Go to OpenModSim folder
+```powershell
+cd OpenModSim
+```
+5. Allow script execution in PowerShell terminal
+```powershell
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+```
+6. Run the build script
+```powershell
+.\build.ps1
+```
+If you need to specify Qt framework major version (5 or 6), you can do it in the parameters
+  - `.\build.ps1 -qt5` or  `.\build.ps1 -qt6`
+
+The build script supports building the application only for 64-bit architecture.
+
+## Linux Building
+1. Install [git](https://git-scm.com/downloads/linux) for your Linux distribution
+2. Run the following commands from the console:
+```bash
+git clone https://github.com/sanny32/OpenModSim.git
+```
+```bash
+cd OpenModSim
+```
+```bash
+./build.sh
+```
+
+If you need to specify Qt framework major version (5 or 6), you can do it in the parameters
+  - `./build.sh -qt5` or  `./build.sh -qt6`
 
 # About supported operating systems
 
