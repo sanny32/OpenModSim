@@ -387,7 +387,7 @@ if (-not (Test-Path $QtDir)) {
     Write-Host "Downloading Qt $QtVersion ($Compiler)..."
 
     $modules = if ($QtMajorVersion -eq "6") { 
-        "qtdeclarative", "qtserialbus", "qtserialport", "qt5compat", "qtpdf" 
+        "qtserialbus", "qtserialport", "qt5compat", "qtpdf" 
     }
 
 	python -m aqt install-qt windows desktop $QtVersion ${Arch}_${Compiler} --outputdir C:\Qt -m $modules
@@ -401,7 +401,7 @@ if (-not (Test-Path $QtDir)) {
 Write-Host "Found Qt: $QtDir"
 
 # Create Build dir
-$BuildDir = "build-omodscan-Qt_${QtVersion}_$($Compiler.ToUpper())bit-$BuildType"
+$BuildDir = "build-omodsim-Qt_${QtVersion}_$($Compiler.ToUpper())bit-$BuildType"
 if (-not (Test-Path $BuildDir)) { 
     New-Item -ItemType Directory -Path $BuildDir -Force | Out-Null 
 }
@@ -441,10 +441,10 @@ if ($LASTEXITCODE -ne 0) {
 }
 
 # Find the built executable
-$exePath = Join-Path $PWD "$BuildType\omodscan.exe"
+$exePath = Join-Path $PWD "$BuildType\omodsim.exe"
 if (-not (Test-Path $exePath)) {
     # Try alternative path
-    $exePath = Join-Path $PWD "omodscan.exe"
+    $exePath = Join-Path $PWD "omodsim.exe"
 }
 
 if (Test-Path $exePath) {
@@ -464,7 +464,7 @@ if (Test-Path $exePath) {
         Set-Location $exeDir
         
         # Run windeployqt
-        & $windeployqtPath --release --no-compiler-runtime --no-opengl-sw "omodscan.exe" | Out-Null
+        & $windeployqtPath --release --no-compiler-runtime --no-opengl-sw "omodsim.exe" | Out-Null
         
         if ($LASTEXITCODE -eq 0) {
             Write-Host "windeployqt completed successfully"
