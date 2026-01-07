@@ -20,6 +20,9 @@ public:
 signals:
     void collapse();
 
+protected:
+    void changeEvent(QEvent* event) override;
+
 private:
     QToolButton* createToolButton(QWidget* parent,
                                   const QString& text,
@@ -30,6 +33,9 @@ private:
 
 private:
     HelpBrowser*    _helpBrowser;
+    QLabel*         _findLabel;
+    QToolButton*    _findPrevButton;
+    QToolButton*    _findNextButton;
 };
 
 #endif // HELPWIDGET_H

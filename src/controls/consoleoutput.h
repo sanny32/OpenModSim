@@ -21,6 +21,9 @@ public slots:
 signals:
     void collapse();
 
+protected:
+    void changeEvent(QEvent* event) override;
+
 private slots:
     void on_customContextMenuRequested(const QPoint &pos);
 
@@ -34,5 +37,6 @@ private:
 
 private:
     QPlainTextEdit* _textEdit;
+    QToolButton*    _clearButton;
 };
 #endif // CONSOLEOUTPUT_H

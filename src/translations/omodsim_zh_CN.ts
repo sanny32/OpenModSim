@@ -169,11 +169,12 @@
     <name>ConsoleOutput</name>
     <message>
         <location filename="../controls/consoleoutput.cpp" line="23"/>
+        <location filename="../controls/consoleoutput.cpp" line="68"/>
         <source>Clear console</source>
         <translation>清除控制台</translation>
     </message>
     <message>
-        <location filename="../controls/consoleoutput.cpp" line="142"/>
+        <location filename="../controls/consoleoutput.cpp" line="154"/>
         <source>Clear</source>
         <translation>清除</translation>
     </message>
@@ -1438,17 +1439,20 @@ MODBUS Point Type:
         <translation type="vanished">qthelp://omodsim/doc/index.html#%1</translation>
     </message>
     <message>
-        <location filename="../controls/helpwidget.cpp" line="20"/>
+        <location filename="../controls/helpwidget.cpp" line="21"/>
+        <location filename="../controls/helpwidget.cpp" line="75"/>
         <source>Find:</source>
         <translation>寻找：</translation>
     </message>
     <message>
-        <location filename="../controls/helpwidget.cpp" line="26"/>
+        <location filename="../controls/helpwidget.cpp" line="27"/>
+        <location filename="../controls/helpwidget.cpp" line="76"/>
         <source>Find Previous</source>
         <translation>查找上一个</translation>
     </message>
     <message>
-        <location filename="../controls/helpwidget.cpp" line="27"/>
+        <location filename="../controls/helpwidget.cpp" line="28"/>
+        <location filename="../controls/helpwidget.cpp" line="77"/>
         <source>Find Next</source>
         <translation>查找下一个</translation>
     </message>

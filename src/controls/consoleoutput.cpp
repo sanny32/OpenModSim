@@ -20,10 +20,10 @@ ConsoleOutput::ConsoleOutput(QWidget* parent)
     auto headerLayout = new QHBoxLayout(header);
     headerLayout->setContentsMargins(4, 0, 4, 2);
 
-    auto clearButton = createToolButton(header, QString(), QIcon(":/res/edit-delete.svg"), tr("Clear console"));
+    _clearButton = createToolButton(header, QString(), QIcon(":/res/edit-delete.svg"), tr("Clear console"));
     auto collapseButton = createToolButton(header, "✕");
 
-    headerLayout->addWidget(clearButton);
+    headerLayout->addWidget(_clearButton);
     headerLayout->addSpacerItem(new QSpacerItem(10, 0, QSizePolicy::Expanding));
     headerLayout->addWidget(collapseButton);
 
@@ -52,9 +52,21 @@ ConsoleOutput::ConsoleOutput(QWidget* parent)
     const int minHeight = header->height() + lineHeight + extraHeight;
     setMinimumHeight(minHeight);
 
-    connect(clearButton, &QToolButton::clicked, this, &ConsoleOutput::clear);
+    connect(_clearButton, &QToolButton::clicked, this, &ConsoleOutput::clear);
     connect(collapseButton, &QToolButton::clicked, this, &ConsoleOutput::collapse);
     connect(_textEdit, &QWidget::customContextMenuRequested, this, &ConsoleOutput::on_customContextMenuRequested);
+}
+
+///
+/// \brief ConsoleOutput::changeEvent
+/// \param event
+///
+void ConsoleOutput::changeEvent(QEvent* event)
+{
+    if (event->type() == QEvent::LanguageChange)
+    {
+        _clearButton->setToolTip(tr("Clear console"));
+    }
 }
 
 ///

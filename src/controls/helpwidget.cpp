@@ -1,4 +1,5 @@
 #include <QEvent>
+#include <QToolButton>
 #include <QHelpContentWidget>
 #include "helpwidget.h"
 
@@ -17,19 +18,19 @@ HelpWidget::HelpWidget(QWidget *parent)
 
     auto collapseButton = createToolButton(header, "✕");
 
-    auto findLabel = new QLabel(tr("Find:"), header);
-    findLabel->setAlignment(Qt::AlignVCenter);
+    _findLabel = new QLabel(tr("Find:"), header);
+    _findLabel->setAlignment(Qt::AlignVCenter);
 
     auto searchEdit = new QLineEdit(header);
     searchEdit->setClearButtonEnabled(true);
 
-    auto findPrevButton = createToolButton(header, tr("Find Previous"), QIcon(), QString(), QSize());
-    auto findNextButton = createToolButton(header, tr("Find Next"), QIcon(), QString(), QSize());
+    _findPrevButton = createToolButton(header, tr("Find Previous"), QIcon(), QString(), QSize());
+    _findNextButton = createToolButton(header, tr("Find Next"), QIcon(), QString(), QSize());
 
-    headerLayout->addWidget(findLabel);
+    headerLayout->addWidget(_findLabel);
     headerLayout->addWidget(searchEdit, 1);
-    headerLayout->addWidget(findPrevButton);
-    headerLayout->addWidget(findNextButton);
+    headerLayout->addWidget(_findPrevButton);
+    headerLayout->addWidget(_findNextButton);
     headerLayout->addSpacerItem(new QSpacerItem(10, 0, QSizePolicy::Fixed));
     headerLayout->addWidget(collapseButton);
 
@@ -53,14 +54,28 @@ HelpWidget::HelpWidget(QWidget *parent)
         _helpBrowser->find(searchEdit->text());
     });
 
-    connect(findNextButton, &QToolButton::clicked, this, [=] {
+    connect(_findNextButton, &QToolButton::clicked, this, [=] {
         _helpBrowser->find(searchEdit->text());
     });
 
-    connect(findPrevButton, &QToolButton::clicked, this, [=] {
+    connect(_findPrevButton, &QToolButton::clicked, this, [=] {
         _helpBrowser->find(searchEdit->text(),
                            QTextDocument::FindBackward);
     });
+}
+
+///
+/// \brief HelpWidget::changeEvent
+/// \param event
+///
+void HelpWidget::changeEvent(QEvent* event)
+{
+    if (event->type() == QEvent::LanguageChange)
+    {
+        _findLabel->setText(tr("Find:"));
+        _findPrevButton->setText(tr("Find Previous"));
+        _findNextButton->setText(tr("Find Next"));
+    }
 }
 
 ///
