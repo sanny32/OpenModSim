@@ -19,12 +19,12 @@ MenuConnect::MenuConnect(MenuType type, ModbusMultiServer& server, QWidget *pare
 
         const auto availablePorts = getAvailableSerialPorts();
         if(!availablePorts.isEmpty()) {
-            auto serialMenu = new QMenu(tr("Modbus/RTU Srv"), parent);
+            _serialMenu = new QMenu(tr("Modbus/RTU Srv"), parent);
             for(auto&& port: availablePorts) {
                 const auto text = QString(tr("Port %1")).arg(port);
-                addAction(serialMenu, text, ConnectionType::Serial, port, QString("Port %1").arg(port));
+                addAction(_serialMenu, text, ConnectionType::Serial, port, QString("Port %1").arg(port));
             }
-            addMenu(serialMenu);
+            addMenu(_serialMenu);
         }
     }
 
@@ -90,6 +90,10 @@ void MenuConnect::changeEvent(QEvent* event)
 {
     if (event->type() == QEvent::LanguageChange)
     {
+        if(_serialMenu) {
+            _serialMenu->setTitle(tr("Modbus/RTU Srv"));
+        }
+
         for(auto&& a : actions(this))
         {
             const auto data = a->data().value<QPair<ConnectionType, QString>>();

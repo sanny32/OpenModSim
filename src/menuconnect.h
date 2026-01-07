@@ -35,6 +35,7 @@ private:
     void addAction(QMenu* menu, const QString& text, ConnectionType type, const QString& port, const QString& id);
 
 private:
+    QMenu* _serialMenu = nullptr;
     MenuType _menuType;
     ModbusMultiServer& _mbMultiServer;
     QMap<QAction*, ConnectionDetails> _connectionDetailsMap;

@@ -2043,25 +2043,26 @@ Script.onInit(()=&gt;{
     <name>MenuConnect</name>
     <message>
         <location filename="../menuconnect.cpp" line="18"/>
-        <location filename="../menuconnect.cpp" line="100"/>
+        <location filename="../menuconnect.cpp" line="104"/>
         <source>Modbus/TCP Srv</source>
         <translation>Modbus/TCP伺服器</translation>
     </message>
     <message>
         <location filename="../menuconnect.cpp" line="22"/>
+        <location filename="../menuconnect.cpp" line="94"/>
         <source>Modbus/RTU Srv</source>
         <translation>Modbus/RTU伺服器</translation>
     </message>
     <message>
         <location filename="../menuconnect.cpp" line="24"/>
         <location filename="../menuconnect.cpp" line="45"/>
-        <location filename="../menuconnect.cpp" line="105"/>
+        <location filename="../menuconnect.cpp" line="109"/>
         <source>Port %1</source>
         <translation>埠 %1</translation>
     </message>
     <message>
         <location filename="../menuconnect.cpp" line="40"/>
-        <location filename="../menuconnect.cpp" line="102"/>
+        <location filename="../menuconnect.cpp" line="106"/>
         <source>Modbus/TCP Srv %1</source>
         <translation>Modbus/TCP伺服器 %1</translation>
     </message>
