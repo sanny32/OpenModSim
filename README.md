@@ -70,7 +70,7 @@ The following simulations are available:
 # Scripting
   From version 1.2.0 Open ModSim supports scripting. Qt runtime implements the [ECMAScript Language Specification](http://www.ecma-international.org/publications/standards/Ecma-262.htm) standard, so Javascript is used to write code.
   
-<img width="1292" height="759" alt="image" src="https://github.com/user-attachments/assets/54c0994c-4a24-4425-9b7b-cbbc6b8656b1" />
+<img width="1288" height="749" alt="image" src="https://github.com/user-attachments/assets/6f37b58a-798c-4b45-ad88-165ad5a373c2" />
 
   Scripts can be launched in two modes: Once or Periodically. If you run script in Once mode the script will stop after it finishes executing. In Periodically mode, the script will start after a certain period of time until the user stops it or the method is called
   ```javascript
