@@ -6,9 +6,9 @@
 
 Open ModSim is a free implimentation of modbus slave (server) utility for modbus-tcp and modbus-rtu protocols.
 
-<img width="1292" height="759" alt="изображение" src="https://github.com/user-attachments/assets/5e3bb093-1d12-48e6-89fa-e688d08fa0be" />
+<img width="1292" height="759" alt="image" src="https://github.com/user-attachments/assets/5e3bb093-1d12-48e6-89fa-e688d08fa0be" />
 
-<img width="1292" height="759" alt="изображение" src="https://github.com/user-attachments/assets/2e5ca631-b219-44a6-9983-9a3367d71d51" />
+<img width="1292" height="759" alt="image" src="https://github.com/user-attachments/assets/2e5ca631-b219-44a6-9983-9a3367d71d51" />
 
 
 # Features
@@ -49,7 +49,7 @@ The following simulations are available:
 
 # Modbus Logging
 
-<img width="1292" height="759" alt="изображение" src="https://github.com/user-attachments/assets/6bfa6030-a0ed-4155-93a7-f7a1208e87b6" />
+<img width="1292" height="759" alt="image" src="https://github.com/user-attachments/assets/6bfa6030-a0ed-4155-93a7-f7a1208e87b6" />
 
 
 # Extended Featues
@@ -70,7 +70,7 @@ The following simulations are available:
 # Scripting
   From version 1.2.0 Open ModSim supports scripting. Qt runtime implements the [ECMAScript Language Specification](http://www.ecma-international.org/publications/standards/Ecma-262.htm) standard, so Javascript is used to write code.
   
-<img width="1292" height="759" alt="image" src="https://github.com/user-attachments/assets/54c0994c-4a24-4425-9b7b-cbbc6b8656b1" />
+<img width="1288" height="749" alt="image" src="https://github.com/user-attachments/assets/6f37b58a-798c-4b45-ad88-165ad5a373c2" />
 
   Scripts can be launched in two modes: Once or Periodically. If you run script in Once mode the script will stop after it finishes executing. In Periodically mode, the script will start after a certain period of time until the user stops it or the method is called
   ```javascript
@@ -131,7 +131,50 @@ Script.onInit(init);
 ```
 
 # Building
-  Now building is available via cmake (with installed Qt version 5.15 and above) or Qt Creator. Supports both OS Microsoft Windows and Linux.
+  Building is available via cmake (with installed Qt version 5.15 and above) or Qt Creator. Supports both OS Microsoft Windows and Linux.
+
+## Microsoft Windows Building
+
+The minimum supported version of Microsoft Windows for building OpenModSim from sources is Windows 10.
+
+1. Install latest [git](https://git-scm.com/downloads/win) version
+2. Run Windows PowerShell terminal as an Administrator
+3. Clone OpenModSim sources from github repository
+```powershell
+git clone https://github.com/sanny32/OpenModSim.git
+```
+4. Go to OpenModSim folder
+```powershell
+cd OpenModSim
+```
+5. Allow script execution in PowerShell terminal
+```powershell
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+```
+6. Run the build script
+```powershell
+.\build.ps1
+```
+If you need to specify Qt framework major version (5 or 6), you can do it in the parameters
+  - `.\build.ps1 -qt5` or  `.\build.ps1 -qt6`
+
+The build script supports building the application only for 64-bit architecture.
+
+## Linux Building
+1. Install [git](https://git-scm.com/downloads/linux) for your Linux distribution
+2. Run the following commands from the console:
+```bash
+git clone https://github.com/sanny32/OpenModSim.git
+```
+```bash
+cd OpenModSim
+```
+```bash
+./build.sh
+```
+
+If you need to specify Qt framework major version (5 or 6), you can do it in the parameters
+  - `./build.sh -qt5` or  `./build.sh -qt6`
 
 # About supported operating systems
 
@@ -140,6 +183,7 @@ The following minimum operating system versions are supported for OpenModSim:
 - Debian Linux 11
 - Ubuntu Linux 22.04
 - Mint Linux 22
+- Zorin OS 18
 - Fedora Linux 41
 - Rocky Linux 9.7
 - OpenSuse Linux 15.6
@@ -154,18 +198,18 @@ Below are the methods for installing the OpenModSim for different OS
 ## Microsoft Windows
 Run the installer:
 
-- For 32-bit Windows: `qt5-omodsim_1.11.2_x86.exe`
-- For 64-bit Windows: `qt5-omodsim_1.11.2_x64.exe` or `qt6-omodsim_1.11.2_x64.exe`
+- For 32-bit Windows: `qt5-omodsim_1.11.3_x86.exe`
+- For 64-bit Windows: `qt5-omodsim_1.11.3_x64.exe` or `qt6-omodsim_1.11.3_x64.exe`
 
-## Debian/Ubintu/Mint/Astra Linux
+## Debian/Ubintu/Mint/Zorin/Astra Linux
 ### Install
 Install the DEB package from the command line:
 ```bash
-sudo apt install ./qt6-omodsim_1.11.2-1_amd64.deb
+sudo apt install ./qt6-omodsim_1.11.3-1_amd64.deb
 ```
 or if you want to use Qt5 libraries:
 ```bash
-sudo apt install ./qt5-omodsim_1.11.2-1_amd64.deb
+sudo apt install ./qt5-omodsim_1.11.3-1_amd64.deb
 ```
 
 ### Remove
@@ -182,7 +226,7 @@ sudo apt remove qt5-omodsim
 ### Install
 Install the RPM package from the command line:
 ```bash
-sudo dnf install ./qt6-omodsim-1.11.2-1.x86_64.rpm
+sudo dnf install ./qt6-omodsim-1.11.3-1.x86_64.rpm
 ```
 
 ### Remove
@@ -195,7 +239,7 @@ sudo dnf remove qt6-omodsim
 ### Install
 Install the RPM package from the command line as root user:
 ```bash
-apt-get install ./qt6-omodsim-1.11.2-1.x86_64.rpm
+apt-get install ./qt6-omodsim-1.11.3-1.x86_64.rpm
 ```
 
 ### Remove
@@ -212,7 +256,7 @@ sudo rpm --import qt6-omodsim.rpm.pubkey
 ```
 Install the RPM package using Zypper:
 ```bash
-sudo zypper install ./qt6-omodsim-1.11.2-1.x86_64.rpm
+sudo zypper install ./qt6-omodsim-1.11.3-1.x86_64.rpm
 ```
 
 ### Remove
@@ -221,8 +265,8 @@ To remove the RPM package run:
 sudo zypper remove qt6-omodsim
 ```
   
-## MIT License
-Copyright 2025 Alexandr Ananev [mail@ananev.org]
+# MIT License
+Copyright 2023-2026 Alexandr Ananev [mail@ananev.org]
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
