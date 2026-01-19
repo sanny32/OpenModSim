@@ -226,64 +226,76 @@ void OutputListModel::updateData(const QModbusDataUnit& data)
                 break;
 
             case DataDisplayMode::FloatingPt:
-                itemData.ValueStr = formatFloatValue(pointType, value, _lastData.value(i+1), byteOrder,
-                                          (i%2) || (i+1>=rowCount()), itemData.Value);
-            break;
+                // MSRF
+                itemData.ValueStr = formatFloatValue(pointType, _lastData.value(i+1), value, byteOrder,
+                                                     (i%2) || (i+1>=rowCount()), itemData.Value);
+                break;
 
             case DataDisplayMode::SwappedFP:
-                itemData.ValueStr = formatFloatValue(pointType, _lastData.value(i+1), value, byteOrder,
-                                          (i%2) || (i+1>=rowCount()), itemData.Value);
-            break;
+                // LSRF
+                itemData.ValueStr = formatFloatValue(pointType, value, _lastData.value(i+1), byteOrder,
+                                                     (i%2) || (i+1>=rowCount()), itemData.Value);
+                break;
 
             case DataDisplayMode::DblFloat:
-                itemData.ValueStr = formatDoubleValue(pointType, value, _lastData.value(i+1), _lastData.value(i+2), _lastData.value(i+3),
-                                           byteOrder, (i%4) || (i+3>=rowCount()), itemData.Value);
-            break;
+                // MSRF
+                itemData.ValueStr = formatDoubleValue(pointType, _lastData.value(i+3), _lastData.value(i+2), _lastData.value(i+1), value,
+                                                      byteOrder, (i%4) || (i+3>=rowCount()), itemData.Value);
+                break;
 
             case DataDisplayMode::SwappedDbl:
-                itemData.ValueStr = formatDoubleValue(pointType, _lastData.value(i+3), _lastData.value(i+2), _lastData.value(i+1), value,
-                                           byteOrder, (i%4) || (i+3>=rowCount()), itemData.Value);
-            break;
-                
+                // LSRF
+                itemData.ValueStr = formatDoubleValue(pointType, value, _lastData.value(i+1), _lastData.value(i+2), _lastData.value(i+3),
+                                                      byteOrder, (i%4) || (i+3>=rowCount()), itemData.Value);
+                break;
+
             case DataDisplayMode::Int32:
-                itemData.ValueStr = formatInt32Value(pointType, value, _lastData.value(i+1), byteOrder,
-                                                    (i%2) || (i+1>=rowCount()), itemData.Value);
-            break;
+                // MSRF
+                itemData.ValueStr = formatInt32Value(pointType, _lastData.value(i+1), value, byteOrder,
+                                                     (i%2) || (i+1>=rowCount()), itemData.Value);
+                break;
 
             case DataDisplayMode::SwappedInt32:
-                itemData.ValueStr = formatInt32Value(pointType, _lastData.value(i+1), value, byteOrder,
-                                                    (i%2) || (i+1>=rowCount()), itemData.Value);
-            break;
+                // LSRF
+                itemData.ValueStr = formatInt32Value(pointType, value, _lastData.value(i+1), byteOrder,
+                                                     (i%2) || (i+1>=rowCount()), itemData.Value);
+                break;
 
             case DataDisplayMode::UInt32:
-                itemData.ValueStr = formatUInt32Value(pointType, value, _lastData.value(i+1), byteOrder, leadingZeros,
-                                                            (i%2) || (i+1>=rowCount()), itemData.Value);
-            break;
+                // MSRF
+                itemData.ValueStr = formatUInt32Value(pointType, _lastData.value(i+1), value, byteOrder, leadingZeros,
+                                                      (i%2) || (i+1>=rowCount()), itemData.Value);
+                break;
 
             case DataDisplayMode::SwappedUInt32:
-                itemData.ValueStr = formatUInt32Value(pointType, _lastData.value(i+1), value, byteOrder, leadingZeros,
-                                                            (i%2) || (i+1>=rowCount()), itemData.Value);
-            break;
+                // LSRF
+                itemData.ValueStr = formatUInt32Value(pointType, value, _lastData.value(i+1), byteOrder, leadingZeros,
+                                                      (i%2) || (i+1>=rowCount()), itemData.Value);
+                break;
 
             case DataDisplayMode::Int64:
-                itemData.ValueStr = formatInt64Value(pointType, value, _lastData.value(i+1), _lastData.value(i+2), _lastData.value(i+3),
-                                                     byteOrder, (i%4) || (i+3>=rowCount()), itemData.Value);
-            break;
-
-            case DataDisplayMode::SwappedInt64:
+                // MSRF
                 itemData.ValueStr = formatInt64Value(pointType, _lastData.value(i+3), _lastData.value(i+2), _lastData.value(i+1), value,
                                                      byteOrder, (i%4) || (i+3>=rowCount()), itemData.Value);
-            break;
+                break;
+
+            case DataDisplayMode::SwappedInt64:
+                // LSRF
+                itemData.ValueStr = formatInt64Value(pointType, value, _lastData.value(i+1), _lastData.value(i+2), _lastData.value(i+3),
+                                                     byteOrder, (i%4) || (i+3>=rowCount()), itemData.Value);
+                break;
 
             case DataDisplayMode::UInt64:
-                itemData.ValueStr = formatUInt64Value(pointType, value, _lastData.value(i+1), _lastData.value(i+2), _lastData.value(i+3),
-                                                      byteOrder, leadingZeros, (i%4) || (i+3>=rowCount()), itemData.Value);
-            break;
-
-            case DataDisplayMode::SwappedUInt64:
+                // MSRF
                 itemData.ValueStr = formatUInt64Value(pointType, _lastData.value(i+3), _lastData.value(i+2), _lastData.value(i+1), value,
                                                       byteOrder, leadingZeros, (i%4) || (i+3>=rowCount()), itemData.Value);
-            break;
+                break;
+
+            case DataDisplayMode::SwappedUInt64:
+                // LSRF
+                itemData.ValueStr = formatUInt64Value(pointType, value, _lastData.value(i+1), _lastData.value(i+2), _lastData.value(i+3),
+                                                      byteOrder, leadingZeros, (i%4) || (i+3>=rowCount()), itemData.Value);
+                break;
         }
     }
 
