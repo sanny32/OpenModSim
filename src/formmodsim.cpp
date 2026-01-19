@@ -914,7 +914,7 @@ void FormModSim::on_outputWidget_itemDoubleClicked(quint16 addr, const QVariant&
         case QModbusDataUnit::DiscreteInputs:
         {
             ModbusWriteParams params = { addr, value, mode, byteOrder(), codepage(), zeroBasedAddress, addrSpace };
-            DialogWriteCoilRegister dlg(params, simParams, displayHexAddresses(), this);
+            DialogWriteCoilRegister dlg(params, simParams, displayHexAddresses(), _parent);
             switch(dlg.exec())
             {
                 case QDialog::Accepted:
@@ -935,13 +935,13 @@ void FormModSim::on_outputWidget_itemDoubleClicked(quint16 addr, const QVariant&
             ModbusWriteParams params = { addr, value, mode, byteOrder(), codepage(), zeroBasedAddress, addrSpace };
             if(mode == DataDisplayMode::Binary)
             {
-                DialogWriteHoldingRegisterBits dlg(params, displayHexAddresses(), this);
+                DialogWriteHoldingRegisterBits dlg(params, displayHexAddresses(), _parent);
                 if(dlg.exec() == QDialog::Accepted)
                     _mbMultiServer.writeRegister(deviceId, pointType, params);
             }
             else
             {
-                DialogWriteHoldingRegister dlg(params, simParams, displayHexAddresses(), this);
+                DialogWriteHoldingRegister dlg(params, simParams, displayHexAddresses(), _parent);
                 switch(dlg.exec())
                 {
                     case QDialog::Accepted:
