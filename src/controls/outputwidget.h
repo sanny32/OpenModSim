@@ -73,6 +73,8 @@ private:
         QString ValueStr;
         QString Description;
         bool Simulated = false;
+        QColor BgColor;
+        QColor FgColor;
     };
 
     OutputWidget* _parentWidget;
@@ -180,6 +182,7 @@ private:
     void hideModbusMessage();
     void showZoomOverlay();
     void updateLogView(QSharedPointer<const ModbusMessage> msg);
+    QModelIndex getValueIndex(const QModelIndex& index) const;
 
 private:
     Ui::OutputWidget *ui;

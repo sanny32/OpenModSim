@@ -4,6 +4,7 @@
 #include <QInputDialog>
 #include "fontutils.h"
 #include "formatutils.h"
+#include "htmldelegate.h"
 #include "outputwidget.h"
 #include "ui_outputwidget.h"
 
@@ -36,6 +37,38 @@ const int AddressRole = Qt::UserRole + 5;
 /// \brief ValueRole
 ///
 const int ValueRole = Qt::UserRole + 6;
+
+///
+/// \brief ColorRole
+///
+const int ColorRole = Qt::UserRole + 7;
+
+///
+/// \brief htmlPad
+/// \param count
+/// \return
+///
+QString htmlPad(int count)
+{
+    return QString("&nbsp;").repeated(count);
+}
+
+///
+/// \brief normalizeHtml
+/// \param s
+/// \return
+///
+QString normalizeHtml(const QString& s)
+{
+    QString out = s;
+    out.replace("&", "&amp;");
+    out.replace("<", "&lt;");
+    out.replace(">", "&gt;");
+    out.replace("\"", "&quot;");
+    out.replace("'", "&#39;");
+    out.replace(" ", "&nbsp;");
+    return out;
+}
 
 ///
 /// \brief OutputListModel::OutputListModel
@@ -78,31 +111,53 @@ QVariant OutputListModel::data(const QModelIndex& index, int role) const
     const auto hexAddresses = _parentWidget->displayHexAddresses();
 
     const ItemData& itemData = _mapItems[row];
-    const auto addrstr = formatAddress(pointType, itemData.Address, addrSpace, hexAddresses);
+    const auto addrStr = formatAddress(pointType, itemData.Address, addrSpace, hexAddresses);
 
     switch(role)
     {
         case Qt::DisplayRole:
         {
-            auto str = QString("%1: %2").arg(addrstr, itemData.ValueStr);
-            const int length = str.length();
-            const auto descr = itemData.Description.length() > 20 ?
-                        QString("%1...").arg(itemData.Description.left(18)): itemData.Description;
-            if(!descr.isEmpty()) str += QString("; %1").arg(descr);
-            return str.leftJustified(length + _columnsDistance, ' ');
+            const auto fg = itemData.FgColor.isValid() ? itemData.FgColor : _parentWidget->foregroundColor();
+            const auto bg = itemData.BgColor.isValid() ? itemData.BgColor : _parentWidget->backgroundColor();
+
+            const QString base = QString("%1: %2").arg(addrStr, itemData.ValueStr);
+            const int targetLen = base.length() + _columnsDistance;
+
+            QString descr = itemData.Description;
+            if (!descr.isEmpty())
+            {
+                const QString prefix = "; ";
+                const int freeSpace = targetLen - (base.length() + prefix.length());
+
+                if (freeSpace > 0)
+                {
+                    if (descr.length() > freeSpace)
+                        descr = descr.left(freeSpace - 4) + "...";
+
+                    descr = prefix + descr;
+                }
+            }
+
+            const int pad = targetLen - (base.length() + descr.length());
+            return QString(
+                       "<span style=\"background-color:%1; color:%2\">%3</span><span>%4%5</span>"
+                       ).arg(bg.name(), fg.name(), normalizeHtml(base), normalizeHtml(descr), (pad > 0) ? htmlPad(pad) : "");
         }
 
         case CaptureRole:
             return QString(itemData.ValueStr).remove('<').remove('>');
 
         case AddressStringRole:
-            return addrstr;
+            return addrStr;
 
         case AddressRole:
             return itemData.Address;
 
         case ValueRole:
             return itemData.Value;
+
+        case ColorRole:
+            return itemData.BgColor;
 
         case DescriptionRole:
             return itemData.Description;
@@ -140,6 +195,11 @@ bool OutputListModel::setData(const QModelIndex &index, const QVariant &value, i
         case DescriptionRole:
             _mapItems[index.row()].Description = value.toString();
             emit dataChanged(index, index, QVector<int>() << role);
+        return true;
+
+        case ColorRole:
+            _mapItems[index.row()].BgColor = value.value<QColor>();
+            emit dataChanged(index, index, QVector<int>() << Qt::DisplayRole);
         return true;
 
         default:
@@ -338,6 +398,7 @@ OutputWidget::OutputWidget(QWidget *parent) :
     ui->setupUi(this);
     ui->stackedWidget->setCurrentIndex(0);
     ui->listView->setModel(_listModel.get());
+    ui->listView->setItemDelegate(new HtmlDelegate(this));
     ui->labelStatus->setAutoFillBackground(true);
 
     setFont(defaultMonospaceFont());
@@ -913,21 +974,96 @@ void OutputWidget::setCodepage(const QString& name)
 }
 
 ///
+/// \brief drawRemoveColorIcon
+/// \param size
+/// \return
+///
+QIcon drawRemoveColorIcon(int size = 16)
+{
+    QPixmap pm(size, size);
+    pm.fill(Qt::transparent);
+
+    QPainter p(&pm);
+    p.setRenderHint(QPainter::Antialiasing, true);
+
+    QRect r(2, 2, size - 4, size - 4);
+    p.setBrush(Qt::white);
+    p.setPen(QPen(Qt::black, 0.1));
+    p.drawRect(r);
+
+    QPen pen(Qt::red, 1);
+    p.setPen(pen);
+    p.drawLine(0, size, size, 0);
+
+    return QIcon(pm);
+}
+
+///
 /// \brief OutputWidget::on_listView_customContextMenuRequested
 /// \param pos
 ///
 void OutputWidget::on_listView_customContextMenuRequested(const QPoint &pos)
 {
-    const auto index = ui->listView->indexAt(pos);
-    if(!index.isValid()) return;
+    QModelIndex index = ui->listView->indexAt(pos);
+    if (!index.isValid())
+        return;
 
-    QInputDialog dlg(this);
-    dlg.setLabelText(QString(tr("%1: Enter Description")).arg(_listModel->data(index, AddressStringRole).toString()));
-    dlg.setTextValue(_listModel->data(index, DescriptionRole).toString());
-    if(dlg.exec() == QDialog::Accepted)
+    QMenu menu(this);
+
+    const auto idx = getValueIndex(index);
+    const auto address = _listModel->data(idx, AddressStringRole).toString();
+
+    QAction* writeValueAction = menu.addAction(tr("Set Value of %1").arg(address));
+    connect(writeValueAction, &QAction::triggered, this, [this, index](){
+        emit ui->listView->doubleClicked(index);
+    });
+
+    const auto desc = _listModel->data(index, DescriptionRole).toString();
+    QAction* addDescrAction = menu.addAction(desc.isEmpty() ? tr("Add Description") : tr("Edit Description"));
+    connect(addDescrAction, &QAction::triggered, this, [this, index, address](){
+        QInputDialog dlg(this);
+        dlg.setLabelText(QString(tr("%1: Enter Description")).arg(_listModel->data(index, AddressStringRole).toString()));
+        dlg.setTextValue(_listModel->data(index, DescriptionRole).toString());
+        if(dlg.exec() == QDialog::Accepted) {
+            _listModel->setData(index, dlg.textValue(), DescriptionRole);
+        }
+    });
+
+    menu.addSeparator();
+
+    QAction* removeColorAction = menu.addAction(drawRemoveColorIcon(), tr("Remove Color"));
+    const auto clr = _listModel->data(index, ColorRole).value<QColor>();
+    removeColorAction->setEnabled(clr.isValid());
+    connect(removeColorAction, &QAction::triggered, this, [this, index](){
+        _listModel->setData(index, QColor(), ColorRole);
+    });
+
+    menu.addSeparator();
+
+    struct ColorItem { QString name; QColor color; };
+    QVector<ColorItem> safeColors = {
+        { tr("Yellow"), QColor(Qt::yellow) },
+        { tr("Cyan"), QColor(Qt::cyan) },
+        { tr("Magenta"), QColor(Qt::magenta) },
+        { tr("LightGreen"), QColor(144, 238, 144) },
+        { tr("Orange"), QColor(255, 165, 0) },
+        { tr("LightBlue"), QColor(173, 216, 230) },
+        { tr("LightGray"), QColor(Qt::lightGray) }
+    };
+
+    for (const auto &c : safeColors)
     {
-        _listModel->setData(index, dlg.textValue(), DescriptionRole);
+        QPixmap pixmap(16,16);
+        pixmap.fill(c.color);
+        QIcon icon(pixmap);
+
+        QAction* colorAction = menu.addAction(icon, c.name);
+        connect(colorAction, &QAction::triggered, this, [this, index, c](){
+            _listModel->setData(index, c.color, ColorRole);
+        });
     }
+
+    menu.exec(ui->listView->viewport()->mapToGlobal(pos));
 }
 
 ///
@@ -938,6 +1074,20 @@ void OutputWidget::on_listView_doubleClicked(const QModelIndex& index)
 {
     if(!index.isValid()) return;
 
+    const auto idx = getValueIndex(index);
+    const auto address = _listModel->data(idx, AddressRole).toUInt();
+    const auto value = _listModel->data(idx, ValueRole);
+
+    emit itemDoubleClicked(address, value);
+}
+
+///
+/// \brief OutputWidget::getValueIndex
+/// \param index
+/// \return
+///
+QModelIndex OutputWidget::getValueIndex(const QModelIndex& index) const
+{
     QModelIndex idx = index;
     switch(_displayDefinition.PointType)
     {
@@ -954,7 +1104,7 @@ void OutputWidget::on_listView_doubleClicked(const QModelIndex& index)
                 case DataDisplayMode::SwappedUInt32:
                     if(index.row() % 2)
                         idx = _listModel->index(index.row() - 1);
-                break;
+                    break;
 
                 case DataDisplayMode::DblFloat:
                 case DataDisplayMode::SwappedDbl:
@@ -964,22 +1114,18 @@ void OutputWidget::on_listView_doubleClicked(const QModelIndex& index)
                 case DataDisplayMode::SwappedUInt64:
                     if(index.row() % 4)
                         idx = _listModel->index(index.row() - index.row() % 4);
-                break;
+                    break;
 
                 default:
-                break;
+                    break;
             }
         }
         break;
 
         default:
-        break;
+            break;
     }
-
-    const auto address = _listModel->data(idx, AddressRole).toUInt();
-    const auto value = _listModel->data(idx, ValueRole);
-
-    emit itemDoubleClicked(address, value);
+    return idx;
 }
 
 ///
