@@ -13,7 +13,7 @@
 #include "formmodsim.h"
 #include "ui_formmodsim.h"
 
-QVersionNumber FormModSim::VERSION = QVersionNumber(1, 12);
+QVersionNumber FormModSim::VERSION = QVersionNumber(1, 13);
 
 ///
 /// \brief FormModSim::FormModSim
@@ -458,6 +458,24 @@ QFont FormModSim::font() const
 void FormModSim::setFont(const QFont& font)
 {
     ui->outputWidget->setFont(font);
+}
+
+///
+/// \brief FormModSim::zoomPercent
+/// \return
+///
+int FormModSim::zoomPercent() const
+{
+    return ui->outputWidget->zoomPercent();
+}
+
+///
+/// \brief FormModSim::setZoomPercent
+/// \param zoomPercent
+///
+void FormModSim::setZoomPercent(int zoomPercent)
+{
+    ui->outputWidget->setZoomPercent(zoomPercent);
 }
 
 ///
