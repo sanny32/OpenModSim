@@ -512,6 +512,8 @@ QVector<quint16> OutputWidget::data() const
 void OutputWidget::setup(const DisplayDefinition& dd, const ModbusSimulationMap2& simulations, const QModbusDataUnit& data)
 {
     _descriptionMap.insert(descriptionMap());
+    _colorMap.insert(colorMap());
+
     _displayDefinition = dd;
 
     setLogViewLimit(dd.LogViewLimit);
@@ -838,6 +840,34 @@ void OutputWidget::updateTraffic(QSharedPointer<const ModbusMessage> msg)
 void OutputWidget::updateData(const QModbusDataUnit& data)
 {
     _listModel->updateData(data);
+}
+
+///
+/// \brief OutputWidget::colorMap
+/// \return
+///
+AddressColorMap OutputWidget::colorMap() const
+{
+    AddressColorMap colorMap;
+    for(int i = 0; i < _listModel->rowCount(); i++)
+    {
+        const auto clr = _listModel->data(_listModel->index(i), ColorRole).value<QColor>();
+        const quint16 addr = _listModel->data(_listModel->index(i), AddressRole).toUInt() - (_displayDefinition.ZeroBasedAddress ? 0 : 1);
+        colorMap[{_displayDefinition.DeviceId, _displayDefinition.PointType, addr }] = clr;
+    }
+    return colorMap;
+}
+
+///
+/// \brief OutputWidget::setColor
+/// \param deviceId
+/// \param type
+/// \param addr
+/// \param clr
+///
+void OutputWidget::setColor(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr, const QColor& clr)
+{
+    _listModel->setData(_listModel->find(deviceId, type, addr), clr, ColorRole);
 }
 
 ///

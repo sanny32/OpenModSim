@@ -16,12 +16,12 @@ class OutputWidget;
 
 class OutputWidget;
 
-struct AddressDescriptionMapKey {
+struct ItemMapKey {
     quint8 DeviceId;
     QModbusDataUnit::RegisterType Type;
     quint16 Address;
 
-    bool operator<(const  AddressDescriptionMapKey &other) const {
+    bool operator<(const  ItemMapKey &other) const {
         if (DeviceId != other.DeviceId)
             return DeviceId < other.DeviceId;
         if (Type != other.Type)
@@ -30,8 +30,10 @@ struct AddressDescriptionMapKey {
     }
 };
 
-typedef QMap<AddressDescriptionMapKey, QString> AddressDescriptionMap2;
+typedef QMap<ItemMapKey, QColor> AddressColorMap;
+typedef QMap<ItemMapKey, QString> AddressDescriptionMap2;
 typedef QMap<QPair<QModbusDataUnit::RegisterType, quint16>, QString> AddressDescriptionMap;
+
 
 ///
 /// \brief The OutputListModel class
@@ -155,6 +157,9 @@ public:
     void updateTraffic(QSharedPointer<const ModbusMessage> msg);
     void updateData(const QModbusDataUnit& data);
 
+    AddressColorMap colorMap() const;
+    void setColor(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr, const QColor& clr);
+
     AddressDescriptionMap2 descriptionMap() const;
     void setDescription(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr, const QString& desc);
 
@@ -200,6 +205,7 @@ private:
     QString _codepage;
     DisplayDefinition _displayDefinition;
     QFile _fileCapture;
+    AddressColorMap _colorMap;
     AddressDescriptionMap2 _descriptionMap;
     QSharedPointer<OutputListModel> _listModel;
 };
@@ -211,7 +217,7 @@ private:
 /// \param key
 /// \return
 ///
-inline QDataStream& operator <<(QDataStream& out, const AddressDescriptionMapKey& key)
+inline QDataStream& operator <<(QDataStream& out, const ItemMapKey& key)
 {
     out << key.DeviceId;
     out << key.Type;
@@ -226,7 +232,7 @@ inline QDataStream& operator <<(QDataStream& out, const AddressDescriptionMapKey
 /// \param params
 /// \return
 ///
-inline QDataStream& operator >>(QDataStream& in, AddressDescriptionMapKey& key)
+inline QDataStream& operator >>(QDataStream& in, ItemMapKey& key)
 {
     in >> key.DeviceId;
     in >> key.Type;

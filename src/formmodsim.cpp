@@ -633,6 +633,27 @@ void FormModSim::setDescription(quint8 deviceId, QModbusDataUnit::RegisterType t
 }
 
 ///
+/// \brief FormModSim::colorMap
+/// \return
+///
+AddressColorMap FormModSim::colorMap() const
+{
+    return ui->outputWidget->colorMap();
+}
+
+///
+/// \brief FormModSim::setColor
+/// \param deviceId
+/// \param type
+/// \param addr
+/// \param clr
+///
+void FormModSim::setColor(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr, const QColor& clr)
+{
+    ui->outputWidget->setColor(deviceId, type, addr, clr);
+}
+
+///
 /// \brief FormModSim::script
 /// \return
 ///

@@ -108,6 +108,9 @@ public:
     AddressDescriptionMap2 descriptionMap() const;
     void setDescription(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr, const QString& desc);
 
+    AddressColorMap colorMap() const;
+    void setColor(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr, const QColor& clr);
+
     bool canRunScript() const;
     bool canStopScript() const;
 
@@ -326,6 +329,7 @@ inline QDataStream& operator <<(QDataStream& out, FormModSim* frm)
     out << frm->scriptControl();
     out << frm->scriptSettings();
     out << frm->descriptionMap();
+    out << frm->colorMap();
     out << frm->codepage();
 
     const auto unit = frm->serializeModbusDataUnit(dd.DeviceId, dd.PointType, dd.PointAddress - (dd.ZeroBasedAddress ? 0 : 1), dd.Length);
@@ -460,6 +464,12 @@ inline QDataStream& operator >>(QDataStream& in, FormModSim* frm)
         }
     }
 
+    AddressColorMap colorMap;
+    if(ver >= QVersionNumber(1, 13))
+    {
+        in >> colorMap;
+    }
+
     QString codepage;
     if(ver >= QVersionNumber(1, 7))
     {
@@ -494,6 +504,9 @@ inline QDataStream& operator >>(QDataStream& in, FormModSim* frm)
 
         for(auto&& k : descriptionMap2.keys())
             frm->setDescription(k.DeviceId, k.Type, k.Address, descriptionMap2[k]);
+
+        for(auto&& k : colorMap.keys())
+            frm->setColor(k.DeviceId, k.Type, k.Address, colorMap[k]);
     }
     else {
         for(auto&& k : simulationMap.keys())
@@ -601,7 +614,7 @@ inline QXmlStreamWriter& operator <<(QXmlStreamWriter& xml, FormModSim* frm)
         xml.writeStartElement("AddressDescriptionMap");
 
         for (auto it = descriptionMap.constBegin(); it != descriptionMap.constEnd(); ++it) {
-            const AddressDescriptionMapKey& key = it.key();
+            const ItemMapKey& key = it.key();
             const QString& description = it.value();
 
             if(!description.isEmpty() && key.DeviceId == dd.DeviceId && key.Type == dd.PointType)
@@ -614,6 +627,26 @@ inline QXmlStreamWriter& operator <<(QXmlStreamWriter& xml, FormModSim* frm)
         }
 
         xml.writeEndElement(); // AddressDescriptionMap
+    }
+
+    {
+        const auto colorMap = frm->colorMap();
+        xml.writeStartElement("AddressColorMap");
+
+        for (auto it = colorMap.constBegin(); it != colorMap.constEnd(); ++it) {
+            const ItemMapKey& key = it.key();
+            const QColor& clr = it.value();
+
+            if(clr.isValid() && key.DeviceId == dd.DeviceId && key.Type == dd.PointType)
+            {
+                xml.writeStartElement("Color");
+                xml.writeAttribute("Address", QString::number(key.Address));
+                xml.writeAttribute("Value", clr.name());
+                xml.writeEndElement();
+            }
+        }
+
+        xml.writeEndElement(); // AddressColorMap
     }
 
     {
@@ -654,6 +687,7 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, FormModSim* frm)
         DataDisplayMode ddm;
         DisplayDefinition dd;
         QHash<quint16, quint16> data;
+        QHash<quint16, QColor> colors;
         QHash<quint16, QString> descriptions;
         QHash<quint16, ModbusSimulationParams> simulations;
 
@@ -831,6 +865,24 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, FormModSim* frm)
                     }
                 }
             }
+            else if (xml.name() == QLatin1String("AddressColorMap")) {
+                while (xml.readNextStartElement()) {
+                    if (xml.name() == QLatin1String("Color")) {
+
+                        const QXmlStreamAttributes attributes = xml.attributes();
+                        bool ok; const quint16 address = attributes.value("Address").toUShort(&ok);
+
+                        if(ok) {
+                            const QString value = attributes.value("Value").toString();
+                            if(!value.isEmpty()) colors[address] = QColor(value);
+                        }
+                        xml.skipCurrentElement();
+
+                    } else {
+                        xml.skipCurrentElement();
+                    }
+                }
+            }
             else if (xml.name() == QLatin1String("ModbusDataUnit")) {
                 while (xml.readNextStartElement()) {
                     if (xml.name() == QLatin1String("Value")) {
@@ -880,6 +932,14 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, FormModSim* frm)
                 while(it.hasNext()) {
                     const auto item = it.next();
                     frm->setDescription(dd.DeviceId, dd.PointType, item.key(), item.value());
+                }
+            }
+
+            if(!colors.isEmpty()) {
+                QHashIterator it(colors);
+                while(it.hasNext()) {
+                    const auto item = it.next();
+                    frm->setColor(dd.DeviceId, dd.PointType, item.key(), item.value());
                 }
             }
 
