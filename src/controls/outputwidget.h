@@ -132,6 +132,9 @@ public:
     QFont font() const;
     void setFont(const QFont& font);
 
+    int zoomPercent() const;
+    void setZoomPercent(int zoomPercent);
+
     int dataViewColumnsDistance() const;
     void setDataViewColumnsDistance(int value);
 
@@ -165,6 +168,7 @@ signals:
 
 protected:
     void changeEvent(QEvent* event) override;
+    bool eventFilter(QObject* obj, QEvent* event) override;
 
 private slots:
     void on_listView_doubleClicked(const QModelIndex& index);
@@ -174,12 +178,18 @@ private:
     void captureString(const QString& s);
     void showModbusMessage(const QModelIndex& index);
     void hideModbusMessage();
+    void showZoomOverlay();
     void updateLogView(QSharedPointer<const ModbusMessage> msg);
 
 private:
     Ui::OutputWidget *ui;
+    QLabel* _zoomLabel = nullptr;
+    QTimer* _zoomHideTimer = nullptr;
 
 private:
+    qreal _baseFontSize = 0.0;
+    int _zoomPercent = 100;
+
     bool _displayHexAddreses;
     DisplayMode _displayMode;
     DataDisplayMode _dataDisplayMode;

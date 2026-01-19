@@ -356,6 +356,30 @@ OutputWidget::OutputWidget(QWidget *parent) :
                 if(!sel.indexes().isEmpty())
                     showModbusMessage(sel.indexes().first());
             });
+
+    _baseFontSize = ui->listView->font().pointSizeF();
+    if (_baseFontSize <= 0) _baseFontSize = 10.0;
+
+    _zoomLabel = new QLabel(ui->listView->viewport());
+    _zoomLabel->setVisible(false);
+    _zoomLabel->setAlignment(Qt::AlignCenter);
+    _zoomLabel->setAttribute(Qt::WA_TransparentForMouseEvents);
+
+    _zoomLabel->setStyleSheet(R"(
+        QLabel {
+            background: rgba(30, 30, 30, 180);
+            color: white;
+            border-radius: 6px;
+            padding: 6px 12px;
+            font-size: 12pt;
+        }
+    )");
+
+    _zoomHideTimer = new QTimer(this);
+    _zoomHideTimer->setSingleShot(true);
+    connect(_zoomHideTimer, &QTimer::timeout, _zoomLabel, &QLabel::hide);
+
+    ui->listView->viewport()->installEventFilter(this);
 }
 
 ///
@@ -379,6 +403,34 @@ void OutputWidget::changeEvent(QEvent* event)
     }
 
     QWidget::changeEvent(event);
+}
+
+///
+/// \brief OutputWidget::eventFilter
+/// \param obj
+/// \param event
+/// \return
+///
+bool OutputWidget::eventFilter(QObject* obj, QEvent* event)
+{
+    if (obj == ui->listView->viewport() &&
+        event->type() == QEvent::Wheel)
+    {
+        auto we = static_cast<QWheelEvent*>(event);
+        if (we->modifiers() & Qt::ControlModifier)
+        {
+            if (we->angleDelta().y() > 0)
+                setZoomPercent(zoomPercent() + 10);
+            else if (we->angleDelta().y() < 0)
+                setZoomPercent(zoomPercent() - 10);
+
+            showZoomOverlay();
+
+            return true;
+        }
+    }
+
+    return QWidget::eventFilter(obj, event);
 }
 
 ///
@@ -534,7 +586,7 @@ void OutputWidget::setStatusColor(const QColor& clr)
 ///
 QFont OutputWidget::font() const
 {
-    return ui->listView->font();
+    return ui->logView->font();
 }
 
 ///
@@ -547,6 +599,30 @@ void OutputWidget::setFont(const QFont& font)
     ui->labelStatus->setFont(font);
     ui->logView->setFont(font);
     ui->modbusMsg->setFont(font);
+}
+
+///
+/// \brief OutputWidget::zoomPercent
+/// \return
+///
+int OutputWidget::zoomPercent() const
+{
+    return _zoomPercent;
+}
+
+///
+/// \brief OutputWidget::setZoomPercent
+/// \param zoom
+///
+void OutputWidget::setZoomPercent(int zoomPercent)
+{
+    _zoomPercent = qBound(50, zoomPercent, 300);
+
+    QFont font = ui->listView->font();
+    font.setPointSizeF(_baseFontSize * _zoomPercent / 100.0);
+
+    ui->listView->setFont(font);
+    ui->labelStatus->setFont(font);
 }
 
 ///
@@ -958,6 +1034,25 @@ void OutputWidget::hideModbusMessage()
 {
     ui->splitter->setSizes({1, 0});
     ui->splitter->widget(1)->hide();
+}
+
+///
+/// \brief OutputWidget::showZoomOverlay
+/// \param currentFontSize
+///
+void OutputWidget::showZoomOverlay()
+{
+    _zoomLabel->setText(tr("Zoom: %1%").arg(_zoomPercent));
+    _zoomLabel->adjustSize();
+
+    QRect r = ui->listView->viewport()->rect();
+    QPoint center = r.center() - QPoint(_zoomLabel->width() / 2, _zoomLabel->height() / 2);
+
+    _zoomLabel->move(center);
+    _zoomLabel->show();
+    _zoomLabel->raise();
+
+    _zoomHideTimer->start(800);
 }
 
 ///
