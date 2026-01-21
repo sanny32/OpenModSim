@@ -214,7 +214,7 @@ void DialogRawDataLog::on_rawDataReceived(const ConnectionDetails& cd, const QDa
         const auto protocol = cd.Type == ConnectionType::Serial ? ModbusMessage::Rtu : ModbusMessage::Tcp;
         const bool valid = ModbusMessage::create(data, protocol, time, true)->isValid();
 
-        RawData raw { RawData::Tx, time, data, valid };
+        RawData raw { RawData::Rx, time, data, valid };
         ((RawDataLogModel*)ui->listViewLog->model())->append(raw);
     }
 }
@@ -231,7 +231,7 @@ void DialogRawDataLog::on_rawDataSended(const ConnectionDetails& cd, const QDate
         const auto protocol = cd.Type == ConnectionType::Serial ? ModbusMessage::Rtu : ModbusMessage::Tcp;
         const bool valid = ModbusMessage::create(data, protocol, time, false)->isValid();
 
-        RawData raw { RawData::Rx, time, data, valid };
+        RawData raw { RawData::Tx, time, data, valid };
         ((RawDataLogModel*)ui->listViewLog->model())->append(raw);
     }
 }

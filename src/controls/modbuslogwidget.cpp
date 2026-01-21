@@ -39,8 +39,8 @@ QVariant ModbusLogModel::data(const QModelIndex& index, int role) const
                     <span style="color:%4">%5</span>
                 )")
                 .arg(item->timestamp().toString(Qt::ISODateWithMs),
-                     item->isRequest() ? "#0066cc" : "#009933",
-                     item->isRequest() ? "[Tx] ←" : "[Rx] →",
+                     item->isRequest() ? "#009933" : "#0066cc",
+                     item->isRequest() ? "[Rx] ←" : "[Tx] →",
                      (item->isException() || !item->isValid()) ? "#cc0000" : "#000000",
                      item->toString(_parentWidget->dataDisplayMode(), _parentWidget->showLeadingZeros()));
 
