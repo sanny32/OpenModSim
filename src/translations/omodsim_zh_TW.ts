@@ -941,9 +941,13 @@
 <context>
     <name>DialogRawDataLog</name>
     <message>
-        <location filename="../dialogs/dialograwdatalog.ui" line="14"/>
         <source>Raw Data Log Dialog</source>
-        <translation>原始資料日誌對話方塊</translation>
+        <translation type="vanished">原始資料日誌對話方塊</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialograwdatalog.ui" line="14"/>
+        <source>Raw Data Log Monitor</source>
+        <translation>原始資料日誌監視器</translation>
     </message>
     <message>
         <location filename="../dialogs/dialograwdatalog.ui" line="22"/>

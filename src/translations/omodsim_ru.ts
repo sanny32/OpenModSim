@@ -937,9 +937,13 @@
 <context>
     <name>DialogRawDataLog</name>
     <message>
-        <location filename="../dialogs/dialograwdatalog.ui" line="14"/>
         <source>Raw Data Log Dialog</source>
-        <translation>Лог необработанных данных</translation>
+        <translation type="vanished">Лог необработанных данных</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialograwdatalog.ui" line="14"/>
+        <source>Raw Data Log Monitor</source>
+        <translation>Мониторинг сырых данных</translation>
     </message>
     <message>
         <location filename="../dialogs/dialograwdatalog.ui" line="22"/>
