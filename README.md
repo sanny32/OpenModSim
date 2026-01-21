@@ -201,7 +201,7 @@ Run the installer:
 - For 32-bit Windows: `qt5-omodsim_1.11.3_x86.exe`
 - For 64-bit Windows: `qt5-omodsim_1.11.3_x64.exe` or `qt6-omodsim_1.11.3_x64.exe`
 
-## Debian/Ubintu/Mint/Zorin/Astra Linux
+## Debian/Ubuntu/Mint/Zorin/Astra Linux
 ### Install
 Install the DEB package from the command line:
 ```bash
