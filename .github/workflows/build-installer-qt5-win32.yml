@@ -119,6 +119,7 @@ jobs:
            /DVERSION="${{ env.APP_VERSION }}" ^
            /DBUILD_PATH="%CD%\${{ env.BUILD_DIR }}\${{ env.BUILD_TYPE }}" ^
            /DICON_FILE="%CD%\src\res\omodsim.ico" ^
+           /DWELCOMEFINISHPAGE_BITMAP="%CD%\..\..\.github\win32\nsis3-omodsim.bmp" ^
            /DLICENSE_FILE="%CD%\src\res\license.txt" ^
            /DOUTPUT_FILE="%CD%\qt5-omodsim-${{ env.APP_VERSION }}_${{ env.ARCH }}.exe" ^
            %CD%\.github\win32\installer-win32.nsi
