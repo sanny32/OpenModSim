@@ -361,7 +361,7 @@
         <translation type="vanished">• Fira Code 6.2 字体</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="288"/>
+        <location filename="../dialogs/dialogabout.cpp" line="286"/>
         <source>License Agreement - %1</source>
         <translation>許可協議 - %1</translation>
     </message>
