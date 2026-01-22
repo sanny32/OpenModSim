@@ -49,6 +49,12 @@ target_wrapper.*
 # QtCreator CMake
 CMakeLists.txt.user*
 
+# Visual Studio
+.vs
+out
+CMakePresets.json
+CMakeUserPresets.json
+
 .directory
 *.bat
 *.qmake.stash
@@ -56,9 +62,4 @@ CMakeLists.txt.user*
 *.rc
 *.qtds
 *.ts text eol=lf
-
-# Visual Studio
-.vs
-out
-CMakePresets.json
-CMakeUserPresets.json
+src/res/license.txt
