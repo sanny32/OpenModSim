@@ -18,10 +18,23 @@
   !define SLUG "${NAME} v${VERSION}"
   !define UPDATEURL "https://github.com/sanny32/OpenModSim/releases"
 
+  !define MUI_WELCOMEFINISHPAGE_BITMAP "${NSISDIR}\Contrib\Graphics\Wizard\nsis3-branding.bmp"
   !define MUI_FINISHPAGE_TEXT "${NAME} v${VERSION} (x86) has been installed on your computer."
-  !define MUI_FINISHPAGE_RUN "$INSTDIR\${APPFILE}"
+  !define MUI_FINISHPAGE_RUN
+  !define MUI_FINISHPAGE_RUN_FUNCTION LaunchWithProfile
   !define MUI_FINISHPAGE_RUN_TEXT "Launch ${NAME}"
   !define MUI_FINISHPAGE_RUN_CHECKED
+
+Function LaunchWithProfile
+  StrCpy $0 "$INSTDIR\${APPFILE}"
+  ${GetFileName} "$0" $1
+  ${GetBaseName} $1 $2
+  StrCpy $3 "$2.ini"
+  StrCpy $4 "$LOCALAPPDATA\${NAME}"
+  StrCpy $5 "$4\$3"
+  Exec '"$0" --profile "$5"'
+  Sleep 300
+FunctionEnd
 
   !searchparse /noerrors ${VERSION} "" VERSIONMAJOR "." VERSIONMINOR "." VERSIONPATCH "." VERSIONBUILD
   !ifndef VERSIONBUILD
@@ -83,6 +96,7 @@ FunctionEnd
 # Pages
   
   # Installer pages
+  !insertmacro MUI_PAGE_WELCOME
   !insertmacro MUI_PAGE_LICENSE ${LICENSE_FILE}
   !insertmacro MUI_PAGE_DIRECTORY
   !insertmacro MUI_PAGE_INSTFILES
