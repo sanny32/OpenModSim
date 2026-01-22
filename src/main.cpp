@@ -169,6 +169,11 @@ int main(int argc, char *argv[])
         return EXIT_SUCCESS;
     }
 
+    QString profile;
+    if(parser.isSet(CmdLineParser::_profile)) {
+        profile = parser.value(CmdLineParser::_profile);
+    }
+
     QString cfg;
     if(parser.isSet(CmdLineParser::_config))
     {
@@ -177,9 +182,8 @@ int main(int argc, char *argv[])
 
     const bool noSession = parser.isSet(CmdLineParser::_no_session);
 
-    MainWindow w(!noSession);
-    if(!cfg.isEmpty())
-    {
+    MainWindow w(profile, !noSession);
+    if(!cfg.isEmpty()) {
         w.loadConfig(cfg, true);
     }
     w.show();

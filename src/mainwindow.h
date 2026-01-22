@@ -22,7 +22,7 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit MainWindow(bool useSession, QWidget *parent = nullptr);
+    explicit MainWindow(const QString& profile, bool useSession, QWidget *parent = nullptr);
     ~MainWindow();
 
     void setLanguage(const QString& lang);
@@ -163,8 +163,8 @@ private:
     void saveMdiChild(FormModSim* frm, SerializationFormat format);
     void closeMdiChild(FormModSim* frm);
 
-    bool loadSettings();
-    void saveSettings();
+    bool loadProfile(const QString& filename);
+    void saveProfile();
 
     void saveAs(FormModSim* frm, SerializationFormat format);
 
@@ -189,6 +189,7 @@ private:
     QSharedPointer<QPrinter> _selectedPrinter;
     QSharedPointer<DataSimulator> _dataSimulator;
     QString _savePath;
+    QString _profile;
 };
 
 #endif // MAINWINDOW_H

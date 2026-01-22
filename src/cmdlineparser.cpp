@@ -12,6 +12,9 @@ CmdLineParser::CmdLineParser()
     QCommandLineOption versionOption(QStringList() << _version, tr("Displays version information."));
     addOption(versionOption);
 
+    QCommandLineOption profileOption(QStringList() << _profile, tr("Load settings profile from ini file."), tr("file path"));
+    addOption(profileOption);
+
     QCommandLineOption configOption(QStringList() << _config, tr("Setup test config file."), tr("file path"));
     addOption(configOption);
 

@@ -24,10 +24,11 @@
 
 ///
 /// \brief MainWindow::MainWindow
+/// \param profile
 /// \param useSession
 /// \param parent
 ///
-MainWindow::MainWindow(bool useSession, QWidget *parent)
+MainWindow::MainWindow(const QString& profile, bool useSession, QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
     ,_lang("en")
@@ -93,7 +94,7 @@ MainWindow::MainWindow(bool useSession, QWidget *parent)
     connect(&_mbMultiServer, &ModbusMultiServer::connectionError, this, &MainWindow::on_connectionError);
 
     if(_useSession) {
-        if(!loadSettings()) {
+        if(!loadProfile(profile)) {
             ui->actionNew->trigger();
         }
     }
@@ -151,7 +152,7 @@ void MainWindow::changeEvent(QEvent* event)
 void MainWindow::closeEvent(QCloseEvent *event)
 {
     if(_useSession) {
-        saveSettings();
+        saveProfile();
     }
 
     ui->mdiArea->closeAllSubWindows();
@@ -1844,20 +1845,63 @@ void MainWindow::closeMdiChild(FormModSim* frm)
 }
 
 ///
-/// \brief MainWindow::loadSettings
+/// \brief checkPathIsWritable
+/// \param path
+/// \return
 ///
-bool MainWindow::loadSettings()
+static bool checkPathIsWritable(const QString& path)
 {
-    const auto filename = QString("%1.ini").arg(QFileInfo(qApp->applicationFilePath()).baseName());
-    auto filepath = QString("%1%2%3").arg(qApp->applicationDirPath(), QDir::separator(), filename);
+    const auto filepath = QString("%1%2%3").arg(path, QDir::separator(), ".test");
+    if(!QFile(filepath).open(QFile::WriteOnly)) return false;
 
-    if(!QFile::exists(filepath))
-        filepath = QString("%1%2%3").arg(QStandardPaths::writableLocation(QStandardPaths::ConfigLocation),
-                                         QDir::separator(), filename);
+    QFile::remove(filepath);
+    return true;
+}
 
-    if(!QFile::exists(filepath)) return false;
+///
+/// \brief canWriteFile
+/// \param filePath
+/// \return
+///
+static bool canWriteFile(const QString& filePath)
+{
+    QFile file(filePath);
 
-    QSettings m(filepath, QSettings::IniFormat, this);
+    if (file.exists()) {
+        return file.open(QIODevice::WriteOnly | QIODevice::Append);
+    }
+
+    const QString dirPath = QFileInfo(filePath).absolutePath();
+    return checkPathIsWritable(dirPath);
+}
+
+///
+/// \brief MainWindow::getSettingsFilePath
+/// \return
+///
+static QString getSettingsFilePath()
+{
+    const QString filename = QString("%1.ini").arg(QFileInfo(qApp->applicationFilePath()).baseName());
+    const QString appFilePath = QDir(qApp->applicationDirPath()).filePath(filename);
+
+    if (canWriteFile(appFilePath))
+        return appFilePath;
+
+    return QDir(QStandardPaths::writableLocation(QStandardPaths::ConfigLocation)).filePath(filename);
+}
+
+
+///
+/// \brief MainWindow::loadProfile
+/// \param filename
+/// \return
+///
+bool MainWindow::loadProfile(const QString& filename)
+{
+    _profile = filename.isEmpty() ? getSettingsFilePath() : filename;
+    if(!QFile::exists(_profile)) return false;
+
+    QSettings m(_profile, QSettings::IniFormat, this);
 
     restoreGeometry(m.value("WindowGeometry").toByteArray());
 
@@ -1923,31 +1967,11 @@ bool MainWindow::loadSettings()
 }
 
 ///
-/// \brief checkPathIsWritable
-/// \param path
-/// \return
+/// \brief MainWindow::saveProfile
 ///
-bool checkPathIsWritable(const QString& path)
+void MainWindow::saveProfile()
 {
-    const auto filepath = QString("%1%2%3").arg(path, QDir::separator(), ".test");
-    if(!QFile(filepath).open(QFile::WriteOnly)) return false;
-
-    QFile::remove(filepath);
-    return true;
-}
-
-///
-/// \brief MainWindow::saveSettings
-///
-void MainWindow::saveSettings()
-{
-    const auto filename = QString("%1.ini").arg(QFileInfo(qApp->applicationFilePath()).baseName());
-    auto filepath = QString("%1%2%3").arg(qApp->applicationDirPath(), QDir::separator(), filename);
-
-    if(!QFileInfo(qApp->applicationDirPath()).isWritable() || !checkPathIsWritable(qApp->applicationDirPath()))
-        filepath = QString("%1%2%3").arg(QStandardPaths::writableLocation(QStandardPaths::ConfigLocation),
-                                         QDir::separator(), filename);
-
+    const QString filepath = _profile.isEmpty() ? getSettingsFilePath() : _profile;
     QSettings m(filepath, QSettings::IniFormat, this);
 
     m.clear();
