@@ -255,41 +255,41 @@
         <translation type="obsolete">Версия: %1 %2</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="85"/>
+        <location filename="../dialogs/dialogabout.cpp" line="88"/>
         <source>Using %1 and built against %2</source>
         <translation>%1 (собрано с версией %2)</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="86"/>
+        <location filename="../dialogs/dialogabout.cpp" line="89"/>
         <source>Cross-platform application development framework.</source>
         <translation>Среда для разработки кросс-платформенных приложений.</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="119"/>
+        <location filename="../dialogs/dialogabout.cpp" line="122"/>
         <source>Author and Maintainer</source>
         <translation>Автор</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="229"/>
+        <location filename="../dialogs/dialogabout.cpp" line="232"/>
         <source>Visit component&apos;s homepage
 %1</source>
         <translation>Посетить домашнюю страницу компонента
 %1</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="250"/>
+        <location filename="../dialogs/dialogabout.cpp" line="253"/>
         <source>Email contributer: %1</source>
         <translation>Написать участнику: %1</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="259"/>
+        <location filename="../dialogs/dialogabout.cpp" line="262"/>
         <source>Visit user&apos;s homepage
 %1</source>
         <translation>Посетить домашнюю страницу пользователя на github
 %1</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="92"/>
+        <location filename="../dialogs/dialogabout.cpp" line="95"/>
         <source>Free monospaced font with programming ligatures.</source>
         <translation>Свободный моноширинный шрифт с программными лигатурами.</translation>
     </message>
@@ -304,29 +304,29 @@
         <translation>Версия: &lt;b&gt;%1&lt;/b&gt; %2</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="99"/>
-        <location filename="../dialogs/dialogabout.cpp" line="106"/>
+        <location filename="../dialogs/dialogabout.cpp" line="102"/>
+        <location filename="../dialogs/dialogabout.cpp" line="109"/>
         <source>Underlying platform.</source>
         <translation>Базовая платформа.</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="124"/>
-        <location filename="../dialogs/dialogabout.cpp" line="129"/>
+        <location filename="../dialogs/dialogabout.cpp" line="127"/>
+        <location filename="../dialogs/dialogabout.cpp" line="132"/>
         <source>Contributor</source>
         <translation>Сопровождение</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="142"/>
+        <location filename="../dialogs/dialogabout.cpp" line="145"/>
         <source>Russian</source>
         <translation>Русский</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="147"/>
+        <location filename="../dialogs/dialogabout.cpp" line="150"/>
         <source>Simplified Chinese and Traditional Chinese</source>
         <translation>Упрощенный китайский и традиционный китайский</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="255"/>
+        <location filename="../dialogs/dialogabout.cpp" line="258"/>
         <source>Visit github user&apos;s homepage
 %1</source>
         <translation>Посетить домашнюю страницу пользователя на github
@@ -361,7 +361,7 @@
         <translation type="vanished">• Fira Code 6.2 шрифт</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="281"/>
+        <location filename="../dialogs/dialogabout.cpp" line="288"/>
         <source>License Agreement - %1</source>
         <translation>Лицензионное соглашение - %1</translation>
     </message>
