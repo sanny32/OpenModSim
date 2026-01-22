@@ -16,7 +16,7 @@
   !define SLUG "${NAME} v${VERSION}"
   !define UPDATEURL "https://github.com/sanny32/OpenModSim/releases"
 
-  !define MUI_WELCOMEFINISHPAGE_BITMAP "${NSISDIR}\Contrib\Graphics\Wizard\nsis3-branding.bmp"
+  !define MUI_WELCOMEFINISHPAGE_BITMAP "${NSISDIR}\Contrib\Graphics\Wizard\nsis3-metro.bmp"
   !define MUI_FINISHPAGE_TEXT "${NAME} v${VERSION} has been installed on your computer."
   !define MUI_FINISHPAGE_RUN
   !define MUI_FINISHPAGE_RUN_FUNCTION LaunchWithProfile
