@@ -151,16 +151,22 @@
     </message>
     <message>
         <location filename="../cmdlineparser.cpp" line="15"/>
+        <source>Load settings profile from ini file.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../cmdlineparser.cpp" line="18"/>
         <source>Setup test config file.</source>
         <translation>设置测试配置文件。</translation>
     </message>
     <message>
         <location filename="../cmdlineparser.cpp" line="15"/>
+        <location filename="../cmdlineparser.cpp" line="18"/>
         <source>file path</source>
         <translation>文件路径</translation>
     </message>
     <message>
-        <location filename="../cmdlineparser.cpp" line="18"/>
+        <location filename="../cmdlineparser.cpp" line="21"/>
         <source>Do not use program session.</source>
         <translation>不要使用程序对话。</translation>
     </message>
@@ -2077,25 +2083,25 @@ Script.onInit(()=&gt;{
         <translation type="vanished">俄语</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="359"/>
-        <location filename="../mainwindow.cpp" line="431"/>
-        <location filename="../mainwindow.cpp" line="441"/>
-        <location filename="../mainwindow.cpp" line="472"/>
-        <location filename="../mainwindow.cpp" line="498"/>
+        <location filename="../mainwindow.cpp" line="360"/>
+        <location filename="../mainwindow.cpp" line="432"/>
+        <location filename="../mainwindow.cpp" line="442"/>
+        <location filename="../mainwindow.cpp" line="473"/>
+        <location filename="../mainwindow.cpp" line="499"/>
         <source>All files (*)</source>
         <translation>所有文件 (*)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="358"/>
-        <location filename="../mainwindow.cpp" line="435"/>
-        <location filename="../mainwindow.cpp" line="440"/>
-        <location filename="../mainwindow.cpp" line="471"/>
-        <location filename="../mainwindow.cpp" line="497"/>
+        <location filename="../mainwindow.cpp" line="359"/>
+        <location filename="../mainwindow.cpp" line="436"/>
+        <location filename="../mainwindow.cpp" line="441"/>
+        <location filename="../mainwindow.cpp" line="472"/>
+        <location filename="../mainwindow.cpp" line="498"/>
         <source>XML files (*.xml)</source>
         <translation>XML 文件(*.xml)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1435"/>
+        <location filename="../mainwindow.cpp" line="1436"/>
         <source>Capture Error:<byte value="xd"/>
 %1</source>
         <translation>捕获错误：
