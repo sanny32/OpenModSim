@@ -103,6 +103,15 @@ jobs:
             --exclude-plugins qgif,qjpeg,qpdf,qsqlibase,qsqlmimer,qsqloci,qsqlodbc,qsqlpsql
         shell: cmd
 
+      - name: Remove qml folder
+        run: |
+          IF EXIST "%CD%\${{ env.BUILD_DIR }}\${{ env.BUILD_TYPE }}\qml" (
+            rmdir /s /q "%CD%\${{ env.BUILD_DIR }}\${{ env.BUILD_TYPE }}\qml"
+          ) ELSE (
+            echo "No qml folder found — nothing to remove"
+          )
+        shell: cmd
+
       - name: Install NSIS
         run: |
           choco install nsis -y
