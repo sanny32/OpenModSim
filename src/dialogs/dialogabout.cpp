@@ -76,7 +76,7 @@ DialogAbout::DialogAbout(QWidget *parent) :
     ui->labelName->setText(APP_NAME);
     ui->labelVersion->setText(tr("Version: <b>%1</b> %2").arg(APP_VERSION, arch()));
 
-    const auto copyright = QString(ui->labelCopyright->text()).arg(QDate::currentDate().year());
+    const auto copyright = QString(ui->labelCopyright->text()).arg(BUILD_YEAR);
     ui->labelCopyright->setText(copyright);
 
     {
@@ -279,8 +279,6 @@ void DialogAbout::on_labelLicense_clicked()
     if(license.isEmpty()) {
         return;
     }
-
-    license = QString(license).arg(QDate::currentDate().year());
 
     auto dlg = new QDialog(this);
     dlg->setAttribute(Qt::WA_DeleteOnClose, true);
