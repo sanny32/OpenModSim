@@ -59,6 +59,8 @@ FunctionEnd
   OutFile "${OUTPUT_FILE}"
   InstallDir "$PROGRAMFILES\${NAME}"
   RequestExecutionLevel admin
+  ManifestDPIAware true
+  #ManifestDPIAwareness "PerMonitorV2,System"
   SetCompressor /SOLID lzma
   SetCompressorDictSize 64
   VIProductVersion "${VERSIONMAJOR}.${VERSIONMINOR}.${VERSIONPATCH}.${VERSIONBUILD}"
