@@ -65,7 +65,7 @@ jobs:
 #        shell: cmd
 
       - name: Install (all modules, win32_msvc2019)
-        uses: jurplel/install-qt@v3
+        uses: jurplel/install-qt-action@v4
         with:
           version: ${{ env.QT_VERSION }}
           host: windows
