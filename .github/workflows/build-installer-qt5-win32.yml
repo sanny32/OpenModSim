@@ -50,19 +50,29 @@ jobs:
           )
         shell: cmd
 
-      - name: Install Python (for aqtinstall)
-        uses: actions/setup-python@v5
+#      - name: Install Python (for aqtinstall)
+#        uses: actions/setup-python@v5
+#        with:
+#          python-version: "3.11"
+
+#      - name: Install aqtinstall
+#        run: |
+#          python -m pip install aqtinstall
+
+#      - name: Install Qt
+#        run: |
+#          python -m aqt install-qt windows desktop ${{ env.QT_VERSION }} ${{ env.QT_ARCH }} -O C:\Qt
+#        shell: cmd
+
+      - name: Install (all modules, win32_msvc2019)
+        uses: jurplel/install-qt@v3
         with:
-          python-version: "3.11"
-
-      - name: Install aqtinstall
-        run: |
-          python -m pip install aqtinstall
-
-      - name: Install Qt
-        run: |
-          python -m aqt install-qt windows desktop ${{ env.QT_VERSION }} ${{ env.QT_ARCH }} -O C:\Qt
-        shell: cmd
+          version: ${{ env.QT_VERSION }}
+          host: windows
+          target: desktop
+          arch: ${{ env.QT_ARCH }}
+          modules: all
+          cache: true
 
       - name: Set BUILD_DIR
         run: |
