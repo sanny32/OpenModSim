@@ -23,6 +23,43 @@
 #include "ui_mainwindow.h"
 
 ///
+/// \brief availableTranslations
+/// \return
+///
+static QStringList availableTranslations()
+{
+    QStringList locales;
+    const QStringList files = QDir(":/translations").entryList(QStringList() << "*.qm", QDir::Files);
+
+    for (auto file : files) {
+        locales << file.remove("omodsim_").remove(".qm");
+    }
+
+    return locales;
+}
+
+///
+/// \brief translationLang
+/// \return
+///
+static QString translationLang()
+{
+    const QStringList locales = availableTranslations();
+    const QString sysLocale = QLocale::system().name();
+
+    for (const QString &pattern : locales) {
+        const QString regexPattern = QString("%1.*").arg(pattern);
+        QRegularExpression re("^" + regexPattern + "$", QRegularExpression::CaseInsensitiveOption);
+
+        if(re.match(sysLocale).hasMatch()) {
+            return pattern;
+        }
+    }
+
+    return "en";
+}
+
+///
 /// \brief MainWindow::MainWindow
 /// \param profile
 /// \param useSession
@@ -31,13 +68,14 @@
 MainWindow::MainWindow(const QString& profile, bool useSession, QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
-    ,_lang("en")
+    ,_lang(translationLang())
     ,_windowCounter(0)
     ,_useSession(useSession)
     ,_dataSimulator(new DataSimulator(this))
 {
     ui->setupUi(this);
 
+    setLanguage(_lang);
     setWindowTitle(APP_NAME);
     setUnifiedTitleAndToolBarOnMac(true);
     setStatusBar(new MainStatusBar(_mbMultiServer, this));
@@ -1925,7 +1963,7 @@ bool MainWindow::loadProfile(const QString& filename)
     if(editbarBreak) addToolBarBreak(editbarArea);
     addToolBar(editbarArea, ui->toolBarEdit);
 
-    _lang = m.value("Language", "en").toString();
+    _lang = m.value("Language", translationLang()).toString();
     setLanguage(_lang);
 
     _savePath = m.value("SavePath").toString();
