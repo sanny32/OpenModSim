@@ -548,9 +548,12 @@ QModbusDataUnit createInt32DataUnit(QModbusDataUnit::RegisterType type, int newS
     auto data = QModbusDataUnit(type, newStartAddress, 2);
 
     if(swapped)
-        breakInt32(value, values[1], values[0], order);
-    else
+        // LRSF
         breakInt32(value, values[0], values[1], order);
+    else
+        // MRSF
+        breakInt32(value, values[1], values[0], order);
+
 
     data.setValues(values);
     return data;
@@ -571,9 +574,12 @@ QModbusDataUnit createInt64DataUnit(QModbusDataUnit::RegisterType type, int newS
     auto data = QModbusDataUnit(type, newStartAddress, 4);
 
     if(swapped)
-        breakInt64(value, values[3], values[2], values[1], values[0], order);
-    else
+        // LRSF
         breakInt64(value, values[0], values[1], values[2], values[3], order);
+    else
+        // MRSF
+        breakInt64(value, values[3], values[2], values[1], values[0], order);
+
 
     data.setValues(values);
     return data;
@@ -597,9 +603,11 @@ QModbusDataUnit createFloatDataUnit(QModbusDataUnit::RegisterType type, int newS
     auto data = QModbusDataUnit(type, newStartAddress, 2);
 
     if(swapped)
-        breakFloat(value, values[1], values[0], order);
-    else
+        // LRSF
         breakFloat(value, values[0], values[1], order);
+    else
+        // MRSF
+        breakFloat(value, values[1], values[0], order);
 
     data.setValues(values);
     return data;
@@ -623,9 +631,11 @@ QModbusDataUnit createDoubleDataUnit(QModbusDataUnit::RegisterType type, int new
     auto data = QModbusDataUnit(type, newStartAddress, 4);
 
     if(swapped)
-        breakDouble(value, values[3], values[2], values[1], values[0], order);
-    else
+        // LRSF
         breakDouble(value, values[0], values[1], values[2], values[3], order);
+    else
+        // MRSF
+        breakDouble(value, values[3], values[2], values[1], values[0], order);
 
     data.setValues(values);
     return data;
