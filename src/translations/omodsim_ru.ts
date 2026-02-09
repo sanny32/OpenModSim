@@ -152,7 +152,7 @@
     <message>
         <location filename="../cmdlineparser.cpp" line="15"/>
         <source>Load settings profile from ini file.</source>
-        <translation type="unfinished"></translation>
+        <translation>Загрузить профиль настроек из ini-файла.</translation>
     </message>
     <message>
         <location filename="../cmdlineparser.cpp" line="18"/>
@@ -1993,7 +1993,7 @@ Script.onInit(()=&gt;{
     <message>
         <location filename="../mainwindow.ui" line="1172"/>
         <source>Reset Ctrs</source>
-        <translation type="unfinished">Сброс</translation>
+        <translation>Сброс счетчиков</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="230"/>
