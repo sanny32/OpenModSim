@@ -1470,7 +1470,7 @@ MODBUS Point Type:
 <context>
     <name>JScriptControl</name>
     <message>
-        <location filename="../controls/jscriptcontrol.ui" line="49"/>
+        <location filename="../controls/jscriptcontrol.ui" line="55"/>
         <source>Server.addressBase = AddressBase.Base1;
 
 let deviceId = 1;
