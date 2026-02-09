@@ -111,6 +111,8 @@ public:
     AddressColorMap colorMap() const;
     void setColor(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr, const QColor& clr);
 
+    void resetCtrs();
+
     bool canRunScript() const;
     bool canStopScript() const;
 

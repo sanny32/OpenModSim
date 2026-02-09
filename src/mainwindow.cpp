@@ -965,6 +965,15 @@ void MainWindow::on_actionCaptureOff_triggered()
 }
 
 ///
+/// \brief MainWindow::on_actionResetCtrs_triggered
+///
+void MainWindow::on_actionResetCtrs_triggered()
+{
+    auto frm = currentMdiChild();
+    if(frm) frm->resetCtrs();
+}
+
+///
 /// \brief MainWindow::on_actionTabbedView_triggered
 ///
 void MainWindow::on_actionTabbedView_triggered()

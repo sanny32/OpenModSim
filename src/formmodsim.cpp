@@ -654,6 +654,14 @@ void FormModSim::setColor(quint8 deviceId, QModbusDataUnit::RegisterType type, q
 }
 
 ///
+/// \brief FormModSim::resetCtrs
+///
+void FormModSim::resetCtrs()
+{
+    ui->statisticWidget->resetCtrs();
+}
+
+///
 /// \brief FormModSim::script
 /// \return
 ///

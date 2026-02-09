@@ -105,6 +105,7 @@ private slots:
     void on_actionRawDataLog_triggered();
     void on_actionTextCapture_triggered();
     void on_actionCaptureOff_triggered();
+    void on_actionResetCtrs_triggered();
 
     /* View menu slots */
     void on_actionTabbedView_triggered();
