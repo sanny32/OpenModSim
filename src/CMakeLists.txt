@@ -107,6 +107,7 @@ set(SOURCES
     controls/aboutdatawidget.cpp
     controls/addressbasecombobox.cpp
     controls/addressspacecombobox.cpp
+    controls/bitpatterncontrol.cpp
     controls/booleancombobox.cpp
     controls/bytelisttextedit.cpp
     controls/clickablelabel.cpp
@@ -186,6 +187,7 @@ set(HEADERS
     controls/aboutdatawidget.h
     controls/addressbasecombobox.h
     controls/addressspacecombobox.h
+    controls/bitpatterncontrol.h
     controls/booleancombobox.h
     controls/bytelisttextedit.h
     controls/clickablelabel.h
@@ -293,6 +295,7 @@ set(HEADERS
 
 # UI Forms
 set(UI_FILES
+    controls/bitpatterncontrol.ui
     controls/jscriptcontrol.ui
     controls/outputwidget.ui
     controls/statisticwidget.ui

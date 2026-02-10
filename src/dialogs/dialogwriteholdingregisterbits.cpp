@@ -19,12 +19,7 @@ DialogWriteHoldingRegisterBits::DialogWriteHoldingRegisterBits(ModbusWriteParams
     ui->lineEditAddress->setInputRange(ModbusLimits::addressRange(params.AddrSpace, params.ZeroBasedAddress));
     ui->lineEditAddress->setValue(params.Address);
 
-    quint16 value = params.Value.toUInt();
-    for (int i = 0; i < 16; i++)
-    {
-        auto ctrl = findChild<QCheckBox*>(QString("checkBox%1").arg(i));
-        if(ctrl) ctrl->setChecked(value >> i & 1);
-    }
+    ui->controlBitPattern->setValue(params.Value.toUInt());
     ui->buttonBox->setFocus();
 }
 
@@ -41,13 +36,7 @@ DialogWriteHoldingRegisterBits::~DialogWriteHoldingRegisterBits()
 ///
 void DialogWriteHoldingRegisterBits::accept()
 {
-    quint16 value = 0;
-    for (int i = 0; i < 16; i++)
-    {
-        auto ctrl = findChild<QCheckBox*>(QString("checkBox%1").arg(i));
-        if(ctrl) value |= ctrl->isChecked() << i;
-    }
-    _writeParams.Value = value;
+    _writeParams.Value = ui->controlBitPattern->value();
     _writeParams.Address = ui->lineEditAddress->value<int>();
 
     QFixedSizeDialog::accept();

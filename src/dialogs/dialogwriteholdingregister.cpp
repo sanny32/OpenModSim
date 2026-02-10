@@ -35,12 +35,11 @@ DialogWriteHoldingRegister::DialogWriteHoldingRegister(ModbusWriteParams& writeP
         auto layout = new QHBoxLayout(ui->pushButtonSimulation);
         layout->setContentsMargins(4,0,4,0);
         layout->addWidget(iconLabel);
-        layout->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Expanding));
         layout->addWidget(textLabel);
-        layout->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Expanding));
 
         ui->pushButtonSimulation->setText(QString());
         ui->pushButtonSimulation->setLayout(layout);
+        ui->pushButtonSimulation->setMinimumWidth(layout->sizeHint().width());
     }
 
     switch(_writeParams.DisplayMode)
@@ -77,38 +76,64 @@ DialogWriteHoldingRegister::DialogWriteHoldingRegister(ModbusWriteParams& writeP
         case DataDisplayMode::SwappedFP:
             ui->lineEditValue->setInputMode(NumericLineEdit::FloatMode);
             ui->lineEditValue->setValue(_writeParams.Value.toFloat());
+            ui->controlBitPattern->setEnabled(false);
         break;
 
         case DataDisplayMode::DblFloat:
         case DataDisplayMode::SwappedDbl:
             ui->lineEditValue->setInputMode(NumericLineEdit::DoubleMode);
             ui->lineEditValue->setValue(_writeParams.Value.toDouble());
+            ui->controlBitPattern->setEnabled(false);
         break;
             
         case DataDisplayMode::Int32:
         case DataDisplayMode::SwappedInt32:
             ui->lineEditValue->setInputMode(NumericLineEdit::Int32Mode);
             ui->lineEditValue->setValue(_writeParams.Value.toInt());
+            ui->controlBitPattern->setEnabled(false);
         break;
 
         case DataDisplayMode::UInt32:
         case DataDisplayMode::SwappedUInt32:
             ui->lineEditValue->setInputMode(NumericLineEdit::UInt32Mode);
             ui->lineEditValue->setValue(_writeParams.Value.toUInt());
+            ui->controlBitPattern->setEnabled(false);
         break;
 
         case DataDisplayMode::Int64:
         case DataDisplayMode::SwappedInt64:
             ui->lineEditValue->setInputMode(NumericLineEdit::Int64Mode);
             ui->lineEditValue->setValue(_writeParams.Value.toLongLong());
+            ui->controlBitPattern->setEnabled(false);
         break;
 
         case DataDisplayMode::UInt64:
         case DataDisplayMode::SwappedUInt64:
             ui->lineEditValue->setInputMode(NumericLineEdit::UInt64Mode);
             ui->lineEditValue->setValue(_writeParams.Value.toULongLong());
+            ui->controlBitPattern->setEnabled(false);
         break;
     }
+
+    if(ui->controlBitPattern->isEnabled())
+    {
+        ui->controlBitPattern->setValue(_writeParams.Value.toUInt());
+
+        connect(ui->lineEditValue, QOverload<const QVariant&>::of(&NumericLineEdit::valueChanged), this, [this](const QVariant& value) {
+            ui->controlBitPattern->setValue(value.toUInt());
+        });
+
+        connect(ui->controlBitPattern, &BitPatternControl::valueChanged, this, [this](quint16 value) {
+            ui->lineEditValue->setValue(value);
+        });
+    }
+    else
+    {
+        delete ui->controlBitPattern;
+        delete ui->labelBitPattern;
+        adjustSize();
+    }
+
     ui->lineEditValue->setFocus();
 }
 
