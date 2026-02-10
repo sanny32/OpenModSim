@@ -25,6 +25,11 @@ env:
   CMAKE_ARCH: x64
   BUILD_TYPE: Release
 
+  # SingPath variables
+  PROJECT_SLUG: OpenModSim
+  ORGANIZAITION_ID: 
+  ARTIFACT_CONF_SLUG: exe-zip
+
 jobs:
   build-omodsim:
     name: Build OpenModSim installer version '${{ github.event.inputs.tag || github.event.inputs.branch || github.ref_name }}' with Qt6
@@ -49,6 +54,37 @@ jobs:
           )
         shell: cmd
 
+      - name: Select signing policy
+        run: |
+          set SIGNING_POLICY_SLUG=none
+          if "%ORGANIZATION_ID%"=="" (
+            echo WARNING: ORGANIZATION_ID is not set or empty, skipping signing steps.
+          ) else (
+            if "${{ github.event_name }}"=="push" (
+              if "${{ github.ref_type }}"=="tag" (
+                for /f %%i in ('echo "${{ github.ref_name }}" ^| find /i "test"') do set TAG_HAS_TEST=1
+                if not defined TAG_HAS_TEST (
+                  set SIGNING_POLICY_SLUG=release-signing
+                )
+              )
+            )
+            if "${{ github.event_name }}"=="workflow_dispatch" (
+              if "${{ github.event.inputs.signing }}"=="true" (
+                if not "${{ github.event.inputs.tag }}"=="" (
+                  echo "%{{ github.event.inputs.tag }}%" | find /i "test" >nul
+                  if errorlevel 1 (
+                    set SIGNING_POLICY_SLUG=release-signing
+                  )
+                ) else (
+                  set SIGNING_POLICY_SLUG=test-signing
+                )
+              )
+            )
+          )
+          echo SIGNING_POLICY_SLUG=%SIGNING_POLICY_SLUG%>>%GITHUB_ENV%
+          echo Selected signing policy: %SIGNING_POLICY_SLUG%
+        shell: cmd
+
       - name: Install Python (for aqtinstall)
         uses: actions/setup-python@v5
         with:
@@ -68,6 +104,13 @@ jobs:
           echo BUILD_DIR=build-omodsim-Qt_${{ env.QT_VERSION }}_${{ env.CMAKE_COMPILER }}bit-${{ env.BUILD_TYPE }}>>%GITHUB_ENV%
         shell: cmd
 
+      - name: Get Visual Studio path
+        run: |
+          for /f "usebackq tokens=*" %%i in (`"%ProgramFiles(x86)%\Microsoft Visual Studio\Installer\vswhere.exe" ^
+           -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath`) do set VS_PATH=%%i
+          echo VS_PATH=%VS_PATH%>>%GITHUB_ENV%
+        shell: cmd
+
       - name: Configure CMake
         run: |
           cmake src -B ${{ env.BUILD_DIR }} -G "${{ env.CMAKE_GENERATOR }}" -A ${{ env.CMAKE_ARCH }} -DCMAKE_PREFIX_PATH="C:/Qt/${{ env.QT_VERSION }}/${{ env.CMAKE_COMPILER }}"
@@ -82,12 +125,34 @@ jobs:
         run: xcopy %CD%\${{ env.BUILD_DIR }}\docs %CD%\${{ env.BUILD_DIR }}\${{ env.BUILD_TYPE }}\docs /E /I /Y
         shell: cmd
 
-      - name: Get Visual Studio path
-        run: |
-          for /f "usebackq tokens=*" %%i in (`"%ProgramFiles(x86)%\Microsoft Visual Studio\Installer\vswhere.exe" ^
-           -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath`) do set VS_PATH=%%i
-          echo VS_PATH=%VS_PATH%>>%GITHUB_ENV%
-        shell: cmd
+      - name: Upload Executable
+        id: upload-exe
+        uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          name: omodsim-${{ env.APP_VERSION }}_${{ env.ARCH }}.exe
+          path: ${{ env.BUILD_DIR }}\${{ env.BUILD_TYPE }}\omodsim.exe
+
+      - name: Signing Executable
+        uses: signpath/github-action-submit-signing-request@v1
+        if: success() && env.SIGNING_POLICY_SLUG != 'none'
+        with:
+          api-token: '${{ secrets.SIGNPATH_API_TOKEN }}'
+          organization-id: '${{ env.ORGANIZAITION_ID }}'
+          project-slug: '${{ env.PROJECT_SLUG }}'
+          signing-policy-slug: ${{ env.SIGNING_POLICY_SLUG }}
+          artifact-configuration-slug: ${{ env.ARTIFACT_CONF_SLUG }}
+          github-artifact-id: '${{steps.upload-exe.outputs.artifact-id}}'
+          output-artifact-directory: ${{ env.BUILD_DIR }}\${{ env.BUILD_TYPE }}
+          wait-for-completion: true
+          wait-for-completion-timeout-in-seconds: 3600
+
+      - name: Upload signed Executable
+        uses: actions/upload-artifact@v4
+        if: success() && env.SIGNING_POLICY_SLUG != 'none'
+        with:
+          name: omodsim-${{ env.APP_VERSION }}_${{ env.ARCH }}-signed.exe
+          path: ${{ env.BUILD_DIR }}\${{ env.BUILD_TYPE }}\omodsim.exe
 
       - name: Deploy Qt dependencies using windeployqt
         run: |
@@ -131,11 +196,33 @@ jobs:
         shell: cmd
 
       - name: Upload Installer
+        id: upload-installer
         uses: actions/upload-artifact@v4
         if: success()
         with:
-          name: qt6-omodsim-${{ env.APP_VERSION }}_${{ env.CMAKE_ARCH }}
-          path: qt6-omodsim-${{ env.APP_VERSION }}_${{ env.CMAKE_ARCH }}.exe
+          name: qt6-omodsim-${{ env.APP_VERSION }}_${{ env.ARCH }}
+          path: qt6-omodsim-${{ env.APP_VERSION }}_${{ env.ARCH }}.exe
+
+      - name: Signing Installer
+        uses: signpath/github-action-submit-signing-request@v1
+        if: success() && env.SIGNING_POLICY_SLUG != 'none'
+        with:
+          api-token: '${{ secrets.SIGNPATH_API_TOKEN }}'
+          organization-id: '${{ env.ORGANIZAITION_ID }}'
+          project-slug: '${{ env.PROJECT_SLUG }}'
+          signing-policy-slug: ${{ env.SIGNING_POLICY_SLUG }}
+          artifact-configuration-slug: ${{ env.ARTIFACT_CONF_SLUG }}
+          github-artifact-id: '${{steps.upload-installer.outputs.artifact-id}}'
+          output-artifact-directory: .
+          wait-for-completion: true
+          wait-for-completion-timeout-in-seconds: 3600
+
+      - name: Upload signed Installer
+        uses: actions/upload-artifact@v4
+        if: success() && env.SIGNING_POLICY_SLUG != 'none'
+        with:
+          name: qt6-omodsim-${{ env.APP_VERSION }}_${{ env.ARCH }}-signed
+          path: qt6-omodsim-${{ env.APP_VERSION }}_${{ env.ARCH }}.exe
 
       - name: Create or update GitHub Release and upload EXE
         if: success() && github.event_name == 'push' && github.ref_type == 'tag'
