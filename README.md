@@ -49,7 +49,7 @@ The following simulations are available:
 
 # Modbus Logging
 
-<img width="1292" height="759" alt="image" src="https://github.com/user-attachments/assets/6bfa6030-a0ed-4155-93a7-f7a1208e87b6" />
+<img width="1292" height="759" alt="image" src="https://github.com/user-attachments/assets/4bfad217-2d0c-4d14-a8c2-f434d7ac93e4" />
 
 
 # Extended Featues
