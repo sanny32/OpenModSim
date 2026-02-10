@@ -37,12 +37,11 @@ DialogWriteCoilRegister::DialogWriteCoilRegister(ModbusWriteParams& writeParams,
         auto layout = new QHBoxLayout(ui->pushButtonSimulation);
         layout->setContentsMargins(4,0,4,0);
         layout->addWidget(iconLabel);
-        layout->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Expanding));
         layout->addWidget(textLabel);
-        layout->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Expanding));
 
         ui->pushButtonSimulation->setText(QString());
         ui->pushButtonSimulation->setLayout(layout);
+        ui->pushButtonSimulation->setMinimumWidth(layout->sizeHint().width());
     }
 
     if(ui->radioButtonOff->isChecked())
