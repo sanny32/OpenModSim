@@ -125,6 +125,14 @@
     </message>
 </context>
 <context>
+    <name>BitPatternControl</name>
+    <message>
+        <location filename="../controls/bitpatterncontrol.ui" line="14"/>
+        <source>Bit Pattern</source>
+        <translation type="unfinished">位模式</translation>
+    </message>
+</context>
+<context>
     <name>BooleanComboBox</name>
     <message>
         <location filename="../controls/booleancombobox.cpp" line="10"/>
@@ -1261,29 +1269,34 @@
         <translation>寫線圈</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwritecoilregister.ui" line="38"/>
+        <location filename="../dialogs/dialogwritecoilregister.ui" line="35"/>
         <source>Address: </source>
         <translation>地址： </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwritecoilregister.ui" line="85"/>
+        <location filename="../dialogs/dialogwritecoilregister.ui" line="82"/>
         <source>Value</source>
         <translation>值</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwritecoilregister.ui" line="104"/>
+        <location filename="../dialogs/dialogwritecoilregister.ui" line="101"/>
         <source>Off</source>
         <translation>關</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwritecoilregister.ui" line="111"/>
+        <location filename="../dialogs/dialogwritecoilregister.ui" line="108"/>
         <source>On</source>
         <translation>開</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwritecoilregister.ui" line="162"/>
+        <location filename="../dialogs/dialogwritecoilregister.ui" line="118"/>
         <source>Auto Simulation</source>
         <translation>自動模擬</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogwritecoilregister.cpp" line="29"/>
+        <source>✔ Auto Simulation</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1294,22 +1307,36 @@
         <translation>寫暫存器</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwriteholdingregister.ui" line="26"/>
+        <location filename="../dialogs/dialogwriteholdingregister.ui" line="23"/>
         <source>Address: </source>
         <translation>地址： </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwriteholdingregister.ui" line="58"/>
+        <location filename="../dialogs/dialogwriteholdingregister.ui" line="55"/>
         <source>Value: </source>
         <translation>值： </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwriteholdingregister.ui" line="115"/>
+        <location filename="../dialogs/dialogwriteholdingregister.ui" line="105"/>
+        <source>Bit Pattern:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Bit Pattern</source>
+        <translation type="obsolete">位模式</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogwriteholdingregister.ui" line="83"/>
         <source>Auto Simulation</source>
         <translation>自動模擬</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwriteholdingregister.cpp" line="70"/>
+        <location filename="../dialogs/dialogwriteholdingregister.cpp" line="27"/>
+        <source>✔ Auto Simulation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogwriteholdingregister.cpp" line="69"/>
         <source>Value, (ANSI): </source>
         <translation>值，(ANSI)： </translation>
     </message>
@@ -1327,7 +1354,7 @@
         <translation>地址： </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwriteholdingregisterbits.ui" line="88"/>
+        <location filename="../dialogs/dialogwriteholdingregisterbits.ui" line="85"/>
         <source>Bit Pattern</source>
         <translation>位模式</translation>
     </message>
