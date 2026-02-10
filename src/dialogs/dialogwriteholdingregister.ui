@@ -76,6 +76,9 @@
         </item>
         <item>
          <widget class="QPushButton" name="pushButtonSimulation">
+          <property name="styleSheet">
+           <string notr="true">padding: 4px 12px;</string>
+          </property>
           <property name="text">
            <string>Auto Simulation</string>
           </property>

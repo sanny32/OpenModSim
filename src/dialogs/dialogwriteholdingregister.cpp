@@ -24,22 +24,22 @@ DialogWriteHoldingRegister::DialogWriteHoldingRegister(ModbusWriteParams& writeP
 
     if(simParams.Mode != SimulationMode::No)
     {
-        QLabel* iconLabel = new QLabel(ui->pushButtonSimulation);
-        iconLabel->setPixmap(QIcon(":/res/pointGreen.png").pixmap(4, 4));
-        iconLabel->setAttribute(Qt::WA_TransparentForMouseEvents, true);
-
-        QLabel* textLabel = new QLabel(ui->pushButtonSimulation->text(), ui->pushButtonSimulation);
-        textLabel->setAlignment(Qt::AlignCenter);
-        textLabel->setAttribute(Qt::WA_TransparentForMouseEvents, true);
-
-        auto layout = new QHBoxLayout(ui->pushButtonSimulation);
-        layout->setContentsMargins(4,0,4,0);
-        layout->addWidget(iconLabel);
-        layout->addWidget(textLabel);
-
-        ui->pushButtonSimulation->setText(QString());
-        ui->pushButtonSimulation->setLayout(layout);
-        ui->pushButtonSimulation->setMinimumWidth(layout->sizeHint().width());
+        ui->pushButtonSimulation->setText(tr("✔ Auto Simulation"));
+        ui->pushButtonSimulation->setStyleSheet(R"(
+            QPushButton {
+                color: white;
+                padding: 4px 12px;
+                background-color: #4CAF50;
+                border: 1px solid #3e8e41;
+                border-radius: 4px;
+            }
+            QPushButton:hover {
+                background-color: #45a049;
+            }
+            QPushButton:pressed {
+                background-color: #3e8e41;
+            }
+        )");
     }
 
     switch(_writeParams.DisplayMode)
