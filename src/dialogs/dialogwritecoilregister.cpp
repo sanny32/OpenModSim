@@ -22,7 +22,6 @@ DialogWriteCoilRegister::DialogWriteCoilRegister(ModbusWriteParams& writeParams,
     ui->lineEditAddress->setValue(_writeParams.Address);
     ui->radioButtonOn->setChecked(_writeParams.Value.toBool());
     ui->radioButtonOff->setChecked(!_writeParams.Value.toBool());
-    ui->buttonBox->setFocus();
 
     if(simParams.Mode != SimulationMode::No)
     {
