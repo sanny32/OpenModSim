@@ -139,7 +139,7 @@ jobs:
         uses: actions/upload-artifact@v4
         if: success()
         with:
-          name: omodsim-${{ env.APP_VERSION }}_${{ env.ARCH }}.exe
+          name: omodsim-${{ env.APP_VERSION }}_${{ env.CMAKE_ARCH }}.exe
           path: ${{ env.BUILD_DIR }}\${{ env.BUILD_TYPE }}\omodsim.exe
 
       - name: Signing Executable
@@ -160,7 +160,7 @@ jobs:
         uses: actions/upload-artifact@v4
         if: success() && env.SIGNING_POLICY_SLUG != 'none'
         with:
-          name: omodsim-${{ env.APP_VERSION }}_${{ env.ARCH }}-signed.exe
+          name: omodsim-${{ env.APP_VERSION }}_${{ env.CMAKE_ARCH }}-signed.exe
           path: ${{ env.BUILD_DIR }}\${{ env.BUILD_TYPE }}\omodsim.exe
 
       - name: Deploy Qt dependencies using windeployqt
@@ -199,8 +199,8 @@ jobs:
         uses: actions/upload-artifact@v4
         if: success()
         with:
-          name: qt5-omodsim-${{ env.APP_VERSION }}_${{ env.ARCH }}
-          path: qt5-omodsim-${{ env.APP_VERSION }}_${{ env.ARCH }}.exe
+          name: qt5-omodsim-${{ env.APP_VERSION }}_${{ env.CMAKE_ARCH }}
+          path: qt5-omodsim-${{ env.APP_VERSION }}_${{ env.CMAKE_ARCH }}.exe
 
       - name: Signing Installer
         uses: signpath/github-action-submit-signing-request@v1
@@ -220,8 +220,8 @@ jobs:
         uses: actions/upload-artifact@v4
         if: success() && env.SIGNING_POLICY_SLUG != 'none'
         with:
-          name: qt5-omodsim-${{ env.APP_VERSION }}_${{ env.ARCH }}-signed
-          path: qt5-omodsim-${{ env.APP_VERSION }}_${{ env.ARCH }}.exe
+          name: qt5-omodsim-${{ env.APP_VERSION }}_${{ env.CMAKE_ARCH }}-signed
+          path: qt5-omodsim-${{ env.APP_VERSION }}_${{ env.CMAKE_ARCH }}.exe
 
       - name: Create or update GitHub Release and upload EXE
         if: success() && github.event_name == 'push' && github.ref_type == 'tag'
