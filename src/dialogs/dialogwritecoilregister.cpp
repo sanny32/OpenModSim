@@ -44,6 +44,11 @@ DialogWriteCoilRegister::DialogWriteCoilRegister(ModbusWriteParams& writeParams,
         ui->pushButtonSimulation->setText(QString());
         ui->pushButtonSimulation->setLayout(layout);
     }
+
+    if(ui->radioButtonOff->isChecked())
+        ui->radioButtonOn->setFocus();
+    else
+        ui->radioButtonOff->setFocus();
 }
 
 ///
