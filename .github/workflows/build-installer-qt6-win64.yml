@@ -13,6 +13,10 @@ on:
       tag:
         description: 'Checkout tag'
         required: false
+      signing:
+        description: 'Sign executable and installer'
+        type: boolean
+        default: false
 
 permissions:
   contents: write
