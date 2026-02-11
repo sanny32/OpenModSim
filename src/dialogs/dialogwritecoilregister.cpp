@@ -25,7 +25,7 @@ DialogWriteCoilRegister::DialogWriteCoilRegister(ModbusWriteParams& writeParams,
 
     if(simParams.Mode != SimulationMode::No)
     {
-        ui->pushButtonSimulation->setText(tr("✔ Auto Simulation"));
+        ui->pushButtonSimulation->setText(tr("Auto Simulation: ON"));
         ui->pushButtonSimulation->setStyleSheet(R"(
             QPushButton {
                 color: white;

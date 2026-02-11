@@ -77,8 +77,8 @@ QString normalizeHtml(const QString& s)
 OutputListModel::OutputListModel(OutputWidget* parent)
     : QAbstractListModel(parent)
     ,_parentWidget(parent)
-    ,_iconPointGreen(QIcon(":/res/pointGreen.png"))
-    ,_iconPointEmpty(QIcon(":/res/pointEmpty.png"))
+    ,_iconSimulationOn(QPixmap(":/res/iconSimulation.png"))
+    ,_iconSimulationOff(_iconSimulationOn.size())
 {
 }
 
@@ -163,7 +163,7 @@ QVariant OutputListModel::data(const QModelIndex& index, int role) const
             return itemData.Description;
 
         case Qt::DecorationRole:
-            return itemData.Simulated ? _iconPointGreen : _iconPointEmpty;
+            return itemData.Simulated ? _iconSimulationOn : _iconSimulationOff;
     }
 
     return QVariant();

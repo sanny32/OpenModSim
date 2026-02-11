@@ -16,6 +16,20 @@ class OutputWidget;
 
 class OutputWidget;
 
+///
+/// \brief The QEmptyPixmap class
+///
+class QEmptyPixmap : public QPixmap {
+public:
+    QEmptyPixmap(const QSize& size) :
+        QPixmap(size) {
+        fill(Qt::transparent);
+    }
+};
+
+///
+/// \brief The ItemMapKey class
+///
 struct ItemMapKey {
     quint8 DeviceId;
     QModbusDataUnit::RegisterType Type;
@@ -33,7 +47,6 @@ struct ItemMapKey {
 typedef QMap<ItemMapKey, QColor> AddressColorMap;
 typedef QMap<ItemMapKey, QString> AddressDescriptionMap2;
 typedef QMap<QPair<QModbusDataUnit::RegisterType, quint16>, QString> AddressDescriptionMap;
-
 
 ///
 /// \brief The OutputListModel class
@@ -81,8 +94,8 @@ private:
 
     OutputWidget* _parentWidget;
     QModbusDataUnit _lastData;
-    QIcon _iconPointGreen;
-    QIcon _iconPointEmpty;
+    const QPixmap _iconSimulationOn;
+    const QEmptyPixmap _iconSimulationOff;
     int _columnsDistance = 16;
     QMap<int, ItemData> _mapItems;
 };

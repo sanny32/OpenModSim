@@ -80,7 +80,7 @@
            <string notr="true">padding: 4px 12px;</string>
           </property>
           <property name="text">
-           <string>Auto Simulation</string>
+           <string>Auto Simulation: OFF</string>
           </property>
          </widget>
         </item>

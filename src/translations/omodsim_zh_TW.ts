@@ -1290,12 +1290,16 @@
     </message>
     <message>
         <location filename="../dialogs/dialogwritecoilregister.ui" line="118"/>
-        <source>Auto Simulation</source>
-        <translation>自動模擬</translation>
+        <source>Auto Simulation: OFF</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwritecoilregister.cpp" line="29"/>
-        <source>✔ Auto Simulation</source>
+        <source>Auto Simulation</source>
+        <translation type="vanished">自動模擬</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogwritecoilregister.cpp" line="28"/>
+        <source>Auto Simulation: ON</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1317,6 +1321,11 @@
         <translation>值： </translation>
     </message>
     <message>
+        <location filename="../dialogs/dialogwriteholdingregister.ui" line="83"/>
+        <source>Auto Simulation: OFF</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../dialogs/dialogwriteholdingregister.ui" line="105"/>
         <source>Bit Pattern:</source>
         <translation type="unfinished"></translation>
@@ -1326,13 +1335,12 @@
         <translation type="obsolete">位模式</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwriteholdingregister.ui" line="83"/>
         <source>Auto Simulation</source>
-        <translation>自動模擬</translation>
+        <translation type="vanished">自動模擬</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogwriteholdingregister.cpp" line="27"/>
-        <source>✔ Auto Simulation</source>
+        <source>Auto Simulation: ON</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

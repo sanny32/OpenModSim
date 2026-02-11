@@ -1286,12 +1286,16 @@
     </message>
     <message>
         <location filename="../dialogs/dialogwritecoilregister.ui" line="118"/>
-        <source>Auto Simulation</source>
-        <translation>Симуляция</translation>
+        <source>Auto Simulation: OFF</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwritecoilregister.cpp" line="29"/>
-        <source>✔ Auto Simulation</source>
+        <source>Auto Simulation</source>
+        <translation type="vanished">Симуляция</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogwritecoilregister.cpp" line="28"/>
+        <source>Auto Simulation: ON</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1313,6 +1317,11 @@
         <translation>Значение: </translation>
     </message>
     <message>
+        <location filename="../dialogs/dialogwriteholdingregister.ui" line="83"/>
+        <source>Auto Simulation: OFF</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../dialogs/dialogwriteholdingregister.ui" line="105"/>
         <source>Bit Pattern:</source>
         <translation type="unfinished"></translation>
@@ -1322,13 +1331,12 @@
         <translation type="obsolete">Битовый шаблон</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwriteholdingregister.ui" line="83"/>
         <source>Auto Simulation</source>
-        <translation>Симуляция</translation>
+        <translation type="vanished">Симуляция</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogwriteholdingregister.cpp" line="27"/>
-        <source>✔ Auto Simulation</source>
+        <source>Auto Simulation: ON</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

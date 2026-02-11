@@ -29,8 +29,6 @@
         <file>res/iconFunc.png</file>
         <file>res/iconProp.png</file>
         <file>res/actionScriptSettings.png</file>
-        <file>res/pointEmpty.png</file>
-        <file>res/pointGreen.png</file>
         <file>res/actionCopy.png</file>
         <file>res/actionCut.png</file>
         <file>res/actionFind.png</file>
@@ -62,5 +60,6 @@
         <file>res/emblem-mail.svg</file>
         <file>res/applications-internet.svg</file>
         <file>res/edit-delete.svg</file>
+        <file>res/iconSimulation.png</file>
     </qresource>
 </RCC>
