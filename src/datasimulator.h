@@ -49,8 +49,8 @@ public:
     bool hasSimulation(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr) const;
 
 signals:
-    void simulationStarted(quint8 deviceId, QModbusDataUnit::RegisterType type, const QVector<quint16>& addresses);
-    void simulationStopped(quint8 deviceId, QModbusDataUnit::RegisterType type, const QVector<quint16>& addresses);
+    void simulationStarted(DataDisplayMode mode, quint8 deviceId, QModbusDataUnit::RegisterType type, const QVector<quint16>& addresses);
+    void simulationStopped(DataDisplayMode mode, quint8 deviceId, QModbusDataUnit::RegisterType type, const QVector<quint16>& addresses);
     void dataSimulated(DataDisplayMode mode, quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 startAddress, QVariant value);
 
 private slots:

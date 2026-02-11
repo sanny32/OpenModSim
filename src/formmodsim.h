@@ -163,8 +163,8 @@ private slots:
     void on_mbResponse(QSharedPointer<const ModbusMessage> msgReq, QSharedPointer<const ModbusMessage> msgResp);
     void on_mbDataChanged(quint8 deviceId, const QModbusDataUnit& data);
     void on_mbDefinitionsChanged(const ModbusDefinitions& defs);
-    void on_simulationStarted(quint8 deviceId, QModbusDataUnit::RegisterType type, const QVector<quint16>& addresses);
-    void on_simulationStopped(quint8 deviceId, QModbusDataUnit::RegisterType type, const QVector<quint16>& addresses);
+    void on_simulationStarted(DataDisplayMode mode, quint8 deviceId, QModbusDataUnit::RegisterType type, const QVector<quint16>& addresses);
+    void on_simulationStopped(DataDisplayMode mode, quint8 deviceId, QModbusDataUnit::RegisterType type, const QVector<quint16>& addresses);
     void on_dataSimulated(DataDisplayMode mode, quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 startAddress, QVariant value);
 
 private:

@@ -58,6 +58,14 @@ class OutputListModel : public QAbstractListModel
     friend class OutputWidget;
 
 public:
+    enum SimulationIconType
+    {
+        SimulationIconNone,
+        SimulationIcon16Bit,
+        SimulationIcon32Bit,
+        SimulationIcon64Bit
+    };
+
     explicit OutputListModel(OutputWidget* parent);
 
     int rowCount(const QModelIndex& parent = QModelIndex()) const override;
@@ -91,13 +99,16 @@ private:
         QString ValueStr;
         QString Description;
         bool Simulated = false;
+        SimulationIconType SimulationIcon = SimulationIconNone;
         QColor BgColor;
         QColor FgColor;
     };
 
     OutputWidget* _parentWidget;
     QModbusDataUnit _lastData;
-    const QPixmap _iconSimulationOn;
+    const QPixmap _iconSimulation16Bit;
+    const QPixmap _iconSimulation32Bit;
+    const QPixmap _iconSimulation64Bit;
     const QEmptyPixmap _iconSimulationOff;
     int _columnsDistance = 16;
     QMap<int, ItemData> _mapItems;
@@ -179,7 +190,7 @@ public:
     AddressDescriptionMap2 descriptionMap() const;
     void setDescription(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr, const QString& desc);
 
-    void setSimulated(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr, bool on);
+    void setSimulated(DataDisplayMode mode, quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr, bool on);
 
 public slots:
     void clearLogView();

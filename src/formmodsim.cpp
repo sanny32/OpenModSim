@@ -1112,31 +1112,34 @@ void FormModSim::on_mbDefinitionsChanged(const ModbusDefinitions& defs)
 
 ///
 /// \brief FormModSim::on_simulationStarted
+/// \param mode
 /// \param deviceId
 /// \param type
 /// \param addresses
 ///
-void FormModSim::on_simulationStarted(quint8 deviceId, QModbusDataUnit::RegisterType type, const QVector<quint16>& addresses)
+void FormModSim::on_simulationStarted(DataDisplayMode mode, quint8 deviceId, QModbusDataUnit::RegisterType type, const QVector<quint16>& addresses)
 {
     if(deviceId != ui->lineEditDeviceId->value<quint8>())
         return;
 
     for(auto&& addr : addresses)
-        ui->outputWidget->setSimulated(deviceId, type, addr, true);
+        ui->outputWidget->setSimulated(mode, deviceId, type, addr, true);
 }
 
 ///
 /// \brief FormModSim::on_simulationStopped
+/// \param mode
+/// \param deviceId
 /// \param type
-/// \param addr
+/// \param addresses
 ///
-void FormModSim::on_simulationStopped(quint8 deviceId, QModbusDataUnit::RegisterType type, const QVector<quint16>& addresses)
+void FormModSim::on_simulationStopped(DataDisplayMode mode, quint8 deviceId, QModbusDataUnit::RegisterType type, const QVector<quint16>& addresses)
 {
     if(deviceId != ui->lineEditDeviceId->value<quint8>())
         return;
 
     for(auto&& addr : addresses)
-        ui->outputWidget->setSimulated(deviceId, type, addr, false);
+        ui->outputWidget->setSimulated(mode, deviceId, type, addr, false);
 }
 
 ///

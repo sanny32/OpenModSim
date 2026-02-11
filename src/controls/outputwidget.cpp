@@ -108,8 +108,10 @@ static int registersCount(DataDisplayMode mode)
 OutputListModel::OutputListModel(OutputWidget* parent)
     : QAbstractListModel(parent)
     ,_parentWidget(parent)
-    ,_iconSimulationOn(QPixmap(":/res/iconSimulation.png"))
-    ,_iconSimulationOff(_iconSimulationOn.size())
+    ,_iconSimulation16Bit(QPixmap(":/res/iconSimulation16bit.png"))
+    ,_iconSimulation32Bit(QPixmap(":/res/iconSimulation32bit.png"))
+    ,_iconSimulation64Bit(QPixmap(":/res/iconSimulation64bit.png"))
+    ,_iconSimulationOff(_iconSimulation16Bit.size())
 {
 }
 
@@ -194,8 +196,28 @@ QVariant OutputListModel::data(const QModelIndex& index, int role) const
             return itemData.Description;
 
         case Qt::DecorationRole:
-            if(itemData.ValueStr.isEmpty()) return _iconSimulationOff;
-            return isItemSimulated(row) ? _iconSimulationOn : _iconSimulationOff;
+        {
+            if(itemData.ValueStr.isEmpty())
+                return _iconSimulationOff;
+
+            if(!isItemSimulated(row))
+                return _iconSimulationOff;
+
+            switch(itemData.SimulationIcon)
+            {
+                case SimulationIcon64Bit:
+                    return _iconSimulation64Bit;
+
+                case SimulationIcon32Bit:
+                    return _iconSimulation32Bit;
+
+                case SimulationIcon16Bit:
+                case SimulationIconNone:
+                default:
+                    return _iconSimulation16Bit;
+            }
+        }
+
     }
 
     return QVariant();
@@ -223,6 +245,10 @@ bool OutputListModel::setData(const QModelIndex &index, const QVariant &value, i
             emit dataChanged(index, index, QVector<int>() << role);
         return true;
 
+        case Qt::DecorationRole:
+            _mapItems[index.row()].SimulationIcon = value.value<SimulationIconType>();
+            emit dataChanged(index, index, QVector<int>() << role);
+            return true;
 
         case DescriptionRole:
             _mapItems[index.row()].Description = value.toString();
@@ -957,9 +983,20 @@ void OutputWidget::setDescription(quint8 deviceId, QModbusDataUnit::RegisterType
 /// \param addr
 /// \param on
 ///
-void OutputWidget::setSimulated(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr, bool on)
+void OutputWidget::setSimulated(DataDisplayMode mode, quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr, bool on)
 {
-    _listModel->setData(_listModel->find(deviceId, type, addr), on, SimulationRole);
+    const auto index = _listModel->find(deviceId, type, addr);
+    _listModel->setData(index, on, SimulationRole);
+
+    if(on) {
+        const int regCount = registersCount(mode);
+        if(regCount == 1) _listModel->setData(index, OutputListModel::SimulationIcon16Bit, Qt::DecorationRole);
+        else if(regCount == 2) _listModel->setData(index, OutputListModel::SimulationIcon32Bit, Qt::DecorationRole);
+        else if(regCount == 4) _listModel->setData(index, OutputListModel::SimulationIcon64Bit, Qt::DecorationRole);
+    }
+    else {
+        _listModel->setData(index, OutputListModel::SimulationIconNone, Qt::DecorationRole);
+    }
 }
 
 ///

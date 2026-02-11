@@ -119,7 +119,7 @@ void DataSimulator::startSimulation(DataDisplayMode mode, quint8 deviceId, QModb
     }
 
     scheduleNextRun();
-    emit simulationStarted(deviceId, type, addresses);
+    emit simulationStarted(mode, deviceId, type, addresses);
 }
 
 ///
@@ -135,8 +135,10 @@ void DataSimulator::stopSimulation(quint8 deviceId, QModbusDataUnit::RegisterTyp
     if(!_simulationMap.contains(key))
         return;
 
+    const auto mode = _simulationMap[key].Mode;
+
     QVector<quint16> addresses;
-    for(int i = 0; i < registersCount(_simulationMap[key].Mode); ++i) {
+    for(int i = 0; i < registersCount(mode); ++i) {
         addresses << addr + i;
     }
 
@@ -144,8 +146,7 @@ void DataSimulator::stopSimulation(quint8 deviceId, QModbusDataUnit::RegisterTyp
         _simulationMap.remove({ deviceId, type, a});
     }
 
-    emit simulationStopped(deviceId, type, addresses);
-
+    emit simulationStopped(mode, deviceId, type, addresses);
     scheduleNextRun();
 }
 
