@@ -39,7 +39,7 @@ bool DataSimulator::canStartSimulation(DataDisplayMode mode, quint8 deviceId, QM
     if(it != _simulationMap.end() && getDataDisplayModeRegistersCount(it->Mode) == count)
         return true;
 
-    for(int i = 1; i < static_cast<int>(count); ++i)
+    for(int i = 1; i < count; ++i)
     {
         if(hasSimulation(deviceId, type, addr + i))
             return false;
