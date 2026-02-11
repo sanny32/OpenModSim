@@ -63,7 +63,11 @@ DataSimulator::~DataSimulator()
 ///
 bool DataSimulator::canStartSimulation(DataDisplayMode mode, quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr) const
 {
-    const int count = registersCount(mode);
+    const auto count = registersCount(mode);
+
+    const auto it = _simulationMap.find({ deviceId, type, addr });
+    if(it != _simulationMap.end() && registersCount(it->Mode) == count)
+        return true;
 
     for(int i = 1; i < count; ++i)
     {
