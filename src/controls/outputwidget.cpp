@@ -71,37 +71,6 @@ QString normalizeHtml(const QString& s)
 }
 
 ///
-/// \brief registersCount
-/// \param mode
-/// \return
-///
-static int registersCount(DataDisplayMode mode)
-{
-    switch(mode)
-    {
-        case DataDisplayMode::FloatingPt:
-        case DataDisplayMode::SwappedFP:
-        case DataDisplayMode::Int32:
-        case DataDisplayMode::SwappedInt32:
-        case DataDisplayMode::UInt32:
-        case DataDisplayMode::SwappedUInt32:
-            return 2;
-
-        case DataDisplayMode::DblFloat:
-        case DataDisplayMode::SwappedDbl:
-        case DataDisplayMode::Int64:
-        case DataDisplayMode::SwappedInt64:
-        case DataDisplayMode::UInt64:
-        case DataDisplayMode::SwappedUInt64:
-            return 4;
-
-        default:
-            return 1;
-    }
-}
-
-
-///
 /// \brief OutputListModel::OutputListModel
 /// \param parent
 ///
@@ -448,7 +417,7 @@ QModelIndex OutputListModel::find(quint8 deviceId, QModbusDataUnit::RegisterType
 bool OutputListModel::isItemSimulated(const int row) const
 {
     const auto mode = _parentWidget->dataDisplayMode();
-    for(int i = 0; i < registersCount(mode); ++i)
+    for(int i = 0; i < static_cast<int>(getSimulationRegistersCount(mode)); ++i)
     {
         if(row + i >= rowCount())
             return false;
@@ -989,10 +958,18 @@ void OutputWidget::setSimulated(DataDisplayMode mode, quint8 deviceId, QModbusDa
     _listModel->setData(index, on, SimulationRole);
 
     if(on) {
-        const int regCount = registersCount(mode);
-        if(regCount == 1) _listModel->setData(index, OutputListModel::SimulationIcon16Bit, Qt::DecorationRole);
-        else if(regCount == 2) _listModel->setData(index, OutputListModel::SimulationIcon32Bit, Qt::DecorationRole);
-        else if(regCount == 4) _listModel->setData(index, OutputListModel::SimulationIcon64Bit, Qt::DecorationRole);
+        switch(getSimulationRegistersCount(mode))
+        {
+            case SimulationRegisters::One:
+                _listModel->setData(index, OutputListModel::SimulationIcon16Bit, Qt::DecorationRole);
+            break;
+            case SimulationRegisters::Two:
+                _listModel->setData(index, OutputListModel::SimulationIcon32Bit, Qt::DecorationRole);
+            break;
+            case SimulationRegisters::Four:
+                _listModel->setData(index, OutputListModel::SimulationIcon64Bit, Qt::DecorationRole);
+            break;
+        }
     }
     else {
         _listModel->setData(index, OutputListModel::SimulationIconNone, Qt::DecorationRole);

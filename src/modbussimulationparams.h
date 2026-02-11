@@ -237,6 +237,7 @@ struct ModbusSimulationParams
     IncrementSimulationParams IncrementParams;
     DecrementSimulationParams DecrementParams;
     quint32 Interval = 1000;
+    SimulationRegisters RegistersCount = SimulationRegisters::One;
 };
 Q_DECLARE_METATYPE(ModbusSimulationParams)
 
@@ -253,6 +254,7 @@ inline QDataStream& operator <<(QDataStream& out, const ModbusSimulationParams& 
     out << params.IncrementParams;
     out << params.DecrementParams;
     out << params.Interval;
+    out << params.RegistersCount;
 
     return out;
 }
@@ -270,6 +272,8 @@ inline QDataStream& operator >>(QDataStream& in, ModbusSimulationParams& params)
     in >> params.IncrementParams;
     in >> params.DecrementParams;
     in >> params.Interval;
+    in >> params.RegistersCount;
+
     return in;
 }
 
@@ -284,6 +288,7 @@ inline QXmlStreamWriter& operator <<(QXmlStreamWriter& xml, const ModbusSimulati
     xml.writeStartElement("ModbusSimulationParams");
     xml.writeAttribute("Mode", enumToString<SimulationMode>(params.Mode));
     xml.writeAttribute("Interval", QString::number(params.Interval));
+    xml.writeAttribute("RegistersCount", enumToString<SimulationRegisters>(params.RegistersCount));
 
     switch(params.Mode) {
     case SimulationMode::Random:
@@ -320,6 +325,10 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, ModbusSimulationPara
             if (ok) {
                 params.Interval = interval;
             }
+        }
+
+        if (attributes.hasAttribute("RegistersCount")) {
+            params.RegistersCount = enumFromString<SimulationRegisters>(attributes.value("RegistersCount").toString(), SimulationRegisters::One);
         }
 
         while (xml.readNextStartElement()) {

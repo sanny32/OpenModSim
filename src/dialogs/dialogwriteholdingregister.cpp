@@ -5,6 +5,37 @@
 #include "ui_dialogwriteholdingregister.h"
 
 ///
+/// \brief The SimButtonColors class
+///
+struct SimButtonColors
+{
+    QString base;
+    QString hover;
+    QString pressed;
+    QString border;
+};
+
+///
+/// \brief simColors
+/// \param registersCount
+/// \return
+///
+static SimButtonColors simColors(SimulationRegisters registersCount)
+{
+    switch(registersCount)
+    {
+        case SimulationRegisters::Two:
+            return { "#5680D0", "#4E75C0", "#466AB0", "#3E5FA0" };
+
+        case SimulationRegisters::Four:
+            return { "#D74D9D", "#C9458F", "#BB3D81", "#A73573" };
+
+        default:
+            return { "#4CAF50", "#45A049", "#3E8E41", "#3E8E41" };
+    }
+}
+
+///
 /// \brief DialogWriteHoldingRegister::DialogWriteHoldingRegister
 /// \param writeParams
 /// \param simParams
@@ -33,22 +64,26 @@ DialogWriteHoldingRegister::DialogWriteHoldingRegister(ModbusWriteParams& writeP
         break;
 
         default:
+        {
             ui->pushButtonSimulation->setText(tr("Auto Simulation: ON"));
-            ui->pushButtonSimulation->setStyleSheet(R"(
+
+            const auto c = simColors(simParams.RegistersCount);
+            ui->pushButtonSimulation->setStyleSheet(QString(R"(
                 QPushButton {
                     color: white;
                     padding: 4px 12px;
-                    background-color: #4CAF50;
-                    border: 1px solid #3e8e41;
+                    background-color: %1;
+                    border: 1px solid %2;
                     border-radius: 4px;
                 }
                 QPushButton:hover {
-                    background-color: #45a049;
+                    background-color: %3;
                 }
                 QPushButton:pressed {
-                    background-color: #3e8e41;
+                    background-color: %4;
                 }
-            )");
+            )").arg(c.base, c.border, c.hover, c.pressed));
+        }
         break;
     }
 

@@ -1340,13 +1340,13 @@
         <translation type="vanished">自动仿真</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwriteholdingregister.cpp" line="28"/>
-        <location filename="../dialogs/dialogwriteholdingregister.cpp" line="36"/>
+        <location filename="../dialogs/dialogwriteholdingregister.cpp" line="59"/>
+        <location filename="../dialogs/dialogwriteholdingregister.cpp" line="68"/>
         <source>Auto Simulation: ON</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwriteholdingregister.cpp" line="79"/>
+        <location filename="../dialogs/dialogwriteholdingregister.cpp" line="114"/>
         <source>Value, (ANSI): </source>
         <translation>值，(ANSI)： </translation>
     </message>
@@ -2737,77 +2737,77 @@ Script.onInit(()=&gt;{
 <context>
     <name>OutputWidget</name>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1135"/>
+        <location filename="../controls/outputwidget.cpp" line="1112"/>
         <source>Set Value of %1</source>
         <translation>将值写入 %1</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1141"/>
+        <location filename="../controls/outputwidget.cpp" line="1118"/>
         <source>Add Description</source>
         <translation>添加描述</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1141"/>
+        <location filename="../controls/outputwidget.cpp" line="1118"/>
         <source>Edit Description</source>
         <translation>编辑描述</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1144"/>
+        <location filename="../controls/outputwidget.cpp" line="1121"/>
         <source>%1: Enter Description</source>
         <translation>%1:输入描述</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1153"/>
+        <location filename="../controls/outputwidget.cpp" line="1130"/>
         <source>Remove Color</source>
         <translation>去除颜色</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1164"/>
+        <location filename="../controls/outputwidget.cpp" line="1141"/>
         <source>Yellow</source>
         <translation>黄色的</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1165"/>
+        <location filename="../controls/outputwidget.cpp" line="1142"/>
         <source>Cyan</source>
         <translation>青色</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1166"/>
+        <location filename="../controls/outputwidget.cpp" line="1143"/>
         <source>Magenta</source>
         <translation>品红</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1167"/>
+        <location filename="../controls/outputwidget.cpp" line="1144"/>
         <source>LightGreen</source>
         <translation>浅绿色</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1168"/>
+        <location filename="../controls/outputwidget.cpp" line="1145"/>
         <source>Orange</source>
         <translation>橙子</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1169"/>
+        <location filename="../controls/outputwidget.cpp" line="1146"/>
         <source>LightBlue</source>
         <translation>浅蓝色</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1170"/>
+        <location filename="../controls/outputwidget.cpp" line="1147"/>
         <source>LightGray</source>
         <translation>浅灰色</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1255"/>
+        <location filename="../controls/outputwidget.cpp" line="1232"/>
         <source>NOT CONNECTED!</source>
         <translation>未连接！</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1263"/>
+        <location filename="../controls/outputwidget.cpp" line="1240"/>
         <source>Invalid Data Length Specified</source>
         <translation>指定的数据长度无效</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1310"/>
+        <location filename="../controls/outputwidget.cpp" line="1287"/>
         <source>Zoom: %1%</source>
         <translation>飞涨： %1%</translation>
     </message>

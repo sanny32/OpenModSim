@@ -207,6 +207,76 @@ inline QSettings& operator >>(QSettings& in, DataDisplayMode& mode)
 }
 
 ///
+/// \brief The SimulationRegisters enum
+///
+enum class SimulationRegisters : quint8
+{
+    One = 1,
+    Two = 2,
+    Four = 4
+};
+Q_DECLARE_METATYPE(SimulationRegisters)
+DECLARE_ENUM_STRINGS(SimulationRegisters,
+                    {   SimulationRegisters::One,          "One"        },
+                    {   SimulationRegisters::Two,          "Two"        },
+                    {   SimulationRegisters::Four,         "Four"       },
+)
+
+///
+/// \brief operator <<
+/// \param out
+/// \param r
+/// \return
+///
+inline QSettings& operator <<(QSettings& out, const SimulationRegisters& r)
+{
+    out.setValue("SimulationRegisters", (uint)r);
+    return out;
+}
+
+///
+/// \brief operator >>
+/// \param in
+/// \param mode
+/// \return
+///
+inline QSettings& operator >>(QSettings& in, SimulationRegisters& r)
+{
+    r = (SimulationRegisters)in.value("SimulationRegisters").toUInt();
+    return in;
+}
+
+///
+/// \brief getSimulationRegistersCount
+/// \param mode
+/// \return
+///
+inline static SimulationRegisters getSimulationRegistersCount(DataDisplayMode mode)
+{
+    switch(mode)
+    {
+        case DataDisplayMode::FloatingPt:
+        case DataDisplayMode::SwappedFP:
+        case DataDisplayMode::Int32:
+        case DataDisplayMode::SwappedInt32:
+        case DataDisplayMode::UInt32:
+        case DataDisplayMode::SwappedUInt32:
+            return SimulationRegisters::Two;
+
+        case DataDisplayMode::DblFloat:
+        case DataDisplayMode::SwappedDbl:
+        case DataDisplayMode::Int64:
+        case DataDisplayMode::SwappedInt64:
+        case DataDisplayMode::UInt64:
+        case DataDisplayMode::SwappedUInt64:
+            return SimulationRegisters::Four;
+
+        default:
+            return SimulationRegisters::One;
+    }
+}
+
+///
 /// \brief The ByteOrder enum
 ///
 enum class ByteOrder

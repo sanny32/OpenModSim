@@ -1336,13 +1336,13 @@
         <translation type="vanished">Симуляция</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwriteholdingregister.cpp" line="28"/>
-        <location filename="../dialogs/dialogwriteholdingregister.cpp" line="36"/>
+        <location filename="../dialogs/dialogwriteholdingregister.cpp" line="59"/>
+        <location filename="../dialogs/dialogwriteholdingregister.cpp" line="68"/>
         <source>Auto Simulation: ON</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwriteholdingregister.cpp" line="79"/>
+        <location filename="../dialogs/dialogwriteholdingregister.cpp" line="114"/>
         <source>Value, (ANSI): </source>
         <translation>Знвчение, (ANSI): </translation>
     </message>
@@ -2731,77 +2731,77 @@ Script.onInit(()=&gt;{
 <context>
     <name>OutputWidget</name>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1135"/>
+        <location filename="../controls/outputwidget.cpp" line="1112"/>
         <source>Set Value of %1</source>
         <translation>Записать значение по адресу %1</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1141"/>
+        <location filename="../controls/outputwidget.cpp" line="1118"/>
         <source>Add Description</source>
         <translation>Добавить описание</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1141"/>
+        <location filename="../controls/outputwidget.cpp" line="1118"/>
         <source>Edit Description</source>
         <translation>Редактировать описание</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1144"/>
+        <location filename="../controls/outputwidget.cpp" line="1121"/>
         <source>%1: Enter Description</source>
         <translation>%1: Введите описание</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1153"/>
+        <location filename="../controls/outputwidget.cpp" line="1130"/>
         <source>Remove Color</source>
         <translation>Удалить цвет</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1164"/>
+        <location filename="../controls/outputwidget.cpp" line="1141"/>
         <source>Yellow</source>
         <translation>Желтый</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1165"/>
+        <location filename="../controls/outputwidget.cpp" line="1142"/>
         <source>Cyan</source>
         <translation>Циан</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1166"/>
+        <location filename="../controls/outputwidget.cpp" line="1143"/>
         <source>Magenta</source>
         <translation>Пурпурный</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1167"/>
+        <location filename="../controls/outputwidget.cpp" line="1144"/>
         <source>LightGreen</source>
         <translation>Светло-зеленый</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1168"/>
+        <location filename="../controls/outputwidget.cpp" line="1145"/>
         <source>Orange</source>
         <translation>Оранжевый</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1169"/>
+        <location filename="../controls/outputwidget.cpp" line="1146"/>
         <source>LightBlue</source>
         <translation>Светло-синий</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1170"/>
+        <location filename="../controls/outputwidget.cpp" line="1147"/>
         <source>LightGray</source>
         <translation>Светло-серый</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1255"/>
+        <location filename="../controls/outputwidget.cpp" line="1232"/>
         <source>NOT CONNECTED!</source>
         <translation>НЕ ПОДКЛЮЧЕНО!</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1263"/>
+        <location filename="../controls/outputwidget.cpp" line="1240"/>
         <source>Invalid Data Length Specified</source>
         <translation>Указана недопустимая длина данных</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1310"/>
+        <location filename="../controls/outputwidget.cpp" line="1287"/>
         <source>Zoom: %1%</source>
         <translation>Увеличение: %1%</translation>
     </message>

@@ -3,36 +3,6 @@
 #include "datasimulator.h"
 
 ///
-/// \brief registersCount
-/// \param mode
-/// \return
-///
-static int registersCount(DataDisplayMode mode)
-{
-    switch(mode)
-    {
-        case DataDisplayMode::FloatingPt:
-        case DataDisplayMode::SwappedFP:
-        case DataDisplayMode::Int32:
-        case DataDisplayMode::SwappedInt32:
-        case DataDisplayMode::UInt32:
-        case DataDisplayMode::SwappedUInt32:
-            return 2;
-
-        case DataDisplayMode::DblFloat:
-        case DataDisplayMode::SwappedDbl:
-        case DataDisplayMode::Int64:
-        case DataDisplayMode::SwappedInt64:
-        case DataDisplayMode::UInt64:
-        case DataDisplayMode::SwappedUInt64:
-            return 4;
-
-        default:
-            return 1;
-    }
-}
-
-///
 /// \brief DataSimulator::DataSimulator
 /// \param server
 ///
@@ -63,13 +33,13 @@ DataSimulator::~DataSimulator()
 ///
 bool DataSimulator::canStartSimulation(DataDisplayMode mode, quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr) const
 {
-    const auto count = registersCount(mode);
+    const auto count = getSimulationRegistersCount(mode);
 
     const auto it = _simulationMap.find({ deviceId, type, addr });
-    if(it != _simulationMap.end() && registersCount(it->Mode) == count)
+    if(it != _simulationMap.end() && getSimulationRegistersCount(it->Mode) == count)
         return true;
 
-    for(int i = 1; i < count; ++i)
+    for(int i = 1; i < static_cast<int>(count); ++i)
     {
         if(hasSimulation(deviceId, type, addr + i))
             return false;
@@ -107,7 +77,7 @@ void DataSimulator::startSimulation(DataDisplayMode mode, quint8 deviceId, QModb
 
 
     QVector<quint16> addresses;
-    for(int i = 0; i < registersCount(mode); ++i) {
+    for(int i = 0; i < static_cast<int>(getSimulationRegistersCount(mode)); ++i) {
         addresses << addr + i;
     }
 
@@ -142,7 +112,7 @@ void DataSimulator::stopSimulation(quint8 deviceId, QModbusDataUnit::RegisterTyp
     const auto mode = _simulationMap[key].Mode;
 
     QVector<quint16> addresses;
-    for(int i = 0; i < registersCount(mode); ++i) {
+    for(int i = 0; i < static_cast<int>(getSimulationRegistersCount(mode)); ++i) {
         addresses << addr + i;
     }
 
