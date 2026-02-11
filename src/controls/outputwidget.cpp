@@ -71,6 +71,37 @@ QString normalizeHtml(const QString& s)
 }
 
 ///
+/// \brief registersCount
+/// \param mode
+/// \return
+///
+static int registersCount(DataDisplayMode mode)
+{
+    switch(mode)
+    {
+        case DataDisplayMode::FloatingPt:
+        case DataDisplayMode::SwappedFP:
+        case DataDisplayMode::Int32:
+        case DataDisplayMode::SwappedInt32:
+        case DataDisplayMode::UInt32:
+        case DataDisplayMode::SwappedUInt32:
+            return 2;
+
+        case DataDisplayMode::DblFloat:
+        case DataDisplayMode::SwappedDbl:
+        case DataDisplayMode::Int64:
+        case DataDisplayMode::SwappedInt64:
+        case DataDisplayMode::UInt64:
+        case DataDisplayMode::SwappedUInt64:
+            return 4;
+
+        default:
+            return 1;
+    }
+}
+
+
+///
 /// \brief OutputListModel::OutputListModel
 /// \param parent
 ///
@@ -109,7 +140,6 @@ QVariant OutputListModel::data(const QModelIndex& index, int role) const
     const auto pointType = _parentWidget->_displayDefinition.PointType;
     const auto addrSpace = _parentWidget->_displayDefinition.AddrSpace;
     const auto hexAddresses = _parentWidget->displayHexAddresses();
-    const auto mode = _parentWidget->dataDisplayMode();
 
     const ItemData& itemData = _mapItems[row];
     const auto addrStr = formatAddress(pointType, itemData.Address, addrSpace, hexAddresses);
@@ -164,45 +194,8 @@ QVariant OutputListModel::data(const QModelIndex& index, int role) const
             return itemData.Description;
 
         case Qt::DecorationRole:
-        {
-            switch(mode)
-            {
-                case DataDisplayMode::FloatingPt:
-                case DataDisplayMode::SwappedFP:
-                case DataDisplayMode::Int32:
-                case DataDisplayMode::SwappedInt32:
-                case DataDisplayMode::UInt32:
-                case DataDisplayMode::SwappedUInt32:
-                    if(!itemData.ValueStr.isEmpty() && row < rowCount() - 1)
-                        return (itemData.Simulated ||
-                                _mapItems[row + 1].Simulated) ?
-                                   _iconSimulationOn :
-                                   _iconSimulationOff;
-                    else
-                        return _iconSimulationOff;
-                break;
-
-                case DataDisplayMode::DblFloat:
-                case DataDisplayMode::SwappedDbl:
-                case DataDisplayMode::Int64:
-                case DataDisplayMode::SwappedInt64:
-                case DataDisplayMode::UInt64:
-                case DataDisplayMode::SwappedUInt64:
-                    if(!itemData.ValueStr.isEmpty() && row < rowCount() - 3)
-                        return (itemData.Simulated ||
-                                _mapItems[row + 1].Simulated ||
-                                _mapItems[row + 2].Simulated ||
-                                _mapItems[row + 3].Simulated) ?
-                                   _iconSimulationOn :
-                                   _iconSimulationOff;
-                    else
-                        return _iconSimulationOff;
-                break;
-
-                default:
-                    return itemData.Simulated ? _iconSimulationOn : _iconSimulationOff;
-            }
-        }
+            if(itemData.ValueStr.isEmpty()) return _iconSimulationOff;
+            return isItemSimulated(row) ? _iconSimulationOn : _iconSimulationOff;
     }
 
     return QVariant();
@@ -419,6 +412,26 @@ QModelIndex OutputListModel::find(quint8 deviceId, QModbusDataUnit::RegisterType
         return index(row);
 
     return QModelIndex();
+}
+
+///
+/// \brief OutputListModel::isItemSimulated
+/// \param row
+/// \return
+///
+bool OutputListModel::isItemSimulated(const int row) const
+{
+    const auto mode = _parentWidget->dataDisplayMode();
+    for(int i = 0; i < registersCount(mode); ++i)
+    {
+        if(row + i >= rowCount())
+            return false;
+
+        if(_mapItems[row + i].Simulated)
+            return true;
+    }
+
+    return false;
 }
 
 ///

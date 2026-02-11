@@ -81,6 +81,9 @@ public:
     QModelIndex find(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr) const;
 
 private:
+    bool isItemSimulated(const int row) const;
+
+private:
     struct ItemData
     {
         quint32 Address = 0;

@@ -3,6 +3,36 @@
 #include "datasimulator.h"
 
 ///
+/// \brief registersCount
+/// \param mode
+/// \return
+///
+static int registersCount(DataDisplayMode mode)
+{
+    switch(mode)
+    {
+        case DataDisplayMode::FloatingPt:
+        case DataDisplayMode::SwappedFP:
+        case DataDisplayMode::Int32:
+        case DataDisplayMode::SwappedInt32:
+        case DataDisplayMode::UInt32:
+        case DataDisplayMode::SwappedUInt32:
+            return 2;
+
+        case DataDisplayMode::DblFloat:
+        case DataDisplayMode::SwappedDbl:
+        case DataDisplayMode::Int64:
+        case DataDisplayMode::SwappedInt64:
+        case DataDisplayMode::UInt64:
+        case DataDisplayMode::SwappedUInt64:
+            return 4;
+
+        default:
+            return 1;
+    }
+}
+
+///
 /// \brief DataSimulator::DataSimulator
 /// \param server
 ///
@@ -21,6 +51,27 @@ DataSimulator::DataSimulator(QObject* parent)
 DataSimulator::~DataSimulator()
 {
     stopSimulations();
+}
+
+///
+/// \brief DataSimulator::canStartSimulation
+/// \param mode
+/// \param deviceId
+/// \param type
+/// \param addr
+/// \return
+///
+bool DataSimulator::canStartSimulation(DataDisplayMode mode, quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr) const
+{
+    const int count = registersCount(mode);
+
+    for(int i = 1; i < count; ++i)
+    {
+        if(hasSimulation(deviceId, type, addr + i))
+            return false;
+    }
+
+    return true;
 }
 
 ///
@@ -52,30 +103,8 @@ void DataSimulator::startSimulation(DataDisplayMode mode, quint8 deviceId, QModb
 
 
     QVector<quint16> addresses;
-    addresses << addr;
-
-    switch(mode)
-    {
-        case DataDisplayMode::FloatingPt:
-        case DataDisplayMode::SwappedFP:
-        case DataDisplayMode::Int32:
-        case DataDisplayMode::SwappedInt32:
-        case DataDisplayMode::UInt32:
-        case DataDisplayMode::SwappedUInt32:
-            addresses << addr + 1;
-        break;
-
-        case DataDisplayMode::DblFloat:
-        case DataDisplayMode::SwappedDbl:
-        case DataDisplayMode::Int64:
-        case DataDisplayMode::SwappedInt64:
-        case DataDisplayMode::UInt64:
-        case DataDisplayMode::SwappedUInt64:
-            addresses << addr + 1 << addr + 2 << addr + 3;
-        break;
-
-        default:
-        break;
+    for(int i = 0; i < registersCount(mode); ++i) {
+        addresses << addr + i;
     }
 
     for(int i = 0; i < addresses.length(); ++i) {
@@ -107,30 +136,8 @@ void DataSimulator::stopSimulation(quint8 deviceId, QModbusDataUnit::RegisterTyp
         return;
 
     QVector<quint16> addresses;
-    addresses << addr;
-
-    switch(_simulationMap[key].Mode)
-    {
-        case DataDisplayMode::FloatingPt:
-        case DataDisplayMode::SwappedFP:
-        case DataDisplayMode::Int32:
-        case DataDisplayMode::SwappedInt32:
-        case DataDisplayMode::UInt32:
-        case DataDisplayMode::SwappedUInt32:
-            addresses << addr + 1;
-        break;
-
-        case DataDisplayMode::DblFloat:
-        case DataDisplayMode::SwappedDbl:
-        case DataDisplayMode::Int64:
-        case DataDisplayMode::SwappedInt64:
-        case DataDisplayMode::UInt64:
-        case DataDisplayMode::SwappedUInt64:
-            addresses << addr + 1 << addr + 2 << addr + 3;
-        break;
-
-        default:
-        break;
+    for(int i = 0; i < registersCount(_simulationMap[key].Mode); ++i) {
+        addresses << addr + i;
     }
 
     for(auto&& a : addresses) {

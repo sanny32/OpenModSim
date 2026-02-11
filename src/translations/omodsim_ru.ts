@@ -2731,77 +2731,77 @@ Script.onInit(()=&gt;{
 <context>
     <name>OutputWidget</name>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1085"/>
+        <location filename="../controls/outputwidget.cpp" line="1098"/>
         <source>Set Value of %1</source>
         <translation>Записать значение по адресу %1</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1091"/>
+        <location filename="../controls/outputwidget.cpp" line="1104"/>
         <source>Add Description</source>
         <translation>Добавить описание</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1091"/>
+        <location filename="../controls/outputwidget.cpp" line="1104"/>
         <source>Edit Description</source>
         <translation>Редактировать описание</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1094"/>
+        <location filename="../controls/outputwidget.cpp" line="1107"/>
         <source>%1: Enter Description</source>
         <translation>%1: Введите описание</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1103"/>
+        <location filename="../controls/outputwidget.cpp" line="1116"/>
         <source>Remove Color</source>
         <translation>Удалить цвет</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1114"/>
+        <location filename="../controls/outputwidget.cpp" line="1127"/>
         <source>Yellow</source>
         <translation>Желтый</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1115"/>
+        <location filename="../controls/outputwidget.cpp" line="1128"/>
         <source>Cyan</source>
         <translation>Циан</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1116"/>
+        <location filename="../controls/outputwidget.cpp" line="1129"/>
         <source>Magenta</source>
         <translation>Пурпурный</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1117"/>
+        <location filename="../controls/outputwidget.cpp" line="1130"/>
         <source>LightGreen</source>
         <translation>Светло-зеленый</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1118"/>
+        <location filename="../controls/outputwidget.cpp" line="1131"/>
         <source>Orange</source>
         <translation>Оранжевый</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1119"/>
+        <location filename="../controls/outputwidget.cpp" line="1132"/>
         <source>LightBlue</source>
         <translation>Светло-синий</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1120"/>
+        <location filename="../controls/outputwidget.cpp" line="1133"/>
         <source>LightGray</source>
         <translation>Светло-серый</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1205"/>
+        <location filename="../controls/outputwidget.cpp" line="1218"/>
         <source>NOT CONNECTED!</source>
         <translation>НЕ ПОДКЛЮЧЕНО!</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1213"/>
+        <location filename="../controls/outputwidget.cpp" line="1226"/>
         <source>Invalid Data Length Specified</source>
         <translation>Указана недопустимая длина данных</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1260"/>
+        <location filename="../controls/outputwidget.cpp" line="1273"/>
         <source>Zoom: %1%</source>
         <translation>Увеличение: %1%</translation>
     </message>

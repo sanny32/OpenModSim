@@ -34,6 +34,7 @@ public:
     explicit DataSimulator(QObject* parent = nullptr);
     ~DataSimulator() override;
 
+    bool canStartSimulation(DataDisplayMode mode, quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr) const;
     void startSimulation(DataDisplayMode mode, quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr, const ModbusSimulationParams& params);
     void stopSimulation(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr);
     void stopSimulations();

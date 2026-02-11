@@ -940,36 +940,8 @@ void FormModSim::on_outputWidget_itemDoubleClicked(quint16 addr, const QVariant&
         case QModbusDataUnit::InputRegisters:
         case QModbusDataUnit::HoldingRegisters:
         {
-            switch(mode)
-            {
-                case DataDisplayMode::FloatingPt:
-                case DataDisplayMode::SwappedFP:
-                case DataDisplayMode::Int32:
-                case DataDisplayMode::SwappedInt32:
-                case DataDisplayMode::UInt32:
-                case DataDisplayMode::SwappedUInt32:
-                    if(_dataSimulator->hasSimulation(deviceId, pointType, simAddr + 1))
-                    {
-                        simParams.Mode = SimulationMode::Disabled;
-                    }
-                break;
-
-                case DataDisplayMode::DblFloat:
-                case DataDisplayMode::SwappedDbl:
-                case DataDisplayMode::Int64:
-                case DataDisplayMode::SwappedInt64:
-                case DataDisplayMode::UInt64:
-                case DataDisplayMode::SwappedUInt64:
-                    if(_dataSimulator->hasSimulation(deviceId, pointType, simAddr + 1) ||
-                       _dataSimulator->hasSimulation(deviceId, pointType, simAddr + 2) ||
-                       _dataSimulator->hasSimulation(deviceId, pointType, simAddr + 3))
-                    {
-                        simParams.Mode = SimulationMode::Disabled;
-                    }
-                    break;
-
-                default:
-                break;
+            if(!_dataSimulator->canStartSimulation(mode, deviceId, pointType, simAddr)) {
+                simParams.Mode = SimulationMode::Disabled;
             }
 
             ModbusWriteParams params = { addr, value, mode, byteOrder(), codepage(), zeroBasedAddress, addrSpace };
