@@ -217,9 +217,9 @@ enum class SimulationRegisters : quint8
 };
 Q_DECLARE_METATYPE(SimulationRegisters)
 DECLARE_ENUM_STRINGS(SimulationRegisters,
-                    {   SimulationRegisters::One,          "One"        },
-                    {   SimulationRegisters::Two,          "Two"        },
-                    {   SimulationRegisters::Four,         "Four"       },
+                    {   SimulationRegisters::One,   "One"   },
+                    {   SimulationRegisters::Two,   "Two"   },
+                    {   SimulationRegisters::Four,  "Four"  },
 )
 
 ///
