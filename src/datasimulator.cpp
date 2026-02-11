@@ -50,6 +50,7 @@ void DataSimulator::startSimulation(DataDisplayMode mode, quint8 deviceId, QModb
         break;
     }
 
+
     QVector<quint16> addresses;
     addresses << addr;
 
@@ -70,16 +71,23 @@ void DataSimulator::startSimulation(DataDisplayMode mode, quint8 deviceId, QModb
         case DataDisplayMode::SwappedInt64:
         case DataDisplayMode::UInt64:
         case DataDisplayMode::SwappedUInt64:
-            addresses << addr + 1;
-            addresses << addr + 2;
-            addresses << addr + 3;
+            addresses << addr + 1 << addr + 2 << addr + 3;
         break;
 
         default:
         break;
     }
 
-    _simulationMap[{ deviceId, type, addr}] = { mode, params, value };
+    for(int i = 0; i < addresses.length(); ++i) {
+        const ModbusSimulationMapKey key = { deviceId, type, addresses[i] };
+        ModbusSimulationParams simParams = params;
+
+        if(i != 0) {
+            simParams.Mode = SimulationMode::Disabled;
+        }
+
+        _simulationMap[key] = { mode, simParams, value };
+    }
 
     scheduleNextRun();
     emit simulationStarted(deviceId, type, addresses);
@@ -118,16 +126,17 @@ void DataSimulator::stopSimulation(quint8 deviceId, QModbusDataUnit::RegisterTyp
         case DataDisplayMode::SwappedInt64:
         case DataDisplayMode::UInt64:
         case DataDisplayMode::SwappedUInt64:
-            addresses << addr + 1;
-            addresses << addr + 2;
-            addresses << addr + 3;
+            addresses << addr + 1 << addr + 2 << addr + 3;
         break;
 
         default:
-            break;
+        break;
     }
 
-    _simulationMap.remove({ deviceId, type, addr});
+    for(auto&& a : addresses) {
+        _simulationMap.remove({ deviceId, type, a});
+    }
+
     emit simulationStopped(deviceId, type, addresses);
 
     scheduleNextRun();
@@ -174,6 +183,7 @@ void DataSimulator::restartSimulations()
 
 ///
 /// \brief DataSimulator::simulationParams
+/// \param deviceId
 /// \param type
 /// \param addr
 /// \return
@@ -181,7 +191,25 @@ void DataSimulator::restartSimulations()
 ModbusSimulationParams DataSimulator::simulationParams(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr) const
 {
     const auto it = _simulationMap.find({ deviceId, type, addr});
-    return (it != _simulationMap.end()) ? it->Params : ModbusSimulationParams();
+
+    if(it == _simulationMap.end()) {
+        return ModbusSimulationParams();
+    }
+
+    return it->Params;
+}
+
+///
+/// \brief DataSimulator::hasSimulation
+/// \param deviceId
+/// \param type
+/// \param addr
+/// \return
+///
+bool DataSimulator::hasSimulation(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr) const
+{
+    const auto mode = simulationParams(deviceId, type, addr).Mode;
+    return mode != SimulationMode::Off;
 }
 
 ///
@@ -241,7 +269,13 @@ void DataSimulator::on_timeout()
         const auto params = sim.Params;
         const auto interval = params.Interval;
 
-        if (interval <= 0 || sim.NextRunTime > currentTime) continue;
+        if (interval <= 0 ||
+            sim.NextRunTime > currentTime ||
+            params.Mode == SimulationMode::Disabled ||
+            params.Mode == SimulationMode::Off)
+        {
+            continue;
+        }
 
         switch(params.Mode)
         {

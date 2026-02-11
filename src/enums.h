@@ -291,7 +291,8 @@ DECLARE_ENUM_STRINGS(CaptureMode,
 ///
 enum class SimulationMode
 {
-    No = 0,
+    Disabled = 0,
+    Off,
     Random,
     Increment,
     Decrement,
@@ -299,11 +300,12 @@ enum class SimulationMode
 };
 Q_DECLARE_METATYPE(SimulationMode)
 DECLARE_ENUM_STRINGS(SimulationMode,
-                {   SimulationMode::No,           "No"        },
-                {   SimulationMode::Random,       "Random"    },
-                {   SimulationMode::Increment,   "Increment"  },
-                {   SimulationMode::Decrement,   "Decrement"  },
-                {   SimulationMode::Toggle,       "Toggle"    }
+                {   SimulationMode::Disabled,    "Disabled"     },
+                {   SimulationMode::Off,         "Off"          },
+                {   SimulationMode::Random,      "Random"       },
+                {   SimulationMode::Increment,   "Increment"    },
+                {   SimulationMode::Decrement,   "Decrement"    },
+                {   SimulationMode::Toggle,      "Toggle"       }
 )
 
 ///

@@ -1298,7 +1298,8 @@
         <translation type="vanished">自动仿真</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwritecoilregister.cpp" line="28"/>
+        <location filename="../dialogs/dialogwritecoilregister.cpp" line="29"/>
+        <location filename="../dialogs/dialogwritecoilregister.cpp" line="37"/>
         <source>Auto Simulation: ON</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1339,12 +1340,13 @@
         <translation type="vanished">自动仿真</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwriteholdingregister.cpp" line="27"/>
+        <location filename="../dialogs/dialogwriteholdingregister.cpp" line="28"/>
+        <location filename="../dialogs/dialogwriteholdingregister.cpp" line="36"/>
         <source>Auto Simulation: ON</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwriteholdingregister.cpp" line="69"/>
+        <location filename="../dialogs/dialogwriteholdingregister.cpp" line="79"/>
         <source>Value, (ANSI): </source>
         <translation>值，(ANSI)： </translation>
     </message>
@@ -2735,77 +2737,77 @@ Script.onInit(()=&gt;{
 <context>
     <name>OutputWidget</name>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1081"/>
+        <location filename="../controls/outputwidget.cpp" line="1085"/>
         <source>Set Value of %1</source>
         <translation>将值写入 %1</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1087"/>
+        <location filename="../controls/outputwidget.cpp" line="1091"/>
         <source>Add Description</source>
         <translation>添加描述</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1087"/>
+        <location filename="../controls/outputwidget.cpp" line="1091"/>
         <source>Edit Description</source>
         <translation>编辑描述</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1090"/>
+        <location filename="../controls/outputwidget.cpp" line="1094"/>
         <source>%1: Enter Description</source>
         <translation>%1:输入描述</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1099"/>
+        <location filename="../controls/outputwidget.cpp" line="1103"/>
         <source>Remove Color</source>
         <translation>去除颜色</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1110"/>
+        <location filename="../controls/outputwidget.cpp" line="1114"/>
         <source>Yellow</source>
         <translation>黄色的</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1111"/>
+        <location filename="../controls/outputwidget.cpp" line="1115"/>
         <source>Cyan</source>
         <translation>青色</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1112"/>
+        <location filename="../controls/outputwidget.cpp" line="1116"/>
         <source>Magenta</source>
         <translation>品红</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1113"/>
+        <location filename="../controls/outputwidget.cpp" line="1117"/>
         <source>LightGreen</source>
         <translation>浅绿色</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1114"/>
+        <location filename="../controls/outputwidget.cpp" line="1118"/>
         <source>Orange</source>
         <translation>橙子</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1115"/>
+        <location filename="../controls/outputwidget.cpp" line="1119"/>
         <source>LightBlue</source>
         <translation>浅蓝色</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1116"/>
+        <location filename="../controls/outputwidget.cpp" line="1120"/>
         <source>LightGray</source>
         <translation>浅灰色</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1201"/>
+        <location filename="../controls/outputwidget.cpp" line="1205"/>
         <source>NOT CONNECTED!</source>
         <translation>未连接！</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1209"/>
+        <location filename="../controls/outputwidget.cpp" line="1213"/>
         <source>Invalid Data Length Specified</source>
         <translation>指定的数据长度无效</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1256"/>
+        <location filename="../controls/outputwidget.cpp" line="1260"/>
         <source>Zoom: %1%</source>
         <translation>飞涨： %1%</translation>
     </message>

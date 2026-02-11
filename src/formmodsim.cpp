@@ -930,7 +930,7 @@ void FormModSim::on_outputWidget_itemDoubleClicked(quint16 addr, const QVariant&
                 break;
 
                 case 2:
-                    if(simParams.Mode == SimulationMode::No) _dataSimulator->stopSimulation(deviceId, pointType, simAddr);
+                    if(simParams.Mode == SimulationMode::Off) _dataSimulator->stopSimulation(deviceId, pointType, simAddr);
                     else _dataSimulator->startSimulation(mode, deviceId, pointType, simAddr, simParams);
                 break;
             }
@@ -940,6 +940,38 @@ void FormModSim::on_outputWidget_itemDoubleClicked(quint16 addr, const QVariant&
         case QModbusDataUnit::InputRegisters:
         case QModbusDataUnit::HoldingRegisters:
         {
+            switch(mode)
+            {
+                case DataDisplayMode::FloatingPt:
+                case DataDisplayMode::SwappedFP:
+                case DataDisplayMode::Int32:
+                case DataDisplayMode::SwappedInt32:
+                case DataDisplayMode::UInt32:
+                case DataDisplayMode::SwappedUInt32:
+                    if(_dataSimulator->hasSimulation(deviceId, pointType, simAddr + 1))
+                    {
+                        simParams.Mode = SimulationMode::Disabled;
+                    }
+                break;
+
+                case DataDisplayMode::DblFloat:
+                case DataDisplayMode::SwappedDbl:
+                case DataDisplayMode::Int64:
+                case DataDisplayMode::SwappedInt64:
+                case DataDisplayMode::UInt64:
+                case DataDisplayMode::SwappedUInt64:
+                    if(_dataSimulator->hasSimulation(deviceId, pointType, simAddr + 1) ||
+                       _dataSimulator->hasSimulation(deviceId, pointType, simAddr + 2) ||
+                       _dataSimulator->hasSimulation(deviceId, pointType, simAddr + 3))
+                    {
+                        simParams.Mode = SimulationMode::Disabled;
+                    }
+                    break;
+
+                default:
+                break;
+            }
+
             ModbusWriteParams params = { addr, value, mode, byteOrder(), codepage(), zeroBasedAddress, addrSpace };
             if(mode == DataDisplayMode::Binary)
             {
@@ -957,7 +989,7 @@ void FormModSim::on_outputWidget_itemDoubleClicked(quint16 addr, const QVariant&
                     break;
 
                     case 2:
-                        if(simParams.Mode == SimulationMode::No) _dataSimulator->stopSimulation(deviceId, pointType, simAddr);
+                        if(simParams.Mode == SimulationMode::Off) _dataSimulator->stopSimulation(deviceId, pointType, simAddr);
                         else _dataSimulator->startSimulation(mode, deviceId, pointType, simAddr, simParams);
                     break;
                 }

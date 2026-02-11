@@ -22,24 +22,34 @@ DialogWriteHoldingRegister::DialogWriteHoldingRegister(ModbusWriteParams& writeP
     ui->lineEditAddress->setInputRange(ModbusLimits::addressRange(writeParams.AddrSpace, writeParams.ZeroBasedAddress));
     ui->lineEditAddress->setValue(_writeParams.Address);
 
-    if(simParams.Mode != SimulationMode::No)
+    switch(simParams.Mode)
     {
-        ui->pushButtonSimulation->setText(tr("Auto Simulation: ON"));
-        ui->pushButtonSimulation->setStyleSheet(R"(
-            QPushButton {
-                color: white;
-                padding: 4px 12px;
-                background-color: #4CAF50;
-                border: 1px solid #3e8e41;
-                border-radius: 4px;
-            }
-            QPushButton:hover {
-                background-color: #45a049;
-            }
-            QPushButton:pressed {
-                background-color: #3e8e41;
-            }
-        )");
+        case SimulationMode::Disabled:
+            ui->pushButtonSimulation->setText(tr("Auto Simulation: ON"));
+            ui->pushButtonSimulation->setEnabled(false);
+        break;
+
+        case SimulationMode::Off:
+        break;
+
+        default:
+            ui->pushButtonSimulation->setText(tr("Auto Simulation: ON"));
+            ui->pushButtonSimulation->setStyleSheet(R"(
+                QPushButton {
+                    color: white;
+                    padding: 4px 12px;
+                    background-color: #4CAF50;
+                    border: 1px solid #3e8e41;
+                    border-radius: 4px;
+                }
+                QPushButton:hover {
+                    background-color: #45a049;
+                }
+                QPushButton:pressed {
+                    background-color: #3e8e41;
+                }
+            )");
+        break;
     }
 
     switch(_writeParams.DisplayMode)

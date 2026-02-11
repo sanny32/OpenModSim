@@ -173,9 +173,11 @@ QVariant OutputListModel::data(const QModelIndex& index, int role) const
                 case DataDisplayMode::SwappedInt32:
                 case DataDisplayMode::UInt32:
                 case DataDisplayMode::SwappedUInt32:
-                    if(!itemData.ValueStr.isEmpty() && row < rowCount() - 2)
+                    if(!itemData.ValueStr.isEmpty() && row < rowCount() - 1)
                         return (itemData.Simulated ||
-                                _mapItems[row + 1].Simulated) ? _iconSimulationOn : _iconSimulationOff;
+                                _mapItems[row + 1].Simulated) ?
+                                   _iconSimulationOn :
+                                   _iconSimulationOff;
                     else
                         return _iconSimulationOff;
                 break;
@@ -186,11 +188,13 @@ QVariant OutputListModel::data(const QModelIndex& index, int role) const
                 case DataDisplayMode::SwappedInt64:
                 case DataDisplayMode::UInt64:
                 case DataDisplayMode::SwappedUInt64:
-                    if(!itemData.ValueStr.isEmpty() && row < rowCount() - 4)
+                    if(!itemData.ValueStr.isEmpty() && row < rowCount() - 3)
                         return (itemData.Simulated ||
                                 _mapItems[row + 1].Simulated ||
                                 _mapItems[row + 2].Simulated ||
-                                _mapItems[row + 3].Simulated) ? _iconSimulationOn : _iconSimulationOff;
+                                _mapItems[row + 3].Simulated) ?
+                                   _iconSimulationOn :
+                                   _iconSimulationOff;
                     else
                         return _iconSimulationOff;
                 break;

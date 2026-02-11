@@ -232,7 +232,7 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, DecrementSimulationP
 ///
 struct ModbusSimulationParams
 {
-    SimulationMode Mode = SimulationMode::No;
+    SimulationMode Mode = SimulationMode::Off;
     RandomSimulationParams RandomParams;
     IncrementSimulationParams IncrementParams;
     DecrementSimulationParams DecrementParams;
@@ -312,7 +312,7 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, ModbusSimulationPara
         const QXmlStreamAttributes attributes = xml.attributes();
 
         if (attributes.hasAttribute("Mode")) {
-            params.Mode = enumFromString<SimulationMode>(attributes.value("Mode").toString(), SimulationMode::No);
+            params.Mode = enumFromString<SimulationMode>(attributes.value("Mode").toString(), SimulationMode::Off);
         }
 
         if (attributes.hasAttribute("Interval")) {
