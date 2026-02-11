@@ -109,6 +109,7 @@ QVariant OutputListModel::data(const QModelIndex& index, int role) const
     const auto pointType = _parentWidget->_displayDefinition.PointType;
     const auto addrSpace = _parentWidget->_displayDefinition.AddrSpace;
     const auto hexAddresses = _parentWidget->displayHexAddresses();
+    const auto mode = _parentWidget->dataDisplayMode();
 
     const ItemData& itemData = _mapItems[row];
     const auto addrStr = formatAddress(pointType, itemData.Address, addrSpace, hexAddresses);
@@ -163,7 +164,41 @@ QVariant OutputListModel::data(const QModelIndex& index, int role) const
             return itemData.Description;
 
         case Qt::DecorationRole:
-            return itemData.Simulated ? _iconSimulationOn : _iconSimulationOff;
+        {
+            switch(mode)
+            {
+                case DataDisplayMode::FloatingPt:
+                case DataDisplayMode::SwappedFP:
+                case DataDisplayMode::Int32:
+                case DataDisplayMode::SwappedInt32:
+                case DataDisplayMode::UInt32:
+                case DataDisplayMode::SwappedUInt32:
+                    if(!itemData.ValueStr.isEmpty() && row < rowCount() - 2)
+                        return (itemData.Simulated ||
+                                _mapItems[row + 1].Simulated) ? _iconSimulationOn : _iconSimulationOff;
+                    else
+                        return _iconSimulationOff;
+                break;
+
+                case DataDisplayMode::DblFloat:
+                case DataDisplayMode::SwappedDbl:
+                case DataDisplayMode::Int64:
+                case DataDisplayMode::SwappedInt64:
+                case DataDisplayMode::UInt64:
+                case DataDisplayMode::SwappedUInt64:
+                    if(!itemData.ValueStr.isEmpty() && row < rowCount() - 4)
+                        return (itemData.Simulated ||
+                                _mapItems[row + 1].Simulated ||
+                                _mapItems[row + 2].Simulated ||
+                                _mapItems[row + 3].Simulated) ? _iconSimulationOn : _iconSimulationOff;
+                    else
+                        return _iconSimulationOff;
+                break;
+
+                default:
+                    return itemData.Simulated ? _iconSimulationOn : _iconSimulationOff;
+            }
+        }
     }
 
     return QVariant();
@@ -289,43 +324,43 @@ void OutputListModel::updateData(const QModbusDataUnit& data)
                 // MSRF
                 itemData.ValueStr = formatFloatValue(pointType, _lastData.value(i+1), value, byteOrder,
                                                      (i%2) || (i+1>=rowCount()), itemData.Value);
-                break;
+            break;
 
             case DataDisplayMode::SwappedFP:
                 // LSRF
                 itemData.ValueStr = formatFloatValue(pointType, value, _lastData.value(i+1), byteOrder,
                                                      (i%2) || (i+1>=rowCount()), itemData.Value);
-                break;
+            break;
 
             case DataDisplayMode::DblFloat:
                 // MSRF
                 itemData.ValueStr = formatDoubleValue(pointType, _lastData.value(i+3), _lastData.value(i+2), _lastData.value(i+1), value,
                                                       byteOrder, (i%4) || (i+3>=rowCount()), itemData.Value);
-                break;
+            break;
 
             case DataDisplayMode::SwappedDbl:
                 // LSRF
                 itemData.ValueStr = formatDoubleValue(pointType, value, _lastData.value(i+1), _lastData.value(i+2), _lastData.value(i+3),
                                                       byteOrder, (i%4) || (i+3>=rowCount()), itemData.Value);
-                break;
+            break;
 
             case DataDisplayMode::Int32:
                 // MSRF
                 itemData.ValueStr = formatInt32Value(pointType, _lastData.value(i+1), value, byteOrder,
                                                      (i%2) || (i+1>=rowCount()), itemData.Value);
-                break;
+            break;
 
             case DataDisplayMode::SwappedInt32:
                 // LSRF
                 itemData.ValueStr = formatInt32Value(pointType, value, _lastData.value(i+1), byteOrder,
                                                      (i%2) || (i+1>=rowCount()), itemData.Value);
-                break;
+            break;
 
             case DataDisplayMode::UInt32:
                 // MSRF
                 itemData.ValueStr = formatUInt32Value(pointType, _lastData.value(i+1), value, byteOrder, leadingZeros,
                                                       (i%2) || (i+1>=rowCount()), itemData.Value);
-                break;
+            break;
 
             case DataDisplayMode::SwappedUInt32:
                 // LSRF
@@ -337,7 +372,7 @@ void OutputListModel::updateData(const QModbusDataUnit& data)
                 // MSRF
                 itemData.ValueStr = formatInt64Value(pointType, _lastData.value(i+3), _lastData.value(i+2), _lastData.value(i+1), value,
                                                      byteOrder, (i%4) || (i+3>=rowCount()), itemData.Value);
-                break;
+            break;
 
             case DataDisplayMode::SwappedInt64:
                 // LSRF
@@ -349,13 +384,13 @@ void OutputListModel::updateData(const QModbusDataUnit& data)
                 // MSRF
                 itemData.ValueStr = formatUInt64Value(pointType, _lastData.value(i+3), _lastData.value(i+2), _lastData.value(i+1), value,
                                                       byteOrder, leadingZeros, (i%4) || (i+3>=rowCount()), itemData.Value);
-                break;
+            break;
 
             case DataDisplayMode::SwappedUInt64:
                 // LSRF
                 itemData.ValueStr = formatUInt64Value(pointType, value, _lastData.value(i+1), _lastData.value(i+2), _lastData.value(i+3),
                                                       byteOrder, leadingZeros, (i%4) || (i+3>=rowCount()), itemData.Value);
-                break;
+            break;
         }
     }
 

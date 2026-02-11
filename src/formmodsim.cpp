@@ -1108,15 +1108,17 @@ void FormModSim::on_mbDefinitionsChanged(const ModbusDefinitions& defs)
 
 ///
 /// \brief FormModSim::on_simulationStarted
+/// \param deviceId
 /// \param type
-/// \param addr
+/// \param addresses
 ///
-void FormModSim::on_simulationStarted(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr)
+void FormModSim::on_simulationStarted(quint8 deviceId, QModbusDataUnit::RegisterType type, const QVector<quint16>& addresses)
 {
     if(deviceId != ui->lineEditDeviceId->value<quint8>())
         return;
 
-    ui->outputWidget->setSimulated(deviceId, type, addr, true);
+    for(auto&& addr : addresses)
+        ui->outputWidget->setSimulated(deviceId, type, addr, true);
 }
 
 ///
@@ -1124,28 +1126,30 @@ void FormModSim::on_simulationStarted(quint8 deviceId, QModbusDataUnit::Register
 /// \param type
 /// \param addr
 ///
-void FormModSim::on_simulationStopped(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr)
+void FormModSim::on_simulationStopped(quint8 deviceId, QModbusDataUnit::RegisterType type, const QVector<quint16>& addresses)
 {
     if(deviceId != ui->lineEditDeviceId->value<quint8>())
         return;
 
-    ui->outputWidget->setSimulated(deviceId, type, addr, false);
+    for(auto&& addr : addresses)
+        ui->outputWidget->setSimulated(deviceId, type, addr, false);
 }
 
 ///
 /// \brief FormModSim::on_dataSimulated
 /// \param mode
+/// \param deviceId
 /// \param type
-/// \param addr
+/// \param startAddress
 /// \param value
 ///
-void FormModSim::on_dataSimulated(DataDisplayMode mode, quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr, QVariant value)
+void FormModSim::on_dataSimulated(DataDisplayMode mode, quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 startAddress, QVariant value)
 {
     const auto dd = displayDefinition();
     const auto pointAddr = dd.PointAddress - (dd.ZeroBasedAddress ? 0 : 1);
-    if(deviceId == dd.DeviceId && type == dd.PointType && addr >= pointAddr && addr <= pointAddr + dd.Length)
+    if(deviceId == dd.DeviceId && type == dd.PointType && startAddress >= pointAddr && startAddress <= pointAddr + dd.Length)
     {
-        _mbMultiServer.writeRegister(dd.DeviceId, type, { addr, value, mode, byteOrder(), codepage(), true });
+        _mbMultiServer.writeRegister(dd.DeviceId, type, { startAddress, value, mode, byteOrder(), codepage(), true });
     }
 }
 

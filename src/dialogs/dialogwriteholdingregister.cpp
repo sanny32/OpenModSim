@@ -130,6 +130,7 @@ DialogWriteHoldingRegister::DialogWriteHoldingRegister(ModbusWriteParams& writeP
     else
     {
         delete ui->controlBitPattern;
+        delete ui->groupBoxBitPattern;
         delete ui->labelBitPattern;
         adjustSize();
     }

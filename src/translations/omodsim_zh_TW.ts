@@ -2735,77 +2735,77 @@ Script.onInit(()=&gt;{
 <context>
     <name>OutputWidget</name>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1046"/>
+        <location filename="../controls/outputwidget.cpp" line="1081"/>
         <source>Set Value of %1</source>
         <translation>將值寫入 %1</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1052"/>
+        <location filename="../controls/outputwidget.cpp" line="1087"/>
         <source>Add Description</source>
         <translation>添加描述</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1052"/>
+        <location filename="../controls/outputwidget.cpp" line="1087"/>
         <source>Edit Description</source>
         <translation>編輯描述</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1055"/>
+        <location filename="../controls/outputwidget.cpp" line="1090"/>
         <source>%1: Enter Description</source>
         <translation>%1:輸入描述</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1064"/>
+        <location filename="../controls/outputwidget.cpp" line="1099"/>
         <source>Remove Color</source>
         <translation>去除顏色</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1075"/>
+        <location filename="../controls/outputwidget.cpp" line="1110"/>
         <source>Yellow</source>
         <translation>黃色的</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1076"/>
+        <location filename="../controls/outputwidget.cpp" line="1111"/>
         <source>Cyan</source>
         <translation>青色</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1077"/>
+        <location filename="../controls/outputwidget.cpp" line="1112"/>
         <source>Magenta</source>
         <translation>品紅</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1078"/>
+        <location filename="../controls/outputwidget.cpp" line="1113"/>
         <source>LightGreen</source>
         <translation>淺綠色</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1079"/>
+        <location filename="../controls/outputwidget.cpp" line="1114"/>
         <source>Orange</source>
         <translation>橘子</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1080"/>
+        <location filename="../controls/outputwidget.cpp" line="1115"/>
         <source>LightBlue</source>
         <translation>淺藍色</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1081"/>
+        <location filename="../controls/outputwidget.cpp" line="1116"/>
         <source>LightGray</source>
         <translation>淺灰色</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1166"/>
+        <location filename="../controls/outputwidget.cpp" line="1201"/>
         <source>NOT CONNECTED!</source>
         <translation>未連線！</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1174"/>
+        <location filename="../controls/outputwidget.cpp" line="1209"/>
         <source>Invalid Data Length Specified</source>
         <translation>指定的資料長度無效</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1221"/>
+        <location filename="../controls/outputwidget.cpp" line="1256"/>
         <source>Zoom: %1%</source>
         <translation>飛漲： %1%</translation>
     </message>

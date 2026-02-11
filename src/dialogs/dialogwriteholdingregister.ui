@@ -107,7 +107,7 @@
        </widget>
       </item>
       <item row="3" column="1">
-       <widget class="QGroupBox" name="groupBox_2">
+       <widget class="QGroupBox" name="groupBoxBitPattern">
         <layout class="QHBoxLayout" name="horizontalLayout">
          <property name="spacing">
           <number>0</number>
