@@ -207,51 +207,11 @@ inline QSettings& operator >>(QSettings& in, DataDisplayMode& mode)
 }
 
 ///
-/// \brief The SimulationRegisters enum
-///
-enum class SimulationRegisters : quint8
-{
-    One = 1,
-    Two = 2,
-    Four = 4
-};
-Q_DECLARE_METATYPE(SimulationRegisters)
-DECLARE_ENUM_STRINGS(SimulationRegisters,
-                    {   SimulationRegisters::One,   "One"   },
-                    {   SimulationRegisters::Two,   "Two"   },
-                    {   SimulationRegisters::Four,  "Four"  },
-)
-
-///
-/// \brief operator <<
-/// \param out
-/// \param r
-/// \return
-///
-inline QSettings& operator <<(QSettings& out, const SimulationRegisters& r)
-{
-    out.setValue("SimulationRegisters", (uint)r);
-    return out;
-}
-
-///
-/// \brief operator >>
-/// \param in
+/// \brief getDataDisplayModeRegistersCount
 /// \param mode
 /// \return
 ///
-inline QSettings& operator >>(QSettings& in, SimulationRegisters& r)
-{
-    r = (SimulationRegisters)in.value("SimulationRegisters").toUInt();
-    return in;
-}
-
-///
-/// \brief getSimulationRegistersCount
-/// \param mode
-/// \return
-///
-inline static SimulationRegisters getSimulationRegistersCount(DataDisplayMode mode)
+inline static int getDataDisplayModeRegistersCount(DataDisplayMode mode)
 {
     switch(mode)
     {
@@ -261,7 +221,7 @@ inline static SimulationRegisters getSimulationRegistersCount(DataDisplayMode mo
         case DataDisplayMode::SwappedInt32:
         case DataDisplayMode::UInt32:
         case DataDisplayMode::SwappedUInt32:
-            return SimulationRegisters::Two;
+            return 2;
 
         case DataDisplayMode::DblFloat:
         case DataDisplayMode::SwappedDbl:
@@ -269,10 +229,10 @@ inline static SimulationRegisters getSimulationRegistersCount(DataDisplayMode mo
         case DataDisplayMode::SwappedInt64:
         case DataDisplayMode::UInt64:
         case DataDisplayMode::SwappedUInt64:
-            return SimulationRegisters::Four;
+            return 4;
 
         default:
-            return SimulationRegisters::One;
+            return 1;
     }
 }
 

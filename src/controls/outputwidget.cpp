@@ -417,7 +417,7 @@ QModelIndex OutputListModel::find(quint8 deviceId, QModbusDataUnit::RegisterType
 bool OutputListModel::isItemSimulated(const int row) const
 {
     const auto mode = _parentWidget->dataDisplayMode();
-    for(int i = 0; i < static_cast<int>(getSimulationRegistersCount(mode)); ++i)
+    for(int i = 0; i < static_cast<int>(getDataDisplayModeRegistersCount(mode)); ++i)
     {
         if(row + i >= rowCount())
             return false;
@@ -958,15 +958,15 @@ void OutputWidget::setSimulated(DataDisplayMode mode, quint8 deviceId, QModbusDa
     _listModel->setData(index, on, SimulationRole);
 
     if(on) {
-        switch(getSimulationRegistersCount(mode))
+        switch(getDataDisplayModeRegistersCount(mode))
         {
-            case SimulationRegisters::One:
+            case 1:
                 _listModel->setData(index, OutputListModel::SimulationIcon16Bit, Qt::DecorationRole);
             break;
-            case SimulationRegisters::Two:
+            case 2:
                 _listModel->setData(index, OutputListModel::SimulationIcon32Bit, Qt::DecorationRole);
             break;
-            case SimulationRegisters::Four:
+            case 4:
                 _listModel->setData(index, OutputListModel::SimulationIcon64Bit, Qt::DecorationRole);
             break;
         }

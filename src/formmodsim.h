@@ -596,7 +596,7 @@ inline QXmlStreamWriter& operator <<(QXmlStreamWriter& xml, FormModSim* frm)
             const ModbusSimulationMapKey& key = it.key();
             const ModbusSimulationParams& params = it.value();
 
-            if(params.Mode != SimulationMode::Off && key.DeviceId == dd.DeviceId && key.Type == dd.PointType)
+            if(params.Mode != SimulationMode::Off && params.Mode != SimulationMode::Disabled && key.DeviceId == dd.DeviceId && key.Type == dd.PointType)
             {
                 xml.writeStartElement("Simulation");
                 xml.writeAttribute("Address", QString::number(key.Address + (dd.ZeroBasedAddress ? 0 : 1)));

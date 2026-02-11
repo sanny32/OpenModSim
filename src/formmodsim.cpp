@@ -591,7 +591,7 @@ QModbusDataUnit FormModSim::serializeModbusDataUnit(quint8 deviceId, QModbusData
 void FormModSim::startSimulation(QModbusDataUnit::RegisterType type, quint16 addr, const ModbusSimulationParams& params)
 {
     const auto deviceId = ui->lineEditDeviceId->value<quint8>();
-    _dataSimulator->startSimulation(dataDisplayMode(), deviceId, type, addr, params);
+    _dataSimulator->startSimulation(deviceId, type, addr, params);
 }
 
 ///
@@ -931,7 +931,7 @@ void FormModSim::on_outputWidget_itemDoubleClicked(quint16 addr, const QVariant&
 
                 case 2:
                     if(simParams.Mode == SimulationMode::Off) _dataSimulator->stopSimulation(deviceId, pointType, simAddr);
-                    else _dataSimulator->startSimulation(mode, deviceId, pointType, simAddr, simParams);
+                    else _dataSimulator->startSimulation(deviceId, pointType, simAddr, simParams);
                 break;
             }
         }
@@ -962,7 +962,7 @@ void FormModSim::on_outputWidget_itemDoubleClicked(quint16 addr, const QVariant&
 
                     case 2:
                         if(simParams.Mode == SimulationMode::Off) _dataSimulator->stopSimulation(deviceId, pointType, simAddr);
-                        else _dataSimulator->startSimulation(mode, deviceId, pointType, simAddr, simParams);
+                        else _dataSimulator->startSimulation(deviceId, pointType, simAddr, simParams);
                     break;
                 }
             }
