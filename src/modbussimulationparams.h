@@ -254,6 +254,7 @@ inline QDataStream& operator <<(QDataStream& out, const ModbusSimulationParams& 
     out << params.IncrementParams;
     out << params.DecrementParams;
     out << params.Interval;
+    out << params.DataMode;
 
     return out;
 }
@@ -271,6 +272,12 @@ inline QDataStream& operator >>(QDataStream& in, ModbusSimulationParams& params)
     in >> params.IncrementParams;
     in >> params.DecrementParams;
     in >> params.Interval;
+
+    if (in.device()->property("Form_Version").isValid() &&
+        in.device()->property("Form_Version").value<QVersionNumber>() >= QVersionNumber(1, 14))
+    {
+        in >> params.DataMode;
+    }
 
     return in;
 }

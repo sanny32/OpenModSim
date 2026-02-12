@@ -352,6 +352,7 @@ inline QDataStream& operator >>(QDataStream& in, FormModSim* frm)
 {
     if(!frm) return in;
     const auto ver = frm->property("Version").value<QVersionNumber>();
+    in.device()->setProperty("Form_Version", QVariant::fromValue(ver));
 
     bool isMaximized;
     in >> isMaximized;

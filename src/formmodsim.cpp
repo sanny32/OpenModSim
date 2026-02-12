@@ -13,7 +13,7 @@
 #include "formmodsim.h"
 #include "ui_formmodsim.h"
 
-QVersionNumber FormModSim::VERSION = QVersionNumber(1, 13);
+QVersionNumber FormModSim::VERSION = QVersionNumber(1, 14);
 
 ///
 /// \brief FormModSim::FormModSim
@@ -540,6 +540,9 @@ ModbusSimulationMap2 FormModSim::simulationMap() const
     const auto simulationMap = _dataSimulator->simulationMap();
     for(auto&& key : simulationMap.keys())
     {
+        if(simulationMap[key].Mode == SimulationMode::Disabled)
+            continue;
+
         if(key.DeviceId == dd.DeviceId &&
            key.Type == dd.PointType &&
            key.Address >= startAddr && key.Address < endAddr)
