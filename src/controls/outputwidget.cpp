@@ -169,24 +169,19 @@ QVariant OutputListModel::data(const QModelIndex& index, int role) const
             if(itemData.ValueStr.isEmpty())
                 return _iconSimulationOff;
 
-            if(!isItemSimulated(row))
-                return _iconSimulationOff;
-
-            switch(itemData.SimulationIcon)
+            switch(simulationIcon(row))
             {
+                case SimulationIcon16Bit:
+                    return _iconSimulation16Bit;
+                case SimulationIcon32Bit:
+                    return _iconSimulation32Bit;
                 case SimulationIcon64Bit:
                     return _iconSimulation64Bit;
 
-                case SimulationIcon32Bit:
-                    return _iconSimulation32Bit;
-
-                case SimulationIcon16Bit:
-                case SimulationIconNone:
                 default:
-                    return _iconSimulation16Bit;
+                    return _iconSimulationOff;
             }
         }
-
     }
 
     return QVariant();
@@ -410,23 +405,23 @@ QModelIndex OutputListModel::find(quint8 deviceId, QModbusDataUnit::RegisterType
 }
 
 ///
-/// \brief OutputListModel::isItemSimulated
+/// \brief OutputListModel::simulationIcon
 /// \param row
 /// \return
 ///
-bool OutputListModel::isItemSimulated(const int row) const
+OutputListModel::SimulationIconType OutputListModel::simulationIcon(int row) const
 {
     const auto mode = _parentWidget->dataDisplayMode();
-    for(int i = 0; i < static_cast<int>(registersCount(mode)); ++i)
+    for(int i = 0; i < registersCount(mode); ++i)
     {
         if(row + i >= rowCount())
-            return false;
+            return SimulationIconNone;
 
         if(_mapItems[row + i].Simulated)
-            return true;
+            return _mapItems[row + i].SimulationIcon;
     }
 
-    return false;
+    return SimulationIconNone;
 }
 
 ///
