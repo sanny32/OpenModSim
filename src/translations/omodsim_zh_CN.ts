@@ -129,7 +129,7 @@
     <message>
         <location filename="../controls/bitpatterncontrol.ui" line="14"/>
         <source>Bit Pattern</source>
-        <translation type="unfinished">位模式</translation>
+        <translation>位模式</translation>
     </message>
 </context>
 <context>
@@ -1291,7 +1291,7 @@
     <message>
         <location filename="../dialogs/dialogwritecoilregister.ui" line="118"/>
         <source>Auto Simulation: OFF</source>
-        <translation type="unfinished"></translation>
+        <translation>自动模拟：关闭</translation>
     </message>
     <message>
         <source>Auto Simulation</source>
@@ -1301,7 +1301,7 @@
         <location filename="../dialogs/dialogwritecoilregister.cpp" line="29"/>
         <location filename="../dialogs/dialogwritecoilregister.cpp" line="37"/>
         <source>Auto Simulation: ON</source>
-        <translation type="unfinished"></translation>
+        <translation>自动模拟：开启</translation>
     </message>
 </context>
 <context>
@@ -1324,12 +1324,12 @@
     <message>
         <location filename="../dialogs/dialogwriteholdingregister.ui" line="83"/>
         <source>Auto Simulation: OFF</source>
-        <translation type="unfinished"></translation>
+        <translation>自动模拟：关闭</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogwriteholdingregister.ui" line="105"/>
         <source>Bit Pattern:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">位模式：</translation>
     </message>
     <message>
         <source>Bit Pattern</source>
@@ -1343,7 +1343,12 @@
         <location filename="../dialogs/dialogwriteholdingregister.cpp" line="59"/>
         <location filename="../dialogs/dialogwriteholdingregister.cpp" line="68"/>
         <source>Auto Simulation: ON</source>
-        <translation type="unfinished"></translation>
+        <translation>自动模拟：开启</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogwriteholdingregister.cpp" line="107"/>
+        <source>Value, (HEX): </source>
+        <translation>值（十六进制）： </translation>
     </message>
     <message>
         <location filename="../dialogs/dialogwriteholdingregister.cpp" line="114"/>
