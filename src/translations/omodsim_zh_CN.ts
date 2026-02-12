@@ -1329,7 +1329,7 @@
     <message>
         <location filename="../dialogs/dialogwriteholdingregister.ui" line="105"/>
         <source>Bit Pattern:</source>
-        <translation type="unfinished">位模式：</translation>
+        <translation>位模式：</translation>
     </message>
     <message>
         <source>Bit Pattern</source>
@@ -2234,6 +2234,16 @@ Script.onInit(()=&gt;{
         <translation>类型</translation>
     </message>
     <message>
+        <location filename="../controls/modbusmessagewidget.cpp" line="279"/>
+        <source>Request (Rx)</source>
+        <translation>请求(Rx)</translation>
+    </message>
+    <message>
+        <location filename="../controls/modbusmessagewidget.cpp" line="279"/>
+        <source>Response (Tx)</source>
+        <translation>响应(Tx)</translation>
+    </message>
+    <message>
         <location filename="../controls/modbusmessagewidget.cpp" line="280"/>
         <source>Time</source>
         <translation>時間戳</translation>
@@ -2503,14 +2513,12 @@ Script.onInit(()=&gt;{
         <translation type="vanished">&lt;b&gt;类型：&lt;/b&gt; %1</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="279"/>
         <source>Request (Tx)</source>
-        <translation>请求(Tx)</translation>
+        <translation type="vanished">请求(Tx)</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="279"/>
         <source>Response (Rx)</source>
-        <translation>响应(Rx)</translation>
+        <translation type="vanished">响应(Rx)</translation>
     </message>
     <message>
         <source>&lt;b&gt;Timestamp:&lt;/b&gt; %1</source>

@@ -2228,6 +2228,16 @@ Script.onInit(()=&gt;{
         <translation>Тип</translation>
     </message>
     <message>
+        <location filename="../controls/modbusmessagewidget.cpp" line="279"/>
+        <source>Request (Rx)</source>
+        <translation>Запрос (Rx)</translation>
+    </message>
+    <message>
+        <location filename="../controls/modbusmessagewidget.cpp" line="279"/>
+        <source>Response (Tx)</source>
+        <translation>Ответ (Tx)</translation>
+    </message>
+    <message>
         <location filename="../controls/modbusmessagewidget.cpp" line="280"/>
         <source>Time</source>
         <translation>Время</translation>
@@ -2497,14 +2507,12 @@ Script.onInit(()=&gt;{
         <translation type="vanished">&lt;b&gt;Тип:&lt;/b&gt; %1</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="279"/>
         <source>Request (Tx)</source>
-        <translation>Запрос (Tx)</translation>
+        <translation type="vanished">Запрос (Tx)</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="279"/>
         <source>Response (Rx)</source>
-        <translation>Ответ (Rx)</translation>
+        <translation type="vanished">Ответ (Rx)</translation>
     </message>
     <message>
         <source>&lt;b&gt;Timestamp:&lt;/b&gt; %1</source>

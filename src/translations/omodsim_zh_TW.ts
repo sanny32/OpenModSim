@@ -2234,6 +2234,16 @@ Script.onInit(()=&gt;{
         <translation>型別</translation>
     </message>
     <message>
+        <location filename="../controls/modbusmessagewidget.cpp" line="279"/>
+        <source>Request (Rx)</source>
+        <translation>請求(Rx)</translation>
+    </message>
+    <message>
+        <location filename="../controls/modbusmessagewidget.cpp" line="279"/>
+        <source>Response (Tx)</source>
+        <translation>響應(Tx)</translation>
+    </message>
+    <message>
         <location filename="../controls/modbusmessagewidget.cpp" line="280"/>
         <source>Time</source>
         <translation>時間戳</translation>
@@ -2503,14 +2513,12 @@ Script.onInit(()=&gt;{
         <translation type="vanished">&lt;b&gt;类型：&lt;/b&gt; %1</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="279"/>
         <source>Request (Tx)</source>
-        <translation>請求(Tx)</translation>
+        <translation type="vanished">請求(Tx)</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="279"/>
         <source>Response (Rx)</source>
-        <translation>響應(Rx)</translation>
+        <translation type="vanished">響應(Rx)</translation>
     </message>
     <message>
         <source>&lt;b&gt;Timestamp:&lt;/b&gt; %1</source>
