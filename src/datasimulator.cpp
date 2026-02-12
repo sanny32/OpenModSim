@@ -36,7 +36,7 @@ bool DataSimulator::canStartSimulation(DataDisplayMode mode, quint8 deviceId, QM
     const auto count = registersCount(mode);
 
     const auto it = _simulationMap.find({ deviceId, type, addr });
-    if(it != _simulationMap.end() && registersCount(it->Mode) == count)
+    if(it != _simulationMap.end() && it->Params.Mode != SimulationMode::Disabled)
         return true;
 
     for(int i = 1; i < count; ++i)
