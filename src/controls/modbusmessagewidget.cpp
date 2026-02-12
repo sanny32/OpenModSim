@@ -254,7 +254,7 @@ void ModbusMessageWidget::update()
             addItem(tr("<span style='color:%1'>*** INVALID MODBUS RESPONSE ***</span>").arg(errColor));
     }
 
-    const QString dirColor = _mm->isRequest() ? "#0066cc" : "#009933";
+    const QString dirColor = _mm->isRequest() ? "#009933" : "#0066cc";
     auto addField = [&](const QString &name, const QString &value, const QString &clr) {
         addItem(QString("<b style='color:#000000'>%1:</b> <span style='color:%2'>%3</span>").arg(name, clr, value));
     };
@@ -276,7 +276,7 @@ void ModbusMessageWidget::update()
         }
     };
 
-    addField(tr("Type"), _mm->isRequest() ? tr("Request (Tx)") : tr("Response (Rx)"), dirColor);
+    addField(tr("Type"), _mm->isRequest() ? tr("Request (Rx)") : tr("Response (Tx)"), dirColor);
     if(_showTimestamp) addField(tr("Time"), _mm->timestamp().toString(Qt::ISODateWithMs), dataColor);
 
     if(_mm->protocolType() == ModbusMessage::Tcp)
