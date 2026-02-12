@@ -217,7 +217,7 @@ bool OutputListModel::setData(const QModelIndex &index, const QVariant &value, i
         case Qt::DecorationRole:
             _mapItems[index.row()].SimulationIcon = value.value<SimulationIconType>();
             emit dataChanged(index, index, QVector<int>() << role);
-            return true;
+        return true;
 
         case DescriptionRole:
             _mapItems[index.row()].Description = value.toString();
