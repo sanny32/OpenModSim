@@ -20,9 +20,9 @@ struct SimButtonColors
 /// \param registersCount
 /// \return
 ///
-static SimButtonColors simColors(int registersCount)
+static SimButtonColors simColors(DataDisplayMode mode)
 {
-    switch(registersCount)
+    switch(registersCount(mode))
     {
         case 2:
             return { "#5680D0", "#4E75C0", "#466AB0", "#3E5FA0" };
@@ -67,7 +67,7 @@ DialogWriteHoldingRegister::DialogWriteHoldingRegister(ModbusWriteParams& writeP
         {
             ui->pushButtonSimulation->setText(tr("Auto Simulation: ON"));
 
-            const auto c = simColors(getDataDisplayModeRegistersCount(simParams.DataMode));
+            const auto c = simColors(simParams.DataMode);
             ui->pushButtonSimulation->setStyleSheet(QString(R"(
                 QPushButton {
                     color: white;

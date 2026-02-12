@@ -33,10 +33,10 @@ DataSimulator::~DataSimulator()
 ///
 bool DataSimulator::canStartSimulation(DataDisplayMode mode, quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr) const
 {
-    const auto count = getDataDisplayModeRegistersCount(mode);
+    const auto count = registersCount(mode);
 
     const auto it = _simulationMap.find({ deviceId, type, addr });
-    if(it != _simulationMap.end() && getDataDisplayModeRegistersCount(it->Mode) == count)
+    if(it != _simulationMap.end() && registersCount(it->Mode) == count)
         return true;
 
     for(int i = 1; i < count; ++i)
@@ -76,7 +76,7 @@ void DataSimulator::startSimulation(quint8 deviceId, QModbusDataUnit::RegisterTy
 
 
     QVector<quint16> addresses;
-    for(int i = 0; i < getDataDisplayModeRegistersCount(params.DataMode); ++i) {
+    for(int i = 0; i < registersCount(params.DataMode); ++i) {
         addresses << addr + i;
     }
 
@@ -111,7 +111,7 @@ void DataSimulator::stopSimulation(quint8 deviceId, QModbusDataUnit::RegisterTyp
     const auto mode = _simulationMap[key].Mode;
 
     QVector<quint16> addresses;
-    for(int i = 0; i < getDataDisplayModeRegistersCount(mode); ++i) {
+    for(int i = 0; i < registersCount(mode); ++i) {
         addresses << addr + i;
     }
 

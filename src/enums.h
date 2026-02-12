@@ -207,11 +207,11 @@ inline QSettings& operator >>(QSettings& in, DataDisplayMode& mode)
 }
 
 ///
-/// \brief getDataDisplayModeRegistersCount
+/// \brief registersCount
 /// \param mode
 /// \return
 ///
-inline static int getDataDisplayModeRegistersCount(DataDisplayMode mode)
+inline static int registersCount(DataDisplayMode mode)
 {
     switch(mode)
     {
