@@ -577,6 +577,9 @@ void OutputWidget::setup(const DisplayDefinition& dd, const ModbusSimulationMap2
     for(auto&& key : _descriptionMap.keys())
         setDescription(key.DeviceId, key.Type, key.Address, _descriptionMap[key]);
 
+    for(auto&& key : _colorMap.keys())
+        setColor(key.DeviceId, key.Type, key.Address, _colorMap[key]);
+
     updateData(data);
 }
 
