@@ -65,6 +65,7 @@ public:
         SimulationIcon32Bit,
         SimulationIcon64Bit
     };
+    Q_ENUM(SimulationIconType)
 
     explicit OutputListModel(OutputWidget* parent);
 

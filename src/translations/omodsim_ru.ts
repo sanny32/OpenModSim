@@ -1308,22 +1308,22 @@
         <translation>Запись в регистр</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwriteholdingregister.ui" line="26"/>
+        <location filename="../dialogs/dialogwriteholdingregister.ui" line="23"/>
         <source>Address: </source>
         <translation>Адрес: </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwriteholdingregister.ui" line="58"/>
+        <location filename="../dialogs/dialogwriteholdingregister.ui" line="55"/>
         <source>Value: </source>
         <translation>Значение: </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwriteholdingregister.ui" line="86"/>
+        <location filename="../dialogs/dialogwriteholdingregister.ui" line="83"/>
         <source>Auto Simulation: OFF</source>
         <translation>Симуляция: Выкл</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwriteholdingregister.ui" line="108"/>
+        <location filename="../dialogs/dialogwriteholdingregister.ui" line="105"/>
         <source>Bit Pattern:</source>
         <translation>Битовый шаблон:</translation>
     </message>

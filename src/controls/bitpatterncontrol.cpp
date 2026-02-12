@@ -13,7 +13,7 @@ BitPatternControl::BitPatternControl(QWidget *parent)
     for (int i = 0; i < 16; i++)
     {
         auto chb = findChild<QCheckBox*>(QString("checkBox%1").arg(i));
-        if(chb) connect(chb, &QCheckBox::checkStateChanged, this, &BitPatternControl::on_checkStateChanged);
+        if(chb) connect(chb, &QCheckBox::stateChanged, this, &BitPatternControl::on_checkStateChanged);
 
         auto lbl = findChild<ClickableLabel*>(QString("label%1").arg(i));
         if(chb && lbl) connect(lbl, &ClickableLabel::clicked, chb, &QCheckBox::toggle);
@@ -60,7 +60,7 @@ void BitPatternControl::setValue(quint16 value)
 ///
 /// \brief BitPatternControl::on_checkStateChanged
 ///
-void BitPatternControl::on_checkStateChanged(Qt::CheckState)
+void BitPatternControl::on_checkStateChanged(int)
 {
     emit valueChanged(value());
 }
