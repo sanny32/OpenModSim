@@ -3076,7 +3076,7 @@ Script.onInit(()=&gt;{
     <message>
         <location filename="../controls/statisticwidget.ui" line="40"/>
         <source>Requests: 0</source>
-        <translation>Ответов: 0</translation>
+        <translation>Запросов: 0</translation>
     </message>
     <message>
         <location filename="../controls/statisticwidget.ui" line="47"/>
