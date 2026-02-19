@@ -455,6 +455,27 @@ body {
     flex-shrink: 0;
 }
 
+.arch-tag {
+    font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 0.15rem 0.5rem;
+    border-radius: 100px;
+    border: 1px solid currentColor;
+    opacity: 0.75;
+    letter-spacing: 0;
+    flex-shrink: 0;
+}
+
+.btn-download .arch-tag,
+.btn-download-alt .arch-tag {
+    margin-left: auto;
+}
+
+.arch-tag + .btn-badge {
+    margin-left: 0.3rem;
+}
+
 .btn-download-alt .btn-badge {
     background: rgba(24, 119, 200, 0.1);
     color: var(--primary-color);
@@ -557,11 +578,14 @@ body {
 }
 
 .subtab-panel {
-    display: none;
+    grid-area: 1 / 1;
+    visibility: hidden;
+    pointer-events: none;
 }
 
 .subtab-panel.active {
-    display: block;
+    visibility: visible;
+    pointer-events: auto;
 }
 
 /* Install instructions */
@@ -569,6 +593,8 @@ body {
     margin: 0;
     padding: 0;
     border: none;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
 }
 
 .install-instructions h4 {
@@ -595,29 +621,91 @@ body {
     margin-top: 0.5rem;
 }
 
+/* Tip / info box */
+.tip-box {
+    display: flex;
+    gap: 0.65rem;
+    align-items: flex-start;
+    background: rgba(24, 119, 200, 0.06);
+    border: 1px solid rgba(24, 119, 200, 0.25);
+    border-radius: 6px;
+    padding: 0.75rem 1rem;
+    margin-bottom: 0.75rem;
+}
+
+.tip-box-icon {
+    flex-shrink: 0;
+    width: 18px;
+    height: 18px;
+    color: var(--primary-color);
+    margin-top: 0.1rem;
+}
+
+.tip-box-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.tip-box-content p {
+    font-size: 0.85rem;
+    color: var(--text-light);
+    margin-bottom: 0.5rem;
+}
+
+.tip-box-content p:last-child {
+    margin-bottom: 0;
+}
+
+.tip-box-content .code-block {
+    margin-top: 0.5rem;
+}
+
 /* Copy button for install instructions */
 .install-instructions .code-block {
     position: relative;
-    display: inline-block;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    background: #1e1e1e;
+    border-radius: 8px;
+    margin-bottom: 0.75rem;
     width: 100%;
 }
 
 .install-instructions .code-block pre {
-    padding: 0.65rem 2.5rem 0.65rem 1rem;
-    background: #1e1e1e;
+    padding: 0.65rem 1rem;
+    background: transparent;
     color: #e8e8e8;
     font-size: 0.82rem;
     line-height: 1.5;
     overflow-x: auto;
-    margin-bottom: 0.75rem;
+    flex: 1;
+    min-width: 0;
+    margin-bottom: 0;
     border-radius: 8px;
+    scrollbar-width: thin;
+    scrollbar-color: #555 transparent;
+}
+
+.install-instructions .code-block pre::-webkit-scrollbar {
+    height: 4px;
+}
+
+.install-instructions .code-block pre::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.install-instructions .code-block pre::-webkit-scrollbar-thumb {
+    background: #555;
+    border-radius: 2px;
 }
 
 /* Copy button styling — GitHub-style */
 .install-instructions .copy-btn {
-    position: absolute;
-    top: 6px;
-    right: 6px;
+    position: relative;
+    flex-shrink: 0;
+    margin-top: 6px;
+    margin-right: 6px;
     border: 1px solid transparent;
     background: transparent;
     padding: 4px;
