@@ -444,11 +444,20 @@ body {
     margin-bottom: 0;
 }
 
-.download-item-label {
-    font-size: 0.85rem;
-    font-weight: 600;
-    color: var(--text-light);
-    margin-bottom: 0.4rem;
+.btn-badge {
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 0.15rem 0.5rem;
+    border-radius: 100px;
+    background: rgba(255, 255, 255, 0.22);
+    letter-spacing: 0.03em;
+    margin-left: auto;
+    flex-shrink: 0;
+}
+
+.btn-download-alt .btn-badge {
+    background: rgba(24, 119, 200, 0.1);
+    color: var(--primary-color);
 }
 
 .btn-download,
@@ -516,6 +525,43 @@ body {
     background-repeat: no-repeat;
     background-position: center;
     background-color: var(--primary-color);
+}
+
+/* Card inner subtabs */
+.card-header-tabs {
+    padding: 0;
+    gap: 0;
+}
+
+.card-subtab {
+    padding: 0.85rem 1.25rem;
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--text-light);
+    transition: color 0.15s, border-color 0.15s;
+    font-family: inherit;
+}
+
+.card-subtab:hover {
+    color: var(--primary-color);
+}
+
+.card-subtab.active {
+    color: var(--primary-color);
+    border-bottom-color: var(--primary-color);
+}
+
+.subtab-panel {
+    display: none;
+}
+
+.subtab-panel.active {
+    display: block;
 }
 
 /* Install instructions */
@@ -646,6 +692,14 @@ body {
 
 .rpm-distro-section > h4 img {
     object-fit: contain;
+}
+
+.distro-sep {
+    color: var(--border-dark);
+    font-weight: 400;
+    font-size: 1.3rem;
+    margin: 0 0.2rem;
+    line-height: 1;
 }
 
 .build-info {
