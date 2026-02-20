@@ -59,7 +59,7 @@ const translations = {
         'nav.screenshots': 'Скриншоты',
         'nav.download': 'Скачать',
         'hero.title': 'Бесплатный и мощный Modbus симулятор',
-        'hero.subtitle': 'Профессиональный симулятор Modbus Slave (Server) с поддержкой протоколов Modbus-TCP и Modbus-RTU',
+        'hero.subtitle': 'Профессиональный симулятор Modbus Slave (сервер) с поддержкой протоколов Modbus-TCP и Modbus-RTU',
         'hero.btn.download': 'Скачать',
         'hero.btn.github': 'Открыть на GitHub',
         'features.title': 'Возможности',
