@@ -1,0 +1,13 @@
+[Desktop Entry]
+Name=Open ModSim
+Comment=An Open Source Modbus Slave (Server) Utility
+Comment[zh]=一个开源的 Modbus 从站（服务器）实用程序
+Comment[zh_CN]=一个开源的 Modbus 从站（服务器）实用程序
+Comment[zh_TW]=一個開源的 Modbus 從站（伺服器）實用程序
+Comment[ru]=Программа Modbus Slave (сервер) с открытым исходным кодом
+Exec=@APP_EXEC@
+Icon=@APP_ICON@
+Terminal=false
+Type=Application
+Categories=Utility;
+StartupNotify=true

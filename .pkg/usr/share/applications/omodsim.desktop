@@ -1,9 +1,0 @@
-[Desktop Entry]
-Name=Open ModSim
-Comment=An Open Source Modbus Slave (Server) Utility
-Exec=/opt/OpenModSim/omodsim.sh
-Icon=omodsim
-Terminal=false
-Type=Application
-Categories=Utility;
-StartupNotify=true

@@ -6,9 +6,9 @@
 
 Open ModSim is a free implimentation of modbus slave (server) utility for modbus-tcp and modbus-rtu protocols.
 
-<img width="1292" height="759" alt="изображение" src="https://github.com/user-attachments/assets/5e3bb093-1d12-48e6-89fa-e688d08fa0be" />
+<img width="1292" height="759" alt="image" src="https://github.com/user-attachments/assets/5e3bb093-1d12-48e6-89fa-e688d08fa0be" />
 
-<img width="1292" height="759" alt="изображение" src="https://github.com/user-attachments/assets/2e5ca631-b219-44a6-9983-9a3367d71d51" />
+<img width="1292" height="759" alt="image" src="https://github.com/user-attachments/assets/2e5ca631-b219-44a6-9983-9a3367d71d51" />
 
 
 # Features
@@ -49,7 +49,7 @@ The following simulations are available:
 
 # Modbus Logging
 
-<img width="1292" height="759" alt="изображение" src="https://github.com/user-attachments/assets/6bfa6030-a0ed-4155-93a7-f7a1208e87b6" />
+<img width="1292" height="759" alt="image" src="https://github.com/user-attachments/assets/4bfad217-2d0c-4d14-a8c2-f434d7ac93e4" />
 
 
 # Extended Featues
@@ -70,7 +70,7 @@ The following simulations are available:
 # Scripting
   From version 1.2.0 Open ModSim supports scripting. Qt runtime implements the [ECMAScript Language Specification](http://www.ecma-international.org/publications/standards/Ecma-262.htm) standard, so Javascript is used to write code.
   
-<img width="1292" height="759" alt="image" src="https://github.com/user-attachments/assets/54c0994c-4a24-4425-9b7b-cbbc6b8656b1" />
+<img width="1288" height="749" alt="image" src="https://github.com/user-attachments/assets/6f37b58a-798c-4b45-ad88-165ad5a373c2" />
 
   Scripts can be launched in two modes: Once or Periodically. If you run script in Once mode the script will stop after it finishes executing. In Periodically mode, the script will start after a certain period of time until the user stops it or the method is called
   ```javascript
@@ -131,41 +131,86 @@ Script.onInit(init);
 ```
 
 # Building
-  Now building is available via cmake (with installed Qt version 5.15 and above) or Qt Creator. Supports both OS Microsoft Windows and Linux.
+  Building is available via cmake (with installed Qt version 5.15 and above) or Qt Creator. Supports both OS Microsoft Windows and Linux.
+
+## Microsoft Windows Building
+
+The minimum supported version of Microsoft Windows for building OpenModSim from sources is Windows 10.
+
+1. Install latest [git](https://git-scm.com/downloads/win) version
+2. Run Windows PowerShell terminal as an Administrator
+3. Clone OpenModSim sources from github repository
+```powershell
+git clone https://github.com/sanny32/OpenModSim.git
+```
+4. Go to OpenModSim folder
+```powershell
+cd OpenModSim
+```
+5. Allow script execution in PowerShell terminal
+```powershell
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+```
+6. Run the build script
+```powershell
+.\build.ps1
+```
+If you need to specify Qt framework major version (5 or 6), you can do it in the parameters
+  - `.\build.ps1 -qt5` or  `.\build.ps1 -qt6`
+
+The build script supports building the application only for 64-bit architecture.
+
+## Linux Building
+1. Install [git](https://git-scm.com/downloads/linux) for your Linux distribution
+2. Run the following commands from the console:
+```bash
+git clone https://github.com/sanny32/OpenModSim.git
+```
+```bash
+cd OpenModSim
+```
+```bash
+./build.sh
+```
+
+If you need to specify Qt framework major version (5 or 6), you can do it in the parameters
+  - `./build.sh -qt5` or  `./build.sh -qt6`
 
 # About supported operating systems
 
 The following minimum operating system versions are supported for OpenModSim:
-- Microsoft Windows 7
-- Debian Linux 11
-- Ubuntu Linux 22.04
-- Mint Linux 22
-- Fedora Linux 41
-- Rocky Linux 9.7
-- OpenSuse Linux 15.6
-- Alt Linux 11
-- Astra Linux 1.7
-- RedOS 8
 
+- <img src="docs/icons/logo_windows7.svg" width="16" height="16" /> **Microsoft Windows 7**
+- <img src="docs/icons/logo_debian.svg" width="16" height="16" /> **Debian Linux 11**
+- <img src="docs/icons/logo_ubuntu.svg" width="16" height="16" /> **Ubuntu Linux 22.04**
+- <img src="docs/icons/logo_mint.png"  width="16" height="16" /> **Mint Linux 22**
+- <img src="docs/icons/logo_zorin.png" width="16" height="16" /> **Zorin OS 18**
+- <img src="docs/icons/logo_fedora.svg" width="16" height="16" /> **Fedora Linux 41**
+- <img src="docs/icons/logo_rocky.png" width="16" height="16" /> **Rocky Linux 9.7**
+- <img src="docs/icons/logo_opensuse.svg" width="16" height="16" /> **OpenSuse Linux 15.6**
+- <img src="docs/icons/logo_alt.png" width="16" height="16" /> **Alt Linux 11**
+- <img src="docs/icons/logo_astra.png"  width="18" height="18" /> **Astra Linux 1.7**
+- <img src="docs/icons/logo_redos.png" width="16" height="16" /> **RedOS 8**
+  
 # Install from [binary distributions](https://github.com/sanny32/OpenModSim/releases/latest)
 
 Below are the methods for installing the OpenModSim for different OS
 
-## Microsoft Windows
+## <img src="docs/icons/logo_windows.svg" width="16" height="16"> Microsoft Windows
 Run the installer:
 
-- For 32-bit Windows: `qt5-omodsim_1.11.2_x86.exe`
-- For 64-bit Windows: `qt5-omodsim_1.11.2_x64.exe` or `qt6-omodsim_1.11.2_x64.exe`
+- For 32-bit Windows: `qt5-omodsim_1.12.0_x86.exe`
+- For 64-bit Windows: `qt5-omodsim_1.12.0_x64.exe` or `qt6-omodsim_1.12.0_x64.exe`
 
-## Debian/Ubintu/Mint/Astra Linux
+## <img src="docs/icons/logo_debian.svg" width="20" height="20"> Debian / <img src="docs/icons/logo_ubuntu.svg" width="20" height="20"> Ubuntu / <img width="20" height="20" src="docs/icons/logo_mint.png" /> Mint / <img src="docs/icons/logo_zorin.png" width="20" height="20"> Zorin / <img width="22" height="22" src="docs/icons/logo_astra.png" /> Astra Linux
 ### Install
 Install the DEB package from the command line:
 ```bash
-sudo apt install ./qt6-omodsim_1.11.2-1_amd64.deb
+sudo apt install ./qt6-omodsim_1.12.0-1_amd64.deb
 ```
 or if you want to use Qt5 libraries:
 ```bash
-sudo apt install ./qt5-omodsim_1.11.2-1_amd64.deb
+sudo apt install ./qt5-omodsim_1.12.0-1_amd64.deb
 ```
 
 ### Remove
@@ -178,11 +223,11 @@ or for Qt5 package:
 sudo apt remove qt5-omodsim
 ```
 
-## RedHat/Fedora/Rocky/RedOS Linux
+## <img src="docs/icons/logo_redhat.svg" width="24" height="24"> RedHat / <img src="docs/icons/logo_fedora.svg" width="20" height="20"> Fedora / <img src="docs/icons/logo_rocky.png" width="20" height="20"> Rocky / <img width="20" height="20" src="docs/icons/logo_redos.png" /> RedOS Linux
 ### Install
 Install the RPM package from the command line:
 ```bash
-sudo dnf install ./qt6-omodsim-1.11.2-1.x86_64.rpm
+sudo dnf install ./qt6-omodsim-1.12.0-1.x86_64.rpm
 ```
 
 ### Remove
@@ -191,11 +236,11 @@ To remove the RPM package run:
 sudo dnf remove qt6-omodsim
 ```
 
-## Alt Linux
+## <img src="docs/icons/logo_alt.png" width="24" height="24"> Alt Linux
 ### Install
 Install the RPM package from the command line as root user:
 ```bash
-apt-get install ./qt6-omodsim-1.11.2-1.x86_64.rpm
+apt-get install ./qt6-omodsim-1.12.0-1.x86_64.rpm
 ```
 
 ### Remove
@@ -204,7 +249,7 @@ To remove the RPM package run as root user:
 apt-get remove qt6-omodsim
 ```
 
-## SUSE/OpenSUSE Linux
+## <img width="20" height="20" src="docs/icons/logo_suse.png" /> SUSE / <img src="docs/icons/logo_opensuse.svg" width="24" height="24" /> OpenSUSE Linux
 ### Install
 Import qt6-omodsim.rpm.pubkey to rpm repository:
 ```bash
@@ -212,7 +257,7 @@ sudo rpm --import qt6-omodsim.rpm.pubkey
 ```
 Install the RPM package using Zypper:
 ```bash
-sudo zypper install ./qt6-omodsim-1.11.2-1.x86_64.rpm
+sudo zypper install ./qt6-omodsim-1.12.0-1.x86_64.rpm
 ```
 
 ### Remove
@@ -221,8 +266,8 @@ To remove the RPM package run:
 sudo zypper remove qt6-omodsim
 ```
   
-## MIT License
-Copyright 2025 Alexandr Ananev [mail@ananev.org]
+# MIT License
+Copyright 2023-2026 Alexandr Ananev [mail@ananev.org]
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
