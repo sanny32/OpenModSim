@@ -33,6 +33,7 @@ void StatisticWidget::changeEvent(QEvent* event)
     {
         ui->retranslateUi(this);
         setLogState(_logState);
+        updateStatistic();
     }
 
     QWidget::changeEvent(event);
