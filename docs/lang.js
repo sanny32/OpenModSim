@@ -222,10 +222,10 @@ const translations = {
 };
 
 const langMeta = {
-    en:    { flag: '🇺🇸', name: 'English' },
-    ru:    { flag: '🇷🇺', name: 'Русский' },
-    zh_CN: { flag: '🇨🇳', name: '简体中文' },
-    zh_TW: { flag: '🇹🇼', name: '繁體中文' }
+    en:    { flag: 'https://flagcdn.com/w20/us.png', name: 'English' },
+    ru:    { flag: 'https://flagcdn.com/w20/ru.png', name: 'Русский' },
+    zh_CN: { flag: 'https://flagcdn.com/w20/cn.png', name: '简体中文' },
+    zh_TW: { flag: 'https://flagcdn.com/w20/tw.png', name: '繁體中文' }
 };
 
 function detectBrowserLang() {
@@ -253,7 +253,7 @@ function applyTranslations(lang) {
     const meta = langMeta[lang] || langMeta['en'];
     const flagEl = document.querySelector('.lang-current-flag');
     const nameEl = document.querySelector('.lang-current-name');
-    if (flagEl) flagEl.textContent = meta.flag;
+    if (flagEl) flagEl.src = meta.flag;
     if (nameEl) nameEl.textContent = meta.name;
 
     // Mark active option
