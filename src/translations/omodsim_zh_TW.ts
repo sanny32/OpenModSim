@@ -3100,23 +3100,23 @@ Script.onInit(()=&gt;{
         <translation>暫停</translation>
     </message>
     <message>
-        <location filename="../controls/statisticwidget.cpp" line="97"/>
-        <location filename="../controls/statisticwidget.cpp" line="101"/>
+        <location filename="../controls/statisticwidget.cpp" line="98"/>
+        <location filename="../controls/statisticwidget.cpp" line="102"/>
         <source>Pause Logging</source>
         <translation>暫停日誌記錄</translation>
     </message>
     <message>
-        <location filename="../controls/statisticwidget.cpp" line="105"/>
+        <location filename="../controls/statisticwidget.cpp" line="106"/>
         <source>Resume Logging</source>
         <translation>恢復日誌記錄</translation>
     </message>
     <message>
-        <location filename="../controls/statisticwidget.cpp" line="138"/>
+        <location filename="../controls/statisticwidget.cpp" line="139"/>
         <source>Requests: %1</source>
         <translation>請求：%1</translation>
     </message>
     <message>
-        <location filename="../controls/statisticwidget.cpp" line="139"/>
+        <location filename="../controls/statisticwidget.cpp" line="140"/>
         <source>Responses: %1</source>
         <translation>響應：%1</translation>
     </message>
