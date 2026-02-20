@@ -23,6 +23,7 @@ const translations = {
         'screenshots.title': 'Screenshots',
         'download.title': 'Download OpenModSim',
         'download.subtitle': 'Get the latest version for your platform',
+        'download.subtitle.version': 'Get the latest version ({version}) for your platform',
         'card.windows.title': 'Windows Installer',
         'card.sysreq.title': 'System Requirements',
         'card.deb.title': 'Linux DEB Packages',
@@ -78,6 +79,7 @@ const translations = {
         'screenshots.title': 'Скриншоты',
         'download.title': 'Скачать OpenModSim',
         'download.subtitle': 'Получите последнюю версию для вашей платформы',
+        'download.subtitle.version': 'Получите последнюю версию ({version}) для вашей платформы',
         'card.windows.title': 'Установщик Windows',
         'card.sysreq.title': 'Системные требования',
         'card.deb.title': 'Пакеты Linux DEB',
@@ -133,6 +135,7 @@ const translations = {
         'screenshots.title': '截图',
         'download.title': '下载 OpenModSim',
         'download.subtitle': '获取适合您平台的最新版本',
+        'download.subtitle.version': '获取适合您平台的最新版本（{version}）',
         'card.windows.title': 'Windows 安装程序',
         'card.sysreq.title': '系统要求',
         'card.deb.title': 'Linux DEB 软件包',
@@ -188,6 +191,7 @@ const translations = {
         'screenshots.title': '截圖',
         'download.title': '下載 OpenModSim',
         'download.subtitle': '獲取適合您平台的最新版本',
+        'download.subtitle.version': '獲取適合您平台的最新版本（{version}）',
         'card.windows.title': 'Windows 安裝程式',
         'card.sysreq.title': '系統需求',
         'card.deb.title': 'Linux DEB 套件',
@@ -271,9 +275,26 @@ function applyTranslations(lang) {
         img.src = `screenshot-${name}.${lang}.png`;
     });
 
+    // Update subtitle with version if already fetched
+    if (window.releaseVersion && t['download.subtitle.version']) {
+        const subtitle = document.querySelector('.download-subtitle');
+        if (subtitle) subtitle.textContent = t['download.subtitle.version'].replace('{version}', window.releaseVersion);
+    }
+
     document.documentElement.lang = lang.replace('_', '-');
     localStorage.setItem('omodsim-lang', lang);
 }
+
+window.updateSubtitleWithVersion = function(version) {
+    window.releaseVersion = version;
+    const lang = localStorage.getItem('omodsim-lang') || 'en';
+    const t = translations[lang] || translations['en'];
+    const key = 'download.subtitle.version';
+    if (t[key]) {
+        const subtitle = document.querySelector('.download-subtitle');
+        if (subtitle) subtitle.textContent = t[key].replace('{version}', version);
+    }
+};
 
 document.addEventListener('DOMContentLoaded', () => {
     const dropdown = document.getElementById('langDropdown');
