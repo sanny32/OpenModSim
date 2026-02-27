@@ -141,6 +141,7 @@ set(SOURCES
     controls/simulationmodecombobox.cpp
     controls/statisticwidget.cpp
     controls/transpscrollarea.cpp
+    datadelegate.cpp
     datasimulator.cpp
     dialogs/dialogautosimulation.cpp
     dialogs/dialogcoilsimulation.cpp
@@ -225,6 +226,7 @@ set(HEADERS
     controls/simulationmodecombobox.h
     controls/statisticwidget.h
     controls/transpscrollarea.h
+    datadelegate.h
     datasimulator.h
     dialogs/dialogautosimulation.h
     dialogs/dialogcoilsimulation.h
