@@ -144,6 +144,7 @@ signals:
     void closing();
     void byteOrderChanged(ByteOrder);
     void codepageChanged(const QString&);
+    void definitionChanged();
     void pointTypeChanged(QModbusDataUnit::RegisterType);
     void displayModeChanged(DisplayMode mode);
     void scriptSettingsChanged(const ScriptSettings&);

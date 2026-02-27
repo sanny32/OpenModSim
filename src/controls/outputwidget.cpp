@@ -4,7 +4,6 @@
 #include <QInputDialog>
 #include "fontutils.h"
 #include "formatutils.h"
-#include "htmldelegate.h"
 #include "outputwidget.h"
 #include "ui_outputwidget.h"
 
@@ -42,33 +41,6 @@ const int ValueRole = Qt::UserRole + 6;
 /// \brief ColorRole
 ///
 const int ColorRole = Qt::UserRole + 7;
-
-///
-/// \brief htmlPad
-/// \param count
-/// \return
-///
-QString htmlPad(int count)
-{
-    return QString("&nbsp;").repeated(count);
-}
-
-///
-/// \brief normalizeHtml
-/// \param s
-/// \return
-///
-QString normalizeHtml(const QString& s)
-{
-    QString out = s;
-    out.replace("&", "&amp;");
-    out.replace("<", "&lt;");
-    out.replace(">", "&gt;");
-    out.replace("\"", "&quot;");
-    out.replace("'", "&#39;");
-    out.replace(" ", "&nbsp;");
-    return out;
-}
 
 ///
 /// \brief OutputListModel::OutputListModel
@@ -119,32 +91,36 @@ QVariant OutputListModel::data(const QModelIndex& index, int role) const
     {
         case Qt::DisplayRole:
         {
-            const auto fg = itemData.FgColor.isValid() ? itemData.FgColor : _parentWidget->foregroundColor();
-            const auto bg = itemData.BgColor.isValid() ? itemData.BgColor : _parentWidget->backgroundColor();
-
-            const QString base = QString("%1: %2").arg(addrStr, itemData.ValueStr);
-            const int targetLen = base.length() + _columnsDistance;
-
-            QString descr = itemData.Description;
-            if (!descr.isEmpty())
+            QString descr;
+            if (!itemData.Description.isEmpty())
             {
-                const QString prefix = "; ";
-                const int freeSpace = targetLen - (base.length() + prefix.length());
-
+                const auto freeSpace = _columnsDistance - 2;
                 if (freeSpace > 0)
                 {
-                    if (descr.length() > freeSpace)
-                        descr = descr.left(freeSpace - 4) + "...";
-
-                    descr = prefix + descr;
+                    descr = QStringLiteral("; ");
+                    if (itemData.Description.length() > freeSpace)
+                    {
+                        if (freeSpace > 3)
+                        {
+                            descr += itemData.Description.left(freeSpace - 3);
+                            descr += QStringLiteral("...");
+                        }
+                    }
+                    else
+                    {
+                        descr += itemData.Description;
+                    }
                 }
             }
-
-            const int pad = targetLen - (base.length() + descr.length());
-            return QString(
-                       "<span style=\"background-color:%1; color:%2\">%3</span><span>%4%5</span>"
-                       ).arg(bg.name(), fg.name(), normalizeHtml(base), normalizeHtml(descr), (pad > 0) ? htmlPad(pad) : "");
+            const auto pad = _columnsDistance - descr.length();
+            return addrStr + QStringLiteral(": ") + itemData.ValueStr + descr + QStringLiteral(" ").repeated(pad);
         }
+
+        case Qt::ForegroundRole:
+            return QBrush(itemData.FgColor.isValid() ? itemData.FgColor : _parentWidget->foregroundColor());
+
+        case Qt::BackgroundRole:
+            return QBrush(itemData.BgColor.isValid() ? itemData.BgColor : _parentWidget->backgroundColor());
 
         case CaptureRole:
             return QString(itemData.ValueStr).remove('<').remove('>');
@@ -440,7 +416,7 @@ OutputWidget::OutputWidget(QWidget *parent) :
     ui->setupUi(this);
     ui->stackedWidget->setCurrentIndex(0);
     ui->listView->setModel(_listModel.get());
-    ui->listView->setItemDelegate(new HtmlDelegate(this));
+    ui->listView->setItemDelegate(new QStyledItemDelegate(this));
     ui->labelStatus->setAutoFillBackground(true);
 
     setFont(defaultMonospaceFont());

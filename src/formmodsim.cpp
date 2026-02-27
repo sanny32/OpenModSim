@@ -55,7 +55,9 @@ FormModSim::FormModSim(int id, ModbusMultiServer& server, QSharedPointer<DataSim
     ui->comboBoxAddressBase->setCurrentAddressBase(AddressBase::Base1);
     ui->comboBoxModbusPointType->setCurrentPointType(QModbusDataUnit::HoldingRegisters);
 
-    onDefinitionChanged();
+    connect(this, &FormModSim::definitionChanged, &FormModSim::onDefinitionChanged);
+    emit definitionChanged();
+
     ui->outputWidget->setFocus();
     connect(ui->outputWidget, &OutputWidget::startTextCaptureError, this, &FormModSim::captureError);
 
@@ -217,7 +219,7 @@ void FormModSim::setDisplayDefinition(const DisplayDefinition& dd)
 
     setDisplayHexAddresses(dd.HexAddress);
 
-    onDefinitionChanged();
+    emit definitionChanged();
 }
 
 ///
@@ -816,7 +818,7 @@ void FormModSim::show()
 ///
 void FormModSim::on_lineEditAddress_valueChanged(const QVariant&)
 {
-   onDefinitionChanged();
+   emit definitionChanged();
 }
 
 ///
@@ -824,7 +826,7 @@ void FormModSim::on_lineEditAddress_valueChanged(const QVariant&)
 ///
 void FormModSim::on_lineEditLength_valueChanged(const QVariant&)
 {
-    onDefinitionChanged();
+    emit definitionChanged();
 }
 
 ///
@@ -835,7 +837,7 @@ void FormModSim::on_lineEditDeviceId_valueChanged(const QVariant& oldValue, cons
     _mbMultiServer.removeDeviceId(oldValue.toInt());
     _mbMultiServer.addDeviceId(newValue.toInt());
 
-    onDefinitionChanged();
+    emit definitionChanged();
 }
 
 ///
@@ -855,7 +857,7 @@ void FormModSim::on_comboBoxAddressBase_addressBaseChanged(AddressBase base)
 ///
 void FormModSim::on_comboBoxModbusPointType_pointTypeChanged(QModbusDataUnit::RegisterType type)
 {
-    onDefinitionChanged();
+    emit definitionChanged();
     emit pointTypeChanged(type);
 }
 
