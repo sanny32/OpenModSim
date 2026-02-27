@@ -215,6 +215,8 @@ inline QSettings& operator <<(QSettings& out, FormModSim* frm)
     out.setValue("Codepage", frm->codepage());
     out << frm->scriptSettings();
     out << frm->scriptControl();
+    out << frm->descriptionMap();
+    out << frm->colorMap();
 
     return out;
 }
@@ -248,6 +250,26 @@ inline QSettings& operator >>(QSettings& in, FormModSim* frm)
     in >> scriptSettings;
 
     in >> frm->scriptControl();
+
+    if(version >= QVersionNumber(1, 15))
+    {
+        AddressDescriptionMap2 map;
+        in >> map;
+        for(auto it = map.cbegin(); it != map.cend(); ++it)
+        {
+            frm->setDescription(it.key().DeviceId, it.key().Type, it.key().Address, it.value());
+        }
+    }
+
+    if(version >= QVersionNumber(1, 15))
+    {
+        AddressColorMap map;
+        in >> map;
+        for(auto it = map.cbegin(); it != map.cend(); ++it)
+        {
+            frm->setColor(it.key().DeviceId, it.key().Type, it.key().Address, it.value());
+        }
+    }
 
     bool isMinimized;
     isMinimized = in.value("ViewMinimized").toBool();
@@ -611,46 +633,8 @@ inline QXmlStreamWriter& operator <<(QXmlStreamWriter& xml, FormModSim* frm)
 
     xml << frm->scriptControl();
     xml << frm->scriptSettings();
-
-    {
-        const auto descriptionMap = frm->descriptionMap();
-        xml.writeStartElement("AddressDescriptionMap");
-
-        for (auto it = descriptionMap.constBegin(); it != descriptionMap.constEnd(); ++it) {
-            const ItemMapKey& key = it.key();
-            const QString& description = it.value();
-
-            if(!description.isEmpty() && key.DeviceId == dd.DeviceId && key.Type == dd.PointType)
-            {
-                xml.writeStartElement("Description");
-                xml.writeAttribute("Address", QString::number(key.Address));
-                xml.writeCDATA(description);
-                xml.writeEndElement();
-            }
-        }
-
-        xml.writeEndElement(); // AddressDescriptionMap
-    }
-
-    {
-        const auto colorMap = frm->colorMap();
-        xml.writeStartElement("AddressColorMap");
-
-        for (auto it = colorMap.constBegin(); it != colorMap.constEnd(); ++it) {
-            const ItemMapKey& key = it.key();
-            const QColor& clr = it.value();
-
-            if(clr.isValid() && key.DeviceId == dd.DeviceId && key.Type == dd.PointType)
-            {
-                xml.writeStartElement("Color");
-                xml.writeAttribute("Address", QString::number(key.Address));
-                xml.writeAttribute("Value", clr.name());
-                xml.writeEndElement();
-            }
-        }
-
-        xml.writeEndElement(); // AddressColorMap
-    }
+    xml << frm->descriptionMap();
+    xml << frm->colorMap();
 
     {
         const auto unit = frm->serializeModbusDataUnit(dd.DeviceId, dd.PointType, dd.PointAddress - (dd.ZeroBasedAddress ? 0 : 1), dd.Length);
@@ -690,8 +674,6 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, FormModSim* frm)
         DataDisplayMode ddm;
         DisplayDefinition dd;
         QHash<quint16, quint16> data;
-        QHash<quint16, QColor> colors;
-        QHash<quint16, QString> descriptions;
         QHash<quint16, ModbusSimulationParams> simulations;
 
         const QXmlStreamAttributes attributes = xml.attributes();
@@ -847,43 +829,19 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, FormModSim* frm)
                 frm->setScriptSettings(settings);
             }
             else if (xml.name() == QLatin1String("AddressDescriptionMap")) {
-                while (xml.readNextStartElement()) {
-                    if (xml.name() == QLatin1String("Description")) {
-
-                        const QXmlStreamAttributes attributes = xml.attributes();
-                        bool ok; const quint16 address = attributes.value("Address").toUShort(&ok);
-
-                        if(ok) {
-                            QString description;
-                            if (xml.isCDATA()) {
-                                description = xml.readElementText(QXmlStreamReader::IncludeChildElements);
-                            } else {
-                                description = xml.readElementText();
-                            }
-                            descriptions[address] = description;
-                        }
-
-                    } else {
-                        xml.skipCurrentElement();
-                    }
+                AddressDescriptionMap2 map;
+                xml >> map;
+                for(auto it = map.cbegin(); it != map.cend(); ++it)
+                {
+                    frm->setDescription(it.key().DeviceId, it.key().Type, it.key().Address, it.value());
                 }
             }
             else if (xml.name() == QLatin1String("AddressColorMap")) {
-                while (xml.readNextStartElement()) {
-                    if (xml.name() == QLatin1String("Color")) {
-
-                        const QXmlStreamAttributes attributes = xml.attributes();
-                        bool ok; const quint16 address = attributes.value("Address").toUShort(&ok);
-
-                        if(ok) {
-                            const QString value = attributes.value("Value").toString();
-                            if(!value.isEmpty()) colors[address] = QColor(value);
-                        }
-                        xml.skipCurrentElement();
-
-                    } else {
-                        xml.skipCurrentElement();
-                    }
+                AddressColorMap map;
+                xml >> map;
+                for(auto it = map.cbegin(); it != map.cend(); ++it)
+                {
+                    frm->setColor(it.key().DeviceId, it.key().Type, it.key().Address, it.value());
                 }
             }
             else if (xml.name() == QLatin1String("ModbusDataUnit")) {
@@ -927,22 +885,6 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, FormModSim* frm)
                             break;
                         default: break;
                     }
-                }
-            }
-
-            if(!descriptions.isEmpty()) {
-                QHashIterator it(descriptions);
-                while(it.hasNext()) {
-                    const auto item = it.next();
-                    frm->setDescription(dd.DeviceId, dd.PointType, item.key(), item.value());
-                }
-            }
-
-            if(!colors.isEmpty()) {
-                QHashIterator it(colors);
-                while(it.hasNext()) {
-                    const auto item = it.next();
-                    frm->setColor(dd.DeviceId, dd.PointType, item.key(), item.value());
                 }
             }
 
