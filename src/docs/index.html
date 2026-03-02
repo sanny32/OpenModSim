@@ -139,6 +139,7 @@
 				<li><a href="#server.noresponse">Server.noResponse</a></li>
 				<li><a href="#server.onchange">Server.onChange</a></li>
 				<li><a href="#server.onerror">Server.onError</a></li>
+				<li><a href="#server.onrequest">Server.onRequest</a></li>
 				<li><a href="#server.readcoil">Server.readCoil</a></li>
 				<li><a href="#server.readdiscrete">Server.readDiscrete</a></li>
 				<li><a href="#server.readinput">Server.readInput</a></li>
@@ -704,6 +705,54 @@
 			<dt id="server.onerror"><code>Server.onError(deviceId, functionRef)</code></dt>
 			<dd>
 				<p>Executes a <code>functionRef(error)</code> when an error occurred for <code>deviceId</code>.</p>
+			</dd>
+			<dt id="server.onrequest"><code>Server.onRequest(functionRef)</code></dt>
+			<dd>
+				<p>Registers a callback <code>functionRef(request)</code> that is called for every incoming Modbus request <strong>before</strong> default processing. This allows intercepting and customizing the response for any function code.</p>
+				<p>The <code>request</code> object always contains:</p>
+				<ul>
+					<li><code>deviceId</code> &mdash; server device address (integer)</li>
+					<li><code>functionCode</code> &mdash; Modbus function code (integer)</li>
+					<li><code>data</code> &mdash; raw PDU data bytes (array of integers 0&ndash;255)</li>
+				</ul>
+				<p>Depending on the function code, additional convenience properties are provided:</p>
+				<table class="reference-table">
+					<tr><th>FC</th><th>Name</th><th>Properties</th></tr>
+					<tr><td>1</td><td>ReadCoils</td><td><code>address</code>, <code>count</code></td></tr>
+					<tr><td>2</td><td>ReadDiscreteInputs</td><td><code>address</code>, <code>count</code></td></tr>
+					<tr><td>3</td><td>ReadHoldingRegisters</td><td><code>address</code>, <code>count</code></td></tr>
+					<tr><td>4</td><td>ReadInputRegisters</td><td><code>address</code>, <code>count</code></td></tr>
+					<tr><td>5</td><td>WriteSingleCoil</td><td><code>address</code>, <code>value</code></td></tr>
+					<tr><td>6</td><td>WriteSingleRegister</td><td><code>address</code>, <code>value</code></td></tr>
+					<tr><td>15</td><td>WriteMultipleCoils</td><td><code>address</code>, <code>count</code>, <code>values</code> (booleans)</td></tr>
+					<tr><td>16</td><td>WriteMultipleRegisters</td><td><code>address</code>, <code>count</code>, <code>values</code> (integers)</td></tr>
+					<tr><td>22</td><td>MaskWriteRegister</td><td><code>address</code>, <code>andMask</code>, <code>orMask</code></td></tr>
+					<tr><td>23</td><td>ReadWriteMultipleRegisters</td><td><code>readAddress</code>, <code>readCount</code>,<br><code>writeAddress</code>, <code>writeCount</code>,<br><code>values</code> (integers)</td></tr>
+				</table>
+				<p>The callback return value determines the response:</p>
+				<ul>
+					<li><code>null</code> or <code>undefined</code> &mdash; pass request to default handler</li>
+					<li><code>{ exception: N }</code> &mdash; return Modbus exception with code <code>N</code></li>
+					<li><code>{ data: [byte, ...] }</code> &mdash; return raw byte response (works for any function code)</li>
+					<li><code>[value, ...]</code> &mdash; return values for FC 1&ndash;4 (booleans for coils/discrete inputs, integers for registers)</li>
+				</ul>
+				<p><strong>Example:</strong></p>
+<pre><code>Server.onRequest(function(req) {
+    // Custom response for ReadHoldingRegisters
+    if (req.functionCode === 3) {
+        return [100, 200, 300];
+    }
+    // Handle ReportServerId with raw bytes
+    if (req.functionCode === 17) {
+        return { data: [0x01, 0xFF] };
+    }
+    // Reject unknown function codes
+    if (req.functionCode > 24) {
+        return { exception: 1 };
+    }
+    // Default handling for everything else
+    return null;
+});</code></pre>
 			</dd>
 			<dt id="server.readcoil"><code>Server.readCoil(address, deviceId)</code></dt>
 			<dd>
