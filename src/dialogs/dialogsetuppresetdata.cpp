@@ -24,6 +24,7 @@ DialogSetupPresetData::DialogSetupPresetData(SetupPresetParams& params,  QModbus
     ui->lineEditAddress->setInputRange(ModbusLimits::addressRange(params.AddrSpace, params.ZeroBasedAddress));
     ui->lineEditAddress->setValue(params.PointAddress);
 
+    ui->lineEditNumberOfPoints->setInputRange(ModbusLimits::lengthRange(params.PointAddress, params.ZeroBasedAddress, params.AddrSpace));
     ui->lineEditNumberOfPoints->setValue(params.Length);
 
     switch(pointType)
@@ -55,6 +56,20 @@ DialogSetupPresetData::~DialogSetupPresetData()
     delete ui;
 }
 
+
+///
+/// \brief DialogSetupPresetData::on_lineEditAddress_valueChanged
+///
+void DialogSetupPresetData::on_lineEditAddress_valueChanged(const QVariant&)
+{
+    const int address = ui->lineEditAddress->value<int>();
+    const auto lenRange = ModbusLimits::lengthRange(address, _params.ZeroBasedAddress, _params.AddrSpace);
+
+    ui->lineEditNumberOfPoints->setInputRange(lenRange);
+    if(ui->lineEditNumberOfPoints->value<int>() > lenRange.to()) {
+        ui->lineEditNumberOfPoints->setValue(lenRange.to());
+    }
+}
 
 ///
 /// \brief DialogSetupPresetData::accept

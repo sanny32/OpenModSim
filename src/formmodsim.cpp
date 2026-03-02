@@ -49,7 +49,7 @@ FormModSim::FormModSim(int id, ModbusMultiServer& server, QSharedPointer<DataSim
     ui->lineEditAddress->setInputRange(ModbusLimits::addressRange(mbDefs.AddrSpace, true));
     ui->lineEditAddress->setValue(0);
 
-    ui->lineEditLength->setInputRange(ModbusLimits::lengthRange());
+    ui->lineEditLength->setInputRange(ModbusLimits::lengthRange(0, true, mbDefs.AddrSpace));
     ui->lineEditLength->setValue(100);
 
     ui->comboBoxAddressBase->setCurrentAddressBase(AddressBase::Base1);
@@ -203,6 +203,7 @@ void FormModSim::setDisplayDefinition(const DisplayDefinition& dd)
 
     ui->lineEditLength->blockSignals(true);
     ui->lineEditLength->setLeadingZeroes(dd.LeadingZeros);
+    ui->lineEditLength->setInputRange(ModbusLimits::lengthRange(dd.PointAddress, dd.ZeroBasedAddress, defs.AddrSpace));
     ui->lineEditLength->setValue(dd.Length);
     ui->lineEditLength->blockSignals(false);
 
@@ -816,7 +817,18 @@ void FormModSim::show()
 ///
 void FormModSim::on_lineEditAddress_valueChanged(const QVariant&)
 {
-   onDefinitionChanged();
+    const auto defs = _mbMultiServer.getModbusDefinitions();
+    const bool zeroBased = (ui->comboBoxAddressBase->currentAddressBase() == AddressBase::Base0);
+    const int address = ui->lineEditAddress->value<int>();
+    const auto lenRange = ModbusLimits::lengthRange(address, zeroBased, defs.AddrSpace);
+
+    ui->lineEditLength->setInputRange(lenRange);
+    if(ui->lineEditLength->value<int>() > lenRange.to()) {
+        ui->lineEditLength->setValue(lenRange.to());
+        ui->lineEditLength->update();
+    }
+
+    onDefinitionChanged();
 }
 
 ///
@@ -1110,6 +1122,7 @@ void FormModSim::on_mbDefinitionsChanged(const ModbusDefinitions& defs)
     const auto dd = displayDefinition();
     const auto addr = dd.PointAddress - (dd.ZeroBasedAddress ? 0 : 1);
     ui->lineEditAddress->setInputRange(ModbusLimits::addressRange(defs.AddrSpace, dd.ZeroBasedAddress));
+    ui->lineEditLength->setInputRange(ModbusLimits::lengthRange(dd.PointAddress, dd.ZeroBasedAddress, defs.AddrSpace));
     ui->outputWidget->setup(dd, _dataSimulator->simulationMap(), _mbMultiServer.data(dd.DeviceId, dd.PointType, addr, dd.Length));
 }
 

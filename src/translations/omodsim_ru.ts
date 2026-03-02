@@ -1267,22 +1267,22 @@
         <translation>Количество точек: </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogsetuppresetdata.cpp" line="32"/>
+        <location filename="../dialogs/dialogsetuppresetdata.cpp" line="33"/>
         <source>PRESET COILS</source>
         <translation>Предустановка Coils</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogsetuppresetdata.cpp" line="35"/>
+        <location filename="../dialogs/dialogsetuppresetdata.cpp" line="36"/>
         <source>PRESET DISCRETE INPUTS</source>
         <translation>Предустановка Discretes</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogsetuppresetdata.cpp" line="38"/>
+        <location filename="../dialogs/dialogsetuppresetdata.cpp" line="39"/>
         <source>PRESET INPUT REGISTERS</source>
         <translation>Предустановка Input регистров</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogsetuppresetdata.cpp" line="41"/>
+        <location filename="../dialogs/dialogsetuppresetdata.cpp" line="42"/>
         <source>PRESET HOLDING REGISTERS</source>
         <translation>Предустановка Holding регистров</translation>
     </message>
@@ -1610,7 +1610,7 @@ Length: %2</source>
         <translation type="vanished">Указана недопустимая длина данных</translation>
     </message>
     <message>
-        <location filename="../formmodsim.cpp" line="510"/>
+        <location filename="../formmodsim.cpp" line="511"/>
         <source>Address Base: %1
 Start Address: %2
 Length: %3</source>
@@ -1619,7 +1619,7 @@ Length: %3</source>
 Количество: %3</translation>
     </message>
     <message>
-        <location filename="../formmodsim.cpp" line="513"/>
+        <location filename="../formmodsim.cpp" line="514"/>
         <source>Device Id: %1
 MODBUS Point Type:
 %2</source>

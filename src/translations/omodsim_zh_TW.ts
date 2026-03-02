@@ -1271,22 +1271,22 @@
         <translation>點數： </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogsetuppresetdata.cpp" line="32"/>
+        <location filename="../dialogs/dialogsetuppresetdata.cpp" line="33"/>
         <source>PRESET COILS</source>
         <translation>預設線圈</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogsetuppresetdata.cpp" line="35"/>
+        <location filename="../dialogs/dialogsetuppresetdata.cpp" line="36"/>
         <source>PRESET DISCRETE INPUTS</source>
         <translation>預設離散輸入</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogsetuppresetdata.cpp" line="38"/>
+        <location filename="../dialogs/dialogsetuppresetdata.cpp" line="39"/>
         <source>PRESET INPUT REGISTERS</source>
         <translation>預設輸入暫存器</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogsetuppresetdata.cpp" line="41"/>
+        <location filename="../dialogs/dialogsetuppresetdata.cpp" line="42"/>
         <source>PRESET HOLDING REGISTERS</source>
         <translation>預設保持暫存器</translation>
     </message>
@@ -1614,7 +1614,7 @@ Length: %2</source>
         <translation type="vanished">指定了非法的数据长度</translation>
     </message>
     <message>
-        <location filename="../formmodsim.cpp" line="510"/>
+        <location filename="../formmodsim.cpp" line="511"/>
         <source>Address Base: %1
 Start Address: %2
 Length: %3</source>
@@ -1623,7 +1623,7 @@ Length: %3</source>
 長度: %3</translation>
     </message>
     <message>
-        <location filename="../formmodsim.cpp" line="513"/>
+        <location filename="../formmodsim.cpp" line="514"/>
         <source>Device Id: %1
 MODBUS Point Type:
 %2</source>
