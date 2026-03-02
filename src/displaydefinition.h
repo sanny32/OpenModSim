@@ -30,7 +30,8 @@ struct DisplayDefinition
         DeviceId = qMax<quint8>(ModbusLimits::slaveRange().from(), DeviceId);
         PointAddress = qMax<quint16>(ModbusLimits::addressRange(AddrSpace, ZeroBasedAddress).from(), PointAddress);
         PointType = qBound(QModbusDataUnit::DiscreteInputs, PointType, QModbusDataUnit::HoldingRegisters);
-        Length = qBound<quint16>(ModbusLimits::lengthRange().from(), Length, ModbusLimits::lengthRange().to());
+        Length = qBound<quint16>(ModbusLimits::lengthRange().from(), Length,
+                                 (quint16)ModbusLimits::lengthRange(PointAddress, ZeroBasedAddress, AddrSpace).to());
         LogViewLimit = qBound<quint16>(4, LogViewLimit, 1000);
         DataViewColumnsDistance = qBound<quint16>(1, DataViewColumnsDistance, 32);
     }

@@ -24,7 +24,7 @@ DialogDisplayDefinition::DialogDisplayDefinition(DisplayDefinition dd, QWidget* 
 
     ui->lineEditPointAddress->setInputMode(dd.HexAddress ? NumericLineEdit::HexMode : NumericLineEdit::Int32Mode);
     ui->lineEditPointAddress->setInputRange(ModbusLimits::addressRange(dd.AddrSpace, dd.ZeroBasedAddress));
-    ui->lineEditLength->setInputRange(ModbusLimits::lengthRange());
+    ui->lineEditLength->setInputRange(ModbusLimits::lengthRange(dd.PointAddress, dd.ZeroBasedAddress, dd.AddrSpace));
     ui->lineEditSlaveAddress->setInputRange(ModbusLimits::slaveRange());
     ui->lineEditLogLimit->setInputRange(4, 1000);
     ui->checkBoxAutoscrollLog->setChecked(dd.AutoscrollLog);
@@ -72,10 +72,42 @@ void DialogDisplayDefinition::accept()
 /// \brief DialogDisplayDefinition::on_comboBoxAddressBase_currentIndexChanged
 /// \param index
 ///
+void DialogDisplayDefinition::on_lineEditPointAddress_valueChanged(const QVariant&)
+{
+    const auto addrSpace = _displayDefinition.AddrSpace;
+    const bool zeroBased = (ui->comboBoxAddressBase->currentAddressBase() == AddressBase::Base0);
+    const int address = ui->lineEditPointAddress->value<int>();
+    const auto lenRange = ModbusLimits::lengthRange(address, zeroBased, addrSpace);
+
+    ui->lineEditLength->setInputRange(lenRange);
+    if(ui->lineEditLength->value<int>() > lenRange.to()) {
+        ui->lineEditLength->setValue(lenRange.to());
+        ui->lineEditLength->update();
+    }
+}
+
+///
+/// \brief DialogDisplayDefinition::on_lineEditLength_valueChanged
+///
+void DialogDisplayDefinition::on_lineEditLength_valueChanged(const QVariant&)
+{
+}
+
+///
+/// \brief DialogDisplayDefinition::on_comboBoxAddressBase_addressBaseChanged
+/// \param base
+///
 void DialogDisplayDefinition::on_comboBoxAddressBase_addressBaseChanged(AddressBase base)
 {
+    const auto addrSpace = _displayDefinition.AddrSpace;
+    const bool zeroBased = (base == AddressBase::Base0);
     const auto addr = ui->lineEditPointAddress->value<int>();
 
-    ui->lineEditPointAddress->setInputRange(ModbusLimits::addressRange(_displayDefinition.AddrSpace, base == AddressBase::Base0));
+    ui->lineEditPointAddress->setInputRange(ModbusLimits::addressRange(addrSpace, zeroBased));
     ui->lineEditPointAddress->setValue(base == AddressBase::Base1 ? qMax(1, addr + 1) : qMax(0, addr - 1));
+    const int newAddr = ui->lineEditPointAddress->value<int>();
+    const auto lenRange = ModbusLimits::lengthRange(newAddr, zeroBased, addrSpace);
+    ui->lineEditLength->setInputRange(lenRange);
+    if(ui->lineEditLength->value<int>() > lenRange.to())
+        ui->lineEditLength->setValue(lenRange.to());
 }
