@@ -1,40 +1,40 @@
 /* ── Base ────────────────────────────────────────────────────── */
 body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-                 Helvetica, Arial, sans-serif;
-    font-size: 15px;
-    line-height: 1.6;
-    color: #1a1a1a;
-    padding: 0 1em 2em;
-    max-width: 56em;
+    font-family: "Segoe UI", Arial, Helvetica, sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    color: #404244;
+    padding: 0 0.8em 2em;
 }
 
 /* ── Headings ────────────────────────────────────────────────── */
 h1.title {
-    margin: 1.2em 0 0.4em 0;
-    padding: 0.25em 0;
-    font-weight: 700;
-    font-size: 1.6em;
-    color: #1a1a1a;
-    border-bottom: 2px solid #007330;
+    margin: 0.8em 0 0.5em 0;
+    padding: 0 0 0.3em 0;
+    font-weight: 400;
+    font-size: 1.8em;
+    color: #404244;
+    border-bottom: 1px solid #ccc;
 }
 h2, p.h2 {
-    padding: 0.2em 0;
-    margin: 1.4em 0 0.8em 0;
-    font-weight: 600;
-    font-size: 1.15em;
-    color: #333;
+    padding: 0;
+    margin: 1.5em 0 0.5em 0;
+    font-weight: 400;
+    font-size: 1.25em;
+    color: #404244;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 0.2em;
 }
 h3 {
-    margin: 1.2em 0 0.8em 0;
-    font-weight: 600;
-    font-size: 1.05em;
-    color: #444;
+    margin: 1.2em 0 0.5em 0;
+    font-weight: 700;
+    font-size: 1em;
+    color: #404244;
 }
 
 /* ── Text ────────────────────────────────────────────────────── */
 p {
-    margin: 0.6em 0 0.6em 0.5em;
+    margin: 0.5em 0 0.5em 0;
 }
 strong {
     font-weight: 700;
@@ -50,35 +50,43 @@ sup {
 
 /* ── Links ───────────────────────────────────────────────────── */
 a:link, a:visited {
-    color: #007330;
+    color: #007af4;
     text-decoration: none;
 }
 a:hover {
+    color: #007af4;
     text-decoration: underline;
 }
 a > strong {
     font-weight: 700;
 }
 
-/* ── Navigation list ─────────────────────────────────────────── */
+/* ── Navigation (TOC) ────────────────────────────────────────── */
 ul.level1 {
-    margin: 0.3em 0 1em 0.3em;
+    margin: 0.2em 0 1.5em 0;
     padding: 0;
+    border-left: 2px solid #ddd;
+    padding-left: 0.8em;
 }
 ul.level1 > li.object {
     list-style: none;
-    margin-bottom: 0.1em;
+    margin-bottom: 0.2em;
+}
+ul.level1 > li.object > a > strong {
+    font-size: 1em;
+    font-weight: 700;
+    color: #404244;
 }
 ul.level2 {
-    margin: 0 0 0.3em 0;
-    padding-left: 0.8em;
+    margin: 0.1em 0 0.4em 0;
+    padding-left: 0.6em;
 }
 ul.level2 li {
     margin-left: 0;
     margin-bottom: 0;
     list-style-type: none;
-    font-size: 0.85em;
-    line-height: 1.3;
+    font-size: 0.9em;
+    line-height: 1.35;
 }
 ul.level3 {
     margin: 0 0 0.1em 0;
@@ -94,7 +102,7 @@ ul.level3 li {
 
 /* ── Content lists ───────────────────────────────────────────── */
 ul li, ol li {
-    margin-bottom: 0.15em;
+    margin-bottom: 0.2em;
 }
 ul > li {
     list-style-type: disc;
@@ -109,41 +117,43 @@ li.object {
 
 /* ── Code ────────────────────────────────────────────────────── */
 code {
-    font-family: "Consolas", "Source Code Pro", Courier, monospace;
+    font-family: "Consolas", "Courier New", monospace;
     font-weight: 400;
-    font-size: 0.9em;
-    color: #007330;
-    background: #f4f8f5;
-    border-radius: 3px;
-    padding: 0.1em 0.35em;
+    font-size: 0.95em;
+    color: #404244;
+    background: #f6f7f8;
+    border-radius: 2px;
+    padding: 0.1em 0.3em;
 }
 pre {
-    background: #f5f5f5;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    padding: 0.8em 1em;
-    margin: 0.6em 0 0.6em 0.5em;
+    background: #f6f7f8;
+    border: none;
+    border-left: 3px solid #41cd52;
+    border-radius: 0;
+    padding: 0.6em 1em;
+    margin: 0.5em 0;
     overflow-x: auto;
-    line-height: 1.5;
+    line-height: 1.45;
 }
 pre code {
     padding: 0;
     background: none;
-    color: #333;
-    font-size: 0.88em;
+    color: #404244;
+    font-size: 0.92em;
 }
 
 /* ── Articles ────────────────────────────────────────────────── */
 .article-content {
     margin-top: 2em;
-    padding-top: 1.2em;
-    border-top: 1px solid #e0e0e0;
+    padding-top: 0;
 }
 .article-header h1 {
-    font-weight: 700;
-    font-size: 1.4em;
-    color: #007330;
-    margin: 0 0 0.3em 0;
+    font-weight: 400;
+    font-size: 1.6em;
+    color: #404244;
+    margin: 0 0 0.1em 0;
+    padding-bottom: 0.25em;
+    border-bottom: 1px solid #ccc;
 }
 
 /* ── Sections ────────────────────────────────────────────────── */
@@ -151,58 +161,61 @@ section {
     margin-top: 0.5em;
 }
 .section-content {
-    margin-left: 0.3em;
+    margin-left: 0;
 }
 
 /* ── Definition lists ────────────────────────────────────────── */
 dt {
-    margin-top: 1.1em;
-    font-weight: 500;
+    margin-top: 1.2em;
+    padding: 0.2em 0;
+    font-weight: 700;
 }
 dt code {
-    font-size: 0.95em;
-    font-weight: 500;
-    background: #eef5f0;
-    padding: 0.15em 0.4em;
+    font-size: 1em;
+    font-weight: 700;
+    color: #007af4;
+    background: none;
+    padding: 0;
 }
 dd {
-    margin-left: 1.5em;
+    margin-left: 1.2em;
 }
 dd p {
-    margin: 0.3em 0 0.3em 0;
+    margin: 0.3em 0;
 }
 
 /* ── Tables ──────────────────────────────────────────────────── */
 table.reference-table {
     border-collapse: collapse;
-    margin: 0.6em 0 0.6em 0.5em;
-    font-size: 0.9em;
+    margin: 0.6em 0;
+    font-size: 0.95em;
     width: auto;
 }
 table.reference-table th,
 table.reference-table td {
-    border: 1px solid #ccc;
-    padding: 0.4em 0.7em;
+    border: 1px solid #ddd;
+    padding: 0.35em 0.6em;
     text-align: left;
     vertical-align: top;
 }
 table.reference-table th {
-    background: #f0f0f0;
-    font-weight: 600;
+    background: #f6f7f8;
+    font-weight: 700;
+    color: #404244;
 }
 table.reference-table tr:nth-child(even) {
-    background: #fafafa;
+    background: #fafbfc;
 }
 
 /* ── Notecards ───────────────────────────────────────────────── */
 .notecard.note {
-    background: #f0f8f0;
-    border-left: 3px solid #007330;
-    border-radius: 0 4px 4px 0;
+    background: #f6f7f8;
+    border-left: 3px solid #41cd52;
+    border-radius: 0;
     padding: 0.4em 0.8em;
-    margin: 0.6em 0 0.6em 0.5em;
+    margin: 0.6em 0;
     font-size: 0.93em;
 }
 .notecard.note p {
-    margin: 0.3em 0;
+    margin: 0.25em 0;
 }
