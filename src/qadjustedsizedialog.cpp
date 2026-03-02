@@ -1,28 +1,28 @@
-#include "qfixedsizedialog.h"
+#include "qadjustedsizedialog.h"
 
 ///
-/// \brief QFixedSizeDialog::QFixedSizeDialog
+/// \brief QAdjustedSizeDialog::QAdjustedSizeDialog
 /// \param parent
 /// \param f
 ///
-QFixedSizeDialog::QFixedSizeDialog(QWidget *parent, Qt::WindowFlags f)
+QAdjustedSizeDialog::QAdjustedSizeDialog(QWidget *parent, Qt::WindowFlags f)
     :QDialog(parent, f)
 {
     setWindowModality(Qt::WindowModal);
 }
 
 ///
-/// \brief QFixedSizeDialog::showEvent
+/// \brief QAdjustedSizeDialog::showEvent
 /// \param e
 ///
-void QFixedSizeDialog::showEvent(QShowEvent* e)
+void QAdjustedSizeDialog::showEvent(QShowEvent* e)
 {
     QDialog::showEvent(e);
 
     if(!_shown) {
         _shown = true;
-        setFixedSize(sizeHint());
 
+        adjustSize();
         if(auto pw = parentWidget() ? parentWidget()->window() : nullptr)
         {
             const auto center = pw->mapToGlobal(pw->rect().center());

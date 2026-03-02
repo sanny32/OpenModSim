@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.16)
 
 project(omodsim
-        VERSION 1.12.0
+        VERSION 1.12.1
         DESCRIPTION "An Open Source Modbus Slave (Server) Utility"
         LANGUAGES CXX)
 
@@ -167,6 +167,7 @@ set(SOURCES
     modbusserver.cpp
     modbustcpserver.cpp
     modbusmultiserver.cpp
+    qadjustedsizedialog.cpp
     qfixedsizedialog.cpp
     qhexvalidator.cpp
     qint64validator.cpp
@@ -276,6 +277,7 @@ set(HEADERS
     modbuswriteparams.h
     numericutils.h
     pch.h
+    qadjustedsizedialog.h
     qfixedsizedialog.h
     qhexvalidator.h
     qint64validator.h
@@ -290,6 +292,7 @@ set(HEADERS
     scriptsettings.h
     serialportutils.h
     tscrollarea.h
+    uiutils.h
     windowactionlist.h
 )
 
