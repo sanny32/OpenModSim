@@ -28,6 +28,8 @@ public:
     void addUnitMap(int id, quint8 deviceId, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, quint16 length);
     void removeUnitMap(int id, quint8 deviceId);
 
+    void setRequestHandler(const RequestHandlerPtr& handler);
+
     void connectDevice(const ConnectionDetails& cd);
     void disconnectDevice(ConnectionType type, const QString& port);
     void closeConnections();
@@ -97,6 +99,7 @@ private:
     QList<int> _deviceIds;
     QThread* _workerThread;
     ModbusDefinitions _definitions;
+    RequestHandlerPtr _requestHandler;
     QMap<int, ModbusDataUnitMap> _modbusDataUnitMaps;
     QList<QSharedPointer<ModbusServer>> _modbusServerList;
 };

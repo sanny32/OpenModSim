@@ -492,6 +492,13 @@ void ModbusServer::processDefinitionsChanges()
 ///
 QModbusResponse ModbusServer::processRequest(const QModbusPdu &request, int serverAddress)
 {
+    if (_requestHandler)
+    {
+        QModbusResponse jsResponse;
+        if ((*_requestHandler)(request, serverAddress, jsResponse))
+            return jsResponse;
+    }
+
     switch (request.functionCode()) {
     case QModbusRequest::ReadCoils:
         return processReadCoilsRequest(request, serverAddress);
