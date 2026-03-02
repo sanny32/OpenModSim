@@ -238,7 +238,42 @@ private:
     QSharedPointer<OutputListModel> _listModel;
 };
 
+///
+/// \brief operator <<
+/// \param out
+/// \param key
+/// \return
+///
+inline QDataStream& operator <<(QDataStream& out, const ItemMapKey& key)
+{
+    out << key.DeviceId;
+    out << key.Type;
+    out << key.Address;
 
+    return out;
+}
+
+///
+/// \brief operator >>
+/// \param in
+/// \param params
+/// \return
+///
+inline QDataStream& operator >>(QDataStream& in, ItemMapKey& key)
+{
+    in >> key.DeviceId;
+    in >> key.Type;
+    in >> key.Address;
+
+    return in;
+}
+
+///
+/// \brief operator <<
+/// \param out
+/// \param map
+/// \return
+///
 inline QSettings& operator<<(QSettings& out, const AddressDescriptionMap2& map)
 {
     QByteArray array;
@@ -249,6 +284,12 @@ inline QSettings& operator<<(QSettings& out, const AddressDescriptionMap2& map)
     return out;
 }
 
+///
+/// \brief operator >>
+/// \param in
+/// \param map
+/// \return
+///
 inline QSettings& operator>>(QSettings& in, AddressDescriptionMap2& map)
 {
     const auto array = in.value("AddressDescriptionMap").toByteArray();
@@ -261,6 +302,12 @@ inline QSettings& operator>>(QSettings& in, AddressDescriptionMap2& map)
     return in;
 }
 
+///
+/// \brief operator <<
+/// \param out
+/// \param map
+/// \return
+///
 inline QSettings& operator<<(QSettings& out, const AddressColorMap& map)
 {
     QByteArray array;
@@ -271,6 +318,12 @@ inline QSettings& operator<<(QSettings& out, const AddressColorMap& map)
     return out;
 }
 
+///
+/// \brief operator >>
+/// \param in
+/// \param map
+/// \return
+///
 inline QSettings& operator>>(QSettings& in, AddressColorMap& map)
 {
     const auto array = in.value("AddressColorMap").toByteArray();
@@ -283,6 +336,12 @@ inline QSettings& operator>>(QSettings& in, AddressColorMap& map)
     return in;
 }
 
+///
+/// \brief operator <<
+/// \param out
+/// \param map
+/// \return
+///
 inline QXmlStreamWriter& operator<<(QXmlStreamWriter& out, const AddressDescriptionMap2& map)
 {
     out.writeStartElement("AddressDescriptionMap");
@@ -303,6 +362,12 @@ inline QXmlStreamWriter& operator<<(QXmlStreamWriter& out, const AddressDescript
     return out;
 }
 
+///
+/// \brief operator >>
+/// \param in
+/// \param map
+/// \return
+///
 inline QXmlStreamReader& operator>>(QXmlStreamReader& in, AddressDescriptionMap2& map)
 {
     while (in.readNextStartElement())
@@ -341,6 +406,12 @@ inline QXmlStreamReader& operator>>(QXmlStreamReader& in, AddressDescriptionMap2
     return in;
 }
 
+///
+/// \brief operator <<
+/// \param out
+/// \param map
+/// \return
+///
 inline QXmlStreamWriter& operator<<(QXmlStreamWriter& out, const AddressColorMap& map)
 {
     out.writeStartElement("AddressColorMap");
@@ -361,6 +432,12 @@ inline QXmlStreamWriter& operator<<(QXmlStreamWriter& out, const AddressColorMap
     return out;
 }
 
+///
+/// \brief operator >>
+/// \param in
+/// \param map
+/// \return
+///
 inline QXmlStreamReader& operator>>(QXmlStreamReader& in, AddressColorMap& map)
 {
     while(in.readNextStartElement())
@@ -393,34 +470,5 @@ inline QXmlStreamReader& operator>>(QXmlStreamReader& in, AddressColorMap& map)
     return in;
 }
 
-///
-/// \brief operator <<
-/// \param out
-/// \param key
-/// \return
-///
-inline QDataStream& operator <<(QDataStream& out, const ItemMapKey& key)
-{
-    out << key.DeviceId;
-    out << key.Type;
-    out << key.Address;
-
-    return out;
-}
-
-///
-/// \brief operator >>
-/// \param in
-/// \param params
-/// \return
-///
-inline QDataStream& operator >>(QDataStream& in, ItemMapKey& key)
-{
-    in >> key.DeviceId;
-    in >> key.Type;
-    in >> key.Address;
-
-    return in;
-}
 
 #endif // OUTPUTWIDGET_H
