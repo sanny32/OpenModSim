@@ -69,5 +69,6 @@
         <file>res/icon-simulation-16bit.svg</file>
         <file>res/icon-simulation-32bit.svg</file>
         <file>res/icon-simulation-64bit.svg</file>
+        <file>res/icon-increment.svg</file>
     </qresource>
 </RCC>

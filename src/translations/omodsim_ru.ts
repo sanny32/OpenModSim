@@ -731,12 +731,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="223"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="227"/>
         <source>From:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="323"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="327"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Starting Address: &lt;span style=&quot; font-weight:700;&quot;&gt;%1 &lt;/span&gt;→ Ending Address: &lt;span style=&quot; font-weight:700;&quot;&gt;%2&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -753,7 +753,7 @@
         <translation type="vanished">Начало:</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="246"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="250"/>
         <source>Step:</source>
         <translation>Шаг:</translation>
     </message>
@@ -782,50 +782,50 @@
         <translation type="vanished">Количество: %1</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="43"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="44"/>
         <source>PRESET INPUT REGISTERS</source>
         <translation>Предустановка регистров ввода (3x)</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="46"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="47"/>
         <source>PRESET HOLDING REGISTERS</source>
         <translation>Предустановка регистров хранения (4x)</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="762"/>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="843"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="715"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="796"/>
         <source>CSV files (*.csv)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="769"/>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="854"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="722"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="807"/>
         <source>Error</source>
         <translation type="unfinished">Ошибка</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="810"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="763"/>
         <source>Import error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="810"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="763"/>
         <source>Invalid value: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="819"/>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="825"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="772"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="778"/>
         <source>Warning</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="819"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="772"/>
         <source>No data found in file.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="825"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="778"/>
         <source>Imported data size (%1) does not match current size (%2).</source>
         <translation type="unfinished"></translation>
     </message>

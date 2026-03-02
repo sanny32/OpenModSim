@@ -209,11 +209,15 @@
           <property name="minimumSize">
            <size>
             <width>120</width>
-            <height>0</height>
+            <height>26</height>
            </size>
           </property>
           <property name="text">
            <string>Increment Value</string>
+          </property>
+          <property name="icon">
+           <iconset resource="../resources.qrc">
+            <normaloff>:/res/icon-increment.svg</normaloff>:/res/icon-increment.svg</iconset>
           </property>
          </widget>
         </item>
