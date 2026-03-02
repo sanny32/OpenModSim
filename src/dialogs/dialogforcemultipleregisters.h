@@ -5,6 +5,7 @@
 #include <QVariant>
 #include <QTableWidgetItem>
 #include <QModbusDataUnit>
+#include "qadjustedsizedialog.h"
 #include "numericlineedit.h"
 #include "modbuswriteparams.h"
 
@@ -15,7 +16,7 @@ class DialogForceMultipleRegisters;
 ///
 /// \brief The DialogForceMultipleRegisters class
 ///
-class DialogForceMultipleRegisters : public QDialog
+class DialogForceMultipleRegisters : public QAdjustedSizeDialog
 {
     Q_OBJECT
 

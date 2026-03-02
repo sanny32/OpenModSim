@@ -13,7 +13,7 @@
 /// \param parent
 ///
 DialogForceMultipleCoils::DialogForceMultipleCoils(ModbusWriteParams& params, QModbusDataUnit::RegisterType type, int length, bool hexAddress, QWidget *parent) :
-      QDialog(parent)
+      QAdjustedSizeDialog(parent)
     , ui(new Ui::DialogForceMultipleCoils)
     ,_writeParams(params)
     ,_type(type)
