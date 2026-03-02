@@ -236,21 +236,7 @@ QModbusResponse ModbusTcpServer::forwardProcessRequest(const QModbusRequest &r, 
         return QModbusExceptionResponse(r.functionCode(), QModbusExceptionResponse::ServerDeviceBusy);
     }
 
-    QModbusResponse resp;
-    switch (r.functionCode()) {
-    case QModbusRequest::ReadExceptionStatus:
-    case QModbusRequest::Diagnostics:
-    case QModbusRequest::GetCommEventCounter:
-    case QModbusRequest::GetCommEventLog:
-    case QModbusRequest::ReportServerId:
-        resp = QModbusExceptionResponse(r.functionCode(), QModbusExceptionResponse::IllegalFunction);
-        break;
-    default:
-        resp = ModbusServer::processRequest(r, serverAddress);
-        break;
-    }
-
-    return resp;
+    return ModbusServer::processRequest(r, serverAddress);
 }
 
 ///

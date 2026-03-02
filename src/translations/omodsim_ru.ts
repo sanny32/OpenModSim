@@ -2902,7 +2902,7 @@ Script.onInit(()=&gt;{
 <context>
     <name>ModbusTcpServer</name>
     <message>
-        <location filename="../modbustcpserver.cpp" line="271"/>
+        <location filename="../modbustcpserver.cpp" line="257"/>
         <source>Invalid connection settings for TCP communication specified.</source>
         <translation>Указаны некорректные настройки для TCP соединения.</translation>
     </message>

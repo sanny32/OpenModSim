@@ -648,6 +648,13 @@ bool Server::runJsHandler(const JsCallStatePtr& state, const QModbusPdu& pdu, in
     jsRequest.setProperty("functionCode",  static_cast<int>(pdu.functionCode()));
 
     const auto data = pdu.data();
+
+    // Always expose raw PDU data bytes as a JS array
+    QJSValue jsData = state->engine->newArray(data.size());
+    for(int i = 0; i < data.size(); i++)
+        jsData.setProperty(i, static_cast<int>(quint8(data[i])));
+    jsRequest.setProperty("data", jsData);
+
     switch(pdu.functionCode())
     {
         case QModbusPdu::ReadCoils:
@@ -675,13 +682,73 @@ bool Server::runJsHandler(const JsCallStatePtr& state, const QModbusPdu& pdu, in
         break;
 
         case QModbusPdu::WriteMultipleCoils:
+            if(data.size() >= 5)
+            {
+                const quint16 addr  = (quint8(data[0]) << 8) | quint8(data[1]);
+                const quint16 count = (quint8(data[2]) << 8) | quint8(data[3]);
+                const quint8 byteCount = quint8(data[4]);
+                jsRequest.setProperty("address", addr);
+                jsRequest.setProperty("count",   count);
+
+                QJSValue jsValues = state->engine->newArray(count);
+                for(int i = 0; i < count && (i / 8) < byteCount && (5 + i / 8) < data.size(); i++)
+                {
+                    const bool bitVal = (quint8(data[5 + i / 8]) >> (i % 8)) & 1;
+                    jsValues.setProperty(i, bitVal);
+                }
+                jsRequest.setProperty("values", jsValues);
+            }
+        break;
+
         case QModbusPdu::WriteMultipleRegisters:
-            if(data.size() >= 4)
+            if(data.size() >= 5)
             {
                 const quint16 addr  = (quint8(data[0]) << 8) | quint8(data[1]);
                 const quint16 count = (quint8(data[2]) << 8) | quint8(data[3]);
                 jsRequest.setProperty("address", addr);
                 jsRequest.setProperty("count",   count);
+
+                QJSValue jsValues = state->engine->newArray(count);
+                for(int i = 0; i < count && (5 + i * 2 + 1) < data.size(); i++)
+                {
+                    const quint16 v = (quint8(data[5 + i * 2]) << 8) | quint8(data[5 + i * 2 + 1]);
+                    jsValues.setProperty(i, v);
+                }
+                jsRequest.setProperty("values", jsValues);
+            }
+        break;
+
+        case QModbusPdu::MaskWriteRegister:
+            if(data.size() >= 6)
+            {
+                const quint16 addr    = (quint8(data[0]) << 8) | quint8(data[1]);
+                const quint16 andMask = (quint8(data[2]) << 8) | quint8(data[3]);
+                const quint16 orMask  = (quint8(data[4]) << 8) | quint8(data[5]);
+                jsRequest.setProperty("address", addr);
+                jsRequest.setProperty("andMask", andMask);
+                jsRequest.setProperty("orMask",  orMask);
+            }
+        break;
+
+        case QModbusPdu::ReadWriteMultipleRegisters:
+            if(data.size() >= 9)
+            {
+                const quint16 readAddr   = (quint8(data[0]) << 8) | quint8(data[1]);
+                const quint16 readCount  = (quint8(data[2]) << 8) | quint8(data[3]);
+                const quint16 writeAddr  = (quint8(data[4]) << 8) | quint8(data[5]);
+                const quint16 writeCount = (quint8(data[6]) << 8) | quint8(data[7]);
+                jsRequest.setProperty("readAddress",  readAddr);
+                jsRequest.setProperty("readCount",    readCount);
+                jsRequest.setProperty("writeAddress", writeAddr);
+                jsRequest.setProperty("writeCount",   writeCount);
+
+                QJSValue jsValues = state->engine->newArray(writeCount);
+                for(int i = 0; i < writeCount && (9 + i * 2 + 1) < data.size(); i++)
+                {
+                    const quint16 v = (quint8(data[9 + i * 2]) << 8) | quint8(data[9 + i * 2 + 1]);
+                    jsValues.setProperty(i, v);
+                }
+                jsRequest.setProperty("values", jsValues);
             }
         break;
 
@@ -705,6 +772,21 @@ bool Server::runJsHandler(const JsCallStatePtr& state, const QModbusPdu& pdu, in
         response = QModbusExceptionResponse(pdu.functionCode(),
                        static_cast<QModbusExceptionResponse::ExceptionCode>(exCode));
         return true;
+    }
+
+    // Raw data response: { data: [byte1, byte2, ...] }
+    if(result.isObject() && result.hasProperty("data"))
+    {
+        QJSValue jsRespData = result.property("data");
+        if(jsRespData.isArray())
+        {
+            QByteArray respData;
+            const int len = jsRespData.property("length").toInt();
+            for(int i = 0; i < len; i++)
+                respData.append(char(jsRespData.property(i).toInt()));
+            response = QModbusResponse(pdu.functionCode(), respData);
+            return true;
+        }
     }
 
     // Normal response: array of values

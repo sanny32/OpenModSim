@@ -2908,7 +2908,7 @@ Script.onInit(()=&gt;{
 <context>
     <name>ModbusTcpServer</name>
     <message>
-        <location filename="../modbustcpserver.cpp" line="271"/>
+        <location filename="../modbustcpserver.cpp" line="257"/>
         <source>Invalid connection settings for TCP communication specified.</source>
         <translation>指定的 TCP 通讯连接设定无效。</translation>
     </message>
