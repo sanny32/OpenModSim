@@ -31,11 +31,35 @@ private slots:
     void on_pushButtonRandom_clicked();
     void on_pushButtonValue_clicked();
     void on_pushButtonInc_clicked();
+    void on_pushButtonImport_clicked();
+    void on_pushButtonExport_clicked();
 
 private:
+    enum class ValueOperation {
+        Set,
+        Add,
+        Subtract,
+        Multiply,
+        Divide
+    };
+
     void updateTableWidget();
     QLineEdit* createLineEdit();
     NumericLineEdit* createNumEdit(int idx);
+
+    template<typename T>
+    void applyValue(T value, int index, ValueOperation op)
+    {
+        switch(op)
+        {
+        case ValueOperation::Set:       _data[index] = value; break;
+        case ValueOperation::Add:       _data[index] += value; break;
+        case ValueOperation::Subtract:  _data[index] -= value; break;
+        case ValueOperation::Multiply:  _data[index] *= value; break;
+        case ValueOperation::Divide:    _data[index] /= value; break;
+        }
+    }
+    void applyToAll(ValueOperation op, double value);
 
     template<typename T>
     void setupLineEdit(NumericLineEdit* edit, NumericLineEdit::InputMode mode,

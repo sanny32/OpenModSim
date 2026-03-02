@@ -9,13 +9,15 @@
 ///
 struct ModbusWriteParams
 {
+    quint32 DeviceId;
     quint16 Address;
     QVariant Value;
     DataDisplayMode DisplayMode;
+    AddressSpace AddrSpace = AddressSpace::Addr6Digits;
     ByteOrder Order;
     QString Codepage;
     bool ZeroBasedAddress;
-    AddressSpace AddrSpace;
+    bool LeadingZeros = false;
 };
 Q_DECLARE_METATYPE(ModbusWriteParams)
 
@@ -29,6 +31,7 @@ struct ModbusMaskWriteParams
     quint16 OrMask;
     bool ZeroBasedAddress;
     AddressSpace AddrSpace;
+    bool LeadingZeros = false;
 };
 Q_DECLARE_METATYPE(ModbusMaskWriteParams)
 

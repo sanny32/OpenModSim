@@ -924,12 +924,12 @@ void FormModSim::on_outputWidget_itemDoubleClicked(quint16 addr, const QVariant&
         case QModbusDataUnit::Coils:
         case QModbusDataUnit::DiscreteInputs:
         {
-            ModbusWriteParams params = { addr, value, mode, byteOrder(), codepage(), zeroBasedAddress, addrSpace };
+            ModbusWriteParams params = { deviceId, addr, value, mode, addrSpace, byteOrder(), codepage(), zeroBasedAddress };
             DialogWriteCoilRegister dlg(params, simParams, displayHexAddresses(), _parent);
             switch(dlg.exec())
             {
                 case QDialog::Accepted:
-                    _mbMultiServer.writeRegister(deviceId, pointType, params);
+                    _mbMultiServer.writeRegister(pointType, params);
                 break;
 
                 case 2:
@@ -947,12 +947,12 @@ void FormModSim::on_outputWidget_itemDoubleClicked(quint16 addr, const QVariant&
                 simParams.Mode = SimulationMode::Disabled;
             }
 
-            ModbusWriteParams params = { addr, value, mode, byteOrder(), codepage(), zeroBasedAddress, addrSpace };
+            ModbusWriteParams params = { deviceId, addr, value, mode, addrSpace, byteOrder(), codepage(), zeroBasedAddress };
             if(mode == DataDisplayMode::Binary)
             {
                 DialogWriteHoldingRegisterBits dlg(params, displayHexAddresses(), _parent);
                 if(dlg.exec() == QDialog::Accepted)
-                    _mbMultiServer.writeRegister(deviceId, pointType, params);
+                    _mbMultiServer.writeRegister(pointType, params);
             }
             else
             {
@@ -960,7 +960,7 @@ void FormModSim::on_outputWidget_itemDoubleClicked(quint16 addr, const QVariant&
                 switch(dlg.exec())
                 {
                     case QDialog::Accepted:
-                        _mbMultiServer.writeRegister(deviceId, pointType, params);
+                        _mbMultiServer.writeRegister(pointType, params);
                     break;
 
                     case 2:
@@ -1159,7 +1159,8 @@ void FormModSim::on_dataSimulated(DataDisplayMode mode, quint8 deviceId, QModbus
     const auto pointAddr = dd.PointAddress - (dd.ZeroBasedAddress ? 0 : 1);
     if(deviceId == dd.DeviceId && type == dd.PointType && startAddress >= pointAddr && startAddress <= pointAddr + dd.Length)
     {
-        _mbMultiServer.writeRegister(dd.DeviceId, type, { startAddress, value, mode, byteOrder(), codepage(), true });
+        const ModbusWriteParams params = { dd.DeviceId, startAddress, value, mode, dd.AddrSpace, byteOrder(), codepage(), true };
+        _mbMultiServer.writeRegister(type, params);
     }
 }
 

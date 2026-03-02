@@ -553,29 +553,70 @@
     <name>DialogForceMultipleCoils</name>
     <message>
         <location filename="../dialogs/dialogforcemultiplecoils.ui" line="20"/>
-        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="30"/>
+        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="28"/>
         <source>FORCE MULTIPLE COILS</source>
         <translation>強制多個線圈</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultiplecoils.ui" line="28"/>
+        <location filename="../dialogs/dialogforcemultiplecoils.ui" line="33"/>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Device Id: &lt;span style=&quot; font-weight:700;&quot;&gt;%1&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcemultiplecoils.ui" line="40"/>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Starting Address: &lt;span style=&quot; font-weight:700;&quot;&gt;%1&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcemultiplecoils.ui" line="47"/>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Length: &lt;span style=&quot; font-weight:700;&quot;&gt;%1&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcemultiplecoils.ui" line="81"/>
+        <source>Import</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcemultiplecoils.ui" line="104"/>
+        <source>Export</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcemultiplecoils.ui" line="126"/>
+        <source>Reset</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcemultiplecoils.ui" line="143"/>
+        <source>Set</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcemultiplecoils.ui" line="163"/>
+        <source>Random</source>
+        <translation type="unfinished">隨機數</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcemultiplecoils.ui" line="226"/>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Starting Address: &lt;span style=&quot; font-weight:700;&quot;&gt;%1 &lt;/span&gt;→ Ending Address: &lt;span style=&quot; font-weight:700;&quot;&gt;%2&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Address: </source>
-        <translation>地址： </translation>
+        <translation type="vanished">地址： </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultiplecoils.ui" line="82"/>
         <source>Set Values to 0</source>
-        <translation>將值設定為0</translation>
+        <translation type="vanished">將值設定為0</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultiplecoils.ui" line="89"/>
         <source>Set Values to 1</source>
-        <translation>將值設定為1</translation>
+        <translation type="vanished">將值設定為1</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultiplecoils.ui" line="96"/>
         <source>Length: </source>
-        <translation>長度： </translation>
+        <translation type="vanished">長度： </translation>
     </message>
     <message>
         <source>Address: %1</source>
@@ -586,19 +627,55 @@
         <translation type="vanished">长度：%1</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="33"/>
+        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="31"/>
         <source>FORCE DISCRETE INPUTS</source>
         <translation>強制離散輸入</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="39"/>
-        <source>Address: &lt;b&gt;%1&lt;/b&gt;</source>
-        <translation>地址：&lt;b&gt;%1&lt;/b&gt;</translation>
+        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="114"/>
+        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="188"/>
+        <source>CSV files (*.csv)</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="40"/>
+        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="121"/>
+        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="199"/>
+        <source>Error</source>
+        <translation type="unfinished">錯誤</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="155"/>
+        <source>Import error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="155"/>
+        <source>Invalid value: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="164"/>
+        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="170"/>
+        <source>Warning</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="164"/>
+        <source>No data found in file.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="170"/>
+        <source>Imported data size (%1) does not match current size (%2).</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Address: &lt;b&gt;%1&lt;/b&gt;</source>
+        <translation type="vanished">地址：&lt;b&gt;%1&lt;/b&gt;</translation>
+    </message>
+    <message>
         <source>Length: &lt;b&gt;%1&lt;/b&gt;</source>
-        <translation>長度：&lt;b&gt;%1&lt;/b&gt;</translation>
+        <translation type="vanished">長度：&lt;b&gt;%1&lt;/b&gt;</translation>
     </message>
 </context>
 <context>
@@ -609,44 +686,92 @@
         <translation>預設多個暫存器</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="63"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="33"/>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Device Id: &lt;span style=&quot; font-weight:700;&quot;&gt;%1&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="40"/>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Starting Address: &lt;span style=&quot; font-weight:700;&quot;&gt;%1&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="47"/>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Length: &lt;span style=&quot; font-weight:700;&quot;&gt;%1&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="81"/>
+        <source>Import</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="104"/>
+        <source>Export</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="133"/>
+        <source>Reset</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="150"/>
+        <source>Random</source>
+        <translation type="unfinished">隨機數</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="174"/>
+        <source>Constant Value</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="216"/>
+        <source>Increment Value</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="223"/>
+        <source>From:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="323"/>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Starting Address: &lt;span style=&quot; font-weight:700;&quot;&gt;%1 &lt;/span&gt;→ Ending Address: &lt;span style=&quot; font-weight:700;&quot;&gt;%2&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Set Value to</source>
-        <translation>將值設定為</translation>
+        <translation type="vanished">將值設定為</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="99"/>
         <source>Set Incremental Values</source>
-        <translation>設定增量值</translation>
+        <translation type="vanished">設定增量值</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="106"/>
         <source>Start:</source>
-        <translation>開始：</translation>
+        <translation type="vanished">開始：</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="129"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="246"/>
         <source>Step:</source>
         <translation>步：</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="35"/>
         <source>Length: </source>
-        <translation>長度： </translation>
+        <translation type="vanished">長度： </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="49"/>
         <source>Set Random Values</source>
-        <translation>設定隨機值</translation>
+        <translation type="vanished">設定隨機值</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="42"/>
         <source>Set Values to 0</source>
-        <translation>將值設定為0</translation>
+        <translation type="vanished">將值設定為0</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="28"/>
         <source>Address: </source>
-        <translation>地址： </translation>
+        <translation type="vanished">地址： </translation>
     </message>
     <message>
         <source>Address: %1</source>
@@ -657,24 +782,60 @@
         <translation type="vanished">长度：%1</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="32"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="43"/>
         <source>PRESET INPUT REGISTERS</source>
         <translation>預設輸入暫存器</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="35"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="46"/>
         <source>PRESET HOLDING REGISTERS</source>
         <translation>預設保持暫存器</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="41"/>
-        <source>Address: &lt;b&gt;%1&lt;/b&gt;</source>
-        <translation>地址：&lt;b&gt;%1&lt;/b&gt;</translation>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="762"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="843"/>
+        <source>CSV files (*.csv)</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="42"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="769"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="854"/>
+        <source>Error</source>
+        <translation type="unfinished">錯誤</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="810"/>
+        <source>Import error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="810"/>
+        <source>Invalid value: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="819"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="825"/>
+        <source>Warning</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="819"/>
+        <source>No data found in file.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="825"/>
+        <source>Imported data size (%1) does not match current size (%2).</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Address: &lt;b&gt;%1&lt;/b&gt;</source>
+        <translation type="vanished">地址：&lt;b&gt;%1&lt;/b&gt;</translation>
+    </message>
+    <message>
         <source>Length: &lt;b&gt;%1&lt;/b&gt;</source>
-        <translation>長度：&lt;b&gt;%1&lt;/b&gt;</translation>
+        <translation type="vanished">長度：&lt;b&gt;%1&lt;/b&gt;</translation>
     </message>
 </context>
 <context>
@@ -1096,31 +1257,36 @@
     <name>DialogSetupPresetData</name>
     <message>
         <location filename="../dialogs/dialogsetuppresetdata.ui" line="23"/>
+        <source>Device Id: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogsetuppresetdata.ui" line="46"/>
         <source>Address: </source>
         <translation>地址： </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogsetuppresetdata.ui" line="46"/>
+        <location filename="../dialogs/dialogsetuppresetdata.ui" line="69"/>
         <source>Number of Points: </source>
         <translation>點數： </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogsetuppresetdata.cpp" line="27"/>
+        <location filename="../dialogs/dialogsetuppresetdata.cpp" line="32"/>
         <source>PRESET COILS</source>
         <translation>預設線圈</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogsetuppresetdata.cpp" line="30"/>
+        <location filename="../dialogs/dialogsetuppresetdata.cpp" line="35"/>
         <source>PRESET DISCRETE INPUTS</source>
         <translation>預設離散輸入</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogsetuppresetdata.cpp" line="33"/>
+        <location filename="../dialogs/dialogsetuppresetdata.cpp" line="38"/>
         <source>PRESET INPUT REGISTERS</source>
         <translation>預設輸入暫存器</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogsetuppresetdata.cpp" line="36"/>
+        <location filename="../dialogs/dialogsetuppresetdata.cpp" line="41"/>
         <source>PRESET HOLDING REGISTERS</source>
         <translation>預設保持暫存器</translation>
     </message>
@@ -2148,7 +2314,7 @@ Script.onInit(()=&gt;{
         <translation>XML 檔案(*.xml)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1482"/>
+        <location filename="../mainwindow.cpp" line="1484"/>
         <source>Capture Error:<byte value="xd"/>
 %1</source>
         <translation>捕獲錯誤：
@@ -2750,77 +2916,77 @@ Script.onInit(()=&gt;{
 <context>
     <name>OutputWidget</name>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1110"/>
+        <location filename="../controls/outputwidget.cpp" line="1122"/>
         <source>Set Value of %1</source>
         <translation>將值寫入 %1</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1116"/>
+        <location filename="../controls/outputwidget.cpp" line="1128"/>
         <source>Add Description</source>
         <translation>添加描述</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1116"/>
+        <location filename="../controls/outputwidget.cpp" line="1128"/>
         <source>Edit Description</source>
         <translation>編輯描述</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1119"/>
+        <location filename="../controls/outputwidget.cpp" line="1131"/>
         <source>%1: Enter Description</source>
         <translation>%1:輸入描述</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1128"/>
+        <location filename="../controls/outputwidget.cpp" line="1140"/>
         <source>Remove Color</source>
         <translation>去除顏色</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1139"/>
+        <location filename="../controls/outputwidget.cpp" line="1151"/>
         <source>Yellow</source>
         <translation>黃色的</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1140"/>
+        <location filename="../controls/outputwidget.cpp" line="1152"/>
         <source>Cyan</source>
         <translation>青色</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1141"/>
+        <location filename="../controls/outputwidget.cpp" line="1153"/>
         <source>Magenta</source>
         <translation>品紅</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1142"/>
+        <location filename="../controls/outputwidget.cpp" line="1154"/>
         <source>LightGreen</source>
         <translation>淺綠色</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1143"/>
+        <location filename="../controls/outputwidget.cpp" line="1155"/>
         <source>Orange</source>
         <translation>橘子</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1144"/>
+        <location filename="../controls/outputwidget.cpp" line="1156"/>
         <source>LightBlue</source>
         <translation>淺藍色</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1145"/>
+        <location filename="../controls/outputwidget.cpp" line="1157"/>
         <source>LightGray</source>
         <translation>淺灰色</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1230"/>
+        <location filename="../controls/outputwidget.cpp" line="1242"/>
         <source>NOT CONNECTED!</source>
         <translation>未連線！</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1238"/>
+        <location filename="../controls/outputwidget.cpp" line="1250"/>
         <source>Invalid Data Length Specified</source>
         <translation>指定的資料長度無效</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1285"/>
+        <location filename="../controls/outputwidget.cpp" line="1297"/>
         <source>Zoom: %1%</source>
         <translation>飛漲： %1%</translation>
     </message>

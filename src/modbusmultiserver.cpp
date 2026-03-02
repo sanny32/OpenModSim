@@ -819,7 +819,7 @@ void ModbusMultiServer::writeDouble(quint8 deviceId, QModbusDataUnit::RegisterTy
 /// \param pointType
 /// \param params
 ///
-void ModbusMultiServer::writeRegister(quint8 deviceId, QModbusDataUnit::RegisterType pointType, const ModbusWriteParams& params)
+void ModbusMultiServer::writeRegister(QModbusDataUnit::RegisterType pointType, const ModbusWriteParams& params)
 {
     QModbusDataUnit data;
     const auto addr = params.Address - (params.ZeroBasedAddress ? 0 : 1);
@@ -902,7 +902,7 @@ void ModbusMultiServer::writeRegister(quint8 deviceId, QModbusDataUnit::Register
     }
 
     if(data.isValid())
-        setData(deviceId, data);
+        setData(params.DeviceId, data);
 }
 
 ///

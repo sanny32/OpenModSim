@@ -45,7 +45,7 @@ public:
     void setData(quint8 deviceId, const QModbusDataUnit& data);
 
     void writeValue(quint8 deviceId, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, quint16 value, ByteOrder order);
-    void writeRegister(quint8 deviceId, QModbusDataUnit::RegisterType pointType, const ModbusWriteParams& params);
+    void writeRegister(QModbusDataUnit::RegisterType pointType, const ModbusWriteParams& params);
 
     qint32 readInt32(quint8 deviceId, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, ByteOrder order, bool swapped);
     void writeInt32(quint8 deviceId, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, qint32 value, ByteOrder order, bool swapped);

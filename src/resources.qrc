@@ -60,8 +60,14 @@
         <file>res/emblem-mail.svg</file>
         <file>res/applications-internet.svg</file>
         <file>res/edit-delete.svg</file>
-        <file>res/iconSimulation16bit.png</file>
-        <file>res/iconSimulation32bit.png</file>
-        <file>res/iconSimulation64bit.png</file>
+        <file>res/icon-clear.svg</file>
+        <file>res/icon-constant.svg</file>
+        <file>res/icon-export.svg</file>
+        <file>res/icon-import.svg</file>
+        <file>res/icon-random.svg</file>
+        <file>res/icon-reset.svg</file>
+        <file>res/icon-simulation-16bit.svg</file>
+        <file>res/icon-simulation-32bit.svg</file>
+        <file>res/icon-simulation-64bit.svg</file>
     </qresource>
 </RCC>

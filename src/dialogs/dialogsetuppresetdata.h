@@ -7,10 +7,12 @@
 
 struct SetupPresetParams
 {
+    quint16 DeviceId;
     quint16 PointAddress;
     quint16 Length;
     bool ZeroBasedAddress;
     AddressSpace AddrSpace;
+    bool LeadingZeros = false;
 };
 
 namespace Ui {
