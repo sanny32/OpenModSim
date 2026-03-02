@@ -336,6 +336,11 @@ set(JSHELP_QHP "${CMAKE_SOURCE_DIR}/docs/jshelp.qhp")
 set(JSHELP_QCH "${CMAKE_BINARY_DIR}/docs/jshelp.qch")
 set(JSHELP_QHC "${CMAKE_BINARY_DIR}/docs/jshelp.qhc")
 
+file(GLOB JSHELP_CONTENT
+    "${CMAKE_SOURCE_DIR}/docs/*.html"
+    "${CMAKE_SOURCE_DIR}/docs/assets/css/*.css"
+)
+
 file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/docs)
 
 find_program(QHELP_GENERATOR_EXECUTABLE qhelpgenerator
@@ -399,7 +404,7 @@ add_custom_command(
     COMMAND ${QHELP_GENERATOR_EXECUTABLE} ${JSHELP_QHP} -o ${JSHELP_QCH}
     COMMAND ${QHELP_GENERATOR_EXECUTABLE} ${JSHELP_QHCP} -o ${JSHELP_QHC}
     COMMAND ${CMAKE_COMMAND} -E remove ${JSHELP_QHCP}
-    DEPENDS ${JSHELP_QHP} ${JSHELP_INPUT}
+    DEPENDS ${JSHELP_QHP} ${JSHELP_INPUT} ${JSHELP_CONTENT}
     WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/docs
     COMMENT "Generating and moving help files..."
     VERBATIM
