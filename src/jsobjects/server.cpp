@@ -1,6 +1,8 @@
+#include <QCoreApplication>
 #include "server.h"
 #include "ansiutils.h"
 #include "byteorderutils.h"
+#include "modbusmessages.h"
 
 ///
 /// \brief qHash
@@ -21,10 +23,11 @@ uint qHash(const Server::KeyOnChange &key, uint seed)
 /// \param order
 /// \param base
 ///
-Server::Server(ModbusMultiServer* server, const ByteOrder* order, AddressBase base)
+Server::Server(ModbusMultiServer* server, const ByteOrder* order, AddressBase base, QJSEngine* engine)
     :_addressBase((Address::Base)base)
     ,_byteOrder(order)
     ,_mbMultiServer(server)
+    ,_jsEngine(engine)
 {
     Q_ASSERT(_byteOrder != nullptr);
     Q_ASSERT(_mbMultiServer != nullptr);
@@ -39,6 +42,20 @@ Server::Server(ModbusMultiServer* server, const ByteOrder* order, AddressBase ba
 Server::~Server()
 {
     disconnect(_mbMultiServer, &ModbusMultiServer::dataChanged, this, &Server::on_dataChanged);
+
+    // Deactivate shared call state so any in-flight lambda becomes a no-op
+    // and does not reference 'this' after destruction.
+    if(_callState)
+        _callState->active = false;
+
+    // Post async cleanup to worker thread via QueuedConnection.
+    // BlockingQueuedConnection must NOT be used here: if the worker is blocked on
+    // sem.acquire() waiting for the main thread to process an invokeMethod event,
+    // using BlockingQueuedConnection would cause a deadlock.
+    QMetaObject::invokeMethod(_mbMultiServer, [mbms = _mbMultiServer]()
+    {
+        mbms->setRequestHandler(nullptr);
+    }, Qt::QueuedConnection);
 }
 
 ///
@@ -552,6 +569,272 @@ void Server::writeDouble(Register::Type reg, quint16 address, double value, bool
 {
     address -= _addressBase == Address::Base::Base0 ? 0 : 1;
     _mbMultiServer->writeDouble(deviceId, (QModbusDataUnit::RegisterType)reg, address, value, *_byteOrder, swapped);
+}
+
+///
+/// \brief Server::onRequest
+/// \param func
+///
+void Server::onRequest(const QJSValue& func)
+{
+    // Deactivate any existing handler so in-flight lambdas become no-ops.
+    if(_callState)
+        _callState->active = false;
+    _callState.reset();
+
+    if(!func.isCallable())
+    {
+        // Post async cleanup — do NOT use BlockingQueuedConnection here (deadlock risk).
+        QMetaObject::invokeMethod(_mbMultiServer, [mbms = _mbMultiServer]()
+        {
+            mbms->setRequestHandler(nullptr);
+        }, Qt::QueuedConnection);
+        return;
+    }
+
+    auto state = JsCallStatePtr::create();
+    state->engine = _jsEngine;
+    state->callback = func;
+    _callState = state;
+
+    auto handler = RequestHandlerPtr(new RequestHandlerFunc(
+        [state](const QModbusPdu& pdu, int deviceId, QModbusResponse& response) -> bool
+        {
+            bool handled = false;
+            QSemaphore sem;
+
+            // Target QCoreApplication::instance() — never destroyed, so the queued
+            // event is guaranteed to be delivered and sem.release() will always be
+            // called (unlike targeting 'this' which gets cancelled on Server destruction).
+            QMetaObject::invokeMethod(QCoreApplication::instance(),
+                [state, &pdu, deviceId, &response, &handled, &sem]()
+                {
+                    if(state->active)
+                        handled = runJsHandler(state, pdu, deviceId, response);
+                    sem.release();
+                }, Qt::QueuedConnection);
+
+            sem.acquire();
+            return handled;
+        }
+    ));
+
+    // Post setup to worker thread via QueuedConnection to avoid deadlock
+    // if onRequest() is called from within the request callback itself.
+    QMetaObject::invokeMethod(_mbMultiServer, [mbms = _mbMultiServer, handler]()
+    {
+        mbms->setRequestHandler(handler);
+    }, Qt::QueuedConnection);
+}
+
+///
+/// \brief Server::runJsHandler
+/// \param state
+/// \param pdu
+/// \param deviceId
+/// \param response
+/// \return
+///
+bool Server::runJsHandler(const JsCallStatePtr& state, const QModbusPdu& pdu, int deviceId, QModbusResponse& response)
+{
+    if(!state->callback.isCallable())
+        return false;
+
+    if(!state->engine || state->engine->isInterrupted())
+        return false;
+
+    // Wrap in ModbusMessage to get correct function code (handles FC > 127 sign issue)
+    // and typed field access via subclass API.
+    const auto msg = ModbusMessage::create(pdu, ModbusMessage::Rtu, deviceId, 0, QDateTime(), true);
+    const QModbusPdu::FunctionCode fc = msg->functionCode();
+
+    // Build JS request object
+    QJSValue jsRequest = state->engine->newObject();
+    jsRequest.setProperty("deviceId",     deviceId);
+    jsRequest.setProperty("functionCode", static_cast<int>(fc));
+
+    // Always expose raw PDU data bytes as a JS array
+    const QByteArray data = pdu.data();
+    QJSValue jsData = state->engine->newArray(data.size());
+    for(int i = 0; i < data.size(); i++)
+        jsData.setProperty(i, static_cast<int>(quint8(data[i])));
+    jsRequest.setProperty("data", jsData);
+
+    // Decode function-specific fields using ModbusMessage subclass API
+    if(const auto* req = dynamic_cast<const ReadCoilsRequest*>(msg.get()))
+    {
+        jsRequest.setProperty("address", req->startAddress());
+        jsRequest.setProperty("count",   req->length());
+    }
+    else if(const auto* req = dynamic_cast<const ReadDiscreteInputsRequest*>(msg.get()))
+    {
+        jsRequest.setProperty("address", req->startAddress());
+        jsRequest.setProperty("count",   req->length());
+    }
+    else if(const auto* req = dynamic_cast<const ReadHoldingRegistersRequest*>(msg.get()))
+    {
+        jsRequest.setProperty("address", req->startAddress());
+        jsRequest.setProperty("count",   req->length());
+    }
+    else if(const auto* req = dynamic_cast<const ReadInputRegistersRequest*>(msg.get()))
+    {
+        jsRequest.setProperty("address", req->startAddress());
+        jsRequest.setProperty("count",   req->length());
+    }
+    else if(const auto* req = dynamic_cast<const WriteSingleCoilRequest*>(msg.get()))
+    {
+        jsRequest.setProperty("address", req->address());
+        jsRequest.setProperty("value",   req->value());
+    }
+    else if(const auto* req = dynamic_cast<const WriteSingleRegisterRequest*>(msg.get()))
+    {
+        jsRequest.setProperty("address", req->address());
+        jsRequest.setProperty("value",   req->value());
+    }
+    else if(const auto* req = dynamic_cast<const WriteMultipleCoilsRequest*>(msg.get()))
+    {
+        jsRequest.setProperty("address", req->startAddress());
+        jsRequest.setProperty("count",   req->quantity());
+
+        const QByteArray coilBytes = req->values();
+        const quint16 count = req->quantity();
+        QJSValue jsValues = state->engine->newArray(count);
+        for(int i = 0; i < count; i++)
+        {
+            const bool bitVal = (i / 8 < coilBytes.size()) ? ((quint8(coilBytes[i / 8]) >> (i % 8)) & 1) : false;
+            jsValues.setProperty(i, bitVal);
+        }
+        jsRequest.setProperty("values", jsValues);
+    }
+    else if(const auto* req = dynamic_cast<const WriteMultipleRegistersRequest*>(msg.get()))
+    {
+        jsRequest.setProperty("address", req->startAddress());
+        jsRequest.setProperty("count",   req->quantity());
+
+        const QByteArray regBytes = req->values();
+        const quint16 count = req->quantity();
+        QJSValue jsValues = state->engine->newArray(count);
+        for(int i = 0; i < count && (i * 2 + 1) < regBytes.size(); i++)
+        {
+            const quint16 v = (quint8(regBytes[i * 2]) << 8) | quint8(regBytes[i * 2 + 1]);
+            jsValues.setProperty(i, v);
+        }
+        jsRequest.setProperty("values", jsValues);
+    }
+    else if(const auto* req = dynamic_cast<const MaskWriteRegisterRequest*>(msg.get()))
+    {
+        jsRequest.setProperty("address", req->address());
+        jsRequest.setProperty("andMask", req->andMask());
+        jsRequest.setProperty("orMask",  req->orMask());
+    }
+    else if(const auto* req = dynamic_cast<const ReadWriteMultipleRegistersRequest*>(msg.get()))
+    {
+        jsRequest.setProperty("readAddress",  req->readStartAddress());
+        jsRequest.setProperty("readCount",    req->readLength());
+        jsRequest.setProperty("writeAddress", req->writeStartAddress());
+        jsRequest.setProperty("writeCount",   req->writeLength());
+
+        const QByteArray writeBytes = req->writeValues();
+        const quint16 writeCount = req->writeLength();
+        QJSValue jsValues = state->engine->newArray(writeCount);
+        for(int i = 0; i < writeCount && (i * 2 + 1) < writeBytes.size(); i++)
+        {
+            const quint16 v = (quint8(writeBytes[i * 2]) << 8) | quint8(writeBytes[i * 2 + 1]);
+            jsValues.setProperty(i, v);
+        }
+        jsRequest.setProperty("values", jsValues);
+    }
+    else if(const auto* req = dynamic_cast<const DiagnosticsRequest*>(msg.get()))
+    {
+        jsRequest.setProperty("subfunc", req->subfunc());
+    }
+    else if(const auto* req = dynamic_cast<const ReadFileRecordRequest*>(msg.get()))
+    {
+        jsRequest.setProperty("byteCount", req->byteCount());
+    }
+    else if(const auto* req = dynamic_cast<const WriteFileRecordRequest*>(msg.get()))
+    {
+        jsRequest.setProperty("byteCount", req->length());
+    }
+    else if(const auto* req = dynamic_cast<const ReadFifoQueueRequest*>(msg.get()))
+    {
+        jsRequest.setProperty("address", req->fifoAddress());
+    }
+
+    // Call JS callback
+    const QJSValue result = state->callback.call({jsRequest});
+
+    if(result.isError())
+        return false;
+
+    if(result.isNull() || result.isUndefined())
+        return false;
+
+    // Exception response: { exception: N }
+    if(result.isObject() && result.hasProperty("exception"))
+    {
+        const int exCode = result.property("exception").toInt();
+        response = QModbusExceptionResponse(fc, static_cast<QModbusExceptionResponse::ExceptionCode>(exCode));
+        return true;
+    }
+
+    // Raw data response: { data: [byte1, byte2, ...] }
+    if(result.isObject() && result.hasProperty("data"))
+    {
+        QJSValue jsRespData = result.property("data");
+        if(jsRespData.isArray())
+        {
+            QByteArray respData;
+            const int len = jsRespData.property("length").toInt();
+            for(int i = 0; i < len; i++)
+                respData.append(char(jsRespData.property(i).toInt()));
+            response = QModbusResponse(fc, respData);
+            return true;
+        }
+    }
+
+    // Normal response: array of values
+    if(result.isArray())
+    {
+        const int len = result.property("length").toInt();
+        switch(fc)
+        {
+            case QModbusPdu::ReadHoldingRegisters:
+            case QModbusPdu::ReadInputRegisters:
+            {
+                QByteArray respData;
+                respData.append(char(len * 2));
+                for(int i = 0; i < len; i++)
+                {
+                    const quint16 v = result.property(i).toUInt();
+                    respData.append(char(v >> 8));
+                    respData.append(char(v & 0xFF));
+                }
+                response = QModbusResponse(fc, respData);
+                return true;
+            }
+
+            case QModbusPdu::ReadCoils:
+            case QModbusPdu::ReadDiscreteInputs:
+            {
+                const int byteCount = (len + 7) / 8;
+                QByteArray respData(byteCount + 1, 0);
+                respData[0] = char(byteCount);
+                for(int i = 0; i < len; i++)
+                {
+                    if(result.property(i).toBool())
+                        respData[1 + i / 8] = char(uchar(respData[1 + i / 8]) | uchar(1 << (i % 8)));
+                }
+                response = QModbusResponse(fc, respData);
+                return true;
+            }
+
+            default:
+            break;
+        }
+    }
+
+    return false;
 }
 
 ///

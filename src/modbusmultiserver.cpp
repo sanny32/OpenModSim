@@ -364,12 +364,32 @@ void ModbusMultiServer::setModbusDefinitions(const ModbusDefinitions& defs)
 }
 
 ///
+/// \brief ModbusMultiServer::setRequestHandler
+/// \param handler
+///
+void ModbusMultiServer::setRequestHandler(const RequestHandlerPtr& handler)
+{
+    if(QThread::currentThread() != _workerThread)
+    {
+        QMetaObject::invokeMethod(this, [this, handler]() {
+            setRequestHandler(handler);
+        }, Qt::BlockingQueuedConnection);
+        return;
+    }
+
+    _requestHandler = handler;
+    for(auto&& s : _modbusServerList)
+        s->setRequestHandler(handler);
+}
+
+///
 /// \brief ModbusMultiServer::addModbusServer
 /// \param server
 ///
 void ModbusMultiServer::addModbusServer(QSharedPointer<ModbusServer> server)
 {
     if(server && !_modbusServerList.contains(server)) {
+        server->setRequestHandler(_requestHandler);
         _modbusServerList.push_back(server);
     }
 }

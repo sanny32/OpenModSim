@@ -240,7 +240,7 @@ void JScriptControl::runScript(RunMode mode, int interval)
     _scriptCode = script();
 
     _storage = QSharedPointer<Storage>(new Storage);
-    _server = QSharedPointer<Server>(new Server(_mbMultiServer, _byteOrder, _addressBase));
+    _server = QSharedPointer<Server>(new Server(_mbMultiServer, _byteOrder, _addressBase, &_jsEngine));
     _script = QSharedPointer<Script>(new Script(interval));
     _console = QSharedPointer<console>(new console(ui->console));
     connect(_script.get(), &Script::stopped, this, &JScriptControl::stopScript, Qt::QueuedConnection);

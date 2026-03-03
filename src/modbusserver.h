@@ -3,8 +3,10 @@
 
 #include <deque>
 #include <array>
+#include <functional>
 #include <QLoggingCategory>
 #include <QModbusServer>
+#include <QSharedPointer>
 #include "qcountedset.h"
 #include "modbusdataunitmap.h"
 #include "qmodbuscommevent.h"
@@ -43,6 +45,9 @@ enum SubFunctionCode {
 };
 }
 
+using RequestHandlerFunc = std::function<bool(const QModbusPdu&, int, QModbusResponse&)>;
+using RequestHandlerPtr  = QSharedPointer<RequestHandlerFunc>;
+
 ///
 /// \brief The ModbusServer class
 ///
@@ -74,6 +79,8 @@ public:
 
     virtual bool setMap(const ModbusDataUnitMap &map, int serverAddress);
     virtual bool processesBroadcast() const { return false; }
+
+    void setRequestHandler(const RequestHandlerPtr& handler) { _requestHandler = handler; }
 
     ModbusDefinitions getDefinitions() const { return _definitions; }
     void setDefinitions(const ModbusDefinitions& defs) {
@@ -178,6 +185,7 @@ protected:
     void storeModbusCommEvent(const QModbusCommEvent &eventByte);
 
 private:
+    RequestHandlerPtr _requestHandler;
     ModbusDefinitions _definitions;
     QCountedSet<int> _serverAddresses;
     QHash<int, std::array<quint16, 20>> _counters;

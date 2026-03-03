@@ -139,6 +139,7 @@
 				<li><a href="#server.noresponse">Server.noResponse</a></li>
 				<li><a href="#server.onchange">Server.onChange</a></li>
 				<li><a href="#server.onerror">Server.onError</a></li>
+				<li><a href="#server.onrequest">Server.onRequest</a></li>
 				<li><a href="#server.readcoil">Server.readCoil</a></li>
 				<li><a href="#server.readdiscrete">Server.readDiscrete</a></li>
 				<li><a href="#server.readinput">Server.readInput</a></li>
@@ -704,6 +705,59 @@
 			<dt id="server.onerror"><code>Server.onError(deviceId, functionRef)</code></dt>
 			<dd>
 				<p>Выполняет функцию <code>functionRef(error)</code> когда произошла ошибка на сервере с номером устройства <code>deviceId</code>.</p>
+			</dd>
+			<dt id="server.onrequest"><code>Server.onRequest(functionRef)</code></dt>
+			<dd>
+				<p>Регистрирует функцию обратного вызова <code>functionRef(request)</code>, которая вызывается для каждого входящего Modbus-запроса <strong>до</strong> стандартной обработки. Позволяет перехватывать и формировать собственный ответ для любого кода функции.</p>
+				<p>Объект <code>request</code> всегда содержит:</p>
+				<ul>
+					<li><code>deviceId</code> &mdash; адрес устройства сервера (целое число)</li>
+					<li><code>functionCode</code> &mdash; код функции Modbus (целое число)</li>
+					<li><code>data</code> &mdash; сырые байты данных PDU (массив целых чисел 0&ndash;255)</li>
+				</ul>
+				<p>В зависимости от кода функции, предоставляются дополнительные свойства:</p>
+				<table class="reference-table">
+					<tr><th>FC</th><th>Название</th><th>Свойства</th></tr>
+					<tr><td>1</td><td>ReadCoils</td><td><code>address</code>, <code>count</code></td></tr>
+					<tr><td>2</td><td>ReadDiscreteInputs</td><td><code>address</code>, <code>count</code></td></tr>
+					<tr><td>3</td><td>ReadHoldingRegisters</td><td><code>address</code>, <code>count</code></td></tr>
+					<tr><td>4</td><td>ReadInputRegisters</td><td><code>address</code>, <code>count</code></td></tr>
+					<tr><td>5</td><td>WriteSingleCoil</td><td><code>address</code>, <code>value</code></td></tr>
+					<tr><td>6</td><td>WriteSingleRegister</td><td><code>address</code>, <code>value</code></td></tr>
+					<tr><td>7</td><td>ReadExceptionStatus</td><td><em>(дополнительных свойств нет)</em></td></tr>
+					<tr><td>8</td><td>Diagnostics</td><td><code>subfunc</code></td></tr>
+					<tr><td>15</td><td>WriteMultipleCoils</td><td><code>address</code>, <code>count</code>, <code>values</code> (boolean)</td></tr>
+					<tr><td>16</td><td>WriteMultipleRegisters</td><td><code>address</code>, <code>count</code>, <code>values</code> (целые числа)</td></tr>
+					<tr><td>20</td><td>ReadFileRecord</td><td><code>byteCount</code></td></tr>
+					<tr><td>21</td><td>WriteFileRecord</td><td><code>byteCount</code></td></tr>
+					<tr><td>22</td><td>MaskWriteRegister</td><td><code>address</code>, <code>andMask</code>, <code>orMask</code></td></tr>
+					<tr><td>23</td><td>ReadWriteMultipleRegisters</td><td><code>readAddress</code>, <code>readCount</code>,<br><code>writeAddress</code>, <code>writeCount</code>,<br><code>values</code> (целые числа)</td></tr>
+					<tr><td>24</td><td>ReadFifoQueue</td><td><code>address</code></td></tr>
+				</table>
+				<p>Возвращаемое значение определяет ответ:</p>
+				<ul>
+					<li><code>null</code> или <code>undefined</code> &mdash; передать запрос стандартному обработчику</li>
+					<li><code>{ exception: N }</code> &mdash; вернуть Modbus-исключение с кодом <code>N</code></li>
+					<li><code>{ data: [byte, ...] }</code> &mdash; вернуть ответ в виде сырых байтов (работает для любого кода функции)</li>
+					<li><code>[value, ...]</code> &mdash; вернуть значения для FC 1&ndash;4 (boolean для coils/discrete inputs, целые числа для регистров)</li>
+				</ul>
+				<p><strong>Пример:</strong></p>
+				<table width="100%" cellspacing="0" cellpadding="0" style="border-left: 3px solid #41cd52; margin: 0.5em 0;"><tr><td bgcolor="#f6f7f8" style="padding: 0.6em 1em;"><pre style="margin: 0; padding: 0; font-family: Consolas, 'Courier New', monospace; font-size: 0.92em; line-height: 1.45; background: none; border: none;">Server.onRequest(<span style="color:#0070c1">function</span>(req) {
+    <span style="color:#008000">// Свой ответ на ReadHoldingRegisters</span>
+    <span style="color:#0070c1">if</span> (req.functionCode === <span style="color:#098658">3</span>) {
+        <span style="color:#0070c1">return</span> [<span style="color:#098658">100</span>, <span style="color:#098658">200</span>, <span style="color:#098658">300</span>];
+    }
+    <span style="color:#008000">// Обработка ReportServerId сырыми байтами</span>
+    <span style="color:#0070c1">if</span> (req.functionCode === <span style="color:#098658">17</span>) {
+        <span style="color:#0070c1">return</span> { data: [<span style="color:#098658">0x01</span>, <span style="color:#098658">0xFF</span>] };
+    }
+    <span style="color:#008000">// Отклонить неизвестные коды функций</span>
+    <span style="color:#0070c1">if</span> (req.functionCode > <span style="color:#098658">24</span>) {
+        <span style="color:#0070c1">return</span> { exception: <span style="color:#098658">1</span> };
+    }
+    <span style="color:#008000">// Стандартная обработка для всего остального</span>
+    <span style="color:#0070c1">return</span> <span style="color:#0070c1">null</span>;
+});</pre></td></tr></table>
 			</dd>
 			<dt id="server.readcoil"><code>Server.readCoil(address, deviceId)</code></dt>
 			<dd>
