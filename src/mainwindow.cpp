@@ -294,6 +294,7 @@ void MainWindow::on_awake()
     ui->actionChineseCN->setChecked(_lang == "zh_CN");
     ui->actionChineseTW->setChecked(_lang == "zh_TW");
 
+    ui->actionEditBar->setVisible(frm && frm->displayMode() == DisplayMode::Script);
     ui->actionScriptHelp->setVisible(frm && frm->displayMode() == DisplayMode::Script);
     ui->actionConsoleOutput->setVisible(frm && frm->displayMode() == DisplayMode::Script);
 
