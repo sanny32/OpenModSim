@@ -1,4 +1,3 @@
-#include <QTextCharFormat>
 #include "console.h"
 
 ///
@@ -24,7 +23,7 @@ void console::clear()
 ///
 void console::log(const QString& msg)
 {
-    _console->addText(msg, Qt::black);
+    _console->addMessage(msg, ConsoleOutput::MessageType::Log);
 }
 
 ///
@@ -33,7 +32,7 @@ void console::log(const QString& msg)
 ///
 void console::debug(const QString& msg)
 {
-    log(msg);
+    _console->addMessage(msg, ConsoleOutput::MessageType::Debug);
 }
 
 ///
@@ -42,7 +41,7 @@ void console::debug(const QString& msg)
 ///
 void console::warning(const QString& msg)
 {
-    _console->addText(msg, "#F7C600");
+    _console->addMessage(msg, ConsoleOutput::MessageType::Warning);
 }
 
 ///
@@ -51,6 +50,5 @@ void console::warning(const QString& msg)
 ///
 void console::error(const QString& msg)
 {
-    _console->addText(msg, Qt::red);
+    _console->addMessage(msg, ConsoleOutput::MessageType::Error);
 }
-
