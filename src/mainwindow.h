@@ -2,8 +2,10 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QDockWidget>
 #include <QTranslator>
 #include <QWidgetAction>
+#include "helpwidget.h"
 #include "formmodsim.h"
 #include "ansimenu.h"
 #include "modbusmultiserver.h"
@@ -178,6 +180,8 @@ private:
 private:
     Ui::MainWindow *ui;
     QWidgetAction* _actionRunMode;
+    QDockWidget* _helpDockWidget;
+    HelpWidget* _helpWidget;
 
     QString _lang;
     QTranslator _qtTranslator;

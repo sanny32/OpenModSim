@@ -2,6 +2,8 @@
 #define HELPWIDGET_H
 
 #include <QHelpEngine>
+#include <QLineEdit>
+#include <QLabel>
 #include "helpbrowser.h"
 
 ///
@@ -16,26 +18,27 @@ public:
 
     void setHelp(const QString& helpFile);
     void showHelp(const QString& helpKey);
-
-signals:
-    void collapse();
+    void showFind();
 
 protected:
     void changeEvent(QEvent* event) override;
+    void keyPressEvent(QKeyEvent* event) override;
+    bool eventFilter(QObject* obj, QEvent* event) override;
 
 private:
-    QToolButton* createToolButton(QWidget* parent,
-                                  const QString& text,
-                                  const QIcon& icon = QIcon(),
-                                  const QString& toolTip = QString(),
-                                  const QSize& size = {24, 24},
-                                  const QSize& iconSize = {12, 12});
+    void onFindNext();
+    void onFindPrevious();
+    void onSearchTextEdited(const QString& text);
+    void onClose();
 
 private:
-    HelpBrowser*    _helpBrowser;
-    QLabel*         _findLabel;
-    QToolButton*    _findPrevButton;
-    QToolButton*    _findNextButton;
+    HelpBrowser* _helpBrowser;
+    QWidget*     _findBar;
+    QLineEdit*   _searchEdit;
+    QPushButton* _prevButton;
+    QPushButton* _nextButton;
+    QToolButton* _closeButton;
+    QLabel*      _matchCountLabel;
 };
 
 #endif // HELPWIDGET_H

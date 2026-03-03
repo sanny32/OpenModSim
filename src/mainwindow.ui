@@ -900,7 +900,7 @@
     <string>Replace...</string>
    </property>
    <property name="shortcut">
-    <string notr="true">Ctrl+R</string>
+    <string>Ctrl+H</string>
    </property>
   </action>
   <action name="actionInt32">
@@ -1183,6 +1183,9 @@
    </property>
    <property name="toolTip">
     <string>Script Help</string>
+   </property>
+   <property name="shortcut">
+    <string>F1</string>
    </property>
   </action>
   <action name="actionConsoleOutput">

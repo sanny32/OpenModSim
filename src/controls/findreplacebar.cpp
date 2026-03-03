@@ -7,10 +7,13 @@
 /// \param parent
 ///
 FindReplaceBar::FindReplaceBar(QWidget *parent)
-    : QWidget(parent)
+    : QFrame(parent)
 {
     setFixedWidth(420);
     setAutoFillBackground(true);
+
+    setFrameShape(QFrame::Panel);
+    setFrameShadow(QFrame::Raised);
 
     auto pal = palette();
     pal.setColor(QPalette::Window, QColor(240, 240, 240));
@@ -81,7 +84,6 @@ FindReplaceBar::FindReplaceBar(QWidget *parent)
     mainLayout->addLayout(findRow);
     mainLayout->addWidget(_replaceRow);
 
-    // Connections
     connect(_searchEdit, &QLineEdit::textEdited, this, &FindReplaceBar::onSearchTextEdited);
     connect(_prevButton, &QPushButton::clicked, this, &FindReplaceBar::onFindPrevious);
     connect(_nextButton, &QPushButton::clicked, this, &FindReplaceBar::onFindNext);
@@ -131,7 +133,7 @@ void FindReplaceBar::updatePosition()
     if(!parentWidget())
         return;
 
-    const int x = parentWidget()->width() - width() - 16;
+    const int x = parentWidget()->width() - width();
     move(qMax(0, x), 0);
 }
 

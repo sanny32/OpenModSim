@@ -13,7 +13,7 @@
 ///
 /// \brief The FindReplaceBar class
 ///
-class FindReplaceBar : public QWidget
+class FindReplaceBar : public QFrame
 {
     Q_OBJECT
 

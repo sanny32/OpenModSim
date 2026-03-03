@@ -57,6 +57,7 @@ FormModSim::FormModSim(int id, ModbusMultiServer& server, QSharedPointer<DataSim
     onDefinitionChanged();
     ui->outputWidget->setFocus();
     connect(ui->outputWidget, &OutputWidget::startTextCaptureError, this, &FormModSim::captureError);
+    connect(ui->scriptControl, &JScriptControl::helpContext, this, &FormModSim::helpContextRequested);
 
     setLogViewState(server.isConnected() ? LogViewState::Running : LogViewState::Unknown);
     connect(ui->statisticWidget, &StatisticWidget::ctrsReseted, ui->outputWidget, &OutputWidget::clearLogView);
@@ -476,33 +477,6 @@ int FormModSim::zoomPercent() const
 void FormModSim::setZoomPercent(int zoomPercent)
 {
     ui->outputWidget->setZoomPercent(zoomPercent);
-}
-
-///
-/// \brief FormModSim::isScriptHelpVisible
-/// \return
-///
-bool FormModSim::isScriptHelpVisible() const
-{
-    if(displayMode() != DisplayMode::Script)
-        return false;
-
-    return ui->scriptControl->isHelpVisible();
-}
-
-///
-/// \brief FormModSim::setScriptHelpVisible
-/// \param visible
-///
-void FormModSim::setScriptHelpVisible(bool visible)
-{
-    if(displayMode() != DisplayMode::Script)
-        return;
-
-    if(visible)
-        ui->scriptControl->showHelp();
-    else
-        ui->scriptControl->hideHelp();
 }
 
 ///

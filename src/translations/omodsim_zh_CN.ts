@@ -1623,43 +1623,43 @@
 <context>
     <name>FindReplaceBar</name>
     <message>
-        <location filename="../controls/findreplacebar.cpp" line="28"/>
+        <location filename="../controls/findreplacebar.cpp" line="31"/>
         <source>Find</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/findreplacebar.cpp" line="34"/>
+        <location filename="../controls/findreplacebar.cpp" line="37"/>
         <source>Previous (Shift+Enter)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/findreplacebar.cpp" line="40"/>
+        <location filename="../controls/findreplacebar.cpp" line="43"/>
         <source>Next (Enter)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/findreplacebar.cpp" line="50"/>
+        <location filename="../controls/findreplacebar.cpp" line="53"/>
         <source>Close (Escape)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/findreplacebar.cpp" line="67"/>
-        <location filename="../controls/findreplacebar.cpp" line="71"/>
+        <location filename="../controls/findreplacebar.cpp" line="70"/>
+        <location filename="../controls/findreplacebar.cpp" line="74"/>
         <source>Replace</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/findreplacebar.cpp" line="74"/>
+        <location filename="../controls/findreplacebar.cpp" line="77"/>
         <source>Replace All</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/findreplacebar.cpp" line="121"/>
+        <location filename="../controls/findreplacebar.cpp" line="123"/>
         <source>No results</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/findreplacebar.cpp" line="123"/>
+        <location filename="../controls/findreplacebar.cpp" line="125"/>
         <source>%1 of %2</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1738,7 +1738,7 @@ Length: %2</source>
         <translation type="vanished">指定了非法的数据长度</translation>
     </message>
     <message>
-        <location filename="../formmodsim.cpp" line="564"/>
+        <location filename="../formmodsim.cpp" line="538"/>
         <source>Address Base: %1
 Start Address: %2
 Length: %3</source>
@@ -1747,7 +1747,7 @@ Length: %3</source>
 长度: %3</translation>
     </message>
     <message>
-        <location filename="../formmodsim.cpp" line="567"/>
+        <location filename="../formmodsim.cpp" line="541"/>
         <source>Device Id: %1
 MODBUS Point Type:
 %2</source>
@@ -1781,28 +1781,46 @@ MODBUS Point Type:
         <translation type="vanished">qthelp://omodsim/doc/index.html#%1</translation>
     </message>
     <message>
-        <location filename="../controls/helpwidget.cpp" line="21"/>
-        <location filename="../controls/helpwidget.cpp" line="75"/>
         <source>Find:</source>
-        <translation>寻找：</translation>
+        <translation type="vanished">寻找：</translation>
     </message>
     <message>
-        <location filename="../controls/helpwidget.cpp" line="27"/>
-        <location filename="../controls/helpwidget.cpp" line="76"/>
         <source>Find Previous</source>
-        <translation>查找上一个</translation>
+        <translation type="vanished">查找上一个</translation>
     </message>
     <message>
-        <location filename="../controls/helpwidget.cpp" line="28"/>
-        <location filename="../controls/helpwidget.cpp" line="77"/>
         <source>Find Next</source>
-        <translation>查找下一个</translation>
+        <translation type="vanished">查找下一个</translation>
+    </message>
+    <message>
+        <location filename="../controls/helpwidget.cpp" line="35"/>
+        <location filename="../controls/helpwidget.cpp" line="89"/>
+        <source>Find</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../controls/helpwidget.cpp" line="41"/>
+        <location filename="../controls/helpwidget.cpp" line="90"/>
+        <source>Previous (Shift+Enter)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../controls/helpwidget.cpp" line="47"/>
+        <location filename="../controls/helpwidget.cpp" line="91"/>
+        <source>Next (Enter)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../controls/helpwidget.cpp" line="57"/>
+        <location filename="../controls/helpwidget.cpp" line="92"/>
+        <source>Close (Escape)</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>JScriptControl</name>
     <message>
-        <location filename="../controls/jscriptcontrol.ui" line="61"/>
+        <location filename="../controls/jscriptcontrol.ui" line="48"/>
         <source>Server.addressBase = AddressBase.Base1;
 
 let deviceId = 1;
@@ -2335,6 +2353,11 @@ Script.onInit(()=&gt;{
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../mainwindow.ui" line="903"/>
+        <source>Ctrl+H</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../mainwindow.ui" line="1174"/>
         <source>Reset Ctrs</source>
         <translation>重置计数器</translation>
@@ -2342,11 +2365,17 @@ Script.onInit(()=&gt;{
     <message>
         <location filename="../mainwindow.ui" line="1182"/>
         <location filename="../mainwindow.ui" line="1185"/>
+        <location filename="../mainwindow.cpp" line="131"/>
         <source>Script Help</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1193"/>
+        <location filename="../mainwindow.ui" line="1188"/>
+        <source>F1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="1196"/>
         <source>Console Output</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2439,25 +2468,25 @@ Script.onInit(()=&gt;{
         <translation type="vanished">俄语</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="388"/>
-        <location filename="../mainwindow.cpp" line="459"/>
-        <location filename="../mainwindow.cpp" line="469"/>
-        <location filename="../mainwindow.cpp" line="500"/>
-        <location filename="../mainwindow.cpp" line="526"/>
+        <location filename="../mainwindow.cpp" line="402"/>
+        <location filename="../mainwindow.cpp" line="473"/>
+        <location filename="../mainwindow.cpp" line="483"/>
+        <location filename="../mainwindow.cpp" line="514"/>
+        <location filename="../mainwindow.cpp" line="540"/>
         <source>All files (*)</source>
         <translation>所有文件 (*)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="387"/>
-        <location filename="../mainwindow.cpp" line="463"/>
-        <location filename="../mainwindow.cpp" line="468"/>
-        <location filename="../mainwindow.cpp" line="499"/>
-        <location filename="../mainwindow.cpp" line="525"/>
+        <location filename="../mainwindow.cpp" line="401"/>
+        <location filename="../mainwindow.cpp" line="477"/>
+        <location filename="../mainwindow.cpp" line="482"/>
+        <location filename="../mainwindow.cpp" line="513"/>
+        <location filename="../mainwindow.cpp" line="539"/>
         <source>XML files (*.xml)</source>
         <translation>XML 文件(*.xml)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1497"/>
+        <location filename="../mainwindow.cpp" line="1508"/>
         <source>Capture Error:<byte value="xd"/>
 %1</source>
         <translation>捕获错误：

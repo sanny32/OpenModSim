@@ -32,11 +32,10 @@ class JScriptControl : public QWidget
     friend QXmlStreamWriter& operator <<(QXmlStreamWriter& xml, const JScriptControl* ctrl);
     friend QXmlStreamReader& operator >>(QXmlStreamReader& xml, JScriptControl* ctrl);
 
-public:  
+public:
     explicit JScriptControl(QWidget *parent = nullptr);
     ~JScriptControl();
 
-    bool isHelpVisible() const;
     bool isConsoleVisible() const;
 
     void setModbusMultiServer(ModbusMultiServer* server);
@@ -78,8 +77,8 @@ public slots:
     void showConsole();
     void hideConsole();
 
-    void showHelp(const QString& helpKey = QString());
-    void hideHelp();
+signals:
+    void helpContext(const QString& helpKey);
 
 private slots:
     bool executeScript();

@@ -121,6 +121,22 @@ MainWindow::MainWindow(const QString& profile, bool useSession, QWidget *parent)
     auto dispatcher = QAbstractEventDispatcher::instance();
     connect(dispatcher, &QAbstractEventDispatcher::awake, this, &MainWindow::on_awake);
 
+    _helpWidget = new HelpWidget(this);
+    auto helpfile = QApplication::applicationDirPath() + "/docs/jshelp.qhc";
+    if(!QFile::exists(helpfile)){
+        helpfile = QApplication::applicationDirPath() + "/../docs/jshelp.qhc";
+    }
+    _helpWidget->setHelp(helpfile);
+
+    _helpDockWidget = new QDockWidget(tr("Script Help"), this);
+    _helpDockWidget->setObjectName("helpDockWidget");
+    _helpDockWidget->setWidget(_helpWidget);
+    _helpDockWidget->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea | Qt::BottomDockWidgetArea);
+    addDockWidget(Qt::RightDockWidgetArea, _helpDockWidget);
+    _helpDockWidget->setVisible(false);
+
+    connect(_helpDockWidget, &QDockWidget::visibilityChanged, ui->actionScriptHelp, &QAction::setChecked);
+
     connect(ui->mdiArea, &QMdiArea::subWindowActivated, this, &MainWindow::updateMenuWindow);
     connect(&_mbMultiServer, &ModbusMultiServer::connectionError, this, &MainWindow::on_connectionError);
 
@@ -292,7 +308,6 @@ void MainWindow::on_awake()
     ui->actionChineseCN->setChecked(_lang == "zh_CN");
     ui->actionChineseTW->setChecked(_lang == "zh_TW");
 
-    ui->actionScriptHelp->setVisible(frm && frm->displayMode() == DisplayMode::Script);
     ui->actionConsoleOutput->setVisible(frm && frm->displayMode() == DisplayMode::Script);
 
     ui->actionTile->setEnabled(ui->mdiArea->viewMode() == QMdiArea::SubWindowView);
@@ -348,7 +363,6 @@ void MainWindow::on_awake()
         ui->actionShowTraffic->setChecked(dm == DisplayMode::Traffic);
         ui->actionShowScript->setChecked(dm == DisplayMode::Script);
 
-        ui->actionScriptHelp->setChecked(frm->isScriptHelpVisible());
         ui->actionConsoleOutput->setChecked(frm->isConsoleOutputVisible());
     }
 }
@@ -1044,10 +1058,7 @@ void MainWindow::on_actionScriptBar_triggered()
 ///
 void MainWindow::on_actionScriptHelp_triggered()
 {
-    auto frm = currentMdiChild();
-    if(!frm || frm->displayMode() != DisplayMode::Script) return;
-
-    frm->setScriptHelpVisible(!frm->isScriptHelpVisible());
+    _helpDockWidget->setVisible(!_helpDockWidget->isVisible());
 }
 
 ///
@@ -1500,6 +1511,14 @@ FormModSim* MainWindow::createMdiChild(int id)
     connect(frm, &FormModSim::doubleClicked, this, [this]()
     {
         ui->actionDataDefinition->trigger();
+    });
+
+    connect(frm, &FormModSim::helpContextRequested, this, [this](const QString& helpKey)
+    {
+        _helpDockWidget->setVisible(true);
+        if(!helpKey.isEmpty()) {
+            _helpWidget->showHelp(helpKey);
+        }
     });
 
     _windowActionList->addWindow(wnd);
