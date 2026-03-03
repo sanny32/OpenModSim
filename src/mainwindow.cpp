@@ -113,7 +113,11 @@ MainWindow::MainWindow(const QString& profile, bool useSession, QWidget *parent)
 
     _actionSearch = new QWidgetAction(this);
     _actionSearch->setDefaultWidget(serachEdit);
-    ui->toolBarEdit->addAction(_actionSearch);
+
+    auto spacer = new QWidget(this);
+    spacer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+    ui->toolBarMain->addWidget(spacer);
+    ui->toolBarMain->addAction(_actionSearch);
 
     const auto defaultPrinter = QPrinterInfo::defaultPrinter();
     if(!defaultPrinter.isNull())
@@ -288,24 +292,16 @@ void MainWindow::on_awake()
     ui->actionStatusBar->setChecked(statusBar()->isVisible());
     ui->actionDisplayBar->setChecked(ui->toolBarDisplay->isVisible());
     ui->actionScriptBar->setChecked(ui->toolBarScript->isVisible());
-    ui->actionEditBar->setChecked(ui->toolBarEdit->isVisible());
     ui->actionEnglish->setChecked(_lang == "en");
     ui->actionRussian->setChecked(_lang == "ru");
     ui->actionChineseCN->setChecked(_lang == "zh_CN");
     ui->actionChineseTW->setChecked(_lang == "zh_TW");
 
-    ui->actionEditBar->setVisible(frm && frm->displayMode() == DisplayMode::Script);
     ui->actionScriptHelp->setVisible(frm && frm->displayMode() == DisplayMode::Script);
     ui->actionConsoleOutput->setVisible(frm && frm->displayMode() == DisplayMode::Script);
 
     ui->actionTile->setEnabled(ui->mdiArea->viewMode() == QMdiArea::SubWindowView);
     ui->actionCascade->setEnabled(ui->mdiArea->viewMode() == QMdiArea::SubWindowView);
-
-    if(ui->mdiArea->subWindowList().empty())
-    {
-        ui->toolBarEdit->setVisible(false);
-        ui->menuEdit->menuAction()->setVisible(false);
-    }
 
     if(frm != nullptr)
     {
@@ -360,11 +356,11 @@ void MainWindow::on_awake()
         ui->actionScriptHelp->setChecked(frm->isScriptHelpVisible());
         ui->actionConsoleOutput->setChecked(frm->isConsoleOutputVisible());
 
-        ui->actionUndo->setEnabled(dm == DisplayMode::Script && frm->canUndo());
-        ui->actionRedo->setEnabled(dm == DisplayMode::Script && frm->canRedo());
-        ui->actionCut->setEnabled(dm == DisplayMode::Script);
-        ui->actionCopy->setEnabled(dm == DisplayMode::Script);
-        ui->actionPaste->setEnabled(dm == DisplayMode::Script && frm->canPaste());
+        ui->actionUndo->setEnabled(true);
+        ui->actionRedo->setEnabled(true);
+        ui->actionCut->setEnabled(true);
+        ui->actionCopy->setEnabled(true);
+        ui->actionPaste->setEnabled(true);
         ui->actionSelectAll->setEnabled(dm == DisplayMode::Script);
         _actionSearch->setEnabled(dm == DisplayMode::Script);
     }
@@ -586,7 +582,8 @@ void MainWindow::on_actionExit_triggered()
 ///
 void MainWindow::on_actionUndo_triggered()
 {
-    emit undo();
+    if (auto w = QApplication::focusWidget())
+        QMetaObject::invokeMethod(w, "undo");
 }
 
 ///
@@ -594,7 +591,8 @@ void MainWindow::on_actionUndo_triggered()
 ///
 void MainWindow::on_actionRedo_triggered()
 {
-    emit redo();
+    if (auto w = QApplication::focusWidget())
+        QMetaObject::invokeMethod(w, "redo");
 }
 
 ///
@@ -602,7 +600,8 @@ void MainWindow::on_actionRedo_triggered()
 ///
 void MainWindow::on_actionCut_triggered()
 {
-    emit cut();
+    if (auto w = QApplication::focusWidget())
+        QMetaObject::invokeMethod(w, "cut");
 }
 
 ///
@@ -610,7 +609,8 @@ void MainWindow::on_actionCut_triggered()
 ///
 void MainWindow::on_actionCopy_triggered()
 {
-    emit copy();
+    if (auto w = QApplication::focusWidget())
+        QMetaObject::invokeMethod(w, "copy");
 }
 
 ///
@@ -618,7 +618,8 @@ void MainWindow::on_actionCopy_triggered()
 ///
 void MainWindow::on_actionPaste_triggered()
 {
-    emit paste();
+    if (auto w = QApplication::focusWidget())
+        QMetaObject::invokeMethod(w, "paste");
 }
 
 ///
@@ -1036,16 +1037,6 @@ void MainWindow::on_actionScriptBar_triggered()
 }
 
 ///
-/// \brief MainWindow::on_actionEditBar_triggered
-///
-void MainWindow::on_actionEditBar_triggered()
-{
-    const bool isVisible = ui->toolBarEdit->isVisible();
-    ui->toolBarEdit->setVisible(!isVisible);
-    ui->toolBarEdit->setProperty("Hidden", isVisible);
-}
-
-///
 /// \brief MainWindow::on_actionScriptHelp_triggered
 ///
 void MainWindow::on_actionScriptHelp_triggered()
@@ -1441,13 +1432,6 @@ FormModSim* MainWindow::createMdiChild(int id)
         comboBox->setCurrentRunMode(mode);
     };
 
-    auto updateEditTools = [this](DisplayMode mode)
-    {
-        if(!ui->toolBarEdit->property("Hidden").toBool())
-            ui->toolBarEdit->setVisible(mode == DisplayMode::Script);
-        ui->menuEdit->menuAction()->setVisible(mode == DisplayMode::Script);
-    };
-
     auto updateSearch = [this](const QString& text)
     {
         auto edit = qobject_cast<SearchLineEdit*>(_actionSearch->defaultWidget());
@@ -1460,14 +1444,13 @@ FormModSim* MainWindow::createMdiChild(int id)
     });
 
     connect(wnd, &QMdiSubWindow::windowStateChanged, this,
-            [frm, updateCodepage, updateRunMode, updateEditTools, updateSearch](Qt::WindowStates, Qt::WindowStates newState)
+            [frm, updateCodepage, updateRunMode, updateSearch](Qt::WindowStates, Qt::WindowStates newState)
     {
         switch(newState & ~Qt::WindowMaximized & ~Qt::WindowMinimized)
         {
             case Qt::WindowActive:
                 updateCodepage(frm->codepage());
                 updateSearch(frm->searchText());
-                updateEditTools(frm->displayMode());
                 updateRunMode(frm->scriptSettings().Mode);
                 frm->connectEditSlots();
             break;
@@ -1507,15 +1490,9 @@ FormModSim* MainWindow::createMdiChild(int id)
         updateRunMode(ss.Mode);
     });
 
-    connect(frm, &FormModSim::displayModeChanged, this, [updateEditTools](DisplayMode mode)
-    {
-        updateEditTools(mode);
-    });
-
-    connect(frm, &FormModSim::showed, this, [this, frm, wnd, updateRunMode, updateEditTools]
+    connect(frm, &FormModSim::showed, this, [this, frm, wnd, updateRunMode]
     {
         windowActivate(wnd);
-        updateEditTools(frm->displayMode());
         updateRunMode(frm->scriptSettings().Mode);
     });
 
@@ -2019,11 +1996,6 @@ bool MainWindow::loadProfile(const QString& filename)
     if(scriptbarBreak) addToolBarBreak(scriptbarArea);
     addToolBar(scriptbarArea, ui->toolBarScript);
 
-    const auto editbarArea = (Qt::ToolBarArea)qBound(0, m.value("EditBarArea", Qt::TopToolBarArea).toInt(), 0xf);
-    const auto editbarBreak = m.value("EditBarBreak").toBool();
-    if(editbarBreak) addToolBarBreak(editbarArea);
-    addToolBar(editbarArea, ui->toolBarEdit);
-
     _lang = m.value("Language", translationLang()).toString();
     setLanguage(_lang);
 
@@ -2088,8 +2060,6 @@ void MainWindow::saveProfile()
     m.setValue("DisplayBarBreak", toolBarBreak(ui->toolBarDisplay));
     m.setValue("ScriptBarArea", toolBarArea(ui->toolBarScript));
     m.setValue("ScriptBarBreak", toolBarBreak(ui->toolBarScript));
-    m.setValue("EditBarArea", toolBarArea(ui->toolBarEdit));
-    m.setValue("EditBarBreak", toolBarBreak(ui->toolBarEdit));
     m.setValue("Language", _lang);
     m.setValue("SavePath", _savePath);
 

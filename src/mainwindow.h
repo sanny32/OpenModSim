@@ -113,7 +113,6 @@ private slots:
     void on_actionStatusBar_triggered();
     void on_actionDisplayBar_triggered();
     void on_actionScriptBar_triggered();
-    void on_actionEditBar_triggered();
     void on_actionScriptHelp_triggered();
     void on_actionConsoleOutput_triggered();
     void on_actionBackground_triggered();
