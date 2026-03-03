@@ -147,15 +147,6 @@
      <addaction name="actionMsgParser"/>
      <addaction name="actionRawDataLog"/>
     </widget>
-    <widget class="QMenu" name="menuScript">
-     <property name="title">
-      <string>Script</string>
-     </property>
-     <addaction name="actionRunScript"/>
-     <addaction name="actionStopScript"/>
-     <addaction name="separator"/>
-     <addaction name="actionScriptSettings"/>
-    </widget>
     <addaction name="separator"/>
     <addaction name="actionDataDefinition"/>
     <addaction name="menuDisplay_Options"/>
@@ -164,7 +155,6 @@
     <addaction name="actionCaptureOff"/>
     <addaction name="actionResetCtrs"/>
     <addaction name="separator"/>
-    <addaction name="menuScript"/>
    </widget>
    <widget class="QMenu" name="menuWindow">
     <property name="title">
@@ -222,9 +212,17 @@
     <addaction name="menuLanguage"/>
     <addaction name="menuConfig"/>
    </widget>
+   <widget class="QMenu" name="menuScript">
+    <property name="title">
+     <string>Script</string>
+    </property>
+    <addaction name="actionRunScript"/>
+    <addaction name="actionStopScript"/>
+   </widget>
    <addaction name="menuFile"/>
    <addaction name="menuEdit"/>
    <addaction name="menuConnection"/>
+   <addaction name="menuScript"/>
    <addaction name="menuSetup"/>
    <addaction name="menuView"/>
    <addaction name="menuWindow"/>

@@ -108,17 +108,6 @@ MainWindow::MainWindow(const QString& profile, bool useSession, QWidget *parent)
     qobject_cast<QToolButton*>(ui->toolBarScript->widgetForAction(ui->actionRunScript))->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
     qobject_cast<QToolButton*>(ui->toolBarScript->widgetForAction(ui->actionStopScript))->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
 
-    auto serachEdit = new SearchLineEdit(this);
-    connect(serachEdit, &SearchLineEdit::searchText, this, &MainWindow::on_searchText);
-
-    _actionSearch = new QWidgetAction(this);
-    _actionSearch->setDefaultWidget(serachEdit);
-
-    auto spacer = new QWidget(this);
-    spacer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
-    ui->toolBarMain->addWidget(spacer);
-    ui->toolBarMain->addAction(_actionSearch);
-
     const auto defaultPrinter = QPrinterInfo::defaultPrinter();
     if(!defaultPrinter.isNull())
         _selectedPrinter = QSharedPointer<QPrinter>(new QPrinter(defaultPrinter));
@@ -252,6 +241,12 @@ void MainWindow::on_awake()
     ui->actionPrint->setEnabled(_selectedPrinter != nullptr && frm && frm->displayMode() == DisplayMode::Data);
     ui->actionRecentFile->setEnabled(!_recentFileActionList->isEmpty());
 
+    ui->actionUndo->setEnabled(frm != nullptr);
+    ui->actionRedo->setEnabled(frm != nullptr);
+    ui->actionCut->setEnabled(frm != nullptr);
+    ui->actionCopy->setEnabled(frm != nullptr);
+    ui->actionPaste->setEnabled(frm != nullptr);
+
     ui->actionDataDefinition->setEnabled(frm != nullptr);
     ui->actionShowData->setEnabled(frm != nullptr);
     ui->actionShowTraffic->setEnabled(frm != nullptr);
@@ -355,14 +350,6 @@ void MainWindow::on_awake()
 
         ui->actionScriptHelp->setChecked(frm->isScriptHelpVisible());
         ui->actionConsoleOutput->setChecked(frm->isConsoleOutputVisible());
-
-        ui->actionUndo->setEnabled(true);
-        ui->actionRedo->setEnabled(true);
-        ui->actionCut->setEnabled(true);
-        ui->actionCopy->setEnabled(true);
-        ui->actionPaste->setEnabled(true);
-        ui->actionSelectAll->setEnabled(dm == DisplayMode::Script);
-        _actionSearch->setEnabled(dm == DisplayMode::Script);
     }
 }
 
@@ -1432,25 +1419,18 @@ FormModSim* MainWindow::createMdiChild(int id)
         comboBox->setCurrentRunMode(mode);
     };
 
-    auto updateSearch = [this](const QString& text)
-    {
-        auto edit = qobject_cast<SearchLineEdit*>(_actionSearch->defaultWidget());
-        edit->setText(text);
-    };
-
     connect(frm, &FormModSim::codepageChanged, this, [updateCodepage](const QString& name)
     {
         updateCodepage(name);
     });
 
     connect(wnd, &QMdiSubWindow::windowStateChanged, this,
-            [frm, updateCodepage, updateRunMode, updateSearch](Qt::WindowStates, Qt::WindowStates newState)
+            [frm, updateCodepage, updateRunMode](Qt::WindowStates, Qt::WindowStates newState)
     {
         switch(newState & ~Qt::WindowMaximized & ~Qt::WindowMinimized)
         {
             case Qt::WindowActive:
                 updateCodepage(frm->codepage());
-                updateSearch(frm->searchText());
                 updateRunMode(frm->scriptSettings().Mode);
                 frm->connectEditSlots();
             break;

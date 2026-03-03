@@ -174,7 +174,6 @@ private:
 private:
     Ui::MainWindow *ui;
     QWidgetAction* _actionRunMode;
-    QWidgetAction* _actionSearch;
 
     QString _lang;
     QTranslator _qtTranslator;

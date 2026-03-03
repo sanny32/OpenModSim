@@ -1874,37 +1874,37 @@ Script.onInit(()=&gt;{
         <translation>高階選項</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="152"/>
+        <location filename="../mainwindow.ui" line="217"/>
         <source>Script</source>
         <translation>指令碼</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="171"/>
+        <location filename="../mainwindow.ui" line="161"/>
         <source>Window</source>
         <translation>視窗</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="180"/>
+        <location filename="../mainwindow.ui" line="170"/>
         <source>Help</source>
         <translation>幫助</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="186"/>
+        <location filename="../mainwindow.ui" line="176"/>
         <source>View</source>
         <translation>檢視</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="190"/>
+        <location filename="../mainwindow.ui" line="180"/>
         <source>Config</source>
         <translation>配置</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="194"/>
+        <location filename="../mainwindow.ui" line="184"/>
         <source>Colors</source>
         <translation>顏色</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="205"/>
+        <location filename="../mainwindow.ui" line="195"/>
         <source>Language</source>
         <translation>語言</translation>
     </message>
@@ -1913,37 +1913,37 @@ Script.onInit(()=&gt;{
         <translation type="vanished">編輯欄</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="331"/>
+        <location filename="../mainwindow.ui" line="329"/>
         <source>New</source>
         <translation>新建</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="483"/>
-        <location filename="../mainwindow.ui" line="486"/>
+        <location filename="../mainwindow.ui" line="481"/>
+        <location filename="../mainwindow.ui" line="484"/>
         <source>Float (MSRF)</source>
         <translation>浮點數（MSRF）</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="501"/>
-        <location filename="../mainwindow.ui" line="504"/>
+        <location filename="../mainwindow.ui" line="499"/>
+        <location filename="../mainwindow.ui" line="502"/>
         <source>Float (LSRF)</source>
         <translation>浮點數（LSRF）</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="519"/>
-        <location filename="../mainwindow.ui" line="525"/>
+        <location filename="../mainwindow.ui" line="517"/>
+        <location filename="../mainwindow.ui" line="523"/>
         <source>Double (MSRF)</source>
         <translation>雙倍（MSRF）</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="540"/>
-        <location filename="../mainwindow.ui" line="543"/>
+        <location filename="../mainwindow.ui" line="538"/>
+        <location filename="../mainwindow.ui" line="541"/>
         <source>Double (LSRF)</source>
         <translation>雙倍（LSRF）</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="738"/>
-        <location filename="../mainwindow.ui" line="741"/>
+        <location filename="../mainwindow.ui" line="736"/>
+        <location filename="../mainwindow.ui" line="739"/>
         <source>Swap Bytes (0xAB → 0xBA)</source>
         <translation>交換位元組(0xAB → 0xBA)</translation>
     </message>
@@ -1952,8 +1952,8 @@ Script.onInit(()=&gt;{
         <translation type="vanished">32位整數</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="898"/>
-        <location filename="../mainwindow.ui" line="901"/>
+        <location filename="../mainwindow.ui" line="896"/>
+        <location filename="../mainwindow.ui" line="899"/>
         <source>32-bit Integer (MSRF)</source>
         <translation>32位整數（MSRF）</translation>
     </message>
@@ -1962,8 +1962,8 @@ Script.onInit(()=&gt;{
         <translation type="vanished">32位整數(位元組交換)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="916"/>
-        <location filename="../mainwindow.ui" line="919"/>
+        <location filename="../mainwindow.ui" line="914"/>
+        <location filename="../mainwindow.ui" line="917"/>
         <source>32-bit Integer (LSRF)</source>
         <translation>32位整數（LSRF）</translation>
     </message>
@@ -1972,8 +1972,8 @@ Script.onInit(()=&gt;{
         <translation type="vanished">無符號32位整數</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="934"/>
-        <location filename="../mainwindow.ui" line="937"/>
+        <location filename="../mainwindow.ui" line="932"/>
+        <location filename="../mainwindow.ui" line="935"/>
         <source>Unsigned 32-bit Integer (MSRF)</source>
         <translation>無符號32位整數（MSRF）</translation>
     </message>
@@ -1982,8 +1982,8 @@ Script.onInit(()=&gt;{
         <translation type="vanished">無符號32位整數(位元組交換)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="952"/>
-        <location filename="../mainwindow.ui" line="955"/>
+        <location filename="../mainwindow.ui" line="950"/>
+        <location filename="../mainwindow.ui" line="953"/>
         <source>Unsigned 32-bit Integer (LSRF)</source>
         <translation>無符號32位整數（LSRF）</translation>
     </message>
@@ -1992,8 +1992,8 @@ Script.onInit(()=&gt;{
         <translation type="vanished">64位整數</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="998"/>
-        <location filename="../mainwindow.ui" line="1001"/>
+        <location filename="../mainwindow.ui" line="996"/>
+        <location filename="../mainwindow.ui" line="999"/>
         <source>64-bit Integer (MSRF)</source>
         <translation>64位整數（MSRF）</translation>
     </message>
@@ -2002,8 +2002,8 @@ Script.onInit(()=&gt;{
         <translation type="vanished">64位整數(位元組交換)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1016"/>
-        <location filename="../mainwindow.ui" line="1019"/>
+        <location filename="../mainwindow.ui" line="1014"/>
+        <location filename="../mainwindow.ui" line="1017"/>
         <source>64-bit Integer (LSRF)</source>
         <translation>64位整數（LSRF）</translation>
     </message>
@@ -2012,8 +2012,8 @@ Script.onInit(()=&gt;{
         <translation type="vanished">無符號64位整數</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1034"/>
-        <location filename="../mainwindow.ui" line="1037"/>
+        <location filename="../mainwindow.ui" line="1032"/>
+        <location filename="../mainwindow.ui" line="1035"/>
         <source>Unsigned 64-bit Integer (MSRF)</source>
         <translation>無符號64位整數(MSRF)</translation>
     </message>
@@ -2022,34 +2022,34 @@ Script.onInit(()=&gt;{
         <translation type="vanished">無符號64位整數(位元組交換)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1052"/>
-        <location filename="../mainwindow.ui" line="1055"/>
+        <location filename="../mainwindow.ui" line="1050"/>
+        <location filename="../mainwindow.ui" line="1053"/>
         <source>Unsigned 64-bit Integer (LSRF)</source>
         <translation>無符號64位整數(LSRF)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1070"/>
+        <location filename="../mainwindow.ui" line="1068"/>
         <source>ANSI</source>
         <translation>ANSI</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1096"/>
-        <location filename="../mainwindow.ui" line="1099"/>
+        <location filename="../mainwindow.ui" line="1094"/>
+        <location filename="../mainwindow.ui" line="1097"/>
         <source>Modbus Definitions</source>
         <translation>Modbus定義</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1107"/>
+        <location filename="../mainwindow.ui" line="1105"/>
         <source>Tabbed View</source>
         <translation>標籤頁檢視</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1115"/>
+        <location filename="../mainwindow.ui" line="1113"/>
         <source>Close All Windows</source>
         <translation>關閉所有視窗</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1126"/>
+        <location filename="../mainwindow.ui" line="1124"/>
         <source>Raw Data Log</source>
         <translation>原始資料日誌</translation>
     </message>
@@ -2070,82 +2070,82 @@ Script.onInit(()=&gt;{
         <translation type="vanished">无符号长整型（字节交换）</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="963"/>
+        <location filename="../mainwindow.ui" line="961"/>
         <source>Text Capture</source>
         <translation>文字捕獲</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="968"/>
+        <location filename="../mainwindow.ui" line="966"/>
         <source>Capture Off</source>
         <translation>捕獲關閉</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="977"/>
+        <location filename="../mainwindow.ui" line="975"/>
         <source>Msg Parser</source>
         <translation>報文解析</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="343"/>
+        <location filename="../mainwindow.ui" line="341"/>
         <source>Open...</source>
         <translation>開啟...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="351"/>
+        <location filename="../mainwindow.ui" line="349"/>
         <source>Close</source>
         <translation>關閉</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="363"/>
+        <location filename="../mainwindow.ui" line="361"/>
         <source>Save</source>
         <translation>儲存</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="371"/>
+        <location filename="../mainwindow.ui" line="369"/>
         <source>Save As...</source>
         <translation>另存為...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="376"/>
+        <location filename="../mainwindow.ui" line="374"/>
         <source>Save Test Config</source>
         <translation>儲存測試配置</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="381"/>
+        <location filename="../mainwindow.ui" line="379"/>
         <source>Restore Test Config</source>
         <translation>恢復測試配置</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="390"/>
+        <location filename="../mainwindow.ui" line="388"/>
         <source>Print...</source>
         <translation>列印...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="398"/>
+        <location filename="../mainwindow.ui" line="396"/>
         <source>Print Setup...</source>
         <translation>列印設定...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="403"/>
+        <location filename="../mainwindow.ui" line="401"/>
         <source>Recent File</source>
         <translation>最近檔案</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="408"/>
+        <location filename="../mainwindow.ui" line="406"/>
         <source>Exit</source>
         <translation>退出</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="417"/>
+        <location filename="../mainwindow.ui" line="415"/>
         <source>Connect</source>
         <translation>連線</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="426"/>
+        <location filename="../mainwindow.ui" line="424"/>
         <source>Disconnect</source>
         <translation>斷開連線</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="438"/>
+        <location filename="../mainwindow.ui" line="436"/>
         <source>Binary</source>
         <translation>二進位制</translation>
     </message>
@@ -2154,7 +2154,7 @@ Script.onInit(()=&gt;{
         <translation type="vanished">无符号十进制</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="468"/>
+        <location filename="../mainwindow.ui" line="466"/>
         <source>Hex</source>
         <translation>十六進位制</translation>
     </message>
@@ -2175,17 +2175,17 @@ Script.onInit(()=&gt;{
         <translation type="vanished">64位浮点数（字节交换）</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="551"/>
+        <location filename="../mainwindow.ui" line="549"/>
         <source>Cascade</source>
         <translation>層疊</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="556"/>
+        <location filename="../mainwindow.ui" line="554"/>
         <source>Tile</source>
         <translation>平鋪</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="565"/>
+        <location filename="../mainwindow.ui" line="563"/>
         <source>About Open ModSim...</source>
         <translation>關於Open ModSim...</translation>
     </message>
@@ -2194,133 +2194,133 @@ Script.onInit(()=&gt;{
         <translation type="vanished">整型</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="592"/>
+        <location filename="../mainwindow.ui" line="590"/>
         <source>Show Data</source>
         <translation>顯示資料</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="604"/>
+        <location filename="../mainwindow.ui" line="602"/>
         <source>Show Traffic</source>
         <translation>顯示流量</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="613"/>
+        <location filename="../mainwindow.ui" line="611"/>
         <source>Data Definition</source>
         <translation>資料格式</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="701"/>
+        <location filename="../mainwindow.ui" line="699"/>
         <source>Force Coils</source>
         <translation>強制線圈</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="710"/>
+        <location filename="../mainwindow.ui" line="708"/>
         <source>Preset Holding Regs</source>
         <translation>預設保持暫存器</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="750"/>
+        <location filename="../mainwindow.ui" line="748"/>
         <source>Preset Input Regs</source>
         <translation>預設輸入暫存器</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="759"/>
+        <location filename="../mainwindow.ui" line="757"/>
         <source>Force Discretes</source>
         <translation>強制離散值</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="771"/>
+        <location filename="../mainwindow.ui" line="769"/>
         <source>Show Script</source>
         <translation>顯示指令碼</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="780"/>
-        <location filename="../mainwindow.ui" line="783"/>
+        <location filename="../mainwindow.ui" line="778"/>
+        <location filename="../mainwindow.ui" line="781"/>
         <source>Run Script</source>
         <translation>執行指令碼</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="795"/>
-        <location filename="../mainwindow.ui" line="798"/>
+        <location filename="../mainwindow.ui" line="793"/>
+        <location filename="../mainwindow.ui" line="796"/>
         <source>Stop Script</source>
         <translation>停止指令碼</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="810"/>
+        <location filename="../mainwindow.ui" line="808"/>
         <source>Script Settings</source>
         <translation>指令碼設定</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="827"/>
+        <location filename="../mainwindow.ui" line="825"/>
         <source>Undo</source>
         <translation>取消</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="839"/>
+        <location filename="../mainwindow.ui" line="837"/>
         <source>Redo</source>
         <translation>恢復</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="851"/>
+        <location filename="../mainwindow.ui" line="849"/>
         <source>Cut</source>
         <translation>剪下</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="863"/>
+        <location filename="../mainwindow.ui" line="861"/>
         <source>Copy</source>
         <translation>複製</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="875"/>
+        <location filename="../mainwindow.ui" line="873"/>
         <source>Paste</source>
         <translation>貼上</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="883"/>
+        <location filename="../mainwindow.ui" line="881"/>
         <source>Select All</source>
         <translation>選擇所有</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1157"/>
+        <location filename="../mainwindow.ui" line="1155"/>
         <source>Reset Ctrs</source>
         <translation>重設計數器</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1165"/>
-        <location filename="../mainwindow.ui" line="1168"/>
+        <location filename="../mainwindow.ui" line="1163"/>
+        <location filename="../mainwindow.ui" line="1166"/>
         <source>Script Help</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1176"/>
+        <location filename="../mainwindow.ui" line="1174"/>
         <source>Console Output</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="235"/>
-        <location filename="../mainwindow.ui" line="621"/>
+        <location filename="../mainwindow.ui" line="233"/>
+        <location filename="../mainwindow.ui" line="619"/>
         <source>Toolbar</source>
         <translation>工具欄</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="629"/>
+        <location filename="../mainwindow.ui" line="627"/>
         <source>Status Bar</source>
         <translation>狀態列</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="276"/>
-        <location filename="../mainwindow.ui" line="637"/>
+        <location filename="../mainwindow.ui" line="274"/>
+        <location filename="../mainwindow.ui" line="635"/>
         <source>Display Bar</source>
         <translation>格式欄</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="313"/>
-        <location filename="../mainwindow.ui" line="818"/>
+        <location filename="../mainwindow.ui" line="311"/>
+        <location filename="../mainwindow.ui" line="816"/>
         <source>Script Bar</source>
         <translation>指令碼欄</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="453"/>
+        <location filename="../mainwindow.ui" line="451"/>
         <source>Unsigned 16-bit Intger</source>
         <translation>無符號16位整數</translation>
     </message>
@@ -2333,7 +2333,7 @@ Script.onInit(()=&gt;{
         <translation type="vanished">浮點數(位元組交換)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="522"/>
+        <location filename="../mainwindow.ui" line="520"/>
         <source>Double</source>
         <translation>雙精度浮點數</translation>
     </message>
@@ -2342,37 +2342,37 @@ Script.onInit(()=&gt;{
         <translation type="vanished">雙精度浮點數(位元組交換)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="577"/>
+        <location filename="../mainwindow.ui" line="575"/>
         <source>16-bit Integer</source>
         <translation>16位整數</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="642"/>
+        <location filename="../mainwindow.ui" line="640"/>
         <source>Font</source>
         <translation>字型</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="647"/>
+        <location filename="../mainwindow.ui" line="645"/>
         <source>Background</source>
         <translation>背景</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="652"/>
+        <location filename="../mainwindow.ui" line="650"/>
         <source>Foreground</source>
         <translation>前景</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="657"/>
+        <location filename="../mainwindow.ui" line="655"/>
         <source>Status</source>
         <translation>狀態</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="662"/>
+        <location filename="../mainwindow.ui" line="660"/>
         <source>Windows...</source>
         <translation>視窗...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="670"/>
+        <location filename="../mainwindow.ui" line="668"/>
         <source>Hex Addresses</source>
         <translation>十六進位制地址</translation>
     </message>
@@ -2385,25 +2385,25 @@ Script.onInit(()=&gt;{
         <translation type="vanished">俄语</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="401"/>
-        <location filename="../mainwindow.cpp" line="472"/>
-        <location filename="../mainwindow.cpp" line="482"/>
-        <location filename="../mainwindow.cpp" line="513"/>
-        <location filename="../mainwindow.cpp" line="539"/>
+        <location filename="../mainwindow.cpp" line="388"/>
+        <location filename="../mainwindow.cpp" line="459"/>
+        <location filename="../mainwindow.cpp" line="469"/>
+        <location filename="../mainwindow.cpp" line="500"/>
+        <location filename="../mainwindow.cpp" line="526"/>
         <source>All files (*)</source>
         <translation>所有檔案 (*)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="400"/>
-        <location filename="../mainwindow.cpp" line="476"/>
-        <location filename="../mainwindow.cpp" line="481"/>
-        <location filename="../mainwindow.cpp" line="512"/>
-        <location filename="../mainwindow.cpp" line="538"/>
+        <location filename="../mainwindow.cpp" line="387"/>
+        <location filename="../mainwindow.cpp" line="463"/>
+        <location filename="../mainwindow.cpp" line="468"/>
+        <location filename="../mainwindow.cpp" line="499"/>
+        <location filename="../mainwindow.cpp" line="525"/>
         <source>XML files (*.xml)</source>
         <translation>XML 檔案(*.xml)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1501"/>
+        <location filename="../mainwindow.cpp" line="1481"/>
         <source>Capture Error:<byte value="xd"/>
 %1</source>
         <translation>捕獲錯誤：
