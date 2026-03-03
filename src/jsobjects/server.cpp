@@ -823,7 +823,7 @@ bool Server::runJsHandler(const JsCallStatePtr& state, const QModbusPdu& pdu, in
                 for(int i = 0; i < len; i++)
                 {
                     if(result.property(i).toBool())
-                        respData[1 + i / 8] |= char(1 << (i % 8));
+                        respData[1 + i / 8] = char(uchar(respData[1 + i / 8]) | uchar(1 << (i % 8)));
                 }
                 response = QModbusResponse(fc, respData);
                 return true;
