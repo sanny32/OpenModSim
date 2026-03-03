@@ -108,8 +108,7 @@ function init()
         /* ---- FC 8: Diagnostics ---- */
         if(fc === 8)
         {
-            var subFunc = (req.data[0] << 8) | req.data[1];
-            console.log("  Diagnostics subFunction=" + subFunc);
+            console.log("  Diagnostics subfunc=" + req.subfunc);
             /* Echo back (Return Query Data) */
             return { data: req.data };
         }
@@ -175,6 +174,30 @@ function init()
                 resp.push(regs[i] & 0xFF);
             }
             return { data: resp };
+        }
+
+        /* ---- FC 20: Read File Record ---- */
+        if(fc === 20)
+        {
+            console.log("  ReadFileRecord byteCount=" + req.byteCount);
+            /* Let default handler respond */
+            return null;
+        }
+
+        /* ---- FC 21: Write File Record ---- */
+        if(fc === 21)
+        {
+            console.log("  WriteFileRecord byteCount=" + req.byteCount);
+            /* Let default handler respond */
+            return null;
+        }
+
+        /* ---- FC 24: Read FIFO Queue ---- */
+        if(fc === 24)
+        {
+            console.log("  ReadFifoQueue addr=" + req.address);
+            /* Let default handler respond */
+            return null;
         }
 
         /* ---- Any other FC: return IllegalFunction exception ---- */

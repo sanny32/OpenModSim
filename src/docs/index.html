@@ -724,10 +724,15 @@
 					<tr><td>4</td><td>ReadInputRegisters</td><td><code>address</code>, <code>count</code></td></tr>
 					<tr><td>5</td><td>WriteSingleCoil</td><td><code>address</code>, <code>value</code></td></tr>
 					<tr><td>6</td><td>WriteSingleRegister</td><td><code>address</code>, <code>value</code></td></tr>
+					<tr><td>7</td><td>ReadExceptionStatus</td><td><em>(no additional properties)</em></td></tr>
+					<tr><td>8</td><td>Diagnostics</td><td><code>subfunc</code></td></tr>
 					<tr><td>15</td><td>WriteMultipleCoils</td><td><code>address</code>, <code>count</code>, <code>values</code> (booleans)</td></tr>
 					<tr><td>16</td><td>WriteMultipleRegisters</td><td><code>address</code>, <code>count</code>, <code>values</code> (integers)</td></tr>
+					<tr><td>20</td><td>ReadFileRecord</td><td><code>byteCount</code></td></tr>
+					<tr><td>21</td><td>WriteFileRecord</td><td><code>byteCount</code></td></tr>
 					<tr><td>22</td><td>MaskWriteRegister</td><td><code>address</code>, <code>andMask</code>, <code>orMask</code></td></tr>
 					<tr><td>23</td><td>ReadWriteMultipleRegisters</td><td><code>readAddress</code>, <code>readCount</code>,<br><code>writeAddress</code>, <code>writeCount</code>,<br><code>values</code> (integers)</td></tr>
+					<tr><td>24</td><td>ReadFifoQueue</td><td><code>address</code></td></tr>
 				</table>
 				<p>The callback return value determines the response:</p>
 				<ul>
