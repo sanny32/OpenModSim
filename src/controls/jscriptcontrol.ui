@@ -26,7 +26,10 @@
    <item>
     <widget class="QSplitter" name="verticalSplitter">
      <property name="orientation">
-      <enum>Qt::Horizontal</enum>
+      <enum>Qt::Orientation::Horizontal</enum>
+     </property>
+     <property name="childrenCollapsible">
+      <bool>false</bool>
      </property>
      <widget class="QSplitter" name="horizontalSplitter">
       <property name="sizePolicy">
@@ -36,7 +39,10 @@
        </sizepolicy>
       </property>
       <property name="orientation">
-       <enum>Qt::Vertical</enum>
+       <enum>Qt::Orientation::Vertical</enum>
+      </property>
+      <property name="childrenCollapsible">
+       <bool>false</bool>
       </property>
       <widget class="JSCodeEditor" name="codeEditor">
        <property name="sizePolicy">

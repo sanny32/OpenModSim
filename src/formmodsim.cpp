@@ -479,6 +479,60 @@ void FormModSim::setZoomPercent(int zoomPercent)
 }
 
 ///
+/// \brief FormModSim::isScriptHelpVisible
+/// \return
+///
+bool FormModSim::isScriptHelpVisible() const
+{
+    if(displayMode() != DisplayMode::Script)
+        return false;
+
+    return ui->scriptControl->isHelpVisible();
+}
+
+///
+/// \brief FormModSim::setScriptHelpVisible
+/// \param visible
+///
+void FormModSim::setScriptHelpVisible(bool visible)
+{
+    if(displayMode() != DisplayMode::Script)
+        return;
+
+    if(visible)
+        ui->scriptControl->showHelp();
+    else
+        ui->scriptControl->hideHelp();
+}
+
+///
+/// \brief FormModSim::isConsoleOutputVisible
+/// \return
+///
+bool FormModSim::isConsoleOutputVisible() const
+{
+    if(displayMode() != DisplayMode::Script)
+        return false;
+
+    return ui->scriptControl->isConsoleVisible();
+}
+
+///
+/// \brief FormModSim::setConsoleOutputVisible
+/// \param visible
+///
+void FormModSim::setConsoleOutputVisible(bool visible)
+{
+    if(displayMode() != DisplayMode::Script)
+        return;
+
+    if(visible)
+        ui->scriptControl->showConsole();
+    else
+        ui->scriptControl->hideConsole();
+}
+
+///
 /// \brief FormModSim::print
 /// \param printer
 ///

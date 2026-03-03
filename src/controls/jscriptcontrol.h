@@ -34,6 +34,9 @@ public:
     explicit JScriptControl(QWidget *parent = nullptr);
     ~JScriptControl();
 
+    bool isHelpVisible() const;
+    bool isConsoleVisible() const;
+
     void setModbusMultiServer(ModbusMultiServer* server);
     void setByteOrder(const ByteOrder* order);
     void setAddressBase(AddressBase base);
@@ -61,16 +64,23 @@ public slots:
     void copy();
     void paste();
     void selectAll();
+
     void search(const QString& text);
+
     void runScript(RunMode mode, int interval = 0);
     void stopScript();
-    void showHelp(const QString& helpKey);
-    void hideHelp();
+
     void showConsole();
     void hideConsole();
 
+    void showHelp(const QString& helpKey = QString());
+    void hideHelp();
+
 private slots:
     bool executeScript();
+
+protected:
+    bool eventFilter(QObject* obj, QEvent* event) override;
 
 private:
     QJSValue newEnumObject(const QMetaObject& metaObj, const QString& enumName);

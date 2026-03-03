@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="contextMenuPolicy">
-   <enum>Qt::NoContextMenu</enum>
+   <enum>Qt::ContextMenuPolicy::NoContextMenu</enum>
   </property>
   <property name="windowTitle">
    <string>Open ModSim</string>
@@ -36,6 +36,9 @@
     </property>
     <item>
      <widget class="QMdiArea" name="mdiArea">
+      <property name="documentMode">
+       <bool>true</bool>
+      </property>
       <property name="tabsClosable">
        <bool>true</bool>
       </property>
@@ -214,8 +217,11 @@
     <addaction name="actionScriptBar"/>
     <addaction name="actionEditBar"/>
     <addaction name="separator"/>
-    <addaction name="menuConfig"/>
+    <addaction name="actionScriptHelp"/>
+    <addaction name="actionConsoleOutput"/>
+    <addaction name="separator"/>
     <addaction name="menuLanguage"/>
+    <addaction name="menuConfig"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuEdit"/>
@@ -995,7 +1001,7 @@
     <string notr="true">F9</string>
    </property>
    <property name="shortcutContext">
-    <enum>Qt::ApplicationShortcut</enum>
+    <enum>Qt::ShortcutContext::ApplicationShortcut</enum>
    </property>
    <property name="autoRepeat">
     <bool>false</bool>
@@ -1085,7 +1091,7 @@
     <string>ANSI</string>
    </property>
    <property name="menuRole">
-    <enum>QAction::TextHeuristicRole</enum>
+    <enum>QAction::MenuRole::TextHeuristicRole</enum>
    </property>
   </action>
   <action name="actionChineseCN">
@@ -1144,7 +1150,7 @@
     <string notr="true">F10</string>
    </property>
    <property name="shortcutContext">
-    <enum>Qt::ApplicationShortcut</enum>
+    <enum>Qt::ShortcutContext::ApplicationShortcut</enum>
    </property>
    <property name="autoRepeat">
     <bool>false</bool>
@@ -1164,12 +1170,31 @@
     <string notr="true">繁體中文</string>
    </property>
    <property name="menuRole">
-    <enum>QAction::TextHeuristicRole</enum>
+    <enum>QAction::MenuRole::TextHeuristicRole</enum>
    </property>
   </action>
   <action name="actionResetCtrs">
    <property name="text">
     <string>Reset Ctrs</string>
+   </property>
+  </action>
+  <action name="actionScriptHelp">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Script Help</string>
+   </property>
+   <property name="toolTip">
+    <string>Script Help</string>
+   </property>
+  </action>
+  <action name="actionConsoleOutput">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Console Output</string>
    </property>
   </action>
  </widget>

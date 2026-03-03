@@ -29,6 +29,9 @@ JScriptControl::JScriptControl(QWidget *parent)
     connect(ui->codeEditor, &JSCodeEditor::helpContext, this, &JScriptControl::showHelp);
     connect(ui->console, &ConsoleOutput::collapse, this, &JScriptControl::hideConsole);
     connect(ui->helpWidget, &HelpWidget::collapse, this, &JScriptControl::hideHelp);
+
+    ui->helpWidget->installEventFilter(this);
+    ui->console->installEventFilter(this);
 }
 
 ///
@@ -37,6 +40,60 @@ JScriptControl::JScriptControl(QWidget *parent)
 JScriptControl::~JScriptControl()
 {
     delete ui;
+}
+
+///
+/// \brief JScriptControl::eventFilter
+/// \param obj
+/// \param event
+/// \return
+///
+bool JScriptControl::eventFilter(QObject* obj, QEvent* event)
+{
+    if (event->type() == QEvent::Resize)
+    {
+        if (obj == ui->helpWidget)
+        {
+            const QList<int> sizes = ui->verticalSplitter->sizes();
+            if (sizes.size() == 2)
+            {
+                const bool visible = sizes.at(1) > 0;
+                if (ui->helpWidget->isVisible() != visible)
+                    ui->helpWidget->setVisible(visible);
+            }
+        }
+
+        if (obj == ui->console)
+        {
+            const QList<int> sizes = ui->horizontalSplitter->sizes();
+            if (sizes.size() == 2)
+            {
+                const bool visible = sizes.at(1) > 0;
+                if (ui->console->isVisible() != visible)
+                    ui->console->setVisible(visible);
+            }
+        }
+    }
+
+    return QWidget::eventFilter(obj, event);
+}
+
+///
+/// \brief JScriptControl::isHelpVisible
+/// \return
+///
+bool JScriptControl::isHelpVisible() const
+{
+    return ui->helpWidget->isVisible();
+}
+
+///
+/// \brief JScriptControl::isConsoleOutputVisible
+/// \return
+///
+bool JScriptControl::isConsoleVisible() const
+{
+    return ui->console->isVisible();
 }
 
 ///
@@ -306,8 +363,12 @@ void JScriptControl::showHelp(const QString& helpKey)
     {
         const int w = size().width();
         ui->verticalSplitter->setSizes(QList<int>() << w * 5 / 7 << w * 2 / 7);
+        ui->helpWidget->setVisible(true);
     }
-    ui->helpWidget->showHelp(helpKey);
+
+    if(!helpKey.isEmpty()) {
+        ui->helpWidget->showHelp(helpKey);
+    }
 }
 
 ///
@@ -315,7 +376,7 @@ void JScriptControl::showHelp(const QString& helpKey)
 ///
 void JScriptControl::hideHelp()
 {
-     ui->verticalSplitter->setSizes(QList<int>() << 1 << 0);
+    ui->verticalSplitter->setSizes(QList<int>() << 1 << 0);
 }
 
 ///
@@ -327,6 +388,7 @@ void JScriptControl::showConsole()
     {
         const int h = size().height();
         ui->horizontalSplitter->setSizes(QList<int>() << h * 6 / 7 << h * 1 / 7);
+        ui->console->setVisible(true);
     }
 }
 
@@ -366,6 +428,8 @@ QSettings& operator <<(QSettings& out, const JScriptControl* ctrl)
     out.setValue("ScriptControl/Script", ctrl->script().toUtf8().toBase64());
     out.setValue("ScriptControl/VSplitter", ctrl->ui->verticalSplitter->saveState());
     out.setValue("ScriptControl/HSplitter", ctrl->ui->horizontalSplitter->saveState());
+    out.setValue("ScriptControl/HelpVisible",    ctrl->isHelpVisible());
+    out.setValue("ScriptControl/ConsoleVisible", ctrl->isConsoleVisible());
     return out;
 }
 
@@ -379,6 +443,9 @@ QSettings& operator >>(QSettings& in, JScriptControl* ctrl)
 {
     const auto script = QByteArray::fromBase64(in.value("ScriptControl/Script").toString().toUtf8());
     ctrl->setScript(script);
+
+    ctrl->ui->helpWidget->setVisible(in.value("ScriptControl/HelpVisible", true).toBool());
+    ctrl->ui->console->setVisible(in.value("ScriptControl/ConsoleVisible", true).toBool());
 
     const auto vstate = in.value("ScriptControl/VSplitter").toByteArray();
     if(!vstate.isEmpty()) ctrl->ui->verticalSplitter->restoreState(vstate);
@@ -398,9 +465,11 @@ QSettings& operator >>(QSettings& in, JScriptControl* ctrl)
 QDataStream& operator <<(QDataStream& out, const JScriptControl* ctrl)
 {
     QMap<QString, QVariant> m;
-    m["script"] = ctrl->script();
-    m["vsplitter"] = ctrl->ui->verticalSplitter->saveState();
-    m["hsplitter"] = ctrl->ui->horizontalSplitter->saveState();
+    m["script"]        = ctrl->script();
+    m["vsplitter"]     = ctrl->ui->verticalSplitter->saveState();
+    m["hsplitter"]     = ctrl->ui->horizontalSplitter->saveState();
+    m["helpVisible"]   = ctrl->isHelpVisible();
+    m["consoleVisible"]= ctrl->isConsoleVisible();
 
     out << m;
     return out;
@@ -418,6 +487,9 @@ QDataStream& operator >>(QDataStream& in, JScriptControl* ctrl)
     in >> m;
 
     ctrl->setScript(m["script"].toString());
+
+    ctrl->ui->helpWidget->setVisible(m.value("helpVisible", true).toBool());
+    ctrl->ui->console->setVisible(m.value("consoleVisible", true).toBool());
 
     const auto vstate = m["vsplitter"].toByteArray();
     if(!vstate.isEmpty()) ctrl->ui->verticalSplitter->restoreState(vstate);
@@ -445,10 +517,12 @@ QXmlStreamWriter& operator <<(QXmlStreamWriter& xml, const JScriptControl* ctrl)
     xml.writeEndElement();
 
     xml.writeStartElement("VerticalSplitter");
+    xml.writeAttribute("Visible", boolToString(ctrl->isHelpVisible()));
     xml.writeCharacters(ctrl->ui->verticalSplitter->saveState().toBase64());
     xml.writeEndElement();
 
     xml.writeStartElement("HorizontalSplitter");
+    xml.writeAttribute("Visible", boolToString(ctrl->isConsoleVisible()));
     xml.writeCharacters(ctrl->ui->horizontalSplitter->saveState().toBase64());
     xml.writeEndElement();
 
@@ -479,14 +553,18 @@ QXmlStreamReader& operator>>(QXmlStreamReader& xml, JScriptControl* ctrl)
                 ctrl->setScript(scriptText);
             }
             else if (xml.name() == QLatin1String("VerticalSplitter")) {
+                const QXmlStreamAttributes attrs = xml.attributes();
+                const bool visible = !attrs.hasAttribute("Visible") || stringToBool(attrs.value("Visible").toString());
+                ctrl->ui->helpWidget->setVisible(visible);
                 const QByteArray state = QByteArray::fromBase64(xml.readElementText().toLatin1());
-                if (!state.isEmpty())
-                    ctrl->ui->verticalSplitter->restoreState(state);
+                if (!state.isEmpty()) ctrl->ui->verticalSplitter->restoreState(state);
             }
             else if (xml.name() == QLatin1String("HorizontalSplitter")) {
+                const QXmlStreamAttributes attrs = xml.attributes();
+                const bool visible = !attrs.hasAttribute("Visible") || stringToBool(attrs.value("Visible").toString());
+                ctrl->ui->console->setVisible(visible);
                 const QByteArray state = QByteArray::fromBase64(xml.readElementText().toLatin1());
-                if (!state.isEmpty())
-                    ctrl->ui->horizontalSplitter->restoreState(state);
+                if (!state.isEmpty()) ctrl->ui->horizontalSplitter->restoreState(state);
             }
             else if (xml.name() == QLatin1String("AutoComplete")) {
                 const QXmlStreamAttributes attrs = xml.attributes();

@@ -97,6 +97,12 @@ public:
     int zoomPercent() const;
     void setZoomPercent(int zoomPercent);
 
+    bool isScriptHelpVisible() const;
+    void setScriptHelpVisible(bool visible);
+
+    bool isConsoleOutputVisible() const;
+    void setConsoleOutputVisible(bool visible);
+
     void print(QPrinter* painter);
 
     ModbusSimulationMap2 simulationMap() const;

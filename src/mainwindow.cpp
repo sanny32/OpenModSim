@@ -294,6 +294,9 @@ void MainWindow::on_awake()
     ui->actionChineseCN->setChecked(_lang == "zh_CN");
     ui->actionChineseTW->setChecked(_lang == "zh_TW");
 
+    ui->actionScriptHelp->setVisible(frm && frm->displayMode() == DisplayMode::Script);
+    ui->actionConsoleOutput->setVisible(frm && frm->displayMode() == DisplayMode::Script);
+
     ui->actionTile->setEnabled(ui->mdiArea->viewMode() == QMdiArea::SubWindowView);
     ui->actionCascade->setEnabled(ui->mdiArea->viewMode() == QMdiArea::SubWindowView);
 
@@ -352,6 +355,9 @@ void MainWindow::on_awake()
         ui->actionShowData->setChecked(dm == DisplayMode::Data);
         ui->actionShowTraffic->setChecked(dm == DisplayMode::Traffic);
         ui->actionShowScript->setChecked(dm == DisplayMode::Script);
+
+        ui->actionScriptHelp->setChecked(frm->isScriptHelpVisible());
+        ui->actionConsoleOutput->setChecked(frm->isConsoleOutputVisible());
 
         ui->actionUndo->setEnabled(dm == DisplayMode::Script && frm->canUndo());
         ui->actionRedo->setEnabled(dm == DisplayMode::Script && frm->canRedo());
@@ -1025,6 +1031,28 @@ void MainWindow::on_actionEditBar_triggered()
     const bool isVisible = ui->toolBarEdit->isVisible();
     ui->toolBarEdit->setVisible(!isVisible);
     ui->toolBarEdit->setProperty("Hidden", isVisible);
+}
+
+///
+/// \brief MainWindow::on_actionScriptHelp_triggered
+///
+void MainWindow::on_actionScriptHelp_triggered()
+{
+    auto frm = currentMdiChild();
+    if(!frm || frm->displayMode() != DisplayMode::Script) return;
+
+    frm->setScriptHelpVisible(!frm->isScriptHelpVisible());
+}
+
+///
+/// \brief MainWindow::on_actionConsoleOutput_triggered
+///
+void MainWindow::on_actionConsoleOutput_triggered()
+{
+    auto frm = currentMdiChild();
+    if(!frm || frm->displayMode() != DisplayMode::Script) return;
+
+    frm->setConsoleOutputVisible(!frm->isConsoleOutputVisible());
 }
 
 ///
