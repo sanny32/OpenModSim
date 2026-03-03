@@ -67,8 +67,6 @@ JScriptControl::JScriptControl(QWidget *parent)
     connect(ui->console, &ConsoleOutput::collapse, this, &JScriptControl::hideConsole);
     connect(ui->helpWidget, &HelpWidget::collapse, this, &JScriptControl::hideHelp);
 
-    ui->helpWidget->installEventFilter(this);
-    ui->console->installEventFilter(this);
 }
 
 ///
@@ -89,28 +87,6 @@ bool JScriptControl::eventFilter(QObject* obj, QEvent* event)
 {
     if (event->type() == QEvent::Resize)
     {
-        if (obj == ui->helpWidget)
-        {
-            const QList<int> sizes = ui->verticalSplitter->sizes();
-            if (sizes.size() == 2)
-            {
-                const bool visible = sizes.at(1) > 0;
-                if (ui->helpWidget->isVisible() != visible)
-                    ui->helpWidget->setVisible(visible);
-            }
-        }
-
-        if (obj == ui->console)
-        {
-            const QList<int> sizes = ui->horizontalSplitter->sizes();
-            if (sizes.size() == 2)
-            {
-                const bool visible = sizes.at(1) > 0;
-                if (ui->console->isVisible() != visible)
-                    ui->console->setVisible(visible);
-            }
-        }
-
         if (obj == ui->codeEditor)
         {
             _findReplaceBar->updatePosition();
@@ -436,7 +412,7 @@ void JScriptControl::showHelp(const QString& helpKey)
 ///
 void JScriptControl::hideHelp()
 {
-    ui->verticalSplitter->setSizes(QList<int>() << 1 << 0);
+    ui->helpWidget->setVisible(false);
 }
 
 ///
@@ -457,7 +433,7 @@ void JScriptControl::showConsole()
 ///
 void JScriptControl::hideConsole()
 {
-    ui->horizontalSplitter->setSizes(QList<int>() << 1 << 0);
+    ui->console->setVisible(false);
 }
 
 ///
