@@ -1430,72 +1430,59 @@
 <context>
     <name>DialogWriteCoilRegister</name>
     <message>
-        <location filename="../dialogs/dialogwritecoilregister.ui" line="14"/>
         <source>Write Coil</source>
-        <translation>写线圈</translation>
+        <translation type="vanished">写线圈</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwritecoilregister.ui" line="35"/>
         <source>Address: </source>
-        <translation>地址： </translation>
+        <translation type="vanished">地址： </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwritecoilregister.ui" line="82"/>
         <source>Value</source>
-        <translation>值</translation>
+        <translation type="vanished">值</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwritecoilregister.ui" line="101"/>
         <source>Off</source>
-        <translation>关</translation>
+        <translation type="vanished">关</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwritecoilregister.ui" line="108"/>
         <source>On</source>
-        <translation>开</translation>
+        <translation type="vanished">开</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwritecoilregister.ui" line="118"/>
         <source>Auto Simulation: OFF</source>
-        <translation>自动模拟：关闭</translation>
+        <translation type="vanished">自动模拟：关闭</translation>
     </message>
     <message>
         <source>Auto Simulation</source>
         <translation type="vanished">自动仿真</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwritecoilregister.cpp" line="29"/>
-        <location filename="../dialogs/dialogwritecoilregister.cpp" line="37"/>
         <source>Auto Simulation: ON</source>
-        <translation>自动模拟：开启</translation>
+        <translation type="vanished">自动模拟：开启</translation>
     </message>
 </context>
 <context>
     <name>DialogWriteHoldingRegister</name>
     <message>
-        <location filename="../dialogs/dialogwriteholdingregister.ui" line="14"/>
         <source>Write Register</source>
-        <translation>写寄存器</translation>
+        <translation type="vanished">写寄存器</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwriteholdingregister.ui" line="23"/>
         <source>Address: </source>
-        <translation>地址： </translation>
+        <translation type="vanished">地址： </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwriteholdingregister.ui" line="55"/>
         <source>Value: </source>
-        <translation>值： </translation>
+        <translation type="vanished">值： </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwriteholdingregister.ui" line="83"/>
         <source>Auto Simulation: OFF</source>
-        <translation>自动模拟：关闭</translation>
+        <translation type="vanished">自动模拟：关闭</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwriteholdingregister.ui" line="105"/>
         <source>Bit Pattern:</source>
-        <translation>位模式：</translation>
+        <translation type="vanished">位模式：</translation>
     </message>
     <message>
         <source>Bit Pattern</source>
@@ -1506,38 +1493,126 @@
         <translation type="vanished">自动仿真</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwriteholdingregister.cpp" line="59"/>
-        <location filename="../dialogs/dialogwriteholdingregister.cpp" line="68"/>
         <source>Auto Simulation: ON</source>
-        <translation>自动模拟：开启</translation>
+        <translation type="vanished">自动模拟：开启</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwriteholdingregister.cpp" line="107"/>
         <source>Value, (HEX): </source>
-        <translation>值（十六进制）： </translation>
+        <translation type="vanished">值（十六进制）： </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwriteholdingregister.cpp" line="114"/>
         <source>Value, (ANSI): </source>
-        <translation>值，(ANSI)： </translation>
+        <translation type="vanished">值，(ANSI)： </translation>
     </message>
 </context>
 <context>
     <name>DialogWriteHoldingRegisterBits</name>
     <message>
-        <location filename="../dialogs/dialogwriteholdingregisterbits.ui" line="14"/>
         <source>Write Register</source>
-        <translation>写寄存器</translation>
+        <translation type="vanished">写寄存器</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwriteholdingregisterbits.ui" line="38"/>
         <source>Address: </source>
-        <translation>地址： </translation>
+        <translation type="vanished">地址： </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwriteholdingregisterbits.ui" line="85"/>
         <source>Bit Pattern</source>
-        <translation>位模式</translation>
+        <translation type="vanished">位模式</translation>
+    </message>
+</context>
+<context>
+    <name>DialogWriteRegister</name>
+    <message>
+        <location filename="../dialogs/dialogwriteregister.ui" line="14"/>
+        <source>06: Write Holding Register</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogwriteregister.ui" line="23"/>
+        <source>Device Id: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogwriteregister.ui" line="52"/>
+        <source>Address: </source>
+        <translation type="unfinished">地址： </translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogwriteregister.ui" line="84"/>
+        <source>Value: </source>
+        <translation type="unfinished">值： </translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogwriteregister.ui" line="118"/>
+        <location filename="../dialogs/dialogwriteregister.cpp" line="223"/>
+        <source>Auto Simulation: OFF</source>
+        <translation type="unfinished">自动模拟：关闭</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogwriteregister.ui" line="140"/>
+        <source>Bit Pattern: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogwriteregister.cpp" line="101"/>
+        <source>Value, (HEX): </source>
+        <translation type="unfinished">值（十六进制）： </translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogwriteregister.cpp" line="108"/>
+        <source>Value, (ANSI): </source>
+        <translation type="unfinished">值，(ANSI)： </translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogwriteregister.cpp" line="217"/>
+        <location filename="../dialogs/dialogwriteregister.cpp" line="230"/>
+        <source>Auto Simulation: ON</source>
+        <translation type="unfinished">自动模拟：开启</translation>
+    </message>
+</context>
+<context>
+    <name>DialogWriteStatusRegister</name>
+    <message>
+        <location filename="../dialogs/dialogwritestatusregister.ui" line="14"/>
+        <source>05: Write Single Coil</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogwritestatusregister.ui" line="23"/>
+        <source>Device Id: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogwritestatusregister.ui" line="52"/>
+        <source>Address: </source>
+        <translation type="unfinished">地址： </translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogwritestatusregister.ui" line="84"/>
+        <source>Value:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogwritestatusregister.ui" line="108"/>
+        <source>Off</source>
+        <translation type="unfinished">关</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogwritestatusregister.ui" line="115"/>
+        <source>On</source>
+        <translation type="unfinished">开</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogwritestatusregister.ui" line="134"/>
+        <location filename="../dialogs/dialogwritestatusregister.cpp" line="85"/>
+        <source>Auto Simulation: OFF</source>
+        <translation type="unfinished">自动模拟：关闭</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogwritestatusregister.cpp" line="79"/>
+        <location filename="../dialogs/dialogwritestatusregister.cpp" line="91"/>
+        <source>Auto Simulation: ON</source>
+        <translation type="unfinished">自动模拟：开启</translation>
     </message>
 </context>
 <context>
@@ -1614,7 +1689,7 @@ Length: %2</source>
         <translation type="vanished">指定了非法的数据长度</translation>
     </message>
     <message>
-        <location filename="../formmodsim.cpp" line="511"/>
+        <location filename="../formmodsim.cpp" line="510"/>
         <source>Address Base: %1
 Start Address: %2
 Length: %3</source>
@@ -1623,7 +1698,7 @@ Length: %3</source>
 长度: %3</translation>
     </message>
     <message>
-        <location filename="../formmodsim.cpp" line="514"/>
+        <location filename="../formmodsim.cpp" line="513"/>
         <source>Device Id: %1
 MODBUS Point Type:
 %2</source>

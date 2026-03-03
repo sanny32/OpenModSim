@@ -1426,72 +1426,59 @@
 <context>
     <name>DialogWriteCoilRegister</name>
     <message>
-        <location filename="../dialogs/dialogwritecoilregister.ui" line="14"/>
         <source>Write Coil</source>
-        <translation>Запись в регистр Coil</translation>
+        <translation type="vanished">Запись в регистр Coil</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwritecoilregister.ui" line="35"/>
         <source>Address: </source>
-        <translation>Адрес: </translation>
+        <translation type="vanished">Адрес: </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwritecoilregister.ui" line="82"/>
         <source>Value</source>
-        <translation>Значение</translation>
+        <translation type="vanished">Значение</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwritecoilregister.ui" line="101"/>
         <source>Off</source>
-        <translation>Откл</translation>
+        <translation type="vanished">Откл</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwritecoilregister.ui" line="108"/>
         <source>On</source>
-        <translation>Вкл</translation>
+        <translation type="vanished">Вкл</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwritecoilregister.ui" line="118"/>
         <source>Auto Simulation: OFF</source>
-        <translation>Симуляция: Выкл</translation>
+        <translation type="vanished">Симуляция: Выкл</translation>
     </message>
     <message>
         <source>Auto Simulation</source>
         <translation type="vanished">Симуляция</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwritecoilregister.cpp" line="29"/>
-        <location filename="../dialogs/dialogwritecoilregister.cpp" line="37"/>
         <source>Auto Simulation: ON</source>
-        <translation>Симуляция: Вкл</translation>
+        <translation type="vanished">Симуляция: Вкл</translation>
     </message>
 </context>
 <context>
     <name>DialogWriteHoldingRegister</name>
     <message>
-        <location filename="../dialogs/dialogwriteholdingregister.ui" line="14"/>
         <source>Write Register</source>
-        <translation>Запись в регистр</translation>
+        <translation type="vanished">Запись в регистр</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwriteholdingregister.ui" line="23"/>
         <source>Address: </source>
-        <translation>Адрес: </translation>
+        <translation type="vanished">Адрес: </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwriteholdingregister.ui" line="55"/>
         <source>Value: </source>
-        <translation>Значение: </translation>
+        <translation type="vanished">Значение: </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwriteholdingregister.ui" line="83"/>
         <source>Auto Simulation: OFF</source>
-        <translation>Симуляция: Выкл</translation>
+        <translation type="vanished">Симуляция: Выкл</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwriteholdingregister.ui" line="105"/>
         <source>Bit Pattern:</source>
-        <translation>Битовый шаблон:</translation>
+        <translation type="vanished">Битовый шаблон:</translation>
     </message>
     <message>
         <source>Bit Pattern</source>
@@ -1502,38 +1489,126 @@
         <translation type="vanished">Симуляция</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwriteholdingregister.cpp" line="59"/>
-        <location filename="../dialogs/dialogwriteholdingregister.cpp" line="68"/>
         <source>Auto Simulation: ON</source>
-        <translation>Симуляция: Вкл</translation>
+        <translation type="vanished">Симуляция: Вкл</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwriteholdingregister.cpp" line="107"/>
         <source>Value, (HEX): </source>
-        <translation>Значение, (HEX): </translation>
+        <translation type="vanished">Значение, (HEX): </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwriteholdingregister.cpp" line="114"/>
         <source>Value, (ANSI): </source>
-        <translation>Знвчение, (ANSI): </translation>
+        <translation type="vanished">Знвчение, (ANSI): </translation>
     </message>
 </context>
 <context>
     <name>DialogWriteHoldingRegisterBits</name>
     <message>
-        <location filename="../dialogs/dialogwriteholdingregisterbits.ui" line="14"/>
         <source>Write Register</source>
-        <translation>Запись в регистр</translation>
+        <translation type="vanished">Запись в регистр</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwriteholdingregisterbits.ui" line="38"/>
         <source>Address: </source>
-        <translation>Адрес: </translation>
+        <translation type="vanished">Адрес: </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwriteholdingregisterbits.ui" line="85"/>
         <source>Bit Pattern</source>
-        <translation>Битовый шаблон</translation>
+        <translation type="vanished">Битовый шаблон</translation>
+    </message>
+</context>
+<context>
+    <name>DialogWriteRegister</name>
+    <message>
+        <location filename="../dialogs/dialogwriteregister.ui" line="14"/>
+        <source>06: Write Holding Register</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogwriteregister.ui" line="23"/>
+        <source>Device Id: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogwriteregister.ui" line="52"/>
+        <source>Address: </source>
+        <translation type="unfinished">Адрес: </translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogwriteregister.ui" line="84"/>
+        <source>Value: </source>
+        <translation type="unfinished">Значение: </translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogwriteregister.ui" line="118"/>
+        <location filename="../dialogs/dialogwriteregister.cpp" line="223"/>
+        <source>Auto Simulation: OFF</source>
+        <translation type="unfinished">Симуляция: Выкл</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogwriteregister.ui" line="140"/>
+        <source>Bit Pattern: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogwriteregister.cpp" line="101"/>
+        <source>Value, (HEX): </source>
+        <translation type="unfinished">Значение, (HEX): </translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogwriteregister.cpp" line="108"/>
+        <source>Value, (ANSI): </source>
+        <translation type="unfinished">Знвчение, (ANSI): </translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogwriteregister.cpp" line="217"/>
+        <location filename="../dialogs/dialogwriteregister.cpp" line="230"/>
+        <source>Auto Simulation: ON</source>
+        <translation type="unfinished">Симуляция: Вкл</translation>
+    </message>
+</context>
+<context>
+    <name>DialogWriteStatusRegister</name>
+    <message>
+        <location filename="../dialogs/dialogwritestatusregister.ui" line="14"/>
+        <source>05: Write Single Coil</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogwritestatusregister.ui" line="23"/>
+        <source>Device Id: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogwritestatusregister.ui" line="52"/>
+        <source>Address: </source>
+        <translation type="unfinished">Адрес: </translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogwritestatusregister.ui" line="84"/>
+        <source>Value:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogwritestatusregister.ui" line="108"/>
+        <source>Off</source>
+        <translation type="unfinished">Откл</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogwritestatusregister.ui" line="115"/>
+        <source>On</source>
+        <translation type="unfinished">Вкл</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogwritestatusregister.ui" line="134"/>
+        <location filename="../dialogs/dialogwritestatusregister.cpp" line="85"/>
+        <source>Auto Simulation: OFF</source>
+        <translation type="unfinished">Симуляция: Выкл</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogwritestatusregister.cpp" line="79"/>
+        <location filename="../dialogs/dialogwritestatusregister.cpp" line="91"/>
+        <source>Auto Simulation: ON</source>
+        <translation type="unfinished">Симуляция: Вкл</translation>
     </message>
 </context>
 <context>
@@ -1610,7 +1685,7 @@ Length: %2</source>
         <translation type="vanished">Указана недопустимая длина данных</translation>
     </message>
     <message>
-        <location filename="../formmodsim.cpp" line="511"/>
+        <location filename="../formmodsim.cpp" line="510"/>
         <source>Address Base: %1
 Start Address: %2
 Length: %3</source>
@@ -1619,7 +1694,7 @@ Length: %3</source>
 Количество: %3</translation>
     </message>
     <message>
-        <location filename="../formmodsim.cpp" line="514"/>
+        <location filename="../formmodsim.cpp" line="513"/>
         <source>Device Id: %1
 MODBUS Point Type:
 %2</source>

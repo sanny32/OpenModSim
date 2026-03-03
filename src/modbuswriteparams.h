@@ -4,6 +4,8 @@
 #include <QVariant>
 #include "enums.h"
 
+class ModbusMultiServer;
+
 ///
 /// \brief The ModbusWriteParams class
 ///
@@ -18,6 +20,7 @@ struct ModbusWriteParams
     QString Codepage;
     bool ZeroBasedAddress;
     bool LeadingZeros = false;
+    ModbusMultiServer* Server = nullptr;
 };
 Q_DECLARE_METATYPE(ModbusWriteParams)
 
