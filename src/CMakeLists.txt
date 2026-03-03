@@ -110,6 +110,7 @@ set(SOURCES
     controls/bitpatterncontrol.cpp
     controls/booleancombobox.cpp
     controls/bytelisttextedit.cpp
+    controls/checkablegroupbox.cpp
     controls/clickablelabel.cpp
     controls/consoleoutput.cpp
     controls/customframe.cpp
@@ -146,9 +147,8 @@ set(SOURCES
     dialogs/dialogsetuppresetdata.cpp
     dialogs/dialogsetupserialport.cpp
     dialogs/dialogwindowsmanager.cpp
-    dialogs/dialogwritecoilregister.cpp
-    dialogs/dialogwriteholdingregister.cpp
-    dialogs/dialogwriteholdingregisterbits.cpp
+    dialogs/dialogwritestatusregister.cpp
+    dialogs/dialogwriteregister.cpp
     htmldelegate.cpp
     jscompleter.cpp
     jsobjects/console.cpp
@@ -191,6 +191,7 @@ set(HEADERS
     controls/bitpatterncontrol.h
     controls/booleancombobox.h
     controls/bytelisttextedit.h
+    controls/checkablegroupbox.h
     controls/clickablelabel.h
     controls/consoleoutput.h
     controls/customframe.h
@@ -228,9 +229,8 @@ set(HEADERS
     dialogs/dialogsetuppresetdata.h
     dialogs/dialogsetupserialport.h
     dialogs/dialogwindowsmanager.h
-    dialogs/dialogwritecoilregister.h
-    dialogs/dialogwriteholdingregister.h
-    dialogs/dialogwriteholdingregisterbits.h
+    dialogs/dialogwritestatusregister.h
+    dialogs/dialogwriteregister.h
     fontutils.h
     formatutils.h
     htmldelegate.h
@@ -317,9 +317,8 @@ set(UI_FILES
     dialogs/dialogsetuppresetdata.ui
     dialogs/dialogsetupserialport.ui
     dialogs/dialogwindowsmanager.ui
-    dialogs/dialogwritecoilregister.ui
-    dialogs/dialogwriteholdingregister.ui
-    dialogs/dialogwriteholdingregisterbits.ui
+    dialogs/dialogwritestatusregister.ui
+    dialogs/dialogwriteregister.ui
     formmodsim.ui
     mainwindow.ui
 )

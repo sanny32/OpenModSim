@@ -7,9 +7,8 @@
 #include "mainwindow.h"
 #include "modbusmessages.h"
 #include "datasimulator.h"
-#include "dialogwritecoilregister.h"
-#include "dialogwriteholdingregister.h"
-#include "dialogwriteholdingregisterbits.h"
+#include "dialogwritestatusregister.h"
+#include "dialogwriteregister.h"
 #include "formmodsim.h"
 #include "ui_formmodsim.h"
 
@@ -923,10 +922,11 @@ JScriptControl* FormModSim::scriptControl()
 ///
 void FormModSim::on_outputWidget_itemDoubleClicked(quint16 addr, const QVariant& value)
 {
+    const auto dd = displayDefinition();
     const auto mode = dataDisplayMode();
     const auto deviceId = ui->lineEditDeviceId->value<quint8>();
     const auto pointType = ui->comboBoxModbusPointType->currentPointType();
-    const auto zeroBasedAddress = displayDefinition().ZeroBasedAddress;
+    const auto zeroBasedAddress = dd.ZeroBasedAddress;
     const auto simAddr = addr - (zeroBasedAddress ? 0 : 1);
     const auto addrSpace = _mbMultiServer.getModbusDefinitions().AddrSpace;
     auto simParams = _dataSimulator->simulationParams(deviceId, pointType, simAddr);
@@ -936,51 +936,42 @@ void FormModSim::on_outputWidget_itemDoubleClicked(quint16 addr, const QVariant&
         case QModbusDataUnit::Coils:
         case QModbusDataUnit::DiscreteInputs:
         {
-            ModbusWriteParams params = { deviceId, addr, value, mode, addrSpace, byteOrder(), codepage(), zeroBasedAddress };
-            DialogWriteCoilRegister dlg(params, simParams, displayHexAddresses(), _parent);
-            switch(dlg.exec())
-            {
-                case QDialog::Accepted:
-                    _mbMultiServer.writeRegister(pointType, params);
-                break;
+            ModbusWriteParams params;
+            params.DeviceId = deviceId;
+            params.Address = addr;
+            params.Value = value;
+            params.DisplayMode = mode;
+            params.AddrSpace = addrSpace;
+            params.Order = byteOrder();
+            params.Codepage = codepage();
+            params.ZeroBasedAddress = zeroBasedAddress;
+            params.LeadingZeros = dd.LeadingZeros;
+            params.Server = &_mbMultiServer;
 
-                case 2:
-                    if(simParams.Mode == SimulationMode::Off) _dataSimulator->stopSimulation(deviceId, pointType, simAddr);
-                    else _dataSimulator->startSimulation(deviceId, pointType, simAddr, simParams);
-                break;
-            }
+            DialogWriteStatusRegister dlg(params, pointType, displayHexAddresses(), _dataSimulator.get(), _parent);
+            if(dlg.exec() == QDialog::Accepted)
+                _mbMultiServer.writeRegister(pointType, params);
         }
         break;
 
         case QModbusDataUnit::InputRegisters:
         case QModbusDataUnit::HoldingRegisters:
         {
-            if(!_dataSimulator->canStartSimulation(mode, deviceId, pointType, simAddr)) {
-                simParams.Mode = SimulationMode::Disabled;
-            }
+            ModbusWriteParams params;
+            params.DeviceId = deviceId;
+            params.Address = addr;
+            params.Value = value;
+            params.DisplayMode = mode;
+            params.AddrSpace = addrSpace;
+            params.Order = byteOrder();
+            params.Codepage = codepage();
+            params.ZeroBasedAddress = zeroBasedAddress;
+            params.LeadingZeros = dd.LeadingZeros;
+            params.Server = &_mbMultiServer;
 
-            ModbusWriteParams params = { deviceId, addr, value, mode, addrSpace, byteOrder(), codepage(), zeroBasedAddress };
-            if(mode == DataDisplayMode::Binary)
-            {
-                DialogWriteHoldingRegisterBits dlg(params, displayHexAddresses(), _parent);
-                if(dlg.exec() == QDialog::Accepted)
-                    _mbMultiServer.writeRegister(pointType, params);
-            }
-            else
-            {
-                DialogWriteHoldingRegister dlg(params, simParams, displayHexAddresses(), _parent);
-                switch(dlg.exec())
-                {
-                    case QDialog::Accepted:
-                        _mbMultiServer.writeRegister(pointType, params);
-                    break;
-
-                    case 2:
-                        if(simParams.Mode == SimulationMode::Off) _dataSimulator->stopSimulation(deviceId, pointType, simAddr);
-                        else _dataSimulator->startSimulation(deviceId, pointType, simAddr, simParams);
-                    break;
-                }
-            }
+            DialogWriteRegister dlg(params, pointType, displayHexAddresses(), _dataSimulator.get(), _parent);
+            if(dlg.exec() == QDialog::Accepted)
+                _mbMultiServer.writeRegister(pointType, params);
         }
         break;
 
