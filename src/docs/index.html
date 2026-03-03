@@ -742,22 +742,22 @@
 					<li><code>[value, ...]</code> &mdash; return values for FC 1&ndash;4 (booleans for coils/discrete inputs, integers for registers)</li>
 				</ul>
 				<p><strong>Example:</strong></p>
-<pre><code>Server.onRequest(function(req) {
-    // Custom response for ReadHoldingRegisters
-    if (req.functionCode === 3) {
-        return [100, 200, 300];
+				<table width="100%" cellspacing="0" cellpadding="0" style="border-left: 3px solid #41cd52; margin: 0.5em 0;"><tr><td bgcolor="#f6f7f8" style="padding: 0.6em 1em;"><pre style="margin: 0; padding: 0; font-family: Consolas, 'Courier New', monospace; font-size: 0.92em; line-height: 1.45; background: none; border: none;">Server.onRequest(<span style="color:#0070c1">function</span>(req) {
+    <span style="color:#008000">// Custom response for ReadHoldingRegisters</span>
+    <span style="color:#0070c1">if</span> (req.functionCode === <span style="color:#098658">3</span>) {
+        <span style="color:#0070c1">return</span> [<span style="color:#098658">100</span>, <span style="color:#098658">200</span>, <span style="color:#098658">300</span>];
     }
-    // Handle ReportServerId with raw bytes
-    if (req.functionCode === 17) {
-        return { data: [0x01, 0xFF] };
+    <span style="color:#008000">// Handle ReportServerId with raw bytes</span>
+    <span style="color:#0070c1">if</span> (req.functionCode === <span style="color:#098658">17</span>) {
+        <span style="color:#0070c1">return</span> { data: [<span style="color:#098658">0x01</span>, <span style="color:#098658">0xFF</span>] };
     }
-    // Reject unknown function codes
-    if (req.functionCode > 24) {
-        return { exception: 1 };
+    <span style="color:#008000">// Reject unknown function codes</span>
+    <span style="color:#0070c1">if</span> (req.functionCode > <span style="color:#098658">24</span>) {
+        <span style="color:#0070c1">return</span> { exception: <span style="color:#098658">1</span> };
     }
-    // Default handling for everything else
-    return null;
-});</code></pre>
+    <span style="color:#008000">// Default handling for everything else</span>
+    <span style="color:#0070c1">return</span> <span style="color:#0070c1">null</span>;
+});</pre></td></tr></table>
 			</dd>
 			<dt id="server.readcoil"><code>Server.readCoil(address, deviceId)</code></dt>
 			<dd>
