@@ -170,6 +170,7 @@ private:
     void saveProfile();
 
     void saveAs(FormModSim* frm, SerializationFormat format);
+    void setViewMode(QMdiArea::ViewMode mode);
 
 private:
     Ui::MainWindow *ui;
