@@ -1,6 +1,7 @@
 #include <QFile>
 #include <QMetaEnum>
 #include "modbusmultiserver.h"
+#include "findreplacebar.h"
 #include "jscriptcontrol.h"
 #include "ui_jscriptcontrol.h"
 
@@ -18,6 +19,42 @@ JScriptControl::JScriptControl(QWidget *parent)
 {
     ui->setupUi(this);
     ui->codeEditor->moveCursor(QTextCursor::End);
+
+    // Create find/replace bar as overlay on code editor (top-right corner)
+    _findReplaceBar = new FindReplaceBar(ui->codeEditor);
+    ui->codeEditor->installEventFilter(this);
+
+    // Connect find/replace bar signals
+    connect(_findReplaceBar, &FindReplaceBar::searchTextChanged, this, [this](const QString& text) {
+        int count = ui->codeEditor->highlightAllMatches(text);
+        _findReplaceBar->updateMatchCount(
+            count > 0 ? ui->codeEditor->currentMatchIndex() + 1 : 0, count);
+    });
+    connect(_findReplaceBar, &FindReplaceBar::findNext, this, [this](const QString& text) {
+        ui->codeEditor->findNext(text);
+        _findReplaceBar->updateMatchCount(
+            ui->codeEditor->currentMatchIndex() + 1, ui->codeEditor->totalMatchCount());
+    });
+    connect(_findReplaceBar, &FindReplaceBar::findPrevious, this, [this](const QString& text) {
+        ui->codeEditor->findPrevious(text);
+        _findReplaceBar->updateMatchCount(
+            ui->codeEditor->currentMatchIndex() + 1, ui->codeEditor->totalMatchCount());
+    });
+    connect(_findReplaceBar, &FindReplaceBar::replaceRequested, this, [this](const QString& text, const QString& replacement) {
+        ui->codeEditor->replaceCurrent(text, replacement);
+        _findReplaceBar->updateMatchCount(
+            ui->codeEditor->totalMatchCount() > 0 ? ui->codeEditor->currentMatchIndex() + 1 : 0,
+            ui->codeEditor->totalMatchCount());
+    });
+    connect(_findReplaceBar, &FindReplaceBar::replaceAllRequested, this, [this](const QString& text, const QString& replacement) {
+        int count = ui->codeEditor->replaceAll(text, replacement);
+        _findReplaceBar->updateMatchCount(0, 0);
+        Q_UNUSED(count);
+    });
+    connect(_findReplaceBar, &FindReplaceBar::closed, this, [this]() {
+        ui->codeEditor->clearSearchHighlights();
+        ui->codeEditor->setFocus();
+    });
 
     auto helpfile = QApplication::applicationDirPath() + "/docs/jshelp.qhc";
     if(!QFile::exists(helpfile)){
@@ -72,6 +109,11 @@ bool JScriptControl::eventFilter(QObject* obj, QEvent* event)
                 if (ui->console->isVisible() != visible)
                     ui->console->setVisible(visible);
             }
+        }
+
+        if (obj == ui->codeEditor)
+        {
+            _findReplaceBar->updatePosition();
         }
     }
 
@@ -225,6 +267,24 @@ void JScriptControl::search(const QString& text)
 {
     _searchText = text;
     ui->codeEditor->search(text);
+}
+
+///
+/// \brief JScriptControl::showFind
+///
+void JScriptControl::showFind()
+{
+    auto cursor = ui->codeEditor->textCursor();
+    _findReplaceBar->showFind(cursor.selectedText());
+}
+
+///
+/// \brief JScriptControl::showReplace
+///
+void JScriptControl::showReplace()
+{
+    auto cursor = ui->codeEditor->textCursor();
+    _findReplaceBar->showReplace(cursor.selectedText());
 }
 
 ///

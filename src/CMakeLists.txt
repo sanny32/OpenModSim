@@ -114,6 +114,7 @@ set(SOURCES
     controls/clickablelabel.cpp
     controls/consoleoutput.cpp
     controls/customframe.cpp
+    controls/findreplacebar.cpp
     controls/customlineedit.cpp
     controls/flowcontroltypecombobox.cpp
     controls/helpwidget.cpp
@@ -195,6 +196,7 @@ set(HEADERS
     controls/clickablelabel.h
     controls/consoleoutput.h
     controls/customframe.h
+    controls/findreplacebar.h
     controls/customlineedit.h
     controls/flowcontroltypecombobox.h
     controls/helpbrowser.h

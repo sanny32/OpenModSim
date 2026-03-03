@@ -139,6 +139,187 @@ void JSCodeEditor::search(const QString& text)
 }
 
 ///
+/// \brief JSCodeEditor::highlightAllMatches
+/// \param text
+/// \return
+///
+int JSCodeEditor::highlightAllMatches(const QString& text)
+{
+    _searchSelections.clear();
+    _currentMatchIndex = -1;
+
+    if(text.isEmpty())
+    {
+        highlightCurrentLine();
+        return 0;
+    }
+
+    const auto cur = textCursor();
+    QTextCursor findCursor(document());
+
+    while(!(findCursor = document()->find(text, findCursor)).isNull())
+    {
+        QTextEdit::ExtraSelection extra;
+        extra.format.setBackground(Qt::yellow);
+        extra.cursor = findCursor;
+        _searchSelections.append(extra);
+    }
+
+    // Determine current match based on cursor position
+    for(int i = 0; i < _searchSelections.size(); ++i)
+    {
+        if(_searchSelections[i].cursor.selectionStart() >= cur.position())
+        {
+            _currentMatchIndex = i;
+            break;
+        }
+    }
+
+    if(_currentMatchIndex == -1 && !_searchSelections.isEmpty())
+        _currentMatchIndex = 0;
+
+    // Highlight current match differently
+    if(_currentMatchIndex >= 0 && _currentMatchIndex < _searchSelections.size())
+        _searchSelections[_currentMatchIndex].format.setBackground(QColor(255, 150, 50));
+
+    highlightCurrentLine();
+    return _searchSelections.size();
+}
+
+///
+/// \brief JSCodeEditor::clearSearchHighlights
+///
+void JSCodeEditor::clearSearchHighlights()
+{
+    _searchSelections.clear();
+    _currentMatchIndex = -1;
+    highlightCurrentLine();
+}
+
+///
+/// \brief JSCodeEditor::findNext
+/// \param text
+/// \return
+///
+bool JSCodeEditor::findNext(const QString& text)
+{
+    if(_searchSelections.isEmpty() || text.isEmpty())
+        return false;
+
+    _currentMatchIndex++;
+    if(_currentMatchIndex >= _searchSelections.size())
+        _currentMatchIndex = 0;
+
+    // Reset all to yellow
+    for(auto& sel : _searchSelections)
+        sel.format.setBackground(Qt::yellow);
+
+    // Highlight current match
+    _searchSelections[_currentMatchIndex].format.setBackground(QColor(255, 150, 50));
+
+    // Move cursor to current match
+    auto cursor = _searchSelections[_currentMatchIndex].cursor;
+    setTextCursor(cursor);
+
+    highlightCurrentLine();
+    return true;
+}
+
+///
+/// \brief JSCodeEditor::findPrevious
+/// \param text
+/// \return
+///
+bool JSCodeEditor::findPrevious(const QString& text)
+{
+    if(_searchSelections.isEmpty() || text.isEmpty())
+        return false;
+
+    _currentMatchIndex--;
+    if(_currentMatchIndex < 0)
+        _currentMatchIndex = _searchSelections.size() - 1;
+
+    // Reset all to yellow
+    for(auto& sel : _searchSelections)
+        sel.format.setBackground(Qt::yellow);
+
+    // Highlight current match
+    _searchSelections[_currentMatchIndex].format.setBackground(QColor(255, 150, 50));
+
+    // Move cursor to current match
+    auto cursor = _searchSelections[_currentMatchIndex].cursor;
+    setTextCursor(cursor);
+
+    highlightCurrentLine();
+    return true;
+}
+
+///
+/// \brief JSCodeEditor::replaceCurrent
+/// \param text
+/// \param replacement
+///
+void JSCodeEditor::replaceCurrent(const QString& text, const QString& replacement)
+{
+    auto cursor = textCursor();
+    if(cursor.hasSelection() && cursor.selectedText().compare(text, Qt::CaseInsensitive) == 0)
+    {
+        cursor.insertText(replacement);
+        setTextCursor(cursor);
+    }
+
+    highlightAllMatches(text);
+    if(!_searchSelections.isEmpty())
+        findNext(text);
+}
+
+///
+/// \brief JSCodeEditor::replaceAll
+/// \param text
+/// \param replacement
+/// \return
+///
+int JSCodeEditor::replaceAll(const QString& text, const QString& replacement)
+{
+    if(text.isEmpty())
+        return 0;
+
+    int count = 0;
+    auto cursor = textCursor();
+    cursor.beginEditBlock();
+
+    QTextCursor findCursor(document());
+    while(!(findCursor = document()->find(text, findCursor)).isNull())
+    {
+        findCursor.insertText(replacement);
+        count++;
+    }
+
+    cursor.endEditBlock();
+
+    clearSearchHighlights();
+    return count;
+}
+
+///
+/// \brief JSCodeEditor::currentMatchIndex
+/// \return
+///
+int JSCodeEditor::currentMatchIndex() const
+{
+    return _currentMatchIndex;
+}
+
+///
+/// \brief JSCodeEditor::totalMatchCount
+/// \return
+///
+int JSCodeEditor::totalMatchCount() const
+{
+    return _searchSelections.size();
+}
+
+///
 /// \brief console::updateLineNumberAreaWidth
 ///
 void JSCodeEditor::updateLineNumberAreaWidth(int)
@@ -293,12 +474,12 @@ void JSCodeEditor::highlightCurrentLine()
     if (isReadOnly())
         return;
 
-    auto extraSelections = this->extraSelections();
-    QMutableListIterator<QTextEdit::ExtraSelection> i(extraSelections);
-    while (i.hasNext())
-        if(i.next().format.background().color() == _lineColor)
-            i.remove();
+    QList<QTextEdit::ExtraSelection> extraSelections;
 
+    // Add search highlights
+    extraSelections.append(_searchSelections);
+
+    // Add current line highlight
     QTextEdit::ExtraSelection selection;
     selection.format.setBackground(_lineColor);
     selection.format.setProperty(QTextFormat::FullWidthSelection, true);

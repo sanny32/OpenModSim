@@ -618,6 +618,22 @@ void MainWindow::on_actionSelectAll_triggered()
 }
 
 ///
+/// \brief MainWindow::on_actionFind_triggered
+///
+void MainWindow::on_actionFind_triggered()
+{
+    emit find();
+}
+
+///
+/// \brief MainWindow::on_actionReplace_triggered
+///
+void MainWindow::on_actionReplace_triggered()
+{
+    emit replace();
+}
+
+///
 /// \brief MainWindow::on_connectAction
 /// \param type
 /// \param port

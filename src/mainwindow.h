@@ -38,6 +38,8 @@ signals:
     void paste();
     void selectAll();
     void search(const QString& text);
+    void find();
+    void replace();
 
 protected:
     void changeEvent(QEvent* event) override;
@@ -67,6 +69,8 @@ private slots:
     void on_actionCopy_triggered();
     void on_actionPaste_triggered();
     void on_actionSelectAll_triggered();
+    void on_actionFind_triggered();
+    void on_actionReplace_triggered();
 
     /* Connection menu slots */
     void on_connectAction(ConnectionDetails& cd);

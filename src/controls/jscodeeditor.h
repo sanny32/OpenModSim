@@ -28,6 +28,16 @@ public:
 
     void search(const QString& text);
 
+    int highlightAllMatches(const QString& text);
+    void clearSearchHighlights();
+    bool findNext(const QString& text);
+    bool findPrevious(const QString& text);
+    void replaceCurrent(const QString& text, const QString& replacement);
+    int replaceAll(const QString& text, const QString& replacement);
+
+    int currentMatchIndex() const;
+    int totalMatchCount() const;
+
 signals:
     void helpContext(const QString& key);
 
@@ -49,6 +59,9 @@ private:
     QWidget* _lineNumberArea;
     JSHighlighter* _highlighter;
     JSCompleter* _compliter;
+
+    QList<QTextEdit::ExtraSelection> _searchSelections;
+    int _currentMatchIndex = -1;
 };
 
 ///

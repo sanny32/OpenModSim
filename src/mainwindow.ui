@@ -91,6 +91,9 @@
     <addaction name="actionPaste"/>
     <addaction name="separator"/>
     <addaction name="actionSelectAll"/>
+    <addaction name="separator"/>
+    <addaction name="actionFind"/>
+    <addaction name="actionReplace"/>
    </widget>
    <widget class="QMenu" name="menuConnection">
     <property name="title">
@@ -882,6 +885,22 @@
    </property>
    <property name="shortcut">
     <string notr="true">Ctrl+A</string>
+   </property>
+  </action>
+  <action name="actionFind">
+   <property name="text">
+    <string>Find...</string>
+   </property>
+   <property name="shortcut">
+    <string notr="true">Ctrl+F</string>
+   </property>
+  </action>
+  <action name="actionReplace">
+   <property name="text">
+    <string>Replace...</string>
+   </property>
+   <property name="shortcut">
+    <string notr="true">Ctrl+R</string>
    </property>
   </action>
   <action name="actionInt32">

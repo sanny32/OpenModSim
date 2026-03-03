@@ -1235,6 +1235,8 @@ void FormModSim::connectEditSlots()
     connect(_parent, &MainWindow::paste, ui->scriptControl, &JScriptControl::paste);
     connect(_parent, &MainWindow::selectAll, ui->scriptControl, &JScriptControl::selectAll);
     connect(_parent, &MainWindow::search, ui->scriptControl, &JScriptControl::search);
+    connect(_parent, &MainWindow::find, ui->scriptControl, &JScriptControl::showFind);
+    connect(_parent, &MainWindow::replace, ui->scriptControl, &JScriptControl::showReplace);
 }
 
 ///
@@ -1249,4 +1251,6 @@ void FormModSim::disconnectEditSlots()
     disconnect(_parent, &MainWindow::paste, ui->scriptControl, &JScriptControl::paste);
     disconnect(_parent, &MainWindow::selectAll, ui->scriptControl, &JScriptControl::selectAll);
     disconnect(_parent, &MainWindow::search, ui->scriptControl, &JScriptControl::search);
+    disconnect(_parent, &MainWindow::find, ui->scriptControl, &JScriptControl::showFind);
+    disconnect(_parent, &MainWindow::replace, ui->scriptControl, &JScriptControl::showReplace);
 }

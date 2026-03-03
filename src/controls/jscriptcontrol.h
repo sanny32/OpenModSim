@@ -10,6 +10,8 @@
 #include "storage.h"
 #include "server.h"
 
+class FindReplaceBar;
+
 namespace Ui {
 class JScriptControl;
 }
@@ -67,6 +69,9 @@ public slots:
 
     void search(const QString& text);
 
+    void showFind();
+    void showReplace();
+
     void runScript(RunMode mode, int interval = 0);
     void stopScript();
 
@@ -87,6 +92,7 @@ private:
 
 private:
     Ui::JScriptControl *ui;
+    FindReplaceBar* _findReplaceBar;
 
     QTimer _timer;
     QJSEngine _jsEngine;
