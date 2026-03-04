@@ -133,8 +133,9 @@ MainWindow::MainWindow(const QString& profile, bool useSession, QWidget *parent)
     addDockWidget(Qt::RightDockWidgetArea, _helpDockWidget);
     _helpDockWidget->setVisible(false);
 
-    connect(_helpDockWidget, &QDockWidget::visibilityChanged, this, [this](bool) {
-        _helpWidget->setProperty("WasShown", _helpDockWidget->isVisible());
+    connect(_helpDockWidget, &QDockWidget::visibilityChanged, this, [this](bool visible) {
+        if(_helpDockWidget->isVisible())
+            _helpDockWidget->setProperty("WasShown", false);
     });
 
     connect(ui->mdiArea, &QMdiArea::subWindowActivated, this, &MainWindow::updateMenuWindow);
@@ -1104,7 +1105,6 @@ void MainWindow::on_actionScriptBar_triggered()
 void MainWindow::on_actionScriptHelp_triggered()
 {
     _helpDockWidget->setVisible(!_helpDockWidget->isVisible());
-    _helpDockWidget->setProperty("WasShown", _helpDockWidget->isVisible());
 }
 
 ///
