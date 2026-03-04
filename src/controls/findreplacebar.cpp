@@ -102,16 +102,16 @@ FindReplaceBar::FindReplaceBar(QWidget *parent)
 
     ui->horizontalLayout->insertWidget(0, new LeftSizeGrip(this, this));
 
-    connect(actionFindNext, &QAction::triggered, this, &FindReplaceBar::onFindNext);
-    connect(actionFindPrev, &QAction::triggered, this, &FindReplaceBar::onFindPrevious);
-    connect(ui->expandButton,    &QToolButton::clicked,  this, &FindReplaceBar::onToggleReplace);
-    connect(ui->searchEdit,      &QLineEdit::textEdited, this, &FindReplaceBar::onSearchTextEdited);
-    connect(ui->matchCaseButton, &QToolButton::toggled,  this, &FindReplaceBar::onOptionsChanged);
-    connect(ui->matchWordButton, &QToolButton::toggled,  this, &FindReplaceBar::onOptionsChanged);
-    connect(ui->replaceButton,   &QToolButton::clicked,  this, &FindReplaceBar::onReplace);
-    connect(ui->replaceAllButton,&QToolButton::clicked,  this, &FindReplaceBar::onReplaceAll);
-    connect(ui->closeButton,     &QToolButton::clicked,  this, &FindReplaceBar::onClose);
-    connect(ui->findButton, &QToolButton::triggered, ui->findButton, &QToolButton::setDefaultAction);
+    connect(actionFindNext,      &QAction::triggered,    this,              &FindReplaceBar::onFindNext);
+    connect(actionFindPrev,      &QAction::triggered,    this,              &FindReplaceBar::onFindPrevious);
+    connect(ui->expandButton,    &QToolButton::clicked,  this,              &FindReplaceBar::onToggleReplace);
+    connect(ui->searchEdit,      &QLineEdit::textEdited, this,              &FindReplaceBar::onSearchTextEdited);
+    connect(ui->matchCaseButton, &QToolButton::toggled,  this,              &FindReplaceBar::onOptionsChanged);
+    connect(ui->matchWordButton, &QToolButton::toggled,  this,              &FindReplaceBar::onOptionsChanged);
+    connect(ui->replaceButton,   &QToolButton::clicked,  this,              &FindReplaceBar::onReplace);
+    connect(ui->replaceAllButton,&QToolButton::clicked,  this,              &FindReplaceBar::onReplaceAll);
+    connect(ui->closeButton,     &QToolButton::clicked,  this,              &FindReplaceBar::onClose);
+    connect(ui->findButton,      &QToolButton::triggered, ui->findButton,   &QToolButton::setDefaultAction);
 
     setVisible(false);
 }
