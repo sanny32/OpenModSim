@@ -3,6 +3,7 @@
 
 #include <QCompleter>
 #include <QPlainTextEdit>
+#include <QTextDocument>
 #include "jscompleter.h"
 #include "jshighlighter.h"
 
@@ -28,6 +29,16 @@ public:
 
     void search(const QString& text);
 
+    int highlightAllMatches(const QString& text, QTextDocument::FindFlags flags = {});
+    void clearSearchHighlights();
+    bool findNext(const QString& text);
+    bool findPrevious(const QString& text);
+    void replaceCurrent(const QString& text, const QString& replacement, QTextDocument::FindFlags flags = {});
+    int replaceAll(const QString& text, const QString& replacement, QTextDocument::FindFlags flags = {});
+
+    int currentMatchIndex() const;
+    int totalMatchCount() const;
+
 signals:
     void helpContext(const QString& key);
 
@@ -49,6 +60,9 @@ private:
     QWidget* _lineNumberArea;
     JSHighlighter* _highlighter;
     JSCompleter* _compliter;
+
+    QList<QTextEdit::ExtraSelection> _searchSelections;
+    int _currentMatchIndex = -1;
 };
 
 ///

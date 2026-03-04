@@ -70,5 +70,11 @@
         <file>res/icon-simulation-32bit.svg</file>
         <file>res/icon-simulation-64bit.svg</file>
         <file>res/icon-increment.svg</file>
+        <file>res/icon-replace.svg</file>
+        <file>res/icon-replace-all.svg</file>
+        <file>res/icon-match-case.svg</file>
+        <file>res/icon-whole-word.svg</file>
+        <file>res/icon-arrow-right.svg</file>
+        <file>res/icon-arrow-left.svg</file>
     </qresource>
 </RCC>

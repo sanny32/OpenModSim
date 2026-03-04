@@ -97,9 +97,6 @@ public:
     int zoomPercent() const;
     void setZoomPercent(int zoomPercent);
 
-    bool isScriptHelpVisible() const;
-    void setScriptHelpVisible(bool visible);
-
     bool isConsoleOutputVisible() const;
     void setConsoleOutputVisible(bool visible);
 
@@ -148,6 +145,7 @@ public slots:
 signals:
     void showed();
     void closing();
+    void helpContextRequested(const QString& helpKey);
     void byteOrderChanged(ByteOrder);
     void codepageChanged(const QString&);
     void pointTypeChanged(QModbusDataUnit::RegisterType);

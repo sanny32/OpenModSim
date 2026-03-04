@@ -2,8 +2,10 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QDockWidget>
 #include <QTranslator>
 #include <QWidgetAction>
+#include "helpwidget.h"
 #include "formmodsim.h"
 #include "ansimenu.h"
 #include "modbusmultiserver.h"
@@ -31,13 +33,10 @@ public:
     void saveConfig(const QString& filename, SerializationFormat format);
 
 signals:
-    void undo();
-    void redo();
-    void cut();
-    void copy();
-    void paste();
     void selectAll();
     void search(const QString& text);
+    void find();
+    void replace();
 
 protected:
     void changeEvent(QEvent* event) override;
@@ -67,6 +66,8 @@ private slots:
     void on_actionCopy_triggered();
     void on_actionPaste_triggered();
     void on_actionSelectAll_triggered();
+    void on_actionFind_triggered();
+    void on_actionReplace_triggered();
 
     /* Connection menu slots */
     void on_connectAction(ConnectionDetails& cd);
@@ -113,7 +114,6 @@ private slots:
     void on_actionStatusBar_triggered();
     void on_actionDisplayBar_triggered();
     void on_actionScriptBar_triggered();
-    void on_actionEditBar_triggered();
     void on_actionScriptHelp_triggered();
     void on_actionConsoleOutput_triggered();
     void on_actionBackground_triggered();
@@ -146,6 +146,7 @@ private slots:
     void on_connectionError(const QString& error);
 
     void updateMenuWindow();
+    void updateHelpWidgetState();
     void openFile(const QString& filename);
     void windowActivate(QMdiSubWindow* wnd);
     void setCodepage(const QString& name);
@@ -175,7 +176,8 @@ private:
 private:
     Ui::MainWindow *ui;
     QWidgetAction* _actionRunMode;
-    QWidgetAction* _actionSearch;
+    QDockWidget* _helpDockWidget;
+    HelpWidget* _helpWidget;
 
     QString _lang;
     QTranslator _qtTranslator;

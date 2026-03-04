@@ -10,6 +10,8 @@
 #include "storage.h"
 #include "server.h"
 
+class FindReplaceBar;
+
 namespace Ui {
 class JScriptControl;
 }
@@ -30,11 +32,10 @@ class JScriptControl : public QWidget
     friend QXmlStreamWriter& operator <<(QXmlStreamWriter& xml, const JScriptControl* ctrl);
     friend QXmlStreamReader& operator >>(QXmlStreamReader& xml, JScriptControl* ctrl);
 
-public:  
+public:
     explicit JScriptControl(QWidget *parent = nullptr);
     ~JScriptControl();
 
-    bool isHelpVisible() const;
     bool isConsoleVisible() const;
 
     void setModbusMultiServer(ModbusMultiServer* server);
@@ -67,14 +68,17 @@ public slots:
 
     void search(const QString& text);
 
+    void showFind();
+    void showReplace();
+
     void runScript(RunMode mode, int interval = 0);
     void stopScript();
 
     void showConsole();
     void hideConsole();
 
-    void showHelp(const QString& helpKey = QString());
-    void hideHelp();
+signals:
+    void helpContext(const QString& helpKey);
 
 private slots:
     bool executeScript();
@@ -87,6 +91,7 @@ private:
 
 private:
     Ui::JScriptControl *ui;
+    FindReplaceBar* _findReplaceBar;
 
     QTimer _timer;
     QJSEngine _jsEngine;

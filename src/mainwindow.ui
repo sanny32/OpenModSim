@@ -91,6 +91,9 @@
     <addaction name="actionPaste"/>
     <addaction name="separator"/>
     <addaction name="actionSelectAll"/>
+    <addaction name="separator"/>
+    <addaction name="actionFind"/>
+    <addaction name="actionReplace"/>
    </widget>
    <widget class="QMenu" name="menuConnection">
     <property name="title">
@@ -147,15 +150,6 @@
      <addaction name="actionMsgParser"/>
      <addaction name="actionRawDataLog"/>
     </widget>
-    <widget class="QMenu" name="menuScript">
-     <property name="title">
-      <string>Script</string>
-     </property>
-     <addaction name="actionRunScript"/>
-     <addaction name="actionStopScript"/>
-     <addaction name="separator"/>
-     <addaction name="actionScriptSettings"/>
-    </widget>
     <addaction name="separator"/>
     <addaction name="actionDataDefinition"/>
     <addaction name="menuDisplay_Options"/>
@@ -164,7 +158,6 @@
     <addaction name="actionCaptureOff"/>
     <addaction name="actionResetCtrs"/>
     <addaction name="separator"/>
-    <addaction name="menuScript"/>
    </widget>
    <widget class="QMenu" name="menuWindow">
     <property name="title">
@@ -215,7 +208,6 @@
     <addaction name="actionStatusBar"/>
     <addaction name="actionDisplayBar"/>
     <addaction name="actionScriptBar"/>
-    <addaction name="actionEditBar"/>
     <addaction name="separator"/>
     <addaction name="actionScriptHelp"/>
     <addaction name="actionConsoleOutput"/>
@@ -223,9 +215,17 @@
     <addaction name="menuLanguage"/>
     <addaction name="menuConfig"/>
    </widget>
+   <widget class="QMenu" name="menuScript">
+    <property name="title">
+     <string>Script</string>
+    </property>
+    <addaction name="actionRunScript"/>
+    <addaction name="actionStopScript"/>
+   </widget>
    <addaction name="menuFile"/>
    <addaction name="menuEdit"/>
    <addaction name="menuConnection"/>
+   <addaction name="menuScript"/>
    <addaction name="menuSetup"/>
    <addaction name="menuView"/>
    <addaction name="menuWindow"/>
@@ -245,7 +245,12 @@
    <addaction name="actionOpen"/>
    <addaction name="actionSave"/>
    <addaction name="separator"/>
-   <addaction name="actionPrint"/>
+   <addaction name="actionCut"/>
+   <addaction name="actionCopy"/>
+   <addaction name="actionPaste"/>
+   <addaction name="separator"/>
+   <addaction name="actionUndo"/>
+   <addaction name="actionRedo"/>
    <addaction name="separator"/>
    <addaction name="actionConnect"/>
    <addaction name="actionDisconnect"/>
@@ -264,6 +269,7 @@
    <addaction name="separator"/>
    <addaction name="actionMsgParser"/>
    <addaction name="separator"/>
+   <addaction name="actionPrint"/>
    <addaction name="actionAbout"/>
   </widget>
   <widget class="QToolBar" name="toolBarDisplay">
@@ -316,24 +322,6 @@
    <addaction name="actionScriptSettings"/>
    <addaction name="actionRunScript"/>
    <addaction name="actionStopScript"/>
-  </widget>
-  <widget class="QToolBar" name="toolBarEdit">
-   <property name="windowTitle">
-    <string>Edit Bar</string>
-   </property>
-   <attribute name="toolBarArea">
-    <enum>TopToolBarArea</enum>
-   </attribute>
-   <attribute name="toolBarBreak">
-    <bool>true</bool>
-   </attribute>
-   <addaction name="actionUndo"/>
-   <addaction name="actionRedo"/>
-   <addaction name="separator"/>
-   <addaction name="actionCut"/>
-   <addaction name="actionCopy"/>
-   <addaction name="actionPaste"/>
-   <addaction name="separator"/>
   </widget>
   <action name="actionNew">
    <property name="icon">
@@ -899,12 +887,20 @@
     <string notr="true">Ctrl+A</string>
    </property>
   </action>
-  <action name="actionEditBar">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
+  <action name="actionFind">
    <property name="text">
-    <string>Edit Bar</string>
+    <string>Find...</string>
+   </property>
+   <property name="shortcut">
+    <string notr="true">Ctrl+F</string>
+   </property>
+  </action>
+  <action name="actionReplace">
+   <property name="text">
+    <string>Replace...</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+H</string>
    </property>
   </action>
   <action name="actionInt32">
@@ -1187,6 +1183,9 @@
    </property>
    <property name="toolTip">
     <string>Script Help</string>
+   </property>
+   <property name="shortcut">
+    <string>F1</string>
    </property>
   </action>
   <action name="actionConsoleOutput">

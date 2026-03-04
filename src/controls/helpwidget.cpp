@@ -1,5 +1,8 @@
 #include <QEvent>
+#include <QStyle>
+#include <QKeyEvent>
 #include <QToolButton>
+#include <QPushButton>
 #include <QHelpContentWidget>
 #include "helpwidget.h"
 
@@ -11,57 +14,68 @@ HelpWidget::HelpWidget(QWidget *parent)
     : QWidget(parent)
     ,_helpBrowser(new HelpBrowser(this))
 {
-    auto header = new QWidget(this);
-
-    auto headerLayout = new QHBoxLayout(header);
-    headerLayout->setContentsMargins(2, 2, 4, 2);
-
-    auto collapseButton = createToolButton(header, "✕");
-
-    _findLabel = new QLabel(tr("Find:"), header);
-    _findLabel->setAlignment(Qt::AlignVCenter);
-
-    auto searchEdit = new QLineEdit(header);
-    searchEdit->setClearButtonEnabled(true);
-
-    _findPrevButton = createToolButton(header, tr("Find Previous"), QIcon(), QString(), QSize());
-    _findNextButton = createToolButton(header, tr("Find Next"), QIcon(), QString(), QSize());
-
-    headerLayout->addWidget(_findLabel);
-    headerLayout->addWidget(searchEdit, 1);
-    headerLayout->addWidget(_findPrevButton);
-    headerLayout->addWidget(_findNextButton);
-    headerLayout->addSpacerItem(new QSpacerItem(10, 0, QSizePolicy::Fixed));
-    headerLayout->addWidget(collapseButton);
-
     auto pal = _helpBrowser->palette();
     pal.setColor(QPalette::Base, Qt::white);
     pal.setColor(QPalette::Window, Qt::white);
     _helpBrowser->setPalette(pal);
 
+    // Find bar (bottom, styled like FindReplaceBar)
+    _findBar = new QWidget(this);
+    _findBar->setAutoFillBackground(true);
+    auto findPal = _findBar->palette();
+    findPal.setColor(QPalette::Window, QColor(240, 240, 240));
+    _findBar->setPalette(findPal);
+    _findBar->setVisible(false);
+
+    auto findLayout = new QHBoxLayout(_findBar);
+    findLayout->setContentsMargins(6, 4, 6, 4);
+    findLayout->setSpacing(2);
+
+    _searchEdit = new QLineEdit(_findBar);
+    _searchEdit->setPlaceholderText(tr("Find"));
+    _searchEdit->setClearButtonEnabled(true);
+    _searchEdit->installEventFilter(this);
+
+    _prevButton = new QPushButton(_findBar);
+    _prevButton->setIcon(style()->standardIcon(QStyle::SP_ArrowUp));
+    _prevButton->setToolTip(tr("Previous (Shift+Enter)"));
+    _prevButton->setFixedSize(24, 24);
+    _prevButton->setFlat(true);
+
+    _nextButton = new QPushButton(_findBar);
+    _nextButton->setIcon(style()->standardIcon(QStyle::SP_ArrowDown));
+    _nextButton->setToolTip(tr("Next (Enter)"));
+    _nextButton->setFixedSize(24, 24);
+    _nextButton->setFlat(true);
+
+    _matchCountLabel = new QLabel(_findBar);
+    _matchCountLabel->setMinimumWidth(60);
+    _matchCountLabel->setAlignment(Qt::AlignCenter);
+
+    _closeButton = new QToolButton(_findBar);
+    _closeButton->setIcon(style()->standardIcon(QStyle::SP_TitleBarCloseButton));
+    _closeButton->setToolTip(tr("Close (Escape)"));
+    _closeButton->setAutoRaise(true);
+    _closeButton->setFixedSize(24, 24);
+
+    findLayout->addWidget(_searchEdit, 1);
+    findLayout->addWidget(_prevButton);
+    findLayout->addWidget(_nextButton);
+    findLayout->addWidget(_matchCountLabel);
+    findLayout->addWidget(_closeButton);
+
+    // Main layout: browser on top, find bar on bottom
     auto mainLayout = new QVBoxLayout(this);
     mainLayout->setContentsMargins(0, 0, 0, 0);
     mainLayout->setSpacing(0);
-
-    mainLayout->addWidget(header);
     mainLayout->addWidget(_helpBrowser);
+    mainLayout->addWidget(_findBar);
 
-    header->setFixedHeight(header->sizeHint().height());
-
-    connect(collapseButton, &QToolButton::clicked, this, &HelpWidget::collapse);
-
-    connect(searchEdit, &QLineEdit::returnPressed, this, [=] {
-        _helpBrowser->find(searchEdit->text());
-    });
-
-    connect(_findNextButton, &QToolButton::clicked, this, [=] {
-        _helpBrowser->find(searchEdit->text());
-    });
-
-    connect(_findPrevButton, &QToolButton::clicked, this, [=] {
-        _helpBrowser->find(searchEdit->text(),
-                           QTextDocument::FindBackward);
-    });
+    // Connections
+    connect(_searchEdit, &QLineEdit::textEdited, this, &HelpWidget::onSearchTextEdited);
+    connect(_prevButton, &QPushButton::clicked, this, &HelpWidget::onFindPrevious);
+    connect(_nextButton, &QPushButton::clicked, this, &HelpWidget::onFindNext);
+    connect(_closeButton, &QToolButton::clicked, this, &HelpWidget::onClose);
 }
 
 ///
@@ -72,10 +86,107 @@ void HelpWidget::changeEvent(QEvent* event)
 {
     if (event->type() == QEvent::LanguageChange)
     {
-        _findLabel->setText(tr("Find:"));
-        _findPrevButton->setText(tr("Find Previous"));
-        _findNextButton->setText(tr("Find Next"));
+        _searchEdit->setPlaceholderText(tr("Find"));
+        _prevButton->setToolTip(tr("Previous (Shift+Enter)"));
+        _nextButton->setToolTip(tr("Next (Enter)"));
+        _closeButton->setToolTip(tr("Close (Escape)"));
     }
+}
+
+///
+/// \brief HelpWidget::keyPressEvent
+/// \param event
+///
+void HelpWidget::keyPressEvent(QKeyEvent* event)
+{
+    if(event->matches(QKeySequence::Find))
+    {
+        showFind();
+        return;
+    }
+    QWidget::keyPressEvent(event);
+}
+
+///
+/// \brief HelpWidget::eventFilter
+/// \param obj
+/// \param event
+/// \return
+///
+bool HelpWidget::eventFilter(QObject* obj, QEvent* event)
+{
+    if(obj == _searchEdit && event->type() == QEvent::KeyPress)
+    {
+        auto keyEvent = static_cast<QKeyEvent*>(event);
+        if(keyEvent->key() == Qt::Key_Escape)
+        {
+            onClose();
+            return true;
+        }
+        if(keyEvent->key() == Qt::Key_Return || keyEvent->key() == Qt::Key_Enter)
+        {
+            if(keyEvent->modifiers() & Qt::ShiftModifier)
+                onFindPrevious();
+            else
+                onFindNext();
+            return true;
+        }
+    }
+    return QWidget::eventFilter(obj, event);
+}
+
+///
+/// \brief HelpWidget::onFindNext
+///
+void HelpWidget::onFindNext()
+{
+    const auto text = _searchEdit->text();
+    if(!text.isEmpty())
+        _helpBrowser->find(text);
+}
+
+///
+/// \brief HelpWidget::onFindPrevious
+///
+void HelpWidget::onFindPrevious()
+{
+    const auto text = _searchEdit->text();
+    if(!text.isEmpty())
+        _helpBrowser->find(text, QTextDocument::FindBackward);
+}
+
+///
+/// \brief HelpWidget::onSearchTextEdited
+/// \param text
+///
+void HelpWidget::onSearchTextEdited(const QString& text)
+{
+    if(!text.isEmpty())
+    {
+        auto cursor = _helpBrowser->textCursor();
+        cursor.movePosition(QTextCursor::Start);
+        _helpBrowser->setTextCursor(cursor);
+        _helpBrowser->find(text);
+    }
+}
+
+///
+/// \brief HelpWidget::onClose
+///
+void HelpWidget::onClose()
+{
+    _findBar->setVisible(false);
+    _helpBrowser->setFocus();
+}
+
+///
+/// \brief HelpWidget::showFind
+///
+void HelpWidget::showFind()
+{
+    _findBar->setVisible(true);
+    _searchEdit->setFocus();
+    _searchEdit->selectAll();
 }
 
 ///
@@ -94,42 +205,4 @@ void HelpWidget::setHelp(const QString& helpFile)
 void HelpWidget::showHelp(const QString& helpKey)
 {
     _helpBrowser->showHelp(helpKey);
-}
-
-///
-/// \brief HelpWidget::createToolButton
-/// \param parent
-/// \param text
-/// \param icon
-/// \param toolTip
-/// \param size
-/// \param iconSize
-/// \return
-///
-QToolButton* HelpWidget::createToolButton(QWidget* parent, const QString& text, const QIcon& icon, const QString& toolTip, const QSize& size, const QSize& iconSize)
-{
-    auto btn = new QToolButton(parent);
-    btn->setText(text);
-    btn->setIcon(icon);
-
-    if(!iconSize.isEmpty())
-        btn->setIconSize(iconSize);
-
-    if(!size.isEmpty())
-        btn->setFixedSize(size);
-
-    btn->setToolTip(toolTip);
-    btn->setAutoRaise(true);
-
-    if(text.isEmpty() && !icon.isNull()) {
-        btn->setToolButtonStyle(Qt::ToolButtonIconOnly);
-    }
-    else if(!text.isEmpty() && !icon.isNull()) {
-        btn->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
-    }
-    else if(!text.isEmpty() && icon.isNull()) {
-        btn->setToolButtonStyle(Qt::ToolButtonTextOnly);
-    }
-
-    return btn;
 }
