@@ -1023,9 +1023,17 @@ void MainWindow::on_actionTabbedView_triggered()
 ///
 void MainWindow::setViewMode(QMdiArea::ViewMode mode)
 {
+    static QMetaObject::Connection connection;
+
     ui->mdiArea->setViewMode(mode);
-    if(auto tabBar = ui->mdiArea->findChild<QTabBar*>())
+    if(auto tabBar = ui->mdiArea->findChild<QTabBar*>()) {
         tabBar->setExpanding(false);
+
+        if (connection) {
+            disconnect(connection);
+        }
+        connection = connect(tabBar, &QTabBar::tabBarDoubleClicked, ui->actionDataDefinition, &QAction::triggered);
+    }
 }
 
 ///

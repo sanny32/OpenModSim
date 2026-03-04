@@ -2524,7 +2524,7 @@ Script.onInit(()=&gt;{
         <translation>XML 文件(*.xml)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1532"/>
+        <location filename="../mainwindow.cpp" line="1540"/>
         <source>Capture Error:<byte value="xd"/>
 %1</source>
         <translation>捕获错误：
