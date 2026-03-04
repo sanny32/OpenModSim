@@ -72,5 +72,9 @@
         <file>res/icon-increment.svg</file>
         <file>res/icon-replace.svg</file>
         <file>res/icon-replace-all.svg</file>
+        <file>res/icon-match-case.svg</file>
+        <file>res/icon-whole-word.svg</file>
+        <file>res/icon-arrow-right.svg</file>
+        <file>res/icon-arrow-left.svg</file>
     </qresource>
 </RCC>

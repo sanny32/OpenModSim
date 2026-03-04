@@ -1,7 +1,6 @@
 #include <QStyle>
 #include <QPainter>
 #include <QMouseEvent>
-#include <QVBoxLayout>
 #include "findreplacebar.h"
 #include "ui_findreplacebar.h"
 
@@ -84,28 +83,32 @@ FindReplaceBar::FindReplaceBar(QWidget *parent)
 {
     ui->setupUi(this);
 
-    ui->prevButton->setIcon(style()->standardIcon(QStyle::SP_ArrowUp));
-    ui->nextButton->setIcon(style()->standardIcon(QStyle::SP_ArrowDown));
-
-    auto labelFont = ui->matchCountLabel->font();
-    labelFont.setPointSize(qMax(7, labelFont.pointSize() - 1));
-    ui->matchCountLabel->setFont(labelFont);
-
     ui->searchEdit->installEventFilter(this);
     ui->replaceEdit->installEventFilter(this);
 
-    auto* grip = new LeftSizeGrip(this, this);
-    qobject_cast<QVBoxLayout*>(layout())->addWidget(grip, 0, Qt::AlignBottom | Qt::AlignLeft);
+    const int iconSize = 12;
+    const QIcon iconFindeNext = QIcon(":/res/icon-arrow-right.svg").pixmap(iconSize, iconSize);
+    const QIcon iconFindPrev = QIcon(":/res/icon-arrow-left.svg").pixmap(iconSize, iconSize);
 
+    auto actionFindNext = new QAction(iconFindeNext, tr("Find Next"), this);
+    auto actionFindPrev = new QAction(iconFindPrev, tr("Find Previous"), this);
+
+    ui->findButton->addAction(actionFindNext);
+    ui->findButton->addAction(actionFindPrev);
+    ui->findButton->setDefaultAction(actionFindNext);
+
+    ui->horizontalLayout->insertWidget(0, new LeftSizeGrip(this, this));
+
+    connect(actionFindNext, &QAction::triggered, this, &FindReplaceBar::onFindNext);
+    connect(actionFindPrev, &QAction::triggered, this, &FindReplaceBar::onFindPrevious);
     connect(ui->expandButton,    &QToolButton::clicked,  this, &FindReplaceBar::onToggleReplace);
     connect(ui->searchEdit,      &QLineEdit::textEdited, this, &FindReplaceBar::onSearchTextEdited);
     connect(ui->matchCaseButton, &QToolButton::toggled,  this, &FindReplaceBar::onOptionsChanged);
     connect(ui->matchWordButton, &QToolButton::toggled,  this, &FindReplaceBar::onOptionsChanged);
-    connect(ui->prevButton,      &QToolButton::clicked,  this, &FindReplaceBar::onFindPrevious);
-    connect(ui->nextButton,      &QToolButton::clicked,  this, &FindReplaceBar::onFindNext);
     connect(ui->replaceButton,   &QToolButton::clicked,  this, &FindReplaceBar::onReplace);
     connect(ui->replaceAllButton,&QToolButton::clicked,  this, &FindReplaceBar::onReplaceAll);
     connect(ui->closeButton,     &QToolButton::clicked,  this, &FindReplaceBar::onClose);
+    connect(ui->findButton, &QToolButton::triggered, ui->findButton, &QToolButton::setDefaultAction);
 
     setVisible(false);
 }
@@ -148,19 +151,6 @@ QTextDocument::FindFlags FindReplaceBar::findFlags() const
     if (ui->matchWordButton->isChecked())
         flags |= QTextDocument::FindWholeWords;
     return flags;
-}
-
-///
-/// \brief FindReplaceBar::updateMatchCount
-/// \param current
-/// \param total
-///
-void FindReplaceBar::updateMatchCount(int current, int total)
-{
-    if(total == 0)
-        ui->matchCountLabel->setText(ui->searchEdit->text().isEmpty() ? QString() : tr("No results"));
-    else
-        ui->matchCountLabel->setText(tr("%1 of %2").arg(current).arg(total));
 }
 
 ///

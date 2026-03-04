@@ -25,7 +25,6 @@ public:
 
     QTextDocument::FindFlags findFlags() const;
 
-    void updateMatchCount(int current, int total);
     void updatePosition();
 
 public slots:

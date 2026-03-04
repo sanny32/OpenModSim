@@ -6,9 +6,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>314</width>
-    <height>64</height>
+    <width>354</width>
+    <height>89</height>
    </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>280</width>
+    <height>0</height>
+   </size>
   </property>
   <property name="autoFillBackground">
    <bool>true</bool>
@@ -22,7 +28,7 @@
   <property name="sizeGripEnabled" stdset="0">
    <bool>true</bool>
   </property>
-  <layout class="QVBoxLayout" name="mainLayout" stretch="0,0">
+  <layout class="QVBoxLayout" name="mainLayout" stretch="0,0,0">
    <property name="spacing">
     <number>2</number>
    </property>
@@ -39,7 +45,7 @@
     <number>4</number>
    </property>
    <item>
-    <layout class="QHBoxLayout" name="findRow" stretch="0,1,0,0,0,0,0,0">
+    <layout class="QHBoxLayout" name="findRow" stretch="0,1,0,0">
      <property name="spacing">
       <number>2</number>
      </property>
@@ -79,96 +85,44 @@
       </widget>
      </item>
      <item>
-      <widget class="QToolButton" name="matchCaseButton">
-       <property name="toolTip">
-        <string>Match Case</string>
-       </property>
-       <property name="text">
-        <string>Aa</string>
-       </property>
-       <property name="checkable">
-        <bool>true</bool>
-       </property>
-       <property name="autoRaise">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QToolButton" name="matchWordButton">
-       <property name="toolTip">
-        <string>Match Whole Word</string>
-       </property>
-       <property name="text">
-        <string>W</string>
-       </property>
-       <property name="checkable">
-        <bool>true</bool>
-       </property>
-       <property name="autoRaise">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QToolButton" name="prevButton">
+      <widget class="QToolButton" name="findButton">
        <property name="minimumSize">
         <size>
-         <width>22</width>
+         <width>36</width>
          <height>22</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
-         <width>22</width>
-         <height>22</height>
-        </size>
-       </property>
-       <property name="toolTip">
-        <string>Previous (Shift+Enter)</string>
-       </property>
-       <property name="autoRaise">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QToolButton" name="nextButton">
-       <property name="minimumSize">
-        <size>
-         <width>22</width>
-         <height>22</height>
-        </size>
-       </property>
-       <property name="maximumSize">
-        <size>
-         <width>22</width>
+         <width>36</width>
          <height>22</height>
         </size>
        </property>
        <property name="toolTip">
         <string>Next (Enter)</string>
        </property>
+       <property name="popupMode">
+        <enum>QToolButton::ToolButtonPopupMode::MenuButtonPopup</enum>
+       </property>
        <property name="autoRaise">
         <bool>true</bool>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QLabel" name="matchCountLabel">
+      <widget class="QToolButton" name="closeButton">
        <property name="minimumSize">
         <size>
-         <width>50</width>
-         <height>0</height>
+         <width>22</width>
+         <height>22</height>
         </size>
        </property>
-       <property name="alignment">
-        <set>Qt::AlignmentFlag::AlignCenter</set>
+       <property name="maximumSize">
+        <size>
+         <width>22</width>
+         <height>22</height>
+        </size>
        </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QToolButton" name="closeButton">
        <property name="toolTip">
         <string>Close (Escape)</string>
        </property>
@@ -190,7 +144,7 @@
      <property name="lineWidth">
       <number>0</number>
      </property>
-     <layout class="QHBoxLayout" name="replaceLayout" stretch="0,1,0,0">
+     <layout class="QHBoxLayout" name="replaceLayout" stretch="0,1,0,0,0">
       <property name="spacing">
        <number>2</number>
       </property>
@@ -234,6 +188,18 @@
       </item>
       <item>
        <widget class="QToolButton" name="replaceButton">
+        <property name="minimumSize">
+         <size>
+          <width>22</width>
+          <height>22</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>22</width>
+          <height>22</height>
+         </size>
+        </property>
         <property name="toolTip">
          <string>Replace</string>
         </property>
@@ -254,6 +220,18 @@
       </item>
       <item>
        <widget class="QToolButton" name="replaceAllButton">
+        <property name="minimumSize">
+         <size>
+          <width>22</width>
+          <height>22</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>22</width>
+          <height>22</height>
+         </size>
+        </property>
         <property name="toolTip">
          <string>Replace All</string>
         </property>
@@ -272,8 +250,102 @@
         </property>
        </widget>
       </item>
+      <item>
+       <spacer name="horizontalSpacer_2">
+        <property name="orientation">
+         <enum>Qt::Orientation::Horizontal</enum>
+        </property>
+        <property name="sizeType">
+         <enum>QSizePolicy::Policy::Fixed</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>14</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
      </layout>
     </widget>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,0,1">
+     <property name="spacing">
+      <number>2</number>
+     </property>
+     <item>
+      <widget class="QToolButton" name="matchCaseButton">
+       <property name="minimumSize">
+        <size>
+         <width>22</width>
+         <height>22</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>22</width>
+         <height>22</height>
+        </size>
+       </property>
+       <property name="toolTip">
+        <string>Match Case</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../resources.qrc">
+         <normaloff>:/res/icon-match-case.svg</normaloff>:/res/icon-match-case.svg</iconset>
+       </property>
+       <property name="checkable">
+        <bool>true</bool>
+       </property>
+       <property name="autoRaise">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QToolButton" name="matchWordButton">
+       <property name="minimumSize">
+        <size>
+         <width>22</width>
+         <height>22</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>22</width>
+         <height>22</height>
+        </size>
+       </property>
+       <property name="toolTip">
+        <string>Match Whole Word</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../resources.qrc">
+         <normaloff>:/res/icon-whole-word.svg</normaloff>:/res/icon-whole-word.svg</iconset>
+       </property>
+       <property name="checkable">
+        <bool>true</bool>
+       </property>
+       <property name="autoRaise">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer">
+       <property name="orientation">
+        <enum>Qt::Orientation::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+    </layout>
    </item>
   </layout>
  </widget>

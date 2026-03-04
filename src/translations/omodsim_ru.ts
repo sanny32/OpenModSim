@@ -1619,79 +1619,64 @@
 <context>
     <name>FindReplaceBar</name>
     <message>
-        <location filename="../controls/findreplacebar.ui" line="61"/>
+        <location filename="../controls/findreplacebar.ui" line="67"/>
         <source>Toggle Replace</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/findreplacebar.ui" line="74"/>
+        <location filename="../controls/findreplacebar.ui" line="80"/>
         <source>Find...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/findreplacebar.ui" line="84"/>
+        <location filename="../controls/findreplacebar.ui" line="292"/>
         <source>Match Case</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/findreplacebar.ui" line="87"/>
-        <source>Aa</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../controls/findreplacebar.ui" line="100"/>
+        <location filename="../controls/findreplacebar.ui" line="321"/>
         <source>Match Whole Word</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/findreplacebar.ui" line="103"/>
-        <source>W</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../controls/findreplacebar.ui" line="128"/>
-        <source>Previous (Shift+Enter)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../controls/findreplacebar.ui" line="150"/>
+        <location filename="../controls/findreplacebar.ui" line="102"/>
         <source>Next (Enter)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/findreplacebar.ui" line="173"/>
+        <location filename="../controls/findreplacebar.ui" line="127"/>
         <source>Close (Escape)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/findreplacebar.ui" line="176"/>
+        <location filename="../controls/findreplacebar.ui" line="130"/>
         <source>✕</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/findreplacebar.ui" line="228"/>
+        <location filename="../controls/findreplacebar.ui" line="182"/>
         <source>Replace...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/findreplacebar.ui" line="238"/>
+        <location filename="../controls/findreplacebar.ui" line="204"/>
         <source>Replace</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/findreplacebar.ui" line="258"/>
+        <location filename="../controls/findreplacebar.ui" line="236"/>
         <source>Replace All</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/findreplacebar.cpp" line="161"/>
-        <source>No results</source>
-        <translation type="unfinished"></translation>
+        <location filename="../controls/findreplacebar.cpp" line="93"/>
+        <source>Find Next</source>
+        <translation type="unfinished">Далее</translation>
     </message>
     <message>
-        <location filename="../controls/findreplacebar.cpp" line="163"/>
-        <source>%1 of %2</source>
-        <translation type="unfinished"></translation>
+        <location filename="../controls/findreplacebar.cpp" line="94"/>
+        <source>Find Previous</source>
+        <translation type="unfinished">Пред</translation>
     </message>
 </context>
 <context>

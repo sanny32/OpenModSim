@@ -23,30 +23,19 @@ JScriptControl::JScriptControl(QWidget *parent)
     ui->codeEditor->installEventFilter(this);
 
     connect(_findReplaceBar, &FindReplaceBar::searchTextChanged, this, [this](const QString& text) {
-        int count = ui->codeEditor->highlightAllMatches(text, _findReplaceBar->findFlags());
-        _findReplaceBar->updateMatchCount(
-            count > 0 ? ui->codeEditor->currentMatchIndex() + 1 : 0, count);
+        ui->codeEditor->highlightAllMatches(text, _findReplaceBar->findFlags());
     });
     connect(_findReplaceBar, &FindReplaceBar::findNext, this, [this](const QString& text) {
         ui->codeEditor->findNext(text);
-        _findReplaceBar->updateMatchCount(
-            ui->codeEditor->currentMatchIndex() + 1, ui->codeEditor->totalMatchCount());
     });
     connect(_findReplaceBar, &FindReplaceBar::findPrevious, this, [this](const QString& text) {
         ui->codeEditor->findPrevious(text);
-        _findReplaceBar->updateMatchCount(
-            ui->codeEditor->currentMatchIndex() + 1, ui->codeEditor->totalMatchCount());
     });
     connect(_findReplaceBar, &FindReplaceBar::replaceRequested, this, [this](const QString& text, const QString& replacement) {
         ui->codeEditor->replaceCurrent(text, replacement, _findReplaceBar->findFlags());
-        _findReplaceBar->updateMatchCount(
-            ui->codeEditor->totalMatchCount() > 0 ? ui->codeEditor->currentMatchIndex() + 1 : 0,
-            ui->codeEditor->totalMatchCount());
     });
     connect(_findReplaceBar, &FindReplaceBar::replaceAllRequested, this, [this](const QString& text, const QString& replacement) {
-        int count = ui->codeEditor->replaceAll(text, replacement, _findReplaceBar->findFlags());
-        _findReplaceBar->updateMatchCount(0, 0);
-        Q_UNUSED(count);
+        ui->codeEditor->replaceAll(text, replacement, _findReplaceBar->findFlags());
     });
     connect(_findReplaceBar, &FindReplaceBar::closed, this, [this]() {
         ui->codeEditor->clearSearchHighlights();
