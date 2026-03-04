@@ -93,6 +93,9 @@ FindReplaceBar::FindReplaceBar(QWidget *parent)
     auto actionFindNext = new QAction(iconFindeNext, tr("Find Next"), this);
     auto actionFindPrev = new QAction(iconFindPrev, tr("Find Previous"), this);
 
+    actionFindNext->setShortcut(Qt::Key_F3);
+    actionFindPrev->setShortcut(Qt::SHIFT | Qt::Key_F3);
+
     ui->findButton->addAction(actionFindNext);
     ui->findButton->addAction(actionFindPrev);
     ui->findButton->setDefaultAction(actionFindNext);
