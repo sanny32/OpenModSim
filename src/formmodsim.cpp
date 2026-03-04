@@ -217,8 +217,8 @@ void FormModSim::setDisplayDefinition(const DisplayDefinition& dd)
     ui->outputWidget->setAutosctollLogView(dd.AutoscrollLog);
 
     _verboseLogging = dd.VerboseLogging;
-    _scriptSettings = dd.ScriptCfg;
 
+    setScriptSettings(dd.ScriptCfg);
     setDisplayHexAddresses(dd.HexAddress);
 
     onDefinitionChanged();
