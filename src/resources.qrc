@@ -70,5 +70,7 @@
         <file>res/icon-simulation-32bit.svg</file>
         <file>res/icon-simulation-64bit.svg</file>
         <file>res/icon-increment.svg</file>
+        <file>res/icon-replace.svg</file>
+        <file>res/icon-replace-all.svg</file>
     </qresource>
 </RCC>

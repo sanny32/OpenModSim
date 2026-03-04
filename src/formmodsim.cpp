@@ -1202,11 +1202,6 @@ void FormModSim::on_dataSimulated(DataDisplayMode mode, quint8 deviceId, QModbus
 void FormModSim::connectEditSlots()
 {
     disconnectEditSlots();
-    connect(_parent, &MainWindow::undo, ui->scriptControl, &JScriptControl::undo);
-    connect(_parent, &MainWindow::redo, ui->scriptControl, &JScriptControl::redo);
-    connect(_parent, &MainWindow::cut, ui->scriptControl, &JScriptControl::cut);
-    connect(_parent, &MainWindow::copy, ui->scriptControl, &JScriptControl::copy);
-    connect(_parent, &MainWindow::paste, ui->scriptControl, &JScriptControl::paste);
     connect(_parent, &MainWindow::selectAll, ui->scriptControl, &JScriptControl::selectAll);
     connect(_parent, &MainWindow::search, ui->scriptControl, &JScriptControl::search);
     connect(_parent, &MainWindow::find, ui->scriptControl, &JScriptControl::showFind);
@@ -1218,11 +1213,6 @@ void FormModSim::connectEditSlots()
 ///
 void FormModSim::disconnectEditSlots()
 {
-    disconnect(_parent, &MainWindow::undo, ui->scriptControl, &JScriptControl::undo);
-    disconnect(_parent, &MainWindow::redo, ui->scriptControl, &JScriptControl::redo);
-    disconnect(_parent, &MainWindow::cut, ui->scriptControl, &JScriptControl::cut);
-    disconnect(_parent, &MainWindow::copy, ui->scriptControl, &JScriptControl::copy);
-    disconnect(_parent, &MainWindow::paste, ui->scriptControl, &JScriptControl::paste);
     disconnect(_parent, &MainWindow::selectAll, ui->scriptControl, &JScriptControl::selectAll);
     disconnect(_parent, &MainWindow::search, ui->scriptControl, &JScriptControl::search);
     disconnect(_parent, &MainWindow::find, ui->scriptControl, &JScriptControl::showFind);

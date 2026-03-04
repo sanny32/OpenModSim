@@ -1,14 +1,13 @@
 #ifndef FINDREPLACEBAR_H
 #define FINDREPLACEBAR_H
 
-#include <QWidget>
-#include <QLineEdit>
-#include <QPushButton>
-#include <QToolButton>
-#include <QLabel>
-#include <QHBoxLayout>
-#include <QVBoxLayout>
+#include <QFrame>
+#include <QTextDocument>
 #include <QKeyEvent>
+
+namespace Ui {
+class FindReplaceBar;
+}
 
 ///
 /// \brief The FindReplaceBar class
@@ -19,9 +18,12 @@ class FindReplaceBar : public QFrame
 
 public:
     explicit FindReplaceBar(QWidget *parent = nullptr);
+    ~FindReplaceBar();
 
     QString searchText() const;
     QString replaceText() const;
+
+    QTextDocument::FindFlags findFlags() const;
 
     void updateMatchCount(int current, int total);
     void updatePosition();
@@ -47,18 +49,15 @@ private slots:
     void onReplace();
     void onReplaceAll();
     void onSearchTextEdited(const QString& text);
+    void onOptionsChanged();
+    void onToggleReplace();
     void onClose();
 
 private:
-    QLineEdit* _searchEdit;
-    QLineEdit* _replaceEdit;
-    QPushButton* _prevButton;
-    QPushButton* _nextButton;
-    QPushButton* _replaceButton;
-    QPushButton* _replaceAllButton;
-    QToolButton* _closeButton;
-    QLabel* _matchCountLabel;
-    QWidget* _replaceRow;
+    void setReplaceVisible(bool visible);
+
+private:
+    Ui::FindReplaceBar* ui;
 };
 
 #endif // FINDREPLACEBAR_H

@@ -141,9 +141,10 @@ void JSCodeEditor::search(const QString& text)
 ///
 /// \brief JSCodeEditor::highlightAllMatches
 /// \param text
+/// \param flags
 /// \return
 ///
-int JSCodeEditor::highlightAllMatches(const QString& text)
+int JSCodeEditor::highlightAllMatches(const QString& text, QTextDocument::FindFlags flags)
 {
     _searchSelections.clear();
     _currentMatchIndex = -1;
@@ -157,7 +158,7 @@ int JSCodeEditor::highlightAllMatches(const QString& text)
     const auto cur = textCursor();
     QTextCursor findCursor(document());
 
-    while(!(findCursor = document()->find(text, findCursor)).isNull())
+    while(!(findCursor = document()->find(text, findCursor, flags)).isNull())
     {
         QTextEdit::ExtraSelection extra;
         extra.format.setBackground(Qt::yellow);
@@ -258,17 +259,20 @@ bool JSCodeEditor::findPrevious(const QString& text)
 /// \brief JSCodeEditor::replaceCurrent
 /// \param text
 /// \param replacement
+/// \param flags
 ///
-void JSCodeEditor::replaceCurrent(const QString& text, const QString& replacement)
+void JSCodeEditor::replaceCurrent(const QString& text, const QString& replacement, QTextDocument::FindFlags flags)
 {
     auto cursor = textCursor();
-    if(cursor.hasSelection() && cursor.selectedText().compare(text, Qt::CaseInsensitive) == 0)
+    const Qt::CaseSensitivity cs = (flags & QTextDocument::FindCaseSensitively)
+                                       ? Qt::CaseSensitive : Qt::CaseInsensitive;
+    if(cursor.hasSelection() && cursor.selectedText().compare(text, cs) == 0)
     {
         cursor.insertText(replacement);
         setTextCursor(cursor);
     }
 
-    highlightAllMatches(text);
+    highlightAllMatches(text, flags);
     if(!_searchSelections.isEmpty())
         findNext(text);
 }
@@ -277,9 +281,10 @@ void JSCodeEditor::replaceCurrent(const QString& text, const QString& replacemen
 /// \brief JSCodeEditor::replaceAll
 /// \param text
 /// \param replacement
+/// \param flags
 /// \return
 ///
-int JSCodeEditor::replaceAll(const QString& text, const QString& replacement)
+int JSCodeEditor::replaceAll(const QString& text, const QString& replacement, QTextDocument::FindFlags flags)
 {
     if(text.isEmpty())
         return 0;
@@ -289,7 +294,7 @@ int JSCodeEditor::replaceAll(const QString& text, const QString& replacement)
     cursor.beginEditBlock();
 
     QTextCursor findCursor(document());
-    while(!(findCursor = document()->find(text, findCursor)).isNull())
+    while(!(findCursor = document()->find(text, findCursor, flags)).isNull())
     {
         findCursor.insertText(replacement);
         count++;

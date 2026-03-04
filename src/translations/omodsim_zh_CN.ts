@@ -1623,43 +1623,77 @@
 <context>
     <name>FindReplaceBar</name>
     <message>
-        <location filename="../controls/findreplacebar.cpp" line="31"/>
-        <source>Find</source>
+        <location filename="../controls/findreplacebar.ui" line="61"/>
+        <source>Toggle Replace</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/findreplacebar.cpp" line="37"/>
+        <location filename="../controls/findreplacebar.ui" line="74"/>
+        <source>Find...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../controls/findreplacebar.ui" line="84"/>
+        <source>Match Case</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../controls/findreplacebar.ui" line="87"/>
+        <source>Aa</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../controls/findreplacebar.ui" line="100"/>
+        <source>Match Whole Word</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../controls/findreplacebar.ui" line="103"/>
+        <source>W</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../controls/findreplacebar.ui" line="128"/>
         <source>Previous (Shift+Enter)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/findreplacebar.cpp" line="43"/>
+        <location filename="../controls/findreplacebar.ui" line="150"/>
         <source>Next (Enter)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/findreplacebar.cpp" line="53"/>
+        <location filename="../controls/findreplacebar.ui" line="173"/>
         <source>Close (Escape)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/findreplacebar.cpp" line="70"/>
-        <location filename="../controls/findreplacebar.cpp" line="74"/>
+        <location filename="../controls/findreplacebar.ui" line="176"/>
+        <source>✕</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../controls/findreplacebar.ui" line="228"/>
+        <source>Replace...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../controls/findreplacebar.ui" line="238"/>
         <source>Replace</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/findreplacebar.cpp" line="77"/>
+        <location filename="../controls/findreplacebar.ui" line="258"/>
         <source>Replace All</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/findreplacebar.cpp" line="123"/>
+        <location filename="../controls/findreplacebar.cpp" line="161"/>
         <source>No results</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/findreplacebar.cpp" line="125"/>
+        <location filename="../controls/findreplacebar.cpp" line="163"/>
         <source>%1 of %2</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1820,7 +1854,7 @@ MODBUS Point Type:
 <context>
     <name>JScriptControl</name>
     <message>
-        <location filename="../controls/jscriptcontrol.ui" line="48"/>
+        <location filename="../controls/jscriptcontrol.ui" line="51"/>
         <source>Server.addressBase = AddressBase.Base1;
 
 let deviceId = 1;
@@ -2365,7 +2399,7 @@ Script.onInit(()=&gt;{
     <message>
         <location filename="../mainwindow.ui" line="1182"/>
         <location filename="../mainwindow.ui" line="1185"/>
-        <location filename="../mainwindow.cpp" line="131"/>
+        <location filename="../mainwindow.cpp" line="130"/>
         <source>Script Help</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2468,25 +2502,25 @@ Script.onInit(()=&gt;{
         <translation type="vanished">俄语</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="402"/>
-        <location filename="../mainwindow.cpp" line="473"/>
-        <location filename="../mainwindow.cpp" line="483"/>
-        <location filename="../mainwindow.cpp" line="514"/>
-        <location filename="../mainwindow.cpp" line="540"/>
+        <location filename="../mainwindow.cpp" line="405"/>
+        <location filename="../mainwindow.cpp" line="476"/>
+        <location filename="../mainwindow.cpp" line="486"/>
+        <location filename="../mainwindow.cpp" line="517"/>
+        <location filename="../mainwindow.cpp" line="543"/>
         <source>All files (*)</source>
         <translation>所有文件 (*)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="401"/>
-        <location filename="../mainwindow.cpp" line="477"/>
-        <location filename="../mainwindow.cpp" line="482"/>
-        <location filename="../mainwindow.cpp" line="513"/>
-        <location filename="../mainwindow.cpp" line="539"/>
+        <location filename="../mainwindow.cpp" line="404"/>
+        <location filename="../mainwindow.cpp" line="480"/>
+        <location filename="../mainwindow.cpp" line="485"/>
+        <location filename="../mainwindow.cpp" line="516"/>
+        <location filename="../mainwindow.cpp" line="542"/>
         <source>XML files (*.xml)</source>
         <translation>XML 文件(*.xml)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1508"/>
+        <location filename="../mainwindow.cpp" line="1549"/>
         <source>Capture Error:<byte value="xd"/>
 %1</source>
         <translation>捕获错误：

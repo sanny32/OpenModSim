@@ -33,11 +33,6 @@ public:
     void saveConfig(const QString& filename, SerializationFormat format);
 
 signals:
-    void undo();
-    void redo();
-    void cut();
-    void copy();
-    void paste();
     void selectAll();
     void search(const QString& text);
     void find();
@@ -151,6 +146,7 @@ private slots:
     void on_connectionError(const QString& error);
 
     void updateMenuWindow();
+    void updateHelpWidgetState();
     void openFile(const QString& filename);
     void windowActivate(QMdiSubWindow* wnd);
     void setCodepage(const QString& name);

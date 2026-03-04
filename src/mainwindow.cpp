@@ -16,7 +16,6 @@
 #include "dialogmodbusdefinitions.h"
 #include "dialograwdatalog.h"
 #include "runmodecombobox.h"
-#include "searchlineedit.h"
 #include "mainstatusbar.h"
 #include "menuconnect.h"
 #include "mainwindow.h"
@@ -135,7 +134,9 @@ MainWindow::MainWindow(const QString& profile, bool useSession, QWidget *parent)
     addDockWidget(Qt::RightDockWidgetArea, _helpDockWidget);
     _helpDockWidget->setVisible(false);
 
-    connect(_helpDockWidget, &QDockWidget::visibilityChanged, ui->actionScriptHelp, &QAction::setChecked);
+    connect(_helpDockWidget, &QDockWidget::visibilityChanged, this, [this](bool) {
+        _helpWidget->setProperty("WasShown", _helpDockWidget->isVisible());
+    });
 
     connect(ui->mdiArea, &QMdiArea::subWindowActivated, this, &MainWindow::updateMenuWindow);
     connect(&_mbMultiServer, &ModbusMultiServer::connectionError, this, &MainWindow::on_connectionError);
@@ -308,6 +309,8 @@ void MainWindow::on_awake()
     ui->actionChineseCN->setChecked(_lang == "zh_CN");
     ui->actionChineseTW->setChecked(_lang == "zh_TW");
 
+    ui->actionScriptHelp->setChecked(_helpDockWidget->isVisible());
+    ui->actionScriptHelp->setVisible(frm && frm->displayMode() == DisplayMode::Script);
     ui->actionConsoleOutput->setVisible(frm && frm->displayMode() == DisplayMode::Script);
 
     ui->actionTile->setEnabled(ui->mdiArea->viewMode() == QMdiArea::SubWindowView);
@@ -712,6 +715,8 @@ void MainWindow::on_actionShowData_triggered()
 {
     auto frm = currentMdiChild();
     if(frm) frm->setDisplayMode(DisplayMode::Data);
+
+    updateHelpWidgetState();
 }
 
 ///
@@ -721,6 +726,8 @@ void MainWindow::on_actionShowTraffic_triggered()
 {
     auto frm = currentMdiChild();
     if(frm) frm->setDisplayMode(DisplayMode::Traffic);
+
+    updateHelpWidgetState();
 }
 
 ///
@@ -730,6 +737,8 @@ void MainWindow::on_actionShowScript_triggered()
 {
     auto frm = currentMdiChild();
     if(frm) frm->setDisplayMode(DisplayMode::Script);
+
+    updateHelpWidgetState();
 }
 
 ///
@@ -1022,6 +1031,36 @@ void MainWindow::setViewMode(QMdiArea::ViewMode mode)
 }
 
 ///
+/// \brief MainWindow::updateHelpWidgetState
+///
+void MainWindow::updateHelpWidgetState()
+{
+    auto frm = currentMdiChild();
+    if(!frm) return;
+
+    switch(frm->displayMode())
+    {
+        case DisplayMode::Data:
+        case DisplayMode::Traffic:
+            if(_helpDockWidget->isVisible() &&
+                !_helpDockWidget->isFloating())
+            {
+                _helpDockWidget->setProperty("WasShown", true);
+                _helpDockWidget->setVisible(false);
+            }
+        break;
+
+        case DisplayMode::Script:
+            if(!_helpDockWidget->isVisible() &&
+                _helpDockWidget->property("WasShown").toBool())
+            {
+                _helpDockWidget->setVisible(true);
+            }
+        break;
+    }
+}
+
+///
 /// \brief MainWindow::on_actionToolbar_triggered
 ///
 void MainWindow::on_actionToolbar_triggered()
@@ -1059,6 +1098,7 @@ void MainWindow::on_actionScriptBar_triggered()
 void MainWindow::on_actionScriptHelp_triggered()
 {
     _helpDockWidget->setVisible(!_helpDockWidget->isVisible());
+    _helpDockWidget->setProperty("WasShown", _helpDockWidget->isVisible());
 }
 
 ///
@@ -1452,11 +1492,12 @@ FormModSim* MainWindow::createMdiChild(int id)
     });
 
     connect(wnd, &QMdiSubWindow::windowStateChanged, this,
-            [frm, updateCodepage, updateRunMode](Qt::WindowStates, Qt::WindowStates newState)
+            [this, frm, updateCodepage, updateRunMode](Qt::WindowStates, Qt::WindowStates newState)
     {
         switch(newState & ~Qt::WindowMaximized & ~Qt::WindowMinimized)
         {
             case Qt::WindowActive:
+                updateHelpWidgetState();
                 updateCodepage(frm->codepage());
                 updateRunMode(frm->scriptSettings().Mode);
                 frm->connectEditSlots();

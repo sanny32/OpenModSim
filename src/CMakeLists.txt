@@ -301,6 +301,7 @@ set(HEADERS
 # UI Forms
 set(UI_FILES
     controls/bitpatterncontrol.ui
+    controls/findreplacebar.ui
     controls/jscriptcontrol.ui
     controls/outputwidget.ui
     controls/statisticwidget.ui
