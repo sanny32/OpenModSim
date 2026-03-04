@@ -138,7 +138,6 @@ private slots:
     /* Script menu slots */
     void on_actionRunScript_triggered();
     void on_actionStopScript_triggered();
-    void on_actionScriptSettings_triggered();
 
     void on_runModeChanged(RunMode mode);
     void on_searchText(const QString& text);

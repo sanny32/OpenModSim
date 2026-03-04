@@ -37,6 +37,9 @@ DialogDisplayDefinition::DialogDisplayDefinition(DisplayDefinition dd, QWidget* 
     ui->lineEditLogLimit->setValue(dd.LogViewLimit);
     ui->comboBoxPointType->setCurrentPointType(dd.PointType);
 
+    ui->lineEditScriptInterval->setValue(dd.ScriptCfg.Interval);
+    ui->comboBoxScriptRunMode->setCurrentRunMode(dd.ScriptCfg.Mode);
+
     ui->buttonBox->setFocus();
 }
 
@@ -64,6 +67,8 @@ void DialogDisplayDefinition::accept()
     _displayDefinition.ZeroBasedAddress = (ui->comboBoxAddressBase->currentAddressBase() == AddressBase::Base0);
     _displayDefinition.DataViewColumnsDistance = ui->comboBoxColumnsDistance->currentText().toUInt();
     _displayDefinition.LeadingZeros = ui->checkBoxLeadingZeros->isChecked();
+    _displayDefinition.ScriptCfg.Interval = ui->lineEditScriptInterval->value<int>();
+    _displayDefinition.ScriptCfg.Mode = ui->comboBoxScriptRunMode->currentRunMode();
 
     QFixedSizeDialog::accept();
 }

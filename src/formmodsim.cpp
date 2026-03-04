@@ -173,6 +173,7 @@ DisplayDefinition FormModSim::displayDefinition() const
     dd.AddrSpace = _mbMultiServer.getModbusDefinitions().AddrSpace;
     dd.DataViewColumnsDistance = ui->outputWidget->dataViewColumnsDistance();
     dd.LeadingZeros = ui->lineEditDeviceId->leadingZeroes();
+    dd.ScriptCfg = _scriptSettings;
 
     return dd;
 }
@@ -214,7 +215,9 @@ void FormModSim::setDisplayDefinition(const DisplayDefinition& dd)
     ui->outputWidget->setLogViewLimit(dd.LogViewLimit);
     ui->outputWidget->setDataViewColumnsDistance(dd.DataViewColumnsDistance);
     ui->outputWidget->setAutosctollLogView(dd.AutoscrollLog);
+
     _verboseLogging = dd.VerboseLogging;
+    _scriptSettings = dd.ScriptCfg;
 
     setDisplayHexAddresses(dd.HexAddress);
 

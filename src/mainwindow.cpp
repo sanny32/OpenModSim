@@ -10,7 +10,6 @@
 #include "dialogselectserviceport.h"
 #include "dialogsetupserialport.h"
 #include "dialogsetuppresetdata.h"
-#include "dialogscriptsettings.h"
 #include "dialogforcemultiplecoils.h"
 #include "dialogforcemultipleregisters.h"
 #include "dialogmodbusdefinitions.h"
@@ -296,7 +295,6 @@ void MainWindow::on_awake()
 
     ui->actionRunScript->setEnabled(frm && frm->canRunScript());
     ui->actionStopScript->setEnabled(frm && frm->canStopScript());
-    ui->actionScriptSettings->setEnabled(frm && !frm->canStopScript());
     _actionRunMode->setEnabled(frm && !frm->canStopScript());
 
     ui->actionTabbedView->setChecked(ui->mdiArea->viewMode() == QMdiArea::TabbedView);
@@ -1258,21 +1256,6 @@ void MainWindow::on_actionStopScript_triggered()
     if(!frm) return;
 
     frm->stopScript();
-}
-
-///
-/// \brief MainWindow::on_actionScriptSettings_triggered
-///
-void MainWindow::on_actionScriptSettings_triggered()
-{
-    auto frm = currentMdiChild();
-    if(!frm) return;
-
-    auto ss = frm->scriptSettings();
-    DialogScriptSettings dlg(ss, this);
-
-    if(dlg.exec() == QDialog::Accepted)
-        frm->setScriptSettings(ss);
 }
 
 ///

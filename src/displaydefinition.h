@@ -5,6 +5,7 @@
 #include <QModbusDataUnit>
 #include <QXmlStreamWriter>
 #include "modbuslimits.h"
+#include "scriptsettings.h"
 
 ///
 /// \brief The DisplayDefinition struct
@@ -24,6 +25,7 @@ struct DisplayDefinition
     AddressSpace AddrSpace;
     quint16 DataViewColumnsDistance = 16;
     bool LeadingZeros = true;
+    ScriptSettings ScriptCfg;
 
     void normalize()
     {
@@ -34,6 +36,7 @@ struct DisplayDefinition
                                  (quint16)ModbusLimits::lengthRange(PointAddress, ZeroBasedAddress, AddrSpace).to());
         LogViewLimit = qBound<quint16>(4, LogViewLimit, 1000);
         DataViewColumnsDistance = qBound<quint16>(1, DataViewColumnsDistance, 32);
+        ScriptCfg.normalize();
     }
 };
 Q_DECLARE_METATYPE(DisplayDefinition)
@@ -59,6 +62,9 @@ inline QSettings& operator <<(QSettings& out, const DisplayDefinition& dd)
     out.setValue("DisplayDefinition/AutoscrollLog",         dd.AutoscrollLog);
     out.setValue("DisplayDefinition/VerboseLogging",        dd.VerboseLogging);
 
+    out.beginGroup("DisplaDefinition/ScriptSettings");
+    out << dd.ScriptCfg;
+    out.endGroup();
 
     return out;
 }
@@ -83,6 +89,10 @@ inline QSettings& operator >>(QSettings& in, DisplayDefinition& dd)
     dd.HexAddress = in.value("DisplayDefinition/HexAddress").toBool();
     dd.AutoscrollLog = in.value("DisplayDefinition/AutoscrollLog").toBool();
     dd.VerboseLogging = in.value("DisplayDefinition/VerboseLogging", true).toBool();
+
+    in.beginGroup("DisplaDefinition/ScriptSettings");
+    in >> dd.ScriptCfg;
+    in.endGroup();
 
     dd.normalize();
     return in;

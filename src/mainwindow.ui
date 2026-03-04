@@ -319,7 +319,6 @@
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
-   <addaction name="actionScriptSettings"/>
    <addaction name="actionRunScript"/>
    <addaction name="actionStopScript"/>
   </widget>
@@ -800,15 +799,6 @@
    </property>
    <property name="shortcut">
     <string notr="true">Ctrl+B</string>
-   </property>
-  </action>
-  <action name="actionScriptSettings">
-   <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/res/actionScriptSettings.png</normaloff>:/res/actionScriptSettings.png</iconset>
-   </property>
-   <property name="text">
-    <string>Script Settings</string>
    </property>
   </action>
   <action name="actionScriptBar">
