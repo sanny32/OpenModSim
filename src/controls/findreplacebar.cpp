@@ -316,7 +316,7 @@ void FindReplaceBar::onToggleReplace()
     setReplaceVisible(!ui->replaceRow->isVisible());
 
     layout()->activate();
-    setFixedHeight(sizeHint().height());
+    resize(width(), sizeHint().height());
 
     updatePosition();
 }
