@@ -118,6 +118,7 @@ inline QXmlStreamWriter& operator <<(QXmlStreamWriter& xml, const DisplayDefinit
     xml.writeAttribute("VerboseLogging", boolToString(dd.VerboseLogging));
     xml.writeAttribute("DataViewColumnsDistance", QString::number(dd.DataViewColumnsDistance));
     xml.writeAttribute("LeadingZeros", boolToString(dd.LeadingZeros));
+    xml << dd.ScriptCfg;
     xml.writeEndElement();
 
     return xml;
@@ -183,7 +184,13 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, DisplayDefinition& d
             dd.LeadingZeros = stringToBool(attributes.value("LeadingZeros").toString());
         }
 
-        xml.skipCurrentElement();
+        while (xml.readNextStartElement()) {
+            if (xml.name() == QLatin1String("ScriptSettings")) {
+                xml >> dd.ScriptCfg;
+            } else {
+                xml.skipCurrentElement();
+            }
+        }
 
         dd.normalize();
     }

@@ -12,7 +12,6 @@ struct ScriptSettings
 {
     RunMode Mode = RunMode::Periodically;
     uint Interval = 1000;
-    bool UseAutoComplete = true;
     bool RunOnStartup = false;
 
     void normalize()
@@ -33,7 +32,6 @@ inline QSettings& operator <<(QSettings& out, const ScriptSettings& ss)
 {
     out.setValue("ScriptSettings/RunMode",          (int)ss.Mode);
     out.setValue("ScriptSettings/Interval",         ss.Interval);
-    //out.setValue("ScriptSettings/UseAutoComplete",  ss.UseAutoComplete);
     out.setValue("ScriptSettings/RunOnStartup",     ss.RunOnStartup);
 
     return out;
@@ -49,7 +47,6 @@ inline QSettings& operator >>(QSettings& in, ScriptSettings& ss)
 {
     ss.Mode = (RunMode)in.value("ScriptSettings/RunMode").toInt();
     ss.Interval = in.value("ScriptSettings/Interval", 1000).toUInt();
-    //ss.UseAutoComplete = in.value("ScriptSettings/UseAutoComplete", true).toBool();
     ss.RunOnStartup = in.value("ScriptSettings/RunOnStartup", false).toBool();
 
     ss.normalize();
@@ -67,7 +64,6 @@ inline QXmlStreamWriter& operator <<(QXmlStreamWriter& xml, const ScriptSettings
     xml.writeStartElement("ScriptSettings");
     xml.writeAttribute("Mode", enumToString<RunMode>(settings.Mode));
     xml.writeAttribute("Interval", QString::number(settings.Interval));
-    xml.writeAttribute("UseAutoComplete", boolToString(settings.UseAutoComplete));
     xml.writeAttribute("RunOnStartup", boolToString(settings.RunOnStartup));
     xml.writeEndElement();
     return xml;
@@ -91,10 +87,6 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, ScriptSettings& sett
         if (attributes.hasAttribute("Interval")) {
             bool ok; const uint interval = attributes.value("Interval").toUInt(&ok);
             if (ok) settings.Interval = interval;
-        }
-
-        if (attributes.hasAttribute("UseAutoComplete")) {
-            settings.UseAutoComplete = stringToBool(attributes.value("UseAutoComplete").toString());
         }
 
         if (attributes.hasAttribute("RunOnStartup")) {

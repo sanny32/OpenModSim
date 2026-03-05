@@ -351,7 +351,6 @@ ScriptSettings FormModSim::scriptSettings() const
 void FormModSim::setScriptSettings(const ScriptSettings& ss)
 {
     _scriptSettings = ss;
-    ui->scriptControl->enableAutoComplete(ss.UseAutoComplete);
     emit scriptSettingsChanged(ss);
 }
 
@@ -962,7 +961,6 @@ void FormModSim::on_outputWidget_itemDoubleClicked(quint16 addr, const QVariant&
     const auto zeroBasedAddress = dd.ZeroBasedAddress;
     const auto simAddr = addr - (zeroBasedAddress ? 0 : 1);
     const auto addrSpace = _mbMultiServer.getModbusDefinitions().AddrSpace;
-    auto simParams = _dataSimulator->simulationParams(deviceId, pointType, simAddr);
 
     switch(pointType)
     {

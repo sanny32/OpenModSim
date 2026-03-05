@@ -1778,7 +1778,7 @@ Length: %2</source>
         <translation type="vanished">Указана недопустимая длина данных</translation>
     </message>
     <message>
-        <location filename="../formmodsim.cpp" line="542"/>
+        <location filename="../formmodsim.cpp" line="541"/>
         <source>Address Base: %1
 Start Address: %2
 Length: %3</source>
@@ -1787,7 +1787,7 @@ Length: %3</source>
 Количество: %3</translation>
     </message>
     <message>
-        <location filename="../formmodsim.cpp" line="545"/>
+        <location filename="../formmodsim.cpp" line="544"/>
         <source>Device Id: %1
 MODBUS Point Type:
 %2</source>
@@ -2522,7 +2522,7 @@ Script.onInit(()=&gt;{
         <translation>XML файлы (*.xml)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1544"/>
+        <location filename="../mainwindow.cpp" line="1546"/>
         <source>Capture Error:<byte value="xd"/>
 %1</source>
         <translation>Ошибка захвата:

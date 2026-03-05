@@ -1475,10 +1475,12 @@ FormModSim* MainWindow::createMdiChild(int id)
         _ansiMenu->selectCodepage(name);
     };
 
-    auto updateRunMode = [this](RunMode mode)
+    auto updateRunMode = [this, frm](RunMode mode)
     {
         auto comboBox = qobject_cast<RunModeComboBox*>(ui->toolBarScript->widgetForAction(_actionRunMode));
+        comboBox->blockSignals(true);
         comboBox->setCurrentRunMode(mode);
+        comboBox->blockSignals(false);
     };
 
     connect(frm, &FormModSim::codepageChanged, this, [updateCodepage](const QString& name)

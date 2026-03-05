@@ -295,9 +295,9 @@ inline QSettings& operator >>(QSettings& in, FormModSim* frm)
     frm->setDataDisplayMode(dataDisplayMode);
     frm->setByteOrder(byteOrder);
     frm->setDisplayDefinition(displayDefinition);
+
     frm->setDisplayHexAddresses(in.value("DisplayHexAddresses").toBool());
     frm->setCodepage(in.value("Codepage").toString());
-
 
     if(displayDefinition.ScriptCfg.RunOnStartup) {
         frm->runScript();
