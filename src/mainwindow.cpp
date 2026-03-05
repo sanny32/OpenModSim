@@ -263,6 +263,9 @@ void MainWindow::on_awake()
     ui->actionCut->setEnabled(frm != nullptr);
     ui->actionCopy->setEnabled(frm != nullptr);
     ui->actionPaste->setEnabled(frm != nullptr);
+    ui->actionSelectAll->setEnabled(frm != nullptr);
+    ui->actionFind->setEnabled(frm && frm->displayMode() == DisplayMode::Script);
+    ui->actionReplace->setEnabled(frm && frm->displayMode() == DisplayMode::Script);
 
     ui->actionDataDefinition->setEnabled(frm != nullptr);
     ui->actionShowData->setEnabled(frm != nullptr);
@@ -309,8 +312,8 @@ void MainWindow::on_awake()
     ui->actionChineseTW->setChecked(_lang == "zh_TW");
 
     ui->actionScriptHelp->setChecked(_helpDockWidget->isVisible());
-    ui->actionScriptHelp->setVisible(frm && frm->displayMode() == DisplayMode::Script);
-    ui->actionConsoleOutput->setVisible(frm && frm->displayMode() == DisplayMode::Script);
+    ui->actionScriptHelp->setEnabled(frm && frm->displayMode() == DisplayMode::Script);
+    ui->actionConsoleOutput->setEnabled(frm && frm->displayMode() == DisplayMode::Script);
 
     ui->actionTile->setEnabled(ui->mdiArea->viewMode() == QMdiArea::SubWindowView);
     ui->actionCascade->setEnabled(ui->mdiArea->viewMode() == QMdiArea::SubWindowView);
