@@ -495,7 +495,7 @@
         <translation type="unfinished">脚本设置</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogdisplaydefinition.ui" line="393"/>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="399"/>
         <source>Run Mode: </source>
         <translation type="unfinished">运行模式： </translation>
     </message>
@@ -505,12 +505,12 @@
         <translation type="unfinished">间隔： </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogdisplaydefinition.ui" line="384"/>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="390"/>
         <source>(msec)</source>
         <translation type="unfinished">（毫秒）</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogdisplaydefinition.ui" line="424"/>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="436"/>
         <source>Form Name: </source>
         <translation>表单名称： </translation>
     </message>

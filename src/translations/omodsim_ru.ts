@@ -490,7 +490,7 @@
         <translation type="unfinished">Настройки скрипта</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogdisplaydefinition.ui" line="393"/>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="399"/>
         <source>Run Mode: </source>
         <translation type="unfinished">Режим запуска: </translation>
     </message>
@@ -500,12 +500,12 @@
         <translation type="unfinished">Интервал: </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogdisplaydefinition.ui" line="384"/>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="390"/>
         <source>(msec)</source>
         <translation type="unfinished">(мсек)</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogdisplaydefinition.ui" line="424"/>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="436"/>
         <source>Form Name: </source>
         <translation>Имя формы: </translation>
     </message>
