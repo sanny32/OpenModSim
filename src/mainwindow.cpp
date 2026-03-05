@@ -18,6 +18,7 @@
 #include "mainstatusbar.h"
 #include "menuconnect.h"
 #include "mainwindow.h"
+#include "uiutils.h"
 #include "ui_mainwindow.h"
 
 ///
@@ -312,8 +313,8 @@ void MainWindow::on_awake()
     ui->actionChineseTW->setChecked(_lang == "zh_TW");
 
     ui->actionScriptHelp->setChecked(_helpDockWidget->isVisible());
-    ui->actionScriptHelp->setEnabled(frm && frm->displayMode() == DisplayMode::Script);
-    ui->actionConsoleOutput->setEnabled(frm && frm->displayMode() == DisplayMode::Script);
+    ui->actionScriptHelp->setVisible(frm && frm->displayMode() == DisplayMode::Script);
+    ui->actionConsoleOutput->setVisible(frm && frm->displayMode() == DisplayMode::Script);
 
     ui->actionTile->setEnabled(ui->mdiArea->viewMode() == QMdiArea::SubWindowView);
     ui->actionCascade->setEnabled(ui->mdiArea->viewMode() == QMdiArea::SubWindowView);
@@ -1554,6 +1555,18 @@ FormModSim* MainWindow::createMdiChild(int id)
         if(!helpKey.isEmpty()) {
             _helpWidget->showHelp(helpKey);
         }
+    });
+
+    connect(frm, &FormModSim::scriptRunning, this, [this, frm, wnd]()
+    {
+        if(frm->scriptSettings().Mode == RunMode::Periodically)
+            crossFadeWindowIcon(wnd, wnd->windowIcon(), ui->actionRunScript->icon());
+    });
+
+    connect(frm, &FormModSim::scriptStopped, this, [this, frm, wnd]()
+    {
+        if(frm->scriptSettings().Mode == RunMode::Periodically)
+            crossFadeWindowIcon(wnd, ui->actionStopScript->icon(), windowIcon());
     });
 
     _windowActionList->addWindow(wnd);

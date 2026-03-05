@@ -151,6 +151,8 @@ signals:
     void pointTypeChanged(QModbusDataUnit::RegisterType);
     void displayModeChanged(DisplayMode mode);
     void scriptSettingsChanged(const ScriptSettings&);
+    void scriptRunning();
+    void scriptStopped();
     void captureError(const QString& error);
     void doubleClicked();
 

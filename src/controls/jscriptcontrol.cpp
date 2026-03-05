@@ -357,6 +357,8 @@ void JScriptControl::stopScript()
     _server = nullptr;
     _script = nullptr;
     _console = nullptr;
+
+    emit scriptStopped();
 }
 
 ///

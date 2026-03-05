@@ -58,6 +58,7 @@ FormModSim::FormModSim(int id, ModbusMultiServer& server, QSharedPointer<DataSim
     ui->outputWidget->setFocus();
     connect(ui->outputWidget, &OutputWidget::startTextCaptureError, this, &FormModSim::captureError);
     connect(ui->scriptControl, &JScriptControl::helpContext, this, &FormModSim::helpContextRequested);
+    connect(ui->scriptControl, &JScriptControl::scriptStopped, this, &FormModSim::scriptStopped);
 
     setLogViewState(server.isConnected() ? LogViewState::Running : LogViewState::Unknown);
     connect(ui->statisticWidget, &StatisticWidget::ctrsReseted, ui->outputWidget, &OutputWidget::clearLogView);
@@ -774,6 +775,7 @@ bool FormModSim::canPaste() const
 ///
 void FormModSim::runScript()
 {
+    emit scriptRunning();
     ui->scriptControl->runScript(_scriptSettings.Mode, _scriptSettings.Interval);
 }
 

@@ -78,6 +78,7 @@ public slots:
     void hideConsole();
 
 signals:
+    void scriptStopped();
     void helpContext(const QString& helpKey);
 
 private slots:
