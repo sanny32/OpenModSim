@@ -33,9 +33,6 @@ class FormModSim : public QWidget
     friend QSettings& operator <<(QSettings& out, FormModSim* frm);
     friend QSettings& operator >>(QSettings& in, FormModSim* frm);
 
-    friend QDataStream& operator <<(QDataStream& out, FormModSim* frm);
-    friend QDataStream& operator >>(QDataStream& in, FormModSim* frm);
-
     friend QXmlStreamWriter& operator <<(QXmlStreamWriter& xml, FormModSim* frm);
     friend QXmlStreamReader& operator >>(QXmlStreamReader& xml, FormModSim* frm);
 
@@ -219,7 +216,6 @@ inline QSettings& operator <<(QSettings& out, FormModSim* frm)
     out << frm->displayDefinition();
     out.setValue("DisplayHexAddresses", frm->displayHexAddresses());
     out.setValue("Codepage", frm->codepage());
-    out << frm->scriptSettings();
     out << frm->scriptControl();
     out << frm->descriptionMap();
     out << frm->colorMap();
@@ -251,9 +247,6 @@ inline QSettings& operator >>(QSettings& in, FormModSim* frm)
 
     DisplayDefinition displayDefinition;
     in >> displayDefinition;
-
-    ScriptSettings scriptSettings;
-    in >> scriptSettings;
 
     in >> frm->scriptControl();
 
@@ -304,260 +297,10 @@ inline QSettings& operator >>(QSettings& in, FormModSim* frm)
     frm->setDisplayDefinition(displayDefinition);
     frm->setDisplayHexAddresses(in.value("DisplayHexAddresses").toBool());
     frm->setCodepage(in.value("Codepage").toString());
-    frm->setScriptSettings(scriptSettings);
 
-    if(scriptSettings.RunOnStartup) {
+
+    if(displayDefinition.ScriptCfg.RunOnStartup) {
         frm->runScript();
-    }
-
-    return in;
-}
-
-///
-/// \brief operator <<
-/// \param out
-/// \param frm
-/// \return
-///
-inline QDataStream& operator <<(QDataStream& out, FormModSim* frm)
-{
-    if(!frm) return out;
-
-    out << frm->formId();
-
-    const auto wnd = frm->parentWidget();
-    out << wnd->isMaximized();
-
-    const auto windowSize = (wnd->isMinimized() || wnd->isMaximized()) ? wnd->sizeHint() : wnd->size();
-    out << windowSize;
-
-    out << frm->displayMode();
-    out << frm->dataDisplayMode();
-    out << frm->displayHexAddresses();
-
-    out << frm->backgroundColor();
-    out << frm->foregroundColor();
-    out << frm->statusColor();
-    out << frm->font();
-    out << frm->zoomPercent();
-
-    const auto dd = frm->displayDefinition();
-    out << dd.FormName;
-    out << dd.DeviceId;
-    out << dd.PointType;
-    out << dd.PointAddress;
-    out << dd.Length;
-    out << dd.LogViewLimit;
-    out << dd.ZeroBasedAddress;
-    out << dd.AutoscrollLog;
-    out << dd.VerboseLogging;
-    out << dd.DataViewColumnsDistance;
-    out << dd.LeadingZeros;
-
-    out << frm->byteOrder();
-    out << frm->simulationMap();
-    out << frm->scriptControl();
-    out << frm->scriptSettings();
-    out << frm->descriptionMap();
-    out << frm->colorMap();
-    out << frm->codepage();
-
-    const auto unit = frm->serializeModbusDataUnit(dd.DeviceId, dd.PointType, dd.PointAddress - (dd.ZeroBasedAddress ? 0 : 1), dd.Length);
-    out << unit.registerType();
-    out << unit.startAddress();
-    out << unit.values();
-
-    return out;
-}
-
-///
-/// \brief operator >>
-/// \param in
-/// \param frm
-/// \return
-///
-inline QDataStream& operator >>(QDataStream& in, FormModSim* frm)
-{
-    if(!frm) return in;
-    const auto ver = frm->property("Version").value<QVersionNumber>();
-    in.device()->setProperty("Form_Version", QVariant::fromValue(ver));
-
-    bool isMaximized;
-    in >> isMaximized;
-
-    QSize windowSize;
-    in >> windowSize;
-
-    DisplayMode displayMode;
-    in >> displayMode;
-
-    DataDisplayMode dataDisplayMode;
-    in >> dataDisplayMode;
-
-    bool hexAddresses;
-    in >> hexAddresses;
-
-    QColor bkgClr;
-    in >> bkgClr;
-
-    QColor fgClr;
-    in >> fgClr;
-
-    QColor stCrl;
-    in >> stCrl;
-
-    QFont font;
-    in >> font;
-
-    int zoomPercent = 100;
-    if(ver >= QVersionNumber(1, 13))
-    {
-        in >> zoomPercent;
-    }
-
-    DisplayDefinition dd;
-    bool UseGlobalUnitMap;
-
-    if(ver >= QVersionNumber(1,11))
-    {
-        in >> dd.FormName;
-    }
-    if(ver >= QVersionNumber(1, 5))
-    {
-        in >> dd.DeviceId;
-        in >> dd.PointType;
-        in >> dd.PointAddress;
-        in >> dd.Length;
-        in >> dd.LogViewLimit;
-    }
-    if(ver >= QVersionNumber(1, 6))
-    {
-        in >> dd.ZeroBasedAddress;
-    }
-
-    if(ver >= QVersionNumber(1, 9))
-    {
-        if(ver < QVersionNumber(1, 11)) {
-            in >> UseGlobalUnitMap;
-        }
-
-        in >> dd.AutoscrollLog;
-        in >> dd.VerboseLogging;
-
-        if(ver >= QVersionNumber(1, 11)) {
-            in >> dd.DataViewColumnsDistance;
-        }
-
-        if(ver >= QVersionNumber(1, 12)) {
-            in >> dd.LeadingZeros;
-        }
-    }
-
-    ModbusSimulationMap simulationMap;
-    ModbusSimulationMap2 simulationMap2;
-    ByteOrder byteOrder = ByteOrder::Direct;
-    if(ver >= QVersionNumber(1, 1))
-    {
-        in >> byteOrder;
-
-        if(ver >= QVersionNumber(1, 10)) {
-            in >> simulationMap2;
-        }
-        else {
-            in >> simulationMap;
-        }
-    }
-
-    ScriptSettings scriptSettings;
-    if(ver >=  QVersionNumber(1, 2))
-    {
-        in >> frm->scriptControl();
-
-        if(ver >= QVersionNumber(1, 8)) {
-            in >> scriptSettings;
-        }
-        else {
-            in >> scriptSettings.Mode;
-            in >> scriptSettings.Interval;
-            in >> scriptSettings.UseAutoComplete;
-        }
-    }
-
-    AddressDescriptionMap descriptionMap;
-    AddressDescriptionMap2 descriptionMap2;
-    if(ver >=  QVersionNumber(1, 3))
-    {
-        if(ver >= QVersionNumber(1, 10)) {
-            in >> descriptionMap2;
-        }
-        else {
-            in >> descriptionMap;
-        }
-    }
-
-    AddressColorMap colorMap;
-    if(ver >= QVersionNumber(1, 13))
-    {
-        in >> colorMap;
-    }
-
-    QString codepage;
-    if(ver >= QVersionNumber(1, 7))
-    {
-        in >> codepage;
-    }
-
-    if(in.status() != QDataStream::Ok)
-        return in;
-
-    auto wnd = frm->parentWidget();
-    wnd->resize(windowSize);
-    wnd->setWindowState(Qt::WindowActive);
-    if(isMaximized) wnd->setWindowState(Qt::WindowMaximized);
-    else wnd->resize(windowSize);
-
-    frm->setDisplayMode(displayMode);
-    frm->setDataDisplayMode(dataDisplayMode);
-    frm->setDisplayHexAddresses(hexAddresses);
-    frm->setBackgroundColor(bkgClr);
-    frm->setForegroundColor(fgClr);
-    frm->setStatusColor(stCrl);
-    frm->setFont(font);
-    frm->setZoomPercent(zoomPercent);
-    frm->setDisplayDefinition(dd);
-    frm->setByteOrder(byteOrder);
-    frm->setCodepage(codepage);
-    frm->setScriptSettings(scriptSettings);
-
-    if(ver >= QVersionNumber(1,10)) {
-        for(auto&& k : simulationMap2.keys())
-            frm->startSimulation(k.Type, k.Address, simulationMap2[k]);
-
-        for(auto&& k : descriptionMap2.keys())
-            frm->setDescription(k.DeviceId, k.Type, k.Address, descriptionMap2[k]);
-
-        for(auto&& k : colorMap.keys())
-            frm->setColor(k.DeviceId, k.Type, k.Address, colorMap[k]);
-    }
-    else {
-        for(auto&& k : simulationMap.keys())
-            frm->startSimulation(k.first, k.second, simulationMap[k]);
-
-        for(auto&& k : descriptionMap.keys())
-            frm->setDescription(dd.DeviceId, k.first, k.second, descriptionMap[k]);
-    }
-
-    if(ver >= QVersionNumber(1, 7))
-    {
-        QModbusDataUnit::RegisterType type;
-        int startAddress;
-        QVector<quint16> values;
-
-        in >> type;
-        in >> startAddress;
-        in >> values;
-
-        frm->configureModbusDataUnit(dd.DeviceId, type, startAddress, values);
     }
 
     return in;
@@ -638,7 +381,6 @@ inline QXmlStreamWriter& operator <<(QXmlStreamWriter& xml, FormModSim* frm)
     }
 
     xml << frm->scriptControl();
-    xml << frm->scriptSettings();
     xml << frm->descriptionMap();
     xml << frm->colorMap();
 
@@ -828,11 +570,6 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, FormModSim* frm)
             else if (xml.name() == QLatin1String("JScriptControl")) {
                 auto scriptControl = frm->scriptControl();
                 xml >> scriptControl;
-            }
-            else if (xml.name() == QLatin1String("ScriptSettings")) {
-                ScriptSettings settings;
-                xml >> settings;
-                frm->setScriptSettings(settings);
             }
             else if (xml.name() == QLatin1String("AddressDescriptionMap")) {
                 AddressDescriptionMap2 map;

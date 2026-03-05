@@ -58,39 +58,6 @@ inline QSettings& operator >>(QSettings& in, ScriptSettings& ss)
 
 ///
 /// \brief operator <<
-/// \param out
-/// \param ss
-/// \return
-///
-inline QDataStream& operator <<(QDataStream& out, const ScriptSettings& ss)
-{
-    out << ss.Mode;
-    out << ss.Interval;
-    out << ss.UseAutoComplete;
-    out << ss.RunOnStartup;
-
-    return out;
-}
-
-///
-/// \brief operator >>
-/// \param in
-/// \param ss
-/// \return
-///
-inline QDataStream& operator >>(QDataStream& in, ScriptSettings& ss)
-{
-    in >> ss.Mode;
-    in >> ss.Interval;
-    in >> ss.UseAutoComplete;
-    in >> ss.RunOnStartup;
-
-
-    return in;
-}
-
-///
-/// \brief operator <<
 /// \param xml
 /// \param settings
 /// \return

@@ -26,9 +26,6 @@ class JScriptControl : public QWidget
     friend QSettings& operator <<(QSettings& out, const JScriptControl* ctrl);
     friend QSettings& operator >>(QSettings& in, JScriptControl* ctrl);
 
-    friend QDataStream& operator <<(QDataStream& out, const JScriptControl* ctrl);
-    friend QDataStream& operator >>(QDataStream& in, JScriptControl* ctrl);
-
     friend QXmlStreamWriter& operator <<(QXmlStreamWriter& xml, const JScriptControl* ctrl);
     friend QXmlStreamReader& operator >>(QXmlStreamReader& xml, JScriptControl* ctrl);
 

@@ -1641,44 +1641,6 @@ void MainWindow::loadConfig(const QString& filename, bool startup)
     switch(format)
     {
         case SerializationFormat::Binary:
-        {
-            QDataStream s(&file);
-            s.setByteOrder(QDataStream::BigEndian);
-            s.setVersion(QDataStream::Version::Qt_5_0);
-
-            quint8 magic = 0;
-            s >> magic;
-
-            if(magic != 0x35)
-                return;
-
-            QVersionNumber ver;
-            s >> ver;
-
-            if(ver < QVersionNumber(1, 0))
-                return;
-
-            QStringList listFilename;
-            s >> listFilename;
-
-            ui->mdiArea->closeAllSubWindows();
-            for(auto&& filename: listFilename)
-            {
-                if(!filename.isEmpty())
-                    openFile(filename);
-            }
-
-            s >> conns;
-
-            if(ver >= QVersionNumber(1, 1)) {
-                s >> defs.AddrSpace;
-                s >> defs.UseGlobalUnitMap;
-                s >> defs.ErrorSimulations;
-            }
-
-            if(s.status() != QDataStream::Ok)
-                return;
-        }
         break;
 
         case SerializationFormat::Xml:
@@ -1765,43 +1727,6 @@ void MainWindow::saveConfig(const QString& filename, SerializationFormat format)
     switch(format)
     {
         case SerializationFormat::Binary:
-        {
-            QStringList listFilename;
-            const auto activeWnd = ui->mdiArea->currentSubWindow();
-            for(auto&& wnd : ui->mdiArea->subWindowList())
-            {
-                const auto frm = qobject_cast<FormModSim*>(wnd->widget());
-
-                windowActivate(wnd);
-                saveAs(frm, format);
-
-                const auto filename = frm->filename();
-                if(!filename.isEmpty()) listFilename.push_back(filename);
-            }
-            windowActivate(activeWnd);
-
-            QDataStream s(&file);
-            s.setByteOrder(QDataStream::BigEndian);
-            s.setVersion(QDataStream::Version::Qt_5_0);
-
-            // magic number
-            s << (quint8)0x35;
-
-            // version number
-            s << QVersionNumber(1, 1);
-
-            // list of files
-            s << listFilename;
-
-            // connections
-            s << _mbMultiServer.connections();
-
-            // modbus definitions
-            ModbusDefinitions defs = _mbMultiServer.getModbusDefinitions();
-            s << defs.AddrSpace;
-            s << defs.UseGlobalUnitMap;
-            s << defs.ErrorSimulations;
-        }
         break;
 
         case SerializationFormat::Xml:
@@ -1853,45 +1778,6 @@ FormModSim* MainWindow::loadMdiChild(const QString& filename)
     switch(format)
     {
         case SerializationFormat::Binary:
-        {
-            QDataStream s(&file);
-            s.setByteOrder(QDataStream::BigEndian);
-            s.setVersion(QDataStream::Version::Qt_5_0);
-
-            quint8 magic = 0;
-            s >> magic;
-
-            if(magic != 0x34)
-                return nullptr;
-
-            QVersionNumber ver;
-            s >> ver;
-
-            if(ver > FormModSim::VERSION)
-                return nullptr;
-
-            int formId;
-            s >> formId;
-
-            if(s.status() != QDataStream::Ok)
-                return nullptr;
-
-            bool created = false;
-            frm = findMdiChild(formId);
-            if(!frm) {
-                frm = createMdiChild(formId);
-                created = true;
-            }
-
-            if(frm) {
-                frm->setProperty("Version", QVariant::fromValue(ver));
-                s >> frm;
-
-                if(s.status() != QDataStream::Ok && created) {
-                    closeMdiChild(frm);
-                }
-            }
-        }
         break;
 
         case SerializationFormat::Xml:
@@ -1941,20 +1827,6 @@ void MainWindow::saveMdiChild(FormModSim* frm, SerializationFormat format)
     switch(format)
     {
         case SerializationFormat::Binary:
-        {
-            QDataStream s(&file);
-            s.setByteOrder(QDataStream::BigEndian);
-            s.setVersion(QDataStream::Version::Qt_5_0);
-
-            // magic number
-            s << (quint8)0x34;
-
-            // version number
-            s << FormModSim::VERSION;
-
-            // form
-            s << frm;
-        }
         break;
 
         case SerializationFormat::Xml:

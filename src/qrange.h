@@ -11,10 +11,6 @@
 template<class T>
 class QRange
 {
-
-    friend QDataStream& operator <<(QDataStream& out, const QRange<double>& range);
-    friend QDataStream& operator >>(QDataStream& in, QRange<double>& range);
-
 public:
     ///
     /// \brief QRange
@@ -62,32 +58,6 @@ private:
     T _from;
     T _to;
 };
-
-///
-/// \brief operator <<
-/// \param out
-/// \param range
-/// \return
-///
-inline QDataStream& operator <<(QDataStream& out, const QRange<double>& range)
-{
-    out << range.from();
-    out << range.to();
-    return out;
-}
-
-///
-/// \brief operator >>
-/// \param in
-/// \param range
-/// \return
-///
-inline QDataStream& operator >>(QDataStream& in, QRange<double>& range)
-{
-    in >> range._from;
-    in >> range._to;
-    return in;
-}
 
 ///
 /// \brief operator <<

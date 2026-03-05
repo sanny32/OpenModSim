@@ -434,44 +434,6 @@ QSettings& operator >>(QSettings& in, JScriptControl* ctrl)
 
 ///
 /// \brief operator <<
-/// \param out
-/// \param ctrl
-/// \return
-///
-QDataStream& operator <<(QDataStream& out, const JScriptControl* ctrl)
-{
-    QMap<QString, QVariant> m;
-    m["script"]        = ctrl->script();
-    m["hsplitter"]     = ctrl->ui->horizontalSplitter->saveState();
-    m["consoleVisible"]= ctrl->isConsoleVisible();
-
-    out << m;
-    return out;
-}
-
-///
-/// \brief operator >>
-/// \param in
-/// \param ctrl
-/// \return
-///
-QDataStream& operator >>(QDataStream& in, JScriptControl* ctrl)
-{
-    QMap<QString, QVariant> m;
-    in >> m;
-
-    ctrl->setScript(m["script"].toString());
-
-    ctrl->ui->console->setVisible(m.value("consoleVisible", true).toBool());
-
-    const auto hstate = m["hsplitter"].toByteArray();
-    if(!hstate.isEmpty()) ctrl->ui->horizontalSplitter->restoreState(hstate);
-
-    return in;
-}
-
-///
-/// \brief operator <<
 /// \param xml
 /// \param ctrl
 /// \return
