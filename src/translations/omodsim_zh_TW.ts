@@ -495,17 +495,17 @@
         <translation type="unfinished">指令碼設定</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogdisplaydefinition.ui" line="369"/>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="393"/>
         <source>Run Mode: </source>
         <translation type="unfinished">執行模式： </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogdisplaydefinition.ui" line="376"/>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="359"/>
         <source>Interval: </source>
         <translation type="unfinished">間隔： </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogdisplaydefinition.ui" line="401"/>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="384"/>
         <source>(msec)</source>
         <translation type="unfinished">（毫秒）</translation>
     </message>

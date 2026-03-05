@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>537</width>
-    <height>444</height>
+    <height>436</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -86,7 +86,7 @@
     </widget>
    </item>
    <item row="1" column="2" rowspan="2">
-    <widget class="QGroupBox" name="groupBox">
+    <widget class="QGroupBox" name="groupBoxModbusData">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
        <horstretch>0</horstretch>
@@ -253,7 +253,7 @@
     </widget>
    </item>
    <item row="2" column="0" colspan="2">
-    <widget class="QGroupBox" name="groupBox_2">
+    <widget class="QGroupBox" name="groupBoxLogView">
      <property name="title">
       <string>Log View</string>
      </property>
@@ -348,36 +348,19 @@
     </widget>
    </item>
    <item row="3" column="0" colspan="3">
-    <widget class="QGroupBox" name="groupBox_3">
+    <widget class="QGroupBox" name="groupBoxScriptSettings">
      <property name="title">
       <string>Script Settings</string>
      </property>
      <layout class="QFormLayout" name="formLayout_5">
-      <item row="2" column="1">
-       <widget class="RunModeComboBox" name="comboBoxScriptRunMode">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="0">
-       <widget class="QLabel" name="labelRunMode">
-        <property name="text">
-         <string>Run Mode: </string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="0">
+      <item row="0" column="0">
        <widget class="QLabel" name="labelInterval">
         <property name="text">
          <string>Interval: </string>
         </property>
        </widget>
       </item>
-      <item row="1" column="1">
+      <item row="0" column="1">
        <layout class="QHBoxLayout" name="horizontalLayout_3">
         <item>
          <widget class="NumericLineEdit" name="lineEditScriptInterval">
@@ -403,6 +386,23 @@
          </widget>
         </item>
        </layout>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="labelRunMode">
+        <property name="text">
+         <string>Run Mode: </string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="RunModeComboBox" name="comboBoxScriptRunMode">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+       </widget>
       </item>
      </layout>
     </widget>

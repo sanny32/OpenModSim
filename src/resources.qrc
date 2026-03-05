@@ -76,5 +76,6 @@
         <file>res/icon-whole-word.svg</file>
         <file>res/icon-arrow-right.svg</file>
         <file>res/icon-arrow-left.svg</file>
+        <file>res/banner-js.png</file>
     </qresource>
 </RCC>

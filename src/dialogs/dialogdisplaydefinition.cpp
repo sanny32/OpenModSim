@@ -15,6 +15,7 @@ DialogDisplayDefinition::DialogDisplayDefinition(DisplayDefinition dd, QWidget* 
     , ui(new Ui::DialogDisplayDefinition)
 {
     ui->setupUi(this);
+    ui->groupBoxScriptSettings->installEventFilter(this);
 
     ui->lineEditFormName->setText(dd.FormName);
 
@@ -49,6 +50,36 @@ DialogDisplayDefinition::DialogDisplayDefinition(DisplayDefinition dd, QWidget* 
 DialogDisplayDefinition::~DialogDisplayDefinition()
 {
     delete ui;
+}
+
+///
+/// \brief DialogDisplayDefinition::eventFilter
+/// \param obj
+/// \param event
+/// \return
+///
+bool DialogDisplayDefinition::eventFilter(QObject* obj, QEvent* event)
+{
+    if(event->type() == QEvent::Paint)
+    {
+        QGroupBox* box = qobject_cast<QGroupBox*>(obj);
+        if(box && box->objectName() == "groupBoxScriptSettings")
+        {
+            static QPixmap pixmap(":/res/banner-js.png");
+
+            QPainter painter(box);
+            painter.setRenderHint(QPainter::SmoothPixmapTransform);
+
+            const QSize pixSize = pixmap.size();
+            const int x = box->width() - pixSize.width() - 15;
+            const int y = (box->height() - pixSize.height()) / 2 + 5;
+
+            painter.setOpacity(0.5);
+            painter.drawPixmap(x, y, pixmap);
+        }
+    }
+
+    return QFixedSizeDialog::eventFilter(obj, event);
 }
 
 ///

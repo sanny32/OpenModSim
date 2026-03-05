@@ -490,17 +490,17 @@
         <translation type="unfinished">Настройки скрипта</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogdisplaydefinition.ui" line="369"/>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="393"/>
         <source>Run Mode: </source>
         <translation type="unfinished">Режим запуска: </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogdisplaydefinition.ui" line="376"/>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="359"/>
         <source>Interval: </source>
         <translation type="unfinished">Интервал: </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogdisplaydefinition.ui" line="401"/>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="384"/>
         <source>(msec)</source>
         <translation type="unfinished">(мсек)</translation>
     </message>
