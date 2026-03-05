@@ -715,10 +715,14 @@ QFont OutputWidget::font() const
 ///
 void OutputWidget::setFont(const QFont& font)
 {
+    _baseFontSize = font.pointSizeF();
+
     ui->listView->setFont(font);
     ui->labelStatus->setFont(font);
     ui->logView->setFont(font);
     ui->modbusMsg->setFont(font);
+
+    setZoomPercent(_zoomPercent);
 }
 
 ///
