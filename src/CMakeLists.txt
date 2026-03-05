@@ -139,6 +139,7 @@ set(SOURCES
     controls/searchlineedit.cpp
     controls/simulationmodecombobox.cpp
     controls/statisticwidget.cpp
+    controls/transpscrollarea.cpp
     datasimulator.cpp
     dialogs/dialogautosimulation.cpp
     dialogs/dialogcoilsimulation.cpp
@@ -181,7 +182,6 @@ set(SOURCES
     qint64validator.cpp
     quintvalidator.cpp
     recentfileactionlist.cpp
-    tscrollarea.cpp
     windowactionlist.cpp
 )
 
@@ -222,6 +222,7 @@ set(HEADERS
     controls/searchlineedit.h
     controls/simulationmodecombobox.h
     controls/statisticwidget.h
+    controls/transpscrollarea.h
     datasimulator.h
     dialogs/dialogautosimulation.h
     dialogs/dialogcoilsimulation.h
@@ -300,7 +301,6 @@ set(HEADERS
     recentfileactionlist.h
     scriptsettings.h
     serialportutils.h
-    tscrollarea.h
     uiutils.h
     windowactionlist.h
 )
