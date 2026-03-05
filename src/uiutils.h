@@ -37,11 +37,11 @@ inline void recolorPushButtonIcon(QPushButton* btn, const QColor& color)
 /// \param wnd
 /// \param from
 /// \param to
+/// \param size
 /// \param msec
 ///
-inline void crossFadeWindowIcon(QWidget* wnd, const QIcon& from, const QIcon& to, int msec = 16)
+inline void crossFadeWindowIcon(QWidget* wnd, const QIcon& from, const QIcon& to, int size = 16, int msec = 16)
 {
-    const int size = 16;
     const int steps = 12;
     int step = 0;
 
