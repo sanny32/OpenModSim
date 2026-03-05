@@ -62,7 +62,7 @@ inline QSettings& operator <<(QSettings& out, const DisplayDefinition& dd)
     out.setValue("DisplayDefinition/AutoscrollLog",         dd.AutoscrollLog);
     out.setValue("DisplayDefinition/VerboseLogging",        dd.VerboseLogging);
 
-    out.beginGroup("DisplaDefinition/ScriptSettings");
+    out.beginGroup("DisplaDefinition");
     out << dd.ScriptCfg;
     out.endGroup();
 
@@ -90,7 +90,7 @@ inline QSettings& operator >>(QSettings& in, DisplayDefinition& dd)
     dd.AutoscrollLog = in.value("DisplayDefinition/AutoscrollLog").toBool();
     dd.VerboseLogging = in.value("DisplayDefinition/VerboseLogging", true).toBool();
 
-    in.beginGroup("DisplaDefinition/ScriptSettings");
+    in.beginGroup("DisplaDefinition");
     in >> dd.ScriptCfg;
     in.endGroup();
 

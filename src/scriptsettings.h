@@ -34,7 +34,7 @@ inline QSettings& operator <<(QSettings& out, const ScriptSettings& ss)
     out.setValue("ScriptSettings/RunMode",          (int)ss.Mode);
     out.setValue("ScriptSettings/Interval",         ss.Interval);
     //out.setValue("ScriptSettings/UseAutoComplete",  ss.UseAutoComplete);
-    //out.setValue("ScriptSettings/RunOnStartup",     ss.RunOnStartup);
+    out.setValue("ScriptSettings/RunOnStartup",     ss.RunOnStartup);
 
     return out;
 }
@@ -50,7 +50,7 @@ inline QSettings& operator >>(QSettings& in, ScriptSettings& ss)
     ss.Mode = (RunMode)in.value("ScriptSettings/RunMode").toInt();
     ss.Interval = in.value("ScriptSettings/Interval", 1000).toUInt();
     //ss.UseAutoComplete = in.value("ScriptSettings/UseAutoComplete", true).toBool();
-    //ss.RunOnStartup = in.value("ScriptSettings/RunOnStartup", false).toBool();
+    ss.RunOnStartup = in.value("ScriptSettings/RunOnStartup", false).toBool();
 
     ss.normalize();
     return in;

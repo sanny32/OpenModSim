@@ -510,7 +510,12 @@
         <translation type="unfinished">（毫秒）</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogdisplaydefinition.ui" line="436"/>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="422"/>
+        <source>Run script on startup</source>
+        <translation type="unfinished">在系统启动时运行脚本</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="443"/>
         <source>Form Name: </source>
         <translation>表单名称： </translation>
     </message>

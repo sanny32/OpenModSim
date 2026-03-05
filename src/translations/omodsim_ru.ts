@@ -505,7 +505,12 @@
         <translation type="unfinished">(мсек)</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogdisplaydefinition.ui" line="436"/>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="422"/>
+        <source>Run script on startup</source>
+        <translation type="unfinished">Запускать скрипт при старте</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="443"/>
         <source>Form Name: </source>
         <translation>Имя формы: </translation>
     </message>

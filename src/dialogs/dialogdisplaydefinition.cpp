@@ -40,6 +40,7 @@ DialogDisplayDefinition::DialogDisplayDefinition(DisplayDefinition dd, QWidget* 
 
     ui->lineEditScriptInterval->setValue(dd.ScriptCfg.Interval);
     ui->comboBoxScriptRunMode->setCurrentRunMode(dd.ScriptCfg.Mode);
+    ui->checkBoxRunOnStartup->setChecked(dd.ScriptCfg.RunOnStartup);
 
     ui->buttonBox->setFocus();
 }
@@ -100,6 +101,7 @@ void DialogDisplayDefinition::accept()
     _displayDefinition.LeadingZeros = ui->checkBoxLeadingZeros->isChecked();
     _displayDefinition.ScriptCfg.Interval = ui->lineEditScriptInterval->value<int>();
     _displayDefinition.ScriptCfg.Mode = ui->comboBoxScriptRunMode->currentRunMode();
+    _displayDefinition.ScriptCfg.RunOnStartup = ui->checkBoxRunOnStartup->isChecked();
 
     QFixedSizeDialog::accept();
 }
