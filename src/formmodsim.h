@@ -12,7 +12,7 @@
 #include "displaydefinition.h"
 #include "outputwidget.h"
 #include "jscriptcontrol.h"
-#include "scriptsettings.h"
+#include "apppreferences.h"
 
 ///
 /// \brief Forward declaration of the MainWindow
@@ -660,6 +660,10 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, FormModSim* frm)
 
                 frm->configureModbusDataUnit(dd.DeviceId, dd.PointType, dd.PointAddress - (dd.ZeroBasedAddress ? 0 : 1), values);
             }
+        }
+
+        if(dd.ScriptCfg.RunOnStartup) {
+            frm->runScript();
         }
     }
     else {

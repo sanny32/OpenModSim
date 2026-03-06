@@ -4,8 +4,8 @@
 #include <QFont>
 #include <QColor>
 #include <QSettings>
+#include <QXmlStreamWriter>
 #include "displaydefinition.h"
-#include "fontutils.h"
 #include "translationutils.h"
 
 ///
@@ -51,9 +51,15 @@ public:
     bool codeAutoComplete() const { return _codeAutoComplete; }
     void setCodeAutoComplete(bool enable) { _codeAutoComplete = enable; }
 
+    bool runScriptOnStartup() const { return _displayDefinition.ScriptCfg.RunOnStartup; }
+    void setRunScriptOnStartup(bool enable) { _displayDefinition.ScriptCfg.RunOnStartup = enable; }
+
     // ----- Persistence -----
     void load(QSettings& settings);
     void save(QSettings& settings) const;
+
+    void loadXml(QXmlStreamReader& xml);
+    void saveXml(QXmlStreamWriter& xml) const;
 
 private:
     AppPreferences();

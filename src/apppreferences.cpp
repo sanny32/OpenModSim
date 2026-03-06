@@ -1,3 +1,4 @@
+#include "fontutils.h"
 #include "apppreferences.h"
 
 ///
@@ -63,4 +64,73 @@ void AppPreferences::save(QSettings& settings) const
     settings << _displayDefinition;
 
     settings.endGroup();
+}
+
+///
+/// \brief AppPreferences::saveXml
+/// \param xml
+///
+void AppPreferences::saveXml(QXmlStreamWriter& xml) const
+{
+    xml.writeStartElement("AppPreferences");
+    xml.writeAttribute("Font",            _font.toString());
+    xml.writeAttribute("FontZoom",        QString::number(_fontZoom));
+    xml.writeAttribute("BackgroundColor", _backgroundColor.name());
+    xml.writeAttribute("ForegroundColor", _foregroundColor.name());
+    xml.writeAttribute("StatusColor",     _statusColor.name());
+    xml.writeAttribute("Language",        _language);
+    xml.writeAttribute("ScriptFont",      _scriptFont.toString());
+    xml.writeAttribute("CodeAutoComplete", boolToString(_codeAutoComplete));
+    xml << _displayDefinition;
+    xml.writeEndElement();
+}
+
+///
+/// \brief AppPreferences::loadXml
+/// \param xml
+///
+void AppPreferences::loadXml(QXmlStreamReader& xml)
+{
+    const QXmlStreamAttributes attributes = xml.attributes();
+
+    if (attributes.hasAttribute("Font")) {
+        _font.fromString(attributes.value("Font").toString());
+    }
+
+    if (attributes.hasAttribute("FontZoom")) {
+        bool ok; const int zoom = attributes.value("FontZoom").toInt(&ok);
+        if (ok) _fontZoom = zoom;
+    }
+
+    if (attributes.hasAttribute("BackgroundColor")) {
+        _backgroundColor = QColor(attributes.value("BackgroundColor").toString());
+    }
+
+    if (attributes.hasAttribute("ForegroundColor")) {
+        _foregroundColor = QColor(attributes.value("ForegroundColor").toString());
+    }
+
+    if (attributes.hasAttribute("StatusColor")) {
+        _statusColor = QColor(attributes.value("StatusColor").toString());
+    }
+
+    if (attributes.hasAttribute("Language")) {
+        _language = attributes.value("Language").toString();
+    }
+
+    if (attributes.hasAttribute("ScriptFont")) {
+        _scriptFont.fromString(attributes.value("ScriptFont").toString());
+    }
+
+    if (attributes.hasAttribute("CodeAutoComplete")) {
+        _codeAutoComplete = stringToBool(attributes.value("CodeAutoComplete").toString());
+    }
+
+    while (xml.readNextStartElement()) {
+        if (xml.name() == QLatin1String("DisplayDefinition")) {
+            xml >> _displayDefinition;
+        } else {
+            xml.skipCurrentElement();
+        }
+    }
 }

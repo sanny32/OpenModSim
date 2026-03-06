@@ -390,6 +390,7 @@ void MainWindow::on_actionNew_triggered()
         dd.AutoscrollLog           = prefDd.AutoscrollLog;
         dd.VerboseLogging          = prefDd.VerboseLogging;
         dd.LogViewLimit            = prefDd.LogViewLimit;
+        dd.ScriptCfg               = prefDd.ScriptCfg;
         frm->setDisplayDefinition(dd);
     }
 
@@ -1687,7 +1688,7 @@ FormModSim* MainWindow::firstMdiChild() const
 /// \brief MainWindow::loadConfig
 /// \param filename
 ///
-void MainWindow::loadConfig(const QString& filename, bool startup)
+void MainWindow::loadConfig(const QString& filename)
 {
     const auto format = filename.endsWith(".xml", Qt::CaseInsensitive) ?
                             SerializationFormat::Xml :
@@ -1710,7 +1711,10 @@ void MainWindow::loadConfig(const QString& filename, bool startup)
             while (xml.readNextStartElement()) {
                 if (xml.name() == QLatin1String("OpenModSim")) {
                     while (xml.readNextStartElement()) {
-                        if (xml.name() == QLatin1String("ModbusDefinitions")) {
+                        if (xml.name() == QLatin1String("AppPreferences")) {
+                            AppPreferences::instance().loadXml(xml);
+                        }
+                        else if (xml.name() == QLatin1String("ModbusDefinitions")) {
                             xml >> defs;
                         }
                         else if (xml.name() == QLatin1String("Connections")) {
@@ -1764,14 +1768,6 @@ void MainWindow::loadConfig(const QString& filename, bool startup)
             _mbMultiServer.connectDevice(cd);
     }
 
-    if(startup) {
-        for(auto&& wnd : ui->mdiArea->subWindowList()) {
-            const auto frm = qobject_cast<FormModSim*>(wnd->widget());
-            if(frm->scriptSettings().RunOnStartup) {
-                frm->runScript();
-            }
-        }
-    }
 }
 
 ///
@@ -1798,6 +1794,8 @@ void MainWindow::saveConfig(const QString& filename, SerializationFormat format)
             w.writeStartDocument();
             w.writeStartElement("OpenModSim");
             w.writeAttribute("Version", qApp->applicationVersion());
+
+            AppPreferences::instance().saveXml(w);
 
             w << _mbMultiServer.getModbusDefinitions();
 

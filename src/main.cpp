@@ -184,7 +184,7 @@ int main(int argc, char *argv[])
 
     MainWindow w(profile, !noSession);
     if(!cfg.isEmpty()) {
-        w.loadConfig(cfg, true);
+        w.loadConfig(cfg);
     }
     w.show();
 

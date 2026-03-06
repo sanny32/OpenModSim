@@ -1000,9 +1000,8 @@
         <translation>介面</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="75"/>
         <source>Display</source>
-        <translation>顯示</translation>
+        <translation type="vanished">顯示</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogpreferences.ui" line="84"/>
@@ -1043,13 +1042,13 @@
     </message>
     <message>
         <location filename="../dialogs/dialogpreferences.ui" line="343"/>
-        <location filename="../dialogs/dialogpreferences.ui" line="708"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="724"/>
         <source>Font</source>
         <translation>字型</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogpreferences.ui" line="380"/>
-        <location filename="../dialogs/dialogpreferences.ui" line="745"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="761"/>
         <source>Size:</source>
         <translation>大小：</translation>
     </message>
@@ -1060,9 +1059,14 @@
     </message>
     <message>
         <location filename="../dialogs/dialogpreferences.ui" line="358"/>
-        <location filename="../dialogs/dialogpreferences.ui" line="723"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="739"/>
         <source>Family:</source>
         <translation>字型族：</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogpreferences.ui" line="75"/>
+        <source>Defaults</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../dialogs/dialogpreferences.ui" line="434"/>
@@ -1071,7 +1075,7 @@
     </message>
     <message>
         <location filename="../dialogs/dialogpreferences.ui" line="455"/>
-        <location filename="../dialogs/dialogpreferences.ui" line="779"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="795"/>
         <source>Antialias</source>
         <translation>反鋸齒</translation>
     </message>
@@ -1121,19 +1125,29 @@
         <translation>日誌限制：</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="676"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="636"/>
+        <source>Script</source>
+        <translation type="unfinished">指令碼</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogpreferences.ui" line="692"/>
         <source>&lt;b&gt;Note:&lt;/b&gt; These settings apply to newly opened windows only.</source>
         <translation>&lt;b&gt;注意：&lt;/b&gt;這些設定僅適用於新開啟的視窗。</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="789"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="805"/>
         <source>Editor</source>
         <translation>編輯器</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="795"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="811"/>
         <source>Enable code auto-complete</source>
         <translation>啟用程式碼自動完成</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogpreferences.ui" line="642"/>
+        <source>Run script on startup</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2655,30 +2669,30 @@ Script.onInit(()=&gt;{
         <translation type="vanished">俄语</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="406"/>
-        <location filename="../mainwindow.cpp" line="477"/>
-        <location filename="../mainwindow.cpp" line="487"/>
-        <location filename="../mainwindow.cpp" line="518"/>
-        <location filename="../mainwindow.cpp" line="544"/>
+        <location filename="../mainwindow.cpp" line="407"/>
+        <location filename="../mainwindow.cpp" line="478"/>
+        <location filename="../mainwindow.cpp" line="488"/>
+        <location filename="../mainwindow.cpp" line="519"/>
+        <location filename="../mainwindow.cpp" line="545"/>
         <source>All files (*)</source>
         <translation>所有檔案 (*)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="405"/>
-        <location filename="../mainwindow.cpp" line="481"/>
-        <location filename="../mainwindow.cpp" line="486"/>
-        <location filename="../mainwindow.cpp" line="517"/>
-        <location filename="../mainwindow.cpp" line="543"/>
+        <location filename="../mainwindow.cpp" line="406"/>
+        <location filename="../mainwindow.cpp" line="482"/>
+        <location filename="../mainwindow.cpp" line="487"/>
+        <location filename="../mainwindow.cpp" line="518"/>
+        <location filename="../mainwindow.cpp" line="544"/>
         <source>XML files (*.xml)</source>
         <translation>XML 檔案(*.xml)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1299"/>
+        <location filename="../mainwindow.cpp" line="1300"/>
         <source>JavaScript files (*.js);;All files (*)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1605"/>
+        <location filename="../mainwindow.cpp" line="1606"/>
         <source>Capture Error:<byte value="xd"/>
 %1</source>
         <translation>捕獲錯誤：

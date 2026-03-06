@@ -72,7 +72,7 @@
         </item>
         <item>
          <property name="text">
-          <string>Display</string>
+          <string>Defaults</string>
          </property>
          <property name="icon">
           <iconset resource="../resources.qrc">
@@ -624,6 +624,22 @@
                   </property>
                   <property name="maximum">
                    <number>1000</number>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </widget>
+             </item>
+             <item>
+              <widget class="QGroupBox" name="groupBoxScript">
+               <property name="title">
+                <string>Script</string>
+               </property>
+               <layout class="QVBoxLayout" name="vlScript2">
+                <item>
+                 <widget class="QCheckBox" name="checkBoxRunOnStartup">
+                  <property name="text">
+                   <string>Run script on startup</string>
                   </property>
                  </widget>
                 </item>

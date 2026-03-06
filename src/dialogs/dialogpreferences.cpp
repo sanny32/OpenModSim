@@ -160,6 +160,7 @@ void DialogPreferences::loadFromPreferences()
 
     // Script — editor
     ui->checkBoxAutoComplete->setChecked(prefs.codeAutoComplete());
+    ui->checkBoxRunOnStartup->setChecked(prefs.runScriptOnStartup());
 
     on_listWidget_currentRowChanged(ui->listWidget->currentRow());
 }
@@ -210,6 +211,7 @@ void DialogPreferences::apply()
     // Script — editor
     const bool autoComplete = ui->checkBoxAutoComplete->isChecked();
     prefs.setCodeAutoComplete(autoComplete);
+    prefs.setRunScriptOnStartup(ui->checkBoxRunOnStartup->isChecked());
     if (_mainWindow) _mainWindow->applyAutoComplete(autoComplete);
 }
 

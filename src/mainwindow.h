@@ -34,7 +34,7 @@ public:
     void applyZoom(int zoomPercent);
     void applyColors(const QColor& bg, const QColor& fg, const QColor& status);
 
-    void loadConfig(const QString& filename, bool startup = false);
+    void loadConfig(const QString& filename);
     void saveConfig(const QString& filename, SerializationFormat format);
 
 signals:
