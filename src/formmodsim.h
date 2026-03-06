@@ -150,6 +150,7 @@ signals:
     void helpContextRequested(const QString& helpKey);
     void byteOrderChanged(ByteOrder);
     void codepageChanged(const QString&);
+    void definitionChanged();
     void pointTypeChanged(QModbusDataUnit::RegisterType);
     void displayModeChanged(DisplayMode mode);
     void scriptSettingsChanged(const ScriptSettings&);
