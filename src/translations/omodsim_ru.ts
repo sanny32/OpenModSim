@@ -1864,27 +1864,27 @@
         <translation type="vanished">Адрес:</translation>
     </message>
     <message>
-        <location filename="../formmodsim.ui" line="97"/>
+        <location filename="../formmodsim.ui" line="106"/>
         <source>Start Address:</source>
         <translation>Адрес:</translation>
     </message>
     <message>
-        <location filename="../formmodsim.ui" line="104"/>
+        <location filename="../formmodsim.ui" line="113"/>
         <source>Length:</source>
         <translation>Количество:</translation>
     </message>
     <message>
-        <location filename="../formmodsim.ui" line="155"/>
+        <location filename="../formmodsim.ui" line="152"/>
         <source>Address Base:</source>
         <translation>Адресация:</translation>
     </message>
     <message>
-        <location filename="../formmodsim.ui" line="205"/>
+        <location filename="../formmodsim.ui" line="202"/>
         <source>Device Id:</source>
         <translation>Узел:</translation>
     </message>
     <message>
-        <location filename="../formmodsim.ui" line="249"/>
+        <location filename="../formmodsim.ui" line="252"/>
         <source>MODBUS Point Type</source>
         <translation>Тип регистров MODBUS</translation>
     </message>
@@ -1913,7 +1913,7 @@ Length: %2</source>
         <translation type="vanished">Указана недопустимая длина данных</translation>
     </message>
     <message>
-        <location filename="../formmodsim.cpp" line="541"/>
+        <location filename="../formmodsim.cpp" line="543"/>
         <source>Address Base: %1
 Start Address: %2
 Length: %3</source>
@@ -1922,7 +1922,7 @@ Length: %3</source>
 Количество: %3</translation>
     </message>
     <message>
-        <location filename="../formmodsim.cpp" line="544"/>
+        <location filename="../formmodsim.cpp" line="546"/>
         <source>Device Id: %1
 MODBUS Point Type:
 %2</source>
@@ -3274,77 +3274,77 @@ Script.onInit(()=&gt;{
 <context>
     <name>OutputWidget</name>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1130"/>
+        <location filename="../controls/outputwidget.cpp" line="1101"/>
         <source>Set Value of %1</source>
         <translation>Записать значение по адресу %1</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1136"/>
+        <location filename="../controls/outputwidget.cpp" line="1107"/>
         <source>Add Description</source>
         <translation>Добавить описание</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1136"/>
+        <location filename="../controls/outputwidget.cpp" line="1107"/>
         <source>Edit Description</source>
         <translation>Редактировать описание</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1139"/>
+        <location filename="../controls/outputwidget.cpp" line="1110"/>
         <source>%1: Enter Description</source>
         <translation>%1: Введите описание</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1148"/>
+        <location filename="../controls/outputwidget.cpp" line="1119"/>
         <source>Remove Color</source>
         <translation>Удалить цвет</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1159"/>
+        <location filename="../controls/outputwidget.cpp" line="1130"/>
         <source>Yellow</source>
         <translation>Желтый</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1160"/>
+        <location filename="../controls/outputwidget.cpp" line="1131"/>
         <source>Cyan</source>
         <translation>Циан</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1161"/>
+        <location filename="../controls/outputwidget.cpp" line="1132"/>
         <source>Magenta</source>
         <translation>Пурпурный</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1162"/>
+        <location filename="../controls/outputwidget.cpp" line="1133"/>
         <source>LightGreen</source>
         <translation>Светло-зеленый</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1163"/>
+        <location filename="../controls/outputwidget.cpp" line="1134"/>
         <source>Orange</source>
         <translation>Оранжевый</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1164"/>
+        <location filename="../controls/outputwidget.cpp" line="1135"/>
         <source>LightBlue</source>
         <translation>Светло-синий</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1165"/>
+        <location filename="../controls/outputwidget.cpp" line="1136"/>
         <source>LightGray</source>
         <translation>Светло-серый</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1250"/>
+        <location filename="../controls/outputwidget.cpp" line="1221"/>
         <source>NOT CONNECTED!</source>
         <translation>НЕ ПОДКЛЮЧЕНО!</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1258"/>
+        <location filename="../controls/outputwidget.cpp" line="1229"/>
         <source>Invalid Data Length Specified</source>
         <translation>Указана недопустимая длина данных</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1305"/>
+        <location filename="../controls/outputwidget.cpp" line="1276"/>
         <source>Zoom: %1%</source>
         <translation>Увеличение: %1%</translation>
     </message>

@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>850</width>
+    <width>866</width>
     <height>410</height>
    </rect>
   </property>
@@ -74,11 +74,20 @@
             <widget class="QFrame" name="frame_5">
              <property name="minimumSize">
               <size>
-               <width>190</width>
+               <width>160</width>
                <height>0</height>
               </size>
              </property>
+             <property name="maximumSize">
+              <size>
+               <width>160</width>
+               <height>16777215</height>
+              </size>
+             </property>
              <layout class="QFormLayout" name="formLayout">
+              <property name="labelAlignment">
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              </property>
               <property name="leftMargin">
                <number>0</number>
               </property>
@@ -113,12 +122,6 @@
                   <height>24</height>
                  </size>
                 </property>
-                <property name="maximumSize">
-                 <size>
-                  <width>100</width>
-                  <height>16777215</height>
-                 </size>
-                </property>
                 <property name="contextMenuPolicy">
                  <enum>Qt::NoContextMenu</enum>
                 </property>
@@ -133,12 +136,6 @@
                  <size>
                   <width>0</width>
                   <height>24</height>
-                 </size>
-                </property>
-                <property name="maximumSize">
-                 <size>
-                  <width>100</width>
-                  <height>16777215</height>
                  </size>
                 </property>
                 <property name="contextMenuPolicy">
@@ -180,7 +177,7 @@
             <widget class="QFrame" name="frame_4">
              <property name="minimumSize">
               <size>
-               <width>190</width>
+               <width>160</width>
                <height>0</height>
               </size>
              </property>
@@ -198,7 +195,7 @@
                <number>0</number>
               </property>
               <item>
-               <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,0,1">
+               <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,0,0">
                 <item>
                  <widget class="QLabel" name="labelDeviceId">
                   <property name="text">
@@ -232,6 +229,12 @@
                  <spacer name="horizontalSpacer_2">
                   <property name="orientation">
                    <enum>Qt::Horizontal</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>0</width>
+                    <height>0</height>
+                   </size>
                   </property>
                  </spacer>
                 </item>
@@ -274,6 +277,12 @@
                 <property name="orientation">
                  <enum>Qt::Vertical</enum>
                 </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>0</width>
+                  <height>0</height>
+                 </size>
+                </property>
                </spacer>
               </item>
              </layout>
@@ -300,6 +309,12 @@
             <spacer name="horizontalSpacer">
              <property name="orientation">
               <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>0</width>
+               <height>0</height>
+              </size>
              </property>
             </spacer>
            </item>

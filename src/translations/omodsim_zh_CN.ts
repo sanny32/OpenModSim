@@ -1868,27 +1868,27 @@
         <translation type="vanished">地址：</translation>
     </message>
     <message>
-        <location filename="../formmodsim.ui" line="97"/>
+        <location filename="../formmodsim.ui" line="106"/>
         <source>Start Address:</source>
         <translation>起始地址：</translation>
     </message>
     <message>
-        <location filename="../formmodsim.ui" line="104"/>
+        <location filename="../formmodsim.ui" line="113"/>
         <source>Length:</source>
         <translation>长度：</translation>
     </message>
     <message>
-        <location filename="../formmodsim.ui" line="155"/>
+        <location filename="../formmodsim.ui" line="152"/>
         <source>Address Base:</source>
         <translation>基地址：</translation>
     </message>
     <message>
-        <location filename="../formmodsim.ui" line="205"/>
+        <location filename="../formmodsim.ui" line="202"/>
         <source>Device Id:</source>
         <translation>设备地址：</translation>
     </message>
     <message>
-        <location filename="../formmodsim.ui" line="249"/>
+        <location filename="../formmodsim.ui" line="252"/>
         <source>MODBUS Point Type</source>
         <translation>寄存器类型</translation>
     </message>
@@ -1917,7 +1917,7 @@ Length: %2</source>
         <translation type="vanished">指定了非法的数据长度</translation>
     </message>
     <message>
-        <location filename="../formmodsim.cpp" line="541"/>
+        <location filename="../formmodsim.cpp" line="543"/>
         <source>Address Base: %1
 Start Address: %2
 Length: %3</source>
@@ -1926,7 +1926,7 @@ Length: %3</source>
 长度: %3</translation>
     </message>
     <message>
-        <location filename="../formmodsim.cpp" line="544"/>
+        <location filename="../formmodsim.cpp" line="546"/>
         <source>Device Id: %1
 MODBUS Point Type:
 %2</source>
@@ -3280,77 +3280,77 @@ Script.onInit(()=&gt;{
 <context>
     <name>OutputWidget</name>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1130"/>
+        <location filename="../controls/outputwidget.cpp" line="1101"/>
         <source>Set Value of %1</source>
         <translation>将值写入 %1</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1136"/>
+        <location filename="../controls/outputwidget.cpp" line="1107"/>
         <source>Add Description</source>
         <translation>添加描述</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1136"/>
+        <location filename="../controls/outputwidget.cpp" line="1107"/>
         <source>Edit Description</source>
         <translation>编辑描述</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1139"/>
+        <location filename="../controls/outputwidget.cpp" line="1110"/>
         <source>%1: Enter Description</source>
         <translation>%1:输入描述</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1148"/>
+        <location filename="../controls/outputwidget.cpp" line="1119"/>
         <source>Remove Color</source>
         <translation>去除颜色</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1159"/>
+        <location filename="../controls/outputwidget.cpp" line="1130"/>
         <source>Yellow</source>
         <translation>黄色的</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1160"/>
+        <location filename="../controls/outputwidget.cpp" line="1131"/>
         <source>Cyan</source>
         <translation>青色</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1161"/>
+        <location filename="../controls/outputwidget.cpp" line="1132"/>
         <source>Magenta</source>
         <translation>品红</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1162"/>
+        <location filename="../controls/outputwidget.cpp" line="1133"/>
         <source>LightGreen</source>
         <translation>浅绿色</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1163"/>
+        <location filename="../controls/outputwidget.cpp" line="1134"/>
         <source>Orange</source>
         <translation>橙子</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1164"/>
+        <location filename="../controls/outputwidget.cpp" line="1135"/>
         <source>LightBlue</source>
         <translation>浅蓝色</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1165"/>
+        <location filename="../controls/outputwidget.cpp" line="1136"/>
         <source>LightGray</source>
         <translation>浅灰色</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1250"/>
+        <location filename="../controls/outputwidget.cpp" line="1221"/>
         <source>NOT CONNECTED!</source>
         <translation>未连接！</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1258"/>
+        <location filename="../controls/outputwidget.cpp" line="1229"/>
         <source>Invalid Data Length Specified</source>
         <translation>指定的数据长度无效</translation>
     </message>
     <message>
-        <location filename="../controls/outputwidget.cpp" line="1305"/>
+        <location filename="../controls/outputwidget.cpp" line="1276"/>
         <source>Zoom: %1%</source>
         <translation>飞涨： %1%</translation>
     </message>
