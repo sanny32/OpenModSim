@@ -281,6 +281,7 @@ void MainWindow::on_awake()
     ui->actionTextCapture->setEnabled(frm && frm->captureMode() == CaptureMode::Off);
     ui->actionCaptureOff->setEnabled(frm && frm->captureMode() == CaptureMode::TextCapture);
 
+    ui->actionImportScript->setEnabled(frm != nullptr);
     ui->actionRunScript->setEnabled(frm && frm->canRunScript());
     ui->actionStopScript->setEnabled(frm && frm->canStopScript());
     _actionRunMode->setEnabled(frm && !frm->canStopScript());
@@ -1285,6 +1286,24 @@ void MainWindow::on_actionAbout_triggered()
 {
     DialogAbout dlg(this);
     dlg.exec();
+}
+
+///
+/// \brief MainWindow::on_actionImportScript_triggered
+///
+void MainWindow::on_actionImportScript_triggered()
+{
+    auto frm = currentMdiChild();
+    if(!frm) return;
+
+    const auto filename = QFileDialog::getOpenFileName(this, QString(), QString(), tr("JavaScript files (*.js);;All files (*)"));
+    if(filename.isEmpty()) return;
+
+    QFile file(filename);
+    if(!file.open(QFile::ReadOnly | QFile::Text)) return;
+
+    frm->setScript(QTextStream(&file).readAll());
+    frm->setDisplayMode(DisplayMode::Script);
 }
 
 ///

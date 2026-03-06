@@ -137,6 +137,7 @@ private slots:
     void on_actionAbout_triggered();
 
     /* Script menu slots */
+    void on_actionImportScript_triggered();
     void on_actionRunScript_triggered();
     void on_actionStopScript_triggered();
 

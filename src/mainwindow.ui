@@ -211,6 +211,8 @@
     <property name="title">
      <string>Script</string>
     </property>
+    <addaction name="actionImportScript"/>
+    <addaction name="separator"/>
     <addaction name="actionRunScript"/>
     <addaction name="actionStopScript"/>
    </widget>
@@ -1128,6 +1130,11 @@
   <action name="actionPreferences">
    <property name="text">
     <string>Preferences</string>
+   </property>
+  </action>
+  <action name="actionImportScript">
+   <property name="text">
+    <string>Import Script...</string>
    </property>
   </action>
  </widget>
