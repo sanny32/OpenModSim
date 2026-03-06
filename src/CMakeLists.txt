@@ -110,6 +110,7 @@ target_include_directories(${PROJECT_NAME} PRIVATE
 # Source files
 set(SOURCES
     ansimenu.cpp
+    apppreferences.cpp
     cmdlineparser.cpp
     controls/aboutdatawidget.cpp
     controls/addressbasecombobox.cpp
@@ -150,7 +151,7 @@ set(SOURCES
     dialogs/dialogmsgparser.cpp
     dialogs/dialogprintsettings.cpp
     dialogs/dialograwdatalog.cpp
-    dialogs/dialogscriptsettings.cpp
+    dialogs/dialogpreferences.cpp
     dialogs/dialogselectserviceport.cpp
     dialogs/dialogmodbusdefinitions.cpp
     dialogs/dialogsetuppresetdata.cpp
@@ -189,6 +190,7 @@ set(SOURCES
 set(HEADERS
     ansimenu.h
     ansiutils.h
+    apppreferences.h
     bufferinglistmodel.h
     byteorderutils.h
     cmdlineparser.h
@@ -233,7 +235,8 @@ set(HEADERS
     dialogs/dialogmsgparser.h
     dialogs/dialogprintsettings.h
     dialogs/dialograwdatalog.h
-    dialogs/dialogscriptsettings.h
+    dialogs/colorswatch.h
+    dialogs/dialogpreferences.h
     dialogs/dialogmodbusdefinitions.h
     dialogs/dialogselectserviceport.h
     dialogs/dialogsetuppresetdata.h
@@ -321,7 +324,7 @@ set(UI_FILES
     dialogs/dialogmsgparser.ui
     dialogs/dialogprintsettings.ui
     dialogs/dialograwdatalog.ui
-    dialogs/dialogscriptsettings.ui
+    dialogs/dialogpreferences.ui
     dialogs/dialogselectserviceport.ui
     dialogs/dialogmodbusdefinitions.ui
     dialogs/dialogsetuppresetdata.ui

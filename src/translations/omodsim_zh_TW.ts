@@ -992,6 +992,190 @@
     </message>
 </context>
 <context>
+    <name>DialogPreferences</name>
+    <message>
+        <location filename="../dialogs/dialogpreferences.ui" line="14"/>
+        <source>Preferences</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>General</source>
+        <translation type="obsolete">一般</translation>
+    </message>
+    <message>
+        <source>Modbus Definitions</source>
+        <translation type="obsolete">Modbus定義</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogpreferences.ui" line="66"/>
+        <source>Interface</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogpreferences.ui" line="75"/>
+        <source>Display</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogpreferences.ui" line="84"/>
+        <source>Script Editor</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogpreferences.ui" line="153"/>
+        <source>User Interface</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogpreferences.ui" line="199"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="252"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="305"/>
+        <source>Reset</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogpreferences.ui" line="168"/>
+        <source>Background Color:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogpreferences.ui" line="221"/>
+        <source>Foreground Color:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogpreferences.ui" line="274"/>
+        <source>Status Color:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogpreferences.ui" line="327"/>
+        <source>Language:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogpreferences.ui" line="340"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="652"/>
+        <source>Font</source>
+        <translation type="unfinished">字型</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogpreferences.ui" line="377"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="689"/>
+        <source>Size:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogpreferences.ui" line="409"/>
+        <source>Zoom:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogpreferences.ui" line="355"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="667"/>
+        <source>Family:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogpreferences.ui" line="431"/>
+        <source>%</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogpreferences.ui" line="449"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="723"/>
+        <source>Antialias</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogpreferences.ui" line="491"/>
+        <source>Data Display</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogpreferences.ui" line="503"/>
+        <source>Zero Based Address</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogpreferences.ui" line="510"/>
+        <source>Hex Address</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogpreferences.ui" line="517"/>
+        <source>Leading Zeros</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogpreferences.ui" line="524"/>
+        <source>Columns Distance:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogpreferences.ui" line="559"/>
+        <source>Log View</source>
+        <translation type="unfinished">日誌</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogpreferences.ui" line="571"/>
+        <source>Autoscroll</source>
+        <translation type="unfinished">自動滾動</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogpreferences.ui" line="578"/>
+        <source>Verbose Logging</source>
+        <translation type="unfinished">詳細日誌記錄</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogpreferences.ui" line="585"/>
+        <source>Log View Limit:</source>
+        <translation type="unfinished">日誌檢視：</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogpreferences.ui" line="733"/>
+        <source>Editor</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Error Simulations</source>
+        <translation type="obsolete">錯誤模擬</translation>
+    </message>
+    <message>
+        <source>Response with incorrect IDs</source>
+        <translation type="obsolete">帶有錯誤 ID 的響應</translation>
+    </message>
+    <message>
+        <source>Response with ILLEGAL FUNCTION</source>
+        <translation type="obsolete">響應非法功能</translation>
+    </message>
+    <message>
+        <source>Response with DEVICE BUSY</source>
+        <translation type="obsolete">響應 DEVICE BUSY</translation>
+    </message>
+    <message>
+        <source>Response with incorrect CRC (Serial Line only)</source>
+        <translation type="obsolete">響應帶有錯誤的 CRC（僅限序列線路）</translation>
+    </message>
+    <message>
+        <source>Response with delay</source>
+        <translation type="obsolete">延遲響應</translation>
+    </message>
+    <message>
+        <source>Response with random delay from 0 to</source>
+        <translation type="obsolete">響應隨機延遲從 0 到</translation>
+    </message>
+    <message>
+        <source>No response</source>
+        <translation type="obsolete">沒有響應</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogpreferences.ui" line="739"/>
+        <source>Enable code auto-complete</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>DialogPrintSettings</name>
     <message>
         <location filename="../dialogs/dialogprintsettings.ui" line="14"/>
@@ -1226,34 +1410,28 @@
 <context>
     <name>DialogScriptSettings</name>
     <message>
-        <location filename="../dialogs/dialogscriptsettings.ui" line="14"/>
         <source>Script Settings</source>
-        <translation>指令碼設定</translation>
+        <translation type="vanished">指令碼設定</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogscriptsettings.ui" line="23"/>
         <source>Run Mode: </source>
-        <translation>執行模式： </translation>
+        <translation type="vanished">執行模式： </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogscriptsettings.ui" line="40"/>
         <source>Interval: </source>
-        <translation>間隔： </translation>
+        <translation type="vanished">間隔： </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogscriptsettings.ui" line="65"/>
         <source>(msec)</source>
-        <translation>（毫秒）</translation>
+        <translation type="vanished">（毫秒）</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogscriptsettings.ui" line="74"/>
         <source>Use Auto-completion</source>
-        <translation>使用自動完成功能</translation>
+        <translation type="vanished">使用自動完成功能</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogscriptsettings.ui" line="94"/>
         <source>Run script on startup</source>
-        <translation>在系統啟動時執行指令碼</translation>
+        <translation type="vanished">在系統啟動時執行指令碼</translation>
     </message>
 </context>
 <context>
@@ -2413,7 +2591,7 @@ Script.onInit(()=&gt;{
     <message>
         <location filename="../mainwindow.ui" line="1174"/>
         <location filename="../mainwindow.ui" line="1177"/>
-        <location filename="../mainwindow.cpp" line="130"/>
+        <location filename="../mainwindow.cpp" line="135"/>
         <source>Script Help</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2516,25 +2694,25 @@ Script.onInit(()=&gt;{
         <translation type="vanished">俄语</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="408"/>
-        <location filename="../mainwindow.cpp" line="479"/>
-        <location filename="../mainwindow.cpp" line="489"/>
-        <location filename="../mainwindow.cpp" line="520"/>
-        <location filename="../mainwindow.cpp" line="546"/>
+        <location filename="../mainwindow.cpp" line="447"/>
+        <location filename="../mainwindow.cpp" line="518"/>
+        <location filename="../mainwindow.cpp" line="528"/>
+        <location filename="../mainwindow.cpp" line="559"/>
+        <location filename="../mainwindow.cpp" line="585"/>
         <source>All files (*)</source>
         <translation>所有檔案 (*)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="407"/>
-        <location filename="../mainwindow.cpp" line="483"/>
-        <location filename="../mainwindow.cpp" line="488"/>
-        <location filename="../mainwindow.cpp" line="519"/>
-        <location filename="../mainwindow.cpp" line="545"/>
+        <location filename="../mainwindow.cpp" line="446"/>
+        <location filename="../mainwindow.cpp" line="522"/>
+        <location filename="../mainwindow.cpp" line="527"/>
+        <location filename="../mainwindow.cpp" line="558"/>
+        <location filename="../mainwindow.cpp" line="584"/>
         <source>XML files (*.xml)</source>
         <translation>XML 檔案(*.xml)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1546"/>
+        <location filename="../mainwindow.cpp" line="1619"/>
         <source>Capture Error:<byte value="xd"/>
 %1</source>
         <translation>捕獲錯誤：

@@ -948,6 +948,33 @@ JScriptControl* FormModSim::scriptControl()
 }
 
 ///
+/// \brief FormModSim::isAutoCompleteEnabled
+/// \return
+///
+bool FormModSim::isAutoCompleteEnabled() const
+{
+    return ui->scriptControl->isAutoCompleteEnabled();
+}
+
+///
+/// \brief FormModSim::enableAutoComplete
+/// \param enable
+///
+void FormModSim::enableAutoComplete(bool enable)
+{
+    ui->scriptControl->enableAutoComplete(enable);
+}
+
+///
+/// \brief FormModSim::setScriptFont
+/// \param font
+///
+void FormModSim::setScriptFont(const QFont& font)
+{
+    ui->scriptControl->setFont(font);
+}
+
+///
 /// \brief FormModSim::on_outputWidget_itemDoubleClicked
 /// \param addr
 /// \param value

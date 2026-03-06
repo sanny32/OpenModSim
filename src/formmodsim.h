@@ -129,6 +129,11 @@ public:
     QRect parentGeometry() const;
     void setParentGeometry(const QRect& geometry);
 
+    bool isAutoCompleteEnabled() const;
+    void enableAutoComplete(bool enable);
+
+    void setScriptFont(const QFont& font);
+
 protected:
     void changeEvent(QEvent* event) override;
     void closeEvent(QCloseEvent* event) override;

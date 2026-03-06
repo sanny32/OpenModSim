@@ -77,5 +77,8 @@
         <file>res/icon-arrow-right.svg</file>
         <file>res/icon-arrow-left.svg</file>
         <file>res/banner-js.png</file>
+        <file>res/pref-interface.svg</file>
+        <file>res/pref-display.svg</file>
+        <file>res/pref-script.svg</file>
     </qresource>
 </RCC>

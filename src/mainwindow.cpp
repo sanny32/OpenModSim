@@ -2,8 +2,10 @@
 #include <QPrinterInfo>
 #include <QPrintDialog>
 #include <QPageSetupDialog>
+#include "apppreferences.h"
 #include "dialogabout.h"
 #include "dialogmsgparser.h"
+#include "dialogpreferences.h"
 #include "dialogwindowsmanager.h"
 #include "dialogprintsettings.h"
 #include "dialogdisplaydefinition.h"
@@ -20,6 +22,9 @@
 #include "mainwindow.h"
 #include "uiutils.h"
 #include "ui_mainwindow.h"
+
+// Forward declaration (defined later in this file)
+static QString getSettingsFilePath();
 
 ///
 /// \brief availableTranslations
@@ -147,6 +152,14 @@ MainWindow::MainWindow(const QString& profile, bool useSession, QWidget *parent)
             ui->actionNew->trigger();
         }
     }
+    else {
+        // Load AppPreferences even without a session
+        const QString settingsFile = getSettingsFilePath();
+        if(QFile::exists(settingsFile)) {
+            QSettings m(settingsFile, QSettings::IniFormat);
+            AppPreferences::instance().load(m);
+        }
+    }
 }
 
 ///
@@ -201,7 +214,13 @@ void MainWindow::changeEvent(QEvent* event)
 void MainWindow::closeEvent(QCloseEvent *event)
 {
     if(_useSession) {
-        saveProfile();
+        saveProfile(); // also saves AppPreferences
+    }
+    else {
+        // Save preferences even when session tracking is off
+        const QString filepath = getSettingsFilePath();
+        QSettings m(filepath, QSettings::IniFormat, this);
+        AppPreferences::instance().save(m);
     }
 
     ui->mdiArea->closeAllSubWindows();
@@ -393,6 +412,26 @@ void MainWindow::on_actionNew_triggered()
         frm->setStatusColor(cur->statusColor());
         frm->setBackgroundColor(cur->backgroundColor());
         frm->setForegroundColor(cur->foregroundColor());
+    }
+    else {
+        const auto& prefs = AppPreferences::instance();
+        frm->setFont(prefs.font());
+        frm->setZoomPercent(prefs.fontZoom());
+        frm->setBackgroundColor(prefs.backgroundColor());
+        frm->setForegroundColor(prefs.foregroundColor());
+        frm->setStatusColor(prefs.statusColor());
+        frm->setScriptFont(prefs.scriptFont());
+
+        auto dd = frm->displayDefinition();
+        const auto& prefDd = prefs.displayDefinition();
+        dd.ZeroBasedAddress        = prefDd.ZeroBasedAddress;
+        dd.HexAddress              = prefDd.HexAddress;
+        dd.LeadingZeros            = prefDd.LeadingZeros;
+        dd.DataViewColumnsDistance = prefDd.DataViewColumnsDistance;
+        dd.AutoscrollLog           = prefDd.AutoscrollLog;
+        dd.VerboseLogging          = prefDd.VerboseLogging;
+        dd.LogViewLimit            = prefDd.LogViewLimit;
+        frm->setDisplayDefinition(dd);
     }
 
     frm->show();
@@ -651,6 +690,39 @@ void MainWindow::on_actionFind_triggered()
 void MainWindow::on_actionReplace_triggered()
 {
     emit replace();
+}
+
+///
+/// \brief MainWindow::on_actionPreferences_triggered
+///
+void MainWindow::on_actionPreferences_triggered()
+{
+    DialogPreferences dlg(this, this);
+    dlg.exec();
+}
+
+///
+/// \brief MainWindow::applyAutoComplete
+/// \param enable
+///
+void MainWindow::applyAutoComplete(bool enable)
+{
+    for (auto&& wnd : ui->mdiArea->subWindowList()) {
+        if (auto frm = qobject_cast<FormModSim*>(wnd->widget()))
+            frm->enableAutoComplete(enable);
+    }
+}
+
+///
+/// \brief MainWindow::applyScriptFont
+/// \param font
+///
+void MainWindow::applyScriptFont(const QFont& font)
+{
+    for (auto&& wnd : ui->mdiArea->subWindowList()) {
+        if (auto frm = qobject_cast<FormModSim*>(wnd->widget()))
+            frm->setScriptFont(font);
+    }
 }
 
 ///
@@ -1466,6 +1538,7 @@ FormModSim* MainWindow::createMdiChild(int id)
     }
 
     auto frm = new FormModSim(id, _mbMultiServer, _dataSimulator, this);
+    frm->enableAutoComplete(AppPreferences::instance().codeAutoComplete());
     auto wnd = ui->mdiArea->addSubWindow(frm);
     wnd->installEventFilter(this);
     wnd->setAttribute(Qt::WA_DeleteOnClose, true);
@@ -1916,6 +1989,8 @@ bool MainWindow::loadProfile(const QString& filename)
 
     QSettings m(_profile, QSettings::IniFormat, this);
 
+    AppPreferences::instance().load(m);
+
     restoreGeometry(m.value("WindowGeometry").toByteArray());
 
     const auto viewMode = (QMdiArea::ViewMode)qBound(0, m.value("ViewMode", QMdiArea::SubWindowView).toInt(), 1);
@@ -2014,4 +2089,6 @@ void MainWindow::saveProfile()
             m.endGroup();
         }
     }
+
+    AppPreferences::instance().save(m);
 }

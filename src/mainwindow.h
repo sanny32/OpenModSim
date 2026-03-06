@@ -28,6 +28,8 @@ public:
     ~MainWindow();
 
     void setLanguage(const QString& lang);
+    void applyAutoComplete(bool enable);
+    void applyScriptFont(const QFont& font);
 
     void loadConfig(const QString& filename, bool startup = false);
     void saveConfig(const QString& filename, SerializationFormat format);
@@ -58,6 +60,8 @@ private slots:
     void on_actionPrint_triggered();
     void on_actionPrintSetup_triggered();
     void on_actionExit_triggered();
+
+    void on_actionPreferences_triggered();
 
     /* Edit menu slots */
     void on_actionUndo_triggered();

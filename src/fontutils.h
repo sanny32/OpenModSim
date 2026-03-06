@@ -5,6 +5,17 @@
 #include <QList>
 #include <QFontDatabase>
 
+inline QFont defaultScriptFont(int pointSize = -1)
+{
+    const auto families = QFontDatabase::families();
+    const QString family = families.contains("Fira Code") ? "Fira Code"
+                         : families.contains("Consolas")  ? "Consolas"
+                         : "Courier New";
+    QFont font(family, pointSize > 0 ? pointSize : 10);
+    font.setStyleHint(QFont::Monospace);
+    return font;
+}
+
 inline QFont defaultMonospaceFont(int pointSize = -1)
 {
     QString family;

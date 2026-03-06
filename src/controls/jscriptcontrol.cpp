@@ -130,6 +130,15 @@ void JScriptControl::enableAutoComplete(bool enable)
 }
 
 ///
+/// \brief JScriptControl::setFont
+/// \param font
+///
+void JScriptControl::setFont(const QFont& font)
+{
+    ui->codeEditor->setFont(font);
+}
+
+///
 /// \brief JScriptControl::script
 /// \return
 ///

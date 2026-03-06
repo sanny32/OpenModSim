@@ -42,6 +42,8 @@ public:
     bool isAutoCompleteEnabled() const;
     void enableAutoComplete(bool enable);
 
+    void setFont(const QFont& font);
+
     QString script() const;
     void setScript(const QString& text);
 
