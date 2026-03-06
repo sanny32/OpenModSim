@@ -39,7 +39,11 @@ protected:
     {
         if(e->button() == Qt::LeftButton) {
             _resizing          = true;
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
             _resizeGlobalStart = e->globalPosition().toPoint();
+#else
+            _resizeGlobalStart = e->globalPos();
+#endif
             _resizeStartX      = _target->x();
             _resizeStartWidth  = _target->width();
             e->accept();
@@ -49,7 +53,11 @@ protected:
     void mouseMoveEvent(QMouseEvent* e) override
     {
         if(_resizing) {
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
             const int dx   = e->globalPosition().toPoint().x() - _resizeGlobalStart.x();
+#else
+            const int dx   = e->globalPos().x() - _resizeGlobalStart.x();
+#endif
             const int newW = qMax(_target->minimumWidth(), _resizeStartWidth - dx);
             _target->move(_resizeStartX + _resizeStartWidth - newW, _target->y());
             _target->resize(newW, _target->height());

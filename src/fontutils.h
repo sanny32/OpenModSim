@@ -7,7 +7,11 @@
 
 inline QFont defaultScriptFont(int pointSize = -1)
 {
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
     const auto families = QFontDatabase::families();
+#else
+    const auto families = QFontDatabase().families();
+#endif
     const QString family = families.contains("Fira Code") ? "Fira Code"
                          : families.contains("Consolas")  ? "Consolas"
                          : "Courier New";

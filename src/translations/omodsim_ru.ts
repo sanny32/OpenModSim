@@ -1829,12 +1829,12 @@
         <translation>Заменить все</translation>
     </message>
     <message>
-        <location filename="../controls/findreplacebar.cpp" line="93"/>
+        <location filename="../controls/findreplacebar.cpp" line="101"/>
         <source>Find Next</source>
         <translation>Далее</translation>
     </message>
     <message>
-        <location filename="../controls/findreplacebar.cpp" line="94"/>
+        <location filename="../controls/findreplacebar.cpp" line="102"/>
         <source>Find Previous</source>
         <translation>Назад</translation>
     </message>

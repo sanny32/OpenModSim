@@ -1833,12 +1833,12 @@
         <translation>全部取代</translation>
     </message>
     <message>
-        <location filename="../controls/findreplacebar.cpp" line="93"/>
+        <location filename="../controls/findreplacebar.cpp" line="101"/>
         <source>Find Next</source>
         <translation>尋找下一個</translation>
     </message>
     <message>
-        <location filename="../controls/findreplacebar.cpp" line="94"/>
+        <location filename="../controls/findreplacebar.cpp" line="102"/>
         <source>Find Previous</source>
         <translation>找上一個</translation>
     </message>
