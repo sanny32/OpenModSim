@@ -107,6 +107,7 @@ MainWindow::MainWindow(const QString& profile, bool useSession, QWidget *parent)
             _helpDockWidget->setProperty("WasShown", false);
     });
 
+    ui->mdiArea->setActivationOrder(QMdiArea::ActivationHistoryOrder);
     connect(ui->mdiArea, &QMdiArea::subWindowActivated, this, &MainWindow::updateMenuWindow);
     connect(&_mbMultiServer, &ModbusMultiServer::connectionError, this, &MainWindow::on_connectionError);
 
