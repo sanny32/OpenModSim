@@ -122,12 +122,7 @@ void DialogRawDataLog::changeEvent(QEvent* event)
 ///
 void DialogRawDataLog::createCopyActions()
 {
-    QIcon copyIcon = QIcon::fromTheme("edit-copy");
-    if (copyIcon.isNull()) {
-        copyIcon = style()->standardIcon(QStyle::SP_FileIcon);
-    }
-
-    _copyAct = new QAction(copyIcon, tr("Copy Text"), this);
+    _copyAct = new QAction(QIcon(":/res/actionCopy.png"), tr("Copy Text"), this);
     _copyAct->setShortcut(QKeySequence::Copy);
     _copyAct->setShortcutContext(Qt::WidgetShortcut);
     _copyAct->setShortcutVisibleInContextMenu(true);

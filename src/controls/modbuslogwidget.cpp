@@ -1,6 +1,5 @@
 #include <QMenu>
 #include <QEvent>
-#include <QStyle>
 #include <QClipboard>
 #include <QTextDocument>
 #include <QApplication>
@@ -66,12 +65,7 @@ ModbusLogWidget::ModbusLogWidget(QWidget* parent)
     setItemDelegate(new HtmlDelegate(this));
     setModel(new ModbusLogModel(this));
 
-    QIcon copyIcon = QIcon::fromTheme("edit-copy");
-    if (copyIcon.isNull()) {
-        copyIcon = style()->standardIcon(QStyle::SP_FileIcon);
-    }
-
-    _copyAct = new QAction(copyIcon, tr("Copy Text"), this);
+    _copyAct = new QAction(QIcon(":/res/actionCopy.png"), tr("Copy Text"), this);
     _copyAct->setShortcut(QKeySequence::Copy);
     _copyAct->setShortcutContext(Qt::WidgetShortcut);
     _copyAct->setShortcutVisibleInContextMenu(true);

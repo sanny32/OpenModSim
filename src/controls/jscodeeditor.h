@@ -45,6 +45,7 @@ signals:
 protected:
     void resizeEvent(QResizeEvent *event) override;
     void keyPressEvent(QKeyEvent *e) override;
+    void contextMenuEvent(QContextMenuEvent *event) override;
 
 private slots:
     void updateLineNumberAreaWidth(int newBlockCount);

@@ -1,12 +1,14 @@
+#include <QMenu>
 #include <QPainter>
 #include <QTextBlock>
 #include <QScrollBar>
 #include <QAbstractItemView>
+#include <QContextMenuEvent>
 #include "jscompleter.h"
 #include "jscodeeditor.h"
 
 ///
-/// \brief console::console
+/// \brief JSCodeEditor::JSCodeEditor
 /// \param parent
 ///
 JSCodeEditor::JSCodeEditor(QWidget *parent)
@@ -45,7 +47,7 @@ JSCodeEditor::~JSCodeEditor()
 }
 
 ///
-/// \brief console::lineNumberAreaWidth
+/// \brief JSCodeEditor::lineNumberAreaWidth
 /// \return
 ///
 int JSCodeEditor::lineNumberAreaWidth()
@@ -61,7 +63,7 @@ int JSCodeEditor::lineNumberAreaWidth()
 }
 
 ///
-/// \brief console::setForegroundColor
+/// \brief JSCodeEditor::setForegroundColor
 /// \param clr
 ///
 void JSCodeEditor::setForegroundColor(const QColor& clr)
@@ -72,7 +74,7 @@ void JSCodeEditor::setForegroundColor(const QColor& clr)
 }
 
 ///
-/// \brief console::setBackgroundColor
+/// \brief JSCodeEditor::setBackgroundColor
 /// \param clr
 ///
 void JSCodeEditor::setBackgroundColor(const QColor& clr)
@@ -325,7 +327,7 @@ int JSCodeEditor::totalMatchCount() const
 }
 
 ///
-/// \brief console::updateLineNumberAreaWidth
+/// \brief JSCodeEditor::updateLineNumberAreaWidth
 ///
 void JSCodeEditor::updateLineNumberAreaWidth(int)
 {
@@ -333,7 +335,7 @@ void JSCodeEditor::updateLineNumberAreaWidth(int)
 }
 
 ///
-/// \brief console::updateLineNumberArea
+/// \brief JSCodeEditor::updateLineNumberArea
 /// \param rect
 /// \param dy
 ///
@@ -349,7 +351,7 @@ void JSCodeEditor::updateLineNumberArea(const QRect &rect, int dy)
 }
 
 ///
-/// \brief console::insertCompletion
+/// \brief JSCodeEditor::insertCompletion
 /// \param completion
 ///
 void JSCodeEditor::insertCompletion(const QString& completion)
@@ -361,7 +363,7 @@ void JSCodeEditor::insertCompletion(const QString& completion)
 }
 
 ///
-/// \brief console::resizeEvent
+/// \brief JSCodeEditor::resizeEvent
 /// \param e
 ///
 void JSCodeEditor::resizeEvent(QResizeEvent *e)
@@ -373,7 +375,7 @@ void JSCodeEditor::resizeEvent(QResizeEvent *e)
 }
 
 ///
-/// \brief console::keyPressEvent
+/// \brief JSCodeEditor::keyPressEvent
 /// \param e
 ///
 void JSCodeEditor::keyPressEvent(QKeyEvent *e)
@@ -472,7 +474,7 @@ void JSCodeEditor::keyPressEvent(QKeyEvent *e)
 }
 
 ///
-/// \brief console::highlightCurrentLine
+/// \brief JSCodeEditor::highlightCurrentLine
 ///
 void JSCodeEditor::highlightCurrentLine()
 {
@@ -496,7 +498,7 @@ void JSCodeEditor::highlightCurrentLine()
 }
 
 ///
-/// \brief console::lineNumberAreaPaintEvent
+/// \brief JSCodeEditor::lineNumberAreaPaintEvent
 /// \param event
 ///
 void JSCodeEditor::lineNumberAreaPaintEvent(QPaintEvent *event)
@@ -526,7 +528,30 @@ void JSCodeEditor::lineNumberAreaPaintEvent(QPaintEvent *event)
 }
 
 ///
-/// \brief console::textUnderCursor
+/// \brief JSCodeEditor::contextMenuEvent
+/// \param event
+///
+void JSCodeEditor::contextMenuEvent(QContextMenuEvent *event)
+{
+    QMenu* menu = createStandardContextMenu();
+
+    for(QAction* action : menu->actions())
+    {
+        const QString name = action->objectName();
+        if     (name == "edit-undo")  action->setIcon(QIcon(":/res/actionUndo.png"));
+        else if(name == "edit-redo")  action->setIcon(QIcon(":/res/actionRedo.png"));
+        else if(name == "edit-cut")   action->setIcon(QIcon(":/res/actionCut.png"));
+        else if(name == "edit-copy")  action->setIcon(QIcon(":/res/actionCopy.png"));
+        else if(name == "edit-paste") action->setIcon(QIcon(":/res/actionPaste.png"));
+        else                          action->setIcon(QIcon());
+    }
+
+    menu->exec(event->globalPos());
+    delete menu;
+}
+
+///
+/// \brief JSCodeEditor::textUnderCursor
 /// \return
 ///
 QString JSCodeEditor::textUnderCursor() const
