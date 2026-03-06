@@ -3,6 +3,7 @@
 
 #include <QFont>
 #include <QList>
+#include <QApplication>
 #include <QFontDatabase>
 
 inline QFont defaultScriptFont(int pointSize = -1)
@@ -50,7 +51,7 @@ inline QFont defaultMonospaceFont(int pointSize = -1)
     family = "Monospace";
 #endif
 
-    QFont font(family, pointSize);
+    QFont font(family, pointSize > 0 ? pointSize : 10);
     font.setStyleHint(QFont::Monospace);
     return font;
 }
