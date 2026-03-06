@@ -18,6 +18,9 @@ public:
     explicit DialogAbout(QWidget *parent = nullptr);
     ~DialogAbout();
 
+protected:
+    void changeEvent(QEvent* event) override;
+
 private slots:
     void on_labelLicense_clicked();
 

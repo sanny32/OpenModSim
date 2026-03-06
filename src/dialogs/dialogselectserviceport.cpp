@@ -49,6 +49,17 @@ DialogSelectServicePort::~DialogSelectServicePort()
 }
 
 ///
+/// rief DialogSelectServicePort::changeEvent
+///
+void DialogSelectServicePort::changeEvent(QEvent* event)
+{
+    if (event->type() == QEvent::LanguageChange)
+        ui->retranslateUi(this);
+
+    QDialog::changeEvent(event);
+}
+
+///
 /// \brief DialogSelectServicePort::accept
 ///
 void DialogSelectServicePort::accept()

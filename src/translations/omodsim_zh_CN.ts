@@ -190,7 +190,7 @@
     <message>
         <location filename="../controls/consoleoutput.cpp" line="334"/>
         <source>Copy</source>
-        <translation type="unfinished">复制</translation>
+        <translation>复制</translation>
     </message>
     <message>
         <location filename="../controls/consoleoutput.cpp" line="345"/>
@@ -264,10 +264,6 @@
         <translation>关于 %1...</translation>
     </message>
     <message>
-        <source>Version: %1 %2</source>
-        <translation type="obsolete">版本: %1 %2</translation>
-    </message>
-    <message>
         <location filename="../dialogs/dialogabout.cpp" line="88"/>
         <source>Using %1 and built against %2</source>
         <translation>使用 %1 并针对 %2 构建</translation>
@@ -283,19 +279,19 @@
         <translation>作者和维护者</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="232"/>
+        <location filename="../dialogs/dialogabout.cpp" line="243"/>
         <source>Visit component&apos;s homepage
 %1</source>
         <translation>访问组件主页
 %1</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="253"/>
+        <location filename="../dialogs/dialogabout.cpp" line="264"/>
         <source>Email contributer: %1</source>
         <translation>电子邮件贡献者：%1</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="262"/>
+        <location filename="../dialogs/dialogabout.cpp" line="273"/>
         <source>Visit user&apos;s homepage
 %1</source>
         <translation>访问用户主页
@@ -339,7 +335,7 @@
         <translation>简体中文和繁体中文</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="258"/>
+        <location filename="../dialogs/dialogabout.cpp" line="269"/>
         <source>Visit github user&apos;s homepage
 %1</source>
         <translation>访问 GitHub 用户主页
@@ -374,7 +370,7 @@
         <translation type="vanished">• Fira Code 6.2 字体</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="286"/>
+        <location filename="../dialogs/dialogabout.cpp" line="297"/>
         <source>License Agreement - %1</source>
         <translation>许可协议 - %1</translation>
     </message>
@@ -492,27 +488,27 @@
     <message>
         <location filename="../dialogs/dialogdisplaydefinition.ui" line="353"/>
         <source>Script Settings</source>
-        <translation type="unfinished">脚本设置</translation>
+        <translation>脚本设置</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogdisplaydefinition.ui" line="399"/>
         <source>Run Mode: </source>
-        <translation type="unfinished">运行模式： </translation>
+        <translation>运行模式： </translation>
     </message>
     <message>
         <location filename="../dialogs/dialogdisplaydefinition.ui" line="359"/>
         <source>Interval: </source>
-        <translation type="unfinished">间隔： </translation>
+        <translation>间隔： </translation>
     </message>
     <message>
         <location filename="../dialogs/dialogdisplaydefinition.ui" line="390"/>
         <source>(msec)</source>
-        <translation type="unfinished">（毫秒）</translation>
+        <translation>（毫秒）</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogdisplaydefinition.ui" line="422"/>
         <source>Run script on startup</source>
-        <translation type="unfinished">在系统启动时运行脚本</translation>
+        <translation>在系统启动时运行脚本</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogdisplaydefinition.ui" line="443"/>
@@ -590,47 +586,47 @@
     <message>
         <location filename="../dialogs/dialogforcemultiplecoils.ui" line="33"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Device Id: &lt;span style=&quot; font-weight:700;&quot;&gt;%1&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;设备地址：&lt;span style=&quot; font-weight:700;&quot;&gt;%1&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogforcemultiplecoils.ui" line="40"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Starting Address: &lt;span style=&quot; font-weight:700;&quot;&gt;%1&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;起始地址：&lt;span style=&quot; font-weight:700;&quot;&gt;%1&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogforcemultiplecoils.ui" line="47"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Length: &lt;span style=&quot; font-weight:700;&quot;&gt;%1&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;长度：&lt;span style=&quot; font-weight:700;&quot;&gt;%1&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogforcemultiplecoils.ui" line="81"/>
         <source>Import</source>
-        <translation type="unfinished"></translation>
+        <translation>导入</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogforcemultiplecoils.ui" line="104"/>
         <source>Export</source>
-        <translation type="unfinished"></translation>
+        <translation>导出</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogforcemultiplecoils.ui" line="126"/>
         <source>Reset</source>
-        <translation type="unfinished"></translation>
+        <translation>重置</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogforcemultiplecoils.ui" line="143"/>
         <source>Set</source>
-        <translation type="unfinished"></translation>
+        <translation>设置</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogforcemultiplecoils.ui" line="163"/>
         <source>Random</source>
-        <translation type="unfinished">随机数</translation>
+        <translation>随机数</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogforcemultiplecoils.ui" line="226"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Starting Address: &lt;span style=&quot; font-weight:700;&quot;&gt;%1 &lt;/span&gt;→ Ending Address: &lt;span style=&quot; font-weight:700;&quot;&gt;%2&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;起始地址：&lt;span style=&quot; font-weight:700;&quot;&gt;%1 &lt;/span&gt;→ 结束地址：&lt;span style=&quot; font-weight:700;&quot;&gt;%2&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <source>Address: </source>
@@ -662,42 +658,42 @@
         <translation>强制离散输入</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="114"/>
-        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="188"/>
-        <source>CSV files (*.csv)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="121"/>
+        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="125"/>
         <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="199"/>
+        <source>CSV files (*.csv)</source>
+        <translation>CSV 文件 (*.csv)</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="132"/>
+        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="210"/>
         <source>Error</source>
-        <translation type="unfinished">错误</translation>
+        <translation>错误</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="155"/>
+        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="166"/>
         <source>Import error</source>
-        <translation type="unfinished"></translation>
+        <translation>导入错误</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="155"/>
+        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="166"/>
         <source>Invalid value: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>无效值：%1</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="164"/>
-        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="170"/>
+        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="175"/>
+        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="181"/>
         <source>Warning</source>
-        <translation type="unfinished"></translation>
+        <translation>警告</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="164"/>
+        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="175"/>
         <source>No data found in file.</source>
-        <translation type="unfinished"></translation>
+        <translation>文件中未找到数据。</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="170"/>
+        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="181"/>
         <source>Imported data size (%1) does not match current size (%2).</source>
-        <translation type="unfinished"></translation>
+        <translation>导入数据大小 (%1) 与当前大小 (%2) 不匹配。</translation>
     </message>
     <message>
         <source>Address: &lt;b&gt;%1&lt;/b&gt;</source>
@@ -718,57 +714,57 @@
     <message>
         <location filename="../dialogs/dialogforcemultipleregisters.ui" line="33"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Device Id: &lt;span style=&quot; font-weight:700;&quot;&gt;%1&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;设备地址：&lt;span style=&quot; font-weight:700;&quot;&gt;%1&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogforcemultipleregisters.ui" line="40"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Starting Address: &lt;span style=&quot; font-weight:700;&quot;&gt;%1&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;起始地址：&lt;span style=&quot; font-weight:700;&quot;&gt;%1&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogforcemultipleregisters.ui" line="47"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Length: &lt;span style=&quot; font-weight:700;&quot;&gt;%1&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;长度：&lt;span style=&quot; font-weight:700;&quot;&gt;%1&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogforcemultipleregisters.ui" line="81"/>
         <source>Import</source>
-        <translation type="unfinished"></translation>
+        <translation>导入</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogforcemultipleregisters.ui" line="104"/>
         <source>Export</source>
-        <translation type="unfinished"></translation>
+        <translation>导出</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogforcemultipleregisters.ui" line="133"/>
         <source>Reset</source>
-        <translation type="unfinished"></translation>
+        <translation>重置</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogforcemultipleregisters.ui" line="150"/>
         <source>Random</source>
-        <translation type="unfinished">随机数</translation>
+        <translation>随机数</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogforcemultipleregisters.ui" line="174"/>
         <source>Constant Value</source>
-        <translation type="unfinished"></translation>
+        <translation>常量值</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogforcemultipleregisters.ui" line="216"/>
         <source>Increment Value</source>
-        <translation type="unfinished"></translation>
+        <translation>增量值</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogforcemultipleregisters.ui" line="227"/>
         <source>From:</source>
-        <translation type="unfinished"></translation>
+        <translation>从：</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogforcemultipleregisters.ui" line="327"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Starting Address: &lt;span style=&quot; font-weight:700;&quot;&gt;%1 &lt;/span&gt;→ Ending Address: &lt;span style=&quot; font-weight:700;&quot;&gt;%2&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;起始地址：&lt;span style=&quot; font-weight:700;&quot;&gt;%1 &lt;/span&gt;→ 结束地址：&lt;span style=&quot; font-weight:700;&quot;&gt;%2&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <source>Set Value to</source>
@@ -822,42 +818,42 @@
         <translation>预设保持寄存器</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="715"/>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="796"/>
-        <source>CSV files (*.csv)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="722"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="726"/>
         <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="807"/>
+        <source>CSV files (*.csv)</source>
+        <translation>CSV 文件 (*.csv)</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="733"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="818"/>
         <source>Error</source>
-        <translation type="unfinished">错误</translation>
+        <translation>错误</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="763"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="774"/>
         <source>Import error</source>
-        <translation type="unfinished"></translation>
+        <translation>导入错误</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="763"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="774"/>
         <source>Invalid value: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>无效值：%1</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="772"/>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="778"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="783"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="789"/>
         <source>Warning</source>
-        <translation type="unfinished"></translation>
+        <translation>警告</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="772"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="783"/>
         <source>No data found in file.</source>
-        <translation type="unfinished"></translation>
+        <translation>文件中未找到数据。</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="778"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="789"/>
         <source>Imported data size (%1) does not match current size (%2).</source>
-        <translation type="unfinished"></translation>
+        <translation>导入数据大小 (%1) 与当前大小 (%2) 不匹配。</translation>
     </message>
     <message>
         <source>Address: &lt;b&gt;%1&lt;/b&gt;</source>
@@ -996,187 +992,148 @@
     <message>
         <location filename="../dialogs/dialogpreferences.ui" line="14"/>
         <source>Preferences</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>General</source>
-        <translation type="obsolete">一般</translation>
-    </message>
-    <message>
-        <source>Modbus Definitions</source>
-        <translation type="obsolete">Modbus定义</translation>
+        <translation>首选项</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogpreferences.ui" line="66"/>
         <source>Interface</source>
-        <translation type="unfinished"></translation>
+        <translation>界面</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogpreferences.ui" line="75"/>
         <source>Display</source>
-        <translation type="unfinished"></translation>
+        <translation>显示</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogpreferences.ui" line="84"/>
         <source>Script Editor</source>
-        <translation type="unfinished"></translation>
+        <translation>脚本编辑器</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="153"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="156"/>
         <source>User Interface</source>
-        <translation type="unfinished"></translation>
+        <translation>用户界面</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="199"/>
-        <location filename="../dialogs/dialogpreferences.ui" line="252"/>
-        <location filename="../dialogs/dialogpreferences.ui" line="305"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="202"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="255"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="308"/>
         <source>Reset</source>
-        <translation type="unfinished"></translation>
+        <translation>重置</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="168"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="171"/>
         <source>Background Color:</source>
-        <translation type="unfinished"></translation>
+        <translation>背景颜色：</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="221"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="224"/>
         <source>Foreground Color:</source>
-        <translation type="unfinished"></translation>
+        <translation>前景颜色：</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="274"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="277"/>
         <source>Status Color:</source>
-        <translation type="unfinished"></translation>
+        <translation>状态颜色：</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="327"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="330"/>
         <source>Language:</source>
-        <translation type="unfinished"></translation>
+        <translation>语言：</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="340"/>
-        <location filename="../dialogs/dialogpreferences.ui" line="652"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="343"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="708"/>
         <source>Font</source>
-        <translation type="unfinished">字体</translation>
+        <translation>字体</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="377"/>
-        <location filename="../dialogs/dialogpreferences.ui" line="689"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="380"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="745"/>
         <source>Size:</source>
-        <translation type="unfinished"></translation>
+        <translation>大小：</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="409"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="412"/>
         <source>Zoom:</source>
-        <translation type="unfinished"></translation>
+        <translation>缩放：</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="355"/>
-        <location filename="../dialogs/dialogpreferences.ui" line="667"/>
-        <source>Family:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="431"/>
-        <source>%</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="449"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="358"/>
         <location filename="../dialogs/dialogpreferences.ui" line="723"/>
+        <source>Family:</source>
+        <translation>字体族：</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogpreferences.ui" line="434"/>
+        <source>%</source>
+        <translation>%</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogpreferences.ui" line="455"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="779"/>
         <source>Antialias</source>
-        <translation type="unfinished"></translation>
+        <translation>抗锯齿</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="491"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="497"/>
         <source>Data Display</source>
-        <translation type="unfinished"></translation>
+        <translation>数据显示</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="503"/>
-        <source>Zero Based Address</source>
-        <translation type="unfinished"></translation>
+        <location filename="../dialogs/dialogpreferences.ui" line="509"/>
+        <source>Address Base:</source>
+        <translation>地址基数：</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="510"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="526"/>
         <source>Hex Address</source>
-        <translation type="unfinished"></translation>
+        <translation>十六进制地址</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="517"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="533"/>
         <source>Leading Zeros</source>
-        <translation type="unfinished"></translation>
+        <translation>前导零</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="524"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="540"/>
         <source>Columns Distance:</source>
-        <translation type="unfinished"></translation>
+        <translation>列间距：</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="559"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="575"/>
         <source>Log View</source>
-        <translation type="unfinished">日志</translation>
+        <translation>日志视图</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="571"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="587"/>
         <source>Autoscroll</source>
-        <translation type="unfinished">自动滚动</translation>
+        <translation>自动滚动</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="578"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="594"/>
         <source>Verbose Logging</source>
-        <translation type="unfinished">详细日志记录</translation>
+        <translation>详细日志记录</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="585"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="601"/>
         <source>Log View Limit:</source>
-        <translation type="unfinished">日志视图：</translation>
+        <translation>日志限制：</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="733"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="676"/>
+        <source>&lt;b&gt;Note:&lt;/b&gt; These settings apply to newly opened windows only.</source>
+        <translation>&lt;b&gt;注意：&lt;/b&gt;这些设置仅适用于新打开的窗口。</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogpreferences.ui" line="789"/>
         <source>Editor</source>
-        <translation type="unfinished"></translation>
+        <translation>编辑器</translation>
     </message>
     <message>
-        <source>Use Global Address Map (Unallocated registers will be zero)</source>
-        <translation type="obsolete">使用全局地址映射（未分配的寄存器将为零）</translation>
-    </message>
-    <message>
-        <source>Error Simulations</source>
-        <translation type="obsolete">错误模拟</translation>
-    </message>
-    <message>
-        <source>Response with incorrect IDs</source>
-        <translation type="obsolete">带有错误 ID 的响应</translation>
-    </message>
-    <message>
-        <source>Response with ILLEGAL FUNCTION</source>
-        <translation type="obsolete">响应非法功能</translation>
-    </message>
-    <message>
-        <source>Response with DEVICE BUSY</source>
-        <translation type="obsolete">响应 DEVICE BUSY</translation>
-    </message>
-    <message>
-        <source>Response with incorrect CRC (Serial Line only)</source>
-        <translation type="obsolete">响应带有错误的 CRC（仅限串行线路）</translation>
-    </message>
-    <message>
-        <source>Response with delay</source>
-        <translation type="obsolete">延迟响应</translation>
-    </message>
-    <message>
-        <source>Response with random delay from 0 to</source>
-        <translation type="obsolete">响应随机延迟从 0 到</translation>
-    </message>
-    <message>
-        <source>No response</source>
-        <translation type="obsolete">没有响应</translation>
-    </message>
-    <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="739"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="795"/>
         <source>Enable code auto-complete</source>
-        <translation type="unfinished"></translation>
+        <translation>启用代码自动补全</translation>
     </message>
 </context>
 <context>
@@ -1242,82 +1199,82 @@
         <translation>横向</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogprintsettings.cpp" line="77"/>
+        <location filename="../dialogs/dialogprintsettings.cpp" line="88"/>
         <source>Ready</source>
         <translation>就绪</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogprintsettings.cpp" line="80"/>
+        <location filename="../dialogs/dialogprintsettings.cpp" line="91"/>
         <source>Printing</source>
         <translation>打印</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogprintsettings.cpp" line="83"/>
+        <location filename="../dialogs/dialogprintsettings.cpp" line="94"/>
         <source>Aborted</source>
         <translation>中止</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogprintsettings.cpp" line="86"/>
+        <location filename="../dialogs/dialogprintsettings.cpp" line="97"/>
         <source>Error</source>
         <translation>错误</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogprintsettings.cpp" line="153"/>
+        <location filename="../dialogs/dialogprintsettings.cpp" line="164"/>
         <source>Only One</source>
         <translation>只有一个</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogprintsettings.cpp" line="157"/>
+        <location filename="../dialogs/dialogprintsettings.cpp" line="168"/>
         <source>Lower</source>
         <translation>底部</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogprintsettings.cpp" line="161"/>
+        <location filename="../dialogs/dialogprintsettings.cpp" line="172"/>
         <source>Middle</source>
         <translation>中间</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogprintsettings.cpp" line="165"/>
+        <location filename="../dialogs/dialogprintsettings.cpp" line="176"/>
         <source>Manual</source>
         <translation>手册</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogprintsettings.cpp" line="169"/>
+        <location filename="../dialogs/dialogprintsettings.cpp" line="180"/>
         <source>Envelope</source>
         <translation>信封</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogprintsettings.cpp" line="173"/>
+        <location filename="../dialogs/dialogprintsettings.cpp" line="184"/>
         <source>Envelope Manual</source>
         <translation>信封手册</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogprintsettings.cpp" line="177"/>
+        <location filename="../dialogs/dialogprintsettings.cpp" line="188"/>
         <source>Auto</source>
         <translation>自动</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogprintsettings.cpp" line="181"/>
+        <location filename="../dialogs/dialogprintsettings.cpp" line="192"/>
         <source>Tractor</source>
         <translation>牵引机</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogprintsettings.cpp" line="185"/>
+        <location filename="../dialogs/dialogprintsettings.cpp" line="196"/>
         <source>Small Format</source>
         <translation>小尺寸格式</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogprintsettings.cpp" line="189"/>
+        <location filename="../dialogs/dialogprintsettings.cpp" line="200"/>
         <source>Large Format</source>
         <translation>大尺寸格式</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogprintsettings.cpp" line="193"/>
+        <location filename="../dialogs/dialogprintsettings.cpp" line="204"/>
         <source>Large Capacity</source>
         <translation>大容量</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogprintsettings.cpp" line="197"/>
+        <location filename="../dialogs/dialogprintsettings.cpp" line="208"/>
         <source>Cassette</source>
         <translation>纸盒</translation>
     </message>
@@ -1326,7 +1283,7 @@
         <translation type="vanished">最大页面来源</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogprintsettings.cpp" line="201"/>
+        <location filename="../dialogs/dialogprintsettings.cpp" line="212"/>
         <source>Custom Source</source>
         <translation>自定义源</translation>
     </message>
@@ -1470,7 +1427,7 @@
     <message>
         <location filename="../dialogs/dialogsetuppresetdata.ui" line="23"/>
         <source>Device Id: </source>
-        <translation type="unfinished"></translation>
+        <translation>设备地址： </translation>
     </message>
     <message>
         <location filename="../dialogs/dialogsetuppresetdata.ui" line="46"/>
@@ -1697,10 +1654,6 @@
         <translation type="vanished">位模式：</translation>
     </message>
     <message>
-        <source>Bit Pattern</source>
-        <translation type="obsolete">位模式</translation>
-    </message>
-    <message>
         <source>Auto Simulation</source>
         <translation type="vanished">自动仿真</translation>
     </message>
@@ -1737,49 +1690,49 @@
     <message>
         <location filename="../dialogs/dialogwriteregister.ui" line="14"/>
         <source>06: Write Holding Register</source>
-        <translation type="unfinished"></translation>
+        <translation>06：写入保持寄存器</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogwriteregister.ui" line="23"/>
         <source>Device Id: </source>
-        <translation type="unfinished"></translation>
+        <translation>设备地址： </translation>
     </message>
     <message>
         <location filename="../dialogs/dialogwriteregister.ui" line="52"/>
         <source>Address: </source>
-        <translation type="unfinished">地址： </translation>
+        <translation>地址： </translation>
     </message>
     <message>
         <location filename="../dialogs/dialogwriteregister.ui" line="84"/>
         <source>Value: </source>
-        <translation type="unfinished">值： </translation>
+        <translation>值： </translation>
     </message>
     <message>
         <location filename="../dialogs/dialogwriteregister.ui" line="118"/>
-        <location filename="../dialogs/dialogwriteregister.cpp" line="223"/>
+        <location filename="../dialogs/dialogwriteregister.cpp" line="234"/>
         <source>Auto Simulation: OFF</source>
-        <translation type="unfinished">自动模拟：关闭</translation>
+        <translation>自动模拟：关闭</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogwriteregister.ui" line="140"/>
         <source>Bit Pattern: </source>
-        <translation type="unfinished"></translation>
+        <translation>位模式： </translation>
     </message>
     <message>
         <location filename="../dialogs/dialogwriteregister.cpp" line="101"/>
         <source>Value, (HEX): </source>
-        <translation type="unfinished">值（十六进制）： </translation>
+        <translation>值（十六进制）： </translation>
     </message>
     <message>
         <location filename="../dialogs/dialogwriteregister.cpp" line="108"/>
         <source>Value, (ANSI): </source>
-        <translation type="unfinished">值，(ANSI)： </translation>
+        <translation>值，(ANSI)： </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwriteregister.cpp" line="217"/>
-        <location filename="../dialogs/dialogwriteregister.cpp" line="230"/>
+        <location filename="../dialogs/dialogwriteregister.cpp" line="228"/>
+        <location filename="../dialogs/dialogwriteregister.cpp" line="241"/>
         <source>Auto Simulation: ON</source>
-        <translation type="unfinished">自动模拟：开启</translation>
+        <translation>自动模拟：开启</translation>
     </message>
 </context>
 <context>
@@ -1787,44 +1740,44 @@
     <message>
         <location filename="../dialogs/dialogwritestatusregister.ui" line="14"/>
         <source>05: Write Single Coil</source>
-        <translation type="unfinished"></translation>
+        <translation>05：写入单个线圈</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogwritestatusregister.ui" line="23"/>
         <source>Device Id: </source>
-        <translation type="unfinished"></translation>
+        <translation>设备地址： </translation>
     </message>
     <message>
         <location filename="../dialogs/dialogwritestatusregister.ui" line="52"/>
         <source>Address: </source>
-        <translation type="unfinished">地址： </translation>
+        <translation>地址： </translation>
     </message>
     <message>
         <location filename="../dialogs/dialogwritestatusregister.ui" line="84"/>
         <source>Value:</source>
-        <translation type="unfinished"></translation>
+        <translation>值：</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogwritestatusregister.ui" line="108"/>
         <source>Off</source>
-        <translation type="unfinished">关</translation>
+        <translation>关</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogwritestatusregister.ui" line="115"/>
         <source>On</source>
-        <translation type="unfinished">开</translation>
+        <translation>开</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogwritestatusregister.ui" line="134"/>
-        <location filename="../dialogs/dialogwritestatusregister.cpp" line="85"/>
+        <location filename="../dialogs/dialogwritestatusregister.cpp" line="96"/>
         <source>Auto Simulation: OFF</source>
-        <translation type="unfinished">自动模拟：关闭</translation>
+        <translation>自动模拟：关闭</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwritestatusregister.cpp" line="79"/>
-        <location filename="../dialogs/dialogwritestatusregister.cpp" line="91"/>
+        <location filename="../dialogs/dialogwritestatusregister.cpp" line="90"/>
+        <location filename="../dialogs/dialogwritestatusregister.cpp" line="102"/>
         <source>Auto Simulation: ON</source>
-        <translation type="unfinished">自动模拟：开启</translation>
+        <translation>自动模拟：开启</translation>
     </message>
 </context>
 <context>
@@ -1832,62 +1785,62 @@
     <message>
         <location filename="../controls/findreplacebar.ui" line="67"/>
         <source>Toggle Replace</source>
-        <translation type="unfinished"></translation>
+        <translation>切换替换</translation>
     </message>
     <message>
         <location filename="../controls/findreplacebar.ui" line="80"/>
         <source>Find...</source>
-        <translation type="unfinished"></translation>
+        <translation>查找...</translation>
     </message>
     <message>
         <location filename="../controls/findreplacebar.ui" line="292"/>
         <source>Match Case</source>
-        <translation type="unfinished"></translation>
+        <translation>区分大小写</translation>
     </message>
     <message>
         <location filename="../controls/findreplacebar.ui" line="321"/>
         <source>Match Whole Word</source>
-        <translation type="unfinished"></translation>
+        <translation>全字匹配</translation>
     </message>
     <message>
         <location filename="../controls/findreplacebar.ui" line="102"/>
         <source>Next (Enter)</source>
-        <translation type="unfinished"></translation>
+        <translation>下一个 (Enter)</translation>
     </message>
     <message>
         <location filename="../controls/findreplacebar.ui" line="127"/>
         <source>Close (Escape)</source>
-        <translation type="unfinished"></translation>
+        <translation>关闭 (Escape)</translation>
     </message>
     <message>
         <location filename="../controls/findreplacebar.ui" line="130"/>
         <source>✕</source>
-        <translation type="unfinished"></translation>
+        <translation>✕</translation>
     </message>
     <message>
         <location filename="../controls/findreplacebar.ui" line="182"/>
         <source>Replace...</source>
-        <translation type="unfinished"></translation>
+        <translation>替换...</translation>
     </message>
     <message>
         <location filename="../controls/findreplacebar.ui" line="204"/>
         <source>Replace</source>
-        <translation type="unfinished"></translation>
+        <translation>替换</translation>
     </message>
     <message>
         <location filename="../controls/findreplacebar.ui" line="236"/>
         <source>Replace All</source>
-        <translation type="unfinished"></translation>
+        <translation>全部替换</translation>
     </message>
     <message>
         <location filename="../controls/findreplacebar.cpp" line="93"/>
         <source>Find Next</source>
-        <translation type="unfinished">查找下一个</translation>
+        <translation>查找下一个</translation>
     </message>
     <message>
         <location filename="../controls/findreplacebar.cpp" line="94"/>
         <source>Find Previous</source>
-        <translation type="unfinished">查找上一个</translation>
+        <translation>查找上一个</translation>
     </message>
 </context>
 <context>
@@ -2022,25 +1975,25 @@ MODBUS Point Type:
         <location filename="../controls/helpwidget.cpp" line="35"/>
         <location filename="../controls/helpwidget.cpp" line="89"/>
         <source>Find</source>
-        <translation type="unfinished"></translation>
+        <translation>查找</translation>
     </message>
     <message>
         <location filename="../controls/helpwidget.cpp" line="41"/>
         <location filename="../controls/helpwidget.cpp" line="90"/>
         <source>Previous (Shift+Enter)</source>
-        <translation type="unfinished"></translation>
+        <translation>上一页 (Shift+Enter)</translation>
     </message>
     <message>
         <location filename="../controls/helpwidget.cpp" line="47"/>
         <location filename="../controls/helpwidget.cpp" line="91"/>
         <source>Next (Enter)</source>
-        <translation type="unfinished"></translation>
+        <translation>下一个 (Enter)</translation>
     </message>
     <message>
         <location filename="../controls/helpwidget.cpp" line="57"/>
         <location filename="../controls/helpwidget.cpp" line="92"/>
         <source>Close (Escape)</source>
-        <translation type="unfinished"></translation>
+        <translation>关闭 (Escape)</translation>
     </message>
 </context>
 <context>
@@ -2162,7 +2115,7 @@ Script.onInit(()=&gt;{
         <translation>高级选项</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="222"/>
+        <location filename="../mainwindow.ui" line="212"/>
         <source>Script</source>
         <translation>脚本</translation>
     </message>
@@ -2192,46 +2145,45 @@ Script.onInit(()=&gt;{
         <translation>颜色</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="200"/>
         <source>Language</source>
-        <translation>语言</translation>
+        <translation type="vanished">语言</translation>
     </message>
     <message>
         <source>Edit Bar</source>
         <translation type="vanished">编辑栏</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="333"/>
+        <location filename="../mainwindow.ui" line="323"/>
         <source>New</source>
         <translation>新建</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="485"/>
-        <location filename="../mainwindow.ui" line="488"/>
+        <location filename="../mainwindow.ui" line="475"/>
+        <location filename="../mainwindow.ui" line="478"/>
         <source>Float (MSRF)</source>
         <translation>浮点数（MSRF）</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="503"/>
-        <location filename="../mainwindow.ui" line="506"/>
+        <location filename="../mainwindow.ui" line="493"/>
+        <location filename="../mainwindow.ui" line="496"/>
         <source>Float (LSRF)</source>
         <translation>浮点数（LSRF）</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="521"/>
-        <location filename="../mainwindow.ui" line="527"/>
+        <location filename="../mainwindow.ui" line="511"/>
+        <location filename="../mainwindow.ui" line="517"/>
         <source>Double (MSRF)</source>
         <translation>双倍（MSRF）</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="542"/>
-        <location filename="../mainwindow.ui" line="545"/>
+        <location filename="../mainwindow.ui" line="532"/>
+        <location filename="../mainwindow.ui" line="535"/>
         <source>Double (LSRF)</source>
         <translation>双倍（LSRF）</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="740"/>
-        <location filename="../mainwindow.ui" line="743"/>
+        <location filename="../mainwindow.ui" line="708"/>
+        <location filename="../mainwindow.ui" line="711"/>
         <source>Swap Bytes (0xAB → 0xBA)</source>
         <translation>交换字节(0xAB → 0xBA)</translation>
     </message>
@@ -2240,8 +2192,8 @@ Script.onInit(()=&gt;{
         <translation type="vanished">32位整数</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="907"/>
-        <location filename="../mainwindow.ui" line="910"/>
+        <location filename="../mainwindow.ui" line="875"/>
+        <location filename="../mainwindow.ui" line="878"/>
         <source>32-bit Integer (MSRF)</source>
         <translation>32位整数（MSRF）</translation>
     </message>
@@ -2250,8 +2202,8 @@ Script.onInit(()=&gt;{
         <translation type="vanished">32位整数(字节交换)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="925"/>
-        <location filename="../mainwindow.ui" line="928"/>
+        <location filename="../mainwindow.ui" line="893"/>
+        <location filename="../mainwindow.ui" line="896"/>
         <source>32-bit Integer (LSRF)</source>
         <translation>32位整数（LSRF）</translation>
     </message>
@@ -2260,8 +2212,8 @@ Script.onInit(()=&gt;{
         <translation type="vanished">无符号32位整数</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="943"/>
-        <location filename="../mainwindow.ui" line="946"/>
+        <location filename="../mainwindow.ui" line="911"/>
+        <location filename="../mainwindow.ui" line="914"/>
         <source>Unsigned 32-bit Integer (MSRF)</source>
         <translation>无符号32位整数（MSRF）</translation>
     </message>
@@ -2270,8 +2222,8 @@ Script.onInit(()=&gt;{
         <translation type="vanished">无符号32位整数(字节交换)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="961"/>
-        <location filename="../mainwindow.ui" line="964"/>
+        <location filename="../mainwindow.ui" line="929"/>
+        <location filename="../mainwindow.ui" line="932"/>
         <source>Unsigned 32-bit Integer (LSRF)</source>
         <translation>无符号32位整数（LSRF）</translation>
     </message>
@@ -2280,8 +2232,8 @@ Script.onInit(()=&gt;{
         <translation type="vanished">64位整数</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1007"/>
-        <location filename="../mainwindow.ui" line="1010"/>
+        <location filename="../mainwindow.ui" line="975"/>
+        <location filename="../mainwindow.ui" line="978"/>
         <source>64-bit Integer (MSRF)</source>
         <translation>64位整数（MSRF）</translation>
     </message>
@@ -2290,8 +2242,8 @@ Script.onInit(()=&gt;{
         <translation type="vanished">64位整数(字节交换)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1025"/>
-        <location filename="../mainwindow.ui" line="1028"/>
+        <location filename="../mainwindow.ui" line="993"/>
+        <location filename="../mainwindow.ui" line="996"/>
         <source>64-bit Integer (LSRF)</source>
         <translation>64位整数（LSRF）</translation>
     </message>
@@ -2300,8 +2252,8 @@ Script.onInit(()=&gt;{
         <translation type="vanished">无符号64位整数</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1043"/>
-        <location filename="../mainwindow.ui" line="1046"/>
+        <location filename="../mainwindow.ui" line="1011"/>
+        <location filename="../mainwindow.ui" line="1014"/>
         <source>Unsigned 64-bit Integer (MSRF)</source>
         <translation>无符号64位整数（MSRF）</translation>
     </message>
@@ -2310,34 +2262,34 @@ Script.onInit(()=&gt;{
         <translation type="vanished">无符号64位整数(字节交换)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1061"/>
-        <location filename="../mainwindow.ui" line="1064"/>
+        <location filename="../mainwindow.ui" line="1029"/>
+        <location filename="../mainwindow.ui" line="1032"/>
         <source>Unsigned 64-bit Integer (LSRF)</source>
         <translation>无符号64位整数（LSRF）</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1079"/>
+        <location filename="../mainwindow.ui" line="1047"/>
         <source>ANSI</source>
         <translation>ANSI</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1105"/>
-        <location filename="../mainwindow.ui" line="1108"/>
+        <location filename="../mainwindow.ui" line="1059"/>
+        <location filename="../mainwindow.ui" line="1062"/>
         <source>Modbus Definitions</source>
         <translation>Modbus定义</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1116"/>
+        <location filename="../mainwindow.ui" line="1070"/>
         <source>Tabbed View</source>
         <translation>标签页视图</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1124"/>
+        <location filename="../mainwindow.ui" line="1078"/>
         <source>Close All Windows</source>
         <translation>关闭所有窗口</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1135"/>
+        <location filename="../mainwindow.ui" line="1089"/>
         <source>Raw Data Log</source>
         <translation>原始数据日志</translation>
     </message>
@@ -2358,96 +2310,96 @@ Script.onInit(()=&gt;{
         <translation type="vanished">无符号长整型（字节交换）</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="972"/>
+        <location filename="../mainwindow.ui" line="940"/>
         <source>Text Capture</source>
         <translation>文本捕获</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="977"/>
+        <location filename="../mainwindow.ui" line="945"/>
         <source>Capture Off</source>
         <translation>捕获关闭</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="986"/>
+        <location filename="../mainwindow.ui" line="954"/>
         <source>Msg Parser</source>
         <translation>报文解析</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="345"/>
+        <location filename="../mainwindow.ui" line="335"/>
         <source>Open...</source>
         <translation>打开...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="353"/>
+        <location filename="../mainwindow.ui" line="343"/>
         <source>Close</source>
         <translation>关闭</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="365"/>
+        <location filename="../mainwindow.ui" line="355"/>
         <source>Save</source>
         <translation>保存</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="373"/>
+        <location filename="../mainwindow.ui" line="363"/>
         <source>Save As...</source>
         <translation>另存为...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="378"/>
+        <location filename="../mainwindow.ui" line="368"/>
         <source>Save Test Config</source>
         <translation>保存测试配置</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="383"/>
+        <location filename="../mainwindow.ui" line="373"/>
         <source>Restore Test Config</source>
         <translation>恢复测试配置</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="392"/>
+        <location filename="../mainwindow.ui" line="382"/>
         <source>Print...</source>
         <translation>打印...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="400"/>
+        <location filename="../mainwindow.ui" line="390"/>
         <source>Print Setup...</source>
         <translation>打印设置...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="405"/>
+        <location filename="../mainwindow.ui" line="395"/>
         <source>Recent File</source>
         <translation>最近文件</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="410"/>
+        <location filename="../mainwindow.ui" line="400"/>
         <source>Exit</source>
         <translation>退出</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="419"/>
+        <location filename="../mainwindow.ui" line="409"/>
         <source>Connect</source>
         <translation>连接</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="428"/>
+        <location filename="../mainwindow.ui" line="418"/>
         <source>Disconnect</source>
         <translation>断开连接</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="440"/>
+        <location filename="../mainwindow.ui" line="430"/>
         <source>Binary</source>
         <translation>二进制</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1193"/>
+        <location filename="../mainwindow.ui" line="1130"/>
         <source>Preferences</source>
-        <translation type="unfinished"></translation>
+        <translation>首选项</translation>
     </message>
     <message>
         <source>Unsigned Decimal</source>
         <translation type="vanished">无符号十进制</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="470"/>
+        <location filename="../mainwindow.ui" line="460"/>
         <source>Hex</source>
         <translation>十六进制</translation>
     </message>
@@ -2468,17 +2420,17 @@ Script.onInit(()=&gt;{
         <translation type="vanished">64位浮点数（字节交换）</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="553"/>
+        <location filename="../mainwindow.ui" line="543"/>
         <source>Cascade</source>
         <translation>层叠</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="558"/>
+        <location filename="../mainwindow.ui" line="548"/>
         <source>Tile</source>
         <translation>平铺</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="567"/>
+        <location filename="../mainwindow.ui" line="557"/>
         <source>About Open ModSim...</source>
         <translation>关于Open ModSim...</translation>
     </message>
@@ -2487,54 +2439,54 @@ Script.onInit(()=&gt;{
         <translation type="vanished">整型</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="594"/>
+        <location filename="../mainwindow.ui" line="584"/>
         <source>Show Data</source>
         <translation>显示数据</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="606"/>
+        <location filename="../mainwindow.ui" line="596"/>
         <source>Show Traffic</source>
         <translation>显示流量</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="615"/>
+        <location filename="../mainwindow.ui" line="605"/>
         <source>Data Definition</source>
         <translation>数据格式</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="703"/>
+        <location filename="../mainwindow.ui" line="671"/>
         <source>Force Coils</source>
         <translation>强制线圈</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="712"/>
+        <location filename="../mainwindow.ui" line="680"/>
         <source>Preset Holding Regs</source>
         <translation>预设保持寄存器</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="752"/>
+        <location filename="../mainwindow.ui" line="720"/>
         <source>Preset Input Regs</source>
         <translation>预设输入寄存器</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="761"/>
+        <location filename="../mainwindow.ui" line="729"/>
         <source>Force Discretes</source>
         <translation>强制离散值</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="773"/>
+        <location filename="../mainwindow.ui" line="741"/>
         <source>Show Script</source>
         <translation>显示脚本</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="782"/>
-        <location filename="../mainwindow.ui" line="785"/>
+        <location filename="../mainwindow.ui" line="750"/>
+        <location filename="../mainwindow.ui" line="753"/>
         <source>Run Script</source>
         <translation>运行脚本</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="797"/>
-        <location filename="../mainwindow.ui" line="800"/>
+        <location filename="../mainwindow.ui" line="765"/>
+        <location filename="../mainwindow.ui" line="768"/>
         <source>Stop Script</source>
         <translation>停止脚本</translation>
     </message>
@@ -2543,97 +2495,97 @@ Script.onInit(()=&gt;{
         <translation type="vanished">脚本设置</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="820"/>
+        <location filename="../mainwindow.ui" line="788"/>
         <source>Undo</source>
         <translation>取消</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="832"/>
+        <location filename="../mainwindow.ui" line="800"/>
         <source>Redo</source>
         <translation>恢复</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="844"/>
+        <location filename="../mainwindow.ui" line="812"/>
         <source>Cut</source>
         <translation>剪切</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="856"/>
+        <location filename="../mainwindow.ui" line="824"/>
         <source>Copy</source>
         <translation>复制</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="868"/>
+        <location filename="../mainwindow.ui" line="836"/>
         <source>Paste</source>
         <translation>粘贴</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="876"/>
+        <location filename="../mainwindow.ui" line="844"/>
         <source>Select All</source>
         <translation>选择所有</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="884"/>
+        <location filename="../mainwindow.ui" line="852"/>
         <source>Find...</source>
-        <translation type="unfinished"></translation>
+        <translation>查找...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="892"/>
+        <location filename="../mainwindow.ui" line="860"/>
         <source>Replace...</source>
-        <translation type="unfinished"></translation>
+        <translation>替换...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="895"/>
+        <location filename="../mainwindow.ui" line="863"/>
         <source>Ctrl+H</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+H</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1166"/>
+        <location filename="../mainwindow.ui" line="1103"/>
         <source>Reset Ctrs</source>
         <translation>重置计数器</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1174"/>
-        <location filename="../mainwindow.ui" line="1177"/>
-        <location filename="../mainwindow.cpp" line="135"/>
+        <location filename="../mainwindow.ui" line="1111"/>
+        <location filename="../mainwindow.ui" line="1114"/>
+        <location filename="../mainwindow.cpp" line="98"/>
         <source>Script Help</source>
-        <translation type="unfinished"></translation>
+        <translation>脚本帮助</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1180"/>
+        <location filename="../mainwindow.ui" line="1117"/>
         <source>F1</source>
-        <translation type="unfinished"></translation>
+        <translation>F1</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1188"/>
+        <location filename="../mainwindow.ui" line="1125"/>
         <source>Console Output</source>
-        <translation type="unfinished"></translation>
+        <translation>控制台输出</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="238"/>
-        <location filename="../mainwindow.ui" line="623"/>
+        <location filename="../mainwindow.ui" line="228"/>
+        <location filename="../mainwindow.ui" line="613"/>
         <source>Toolbar</source>
         <translation>工具栏</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="631"/>
+        <location filename="../mainwindow.ui" line="621"/>
         <source>Status Bar</source>
         <translation>状态栏</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="279"/>
-        <location filename="../mainwindow.ui" line="639"/>
+        <location filename="../mainwindow.ui" line="269"/>
+        <location filename="../mainwindow.ui" line="629"/>
         <source>Display Bar</source>
         <translation>格式栏</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="316"/>
-        <location filename="../mainwindow.ui" line="811"/>
+        <location filename="../mainwindow.ui" line="306"/>
+        <location filename="../mainwindow.ui" line="779"/>
         <source>Script Bar</source>
         <translation>脚本栏</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="455"/>
+        <location filename="../mainwindow.ui" line="445"/>
         <source>Unsigned 16-bit Intger</source>
         <translation>无符号16位整数</translation>
     </message>
@@ -2646,7 +2598,7 @@ Script.onInit(()=&gt;{
         <translation type="vanished">浮点数(字节交换)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="524"/>
+        <location filename="../mainwindow.ui" line="514"/>
         <source>Double</source>
         <translation>双精度浮点数</translation>
     </message>
@@ -2655,37 +2607,37 @@ Script.onInit(()=&gt;{
         <translation type="vanished">双精度浮点数(字节交换)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="579"/>
+        <location filename="../mainwindow.ui" line="569"/>
         <source>16-bit Integer</source>
         <translation>16位整数</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="644"/>
+        <location filename="../mainwindow.ui" line="634"/>
         <source>Font</source>
         <translation>字体</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="649"/>
+        <location filename="../mainwindow.ui" line="639"/>
         <source>Background</source>
         <translation>背景</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="654"/>
+        <location filename="../mainwindow.ui" line="644"/>
         <source>Foreground</source>
         <translation>前景</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="659"/>
+        <location filename="../mainwindow.ui" line="649"/>
         <source>Status</source>
         <translation>状态</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="664"/>
+        <location filename="../mainwindow.ui" line="654"/>
         <source>Windows...</source>
         <translation>窗口...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="672"/>
+        <location filename="../mainwindow.ui" line="662"/>
         <source>Hex Addresses</source>
         <translation>十六进制地址</translation>
     </message>
@@ -2698,25 +2650,25 @@ Script.onInit(()=&gt;{
         <translation type="vanished">俄语</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="447"/>
-        <location filename="../mainwindow.cpp" line="518"/>
-        <location filename="../mainwindow.cpp" line="528"/>
-        <location filename="../mainwindow.cpp" line="559"/>
-        <location filename="../mainwindow.cpp" line="585"/>
+        <location filename="../mainwindow.cpp" line="404"/>
+        <location filename="../mainwindow.cpp" line="475"/>
+        <location filename="../mainwindow.cpp" line="485"/>
+        <location filename="../mainwindow.cpp" line="516"/>
+        <location filename="../mainwindow.cpp" line="542"/>
         <source>All files (*)</source>
         <translation>所有文件 (*)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="446"/>
-        <location filename="../mainwindow.cpp" line="522"/>
-        <location filename="../mainwindow.cpp" line="527"/>
-        <location filename="../mainwindow.cpp" line="558"/>
-        <location filename="../mainwindow.cpp" line="584"/>
+        <location filename="../mainwindow.cpp" line="403"/>
+        <location filename="../mainwindow.cpp" line="479"/>
+        <location filename="../mainwindow.cpp" line="484"/>
+        <location filename="../mainwindow.cpp" line="515"/>
+        <location filename="../mainwindow.cpp" line="541"/>
         <source>XML files (*.xml)</source>
         <translation>XML 文件(*.xml)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1619"/>
+        <location filename="../mainwindow.cpp" line="1585"/>
         <source>Capture Error:<byte value="xd"/>
 %1</source>
         <translation>捕获错误：
@@ -3483,21 +3435,6 @@ Script.onInit(()=&gt;{
         <location filename="../modbustcpserver.cpp" line="186"/>
         <source>Could not write response to client</source>
         <translation>无法写入对客户端的响应</translation>
-    </message>
-</context>
-<context>
-    <name>QObject</name>
-    <message>
-        <source>Displays this help.</source>
-        <translation type="obsolete">显示这个帮助。</translation>
-    </message>
-    <message>
-        <source>Displays version information.</source>
-        <translation type="obsolete">显示版本信息</translation>
-    </message>
-    <message>
-        <source>Setup test config file.</source>
-        <translation type="obsolete">设定测试配置文件。</translation>
     </message>
 </context>
 <context>

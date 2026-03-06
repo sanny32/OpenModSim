@@ -29,7 +29,10 @@ public:
 
     void setLanguage(const QString& lang);
     void applyAutoComplete(bool enable);
+    void applyFont(const QFont& font);
     void applyScriptFont(const QFont& font);
+    void applyZoom(int zoomPercent);
+    void applyColors(const QColor& bg, const QColor& fg, const QColor& status);
 
     void loadConfig(const QString& filename, bool startup = false);
     void saveConfig(const QString& filename, SerializationFormat format);
@@ -124,12 +127,6 @@ private slots:
     void on_actionForeground_triggered();
     void on_actionStatus_triggered();
     void on_actionFont_triggered();
-
-    /* Language menu slots */
-    void on_actionEnglish_triggered();
-    void on_actionRussian_triggered();
-    void on_actionChineseCN_triggered();
-    void on_actionChineseTW_triggered();
 
     /* Window menu slots */
     void on_actionCascade_triggered();

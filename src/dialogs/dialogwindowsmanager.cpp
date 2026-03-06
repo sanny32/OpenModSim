@@ -53,6 +53,17 @@ DialogWindowsManager::~DialogWindowsManager()
 }
 
 ///
+/// rief DialogWindowsManager::changeEvent
+///
+void DialogWindowsManager::changeEvent(QEvent* event)
+{
+    if (event->type() == QEvent::LanguageChange)
+        ui->retranslateUi(this);
+
+    QDialog::changeEvent(event);
+}
+
+///
 /// \brief DialogWindowsManager::activateWindow
 /// \param item
 ///

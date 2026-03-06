@@ -26,6 +26,9 @@ public:
 
     void accept() override;
 
+protected:
+    void changeEvent(QEvent* event) override;
+
 private slots:
     void on_pushButton0_clicked();
     void on_pushButtonRandom_clicked();

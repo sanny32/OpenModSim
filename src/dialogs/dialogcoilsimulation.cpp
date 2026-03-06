@@ -35,6 +35,17 @@ DialogCoilSimulation::~DialogCoilSimulation()
 }
 
 ///
+/// rief DialogCoilSimulation::changeEvent
+///
+void DialogCoilSimulation::changeEvent(QEvent* event)
+{
+    if (event->type() == QEvent::LanguageChange)
+        ui->retranslateUi(this);
+
+    QDialog::changeEvent(event);
+}
+
+///
 /// \brief DialogCoilSimulation::accept
 ///
 void DialogCoilSimulation::accept()

@@ -1,5 +1,6 @@
 #include <QtWidgets>
 #include "colorswatch.h"
+#include "controls/addressbasecombobox.h"
 #include "dialogpreferences.h"
 #include "mainwindow.h"
 #include "ui_dialogpreferences.h"
@@ -14,55 +15,50 @@ DialogPreferences::DialogPreferences(MainWindow* mainWindow, QWidget* parent)
 {
     ui->setupUi(this);
 
-    // Uniform item height
     for (int i = 0; i < ui->listWidget->count(); ++i)
         ui->listWidget->item(i)->setSizeHint(QSize(0, 28));
 
-    // Language items (need userData for findData())
-    ui->langCombo->addItem("English",                       "en");
-    ui->langCombo->addItem(QString::fromUtf8("Русский"),    "ru");
-    ui->langCombo->addItem(QString::fromUtf8("简体中文"),    "zh_CN");
-    ui->langCombo->addItem(QString::fromUtf8("繁體中文"),    "zh_TW");
+    ui->comboBoxLanguage->addItem("English",                       "en");
+    ui->comboBoxLanguage->addItem(QString::fromUtf8("Русский"),    "ru");
+    ui->comboBoxLanguage->addItem(QString::fromUtf8("简体中文"),    "zh_CN");
+    ui->comboBoxLanguage->addItem(QString::fromUtf8("繁體中文"),    "zh_TW");
 
-    // Display font: restrict to monospace only
-    ui->fontFamilyCombo->setFontFilters(QFontComboBox::MonospacedFonts);
-    // Script editor: show all fonts so the bundled Fira Code is always available
+    ui->fontComboBoxFont->setFontFilters(QFontComboBox::MonospacedFonts);
 
-    // Color button connections
-    connect(ui->bgColorBtn, &QPushButton::clicked, this, [this]() {
+    connect(ui->pushButtonBackgroundColor, &QPushButton::clicked, this, [this]() {
         QColorDialog dlg(_bgColor, this);
         if (dlg.exec() == QDialog::Accepted) {
             _bgColor = dlg.currentColor();
-            ui->bgColorBtn->setColor(_bgColor);
+            ui->pushButtonBackgroundColor->setColor(_bgColor);
         }
     });
-    connect(ui->bgResetBtn, &QPushButton::clicked, this, [this]() {
+    connect(ui->pushButtonResetBackgroundColor, &QPushButton::clicked, this, [this]() {
         _bgColor = Qt::white;
-        ui->bgColorBtn->setColor(_bgColor);
+        ui->pushButtonBackgroundColor->setColor(_bgColor);
     });
 
-    connect(ui->fgColorBtn, &QPushButton::clicked, this, [this]() {
+    connect(ui->pushButtonForegroundColor, &QPushButton::clicked, this, [this]() {
         QColorDialog dlg(_fgColor, this);
         if (dlg.exec() == QDialog::Accepted) {
             _fgColor = dlg.currentColor();
-            ui->fgColorBtn->setColor(_fgColor);
+            ui->pushButtonForegroundColor->setColor(_fgColor);
         }
     });
-    connect(ui->fgResetBtn, &QPushButton::clicked, this, [this]() {
+    connect(ui->pushButtonResetForegroundColor, &QPushButton::clicked, this, [this]() {
         _fgColor = Qt::black;
-        ui->fgColorBtn->setColor(_fgColor);
+        ui->pushButtonForegroundColor->setColor(_fgColor);
     });
 
-    connect(ui->statusColorBtn, &QPushButton::clicked, this, [this]() {
+    connect(ui->pushButtonStatusColor, &QPushButton::clicked, this, [this]() {
         QColorDialog dlg(_statusColor, this);
         if (dlg.exec() == QDialog::Accepted) {
             _statusColor = dlg.currentColor();
-            ui->statusColorBtn->setColor(_statusColor);
+            ui->pushButtonStatusColor->setColor(_statusColor);
         }
     });
-    connect(ui->statusResetBtn, &QPushButton::clicked, this, [this]() {
+    connect(ui->pushButtonResetStatusColor, &QPushButton::clicked, this, [this]() {
         _statusColor = Qt::red;
-        ui->statusColorBtn->setColor(_statusColor);
+        ui->pushButtonStatusColor->setColor(_statusColor);
     });
 
     connect(ui->listWidget, &QListWidget::currentRowChanged,
@@ -79,6 +75,17 @@ DialogPreferences::DialogPreferences(MainWindow* mainWindow, QWidget* parent)
 DialogPreferences::~DialogPreferences()
 {
     delete ui;
+}
+
+///
+/// rief DialogPreferences::changeEvent
+///
+void DialogPreferences::changeEvent(QEvent* event)
+{
+    if (event->type() == QEvent::LanguageChange)
+        ui->retranslateUi(this);
+
+    QDialog::changeEvent(event);
 }
 
 ///
@@ -109,10 +116,6 @@ void DialogPreferences::on_listWidget_currentRowChanged(int row)
         ui->labelTitle->setText(item->text());
 }
 
-// ----------------------------------------------------------------
-//  Load / Apply
-// ----------------------------------------------------------------
-
 ///
 /// \brief DialogPreferences::loadFromPreferences
 ///
@@ -124,39 +127,39 @@ void DialogPreferences::loadFromPreferences()
     _bgColor     = prefs.backgroundColor();
     _fgColor     = prefs.foregroundColor();
     _statusColor = prefs.statusColor();
-    ui->bgColorBtn->setColor(_bgColor);
-    ui->fgColorBtn->setColor(_fgColor);
-    ui->statusColorBtn->setColor(_statusColor);
+    ui->pushButtonBackgroundColor->setColor(_bgColor);
+    ui->pushButtonForegroundColor->setColor(_fgColor);
+    ui->pushButtonStatusColor->setColor(_statusColor);
 
     // Interface — language
-    const int langIdx = ui->langCombo->findData(prefs.language());
-    ui->langCombo->setCurrentIndex(langIdx >= 0 ? langIdx : 0);
+    const int langIdx = ui->comboBoxLanguage->findData(prefs.language());
+    ui->comboBoxLanguage->setCurrentIndex(langIdx >= 0 ? langIdx : 0);
 
     // Interface — font
     const QFont& f = prefs.font();
-    ui->fontFamilyCombo->setCurrentFont(f);
-    ui->fontSizeSpinBox->setValue(f.pointSize() > 0 ? f.pointSize() : 10);
-    ui->fontZoomSpinBox->setValue(prefs.fontZoom());
-    ui->fontAntialiasCheck->setChecked(!(f.styleStrategy() & QFont::NoAntialias));
+    ui->fontComboBoxFont->setCurrentFont(f);
+    ui->spinBoxFontSize->setValue(f.pointSize() > 0 ? f.pointSize() : 10);
+    ui->spinBoxFontZoom->setValue(prefs.fontZoom());
+    ui->checkBoxFontAntialias->setChecked(!(f.styleStrategy() & QFont::NoAntialias));
 
     // Display
     const auto& dd = prefs.displayDefinition();
-    ui->zeroBasedAddrCheck->setChecked(dd.ZeroBasedAddress);
-    ui->hexAddressCheck->setChecked(dd.HexAddress);
-    ui->leadingZerosCheck->setChecked(dd.LeadingZeros);
-    ui->colsDistSpinBox->setValue(dd.DataViewColumnsDistance);
-    ui->autoscrollCheck->setChecked(dd.AutoscrollLog);
-    ui->verboseLoggingCheck->setChecked(dd.VerboseLogging);
-    ui->logLimitSpinBox->setValue(dd.LogViewLimit);
+    ui->comboBoxAddressBase->setCurrentAddressBase(dd.ZeroBasedAddress ? AddressBase::Base0 : AddressBase::Base1);
+    ui->checkBoxHexAddress->setChecked(dd.HexAddress);
+    ui->checkBoxLeadingZeros->setChecked(dd.LeadingZeros);
+    ui->spinBoxColumnsDistance->setValue(dd.DataViewColumnsDistance);
+    ui->checkBoxAutoscrollLog->setChecked(dd.AutoscrollLog);
+    ui->checkBoxVerboseLogging->setChecked(dd.VerboseLogging);
+    ui->spinBoxLogLimit->setValue(dd.LogViewLimit);
 
     // Script — font
     const QFont& sf = prefs.scriptFont();
-    ui->scriptFontFamilyCombo->setCurrentFont(sf);
-    ui->scriptFontSizeSpinBox->setValue(sf.pointSize() > 0 ? sf.pointSize() : 10);
-    ui->scriptFontAntialiasCheck->setChecked(!(sf.styleStrategy() & QFont::NoAntialias));
+    ui->fontComboBoxScriptFont->setCurrentFont(sf);
+    ui->spinBoxScriptFontSize->setValue(sf.pointSize() > 0 ? sf.pointSize() : 10);
+    ui->checkBoxScriptFontAntialias->setChecked(!(sf.styleStrategy() & QFont::NoAntialias));
 
     // Script — editor
-    ui->autoCompleteCheck->setChecked(prefs.codeAutoComplete());
+    ui->checkBoxAutoComplete->setChecked(prefs.codeAutoComplete());
 
     on_listWidget_currentRowChanged(ui->listWidget->currentRow());
 }
@@ -172,44 +175,43 @@ void DialogPreferences::apply()
     prefs.setBackgroundColor(_bgColor);
     prefs.setForegroundColor(_fgColor);
     prefs.setStatusColor(_statusColor);
+    if (_mainWindow) _mainWindow->applyColors(_bgColor, _fgColor, _statusColor);
 
     // Interface — language
-    const QString lang = ui->langCombo->currentData().toString();
+    const QString lang = ui->comboBoxLanguage->currentData().toString();
     prefs.setLanguage(lang);
-    if (_mainWindow)
-        _mainWindow->setLanguage(lang);
+    if (_mainWindow) _mainWindow->setLanguage(lang);
 
     // Interface — font
-    prefs.setFont(fontFromControls(ui->fontFamilyCombo, ui->fontSizeSpinBox, ui->fontAntialiasCheck));
-    prefs.setFontZoom(ui->fontZoomSpinBox->value());
+    const QFont displayFont = fontFromControls(ui->fontComboBoxFont, ui->spinBoxFontSize, ui->checkBoxFontAntialias);
+    prefs.setFont(displayFont);
+    prefs.setFontZoom(ui->spinBoxFontZoom->value());
+    if (_mainWindow) {
+        _mainWindow->applyFont(displayFont);
+        _mainWindow->applyZoom(ui->spinBoxFontZoom->value());
+    }
 
     // Display
     DisplayDefinition dd = prefs.displayDefinition();
-    dd.ZeroBasedAddress        = ui->zeroBasedAddrCheck->isChecked();
-    dd.HexAddress              = ui->hexAddressCheck->isChecked();
-    dd.LeadingZeros            = ui->leadingZerosCheck->isChecked();
-    dd.DataViewColumnsDistance = ui->colsDistSpinBox->value();
-    dd.AutoscrollLog           = ui->autoscrollCheck->isChecked();
-    dd.VerboseLogging          = ui->verboseLoggingCheck->isChecked();
-    dd.LogViewLimit            = ui->logLimitSpinBox->value();
+    dd.ZeroBasedAddress        = (ui->comboBoxAddressBase->currentAddressBase() == AddressBase::Base0);
+    dd.HexAddress              = ui->checkBoxHexAddress->isChecked();
+    dd.LeadingZeros            = ui->checkBoxLeadingZeros->isChecked();
+    dd.DataViewColumnsDistance = ui->spinBoxColumnsDistance->value();
+    dd.AutoscrollLog           = ui->checkBoxAutoscrollLog->isChecked();
+    dd.VerboseLogging          = ui->checkBoxVerboseLogging->isChecked();
+    dd.LogViewLimit            = ui->spinBoxLogLimit->value();
     prefs.setDisplayDefinition(dd);
 
     // Script — font
-    const QFont scriptFont = fontFromControls(ui->scriptFontFamilyCombo, ui->scriptFontSizeSpinBox, ui->scriptFontAntialiasCheck);
+    const QFont scriptFont = fontFromControls(ui->fontComboBoxScriptFont, ui->spinBoxScriptFontSize, ui->checkBoxScriptFontAntialias);
     prefs.setScriptFont(scriptFont);
-    if (_mainWindow)
-        _mainWindow->applyScriptFont(scriptFont);
+    if (_mainWindow) _mainWindow->applyScriptFont(scriptFont);
 
     // Script — editor
-    const bool autoComplete = ui->autoCompleteCheck->isChecked();
+    const bool autoComplete = ui->checkBoxAutoComplete->isChecked();
     prefs.setCodeAutoComplete(autoComplete);
-    if (_mainWindow)
-        _mainWindow->applyAutoComplete(autoComplete);
+    if (_mainWindow) _mainWindow->applyAutoComplete(autoComplete);
 }
-
-// ----------------------------------------------------------------
-//  Helpers
-// ----------------------------------------------------------------
 
 ///
 /// \brief DialogPreferences::fontFromControls

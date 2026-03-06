@@ -167,6 +167,17 @@ DialogAbout::~DialogAbout()
 }
 
 ///
+/// rief DialogAbout::changeEvent
+///
+void DialogAbout::changeEvent(QEvent* event)
+{
+    if (event->type() == QEvent::LanguageChange)
+        ui->retranslateUi(this);
+
+    QDialog::changeEvent(event);
+}
+
+///
 /// \brief DialogAbout::adjustSize
 ///
 void DialogAbout::adjustSize()

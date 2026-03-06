@@ -18,6 +18,9 @@ public:
 
     void accept() override;
 
+protected:
+    void changeEvent(QEvent* event) override;
+
 private:
     Ui::DialogSelectServicePort *ui;
     TcpConnectionParams& _params;

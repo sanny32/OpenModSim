@@ -32,6 +32,17 @@ DialogSetupSerialPort::~DialogSetupSerialPort()
 }
 
 ///
+/// rief DialogSetupSerialPort::changeEvent
+///
+void DialogSetupSerialPort::changeEvent(QEvent* event)
+{
+    if (event->type() == QEvent::LanguageChange)
+        ui->retranslateUi(this);
+
+    QDialog::changeEvent(event);
+}
+
+///
 /// \brief DialogSetupSerialPort::accept
 ///
 void DialogSetupSerialPort::accept()

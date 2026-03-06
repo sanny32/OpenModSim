@@ -59,6 +59,17 @@ DialogModbusDefinitions::~DialogModbusDefinitions()
 }
 
 ///
+/// rief DialogModbusDefinitions::changeEvent
+///
+void DialogModbusDefinitions::changeEvent(QEvent* event)
+{
+    if (event->type() == QEvent::LanguageChange)
+        ui->retranslateUi(this);
+
+    QDialog::changeEvent(event);
+}
+
+///
 /// \brief DialogModbusDefinitions::accept
 ///
 void DialogModbusDefinitions::accept()

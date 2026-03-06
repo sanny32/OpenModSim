@@ -54,6 +54,17 @@ DialogDisplayDefinition::~DialogDisplayDefinition()
 }
 
 ///
+/// rief DialogDisplayDefinition::changeEvent
+///
+void DialogDisplayDefinition::changeEvent(QEvent* event)
+{
+    if (event->type() == QEvent::LanguageChange)
+        ui->retranslateUi(this);
+
+    QDialog::changeEvent(event);
+}
+
+///
 /// \brief DialogDisplayDefinition::eventFilter
 /// \param obj
 /// \param event

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>680</width>
-    <height>480</height>
+    <height>496</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -67,7 +67,7 @@
          </property>
          <property name="icon">
           <iconset resource="../resources.qrc">
-           <normaloff>:/res/pref-interface.svg</normaloff>:/res/pref-interface.svg</iconset>
+           <normaloff>:/res/pref-interface.png</normaloff>:/res/pref-interface.png</iconset>
          </property>
         </item>
         <item>
@@ -76,7 +76,7 @@
          </property>
          <property name="icon">
           <iconset resource="../resources.qrc">
-           <normaloff>:/res/pref-display.svg</normaloff>:/res/pref-display.svg</iconset>
+           <normaloff>:/res/actionDefineData.png</normaloff>:/res/actionDefineData.png</iconset>
          </property>
         </item>
         <item>
@@ -85,7 +85,7 @@
          </property>
          <property name="icon">
           <iconset resource="../resources.qrc">
-           <normaloff>:/res/pref-script.svg</normaloff>:/res/pref-script.svg</iconset>
+           <normaloff>:/res/actionShowScript.png</normaloff>:/res/actionShowScript.png</iconset>
          </property>
         </item>
        </widget>
@@ -127,8 +127,11 @@
          </item>
          <item>
           <widget class="QStackedWidget" name="stackedWidget">
+           <property name="autoFillBackground">
+            <bool>true</bool>
+           </property>
            <property name="currentIndex">
-            <number>0</number>
+            <number>1</number>
            </property>
            <widget class="QWidget" name="pageInterface">
             <layout class="QVBoxLayout" name="vlInterface">
@@ -148,7 +151,7 @@
               <number>12</number>
              </property>
              <item>
-              <widget class="QGroupBox" name="groupUserInterface">
+              <widget class="QGroupBox" name="groupBoxUserInterface">
                <property name="title">
                 <string>User Interface</string>
                </property>
@@ -163,7 +166,7 @@
                  <number>8</number>
                 </property>
                 <item row="0" column="0">
-                 <widget class="QLabel" name="labelBgColor">
+                 <widget class="QLabel" name="labelBackgroundColor">
                   <property name="text">
                    <string>Background Color:</string>
                   </property>
@@ -175,14 +178,14 @@
                    <number>6</number>
                   </property>
                   <item>
-                   <widget class="ColorSwatch" name="bgColorBtn">
+                   <widget class="ColorSwatch" name="pushButtonBackgroundColor">
                     <property name="text">
                      <string/>
                     </property>
                    </widget>
                   </item>
                   <item>
-                   <widget class="QPushButton" name="bgResetBtn">
+                   <widget class="QPushButton" name="pushButtonResetBackgroundColor">
                     <property name="minimumSize">
                      <size>
                       <width>60</width>
@@ -216,7 +219,7 @@
                  </layout>
                 </item>
                 <item row="1" column="0">
-                 <widget class="QLabel" name="labelFgColor">
+                 <widget class="QLabel" name="labelForegroundColor">
                   <property name="text">
                    <string>Foreground Color:</string>
                   </property>
@@ -228,14 +231,14 @@
                    <number>6</number>
                   </property>
                   <item>
-                   <widget class="ColorSwatch" name="fgColorBtn">
+                   <widget class="ColorSwatch" name="pushButtonForegroundColor">
                     <property name="text">
                      <string/>
                     </property>
                    </widget>
                   </item>
                   <item>
-                   <widget class="QPushButton" name="fgResetBtn">
+                   <widget class="QPushButton" name="pushButtonResetForegroundColor">
                     <property name="minimumSize">
                      <size>
                       <width>60</width>
@@ -281,14 +284,14 @@
                    <number>6</number>
                   </property>
                   <item>
-                   <widget class="ColorSwatch" name="statusColorBtn">
+                   <widget class="ColorSwatch" name="pushButtonStatusColor">
                     <property name="text">
                      <string/>
                     </property>
                    </widget>
                   </item>
                   <item>
-                   <widget class="QPushButton" name="statusResetBtn">
+                   <widget class="QPushButton" name="pushButtonResetStatusColor">
                     <property name="minimumSize">
                      <size>
                       <width>60</width>
@@ -329,13 +332,13 @@
                  </widget>
                 </item>
                 <item row="3" column="1">
-                 <widget class="QComboBox" name="langCombo"/>
+                 <widget class="QComboBox" name="comboBoxLanguage"/>
                 </item>
                </layout>
               </widget>
              </item>
              <item>
-              <widget class="QGroupBox" name="groupFont">
+              <widget class="QGroupBox" name="groupBoxFont">
                <property name="title">
                 <string>Font</string>
                </property>
@@ -362,7 +365,7 @@
                    <number>6</number>
                   </property>
                   <item>
-                   <widget class="QFontComboBox" name="fontFamilyCombo">
+                   <widget class="QFontComboBox" name="fontComboBoxFont">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
                       <horstretch>1</horstretch>
@@ -379,7 +382,7 @@
                    </widget>
                   </item>
                   <item>
-                   <widget class="QSpinBox" name="fontSizeSpinBox">
+                   <widget class="QSpinBox" name="spinBoxFontSize">
                     <property name="minimumSize">
                      <size>
                       <width>56</width>
@@ -411,7 +414,7 @@
                    </widget>
                   </item>
                   <item>
-                   <widget class="QSpinBox" name="fontZoomSpinBox">
+                   <widget class="QSpinBox" name="spinBoxFontZoom">
                     <property name="minimumSize">
                      <size>
                       <width>72</width>
@@ -431,10 +434,13 @@
                      <string>%</string>
                     </property>
                     <property name="minimum">
-                     <number>10</number>
+                     <number>50</number>
                     </property>
                     <property name="maximum">
-                     <number>400</number>
+                     <number>300</number>
+                    </property>
+                    <property name="singleStep">
+                     <number>10</number>
                     </property>
                     <property name="value">
                      <number>100</number>
@@ -444,7 +450,7 @@
                  </layout>
                 </item>
                 <item row="1" column="1">
-                 <widget class="QCheckBox" name="fontAntialiasCheck">
+                 <widget class="QCheckBox" name="checkBoxFontAntialias">
                   <property name="text">
                    <string>Antialias</string>
                   </property>
@@ -486,7 +492,7 @@
               <number>12</number>
              </property>
              <item>
-              <widget class="QGroupBox" name="groupDataDisplay">
+              <widget class="QGroupBox" name="groupBoxDataDisplay">
                <property name="title">
                 <string>Data Display</string>
                </property>
@@ -497,36 +503,46 @@
                 <property name="verticalSpacing">
                  <number>8</number>
                 </property>
-                <item row="0" column="0" colspan="2">
-                 <widget class="QCheckBox" name="zeroBasedAddrCheck">
+                <item row="0" column="0">
+                 <widget class="QLabel" name="labelAddressBase">
                   <property name="text">
-                   <string>Zero Based Address</string>
+                   <string>Address Base:</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="1">
+                 <widget class="AddressBaseComboBox" name="comboBoxAddressBase">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
                   </property>
                  </widget>
                 </item>
                 <item row="1" column="0" colspan="2">
-                 <widget class="QCheckBox" name="hexAddressCheck">
+                 <widget class="QCheckBox" name="checkBoxHexAddress">
                   <property name="text">
                    <string>Hex Address</string>
                   </property>
                  </widget>
                 </item>
                 <item row="2" column="0" colspan="2">
-                 <widget class="QCheckBox" name="leadingZerosCheck">
+                 <widget class="QCheckBox" name="checkBoxLeadingZeros">
                   <property name="text">
                    <string>Leading Zeros</string>
                   </property>
                  </widget>
                 </item>
                 <item row="3" column="0">
-                 <widget class="QLabel" name="labelColsDistance">
+                 <widget class="QLabel" name="labelColumnsDistance">
                   <property name="text">
                    <string>Columns Distance:</string>
                   </property>
                  </widget>
                 </item>
                 <item row="3" column="1">
-                 <widget class="QSpinBox" name="colsDistSpinBox">
+                 <widget class="QSpinBox" name="spinBoxColumnsDistance">
                   <property name="minimumSize">
                    <size>
                     <width>80</width>
@@ -554,7 +570,7 @@
               </widget>
              </item>
              <item>
-              <widget class="QGroupBox" name="groupLogView">
+              <widget class="QGroupBox" name="groupBoxLogView">
                <property name="title">
                 <string>Log View</string>
                </property>
@@ -566,14 +582,14 @@
                  <number>8</number>
                 </property>
                 <item row="0" column="0" colspan="2">
-                 <widget class="QCheckBox" name="autoscrollCheck">
+                 <widget class="QCheckBox" name="checkBoxAutoscrollLog">
                   <property name="text">
                    <string>Autoscroll</string>
                   </property>
                  </widget>
                 </item>
                 <item row="1" column="0" colspan="2">
-                 <widget class="QCheckBox" name="verboseLoggingCheck">
+                 <widget class="QCheckBox" name="checkBoxVerboseLogging">
                   <property name="text">
                    <string>Verbose Logging</string>
                   </property>
@@ -587,7 +603,7 @@
                  </widget>
                 </item>
                 <item row="2" column="1">
-                 <widget class="QSpinBox" name="logLimitSpinBox">
+                 <widget class="QSpinBox" name="spinBoxLogLimit">
                   <property name="minimumSize">
                    <size>
                     <width>80</width>
@@ -615,7 +631,7 @@
               </widget>
              </item>
              <item>
-              <spacer name="vsDisplay">
+              <spacer name="verticalSpacer">
                <property name="orientation">
                 <enum>Qt::Orientation::Vertical</enum>
                </property>
@@ -626,6 +642,46 @@
                 </size>
                </property>
               </spacer>
+             </item>
+             <item>
+              <widget class="QFrame" name="frameDisplayNote">
+               <property name="styleSheet">
+                <string notr="true">background-color: #E8F4FD; border: 1px solid #B8D9F0; border-radius: 4px;</string>
+               </property>
+               <property name="frameShape">
+                <enum>QFrame::Shape::StyledPanel</enum>
+               </property>
+               <property name="frameShadow">
+                <enum>QFrame::Shadow::Plain</enum>
+               </property>
+               <layout class="QHBoxLayout" name="hlDisplayNote">
+                <property name="leftMargin">
+                 <number>8</number>
+                </property>
+                <property name="topMargin">
+                 <number>6</number>
+                </property>
+                <property name="rightMargin">
+                 <number>8</number>
+                </property>
+                <property name="bottomMargin">
+                 <number>6</number>
+                </property>
+                <item>
+                 <widget class="QLabel" name="labelDisplayNote">
+                  <property name="styleSheet">
+                   <string notr="true">border: none;</string>
+                  </property>
+                  <property name="text">
+                   <string>&lt;b&gt;Note:&lt;/b&gt; These settings apply to newly opened windows only.</string>
+                  </property>
+                  <property name="wordWrap">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </widget>
              </item>
             </layout>
            </widget>
@@ -647,7 +703,7 @@
               <number>12</number>
              </property>
              <item>
-              <widget class="QGroupBox" name="groupScriptFont">
+              <widget class="QGroupBox" name="groupBoxScriptFont">
                <property name="title">
                 <string>Font</string>
                </property>
@@ -674,7 +730,7 @@
                    <number>6</number>
                   </property>
                   <item>
-                   <widget class="QFontComboBox" name="scriptFontFamilyCombo">
+                   <widget class="QFontComboBox" name="fontComboBoxScriptFont">
                     <property name="sizePolicy">
                      <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
                       <horstretch>1</horstretch>
@@ -691,7 +747,7 @@
                    </widget>
                   </item>
                   <item>
-                   <widget class="QSpinBox" name="scriptFontSizeSpinBox">
+                   <widget class="QSpinBox" name="spinBoxScriptFontSize">
                     <property name="minimumSize">
                      <size>
                       <width>56</width>
@@ -718,7 +774,7 @@
                  </layout>
                 </item>
                 <item row="1" column="1">
-                 <widget class="QCheckBox" name="scriptFontAntialiasCheck">
+                 <widget class="QCheckBox" name="checkBoxScriptFontAntialias">
                   <property name="text">
                    <string>Antialias</string>
                   </property>
@@ -728,13 +784,13 @@
               </widget>
              </item>
              <item>
-              <widget class="QGroupBox" name="groupEditor">
+              <widget class="QGroupBox" name="groupBoxEditor">
                <property name="title">
                 <string>Editor</string>
                </property>
                <layout class="QVBoxLayout" name="vlEditor">
                 <item>
-                 <widget class="QCheckBox" name="autoCompleteCheck">
+                 <widget class="QCheckBox" name="checkBoxAutoComplete">
                   <property name="text">
                    <string>Enable code auto-complete</string>
                   </property>
@@ -786,6 +842,11 @@
   </layout>
  </widget>
  <customwidgets>
+  <customwidget>
+   <class>AddressBaseComboBox</class>
+   <extends>QComboBox</extends>
+   <header>addressbasecombobox.h</header>
+  </customwidget>
   <customwidget>
    <class>ColorSwatch</class>
    <extends>QPushButton</extends>

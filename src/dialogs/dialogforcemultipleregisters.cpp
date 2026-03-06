@@ -176,6 +176,17 @@ DialogForceMultipleRegisters::~DialogForceMultipleRegisters()
 }
 
 ///
+/// rief DialogForceMultipleRegisters::changeEvent
+///
+void DialogForceMultipleRegisters::changeEvent(QEvent* event)
+{
+    if (event->type() == QEvent::LanguageChange)
+        ui->retranslateUi(this);
+
+    QDialog::changeEvent(event);
+}
+
+///
 /// \brief DialogForceMultipleRegisters::applyValue
 /// \param value
 /// \param index

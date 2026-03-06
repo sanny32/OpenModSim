@@ -32,6 +32,9 @@ public:
 
     void accept() override;
 
+protected:
+    void changeEvent(QEvent* event) override;
+
 private slots:
     void on_lineEditAddress_valueChanged(const QVariant&);
 

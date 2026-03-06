@@ -194,6 +194,17 @@ DialogWriteRegister::~DialogWriteRegister()
 }
 
 ///
+/// rief DialogWriteRegister::changeEvent
+///
+void DialogWriteRegister::changeEvent(QEvent* event)
+{
+    if (event->type() == QEvent::LanguageChange)
+        ui->retranslateUi(this);
+
+    QDialog::changeEvent(event);
+}
+
+///
 /// \brief DialogWriteRegister::accept
 ///
 void DialogWriteRegister::accept()

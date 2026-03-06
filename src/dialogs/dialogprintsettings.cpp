@@ -39,6 +39,17 @@ DialogPrintSettings::~DialogPrintSettings()
 }
 
 ///
+/// rief DialogPrintSettings::changeEvent
+///
+void DialogPrintSettings::changeEvent(QEvent* event)
+{
+    if (event->type() == QEvent::LanguageChange)
+        ui->retranslateUi(this);
+
+    QDialog::changeEvent(event);
+}
+
+///
 /// \brief DialogPrintSettings::accept
 ///
 void DialogPrintSettings::accept()

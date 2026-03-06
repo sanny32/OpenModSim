@@ -20,6 +20,9 @@ public:
     explicit DialogWindowsManager(const QList<QAction*>& actions, QAction* saveAction, QWidget *parent = nullptr);
     ~DialogWindowsManager();
 
+protected:
+    void changeEvent(QEvent* event) override;
+
 private slots:
     void on_pushButtonActivate_clicked();
     void on_pushButtonSave_clicked();

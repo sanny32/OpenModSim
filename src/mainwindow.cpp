@@ -27,43 +27,6 @@
 static QString getSettingsFilePath();
 
 ///
-/// \brief availableTranslations
-/// \return
-///
-static QStringList availableTranslations()
-{
-    QStringList locales;
-    const QStringList files = QDir(":/translations").entryList(QStringList() << "*.qm", QDir::Files);
-
-    for (auto file : files) {
-        locales << file.remove("omodsim_").remove(".qm");
-    }
-
-    return locales;
-}
-
-///
-/// \brief translationLang
-/// \return
-///
-static QString translationLang()
-{
-    const QStringList locales = availableTranslations();
-    const QString sysLocale = QLocale::system().name();
-
-    for (const QString &pattern : locales) {
-        const QString regexPattern = QString("%1.*").arg(pattern);
-        QRegularExpression re("^" + regexPattern + "$", QRegularExpression::CaseInsensitiveOption);
-
-        if(re.match(sysLocale).hasMatch()) {
-            return pattern;
-        }
-    }
-
-    return "en";
-}
-
-///
 /// \brief MainWindow::MainWindow
 /// \param profile
 /// \param useSession
@@ -326,11 +289,6 @@ void MainWindow::on_awake()
     ui->actionStatusBar->setChecked(statusBar()->isVisible());
     ui->actionDisplayBar->setChecked(ui->toolBarDisplay->isVisible());
     ui->actionScriptBar->setChecked(ui->toolBarScript->isVisible());
-    ui->actionEnglish->setChecked(_lang == "en");
-    ui->actionRussian->setChecked(_lang == "ru");
-    ui->actionChineseCN->setChecked(_lang == "zh_CN");
-    ui->actionChineseTW->setChecked(_lang == "zh_TW");
-
     ui->actionScriptHelp->setChecked(_helpDockWidget->isVisible());
     ui->actionScriptHelp->setVisible(frm && frm->displayMode() == DisplayMode::Script);
     ui->actionConsoleOutput->setVisible(frm && frm->displayMode() == DisplayMode::Script);
@@ -400,28 +358,27 @@ void MainWindow::on_actionNew_triggered()
     const auto cur = currentMdiChild();
     auto frm = createMdiChild(++_windowCounter);
 
+    const auto& prefs = AppPreferences::instance();
+
     if(cur) {
         frm->setByteOrder(cur->byteOrder());
         frm->setDataDisplayMode(cur->dataDisplayMode());
-
-        auto dd = cur->displayDefinition();
-        dd.FormName = frm->displayDefinition().FormName;
-        frm->setDisplayDefinition(dd);
-
         frm->setFont(cur->font());
         frm->setStatusColor(cur->statusColor());
         frm->setBackgroundColor(cur->backgroundColor());
         frm->setForegroundColor(cur->foregroundColor());
     }
     else {
-        const auto& prefs = AppPreferences::instance();
         frm->setFont(prefs.font());
-        frm->setZoomPercent(prefs.fontZoom());
         frm->setBackgroundColor(prefs.backgroundColor());
         frm->setForegroundColor(prefs.foregroundColor());
         frm->setStatusColor(prefs.statusColor());
         frm->setScriptFont(prefs.scriptFont());
+    }
+    frm->setZoomPercent(prefs.fontZoom());
 
+    // Display definition always comes from application preferences
+    {
         auto dd = frm->displayDefinition();
         const auto& prefDd = prefs.displayDefinition();
         dd.ZeroBasedAddress        = prefDd.ZeroBasedAddress;
@@ -717,11 +674,52 @@ void MainWindow::applyAutoComplete(bool enable)
 /// \brief MainWindow::applyScriptFont
 /// \param font
 ///
+void MainWindow::applyFont(const QFont& font)
+{
+    for (auto&& wnd : ui->mdiArea->subWindowList()) {
+        if (auto frm = qobject_cast<FormModSim*>(wnd->widget()))
+            frm->setFont(font);
+    }
+}
+
+///
+/// \brief MainWindow::applyScriptFont
+/// \param font
+///
 void MainWindow::applyScriptFont(const QFont& font)
 {
     for (auto&& wnd : ui->mdiArea->subWindowList()) {
         if (auto frm = qobject_cast<FormModSim*>(wnd->widget()))
             frm->setScriptFont(font);
+    }
+}
+
+///
+/// \brief MainWindow::applyColors
+/// \param bg
+/// \param fg
+/// \param status
+///
+void MainWindow::applyColors(const QColor& bg, const QColor& fg, const QColor& status)
+{
+    for (auto&& wnd : ui->mdiArea->subWindowList()) {
+        if (auto frm = qobject_cast<FormModSim*>(wnd->widget())) {
+            frm->setBackgroundColor(bg);
+            frm->setForegroundColor(fg);
+            frm->setStatusColor(status);
+        }
+    }
+}
+
+///
+/// \brief MainWindow::applyZoom
+/// \param zoomPercent
+///
+void MainWindow::applyZoom(int zoomPercent)
+{
+    for (auto&& wnd : ui->mdiArea->subWindowList()) {
+        if (auto frm = qobject_cast<FormModSim*>(wnd->widget()))
+            frm->setZoomPercent(zoomPercent);
     }
 }
 
@@ -1252,38 +1250,6 @@ void MainWindow::on_actionFont_triggered()
     {
         frm->setFont(dlg.currentFont());
     }
-}
-
-///
-/// \brief MainWindow::on_actionEnglish_triggered
-///
-void MainWindow::on_actionEnglish_triggered()
-{
-    setLanguage("en");
-}
-
-///
-/// \brief MainWindow::on_actionRussian_triggered
-///
-void MainWindow::on_actionRussian_triggered()
-{
-   setLanguage("ru");
-}
-
-///
-/// \brief MainWindow::on_actionChineseCN_triggered
-///
-void MainWindow::on_actionChineseCN_triggered()
-{
-    setLanguage("zh_CN");
-}
-
-///
-/// \brief MainWindow::on_actionChineseTW_triggered
-///
-void MainWindow::on_actionChineseTW_triggered()
-{
-    setLanguage("zh_TW");
 }
 
 ///
@@ -2060,6 +2026,8 @@ void MainWindow::saveProfile()
     m.clear();
     m.sync();
 
+    AppPreferences::instance().save(m);
+
     m.setValue("WindowGeometry", saveGeometry());
     m.setValue("WindowState", saveState());
 
@@ -2089,6 +2057,4 @@ void MainWindow::saveProfile()
             m.endGroup();
         }
     }
-
-    AppPreferences::instance().save(m);
 }

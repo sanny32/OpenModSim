@@ -56,6 +56,17 @@ DialogSetupPresetData::~DialogSetupPresetData()
     delete ui;
 }
 
+///
+/// rief DialogSetupPresetData::changeEvent
+///
+void DialogSetupPresetData::changeEvent(QEvent* event)
+{
+    if (event->type() == QEvent::LanguageChange)
+        ui->retranslateUi(this);
+
+    QDialog::changeEvent(event);
+}
+
 
 ///
 /// \brief DialogSetupPresetData::on_lineEditAddress_valueChanged

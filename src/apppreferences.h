@@ -6,6 +6,7 @@
 #include <QSettings>
 #include "displaydefinition.h"
 #include "fontutils.h"
+#include "translationutils.h"
 
 ///
 /// \brief The AppPreferences class
@@ -64,7 +65,7 @@ private:
     QColor        _backgroundColor{ Qt::white };
     QColor        _foregroundColor{ Qt::black };
     QColor        _statusColor{ Qt::red };
-    QString       _language{ "en" };
+    QString       _language{ translationLang() };
     DisplayDefinition _displayDefinition;
     QFont         _scriptFont;
     bool          _codeAutoComplete{ true };

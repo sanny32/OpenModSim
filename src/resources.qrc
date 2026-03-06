@@ -28,7 +28,6 @@
         <file>res/actionStopScript.png</file>
         <file>res/iconFunc.png</file>
         <file>res/iconProp.png</file>
-        <file>res/actionScriptSettings.png</file>
         <file>res/actionCopy.png</file>
         <file>res/actionCut.png</file>
         <file>res/actionFind.png</file>
@@ -80,5 +79,6 @@
         <file>res/pref-interface.svg</file>
         <file>res/pref-display.svg</file>
         <file>res/pref-script.svg</file>
+        <file>res/pref-interface.png</file>
     </qresource>
 </RCC>

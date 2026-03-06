@@ -28,6 +28,9 @@ public:
 
     void accept() override;
 
+protected:
+    void changeEvent(QEvent* event) override;
+
 private slots:
     void on_comboBoxPrinters_currentIndexChanged(int index);
     void orientationChanged();

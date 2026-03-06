@@ -126,6 +126,17 @@ DialogAutoSimulation::~DialogAutoSimulation()
 }
 
 ///
+/// rief DialogAutoSimulation::changeEvent
+///
+void DialogAutoSimulation::changeEvent(QEvent* event)
+{
+    if (event->type() == QEvent::LanguageChange)
+        ui->retranslateUi(this);
+
+    QDialog::changeEvent(event);
+}
+
+///
 /// \brief DialogAutoSimulation::accept
 ///
 void DialogAutoSimulation::accept()

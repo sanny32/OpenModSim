@@ -59,6 +59,17 @@ DialogForceMultipleCoils::~DialogForceMultipleCoils()
 }
 
 ///
+/// rief DialogForceMultipleCoils::changeEvent
+///
+void DialogForceMultipleCoils::changeEvent(QEvent* event)
+{
+    if (event->type() == QEvent::LanguageChange)
+        ui->retranslateUi(this);
+
+    QDialog::changeEvent(event);
+}
+
+///
 /// \brief DialogForceMultipleCoils::accept
 ///
 void DialogForceMultipleCoils::accept()
