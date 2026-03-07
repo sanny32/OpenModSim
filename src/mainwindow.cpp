@@ -1916,7 +1916,7 @@ bool MainWindow::loadProfile(const QString& filename)
 
     restoreGeometry(m.value("WindowGeometry").toByteArray());
 
-    const auto viewMode = (QMdiArea::ViewMode)qBound(0, m.value("ViewMode", QMdiArea::SubWindowView).toInt(), 1);
+    const auto viewMode = (QMdiArea::ViewMode)qBound(0, m.value("ViewMode", QMdiArea::TabbedView).toInt(), 1);
     setViewMode(viewMode);
 
     statusBar()->setVisible(m.value("StatusBar", true).toBool());
