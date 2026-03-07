@@ -37,9 +37,8 @@ MainStatusBar::MainStatusBar(const ModbusMultiServer& server, QWidget* parent)
     connect(&server, &ModbusMultiServer::connected, this, [&](const ConnectionDetails& cd)
     {
         auto label = new QLabel(this);
-        label->setFrameShadow(QFrame::Sunken);
-        label->setFrameShape(QFrame::Panel);
-        label->setMinimumWidth(80);
+        label->setTextFormat(Qt::RichText);
+        label->setContentsMargins(6, 0, 6, 0);
         label->setProperty("ConnectionDetails", QVariant::fromValue(cd));
 
         updateConnectionInfo(label, cd);
@@ -108,14 +107,15 @@ void MainStatusBar::changeEvent(QEvent* event)
 ///
 void MainStatusBar::updateConnectionInfo(QLabel* label, const ConnectionDetails& cd)
 {
+    const QString dot = QStringLiteral("<span style='color:#22c55e; font-size:10px;'>\u25CF</span>&nbsp;");
     switch(cd.Type)
     {
         case ConnectionType::Tcp:
-            label->setText(tr("Modbus/TCP Srv %1:%2").arg(cd.TcpParams.IPAddress, QString::number(cd.TcpParams.ServicePort)));
+            label->setText(dot + tr("Modbus/TCP Srv %1:%2").arg(cd.TcpParams.IPAddress, QString::number(cd.TcpParams.ServicePort)));
         break;
 
         case ConnectionType::Serial:
-            label->setText(tr("Port %1:%2:%3:%4:%5").arg(cd.SerialParams.PortName,
+            label->setText(dot + tr("Port %1:%2:%3:%4:%5").arg(cd.SerialParams.PortName,
                                                                 QString::number(cd.SerialParams.BaudRate),
                                                                 QString::number(cd.SerialParams.WordLength),
                                                                 Parity_toString(cd.SerialParams.Parity),

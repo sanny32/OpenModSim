@@ -2071,12 +2071,12 @@ Script.onInit(()=&gt;{
     </message>
     <message>
         <location filename="../controls/mainstatusbar.cpp" line="20"/>
-        <location filename="../controls/mainstatusbar.cpp" line="98"/>
+        <location filename="../controls/mainstatusbar.cpp" line="97"/>
         <source>No updates available</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/mainstatusbar.cpp" line="96"/>
+        <location filename="../controls/mainstatusbar.cpp" line="95"/>
         <location filename="../controls/mainstatusbar.cpp" line="146"/>
         <source>New version %1 is available. Click to download.</source>
         <translation type="unfinished"></translation>
