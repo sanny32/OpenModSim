@@ -180,21 +180,6 @@
     <property name="title">
      <string>View</string>
     </property>
-    <widget class="QMenu" name="menuConfig">
-     <property name="title">
-      <string>Config</string>
-     </property>
-     <widget class="QMenu" name="menuColors">
-      <property name="title">
-       <string>Colors</string>
-      </property>
-      <addaction name="actionBackground"/>
-      <addaction name="actionForeground"/>
-      <addaction name="actionStatus"/>
-     </widget>
-     <addaction name="menuColors"/>
-     <addaction name="actionFont"/>
-    </widget>
     <addaction name="actionTabbedView"/>
     <addaction name="separator"/>
     <addaction name="actionToolbar"/>
@@ -204,8 +189,6 @@
     <addaction name="separator"/>
     <addaction name="actionScriptHelp"/>
     <addaction name="actionConsoleOutput"/>
-    <addaction name="separator"/>
-    <addaction name="menuConfig"/>
    </widget>
    <widget class="QMenu" name="menuScript">
     <property name="title">
@@ -629,26 +612,6 @@
    </property>
    <property name="text">
     <string>Display Bar</string>
-   </property>
-  </action>
-  <action name="actionFont">
-   <property name="text">
-    <string>Font</string>
-   </property>
-  </action>
-  <action name="actionBackground">
-   <property name="text">
-    <string>Background</string>
-   </property>
-  </action>
-  <action name="actionForeground">
-   <property name="text">
-    <string>Foreground</string>
-   </property>
-  </action>
-  <action name="actionStatus">
-   <property name="text">
-    <string>Status</string>
    </property>
   </action>
   <action name="actionWindows">
