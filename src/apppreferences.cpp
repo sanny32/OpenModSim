@@ -36,6 +36,7 @@ void AppPreferences::load(QSettings& settings)
     _language        = settings.value("Language", _language).toString();
     _scriptFont.fromString(settings.value("ScriptFont", _scriptFont.toString()).toString());
     _codeAutoComplete = settings.value("CodeAutoComplete", _codeAutoComplete).toBool();
+    _checkForUpdates  = settings.value("CheckForUpdates",  _checkForUpdates).toBool();
 
     DisplayDefinition dd;
     settings >> dd;
@@ -60,6 +61,7 @@ void AppPreferences::save(QSettings& settings) const
     settings.setValue("Language",        _language);
     settings.setValue("ScriptFont",      _scriptFont.toString());
     settings.setValue("CodeAutoComplete",_codeAutoComplete);
+    settings.setValue("CheckForUpdates", _checkForUpdates);
 
     settings << _displayDefinition;
 

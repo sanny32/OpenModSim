@@ -1,5 +1,8 @@
 #include <QEvent>
+#include <QDesktopServices>
 #include <QMdiSubWindow>
+#include <QUrl>
+#include "apppreferences.h"
 #include "mainstatusbar.h"
 #include "serialportutils.h"
 
@@ -9,7 +12,28 @@
 ///
 MainStatusBar::MainStatusBar(const ModbusMultiServer& server, QWidget* parent)
     : QStatusBar(parent)
+    , _updateChecker(new UpdateChecker(this))
 {
+    _bellButton = new QToolButton(this);
+    _bellButton->setIcon(QIcon(":/res/icon-bell.svg"));
+    _bellButton->setAutoRaise(true);
+    _bellButton->setToolTip(tr("No updates available"));
+    _bellButton->setCursor(Qt::PointingHandCursor);
+    _bellButton->setFixedSize(22, 22);
+    _bellButton->setIconSize(QSize(16, 16));
+    addPermanentWidget(_bellButton);
+
+    connect(_bellButton, &QToolButton::clicked, this, [this]()
+    {
+        if(_updateChecker->hasNewVersion())
+        {
+            QDesktopServices::openUrl(QUrl(_updateChecker->releaseUrl()));
+        }
+    });
+
+    connect(_updateChecker, &UpdateChecker::newVersionAvailable,
+            this, &MainStatusBar::onNewVersionAvailable);
+
     connect(&server, &ModbusMultiServer::connected, this, [&](const ConnectionDetails& cd)
     {
         auto label = new QLabel(this);
@@ -21,7 +45,7 @@ MainStatusBar::MainStatusBar(const ModbusMultiServer& server, QWidget* parent)
         updateConnectionInfo(label, cd);
 
         _labels.append(label);
-        addPermanentWidget(label);
+        insertPermanentWidget(_labels.size() - 1, label);
     });
 
     connect(&server, &ModbusMultiServer::disconnected, this, [&](const ConnectionDetails& cd)
@@ -37,6 +61,12 @@ MainStatusBar::MainStatusBar(const ModbusMultiServer& server, QWidget* parent)
             }
         }
     });
+
+    // Initial check after a short delay
+    if(AppPreferences::instance().checkForUpdates())
+        QTimer::singleShot(3000, _updateChecker, &UpdateChecker::checkForUpdates);
+    else
+        _bellButton->setVisible(false);
 }
 
 ///
@@ -61,6 +91,11 @@ void MainStatusBar::changeEvent(QEvent* event)
             const auto cd = label->property("ConnectionDetails").value<ConnectionDetails>();
             updateConnectionInfo(label, cd);
         }
+
+        if(_updateChecker->hasNewVersion())
+            _bellButton->setToolTip(tr("New version %1 is available. Click to download.").arg(_updateChecker->latestVersion()));
+        else
+            _bellButton->setToolTip(tr("No updates available"));
     }
 
     QStatusBar::changeEvent(event);
@@ -87,4 +122,26 @@ void MainStatusBar::updateConnectionInfo(QLabel* label, const ConnectionDetails&
                                                                 QString::number(cd.SerialParams.StopBits)));
         break;
     }
+}
+
+///
+/// \brief MainStatusBar::setCheckForUpdates
+/// \param enabled
+///
+void MainStatusBar::setCheckForUpdates(bool enabled)
+{
+    _bellButton->setVisible(enabled);
+    _updateChecker->setEnabled(enabled);
+}
+
+///
+/// \brief MainStatusBar::onNewVersionAvailable
+/// \param version
+/// \param url
+///
+void MainStatusBar::onNewVersionAvailable(const QString& version, const QString& url)
+{
+    Q_UNUSED(url);
+    _bellButton->setIcon(QIcon(":/res/icon-bell-dot.svg"));
+    _bellButton->setToolTip(tr("New version %1 is available. Click to download.").arg(version));
 }

@@ -184,6 +184,7 @@ set(SOURCES
     qint64validator.cpp
     quintvalidator.cpp
     recentfileactionlist.cpp
+    updatechecker.cpp
     windowactionlist.cpp
 )
 
@@ -304,6 +305,7 @@ set(HEADERS
     qrange.h
     quintvalidator.h
     recentfileactionlist.h
+    updatechecker.h
     scriptsettings.h
     serialportutils.h
     uiutils.h

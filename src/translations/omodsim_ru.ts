@@ -1041,25 +1041,25 @@
         <translation>Язык:</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="343"/>
-        <location filename="../dialogs/dialogpreferences.ui" line="724"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="350"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="731"/>
         <source>Font</source>
         <translation>Шрифт</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="380"/>
-        <location filename="../dialogs/dialogpreferences.ui" line="761"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="387"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="768"/>
         <source>Size:</source>
         <translation>Размер:</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="412"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="419"/>
         <source>Zoom:</source>
         <translation>Масштаб:</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="358"/>
-        <location filename="../dialogs/dialogpreferences.ui" line="739"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="365"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="746"/>
         <source>Family:</source>
         <translation>Семейство:</translation>
     </message>
@@ -1069,83 +1069,88 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="434"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="340"/>
+        <source>Check for updates</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogpreferences.ui" line="441"/>
         <source>%</source>
         <translation>%</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="455"/>
-        <location filename="../dialogs/dialogpreferences.ui" line="795"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="462"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="802"/>
         <source>Antialias</source>
         <translation>Сглаживание</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="497"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="504"/>
         <source>Data Display</source>
         <translation>Отображение данных</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="509"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="516"/>
         <source>Address Base:</source>
         <translation>Адресация:</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="526"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="533"/>
         <source>Hex Address</source>
         <translation>Шестнадцатеричные адреса</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="533"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="540"/>
         <source>Leading Zeros</source>
         <translation>Ведущие нули</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="540"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="547"/>
         <source>Columns Distance:</source>
         <translation>Расстояние между столбцами:</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="575"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="582"/>
         <source>Log View</source>
         <translation>Журнал</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="587"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="594"/>
         <source>Autoscroll</source>
         <translation>Автопрокрутка</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="594"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="601"/>
         <source>Verbose Logging</source>
         <translation>Подробное логирование</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="601"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="608"/>
         <source>Log View Limit:</source>
         <translation>Лимит лога:</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="636"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="643"/>
         <source>Script</source>
         <translation type="unfinished">Скрипт</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="692"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="699"/>
         <source>&lt;b&gt;Note:&lt;/b&gt; These settings apply to newly opened windows only.</source>
         <translation>&lt;b&gt;Примечание:&lt;/b&gt; Эти настройки применяются только к новым окнам.</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="805"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="812"/>
         <source>Editor</source>
         <translation>Редактор</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="811"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="818"/>
         <source>Enable code auto-complete</source>
         <translation>Включить автодополнение кода</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="642"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="649"/>
         <source>Run script on startup</source>
         <translation type="unfinished">Запускать скрипт при старте</translation>
     </message>
@@ -2061,12 +2066,24 @@ Script.onInit(()=&gt;{
         <translation type="vanished">Маркер</translation>
     </message>
     <message>
-        <location filename="../controls/mainstatusbar.cpp" line="79"/>
+        <location filename="../controls/mainstatusbar.cpp" line="20"/>
+        <location filename="../controls/mainstatusbar.cpp" line="98"/>
+        <source>No updates available</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../controls/mainstatusbar.cpp" line="96"/>
+        <location filename="../controls/mainstatusbar.cpp" line="146"/>
+        <source>New version %1 is available. Click to download.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../controls/mainstatusbar.cpp" line="114"/>
         <source>Modbus/TCP Srv %1:%2</source>
         <translation>Modbus/TCP сервер %1:%2</translation>
     </message>
     <message>
-        <location filename="../controls/mainstatusbar.cpp" line="83"/>
+        <location filename="../controls/mainstatusbar.cpp" line="118"/>
         <source>Port %1:%2:%3:%4:%5</source>
         <translation>Порт %1:%2:%3:%4:%5</translation>
     </message>
@@ -2669,12 +2686,12 @@ Script.onInit(()=&gt;{
         <translation>XML файлы (*.xml)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1239"/>
+        <location filename="../mainwindow.cpp" line="1249"/>
         <source>JavaScript files (*.js);;All files (*)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1545"/>
+        <location filename="../mainwindow.cpp" line="1555"/>
         <source>Capture Error:<byte value="xd"/>
 %1</source>
         <translation>Ошибка захвата:

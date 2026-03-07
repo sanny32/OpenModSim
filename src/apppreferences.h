@@ -36,6 +36,10 @@ public:
     QColor statusColor() const { return _statusColor; }
     void setStatusColor(const QColor& c) { _statusColor = c; }
 
+    // ----- Updates -----
+    bool checkForUpdates() const { return _checkForUpdates; }
+    void setCheckForUpdates(bool enable) { _checkForUpdates = enable; }
+
     // ----- Language -----
     QString language() const { return _language; }
     void setLanguage(const QString& lang) { _language = lang; }
@@ -68,6 +72,7 @@ private:
 
     QFont         _font;
     int           _fontZoom{ 100 };
+    bool          _checkForUpdates{ true };
     QColor        _backgroundColor{ Qt::white };
     QColor        _foregroundColor{ Qt::black };
     QColor        _statusColor{ Qt::red };

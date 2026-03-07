@@ -714,6 +714,16 @@ void MainWindow::applyColors(const QColor& bg, const QColor& fg, const QColor& s
 }
 
 ///
+/// \brief MainWindow::applyCheckForUpdates
+/// \param enabled
+///
+void MainWindow::applyCheckForUpdates(bool enabled)
+{
+    auto sb = qobject_cast<MainStatusBar*>(statusBar());
+    if(sb) sb->setCheckForUpdates(enabled);
+}
+
+///
 /// \brief MainWindow::applyZoom
 /// \param zoomPercent
 ///

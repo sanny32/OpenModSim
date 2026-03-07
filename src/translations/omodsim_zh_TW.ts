@@ -1041,25 +1041,25 @@
         <translation>語言：</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="343"/>
-        <location filename="../dialogs/dialogpreferences.ui" line="724"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="350"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="731"/>
         <source>Font</source>
         <translation>字型</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="380"/>
-        <location filename="../dialogs/dialogpreferences.ui" line="761"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="387"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="768"/>
         <source>Size:</source>
         <translation>大小：</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="412"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="419"/>
         <source>Zoom:</source>
         <translation>縮放：</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="358"/>
-        <location filename="../dialogs/dialogpreferences.ui" line="739"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="365"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="746"/>
         <source>Family:</source>
         <translation>字型族：</translation>
     </message>
@@ -1069,83 +1069,88 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="434"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="340"/>
+        <source>Check for updates</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogpreferences.ui" line="441"/>
         <source>%</source>
         <translation>%</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="455"/>
-        <location filename="../dialogs/dialogpreferences.ui" line="795"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="462"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="802"/>
         <source>Antialias</source>
         <translation>反鋸齒</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="497"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="504"/>
         <source>Data Display</source>
         <translation>資料顯示</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="509"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="516"/>
         <source>Address Base:</source>
         <translation>位址基數：</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="526"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="533"/>
         <source>Hex Address</source>
         <translation>十六進制位址</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="533"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="540"/>
         <source>Leading Zeros</source>
         <translation>前導零</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="540"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="547"/>
         <source>Columns Distance:</source>
         <translation>欄間距：</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="575"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="582"/>
         <source>Log View</source>
         <translation>日誌檢視</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="587"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="594"/>
         <source>Autoscroll</source>
         <translation>自動捲動</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="594"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="601"/>
         <source>Verbose Logging</source>
         <translation>詳細日誌記錄</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="601"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="608"/>
         <source>Log View Limit:</source>
         <translation>日誌限制：</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="636"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="643"/>
         <source>Script</source>
         <translation type="unfinished">指令碼</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="692"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="699"/>
         <source>&lt;b&gt;Note:&lt;/b&gt; These settings apply to newly opened windows only.</source>
         <translation>&lt;b&gt;注意：&lt;/b&gt;這些設定僅適用於新開啟的視窗。</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="805"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="812"/>
         <source>Editor</source>
         <translation>編輯器</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="811"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="818"/>
         <source>Enable code auto-complete</source>
         <translation>啟用程式碼自動完成</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="642"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="649"/>
         <source>Run script on startup</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2065,12 +2070,24 @@ Script.onInit(()=&gt;{
         <translation type="vanished">标记</translation>
     </message>
     <message>
-        <location filename="../controls/mainstatusbar.cpp" line="79"/>
+        <location filename="../controls/mainstatusbar.cpp" line="20"/>
+        <location filename="../controls/mainstatusbar.cpp" line="98"/>
+        <source>No updates available</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../controls/mainstatusbar.cpp" line="96"/>
+        <location filename="../controls/mainstatusbar.cpp" line="146"/>
+        <source>New version %1 is available. Click to download.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../controls/mainstatusbar.cpp" line="114"/>
         <source>Modbus/TCP Srv %1:%2</source>
         <translation>modbus/TCP伺服器%1:%2</translation>
     </message>
     <message>
-        <location filename="../controls/mainstatusbar.cpp" line="83"/>
+        <location filename="../controls/mainstatusbar.cpp" line="118"/>
         <source>Port %1:%2:%3:%4:%5</source>
         <translation>埠 %1:%2:%3:%4:%5</translation>
     </message>
@@ -2681,12 +2698,12 @@ Script.onInit(()=&gt;{
         <translation>XML 檔案(*.xml)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1239"/>
+        <location filename="../mainwindow.cpp" line="1249"/>
         <source>JavaScript files (*.js);;All files (*)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1545"/>
+        <location filename="../mainwindow.cpp" line="1555"/>
         <source>Capture Error:<byte value="xd"/>
 %1</source>
         <translation>捕獲錯誤：

@@ -135,6 +135,9 @@ void DialogPreferences::loadFromPreferences()
     const int langIdx = ui->comboBoxLanguage->findData(prefs.language());
     ui->comboBoxLanguage->setCurrentIndex(langIdx >= 0 ? langIdx : 0);
 
+    // Interface — updates
+    ui->checkBoxCheckForUpdates->setChecked(prefs.checkForUpdates());
+
     // Interface — font
     const QFont& f = prefs.font();
     ui->fontComboBoxFont->setCurrentFont(f);
@@ -182,6 +185,11 @@ void DialogPreferences::apply()
     const QString lang = ui->comboBoxLanguage->currentData().toString();
     prefs.setLanguage(lang);
     if (_mainWindow) _mainWindow->setLanguage(lang);
+
+    // Interface — updates
+    const bool checkUpdates = ui->checkBoxCheckForUpdates->isChecked();
+    prefs.setCheckForUpdates(checkUpdates);
+    if (_mainWindow) _mainWindow->applyCheckForUpdates(checkUpdates);
 
     // Interface — font
     const QFont displayFont = fontFromControls(ui->fontComboBoxFont, ui->spinBoxFontSize, ui->checkBoxFontAntialias);
