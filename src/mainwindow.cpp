@@ -374,8 +374,8 @@ void MainWindow::on_actionNew_triggered()
         frm->setBackgroundColor(prefs.backgroundColor());
         frm->setForegroundColor(prefs.foregroundColor());
         frm->setStatusColor(prefs.statusColor());
-        frm->setScriptFont(prefs.scriptFont());
     }
+    frm->setScriptFont(prefs.scriptFont());
     frm->setZoomPercent(prefs.fontZoom());
 
     // Display definition always comes from application preferences

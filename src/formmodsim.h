@@ -292,6 +292,7 @@ inline QSettings& operator >>(QSettings& in, FormModSim* frm)
         frm->setStatusColor(in.value("StatusColor", QColor(Qt::red)).value<QColor>());
         frm->setZoomPercent(in.value("ZoomPercent", 100).toInt());
     }
+    frm->setScriptFont(AppPreferences::instance().scriptFont());
 
     frm->setParentGeometry(wndRect);
     if(isMinimized) wnd->setWindowState(Qt::WindowMinimized);
@@ -661,6 +662,8 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, FormModSim* frm)
                 frm->configureModbusDataUnit(dd.DeviceId, dd.PointType, dd.PointAddress - (dd.ZeroBasedAddress ? 0 : 1), values);
             }
         }
+
+        frm->setScriptFont(AppPreferences::instance().scriptFont());
 
         if(dd.ScriptCfg.RunOnStartup) {
             frm->runScript();
