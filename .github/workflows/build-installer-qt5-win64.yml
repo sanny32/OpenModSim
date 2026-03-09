@@ -61,7 +61,7 @@ jobs:
       - name: Select signing policy
         run: |
           set SIGNING_POLICY_SLUG=none
-          if "%ORGANIZATION_ID%"=="" (
+          if "${{ env.ORGANIZATION_ID }}"=="" (
             echo WARNING: ORGANIZATION_ID is not set or empty, skipping signing steps.
           ) else (
             if "${{ github.event_name }}"=="push" (
