@@ -32,7 +32,7 @@ env:
 
   # SingPath variables
   PROJECT_SLUG: OpenModSim
-  ORGANIZAITION_ID: 6aeb3196-43e9-4b2c-83db-d1d90af47bc4
+  ORGANIZATION_ID: 6aeb3196-43e9-4b2c-83db-d1d90af47bc4
   ARTIFACT_CONF_SLUG: exe-zip
 
 jobs:
@@ -148,7 +148,7 @@ jobs:
         if: success() && env.SIGNING_POLICY_SLUG != 'none'
         with:
           api-token: '${{ secrets.SIGNPATH_API_TOKEN }}'
-          organization-id: '${{ env.ORGANIZAITION_ID }}'
+          organization-id: '${{ env.ORGANIZATION_ID }}'
           project-slug: '${{ env.PROJECT_SLUG }}'
           signing-policy-slug: ${{ env.SIGNING_POLICY_SLUG }}
           artifact-configuration-slug: ${{ env.ARTIFACT_CONF_SLUG }}
@@ -208,7 +208,7 @@ jobs:
         if: success() && env.SIGNING_POLICY_SLUG != 'none'
         with:
           api-token: '${{ secrets.SIGNPATH_API_TOKEN }}'
-          organization-id: '${{ env.ORGANIZAITION_ID }}'
+          organization-id: '${{ env.ORGANIZATION_ID }}'
           project-slug: '${{ env.PROJECT_SLUG }}'
           signing-policy-slug: ${{ env.SIGNING_POLICY_SLUG }}
           artifact-configuration-slug: ${{ env.ARTIFACT_CONF_SLUG }}
