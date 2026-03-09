@@ -31,7 +31,7 @@ env:
 
   # SingPath variables
   PROJECT_SLUG: OpenModSim
-  ORGANIZAITION_ID: 
+  ORGANIZAITION_ID: 6aeb3196-43e9-4b2c-83db-d1d90af47bc4
   ARTIFACT_CONF_SLUG: exe-zip
 
 jobs:
