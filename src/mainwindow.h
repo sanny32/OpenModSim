@@ -36,7 +36,7 @@ public:
     void applyCheckForUpdates(bool enabled);
 
     void loadConfig(const QString& filename);
-    void saveConfig(const QString& filename, SerializationFormat format);
+    void saveConfig(const QString& filename);
 
 signals:
     void selectAll();
@@ -162,13 +162,13 @@ private:
     FormModSim* firstMdiChild() const;
 
     FormModSim* loadMdiChild(const QString& filename);
-    void saveMdiChild(FormModSim* frm, SerializationFormat format);
+    void saveMdiChild(FormModSim* frm);
     void closeMdiChild(FormModSim* frm);
 
     bool loadProfile(const QString& filename);
     void saveProfile();
 
-    void saveAs(FormModSim* frm, SerializationFormat format);
+    void saveAs(FormModSim* frm);
     void setViewMode(QMdiArea::ViewMode mode);
 
 private:

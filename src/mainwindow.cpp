@@ -444,7 +444,7 @@ void MainWindow::on_actionSave_triggered()
         ui->actionSaveAs->trigger();
     }
     else {
-        saveMdiChild(frm,  SerializationFormat::Xml);
+        saveMdiChild(frm);
     }
 }
 
@@ -456,7 +456,7 @@ void MainWindow::on_actionSaveAs_triggered()
     auto frm = currentMdiChild();
     if(!frm) return;
 
-    saveAs(frm, SerializationFormat::Xml);
+    saveAs(frm);
 }
 
 ///
@@ -464,48 +464,25 @@ void MainWindow::on_actionSaveAs_triggered()
 /// \param frm
 /// \param format
 ///
-void MainWindow::saveAs(FormModSim* frm, SerializationFormat format)
+void MainWindow::saveAs(FormModSim* frm)
 {
     if(!frm) return;
 
     const auto dir = QString("%1%2%3").arg(_savePath, QDir::separator(), frm->windowTitle());
 
-    QString filename;
     QStringList filters;
-    switch (format) {
-        case SerializationFormat::Binary:
-            filters << tr("All files (*)");
-            filename = QFileDialog::getSaveFileName(this, QString(), dir, filters.join(";;"));
-            break;
-        case SerializationFormat::Xml:
-            filters << tr("XML files (*.xml)");
-            filename = QFileDialog::getSaveFileName(this, QString(), dir, filters.join(";;"));
-            break;
-        default:
-        {
-            filters << tr("XML files (*.xml)");
-            filters << tr("All files (*)");
-
-            QString selectedFilter;
-            filename = QFileDialog::getSaveFileName(this, QString(), dir, filters.join(";;"), &selectedFilter);
-
-            format = SerializationFormat::Binary;
-            if(selectedFilter == filters[0]) {
-                format = SerializationFormat::Xml;
-                if(!filename.endsWith(".xml", Qt::CaseInsensitive)) {
-                    filename.append(".xml");
-                }
-            }
-        }
-        break;
-    }
+    filters << tr("XML files (*.xml)");
+    auto filename = QFileDialog::getSaveFileName(this, QString(), dir, filters.join(";;"));
 
     if(filename.isEmpty()) return;
+
+    if(!filename.endsWith(".xml", Qt::CaseInsensitive))
+        filename.append(".xml");
 
     _savePath = QFileInfo(filename).absoluteDir().absolutePath();
     frm->setFilename(filename);
 
-    saveMdiChild(frm, format);
+    saveMdiChild(frm);
 }
 
 ///
@@ -515,23 +492,15 @@ void MainWindow::on_actionSaveTestConfig_triggered()
 {
     QStringList filters;
     filters << tr("XML files (*.xml)");
-    filters << tr("All files (*)");
-
-    QString selectedFilter;
-    auto filename = QFileDialog::getSaveFileName(this, QString(), _savePath, filters.join(";;"), &selectedFilter);
+    auto filename = QFileDialog::getSaveFileName(this, QString(), _savePath, filters.join(";;"));
 
     if(filename.isEmpty()) return;
 
-    auto format = SerializationFormat::Binary;
-    if(selectedFilter == filters[0]) {
-        format = SerializationFormat::Xml;
-        if(!filename.endsWith(".xml", Qt::CaseInsensitive)) {
-            filename.append(".xml");
-        }
-    }
+    if(!filename.endsWith(".xml", Qt::CaseInsensitive))
+        filename.append(".xml");
 
     _savePath = QFileInfo(filename).absoluteDir().absolutePath();
-    saveConfig(filename, format);
+    saveConfig(filename);
 }
 
 ///
@@ -1639,59 +1608,44 @@ FormModSim* MainWindow::firstMdiChild() const
 ///
 void MainWindow::loadConfig(const QString& filename)
 {
-    const auto format = filename.endsWith(".xml", Qt::CaseInsensitive) ?
-                            SerializationFormat::Xml :
-                            SerializationFormat::Binary;
-
     QFile file(filename);
     if(!file.open(QFile::ReadOnly))
         return;
 
     ModbusDefinitions defs;
     QList<ConnectionDetails> conns;
-    switch(format)
-    {
-        case SerializationFormat::Binary:
-        break;
 
-        case SerializationFormat::Xml:
-        {
-            QXmlStreamReader xml(&file);
+    QXmlStreamReader xml(&file);
+    while (xml.readNextStartElement()) {
+        if (xml.name() == QLatin1String("OpenModSim")) {
             while (xml.readNextStartElement()) {
-                if (xml.name() == QLatin1String("OpenModSim")) {
+                if (xml.name() == QLatin1String("AppPreferences")) {
+                    AppPreferences::instance().loadXml(xml);
+                }
+                else if (xml.name() == QLatin1String("ModbusDefinitions")) {
+                    xml >> defs;
+                }
+                else if (xml.name() == QLatin1String("Connections")) {
                     while (xml.readNextStartElement()) {
-                        if (xml.name() == QLatin1String("AppPreferences")) {
-                            AppPreferences::instance().loadXml(xml);
+                        if (xml.name() == QLatin1String("ConnectionDetails")) {
+                            ConnectionDetails cd;
+                            xml >> cd;
+                            conns.append(cd);
+                        } else {
+                            xml.skipCurrentElement();
                         }
-                        else if (xml.name() == QLatin1String("ModbusDefinitions")) {
-                            xml >> defs;
-                        }
-                        else if (xml.name() == QLatin1String("Connections")) {
-                            while (xml.readNextStartElement()) {
-                                if (xml.name() == QLatin1String("ConnectionDetails")) {
-                                    ConnectionDetails cd;
-                                    xml >> cd;
-                                    conns.append(cd);
-                                } else {
-                                    xml.skipCurrentElement();
-                                }
+                    }
+                }
+                else if (xml.name() == QLatin1String("Forms")) {
+                    ui->mdiArea->closeAllSubWindows();
+                    while (xml.readNextStartElement()) {
+                        if (xml.name() == QLatin1String("FormModSim")) {
+                            auto frm = createMdiChild(++_windowCounter);
+                            if (frm) {
+                                xml >> frm;
+                                frm->show();
                             }
-                        }
-                        else if (xml.name() == QLatin1String("Forms")) {
-                            ui->mdiArea->closeAllSubWindows();
-                            while (xml.readNextStartElement()) {
-                                if (xml.name() == QLatin1String("FormModSim")) {
-                                    auto frm = createMdiChild(++_windowCounter);
-                                    if (frm) {
-                                        xml >> frm;
-                                        frm->show();
-                                    }
-                                } else {
-                                    xml.skipCurrentElement();
-                                }
-                            }
-                        }
-                        else {
+                        } else {
                             xml.skipCurrentElement();
                         }
                     }
@@ -1700,9 +1654,10 @@ void MainWindow::loadConfig(const QString& filename)
                     xml.skipCurrentElement();
                 }
             }
-
         }
-        break;
+        else {
+            xml.skipCurrentElement();
+        }
     }
 
     auto menu = qobject_cast<MenuConnect*>(ui->actionConnect->menu());
@@ -1724,47 +1679,37 @@ void MainWindow::loadConfig(const QString& filename)
 /// \param filename
 /// \param format
 ///
-void MainWindow::saveConfig(const QString& filename, SerializationFormat format)
+void MainWindow::saveConfig(const QString& filename)
 {
     QFile file(filename);
     if(!file.open(QFile::WriteOnly))
         return;
 
-    switch(format)
-    {
-        case SerializationFormat::Binary:
-        break;
+    QXmlStreamWriter w(&file);
+    w.setAutoFormatting(true);
 
-        case SerializationFormat::Xml:
-        {
-            QXmlStreamWriter w(&file);
-            w.setAutoFormatting(true);
+    w.writeStartDocument();
+    w.writeStartElement("OpenModSim");
+    w.writeAttribute("Version", qApp->applicationVersion());
 
-            w.writeStartDocument();
-            w.writeStartElement("OpenModSim");
-            w.writeAttribute("Version", qApp->applicationVersion());
+    AppPreferences::instance().saveXml(w);
 
-            AppPreferences::instance().saveXml(w);
+    w << _mbMultiServer.getModbusDefinitions();
 
-            w << _mbMultiServer.getModbusDefinitions();
-
-            w.writeStartElement("Connections");
-            for(auto&& cd : _mbMultiServer.connections()) {
-                w << cd;
-            }
-            w.writeEndElement(); // Connections
-
-            w.writeStartElement("Forms");
-            for(auto&& wnd : ui->mdiArea->subWindowList()) {
-                w << qobject_cast<FormModSim*>(wnd->widget());
-            }
-            w.writeEndElement(); // Forms
-
-            w.writeEndElement(); // OpenModSim
-            w.writeEndDocument();
-        }
-        break;
+    w.writeStartElement("Connections");
+    for(auto&& cd : _mbMultiServer.connections()) {
+        w << cd;
     }
+    w.writeEndElement(); // Connections
+
+    w.writeStartElement("Forms");
+    for(auto&& wnd : ui->mdiArea->subWindowList()) {
+        w << qobject_cast<FormModSim*>(wnd->widget());
+    }
+    w.writeEndElement(); // Forms
+
+    w.writeEndElement(); // OpenModSim
+    w.writeEndDocument();
 }
 
 ///
@@ -1774,39 +1719,25 @@ void MainWindow::saveConfig(const QString& filename, SerializationFormat format)
 ///
 FormModSim* MainWindow::loadMdiChild(const QString& filename)
 {
-    const auto format = filename.endsWith(".xml", Qt::CaseInsensitive) ?
-                            SerializationFormat::Xml :
-                            SerializationFormat::Binary;
-
     QFile file(filename);
     if(!file.open(QFile::ReadOnly))
         return nullptr;
 
     FormModSim* frm = nullptr;
-    switch(format)
-    {
-        case SerializationFormat::Binary:
-        break;
+    QXmlStreamReader xml(&file);
+    if(xml.readNextStartElement() && xml.name() == QLatin1String("FormModSim")) {
+        frm = createMdiChild(++_windowCounter);
+        if(frm) {
+            xml >> frm;
 
-        case SerializationFormat::Xml:
-        {
-            QXmlStreamReader xml(&file);
-            if(xml.readNextStartElement() && xml.name() == QLatin1String("FormModSim")) {
-                frm = createMdiChild(++_windowCounter);
-                if(frm) {
-                    xml >> frm;
-
-                    // close windows with the same title
-                    for(auto&& wnd : ui->mdiArea->subWindowList()) {
-                        const auto f = qobject_cast<FormModSim*>(wnd->widget());
-                        if(f != nullptr && f != frm && f->windowTitle() == frm->windowTitle()) {
-                            wnd->close();
-                        }
-                    }
+            // close windows with the same title
+            for(auto&& wnd : ui->mdiArea->subWindowList()) {
+                const auto f = qobject_cast<FormModSim*>(wnd->widget());
+                if(f != nullptr && f != frm && f->windowTitle() == frm->windowTitle()) {
+                    wnd->close();
                 }
             }
         }
-        break;
     }
 
     if(frm) {
@@ -1824,7 +1755,7 @@ FormModSim* MainWindow::loadMdiChild(const QString& filename)
 /// \param frm
 /// \param format
 ///
-void MainWindow::saveMdiChild(FormModSim* frm, SerializationFormat format)
+void MainWindow::saveMdiChild(FormModSim* frm)
 {
     if(!frm) return;
 
@@ -1832,21 +1763,11 @@ void MainWindow::saveMdiChild(FormModSim* frm, SerializationFormat format)
     if(!file.open(QFile::WriteOnly))
         return;
 
-    switch(format)
-    {
-        case SerializationFormat::Binary:
-        break;
-
-        case SerializationFormat::Xml:
-        {
-            QXmlStreamWriter w(&file);
-            w.setAutoFormatting(true);
-            w.writeStartDocument();
-            w << frm;
-            w.writeEndDocument();
-        }
-        break;
-    }
+    QXmlStreamWriter w(&file);
+    w.setAutoFormatting(true);
+    w.writeStartDocument();
+    w << frm;
+    w.writeEndDocument();
 
     addRecentFile(frm->filename());
 }
