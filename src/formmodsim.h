@@ -196,6 +196,7 @@ private:
     int _formId;
     QString _filename;
     bool _verboseLogging;
+    bool _leadingZeros = true;
     ScriptSettings _scriptSettings;
     ModbusMultiServer& _mbMultiServer;
     QSharedPointer<DataSimulator> _dataSimulator;
