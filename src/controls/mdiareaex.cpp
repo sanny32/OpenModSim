@@ -162,7 +162,10 @@ void MdiAreaEx::createSplitButton()
 ///
 void MdiAreaEx::on_currentTabChanged(int index)
 {
-    auto wnd = _tabBar ? _tabBar->subWindowAt(index) : nullptr;
+    if(!_tabBar)
+        return;
+
+    auto wnd = _tabBar->subWindowAt(index);
     if(wnd) setActiveSubWindow(wnd);
 }
 
@@ -172,7 +175,10 @@ void MdiAreaEx::on_currentTabChanged(int index)
 ///
 void MdiAreaEx::on_closeTab(int index)
 {
-    auto wnd = _tabBar ? _tabBar->subWindowAt(index) : nullptr;
+    if(!_tabBar)
+        return;
+
+    auto wnd = _tabBar->subWindowAt(index);
     if(wnd) wnd->close();
 }
 
