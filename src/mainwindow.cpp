@@ -39,6 +39,8 @@ MainWindow::MainWindow(const QString& profile, bool useSession, QWidget *parent)
     ,_windowCounter(0)
     ,_useSession(useSession)
     ,_dataSimulator(new DataSimulator(this))
+    ,_helpDockWidget(nullptr)
+    ,_helpWidget(nullptr)
 {
     ui->setupUi(this);
 
@@ -286,6 +288,7 @@ void MainWindow::on_awake()
     _actionRunMode->setEnabled(frm && !frm->canStopScript());
 
     ui->actionTabbedView->setChecked(ui->mdiArea->viewMode() == QMdiArea::TabbedView);
+    ui->actionSplitView->setVisible(ui->mdiArea->viewMode() == QMdiArea::TabbedView);
     ui->actionToolbar->setChecked(ui->toolBarMain->isVisible());
     ui->actionStatusBar->setChecked(statusBar()->isVisible());
     ui->actionDisplayBar->setChecked(ui->toolBarDisplay->isVisible());
@@ -1079,16 +1082,9 @@ void MainWindow::on_actionTabbedView_triggered()
 ///
 void MainWindow::setViewMode(QMdiArea::ViewMode mode)
 {
-    static QMetaObject::Connection connection;
-
     ui->mdiArea->setViewMode(mode);
-    if(auto tabBar = ui->mdiArea->findChild<QTabBar*>()) {
-        tabBar->setExpanding(false);
-
-        if (connection) {
-            disconnect(connection);
-        }
-        connection = connect(tabBar, &QTabBar::tabBarDoubleClicked, ui->actionDataDefinition, &QAction::triggered);
+    if(auto tabBar = ui->mdiArea->tabBar()) {
+        connect(tabBar, &QTabBar::tabBarDoubleClicked, ui->actionDataDefinition, &QAction::triggered);
     }
 }
 
@@ -1566,7 +1562,7 @@ FormModSim* MainWindow::currentMdiChild() const
         // because _q_currentTabChanged is posted via QueuedConnection while
         // awake() fires before posted events are processed. Read the tab bar
         // directly to get the correct subwindow.
-        const auto tabBar = ui->mdiArea->findChild<QTabBar*>();
+        const auto tabBar = ui->mdiArea->tabBar();
         const auto list = ui->mdiArea->subWindowList();
         const auto idx = tabBar ? tabBar->currentIndex() : -1;
         if(idx >= 0 && idx < list.size())
