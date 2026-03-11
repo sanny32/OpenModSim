@@ -143,7 +143,8 @@ void MdiTabBar::addSubWindow(QMdiSubWindow* wnd)
     const int existingIndex = indexOfSubWindow(wnd);
     if(existingIndex != -1) {
         updateSubWindowState(wnd);
-        setCurrentIndex(existingIndex);
+        if (isVisible())
+            setCurrentIndex(existingIndex);
         return;
     }
 
@@ -160,7 +161,8 @@ void MdiTabBar::addSubWindow(QMdiSubWindow* wnd)
         removeSubWindow(wnd);
     });
 
-    setCurrentIndex(index);
+    if (isVisible())
+        setCurrentIndex(index);
 }
 
 ///
