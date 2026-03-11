@@ -35,7 +35,7 @@
      <number>0</number>
     </property>
     <item>
-     <widget class="QMdiArea" name="mdiArea">
+     <widget class="MdiAreaEx" name="mdiArea">
       <property name="documentMode">
        <bool>true</bool>
       </property>
@@ -181,6 +181,7 @@
      <string>View</string>
     </property>
     <addaction name="actionTabbedView"/>
+    <addaction name="actionSplitView"/>
     <addaction name="separator"/>
     <addaction name="actionToolbar"/>
     <addaction name="actionStatusBar"/>
@@ -1100,9 +1101,25 @@
     <string>Import Script...</string>
    </property>
   </action>
+  <action name="actionSplitView">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/res/actionSplitView.png</normaloff>:/res/actionSplitView.png</iconset>
+   </property>
+   <property name="text">
+    <string>Split View</string>
+   </property>
+  </action>
  </widget>
  <resources>
   <include location="resources.qrc"/>
  </resources>
  <connections/>
+ <customwidgets>
+ <customwidget>
+  <class>MdiAreaEx</class>
+  <extends>QMdiArea</extends>
+  <header>mdiareaex.h</header>
+ </customwidget>
+</customwidgets>
 </ui>

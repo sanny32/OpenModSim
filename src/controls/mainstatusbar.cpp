@@ -107,7 +107,7 @@ void MainStatusBar::changeEvent(QEvent* event)
 ///
 void MainStatusBar::updateConnectionInfo(QLabel* label, const ConnectionDetails& cd)
 {
-    const QString dot = QStringLiteral("<span style='color:#22c55e; font-size:10px;'>\u25CF</span>&nbsp;");
+    const QString dot = QStringLiteral("<span style='color:#22c55e; font-size:10px;'>●</span>&nbsp;");
     switch(cd.Type)
     {
         case ConnectionType::Tcp:
