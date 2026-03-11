@@ -1,4 +1,8 @@
 #include "mditabbar.h"
+#include <QApplication>
+#include <QMdiArea>
+#include <QMdiSubWindow>
+#include <QVariant>
 
 ///
 /// \brief setWindowTitleHelper
@@ -50,7 +54,6 @@ static inline QString tabTextForWindow(QMdiSubWindow *subWindow)
     if (subWindow->isWindowModified()) {
         title.replace(QLatin1String("[*]"), QLatin1String("*"));
     } else {
-        extern QString setWindowTitleHelper(const QString&, const QWidget*);
         title = setWindowTitleHelper(title, subWindow);
     }
 
@@ -65,6 +68,7 @@ MdiTabBar::MdiTabBar(QWidget* parent)
     : QTabBar(parent)
     ,_mainTabOverlay(new TabBarOverlay(this, true))
 {
+    setUsesScrollButtons(true);
     connect(qApp, &QApplication::focusChanged, this, [this, parent](QWidget* /*old*/, QWidget* now) {
         if(!now) return;
         if(parent && parent->isAncestorOf(now)){
@@ -81,8 +85,27 @@ void MdiTabBar::addSubWindow(QMdiSubWindow* wnd)
 {
     if(!wnd) return;
 
+    const int existingIndex = indexOfSubWindow(wnd);
+    if(existingIndex != -1) {
+        updateSubWindowState(wnd);
+        setCurrentIndex(existingIndex);
+        return;
+    }
+
     const int index = addTab(wnd->windowIcon(), tabTextForWindow(wnd));
     setTabData(index, QVariant::fromValue(wnd));
+
+    connect(wnd, &QWidget::windowTitleChanged, this, [this, wnd](const QString&) {
+        updateSubWindowState(wnd);
+    });
+    connect(wnd, &QWidget::windowIconChanged, this, [this, wnd](const QIcon&) {
+        updateSubWindowState(wnd);
+    });
+    connect(wnd, &QObject::destroyed, this, [this, wnd]() {
+        removeSubWindow(wnd);
+    });
+
+    setCurrentIndex(index);
 }
 
 ///
@@ -93,12 +116,39 @@ void MdiTabBar::removeSubWindow(QMdiSubWindow* wnd)
 {
     if(!wnd) return;
 
+    const int index = indexOfSubWindow(wnd);
+    if(index != -1)
+        removeTab(index);
+}
+
+///
+/// \brief MdiTabBar::indexOfSubWindow
+/// \param wnd
+/// \return
+///
+int MdiTabBar::indexOfSubWindow(QMdiSubWindow* wnd) const
+{
+    if(!wnd) return -1;
+
     for(int i = 0; i < count(); i++) {
-        if(tabData(i).value<QMdiSubWindow*>() == wnd) {
-            removeTab(i);
-            break;
-        }
+        if(tabData(i).value<QMdiSubWindow*>() == wnd)
+            return i;
     }
+
+    return -1;
+}
+
+///
+/// \brief MdiTabBar::subWindowAt
+/// \param tabIndex
+/// \return
+///
+QMdiSubWindow* MdiTabBar::subWindowAt(int tabIndex) const
+{
+    if(tabIndex < 0 || tabIndex >= count())
+        return nullptr;
+
+    return tabData(tabIndex).value<QMdiSubWindow*>();
 }
 
 ///
@@ -107,10 +157,7 @@ void MdiTabBar::removeSubWindow(QMdiSubWindow* wnd)
 ///
 QMdiSubWindow* MdiTabBar::currentSubWindow() const
 {
-    if(currentIndex() == -1)
-        return nullptr;
-
-    return tabData(currentIndex()).value<QMdiSubWindow*>();
+    return subWindowAt(currentIndex());
 }
 
 ///
@@ -119,23 +166,21 @@ QMdiSubWindow* MdiTabBar::currentSubWindow() const
 ///
 void MdiTabBar::setCurrentSubWindow(QMdiSubWindow* wnd)
 {
-    for(int i = 0; i < count(); i++) {
-        if(tabData(i).value<QMdiSubWindow*>() == wnd) {
-            setCurrentIndex(i);
-            break;
-        }
-    }
+    const int index = indexOfSubWindow(wnd);
+    if(index != -1)
+        setCurrentIndex(index);
 }
 
 ///
-/// \brief MdiTabBar::createSplitButton
+/// \brief MdiTabBar::updateSubWindowState
+/// \param wnd
 ///
-void MdiTabBar::createSplitButton()
+void MdiTabBar::updateSubWindowState(QMdiSubWindow* wnd)
 {
-    if (_splitButton)
+    const int index = indexOfSubWindow(wnd);
+    if(index == -1)
         return;
 
-    _splitButton = new QToolButton(this);
-    _splitButton->setAutoRaise(true);
-    _splitButton->setIcon(QIcon(":/res/actionSplitView.png"));
+    setTabIcon(index, wnd->windowIcon());
+    setTabText(index, tabTextForWindow(wnd));
 }

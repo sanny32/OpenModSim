@@ -6,9 +6,17 @@
 ///
 MdiAreaEx::MdiAreaEx(QWidget* parent)
     : QMdiArea(parent)
+    ,_splitButton(nullptr)
 {
     setViewMode(QMdiArea::TabbedView);
     connect(this, &QMdiArea::subWindowActivated, this, &MdiAreaEx::on_subWindowActivated);
+}
+
+///
+/// \brief MdiAreaEx::~MdiAreaEx
+///
+MdiAreaEx::~MdiAreaEx()
+{
 }
 
 ///
@@ -35,6 +43,8 @@ bool MdiAreaEx::eventFilter(QObject* obj, QEvent* event)
 QMdiSubWindow* MdiAreaEx::addSubWindow(QWidget* widget, Qt::WindowFlags flags)
 {
     auto wnd = QMdiArea::addSubWindow(widget, flags);
+    if(!wnd) return nullptr;
+    wnd->installEventFilter(this);
 
     if(_tabBar) {
         _tabBar->addSubWindow(wnd);
@@ -50,6 +60,21 @@ QMdiSubWindow* MdiAreaEx::addSubWindow(QWidget* widget, Qt::WindowFlags flags)
 ///
 void MdiAreaEx::removeSubWindow(QWidget* widget)
 {
+    if(_tabBar) {
+        auto wnd = qobject_cast<QMdiSubWindow*>(widget);
+        if(!wnd) {
+            for(auto* candidate : subWindowList()) {
+                if(candidate && candidate->widget() == widget) {
+                    wnd = candidate;
+                    break;
+                }
+            }
+        }
+
+        if(wnd)
+            _tabBar->removeSubWindow(wnd);
+    }
+
     QMdiArea::removeSubWindow(widget);
     updateTabBarGeometry();
 }
@@ -102,6 +127,7 @@ void MdiAreaEx::setupTabbedMode()
         _tabBar->show();
     }
 
+    createSplitButton();
     updateTabBarGeometry();
 
     connect(tabBar, &QObject::destroyed, this, &MdiAreaEx::on_tabBarDestroyed);
@@ -111,12 +137,33 @@ void MdiAreaEx::setupTabbedMode()
 }
 
 ///
+/// \brief MdiTabBar::createSplitButton
+///
+void MdiAreaEx::createSplitButton()
+{
+    if (_splitButton)
+        return;
+
+    _splitButton = new QToolButton(this);
+    _splitButton->setAutoRaise(true);
+    _splitButton->setIcon(QIcon(":/res/actionSplitView.png"));
+    _splitButton->setToolTip(tr("Split view"));
+
+    const QSize sh = _splitButton->sizeHint();
+    const int btnSize = qMax(20, qMin(sh.width(), sh.height()));
+    _splitButton->setFixedSize(btnSize, btnSize);
+
+    _splitButton->raise();
+}
+
+
+///
 /// \brief MdiAreaEx::on_currentTabChanged
 /// \param index
 ///
 void MdiAreaEx::on_currentTabChanged(int index)
 {
-    auto wnd = subWindowAtIndex(index);
+    auto wnd = _tabBar ? _tabBar->subWindowAt(index) : nullptr;
     if(wnd) setActiveSubWindow(wnd);
 }
 
@@ -126,7 +173,7 @@ void MdiAreaEx::on_currentTabChanged(int index)
 ///
 void MdiAreaEx::on_closeTab(int index)
 {
-    auto wnd = subWindowAtIndex(index);
+    auto wnd = _tabBar ? _tabBar->subWindowAt(index) : nullptr;
     if(wnd) wnd->close();
 }
 
@@ -137,7 +184,8 @@ void MdiAreaEx::on_closeTab(int index)
 ///
 void MdiAreaEx::on_moveTab(int from, int to)
 {
-
+    Q_UNUSED(from)
+    Q_UNUSED(to)
 }
 
 ///
@@ -148,6 +196,11 @@ void MdiAreaEx::on_tabBarDestroyed()
     if (_tabBar) {
         _tabBar->deleteLater();
         _tabBar = nullptr;
+    }
+
+    if (_splitButton) {
+        _splitButton->deleteLater();
+        _splitButton = nullptr;
     }
 }
 
@@ -196,15 +249,34 @@ void MdiAreaEx::updateTabBarGeometry()
     if (verticalScrollBar() && verticalScrollBar()->isVisible())
         areaWidth -= verticalScrollBar()->width();
 
+    const int splitWidth = _splitButton ? (_splitButton->width() + 4) : 0;
+
     QRect tabBarRect;
+    QRect buttonRect;
+
     switch (tabPosition()) {
         case QTabWidget::North:
             setViewportMargins(0, tabBarSizeHint.height(), 0, 0);
-            tabBarRect = QRect(0, 0, areaWidth, tabBarSizeHint.height());
+            tabBarRect = QRect(0, 0, areaWidth - splitWidth, tabBarSizeHint.height());
+            if (_splitButton)
+            {
+                buttonRect = QRect(areaWidth - splitWidth,
+                                   (tabBarSizeHint.height() - _splitButton->height())/2,
+                                   _splitButton->width(),
+                                   _splitButton->height());
+            }
             break;
         case QTabWidget::South:
             setViewportMargins(0, 0, 0, tabBarSizeHint.height());
-            tabBarRect = QRect(0, areaHeight - tabBarSizeHint.height(), areaWidth, tabBarSizeHint.height());
+            tabBarRect = QRect(0, areaHeight - tabBarSizeHint.height(), areaWidth - splitWidth, tabBarSizeHint.height());
+            if (_splitButton)
+            {
+                buttonRect = QRect(areaWidth - splitWidth,
+                                   areaHeight - tabBarSizeHint.height() +
+                                       (tabBarSizeHint.height() - _splitButton->height())/2,
+                                   _splitButton->width(),
+                                   _splitButton->height());
+            }
             break;
         case QTabWidget::East:
             if (layoutDirection() == Qt::LeftToRight)
@@ -225,6 +297,10 @@ void MdiAreaEx::updateTabBarGeometry()
     }
 
     _tabBar->setGeometry(QStyle::visualRect(layoutDirection(), contentsRect(), tabBarRect));
+
+    if (_splitButton) {
+        _splitButton->setGeometry(buttonRect);
+    }
 }
 
 ///
@@ -254,7 +330,7 @@ void MdiAreaEx::setVisible(bool visible)
 ///
 QMdiSubWindow* MdiAreaEx::subWindowAtIndex(int index) const
 {
-    return (index >= 0 && index < subWindowList().size()) ? subWindowList().at(index) : nullptr;
+    return _tabBar ? _tabBar->subWindowAt(index) : nullptr;
 }
 
 ///

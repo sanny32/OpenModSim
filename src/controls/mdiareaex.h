@@ -7,7 +7,6 @@
 #include <QToolButton>
 #include <QSplitter>
 #include "mditabbar.h"
-#include "tabbaroverlay.h"
 
 ///
 /// \brief The MdiAreaEx class
@@ -17,6 +16,7 @@ class MdiAreaEx : public QMdiArea
     Q_OBJECT
 public:
     explicit MdiAreaEx(QWidget* parent = nullptr);
+    ~MdiAreaEx();
 
     QMdiSubWindow *addSubWindow(QWidget *widget, Qt::WindowFlags flags = Qt::WindowFlags());
     void removeSubWindow(QWidget *widget);
@@ -73,6 +73,7 @@ private slots:
 
 private:
     void setupTabbedMode();
+    void createSplitButton();
 
     void refreshTabBar();
     void updateTabBarGeometry();
@@ -83,6 +84,7 @@ private:
 private:
     bool _tabsExpanding = false;
     MdiTabBar* _tabBar;
+    QToolButton* _splitButton;
 };
 
 #endif // MDIAREAEX_H
