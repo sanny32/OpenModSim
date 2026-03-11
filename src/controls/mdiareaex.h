@@ -75,6 +75,7 @@ private slots:
 private:
     void setupTabbedMode();
     void createSplitButton();
+    void updateViewportBaseLine();
 
     void refreshTabBar();
     void updateTabBarGeometry();
@@ -86,6 +87,7 @@ private:
     bool _tabsExpanding = false;
     MdiTabBar* _tabBar;
     QToolButton* _splitButton;
+    QFrame* _tabBarBaseLine = nullptr;
 };
 
 #endif // MDIAREAEX_H

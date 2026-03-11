@@ -1,4 +1,46 @@
 #include "mdiareaex.h"
+#include <QPainter>
+#include <QStyleOptionTabBarBase>
+
+///
+/// \brief The TabBarBaseLineWidget class
+///
+class TabBarBaseLineWidget : public QFrame
+{
+public:
+    explicit TabBarBaseLineWidget(MdiAreaEx* owner)
+        : QFrame(owner)
+        , _owner(owner)
+    {
+        setFrameShape(QFrame::NoFrame);
+        setAttribute(Qt::WA_TransparentForMouseEvents, true);
+        setAttribute(Qt::WA_NoSystemBackground, false);
+    }
+
+protected:
+    void paintEvent(QPaintEvent* event) override
+    {
+        Q_UNUSED(event)
+        if (!_owner)
+            return;
+
+        auto* tab = _owner->tabBar();
+        if (!tab || _owner->viewMode() != QMdiArea::TabbedView || !tab->isVisible())
+            return;
+
+        QStyleOptionTabBarBase option;
+        option.initFrom(this);
+        option.shape = tab->shape();
+        option.documentMode = tab->documentMode();
+        option.tabBarRect = rect();
+
+        QPainter painter(this);
+        style()->drawPrimitive(QStyle::PE_FrameTabBarBase, &option, &painter, this);
+    }
+
+private:
+    MdiAreaEx* _owner;
+};
 
 ///
 /// \brief MdiAreaEx::MdiAreaEx
@@ -27,6 +69,20 @@ MdiAreaEx::~MdiAreaEx()
 ///
 bool MdiAreaEx::eventFilter(QObject* obj, QEvent* event)
 {
+    if (obj == _tabBar) {
+        switch (event->type()) {
+            case QEvent::Paint:
+            case QEvent::Resize:
+            case QEvent::Move:
+            case QEvent::Show:
+            case QEvent::Hide:
+                updateViewportBaseLine();
+                break;
+            default:
+                break;
+        }
+    }
+
     if (event->type() == QEvent::Close) {
         auto wnd = qobject_cast<QMdiSubWindow*>(obj);
         if(_tabBar) _tabBar->removeSubWindow(wnd);
@@ -102,6 +158,7 @@ void MdiAreaEx::setupTabbedMode()
     tabBar->setVisible(false);
 
     _tabBar = new MdiTabBar(this);
+    _tabBar->installEventFilter(this);
     _tabBar->setDocumentMode(documentMode());
     _tabBar->setTabsClosable(tabsClosable());
     _tabBar->setExpanding(tabsExpanding());
@@ -128,6 +185,7 @@ void MdiAreaEx::setupTabbedMode()
 
     createSplitButton();
     updateTabBarGeometry();
+    updateViewportBaseLine();
 
     connect(tabBar, &QObject::destroyed, this, &MdiAreaEx::on_tabBarDestroyed);
     connect(_tabBar, &QTabBar::currentChanged, this, &MdiAreaEx::on_currentTabChanged);
@@ -207,6 +265,11 @@ void MdiAreaEx::on_tabBarDestroyed()
         _splitButton->deleteLater();
         _splitButton = nullptr;
     }
+
+    if (_tabBarBaseLine)
+        _tabBarBaseLine->hide();
+
+    updateViewportBaseLine();
 }
 
 ///
@@ -306,6 +369,79 @@ void MdiAreaEx::updateTabBarGeometry()
     if (_splitButton) {
         _splitButton->setGeometry(buttonRect);
     }
+    updateViewportBaseLine();
+}
+
+///
+/// \brief MdiAreaEx::updateViewportBaseLine
+///
+void MdiAreaEx::updateViewportBaseLine()
+{
+    if (!_tabBarBaseLine) {
+        _tabBarBaseLine = new TabBarBaseLineWidget(this);
+    }
+
+    auto* vp = viewport();
+    if (!vp || viewMode() != QMdiArea::TabbedView || !_tabBar || !_tabBar->isVisible()) {
+        _tabBarBaseLine->hide();
+        return;
+    }
+
+    const QRect vpRect = vp->geometry();
+    QRect lineRect;
+    switch (tabPosition()) {
+        case QTabWidget::North:
+            lineRect = QRect(vpRect.left(), vpRect.top() - 1, vpRect.width(), 1);
+            break;
+        case QTabWidget::South:
+            lineRect = QRect(vpRect.left(), vpRect.bottom() + 1, vpRect.width(), 1);
+            break;
+        case QTabWidget::East:
+            lineRect = QRect(vpRect.right() + 1, vpRect.top(), 1, vpRect.height());
+            break;
+        case QTabWidget::West:
+            lineRect = QRect(vpRect.left() - 1, vpRect.top(), 1, vpRect.height());
+            break;
+        default:
+            _tabBarBaseLine->hide();
+            return;
+    }
+
+    if (!lineRect.isValid() || lineRect.isEmpty()) {
+        _tabBarBaseLine->hide();
+        return;
+    }
+
+    _tabBarBaseLine->setGeometry(lineRect);
+    _tabBarBaseLine->clearMask();
+
+    const QRect tabBarRect = _tabBar->geometry();
+    QRegion mask;
+
+    if (tabPosition() == QTabWidget::North || tabPosition() == QTabWidget::South) {
+        const int tabLeft = qMax(0, tabBarRect.left() - lineRect.left());
+        const int tabRight = qMin(lineRect.width() - 1, tabBarRect.right() - lineRect.left());
+
+        if (tabLeft > 0)
+            mask += QRect(0, 0, tabLeft, 1);
+        if (tabRight + 1 < lineRect.width())
+            mask += QRect(tabRight + 1, 0, lineRect.width() - (tabRight + 1), 1);
+    }
+    else {
+        const int tabTop = qMax(0, tabBarRect.top() - lineRect.top());
+        const int tabBottom = qMin(lineRect.height() - 1, tabBarRect.bottom() - lineRect.top());
+
+        if (tabTop > 0)
+            mask += QRect(0, 0, 1, tabTop);
+        if (tabBottom + 1 < lineRect.height())
+            mask += QRect(0, tabBottom + 1, 1, lineRect.height() - (tabBottom + 1));
+    }
+
+    _tabBarBaseLine->setMask(mask);
+    _tabBarBaseLine->update();
+
+    _tabBarBaseLine->show();
+    _tabBarBaseLine->raise();
 }
 
 ///
@@ -326,6 +462,7 @@ void MdiAreaEx::setVisible(bool visible)
 {
     QMdiArea::setVisible(visible);
     if(_tabBar) _tabBar->setVisible(visible);
+    updateViewportBaseLine();
 }
 
 ///

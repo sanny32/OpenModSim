@@ -2714,7 +2714,7 @@ Script.onInit(()=&gt;{
 <context>
     <name>MdiAreaEx</name>
     <message>
-        <location filename="../controls/mdiareaex.cpp" line="149"/>
+        <location filename="../controls/mdiareaex.cpp" line="204"/>
         <source>Split view</source>
         <translation type="unfinished"></translation>
     </message>
