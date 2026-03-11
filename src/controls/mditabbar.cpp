@@ -2,7 +2,59 @@
 #include <QApplication>
 #include <QMdiArea>
 #include <QMdiSubWindow>
+#include <QPainter>
+#include <QProxyStyle>
+#include <QStyleOptionTab>
 #include <QVariant>
+
+class MdiTabBarStyle : public QProxyStyle
+{
+public:
+    using QProxyStyle::QProxyStyle;
+
+    void drawControl(ControlElement element, const QStyleOption* option, QPainter* painter, const QWidget* widget) const override
+    {
+        QProxyStyle::drawControl(element, option, painter, widget);
+
+        if(element != CE_TabBarTabShape || !widget)
+            return;
+
+        const auto* tabBar = qobject_cast<const QTabBar*>(widget);
+        const auto* tabOption = qstyleoption_cast<const QStyleOptionTab*>(option);
+        if(!tabBar || !tabOption)
+            return;
+
+        if(!(tabOption->state & State_Selected))
+            return;
+
+        if(!widget->property("mdiIndicatorActive").toBool())
+            return;
+
+        const QRect r = tabOption->rect;
+        const QColor color = widget->palette().highlight().color();
+        constexpr int thickness = 2;
+
+        switch (tabBar->shape()) {
+            case QTabBar::RoundedSouth:
+            case QTabBar::TriangularSouth:
+                painter->fillRect(r.left(), r.bottom() - thickness + 1, r.width(), thickness, color);
+                break;
+            case QTabBar::RoundedWest:
+            case QTabBar::TriangularWest:
+                painter->fillRect(r.left(), r.top(), thickness, r.height(), color);
+                break;
+            case QTabBar::RoundedEast:
+            case QTabBar::TriangularEast:
+                painter->fillRect(r.right() - thickness + 1, r.top(), thickness, r.height(), color);
+                break;
+            case QTabBar::RoundedNorth:
+            case QTabBar::TriangularNorth:
+            default:
+                painter->fillRect(r.left(), r.top(), r.width(), thickness, color);
+                break;
+        }
+    }
+};
 
 ///
 /// \brief setWindowTitleHelper
@@ -66,14 +118,17 @@ static inline QString tabTextForWindow(QMdiSubWindow *subWindow)
 ///
 MdiTabBar::MdiTabBar(QWidget* parent)
     : QTabBar(parent)
-    ,_mainTabOverlay(new TabBarOverlay(this, true))
 {
+    setStyle(new MdiTabBarStyle(style()));
+
     setUsesScrollButtons(true);
+    setAutoFillBackground(true);
+    setProperty("mdiIndicatorActive", true);
+
     connect(qApp, &QApplication::focusChanged, this, [this, parent](QWidget* /*old*/, QWidget* now) {
-        if(!now) return;
-        if(parent && parent->isAncestorOf(now)){
-            _mainTabOverlay->update();
-        }
+        _indicatorActive = (now != nullptr) && parent && parent->isAncestorOf(now);
+        setProperty("mdiIndicatorActive", _indicatorActive);
+        update();
     });
 }
 

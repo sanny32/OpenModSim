@@ -2,7 +2,6 @@
 #define MDITABBAR_H
 
 #include <QTabBar>
-#include "tabbaroverlay.h"
 
 class QMdiSubWindow;
 
@@ -28,7 +27,7 @@ private:
     void updateSubWindowState(QMdiSubWindow* wnd);
 
 private:
-    TabBarOverlay* _mainTabOverlay;
+    bool _indicatorActive = true;
 };
 
 #endif // MDITABBAR_H

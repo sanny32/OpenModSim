@@ -312,7 +312,6 @@ set(HEADERS
     updatechecker.h
     scriptsettings.h
     serialportutils.h
-    tabbaroverlay.h
     uiutils.h
     windowactionlist.h
 )

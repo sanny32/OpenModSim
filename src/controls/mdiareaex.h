@@ -6,6 +6,7 @@
 #include <QTabBar>
 #include <QToolButton>
 #include <QSplitter>
+#include <QFrame>
 #include "mditabbar.h"
 
 ///

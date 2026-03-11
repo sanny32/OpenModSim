@@ -102,7 +102,6 @@ void MdiAreaEx::setupTabbedMode()
     tabBar->setVisible(false);
 
     _tabBar = new MdiTabBar(this);
-    _tabBar->setAutoFillBackground(true);
     _tabBar->setDocumentMode(documentMode());
     _tabBar->setTabsClosable(tabsClosable());
     _tabBar->setExpanding(tabsExpanding());

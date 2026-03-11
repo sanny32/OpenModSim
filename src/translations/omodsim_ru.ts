@@ -2708,7 +2708,7 @@ Script.onInit(()=&gt;{
 <context>
     <name>MdiAreaEx</name>
     <message>
-        <location filename="../controls/mdiareaex.cpp" line="150"/>
+        <location filename="../controls/mdiareaex.cpp" line="149"/>
         <source>Split view</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3404,7 +3404,7 @@ Script.onInit(()=&gt;{
 <context>
     <name>QMdiArea</name>
     <message>
-        <location filename="../controls/mditabbar.cpp" line="60"/>
+        <location filename="../controls/mditabbar.cpp" line="112"/>
         <source>(Untitled)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3514,7 +3514,7 @@ Script.onInit(()=&gt;{
 <context>
     <name>QWidget</name>
     <message>
-        <location filename="../controls/mditabbar.cpp" line="33"/>
+        <location filename="../controls/mditabbar.cpp" line="85"/>
         <source>*</source>
         <translation type="unfinished"></translation>
     </message>
