@@ -153,9 +153,21 @@ void MdiAreaEx::setViewMode(ViewMode mode)
 ///
 void MdiAreaEx::setupTabbedMode()
 {
-    auto tabBar = findChild<QTabBar*>();
-    if (!tabBar) return;
-    tabBar->setVisible(false);
+    QTabBar* nativeTabBar = nullptr;
+    const auto tabBars = findChildren<QTabBar*>();
+    for (auto* candidate : tabBars) {
+        if (candidate && !qobject_cast<MdiTabBar*>(candidate)) {
+            nativeTabBar = candidate;
+            break;
+        }
+    }
+
+    if (!nativeTabBar)
+        return;
+
+    nativeTabBar->hide();
+    nativeTabBar->lower();
+    nativeTabBar->setAttribute(Qt::WA_TransparentForMouseEvents, true);
 
     _tabBar = new MdiTabBar(this);
     _tabBar->installEventFilter(this);
@@ -187,7 +199,7 @@ void MdiAreaEx::setupTabbedMode()
     updateTabBarGeometry();
     updateViewportBaseLine();
 
-    connect(tabBar, &QObject::destroyed, this, &MdiAreaEx::on_tabBarDestroyed);
+    connect(nativeTabBar, &QObject::destroyed, this, &MdiAreaEx::on_tabBarDestroyed);
     connect(_tabBar, &QTabBar::currentChanged, this, &MdiAreaEx::on_currentTabChanged);
     connect(_tabBar, &QTabBar::tabCloseRequested, this, &MdiAreaEx::on_closeTab);
     connect(_tabBar, &QTabBar::tabMoved, this, &MdiAreaEx::on_moveTab);
@@ -198,8 +210,11 @@ void MdiAreaEx::setupTabbedMode()
 ///
 void MdiAreaEx::createSplitButton()
 {
-    if (_splitButton)
+    if (_splitButton) {
+        _splitButton->show();
+        _splitButton->raise();
         return;
+    }
 
     _splitButton = new QToolButton(this);
     _splitButton->setAutoRaise(true);
@@ -262,8 +277,7 @@ void MdiAreaEx::on_tabBarDestroyed()
     }
 
     if (_splitButton) {
-        _splitButton->deleteLater();
-        _splitButton = nullptr;
+        _splitButton->hide();
     }
 
     if (_tabBarBaseLine)
