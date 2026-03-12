@@ -29,7 +29,11 @@ static bool setEqualSplitterSizes(QSplitter* splitter)
 
     splitter->setStretchFactor(0, 1);
     splitter->setStretchFactor(1, 1);
-    splitter->setSizes({1, 1});
+
+    const int handleWidth = qMax(0, splitter->handleWidth());
+    const int available = qMax(2, total - handleWidth);
+    const int first = available / 2;
+    splitter->setSizes({first, available - first});
     return true;
 }
 
@@ -45,6 +49,8 @@ MdiAreaEx::MdiAreaEx(QWidget* parent)
     hostLayout->setSpacing(0);
 
     _primaryArea = new MdiArea(this);
+    _primaryArea->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Expanding);
+    _primaryArea->setMinimumSize(0, 0);
     hostLayout->addWidget(_primaryArea);
 
     _lastActiveArea = _primaryArea;
@@ -901,15 +907,19 @@ void MdiAreaEx::ensureSplitArea(Qt::Orientation orientation)
 
     hostLayout->removeWidget(_primaryArea);
     _primaryArea->setParent(_splitter);
+    _primaryArea->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Expanding);
+    _primaryArea->setMinimumSize(0, 0);
     _splitter->addWidget(_primaryArea);
 
     _secondaryArea = new MdiArea(_splitter);
+    _secondaryArea->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Expanding);
+    _secondaryArea->setMinimumSize(0, 0);
     syncPanelOptions(_secondaryArea);
     _secondaryArea->setViewMode(viewMode());
     _splitter->addWidget(_secondaryArea);
     _splitter->setStretchFactor(0, 1);
     _splitter->setStretchFactor(1, 1);
-    _splitter->setSizes({1, 1});
+    setEqualSplitterSizes(_splitter);
 
     if (auto* boxLayout = qobject_cast<QBoxLayout*>(hostLayout)) {
         if (hostIndex >= 0)
@@ -965,6 +975,7 @@ void MdiAreaEx::mergeSplitArea()
     _splitter->deleteLater();
     _splitter = nullptr;
     _pendingSplitterEqualize = false;
+    _pendingSplitterEqualizePasses = 0;
 
     _lastActiveArea = _primaryArea;
     _isSplitInProgress = false;
@@ -981,8 +992,15 @@ void MdiAreaEx::requestEqualSplitterSizes()
         return;
 
     _pendingSplitterEqualize = true;
+    _pendingSplitterEqualizePasses = 8;
     tryEqualizeSplitterSizes();
     QTimer::singleShot(0, this, [this]() {
+        tryEqualizeSplitterSizes();
+    });
+    QTimer::singleShot(16, this, [this]() {
+        tryEqualizeSplitterSizes();
+    });
+    QTimer::singleShot(33, this, [this]() {
         tryEqualizeSplitterSizes();
     });
 }
@@ -995,6 +1013,12 @@ void MdiAreaEx::tryEqualizeSplitterSizes()
     if (!_pendingSplitterEqualize || !_splitter)
         return;
 
-    if (setEqualSplitterSizes(_splitter))
+    if (!setEqualSplitterSizes(_splitter))
+        return;
+
+    if (_pendingSplitterEqualizePasses > 0)
+        --_pendingSplitterEqualizePasses;
+
+    if (_pendingSplitterEqualizePasses <= 0)
         _pendingSplitterEqualize = false;
 }
