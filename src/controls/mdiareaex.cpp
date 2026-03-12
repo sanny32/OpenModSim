@@ -494,6 +494,7 @@ void MdiAreaEx::setupTabbedMode()
     updateViewportBaseLine();
 
     connect(nativeTabBar, &QObject::destroyed, this, &MdiAreaEx::on_tabBarDestroyed);
+    connect(_tabBar, &QTabBar::tabBarClicked, this, &MdiAreaEx::on_tabBarClicked, Qt::UniqueConnection);
     connect(_tabBar, &QTabBar::currentChanged, this, &MdiAreaEx::on_currentTabChanged, Qt::UniqueConnection);
     connect(_tabBar, &QTabBar::tabCloseRequested, this, &MdiAreaEx::on_closeTab, Qt::UniqueConnection);
     connect(_tabBar, &QTabBar::tabMoved, this, &MdiAreaEx::on_moveTab, Qt::UniqueConnection);
@@ -690,6 +691,22 @@ void MdiAreaEx::setSplitViewEnabled(bool enabled)
 
     if (wasSplit != isSplitView())
         emit splitViewToggled(isSplitView());
+}
+
+///
+/// \brief MdiAreaEx::on_tabBarClicked
+/// \param index
+///
+void MdiAreaEx::on_tabBarClicked(int index)
+{
+    if (!_tabBar)
+        return;
+
+    auto wnd = _tabBar->subWindowAt(index);
+    if (wnd)
+        setActiveSubWindow(wnd);
+
+    setFocus(Qt::OtherFocusReason);
 }
 
 ///

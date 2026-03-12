@@ -80,6 +80,7 @@ protected:
     void setVisible(bool visible) override;
 
 private slots:
+    void on_tabBarClicked(int index);
     void on_currentTabChanged(int index);
     void on_closeTab(int index);
     void on_moveTab(int from, int to);
