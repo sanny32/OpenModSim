@@ -118,9 +118,12 @@ MainWindow::MainWindow(const QString& profile, bool useSession, QWidget *parent)
     ui->mdiArea->setActivationOrder(QMdiArea::ActivationHistoryOrder);
     connect(ui->mdiArea, &QMdiArea::subWindowActivated, this, &MainWindow::updateMenuWindow);
     connect(ui->mdiArea, &MdiAreaEx::splitViewAboutToDisable, this, [this]() {
+        _splitDisableInProgress = true;
         clearSplitMirrorsFromSecondary();
     });
     connect(ui->mdiArea, &MdiAreaEx::splitViewToggled, this, [this](bool enabled) {
+        _splitDisableInProgress = false;
+
         if(enabled) {
             syncSplitForms();
             return;
@@ -229,6 +232,9 @@ bool MainWindow::eventFilter(QObject* obj, QEvent* e)
             if(auto wnd = qobject_cast<QMdiSubWindow*>(obj))
             {
                 _windowActionList->removeWindow(wnd);
+
+                if(_splitDisableInProgress)
+                    break;
 
                 auto frm = qobject_cast<FormModSim*>(wnd->widget());
                 const int peerId = frm ? frm->property(kSplitMirrorPeerId).toInt() : 0;
@@ -1732,7 +1738,7 @@ bool MainWindow::isSplitTabbedView() const
 ///
 void MainWindow::resetSplitViewIfSecondaryEmpty()
 {
-    if(!isSplitTabbedView())
+    if(_splitDisableInProgress || !isSplitTabbedView())
         return;
 
     auto secondary = splitSecondaryArea();

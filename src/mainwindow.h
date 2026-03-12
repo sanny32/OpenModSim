@@ -211,6 +211,7 @@ private:
     QString _savePath;
     QString _profile;
     bool _splitDisplayDefinitionSyncInProgress = false;
+    bool _splitDisableInProgress = false;
 };
 
 #endif // MAINWINDOW_H
