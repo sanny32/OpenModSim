@@ -38,6 +38,10 @@ public:
         return _tabBar;
     }
 
+    bool isEmpty() const {
+        return subWindowList().isEmpty();
+    }
+
     bool documentMode() const {
         return QMdiArea::documentMode();
     }
