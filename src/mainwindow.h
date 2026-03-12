@@ -157,6 +157,9 @@ private:
     void setupMdiChild(FormModSim* frm, QMdiSubWindow* wnd, bool addToWindowList);
     bool cloneMdiChildState(FormModSim* source, FormModSim* target) const;
     FormModSim* findMdiChildInArea(MdiAreaEx* area, int id) const;
+    FormModSim* splitPeer(FormModSim* frm) const;
+    bool isScriptRunningOnSplitPair(FormModSim* frm) const;
+    void updateSplitPairScriptIcons(FormModSim* frm);
     MdiAreaEx* splitSecondaryArea() const;
     bool isSplitTabbedView() const;
     void resetSplitViewIfEmpty();

@@ -30,6 +30,7 @@ static QString getSettingsFilePath();
 
 namespace {
 constexpr const char* kSplitMirrorPeerId = "SplitMirrorPeerId";
+constexpr const char* kSplitScriptRunning = "SplitScriptRunning";
 }
 
 ///
@@ -329,10 +330,11 @@ void MainWindow::on_awake()
     ui->actionTextCapture->setEnabled(frm && frm->captureMode() == CaptureMode::Off);
     ui->actionCaptureOff->setEnabled(frm && frm->captureMode() == CaptureMode::TextCapture);
 
+    const bool scriptRunning = frm && isScriptRunningOnSplitPair(frm);
     ui->actionImportScript->setEnabled(frm != nullptr);
-    ui->actionRunScript->setEnabled(frm && frm->canRunScript());
-    ui->actionStopScript->setEnabled(frm && frm->canStopScript());
-    _actionRunMode->setEnabled(frm && !frm->canStopScript());
+    ui->actionRunScript->setEnabled(frm && !scriptRunning && frm->canRunScript());
+    ui->actionStopScript->setEnabled(scriptRunning);
+    _actionRunMode->setEnabled(frm && !scriptRunning);
 
     ui->actionTabbedView->setChecked(ui->mdiArea->viewMode() == QMdiArea::TabbedView);
     ui->actionSplitView->setVisible(ui->mdiArea->viewMode() == QMdiArea::TabbedView);
@@ -1285,6 +1287,9 @@ void MainWindow::on_actionRunScript_triggered()
     auto frm = currentMdiChild();
     if(!frm) return;
 
+    if(isScriptRunningOnSplitPair(frm))
+        return;
+
     frm->runScript();
 }
 
@@ -1296,7 +1301,13 @@ void MainWindow::on_actionStopScript_triggered()
     auto frm = currentMdiChild();
     if(!frm) return;
 
-    frm->stopScript();
+    if(frm->canStopScript()) {
+        frm->stopScript();
+        return;
+    }
+
+    if(auto peer = splitPeer(frm); peer && peer->canStopScript())
+        peer->stopScript();
 }
 
 ///
@@ -1619,16 +1630,20 @@ void MainWindow::setupMdiChild(FormModSim* frm, QMdiSubWindow* wnd, bool addToWi
         }
     });
 
-    connect(frm, &FormModSim::scriptRunning, this, [this, frm, wnd]()
+    connect(frm, &FormModSim::scriptRunning, this, [this, frm]()
     {
-        if(frm->scriptSettings().Mode == RunMode::Periodically)
-            crossFadeWindowIcon(wnd, wnd->windowIcon(), ui->actionRunScript->icon());
+        frm->setProperty(kSplitScriptRunning, true);
+        if(auto peer = splitPeer(frm))
+            peer->setProperty(kSplitScriptRunning, true);
+        updateSplitPairScriptIcons(frm);
     });
 
-    connect(frm, &FormModSim::scriptStopped, this, [this, frm, wnd]()
+    connect(frm, &FormModSim::scriptStopped, this, [this, frm]()
     {
-        if(frm->scriptSettings().Mode == RunMode::Periodically)
-            crossFadeWindowIcon(wnd, ui->actionStopScript->icon(), windowIcon());
+        frm->setProperty(kSplitScriptRunning, false);
+        if(auto peer = splitPeer(frm))
+            peer->setProperty(kSplitScriptRunning, false);
+        updateSplitPairScriptIcons(frm);
     });
 
     connect(frm, &FormModSim::closing, this, [this, frm]()
@@ -1711,6 +1726,79 @@ FormModSim* MainWindow::findMdiChildInArea(MdiAreaEx* area, int id) const
 }
 
 ///
+/// \brief MainWindow::splitPeer
+/// \param frm
+/// \return
+///
+FormModSim* MainWindow::splitPeer(FormModSim* frm) const
+{
+    if(!frm)
+        return nullptr;
+
+    const int peerId = frm->property(kSplitMirrorPeerId).toInt();
+    if(peerId <= 0)
+        return nullptr;
+
+    auto peer = findMdiChild(peerId);
+    return (peer && peer != frm) ? peer : nullptr;
+}
+
+///
+/// \brief MainWindow::isScriptRunningOnSplitPair
+/// \param frm
+/// \return
+///
+bool MainWindow::isScriptRunningOnSplitPair(FormModSim* frm) const
+{
+    if(!frm)
+        return false;
+
+    const bool formRunning = frm->canStopScript() || frm->property(kSplitScriptRunning).toBool();
+    if(formRunning)
+        return true;
+
+    if(auto peer = splitPeer(frm)) {
+        const bool peerRunning = peer->canStopScript() || peer->property(kSplitScriptRunning).toBool();
+        return peerRunning;
+    }
+
+    return false;
+}
+
+///
+/// \brief MainWindow::updateSplitPairScriptIcons
+/// \param frm
+///
+void MainWindow::updateSplitPairScriptIcons(FormModSim* frm)
+{
+    if(!frm)
+        return;
+
+    auto applyIcon = [this](FormModSim* target, bool running)
+    {
+        if(!target)
+            return;
+
+        auto targetWnd = qobject_cast<QMdiSubWindow*>(target->parentWidget());
+        if(!targetWnd)
+            return;
+
+        if(running)
+            crossFadeWindowIcon(targetWnd, targetWnd->windowIcon(), ui->actionRunScript->icon());
+        else
+            crossFadeWindowIcon(targetWnd, targetWnd->windowIcon(), windowIcon());
+    };
+
+    auto peer = splitPeer(frm);
+    const bool periodicMode = frm->scriptSettings().Mode == RunMode::Periodically ||
+                              (peer && peer->scriptSettings().Mode == RunMode::Periodically);
+    const bool running = periodicMode && isScriptRunningOnSplitPair(frm);
+
+    applyIcon(frm, running);
+    applyIcon(peer, running);
+}
+
+///
 /// \brief MainWindow::splitSecondaryArea
 /// \return
 ///
@@ -1786,6 +1874,7 @@ void MainWindow::ensureSplitMirrorForForm(FormModSim* frm)
                     doc->setParent(this);
                 existingPeer->setScriptDocument(doc);
             }
+            updateSplitPairScriptIcons(frm);
             return;
         }
     }
@@ -1808,6 +1897,8 @@ void MainWindow::ensureSplitMirrorForForm(FormModSim* frm)
     }
     frm->setProperty(kSplitMirrorPeerId, mirror->formId());
     mirror->setProperty(kSplitMirrorPeerId, frm->formId());
+    mirror->setProperty(kSplitScriptRunning, frm->property(kSplitScriptRunning));
+    updateSplitPairScriptIcons(frm);
     mirror->show();
 }
 
