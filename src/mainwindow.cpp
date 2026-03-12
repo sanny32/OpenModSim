@@ -1647,7 +1647,7 @@ void MainWindow::setupMdiChild(FormModSim* frm, QMdiSubWindow* wnd, bool addToWi
     });
 
     connect(wnd, &QObject::destroyed, this, [this]() {
-        resetSplitViewIfSecondaryEmpty();
+        resetSplitViewIfEmpty();
     });
 
     if(addToWindowList)
@@ -1734,9 +1734,9 @@ bool MainWindow::isSplitTabbedView() const
 }
 
 ///
-/// \brief MainWindow::resetSplitViewIfSecondaryEmpty
+/// \brief MainWindow::resetSplitViewIfEmpty
 ///
-void MainWindow::resetSplitViewIfSecondaryEmpty()
+void MainWindow::resetSplitViewIfEmpty()
 {
     if(_splitDisableInProgress || !isSplitTabbedView())
         return;

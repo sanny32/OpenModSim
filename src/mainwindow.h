@@ -159,7 +159,7 @@ private:
     FormModSim* findMdiChildInArea(MdiAreaEx* area, int id) const;
     MdiAreaEx* splitSecondaryArea() const;
     bool isSplitTabbedView() const;
-    void resetSplitViewIfSecondaryEmpty();
+    void resetSplitViewIfEmpty();
     void ensureSplitMirrorForForm(FormModSim* frm);
     void syncSplitPeerDisplayDefinition(FormModSim* frm);
     void syncSplitPeerState(FormModSim* frm);
