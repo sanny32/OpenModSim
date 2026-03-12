@@ -48,6 +48,7 @@ private:
 ///
 MdiAreaEx::MdiAreaEx(QWidget* parent)
     : QMdiArea(parent)
+    ,_tabBar(nullptr)
     ,_splitButton(nullptr)
 {
     setViewMode(QMdiArea::TabbedView);
@@ -220,6 +221,7 @@ void MdiAreaEx::createSplitButton()
     _splitButton->setAutoRaise(true);
     _splitButton->setIcon(QIcon(":/res/actionSplitView.png"));
     _splitButton->setToolTip(tr("Split view"));
+    _splitButton->setCheckable(true);
 
     const QSize sh = _splitButton->sizeHint();
     const int btnSize = qMax(20, qMin(sh.width(), sh.height()));
