@@ -5,6 +5,9 @@
 #include <QStyle>
 #include <QStyleOptionTabBarBase>
 
+///
+/// \brief The TabBarBaseLineWidget class
+///
 class TabBarBaseLineWidget : public QFrame
 {
 public:
@@ -42,6 +45,10 @@ private:
     MdiArea* _owner;
 };
 
+///
+/// \brief MdiArea::MdiArea
+/// \param parent
+///
 MdiArea::MdiArea(QWidget* parent)
     : QMdiArea(parent)
 {
@@ -49,11 +56,20 @@ MdiArea::MdiArea(QWidget* parent)
     connect(this, &QMdiArea::subWindowActivated, this, &MdiArea::on_subWindowActivated);
 }
 
+///
+/// \brief MdiArea::~MdiArea
+///
 MdiArea::~MdiArea()
 {
     _destroying = true;
 }
 
+///
+/// \brief MdiArea::addSubWindow
+/// \param widget
+/// \param flags
+/// \return
+///
 QMdiSubWindow* MdiArea::addSubWindow(QWidget* widget, Qt::WindowFlags flags)
 {
     auto* wnd = QMdiArea::addSubWindow(widget, flags);
@@ -69,6 +85,10 @@ QMdiSubWindow* MdiArea::addSubWindow(QWidget* widget, Qt::WindowFlags flags)
     return wnd;
 }
 
+///
+/// \brief MdiArea::removeSubWindow
+/// \param widget
+///
 void MdiArea::removeSubWindow(QWidget* widget)
 {
     if (_tabBar) {
@@ -90,11 +110,20 @@ void MdiArea::removeSubWindow(QWidget* widget)
     updateTabBarGeometry();
 }
 
+///
+/// \brief MdiArea::localSubWindowList
+/// \param order
+/// \return
+///
 QList<QMdiSubWindow*> MdiArea::localSubWindowList(WindowOrder order) const
 {
     return QMdiArea::subWindowList(order);
 }
 
+///
+/// \brief MdiArea::setViewMode
+/// \param mode
+///
 void MdiArea::setViewMode(ViewMode mode)
 {
     QMdiArea::setViewMode(mode);
@@ -113,6 +142,10 @@ void MdiArea::setViewMode(ViewMode mode)
     emit tabBarLayoutChanged();
 }
 
+///
+/// \brief MdiArea::setTabsExpanding
+/// \param expanding
+///
 void MdiArea::setTabsExpanding(bool expanding)
 {
     if (_tabsExpanding == expanding)
@@ -122,24 +155,40 @@ void MdiArea::setTabsExpanding(bool expanding)
     refreshTabBar();
 }
 
+///
+/// \brief MdiArea::setDocumentMode
+/// \param enabled
+///
 void MdiArea::setDocumentMode(bool enabled)
 {
     QMdiArea::setDocumentMode(enabled);
     refreshTabBar();
 }
 
+///
+/// \brief MdiArea::setTabsClosable
+/// \param closable
+///
 void MdiArea::setTabsClosable(bool closable)
 {
     QMdiArea::setTabsClosable(closable);
     refreshTabBar();
 }
 
+///
+/// \brief MdiArea::setTabsMovable
+/// \param movable
+///
 void MdiArea::setTabsMovable(bool movable)
 {
     QMdiArea::setTabsMovable(movable);
     refreshTabBar();
 }
 
+///
+/// \brief MdiArea::setTabBarTrailingInset
+/// \param inset
+///
 void MdiArea::setTabBarTrailingInset(int inset)
 {
     const int normalizedInset = qMax(0, inset);
@@ -151,6 +200,12 @@ void MdiArea::setTabBarTrailingInset(int inset)
     emit tabBarLayoutChanged();
 }
 
+///
+/// \brief MdiArea::eventFilter
+/// \param obj
+/// \param event
+/// \return
+///
 bool MdiArea::eventFilter(QObject* obj, QEvent* event)
 {
     if (obj == _tabBar) {
@@ -176,12 +231,20 @@ bool MdiArea::eventFilter(QObject* obj, QEvent* event)
     return QMdiArea::eventFilter(obj, event);
 }
 
+///
+/// \brief MdiArea::resizeEvent
+/// \param event
+///
 void MdiArea::resizeEvent(QResizeEvent* event)
 {
     QMdiArea::resizeEvent(event);
     updateTabBarGeometry();
 }
 
+///
+/// \brief MdiArea::setVisible
+/// \param visible
+///
 void MdiArea::setVisible(bool visible)
 {
     QMdiArea::setVisible(visible);
@@ -191,6 +254,10 @@ void MdiArea::setVisible(bool visible)
     emit tabBarLayoutChanged();
 }
 
+///
+/// \brief MdiArea::on_tabBarClicked
+/// \param index
+///
 void MdiArea::on_tabBarClicked(int index)
 {
     if (!_tabBar)
@@ -203,6 +270,10 @@ void MdiArea::on_tabBarClicked(int index)
     setFocus(Qt::OtherFocusReason);
 }
 
+///
+/// \brief MdiArea::on_currentTabChanged
+/// \param index
+///
 void MdiArea::on_currentTabChanged(int index)
 {
     if (!_tabBar)
@@ -213,6 +284,10 @@ void MdiArea::on_currentTabChanged(int index)
         setActiveSubWindow(wnd);
 }
 
+///
+/// \brief MdiArea::on_closeTab
+/// \param index
+///
 void MdiArea::on_closeTab(int index)
 {
     if (!_tabBar)
@@ -223,12 +298,20 @@ void MdiArea::on_closeTab(int index)
         wnd->close();
 }
 
+///
+/// \brief MdiArea::on_moveTab
+/// \param from
+/// \param to
+///
 void MdiArea::on_moveTab(int from, int to)
 {
     Q_UNUSED(from)
     Q_UNUSED(to)
 }
 
+///
+/// \brief MdiArea::on_tabBarDestroyed
+///
 void MdiArea::on_tabBarDestroyed()
 {
     if (_tabBar) {
@@ -243,6 +326,10 @@ void MdiArea::on_tabBarDestroyed()
     emit tabBarLayoutChanged();
 }
 
+///
+/// \brief MdiArea::on_subWindowActivated
+/// \param wnd
+///
 void MdiArea::on_subWindowActivated(QMdiSubWindow* wnd)
 {
     enforceTabbedSubWindowState(wnd);
@@ -254,6 +341,9 @@ void MdiArea::on_subWindowActivated(QMdiSubWindow* wnd)
     updateTabBarGeometry();
 }
 
+///
+/// \brief MdiArea::setupTabbedMode
+///
 void MdiArea::setupTabbedMode()
 {
     if (_tabBar) {
@@ -313,6 +403,9 @@ void MdiArea::setupTabbedMode()
     connect(_tabBar, &QTabBar::tabMoved, this, &MdiArea::on_moveTab, Qt::UniqueConnection);
 }
 
+///
+/// \brief MdiArea::refreshTabBar
+///
 void MdiArea::refreshTabBar()
 {
     if (!_tabBar)
@@ -325,6 +418,9 @@ void MdiArea::refreshTabBar()
     updateTabBarGeometry();
 }
 
+///
+/// \brief MdiArea::updateTabBarGeometry
+///
 void MdiArea::updateTabBarGeometry()
 {
     if (!_tabBar || _updatingTabBarGeometry)
@@ -384,6 +480,9 @@ void MdiArea::updateTabBarGeometry()
     emit tabBarLayoutChanged();
 }
 
+///
+/// \brief MdiArea::updateViewportBaseLine
+///
 void MdiArea::updateViewportBaseLine()
 {
     auto* vp = viewport();
@@ -452,6 +551,10 @@ void MdiArea::updateViewportBaseLine()
     _tabBarBaseLine->raise();
 }
 
+///
+/// \brief MdiArea::enforceTabbedSubWindowState
+/// \param wnd
+///
 void MdiArea::enforceTabbedSubWindowState(QMdiSubWindow* wnd)
 {
     if (!wnd || viewMode() != QMdiArea::TabbedView)
@@ -467,6 +570,11 @@ void MdiArea::enforceTabbedSubWindowState(QMdiSubWindow* wnd)
         wnd->showMaximized();
 }
 
+///
+/// \brief MdiArea::subWindowAtIndex
+/// \param index
+/// \return
+///
 QMdiSubWindow* MdiArea::subWindowAtIndex(int index) const
 {
     return _tabBar ? _tabBar->subWindowAt(index) : nullptr;

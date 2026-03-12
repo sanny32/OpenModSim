@@ -2712,14 +2712,6 @@ Script.onInit(()=&gt;{
     </message>
 </context>
 <context>
-    <name>MdiAreaEx</name>
-    <message>
-        <location filename="../controls/mdiareaex.cpp" line="536"/>
-        <source>Split view</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>MenuConnect</name>
     <message>
         <location filename="../menuconnect.cpp" line="18"/>
