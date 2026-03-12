@@ -117,7 +117,7 @@ MainWindow::MainWindow(const QString& profile, bool useSession, QWidget *parent)
     });
 
     ui->mdiArea->setActivationOrder(QMdiArea::ActivationHistoryOrder);
-    connect(ui->mdiArea, &QMdiArea::subWindowActivated, this, &MainWindow::updateMenuWindow);
+    connect(ui->mdiArea, &MdiAreaEx::subWindowActivated, this, &MainWindow::updateMenuWindow);
     connect(ui->mdiArea, &MdiAreaEx::splitViewAboutToDisable, this, [this]() {
         _splitDisableInProgress = true;
         clearSplitMirrorsFromSecondary();
@@ -1501,7 +1501,7 @@ void MainWindow::presetRegs(QModbusDataUnit::RegisterType type)
 /// \param addToWindowList
 /// \return
 ///
-FormModSim* MainWindow::createMdiChildOnArea(int id, MdiAreaEx* area, bool addToWindowList)
+FormModSim* MainWindow::createMdiChildOnArea(int id, MdiArea* area, bool addToWindowList)
 {
     if(!area)
         return nullptr;
@@ -1509,7 +1509,7 @@ FormModSim* MainWindow::createMdiChildOnArea(int id, MdiAreaEx* area, bool addTo
     auto frm = new FormModSim(id, _mbMultiServer, _dataSimulator, this);
     frm->enableAutoComplete(AppPreferences::instance().codeAutoComplete());
 
-    auto wnd = area->addSubWindowDirect(frm);
+    auto wnd = area->addSubWindow(frm);
     if(!wnd)
     {
         frm->deleteLater();
@@ -1711,7 +1711,7 @@ bool MainWindow::cloneMdiChildState(FormModSim* source, FormModSim* target) cons
 /// \param id
 /// \return
 ///
-FormModSim* MainWindow::findMdiChildInArea(MdiAreaEx* area, int id) const
+FormModSim* MainWindow::findMdiChildInArea(MdiArea* area, int id) const
 {
     if(!area)
         return nullptr;
@@ -1803,7 +1803,7 @@ void MainWindow::updateSplitPairScriptIcons(FormModSim* frm)
 /// \brief MainWindow::splitSecondaryArea
 /// \return
 ///
-MdiAreaEx* MainWindow::splitSecondaryArea() const
+MdiArea* MainWindow::splitSecondaryArea() const
 {
     return ui->mdiArea->secondaryArea();
 }
@@ -1847,10 +1847,10 @@ void MainWindow::ensureSplitMirrorForForm(FormModSim* frm)
     if(!secondary)
         return;
 
-    MdiAreaEx* ownerArea = nullptr;
+    MdiArea* ownerArea = nullptr;
     for(auto&& wnd : ui->mdiArea->localSubWindowList()) {
         if(wnd && wnd->widget() == frm) {
-            ownerArea = ui->mdiArea;
+            ownerArea = ui->mdiArea->primaryArea();
             break;
         }
     }
@@ -1867,7 +1867,7 @@ void MainWindow::ensureSplitMirrorForForm(FormModSim* frm)
         return;
 
     const int peerId = frm->property(kSplitMirrorPeerId).toInt();
-    MdiAreaEx* targetArea = ownerArea == ui->mdiArea ? secondary : ui->mdiArea;
+    MdiArea* targetArea = ownerArea == ui->mdiArea->primaryArea() ? secondary : ui->mdiArea->primaryArea();
     if(peerId > 0) {
         if(auto existingPeer = findMdiChildInArea(targetArea, peerId)) {
             if(auto* doc = frm->scriptDocument()) {
@@ -1885,7 +1885,7 @@ void MainWindow::ensureSplitMirrorForForm(FormModSim* frm)
         ++mirrorId;
     _windowCounter = mirrorId;
 
-    const bool addToWindowList = (targetArea == ui->mdiArea);
+    const bool addToWindowList = (targetArea == ui->mdiArea->primaryArea());
     auto mirror = createMdiChildOnArea(mirrorId, targetArea, addToWindowList);
     if(!mirror)
         return;
@@ -1995,7 +1995,7 @@ void MainWindow::clearSplitMirrorsFromSecondary()
             continue;
 
         const int peerId = frm->property(kSplitMirrorPeerId).toInt();
-        auto peer = findMdiChildInArea(ui->mdiArea, peerId);
+        auto peer = findMdiChildInArea(ui->mdiArea->primaryArea(), peerId);
         if(!peer)
             continue;
 
@@ -2015,7 +2015,7 @@ FormModSim* MainWindow::createMdiChild(int id)
         ++id;
 
     _windowCounter = qMax(_windowCounter, id);
-    auto frm = createMdiChildOnArea(id, ui->mdiArea, true);
+    auto frm = createMdiChildOnArea(id, ui->mdiArea->primaryArea(), true);
     if(frm)
         ensureSplitMirrorForForm(frm);
 

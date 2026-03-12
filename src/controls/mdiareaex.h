@@ -1,80 +1,86 @@
 #ifndef MDIAREAEX_H
 #define MDIAREAEX_H
 
+#include <QWidget>
 #include <QMdiArea>
 #include <QMdiSubWindow>
+#include <QBrush>
 #include <QTabBar>
+#include <QTabWidget>
 #include <QToolButton>
 #include <QSplitter>
-#include <QFrame>
-#include "mditabbar.h"
+#include "mdiarea.h"
 
-///
-/// \brief The MdiAreaEx class
-///
-class MdiAreaEx : public QMdiArea
+class MdiAreaEx : public QWidget
 {
     Q_OBJECT
-public:
-    explicit MdiAreaEx(QWidget* parent = nullptr, bool splitPanel = false);
-    ~MdiAreaEx();
+    Q_PROPERTY(bool documentMode READ documentMode WRITE setDocumentMode)
+    Q_PROPERTY(bool tabsClosable READ tabsClosable WRITE setTabsClosable)
+    Q_PROPERTY(bool tabsMovable READ tabsMovable WRITE setTabsMovable)
 
-    QMdiSubWindow *addSubWindow(QWidget *widget, Qt::WindowFlags flags = Qt::WindowFlags());
-    QMdiSubWindow *addSubWindowDirect(QWidget *widget, Qt::WindowFlags flags = Qt::WindowFlags());
-    void removeSubWindow(QWidget *widget);
-    QList<QMdiSubWindow*> subWindowList(WindowOrder order = CreationOrder) const;
-    QList<QMdiSubWindow*> localSubWindowList(WindowOrder order = CreationOrder) const;
+public:
+    explicit MdiAreaEx(QWidget* parent = nullptr);
+    ~MdiAreaEx() override;
+
+    QMdiSubWindow* addSubWindow(QWidget* widget, Qt::WindowFlags flags = Qt::WindowFlags());
+    QMdiSubWindow* addSubWindowDirect(QWidget* widget, Qt::WindowFlags flags = Qt::WindowFlags());
+    void removeSubWindow(QWidget* widget);
+
+    QList<QMdiSubWindow*> subWindowList(QMdiArea::WindowOrder order = QMdiArea::CreationOrder) const;
+    QList<QMdiSubWindow*> localSubWindowList(QMdiArea::WindowOrder order = QMdiArea::CreationOrder) const;
+
     QMdiSubWindow* currentSubWindow() const;
     QMdiSubWindow* activeSubWindow() const;
     void setActiveSubWindow(QMdiSubWindow* wnd);
     void closeAllSubWindows();
 
-    void setViewMode(ViewMode mode);
+    void setViewMode(QMdiArea::ViewMode mode);
+    QMdiArea::ViewMode viewMode() const;
     void toggleVerticalSplit();
     bool isSplitView() const;
-    MdiAreaEx* secondaryArea() const;
 
-    QTabBar* tabBar() {
-        return _tabBar;
-    }
+    MdiArea* primaryArea() const;
+    MdiArea* secondaryArea() const;
 
-    bool isEmpty() const {
+    QTabBar* tabBar() const;
+
+    bool isEmpty() const
+    {
         return subWindowList().isEmpty();
     }
 
-    bool documentMode() const {
-        return QMdiArea::documentMode();
-    }
-    void setDocumentMode(bool enabled) {
-        QMdiArea::setDocumentMode(enabled);
-        refreshTabBar();
-    }
+    bool documentMode() const;
+    void setDocumentMode(bool enabled);
 
-    bool tabsClosable() const {
-        return QMdiArea::tabsClosable();
-    }
-    void setTabsClosable(bool closable){
-        QMdiArea::setTabsClosable(closable);
-        refreshTabBar();
-    }
+    bool tabsClosable() const;
+    void setTabsClosable(bool closable);
 
-    bool tabsMovable() const{
-        return QMdiArea::tabsMovable();
-    }
-    void setTabsMovable(bool movable){
-        QMdiArea::setTabsMovable(movable);
-        refreshTabBar();
-    }
+    bool tabsMovable() const;
+    void setTabsMovable(bool movable);
 
-    bool tabsExpanding() const {
-        return _tabsExpanding;
-    }
-    void setTabsExpanding(bool expanding) {
-        _tabsExpanding = expanding;
-        refreshTabBar();
-    }
+    bool tabsExpanding() const;
+    void setTabsExpanding(bool expanding);
+
+    void setActivationOrder(QMdiArea::WindowOrder order);
+    QMdiArea::WindowOrder activationOrder() const;
+
+    void setBackground(const QBrush& background);
+    QBrush background() const;
+
+    void setOption(QMdiArea::AreaOption option, bool on = true);
+    bool testOption(QMdiArea::AreaOption option) const;
+
+    void setTabPosition(QTabWidget::TabPosition position);
+    QTabWidget::TabPosition tabPosition() const;
+
+    void setTabShape(QTabWidget::TabShape shape);
+    QTabWidget::TabShape tabShape() const;
+
+    void cascadeSubWindows();
+    void tileSubWindows();
 
 signals:
+    void subWindowActivated(QMdiSubWindow* wnd);
     void splitViewAboutToDisable();
     void splitViewToggled(bool enabled);
 
@@ -84,50 +90,35 @@ protected:
     void setVisible(bool visible) override;
 
 private slots:
-    void on_tabBarClicked(int index);
-    void on_currentTabChanged(int index);
-    void on_closeTab(int index);
-    void on_moveTab(int from, int to);
-    void on_tabBarDestroyed();
-    void on_subWindowActivated(QMdiSubWindow* wnd);
+    void on_panelSubWindowActivated(QMdiSubWindow* wnd);
+    void on_panelTabBarLayoutChanged();
 
 private:
-    QMdiSubWindow* addSubWindowLocal(QWidget* widget, Qt::WindowFlags flags);
-    void removeSubWindowLocal(QWidget* widget);
-    MdiAreaEx* areaForSubWindow(QMdiSubWindow* wnd) const;
-    MdiAreaEx* activePanel() const;
+    MdiArea* areaForSubWindow(QMdiSubWindow* wnd) const;
+    MdiArea* activePanel() const;
+    void connectPanel(MdiArea* area);
+    void syncPanelOptions(MdiArea* area) const;
 
-    void setupTabbedMode();
     void createSplitButton();
-    void updateViewportBaseLine();
     bool shouldShowSplitButton() const;
     void syncSplitButtonState();
-    void splitTab(int index, Qt::Orientation orientation);
+    void updateSplitButtonGeometry();
     void setSplitViewEnabled(bool enabled);
     void ensureSplitArea(Qt::Orientation orientation);
     void mergeSplitArea();
     void requestEqualSplitterSizes();
     void tryEqualizeSplitterSizes();
-    void enforceTabbedSubWindowState(QMdiSubWindow* wnd);
-
-    void refreshTabBar();
-    void updateTabBarGeometry();
-
-    QMdiSubWindow* subWindowAtIndex(int index) const;
 
 private:
-    bool _isSecondaryPanel = false;
     bool _isSplitInProgress = false;
     bool _destroying = false;
-    bool _tabsExpanding = false;
-    bool _updatingTabBarGeometry = false;
     bool _pendingSplitterEqualize = false;
-    MdiTabBar* _tabBar;
-    QToolButton* _splitButton;
-    QFrame* _tabBarBaseLine = nullptr;
+    bool _updatingSplitButtonGeometry = false;
+    QToolButton* _splitButton = nullptr;
     QSplitter* _splitter = nullptr;
-    MdiAreaEx* _secondaryArea = nullptr;
-    MdiAreaEx* _lastActiveArea = nullptr;
+    MdiArea* _primaryArea = nullptr;
+    MdiArea* _secondaryArea = nullptr;
+    MdiArea* _lastActiveArea = nullptr;
 };
 
 #endif // MDIAREAEX_H

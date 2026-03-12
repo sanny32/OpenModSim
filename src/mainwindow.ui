@@ -1117,7 +1117,7 @@
  <customwidgets>
   <customwidget>
    <class>MdiAreaEx</class>
-   <extends>QMdiArea</extends>
+   <extends>QWidget</extends>
    <header>mdiareaex.h</header>
    <container>1</container>
   </customwidget>

@@ -17,6 +17,7 @@ class MainWindow;
 }
 
 class MdiAreaEx;
+class MdiArea;
 
 ///
 /// \brief The MainWindow class
@@ -153,14 +154,14 @@ private slots:
     void setCodepage(const QString& name);
 
 private:
-    FormModSim* createMdiChildOnArea(int id, MdiAreaEx* area, bool addToWindowList);
+    FormModSim* createMdiChildOnArea(int id, MdiArea* area, bool addToWindowList);
     void setupMdiChild(FormModSim* frm, QMdiSubWindow* wnd, bool addToWindowList);
     bool cloneMdiChildState(FormModSim* source, FormModSim* target) const;
-    FormModSim* findMdiChildInArea(MdiAreaEx* area, int id) const;
+    FormModSim* findMdiChildInArea(MdiArea* area, int id) const;
     FormModSim* splitPeer(FormModSim* frm) const;
     bool isScriptRunningOnSplitPair(FormModSim* frm) const;
     void updateSplitPairScriptIcons(FormModSim* frm);
-    MdiAreaEx* splitSecondaryArea() const;
+    MdiArea* splitSecondaryArea() const;
     bool isSplitTabbedView() const;
     void resetSplitViewIfEmpty();
     void ensureSplitMirrorForForm(FormModSim* frm);

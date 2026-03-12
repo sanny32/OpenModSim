@@ -1,4 +1,5 @@
 ﻿#include "mdiareaex.h"
+#if 0
 #include <QApplication>
 #include <QBoxLayout>
 #include <QLayout>
@@ -1117,4 +1118,770 @@ void MdiAreaEx::splitTab(int index, Qt::Orientation orientation)
     _secondaryArea->setFocus(Qt::OtherFocusReason);
     _lastActiveArea = _secondaryArea;
     syncSplitButtonState();
+}
+#endif
+
+#include <QApplication>
+#include <QBoxLayout>
+#include <QHBoxLayout>
+#include <QLayout>
+#include <QScopedValueRollback>
+#include <QSignalBlocker>
+
+static bool setEqualSplitterSizes(QSplitter* splitter)
+{
+    if (!splitter)
+        return false;
+
+    splitter->setStretchFactor(0, 1);
+    splitter->setStretchFactor(1, 1);
+
+    const int total = splitter->orientation() == Qt::Horizontal
+                          ? splitter->size().width()
+                          : splitter->size().height();
+
+    if (total > 1) {
+        const int first = total / 2;
+        splitter->setSizes({first, total - first});
+        return true;
+    }
+
+    return false;
+}
+
+MdiAreaEx::MdiAreaEx(QWidget* parent)
+    : QWidget(parent)
+{
+    auto* hostLayout = new QHBoxLayout(this);
+    hostLayout->setContentsMargins(0, 0, 0, 0);
+    hostLayout->setSpacing(0);
+
+    _primaryArea = new MdiArea(this);
+    hostLayout->addWidget(_primaryArea);
+
+    _lastActiveArea = _primaryArea;
+
+    connectPanel(_primaryArea);
+    createSplitButton();
+    syncSplitButtonState();
+    updateSplitButtonGeometry();
+}
+
+MdiAreaEx::~MdiAreaEx()
+{
+    _destroying = true;
+}
+
+QMdiSubWindow* MdiAreaEx::addSubWindow(QWidget* widget, Qt::WindowFlags flags)
+{
+    if (!_primaryArea)
+        return nullptr;
+
+    MdiArea* target = _primaryArea;
+    if (_secondaryArea) {
+        if (auto* panel = activePanel())
+            target = panel;
+    }
+
+    auto* wnd = target->addSubWindow(widget, flags);
+    syncSplitButtonState();
+    updateSplitButtonGeometry();
+    return wnd;
+}
+
+QMdiSubWindow* MdiAreaEx::addSubWindowDirect(QWidget* widget, Qt::WindowFlags flags)
+{
+    if (!_primaryArea)
+        return nullptr;
+
+    auto* wnd = _primaryArea->addSubWindow(widget, flags);
+    syncSplitButtonState();
+    updateSplitButtonGeometry();
+    return wnd;
+}
+
+void MdiAreaEx::removeSubWindow(QWidget* widget)
+{
+    if (!_primaryArea || !widget)
+        return;
+
+    QMdiSubWindow* wnd = qobject_cast<QMdiSubWindow*>(widget);
+    if (!wnd) {
+        for (auto* candidate : _primaryArea->localSubWindowList()) {
+            if (candidate && candidate->widget() == widget) {
+                wnd = candidate;
+                break;
+            }
+        }
+
+        if (!wnd && _secondaryArea) {
+            for (auto* candidate : _secondaryArea->localSubWindowList()) {
+                if (candidate && candidate->widget() == widget) {
+                    wnd = candidate;
+                    break;
+                }
+            }
+        }
+    }
+
+    auto* owner = areaForSubWindow(wnd);
+    if (!owner)
+        owner = _primaryArea;
+
+    owner->removeSubWindow(widget);
+    syncSplitButtonState();
+    updateSplitButtonGeometry();
+}
+
+QList<QMdiSubWindow*> MdiAreaEx::subWindowList(QMdiArea::WindowOrder order) const
+{
+    QList<QMdiSubWindow*> list;
+
+    if (_primaryArea)
+        list = _primaryArea->localSubWindowList(order);
+
+    if (_secondaryArea)
+        list.append(_secondaryArea->localSubWindowList(order));
+
+    return list;
+}
+
+QList<QMdiSubWindow*> MdiAreaEx::localSubWindowList(QMdiArea::WindowOrder order) const
+{
+    return _primaryArea ? _primaryArea->localSubWindowList(order) : QList<QMdiSubWindow*>();
+}
+
+QMdiSubWindow* MdiAreaEx::currentSubWindow() const
+{
+    if (!_primaryArea)
+        return nullptr;
+
+    if (!_secondaryArea)
+        return _primaryArea->currentSubWindow();
+
+    auto* panel = activePanel();
+    if (panel == _secondaryArea) {
+        if (auto* wnd = _secondaryArea->currentSubWindow())
+            return wnd;
+    }
+
+    if (auto* wnd = _primaryArea->currentSubWindow())
+        return wnd;
+
+    return _secondaryArea->currentSubWindow();
+}
+
+QMdiSubWindow* MdiAreaEx::activeSubWindow() const
+{
+    if (!_primaryArea)
+        return nullptr;
+
+    if (!_secondaryArea)
+        return _primaryArea->activeSubWindow();
+
+    auto* panel = activePanel();
+    if (panel == _secondaryArea) {
+        if (auto* wnd = _secondaryArea->activeSubWindow())
+            return wnd;
+    }
+
+    if (auto* wnd = _primaryArea->activeSubWindow())
+        return wnd;
+
+    return _secondaryArea->activeSubWindow();
+}
+
+void MdiAreaEx::setActiveSubWindow(QMdiSubWindow* wnd)
+{
+    if (!_primaryArea)
+        return;
+
+    if (!wnd) {
+        _primaryArea->setActiveSubWindow(nullptr);
+        if (_secondaryArea)
+            _secondaryArea->setActiveSubWindow(nullptr);
+        return;
+    }
+
+    if (auto* owner = areaForSubWindow(wnd)) {
+        owner->setActiveSubWindow(wnd);
+        owner->setFocus(Qt::OtherFocusReason);
+        _lastActiveArea = owner;
+        return;
+    }
+
+    _primaryArea->setActiveSubWindow(wnd);
+    _primaryArea->setFocus(Qt::OtherFocusReason);
+    _lastActiveArea = _primaryArea;
+}
+
+void MdiAreaEx::closeAllSubWindows()
+{
+    if (_primaryArea)
+        _primaryArea->closeAllSubWindows();
+
+    if (_secondaryArea)
+        _secondaryArea->closeAllSubWindows();
+
+    syncSplitButtonState();
+    updateSplitButtonGeometry();
+}
+
+void MdiAreaEx::setViewMode(QMdiArea::ViewMode mode)
+{
+    if (!_primaryArea)
+        return;
+
+    if (mode != QMdiArea::TabbedView && _secondaryArea)
+        setSplitViewEnabled(false);
+
+    _primaryArea->setViewMode(mode);
+
+    if (_secondaryArea)
+        _secondaryArea->setViewMode(mode);
+
+    syncSplitButtonState();
+    updateSplitButtonGeometry();
+}
+
+QMdiArea::ViewMode MdiAreaEx::viewMode() const
+{
+    return _primaryArea ? _primaryArea->viewMode() : QMdiArea::TabbedView;
+}
+
+void MdiAreaEx::toggleVerticalSplit()
+{
+    setSplitViewEnabled(!isSplitView());
+}
+
+bool MdiAreaEx::isSplitView() const
+{
+    return _splitter && _secondaryArea;
+}
+
+MdiArea* MdiAreaEx::primaryArea() const
+{
+    return _primaryArea;
+}
+
+MdiArea* MdiAreaEx::secondaryArea() const
+{
+    return _secondaryArea;
+}
+
+QTabBar* MdiAreaEx::tabBar() const
+{
+    return _primaryArea ? _primaryArea->tabBar() : nullptr;
+}
+
+bool MdiAreaEx::documentMode() const
+{
+    return _primaryArea ? _primaryArea->documentMode() : false;
+}
+
+void MdiAreaEx::setDocumentMode(bool enabled)
+{
+    if (_primaryArea)
+        _primaryArea->setDocumentMode(enabled);
+
+    if (_secondaryArea)
+        _secondaryArea->setDocumentMode(enabled);
+
+    updateSplitButtonGeometry();
+}
+
+bool MdiAreaEx::tabsClosable() const
+{
+    return _primaryArea ? _primaryArea->tabsClosable() : false;
+}
+
+void MdiAreaEx::setTabsClosable(bool closable)
+{
+    if (_primaryArea)
+        _primaryArea->setTabsClosable(closable);
+
+    if (_secondaryArea)
+        _secondaryArea->setTabsClosable(closable);
+
+    updateSplitButtonGeometry();
+}
+
+bool MdiAreaEx::tabsMovable() const
+{
+    return _primaryArea ? _primaryArea->tabsMovable() : false;
+}
+
+void MdiAreaEx::setTabsMovable(bool movable)
+{
+    if (_primaryArea)
+        _primaryArea->setTabsMovable(movable);
+
+    if (_secondaryArea)
+        _secondaryArea->setTabsMovable(movable);
+
+    updateSplitButtonGeometry();
+}
+
+bool MdiAreaEx::tabsExpanding() const
+{
+    return _primaryArea ? _primaryArea->tabsExpanding() : false;
+}
+
+void MdiAreaEx::setTabsExpanding(bool expanding)
+{
+    if (_primaryArea)
+        _primaryArea->setTabsExpanding(expanding);
+
+    if (_secondaryArea)
+        _secondaryArea->setTabsExpanding(expanding);
+
+    updateSplitButtonGeometry();
+}
+
+void MdiAreaEx::setActivationOrder(QMdiArea::WindowOrder order)
+{
+    if (_primaryArea)
+        _primaryArea->setActivationOrder(order);
+
+    if (_secondaryArea)
+        _secondaryArea->setActivationOrder(order);
+}
+
+QMdiArea::WindowOrder MdiAreaEx::activationOrder() const
+{
+    return _primaryArea ? _primaryArea->activationOrder() : QMdiArea::ActivationHistoryOrder;
+}
+
+void MdiAreaEx::setBackground(const QBrush& background)
+{
+    if (_primaryArea)
+        _primaryArea->setBackground(background);
+
+    if (_secondaryArea)
+        _secondaryArea->setBackground(background);
+}
+
+QBrush MdiAreaEx::background() const
+{
+    return _primaryArea ? _primaryArea->background() : QBrush();
+}
+
+void MdiAreaEx::setOption(QMdiArea::AreaOption option, bool on)
+{
+    if (_primaryArea)
+        _primaryArea->setOption(option, on);
+
+    if (_secondaryArea)
+        _secondaryArea->setOption(option, on);
+}
+
+bool MdiAreaEx::testOption(QMdiArea::AreaOption option) const
+{
+    return _primaryArea && _primaryArea->testOption(option);
+}
+
+void MdiAreaEx::setTabPosition(QTabWidget::TabPosition position)
+{
+    if (_primaryArea)
+        _primaryArea->setTabPosition(position);
+
+    if (_secondaryArea)
+        _secondaryArea->setTabPosition(position);
+
+    updateSplitButtonGeometry();
+}
+
+QTabWidget::TabPosition MdiAreaEx::tabPosition() const
+{
+    return _primaryArea ? _primaryArea->tabPosition() : QTabWidget::North;
+}
+
+void MdiAreaEx::setTabShape(QTabWidget::TabShape shape)
+{
+    if (_primaryArea)
+        _primaryArea->setTabShape(shape);
+
+    if (_secondaryArea)
+        _secondaryArea->setTabShape(shape);
+
+    updateSplitButtonGeometry();
+}
+
+QTabWidget::TabShape MdiAreaEx::tabShape() const
+{
+    return _primaryArea ? _primaryArea->tabShape() : QTabWidget::Rounded;
+}
+
+void MdiAreaEx::cascadeSubWindows()
+{
+    if (_primaryArea)
+        _primaryArea->cascadeSubWindows();
+
+    if (_secondaryArea)
+        _secondaryArea->cascadeSubWindows();
+}
+
+void MdiAreaEx::tileSubWindows()
+{
+    if (_primaryArea)
+        _primaryArea->tileSubWindows();
+
+    if (_secondaryArea)
+        _secondaryArea->tileSubWindows();
+}
+
+bool MdiAreaEx::eventFilter(QObject* obj, QEvent* event)
+{
+    if (obj == _splitter) {
+        switch (event->type()) {
+            case QEvent::Show:
+            case QEvent::Resize:
+            case QEvent::LayoutRequest:
+                tryEqualizeSplitterSizes();
+                updateSplitButtonGeometry();
+                break;
+            default:
+                break;
+        }
+    }
+
+    return QWidget::eventFilter(obj, event);
+}
+
+void MdiAreaEx::resizeEvent(QResizeEvent* event)
+{
+    QWidget::resizeEvent(event);
+    tryEqualizeSplitterSizes();
+    updateSplitButtonGeometry();
+}
+
+void MdiAreaEx::setVisible(bool visible)
+{
+    QWidget::setVisible(visible);
+    if (_splitButton)
+        _splitButton->setVisible(visible && shouldShowSplitButton());
+    updateSplitButtonGeometry();
+}
+
+void MdiAreaEx::on_panelSubWindowActivated(QMdiSubWindow* wnd)
+{
+    if (_isSplitInProgress)
+        return;
+
+    if (wnd) {
+        if (auto* owner = areaForSubWindow(wnd))
+            _lastActiveArea = owner;
+    } else {
+        auto* senderArea = qobject_cast<MdiArea*>(sender());
+        if (senderArea == _primaryArea || senderArea == _secondaryArea)
+            _lastActiveArea = senderArea;
+    }
+
+    emit subWindowActivated(wnd);
+    syncSplitButtonState();
+    updateSplitButtonGeometry();
+}
+
+void MdiAreaEx::on_panelTabBarLayoutChanged()
+{
+    updateSplitButtonGeometry();
+}
+
+MdiArea* MdiAreaEx::areaForSubWindow(QMdiSubWindow* wnd) const
+{
+    if (!wnd)
+        return nullptr;
+
+    if (_primaryArea && _primaryArea->localSubWindowList().contains(wnd))
+        return _primaryArea;
+
+    if (_secondaryArea && _secondaryArea->localSubWindowList().contains(wnd))
+        return _secondaryArea;
+
+    return nullptr;
+}
+
+MdiArea* MdiAreaEx::activePanel() const
+{
+    if (!_primaryArea)
+        return nullptr;
+
+    if (!_secondaryArea)
+        return _primaryArea;
+
+    QWidget* focus = QApplication::focusWidget();
+    if (focus) {
+        if (_secondaryArea->isAncestorOf(focus))
+            return _secondaryArea;
+        if (_primaryArea->isAncestorOf(focus))
+            return _primaryArea;
+    }
+
+    if (_lastActiveArea == _secondaryArea || _lastActiveArea == _primaryArea)
+        return _lastActiveArea;
+
+    return _primaryArea;
+}
+
+void MdiAreaEx::connectPanel(MdiArea* area)
+{
+    if (!area)
+        return;
+
+    connect(area, &QMdiArea::subWindowActivated, this, &MdiAreaEx::on_panelSubWindowActivated, Qt::UniqueConnection);
+    connect(area, &MdiArea::tabBarLayoutChanged, this, &MdiAreaEx::on_panelTabBarLayoutChanged, Qt::UniqueConnection);
+}
+
+void MdiAreaEx::syncPanelOptions(MdiArea* area) const
+{
+    if (!area || !_primaryArea)
+        return;
+
+    area->setActivationOrder(_primaryArea->activationOrder());
+    area->setBackground(_primaryArea->background());
+    area->setDocumentMode(_primaryArea->documentMode());
+    area->setTabsClosable(_primaryArea->tabsClosable());
+    area->setTabsMovable(_primaryArea->tabsMovable());
+    area->setTabsExpanding(_primaryArea->tabsExpanding());
+    area->setTabPosition(_primaryArea->tabPosition());
+    area->setTabShape(_primaryArea->tabShape());
+    area->setOption(QMdiArea::DontMaximizeSubWindowOnActivation,
+                    _primaryArea->testOption(QMdiArea::DontMaximizeSubWindowOnActivation));
+    area->setTabBarTrailingInset(0);
+}
+
+void MdiAreaEx::createSplitButton()
+{
+    if (_splitButton) {
+        _splitButton->raise();
+        syncSplitButtonState();
+        return;
+    }
+
+    _splitButton = new QToolButton(this);
+    _splitButton->setAutoRaise(true);
+    _splitButton->setIcon(QIcon(":/res/actionSplitView.png"));
+    _splitButton->setToolTip(QStringLiteral("Split view"));
+    _splitButton->setCheckable(true);
+
+    const QSize sh = _splitButton->sizeHint();
+    const int btnSize = qMax(20, qMin(sh.width(), sh.height()));
+    _splitButton->setFixedSize(btnSize, btnSize);
+
+    connect(_splitButton, &QToolButton::toggled, this, [this](bool checked) {
+        if (_isSplitInProgress)
+            return;
+        setSplitViewEnabled(checked);
+    });
+
+    _splitButton->raise();
+    syncSplitButtonState();
+}
+
+bool MdiAreaEx::shouldShowSplitButton() const
+{
+    return _primaryArea &&
+           _primaryArea->viewMode() == QMdiArea::TabbedView &&
+           !subWindowList().isEmpty();
+}
+
+void MdiAreaEx::syncSplitButtonState()
+{
+    if (!_splitButton)
+        return;
+
+    const bool visible = shouldShowSplitButton() && isVisible();
+    _splitButton->setVisible(visible);
+
+    QSignalBlocker blocker(_splitButton);
+    _splitButton->setChecked(isSplitView());
+}
+
+void MdiAreaEx::updateSplitButtonGeometry()
+{
+    if (!_splitButton || !_primaryArea || _updatingSplitButtonGeometry)
+        return;
+
+    QScopedValueRollback<bool> guard(_updatingSplitButtonGeometry, true);
+
+    const bool showSplitButton = shouldShowSplitButton() && isVisible();
+    if (!showSplitButton) {
+        _primaryArea->setTabBarTrailingInset(0);
+        _splitButton->hide();
+        return;
+    }
+
+    auto* primaryTabBar = _primaryArea->tabBar();
+    if (!primaryTabBar || _primaryArea->viewMode() != QMdiArea::TabbedView || !primaryTabBar->isVisible()) {
+        _primaryArea->setTabBarTrailingInset(0);
+        _splitButton->hide();
+        return;
+    }
+
+    QWidget* splitButtonHost = _primaryArea;
+    if (isSplitView() && _splitter && _splitter->parentWidget())
+        splitButtonHost = _splitter->parentWidget();
+
+    if (_splitButton->parentWidget() != splitButtonHost)
+        _splitButton->setParent(splitButtonHost);
+
+    const bool splitButtonInPrimaryArea = _splitButton->parentWidget() == _primaryArea;
+    const int splitWidth = splitButtonInPrimaryArea ? (_splitButton->width() + 4) : 0;
+    if (_primaryArea->tabBarTrailingInset() != splitWidth)
+        _primaryArea->setTabBarTrailingInset(splitWidth);
+
+    QRect buttonRect;
+    const QRect tabBarRect = primaryTabBar->geometry();
+
+    if (splitButtonInPrimaryArea) {
+        const int x = qMax(0, _primaryArea->width() - splitWidth);
+        const int y = tabBarRect.y() + (tabBarRect.height() - _splitButton->height()) / 2;
+        buttonRect = QRect(x, y, _splitButton->width(), _splitButton->height());
+    } else if (_splitter && splitButtonHost == _splitter->parentWidget()) {
+        const QPoint topLeftOnHost = _primaryArea->mapTo(splitButtonHost, QPoint(0, 0));
+        const QRect splitterRectOnHost = _splitter->geometry();
+        const int rightX = splitterRectOnHost.right() - (_splitButton->width() + 3);
+        const int y = topLeftOnHost.y() + tabBarRect.y() + (tabBarRect.height() - _splitButton->height()) / 2;
+        buttonRect = QRect(rightX, y, _splitButton->width(), _splitButton->height());
+    }
+
+    if (buttonRect.isValid() && !buttonRect.isEmpty()) {
+        _splitButton->setGeometry(buttonRect);
+        _splitButton->show();
+        _splitButton->raise();
+    } else {
+        _splitButton->hide();
+    }
+}
+
+void MdiAreaEx::setSplitViewEnabled(bool enabled)
+{
+    if (!_primaryArea || _primaryArea->viewMode() != QMdiArea::TabbedView)
+        return;
+
+    const bool wasSplit = isSplitView();
+
+    if (enabled) {
+        ensureSplitArea(Qt::Horizontal);
+        if (!_secondaryArea)
+            return;
+
+        requestEqualSplitterSizes();
+    } else {
+        emit splitViewAboutToDisable();
+        mergeSplitArea();
+    }
+
+    syncSplitButtonState();
+    updateSplitButtonGeometry();
+
+    if (wasSplit != isSplitView())
+        emit splitViewToggled(isSplitView());
+}
+
+void MdiAreaEx::ensureSplitArea(Qt::Orientation orientation)
+{
+    if (!_primaryArea)
+        return;
+
+    if (_splitter && _secondaryArea) {
+        _splitter->setOrientation(orientation);
+        requestEqualSplitterSizes();
+        updateSplitButtonGeometry();
+        return;
+    }
+
+    auto* hostLayout = layout();
+    if (!hostLayout)
+        return;
+
+    const int hostIndex = hostLayout->indexOf(_primaryArea);
+
+    _splitter = new QSplitter(orientation, this);
+    _splitter->setChildrenCollapsible(false);
+    _splitter->installEventFilter(this);
+
+    hostLayout->removeWidget(_primaryArea);
+    _primaryArea->setParent(_splitter);
+    _splitter->addWidget(_primaryArea);
+
+    _secondaryArea = new MdiArea(_splitter);
+    syncPanelOptions(_secondaryArea);
+    _secondaryArea->setViewMode(viewMode());
+    _splitter->addWidget(_secondaryArea);
+
+    if (auto* boxLayout = qobject_cast<QBoxLayout*>(hostLayout)) {
+        if (hostIndex >= 0)
+            boxLayout->insertWidget(hostIndex, _splitter);
+        else
+            boxLayout->addWidget(_splitter);
+    } else {
+        hostLayout->addWidget(_splitter);
+    }
+
+    connectPanel(_secondaryArea);
+    _lastActiveArea = _primaryArea;
+    requestEqualSplitterSizes();
+    updateSplitButtonGeometry();
+}
+
+void MdiAreaEx::mergeSplitArea()
+{
+    if (!_splitter || !_secondaryArea || !_primaryArea)
+        return;
+
+    _isSplitInProgress = true;
+
+    const auto secondaryWindows = _secondaryArea->localSubWindowList();
+    for (auto* wnd : secondaryWindows) {
+        _secondaryArea->removeSubWindow(wnd);
+        _primaryArea->addSubWindow(wnd, Qt::WindowFlags());
+    }
+
+    auto* hostLayout = layout();
+    if (hostLayout) {
+        const int hostIndex = hostLayout->indexOf(_splitter);
+        hostLayout->removeWidget(_splitter);
+
+        _primaryArea->setParent(this);
+
+        if (auto* boxLayout = qobject_cast<QBoxLayout*>(hostLayout)) {
+            if (hostIndex >= 0)
+                boxLayout->insertWidget(hostIndex, _primaryArea);
+            else
+                boxLayout->addWidget(_primaryArea);
+        } else {
+            hostLayout->addWidget(_primaryArea);
+        }
+    }
+
+    _secondaryArea->deleteLater();
+    _secondaryArea = nullptr;
+
+    _splitter->deleteLater();
+    _splitter = nullptr;
+    _pendingSplitterEqualize = false;
+
+    _lastActiveArea = _primaryArea;
+    _isSplitInProgress = false;
+    syncSplitButtonState();
+    updateSplitButtonGeometry();
+}
+
+void MdiAreaEx::requestEqualSplitterSizes()
+{
+    if (!_splitter)
+        return;
+
+    _pendingSplitterEqualize = true;
+    tryEqualizeSplitterSizes();
+}
+
+void MdiAreaEx::tryEqualizeSplitterSizes()
+{
+    if (!_pendingSplitterEqualize || !_splitter)
+        return;
+
+    if (setEqualSplitterSizes(_splitter))
+        _pendingSplitterEqualize = false;
 }
