@@ -20,8 +20,10 @@ public:
     ~MdiAreaEx();
 
     QMdiSubWindow *addSubWindow(QWidget *widget, Qt::WindowFlags flags = Qt::WindowFlags());
+    QMdiSubWindow *addSubWindowDirect(QWidget *widget, Qt::WindowFlags flags = Qt::WindowFlags());
     void removeSubWindow(QWidget *widget);
     QList<QMdiSubWindow*> subWindowList(WindowOrder order = CreationOrder) const;
+    QList<QMdiSubWindow*> localSubWindowList(WindowOrder order = CreationOrder) const;
     QMdiSubWindow* currentSubWindow() const;
     QMdiSubWindow* activeSubWindow() const;
     void setActiveSubWindow(QMdiSubWindow* wnd);
@@ -30,6 +32,7 @@ public:
     void setViewMode(ViewMode mode);
     void toggleVerticalSplit();
     bool isSplitView() const;
+    MdiAreaEx* secondaryArea() const;
 
     QTabBar* tabBar() {
         return _tabBar;
@@ -66,6 +69,10 @@ public:
         _tabsExpanding = expanding;
         refreshTabBar();
     }
+
+signals:
+    void splitViewAboutToDisable();
+    void splitViewToggled(bool enabled);
 
 protected:
     bool eventFilter(QObject* obj, QEvent* event) override;

@@ -16,6 +16,8 @@ namespace Ui {
 class MainWindow;
 }
 
+class MdiAreaEx;
+
 ///
 /// \brief The MainWindow class
 ///
@@ -151,6 +153,17 @@ private slots:
     void setCodepage(const QString& name);
 
 private:
+    FormModSim* createMdiChildOnArea(int id, MdiAreaEx* area, bool addToWindowList);
+    void setupMdiChild(FormModSim* frm, QMdiSubWindow* wnd, bool addToWindowList);
+    bool cloneMdiChildState(FormModSim* source, FormModSim* target) const;
+    FormModSim* findMdiChildInArea(MdiAreaEx* area, int id) const;
+    MdiAreaEx* splitSecondaryArea() const;
+    bool isSplitTabbedView() const;
+    void ensureSplitMirrorForForm(FormModSim* frm);
+    void syncSplitPeerState(FormModSim* frm);
+    void syncSplitForms();
+    void clearSplitMirrorsFromSecondary();
+
     void addRecentFile(const QString& filename);
     void updateDataDisplayMode(DataDisplayMode mode);
 

@@ -105,6 +105,15 @@ bool MdiAreaEx::isSplitView() const
 }
 
 ///
+/// \brief MdiAreaEx::secondaryArea
+/// \return
+///
+MdiAreaEx* MdiAreaEx::secondaryArea() const
+{
+    return _isSecondaryPanel ? nullptr : _secondaryArea;
+}
+
+///
 /// \brief MdiAreaEx::toggleVerticalSplit
 ///
 void MdiAreaEx::toggleVerticalSplit()
@@ -222,6 +231,17 @@ QMdiSubWindow* MdiAreaEx::addSubWindow(QWidget* widget, Qt::WindowFlags flags)
 }
 
 ///
+/// \brief MdiAreaEx::addSubWindowDirect
+/// \param widget
+/// \param flags
+/// \return
+///
+QMdiSubWindow* MdiAreaEx::addSubWindowDirect(QWidget* widget, Qt::WindowFlags flags)
+{
+    return addSubWindowLocal(widget, flags);
+}
+
+///
 /// \brief MdiAreaEx::removeSubWindowLocal
 /// \param widget
 ///
@@ -294,6 +314,16 @@ QList<QMdiSubWindow*> MdiAreaEx::subWindowList(WindowOrder order) const
         list.append(_secondaryArea->QMdiArea::subWindowList(order));
 
     return list;
+}
+
+///
+/// \brief MdiAreaEx::localSubWindowList
+/// \param order
+/// \return
+///
+QList<QMdiSubWindow*> MdiAreaEx::localSubWindowList(WindowOrder order) const
+{
+    return QMdiArea::subWindowList(order);
 }
 
 ///
@@ -642,30 +672,24 @@ void MdiAreaEx::setSplitViewEnabled(bool enabled)
     if (_isSecondaryPanel || viewMode() != QMdiArea::TabbedView)
         return;
 
+    const bool wasSplit = isSplitView();
+
     if (enabled) {
         ensureSplitArea(Qt::Horizontal);
         if (!_secondaryArea)
             return;
 
-        if (auto* wnd = currentSubWindow()) {
-            auto* owner = areaForSubWindow(wnd);
-            if (owner && owner != _secondaryArea) {
-                owner->removeSubWindowLocal(wnd);
-                _secondaryArea->addSubWindowLocal(wnd, Qt::WindowFlags());
-            }
-
-            _secondaryArea->QMdiArea::setActiveSubWindow(wnd);
-            _secondaryArea->setFocus(Qt::OtherFocusReason);
-            _lastActiveArea = _secondaryArea;
-        }
-
         setEqualSplitterSizes(_splitter);
         QTimer::singleShot(0, _splitter, [this]() { setEqualSplitterSizes(_splitter); });
     } else {
+        emit splitViewAboutToDisable();
         mergeSplitArea();
     }
 
     syncSplitButtonState();
+
+    if (wasSplit != isSplitView())
+        emit splitViewToggled(isSplitView());
 }
 
 ///
