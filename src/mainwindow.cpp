@@ -1610,12 +1610,16 @@ void MainWindow::setupMdiChild(FormModSim* frm, QMdiSubWindow* wnd, bool addToWi
     {
         const int peerId = frm->property(kSplitMirrorPeerId).toInt();
         if(peerId <= 0)
+        {
+            QTimer::singleShot(0, this, [this]() { resetSplitViewIfSecondaryEmpty(); });
             return;
+        }
 
         if(auto peer = findMdiChild(peerId))
             peer->setProperty(kSplitMirrorPeerId, QVariant());
 
         frm->setProperty(kSplitMirrorPeerId, QVariant());
+        QTimer::singleShot(0, this, [this]() { resetSplitViewIfSecondaryEmpty(); });
     });
 
     if(addToWindowList)
@@ -1699,6 +1703,21 @@ bool MainWindow::isSplitTabbedView() const
     return ui->mdiArea->viewMode() == QMdiArea::TabbedView &&
            ui->mdiArea->isSplitView() &&
            splitSecondaryArea() != nullptr;
+}
+
+///
+/// \brief MainWindow::resetSplitViewIfSecondaryEmpty
+///
+void MainWindow::resetSplitViewIfSecondaryEmpty()
+{
+    if(!isSplitTabbedView())
+        return;
+
+    auto secondary = splitSecondaryArea();
+    if(!secondary || !secondary->localSubWindowList().isEmpty())
+        return;
+
+    ui->mdiArea->toggleVerticalSplit();
 }
 
 ///
