@@ -514,7 +514,6 @@ void MdiAreaEx::createSplitButton()
         return;
 
     if (_splitButton) {
-        _splitButton->show();
         _splitButton->raise();
         syncSplitButtonState();
         return;
@@ -541,6 +540,17 @@ void MdiAreaEx::createSplitButton()
 }
 
 ///
+/// \brief MdiAreaEx::shouldShowSplitButton
+/// \return
+///
+bool MdiAreaEx::shouldShowSplitButton() const
+{
+    return !_isSecondaryPanel &&
+           viewMode() == QMdiArea::TabbedView &&
+           !subWindowList().isEmpty();
+}
+
+///
 /// \brief MdiAreaEx::syncSplitButtonState
 ///
 void MdiAreaEx::syncSplitButtonState()
@@ -548,7 +558,7 @@ void MdiAreaEx::syncSplitButtonState()
     if (!_splitButton)
         return;
 
-    const bool visible = !_isSecondaryPanel && viewMode() == QMdiArea::TabbedView;
+    const bool visible = shouldShowSplitButton();
     _splitButton->setVisible(visible);
 
     QSignalBlocker blocker(_splitButton);
@@ -786,6 +796,8 @@ void MdiAreaEx::on_subWindowActivated(QMdiSubWindow* wnd)
         if (auto* owner = areaForSubWindow(wnd))
             _lastActiveArea = owner;
     }
+
+    updateTabBarGeometry();
 }
 
 ///
@@ -828,7 +840,7 @@ void MdiAreaEx::updateTabBarGeometry()
     if (verticalScrollBar() && verticalScrollBar()->isVisible())
         areaWidth -= verticalScrollBar()->width();
 
-    const bool showSplitButton = _splitButton && !_isSecondaryPanel && viewMode() == QMdiArea::TabbedView;
+    const bool showSplitButton = _splitButton && shouldShowSplitButton();
     QWidget* splitButtonHost = this;
     if (showSplitButton && isSplitView() && _splitter && _splitter->parentWidget())
         splitButtonHost = _splitter->parentWidget();
@@ -1001,7 +1013,7 @@ void MdiAreaEx::setVisible(bool visible)
     if (_tabBar)
         _tabBar->setVisible(visible && viewMode() == QMdiArea::TabbedView);
     if (_splitButton)
-        _splitButton->setVisible(visible && !_isSecondaryPanel && viewMode() == QMdiArea::TabbedView);
+        _splitButton->setVisible(visible && shouldShowSplitButton());
     updateViewportBaseLine();
 }
 

@@ -96,6 +96,7 @@ private:
     void setupTabbedMode();
     void createSplitButton();
     void updateViewportBaseLine();
+    bool shouldShowSplitButton() const;
     void syncSplitButtonState();
     void splitTab(int index, Qt::Orientation orientation);
     void setSplitViewEnabled(bool enabled);
