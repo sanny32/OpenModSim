@@ -48,6 +48,11 @@ private:
     MdiAreaEx* _owner;
 };
 
+///
+/// \brief setEqualSplitterSizes
+/// \param splitter
+/// \return
+///
 static bool setEqualSplitterSizes(QSplitter* splitter)
 {
     if (!splitter)
@@ -215,6 +220,7 @@ QMdiSubWindow* MdiAreaEx::addSubWindowLocal(QWidget* widget, Qt::WindowFlags fla
         return nullptr;
 
     wnd->installEventFilter(this);
+    enforceTabbedSubWindowState(wnd);
     if (_tabBar)
         _tabBar->addSubWindow(wnd);
 
@@ -481,18 +487,15 @@ void MdiAreaEx::setupTabbedMode()
     _tabBar->setExpanding(tabsExpanding());
     _tabBar->setMovable(tabsMovable());
 
-    foreach (QMdiSubWindow* wnd, QMdiArea::subWindowList())
+    foreach (QMdiSubWindow* wnd, QMdiArea::subWindowList()) {
         _tabBar->addSubWindow(wnd);
+        enforceTabbedSubWindowState(wnd);
+    }
 
     QMdiSubWindow* current = QMdiArea::currentSubWindow();
     if (current) {
         _tabBar->setCurrentSubWindow(current);
-
-        if (current->isMaximized())
-            current->showNormal();
-
-        if (!testOption(QMdiArea::DontMaximizeSubWindowOnActivation))
-            current->showMaximized();
+        enforceTabbedSubWindowState(current);
     }
 
     if (isVisible())
@@ -741,6 +744,25 @@ void MdiAreaEx::tryEqualizeSplitterSizes()
 }
 
 ///
+/// \brief MdiAreaEx::enforceTabbedSubWindowState
+/// \param wnd
+///
+void MdiAreaEx::enforceTabbedSubWindowState(QMdiSubWindow* wnd)
+{
+    if (!wnd || viewMode() != QMdiArea::TabbedView)
+        return;
+
+    if (testOption(QMdiArea::DontMaximizeSubWindowOnActivation))
+        return;
+
+    if (wnd->isMinimized())
+        wnd->showNormal();
+
+    if (!wnd->isMaximized())
+        wnd->showMaximized();
+}
+
+///
 /// \brief MdiAreaEx::on_tabBarClicked
 /// \param index
 ///
@@ -819,6 +841,8 @@ void MdiAreaEx::on_tabBarDestroyed()
 ///
 void MdiAreaEx::on_subWindowActivated(QMdiSubWindow* wnd)
 {
+    enforceTabbedSubWindowState(wnd);
+
     if (!_tabBar)
         return;
 
@@ -1090,6 +1114,7 @@ void MdiAreaEx::splitTab(int index, Qt::Orientation orientation)
     }
 
     _secondaryArea->QMdiArea::setActiveSubWindow(sw);
+    _secondaryArea->enforceTabbedSubWindowState(sw);
     _secondaryArea->setFocus(Qt::OtherFocusReason);
     _lastActiveArea = _secondaryArea;
     syncSplitButtonState();

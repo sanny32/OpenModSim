@@ -108,6 +108,7 @@ private:
     void mergeSplitArea();
     void requestEqualSplitterSizes();
     void tryEqualizeSplitterSizes();
+    void enforceTabbedSubWindowState(QMdiSubWindow* wnd);
 
     void refreshTabBar();
     void updateTabBarGeometry();
