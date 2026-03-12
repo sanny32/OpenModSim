@@ -160,6 +160,7 @@ private:
     MdiAreaEx* splitSecondaryArea() const;
     bool isSplitTabbedView() const;
     void ensureSplitMirrorForForm(FormModSim* frm);
+    void syncSplitPeerDisplayDefinition(FormModSim* frm);
     void syncSplitPeerState(FormModSim* frm);
     void syncSplitForms();
     void clearSplitMirrorsFromSecondary();
@@ -208,6 +209,7 @@ private:
     QSharedPointer<DataSimulator> _dataSimulator;
     QString _savePath;
     QString _profile;
+    bool _splitDisplayDefinitionSyncInProgress = false;
 };
 
 #endif // MAINWINDOW_H

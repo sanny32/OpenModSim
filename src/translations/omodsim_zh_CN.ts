@@ -2704,7 +2704,7 @@ Script.onInit(()=&gt;{
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1576"/>
+        <location filename="../mainwindow.cpp" line="1581"/>
         <source>Capture Error:<byte value="xd"/>
 %1</source>
         <translation>捕获错误：

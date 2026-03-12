@@ -1565,6 +1565,11 @@ void MainWindow::setupMdiChild(FormModSim* frm, QMdiSubWindow* wnd, bool addToWi
         updateRunMode(ss.Mode);
     });
 
+    connect(frm, &FormModSim::definitionChanged, this, [this, frm]()
+    {
+        syncSplitPeerDisplayDefinition(frm);
+    });
+
     connect(frm, &FormModSim::showed, this, [this, frm, wnd, updateRunMode]
     {
         windowActivate(wnd);
@@ -1760,6 +1765,28 @@ void MainWindow::ensureSplitMirrorForForm(FormModSim* frm)
     frm->setProperty(kSplitMirrorPeerId, mirror->formId());
     mirror->setProperty(kSplitMirrorPeerId, frm->formId());
     mirror->show();
+}
+
+///
+/// \brief MainWindow::syncSplitPeerDisplayDefinition
+/// \param frm
+///
+void MainWindow::syncSplitPeerDisplayDefinition(FormModSim* frm)
+{
+    if(!frm || !isSplitTabbedView() || _splitDisplayDefinitionSyncInProgress)
+        return;
+
+    const int peerId = frm->property(kSplitMirrorPeerId).toInt();
+    if(peerId <= 0)
+        return;
+
+    auto peer = findMdiChild(peerId);
+    if(!peer || peer == frm)
+        return;
+
+    _splitDisplayDefinitionSyncInProgress = true;
+    peer->setDisplayDefinition(frm->displayDefinition());
+    _splitDisplayDefinitionSyncInProgress = false;
 }
 
 ///
