@@ -117,6 +117,7 @@ private:
     bool _isSplitInProgress = false;
     bool _destroying = false;
     bool _tabsExpanding = false;
+    bool _updatingTabBarGeometry = false;
     MdiTabBar* _tabBar;
     QToolButton* _splitButton;
     QFrame* _tabBarBaseLine = nullptr;

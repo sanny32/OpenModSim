@@ -5,6 +5,7 @@
 #include <QPainter>
 #include <QPointer>
 #include <QScrollBar>
+#include <QScopedValueRollback>
 #include <QSignalBlocker>
 #include <QStyleOptionTabBarBase>
 #include <QTimer>
@@ -827,8 +828,10 @@ void MdiAreaEx::refreshTabBar()
 ///
 void MdiAreaEx::updateTabBarGeometry()
 {
-    if (!_tabBar)
+    if (!_tabBar || _updatingTabBarGeometry)
         return;
+
+    QScopedValueRollback<bool> updatingGuard(_updatingTabBarGeometry, true);
 
     const QSize tabBarSizeHint = _tabBar->sizeHint();
 
@@ -853,10 +856,11 @@ void MdiAreaEx::updateTabBarGeometry()
 
     QRect tabBarRect;
     QRect buttonRect;
+    QMargins desiredMargins = viewportMargins();
 
     switch (tabPosition()) {
         case QTabWidget::North:
-            setViewportMargins(0, tabBarSizeHint.height(), 0, 0);
+            desiredMargins = QMargins(0, tabBarSizeHint.height(), 0, 0);
             tabBarRect = QRect(0, 0, areaWidth - splitWidth, tabBarSizeHint.height());
             if (splitButtonInPrimaryArea) {
                 buttonRect = QRect(areaWidth - splitWidth,
@@ -866,7 +870,7 @@ void MdiAreaEx::updateTabBarGeometry()
             }
             break;
         case QTabWidget::South:
-            setViewportMargins(0, 0, 0, tabBarSizeHint.height());
+            desiredMargins = QMargins(0, 0, 0, tabBarSizeHint.height());
             tabBarRect = QRect(0, areaHeight - tabBarSizeHint.height(), areaWidth - splitWidth, tabBarSizeHint.height());
             if (splitButtonInPrimaryArea) {
                 buttonRect = QRect(areaWidth - splitWidth,
@@ -878,21 +882,24 @@ void MdiAreaEx::updateTabBarGeometry()
             break;
         case QTabWidget::East:
             if (layoutDirection() == Qt::LeftToRight)
-                setViewportMargins(0, 0, tabBarSizeHint.width(), 0);
+                desiredMargins = QMargins(0, 0, tabBarSizeHint.width(), 0);
             else
-                setViewportMargins(tabBarSizeHint.width(), 0, 0, 0);
+                desiredMargins = QMargins(tabBarSizeHint.width(), 0, 0, 0);
             tabBarRect = QRect(areaWidth - tabBarSizeHint.width(), 0, tabBarSizeHint.width(), areaHeight);
             break;
         case QTabWidget::West:
             if (layoutDirection() == Qt::LeftToRight)
-                setViewportMargins(tabBarSizeHint.width(), 0, 0, 0);
+                desiredMargins = QMargins(tabBarSizeHint.width(), 0, 0, 0);
             else
-                setViewportMargins(0, 0, tabBarSizeHint.width(), 0);
+                desiredMargins = QMargins(0, 0, tabBarSizeHint.width(), 0);
             tabBarRect = QRect(0, 0, tabBarSizeHint.width(), areaHeight);
             break;
         default:
             break;
     }
+
+    if (viewportMargins() != desiredMargins)
+        setViewportMargins(desiredMargins);
 
     _tabBar->setGeometry(QStyle::visualRect(layoutDirection(), contentsRect(), tabBarRect));
 
