@@ -226,7 +226,29 @@ bool MainWindow::eventFilter(QObject* obj, QEvent* e)
     switch (e->type())
     {
         case QEvent::Close:
-            _windowActionList->removeWindow(qobject_cast<QMdiSubWindow*>(obj));
+            if(auto wnd = qobject_cast<QMdiSubWindow*>(obj))
+            {
+                _windowActionList->removeWindow(wnd);
+
+                auto frm = qobject_cast<FormModSim*>(wnd->widget());
+                const int peerId = frm ? frm->property(kSplitMirrorPeerId).toInt() : 0;
+                if(peerId > 0)
+                {
+                    auto peer = findMdiChild(peerId);
+                    if(peer)
+                    {
+                        frm->setProperty(kSplitMirrorPeerId, QVariant());
+                        peer->setProperty(kSplitMirrorPeerId, QVariant());
+
+                        if(auto peerWnd = qobject_cast<QMdiSubWindow*>(peer->parentWidget())) {
+                            if(peerWnd != wnd)
+                                peerWnd->close();
+                        } else {
+                            peer->close();
+                        }
+                    }
+                }
+            }
         break;
         case QEvent::Move:
             if(auto wnd = qobject_cast<const QMdiSubWindow*>(obj))
