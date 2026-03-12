@@ -824,7 +824,15 @@ void MdiAreaEx::updateTabBarGeometry()
         areaWidth -= verticalScrollBar()->width();
 
     const bool showSplitButton = _splitButton && !_isSecondaryPanel && viewMode() == QMdiArea::TabbedView;
-    const int splitWidth = showSplitButton ? (_splitButton->width() + 4) : 0;
+    QWidget* splitButtonHost = this;
+    if (showSplitButton && isSplitView() && _splitter && _splitter->parentWidget())
+        splitButtonHost = _splitter->parentWidget();
+
+    if (showSplitButton && _splitButton->parentWidget() != splitButtonHost)
+        _splitButton->setParent(splitButtonHost);
+
+    const bool splitButtonInPrimaryArea = showSplitButton && _splitButton->parentWidget() == this;
+    const int splitWidth = splitButtonInPrimaryArea ? (_splitButton->width() + 4) : 0;
 
     QRect tabBarRect;
     QRect buttonRect;
@@ -833,7 +841,7 @@ void MdiAreaEx::updateTabBarGeometry()
         case QTabWidget::North:
             setViewportMargins(0, tabBarSizeHint.height(), 0, 0);
             tabBarRect = QRect(0, 0, areaWidth - splitWidth, tabBarSizeHint.height());
-            if (showSplitButton) {
+            if (splitButtonInPrimaryArea) {
                 buttonRect = QRect(areaWidth - splitWidth,
                                    (tabBarSizeHint.height() - _splitButton->height()) / 2,
                                    _splitButton->width(),
@@ -843,7 +851,7 @@ void MdiAreaEx::updateTabBarGeometry()
         case QTabWidget::South:
             setViewportMargins(0, 0, 0, tabBarSizeHint.height());
             tabBarRect = QRect(0, areaHeight - tabBarSizeHint.height(), areaWidth - splitWidth, tabBarSizeHint.height());
-            if (showSplitButton) {
+            if (splitButtonInPrimaryArea) {
                 buttonRect = QRect(areaWidth - splitWidth,
                                    areaHeight - tabBarSizeHint.height() +
                                        (tabBarSizeHint.height() - _splitButton->height()) / 2,
@@ -873,8 +881,25 @@ void MdiAreaEx::updateTabBarGeometry()
 
     if (_splitButton) {
         _splitButton->setVisible(showSplitButton);
-        if (showSplitButton)
+        if (showSplitButton) {
+            if (!splitButtonInPrimaryArea && _splitter && splitButtonHost == _splitter->parentWidget()) {
+                const QPoint topLeftOnHost = mapTo(splitButtonHost, QPoint(0, 0));
+                const QRect splitterRectOnHost = _splitter->geometry();
+                const int rightX = splitterRectOnHost.right() - (_splitButton->width() + 3);
+
+                if (tabPosition() == QTabWidget::South) {
+                    const int y = topLeftOnHost.y() + areaHeight - tabBarSizeHint.height() +
+                                  (tabBarSizeHint.height() - _splitButton->height()) / 2;
+                    buttonRect = QRect(rightX, y, _splitButton->width(), _splitButton->height());
+                } else {
+                    const int y = topLeftOnHost.y() + (tabBarSizeHint.height() - _splitButton->height()) / 2;
+                    buttonRect = QRect(rightX, y, _splitButton->width(), _splitButton->height());
+                }
+            }
+
             _splitButton->setGeometry(buttonRect);
+            _splitButton->raise();
+        }
     }
 
     updateViewportBaseLine();
