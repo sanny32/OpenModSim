@@ -1102,6 +1102,9 @@
    </property>
   </action>
   <action name="actionSplitView">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="icon">
     <iconset resource="resources.qrc">
      <normaloff>:/res/actionSplitView.png</normaloff>:/res/actionSplitView.png</iconset>
@@ -1111,15 +1114,16 @@
    </property>
   </action>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>MdiAreaEx</class>
+   <extends>QMdiArea</extends>
+   <header>mdiareaex.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources>
   <include location="resources.qrc"/>
  </resources>
  <connections/>
- <customwidgets>
- <customwidget>
-  <class>MdiAreaEx</class>
-  <extends>QMdiArea</extends>
-  <header>mdiareaex.h</header>
- </customwidget>
-</customwidgets>
 </ui>
