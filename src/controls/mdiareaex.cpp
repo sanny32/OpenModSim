@@ -495,7 +495,6 @@ void MdiAreaEx::setupTabbedMode()
     QMdiSubWindow* current = QMdiArea::currentSubWindow();
     if (current) {
         _tabBar->setCurrentSubWindow(current);
-        enforceTabbedSubWindowState(current);
     }
 
     if (isVisible())
