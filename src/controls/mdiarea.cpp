@@ -2,6 +2,7 @@
 #include <QPainter>
 #include <QScrollBar>
 #include <QScopedValueRollback>
+#include <QSplitter>
 #include <QStyle>
 #include <QStyleOptionTabBarBase>
 
@@ -485,6 +486,14 @@ void MdiArea::updateTabBarGeometry()
 ///
 void MdiArea::updateViewportBaseLine()
 {
+    // In split mode the panel lives inside QSplitter; suppress baseline to avoid
+    // an extra separator line under the tab header.
+    if (qobject_cast<QSplitter*>(parentWidget())) {
+        if (_tabBarBaseLine)
+            _tabBarBaseLine->hide();
+        return;
+    }
+
     auto* vp = viewport();
     if (!vp || viewMode() != QMdiArea::TabbedView || !_tabBar || !_tabBar->isVisible()) {
         if (_tabBarBaseLine)
