@@ -93,6 +93,7 @@ MdiAreaEx::MdiAreaEx(QWidget* parent, bool splitPanel)
 ///
 MdiAreaEx::~MdiAreaEx()
 {
+    _destroying = true;
 }
 
 ///
@@ -493,7 +494,11 @@ void MdiAreaEx::setupTabbedMode()
     updateTabBarGeometry();
     updateViewportBaseLine();
 
-    connect(nativeTabBar, &QObject::destroyed, this, &MdiAreaEx::on_tabBarDestroyed);
+    connect(nativeTabBar, &QObject::destroyed, this, [this]() {
+        if (_destroying)
+            return;
+        on_tabBarDestroyed();
+    });
     connect(_tabBar, &QTabBar::tabBarClicked, this, &MdiAreaEx::on_tabBarClicked, Qt::UniqueConnection);
     connect(_tabBar, &QTabBar::currentChanged, this, &MdiAreaEx::on_currentTabChanged, Qt::UniqueConnection);
     connect(_tabBar, &QTabBar::tabCloseRequested, this, &MdiAreaEx::on_closeTab, Qt::UniqueConnection);
@@ -910,14 +915,15 @@ void MdiAreaEx::updateTabBarGeometry()
 ///
 void MdiAreaEx::updateViewportBaseLine()
 {
-    if (!_tabBarBaseLine)
-        _tabBarBaseLine = new TabBarBaseLineWidget(this);
-
     auto* vp = viewport();
     if (!vp || viewMode() != QMdiArea::TabbedView || !_tabBar || !_tabBar->isVisible()) {
-        _tabBarBaseLine->hide();
+        if (_tabBarBaseLine)
+            _tabBarBaseLine->hide();
         return;
     }
+
+    if (!_tabBarBaseLine)
+        _tabBarBaseLine = new TabBarBaseLineWidget(this);
 
     const QRect vpRect = vp->geometry();
     QRect lineRect;

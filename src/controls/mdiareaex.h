@@ -110,6 +110,7 @@ private:
 private:
     bool _isSecondaryPanel = false;
     bool _isSplitInProgress = false;
+    bool _destroying = false;
     bool _tabsExpanding = false;
     MdiTabBar* _tabBar;
     QToolButton* _splitButton;
