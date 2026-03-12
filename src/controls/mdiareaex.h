@@ -106,6 +106,8 @@ private:
     void setSplitViewEnabled(bool enabled);
     void ensureSplitArea(Qt::Orientation orientation);
     void mergeSplitArea();
+    void requestEqualSplitterSizes();
+    void tryEqualizeSplitterSizes();
 
     void refreshTabBar();
     void updateTabBarGeometry();
@@ -118,6 +120,7 @@ private:
     bool _destroying = false;
     bool _tabsExpanding = false;
     bool _updatingTabBarGeometry = false;
+    bool _pendingSplitterEqualize = false;
     MdiTabBar* _tabBar;
     QToolButton* _splitButton;
     QFrame* _tabBarBaseLine = nullptr;

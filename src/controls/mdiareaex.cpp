@@ -3,12 +3,10 @@
 #include <QBoxLayout>
 #include <QLayout>
 #include <QPainter>
-#include <QPointer>
 #include <QScrollBar>
 #include <QScopedValueRollback>
 #include <QSignalBlocker>
 #include <QStyleOptionTabBarBase>
-#include <QTimer>
 
 ///
 /// \brief The TabBarBaseLineWidget class
@@ -50,10 +48,10 @@ private:
     MdiAreaEx* _owner;
 };
 
-static void setEqualSplitterSizes(QSplitter* splitter)
+static bool setEqualSplitterSizes(QSplitter* splitter)
 {
     if (!splitter)
-        return;
+        return false;
 
     splitter->setStretchFactor(0, 1);
     splitter->setStretchFactor(1, 1);
@@ -65,13 +63,10 @@ static void setEqualSplitterSizes(QSplitter* splitter)
     if (total > 1) {
         const int first = total / 2;
         splitter->setSizes({first, total - first});
-    } else {
-        QPointer<QSplitter> deferredSplitter(splitter);
-        QTimer::singleShot(0, splitter, [deferredSplitter]() {
-            if (deferredSplitter)
-                setEqualSplitterSizes(deferredSplitter);
-        });
+        return true;
     }
+
+    return false;
 }
 
 ///
@@ -173,6 +168,18 @@ MdiAreaEx* MdiAreaEx::activePanel() const
 ///
 bool MdiAreaEx::eventFilter(QObject* obj, QEvent* event)
 {
+    if (obj == _splitter) {
+        switch (event->type()) {
+            case QEvent::Show:
+            case QEvent::Resize:
+            case QEvent::LayoutRequest:
+                tryEqualizeSplitterSizes();
+                break;
+            default:
+                break;
+        }
+    }
+
     if (obj == _tabBar) {
         switch (event->type()) {
             case QEvent::Paint:
@@ -577,7 +584,7 @@ void MdiAreaEx::ensureSplitArea(Qt::Orientation orientation)
 
     if (_splitter && _secondaryArea) {
         _splitter->setOrientation(orientation);
-        setEqualSplitterSizes(_splitter);
+        requestEqualSplitterSizes();
         return;
     }
 
@@ -590,6 +597,7 @@ void MdiAreaEx::ensureSplitArea(Qt::Orientation orientation)
 
     _splitter = new QSplitter(orientation, hostParent);
     _splitter->setChildrenCollapsible(false);
+    _splitter->installEventFilter(this);
 
     hostLayout->removeWidget(this);
     setParent(_splitter);
@@ -619,8 +627,7 @@ void MdiAreaEx::ensureSplitArea(Qt::Orientation orientation)
         hostLayout->addWidget(_splitter);
     }
 
-    setEqualSplitterSizes(_splitter);
-    QTimer::singleShot(0, _splitter, [this]() { setEqualSplitterSizes(_splitter); });
+    requestEqualSplitterSizes();
 
     connect(_secondaryArea, &QMdiArea::subWindowActivated, this, [this](QMdiSubWindow* wnd) {
         if (_isSplitInProgress)
@@ -673,6 +680,7 @@ void MdiAreaEx::mergeSplitArea()
 
     _splitter->deleteLater();
     _splitter = nullptr;
+    _pendingSplitterEqualize = false;
 
     _lastActiveArea = this;
     _isSplitInProgress = false;
@@ -696,8 +704,7 @@ void MdiAreaEx::setSplitViewEnabled(bool enabled)
         if (!_secondaryArea)
             return;
 
-        setEqualSplitterSizes(_splitter);
-        QTimer::singleShot(0, _splitter, [this]() { setEqualSplitterSizes(_splitter); });
+        requestEqualSplitterSizes();
     } else {
         emit splitViewAboutToDisable();
         mergeSplitArea();
@@ -707,6 +714,30 @@ void MdiAreaEx::setSplitViewEnabled(bool enabled)
 
     if (wasSplit != isSplitView())
         emit splitViewToggled(isSplitView());
+}
+
+///
+/// \brief MdiAreaEx::requestEqualSplitterSizes
+///
+void MdiAreaEx::requestEqualSplitterSizes()
+{
+    if (_isSecondaryPanel || !_splitter)
+        return;
+
+    _pendingSplitterEqualize = true;
+    tryEqualizeSplitterSizes();
+}
+
+///
+/// \brief MdiAreaEx::tryEqualizeSplitterSizes
+///
+void MdiAreaEx::tryEqualizeSplitterSizes()
+{
+    if (!_pendingSplitterEqualize || !_splitter)
+        return;
+
+    if (setEqualSplitterSizes(_splitter))
+        _pendingSplitterEqualize = false;
 }
 
 ///
