@@ -1730,8 +1730,16 @@ void MainWindow::ensureSplitMirrorForForm(FormModSim* frm)
 
     const int peerId = frm->property(kSplitMirrorPeerId).toInt();
     MdiAreaEx* targetArea = ownerArea == ui->mdiArea ? secondary : ui->mdiArea;
-    if(peerId > 0 && findMdiChildInArea(targetArea, peerId))
-        return;
+    if(peerId > 0) {
+        if(auto existingPeer = findMdiChildInArea(targetArea, peerId)) {
+            if(auto* doc = frm->scriptDocument()) {
+                if(doc->parent() != this)
+                    doc->setParent(this);
+                existingPeer->setScriptDocument(doc);
+            }
+            return;
+        }
+    }
 
     int mirrorId = _windowCounter + 1;
     while(findMdiChild(mirrorId))
@@ -1744,6 +1752,11 @@ void MainWindow::ensureSplitMirrorForForm(FormModSim* frm)
         return;
 
     cloneMdiChildState(frm, mirror);
+    if(auto* doc = frm->scriptDocument()) {
+        if(doc->parent() != this)
+            doc->setParent(this);
+        mirror->setScriptDocument(doc);
+    }
     frm->setProperty(kSplitMirrorPeerId, mirror->formId());
     mirror->setProperty(kSplitMirrorPeerId, frm->formId());
     mirror->show();

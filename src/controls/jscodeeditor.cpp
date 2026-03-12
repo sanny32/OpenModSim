@@ -47,6 +47,37 @@ JSCodeEditor::~JSCodeEditor()
 }
 
 ///
+/// \brief JSCodeEditor::codeDocument
+/// \return
+///
+QTextDocument* JSCodeEditor::codeDocument() const
+{
+    return document();
+}
+
+///
+/// \brief JSCodeEditor::setCodeDocument
+/// \param doc
+///
+void JSCodeEditor::setCodeDocument(QTextDocument* doc)
+{
+    if(!doc || doc == document())
+        return;
+
+    if(_highlighter) {
+        delete _highlighter;
+        _highlighter = nullptr;
+    }
+
+    QPlainTextEdit::setDocument(doc);
+    _highlighter = new JSHighlighter(document());
+
+    clearSearchHighlights();
+    updateLineNumberAreaWidth(0);
+    highlightCurrentLine();
+}
+
+///
 /// \brief JSCodeEditor::lineNumberAreaWidth
 /// \return
 ///
@@ -480,6 +511,11 @@ void JSCodeEditor::highlightCurrentLine()
 {
     if (isReadOnly())
         return;
+
+    // A shared QTextDocument can be viewed by multiple editors.
+    // Re-attach this editor highlighter when needed.
+    if(_highlighter && _highlighter->document() != document())
+        _highlighter->setDocument(document());
 
     QList<QTextEdit::ExtraSelection> extraSelections;
 

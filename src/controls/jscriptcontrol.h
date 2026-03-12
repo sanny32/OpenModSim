@@ -4,6 +4,7 @@
 #include <QTimer>
 #include <QJSEngine>
 #include <QPlainTextEdit>
+#include <QTextDocument>
 #include <QXmlStreamWriter>
 #include "console.h"
 #include "script.h"
@@ -46,6 +47,8 @@ public:
 
     QString script() const;
     void setScript(const QString& text);
+    QTextDocument* scriptDocument() const;
+    void setScriptDocument(QTextDocument* document);
 
     QString searchText() const;
 

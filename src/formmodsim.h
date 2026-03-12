@@ -18,6 +18,7 @@
 /// \brief Forward declaration of the MainWindow
 ///
 class MainWindow;
+class QTextDocument;
 
 namespace Ui {
 class FormModSim;
@@ -69,6 +70,8 @@ public:
 
     QString script() const;
     void setScript(const QString& text);
+    QTextDocument* scriptDocument() const;
+    void setScriptDocument(QTextDocument* document);
 
     QString searchText() const;
 

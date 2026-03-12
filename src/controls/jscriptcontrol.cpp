@@ -158,6 +158,24 @@ void JScriptControl::setScript(const QString& text)
 }
 
 ///
+/// \brief JScriptControl::scriptDocument
+/// \return
+///
+QTextDocument* JScriptControl::scriptDocument() const
+{
+    return ui->codeEditor->codeDocument();
+}
+
+///
+/// \brief JScriptControl::setScriptDocument
+/// \param document
+///
+void JScriptControl::setScriptDocument(QTextDocument* document)
+{
+    ui->codeEditor->setCodeDocument(document);
+}
+
+///
 /// \brief JScriptControl::searchText
 /// \return
 ///

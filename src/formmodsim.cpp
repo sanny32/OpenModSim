@@ -716,6 +716,24 @@ void FormModSim::setScript(const QString& text)
 }
 
 ///
+/// \brief FormModSim::scriptDocument
+/// \return
+///
+QTextDocument* FormModSim::scriptDocument() const
+{
+    return ui->scriptControl->scriptDocument();
+}
+
+///
+/// \brief FormModSim::setScriptDocument
+/// \param document
+///
+void FormModSim::setScriptDocument(QTextDocument* document)
+{
+    ui->scriptControl->setScriptDocument(document);
+}
+
+///
 /// \brief FormModSim::searchText
 /// \return
 ///
