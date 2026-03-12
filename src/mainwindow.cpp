@@ -1138,9 +1138,6 @@ void MainWindow::on_actionSplitView_triggered()
 ///
 void MainWindow::setViewMode(QMdiArea::ViewMode mode)
 {
-    if(mode != QMdiArea::TabbedView && ui->mdiArea->isSplitView())
-        clearSplitMirrorsFromSecondary();
-
     ui->mdiArea->setViewMode(mode);
     if(auto tabBar = ui->mdiArea->tabBar()) {
         connect(tabBar, &QTabBar::tabBarDoubleClicked, ui->actionDataDefinition, &QAction::triggered);
