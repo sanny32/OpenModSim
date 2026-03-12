@@ -16,13 +16,20 @@ class MdiAreaEx : public QMdiArea
 {
     Q_OBJECT
 public:
-    explicit MdiAreaEx(QWidget* parent = nullptr);
+    explicit MdiAreaEx(QWidget* parent = nullptr, bool splitPanel = false);
     ~MdiAreaEx();
 
     QMdiSubWindow *addSubWindow(QWidget *widget, Qt::WindowFlags flags = Qt::WindowFlags());
     void removeSubWindow(QWidget *widget);
+    QList<QMdiSubWindow*> subWindowList(WindowOrder order = CreationOrder) const;
+    QMdiSubWindow* currentSubWindow() const;
+    QMdiSubWindow* activeSubWindow() const;
+    void setActiveSubWindow(QMdiSubWindow* wnd);
+    void closeAllSubWindows();
 
     void setViewMode(ViewMode mode);
+    void toggleVerticalSplit();
+    bool isSplitView() const;
 
     QTabBar* tabBar() {
         return _tabBar;
@@ -73,21 +80,35 @@ private slots:
     void on_subWindowActivated(QMdiSubWindow* wnd);
 
 private:
+    QMdiSubWindow* addSubWindowLocal(QWidget* widget, Qt::WindowFlags flags);
+    void removeSubWindowLocal(QWidget* widget);
+    MdiAreaEx* areaForSubWindow(QMdiSubWindow* wnd) const;
+    MdiAreaEx* activePanel() const;
+
     void setupTabbedMode();
     void createSplitButton();
     void updateViewportBaseLine();
+    void syncSplitButtonState();
+    void splitTab(int index, Qt::Orientation orientation);
+    void setSplitViewEnabled(bool enabled);
+    void ensureSplitArea(Qt::Orientation orientation);
+    void mergeSplitArea();
 
     void refreshTabBar();
     void updateTabBarGeometry();
 
     QMdiSubWindow* subWindowAtIndex(int index) const;
-    void splitTab(int index, Qt::Orientation orientation);
 
 private:
+    bool _isSecondaryPanel = false;
+    bool _isSplitInProgress = false;
     bool _tabsExpanding = false;
     MdiTabBar* _tabBar;
     QToolButton* _splitButton;
     QFrame* _tabBarBaseLine = nullptr;
+    QSplitter* _splitter = nullptr;
+    MdiAreaEx* _secondaryArea = nullptr;
+    MdiAreaEx* _lastActiveArea = nullptr;
 };
 
 #endif // MDIAREAEX_H

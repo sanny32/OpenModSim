@@ -118,6 +118,7 @@ private slots:
 
     /* View menu slots */
     void on_actionTabbedView_triggered();
+    void on_actionSplitView_triggered();
     void on_actionToolbar_triggered();
     void on_actionStatusBar_triggered();
     void on_actionDisplayBar_triggered();

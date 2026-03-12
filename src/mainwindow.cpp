@@ -1077,6 +1077,14 @@ void MainWindow::on_actionTabbedView_triggered()
 }
 
 ///
+/// \brief MainWindow::on_actionSplitView_triggered
+///
+void MainWindow::on_actionSplitView_triggered()
+{
+    ui->mdiArea->toggleVerticalSplit();
+}
+
+///
 /// \brief MainWindow::setViewMode
 /// \param mode
 ///
