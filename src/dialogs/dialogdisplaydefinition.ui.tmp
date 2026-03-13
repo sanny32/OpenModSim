@@ -1,7 +1,7 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>DialogDisplayDefinition</class>
-  <widget class="QDialog" name="DialogDisplayDefinition">
+ <widget class="QDialog" name="DialogDisplayDefinition">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -41,7 +41,7 @@
         <property name="minimumSize">
          <size>
           <width>25</width>
-          <height>26</height>
+          <height>0</height>
          </size>
         </property>
         <property name="maximumSize">
@@ -121,7 +121,7 @@
         <property name="minimumSize">
          <size>
           <width>0</width>
-          <height>26</height>
+          <height>25</height>
          </size>
         </property>
         <property name="maximumSize">
@@ -150,7 +150,7 @@
         <property name="minimumSize">
          <size>
           <width>150</width>
-          <height>26</height>
+          <height>25</height>
          </size>
         </property>
        </widget>
@@ -173,7 +173,7 @@
         <property name="minimumSize">
          <size>
           <width>100</width>
-          <height>26</height>
+          <height>25</height>
          </size>
         </property>
        </widget>
@@ -196,7 +196,7 @@
         <property name="minimumSize">
          <size>
           <width>0</width>
-          <height>26</height>
+          <height>25</height>
          </size>
         </property>
         <property name="maximumSize">
@@ -225,7 +225,7 @@
         <property name="minimumSize">
          <size>
           <width>0</width>
-          <height>26</height>
+          <height>25</height>
          </size>
         </property>
         <property name="maximumSize">
@@ -277,7 +277,7 @@
           <property name="minimumSize">
            <size>
             <width>0</width>
-            <height>26</height>
+            <height>25</height>
            </size>
           </property>
           <property name="maximumSize">
@@ -373,7 +373,7 @@
           <property name="minimumSize">
            <size>
             <width>0</width>
-            <height>26</height>
+            <height>25</height>
            </size>
           </property>
           <property name="maximumSize">
@@ -411,7 +411,7 @@
         <property name="minimumSize">
          <size>
           <width>0</width>
-          <height>26</height>
+          <height>25</height>
          </size>
         </property>
        </widget>
@@ -540,3 +540,4 @@
   </connection>
  </connections>
 </ui>
+

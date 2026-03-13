@@ -25,6 +25,7 @@ public:
     void increaseRequests();
     void increaseResponses();
     void resetCtrs();
+    void setCounters(uint requests, uint responses);
 
     LogViewState logState() const;
     void setLogState(LogViewState state);

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>DialogAutoSimulation</class>
  <widget class="QDialog" name="DialogAutoSimulation">
@@ -34,7 +34,7 @@
       </widget>
      </item>
      <item row="0" column="1">
-      <widget class="SimulationModeComboBox" name="comboBoxSimulationType"/>
+      <widget class="SimulationModeComboBox" name="comboBoxSimulationType"><property name="minimumSize"><size><width>0</width><height>26</height></size></property></widget>
      </item>
      <item row="1" column="1">
       <widget class="NumericLineEdit" name="lineEditInterval">
@@ -43,7 +43,7 @@
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
-       </property>
+       </property><property name="minimumSize"><size><width>0</width><height>26</height></size></property>
        <property name="maximumSize">
         <size>
          <width>80</width>
@@ -76,7 +76,7 @@
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
-       </property>
+       </property><property name="minimumSize"><size><width>0</width><height>26</height></size></property>
        <property name="maximumSize">
         <size>
          <width>80</width>
@@ -110,7 +110,7 @@
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
-        </property>
+        </property><property name="minimumSize"><size><width>0</width><height>26</height></size></property>
         <property name="maximumSize">
          <size>
           <width>80</width>
@@ -133,7 +133,7 @@
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
-        </property>
+        </property><property name="minimumSize"><size><width>0</width><height>26</height></size></property>
         <property name="maximumSize">
          <size>
           <width>80</width>
@@ -172,7 +172,7 @@
    <header>simulationmodecombobox.h</header>
   </customwidget>
  </customwidgets>
- <resources/>
+ <resources />
  <connections>
   <connection>
    <sender>buttonBox</sender>

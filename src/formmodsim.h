@@ -115,6 +115,9 @@ public:
     void setColor(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr, const QColor& clr);
 
     void resetCtrs();
+    uint requestCount() const;
+    uint responseCount() const;
+    void setStatisticCounters(uint requests, uint responses);
 
     bool canRunScript() const;
     bool canStopScript() const;
@@ -161,6 +164,8 @@ signals:
     void scriptStopped();
     void captureError(const QString& error);
     void doubleClicked();
+    void statisticCtrsReseted();
+    void statisticLogStateChanged(LogViewState state);
 
 private slots:
     void on_lineEditAddress_valueChanged(const QVariant&);

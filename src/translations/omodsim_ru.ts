@@ -1445,12 +1445,12 @@
         <translation>Адрес устройства: </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogsetuppresetdata.ui" line="46"/>
+        <location filename="../dialogs/dialogsetuppresetdata.ui" line="52"/>
         <source>Address: </source>
         <translation>Адрес: </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogsetuppresetdata.ui" line="69"/>
+        <location filename="../dialogs/dialogsetuppresetdata.ui" line="81"/>
         <source>Number of Points: </source>
         <translation>Количество точек: </translation>
     </message>
@@ -1932,7 +1932,7 @@ Length: %2</source>
         <translation type="vanished">Указана недопустимая длина данных</translation>
     </message>
     <message>
-        <location filename="../formmodsim.cpp" line="543"/>
+        <location filename="../formmodsim.cpp" line="545"/>
         <source>Address Base: %1
 Start Address: %2
 Length: %3</source>
@@ -1941,7 +1941,7 @@ Length: %3</source>
 Количество: %3</translation>
     </message>
     <message>
-        <location filename="../formmodsim.cpp" line="546"/>
+        <location filename="../formmodsim.cpp" line="548"/>
         <source>Device Id: %1
 MODBUS Point Type:
 %2</source>
@@ -2687,12 +2687,12 @@ Script.onInit(()=&gt;{
         <translation>XML файлы (*.xml)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1273"/>
+        <location filename="../mainwindow.cpp" line="1282"/>
         <source>JavaScript files (*.js);;All files (*)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1618"/>
+        <location filename="../mainwindow.cpp" line="1627"/>
         <source>Capture Error:<byte value="xd"/>
 %1</source>
         <translation>Ошибка захвата:
@@ -3651,23 +3651,23 @@ Script.onInit(()=&gt;{
         <translation>Пауза</translation>
     </message>
     <message>
-        <location filename="../controls/statisticwidget.cpp" line="98"/>
-        <location filename="../controls/statisticwidget.cpp" line="102"/>
+        <location filename="../controls/statisticwidget.cpp" line="108"/>
+        <location filename="../controls/statisticwidget.cpp" line="112"/>
         <source>Pause Logging</source>
         <translation>Приостановить логирование</translation>
     </message>
     <message>
-        <location filename="../controls/statisticwidget.cpp" line="106"/>
+        <location filename="../controls/statisticwidget.cpp" line="116"/>
         <source>Resume Logging</source>
         <translation>Возобновить логирование</translation>
     </message>
     <message>
-        <location filename="../controls/statisticwidget.cpp" line="139"/>
+        <location filename="../controls/statisticwidget.cpp" line="149"/>
         <source>Requests: %1</source>
         <translation>Запросов: %1</translation>
     </message>
     <message>
-        <location filename="../controls/statisticwidget.cpp" line="140"/>
+        <location filename="../controls/statisticwidget.cpp" line="150"/>
         <source>Responses: %1</source>
         <translation>Ответов: %1</translation>
     </message>

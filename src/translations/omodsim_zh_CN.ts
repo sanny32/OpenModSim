@@ -1449,12 +1449,12 @@
         <translation>设备地址： </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogsetuppresetdata.ui" line="46"/>
+        <location filename="../dialogs/dialogsetuppresetdata.ui" line="52"/>
         <source>Address: </source>
         <translation>地址： </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogsetuppresetdata.ui" line="69"/>
+        <location filename="../dialogs/dialogsetuppresetdata.ui" line="81"/>
         <source>Number of Points: </source>
         <translation>点数： </translation>
     </message>
@@ -1936,7 +1936,7 @@ Length: %2</source>
         <translation type="vanished">指定了非法的数据长度</translation>
     </message>
     <message>
-        <location filename="../formmodsim.cpp" line="543"/>
+        <location filename="../formmodsim.cpp" line="545"/>
         <source>Address Base: %1
 Start Address: %2
 Length: %3</source>
@@ -1945,7 +1945,7 @@ Length: %3</source>
 长度: %3</translation>
     </message>
     <message>
-        <location filename="../formmodsim.cpp" line="546"/>
+        <location filename="../formmodsim.cpp" line="548"/>
         <source>Device Id: %1
 MODBUS Point Type:
 %2</source>
@@ -2699,12 +2699,12 @@ Script.onInit(()=&gt;{
         <translation>XML 文件(*.xml)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1273"/>
+        <location filename="../mainwindow.cpp" line="1282"/>
         <source>JavaScript files (*.js);;All files (*)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1618"/>
+        <location filename="../mainwindow.cpp" line="1627"/>
         <source>Capture Error:<byte value="xd"/>
 %1</source>
         <translation>捕获错误：
@@ -3657,23 +3657,23 @@ Script.onInit(()=&gt;{
         <translation>暂停</translation>
     </message>
     <message>
-        <location filename="../controls/statisticwidget.cpp" line="98"/>
-        <location filename="../controls/statisticwidget.cpp" line="102"/>
+        <location filename="../controls/statisticwidget.cpp" line="108"/>
+        <location filename="../controls/statisticwidget.cpp" line="112"/>
         <source>Pause Logging</source>
         <translation>暂停日志记录</translation>
     </message>
     <message>
-        <location filename="../controls/statisticwidget.cpp" line="106"/>
+        <location filename="../controls/statisticwidget.cpp" line="116"/>
         <source>Resume Logging</source>
         <translation>恢复日志记录</translation>
     </message>
     <message>
-        <location filename="../controls/statisticwidget.cpp" line="139"/>
+        <location filename="../controls/statisticwidget.cpp" line="149"/>
         <source>Requests: %1</source>
         <translation>请求：%1</translation>
     </message>
     <message>
-        <location filename="../controls/statisticwidget.cpp" line="140"/>
+        <location filename="../controls/statisticwidget.cpp" line="150"/>
         <source>Responses: %1</source>
         <translation>响应：%1</translation>
     </message>

@@ -1111,7 +1111,16 @@ void MainWindow::on_actionCaptureOff_triggered()
 void MainWindow::on_actionResetCtrs_triggered()
 {
     auto frm = currentMdiChild();
-    if(frm) frm->resetCtrs();
+    if(!frm)
+        return;
+
+    frm->resetCtrs();
+
+    if(_splitDisableInProgress || !isSplitTabbedView())
+        return;
+
+    if(auto peer = splitPeer(frm))
+        peer->resetCtrs();
 }
 
 ///
@@ -1631,6 +1640,24 @@ void MainWindow::setupMdiChild(FormModSim* frm, QMdiSubWindow* wnd, bool addToWi
         }
     });
 
+    connect(frm, &FormModSim::statisticCtrsReseted, this, [this, frm]()
+    {
+        if(_splitDisableInProgress || !isSplitTabbedView())
+            return;
+
+        if(auto peer = splitPeer(frm))
+            peer->resetCtrs();
+    });
+
+    connect(frm, &FormModSim::statisticLogStateChanged, this, [this, frm](LogViewState state)
+    {
+        if(_splitDisableInProgress || !isSplitTabbedView())
+            return;
+
+        if(auto peer = splitPeer(frm))
+            peer->setLogViewState(state);
+    });
+
     connect(frm, &FormModSim::scriptRunning, this, [this, frm]()
     {
         frm->setProperty(kSplitScriptRunning, true);
@@ -1891,6 +1918,8 @@ void MainWindow::ensureSplitMirrorForForm(FormModSim* frm)
         return;
 
     cloneMdiChildState(frm, mirror);
+    mirror->setStatisticCounters(frm->requestCount(), frm->responseCount());
+    mirror->setLogViewState(frm->logViewState());
     if(auto* doc = frm->scriptDocument()) {
         if(doc->parent() != this)
             doc->setParent(this);

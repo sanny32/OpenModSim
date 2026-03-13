@@ -66,8 +66,18 @@ void StatisticWidget::increaseResponses()
 ///
 void StatisticWidget::resetCtrs()
 {
-    _requests = 0;
-    _responses = 0;
+    setCounters(0, 0);
+}
+
+///
+/// \brief StatisticWidget::setCounters
+/// \param requests
+/// \param responses
+///
+void StatisticWidget::setCounters(uint requests, uint responses)
+{
+    _requests = requests;
+    _responses = responses;
 
     updateStatistic();
 

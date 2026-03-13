@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>DialogRawDataLog</class>
  <widget class="QDialog" name="DialogRawDataLog">
@@ -28,7 +28,7 @@
        <property name="minimumSize">
         <size>
          <width>100</width>
-         <height>0</height>
+         <height>26</height>
         </size>
        </property>
        <property name="sizeAdjustPolicy">
@@ -58,7 +58,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QComboBox" name="comboBoxRowLimit">
+      <widget class="QComboBox" name="comboBoxRowLimit"><property name="minimumSize"><size><width>0</width><height>26</height></size></property>
        <property name="editable">
         <bool>true</bool>
        </property>
@@ -142,6 +142,6 @@
    </item>
   </layout>
  </widget>
- <resources/>
- <connections/>
+ <resources />
+ <connections />
 </ui>
