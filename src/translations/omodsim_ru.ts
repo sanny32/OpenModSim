@@ -1883,27 +1883,27 @@
         <translation type="vanished">Адрес:</translation>
     </message>
     <message>
-        <location filename="../formmodsim.ui" line="106"/>
+        <location filename="../formmodsim.ui" line="103"/>
         <source>Start Address:</source>
         <translation>Адрес:</translation>
     </message>
     <message>
-        <location filename="../formmodsim.ui" line="113"/>
+        <location filename="../formmodsim.ui" line="110"/>
         <source>Length:</source>
         <translation>Количество:</translation>
     </message>
     <message>
-        <location filename="../formmodsim.ui" line="152"/>
+        <location filename="../formmodsim.ui" line="149"/>
         <source>Address Base:</source>
         <translation>Адресация:</translation>
     </message>
     <message>
-        <location filename="../formmodsim.ui" line="202"/>
+        <location filename="../formmodsim.ui" line="199"/>
         <source>Device Id:</source>
         <translation>Узел:</translation>
     </message>
     <message>
-        <location filename="../formmodsim.ui" line="252"/>
+        <location filename="../formmodsim.ui" line="249"/>
         <source>MODBUS Point Type</source>
         <translation>Тип регистров MODBUS</translation>
     </message>

@@ -1887,27 +1887,27 @@
         <translation type="vanished">地址：</translation>
     </message>
     <message>
-        <location filename="../formmodsim.ui" line="106"/>
+        <location filename="../formmodsim.ui" line="103"/>
         <source>Start Address:</source>
         <translation>起始地址：</translation>
     </message>
     <message>
-        <location filename="../formmodsim.ui" line="113"/>
+        <location filename="../formmodsim.ui" line="110"/>
         <source>Length:</source>
         <translation>长度：</translation>
     </message>
     <message>
-        <location filename="../formmodsim.ui" line="152"/>
+        <location filename="../formmodsim.ui" line="149"/>
         <source>Address Base:</source>
         <translation>基地址：</translation>
     </message>
     <message>
-        <location filename="../formmodsim.ui" line="202"/>
+        <location filename="../formmodsim.ui" line="199"/>
         <source>Device Id:</source>
         <translation>设备地址：</translation>
     </message>
     <message>
-        <location filename="../formmodsim.ui" line="252"/>
+        <location filename="../formmodsim.ui" line="249"/>
         <source>MODBUS Point Type</source>
         <translation>寄存器类型</translation>
     </message>
