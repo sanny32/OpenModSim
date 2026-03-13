@@ -20,7 +20,7 @@ DialogForceMultipleRegisters::DialogForceMultipleRegisters(ModbusWriteParams& pa
     , ui(new Ui::DialogForceMultipleRegisters)
     ,_writeParams(params)
     ,_type(type)
-    ,_hexAddress(dd.HexAddress || dd.HexViewAddress)
+    ,_hexAddress(dd.HexAddress)
     ,_hexViewDeviceId(dd.HexViewDeviceId)
     ,_hexViewLength(dd.HexViewLength)
 {
@@ -34,12 +34,12 @@ DialogForceMultipleRegisters::DialogForceMultipleRegisters(ModbusWriteParams& pa
         : QString::number(length);
 
     ui->labelAddress->setText(QString(ui->labelAddress->text()).arg(
-        formatAddress(type, params.Address, params.AddrSpace, _hexAddress)));
+        formatAddress(type, params.Address, params.AddrSpace, _hexAddress || dd.HexViewAddress)));
     ui->labelLength->setText(QString(ui->labelLength->text()).arg(lengthStr));
     ui->labelSlaveDevice->setText(QString(ui->labelSlaveDevice->text()).arg(deviceIdStr));
     ui->labelAddresses->setText(QString(ui->labelAddresses->text()).arg(
-        formatAddress(type, params.Address, params.AddrSpace, _hexAddress),
-        formatAddress(type, params.Address + length - 1, params.AddrSpace, _hexAddress)));
+        formatAddress(type, params.Address, params.AddrSpace, _hexAddress || dd.HexViewAddress),
+        formatAddress(type, params.Address + length - 1, params.AddrSpace, _hexAddress || dd.HexViewAddress)));
 
     ui->lineEditStep->setValue(1);
 

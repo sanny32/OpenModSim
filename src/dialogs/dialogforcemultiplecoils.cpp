@@ -18,7 +18,7 @@ DialogForceMultipleCoils::DialogForceMultipleCoils(ModbusWriteParams& params, QM
     , ui(new Ui::DialogForceMultipleCoils)
     ,_writeParams(params)
     ,_type(type)
-    ,_hexAddress(dd.HexAddress || dd.HexViewAddress)
+    ,_hexAddress(dd.HexAddress)
     ,_hexViewDeviceId(dd.HexViewDeviceId)
     ,_hexViewLength(dd.HexViewLength)
 {
@@ -44,12 +44,12 @@ DialogForceMultipleCoils::DialogForceMultipleCoils(ModbusWriteParams& params, QM
         : QString("%1").arg(length, 3, 10, QLatin1Char('0'));
 
     ui->labelAddress->setText(QString(ui->labelAddress->text()).arg(
-        formatAddress(type, params.Address, params.AddrSpace, _hexAddress)));
+        formatAddress(type, params.Address, params.AddrSpace, _hexAddress || dd.HexViewAddress)));
     ui->labelLength->setText(QString(ui->labelLength->text()).arg(lengthStr));
     ui->labelSlaveDevice->setText(QString(ui->labelSlaveDevice->text()).arg(deviceIdStr));
     ui->labelAddresses->setText(QString(ui->labelAddresses->text()).arg(
-        formatAddress(type, params.Address, params.AddrSpace, _hexAddress),
-        formatAddress(type, params.Address + length - 1, params.AddrSpace, _hexAddress)));
+        formatAddress(type, params.Address, params.AddrSpace, _hexAddress || dd.HexViewAddress),
+        formatAddress(type, params.Address + length - 1, params.AddrSpace, _hexAddress || dd.HexViewAddress)));
 
     recolorPushButtonIcon(ui->pushButtonExport, Qt::red);
     recolorPushButtonIcon(ui->pushButtonImport, Qt::darkGreen);

@@ -658,40 +658,40 @@
         <translation>Предустановка дискретных регистров</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="134"/>
-        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="208"/>
+        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="135"/>
+        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="209"/>
         <source>CSV files (*.csv)</source>
         <translation>Файлы CSV (*.csv)</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="141"/>
-        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="219"/>
+        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="142"/>
+        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="220"/>
         <source>Error</source>
         <translation>Ошибка</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="175"/>
+        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="176"/>
         <source>Import error</source>
         <translation>Ошибка импорта</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="175"/>
+        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="176"/>
         <source>Invalid value: %1</source>
         <translation>Неверное значение: %1</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="184"/>
-        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="190"/>
+        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="185"/>
+        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="191"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="184"/>
+        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="185"/>
         <source>No data found in file.</source>
         <translation>Данные в файле не найдены.</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="190"/>
+        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="191"/>
         <source>Imported data size (%1) does not match current size (%2).</source>
         <translation>Размер импортированных данных (%1) не совпадает с текущим (%2).</translation>
     </message>
@@ -808,50 +808,50 @@
         <translation type="vanished">Количество: %1</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="53"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="54"/>
         <source>PRESET INPUT REGISTERS</source>
         <translation>Предустановка регистров ввода (3x)</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="56"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="57"/>
         <source>PRESET HOLDING REGISTERS</source>
         <translation>Предустановка регистров хранения (4x)</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="735"/>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="816"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="736"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="817"/>
         <source>CSV files (*.csv)</source>
         <translation>Файлы CSV (*.csv)</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="742"/>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="827"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="743"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="828"/>
         <source>Error</source>
         <translation>Ошибка</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="783"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="784"/>
         <source>Import error</source>
         <translation>Ошибка импорта</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="783"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="784"/>
         <source>Invalid value: %1</source>
         <translation>Неверное значение: %1</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="792"/>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="798"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="793"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="799"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="792"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="793"/>
         <source>No data found in file.</source>
         <translation>Данные в файле не найдены.</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="798"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="799"/>
         <source>Imported data size (%1) does not match current size (%2).</source>
         <translation>Размер импортированных данных (%1) не совпадает с текущим (%2).</translation>
     </message>
