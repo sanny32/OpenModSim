@@ -16,7 +16,7 @@ public:
     {
         QProxyStyle::drawControl(element, option, painter, widget);
 
-        if(element != CE_TabBarTabShape || !widget)
+        if(element != CE_TabBarTab || !widget)
             return;
 
         const auto* tabBar = qobject_cast<const QTabBar*>(widget);
