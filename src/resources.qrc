@@ -83,5 +83,6 @@
         <file>res/icon-bell.svg</file>
         <file>res/icon-bell-dot.svg</file>
         <file>res/actionSplitView.png</file>
+        <file>res/icon-hex.svg</file>
     </qresource>
 </RCC>

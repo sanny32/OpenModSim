@@ -36,6 +36,7 @@ FormModSim::FormModSim(int id, ModbusMultiServer& server, QSharedPointer<DataSim
     ui->lineEditDeviceId->setInputRange(ModbusLimits::slaveRange());
     ui->lineEditDeviceId->setValue(1);
     ui->lineEditDeviceId->setLeadingZeroes(true);
+    ui->lineEditDeviceId->setHexButtonVisible(true);
     server.addDeviceId(ui->lineEditDeviceId->value<int>());
 
     ui->stackedWidget->setCurrentIndex(0);
@@ -47,9 +48,11 @@ FormModSim::FormModSim(int id, ModbusMultiServer& server, QSharedPointer<DataSim
     ui->lineEditAddress->setLeadingZeroes(true);
     ui->lineEditAddress->setInputRange(ModbusLimits::addressRange(mbDefs.AddrSpace, true));
     ui->lineEditAddress->setValue(0);
+    ui->lineEditAddress->setHexButtonVisible(true);
 
     ui->lineEditLength->setInputRange(ModbusLimits::lengthRange(0, true, mbDefs.AddrSpace));
     ui->lineEditLength->setValue(100);
+    ui->lineEditLength->setHexButtonVisible(true);
 
     ui->comboBoxAddressBase->setCurrentAddressBase(AddressBase::Base1);
     ui->comboBoxModbusPointType->setCurrentPointType(QModbusDataUnit::HoldingRegisters);
@@ -175,6 +178,9 @@ DisplayDefinition FormModSim::displayDefinition() const
     dd.AutoscrollLog = ui->outputWidget->autoscrollLogView();
     dd.VerboseLogging = _verboseLogging;
     dd.HexAddress = displayHexAddresses();
+    dd.HexViewAddress  = ui->lineEditAddress->hexView();
+    dd.HexViewDeviceId = ui->lineEditDeviceId->hexView();
+    dd.HexViewLength   = ui->lineEditLength->hexView();
     dd.AddrSpace = _mbMultiServer.getModbusDefinitions().AddrSpace;
     dd.DataViewColumnsDistance = ui->outputWidget->dataViewColumnsDistance();
     dd.LeadingZeros = ui->lineEditDeviceId->leadingZeroes();
@@ -225,6 +231,10 @@ void FormModSim::setDisplayDefinition(const DisplayDefinition& dd)
 
     setScriptSettings(dd.ScriptCfg);
     setDisplayHexAddresses(dd.HexAddress);
+
+    ui->lineEditDeviceId->setHexView(dd.HexViewDeviceId);
+    ui->lineEditAddress->setHexView(dd.HexViewAddress);
+    ui->lineEditLength->setHexView(dd.HexViewLength);
 
     emit definitionChanged();
 }

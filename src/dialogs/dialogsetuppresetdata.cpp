@@ -6,26 +6,34 @@
 /// \brief DialogSetupPresetData::DialogSetupPresetData
 /// \param params
 /// \param pointType
-/// \param hexAddress
+/// \param dd
 /// \param parent
 ///
-DialogSetupPresetData::DialogSetupPresetData(SetupPresetParams& params,  QModbusDataUnit::RegisterType pointType, bool hexAddress, QWidget *parent) :
+DialogSetupPresetData::DialogSetupPresetData(SetupPresetParams& params,  QModbusDataUnit::RegisterType pointType, const DisplayDefinition& dd, QWidget *parent) :
      QFixedSizeDialog(parent)
     , ui(new Ui::DialogSetupPresetData)
     ,_params(params)
+    ,_pointType(pointType)
 {
     ui->setupUi(this);
+
     ui->lineEditSlaveDevice->setLeadingZeroes(params.LeadingZeros);
     ui->lineEditSlaveDevice->setInputRange(ModbusLimits::slaveRange());
     ui->lineEditSlaveDevice->setValue(params.DeviceId);
+    ui->lineEditSlaveDevice->setHexButtonVisible(true);
+    ui->lineEditSlaveDevice->setHexView(dd.HexViewDeviceId);
 
     ui->lineEditAddress->setLeadingZeroes(params.LeadingZeros);
-    ui->lineEditAddress->setInputMode(hexAddress ? NumericLineEdit::HexMode : NumericLineEdit::Int32Mode);
+    ui->lineEditAddress->setInputMode(dd.HexAddress ? NumericLineEdit::HexMode : NumericLineEdit::Int32Mode);
     ui->lineEditAddress->setInputRange(ModbusLimits::addressRange(params.AddrSpace, params.ZeroBasedAddress));
     ui->lineEditAddress->setValue(params.PointAddress);
+    ui->lineEditAddress->setHexButtonVisible(true);
+    ui->lineEditAddress->setHexView(dd.HexViewAddress);
 
     ui->lineEditNumberOfPoints->setInputRange(ModbusLimits::lengthRange(params.PointAddress, params.ZeroBasedAddress, params.AddrSpace));
     ui->lineEditNumberOfPoints->setValue(params.Length);
+    ui->lineEditNumberOfPoints->setHexButtonVisible(true);
+    ui->lineEditNumberOfPoints->setHexView(dd.HexViewLength);
 
     switch(pointType)
     {

@@ -135,6 +135,7 @@ set(SOURCES
     controls/modbuslogwidget.cpp
     controls/modbusmessagewidget.cpp
     controls/numericcombobox.cpp
+    controls/hexviewbutton.cpp
     controls/numericlineedit.cpp
     controls/outputwidget.cpp
     controls/paritytypecombobox.cpp
@@ -224,6 +225,7 @@ set(HEADERS
     controls/modbuslogwidget.h
     controls/modbusmessagewidget.h
     controls/numericcombobox.h
+    controls/hexviewbutton.h
     controls/numericlineedit.h
     controls/outputwidget.h
     controls/paritytypecombobox.h

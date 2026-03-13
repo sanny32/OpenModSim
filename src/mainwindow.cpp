@@ -1441,7 +1441,7 @@ void MainWindow::forceCoils(QModbusDataUnit::RegisterType type)
     SetupPresetParams presetParams = { dd.DeviceId, dd.PointAddress, dd.Length, dd.ZeroBasedAddress, dd.AddrSpace, dd.LeadingZeros };
 
     {
-        DialogSetupPresetData dlg(presetParams, type, dd.HexAddress, this);
+        DialogSetupPresetData dlg(presetParams, type, dd, this);
         if(dlg.exec() != QDialog::Accepted) return;
     }
 
@@ -1457,7 +1457,7 @@ void MainWindow::forceCoils(QModbusDataUnit::RegisterType type)
         params.Value = QVariant::fromValue(data.values());
     }
 
-    DialogForceMultipleCoils dlg(params, type, presetParams.Length, dd.HexAddress, this);
+    DialogForceMultipleCoils dlg(params, type, presetParams.Length, dd, this);
     if(dlg.exec() == QDialog::Accepted)
     {
         _mbMultiServer.writeRegister(type, params);
@@ -1477,7 +1477,7 @@ void MainWindow::presetRegs(QModbusDataUnit::RegisterType type)
     SetupPresetParams presetParams = { dd.DeviceId, dd.PointAddress, dd.Length, dd.ZeroBasedAddress, dd.AddrSpace, dd.LeadingZeros };
 
     {
-        DialogSetupPresetData dlg(presetParams, type, dd.HexAddress, this);
+        DialogSetupPresetData dlg(presetParams, type, dd, this);
         if(dlg.exec() != QDialog::Accepted) return;
     }
 
@@ -1496,7 +1496,7 @@ void MainWindow::presetRegs(QModbusDataUnit::RegisterType type)
         params.Value = QVariant::fromValue(data.values());
     }
 
-    DialogForceMultipleRegisters dlg(params, type, presetParams.Length, dd.HexAddress, this);
+    DialogForceMultipleRegisters dlg(params, type, presetParams.Length, dd, this);
     if(dlg.exec() == QDialog::Accepted)
     {
         _mbMultiServer.writeRegister(type, params);

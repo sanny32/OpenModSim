@@ -579,7 +579,7 @@
     <name>DialogForceMultipleCoils</name>
     <message>
         <location filename="../dialogs/dialogforcemultiplecoils.ui" line="20"/>
-        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="28"/>
+        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="30"/>
         <source>FORCE MULTIPLE COILS</source>
         <translation>强制多个线圈</translation>
     </message>
@@ -653,45 +653,45 @@
         <translation type="vanished">长度：%1</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="31"/>
+        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="33"/>
         <source>FORCE DISCRETE INPUTS</source>
         <translation>强制离散输入</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="125"/>
-        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="199"/>
+        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="134"/>
+        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="208"/>
         <source>CSV files (*.csv)</source>
         <translation>CSV 文件 (*.csv)</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="132"/>
-        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="210"/>
+        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="141"/>
+        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="219"/>
         <source>Error</source>
         <translation>错误</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="166"/>
+        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="175"/>
         <source>Import error</source>
         <translation>导入错误</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="166"/>
+        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="175"/>
         <source>Invalid value: %1</source>
         <translation>无效值：%1</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="175"/>
-        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="181"/>
+        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="184"/>
+        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="190"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="175"/>
+        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="184"/>
         <source>No data found in file.</source>
         <translation>文件中未找到数据。</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="181"/>
+        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="190"/>
         <source>Imported data size (%1) does not match current size (%2).</source>
         <translation>导入数据大小 (%1) 与当前大小 (%2) 不匹配。</translation>
     </message>
@@ -808,50 +808,50 @@
         <translation type="vanished">长度：%1</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="44"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="53"/>
         <source>PRESET INPUT REGISTERS</source>
         <translation>预设输入寄存器</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="47"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="56"/>
         <source>PRESET HOLDING REGISTERS</source>
         <translation>预设保持寄存器</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="726"/>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="807"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="735"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="816"/>
         <source>CSV files (*.csv)</source>
         <translation>CSV 文件 (*.csv)</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="733"/>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="818"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="742"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="827"/>
         <source>Error</source>
         <translation>错误</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="774"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="783"/>
         <source>Import error</source>
         <translation>导入错误</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="774"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="783"/>
         <source>Invalid value: %1</source>
         <translation>无效值：%1</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="783"/>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="789"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="792"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="798"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="783"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="792"/>
         <source>No data found in file.</source>
         <translation>文件中未找到数据。</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="789"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="798"/>
         <source>Imported data size (%1) does not match current size (%2).</source>
         <translation>导入数据大小 (%1) 与当前大小 (%2) 不匹配。</translation>
     </message>
@@ -1459,22 +1459,22 @@
         <translation>点数： </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogsetuppresetdata.cpp" line="33"/>
+        <location filename="../dialogs/dialogsetuppresetdata.cpp" line="41"/>
         <source>PRESET COILS</source>
         <translation>预设线圈</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogsetuppresetdata.cpp" line="36"/>
+        <location filename="../dialogs/dialogsetuppresetdata.cpp" line="44"/>
         <source>PRESET DISCRETE INPUTS</source>
         <translation>预设离散输入</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogsetuppresetdata.cpp" line="39"/>
+        <location filename="../dialogs/dialogsetuppresetdata.cpp" line="47"/>
         <source>PRESET INPUT REGISTERS</source>
         <translation>预设输入寄存器</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogsetuppresetdata.cpp" line="42"/>
+        <location filename="../dialogs/dialogsetuppresetdata.cpp" line="50"/>
         <source>PRESET HOLDING REGISTERS</source>
         <translation>预设保持寄存器</translation>
     </message>
@@ -1936,7 +1936,7 @@ Length: %2</source>
         <translation type="vanished">指定了非法的数据长度</translation>
     </message>
     <message>
-        <location filename="../formmodsim.cpp" line="545"/>
+        <location filename="../formmodsim.cpp" line="555"/>
         <source>Address Base: %1
 Start Address: %2
 Length: %3</source>
@@ -1945,7 +1945,7 @@ Length: %3</source>
 长度: %3</translation>
     </message>
     <message>
-        <location filename="../formmodsim.cpp" line="548"/>
+        <location filename="../formmodsim.cpp" line="558"/>
         <source>Device ID: %1
 MODBUS Point Type:
 %2</source>
@@ -2013,6 +2013,14 @@ MODBUS Point Type:
         <location filename="../controls/helpwidget.cpp" line="92"/>
         <source>Close (Escape)</source>
         <translation>关闭 (Escape)</translation>
+    </message>
+</context>
+<context>
+    <name>HexViewButton</name>
+    <message>
+        <location filename="../controls/hexviewbutton.cpp" line="32"/>
+        <source>Hex View</source>
+        <translation type="unfinished">十六进制视图</translation>
     </message>
 </context>
 <context>

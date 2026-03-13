@@ -8,6 +8,7 @@
 #include "qadjustedsizedialog.h"
 #include "numericlineedit.h"
 #include "modbuswriteparams.h"
+#include "displaydefinition.h"
 
 namespace Ui {
 class DialogForceMultipleRegisters;
@@ -21,7 +22,7 @@ class DialogForceMultipleRegisters : public QAdjustedSizeDialog
     Q_OBJECT
 
 public:
-    explicit DialogForceMultipleRegisters(ModbusWriteParams& params, QModbusDataUnit::RegisterType type, int length, bool hexAddress, QWidget *parent = nullptr);
+    explicit DialogForceMultipleRegisters(ModbusWriteParams& params, QModbusDataUnit::RegisterType type, int length, const DisplayDefinition& dd, QWidget *parent = nullptr);
     ~DialogForceMultipleRegisters();
 
     void accept() override;
@@ -84,6 +85,8 @@ private:
     ModbusWriteParams& _writeParams;
     QModbusDataUnit::RegisterType _type;
     bool _hexAddress = false;
+    bool _hexViewDeviceId = false;
+    bool _hexViewLength   = false;
 };
 
 #endif // DIALOGFORCEMULTIPLEREGISTERS_H

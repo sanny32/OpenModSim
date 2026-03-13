@@ -20,6 +20,9 @@ struct DisplayDefinition
     quint16 LogViewLimit = 30;
     bool ZeroBasedAddress = false;
     bool HexAddress = false;
+    bool HexViewAddress  = false;
+    bool HexViewDeviceId = false;
+    bool HexViewLength   = false;
     bool AutoscrollLog = false;
     bool VerboseLogging = true;
     AddressSpace AddrSpace;
@@ -59,6 +62,9 @@ inline QSettings& operator <<(QSettings& out, const DisplayDefinition& dd)
     out.setValue("DisplayDefinition/LeadingZeros",          dd.LeadingZeros);
     out.setValue("DisplayDefinition/ZeroBasedAddress",      dd.ZeroBasedAddress);
     out.setValue("DisplayDefinition/HexAddress",            dd.HexAddress);
+    out.setValue("DisplayDefinition/HexViewAddress",        dd.HexViewAddress);
+    out.setValue("DisplayDefinition/HexViewDeviceId",       dd.HexViewDeviceId);
+    out.setValue("DisplayDefinition/HexViewLength",         dd.HexViewLength);
     out.setValue("DisplayDefinition/AutoscrollLog",         dd.AutoscrollLog);
     out.setValue("DisplayDefinition/VerboseLogging",        dd.VerboseLogging);
 
@@ -87,6 +93,9 @@ inline QSettings& operator >>(QSettings& in, DisplayDefinition& dd)
     dd.LeadingZeros = in.value("DisplayDefinition/LeadingZeros", true).toBool();
     dd.ZeroBasedAddress = in.value("DisplayDefinition/ZeroBasedAddress").toBool();
     dd.HexAddress = in.value("DisplayDefinition/HexAddress").toBool();
+    dd.HexViewAddress  = in.value("DisplayDefinition/HexViewAddress",  false).toBool();
+    dd.HexViewDeviceId = in.value("DisplayDefinition/HexViewDeviceId", false).toBool();
+    dd.HexViewLength   = in.value("DisplayDefinition/HexViewLength",   false).toBool();
     dd.AutoscrollLog = in.value("DisplayDefinition/AutoscrollLog").toBool();
     dd.VerboseLogging = in.value("DisplayDefinition/VerboseLogging", true).toBool();
 
@@ -118,6 +127,9 @@ inline QXmlStreamWriter& operator <<(QXmlStreamWriter& xml, const DisplayDefinit
     xml.writeAttribute("VerboseLogging", boolToString(dd.VerboseLogging));
     xml.writeAttribute("DataViewColumnsDistance", QString::number(dd.DataViewColumnsDistance));
     xml.writeAttribute("LeadingZeros", boolToString(dd.LeadingZeros));
+    xml.writeAttribute("HexViewAddress",  boolToString(dd.HexViewAddress));
+    xml.writeAttribute("HexViewDeviceId", boolToString(dd.HexViewDeviceId));
+    xml.writeAttribute("HexViewLength",   boolToString(dd.HexViewLength));
     xml << dd.ScriptCfg;
     xml.writeEndElement();
 
@@ -183,6 +195,15 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, DisplayDefinition& d
         if (attributes.hasAttribute("LeadingZeros")) {
             dd.LeadingZeros = stringToBool(attributes.value("LeadingZeros").toString());
         }
+
+        if (attributes.hasAttribute("HexViewAddress"))
+            dd.HexViewAddress = stringToBool(attributes.value("HexViewAddress").toString());
+
+        if (attributes.hasAttribute("HexViewDeviceId"))
+            dd.HexViewDeviceId = stringToBool(attributes.value("HexViewDeviceId").toString());
+
+        if (attributes.hasAttribute("HexViewLength"))
+            dd.HexViewLength = stringToBool(attributes.value("HexViewLength").toString());
 
         while (xml.readNextStartElement()) {
             if (xml.name() == QLatin1String("ScriptSettings")) {
