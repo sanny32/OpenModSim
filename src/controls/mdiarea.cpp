@@ -277,7 +277,7 @@ void MdiArea::on_tabBarClicked(int index)
 ///
 void MdiArea::on_currentTabChanged(int index)
 {
-    if (!_tabBar)
+    if (!_tabBar || !_tabBar->isVisible())
         return;
 
     auto* wnd = subWindowAtIndex(index);

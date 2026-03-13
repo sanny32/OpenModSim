@@ -13,11 +13,23 @@
 MainStatusBar::MainStatusBar(const ModbusMultiServer& server, QWidget* parent)
     : QStatusBar(parent)
     , _deviceIdsLabel(new QLabel(this))
+    , _errorSimLabel(new QLabel(this))
     , _updateChecker(new UpdateChecker(this))
 {
     _deviceIdsLabel->setContentsMargins(6, 0, 6, 0);
     addPermanentWidget(_deviceIdsLabel);
     updateDeviceIdsInfo();
+
+    _errorSimLabel->setTextFormat(Qt::RichText);
+    _errorSimLabel->setContentsMargins(6, 0, 6, 0);
+    _errorSimLabel->setVisible(false);
+    addPermanentWidget(_errorSimLabel);
+
+    connect(&server, &ModbusMultiServer::definitionsChanged, this, [this](const ModbusDefinitions& defs)
+    {
+        _errorSimulations = defs.ErrorSimulations;
+        updateErrorSimInfo();
+    });
 
     _bellButton = new QToolButton(this);
     _bellButton->setIcon(QIcon(":/res/icon-bell.svg"));
@@ -108,6 +120,7 @@ void MainStatusBar::changeEvent(QEvent* event)
             _bellButton->setToolTip(tr("No updates available"));
 
         updateDeviceIdsInfo();
+        updateErrorSimInfo();
     }
 
     QStatusBar::changeEvent(event);
@@ -130,6 +143,40 @@ void MainStatusBar::updateDeviceIdsInfo()
     }
 
     _deviceIdsLabel->setText(tr("Device IDs: %1").arg(values));
+}
+
+///
+/// \brief MainStatusBar::updateErrorSimInfo
+///
+void MainStatusBar::updateErrorSimInfo()
+{
+    const QString warn = QStringLiteral("<span style='color:#f97316; font-size:10px;'>●</span>&nbsp;");
+    QStringList flags;
+
+    if(_errorSimulations.noResponse())
+        flags << tr("No Resp");
+    if(_errorSimulations.responseIncorrectId())
+        flags << tr("Bad ID");
+    if(_errorSimulations.responseIllegalFunction())
+        flags << tr("Ill Func");
+    if(_errorSimulations.responseDeviceBusy())
+        flags << tr("Dev Busy");
+    if(_errorSimulations.responseIncorrectCrc())
+        flags << tr("Bad CRC");
+    if(_errorSimulations.responseDelay())
+        flags << tr("Delay %1ms").arg(_errorSimulations.responseDelayTime());
+    if(_errorSimulations.responseRandomDelay())
+        flags << tr("Rnd Delay %1ms").arg(_errorSimulations.responseRandomDelayUpToTime());
+
+    if(flags.isEmpty())
+    {
+        _errorSimLabel->setVisible(false);
+    }
+    else
+    {
+        _errorSimLabel->setText(warn + flags.join(", "));
+        _errorSimLabel->setVisible(true);
+    }
 }
 
 ///

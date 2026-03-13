@@ -5,6 +5,7 @@
 #include <QStatusBar>
 #include <QToolButton>
 #include "modbusmultiserver.h"
+#include "modbuserrorsimulations.h"
 #include "updatechecker.h"
 
 ///
@@ -26,12 +27,15 @@ protected:
 private:
     void updateDeviceIdsInfo();
     void updateConnectionInfo(QLabel* label, const ConnectionDetails& cd);
+    void updateErrorSimInfo();
     void onNewVersionAvailable(const QString& version, const QString& url);
 
 private:
     QList<QLabel*> _labels;
     QLabel* _deviceIdsLabel;
+    QLabel* _errorSimLabel;
     QList<int> _deviceIds;
+    ModbusErrorSimulations _errorSimulations;
     QToolButton* _bellButton;
     UpdateChecker* _updateChecker;
 };

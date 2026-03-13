@@ -2074,19 +2074,19 @@ Script.onInit(()=&gt;{
         <translation type="vanished">Маркер</translation>
     </message>
     <message>
-        <location filename="../controls/mainstatusbar.cpp" line="25"/>
-        <location filename="../controls/mainstatusbar.cpp" line="108"/>
+        <location filename="../controls/mainstatusbar.cpp" line="37"/>
+        <location filename="../controls/mainstatusbar.cpp" line="120"/>
         <source>No updates available</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/mainstatusbar.cpp" line="106"/>
-        <location filename="../controls/mainstatusbar.cpp" line="178"/>
+        <location filename="../controls/mainstatusbar.cpp" line="118"/>
+        <location filename="../controls/mainstatusbar.cpp" line="225"/>
         <source>New version %1 is available. Click to download.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/mainstatusbar.cpp" line="132"/>
+        <location filename="../controls/mainstatusbar.cpp" line="145"/>
         <source>Device IDs: %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2095,12 +2095,12 @@ Script.onInit(()=&gt;{
         <translation type="obsolete">Узел: %1</translation>
     </message>
     <message>
-        <location filename="../controls/mainstatusbar.cpp" line="146"/>
+        <location filename="../controls/mainstatusbar.cpp" line="193"/>
         <source>Modbus/TCP Srv %1:%2</source>
         <translation>Modbus/TCP сервер %1:%2</translation>
     </message>
     <message>
-        <location filename="../controls/mainstatusbar.cpp" line="150"/>
+        <location filename="../controls/mainstatusbar.cpp" line="197"/>
         <source>Port %1:%2:%3:%4:%5</source>
         <translation>Порт %1:%2:%3:%4:%5</translation>
     </message>
@@ -2115,6 +2115,41 @@ Script.onInit(()=&gt;{
     <message>
         <source>Port %1: %2</source>
         <translation type="vanished">Порт %1: %2</translation>
+    </message>
+    <message>
+        <location filename="../controls/mainstatusbar.cpp" line="157"/>
+        <source>No Resp</source>
+        <translation>Нет отв.</translation>
+    </message>
+    <message>
+        <location filename="../controls/mainstatusbar.cpp" line="159"/>
+        <source>Bad ID</source>
+        <translation>Плохой ID</translation>
+    </message>
+    <message>
+        <location filename="../controls/mainstatusbar.cpp" line="161"/>
+        <source>Ill Func</source>
+        <translation>Нел. функц.</translation>
+    </message>
+    <message>
+        <location filename="../controls/mainstatusbar.cpp" line="163"/>
+        <source>Dev Busy</source>
+        <translation>Устр. занято</translation>
+    </message>
+    <message>
+        <location filename="../controls/mainstatusbar.cpp" line="165"/>
+        <source>Bad CRC</source>
+        <translation>Плохой CRC</translation>
+    </message>
+    <message>
+        <location filename="../controls/mainstatusbar.cpp" line="167"/>
+        <source>Delay %1ms</source>
+        <translation>Задержка %1мс</translation>
+    </message>
+    <message>
+        <location filename="../controls/mainstatusbar.cpp" line="169"/>
+        <source>Rnd Delay %1ms</source>
+        <translation>Случ. задержка %1мс</translation>
     </message>
 </context>
 <context>
