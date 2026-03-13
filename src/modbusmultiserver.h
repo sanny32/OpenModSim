@@ -70,6 +70,7 @@ public:
 signals:
     void connected(const ConnectionDetails& cd);
     void disconnected(const ConnectionDetails& cd);
+    void deviceIdsChanged(const QList<int>& deviceIds);
     void request(QSharedPointer<const ModbusMessage> msg);
     void response(QSharedPointer<const ModbusMessage> msgReq, QSharedPointer<const ModbusMessage> msgResp);
     void rawDataReceived(const ConnectionDetails& cd, const QDateTime& time, const QByteArray& data);

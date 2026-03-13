@@ -585,7 +585,7 @@
     </message>
     <message>
         <location filename="../dialogs/dialogforcemultiplecoils.ui" line="33"/>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Device Id: &lt;span style=&quot; font-weight:700;&quot;&gt;%1&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Device ID: &lt;span style=&quot; font-weight:700;&quot;&gt;%1&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;裝置位址：&lt;span style=&quot; font-weight:700;&quot;&gt;%1&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
@@ -713,7 +713,7 @@
     </message>
     <message>
         <location filename="../dialogs/dialogforcemultipleregisters.ui" line="33"/>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Device Id: &lt;span style=&quot; font-weight:700;&quot;&gt;%1&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Device ID: &lt;span style=&quot; font-weight:700;&quot;&gt;%1&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;裝置位址：&lt;span style=&quot; font-weight:700;&quot;&gt;%1&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
@@ -969,7 +969,7 @@
         <translation>請求</translation>
     </message>
     <message>
-        <source>Device Id included</source>
+        <source>Device ID included</source>
         <translation type="vanished">包含设备地址</translation>
     </message>
     <message>
@@ -1445,7 +1445,7 @@
     <name>DialogSetupPresetData</name>
     <message>
         <location filename="../dialogs/dialogsetuppresetdata.ui" line="23"/>
-        <source>Device Id: </source>
+        <source>Device ID: </source>
         <translation>裝置位址： </translation>
     </message>
     <message>
@@ -1713,7 +1713,7 @@
     </message>
     <message>
         <location filename="../dialogs/dialogwriteregister.ui" line="23"/>
-        <source>Device Id: </source>
+        <source>Device ID: </source>
         <translation>裝置位址： </translation>
     </message>
     <message>
@@ -1763,7 +1763,7 @@
     </message>
     <message>
         <location filename="../dialogs/dialogwritestatusregister.ui" line="23"/>
-        <source>Device Id: </source>
+        <source>Device ID: </source>
         <translation>裝置位址： </translation>
     </message>
     <message>
@@ -1903,8 +1903,8 @@
     </message>
     <message>
         <location filename="../formmodsim.ui" line="199"/>
-        <source>Device Id:</source>
-        <translation>裝置地址：</translation>
+        <source>Device ID:</source>
+        <translation type="unfinished">裝置地址：</translation>
     </message>
     <message>
         <location filename="../formmodsim.ui" line="249"/>
@@ -1916,7 +1916,7 @@
         <translation type="vanished">未连接：</translation>
     </message>
     <message>
-        <source>Device Id: %1</source>
+        <source>Device ID: %1</source>
         <translation type="vanished">设备地址：%1</translation>
     </message>
     <message>
@@ -1946,10 +1946,10 @@ Length: %3</source>
     </message>
     <message>
         <location filename="../formmodsim.cpp" line="548"/>
-        <source>Device Id: %1
+        <source>Device ID: %1
 MODBUS Point Type:
 %2</source>
-        <translation>裝置地址:%1
+        <translation type="unfinished">裝置地址:%1
 暫存器型別:
 %2</translation>
     </message>
@@ -2070,24 +2070,33 @@ Script.onInit(()=&gt;{
         <translation type="vanished">标记</translation>
     </message>
     <message>
-        <location filename="../controls/mainstatusbar.cpp" line="20"/>
-        <location filename="../controls/mainstatusbar.cpp" line="97"/>
+        <location filename="../controls/mainstatusbar.cpp" line="25"/>
+        <location filename="../controls/mainstatusbar.cpp" line="108"/>
         <source>No updates available</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/mainstatusbar.cpp" line="95"/>
-        <location filename="../controls/mainstatusbar.cpp" line="146"/>
+        <location filename="../controls/mainstatusbar.cpp" line="106"/>
+        <location filename="../controls/mainstatusbar.cpp" line="178"/>
         <source>New version %1 is available. Click to download.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/mainstatusbar.cpp" line="114"/>
+        <location filename="../controls/mainstatusbar.cpp" line="132"/>
+        <source>Device IDs: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Device ID: %1</source>
+        <translation type="obsolete">设备地址：%1</translation>
+    </message>
+    <message>
+        <location filename="../controls/mainstatusbar.cpp" line="146"/>
         <source>Modbus/TCP Srv %1:%2</source>
         <translation>modbus/TCP伺服器%1:%2</translation>
     </message>
     <message>
-        <location filename="../controls/mainstatusbar.cpp" line="118"/>
+        <location filename="../controls/mainstatusbar.cpp" line="150"/>
         <source>Port %1:%2:%3:%4:%5</source>
         <translation>埠 %1:%2:%3:%4:%5</translation>
     </message>
@@ -3285,12 +3294,12 @@ Script.onInit(()=&gt;{
 <context>
     <name>ModbusMultiServer</name>
     <message>
-        <location filename="../modbusmultiserver.cpp" line="490"/>
-        <source>An incorrect device id was specified (%1)</source>
+        <location filename="../modbusmultiserver.cpp" line="505"/>
+        <source>An incorrect device ID was specified (%1)</source>
         <translation>指定了錯誤的裝置地址（%1）</translation>
     </message>
     <message>
-        <location filename="../modbusmultiserver.cpp" line="1003"/>
+        <location filename="../modbusmultiserver.cpp" line="1018"/>
         <source>Connection error. %1</source>
         <translation>連線錯誤 %1</translation>
     </message>

@@ -1,7 +1,18 @@
+#include <algorithm>
 #include "numericutils.h"
 #include "modbustcpserver.h"
 #include "modbusrtuserialserver.h"
 #include "modbusmultiserver.h"
+
+namespace {
+QList<int> normalizedDeviceIds(const QList<int>& deviceIds)
+{
+    auto ids = deviceIds;
+    std::sort(ids.begin(), ids.end());
+    ids.erase(std::unique(ids.begin(), ids.end()), ids.end());
+    return ids;
+}
+}
 
 ///
 /// \brief ModbusServer::ModbusServer
@@ -47,6 +58,8 @@ void ModbusMultiServer::addDeviceId(quint8 deviceId)
     _deviceIds.append(deviceId);
     for(auto&& s : _modbusServerList)
         s->addServerAddress(deviceId);
+
+    emit deviceIdsChanged(normalizedDeviceIds(_deviceIds));
 }
 
 ///
@@ -67,6 +80,8 @@ void ModbusMultiServer::removeDeviceId(quint8 deviceId)
     for(auto&& s : _modbusServerList) {
         s->removeServerAddress(deviceId);
     }
+
+    emit deviceIdsChanged(normalizedDeviceIds(_deviceIds));
 }
 
 ///
@@ -487,7 +502,7 @@ void ModbusMultiServer::setData(quint8 deviceId, const QModbusDataUnit& data)
     }
 
     if(!_modbusDataUnitMaps.contains(deviceId)) {
-        emit errorOccured(deviceId, tr("An incorrect device id was specified (%1)").arg(deviceId));
+        emit errorOccured(deviceId, tr("An incorrect device ID was specified (%1)").arg(deviceId));
         return;
     }
 

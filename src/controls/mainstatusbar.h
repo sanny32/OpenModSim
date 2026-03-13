@@ -24,11 +24,14 @@ protected:
     void changeEvent(QEvent* event) override;
 
 private:
+    void updateDeviceIdsInfo();
     void updateConnectionInfo(QLabel* label, const ConnectionDetails& cd);
     void onNewVersionAvailable(const QString& version, const QString& url);
 
 private:
     QList<QLabel*> _labels;
+    QLabel* _deviceIdsLabel;
+    QList<int> _deviceIds;
     QToolButton* _bellButton;
     UpdateChecker* _updateChecker;
 };

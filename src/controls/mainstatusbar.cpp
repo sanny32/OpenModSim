@@ -12,8 +12,13 @@
 ///
 MainStatusBar::MainStatusBar(const ModbusMultiServer& server, QWidget* parent)
     : QStatusBar(parent)
+    , _deviceIdsLabel(new QLabel(this))
     , _updateChecker(new UpdateChecker(this))
 {
+    _deviceIdsLabel->setContentsMargins(6, 0, 6, 0);
+    addPermanentWidget(_deviceIdsLabel);
+    updateDeviceIdsInfo();
+
     _bellButton = new QToolButton(this);
     _bellButton->setIcon(QIcon(":/res/icon-bell.svg"));
     _bellButton->setAutoRaise(true);
@@ -33,6 +38,12 @@ MainStatusBar::MainStatusBar(const ModbusMultiServer& server, QWidget* parent)
 
     connect(_updateChecker, &UpdateChecker::newVersionAvailable,
             this, &MainStatusBar::onNewVersionAvailable);
+
+    connect(&server, &ModbusMultiServer::deviceIdsChanged, this, [this](const QList<int>& deviceIds)
+    {
+        _deviceIds = deviceIds;
+        updateDeviceIdsInfo();
+    });
 
     connect(&server, &ModbusMultiServer::connected, this, [&](const ConnectionDetails& cd)
     {
@@ -95,9 +106,30 @@ void MainStatusBar::changeEvent(QEvent* event)
             _bellButton->setToolTip(tr("New version %1 is available. Click to download.").arg(_updateChecker->latestVersion()));
         else
             _bellButton->setToolTip(tr("No updates available"));
+
+        updateDeviceIdsInfo();
     }
 
     QStatusBar::changeEvent(event);
+}
+
+///
+/// \brief MainStatusBar::updateDeviceIdsInfo
+///
+void MainStatusBar::updateDeviceIdsInfo()
+{
+    QString values(QChar(0x2014));
+    if(!_deviceIds.isEmpty())
+    {
+        QStringList textIds;
+        textIds.reserve(_deviceIds.size());
+        for(const auto deviceId : _deviceIds)
+            textIds.append(QString::number(deviceId));
+
+        values = textIds.join(", ");
+    }
+
+    _deviceIdsLabel->setText(tr("Device IDs: %1").arg(values));
 }
 
 ///
