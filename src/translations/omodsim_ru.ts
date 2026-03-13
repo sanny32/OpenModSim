@@ -1014,9 +1014,9 @@
         <translation>Интерфейс пользователя</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="202"/>
-        <location filename="../dialogs/dialogpreferences.ui" line="255"/>
-        <location filename="../dialogs/dialogpreferences.ui" line="308"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="208"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="267"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="326"/>
         <source>Reset</source>
         <translation>Сброс</translation>
     </message>
@@ -1026,40 +1026,40 @@
         <translation>Цвет фона:</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="224"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="230"/>
         <source>Foreground Color:</source>
         <translation>Цвет текста:</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="277"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="289"/>
         <source>Status Color:</source>
         <translation>Цвет статуса:</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="330"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="348"/>
         <source>Language:</source>
         <translation>Язык:</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="350"/>
-        <location filename="../dialogs/dialogpreferences.ui" line="731"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="368"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="749"/>
         <source>Font</source>
         <translation>Шрифт</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="387"/>
-        <location filename="../dialogs/dialogpreferences.ui" line="768"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="405"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="786"/>
         <source>Size:</source>
         <translation>Размер:</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="419"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="437"/>
         <source>Zoom:</source>
         <translation>Масштаб:</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="365"/>
-        <location filename="../dialogs/dialogpreferences.ui" line="746"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="383"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="764"/>
         <source>Family:</source>
         <translation>Семейство:</translation>
     </message>
@@ -1069,88 +1069,88 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="340"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="358"/>
         <source>Check for updates</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="441"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="459"/>
         <source>%</source>
         <translation>%</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="462"/>
-        <location filename="../dialogs/dialogpreferences.ui" line="802"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="480"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="820"/>
         <source>Antialias</source>
         <translation>Сглаживание</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="504"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="522"/>
         <source>Data Display</source>
         <translation>Отображение данных</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="516"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="534"/>
         <source>Address Base:</source>
         <translation>Адресация:</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="533"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="551"/>
         <source>Hex Address</source>
         <translation>Шестнадцатеричные адреса</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="540"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="558"/>
         <source>Leading Zeros</source>
         <translation>Ведущие нули</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="547"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="565"/>
         <source>Columns Distance:</source>
         <translation>Расстояние между столбцами:</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="582"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="600"/>
         <source>Log View</source>
         <translation>Журнал</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="594"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="612"/>
         <source>Autoscroll</source>
         <translation>Автопрокрутка</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="601"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="619"/>
         <source>Verbose Logging</source>
         <translation>Подробное логирование</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="608"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="626"/>
         <source>Log View Limit:</source>
         <translation>Лимит лога:</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="643"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="661"/>
         <source>Script</source>
         <translation type="unfinished">Скрипт</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="699"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="717"/>
         <source>&lt;b&gt;Note:&lt;/b&gt; These settings apply to newly opened windows only.</source>
         <translation>&lt;b&gt;Примечание:&lt;/b&gt; Эти настройки применяются только к новым окнам.</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="812"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="830"/>
         <source>Editor</source>
         <translation>Редактор</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="818"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="836"/>
         <source>Enable code auto-complete</source>
         <translation>Включить автодополнение кода</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="649"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="667"/>
         <source>Run script on startup</source>
         <translation type="unfinished">Запускать скрипт при старте</translation>
     </message>

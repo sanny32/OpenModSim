@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>680</width>
-    <height>496</height>
+    <width>670</width>
+    <height>574</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -111,7 +111,7 @@
             </font>
            </property>
            <property name="text">
-            <string />
+            <string/>
            </property>
           </widget>
          </item>
@@ -131,7 +131,7 @@
             <bool>true</bool>
            </property>
            <property name="currentIndex">
-            <number>1</number>
+            <number>0</number>
            </property>
            <widget class="QWidget" name="pageInterface">
             <layout class="QVBoxLayout" name="vlInterface">
@@ -179,8 +179,14 @@
                   </property>
                   <item>
                    <widget class="ColorSwatch" name="pushButtonBackgroundColor">
+                    <property name="minimumSize">
+                     <size>
+                      <width>60</width>
+                      <height>0</height>
+                     </size>
+                    </property>
                     <property name="text">
-                     <string />
+                     <string/>
                     </property>
                    </widget>
                   </item>
@@ -232,8 +238,14 @@
                   </property>
                   <item>
                    <widget class="ColorSwatch" name="pushButtonForegroundColor">
+                    <property name="minimumSize">
+                     <size>
+                      <width>60</width>
+                      <height>0</height>
+                     </size>
+                    </property>
                     <property name="text">
-                     <string />
+                     <string/>
                     </property>
                    </widget>
                   </item>
@@ -285,8 +297,14 @@
                   </property>
                   <item>
                    <widget class="ColorSwatch" name="pushButtonStatusColor">
+                    <property name="minimumSize">
+                     <size>
+                      <width>60</width>
+                      <height>0</height>
+                     </size>
+                    </property>
                     <property name="text">
-                     <string />
+                     <string/>
                     </property>
                    </widget>
                   </item>
@@ -332,7 +350,7 @@
                  </widget>
                 </item>
                 <item row="3" column="1">
-                 <widget class="QComboBox" name="comboBoxLanguage"><property name="minimumSize"><size><width>0</width><height>26</height></size></property></widget>
+                 <widget class="QComboBox" name="comboBoxLanguage"/>
                 </item>
                 <item row="4" column="0" colspan="2">
                  <widget class="QCheckBox" name="checkBoxCheckForUpdates">
@@ -378,7 +396,7 @@
                       <horstretch>1</horstretch>
                       <verstretch>0</verstretch>
                      </sizepolicy>
-                    </property><property name="minimumSize"><size><width>0</width><height>26</height></size></property>
+                    </property>
                    </widget>
                   </item>
                   <item>
@@ -524,7 +542,7 @@
                     <horstretch>0</horstretch>
                     <verstretch>0</verstretch>
                    </sizepolicy>
-                  </property><property name="minimumSize"><size><width>0</width><height>26</height></size></property>
+                  </property>
                  </widget>
                 </item>
                 <item row="1" column="0" colspan="2">
@@ -552,7 +570,7 @@
                  <widget class="QSpinBox" name="spinBoxColumnsDistance">
                   <property name="minimumSize">
                    <size>
-                    <width>80</width>
+                    <width>60</width>
                     <height>0</height>
                    </size>
                   </property>
@@ -613,7 +631,7 @@
                  <widget class="QSpinBox" name="spinBoxLogLimit">
                   <property name="minimumSize">
                    <size>
-                    <width>80</width>
+                    <width>60</width>
                     <height>0</height>
                    </size>
                   </property>
@@ -759,7 +777,7 @@
                       <horstretch>1</horstretch>
                       <verstretch>0</verstretch>
                      </sizepolicy>
-                    </property><property name="minimumSize"><size><width>0</width><height>26</height></size></property>
+                    </property>
                    </widget>
                   </item>
                   <item>
@@ -840,6 +858,19 @@
           </widget>
          </item>
          <item>
+          <spacer name="verticalSpacer_2">
+           <property name="orientation">
+            <enum>Qt::Orientation::Vertical</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>40</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
           <widget class="Line" name="line">
            <property name="orientation">
             <enum>Qt::Orientation::Horizontal</enum>
@@ -877,7 +908,7 @@
   </customwidget>
  </customwidgets>
  <resources>
-  <include location="../resources.qrc" />
+  <include location="../resources.qrc"/>
  </resources>
  <connections>
   <connection>

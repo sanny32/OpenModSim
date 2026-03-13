@@ -1014,9 +1014,9 @@
         <translation>用户界面</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="202"/>
-        <location filename="../dialogs/dialogpreferences.ui" line="255"/>
-        <location filename="../dialogs/dialogpreferences.ui" line="308"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="208"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="267"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="326"/>
         <source>Reset</source>
         <translation>重置</translation>
     </message>
@@ -1026,40 +1026,40 @@
         <translation>背景颜色：</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="224"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="230"/>
         <source>Foreground Color:</source>
         <translation>前景颜色：</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="277"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="289"/>
         <source>Status Color:</source>
         <translation>状态颜色：</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="330"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="348"/>
         <source>Language:</source>
         <translation>语言：</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="350"/>
-        <location filename="../dialogs/dialogpreferences.ui" line="731"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="368"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="749"/>
         <source>Font</source>
         <translation>字体</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="387"/>
-        <location filename="../dialogs/dialogpreferences.ui" line="768"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="405"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="786"/>
         <source>Size:</source>
         <translation>大小：</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="419"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="437"/>
         <source>Zoom:</source>
         <translation>缩放：</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="365"/>
-        <location filename="../dialogs/dialogpreferences.ui" line="746"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="383"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="764"/>
         <source>Family:</source>
         <translation>字体族：</translation>
     </message>
@@ -1069,88 +1069,88 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="340"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="358"/>
         <source>Check for updates</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="441"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="459"/>
         <source>%</source>
         <translation>%</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="462"/>
-        <location filename="../dialogs/dialogpreferences.ui" line="802"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="480"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="820"/>
         <source>Antialias</source>
         <translation>抗锯齿</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="504"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="522"/>
         <source>Data Display</source>
         <translation>数据显示</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="516"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="534"/>
         <source>Address Base:</source>
         <translation>地址基数：</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="533"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="551"/>
         <source>Hex Address</source>
         <translation>十六进制地址</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="540"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="558"/>
         <source>Leading Zeros</source>
         <translation>前导零</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="547"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="565"/>
         <source>Columns Distance:</source>
         <translation>列间距：</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="582"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="600"/>
         <source>Log View</source>
         <translation>日志视图</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="594"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="612"/>
         <source>Autoscroll</source>
         <translation>自动滚动</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="601"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="619"/>
         <source>Verbose Logging</source>
         <translation>详细日志记录</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="608"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="626"/>
         <source>Log View Limit:</source>
         <translation>日志限制：</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="643"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="661"/>
         <source>Script</source>
         <translation type="unfinished">脚本</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="699"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="717"/>
         <source>&lt;b&gt;Note:&lt;/b&gt; These settings apply to newly opened windows only.</source>
         <translation>&lt;b&gt;注意：&lt;/b&gt;这些设置仅适用于新打开的窗口。</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="812"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="830"/>
         <source>Editor</source>
         <translation>编辑器</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="818"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="836"/>
         <source>Enable code auto-complete</source>
         <translation>启用代码自动补全</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="649"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="667"/>
         <source>Run script on startup</source>
         <translation type="unfinished">在系统启动时运行脚本</translation>
     </message>
