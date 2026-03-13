@@ -1,12 +1,63 @@
 #include <float.h>
+#include <QCoreApplication>
+#include <QIcon>
+#include <QPainter>
 #include <QKeyEvent>
 #include <QResizeEvent>
 #include <QIntValidator>
+#include <QStyle>
+#include <QStyleOptionToolButton>
+#include <QToolButton>
 #include "ansiutils.h"
 #include "qhexvalidator.h"
 #include "quintvalidator.h"
 #include "qint64validator.h"
 #include "numericlineedit.h"
+
+namespace
+{
+class HexViewButton final : public QToolButton
+{
+public:
+    explicit HexViewButton(QWidget* parent = nullptr)
+        : QToolButton(parent)
+        , _icon(":/res/icon-hex.svg")
+    {
+        setCheckable(true);
+        setAutoRaise(true);
+        setCursor(Qt::ArrowCursor);
+        setToolTip(QCoreApplication::translate("HexViewButton", "Hex View"));
+    }
+
+protected:
+    void paintEvent(QPaintEvent*) override
+    {
+        QStyleOptionToolButton opt;
+        initStyleOption(&opt);
+        opt.icon = QIcon();
+        opt.text.clear();
+
+        QPainter painter(this);
+        style()->drawComplexControl(QStyle::CC_ToolButton, &opt, &painter, this);
+
+        const int maxWidth = qMax(1, opt.rect.width() - 4);
+        const int maxHeight = qMax(1, opt.rect.height() - 4);
+        const int defaultIconSize = style()->pixelMetric(QStyle::PM_SmallIconSize, nullptr, this);
+        const QSize requested = iconSize().isValid() ? iconSize() : QSize(defaultIconSize, defaultIconSize);
+        const QSize bounded(qMin(requested.width(), maxWidth), qMin(requested.height(), maxHeight));
+
+        QRect iconRect(QPoint(0, 0), bounded);
+        iconRect.moveCenter(opt.rect.center());
+
+        const QIcon::Mode mode = isEnabled() ? (opt.state & QStyle::State_MouseOver ? QIcon::Active : QIcon::Normal) : QIcon::Disabled;
+        const QIcon::State state = isChecked() ? QIcon::On : QIcon::Off;
+        _icon.paint(&painter, iconRect, Qt::AlignCenter, mode, state);
+    }
+
+private:
+    QIcon _icon;
+};
+}
 
 ///
 /// \brief NumberLineEdit::NumberLineEdit

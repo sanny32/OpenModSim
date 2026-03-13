@@ -2,8 +2,9 @@
 #define NUMERICLINEEDIT_H
 
 #include <QLineEdit>
-#include "hexviewbutton.h"
 #include "qrange.h"
+
+class QToolButton;
 
 class NumericLineEdit : public QLineEdit
 {
@@ -101,7 +102,7 @@ private:
     bool _leadingZeroes;
     int _leadingZeroWidth;
     QString _codepage;
-    HexViewButton* _hexButton;
+    QToolButton* _hexButton;
     bool _hexView;
     bool _hexButtonVisible;
 };
