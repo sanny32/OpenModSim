@@ -486,9 +486,9 @@ void MdiArea::updateTabBarGeometry()
 ///
 void MdiArea::updateViewportBaseLine()
 {
-    // In split mode the panel lives inside QSplitter; suppress baseline to avoid
-    // an extra separator line under the tab header.
-    if (qobject_cast<QSplitter*>(parentWidget())) {
+    // In split mode the panel lives inside QSplitter. Keep the baseline hidden
+    // only when there is no reserved trailing space for the split button.
+    if (qobject_cast<QSplitter*>(parentWidget()) && _tabBarTrailingInset <= 0) {
         if (_tabBarBaseLine)
             _tabBarBaseLine->hide();
         return;
