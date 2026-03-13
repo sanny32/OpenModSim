@@ -126,8 +126,16 @@ MdiTabBar::MdiTabBar(QWidget* parent)
     setProperty("mdiIndicatorActive", true);
 
     connect(qApp, &QApplication::focusChanged, this, [this, parent](QWidget* /*old*/, QWidget* now) {
-        _indicatorActive = (now != nullptr) && parent && parent->isAncestorOf(now);
-        setProperty("mdiIndicatorActive", _indicatorActive);
+        if (!now || !parent)
+            return;
+        const Qt::WindowType wtype = now->window()->windowType();
+        if (wtype == Qt::Popup || wtype == Qt::ToolTip)
+            return;
+        const bool active = (now == parent) || parent->isAncestorOf(now);
+        if (active == _indicatorActive)
+            return;
+        _indicatorActive = active;
+        setProperty("mdiIndicatorActive", active);
         update();
     });
 }

@@ -3448,7 +3448,7 @@ Script.onInit(()=&gt;{
 <context>
     <name>QMdiArea</name>
     <message>
-        <location filename="../controls/mditabbar.cpp" line="117"/>
+        <location filename="../controls/mditabbar.cpp" line="112"/>
         <source>(Untitled)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3558,7 +3558,7 @@ Script.onInit(()=&gt;{
 <context>
     <name>QWidget</name>
     <message>
-        <location filename="../controls/mditabbar.cpp" line="90"/>
+        <location filename="../controls/mditabbar.cpp" line="85"/>
         <source>*</source>
         <translation type="unfinished"></translation>
     </message>
