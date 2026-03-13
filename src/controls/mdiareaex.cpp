@@ -4,6 +4,7 @@
 #include <QLayout>
 #include <QScopedValueRollback>
 #include <QSignalBlocker>
+#include <QStyle>
 #include <QTimer>
 #include "mdiareaex.h"
 
@@ -800,16 +801,40 @@ void MdiAreaEx::updateSplitButtonGeometry()
 
     QScopedValueRollback<bool> guard(_updatingSplitButtonGeometry, true);
 
+    auto clearTabBarInsets = [this]() {
+        if (_primaryArea)
+            _primaryArea->setTabBarTrailingInset(0);
+        if (_secondaryArea)
+            _secondaryArea->setTabBarTrailingInset(0);
+    };
+
     const bool showSplitButton = shouldShowSplitButton() && isVisible();
     if (!showSplitButton) {
-        _primaryArea->setTabBarTrailingInset(0);
+        clearTabBarInsets();
+        _splitButton->hide();
+        return;
+    }
+
+    if (_primaryArea->viewMode() != QMdiArea::TabbedView) {
+        clearTabBarInsets();
         _splitButton->hide();
         return;
     }
 
     auto* primaryTabBar = _primaryArea->tabBar();
-    if (!primaryTabBar || _primaryArea->viewMode() != QMdiArea::TabbedView || !primaryTabBar->isVisible()) {
-        _primaryArea->setTabBarTrailingInset(0);
+
+    MdiArea* placementArea = _primaryArea;
+    if (isSplitView() && _secondaryArea)
+        placementArea = _secondaryArea;
+
+    auto* placementTabBar = placementArea ? placementArea->tabBar() : nullptr;
+    const bool placementTabBarVisible = placementTabBar && placementTabBar->isVisible();
+
+    QTabBar* anchorTabBar = placementTabBarVisible
+                                ? placementTabBar
+                                : ((primaryTabBar && primaryTabBar->isVisible()) ? primaryTabBar : nullptr);
+    if (!anchorTabBar) {
+        clearTabBarInsets();
         _splitButton->hide();
         return;
     }
@@ -821,24 +846,43 @@ void MdiAreaEx::updateSplitButtonGeometry()
     if (_splitButton->parentWidget() != splitButtonHost)
         _splitButton->setParent(splitButtonHost);
 
-    const bool splitButtonInPrimaryArea = _splitButton->parentWidget() == _primaryArea;
-    const int splitWidth = splitButtonInPrimaryArea ? (_splitButton->width() + 4) : 0;
-    if (_primaryArea->tabBarTrailingInset() != splitWidth)
-        _primaryArea->setTabBarTrailingInset(splitWidth);
+    int styleGap = -1;
+    if (_splitButton->style())
+        styleGap = _splitButton->style()->pixelMetric(QStyle::PM_LayoutHorizontalSpacing, nullptr, _splitButton);
+    if (styleGap <= 0 && splitButtonHost && splitButtonHost->style())
+        styleGap = splitButtonHost->style()->pixelMetric(QStyle::PM_LayoutHorizontalSpacing, nullptr, splitButtonHost);
+    if (styleGap <= 0)
+        styleGap = 4;
+
+    const int splitWidth = _splitButton->width() + styleGap;
+
+    MdiArea* insetOwner = placementTabBarVisible ? placementArea : nullptr;
+    clearTabBarInsets();
+    if (insetOwner)
+        insetOwner->setTabBarTrailingInset(splitWidth);
 
     QRect buttonRect;
-    const QRect tabBarRect = primaryTabBar->geometry();
+    QRect reserveRect;
+    if (insetOwner) {
+        auto* insetTabBar = insetOwner->tabBar();
+        if (insetTabBar && insetTabBar->isVisible()) {
+            const QPoint topLeftOnHost = insetTabBar->mapTo(splitButtonHost, QPoint(0, 0));
+            const QRect tabBarRectOnHost = QRect(topLeftOnHost, insetTabBar->size());
+            reserveRect = QRect(tabBarRectOnHost.right() + 1, tabBarRectOnHost.y(), splitWidth, tabBarRectOnHost.height());
+        }
+    } else if (placementArea) {
+        const QPoint areaTopLeftOnHost = placementArea->mapTo(splitButtonHost, QPoint(0, 0));
+        const QPoint anchorTopLeftOnHost = anchorTabBar->mapTo(splitButtonHost, QPoint(0, 0));
+        reserveRect = QRect(areaTopLeftOnHost.x() + qMax(0, placementArea->width() - splitWidth),
+                            anchorTopLeftOnHost.y(),
+                            splitWidth,
+                            anchorTabBar->height());
+    }
 
-    if (splitButtonInPrimaryArea) {
-        const int x = qMax(0, _primaryArea->width() - splitWidth);
-        const int y = tabBarRect.y() + (tabBarRect.height() - _splitButton->height()) / 2;
+    if (reserveRect.isValid() && !reserveRect.isEmpty()) {
+        const int x = reserveRect.x() + qMax(0, (reserveRect.width() - _splitButton->width()) / 2);
+        const int y = reserveRect.y() + (reserveRect.height() - _splitButton->height()) / 2;
         buttonRect = QRect(x, y, _splitButton->width(), _splitButton->height());
-    } else if (_splitter && splitButtonHost == _splitter->parentWidget()) {
-        const QPoint topLeftOnHost = _primaryArea->mapTo(splitButtonHost, QPoint(0, 0));
-        const QRect splitterRectOnHost = _splitter->geometry();
-        const int rightX = splitterRectOnHost.right() - (_splitButton->width() + 3);
-        const int y = topLeftOnHost.y() + tabBarRect.y() + (tabBarRect.height() - _splitButton->height()) / 2;
-        buttonRect = QRect(rightX, y, _splitButton->width(), _splitButton->height());
     }
 
     if (buttonRect.isValid() && !buttonRect.isEmpty()) {
