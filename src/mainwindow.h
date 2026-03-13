@@ -16,6 +16,9 @@ namespace Ui {
 class MainWindow;
 }
 
+class MdiAreaEx;
+class MdiArea;
+
 ///
 /// \brief The MainWindow class
 ///
@@ -118,6 +121,7 @@ private slots:
 
     /* View menu slots */
     void on_actionTabbedView_triggered();
+    void on_actionSplitView_triggered();
     void on_actionToolbar_triggered();
     void on_actionStatusBar_triggered();
     void on_actionDisplayBar_triggered();
@@ -150,6 +154,22 @@ private slots:
     void setCodepage(const QString& name);
 
 private:
+    FormModSim* createMdiChildOnArea(int id, MdiArea* area, bool addToWindowList);
+    void setupMdiChild(FormModSim* frm, QMdiSubWindow* wnd, bool addToWindowList);
+    bool cloneMdiChildState(FormModSim* source, FormModSim* target) const;
+    FormModSim* findMdiChildInArea(MdiArea* area, int id) const;
+    FormModSim* splitPeer(FormModSim* frm) const;
+    bool isScriptRunningOnSplitPair(FormModSim* frm) const;
+    void updateSplitPairScriptIcons(FormModSim* frm);
+    MdiArea* splitSecondaryArea() const;
+    bool isSplitTabbedView() const;
+    void resetSplitViewIfEmpty();
+    void ensureSplitMirrorForForm(FormModSim* frm);
+    void syncSplitPeerDisplayDefinition(FormModSim* frm);
+    void syncSplitPeerState(FormModSim* frm);
+    void syncSplitForms();
+    void clearSplitMirrorsFromSecondary();
+
     void addRecentFile(const QString& filename);
     void updateDataDisplayMode(DataDisplayMode mode);
 
@@ -194,6 +214,8 @@ private:
     QSharedPointer<DataSimulator> _dataSimulator;
     QString _savePath;
     QString _profile;
+    bool _splitDisplayDefinitionSyncInProgress = false;
+    bool _splitDisableInProgress = false;
 };
 
 #endif // MAINWINDOW_H

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>DialogModbusDefinitions</class>
  <widget class="QDialog" name="DialogModbusDefinitions">
@@ -41,7 +41,7 @@
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
-         </property>
+         </property><property name="minimumSize"><size><width>0</width><height>26</height></size></property>
         </widget>
        </item>
        <item row="1" column="0" colspan="2">
@@ -275,7 +275,7 @@
    <header>addressspacecombobox.h</header>
   </customwidget>
  </customwidgets>
- <resources/>
+ <resources />
  <connections>
   <connection>
    <sender>buttonBox</sender>

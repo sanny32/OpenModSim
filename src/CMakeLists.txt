@@ -129,6 +129,9 @@ set(SOURCES
     controls/jscodeeditor.cpp
     controls/jscriptcontrol.cpp
     controls/mainstatusbar.cpp
+    controls/mdiarea.cpp
+    controls/mdiareaex.cpp
+    controls/mditabbar.cpp
     controls/modbuslogwidget.cpp
     controls/modbusmessagewidget.cpp
     controls/numericcombobox.cpp
@@ -215,6 +218,9 @@ set(HEADERS
     controls/jscodeeditor.h
     controls/jscriptcontrol.h
     controls/mainstatusbar.h
+    controls/mdiarea.h
+    controls/mdiareaex.h
+    controls/mditabbar.h
     controls/modbuslogwidget.h
     controls/modbusmessagewidget.h
     controls/numericcombobox.h

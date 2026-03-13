@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>DialogSelectServicePort</class>
  <widget class="QDialog" name="DialogSelectServicePort">
@@ -26,7 +26,7 @@
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
-       </property>
+       </property><property name="minimumSize"><size><width>0</width><height>26</height></size></property>
        <property name="maximumSize">
         <size>
          <width>60</width>
@@ -49,7 +49,7 @@
       </widget>
      </item>
      <item row="0" column="1">
-      <widget class="QComboBox" name="comboBoxIp"/>
+      <widget class="QComboBox" name="comboBoxIp"><property name="minimumSize"><size><width>0</width><height>26</height></size></property></widget>
      </item>
      <item row="0" column="0">
       <widget class="QLabel" name="label_2">
@@ -82,7 +82,7 @@
    <header>numericlineedit.h</header>
   </customwidget>
  </customwidgets>
- <resources/>
+ <resources />
  <connections>
   <connection>
    <sender>buttonBox</sender>

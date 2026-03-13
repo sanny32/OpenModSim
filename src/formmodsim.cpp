@@ -65,6 +65,8 @@ FormModSim::FormModSim(int id, ModbusMultiServer& server, QSharedPointer<DataSim
     setLogViewState(server.isConnected() ? LogViewState::Running : LogViewState::Unknown);
     connect(ui->statisticWidget, &StatisticWidget::ctrsReseted, ui->outputWidget, &OutputWidget::clearLogView);
     connect(ui->statisticWidget, &StatisticWidget::logStateChanged, ui->outputWidget, &OutputWidget::setLogViewState);
+    connect(ui->statisticWidget, &StatisticWidget::ctrsReseted, this, &FormModSim::statisticCtrsReseted);
+    connect(ui->statisticWidget, &StatisticWidget::logStateChanged, this, &FormModSim::statisticLogStateChanged);
 
     connect(&_mbMultiServer, &ModbusMultiServer::request, this, &FormModSim::on_mbRequest);
     connect(&_mbMultiServer, &ModbusMultiServer::response, this, &FormModSim::on_mbResponse);
@@ -698,6 +700,34 @@ void FormModSim::resetCtrs()
 }
 
 ///
+/// \brief FormModSim::requestCount
+/// \return
+///
+uint FormModSim::requestCount() const
+{
+    return ui->statisticWidget->numberRequets();
+}
+
+///
+/// \brief FormModSim::responseCount
+/// \return
+///
+uint FormModSim::responseCount() const
+{
+    return ui->statisticWidget->numberResposes();
+}
+
+///
+/// \brief FormModSim::setStatisticCounters
+/// \param requests
+/// \param responses
+///
+void FormModSim::setStatisticCounters(uint requests, uint responses)
+{
+    ui->statisticWidget->setCounters(requests, responses);
+}
+
+///
 /// \brief FormModSim::script
 /// \return
 ///
@@ -713,6 +743,24 @@ QString FormModSim::script() const
 void FormModSim::setScript(const QString& text)
 {
     ui->scriptControl->setScript(text);
+}
+
+///
+/// \brief FormModSim::scriptDocument
+/// \return
+///
+QTextDocument* FormModSim::scriptDocument() const
+{
+    return ui->scriptControl->scriptDocument();
+}
+
+///
+/// \brief FormModSim::setScriptDocument
+/// \param document
+///
+void FormModSim::setScriptDocument(QTextDocument* document)
+{
+    ui->scriptControl->setScriptDocument(document);
 }
 
 ///

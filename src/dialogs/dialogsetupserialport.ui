@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>DialogSetupSerialPort</class>
  <widget class="QDialog" name="DialogSetupSerialPort">
@@ -47,7 +47,7 @@
         <property name="minimumSize">
          <size>
           <width>90</width>
-          <height>25</height>
+          <height>26</height>
          </size>
         </property>
         <property name="editable">
@@ -116,7 +116,7 @@
         <property name="minimumSize">
          <size>
           <width>90</width>
-          <height>25</height>
+          <height>26</height>
          </size>
         </property>
         <property name="currentIndex">
@@ -152,7 +152,7 @@
         <property name="minimumSize">
          <size>
           <width>90</width>
-          <height>25</height>
+          <height>26</height>
          </size>
         </property>
         <property name="currentIndex">
@@ -178,7 +178,7 @@
         <property name="minimumSize">
          <size>
           <width>90</width>
-          <height>25</height>
+          <height>26</height>
          </size>
         </property>
         <item>
@@ -223,7 +223,7 @@
         <property name="minimumSize">
          <size>
           <width>0</width>
-          <height>25</height>
+          <height>26</height>
          </size>
         </property>
         <property name="currentIndex">
@@ -249,7 +249,7 @@
         <property name="minimumSize">
          <size>
           <width>90</width>
-          <height>25</height>
+          <height>26</height>
          </size>
         </property>
        </widget>
@@ -272,7 +272,7 @@
         <property name="minimumSize">
          <size>
           <width>90</width>
-          <height>25</height>
+          <height>26</height>
          </size>
         </property>
        </widget>
@@ -317,7 +317,7 @@
    <header>booleancombobox.h</header>
   </customwidget>
  </customwidgets>
- <resources/>
+ <resources />
  <connections>
   <connection>
    <sender>buttonBox</sender>

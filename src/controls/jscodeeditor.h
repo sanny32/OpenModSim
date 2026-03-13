@@ -18,6 +18,9 @@ public:
     explicit JSCodeEditor(QWidget *parent = nullptr);
     ~JSCodeEditor() override;
 
+    QTextDocument* codeDocument() const;
+    void setCodeDocument(QTextDocument* doc);
+
     void lineNumberAreaPaintEvent(QPaintEvent *event);
     int lineNumberAreaWidth();
 
