@@ -79,6 +79,8 @@ public:
     void cascadeSubWindows();
     void tileSubWindows();
 
+    void setSplitViewEnabled(bool enabled);
+
 signals:
     void subWindowActivated(QMdiSubWindow* wnd);
     void splitViewAboutToDisable();
@@ -103,7 +105,6 @@ private:
     bool shouldShowSplitButton() const;
     void syncSplitButtonState();
     void updateSplitButtonGeometry();
-    void setSplitViewEnabled(bool enabled);
     void ensureSplitArea(Qt::Orientation orientation);
     void mergeSplitArea();
     void requestEqualSplitterSizes();

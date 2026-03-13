@@ -2111,6 +2111,8 @@ void MainWindow::loadConfig(const QString& filename)
 
     ModbusDefinitions defs;
     QList<ConnectionDetails> conns;
+    QMdiArea::ViewMode viewMode = QMdiArea::TabbedView;
+    bool splitView = false;
 
     QXmlStreamReader xml(&file);
     while (xml.readNextStartElement()) {
@@ -2118,6 +2120,12 @@ void MainWindow::loadConfig(const QString& filename)
             while (xml.readNextStartElement()) {
                 if (xml.name() == QLatin1String("AppPreferences")) {
                     AppPreferences::instance().loadXml(xml);
+                }
+                else if (xml.name() == QLatin1String("ViewSettings")) {
+                    const auto attrs = xml.attributes();
+                    viewMode = (QMdiArea::ViewMode)qBound(0, attrs.value("ViewMode").toInt(), 1);
+                    splitView = attrs.value("SplitView").toInt() != 0;
+                    xml.skipCurrentElement();
                 }
                 else if (xml.name() == QLatin1String("ModbusDefinitions")) {
                     xml >> defs;
@@ -2158,6 +2166,8 @@ void MainWindow::loadConfig(const QString& filename)
         }
     }
 
+    setViewMode(viewMode);
+
     auto menu = qobject_cast<MenuConnect*>(ui->actionConnect->menu());
     menu->updateConnectionDetails(conns);
 
@@ -2170,6 +2180,8 @@ void MainWindow::loadConfig(const QString& filename)
             _mbMultiServer.connectDevice(cd);
     }
 
+    if(splitView)
+        ui->mdiArea->setSplitViewEnabled(true);
 }
 
 ///
@@ -2199,6 +2211,11 @@ void MainWindow::saveConfig(const QString& filename)
         w << cd;
     }
     w.writeEndElement(); // Connections
+
+    w.writeStartElement("ViewSettings");
+    w.writeAttribute("ViewMode", QString::number(ui->mdiArea->viewMode()));
+    w.writeAttribute("SplitView", ui->mdiArea->isSplitView() ? "1" : "0");
+    w.writeEndElement(); // ViewSettings
 
     w.writeStartElement("Forms");
     for(auto&& wnd : ui->mdiArea->localSubWindowList()) {
@@ -2389,6 +2406,9 @@ bool MainWindow::loadProfile(const QString& filename)
         }
     }
 
+    if(m.value("SplitView", false).toBool())
+        ui->mdiArea->setSplitViewEnabled(true);
+
     // activate window
     const auto activeWindowTitle = m.value("ActiveWindow").toString();
     if(!activeWindowTitle.isEmpty()) {
@@ -2427,6 +2447,7 @@ void MainWindow::saveProfile()
     if(frm) m.setValue("ActiveWindow", frm->windowTitle());
 
     m.setValue("ViewMode", ui->mdiArea->viewMode());
+    m.setValue("SplitView", ui->mdiArea->isSplitView());
     m.setValue("StatusBar", statusBar()->isVisible());
     m.setValue("DisplayBarArea", toolBarArea(ui->toolBarDisplay));
     m.setValue("DisplayBarBreak", toolBarBreak(ui->toolBarDisplay));

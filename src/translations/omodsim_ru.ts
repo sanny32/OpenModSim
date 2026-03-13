@@ -2014,7 +2014,7 @@ MODBUS Point Type:
 <context>
     <name>HexViewButton</name>
     <message>
-        <location filename="../controls/hexviewbutton.cpp" line="32"/>
+        <location filename="../controls/hexviewbutton.cpp" line="33"/>
         <source>Hex View</source>
         <translation type="unfinished">Шестнадцатиричный режим</translation>
     </message>

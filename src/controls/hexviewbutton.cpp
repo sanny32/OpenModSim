@@ -12,8 +12,9 @@ public:
 
     int pixelMetric(PixelMetric m, const QStyleOption* opt = nullptr, const QWidget* w = nullptr) const override
     {
-        if(m == PM_ButtonShiftHorizontal || m == PM_ButtonShiftVertical)
+        if(m == PM_ButtonShiftHorizontal || m == PM_ButtonShiftVertical) {
             return 0;
+        }
         return QProxyStyle::pixelMetric(m, opt, w);
     }
 };
