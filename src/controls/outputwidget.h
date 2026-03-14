@@ -366,25 +366,26 @@ inline QXmlStreamReader& operator>>(QXmlStreamReader& in, AddressDescriptionMap2
         {
             const auto attributes = in.attributes();
             bool ok;
-            const auto device_id = static_cast<quint8>(attributes.value("DeviceId").toUShort(&ok));
+            auto device_id = static_cast<quint8>(attributes.value("DeviceId").toUShort(&ok));
+            if(!ok)
+            {
+                device_id = 0;
+            }
+            auto type = static_cast<QModbusDataUnit::RegisterType>(attributes.value("Type").toInt(&ok));
+            if(!ok)
+            {
+                type = QModbusDataUnit::RegisterType::Invalid;
+            }
+            const auto address = attributes.value("Address").toUShort(&ok);
             if(ok)
             {
-                const auto type = static_cast<QModbusDataUnit::RegisterType>(attributes.value("Type").toInt(&ok));
-                if(ok)
+                skip = false;
+                const auto value = in.readElementText(QXmlStreamReader::IncludeChildElements);
+                if(!value.isEmpty())
                 {
-                    const auto address = attributes.value("Address").toUShort(&ok);
-                    if(ok)
-                    {
-                        skip = false;
-                        const auto value = in.readElementText(QXmlStreamReader::IncludeChildElements);
-                        if(!value.isEmpty())
-                        {
-                            map.insert( { device_id, type, address }, value );
-                        }
-                    }
+                    map.insert( { device_id, type, address }, value );
                 }
             }
-
         }
         if(skip)
         {

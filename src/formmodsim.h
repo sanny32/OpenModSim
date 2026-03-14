@@ -264,24 +264,16 @@ inline QSettings& operator >>(QSettings& in, FormModSim* frm)
 
     in >> frm->scriptControl();
 
+    AddressDescriptionMap2 descriptionMap;
     if(version >= QVersionNumber(1, 15))
     {
-        AddressDescriptionMap2 map;
-        in >> map;
-        for(auto it = map.cbegin(); it != map.cend(); ++it)
-        {
-            frm->setDescription(it.key().DeviceId, it.key().Type, it.key().Address, it.value());
-        }
+        in >> descriptionMap;
     }
 
+    AddressColorMap colorMap;
     if(version >= QVersionNumber(1, 15))
     {
-        AddressColorMap map;
-        in >> map;
-        for(auto it = map.cbegin(); it != map.cend(); ++it)
-        {
-            frm->setColor(it.key().DeviceId, it.key().Type, it.key().Address, it.value());
-        }
+        in >> colorMap;
     }
 
     bool isMinimized;
@@ -313,6 +305,15 @@ inline QSettings& operator >>(QSettings& in, FormModSim* frm)
 
     frm->setDisplayHexAddresses(in.value("DisplayHexAddresses").toBool());
     frm->setCodepage(in.value("Codepage").toString());
+
+    for(auto it = descriptionMap.cbegin(); it != descriptionMap.cend(); ++it)
+    {
+        frm->setDescription(it.key().DeviceId, it.key().Type, it.key().Address, it.value());
+    }
+    for(auto it = colorMap.cbegin(); it != colorMap.cend(); ++it)
+    {
+        frm->setColor(it.key().DeviceId, it.key().Type, it.key().Address, it.value());
+    }
 
     if(displayDefinition.ScriptCfg.RunOnStartup) {
         frm->runScript();
@@ -591,7 +592,9 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, FormModSim* frm)
                 xml >> map;
                 for(auto it = map.cbegin(); it != map.cend(); ++it)
                 {
-                    frm->setDescription(it.key().DeviceId, it.key().Type, it.key().Address, it.value());
+                    const auto device_id = it.key().DeviceId;
+                    const auto type = it.key().Type;
+                    frm->setDescription(device_id ? device_id : dd.DeviceId, type ? type : dd.PointType, it.key().Address, it.value());
                 }
             }
             else if (xml.name() == QLatin1String("AddressColorMap")) {
@@ -599,7 +602,9 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, FormModSim* frm)
                 xml >> map;
                 for(auto it = map.cbegin(); it != map.cend(); ++it)
                 {
-                    frm->setColor(it.key().DeviceId, it.key().Type, it.key().Address, it.value());
+                    const auto device_id = it.key().DeviceId;
+                    const auto type = it.key().Type;
+                    frm->setColor(device_id ? device_id : dd.DeviceId, type ? type : dd.PointType, it.key().Address, it.value());
                 }
             }
             else if (xml.name() == QLatin1String("ModbusDataUnit")) {
