@@ -5,6 +5,7 @@
 #include <QModbusDataUnit>
 #include <QXmlStreamWriter>
 #include "modbuslimits.h"
+#include "modbusserver.h"
 #include "scriptsettings.h"
 
 ///
