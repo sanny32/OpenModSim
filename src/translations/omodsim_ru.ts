@@ -537,7 +537,7 @@
     </message>
     <message>
         <location filename="../dialogs/dialogdisplaydefinition.ui" line="109"/>
-        <source>Slave Address:</source>
+        <source>Unit Identifier:</source>
         <translation>Адрес устройства:</translation>
     </message>
     <message>

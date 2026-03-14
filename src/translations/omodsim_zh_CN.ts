@@ -547,7 +547,7 @@
     </message>
     <message>
         <location filename="../dialogs/dialogdisplaydefinition.ui" line="109"/>
-        <source>Slave Address:</source>
+        <source>Unit Identifier:</source>
         <translation>从设备地址：</translation>
     </message>
     <message>

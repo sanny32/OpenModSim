@@ -8,10 +8,10 @@
 PointTypeComboBox::PointTypeComboBox(QWidget *parent)
     : QComboBox(parent)
 {
-    addItem("COIL STATUS", QModbusDataUnit::Coils);
-    addItem("INPUT STATUS", QModbusDataUnit::DiscreteInputs);
-    addItem("HOLDING REGISTER", QModbusDataUnit::HoldingRegisters);
-    addItem("INPUT REGISTER", QModbusDataUnit::InputRegisters);
+    addItem("Coils (Read-Write)", QModbusDataUnit::Coils);
+    addItem("Discrete Inputs (Read Only)", QModbusDataUnit::DiscreteInputs);
+    addItem("Holding Registers (Read-Write)", QModbusDataUnit::HoldingRegisters);
+    addItem("Input Registers (Read Only)", QModbusDataUnit::InputRegisters);
 
     connect(this, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &PointTypeComboBox::on_currentIndexChanged);
 }
