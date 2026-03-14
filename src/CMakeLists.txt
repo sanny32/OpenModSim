@@ -133,6 +133,9 @@ set(SOURCES
     controls/mdiareaex.cpp
     controls/mditabbar.cpp
     controls/modbuslogwidget.cpp
+    controls/projecttreewidget.cpp
+    controls/scripteditorwindow.cpp
+    controls/trafficlogwindow.cpp
     controls/modbusmessagewidget.cpp
     controls/numericcombobox.cpp
     controls/numericlineedit.cpp
@@ -154,7 +157,6 @@ set(SOURCES
     dialogs/dialogforcemultipleregisters.cpp
     dialogs/dialogmsgparser.cpp
     dialogs/dialogprintsettings.cpp
-    dialogs/dialograwdatalog.cpp
     dialogs/dialogpreferences.cpp
     dialogs/dialogselectserviceport.cpp
     dialogs/dialogmodbusdefinitions.cpp
@@ -170,6 +172,7 @@ set(SOURCES
     jsobjects/server.cpp
     jsobjects/storage.cpp
     formmodsim.cpp
+    scriptdocument.cpp
     jshighlighter.cpp
     main.cpp
     mainwindow.cpp
@@ -222,6 +225,9 @@ set(HEADERS
     controls/mdiareaex.h
     controls/mditabbar.h
     controls/modbuslogwidget.h
+    controls/projecttreewidget.h
+    controls/scripteditorwindow.h
+    controls/trafficlogwindow.h
     controls/modbusmessagewidget.h
     controls/numericcombobox.h
     controls/numericlineedit.h
@@ -243,7 +249,6 @@ set(HEADERS
     dialogs/dialogforcemultipleregisters.h
     dialogs/dialogmsgparser.h
     dialogs/dialogprintsettings.h
-    dialogs/dialograwdatalog.h
     dialogs/colorswatch.h
     dialogs/dialogpreferences.h
     dialogs/dialogmodbusdefinitions.h
@@ -265,6 +270,7 @@ set(HEADERS
     enums.h
     modbusserver.h
     formmodsim.h
+    scriptdocument.h
     jshighlighter.h
     mainwindow.h
     menuconnect.h
@@ -333,7 +339,6 @@ set(UI_FILES
     dialogs/dialogforcemultipleregisters.ui
     dialogs/dialogmsgparser.ui
     dialogs/dialogprintsettings.ui
-    dialogs/dialograwdatalog.ui
     dialogs/dialogpreferences.ui
     dialogs/dialogselectserviceport.ui
     dialogs/dialogmodbusdefinitions.ui

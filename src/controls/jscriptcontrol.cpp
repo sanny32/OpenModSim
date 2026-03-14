@@ -45,7 +45,6 @@ JScriptControl::JScriptControl(QWidget *parent)
 
     connect(&_timer, &QTimer::timeout, this, &JScriptControl::executeScript);
     connect(ui->codeEditor, &JSCodeEditor::helpContext, this, &JScriptControl::helpContext);
-    connect(ui->console, &ConsoleOutput::collapse, this, &JScriptControl::hideConsole);
 
 }
 
@@ -77,12 +76,12 @@ bool JScriptControl::eventFilter(QObject* obj, QEvent* event)
 }
 
 ///
-/// \brief JScriptControl::isConsoleOutputVisible
-/// \return
+/// \brief JScriptControl::setScriptSource
+/// \param source
 ///
-bool JScriptControl::isConsoleVisible() const
+void JScriptControl::setScriptSource(const QString& source)
 {
-    return ui->console->isVisible();
+    _scriptSource = source;
 }
 
 ///
@@ -333,8 +332,11 @@ void JScriptControl::runScript(RunMode mode, int interval)
     _storage = QSharedPointer<Storage>(new Storage);
     _server = QSharedPointer<Server>(new Server(_mbMultiServer, _byteOrder, _addressBase, &_jsEngine));
     _script = QSharedPointer<Script>(new Script(interval));
-    _console = QSharedPointer<console>(new console(ui->console));
+    _console = QSharedPointer<console>(new console());
     connect(_script.get(), &Script::stopped, this, &JScriptControl::stopScript, Qt::QueuedConnection);
+    connect(_console.get(), &console::messageAdded, this, [this](const QString& text, ConsoleOutput::MessageType type) {
+        emit consoleMessage(_scriptSource, text, type);
+    });
 
     _jsEngine.globalObject().setProperty("Storage", _jsEngine.newQObject(_storage.get()));
     _jsEngine.globalObject().setProperty("Script",  _jsEngine.newQObject(_script.get()));
@@ -345,7 +347,7 @@ void JScriptControl::runScript(RunMode mode, int interval)
     _jsEngine.globalObject().setProperty("AddressSpace", newEnumObject(Address::staticMetaObject, "Space"));
     _jsEngine.setInterrupted(false);
 
-    _console->clear();
+
 
     if(!executeScript())
         return;
@@ -390,27 +392,6 @@ void JScriptControl::stopScript()
 }
 
 ///
-/// \brief JScriptControl::showConsole
-///
-void JScriptControl::showConsole()
-{
-    if(ui->horizontalSplitter->sizes().at(1) == 0)
-    {
-        const int h = size().height();
-        ui->horizontalSplitter->setSizes(QList<int>() << h * 6 / 7 << h * 1 / 7);
-        ui->console->setVisible(true);
-    }
-}
-
-///
-/// \brief JScriptControl::hideConsole
-///
-void JScriptControl::hideConsole()
-{
-    ui->console->setVisible(false);
-}
-
-///
 /// \brief JScriptControl::executeScript
 ///
 bool JScriptControl::executeScript()
@@ -418,8 +399,8 @@ bool JScriptControl::executeScript()
     const auto res = _script->run(_jsEngine, _scriptCode);
     if(res.isError() && !_jsEngine.isInterrupted())
     {
-        showConsole();
-        _console->error(QString("%1 (line %2)").arg(res.toString(), res.property("lineNumber").toString()));
+        const QString errMsg = QString("%1 (line %2)").arg(res.toString(), res.property("lineNumber").toString());
+        emit consoleMessage(_scriptSource, errMsg, ConsoleOutput::MessageType::Error);
 
         _script->stop();
         return false;
@@ -458,8 +439,6 @@ void JScriptControl::setScrollPosition(int pos)
 QSettings& operator <<(QSettings& out, const JScriptControl* ctrl)
 {
     out.setValue("ScriptControl/Script", ctrl->script().toUtf8().toBase64());
-    out.setValue("ScriptControl/HSplitter", ctrl->ui->horizontalSplitter->saveState());
-    out.setValue("ScriptControl/ConsoleVisible", ctrl->isConsoleVisible());
     out.setValue("ScriptControl/CursorPosition", ctrl->cursorPosition());
     out.setValue("ScriptControl/ScrollPosition", ctrl->scrollPosition());
     return out;
@@ -475,11 +454,6 @@ QSettings& operator >>(QSettings& in, JScriptControl* ctrl)
 {
     const auto script = QByteArray::fromBase64(in.value("ScriptControl/Script").toString().toUtf8());
     ctrl->setScript(script);
-
-    ctrl->ui->console->setVisible(in.value("ScriptControl/ConsoleVisible", true).toBool());
-
-    const auto hstate = in.value("ScriptControl/HSplitter").toByteArray();
-    if(!hstate.isEmpty()) ctrl->ui->horizontalSplitter->restoreState(hstate);
 
     const int cursorPos = in.value("ScriptControl/CursorPosition", -1).toInt();
     if(cursorPos >= 0)
@@ -508,11 +482,6 @@ QXmlStreamWriter& operator <<(QXmlStreamWriter& xml, const JScriptControl* ctrl)
     xml.writeAttribute("CursorPosition", QString::number(ctrl->cursorPosition()));
     xml.writeAttribute("ScrollPosition", QString::number(ctrl->scrollPosition()));
     xml.writeCDATA(ctrl->script());
-    xml.writeEndElement();
-
-    xml.writeStartElement("HorizontalSplitter");
-    xml.writeAttribute("Visible", boolToString(ctrl->isConsoleVisible()));
-    xml.writeCharacters(ctrl->ui->horizontalSplitter->saveState().toBase64());
     xml.writeEndElement();
 
     xml.writeStartElement("AutoComplete");
@@ -552,11 +521,7 @@ QXmlStreamReader& operator>>(QXmlStreamReader& xml, JScriptControl* ctrl)
                 xml.skipCurrentElement();
             }
             else if (xml.name() == QLatin1String("HorizontalSplitter")) {
-                const QXmlStreamAttributes attrs = xml.attributes();
-                const bool visible = !attrs.hasAttribute("Visible") || stringToBool(attrs.value("Visible").toString());
-                ctrl->ui->console->setVisible(visible);
-                const QByteArray state = QByteArray::fromBase64(xml.readElementText().toLatin1());
-                if (!state.isEmpty()) ctrl->ui->horizontalSplitter->restoreState(state);
+                xml.skipCurrentElement(); // obsolete, console is now global
             }
             else if (xml.name() == QLatin1String("AutoComplete")) {
                 const QXmlStreamAttributes attrs = xml.attributes();

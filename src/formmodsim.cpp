@@ -42,6 +42,7 @@ FormModSim::FormModSim(int id, ModbusMultiServer& server, QSharedPointer<DataSim
     ui->stackedWidget->setCurrentIndex(0);
     ui->scriptControl->setModbusMultiServer(&_mbMultiServer);
     ui->scriptControl->setByteOrder(ui->outputWidget->byteOrder());
+    ui->scriptControl->setScriptSource(windowTitle());
 
     const auto mbDefs = _mbMultiServer.getModbusDefinitions();
 
@@ -64,6 +65,7 @@ FormModSim::FormModSim(int id, ModbusMultiServer& server, QSharedPointer<DataSim
     connect(ui->outputWidget, &OutputWidget::startTextCaptureError, this, &FormModSim::captureError);
     connect(ui->scriptControl, &JScriptControl::helpContext, this, &FormModSim::helpContextRequested);
     connect(ui->scriptControl, &JScriptControl::scriptStopped, this, &FormModSim::scriptStopped);
+    connect(ui->scriptControl, &JScriptControl::consoleMessage, this, &FormModSim::consoleMessage);
 
     setLogViewState(server.isConnected() ? LogViewState::Running : LogViewState::Unknown);
     connect(ui->statisticWidget, &StatisticWidget::ctrsReseted, ui->outputWidget, &OutputWidget::clearLogView);
@@ -81,6 +83,9 @@ FormModSim::FormModSim(int id, ModbusMultiServer& server, QSharedPointer<DataSim
     connect(_dataSimulator.get(), &DataSimulator::simulationStarted, this, &FormModSim::on_simulationStarted);
     connect(_dataSimulator.get(), &DataSimulator::simulationStopped, this, &FormModSim::on_simulationStopped);
     connect(_dataSimulator.get(), &DataSimulator::dataSimulated, this, &FormModSim::on_dataSimulated);
+
+    setupDisplayBar();
+    setupScriptBar();
 }
 
 ///
@@ -347,6 +352,7 @@ void FormModSim::setDataDisplayMode(DataDisplayMode mode)
             break;
         default: break;
     }
+    updateDisplayBar();
 }
 
 ///
@@ -385,6 +391,7 @@ void FormModSim::setByteOrder(ByteOrder order)
 {
     ui->outputWidget->setByteOrder(order);
     emit byteOrderChanged(order);
+    updateDisplayBar();
 }
 
 ///
@@ -404,6 +411,7 @@ void FormModSim::setCodepage(const QString& name)
 {
     ui->outputWidget->setCodepage(name);
     emit codepageChanged(name);
+    if (_ansiMenu) _ansiMenu->selectCodepage(name);
 }
 
 ///
@@ -494,33 +502,6 @@ int FormModSim::zoomPercent() const
 void FormModSim::setZoomPercent(int zoomPercent)
 {
     ui->outputWidget->setZoomPercent(zoomPercent);
-}
-
-///
-/// \brief FormModSim::isConsoleOutputVisible
-/// \return
-///
-bool FormModSim::isConsoleOutputVisible() const
-{
-    if(displayMode() != DisplayMode::Script)
-        return false;
-
-    return ui->scriptControl->isConsoleVisible();
-}
-
-///
-/// \brief FormModSim::setConsoleOutputVisible
-/// \param visible
-///
-void FormModSim::setConsoleOutputVisible(bool visible)
-{
-    if(displayMode() != DisplayMode::Script)
-        return;
-
-    if(visible)
-        ui->scriptControl->showConsole();
-    else
-        ui->scriptControl->hideConsole();
 }
 
 ///
@@ -980,6 +961,7 @@ void FormModSim::on_comboBoxModbusPointType_pointTypeChanged(QModbusDataUnit::Re
 {
     emit definitionChanged();
     emit pointTypeChanged(type);
+    updateDisplayBar();
 }
 
 ///
@@ -1304,6 +1286,160 @@ void FormModSim::on_dataSimulated(DataDisplayMode mode, quint8 deviceId, QModbus
         const ModbusWriteParams params = { dd.DeviceId, startAddress, value, mode, dd.AddrSpace, byteOrder(), codepage(), true };
         _mbMultiServer.writeRegister(type, params);
     }
+}
+
+///
+/// \brief FormModSim::setupScriptBar
+///
+void FormModSim::setupScriptBar()
+{
+    _scriptBar = new QToolBar(this);
+    _scriptBar->setIconSize(QSize(16, 16));
+
+    _scriptRunModeCombo = new RunModeComboBox(_scriptBar);
+    _scriptRunModeCombo->setCurrentRunMode(_scriptSettings.Mode);
+    connect(_scriptRunModeCombo, &RunModeComboBox::runModeChanged, this, [this](RunMode mode) {
+        _scriptSettings.Mode = mode;
+    });
+
+    auto widgetAction = new QWidgetAction(_scriptBar);
+    widgetAction->setDefaultWidget(_scriptRunModeCombo);
+    _scriptBar->addAction(widgetAction);
+
+    _actionRunScript = _scriptBar->addAction(QIcon(":/res/actionRunScript.png"), tr("Run Script"));
+    qobject_cast<QToolButton*>(_scriptBar->widgetForAction(_actionRunScript))->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+    connect(_actionRunScript, &QAction::triggered, this, [this]() {
+        runScript();
+    });
+
+    _actionStopScript = _scriptBar->addAction(QIcon(":/res/actionStopScript.png"), tr("Stop Script"));
+    qobject_cast<QToolButton*>(_scriptBar->widgetForAction(_actionStopScript))->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+    connect(_actionStopScript, &QAction::triggered, this, &FormModSim::stopScript);
+
+    connect(this, &FormModSim::scriptRunning, this, &FormModSim::updateScriptBar);
+    connect(this, &FormModSim::scriptStopped, this, &FormModSim::updateScriptBar);
+    connect(ui->scriptControl->scriptDocument(), &QTextDocument::contentsChanged,
+            this, &FormModSim::updateScriptBar);
+
+    ui->verticalLayout_4->insertWidget(0, _scriptBar);
+
+    updateScriptBar();
+}
+
+///
+/// \brief FormModSim::updateScriptBar
+///
+void FormModSim::updateScriptBar()
+{
+    if (!_scriptBar) return;
+
+    _actionRunScript->setEnabled(canRunScript());
+    _actionStopScript->setEnabled(canStopScript());
+    if (_scriptRunModeCombo) _scriptRunModeCombo->setEnabled(!canStopScript());
+}
+
+///
+/// \brief FormModSim::setupDisplayBar
+///
+void FormModSim::setupDisplayBar()
+{
+    _displayBar = new QToolBar(this);
+    _displayBar->setIconSize(QSize(16, 16));
+
+    auto group = new QActionGroup(_displayBar);
+    group->setExclusive(true);
+
+    auto addModeAction = [&](DataDisplayMode mode, const QString& icon, const QString& text)
+    {
+        auto action = _displayBar->addAction(QIcon(icon), text);
+        action->setCheckable(true);
+        group->addAction(action);
+        _displayModeActions[mode] = action;
+        connect(action, &QAction::triggered, this, [this, mode](bool checked) {
+            if (checked) setDataDisplayMode(mode);
+        });
+        return action;
+    };
+
+    addModeAction(DataDisplayMode::Binary,        ":/res/actionBinary.png",       tr("Binary"));
+    addModeAction(DataDisplayMode::Hex,           ":/res/actionHex.png",          tr("Hex"));
+    auto ansiAction = addModeAction(DataDisplayMode::Ansi, ":/res/actionAnsi.png", tr("Ansi"));
+
+    _ansiMenu = new AnsiMenu(this);
+    connect(_ansiMenu, &AnsiMenu::codepageSelected, this, &FormModSim::setCodepage);
+    ansiAction->setMenu(_ansiMenu);
+    qobject_cast<QToolButton*>(_displayBar->widgetForAction(ansiAction))->setPopupMode(QToolButton::DelayedPopup);
+
+    _displayBar->addSeparator();
+    addModeAction(DataDisplayMode::Int16,         ":/res/actionInt16.png",        tr("16-bit Integer"));
+    addModeAction(DataDisplayMode::UInt16,        ":/res/actionUInt16.png",       tr("Unsigned 16-bit Integer"));
+
+    _displayBar->addSeparator();
+    addModeAction(DataDisplayMode::Int32,         ":/res/actionInt32.png",        tr("32-bit Integer (MSRF)"));
+    addModeAction(DataDisplayMode::SwappedInt32,  ":/res/actionSwappedInt32.png", tr("32-bit Integer (LSRF)"));
+
+    _displayBar->addSeparator();
+    addModeAction(DataDisplayMode::UInt32,        ":/res/actionUInt32.png",       tr("Unsigned 32-bit Integer (MSRF)"));
+    addModeAction(DataDisplayMode::SwappedUInt32, ":/res/actionSwappedUInt32.png",tr("Unsigned 32-bit Integer (LSRF)"));
+
+    _displayBar->addSeparator();
+    addModeAction(DataDisplayMode::Int64,         ":/res/actionInt64.png",        tr("64-bit Integer (MSRF)"));
+    addModeAction(DataDisplayMode::SwappedInt64,  ":/res/actionSwappedInt64.png", tr("64-bit Integer (LSRF)"));
+
+    _displayBar->addSeparator();
+    addModeAction(DataDisplayMode::UInt64,        ":/res/actionUInt64.png",       tr("Unsigned 64-bit Integer (MSRF)"));
+    addModeAction(DataDisplayMode::SwappedUInt64, ":/res/actionSwappedUInt64.png",tr("Unsigned 64-bit Integer (LSRF)"));
+
+    _displayBar->addSeparator();
+    addModeAction(DataDisplayMode::FloatingPt,    ":/res/actionFloatingPt.png",   tr("Float (MSRF)"));
+    addModeAction(DataDisplayMode::SwappedFP,     ":/res/actionSwappedFP.png",    tr("Float (LSRF)"));
+
+    _displayBar->addSeparator();
+    addModeAction(DataDisplayMode::DblFloat,      ":/res/actionDblFloat.png",     tr("Double (MSRF)"));
+    addModeAction(DataDisplayMode::SwappedDbl,    ":/res/actionSwappedDbl.png",   tr("Double (LSRF)"));
+
+    _displayBar->addSeparator();
+    _actionSwapBytes = _displayBar->addAction(QIcon(":/res/actionSwapBytes.png"), tr("Swap Bytes"));
+    _actionSwapBytes->setCheckable(true);
+    connect(_actionSwapBytes, &QAction::triggered, this, [this](bool checked) {
+        setByteOrder(checked ? ByteOrder::Swapped : ByteOrder::Direct);
+    });
+
+    ui->verticalLayout_2->insertWidget(0, _displayBar);
+
+    updateDisplayBar();
+}
+
+///
+/// \brief FormModSim::updateDisplayBar
+///
+void FormModSim::updateDisplayBar()
+{
+    if (!_displayBar) return;
+
+    const auto ddm = dataDisplayMode();
+    const auto dd = displayDefinition();
+    const bool coilType = (dd.PointType == QModbusDataUnit::Coils ||
+                           dd.PointType == QModbusDataUnit::DiscreteInputs);
+
+    // Check the matching mode action
+    const auto it = _displayModeActions.find(ddm);
+    if (it != _displayModeActions.end())
+        it.value()->setChecked(true);
+
+    // Enable/disable non-binary actions for coil/discrete types
+    for (auto action : _displayModeActions) {
+        action->setEnabled(!coilType || action == _displayModeActions.value(DataDisplayMode::Binary));
+    }
+
+    // Sync swap bytes
+    if (_actionSwapBytes) {
+        _actionSwapBytes->setChecked(byteOrder() == ByteOrder::Swapped);
+        _actionSwapBytes->setEnabled(!coilType);
+    }
+
+    // Sync ANSI codepage menu
+    if (_ansiMenu) _ansiMenu->selectCodepage(codepage());
 }
 
 ///

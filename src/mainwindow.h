@@ -11,6 +11,10 @@
 #include "modbusmultiserver.h"
 #include "windowactionlist.h"
 #include "recentfileactionlist.h"
+#include "controls/consoleoutput.h"
+#include "controls/projecttreewidget.h"
+#include "controls/scripteditorwindow.h"
+#include "scriptdocument.h"
 
 namespace Ui {
 class MainWindow;
@@ -124,8 +128,6 @@ private slots:
     void on_actionSplitView_triggered();
     void on_actionToolbar_triggered();
     void on_actionStatusBar_triggered();
-    void on_actionDisplayBar_triggered();
-    void on_actionScriptBar_triggered();
     void on_actionScriptHelp_triggered();
     void on_actionConsoleOutput_triggered();
 
@@ -138,11 +140,11 @@ private slots:
     void on_actionAbout_triggered();
 
     /* Script menu slots */
+    void on_actionNewScript_triggered();
     void on_actionImportScript_triggered();
     void on_actionRunScript_triggered();
     void on_actionStopScript_triggered();
 
-    void on_runModeChanged(RunMode mode);
     void on_searchText(const QString& text);
 
     void on_connectionError(const QString& error);
@@ -185,6 +187,10 @@ private:
     void saveMdiChild(FormModSim* frm);
     void closeMdiChild(FormModSim* frm);
 
+    ScriptDocument* createStandaloneScript(const QString& name);
+    ScriptEditorWindow* openScriptEditor(ScriptDocument* doc);
+    ScriptEditorWindow* findScriptEditor(ScriptDocument* doc) const;
+
     bool loadProfile(const QString& filename);
     void saveProfile();
 
@@ -193,9 +199,13 @@ private:
 
 private:
     Ui::MainWindow *ui;
-    QWidgetAction* _actionRunMode;
     QDockWidget* _helpDockWidget;
     HelpWidget* _helpWidget;
+    QDockWidget* _consoleDockWidget = nullptr;
+    ConsoleOutput* _globalConsole = nullptr;
+    QDockWidget* _projectDockWidget = nullptr;
+    ProjectTreeWidget* _projectTree = nullptr;
+    QMdiSubWindow* _trafficLogSubWindow = nullptr;
 
     QString _lang;
     QTranslator _qtTranslator;
@@ -214,6 +224,9 @@ private:
     QSharedPointer<DataSimulator> _dataSimulator;
     QString _savePath;
     QString _profile;
+    QList<ScriptDocument*> _standaloneScripts;
+    int _scriptCounter = 0;
+
     bool _splitDisplayDefinitionSyncInProgress = false;
     bool _splitDisableInProgress = false;
 };

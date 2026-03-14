@@ -4,6 +4,9 @@
 #include <QWidget>
 #include <QTimer>
 #include <QPrinter>
+#include <QToolBar>
+#include <QActionGroup>
+#include <QMap>
 #include <QVersionNumber>
 #include <QXmlStreamWriter>
 #include "fontutils.h"
@@ -12,7 +15,10 @@
 #include "displaydefinition.h"
 #include "outputwidget.h"
 #include "jscriptcontrol.h"
+#include "consoleoutput.h"
 #include "apppreferences.h"
+#include "ansimenu.h"
+#include "controls/runmodecombobox.h"
 
 ///
 /// \brief Forward declaration of the MainWindow
@@ -103,9 +109,6 @@ public:
     int zoomPercent() const;
     void setZoomPercent(int zoomPercent);
 
-    bool isConsoleOutputVisible() const;
-    void setConsoleOutputVisible(bool visible);
-
     void print(QPrinter* painter);
 
     ModbusSimulationMap2 simulationMap() const;
@@ -168,6 +171,7 @@ signals:
     void scriptSettingsChanged(const ScriptSettings&);
     void scriptRunning();
     void scriptStopped();
+    void consoleMessage(const QString& source, const QString& text, ConsoleOutput::MessageType type);
     void captureError(const QString& error);
     void doubleClicked();
     void statisticCtrsReseted();
@@ -196,6 +200,12 @@ private:
     JScriptControl* scriptControl();
     bool isLoggingRequest(QSharedPointer<const ModbusMessage> msgReq) const;
 
+    void setupDisplayBar();
+    void updateDisplayBar();
+
+    void setupScriptBar();
+    void updateScriptBar();
+
 private:
     Ui::FormModSim *ui;
     MainWindow* _parent;
@@ -206,6 +216,16 @@ private:
     ModbusMultiServer& _mbMultiServer;
     QSharedPointer<DataSimulator> _dataSimulator;
     QRect _parentGeometry;
+
+    QToolBar*  _displayBar = nullptr;
+    QAction*   _actionSwapBytes = nullptr;
+    AnsiMenu*  _ansiMenu = nullptr;
+    QMap<DataDisplayMode, QAction*> _displayModeActions;
+
+    QToolBar*        _scriptBar = nullptr;
+    QAction*         _actionRunScript = nullptr;
+    QAction*         _actionStopScript = nullptr;
+    RunModeComboBox* _scriptRunModeCombo = nullptr;
 };
 
 ///

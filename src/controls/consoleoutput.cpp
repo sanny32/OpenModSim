@@ -213,11 +213,12 @@ void ConsoleOutput::changeEvent(QEvent* event)
 ///
 /// \brief ConsoleOutput::addMessage
 ///
-void ConsoleOutput::addMessage(const QString& text, MessageType type)
+void ConsoleOutput::addMessage(const QString& text, MessageType type, const QString& source)
 {
-    auto item = new QListWidgetItem(text, _listWidget);
+    const QString displayText = source.isEmpty() ? text : QString("[%1] %2").arg(source, text);
+    auto item = new QListWidgetItem(displayText, _listWidget);
     item->setData(MessageTypeRole, static_cast<int>(type));
-    item->setToolTip(text);
+    item->setToolTip(displayText);
 
     bool visible = true;
     switch (type) {

@@ -2,10 +2,10 @@
 
 ///
 /// \brief console::console
-/// \param console
+/// \param parent
 ///
-console::console(ConsoleOutput* console)
-    : _console(console)
+console::console(QObject* parent)
+    : QObject(parent)
 {
 }
 
@@ -14,7 +14,7 @@ console::console(ConsoleOutput* console)
 ///
 void console::clear()
 {
-    _console->clear();
+    emit clearRequested();
 }
 
 ///
@@ -23,7 +23,7 @@ void console::clear()
 ///
 void console::log(const QString& msg)
 {
-    _console->addMessage(msg, ConsoleOutput::MessageType::Log);
+    emit messageAdded(msg, ConsoleOutput::MessageType::Log);
 }
 
 ///
@@ -32,7 +32,7 @@ void console::log(const QString& msg)
 ///
 void console::debug(const QString& msg)
 {
-    _console->addMessage(msg, ConsoleOutput::MessageType::Debug);
+    emit messageAdded(msg, ConsoleOutput::MessageType::Debug);
 }
 
 ///
@@ -41,7 +41,7 @@ void console::debug(const QString& msg)
 ///
 void console::warning(const QString& msg)
 {
-    _console->addMessage(msg, ConsoleOutput::MessageType::Warning);
+    emit messageAdded(msg, ConsoleOutput::MessageType::Warning);
 }
 
 ///
@@ -50,5 +50,5 @@ void console::warning(const QString& msg)
 ///
 void console::error(const QString& msg)
 {
-    _console->addMessage(msg, ConsoleOutput::MessageType::Error);
+    emit messageAdded(msg, ConsoleOutput::MessageType::Error);
 }

@@ -16,7 +16,7 @@
 #include "dialogforcemultiplecoils.h"
 #include "dialogforcemultipleregisters.h"
 #include "dialogmodbusdefinitions.h"
-#include "dialograwdatalog.h"
+#include "controls/trafficlogwindow.h"
 #include "runmodecombobox.h"
 #include "mainstatusbar.h"
 #include "menuconnect.h"
@@ -59,7 +59,6 @@ MainWindow::MainWindow(const QString& profile, bool useSession, QWidget *parent)
     _ansiMenu = new AnsiMenu(this);
     connect(_ansiMenu, &AnsiMenu::codepageSelected, this, &MainWindow::setCodepage);
     ui->actionAnsi->setMenu(_ansiMenu);
-    qobject_cast<QToolButton*>(ui->toolBarDisplay->widgetForAction(ui->actionAnsi))->setPopupMode(QToolButton::DelayedPopup);
 
     auto menuConnect = new MenuConnect(MenuConnect::ConnectMenu, _mbMultiServer, this);
     connect(menuConnect, &MenuConnect::connectAction, this, &MainWindow::on_connectAction);
@@ -74,15 +73,6 @@ MainWindow::MainWindow(const QString& profile, bool useSession, QWidget *parent)
     ui->actionDisconnect->setMenu(menuDisconnect);
     qobject_cast<QToolButton*>(ui->toolBarMain->widgetForAction(ui->actionDisconnect))->setPopupMode(QToolButton::InstantPopup);
     qobject_cast<QToolButton*>(ui->toolBarMain->widgetForAction(ui->actionDisconnect))->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
-
-    auto comboBoxRunMode = new RunModeComboBox(this);
-    connect(comboBoxRunMode, &RunModeComboBox::runModeChanged, this, &MainWindow::on_runModeChanged);
-
-    _actionRunMode = new QWidgetAction(this);
-    _actionRunMode->setDefaultWidget(comboBoxRunMode);
-    ui->toolBarScript->insertAction(ui->actionRunScript, _actionRunMode);
-    qobject_cast<QToolButton*>(ui->toolBarScript->widgetForAction(ui->actionRunScript))->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
-    qobject_cast<QToolButton*>(ui->toolBarScript->widgetForAction(ui->actionStopScript))->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
 
     const auto defaultPrinter = QPrinterInfo::defaultPrinter();
     if(!defaultPrinter.isNull())
@@ -114,6 +104,38 @@ MainWindow::MainWindow(const QString& profile, bool useSession, QWidget *parent)
     connect(_helpDockWidget, &QDockWidget::visibilityChanged, this, [this](bool visible) {
         if(_helpDockWidget->isVisible())
             _helpDockWidget->setProperty("WasShown", false);
+    });
+
+    _projectTree = new ProjectTreeWidget(this);
+    _projectDockWidget = new QDockWidget(tr("Project"), this);
+    _projectDockWidget->setObjectName("projectDockWidget");
+    _projectDockWidget->setWidget(_projectTree);
+    _projectDockWidget->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
+    addDockWidget(Qt::LeftDockWidgetArea, _projectDockWidget);
+
+    connect(_projectTree, &ProjectTreeWidget::formActivated, this, [this](FormModSim* frm) {
+        const auto list = ui->mdiArea->subWindowList();
+        for (auto wnd : list) {
+            if (qobject_cast<FormModSim*>(wnd->widget()) == frm) {
+                ui->mdiArea->setActiveSubWindow(wnd);
+                break;
+            }
+        }
+    });
+    connect(_projectTree, &ProjectTreeWidget::scriptActivated, this, [this](ScriptDocument* doc) {
+        openScriptEditor(doc);
+    });
+
+    _globalConsole = new ConsoleOutput(this);
+    _consoleDockWidget = new QDockWidget(tr("Output"), this);
+    _consoleDockWidget->setObjectName("consoleDockWidget");
+    _consoleDockWidget->setWidget(_globalConsole);
+    _consoleDockWidget->setAllowedAreas(Qt::BottomDockWidgetArea | Qt::TopDockWidgetArea);
+    addDockWidget(Qt::BottomDockWidgetArea, _consoleDockWidget);
+    _consoleDockWidget->setVisible(false);
+
+    connect(_globalConsole, &ConsoleOutput::collapse, this, [this]() {
+        _consoleDockWidget->setVisible(false);
     });
 
     ui->mdiArea->setActivationOrder(QMdiArea::ActivationHistoryOrder);
@@ -297,8 +319,11 @@ void MainWindow::on_awake()
     ui->actionCopy->setEnabled(frm != nullptr);
     ui->actionPaste->setEnabled(frm != nullptr);
     ui->actionSelectAll->setEnabled(frm != nullptr);
-    ui->actionFind->setEnabled(frm && frm->displayMode() == DisplayMode::Script);
-    ui->actionReplace->setEnabled(frm && frm->displayMode() == DisplayMode::Script);
+    const bool isScriptActive = (frm && frm->displayMode() == DisplayMode::Script) ||
+                                 qobject_cast<ScriptEditorWindow*>(
+                                     ui->mdiArea->activeSubWindow() ? ui->mdiArea->activeSubWindow()->widget() : nullptr) != nullptr;
+    ui->actionFind->setEnabled(isScriptActive);
+    ui->actionReplace->setEnabled(isScriptActive);
 
     ui->actionDataDefinition->setEnabled(frm != nullptr);
     ui->actionShowData->setEnabled(frm != nullptr);
@@ -324,8 +349,7 @@ void MainWindow::on_awake()
     ui->actionSwappedDbl->setEnabled(frm != nullptr);
     ui->actionSwapBytes->setEnabled(frm != nullptr);
 
-    ui->actionRawDataLog->setEnabled(_mbMultiServer.isConnected());
-    ui->actionRawDataLog->setChecked(ui->actionRawDataLog->data().isValid());
+    ui->actionRawDataLog->setChecked(_trafficLogSubWindow != nullptr);
 
     ui->actionTextCapture->setEnabled(frm && frm->captureMode() == CaptureMode::Off);
     ui->actionCaptureOff->setEnabled(frm && frm->captureMode() == CaptureMode::TextCapture);
@@ -334,18 +358,20 @@ void MainWindow::on_awake()
     ui->actionImportScript->setEnabled(frm != nullptr);
     ui->actionRunScript->setEnabled(frm && !scriptRunning && frm->canRunScript());
     ui->actionStopScript->setEnabled(scriptRunning);
-    _actionRunMode->setEnabled(frm && !scriptRunning);
 
     ui->actionTabbedView->setChecked(ui->mdiArea->viewMode() == QMdiArea::TabbedView);
     ui->actionSplitView->setVisible(ui->mdiArea->viewMode() == QMdiArea::TabbedView);
     ui->actionSplitView->setChecked(ui->mdiArea->isSplitView());
     ui->actionToolbar->setChecked(ui->toolBarMain->isVisible());
     ui->actionStatusBar->setChecked(statusBar()->isVisible());
-    ui->actionDisplayBar->setChecked(ui->toolBarDisplay->isVisible());
-    ui->actionScriptBar->setChecked(ui->toolBarScript->isVisible());
     ui->actionScriptHelp->setChecked(_helpDockWidget->isVisible());
-    ui->actionScriptHelp->setVisible(frm && frm->displayMode() == DisplayMode::Script);
-    ui->actionConsoleOutput->setVisible(frm && frm->displayMode() == DisplayMode::Script);
+    // Show script help when any script editor is the active window
+    const bool scriptEditorActive = qobject_cast<ScriptEditorWindow*>(
+        ui->mdiArea->activeSubWindow() ? ui->mdiArea->activeSubWindow()->widget() : nullptr) != nullptr;
+    const bool formInScriptMode = frm && frm->displayMode() == DisplayMode::Script;
+    ui->actionScriptHelp->setVisible(scriptEditorActive || formInScriptMode);
+    ui->actionConsoleOutput->setVisible(true);
+    ui->actionConsoleOutput->setChecked(_consoleDockWidget->isVisible());
 
     ui->actionTile->setEnabled(ui->mdiArea->viewMode() == QMdiArea::SubWindowView);
     ui->actionCascade->setEnabled(ui->mdiArea->viewMode() == QMdiArea::SubWindowView);
@@ -395,12 +421,11 @@ void MainWindow::on_awake()
 
         ui->actionHexAddresses->setChecked(frm->displayHexAddresses());
 
-        const auto dm = frm->displayMode();
-        ui->actionShowData->setChecked(dm == DisplayMode::Data);
-        ui->actionShowTraffic->setChecked(dm == DisplayMode::Traffic);
-        ui->actionShowScript->setChecked(dm == DisplayMode::Script);
+        ui->actionShowData->setChecked(true);
+        ui->actionShowTraffic->setChecked(_trafficLogSubWindow != nullptr);
+        ui->actionShowScript->setChecked(false);
 
-        ui->actionConsoleOutput->setChecked(frm->isConsoleOutputVisible());
+        _projectTree->activateForm(frm);
     }
 }
 
@@ -832,21 +857,16 @@ void MainWindow::on_actionShowData_triggered()
 ///
 void MainWindow::on_actionShowTraffic_triggered()
 {
-    auto frm = currentMdiChild();
-    if(frm) frm->setDisplayMode(DisplayMode::Traffic);
-
-    updateHelpWidgetState();
+    on_actionRawDataLog_triggered(); // open global traffic log window
 }
 
 ///
 /// \brief MainWindow::on_actionShowScript_triggered
+/// Opens a new standalone script document.
 ///
 void MainWindow::on_actionShowScript_triggered()
 {
-    auto frm = currentMdiChild();
-    if(frm) frm->setDisplayMode(DisplayMode::Script);
-
-    updateHelpWidgetState();
+    on_actionNewScript_triggered();
 }
 
 ///
@@ -1059,23 +1079,25 @@ void MainWindow::on_actionMsgParser_triggered()
 ///
 void MainWindow::on_actionRawDataLog_triggered()
 {
-    auto dlg = ui->actionRawDataLog->data().value<DialogRawDataLog*>();
-    if(dlg != nullptr) {
-        dlg->close();
+    if (_trafficLogSubWindow) {
+        // already open — bring to front
+        ui->mdiArea->setActiveSubWindow(_trafficLogSubWindow);
         return;
     }
-    else
-    {
-        dlg = new DialogRawDataLog(_mbMultiServer);
-        dlg->setAttribute(Qt::WA_DeleteOnClose, true);
-        ui->actionRawDataLog->setData(QVariant::fromValue(dlg));
 
-        connect(dlg, &DialogRawDataLog::destroyed, this, [this](){
-            ui->actionRawDataLog->setData(QVariant());
-        });
+    auto trafficWnd = new TrafficLogWindow(_mbMultiServer);
+    if (auto frm = currentMdiChild())
+        trafficWnd->setDataDisplayMode(frm->dataDisplayMode());
+    _trafficLogSubWindow = ui->mdiArea->addSubWindow(trafficWnd);
+    _trafficLogSubWindow->setAttribute(Qt::WA_DeleteOnClose);
+    _trafficLogSubWindow->setWindowTitle(tr("Traffic"));
+    _trafficLogSubWindow->setWindowIcon(QIcon(":/res/actionShowTraffic.png"));
 
-        dlg->show();
-    }
+    connect(_trafficLogSubWindow, &QMdiSubWindow::destroyed, this, [this]() {
+        _trafficLogSubWindow = nullptr;
+    });
+
+    _trafficLogSubWindow->show();
 }
 
 ///
@@ -1203,22 +1225,6 @@ void MainWindow::on_actionStatusBar_triggered()
 }
 
 ///
-/// \brief MainWindow::on_actionDisplayBar_triggered
-///
-void MainWindow::on_actionDisplayBar_triggered()
-{
-    ui->toolBarDisplay->setVisible(!ui->toolBarDisplay->isVisible());
-}
-
-///
-/// \brief MainWindow::on_actionScriptBar_triggered
-///
-void MainWindow::on_actionScriptBar_triggered()
-{
-    ui->toolBarScript->setVisible(!ui->toolBarScript->isVisible());
-}
-
-///
 /// \brief MainWindow::on_actionScriptHelp_triggered
 ///
 void MainWindow::on_actionScriptHelp_triggered()
@@ -1231,10 +1237,7 @@ void MainWindow::on_actionScriptHelp_triggered()
 ///
 void MainWindow::on_actionConsoleOutput_triggered()
 {
-    auto frm = currentMdiChild();
-    if(!frm || frm->displayMode() != DisplayMode::Script) return;
-
-    frm->setConsoleOutputVisible(!frm->isConsoleOutputVisible());
+    _consoleDockWidget->setVisible(!_consoleDockWidget->isVisible());
 }
 
 ///
@@ -1269,6 +1272,16 @@ void MainWindow::on_actionAbout_triggered()
 {
     DialogAbout dlg(this);
     dlg.exec();
+}
+
+///
+/// \brief MainWindow::on_actionNewScript_triggered
+///
+void MainWindow::on_actionNewScript_triggered()
+{
+    const QString name = tr("Script%1").arg(++_scriptCounter);
+    auto doc = createStandaloneScript(name);
+    openScriptEditor(doc);
 }
 
 ///
@@ -1318,21 +1331,6 @@ void MainWindow::on_actionStopScript_triggered()
 
     if(auto peer = splitPeer(frm); peer && peer->canStopScript())
         peer->stopScript();
-}
-
-///
-/// \brief MainWindow::on_runModeChanged
-/// \param mode
-///
-void MainWindow::on_runModeChanged(RunMode mode)
-{
-    auto frm = currentMdiChild();
-    if(!frm) return;
-
-    auto ss = frm->scriptSettings();
-
-    ss.Mode = mode;
-    frm->setScriptSettings(ss);
 }
 
 ///
@@ -1426,6 +1424,11 @@ void MainWindow::updateDataDisplayMode(DataDisplayMode mode)
 {
     auto frm = currentMdiChild();
     if(frm) frm->setDataDisplayMode(mode);
+
+    if (_trafficLogSubWindow) {
+        auto trafficWnd = qobject_cast<TrafficLogWindow*>(_trafficLogSubWindow->widget());
+        if (trafficWnd) trafficWnd->setDataDisplayMode(mode);
+    }
 }
 
 ///
@@ -1658,6 +1661,11 @@ void MainWindow::setupMdiChild(FormModSim* frm, QMdiSubWindow* wnd, bool addToWi
             peer->setLogViewState(state);
     });
 
+    connect(frm, &FormModSim::consoleMessage, this, [this](const QString& source, const QString& text, ConsoleOutput::MessageType type) {
+        _consoleDockWidget->setVisible(true);
+        _globalConsole->addMessage(text, type, source);
+    });
+
     connect(frm, &FormModSim::scriptRunning, this, [this, frm]()
     {
         frm->setProperty(kSplitScriptRunning, true);
@@ -1690,8 +1698,13 @@ void MainWindow::setupMdiChild(FormModSim* frm, QMdiSubWindow* wnd, bool addToWi
         resetSplitViewIfEmpty();
     });
 
-    if(addToWindowList)
+    if(addToWindowList) {
         _windowActionList->addWindow(wnd);
+        _projectTree->addForm(frm);
+        connect(frm, &FormModSim::closing, this, [this, frm]() {
+            _projectTree->removeForm(frm);
+        });
+    }
 }
 
 ///
@@ -2180,6 +2193,29 @@ void MainWindow::loadConfig(const QString& filename)
                         }
                     }
                 }
+                else if (xml.name() == QLatin1String("Scripts")) {
+                    // Remove existing standalone scripts
+                    for (auto doc : _standaloneScripts)
+                        _projectTree->removeScript(doc);
+                    qDeleteAll(_standaloneScripts);
+                    _standaloneScripts.clear();
+
+                    while (xml.readNextStartElement()) {
+                        if (xml.name() == QLatin1String("ScriptDocument")) {
+                            auto doc = new ScriptDocument(QString(), this);
+                            xml >> doc;
+                            if (doc->name().isEmpty())
+                                doc->setName(tr("Script%1").arg(++_scriptCounter));
+                            _standaloneScripts.append(doc);
+                            _projectTree->addScript(doc);
+                            // Auto-run if RunOnStartup
+                            if (doc->settings().RunOnStartup)
+                                openScriptEditor(doc)->runScript(doc->settings().Mode, doc->settings().Interval);
+                        } else {
+                            xml.skipCurrentElement();
+                        }
+                    }
+                }
                 else {
                     xml.skipCurrentElement();
                 }
@@ -2289,6 +2325,12 @@ void MainWindow::saveConfig(const QString& filename)
     }
     w.writeEndElement(); // Forms
 
+    w.writeStartElement("Scripts");
+    for (auto doc : _standaloneScripts) {
+        w << doc;
+    }
+    w.writeEndElement(); // Scripts
+
     if(isSplitTabbedView())
     {
         w.writeStartElement("SecondaryPanel");
@@ -2391,6 +2433,83 @@ void MainWindow::closeMdiChild(FormModSim* frm)
 }
 
 ///
+/// \brief MainWindow::createStandaloneScript
+///
+ScriptDocument* MainWindow::createStandaloneScript(const QString& name)
+{
+    auto doc = new ScriptDocument(name, this);
+    _standaloneScripts.append(doc);
+    _projectTree->addScript(doc);
+    return doc;
+}
+
+///
+/// \brief MainWindow::openScriptEditor
+/// Opens (or focuses) the MDI editor window for a standalone script.
+///
+ScriptEditorWindow* MainWindow::openScriptEditor(ScriptDocument* doc)
+{
+    // If already open, bring to front
+    if (auto existing = findScriptEditor(doc)) {
+        for (auto wnd : ui->mdiArea->subWindowList()) {
+            if (wnd->widget() == existing) {
+                ui->mdiArea->setActiveSubWindow(wnd);
+                return existing;
+            }
+        }
+    }
+
+    auto editor = new ScriptEditorWindow(doc, &_mbMultiServer);
+    auto wnd = ui->mdiArea->addSubWindow(editor);
+    wnd->setAttribute(Qt::WA_DeleteOnClose);
+    wnd->setWindowTitle(doc->name());
+    wnd->setWindowIcon(QIcon(":/res/actionShowScript.png"));
+
+    connect(doc, &ScriptDocument::nameChanged, wnd, &QMdiSubWindow::setWindowTitle);
+
+    connect(editor, &ScriptEditorWindow::scriptRunning, this, [this, doc]() {
+        _projectTree->setScriptRunning(doc, true);
+    });
+    connect(editor, &ScriptEditorWindow::scriptStopped, this, [this, doc]() {
+        _projectTree->setScriptRunning(doc, false);
+    });
+    connect(editor, &ScriptEditorWindow::consoleMessage, this,
+            [this](const QString& source, const QString& text, ConsoleOutput::MessageType type) {
+                _consoleDockWidget->setVisible(true);
+                _globalConsole->addMessage(text, type, source);
+            });
+
+    // Route Find/Replace to the script editor when it's active
+    connect(wnd, &QMdiSubWindow::windowStateChanged, this,
+            [this, editor](Qt::WindowStates, Qt::WindowStates newState) {
+        if (newState & Qt::WindowActive) {
+            connect(this, &MainWindow::find,    editor->scriptControl(), &JScriptControl::showFind,    Qt::UniqueConnection);
+            connect(this, &MainWindow::replace, editor->scriptControl(), &JScriptControl::showReplace, Qt::UniqueConnection);
+        } else {
+            disconnect(this, &MainWindow::find,    editor->scriptControl(), &JScriptControl::showFind);
+            disconnect(this, &MainWindow::replace, editor->scriptControl(), &JScriptControl::showReplace);
+        }
+    });
+
+    wnd->show();
+    _projectTree->activateScript(doc);
+    return editor;
+}
+
+///
+/// \brief MainWindow::findScriptEditor
+///
+ScriptEditorWindow* MainWindow::findScriptEditor(ScriptDocument* doc) const
+{
+    for (auto wnd : ui->mdiArea->subWindowList()) {
+        auto editor = qobject_cast<ScriptEditorWindow*>(wnd->widget());
+        if (editor && editor->document() == doc)
+            return editor;
+    }
+    return nullptr;
+}
+
+///
 /// \brief checkPathIsWritable
 /// \param path
 /// \return
@@ -2457,11 +2576,6 @@ bool MainWindow::loadProfile(const QString& filename)
     setViewMode(viewMode);
 
     statusBar()->setVisible(m.value("StatusBar", true).toBool());
-
-    const auto displaybarArea = (Qt::ToolBarArea)qBound(0, m.value("DisplayBarArea", Qt::TopToolBarArea).toInt(), 0xf);
-    const auto displaybarBreak = m.value("DisplayBarBreak").toBool();
-    if(displaybarBreak) addToolBarBreak(displaybarArea);
-    addToolBar(displaybarArea, ui->toolBarDisplay);
 
     const auto scriptbarArea = (Qt::ToolBarArea)qBound(0, m.value("ScriptBarArea", Qt::TopToolBarArea).toInt(), 0xf);
     const auto scriptbarBreak = m.value("ScriptBarBreak").toBool();
@@ -2574,8 +2688,6 @@ void MainWindow::saveProfile()
     m.setValue("ViewMode", ui->mdiArea->viewMode());
     m.setValue("SplitView", ui->mdiArea->isSplitView());
     m.setValue("StatusBar", statusBar()->isVisible());
-    m.setValue("DisplayBarArea", toolBarArea(ui->toolBarDisplay));
-    m.setValue("DisplayBarBreak", toolBarBreak(ui->toolBarDisplay));
     m.setValue("ScriptBarArea", toolBarArea(ui->toolBarScript));
     m.setValue("ScriptBarBreak", toolBarBreak(ui->toolBarScript));
     m.setValue("Language", _lang);
