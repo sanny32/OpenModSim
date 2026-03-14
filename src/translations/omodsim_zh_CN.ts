@@ -471,47 +471,45 @@
         <translation type="vanished">（毫秒）</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogdisplaydefinition.ui" line="258"/>
         <source>Log View</source>
-        <translation>日志</translation>
+        <translation type="vanished">日志</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogdisplaydefinition.ui" line="316"/>
         <source>Log View Limit:</source>
-        <translation>日志视图：</translation>
+        <translation type="vanished">日志视图：</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogdisplaydefinition.ui" line="294"/>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="297"/>
         <source>(rows)</source>
         <translation>（行）</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogdisplaydefinition.ui" line="353"/>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="356"/>
         <source>Script Settings</source>
         <translation>脚本设置</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogdisplaydefinition.ui" line="399"/>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="402"/>
         <source>Run Mode: </source>
         <translation>运行模式： </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogdisplaydefinition.ui" line="359"/>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="362"/>
         <source>Interval: </source>
         <translation>间隔： </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogdisplaydefinition.ui" line="390"/>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="393"/>
         <source>(msec)</source>
         <translation>（毫秒）</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogdisplaydefinition.ui" line="422"/>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="425"/>
         <source>Run script on startup</source>
         <translation>在系统启动时运行脚本</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogdisplaydefinition.ui" line="443"/>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="446"/>
         <source>Form Name: </source>
         <translation>表单名称： </translation>
     </message>
@@ -531,12 +529,32 @@
         <translation>无符号值显示前导零</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogdisplaydefinition.ui" line="323"/>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="112"/>
+        <source>Device ID:</source>
+        <translation type="unfinished">设备地址：</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="187"/>
+        <source>Start Address:</source>
+        <translation type="unfinished">起始地址：</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="261"/>
+        <source>Traffic View</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="319"/>
+        <source>View Limit:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="326"/>
         <source>Verbose Logging</source>
         <translation>详细日志记录</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogdisplaydefinition.ui" line="330"/>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="333"/>
         <source>Autoscroll Log View</source>
         <translation>自动滚动日志视图</translation>
     </message>
@@ -546,22 +564,20 @@
         <translation>Modbus数据</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogdisplaydefinition.ui" line="109"/>
         <source>Unit Identifier:</source>
-        <translation>从设备地址：</translation>
+        <translation type="vanished">从设备地址：</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogdisplaydefinition.ui" line="138"/>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="141"/>
         <source>Point Type:</source>
         <translation>寄存器类型：</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogdisplaydefinition.ui" line="184"/>
         <source>Point Address:</source>
-        <translation>寄存器地址：</translation>
+        <translation type="vanished">寄存器地址：</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogdisplaydefinition.ui" line="213"/>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="216"/>
         <source>Length:</source>
         <translation>长度：</translation>
     </message>
@@ -570,7 +586,7 @@
         <translation type="vanished">使用全局地址映射（未分配的寄存器将为零）</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogdisplaydefinition.ui" line="161"/>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="164"/>
         <source>Address Base:</source>
         <translation>基地址：</translation>
     </message>

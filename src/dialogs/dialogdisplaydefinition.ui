@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>DialogDisplayDefinition</class>
-  <widget class="QDialog" name="DialogDisplayDefinition">
+ <widget class="QDialog" name="DialogDisplayDefinition">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
     <width>537</width>
-    <height>462</height>
+    <height>467</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -100,13 +100,16 @@
       <bool>false</bool>
      </property>
      <layout class="QFormLayout" name="formLayout">
+      <property name="labelAlignment">
+       <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+      </property>
       <property name="formAlignment">
        <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignTop</set>
       </property>
       <item row="0" column="0">
        <widget class="QLabel" name="labelSlaveAddress">
         <property name="text">
-         <string>Unit Identifier:</string>
+         <string>Device ID:</string>
         </property>
        </widget>
       </item>
@@ -126,7 +129,7 @@
         </property>
         <property name="maximumSize">
          <size>
-          <width>60</width>
+          <width>85</width>
           <height>16777215</height>
          </size>
         </property>
@@ -181,7 +184,7 @@
       <item row="4" column="0">
        <widget class="QLabel" name="labelPointAddress">
         <property name="text">
-         <string>Point Address:</string>
+         <string>Start Address:</string>
         </property>
        </widget>
       </item>
@@ -201,7 +204,7 @@
         </property>
         <property name="maximumSize">
          <size>
-          <width>60</width>
+          <width>85</width>
           <height>16777215</height>
          </size>
         </property>
@@ -230,7 +233,7 @@
         </property>
         <property name="maximumSize">
          <size>
-          <width>60</width>
+          <width>85</width>
           <height>16777215</height>
          </size>
         </property>
@@ -255,7 +258,7 @@
    <item row="2" column="0" colspan="2">
     <widget class="QGroupBox" name="groupBoxLogView">
      <property name="title">
-      <string>Log View</string>
+      <string>Traffic View</string>
      </property>
      <layout class="QFormLayout" name="formLayout_3">
       <property name="formAlignment">
@@ -313,7 +316,7 @@
       <item row="1" column="0">
        <widget class="QLabel" name="labelLogLimit">
         <property name="text">
-         <string>Log View Limit:</string>
+         <string>View Limit:</string>
         </property>
        </widget>
       </item>

@@ -27,6 +27,14 @@ DialogDisplayDefinition::DialogDisplayDefinition(DisplayDefinition dd, QWidget* 
     ui->lineEditPointAddress->setInputRange(ModbusLimits::addressRange(dd.AddrSpace, dd.ZeroBasedAddress));
     ui->lineEditLength->setInputRange(ModbusLimits::lengthRange(dd.PointAddress, dd.ZeroBasedAddress, dd.AddrSpace));
     ui->lineEditSlaveAddress->setInputRange(ModbusLimits::slaveRange());
+
+    ui->lineEditSlaveAddress->setHexButtonVisible(true);
+    ui->lineEditPointAddress->setHexButtonVisible(true);
+    ui->lineEditLength->setHexButtonVisible(true);
+
+    ui->lineEditSlaveAddress->setHexView(dd.HexViewDeviceId);
+    ui->lineEditPointAddress->setHexView(dd.HexViewAddress);
+    ui->lineEditLength->setHexView(dd.HexViewLength);
     ui->lineEditLogLimit->setInputRange(4, 1000);
     ui->checkBoxAutoscrollLog->setChecked(dd.AutoscrollLog);
     ui->checkBoxVerboseLogging->setChecked(dd.VerboseLogging);
