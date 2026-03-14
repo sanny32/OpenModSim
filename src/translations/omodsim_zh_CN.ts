@@ -499,6 +499,26 @@
         <translation>间隔： </translation>
     </message>
     <message>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="141"/>
+        <source>Data Type:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="187"/>
+        <source>Starting Address:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="326"/>
+        <source>Verbose Traffic Logging</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="333"/>
+        <source>Autoscroll</source>
+        <translation type="unfinished">自动滚动</translation>
+    </message>
+    <message>
         <location filename="../dialogs/dialogdisplaydefinition.ui" line="393"/>
         <source>(msec)</source>
         <translation>（毫秒）</translation>
@@ -530,13 +550,12 @@
     </message>
     <message>
         <location filename="../dialogs/dialogdisplaydefinition.ui" line="112"/>
-        <source>Device ID:</source>
+        <source>Unit Identifier:</source>
         <translation type="unfinished">设备地址：</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogdisplaydefinition.ui" line="187"/>
         <source>Start Address:</source>
-        <translation type="unfinished">起始地址：</translation>
+        <translation type="obsolete">起始地址：</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogdisplaydefinition.ui" line="261"/>
@@ -549,14 +568,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogdisplaydefinition.ui" line="326"/>
         <source>Verbose Logging</source>
-        <translation>详细日志记录</translation>
+        <translation type="vanished">详细日志记录</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogdisplaydefinition.ui" line="333"/>
         <source>Autoscroll Log View</source>
-        <translation>自动滚动日志视图</translation>
+        <translation type="vanished">自动滚动日志视图</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogdisplaydefinition.ui" line="97"/>
@@ -564,13 +581,8 @@
         <translation>Modbus数据</translation>
     </message>
     <message>
-        <source>Unit Identifier:</source>
-        <translation type="vanished">从设备地址：</translation>
-    </message>
-    <message>
-        <location filename="../dialogs/dialogdisplaydefinition.ui" line="141"/>
         <source>Point Type:</source>
-        <translation>寄存器类型：</translation>
+        <translation type="vanished">寄存器类型：</translation>
     </message>
     <message>
         <source>Point Address:</source>
@@ -601,7 +613,7 @@
     </message>
     <message>
         <location filename="../dialogs/dialogforcemultiplecoils.ui" line="33"/>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Device ID: &lt;span style=&quot; font-weight:700;&quot;&gt;%1&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Unit Identifier: &lt;span style=&quot; font-weight:700;&quot;&gt;%1&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;设备地址：&lt;span style=&quot; font-weight:700;&quot;&gt;%1&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
@@ -729,7 +741,7 @@
     </message>
     <message>
         <location filename="../dialogs/dialogforcemultipleregisters.ui" line="33"/>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Device ID: &lt;span style=&quot; font-weight:700;&quot;&gt;%1&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Unit Identifier: &lt;span style=&quot; font-weight:700;&quot;&gt;%1&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;设备地址：&lt;span style=&quot; font-weight:700;&quot;&gt;%1&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
@@ -985,7 +997,7 @@
         <translation>请求</translation>
     </message>
     <message>
-        <source>Device ID included</source>
+        <source>Unit Identifier included</source>
         <translation type="vanished">包含设备地址</translation>
     </message>
     <message>
@@ -1461,7 +1473,7 @@
     <name>DialogSetupPresetData</name>
     <message>
         <location filename="../dialogs/dialogsetuppresetdata.ui" line="23"/>
-        <source>Device ID: </source>
+        <source>Unit Identifier:</source>
         <translation>设备地址： </translation>
     </message>
     <message>
@@ -1729,7 +1741,7 @@
     </message>
     <message>
         <location filename="../dialogs/dialogwriteregister.ui" line="23"/>
-        <source>Device ID: </source>
+        <source>Unit Identifier:</source>
         <translation>设备地址： </translation>
     </message>
     <message>
@@ -1779,7 +1791,7 @@
     </message>
     <message>
         <location filename="../dialogs/dialogwritestatusregister.ui" line="23"/>
-        <source>Device ID: </source>
+        <source>Unit Identifier:</source>
         <translation>设备地址： </translation>
     </message>
     <message>
@@ -1903,36 +1915,44 @@
         <translation type="vanished">地址：</translation>
     </message>
     <message>
-        <location filename="../formmodsim.ui" line="103"/>
         <source>Start Address:</source>
-        <translation>起始地址：</translation>
+        <translation type="vanished">起始地址：</translation>
     </message>
     <message>
-        <location filename="../formmodsim.ui" line="110"/>
+        <location filename="../formmodsim.ui" line="109"/>
+        <source>Starting Address:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../formmodsim.ui" line="116"/>
         <source>Length:</source>
         <translation>长度：</translation>
     </message>
     <message>
-        <location filename="../formmodsim.ui" line="149"/>
+        <location filename="../formmodsim.ui" line="155"/>
         <source>Address Base:</source>
         <translation>基地址：</translation>
     </message>
     <message>
-        <location filename="../formmodsim.ui" line="199"/>
-        <source>Device ID:</source>
+        <location filename="../formmodsim.ui" line="205"/>
+        <source>Unit Identifier:</source>
         <translation type="unfinished">设备地址：</translation>
     </message>
     <message>
-        <location filename="../formmodsim.ui" line="249"/>
+        <location filename="../formmodsim.ui" line="255"/>
+        <source>Data Type</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>MODBUS Point Type</source>
-        <translation>寄存器类型</translation>
+        <translation type="vanished">寄存器类型</translation>
     </message>
     <message>
         <source>NOT CONNECTED!</source>
         <translation type="vanished">未连接：</translation>
     </message>
     <message>
-        <source>Device ID: %1</source>
+        <source>Unit Identifier: %1</source>
         <translation type="vanished">设备地址：%1</translation>
     </message>
     <message>
@@ -1962,7 +1982,7 @@ Length: %3</source>
     </message>
     <message>
         <location filename="../formmodsim.cpp" line="558"/>
-        <source>Device ID: %1
+        <source>Unit Identifier: %1
 MODBUS Point Type:
 %2</source>
         <translation type="unfinished">设备地址:%1
@@ -2107,11 +2127,11 @@ Script.onInit(()=&gt;{
     </message>
     <message>
         <location filename="../controls/mainstatusbar.cpp" line="145"/>
-        <source>Device IDs: %1</source>
+        <source>Unit Identifiers: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Device ID: %1</source>
+        <source>Unit Identifier: %1</source>
         <translation type="obsolete">设备地址：%1</translation>
     </message>
     <message>
@@ -2893,7 +2913,7 @@ Script.onInit(()=&gt;{
     </message>
     <message>
         <location filename="../controls/modbusmessagewidget.cpp" line="288"/>
-        <source>Device ID</source>
+        <source>Unit Identifier</source>
         <translation>设备地址</translation>
     </message>
     <message>
@@ -3161,7 +3181,7 @@ Script.onInit(()=&gt;{
         <translation type="vanished">&lt;b&gt;长度：&lt;/b&gt; %1</translation>
     </message>
     <message>
-        <source>&lt;b&gt;Device ID:&lt;/b&gt; %1</source>
+        <source>&lt;b&gt;Unit Identifier:&lt;/b&gt; %1</source>
         <translation type="vanished">&lt;b&gt;设备地址：&lt;/b&gt; %1</translation>
     </message>
     <message>

@@ -496,13 +496,12 @@
     </message>
     <message>
         <location filename="../dialogs/dialogdisplaydefinition.ui" line="112"/>
-        <source>Device ID:</source>
+        <source>Unit Identifier:</source>
         <translation type="unfinished">Узел:</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogdisplaydefinition.ui" line="187"/>
         <source>Start Address:</source>
-        <translation type="unfinished">Адрес:</translation>
+        <translation type="obsolete">Адрес:</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogdisplaydefinition.ui" line="261"/>
@@ -513,6 +512,16 @@
         <location filename="../dialogs/dialogdisplaydefinition.ui" line="319"/>
         <source>View Limit:</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="326"/>
+        <source>Verbose Traffic Logging</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="333"/>
+        <source>Autoscroll</source>
+        <translation type="unfinished">Автопрокрутка</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogdisplaydefinition.ui" line="393"/>
@@ -540,14 +549,12 @@
         <translation>Показывать ведущие нули для беззнаковых значений</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogdisplaydefinition.ui" line="326"/>
         <source>Verbose Logging</source>
-        <translation>Подробное логирование</translation>
+        <translation type="vanished">Подробное логирование</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogdisplaydefinition.ui" line="333"/>
         <source>Autoscroll Log View</source>
-        <translation>Автопрокрутка текста</translation>
+        <translation type="vanished">Автопрокрутка текста</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogdisplaydefinition.ui" line="97"/>
@@ -555,13 +562,8 @@
         <translation>Настройки Modbus</translation>
     </message>
     <message>
-        <source>Unit Identifier:</source>
-        <translation type="vanished">Адрес устройства:</translation>
-    </message>
-    <message>
-        <location filename="../dialogs/dialogdisplaydefinition.ui" line="141"/>
         <source>Point Type:</source>
-        <translation>Тип регистров:</translation>
+        <translation type="vanished">Тип регистров:</translation>
     </message>
     <message>
         <source>Use Global Address Map (Unallocated registers will be zero)</source>
@@ -579,6 +581,16 @@
         <location filename="../dialogs/dialogdisplaydefinition.ui" line="29"/>
         <source>Columns Distance: </source>
         <translation>Расстояние между столбцами: </translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="141"/>
+        <source>Data Type:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogdisplaydefinition.ui" line="187"/>
+        <source>Starting Address:</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../dialogs/dialogdisplaydefinition.ui" line="216"/>
@@ -601,7 +613,7 @@
     </message>
     <message>
         <location filename="../dialogs/dialogforcemultiplecoils.ui" line="33"/>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Device ID: &lt;span style=&quot; font-weight:700;&quot;&gt;%1&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Unit Identifier: &lt;span style=&quot; font-weight:700;&quot;&gt;%1&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Адрес устройства: &lt;span style=&quot; font-weight:700;&quot;&gt;%1&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
@@ -729,7 +741,7 @@
     </message>
     <message>
         <location filename="../dialogs/dialogforcemultipleregisters.ui" line="33"/>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Device ID: &lt;span style=&quot; font-weight:700;&quot;&gt;%1&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Unit Identifier: &lt;span style=&quot; font-weight:700;&quot;&gt;%1&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Адрес устройства: &lt;span style=&quot; font-weight:700;&quot;&gt;%1&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
@@ -985,7 +997,7 @@
         <translation>Запрос</translation>
     </message>
     <message>
-        <source>Device ID included</source>
+        <source>Unit Identifier included</source>
         <translation type="vanished">Содержит номер устройства</translation>
     </message>
     <message>
@@ -1457,7 +1469,7 @@
     <name>DialogSetupPresetData</name>
     <message>
         <location filename="../dialogs/dialogsetuppresetdata.ui" line="23"/>
-        <source>Device ID: </source>
+        <source>Unit Identifier:</source>
         <translation>Адрес устройства: </translation>
     </message>
     <message>
@@ -1725,7 +1737,7 @@
     </message>
     <message>
         <location filename="../dialogs/dialogwriteregister.ui" line="23"/>
-        <source>Device ID: </source>
+        <source>Unit Identifier:</source>
         <translation>Адрес устройства: </translation>
     </message>
     <message>
@@ -1775,7 +1787,7 @@
     </message>
     <message>
         <location filename="../dialogs/dialogwritestatusregister.ui" line="23"/>
-        <source>Device ID: </source>
+        <source>Unit Identifier:</source>
         <translation>Адрес устройства: </translation>
     </message>
     <message>
@@ -1899,36 +1911,44 @@
         <translation type="vanished">Адрес:</translation>
     </message>
     <message>
-        <location filename="../formmodsim.ui" line="103"/>
         <source>Start Address:</source>
-        <translation>Адрес:</translation>
+        <translation type="vanished">Адрес:</translation>
     </message>
     <message>
-        <location filename="../formmodsim.ui" line="110"/>
+        <location filename="../formmodsim.ui" line="109"/>
+        <source>Starting Address:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../formmodsim.ui" line="116"/>
         <source>Length:</source>
         <translation>Количество:</translation>
     </message>
     <message>
-        <location filename="../formmodsim.ui" line="149"/>
+        <location filename="../formmodsim.ui" line="155"/>
         <source>Address Base:</source>
         <translation>Адресация:</translation>
     </message>
     <message>
-        <location filename="../formmodsim.ui" line="199"/>
-        <source>Device ID:</source>
+        <location filename="../formmodsim.ui" line="205"/>
+        <source>Unit Identifier:</source>
         <translation type="unfinished">Узел:</translation>
     </message>
     <message>
-        <location filename="../formmodsim.ui" line="249"/>
+        <location filename="../formmodsim.ui" line="255"/>
+        <source>Data Type</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>MODBUS Point Type</source>
-        <translation>Тип регистров MODBUS</translation>
+        <translation type="vanished">Тип регистров MODBUS</translation>
     </message>
     <message>
         <source>NOT CONNECTED!</source>
         <translation type="vanished">НЕ ПОДКЛЮЧЕНО!</translation>
     </message>
     <message>
-        <source>Device ID: %1</source>
+        <source>Unit Identifier: %1</source>
         <translation type="vanished">Узел: %1</translation>
     </message>
     <message>
@@ -1958,7 +1978,7 @@ Length: %3</source>
     </message>
     <message>
         <location filename="../formmodsim.cpp" line="558"/>
-        <source>Device ID: %1
+        <source>Unit Identifier: %1
 MODBUS Point Type:
 %2</source>
         <translation type="unfinished">Узел: %1
@@ -2103,11 +2123,11 @@ Script.onInit(()=&gt;{
     </message>
     <message>
         <location filename="../controls/mainstatusbar.cpp" line="145"/>
-        <source>Device IDs: %1</source>
+        <source>Unit Identifiers: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Device ID: %1</source>
+        <source>Unit Identifier: %1</source>
         <translation type="obsolete">Узел: %1</translation>
     </message>
     <message>
@@ -2887,7 +2907,7 @@ Script.onInit(()=&gt;{
     </message>
     <message>
         <location filename="../controls/modbusmessagewidget.cpp" line="288"/>
-        <source>Device ID</source>
+        <source>Unit Identifier</source>
         <translation>Устройство</translation>
     </message>
     <message>
@@ -3155,7 +3175,7 @@ Script.onInit(()=&gt;{
         <translation type="vanished">&lt;b&gt;Длина:&lt;/b&gt; %1</translation>
     </message>
     <message>
-        <source>&lt;b&gt;Device ID:&lt;/b&gt; %1</source>
+        <source>&lt;b&gt;Unit Identifier:&lt;/b&gt; %1</source>
         <translation type="vanished">&lt;b&gt;Устройство:&lt;/b&gt; %1</translation>
     </message>
     <message>

@@ -69,6 +69,12 @@
            </property>
            <item>
             <widget class="QFrame" name="frame_5">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
              <property name="minimumSize">
               <size>
                <width>160</width>
@@ -77,7 +83,7 @@
              </property>
              <property name="maximumSize">
               <size>
-               <width>160</width>
+               <width>180</width>
                <height>16777215</height>
               </size>
              </property>
@@ -100,7 +106,7 @@
               <item row="1" column="0">
                <widget class="QLabel" name="labelAddress">
                 <property name="text">
-                 <string>Start Address:</string>
+                 <string>Starting Address:</string>
                 </property>
                </widget>
               </item>
@@ -196,7 +202,7 @@
                 <item>
                  <widget class="QLabel" name="labelDeviceId">
                   <property name="text">
-                  <string>Device ID:</string>
+                   <string>Unit Identifier:</string>
                   </property>
                  </widget>
                 </item>
@@ -246,7 +252,7 @@
                  </size>
                 </property>
                 <property name="text">
-                 <string>MODBUS Point Type</string>
+                 <string>Data Type</string>
                 </property>
                 <property name="alignment">
                  <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>

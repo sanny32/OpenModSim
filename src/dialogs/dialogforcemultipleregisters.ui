@@ -30,7 +30,7 @@
        <item>
         <widget class="QLabel" name="labelSlaveDevice">
          <property name="text">
-          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Device ID: &lt;span style=" font-weight:700;"&gt;%1&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Unit Identifier: &lt;span style=" font-weight:700;"&gt;%1&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
         </widget>
        </item>

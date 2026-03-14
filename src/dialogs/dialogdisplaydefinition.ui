@@ -109,7 +109,7 @@
       <item row="0" column="0">
        <widget class="QLabel" name="labelSlaveAddress">
         <property name="text">
-         <string>Device ID:</string>
+         <string>Unit Identifier:</string>
         </property>
        </widget>
       </item>
@@ -138,7 +138,7 @@
       <item row="1" column="0">
        <widget class="QLabel" name="labelPoinType">
         <property name="text">
-         <string>Point Type:</string>
+         <string>Data Type:</string>
         </property>
        </widget>
       </item>
@@ -184,7 +184,7 @@
       <item row="4" column="0">
        <widget class="QLabel" name="labelPointAddress">
         <property name="text">
-         <string>Start Address:</string>
+         <string>Starting Address:</string>
         </property>
        </widget>
       </item>
@@ -323,14 +323,14 @@
       <item row="3" column="0" colspan="2">
        <widget class="QCheckBox" name="checkBoxVerboseLogging">
         <property name="text">
-         <string>Verbose Logging</string>
+         <string>Verbose Traffic Logging</string>
         </property>
        </widget>
       </item>
       <item row="2" column="0" colspan="2">
        <widget class="QCheckBox" name="checkBoxAutoscrollLog">
         <property name="text">
-         <string>Autoscroll Log View</string>
+         <string>Autoscroll</string>
         </property>
        </widget>
       </item>

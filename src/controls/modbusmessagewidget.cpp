@@ -285,7 +285,7 @@ void ModbusMessageWidget::update()
         addField(tr("Length"), length, valueColor);
     }
     
-    addField(tr("Device ID"), formatUInt8Value(_dataDisplayMode, _showLeadingZeros, _mm->deviceId()), valueColor);
+    addField(tr("Unit Identifier"), formatUInt8Value(_dataDisplayMode, _showLeadingZeros, _mm->deviceId()), valueColor);
 
     if(_mm->isException())
     {

@@ -142,7 +142,7 @@ void MainStatusBar::updateDeviceIdsInfo()
         values = textIds.join(", ");
     }
 
-    _deviceIdsLabel->setText(tr("Device IDs: %1").arg(values));
+    _deviceIdsLabel->setText(tr("Unit Identifiers: %1").arg(values));
 }
 
 ///
