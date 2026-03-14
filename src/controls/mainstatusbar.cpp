@@ -136,7 +136,7 @@ void MainStatusBar::updateDeviceIdsInfo()
     {
         QStringList textIds;
         textIds.reserve(_deviceIds.size());
-        for(const auto deviceId : _deviceIds)
+        for(auto&& deviceId : _deviceIds)
             textIds.append(QString::number(deviceId));
 
         values = textIds.join(", ");
@@ -150,7 +150,7 @@ void MainStatusBar::updateDeviceIdsInfo()
 ///
 void MainStatusBar::updateErrorSimInfo()
 {
-    const QString warn = QStringLiteral("<span style='color:#f97316; font-size:10px;'>●</span>&nbsp;");
+    const QString warn = QStringLiteral("<span style='color:#f97316; font-size:10px;'>&#9679;</span>&nbsp;");
     QStringList flags;
 
     if(_errorSimulations.noResponse())
@@ -186,7 +186,7 @@ void MainStatusBar::updateErrorSimInfo()
 ///
 void MainStatusBar::updateConnectionInfo(QLabel* label, const ConnectionDetails& cd)
 {
-    const QString dot = QStringLiteral("<span style='color:#22c55e; font-size:10px;'>●</span>&nbsp;");
+    const QString dot = QStringLiteral("<span style='color:#22c55e; font-size:10px;'>&#9679;</span>&nbsp;");
     switch(cd.Type)
     {
         case ConnectionType::Tcp:
