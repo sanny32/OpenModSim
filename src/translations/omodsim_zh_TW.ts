@@ -1478,8 +1478,12 @@
     </message>
     <message>
         <location filename="../dialogs/dialogsetuppresetdata.ui" line="52"/>
+        <source>Starting Address: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Address: </source>
-        <translation>地址： </translation>
+        <translation type="vanished">地址： </translation>
     </message>
     <message>
         <location filename="../dialogs/dialogsetuppresetdata.ui" line="81"/>
@@ -3736,11 +3740,15 @@ Script.onInit(()=&gt;{
     </message>
     <message>
         <location filename="../controls/statisticwidget.ui" line="69"/>
-        <source>Reset Ctrs</source>
-        <translation>重置計數器</translation>
+        <source>Clear</source>
+        <translation type="unfinished">清除</translation>
     </message>
     <message>
-        <location filename="../controls/statisticwidget.ui" line="98"/>
+        <source>Reset Ctrs</source>
+        <translation type="vanished">重置計數器</translation>
+    </message>
+    <message>
+        <location filename="../controls/statisticwidget.ui" line="104"/>
         <source>Pause</source>
         <translation>暫停</translation>
     </message>

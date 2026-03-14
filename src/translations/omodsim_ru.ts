@@ -1474,8 +1474,12 @@
     </message>
     <message>
         <location filename="../dialogs/dialogsetuppresetdata.ui" line="52"/>
+        <source>Starting Address: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Address: </source>
-        <translation>Адрес: </translation>
+        <translation type="vanished">Адрес: </translation>
     </message>
     <message>
         <location filename="../dialogs/dialogsetuppresetdata.ui" line="81"/>
@@ -3730,11 +3734,15 @@ Script.onInit(()=&gt;{
     </message>
     <message>
         <location filename="../controls/statisticwidget.ui" line="69"/>
-        <source>Reset Ctrs</source>
-        <translation>Сброс</translation>
+        <source>Clear</source>
+        <translation type="unfinished">Очистить</translation>
     </message>
     <message>
-        <location filename="../controls/statisticwidget.ui" line="98"/>
+        <source>Reset Ctrs</source>
+        <translation type="vanished">Сброс</translation>
+    </message>
+    <message>
+        <location filename="../controls/statisticwidget.ui" line="104"/>
         <source>Pause</source>
         <translation>Пауза</translation>
     </message>
