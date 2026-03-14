@@ -1,4 +1,5 @@
 #include <QMetaEnum>
+#include <QScrollBar>
 #include "modbusmultiserver.h"
 #include "findreplacebar.h"
 #include "jscriptcontrol.h"
@@ -426,6 +427,28 @@ bool JScriptControl::executeScript()
     return true;
 }
 
+int JScriptControl::cursorPosition() const
+{
+    return ui->codeEditor->textCursor().position();
+}
+
+void JScriptControl::setCursorPosition(int pos)
+{
+    auto cursor = ui->codeEditor->textCursor();
+    cursor.setPosition(qMin(pos, ui->codeEditor->document()->characterCount() - 1));
+    ui->codeEditor->setTextCursor(cursor);
+}
+
+int JScriptControl::scrollPosition() const
+{
+    return ui->codeEditor->verticalScrollBar()->value();
+}
+
+void JScriptControl::setScrollPosition(int pos)
+{
+    ui->codeEditor->verticalScrollBar()->setValue(pos);
+}
+
 ///
 /// \brief operator <<
 /// \param out
@@ -437,6 +460,8 @@ QSettings& operator <<(QSettings& out, const JScriptControl* ctrl)
     out.setValue("ScriptControl/Script", ctrl->script().toUtf8().toBase64());
     out.setValue("ScriptControl/HSplitter", ctrl->ui->horizontalSplitter->saveState());
     out.setValue("ScriptControl/ConsoleVisible", ctrl->isConsoleVisible());
+    out.setValue("ScriptControl/CursorPosition", ctrl->cursorPosition());
+    out.setValue("ScriptControl/ScrollPosition", ctrl->scrollPosition());
     return out;
 }
 
@@ -456,6 +481,14 @@ QSettings& operator >>(QSettings& in, JScriptControl* ctrl)
     const auto hstate = in.value("ScriptControl/HSplitter").toByteArray();
     if(!hstate.isEmpty()) ctrl->ui->horizontalSplitter->restoreState(hstate);
 
+    const int cursorPos = in.value("ScriptControl/CursorPosition", -1).toInt();
+    if(cursorPos >= 0)
+        ctrl->setCursorPosition(cursorPos);
+
+    const int scrollPos = in.value("ScriptControl/ScrollPosition", -1).toInt();
+    if(scrollPos >= 0)
+        ctrl->setScrollPosition(scrollPos);
+
     return in;
 }
 
@@ -472,6 +505,8 @@ QXmlStreamWriter& operator <<(QXmlStreamWriter& xml, const JScriptControl* ctrl)
     xml.writeStartElement("JScriptControl");
 
     xml.writeStartElement("Script");
+    xml.writeAttribute("CursorPosition", QString::number(ctrl->cursorPosition()));
+    xml.writeAttribute("ScrollPosition", QString::number(ctrl->scrollPosition()));
     xml.writeCDATA(ctrl->script());
     xml.writeEndElement();
 
@@ -501,8 +536,15 @@ QXmlStreamReader& operator>>(QXmlStreamReader& xml, JScriptControl* ctrl)
         return xml;
 
     if (xml.isStartElement() && xml.name() == QLatin1String("JScriptControl")) {
+        int cursorPos = -1;
+        int scrollPos = -1;
         while (xml.readNextStartElement()) {
             if (xml.name() == QLatin1String("Script")) {
+                const QXmlStreamAttributes attrs = xml.attributes();
+                if(attrs.hasAttribute("CursorPosition"))
+                    cursorPos = attrs.value("CursorPosition").toInt();
+                if(attrs.hasAttribute("ScrollPosition"))
+                    scrollPos = attrs.value("ScrollPosition").toInt();
                 const QString scriptText = xml.readElementText(QXmlStreamReader::IncludeChildElements);
                 ctrl->setScript(scriptText);
             }
@@ -528,6 +570,12 @@ QXmlStreamReader& operator>>(QXmlStreamReader& xml, JScriptControl* ctrl)
                 xml.skipCurrentElement();
             }
         }
+
+        if(cursorPos >= 0)
+            ctrl->setCursorPosition(cursorPos);
+
+        if(scrollPos >= 0)
+            ctrl->setScrollPosition(scrollPos);
     }
 
     return xml;

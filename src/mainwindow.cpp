@@ -2113,6 +2113,10 @@ void MainWindow::loadConfig(const QString& filename)
     QList<ConnectionDetails> conns;
     QMdiArea::ViewMode viewMode = QMdiArea::TabbedView;
     bool splitView = false;
+    QString activePrimaryWin;
+    QString activeSecWin;
+    struct MirrorState { DisplayMode displayMode = DisplayMode::Data; int scriptCursorPos = -1; int scriptScrollPos = -1; };
+    QMap<int, MirrorState> mirrorStates;
 
     QXmlStreamReader xml(&file);
     while (xml.readNextStartElement()) {
@@ -2125,7 +2129,27 @@ void MainWindow::loadConfig(const QString& filename)
                     const auto attrs = xml.attributes();
                     viewMode = (QMdiArea::ViewMode)qBound(0, attrs.value("ViewMode").toInt(), 1);
                     splitView = attrs.value("SplitView").toInt() != 0;
+                    activePrimaryWin = attrs.value("ActivePrimaryWindow").toString();
+                    activeSecWin = attrs.value("ActiveSecondaryWindow").toString();
                     xml.skipCurrentElement();
+                }
+                else if (xml.name() == QLatin1String("SecondaryPanel")) {
+                    while(xml.readNextStartElement())
+                    {
+                        if(xml.name() == QLatin1String("Mirror"))
+                        {
+                            const auto attrs = xml.attributes();
+                            const int primaryId = attrs.value("PrimaryId").toInt();
+                            MirrorState ms;
+                            ms.displayMode = (DisplayMode)attrs.value("DisplayMode").toInt();
+                            if(attrs.hasAttribute("ScriptCursorPos"))
+                                ms.scriptCursorPos = attrs.value("ScriptCursorPos").toInt();
+                            if(attrs.hasAttribute("ScriptScrollPos"))
+                                ms.scriptScrollPos = attrs.value("ScriptScrollPos").toInt();
+                            mirrorStates[primaryId] = ms;
+                        }
+                        xml.skipCurrentElement();
+                    }
                 }
                 else if (xml.name() == QLatin1String("ModbusDefinitions")) {
                     xml >> defs;
@@ -2180,8 +2204,41 @@ void MainWindow::loadConfig(const QString& filename)
             _mbMultiServer.connectDevice(cd);
     }
 
+    if(!activePrimaryWin.isEmpty())
+        if(auto primary = ui->mdiArea->primaryArea())
+            for(auto&& wnd : primary->localSubWindowList())
+                if(auto frm = qobject_cast<FormModSim*>(wnd->widget()))
+                    if(frm->windowTitle() == activePrimaryWin)
+                    {
+                        primary->setActiveSubWindow(wnd);
+                        break;
+                    }
+
     if(splitView)
+    {
         ui->mdiArea->setSplitViewEnabled(true);
+
+        for(auto it = mirrorStates.begin(); it != mirrorStates.end(); ++it)
+            if(auto frm = findMdiChild(it.key()))
+                if(auto mirror = splitPeer(frm))
+                {
+                    mirror->setDisplayMode(it.value().displayMode);
+                    if(it.value().scriptCursorPos >= 0)
+                        mirror->setScriptCursorPosition(it.value().scriptCursorPos);
+                    if(it.value().scriptScrollPos >= 0)
+                        mirror->setScriptScrollPosition(it.value().scriptScrollPos);
+                }
+
+        if(!activeSecWin.isEmpty())
+            if(auto secondary = splitSecondaryArea())
+                for(auto&& wnd : secondary->localSubWindowList())
+                    if(auto frm = qobject_cast<FormModSim*>(wnd->widget()))
+                        if(frm->windowTitle() == activeSecWin)
+                        {
+                            secondary->setActiveSubWindow(wnd);
+                            break;
+                        }
+    }
 }
 
 ///
@@ -2215,6 +2272,15 @@ void MainWindow::saveConfig(const QString& filename)
     w.writeStartElement("ViewSettings");
     w.writeAttribute("ViewMode", QString::number(ui->mdiArea->viewMode()));
     w.writeAttribute("SplitView", ui->mdiArea->isSplitView() ? "1" : "0");
+    if(auto primary = ui->mdiArea->primaryArea())
+        if(auto wnd = primary->activeSubWindow())
+            if(auto frm = qobject_cast<FormModSim*>(wnd->widget()))
+                w.writeAttribute("ActivePrimaryWindow", frm->windowTitle());
+    if(isSplitTabbedView())
+        if(auto secondary = splitSecondaryArea())
+            if(auto wnd = secondary->activeSubWindow())
+                if(auto frm = qobject_cast<FormModSim*>(wnd->widget()))
+                    w.writeAttribute("ActiveSecondaryWindow", frm->windowTitle());
     w.writeEndElement(); // ViewSettings
 
     w.writeStartElement("Forms");
@@ -2222,6 +2288,26 @@ void MainWindow::saveConfig(const QString& filename)
         w << qobject_cast<FormModSim*>(wnd->widget());
     }
     w.writeEndElement(); // Forms
+
+    if(isSplitTabbedView())
+    {
+        w.writeStartElement("SecondaryPanel");
+        for(auto&& wnd : ui->mdiArea->localSubWindowList())
+        {
+            auto frm = qobject_cast<FormModSim*>(wnd->widget());
+            if(!frm) continue;
+            if(auto mirror = splitPeer(frm))
+            {
+                w.writeStartElement("Mirror");
+                w.writeAttribute("PrimaryId", QString::number(frm->formId()));
+                w.writeAttribute("DisplayMode", QString::number((int)mirror->displayMode()));
+                w.writeAttribute("ScriptCursorPos", QString::number(mirror->scriptCursorPosition()));
+                w.writeAttribute("ScriptScrollPos", QString::number(mirror->scriptScrollPosition()));
+                w.writeEndElement(); // Mirror
+            }
+        }
+        w.writeEndElement(); // SecondaryPanel
+    }
 
     w.writeEndElement(); // OpenModSim
     w.writeEndDocument();
@@ -2407,15 +2493,49 @@ bool MainWindow::loadProfile(const QString& filename)
     }
 
     if(m.value("SplitView", false).toBool())
+    {
         ui->mdiArea->setSplitViewEnabled(true);
 
+        for(const QString& g : groups)
+        {
+            if(!g.startsWith("Form_")) continue;
+            m.beginGroup(g);
+            const int formId = m.value("FromId", 0).toInt();
+            if(auto frm = findMdiChild(formId))
+                if(auto mirror = splitPeer(frm))
+                {
+                    if(m.contains("MirrorDisplayMode"))
+                        mirror->setDisplayMode((DisplayMode)m.value("MirrorDisplayMode", 0).toInt());
+                    if(m.contains("MirrorScriptCursorPos"))
+                        mirror->setScriptCursorPosition(m.value("MirrorScriptCursorPos").toInt());
+                    if(m.contains("MirrorScriptScrollPos"))
+                        mirror->setScriptScrollPosition(m.value("MirrorScriptScrollPos").toInt());
+                }
+            m.endGroup();
+        }
+
+        const auto activeSecWin = m.value("ActiveSecondaryWindow").toString();
+        if(!activeSecWin.isEmpty())
+            if(auto secondary = splitSecondaryArea())
+                for(auto&& wnd : secondary->localSubWindowList())
+                    if(auto frm = qobject_cast<FormModSim*>(wnd->widget()))
+                        if(frm->windowTitle() == activeSecWin)
+                        {
+                            secondary->setActiveSubWindow(wnd);
+                            break;
+                        }
+    }
+
     // activate window
-    const auto activeWindowTitle = m.value("ActiveWindow").toString();
-    if(!activeWindowTitle.isEmpty()) {
-        for(auto&& wnd : ui->mdiArea->subWindowList())
+    const auto activePrimaryTitle = m.value("ActivePrimaryWindow", m.value("ActiveWindow")).toString();
+    if(!activePrimaryTitle.isEmpty()) {
+        const auto primaryList = ui->mdiArea->primaryArea()
+            ? ui->mdiArea->primaryArea()->localSubWindowList()
+            : ui->mdiArea->localSubWindowList();
+        for(auto&& wnd : primaryList)
         {
             const auto frm = qobject_cast<FormModSim*>(wnd->widget());
-            if(frm && frm->windowTitle() == activeWindowTitle) {
+            if(frm && frm->windowTitle() == activePrimaryTitle) {
                 ui->mdiArea->setActiveSubWindow(wnd);
                 break;
             }
@@ -2446,6 +2566,11 @@ void MainWindow::saveProfile()
     const auto frm = currentMdiChild();
     if(frm) m.setValue("ActiveWindow", frm->windowTitle());
 
+    if(auto primary = ui->mdiArea->primaryArea())
+        if(auto wnd = primary->activeSubWindow())
+            if(auto frmPrimary = qobject_cast<FormModSim*>(wnd->widget()))
+                m.setValue("ActivePrimaryWindow", frmPrimary->windowTitle());
+
     m.setValue("ViewMode", ui->mdiArea->viewMode());
     m.setValue("SplitView", ui->mdiArea->isSplitView());
     m.setValue("StatusBar", statusBar()->isVisible());
@@ -2467,7 +2592,20 @@ void MainWindow::saveProfile()
             m.beginGroup("Form_" + QString::number(i + 1));
             m.setValue("FromId", frm->formId());
             m << frm;
+            if(isSplitTabbedView())
+                if(auto mirror = splitPeer(frm))
+                {
+                    m.setValue("MirrorDisplayMode", (int)mirror->displayMode());
+                    m.setValue("MirrorScriptCursorPos", mirror->scriptCursorPosition());
+                    m.setValue("MirrorScriptScrollPos", mirror->scriptScrollPosition());
+                }
             m.endGroup();
         }
     }
+
+    if(isSplitTabbedView())
+        if(auto secondary = splitSecondaryArea())
+            if(auto wnd = secondary->activeSubWindow())
+                if(auto frm = qobject_cast<FormModSim*>(wnd->widget()))
+                    m.setValue("ActiveSecondaryWindow", frm->windowTitle());
 }

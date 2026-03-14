@@ -73,6 +73,12 @@ public:
     QTextDocument* scriptDocument() const;
     void setScriptDocument(QTextDocument* document);
 
+    int scriptCursorPosition() const;
+    void setScriptCursorPosition(int pos);
+
+    int scriptScrollPosition() const;
+    void setScriptScrollPosition(int pos);
+
     QString searchText() const;
 
     bool displayHexAddresses() const;

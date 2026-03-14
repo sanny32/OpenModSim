@@ -773,6 +773,26 @@ void FormModSim::setScriptDocument(QTextDocument* document)
     ui->scriptControl->setScriptDocument(document);
 }
 
+int FormModSim::scriptCursorPosition() const
+{
+    return ui->scriptControl->cursorPosition();
+}
+
+void FormModSim::setScriptCursorPosition(int pos)
+{
+    ui->scriptControl->setCursorPosition(pos);
+}
+
+int FormModSim::scriptScrollPosition() const
+{
+    return ui->scriptControl->scrollPosition();
+}
+
+void FormModSim::setScriptScrollPosition(int pos)
+{
+    ui->scriptControl->setScrollPosition(pos);
+}
+
 ///
 /// \brief FormModSim::searchText
 /// \return

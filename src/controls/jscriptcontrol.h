@@ -52,6 +52,12 @@ public:
 
     QString searchText() const;
 
+    int cursorPosition() const;
+    void setCursorPosition(int pos);
+
+    int scrollPosition() const;
+    void setScrollPosition(int pos);
+
     bool isRunning() const;
 
     void setFocus();
