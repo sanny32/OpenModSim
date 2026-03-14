@@ -35,14 +35,14 @@
      <number>0</number>
     </property>
     <item>
-     <widget class="MdiAreaEx" name="mdiArea">
-      <property name="documentMode">
+     <widget class="MdiAreaEx" name="mdiArea" native="true">
+      <property name="documentMode" stdset="0">
        <bool>true</bool>
       </property>
-      <property name="tabsClosable">
+      <property name="tabsClosable" stdset="0">
        <bool>true</bool>
       </property>
-      <property name="tabsMovable">
+      <property name="tabsMovable" stdset="0">
        <bool>true</bool>
       </property>
      </widget>
@@ -569,6 +569,9 @@
    <property name="text">
     <string>Show Data</string>
    </property>
+   <property name="toolTip">
+    <string>Show Data</string>
+   </property>
   </action>
   <action name="actionShowTraffic">
    <property name="checkable">
@@ -579,6 +582,9 @@
      <normaloff>:/res/actionShowTraffic.png</normaloff>:/res/actionShowTraffic.png</iconset>
    </property>
    <property name="text">
+    <string>Show Traffic</string>
+   </property>
+   <property name="toolTip">
     <string>Show Traffic</string>
    </property>
   </action>
