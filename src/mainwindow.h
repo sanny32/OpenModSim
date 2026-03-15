@@ -38,6 +38,7 @@ public:
     void applyScriptFont(const QFont& font);
     void applyZoom(int zoomPercent);
     void applyColors(const QColor& bg, const QColor& fg, const QColor& status);
+    void applyDisplayDefaults(const DisplayDefinition& dd);
     void applyCheckForUpdates(bool enabled);
 
     void loadProject(const QString& filename);
@@ -86,7 +87,6 @@ private slots:
     void on_actionMbDefinitions_triggered();
 
     /* Setup menu slots*/
-    void on_actionDataDefinition_triggered();
     void on_actionShowData_triggered();
     void on_actionShowTraffic_triggered();
     void on_actionShowScript_triggered();

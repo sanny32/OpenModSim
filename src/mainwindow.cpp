@@ -9,7 +9,6 @@
 #include "dialogpreferences.h"
 #include "dialogwindowsmanager.h"
 #include "dialogprintsettings.h"
-#include "dialogdisplaydefinition.h"
 #include "dialogselectserviceport.h"
 #include "dialogsetupserialport.h"
 #include "dialogsetuppresetdata.h"
@@ -351,7 +350,6 @@ void MainWindow::on_awake()
     ui->actionFind->setEnabled(isScriptActive);
     ui->actionReplace->setEnabled(isScriptActive);
 
-    ui->actionDataDefinition->setEnabled(frm != nullptr);
     ui->actionShowData->setEnabled(frm != nullptr);
     ui->actionShowTraffic->setEnabled(frm != nullptr);
     ui->actionShowScript->setEnabled(frm != nullptr);
@@ -726,6 +724,27 @@ void MainWindow::applyColors(const QColor& bg, const QColor& fg, const QColor& s
 }
 
 ///
+/// \brief MainWindow::applyDisplayDefaults
+/// \param dd
+///
+void MainWindow::applyDisplayDefaults(const DisplayDefinition& dd)
+{
+    for (auto&& wnd : ui->mdiArea->subWindowList()) {
+        if (auto frm = qobject_cast<FormModSim*>(wnd->widget())) {
+            auto cur = frm->displayDefinition();
+            cur.ZeroBasedAddress        = dd.ZeroBasedAddress;
+            cur.HexAddress              = dd.HexAddress;
+            cur.LeadingZeros            = dd.LeadingZeros;
+            cur.DataViewColumnsDistance = dd.DataViewColumnsDistance;
+            cur.AutoscrollLog           = dd.AutoscrollLog;
+            cur.VerboseLogging          = dd.VerboseLogging;
+            cur.LogViewLimit            = dd.LogViewLimit;
+            frm->setDisplayDefinition(cur);
+        }
+    }
+}
+
+///
 /// \brief MainWindow::applyCheckForUpdates
 /// \param enabled
 ///
@@ -789,20 +808,6 @@ void MainWindow::on_actionMbDefinitions_triggered()
 {
     DialogModbusDefinitions dlg(_mbMultiServer, this);
     dlg.exec();
-}
-
-///
-/// \brief MainWindow::on_actionDataDefinition_triggered
-///
-void MainWindow::on_actionDataDefinition_triggered()
-{
-    auto frm = currentMdiChild();
-    if(!frm) return;
-
-    DialogDisplayDefinition dlg(frm->displayDefinition(), this);
-    if(dlg.exec() == QDialog::Accepted) {
-            frm->setDisplayDefinition(dlg.displayDefinition());
-    }
 }
 
 ///
@@ -1137,9 +1142,6 @@ void MainWindow::on_actionSplitView_triggered()
 void MainWindow::setViewMode(QMdiArea::ViewMode mode)
 {
     ui->mdiArea->setViewMode(mode);
-    if(auto tabBar = ui->mdiArea->tabBar()) {
-        connect(tabBar, &QTabBar::tabBarDoubleClicked, ui->actionDataDefinition, &QAction::triggered);
-    }
 }
 
 ///
@@ -1550,11 +1552,6 @@ void MainWindow::setupMdiChild(FormModSim* frm, QMdiSubWindow* wnd, bool addToWi
     connect(frm, &FormModSim::captureError, this, [this](const QString& error)
     {
         QMessageBox::critical(this, windowTitle(), tr("Capture Error:\r\n%1").arg(error));
-    });
-
-    connect(frm, &FormModSim::doubleClicked, this, [this]()
-    {
-        ui->actionDataDefinition->trigger();
     });
 
     connect(frm, &FormModSim::helpContextRequested, this, [this](const QString& helpKey)

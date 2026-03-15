@@ -153,7 +153,6 @@
      <addaction name="actionRawDataLog"/>
     </widget>
     <addaction name="separator"/>
-    <addaction name="actionDataDefinition"/>
     <addaction name="menuDisplay_Options"/>
     <addaction name="menuExtended"/>
     <addaction name="actionTextCapture"/>
@@ -219,8 +218,6 @@
    <addaction name="separator"/>
    <addaction name="actionConnect"/>
    <addaction name="actionDisconnect"/>
-   <addaction name="separator"/>
-   <addaction name="actionDataDefinition"/>
    <addaction name="separator"/>
    <addaction name="actionMbDefinitions"/>
    <addaction name="separator"/>
@@ -503,15 +500,6 @@
    </property>
    <property name="toolTip">
     <string>Show Traffic</string>
-   </property>
-  </action>
-  <action name="actionDataDefinition">
-   <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/res/actionDefineData.png</normaloff>:/res/actionDefineData.png</iconset>
-   </property>
-   <property name="text">
-    <string>Data Definition</string>
    </property>
   </action>
   <action name="actionToolbar">

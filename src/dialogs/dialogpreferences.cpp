@@ -210,6 +210,7 @@ void DialogPreferences::apply()
     dd.VerboseLogging          = ui->checkBoxVerboseLogging->isChecked();
     dd.LogViewLimit            = ui->spinBoxLogLimit->value();
     prefs.setDisplayDefinition(dd);
+    if (_mainWindow) _mainWindow->applyDisplayDefaults(dd);
 
     // Script — font
     const QFont scriptFont = fontFromControls(ui->fontComboBoxScriptFont, ui->spinBoxScriptFontSize, ui->checkBoxScriptFontAntialias);
