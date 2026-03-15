@@ -34,6 +34,7 @@ ProjectTreeWidget::ProjectTreeWidget(QWidget* parent)
     setExpandsOnDoubleClick(true);
     setAnimated(true);
     setContextMenuPolicy(Qt::CustomContextMenu);
+    setEditTriggers(QAbstractItemView::EditKeyPressed | QAbstractItemView::SelectedClicked);
 
     _dataRoot = new QTreeWidgetItem(this, QStringList{tr("Data")});
     _dataRoot->setExpanded(true);
@@ -43,6 +44,8 @@ ProjectTreeWidget::ProjectTreeWidget(QWidget* parent)
 
     connect(this, &QTreeWidget::itemActivated,
             this, &ProjectTreeWidget::on_itemActivated);
+    connect(this, &QTreeWidget::itemChanged,
+            this, &ProjectTreeWidget::on_itemChanged);
     connect(this, &QTreeWidget::customContextMenuRequested,
             this, &ProjectTreeWidget::on_contextMenu);
 }
@@ -58,6 +61,7 @@ void ProjectTreeWidget::addForm(FormModSim* frm)
     item->setIcon(0, _iconForm);
     item->setData(0, Qt::UserRole,  QVariant::fromValue(static_cast<void*>(frm)));
     item->setData(0, ItemTypeRole, ItemTypeForm);
+    item->setFlags(item->flags() | Qt::ItemIsEditable);
 
     connect(frm, &FormModSim::scriptRunning, this, [this, frm]() {
         setFormScriptRunning(frm, true);
@@ -131,6 +135,7 @@ void ProjectTreeWidget::addScript(ScriptDocument* doc)
     item->setIcon(0, _iconScriptIdle);
     item->setData(0, Qt::UserRole, QVariant::fromValue(static_cast<void*>(doc)));
     item->setData(0, ItemTypeRole, ItemTypeScript);
+    item->setFlags(item->flags() | Qt::ItemIsEditable);
 
     connect(doc, &ScriptDocument::nameChanged, this, [this, doc](const QString& name) {
         auto it = itemForScript(doc);
@@ -200,6 +205,43 @@ void ProjectTreeWidget::on_itemActivated(QTreeWidgetItem* item, int /*column*/)
         emit formActivated(static_cast<FormModSim*>(ptr));
     else if (type == ItemTypeScript)
         emit scriptActivated(static_cast<ScriptDocument*>(ptr));
+}
+
+///
+/// \brief ProjectTreeWidget::on_itemChanged
+///
+void ProjectTreeWidget::on_itemChanged(QTreeWidgetItem* item, int column)
+{
+    if (column != 0) return;
+    const int type = item->data(0, ItemTypeRole).toInt();
+    auto ptr = item->data(0, Qt::UserRole).value<void*>();
+    if (!ptr) return;
+
+    const QString newName = item->text(0).trimmed();
+
+    if (type == ItemTypeForm) {
+        auto frm = static_cast<FormModSim*>(ptr);
+        const QString current = frm->windowTitle();
+        if (newName.isEmpty()) {
+            item->setText(0, current); // will re-trigger itemChanged, but guard below prevents any action
+        } else if (current != newName) {
+            frm->setWindowTitle(newName);
+            emit formRenamed(frm);
+        }
+    } else if (type == ItemTypeScript) {
+        auto doc = static_cast<ScriptDocument*>(ptr);
+        const QString current = doc->name();
+        if (newName.isEmpty()) {
+            blockSignals(true);
+            item->setText(0, current);
+            blockSignals(false);
+        } else if (current != newName) {
+            // Block tree signals to prevent loop: nameChanged → setText → itemChanged
+            blockSignals(true);
+            doc->setName(newName);
+            blockSignals(false);
+        }
+    }
 }
 
 ///

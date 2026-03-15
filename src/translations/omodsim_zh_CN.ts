@@ -125,6 +125,21 @@
     </message>
 </context>
 <context>
+    <name>AppProject</name>
+    <message>
+        <location filename="../appproject.cpp" line="220"/>
+        <source>Capture Error:<byte value="xd"/>
+%1</source>
+        <translation type="unfinished">捕获错误：
+%1</translation>
+    </message>
+    <message>
+        <location filename="../appproject.cpp" line="965"/>
+        <source>Script%1</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>BitPatternControl</name>
     <message>
         <location filename="../controls/bitpatterncontrol.ui" line="14"/>
@@ -1921,7 +1936,7 @@ Length: %2</source>
         <translation type="vanished">指定了非法的数据长度</translation>
     </message>
     <message>
-        <location filename="../formmodsim.cpp" line="544"/>
+        <location filename="../formmodsim.cpp" line="545"/>
         <source>Address Base: %1
 Start Address: %2
 Length: %3</source>
@@ -1930,7 +1945,7 @@ Length: %3</source>
 长度: %3</translation>
     </message>
     <message>
-        <location filename="../formmodsim.cpp" line="547"/>
+        <location filename="../formmodsim.cpp" line="548"/>
         <source>Unit Identifier: %1
 MODBUS Point Type:
 %2</source>
@@ -1939,112 +1954,112 @@ MODBUS Point Type:
 %2</translation>
     </message>
     <message>
-        <location filename="../formmodsim.cpp" line="1321"/>
+        <location filename="../formmodsim.cpp" line="1322"/>
         <source> ms</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formmodsim.cpp" line="1332"/>
+        <location filename="../formmodsim.cpp" line="1333"/>
         <source>Run on startup</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formmodsim.cpp" line="1343"/>
+        <location filename="../formmodsim.cpp" line="1344"/>
         <source>Run Script</source>
         <translation type="unfinished">运行脚本</translation>
     </message>
     <message>
-        <location filename="../formmodsim.cpp" line="1349"/>
+        <location filename="../formmodsim.cpp" line="1350"/>
         <source>Stop Script</source>
         <translation type="unfinished">停止脚本</translation>
     </message>
     <message>
-        <location filename="../formmodsim.cpp" line="1401"/>
+        <location filename="../formmodsim.cpp" line="1402"/>
         <source>Binary</source>
         <translation type="unfinished">二进制</translation>
     </message>
     <message>
-        <location filename="../formmodsim.cpp" line="1402"/>
+        <location filename="../formmodsim.cpp" line="1403"/>
         <source>Hex</source>
         <translation type="unfinished">十六进制</translation>
     </message>
     <message>
-        <location filename="../formmodsim.cpp" line="1403"/>
+        <location filename="../formmodsim.cpp" line="1404"/>
         <source>Ansi</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formmodsim.cpp" line="1411"/>
+        <location filename="../formmodsim.cpp" line="1412"/>
         <source>16-bit Integer</source>
         <translation type="unfinished">16位整数</translation>
     </message>
     <message>
-        <location filename="../formmodsim.cpp" line="1412"/>
+        <location filename="../formmodsim.cpp" line="1413"/>
         <source>Unsigned 16-bit Integer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formmodsim.cpp" line="1415"/>
+        <location filename="../formmodsim.cpp" line="1416"/>
         <source>32-bit Integer (MSRF)</source>
         <translation type="unfinished">32位整数（MSRF）</translation>
     </message>
     <message>
-        <location filename="../formmodsim.cpp" line="1416"/>
+        <location filename="../formmodsim.cpp" line="1417"/>
         <source>32-bit Integer (LSRF)</source>
         <translation type="unfinished">32位整数（LSRF）</translation>
     </message>
     <message>
-        <location filename="../formmodsim.cpp" line="1419"/>
+        <location filename="../formmodsim.cpp" line="1420"/>
         <source>Unsigned 32-bit Integer (MSRF)</source>
         <translation type="unfinished">无符号32位整数（MSRF）</translation>
     </message>
     <message>
-        <location filename="../formmodsim.cpp" line="1420"/>
+        <location filename="../formmodsim.cpp" line="1421"/>
         <source>Unsigned 32-bit Integer (LSRF)</source>
         <translation type="unfinished">无符号32位整数（LSRF）</translation>
     </message>
     <message>
-        <location filename="../formmodsim.cpp" line="1423"/>
+        <location filename="../formmodsim.cpp" line="1424"/>
         <source>64-bit Integer (MSRF)</source>
         <translation type="unfinished">64位整数（MSRF）</translation>
     </message>
     <message>
-        <location filename="../formmodsim.cpp" line="1424"/>
+        <location filename="../formmodsim.cpp" line="1425"/>
         <source>64-bit Integer (LSRF)</source>
         <translation type="unfinished">64位整数（LSRF）</translation>
     </message>
     <message>
-        <location filename="../formmodsim.cpp" line="1427"/>
+        <location filename="../formmodsim.cpp" line="1428"/>
         <source>Unsigned 64-bit Integer (MSRF)</source>
         <translation type="unfinished">无符号64位整数（MSRF）</translation>
     </message>
     <message>
-        <location filename="../formmodsim.cpp" line="1428"/>
+        <location filename="../formmodsim.cpp" line="1429"/>
         <source>Unsigned 64-bit Integer (LSRF)</source>
         <translation type="unfinished">无符号64位整数（LSRF）</translation>
     </message>
     <message>
-        <location filename="../formmodsim.cpp" line="1431"/>
+        <location filename="../formmodsim.cpp" line="1432"/>
         <source>Float (MSRF)</source>
         <translation type="unfinished">浮点数（MSRF）</translation>
     </message>
     <message>
-        <location filename="../formmodsim.cpp" line="1432"/>
+        <location filename="../formmodsim.cpp" line="1433"/>
         <source>Float (LSRF)</source>
         <translation type="unfinished">浮点数（LSRF）</translation>
     </message>
     <message>
-        <location filename="../formmodsim.cpp" line="1435"/>
+        <location filename="../formmodsim.cpp" line="1436"/>
         <source>Double (MSRF)</source>
         <translation type="unfinished">双倍（MSRF）</translation>
     </message>
     <message>
-        <location filename="../formmodsim.cpp" line="1436"/>
+        <location filename="../formmodsim.cpp" line="1437"/>
         <source>Double (LSRF)</source>
         <translation type="unfinished">双倍（LSRF）</translation>
     </message>
     <message>
-        <location filename="../formmodsim.cpp" line="1439"/>
+        <location filename="../formmodsim.cpp" line="1440"/>
         <source>Swap Bytes</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2748,7 +2763,7 @@ Script.onInit(()=&gt;{
     <message>
         <location filename="../mainwindow.ui" line="972"/>
         <location filename="../mainwindow.ui" line="975"/>
-        <location filename="../mainwindow.cpp" line="92"/>
+        <location filename="../mainwindow.cpp" line="97"/>
         <source>Script Help</source>
         <translation>脚本帮助</translation>
     </message>
@@ -2843,7 +2858,7 @@ Script.onInit(()=&gt;{
         <translation type="vanished">俄语</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="528"/>
+        <location filename="../mainwindow.cpp" line="511"/>
         <source>All files (*)</source>
         <translation>所有文件 (*)</translation>
     </message>
@@ -2852,7 +2867,7 @@ Script.onInit(()=&gt;{
         <translation type="vanished">XML 文件(*.xml)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="105"/>
+        <location filename="../mainwindow.cpp" line="78"/>
         <source>Project</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2862,32 +2877,30 @@ Script.onInit(()=&gt;{
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="527"/>
-        <location filename="../mainwindow.cpp" line="543"/>
+        <location filename="../mainwindow.cpp" line="510"/>
+        <location filename="../mainwindow.cpp" line="526"/>
         <source>Project files (*.msimprj)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1062"/>
+        <location filename="../mainwindow.cpp" line="1045"/>
         <source>Traffic</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1248"/>
-        <location filename="../mainwindow.cpp" line="2130"/>
+        <location filename="../mainwindow.cpp" line="1232"/>
         <source>Script%1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1261"/>
+        <location filename="../mainwindow.cpp" line="1245"/>
         <source>JavaScript files (*.js);;All files (*)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1554"/>
         <source>Capture Error:<byte value="xd"/>
 %1</source>
-        <translation>捕获错误：
+        <translation type="vanished">捕获错误：
 %1</translation>
     </message>
 </context>
@@ -3582,35 +3595,35 @@ Script.onInit(()=&gt;{
 <context>
     <name>ProjectTreeWidget</name>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="38"/>
-        <location filename="../controls/projecttreewidget.cpp" line="210"/>
+        <location filename="../controls/projecttreewidget.cpp" line="39"/>
+        <location filename="../controls/projecttreewidget.cpp" line="252"/>
         <source>Data</source>
         <translation type="unfinished">数据</translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="41"/>
-        <location filename="../controls/projecttreewidget.cpp" line="211"/>
+        <location filename="../controls/projecttreewidget.cpp" line="42"/>
+        <location filename="../controls/projecttreewidget.cpp" line="253"/>
         <source>Scripts</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="233"/>
+        <location filename="../controls/projecttreewidget.cpp" line="275"/>
         <source>Delete</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="240"/>
+        <location filename="../controls/projecttreewidget.cpp" line="282"/>
         <source>Delete Form</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="241"/>
-        <location filename="../controls/projecttreewidget.cpp" line="249"/>
+        <location filename="../controls/projecttreewidget.cpp" line="283"/>
+        <location filename="../controls/projecttreewidget.cpp" line="291"/>
         <source>Delete &quot;%1&quot; from the project?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="248"/>
+        <location filename="../controls/projecttreewidget.cpp" line="290"/>
         <source>Delete Script</source>
         <translation type="unfinished"></translation>
     </message>

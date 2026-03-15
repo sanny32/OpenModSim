@@ -48,7 +48,7 @@ class FormModSim : public QWidget
 public:
     static QVersionNumber VERSION;
 
-    explicit FormModSim(int id, ModbusMultiServer& server, QSharedPointer<DataSimulator> simulator, MainWindow* parent);
+    explicit FormModSim(int id, ModbusMultiServer& server, DataSimulator* simulator, MainWindow* parent);
     ~FormModSim();
 
     int formId() const { return _formId; }
@@ -216,7 +216,7 @@ private:
     bool _verboseLogging;
     ScriptSettings _scriptSettings;
     ModbusMultiServer& _mbMultiServer;
-    QSharedPointer<DataSimulator> _dataSimulator;
+    DataSimulator* _dataSimulator;
     QRect _parentGeometry;
 
     QToolBar*  _displayBar = nullptr;

@@ -11,8 +11,7 @@
 #include "windowactionlist.h"
 #include "controls/consoleoutput.h"
 #include "controls/projecttreewidget.h"
-#include "controls/scripteditorwindow.h"
-#include "scriptdocument.h"
+#include "appproject.h"
 
 namespace Ui {
 class MainWindow;
@@ -44,6 +43,14 @@ public:
     void loadProject(const QString& filename);
     void saveProject(const QString& filename);
 
+    void selectAnsiCodepage(const QString& name);
+    void showConsoleMessage(const QString& source, const QString& text, ConsoleOutput::MessageType type);
+    void showHelpContext(const QString& helpKey);
+    QIcon runScriptIcon() const;
+    void applyConnections(const ModbusDefinitions& defs, const QList<ConnectionDetails>& conns);
+
+    void setViewMode(QMdiArea::ViewMode mode);
+
 signals:
     void selectAll();
     void search(const QString& text);
@@ -54,6 +61,11 @@ protected:
     void changeEvent(QEvent* event) override;
     void closeEvent(QCloseEvent *event) override;
     bool eventFilter(QObject * obj, QEvent * e) override;
+
+public slots:
+    void windowActivate(QMdiSubWindow* wnd);
+    void updateHelpWidgetState();
+    void setCodepage(const QString& name);
 
 private slots:
     void on_awake();
@@ -146,52 +158,15 @@ private slots:
     void on_connectionError(const QString& error);
 
     void updateMenuWindow();
-    void updateHelpWidgetState();
-    void windowActivate(QMdiSubWindow* wnd);
-    void setCodepage(const QString& name);
 
 private:
-    FormModSim* createMdiChildOnArea(int id, MdiArea* area, bool addToWindowList);
-    void setupMdiChild(FormModSim* frm, QMdiSubWindow* wnd, bool addToWindowList);
-    bool cloneMdiChildState(FormModSim* source, FormModSim* target) const;
-    FormModSim* findMdiChildInArea(MdiArea* area, int id) const;
-    FormModSim* splitPeer(FormModSim* frm) const;
-    bool isScriptRunningOnSplitPair(FormModSim* frm) const;
-    void updateSplitPairScriptIcons(FormModSim* frm);
-    MdiArea* splitSecondaryArea() const;
-    bool isSplitTabbedView() const;
-    void resetSplitViewIfEmpty();
-    void ensureSplitMirrorForForm(FormModSim* frm);
-    void syncSplitPeerDisplayDefinition(FormModSim* frm);
-    void syncSplitPeerState(FormModSim* frm);
-    void syncSplitForms();
-    void clearSplitMirrorsFromSecondary();
-
     void updateDataDisplayMode(DataDisplayMode mode);
 
     void forceCoils(QModbusDataUnit::RegisterType type);
     void presetRegs(QModbusDataUnit::RegisterType type);
 
-    FormModSim* createMdiChild(int id);
-    FormModSim* currentMdiChild() const;
-    FormModSim* findMdiChild(int id) const;
-    FormModSim* firstMdiChild() const;
-
-    void closeMdiChild(FormModSim* frm);
-
-    ScriptDocument* createStandaloneScript(const QString& name);
-    ScriptEditorWindow* openScriptEditor(ScriptDocument* doc);
-    ScriptEditorWindow* findScriptEditor(ScriptDocument* doc) const;
-
-    void rewrapMdiChild(FormModSim* frm);
-    void closeProject();
-    void deleteForm(FormModSim* frm);
-    void deleteScript(ScriptDocument* doc);
-
     bool loadProfile(const QString& filename);
     void saveProfile();
-
-    void setViewMode(QMdiArea::ViewMode mode);
 
 private:
     Ui::MainWindow *ui;
@@ -208,7 +183,6 @@ private:
     QTranslator _appTranslator;
 
 private:
-    int _windowCounter;
     bool _useSession;
 
     ModbusMultiServer _mbMultiServer;
@@ -216,16 +190,10 @@ private:
     AnsiMenu* _ansiMenu;
     WindowActionList* _windowActionList;
     QSharedPointer<QPrinter> _selectedPrinter;
-    QSharedPointer<DataSimulator> _dataSimulator;
-    QString _savePath;
+    DataSimulator* _dataSimulator = nullptr;
     QString _profile;
-    QList<ScriptDocument*> _standaloneScripts;
-    int _scriptCounter = 0;
 
-    QList<FormModSim*> _closedForms;
-
-    bool _splitDisplayDefinitionSyncInProgress = false;
-    bool _splitDisableInProgress = false;
+    AppProject* _project = nullptr;
 };
 
 #endif // MAINWINDOW_H

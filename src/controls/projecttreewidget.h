@@ -32,12 +32,14 @@ signals:
     void scriptActivated(ScriptDocument* doc);
     void formDeleteRequested(FormModSim* frm);
     void scriptDeleteRequested(ScriptDocument* doc);
+    void formRenamed(FormModSim* frm);
 
 protected:
     void changeEvent(QEvent* event) override;
 
 private slots:
     void on_itemActivated(QTreeWidgetItem* item, int column);
+    void on_itemChanged(QTreeWidgetItem* item, int column);
     void on_contextMenu(const QPoint& pos);
     void retranslateUi();
 

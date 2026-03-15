@@ -40,11 +40,11 @@ JSCodeEditor::JSCodeEditor(QWidget *parent)
 ///
 JSCodeEditor::~JSCodeEditor()
 {
-    if(_compliter)
-        delete _compliter;
+    //if(_compliter)
+    //    delete _compliter;
 
-    delete _highlighter;
-    delete _lineNumberArea;
+    //delete _highlighter;
+    //delete _lineNumberArea;
 }
 
 ///

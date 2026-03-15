@@ -20,7 +20,7 @@ QVersionNumber FormModSim::VERSION = QVersionNumber(1, 15);
 /// \param num
 /// \param parent
 ///
-FormModSim::FormModSim(int id, ModbusMultiServer& server, QSharedPointer<DataSimulator> simulator, MainWindow* parent)
+FormModSim::FormModSim(int id, ModbusMultiServer& server, DataSimulator* simulator, MainWindow* parent)
     : QWidget(parent)
     , ui(new Ui::FormModSim)
     ,_parent(parent)
@@ -30,6 +30,7 @@ FormModSim::FormModSim(int id, ModbusMultiServer& server, QSharedPointer<DataSim
     ,_verboseLogging(true)
 {
     Q_ASSERT(parent != nullptr);
+    Q_ASSERT(_dataSimulator != nullptr);
 
     ui->setupUi(this);
     setWindowTitle(QString("ModSim%1").arg(_formId));
@@ -81,9 +82,9 @@ FormModSim::FormModSim(int id, ModbusMultiServer& server, QSharedPointer<DataSim
     connect(&_mbMultiServer, &ModbusMultiServer::dataChanged, this, &FormModSim::on_mbDataChanged);
     connect(&_mbMultiServer, &ModbusMultiServer::definitionsChanged, this, &FormModSim::on_mbDefinitionsChanged);
 
-    connect(_dataSimulator.get(), &DataSimulator::simulationStarted, this, &FormModSim::on_simulationStarted);
-    connect(_dataSimulator.get(), &DataSimulator::simulationStopped, this, &FormModSim::on_simulationStopped);
-    connect(_dataSimulator.get(), &DataSimulator::dataSimulated, this, &FormModSim::on_dataSimulated);
+    connect(_dataSimulator, &DataSimulator::simulationStarted, this, &FormModSim::on_simulationStarted);
+    connect(_dataSimulator, &DataSimulator::simulationStopped, this, &FormModSim::on_simulationStopped);
+    connect(_dataSimulator, &DataSimulator::dataSimulated, this, &FormModSim::on_dataSimulated);
 
     setupDisplayBar();
     setupScriptBar();
@@ -1076,7 +1077,7 @@ void FormModSim::on_outputWidget_itemDoubleClicked(quint16 addr, const QVariant&
             params.LeadingZeros = dd.LeadingZeros;
             params.Server = &_mbMultiServer;
 
-            DialogWriteStatusRegister dlg(params, pointType, displayHexAddresses(), _dataSimulator.get(), _parent);
+            DialogWriteStatusRegister dlg(params, pointType, displayHexAddresses(), _dataSimulator, _parent);
             if(dlg.exec() == QDialog::Accepted)
                 _mbMultiServer.writeRegister(pointType, params);
         }
@@ -1097,7 +1098,7 @@ void FormModSim::on_outputWidget_itemDoubleClicked(quint16 addr, const QVariant&
             params.LeadingZeros = dd.LeadingZeros;
             params.Server = &_mbMultiServer;
 
-            DialogWriteRegister dlg(params, pointType, displayHexAddresses(), _dataSimulator.get(), _parent);
+            DialogWriteRegister dlg(params, pointType, displayHexAddresses(), _dataSimulator, _parent);
             if(dlg.exec() == QDialog::Accepted)
                 _mbMultiServer.writeRegister(pointType, params);
         }

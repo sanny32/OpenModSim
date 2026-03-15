@@ -111,6 +111,7 @@ target_include_directories(${PROJECT_NAME} PRIVATE
 set(SOURCES
     ansimenu.cpp
     apppreferences.cpp
+    appproject.cpp
     cmdlineparser.cpp
     controls/aboutdatawidget.cpp
     controls/addressbasecombobox.cpp
@@ -198,6 +199,7 @@ set(HEADERS
     ansimenu.h
     ansiutils.h
     apppreferences.h
+    appproject.h
     bufferinglistmodel.h
     byteorderutils.h
     cmdlineparser.h

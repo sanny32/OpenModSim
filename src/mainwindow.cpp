@@ -15,21 +15,17 @@
 #include "dialogforcemultiplecoils.h"
 #include "dialogforcemultipleregisters.h"
 #include "dialogmodbusdefinitions.h"
-#include "controls/trafficlogwindow.h"
+#include "scripteditorwindow.h"
+#include "trafficlogwindow.h"
 #include "mainstatusbar.h"
 #include "menuconnect.h"
 #include "controls/mdiareaex.h"
 #include "mainwindow.h"
-#include "uiutils.h"
 #include "ui_mainwindow.h"
 
 // Forward declaration (defined later in this file)
 static QString getSettingsFilePath();
 
-namespace {
-constexpr const char* kSplitMirrorPeerId = "SplitMirrorPeerId";
-constexpr const char* kSplitScriptRunning = "SplitScriptRunning";
-}
 
 ///
 /// \brief MainWindow::MainWindow
@@ -41,7 +37,6 @@ MainWindow::MainWindow(const QString& profile, bool useSession, QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
     ,_lang(translationLang())
-    ,_windowCounter(0)
     ,_useSession(useSession)
     ,_dataSimulator(new DataSimulator(this))
     ,_helpDockWidget(nullptr)
@@ -79,6 +74,16 @@ MainWindow::MainWindow(const QString& profile, bool useSession, QWidget *parent)
     _windowActionList = new WindowActionList(ui->menuWindow, ui->actionWindows);
     connect(_windowActionList, &WindowActionList::triggered, this, &MainWindow::windowActivate);
 
+    _projectTree = new ProjectTreeWidget(this);
+    _projectDockWidget = new QDockWidget(tr("Project"), this);
+    _projectDockWidget->setObjectName("projectDockWidget");
+    _projectDockWidget->setWidget(_projectTree);
+    _projectDockWidget->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
+    addDockWidget(Qt::LeftDockWidgetArea, _projectDockWidget);
+
+    _project = new AppProject(ui->mdiArea, _mbMultiServer, _dataSimulator,
+                               _projectTree, _windowActionList, this, this);
+
     auto dispatcher = QAbstractEventDispatcher::instance();
     connect(dispatcher, &QAbstractEventDispatcher::awake, this, &MainWindow::on_awake);
 
@@ -101,34 +106,29 @@ MainWindow::MainWindow(const QString& profile, bool useSession, QWidget *parent)
             _helpDockWidget->setProperty("WasShown", false);
     });
 
-    _projectTree = new ProjectTreeWidget(this);
-    _projectDockWidget = new QDockWidget(tr("Project"), this);
-    _projectDockWidget->setObjectName("projectDockWidget");
-    _projectDockWidget->setWidget(_projectTree);
-    _projectDockWidget->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
-    addDockWidget(Qt::LeftDockWidgetArea, _projectDockWidget);
-
     connect(_projectTree, &ProjectTreeWidget::formActivated, this, [this](FormModSim* frm) {
         // If the form is currently open in a tab, activate it
-        const auto list = ui->mdiArea->subWindowList();
-        for (auto wnd : list) {
+        for (auto wnd : ui->mdiArea->subWindowList()) {
             if (qobject_cast<FormModSim*>(wnd->widget()) == frm) {
                 ui->mdiArea->setActiveSubWindow(wnd);
                 return;
             }
         }
         // Form tab was closed but form is still alive — re-open it
-        if (_closedForms.contains(frm))
-            rewrapMdiChild(frm);
+        if (_project->closedForms().contains(frm))
+            _project->rewrapMdiChild(frm);
     });
     connect(_projectTree, &ProjectTreeWidget::formDeleteRequested, this, [this](FormModSim* frm) {
-        deleteForm(frm);
+        _project->deleteForm(frm);
     });
     connect(_projectTree, &ProjectTreeWidget::scriptDeleteRequested, this, [this](ScriptDocument* doc) {
-        deleteScript(doc);
+        _project->deleteScript(doc);
     });
     connect(_projectTree, &ProjectTreeWidget::scriptActivated, this, [this](ScriptDocument* doc) {
-        openScriptEditor(doc);
+        _project->openScriptEditor(doc);
+    });
+    connect(_projectTree, &ProjectTreeWidget::formRenamed, this, [this](FormModSim*) {
+        _windowActionList->update();
     });
 
     _globalConsole = new ConsoleOutput(this);
@@ -146,14 +146,14 @@ MainWindow::MainWindow(const QString& profile, bool useSession, QWidget *parent)
     ui->mdiArea->setActivationOrder(QMdiArea::ActivationHistoryOrder);
     connect(ui->mdiArea, &MdiAreaEx::subWindowActivated, this, &MainWindow::updateMenuWindow);
     connect(ui->mdiArea, &MdiAreaEx::splitViewAboutToDisable, this, [this]() {
-        _splitDisableInProgress = true;
-        clearSplitMirrorsFromSecondary();
+        _project->setSplitDisableInProgress(true);
+        _project->clearSplitMirrorsFromSecondary();
     });
     connect(ui->mdiArea, &MdiAreaEx::splitViewToggled, this, [this](bool enabled) {
-        _splitDisableInProgress = false;
+        _project->setSplitDisableInProgress(false);
 
         if(enabled) {
-            syncSplitForms();
+            _project->syncSplitForms();
             return;
         }
 
@@ -183,20 +183,6 @@ MainWindow::MainWindow(const QString& profile, bool useSession, QWidget *parent)
 ///
 MainWindow::~MainWindow()
 {
-    // Close any remaining MDI subwindows (ScriptEditorWindows) before scripts are deleted.
-    // QObject child cleanup runs after this destructor body, in reverse construction order,
-    // meaning ScriptDocuments (added later) would be deleted before QMdiArea (added early by
-    // setupUi). Explicitly close here to ensure QPlainTextEdit is destroyed before _document.
-    ui->mdiArea->closeAllSubWindows();
-
-    // Explicitly delete closed (hidden) forms and standalone scripts now, while ui is still
-    // valid, to avoid accessing stale pointers during QObject child cleanup.
-    for (auto frm : std::as_const(_closedForms))
-        delete frm;   // QObject::~QObject removes frm from MainWindow's children list
-    _closedForms.clear();
-    qDeleteAll(_standaloneScripts);
-    _standaloneScripts.clear();
-
     delete ui;
 }
 
@@ -275,18 +261,18 @@ bool MainWindow::eventFilter(QObject* obj, QEvent* e)
             {
                 _windowActionList->removeWindow(wnd);
 
-                if(_splitDisableInProgress)
+                if(_project->splitDisableInProgress())
                     break;
 
                 auto frm = qobject_cast<FormModSim*>(wnd->widget());
-                const int peerId = frm ? frm->property(kSplitMirrorPeerId).toInt() : 0;
+                const int peerId = frm ? frm->property(AppProject::kSplitMirrorPeerId).toInt() : 0;
                 if(peerId > 0)
                 {
-                    auto peer = findMdiChild(peerId);
+                    auto peer = _project->findMdiChild(peerId);
                     if(peer)
                     {
-                        frm->setProperty(kSplitMirrorPeerId, QVariant());
-                        peer->setProperty(kSplitMirrorPeerId, QVariant());
+                        frm->setProperty(AppProject::kSplitMirrorPeerId, QVariant());
+                        peer->setProperty(AppProject::kSplitMirrorPeerId, QVariant());
 
                         if(auto peerWnd = qobject_cast<QMdiSubWindow*>(peer->parentWidget())) {
                             if(peerWnd != wnd)
@@ -299,11 +285,7 @@ bool MainWindow::eventFilter(QObject* obj, QEvent* e)
                 else if (frm)
                 {
                     // Primary form: reparent before subwindow is destroyed so frm survives
-                    frm->setParent(this);
-                    frm->hide();
-                    if (!_closedForms.contains(frm))
-                        _closedForms.append(frm);
-                    _projectTree->setFormOpen(frm, false);
+                    _project->markFormClosed(frm);
                 }
             }
         break;
@@ -330,7 +312,7 @@ bool MainWindow::eventFilter(QObject* obj, QEvent* e)
 ///
 void MainWindow::on_awake()
 {
-    auto frm = currentMdiChild();
+    auto frm = _project->currentMdiChild();
 
     ui->menuSetup->setEnabled(frm != nullptr);
     ui->menuWindow->setEnabled(frm != nullptr);
@@ -378,7 +360,7 @@ void MainWindow::on_awake()
     ui->actionTextCapture->setEnabled(frm && frm->captureMode() == CaptureMode::Off);
     ui->actionCaptureOff->setEnabled(frm && frm->captureMode() == CaptureMode::TextCapture);
 
-    const bool scriptRunning = frm && isScriptRunningOnSplitPair(frm);
+    const bool scriptRunning = frm && _project->isScriptRunningOnSplitPair(frm);
     ui->actionImportScript->setEnabled(frm != nullptr);
     ui->actionRunScript->setEnabled(frm && !scriptRunning && frm->canRunScript());
     ui->actionStopScript->setEnabled(scriptRunning);
@@ -458,8 +440,9 @@ void MainWindow::on_awake()
 ///
 void MainWindow::on_actionNew_triggered()
 {
-    const auto cur = currentMdiChild();
-    auto frm = createMdiChild(++_windowCounter);
+    const auto cur = _project->currentMdiChild();
+    _project->setWindowCounter(_project->windowCounter() + 1);
+    auto frm = _project->createMdiChild(_project->windowCounter());
 
     const auto& prefs = AppPreferences::instance();
 
@@ -495,7 +478,7 @@ void MainWindow::on_actionNew_triggered()
         frm->setDisplayDefinition(dd);
     }
 
-    syncSplitPeerState(frm);
+    _project->syncSplitPeerState(frm);
     frm->show();
 }
 
@@ -527,10 +510,10 @@ void MainWindow::on_actionOpenProject_triggered()
     filters << tr("Project files (*.msimprj)");
     filters << tr("All files (*)");
 
-    const auto filename = QFileDialog::getOpenFileName(this, QString(), _savePath, filters.join(";;"));
+    const auto filename = QFileDialog::getOpenFileName(this, QString(), _project->savePath(), filters.join(";;"));
     if(filename.isEmpty()) return;
 
-    _savePath = QFileInfo(filename).absoluteDir().absolutePath();
+    _project->setSavePath(QFileInfo(filename).absoluteDir().absolutePath());
     loadProject(filename);
 }
 
@@ -541,14 +524,14 @@ void MainWindow::on_actionSaveProjectAs_triggered()
 {
     QStringList filters;
     filters << tr("Project files (*.msimprj)");
-    auto filename = QFileDialog::getSaveFileName(this, QString(), _savePath, filters.join(";;"));
+    auto filename = QFileDialog::getSaveFileName(this, QString(), _project->savePath(), filters.join(";;"));
 
     if(filename.isEmpty()) return;
 
     if(!filename.endsWith(".msimprj", Qt::CaseInsensitive))
         filename.append(".msimprj");
 
-    _savePath = QFileInfo(filename).absoluteDir().absolutePath();
+    _project->setSavePath(QFileInfo(filename).absoluteDir().absolutePath());
     saveProject(filename);
 }
 
@@ -557,7 +540,7 @@ void MainWindow::on_actionSaveProjectAs_triggered()
 ///
 void MainWindow::on_actionCloseProject_triggered()
 {
-    closeProject();
+    _project->closeProject();
 }
 
 ///
@@ -565,7 +548,7 @@ void MainWindow::on_actionCloseProject_triggered()
 ///
 void MainWindow::on_actionPrint_triggered()
 {
-    auto frm = currentMdiChild();
+    auto frm = _project->currentMdiChild();
     if(!frm) return;
 
     QPrintDialog dlg(_selectedPrinter.get(), this);
@@ -815,7 +798,7 @@ void MainWindow::on_actionMbDefinitions_triggered()
 ///
 void MainWindow::on_actionShowData_triggered()
 {
-    auto frm = currentMdiChild();
+    auto frm = _project->currentMdiChild();
     if(frm) frm->setDisplayMode(DisplayMode::Data);
 
     updateHelpWidgetState();
@@ -960,7 +943,7 @@ void MainWindow::on_actionSwappedFP_triggered()
 ///
 void MainWindow::on_actionSwapBytes_triggered()
 {
-    auto frm = currentMdiChild();
+    auto frm = _project->currentMdiChild();
     if(!frm) return;
 
     switch (frm->byteOrder()) {
@@ -994,7 +977,7 @@ void MainWindow::on_actionSwappedDbl_triggered()
 ///
 void MainWindow::on_actionHexAddresses_triggered()
 {
-    auto frm = currentMdiChild();
+    auto frm = _project->currentMdiChild();
     if(frm) frm->setDisplayHexAddresses(!frm->displayHexAddresses());
 }
 
@@ -1035,7 +1018,7 @@ void MainWindow::on_actionPresetHoldingRegs_triggered()
 ///
 void MainWindow::on_actionMsgParser_triggered()
 {
-    auto frm = currentMdiChild();
+    auto frm = _project->currentMdiChild();
     const auto mode = frm ? frm->dataDisplayMode() : DataDisplayMode::Hex;
 
     auto dlg = new DialogMsgParser(mode, ModbusMessage::Rtu);
@@ -1055,7 +1038,7 @@ void MainWindow::on_actionRawDataLog_triggered()
     }
 
     auto trafficWnd = new TrafficLogWindow(_mbMultiServer);
-    if (auto frm = currentMdiChild())
+    if (auto frm = _project->currentMdiChild())
         trafficWnd->setDataDisplayMode(frm->dataDisplayMode());
     _trafficLogSubWindow = ui->mdiArea->addSubWindow(trafficWnd);
     _trafficLogSubWindow->setAttribute(Qt::WA_DeleteOnClose);
@@ -1074,7 +1057,7 @@ void MainWindow::on_actionRawDataLog_triggered()
 ///
 void MainWindow::on_actionTextCapture_triggered()
 {
-    auto frm = currentMdiChild();
+    auto frm = _project->currentMdiChild();
     if(!frm) return;
 
     auto filename = QFileDialog::getSaveFileName(this, QString(), QString(), "Text files (*.txt)");
@@ -1090,7 +1073,7 @@ void MainWindow::on_actionTextCapture_triggered()
 ///
 void MainWindow::on_actionCaptureOff_triggered()
 {
-    auto frm = currentMdiChild();
+    auto frm = _project->currentMdiChild();
     if(!frm) return;
 
     frm->stopTextCapture();
@@ -1101,16 +1084,16 @@ void MainWindow::on_actionCaptureOff_triggered()
 ///
 void MainWindow::on_actionResetCtrs_triggered()
 {
-    auto frm = currentMdiChild();
+    auto frm = _project->currentMdiChild();
     if(!frm)
         return;
 
     frm->resetCtrs();
 
-    if(_splitDisableInProgress || !isSplitTabbedView())
+    if(_project->splitDisableInProgress() || !_project->isSplitTabbedView())
         return;
 
-    if(auto peer = splitPeer(frm))
+    if(auto peer = _project->splitPeer(frm))
         peer->resetCtrs();
 }
 
@@ -1149,7 +1132,7 @@ void MainWindow::setViewMode(QMdiArea::ViewMode mode)
 ///
 void MainWindow::updateHelpWidgetState()
 {
-    auto frm = currentMdiChild();
+    auto frm = _project->currentMdiChild();
     if(!frm) return;
 
     switch(frm->displayMode())
@@ -1245,9 +1228,10 @@ void MainWindow::on_actionAbout_triggered()
 ///
 void MainWindow::on_actionNewScript_triggered()
 {
-    const QString name = tr("Script%1").arg(++_scriptCounter);
-    auto doc = createStandaloneScript(name);
-    openScriptEditor(doc);
+    _project->setScriptCounter(_project->scriptCounter() + 1);
+    const QString name = tr("Script%1").arg(_project->scriptCounter());
+    auto doc = _project->createStandaloneScript(name);
+    _project->openScriptEditor(doc);
 }
 
 ///
@@ -1255,7 +1239,7 @@ void MainWindow::on_actionNewScript_triggered()
 ///
 void MainWindow::on_actionImportScript_triggered()
 {
-    auto frm = currentMdiChild();
+    auto frm = _project->currentMdiChild();
     if(!frm) return;
 
     const auto filename = QFileDialog::getOpenFileName(this, QString(), QString(), tr("JavaScript files (*.js);;All files (*)"));
@@ -1273,10 +1257,10 @@ void MainWindow::on_actionImportScript_triggered()
 ///
 void MainWindow::on_actionRunScript_triggered()
 {
-    auto frm = currentMdiChild();
+    auto frm = _project->currentMdiChild();
     if(!frm) return;
 
-    if(isScriptRunningOnSplitPair(frm))
+    if(_project->isScriptRunningOnSplitPair(frm))
         return;
 
     frm->runScript();
@@ -1287,7 +1271,7 @@ void MainWindow::on_actionRunScript_triggered()
 ///
 void MainWindow::on_actionStopScript_triggered()
 {
-    auto frm = currentMdiChild();
+    auto frm = _project->currentMdiChild();
     if(!frm) return;
 
     if(frm->canStopScript()) {
@@ -1295,7 +1279,7 @@ void MainWindow::on_actionStopScript_triggered()
         return;
     }
 
-    if(auto peer = splitPeer(frm); peer && peer->canStopScript())
+    if(auto peer = _project->splitPeer(frm); peer && peer->canStopScript())
         peer->stopScript();
 }
 
@@ -1345,7 +1329,7 @@ void MainWindow::windowActivate(QMdiSubWindow* wnd)
 ///
 void MainWindow::setCodepage(const QString& name)
 {
-    auto frm = currentMdiChild();
+    auto frm = _project->currentMdiChild();
     if(!frm) return;
 
     frm->setCodepage(name);
@@ -1358,7 +1342,7 @@ void MainWindow::setCodepage(const QString& name)
 ///
 void MainWindow::updateDataDisplayMode(DataDisplayMode mode)
 {
-    auto frm = currentMdiChild();
+    auto frm = _project->currentMdiChild();
     if(frm) frm->setDataDisplayMode(mode);
 
     if (_trafficLogSubWindow) {
@@ -1373,7 +1357,7 @@ void MainWindow::updateDataDisplayMode(DataDisplayMode mode)
 ///
 void MainWindow::forceCoils(QModbusDataUnit::RegisterType type)
 {
-    auto frm = currentMdiChild();
+    auto frm = _project->currentMdiChild();
     if(!frm) return;
 
     const auto dd = frm->displayDefinition();
@@ -1409,7 +1393,7 @@ void MainWindow::forceCoils(QModbusDataUnit::RegisterType type)
 ///
 void MainWindow::presetRegs(QModbusDataUnit::RegisterType type)
 {
-    auto frm = currentMdiChild();
+    auto frm = _project->currentMdiChild();
     if(!frm) return;
 
     const auto dd = frm->displayDefinition();
@@ -1443,760 +1427,12 @@ void MainWindow::presetRegs(QModbusDataUnit::RegisterType type)
 }
 
 ///
-/// \brief MainWindow::createMdiChildOnArea
-/// \param id
-/// \param area
-/// \param addToWindowList
-/// \return
-///
-FormModSim* MainWindow::createMdiChildOnArea(int id, MdiArea* area, bool addToWindowList)
-{
-    if(!area)
-        return nullptr;
-
-    auto frm = new FormModSim(id, _mbMultiServer, _dataSimulator, this);
-    frm->enableAutoComplete(AppPreferences::instance().codeAutoComplete());
-
-    auto wnd = area->addSubWindow(frm);
-    if(!wnd)
-    {
-        frm->deleteLater();
-        return nullptr;
-    }
-
-    wnd->installEventFilter(this);
-    wnd->setAttribute(Qt::WA_DeleteOnClose, true);
-    setupMdiChild(frm, wnd, addToWindowList);
-
-    return frm;
-}
-
-///
-/// \brief MainWindow::setupMdiChild
-/// \param frm
-/// \param wnd
-/// \param addToWindowList
-///
-void MainWindow::setupMdiChild(FormModSim* frm, QMdiSubWindow* wnd, bool addToWindowList)
-{
-    if(!frm || !wnd)
-        return;
-
-    auto updateCodepage = [this](const QString& name)
-    {
-        _ansiMenu->selectCodepage(name);
-    };
-
-    connect(frm, &FormModSim::codepageChanged, this, [updateCodepage](const QString& name)
-    {
-        updateCodepage(name);
-    });
-
-    connect(wnd, &QMdiSubWindow::windowStateChanged, this,
-            [this, frm, updateCodepage](Qt::WindowStates, Qt::WindowStates newState)
-    {
-        switch(newState & ~Qt::WindowMaximized & ~Qt::WindowMinimized)
-        {
-            case Qt::WindowActive:
-                updateHelpWidgetState();
-                updateCodepage(frm->codepage());
-                frm->connectEditSlots();
-            break;
-
-            case Qt::WindowNoState:
-                frm->disconnectEditSlots();
-            break;
-        }
-    });
-
-    connect(frm, &FormModSim::pointTypeChanged, this, [frm](QModbusDataUnit::RegisterType type)
-    {
-        switch(type)
-        {
-            case QModbusDataUnit::Coils:
-            case QModbusDataUnit::DiscreteInputs:
-                frm->setProperty("PrevDataDisplayMode", QVariant::fromValue(frm->dataDisplayMode()));
-                frm->setDataDisplayMode(DataDisplayMode::Binary);
-                break;
-
-            case QModbusDataUnit::HoldingRegisters:
-            case QModbusDataUnit::InputRegisters:
-            {
-                const auto mode = frm->property("PrevDataDisplayMode");
-                if(mode.isValid())
-                    frm->setDataDisplayMode(mode.value<DataDisplayMode>());
-            }
-            break;
-
-            default:
-                break;
-        }
-    });
-
-    connect(frm, &FormModSim::definitionChanged, this, [this, frm]()
-    {
-        syncSplitPeerDisplayDefinition(frm);
-    });
-
-    connect(frm, &FormModSim::showed, this, [this, frm]
-    {
-        // Activate whichever subwindow currently holds this form
-        for (auto w : ui->mdiArea->subWindowList()) {
-            if (qobject_cast<FormModSim*>(w->widget()) == frm) {
-                windowActivate(w);
-                break;
-            }
-        }
-    });
-
-    connect(frm, &FormModSim::captureError, this, [this](const QString& error)
-    {
-        QMessageBox::critical(this, windowTitle(), tr("Capture Error:\r\n%1").arg(error));
-    });
-
-    connect(frm, &FormModSim::helpContextRequested, this, [this](const QString& helpKey)
-    {
-        _helpDockWidget->setVisible(true);
-        if(!helpKey.isEmpty()) {
-            _helpWidget->showHelp(helpKey);
-        }
-    });
-
-    connect(frm, &FormModSim::statisticCtrsReseted, this, [this, frm]()
-    {
-        if(_splitDisableInProgress || !isSplitTabbedView())
-            return;
-
-        if(auto peer = splitPeer(frm))
-            peer->resetCtrs();
-    });
-
-    connect(frm, &FormModSim::statisticLogStateChanged, this, [this, frm](LogViewState state)
-    {
-        if(_splitDisableInProgress || !isSplitTabbedView())
-            return;
-
-        if(auto peer = splitPeer(frm))
-            peer->setLogViewState(state);
-    });
-
-    connect(frm, &FormModSim::consoleMessage, this, [this](const QString& source, const QString& text, ConsoleOutput::MessageType type) {
-        _consoleDockWidget->setVisible(true);
-        _globalConsole->addMessage(text, type, source);
-    });
-
-    connect(frm, &FormModSim::scriptRunning, this, [this, frm]()
-    {
-        frm->setProperty(kSplitScriptRunning, true);
-        if(auto peer = splitPeer(frm))
-            peer->setProperty(kSplitScriptRunning, true);
-        updateSplitPairScriptIcons(frm);
-    });
-
-    connect(frm, &FormModSim::scriptStopped, this, [this, frm]()
-    {
-        frm->setProperty(kSplitScriptRunning, false);
-        if(auto peer = splitPeer(frm))
-            peer->setProperty(kSplitScriptRunning, false);
-        updateSplitPairScriptIcons(frm);
-    });
-
-    connect(frm, &FormModSim::closing, this, [this, frm]()
-    {
-        const int peerId = frm->property(kSplitMirrorPeerId).toInt();
-        if(peerId <= 0)
-            return;
-
-        if(auto peer = findMdiChild(peerId))
-            peer->setProperty(kSplitMirrorPeerId, QVariant());
-
-        frm->setProperty(kSplitMirrorPeerId, QVariant());
-    });
-
-    connect(wnd, &QObject::destroyed, this, [this]() {
-        resetSplitViewIfEmpty();
-    });
-
-    if(addToWindowList) {
-        _windowActionList->addWindow(wnd);
-        _projectTree->addForm(frm);
-    }
-}
-
-///
-/// \brief MainWindow::cloneMdiChildState
-/// \param source
-/// \param target
-/// \return
-///
-bool MainWindow::cloneMdiChildState(FormModSim* source, FormModSim* target) const
-{
-    if(!source || !target)
-        return false;
-
-    QByteArray xmlBuffer;
-    QBuffer writeBuffer(&xmlBuffer);
-    if(!writeBuffer.open(QIODevice::WriteOnly))
-        return false;
-
-    QXmlStreamWriter writer(&writeBuffer);
-    writer.writeStartDocument();
-    writer << source;
-    writer.writeEndDocument();
-    writeBuffer.close();
-
-    QBuffer readBuffer(&xmlBuffer);
-    if(!readBuffer.open(QIODevice::ReadOnly))
-        return false;
-
-    QXmlStreamReader reader(&readBuffer);
-    if(!reader.readNextStartElement() || reader.name() != QLatin1String("FormModSim"))
-        return false;
-
-    reader >> target;
-    if(reader.hasError())
-        return false;
-
-    target->setFilename(source->filename());
-    return true;
-}
-
-///
-/// \brief MainWindow::findMdiChildInArea
-/// \param area
-/// \param id
-/// \return
-///
-FormModSim* MainWindow::findMdiChildInArea(MdiArea* area, int id) const
-{
-    if(!area)
-        return nullptr;
-
-    for(auto&& wnd : area->localSubWindowList())
-    {
-        const auto frm = qobject_cast<FormModSim*>(wnd->widget());
-        if(frm && frm->formId() == id)
-            return frm;
-    }
-
-    return nullptr;
-}
-
-///
-/// \brief MainWindow::splitPeer
-/// \param frm
-/// \return
-///
-FormModSim* MainWindow::splitPeer(FormModSim* frm) const
-{
-    if(!frm)
-        return nullptr;
-
-    const int peerId = frm->property(kSplitMirrorPeerId).toInt();
-    if(peerId <= 0)
-        return nullptr;
-
-    auto peer = findMdiChild(peerId);
-    return (peer && peer != frm) ? peer : nullptr;
-}
-
-///
-/// \brief MainWindow::isScriptRunningOnSplitPair
-/// \param frm
-/// \return
-///
-bool MainWindow::isScriptRunningOnSplitPair(FormModSim* frm) const
-{
-    if(!frm)
-        return false;
-
-    const bool formRunning = frm->canStopScript() || frm->property(kSplitScriptRunning).toBool();
-    if(formRunning)
-        return true;
-
-    if(auto peer = splitPeer(frm)) {
-        const bool peerRunning = peer->canStopScript() || peer->property(kSplitScriptRunning).toBool();
-        return peerRunning;
-    }
-
-    return false;
-}
-
-///
-/// \brief MainWindow::updateSplitPairScriptIcons
-/// \param frm
-///
-void MainWindow::updateSplitPairScriptIcons(FormModSim* frm)
-{
-    if(!frm)
-        return;
-
-    auto applyIcon = [this](FormModSim* target, bool running)
-    {
-        if(!target)
-            return;
-
-        auto targetWnd = qobject_cast<QMdiSubWindow*>(target->parentWidget());
-        if(!targetWnd)
-            return;
-
-        if(running)
-            crossFadeWindowIcon(targetWnd, targetWnd->windowIcon(), ui->actionRunScript->icon());
-        else
-            crossFadeWindowIcon(targetWnd, targetWnd->windowIcon(), windowIcon());
-    };
-
-    auto peer = splitPeer(frm);
-    const bool periodicMode = frm->scriptSettings().Mode == RunMode::Periodically ||
-                              (peer && peer->scriptSettings().Mode == RunMode::Periodically);
-    const bool running = periodicMode && isScriptRunningOnSplitPair(frm);
-
-    applyIcon(frm, running);
-    applyIcon(peer, running);
-}
-
-///
-/// \brief MainWindow::splitSecondaryArea
-/// \return
-///
-MdiArea* MainWindow::splitSecondaryArea() const
-{
-    return ui->mdiArea->secondaryArea();
-}
-
-///
-/// \brief MainWindow::isSplitTabbedView
-/// \return
-///
-bool MainWindow::isSplitTabbedView() const
-{
-    return ui->mdiArea->viewMode() == QMdiArea::TabbedView &&
-           ui->mdiArea->isSplitView() &&
-           splitSecondaryArea() != nullptr;
-}
-
-///
-/// \brief MainWindow::resetSplitViewIfEmpty
-///
-void MainWindow::resetSplitViewIfEmpty()
-{
-    if(_splitDisableInProgress || !isSplitTabbedView())
-        return;
-
-    auto secondary = splitSecondaryArea();
-    if(!secondary || !secondary->localSubWindowList().isEmpty())
-        return;
-
-    ui->mdiArea->toggleVerticalSplit();
-}
-
-///
-/// \brief MainWindow::ensureSplitMirrorForForm
-/// \param frm
-///
-void MainWindow::ensureSplitMirrorForForm(FormModSim* frm)
-{
-    if(!frm || !isSplitTabbedView())
-        return;
-
-    auto secondary = splitSecondaryArea();
-    if(!secondary)
-        return;
-
-    MdiArea* ownerArea = nullptr;
-    for(auto&& wnd : ui->mdiArea->localSubWindowList()) {
-        if(wnd && wnd->widget() == frm) {
-            ownerArea = ui->mdiArea->primaryArea();
-            break;
-        }
-    }
-    if(!ownerArea) {
-        for(auto&& wnd : secondary->localSubWindowList()) {
-            if(wnd && wnd->widget() == frm) {
-                ownerArea = secondary;
-                break;
-            }
-        }
-    }
-
-    if(!ownerArea)
-        return;
-
-    const int peerId = frm->property(kSplitMirrorPeerId).toInt();
-    MdiArea* targetArea = ownerArea == ui->mdiArea->primaryArea() ? secondary : ui->mdiArea->primaryArea();
-    if(peerId > 0) {
-        if(auto existingPeer = findMdiChildInArea(targetArea, peerId)) {
-            if(auto* doc = frm->scriptDocument()) {
-                if(doc->parent() != this)
-                    doc->setParent(this);
-                existingPeer->setScriptDocument(doc);
-            }
-            updateSplitPairScriptIcons(frm);
-            return;
-        }
-    }
-
-    int mirrorId = _windowCounter + 1;
-    while(findMdiChild(mirrorId))
-        ++mirrorId;
-    _windowCounter = mirrorId;
-
-    const bool addToWindowList = (targetArea == ui->mdiArea->primaryArea());
-    auto mirror = createMdiChildOnArea(mirrorId, targetArea, addToWindowList);
-    if(!mirror)
-        return;
-
-    cloneMdiChildState(frm, mirror);
-    mirror->setStatisticCounters(frm->requestCount(), frm->responseCount());
-    mirror->setLogViewState(frm->logViewState());
-    if(auto* doc = frm->scriptDocument()) {
-        if(doc->parent() != this)
-            doc->setParent(this);
-        mirror->setScriptDocument(doc);
-    }
-    frm->setProperty(kSplitMirrorPeerId, mirror->formId());
-    mirror->setProperty(kSplitMirrorPeerId, frm->formId());
-    mirror->setProperty(kSplitScriptRunning, frm->property(kSplitScriptRunning));
-    updateSplitPairScriptIcons(frm);
-    mirror->show();
-}
-
-///
-/// \brief MainWindow::syncSplitPeerDisplayDefinition
-/// \param frm
-///
-void MainWindow::syncSplitPeerDisplayDefinition(FormModSim* frm)
-{
-    if(!frm || !isSplitTabbedView() || _splitDisplayDefinitionSyncInProgress)
-        return;
-
-    const int peerId = frm->property(kSplitMirrorPeerId).toInt();
-    if(peerId <= 0)
-        return;
-
-    auto peer = findMdiChild(peerId);
-    if(!peer || peer == frm)
-        return;
-
-    _splitDisplayDefinitionSyncInProgress = true;
-    peer->setDisplayDefinition(frm->displayDefinition());
-    _splitDisplayDefinitionSyncInProgress = false;
-}
-
-///
-/// \brief MainWindow::syncSplitPeerState
-/// \param frm
-///
-void MainWindow::syncSplitPeerState(FormModSim* frm)
-{
-    if(!frm || !isSplitTabbedView())
-        return;
-
-    ensureSplitMirrorForForm(frm);
-
-    const int peerId = frm->property(kSplitMirrorPeerId).toInt();
-    if(peerId <= 0)
-        return;
-
-    auto peer = findMdiChild(peerId);
-    if(!peer || peer == frm)
-        return;
-
-    cloneMdiChildState(frm, peer);
-}
-
-///
-/// \brief MainWindow::syncSplitForms
-///
-void MainWindow::syncSplitForms()
-{
-    if(!isSplitTabbedView())
-        return;
-
-    auto secondary = splitSecondaryArea();
-    if(!secondary)
-        return;
-
-    QList<FormModSim*> primaryForms;
-    for(auto&& wnd : ui->mdiArea->localSubWindowList()) {
-        if(auto frm = qobject_cast<FormModSim*>(wnd->widget()))
-            primaryForms.append(frm);
-    }
-
-    QList<FormModSim*> secondaryForms;
-    for(auto&& wnd : secondary->localSubWindowList()) {
-        if(auto frm = qobject_cast<FormModSim*>(wnd->widget()))
-            secondaryForms.append(frm);
-    }
-
-    for(auto* frm : primaryForms)
-        ensureSplitMirrorForForm(frm);
-
-    for(auto* frm : secondaryForms)
-        ensureSplitMirrorForForm(frm);
-}
-
-///
-/// \brief MainWindow::clearSplitMirrorsFromSecondary
-///
-void MainWindow::clearSplitMirrorsFromSecondary()
-{
-    auto secondary = splitSecondaryArea();
-    if(!secondary)
-        return;
-
-    const auto secondaryWindows = secondary->localSubWindowList();
-    for(auto&& wnd : secondaryWindows)
-    {
-        auto frm = qobject_cast<FormModSim*>(wnd->widget());
-        if(!frm)
-            continue;
-
-        const int peerId = frm->property(kSplitMirrorPeerId).toInt();
-        auto peer = findMdiChildInArea(ui->mdiArea->primaryArea(), peerId);
-        if(!peer)
-            continue;
-
-        peer->setProperty(kSplitMirrorPeerId, QVariant());
-        wnd->close();
-    }
-}
-
-///
-/// \brief MainWindow::createMdiChild
-/// \param id
-/// \return
-///
-FormModSim* MainWindow::createMdiChild(int id)
-{
-    while(findMdiChild(id))
-        ++id;
-
-    _windowCounter = qMax(_windowCounter, id);
-    auto frm = createMdiChildOnArea(id, ui->mdiArea->primaryArea(), true);
-    if(frm)
-        ensureSplitMirrorForForm(frm);
-
-    return frm;
-}
-
-///
-/// \brief MainWindow::currentMdiChild
-/// \return
-///
-FormModSim* MainWindow::currentMdiChild() const
-{
-    auto wnd = ui->mdiArea->currentSubWindow();
-    if(!wnd && ui->mdiArea->viewMode() == QMdiArea::TabbedView) {
-        // Qt5: d->active may still be null on the first event loop iteration
-        // because _q_currentTabChanged is posted via QueuedConnection while
-        // awake() fires before posted events are processed. Read the tab bar
-        // directly to get the correct subwindow.
-        const auto tabBar = ui->mdiArea->tabBar();
-        const auto list = ui->mdiArea->subWindowList();
-        const auto idx = tabBar ? tabBar->currentIndex() : -1;
-        if(idx >= 0 && idx < list.size())
-            wnd = list.at(idx);
-    }
-    return wnd ? qobject_cast<FormModSim*>(wnd->widget()) : nullptr;
-}
-
-///
-/// \brief MainWindow::findMdiChild
-/// \param num
-/// \return
-///
-FormModSim* MainWindow::findMdiChild(int id) const
-{
-    for(auto&& wnd : ui->mdiArea->subWindowList())
-    {
-        const auto frm = qobject_cast<FormModSim*>(wnd->widget());
-        if(frm && frm->formId() == id) return frm;
-    }
-    return nullptr;
-}
-
-///
-/// \brief MainWindow::firstMdiChild
-/// \return
-///
-FormModSim* MainWindow::firstMdiChild() const
-{
-    for(auto&& wnd : ui->mdiArea->subWindowList())
-        return qobject_cast<FormModSim*>(wnd->widget());
-
-    return nullptr;
-}
-
-///
 /// \brief MainWindow::loadProject
 /// \param filename
 ///
 void MainWindow::loadProject(const QString& filename)
 {
-    QFile file(filename);
-    if(!file.open(QFile::ReadOnly))
-        return;
-
-    ModbusDefinitions defs;
-    QList<ConnectionDetails> conns;
-    QMdiArea::ViewMode viewMode = QMdiArea::TabbedView;
-    bool splitView = false;
-    QString activePrimaryWin;
-    QString activeSecWin;
-    struct MirrorState { DisplayMode displayMode = DisplayMode::Data; int scriptCursorPos = -1; int scriptScrollPos = -1; };
-    QMap<int, MirrorState> mirrorStates;
-
-    QXmlStreamReader xml(&file);
-    while (xml.readNextStartElement()) {
-        if (xml.name() == QLatin1String("OpenModSim")) {
-            while (xml.readNextStartElement()) {
-                if (xml.name() == QLatin1String("AppPreferences")) {
-                    AppPreferences::instance().loadXml(xml);
-                }
-                else if (xml.name() == QLatin1String("ViewSettings")) {
-                    const auto attrs = xml.attributes();
-                    viewMode = (QMdiArea::ViewMode)qBound(0, attrs.value("ViewMode").toInt(), 1);
-                    splitView = attrs.value("SplitView").toInt() != 0;
-                    activePrimaryWin = attrs.value("ActivePrimaryWindow").toString();
-                    activeSecWin = attrs.value("ActiveSecondaryWindow").toString();
-                    xml.skipCurrentElement();
-                }
-                else if (xml.name() == QLatin1String("SecondaryPanel")) {
-                    while(xml.readNextStartElement())
-                    {
-                        if(xml.name() == QLatin1String("Mirror"))
-                        {
-                            const auto attrs = xml.attributes();
-                            const int primaryId = attrs.value("PrimaryId").toInt();
-                            MirrorState ms;
-                            ms.displayMode = (DisplayMode)attrs.value("DisplayMode").toInt();
-                            if(attrs.hasAttribute("ScriptCursorPos"))
-                                ms.scriptCursorPos = attrs.value("ScriptCursorPos").toInt();
-                            if(attrs.hasAttribute("ScriptScrollPos"))
-                                ms.scriptScrollPos = attrs.value("ScriptScrollPos").toInt();
-                            mirrorStates[primaryId] = ms;
-                        }
-                        xml.skipCurrentElement();
-                    }
-                }
-                else if (xml.name() == QLatin1String("ModbusDefinitions")) {
-                    xml >> defs;
-                }
-                else if (xml.name() == QLatin1String("Connections")) {
-                    while (xml.readNextStartElement()) {
-                        if (xml.name() == QLatin1String("ConnectionDetails")) {
-                            ConnectionDetails cd;
-                            xml >> cd;
-                            conns.append(cd);
-                        } else {
-                            xml.skipCurrentElement();
-                        }
-                    }
-                }
-                else if (xml.name() == QLatin1String("Forms")) {
-                    ui->mdiArea->closeAllSubWindows();
-                    // Clean up forms that were already closed (hidden)
-                    for (auto&& frm : _closedForms) {
-                        _projectTree->removeForm(frm);
-                        delete frm;
-                    }
-                    _closedForms.clear();
-                    while (xml.readNextStartElement()) {
-                        if (xml.name() == QLatin1String("FormModSim")) {
-                            auto frm = createMdiChild(++_windowCounter);
-                            if (frm) {
-                                xml >> frm;
-                                syncSplitPeerState(frm);
-                                frm->show();
-                            }
-                        } else {
-                            xml.skipCurrentElement();
-                        }
-                    }
-                }
-                else if (xml.name() == QLatin1String("Scripts")) {
-                    // Remove existing standalone scripts
-                    for (auto&& doc : _standaloneScripts)
-                        _projectTree->removeScript(doc);
-                    qDeleteAll(_standaloneScripts);
-                    _standaloneScripts.clear();
-
-                    while (xml.readNextStartElement()) {
-                        if (xml.name() == QLatin1String("ScriptDocument")) {
-                            auto doc = new ScriptDocument(QString(), this);
-                            xml >> doc;
-                            if (doc->name().isEmpty())
-                                doc->setName(tr("Script%1").arg(++_scriptCounter));
-                            _standaloneScripts.append(doc);
-                            _projectTree->addScript(doc);
-                            // Auto-run if RunOnStartup
-                            if (doc->settings().RunOnStartup)
-                                openScriptEditor(doc)->runScript(doc->settings().Mode, doc->settings().Interval);
-                        } else {
-                            xml.skipCurrentElement();
-                        }
-                    }
-                }
-                else {
-                    xml.skipCurrentElement();
-                }
-            }
-        }
-        else {
-            xml.skipCurrentElement();
-        }
-    }
-
-    setViewMode(viewMode);
-
-    auto menu = qobject_cast<MenuConnect*>(ui->actionConnect->menu());
-    menu->updateConnectionDetails(conns);
-
-    // setup definitions
-    _mbMultiServer.setModbusDefinitions(defs);
-
-    for(auto&& cd : conns)
-    {
-        if(menu->canConnect(cd))
-            _mbMultiServer.connectDevice(cd);
-    }
-
-    if(!activePrimaryWin.isEmpty())
-        if(auto primary = ui->mdiArea->primaryArea())
-            for(auto&& wnd : primary->localSubWindowList())
-                if(auto frm = qobject_cast<FormModSim*>(wnd->widget()))
-                    if(frm->windowTitle() == activePrimaryWin)
-                    {
-                        primary->setActiveSubWindow(wnd);
-                        break;
-                    }
-
-    if(splitView)
-    {
-        ui->mdiArea->setSplitViewEnabled(true);
-
-        for(auto it = mirrorStates.begin(); it != mirrorStates.end(); ++it)
-            if(auto frm = findMdiChild(it.key()))
-                if(auto mirror = splitPeer(frm))
-                {
-                    mirror->setDisplayMode(it.value().displayMode);
-                    if(it.value().scriptCursorPos >= 0)
-                        mirror->setScriptCursorPosition(it.value().scriptCursorPos);
-                    if(it.value().scriptScrollPos >= 0)
-                        mirror->setScriptScrollPosition(it.value().scriptScrollPos);
-                }
-
-        if(!activeSecWin.isEmpty())
-            if(auto secondary = splitSecondaryArea())
-                for(auto&& wnd : secondary->localSubWindowList())
-                    if(auto frm = qobject_cast<FormModSim*>(wnd->widget()))
-                        if(frm->windowTitle() == activeSecWin)
-                        {
-                            secondary->setActiveSubWindow(wnd);
-                            break;
-                        }
-    }
+    _project->loadProject(filename);
 }
 
 ///
@@ -2205,299 +1441,59 @@ void MainWindow::loadProject(const QString& filename)
 ///
 void MainWindow::saveProject(const QString& filename)
 {
-    QFile file(filename);
-    if(!file.open(QFile::WriteOnly))
-        return;
-
-    QXmlStreamWriter w(&file);
-    w.setAutoFormatting(true);
-
-    w.writeStartDocument();
-    w.writeStartElement("OpenModSim");
-    w.writeAttribute("Version", qApp->applicationVersion());
-
-    AppPreferences::instance().saveXml(w);
-
-    w << _mbMultiServer.getModbusDefinitions();
-
-    w.writeStartElement("Connections");
-    for(auto&& cd : _mbMultiServer.connections()) {
-        w << cd;
-    }
-    w.writeEndElement(); // Connections
-
-    w.writeStartElement("ViewSettings");
-    w.writeAttribute("ViewMode", QString::number(ui->mdiArea->viewMode()));
-    w.writeAttribute("SplitView", ui->mdiArea->isSplitView() ? "1" : "0");
-    if(auto primary = ui->mdiArea->primaryArea())
-        if(auto wnd = primary->activeSubWindow())
-            if(auto frm = qobject_cast<FormModSim*>(wnd->widget()))
-                w.writeAttribute("ActivePrimaryWindow", frm->windowTitle());
-    if(isSplitTabbedView())
-        if(auto secondary = splitSecondaryArea())
-            if(auto wnd = secondary->activeSubWindow())
-                if(auto frm = qobject_cast<FormModSim*>(wnd->widget()))
-                    w.writeAttribute("ActiveSecondaryWindow", frm->windowTitle());
-    w.writeEndElement(); // ViewSettings
-
-    w.writeStartElement("Forms");
-    for(auto&& wnd : ui->mdiArea->localSubWindowList()) {
-        w << qobject_cast<FormModSim*>(wnd->widget());
-    }
-    // Also save forms that are closed (hidden in project tree)
-    for (auto&& frm : _closedForms) {
-        w << frm;
-    }
-    w.writeEndElement(); // Forms
-
-    w.writeStartElement("Scripts");
-    for (auto&& doc : _standaloneScripts) {
-        w << doc;
-    }
-    w.writeEndElement(); // Scripts
-
-    if(isSplitTabbedView())
-    {
-        w.writeStartElement("SecondaryPanel");
-        for(auto&& wnd : ui->mdiArea->localSubWindowList())
-        {
-            auto frm = qobject_cast<FormModSim*>(wnd->widget());
-            if(!frm) continue;
-            if(auto mirror = splitPeer(frm))
-            {
-                w.writeStartElement("Mirror");
-                w.writeAttribute("PrimaryId", QString::number(frm->formId()));
-                w.writeAttribute("DisplayMode", QString::number((int)mirror->displayMode()));
-                w.writeAttribute("ScriptCursorPos", QString::number(mirror->scriptCursorPosition()));
-                w.writeAttribute("ScriptScrollPos", QString::number(mirror->scriptScrollPosition()));
-                w.writeEndElement(); // Mirror
-            }
-        }
-        w.writeEndElement(); // SecondaryPanel
-    }
-
-    w.writeEndElement(); // OpenModSim
-    w.writeEndDocument();
+    _project->saveProject(filename);
 }
 
 ///
-/// \brief MainWindow::closeMdiChild
-/// \param frm
+/// \brief MainWindow::selectAnsiCodepage
+/// \param name
 ///
-void MainWindow::closeMdiChild(FormModSim* frm)
+void MainWindow::selectAnsiCodepage(const QString& name)
 {
-    for(auto&& wnd : ui->mdiArea->subWindowList()) {
-        const auto f = qobject_cast<FormModSim*>(wnd->widget());
-        if(f == frm) wnd->close();
-    }
+    _ansiMenu->selectCodepage(name);
 }
 
 ///
-/// \brief MainWindow::createStandaloneScript
+/// \brief MainWindow::showConsoleMessage
 ///
-ScriptDocument* MainWindow::createStandaloneScript(const QString& name)
+void MainWindow::showConsoleMessage(const QString& source, const QString& text, ConsoleOutput::MessageType type)
 {
-    auto doc = new ScriptDocument(name, this);
-    _standaloneScripts.append(doc);
-    _projectTree->addScript(doc);
-    return doc;
+    _consoleDockWidget->setVisible(true);
+    _globalConsole->addMessage(text, type, source);
 }
 
 ///
-/// \brief MainWindow::openScriptEditor
-/// Opens (or focuses) the MDI editor window for a standalone script.
+/// \brief MainWindow::showHelpContext
 ///
-ScriptEditorWindow* MainWindow::openScriptEditor(ScriptDocument* doc)
+void MainWindow::showHelpContext(const QString& helpKey)
 {
-    // If already open, bring to front
-    if (auto existing = findScriptEditor(doc)) {
-        for (auto wnd : ui->mdiArea->subWindowList()) {
-            if (wnd->widget() == existing) {
-                ui->mdiArea->setActiveSubWindow(wnd);
-                return existing;
-            }
-        }
-    }
-
-    auto editor = new ScriptEditorWindow(doc, &_mbMultiServer);
-    auto wnd = ui->mdiArea->addSubWindow(editor);
-    wnd->setAttribute(Qt::WA_DeleteOnClose);
-    wnd->setWindowTitle(doc->name());
-    wnd->setWindowIcon(QIcon(":/res/actionShowScript.png"));
-
-    connect(doc, &ScriptDocument::nameChanged, wnd, &QMdiSubWindow::setWindowTitle);
-
-    connect(editor, &ScriptEditorWindow::scriptRunning, this, [this, doc]() {
-        _projectTree->setScriptRunning(doc, true);
-    });
-    connect(editor, &ScriptEditorWindow::scriptStopped, this, [this, doc]() {
-        _projectTree->setScriptRunning(doc, false);
-    });
-    connect(editor, &ScriptEditorWindow::consoleMessage, this,
-            [this](const QString& source, const QString& text, ConsoleOutput::MessageType type) {
-                _consoleDockWidget->setVisible(true);
-                _globalConsole->addMessage(text, type, source);
-            });
-
-    // Route Find/Replace to the script editor when it's active
-    connect(wnd, &QMdiSubWindow::windowStateChanged, this,
-            [this, editor](Qt::WindowStates, Qt::WindowStates newState) {
-        if (newState & Qt::WindowActive) {
-            connect(this, &MainWindow::find,    editor->scriptControl(), &JScriptControl::showFind,    Qt::UniqueConnection);
-            connect(this, &MainWindow::replace, editor->scriptControl(), &JScriptControl::showReplace, Qt::UniqueConnection);
-        } else {
-            disconnect(this, &MainWindow::find,    editor->scriptControl(), &JScriptControl::showFind);
-            disconnect(this, &MainWindow::replace, editor->scriptControl(), &JScriptControl::showReplace);
-        }
-    });
-
-    wnd->show();
-    _projectTree->activateScript(doc);
-    return editor;
+    _helpDockWidget->setVisible(true);
+    if (!helpKey.isEmpty())
+        _helpWidget->showHelp(helpKey);
 }
 
 ///
-/// \brief MainWindow::findScriptEditor
+/// \brief MainWindow::runScriptIcon
 ///
-ScriptEditorWindow* MainWindow::findScriptEditor(ScriptDocument* doc) const
+QIcon MainWindow::runScriptIcon() const
 {
-    for (auto wnd : ui->mdiArea->subWindowList()) {
-        auto editor = qobject_cast<ScriptEditorWindow*>(wnd->widget());
-        if (editor && editor->document() == doc)
-            return editor;
-    }
-    return nullptr;
+    return ui->actionRunScript->icon();
 }
 
 ///
-/// \brief MainWindow::rewrapMdiChild
-/// Re-opens a previously "closed" (hidden) FormModSim by creating a new MDI subwindow for it.
+/// \brief MainWindow::applyConnections
 ///
-void MainWindow::rewrapMdiChild(FormModSim* frm)
+void MainWindow::applyConnections(const ModbusDefinitions& defs, const QList<ConnectionDetails>& conns)
 {
-    if (!frm || !_closedForms.contains(frm))
-        return;
-
-    auto area = ui->mdiArea->primaryArea();
-    if (!area)
-        return;
-
-    _closedForms.removeOne(frm);
-
-    frm->setParent(nullptr); // detach from MainWindow before adding to MDI area
-    auto wnd = area->addSubWindow(frm);
-    if (!wnd) {
-        frm->setParent(this);
-        frm->hide();
-        _closedForms.append(frm);
-        return;
+    _mbMultiServer.setModbusDefinitions(defs);
+    auto menu = qobject_cast<MenuConnect*>(ui->actionConnect->menu());
+    menu->updateConnectionDetails(conns);
+    for (auto&& cd : conns) {
+        if (menu->canConnect(cd))
+            _mbMultiServer.connectDevice(cd);
     }
-
-    wnd->installEventFilter(this);
-    wnd->setAttribute(Qt::WA_DeleteOnClose, true);
-    wnd->setWindowTitle(frm->windowTitle());
-    wnd->setWindowIcon(frm->windowIcon());
-
-    // Window-specific connections (new wnd each time)
-    auto updateCodepage = [this](const QString& name) { _ansiMenu->selectCodepage(name); };
-    connect(wnd, &QMdiSubWindow::windowStateChanged, this,
-            [this, frm, updateCodepage](Qt::WindowStates, Qt::WindowStates newState)
-    {
-        switch(newState & ~Qt::WindowMaximized & ~Qt::WindowMinimized)
-        {
-            case Qt::WindowActive:
-                updateHelpWidgetState();
-                updateCodepage(frm->codepage());
-                frm->connectEditSlots();
-            break;
-            case Qt::WindowNoState:
-                frm->disconnectEditSlots();
-            break;
-        }
-    });
-
-    connect(wnd, &QObject::destroyed, this, [this]() {
-        resetSplitViewIfEmpty();
-    });
-
-    _windowActionList->addWindow(wnd);
-    _projectTree->setFormOpen(frm, true);
-    _projectTree->activateForm(frm);
-
-    frm->show();
 }
 
-///
-/// \brief MainWindow::closeProject
-/// Closes all open and hidden forms and scripts, resetting the workspace.
-///
-void MainWindow::closeProject()
-{
-    // Close open MDI windows (FormModSim and ScriptEditorWindow)
-    ui->mdiArea->closeAllSubWindows();
-
-    // Delete forms that were closed (hidden)
-    for (auto&& frm : _closedForms) {
-        _projectTree->removeForm(frm);
-        delete frm;
-    }
-    _closedForms.clear();
-
-    // Delete standalone scripts
-    for (auto&& doc : _standaloneScripts) {
-        _projectTree->removeScript(doc);
-        delete doc;
-    }
-    _standaloneScripts.clear();
-
-    _windowCounter = 0;
-    _scriptCounter = 0;
-}
-
-///
-/// \brief MainWindow::deleteForm
-/// Deletes a form permanently from the project (closes its tab if open).
-///
-void MainWindow::deleteForm(FormModSim* frm)
-{
-    if (!frm) return;
-
-    // Close the MDI subwindow if the form is currently open
-    for (auto wnd : ui->mdiArea->subWindowList()) {
-        if (qobject_cast<FormModSim*>(wnd->widget()) == frm) {
-            wnd->close(); // triggers closing signal → moves frm to _closedForms
-            break;
-        }
-    }
-
-    // Now frm is either in _closedForms (just closed) or was already there
-    _closedForms.removeOne(frm);
-    _projectTree->removeForm(frm);
-    delete frm;
-}
-
-///
-/// \brief MainWindow::deleteScript
-/// Deletes a standalone script permanently from the project.
-///
-void MainWindow::deleteScript(ScriptDocument* doc)
-{
-    if (!doc) return;
-
-    // Close the editor window if open
-    if (auto editor = findScriptEditor(doc)) {
-        for (auto wnd : ui->mdiArea->subWindowList()) {
-            if (wnd->widget() == editor) {
-                wnd->close();
-                break;
-            }
-        }
-    }
-
-    _standaloneScripts.removeOne(doc);
-    _projectTree->removeScript(doc);
-    delete doc;
-}
 
 ///
 /// \brief checkPathIsWritable
@@ -2570,7 +1566,7 @@ bool MainWindow::loadProfile(const QString& filename)
     _lang = m.value("Language", translationLang()).toString();
     setLanguage(_lang);
 
-    _savePath = m.value("SavePath").toString();
+    _project->setSavePath(m.value("SavePath").toString());
 
     ModbusDefinitions defs;
     m >> defs;
@@ -2582,10 +1578,11 @@ bool MainWindow::loadProfile(const QString& filename)
     for (const QString& g : groups) {
         if (g.startsWith("Form_")) {
             m.beginGroup(g);
-            const auto id = m.value("FromId", ++_windowCounter).toInt();
-            auto frm = createMdiChild(id);
+            _project->setWindowCounter(_project->windowCounter() + 1);
+            const auto id = m.value("FromId", _project->windowCounter()).toInt();
+            auto frm = _project->createMdiChild(id);
             m >> frm;
-            syncSplitPeerState(frm);
+            _project->syncSplitPeerState(frm);
             frm->show();
             m.endGroup();
         }
@@ -2600,8 +1597,8 @@ bool MainWindow::loadProfile(const QString& filename)
             if(!g.startsWith("Form_")) continue;
             m.beginGroup(g);
             const int formId = m.value("FromId", 0).toInt();
-            if(auto frm = findMdiChild(formId))
-                if(auto mirror = splitPeer(frm))
+            if(auto frm = _project->findMdiChild(formId))
+                if(auto mirror = _project->splitPeer(frm))
                 {
                     if(m.contains("MirrorDisplayMode"))
                         mirror->setDisplayMode((DisplayMode)m.value("MirrorDisplayMode", 0).toInt());
@@ -2615,7 +1612,7 @@ bool MainWindow::loadProfile(const QString& filename)
 
         const auto activeSecWin = m.value("ActiveSecondaryWindow").toString();
         if(!activeSecWin.isEmpty())
-            if(auto secondary = splitSecondaryArea())
+            if(auto secondary = _project->splitSecondaryArea())
                 for(auto&& wnd : secondary->localSubWindowList())
                     if(auto frm = qobject_cast<FormModSim*>(wnd->widget()))
                         if(frm->windowTitle() == activeSecWin)
@@ -2662,7 +1659,7 @@ void MainWindow::saveProfile()
     m.setValue("WindowGeometry", saveGeometry());
     m.setValue("WindowState", saveState());
 
-    const auto frm = currentMdiChild();
+    const auto frm = _project->currentMdiChild();
     if(frm) m.setValue("ActiveWindow", frm->windowTitle());
 
     if(auto primary = ui->mdiArea->primaryArea())
@@ -2674,7 +1671,7 @@ void MainWindow::saveProfile()
     m.setValue("SplitView", ui->mdiArea->isSplitView());
     m.setValue("StatusBar", statusBar()->isVisible());
     m.setValue("Language", _lang);
-    m.setValue("SavePath", _savePath);
+    m.setValue("SavePath", _project->savePath());
 
     m << _mbMultiServer.getModbusDefinitions();
 
@@ -2687,8 +1684,8 @@ void MainWindow::saveProfile()
             m.beginGroup("Form_" + QString::number(i + 1));
             m.setValue("FromId", frm->formId());
             m << frm;
-            if(isSplitTabbedView())
-                if(auto mirror = splitPeer(frm))
+            if(_project->isSplitTabbedView())
+                if(auto mirror = _project->splitPeer(frm))
                 {
                     m.setValue("MirrorDisplayMode", (int)mirror->displayMode());
                     m.setValue("MirrorScriptCursorPos", mirror->scriptCursorPosition());
@@ -2698,8 +1695,8 @@ void MainWindow::saveProfile()
         }
     }
 
-    if(isSplitTabbedView())
-        if(auto secondary = splitSecondaryArea())
+    if(_project->isSplitTabbedView())
+        if(auto secondary = _project->splitSecondaryArea())
             if(auto wnd = secondary->activeSubWindow())
                 if(auto frm = qobject_cast<FormModSim*>(wnd->widget()))
                     m.setValue("ActiveSecondaryWindow", frm->windowTitle());
