@@ -2584,7 +2584,7 @@ void MainWindow::rewrapMdiChild(FormModSim* frm)
     _projectTree->setFormOpen(frm, true);
     _projectTree->activateForm(frm);
 
-    wnd->show();
+    frm->show();
 }
 
 ///

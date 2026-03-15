@@ -8,6 +8,7 @@
 ScriptDocument::ScriptDocument(const QString& name, QObject* parent)
     : QObject(parent)
     , _name(name)
+    , _document(new QTextDocument(this))
 {
 }
 
@@ -26,7 +27,7 @@ void ScriptDocument::setName(const QString& name)
 ///
 QString ScriptDocument::script() const
 {
-    return _document.toPlainText();
+    return _document->toPlainText();
 }
 
 ///
@@ -34,7 +35,7 @@ QString ScriptDocument::script() const
 ///
 void ScriptDocument::setScript(const QString& text)
 {
-    _document.setPlainText(text);
+    _document->setPlainText(text);
 }
 
 ///

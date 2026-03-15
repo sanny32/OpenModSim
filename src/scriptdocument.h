@@ -22,7 +22,7 @@ public:
 
     QString script() const;
     void setScript(const QString& text);
-    QTextDocument* textDocument() { return &_document; }
+    QTextDocument* textDocument() { return _document; }
 
     ScriptSettings settings() const { return _settings; }
     void setSettings(const ScriptSettings& ss);
@@ -39,8 +39,8 @@ public:
     int scrollPosition() const { return _scrollPos; }
     void setScrollPosition(int pos) { _scrollPos = pos; }
 
-    bool isModified() const { return _document.isModified(); }
-    void setModified(bool modified) { _document.setModified(modified); }
+    bool isModified() const { return _document->isModified(); }
+    void setModified(bool modified) { _document->setModified(modified); }
 
 signals:
     void nameChanged(const QString& name);
@@ -48,7 +48,7 @@ signals:
 
 private:
     QString       _name;
-    QTextDocument _document;
+    QTextDocument* _document;
     ScriptSettings _settings;
     ByteOrder _byteOrder = ByteOrder::Direct;
     AddressBase _addressBase = AddressBase::Base1;
