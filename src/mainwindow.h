@@ -9,7 +9,6 @@
 #include "ansimenu.h"
 #include "modbusmultiserver.h"
 #include "windowactionlist.h"
-#include "recentfileactionlist.h"
 #include "controls/consoleoutput.h"
 #include "controls/projecttreewidget.h"
 #include "controls/scripteditorwindow.h"
@@ -60,11 +59,8 @@ private slots:
 
     /* File menu slots */
     void on_actionNew_triggered();
-    void on_actionOpen_triggered();
     void on_actionClose_triggered();
     void on_actionCloseAll_triggered();
-    void on_actionSave_triggered();
-    void on_actionSaveAs_triggered();
     void on_actionOpenProject_triggered();
     void on_actionSaveProjectAs_triggered();
     void on_actionCloseProject_triggered();
@@ -151,7 +147,6 @@ private slots:
 
     void updateMenuWindow();
     void updateHelpWidgetState();
-    void openFile(const QString& filename);
     void windowActivate(QMdiSubWindow* wnd);
     void setCodepage(const QString& name);
 
@@ -172,7 +167,6 @@ private:
     void syncSplitForms();
     void clearSplitMirrorsFromSecondary();
 
-    void addRecentFile(const QString& filename);
     void updateDataDisplayMode(DataDisplayMode mode);
 
     void forceCoils(QModbusDataUnit::RegisterType type);
@@ -183,8 +177,6 @@ private:
     FormModSim* findMdiChild(int id) const;
     FormModSim* firstMdiChild() const;
 
-    FormModSim* loadMdiChild(const QString& filename);
-    void saveMdiChild(FormModSim* frm);
     void closeMdiChild(FormModSim* frm);
 
     ScriptDocument* createStandaloneScript(const QString& name);
@@ -199,7 +191,6 @@ private:
     bool loadProfile(const QString& filename);
     void saveProfile();
 
-    void saveAs(FormModSim* frm);
     void setViewMode(QMdiArea::ViewMode mode);
 
 private:
@@ -224,7 +215,6 @@ private:
 
     AnsiMenu* _ansiMenu;
     WindowActionList* _windowActionList;
-    RecentFileActionList* _recentFileActionList;
     QSharedPointer<QPrinter> _selectedPrinter;
     QSharedPointer<DataSimulator> _dataSimulator;
     QString _savePath;

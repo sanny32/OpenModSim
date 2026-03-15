@@ -77,9 +77,6 @@ MainWindow::MainWindow(const QString& profile, bool useSession, QWidget *parent)
     if(!defaultPrinter.isNull())
         _selectedPrinter = QSharedPointer<QPrinter>(new QPrinter(defaultPrinter));
 
-    _recentFileActionList = new RecentFileActionList(ui->menuFile, ui->actionRecentFile);
-    connect(_recentFileActionList, &RecentFileActionList::triggered, this, &MainWindow::openFile);
-
     _windowActionList = new WindowActionList(ui->menuWindow, ui->actionWindows);
     connect(_windowActionList, &WindowActionList::triggered, this, &MainWindow::windowActivate);
 
@@ -339,11 +336,8 @@ void MainWindow::on_awake()
     ui->menuSetup->setEnabled(frm != nullptr);
     ui->menuWindow->setEnabled(frm != nullptr);
 
-    ui->actionSave->setEnabled(frm != nullptr);
-    ui->actionSaveAs->setEnabled(frm != nullptr);
     ui->actionPrintSetup->setEnabled(_selectedPrinter != nullptr);
     ui->actionPrint->setEnabled(_selectedPrinter != nullptr && frm && frm->displayMode() == DisplayMode::Data);
-    ui->actionRecentFile->setEnabled(!_recentFileActionList->isEmpty());
 
     ui->actionUndo->setEnabled(frm != nullptr);
     ui->actionRedo->setEnabled(frm != nullptr);
@@ -508,22 +502,6 @@ void MainWindow::on_actionNew_triggered()
 }
 
 ///
-/// \brief MainWindow::on_actionOpen_triggered
-///
-void MainWindow::on_actionOpen_triggered()
-{
-    QStringList filters;
-    filters << tr("XML files (*.xml)");
-    filters << tr("All files (*)");
-
-    const auto filename = QFileDialog::getOpenFileName(this, QString(), _savePath, filters.join(";;"));
-    if(filename.isEmpty()) return;
-
-    _savePath = QFileInfo(filename).absoluteDir().absolutePath();
-    openFile(filename);
-}
-
-///
 /// \brief MainWindow::on_actionClose_triggered
 ///
 void MainWindow::on_actionClose_triggered()
@@ -540,60 +518,6 @@ void MainWindow::on_actionClose_triggered()
 void MainWindow::on_actionCloseAll_triggered()
 {
     ui->mdiArea->closeAllSubWindows();
-}
-
-///
-/// \brief MainWindow::on_actionSave_triggered
-///
-void MainWindow::on_actionSave_triggered()
-{
-    auto frm = currentMdiChild();
-    if(!frm) return;
-
-    const auto filename = frm->filename();
-    if(filename.isEmpty()) {
-        ui->actionSaveAs->trigger();
-    }
-    else {
-        saveMdiChild(frm);
-    }
-}
-
-///
-/// \brief MainWindow::on_actionSaveAs_triggered
-///
-void MainWindow::on_actionSaveAs_triggered()
-{
-    auto frm = currentMdiChild();
-    if(!frm) return;
-
-    saveAs(frm);
-}
-
-///
-/// \brief MainWindow::saveAs
-/// \param frm
-/// \param format
-///
-void MainWindow::saveAs(FormModSim* frm)
-{
-    if(!frm) return;
-
-    const auto dir = QString("%1%2%3").arg(_savePath, QDir::separator(), frm->windowTitle());
-
-    QStringList filters;
-    filters << tr("XML files (*.xml)");
-    auto filename = QFileDialog::getSaveFileName(this, QString(), dir, filters.join(";;"));
-
-    if(filename.isEmpty()) return;
-
-    if(!filename.endsWith(".xml", Qt::CaseInsensitive))
-        filename.append(".xml");
-
-    _savePath = QFileInfo(filename).absoluteDir().absolutePath();
-    frm->setFilename(filename);
-
-    saveMdiChild(frm);
 }
 
 ///
@@ -1301,7 +1225,7 @@ void MainWindow::on_actionTile_triggered()
 ///
 void MainWindow::on_actionWindows_triggered()
 {
-    DialogWindowsManager dlg(_windowActionList->actionList(), ui->actionSave, this);
+    DialogWindowsManager dlg(_windowActionList->actionList(), nullptr, this);
     dlg.exec();
 }
 
@@ -1425,36 +1349,6 @@ void MainWindow::setCodepage(const QString& name)
     frm->setCodepage(name);
 }
 
-///
-/// \brief MainWindow::openFile
-/// \param filename
-///
-void MainWindow::openFile(const QString& filename)
-{
-    auto frm = loadMdiChild(filename);
-    if(frm)
-    {
-        frm->show();
-    }
-    else
-    {
-        QString message = !QFileInfo::exists(filename) ?
-                    QString("%1 was not found").arg(filename) :
-                    QString("Failed to open %1").arg(filename);
-
-        _recentFileActionList->removeRecentFile(filename);
-        QMessageBox::warning(this, windowTitle(), message);
-    }
-}
-
-///
-/// \brief MainWindow::addRecentFile
-/// \param filename
-///
-void MainWindow::addRecentFile(const QString& filename)
-{
-    _recentFileActionList->addRecentFile(filename);
-}
 
 ///
 /// \brief MainWindow::updateDisplayMode
@@ -2387,71 +2281,6 @@ void MainWindow::saveProject(const QString& filename)
 
     w.writeEndElement(); // OpenModSim
     w.writeEndDocument();
-}
-
-///
-/// \brief MainWindow::loadMdiChild
-/// \param filename
-/// \return
-///
-FormModSim* MainWindow::loadMdiChild(const QString& filename)
-{
-    QFile file(filename);
-    if(!file.open(QFile::ReadOnly))
-        return nullptr;
-
-    FormModSim* frm = nullptr;
-    QXmlStreamReader xml(&file);
-    if(xml.readNextStartElement() && xml.name() == QLatin1String("FormModSim")) {
-        frm = createMdiChild(++_windowCounter);
-        if(frm) {
-            xml >> frm;
-
-            // close windows with the same title
-            const int peerId = frm->property(kSplitMirrorPeerId).toInt();
-            for(auto&& wnd : ui->mdiArea->subWindowList()) {
-                const auto f = qobject_cast<FormModSim*>(wnd->widget());
-                if(f != nullptr &&
-                   f != frm &&
-                   f->formId() != peerId &&
-                   f->windowTitle() == frm->windowTitle()) {
-                    wnd->close();
-                }
-            }
-        }
-    }
-
-    if(frm) {
-        frm->setFilename(filename);
-        syncSplitPeerState(frm);
-
-        addRecentFile(filename);
-        _windowCounter = qMax(frm->formId(), _windowCounter);
-    }
-
-    return frm;
-}
-
-///
-/// \brief MainWindow::saveMdiChild
-/// \param frm
-/// \param format
-///
-void MainWindow::saveMdiChild(FormModSim* frm)
-{
-    if(!frm) return;
-
-    QFile file(frm->filename());
-    if(!file.open(QFile::WriteOnly))
-        return;
-
-    QXmlStreamWriter w(&file);
-    w.setAutoFormatting(true);
-    w.writeStartDocument();
-    w << frm;
-    w.writeEndDocument();
-
-    addRecentFile(frm->filename());
 }
 
 ///
