@@ -6,7 +6,9 @@
 #include <QPrinter>
 #include <QToolBar>
 #include <QActionGroup>
+#include <QCheckBox>
 #include <QMap>
+#include <QSpinBox>
 #include <QVersionNumber>
 #include <QXmlStreamWriter>
 #include "fontutils.h"
@@ -226,6 +228,8 @@ private:
     QAction*         _actionRunScript = nullptr;
     QAction*         _actionStopScript = nullptr;
     RunModeComboBox* _scriptRunModeCombo = nullptr;
+    QSpinBox*        _scriptIntervalSpin = nullptr;
+    QCheckBox*       _scriptRunOnStartupCheck = nullptr;
 };
 
 ///

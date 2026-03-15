@@ -19,6 +19,7 @@ public:
     void addForm(FormModSim* frm);
     void removeForm(FormModSim* frm);
     void setFormScriptRunning(FormModSim* frm, bool running);
+    void setFormOpen(FormModSim* frm, bool open);
     void activateForm(FormModSim* frm);
 
     void addScript(ScriptDocument* doc);
@@ -29,12 +30,15 @@ public:
 signals:
     void formActivated(FormModSim* frm);
     void scriptActivated(ScriptDocument* doc);
+    void formDeleteRequested(FormModSim* frm);
+    void scriptDeleteRequested(ScriptDocument* doc);
 
 protected:
     void changeEvent(QEvent* event) override;
 
 private slots:
     void on_itemActivated(QTreeWidgetItem* item, int column);
+    void on_contextMenu(const QPoint& pos);
     void retranslateUi();
 
 private:
@@ -46,6 +50,7 @@ private:
     QTreeWidgetItem* _scriptsRoot = nullptr;
 
     QIcon _iconForm;
+    QIcon _iconFormClosed;
     QIcon _iconScriptIdle;
     QIcon _iconScriptRunning;
 };

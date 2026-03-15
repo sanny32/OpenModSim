@@ -63,14 +63,20 @@
      <string>File</string>
     </property>
     <addaction name="actionNew"/>
+    <addaction name="actionNewScript"/>
+    <addaction name="separator"/>
     <addaction name="actionOpen"/>
+    <addaction name="actionImportScript"/>
+    <addaction name="separator"/>
     <addaction name="actionClose"/>
     <addaction name="actionCloseAll"/>
+    <addaction name="separator"/>
     <addaction name="actionSave"/>
     <addaction name="actionSaveAs"/>
     <addaction name="separator"/>
-    <addaction name="actionSaveTestConfig"/>
-    <addaction name="actionRestoreTestConfig"/>
+    <addaction name="actionOpenProject"/>
+    <addaction name="actionSaveProjectAs"/>
+    <addaction name="actionCloseProject"/>
     <addaction name="separator"/>
     <addaction name="actionPrint"/>
     <addaction name="actionPrintSetup"/>
@@ -189,20 +195,9 @@
     <addaction name="actionScriptHelp"/>
     <addaction name="actionConsoleOutput"/>
    </widget>
-   <widget class="QMenu" name="menuScript">
-    <property name="title">
-     <string>Script</string>
-    </property>
-    <addaction name="actionNewScript"/>
-    <addaction name="actionImportScript"/>
-    <addaction name="separator"/>
-    <addaction name="actionRunScript"/>
-    <addaction name="actionStopScript"/>
-   </widget>
    <addaction name="menuFile"/>
    <addaction name="menuEdit"/>
    <addaction name="menuConnection"/>
-   <addaction name="menuScript"/>
    <addaction name="menuSetup"/>
    <addaction name="menuView"/>
    <addaction name="menuWindow"/>
@@ -303,6 +298,21 @@
   <action name="actionRestoreTestConfig">
    <property name="text">
     <string>Restore Test Config</string>
+   </property>
+  </action>
+  <action name="actionOpenProject">
+   <property name="text">
+    <string>Open Project...</string>
+   </property>
+  </action>
+  <action name="actionSaveProjectAs">
+   <property name="text">
+    <string>Save Project As...</string>
+   </property>
+  </action>
+  <action name="actionCloseProject">
+   <property name="text">
+    <string>Close Project</string>
    </property>
   </action>
   <action name="actionPrint">

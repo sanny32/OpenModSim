@@ -2,6 +2,8 @@
 #define SCRIPTEDITORWINDOW_H
 
 #include <QWidget>
+#include <QCheckBox>
+#include <QSpinBox>
 #include <QToolBar>
 #include "scriptdocument.h"
 #include "jscriptcontrol.h"
@@ -53,6 +55,8 @@ private:
     QAction*         _actionRun = nullptr;
     QAction*         _actionStop = nullptr;
     RunModeComboBox* _runModeCombo = nullptr;
+    QSpinBox*        _intervalSpin = nullptr;
+    QCheckBox*       _runOnStartupCheck = nullptr;
 };
 
 #endif // SCRIPTEDITORWINDOW_H

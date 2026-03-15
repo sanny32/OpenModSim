@@ -104,10 +104,39 @@ void ScriptEditorWindow::setupScriptBar()
         ss.Mode = mode;
         _document->setSettings(ss);
     });
+    auto modeAction = new QWidgetAction(_scriptBar);
+    modeAction->setDefaultWidget(_runModeCombo);
+    _scriptBar->addAction(modeAction);
 
-    auto widgetAction = new QWidgetAction(_scriptBar);
-    widgetAction->setDefaultWidget(_runModeCombo);
-    _scriptBar->addAction(widgetAction);
+    // Interval spinbox (500 – 10000 ms)
+    _intervalSpin = new QSpinBox(_scriptBar);
+    _intervalSpin->setRange(500, 10000);
+    _intervalSpin->setSingleStep(100);
+    _intervalSpin->setSuffix(tr(" ms"));
+    _intervalSpin->setValue(static_cast<int>(_document->settings().Interval));
+    _intervalSpin->setFixedWidth(90);
+    connect(_intervalSpin, &QSpinBox::valueChanged, this, [this](int value) {
+        auto ss = _document->settings();
+        ss.Interval = static_cast<uint>(value);
+        _document->setSettings(ss);
+    });
+    auto intervalAction = new QWidgetAction(_scriptBar);
+    intervalAction->setDefaultWidget(_intervalSpin);
+    _scriptBar->addAction(intervalAction);
+
+    // Run on startup checkbox
+    _runOnStartupCheck = new QCheckBox(tr("Run on startup"), _scriptBar);
+    _runOnStartupCheck->setChecked(_document->settings().RunOnStartup);
+    connect(_runOnStartupCheck, &QCheckBox::checkStateChanged, this, [this](Qt::CheckState state) {
+        auto ss = _document->settings();
+        ss.RunOnStartup = (state == Qt::Checked);
+        _document->setSettings(ss);
+    });
+    auto startupAction = new QWidgetAction(_scriptBar);
+    startupAction->setDefaultWidget(_runOnStartupCheck);
+    _scriptBar->addAction(startupAction);
+
+    _scriptBar->addSeparator();
 
     _actionRun = _scriptBar->addAction(QIcon(":/res/actionRunScript.png"), tr("Run Script"));
     qobject_cast<QToolButton*>(_scriptBar->widgetForAction(_actionRun))->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
@@ -144,4 +173,6 @@ void ScriptEditorWindow::updateScriptBar()
     _actionRun->setEnabled(!running && hasScript);
     _actionStop->setEnabled(running);
     if (_runModeCombo) _runModeCombo->setEnabled(!running);
+    if (_intervalSpin) _intervalSpin->setEnabled(!running);
+    if (_runOnStartupCheck) _runOnStartupCheck->setEnabled(!running);
 }

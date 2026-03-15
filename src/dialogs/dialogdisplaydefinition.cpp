@@ -15,8 +15,6 @@ DialogDisplayDefinition::DialogDisplayDefinition(DisplayDefinition dd, QWidget* 
     , ui(new Ui::DialogDisplayDefinition)
 {
     ui->setupUi(this);
-    ui->groupBoxScriptSettings->installEventFilter(this);
-
     ui->lineEditFormName->setText(dd.FormName);
 
     ui->comboBoxColumnsDistance->setValidator(new QUIntValidator(1, 32, this));
@@ -45,10 +43,6 @@ DialogDisplayDefinition::DialogDisplayDefinition(DisplayDefinition dd, QWidget* 
     ui->lineEditLength->setValue(dd.Length);
     ui->lineEditLogLimit->setValue(dd.LogViewLimit);
     ui->comboBoxPointType->setCurrentPointType(dd.PointType);
-
-    ui->lineEditScriptInterval->setValue(dd.ScriptCfg.Interval);
-    ui->comboBoxScriptRunMode->setCurrentRunMode(dd.ScriptCfg.Mode);
-    ui->checkBoxRunOnStartup->setChecked(dd.ScriptCfg.RunOnStartup);
 
     ui->buttonBox->setFocus();
 }
@@ -80,25 +74,6 @@ void DialogDisplayDefinition::changeEvent(QEvent* event)
 ///
 bool DialogDisplayDefinition::eventFilter(QObject* obj, QEvent* event)
 {
-    if(event->type() == QEvent::Paint)
-    {
-        QGroupBox* box = qobject_cast<QGroupBox*>(obj);
-        if(box && box->objectName() == "groupBoxScriptSettings")
-        {
-            static QPixmap pixmap(":/res/banner-js.png");
-
-            QPainter painter(box);
-            painter.setRenderHint(QPainter::SmoothPixmapTransform);
-
-            const QSize pixSize = pixmap.size();
-            const int x = box->width() - pixSize.width() - 15;
-            const int y = (box->height() - pixSize.height()) / 2 + 5;
-
-            painter.setOpacity(0.5);
-            painter.drawPixmap(x, y, pixmap);
-        }
-    }
-
     return QFixedSizeDialog::eventFilter(obj, event);
 }
 
@@ -118,9 +93,6 @@ void DialogDisplayDefinition::accept()
     _displayDefinition.ZeroBasedAddress = (ui->comboBoxAddressBase->currentAddressBase() == AddressBase::Base0);
     _displayDefinition.DataViewColumnsDistance = ui->comboBoxColumnsDistance->currentText().toUInt();
     _displayDefinition.LeadingZeros = ui->checkBoxLeadingZeros->isChecked();
-    _displayDefinition.ScriptCfg.Interval = ui->lineEditScriptInterval->value<int>();
-    _displayDefinition.ScriptCfg.Mode = ui->comboBoxScriptRunMode->currentRunMode();
-    _displayDefinition.ScriptCfg.RunOnStartup = ui->checkBoxRunOnStartup->isChecked();
 
     QFixedSizeDialog::accept();
 }

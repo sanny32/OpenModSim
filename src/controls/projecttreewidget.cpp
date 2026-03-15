@@ -1,4 +1,7 @@
 #include <QHeaderView>
+#include <QMenu>
+#include <QMessageBox>
+#include <QPainter>
 #include "projecttreewidget.h"
 
 namespace {
@@ -16,10 +19,21 @@ ProjectTreeWidget::ProjectTreeWidget(QWidget* parent)
     , _iconScriptIdle(QIcon(":/res/actionShowScript.png"))
     , _iconScriptRunning(QIcon(":/res/actionRunScript.png"))
 {
+    // Build a grayed version of the form icon for closed forms
+    const QPixmap srcPixmap(":/res/actionNew.png");
+    QPixmap grayPixmap(srcPixmap.size());
+    grayPixmap.fill(Qt::transparent);
+    QPainter painter(&grayPixmap);
+    painter.setOpacity(0.4);
+    painter.drawPixmap(0, 0, srcPixmap);
+    painter.end();
+    _iconFormClosed = QIcon(grayPixmap);
+
     setHeaderHidden(true);
     setRootIsDecorated(true);
     setExpandsOnDoubleClick(true);
     setAnimated(true);
+    setContextMenuPolicy(Qt::CustomContextMenu);
 
     _dataRoot = new QTreeWidgetItem(this, QStringList{tr("Data")});
     _dataRoot->setExpanded(true);
@@ -29,6 +43,8 @@ ProjectTreeWidget::ProjectTreeWidget(QWidget* parent)
 
     connect(this, &QTreeWidget::itemActivated,
             this, &ProjectTreeWidget::on_itemActivated);
+    connect(this, &QTreeWidget::customContextMenuRequested,
+            this, &ProjectTreeWidget::on_contextMenu);
 }
 
 ///
@@ -74,6 +90,21 @@ void ProjectTreeWidget::setFormScriptRunning(FormModSim* frm, bool running)
     if (!item) return;
 
     item->setIcon(0, running ? _iconScriptRunning : _iconForm);
+}
+
+///
+/// \brief ProjectTreeWidget::setFormOpen
+///
+void ProjectTreeWidget::setFormOpen(FormModSim* frm, bool open)
+{
+    auto item = itemForForm(frm);
+    if (!item) return;
+
+    item->setIcon(0, open ? _iconForm : _iconFormClosed);
+
+    QFont f = item->font(0);
+    f.setItalic(!open);
+    item->setFont(0, f);
 }
 
 ///
@@ -183,6 +214,42 @@ void ProjectTreeWidget::retranslateUi()
         auto item = _dataRoot->child(i);
         auto frm = static_cast<FormModSim*>(item->data(0, Qt::UserRole).value<void*>());
         if (frm) item->setText(0, frm->windowTitle());
+    }
+}
+
+///
+/// \brief ProjectTreeWidget::on_contextMenu
+///
+void ProjectTreeWidget::on_contextMenu(const QPoint& pos)
+{
+    auto item = itemAt(pos);
+    if (!item) return;
+
+    const int type = item->data(0, ItemTypeRole).toInt();
+    auto ptr = item->data(0, Qt::UserRole).value<void*>();
+    if (!ptr) return;
+
+    QMenu menu(this);
+    auto deleteAction = menu.addAction(tr("Delete"));
+
+    if (menu.exec(viewport()->mapToGlobal(pos)) != deleteAction)
+        return;
+
+    if (type == ItemTypeForm) {
+        auto frm = static_cast<FormModSim*>(ptr);
+        const int ret = QMessageBox::question(this, tr("Delete Form"),
+            tr("Delete \"%1\" from the project?").arg(frm->windowTitle()),
+            QMessageBox::Yes | QMessageBox::No);
+        if (ret == QMessageBox::Yes)
+            emit formDeleteRequested(frm);
+    }
+    else if (type == ItemTypeScript) {
+        auto doc = static_cast<ScriptDocument*>(ptr);
+        const int ret = QMessageBox::question(this, tr("Delete Script"),
+            tr("Delete \"%1\" from the project?").arg(doc->name()),
+            QMessageBox::Yes | QMessageBox::No);
+        if (ret == QMessageBox::Yes)
+            emit scriptDeleteRequested(doc);
     }
 }
 

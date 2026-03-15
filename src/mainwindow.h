@@ -67,6 +67,10 @@ private slots:
     void on_actionSaveAs_triggered();
     void on_actionSaveTestConfig_triggered();
     void on_actionRestoreTestConfig_triggered();
+
+    void on_actionOpenProject_triggered();
+    void on_actionSaveProjectAs_triggered();
+    void on_actionCloseProject_triggered();
     void on_actionPrint_triggered();
     void on_actionPrintSetup_triggered();
     void on_actionExit_triggered();
@@ -138,7 +142,7 @@ private slots:
     /* Help menu slots */
     void on_actionAbout_triggered();
 
-    /* Script menu slots */
+    /* Script slots */
     void on_actionNewScript_triggered();
     void on_actionImportScript_triggered();
     void on_actionRunScript_triggered();
@@ -190,6 +194,11 @@ private:
     ScriptEditorWindow* openScriptEditor(ScriptDocument* doc);
     ScriptEditorWindow* findScriptEditor(ScriptDocument* doc) const;
 
+    void rewrapMdiChild(FormModSim* frm);
+    void closeProject();
+    void deleteForm(FormModSim* frm);
+    void deleteScript(ScriptDocument* doc);
+
     bool loadProfile(const QString& filename);
     void saveProfile();
 
@@ -225,6 +234,8 @@ private:
     QString _profile;
     QList<ScriptDocument*> _standaloneScripts;
     int _scriptCounter = 0;
+
+    QList<FormModSim*> _closedForms;
 
     bool _splitDisplayDefinitionSyncInProgress = false;
     bool _splitDisableInProgress = false;

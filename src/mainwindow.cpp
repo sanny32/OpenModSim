@@ -113,13 +113,23 @@ MainWindow::MainWindow(const QString& profile, bool useSession, QWidget *parent)
     addDockWidget(Qt::LeftDockWidgetArea, _projectDockWidget);
 
     connect(_projectTree, &ProjectTreeWidget::formActivated, this, [this](FormModSim* frm) {
+        // If the form is currently open in a tab, activate it
         const auto list = ui->mdiArea->subWindowList();
         for (auto wnd : list) {
             if (qobject_cast<FormModSim*>(wnd->widget()) == frm) {
                 ui->mdiArea->setActiveSubWindow(wnd);
-                break;
+                return;
             }
         }
+        // Form tab was closed but form is still alive — re-open it
+        if (_closedForms.contains(frm))
+            rewrapMdiChild(frm);
+    });
+    connect(_projectTree, &ProjectTreeWidget::formDeleteRequested, this, [this](FormModSim* frm) {
+        deleteForm(frm);
+    });
+    connect(_projectTree, &ProjectTreeWidget::scriptDeleteRequested, this, [this](ScriptDocument* doc) {
+        deleteScript(doc);
     });
     connect(_projectTree, &ProjectTreeWidget::scriptActivated, this, [this](ScriptDocument* doc) {
         openScriptEditor(doc);
@@ -275,6 +285,15 @@ bool MainWindow::eventFilter(QObject* obj, QEvent* e)
                             peer->close();
                         }
                     }
+                }
+                else if (frm)
+                {
+                    // Primary form: reparent before subwindow is destroyed so frm survives
+                    frm->setParent(this);
+                    frm->hide();
+                    if (!_closedForms.contains(frm))
+                        _closedForms.append(frm);
+                    _projectTree->setFormOpen(frm, false);
                 }
             }
         break;
@@ -595,6 +614,48 @@ void MainWindow::on_actionRestoreTestConfig_triggered()
 
     _savePath = QFileInfo(filename).absoluteDir().absolutePath();
     loadConfig(filename);
+}
+
+///
+/// \brief MainWindow::on_actionOpenProject_triggered
+///
+void MainWindow::on_actionOpenProject_triggered()
+{
+    QStringList filters;
+    filters << tr("XML files (*.xml)");
+    filters << tr("All files (*)");
+
+    const auto filename = QFileDialog::getOpenFileName(this, QString(), _savePath, filters.join(";;"));
+    if(filename.isEmpty()) return;
+
+    _savePath = QFileInfo(filename).absoluteDir().absolutePath();
+    loadConfig(filename);
+}
+
+///
+/// \brief MainWindow::on_actionSaveProjectAs_triggered
+///
+void MainWindow::on_actionSaveProjectAs_triggered()
+{
+    QStringList filters;
+    filters << tr("XML files (*.xml)");
+    auto filename = QFileDialog::getSaveFileName(this, QString(), _savePath, filters.join(";;"));
+
+    if(filename.isEmpty()) return;
+
+    if(!filename.endsWith(".xml", Qt::CaseInsensitive))
+        filename.append(".xml");
+
+    _savePath = QFileInfo(filename).absoluteDir().absolutePath();
+    saveConfig(filename);
+}
+
+///
+/// \brief MainWindow::on_actionCloseProject_triggered
+///
+void MainWindow::on_actionCloseProject_triggered()
+{
+    closeProject();
 }
 
 ///
@@ -1601,9 +1662,15 @@ void MainWindow::setupMdiChild(FormModSim* frm, QMdiSubWindow* wnd, bool addToWi
         syncSplitPeerDisplayDefinition(frm);
     });
 
-    connect(frm, &FormModSim::showed, this, [this, wnd]
+    connect(frm, &FormModSim::showed, this, [this, frm]
     {
-        windowActivate(wnd);
+        // Activate whichever subwindow currently holds this form
+        for (auto w : ui->mdiArea->subWindowList()) {
+            if (qobject_cast<FormModSim*>(w->widget()) == frm) {
+                windowActivate(w);
+                break;
+            }
+        }
     });
 
     connect(frm, &FormModSim::captureError, this, [this](const QString& error)
@@ -1682,9 +1749,6 @@ void MainWindow::setupMdiChild(FormModSim* frm, QMdiSubWindow* wnd, bool addToWi
     if(addToWindowList) {
         _windowActionList->addWindow(wnd);
         _projectTree->addForm(frm);
-        connect(frm, &FormModSim::closing, this, [this, frm]() {
-            _projectTree->removeForm(frm);
-        });
     }
 }
 
@@ -2161,6 +2225,12 @@ void MainWindow::loadConfig(const QString& filename)
                 }
                 else if (xml.name() == QLatin1String("Forms")) {
                     ui->mdiArea->closeAllSubWindows();
+                    // Clean up forms that were already closed (hidden)
+                    for (auto frm : _closedForms) {
+                        _projectTree->removeForm(frm);
+                        delete frm;
+                    }
+                    _closedForms.clear();
                     while (xml.readNextStartElement()) {
                         if (xml.name() == QLatin1String("FormModSim")) {
                             auto frm = createMdiChild(++_windowCounter);
@@ -2303,6 +2373,10 @@ void MainWindow::saveConfig(const QString& filename)
     w.writeStartElement("Forms");
     for(auto&& wnd : ui->mdiArea->localSubWindowList()) {
         w << qobject_cast<FormModSim*>(wnd->widget());
+    }
+    // Also save forms that are closed (hidden in project tree)
+    for (auto frm : _closedForms) {
+        w << frm;
     }
     w.writeEndElement(); // Forms
 
@@ -2488,6 +2562,136 @@ ScriptEditorWindow* MainWindow::findScriptEditor(ScriptDocument* doc) const
             return editor;
     }
     return nullptr;
+}
+
+///
+/// \brief MainWindow::rewrapMdiChild
+/// Re-opens a previously "closed" (hidden) FormModSim by creating a new MDI subwindow for it.
+///
+void MainWindow::rewrapMdiChild(FormModSim* frm)
+{
+    if (!frm || !_closedForms.contains(frm))
+        return;
+
+    auto area = ui->mdiArea->primaryArea();
+    if (!area)
+        return;
+
+    _closedForms.removeOne(frm);
+
+    frm->setParent(nullptr); // detach from MainWindow before adding to MDI area
+    auto wnd = area->addSubWindow(frm);
+    if (!wnd) {
+        frm->setParent(this);
+        frm->hide();
+        _closedForms.append(frm);
+        return;
+    }
+
+    wnd->installEventFilter(this);
+    wnd->setAttribute(Qt::WA_DeleteOnClose, true);
+    wnd->setWindowTitle(frm->windowTitle());
+    wnd->setWindowIcon(frm->windowIcon());
+
+    // Window-specific connections (new wnd each time)
+    auto updateCodepage = [this](const QString& name) { _ansiMenu->selectCodepage(name); };
+    connect(wnd, &QMdiSubWindow::windowStateChanged, this,
+            [this, frm, updateCodepage](Qt::WindowStates, Qt::WindowStates newState)
+    {
+        switch(newState & ~Qt::WindowMaximized & ~Qt::WindowMinimized)
+        {
+            case Qt::WindowActive:
+                updateHelpWidgetState();
+                updateCodepage(frm->codepage());
+                frm->connectEditSlots();
+            break;
+            case Qt::WindowNoState:
+                frm->disconnectEditSlots();
+            break;
+        }
+    });
+
+    connect(wnd, &QObject::destroyed, this, [this]() {
+        resetSplitViewIfEmpty();
+    });
+
+    _windowActionList->addWindow(wnd);
+    _projectTree->setFormOpen(frm, true);
+    _projectTree->activateForm(frm);
+
+    wnd->show();
+}
+
+///
+/// \brief MainWindow::closeProject
+/// Closes all open and hidden forms and scripts, resetting the workspace.
+///
+void MainWindow::closeProject()
+{
+    // Close open MDI windows (FormModSim and ScriptEditorWindow)
+    ui->mdiArea->closeAllSubWindows();
+
+    // Delete forms that were closed (hidden)
+    for (auto frm : _closedForms) {
+        _projectTree->removeForm(frm);
+        delete frm;
+    }
+    _closedForms.clear();
+
+    // Delete standalone scripts
+    for (auto doc : _standaloneScripts) {
+        _projectTree->removeScript(doc);
+        delete doc;
+    }
+    _standaloneScripts.clear();
+
+    _windowCounter = 0;
+    _scriptCounter = 0;
+}
+
+///
+/// \brief MainWindow::deleteForm
+/// Deletes a form permanently from the project (closes its tab if open).
+///
+void MainWindow::deleteForm(FormModSim* frm)
+{
+    if (!frm) return;
+
+    // Close the MDI subwindow if the form is currently open
+    for (auto wnd : ui->mdiArea->subWindowList()) {
+        if (qobject_cast<FormModSim*>(wnd->widget()) == frm) {
+            wnd->close(); // triggers closing signal → moves frm to _closedForms
+            break;
+        }
+    }
+
+    // Now frm is either in _closedForms (just closed) or was already there
+    _closedForms.removeOne(frm);
+    _projectTree->removeForm(frm);
+    delete frm;
+}
+
+///
+/// \brief MainWindow::deleteScript
+/// Deletes a standalone script permanently from the project.
+///
+void MainWindow::deleteScript(ScriptDocument* doc)
+{
+    if (!doc) return;
+
+    // Close the editor window if open
+    if (auto editor = findScriptEditor(doc)) {
+        for (auto wnd : ui->mdiArea->subWindowList()) {
+            if (wnd->widget() == editor) {
+                wnd->close();
+                break;
+            }
+        }
+    }
+
+    _standaloneScripts.removeOne(doc);
+    _projectTree->removeScript(doc);
+    delete doc;
 }
 
 ///

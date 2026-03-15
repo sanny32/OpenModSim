@@ -372,6 +372,13 @@ ScriptSettings FormModSim::scriptSettings() const
 void FormModSim::setScriptSettings(const ScriptSettings& ss)
 {
     _scriptSettings = ss;
+    // Sync toolbar controls if already created
+    if (_scriptRunModeCombo)
+        _scriptRunModeCombo->setCurrentRunMode(ss.Mode);
+    if (_scriptIntervalSpin)
+        _scriptIntervalSpin->setValue(static_cast<int>(ss.Interval));
+    if (_scriptRunOnStartupCheck)
+        _scriptRunOnStartupCheck->setChecked(ss.RunOnStartup);
     emit scriptSettingsChanged(ss);
 }
 
@@ -1303,9 +1310,35 @@ void FormModSim::setupScriptBar()
         _scriptSettings.Mode = mode;
     });
 
-    auto widgetAction = new QWidgetAction(_scriptBar);
-    widgetAction->setDefaultWidget(_scriptRunModeCombo);
-    _scriptBar->addAction(widgetAction);
+    auto modeAction = new QWidgetAction(_scriptBar);
+    modeAction->setDefaultWidget(_scriptRunModeCombo);
+    _scriptBar->addAction(modeAction);
+
+    // Interval spinbox (500 – 10000 ms)
+    _scriptIntervalSpin = new QSpinBox(_scriptBar);
+    _scriptIntervalSpin->setRange(500, 10000);
+    _scriptIntervalSpin->setSingleStep(100);
+    _scriptIntervalSpin->setSuffix(tr(" ms"));
+    _scriptIntervalSpin->setValue(_scriptSettings.Interval);
+    _scriptIntervalSpin->setFixedWidth(90);
+    connect(_scriptIntervalSpin, &QSpinBox::valueChanged, this, [this](int value) {
+        _scriptSettings.Interval = static_cast<uint>(value);
+    });
+    auto intervalAction = new QWidgetAction(_scriptBar);
+    intervalAction->setDefaultWidget(_scriptIntervalSpin);
+    _scriptBar->addAction(intervalAction);
+
+    // Run on startup checkbox
+    _scriptRunOnStartupCheck = new QCheckBox(tr("Run on startup"), _scriptBar);
+    _scriptRunOnStartupCheck->setChecked(_scriptSettings.RunOnStartup);
+    connect(_scriptRunOnStartupCheck, &QCheckBox::checkStateChanged, this, [this](Qt::CheckState state) {
+        _scriptSettings.RunOnStartup = (state == Qt::Checked);
+    });
+    auto startupAction = new QWidgetAction(_scriptBar);
+    startupAction->setDefaultWidget(_scriptRunOnStartupCheck);
+    _scriptBar->addAction(startupAction);
+
+    _scriptBar->addSeparator();
 
     _actionRunScript = _scriptBar->addAction(QIcon(":/res/actionRunScript.png"), tr("Run Script"));
     qobject_cast<QToolButton*>(_scriptBar->widgetForAction(_actionRunScript))->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
@@ -1334,9 +1367,12 @@ void FormModSim::updateScriptBar()
 {
     if (!_scriptBar) return;
 
+    const bool running = canStopScript();
     _actionRunScript->setEnabled(canRunScript());
-    _actionStopScript->setEnabled(canStopScript());
-    if (_scriptRunModeCombo) _scriptRunModeCombo->setEnabled(!canStopScript());
+    _actionStopScript->setEnabled(running);
+    if (_scriptRunModeCombo) _scriptRunModeCombo->setEnabled(!running);
+    if (_scriptIntervalSpin) _scriptIntervalSpin->setEnabled(!running);
+    if (_scriptRunOnStartupCheck) _scriptRunOnStartupCheck->setEnabled(!running);
 }
 
 ///
