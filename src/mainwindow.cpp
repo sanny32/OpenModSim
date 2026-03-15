@@ -583,53 +583,19 @@ void MainWindow::saveAs(FormModSim* frm)
 }
 
 ///
-/// \brief MainWindow::on_actionSaveTestConfig_triggered
-///
-void MainWindow::on_actionSaveTestConfig_triggered()
-{
-    QStringList filters;
-    filters << tr("XML files (*.xml)");
-    auto filename = QFileDialog::getSaveFileName(this, QString(), _savePath, filters.join(";;"));
-
-    if(filename.isEmpty()) return;
-
-    if(!filename.endsWith(".xml", Qt::CaseInsensitive))
-        filename.append(".xml");
-
-    _savePath = QFileInfo(filename).absoluteDir().absolutePath();
-    saveConfig(filename);
-}
-
-///
-/// \brief MainWindow::on_actionRestoreTestConfig_triggered
-///
-void MainWindow::on_actionRestoreTestConfig_triggered()
-{
-    QStringList filters;
-    filters << tr("XML files (*.xml)");
-    filters << tr("All files (*)");
-
-    const auto filename = QFileDialog::getOpenFileName(this, QString(), _savePath, filters.join(";;"));
-    if(filename.isEmpty()) return;
-
-    _savePath = QFileInfo(filename).absoluteDir().absolutePath();
-    loadConfig(filename);
-}
-
-///
 /// \brief MainWindow::on_actionOpenProject_triggered
 ///
 void MainWindow::on_actionOpenProject_triggered()
 {
     QStringList filters;
-    filters << tr("XML files (*.xml)");
+    filters << tr("Project files (*.msimprj)");
     filters << tr("All files (*)");
 
     const auto filename = QFileDialog::getOpenFileName(this, QString(), _savePath, filters.join(";;"));
     if(filename.isEmpty()) return;
 
     _savePath = QFileInfo(filename).absoluteDir().absolutePath();
-    loadConfig(filename);
+    loadProject(filename);
 }
 
 ///
@@ -638,16 +604,16 @@ void MainWindow::on_actionOpenProject_triggered()
 void MainWindow::on_actionSaveProjectAs_triggered()
 {
     QStringList filters;
-    filters << tr("XML files (*.xml)");
+    filters << tr("Project files (*.msimprj)");
     auto filename = QFileDialog::getSaveFileName(this, QString(), _savePath, filters.join(";;"));
 
     if(filename.isEmpty()) return;
 
-    if(!filename.endsWith(".xml", Qt::CaseInsensitive))
-        filename.append(".xml");
+    if(!filename.endsWith(".msimprj", Qt::CaseInsensitive))
+        filename.append(".msimprj");
 
     _savePath = QFileInfo(filename).absoluteDir().absolutePath();
-    saveConfig(filename);
+    saveProject(filename);
 }
 
 ///
@@ -2158,10 +2124,10 @@ FormModSim* MainWindow::firstMdiChild() const
 }
 
 ///
-/// \brief MainWindow::loadConfig
+/// \brief MainWindow::loadProject
 /// \param filename
 ///
-void MainWindow::loadConfig(const QString& filename)
+void MainWindow::loadProject(const QString& filename)
 {
     QFile file(filename);
     if(!file.open(QFile::ReadOnly))
@@ -2329,11 +2295,10 @@ void MainWindow::loadConfig(const QString& filename)
 }
 
 ///
-/// \brief MainWindow::saveConfig
+/// \brief MainWindow::saveProject
 /// \param filename
-/// \param format
 ///
-void MainWindow::saveConfig(const QString& filename)
+void MainWindow::saveProject(const QString& filename)
 {
     QFile file(filename);
     if(!file.open(QFile::WriteOnly))

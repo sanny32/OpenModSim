@@ -41,8 +41,8 @@ public:
     void applyColors(const QColor& bg, const QColor& fg, const QColor& status);
     void applyCheckForUpdates(bool enabled);
 
-    void loadConfig(const QString& filename);
-    void saveConfig(const QString& filename);
+    void loadProject(const QString& filename);
+    void saveProject(const QString& filename);
 
 signals:
     void selectAll();
@@ -65,9 +65,6 @@ private slots:
     void on_actionCloseAll_triggered();
     void on_actionSave_triggered();
     void on_actionSaveAs_triggered();
-    void on_actionSaveTestConfig_triggered();
-    void on_actionRestoreTestConfig_triggered();
-
     void on_actionOpenProject_triggered();
     void on_actionSaveProjectAs_triggered();
     void on_actionCloseProject_triggered();

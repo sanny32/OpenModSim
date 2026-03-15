@@ -290,16 +290,6 @@
     <string>Save As...</string>
    </property>
   </action>
-  <action name="actionSaveTestConfig">
-   <property name="text">
-    <string>Save Test Config</string>
-   </property>
-  </action>
-  <action name="actionRestoreTestConfig">
-   <property name="text">
-    <string>Restore Test Config</string>
-   </property>
-  </action>
   <action name="actionOpenProject">
    <property name="text">
     <string>Open Project...</string>
