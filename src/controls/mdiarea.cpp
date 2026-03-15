@@ -569,6 +569,9 @@ void MdiArea::enforceTabbedSubWindowState(QMdiSubWindow* wnd)
     if (!wnd || viewMode() != QMdiArea::TabbedView)
         return;
 
+    if(!wnd->isVisible())
+        return;
+
     if (testOption(QMdiArea::DontMaximizeSubWindowOnActivation))
         return;
 
