@@ -3,6 +3,7 @@
 #include <QDateTime>
 #include <QHelpEngine>
 #include <QHelpContentWidget>
+#include <QWidgetAction>
 #include "modbuslimits.h"
 #include "mainwindow.h"
 #include "modbusmessages.h"

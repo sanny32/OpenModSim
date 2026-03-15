@@ -1959,7 +1959,7 @@ Length: %2</source>
         <translation type="vanished">Указана недопустимая длина данных</translation>
     </message>
     <message>
-        <location filename="../formmodsim.cpp" line="535"/>
+        <location filename="../formmodsim.cpp" line="537"/>
         <source>Address Base: %1
 Start Address: %2
 Length: %3</source>
@@ -1968,7 +1968,7 @@ Length: %3</source>
 Количество: %3</translation>
     </message>
     <message>
-        <location filename="../formmodsim.cpp" line="538"/>
+        <location filename="../formmodsim.cpp" line="540"/>
         <source>Unit Identifier: %1
 MODBUS Point Type:
 %2</source>
@@ -1977,92 +1977,102 @@ MODBUS Point Type:
 %2</translation>
     </message>
     <message>
-        <location filename="../formmodsim.cpp" line="1313"/>
+        <location filename="../formmodsim.cpp" line="1310"/>
+        <source>Run Script</source>
+        <translation type="unfinished">Запуск</translation>
+    </message>
+    <message>
+        <location filename="../formmodsim.cpp" line="1316"/>
+        <source>Stop Script</source>
+        <translation type="unfinished">Останов</translation>
+    </message>
+    <message>
+        <location filename="../formmodsim.cpp" line="1365"/>
         <source>Binary</source>
         <translation type="unfinished">Двоичный</translation>
     </message>
     <message>
-        <location filename="../formmodsim.cpp" line="1314"/>
+        <location filename="../formmodsim.cpp" line="1366"/>
         <source>Hex</source>
         <translation type="unfinished">Шестандцатиричный</translation>
     </message>
     <message>
-        <location filename="../formmodsim.cpp" line="1315"/>
+        <location filename="../formmodsim.cpp" line="1367"/>
         <source>Ansi</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formmodsim.cpp" line="1323"/>
+        <location filename="../formmodsim.cpp" line="1375"/>
         <source>16-bit Integer</source>
         <translation type="unfinished">16-бит целое</translation>
     </message>
     <message>
-        <location filename="../formmodsim.cpp" line="1324"/>
+        <location filename="../formmodsim.cpp" line="1376"/>
         <source>Unsigned 16-bit Integer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formmodsim.cpp" line="1327"/>
+        <location filename="../formmodsim.cpp" line="1379"/>
         <source>32-bit Integer (MSRF)</source>
         <translation type="unfinished">32-бит целое (MSRF)</translation>
     </message>
     <message>
-        <location filename="../formmodsim.cpp" line="1328"/>
+        <location filename="../formmodsim.cpp" line="1380"/>
         <source>32-bit Integer (LSRF)</source>
         <translation type="unfinished">32-бит целое (LSRF)</translation>
     </message>
     <message>
-        <location filename="../formmodsim.cpp" line="1331"/>
+        <location filename="../formmodsim.cpp" line="1383"/>
         <source>Unsigned 32-bit Integer (MSRF)</source>
         <translation type="unfinished">Беззнаковое 32-бит целое (MSRF)</translation>
     </message>
     <message>
-        <location filename="../formmodsim.cpp" line="1332"/>
+        <location filename="../formmodsim.cpp" line="1384"/>
         <source>Unsigned 32-bit Integer (LSRF)</source>
         <translation type="unfinished">Беззнаковое 32-бит целое (LSRF)</translation>
     </message>
     <message>
-        <location filename="../formmodsim.cpp" line="1335"/>
+        <location filename="../formmodsim.cpp" line="1387"/>
         <source>64-bit Integer (MSRF)</source>
         <translation type="unfinished">64-бит целое (MSRF)</translation>
     </message>
     <message>
-        <location filename="../formmodsim.cpp" line="1336"/>
+        <location filename="../formmodsim.cpp" line="1388"/>
         <source>64-bit Integer (LSRF)</source>
         <translation type="unfinished">64-бит целое (LSRF)</translation>
     </message>
     <message>
-        <location filename="../formmodsim.cpp" line="1339"/>
+        <location filename="../formmodsim.cpp" line="1391"/>
         <source>Unsigned 64-bit Integer (MSRF)</source>
         <translation type="unfinished">Беззнаковое 64-бит целое (MSRF)</translation>
     </message>
     <message>
-        <location filename="../formmodsim.cpp" line="1340"/>
+        <location filename="../formmodsim.cpp" line="1392"/>
         <source>Unsigned 64-bit Integer (LSRF)</source>
         <translation type="unfinished">Беззнаковое 64-бит целое (LSRF)</translation>
     </message>
     <message>
-        <location filename="../formmodsim.cpp" line="1343"/>
+        <location filename="../formmodsim.cpp" line="1395"/>
         <source>Float (MSRF)</source>
         <translation type="unfinished">С плавающей точкой (MSRF)</translation>
     </message>
     <message>
-        <location filename="../formmodsim.cpp" line="1344"/>
+        <location filename="../formmodsim.cpp" line="1396"/>
         <source>Float (LSRF)</source>
         <translation type="unfinished">С плавающей точкой (LSRF)</translation>
     </message>
     <message>
-        <location filename="../formmodsim.cpp" line="1347"/>
+        <location filename="../formmodsim.cpp" line="1399"/>
         <source>Double (MSRF)</source>
         <translation type="unfinished">Двойной точности (MSRF)</translation>
     </message>
     <message>
-        <location filename="../formmodsim.cpp" line="1348"/>
+        <location filename="../formmodsim.cpp" line="1400"/>
         <source>Double (LSRF)</source>
         <translation type="unfinished">Двойной точности (LSRF)</translation>
     </message>
     <message>
-        <location filename="../formmodsim.cpp" line="1351"/>
+        <location filename="../formmodsim.cpp" line="1403"/>
         <source>Swap Bytes</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2311,7 +2321,7 @@ Script.onInit(()=&gt;{
         <translation>Расширенные параметры</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="195"/>
+        <location filename="../mainwindow.ui" line="194"/>
         <source>Script</source>
         <translation>Скрипт</translation>
     </message>
@@ -2347,37 +2357,37 @@ Script.onInit(()=&gt;{
         <translation type="vanished">Панель редактирования</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="269"/>
+        <location filename="../mainwindow.ui" line="255"/>
         <source>New</source>
         <translation>Новый</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="421"/>
-        <location filename="../mainwindow.ui" line="424"/>
+        <location filename="../mainwindow.ui" line="407"/>
+        <location filename="../mainwindow.ui" line="410"/>
         <source>Float (MSRF)</source>
         <translation>С плавающей точкой (MSRF)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="439"/>
-        <location filename="../mainwindow.ui" line="442"/>
+        <location filename="../mainwindow.ui" line="425"/>
+        <location filename="../mainwindow.ui" line="428"/>
         <source>Float (LSRF)</source>
         <translation>С плавающей точкой (LSRF)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="457"/>
-        <location filename="../mainwindow.ui" line="463"/>
+        <location filename="../mainwindow.ui" line="443"/>
+        <location filename="../mainwindow.ui" line="449"/>
         <source>Double (MSRF)</source>
         <translation>Двойной точности (MSRF)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="478"/>
-        <location filename="../mainwindow.ui" line="481"/>
+        <location filename="../mainwindow.ui" line="464"/>
+        <location filename="../mainwindow.ui" line="467"/>
         <source>Double (LSRF)</source>
         <translation>Двойной точности (LSRF)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="632"/>
-        <location filename="../mainwindow.ui" line="635"/>
+        <location filename="../mainwindow.ui" line="618"/>
+        <location filename="../mainwindow.ui" line="621"/>
         <source>Swap Bytes (0xAB → 0xBA)</source>
         <translation>Порядок байт (0xAB → 0xBA)</translation>
     </message>
@@ -2386,8 +2396,8 @@ Script.onInit(()=&gt;{
         <translation type="vanished">32-бит целое</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="799"/>
-        <location filename="../mainwindow.ui" line="802"/>
+        <location filename="../mainwindow.ui" line="777"/>
+        <location filename="../mainwindow.ui" line="780"/>
         <source>32-bit Integer (MSRF)</source>
         <translation>32-бит целое (MSRF)</translation>
     </message>
@@ -2396,8 +2406,8 @@ Script.onInit(()=&gt;{
         <translation type="vanished">Перевернутое 32-бит целое</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="817"/>
-        <location filename="../mainwindow.ui" line="820"/>
+        <location filename="../mainwindow.ui" line="795"/>
+        <location filename="../mainwindow.ui" line="798"/>
         <source>32-bit Integer (LSRF)</source>
         <translation>32-бит целое (LSRF)</translation>
     </message>
@@ -2406,8 +2416,8 @@ Script.onInit(()=&gt;{
         <translation type="vanished">Беззнаковое 32-бит целое</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="835"/>
-        <location filename="../mainwindow.ui" line="838"/>
+        <location filename="../mainwindow.ui" line="813"/>
+        <location filename="../mainwindow.ui" line="816"/>
         <source>Unsigned 32-bit Integer (MSRF)</source>
         <translation>Беззнаковое 32-бит целое (MSRF)</translation>
     </message>
@@ -2416,8 +2426,8 @@ Script.onInit(()=&gt;{
         <translation type="vanished">Перевернутое беззнаковое 32-бит целое</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="853"/>
-        <location filename="../mainwindow.ui" line="856"/>
+        <location filename="../mainwindow.ui" line="831"/>
+        <location filename="../mainwindow.ui" line="834"/>
         <source>Unsigned 32-bit Integer (LSRF)</source>
         <translation>Беззнаковое 32-бит целое (LSRF)</translation>
     </message>
@@ -2426,8 +2436,8 @@ Script.onInit(()=&gt;{
         <translation type="vanished">64-бит целое</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="899"/>
-        <location filename="../mainwindow.ui" line="902"/>
+        <location filename="../mainwindow.ui" line="877"/>
+        <location filename="../mainwindow.ui" line="880"/>
         <source>64-bit Integer (MSRF)</source>
         <translation>64-бит целое (MSRF)</translation>
     </message>
@@ -2436,8 +2446,8 @@ Script.onInit(()=&gt;{
         <translation type="vanished">Перевернутое 64-бит целое</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="917"/>
-        <location filename="../mainwindow.ui" line="920"/>
+        <location filename="../mainwindow.ui" line="895"/>
+        <location filename="../mainwindow.ui" line="898"/>
         <source>64-bit Integer (LSRF)</source>
         <translation>64-бит целое (LSRF)</translation>
     </message>
@@ -2446,8 +2456,8 @@ Script.onInit(()=&gt;{
         <translation type="vanished">Беззнаковое 64-бит целое</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="935"/>
-        <location filename="../mainwindow.ui" line="938"/>
+        <location filename="../mainwindow.ui" line="913"/>
+        <location filename="../mainwindow.ui" line="916"/>
         <source>Unsigned 64-bit Integer (MSRF)</source>
         <translation>Беззнаковое 64-бит целое (MSRF)</translation>
     </message>
@@ -2456,34 +2466,34 @@ Script.onInit(()=&gt;{
         <translation type="vanished">Перевернутое беззнаковое 64-бит целое</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="953"/>
-        <location filename="../mainwindow.ui" line="956"/>
+        <location filename="../mainwindow.ui" line="931"/>
+        <location filename="../mainwindow.ui" line="934"/>
         <source>Unsigned 64-bit Integer (LSRF)</source>
         <translation>Беззнаковое 64-бит целое (LSRF)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="971"/>
+        <location filename="../mainwindow.ui" line="949"/>
         <source>ANSI</source>
         <translation>ANSI</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="983"/>
-        <location filename="../mainwindow.ui" line="986"/>
+        <location filename="../mainwindow.ui" line="961"/>
+        <location filename="../mainwindow.ui" line="964"/>
         <source>Modbus Definitions</source>
         <translation>Настройки MODBUS</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="994"/>
+        <location filename="../mainwindow.ui" line="972"/>
         <source>Tabbed View</source>
         <translation>Вид с вкладками</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1002"/>
+        <location filename="../mainwindow.ui" line="980"/>
         <source>Close All Windows</source>
         <translation>Закрыть все окна</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1013"/>
+        <location filename="../mainwindow.ui" line="991"/>
         <source>Raw Data Log</source>
         <translation>Необработанные данные</translation>
     </message>
@@ -2504,102 +2514,102 @@ Script.onInit(()=&gt;{
         <translation type="vanished">Перевернутое беззнаковое ДЦ</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="864"/>
+        <location filename="../mainwindow.ui" line="842"/>
         <source>Text Capture</source>
         <translation>Захват в файл</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="869"/>
+        <location filename="../mainwindow.ui" line="847"/>
         <source>Capture Off</source>
         <translation>Остановить захват</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="878"/>
+        <location filename="../mainwindow.ui" line="856"/>
         <source>Msg Parser</source>
         <translation>Анализатор сообщений</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="281"/>
+        <location filename="../mainwindow.ui" line="267"/>
         <source>Open...</source>
         <translation>Открыть...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="289"/>
+        <location filename="../mainwindow.ui" line="275"/>
         <source>Close</source>
         <translation>Закрыть</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="301"/>
+        <location filename="../mainwindow.ui" line="287"/>
         <source>Save</source>
         <translation>Сохранить</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="309"/>
+        <location filename="../mainwindow.ui" line="295"/>
         <source>Save As...</source>
         <translation>Сохранить как...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="314"/>
+        <location filename="../mainwindow.ui" line="300"/>
         <source>Save Test Config</source>
         <translation>Сохранить конфиг</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="319"/>
+        <location filename="../mainwindow.ui" line="305"/>
         <source>Restore Test Config</source>
         <translation>Восстановить конфиг</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="328"/>
+        <location filename="../mainwindow.ui" line="314"/>
         <source>Print...</source>
         <translation>Печать...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="336"/>
+        <location filename="../mainwindow.ui" line="322"/>
         <source>Print Setup...</source>
         <translation>Настройка печати...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="341"/>
+        <location filename="../mainwindow.ui" line="327"/>
         <source>Recent File</source>
         <translation>Последние файлы</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="346"/>
+        <location filename="../mainwindow.ui" line="332"/>
         <source>Exit</source>
         <translation>Выход</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="355"/>
+        <location filename="../mainwindow.ui" line="341"/>
         <source>Connect</source>
         <translation>Подключить</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="364"/>
+        <location filename="../mainwindow.ui" line="350"/>
         <source>Disconnect</source>
         <translation>Отключить</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="376"/>
+        <location filename="../mainwindow.ui" line="362"/>
         <source>Binary</source>
         <translation>Двоичный</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1054"/>
+        <location filename="../mainwindow.ui" line="1032"/>
         <source>Preferences</source>
         <translation>Настройки</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1063"/>
+        <location filename="../mainwindow.ui" line="1041"/>
         <source>New Script</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1068"/>
+        <location filename="../mainwindow.ui" line="1046"/>
         <source>Import Script...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1080"/>
+        <location filename="../mainwindow.ui" line="1058"/>
         <source>Split View</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2608,7 +2618,7 @@ Script.onInit(()=&gt;{
         <translation type="vanished">Беззнаковый десятичный</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="406"/>
+        <location filename="../mainwindow.ui" line="392"/>
         <source>Hex</source>
         <translation>Шестандцатиричный</translation>
     </message>
@@ -2629,17 +2639,17 @@ Script.onInit(()=&gt;{
         <translation type="vanished">Перевернутое двойной точности</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="489"/>
+        <location filename="../mainwindow.ui" line="475"/>
         <source>Cascade</source>
         <translation>Каскадно</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="494"/>
+        <location filename="../mainwindow.ui" line="480"/>
         <source>Tile</source>
         <translation>Замостить</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="503"/>
+        <location filename="../mainwindow.ui" line="489"/>
         <source>About Open ModSim...</source>
         <translation>О программе Open ModSim...</translation>
     </message>
@@ -2648,56 +2658,56 @@ Script.onInit(()=&gt;{
         <translation type="vanished">Целый</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="530"/>
-        <location filename="../mainwindow.ui" line="533"/>
+        <location filename="../mainwindow.ui" line="516"/>
+        <location filename="../mainwindow.ui" line="519"/>
         <source>Show Data</source>
         <translation>Данные</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="545"/>
-        <location filename="../mainwindow.ui" line="548"/>
+        <location filename="../mainwindow.ui" line="531"/>
+        <location filename="../mainwindow.ui" line="534"/>
         <source>Show Traffic</source>
         <translation>Трафик</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="557"/>
+        <location filename="../mainwindow.ui" line="543"/>
         <source>Data Definition</source>
         <translation>Настройки отображения</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="595"/>
+        <location filename="../mainwindow.ui" line="581"/>
         <source>Force Coils</source>
         <translation>Предустановка coils</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="604"/>
+        <location filename="../mainwindow.ui" line="590"/>
         <source>Preset Holding Regs</source>
         <translation>Предустановка holding регистров</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="644"/>
+        <location filename="../mainwindow.ui" line="630"/>
         <source>Preset Input Regs</source>
         <translation>Предустановка input регистров</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="653"/>
+        <location filename="../mainwindow.ui" line="639"/>
         <source>Force Discretes</source>
         <translation>Предустановка discretes</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="665"/>
+        <location filename="../mainwindow.ui" line="651"/>
         <source>Show Script</source>
         <translation>Показать скрипт</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="674"/>
-        <location filename="../mainwindow.ui" line="677"/>
+        <location filename="../mainwindow.ui" line="660"/>
+        <location filename="../mainwindow.ui" line="663"/>
         <source>Run Script</source>
         <translation>Запуск</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="689"/>
-        <location filename="../mainwindow.ui" line="692"/>
+        <location filename="../mainwindow.ui" line="675"/>
+        <location filename="../mainwindow.ui" line="678"/>
         <source>Stop Script</source>
         <translation>Останов</translation>
     </message>
@@ -2706,80 +2716,80 @@ Script.onInit(()=&gt;{
         <translation type="vanished">Настройки скрипта</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="712"/>
+        <location filename="../mainwindow.ui" line="690"/>
         <source>Undo</source>
         <translation>Отменить</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="724"/>
+        <location filename="../mainwindow.ui" line="702"/>
         <source>Redo</source>
         <translation>Повторить</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="736"/>
+        <location filename="../mainwindow.ui" line="714"/>
         <source>Cut</source>
         <translation>Вырезать</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="748"/>
+        <location filename="../mainwindow.ui" line="726"/>
         <source>Copy</source>
         <translation>Копировать</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="760"/>
+        <location filename="../mainwindow.ui" line="738"/>
         <source>Paste</source>
         <translation>Вставить</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="768"/>
+        <location filename="../mainwindow.ui" line="746"/>
         <source>Select All</source>
         <translation>Выделить всё</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="776"/>
+        <location filename="../mainwindow.ui" line="754"/>
         <source>Find...</source>
         <translation>Найти...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="784"/>
+        <location filename="../mainwindow.ui" line="762"/>
         <source>Replace...</source>
         <translation>Заменить...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="787"/>
+        <location filename="../mainwindow.ui" line="765"/>
         <source>Ctrl+H</source>
         <translation>Ctrl+H</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1027"/>
+        <location filename="../mainwindow.ui" line="1005"/>
         <source>Reset Ctrs</source>
         <translation>Сброс счетчиков</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1035"/>
-        <location filename="../mainwindow.ui" line="1038"/>
-        <location filename="../mainwindow.cpp" line="106"/>
+        <location filename="../mainwindow.ui" line="1013"/>
+        <location filename="../mainwindow.ui" line="1016"/>
+        <location filename="../mainwindow.cpp" line="96"/>
         <source>Script Help</source>
         <translation>Справка по скриптам</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1041"/>
+        <location filename="../mainwindow.ui" line="1019"/>
         <source>F1</source>
         <translation>F1</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1049"/>
+        <location filename="../mainwindow.ui" line="1027"/>
         <source>Console Output</source>
         <translation>Вывод консоли</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="214"/>
-        <location filename="../mainwindow.ui" line="565"/>
+        <location filename="../mainwindow.ui" line="213"/>
+        <location filename="../mainwindow.ui" line="551"/>
         <source>Toolbar</source>
         <translation>Панель инструментов</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="573"/>
+        <location filename="../mainwindow.ui" line="559"/>
         <source>Status Bar</source>
         <translation>Строка состояния</translation>
     </message>
@@ -2788,13 +2798,11 @@ Script.onInit(()=&gt;{
         <translation type="vanished">Панель отображения</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="252"/>
-        <location filename="../mainwindow.ui" line="703"/>
         <source>Script Bar</source>
-        <translation>Панель управления скриптом</translation>
+        <translation type="vanished">Панель управления скриптом</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="391"/>
+        <location filename="../mainwindow.ui" line="377"/>
         <source>Unsigned 16-bit Intger</source>
         <translation>Беззнаковое 16-бит целое</translation>
     </message>
@@ -2807,7 +2815,7 @@ Script.onInit(()=&gt;{
         <translation type="vanished">Перевернутое с плавающей точкой</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="460"/>
+        <location filename="../mainwindow.ui" line="446"/>
         <source>Double</source>
         <translation>Двойной точности</translation>
     </message>
@@ -2816,7 +2824,7 @@ Script.onInit(()=&gt;{
         <translation type="vanished">Перевернутое двойной точности</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="515"/>
+        <location filename="../mainwindow.ui" line="501"/>
         <source>16-bit Integer</source>
         <translation>16-бит целое</translation>
     </message>
@@ -2837,57 +2845,57 @@ Script.onInit(()=&gt;{
         <translation type="vanished">Статус</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="578"/>
+        <location filename="../mainwindow.ui" line="564"/>
         <source>Windows...</source>
         <translation>Окна...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="586"/>
+        <location filename="../mainwindow.ui" line="572"/>
         <source>Hex Addresses</source>
         <translation>Шестнадцатиричные адреса</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="496"/>
-        <location filename="../mainwindow.cpp" line="603"/>
+        <location filename="../mainwindow.cpp" line="484"/>
+        <location filename="../mainwindow.cpp" line="591"/>
         <source>All files (*)</source>
         <translation>Все файлы (*)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="495"/>
-        <location filename="../mainwindow.cpp" line="564"/>
-        <location filename="../mainwindow.cpp" line="584"/>
-        <location filename="../mainwindow.cpp" line="602"/>
+        <location filename="../mainwindow.cpp" line="483"/>
+        <location filename="../mainwindow.cpp" line="552"/>
+        <location filename="../mainwindow.cpp" line="572"/>
+        <location filename="../mainwindow.cpp" line="590"/>
         <source>XML files (*.xml)</source>
         <translation>XML файлы (*.xml)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="119"/>
+        <location filename="../mainwindow.cpp" line="109"/>
         <source>Project</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="139"/>
+        <location filename="../mainwindow.cpp" line="129"/>
         <source>Output</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1104"/>
+        <location filename="../mainwindow.cpp" line="1092"/>
         <source>Traffic</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1301"/>
-        <location filename="../mainwindow.cpp" line="2242"/>
+        <location filename="../mainwindow.cpp" line="1281"/>
+        <location filename="../mainwindow.cpp" line="2189"/>
         <source>Script%1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1314"/>
+        <location filename="../mainwindow.cpp" line="1294"/>
         <source>JavaScript files (*.js);;All files (*)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1664"/>
+        <location filename="../mainwindow.cpp" line="1611"/>
         <source>Capture Error:<byte value="xd"/>
 %1</source>
         <translation>Ошибка захвата:
@@ -3803,6 +3811,19 @@ Script.onInit(()=&gt;{
 
 	/* здесь должен быть ваш код инициализации */
 });</translation>
+    </message>
+</context>
+<context>
+    <name>ScriptEditorWindow</name>
+    <message>
+        <location filename="../controls/scripteditorwindow.cpp" line="112"/>
+        <source>Run Script</source>
+        <translation type="unfinished">Запуск</translation>
+    </message>
+    <message>
+        <location filename="../controls/scripteditorwindow.cpp" line="119"/>
+        <source>Stop Script</source>
+        <translation type="unfinished">Останов</translation>
     </message>
 </context>
 <context>

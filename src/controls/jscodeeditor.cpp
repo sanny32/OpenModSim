@@ -4,6 +4,7 @@
 #include <QScrollBar>
 #include <QAbstractItemView>
 #include <QContextMenuEvent>
+#include <QPlainTextDocumentLayout>
 #include "jscompleter.h"
 #include "jscodeeditor.h"
 
@@ -68,6 +69,9 @@ void JSCodeEditor::setCodeDocument(QTextDocument* doc)
         delete _highlighter;
         _highlighter = nullptr;
     }
+
+    if(!qobject_cast<QPlainTextDocumentLayout*>(doc->documentLayout()))
+        doc->setDocumentLayout(new QPlainTextDocumentLayout(doc));
 
     QPlainTextEdit::setDocument(doc);
     _highlighter = new JSHighlighter(document());

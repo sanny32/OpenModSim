@@ -4,7 +4,6 @@
 #include <QMainWindow>
 #include <QDockWidget>
 #include <QTranslator>
-#include <QWidgetAction>
 #include "helpwidget.h"
 #include "formmodsim.h"
 #include "ansimenu.h"

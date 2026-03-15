@@ -17,7 +17,6 @@
 #include "dialogforcemultipleregisters.h"
 #include "dialogmodbusdefinitions.h"
 #include "controls/trafficlogwindow.h"
-#include "runmodecombobox.h"
 #include "mainstatusbar.h"
 #include "menuconnect.h"
 #include "controls/mdiareaex.h"
@@ -1551,31 +1550,19 @@ void MainWindow::setupMdiChild(FormModSim* frm, QMdiSubWindow* wnd, bool addToWi
         _ansiMenu->selectCodepage(name);
     };
 
-    auto updateRunMode = [this](RunMode mode)
-    {
-        auto comboBox = qobject_cast<RunModeComboBox*>(ui->toolBarScript->widgetForAction(_actionRunMode));
-        if(!comboBox)
-            return;
-
-        comboBox->blockSignals(true);
-        comboBox->setCurrentRunMode(mode);
-        comboBox->blockSignals(false);
-    };
-
     connect(frm, &FormModSim::codepageChanged, this, [updateCodepage](const QString& name)
     {
         updateCodepage(name);
     });
 
     connect(wnd, &QMdiSubWindow::windowStateChanged, this,
-            [this, frm, updateCodepage, updateRunMode](Qt::WindowStates, Qt::WindowStates newState)
+            [this, frm, updateCodepage](Qt::WindowStates, Qt::WindowStates newState)
     {
         switch(newState & ~Qt::WindowMaximized & ~Qt::WindowMinimized)
         {
             case Qt::WindowActive:
                 updateHelpWidgetState();
                 updateCodepage(frm->codepage());
-                updateRunMode(frm->scriptSettings().Mode);
                 frm->connectEditSlots();
             break;
 
@@ -1609,20 +1596,14 @@ void MainWindow::setupMdiChild(FormModSim* frm, QMdiSubWindow* wnd, bool addToWi
         }
     });
 
-    connect(frm, &FormModSim::scriptSettingsChanged, this, [updateRunMode](const ScriptSettings& ss)
-    {
-        updateRunMode(ss.Mode);
-    });
-
     connect(frm, &FormModSim::definitionChanged, this, [this, frm]()
     {
         syncSplitPeerDisplayDefinition(frm);
     });
 
-    connect(frm, &FormModSim::showed, this, [this, frm, wnd, updateRunMode]
+    connect(frm, &FormModSim::showed, this, [this, wnd]
     {
         windowActivate(wnd);
-        updateRunMode(frm->scriptSettings().Mode);
     });
 
     connect(frm, &FormModSim::captureError, this, [this](const QString& error)
@@ -2577,11 +2558,6 @@ bool MainWindow::loadProfile(const QString& filename)
 
     statusBar()->setVisible(m.value("StatusBar", true).toBool());
 
-    const auto scriptbarArea = (Qt::ToolBarArea)qBound(0, m.value("ScriptBarArea", Qt::TopToolBarArea).toInt(), 0xf);
-    const auto scriptbarBreak = m.value("ScriptBarBreak").toBool();
-    if(scriptbarBreak) addToolBarBreak(scriptbarArea);
-    addToolBar(scriptbarArea, ui->toolBarScript);
-
     _lang = m.value("Language", translationLang()).toString();
     setLanguage(_lang);
 
@@ -2688,8 +2664,6 @@ void MainWindow::saveProfile()
     m.setValue("ViewMode", ui->mdiArea->viewMode());
     m.setValue("SplitView", ui->mdiArea->isSplitView());
     m.setValue("StatusBar", statusBar()->isVisible());
-    m.setValue("ScriptBarArea", toolBarArea(ui->toolBarScript));
-    m.setValue("ScriptBarBreak", toolBarBreak(ui->toolBarScript));
     m.setValue("Language", _lang);
     m.setValue("SavePath", _savePath);
 
