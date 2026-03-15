@@ -2097,7 +2097,7 @@ void MainWindow::loadProject(const QString& filename)
                 else if (xml.name() == QLatin1String("Forms")) {
                     ui->mdiArea->closeAllSubWindows();
                     // Clean up forms that were already closed (hidden)
-                    for (auto frm : _closedForms) {
+                    for (auto&& frm : _closedForms) {
                         _projectTree->removeForm(frm);
                         delete frm;
                     }
@@ -2117,7 +2117,7 @@ void MainWindow::loadProject(const QString& filename)
                 }
                 else if (xml.name() == QLatin1String("Scripts")) {
                     // Remove existing standalone scripts
-                    for (auto doc : _standaloneScripts)
+                    for (auto&& doc : _standaloneScripts)
                         _projectTree->removeScript(doc);
                     qDeleteAll(_standaloneScripts);
                     _standaloneScripts.clear();
@@ -2245,13 +2245,13 @@ void MainWindow::saveProject(const QString& filename)
         w << qobject_cast<FormModSim*>(wnd->widget());
     }
     // Also save forms that are closed (hidden in project tree)
-    for (auto frm : _closedForms) {
+    for (auto&& frm : _closedForms) {
         w << frm;
     }
     w.writeEndElement(); // Forms
 
     w.writeStartElement("Scripts");
-    for (auto doc : _standaloneScripts) {
+    for (auto&& doc : _standaloneScripts) {
         w << doc;
     }
     w.writeEndElement(); // Scripts
@@ -2437,14 +2437,14 @@ void MainWindow::closeProject()
     ui->mdiArea->closeAllSubWindows();
 
     // Delete forms that were closed (hidden)
-    for (auto frm : _closedForms) {
+    for (auto&& frm : _closedForms) {
         _projectTree->removeForm(frm);
         delete frm;
     }
     _closedForms.clear();
 
     // Delete standalone scripts
-    for (auto doc : _standaloneScripts) {
+    for (auto&& doc : _standaloneScripts) {
         _projectTree->removeScript(doc);
         delete doc;
     }
