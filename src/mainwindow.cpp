@@ -187,6 +187,20 @@ MainWindow::MainWindow(const QString& profile, bool useSession, QWidget *parent)
 ///
 MainWindow::~MainWindow()
 {
+    // Close any remaining MDI subwindows (ScriptEditorWindows) before scripts are deleted.
+    // QObject child cleanup runs after this destructor body, in reverse construction order,
+    // meaning ScriptDocuments (added later) would be deleted before QMdiArea (added early by
+    // setupUi). Explicitly close here to ensure QPlainTextEdit is destroyed before _document.
+    ui->mdiArea->closeAllSubWindows();
+
+    // Explicitly delete closed (hidden) forms and standalone scripts now, while ui is still
+    // valid, to avoid accessing stale pointers during QObject child cleanup.
+    for (auto frm : std::as_const(_closedForms))
+        delete frm;   // QObject::~QObject removes frm from MainWindow's children list
+    _closedForms.clear();
+    qDeleteAll(_standaloneScripts);
+    _standaloneScripts.clear();
+
     delete ui;
 }
 
