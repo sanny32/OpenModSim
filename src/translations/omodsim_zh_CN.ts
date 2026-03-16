@@ -3139,7 +3139,7 @@ Script.onInit(()=&gt;{
     <message>
         <location filename="../mainwindow.ui" line="979"/>
         <location filename="../mainwindow.ui" line="982"/>
-        <location filename="../mainwindow.cpp" line="98"/>
+        <location filename="../mainwindow.cpp" line="122"/>
         <source>Script Help</source>
         <translation>脚本帮助</translation>
     </message>
@@ -3234,7 +3234,7 @@ Script.onInit(()=&gt;{
         <translation type="vanished">俄语</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="496"/>
+        <location filename="../mainwindow.cpp" line="525"/>
         <source>All files (*)</source>
         <translation>所有文件 (*)</translation>
     </message>
@@ -3243,12 +3243,12 @@ Script.onInit(()=&gt;{
         <translation type="vanished">XML 文件(*.xml)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="79"/>
+        <location filename="../mainwindow.cpp" line="103"/>
         <source>Project</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="130"/>
+        <location filename="../mainwindow.cpp" line="154"/>
         <source>Output</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3257,13 +3257,13 @@ Script.onInit(()=&gt;{
         <translation type="obsolete">数据</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="495"/>
-        <location filename="../mainwindow.cpp" line="511"/>
+        <location filename="../mainwindow.cpp" line="524"/>
+        <location filename="../mainwindow.cpp" line="540"/>
         <source>Project files (*.msimprj)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1209"/>
+        <location filename="../mainwindow.cpp" line="1239"/>
         <source>JavaScript files (*.js);;All files (*)</source>
         <translation type="unfinished"></translation>
     </message>

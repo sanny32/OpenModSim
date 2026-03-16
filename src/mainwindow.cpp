@@ -25,6 +25,24 @@
 static QString getSettingsFilePath();
 namespace {
 constexpr const char* kSplitAutoCloneProperty = "SplitAutoClone";
+constexpr const char* kNewFormKindKey = "NewFormKind";
+
+FormModSim::FormKind newFormKindFromSetting(int value)
+{
+    switch (static_cast<FormModSim::FormKind>(value)) {
+        case FormModSim::FormKind::Data:
+        case FormModSim::FormKind::Traffic:
+        case FormModSim::FormKind::Script:
+            return static_cast<FormModSim::FormKind>(value);
+        default:
+            return FormModSim::FormKind::Data;
+    }
+}
+
+int newFormKindToSetting(FormModSim::FormKind kind)
+{
+    return static_cast<int>(kind);
+}
 }
 
 
@@ -49,6 +67,12 @@ MainWindow::MainWindow(const QString& profile, bool useSession, QWidget *parent)
     setWindowTitle(APP_NAME);
     setUnifiedTitleAndToolBarOnMac(true);
     setStatusBar(new MainStatusBar(_mbMultiServer, this));
+
+    ui->actionNew->setIcon(QIcon(":/res/icon-new-form.svg"));
+    ui->actionNew->setMenu(ui->menuNew);
+    if (auto* newButton = qobject_cast<QToolButton*>(ui->toolBarMain->widgetForAction(ui->actionNew))) {
+        newButton->setPopupMode(QToolButton::MenuButtonPopup);
+    }
 
     _ansiMenu = new AnsiMenu(this);
     connect(_ansiMenu, &AnsiMenu::codepageSelected, this, &MainWindow::setCodepage);
@@ -160,6 +184,8 @@ MainWindow::MainWindow(const QString& profile, bool useSession, QWidget *parent)
         if(QFile::exists(settingsFile)) {
             QSettings m(settingsFile, QSettings::IniFormat);
             AppPreferences::instance().load(m);
+            _newFormKind = newFormKindFromSetting(
+                m.value(kNewFormKindKey, newFormKindToSetting(FormModSim::FormKind::Data)).toInt());
         }
     }
 }
@@ -223,6 +249,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
         const QString filepath = getSettingsFilePath();
         QSettings m(filepath, QSettings::IniFormat, this);
         AppPreferences::instance().save(m);
+        m.setValue(kNewFormKindKey, newFormKindToSetting(_newFormKind));
     }
 
     ui->mdiArea->closeAllSubWindows();
@@ -399,7 +426,7 @@ void MainWindow::on_awake()
 ///
 void MainWindow::on_actionNew_triggered()
 {
-    createNewForm(FormModSim::FormKind::Data);
+    createNewForm(_newFormKind);
 }
 
 ///
@@ -407,7 +434,8 @@ void MainWindow::on_actionNew_triggered()
 ///
 void MainWindow::on_actionNewDataView_triggered()
 {
-    createNewForm(FormModSim::FormKind::Data);
+    _newFormKind = FormModSim::FormKind::Data;
+    createNewForm(_newFormKind);
 }
 
 ///
@@ -415,7 +443,8 @@ void MainWindow::on_actionNewDataView_triggered()
 ///
 void MainWindow::on_actionNewTrafficView_triggered()
 {
-    createNewForm(FormModSim::FormKind::Traffic);
+    _newFormKind = FormModSim::FormKind::Traffic;
+    createNewForm(_newFormKind);
 }
 
 ///
@@ -1195,7 +1224,8 @@ void MainWindow::on_actionAbout_triggered()
 ///
 void MainWindow::on_actionNewScript_triggered()
 {
-    createNewForm(FormModSim::FormKind::Script);
+    _newFormKind = FormModSim::FormKind::Script;
+    createNewForm(_newFormKind);
 }
 
 ///
@@ -1509,6 +1539,8 @@ bool MainWindow::loadProfile(const QString& filename)
     QSettings m(_profile, QSettings::IniFormat, this);
 
     AppPreferences::instance().load(m);
+    _newFormKind = newFormKindFromSetting(
+        m.value(kNewFormKindKey, newFormKindToSetting(FormModSim::FormKind::Data)).toInt());
 
     restoreGeometry(m.value("WindowGeometry").toByteArray());
 
@@ -1617,6 +1649,7 @@ void MainWindow::saveProfile()
     m.setValue("StatusBar", statusBar()->isVisible());
     m.setValue("Language", _lang);
     m.setValue("SavePath", _project->savePath());
+    m.setValue(kNewFormKindKey, newFormKindToSetting(_newFormKind));
 
     m << _mbMultiServer.getModbusDefinitions();
 

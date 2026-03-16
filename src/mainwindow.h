@@ -193,6 +193,7 @@ private:
     QSharedPointer<QPrinter> _selectedPrinter;
     DataSimulator* _dataSimulator = nullptr;
     QString _profile;
+    FormModSim::FormKind _newFormKind = FormModSim::FormKind::Data;
 
     AppProject* _project = nullptr;
 };
