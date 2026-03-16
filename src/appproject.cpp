@@ -1,5 +1,6 @@
 #include <QtWidgets>
 #include <QBuffer>
+#include <QSet>
 #include "apppreferences.h"
 #include "appproject.h"
 #include "mainwindow.h"
@@ -554,14 +555,7 @@ void AppProject::resetSplitViewIfEmpty()
     if(!secondary || !secondary->localSubWindowList().isEmpty())
         return;
 
-    QTimer::singleShot(0, _mdiArea, [this]() {
-        if(!isSplitTabbedView())
-            return;
-
-        auto* sec = splitSecondaryArea();
-        if(sec && sec->localSubWindowList().isEmpty())
-            _mdiArea->setSplitViewEnabled(false);
-    });
+    _mdiArea->setSplitViewEnabled(false);
 }
 
 ///
@@ -623,6 +617,28 @@ int AppProject::duplicatePrimaryTabsToSecondary()
     if(!primary || !secondary)
         return 0;
 
+    // Tabbed split should keep activated subwindows maximized on both panels.
+    primary->setOption(QMdiArea::DontMaximizeSubWindowOnActivation, false);
+    secondary->setOption(QMdiArea::DontMaximizeSubWindowOnActivation, false);
+
+    auto normalizeTabbedState = [](QMdiSubWindow* wnd, MdiArea* area)
+    {
+        if(!wnd || !area)
+            return;
+
+        if(area->viewMode() == QMdiArea::TabbedView && !wnd->isMaximized())
+            wnd->showMaximized();
+    };
+
+    auto normalizeAllTabbedStates = [normalizeTabbedState](MdiArea* area)
+    {
+        if(!area || area->viewMode() != QMdiArea::TabbedView)
+            return;
+
+        for(auto* wnd : area->localSubWindowList())
+            normalizeTabbedState(wnd, area);
+    };
+
     // Split was just enabled: secondary must be empty.
     if(!secondary->localSubWindowList().isEmpty())
         return 0;
@@ -636,6 +652,12 @@ int AppProject::duplicatePrimaryTabsToSecondary()
     int movedOrDuplicated = 0;
 
     QHash<int, QList<QMdiSubWindow*>> groupsByOrigin;
+    QList<int> orderedOrigins;
+    QList<int> autoOnlyOrigins;
+    QSet<int> seenNonAuto;
+    QSet<int> seenAny;
+    int activeOriginId = 0;
+
     for(auto* wnd : primaryWindows)
     {
         auto* frm = qobject_cast<FormModSim*>(wnd ? wnd->widget() : nullptr);
@@ -650,16 +672,43 @@ int AppProject::duplicatePrimaryTabsToSecondary()
         if(!frm->property(kSplitAutoCloneProperty).isValid())
             frm->setProperty(kSplitAutoCloneProperty, false);
 
+        const bool isAutoClone = frm->property(kSplitAutoCloneProperty).toBool();
         groupsByOrigin[originId].append(wnd);
+        if(wnd == primaryActive)
+            activeOriginId = originId;
+
+        if(!isAutoClone) {
+            if(!seenNonAuto.contains(originId)) {
+                orderedOrigins.append(originId);
+                seenNonAuto.insert(originId);
+            }
+        } else if(!seenAny.contains(originId)) {
+            autoOnlyOrigins.append(originId);
+        }
+        seenAny.insert(originId);
     }
 
-    for(auto it = groupsByOrigin.cbegin(); it != groupsByOrigin.cend(); ++it)
+    for(int originId : autoOnlyOrigins)
+        if(!seenNonAuto.contains(originId))
+            orderedOrigins.append(originId);
+
+    for(int originId : orderedOrigins)
     {
-        const auto& group = it.value();
+        const auto group = groupsByOrigin.value(originId);
         if(group.isEmpty())
             continue;
 
-        auto* sourceWnd = group.first();
+        QMdiSubWindow* sourceWnd = nullptr;
+        for(auto* candidate : group) {
+            auto* candidateFrm = qobject_cast<FormModSim*>(candidate ? candidate->widget() : nullptr);
+            if(candidateFrm && !candidateFrm->property(kSplitAutoCloneProperty).toBool()) {
+                sourceWnd = candidate;
+                break;
+            }
+        }
+        if(!sourceWnd)
+            sourceWnd = group.first();
+
         auto* source = qobject_cast<FormModSim*>(sourceWnd ? sourceWnd->widget() : nullptr);
         if(!source)
             continue;
@@ -681,9 +730,10 @@ int AppProject::duplicatePrimaryTabsToSecondary()
             secondary->addSubWindow(toMove, Qt::WindowFlags());
             if(auto* movedFrm = qobject_cast<FormModSim*>(toMove->widget()))
                 movedFrm->show();
+            normalizeTabbedState(toMove, secondary);
 
             ++movedOrDuplicated;
-            if(toMove == primaryActive)
+            if(originId == activeOriginId)
                 secondaryActive = toMove;
             continue;
         }
@@ -699,18 +749,23 @@ int AppProject::duplicatePrimaryTabsToSecondary()
             continue;
 
         cloneMdiChildState(source, clone);
-        clone->setProperty(kSplitOriginIdProperty, it.key());
+        clone->setProperty(kSplitOriginIdProperty, originId);
         clone->setProperty(kSplitAutoCloneProperty, true);
         clone->setProperty(kSplitScriptRunning, source->property(kSplitScriptRunning));
         clone->show();
+        if(auto* cloneWnd = qobject_cast<QMdiSubWindow*>(clone->parentWidget()))
+            normalizeTabbedState(cloneWnd, secondary);
         ++movedOrDuplicated;
 
-        if(sourceWnd == primaryActive)
+        if(originId == activeOriginId)
             secondaryActive = qobject_cast<QMdiSubWindow*>(clone->parentWidget());
     }
 
     if(secondaryActive)
         secondary->setActiveSubWindow(secondaryActive);
+
+    // Final synchronous normalization.
+    normalizeAllTabbedStates(secondary);
 
     return movedOrDuplicated;
 }

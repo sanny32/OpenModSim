@@ -127,7 +127,7 @@
 <context>
     <name>AppProject</name>
     <message>
-        <location filename="../appproject.cpp" line="230"/>
+        <location filename="../appproject.cpp" line="231"/>
         <source>Capture Error:<byte value="xd"/>
 %1</source>
         <translation type="unfinished">Ошибка захвата:
@@ -1881,12 +1881,12 @@
         <translation type="unfinished">Адресация:</translation>
     </message>
     <message>
-        <location filename="../formdataview.ui" line="205"/>
+        <location filename="../formdataview.ui" line="211"/>
         <source>Unit Identifier:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formdataview.ui" line="255"/>
+        <location filename="../formdataview.ui" line="261"/>
         <source>Data Type</source>
         <translation type="unfinished"></translation>
     </message>
