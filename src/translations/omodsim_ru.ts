@@ -2316,7 +2316,7 @@ MODBUS Point Type:
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="563"/>
+        <location filename="../formtrafficview.cpp" line="579"/>
         <source>Address Base: %1
 Start Address: %2
 Length: %3</source>
@@ -2325,7 +2325,7 @@ Length: %3</source>
 Количество: %3</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="566"/>
+        <location filename="../formtrafficview.cpp" line="582"/>
         <source>Unit Identifier: %1
 MODBUS Point Type:
 %2</source>
@@ -2334,24 +2334,66 @@ MODBUS Point Type:
 %2</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="1339"/>
+        <location filename="../formtrafficview.cpp" line="1384"/>
         <source> ms</source>
         <translation type="unfinished"> мс</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="1350"/>
+        <location filename="../formtrafficview.cpp" line="1395"/>
         <source>Run on startup</source>
         <translation type="unfinished">Запускать при открытии</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="1361"/>
+        <location filename="../formtrafficview.cpp" line="1406"/>
         <source>Run Script</source>
         <translation type="unfinished">Запуск</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="1367"/>
+        <location filename="../formtrafficview.cpp" line="1412"/>
         <source>Stop Script</source>
         <translation type="unfinished">Останов</translation>
+    </message>
+    <message>
+        <location filename="../formtrafficview.cpp" line="1444"/>
+        <location filename="../formtrafficview.cpp" line="1517"/>
+        <location filename="../formtrafficview.cpp" line="1522"/>
+        <source>All</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../formtrafficview.cpp" line="1516"/>
+        <source>Unit ID:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../formtrafficview.cpp" line="1518"/>
+        <source>Filter by Unit Identifier (0 = all)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../formtrafficview.cpp" line="1519"/>
+        <source>Function:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../formtrafficview.cpp" line="1520"/>
+        <source>Limit:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../formtrafficview.cpp" line="1521"/>
+        <source>Clear</source>
+        <translation type="unfinished">Очистить</translation>
+    </message>
+    <message>
+        <location filename="../formtrafficview.cpp" line="1540"/>
+        <source>Resume</source>
+        <translation type="unfinished">Возобновить</translation>
+    </message>
+    <message>
+        <location filename="../formtrafficview.cpp" line="1540"/>
+        <source>Pause</source>
+        <translation type="unfinished">Пауза</translation>
     </message>
     <message>
         <source>Binary</source>

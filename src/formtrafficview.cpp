@@ -3,6 +3,7 @@
 #include <QDateTime>
 #include <QHelpEngine>
 #include <QHelpContentWidget>
+#include <QHBoxLayout>
 #include <QWidgetAction>
 #include "modbuslimits.h"
 #include "mainwindow.h"
@@ -35,6 +36,11 @@ FormTrafficView::FormTrafficView(int id, ModbusMultiServer& server, DataSimulato
     ui->setupUi(this);
     setWindowTitle(QString("Traffic%1").arg(_formId));
     setWindowIcon(QIcon(":/res/actionShowTraffic.png"));
+    setupTrafficFilterBar();
+
+    ui->frameDataDefinition->hide();
+    ui->frameDataDefinition->setMaximumHeight(0);
+    ui->splitter->setSizes({0, 1});
 
     ui->lineEditDeviceId->setInputRange(ModbusLimits::slaveRange());
     ui->lineEditDeviceId->setValue(1);
@@ -128,6 +134,7 @@ void FormTrafficView::changeEvent(QEvent* e)
     if (e->type() == QEvent::LanguageChange)
     {
         ui->retranslateUi(this);
+        retranslateTrafficFilterBar();
         updateStatus();
     }
 
@@ -254,6 +261,15 @@ void FormTrafficView::setDisplayDefinition(const DisplayDefinition& dd)
     ui->outputWidget->setLogViewLimit(dd.LogViewLimit);
     ui->outputWidget->setDataViewColumnsDistance(dd.DataViewColumnsDistance);
     ui->outputWidget->setAutosctollLogView(dd.AutoscrollLog);
+    if (_rowLimitCombo) {
+        int idx = _rowLimitCombo->findData(dd.LogViewLimit);
+        if (idx < 0) {
+            _rowLimitCombo->addItem(QString::number(dd.LogViewLimit), dd.LogViewLimit);
+            idx = _rowLimitCombo->findData(dd.LogViewLimit);
+        }
+        if (idx >= 0)
+            _rowLimitCombo->setCurrentIndex(idx);
+    }
 
     _verboseLogging = dd.VerboseLogging;
 
@@ -890,6 +906,8 @@ LogViewState FormTrafficView::logViewState() const
 void FormTrafficView::setLogViewState(LogViewState state)
 {
     ui->statisticWidget->setLogState(state);
+    ui->outputWidget->setLogViewState(state);
+    syncTrafficFilterState(state);
 }
 
 ///
@@ -1213,12 +1231,37 @@ bool FormTrafficView::isLoggingRequest(QSharedPointer<const ModbusMessage> msgRe
 }
 
 ///
+/// \brief FormTrafficView::matchesTrafficFilter
+/// \param msg
+/// \return
+///
+bool FormTrafficView::matchesTrafficFilter(QSharedPointer<const ModbusMessage> msg) const
+{
+    if (!msg)
+        return false;
+
+    if (_unitIdFilter) {
+        const int unitId = _unitIdFilter->value();
+        if (unitId != 0 && msg->deviceId() != unitId)
+            return false;
+    }
+
+    if (_funcCodeFilter && _funcCodeFilter->currentIndex() > 0) {
+        const int fc = _funcCodeFilter->currentData().toInt();
+        if (static_cast<int>(msg->functionCode()) != fc)
+            return false;
+    }
+
+    return true;
+}
+
+///
 /// \brief FormTrafficView::on_mbRequest
 /// \param msg
 ///
 void FormTrafficView::on_mbRequest(QSharedPointer<const ModbusMessage> msg)
 {
-    if(_verboseLogging || isLoggingRequest(msg)) {
+    if((_verboseLogging || isLoggingRequest(msg)) && matchesTrafficFilter(msg)) {
         ui->statisticWidget->increaseRequests();
         ui->outputWidget->updateTraffic(msg);
     }
@@ -1231,7 +1274,9 @@ void FormTrafficView::on_mbRequest(QSharedPointer<const ModbusMessage> msg)
 ///
 void FormTrafficView::on_mbResponse(QSharedPointer<const ModbusMessage> msgReq, QSharedPointer<const ModbusMessage> msgResp)
 {
-    if(_verboseLogging || isLoggingRequest(msgReq)) {
+    const bool logByDefinition = _verboseLogging || isLoggingRequest(msgReq);
+    const bool passesFilter = msgReq ? matchesTrafficFilter(msgReq) : matchesTrafficFilter(msgResp);
+    if(logByDefinition && passesFilter) {
         ui->statisticWidget->increaseResponses();
         ui->outputWidget->updateTraffic(msgResp);
     }
@@ -1376,6 +1421,123 @@ void FormTrafficView::setupScriptBar()
     ui->verticalLayout_4->insertWidget(0, _scriptBar);
 
     updateScriptBar();
+}
+
+///
+/// \brief FormTrafficView::setupTrafficFilterBar
+///
+void FormTrafficView::setupTrafficFilterBar()
+{
+    _trafficFilterBar = new QWidget(this);
+    auto* tbLayout = new QHBoxLayout(_trafficFilterBar);
+    tbLayout->setContentsMargins(4, 2, 4, 2);
+    tbLayout->setSpacing(6);
+
+    _labelUnitId = new QLabel(_trafficFilterBar);
+    _unitIdFilter = new QSpinBox(_trafficFilterBar);
+    _unitIdFilter->setRange(0, 247);
+    _unitIdFilter->setValue(0);
+    _unitIdFilter->setFixedWidth(70);
+
+    _labelFuncCode = new QLabel(_trafficFilterBar);
+    _funcCodeFilter = new QComboBox(_trafficFilterBar);
+    _funcCodeFilter->addItem(tr("All"), 0);
+    _funcCodeFilter->addItem("FC01 Read Coils", 1);
+    _funcCodeFilter->addItem("FC02 Read Discrete Inputs", 2);
+    _funcCodeFilter->addItem("FC03 Read Holding Registers", 3);
+    _funcCodeFilter->addItem("FC04 Read Input Registers", 4);
+    _funcCodeFilter->addItem("FC05 Write Single Coil", 5);
+    _funcCodeFilter->addItem("FC06 Write Single Register", 6);
+    _funcCodeFilter->addItem("FC15 Write Multiple Coils", 15);
+    _funcCodeFilter->addItem("FC16 Write Multiple Registers", 16);
+    _funcCodeFilter->setFixedWidth(220);
+
+    _labelRowLimit = new QLabel(_trafficFilterBar);
+    _rowLimitCombo = new QComboBox(_trafficFilterBar);
+    for (const int limit : {100, 500, 1000, 5000})
+        _rowLimitCombo->addItem(QString::number(limit), limit);
+    _rowLimitCombo->setCurrentIndex(2);
+    _rowLimitCombo->setFixedWidth(65);
+
+    _pauseButton = new QToolButton(_trafficFilterBar);
+    _pauseButton->setCheckable(true);
+    _pauseButton->setIcon(QIcon(":/res/actionStopScript.png"));
+    _pauseButton->setAutoRaise(true);
+
+    _clearButton = new QToolButton(_trafficFilterBar);
+    _clearButton->setIcon(QIcon(":/res/edit-delete.svg"));
+    _clearButton->setAutoRaise(true);
+
+    tbLayout->addWidget(_labelUnitId);
+    tbLayout->addWidget(_unitIdFilter);
+    tbLayout->addSpacing(8);
+    tbLayout->addWidget(_labelFuncCode);
+    tbLayout->addWidget(_funcCodeFilter);
+    tbLayout->addSpacing(8);
+    tbLayout->addWidget(_labelRowLimit);
+    tbLayout->addWidget(_rowLimitCombo);
+    tbLayout->addStretch();
+    tbLayout->addWidget(_pauseButton);
+    tbLayout->addWidget(_clearButton);
+
+    ui->verticalLayout->insertWidget(0, _trafficFilterBar);
+    ui->outputWidget->setLogViewLimit(_rowLimitCombo->currentData().toInt());
+
+    connect(_rowLimitCombo, QOverload<int>::of(&QComboBox::currentIndexChanged), this, [this]() {
+        ui->outputWidget->setLogViewLimit(_rowLimitCombo->currentData().toInt());
+    });
+    connect(_pauseButton, &QToolButton::toggled, this, [this](bool paused) {
+        if (logViewState() == LogViewState::Unknown) {
+            _pauseButton->blockSignals(true);
+            _pauseButton->setChecked(false);
+            _pauseButton->blockSignals(false);
+            return;
+        }
+
+        const auto state = paused ? LogViewState::Paused : LogViewState::Running;
+        setLogViewState(state);
+        emit statisticLogStateChanged(state);
+    });
+    connect(_clearButton, &QToolButton::clicked, this, [this]() {
+        ui->outputWidget->clearLogView();
+    });
+
+    retranslateTrafficFilterBar();
+}
+
+///
+/// \brief FormTrafficView::retranslateTrafficFilterBar
+///
+void FormTrafficView::retranslateTrafficFilterBar()
+{
+    if (!_trafficFilterBar)
+        return;
+
+    _labelUnitId->setText(tr("Unit ID:"));
+    _unitIdFilter->setSpecialValueText(tr("All"));
+    _unitIdFilter->setToolTip(tr("Filter by Unit Identifier (0 = all)"));
+    _labelFuncCode->setText(tr("Function:"));
+    _labelRowLimit->setText(tr("Limit:"));
+    _clearButton->setToolTip(tr("Clear"));
+    _funcCodeFilter->setItemText(0, tr("All"));
+
+    syncTrafficFilterState(logViewState());
+}
+
+///
+/// \brief FormTrafficView::syncTrafficFilterState
+/// \param state
+///
+void FormTrafficView::syncTrafficFilterState(LogViewState state)
+{
+    if (!_pauseButton)
+        return;
+
+    _pauseButton->setEnabled(state != LogViewState::Unknown);
+    _pauseButton->blockSignals(true);
+    _pauseButton->setChecked(state == LogViewState::Paused);
+    _pauseButton->blockSignals(false);
+    _pauseButton->setToolTip((state == LogViewState::Paused) ? tr("Resume") : tr("Pause"));
 }
 
 ///

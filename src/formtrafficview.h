@@ -7,6 +7,9 @@
 #include <QToolBar>
 #include <QCheckBox>
 #include <QSpinBox>
+#include <QComboBox>
+#include <QLabel>
+#include <QToolButton>
 #include <QVersionNumber>
 #include <QXmlStreamWriter>
 #include "fontutils.h"
@@ -187,6 +190,10 @@ private:
     void onDefinitionChanged();
     JScriptControl* scriptControl();
     bool isLoggingRequest(QSharedPointer<const ModbusMessage> msgReq) const;
+    bool matchesTrafficFilter(QSharedPointer<const ModbusMessage> msg) const;
+    void setupTrafficFilterBar();
+    void retranslateTrafficFilterBar();
+    void syncTrafficFilterState(LogViewState state);
 
     void setupScriptBar();
     void updateScriptBar();
@@ -208,6 +215,16 @@ private:
     RunModeComboBox* _scriptRunModeCombo = nullptr;
     QSpinBox*        _scriptIntervalSpin = nullptr;
     QCheckBox*       _scriptRunOnStartupCheck = nullptr;
+
+    QWidget*      _trafficFilterBar = nullptr;
+    QLabel*       _labelUnitId = nullptr;
+    QSpinBox*     _unitIdFilter = nullptr;
+    QLabel*       _labelFuncCode = nullptr;
+    QComboBox*    _funcCodeFilter = nullptr;
+    QLabel*       _labelRowLimit = nullptr;
+    QComboBox*    _rowLimitCombo = nullptr;
+    QToolButton*  _pauseButton = nullptr;
+    QToolButton*  _clearButton = nullptr;
 };
 
 ///
