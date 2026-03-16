@@ -346,6 +346,9 @@ inline QXmlStreamWriter& operator <<(QXmlStreamWriter& xml, FormScriptView* frm)
     xml.writeStartElement("FormScriptView");
 
     xml.writeAttribute("Version", FormScriptView::VERSION.toString());
+    const auto panel = frm->property("SplitPanel").toString();
+    if(!panel.isEmpty())
+        xml.writeAttribute("Panel", panel);
     xml.writeAttribute("DisplayMode", enumToString<DisplayMode>(frm->displayMode()));
     xml.writeAttribute("DataDisplayMode", enumToString<DataDisplayMode>(frm->dataDisplayMode()));
     xml.writeAttribute("DisplayHexAddresses", boolToString(frm->displayHexAddresses()));

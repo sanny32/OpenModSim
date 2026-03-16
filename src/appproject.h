@@ -17,15 +17,14 @@ class MainWindow;
 
 ///
 /// \brief The AppProject class manages the project state:
-/// forms, scripts, counters, split-view sync, and project file I/O.
+/// forms, scripts, counters, split-view state, and project file I/O.
 ///
 class AppProject : public QObject
 {
     Q_OBJECT
 
 public:
-    // Shared constants for split-view form pairing
-    static constexpr const char* kSplitMirrorPeerId = "SplitMirrorPeerId";
+    // Shared constants for split-view runtime state
     static constexpr const char* kSplitScriptRunning = "SplitScriptRunning";
 
     explicit AppProject(MdiAreaEx* mdiArea,
@@ -55,16 +54,12 @@ public:
     bool        cloneMdiChildState(FormModSim* source, FormModSim* target) const;
 
     // Split-view
-    FormModSim* splitPeer(FormModSim* frm) const;
     MdiArea*    splitSecondaryArea() const;
     bool        isSplitTabbedView() const;
     bool        isScriptRunningOnSplitPair(FormModSim* frm) const;
     void        updateSplitPairScriptIcons(FormModSim* frm);
-    void        ensureSplitMirrorForForm(FormModSim* frm);
-    void        syncSplitPeerDisplayDefinition(FormModSim* frm);
-    void        syncSplitPeerState(FormModSim* frm);
-    void        syncSplitForms();
-    void        clearSplitMirrorsFromSecondary();
+    int         duplicatePrimaryTabsToSecondary();
+    void        removeSplitAutoClonesFromSecondary();
     void        resetSplitViewIfEmpty();
 
     // Project I/O
@@ -82,11 +77,11 @@ public:
     void    setSavePath(const QString& p) { _savePath = p; }
     int     windowCounter() const   { return _windowCounter; }
     void    setWindowCounter(int v) { _windowCounter = v; }
-    bool    splitDisableInProgress() const { return _splitDisableInProgress; }
-    void    setSplitDisableInProgress(bool v) { _splitDisableInProgress = v; }
 
 private:
     void setupMdiChild(FormModSim* frm, QMdiSubWindow* wnd, bool addToWindowList);
+    MdiArea* activeCreateArea() const;
+    MdiArea* areaOfForm(FormModSim* frm) const;
 
 private:
     MdiAreaEx*                    _mdiArea;
@@ -99,8 +94,6 @@ private:
     int                _windowCounter = 0;
     QList<FormModSim*> _closedForms;
     QString            _savePath;
-    bool _splitDisplayDefinitionSyncInProgress = false;
-    bool _splitDisableInProgress = false;
 };
 
 #endif // APPPROJECT_H

@@ -1,7 +1,5 @@
 #include <QtWidgets>
 #include <QBuffer>
-#include <QScopedValueRollback>
-#include <QSet>
 #include "apppreferences.h"
 #include "appproject.h"
 #include "mainwindow.h"
@@ -12,6 +10,14 @@
 #include "formtrafficview.h"
 #include "formscriptview.h"
 #include "uiutils.h"
+
+namespace {
+constexpr const char* kFormPanelProperty = "SplitPanel";
+constexpr const char* kPanelLeft = "L";
+constexpr const char* kPanelRight = "R";
+constexpr const char* kSplitOriginIdProperty = "SplitOriginId";
+constexpr const char* kSplitAutoCloneProperty = "SplitAutoClone";
+}
 
 ///
 /// \brief AppProject::AppProject
@@ -93,11 +99,7 @@ FormModSim* AppProject::createMdiChild(int id, FormModSim::FormKind kind)
         ++id;
 
     _windowCounter = qMax(_windowCounter, id);
-    auto frm = createMdiChildOnArea(id, kind, _mdiArea->primaryArea(), true);
-    if(frm)
-        ensureSplitMirrorForForm(frm);
-
-    return frm;
+    return createMdiChildOnArea(id, kind, activeCreateArea(), true);
 }
 
 ///
@@ -212,11 +214,6 @@ void AppProject::setupMdiChild(FormModSim* frm, QMdiSubWindow* wnd, bool addToWi
         }
     });
 
-    connect(frm, &FormModSim::definitionChanged, _mainWindow, [this, frm]()
-    {
-        syncSplitPeerDisplayDefinition(frm);
-    });
-
     connect(frm, &FormModSim::showed, _mainWindow, [this, frm]
     {
         // Activate whichever subwindow currently holds this form
@@ -238,24 +235,6 @@ void AppProject::setupMdiChild(FormModSim* frm, QMdiSubWindow* wnd, bool addToWi
         _mainWindow->showHelpContext(helpKey);
     });
 
-    connect(frm, &FormModSim::statisticCtrsReseted, _mainWindow, [this, frm]()
-    {
-        if(_splitDisableInProgress || !isSplitTabbedView())
-            return;
-
-        if(auto peer = splitPeer(frm))
-            peer->resetCtrs();
-    });
-
-    connect(frm, &FormModSim::statisticLogStateChanged, _mainWindow, [this, frm](LogViewState state)
-    {
-        if(_splitDisableInProgress || !isSplitTabbedView())
-            return;
-
-        if(auto peer = splitPeer(frm))
-            peer->setLogViewState(state);
-    });
-
     connect(frm, &FormModSim::consoleMessage, _mainWindow, [this](const QString& source, const QString& text, ConsoleOutput::MessageType type) {
         _mainWindow->showConsoleMessage(source, text, type);
     });
@@ -263,32 +242,16 @@ void AppProject::setupMdiChild(FormModSim* frm, QMdiSubWindow* wnd, bool addToWi
     connect(frm, &FormModSim::scriptRunning, _mainWindow, [this, frm]()
     {
         frm->setProperty(kSplitScriptRunning, true);
-        if(auto peer = splitPeer(frm))
-            peer->setProperty(kSplitScriptRunning, true);
         updateSplitPairScriptIcons(frm);
     });
 
     connect(frm, &FormModSim::scriptStopped, _mainWindow, [this, frm]()
     {
         frm->setProperty(kSplitScriptRunning, false);
-        if(auto peer = splitPeer(frm))
-            peer->setProperty(kSplitScriptRunning, false);
         updateSplitPairScriptIcons(frm);
     });
 
-    connect(frm, &FormModSim::closing, _mainWindow, [this, frm]()
-    {
-        const int peerId = frm->property(kSplitMirrorPeerId).toInt();
-        if(peerId <= 0)
-            return;
-
-        if(auto peer = findMdiChild(peerId))
-            peer->setProperty(kSplitMirrorPeerId, QVariant());
-
-        frm->setProperty(kSplitMirrorPeerId, QVariant());
-    });
-
-    connect(wnd, &QObject::destroyed, _mainWindow, [this]() {
+    connect(wnd, &QObject::destroyed, _mdiArea, [this]() {
         resetSplitViewIfEmpty();
     });
 
@@ -307,7 +270,7 @@ void AppProject::rewrapMdiChild(FormModSim* frm)
     if (!frm || !_closedForms.contains(frm))
         return;
 
-    auto area = _mdiArea->primaryArea();
+    auto area = activeCreateArea();
     if (!area)
         return;
 
@@ -345,7 +308,7 @@ void AppProject::rewrapMdiChild(FormModSim* frm)
         }
     });
 
-    connect(wnd, &QObject::destroyed, _mainWindow, [this]() {
+    connect(wnd, &QObject::destroyed, _mdiArea, [this]() {
         resetSplitViewIfEmpty();
     });
 
@@ -498,21 +461,65 @@ bool AppProject::cloneMdiChildState(FormModSim* source, FormModSim* target) cons
 }
 
 ///
-/// \brief AppProject::splitPeer
+/// \brief AppProject::activeCreateArea
+/// \return
+///
+MdiArea* AppProject::activeCreateArea() const
+{
+    auto* primary = _mdiArea->primaryArea();
+    if(!primary)
+        return nullptr;
+
+    if(!isSplitTabbedView())
+        return primary;
+
+    auto* secondary = splitSecondaryArea();
+    if(!secondary)
+        return primary;
+
+    if(auto activeWnd = _mdiArea->activeSubWindow()) {
+        if(secondary->localSubWindowList().contains(activeWnd))
+            return secondary;
+        if(primary->localSubWindowList().contains(activeWnd))
+            return primary;
+    }
+
+    if(auto* focus = QApplication::focusWidget()) {
+        if(secondary->isAncestorOf(focus))
+            return secondary;
+        if(primary->isAncestorOf(focus))
+            return primary;
+    }
+
+    return primary;
+}
+
+///
+/// \brief AppProject::areaOfForm
 /// \param frm
 /// \return
 ///
-FormModSim* AppProject::splitPeer(FormModSim* frm) const
+MdiArea* AppProject::areaOfForm(FormModSim* frm) const
 {
     if(!frm)
         return nullptr;
 
-    const int peerId = frm->property(kSplitMirrorPeerId).toInt();
-    if(peerId <= 0)
+    auto* primary = _mdiArea->primaryArea();
+    if(!primary)
         return nullptr;
 
-    auto peer = findMdiChild(peerId);
-    return (peer && peer != frm) ? peer : nullptr;
+    auto* wnd = qobject_cast<QMdiSubWindow*>(frm->parentWidget());
+    if(!wnd)
+        return nullptr;
+
+    if(primary->localSubWindowList().contains(wnd))
+        return primary;
+
+    if(auto* secondary = splitSecondaryArea())
+        if(secondary->localSubWindowList().contains(wnd))
+            return secondary;
+
+    return nullptr;
 }
 
 ///
@@ -540,14 +547,21 @@ bool AppProject::isSplitTabbedView() const
 ///
 void AppProject::resetSplitViewIfEmpty()
 {
-    if(_splitDisableInProgress || !isSplitTabbedView())
+    if(!isSplitTabbedView())
         return;
 
-    auto secondary = splitSecondaryArea();
+    auto* secondary = splitSecondaryArea();
     if(!secondary || !secondary->localSubWindowList().isEmpty())
         return;
 
-    _mdiArea->toggleVerticalSplit();
+    QTimer::singleShot(0, _mdiArea, [this]() {
+        if(!isSplitTabbedView())
+            return;
+
+        auto* sec = splitSecondaryArea();
+        if(sec && sec->localSubWindowList().isEmpty())
+            _mdiArea->setSplitViewEnabled(false);
+    });
 }
 
 ///
@@ -560,16 +574,7 @@ bool AppProject::isScriptRunningOnSplitPair(FormModSim* frm) const
     if(!frm)
         return false;
 
-    const bool formRunning = frm->canStopScript() || frm->property(kSplitScriptRunning).toBool();
-    if(formRunning)
-        return true;
-
-    if(auto peer = splitPeer(frm)) {
-        const bool peerRunning = peer->canStopScript() || peer->property(kSplitScriptRunning).toBool();
-        return peerRunning;
-    }
-
-    return false;
+    return frm->canStopScript() || frm->property(kSplitScriptRunning).toBool();
 }
 
 ///
@@ -596,184 +601,139 @@ void AppProject::updateSplitPairScriptIcons(FormModSim* frm)
             crossFadeWindowIcon(targetWnd, targetWnd->windowIcon(), target->windowIcon());
     };
 
-    auto peer = splitPeer(frm);
-    const bool periodicMode = frm->scriptSettings().Mode == RunMode::Periodically ||
-                              (peer && peer->scriptSettings().Mode == RunMode::Periodically);
+    const bool periodicMode = frm->scriptSettings().Mode == RunMode::Periodically;
     const bool running = periodicMode && isScriptRunningOnSplitPair(frm);
-
     applyIcon(frm, running);
-    applyIcon(peer, running);
 }
 
 ///
-/// \brief AppProject::ensureSplitMirrorForForm
-/// \param frm
+/// \brief AppProject::duplicatePrimaryTabsToSecondary
+/// Rebuilds split tabs from primary panel:
+/// - creates a secondary copy for tabs that exist once;
+/// - reuses previously auto-cloned tabs (moves one back to secondary) to avoid growth.
+/// \return number of tabs moved/duplicated into secondary
 ///
-void AppProject::ensureSplitMirrorForForm(FormModSim* frm)
+int AppProject::duplicatePrimaryTabsToSecondary()
 {
-    if(!frm || !isSplitTabbedView())
-        return;
+    if(!isSplitTabbedView())
+        return 0;
 
-    auto secondary = splitSecondaryArea();
-    if(!secondary)
-        return;
+    auto* primary = _mdiArea->primaryArea();
+    auto* secondary = splitSecondaryArea();
+    if(!primary || !secondary)
+        return 0;
 
-    MdiArea* ownerArea = nullptr;
-    for(auto&& wnd : _mdiArea->localSubWindowList()) {
-        if(wnd && wnd->widget() == frm) {
-            ownerArea = _mdiArea->primaryArea();
-            break;
+    // Split was just enabled: secondary must be empty.
+    if(!secondary->localSubWindowList().isEmpty())
+        return 0;
+
+    const auto primaryWindows = primary->localSubWindowList();
+    if(primaryWindows.isEmpty())
+        return 0;
+
+    auto* primaryActive = primary->activeSubWindow();
+    QMdiSubWindow* secondaryActive = nullptr;
+    int movedOrDuplicated = 0;
+
+    QHash<int, QList<QMdiSubWindow*>> groupsByOrigin;
+    for(auto* wnd : primaryWindows)
+    {
+        auto* frm = qobject_cast<FormModSim*>(wnd ? wnd->widget() : nullptr);
+        if(!frm)
+            continue;
+
+        int originId = frm->property(kSplitOriginIdProperty).toInt();
+        if(originId <= 0) {
+            originId = frm->formId();
+            frm->setProperty(kSplitOriginIdProperty, originId);
         }
+        if(!frm->property(kSplitAutoCloneProperty).isValid())
+            frm->setProperty(kSplitAutoCloneProperty, false);
+
+        groupsByOrigin[originId].append(wnd);
     }
-    if(!ownerArea) {
-        for(auto&& wnd : secondary->localSubWindowList()) {
-            if(wnd && wnd->widget() == frm) {
-                ownerArea = secondary;
-                break;
+
+    for(auto it = groupsByOrigin.cbegin(); it != groupsByOrigin.cend(); ++it)
+    {
+        const auto& group = it.value();
+        if(group.isEmpty())
+            continue;
+
+        auto* sourceWnd = group.first();
+        auto* source = qobject_cast<FormModSim*>(sourceWnd ? sourceWnd->widget() : nullptr);
+        if(!source)
+            continue;
+
+        if(group.size() > 1)
+        {
+            QMdiSubWindow* toMove = nullptr;
+            for(auto* candidate : group) {
+                auto* candidateFrm = qobject_cast<FormModSim*>(candidate ? candidate->widget() : nullptr);
+                if(candidateFrm && candidateFrm->property(kSplitAutoCloneProperty).toBool()) {
+                    toMove = candidate;
+                    break;
+                }
             }
+            if(!toMove)
+                toMove = group.last();
+
+            primary->removeSubWindow(toMove);
+            secondary->addSubWindow(toMove, Qt::WindowFlags());
+            if(auto* movedFrm = qobject_cast<FormModSim*>(toMove->widget()))
+                movedFrm->show();
+
+            ++movedOrDuplicated;
+            if(toMove == primaryActive)
+                secondaryActive = toMove;
+            continue;
         }
+
+        int cloneId = _windowCounter + 1;
+        while(findMdiChild(cloneId))
+            ++cloneId;
+        _windowCounter = cloneId;
+
+        // Split clones are visual peers only: do not add them to project tree/window menu.
+        auto* clone = createMdiChildOnArea(cloneId, source->formKind(), secondary, false);
+        if(!clone)
+            continue;
+
+        cloneMdiChildState(source, clone);
+        clone->setProperty(kSplitOriginIdProperty, it.key());
+        clone->setProperty(kSplitAutoCloneProperty, true);
+        clone->setProperty(kSplitScriptRunning, source->property(kSplitScriptRunning));
+        clone->show();
+        ++movedOrDuplicated;
+
+        if(sourceWnd == primaryActive)
+            secondaryActive = qobject_cast<QMdiSubWindow*>(clone->parentWidget());
     }
 
-    if(!ownerArea)
-        return;
+    if(secondaryActive)
+        secondary->setActiveSubWindow(secondaryActive);
 
-    const int peerId = frm->property(kSplitMirrorPeerId).toInt();
-    MdiArea* targetArea = ownerArea == _mdiArea->primaryArea() ? secondary : _mdiArea->primaryArea();
-    if(peerId > 0) {
-        if(auto existingPeer = findMdiChildInArea(targetArea, peerId)) {
-            if(auto* doc = frm->scriptDocument()) {
-                if(doc->parent() != _mainWindow)
-                    doc->setParent(_mainWindow);
-                existingPeer->setScriptDocument(doc);
-            }
-            updateSplitPairScriptIcons(frm);
-            return;
-        }
-    }
-
-    int mirrorId = _windowCounter + 1;
-    while(findMdiChild(mirrorId))
-        ++mirrorId;
-    _windowCounter = mirrorId;
-
-    const bool addToWindowList = (targetArea == _mdiArea->primaryArea());
-    auto mirror = createMdiChildOnArea(mirrorId, frm->formKind(), targetArea, addToWindowList);
-    if(!mirror)
-        return;
-
-    cloneMdiChildState(frm, mirror);
-    mirror->setStatisticCounters(frm->requestCount(), frm->responseCount());
-    mirror->setLogViewState(frm->logViewState());
-    if(auto* doc = frm->scriptDocument()) {
-        if(doc->parent() != _mainWindow)
-            doc->setParent(_mainWindow);
-        mirror->setScriptDocument(doc);
-    }
-    frm->setProperty(kSplitMirrorPeerId, mirror->formId());
-    mirror->setProperty(kSplitMirrorPeerId, frm->formId());
-    mirror->setProperty(kSplitScriptRunning, frm->property(kSplitScriptRunning));
-    updateSplitPairScriptIcons(frm);
-    mirror->show();
+    return movedOrDuplicated;
 }
 
 ///
-/// \brief AppProject::syncSplitPeerDisplayDefinition
-/// \param frm
+/// \brief AppProject::removeSplitAutoClonesFromSecondary
+/// Removes transient split clones from secondary panel before split merge.
 ///
-void AppProject::syncSplitPeerDisplayDefinition(FormModSim* frm)
-{
-    if(!frm || !isSplitTabbedView() || _splitDisplayDefinitionSyncInProgress)
-        return;
-
-    const int peerId = frm->property(kSplitMirrorPeerId).toInt();
-    if(peerId <= 0)
-        return;
-
-    auto peer = findMdiChild(peerId);
-    if(!peer || peer == frm)
-        return;
-
-    _splitDisplayDefinitionSyncInProgress = true;
-    peer->setDisplayDefinition(frm->displayDefinition());
-    _splitDisplayDefinitionSyncInProgress = false;
-}
-
-///
-/// \brief AppProject::syncSplitPeerState
-/// \param frm
-///
-void AppProject::syncSplitPeerState(FormModSim* frm)
-{
-    if(!frm || !isSplitTabbedView())
-        return;
-
-    ensureSplitMirrorForForm(frm);
-
-    const int peerId = frm->property(kSplitMirrorPeerId).toInt();
-    if(peerId <= 0)
-        return;
-
-    auto peer = findMdiChild(peerId);
-    if(!peer || peer == frm)
-        return;
-
-    cloneMdiChildState(frm, peer);
-}
-
-///
-/// \brief AppProject::syncSplitForms
-///
-void AppProject::syncSplitForms()
+void AppProject::removeSplitAutoClonesFromSecondary()
 {
     if(!isSplitTabbedView())
         return;
 
-    auto secondary = splitSecondaryArea();
-    if(!secondary)
-        return;
-
-    QList<FormModSim*> primaryForms;
-    for(auto&& wnd : _mdiArea->localSubWindowList()) {
-        if(auto frm = qobject_cast<FormModSim*>(wnd->widget()))
-            primaryForms.append(frm);
-    }
-
-    QList<FormModSim*> secondaryForms;
-    for(auto&& wnd : secondary->localSubWindowList()) {
-        if(auto frm = qobject_cast<FormModSim*>(wnd->widget()))
-            secondaryForms.append(frm);
-    }
-
-    for(auto* frm : primaryForms)
-        ensureSplitMirrorForForm(frm);
-
-    for(auto* frm : secondaryForms)
-        ensureSplitMirrorForForm(frm);
-}
-
-///
-/// \brief AppProject::clearSplitMirrorsFromSecondary
-///
-void AppProject::clearSplitMirrorsFromSecondary()
-{
-    auto secondary = splitSecondaryArea();
+    auto* secondary = splitSecondaryArea();
     if(!secondary)
         return;
 
     const auto secondaryWindows = secondary->localSubWindowList();
-    for(auto&& wnd : secondaryWindows)
+    for(auto* wnd : secondaryWindows)
     {
-        auto frm = qobject_cast<FormModSim*>(wnd->widget());
-        if(!frm)
-            continue;
-
-        const int peerId = frm->property(kSplitMirrorPeerId).toInt();
-        auto peer = findMdiChildInArea(_mdiArea->primaryArea(), peerId);
-        if(!peer)
-            continue;
-
-        peer->setProperty(kSplitMirrorPeerId, QVariant());
-        wnd->close();
+        auto* frm = qobject_cast<FormModSim*>(wnd ? wnd->widget() : nullptr);
+        if(frm && frm->property(kSplitAutoCloneProperty).toBool())
+            wnd->close();
     }
 }
 
@@ -793,8 +753,7 @@ void AppProject::loadProject(const QString& filename)
     bool splitView = false;
     QString activePrimaryWin;
     QString activeSecWin;
-    struct MirrorState { DisplayMode displayMode = DisplayMode::Data; int scriptCursorPos = -1; int scriptScrollPos = -1; };
-    QMap<int, MirrorState> mirrorStates;
+    bool viewPreparedForForms = false;
 
     QXmlStreamReader xml(&file);
     while (xml.readNextStartElement()) {
@@ -811,24 +770,6 @@ void AppProject::loadProject(const QString& filename)
                     activeSecWin = attrs.value("ActiveSecondaryWindow").toString();
                     xml.skipCurrentElement();
                 }
-                else if (xml.name() == QLatin1String("SecondaryPanel")) {
-                    while(xml.readNextStartElement())
-                    {
-                        if(xml.name() == QLatin1String("Mirror"))
-                        {
-                            const auto attrs = xml.attributes();
-                            const int primaryId = attrs.value("PrimaryId").toInt();
-                            MirrorState ms;
-                            ms.displayMode = (DisplayMode)attrs.value("DisplayMode").toInt();
-                            if(attrs.hasAttribute("ScriptCursorPos"))
-                                ms.scriptCursorPos = attrs.value("ScriptCursorPos").toInt();
-                            if(attrs.hasAttribute("ScriptScrollPos"))
-                                ms.scriptScrollPos = attrs.value("ScriptScrollPos").toInt();
-                            mirrorStates[primaryId] = ms;
-                        }
-                        xml.skipCurrentElement();
-                    }
-                }
                 else if (xml.name() == QLatin1String("ModbusDefinitions")) {
                     xml >> defs;
                 }
@@ -844,6 +785,13 @@ void AppProject::loadProject(const QString& filename)
                     }
                 }
                 else if (xml.name() == QLatin1String("Forms")) {
+                    if(!viewPreparedForForms) {
+                        _mainWindow->setViewMode(viewMode);
+                        if(_mdiArea->viewMode() == QMdiArea::TabbedView && _mdiArea->isSplitView() != splitView)
+                            _mdiArea->setSplitViewEnabled(splitView);
+                        viewPreparedForForms = true;
+                    }
+
                     _mdiArea->closeAllSubWindows();
                     // Clean up forms that were already closed (hidden)
                     for (auto&& frm : _closedForms) {
@@ -865,11 +813,20 @@ void AppProject::loadProject(const QString& filename)
                         }
 
                         if (isForm) {
-                            auto frm = createMdiChild(++_windowCounter, kind);
+                            MdiArea* targetArea = _mdiArea->primaryArea();
+                            const auto attrs = xml.attributes();
+                            const QString panel = attrs.value("Panel").toString();
+                            if(splitView && panel.compare(QLatin1String(kPanelRight), Qt::CaseInsensitive) == 0) {
+                                if(auto* secondary = splitSecondaryArea())
+                                    targetArea = secondary;
+                            }
+
+                            auto frm = createMdiChildOnArea(++_windowCounter, kind, targetArea, true);
                             if (frm) {
                                 frm->loadXml(xml);
-                                syncSplitPeerState(frm);
                                 frm->show();
+                            } else {
+                                xml.skipCurrentElement();
                             }
                         } else {
                             xml.skipCurrentElement();
@@ -889,7 +846,12 @@ void AppProject::loadProject(const QString& filename)
         }
     }
 
-    _mainWindow->setViewMode(viewMode);
+    if(!viewPreparedForForms) {
+        _mainWindow->setViewMode(viewMode);
+        if(_mdiArea->viewMode() == QMdiArea::TabbedView && _mdiArea->isSplitView() != splitView)
+            _mdiArea->setSplitViewEnabled(splitView);
+    }
+
     _mainWindow->applyConnections(defs, conns);
 
     if(!activePrimaryWin.isEmpty())
@@ -904,19 +866,6 @@ void AppProject::loadProject(const QString& filename)
 
     if(splitView)
     {
-        _mdiArea->setSplitViewEnabled(true);
-
-        for(auto it = mirrorStates.begin(); it != mirrorStates.end(); ++it)
-            if(auto frm = findMdiChild(it.key()))
-                if(auto mirror = splitPeer(frm))
-                {
-                    mirror->setDisplayMode(it.value().displayMode);
-                    if(it.value().scriptCursorPos >= 0)
-                        mirror->setScriptCursorPosition(it.value().scriptCursorPos);
-                    if(it.value().scriptScrollPos >= 0)
-                        mirror->setScriptScrollPosition(it.value().scriptScrollPos);
-                }
-
         if(!activeSecWin.isEmpty())
             if(auto secondary = splitSecondaryArea())
                 for(auto&& wnd : secondary->localSubWindowList())
@@ -971,36 +920,26 @@ void AppProject::saveProject(const QString& filename)
     w.writeEndElement(); // ViewSettings
 
     w.writeStartElement("Forms");
-    for(auto&& wnd : _mdiArea->localSubWindowList()) {
-        if (auto frm = qobject_cast<FormModSim*>(wnd->widget()))
+    for(auto&& wnd : _mdiArea->subWindowList()) {
+        if (auto frm = qobject_cast<FormModSim*>(wnd->widget())) {
+            if(frm->property(kSplitAutoCloneProperty).toBool())
+                continue;
+
+            const bool onRight = areaOfForm(frm) == splitSecondaryArea();
+            frm->setProperty(kFormPanelProperty, onRight ? QLatin1String(kPanelRight) : QLatin1String(kPanelLeft));
             frm->saveXml(w);
+            frm->setProperty(kFormPanelProperty, QVariant());
+        }
     }
     // Also save forms that are closed (hidden in project tree)
     for (auto&& frm : _closedForms) {
-        if (frm)
+        if (frm) {
+            frm->setProperty(kFormPanelProperty, QLatin1String(kPanelLeft));
             frm->saveXml(w);
+            frm->setProperty(kFormPanelProperty, QVariant());
+        }
     }
     w.writeEndElement(); // Forms
-
-    if(isSplitTabbedView())
-    {
-        w.writeStartElement("SecondaryPanel");
-        for(auto&& wnd : _mdiArea->localSubWindowList())
-        {
-            auto frm = qobject_cast<FormModSim*>(wnd->widget());
-            if(!frm) continue;
-            if(auto mirror = splitPeer(frm))
-            {
-                w.writeStartElement("Mirror");
-                w.writeAttribute("PrimaryId", QString::number(frm->formId()));
-                w.writeAttribute("DisplayMode", QString::number((int)mirror->displayMode()));
-                w.writeAttribute("ScriptCursorPos", QString::number(mirror->scriptCursorPosition()));
-                w.writeAttribute("ScriptScrollPos", QString::number(mirror->scriptScrollPosition()));
-                w.writeEndElement(); // Mirror
-            }
-        }
-        w.writeEndElement(); // SecondaryPanel
-    }
 
     w.writeEndElement(); // OpenModSim
     w.writeEndDocument();

@@ -127,7 +127,7 @@
 <context>
     <name>AppProject</name>
     <message>
-        <location filename="../appproject.cpp" line="233"/>
+        <location filename="../appproject.cpp" line="230"/>
         <source>Capture Error:<byte value="xd"/>
 %1</source>
         <translation type="unfinished">捕获错误：
@@ -3162,7 +3162,7 @@ Script.onInit(()=&gt;{
     <message>
         <location filename="../mainwindow.ui" line="979"/>
         <location filename="../mainwindow.ui" line="982"/>
-        <location filename="../mainwindow.cpp" line="95"/>
+        <location filename="../mainwindow.cpp" line="98"/>
         <source>Script Help</source>
         <translation>脚本帮助</translation>
     </message>
@@ -3257,7 +3257,7 @@ Script.onInit(()=&gt;{
         <translation type="vanished">俄语</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="525"/>
+        <location filename="../mainwindow.cpp" line="496"/>
         <source>All files (*)</source>
         <translation>所有文件 (*)</translation>
     </message>
@@ -3266,12 +3266,12 @@ Script.onInit(()=&gt;{
         <translation type="vanished">XML 文件(*.xml)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="76"/>
+        <location filename="../mainwindow.cpp" line="79"/>
         <source>Project</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="127"/>
+        <location filename="../mainwindow.cpp" line="130"/>
         <source>Output</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3280,13 +3280,13 @@ Script.onInit(()=&gt;{
         <translation type="obsolete">数据</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="524"/>
-        <location filename="../mainwindow.cpp" line="540"/>
+        <location filename="../mainwindow.cpp" line="495"/>
+        <location filename="../mainwindow.cpp" line="511"/>
         <source>Project files (*.msimprj)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1247"/>
+        <location filename="../mainwindow.cpp" line="1209"/>
         <source>JavaScript files (*.js);;All files (*)</source>
         <translation type="unfinished"></translation>
     </message>
