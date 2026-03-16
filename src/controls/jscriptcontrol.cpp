@@ -438,6 +438,9 @@ void JScriptControl::setScrollPosition(int pos)
 ///
 QSettings& operator <<(QSettings& out, const JScriptControl* ctrl)
 {
+    if (!ctrl)
+        return out;
+
     out.setValue("ScriptControl/Script", ctrl->script().toUtf8().toBase64());
     out.setValue("ScriptControl/CursorPosition", ctrl->cursorPosition());
     out.setValue("ScriptControl/ScrollPosition", ctrl->scrollPosition());
@@ -452,6 +455,9 @@ QSettings& operator <<(QSettings& out, const JScriptControl* ctrl)
 ///
 QSettings& operator >>(QSettings& in, JScriptControl* ctrl)
 {
+    if (!ctrl)
+        return in;
+
     const auto script = QByteArray::fromBase64(in.value("ScriptControl/Script").toString().toUtf8());
     ctrl->setScript(script);
 

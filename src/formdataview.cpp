@@ -44,9 +44,6 @@ FormDataView::FormDataView(int id, ModbusMultiServer& server, DataSimulator* sim
 
     ui->stackedWidget->setCurrentIndex(0);
     ui->outputWidget->enforceDataMode();
-    ui->scriptControl->setModbusMultiServer(&_mbMultiServer);
-    ui->scriptControl->setByteOrder(ui->outputWidget->byteOrder());
-    ui->scriptControl->setScriptSource(windowTitle());
 
     const auto mbDefs = _mbMultiServer.getModbusDefinitions();
 
@@ -67,9 +64,6 @@ FormDataView::FormDataView(int id, ModbusMultiServer& server, DataSimulator* sim
 
     ui->outputWidget->setFocus();
     connect(ui->outputWidget, &OutputDataWidget::startTextCaptureError, this, &FormModSim::captureError);
-    connect(ui->scriptControl, &JScriptControl::helpContext, this, &FormModSim::helpContextRequested);
-    connect(ui->scriptControl, &JScriptControl::scriptStopped, this, &FormModSim::scriptStopped);
-    connect(ui->scriptControl, &JScriptControl::consoleMessage, this, &FormModSim::consoleMessage);
 
     setLogViewState(server.isConnected() ? LogViewState::Running : LogViewState::Unknown);
 
@@ -85,7 +79,6 @@ FormDataView::FormDataView(int id, ModbusMultiServer& server, DataSimulator* sim
     connect(_dataSimulator, &DataSimulator::dataSimulated, this, &FormDataView::on_dataSimulated);
 
     setupDisplayBar();
-    setupScriptBar();
 }
 
 ///
@@ -270,10 +263,7 @@ void FormDataView::setDisplayDefinition(const DisplayDefinition& dd)
 ///
 DisplayMode FormDataView::displayMode() const
 {
-    if(ui->stackedWidget->currentIndex() == 1)
-        return DisplayMode::Script;
-    else
-        return ui->outputWidget->displayMode();
+    return ui->outputWidget->displayMode();
 }
 
 ///
@@ -282,20 +272,10 @@ DisplayMode FormDataView::displayMode() const
 ///
 void FormDataView::setDisplayMode(DisplayMode mode)
 {
-    switch(mode)
-    {
-        case DisplayMode::Script:
-            ui->stackedWidget->setCurrentIndex(1);
-            ui->scriptControl->setFocus();
-        break;
-
-        default:
-            ui->stackedWidget->setCurrentIndex(0);
-            ui->outputWidget->setDisplayMode(mode);
-        break;
-    }
-
-    emit displayModeChanged(mode);
+    ui->stackedWidget->setCurrentIndex(0);
+    if (mode != DisplayMode::Script)
+        ui->outputWidget->setDisplayMode(mode);
+    emit displayModeChanged(displayMode());
 }
 
 ///
@@ -391,13 +371,6 @@ ScriptSettings FormDataView::scriptSettings() const
 void FormDataView::setScriptSettings(const ScriptSettings& ss)
 {
     _scriptSettings = ss;
-    // Sync toolbar controls if already created
-    if (_scriptRunModeCombo)
-        _scriptRunModeCombo->setCurrentRunMode(ss.Mode);
-    if (_scriptIntervalSpin)
-        _scriptIntervalSpin->setValue(static_cast<int>(ss.Interval));
-    if (_scriptRunOnStartupCheck)
-        _scriptRunOnStartupCheck->setChecked(ss.RunOnStartup);
     emit scriptSettingsChanged(ss);
 }
 
@@ -755,7 +728,7 @@ void FormDataView::setStatisticCounters(uint requests, uint responses)
 ///
 QString FormDataView::script() const
 {
-    return ui->scriptControl->script();
+    return QString();
 }
 
 ///
@@ -764,7 +737,7 @@ QString FormDataView::script() const
 ///
 void FormDataView::setScript(const QString& text)
 {
-    ui->scriptControl->setScript(text);
+    Q_UNUSED(text)
 }
 
 ///
@@ -773,7 +746,7 @@ void FormDataView::setScript(const QString& text)
 ///
 QTextDocument* FormDataView::scriptDocument() const
 {
-    return ui->scriptControl->scriptDocument();
+    return nullptr;
 }
 
 ///
@@ -782,27 +755,27 @@ QTextDocument* FormDataView::scriptDocument() const
 ///
 void FormDataView::setScriptDocument(QTextDocument* document)
 {
-    ui->scriptControl->setScriptDocument(document);
+    Q_UNUSED(document)
 }
 
 int FormDataView::scriptCursorPosition() const
 {
-    return ui->scriptControl->cursorPosition();
+    return 0;
 }
 
 void FormDataView::setScriptCursorPosition(int pos)
 {
-    ui->scriptControl->setCursorPosition(pos);
+    Q_UNUSED(pos)
 }
 
 int FormDataView::scriptScrollPosition() const
 {
-    return ui->scriptControl->scrollPosition();
+    return 0;
 }
 
 void FormDataView::setScriptScrollPosition(int pos)
 {
-    ui->scriptControl->setScrollPosition(pos);
+    Q_UNUSED(pos)
 }
 
 ///
@@ -811,7 +784,7 @@ void FormDataView::setScriptScrollPosition(int pos)
 ///
 QString FormDataView::searchText() const
 {
-    return ui->scriptControl->searchText();
+    return QString();
 }
 
 ///
@@ -820,8 +793,7 @@ QString FormDataView::searchText() const
 ///
 bool FormDataView::canRunScript() const
 {
-    return !ui->scriptControl->script().isEmpty() &&
-           !ui->scriptControl->isRunning();
+    return false;
 }
 
 ///
@@ -830,7 +802,7 @@ bool FormDataView::canRunScript() const
 ///
 bool FormDataView::canStopScript() const
 {
-    return ui->scriptControl->isRunning();
+    return false;
 }
 
 ///
@@ -839,7 +811,7 @@ bool FormDataView::canStopScript() const
 ///
 bool FormDataView::canUndo() const
 {
-    return ui->scriptControl->canUndo();
+    return false;
 }
 
 ///
@@ -848,7 +820,7 @@ bool FormDataView::canUndo() const
 ///
 bool FormDataView::canRedo() const
 {
-    return ui->scriptControl->canRedo();
+    return false;
 }
 
 ///
@@ -857,7 +829,7 @@ bool FormDataView::canRedo() const
 ///
 bool FormDataView::canPaste() const
 {
-    return ui->scriptControl->canPaste();
+    return false;
 }
 
 ///
@@ -866,8 +838,7 @@ bool FormDataView::canPaste() const
 ///
 void FormDataView::runScript()
 {
-    emit scriptRunning();
-    ui->scriptControl->runScript(_scriptSettings.Mode, _scriptSettings.Interval);
+    // Data view intentionally has no embedded script editor/runtime.
 }
 
 ///
@@ -875,7 +846,7 @@ void FormDataView::runScript()
 ///
 void FormDataView::stopScript()
 {
-    ui->scriptControl->stopScript();
+    // Data view intentionally has no embedded script editor/runtime.
 }
 
 ///
@@ -1032,7 +1003,6 @@ void FormDataView::onDefinitionChanged()
     const auto addr = dd.PointAddress - (dd.ZeroBasedAddress ? 0 : 1);
     _mbMultiServer.addUnitMap(formId(), dd.DeviceId, dd.PointType, addr, dd.Length);
 
-    ui->scriptControl->setAddressBase(dd.ZeroBasedAddress ? AddressBase::Base0 : AddressBase::Base1);
     ui->outputWidget->setup(dd, _dataSimulator->simulationMap(), _mbMultiServer.data(dd.DeviceId, dd.PointType, addr, dd.Length));
 }
 
@@ -1042,7 +1012,7 @@ void FormDataView::onDefinitionChanged()
 ///
 JScriptControl* FormDataView::scriptControl()
 {
-    return ui->scriptControl;
+    return nullptr;
 }
 
 ///
@@ -1051,7 +1021,7 @@ JScriptControl* FormDataView::scriptControl()
 ///
 bool FormDataView::isAutoCompleteEnabled() const
 {
-    return ui->scriptControl->isAutoCompleteEnabled();
+    return false;
 }
 
 ///
@@ -1060,7 +1030,7 @@ bool FormDataView::isAutoCompleteEnabled() const
 ///
 void FormDataView::enableAutoComplete(bool enable)
 {
-    ui->scriptControl->enableAutoComplete(enable);
+    Q_UNUSED(enable)
 }
 
 ///
@@ -1069,7 +1039,7 @@ void FormDataView::enableAutoComplete(bool enable)
 ///
 void FormDataView::setScriptFont(const QFont& font)
 {
-    ui->scriptControl->setFont(font);
+    Q_UNUSED(font)
 }
 
 ///
@@ -1325,85 +1295,6 @@ void FormDataView::on_dataSimulated(DataDisplayMode mode, quint8 deviceId, QModb
 }
 
 ///
-/// \brief FormDataView::setupScriptBar
-///
-void FormDataView::setupScriptBar()
-{
-    _scriptBar = new QToolBar(this);
-    _scriptBar->setIconSize(QSize(16, 16));
-
-    _scriptRunModeCombo = new RunModeComboBox(_scriptBar);
-    _scriptRunModeCombo->setCurrentRunMode(_scriptSettings.Mode);
-    connect(_scriptRunModeCombo, &RunModeComboBox::runModeChanged, this, [this](RunMode mode) {
-        _scriptSettings.Mode = mode;
-    });
-
-    auto modeAction = new QWidgetAction(_scriptBar);
-    modeAction->setDefaultWidget(_scriptRunModeCombo);
-    _scriptBar->addAction(modeAction);
-
-    // Interval spinbox (500 вЂ“ 10000 ms)
-    _scriptIntervalSpin = new QSpinBox(_scriptBar);
-    _scriptIntervalSpin->setRange(500, 10000);
-    _scriptIntervalSpin->setSingleStep(100);
-    _scriptIntervalSpin->setSuffix(tr(" ms"));
-    _scriptIntervalSpin->setValue(_scriptSettings.Interval);
-    _scriptIntervalSpin->setFixedWidth(90);
-    connect(_scriptIntervalSpin, &QSpinBox::valueChanged, this, [this](int value) {
-        _scriptSettings.Interval = static_cast<uint>(value);
-    });
-    auto intervalAction = new QWidgetAction(_scriptBar);
-    intervalAction->setDefaultWidget(_scriptIntervalSpin);
-    _scriptBar->addAction(intervalAction);
-
-    // Run on startup checkbox
-    _scriptRunOnStartupCheck = new QCheckBox(tr("Run on startup"), _scriptBar);
-    _scriptRunOnStartupCheck->setChecked(_scriptSettings.RunOnStartup);
-    connect(_scriptRunOnStartupCheck, &QCheckBox::checkStateChanged, this, [this](Qt::CheckState state) {
-        _scriptSettings.RunOnStartup = (state == Qt::Checked);
-    });
-    auto startupAction = new QWidgetAction(_scriptBar);
-    startupAction->setDefaultWidget(_scriptRunOnStartupCheck);
-    _scriptBar->addAction(startupAction);
-
-    _scriptBar->addSeparator();
-
-    _actionRunScript = _scriptBar->addAction(QIcon(":/res/actionRunScript.png"), tr("Run Script"));
-    qobject_cast<QToolButton*>(_scriptBar->widgetForAction(_actionRunScript))->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
-    connect(_actionRunScript, &QAction::triggered, this, [this]() {
-        runScript();
-    });
-
-    _actionStopScript = _scriptBar->addAction(QIcon(":/res/actionStopScript.png"), tr("Stop Script"));
-    qobject_cast<QToolButton*>(_scriptBar->widgetForAction(_actionStopScript))->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
-    connect(_actionStopScript, &QAction::triggered, this, &FormDataView::stopScript);
-
-    connect(this, &FormModSim::scriptRunning, this, &FormDataView::updateScriptBar);
-    connect(this, &FormModSim::scriptStopped, this, &FormDataView::updateScriptBar);
-    connect(ui->scriptControl->scriptDocument(), &QTextDocument::contentsChanged,
-            this, &FormDataView::updateScriptBar);
-
-    ui->verticalLayout_4->insertWidget(0, _scriptBar);
-
-    updateScriptBar();
-}
-
-///
-/// \brief FormDataView::updateScriptBar
-///
-void FormDataView::updateScriptBar()
-{
-    if (!_scriptBar) return;
-
-    const bool running = canStopScript();
-    _actionRunScript->setEnabled(canRunScript());
-    _actionStopScript->setEnabled(running);
-    if (_scriptRunModeCombo) _scriptRunModeCombo->setEnabled(!running);
-    if (_scriptIntervalSpin) _scriptIntervalSpin->setEnabled(!running);
-    if (_scriptRunOnStartupCheck) _scriptRunOnStartupCheck->setEnabled(!running);
-}
-
-///
 /// \brief FormDataView::setupDisplayBar
 ///
 void FormDataView::setupDisplayBar()
@@ -1512,11 +1403,7 @@ void FormDataView::updateDisplayBar()
 ///
 void FormDataView::connectEditSlots()
 {
-    disconnectEditSlots();
-    connect(_parent, &MainWindow::selectAll, ui->scriptControl, &JScriptControl::selectAll);
-    connect(_parent, &MainWindow::search, ui->scriptControl, &JScriptControl::search);
-    connect(_parent, &MainWindow::find, ui->scriptControl, &JScriptControl::showFind);
-    connect(_parent, &MainWindow::replace, ui->scriptControl, &JScriptControl::showReplace);
+    // Data view has no script editor.
 }
 
 ///
@@ -1524,10 +1411,7 @@ void FormDataView::connectEditSlots()
 ///
 void FormDataView::disconnectEditSlots()
 {
-    disconnect(_parent, &MainWindow::selectAll, ui->scriptControl, &JScriptControl::selectAll);
-    disconnect(_parent, &MainWindow::search, ui->scriptControl, &JScriptControl::search);
-    disconnect(_parent, &MainWindow::find, ui->scriptControl, &JScriptControl::showFind);
-    disconnect(_parent, &MainWindow::replace, ui->scriptControl, &JScriptControl::showReplace);
+    // Data view has no script editor.
 }
 
 

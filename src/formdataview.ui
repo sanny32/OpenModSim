@@ -361,28 +361,6 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="page2">
-      <layout class="QVBoxLayout" name="verticalLayout_4">
-       <property name="spacing">
-        <number>0</number>
-       </property>
-       <property name="leftMargin">
-        <number>0</number>
-       </property>
-       <property name="topMargin">
-        <number>0</number>
-       </property>
-       <property name="rightMargin">
-        <number>0</number>
-       </property>
-       <property name="bottomMargin">
-        <number>0</number>
-       </property>
-       <item>
-        <widget class="JScriptControl" name="scriptControl" native="true"/>
-       </item>
-      </layout>
-     </widget>
     </widget>
    </item>
   </layout>
@@ -402,12 +380,6 @@
    <class>AddressBaseComboBox</class>
    <extends>QComboBox</extends>
    <header>addressbasecombobox.h</header>
-  </customwidget>
-  <customwidget>
-   <class>JScriptControl</class>
-   <extends>QWidget</extends>
-   <header>jscriptcontrol.h</header>
-   <container>1</container>
   </customwidget>
   <customwidget>
    <class>OutputDataWidget</class>

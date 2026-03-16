@@ -6,9 +6,7 @@
 #include <QPrinter>
 #include <QToolBar>
 #include <QActionGroup>
-#include <QCheckBox>
 #include <QMap>
-#include <QSpinBox>
 #include <QVersionNumber>
 #include <QXmlStreamWriter>
 #include "fontutils.h"
@@ -20,7 +18,6 @@
 #include "consoleoutput.h"
 #include "apppreferences.h"
 #include "ansimenu.h"
-#include "controls/runmodecombobox.h"
 #include "formmodsim.h"
 
 ///
@@ -194,9 +191,6 @@ private:
     void setupDisplayBar();
     void updateDisplayBar();
 
-    void setupScriptBar();
-    void updateScriptBar();
-
 private:
     Ui::FormDataView *ui;
     MainWindow* _parent;
@@ -215,13 +209,6 @@ private:
     QAction*   _actionSwapBytes = nullptr;
     AnsiMenu*  _ansiMenu = nullptr;
     QMap<DataDisplayMode, QAction*> _displayModeActions;
-
-    QToolBar*        _scriptBar = nullptr;
-    QAction*         _actionRunScript = nullptr;
-    QAction*         _actionStopScript = nullptr;
-    RunModeComboBox* _scriptRunModeCombo = nullptr;
-    QSpinBox*        _scriptIntervalSpin = nullptr;
-    QCheckBox*       _scriptRunOnStartupCheck = nullptr;
 };
 
 ///
@@ -610,7 +597,10 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, FormDataView* frm)
             }
             else if (xml.name() == QLatin1String("JScriptControl")) {
                 auto scriptControl = frm->scriptControl();
-                xml >> scriptControl;
+                if (scriptControl)
+                    xml >> scriptControl;
+                else
+                    xml.skipCurrentElement();
             }
             else if (xml.name() == QLatin1String("AddressDescriptionMap")) {
                 AddressDescriptionMap2 map;

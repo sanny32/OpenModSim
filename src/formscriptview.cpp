@@ -36,30 +36,31 @@ FormScriptView::FormScriptView(int id, ModbusMultiServer& server, DataSimulator*
     setWindowTitle(QString("Script%1").arg(_formId));
     setWindowIcon(QIcon(":/res/actionShowScript.png"));
 
-    ui->lineEditDeviceId->setInputRange(ModbusLimits::slaveRange());
-    ui->lineEditDeviceId->setValue(1);
-    ui->lineEditDeviceId->setLeadingZeroes(true);
-    ui->lineEditDeviceId->setHexButtonVisible(true);
-    server.addDeviceId(ui->lineEditDeviceId->value<int>());
-
     ui->stackedWidget->setCurrentIndex(1);
     ui->scriptControl->setModbusMultiServer(&_mbMultiServer);
     ui->scriptControl->setByteOrder(ui->outputWidget->byteOrder());
     ui->scriptControl->setScriptSource(windowTitle());
 
     const auto mbDefs = _mbMultiServer.getModbusDefinitions();
+    _displayDefinition.FormName = windowTitle();
+    _displayDefinition.DeviceId = 1;
+    _displayDefinition.PointAddress = 1;
+    _displayDefinition.PointType = QModbusDataUnit::HoldingRegisters;
+    _displayDefinition.Length = 100;
+    _displayDefinition.LogViewLimit = ui->outputWidget->logViewLimit();
+    _displayDefinition.AutoscrollLog = ui->outputWidget->autoscrollLogView();
+    _displayDefinition.VerboseLogging = _verboseLogging;
+    _displayDefinition.HexAddress = false;
+    _displayDefinition.HexViewAddress = false;
+    _displayDefinition.HexViewDeviceId = false;
+    _displayDefinition.HexViewLength = false;
+    _displayDefinition.AddrSpace = mbDefs.AddrSpace;
+    _displayDefinition.DataViewColumnsDistance = ui->outputWidget->dataViewColumnsDistance();
+    _displayDefinition.LeadingZeros = true;
+    _displayDefinition.ScriptCfg = _scriptSettings;
+    _displayDefinition.normalize();
 
-    ui->lineEditAddress->setLeadingZeroes(true);
-    ui->lineEditAddress->setInputRange(ModbusLimits::addressRange(mbDefs.AddrSpace, true));
-    ui->lineEditAddress->setValue(0);
-    ui->lineEditAddress->setHexButtonVisible(true);
-
-    ui->lineEditLength->setInputRange(ModbusLimits::lengthRange(0, true, mbDefs.AddrSpace));
-    ui->lineEditLength->setValue(100);
-    ui->lineEditLength->setHexButtonVisible(true);
-
-    ui->comboBoxAddressBase->setCurrentAddressBase(AddressBase::Base1);
-    ui->comboBoxModbusPointType->setCurrentPointType(QModbusDataUnit::HoldingRegisters);
+    server.addDeviceId(_displayDefinition.DeviceId);
 
     connect(this, &FormModSim::definitionChanged, this, &FormScriptView::onDefinitionChanged);
     emit definitionChanged();
@@ -135,7 +136,7 @@ void FormScriptView::changeEvent(QEvent* e)
 ///
 void FormScriptView::closeEvent(QCloseEvent* event)
 {
-    const auto deviceId = ui->lineEditDeviceId->value<quint8>();
+    const auto deviceId = _displayDefinition.DeviceId;
     _mbMultiServer.removeDeviceId(deviceId);
     _mbMultiServer.removeUnitMap(formId(), deviceId);
 
@@ -150,10 +151,6 @@ void FormScriptView::closeEvent(QCloseEvent* event)
 ///
 void FormScriptView::mouseDoubleClickEvent(QMouseEvent* event)
 {
-    if(ui->frameDataDefinition->geometry().contains(event->pos())) {
-        emit doubleClicked();
-    }
-
     return QWidget::mouseDoubleClickEvent(event);
 }
 
@@ -190,25 +187,16 @@ QVector<quint16> FormScriptView::data() const
 ///
 DisplayDefinition FormScriptView::displayDefinition() const
 {
-    DisplayDefinition dd;
+    DisplayDefinition dd = _displayDefinition;
     dd.FormName = windowTitle();
-    dd.DeviceId = ui->lineEditDeviceId->value<int>();
-    dd.PointAddress = ui->lineEditAddress->value<int>();
-    dd.PointType = ui->comboBoxModbusPointType->currentPointType();
-    dd.Length = ui->lineEditLength->value<int>();
-    dd.ZeroBasedAddress = ui->lineEditAddress->range<int>().from() == 0;
     dd.LogViewLimit = ui->outputWidget->logViewLimit();
     dd.AutoscrollLog = ui->outputWidget->autoscrollLogView();
     dd.VerboseLogging = _verboseLogging;
     dd.HexAddress = displayHexAddresses();
-    dd.HexViewAddress  = ui->lineEditAddress->hexView();
-    dd.HexViewDeviceId = ui->lineEditDeviceId->hexView();
-    dd.HexViewLength   = ui->lineEditLength->hexView();
     dd.AddrSpace = _mbMultiServer.getModbusDefinitions().AddrSpace;
     dd.DataViewColumnsDistance = ui->outputWidget->dataViewColumnsDistance();
-    dd.LeadingZeros = ui->lineEditDeviceId->leadingZeroes();
     dd.ScriptCfg = _scriptSettings;
-
+    dd.normalize();
     return dd;
 }
 
@@ -218,46 +206,33 @@ DisplayDefinition FormScriptView::displayDefinition() const
 ///
 void FormScriptView::setDisplayDefinition(const DisplayDefinition& dd)
 {
-    if(!dd.FormName.isEmpty())
-        setWindowTitle(dd.FormName);
+    DisplayDefinition next = dd;
+    if(!next.FormName.isEmpty())
+        setWindowTitle(next.FormName);
+    else
+        next.FormName = windowTitle();
 
     const auto defs = _mbMultiServer.getModbusDefinitions();
+    next.AddrSpace = defs.AddrSpace;
+    next.normalize();
 
-    ui->lineEditDeviceId->setLeadingZeroes(dd.LeadingZeros);
-    ui->lineEditDeviceId->setValue(dd.DeviceId);
+    const auto oldDeviceId = _displayDefinition.DeviceId;
+    _displayDefinition = next;
 
-    ui->comboBoxAddressBase->blockSignals(true);
-    ui->comboBoxAddressBase->setCurrentAddressBase(dd.ZeroBasedAddress ? AddressBase::Base0 : AddressBase::Base1);
-    ui->comboBoxAddressBase->blockSignals(false);
+    if (oldDeviceId != _displayDefinition.DeviceId) {
+        _mbMultiServer.removeDeviceId(oldDeviceId);
+        _mbMultiServer.removeUnitMap(formId(), oldDeviceId);
+        _mbMultiServer.addDeviceId(_displayDefinition.DeviceId);
+    }
 
-    ui->lineEditAddress->blockSignals(true);
-    ui->lineEditAddress->setLeadingZeroes(dd.LeadingZeros);
-    ui->lineEditAddress->setInputRange(ModbusLimits::addressRange(defs.AddrSpace, dd.ZeroBasedAddress));
-    ui->lineEditAddress->setValue(dd.PointAddress);
-    ui->lineEditAddress->blockSignals(false);
+    ui->outputWidget->setLogViewLimit(_displayDefinition.LogViewLimit);
+    ui->outputWidget->setDataViewColumnsDistance(_displayDefinition.DataViewColumnsDistance);
+    ui->outputWidget->setAutosctollLogView(_displayDefinition.AutoscrollLog);
 
-    ui->lineEditLength->blockSignals(true);
-    ui->lineEditLength->setLeadingZeroes(dd.LeadingZeros);
-    ui->lineEditLength->setInputRange(ModbusLimits::lengthRange(dd.PointAddress, dd.ZeroBasedAddress, defs.AddrSpace));
-    ui->lineEditLength->setValue(dd.Length);
-    ui->lineEditLength->blockSignals(false);
+    _verboseLogging = _displayDefinition.VerboseLogging;
 
-    ui->comboBoxModbusPointType->blockSignals(true);
-    ui->comboBoxModbusPointType->setCurrentPointType(dd.PointType);
-    ui->comboBoxModbusPointType->blockSignals(false);
-
-    ui->outputWidget->setLogViewLimit(dd.LogViewLimit);
-    ui->outputWidget->setDataViewColumnsDistance(dd.DataViewColumnsDistance);
-    ui->outputWidget->setAutosctollLogView(dd.AutoscrollLog);
-
-    _verboseLogging = dd.VerboseLogging;
-
-    setScriptSettings(dd.ScriptCfg);
-    setDisplayHexAddresses(dd.HexAddress);
-
-    ui->lineEditDeviceId->setHexView(dd.HexViewDeviceId);
-    ui->lineEditAddress->setHexView(dd.HexViewAddress);
-    ui->lineEditLength->setHexView(dd.HexViewLength);
+    setScriptSettings(_displayDefinition.ScriptCfg);
+    setDisplayHexAddresses(_displayDefinition.HexAddress);
 
     emit definitionChanged();
 }
@@ -321,10 +296,7 @@ bool FormScriptView::displayHexAddresses() const
 void FormScriptView::setDisplayHexAddresses(bool on)
 {
     ui->outputWidget->setDisplayHexAddresses(on);
-
-    const auto defs = _mbMultiServer.getModbusDefinitions();
-    ui->lineEditAddress->setInputMode(on ? NumericLineEdit::HexMode : NumericLineEdit::Int32Mode);
-    ui->lineEditAddress->setInputRange(ModbusLimits::addressRange(defs.AddrSpace, ui->comboBoxAddressBase->currentAddressBase() == AddressBase::Base0));
+    _displayDefinition.HexAddress = on;
 }
 
 ///
@@ -555,10 +527,14 @@ void FormScriptView::print(QPrinter* printer)
     const auto textTime = QLocale().toString(QDateTime::currentDateTime(), QLocale::ShortFormat);
     auto rcTime = painter.boundingRect(cx, cy, pageWidth, pageHeight, Qt::TextSingleLine, textTime);
 
-    const auto textAddrLen = QString(tr("Address Base: %1\nStart Address: %2\nLength: %3")).arg(ui->comboBoxAddressBase->currentText(), ui->lineEditAddress->text(), ui->lineEditLength->text());
+    const auto dd = displayDefinition();
+    const auto addressBaseText = dd.ZeroBasedAddress ? tr("0-based") : tr("1-based");
+    const auto textAddrLen = QString(tr("Address Base: %1\nStart Address: %2\nLength: %3"))
+                                 .arg(addressBaseText, QString::number(dd.PointAddress), QString::number(dd.Length));
     auto rcAddrLen = painter.boundingRect(cx, cy, pageWidth, pageHeight, Qt::TextWordWrap, textAddrLen);
 
-    const auto textDevIdType = QString(tr("Unit Identifier: %1\nMODBUS Point Type:\n%2")).arg(ui->lineEditDeviceId->text(), ui->comboBoxModbusPointType->currentText());
+    const auto textDevIdType = QString(tr("Unit Identifier: %1\nMODBUS Point Type:\n%2"))
+                                   .arg(QString::number(dd.DeviceId), enumToString<QModbusDataUnit::RegisterType>(dd.PointType));
     auto rcDevIdType = painter.boundingRect(cx, cy, pageWidth, pageHeight, Qt::TextWordWrap, textDevIdType);
 
     rcTime.moveTopRight({ pageRect.right(), 10 });
@@ -641,7 +617,7 @@ QModbusDataUnit FormScriptView::serializeModbusDataUnit(quint8 deviceId, QModbus
 ///
 void FormScriptView::startSimulation(QModbusDataUnit::RegisterType type, quint16 addr, const ModbusSimulationParams& params)
 {
-    const auto deviceId = ui->lineEditDeviceId->value<quint8>();
+    const auto deviceId = displayDefinition().DeviceId;
     _dataSimulator->startSimulation(deviceId, type, addr, params);
 }
 
@@ -936,65 +912,6 @@ void FormScriptView::show()
 }
 
 ///
-/// \brief FormScriptView::on_lineEditAddress_valueChanged
-///
-void FormScriptView::on_lineEditAddress_valueChanged(const QVariant&)
-{
-    const auto defs = _mbMultiServer.getModbusDefinitions();
-    const bool zeroBased = (ui->comboBoxAddressBase->currentAddressBase() == AddressBase::Base0);
-    const int address = ui->lineEditAddress->value<int>();
-    const auto lenRange = ModbusLimits::lengthRange(address, zeroBased, defs.AddrSpace);
-
-    ui->lineEditLength->setInputRange(lenRange);
-    if(ui->lineEditLength->value<int>() > lenRange.to()) {
-        ui->lineEditLength->setValue(lenRange.to());
-        ui->lineEditLength->update();
-    }
-
-   emit definitionChanged();
-}
-
-///
-/// \brief FormScriptView::on_lineEditLength_valueChanged
-///
-void FormScriptView::on_lineEditLength_valueChanged(const QVariant&)
-{
-    emit definitionChanged();
-}
-
-///
-/// \brief FormScriptView::on_lineEditDeviceId_valueChanged
-///
-void FormScriptView::on_lineEditDeviceId_valueChanged(const QVariant& oldValue, const QVariant& newValue)
-{
-    _mbMultiServer.removeDeviceId(oldValue.toInt());
-    _mbMultiServer.addDeviceId(newValue.toInt());
-
-    emit definitionChanged();
-}
-
-///
-/// \brief FormScriptView::on_comboBoxAddressBase_addressBaseChanged
-/// \param base
-///
-void FormScriptView::on_comboBoxAddressBase_addressBaseChanged(AddressBase base)
-{
-    auto dd = displayDefinition();
-    dd.PointAddress = (base == AddressBase::Base1 ? qMax(1, dd.PointAddress + 1) : qMax(0, dd.PointAddress - 1));
-    dd.ZeroBasedAddress = (base == AddressBase::Base0);
-    setDisplayDefinition(dd);
-}
-
-///
-/// \brief FormScriptView::on_comboBoxModbusPointType_pointTypeChanged
-///
-void FormScriptView::on_comboBoxModbusPointType_pointTypeChanged(QModbusDataUnit::RegisterType type)
-{
-    emit definitionChanged();
-    emit pointTypeChanged(type);
-}
-
-///
 /// \brief FormScriptView::updateStatus
 ///
 void FormScriptView::updateStatus()
@@ -1075,10 +992,9 @@ void FormScriptView::on_outputWidget_itemDoubleClicked(quint16 addr, const QVari
 {
     const auto dd = displayDefinition();
     const auto mode = dataDisplayMode();
-    const auto deviceId = ui->lineEditDeviceId->value<quint8>();
-    const auto pointType = ui->comboBoxModbusPointType->currentPointType();
+    const auto deviceId = dd.DeviceId;
+    const auto pointType = dd.PointType;
     const auto zeroBasedAddress = dd.ZeroBasedAddress;
-    const auto simAddr = addr - (zeroBasedAddress ? 0 : 1);
     const auto addrSpace = _mbMultiServer.getModbusDefinitions().AddrSpace;
 
     switch(pointType)
@@ -1260,10 +1176,10 @@ void FormScriptView::on_mbDataChanged(quint8 deviceId, const QModbusDataUnit&)
 ///
 void FormScriptView::on_mbDefinitionsChanged(const ModbusDefinitions& defs)
 {
+    _displayDefinition.AddrSpace = defs.AddrSpace;
+    _displayDefinition.normalize();
     const auto dd = displayDefinition();
     const auto addr = dd.PointAddress - (dd.ZeroBasedAddress ? 0 : 1);
-    ui->lineEditAddress->setInputRange(ModbusLimits::addressRange(defs.AddrSpace, dd.ZeroBasedAddress));
-    ui->lineEditLength->setInputRange(ModbusLimits::lengthRange(dd.PointAddress, dd.ZeroBasedAddress, defs.AddrSpace));
     ui->outputWidget->setup(dd, _dataSimulator->simulationMap(), _mbMultiServer.data(dd.DeviceId, dd.PointType, addr, dd.Length));
 }
 
@@ -1276,7 +1192,7 @@ void FormScriptView::on_mbDefinitionsChanged(const ModbusDefinitions& defs)
 ///
 void FormScriptView::on_simulationStarted(DataDisplayMode mode, quint8 deviceId, QModbusDataUnit::RegisterType type, const QVector<quint16>& addresses)
 {
-    if(deviceId != ui->lineEditDeviceId->value<quint8>())
+    if(deviceId != displayDefinition().DeviceId)
         return;
 
     for(auto&& addr : addresses)
@@ -1292,7 +1208,7 @@ void FormScriptView::on_simulationStarted(DataDisplayMode mode, quint8 deviceId,
 ///
 void FormScriptView::on_simulationStopped(DataDisplayMode mode, quint8 deviceId, QModbusDataUnit::RegisterType type, const QVector<quint16>& addresses)
 {
-    if(deviceId != ui->lineEditDeviceId->value<quint8>())
+    if(deviceId != displayDefinition().DeviceId)
         return;
 
     for(auto&& addr : addresses)

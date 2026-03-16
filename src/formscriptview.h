@@ -166,11 +166,6 @@ public slots:
     void disconnectEditSlots();
 
 private slots:
-    void on_lineEditAddress_valueChanged(const QVariant&);
-    void on_lineEditLength_valueChanged(const QVariant&);
-    void on_lineEditDeviceId_valueChanged(const QVariant&, const QVariant&);
-    void on_comboBoxAddressBase_addressBaseChanged(AddressBase base);
-    void on_comboBoxModbusPointType_pointTypeChanged(QModbusDataUnit::RegisterType value);
     void on_outputWidget_itemDoubleClicked(quint16 addr, const QVariant& value);
     void on_mbConnected(const ConnectionDetails& cd);
     void on_mbDisconnected(const ConnectionDetails& cd);
@@ -198,6 +193,7 @@ private:
     QString _filename;
     bool _verboseLogging;
     ScriptSettings _scriptSettings;
+    DisplayDefinition _displayDefinition;
     ModbusMultiServer& _mbMultiServer;
     DataSimulator* _dataSimulator;
     QRect _parentGeometry;
