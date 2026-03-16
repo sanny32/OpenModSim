@@ -72,6 +72,8 @@ private slots:
 
     /* File menu slots */
     void on_actionNew_triggered();
+    void on_actionNewDataView_triggered();
+    void on_actionNewTrafficView_triggered();
     void on_actionClose_triggered();
     void on_actionCloseAll_triggered();
     void on_actionOpenProject_triggered();
@@ -160,6 +162,7 @@ private slots:
     void updateMenuWindow();
 
 private:
+    void createNewForm(FormModSim::FormKind kind);
     void updateDataDisplayMode(DataDisplayMode mode);
 
     void forceCoils(QModbusDataUnit::RegisterType type);
@@ -176,8 +179,6 @@ private:
     ConsoleOutput* _globalConsole = nullptr;
     QDockWidget* _projectDockWidget = nullptr;
     ProjectTreeWidget* _projectTree = nullptr;
-    QMdiSubWindow* _trafficLogSubWindow = nullptr;
-
     QString _lang;
     QTranslator _qtTranslator;
     QTranslator _appTranslator;

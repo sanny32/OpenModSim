@@ -6,11 +6,11 @@
 #include "appproject.h"
 #include "mainwindow.h"
 #include "controls/mdiareaex.h"
-#include "controls/scripteditorwindow.h"
 #include "controls/projecttreewidget.h"
 #include "windowactionlist.h"
-#include "formmodsim.h"
-#include "scriptdocument.h"
+#include "formdataview.h"
+#include "formtrafficview.h"
+#include "formscriptview.h"
 #include "uiutils.h"
 
 ///
@@ -43,11 +43,11 @@ AppProject::~AppProject()
 
 ///
 /// \brief AppProject::closeProject
-/// Closes all open and hidden forms and scripts, resetting the workspace.
+/// Closes all open and hidden forms, resetting the workspace.
 ///
 void AppProject::closeProject()
 {
-    // Close open MDI windows (FormModSim and ScriptEditorWindow)
+    // Close open MDI windows (FormModSim windows)
     _mdiArea->closeAllSubWindows();
 
     // Delete forms that were closed (hidden)
@@ -57,15 +57,7 @@ void AppProject::closeProject()
     }
     _closedForms.clear();
 
-    // Delete standalone scripts
-    for (auto&& doc : _standaloneScripts) {
-        _projectTree->removeScript(doc);
-        delete doc;
-    }
-    _standaloneScripts.clear();
-
     _windowCounter = 0;
-    _scriptCounter = 0;
 }
 
 ///
@@ -95,13 +87,13 @@ void AppProject::markFormClosed(FormModSim* frm)
 /// \param id
 /// \return
 ///
-FormModSim* AppProject::createMdiChild(int id)
+FormModSim* AppProject::createMdiChild(int id, FormModSim::FormKind kind)
 {
     while(findMdiChild(id))
         ++id;
 
     _windowCounter = qMax(_windowCounter, id);
-    auto frm = createMdiChildOnArea(id, _mdiArea->primaryArea(), true);
+    auto frm = createMdiChildOnArea(id, kind, _mdiArea->primaryArea(), true);
     if(frm)
         ensureSplitMirrorForForm(frm);
 
@@ -115,12 +107,27 @@ FormModSim* AppProject::createMdiChild(int id)
 /// \param addToWindowList
 /// \return
 ///
-FormModSim* AppProject::createMdiChildOnArea(int id, MdiArea* area, bool addToWindowList)
+FormModSim* AppProject::createMdiChildOnArea(int id, FormModSim::FormKind kind, MdiArea* area, bool addToWindowList)
 {
     if(!area)
         return nullptr;
 
-    auto frm = new FormModSim(id, _mbServer, _dataSimulator, _mainWindow);
+    FormModSim* frm = nullptr;
+    switch (kind)
+    {
+        case FormModSim::FormKind::Data:
+            frm = new FormDataView(id, _mbServer, _dataSimulator, _mainWindow);
+            break;
+        case FormModSim::FormKind::Traffic:
+            frm = new FormTrafficView(id, _mbServer, _dataSimulator, _mainWindow);
+            break;
+        case FormModSim::FormKind::Script:
+            frm = new FormScriptView(id, _mbServer, _dataSimulator, _mainWindow);
+            break;
+    }
+    if(!frm)
+        return nullptr;
+
     frm->enableAutoComplete(AppPreferences::instance().codeAutoComplete());
 
     auto wnd = area->addSubWindow(frm);
@@ -147,6 +154,12 @@ void AppProject::setupMdiChild(FormModSim* frm, QMdiSubWindow* wnd, bool addToWi
 {
     if(!frm || !wnd)
         return;
+
+    // Keep the subwindow (and therefore tab icon/title) in sync with the form.
+    wnd->setWindowTitle(frm->windowTitle());
+    wnd->setWindowIcon(frm->windowIcon());
+    connect(frm, &QWidget::windowTitleChanged, wnd, &QMdiSubWindow::setWindowTitle);
+    connect(frm, &QWidget::windowIconChanged, wnd, &QMdiSubWindow::setWindowIcon);
 
     auto updateCodepage = [this](const QString& name)
     {
@@ -464,7 +477,7 @@ bool AppProject::cloneMdiChildState(FormModSim* source, FormModSim* target) cons
 
     QXmlStreamWriter writer(&writeBuffer);
     writer.writeStartDocument();
-    writer << source;
+    source->saveXml(writer);
     writer.writeEndDocument();
     writeBuffer.close();
 
@@ -473,114 +486,15 @@ bool AppProject::cloneMdiChildState(FormModSim* source, FormModSim* target) cons
         return false;
 
     QXmlStreamReader reader(&readBuffer);
-    if(!reader.readNextStartElement() || reader.name() != QLatin1String("FormModSim"))
+    if(!reader.readNextStartElement())
         return false;
 
-    reader >> target;
+    target->loadXml(reader);
     if(reader.hasError())
         return false;
 
     target->setFilename(source->filename());
     return true;
-}
-
-///
-/// \brief AppProject::createStandaloneScript
-///
-ScriptDocument* AppProject::createStandaloneScript(const QString& name)
-{
-    auto doc = new ScriptDocument(name, _mainWindow);
-    _standaloneScripts.append(doc);
-    _projectTree->addScript(doc);
-    return doc;
-}
-
-///
-/// \brief AppProject::openScriptEditor
-/// Opens (or focuses) the MDI editor window for a standalone script.
-///
-ScriptEditorWindow* AppProject::openScriptEditor(ScriptDocument* doc)
-{
-    // If already open, bring to front
-    if (auto existing = findScriptEditor(doc)) {
-        for (auto wnd : _mdiArea->subWindowList()) {
-            if (wnd->widget() == existing) {
-                _mdiArea->setActiveSubWindow(wnd);
-                return existing;
-            }
-        }
-    }
-
-    auto editor = new ScriptEditorWindow(doc, &_mbServer);
-    auto wnd = _mdiArea->addSubWindow(editor);
-    wnd->setAttribute(Qt::WA_DeleteOnClose);
-    wnd->setWindowTitle(doc->name());
-    wnd->setWindowIcon(QIcon(":/res/actionShowScript.png"));
-
-    connect(doc, &ScriptDocument::nameChanged, wnd, &QMdiSubWindow::setWindowTitle);
-
-    connect(editor, &ScriptEditorWindow::scriptRunning, _mainWindow, [this, doc]() {
-        _projectTree->setScriptRunning(doc, true);
-    });
-    connect(editor, &ScriptEditorWindow::scriptStopped, _mainWindow, [this, doc]() {
-        _projectTree->setScriptRunning(doc, false);
-    });
-    connect(editor, &ScriptEditorWindow::consoleMessage, _mainWindow,
-            [this](const QString& source, const QString& text, ConsoleOutput::MessageType type) {
-                _mainWindow->showConsoleMessage(source, text, type);
-            });
-
-    // Route Find/Replace to the script editor when it's active
-    connect(wnd, &QMdiSubWindow::windowStateChanged, _mainWindow,
-            [this, editor](Qt::WindowStates, Qt::WindowStates newState) {
-        if (newState & Qt::WindowActive) {
-            connect(_mainWindow, &MainWindow::find,    editor->scriptControl(), &JScriptControl::showFind,    Qt::UniqueConnection);
-            connect(_mainWindow, &MainWindow::replace, editor->scriptControl(), &JScriptControl::showReplace, Qt::UniqueConnection);
-        } else {
-            disconnect(_mainWindow, &MainWindow::find,    editor->scriptControl(), &JScriptControl::showFind);
-            disconnect(_mainWindow, &MainWindow::replace, editor->scriptControl(), &JScriptControl::showReplace);
-        }
-    });
-
-    wnd->show();
-    _projectTree->activateScript(doc);
-    return editor;
-}
-
-///
-/// \brief AppProject::findScriptEditor
-///
-ScriptEditorWindow* AppProject::findScriptEditor(ScriptDocument* doc) const
-{
-    for (auto wnd : _mdiArea->subWindowList()) {
-        auto editor = qobject_cast<ScriptEditorWindow*>(wnd->widget());
-        if (editor && editor->document() == doc)
-            return editor;
-    }
-    return nullptr;
-}
-
-///
-/// \brief AppProject::deleteScript
-/// Deletes a standalone script permanently from the project.
-///
-void AppProject::deleteScript(ScriptDocument* doc)
-{
-    if (!doc) return;
-
-    // Close the editor window if open
-    if (auto editor = findScriptEditor(doc)) {
-        for (auto wnd : _mdiArea->subWindowList()) {
-            if (wnd->widget() == editor) {
-                wnd->close();
-                break;
-            }
-        }
-    }
-
-    _standaloneScripts.removeOne(doc);
-    _projectTree->removeScript(doc);
-    delete doc;
 }
 
 ///
@@ -679,7 +593,7 @@ void AppProject::updateSplitPairScriptIcons(FormModSim* frm)
         if(running)
             crossFadeWindowIcon(targetWnd, targetWnd->windowIcon(), _mainWindow->runScriptIcon());
         else
-            crossFadeWindowIcon(targetWnd, targetWnd->windowIcon(), _mainWindow->windowIcon());
+            crossFadeWindowIcon(targetWnd, targetWnd->windowIcon(), target->windowIcon());
     };
 
     auto peer = splitPeer(frm);
@@ -743,7 +657,7 @@ void AppProject::ensureSplitMirrorForForm(FormModSim* frm)
     _windowCounter = mirrorId;
 
     const bool addToWindowList = (targetArea == _mdiArea->primaryArea());
-    auto mirror = createMdiChildOnArea(mirrorId, targetArea, addToWindowList);
+    auto mirror = createMdiChildOnArea(mirrorId, frm->formKind(), targetArea, addToWindowList);
     if(!mirror)
         return;
 
@@ -938,10 +852,22 @@ void AppProject::loadProject(const QString& filename)
                     }
                     _closedForms.clear();
                     while (xml.readNextStartElement()) {
-                        if (xml.name() == QLatin1String("FormModSim")) {
-                            auto frm = createMdiChild(++_windowCounter);
+                        FormModSim::FormKind kind;
+                        bool isForm = true;
+                        if (xml.name() == QLatin1String("FormDataView")) {
+                            kind = FormModSim::FormKind::Data;
+                        } else if (xml.name() == QLatin1String("FormTrafficView")) {
+                            kind = FormModSim::FormKind::Traffic;
+                        } else if (xml.name() == QLatin1String("FormScriptView")) {
+                            kind = FormModSim::FormKind::Script;
+                        } else {
+                            isForm = false;
+                        }
+
+                        if (isForm) {
+                            auto frm = createMdiChild(++_windowCounter, kind);
                             if (frm) {
-                                xml >> frm;
+                                frm->loadXml(xml);
                                 syncSplitPeerState(frm);
                                 frm->show();
                             }
@@ -951,27 +877,7 @@ void AppProject::loadProject(const QString& filename)
                     }
                 }
                 else if (xml.name() == QLatin1String("Scripts")) {
-                    // Remove existing standalone scripts
-                    for (auto&& doc : _standaloneScripts)
-                        _projectTree->removeScript(doc);
-                    qDeleteAll(_standaloneScripts);
-                    _standaloneScripts.clear();
-
-                    while (xml.readNextStartElement()) {
-                        if (xml.name() == QLatin1String("ScriptDocument")) {
-                            auto doc = new ScriptDocument(QString(), _mainWindow);
-                            xml >> doc;
-                            if (doc->name().isEmpty())
-                                doc->setName(tr("Script%1").arg(++_scriptCounter));
-                            _standaloneScripts.append(doc);
-                            _projectTree->addScript(doc);
-                            // Auto-run if RunOnStartup
-                            if (doc->settings().RunOnStartup)
-                                openScriptEditor(doc)->runScript(doc->settings().Mode, doc->settings().Interval);
-                        } else {
-                            xml.skipCurrentElement();
-                        }
-                    }
+                    xml.skipCurrentElement();
                 }
                 else {
                     xml.skipCurrentElement();
@@ -1066,19 +972,15 @@ void AppProject::saveProject(const QString& filename)
 
     w.writeStartElement("Forms");
     for(auto&& wnd : _mdiArea->localSubWindowList()) {
-        w << qobject_cast<FormModSim*>(wnd->widget());
+        if (auto frm = qobject_cast<FormModSim*>(wnd->widget()))
+            frm->saveXml(w);
     }
     // Also save forms that are closed (hidden in project tree)
     for (auto&& frm : _closedForms) {
-        w << frm;
+        if (frm)
+            frm->saveXml(w);
     }
     w.writeEndElement(); // Forms
-
-    w.writeStartElement("Scripts");
-    for (auto&& doc : _standaloneScripts) {
-        w << doc;
-    }
-    w.writeEndElement(); // Scripts
 
     if(isSplitTabbedView())
     {
@@ -1102,4 +1004,12 @@ void AppProject::saveProject(const QString& filename)
 
     w.writeEndElement(); // OpenModSim
     w.writeEndDocument();
+}
+
+///
+/// \brief AppProject::destroyContentForShutdown
+///
+void AppProject::destroyContentForShutdown()
+{
+    closeProject();
 }

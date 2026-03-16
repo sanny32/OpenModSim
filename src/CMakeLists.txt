@@ -135,12 +135,11 @@ set(SOURCES
     controls/mditabbar.cpp
     controls/modbuslogwidget.cpp
     controls/projecttreewidget.cpp
-    controls/scripteditorwindow.cpp
-    controls/trafficlogwindow.cpp
     controls/modbusmessagewidget.cpp
     controls/numericcombobox.cpp
     controls/numericlineedit.cpp
-    controls/outputwidget.cpp
+    controls/outputdatawidget.cpp
+    controls/outputtrafficwidget.cpp
     controls/paritytypecombobox.cpp
     controls/pointtypecombobox.cpp
     controls/runmodecombobox.cpp
@@ -172,7 +171,9 @@ set(SOURCES
     jsobjects/server.cpp
     jsobjects/storage.cpp
     formmodsim.cpp
-    scriptdocument.cpp
+    formdataview.cpp
+    formtrafficview.cpp
+    formscriptview.cpp
     jshighlighter.cpp
     main.cpp
     mainwindow.cpp
@@ -227,12 +228,12 @@ set(HEADERS
     controls/mditabbar.h
     controls/modbuslogwidget.h
     controls/projecttreewidget.h
-    controls/scripteditorwindow.h
-    controls/trafficlogwindow.h
     controls/modbusmessagewidget.h
     controls/numericcombobox.h
     controls/numericlineedit.h
-    controls/outputwidget.h
+    controls/outputdatawidget.h
+    controls/outputtrafficwidget.h
+    controls/outputtypes.h
     controls/paritytypecombobox.h
     controls/pointtypecombobox.h
     controls/runmodecombobox.h
@@ -270,7 +271,9 @@ set(HEADERS
     enums.h
     modbusserver.h
     formmodsim.h
-    scriptdocument.h
+    formdataview.h
+    formtrafficview.h
+    formscriptview.h
     jshighlighter.h
     mainwindow.h
     menuconnect.h
@@ -329,8 +332,12 @@ set(UI_FILES
     controls/bitpatterncontrol.ui
     controls/findreplacebar.ui
     controls/jscriptcontrol.ui
-    controls/outputwidget.ui
+    controls/outputdatawidget.ui
+    controls/outputtrafficwidget.ui
     controls/statisticwidget.ui
+    formdataview.ui
+    formtrafficview.ui
+    formscriptview.ui
     dialogs/dialogautosimulation.ui
     dialogs/dialogcoilsimulation.ui
     dialogs/dialogabout.ui
@@ -346,7 +353,7 @@ set(UI_FILES
     dialogs/dialogwindowsmanager.ui
     dialogs/dialogwritestatusregister.ui
     dialogs/dialogwriteregister.ui
-    formmodsim.ui
+    # formmodsim.ui was replaced by typed forms
     mainwindow.ui
 )
 

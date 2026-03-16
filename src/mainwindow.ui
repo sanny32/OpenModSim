@@ -62,8 +62,15 @@
     <property name="title">
      <string>File</string>
     </property>
-    <addaction name="actionNew"/>
-    <addaction name="actionNewScript"/>
+    <widget class="QMenu" name="menuNew">
+     <property name="title">
+      <string>New</string>
+     </property>
+     <addaction name="actionNewDataView"/>
+     <addaction name="actionNewTrafficView"/>
+     <addaction name="actionNewScript"/>
+    </widget>
+    <addaction name="menuNew"/>
     <addaction name="separator"/>
     <addaction name="actionImportScript"/>
     <addaction name="separator"/>
@@ -989,6 +996,24 @@
   <action name="actionPreferences">
    <property name="text">
     <string>Preferences</string>
+   </property>
+  </action>
+  <action name="actionNewDataView">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/res/actionShowData.png</normaloff>:/res/actionShowData.png</iconset>
+   </property>
+   <property name="text">
+    <string>New Data View</string>
+   </property>
+  </action>
+  <action name="actionNewTrafficView">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/res/actionShowTraffic.png</normaloff>:/res/actionShowTraffic.png</iconset>
+   </property>
+   <property name="text">
+    <string>New Traffic View</string>
    </property>
   </action>
   <action name="actionNewScript">

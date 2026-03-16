@@ -6,10 +6,8 @@
 #include <QMdiArea>
 #include "modbusmultiserver.h"
 #include "datasimulator.h"
+#include "formmodsim.h"
 
-class FormModSim;
-class ScriptDocument;
-class ScriptEditorWindow;
 class MdiAreaEx;
 class MdiArea;
 class QMdiSubWindow;
@@ -44,8 +42,8 @@ public:
     void markFormClosed(FormModSim* frm);
 
     // Forms
-    FormModSim* createMdiChild(int id);
-    FormModSim* createMdiChildOnArea(int id, MdiArea* area, bool addToWindowList);
+    FormModSim* createMdiChild(int id, FormModSim::FormKind kind = FormModSim::FormKind::Data);
+    FormModSim* createMdiChildOnArea(int id, FormModSim::FormKind kind, MdiArea* area, bool addToWindowList);
     void        rewrapMdiChild(FormModSim* frm);
     void        closeMdiChild(FormModSim* frm);
     void        deleteForm(FormModSim* frm);
@@ -55,12 +53,6 @@ public:
     FormModSim* findMdiChildInArea(MdiArea* area, int id) const;
     FormModSim* firstMdiChild() const;
     bool        cloneMdiChildState(FormModSim* source, FormModSim* target) const;
-
-    // Scripts
-    ScriptDocument*     createStandaloneScript(const QString& name);
-    ScriptEditorWindow* openScriptEditor(ScriptDocument* doc);
-    ScriptEditorWindow* findScriptEditor(ScriptDocument* doc) const;
-    void                deleteScript(ScriptDocument* doc);
 
     // Split-view
     FormModSim* splitPeer(FormModSim* frm) const;
@@ -86,13 +78,10 @@ public:
 
     // Accessors for MainWindow (loadProfile/saveProfile/eventFilter)
     const QList<FormModSim*>&     closedForms() const { return _closedForms; }
-    const QList<ScriptDocument*>& scripts() const     { return _standaloneScripts; }
     QString savePath() const        { return _savePath; }
     void    setSavePath(const QString& p) { _savePath = p; }
     int     windowCounter() const   { return _windowCounter; }
     void    setWindowCounter(int v) { _windowCounter = v; }
-    int     scriptCounter() const   { return _scriptCounter; }
-    void    setScriptCounter(int v) { _scriptCounter = v; }
     bool    splitDisableInProgress() const { return _splitDisableInProgress; }
     void    setSplitDisableInProgress(bool v) { _splitDisableInProgress = v; }
 
@@ -107,11 +96,9 @@ private:
     WindowActionList*             _windowActionList;
     MainWindow*                   _mainWindow;
 
-    int                    _windowCounter = 0;
-    int                    _scriptCounter = 0;
-    QList<FormModSim*>     _closedForms;
-    QList<ScriptDocument*> _standaloneScripts;
-    QString                _savePath;
+    int                _windowCounter = 0;
+    QList<FormModSim*> _closedForms;
+    QString            _savePath;
     bool _splitDisplayDefinitionSyncInProgress = false;
     bool _splitDisableInProgress = false;
 };

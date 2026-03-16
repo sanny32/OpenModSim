@@ -4,7 +4,6 @@
 #include <QTreeWidget>
 #include <QTreeWidgetItem>
 #include "formmodsim.h"
-#include "scriptdocument.h"
 
 ///
 /// \brief The ProjectTreeWidget class
@@ -22,16 +21,9 @@ public:
     void setFormOpen(FormModSim* frm, bool open);
     void activateForm(FormModSim* frm);
 
-    void addScript(ScriptDocument* doc);
-    void removeScript(ScriptDocument* doc);
-    void setScriptRunning(ScriptDocument* doc, bool running);
-    void activateScript(ScriptDocument* doc);
-
 signals:
     void formActivated(FormModSim* frm);
-    void scriptActivated(ScriptDocument* doc);
     void formDeleteRequested(FormModSim* frm);
-    void scriptDeleteRequested(ScriptDocument* doc);
     void formRenamed(FormModSim* frm);
 
 protected:
@@ -45,15 +37,18 @@ private slots:
 
 private:
     QTreeWidgetItem* itemForForm(FormModSim* frm) const;
-    QTreeWidgetItem* itemForScript(ScriptDocument* doc) const;
 
 private:
     QTreeWidgetItem* _dataRoot    = nullptr;
-    QTreeWidgetItem* _scriptsRoot = nullptr;
+    QTreeWidgetItem* _trafficRoot = nullptr;
+    QTreeWidgetItem* _scriptRoot  = nullptr;
 
-    QIcon _iconForm;
-    QIcon _iconFormClosed;
+    QIcon _iconData;
+    QIcon _iconDataClosed;
+    QIcon _iconTraffic;
+    QIcon _iconTrafficClosed;
     QIcon _iconScriptIdle;
+    QIcon _iconScriptClosed;
     QIcon _iconScriptRunning;
 };
 

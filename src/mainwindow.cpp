@@ -15,8 +15,6 @@
 #include "dialogforcemultiplecoils.h"
 #include "dialogforcemultipleregisters.h"
 #include "dialogmodbusdefinitions.h"
-#include "scripteditorwindow.h"
-#include "trafficlogwindow.h"
 #include "mainstatusbar.h"
 #include "menuconnect.h"
 #include "controls/mdiareaex.h"
@@ -120,12 +118,6 @@ MainWindow::MainWindow(const QString& profile, bool useSession, QWidget *parent)
     });
     connect(_projectTree, &ProjectTreeWidget::formDeleteRequested, this, [this](FormModSim* frm) {
         _project->deleteForm(frm);
-    });
-    connect(_projectTree, &ProjectTreeWidget::scriptDeleteRequested, this, [this](ScriptDocument* doc) {
-        _project->deleteScript(doc);
-    });
-    connect(_projectTree, &ProjectTreeWidget::scriptActivated, this, [this](ScriptDocument* doc) {
-        _project->openScriptEditor(doc);
     });
     connect(_projectTree, &ProjectTreeWidget::formRenamed, this, [this](FormModSim*) {
         _windowActionList->update();
@@ -326,9 +318,7 @@ void MainWindow::on_awake()
     ui->actionCopy->setEnabled(frm != nullptr);
     ui->actionPaste->setEnabled(frm != nullptr);
     ui->actionSelectAll->setEnabled(frm != nullptr);
-    const bool isScriptActive = (frm && frm->displayMode() == DisplayMode::Script) ||
-                                 qobject_cast<ScriptEditorWindow*>(
-                                     ui->mdiArea->activeSubWindow() ? ui->mdiArea->activeSubWindow()->widget() : nullptr) != nullptr;
+    const bool isScriptActive = (frm && frm->displayMode() == DisplayMode::Script);
     ui->actionFind->setEnabled(isScriptActive);
     ui->actionReplace->setEnabled(isScriptActive);
 
@@ -355,7 +345,7 @@ void MainWindow::on_awake()
     ui->actionSwappedDbl->setEnabled(frm != nullptr);
     ui->actionSwapBytes->setEnabled(frm != nullptr);
 
-    ui->actionRawDataLog->setChecked(_trafficLogSubWindow != nullptr);
+    ui->actionRawDataLog->setChecked(false);
 
     ui->actionTextCapture->setEnabled(frm && frm->captureMode() == CaptureMode::Off);
     ui->actionCaptureOff->setEnabled(frm && frm->captureMode() == CaptureMode::TextCapture);
@@ -371,11 +361,8 @@ void MainWindow::on_awake()
     ui->actionToolbar->setChecked(ui->toolBarMain->isVisible());
     ui->actionStatusBar->setChecked(statusBar()->isVisible());
     ui->actionScriptHelp->setChecked(_helpDockWidget->isVisible());
-    // Show script help when any script editor is the active window
-    const bool scriptEditorActive = qobject_cast<ScriptEditorWindow*>(
-        ui->mdiArea->activeSubWindow() ? ui->mdiArea->activeSubWindow()->widget() : nullptr) != nullptr;
     const bool formInScriptMode = frm && frm->displayMode() == DisplayMode::Script;
-    ui->actionScriptHelp->setVisible(scriptEditorActive || formInScriptMode);
+    ui->actionScriptHelp->setVisible(formInScriptMode);
     ui->actionConsoleOutput->setVisible(true);
     ui->actionConsoleOutput->setChecked(_consoleDockWidget->isVisible());
 
@@ -427,9 +414,9 @@ void MainWindow::on_awake()
 
         ui->actionHexAddresses->setChecked(frm->displayHexAddresses());
 
-        ui->actionShowData->setChecked(true);
-        ui->actionShowTraffic->setChecked(_trafficLogSubWindow != nullptr);
-        ui->actionShowScript->setChecked(false);
+        ui->actionShowData->setChecked(frm->formKind() == FormModSim::FormKind::Data);
+        ui->actionShowTraffic->setChecked(frm->formKind() == FormModSim::FormKind::Traffic);
+        ui->actionShowScript->setChecked(frm->formKind() == FormModSim::FormKind::Script);
 
         _projectTree->activateForm(frm);
     }
@@ -440,9 +427,36 @@ void MainWindow::on_awake()
 ///
 void MainWindow::on_actionNew_triggered()
 {
+    createNewForm(FormModSim::FormKind::Data);
+}
+
+///
+/// \brief MainWindow::on_actionNewDataView_triggered
+///
+void MainWindow::on_actionNewDataView_triggered()
+{
+    createNewForm(FormModSim::FormKind::Data);
+}
+
+///
+/// \brief MainWindow::on_actionNewTrafficView_triggered
+///
+void MainWindow::on_actionNewTrafficView_triggered()
+{
+    createNewForm(FormModSim::FormKind::Traffic);
+}
+
+///
+/// \brief MainWindow::createNewForm
+/// \param kind
+///
+void MainWindow::createNewForm(FormModSim::FormKind kind)
+{
     const auto cur = _project->currentMdiChild();
     _project->setWindowCounter(_project->windowCounter() + 1);
-    auto frm = _project->createMdiChild(_project->windowCounter());
+    auto frm = _project->createMdiChild(_project->windowCounter(), kind);
+    if(!frm)
+        return;
 
     const auto& prefs = AppPreferences::instance();
 
@@ -798,10 +812,11 @@ void MainWindow::on_actionMbDefinitions_triggered()
 ///
 void MainWindow::on_actionShowData_triggered()
 {
-    auto frm = _project->currentMdiChild();
-    if(frm) frm->setDisplayMode(DisplayMode::Data);
-
-    updateHelpWidgetState();
+    _project->setWindowCounter(_project->windowCounter() + 1);
+    if (auto frm = _project->createMdiChild(_project->windowCounter(), FormModSim::FormKind::Data)) {
+        _project->syncSplitPeerState(frm);
+        frm->show();
+    }
 }
 
 ///
@@ -809,7 +824,11 @@ void MainWindow::on_actionShowData_triggered()
 ///
 void MainWindow::on_actionShowTraffic_triggered()
 {
-    on_actionRawDataLog_triggered(); // open global traffic log window
+    _project->setWindowCounter(_project->windowCounter() + 1);
+    if (auto frm = _project->createMdiChild(_project->windowCounter(), FormModSim::FormKind::Traffic)) {
+        _project->syncSplitPeerState(frm);
+        frm->show();
+    }
 }
 
 ///
@@ -818,7 +837,11 @@ void MainWindow::on_actionShowTraffic_triggered()
 ///
 void MainWindow::on_actionShowScript_triggered()
 {
-    on_actionNewScript_triggered();
+    _project->setWindowCounter(_project->windowCounter() + 1);
+    if (auto frm = _project->createMdiChild(_project->windowCounter(), FormModSim::FormKind::Script)) {
+        _project->syncSplitPeerState(frm);
+        frm->show();
+    }
 }
 
 ///
@@ -1031,25 +1054,7 @@ void MainWindow::on_actionMsgParser_triggered()
 ///
 void MainWindow::on_actionRawDataLog_triggered()
 {
-    if (_trafficLogSubWindow) {
-        // already open — bring to front
-        ui->mdiArea->setActiveSubWindow(_trafficLogSubWindow);
-        return;
-    }
-
-    auto trafficWnd = new TrafficLogWindow(_mbMultiServer);
-    if (auto frm = _project->currentMdiChild())
-        trafficWnd->setDataDisplayMode(frm->dataDisplayMode());
-    _trafficLogSubWindow = ui->mdiArea->addSubWindow(trafficWnd);
-    _trafficLogSubWindow->setAttribute(Qt::WA_DeleteOnClose);
-    _trafficLogSubWindow->setWindowTitle(tr("Traffic"));
-    _trafficLogSubWindow->setWindowIcon(QIcon(":/res/actionShowTraffic.png"));
-
-    connect(_trafficLogSubWindow, &QMdiSubWindow::destroyed, this, [this]() {
-        _trafficLogSubWindow = nullptr;
-    });
-
-    _trafficLogSubWindow->show();
+    on_actionShowTraffic_triggered();
 }
 
 ///
@@ -1228,10 +1233,7 @@ void MainWindow::on_actionAbout_triggered()
 ///
 void MainWindow::on_actionNewScript_triggered()
 {
-    _project->setScriptCounter(_project->scriptCounter() + 1);
-    const QString name = tr("Script%1").arg(_project->scriptCounter());
-    auto doc = _project->createStandaloneScript(name);
-    _project->openScriptEditor(doc);
+    createNewForm(FormModSim::FormKind::Script);
 }
 
 ///
@@ -1344,11 +1346,6 @@ void MainWindow::updateDataDisplayMode(DataDisplayMode mode)
 {
     auto frm = _project->currentMdiChild();
     if(frm) frm->setDataDisplayMode(mode);
-
-    if (_trafficLogSubWindow) {
-        auto trafficWnd = qobject_cast<TrafficLogWindow*>(_trafficLogSubWindow->widget());
-        if (trafficWnd) trafficWnd->setDataDisplayMode(mode);
-    }
 }
 
 ///
@@ -1580,10 +1577,13 @@ bool MainWindow::loadProfile(const QString& filename)
             m.beginGroup(g);
             _project->setWindowCounter(_project->windowCounter() + 1);
             const auto id = m.value("FromId", _project->windowCounter()).toInt();
-            auto frm = _project->createMdiChild(id);
-            m >> frm;
-            _project->syncSplitPeerState(frm);
-            frm->show();
+            const auto kind = static_cast<FormModSim::FormKind>(m.value("FormKind", static_cast<int>(FormModSim::FormKind::Data)).toInt());
+            auto frm = _project->createMdiChild(id, kind);
+            if (frm) {
+                frm->loadSettings(m);
+                _project->syncSplitPeerState(frm);
+                frm->show();
+            }
             m.endGroup();
         }
     }
@@ -1683,7 +1683,8 @@ void MainWindow::saveProfile()
         if(frm) {
             m.beginGroup("Form_" + QString::number(i + 1));
             m.setValue("FromId", frm->formId());
-            m << frm;
+            m.setValue("FormKind", static_cast<int>(frm->formKind()));
+            frm->saveSettings(m);
             if(_project->isSplitTabbedView())
                 if(auto mirror = _project->splitPeer(frm))
                 {
@@ -1701,3 +1702,4 @@ void MainWindow::saveProfile()
                 if(auto frm = qobject_cast<FormModSim*>(wnd->widget()))
                     m.setValue("ActiveSecondaryWindow", frm->windowTitle());
 }
+

@@ -1,13 +1,27 @@
-#include <QHeaderView>
+﻿#include <QHeaderView>
 #include <QMenu>
 #include <QMessageBox>
 #include <QPainter>
 #include "projecttreewidget.h"
 
 namespace {
-    constexpr int ItemTypeRole = Qt::UserRole + 1;
-    constexpr int ItemTypeForm   = 1;
-    constexpr int ItemTypeScript = 2;
+constexpr int ItemTypeRole = Qt::UserRole + 1;
+constexpr int ItemTypeForm = 1;
+
+QIcon dimmedIcon(const QString& path)
+{
+    const QPixmap srcPixmap(path);
+    if (srcPixmap.isNull())
+        return QIcon();
+
+    QPixmap grayPixmap(srcPixmap.size());
+    grayPixmap.fill(Qt::transparent);
+    QPainter painter(&grayPixmap);
+    painter.setOpacity(0.4);
+    painter.drawPixmap(0, 0, srcPixmap);
+    painter.end();
+    return QIcon(grayPixmap);
+}
 }
 
 ///
@@ -15,19 +29,14 @@ namespace {
 ///
 ProjectTreeWidget::ProjectTreeWidget(QWidget* parent)
     : QTreeWidget(parent)
-    , _iconForm(QIcon(":/res/actionNew.png"))
+    , _iconData(QIcon(":/res/actionShowData.png"))
+    , _iconTraffic(QIcon(":/res/actionShowTraffic.png"))
     , _iconScriptIdle(QIcon(":/res/actionShowScript.png"))
     , _iconScriptRunning(QIcon(":/res/actionRunScript.png"))
 {
-    // Build a grayed version of the form icon for closed forms
-    const QPixmap srcPixmap(":/res/actionNew.png");
-    QPixmap grayPixmap(srcPixmap.size());
-    grayPixmap.fill(Qt::transparent);
-    QPainter painter(&grayPixmap);
-    painter.setOpacity(0.4);
-    painter.drawPixmap(0, 0, srcPixmap);
-    painter.end();
-    _iconFormClosed = QIcon(grayPixmap);
+    _iconDataClosed = dimmedIcon(":/res/actionShowData.png");
+    _iconTrafficClosed = dimmedIcon(":/res/actionShowTraffic.png");
+    _iconScriptClosed = dimmedIcon(":/res/actionShowScript.png");
 
     setHeaderHidden(true);
     setRootIsDecorated(true);
@@ -39,8 +48,11 @@ ProjectTreeWidget::ProjectTreeWidget(QWidget* parent)
     _dataRoot = new QTreeWidgetItem(this, QStringList{tr("Data")});
     _dataRoot->setExpanded(true);
 
-    _scriptsRoot = new QTreeWidgetItem(this, QStringList{tr("Scripts")});
-    _scriptsRoot->setExpanded(true);
+    _trafficRoot = new QTreeWidgetItem(this, QStringList{tr("Traffic")});
+    _trafficRoot->setExpanded(true);
+
+    _scriptRoot = new QTreeWidgetItem(this, QStringList{tr("Script")});
+    _scriptRoot->setExpanded(true);
 
     connect(this, &QTreeWidget::itemActivated,
             this, &ProjectTreeWidget::on_itemActivated);
@@ -55,11 +67,30 @@ ProjectTreeWidget::ProjectTreeWidget(QWidget* parent)
 ///
 void ProjectTreeWidget::addForm(FormModSim* frm)
 {
-    if (!frm || itemForForm(frm)) return;
+    if (!frm || itemForForm(frm))
+        return;
 
-    auto item = new QTreeWidgetItem(_dataRoot, QStringList{frm->windowTitle()});
-    item->setIcon(0, _iconForm);
-    item->setData(0, Qt::UserRole,  QVariant::fromValue(static_cast<void*>(frm)));
+    QTreeWidgetItem* root = _dataRoot;
+    QIcon baseIcon = _iconData;
+    switch (frm->formKind())
+    {
+        case FormModSim::FormKind::Data:
+            root = _dataRoot;
+            baseIcon = _iconData;
+            break;
+        case FormModSim::FormKind::Traffic:
+            root = _trafficRoot;
+            baseIcon = _iconTraffic;
+            break;
+        case FormModSim::FormKind::Script:
+            root = _scriptRoot;
+            baseIcon = _iconScriptIdle;
+            break;
+    }
+
+    auto item = new QTreeWidgetItem(root, QStringList{frm->windowTitle()});
+    item->setIcon(0, baseIcon);
+    item->setData(0, Qt::UserRole, QVariant::fromValue(static_cast<void*>(frm)));
     item->setData(0, ItemTypeRole, ItemTypeForm);
     item->setFlags(item->flags() | Qt::ItemIsEditable);
 
@@ -70,7 +101,7 @@ void ProjectTreeWidget::addForm(FormModSim* frm)
         setFormScriptRunning(frm, false);
     });
 
-    _dataRoot->setExpanded(true);
+    root->setExpanded(true);
 }
 
 ///
@@ -79,9 +110,11 @@ void ProjectTreeWidget::addForm(FormModSim* frm)
 void ProjectTreeWidget::removeForm(FormModSim* frm)
 {
     auto item = itemForForm(frm);
-    if (!item) return;
+    if (!item)
+        return;
 
-    _dataRoot->removeChild(item);
+    if (auto parent = item->parent())
+        parent->removeChild(item);
     delete item;
 }
 
@@ -91,9 +124,27 @@ void ProjectTreeWidget::removeForm(FormModSim* frm)
 void ProjectTreeWidget::setFormScriptRunning(FormModSim* frm, bool running)
 {
     auto item = itemForForm(frm);
-    if (!item) return;
+    if (!item)
+        return;
 
-    item->setIcon(0, running ? _iconScriptRunning : _iconForm);
+    if (running) {
+        item->setIcon(0, _iconScriptRunning);
+        return;
+    }
+
+    const bool isOpen = !item->font(0).italic();
+    switch (frm->formKind())
+    {
+        case FormModSim::FormKind::Data:
+            item->setIcon(0, isOpen ? _iconData : _iconDataClosed);
+            break;
+        case FormModSim::FormKind::Traffic:
+            item->setIcon(0, isOpen ? _iconTraffic : _iconTrafficClosed);
+            break;
+        case FormModSim::FormKind::Script:
+            item->setIcon(0, isOpen ? _iconScriptIdle : _iconScriptClosed);
+            break;
+    }
 }
 
 ///
@@ -102,9 +153,21 @@ void ProjectTreeWidget::setFormScriptRunning(FormModSim* frm, bool running)
 void ProjectTreeWidget::setFormOpen(FormModSim* frm, bool open)
 {
     auto item = itemForForm(frm);
-    if (!item) return;
+    if (!item)
+        return;
 
-    item->setIcon(0, open ? _iconForm : _iconFormClosed);
+    switch (frm->formKind())
+    {
+        case FormModSim::FormKind::Data:
+            item->setIcon(0, open ? _iconData : _iconDataClosed);
+            break;
+        case FormModSim::FormKind::Traffic:
+            item->setIcon(0, open ? _iconTraffic : _iconTrafficClosed);
+            break;
+        case FormModSim::FormKind::Script:
+            item->setIcon(0, open ? _iconScriptIdle : _iconScriptClosed);
+            break;
+    }
 
     QFont f = item->font(0);
     f.setItalic(!open);
@@ -117,64 +180,8 @@ void ProjectTreeWidget::setFormOpen(FormModSim* frm, bool open)
 void ProjectTreeWidget::activateForm(FormModSim* frm)
 {
     auto item = itemForForm(frm);
-    if (!item) return;
-
-    blockSignals(true);
-    setCurrentItem(item);
-    blockSignals(false);
-}
-
-///
-/// \brief ProjectTreeWidget::addScript
-///
-void ProjectTreeWidget::addScript(ScriptDocument* doc)
-{
-    if (!doc || itemForScript(doc)) return;
-
-    auto item = new QTreeWidgetItem(_scriptsRoot, QStringList{doc->name()});
-    item->setIcon(0, _iconScriptIdle);
-    item->setData(0, Qt::UserRole, QVariant::fromValue(static_cast<void*>(doc)));
-    item->setData(0, ItemTypeRole, ItemTypeScript);
-    item->setFlags(item->flags() | Qt::ItemIsEditable);
-
-    connect(doc, &ScriptDocument::nameChanged, this, [this, doc](const QString& name) {
-        auto it = itemForScript(doc);
-        if (it) it->setText(0, name);
-    });
-
-    _scriptsRoot->setExpanded(true);
-}
-
-///
-/// \brief ProjectTreeWidget::removeScript
-///
-void ProjectTreeWidget::removeScript(ScriptDocument* doc)
-{
-    auto item = itemForScript(doc);
-    if (!item) return;
-
-    _scriptsRoot->removeChild(item);
-    delete item;
-}
-
-///
-/// \brief ProjectTreeWidget::setScriptRunning
-///
-void ProjectTreeWidget::setScriptRunning(ScriptDocument* doc, bool running)
-{
-    auto item = itemForScript(doc);
-    if (!item) return;
-
-    item->setIcon(0, running ? _iconScriptRunning : _iconScriptIdle);
-}
-
-///
-/// \brief ProjectTreeWidget::activateScript
-///
-void ProjectTreeWidget::activateScript(ScriptDocument* doc)
-{
-    auto item = itemForScript(doc);
-    if (!item) return;
+    if (!item)
+        return;
 
     blockSignals(true);
     setCurrentItem(item);
@@ -196,15 +203,17 @@ void ProjectTreeWidget::changeEvent(QEvent* event)
 ///
 void ProjectTreeWidget::on_itemActivated(QTreeWidgetItem* item, int /*column*/)
 {
-    if (!item) return;
-    const int type = item->data(0, ItemTypeRole).toInt();
-    auto ptr = item->data(0, Qt::UserRole).value<void*>();
-    if (!ptr) return;
+    if (!item)
+        return;
 
-    if (type == ItemTypeForm)
-        emit formActivated(static_cast<FormModSim*>(ptr));
-    else if (type == ItemTypeScript)
-        emit scriptActivated(static_cast<ScriptDocument*>(ptr));
+    if (item->data(0, ItemTypeRole).toInt() != ItemTypeForm)
+        return;
+
+    auto ptr = item->data(0, Qt::UserRole).value<void*>();
+    if (!ptr)
+        return;
+
+    emit formActivated(static_cast<FormModSim*>(ptr));
 }
 
 ///
@@ -212,35 +221,27 @@ void ProjectTreeWidget::on_itemActivated(QTreeWidgetItem* item, int /*column*/)
 ///
 void ProjectTreeWidget::on_itemChanged(QTreeWidgetItem* item, int column)
 {
-    if (column != 0) return;
-    const int type = item->data(0, ItemTypeRole).toInt();
+    if (column != 0)
+        return;
+
+    if (item->data(0, ItemTypeRole).toInt() != ItemTypeForm)
+        return;
+
     auto ptr = item->data(0, Qt::UserRole).value<void*>();
-    if (!ptr) return;
+    if (!ptr)
+        return;
 
+    auto frm = static_cast<FormModSim*>(ptr);
+    const QString current = frm->windowTitle();
     const QString newName = item->text(0).trimmed();
+    if (newName.isEmpty()) {
+        item->setText(0, current);
+        return;
+    }
 
-    if (type == ItemTypeForm) {
-        auto frm = static_cast<FormModSim*>(ptr);
-        const QString current = frm->windowTitle();
-        if (newName.isEmpty()) {
-            item->setText(0, current); // will re-trigger itemChanged, but guard below prevents any action
-        } else if (current != newName) {
-            frm->setWindowTitle(newName);
-            emit formRenamed(frm);
-        }
-    } else if (type == ItemTypeScript) {
-        auto doc = static_cast<ScriptDocument*>(ptr);
-        const QString current = doc->name();
-        if (newName.isEmpty()) {
-            blockSignals(true);
-            item->setText(0, current);
-            blockSignals(false);
-        } else if (current != newName) {
-            // Block tree signals to prevent loop: nameChanged → setText → itemChanged
-            blockSignals(true);
-            doc->setName(newName);
-            blockSignals(false);
-        }
+    if (current != newName) {
+        frm->setWindowTitle(newName);
+        emit formRenamed(frm);
     }
 }
 
@@ -250,13 +251,21 @@ void ProjectTreeWidget::on_itemChanged(QTreeWidgetItem* item, int column)
 void ProjectTreeWidget::retranslateUi()
 {
     _dataRoot->setText(0, tr("Data"));
-    _scriptsRoot->setText(0, tr("Scripts"));
+    _trafficRoot->setText(0, tr("Traffic"));
+    _scriptRoot->setText(0, tr("Script"));
 
-    for (int i = 0; i < _dataRoot->childCount(); ++i) {
-        auto item = _dataRoot->child(i);
-        auto frm = static_cast<FormModSim*>(item->data(0, Qt::UserRole).value<void*>());
-        if (frm) item->setText(0, frm->windowTitle());
-    }
+    auto retranslateRoot = [](QTreeWidgetItem* root) {
+        for (int i = 0; i < root->childCount(); ++i) {
+            auto item = root->child(i);
+            auto frm = static_cast<FormModSim*>(item->data(0, Qt::UserRole).value<void*>());
+            if (frm)
+                item->setText(0, frm->windowTitle());
+        }
+    };
+
+    retranslateRoot(_dataRoot);
+    retranslateRoot(_trafficRoot);
+    retranslateRoot(_scriptRoot);
 }
 
 ///
@@ -265,34 +274,29 @@ void ProjectTreeWidget::retranslateUi()
 void ProjectTreeWidget::on_contextMenu(const QPoint& pos)
 {
     auto item = itemAt(pos);
-    if (!item) return;
+    if (!item)
+        return;
 
-    const int type = item->data(0, ItemTypeRole).toInt();
+    if (item->data(0, ItemTypeRole).toInt() != ItemTypeForm)
+        return;
+
     auto ptr = item->data(0, Qt::UserRole).value<void*>();
-    if (!ptr) return;
+    if (!ptr)
+        return;
+
+    auto frm = static_cast<FormModSim*>(ptr);
 
     QMenu menu(this);
     auto deleteAction = menu.addAction(tr("Delete"));
-
     if (menu.exec(viewport()->mapToGlobal(pos)) != deleteAction)
         return;
 
-    if (type == ItemTypeForm) {
-        auto frm = static_cast<FormModSim*>(ptr);
-        const int ret = QMessageBox::question(this, tr("Delete Form"),
-            tr("Delete \"%1\" from the project?").arg(frm->windowTitle()),
-            QMessageBox::Yes | QMessageBox::No);
-        if (ret == QMessageBox::Yes)
-            emit formDeleteRequested(frm);
-    }
-    else if (type == ItemTypeScript) {
-        auto doc = static_cast<ScriptDocument*>(ptr);
-        const int ret = QMessageBox::question(this, tr("Delete Script"),
-            tr("Delete \"%1\" from the project?").arg(doc->name()),
-            QMessageBox::Yes | QMessageBox::No);
-        if (ret == QMessageBox::Yes)
-            emit scriptDeleteRequested(doc);
-    }
+    const int ret = QMessageBox::question(this,
+                                          tr("Delete Form"),
+                                          tr("Delete \"%1\" from the project?").arg(frm->windowTitle()),
+                                          QMessageBox::Yes | QMessageBox::No);
+    if (ret == QMessageBox::Yes)
+        emit formDeleteRequested(frm);
 }
 
 ///
@@ -300,23 +304,21 @@ void ProjectTreeWidget::on_contextMenu(const QPoint& pos)
 ///
 QTreeWidgetItem* ProjectTreeWidget::itemForForm(FormModSim* frm) const
 {
-    for (int i = 0; i < _dataRoot->childCount(); ++i) {
-        auto item = _dataRoot->child(i);
-        if (item->data(0, Qt::UserRole).value<void*>() == static_cast<void*>(frm))
-            return item;
-    }
-    return nullptr;
-}
+    auto findInRoot = [frm](QTreeWidgetItem* root) -> QTreeWidgetItem* {
+        for (int i = 0; i < root->childCount(); ++i) {
+            auto item = root->child(i);
+            if (item->data(0, Qt::UserRole).value<void*>() == static_cast<void*>(frm))
+                return item;
+        }
+        return nullptr;
+    };
 
-///
-/// \brief ProjectTreeWidget::itemForScript
-///
-QTreeWidgetItem* ProjectTreeWidget::itemForScript(ScriptDocument* doc) const
-{
-    for (int i = 0; i < _scriptsRoot->childCount(); ++i) {
-        auto item = _scriptsRoot->child(i);
-        if (item->data(0, Qt::UserRole).value<void*>() == static_cast<void*>(doc))
-            return item;
-    }
+    if (auto item = findInRoot(_dataRoot))
+        return item;
+    if (auto item = findInRoot(_trafficRoot))
+        return item;
+    if (auto item = findInRoot(_scriptRoot))
+        return item;
+
     return nullptr;
 }
