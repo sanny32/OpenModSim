@@ -127,10 +127,9 @@
 <context>
     <name>AppProject</name>
     <message>
-        <location filename="../appproject.cpp" line="454"/>
         <source>Capture Error:<byte value="xd"/>
 %1</source>
-        <translation type="unfinished">Ошибка захвата:
+        <translation type="obsolete">Ошибка захвата:
 %1</translation>
     </message>
 </context>
@@ -1891,7 +1890,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formdataview.cpp" line="484"/>
+        <location filename="../formdataview.cpp" line="444"/>
         <source>Address Base: %1
 Start Address: %2
 Length: %3</source>
@@ -1900,7 +1899,7 @@ Length: %3</source>
 Количество: %3</translation>
     </message>
     <message>
-        <location filename="../formdataview.cpp" line="487"/>
+        <location filename="../formdataview.cpp" line="447"/>
         <source>Unit Identifier: %1
 MODBUS Point Type:
 %2</source>
@@ -3156,7 +3155,7 @@ Script.onInit(()=&gt;{
     <message>
         <location filename="../mainwindow.ui" line="979"/>
         <location filename="../mainwindow.ui" line="982"/>
-        <location filename="../mainwindow.cpp" line="308"/>
+        <location filename="../mainwindow.cpp" line="291"/>
         <source>Script Help</source>
         <translation>Справка по скриптам</translation>
     </message>
@@ -3243,7 +3242,7 @@ Script.onInit(()=&gt;{
         <translation>Шестнадцатиричные адреса</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="736"/>
+        <location filename="../mainwindow.cpp" line="717"/>
         <source>All files (*)</source>
         <translation>Все файлы (*)</translation>
     </message>
@@ -3252,12 +3251,12 @@ Script.onInit(()=&gt;{
         <translation type="vanished">XML файлы (*.xml)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="289"/>
+        <location filename="../mainwindow.cpp" line="272"/>
         <source>Project</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="345"/>
+        <location filename="../mainwindow.cpp" line="328"/>
         <source>Output</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3266,13 +3265,13 @@ Script.onInit(()=&gt;{
         <translation type="obsolete">Данные</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="735"/>
-        <location filename="../mainwindow.cpp" line="751"/>
+        <location filename="../mainwindow.cpp" line="716"/>
+        <location filename="../mainwindow.cpp" line="732"/>
         <source>Project files (*.msimprj)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1470"/>
+        <location filename="../mainwindow.cpp" line="1436"/>
         <source>JavaScript files (*.js);;All files (*)</source>
         <translation type="unfinished"></translation>
     </message>

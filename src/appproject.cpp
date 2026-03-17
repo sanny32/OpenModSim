@@ -69,8 +69,7 @@ int formIdOf(QWidget* widget)
 
 void enableAutoCompleteOnForm(QWidget* widget, bool enable)
 {
-    if (auto* frm = qobject_cast<FormDataView*>(widget)) frm->enableAutoComplete(enable);
-    else if (auto* frm = qobject_cast<FormScriptView*>(widget)) frm->enableAutoComplete(enable);
+    if (auto* frm = qobject_cast<FormScriptView*>(widget)) frm->enableAutoComplete(enable);
 }
 
 QString codepageOfForm(QWidget* widget)
@@ -449,14 +448,6 @@ void AppProject::setupMdiChild(QWidget* frm, QMdiSubWindow* wnd, bool addToWindo
         connect(script, &FormScriptView::showed, _mainWindow, onShowed);
     }
 
-    auto onCaptureError = [this](const QString& error)
-    {
-        QMessageBox::critical(_mainWindow, _mainWindow->windowTitle(), tr("Capture Error:\r\n%1").arg(error));
-    };
-    if (auto* data = qobject_cast<FormDataView*>(frm)) {
-        connect(data, &FormDataView::captureError, _mainWindow, onCaptureError);
-    }
-
     auto onHelpRequested = [this](const QString& helpKey)
     {
         _mainWindow->showHelpContext(helpKey);
@@ -470,9 +461,7 @@ void AppProject::setupMdiChild(QWidget* frm, QMdiSubWindow* wnd, bool addToWindo
     auto onConsoleMessage = [this](const QString& source, const QString& text, ConsoleOutput::MessageType type) {
         _mainWindow->showConsoleMessage(source, text, type);
     };
-    if (auto* data = qobject_cast<FormDataView*>(frm)) {
-        connect(data, &FormDataView::consoleMessage, _mainWindow, onConsoleMessage);
-    } else if (auto* script = qobject_cast<FormScriptView*>(frm)) {
+    if (auto* script = qobject_cast<FormScriptView*>(frm)) {
         connect(script, &FormScriptView::consoleMessage, _mainWindow, onConsoleMessage);
     }
 

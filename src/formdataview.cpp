@@ -12,6 +12,21 @@
 #include "formdataview.h"
 #include "ui_formdataview.h"
 
+namespace {
+int dataFormId(const QWidget* widget)
+{
+    if (!widget)
+        return -1;
+    const QString title = widget->windowTitle();
+    int idx = title.size() - 1;
+    while (idx >= 0 && title.at(idx).isDigit())
+        --idx;
+    bool ok = false;
+    const int id = title.mid(idx + 1).toInt(&ok);
+    return ok ? id : -1;
+}
+}
+
 ///
 /// \brief FormDataView::FormDataView
 /// \param num
@@ -21,16 +36,14 @@ FormDataView::FormDataView(int id, ModbusMultiServer& server, DataSimulator* sim
     : QWidget(parent)
     , ui(new Ui::FormDataView)
     ,_parent(parent)
-    ,_formId(id)
     ,_mbMultiServer(server)
     ,_dataSimulator(simulator)
-    ,_verboseLogging(true)
 {
     Q_ASSERT(parent != nullptr);
     Q_ASSERT(_dataSimulator != nullptr);
 
     ui->setupUi(this);
-    setWindowTitle(QString("Data%1").arg(_formId));
+    setWindowTitle(QString("Data%1").arg(id));
     setWindowIcon(QIcon(":/res/actionShowData.png"));
 
     ui->lineEditDeviceId->setInputRange(ModbusLimits::slaveRange());
@@ -58,10 +71,6 @@ FormDataView::FormDataView(int id, ModbusMultiServer& server, DataSimulator* sim
 
     ui->outputWidget->setFocus();
 
-    setLogViewState(server.isConnected() ? LogViewState::Running : LogViewState::Unknown);
-
-    connect(&_mbMultiServer, &ModbusMultiServer::request, this, &FormDataView::on_mbRequest);
-    connect(&_mbMultiServer, &ModbusMultiServer::response, this, &FormDataView::on_mbResponse);
     connect(&_mbMultiServer, &ModbusMultiServer::connected, this, &FormDataView::on_mbConnected);
     connect(&_mbMultiServer, &ModbusMultiServer::disconnected, this, &FormDataView::on_mbDisconnected);
     connect(&_mbMultiServer, &ModbusMultiServer::dataChanged, this, &FormDataView::on_mbDataChanged);
@@ -125,7 +134,7 @@ void FormDataView::closeEvent(QCloseEvent* event)
 {
     const auto deviceId = ui->lineEditDeviceId->value<quint8>();
     _mbMultiServer.removeDeviceId(deviceId);
-    _mbMultiServer.removeUnitMap(_formId, deviceId);
+    _mbMultiServer.removeUnitMap(dataFormId(this), deviceId);
 
     emit closing();
     QWidget::closeEvent(event);
@@ -138,10 +147,6 @@ void FormDataView::closeEvent(QCloseEvent* event)
 ///
 void FormDataView::mouseDoubleClickEvent(QMouseEvent* event)
 {
-    if(ui->frameDataDefinition->geometry().contains(event->pos())) {
-        emit doubleClicked();
-    }
-
     return QWidget::mouseDoubleClickEvent(event);
 }
 
@@ -169,7 +174,7 @@ DataViewDefinitions FormDataView::displayDefinition() const
     dd.ZeroBasedAddress = ui->lineEditAddress->range<int>().from() == 0;
     dd.LogViewLimit = 30;
     dd.AutoscrollLog = false;
-    dd.VerboseLogging = _verboseLogging;
+    dd.VerboseLogging = true;
     dd.HexAddress = displayHexAddresses();
     dd.HexViewAddress  = ui->lineEditAddress->hexView();
     dd.HexViewDeviceId = ui->lineEditDeviceId->hexView();
@@ -216,8 +221,6 @@ void FormDataView::setDisplayDefinition(const DataViewDefinitions& dd)
     ui->comboBoxModbusPointType->blockSignals(false);
     ui->outputWidget->setDataViewColumnsDistance(dd.DataViewColumnsDistance);
 
-    _verboseLogging = dd.VerboseLogging;
-
     setDisplayHexAddresses(dd.HexAddress);
 
     ui->lineEditDeviceId->setHexView(dd.HexViewDeviceId);
@@ -259,30 +262,6 @@ void FormDataView::setDisplayHexAddresses(bool on)
 }
 
 ///
-/// \brief FormDataView::captureMode
-///
-CaptureMode FormDataView::captureMode() const
-{
-    return CaptureMode::Off;
-}
-
-///
-/// \brief FormDataView::startTextCapture
-/// \param file
-///
-void FormDataView::startTextCapture(const QString& file)
-{
-    Q_UNUSED(file)
-}
-
-///
-/// \brief FormDataView::stopTextCapture
-///
-void FormDataView::stopTextCapture()
-{
-}
-
-///
 /// \brief FormDataView::setDataDisplayMode
 /// \param mode
 ///
@@ -301,25 +280,6 @@ void FormDataView::setDataDisplayMode(DataDisplayMode mode)
         default: break;
     }
     updateDisplayBar();
-}
-
-///
-/// \brief FormDataView::scriptSettings
-/// \return
-///
-ScriptSettings FormDataView::scriptSettings() const
-{
-    return _scriptSettings;
-}
-
-///
-/// \brief FormDataView::setScriptSettings
-/// \param ss
-///
-void FormDataView::setScriptSettings(const ScriptSettings& ss)
-{
-    _scriptSettings = ss;
-    emit scriptSettingsChanged(ss);
 }
 
 ///
@@ -631,222 +591,6 @@ void FormDataView::setColor(quint8 deviceId, QModbusDataUnit::RegisterType type,
 }
 
 ///
-/// \brief FormDataView::resetCtrs
-///
-void FormDataView::resetCtrs()
-{
-    _requestCount = 0;
-    _responseCount = 0;
-    emit statisticCtrsReseted();
-}
-
-///
-/// \brief FormDataView::requestCount
-/// \return
-///
-uint FormDataView::requestCount() const
-{
-    return _requestCount;
-}
-
-///
-/// \brief FormDataView::responseCount
-/// \return
-///
-uint FormDataView::responseCount() const
-{
-    return _responseCount;
-}
-
-///
-/// \brief FormDataView::setStatisticCounters
-/// \param requests
-/// \param responses
-///
-void FormDataView::setStatisticCounters(uint requests, uint responses)
-{
-    _requestCount = requests;
-    _responseCount = responses;
-}
-
-///
-/// \brief FormDataView::script
-/// \return
-///
-QString FormDataView::script() const
-{
-    return QString();
-}
-
-///
-/// \brief FormDataView::setScript
-/// \param text
-///
-void FormDataView::setScript(const QString& text)
-{
-    Q_UNUSED(text)
-}
-
-///
-/// \brief FormDataView::scriptDocument
-/// \return
-///
-QTextDocument* FormDataView::scriptDocument() const
-{
-    return nullptr;
-}
-
-///
-/// \brief FormDataView::setScriptDocument
-/// \param document
-///
-void FormDataView::setScriptDocument(QTextDocument* document)
-{
-    Q_UNUSED(document)
-}
-
-int FormDataView::scriptCursorPosition() const
-{
-    return 0;
-}
-
-void FormDataView::setScriptCursorPosition(int pos)
-{
-    Q_UNUSED(pos)
-}
-
-int FormDataView::scriptScrollPosition() const
-{
-    return 0;
-}
-
-void FormDataView::setScriptScrollPosition(int pos)
-{
-    Q_UNUSED(pos)
-}
-
-///
-/// \brief FormDataView::searchText
-/// \return
-///
-QString FormDataView::searchText() const
-{
-    return QString();
-}
-
-///
-/// \brief FormDataView::canRunScript
-/// \return
-///
-bool FormDataView::canRunScript() const
-{
-    return false;
-}
-
-///
-/// \brief FormDataView::canStopScript
-/// \return
-///
-bool FormDataView::canStopScript() const
-{
-    return false;
-}
-
-///
-/// \brief FormDataView::canUndo
-/// \return
-///
-bool FormDataView::canUndo() const
-{
-    return false;
-}
-
-///
-/// \brief FormDataView::canRedo
-/// \return
-///
-bool FormDataView::canRedo() const
-{
-    return false;
-}
-
-///
-/// \brief FormDataView::canPaste
-/// \return
-///
-bool FormDataView::canPaste() const
-{
-    return false;
-}
-
-///
-/// \brief FormDataView::runScript
-/// \param interval
-///
-void FormDataView::runScript()
-{
-    // Data view intentionally has no embedded script editor/runtime.
-}
-
-///
-/// \brief FormDataView::stopScript
-///
-void FormDataView::stopScript()
-{
-    // Data view intentionally has no embedded script editor/runtime.
-}
-
-///
-/// \brief FormDataView::logViewState
-/// \return
-///
-LogViewState FormDataView::logViewState() const
-{
-    return _logViewState;
-}
-
-///
-/// \brief FormDataView::setLogViewState
-/// \param state
-///
-void FormDataView::setLogViewState(LogViewState state)
-{
-    if(_logViewState == state)
-        return;
-
-    _logViewState = state;
-    emit statisticLogStateChanged(state);
-}
-
-///
-/// \brief FormDataView::parentGeometry
-/// \return
-///
-QRect FormDataView::parentGeometry() const
-{
-    auto wnd = parentWidget();
-    return (!wnd->isMaximized() && !wnd->isMinimized()) ? wnd->geometry() : _parentGeometry;
-}
-
-///
-/// \brief FormDataView::setParentGeometry
-/// \param geometry
-///
-void FormDataView::setParentGeometry(const QRect& geometry)
-{
-    if(geometry.isValid())
-    {
-        _parentGeometry = geometry;
-
-        auto wnd = parentWidget();
-        if(wnd->geometry() != geometry)
-        {
-            wnd->setGeometry(geometry);
-        }
-    }
-}
-
-///
 /// \brief FormDataView::show
 ///
 void FormDataView::show()
@@ -947,36 +691,9 @@ void FormDataView::onDefinitionChanged()
 
     const auto dd = displayDefinition();
     const auto addr = dd.PointAddress - (dd.ZeroBasedAddress ? 0 : 1);
-    _mbMultiServer.addUnitMap(_formId, dd.DeviceId, dd.PointType, addr, dd.Length);
+    _mbMultiServer.addUnitMap(dataFormId(this), dd.DeviceId, dd.PointType, addr, dd.Length);
 
     ui->outputWidget->setup(dd, _dataSimulator->simulationMap(), _mbMultiServer.data(dd.DeviceId, dd.PointType, addr, dd.Length));
-}
-
-///
-/// \brief FormDataView::isAutoCompleteEnabled
-/// \return
-///
-bool FormDataView::isAutoCompleteEnabled() const
-{
-    return false;
-}
-
-///
-/// \brief FormDataView::enableAutoComplete
-/// \param enable
-///
-void FormDataView::enableAutoComplete(bool enable)
-{
-    Q_UNUSED(enable)
-}
-
-///
-/// \brief FormDataView::setScriptFont
-/// \param font
-///
-void FormDataView::setScriptFont(const QFont& font)
-{
-    Q_UNUSED(font)
 }
 
 ///
@@ -1049,10 +766,6 @@ void FormDataView::on_outputWidget_itemDoubleClicked(quint16 addr, const QVarian
 void FormDataView::on_mbConnected(const ConnectionDetails&)
 {
     updateStatus();
-
-    if(logViewState() == LogViewState::Unknown) {
-        setLogViewState(LogViewState::Running);
-    }
 }
 
 ///
@@ -1061,94 +774,6 @@ void FormDataView::on_mbConnected(const ConnectionDetails&)
 void FormDataView::on_mbDisconnected(const ConnectionDetails&)
 {
     updateStatus();
-    if(!_mbMultiServer.isConnected()) {
-        setLogViewState(LogViewState::Unknown);
-    }
-}
-
-///
-/// \brief FormDataView::isLoggingRequest
-/// \param msgReq
-/// \return
-///
-bool FormDataView::isLoggingRequest(QSharedPointer<const ModbusMessage> msgReq) const
-{
-    if(!msgReq)
-        return false;
-
-    const auto dd = displayDefinition();
-    if(dd.DeviceId != msgReq->deviceId())
-        return false;
-
-    const auto startAddress = dd.PointAddress - (dd.ZeroBasedAddress ? 0 : 1);
-
-    switch(msgReq->functionCode()) {
-        case QModbusPdu::ReadCoils: {
-            auto req = reinterpret_cast<const ReadCoilsRequest*>(msgReq.get());
-            return (req->startAddress() >= startAddress) && (dd.PointType == QModbusDataUnit::Coils);
-        }
-        case QModbusPdu::ReadDiscreteInputs: {
-            auto req = reinterpret_cast<const ReadDiscreteInputsRequest*>(msgReq.get());
-            return (req->startAddress() >= startAddress) && (dd.PointType == QModbusDataUnit::DiscreteInputs);
-        }
-        case QModbusPdu::ReadHoldingRegisters: {
-            auto req = reinterpret_cast<const ReadHoldingRegistersRequest*>(msgReq.get());
-            return (req->startAddress() >= startAddress) && (dd.PointType == QModbusDataUnit::HoldingRegisters);
-        }
-        case QModbusPdu::ReadInputRegisters: {
-            auto req = reinterpret_cast<const ReadInputRegistersRequest*>(msgReq.get());
-            return (req->startAddress() >= startAddress) && (dd.PointType == QModbusDataUnit::InputRegisters);
-        }
-        case QModbusPdu::WriteSingleCoil: {
-            auto req = reinterpret_cast<const WriteSingleCoilRequest*>(msgReq.get());
-            return (req->address() >= startAddress) && (dd.PointType == QModbusDataUnit::Coils);
-        }
-        case QModbusPdu::WriteSingleRegister: {
-            auto req = reinterpret_cast<const WriteSingleRegisterRequest*>(msgReq.get());
-            return (req->address() >= startAddress) && (dd.PointType == QModbusDataUnit::HoldingRegisters);
-        }
-        case QModbusPdu::WriteMultipleCoils: {
-            auto req = reinterpret_cast<const WriteMultipleCoilsRequest*>(msgReq.get());
-            return (req->startAddress() >= startAddress) && (dd.PointType == QModbusDataUnit::Coils);
-        }
-        case QModbusPdu::WriteMultipleRegisters: {
-            auto req = reinterpret_cast<const WriteMultipleRegistersRequest*>(msgReq.get());
-            return (req->startAddress() >= startAddress) && (dd.PointType == QModbusDataUnit::HoldingRegisters);
-        }
-        case QModbusPdu::MaskWriteRegister: {
-            auto req = reinterpret_cast<const MaskWriteRegisterRequest*>(msgReq.get());
-            return (req->address() >= startAddress) && (dd.PointType == QModbusDataUnit::HoldingRegisters);
-        }
-        case QModbusPdu::ReadWriteMultipleRegisters: {
-            auto req = reinterpret_cast<const ReadWriteMultipleRegistersRequest*>(msgReq.get());
-            return ((req->readStartAddress() >= startAddress) || (req->writeStartAddress() >= startAddress)) && (dd.PointType == QModbusDataUnit::HoldingRegisters);
-        }
-        default:
-            return true;
-    }
-}
-
-///
-/// \brief FormDataView::on_mbRequest
-/// \param msg
-///
-void FormDataView::on_mbRequest(QSharedPointer<const ModbusMessage> msg)
-{
-    if(_verboseLogging || isLoggingRequest(msg)) {
-        ++_requestCount;
-    }
-}
-
-///
-/// \brief FormDataView::on_mbResponse
-/// \param msgReq
-/// \param msgResp
-///
-void FormDataView::on_mbResponse(QSharedPointer<const ModbusMessage> msgReq, QSharedPointer<const ModbusMessage> msgResp)
-{
-    if(_verboseLogging || isLoggingRequest(msgReq)) {
-        ++_responseCount;
-    }
 }
 
 ///

@@ -20,7 +20,6 @@
 /// \brief Forward declaration of the MainWindow
 ///
 class MainWindow;
-class QTextDocument;
 
 namespace Ui {
 class FormDataView;
@@ -57,28 +56,8 @@ public:
     DataDisplayMode dataDisplayMode() const;
     void setDataDisplayMode(DataDisplayMode mode);
 
-    ScriptSettings scriptSettings() const;
-    void setScriptSettings(const ScriptSettings& ss);
-
-    QString script() const;
-    void setScript(const QString& text);
-    QTextDocument* scriptDocument() const;
-    void setScriptDocument(QTextDocument* document);
-
-    int scriptCursorPosition() const;
-    void setScriptCursorPosition(int pos);
-
-    int scriptScrollPosition() const;
-    void setScriptScrollPosition(int pos);
-
-    QString searchText() const;
-
     bool displayHexAddresses() const;
     void setDisplayHexAddresses(bool on);
-
-    CaptureMode captureMode() const;
-    void startTextCapture(const QString& file);
-    void stopTextCapture();
 
     QColor backgroundColor() const;
     void setBackgroundColor(const QColor& clr);
@@ -109,32 +88,6 @@ public:
     AddressColorMap colorMap() const;
     void setColor(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr, const QColor& clr);
 
-    void resetCtrs();
-    uint requestCount() const;
-    uint responseCount() const;
-    void setStatisticCounters(uint requests, uint responses);
-
-    bool canRunScript() const;
-    bool canStopScript() const;
-
-    bool canUndo() const;
-    bool canRedo() const;
-    bool canPaste() const;
-
-    void runScript();
-    void stopScript();
-
-    LogViewState logViewState() const;
-    void setLogViewState(LogViewState state);
-
-    QRect parentGeometry() const;
-    void setParentGeometry(const QRect& geometry);
-
-    bool isAutoCompleteEnabled() const;
-    void enableAutoComplete(bool enable);
-
-    void setScriptFont(const QFont& font);
-
     void saveSettings(QSettings& out) const;
     void loadSettings(QSettings& in);
     void saveXml(QXmlStreamWriter& xml) const;
@@ -158,14 +111,6 @@ signals:
     void codepageChanged(const QString&);
     void definitionChanged();
     void pointTypeChanged(QModbusDataUnit::RegisterType);
-    void scriptSettingsChanged(const ScriptSettings&);
-    void scriptRunning();
-    void scriptStopped();
-    void consoleMessage(const QString& source, const QString& text, ConsoleOutput::MessageType type);
-    void captureError(const QString& error);
-    void doubleClicked();
-    void statisticCtrsReseted();
-    void statisticLogStateChanged(LogViewState state);
 
 private slots:
     void on_lineEditAddress_valueChanged(const QVariant&);
@@ -176,8 +121,6 @@ private slots:
     void on_outputWidget_itemDoubleClicked(quint16 addr, const QVariant& value);
     void on_mbConnected(const ConnectionDetails& cd);
     void on_mbDisconnected(const ConnectionDetails& cd);
-    void on_mbRequest(QSharedPointer<const ModbusMessage> msg);
-    void on_mbResponse(QSharedPointer<const ModbusMessage> msgReq, QSharedPointer<const ModbusMessage> msgResp);
     void on_mbDataChanged(quint8 deviceId, const QModbusDataUnit& data);
     void on_mbDefinitionsChanged(const ModbusDefinitions& defs);
     void on_simulationStarted(DataDisplayMode mode, quint8 deviceId, QModbusDataUnit::RegisterType type, const QVector<quint16>& addresses);
@@ -187,7 +130,6 @@ private slots:
 private:
     void updateStatus();
     void onDefinitionChanged();
-    bool isLoggingRequest(QSharedPointer<const ModbusMessage> msgReq) const;
 
     void setupDisplayBar();
     void updateDisplayBar();
@@ -195,15 +137,8 @@ private:
 private:
     Ui::FormDataView *ui;
     MainWindow* _parent;
-    int _formId;
-    bool _verboseLogging;
-    ScriptSettings _scriptSettings;
     ModbusMultiServer& _mbMultiServer;
     DataSimulator* _dataSimulator;
-    QRect _parentGeometry;
-    uint _requestCount = 0;
-    uint _responseCount = 0;
-    LogViewState _logViewState = LogViewState::Unknown;
 
     AnsiMenu*  _ansiMenu = nullptr;
     QMap<DataDisplayMode, QAction*> _displayModeActions;
@@ -228,7 +163,7 @@ inline QSettings& operator <<(QSettings& out, FormDataView* frm)
     const auto wnd = frm->parentWidget();
     out.setValue("ViewMinimized", wnd->isMinimized());
     out.setValue("ViewMaximized", wnd->isMaximized());
-    out.setValue("ViewRect", frm->parentGeometry());
+    out.setValue("ViewRect", wnd->geometry());
 
     out << frm->dataDisplayMode();
     out << frm->byteOrder();
@@ -281,9 +216,8 @@ inline QSettings& operator >>(QSettings& in, FormDataView* frm)
     frm->setBackgroundColor(in.value("BackgroundColor", QColor(Qt::white)).value<QColor>());
     frm->setStatusColor(in.value("StatusColor", QColor(Qt::red)).value<QColor>());
     frm->setZoomPercent(in.value("ZoomPercent", 100).toInt());
-    frm->setScriptFont(AppPreferences::instance().scriptFont());
-
-    frm->setParentGeometry(wndRect);
+    if (wnd && wndRect.isValid() && !wnd->isMaximized() && !wnd->isMinimized())
+        wnd->setGeometry(wndRect);
     if(isMinimized) wnd->setWindowState(Qt::WindowMinimized);
     if(isMaximized) wnd->setWindowState(Qt::WindowMaximized);
 
@@ -653,9 +587,6 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, FormDataView* frm)
                 frm->configureModbusDataUnit(dd.DeviceId, dd.PointType, dd.PointAddress - (dd.ZeroBasedAddress ? 0 : 1), values);
             }
         }
-
-        frm->setScriptFont(AppPreferences::instance().scriptFont());
-
     }
     else {
         xml.skipCurrentElement();

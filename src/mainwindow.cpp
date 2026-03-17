@@ -134,25 +134,9 @@ void setByteOrderOnForm(QWidget* widget, ByteOrder order)
     if (auto* frm = qobject_cast<FormDataView*>(widget)) frm->setByteOrder(order);
 }
 
-CaptureMode captureModeOfForm(QWidget* widget)
-{
-    if (auto* frm = qobject_cast<FormDataView*>(widget)) return frm->captureMode();
-    return CaptureMode::Off;
-}
-
-void startTextCaptureOnForm(QWidget* widget, const QString& file)
-{
-    if (auto* frm = qobject_cast<FormDataView*>(widget)) frm->startTextCapture(file);
-}
-
-void stopTextCaptureOnForm(QWidget* widget)
-{
-    if (auto* frm = qobject_cast<FormDataView*>(widget)) frm->stopTextCapture();
-}
-
 void resetCtrsOnForm(QWidget* widget)
 {
-    if (auto* frm = qobject_cast<FormDataView*>(widget)) frm->resetCtrs();
+    Q_UNUSED(widget)
 }
 
 bool displayHexAddressesOfForm(QWidget* widget)
@@ -219,8 +203,7 @@ void setForegroundColorOnForm(QWidget* widget, const QColor& clr)
 
 void setScriptFontOnForm(QWidget* widget, const QFont& font)
 {
-    if (auto* frm = qobject_cast<FormDataView*>(widget)) frm->setScriptFont(font);
-    else if (auto* frm = qobject_cast<FormScriptView*>(widget)) frm->setFont(font);
+    if (auto* frm = qobject_cast<FormScriptView*>(widget)) frm->setFont(font);
 }
 
 void setZoomPercentOnForm(QWidget* widget, int zoomPercent)
@@ -478,9 +461,7 @@ bool MainWindow::eventFilter(QObject* obj, QEvent* e)
                 if(!widget || wnd->isMinimized() || wnd->isMaximized())
                     break;
 
-                if (auto* frm = qobject_cast<FormDataView*>(widget))
-                    frm->setParentGeometry(wnd->geometry());
-                else if (auto* frm = qobject_cast<FormTrafficView*>(widget))
+                if (auto* frm = qobject_cast<FormTrafficView*>(widget))
                     frm->setProperty("ParentGeometry", wnd->geometry());
             }
         break;
@@ -542,8 +523,8 @@ void MainWindow::on_awake()
 
     ui->actionRawDataLog->setChecked(false);
 
-    ui->actionTextCapture->setEnabled(dataLikeFrm && captureModeOfForm(dataLikeFrm) == CaptureMode::Off);
-    ui->actionCaptureOff->setEnabled(dataLikeFrm && captureModeOfForm(dataLikeFrm) == CaptureMode::TextCapture);
+    ui->actionTextCapture->setEnabled(false);
+    ui->actionCaptureOff->setEnabled(false);
 
     const bool scriptRunning = scriptFrm && _project->isScriptRunningOnSplitPair(scriptFrm);
     ui->actionImportScript->setEnabled(scriptFrm != nullptr);
@@ -885,9 +866,7 @@ void MainWindow::on_actionPreferences_triggered()
 void MainWindow::applyAutoComplete(bool enable)
 {
     forEachTypedForm(ui->mdiArea, [enable](auto* frm) {
-        if (auto* data = qobject_cast<FormDataView*>(frm))
-            data->enableAutoComplete(enable);
-        else if (auto* script = qobject_cast<FormScriptView*>(frm))
+        if (auto* script = qobject_cast<FormScriptView*>(frm))
             script->enableAutoComplete(enable);
     });
 }
@@ -908,9 +887,7 @@ void MainWindow::applyFont(const QFont& font)
 void MainWindow::applyScriptFont(const QFont& font)
 {
     forEachTypedForm(ui->mdiArea, [&font](auto* frm) {
-        if (auto* data = qobject_cast<FormDataView*>(frm))
-            data->setScriptFont(font);
-        else if (auto* script = qobject_cast<FormScriptView*>(frm))
+        if (auto* script = qobject_cast<FormScriptView*>(frm))
             script->setFont(font);
     });
 }
@@ -1296,15 +1273,7 @@ void MainWindow::on_actionRawDataLog_triggered()
 ///
 void MainWindow::on_actionTextCapture_triggered()
 {
-    auto* frm = currentDataOrTrafficForm();
-    if(!frm) return;
-
-    auto filename = QFileDialog::getSaveFileName(this, QString(), QString(), "Text files (*.txt)");
-    if(!filename.isEmpty())
-    {
-        if(!filename.endsWith(".txt", Qt::CaseInsensitive)) filename += ".txt";
-        startTextCaptureOnForm(frm, filename);
-    }
+    // Text capture is not supported in typed form architecture.
 }
 
 ///
@@ -1312,10 +1281,7 @@ void MainWindow::on_actionTextCapture_triggered()
 ///
 void MainWindow::on_actionCaptureOff_triggered()
 {
-    auto* frm = currentDataOrTrafficForm();
-    if(!frm) return;
-
-    stopTextCaptureOnForm(frm);
+    // Text capture is not supported in typed form architecture.
 }
 
 ///
