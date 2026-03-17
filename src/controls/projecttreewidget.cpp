@@ -34,6 +34,8 @@ ProjectTreeWidget::ProjectTreeWidget(QWidget* parent)
     , _iconScriptIdle(QIcon(":/res/actionShowScript.png"))
     , _iconScriptRunning(QIcon(":/res/actionRunScript.png"))
 {
+    qRegisterMetaType<ProjectFormRef>("ProjectFormRef");
+
     _iconDataClosed = dimmedIcon(":/res/actionShowData.png");
     _iconTrafficClosed = dimmedIcon(":/res/actionShowTraffic.png");
     _iconScriptClosed = dimmedIcon(":/res/actionShowScript.png");
@@ -65,24 +67,24 @@ ProjectTreeWidget::ProjectTreeWidget(QWidget* parent)
 ///
 /// \brief ProjectTreeWidget::addForm
 ///
-void ProjectTreeWidget::addForm(FormModSim* frm)
+void ProjectTreeWidget::addForm(ProjectFormType type, QWidget* frm)
 {
     if (!frm || itemForForm(frm))
         return;
 
     QTreeWidgetItem* root = _dataRoot;
     QIcon baseIcon = _iconData;
-    switch (frm->formKind())
+    switch (type)
     {
-        case FormModSim::FormKind::Data:
+        case ProjectFormType::Data:
             root = _dataRoot;
             baseIcon = _iconData;
             break;
-        case FormModSim::FormKind::Traffic:
+        case ProjectFormType::Traffic:
             root = _trafficRoot;
             baseIcon = _iconTraffic;
             break;
-        case FormModSim::FormKind::Script:
+        case ProjectFormType::Script:
             root = _scriptRoot;
             baseIcon = _iconScriptIdle;
             break;
@@ -92,14 +94,8 @@ void ProjectTreeWidget::addForm(FormModSim* frm)
     item->setIcon(0, baseIcon);
     item->setData(0, Qt::UserRole, QVariant::fromValue(static_cast<void*>(frm)));
     item->setData(0, ItemTypeRole, ItemTypeForm);
+    item->setData(0, ItemTypeRole + 1, static_cast<int>(type));
     item->setFlags(item->flags() | Qt::ItemIsEditable);
-
-    connect(frm, &FormModSim::scriptRunning, this, [this, frm]() {
-        setFormScriptRunning(frm, true);
-    });
-    connect(frm, &FormModSim::scriptStopped, this, [this, frm]() {
-        setFormScriptRunning(frm, false);
-    });
 
     root->setExpanded(true);
 }
@@ -107,7 +103,7 @@ void ProjectTreeWidget::addForm(FormModSim* frm)
 ///
 /// \brief ProjectTreeWidget::removeForm
 ///
-void ProjectTreeWidget::removeForm(FormModSim* frm)
+void ProjectTreeWidget::removeForm(QWidget* frm)
 {
     auto item = itemForForm(frm);
     if (!item)
@@ -121,7 +117,7 @@ void ProjectTreeWidget::removeForm(FormModSim* frm)
 ///
 /// \brief ProjectTreeWidget::setFormScriptRunning
 ///
-void ProjectTreeWidget::setFormScriptRunning(FormModSim* frm, bool running)
+void ProjectTreeWidget::setFormScriptRunning(QWidget* frm, bool running)
 {
     auto item = itemForForm(frm);
     if (!item)
@@ -133,41 +129,23 @@ void ProjectTreeWidget::setFormScriptRunning(FormModSim* frm, bool running)
     }
 
     const bool isOpen = !item->font(0).italic();
-    switch (frm->formKind())
-    {
-        case FormModSim::FormKind::Data:
-            item->setIcon(0, isOpen ? _iconData : _iconDataClosed);
-            break;
-        case FormModSim::FormKind::Traffic:
-            item->setIcon(0, isOpen ? _iconTraffic : _iconTrafficClosed);
-            break;
-        case FormModSim::FormKind::Script:
-            item->setIcon(0, isOpen ? _iconScriptIdle : _iconScriptClosed);
-            break;
-    }
+    const auto type = static_cast<ProjectFormType>(item->data(0, ItemTypeRole + 1).toInt());
+    item->setIcon(0, iconFor(type, isOpen, running, _iconData, _iconDataClosed, _iconTraffic,
+                              _iconTrafficClosed, _iconScriptIdle, _iconScriptClosed, _iconScriptRunning));
 }
 
 ///
 /// \brief ProjectTreeWidget::setFormOpen
 ///
-void ProjectTreeWidget::setFormOpen(FormModSim* frm, bool open)
+void ProjectTreeWidget::setFormOpen(QWidget* frm, bool open)
 {
     auto item = itemForForm(frm);
     if (!item)
         return;
 
-    switch (frm->formKind())
-    {
-        case FormModSim::FormKind::Data:
-            item->setIcon(0, open ? _iconData : _iconDataClosed);
-            break;
-        case FormModSim::FormKind::Traffic:
-            item->setIcon(0, open ? _iconTraffic : _iconTrafficClosed);
-            break;
-        case FormModSim::FormKind::Script:
-            item->setIcon(0, open ? _iconScriptIdle : _iconScriptClosed);
-            break;
-    }
+    const auto type = static_cast<ProjectFormType>(item->data(0, ItemTypeRole + 1).toInt());
+    item->setIcon(0, iconFor(type, open, false, _iconData, _iconDataClosed, _iconTraffic,
+                              _iconTrafficClosed, _iconScriptIdle, _iconScriptClosed, _iconScriptRunning));
 
     QFont f = item->font(0);
     f.setItalic(!open);
@@ -177,7 +155,7 @@ void ProjectTreeWidget::setFormOpen(FormModSim* frm, bool open)
 ///
 /// \brief ProjectTreeWidget::activateForm
 ///
-void ProjectTreeWidget::activateForm(FormModSim* frm)
+void ProjectTreeWidget::activateForm(QWidget* frm)
 {
     auto item = itemForForm(frm);
     if (!item)
@@ -213,7 +191,10 @@ void ProjectTreeWidget::on_itemActivated(QTreeWidgetItem* item, int /*column*/)
     if (!ptr)
         return;
 
-    emit formActivated(static_cast<FormModSim*>(ptr));
+    ProjectFormRef ref;
+    ref.type = static_cast<ProjectFormType>(item->data(0, ItemTypeRole + 1).toInt());
+    ref.widget = static_cast<QWidget*>(ptr);
+    emit formActivated(ref);
 }
 
 ///
@@ -231,7 +212,7 @@ void ProjectTreeWidget::on_itemChanged(QTreeWidgetItem* item, int column)
     if (!ptr)
         return;
 
-    auto frm = static_cast<FormModSim*>(ptr);
+    auto frm = static_cast<QWidget*>(ptr);
     const QString current = frm->windowTitle();
     const QString newName = item->text(0).trimmed();
     if (newName.isEmpty()) {
@@ -241,7 +222,10 @@ void ProjectTreeWidget::on_itemChanged(QTreeWidgetItem* item, int column)
 
     if (current != newName) {
         frm->setWindowTitle(newName);
-        emit formRenamed(frm);
+        ProjectFormRef ref;
+        ref.type = static_cast<ProjectFormType>(item->data(0, ItemTypeRole + 1).toInt());
+        ref.widget = frm;
+        emit formRenamed(ref);
     }
 }
 
@@ -257,7 +241,7 @@ void ProjectTreeWidget::retranslateUi()
     auto retranslateRoot = [](QTreeWidgetItem* root) {
         for (int i = 0; i < root->childCount(); ++i) {
             auto item = root->child(i);
-            auto frm = static_cast<FormModSim*>(item->data(0, Qt::UserRole).value<void*>());
+            auto frm = static_cast<QWidget*>(item->data(0, Qt::UserRole).value<void*>());
             if (frm)
                 item->setText(0, frm->windowTitle());
         }
@@ -284,7 +268,9 @@ void ProjectTreeWidget::on_contextMenu(const QPoint& pos)
     if (!ptr)
         return;
 
-    auto frm = static_cast<FormModSim*>(ptr);
+    ProjectFormRef ref;
+    ref.type = static_cast<ProjectFormType>(item->data(0, ItemTypeRole + 1).toInt());
+    ref.widget = static_cast<QWidget*>(ptr);
 
     QMenu menu(this);
     auto deleteAction = menu.addAction(tr("Delete"));
@@ -293,16 +279,16 @@ void ProjectTreeWidget::on_contextMenu(const QPoint& pos)
 
     const int ret = QMessageBox::question(this,
                                           tr("Delete Form"),
-                                          tr("Delete \"%1\" from the project?").arg(frm->windowTitle()),
+                                          tr("Delete \"%1\" from the project?").arg(ref.widget ? ref.widget->windowTitle() : QString()),
                                           QMessageBox::Yes | QMessageBox::No);
     if (ret == QMessageBox::Yes)
-        emit formDeleteRequested(frm);
+        emit formDeleteRequested(ref);
 }
 
 ///
 /// \brief ProjectTreeWidget::itemForForm
 ///
-QTreeWidgetItem* ProjectTreeWidget::itemForForm(FormModSim* frm) const
+QTreeWidgetItem* ProjectTreeWidget::itemForForm(QWidget* frm) const
 {
     auto findInRoot = [frm](QTreeWidgetItem* root) -> QTreeWidgetItem* {
         for (int i = 0; i < root->childCount(); ++i) {
@@ -321,4 +307,23 @@ QTreeWidgetItem* ProjectTreeWidget::itemForForm(FormModSim* frm) const
         return item;
 
     return nullptr;
+}
+
+QIcon ProjectTreeWidget::iconFor(ProjectFormType type, bool open, bool running, const QIcon& dataOpen,
+                                 const QIcon& dataClosed, const QIcon& trafficOpen, const QIcon& trafficClosed,
+                                 const QIcon& scriptIdle, const QIcon& scriptClosed, const QIcon& scriptRunning)
+{
+    if (running)
+        return scriptRunning;
+
+    switch (type)
+    {
+        case ProjectFormType::Data:
+            return open ? dataOpen : dataClosed;
+        case ProjectFormType::Traffic:
+            return open ? trafficOpen : trafficClosed;
+        case ProjectFormType::Script:
+            return open ? scriptIdle : scriptClosed;
+    }
+    return QIcon();
 }

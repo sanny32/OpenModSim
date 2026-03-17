@@ -3,27 +3,11 @@
 #include <QDateTime>
 #include <QHelpEngine>
 #include <QHelpContentWidget>
-#include <QCheckBox>
 #include <QSpinBox>
 #include <QComboBox>
 #include <QLabel>
-#include <QToolButton>
-#include <QToolBar>
-#include <QVBoxLayout>
-#include <QHBoxLayout>
-#include <QFrame>
-#include <QSplitter>
-#include "modbuslimits.h"
 #include "mainwindow.h"
 #include "modbusmessages.h"
-#include "datasimulator.h"
-#include "dialogwritestatusregister.h"
-#include "dialogwriteregister.h"
-#include "controls/numericlineedit.h"
-#include "controls/addressbasecombobox.h"
-#include "controls/pointtypecombobox.h"
-#include "controls/statisticwidget.h"
-#include "controls/runmodecombobox.h"
 #include "formtrafficview.h"
 #include "ui_formtrafficview.h"
 
@@ -34,173 +18,132 @@ QVersionNumber FormTrafficView::VERSION = QVersionNumber(1, 15);
 /// \param num
 /// \param parent
 ///
-FormTrafficView::FormTrafficView(int id, ModbusMultiServer& server, DataSimulator* simulator, MainWindow* parent)
-    : FormModSim(parent)
+FormTrafficView::FormTrafficView(int id, ModbusMultiServer& server, MainWindow* parent)
+    : QWidget(parent)
     , ui(new Ui::FormTrafficView)
-    ,_parent(parent)
-    ,_formId(id)
-    ,_mbMultiServer(server)
-    ,_dataSimulator(simulator)
-    ,_verboseLogging(true)
+    , _formId(id)
+    , _mbMultiServer(server)
 {
     Q_ASSERT(parent != nullptr);
-    Q_ASSERT(_dataSimulator != nullptr);
 
     ui->setupUi(this);
 
-    _widgetOutputView = new QWidget(this);
-    _widgetOutputView->setObjectName(QStringLiteral("widgetOutputView"));
-    auto* outputViewLayout = new QVBoxLayout(_widgetOutputView);
-    outputViewLayout->setContentsMargins(0, 0, 0, 0);
-    outputViewLayout->setSpacing(0);
-
-    _toolBarTrafficFilter = new QToolBar(_widgetOutputView);
-    _toolBarTrafficFilter->setObjectName(QStringLiteral("toolBarTrafficFilter"));
-    _toolBarTrafficFilter->setIconSize(QSize(16, 16));
-    outputViewLayout->addWidget(_toolBarTrafficFilter);
-
-    _splitter = new QSplitter(Qt::Vertical, _widgetOutputView);
-    _splitter->setObjectName(QStringLiteral("splitter"));
-    _splitter->setChildrenCollapsible(false);
-
-    _frameDataDefinition = new QFrame(_splitter);
-    _frameDataDefinition->setObjectName(QStringLiteral("frameDataDefinition"));
-    _frameDataDefinition->setAutoFillBackground(true);
-    _frameDataDefinition->setFrameShape(QFrame::WinPanel);
-    _frameDataDefinition->setFrameShadow(QFrame::Sunken);
-    auto* definitionLayout = new QHBoxLayout(_frameDataDefinition);
-    definitionLayout->setContentsMargins(9, 9, 9, 9);
-    definitionLayout->setSpacing(9);
-
-    _comboBoxAddressBase = new AddressBaseComboBox(_frameDataDefinition);
-    _comboBoxAddressBase->setObjectName(QStringLiteral("comboBoxAddressBase"));
-    _comboBoxAddressBase->setMinimumHeight(26);
-    definitionLayout->addWidget(_comboBoxAddressBase);
-
-    _lineEditAddress = new NumericLineEdit(_frameDataDefinition);
-    _lineEditAddress->setObjectName(QStringLiteral("lineEditAddress"));
-    _lineEditAddress->setMinimumHeight(26);
-    _lineEditAddress->setContextMenuPolicy(Qt::NoContextMenu);
-    _lineEditAddress->setAcceptDrops(false);
-    definitionLayout->addWidget(_lineEditAddress);
-
-    _lineEditLength = new NumericLineEdit(_frameDataDefinition);
-    _lineEditLength->setObjectName(QStringLiteral("lineEditLength"));
-    _lineEditLength->setMinimumHeight(26);
-    _lineEditLength->setContextMenuPolicy(Qt::NoContextMenu);
-    _lineEditLength->setAcceptDrops(false);
-    definitionLayout->addWidget(_lineEditLength);
-
-    _lineEditDeviceId = new NumericLineEdit(_frameDataDefinition);
-    _lineEditDeviceId->setObjectName(QStringLiteral("lineEditDeviceId"));
-    _lineEditDeviceId->setMinimumHeight(26);
-    _lineEditDeviceId->setMaximumWidth(65);
-    _lineEditDeviceId->setContextMenuPolicy(Qt::NoContextMenu);
-    _lineEditDeviceId->setAcceptDrops(false);
-    definitionLayout->addWidget(_lineEditDeviceId);
-
-    _comboBoxModbusPointType = new PointTypeComboBox(_frameDataDefinition);
-    _comboBoxModbusPointType->setObjectName(QStringLiteral("comboBoxModbusPointType"));
-    _comboBoxModbusPointType->setMinimumHeight(26);
-    _comboBoxModbusPointType->setFocusPolicy(Qt::StrongFocus);
-    _comboBoxModbusPointType->setFrame(true);
-    definitionLayout->addWidget(_comboBoxModbusPointType);
-
-    _statisticWidget = new StatisticWidget(_frameDataDefinition);
-    _statisticWidget->setObjectName(QStringLiteral("statisticWidget"));
-    _statisticWidget->setMinimumWidth(190);
-    definitionLayout->addStretch(1);
-    definitionLayout->addWidget(_statisticWidget);
-
-    auto* frameOutput = new QFrame(_splitter);
-    frameOutput->setObjectName(QStringLiteral("frameOutput"));
-    frameOutput->setFrameShape(QFrame::WinPanel);
-    frameOutput->setFrameShadow(QFrame::Sunken);
-    auto* frameOutputLayout = new QVBoxLayout(frameOutput);
-    frameOutputLayout->setContentsMargins(0, 0, 0, 0);
-    frameOutputLayout->setSpacing(0);
-
-    _outputWidget = ui->outputWidget;
-    _outputWidget->setParent(frameOutput);
-    frameOutputLayout->addWidget(_outputWidget);
-
-    outputViewLayout->addWidget(_splitter);
-    ui->verticalLayout_2->insertWidget(0, _widgetOutputView);
-
-    _scriptControl = new JScriptControl(this);
-    _scriptControl->setObjectName(QStringLiteral("scriptControl"));
-    ui->verticalLayout_2->addWidget(_scriptControl);
-
-    connect(_lineEditAddress, qOverload<const QVariant&>(&NumericLineEdit::valueChanged), this, &FormTrafficView::on_lineEditAddress_valueChanged);
-    connect(_lineEditLength, qOverload<const QVariant&>(&NumericLineEdit::valueChanged), this, &FormTrafficView::on_lineEditLength_valueChanged);
-    connect(_lineEditDeviceId, qOverload<const QVariant&, const QVariant&>(&NumericLineEdit::valueChanged), this, &FormTrafficView::on_lineEditDeviceId_valueChanged);
-    connect(_comboBoxAddressBase, &AddressBaseComboBox::addressBaseChanged, this, &FormTrafficView::on_comboBoxAddressBase_addressBaseChanged);
-    connect(_comboBoxModbusPointType, &PointTypeComboBox::pointTypeChanged, this, &FormTrafficView::on_comboBoxModbusPointType_pointTypeChanged);
-    connect(_outputWidget, &OutputTrafficWidget::itemDoubleClicked, this, &FormTrafficView::on_outputWidget_itemDoubleClicked);
-
     setWindowTitle(QString("Traffic%1").arg(_formId));
     setWindowIcon(QIcon(":/res/actionShowTraffic.png"));
-    setupTrafficFilterBar();
+    ui->toolBarTraffic->setVisible(true);
+    ui->actionPauseTraffic->setChecked(false);
+    connect(ui->actionPauseTraffic, &QAction::toggled, this, [this](bool paused) {
+        if (_logViewState == LogViewState::Unknown)
+            return;
+        setLogViewState(paused ? LogViewState::Paused : LogViewState::Running);
+    });
+    connect(ui->actionClearTraffic, &QAction::triggered, this, [this]() {
+        ui->outputWidget->clearLogView();
+        _requestCount = 0;
+        _responseCount = 0;
+    });
+    ui->toolBarTraffic->addSeparator();
 
-    _frameDataDefinition->hide();
-    _frameDataDefinition->setMaximumHeight(0);
-    _splitter->setSizes({0, 1});
+    _labelUnitId = new QLabel(ui->toolBarTraffic);
+    _labelUnitId->setText(tr("Unit:"));
+    ui->toolBarTraffic->addWidget(_labelUnitId);
 
-    _lineEditDeviceId->setInputRange(ModbusLimits::slaveRange());
-    _lineEditDeviceId->setValue(1);
-    _lineEditDeviceId->setLeadingZeroes(true);
-    _lineEditDeviceId->setHexButtonVisible(true);
-    server.addDeviceId(_lineEditDeviceId->value<int>());
+    _unitIdFilter = new QSpinBox(ui->toolBarTraffic);
+    _unitIdFilter->setRange(0, 247);
+    _unitIdFilter->setValue(0);
+    _unitIdFilter->setSpecialValueText(tr("All"));
+    _unitIdFilter->setToolTip(tr("0 = all unit ids"));
+    ui->toolBarTraffic->addWidget(_unitIdFilter);
+    connect(_unitIdFilter, qOverload<int>(&QSpinBox::valueChanged), this, [this](int) {
+        _requestCount = 0;
+        _responseCount = 0;
+    });
 
-    _widgetOutputView->setVisible(true);
-    ui->toolBarTraffic->setVisible(false);
-    _scriptControl->setVisible(false);
-    _outputWidget->enforceTrafficMode();
-    _scriptControl->setModbusMultiServer(&_mbMultiServer);
-    _scriptControl->setByteOrder(_outputWidget->byteOrder());
-    _scriptControl->setScriptSource(windowTitle());
+    _labelFuncCode = new QLabel(ui->toolBarTraffic);
+    _labelFuncCode->setText(tr("Function:"));
+    ui->toolBarTraffic->addWidget(_labelFuncCode);
 
-    const auto mbDefs = _mbMultiServer.getModbusDefinitions();
+    _funcCodeFilter = new QComboBox(ui->toolBarTraffic);
+    _funcCodeFilter->addItem(tr("All"), -1);
+    _funcCodeFilter->addItem(QStringLiteral("01 Read Coils"), static_cast<int>(QModbusPdu::ReadCoils));
+    _funcCodeFilter->addItem(QStringLiteral("02 Read Discrete Inputs"), static_cast<int>(QModbusPdu::ReadDiscreteInputs));
+    _funcCodeFilter->addItem(QStringLiteral("03 Read Holding Registers"), static_cast<int>(QModbusPdu::ReadHoldingRegisters));
+    _funcCodeFilter->addItem(QStringLiteral("04 Read Input Registers"), static_cast<int>(QModbusPdu::ReadInputRegisters));
+    _funcCodeFilter->addItem(QStringLiteral("05 Write Single Coil"), static_cast<int>(QModbusPdu::WriteSingleCoil));
+    _funcCodeFilter->addItem(QStringLiteral("06 Write Single Register"), static_cast<int>(QModbusPdu::WriteSingleRegister));
+    _funcCodeFilter->addItem(QStringLiteral("15 Write Multiple Coils"), static_cast<int>(QModbusPdu::WriteMultipleCoils));
+    _funcCodeFilter->addItem(QStringLiteral("16 Write Multiple Registers"), static_cast<int>(QModbusPdu::WriteMultipleRegisters));
+    _funcCodeFilter->addItem(QStringLiteral("22 Mask Write Register"), static_cast<int>(QModbusPdu::MaskWriteRegister));
+    _funcCodeFilter->addItem(QStringLiteral("23 Read/Write Multiple Registers"), static_cast<int>(QModbusPdu::ReadWriteMultipleRegisters));
+    ui->toolBarTraffic->addWidget(_funcCodeFilter);
+    connect(_funcCodeFilter, qOverload<int>(&QComboBox::currentIndexChanged), this, [this](int) {
+        _requestCount = 0;
+        _responseCount = 0;
+    });
 
-    _lineEditAddress->setLeadingZeroes(true);
-    _lineEditAddress->setInputRange(ModbusLimits::addressRange(mbDefs.AddrSpace, true));
-    _lineEditAddress->setValue(0);
-    _lineEditAddress->setHexButtonVisible(true);
+    _labelRowLimit = new QLabel(ui->toolBarTraffic);
+    _labelRowLimit->setText(tr("Rows:"));
+    ui->toolBarTraffic->addWidget(_labelRowLimit);
 
-    _lineEditLength->setInputRange(ModbusLimits::lengthRange(0, true, mbDefs.AddrSpace));
-    _lineEditLength->setValue(100);
-    _lineEditLength->setHexButtonVisible(true);
+    _rowLimitCombo = new QComboBox(ui->toolBarTraffic);
+    _rowLimitCombo->setEditable(false);
+    _rowLimitCombo->addItem(QStringLiteral("30"), 30);
+    _rowLimitCombo->addItem(QStringLiteral("100"), 100);
+    _rowLimitCombo->addItem(QStringLiteral("300"), 300);
+    _rowLimitCombo->addItem(QStringLiteral("1000"), 1000);
+    ui->toolBarTraffic->addWidget(_rowLimitCombo);
+    connect(_rowLimitCombo, qOverload<int>(&QComboBox::currentIndexChanged), this, [this](int idx) {
+        if (idx < 0)
+            return;
+        const int limit = _rowLimitCombo->itemData(idx).toInt();
+        if (limit <= 0)
+            return;
+        ui->outputWidget->setLogViewLimit(limit);
+        _displayDefinition.LogViewLimit = static_cast<quint16>(limit);
+    });
 
-    _comboBoxAddressBase->setCurrentAddressBase(AddressBase::Base1);
-    _comboBoxModbusPointType->setCurrentPointType(QModbusDataUnit::HoldingRegisters);
+    const auto mbDefs = server.getModbusDefinitions();
+    _displayDefinition.FormName = windowTitle();
+    _displayDefinition.DeviceId = 1;
+    _displayDefinition.PointAddress = 1;
+    _displayDefinition.PointType = QModbusDataUnit::HoldingRegisters;
+    _displayDefinition.Length = 100;
+    _displayDefinition.LogViewLimit = ui->outputWidget->logViewLimit();
+    _displayDefinition.AutoscrollLog = ui->outputWidget->autoscrollLogView();
+    _displayDefinition.VerboseLogging = true;
+    _displayDefinition.HexAddress = false;
+    _displayDefinition.HexViewAddress = false;
+    _displayDefinition.HexViewDeviceId = false;
+    _displayDefinition.HexViewLength = false;
+    _displayDefinition.AddrSpace = mbDefs.AddrSpace;
+    _displayDefinition.DataViewColumnsDistance = 16;
+    _displayDefinition.LeadingZeros = true;
+    _displayDefinition.normalize();
+    if (_rowLimitCombo) {
+        int idx = _rowLimitCombo->findData(_displayDefinition.LogViewLimit);
+        if (idx < 0) {
+            _rowLimitCombo->addItem(QString::number(_displayDefinition.LogViewLimit), _displayDefinition.LogViewLimit);
+            idx = _rowLimitCombo->findData(_displayDefinition.LogViewLimit);
+        }
+        if (idx >= 0)
+            _rowLimitCombo->setCurrentIndex(idx);
+    }
 
-    connect(this, &FormModSim::definitionChanged, this, &FormTrafficView::onDefinitionChanged);
-    emit definitionChanged();
+    server.addDeviceId(_displayDefinition.DeviceId);
 
-    _outputWidget->setFocus();
-    connect(_outputWidget, &OutputTrafficWidget::startTextCaptureError, this, &FormModSim::captureError);
-    connect(_scriptControl, &JScriptControl::helpContext, this, &FormModSim::helpContextRequested);
-    connect(_scriptControl, &JScriptControl::scriptStopped, this, &FormModSim::scriptStopped);
-    connect(_scriptControl, &JScriptControl::consoleMessage, this, &FormModSim::consoleMessage);
+    ui->outputWidget->setFocus();
 
     setLogViewState(server.isConnected() ? LogViewState::Running : LogViewState::Unknown);
-    connect(_statisticWidget, &StatisticWidget::ctrsReseted, _outputWidget, &OutputTrafficWidget::clearLogView);
-    connect(_statisticWidget, &StatisticWidget::logStateChanged, _outputWidget, &OutputTrafficWidget::setLogViewState);
-    connect(_statisticWidget, &StatisticWidget::ctrsReseted, this, &FormModSim::statisticCtrsReseted);
-    connect(_statisticWidget, &StatisticWidget::logStateChanged, this, &FormModSim::statisticLogStateChanged);
 
-    connect(&_mbMultiServer, &ModbusMultiServer::request, this, &FormTrafficView::on_mbRequest);
-    connect(&_mbMultiServer, &ModbusMultiServer::response, this, &FormTrafficView::on_mbResponse);
-    connect(&_mbMultiServer, &ModbusMultiServer::connected, this, &FormTrafficView::on_mbConnected);
-    connect(&_mbMultiServer, &ModbusMultiServer::disconnected, this, &FormTrafficView::on_mbDisconnected);
-    connect(&_mbMultiServer, &ModbusMultiServer::dataChanged, this, &FormTrafficView::on_mbDataChanged);
-    connect(&_mbMultiServer, &ModbusMultiServer::definitionsChanged, this, &FormTrafficView::on_mbDefinitionsChanged);
+    connect(&server, &ModbusMultiServer::request, this, &FormTrafficView::on_mbRequest);
+    connect(&server, &ModbusMultiServer::response, this, &FormTrafficView::on_mbResponse);
+    connect(&server, &ModbusMultiServer::connected, this, &FormTrafficView::on_mbConnected);
+    connect(&server, &ModbusMultiServer::disconnected, this, &FormTrafficView::on_mbDisconnected);
+    connect(&server, &ModbusMultiServer::definitionsChanged, this, &FormTrafficView::on_mbDefinitionsChanged);
 
-    connect(_dataSimulator, &DataSimulator::simulationStarted, this, &FormTrafficView::on_simulationStarted);
-    connect(_dataSimulator, &DataSimulator::simulationStopped, this, &FormTrafficView::on_simulationStopped);
-    connect(_dataSimulator, &DataSimulator::dataSimulated, this, &FormTrafficView::on_dataSimulated);
-
-    setupScriptBar();
+    const auto addr = _displayDefinition.PointAddress - (_displayDefinition.ZeroBasedAddress ? 0 : 1);
+    _mbMultiServer.addUnitMap(formId(), _displayDefinition.DeviceId, _displayDefinition.PointType, addr, _displayDefinition.Length);
+    ui->outputWidget->setup(_displayDefinition);
 }
 
 ///
@@ -240,26 +183,6 @@ void FormTrafficView::changeEvent(QEvent* e)
     if (e->type() == QEvent::LanguageChange)
     {
         ui->retranslateUi(this);
-        if (_scriptIntervalSpin)
-            _scriptIntervalSpin->setSuffix(tr(" ms"));
-        if (_scriptRunOnStartupCheck)
-            _scriptRunOnStartupCheck->setText(tr("Run on startup"));
-        if (_actionUndoScript)
-            _actionUndoScript->setText(tr("Undo"));
-        if (_actionRedoScript)
-            _actionRedoScript->setText(tr("Redo"));
-        if (_actionCutScript)
-            _actionCutScript->setText(tr("Cut"));
-        if (_actionCopyScript)
-            _actionCopyScript->setText(tr("Copy"));
-        if (_actionPasteScript)
-            _actionPasteScript->setText(tr("Paste"));
-        if (_actionFindScript)
-            _actionFindScript->setText(tr("Find"));
-        if (_actionReplaceScript)
-            _actionReplaceScript->setText(tr("Replace"));
-        retranslateTrafficFilterBar();
-        updateStatus();
     }
 
     QWidget::changeEvent(e);
@@ -271,7 +194,7 @@ void FormTrafficView::changeEvent(QEvent* e)
 ///
 void FormTrafficView::closeEvent(QCloseEvent* event)
 {
-    const auto deviceId = _lineEditDeviceId->value<quint8>();
+    const auto deviceId = _displayDefinition.DeviceId;
     _mbMultiServer.removeDeviceId(deviceId);
     _mbMultiServer.removeUnitMap(formId(), deviceId);
 
@@ -284,67 +207,21 @@ void FormTrafficView::closeEvent(QCloseEvent* event)
 /// \param event
 /// \return
 ///
-void FormTrafficView::mouseDoubleClickEvent(QMouseEvent* event)
-{
-    if(_frameDataDefinition->geometry().contains(event->pos())) {
-        emit doubleClicked();
-    }
-
-    return QWidget::mouseDoubleClickEvent(event);
-}
-
-///
-/// \brief FormTrafficView::filename
-/// \return
-///
-QString FormTrafficView::filename() const
-{
-    return _filename;
-}
-
-///
-/// \brief FormTrafficView::setFilename
-/// \param filename
-///
-void FormTrafficView::setFilename(const QString& filename)
-{
-    _filename = filename;
-}
-
-///
-/// \brief FormTrafficView::data
-/// \return
-///
-QVector<quint16> FormTrafficView::data() const
-{
-    return _outputWidget->data();
-}
-
 ///
 /// \brief FormTrafficView::displayDefinition
 /// \return
 ///
 TrafficViewDefinitions FormTrafficView::displayDefinition() const
 {
-    TrafficViewDefinitions dd;
+    TrafficViewDefinitions dd = _displayDefinition;
     dd.FormName = windowTitle();
-    dd.DeviceId = _lineEditDeviceId->value<int>();
-    dd.PointAddress = _lineEditAddress->value<int>();
-    dd.PointType = _comboBoxModbusPointType->currentPointType();
-    dd.Length = _lineEditLength->value<int>();
-    dd.ZeroBasedAddress = _lineEditAddress->range<int>().from() == 0;
-    dd.LogViewLimit = _outputWidget->logViewLimit();
-    dd.AutoscrollLog = _outputWidget->autoscrollLogView();
-    dd.VerboseLogging = _verboseLogging;
-    dd.HexAddress = displayHexAddresses();
-    dd.HexViewAddress  = _lineEditAddress->hexView();
-    dd.HexViewDeviceId = _lineEditDeviceId->hexView();
-    dd.HexViewLength   = _lineEditLength->hexView();
+    dd.LogViewLimit = ui->outputWidget->logViewLimit();
+    dd.AutoscrollLog = ui->outputWidget->autoscrollLogView();
+    dd.VerboseLogging = _displayDefinition.VerboseLogging;
+    dd.HexAddress = _displayDefinition.HexAddress;
     dd.AddrSpace = _mbMultiServer.getModbusDefinitions().AddrSpace;
-    dd.DataViewColumnsDistance = _outputWidget->dataViewColumnsDistance();
-    dd.LeadingZeros = _lineEditDeviceId->leadingZeroes();
-    dd.ScriptCfg = _scriptSettings;
-
+    dd.DataViewColumnsDistance = _displayDefinition.DataViewColumnsDistance;
+    dd.normalize();
     return dd;
 }
 
@@ -354,57 +231,40 @@ TrafficViewDefinitions FormTrafficView::displayDefinition() const
 ///
 void FormTrafficView::setDisplayDefinition(const TrafficViewDefinitions& dd)
 {
-    if(!dd.FormName.isEmpty())
-        setWindowTitle(dd.FormName);
+    TrafficViewDefinitions next = dd;
+    if(!next.FormName.isEmpty())
+        setWindowTitle(next.FormName);
+    else
+        next.FormName = windowTitle();
 
     const auto defs = _mbMultiServer.getModbusDefinitions();
+    next.AddrSpace = defs.AddrSpace;
+    next.normalize();
 
-    _lineEditDeviceId->setLeadingZeroes(dd.LeadingZeros);
-    _lineEditDeviceId->setValue(dd.DeviceId);
+    const auto oldDeviceId = _displayDefinition.DeviceId;
+    _displayDefinition = next;
 
-    _comboBoxAddressBase->blockSignals(true);
-    _comboBoxAddressBase->setCurrentAddressBase(dd.ZeroBasedAddress ? AddressBase::Base0 : AddressBase::Base1);
-    _comboBoxAddressBase->blockSignals(false);
+    if (oldDeviceId != _displayDefinition.DeviceId) {
+        _mbMultiServer.removeDeviceId(oldDeviceId);
+        _mbMultiServer.removeUnitMap(formId(), oldDeviceId);
+        _mbMultiServer.addDeviceId(_displayDefinition.DeviceId);
+    }
 
-    _lineEditAddress->blockSignals(true);
-    _lineEditAddress->setLeadingZeroes(dd.LeadingZeros);
-    _lineEditAddress->setInputRange(ModbusLimits::addressRange(defs.AddrSpace, dd.ZeroBasedAddress));
-    _lineEditAddress->setValue(dd.PointAddress);
-    _lineEditAddress->blockSignals(false);
-
-    _lineEditLength->blockSignals(true);
-    _lineEditLength->setLeadingZeroes(dd.LeadingZeros);
-    _lineEditLength->setInputRange(ModbusLimits::lengthRange(dd.PointAddress, dd.ZeroBasedAddress, defs.AddrSpace));
-    _lineEditLength->setValue(dd.Length);
-    _lineEditLength->blockSignals(false);
-
-    _comboBoxModbusPointType->blockSignals(true);
-    _comboBoxModbusPointType->setCurrentPointType(dd.PointType);
-    _comboBoxModbusPointType->blockSignals(false);
-
-    _outputWidget->setLogViewLimit(dd.LogViewLimit);
-    _outputWidget->setDataViewColumnsDistance(dd.DataViewColumnsDistance);
-    _outputWidget->setAutosctollLogView(dd.AutoscrollLog);
+    ui->outputWidget->setLogViewLimit(_displayDefinition.LogViewLimit);
+    ui->outputWidget->setAutosctollLogView(_displayDefinition.AutoscrollLog);
     if (_rowLimitCombo) {
-        int idx = _rowLimitCombo->findData(dd.LogViewLimit);
+        int idx = _rowLimitCombo->findData(_displayDefinition.LogViewLimit);
         if (idx < 0) {
-            _rowLimitCombo->addItem(QString::number(dd.LogViewLimit), dd.LogViewLimit);
-            idx = _rowLimitCombo->findData(dd.LogViewLimit);
+            _rowLimitCombo->addItem(QString::number(_displayDefinition.LogViewLimit), _displayDefinition.LogViewLimit);
+            idx = _rowLimitCombo->findData(_displayDefinition.LogViewLimit);
         }
         if (idx >= 0)
             _rowLimitCombo->setCurrentIndex(idx);
     }
 
-    _verboseLogging = dd.VerboseLogging;
-
-    setScriptSettings(dd.ScriptCfg);
-    setDisplayHexAddresses(dd.HexAddress);
-
-    _lineEditDeviceId->setHexView(dd.HexViewDeviceId);
-    _lineEditAddress->setHexView(dd.HexViewAddress);
-    _lineEditLength->setHexView(dd.HexViewLength);
-
-    emit definitionChanged();
+    const auto addr = _displayDefinition.PointAddress - (_displayDefinition.ZeroBasedAddress ? 0 : 1);
+    _mbMultiServer.addUnitMap(formId(), _displayDefinition.DeviceId, _displayDefinition.PointType, addr, _displayDefinition.Length);
+    ui->outputWidget->setup(_displayDefinition);
 }
 
 FormDisplayDefinition FormTrafficView::displayDefinitionValue() const
@@ -419,189 +279,12 @@ void FormTrafficView::setDisplayDefinitionValue(const FormDisplayDefinition& dd)
 }
 
 ///
-/// \brief FormTrafficView::displayMode
-/// \return
-///
-DisplayMode FormTrafficView::displayMode() const
-{
-    if(_scriptControl->isVisible())
-        return DisplayMode::Script;
-
-        return _outputWidget->displayMode();
-}
-
-///
-/// \brief FormTrafficView::setDisplayMode
-/// \param mode
-///
-void FormTrafficView::setDisplayMode(DisplayMode mode)
-{
-    switch(mode)
-    {
-        case DisplayMode::Script:
-            _widgetOutputView->setVisible(false);
-            ui->toolBarTraffic->setVisible(true);
-            _scriptControl->setVisible(true);
-            _scriptControl->setFocus();
-        break;
-
-        default:
-            ui->toolBarTraffic->setVisible(false);
-            _scriptControl->setVisible(false);
-            _widgetOutputView->setVisible(true);
-            _outputWidget->setDisplayMode(mode);
-        break;
-    }
-
-    emit displayModeChanged(mode);
-}
-
-///
-/// \brief FormTrafficView::dataDisplayMode
-/// \return
-///
-DataDisplayMode FormTrafficView::dataDisplayMode() const
-{
-    return _outputWidget->dataDisplayMode();
-}
-
-///
-/// \brief FormTrafficView::displayHexAddresses
-/// \return
-///
-bool FormTrafficView::displayHexAddresses() const
-{
-    return _outputWidget->displayHexAddresses();
-}
-
-///
-/// \brief FormTrafficView::setDisplayHexAddresses
-/// \param on
-///
-void FormTrafficView::setDisplayHexAddresses(bool on)
-{
-    _outputWidget->setDisplayHexAddresses(on);
-
-    const auto defs = _mbMultiServer.getModbusDefinitions();
-    _lineEditAddress->setInputMode(on ? NumericLineEdit::HexMode : NumericLineEdit::Int32Mode);
-    _lineEditAddress->setInputRange(ModbusLimits::addressRange(defs.AddrSpace, _comboBoxAddressBase->currentAddressBase() == AddressBase::Base0));
-}
-
-///
-/// \brief FormTrafficView::captureMode
-///
-CaptureMode FormTrafficView::captureMode() const
-{
-    return _outputWidget->captureMode();
-}
-
-///
-/// \brief FormTrafficView::startTextCapture
-/// \param file
-///
-void FormTrafficView::startTextCapture(const QString& file)
-{
-    _outputWidget->startTextCapture(file);
-}
-
-///
-/// \brief FormTrafficView::stopTextCapture
-///
-void FormTrafficView::stopTextCapture()
-{
-    _outputWidget->stopTextCapture();
-}
-
-///
-/// \brief FormTrafficView::setDataDisplayMode
-/// \param mode
-///
-void FormTrafficView::setDataDisplayMode(DataDisplayMode mode)
-{
-    const auto dd = displayDefinition();
-    switch(dd.PointType) {
-        case QModbusDataUnit::Coils:
-        case QModbusDataUnit::DiscreteInputs:
-            _outputWidget->setDataDisplayMode(DataDisplayMode::Binary);
-            break;
-        case QModbusDataUnit::InputRegisters:
-        case QModbusDataUnit::HoldingRegisters:
-            _outputWidget->setDataDisplayMode(mode);
-            break;
-        default: break;
-    }
-}
-
-///
-/// \brief FormTrafficView::scriptSettings
-/// \return
-///
-ScriptSettings FormTrafficView::scriptSettings() const
-{
-    return _scriptSettings;
-}
-
-///
-/// \brief FormTrafficView::setScriptSettings
-/// \param ss
-///
-void FormTrafficView::setScriptSettings(const ScriptSettings& ss)
-{
-    _scriptSettings = ss;
-    if (_scriptRunModeCombo)
-        _scriptRunModeCombo->setCurrentRunMode(ss.Mode);
-    if (_scriptIntervalSpin)
-        _scriptIntervalSpin->setValue(static_cast<int>(ss.Interval));
-    if (_scriptRunOnStartupCheck)
-        _scriptRunOnStartupCheck->setChecked(ss.RunOnStartup);
-    emit scriptSettingsChanged(ss);
-}
-
-///
-/// \brief FormTrafficView::byteOrder
-/// \return
-///
-ByteOrder FormTrafficView::byteOrder() const
-{
-    return *_outputWidget->byteOrder();
-}
-
-///
-/// \brief FormTrafficView::setByteOrder
-/// \param order
-///
-void FormTrafficView::setByteOrder(ByteOrder order)
-{
-    _outputWidget->setByteOrder(order);
-    emit byteOrderChanged(order);
-}
-
-///
-/// \brief FormTrafficView::codepage
-/// \return
-///
-QString FormTrafficView::codepage() const
-{
-    return _outputWidget->codepage();
-}
-
-///
-/// \brief FormTrafficView::setCodepage
-/// \param name
-///
-void FormTrafficView::setCodepage(const QString& name)
-{
-    _outputWidget->setCodepage(name);
-    emit codepageChanged(name);
-}
-
-///
 /// \brief FormTrafficView::backgroundColor
 /// \return
 ///
 QColor FormTrafficView::backgroundColor() const
 {
-    return _outputWidget->backgroundColor();
+    return ui->outputWidget->backgroundColor();
 }
 
 ///
@@ -610,7 +293,7 @@ QColor FormTrafficView::backgroundColor() const
 ///
 void FormTrafficView::setBackgroundColor(const QColor& clr)
 {
-    _outputWidget->setBackgroundColor(clr);
+    ui->outputWidget->setBackgroundColor(clr);
 }
 
 ///
@@ -619,7 +302,7 @@ void FormTrafficView::setBackgroundColor(const QColor& clr)
 ///
 QColor FormTrafficView::foregroundColor() const
 {
-    return _outputWidget->foregroundColor();
+    return ui->outputWidget->foregroundColor();
 }
 
 ///
@@ -628,25 +311,7 @@ QColor FormTrafficView::foregroundColor() const
 ///
 void FormTrafficView::setForegroundColor(const QColor& clr)
 {
-    _outputWidget->setForegroundColor(clr);
-}
-
-///
-/// \brief FormTrafficView::statusColor
-/// \return
-///
-QColor FormTrafficView::statusColor() const
-{
-    return _outputWidget->statusColor();
-}
-
-///
-/// \brief FormTrafficView::setStatusColor
-/// \param clr
-///
-void FormTrafficView::setStatusColor(const QColor& clr)
-{
-    _outputWidget->setStatusColor(clr);
+    ui->outputWidget->setForegroundColor(clr);
 }
 
 ///
@@ -655,7 +320,7 @@ void FormTrafficView::setStatusColor(const QColor& clr)
 ///
 QFont FormTrafficView::font() const
 {
-   return _outputWidget->font();
+   return ui->outputWidget->font();
 }
 
 ///
@@ -664,368 +329,7 @@ QFont FormTrafficView::font() const
 ///
 void FormTrafficView::setFont(const QFont& font)
 {
-    _outputWidget->setFont(font);
-}
-
-///
-/// \brief FormTrafficView::zoomPercent
-/// \return
-///
-int FormTrafficView::zoomPercent() const
-{
-    return _outputWidget->zoomPercent();
-}
-
-///
-/// \brief FormTrafficView::setZoomPercent
-/// \param zoomPercent
-///
-void FormTrafficView::setZoomPercent(int zoomPercent)
-{
-    _outputWidget->setZoomPercent(zoomPercent);
-}
-
-///
-/// \brief FormTrafficView::print
-/// \param printer
-///
-void FormTrafficView::print(QPrinter* printer)
-{
-    if(!printer) return;
-
-    auto layout = printer->pageLayout();
-    const auto resolution = printer->resolution();
-    auto pageRect = layout.paintRectPixels(resolution);
-
-    const auto margin = qMax(pageRect.width(), pageRect.height()) * 0.05;
-    layout.setMargins(QMargins(margin, margin, margin, margin));
-    pageRect.adjust(layout.margins().left(), layout.margins().top(), -layout.margins().right(), -layout.margins().bottom());
-
-    const int pageWidth = pageRect.width();
-    const int pageHeight = pageRect.height();
-
-    const int cx = pageRect.left();
-    const int cy = pageRect.top();
-
-    QPainter painter(printer);
-    painter.setRenderHint(QPainter::Antialiasing);
-    painter.setRenderHint(QPainter::TextAntialiasing);
-
-    const auto textTime = QLocale().toString(QDateTime::currentDateTime(), QLocale::ShortFormat);
-    auto rcTime = painter.boundingRect(cx, cy, pageWidth, pageHeight, Qt::TextSingleLine, textTime);
-
-    const auto textAddrLen = QString(tr("Address Base: %1\nStart Address: %2\nLength: %3")).arg(_comboBoxAddressBase->currentText(), _lineEditAddress->text(), _lineEditLength->text());
-    auto rcAddrLen = painter.boundingRect(cx, cy, pageWidth, pageHeight, Qt::TextWordWrap, textAddrLen);
-
-    const auto textDevIdType = QString(tr("Unit Identifier: %1\nMODBUS Point Type:\n%2")).arg(_lineEditDeviceId->text(), _comboBoxModbusPointType->currentText());
-    auto rcDevIdType = painter.boundingRect(cx, cy, pageWidth, pageHeight, Qt::TextWordWrap, textDevIdType);
-
-    rcTime.moveTopRight({ pageRect.right(), 10 });
-    rcDevIdType.moveTopLeft({ rcAddrLen.right() + 40, rcAddrLen.top()});
-
-    painter.drawText(rcTime, Qt::TextSingleLine, textTime);
-    painter.drawText(rcAddrLen, Qt::TextWordWrap, textAddrLen);
-    painter.drawText(rcDevIdType, Qt::TextWordWrap, textDevIdType);
-
-    auto rcOutput = pageRect;
-    rcOutput.setTop(rcAddrLen.bottom() + 20);
-
-    _outputWidget->paint(rcOutput, painter);
-}
-
-///
-/// \brief FormTrafficView::simulationMap
-/// \return
-///
-ModbusSimulationMap2 FormTrafficView::simulationMap() const
-{
-    const auto dd = displayDefinition();
-    const auto startAddr = dd.PointAddress - (dd.ZeroBasedAddress ? 0 : 1);
-    const auto endAddr = startAddr + dd.Length;
-
-    ModbusSimulationMap2 result;
-    const auto simulationMap = _dataSimulator->simulationMap();
-    for(auto&& key : simulationMap.keys())
-    {
-        if(simulationMap[key].Mode == SimulationMode::Disabled)
-            continue;
-
-        if(key.DeviceId == dd.DeviceId &&
-           key.Type == dd.PointType &&
-           key.Address >= startAddr && key.Address < endAddr)
-        {
-            result[key] = simulationMap[key];
-        }
-    }
-
-    return result;
-}
-
-///
-/// \brief FormTrafficView::serializeModbusDataUnit
-/// \param deviceId
-/// \param type
-/// \param startAddress
-/// \param length
-/// \return
-///
-QModbusDataUnit FormTrafficView::serializeModbusDataUnit(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 startAddress, quint16 length) const
-{
-    QModbusDataUnit dataUnit;
-    const auto serverData = _mbMultiServer.data(deviceId, type, startAddress, length);
-
-    if (startAddress >= serverData.startAddress() &&
-        (startAddress + length) <= (serverData.startAddress() + serverData.valueCount())) {
-
-        const int offset = startAddress - serverData.startAddress();
-
-        QVector<quint16> values;
-        for (int i = 0; i < length; ++i) {
-            values.append(serverData.value(offset + i));
-        }
-
-        dataUnit.setValues(values);
-        dataUnit.setRegisterType(type);
-        dataUnit.setStartAddress(startAddress);
-    }
-
-    return dataUnit;
-}
-
-///
-/// \brief FormTrafficView::startSimulation
-/// \param type
-/// \param addr
-/// \param params
-///
-void FormTrafficView::startSimulation(QModbusDataUnit::RegisterType type, quint16 addr, const ModbusSimulationParams& params)
-{
-    const auto deviceId = _lineEditDeviceId->value<quint8>();
-    _dataSimulator->startSimulation(deviceId, type, addr, params);
-}
-
-///
-/// \brief FormTrafficView::configureModbusDataUnit
-/// \param deviceId
-/// \param type
-/// \param startAddress
-/// \param values
-///
-void FormTrafficView::configureModbusDataUnit(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 startAddress, const QVector<quint16>& values) const
-{
-    QModbusDataUnit unit;
-    unit.setRegisterType(type);
-    unit.setStartAddress(startAddress);
-    unit.setValues(values);
-    _mbMultiServer.setData(deviceId, unit);
-}
-
-
-///
-/// \brief FormTrafficView::descriptionMap
-/// \return
-///
-AddressDescriptionMap2 FormTrafficView::descriptionMap() const
-{
-    return _outputWidget->descriptionMap();
-}
-
-///
-/// \brief FormTrafficView::setDescription
-/// \param deviceId
-/// \param type
-/// \param addr
-/// \param desc
-///
-void FormTrafficView::setDescription(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr, const QString& desc)
-{
-    _outputWidget->setDescription(deviceId, type, addr, desc);
-}
-
-///
-/// \brief FormTrafficView::colorMap
-/// \return
-///
-AddressColorMap FormTrafficView::colorMap() const
-{
-    return _outputWidget->colorMap();
-}
-
-///
-/// \brief FormTrafficView::setColor
-/// \param deviceId
-/// \param type
-/// \param addr
-/// \param clr
-///
-void FormTrafficView::setColor(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr, const QColor& clr)
-{
-    _outputWidget->setColor(deviceId, type, addr, clr);
-}
-
-///
-/// \brief FormTrafficView::resetCtrs
-///
-void FormTrafficView::resetCtrs()
-{
-    _statisticWidget->resetCtrs();
-}
-
-///
-/// \brief FormTrafficView::requestCount
-/// \return
-///
-uint FormTrafficView::requestCount() const
-{
-    return _statisticWidget->numberRequets();
-}
-
-///
-/// \brief FormTrafficView::responseCount
-/// \return
-///
-uint FormTrafficView::responseCount() const
-{
-    return _statisticWidget->numberResposes();
-}
-
-///
-/// \brief FormTrafficView::setStatisticCounters
-/// \param requests
-/// \param responses
-///
-void FormTrafficView::setStatisticCounters(uint requests, uint responses)
-{
-    _statisticWidget->setCounters(requests, responses);
-}
-
-///
-/// \brief FormTrafficView::script
-/// \return
-///
-QString FormTrafficView::script() const
-{
-    return _scriptControl->script();
-}
-
-///
-/// \brief FormTrafficView::setScript
-/// \param text
-///
-void FormTrafficView::setScript(const QString& text)
-{
-    _scriptControl->setScript(text);
-}
-
-///
-/// \brief FormTrafficView::scriptDocument
-/// \return
-///
-QTextDocument* FormTrafficView::scriptDocument() const
-{
-    return _scriptControl->scriptDocument();
-}
-
-///
-/// \brief FormTrafficView::setScriptDocument
-/// \param document
-///
-void FormTrafficView::setScriptDocument(QTextDocument* document)
-{
-    _scriptControl->setScriptDocument(document);
-}
-
-int FormTrafficView::scriptCursorPosition() const
-{
-    return _scriptControl->cursorPosition();
-}
-
-void FormTrafficView::setScriptCursorPosition(int pos)
-{
-    _scriptControl->setCursorPosition(pos);
-}
-
-int FormTrafficView::scriptScrollPosition() const
-{
-    return _scriptControl->scrollPosition();
-}
-
-void FormTrafficView::setScriptScrollPosition(int pos)
-{
-    _scriptControl->setScrollPosition(pos);
-}
-
-///
-/// \brief FormTrafficView::searchText
-/// \return
-///
-QString FormTrafficView::searchText() const
-{
-    return _scriptControl->searchText();
-}
-
-///
-/// \brief FormTrafficView::canRunScript
-/// \return
-///
-bool FormTrafficView::canRunScript() const
-{
-    return !_scriptControl->script().isEmpty() &&
-           !_scriptControl->isRunning();
-}
-
-///
-/// \brief FormTrafficView::canStopScript
-/// \return
-///
-bool FormTrafficView::canStopScript() const
-{
-    return _scriptControl->isRunning();
-}
-
-///
-/// \brief FormTrafficView::canUndo
-/// \return
-///
-bool FormTrafficView::canUndo() const
-{
-    return _scriptControl->canUndo();
-}
-
-///
-/// \brief FormTrafficView::canRedo
-/// \return
-///
-bool FormTrafficView::canRedo() const
-{
-    return _scriptControl->canRedo();
-}
-
-///
-/// \brief FormTrafficView::canPaste
-/// \return
-///
-bool FormTrafficView::canPaste() const
-{
-    return _scriptControl->canPaste();
-}
-
-///
-/// \brief FormTrafficView::runScript
-/// \param interval
-///
-void FormTrafficView::runScript()
-{
-    emit scriptRunning();
-    _scriptControl->runScript(_scriptSettings.Mode, _scriptSettings.Interval);
-}
-
-///
-/// \brief FormTrafficView::stopScript
-///
-void FormTrafficView::stopScript()
-{
-    _scriptControl->stopScript();
+    ui->outputWidget->setFont(font);
 }
 
 ///
@@ -1034,7 +338,7 @@ void FormTrafficView::stopScript()
 ///
 LogViewState FormTrafficView::logViewState() const
 {
-    return _statisticWidget->logState();
+    return _logViewState;
 }
 
 ///
@@ -1043,37 +347,15 @@ LogViewState FormTrafficView::logViewState() const
 ///
 void FormTrafficView::setLogViewState(LogViewState state)
 {
-    _statisticWidget->setLogState(state);
-    _outputWidget->setLogViewState(state);
-    syncTrafficFilterState(state);
-}
+    if(_logViewState == state)
+        return;
 
-///
-/// \brief FormTrafficView::parentGeometry
-/// \return
-///
-QRect FormTrafficView::parentGeometry() const
-{
-    auto wnd = parentWidget();
-    return (!wnd->isMaximized() && !wnd->isMinimized()) ? wnd->geometry() : _parentGeometry;
-}
-
-///
-/// \brief FormTrafficView::setParentGeometry
-/// \param geometry
-///
-void FormTrafficView::setParentGeometry(const QRect& geometry)
-{
-    if(geometry.isValid())
-    {
-        _parentGeometry = geometry;
-
-        auto wnd = parentWidget();
-        if(wnd->geometry() != geometry)
-        {
-            wnd->setGeometry(geometry);
-        }
-    }
+    _logViewState = state;
+    ui->outputWidget->setLogViewState(state);
+    ui->actionPauseTraffic->blockSignals(true);
+    ui->actionPauseTraffic->setChecked(state == LogViewState::Paused);
+    ui->actionPauseTraffic->blockSignals(false);
+    ui->actionPauseTraffic->setEnabled(state != LogViewState::Unknown);
 }
 
 ///
@@ -1088,207 +370,11 @@ void FormTrafficView::show()
 }
 
 ///
-/// \brief FormTrafficView::on_lineEditAddress_valueChanged
-///
-void FormTrafficView::on_lineEditAddress_valueChanged(const QVariant&)
-{
-    const auto defs = _mbMultiServer.getModbusDefinitions();
-    const bool zeroBased = (_comboBoxAddressBase->currentAddressBase() == AddressBase::Base0);
-    const int address = _lineEditAddress->value<int>();
-    const auto lenRange = ModbusLimits::lengthRange(address, zeroBased, defs.AddrSpace);
-
-    _lineEditLength->setInputRange(lenRange);
-    if(_lineEditLength->value<int>() > lenRange.to()) {
-        _lineEditLength->setValue(lenRange.to());
-        _lineEditLength->update();
-    }
-
-   emit definitionChanged();
-}
-
-///
-/// \brief FormTrafficView::on_lineEditLength_valueChanged
-///
-void FormTrafficView::on_lineEditLength_valueChanged(const QVariant&)
-{
-    emit definitionChanged();
-}
-
-///
-/// \brief FormTrafficView::on_lineEditDeviceId_valueChanged
-///
-void FormTrafficView::on_lineEditDeviceId_valueChanged(const QVariant& oldValue, const QVariant& newValue)
-{
-    _mbMultiServer.removeDeviceId(oldValue.toInt());
-    _mbMultiServer.addDeviceId(newValue.toInt());
-
-    emit definitionChanged();
-}
-
-///
-/// \brief FormTrafficView::on_comboBoxAddressBase_addressBaseChanged
-/// \param base
-///
-void FormTrafficView::on_comboBoxAddressBase_addressBaseChanged(AddressBase base)
-{
-    auto dd = displayDefinition();
-    dd.PointAddress = (base == AddressBase::Base1 ? qMax(1, dd.PointAddress + 1) : qMax(0, dd.PointAddress - 1));
-    dd.ZeroBasedAddress = (base == AddressBase::Base0);
-    setDisplayDefinition(dd);
-}
-
-///
-/// \brief FormTrafficView::on_comboBoxModbusPointType_pointTypeChanged
-///
-void FormTrafficView::on_comboBoxModbusPointType_pointTypeChanged(QModbusDataUnit::RegisterType type)
-{
-    emit definitionChanged();
-    emit pointTypeChanged(type);
-}
-
-///
-/// \brief FormTrafficView::updateStatus
-///
-void FormTrafficView::updateStatus()
-{
-    const auto dd = displayDefinition();
-    if(_mbMultiServer.isConnected())
-    {
-        const auto defs = _mbMultiServer.getModbusDefinitions();
-        const auto addr = dd.PointAddress - (dd.ZeroBasedAddress ? 0 : 1);
-        if(addr + dd.Length <= ModbusLimits::addressRange(defs.AddrSpace).to())
-            _outputWidget->setStatus(QString());
-        else
-            _outputWidget->setInvalidLengthStatus();
-    }
-    else
-    {
-        _outputWidget->setNotConnectedStatus();
-    }
-}
-
-///
-/// \brief FormTrafficView::onDefinitionChanged
-///
-void FormTrafficView::onDefinitionChanged()
-{
-    updateStatus();
-
-    const auto dd = displayDefinition();
-    const auto addr = dd.PointAddress - (dd.ZeroBasedAddress ? 0 : 1);
-    _mbMultiServer.addUnitMap(formId(), dd.DeviceId, dd.PointType, addr, dd.Length);
-
-    _scriptControl->setAddressBase(dd.ZeroBasedAddress ? AddressBase::Base0 : AddressBase::Base1);
-    _outputWidget->setup(dd, _dataSimulator->simulationMap(), _mbMultiServer.data(dd.DeviceId, dd.PointType, addr, dd.Length));
-}
-
-///
-/// \brief FormTrafficView::scriptControl
-/// \return
-///
-JScriptControl* FormTrafficView::scriptControl()
-{
-    return _scriptControl;
-}
-
-///
-/// \brief FormTrafficView::isAutoCompleteEnabled
-/// \return
-///
-bool FormTrafficView::isAutoCompleteEnabled() const
-{
-    return _scriptControl->isAutoCompleteEnabled();
-}
-
-///
-/// \brief FormTrafficView::enableAutoComplete
-/// \param enable
-///
-void FormTrafficView::enableAutoComplete(bool enable)
-{
-    _scriptControl->enableAutoComplete(enable);
-}
-
-///
-/// \brief FormTrafficView::setScriptFont
-/// \param font
-///
-void FormTrafficView::setScriptFont(const QFont& font)
-{
-    _scriptControl->setFont(font);
-}
-
-///
-/// \brief FormTrafficView::on_outputWidget_itemDoubleClicked
-/// \param addr
-/// \param value
-///
-void FormTrafficView::on_outputWidget_itemDoubleClicked(quint16 addr, const QVariant& value)
-{
-    const auto dd = displayDefinition();
-    const auto mode = dataDisplayMode();
-    const auto deviceId = _lineEditDeviceId->value<quint8>();
-    const auto pointType = _comboBoxModbusPointType->currentPointType();
-    const auto zeroBasedAddress = dd.ZeroBasedAddress;
-    const auto simAddr = addr - (zeroBasedAddress ? 0 : 1);
-    const auto addrSpace = _mbMultiServer.getModbusDefinitions().AddrSpace;
-
-    switch(pointType)
-    {
-        case QModbusDataUnit::Coils:
-        case QModbusDataUnit::DiscreteInputs:
-        {
-            ModbusWriteParams params;
-            params.DeviceId = deviceId;
-            params.Address = addr;
-            params.Value = value;
-            params.DisplayMode = mode;
-            params.AddrSpace = addrSpace;
-            params.Order = byteOrder();
-            params.Codepage = codepage();
-            params.ZeroBasedAddress = zeroBasedAddress;
-            params.LeadingZeros = dd.LeadingZeros;
-            params.Server = &_mbMultiServer;
-
-            DialogWriteStatusRegister dlg(params, pointType, displayHexAddresses(), _dataSimulator, _parent);
-            if(dlg.exec() == QDialog::Accepted)
-                _mbMultiServer.writeRegister(pointType, params);
-        }
-        break;
-
-        case QModbusDataUnit::InputRegisters:
-        case QModbusDataUnit::HoldingRegisters:
-        {
-            ModbusWriteParams params;
-            params.DeviceId = deviceId;
-            params.Address = addr;
-            params.Value = value;
-            params.DisplayMode = mode;
-            params.AddrSpace = addrSpace;
-            params.Order = byteOrder();
-            params.Codepage = codepage();
-            params.ZeroBasedAddress = zeroBasedAddress;
-            params.LeadingZeros = dd.LeadingZeros;
-            params.Server = &_mbMultiServer;
-
-            DialogWriteRegister dlg(params, pointType, displayHexAddresses(), _dataSimulator, _parent);
-            if(dlg.exec() == QDialog::Accepted)
-                _mbMultiServer.writeRegister(pointType, params);
-        }
-        break;
-
-        default:
-        break;
-    }
-}
-
-///
 /// \brief FormTrafficView::on_mbConnected
 ///
 void FormTrafficView::on_mbConnected(const ConnectionDetails&)
 {
-    updateStatus();
-    _outputWidget->clearLogView();
+    ui->outputWidget->clearLogView();
 
     if(logViewState() == LogViewState::Unknown) {
         setLogViewState(LogViewState::Running);
@@ -1300,71 +386,8 @@ void FormTrafficView::on_mbConnected(const ConnectionDetails&)
 ///
 void FormTrafficView::on_mbDisconnected(const ConnectionDetails&)
 {
-    updateStatus();
     if(!_mbMultiServer.isConnected()) {
         setLogViewState(LogViewState::Unknown);
-    }
-}
-
-///
-/// \brief FormTrafficView::isLoggingRequest
-/// \param msgReq
-/// \return
-///
-bool FormTrafficView::isLoggingRequest(QSharedPointer<const ModbusMessage> msgReq) const
-{
-    if(!msgReq)
-        return false;
-
-    const auto dd = displayDefinition();
-    if(dd.DeviceId != msgReq->deviceId())
-        return false;
-
-    const auto startAddress = dd.PointAddress - (dd.ZeroBasedAddress ? 0 : 1);
-
-    switch(msgReq->functionCode()) {
-        case QModbusPdu::ReadCoils: {
-            auto req = reinterpret_cast<const ReadCoilsRequest*>(msgReq.get());
-            return (req->startAddress() >= startAddress) && (dd.PointType == QModbusDataUnit::Coils);
-        }
-        case QModbusPdu::ReadDiscreteInputs: {
-            auto req = reinterpret_cast<const ReadDiscreteInputsRequest*>(msgReq.get());
-            return (req->startAddress() >= startAddress) && (dd.PointType == QModbusDataUnit::DiscreteInputs);
-        }
-        case QModbusPdu::ReadHoldingRegisters: {
-            auto req = reinterpret_cast<const ReadHoldingRegistersRequest*>(msgReq.get());
-            return (req->startAddress() >= startAddress) && (dd.PointType == QModbusDataUnit::HoldingRegisters);
-        }
-        case QModbusPdu::ReadInputRegisters: {
-            auto req = reinterpret_cast<const ReadInputRegistersRequest*>(msgReq.get());
-            return (req->startAddress() >= startAddress) && (dd.PointType == QModbusDataUnit::InputRegisters);
-        }
-        case QModbusPdu::WriteSingleCoil: {
-            auto req = reinterpret_cast<const WriteSingleCoilRequest*>(msgReq.get());
-            return (req->address() >= startAddress) && (dd.PointType == QModbusDataUnit::Coils);
-        }
-        case QModbusPdu::WriteSingleRegister: {
-            auto req = reinterpret_cast<const WriteSingleRegisterRequest*>(msgReq.get());
-            return (req->address() >= startAddress) && (dd.PointType == QModbusDataUnit::HoldingRegisters);
-        }
-        case QModbusPdu::WriteMultipleCoils: {
-            auto req = reinterpret_cast<const WriteMultipleCoilsRequest*>(msgReq.get());
-            return (req->startAddress() >= startAddress) && (dd.PointType == QModbusDataUnit::Coils);
-        }
-        case QModbusPdu::WriteMultipleRegisters: {
-            auto req = reinterpret_cast<const WriteMultipleRegistersRequest*>(msgReq.get());
-            return (req->startAddress() >= startAddress) && (dd.PointType == QModbusDataUnit::HoldingRegisters);
-        }
-        case QModbusPdu::MaskWriteRegister: {
-            auto req = reinterpret_cast<const MaskWriteRegisterRequest*>(msgReq.get());
-            return (req->address() >= startAddress) && (dd.PointType == QModbusDataUnit::HoldingRegisters);
-        }
-        case QModbusPdu::ReadWriteMultipleRegisters: {
-            auto req = reinterpret_cast<const ReadWriteMultipleRegistersRequest*>(msgReq.get());
-            return ((req->readStartAddress() >= startAddress) || (req->writeStartAddress() >= startAddress)) && (dd.PointType == QModbusDataUnit::HoldingRegisters);
-        }
-        default:
-            return true;
     }
 }
 
@@ -1400,9 +423,9 @@ bool FormTrafficView::matchesTrafficFilter(QSharedPointer<const ModbusMessage> m
 ///
 void FormTrafficView::on_mbRequest(QSharedPointer<const ModbusMessage> msg)
 {
-    if((_verboseLogging || isLoggingRequest(msg)) && matchesTrafficFilter(msg)) {
-        _statisticWidget->increaseRequests();
-        _outputWidget->updateTraffic(msg);
+    if(matchesTrafficFilter(msg)) {
+        ++_requestCount;
+        ui->outputWidget->updateTraffic(msg);
     }
 }
 
@@ -1413,11 +436,10 @@ void FormTrafficView::on_mbRequest(QSharedPointer<const ModbusMessage> msg)
 ///
 void FormTrafficView::on_mbResponse(QSharedPointer<const ModbusMessage> msgReq, QSharedPointer<const ModbusMessage> msgResp)
 {
-    const bool logByDefinition = _verboseLogging || isLoggingRequest(msgReq);
     const bool passesFilter = msgReq ? matchesTrafficFilter(msgReq) : matchesTrafficFilter(msgResp);
-    if(logByDefinition && passesFilter) {
-        _statisticWidget->increaseResponses();
-        _outputWidget->updateTraffic(msgResp);
+    if(passesFilter) {
+        ++_responseCount;
+        ui->outputWidget->updateTraffic(msgResp);
     }
 }
 
@@ -1426,12 +448,7 @@ void FormTrafficView::on_mbResponse(QSharedPointer<const ModbusMessage> msgReq, 
 ///
 void FormTrafficView::on_mbDataChanged(quint8 deviceId, const QModbusDataUnit&)
 {
-    const auto dd = displayDefinition();
-    if(deviceId == dd.DeviceId)
-    {
-        const auto addr = dd.PointAddress - (dd.ZeroBasedAddress ? 0 : 1);
-        _outputWidget->updateData(_mbMultiServer.data(deviceId, dd.PointType, addr, dd.Length));
-    }
+    Q_UNUSED(deviceId);
 }
 
 ///
@@ -1440,287 +457,11 @@ void FormTrafficView::on_mbDataChanged(quint8 deviceId, const QModbusDataUnit&)
 ///
 void FormTrafficView::on_mbDefinitionsChanged(const ModbusDefinitions& defs)
 {
+    _displayDefinition.AddrSpace = defs.AddrSpace;
+    _displayDefinition.normalize();
     const auto dd = displayDefinition();
     const auto addr = dd.PointAddress - (dd.ZeroBasedAddress ? 0 : 1);
-    _lineEditAddress->setInputRange(ModbusLimits::addressRange(defs.AddrSpace, dd.ZeroBasedAddress));
-    _lineEditLength->setInputRange(ModbusLimits::lengthRange(dd.PointAddress, dd.ZeroBasedAddress, defs.AddrSpace));
-    _outputWidget->setup(dd, _dataSimulator->simulationMap(), _mbMultiServer.data(dd.DeviceId, dd.PointType, addr, dd.Length));
-}
-
-///
-/// \brief FormTrafficView::on_simulationStarted
-/// \param mode
-/// \param deviceId
-/// \param type
-/// \param addresses
-///
-void FormTrafficView::on_simulationStarted(DataDisplayMode mode, quint8 deviceId, QModbusDataUnit::RegisterType type, const QVector<quint16>& addresses)
-{
-    if(deviceId != _lineEditDeviceId->value<quint8>())
-        return;
-
-    for(auto&& addr : addresses)
-        _outputWidget->setSimulated(mode, deviceId, type, addr, true);
-}
-
-///
-/// \brief FormTrafficView::on_simulationStopped
-/// \param mode
-/// \param deviceId
-/// \param type
-/// \param addresses
-///
-void FormTrafficView::on_simulationStopped(DataDisplayMode mode, quint8 deviceId, QModbusDataUnit::RegisterType type, const QVector<quint16>& addresses)
-{
-    if(deviceId != _lineEditDeviceId->value<quint8>())
-        return;
-
-    for(auto&& addr : addresses)
-        _outputWidget->setSimulated(mode, deviceId, type, addr, false);
-}
-
-///
-/// \brief FormTrafficView::on_dataSimulated
-/// \param mode
-/// \param deviceId
-/// \param type
-/// \param startAddress
-/// \param value
-///
-void FormTrafficView::on_dataSimulated(DataDisplayMode mode, quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 startAddress, QVariant value)
-{
-    const auto dd = displayDefinition();
-    const auto pointAddr = dd.PointAddress - (dd.ZeroBasedAddress ? 0 : 1);
-    if(deviceId == dd.DeviceId && type == dd.PointType && startAddress >= pointAddr && startAddress <= pointAddr + dd.Length)
-    {
-        const ModbusWriteParams params = { dd.DeviceId, startAddress, value, mode, dd.AddrSpace, byteOrder(), codepage(), true };
-        _mbMultiServer.writeRegister(type, params);
-    }
-}
-
-///
-/// \brief FormTrafficView::setupScriptBar
-///
-void FormTrafficView::setupScriptBar()
-{
-    ui->toolBarTraffic->clear();
-    _actionUndoScript = nullptr;
-    _actionRedoScript = nullptr;
-    _actionCutScript = nullptr;
-    _actionCopyScript = nullptr;
-    _actionPasteScript = nullptr;
-    _actionFindScript = nullptr;
-    _actionReplaceScript = nullptr;
-
-    _scriptRunModeCombo = new RunModeComboBox(ui->toolBarTraffic);
-    _scriptRunModeCombo->setCurrentRunMode(_scriptSettings.Mode);
-
-    _scriptIntervalSpin = new QSpinBox(ui->toolBarTraffic);
-    _scriptIntervalSpin->setRange(500, 10000);
-    _scriptIntervalSpin->setSingleStep(100);
-    _scriptIntervalSpin->setSuffix(tr(" ms"));
-    _scriptIntervalSpin->setValue(static_cast<int>(_scriptSettings.Interval));
-    _scriptIntervalSpin->setFixedWidth(90);
-
-    _scriptRunOnStartupCheck = new QCheckBox(tr("Run on startup"), ui->toolBarTraffic);
-    _scriptRunOnStartupCheck->setChecked(_scriptSettings.RunOnStartup);
-
-    ui->toolBarTraffic->addWidget(_scriptRunModeCombo);
-    ui->toolBarTraffic->addWidget(_scriptIntervalSpin);
-    ui->toolBarTraffic->addWidget(_scriptRunOnStartupCheck);
-    ui->toolBarTraffic->addSeparator();
-    ui->toolBarTraffic->addAction(ui->actionRunScript);
-    ui->toolBarTraffic->addAction(ui->actionStopScript);
-    ui->toolBarTraffic->addSeparator();
-
-    _actionUndoScript = ui->toolBarTraffic->addAction(QIcon(":/res/actionUndo.png"), tr("Undo"));
-    _actionRedoScript = ui->toolBarTraffic->addAction(QIcon(":/res/actionRedo.png"), tr("Redo"));
-    _actionCutScript = ui->toolBarTraffic->addAction(QIcon(":/res/actionCut.png"), tr("Cut"));
-    _actionCopyScript = ui->toolBarTraffic->addAction(QIcon(":/res/actionCopy.png"), tr("Copy"));
-    _actionPasteScript = ui->toolBarTraffic->addAction(QIcon(":/res/actionPaste.png"), tr("Paste"));
-    _actionFindScript = ui->toolBarTraffic->addAction(QIcon(":/res/actionFind.png"), tr("Find"));
-    _actionReplaceScript = ui->toolBarTraffic->addAction(QIcon(":/res/icon-replace.svg"), tr("Replace"));
-
-    connect(_scriptRunModeCombo, &RunModeComboBox::runModeChanged, this, [this](RunMode mode) {
-        _scriptSettings.Mode = mode;
-    });
-
-    connect(_scriptIntervalSpin, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged), this, [this](int value) {
-        _scriptSettings.Interval = static_cast<uint>(value);
-    });
-
-    connect(_scriptRunOnStartupCheck, &QCheckBox::stateChanged, this, [this](int state) {
-        _scriptSettings.RunOnStartup = (state == Qt::Checked);
-    });
-
-    if (auto* runButton = qobject_cast<QToolButton*>(ui->toolBarTraffic->widgetForAction(ui->actionRunScript)))
-        runButton->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
-
-    if (auto* stopButton = qobject_cast<QToolButton*>(ui->toolBarTraffic->widgetForAction(ui->actionStopScript)))
-        stopButton->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
-
-    connect(ui->actionRunScript, &QAction::triggered, this, &FormTrafficView::runScript);
-    connect(ui->actionStopScript, &QAction::triggered, this, &FormTrafficView::stopScript);
-    connect(_actionUndoScript, &QAction::triggered, _scriptControl, &JScriptControl::undo);
-    connect(_actionRedoScript, &QAction::triggered, _scriptControl, &JScriptControl::redo);
-    connect(_actionCutScript, &QAction::triggered, _scriptControl, &JScriptControl::cut);
-    connect(_actionCopyScript, &QAction::triggered, _scriptControl, &JScriptControl::copy);
-    connect(_actionPasteScript, &QAction::triggered, _scriptControl, &JScriptControl::paste);
-    connect(_actionFindScript, &QAction::triggered, _scriptControl, &JScriptControl::showFind);
-    connect(_actionReplaceScript, &QAction::triggered, _scriptControl, &JScriptControl::showReplace);
-
-    connect(this, &FormModSim::scriptRunning, this, &FormTrafficView::updateScriptBar);
-    connect(this, &FormModSim::scriptStopped, this, &FormTrafficView::updateScriptBar);
-    connect(_scriptControl->scriptDocument(), &QTextDocument::contentsChanged,
-            this, &FormTrafficView::updateScriptBar);
-
-    updateScriptBar();
-}
-
-///
-/// \brief FormTrafficView::setupTrafficFilterBar
-///
-void FormTrafficView::setupTrafficFilterBar()
-{
-    _toolBarTrafficFilter->clear();
-
-    _labelUnitId = new QLabel(_toolBarTrafficFilter);
-    _unitIdFilter = new QSpinBox(_toolBarTrafficFilter);
-    _unitIdFilter->setRange(0, 247);
-    _unitIdFilter->setValue(0);
-    _unitIdFilter->setFixedWidth(70);
-
-    _labelFuncCode = new QLabel(_toolBarTrafficFilter);
-    _funcCodeFilter = new QComboBox(_toolBarTrafficFilter);
-    _funcCodeFilter->addItem(tr("All"), 0);
-    _funcCodeFilter->addItem("FC01 Read Coils", 1);
-    _funcCodeFilter->addItem("FC02 Read Discrete Inputs", 2);
-    _funcCodeFilter->addItem("FC03 Read Holding Registers", 3);
-    _funcCodeFilter->addItem("FC04 Read Input Registers", 4);
-    _funcCodeFilter->addItem("FC05 Write Single Coil", 5);
-    _funcCodeFilter->addItem("FC06 Write Single Register", 6);
-    _funcCodeFilter->addItem("FC15 Write Multiple Coils", 15);
-    _funcCodeFilter->addItem("FC16 Write Multiple Registers", 16);
-    _funcCodeFilter->setFixedWidth(220);
-
-    _labelRowLimit = new QLabel(_toolBarTrafficFilter);
-    _rowLimitCombo = new QComboBox(_toolBarTrafficFilter);
-    for (const int limit : {100, 500, 1000, 5000})
-        _rowLimitCombo->addItem(QString::number(limit), limit);
-    _rowLimitCombo->setCurrentIndex(2);
-    _rowLimitCombo->setFixedWidth(65);
-
-    _trafficFilterStretch = new QWidget(_toolBarTrafficFilter);
-    _trafficFilterStretch->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
-
-    _pauseButton = new QToolButton(_toolBarTrafficFilter);
-    _pauseButton->setCheckable(true);
-    _pauseButton->setIcon(QIcon(":/res/actionStopScript.png"));
-    _pauseButton->setAutoRaise(true);
-
-    _clearButton = new QToolButton(_toolBarTrafficFilter);
-    _clearButton->setIcon(QIcon(":/res/edit-delete.svg"));
-    _clearButton->setAutoRaise(true);
-
-    _toolBarTrafficFilter->addWidget(_labelUnitId);
-    _toolBarTrafficFilter->addWidget(_unitIdFilter);
-    _toolBarTrafficFilter->addSeparator();
-    _toolBarTrafficFilter->addWidget(_labelFuncCode);
-    _toolBarTrafficFilter->addWidget(_funcCodeFilter);
-    _toolBarTrafficFilter->addSeparator();
-    _toolBarTrafficFilter->addWidget(_labelRowLimit);
-    _toolBarTrafficFilter->addWidget(_rowLimitCombo);
-    _toolBarTrafficFilter->addWidget(_trafficFilterStretch);
-    _toolBarTrafficFilter->addWidget(_pauseButton);
-    _toolBarTrafficFilter->addWidget(_clearButton);
-
-    _outputWidget->setLogViewLimit(_rowLimitCombo->currentData().toInt());
-
-    connect(_rowLimitCombo, QOverload<int>::of(&QComboBox::currentIndexChanged), this, [this]() {
-        _outputWidget->setLogViewLimit(_rowLimitCombo->currentData().toInt());
-    });
-    connect(_pauseButton, &QToolButton::toggled, this, [this](bool paused) {
-        if (logViewState() == LogViewState::Unknown) {
-            _pauseButton->blockSignals(true);
-            _pauseButton->setChecked(false);
-            _pauseButton->blockSignals(false);
-            return;
-        }
-
-        const auto state = paused ? LogViewState::Paused : LogViewState::Running;
-        setLogViewState(state);
-        emit statisticLogStateChanged(state);
-    });
-    connect(_clearButton, &QToolButton::clicked, this, [this]() {
-        _outputWidget->clearLogView();
-    });
-
-    retranslateTrafficFilterBar();
-}
-
-///
-/// \brief FormTrafficView::retranslateTrafficFilterBar
-///
-void FormTrafficView::retranslateTrafficFilterBar()
-{
-    if (!_labelUnitId || !_unitIdFilter || !_labelFuncCode || !_labelRowLimit || !_clearButton || !_funcCodeFilter)
-        return;
-
-    _labelUnitId->setText(tr("Unit ID:"));
-    _unitIdFilter->setSpecialValueText(tr("All"));
-    _unitIdFilter->setToolTip(tr("Filter by Unit Identifier (0 = all)"));
-    _labelFuncCode->setText(tr("Function:"));
-    _labelRowLimit->setText(tr("Limit:"));
-    _clearButton->setToolTip(tr("Clear"));
-    _funcCodeFilter->setItemText(0, tr("All"));
-
-    syncTrafficFilterState(logViewState());
-}
-
-///
-/// \brief FormTrafficView::syncTrafficFilterState
-/// \param state
-///
-void FormTrafficView::syncTrafficFilterState(LogViewState state)
-{
-    if (!_pauseButton)
-        return;
-
-    _pauseButton->setEnabled(state != LogViewState::Unknown);
-    _pauseButton->blockSignals(true);
-    _pauseButton->setChecked(state == LogViewState::Paused);
-    _pauseButton->blockSignals(false);
-    _pauseButton->setToolTip((state == LogViewState::Paused) ? tr("Resume") : tr("Pause"));
-}
-
-///
-/// \brief FormTrafficView::updateScriptBar
-///
-void FormTrafficView::updateScriptBar()
-{
-    const bool running = canStopScript();
-    ui->actionRunScript->setEnabled(canRunScript());
-    ui->actionStopScript->setEnabled(running);
-    if (_scriptRunModeCombo)
-        _scriptRunModeCombo->setEnabled(!running);
-    if (_scriptIntervalSpin)
-        _scriptIntervalSpin->setEnabled(!running);
-    if (_scriptRunOnStartupCheck)
-        _scriptRunOnStartupCheck->setEnabled(!running);
-    if (_actionUndoScript)
-        _actionUndoScript->setEnabled(_scriptControl->canUndo());
-    if (_actionRedoScript)
-        _actionRedoScript->setEnabled(_scriptControl->canRedo());
-    if (_actionPasteScript)
-        _actionPasteScript->setEnabled(_scriptControl->canPaste());
-    if (_actionCutScript)
-        _actionCutScript->setEnabled(true);
-    if (_actionCopyScript)
-        _actionCopyScript->setEnabled(true);
-    if (_actionFindScript)
-        _actionFindScript->setEnabled(true);
-    if (_actionReplaceScript)
-        _actionReplaceScript->setEnabled(true);
+    ui->outputWidget->setup(dd);
 }
 
 ///
@@ -1728,11 +469,6 @@ void FormTrafficView::updateScriptBar()
 ///
 void FormTrafficView::connectEditSlots()
 {
-    disconnectEditSlots();
-    connect(_parent, &MainWindow::selectAll, _scriptControl, &JScriptControl::selectAll);
-    connect(_parent, &MainWindow::search, _scriptControl, &JScriptControl::search);
-    connect(_parent, &MainWindow::find, _scriptControl, &JScriptControl::showFind);
-    connect(_parent, &MainWindow::replace, _scriptControl, &JScriptControl::showReplace);
 }
 
 ///
@@ -1740,11 +476,8 @@ void FormTrafficView::connectEditSlots()
 ///
 void FormTrafficView::disconnectEditSlots()
 {
-    disconnect(_parent, &MainWindow::selectAll, _scriptControl, &JScriptControl::selectAll);
-    disconnect(_parent, &MainWindow::search, _scriptControl, &JScriptControl::search);
-    disconnect(_parent, &MainWindow::find, _scriptControl, &JScriptControl::showFind);
-    disconnect(_parent, &MainWindow::replace, _scriptControl, &JScriptControl::showReplace);
 }
+
 
 
 

@@ -27,21 +27,65 @@ namespace {
 constexpr const char* kSplitAutoCloneProperty = "SplitAutoClone";
 constexpr const char* kNewFormKindKey = "NewFormKind";
 
-FormModSim::FormKind newFormKindFromSetting(int value)
+ProjectFormKind newFormKindFromSetting(int value)
 {
-    switch (static_cast<FormModSim::FormKind>(value)) {
-        case FormModSim::FormKind::Data:
-        case FormModSim::FormKind::Traffic:
-        case FormModSim::FormKind::Script:
-            return static_cast<FormModSim::FormKind>(value);
+    switch (static_cast<ProjectFormKind>(value)) {
+        case ProjectFormKind::Data:
+        case ProjectFormKind::Traffic:
+        case ProjectFormKind::Script:
+            return static_cast<ProjectFormKind>(value);
         default:
-            return FormModSim::FormKind::Data;
+            return ProjectFormKind::Data;
     }
 }
 
-int newFormKindToSetting(FormModSim::FormKind kind)
+int newFormKindToSetting(ProjectFormKind kind)
 {
     return static_cast<int>(kind);
+}
+
+template<typename MdiAreaT, typename Fn>
+void forEachTypedForm(MdiAreaT* mdiArea, Fn&& fn)
+{
+    if(!mdiArea)
+        return;
+
+    for (auto* wnd : mdiArea->subWindowList()) {
+        if(!wnd)
+            continue;
+
+        if (auto* frm = qobject_cast<FormDataView*>(wnd->widget())) {
+            fn(frm);
+            continue;
+        }
+        if (auto* frm = qobject_cast<FormTrafficView*>(wnd->widget())) {
+            fn(frm);
+            continue;
+        }
+        if (auto* frm = qobject_cast<FormScriptView*>(wnd->widget())) {
+            fn(frm);
+            continue;
+        }
+    }
+}
+
+ProjectFormKind projectFormKindFromWidget(QWidget* widget, bool* ok = nullptr)
+{
+    if (qobject_cast<FormDataView*>(widget)) {
+        if(ok) *ok = true;
+        return ProjectFormKind::Data;
+    }
+    if (qobject_cast<FormTrafficView*>(widget)) {
+        if(ok) *ok = true;
+        return ProjectFormKind::Traffic;
+    }
+    if (qobject_cast<FormScriptView*>(widget)) {
+        if(ok) *ok = true;
+        return ProjectFormKind::Script;
+    }
+
+    if(ok) *ok = false;
+    return ProjectFormKind::Data;
 }
 
 template<typename TDefinitions>
@@ -66,6 +110,131 @@ void applySharedDisplayDefaults(ScriptViewDefinitions& target, const ScriptViewD
 {
     applySharedDisplayDefaults<ScriptViewDefinitions>(target, defaults);
     target.ScriptCfg = defaults.ScriptCfg;
+}
+
+DisplayMode displayModeOfForm(QWidget* widget)
+{
+    if (auto* frm = qobject_cast<FormDataView*>(widget)) return frm->displayMode();
+    if (qobject_cast<FormTrafficView*>(widget)) return DisplayMode::Traffic;
+    if (qobject_cast<FormScriptView*>(widget)) return DisplayMode::Script;
+    return DisplayMode::Data;
+}
+
+DataDisplayMode dataDisplayModeOfForm(QWidget* widget)
+{
+    if (auto* frm = qobject_cast<FormDataView*>(widget)) return frm->dataDisplayMode();
+    return DataDisplayMode::Hex;
+}
+
+void setDataDisplayModeOnForm(QWidget* widget, DataDisplayMode mode)
+{
+    if (auto* frm = qobject_cast<FormDataView*>(widget)) frm->setDataDisplayMode(mode);
+}
+
+ByteOrder byteOrderOfForm(QWidget* widget)
+{
+    if (auto* frm = qobject_cast<FormDataView*>(widget)) return frm->byteOrder();
+    return ByteOrder::Direct;
+}
+
+void setByteOrderOnForm(QWidget* widget, ByteOrder order)
+{
+    if (auto* frm = qobject_cast<FormDataView*>(widget)) frm->setByteOrder(order);
+}
+
+CaptureMode captureModeOfForm(QWidget* widget)
+{
+    if (auto* frm = qobject_cast<FormDataView*>(widget)) return frm->captureMode();
+    return CaptureMode::Off;
+}
+
+void startTextCaptureOnForm(QWidget* widget, const QString& file)
+{
+    if (auto* frm = qobject_cast<FormDataView*>(widget)) frm->startTextCapture(file);
+}
+
+void stopTextCaptureOnForm(QWidget* widget)
+{
+    if (auto* frm = qobject_cast<FormDataView*>(widget)) frm->stopTextCapture();
+}
+
+void resetCtrsOnForm(QWidget* widget)
+{
+    if (auto* frm = qobject_cast<FormDataView*>(widget)) frm->resetCtrs();
+}
+
+bool displayHexAddressesOfForm(QWidget* widget)
+{
+    if (auto* frm = qobject_cast<FormDataView*>(widget)) return frm->displayHexAddresses();
+    return false;
+}
+
+void setDisplayHexAddressesOnForm(QWidget* widget, bool on)
+{
+    if (auto* frm = qobject_cast<FormDataView*>(widget)) frm->setDisplayHexAddresses(on);
+}
+
+void printOnForm(QWidget* widget, QPrinter* printer)
+{
+    if (auto* frm = qobject_cast<FormDataView*>(widget)) frm->print(printer);
+}
+
+void setCodepageOnForm(QWidget* widget, const QString& name)
+{
+    if (auto* frm = qobject_cast<FormDataView*>(widget)) frm->setCodepage(name);
+}
+
+QColor statusColorOfForm(QWidget* widget)
+{
+    if (auto* frm = qobject_cast<FormDataView*>(widget)) return frm->statusColor();
+    return QColor();
+}
+
+QColor backgroundColorOfForm(QWidget* widget)
+{
+    if (auto* frm = qobject_cast<FormDataView*>(widget)) return frm->backgroundColor();
+    if (auto* frm = qobject_cast<FormTrafficView*>(widget)) return frm->backgroundColor();
+    if (auto* frm = qobject_cast<FormScriptView*>(widget)) return frm->backgroundColor();
+    return QColor();
+}
+
+QColor foregroundColorOfForm(QWidget* widget)
+{
+    if (auto* frm = qobject_cast<FormDataView*>(widget)) return frm->foregroundColor();
+    if (auto* frm = qobject_cast<FormTrafficView*>(widget)) return frm->foregroundColor();
+    if (auto* frm = qobject_cast<FormScriptView*>(widget)) return frm->foregroundColor();
+    return QColor();
+}
+
+void setStatusColorOnForm(QWidget* widget, const QColor& clr)
+{
+    if (auto* frm = qobject_cast<FormDataView*>(widget)) frm->setStatusColor(clr);
+}
+
+void setBackgroundColorOnForm(QWidget* widget, const QColor& clr)
+{
+    if (auto* frm = qobject_cast<FormDataView*>(widget)) frm->setBackgroundColor(clr);
+    else if (auto* frm = qobject_cast<FormTrafficView*>(widget)) frm->setBackgroundColor(clr);
+    else if (auto* frm = qobject_cast<FormScriptView*>(widget)) frm->setBackgroundColor(clr);
+}
+
+void setForegroundColorOnForm(QWidget* widget, const QColor& clr)
+{
+    if (auto* frm = qobject_cast<FormDataView*>(widget)) frm->setForegroundColor(clr);
+    else if (auto* frm = qobject_cast<FormTrafficView*>(widget)) frm->setForegroundColor(clr);
+    else if (auto* frm = qobject_cast<FormScriptView*>(widget)) frm->setForegroundColor(clr);
+}
+
+void setScriptFontOnForm(QWidget* widget, const QFont& font)
+{
+    if (auto* frm = qobject_cast<FormDataView*>(widget)) frm->setScriptFont(font);
+    else if (auto* frm = qobject_cast<FormScriptView*>(widget)) frm->setFont(font);
+}
+
+void setZoomPercentOnForm(QWidget* widget, int zoomPercent)
+{
+    if (auto* frm = qobject_cast<FormDataView*>(widget)) frm->setZoomPercent(zoomPercent);
+    else if (auto* frm = qobject_cast<FormScriptView*>(widget)) frm->setZoomPercent(zoomPercent);
 }
 
 DataViewDefinitions toDataViewDefinitions(const FormDisplayDefinition& definition)
@@ -176,22 +345,27 @@ MainWindow::MainWindow(const QString& profile, bool useSession, QWidget *parent)
             _helpDockWidget->setProperty("WasShown", false);
     });
 
-    connect(_projectTree, &ProjectTreeWidget::formActivated, this, [this](FormModSim* frm) {
+    connect(_projectTree, &ProjectTreeWidget::formActivated, this, [this](ProjectFormRef ref) {
+        auto* frm = ref.widget;
+        if(!frm)
+            return;
         // If the form is currently open in a tab, activate it
         for (auto wnd : ui->mdiArea->subWindowList()) {
-            if (qobject_cast<FormModSim*>(wnd->widget()) == frm) {
+            if (wnd->widget() == frm) {
                 ui->mdiArea->setActiveSubWindow(wnd);
                 return;
             }
         }
         // Form tab was closed but form is still alive — re-open it
-        if (_project->closedForms().contains(frm))
+        if (_project->isFormClosed(frm))
             _project->rewrapMdiChild(frm);
     });
-    connect(_projectTree, &ProjectTreeWidget::formDeleteRequested, this, [this](FormModSim* frm) {
-        _project->deleteForm(frm);
+    connect(_projectTree, &ProjectTreeWidget::formDeleteRequested, this, [this](ProjectFormRef ref) {
+        if(!ref.widget)
+            return;
+        _project->deleteForm(ref.widget);
     });
-    connect(_projectTree, &ProjectTreeWidget::formRenamed, this, [this](FormModSim*) {
+    connect(_projectTree, &ProjectTreeWidget::formRenamed, this, [this](ProjectFormRef) {
         _windowActionList->update();
     });
 
@@ -230,7 +404,7 @@ MainWindow::MainWindow(const QString& profile, bool useSession, QWidget *parent)
             QSettings m(settingsFile, QSettings::IniFormat);
             AppPreferences::instance().load(m);
             _newFormKind = newFormKindFromSetting(
-                m.value(kNewFormKindKey, newFormKindToSetting(FormModSim::FormKind::Data)).toInt());
+                m.value(kNewFormKindKey, newFormKindToSetting(ProjectFormKind::Data)).toInt());
         }
     }
 }
@@ -318,7 +492,7 @@ bool MainWindow::eventFilter(QObject* obj, QEvent* e)
             if(auto wnd = qobject_cast<QMdiSubWindow*>(obj))
             {
                 _windowActionList->removeWindow(wnd);
-                auto frm = qobject_cast<FormModSim*>(wnd->widget());
+                auto* frm = wnd->widget();
                 if (frm && !frm->property(kSplitAutoCloneProperty).toBool()) {
                     // Primary form: reparent before subwindow is destroyed so frm survives
                     _project->markFormClosed(frm);
@@ -328,13 +502,14 @@ bool MainWindow::eventFilter(QObject* obj, QEvent* e)
         case QEvent::Move:
             if(auto wnd = qobject_cast<const QMdiSubWindow*>(obj))
             {
-                if(auto frm = qobject_cast<FormModSim*>(wnd->widget()))
-                {
-                    if (!wnd->isMinimized() && !wnd->isMaximized())
-                    {
-                        frm->setParentGeometry(wnd->geometry());
-                    }
-                }
+                auto* widget = wnd->widget();
+                if(!widget || wnd->isMinimized() || wnd->isMaximized())
+                    break;
+
+                if (auto* frm = qobject_cast<FormDataView*>(widget))
+                    frm->setParentGeometry(wnd->geometry());
+                else if (auto* frm = qobject_cast<FormTrafficView*>(widget))
+                    frm->setProperty("ParentGeometry", wnd->geometry());
             }
         break;
         default:
@@ -348,55 +523,59 @@ bool MainWindow::eventFilter(QObject* obj, QEvent* e)
 ///
 void MainWindow::on_awake()
 {
-    auto frm = _project->currentMdiChild();
+    auto* frm = currentForm();
+    auto* dataFrm = currentDataForm();
+    auto* trafficFrm = currentTrafficForm();
+    auto* scriptFrm = currentScriptForm();
+    auto* dataLikeFrm = currentDataOrTrafficForm();
 
     ui->menuSetup->setEnabled(frm != nullptr);
     ui->menuWindow->setEnabled(frm != nullptr);
 
-    ui->actionPrintSetup->setEnabled(_selectedPrinter != nullptr);
-    ui->actionPrint->setEnabled(_selectedPrinter != nullptr && frm && frm->displayMode() == DisplayMode::Data);
+    ui->actionPrintSetup->setEnabled(_selectedPrinter != nullptr && dataLikeFrm != nullptr);
+    ui->actionPrint->setEnabled(_selectedPrinter != nullptr && dataLikeFrm != nullptr && displayModeOfForm(dataLikeFrm) == DisplayMode::Data);
 
-    ui->actionUndo->setEnabled(frm != nullptr);
-    ui->actionRedo->setEnabled(frm != nullptr);
-    ui->actionCut->setEnabled(frm != nullptr);
-    ui->actionCopy->setEnabled(frm != nullptr);
-    ui->actionPaste->setEnabled(frm != nullptr);
-    ui->actionSelectAll->setEnabled(frm != nullptr);
-    const bool isScriptActive = (frm && frm->displayMode() == DisplayMode::Script);
+    ui->actionUndo->setEnabled(scriptFrm != nullptr);
+    ui->actionRedo->setEnabled(scriptFrm != nullptr);
+    ui->actionCut->setEnabled(scriptFrm != nullptr);
+    ui->actionCopy->setEnabled(scriptFrm != nullptr);
+    ui->actionPaste->setEnabled(scriptFrm != nullptr);
+    ui->actionSelectAll->setEnabled(scriptFrm != nullptr);
+    const bool isScriptActive = (scriptFrm != nullptr);
     ui->actionFind->setEnabled(isScriptActive);
     ui->actionReplace->setEnabled(isScriptActive);
 
-    ui->actionShowData->setEnabled(frm != nullptr);
-    ui->actionShowTraffic->setEnabled(frm != nullptr);
-    ui->actionShowScript->setEnabled(frm != nullptr);
-    ui->actionBinary->setEnabled(frm != nullptr);
-    ui->actionUInt16->setEnabled(frm != nullptr);
-    ui->actionInt16->setEnabled(frm != nullptr);
-    ui->actionInt32->setEnabled(frm != nullptr);
-    ui->actionSwappedInt32->setEnabled(frm != nullptr);
-    ui->actionUInt32->setEnabled(frm != nullptr);
-    ui->actionSwappedUInt32->setEnabled(frm != nullptr);
-    ui->actionInt64->setEnabled(frm != nullptr);
-    ui->actionSwappedInt64->setEnabled(frm != nullptr);
-    ui->actionUInt64->setEnabled(frm != nullptr);
-    ui->actionSwappedUInt64->setEnabled(frm != nullptr);
-    ui->actionHex->setEnabled(frm != nullptr);
-    ui->actionAnsi->setEnabled(frm != nullptr);
-    ui->actionHex->setEnabled(frm != nullptr);
-    ui->actionFloatingPt->setEnabled(frm != nullptr);
-    ui->actionSwappedFP->setEnabled(frm != nullptr);
-    ui->actionDblFloat->setEnabled(frm != nullptr);
-    ui->actionSwappedDbl->setEnabled(frm != nullptr);
-    ui->actionSwapBytes->setEnabled(frm != nullptr);
+    ui->actionShowData->setEnabled(true);
+    ui->actionShowTraffic->setEnabled(true);
+    ui->actionShowScript->setEnabled(true);
+    ui->actionBinary->setEnabled(dataLikeFrm != nullptr);
+    ui->actionUInt16->setEnabled(dataLikeFrm != nullptr);
+    ui->actionInt16->setEnabled(dataLikeFrm != nullptr);
+    ui->actionInt32->setEnabled(dataLikeFrm != nullptr);
+    ui->actionSwappedInt32->setEnabled(dataLikeFrm != nullptr);
+    ui->actionUInt32->setEnabled(dataLikeFrm != nullptr);
+    ui->actionSwappedUInt32->setEnabled(dataLikeFrm != nullptr);
+    ui->actionInt64->setEnabled(dataLikeFrm != nullptr);
+    ui->actionSwappedInt64->setEnabled(dataLikeFrm != nullptr);
+    ui->actionUInt64->setEnabled(dataLikeFrm != nullptr);
+    ui->actionSwappedUInt64->setEnabled(dataLikeFrm != nullptr);
+    ui->actionHex->setEnabled(dataLikeFrm != nullptr);
+    ui->actionAnsi->setEnabled(dataLikeFrm != nullptr);
+    ui->actionHex->setEnabled(dataLikeFrm != nullptr);
+    ui->actionFloatingPt->setEnabled(dataLikeFrm != nullptr);
+    ui->actionSwappedFP->setEnabled(dataLikeFrm != nullptr);
+    ui->actionDblFloat->setEnabled(dataLikeFrm != nullptr);
+    ui->actionSwappedDbl->setEnabled(dataLikeFrm != nullptr);
+    ui->actionSwapBytes->setEnabled(dataLikeFrm != nullptr);
 
     ui->actionRawDataLog->setChecked(false);
 
-    ui->actionTextCapture->setEnabled(frm && frm->captureMode() == CaptureMode::Off);
-    ui->actionCaptureOff->setEnabled(frm && frm->captureMode() == CaptureMode::TextCapture);
+    ui->actionTextCapture->setEnabled(dataLikeFrm && captureModeOfForm(dataLikeFrm) == CaptureMode::Off);
+    ui->actionCaptureOff->setEnabled(dataLikeFrm && captureModeOfForm(dataLikeFrm) == CaptureMode::TextCapture);
 
-    const bool scriptRunning = frm && _project->isScriptRunningOnSplitPair(frm);
-    ui->actionImportScript->setEnabled(frm != nullptr);
-    ui->actionRunScript->setEnabled(frm && !scriptRunning && frm->canRunScript());
+    const bool scriptRunning = scriptFrm && _project->isScriptRunningOnSplitPair(scriptFrm);
+    ui->actionImportScript->setEnabled(scriptFrm != nullptr);
+    ui->actionRunScript->setEnabled(scriptFrm && !scriptRunning && scriptFrm->canRunScript());
     ui->actionStopScript->setEnabled(scriptRunning);
 
     ui->actionTabbedView->setChecked(ui->mdiArea->viewMode() == QMdiArea::TabbedView);
@@ -405,7 +584,7 @@ void MainWindow::on_awake()
     ui->actionToolbar->setChecked(ui->toolBarMain->isVisible());
     ui->actionStatusBar->setChecked(statusBar()->isVisible());
     ui->actionScriptHelp->setChecked(_helpDockWidget->isVisible());
-    const bool formInScriptMode = frm && frm->displayMode() == DisplayMode::Script;
+    const bool formInScriptMode = (scriptFrm != nullptr);
     ui->actionScriptHelp->setVisible(formInScriptMode);
     ui->actionConsoleOutput->setVisible(true);
     ui->actionConsoleOutput->setChecked(_consoleDockWidget->isVisible());
@@ -413,9 +592,10 @@ void MainWindow::on_awake()
     ui->actionTile->setEnabled(ui->mdiArea->viewMode() == QMdiArea::SubWindowView);
     ui->actionCascade->setEnabled(ui->mdiArea->viewMode() == QMdiArea::SubWindowView);
 
-    if(frm != nullptr)
+    if(dataLikeFrm != nullptr)
     {
-        const auto dd = toDataViewDefinitions(frm->displayDefinitionValue());
+        const auto dd = dataFrm ? dataFrm->displayDefinition()
+                                : toDataViewDefinitions(trafficFrm->displayDefinition());
         ui->actionUInt16->setEnabled(dd.PointType > QModbusDataUnit::Coils);
         ui->actionInt16->setEnabled(dd.PointType > QModbusDataUnit::Coils);
         ui->actionHex->setEnabled(dd.PointType > QModbusDataUnit::Coils);
@@ -434,7 +614,7 @@ void MainWindow::on_awake()
         ui->actionSwappedDbl->setEnabled(dd.PointType > QModbusDataUnit::Coils);
         ui->actionSwapBytes->setEnabled(dd.PointType > QModbusDataUnit::Coils);
 
-        const auto ddm = frm->dataDisplayMode();
+        const auto ddm = dataDisplayModeOfForm(dataLikeFrm);
         ui->actionBinary->setChecked(ddm == DataDisplayMode::Binary);
         ui->actionUInt16->setChecked(ddm == DataDisplayMode::UInt16);
         ui->actionInt16->setChecked(ddm == DataDisplayMode::Int16);
@@ -453,17 +633,18 @@ void MainWindow::on_awake()
         ui->actionDblFloat->setChecked(ddm == DataDisplayMode::DblFloat);
         ui->actionSwappedDbl->setChecked(ddm == DataDisplayMode::SwappedDbl);
 
-        const auto byteOrder = frm->byteOrder();
+        const auto byteOrder = byteOrderOfForm(dataLikeFrm);
         ui->actionSwapBytes->setChecked(byteOrder == ByteOrder::Swapped);
 
-        ui->actionHexAddresses->setChecked(frm->displayHexAddresses());
-
-        ui->actionShowData->setChecked(frm->formKind() == FormModSim::FormKind::Data);
-        ui->actionShowTraffic->setChecked(frm->formKind() == FormModSim::FormKind::Traffic);
-        ui->actionShowScript->setChecked(frm->formKind() == FormModSim::FormKind::Script);
-
-        _projectTree->activateForm(frm);
+        ui->actionHexAddresses->setChecked(displayHexAddressesOfForm(dataLikeFrm));
     }
+
+    ui->actionShowData->setChecked(dataFrm != nullptr);
+    ui->actionShowTraffic->setChecked(trafficFrm != nullptr);
+    ui->actionShowScript->setChecked(scriptFrm != nullptr);
+
+    if(frm)
+        _projectTree->activateForm(frm);
 }
 
 ///
@@ -479,7 +660,7 @@ void MainWindow::on_actionNew_triggered()
 ///
 void MainWindow::on_actionNewDataView_triggered()
 {
-    _newFormKind = FormModSim::FormKind::Data;
+    _newFormKind = ProjectFormKind::Data;
     createNewForm(_newFormKind);
 }
 
@@ -488,7 +669,7 @@ void MainWindow::on_actionNewDataView_triggered()
 ///
 void MainWindow::on_actionNewTrafficView_triggered()
 {
-    _newFormKind = FormModSim::FormKind::Traffic;
+    _newFormKind = ProjectFormKind::Traffic;
     createNewForm(_newFormKind);
 }
 
@@ -496,58 +677,59 @@ void MainWindow::on_actionNewTrafficView_triggered()
 /// \brief MainWindow::createNewForm
 /// \param kind
 ///
-void MainWindow::createNewForm(FormModSim::FormKind kind)
+void MainWindow::createNewForm(ProjectFormKind kind)
 {
     const auto cur = _project->currentMdiChild();
     _project->setWindowCounter(_project->windowCounter() + 1);
-    auto frm = _project->createMdiChild(_project->windowCounter(), kind);
+    auto* frm = _project->createMdiChild(_project->windowCounter(), kind);
     if(!frm)
         return;
 
     const auto& prefs = AppPreferences::instance();
 
     if(cur) {
-        frm->setByteOrder(cur->byteOrder());
-        frm->setDataDisplayMode(cur->dataDisplayMode());
+        setByteOrderOnForm(frm, byteOrderOfForm(cur));
+        setDataDisplayModeOnForm(frm, dataDisplayModeOfForm(cur));
         frm->setFont(cur->font());
-        frm->setStatusColor(cur->statusColor());
-        frm->setBackgroundColor(cur->backgroundColor());
-        frm->setForegroundColor(cur->foregroundColor());
+        setStatusColorOnForm(frm, statusColorOfForm(cur));
+        setBackgroundColorOnForm(frm, backgroundColorOfForm(cur));
+        setForegroundColorOnForm(frm, foregroundColorOfForm(cur));
     }
     else {
         frm->setFont(prefs.font());
-        frm->setBackgroundColor(prefs.backgroundColor());
-        frm->setForegroundColor(prefs.foregroundColor());
-        frm->setStatusColor(prefs.statusColor());
+        setBackgroundColorOnForm(frm, prefs.backgroundColor());
+        setForegroundColorOnForm(frm, prefs.foregroundColor());
+        setStatusColorOnForm(frm, prefs.statusColor());
     }
-    frm->setScriptFont(prefs.scriptFont());
-    frm->setZoomPercent(prefs.fontZoom());
+    setScriptFontOnForm(frm, prefs.scriptFont());
+    setZoomPercentOnForm(frm, prefs.fontZoom());
 
     switch(kind)
     {
-        case FormModSim::FormKind::Data:
-        {
-            auto dd = toDataViewDefinitions(frm->displayDefinitionValue());
-            applySharedDisplayDefaults(dd, prefs.dataViewDefinitions());
-            frm->setDisplayDefinitionValue(dd);
+        case ProjectFormKind::Data: {
+            if (auto* dataFrm = qobject_cast<FormDataView*>(frm)) {
+                auto dd = dataFrm->displayDefinition();
+                applySharedDisplayDefaults(dd, prefs.dataViewDefinitions());
+                dataFrm->setDisplayDefinition(dd);
+            }
+            break;
         }
-        break;
-
-        case FormModSim::FormKind::Traffic:
-        {
-            auto dd = toTrafficViewDefinitions(frm->displayDefinitionValue());
-            applySharedDisplayDefaults(dd, prefs.trafficViewDefinitions());
-            frm->setDisplayDefinitionValue(dd);
+        case ProjectFormKind::Traffic: {
+            if (auto* trafficFrm = qobject_cast<FormTrafficView*>(frm)) {
+                auto dd = trafficFrm->displayDefinition();
+                applySharedDisplayDefaults(dd, prefs.trafficViewDefinitions());
+                trafficFrm->setDisplayDefinition(dd);
+            }
+            break;
         }
-        break;
-
-        case FormModSim::FormKind::Script:
-        {
-            auto dd = toScriptViewDefinitions(frm->displayDefinitionValue());
-            applySharedDisplayDefaults(dd, prefs.scriptViewDefinitions());
-            frm->setDisplayDefinitionValue(dd);
+        case ProjectFormKind::Script: {
+            if (auto* scriptFrm = qobject_cast<FormScriptView*>(frm)) {
+                auto dd = scriptFrm->displayDefinition();
+                applySharedDisplayDefaults(dd, prefs.scriptViewDefinitions());
+                scriptFrm->setDisplayDefinition(dd);
+            }
+            break;
         }
-        break;
     }
 
     frm->show();
@@ -619,13 +801,13 @@ void MainWindow::on_actionCloseProject_triggered()
 ///
 void MainWindow::on_actionPrint_triggered()
 {
-    auto frm = _project->currentMdiChild();
+    auto* frm = currentDataOrTrafficForm();
     if(!frm) return;
 
     QPrintDialog dlg(_selectedPrinter.get(), this);
     if(dlg.exec() == QDialog::Accepted)
     {
-        frm->print(_selectedPrinter.get());
+        printOnForm(frm, _selectedPrinter.get());
     }
 }
 
@@ -730,10 +912,12 @@ void MainWindow::on_actionPreferences_triggered()
 ///
 void MainWindow::applyAutoComplete(bool enable)
 {
-    for (auto&& wnd : ui->mdiArea->subWindowList()) {
-        if (auto frm = qobject_cast<FormModSim*>(wnd->widget()))
-            frm->enableAutoComplete(enable);
-    }
+    forEachTypedForm(ui->mdiArea, [enable](auto* frm) {
+        if (auto* data = qobject_cast<FormDataView*>(frm))
+            data->enableAutoComplete(enable);
+        else if (auto* script = qobject_cast<FormScriptView*>(frm))
+            script->enableAutoComplete(enable);
+    });
 }
 
 ///
@@ -742,10 +926,7 @@ void MainWindow::applyAutoComplete(bool enable)
 ///
 void MainWindow::applyFont(const QFont& font)
 {
-    for (auto&& wnd : ui->mdiArea->subWindowList()) {
-        if (auto frm = qobject_cast<FormModSim*>(wnd->widget()))
-            frm->setFont(font);
-    }
+    forEachTypedForm(ui->mdiArea, [&font](auto* frm) { frm->setFont(font); });
 }
 
 ///
@@ -754,10 +935,12 @@ void MainWindow::applyFont(const QFont& font)
 ///
 void MainWindow::applyScriptFont(const QFont& font)
 {
-    for (auto&& wnd : ui->mdiArea->subWindowList()) {
-        if (auto frm = qobject_cast<FormModSim*>(wnd->widget()))
-            frm->setScriptFont(font);
-    }
+    forEachTypedForm(ui->mdiArea, [&font](auto* frm) {
+        if (auto* data = qobject_cast<FormDataView*>(frm))
+            data->setScriptFont(font);
+        else if (auto* script = qobject_cast<FormScriptView*>(frm))
+            script->setFont(font);
+    });
 }
 
 ///
@@ -768,13 +951,12 @@ void MainWindow::applyScriptFont(const QFont& font)
 ///
 void MainWindow::applyColors(const QColor& bg, const QColor& fg, const QColor& status)
 {
-    for (auto&& wnd : ui->mdiArea->subWindowList()) {
-        if (auto frm = qobject_cast<FormModSim*>(wnd->widget())) {
-            frm->setBackgroundColor(bg);
-            frm->setForegroundColor(fg);
-            frm->setStatusColor(status);
-        }
-    }
+    forEachTypedForm(ui->mdiArea, [&bg, &fg, &status](auto* frm) {
+        frm->setBackgroundColor(bg);
+        frm->setForegroundColor(fg);
+        if (auto* data = qobject_cast<FormDataView*>(frm))
+            data->setStatusColor(status);
+    });
 }
 
 ///
@@ -784,13 +966,10 @@ void MainWindow::applyColors(const QColor& bg, const QColor& fg, const QColor& s
 void MainWindow::applyDataViewDefaults(const DataViewDefinitions& dd)
 {
     for (auto&& wnd : ui->mdiArea->subWindowList()) {
-        if (auto frm = qobject_cast<FormModSim*>(wnd->widget())) {
-            if (frm->formKind() != FormModSim::FormKind::Data)
-                continue;
-
-            auto cur = toDataViewDefinitions(frm->displayDefinitionValue());
+        if (auto* frm = qobject_cast<FormDataView*>(wnd->widget())) {
+            auto cur = frm->displayDefinition();
             applySharedDisplayDefaults(cur, dd);
-            frm->setDisplayDefinitionValue(cur);
+            frm->setDisplayDefinition(cur);
         }
     }
 }
@@ -802,13 +981,10 @@ void MainWindow::applyDataViewDefaults(const DataViewDefinitions& dd)
 void MainWindow::applyTrafficViewDefaults(const TrafficViewDefinitions& dd)
 {
     for (auto&& wnd : ui->mdiArea->subWindowList()) {
-        if (auto frm = qobject_cast<FormModSim*>(wnd->widget())) {
-            if (frm->formKind() != FormModSim::FormKind::Traffic)
-                continue;
-
-            auto cur = toTrafficViewDefinitions(frm->displayDefinitionValue());
+        if (auto* frm = qobject_cast<FormTrafficView*>(wnd->widget())) {
+            auto cur = frm->displayDefinition();
             applySharedDisplayDefaults(cur, dd);
-            frm->setDisplayDefinitionValue(cur);
+            frm->setDisplayDefinition(cur);
         }
     }
 }
@@ -820,13 +996,10 @@ void MainWindow::applyTrafficViewDefaults(const TrafficViewDefinitions& dd)
 void MainWindow::applyScriptViewDefaults(const ScriptViewDefinitions& dd)
 {
     for (auto&& wnd : ui->mdiArea->subWindowList()) {
-        if (auto frm = qobject_cast<FormModSim*>(wnd->widget())) {
-            if (frm->formKind() != FormModSim::FormKind::Script)
-                continue;
-
-            auto cur = toScriptViewDefinitions(frm->displayDefinitionValue());
+        if (auto* frm = qobject_cast<FormScriptView*>(wnd->widget())) {
+            auto cur = frm->displayDefinition();
             applySharedDisplayDefaults(cur, dd);
-            frm->setDisplayDefinitionValue(cur);
+            frm->setDisplayDefinition(cur);
         }
     }
 }
@@ -847,10 +1020,12 @@ void MainWindow::applyCheckForUpdates(bool enabled)
 ///
 void MainWindow::applyZoom(int zoomPercent)
 {
-    for (auto&& wnd : ui->mdiArea->subWindowList()) {
-        if (auto frm = qobject_cast<FormModSim*>(wnd->widget()))
-            frm->setZoomPercent(zoomPercent);
-    }
+    forEachTypedForm(ui->mdiArea, [zoomPercent](auto* frm) {
+        if (auto* data = qobject_cast<FormDataView*>(frm))
+            data->setZoomPercent(zoomPercent);
+        else if (auto* script = qobject_cast<FormScriptView*>(frm))
+            script->setZoomPercent(zoomPercent);
+    });
 }
 
 ///
@@ -903,7 +1078,7 @@ void MainWindow::on_actionMbDefinitions_triggered()
 void MainWindow::on_actionShowData_triggered()
 {
     _project->setWindowCounter(_project->windowCounter() + 1);
-    if (auto frm = _project->createMdiChild(_project->windowCounter(), FormModSim::FormKind::Data)) {
+    if (auto frm = _project->createDataMdiChild(_project->windowCounter())) {
         frm->show();
     }
 }
@@ -914,7 +1089,7 @@ void MainWindow::on_actionShowData_triggered()
 void MainWindow::on_actionShowTraffic_triggered()
 {
     _project->setWindowCounter(_project->windowCounter() + 1);
-    if (auto frm = _project->createMdiChild(_project->windowCounter(), FormModSim::FormKind::Traffic)) {
+    if (auto frm = _project->createTrafficMdiChild(_project->windowCounter())) {
         frm->show();
     }
 }
@@ -926,7 +1101,7 @@ void MainWindow::on_actionShowTraffic_triggered()
 void MainWindow::on_actionShowScript_triggered()
 {
     _project->setWindowCounter(_project->windowCounter() + 1);
-    if (auto frm = _project->createMdiChild(_project->windowCounter(), FormModSim::FormKind::Script)) {
+    if (auto frm = _project->createScriptMdiChild(_project->windowCounter())) {
         frm->show();
     }
 }
@@ -1053,15 +1228,15 @@ void MainWindow::on_actionSwappedFP_triggered()
 ///
 void MainWindow::on_actionSwapBytes_triggered()
 {
-    auto frm = _project->currentMdiChild();
+    auto* frm = currentDataOrTrafficForm();
     if(!frm) return;
 
-    switch (frm->byteOrder()) {
+    switch (byteOrderOfForm(frm)) {
     case ByteOrder::Swapped:
-        frm->setByteOrder(ByteOrder::Direct);
+        setByteOrderOnForm(frm, ByteOrder::Direct);
         break;
     case ByteOrder::Direct:
-        frm->setByteOrder(ByteOrder::Swapped);
+        setByteOrderOnForm(frm, ByteOrder::Swapped);
         break;
     }
 }
@@ -1087,8 +1262,8 @@ void MainWindow::on_actionSwappedDbl_triggered()
 ///
 void MainWindow::on_actionHexAddresses_triggered()
 {
-    auto frm = _project->currentMdiChild();
-    if(frm) frm->setDisplayHexAddresses(!frm->displayHexAddresses());
+    auto* frm = currentDataOrTrafficForm();
+    if(frm) setDisplayHexAddressesOnForm(frm, !displayHexAddressesOfForm(frm));
 }
 
 ///
@@ -1128,8 +1303,8 @@ void MainWindow::on_actionPresetHoldingRegs_triggered()
 ///
 void MainWindow::on_actionMsgParser_triggered()
 {
-    auto frm = _project->currentMdiChild();
-    const auto mode = frm ? frm->dataDisplayMode() : DataDisplayMode::Hex;
+    auto* frm = currentDataOrTrafficForm();
+    const auto mode = frm ? dataDisplayModeOfForm(frm) : DataDisplayMode::Hex;
 
     auto dlg = new DialogMsgParser(mode, ModbusMessage::Rtu);
     dlg->setAttribute(Qt::WA_DeleteOnClose, true);
@@ -1149,14 +1324,14 @@ void MainWindow::on_actionRawDataLog_triggered()
 ///
 void MainWindow::on_actionTextCapture_triggered()
 {
-    auto frm = _project->currentMdiChild();
+    auto* frm = currentDataOrTrafficForm();
     if(!frm) return;
 
     auto filename = QFileDialog::getSaveFileName(this, QString(), QString(), "Text files (*.txt)");
     if(!filename.isEmpty())
     {
         if(!filename.endsWith(".txt", Qt::CaseInsensitive)) filename += ".txt";
-        frm->startTextCapture(filename);
+        startTextCaptureOnForm(frm, filename);
     }
 }
 
@@ -1165,10 +1340,10 @@ void MainWindow::on_actionTextCapture_triggered()
 ///
 void MainWindow::on_actionCaptureOff_triggered()
 {
-    auto frm = _project->currentMdiChild();
+    auto* frm = currentDataOrTrafficForm();
     if(!frm) return;
 
-    frm->stopTextCapture();
+    stopTextCaptureOnForm(frm);
 }
 
 ///
@@ -1176,11 +1351,11 @@ void MainWindow::on_actionCaptureOff_triggered()
 ///
 void MainWindow::on_actionResetCtrs_triggered()
 {
-    auto frm = _project->currentMdiChild();
+    auto* frm = currentDataOrTrafficForm();
     if(!frm)
         return;
 
-    frm->resetCtrs();
+    resetCtrsOnForm(frm);
 }
 
 ///
@@ -1221,7 +1396,7 @@ void MainWindow::updateHelpWidgetState()
     auto frm = _project->currentMdiChild();
     if(!frm) return;
 
-    switch(frm->displayMode())
+    switch(displayModeOfForm(frm))
     {
         case DisplayMode::Data:
         case DisplayMode::Traffic:
@@ -1314,7 +1489,7 @@ void MainWindow::on_actionAbout_triggered()
 ///
 void MainWindow::on_actionNewScript_triggered()
 {
-    _newFormKind = FormModSim::FormKind::Script;
+    _newFormKind = ProjectFormKind::Script;
     createNewForm(_newFormKind);
 }
 
@@ -1323,7 +1498,7 @@ void MainWindow::on_actionNewScript_triggered()
 ///
 void MainWindow::on_actionImportScript_triggered()
 {
-    auto frm = _project->currentMdiChild();
+    auto* frm = currentScriptForm();
     if(!frm) return;
 
     const auto filename = QFileDialog::getOpenFileName(this, QString(), QString(), tr("JavaScript files (*.js);;All files (*)"));
@@ -1333,7 +1508,6 @@ void MainWindow::on_actionImportScript_triggered()
     if(!file.open(QFile::ReadOnly | QFile::Text)) return;
 
     frm->setScript(QTextStream(&file).readAll());
-    frm->setDisplayMode(DisplayMode::Script);
 }
 
 ///
@@ -1341,7 +1515,7 @@ void MainWindow::on_actionImportScript_triggered()
 ///
 void MainWindow::on_actionRunScript_triggered()
 {
-    auto frm = _project->currentMdiChild();
+    auto* frm = currentScriptForm();
     if(!frm) return;
 
     if(_project->isScriptRunningOnSplitPair(frm))
@@ -1355,7 +1529,7 @@ void MainWindow::on_actionRunScript_triggered()
 ///
 void MainWindow::on_actionStopScript_triggered()
 {
-    auto frm = _project->currentMdiChild();
+    auto* frm = currentScriptForm();
     if(!frm) return;
 
     if(frm->canStopScript())
@@ -1402,16 +1576,43 @@ void MainWindow::windowActivate(QMdiSubWindow* wnd)
     if(wnd) ui->mdiArea->setActiveSubWindow(wnd);
 }
 
+QWidget* MainWindow::currentForm() const
+{
+    return _project->currentMdiChild();
+}
+
+FormDataView* MainWindow::currentDataForm() const
+{
+    return _project->currentDataMdiChild();
+}
+
+FormTrafficView* MainWindow::currentTrafficForm() const
+{
+    return _project->currentTrafficMdiChild();
+}
+
+FormScriptView* MainWindow::currentScriptForm() const
+{
+    return _project->currentScriptMdiChild();
+}
+
+QWidget* MainWindow::currentDataOrTrafficForm() const
+{
+    if (auto* data = currentDataForm())
+        return data;
+    return currentTrafficForm();
+}
+
 ///
 /// \brief MainWindow::setCodepage
 /// \param name
 ///
 void MainWindow::setCodepage(const QString& name)
 {
-    auto frm = _project->currentMdiChild();
+    auto* frm = currentForm();
     if(!frm) return;
 
-    frm->setCodepage(name);
+    setCodepageOnForm(frm, name);
 }
 
 
@@ -1421,8 +1622,8 @@ void MainWindow::setCodepage(const QString& name)
 ///
 void MainWindow::updateDataDisplayMode(DataDisplayMode mode)
 {
-    auto frm = _project->currentMdiChild();
-    if(frm) frm->setDataDisplayMode(mode);
+    auto* frm = currentDataOrTrafficForm();
+    if(frm) setDataDisplayModeOnForm(frm, mode);
 }
 
 ///
@@ -1431,10 +1632,10 @@ void MainWindow::updateDataDisplayMode(DataDisplayMode mode)
 ///
 void MainWindow::forceCoils(QModbusDataUnit::RegisterType type)
 {
-    auto frm = _project->currentMdiChild();
+    auto* frm = currentDataForm();
     if(!frm) return;
 
-    const auto dd = toDataViewDefinitions(frm->displayDefinitionValue());
+    const auto dd = frm->displayDefinition();
     SetupPresetParams presetParams = { dd.DeviceId, dd.PointAddress, dd.Length, dd.ZeroBasedAddress, dd.AddrSpace, dd.LeadingZeros };
 
     {
@@ -1467,10 +1668,10 @@ void MainWindow::forceCoils(QModbusDataUnit::RegisterType type)
 ///
 void MainWindow::presetRegs(QModbusDataUnit::RegisterType type)
 {
-    auto frm = _project->currentMdiChild();
+    auto* frm = currentDataForm();
     if(!frm) return;
 
-    const auto dd = toDataViewDefinitions(frm->displayDefinitionValue());
+    const auto dd = frm->displayDefinition();
     SetupPresetParams presetParams = { dd.DeviceId, dd.PointAddress, dd.Length, dd.ZeroBasedAddress, dd.AddrSpace, dd.LeadingZeros };
 
     {
@@ -1630,7 +1831,7 @@ bool MainWindow::loadProfile(const QString& filename)
 
     AppPreferences::instance().load(m);
     _newFormKind = newFormKindFromSetting(
-        m.value(kNewFormKindKey, newFormKindToSetting(FormModSim::FormKind::Data)).toInt());
+        m.value(kNewFormKindKey, newFormKindToSetting(ProjectFormKind::Data)).toInt());
 
     restoreGeometry(m.value("WindowGeometry").toByteArray());
 
@@ -1659,17 +1860,32 @@ bool MainWindow::loadProfile(const QString& filename)
             m.beginGroup(g);
             const int id = m.value("FromId", _project->windowCounter() + 1).toInt();
             _project->setWindowCounter(qMax(_project->windowCounter(), id));
-            const auto kind = static_cast<FormModSim::FormKind>(m.value("FormKind", static_cast<int>(FormModSim::FormKind::Data)).toInt());
+            const auto kind = static_cast<ProjectFormKind>(m.value("FormKind", static_cast<int>(ProjectFormKind::Data)).toInt());
             MdiArea* targetArea = ui->mdiArea->primaryArea();
             const auto panel = m.value("SplitPanel", "L").toString();
             if(splitView && panel.compare("R", Qt::CaseInsensitive) == 0)
                 if(auto secondary = _project->splitSecondaryArea())
                     targetArea = secondary;
 
-            auto frm = _project->createMdiChildOnArea(id, kind, targetArea, true);
-            if (frm) {
-                frm->loadSettings(m);
-                frm->show();
+            switch (kind) {
+                case ProjectFormKind::Data:
+                    if (auto* frm = _project->createDataMdiChildOnArea(id, targetArea, true)) {
+                        frm->loadSettings(m);
+                        frm->show();
+                    }
+                    break;
+                case ProjectFormKind::Traffic:
+                    if (auto* frm = _project->createTrafficMdiChildOnArea(id, targetArea, true)) {
+                        frm->loadSettings(m);
+                        frm->show();
+                    }
+                    break;
+                case ProjectFormKind::Script:
+                    if (auto* frm = _project->createScriptMdiChildOnArea(id, targetArea, true)) {
+                        frm->loadSettings(m);
+                        frm->show();
+                    }
+                    break;
             }
             m.endGroup();
         }
@@ -1681,12 +1897,11 @@ bool MainWindow::loadProfile(const QString& filename)
         if(!activeSecWin.isEmpty())
             if(auto secondary = _project->splitSecondaryArea())
                 for(auto&& wnd : secondary->localSubWindowList())
-                    if(auto frm = qobject_cast<FormModSim*>(wnd->widget()))
-                        if(frm->windowTitle() == activeSecWin)
-                        {
-                            secondary->setActiveSubWindow(wnd);
-                            break;
-                        }
+                    if(wnd && wnd->widget() && wnd->widget()->windowTitle() == activeSecWin)
+                    {
+                        secondary->setActiveSubWindow(wnd);
+                        break;
+                    }
     }
 
     // activate window
@@ -1697,7 +1912,7 @@ bool MainWindow::loadProfile(const QString& filename)
             : ui->mdiArea->localSubWindowList();
         for(auto&& wnd : primaryList)
         {
-            const auto frm = qobject_cast<FormModSim*>(wnd->widget());
+            auto* frm = wnd ? wnd->widget() : nullptr;
             if(frm && frm->windowTitle() == activePrimaryTitle) {
                 ui->mdiArea->setActiveSubWindow(wnd);
                 break;
@@ -1731,7 +1946,7 @@ void MainWindow::saveProfile()
 
     if(auto primary = ui->mdiArea->primaryArea())
         if(auto wnd = primary->activeSubWindow())
-            if(auto frmPrimary = qobject_cast<FormModSim*>(wnd->widget()))
+            if(auto frmPrimary = wnd->widget())
                 m.setValue("ActivePrimaryWindow", frmPrimary->windowTitle());
 
     m.setValue("ViewMode", ui->mdiArea->viewMode());
@@ -1749,23 +1964,39 @@ void MainWindow::saveProfile()
     const auto subWindowList = ui->mdiArea->subWindowList();
     int groupIndex = 0;
     for(int i = 0; i < subWindowList.size(); ++i) {
-        const auto frm = qobject_cast<FormModSim*>(subWindowList[i]->widget());
-        if(frm && !frm->property(kSplitAutoCloneProperty).toBool()) {
-            ++groupIndex;
-            m.beginGroup("Form_" + QString::number(groupIndex));
-            m.setValue("FromId", frm->formId());
-            m.setValue("FormKind", static_cast<int>(frm->formKind()));
-            const bool onRight = secondary && secondary->localSubWindowList().contains(subWindowList[i]);
-            m.setValue("SplitPanel", onRight ? "R" : "L");
-            frm->saveSettings(m);
-            m.endGroup();
+        auto* widget = subWindowList[i] ? subWindowList[i]->widget() : nullptr;
+        if(!widget || widget->property(kSplitAutoCloneProperty).toBool())
+            continue;
+
+        bool okKind = false;
+        const auto formKind = projectFormKindFromWidget(widget, &okKind);
+        if(!okKind)
+            continue;
+
+        ++groupIndex;
+        m.beginGroup("Form_" + QString::number(groupIndex));
+        m.setValue("FormKind", static_cast<int>(formKind));
+        const bool onRight = secondary && secondary->localSubWindowList().contains(subWindowList[i]);
+        m.setValue("SplitPanel", onRight ? "R" : "L");
+
+        if (auto* dataFrm = qobject_cast<FormDataView*>(widget)) {
+            m.setValue("FromId", dataFrm->formId());
+            dataFrm->saveSettings(m);
+        } else if (auto* trafficFrm = qobject_cast<FormTrafficView*>(widget)) {
+            m.setValue("FromId", trafficFrm->formId());
+            trafficFrm->saveSettings(m);
+        } else if (auto* scriptFrm = qobject_cast<FormScriptView*>(widget)) {
+            m.setValue("FromId", scriptFrm->formId());
+            scriptFrm->saveSettings(m);
         }
+
+        m.endGroup();
     }
 
     if(_project->isSplitTabbedView())
         if(auto secondary = _project->splitSecondaryArea())
             if(auto wnd = secondary->activeSubWindow())
-                if(auto frm = qobject_cast<FormModSim*>(wnd->widget()))
+                if(auto frm = wnd->widget())
                     m.setValue("ActiveSecondaryWindow", frm->windowTitle());
 }
 

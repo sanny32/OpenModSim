@@ -1,4 +1,4 @@
-﻿#include <QPainter>
+#include <QPainter>
 #include <QPalette>
 #include <QDateTime>
 #include <QHelpEngine>
@@ -20,7 +20,7 @@ QVersionNumber FormDataView::VERSION = QVersionNumber(1, 15);
 /// \param parent
 ///
 FormDataView::FormDataView(int id, ModbusMultiServer& server, DataSimulator* simulator, MainWindow* parent)
-    : FormModSim(parent)
+    : QWidget(parent)
     , ui(new Ui::FormDataView)
     ,_parent(parent)
     ,_formId(id)
@@ -57,11 +57,10 @@ FormDataView::FormDataView(int id, ModbusMultiServer& server, DataSimulator* sim
     ui->comboBoxAddressBase->setCurrentAddressBase(AddressBase::Base1);
     ui->comboBoxModbusPointType->setCurrentPointType(QModbusDataUnit::HoldingRegisters);
 
-    connect(this, &FormModSim::definitionChanged, this, &FormDataView::onDefinitionChanged);
+    connect(this, &FormDataView::definitionChanged, this, &FormDataView::onDefinitionChanged);
     emit definitionChanged();
 
     ui->outputWidget->setFocus();
-    connect(ui->outputWidget, &OutputDataWidget::startTextCaptureError, this, &FormModSim::captureError);
 
     setLogViewState(server.isConnected() ? LogViewState::Running : LogViewState::Unknown);
 
@@ -190,8 +189,8 @@ DataViewDefinitions FormDataView::displayDefinition() const
     dd.PointType = ui->comboBoxModbusPointType->currentPointType();
     dd.Length = ui->lineEditLength->value<int>();
     dd.ZeroBasedAddress = ui->lineEditAddress->range<int>().from() == 0;
-    dd.LogViewLimit = ui->outputWidget->logViewLimit();
-    dd.AutoscrollLog = ui->outputWidget->autoscrollLogView();
+    dd.LogViewLimit = 30;
+    dd.AutoscrollLog = false;
     dd.VerboseLogging = _verboseLogging;
     dd.HexAddress = displayHexAddresses();
     dd.HexViewAddress  = ui->lineEditAddress->hexView();
@@ -237,10 +236,7 @@ void FormDataView::setDisplayDefinition(const DataViewDefinitions& dd)
     ui->comboBoxModbusPointType->blockSignals(true);
     ui->comboBoxModbusPointType->setCurrentPointType(dd.PointType);
     ui->comboBoxModbusPointType->blockSignals(false);
-
-    ui->outputWidget->setLogViewLimit(dd.LogViewLimit);
     ui->outputWidget->setDataViewColumnsDistance(dd.DataViewColumnsDistance);
-    ui->outputWidget->setAutosctollLogView(dd.AutoscrollLog);
 
     _verboseLogging = dd.VerboseLogging;
 
@@ -320,7 +316,7 @@ void FormDataView::setDisplayHexAddresses(bool on)
 ///
 CaptureMode FormDataView::captureMode() const
 {
-    return ui->outputWidget->captureMode();
+    return CaptureMode::Off;
 }
 
 ///
@@ -329,7 +325,7 @@ CaptureMode FormDataView::captureMode() const
 ///
 void FormDataView::startTextCapture(const QString& file)
 {
-    ui->outputWidget->startTextCapture(file);
+    Q_UNUSED(file)
 }
 
 ///
@@ -337,7 +333,6 @@ void FormDataView::startTextCapture(const QString& file)
 ///
 void FormDataView::stopTextCapture()
 {
-    ui->outputWidget->stopTextCapture();
 }
 
 ///
@@ -695,7 +690,6 @@ void FormDataView::resetCtrs()
 {
     _requestCount = 0;
     _responseCount = 0;
-    ui->outputWidget->clearLogView();
     emit statisticCtrsReseted();
 }
 
@@ -874,7 +868,6 @@ void FormDataView::setLogViewState(LogViewState state)
         return;
 
     _logViewState = state;
-    ui->outputWidget->setLogViewState(state);
     emit statisticLogStateChanged(state);
 }
 
@@ -1013,15 +1006,6 @@ void FormDataView::onDefinitionChanged()
 }
 
 ///
-/// \brief FormDataView::scriptControl
-/// \return
-///
-JScriptControl* FormDataView::scriptControl()
-{
-    return nullptr;
-}
-
-///
 /// \brief FormDataView::isAutoCompleteEnabled
 /// \return
 ///
@@ -1118,7 +1102,6 @@ void FormDataView::on_outputWidget_itemDoubleClicked(quint16 addr, const QVarian
 void FormDataView::on_mbConnected(const ConnectionDetails&)
 {
     updateStatus();
-    ui->outputWidget->clearLogView();
 
     if(logViewState() == LogViewState::Unknown) {
         setLogViewState(LogViewState::Running);
@@ -1206,7 +1189,6 @@ void FormDataView::on_mbRequest(QSharedPointer<const ModbusMessage> msg)
 {
     if(_verboseLogging || isLoggingRequest(msg)) {
         ++_requestCount;
-        ui->outputWidget->updateTraffic(msg);
     }
 }
 
@@ -1219,7 +1201,6 @@ void FormDataView::on_mbResponse(QSharedPointer<const ModbusMessage> msgReq, QSh
 {
     if(_verboseLogging || isLoggingRequest(msgReq)) {
         ++_responseCount;
-        ui->outputWidget->updateTraffic(msgResp);
     }
 }
 
@@ -1392,6 +1373,8 @@ void FormDataView::disconnectEditSlots()
 {
     // Data view has no script editor.
 }
+
+
 
 
 

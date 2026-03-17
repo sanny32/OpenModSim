@@ -6,7 +6,9 @@
 #include <QMdiArea>
 #include "modbusmultiserver.h"
 #include "datasimulator.h"
-#include "formmodsim.h"
+#include "formdataview.h"
+#include "formtrafficview.h"
+#include "formscriptview.h"
 
 class MdiAreaEx;
 class MdiArea;
@@ -14,6 +16,13 @@ class QMdiSubWindow;
 class ProjectTreeWidget;
 class WindowActionList;
 class MainWindow;
+
+enum class ProjectFormKind
+{
+    Data = 0,
+    Traffic,
+    Script
+};
 
 ///
 /// \brief The AppProject class manages the project state:
@@ -38,26 +47,36 @@ public:
 
     // Project lifecycle
     void closeProject();
-    void markFormClosed(FormModSim* frm);
+    void markFormClosed(QWidget* frm);
 
     // Forms
-    FormModSim* createMdiChild(int id, FormModSim::FormKind kind = FormModSim::FormKind::Data);
-    FormModSim* createMdiChildOnArea(int id, FormModSim::FormKind kind, MdiArea* area, bool addToWindowList);
-    void        rewrapMdiChild(FormModSim* frm);
-    void        closeMdiChild(FormModSim* frm);
-    void        deleteForm(FormModSim* frm);
+    FormDataView* createDataMdiChild(int id);
+    FormTrafficView* createTrafficMdiChild(int id);
+    FormScriptView* createScriptMdiChild(int id);
+    FormDataView* createDataMdiChildOnArea(int id, MdiArea* area, bool addToWindowList);
+    FormTrafficView* createTrafficMdiChildOnArea(int id, MdiArea* area, bool addToWindowList);
+    FormScriptView* createScriptMdiChildOnArea(int id, MdiArea* area, bool addToWindowList);
 
-    FormModSim* currentMdiChild() const;
-    FormModSim* findMdiChild(int id) const;
-    FormModSim* findMdiChildInArea(MdiArea* area, int id) const;
-    FormModSim* firstMdiChild() const;
-    bool        cloneMdiChildState(FormModSim* source, FormModSim* target) const;
+    QWidget* createMdiChild(int id, ProjectFormKind kind = ProjectFormKind::Data);
+    QWidget* createMdiChildOnArea(int id, ProjectFormKind kind, MdiArea* area, bool addToWindowList);
+    void        rewrapMdiChild(QWidget* frm);
+    void        closeMdiChild(QWidget* frm);
+    void        deleteForm(QWidget* frm);
+
+    QWidget* currentMdiChild() const;
+    FormDataView* currentDataMdiChild() const;
+    FormTrafficView* currentTrafficMdiChild() const;
+    FormScriptView* currentScriptMdiChild() const;
+    QWidget* findMdiChild(int id) const;
+    QWidget* findMdiChildInArea(MdiArea* area, int id) const;
+    QWidget* firstMdiChild() const;
+    bool        cloneMdiChildState(QWidget* source, QWidget* target) const;
 
     // Split-view
     MdiArea*    splitSecondaryArea() const;
     bool        isSplitTabbedView() const;
-    bool        isScriptRunningOnSplitPair(FormModSim* frm) const;
-    void        updateSplitPairScriptIcons(FormModSim* frm);
+    bool        isScriptRunningOnSplitPair(QWidget* frm) const;
+    void        updateSplitPairScriptIcons(QWidget* frm);
     int         duplicatePrimaryTabsToSecondary();
     void        removeSplitAutoClonesFromSecondary();
     void        resetSplitViewIfEmpty();
@@ -72,16 +91,23 @@ public:
     void destroyContentForShutdown();
 
     // Accessors for MainWindow (loadProfile/saveProfile/eventFilter)
-    const QList<FormModSim*>&     closedForms() const { return _closedForms; }
+    const QList<FormDataView*>& closedDataForms() const { return _closedDataForms; }
+    const QList<FormTrafficView*>& closedTrafficForms() const { return _closedTrafficForms; }
+    const QList<FormScriptView*>& closedScriptForms() const { return _closedScriptForms; }
+    bool isFormClosed(QWidget* frm) const;
     QString savePath() const        { return _savePath; }
     void    setSavePath(const QString& p) { _savePath = p; }
     int     windowCounter() const   { return _windowCounter; }
     void    setWindowCounter(int v) { _windowCounter = v; }
 
 private:
-    void setupMdiChild(FormModSim* frm, QMdiSubWindow* wnd, bool addToWindowList);
+    void setupMdiChild(QWidget* frm, QMdiSubWindow* wnd, bool addToWindowList);
     MdiArea* activeCreateArea() const;
-    MdiArea* areaOfForm(FormModSim* frm) const;
+    MdiArea* areaOfForm(QWidget* frm) const;
+    void addClosedForm(QWidget* frm);
+    void removeClosedForm(QWidget* frm);
+    bool containsClosedForm(QWidget* frm) const;
+    QList<QWidget*> allClosedForms() const;
 
 private:
     MdiAreaEx*                    _mdiArea;
@@ -92,7 +118,9 @@ private:
     MainWindow*                   _mainWindow;
 
     int                _windowCounter = 0;
-    QList<FormModSim*> _closedForms;
+    QList<FormDataView*> _closedDataForms;
+    QList<FormTrafficView*> _closedTrafficForms;
+    QList<FormScriptView*> _closedScriptForms;
     QString            _savePath;
 };
 

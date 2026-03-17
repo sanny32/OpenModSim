@@ -27,13 +27,15 @@
     <number>0</number>
    </property>
    <item>
-   <widget class="QToolBar" name="toolBarTraffic">
+    <widget class="QToolBar" name="toolBarTraffic">
      <property name="iconSize">
       <size>
-       <width>16</width>
-       <height>16</height>
+       <width>20</width>
+       <height>20</height>
       </size>
      </property>
+     <addaction name="actionPauseTraffic"/>
+     <addaction name="actionClearTraffic"/>
     </widget>
    </item>
    <item>
@@ -44,22 +46,21 @@
     </widget>
    </item>
   </layout>
-  <action name="actionRunScript">
-   <property name="icon">
-    <iconset>
-     <normaloff>:/res/actionRunScript.png</normaloff>:/res/actionRunScript.png</iconset>
+  <action name="actionPauseTraffic">
+   <property name="checkable">
+    <bool>true</bool>
    </property>
    <property name="text">
-    <string>Run Script</string>
+    <string>Pause</string>
    </property>
   </action>
-  <action name="actionStopScript">
+  <action name="actionClearTraffic">
    <property name="icon">
-    <iconset>
-     <normaloff>:/res/actionStopScript.png</normaloff>:/res/actionStopScript.png</iconset>
+    <iconset resource="resources.qrc">
+     <normaloff>:/res/icon-clear.svg</normaloff>:/res/icon-clear.svg</iconset>
    </property>
    <property name="text">
-    <string>Stop Script</string>
+    <string>Clear</string>
    </property>
   </action>
  </widget>
@@ -71,10 +72,8 @@
    <container>1</container>
   </customwidget>
  </customwidgets>
- <resources/>
+ <resources>
+  <include location="resources.qrc"/>
+ </resources>
  <connections/>
 </ui>
-
-
-
-

@@ -127,7 +127,7 @@
 <context>
     <name>AppProject</name>
     <message>
-        <location filename="../appproject.cpp" line="231"/>
+        <location filename="../appproject.cpp" line="457"/>
         <source>Capture Error:<byte value="xd"/>
 %1</source>
         <translation type="unfinished">Ошибка захвата:
@@ -1891,7 +1891,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formdataview.cpp" line="542"/>
+        <location filename="../formdataview.cpp" line="537"/>
         <source>Address Base: %1
 Start Address: %2
 Length: %3</source>
@@ -1900,7 +1900,7 @@ Length: %3</source>
 Количество: %3</translation>
     </message>
     <message>
-        <location filename="../formdataview.cpp" line="545"/>
+        <location filename="../formdataview.cpp" line="540"/>
         <source>Unit Identifier: %1
 MODBUS Point Type:
 %2</source>
@@ -2169,42 +2169,38 @@ MODBUS Point Type:
         <translation type="obsolete">Адресация:</translation>
     </message>
     <message>
-        <location filename="../formscriptview.cpp" line="561"/>
         <source>0-based</source>
-        <translation type="unfinished">0-первый</translation>
+        <translation type="obsolete">0-первый</translation>
     </message>
     <message>
-        <location filename="../formscriptview.cpp" line="561"/>
         <source>1-based</source>
-        <translation type="unfinished">1-первый</translation>
+        <translation type="obsolete">1-первый</translation>
     </message>
     <message>
-        <location filename="../formscriptview.cpp" line="562"/>
         <source>Address Base: %1
 Start Address: %2
 Length: %3</source>
-        <translation type="unfinished">Адресация: %1
+        <translation type="obsolete">Адресация: %1
 Адрес: %2
 Количество: %3</translation>
     </message>
     <message>
-        <location filename="../formscriptview.cpp" line="566"/>
         <source>Unit Identifier: %1
 MODBUS Point Type:
 %2</source>
-        <translation type="unfinished">Узел: %1
+        <translation type="obsolete">Узел: %1
 Тип регистров MODBUS:
 %2</translation>
     </message>
     <message>
-        <location filename="../formscriptview.cpp" line="144"/>
-        <location filename="../formscriptview.cpp" line="1278"/>
+        <location filename="../formscriptview.cpp" line="68"/>
+        <location filename="../formscriptview.cpp" line="286"/>
         <source> ms</source>
         <translation type="unfinished"> мс</translation>
     </message>
     <message>
-        <location filename="../formscriptview.cpp" line="146"/>
-        <location filename="../formscriptview.cpp" line="1282"/>
+        <location filename="../formscriptview.cpp" line="70"/>
+        <location filename="../formscriptview.cpp" line="290"/>
         <source>Run on startup</source>
         <translation type="unfinished">Запускать при открытии</translation>
     </message>
@@ -2290,126 +2286,102 @@ MODBUS Point Type:
         <translation type="obsolete">Адресация:</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="717"/>
         <source>Address Base: %1
 Start Address: %2
 Length: %3</source>
-        <translation type="unfinished">Адресация: %1
+        <translation type="obsolete">Адресация: %1
 Адрес: %2
 Количество: %3</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="720"/>
         <source>Unit Identifier: %1
 MODBUS Point Type:
 %2</source>
-        <translation type="unfinished">Узел: %1
+        <translation type="obsolete">Узел: %1
 Тип регистров MODBUS:
 %2</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="244"/>
-        <location filename="../formtrafficview.cpp" line="1521"/>
         <source> ms</source>
-        <translation type="unfinished"> мс</translation>
+        <translation type="obsolete"> мс</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="246"/>
-        <location filename="../formtrafficview.cpp" line="1525"/>
         <source>Run on startup</source>
-        <translation type="unfinished">Запускать при открытии</translation>
+        <translation type="obsolete">Запускать при открытии</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.ui" line="53"/>
         <source>Run Script</source>
-        <translation type="unfinished">Запуск</translation>
+        <translation type="obsolete">Запуск</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.ui" line="62"/>
         <source>Stop Script</source>
-        <translation type="unfinished">Останов</translation>
+        <translation type="obsolete">Останов</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="248"/>
-        <location filename="../formtrafficview.cpp" line="1536"/>
         <source>Undo</source>
-        <translation type="unfinished">Отменить</translation>
+        <translation type="obsolete">Отменить</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="250"/>
-        <location filename="../formtrafficview.cpp" line="1537"/>
         <source>Redo</source>
-        <translation type="unfinished">Повторить</translation>
+        <translation type="obsolete">Повторить</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="252"/>
-        <location filename="../formtrafficview.cpp" line="1538"/>
         <source>Cut</source>
-        <translation type="unfinished">Вырезать</translation>
+        <translation type="obsolete">Вырезать</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="254"/>
-        <location filename="../formtrafficview.cpp" line="1539"/>
         <source>Copy</source>
-        <translation type="unfinished">Копировать</translation>
+        <translation type="obsolete">Копировать</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="256"/>
-        <location filename="../formtrafficview.cpp" line="1540"/>
         <source>Paste</source>
-        <translation type="unfinished">Вставить</translation>
+        <translation type="obsolete">Вставить</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="258"/>
-        <location filename="../formtrafficview.cpp" line="1541"/>
         <source>Find</source>
-        <translation type="unfinished">Найти</translation>
+        <translation type="obsolete">Найти</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="260"/>
-        <location filename="../formtrafficview.cpp" line="1542"/>
         <source>Replace</source>
-        <translation type="unfinished">Заменить</translation>
+        <translation type="obsolete">Заменить</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="1595"/>
-        <location filename="../formtrafficview.cpp" line="1670"/>
-        <location filename="../formtrafficview.cpp" line="1675"/>
+        <location filename="../formtrafficview.cpp" line="48"/>
+        <source>Unit:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../formtrafficview.cpp" line="54"/>
+        <location filename="../formtrafficview.cpp" line="67"/>
         <source>All</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="1669"/>
-        <source>Unit ID:</source>
+        <location filename="../formtrafficview.cpp" line="55"/>
+        <source>0 = all unit ids</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="1671"/>
-        <source>Filter by Unit Identifier (0 = all)</source>
+        <location filename="../formtrafficview.cpp" line="85"/>
+        <source>Rows:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="1672"/>
+        <location filename="../formtrafficview.cpp" line="63"/>
         <source>Function:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="1673"/>
-        <source>Limit:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../formtrafficview.cpp" line="1674"/>
+        <location filename="../formtrafficview.ui" line="63"/>
         <source>Clear</source>
         <translation type="unfinished">Очистить</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="1693"/>
         <source>Resume</source>
-        <translation type="unfinished">Возобновить</translation>
+        <translation type="obsolete">Возобновить</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="1693"/>
+        <location filename="../formtrafficview.ui" line="54"/>
         <source>Pause</source>
         <translation type="unfinished">Пауза</translation>
     </message>
@@ -3184,7 +3156,7 @@ Script.onInit(()=&gt;{
     <message>
         <location filename="../mainwindow.ui" line="979"/>
         <location filename="../mainwindow.ui" line="982"/>
-        <location filename="../mainwindow.cpp" line="167"/>
+        <location filename="../mainwindow.cpp" line="336"/>
         <source>Script Help</source>
         <translation>Справка по скриптам</translation>
     </message>
@@ -3271,7 +3243,7 @@ Script.onInit(()=&gt;{
         <translation>Шестнадцатиричные адреса</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="582"/>
+        <location filename="../mainwindow.cpp" line="764"/>
         <source>All files (*)</source>
         <translation>Все файлы (*)</translation>
     </message>
@@ -3280,12 +3252,12 @@ Script.onInit(()=&gt;{
         <translation type="vanished">XML файлы (*.xml)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="148"/>
+        <location filename="../mainwindow.cpp" line="317"/>
         <source>Project</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="199"/>
+        <location filename="../mainwindow.cpp" line="373"/>
         <source>Output</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3294,13 +3266,13 @@ Script.onInit(()=&gt;{
         <translation type="obsolete">Данные</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="581"/>
-        <location filename="../mainwindow.cpp" line="597"/>
+        <location filename="../mainwindow.cpp" line="763"/>
+        <location filename="../mainwindow.cpp" line="779"/>
         <source>Project files (*.msimprj)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1329"/>
+        <location filename="../mainwindow.cpp" line="1504"/>
         <source>JavaScript files (*.js);;All files (*)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3912,77 +3884,77 @@ Script.onInit(()=&gt;{
 <context>
     <name>OutputDataWidget</name>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1101"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1014"/>
         <source>Set Value of %1</source>
         <translation type="unfinished">Записать значение по адресу %1</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1107"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1020"/>
         <source>Add Description</source>
         <translation type="unfinished">Добавить описание</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1107"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1020"/>
         <source>Edit Description</source>
         <translation type="unfinished">Редактировать описание</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1110"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1023"/>
         <source>%1: Enter Description</source>
         <translation type="unfinished">%1: Введите описание</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1119"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1032"/>
         <source>Remove Color</source>
         <translation type="unfinished">Удалить цвет</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1130"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1043"/>
         <source>Yellow</source>
         <translation type="unfinished">Желтый</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1131"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1044"/>
         <source>Cyan</source>
         <translation type="unfinished">Циан</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1132"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1045"/>
         <source>Magenta</source>
         <translation type="unfinished">Пурпурный</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1133"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1046"/>
         <source>LightGreen</source>
         <translation type="unfinished">Светло-зеленый</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1134"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1047"/>
         <source>Orange</source>
         <translation type="unfinished">Оранжевый</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1135"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1048"/>
         <source>LightBlue</source>
         <translation type="unfinished">Светло-синий</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1136"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1049"/>
         <source>LightGray</source>
         <translation type="unfinished">Светло-серый</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1221"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1134"/>
         <source>NOT CONNECTED!</source>
         <translation type="unfinished">НЕ ПОДКЛЮЧЕНО!</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1229"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1142"/>
         <source>Invalid Data Length Specified</source>
         <translation type="unfinished">Указана недопустимая длина данных</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1276"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1177"/>
         <source>Zoom: %1%</source>
         <translation type="unfinished">Увеличение: %1%</translation>
     </message>
@@ -3990,79 +3962,64 @@ Script.onInit(()=&gt;{
 <context>
     <name>OutputTrafficWidget</name>
     <message>
-        <location filename="../controls/outputtrafficwidget.cpp" line="1101"/>
         <source>Set Value of %1</source>
-        <translation type="unfinished">Записать значение по адресу %1</translation>
+        <translation type="obsolete">Записать значение по адресу %1</translation>
     </message>
     <message>
-        <location filename="../controls/outputtrafficwidget.cpp" line="1107"/>
         <source>Add Description</source>
-        <translation type="unfinished">Добавить описание</translation>
+        <translation type="obsolete">Добавить описание</translation>
     </message>
     <message>
-        <location filename="../controls/outputtrafficwidget.cpp" line="1107"/>
         <source>Edit Description</source>
-        <translation type="unfinished">Редактировать описание</translation>
+        <translation type="obsolete">Редактировать описание</translation>
     </message>
     <message>
-        <location filename="../controls/outputtrafficwidget.cpp" line="1110"/>
         <source>%1: Enter Description</source>
-        <translation type="unfinished">%1: Введите описание</translation>
+        <translation type="obsolete">%1: Введите описание</translation>
     </message>
     <message>
-        <location filename="../controls/outputtrafficwidget.cpp" line="1119"/>
         <source>Remove Color</source>
-        <translation type="unfinished">Удалить цвет</translation>
+        <translation type="obsolete">Удалить цвет</translation>
     </message>
     <message>
-        <location filename="../controls/outputtrafficwidget.cpp" line="1130"/>
         <source>Yellow</source>
-        <translation type="unfinished">Желтый</translation>
+        <translation type="obsolete">Желтый</translation>
     </message>
     <message>
-        <location filename="../controls/outputtrafficwidget.cpp" line="1131"/>
         <source>Cyan</source>
-        <translation type="unfinished">Циан</translation>
+        <translation type="obsolete">Циан</translation>
     </message>
     <message>
-        <location filename="../controls/outputtrafficwidget.cpp" line="1132"/>
         <source>Magenta</source>
-        <translation type="unfinished">Пурпурный</translation>
+        <translation type="obsolete">Пурпурный</translation>
     </message>
     <message>
-        <location filename="../controls/outputtrafficwidget.cpp" line="1133"/>
         <source>LightGreen</source>
-        <translation type="unfinished">Светло-зеленый</translation>
+        <translation type="obsolete">Светло-зеленый</translation>
     </message>
     <message>
-        <location filename="../controls/outputtrafficwidget.cpp" line="1134"/>
         <source>Orange</source>
-        <translation type="unfinished">Оранжевый</translation>
+        <translation type="obsolete">Оранжевый</translation>
     </message>
     <message>
-        <location filename="../controls/outputtrafficwidget.cpp" line="1135"/>
         <source>LightBlue</source>
-        <translation type="unfinished">Светло-синий</translation>
+        <translation type="obsolete">Светло-синий</translation>
     </message>
     <message>
-        <location filename="../controls/outputtrafficwidget.cpp" line="1136"/>
         <source>LightGray</source>
-        <translation type="unfinished">Светло-серый</translation>
+        <translation type="obsolete">Светло-серый</translation>
     </message>
     <message>
-        <location filename="../controls/outputtrafficwidget.cpp" line="1221"/>
         <source>NOT CONNECTED!</source>
-        <translation type="unfinished">НЕ ПОДКЛЮЧЕНО!</translation>
+        <translation type="obsolete">НЕ ПОДКЛЮЧЕНО!</translation>
     </message>
     <message>
-        <location filename="../controls/outputtrafficwidget.cpp" line="1229"/>
         <source>Invalid Data Length Specified</source>
-        <translation type="unfinished">Указана недопустимая длина данных</translation>
+        <translation type="obsolete">Указана недопустимая длина данных</translation>
     </message>
     <message>
-        <location filename="../controls/outputtrafficwidget.cpp" line="1276"/>
         <source>Zoom: %1%</source>
-        <translation type="unfinished">Увеличение: %1%</translation>
+        <translation type="obsolete">Увеличение: %1%</translation>
     </message>
 </context>
 <context>
@@ -4149,30 +4106,30 @@ Script.onInit(()=&gt;{
 <context>
     <name>ProjectTreeWidget</name>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="48"/>
-        <location filename="../controls/projecttreewidget.cpp" line="253"/>
+        <location filename="../controls/projecttreewidget.cpp" line="50"/>
+        <location filename="../controls/projecttreewidget.cpp" line="237"/>
         <source>Data</source>
         <translation type="unfinished">Данные</translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="51"/>
-        <location filename="../controls/projecttreewidget.cpp" line="254"/>
+        <location filename="../controls/projecttreewidget.cpp" line="53"/>
+        <location filename="../controls/projecttreewidget.cpp" line="238"/>
         <source>Traffic</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="54"/>
-        <location filename="../controls/projecttreewidget.cpp" line="255"/>
+        <location filename="../controls/projecttreewidget.cpp" line="56"/>
+        <location filename="../controls/projecttreewidget.cpp" line="239"/>
         <source>Script</source>
         <translation type="unfinished">Скрипт</translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="290"/>
+        <location filename="../controls/projecttreewidget.cpp" line="276"/>
         <source>Delete</source>
         <translation>Удалить</translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="295"/>
+        <location filename="../controls/projecttreewidget.cpp" line="281"/>
         <source>Delete Form</source>
         <translation>Удалить форму</translation>
     </message>
@@ -4181,7 +4138,7 @@ Script.onInit(()=&gt;{
         <translation type="vanished">Удалить скрипт</translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="296"/>
+        <location filename="../controls/projecttreewidget.cpp" line="282"/>
         <source>Delete &quot;%1&quot; from the project?</source>
         <translation>Удалить &quot;%1&quot; из проекта?</translation>
     </message>

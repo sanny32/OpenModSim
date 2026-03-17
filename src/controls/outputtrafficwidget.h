@@ -1,127 +1,26 @@
 ﻿#ifndef OUTPUTTRAFFICWIDGET_H
 #define OUTPUTTRAFFICWIDGET_H
 
-#include <QAbstractListModel>
-#include <QFile>
-#include <QPixmap>
 #include <QSharedPointer>
 #include <QWidget>
-#include "datasimulator.h"
 #include "displaydefinition.h"
-#include "enums.h"
 #include "modbusmessage.h"
-#include "outputtypes.h"
-
-class QLabel;
-class QPainter;
-class QTimer;
 
 namespace Ui {
 class OutputTrafficWidget;
 }
 
-class OutputTrafficWidget;
-
-class OutputTrafficListModel : public QAbstractListModel
-{
-    Q_OBJECT
-
-    friend class OutputTrafficWidget;
-
-public:
-    enum SimulationIconType
-    {
-        SimulationIconNone,
-        SimulationIcon16Bit,
-        SimulationIcon32Bit,
-        SimulationIcon64Bit
-    };
-    Q_ENUM(SimulationIconType)
-
-    explicit OutputTrafficListModel(OutputTrafficWidget* parent);
-
-    int rowCount(const QModelIndex& parent = QModelIndex()) const override;
-    QVariant data(const QModelIndex& index, int role) const override;
-    bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::EditRole) override;
-
-    bool isValid() const;
-    QVector<quint16> values() const;
-
-    void clear();
-    void update();
-    void updateData(const QModbusDataUnit& data);
-
-    int columnsDistance() const
-    {
-        return _columnsDistance;
-    }
-    void setColumnsDistance(int value)
-    {
-        _columnsDistance = qMax(1, value);
-    }
-
-    QModelIndex find(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr) const;
-
-private:
-    SimulationIconType simulationIcon(int row) const;
-
-private:
-    struct ItemData
-    {
-        quint32 Address = 0;
-        QVariant Value;
-        QString ValueStr;
-        QString Description;
-        bool Simulated = false;
-        SimulationIconType SimulationIcon = SimulationIconNone;
-        QColor BgColor;
-        QColor FgColor;
-    };
-
-    OutputTrafficWidget* _parentWidget;
-    QModbusDataUnit _lastData;
-    const QPixmap _iconSimulation16Bit;
-    const QPixmap _iconSimulation32Bit;
-    const QPixmap _iconSimulation64Bit;
-    const QPixmap _iconSimulationOff;
-    int _columnsDistance = 16;
-    QMap<int, ItemData> _mapItems;
-};
+class QModelIndex;
 
 class OutputTrafficWidget : public QWidget
 {
     Q_OBJECT
 
-    friend class OutputTrafficListModel;
-
 public:
     explicit OutputTrafficWidget(QWidget* parent = nullptr);
     ~OutputTrafficWidget() override;
 
-    void enforceTrafficMode() { setDisplayMode(DisplayMode::Traffic); }
-
-    QVector<quint16> data() const;
-
-    void setup(const TrafficViewDefinitions& dd, const ModbusSimulationMap2& simulations, const QModbusDataUnit& data);
-
-    DisplayMode displayMode() const;
-    void setDisplayMode(DisplayMode mode);
-
-    DataDisplayMode dataDisplayMode() const;
-    void setDataDisplayMode(DataDisplayMode mode);
-
-    const ByteOrder* byteOrder() const;
-    void setByteOrder(ByteOrder order);
-
-    QString codepage() const;
-    void setCodepage(const QString& name);
-
-    bool displayHexAddresses() const;
-    void setDisplayHexAddresses(bool on);
-
-    CaptureMode captureMode() const;
-    void startTextCapture(const QString& file);
-    void stopTextCapture();
+    void setup(const TrafficViewDefinitions& dd);
 
     QColor backgroundColor() const;
     void setBackgroundColor(const QColor& clr);
@@ -129,17 +28,8 @@ public:
     QColor foregroundColor() const;
     void setForegroundColor(const QColor& clr);
 
-    QColor statusColor() const;
-    void setStatusColor(const QColor& clr);
-
     QFont font() const;
     void setFont(const QFont& font);
-
-    int zoomPercent() const;
-    void setZoomPercent(int zoomPercent);
-
-    int dataViewColumnsDistance() const;
-    void setDataViewColumnsDistance(int value);
 
     int logViewLimit() const;
     void setLogViewLimit(int l);
@@ -147,66 +37,23 @@ public:
     bool autoscrollLogView() const;
     void setAutosctollLogView(bool on);
 
-    void setStatus(const QString& status);
-    void setNotConnectedStatus();
-    void setInvalidLengthStatus();
-
-    void paint(const QRect& rc, QPainter& painter);
-
     void updateTraffic(QSharedPointer<const ModbusMessage> msg);
-    void updateData(const QModbusDataUnit& data);
-
-    AddressColorMap colorMap() const;
-    void setColor(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr, const QColor& clr);
-
-    AddressDescriptionMap2 descriptionMap() const;
-    void setDescription(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr, const QString& desc);
-
-    void setSimulated(DataDisplayMode mode, quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr, bool on);
 
 public slots:
     void clearLogView();
     void setLogViewState(LogViewState state);
 
-signals:
-    void startTextCaptureError(const QString& error);
-    void itemDoubleClicked(quint16 address, const QVariant& value);
-
 protected:
     void changeEvent(QEvent* event) override;
-    bool eventFilter(QObject* obj, QEvent* event) override;
-
-private slots:
-    void on_listView_doubleClicked(const QModelIndex& index);
-    void on_listView_customContextMenuRequested(const QPoint& pos);
 
 private:
-    void captureString(const QString& s);
     void showModbusMessage(const QModelIndex& index);
     void hideModbusMessage();
-    void showZoomOverlay();
     void updateLogView(QSharedPointer<const ModbusMessage> msg);
-    QModelIndex getValueIndex(const QModelIndex& index) const;
 
 private:
     Ui::OutputTrafficWidget* ui;
-    QLabel* _zoomLabel = nullptr;
-    QTimer* _zoomHideTimer = nullptr;
-
-private:
-    qreal _baseFontSize = 0.0;
-    int _zoomPercent = 100;
-
-    bool _displayHexAddreses;
-    DisplayMode _displayMode;
-    DataDisplayMode _dataDisplayMode;
-    ByteOrder _byteOrder;
-    QString _codepage;
     TrafficViewDefinitions _displayDefinition;
-    QFile _fileCapture;
-    AddressColorMap _colorMap;
-    AddressDescriptionMap2 _descriptionMap;
-    QSharedPointer<OutputTrafficListModel> _listModel;
 };
 
 #endif // OUTPUTTRAFFICWIDGET_H

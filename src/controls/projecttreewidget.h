@@ -3,7 +3,21 @@
 
 #include <QTreeWidget>
 #include <QTreeWidgetItem>
-#include "formmodsim.h"
+#include <QWidget>
+
+enum class ProjectFormType
+{
+    Data = 0,
+    Traffic,
+    Script
+};
+
+struct ProjectFormRef
+{
+    ProjectFormType type = ProjectFormType::Data;
+    QWidget* widget = nullptr;
+};
+Q_DECLARE_METATYPE(ProjectFormRef)
 
 ///
 /// \brief The ProjectTreeWidget class
@@ -15,16 +29,16 @@ class ProjectTreeWidget : public QTreeWidget
 public:
     explicit ProjectTreeWidget(QWidget* parent = nullptr);
 
-    void addForm(FormModSim* frm);
-    void removeForm(FormModSim* frm);
-    void setFormScriptRunning(FormModSim* frm, bool running);
-    void setFormOpen(FormModSim* frm, bool open);
-    void activateForm(FormModSim* frm);
+    void addForm(ProjectFormType type, QWidget* frm);
+    void removeForm(QWidget* frm);
+    void setFormScriptRunning(QWidget* frm, bool running);
+    void setFormOpen(QWidget* frm, bool open);
+    void activateForm(QWidget* frm);
 
 signals:
-    void formActivated(FormModSim* frm);
-    void formDeleteRequested(FormModSim* frm);
-    void formRenamed(FormModSim* frm);
+    void formActivated(ProjectFormRef ref);
+    void formDeleteRequested(ProjectFormRef ref);
+    void formRenamed(ProjectFormRef ref);
 
 protected:
     void changeEvent(QEvent* event) override;
@@ -36,7 +50,10 @@ private slots:
     void retranslateUi();
 
 private:
-    QTreeWidgetItem* itemForForm(FormModSim* frm) const;
+    QTreeWidgetItem* itemForForm(QWidget* frm) const;
+    static QIcon iconFor(ProjectFormType type, bool open, bool running, const QIcon& dataOpen,
+                         const QIcon& dataClosed, const QIcon& trafficOpen, const QIcon& trafficClosed,
+                         const QIcon& scriptIdle, const QIcon& scriptClosed, const QIcon& scriptRunning);
 
 private:
     QTreeWidgetItem* _dataRoot    = nullptr;

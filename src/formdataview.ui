@@ -30,8 +30,8 @@
     <widget class="QToolBar" name="toolBarDisplay">
      <property name="iconSize">
       <size>
-       <width>16</width>
-       <height>16</height>
+       <width>20</width>
+       <height>20</height>
       </size>
      </property>
      <addaction name="actionDisplayBinary"/>
@@ -64,317 +64,317 @@
    </item>
    <item>
     <widget class="QSplitter" name="splitter">
+     <property name="orientation">
+      <enum>Qt::Orientation::Vertical</enum>
+     </property>
+     <property name="childrenCollapsible">
+      <bool>false</bool>
+     </property>
+     <widget class="QFrame" name="frameDataDefinition">
+      <property name="autoFillBackground">
+       <bool>true</bool>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::Shape::WinPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Shadow::Sunken</enum>
+      </property>
+      <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="0,0,0,0,0">
+       <property name="spacing">
+        <number>9</number>
+       </property>
+       <item>
+        <widget class="QFrame" name="frame_5">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>160</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>180</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <layout class="QFormLayout" name="formLayout">
+          <property name="labelAlignment">
+           <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+          </property>
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
+          <item row="1" column="0">
+           <widget class="QLabel" name="labelAddress">
+            <property name="text">
+             <string>Starting Address:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QLabel" name="labelLength">
+            <property name="text">
+             <string>Length:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="NumericLineEdit" name="lineEditLength">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>26</height>
+             </size>
+            </property>
+            <property name="contextMenuPolicy">
+             <enum>Qt::ContextMenuPolicy::NoContextMenu</enum>
+            </property>
+            <property name="acceptDrops">
+             <bool>false</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="NumericLineEdit" name="lineEditAddress">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>26</height>
+             </size>
+            </property>
+            <property name="contextMenuPolicy">
+             <enum>Qt::ContextMenuPolicy::NoContextMenu</enum>
+            </property>
+            <property name="acceptDrops">
+             <bool>false</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0">
+           <widget class="QLabel" name="labelAddressBase">
+            <property name="text">
+             <string>Address Base:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="AddressBaseComboBox" name="comboBoxAddressBase">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>26</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="Line" name="line">
          <property name="orientation">
           <enum>Qt::Orientation::Vertical</enum>
          </property>
-         <property name="childrenCollapsible">
-          <bool>false</bool>
-         </property>
-         <widget class="QFrame" name="frameDataDefinition">
-          <property name="autoFillBackground">
-           <bool>true</bool>
-          </property>
-          <property name="frameShape">
-           <enum>QFrame::Shape::WinPanel</enum>
-          </property>
-          <property name="frameShadow">
-           <enum>QFrame::Shadow::Sunken</enum>
-          </property>
-          <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="0,0,0,0,0">
-           <property name="spacing">
-            <number>9</number>
-           </property>
-           <item>
-            <widget class="QFrame" name="frame_5">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="minimumSize">
-              <size>
-               <width>160</width>
-               <height>0</height>
-              </size>
-             </property>
-             <property name="maximumSize">
-              <size>
-               <width>180</width>
-               <height>16777215</height>
-              </size>
-             </property>
-             <layout class="QFormLayout" name="formLayout">
-              <property name="labelAlignment">
-               <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
-              </property>
-              <property name="leftMargin">
-               <number>0</number>
-              </property>
-              <property name="topMargin">
-               <number>0</number>
-              </property>
-              <property name="rightMargin">
-               <number>0</number>
-              </property>
-              <property name="bottomMargin">
-               <number>0</number>
-              </property>
-              <item row="1" column="0">
-               <widget class="QLabel" name="labelAddress">
-                <property name="text">
-                 <string>Starting Address:</string>
-                </property>
-               </widget>
-              </item>
-              <item row="2" column="0">
-               <widget class="QLabel" name="labelLength">
-                <property name="text">
-                 <string>Length:</string>
-                </property>
-               </widget>
-              </item>
-              <item row="2" column="1">
-               <widget class="NumericLineEdit" name="lineEditLength">
-                <property name="minimumSize">
-                 <size>
-                  <width>0</width>
-                  <height>26</height>
-                 </size>
-                </property>
-                <property name="contextMenuPolicy">
-                 <enum>Qt::ContextMenuPolicy::NoContextMenu</enum>
-                </property>
-                <property name="acceptDrops">
-                 <bool>false</bool>
-                </property>
-               </widget>
-              </item>
-              <item row="1" column="1">
-               <widget class="NumericLineEdit" name="lineEditAddress">
-                <property name="minimumSize">
-                 <size>
-                  <width>0</width>
-                  <height>26</height>
-                 </size>
-                </property>
-                <property name="contextMenuPolicy">
-                 <enum>Qt::ContextMenuPolicy::NoContextMenu</enum>
-                </property>
-                <property name="acceptDrops">
-                 <bool>false</bool>
-                </property>
-               </widget>
-              </item>
-              <item row="0" column="0">
-               <widget class="QLabel" name="labelAddressBase">
-                <property name="text">
-                 <string>Address Base:</string>
-                </property>
-               </widget>
-              </item>
-              <item row="0" column="1">
-               <widget class="AddressBaseComboBox" name="comboBoxAddressBase">
-                <property name="minimumSize">
-                 <size>
-                  <width>0</width>
-                  <height>26</height>
-                 </size>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </widget>
-           </item>
-           <item>
-            <widget class="Line" name="line">
-             <property name="orientation">
-              <enum>Qt::Orientation::Vertical</enum>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QFrame" name="frame_4">
-             <property name="minimumSize">
-              <size>
-               <width>160</width>
-               <height>0</height>
-              </size>
-             </property>
-             <property name="maximumSize">
-              <size>
-               <width>190</width>
-               <height>16777215</height>
-              </size>
-             </property>
-             <layout class="QVBoxLayout" name="verticalLayout_5" stretch="0,0,0,1">
-              <property name="leftMargin">
-               <number>0</number>
-              </property>
-              <property name="topMargin">
-               <number>0</number>
-              </property>
-              <property name="rightMargin">
-               <number>0</number>
-              </property>
-              <property name="bottomMargin">
-               <number>0</number>
-              </property>
-              <item>
-               <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,0,0">
-                <item>
-                 <widget class="QLabel" name="labelDeviceId">
-                  <property name="text">
-                   <string>Unit Identifier:</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="NumericLineEdit" name="lineEditDeviceId">
-                  <property name="minimumSize">
-                   <size>
-                    <width>0</width>
-                    <height>26</height>
-                   </size>
-                  </property>
-                  <property name="maximumSize">
-                   <size>
-                    <width>65</width>
-                    <height>16777215</height>
-                   </size>
-                  </property>
-                  <property name="contextMenuPolicy">
-                   <enum>Qt::ContextMenuPolicy::NoContextMenu</enum>
-                  </property>
-                  <property name="acceptDrops">
-                   <bool>false</bool>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <spacer name="horizontalSpacer_2">
-                  <property name="orientation">
-                   <enum>Qt::Orientation::Horizontal</enum>
-                  </property>
-                  <property name="sizeHint" stdset="0">
-                   <size>
-                    <width>0</width>
-                    <height>0</height>
-                   </size>
-                  </property>
-                 </spacer>
-                </item>
-               </layout>
-              </item>
-              <item>
-               <widget class="QLabel" name="labelMobusPointType">
-                <property name="minimumSize">
-                 <size>
-                  <width>0</width>
-                  <height>26</height>
-                 </size>
-                </property>
-                <property name="text">
-                 <string>Data Type</string>
-                </property>
-                <property name="alignment">
-                 <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="PointTypeComboBox" name="comboBoxModbusPointType">
-                <property name="minimumSize">
-                 <size>
-                  <width>0</width>
-                  <height>26</height>
-                 </size>
-                </property>
-                <property name="focusPolicy">
-                 <enum>Qt::FocusPolicy::StrongFocus</enum>
-                </property>
-                <property name="frame">
-                 <bool>true</bool>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <spacer name="verticalSpacer">
-                <property name="orientation">
-                 <enum>Qt::Orientation::Vertical</enum>
-                </property>
-                <property name="sizeHint" stdset="0">
-                 <size>
-                  <width>0</width>
-                  <height>0</height>
-                 </size>
-                </property>
-               </spacer>
-              </item>
-             </layout>
-            </widget>
-           </item>
-           <item>
-            <widget class="Line" name="line_2">
-             <property name="orientation">
-              <enum>Qt::Orientation::Vertical</enum>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <spacer name="horizontalSpacer">
-             <property name="orientation">
-              <enum>Qt::Orientation::Horizontal</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>0</width>
-               <height>0</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-          </layout>
-         </widget>
-         <widget class="QFrame" name="frameOutput">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-            <horstretch>0</horstretch>
-            <verstretch>1</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="frameShape">
-           <enum>QFrame::Shape::WinPanel</enum>
-          </property>
-          <property name="frameShadow">
-           <enum>QFrame::Shadow::Sunken</enum>
-          </property>
-          <layout class="QVBoxLayout" name="verticalLayout_3">
-           <property name="spacing">
-            <number>0</number>
-           </property>
-           <property name="leftMargin">
-            <number>0</number>
-           </property>
-           <property name="topMargin">
-            <number>0</number>
-           </property>
-           <property name="rightMargin">
-            <number>0</number>
-           </property>
-           <property name="bottomMargin">
-            <number>0</number>
-           </property>
-           <item>
-            <widget class="OutputDataWidget" name="outputWidget" native="true">
-             <property name="autoFillBackground">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </widget>
         </widget>
+       </item>
+       <item>
+        <widget class="QFrame" name="frame_4">
+         <property name="minimumSize">
+          <size>
+           <width>160</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>190</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_5" stretch="0,0,0,1">
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,0,0">
+            <item>
+             <widget class="QLabel" name="labelDeviceId">
+              <property name="text">
+               <string>Unit Identifier:</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="NumericLineEdit" name="lineEditDeviceId">
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>26</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>65</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="contextMenuPolicy">
+               <enum>Qt::ContextMenuPolicy::NoContextMenu</enum>
+              </property>
+              <property name="acceptDrops">
+               <bool>false</bool>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer name="horizontalSpacer_2">
+              <property name="orientation">
+               <enum>Qt::Orientation::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>0</width>
+                <height>0</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <widget class="QLabel" name="labelMobusPointType">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>26</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>Data Type</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="PointTypeComboBox" name="comboBoxModbusPointType">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>26</height>
+             </size>
+            </property>
+            <property name="focusPolicy">
+             <enum>Qt::FocusPolicy::StrongFocus</enum>
+            </property>
+            <property name="frame">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="verticalSpacer">
+            <property name="orientation">
+             <enum>Qt::Orientation::Vertical</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>0</width>
+              <height>0</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="Line" name="line_2">
+         <property name="orientation">
+          <enum>Qt::Orientation::Vertical</enum>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="horizontalSpacer">
+         <property name="orientation">
+          <enum>Qt::Orientation::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>0</width>
+           <height>0</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QFrame" name="frameOutput">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+        <horstretch>0</horstretch>
+        <verstretch>1</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::Shape::WinPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Shadow::Sunken</enum>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayout_3">
+       <property name="spacing">
+        <number>0</number>
+       </property>
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
+       <item>
+        <widget class="OutputDataWidget" name="outputWidget" native="true">
+         <property name="autoFillBackground">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </widget>
    </item>
   </layout>
   <action name="actionDisplayBinary">
@@ -382,7 +382,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset>
+    <iconset resource="resources.qrc">
      <normaloff>:/res/actionBinary.png</normaloff>:/res/actionBinary.png</iconset>
    </property>
    <property name="text">
@@ -394,7 +394,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset>
+    <iconset resource="resources.qrc">
      <normaloff>:/res/actionHex.png</normaloff>:/res/actionHex.png</iconset>
    </property>
    <property name="text">
@@ -406,7 +406,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset>
+    <iconset resource="resources.qrc">
      <normaloff>:/res/actionAnsi.png</normaloff>:/res/actionAnsi.png</iconset>
    </property>
    <property name="text">
@@ -418,7 +418,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset>
+    <iconset resource="resources.qrc">
      <normaloff>:/res/actionInt16.png</normaloff>:/res/actionInt16.png</iconset>
    </property>
    <property name="text">
@@ -430,7 +430,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset>
+    <iconset resource="resources.qrc">
      <normaloff>:/res/actionUInt16.png</normaloff>:/res/actionUInt16.png</iconset>
    </property>
    <property name="text">
@@ -442,7 +442,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset>
+    <iconset resource="resources.qrc">
      <normaloff>:/res/actionInt32.png</normaloff>:/res/actionInt32.png</iconset>
    </property>
    <property name="text">
@@ -454,7 +454,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset>
+    <iconset resource="resources.qrc">
      <normaloff>:/res/actionSwappedInt32.png</normaloff>:/res/actionSwappedInt32.png</iconset>
    </property>
    <property name="text">
@@ -466,7 +466,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset>
+    <iconset resource="resources.qrc">
      <normaloff>:/res/actionUInt32.png</normaloff>:/res/actionUInt32.png</iconset>
    </property>
    <property name="text">
@@ -478,7 +478,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset>
+    <iconset resource="resources.qrc">
      <normaloff>:/res/actionSwappedUInt32.png</normaloff>:/res/actionSwappedUInt32.png</iconset>
    </property>
    <property name="text">
@@ -490,7 +490,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset>
+    <iconset resource="resources.qrc">
      <normaloff>:/res/actionInt64.png</normaloff>:/res/actionInt64.png</iconset>
    </property>
    <property name="text">
@@ -502,7 +502,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset>
+    <iconset resource="resources.qrc">
      <normaloff>:/res/actionSwappedInt64.png</normaloff>:/res/actionSwappedInt64.png</iconset>
    </property>
    <property name="text">
@@ -514,7 +514,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset>
+    <iconset resource="resources.qrc">
      <normaloff>:/res/actionUInt64.png</normaloff>:/res/actionUInt64.png</iconset>
    </property>
    <property name="text">
@@ -526,7 +526,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset>
+    <iconset resource="resources.qrc">
      <normaloff>:/res/actionSwappedUInt64.png</normaloff>:/res/actionSwappedUInt64.png</iconset>
    </property>
    <property name="text">
@@ -538,7 +538,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset>
+    <iconset resource="resources.qrc">
      <normaloff>:/res/actionFloatingPt.png</normaloff>:/res/actionFloatingPt.png</iconset>
    </property>
    <property name="text">
@@ -550,7 +550,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset>
+    <iconset resource="resources.qrc">
      <normaloff>:/res/actionSwappedFP.png</normaloff>:/res/actionSwappedFP.png</iconset>
    </property>
    <property name="text">
@@ -562,7 +562,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset>
+    <iconset resource="resources.qrc">
      <normaloff>:/res/actionDblFloat.png</normaloff>:/res/actionDblFloat.png</iconset>
    </property>
    <property name="text">
@@ -574,7 +574,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset>
+    <iconset resource="resources.qrc">
      <normaloff>:/res/actionSwappedDbl.png</normaloff>:/res/actionSwappedDbl.png</iconset>
    </property>
    <property name="text">
@@ -586,7 +586,7 @@
     <bool>true</bool>
    </property>
    <property name="icon">
-    <iconset>
+    <iconset resource="resources.qrc">
      <normaloff>:/res/actionSwapBytes.png</normaloff>:/res/actionSwapBytes.png</iconset>
    </property>
    <property name="text">
@@ -623,6 +623,8 @@
   <tabstop>lineEditDeviceId</tabstop>
   <tabstop>comboBoxModbusPointType</tabstop>
  </tabstops>
- <resources/>
+ <resources>
+  <include location="resources.qrc"/>
+ </resources>
  <connections/>
 </ui>

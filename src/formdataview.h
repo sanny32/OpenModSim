@@ -13,11 +13,9 @@
 #include "modbusmultiserver.h"
 #include "displaydefinition.h"
 #include "controls/outputdatawidget.h"
-#include "jscriptcontrol.h"
 #include "consoleoutput.h"
 #include "apppreferences.h"
 #include "ansimenu.h"
-#include "formmodsim.h"
 
 ///
 /// \brief Forward declaration of the MainWindow
@@ -32,7 +30,7 @@ class FormDataView;
 ///
 /// \brief The FormDataView class
 ///
-class FormDataView : public FormModSim
+class FormDataView : public QWidget
 {
     Q_OBJECT
 
@@ -45,11 +43,10 @@ class FormDataView : public FormModSim
 public:
     static QVersionNumber VERSION;
 
-    FormKind formKind() const override { return FormKind::Data; }
     explicit FormDataView(int id, ModbusMultiServer& server, DataSimulator* simulator, MainWindow* parent);
     ~FormDataView();
 
-    int formId() const override { return _formId; }
+    int formId() const { return _formId; }
 
     QString filename() const;
     void setFilename(const QString& filename);
@@ -58,8 +55,8 @@ public:
 
     DataViewDefinitions displayDefinition() const;
     void setDisplayDefinition(const DataViewDefinitions& dd);
-    FormDisplayDefinition displayDefinitionValue() const override;
-    void setDisplayDefinitionValue(const FormDisplayDefinition& dd) override;
+    FormDisplayDefinition displayDefinitionValue() const;
+    void setDisplayDefinitionValue(const FormDisplayDefinition& dd);
 
     ByteOrder byteOrder() const;
     void setByteOrder(ByteOrder order);
@@ -151,10 +148,10 @@ public:
 
     void setScriptFont(const QFont& font);
 
-    void saveSettings(QSettings& out) const override;
-    void loadSettings(QSettings& in) override;
-    void saveXml(QXmlStreamWriter& xml) const override;
-    void loadXml(QXmlStreamReader& xml) override;
+    void saveSettings(QSettings& out) const;
+    void loadSettings(QSettings& in);
+    void saveXml(QXmlStreamWriter& xml) const;
+    void loadXml(QXmlStreamReader& xml);
 
 protected:
     void changeEvent(QEvent* event) override;
@@ -165,6 +162,24 @@ public slots:
     void show();
     void connectEditSlots();
     void disconnectEditSlots();
+
+signals:
+    void showed();
+    void closing();
+    void helpContextRequested(const QString& helpKey);
+    void byteOrderChanged(ByteOrder);
+    void codepageChanged(const QString&);
+    void definitionChanged();
+    void pointTypeChanged(QModbusDataUnit::RegisterType);
+    void displayModeChanged(DisplayMode mode);
+    void scriptSettingsChanged(const ScriptSettings&);
+    void scriptRunning();
+    void scriptStopped();
+    void consoleMessage(const QString& source, const QString& text, ConsoleOutput::MessageType type);
+    void captureError(const QString& error);
+    void doubleClicked();
+    void statisticCtrsReseted();
+    void statisticLogStateChanged(LogViewState state);
 
 private slots:
     void on_lineEditAddress_valueChanged(const QVariant&);
@@ -186,7 +201,6 @@ private slots:
 private:
     void updateStatus();
     void onDefinitionChanged();
-    JScriptControl* scriptControl();
     bool isLoggingRequest(QSharedPointer<const ModbusMessage> msgReq) const;
 
     void setupDisplayBar();
@@ -238,7 +252,6 @@ inline QSettings& operator <<(QSettings& out, FormDataView* frm)
     out << frm->displayDefinition();
     out.setValue("DisplayHexAddresses", frm->displayHexAddresses());
     out.setValue("Codepage", frm->codepage());
-    out << frm->scriptControl();
     out << frm->descriptionMap();
     out << frm->colorMap();
 
@@ -270,7 +283,6 @@ inline QSettings& operator >>(QSettings& in, FormDataView* frm)
     DataViewDefinitions displayDefinition;
     in >> displayDefinition;
 
-    in >> frm->scriptControl();
 
     AddressDescriptionMap2 descriptionMap;
     if(version >= QVersionNumber(1, 15))
@@ -403,7 +415,6 @@ inline QXmlStreamWriter& operator <<(QXmlStreamWriter& xml, FormDataView* frm)
         xml.writeEndElement(); // ModbusSimulationMap
     }
 
-    xml << frm->scriptControl();
     xml << frm->descriptionMap();
     xml << frm->colorMap();
 
@@ -591,11 +602,7 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, FormDataView* frm)
                 }
             }
             else if (xml.name() == QLatin1String("JScriptControl")) {
-                auto scriptControl = frm->scriptControl();
-                if (scriptControl)
-                    xml >> scriptControl;
-                else
-                    xml.skipCurrentElement();
+                xml.skipCurrentElement();
             }
             else if (xml.name() == QLatin1String("AddressDescriptionMap")) {
                 AddressDescriptionMap2 map;

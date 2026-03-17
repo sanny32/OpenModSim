@@ -127,7 +127,7 @@
 <context>
     <name>AppProject</name>
     <message>
-        <location filename="../appproject.cpp" line="231"/>
+        <location filename="../appproject.cpp" line="457"/>
         <source>Capture Error:<byte value="xd"/>
 %1</source>
         <translation type="unfinished">捕获错误：
@@ -1895,7 +1895,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formdataview.cpp" line="542"/>
+        <location filename="../formdataview.cpp" line="537"/>
         <source>Address Base: %1
 Start Address: %2
 Length: %3</source>
@@ -1904,7 +1904,7 @@ Length: %3</source>
 长度: %3</translation>
     </message>
     <message>
-        <location filename="../formdataview.cpp" line="545"/>
+        <location filename="../formdataview.cpp" line="540"/>
         <source>Unit Identifier: %1
 MODBUS Point Type:
 %2</source>
@@ -2153,42 +2153,38 @@ MODBUS Point Type:
         <translation type="obsolete">长度：</translation>
     </message>
     <message>
-        <location filename="../formscriptview.cpp" line="561"/>
         <source>0-based</source>
-        <translation type="unfinished">基地址为-0</translation>
+        <translation type="obsolete">基地址为-0</translation>
     </message>
     <message>
-        <location filename="../formscriptview.cpp" line="561"/>
         <source>1-based</source>
-        <translation type="unfinished">基地址为-1</translation>
+        <translation type="obsolete">基地址为-1</translation>
     </message>
     <message>
-        <location filename="../formscriptview.cpp" line="562"/>
         <source>Address Base: %1
 Start Address: %2
 Length: %3</source>
-        <translation type="unfinished">基地址: %1
+        <translation type="obsolete">基地址: %1
 起始地址: %2
 长度: %3</translation>
     </message>
     <message>
-        <location filename="../formscriptview.cpp" line="566"/>
         <source>Unit Identifier: %1
 MODBUS Point Type:
 %2</source>
-        <translation type="unfinished">设备地址:%1
+        <translation type="obsolete">设备地址:%1
 寄存器类型:
 %2</translation>
     </message>
     <message>
-        <location filename="../formscriptview.cpp" line="144"/>
-        <location filename="../formscriptview.cpp" line="1278"/>
+        <location filename="../formscriptview.cpp" line="68"/>
+        <location filename="../formscriptview.cpp" line="286"/>
         <source> ms</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formscriptview.cpp" line="146"/>
-        <location filename="../formscriptview.cpp" line="1282"/>
+        <location filename="../formscriptview.cpp" line="70"/>
+        <location filename="../formscriptview.cpp" line="290"/>
         <source>Run on startup</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2270,126 +2266,94 @@ MODBUS Point Type:
         <translation type="obsolete">长度：</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="717"/>
         <source>Address Base: %1
 Start Address: %2
 Length: %3</source>
-        <translation type="unfinished">基地址: %1
+        <translation type="obsolete">基地址: %1
 起始地址: %2
 长度: %3</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="720"/>
         <source>Unit Identifier: %1
 MODBUS Point Type:
 %2</source>
-        <translation type="unfinished">设备地址:%1
+        <translation type="obsolete">设备地址:%1
 寄存器类型:
 %2</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="244"/>
-        <location filename="../formtrafficview.cpp" line="1521"/>
-        <source> ms</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../formtrafficview.cpp" line="246"/>
-        <location filename="../formtrafficview.cpp" line="1525"/>
-        <source>Run on startup</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../formtrafficview.ui" line="53"/>
         <source>Run Script</source>
-        <translation type="unfinished">运行脚本</translation>
+        <translation type="obsolete">运行脚本</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.ui" line="62"/>
         <source>Stop Script</source>
-        <translation type="unfinished">停止脚本</translation>
+        <translation type="obsolete">停止脚本</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="248"/>
-        <location filename="../formtrafficview.cpp" line="1536"/>
         <source>Undo</source>
-        <translation type="unfinished">取消</translation>
+        <translation type="obsolete">取消</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="250"/>
-        <location filename="../formtrafficview.cpp" line="1537"/>
         <source>Redo</source>
-        <translation type="unfinished">恢复</translation>
+        <translation type="obsolete">恢复</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="252"/>
-        <location filename="../formtrafficview.cpp" line="1538"/>
         <source>Cut</source>
-        <translation type="unfinished">剪切</translation>
+        <translation type="obsolete">剪切</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="254"/>
-        <location filename="../formtrafficview.cpp" line="1539"/>
         <source>Copy</source>
-        <translation type="unfinished">复制</translation>
+        <translation type="obsolete">复制</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="256"/>
-        <location filename="../formtrafficview.cpp" line="1540"/>
         <source>Paste</source>
-        <translation type="unfinished">粘贴</translation>
+        <translation type="obsolete">粘贴</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="258"/>
-        <location filename="../formtrafficview.cpp" line="1541"/>
         <source>Find</source>
-        <translation type="unfinished">查找</translation>
+        <translation type="obsolete">查找</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="260"/>
-        <location filename="../formtrafficview.cpp" line="1542"/>
         <source>Replace</source>
-        <translation type="unfinished">替换</translation>
+        <translation type="obsolete">替换</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="1595"/>
-        <location filename="../formtrafficview.cpp" line="1670"/>
-        <location filename="../formtrafficview.cpp" line="1675"/>
+        <location filename="../formtrafficview.cpp" line="48"/>
+        <source>Unit:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../formtrafficview.cpp" line="54"/>
+        <location filename="../formtrafficview.cpp" line="67"/>
         <source>All</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="1669"/>
-        <source>Unit ID:</source>
+        <location filename="../formtrafficview.cpp" line="55"/>
+        <source>0 = all unit ids</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="1671"/>
-        <source>Filter by Unit Identifier (0 = all)</source>
+        <location filename="../formtrafficview.cpp" line="85"/>
+        <source>Rows:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="1672"/>
+        <location filename="../formtrafficview.cpp" line="63"/>
         <source>Function:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="1673"/>
-        <source>Limit:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../formtrafficview.cpp" line="1674"/>
+        <location filename="../formtrafficview.ui" line="63"/>
         <source>Clear</source>
         <translation type="unfinished">清除</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="1693"/>
         <source>Resume</source>
-        <translation type="unfinished">恢复</translation>
+        <translation type="obsolete">恢复</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="1693"/>
+        <location filename="../formtrafficview.ui" line="54"/>
         <source>Pause</source>
         <translation type="unfinished">暂停</translation>
     </message>
@@ -3164,7 +3128,7 @@ Script.onInit(()=&gt;{
     <message>
         <location filename="../mainwindow.ui" line="979"/>
         <location filename="../mainwindow.ui" line="982"/>
-        <location filename="../mainwindow.cpp" line="167"/>
+        <location filename="../mainwindow.cpp" line="336"/>
         <source>Script Help</source>
         <translation>脚本帮助</translation>
     </message>
@@ -3259,7 +3223,7 @@ Script.onInit(()=&gt;{
         <translation type="vanished">俄语</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="582"/>
+        <location filename="../mainwindow.cpp" line="764"/>
         <source>All files (*)</source>
         <translation>所有文件 (*)</translation>
     </message>
@@ -3268,12 +3232,12 @@ Script.onInit(()=&gt;{
         <translation type="vanished">XML 文件(*.xml)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="148"/>
+        <location filename="../mainwindow.cpp" line="317"/>
         <source>Project</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="199"/>
+        <location filename="../mainwindow.cpp" line="373"/>
         <source>Output</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3282,13 +3246,13 @@ Script.onInit(()=&gt;{
         <translation type="obsolete">数据</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="581"/>
-        <location filename="../mainwindow.cpp" line="597"/>
+        <location filename="../mainwindow.cpp" line="763"/>
+        <location filename="../mainwindow.cpp" line="779"/>
         <source>Project files (*.msimprj)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1329"/>
+        <location filename="../mainwindow.cpp" line="1504"/>
         <source>JavaScript files (*.js);;All files (*)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3894,77 +3858,77 @@ Script.onInit(()=&gt;{
 <context>
     <name>OutputDataWidget</name>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1101"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1014"/>
         <source>Set Value of %1</source>
         <translation type="unfinished">将值写入 %1</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1107"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1020"/>
         <source>Add Description</source>
         <translation type="unfinished">添加描述</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1107"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1020"/>
         <source>Edit Description</source>
         <translation type="unfinished">编辑描述</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1110"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1023"/>
         <source>%1: Enter Description</source>
         <translation type="unfinished">%1:输入描述</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1119"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1032"/>
         <source>Remove Color</source>
         <translation type="unfinished">去除颜色</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1130"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1043"/>
         <source>Yellow</source>
         <translation type="unfinished">黄色的</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1131"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1044"/>
         <source>Cyan</source>
         <translation type="unfinished">青色</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1132"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1045"/>
         <source>Magenta</source>
         <translation type="unfinished">品红</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1133"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1046"/>
         <source>LightGreen</source>
         <translation type="unfinished">浅绿色</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1134"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1047"/>
         <source>Orange</source>
         <translation type="unfinished">橙子</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1135"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1048"/>
         <source>LightBlue</source>
         <translation type="unfinished">浅蓝色</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1136"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1049"/>
         <source>LightGray</source>
         <translation type="unfinished">浅灰色</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1221"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1134"/>
         <source>NOT CONNECTED!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1229"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1142"/>
         <source>Invalid Data Length Specified</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1276"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1177"/>
         <source>Zoom: %1%</source>
         <translation type="unfinished">飞涨： %1%</translation>
     </message>
@@ -3972,79 +3936,56 @@ Script.onInit(()=&gt;{
 <context>
     <name>OutputTrafficWidget</name>
     <message>
-        <location filename="../controls/outputtrafficwidget.cpp" line="1101"/>
         <source>Set Value of %1</source>
-        <translation type="unfinished">将值写入 %1</translation>
+        <translation type="obsolete">将值写入 %1</translation>
     </message>
     <message>
-        <location filename="../controls/outputtrafficwidget.cpp" line="1107"/>
         <source>Add Description</source>
-        <translation type="unfinished">添加描述</translation>
+        <translation type="obsolete">添加描述</translation>
     </message>
     <message>
-        <location filename="../controls/outputtrafficwidget.cpp" line="1107"/>
         <source>Edit Description</source>
-        <translation type="unfinished">编辑描述</translation>
+        <translation type="obsolete">编辑描述</translation>
     </message>
     <message>
-        <location filename="../controls/outputtrafficwidget.cpp" line="1110"/>
         <source>%1: Enter Description</source>
-        <translation type="unfinished">%1:输入描述</translation>
+        <translation type="obsolete">%1:输入描述</translation>
     </message>
     <message>
-        <location filename="../controls/outputtrafficwidget.cpp" line="1119"/>
         <source>Remove Color</source>
-        <translation type="unfinished">去除颜色</translation>
+        <translation type="obsolete">去除颜色</translation>
     </message>
     <message>
-        <location filename="../controls/outputtrafficwidget.cpp" line="1130"/>
         <source>Yellow</source>
-        <translation type="unfinished">黄色的</translation>
+        <translation type="obsolete">黄色的</translation>
     </message>
     <message>
-        <location filename="../controls/outputtrafficwidget.cpp" line="1131"/>
         <source>Cyan</source>
-        <translation type="unfinished">青色</translation>
+        <translation type="obsolete">青色</translation>
     </message>
     <message>
-        <location filename="../controls/outputtrafficwidget.cpp" line="1132"/>
         <source>Magenta</source>
-        <translation type="unfinished">品红</translation>
+        <translation type="obsolete">品红</translation>
     </message>
     <message>
-        <location filename="../controls/outputtrafficwidget.cpp" line="1133"/>
         <source>LightGreen</source>
-        <translation type="unfinished">浅绿色</translation>
+        <translation type="obsolete">浅绿色</translation>
     </message>
     <message>
-        <location filename="../controls/outputtrafficwidget.cpp" line="1134"/>
         <source>Orange</source>
-        <translation type="unfinished">橙子</translation>
+        <translation type="obsolete">橙子</translation>
     </message>
     <message>
-        <location filename="../controls/outputtrafficwidget.cpp" line="1135"/>
         <source>LightBlue</source>
-        <translation type="unfinished">浅蓝色</translation>
+        <translation type="obsolete">浅蓝色</translation>
     </message>
     <message>
-        <location filename="../controls/outputtrafficwidget.cpp" line="1136"/>
         <source>LightGray</source>
-        <translation type="unfinished">浅灰色</translation>
+        <translation type="obsolete">浅灰色</translation>
     </message>
     <message>
-        <location filename="../controls/outputtrafficwidget.cpp" line="1221"/>
-        <source>NOT CONNECTED!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../controls/outputtrafficwidget.cpp" line="1229"/>
-        <source>Invalid Data Length Specified</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../controls/outputtrafficwidget.cpp" line="1276"/>
         <source>Zoom: %1%</source>
-        <translation type="unfinished">飞涨： %1%</translation>
+        <translation type="obsolete">飞涨： %1%</translation>
     </message>
 </context>
 <context>
@@ -4131,35 +4072,35 @@ Script.onInit(()=&gt;{
 <context>
     <name>ProjectTreeWidget</name>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="48"/>
-        <location filename="../controls/projecttreewidget.cpp" line="253"/>
+        <location filename="../controls/projecttreewidget.cpp" line="50"/>
+        <location filename="../controls/projecttreewidget.cpp" line="237"/>
         <source>Data</source>
         <translation type="unfinished">数据</translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="51"/>
-        <location filename="../controls/projecttreewidget.cpp" line="254"/>
+        <location filename="../controls/projecttreewidget.cpp" line="53"/>
+        <location filename="../controls/projecttreewidget.cpp" line="238"/>
         <source>Traffic</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="54"/>
-        <location filename="../controls/projecttreewidget.cpp" line="255"/>
+        <location filename="../controls/projecttreewidget.cpp" line="56"/>
+        <location filename="../controls/projecttreewidget.cpp" line="239"/>
         <source>Script</source>
         <translation type="unfinished">脚本</translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="290"/>
+        <location filename="../controls/projecttreewidget.cpp" line="276"/>
         <source>Delete</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="295"/>
+        <location filename="../controls/projecttreewidget.cpp" line="281"/>
         <source>Delete Form</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="296"/>
+        <location filename="../controls/projecttreewidget.cpp" line="282"/>
         <source>Delete &quot;%1&quot; from the project?</source>
         <translation type="unfinished"></translation>
     </message>

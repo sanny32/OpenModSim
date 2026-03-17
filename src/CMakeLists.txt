@@ -170,7 +170,6 @@ set(SOURCES
     jsobjects/script.cpp
     jsobjects/server.cpp
     jsobjects/storage.cpp
-    formmodsim.cpp
     formdataview.cpp
     formtrafficview.cpp
     formscriptview.cpp
@@ -270,7 +269,6 @@ set(HEADERS
     displaydefinition.h
     enums.h
     modbusserver.h
-    formmodsim.h
     formdataview.h
     formtrafficview.h
     formscriptview.h

@@ -1,8 +1,7 @@
-﻿#ifndef OUTPUTDATAWIDGET_H
+#ifndef OUTPUTDATAWIDGET_H
 #define OUTPUTDATAWIDGET_H
 
 #include <QAbstractListModel>
-#include <QFile>
 #include <QPixmap>
 #include <QSharedPointer>
 #include <QWidget>
@@ -119,10 +118,6 @@ public:
     bool displayHexAddresses() const;
     void setDisplayHexAddresses(bool on);
 
-    CaptureMode captureMode() const;
-    void startTextCapture(const QString& file);
-    void stopTextCapture();
-
     QColor backgroundColor() const;
     void setBackgroundColor(const QColor& clr);
 
@@ -141,19 +136,11 @@ public:
     int dataViewColumnsDistance() const;
     void setDataViewColumnsDistance(int value);
 
-    int logViewLimit() const;
-    void setLogViewLimit(int l);
-
-    bool autoscrollLogView() const;
-    void setAutosctollLogView(bool on);
-
     void setStatus(const QString& status);
     void setNotConnectedStatus();
     void setInvalidLengthStatus();
 
     void paint(const QRect& rc, QPainter& painter);
-
-    void updateTraffic(QSharedPointer<const ModbusMessage> msg);
     void updateData(const QModbusDataUnit& data);
 
     AddressColorMap colorMap() const;
@@ -164,12 +151,7 @@ public:
 
     void setSimulated(DataDisplayMode mode, quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr, bool on);
 
-public slots:
-    void clearLogView();
-    void setLogViewState(LogViewState state);
-
 signals:
-    void startTextCaptureError(const QString& error);
     void itemDoubleClicked(quint16 address, const QVariant& value);
 
 protected:
@@ -181,11 +163,9 @@ private slots:
     void on_listView_customContextMenuRequested(const QPoint& pos);
 
 private:
-    void captureString(const QString& s);
     void showModbusMessage(const QModelIndex& index);
     void hideModbusMessage();
     void showZoomOverlay();
-    void updateLogView(QSharedPointer<const ModbusMessage> msg);
     QModelIndex getValueIndex(const QModelIndex& index) const;
 
 private:
@@ -203,10 +183,11 @@ private:
     ByteOrder _byteOrder;
     QString _codepage;
     DataViewDefinitions _displayDefinition;
-    QFile _fileCapture;
     AddressColorMap _colorMap;
     AddressDescriptionMap2 _descriptionMap;
     QSharedPointer<OutputDataListModel> _listModel;
 };
 
 #endif // OUTPUTDATAWIDGET_H
+
+

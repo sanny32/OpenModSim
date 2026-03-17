@@ -1,6 +1,5 @@
-﻿#include <QDateTime>
+#include <QDateTime>
 #include <QPainter>
-#include <QTextStream>
 #include <QInputDialog>
 #include "fontutils.h"
 #include "formatutils.h"
@@ -540,9 +539,6 @@ void OutputDataWidget::setup(const DataViewDefinitions& dd, const ModbusSimulati
     _colorMap.insert(colorMap());
 
     _displayDefinition = dd;
-
-    setLogViewLimit(dd.LogViewLimit);
-    setAutosctollLogView(dd.AutoscrollLog);
     setDataViewColumnsDistance(dd.DataViewColumnsDistance);
     ui->logView->setShowLeadingZeros(dd.LeadingZeros);
     ui->modbusMsg->setShowLeadingZeros(dd.LeadingZeros);
@@ -580,34 +576,8 @@ void OutputDataWidget::setDisplayHexAddresses(bool on)
     _listModel->update();
 }
 
-///
-/// \brief OutputDataWidget::captureMode
-/// \return
-///
-CaptureMode OutputDataWidget::captureMode() const
-{
-    return _fileCapture.isOpen() ? CaptureMode::TextCapture : CaptureMode::Off;
-}
 
-///
-/// \brief OutputDataWidget::startTextCapture
-/// \param file
-///
-void OutputDataWidget::startTextCapture(const QString& file)
-{
-    _fileCapture.setFileName(file);
-    if(!_fileCapture.open(QFile::Text | QFile::WriteOnly))
-        emit startTextCaptureError(_fileCapture.errorString());
-}
 
-///
-/// \brief OutputDataWidget::stopTextCapture
-///
-void OutputDataWidget::stopTextCapture()
-{
-    if(_fileCapture.isOpen())
-        _fileCapture.close();
-}
 
 ///
 /// \brief OutputDataWidget::backgroundColor
@@ -738,60 +708,11 @@ void OutputDataWidget::setDataViewColumnsDistance(int value)
     _listModel->setColumnsDistance(value);
 }
 
-///
-/// \brief OutputDataWidget::logViewLimit
-/// \return
-///
-int OutputDataWidget::logViewLimit() const
-{
-    return ui->logView->rowLimit();
-}
 
-///
-/// \brief OutputDataWidget::setLogViewLimit
-/// \param l
-///
-void OutputDataWidget::setLogViewLimit(int l)
-{
-    ui->logView->setRowLimit(l);
-}
 
-///
-/// \brief OutputDataWidget::pauseLogView
-/// \param pause
-///
-void OutputDataWidget::setLogViewState(LogViewState state)
-{
-    ui->logView->setState(state);
-}
 
-///
-/// \brief OutputDataWidget::autoscrollLogView
-/// \return
-///
-bool OutputDataWidget::autoscrollLogView() const
-{
-    return ui->logView->autoscroll();
-}
 
-///
-/// \brief OutputDataWidget::setAutosctollLogView
-/// \param on
-///
-void OutputDataWidget::setAutosctollLogView(bool on)
-{
-    ui->logView->setAutoscroll(on);
-}
 
-///
-/// \brief OutputDataWidget::clearLogView
-///
-void OutputDataWidget::clearLogView()
-{
-    ui->logView->clear();
-    ui->modbusMsg->clear();
-    hideModbusMessage();
-}
 
 ///
 /// \brief OutputDataWidget::setStatus
@@ -861,14 +782,6 @@ void OutputDataWidget::paint(const QRect& rc, QPainter& painter)
     }
 }
 
-///
-/// \brief OutputDataWidget::updateTraffic
-/// \param msg
-///
-void OutputDataWidget::updateTraffic(QSharedPointer<const ModbusMessage> msg)
-{
-    updateLogView(msg);
-}
 
 ///
 /// \brief OutputDataWidget::updateData
@@ -1229,18 +1142,6 @@ void OutputDataWidget::setInvalidLengthStatus()
     setStatus(tr("Invalid Data Length Specified"));
 }
 
-///
-/// \brief OutputDataWidget::captureString
-/// \param s
-///
-void OutputDataWidget::captureString(const QString& s)
-{
-    if(_fileCapture.isOpen())
-    {
-        QTextStream stream(&_fileCapture);
-        stream << s << "\n";
-    }
-}
 
 ///
 /// \brief OutputDataWidget::showModbusMessage
@@ -1289,21 +1190,6 @@ void OutputDataWidget::showZoomOverlay()
     _zoomHideTimer->start(800);
 }
 
-///
-/// \brief OutputDataWidget::updateLogView
-/// \param msg
-///
-void OutputDataWidget::updateLogView(QSharedPointer<const ModbusMessage> msg)
-{
-    ui->logView->addItem(msg);
-    if(captureMode() == CaptureMode::TextCapture && msg != nullptr)
-    {
-        const auto str = QString("%1: %2 %3 %4").arg(
-            (msg->isRequest()?  "Tx" : "Rx"),
-            msg->timestamp().toString(Qt::ISODateWithMs),
-            (msg->isRequest()?  "<<" : ">>"),
-            msg->toString(DataDisplayMode::Hex, _displayDefinition.LeadingZeros));
-        captureString(str);
-    }
-}
+
+
 

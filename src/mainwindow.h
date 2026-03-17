@@ -5,7 +5,6 @@
 #include <QDockWidget>
 #include <QTranslator>
 #include "helpwidget.h"
-#include "formmodsim.h"
 #include "ansimenu.h"
 #include "modbusmultiserver.h"
 #include "windowactionlist.h"
@@ -19,6 +18,9 @@ class MainWindow;
 
 class MdiAreaEx;
 class MdiArea;
+class FormDataView;
+class FormTrafficView;
+class FormScriptView;
 
 ///
 /// \brief The MainWindow class
@@ -50,6 +52,9 @@ public:
     void showHelpContext(const QString& helpKey);
     QIcon runScriptIcon() const;
     void applyConnections(const ModbusDefinitions& defs, const QList<ConnectionDetails>& conns);
+    ModbusMultiServer& mbMultiServer() { return _mbMultiServer; }
+    const ModbusMultiServer& mbMultiServer() const { return _mbMultiServer; }
+    DataSimulator* dataSimulator() const { return _dataSimulator; }
 
     void setViewMode(QMdiArea::ViewMode mode);
 
@@ -164,7 +169,12 @@ private slots:
     void updateMenuWindow();
 
 private:
-    void createNewForm(FormModSim::FormKind kind);
+    void createNewForm(ProjectFormKind kind);
+    QWidget* currentForm() const;
+    FormDataView* currentDataForm() const;
+    FormTrafficView* currentTrafficForm() const;
+    FormScriptView* currentScriptForm() const;
+    QWidget* currentDataOrTrafficForm() const;
     void updateDataDisplayMode(DataDisplayMode mode);
 
     void forceCoils(QModbusDataUnit::RegisterType type);
@@ -195,7 +205,7 @@ private:
     QSharedPointer<QPrinter> _selectedPrinter;
     DataSimulator* _dataSimulator = nullptr;
     QString _profile;
-    FormModSim::FormKind _newFormKind = FormModSim::FormKind::Data;
+    ProjectFormKind _newFormKind = ProjectFormKind::Data;
 
     AppProject* _project = nullptr;
 };

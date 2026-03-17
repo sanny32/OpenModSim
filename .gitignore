@@ -69,3 +69,4 @@ src/res/license.txt
 /docs/SITE_STRUCTURE.md
 /docs/DEPLOYMENT.md
 *.cmd
+/AGENTS.md
