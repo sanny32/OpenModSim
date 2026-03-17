@@ -21,6 +21,20 @@
 ///
 class MainWindow;
 class QTextDocument;
+class QCheckBox;
+class QSpinBox;
+class QComboBox;
+class QLabel;
+class QToolButton;
+class QToolBar;
+class QWidget;
+class QFrame;
+class QSplitter;
+class RunModeComboBox;
+class NumericLineEdit;
+class AddressBaseComboBox;
+class PointTypeComboBox;
+class StatisticWidget;
 
 namespace Ui {
 class FormTrafficView;
@@ -195,6 +209,17 @@ private:
 
 private:
     Ui::FormTrafficView *ui;
+    QWidget* _widgetOutputView = nullptr;
+    QToolBar* _toolBarTrafficFilter = nullptr;
+    QSplitter* _splitter = nullptr;
+    QFrame* _frameDataDefinition = nullptr;
+    NumericLineEdit* _lineEditDeviceId = nullptr;
+    NumericLineEdit* _lineEditAddress = nullptr;
+    NumericLineEdit* _lineEditLength = nullptr;
+    AddressBaseComboBox* _comboBoxAddressBase = nullptr;
+    PointTypeComboBox* _comboBoxModbusPointType = nullptr;
+    StatisticWidget* _statisticWidget = nullptr;
+    OutputTrafficWidget* _outputWidget = nullptr;
     MainWindow* _parent;
     int _formId;
     QString _filename;
@@ -203,6 +228,20 @@ private:
     ModbusMultiServer& _mbMultiServer;
     DataSimulator* _dataSimulator;
     QRect _parentGeometry;
+
+    RunModeComboBox* _scriptRunModeCombo = nullptr;
+    QSpinBox* _scriptIntervalSpin = nullptr;
+    QCheckBox* _scriptRunOnStartupCheck = nullptr;
+
+    QLabel* _labelUnitId = nullptr;
+    QSpinBox* _unitIdFilter = nullptr;
+    QLabel* _labelFuncCode = nullptr;
+    QComboBox* _funcCodeFilter = nullptr;
+    QLabel* _labelRowLimit = nullptr;
+    QComboBox* _rowLimitCombo = nullptr;
+    QWidget* _trafficFilterStretch = nullptr;
+    QToolButton* _pauseButton = nullptr;
+    QToolButton* _clearButton = nullptr;
 };
 
 ///

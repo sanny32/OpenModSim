@@ -1,14 +1,18 @@
-﻿#include <QPainter>
+#include <QPainter>
 #include <QPalette>
 #include <QDateTime>
 #include <QHelpEngine>
 #include <QHelpContentWidget>
+#include <QCheckBox>
+#include <QSpinBox>
+#include <QVBoxLayout>
 #include "modbuslimits.h"
 #include "mainwindow.h"
 #include "modbusmessages.h"
 #include "datasimulator.h"
 #include "dialogwritestatusregister.h"
 #include "dialogwriteregister.h"
+#include "controls/runmodecombobox.h"
 #include "formscriptview.h"
 #include "ui_formscriptview.h"
 
@@ -32,13 +36,24 @@ FormScriptView::FormScriptView(int id, ModbusMultiServer& server, DataSimulator*
     Q_ASSERT(_dataSimulator != nullptr);
 
     ui->setupUi(this);
+
+    _widgetOutputView = new QWidget(this);
+    _widgetOutputView->setObjectName(QStringLiteral("widgetOutputView"));
+    auto* outputLayout = new QVBoxLayout(_widgetOutputView);
+    outputLayout->setContentsMargins(0, 0, 0, 0);
+    outputLayout->setSpacing(0);
+    _outputWidget = new OutputTrafficWidget(_widgetOutputView);
+    _outputWidget->setObjectName(QStringLiteral("outputWidget"));
+    _outputWidget->setAutoFillBackground(true);
+    outputLayout->addWidget(_outputWidget);
+    ui->verticalLayout->insertWidget(0, _widgetOutputView);
+
     setWindowTitle(QString("Script%1").arg(_formId));
     setWindowIcon(QIcon(":/res/actionShowScript.png"));
 
-    ui->widgetOutputView->setVisible(false);
-    ui->widgetScriptView->setVisible(true);
+    _widgetOutputView->setVisible(false);
     ui->scriptControl->setModbusMultiServer(&_mbMultiServer);
-    ui->scriptControl->setByteOrder(ui->outputWidget->byteOrder());
+    ui->scriptControl->setByteOrder(_outputWidget->byteOrder());
     ui->scriptControl->setScriptSource(windowTitle());
 
     const auto mbDefs = _mbMultiServer.getModbusDefinitions();
@@ -47,15 +62,15 @@ FormScriptView::FormScriptView(int id, ModbusMultiServer& server, DataSimulator*
     _displayDefinition.PointAddress = 1;
     _displayDefinition.PointType = QModbusDataUnit::HoldingRegisters;
     _displayDefinition.Length = 100;
-    _displayDefinition.LogViewLimit = ui->outputWidget->logViewLimit();
-    _displayDefinition.AutoscrollLog = ui->outputWidget->autoscrollLogView();
+    _displayDefinition.LogViewLimit = _outputWidget->logViewLimit();
+    _displayDefinition.AutoscrollLog = _outputWidget->autoscrollLogView();
     _displayDefinition.VerboseLogging = _verboseLogging;
     _displayDefinition.HexAddress = false;
     _displayDefinition.HexViewAddress = false;
     _displayDefinition.HexViewDeviceId = false;
     _displayDefinition.HexViewLength = false;
     _displayDefinition.AddrSpace = mbDefs.AddrSpace;
-    _displayDefinition.DataViewColumnsDistance = ui->outputWidget->dataViewColumnsDistance();
+    _displayDefinition.DataViewColumnsDistance = _outputWidget->dataViewColumnsDistance();
     _displayDefinition.LeadingZeros = true;
     _displayDefinition.ScriptCfg = _scriptSettings;
     _displayDefinition.normalize();
@@ -65,8 +80,9 @@ FormScriptView::FormScriptView(int id, ModbusMultiServer& server, DataSimulator*
     connect(this, &FormModSim::definitionChanged, this, &FormScriptView::onDefinitionChanged);
     emit definitionChanged();
 
-    ui->outputWidget->setFocus();
-    connect(ui->outputWidget, &OutputTrafficWidget::startTextCaptureError, this, &FormModSim::captureError);
+    _outputWidget->setFocus();
+    connect(_outputWidget, &OutputTrafficWidget::startTextCaptureError, this, &FormModSim::captureError);
+    connect(_outputWidget, &OutputTrafficWidget::itemDoubleClicked, this, &FormScriptView::on_outputWidget_itemDoubleClicked);
     connect(ui->scriptControl, &JScriptControl::helpContext, this, &FormModSim::helpContextRequested);
     connect(ui->scriptControl, &JScriptControl::scriptStopped, this, &FormModSim::scriptStopped);
     connect(ui->scriptControl, &JScriptControl::consoleMessage, this, &FormModSim::consoleMessage);
@@ -124,6 +140,10 @@ void FormScriptView::changeEvent(QEvent* e)
     if (e->type() == QEvent::LanguageChange)
     {
         ui->retranslateUi(this);
+        if (_scriptIntervalSpin)
+            _scriptIntervalSpin->setSuffix(tr(" ms"));
+        if (_scriptRunOnStartupCheck)
+            _scriptRunOnStartupCheck->setText(tr("Run on startup"));
         updateStatus();
     }
 
@@ -178,7 +198,7 @@ void FormScriptView::setFilename(const QString& filename)
 ///
 QVector<quint16> FormScriptView::data() const
 {
-    return ui->outputWidget->data();
+    return _outputWidget->data();
 }
 
 ///
@@ -189,12 +209,12 @@ ScriptViewDefinitions FormScriptView::displayDefinition() const
 {
     ScriptViewDefinitions dd = _displayDefinition;
     dd.FormName = windowTitle();
-    dd.LogViewLimit = ui->outputWidget->logViewLimit();
-    dd.AutoscrollLog = ui->outputWidget->autoscrollLogView();
+    dd.LogViewLimit = _outputWidget->logViewLimit();
+    dd.AutoscrollLog = _outputWidget->autoscrollLogView();
     dd.VerboseLogging = _verboseLogging;
     dd.HexAddress = displayHexAddresses();
     dd.AddrSpace = _mbMultiServer.getModbusDefinitions().AddrSpace;
-    dd.DataViewColumnsDistance = ui->outputWidget->dataViewColumnsDistance();
+    dd.DataViewColumnsDistance = _outputWidget->dataViewColumnsDistance();
     dd.ScriptCfg = _scriptSettings;
     dd.normalize();
     return dd;
@@ -225,9 +245,9 @@ void FormScriptView::setDisplayDefinition(const ScriptViewDefinitions& dd)
         _mbMultiServer.addDeviceId(_displayDefinition.DeviceId);
     }
 
-    ui->outputWidget->setLogViewLimit(_displayDefinition.LogViewLimit);
-    ui->outputWidget->setDataViewColumnsDistance(_displayDefinition.DataViewColumnsDistance);
-    ui->outputWidget->setAutosctollLogView(_displayDefinition.AutoscrollLog);
+    _outputWidget->setLogViewLimit(_displayDefinition.LogViewLimit);
+    _outputWidget->setDataViewColumnsDistance(_displayDefinition.DataViewColumnsDistance);
+    _outputWidget->setAutosctollLogView(_displayDefinition.AutoscrollLog);
 
     _verboseLogging = _displayDefinition.VerboseLogging;
 
@@ -254,10 +274,10 @@ void FormScriptView::setDisplayDefinitionValue(const FormDisplayDefinition& dd)
 ///
 DisplayMode FormScriptView::displayMode() const
 {
-    if(ui->widgetScriptView->isVisible())
-        return DisplayMode::Script;
-    else
-        return ui->outputWidget->displayMode();
+    if(_widgetOutputView->isVisible())
+        return _outputWidget->displayMode();
+
+    return DisplayMode::Script;
 }
 
 ///
@@ -269,15 +289,13 @@ void FormScriptView::setDisplayMode(DisplayMode mode)
     switch(mode)
     {
         case DisplayMode::Script:
-            ui->widgetOutputView->setVisible(false);
-            ui->widgetScriptView->setVisible(true);
+            _widgetOutputView->setVisible(false);
             ui->scriptControl->setFocus();
         break;
 
         default:
-            ui->widgetScriptView->setVisible(false);
-            ui->widgetOutputView->setVisible(true);
-            ui->outputWidget->setDisplayMode(mode);
+            _widgetOutputView->setVisible(true);
+            _outputWidget->setDisplayMode(mode);
         break;
     }
 
@@ -290,7 +308,7 @@ void FormScriptView::setDisplayMode(DisplayMode mode)
 ///
 DataDisplayMode FormScriptView::dataDisplayMode() const
 {
-    return ui->outputWidget->dataDisplayMode();
+    return _outputWidget->dataDisplayMode();
 }
 
 ///
@@ -299,7 +317,7 @@ DataDisplayMode FormScriptView::dataDisplayMode() const
 ///
 bool FormScriptView::displayHexAddresses() const
 {
-    return ui->outputWidget->displayHexAddresses();
+    return _outputWidget->displayHexAddresses();
 }
 
 ///
@@ -308,7 +326,7 @@ bool FormScriptView::displayHexAddresses() const
 ///
 void FormScriptView::setDisplayHexAddresses(bool on)
 {
-    ui->outputWidget->setDisplayHexAddresses(on);
+    _outputWidget->setDisplayHexAddresses(on);
     _displayDefinition.HexAddress = on;
 }
 
@@ -317,7 +335,7 @@ void FormScriptView::setDisplayHexAddresses(bool on)
 ///
 CaptureMode FormScriptView::captureMode() const
 {
-    return ui->outputWidget->captureMode();
+    return _outputWidget->captureMode();
 }
 
 ///
@@ -326,7 +344,7 @@ CaptureMode FormScriptView::captureMode() const
 ///
 void FormScriptView::startTextCapture(const QString& file)
 {
-    ui->outputWidget->startTextCapture(file);
+    _outputWidget->startTextCapture(file);
 }
 
 ///
@@ -334,7 +352,7 @@ void FormScriptView::startTextCapture(const QString& file)
 ///
 void FormScriptView::stopTextCapture()
 {
-    ui->outputWidget->stopTextCapture();
+    _outputWidget->stopTextCapture();
 }
 
 ///
@@ -347,11 +365,11 @@ void FormScriptView::setDataDisplayMode(DataDisplayMode mode)
     switch(dd.PointType) {
         case QModbusDataUnit::Coils:
         case QModbusDataUnit::DiscreteInputs:
-            ui->outputWidget->setDataDisplayMode(DataDisplayMode::Binary);
+            _outputWidget->setDataDisplayMode(DataDisplayMode::Binary);
             break;
         case QModbusDataUnit::InputRegisters:
         case QModbusDataUnit::HoldingRegisters:
-            ui->outputWidget->setDataDisplayMode(mode);
+            _outputWidget->setDataDisplayMode(mode);
             break;
         default: break;
     }
@@ -373,9 +391,12 @@ ScriptSettings FormScriptView::scriptSettings() const
 void FormScriptView::setScriptSettings(const ScriptSettings& ss)
 {
     _scriptSettings = ss;
-    ui->comboBoxScriptRunMode->setCurrentRunMode(ss.Mode);
-    ui->spinBoxScriptInterval->setValue(static_cast<int>(ss.Interval));
-    ui->checkBoxScriptRunOnStartup->setChecked(ss.RunOnStartup);
+    if (_scriptRunModeCombo)
+        _scriptRunModeCombo->setCurrentRunMode(ss.Mode);
+    if (_scriptIntervalSpin)
+        _scriptIntervalSpin->setValue(static_cast<int>(ss.Interval));
+    if (_scriptRunOnStartupCheck)
+        _scriptRunOnStartupCheck->setChecked(ss.RunOnStartup);
     emit scriptSettingsChanged(ss);
 }
 
@@ -385,7 +406,7 @@ void FormScriptView::setScriptSettings(const ScriptSettings& ss)
 ///
 ByteOrder FormScriptView::byteOrder() const
 {
-    return *ui->outputWidget->byteOrder();
+    return *_outputWidget->byteOrder();
 }
 
 ///
@@ -394,7 +415,7 @@ ByteOrder FormScriptView::byteOrder() const
 ///
 void FormScriptView::setByteOrder(ByteOrder order)
 {
-    ui->outputWidget->setByteOrder(order);
+    _outputWidget->setByteOrder(order);
     emit byteOrderChanged(order);
 }
 
@@ -404,7 +425,7 @@ void FormScriptView::setByteOrder(ByteOrder order)
 ///
 QString FormScriptView::codepage() const
 {
-    return ui->outputWidget->codepage();
+    return _outputWidget->codepage();
 }
 
 ///
@@ -413,7 +434,7 @@ QString FormScriptView::codepage() const
 ///
 void FormScriptView::setCodepage(const QString& name)
 {
-    ui->outputWidget->setCodepage(name);
+    _outputWidget->setCodepage(name);
     emit codepageChanged(name);
 }
 
@@ -423,7 +444,7 @@ void FormScriptView::setCodepage(const QString& name)
 ///
 QColor FormScriptView::backgroundColor() const
 {
-    return ui->outputWidget->backgroundColor();
+    return _outputWidget->backgroundColor();
 }
 
 ///
@@ -432,7 +453,7 @@ QColor FormScriptView::backgroundColor() const
 ///
 void FormScriptView::setBackgroundColor(const QColor& clr)
 {
-    ui->outputWidget->setBackgroundColor(clr);
+    _outputWidget->setBackgroundColor(clr);
 }
 
 ///
@@ -441,7 +462,7 @@ void FormScriptView::setBackgroundColor(const QColor& clr)
 ///
 QColor FormScriptView::foregroundColor() const
 {
-    return ui->outputWidget->foregroundColor();
+    return _outputWidget->foregroundColor();
 }
 
 ///
@@ -450,7 +471,7 @@ QColor FormScriptView::foregroundColor() const
 ///
 void FormScriptView::setForegroundColor(const QColor& clr)
 {
-    ui->outputWidget->setForegroundColor(clr);
+    _outputWidget->setForegroundColor(clr);
 }
 
 ///
@@ -459,7 +480,7 @@ void FormScriptView::setForegroundColor(const QColor& clr)
 ///
 QColor FormScriptView::statusColor() const
 {
-    return ui->outputWidget->statusColor();
+    return _outputWidget->statusColor();
 }
 
 ///
@@ -468,7 +489,7 @@ QColor FormScriptView::statusColor() const
 ///
 void FormScriptView::setStatusColor(const QColor& clr)
 {
-    ui->outputWidget->setStatusColor(clr);
+    _outputWidget->setStatusColor(clr);
 }
 
 ///
@@ -477,7 +498,7 @@ void FormScriptView::setStatusColor(const QColor& clr)
 ///
 QFont FormScriptView::font() const
 {
-   return ui->outputWidget->font();
+   return _outputWidget->font();
 }
 
 ///
@@ -486,7 +507,7 @@ QFont FormScriptView::font() const
 ///
 void FormScriptView::setFont(const QFont& font)
 {
-    ui->outputWidget->setFont(font);
+    _outputWidget->setFont(font);
 }
 
 ///
@@ -495,7 +516,7 @@ void FormScriptView::setFont(const QFont& font)
 ///
 int FormScriptView::zoomPercent() const
 {
-    return ui->outputWidget->zoomPercent();
+    return _outputWidget->zoomPercent();
 }
 
 ///
@@ -504,7 +525,7 @@ int FormScriptView::zoomPercent() const
 ///
 void FormScriptView::setZoomPercent(int zoomPercent)
 {
-    ui->outputWidget->setZoomPercent(zoomPercent);
+    _outputWidget->setZoomPercent(zoomPercent);
 }
 
 ///
@@ -556,7 +577,7 @@ void FormScriptView::print(QPrinter* printer)
     auto rcOutput = pageRect;
     rcOutput.setTop(rcAddrLen.bottom() + 20);
 
-    ui->outputWidget->paint(rcOutput, painter);
+    _outputWidget->paint(rcOutput, painter);
 }
 
 ///
@@ -653,7 +674,7 @@ void FormScriptView::configureModbusDataUnit(quint8 deviceId, QModbusDataUnit::R
 ///
 AddressDescriptionMap2 FormScriptView::descriptionMap() const
 {
-    return ui->outputWidget->descriptionMap();
+    return _outputWidget->descriptionMap();
 }
 
 ///
@@ -665,7 +686,7 @@ AddressDescriptionMap2 FormScriptView::descriptionMap() const
 ///
 void FormScriptView::setDescription(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr, const QString& desc)
 {
-    ui->outputWidget->setDescription(deviceId, type, addr, desc);
+    _outputWidget->setDescription(deviceId, type, addr, desc);
 }
 
 ///
@@ -674,7 +695,7 @@ void FormScriptView::setDescription(quint8 deviceId, QModbusDataUnit::RegisterTy
 ///
 AddressColorMap FormScriptView::colorMap() const
 {
-    return ui->outputWidget->colorMap();
+    return _outputWidget->colorMap();
 }
 
 ///
@@ -686,7 +707,7 @@ AddressColorMap FormScriptView::colorMap() const
 ///
 void FormScriptView::setColor(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr, const QColor& clr)
 {
-    ui->outputWidget->setColor(deviceId, type, addr, clr);
+    _outputWidget->setColor(deviceId, type, addr, clr);
 }
 
 ///
@@ -696,7 +717,7 @@ void FormScriptView::resetCtrs()
 {
     _requestCount = 0;
     _responseCount = 0;
-    ui->outputWidget->clearLogView();
+    _outputWidget->clearLogView();
     emit statisticCtrsReseted();
 }
 
@@ -877,7 +898,7 @@ void FormScriptView::setLogViewState(LogViewState state)
         return;
 
     _logViewState = state;
-    ui->outputWidget->setLogViewState(state);
+    _outputWidget->setLogViewState(state);
     emit statisticLogStateChanged(state);
 }
 
@@ -931,13 +952,13 @@ void FormScriptView::updateStatus()
         const auto defs = _mbMultiServer.getModbusDefinitions();
         const auto addr = dd.PointAddress - (dd.ZeroBasedAddress ? 0 : 1);
         if(addr + dd.Length <= ModbusLimits::addressRange(defs.AddrSpace).to())
-            ui->outputWidget->setStatus(QString());
+            _outputWidget->setStatus(QString());
         else
-            ui->outputWidget->setInvalidLengthStatus();
+            _outputWidget->setInvalidLengthStatus();
     }
     else
     {
-        ui->outputWidget->setNotConnectedStatus();
+        _outputWidget->setNotConnectedStatus();
     }
 }
 
@@ -953,7 +974,7 @@ void FormScriptView::onDefinitionChanged()
     _mbMultiServer.addUnitMap(formId(), dd.DeviceId, dd.PointType, addr, dd.Length);
 
     ui->scriptControl->setAddressBase(dd.ZeroBasedAddress ? AddressBase::Base0 : AddressBase::Base1);
-    ui->outputWidget->setup(toTrafficViewDefinitions(dd), _dataSimulator->simulationMap(), _mbMultiServer.data(dd.DeviceId, dd.PointType, addr, dd.Length));
+    _outputWidget->setup(toTrafficViewDefinitions(dd), _dataSimulator->simulationMap(), _mbMultiServer.data(dd.DeviceId, dd.PointType, addr, dd.Length));
 }
 
 ///
@@ -1061,7 +1082,7 @@ void FormScriptView::on_outputWidget_itemDoubleClicked(quint16 addr, const QVari
 void FormScriptView::on_mbConnected(const ConnectionDetails&)
 {
     updateStatus();
-    ui->outputWidget->clearLogView();
+    _outputWidget->clearLogView();
 
     if(logViewState() == LogViewState::Unknown) {
         setLogViewState(LogViewState::Running);
@@ -1149,7 +1170,7 @@ void FormScriptView::on_mbRequest(QSharedPointer<const ModbusMessage> msg)
 {
     if(_verboseLogging || isLoggingRequest(msg)) {
         ++_requestCount;
-        ui->outputWidget->updateTraffic(msg);
+        _outputWidget->updateTraffic(msg);
     }
 }
 
@@ -1162,7 +1183,7 @@ void FormScriptView::on_mbResponse(QSharedPointer<const ModbusMessage> msgReq, Q
 {
     if(_verboseLogging || isLoggingRequest(msgReq)) {
         ++_responseCount;
-        ui->outputWidget->updateTraffic(msgResp);
+        _outputWidget->updateTraffic(msgResp);
     }
 }
 
@@ -1175,7 +1196,7 @@ void FormScriptView::on_mbDataChanged(quint8 deviceId, const QModbusDataUnit&)
     if(deviceId == dd.DeviceId)
     {
         const auto addr = dd.PointAddress - (dd.ZeroBasedAddress ? 0 : 1);
-        ui->outputWidget->updateData(_mbMultiServer.data(deviceId, dd.PointType, addr, dd.Length));
+        _outputWidget->updateData(_mbMultiServer.data(deviceId, dd.PointType, addr, dd.Length));
     }
 }
 
@@ -1189,7 +1210,7 @@ void FormScriptView::on_mbDefinitionsChanged(const ModbusDefinitions& defs)
     _displayDefinition.normalize();
     const auto dd = displayDefinition();
     const auto addr = dd.PointAddress - (dd.ZeroBasedAddress ? 0 : 1);
-    ui->outputWidget->setup(toTrafficViewDefinitions(dd), _dataSimulator->simulationMap(), _mbMultiServer.data(dd.DeviceId, dd.PointType, addr, dd.Length));
+    _outputWidget->setup(toTrafficViewDefinitions(dd), _dataSimulator->simulationMap(), _mbMultiServer.data(dd.DeviceId, dd.PointType, addr, dd.Length));
 }
 
 ///
@@ -1205,7 +1226,7 @@ void FormScriptView::on_simulationStarted(DataDisplayMode mode, quint8 deviceId,
         return;
 
     for(auto&& addr : addresses)
-        ui->outputWidget->setSimulated(mode, deviceId, type, addr, true);
+        _outputWidget->setSimulated(mode, deviceId, type, addr, true);
 }
 
 ///
@@ -1221,7 +1242,7 @@ void FormScriptView::on_simulationStopped(DataDisplayMode mode, quint8 deviceId,
         return;
 
     for(auto&& addr : addresses)
-        ui->outputWidget->setSimulated(mode, deviceId, type, addr, false);
+        _outputWidget->setSimulated(mode, deviceId, type, addr, false);
 }
 
 ///
@@ -1249,25 +1270,36 @@ void FormScriptView::on_dataSimulated(DataDisplayMode mode, quint8 deviceId, QMo
 void FormScriptView::setupScriptBar()
 {
     ui->toolBarScript->clear();
-    ui->toolBarScript->addWidget(ui->comboBoxScriptRunMode);
-    ui->toolBarScript->addWidget(ui->spinBoxScriptInterval);
-    ui->toolBarScript->addWidget(ui->checkBoxScriptRunOnStartup);
+
+    _scriptRunModeCombo = new RunModeComboBox(ui->toolBarScript);
+    _scriptRunModeCombo->setCurrentRunMode(_scriptSettings.Mode);
+
+    _scriptIntervalSpin = new QSpinBox(ui->toolBarScript);
+    _scriptIntervalSpin->setRange(500, 10000);
+    _scriptIntervalSpin->setSingleStep(100);
+    _scriptIntervalSpin->setSuffix(tr(" ms"));
+    _scriptIntervalSpin->setValue(static_cast<int>(_scriptSettings.Interval));
+    _scriptIntervalSpin->setFixedWidth(90);
+
+    _scriptRunOnStartupCheck = new QCheckBox(tr("Run on startup"), ui->toolBarScript);
+    _scriptRunOnStartupCheck->setChecked(_scriptSettings.RunOnStartup);
+
+    ui->toolBarScript->addWidget(_scriptRunModeCombo);
+    ui->toolBarScript->addWidget(_scriptIntervalSpin);
+    ui->toolBarScript->addWidget(_scriptRunOnStartupCheck);
     ui->toolBarScript->addSeparator();
     ui->toolBarScript->addAction(ui->actionRunScript);
     ui->toolBarScript->addAction(ui->actionStopScript);
 
-    ui->comboBoxScriptRunMode->setCurrentRunMode(_scriptSettings.Mode);
-    connect(ui->comboBoxScriptRunMode, &RunModeComboBox::runModeChanged, this, [this](RunMode mode) {
+    connect(_scriptRunModeCombo, &RunModeComboBox::runModeChanged, this, [this](RunMode mode) {
         _scriptSettings.Mode = mode;
     });
 
-    ui->spinBoxScriptInterval->setValue(static_cast<int>(_scriptSettings.Interval));
-    connect(ui->spinBoxScriptInterval, &QSpinBox::valueChanged, this, [this](int value) {
+    connect(_scriptIntervalSpin, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged), this, [this](int value) {
         _scriptSettings.Interval = static_cast<uint>(value);
     });
 
-    ui->checkBoxScriptRunOnStartup->setChecked(_scriptSettings.RunOnStartup);
-    connect(ui->checkBoxScriptRunOnStartup, &QCheckBox::checkStateChanged, this, [this](Qt::CheckState state) {
+    connect(_scriptRunOnStartupCheck, &QCheckBox::stateChanged, this, [this](int state) {
         _scriptSettings.RunOnStartup = (state == Qt::Checked);
     });
 
@@ -1296,9 +1328,12 @@ void FormScriptView::updateScriptBar()
     const bool running = canStopScript();
     ui->actionRunScript->setEnabled(canRunScript());
     ui->actionStopScript->setEnabled(running);
-    ui->comboBoxScriptRunMode->setEnabled(!running);
-    ui->spinBoxScriptInterval->setEnabled(!running);
-    ui->checkBoxScriptRunOnStartup->setEnabled(!running);
+    if (_scriptRunModeCombo)
+        _scriptRunModeCombo->setEnabled(!running);
+    if (_scriptIntervalSpin)
+        _scriptIntervalSpin->setEnabled(!running);
+    if (_scriptRunOnStartupCheck)
+        _scriptRunOnStartupCheck->setEnabled(!running);
 }
 
 ///

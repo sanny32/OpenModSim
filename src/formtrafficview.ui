@@ -27,321 +27,22 @@
     <number>0</number>
    </property>
    <item>
-    <layout class="QVBoxLayout" name="verticalLayout_4">
-     <property name="spacing">
-      <number>0</number>
+    <widget class="QToolBar" name="toolBarScript">
+     <property name="iconSize">
+      <size>
+       <width>16</width>
+       <height>16</height>
+      </size>
      </property>
-     <property name="leftMargin">
-      <number>0</number>
-     </property>
-     <property name="topMargin">
-      <number>0</number>
-     </property>
-     <property name="rightMargin">
-      <number>0</number>
-     </property>
-     <property name="bottomMargin">
-      <number>0</number>
-     </property>
-     <item>
-      <widget class="QToolBar" name="toolBarScript">
-       <property name="iconSize">
-        <size>
-         <width>16</width>
-         <height>16</height>
-        </size>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="JScriptControl" name="scriptControl" native="true"/>
-     </item>
-    </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="JScriptControl" name="scriptControl" native="true"/>
    </item>
   </layout>
-  <widget class="QLabel" name="labelTrafficUnitId">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>100</width>
-     <height>30</height>
-    </rect>
-   </property>
-  </widget>
-  <widget class="QSpinBox" name="spinBoxTrafficUnitId">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>70</width>
-     <height>30</height>
-    </rect>
-   </property>
-   <property name="minimumSize">
-    <size>
-     <width>70</width>
-     <height>0</height>
-    </size>
-   </property>
-   <property name="maximumSize">
-    <size>
-     <width>70</width>
-     <height>16777215</height>
-    </size>
-   </property>
-   <property name="minimum">
-    <number>0</number>
-   </property>
-   <property name="maximum">
-    <number>247</number>
-   </property>
-  </widget>
-  <widget class="QLabel" name="labelTrafficFunction">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>100</width>
-     <height>30</height>
-    </rect>
-   </property>
-  </widget>
-  <widget class="QComboBox" name="comboBoxTrafficFunction">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>220</width>
-     <height>30</height>
-    </rect>
-   </property>
-   <property name="minimumSize">
-    <size>
-     <width>220</width>
-     <height>0</height>
-    </size>
-   </property>
-   <property name="maximumSize">
-    <size>
-     <width>220</width>
-     <height>16777215</height>
-    </size>
-   </property>
-   <item>
-    <property name="text">
-     <string>All</string>
-    </property>
-   </item>
-   <item>
-    <property name="text">
-     <string>FC01 Read Coils</string>
-    </property>
-   </item>
-   <item>
-    <property name="text">
-     <string>FC02 Read Discrete Inputs</string>
-    </property>
-   </item>
-   <item>
-    <property name="text">
-     <string>FC03 Read Holding Registers</string>
-    </property>
-   </item>
-   <item>
-    <property name="text">
-     <string>FC04 Read Input Registers</string>
-    </property>
-   </item>
-   <item>
-    <property name="text">
-     <string>FC05 Write Single Coil</string>
-    </property>
-   </item>
-   <item>
-    <property name="text">
-     <string>FC06 Write Single Register</string>
-    </property>
-   </item>
-   <item>
-    <property name="text">
-     <string>FC15 Write Multiple Coils</string>
-    </property>
-   </item>
-   <item>
-    <property name="text">
-     <string>FC16 Write Multiple Registers</string>
-    </property>
-   </item>
-  </widget>
-  <widget class="QLabel" name="labelTrafficLimit">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>100</width>
-     <height>30</height>
-    </rect>
-   </property>
-  </widget>
-  <widget class="QComboBox" name="comboBoxTrafficLimit">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>65</width>
-     <height>30</height>
-    </rect>
-   </property>
-   <property name="minimumSize">
-    <size>
-     <width>65</width>
-     <height>0</height>
-    </size>
-   </property>
-   <property name="maximumSize">
-    <size>
-     <width>65</width>
-     <height>16777215</height>
-    </size>
-   </property>
-   <property name="currentIndex">
-    <number>2</number>
-   </property>
-   <item>
-    <property name="text">
-     <string>100</string>
-    </property>
-   </item>
-   <item>
-    <property name="text">
-     <string>500</string>
-    </property>
-   </item>
-   <item>
-    <property name="text">
-     <string>1000</string>
-    </property>
-   </item>
-   <item>
-    <property name="text">
-     <string>5000</string>
-    </property>
-   </item>
-  </widget>
-  <widget class="QWidget" name="widgetTrafficFilterStretch" native="true">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>100</width>
-     <height>30</height>
-    </rect>
-   </property>
-   <property name="sizePolicy">
-    <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-     <horstretch>0</horstretch>
-     <verstretch>0</verstretch>
-    </sizepolicy>
-   </property>
-  </widget>
-  <widget class="QToolButton" name="toolButtonTrafficPause">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>100</width>
-     <height>30</height>
-    </rect>
-   </property>
-   <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/res/actionStopScript.png</normaloff>:/res/actionStopScript.png</iconset>
-   </property>
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="autoRaise">
-    <bool>true</bool>
-   </property>
-  </widget>
-  <widget class="QToolButton" name="toolButtonTrafficClear">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>100</width>
-     <height>30</height>
-    </rect>
-   </property>
-   <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/res/edit-delete.svg</normaloff>:/res/edit-delete.svg</iconset>
-   </property>
-   <property name="autoRaise">
-    <bool>true</bool>
-   </property>
-  </widget>
-  <widget class="RunModeComboBox" name="comboBoxScriptRunMode">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>100</width>
-     <height>30</height>
-    </rect>
-   </property>
-  </widget>
-  <widget class="QSpinBox" name="spinBoxScriptInterval">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>90</width>
-     <height>30</height>
-    </rect>
-   </property>
-   <property name="minimumSize">
-    <size>
-     <width>90</width>
-     <height>0</height>
-    </size>
-   </property>
-   <property name="maximumSize">
-    <size>
-     <width>90</width>
-     <height>16777215</height>
-    </size>
-   </property>
-   <property name="suffix">
-    <string> ms</string>
-   </property>
-   <property name="minimum">
-    <number>500</number>
-   </property>
-   <property name="maximum">
-    <number>10000</number>
-   </property>
-   <property name="singleStep">
-    <number>100</number>
-   </property>
-  </widget>
-  <widget class="QCheckBox" name="checkBoxScriptRunOnStartup">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>100</width>
-     <height>30</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Run on startup</string>
-   </property>
-  </widget>
   <action name="actionRunScript">
    <property name="icon">
-    <iconset resource="resources.qrc">
+    <iconset>
      <normaloff>:/res/actionRunScript.png</normaloff>:/res/actionRunScript.png</iconset>
    </property>
    <property name="text">
@@ -350,7 +51,7 @@
   </action>
   <action name="actionStopScript">
    <property name="icon">
-    <iconset resource="resources.qrc">
+    <iconset>
      <normaloff>:/res/actionStopScript.png</normaloff>:/res/actionStopScript.png</iconset>
    </property>
    <property name="text">
@@ -365,14 +66,11 @@
    <header>jscriptcontrol.h</header>
    <container>1</container>
   </customwidget>
-  <customwidget>
-   <class>RunModeComboBox</class>
-   <extends>QComboBox</extends>
-   <header>runmodecombobox.h</header>
-  </customwidget>
  </customwidgets>
- <resources>
-  <include location="resources.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>
+
+
+
+

@@ -1939,7 +1939,7 @@ MODBUS Point Type:
     <message>
         <location filename="../formdataview.ui" line="437"/>
         <source>Unsigned 16-bit Integer</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">無符號64位整數 {16-?}</translation>
     </message>
     <message>
         <location filename="../formdataview.ui" line="449"/>
@@ -2149,17 +2149,17 @@ MODBUS Point Type:
         <translation type="obsolete">長度：</translation>
     </message>
     <message>
-        <location filename="../formscriptview.cpp" line="540"/>
+        <location filename="../formscriptview.cpp" line="561"/>
         <source>0-based</source>
         <translation type="unfinished">基地址為-0</translation>
     </message>
     <message>
-        <location filename="../formscriptview.cpp" line="540"/>
+        <location filename="../formscriptview.cpp" line="561"/>
         <source>1-based</source>
         <translation type="unfinished">基地址為-1</translation>
     </message>
     <message>
-        <location filename="../formscriptview.cpp" line="541"/>
+        <location filename="../formscriptview.cpp" line="562"/>
         <source>Address Base: %1
 Start Address: %2
 Length: %3</source>
@@ -2168,7 +2168,7 @@ Length: %3</source>
 長度: %3</translation>
     </message>
     <message>
-        <location filename="../formscriptview.cpp" line="545"/>
+        <location filename="../formscriptview.cpp" line="566"/>
         <source>Unit Identifier: %1
 MODBUS Point Type:
 %2</source>
@@ -2177,22 +2177,24 @@ MODBUS Point Type:
 %2</translation>
     </message>
     <message>
-        <location filename="../formscriptview.ui" line="157"/>
+        <location filename="../formscriptview.cpp" line="144"/>
+        <location filename="../formscriptview.cpp" line="1280"/>
         <source> ms</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formscriptview.ui" line="162"/>
+        <location filename="../formscriptview.cpp" line="146"/>
+        <location filename="../formscriptview.cpp" line="1284"/>
         <source>Run on startup</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formscriptview.ui" line="171"/>
+        <location filename="../formscriptview.ui" line="49"/>
         <source>Run Script</source>
         <translation type="unfinished">執行指令碼</translation>
     </message>
     <message>
-        <location filename="../formscriptview.ui" line="180"/>
+        <location filename="../formscriptview.ui" line="58"/>
         <source>Stop Script</source>
         <translation type="unfinished">停止指令碼</translation>
     </message>
@@ -2260,92 +2262,11 @@ MODBUS Point Type:
 <context>
     <name>FormTrafficView</name>
     <message>
-        <location filename="../formtrafficview.ui" line="118"/>
-        <source>Starting Address:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../formtrafficview.ui" line="125"/>
         <source>Length:</source>
-        <translation type="unfinished">長度：</translation>
+        <translation type="obsolete">長度：</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.ui" line="164"/>
-        <source>Address Base:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../formtrafficview.ui" line="214"/>
-        <source>Unit Identifier:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../formtrafficview.ui" line="264"/>
-        <source>Data Type</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../formtrafficview.ui" line="455"/>
-        <source>FC01 Read Coils</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../formtrafficview.ui" line="460"/>
-        <source>FC02 Read Discrete Inputs</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../formtrafficview.ui" line="465"/>
-        <source>FC03 Read Holding Registers</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../formtrafficview.ui" line="470"/>
-        <source>FC04 Read Input Registers</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../formtrafficview.ui" line="475"/>
-        <source>FC05 Write Single Coil</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../formtrafficview.ui" line="480"/>
-        <source>FC06 Write Single Register</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../formtrafficview.ui" line="485"/>
-        <source>FC15 Write Multiple Coils</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../formtrafficview.ui" line="490"/>
-        <source>FC16 Write Multiple Registers</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../formtrafficview.ui" line="513"/>
-        <source>100</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../formtrafficview.ui" line="518"/>
-        <source>500</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../formtrafficview.ui" line="523"/>
-        <source>1000</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../formtrafficview.ui" line="528"/>
-        <source>5000</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../formtrafficview.cpp" line="585"/>
+        <location filename="../formtrafficview.cpp" line="700"/>
         <source>Address Base: %1
 Start Address: %2
 Length: %3</source>
@@ -2354,7 +2275,7 @@ Length: %3</source>
 長度: %3</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="588"/>
+        <location filename="../formtrafficview.cpp" line="703"/>
         <source>Unit Identifier: %1
 MODBUS Point Type:
 %2</source>
@@ -2363,64 +2284,66 @@ MODBUS Point Type:
 %2</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.ui" line="585"/>
+        <location filename="../formtrafficview.cpp" line="241"/>
+        <location filename="../formtrafficview.cpp" line="1497"/>
         <source> ms</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formtrafficview.ui" line="590"/>
+        <location filename="../formtrafficview.cpp" line="243"/>
+        <location filename="../formtrafficview.cpp" line="1501"/>
         <source>Run on startup</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formtrafficview.ui" line="599"/>
+        <location filename="../formtrafficview.ui" line="49"/>
         <source>Run Script</source>
         <translation type="unfinished">執行指令碼</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.ui" line="608"/>
+        <location filename="../formtrafficview.ui" line="58"/>
         <source>Stop Script</source>
         <translation type="unfinished">停止指令碼</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.ui" line="450"/>
-        <location filename="../formtrafficview.cpp" line="1474"/>
-        <location filename="../formtrafficview.cpp" line="1479"/>
+        <location filename="../formtrafficview.cpp" line="1555"/>
+        <location filename="../formtrafficview.cpp" line="1630"/>
+        <location filename="../formtrafficview.cpp" line="1635"/>
         <source>All</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="1473"/>
+        <location filename="../formtrafficview.cpp" line="1629"/>
         <source>Unit ID:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="1475"/>
+        <location filename="../formtrafficview.cpp" line="1631"/>
         <source>Filter by Unit Identifier (0 = all)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="1476"/>
+        <location filename="../formtrafficview.cpp" line="1632"/>
         <source>Function:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="1477"/>
+        <location filename="../formtrafficview.cpp" line="1633"/>
         <source>Limit:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="1478"/>
+        <location filename="../formtrafficview.cpp" line="1634"/>
         <source>Clear</source>
         <translation type="unfinished">清除</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="1494"/>
+        <location filename="../formtrafficview.cpp" line="1653"/>
         <source>Resume</source>
         <translation type="unfinished">恢復</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="1494"/>
+        <location filename="../formtrafficview.cpp" line="1653"/>
         <source>Pause</source>
         <translation type="unfinished">暫停</translation>
     </message>

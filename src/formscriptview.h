@@ -21,6 +21,9 @@
 ///
 class MainWindow;
 class QTextDocument;
+class QCheckBox;
+class QSpinBox;
+class RunModeComboBox;
 
 namespace Ui {
 class FormScriptView;
@@ -186,6 +189,8 @@ private:
 
 private:
     Ui::FormScriptView *ui;
+    QWidget* _widgetOutputView = nullptr;
+    OutputTrafficWidget* _outputWidget = nullptr;
     MainWindow* _parent;
     int _formId;
     QString _filename;
@@ -198,6 +203,10 @@ private:
     uint _requestCount = 0;
     uint _responseCount = 0;
     LogViewState _logViewState = LogViewState::Unknown;
+
+    RunModeComboBox* _scriptRunModeCombo = nullptr;
+    QSpinBox* _scriptIntervalSpin = nullptr;
+    QCheckBox* _scriptRunOnStartupCheck = nullptr;
 };
 
 ///
