@@ -67,7 +67,7 @@ MainStatusBar::MainStatusBar(const ModbusMultiServer& server, QWidget* parent)
         updateConnectionInfo(label, cd);
 
         _labels.append(label);
-        insertPermanentWidget(_labels.size() - 1, label);
+        insertWidget(_labels.size() - 1, label);
     });
 
     connect(&server, &ModbusMultiServer::disconnected, this, [&](const ConnectionDetails& cd)
@@ -224,3 +224,4 @@ void MainStatusBar::onNewVersionAvailable(const QString& version, const QString&
     _bellButton->setIcon(QIcon(":/res/icon-bell-dot.svg"));
     _bellButton->setToolTip(tr("New version %1 is available. Click to download.").arg(version));
 }
+
