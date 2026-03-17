@@ -27,13 +27,15 @@
     <number>0</number>
    </property>
    <item>
-    <widget class="QToolBar" name="toolBarScript">
+   <widget class="QToolBar" name="toolBarScript">
      <property name="iconSize">
       <size>
        <width>16</width>
        <height>16</height>
       </size>
      </property>
+     <addaction name="actionRunScript"/>
+     <addaction name="actionStopScript"/>
     </widget>
    </item>
    <item>

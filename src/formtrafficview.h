@@ -28,6 +28,7 @@ class QLabel;
 class QToolButton;
 class QToolBar;
 class QWidget;
+class QAction;
 class QFrame;
 class QSplitter;
 class RunModeComboBox;
@@ -209,6 +210,7 @@ private:
 
 private:
     Ui::FormTrafficView *ui;
+    JScriptControl* _scriptControl = nullptr;
     QWidget* _widgetOutputView = nullptr;
     QToolBar* _toolBarTrafficFilter = nullptr;
     QSplitter* _splitter = nullptr;
@@ -242,6 +244,14 @@ private:
     QWidget* _trafficFilterStretch = nullptr;
     QToolButton* _pauseButton = nullptr;
     QToolButton* _clearButton = nullptr;
+
+    QAction* _actionUndoScript = nullptr;
+    QAction* _actionRedoScript = nullptr;
+    QAction* _actionCutScript = nullptr;
+    QAction* _actionCopyScript = nullptr;
+    QAction* _actionPasteScript = nullptr;
+    QAction* _actionFindScript = nullptr;
+    QAction* _actionReplaceScript = nullptr;
 };
 
 ///

@@ -120,13 +120,16 @@ FormTrafficView::FormTrafficView(int id, ModbusMultiServer& server, DataSimulato
     frameOutputLayout->setContentsMargins(0, 0, 0, 0);
     frameOutputLayout->setSpacing(0);
 
-    _outputWidget = new OutputTrafficWidget(frameOutput);
-    _outputWidget->setObjectName(QStringLiteral("outputWidget"));
-    _outputWidget->setAutoFillBackground(true);
+    _outputWidget = ui->outputWidget;
+    _outputWidget->setParent(frameOutput);
     frameOutputLayout->addWidget(_outputWidget);
 
     outputViewLayout->addWidget(_splitter);
     ui->verticalLayout_2->insertWidget(0, _widgetOutputView);
+
+    _scriptControl = new JScriptControl(this);
+    _scriptControl->setObjectName(QStringLiteral("scriptControl"));
+    ui->verticalLayout_2->addWidget(_scriptControl);
 
     connect(_lineEditAddress, qOverload<const QVariant&>(&NumericLineEdit::valueChanged), this, &FormTrafficView::on_lineEditAddress_valueChanged);
     connect(_lineEditLength, qOverload<const QVariant&>(&NumericLineEdit::valueChanged), this, &FormTrafficView::on_lineEditLength_valueChanged);
@@ -150,12 +153,12 @@ FormTrafficView::FormTrafficView(int id, ModbusMultiServer& server, DataSimulato
     server.addDeviceId(_lineEditDeviceId->value<int>());
 
     _widgetOutputView->setVisible(true);
-    ui->toolBarScript->setVisible(false);
-    ui->scriptControl->setVisible(false);
+    ui->toolBarTraffic->setVisible(false);
+    _scriptControl->setVisible(false);
     _outputWidget->enforceTrafficMode();
-    ui->scriptControl->setModbusMultiServer(&_mbMultiServer);
-    ui->scriptControl->setByteOrder(_outputWidget->byteOrder());
-    ui->scriptControl->setScriptSource(windowTitle());
+    _scriptControl->setModbusMultiServer(&_mbMultiServer);
+    _scriptControl->setByteOrder(_outputWidget->byteOrder());
+    _scriptControl->setScriptSource(windowTitle());
 
     const auto mbDefs = _mbMultiServer.getModbusDefinitions();
 
@@ -176,9 +179,9 @@ FormTrafficView::FormTrafficView(int id, ModbusMultiServer& server, DataSimulato
 
     _outputWidget->setFocus();
     connect(_outputWidget, &OutputTrafficWidget::startTextCaptureError, this, &FormModSim::captureError);
-    connect(ui->scriptControl, &JScriptControl::helpContext, this, &FormModSim::helpContextRequested);
-    connect(ui->scriptControl, &JScriptControl::scriptStopped, this, &FormModSim::scriptStopped);
-    connect(ui->scriptControl, &JScriptControl::consoleMessage, this, &FormModSim::consoleMessage);
+    connect(_scriptControl, &JScriptControl::helpContext, this, &FormModSim::helpContextRequested);
+    connect(_scriptControl, &JScriptControl::scriptStopped, this, &FormModSim::scriptStopped);
+    connect(_scriptControl, &JScriptControl::consoleMessage, this, &FormModSim::consoleMessage);
 
     setLogViewState(server.isConnected() ? LogViewState::Running : LogViewState::Unknown);
     connect(_statisticWidget, &StatisticWidget::ctrsReseted, _outputWidget, &OutputTrafficWidget::clearLogView);
@@ -241,6 +244,20 @@ void FormTrafficView::changeEvent(QEvent* e)
             _scriptIntervalSpin->setSuffix(tr(" ms"));
         if (_scriptRunOnStartupCheck)
             _scriptRunOnStartupCheck->setText(tr("Run on startup"));
+        if (_actionUndoScript)
+            _actionUndoScript->setText(tr("Undo"));
+        if (_actionRedoScript)
+            _actionRedoScript->setText(tr("Redo"));
+        if (_actionCutScript)
+            _actionCutScript->setText(tr("Cut"));
+        if (_actionCopyScript)
+            _actionCopyScript->setText(tr("Copy"));
+        if (_actionPasteScript)
+            _actionPasteScript->setText(tr("Paste"));
+        if (_actionFindScript)
+            _actionFindScript->setText(tr("Find"));
+        if (_actionReplaceScript)
+            _actionReplaceScript->setText(tr("Replace"));
         retranslateTrafficFilterBar();
         updateStatus();
     }
@@ -407,7 +424,7 @@ void FormTrafficView::setDisplayDefinitionValue(const FormDisplayDefinition& dd)
 ///
 DisplayMode FormTrafficView::displayMode() const
 {
-    if(ui->scriptControl->isVisible())
+    if(_scriptControl->isVisible())
         return DisplayMode::Script;
 
         return _outputWidget->displayMode();
@@ -423,14 +440,14 @@ void FormTrafficView::setDisplayMode(DisplayMode mode)
     {
         case DisplayMode::Script:
             _widgetOutputView->setVisible(false);
-            ui->toolBarScript->setVisible(true);
-            ui->scriptControl->setVisible(true);
-            ui->scriptControl->setFocus();
+            ui->toolBarTraffic->setVisible(true);
+            _scriptControl->setVisible(true);
+            _scriptControl->setFocus();
         break;
 
         default:
-            ui->toolBarScript->setVisible(false);
-            ui->scriptControl->setVisible(false);
+            ui->toolBarTraffic->setVisible(false);
+            _scriptControl->setVisible(false);
             _widgetOutputView->setVisible(true);
             _outputWidget->setDisplayMode(mode);
         break;
@@ -888,7 +905,7 @@ void FormTrafficView::setStatisticCounters(uint requests, uint responses)
 ///
 QString FormTrafficView::script() const
 {
-    return ui->scriptControl->script();
+    return _scriptControl->script();
 }
 
 ///
@@ -897,7 +914,7 @@ QString FormTrafficView::script() const
 ///
 void FormTrafficView::setScript(const QString& text)
 {
-    ui->scriptControl->setScript(text);
+    _scriptControl->setScript(text);
 }
 
 ///
@@ -906,7 +923,7 @@ void FormTrafficView::setScript(const QString& text)
 ///
 QTextDocument* FormTrafficView::scriptDocument() const
 {
-    return ui->scriptControl->scriptDocument();
+    return _scriptControl->scriptDocument();
 }
 
 ///
@@ -915,27 +932,27 @@ QTextDocument* FormTrafficView::scriptDocument() const
 ///
 void FormTrafficView::setScriptDocument(QTextDocument* document)
 {
-    ui->scriptControl->setScriptDocument(document);
+    _scriptControl->setScriptDocument(document);
 }
 
 int FormTrafficView::scriptCursorPosition() const
 {
-    return ui->scriptControl->cursorPosition();
+    return _scriptControl->cursorPosition();
 }
 
 void FormTrafficView::setScriptCursorPosition(int pos)
 {
-    ui->scriptControl->setCursorPosition(pos);
+    _scriptControl->setCursorPosition(pos);
 }
 
 int FormTrafficView::scriptScrollPosition() const
 {
-    return ui->scriptControl->scrollPosition();
+    return _scriptControl->scrollPosition();
 }
 
 void FormTrafficView::setScriptScrollPosition(int pos)
 {
-    ui->scriptControl->setScrollPosition(pos);
+    _scriptControl->setScrollPosition(pos);
 }
 
 ///
@@ -944,7 +961,7 @@ void FormTrafficView::setScriptScrollPosition(int pos)
 ///
 QString FormTrafficView::searchText() const
 {
-    return ui->scriptControl->searchText();
+    return _scriptControl->searchText();
 }
 
 ///
@@ -953,8 +970,8 @@ QString FormTrafficView::searchText() const
 ///
 bool FormTrafficView::canRunScript() const
 {
-    return !ui->scriptControl->script().isEmpty() &&
-           !ui->scriptControl->isRunning();
+    return !_scriptControl->script().isEmpty() &&
+           !_scriptControl->isRunning();
 }
 
 ///
@@ -963,7 +980,7 @@ bool FormTrafficView::canRunScript() const
 ///
 bool FormTrafficView::canStopScript() const
 {
-    return ui->scriptControl->isRunning();
+    return _scriptControl->isRunning();
 }
 
 ///
@@ -972,7 +989,7 @@ bool FormTrafficView::canStopScript() const
 ///
 bool FormTrafficView::canUndo() const
 {
-    return ui->scriptControl->canUndo();
+    return _scriptControl->canUndo();
 }
 
 ///
@@ -981,7 +998,7 @@ bool FormTrafficView::canUndo() const
 ///
 bool FormTrafficView::canRedo() const
 {
-    return ui->scriptControl->canRedo();
+    return _scriptControl->canRedo();
 }
 
 ///
@@ -990,7 +1007,7 @@ bool FormTrafficView::canRedo() const
 ///
 bool FormTrafficView::canPaste() const
 {
-    return ui->scriptControl->canPaste();
+    return _scriptControl->canPaste();
 }
 
 ///
@@ -1000,7 +1017,7 @@ bool FormTrafficView::canPaste() const
 void FormTrafficView::runScript()
 {
     emit scriptRunning();
-    ui->scriptControl->runScript(_scriptSettings.Mode, _scriptSettings.Interval);
+    _scriptControl->runScript(_scriptSettings.Mode, _scriptSettings.Interval);
 }
 
 ///
@@ -1008,7 +1025,7 @@ void FormTrafficView::runScript()
 ///
 void FormTrafficView::stopScript()
 {
-    ui->scriptControl->stopScript();
+    _scriptControl->stopScript();
 }
 
 ///
@@ -1161,7 +1178,7 @@ void FormTrafficView::onDefinitionChanged()
     const auto addr = dd.PointAddress - (dd.ZeroBasedAddress ? 0 : 1);
     _mbMultiServer.addUnitMap(formId(), dd.DeviceId, dd.PointType, addr, dd.Length);
 
-    ui->scriptControl->setAddressBase(dd.ZeroBasedAddress ? AddressBase::Base0 : AddressBase::Base1);
+    _scriptControl->setAddressBase(dd.ZeroBasedAddress ? AddressBase::Base0 : AddressBase::Base1);
     _outputWidget->setup(dd, _dataSimulator->simulationMap(), _mbMultiServer.data(dd.DeviceId, dd.PointType, addr, dd.Length));
 }
 
@@ -1171,7 +1188,7 @@ void FormTrafficView::onDefinitionChanged()
 ///
 JScriptControl* FormTrafficView::scriptControl()
 {
-    return ui->scriptControl;
+    return _scriptControl;
 }
 
 ///
@@ -1180,7 +1197,7 @@ JScriptControl* FormTrafficView::scriptControl()
 ///
 bool FormTrafficView::isAutoCompleteEnabled() const
 {
-    return ui->scriptControl->isAutoCompleteEnabled();
+    return _scriptControl->isAutoCompleteEnabled();
 }
 
 ///
@@ -1189,7 +1206,7 @@ bool FormTrafficView::isAutoCompleteEnabled() const
 ///
 void FormTrafficView::enableAutoComplete(bool enable)
 {
-    ui->scriptControl->enableAutoComplete(enable);
+    _scriptControl->enableAutoComplete(enable);
 }
 
 ///
@@ -1198,7 +1215,7 @@ void FormTrafficView::enableAutoComplete(bool enable)
 ///
 void FormTrafficView::setScriptFont(const QFont& font)
 {
-    ui->scriptControl->setFont(font);
+    _scriptControl->setFont(font);
 }
 
 ///
@@ -1486,27 +1503,43 @@ void FormTrafficView::on_dataSimulated(DataDisplayMode mode, quint8 deviceId, QM
 ///
 void FormTrafficView::setupScriptBar()
 {
-    ui->toolBarScript->clear();
+    ui->toolBarTraffic->clear();
+    _actionUndoScript = nullptr;
+    _actionRedoScript = nullptr;
+    _actionCutScript = nullptr;
+    _actionCopyScript = nullptr;
+    _actionPasteScript = nullptr;
+    _actionFindScript = nullptr;
+    _actionReplaceScript = nullptr;
 
-    _scriptRunModeCombo = new RunModeComboBox(ui->toolBarScript);
+    _scriptRunModeCombo = new RunModeComboBox(ui->toolBarTraffic);
     _scriptRunModeCombo->setCurrentRunMode(_scriptSettings.Mode);
 
-    _scriptIntervalSpin = new QSpinBox(ui->toolBarScript);
+    _scriptIntervalSpin = new QSpinBox(ui->toolBarTraffic);
     _scriptIntervalSpin->setRange(500, 10000);
     _scriptIntervalSpin->setSingleStep(100);
     _scriptIntervalSpin->setSuffix(tr(" ms"));
     _scriptIntervalSpin->setValue(static_cast<int>(_scriptSettings.Interval));
     _scriptIntervalSpin->setFixedWidth(90);
 
-    _scriptRunOnStartupCheck = new QCheckBox(tr("Run on startup"), ui->toolBarScript);
+    _scriptRunOnStartupCheck = new QCheckBox(tr("Run on startup"), ui->toolBarTraffic);
     _scriptRunOnStartupCheck->setChecked(_scriptSettings.RunOnStartup);
 
-    ui->toolBarScript->addWidget(_scriptRunModeCombo);
-    ui->toolBarScript->addWidget(_scriptIntervalSpin);
-    ui->toolBarScript->addWidget(_scriptRunOnStartupCheck);
-    ui->toolBarScript->addSeparator();
-    ui->toolBarScript->addAction(ui->actionRunScript);
-    ui->toolBarScript->addAction(ui->actionStopScript);
+    ui->toolBarTraffic->addWidget(_scriptRunModeCombo);
+    ui->toolBarTraffic->addWidget(_scriptIntervalSpin);
+    ui->toolBarTraffic->addWidget(_scriptRunOnStartupCheck);
+    ui->toolBarTraffic->addSeparator();
+    ui->toolBarTraffic->addAction(ui->actionRunScript);
+    ui->toolBarTraffic->addAction(ui->actionStopScript);
+    ui->toolBarTraffic->addSeparator();
+
+    _actionUndoScript = ui->toolBarTraffic->addAction(QIcon(":/res/actionUndo.png"), tr("Undo"));
+    _actionRedoScript = ui->toolBarTraffic->addAction(QIcon(":/res/actionRedo.png"), tr("Redo"));
+    _actionCutScript = ui->toolBarTraffic->addAction(QIcon(":/res/actionCut.png"), tr("Cut"));
+    _actionCopyScript = ui->toolBarTraffic->addAction(QIcon(":/res/actionCopy.png"), tr("Copy"));
+    _actionPasteScript = ui->toolBarTraffic->addAction(QIcon(":/res/actionPaste.png"), tr("Paste"));
+    _actionFindScript = ui->toolBarTraffic->addAction(QIcon(":/res/actionFind.png"), tr("Find"));
+    _actionReplaceScript = ui->toolBarTraffic->addAction(QIcon(":/res/icon-replace.svg"), tr("Replace"));
 
     connect(_scriptRunModeCombo, &RunModeComboBox::runModeChanged, this, [this](RunMode mode) {
         _scriptSettings.Mode = mode;
@@ -1520,18 +1553,25 @@ void FormTrafficView::setupScriptBar()
         _scriptSettings.RunOnStartup = (state == Qt::Checked);
     });
 
-    if (auto* runButton = qobject_cast<QToolButton*>(ui->toolBarScript->widgetForAction(ui->actionRunScript)))
+    if (auto* runButton = qobject_cast<QToolButton*>(ui->toolBarTraffic->widgetForAction(ui->actionRunScript)))
         runButton->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
 
-    if (auto* stopButton = qobject_cast<QToolButton*>(ui->toolBarScript->widgetForAction(ui->actionStopScript)))
+    if (auto* stopButton = qobject_cast<QToolButton*>(ui->toolBarTraffic->widgetForAction(ui->actionStopScript)))
         stopButton->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
 
     connect(ui->actionRunScript, &QAction::triggered, this, &FormTrafficView::runScript);
     connect(ui->actionStopScript, &QAction::triggered, this, &FormTrafficView::stopScript);
+    connect(_actionUndoScript, &QAction::triggered, _scriptControl, &JScriptControl::undo);
+    connect(_actionRedoScript, &QAction::triggered, _scriptControl, &JScriptControl::redo);
+    connect(_actionCutScript, &QAction::triggered, _scriptControl, &JScriptControl::cut);
+    connect(_actionCopyScript, &QAction::triggered, _scriptControl, &JScriptControl::copy);
+    connect(_actionPasteScript, &QAction::triggered, _scriptControl, &JScriptControl::paste);
+    connect(_actionFindScript, &QAction::triggered, _scriptControl, &JScriptControl::showFind);
+    connect(_actionReplaceScript, &QAction::triggered, _scriptControl, &JScriptControl::showReplace);
 
     connect(this, &FormModSim::scriptRunning, this, &FormTrafficView::updateScriptBar);
     connect(this, &FormModSim::scriptStopped, this, &FormTrafficView::updateScriptBar);
-    connect(ui->scriptControl->scriptDocument(), &QTextDocument::contentsChanged,
+    connect(_scriptControl->scriptDocument(), &QTextDocument::contentsChanged,
             this, &FormTrafficView::updateScriptBar);
 
     updateScriptBar();
@@ -1667,6 +1707,20 @@ void FormTrafficView::updateScriptBar()
         _scriptIntervalSpin->setEnabled(!running);
     if (_scriptRunOnStartupCheck)
         _scriptRunOnStartupCheck->setEnabled(!running);
+    if (_actionUndoScript)
+        _actionUndoScript->setEnabled(_scriptControl->canUndo());
+    if (_actionRedoScript)
+        _actionRedoScript->setEnabled(_scriptControl->canRedo());
+    if (_actionPasteScript)
+        _actionPasteScript->setEnabled(_scriptControl->canPaste());
+    if (_actionCutScript)
+        _actionCutScript->setEnabled(true);
+    if (_actionCopyScript)
+        _actionCopyScript->setEnabled(true);
+    if (_actionFindScript)
+        _actionFindScript->setEnabled(true);
+    if (_actionReplaceScript)
+        _actionReplaceScript->setEnabled(true);
 }
 
 ///
@@ -1675,10 +1729,10 @@ void FormTrafficView::updateScriptBar()
 void FormTrafficView::connectEditSlots()
 {
     disconnectEditSlots();
-    connect(_parent, &MainWindow::selectAll, ui->scriptControl, &JScriptControl::selectAll);
-    connect(_parent, &MainWindow::search, ui->scriptControl, &JScriptControl::search);
-    connect(_parent, &MainWindow::find, ui->scriptControl, &JScriptControl::showFind);
-    connect(_parent, &MainWindow::replace, ui->scriptControl, &JScriptControl::showReplace);
+    connect(_parent, &MainWindow::selectAll, _scriptControl, &JScriptControl::selectAll);
+    connect(_parent, &MainWindow::search, _scriptControl, &JScriptControl::search);
+    connect(_parent, &MainWindow::find, _scriptControl, &JScriptControl::showFind);
+    connect(_parent, &MainWindow::replace, _scriptControl, &JScriptControl::showReplace);
 }
 
 ///
@@ -1686,10 +1740,10 @@ void FormTrafficView::connectEditSlots()
 ///
 void FormTrafficView::disconnectEditSlots()
 {
-    disconnect(_parent, &MainWindow::selectAll, ui->scriptControl, &JScriptControl::selectAll);
-    disconnect(_parent, &MainWindow::search, ui->scriptControl, &JScriptControl::search);
-    disconnect(_parent, &MainWindow::find, ui->scriptControl, &JScriptControl::showFind);
-    disconnect(_parent, &MainWindow::replace, ui->scriptControl, &JScriptControl::showReplace);
+    disconnect(_parent, &MainWindow::selectAll, _scriptControl, &JScriptControl::selectAll);
+    disconnect(_parent, &MainWindow::search, _scriptControl, &JScriptControl::search);
+    disconnect(_parent, &MainWindow::find, _scriptControl, &JScriptControl::showFind);
+    disconnect(_parent, &MainWindow::replace, _scriptControl, &JScriptControl::showReplace);
 }
 
 

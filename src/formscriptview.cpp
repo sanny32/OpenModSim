@@ -1269,8 +1269,6 @@ void FormScriptView::on_dataSimulated(DataDisplayMode mode, quint8 deviceId, QMo
 ///
 void FormScriptView::setupScriptBar()
 {
-    ui->toolBarScript->clear();
-
     _scriptRunModeCombo = new RunModeComboBox(ui->toolBarScript);
     _scriptRunModeCombo->setCurrentRunMode(_scriptSettings.Mode);
 
@@ -1284,12 +1282,22 @@ void FormScriptView::setupScriptBar()
     _scriptRunOnStartupCheck = new QCheckBox(tr("Run on startup"), ui->toolBarScript);
     _scriptRunOnStartupCheck->setChecked(_scriptSettings.RunOnStartup);
 
-    ui->toolBarScript->addWidget(_scriptRunModeCombo);
-    ui->toolBarScript->addWidget(_scriptIntervalSpin);
-    ui->toolBarScript->addWidget(_scriptRunOnStartupCheck);
-    ui->toolBarScript->addSeparator();
-    ui->toolBarScript->addAction(ui->actionRunScript);
-    ui->toolBarScript->addAction(ui->actionStopScript);
+    QAction* firstAction = nullptr;
+    const auto toolbarActions = ui->toolBarScript->actions();
+    if (!toolbarActions.isEmpty())
+        firstAction = toolbarActions.first();
+
+    if (firstAction) {
+        ui->toolBarScript->insertWidget(firstAction, _scriptRunModeCombo);
+        ui->toolBarScript->insertWidget(firstAction, _scriptIntervalSpin);
+        ui->toolBarScript->insertWidget(firstAction, _scriptRunOnStartupCheck);
+        ui->toolBarScript->insertSeparator(firstAction);
+    } else {
+        ui->toolBarScript->addWidget(_scriptRunModeCombo);
+        ui->toolBarScript->addWidget(_scriptIntervalSpin);
+        ui->toolBarScript->addWidget(_scriptRunOnStartupCheck);
+        ui->toolBarScript->addSeparator();
+    }
 
     connect(_scriptRunModeCombo, &RunModeComboBox::runModeChanged, this, [this](RunMode mode) {
         _scriptSettings.Mode = mode;

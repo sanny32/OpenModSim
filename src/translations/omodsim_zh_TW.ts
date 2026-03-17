@@ -2178,23 +2178,23 @@ MODBUS Point Type:
     </message>
     <message>
         <location filename="../formscriptview.cpp" line="144"/>
-        <location filename="../formscriptview.cpp" line="1280"/>
+        <location filename="../formscriptview.cpp" line="1278"/>
         <source> ms</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../formscriptview.cpp" line="146"/>
-        <location filename="../formscriptview.cpp" line="1284"/>
+        <location filename="../formscriptview.cpp" line="1282"/>
         <source>Run on startup</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formscriptview.ui" line="49"/>
+        <location filename="../formscriptview.ui" line="51"/>
         <source>Run Script</source>
         <translation type="unfinished">執行指令碼</translation>
     </message>
     <message>
-        <location filename="../formscriptview.ui" line="58"/>
+        <location filename="../formscriptview.ui" line="60"/>
         <source>Stop Script</source>
         <translation type="unfinished">停止指令碼</translation>
     </message>
@@ -2266,7 +2266,7 @@ MODBUS Point Type:
         <translation type="obsolete">長度：</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="700"/>
+        <location filename="../formtrafficview.cpp" line="717"/>
         <source>Address Base: %1
 Start Address: %2
 Length: %3</source>
@@ -2275,7 +2275,7 @@ Length: %3</source>
 長度: %3</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="703"/>
+        <location filename="../formtrafficview.cpp" line="720"/>
         <source>Unit Identifier: %1
 MODBUS Point Type:
 %2</source>
@@ -2284,66 +2284,108 @@ MODBUS Point Type:
 %2</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="241"/>
-        <location filename="../formtrafficview.cpp" line="1497"/>
+        <location filename="../formtrafficview.cpp" line="244"/>
+        <location filename="../formtrafficview.cpp" line="1521"/>
         <source> ms</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="243"/>
-        <location filename="../formtrafficview.cpp" line="1501"/>
+        <location filename="../formtrafficview.cpp" line="246"/>
+        <location filename="../formtrafficview.cpp" line="1525"/>
         <source>Run on startup</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formtrafficview.ui" line="49"/>
+        <location filename="../formtrafficview.ui" line="53"/>
         <source>Run Script</source>
         <translation type="unfinished">執行指令碼</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.ui" line="58"/>
+        <location filename="../formtrafficview.ui" line="62"/>
         <source>Stop Script</source>
         <translation type="unfinished">停止指令碼</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="1555"/>
-        <location filename="../formtrafficview.cpp" line="1630"/>
-        <location filename="../formtrafficview.cpp" line="1635"/>
+        <location filename="../formtrafficview.cpp" line="248"/>
+        <location filename="../formtrafficview.cpp" line="1536"/>
+        <source>Undo</source>
+        <translation type="unfinished">取消</translation>
+    </message>
+    <message>
+        <location filename="../formtrafficview.cpp" line="250"/>
+        <location filename="../formtrafficview.cpp" line="1537"/>
+        <source>Redo</source>
+        <translation type="unfinished">恢復</translation>
+    </message>
+    <message>
+        <location filename="../formtrafficview.cpp" line="252"/>
+        <location filename="../formtrafficview.cpp" line="1538"/>
+        <source>Cut</source>
+        <translation type="unfinished">剪下</translation>
+    </message>
+    <message>
+        <location filename="../formtrafficview.cpp" line="254"/>
+        <location filename="../formtrafficview.cpp" line="1539"/>
+        <source>Copy</source>
+        <translation type="unfinished">複製</translation>
+    </message>
+    <message>
+        <location filename="../formtrafficview.cpp" line="256"/>
+        <location filename="../formtrafficview.cpp" line="1540"/>
+        <source>Paste</source>
+        <translation type="unfinished">貼上</translation>
+    </message>
+    <message>
+        <location filename="../formtrafficview.cpp" line="258"/>
+        <location filename="../formtrafficview.cpp" line="1541"/>
+        <source>Find</source>
+        <translation type="unfinished">尋找</translation>
+    </message>
+    <message>
+        <location filename="../formtrafficview.cpp" line="260"/>
+        <location filename="../formtrafficview.cpp" line="1542"/>
+        <source>Replace</source>
+        <translation type="unfinished">取代</translation>
+    </message>
+    <message>
+        <location filename="../formtrafficview.cpp" line="1595"/>
+        <location filename="../formtrafficview.cpp" line="1670"/>
+        <location filename="../formtrafficview.cpp" line="1675"/>
         <source>All</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="1629"/>
+        <location filename="../formtrafficview.cpp" line="1669"/>
         <source>Unit ID:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="1631"/>
+        <location filename="../formtrafficview.cpp" line="1671"/>
         <source>Filter by Unit Identifier (0 = all)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="1632"/>
+        <location filename="../formtrafficview.cpp" line="1672"/>
         <source>Function:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="1633"/>
+        <location filename="../formtrafficview.cpp" line="1673"/>
         <source>Limit:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="1634"/>
+        <location filename="../formtrafficview.cpp" line="1674"/>
         <source>Clear</source>
         <translation type="unfinished">清除</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="1653"/>
+        <location filename="../formtrafficview.cpp" line="1693"/>
         <source>Resume</source>
         <translation type="unfinished">恢復</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="1653"/>
+        <location filename="../formtrafficview.cpp" line="1693"/>
         <source>Pause</source>
         <translation type="unfinished">暫停</translation>
     </message>
