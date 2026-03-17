@@ -1,4 +1,5 @@
 #include <QCheckBox>
+#include <QSizePolicy>
 #include <QSpinBox>
 #include <QToolButton>
 #include "mainwindow.h"
@@ -282,17 +283,33 @@ void FormScriptView::setupScriptBar()
     if (!toolbarActions.isEmpty())
         firstAction = toolbarActions.first();
 
-    if (firstAction) {
-        ui->toolBarScript->insertWidget(firstAction, _scriptRunModeCombo);
-        ui->toolBarScript->insertWidget(firstAction, _scriptIntervalSpin);
-        ui->toolBarScript->insertWidget(firstAction, _scriptRunOnStartupCheck);
+    const auto addToolbarWidget = [this, firstAction](QWidget* widget) {
+        if (firstAction)
+            ui->toolBarScript->insertWidget(firstAction, widget);
+        else
+            ui->toolBarScript->addWidget(widget);
+    };
+
+    const auto addToolbarSpacer = [this, firstAction](int width) {
+        auto* spacer = new QWidget(ui->toolBarScript);
+        spacer->setFixedWidth(width);
+        spacer->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
+        if (firstAction)
+            ui->toolBarScript->insertWidget(firstAction, spacer);
+        else
+            ui->toolBarScript->addWidget(spacer);
+    };
+
+    addToolbarWidget(_scriptRunModeCombo);
+    addToolbarSpacer(6);
+    addToolbarWidget(_scriptIntervalSpin);
+    addToolbarSpacer(8);
+    addToolbarWidget(_scriptRunOnStartupCheck);
+
+    if (firstAction)
         ui->toolBarScript->insertSeparator(firstAction);
-    } else {
-        ui->toolBarScript->addWidget(_scriptRunModeCombo);
-        ui->toolBarScript->addWidget(_scriptIntervalSpin);
-        ui->toolBarScript->addWidget(_scriptRunOnStartupCheck);
+    else
         ui->toolBarScript->addSeparator();
-    }
 
     connect(_scriptRunModeCombo, &RunModeComboBox::runModeChanged, this, [this](RunMode mode) {
         _scriptSettings.Mode = mode;

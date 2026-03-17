@@ -2172,14 +2172,14 @@ MODBUS Point Type:
 %2</translation>
     </message>
     <message>
-        <location filename="../formscriptview.cpp" line="66"/>
-        <location filename="../formscriptview.cpp" line="273"/>
+        <location filename="../formscriptview.cpp" line="67"/>
+        <location filename="../formscriptview.cpp" line="274"/>
         <source> ms</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formscriptview.cpp" line="68"/>
-        <location filename="../formscriptview.cpp" line="277"/>
+        <location filename="../formscriptview.cpp" line="69"/>
+        <location filename="../formscriptview.cpp" line="278"/>
         <source>Run on startup</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2313,28 +2313,28 @@ MODBUS Point Type:
         <translation type="obsolete">取代</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="46"/>
+        <location filename="../formtrafficview.cpp" line="55"/>
         <source>Unit:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="52"/>
-        <location filename="../formtrafficview.cpp" line="65"/>
+        <location filename="../formtrafficview.cpp" line="62"/>
+        <location filename="../formtrafficview.cpp" line="77"/>
         <source>All</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="53"/>
+        <location filename="../formtrafficview.cpp" line="63"/>
         <source>0 = all unit ids</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="83"/>
+        <location filename="../formtrafficview.cpp" line="96"/>
         <source>Rows:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="61"/>
+        <location filename="../formtrafficview.cpp" line="72"/>
         <source>Function:</source>
         <translation type="unfinished"></translation>
     </message>

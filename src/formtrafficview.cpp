@@ -6,6 +6,7 @@
 #include <QSpinBox>
 #include <QComboBox>
 #include <QLabel>
+#include <QSizePolicy>
 #include "mainwindow.h"
 #include "modbusmessages.h"
 #include "formtrafficview.h"
@@ -40,11 +41,20 @@ FormTrafficView::FormTrafficView(int id, ModbusMultiServer& server, MainWindow* 
         _requestCount = 0;
         _responseCount = 0;
     });
-    ui->toolBarTraffic->addSeparator();
+    ui->toolBarTraffic->removeAction(ui->actionPauseTraffic);
+    ui->toolBarTraffic->removeAction(ui->actionClearTraffic);
+
+    const auto addToolbarSpacer = [this](int width) {
+        auto* spacer = new QWidget(ui->toolBarTraffic);
+        spacer->setFixedWidth(width);
+        spacer->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
+        ui->toolBarTraffic->addWidget(spacer);
+    };
 
     _labelUnitId = new QLabel(ui->toolBarTraffic);
     _labelUnitId->setText(tr("Unit:"));
     ui->toolBarTraffic->addWidget(_labelUnitId);
+    addToolbarSpacer(3);
 
     _unitIdFilter = new QSpinBox(ui->toolBarTraffic);
     _unitIdFilter->setRange(0, 247);
@@ -52,6 +62,7 @@ FormTrafficView::FormTrafficView(int id, ModbusMultiServer& server, MainWindow* 
     _unitIdFilter->setSpecialValueText(tr("All"));
     _unitIdFilter->setToolTip(tr("0 = all unit ids"));
     ui->toolBarTraffic->addWidget(_unitIdFilter);
+    addToolbarSpacer(8);
     connect(_unitIdFilter, qOverload<int>(&QSpinBox::valueChanged), this, [this](int) {
         _requestCount = 0;
         _responseCount = 0;
@@ -60,6 +71,7 @@ FormTrafficView::FormTrafficView(int id, ModbusMultiServer& server, MainWindow* 
     _labelFuncCode = new QLabel(ui->toolBarTraffic);
     _labelFuncCode->setText(tr("Function:"));
     ui->toolBarTraffic->addWidget(_labelFuncCode);
+    addToolbarSpacer(3);
 
     _funcCodeFilter = new QComboBox(ui->toolBarTraffic);
     _funcCodeFilter->addItem(tr("All"), -1);
@@ -74,6 +86,7 @@ FormTrafficView::FormTrafficView(int id, ModbusMultiServer& server, MainWindow* 
     _funcCodeFilter->addItem(QStringLiteral("22 Mask Write Register"), static_cast<int>(QModbusPdu::MaskWriteRegister));
     _funcCodeFilter->addItem(QStringLiteral("23 Read/Write Multiple Registers"), static_cast<int>(QModbusPdu::ReadWriteMultipleRegisters));
     ui->toolBarTraffic->addWidget(_funcCodeFilter);
+    addToolbarSpacer(8);
     connect(_funcCodeFilter, qOverload<int>(&QComboBox::currentIndexChanged), this, [this](int) {
         _requestCount = 0;
         _responseCount = 0;
@@ -82,6 +95,7 @@ FormTrafficView::FormTrafficView(int id, ModbusMultiServer& server, MainWindow* 
     _labelRowLimit = new QLabel(ui->toolBarTraffic);
     _labelRowLimit->setText(tr("Rows:"));
     ui->toolBarTraffic->addWidget(_labelRowLimit);
+    addToolbarSpacer(3);
 
     _rowLimitCombo = new QComboBox(ui->toolBarTraffic);
     _rowLimitCombo->setEditable(false);
@@ -99,6 +113,13 @@ FormTrafficView::FormTrafficView(int id, ModbusMultiServer& server, MainWindow* 
         ui->outputWidget->setLogViewLimit(limit);
         _displayDefinition.LogViewLimit = static_cast<quint16>(limit);
     });
+
+    _trafficFilterStretch = new QWidget(ui->toolBarTraffic);
+    _trafficFilterStretch->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+    ui->toolBarTraffic->addWidget(_trafficFilterStretch);
+    ui->toolBarTraffic->addAction(ui->actionPauseTraffic);
+    ui->toolBarTraffic->addSeparator();
+    ui->toolBarTraffic->addAction(ui->actionClearTraffic);
 
     const auto mbDefs = server.getModbusDefinitions();
     _displayDefinition.FormName = windowTitle();
