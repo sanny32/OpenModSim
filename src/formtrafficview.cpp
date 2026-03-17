@@ -3,8 +3,6 @@
 #include <QDateTime>
 #include <QHelpEngine>
 #include <QHelpContentWidget>
-#include <QHBoxLayout>
-#include <QWidgetAction>
 #include "modbuslimits.h"
 #include "mainwindow.h"
 #include "modbusmessages.h"
@@ -48,7 +46,8 @@ FormTrafficView::FormTrafficView(int id, ModbusMultiServer& server, DataSimulato
     ui->lineEditDeviceId->setHexButtonVisible(true);
     server.addDeviceId(ui->lineEditDeviceId->value<int>());
 
-    ui->stackedWidget->setCurrentIndex(0);
+    ui->widgetOutputView->setVisible(true);
+    ui->widgetScriptView->setVisible(false);
     ui->outputWidget->enforceTrafficMode();
     ui->scriptControl->setModbusMultiServer(&_mbMultiServer);
     ui->scriptControl->setByteOrder(ui->outputWidget->byteOrder());
@@ -200,9 +199,9 @@ QVector<quint16> FormTrafficView::data() const
 /// \brief FormTrafficView::displayDefinition
 /// \return
 ///
-DisplayDefinition FormTrafficView::displayDefinition() const
+TrafficViewDefinitions FormTrafficView::displayDefinition() const
 {
-    DisplayDefinition dd;
+    TrafficViewDefinitions dd;
     dd.FormName = windowTitle();
     dd.DeviceId = ui->lineEditDeviceId->value<int>();
     dd.PointAddress = ui->lineEditAddress->value<int>();
@@ -228,7 +227,7 @@ DisplayDefinition FormTrafficView::displayDefinition() const
 /// \brief FormTrafficView::setDisplayDefinition
 /// \param dd
 ///
-void FormTrafficView::setDisplayDefinition(const DisplayDefinition& dd)
+void FormTrafficView::setDisplayDefinition(const TrafficViewDefinitions& dd)
 {
     if(!dd.FormName.isEmpty())
         setWindowTitle(dd.FormName);
@@ -261,15 +260,13 @@ void FormTrafficView::setDisplayDefinition(const DisplayDefinition& dd)
     ui->outputWidget->setLogViewLimit(dd.LogViewLimit);
     ui->outputWidget->setDataViewColumnsDistance(dd.DataViewColumnsDistance);
     ui->outputWidget->setAutosctollLogView(dd.AutoscrollLog);
-    if (_rowLimitCombo) {
-        int idx = _rowLimitCombo->findData(dd.LogViewLimit);
-        if (idx < 0) {
-            _rowLimitCombo->addItem(QString::number(dd.LogViewLimit), dd.LogViewLimit);
-            idx = _rowLimitCombo->findData(dd.LogViewLimit);
-        }
-        if (idx >= 0)
-            _rowLimitCombo->setCurrentIndex(idx);
+    int idx = ui->comboBoxTrafficLimit->findData(dd.LogViewLimit);
+    if (idx < 0) {
+        ui->comboBoxTrafficLimit->addItem(QString::number(dd.LogViewLimit), dd.LogViewLimit);
+        idx = ui->comboBoxTrafficLimit->findData(dd.LogViewLimit);
     }
+    if (idx >= 0)
+        ui->comboBoxTrafficLimit->setCurrentIndex(idx);
 
     _verboseLogging = dd.VerboseLogging;
 
@@ -283,13 +280,24 @@ void FormTrafficView::setDisplayDefinition(const DisplayDefinition& dd)
     emit definitionChanged();
 }
 
+FormDisplayDefinition FormTrafficView::displayDefinitionValue() const
+{
+    return displayDefinition();
+}
+
+void FormTrafficView::setDisplayDefinitionValue(const FormDisplayDefinition& dd)
+{
+    if (const auto value = std::get_if<TrafficViewDefinitions>(&dd))
+        setDisplayDefinition(*value);
+}
+
 ///
 /// \brief FormTrafficView::displayMode
 /// \return
 ///
 DisplayMode FormTrafficView::displayMode() const
 {
-    if(ui->stackedWidget->currentIndex() == 1)
+    if(ui->widgetScriptView->isVisible())
         return DisplayMode::Script;
     else
         return ui->outputWidget->displayMode();
@@ -304,12 +312,14 @@ void FormTrafficView::setDisplayMode(DisplayMode mode)
     switch(mode)
     {
         case DisplayMode::Script:
-            ui->stackedWidget->setCurrentIndex(1);
+            ui->widgetOutputView->setVisible(false);
+            ui->widgetScriptView->setVisible(true);
             ui->scriptControl->setFocus();
         break;
 
         default:
-            ui->stackedWidget->setCurrentIndex(0);
+            ui->widgetScriptView->setVisible(false);
+            ui->widgetOutputView->setVisible(true);
             ui->outputWidget->setDisplayMode(mode);
         break;
     }
@@ -409,13 +419,9 @@ ScriptSettings FormTrafficView::scriptSettings() const
 void FormTrafficView::setScriptSettings(const ScriptSettings& ss)
 {
     _scriptSettings = ss;
-    // Sync toolbar controls if already created
-    if (_scriptRunModeCombo)
-        _scriptRunModeCombo->setCurrentRunMode(ss.Mode);
-    if (_scriptIntervalSpin)
-        _scriptIntervalSpin->setValue(static_cast<int>(ss.Interval));
-    if (_scriptRunOnStartupCheck)
-        _scriptRunOnStartupCheck->setChecked(ss.RunOnStartup);
+    ui->comboBoxScriptRunMode->setCurrentRunMode(ss.Mode);
+    ui->spinBoxScriptInterval->setValue(static_cast<int>(ss.Interval));
+    ui->checkBoxScriptRunOnStartup->setChecked(ss.RunOnStartup);
     emit scriptSettingsChanged(ss);
 }
 
@@ -1240,14 +1246,12 @@ bool FormTrafficView::matchesTrafficFilter(QSharedPointer<const ModbusMessage> m
     if (!msg)
         return false;
 
-    if (_unitIdFilter) {
-        const int unitId = _unitIdFilter->value();
-        if (unitId != 0 && msg->deviceId() != unitId)
-            return false;
-    }
+    const int unitId = ui->spinBoxTrafficUnitId->value();
+    if (unitId != 0 && msg->deviceId() != unitId)
+        return false;
 
-    if (_funcCodeFilter && _funcCodeFilter->currentIndex() > 0) {
-        const int fc = _funcCodeFilter->currentData().toInt();
+    if (ui->comboBoxTrafficFunction->currentIndex() > 0) {
+        const int fc = ui->comboBoxTrafficFunction->currentData().toInt();
         if (static_cast<int>(msg->functionCode()) != fc)
             return false;
     }
@@ -1364,61 +1368,42 @@ void FormTrafficView::on_dataSimulated(DataDisplayMode mode, quint8 deviceId, QM
 ///
 void FormTrafficView::setupScriptBar()
 {
-    _scriptBar = new QToolBar(this);
-    _scriptBar->setIconSize(QSize(16, 16));
+    ui->toolBarScript->clear();
+    ui->toolBarScript->addWidget(ui->comboBoxScriptRunMode);
+    ui->toolBarScript->addWidget(ui->spinBoxScriptInterval);
+    ui->toolBarScript->addWidget(ui->checkBoxScriptRunOnStartup);
+    ui->toolBarScript->addSeparator();
+    ui->toolBarScript->addAction(ui->actionRunScript);
+    ui->toolBarScript->addAction(ui->actionStopScript);
 
-    _scriptRunModeCombo = new RunModeComboBox(_scriptBar);
-    _scriptRunModeCombo->setCurrentRunMode(_scriptSettings.Mode);
-    connect(_scriptRunModeCombo, &RunModeComboBox::runModeChanged, this, [this](RunMode mode) {
+    ui->comboBoxScriptRunMode->setCurrentRunMode(_scriptSettings.Mode);
+    connect(ui->comboBoxScriptRunMode, &RunModeComboBox::runModeChanged, this, [this](RunMode mode) {
         _scriptSettings.Mode = mode;
     });
 
-    auto modeAction = new QWidgetAction(_scriptBar);
-    modeAction->setDefaultWidget(_scriptRunModeCombo);
-    _scriptBar->addAction(modeAction);
-
-    // Interval spinbox (500 вЂ“ 10000 ms)
-    _scriptIntervalSpin = new QSpinBox(_scriptBar);
-    _scriptIntervalSpin->setRange(500, 10000);
-    _scriptIntervalSpin->setSingleStep(100);
-    _scriptIntervalSpin->setSuffix(tr(" ms"));
-    _scriptIntervalSpin->setValue(_scriptSettings.Interval);
-    _scriptIntervalSpin->setFixedWidth(90);
-    connect(_scriptIntervalSpin, &QSpinBox::valueChanged, this, [this](int value) {
+    ui->spinBoxScriptInterval->setValue(static_cast<int>(_scriptSettings.Interval));
+    connect(ui->spinBoxScriptInterval, &QSpinBox::valueChanged, this, [this](int value) {
         _scriptSettings.Interval = static_cast<uint>(value);
     });
-    auto intervalAction = new QWidgetAction(_scriptBar);
-    intervalAction->setDefaultWidget(_scriptIntervalSpin);
-    _scriptBar->addAction(intervalAction);
 
-    // Run on startup checkbox
-    _scriptRunOnStartupCheck = new QCheckBox(tr("Run on startup"), _scriptBar);
-    _scriptRunOnStartupCheck->setChecked(_scriptSettings.RunOnStartup);
-    connect(_scriptRunOnStartupCheck, &QCheckBox::checkStateChanged, this, [this](Qt::CheckState state) {
+    ui->checkBoxScriptRunOnStartup->setChecked(_scriptSettings.RunOnStartup);
+    connect(ui->checkBoxScriptRunOnStartup, &QCheckBox::checkStateChanged, this, [this](Qt::CheckState state) {
         _scriptSettings.RunOnStartup = (state == Qt::Checked);
     });
-    auto startupAction = new QWidgetAction(_scriptBar);
-    startupAction->setDefaultWidget(_scriptRunOnStartupCheck);
-    _scriptBar->addAction(startupAction);
 
-    _scriptBar->addSeparator();
+    if (auto* runButton = qobject_cast<QToolButton*>(ui->toolBarScript->widgetForAction(ui->actionRunScript)))
+        runButton->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
 
-    _actionRunScript = _scriptBar->addAction(QIcon(":/res/actionRunScript.png"), tr("Run Script"));
-    qobject_cast<QToolButton*>(_scriptBar->widgetForAction(_actionRunScript))->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
-    connect(_actionRunScript, &QAction::triggered, this, [this]() {
-        runScript();
-    });
+    if (auto* stopButton = qobject_cast<QToolButton*>(ui->toolBarScript->widgetForAction(ui->actionStopScript)))
+        stopButton->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
 
-    _actionStopScript = _scriptBar->addAction(QIcon(":/res/actionStopScript.png"), tr("Stop Script"));
-    qobject_cast<QToolButton*>(_scriptBar->widgetForAction(_actionStopScript))->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
-    connect(_actionStopScript, &QAction::triggered, this, &FormTrafficView::stopScript);
+    connect(ui->actionRunScript, &QAction::triggered, this, &FormTrafficView::runScript);
+    connect(ui->actionStopScript, &QAction::triggered, this, &FormTrafficView::stopScript);
 
     connect(this, &FormModSim::scriptRunning, this, &FormTrafficView::updateScriptBar);
     connect(this, &FormModSim::scriptStopped, this, &FormTrafficView::updateScriptBar);
     connect(ui->scriptControl->scriptDocument(), &QTextDocument::contentsChanged,
             this, &FormTrafficView::updateScriptBar);
-
-    ui->verticalLayout_4->insertWidget(0, _scriptBar);
 
     updateScriptBar();
 }
@@ -1428,69 +1413,44 @@ void FormTrafficView::setupScriptBar()
 ///
 void FormTrafficView::setupTrafficFilterBar()
 {
-    _trafficFilterBar = new QWidget(this);
-    auto* tbLayout = new QHBoxLayout(_trafficFilterBar);
-    tbLayout->setContentsMargins(4, 2, 4, 2);
-    tbLayout->setSpacing(6);
+    ui->toolBarTrafficFilter->clear();
+    ui->toolBarTrafficFilter->addWidget(ui->labelTrafficUnitId);
+    ui->toolBarTrafficFilter->addWidget(ui->spinBoxTrafficUnitId);
+    ui->toolBarTrafficFilter->addSeparator();
+    ui->toolBarTrafficFilter->addWidget(ui->labelTrafficFunction);
+    ui->toolBarTrafficFilter->addWidget(ui->comboBoxTrafficFunction);
+    ui->toolBarTrafficFilter->addSeparator();
+    ui->toolBarTrafficFilter->addWidget(ui->labelTrafficLimit);
+    ui->toolBarTrafficFilter->addWidget(ui->comboBoxTrafficLimit);
+    ui->toolBarTrafficFilter->addWidget(ui->widgetTrafficFilterStretch);
+    ui->toolBarTrafficFilter->addWidget(ui->toolButtonTrafficPause);
+    ui->toolBarTrafficFilter->addWidget(ui->toolButtonTrafficClear);
 
-    _labelUnitId = new QLabel(_trafficFilterBar);
-    _unitIdFilter = new QSpinBox(_trafficFilterBar);
-    _unitIdFilter->setRange(0, 247);
-    _unitIdFilter->setValue(0);
-    _unitIdFilter->setFixedWidth(70);
+    ui->comboBoxTrafficFunction->setItemData(0, 0);
+    ui->comboBoxTrafficFunction->setItemData(1, 1);
+    ui->comboBoxTrafficFunction->setItemData(2, 2);
+    ui->comboBoxTrafficFunction->setItemData(3, 3);
+    ui->comboBoxTrafficFunction->setItemData(4, 4);
+    ui->comboBoxTrafficFunction->setItemData(5, 5);
+    ui->comboBoxTrafficFunction->setItemData(6, 6);
+    ui->comboBoxTrafficFunction->setItemData(7, 15);
+    ui->comboBoxTrafficFunction->setItemData(8, 16);
 
-    _labelFuncCode = new QLabel(_trafficFilterBar);
-    _funcCodeFilter = new QComboBox(_trafficFilterBar);
-    _funcCodeFilter->addItem(tr("All"), 0);
-    _funcCodeFilter->addItem("FC01 Read Coils", 1);
-    _funcCodeFilter->addItem("FC02 Read Discrete Inputs", 2);
-    _funcCodeFilter->addItem("FC03 Read Holding Registers", 3);
-    _funcCodeFilter->addItem("FC04 Read Input Registers", 4);
-    _funcCodeFilter->addItem("FC05 Write Single Coil", 5);
-    _funcCodeFilter->addItem("FC06 Write Single Register", 6);
-    _funcCodeFilter->addItem("FC15 Write Multiple Coils", 15);
-    _funcCodeFilter->addItem("FC16 Write Multiple Registers", 16);
-    _funcCodeFilter->setFixedWidth(220);
+    ui->comboBoxTrafficLimit->setItemData(0, 100);
+    ui->comboBoxTrafficLimit->setItemData(1, 500);
+    ui->comboBoxTrafficLimit->setItemData(2, 1000);
+    ui->comboBoxTrafficLimit->setItemData(3, 5000);
 
-    _labelRowLimit = new QLabel(_trafficFilterBar);
-    _rowLimitCombo = new QComboBox(_trafficFilterBar);
-    for (const int limit : {100, 500, 1000, 5000})
-        _rowLimitCombo->addItem(QString::number(limit), limit);
-    _rowLimitCombo->setCurrentIndex(2);
-    _rowLimitCombo->setFixedWidth(65);
+    ui->outputWidget->setLogViewLimit(ui->comboBoxTrafficLimit->currentData().toInt());
 
-    _pauseButton = new QToolButton(_trafficFilterBar);
-    _pauseButton->setCheckable(true);
-    _pauseButton->setIcon(QIcon(":/res/actionStopScript.png"));
-    _pauseButton->setAutoRaise(true);
-
-    _clearButton = new QToolButton(_trafficFilterBar);
-    _clearButton->setIcon(QIcon(":/res/edit-delete.svg"));
-    _clearButton->setAutoRaise(true);
-
-    tbLayout->addWidget(_labelUnitId);
-    tbLayout->addWidget(_unitIdFilter);
-    tbLayout->addSpacing(8);
-    tbLayout->addWidget(_labelFuncCode);
-    tbLayout->addWidget(_funcCodeFilter);
-    tbLayout->addSpacing(8);
-    tbLayout->addWidget(_labelRowLimit);
-    tbLayout->addWidget(_rowLimitCombo);
-    tbLayout->addStretch();
-    tbLayout->addWidget(_pauseButton);
-    tbLayout->addWidget(_clearButton);
-
-    ui->verticalLayout->insertWidget(0, _trafficFilterBar);
-    ui->outputWidget->setLogViewLimit(_rowLimitCombo->currentData().toInt());
-
-    connect(_rowLimitCombo, QOverload<int>::of(&QComboBox::currentIndexChanged), this, [this]() {
-        ui->outputWidget->setLogViewLimit(_rowLimitCombo->currentData().toInt());
+    connect(ui->comboBoxTrafficLimit, QOverload<int>::of(&QComboBox::currentIndexChanged), this, [this]() {
+        ui->outputWidget->setLogViewLimit(ui->comboBoxTrafficLimit->currentData().toInt());
     });
-    connect(_pauseButton, &QToolButton::toggled, this, [this](bool paused) {
+    connect(ui->toolButtonTrafficPause, &QToolButton::toggled, this, [this](bool paused) {
         if (logViewState() == LogViewState::Unknown) {
-            _pauseButton->blockSignals(true);
-            _pauseButton->setChecked(false);
-            _pauseButton->blockSignals(false);
+            ui->toolButtonTrafficPause->blockSignals(true);
+            ui->toolButtonTrafficPause->setChecked(false);
+            ui->toolButtonTrafficPause->blockSignals(false);
             return;
         }
 
@@ -1498,7 +1458,7 @@ void FormTrafficView::setupTrafficFilterBar()
         setLogViewState(state);
         emit statisticLogStateChanged(state);
     });
-    connect(_clearButton, &QToolButton::clicked, this, [this]() {
+    connect(ui->toolButtonTrafficClear, &QToolButton::clicked, this, [this]() {
         ui->outputWidget->clearLogView();
     });
 
@@ -1510,16 +1470,13 @@ void FormTrafficView::setupTrafficFilterBar()
 ///
 void FormTrafficView::retranslateTrafficFilterBar()
 {
-    if (!_trafficFilterBar)
-        return;
-
-    _labelUnitId->setText(tr("Unit ID:"));
-    _unitIdFilter->setSpecialValueText(tr("All"));
-    _unitIdFilter->setToolTip(tr("Filter by Unit Identifier (0 = all)"));
-    _labelFuncCode->setText(tr("Function:"));
-    _labelRowLimit->setText(tr("Limit:"));
-    _clearButton->setToolTip(tr("Clear"));
-    _funcCodeFilter->setItemText(0, tr("All"));
+    ui->labelTrafficUnitId->setText(tr("Unit ID:"));
+    ui->spinBoxTrafficUnitId->setSpecialValueText(tr("All"));
+    ui->spinBoxTrafficUnitId->setToolTip(tr("Filter by Unit Identifier (0 = all)"));
+    ui->labelTrafficFunction->setText(tr("Function:"));
+    ui->labelTrafficLimit->setText(tr("Limit:"));
+    ui->toolButtonTrafficClear->setToolTip(tr("Clear"));
+    ui->comboBoxTrafficFunction->setItemText(0, tr("All"));
 
     syncTrafficFilterState(logViewState());
 }
@@ -1530,14 +1487,11 @@ void FormTrafficView::retranslateTrafficFilterBar()
 ///
 void FormTrafficView::syncTrafficFilterState(LogViewState state)
 {
-    if (!_pauseButton)
-        return;
-
-    _pauseButton->setEnabled(state != LogViewState::Unknown);
-    _pauseButton->blockSignals(true);
-    _pauseButton->setChecked(state == LogViewState::Paused);
-    _pauseButton->blockSignals(false);
-    _pauseButton->setToolTip((state == LogViewState::Paused) ? tr("Resume") : tr("Pause"));
+    ui->toolButtonTrafficPause->setEnabled(state != LogViewState::Unknown);
+    ui->toolButtonTrafficPause->blockSignals(true);
+    ui->toolButtonTrafficPause->setChecked(state == LogViewState::Paused);
+    ui->toolButtonTrafficPause->blockSignals(false);
+    ui->toolButtonTrafficPause->setToolTip((state == LogViewState::Paused) ? tr("Resume") : tr("Pause"));
 }
 
 ///
@@ -1545,14 +1499,12 @@ void FormTrafficView::syncTrafficFilterState(LogViewState state)
 ///
 void FormTrafficView::updateScriptBar()
 {
-    if (!_scriptBar) return;
-
     const bool running = canStopScript();
-    _actionRunScript->setEnabled(canRunScript());
-    _actionStopScript->setEnabled(running);
-    if (_scriptRunModeCombo) _scriptRunModeCombo->setEnabled(!running);
-    if (_scriptIntervalSpin) _scriptIntervalSpin->setEnabled(!running);
-    if (_scriptRunOnStartupCheck) _scriptRunOnStartupCheck->setEnabled(!running);
+    ui->actionRunScript->setEnabled(canRunScript());
+    ui->actionStopScript->setEnabled(running);
+    ui->comboBoxScriptRunMode->setEnabled(!running);
+    ui->spinBoxScriptInterval->setEnabled(!running);
+    ui->checkBoxScriptRunOnStartup->setEnabled(!running);
 }
 
 ///

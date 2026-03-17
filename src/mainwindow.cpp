@@ -43,6 +43,51 @@ int newFormKindToSetting(FormModSim::FormKind kind)
 {
     return static_cast<int>(kind);
 }
+
+template<typename TDefinitions>
+void applySharedDisplayDefaults(TDefinitions& target, const TDefinitions& defaults)
+{
+    target.ZeroBasedAddress = defaults.ZeroBasedAddress;
+    target.HexAddress = defaults.HexAddress;
+    target.LeadingZeros = defaults.LeadingZeros;
+    target.DataViewColumnsDistance = defaults.DataViewColumnsDistance;
+    target.AutoscrollLog = defaults.AutoscrollLog;
+    target.VerboseLogging = defaults.VerboseLogging;
+    target.LogViewLimit = defaults.LogViewLimit;
+}
+
+void applySharedDisplayDefaults(TrafficViewDefinitions& target, const TrafficViewDefinitions& defaults)
+{
+    applySharedDisplayDefaults<TrafficViewDefinitions>(target, defaults);
+    target.ScriptCfg = defaults.ScriptCfg;
+}
+
+void applySharedDisplayDefaults(ScriptViewDefinitions& target, const ScriptViewDefinitions& defaults)
+{
+    applySharedDisplayDefaults<ScriptViewDefinitions>(target, defaults);
+    target.ScriptCfg = defaults.ScriptCfg;
+}
+
+DataViewDefinitions toDataViewDefinitions(const FormDisplayDefinition& definition)
+{
+    return std::visit([](const auto& value) -> DataViewDefinitions {
+        return toDataViewDefinitions(value);
+    }, definition);
+}
+
+TrafficViewDefinitions toTrafficViewDefinitions(const FormDisplayDefinition& definition)
+{
+    return std::visit([](const auto& value) -> TrafficViewDefinitions {
+        return toTrafficViewDefinitions(value);
+    }, definition);
+}
+
+ScriptViewDefinitions toScriptViewDefinitions(const FormDisplayDefinition& definition)
+{
+    return std::visit([](const auto& value) -> ScriptViewDefinitions {
+        return toScriptViewDefinitions(value);
+    }, definition);
+}
 }
 
 
@@ -370,7 +415,7 @@ void MainWindow::on_awake()
 
     if(frm != nullptr)
     {
-        const auto dd = frm->displayDefinition();
+        const auto dd = toDataViewDefinitions(frm->displayDefinitionValue());
         ui->actionUInt16->setEnabled(dd.PointType > QModbusDataUnit::Coils);
         ui->actionInt16->setEnabled(dd.PointType > QModbusDataUnit::Coils);
         ui->actionHex->setEnabled(dd.PointType > QModbusDataUnit::Coils);
@@ -478,19 +523,31 @@ void MainWindow::createNewForm(FormModSim::FormKind kind)
     frm->setScriptFont(prefs.scriptFont());
     frm->setZoomPercent(prefs.fontZoom());
 
-    // Display definition always comes from application preferences
+    switch(kind)
     {
-        auto dd = frm->displayDefinition();
-        const auto& prefDd = prefs.displayDefinition();
-        dd.ZeroBasedAddress        = prefDd.ZeroBasedAddress;
-        dd.HexAddress              = prefDd.HexAddress;
-        dd.LeadingZeros            = prefDd.LeadingZeros;
-        dd.DataViewColumnsDistance = prefDd.DataViewColumnsDistance;
-        dd.AutoscrollLog           = prefDd.AutoscrollLog;
-        dd.VerboseLogging          = prefDd.VerboseLogging;
-        dd.LogViewLimit            = prefDd.LogViewLimit;
-        dd.ScriptCfg               = prefDd.ScriptCfg;
-        frm->setDisplayDefinition(dd);
+        case FormModSim::FormKind::Data:
+        {
+            auto dd = toDataViewDefinitions(frm->displayDefinitionValue());
+            applySharedDisplayDefaults(dd, prefs.dataViewDefinitions());
+            frm->setDisplayDefinitionValue(dd);
+        }
+        break;
+
+        case FormModSim::FormKind::Traffic:
+        {
+            auto dd = toTrafficViewDefinitions(frm->displayDefinitionValue());
+            applySharedDisplayDefaults(dd, prefs.trafficViewDefinitions());
+            frm->setDisplayDefinitionValue(dd);
+        }
+        break;
+
+        case FormModSim::FormKind::Script:
+        {
+            auto dd = toScriptViewDefinitions(frm->displayDefinitionValue());
+            applySharedDisplayDefaults(dd, prefs.scriptViewDefinitions());
+            frm->setDisplayDefinitionValue(dd);
+        }
+        break;
     }
 
     frm->show();
@@ -721,22 +778,55 @@ void MainWindow::applyColors(const QColor& bg, const QColor& fg, const QColor& s
 }
 
 ///
-/// \brief MainWindow::applyDisplayDefaults
+/// \brief MainWindow::applyDataViewDefaults
 /// \param dd
 ///
-void MainWindow::applyDisplayDefaults(const DisplayDefinition& dd)
+void MainWindow::applyDataViewDefaults(const DataViewDefinitions& dd)
 {
     for (auto&& wnd : ui->mdiArea->subWindowList()) {
         if (auto frm = qobject_cast<FormModSim*>(wnd->widget())) {
-            auto cur = frm->displayDefinition();
-            cur.ZeroBasedAddress        = dd.ZeroBasedAddress;
-            cur.HexAddress              = dd.HexAddress;
-            cur.LeadingZeros            = dd.LeadingZeros;
-            cur.DataViewColumnsDistance = dd.DataViewColumnsDistance;
-            cur.AutoscrollLog           = dd.AutoscrollLog;
-            cur.VerboseLogging          = dd.VerboseLogging;
-            cur.LogViewLimit            = dd.LogViewLimit;
-            frm->setDisplayDefinition(cur);
+            if (frm->formKind() != FormModSim::FormKind::Data)
+                continue;
+
+            auto cur = toDataViewDefinitions(frm->displayDefinitionValue());
+            applySharedDisplayDefaults(cur, dd);
+            frm->setDisplayDefinitionValue(cur);
+        }
+    }
+}
+
+///
+/// \brief MainWindow::applyTrafficViewDefaults
+/// \param dd
+///
+void MainWindow::applyTrafficViewDefaults(const TrafficViewDefinitions& dd)
+{
+    for (auto&& wnd : ui->mdiArea->subWindowList()) {
+        if (auto frm = qobject_cast<FormModSim*>(wnd->widget())) {
+            if (frm->formKind() != FormModSim::FormKind::Traffic)
+                continue;
+
+            auto cur = toTrafficViewDefinitions(frm->displayDefinitionValue());
+            applySharedDisplayDefaults(cur, dd);
+            frm->setDisplayDefinitionValue(cur);
+        }
+    }
+}
+
+///
+/// \brief MainWindow::applyScriptViewDefaults
+/// \param dd
+///
+void MainWindow::applyScriptViewDefaults(const ScriptViewDefinitions& dd)
+{
+    for (auto&& wnd : ui->mdiArea->subWindowList()) {
+        if (auto frm = qobject_cast<FormModSim*>(wnd->widget())) {
+            if (frm->formKind() != FormModSim::FormKind::Script)
+                continue;
+
+            auto cur = toScriptViewDefinitions(frm->displayDefinitionValue());
+            applySharedDisplayDefaults(cur, dd);
+            frm->setDisplayDefinitionValue(cur);
         }
     }
 }
@@ -1344,7 +1434,7 @@ void MainWindow::forceCoils(QModbusDataUnit::RegisterType type)
     auto frm = _project->currentMdiChild();
     if(!frm) return;
 
-    const auto dd = frm->displayDefinition();
+    const auto dd = toDataViewDefinitions(frm->displayDefinitionValue());
     SetupPresetParams presetParams = { dd.DeviceId, dd.PointAddress, dd.Length, dd.ZeroBasedAddress, dd.AddrSpace, dd.LeadingZeros };
 
     {
@@ -1380,7 +1470,7 @@ void MainWindow::presetRegs(QModbusDataUnit::RegisterType type)
     auto frm = _project->currentMdiChild();
     if(!frm) return;
 
-    const auto dd = frm->displayDefinition();
+    const auto dd = toDataViewDefinitions(frm->displayDefinitionValue());
     SetupPresetParams presetParams = { dd.DeviceId, dd.PointAddress, dd.Length, dd.ZeroBasedAddress, dd.AddrSpace, dd.LeadingZeros };
 
     {

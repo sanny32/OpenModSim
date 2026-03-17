@@ -4,12 +4,6 @@
 #include <QWidget>
 #include <QTimer>
 #include <QPrinter>
-#include <QToolBar>
-#include <QCheckBox>
-#include <QSpinBox>
-#include <QComboBox>
-#include <QLabel>
-#include <QToolButton>
 #include <QVersionNumber>
 #include <QXmlStreamWriter>
 #include "fontutils.h"
@@ -20,7 +14,6 @@
 #include "jscriptcontrol.h"
 #include "consoleoutput.h"
 #include "apppreferences.h"
-#include "controls/runmodecombobox.h"
 #include "formmodsim.h"
 
 ///
@@ -60,8 +53,10 @@ public:
 
     QVector<quint16> data() const;
 
-    DisplayDefinition displayDefinition() const;
-    void setDisplayDefinition(const DisplayDefinition& dd);
+    TrafficViewDefinitions displayDefinition() const;
+    void setDisplayDefinition(const TrafficViewDefinitions& dd);
+    FormDisplayDefinition displayDefinitionValue() const override;
+    void setDisplayDefinitionValue(const FormDisplayDefinition& dd) override;
 
     ByteOrder byteOrder() const;
     void setByteOrder(ByteOrder order);
@@ -208,23 +203,6 @@ private:
     ModbusMultiServer& _mbMultiServer;
     DataSimulator* _dataSimulator;
     QRect _parentGeometry;
-
-    QToolBar*        _scriptBar = nullptr;
-    QAction*         _actionRunScript = nullptr;
-    QAction*         _actionStopScript = nullptr;
-    RunModeComboBox* _scriptRunModeCombo = nullptr;
-    QSpinBox*        _scriptIntervalSpin = nullptr;
-    QCheckBox*       _scriptRunOnStartupCheck = nullptr;
-
-    QWidget*      _trafficFilterBar = nullptr;
-    QLabel*       _labelUnitId = nullptr;
-    QSpinBox*     _unitIdFilter = nullptr;
-    QLabel*       _labelFuncCode = nullptr;
-    QComboBox*    _funcCodeFilter = nullptr;
-    QLabel*       _labelRowLimit = nullptr;
-    QComboBox*    _rowLimitCombo = nullptr;
-    QToolButton*  _pauseButton = nullptr;
-    QToolButton*  _clearButton = nullptr;
 };
 
 ///
@@ -284,7 +262,7 @@ inline QSettings& operator >>(QSettings& in, FormTrafficView* frm)
     ByteOrder byteOrder;
     in >> byteOrder;
 
-    DisplayDefinition displayDefinition;
+    TrafficViewDefinitions displayDefinition;
     in >> displayDefinition;
 
     in >> frm->scriptControl();
@@ -464,7 +442,7 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, FormTrafficView* frm
 
     if (xml.isStartElement() && xml.name() == QLatin1String("FormTrafficView")) {
         DataDisplayMode ddm;
-        DisplayDefinition dd;
+        TrafficViewDefinitions dd;
         QHash<quint16, quint16> data;
         QHash<quint16, ModbusSimulationParams> simulations;
 
@@ -584,7 +562,7 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, FormTrafficView* frm
                     xml.skipCurrentElement();
                 }
             }
-            else if (xml.name() == QLatin1String("DisplayDefinition")) {
+            else if (xml.name() == QLatin1String("TrafficViewDefinitions")) {
                 xml >> dd;
                 frm->setDisplayDefinition(dd);
             }

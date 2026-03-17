@@ -27,26 +27,43 @@
     <number>0</number>
    </property>
    <item>
-    <widget class="QStackedWidget" name="stackedWidget">
-     <widget class="QWidget" name="page1">
-      <layout class="QVBoxLayout" name="verticalLayout">
-       <property name="spacing">
-        <number>0</number>
-       </property>
-       <property name="leftMargin">
-        <number>0</number>
-       </property>
-       <property name="topMargin">
-        <number>0</number>
-       </property>
-       <property name="rightMargin">
-        <number>0</number>
-       </property>
-       <property name="bottomMargin">
-        <number>0</number>
-       </property>
-       <item>
-        <widget class="QSplitter" name="splitter">
+    <widget class="QToolBar" name="toolBarDisplay">
+     <property name="iconSize">
+      <size>
+       <width>16</width>
+       <height>16</height>
+      </size>
+     </property>
+     <addaction name="actionDisplayBinary"/>
+     <addaction name="actionDisplayHex"/>
+     <addaction name="actionDisplayAnsi"/>
+     <addaction name="separator"/>
+     <addaction name="actionDisplayInt16"/>
+     <addaction name="actionDisplayUInt16"/>
+     <addaction name="separator"/>
+     <addaction name="actionDisplayInt32"/>
+     <addaction name="actionDisplaySwappedInt32"/>
+     <addaction name="separator"/>
+     <addaction name="actionDisplayUInt32"/>
+     <addaction name="actionDisplaySwappedUInt32"/>
+     <addaction name="separator"/>
+     <addaction name="actionDisplayInt64"/>
+     <addaction name="actionDisplaySwappedInt64"/>
+     <addaction name="separator"/>
+     <addaction name="actionDisplayUInt64"/>
+     <addaction name="actionDisplaySwappedUInt64"/>
+     <addaction name="separator"/>
+     <addaction name="actionDisplayFloatingPt"/>
+     <addaction name="actionDisplaySwappedFP"/>
+     <addaction name="separator"/>
+     <addaction name="actionDisplayDblFloat"/>
+     <addaction name="actionDisplaySwappedDbl"/>
+     <addaction name="separator"/>
+     <addaction name="actionDisplaySwapBytes"/>
+    </widget>
+   </item>
+   <item>
+    <widget class="QSplitter" name="splitter">
          <property name="orientation">
           <enum>Qt::Orientation::Vertical</enum>
          </property>
@@ -358,12 +375,224 @@
           </layout>
          </widget>
         </widget>
-       </item>
-      </layout>
-     </widget>
-    </widget>
    </item>
   </layout>
+  <action name="actionDisplayBinary">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset>
+     <normaloff>:/res/actionBinary.png</normaloff>:/res/actionBinary.png</iconset>
+   </property>
+   <property name="text">
+    <string>Binary</string>
+   </property>
+  </action>
+  <action name="actionDisplayHex">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset>
+     <normaloff>:/res/actionHex.png</normaloff>:/res/actionHex.png</iconset>
+   </property>
+   <property name="text">
+    <string>Hex</string>
+   </property>
+  </action>
+  <action name="actionDisplayAnsi">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset>
+     <normaloff>:/res/actionAnsi.png</normaloff>:/res/actionAnsi.png</iconset>
+   </property>
+   <property name="text">
+    <string>Ansi</string>
+   </property>
+  </action>
+  <action name="actionDisplayInt16">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset>
+     <normaloff>:/res/actionInt16.png</normaloff>:/res/actionInt16.png</iconset>
+   </property>
+   <property name="text">
+    <string>16-bit Integer</string>
+   </property>
+  </action>
+  <action name="actionDisplayUInt16">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset>
+     <normaloff>:/res/actionUInt16.png</normaloff>:/res/actionUInt16.png</iconset>
+   </property>
+   <property name="text">
+    <string>Unsigned 16-bit Integer</string>
+   </property>
+  </action>
+  <action name="actionDisplayInt32">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset>
+     <normaloff>:/res/actionInt32.png</normaloff>:/res/actionInt32.png</iconset>
+   </property>
+   <property name="text">
+    <string>32-bit Integer (MSRF)</string>
+   </property>
+  </action>
+  <action name="actionDisplaySwappedInt32">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset>
+     <normaloff>:/res/actionSwappedInt32.png</normaloff>:/res/actionSwappedInt32.png</iconset>
+   </property>
+   <property name="text">
+    <string>32-bit Integer (LSRF)</string>
+   </property>
+  </action>
+  <action name="actionDisplayUInt32">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset>
+     <normaloff>:/res/actionUInt32.png</normaloff>:/res/actionUInt32.png</iconset>
+   </property>
+   <property name="text">
+    <string>Unsigned 32-bit Integer (MSRF)</string>
+   </property>
+  </action>
+  <action name="actionDisplaySwappedUInt32">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset>
+     <normaloff>:/res/actionSwappedUInt32.png</normaloff>:/res/actionSwappedUInt32.png</iconset>
+   </property>
+   <property name="text">
+    <string>Unsigned 32-bit Integer (LSRF)</string>
+   </property>
+  </action>
+  <action name="actionDisplayInt64">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset>
+     <normaloff>:/res/actionInt64.png</normaloff>:/res/actionInt64.png</iconset>
+   </property>
+   <property name="text">
+    <string>64-bit Integer (MSRF)</string>
+   </property>
+  </action>
+  <action name="actionDisplaySwappedInt64">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset>
+     <normaloff>:/res/actionSwappedInt64.png</normaloff>:/res/actionSwappedInt64.png</iconset>
+   </property>
+   <property name="text">
+    <string>64-bit Integer (LSRF)</string>
+   </property>
+  </action>
+  <action name="actionDisplayUInt64">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset>
+     <normaloff>:/res/actionUInt64.png</normaloff>:/res/actionUInt64.png</iconset>
+   </property>
+   <property name="text">
+    <string>Unsigned 64-bit Integer (MSRF)</string>
+   </property>
+  </action>
+  <action name="actionDisplaySwappedUInt64">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset>
+     <normaloff>:/res/actionSwappedUInt64.png</normaloff>:/res/actionSwappedUInt64.png</iconset>
+   </property>
+   <property name="text">
+    <string>Unsigned 64-bit Integer (LSRF)</string>
+   </property>
+  </action>
+  <action name="actionDisplayFloatingPt">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset>
+     <normaloff>:/res/actionFloatingPt.png</normaloff>:/res/actionFloatingPt.png</iconset>
+   </property>
+   <property name="text">
+    <string>Float (MSRF)</string>
+   </property>
+  </action>
+  <action name="actionDisplaySwappedFP">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset>
+     <normaloff>:/res/actionSwappedFP.png</normaloff>:/res/actionSwappedFP.png</iconset>
+   </property>
+   <property name="text">
+    <string>Float (LSRF)</string>
+   </property>
+  </action>
+  <action name="actionDisplayDblFloat">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset>
+     <normaloff>:/res/actionDblFloat.png</normaloff>:/res/actionDblFloat.png</iconset>
+   </property>
+   <property name="text">
+    <string>Double (MSRF)</string>
+   </property>
+  </action>
+  <action name="actionDisplaySwappedDbl">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset>
+     <normaloff>:/res/actionSwappedDbl.png</normaloff>:/res/actionSwappedDbl.png</iconset>
+   </property>
+   <property name="text">
+    <string>Double (LSRF)</string>
+   </property>
+  </action>
+  <action name="actionDisplaySwapBytes">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset>
+     <normaloff>:/res/actionSwapBytes.png</normaloff>:/res/actionSwapBytes.png</iconset>
+   </property>
+   <property name="text">
+    <string>Swap Bytes</string>
+   </property>
+  </action>
  </widget>
  <customwidgets>
   <customwidget>

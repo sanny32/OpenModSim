@@ -43,8 +43,8 @@ public:
 
     virtual QVector<quint16> data() const = 0;
 
-    virtual DisplayDefinition displayDefinition() const = 0;
-    virtual void setDisplayDefinition(const DisplayDefinition& dd) = 0;
+    virtual FormDisplayDefinition displayDefinitionValue() const = 0;
+    virtual void setDisplayDefinitionValue(const FormDisplayDefinition& dd) = 0;
 
     virtual ByteOrder byteOrder() const = 0;
     virtual void setByteOrder(ByteOrder order) = 0;

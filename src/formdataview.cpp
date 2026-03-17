@@ -3,7 +3,6 @@
 #include <QDateTime>
 #include <QHelpEngine>
 #include <QHelpContentWidget>
-#include <QWidgetAction>
 #include "modbuslimits.h"
 #include "mainwindow.h"
 #include "modbusmessages.h"
@@ -42,7 +41,6 @@ FormDataView::FormDataView(int id, ModbusMultiServer& server, DataSimulator* sim
     ui->lineEditDeviceId->setHexButtonVisible(true);
     server.addDeviceId(ui->lineEditDeviceId->value<int>());
 
-    ui->stackedWidget->setCurrentIndex(0);
     ui->outputWidget->enforceDataMode();
 
     const auto mbDefs = _mbMultiServer.getModbusDefinitions();
@@ -183,9 +181,9 @@ QVector<quint16> FormDataView::data() const
 /// \brief FormDataView::displayDefinition
 /// \return
 ///
-DisplayDefinition FormDataView::displayDefinition() const
+DataViewDefinitions FormDataView::displayDefinition() const
 {
-    DisplayDefinition dd;
+    DataViewDefinitions dd;
     dd.FormName = windowTitle();
     dd.DeviceId = ui->lineEditDeviceId->value<int>();
     dd.PointAddress = ui->lineEditAddress->value<int>();
@@ -202,7 +200,6 @@ DisplayDefinition FormDataView::displayDefinition() const
     dd.AddrSpace = _mbMultiServer.getModbusDefinitions().AddrSpace;
     dd.DataViewColumnsDistance = ui->outputWidget->dataViewColumnsDistance();
     dd.LeadingZeros = ui->lineEditDeviceId->leadingZeroes();
-    dd.ScriptCfg = _scriptSettings;
 
     return dd;
 }
@@ -211,7 +208,7 @@ DisplayDefinition FormDataView::displayDefinition() const
 /// \brief FormDataView::setDisplayDefinition
 /// \param dd
 ///
-void FormDataView::setDisplayDefinition(const DisplayDefinition& dd)
+void FormDataView::setDisplayDefinition(const DataViewDefinitions& dd)
 {
     if(!dd.FormName.isEmpty())
         setWindowTitle(dd.FormName);
@@ -247,7 +244,6 @@ void FormDataView::setDisplayDefinition(const DisplayDefinition& dd)
 
     _verboseLogging = dd.VerboseLogging;
 
-    setScriptSettings(dd.ScriptCfg);
     setDisplayHexAddresses(dd.HexAddress);
 
     ui->lineEditDeviceId->setHexView(dd.HexViewDeviceId);
@@ -255,6 +251,17 @@ void FormDataView::setDisplayDefinition(const DisplayDefinition& dd)
     ui->lineEditLength->setHexView(dd.HexViewLength);
 
     emit definitionChanged();
+}
+
+FormDisplayDefinition FormDataView::displayDefinitionValue() const
+{
+    return displayDefinition();
+}
+
+void FormDataView::setDisplayDefinitionValue(const FormDisplayDefinition& dd)
+{
+    if (const auto value = std::get_if<DataViewDefinitions>(&dd))
+        setDisplayDefinition(*value);
 }
 
 ///
@@ -272,7 +279,6 @@ DisplayMode FormDataView::displayMode() const
 ///
 void FormDataView::setDisplayMode(DisplayMode mode)
 {
-    ui->stackedWidget->setCurrentIndex(0);
     if (mode != DisplayMode::Script)
         ui->outputWidget->setDisplayMode(mode);
     emit displayModeChanged(displayMode());
@@ -1299,69 +1305,46 @@ void FormDataView::on_dataSimulated(DataDisplayMode mode, quint8 deviceId, QModb
 ///
 void FormDataView::setupDisplayBar()
 {
-    _displayBar = new QToolBar(this);
-    _displayBar->setIconSize(QSize(16, 16));
-
-    auto group = new QActionGroup(_displayBar);
+    auto group = new QActionGroup(ui->toolBarDisplay);
     group->setExclusive(true);
 
-    auto addModeAction = [&](DataDisplayMode mode, const QString& icon, const QString& text)
+    auto addModeAction = [&](DataDisplayMode mode, QAction* action)
     {
-        auto action = _displayBar->addAction(QIcon(icon), text);
-        action->setCheckable(true);
         group->addAction(action);
         _displayModeActions[mode] = action;
         connect(action, &QAction::triggered, this, [this, mode](bool checked) {
             if (checked) setDataDisplayMode(mode);
         });
-        return action;
     };
 
-    addModeAction(DataDisplayMode::Binary,        ":/res/actionBinary.png",       tr("Binary"));
-    addModeAction(DataDisplayMode::Hex,           ":/res/actionHex.png",          tr("Hex"));
-    auto ansiAction = addModeAction(DataDisplayMode::Ansi, ":/res/actionAnsi.png", tr("Ansi"));
+    addModeAction(DataDisplayMode::Binary, ui->actionDisplayBinary);
+    addModeAction(DataDisplayMode::Hex, ui->actionDisplayHex);
+    addModeAction(DataDisplayMode::Ansi, ui->actionDisplayAnsi);
+    addModeAction(DataDisplayMode::Int16, ui->actionDisplayInt16);
+    addModeAction(DataDisplayMode::UInt16, ui->actionDisplayUInt16);
+    addModeAction(DataDisplayMode::Int32, ui->actionDisplayInt32);
+    addModeAction(DataDisplayMode::SwappedInt32, ui->actionDisplaySwappedInt32);
+    addModeAction(DataDisplayMode::UInt32, ui->actionDisplayUInt32);
+    addModeAction(DataDisplayMode::SwappedUInt32, ui->actionDisplaySwappedUInt32);
+    addModeAction(DataDisplayMode::Int64, ui->actionDisplayInt64);
+    addModeAction(DataDisplayMode::SwappedInt64, ui->actionDisplaySwappedInt64);
+    addModeAction(DataDisplayMode::UInt64, ui->actionDisplayUInt64);
+    addModeAction(DataDisplayMode::SwappedUInt64, ui->actionDisplaySwappedUInt64);
+    addModeAction(DataDisplayMode::FloatingPt, ui->actionDisplayFloatingPt);
+    addModeAction(DataDisplayMode::SwappedFP, ui->actionDisplaySwappedFP);
+    addModeAction(DataDisplayMode::DblFloat, ui->actionDisplayDblFloat);
+    addModeAction(DataDisplayMode::SwappedDbl, ui->actionDisplaySwappedDbl);
 
     _ansiMenu = new AnsiMenu(this);
     connect(_ansiMenu, &AnsiMenu::codepageSelected, this, &FormDataView::setCodepage);
-    ansiAction->setMenu(_ansiMenu);
-    qobject_cast<QToolButton*>(_displayBar->widgetForAction(ansiAction))->setPopupMode(QToolButton::DelayedPopup);
+    ui->actionDisplayAnsi->setMenu(_ansiMenu);
+    if (auto* ansiButton = qobject_cast<QToolButton*>(ui->toolBarDisplay->widgetForAction(ui->actionDisplayAnsi))) {
+        ansiButton->setPopupMode(QToolButton::DelayedPopup);
+    }
 
-    _displayBar->addSeparator();
-    addModeAction(DataDisplayMode::Int16,         ":/res/actionInt16.png",        tr("16-bit Integer"));
-    addModeAction(DataDisplayMode::UInt16,        ":/res/actionUInt16.png",       tr("Unsigned 16-bit Integer"));
-
-    _displayBar->addSeparator();
-    addModeAction(DataDisplayMode::Int32,         ":/res/actionInt32.png",        tr("32-bit Integer (MSRF)"));
-    addModeAction(DataDisplayMode::SwappedInt32,  ":/res/actionSwappedInt32.png", tr("32-bit Integer (LSRF)"));
-
-    _displayBar->addSeparator();
-    addModeAction(DataDisplayMode::UInt32,        ":/res/actionUInt32.png",       tr("Unsigned 32-bit Integer (MSRF)"));
-    addModeAction(DataDisplayMode::SwappedUInt32, ":/res/actionSwappedUInt32.png",tr("Unsigned 32-bit Integer (LSRF)"));
-
-    _displayBar->addSeparator();
-    addModeAction(DataDisplayMode::Int64,         ":/res/actionInt64.png",        tr("64-bit Integer (MSRF)"));
-    addModeAction(DataDisplayMode::SwappedInt64,  ":/res/actionSwappedInt64.png", tr("64-bit Integer (LSRF)"));
-
-    _displayBar->addSeparator();
-    addModeAction(DataDisplayMode::UInt64,        ":/res/actionUInt64.png",       tr("Unsigned 64-bit Integer (MSRF)"));
-    addModeAction(DataDisplayMode::SwappedUInt64, ":/res/actionSwappedUInt64.png",tr("Unsigned 64-bit Integer (LSRF)"));
-
-    _displayBar->addSeparator();
-    addModeAction(DataDisplayMode::FloatingPt,    ":/res/actionFloatingPt.png",   tr("Float (MSRF)"));
-    addModeAction(DataDisplayMode::SwappedFP,     ":/res/actionSwappedFP.png",    tr("Float (LSRF)"));
-
-    _displayBar->addSeparator();
-    addModeAction(DataDisplayMode::DblFloat,      ":/res/actionDblFloat.png",     tr("Double (MSRF)"));
-    addModeAction(DataDisplayMode::SwappedDbl,    ":/res/actionSwappedDbl.png",   tr("Double (LSRF)"));
-
-    _displayBar->addSeparator();
-    _actionSwapBytes = _displayBar->addAction(QIcon(":/res/actionSwapBytes.png"), tr("Swap Bytes"));
-    _actionSwapBytes->setCheckable(true);
-    connect(_actionSwapBytes, &QAction::triggered, this, [this](bool checked) {
+    connect(ui->actionDisplaySwapBytes, &QAction::triggered, this, [this](bool checked) {
         setByteOrder(checked ? ByteOrder::Swapped : ByteOrder::Direct);
     });
-
-    ui->verticalLayout_2->insertWidget(0, _displayBar);
 
     updateDisplayBar();
 }
@@ -1371,8 +1354,6 @@ void FormDataView::setupDisplayBar()
 ///
 void FormDataView::updateDisplayBar()
 {
-    if (!_displayBar) return;
-
     const auto ddm = dataDisplayMode();
     const auto dd = displayDefinition();
     const bool coilType = (dd.PointType == QModbusDataUnit::Coils ||
@@ -1389,10 +1370,8 @@ void FormDataView::updateDisplayBar()
     }
 
     // Sync swap bytes
-    if (_actionSwapBytes) {
-        _actionSwapBytes->setChecked(byteOrder() == ByteOrder::Swapped);
-        _actionSwapBytes->setEnabled(!coilType);
-    }
+    ui->actionDisplaySwapBytes->setChecked(byteOrder() == ByteOrder::Swapped);
+    ui->actionDisplaySwapBytes->setEnabled(!coilType);
 
     // Sync ANSI codepage menu
     if (_ansiMenu) _ansiMenu->selectCodepage(codepage());

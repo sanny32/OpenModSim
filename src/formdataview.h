@@ -4,7 +4,6 @@
 #include <QWidget>
 #include <QTimer>
 #include <QPrinter>
-#include <QToolBar>
 #include <QActionGroup>
 #include <QMap>
 #include <QVersionNumber>
@@ -57,8 +56,10 @@ public:
 
     QVector<quint16> data() const;
 
-    DisplayDefinition displayDefinition() const;
-    void setDisplayDefinition(const DisplayDefinition& dd);
+    DataViewDefinitions displayDefinition() const;
+    void setDisplayDefinition(const DataViewDefinitions& dd);
+    FormDisplayDefinition displayDefinitionValue() const override;
+    void setDisplayDefinitionValue(const FormDisplayDefinition& dd) override;
 
     ByteOrder byteOrder() const;
     void setByteOrder(ByteOrder order);
@@ -205,8 +206,6 @@ private:
     uint _responseCount = 0;
     LogViewState _logViewState = LogViewState::Unknown;
 
-    QToolBar*  _displayBar = nullptr;
-    QAction*   _actionSwapBytes = nullptr;
     AnsiMenu*  _ansiMenu = nullptr;
     QMap<DataDisplayMode, QAction*> _displayModeActions;
 };
@@ -268,7 +267,7 @@ inline QSettings& operator >>(QSettings& in, FormDataView* frm)
     ByteOrder byteOrder;
     in >> byteOrder;
 
-    DisplayDefinition displayDefinition;
+    DataViewDefinitions displayDefinition;
     in >> displayDefinition;
 
     in >> frm->scriptControl();
@@ -322,10 +321,6 @@ inline QSettings& operator >>(QSettings& in, FormDataView* frm)
     for(auto it = colorMap.cbegin(); it != colorMap.cend(); ++it)
     {
         frm->setColor(it.key().DeviceId, it.key().Type, it.key().Address, it.value());
-    }
-
-    if(displayDefinition.ScriptCfg.RunOnStartup) {
-        frm->runScript();
     }
 
     return in;
@@ -448,7 +443,7 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, FormDataView* frm)
 
     if (xml.isStartElement() && xml.name() == QLatin1String("FormDataView")) {
         DataDisplayMode ddm;
-        DisplayDefinition dd;
+        DataViewDefinitions dd;
         QHash<quint16, quint16> data;
         QHash<quint16, ModbusSimulationParams> simulations;
 
@@ -568,7 +563,7 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, FormDataView* frm)
                     xml.skipCurrentElement();
                 }
             }
-            else if (xml.name() == QLatin1String("DisplayDefinition")) {
+            else if (xml.name() == QLatin1String("DataViewDefinitions")) {
                 xml >> dd;
                 frm->setDisplayDefinition(dd);
             }
@@ -693,9 +688,6 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, FormDataView* frm)
 
         frm->setScriptFont(AppPreferences::instance().scriptFont());
 
-        if(dd.ScriptCfg.RunOnStartup) {
-            frm->runScript();
-        }
     }
     else {
         xml.skipCurrentElement();

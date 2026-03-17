@@ -4,9 +4,6 @@
 #include <QWidget>
 #include <QTimer>
 #include <QPrinter>
-#include <QToolBar>
-#include <QCheckBox>
-#include <QSpinBox>
 #include <QVersionNumber>
 #include <QXmlStreamWriter>
 #include "fontutils.h"
@@ -17,7 +14,6 @@
 #include "jscriptcontrol.h"
 #include "consoleoutput.h"
 #include "apppreferences.h"
-#include "controls/runmodecombobox.h"
 #include "formmodsim.h"
 
 ///
@@ -57,8 +53,10 @@ public:
 
     QVector<quint16> data() const;
 
-    DisplayDefinition displayDefinition() const;
-    void setDisplayDefinition(const DisplayDefinition& dd);
+    ScriptViewDefinitions displayDefinition() const;
+    void setDisplayDefinition(const ScriptViewDefinitions& dd);
+    FormDisplayDefinition displayDefinitionValue() const override;
+    void setDisplayDefinitionValue(const FormDisplayDefinition& dd) override;
 
     ByteOrder byteOrder() const;
     void setByteOrder(ByteOrder order);
@@ -193,20 +191,13 @@ private:
     QString _filename;
     bool _verboseLogging;
     ScriptSettings _scriptSettings;
-    DisplayDefinition _displayDefinition;
+    ScriptViewDefinitions _displayDefinition;
     ModbusMultiServer& _mbMultiServer;
     DataSimulator* _dataSimulator;
     QRect _parentGeometry;
     uint _requestCount = 0;
     uint _responseCount = 0;
     LogViewState _logViewState = LogViewState::Unknown;
-
-    QToolBar*        _scriptBar = nullptr;
-    QAction*         _actionRunScript = nullptr;
-    QAction*         _actionStopScript = nullptr;
-    RunModeComboBox* _scriptRunModeCombo = nullptr;
-    QSpinBox*        _scriptIntervalSpin = nullptr;
-    QCheckBox*       _scriptRunOnStartupCheck = nullptr;
 };
 
 ///
@@ -266,7 +257,7 @@ inline QSettings& operator >>(QSettings& in, FormScriptView* frm)
     ByteOrder byteOrder;
     in >> byteOrder;
 
-    DisplayDefinition displayDefinition;
+    ScriptViewDefinitions displayDefinition;
     in >> displayDefinition;
 
     in >> frm->scriptControl();
@@ -446,7 +437,7 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, FormScriptView* frm)
 
     if (xml.isStartElement() && xml.name() == QLatin1String("FormScriptView")) {
         DataDisplayMode ddm;
-        DisplayDefinition dd;
+        ScriptViewDefinitions dd;
         QHash<quint16, quint16> data;
         QHash<quint16, ModbusSimulationParams> simulations;
 
@@ -566,7 +557,7 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, FormScriptView* frm)
                     xml.skipCurrentElement();
                 }
             }
-            else if (xml.name() == QLatin1String("DisplayDefinition")) {
+            else if (xml.name() == QLatin1String("ScriptViewDefinitions")) {
                 xml >> dd;
                 frm->setDisplayDefinition(dd);
             }

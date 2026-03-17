@@ -1,4 +1,4 @@
-#include <QtMath>
+﻿#include <QtMath>
 #include <QRandomGenerator>
 #include "uiutils.h"
 #include "formatutils.h"
@@ -15,7 +15,7 @@
 /// \param dd
 /// \param parent
 ///
-DialogForceMultipleRegisters::DialogForceMultipleRegisters(ModbusWriteParams& params, QModbusDataUnit::RegisterType type, int length, const DisplayDefinition& dd, QWidget *parent) :
+DialogForceMultipleRegisters::DialogForceMultipleRegisters(ModbusWriteParams& params, QModbusDataUnit::RegisterType type, int length, const DataViewDefinitions& dd, QWidget *parent) :
       QAdjustedSizeDialog(parent)
     , ui(new Ui::DialogForceMultipleRegisters)
     ,_writeParams(params)

@@ -44,9 +44,15 @@ public:
     QString language() const { return _language; }
     void setLanguage(const QString& lang) { _language = lang; }
 
-    // ----- Default Display Definition -----
-    DisplayDefinition displayDefinition() const { return _displayDefinition; }
-    void setDisplayDefinition(const DisplayDefinition& dd) { _displayDefinition = dd; }
+    // ----- Default View Definitions -----
+    DataViewDefinitions dataViewDefinitions() const { return _dataViewDefinitions; }
+    void setDataViewDefinitions(const DataViewDefinitions& dd) { _dataViewDefinitions = dd; }
+
+    TrafficViewDefinitions trafficViewDefinitions() const { return _trafficViewDefinitions; }
+    void setTrafficViewDefinitions(const TrafficViewDefinitions& dd) { _trafficViewDefinitions = dd; }
+
+    ScriptViewDefinitions scriptViewDefinitions() const { return _scriptViewDefinitions; }
+    void setScriptViewDefinitions(const ScriptViewDefinitions& dd) { _scriptViewDefinitions = dd; }
 
     // ----- Script Editor -----
     QFont scriptFont() const { return _scriptFont; }
@@ -54,9 +60,6 @@ public:
 
     bool codeAutoComplete() const { return _codeAutoComplete; }
     void setCodeAutoComplete(bool enable) { _codeAutoComplete = enable; }
-
-    bool runScriptOnStartup() const { return _displayDefinition.ScriptCfg.RunOnStartup; }
-    void setRunScriptOnStartup(bool enable) { _displayDefinition.ScriptCfg.RunOnStartup = enable; }
 
     // ----- Persistence -----
     void load(QSettings& settings);
@@ -77,7 +80,9 @@ private:
     QColor        _foregroundColor{ Qt::black };
     QColor        _statusColor{ Qt::red };
     QString       _language{ translationLang() };
-    DisplayDefinition _displayDefinition;
+    DataViewDefinitions _dataViewDefinitions;
+    TrafficViewDefinitions _trafficViewDefinitions;
+    ScriptViewDefinitions _scriptViewDefinitions;
     QFont         _scriptFont;
     bool          _codeAutoComplete{ true };
 };

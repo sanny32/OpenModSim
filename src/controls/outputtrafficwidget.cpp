@@ -1,4 +1,4 @@
-#include <QDateTime>
+﻿#include <QDateTime>
 #include <QPainter>
 #include <QTextStream>
 #include <QInputDialog>
@@ -534,7 +534,7 @@ QVector<quint16> OutputTrafficWidget::data() const
 /// \param simulations
 /// \param data
 ///
-void OutputTrafficWidget::setup(const DisplayDefinition& dd, const ModbusSimulationMap2& simulations, const QModbusDataUnit& data)
+void OutputTrafficWidget::setup(const TrafficViewDefinitions& dd, const ModbusSimulationMap2& simulations, const QModbusDataUnit& data)
 {
     _descriptionMap.insert(descriptionMap());
     _colorMap.insert(colorMap());

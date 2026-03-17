@@ -1,4 +1,4 @@
-#ifndef OUTPUTDATAWIDGET_H
+﻿#ifndef OUTPUTDATAWIDGET_H
 #define OUTPUTDATAWIDGET_H
 
 #include <QAbstractListModel>
@@ -102,7 +102,7 @@ public:
 
     QVector<quint16> data() const;
 
-    void setup(const DisplayDefinition& dd, const ModbusSimulationMap2& simulations, const QModbusDataUnit& data);
+    void setup(const DataViewDefinitions& dd, const ModbusSimulationMap2& simulations, const QModbusDataUnit& data);
 
     DisplayMode displayMode() const;
     void setDisplayMode(DisplayMode mode);
@@ -202,7 +202,7 @@ private:
     DataDisplayMode _dataDisplayMode;
     ByteOrder _byteOrder;
     QString _codepage;
-    DisplayDefinition _displayDefinition;
+    DataViewDefinitions _displayDefinition;
     QFile _fileCapture;
     AddressColorMap _colorMap;
     AddressDescriptionMap2 _descriptionMap;

@@ -3,7 +3,6 @@
 #include <QDateTime>
 #include <QHelpEngine>
 #include <QHelpContentWidget>
-#include <QWidgetAction>
 #include "modbuslimits.h"
 #include "mainwindow.h"
 #include "modbusmessages.h"
@@ -36,7 +35,8 @@ FormScriptView::FormScriptView(int id, ModbusMultiServer& server, DataSimulator*
     setWindowTitle(QString("Script%1").arg(_formId));
     setWindowIcon(QIcon(":/res/actionShowScript.png"));
 
-    ui->stackedWidget->setCurrentIndex(1);
+    ui->widgetOutputView->setVisible(false);
+    ui->widgetScriptView->setVisible(true);
     ui->scriptControl->setModbusMultiServer(&_mbMultiServer);
     ui->scriptControl->setByteOrder(ui->outputWidget->byteOrder());
     ui->scriptControl->setScriptSource(windowTitle());
@@ -185,9 +185,9 @@ QVector<quint16> FormScriptView::data() const
 /// \brief FormScriptView::displayDefinition
 /// \return
 ///
-DisplayDefinition FormScriptView::displayDefinition() const
+ScriptViewDefinitions FormScriptView::displayDefinition() const
 {
-    DisplayDefinition dd = _displayDefinition;
+    ScriptViewDefinitions dd = _displayDefinition;
     dd.FormName = windowTitle();
     dd.LogViewLimit = ui->outputWidget->logViewLimit();
     dd.AutoscrollLog = ui->outputWidget->autoscrollLogView();
@@ -204,9 +204,9 @@ DisplayDefinition FormScriptView::displayDefinition() const
 /// \brief FormScriptView::setDisplayDefinition
 /// \param dd
 ///
-void FormScriptView::setDisplayDefinition(const DisplayDefinition& dd)
+void FormScriptView::setDisplayDefinition(const ScriptViewDefinitions& dd)
 {
-    DisplayDefinition next = dd;
+    ScriptViewDefinitions next = dd;
     if(!next.FormName.isEmpty())
         setWindowTitle(next.FormName);
     else
@@ -237,13 +237,24 @@ void FormScriptView::setDisplayDefinition(const DisplayDefinition& dd)
     emit definitionChanged();
 }
 
+FormDisplayDefinition FormScriptView::displayDefinitionValue() const
+{
+    return displayDefinition();
+}
+
+void FormScriptView::setDisplayDefinitionValue(const FormDisplayDefinition& dd)
+{
+    if (const auto value = std::get_if<ScriptViewDefinitions>(&dd))
+        setDisplayDefinition(*value);
+}
+
 ///
 /// \brief FormScriptView::displayMode
 /// \return
 ///
 DisplayMode FormScriptView::displayMode() const
 {
-    if(ui->stackedWidget->currentIndex() == 1)
+    if(ui->widgetScriptView->isVisible())
         return DisplayMode::Script;
     else
         return ui->outputWidget->displayMode();
@@ -258,12 +269,14 @@ void FormScriptView::setDisplayMode(DisplayMode mode)
     switch(mode)
     {
         case DisplayMode::Script:
-            ui->stackedWidget->setCurrentIndex(1);
+            ui->widgetOutputView->setVisible(false);
+            ui->widgetScriptView->setVisible(true);
             ui->scriptControl->setFocus();
         break;
 
         default:
-            ui->stackedWidget->setCurrentIndex(0);
+            ui->widgetScriptView->setVisible(false);
+            ui->widgetOutputView->setVisible(true);
             ui->outputWidget->setDisplayMode(mode);
         break;
     }
@@ -360,13 +373,9 @@ ScriptSettings FormScriptView::scriptSettings() const
 void FormScriptView::setScriptSettings(const ScriptSettings& ss)
 {
     _scriptSettings = ss;
-    // Sync toolbar controls if already created
-    if (_scriptRunModeCombo)
-        _scriptRunModeCombo->setCurrentRunMode(ss.Mode);
-    if (_scriptIntervalSpin)
-        _scriptIntervalSpin->setValue(static_cast<int>(ss.Interval));
-    if (_scriptRunOnStartupCheck)
-        _scriptRunOnStartupCheck->setChecked(ss.RunOnStartup);
+    ui->comboBoxScriptRunMode->setCurrentRunMode(ss.Mode);
+    ui->spinBoxScriptInterval->setValue(static_cast<int>(ss.Interval));
+    ui->checkBoxScriptRunOnStartup->setChecked(ss.RunOnStartup);
     emit scriptSettingsChanged(ss);
 }
 
@@ -944,7 +953,7 @@ void FormScriptView::onDefinitionChanged()
     _mbMultiServer.addUnitMap(formId(), dd.DeviceId, dd.PointType, addr, dd.Length);
 
     ui->scriptControl->setAddressBase(dd.ZeroBasedAddress ? AddressBase::Base0 : AddressBase::Base1);
-    ui->outputWidget->setup(dd, _dataSimulator->simulationMap(), _mbMultiServer.data(dd.DeviceId, dd.PointType, addr, dd.Length));
+    ui->outputWidget->setup(toTrafficViewDefinitions(dd), _dataSimulator->simulationMap(), _mbMultiServer.data(dd.DeviceId, dd.PointType, addr, dd.Length));
 }
 
 ///
@@ -1180,7 +1189,7 @@ void FormScriptView::on_mbDefinitionsChanged(const ModbusDefinitions& defs)
     _displayDefinition.normalize();
     const auto dd = displayDefinition();
     const auto addr = dd.PointAddress - (dd.ZeroBasedAddress ? 0 : 1);
-    ui->outputWidget->setup(dd, _dataSimulator->simulationMap(), _mbMultiServer.data(dd.DeviceId, dd.PointType, addr, dd.Length));
+    ui->outputWidget->setup(toTrafficViewDefinitions(dd), _dataSimulator->simulationMap(), _mbMultiServer.data(dd.DeviceId, dd.PointType, addr, dd.Length));
 }
 
 ///
@@ -1239,61 +1248,42 @@ void FormScriptView::on_dataSimulated(DataDisplayMode mode, quint8 deviceId, QMo
 ///
 void FormScriptView::setupScriptBar()
 {
-    _scriptBar = new QToolBar(this);
-    _scriptBar->setIconSize(QSize(16, 16));
+    ui->toolBarScript->clear();
+    ui->toolBarScript->addWidget(ui->comboBoxScriptRunMode);
+    ui->toolBarScript->addWidget(ui->spinBoxScriptInterval);
+    ui->toolBarScript->addWidget(ui->checkBoxScriptRunOnStartup);
+    ui->toolBarScript->addSeparator();
+    ui->toolBarScript->addAction(ui->actionRunScript);
+    ui->toolBarScript->addAction(ui->actionStopScript);
 
-    _scriptRunModeCombo = new RunModeComboBox(_scriptBar);
-    _scriptRunModeCombo->setCurrentRunMode(_scriptSettings.Mode);
-    connect(_scriptRunModeCombo, &RunModeComboBox::runModeChanged, this, [this](RunMode mode) {
+    ui->comboBoxScriptRunMode->setCurrentRunMode(_scriptSettings.Mode);
+    connect(ui->comboBoxScriptRunMode, &RunModeComboBox::runModeChanged, this, [this](RunMode mode) {
         _scriptSettings.Mode = mode;
     });
 
-    auto modeAction = new QWidgetAction(_scriptBar);
-    modeAction->setDefaultWidget(_scriptRunModeCombo);
-    _scriptBar->addAction(modeAction);
-
-    // Interval spinbox (500 вЂ“ 10000 ms)
-    _scriptIntervalSpin = new QSpinBox(_scriptBar);
-    _scriptIntervalSpin->setRange(500, 10000);
-    _scriptIntervalSpin->setSingleStep(100);
-    _scriptIntervalSpin->setSuffix(tr(" ms"));
-    _scriptIntervalSpin->setValue(_scriptSettings.Interval);
-    _scriptIntervalSpin->setFixedWidth(90);
-    connect(_scriptIntervalSpin, &QSpinBox::valueChanged, this, [this](int value) {
+    ui->spinBoxScriptInterval->setValue(static_cast<int>(_scriptSettings.Interval));
+    connect(ui->spinBoxScriptInterval, &QSpinBox::valueChanged, this, [this](int value) {
         _scriptSettings.Interval = static_cast<uint>(value);
     });
-    auto intervalAction = new QWidgetAction(_scriptBar);
-    intervalAction->setDefaultWidget(_scriptIntervalSpin);
-    _scriptBar->addAction(intervalAction);
 
-    // Run on startup checkbox
-    _scriptRunOnStartupCheck = new QCheckBox(tr("Run on startup"), _scriptBar);
-    _scriptRunOnStartupCheck->setChecked(_scriptSettings.RunOnStartup);
-    connect(_scriptRunOnStartupCheck, &QCheckBox::checkStateChanged, this, [this](Qt::CheckState state) {
+    ui->checkBoxScriptRunOnStartup->setChecked(_scriptSettings.RunOnStartup);
+    connect(ui->checkBoxScriptRunOnStartup, &QCheckBox::checkStateChanged, this, [this](Qt::CheckState state) {
         _scriptSettings.RunOnStartup = (state == Qt::Checked);
     });
-    auto startupAction = new QWidgetAction(_scriptBar);
-    startupAction->setDefaultWidget(_scriptRunOnStartupCheck);
-    _scriptBar->addAction(startupAction);
 
-    _scriptBar->addSeparator();
+    if (auto* runButton = qobject_cast<QToolButton*>(ui->toolBarScript->widgetForAction(ui->actionRunScript)))
+        runButton->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
 
-    _actionRunScript = _scriptBar->addAction(QIcon(":/res/actionRunScript.png"), tr("Run Script"));
-    qobject_cast<QToolButton*>(_scriptBar->widgetForAction(_actionRunScript))->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
-    connect(_actionRunScript, &QAction::triggered, this, [this]() {
-        runScript();
-    });
+    if (auto* stopButton = qobject_cast<QToolButton*>(ui->toolBarScript->widgetForAction(ui->actionStopScript)))
+        stopButton->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
 
-    _actionStopScript = _scriptBar->addAction(QIcon(":/res/actionStopScript.png"), tr("Stop Script"));
-    qobject_cast<QToolButton*>(_scriptBar->widgetForAction(_actionStopScript))->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
-    connect(_actionStopScript, &QAction::triggered, this, &FormScriptView::stopScript);
+    connect(ui->actionRunScript, &QAction::triggered, this, &FormScriptView::runScript);
+    connect(ui->actionStopScript, &QAction::triggered, this, &FormScriptView::stopScript);
 
     connect(this, &FormModSim::scriptRunning, this, &FormScriptView::updateScriptBar);
     connect(this, &FormModSim::scriptStopped, this, &FormScriptView::updateScriptBar);
     connect(ui->scriptControl->scriptDocument(), &QTextDocument::contentsChanged,
             this, &FormScriptView::updateScriptBar);
-
-    ui->verticalLayout_4->insertWidget(0, _scriptBar);
 
     updateScriptBar();
 }
@@ -1303,14 +1293,12 @@ void FormScriptView::setupScriptBar()
 ///
 void FormScriptView::updateScriptBar()
 {
-    if (!_scriptBar) return;
-
     const bool running = canStopScript();
-    _actionRunScript->setEnabled(canRunScript());
-    _actionStopScript->setEnabled(running);
-    if (_scriptRunModeCombo) _scriptRunModeCombo->setEnabled(!running);
-    if (_scriptIntervalSpin) _scriptIntervalSpin->setEnabled(!running);
-    if (_scriptRunOnStartupCheck) _scriptRunOnStartupCheck->setEnabled(!running);
+    ui->actionRunScript->setEnabled(canRunScript());
+    ui->actionStopScript->setEnabled(running);
+    ui->comboBoxScriptRunMode->setEnabled(!running);
+    ui->spinBoxScriptInterval->setEnabled(!running);
+    ui->checkBoxScriptRunOnStartup->setEnabled(!running);
 }
 
 ///
