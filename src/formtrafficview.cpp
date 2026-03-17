@@ -140,7 +140,7 @@ FormTrafficView::FormTrafficView(int id, ModbusMultiServer& server, MainWindow* 
     connect(&server, &ModbusMultiServer::definitionsChanged, this, &FormTrafficView::on_mbDefinitionsChanged);
 
     const auto addr = _displayDefinition.PointAddress - (_displayDefinition.ZeroBasedAddress ? 0 : 1);
-    _mbMultiServer.addUnitMap(formId(), _displayDefinition.DeviceId, _displayDefinition.PointType, addr, _displayDefinition.Length);
+    _mbMultiServer.addUnitMap(_formId, _displayDefinition.DeviceId, _displayDefinition.PointType, addr, _displayDefinition.Length);
     ui->outputWidget->setup(_displayDefinition);
 }
 
@@ -194,7 +194,7 @@ void FormTrafficView::closeEvent(QCloseEvent* event)
 {
     const auto deviceId = _displayDefinition.DeviceId;
     _mbMultiServer.removeDeviceId(deviceId);
-    _mbMultiServer.removeUnitMap(formId(), deviceId);
+    _mbMultiServer.removeUnitMap(_formId, deviceId);
 
     emit closing();
     QWidget::closeEvent(event);
@@ -244,7 +244,7 @@ void FormTrafficView::setDisplayDefinition(const TrafficViewDefinitions& dd)
 
     if (oldDeviceId != _displayDefinition.DeviceId) {
         _mbMultiServer.removeDeviceId(oldDeviceId);
-        _mbMultiServer.removeUnitMap(formId(), oldDeviceId);
+        _mbMultiServer.removeUnitMap(_formId, oldDeviceId);
         _mbMultiServer.addDeviceId(_displayDefinition.DeviceId);
     }
 
@@ -261,19 +261,8 @@ void FormTrafficView::setDisplayDefinition(const TrafficViewDefinitions& dd)
     }
 
     const auto addr = _displayDefinition.PointAddress - (_displayDefinition.ZeroBasedAddress ? 0 : 1);
-    _mbMultiServer.addUnitMap(formId(), _displayDefinition.DeviceId, _displayDefinition.PointType, addr, _displayDefinition.Length);
+    _mbMultiServer.addUnitMap(_formId, _displayDefinition.DeviceId, _displayDefinition.PointType, addr, _displayDefinition.Length);
     ui->outputWidget->setup(_displayDefinition);
-}
-
-FormDisplayDefinition FormTrafficView::displayDefinitionValue() const
-{
-    return displayDefinition();
-}
-
-void FormTrafficView::setDisplayDefinitionValue(const FormDisplayDefinition& dd)
-{
-    if (const auto value = std::get_if<TrafficViewDefinitions>(&dd))
-        setDisplayDefinition(*value);
 }
 
 ///

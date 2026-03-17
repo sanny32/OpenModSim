@@ -42,12 +42,8 @@ public:
     explicit FormScriptView(int id, ModbusMultiServer& server, DataSimulator* simulator, MainWindow* parent);
     ~FormScriptView();
 
-    int formId() const { return _formId; }
-
     ScriptViewDefinitions displayDefinition() const;
     void setDisplayDefinition(const ScriptViewDefinitions& dd);
-    FormDisplayDefinition displayDefinitionValue() const;
-    void setDisplayDefinitionValue(const FormDisplayDefinition& dd);
 
     ScriptSettings scriptSettings() const;
     void setScriptSettings(const ScriptSettings& ss);

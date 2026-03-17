@@ -229,26 +229,6 @@ void setZoomPercentOnForm(QWidget* widget, int zoomPercent)
     else if (auto* frm = qobject_cast<FormScriptView*>(widget)) frm->setZoomPercent(zoomPercent);
 }
 
-DataViewDefinitions toDataViewDefinitions(const FormDisplayDefinition& definition)
-{
-    return std::visit([](const auto& value) -> DataViewDefinitions {
-        return toDataViewDefinitions(value);
-    }, definition);
-}
-
-TrafficViewDefinitions toTrafficViewDefinitions(const FormDisplayDefinition& definition)
-{
-    return std::visit([](const auto& value) -> TrafficViewDefinitions {
-        return toTrafficViewDefinitions(value);
-    }, definition);
-}
-
-ScriptViewDefinitions toScriptViewDefinitions(const FormDisplayDefinition& definition)
-{
-    return std::visit([](const auto& value) -> ScriptViewDefinitions {
-        return toScriptViewDefinitions(value);
-    }, definition);
-}
 }
 
 
@@ -1844,7 +1824,7 @@ bool MainWindow::loadProfile(const QString& filename)
     for (const QString& g : groups) {
         if (g.startsWith("Form_")) {
             m.beginGroup(g);
-            const int id = m.value("FromId", _project->windowCounter() + 1).toInt();
+            const int id = _project->windowCounter() + 1;
             _project->setWindowCounter(qMax(_project->windowCounter(), id));
             const auto kind = static_cast<ProjectFormKind>(m.value("FormKind", static_cast<int>(ProjectFormKind::Data)).toInt());
             MdiArea* targetArea = ui->mdiArea->primaryArea();
@@ -1966,13 +1946,10 @@ void MainWindow::saveProfile()
         m.setValue("SplitPanel", onRight ? "R" : "L");
 
         if (auto* dataFrm = qobject_cast<FormDataView*>(widget)) {
-            m.setValue("FromId", dataFrm->formId());
             dataFrm->saveSettings(m);
         } else if (auto* trafficFrm = qobject_cast<FormTrafficView*>(widget)) {
-            m.setValue("FromId", trafficFrm->formId());
             trafficFrm->saveSettings(m);
         } else if (auto* scriptFrm = qobject_cast<FormScriptView*>(widget)) {
-            m.setValue("FromId", scriptFrm->formId());
             scriptFrm->saveSettings(m);
         }
 

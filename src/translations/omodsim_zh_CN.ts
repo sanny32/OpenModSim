@@ -127,7 +127,7 @@
 <context>
     <name>AppProject</name>
     <message>
-        <location filename="../appproject.cpp" line="447"/>
+        <location filename="../appproject.cpp" line="454"/>
         <source>Capture Error:<byte value="xd"/>
 %1</source>
         <translation type="unfinished">捕获错误：
@@ -1895,7 +1895,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formdataview.cpp" line="495"/>
+        <location filename="../formdataview.cpp" line="484"/>
         <source>Address Base: %1
 Start Address: %2
 Length: %3</source>
@@ -1904,7 +1904,7 @@ Length: %3</source>
 长度: %3</translation>
     </message>
     <message>
-        <location filename="../formdataview.cpp" line="498"/>
+        <location filename="../formdataview.cpp" line="487"/>
         <source>Unit Identifier: %1
 MODBUS Point Type:
 %2</source>
@@ -2178,13 +2178,13 @@ MODBUS Point Type:
     </message>
     <message>
         <location filename="../formscriptview.cpp" line="66"/>
-        <location filename="../formscriptview.cpp" line="284"/>
+        <location filename="../formscriptview.cpp" line="273"/>
         <source> ms</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../formscriptview.cpp" line="68"/>
-        <location filename="../formscriptview.cpp" line="288"/>
+        <location filename="../formscriptview.cpp" line="277"/>
         <source>Run on startup</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3128,7 +3128,7 @@ Script.onInit(()=&gt;{
     <message>
         <location filename="../mainwindow.ui" line="979"/>
         <location filename="../mainwindow.ui" line="982"/>
-        <location filename="../mainwindow.cpp" line="328"/>
+        <location filename="../mainwindow.cpp" line="308"/>
         <source>Script Help</source>
         <translation>脚本帮助</translation>
     </message>
@@ -3223,7 +3223,7 @@ Script.onInit(()=&gt;{
         <translation type="vanished">俄语</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="756"/>
+        <location filename="../mainwindow.cpp" line="736"/>
         <source>All files (*)</source>
         <translation>所有文件 (*)</translation>
     </message>
@@ -3232,12 +3232,12 @@ Script.onInit(()=&gt;{
         <translation type="vanished">XML 文件(*.xml)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="309"/>
+        <location filename="../mainwindow.cpp" line="289"/>
         <source>Project</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="365"/>
+        <location filename="../mainwindow.cpp" line="345"/>
         <source>Output</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3246,13 +3246,13 @@ Script.onInit(()=&gt;{
         <translation type="obsolete">数据</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="755"/>
-        <location filename="../mainwindow.cpp" line="771"/>
+        <location filename="../mainwindow.cpp" line="735"/>
+        <location filename="../mainwindow.cpp" line="751"/>
         <source>Project files (*.msimprj)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1490"/>
+        <location filename="../mainwindow.cpp" line="1470"/>
         <source>JavaScript files (*.js);;All files (*)</source>
         <translation type="unfinished"></translation>
     </message>

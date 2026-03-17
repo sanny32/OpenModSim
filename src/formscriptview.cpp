@@ -104,17 +104,6 @@ void FormScriptView::setDisplayDefinition(const ScriptViewDefinitions& dd)
     setScriptSettings(_displayDefinition.ScriptCfg);
 }
 
-FormDisplayDefinition FormScriptView::displayDefinitionValue() const
-{
-    return displayDefinition();
-}
-
-void FormScriptView::setDisplayDefinitionValue(const FormDisplayDefinition& dd)
-{
-    if (const auto value = std::get_if<ScriptViewDefinitions>(&dd))
-        setDisplayDefinition(*value);
-}
-
 ScriptSettings FormScriptView::scriptSettings() const
 {
     return _scriptSettings;

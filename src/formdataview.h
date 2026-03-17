@@ -43,14 +43,10 @@ public:
     explicit FormDataView(int id, ModbusMultiServer& server, DataSimulator* simulator, MainWindow* parent);
     ~FormDataView();
 
-    int formId() const { return _formId; }
-
     QVector<quint16> data() const;
 
     DataViewDefinitions displayDefinition() const;
     void setDisplayDefinition(const DataViewDefinitions& dd);
-    FormDisplayDefinition displayDefinitionValue() const;
-    void setDisplayDefinitionValue(const FormDisplayDefinition& dd);
 
     ByteOrder byteOrder() const;
     void setByteOrder(ByteOrder order);

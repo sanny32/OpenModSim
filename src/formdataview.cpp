@@ -125,7 +125,7 @@ void FormDataView::closeEvent(QCloseEvent* event)
 {
     const auto deviceId = ui->lineEditDeviceId->value<quint8>();
     _mbMultiServer.removeDeviceId(deviceId);
-    _mbMultiServer.removeUnitMap(formId(), deviceId);
+    _mbMultiServer.removeUnitMap(_formId, deviceId);
 
     emit closing();
     QWidget::closeEvent(event);
@@ -225,17 +225,6 @@ void FormDataView::setDisplayDefinition(const DataViewDefinitions& dd)
     ui->lineEditLength->setHexView(dd.HexViewLength);
 
     emit definitionChanged();
-}
-
-FormDisplayDefinition FormDataView::displayDefinitionValue() const
-{
-    return displayDefinition();
-}
-
-void FormDataView::setDisplayDefinitionValue(const FormDisplayDefinition& dd)
-{
-    if (const auto value = std::get_if<DataViewDefinitions>(&dd))
-        setDisplayDefinition(*value);
 }
 
 ///
@@ -958,7 +947,7 @@ void FormDataView::onDefinitionChanged()
 
     const auto dd = displayDefinition();
     const auto addr = dd.PointAddress - (dd.ZeroBasedAddress ? 0 : 1);
-    _mbMultiServer.addUnitMap(formId(), dd.DeviceId, dd.PointType, addr, dd.Length);
+    _mbMultiServer.addUnitMap(_formId, dd.DeviceId, dd.PointType, addr, dd.Length);
 
     ui->outputWidget->setup(dd, _dataSimulator->simulationMap(), _mbMultiServer.data(dd.DeviceId, dd.PointType, addr, dd.Length));
 }

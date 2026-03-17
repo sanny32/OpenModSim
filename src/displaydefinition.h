@@ -4,7 +4,6 @@
 #include <QSettings>
 #include <QModbusDataUnit>
 #include <QXmlStreamWriter>
-#include <variant>
 #include "modbuslimits.h"
 #include "modbusserver.h"
 #include "scriptsettings.h"
@@ -117,8 +116,6 @@ struct ScriptViewDefinitions
 Q_DECLARE_METATYPE(DataViewDefinitions)
 Q_DECLARE_METATYPE(TrafficViewDefinitions)
 Q_DECLARE_METATYPE(ScriptViewDefinitions)
-using FormDisplayDefinition = std::variant<DataViewDefinitions, TrafficViewDefinitions, ScriptViewDefinitions>;
-Q_DECLARE_METATYPE(FormDisplayDefinition)
 
 inline DataViewDefinitions toDataViewDefinitions(const DataViewDefinitions& src)
 {

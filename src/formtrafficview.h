@@ -44,12 +44,8 @@ public:
     explicit FormTrafficView(int id, ModbusMultiServer& server, MainWindow* parent);
     ~FormTrafficView();
 
-    int formId() const { return _formId; }
-
     TrafficViewDefinitions displayDefinition() const;
     void setDisplayDefinition(const TrafficViewDefinitions& dd);
-    FormDisplayDefinition displayDefinitionValue() const;
-    void setDisplayDefinitionValue(const FormDisplayDefinition& dd);
 
     QColor backgroundColor() const;
     void setBackgroundColor(const QColor& clr);

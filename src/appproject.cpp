@@ -54,10 +54,17 @@ ProjectFormKind projectFormKindFromWidget(QWidget* widget, bool* ok = nullptr)
 
 int formIdOf(QWidget* widget)
 {
-    if (auto* frm = qobject_cast<FormDataView*>(widget)) return frm->formId();
-    if (auto* frm = qobject_cast<FormTrafficView*>(widget)) return frm->formId();
-    if (auto* frm = qobject_cast<FormScriptView*>(widget)) return frm->formId();
-    return -1;
+    if (!widget)
+        return -1;
+
+    const QString title = widget->windowTitle();
+    int idx = title.size() - 1;
+    while (idx >= 0 && title.at(idx).isDigit())
+        --idx;
+
+    bool ok = false;
+    const int id = title.mid(idx + 1).toInt(&ok);
+    return ok ? id : -1;
 }
 
 void enableAutoCompleteOnForm(QWidget* widget, bool enable)
