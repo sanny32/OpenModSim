@@ -84,6 +84,7 @@ private slots:
     void on_actionClose_triggered();
     void on_actionCloseAll_triggered();
     void on_actionOpenProject_triggered();
+    void on_actionSaveProject_triggered();
     void on_actionSaveProjectAs_triggered();
     void on_actionCloseProject_triggered();
     void on_actionPrint_triggered();
@@ -182,6 +183,7 @@ private:
 
     bool loadProfile(const QString& filename);
     void saveProfile();
+    void updateProjectWindowTitle();
 
 private:
     Ui::MainWindow *ui;
@@ -205,6 +207,7 @@ private:
     QSharedPointer<QPrinter> _selectedPrinter;
     DataSimulator* _dataSimulator = nullptr;
     QString _profile;
+    QString _projectFilePath;
     ProjectFormKind _newFormKind = ProjectFormKind::Data;
 
     AppProject* _project = nullptr;

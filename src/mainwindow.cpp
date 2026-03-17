@@ -724,6 +724,19 @@ void MainWindow::on_actionOpenProject_triggered()
 }
 
 ///
+/// \brief MainWindow::on_actionSaveProject_triggered
+///
+void MainWindow::on_actionSaveProject_triggered()
+{
+    if(_projectFilePath.isEmpty()) {
+        on_actionSaveProjectAs_triggered();
+        return;
+    }
+
+    saveProject(_projectFilePath);
+}
+
+///
 /// \brief MainWindow::on_actionSaveProjectAs_triggered
 ///
 void MainWindow::on_actionSaveProjectAs_triggered()
@@ -747,6 +760,8 @@ void MainWindow::on_actionSaveProjectAs_triggered()
 void MainWindow::on_actionCloseProject_triggered()
 {
     _project->closeProject();
+    _projectFilePath.clear();
+    updateProjectWindowTitle();
 }
 
 ///
@@ -1640,6 +1655,8 @@ void MainWindow::presetRegs(QModbusDataUnit::RegisterType type)
 void MainWindow::loadProject(const QString& filename)
 {
     _project->loadProject(filename);
+    _projectFilePath = QFileInfo(filename).absoluteFilePath();
+    updateProjectWindowTitle();
 }
 
 ///
@@ -1649,6 +1666,27 @@ void MainWindow::loadProject(const QString& filename)
 void MainWindow::saveProject(const QString& filename)
 {
     _project->saveProject(filename);
+    _projectFilePath = QFileInfo(filename).absoluteFilePath();
+    updateProjectWindowTitle();
+}
+
+///
+/// \brief MainWindow::updateProjectWindowTitle
+///
+void MainWindow::updateProjectWindowTitle()
+{
+    if(_projectFilePath.isEmpty()) {
+        setWindowTitle(APP_NAME);
+        return;
+    }
+
+    const QString projectName = QFileInfo(_projectFilePath).completeBaseName();
+    if(projectName.isEmpty()) {
+        setWindowTitle(APP_NAME);
+        return;
+    }
+
+    setWindowTitle(QString("%1 - %2").arg(APP_NAME, projectName));
 }
 
 ///

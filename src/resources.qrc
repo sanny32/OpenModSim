@@ -84,6 +84,9 @@
         <file>res/icon-bell-dot.svg</file>
         <file>res/actionSplitView.png</file>
         <file>res/icon-hex.svg</file>
+        <file>res/icon-project-open.svg</file>
+        <file>res/icon-project-save.svg</file>
+        <file>res/icon-project-save-as.svg</file>
         <file alias="res/icon-new-form.svg">icon-new-form.svg</file>
     </qresource>
 </RCC>
