@@ -3,7 +3,6 @@
 
 #include <QWidget>
 #include <QTimer>
-#include <QVersionNumber>
 #include <QXmlStreamWriter>
 #include "fontutils.h"
 #include "displaydefinition.h"
@@ -40,8 +39,6 @@ class FormScriptView : public QWidget
     friend QXmlStreamReader& operator >>(QXmlStreamReader& xml, FormScriptView* frm);
 
 public:
-    static QVersionNumber VERSION;
-
     explicit FormScriptView(int id, ModbusMultiServer& server, DataSimulator* simulator, MainWindow* parent);
     ~FormScriptView();
 
@@ -145,7 +142,6 @@ inline QSettings& operator <<(QSettings& out, FormScriptView* frm)
 {
     if(!frm) return out;
 
-    out.setValue("FormVersion", FormScriptView::VERSION.toString());
     out.setValue("Font", frm->font());
     out.setValue("ForegroundColor", frm->foregroundColor());
     out.setValue("BackgroundColor", frm->backgroundColor());
@@ -172,9 +168,6 @@ inline QSettings& operator >>(QSettings& in, FormScriptView* frm)
 {
     if(!frm) return in;
 
-    QVersionNumber version;
-    version = QVersionNumber::fromString(in.value("FormVersion").toString());
-
     ScriptViewDefinitions displayDefinition;
     in >> displayDefinition;
 
@@ -189,12 +182,10 @@ inline QSettings& operator >>(QSettings& in, FormScriptView* frm)
     wndRect = in.value("ViewRect").toRect();
 
     auto wnd = frm->parentWidget();
-    if(!version.isNull() || version >= QVersionNumber(1, 8)) {
-        frm->setFont(in.value("Font", defaultMonospaceFont()).value<QFont>());
-        frm->setForegroundColor(in.value("ForegroundColor", QColor(Qt::black)).value<QColor>());
-        frm->setBackgroundColor(in.value("BackgroundColor", QColor(Qt::white)).value<QColor>());
-        frm->setZoomPercent(in.value("ZoomPercent", 100).toInt());
-    }
+    frm->setFont(in.value("Font", defaultMonospaceFont()).value<QFont>());
+    frm->setForegroundColor(in.value("ForegroundColor", QColor(Qt::black)).value<QColor>());
+    frm->setBackgroundColor(in.value("BackgroundColor", QColor(Qt::white)).value<QColor>());
+    frm->setZoomPercent(in.value("ZoomPercent", 100).toInt());
     frm->setFont(AppPreferences::instance().scriptFont());
     if(wndRect.isValid())
         wnd->setGeometry(wndRect);
@@ -222,7 +213,6 @@ inline QXmlStreamWriter& operator <<(QXmlStreamWriter& xml, FormScriptView* frm)
 
     xml.writeStartElement("FormScriptView");
 
-    xml.writeAttribute("Version", FormScriptView::VERSION.toString());
     const auto panel = frm->property("SplitPanel").toString();
     if(!panel.isEmpty())
         xml.writeAttribute("Panel", panel);

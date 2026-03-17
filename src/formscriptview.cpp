@@ -6,8 +6,6 @@
 #include "formscriptview.h"
 #include "ui_formscriptview.h"
 
-QVersionNumber FormScriptView::VERSION = QVersionNumber(1, 15);
-
 FormScriptView::FormScriptView(int id, ModbusMultiServer& server, DataSimulator* simulator, MainWindow* parent)
     : QWidget(parent)
     , ui(new Ui::FormScriptView)

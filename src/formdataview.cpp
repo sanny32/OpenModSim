@@ -12,8 +12,6 @@
 #include "formdataview.h"
 #include "ui_formdataview.h"
 
-QVersionNumber FormDataView::VERSION = QVersionNumber(1, 15);
-
 ///
 /// \brief FormDataView::FormDataView
 /// \param num
@@ -147,24 +145,6 @@ void FormDataView::mouseDoubleClickEvent(QMouseEvent* event)
     }
 
     return QWidget::mouseDoubleClickEvent(event);
-}
-
-///
-/// \brief FormDataView::filename
-/// \return
-///
-QString FormDataView::filename() const
-{
-    return _filename;
-}
-
-///
-/// \brief FormDataView::setFilename
-/// \param filename
-///
-void FormDataView::setFilename(const QString& filename)
-{
-    _filename = filename;
 }
 
 ///

@@ -3,7 +3,6 @@
 
 #include <QWidget>
 #include <QTimer>
-#include <QVersionNumber>
 #include <QXmlStreamWriter>
 #include "fontutils.h"
 #include "datasimulator.h"
@@ -42,8 +41,6 @@ class FormTrafficView : public QWidget
     friend QXmlStreamReader& operator >>(QXmlStreamReader& xml, FormTrafficView* frm);
 
 public:
-    static QVersionNumber VERSION;
-
     explicit FormTrafficView(int id, ModbusMultiServer& server, MainWindow* parent);
     ~FormTrafficView();
 
@@ -123,7 +120,6 @@ inline QSettings& operator <<(QSettings& out, FormTrafficView* frm)
 {
     if(!frm) return out;
 
-    out.setValue("FormVersion", FormTrafficView::VERSION.toString());
     out.setValue("Font", frm->font());
     out.setValue("ForegroundColor", frm->foregroundColor());
     out.setValue("BackgroundColor", frm->backgroundColor());
@@ -150,9 +146,6 @@ inline QSettings& operator <<(QSettings& out, FormTrafficView* frm)
 inline QSettings& operator >>(QSettings& in, FormTrafficView* frm)
 {
     if(!frm) return in;
-
-    QVersionNumber version;
-    version = QVersionNumber::fromString(in.value("FormVersion").toString());
 
     TrafficViewDefinitions displayDefinition;
     in >> displayDefinition;
@@ -193,7 +186,6 @@ inline QXmlStreamWriter& operator <<(QXmlStreamWriter& xml, FormTrafficView* frm
 
     xml.writeStartElement("FormTrafficView");
 
-    xml.writeAttribute("Version", FormTrafficView::VERSION.toString());
     const auto panel = frm->property("SplitPanel").toString();
     if(!panel.isEmpty())
         xml.writeAttribute("Panel", panel);

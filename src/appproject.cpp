@@ -124,16 +124,6 @@ void loadXmlOfForm(QWidget* widget, QXmlStreamReader& r)
     else r.skipCurrentElement();
 }
 
-QString filenameOfForm(QWidget* widget)
-{
-    if (auto* frm = qobject_cast<FormDataView*>(widget)) return frm->filename();
-    return QString();
-}
-
-void setFilenameOnForm(QWidget* widget, const QString& filename)
-{
-    if (auto* frm = qobject_cast<FormDataView*>(widget)) frm->setFilename(filename);
-}
 }
 
 ///
@@ -717,7 +707,6 @@ bool AppProject::cloneMdiChildState(QWidget* source, QWidget* target) const
     if(reader.hasError())
         return false;
 
-    setFilenameOnForm(target, filenameOfForm(source));
     return true;
 }
 

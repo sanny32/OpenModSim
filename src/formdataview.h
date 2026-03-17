@@ -6,7 +6,6 @@
 #include <QPrinter>
 #include <QActionGroup>
 #include <QMap>
-#include <QVersionNumber>
 #include <QXmlStreamWriter>
 #include "fontutils.h"
 #include "datasimulator.h"
@@ -41,15 +40,10 @@ class FormDataView : public QWidget
     friend QXmlStreamReader& operator >>(QXmlStreamReader& xml, FormDataView* frm);
 
 public:
-    static QVersionNumber VERSION;
-
     explicit FormDataView(int id, ModbusMultiServer& server, DataSimulator* simulator, MainWindow* parent);
     ~FormDataView();
 
     int formId() const { return _formId; }
-
-    QString filename() const;
-    void setFilename(const QString& filename);
 
     QVector<quint16> data() const;
 
@@ -210,7 +204,6 @@ private:
     Ui::FormDataView *ui;
     MainWindow* _parent;
     int _formId;
-    QString _filename;
     bool _verboseLogging;
     ScriptSettings _scriptSettings;
     ModbusMultiServer& _mbMultiServer;
@@ -234,7 +227,6 @@ inline QSettings& operator <<(QSettings& out, FormDataView* frm)
 {
     if(!frm) return out;
 
-    out.setValue("FormVersion", FormDataView::VERSION.toString());
     out.setValue("Font", frm->font());
     out.setValue("ForegroundColor", frm->foregroundColor());
     out.setValue("BackgroundColor", frm->backgroundColor());
@@ -268,9 +260,6 @@ inline QSettings& operator >>(QSettings& in, FormDataView* frm)
 {
     if(!frm) return in;
 
-    QVersionNumber version;
-    version = QVersionNumber::fromString(in.value("FormVersion").toString());
-
     DisplayMode displayMode;
     in >> displayMode;
 
@@ -285,16 +274,10 @@ inline QSettings& operator >>(QSettings& in, FormDataView* frm)
 
 
     AddressDescriptionMap2 descriptionMap;
-    if(version >= QVersionNumber(1, 15))
-    {
-        in >> descriptionMap;
-    }
+    in >> descriptionMap;
 
     AddressColorMap colorMap;
-    if(version >= QVersionNumber(1, 15))
-    {
-        in >> colorMap;
-    }
+    in >> colorMap;
 
     bool isMinimized;
     isMinimized = in.value("ViewMinimized").toBool();
@@ -305,13 +288,11 @@ inline QSettings& operator >>(QSettings& in, FormDataView* frm)
     wndRect = in.value("ViewRect").toRect();
 
     auto wnd = frm->parentWidget();
-    if(!version.isNull() || version >= QVersionNumber(1, 8)) {
-        frm->setFont(in.value("Font", defaultMonospaceFont()).value<QFont>());
-        frm->setForegroundColor(in.value("ForegroundColor", QColor(Qt::black)).value<QColor>());
-        frm->setBackgroundColor(in.value("BackgroundColor", QColor(Qt::white)).value<QColor>());
-        frm->setStatusColor(in.value("StatusColor", QColor(Qt::red)).value<QColor>());
-        frm->setZoomPercent(in.value("ZoomPercent", 100).toInt());
-    }
+    frm->setFont(in.value("Font", defaultMonospaceFont()).value<QFont>());
+    frm->setForegroundColor(in.value("ForegroundColor", QColor(Qt::black)).value<QColor>());
+    frm->setBackgroundColor(in.value("BackgroundColor", QColor(Qt::white)).value<QColor>());
+    frm->setStatusColor(in.value("StatusColor", QColor(Qt::red)).value<QColor>());
+    frm->setZoomPercent(in.value("ZoomPercent", 100).toInt());
     frm->setScriptFont(AppPreferences::instance().scriptFont());
 
     frm->setParentGeometry(wndRect);
@@ -350,7 +331,6 @@ inline QXmlStreamWriter& operator <<(QXmlStreamWriter& xml, FormDataView* frm)
 
     xml.writeStartElement("FormDataView");
 
-    xml.writeAttribute("Version", FormDataView::VERSION.toString());
     const auto panel = frm->property("SplitPanel").toString();
     if(!panel.isEmpty())
         xml.writeAttribute("Panel", panel);

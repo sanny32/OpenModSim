@@ -11,8 +11,6 @@
 #include "formtrafficview.h"
 #include "ui_formtrafficview.h"
 
-QVersionNumber FormTrafficView::VERSION = QVersionNumber(1, 15);
-
 ///
 /// \brief FormTrafficView::FormTrafficView
 /// \param num
