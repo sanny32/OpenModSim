@@ -887,7 +887,7 @@ void ModbusMultiServer::writeRegister(QModbusDataUnit::RegisterType pointType, c
 
             case QModbusDataUnit::InputRegisters:
             case QModbusDataUnit::HoldingRegisters:
-                switch(params.DisplayMode)
+                switch(params.DataMode)
                 {
                     case DataDisplayMode::Binary:
                     case DataDisplayMode::UInt16:

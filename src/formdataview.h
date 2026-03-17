@@ -58,9 +58,6 @@ public:
     QString codepage() const;
     void setCodepage(const QString& name);
 
-    DisplayMode displayMode() const;
-    void setDisplayMode(DisplayMode mode);
-
     DataDisplayMode dataDisplayMode() const;
     void setDataDisplayMode(DataDisplayMode mode);
 
@@ -165,7 +162,6 @@ signals:
     void codepageChanged(const QString&);
     void definitionChanged();
     void pointTypeChanged(QModbusDataUnit::RegisterType);
-    void displayModeChanged(DisplayMode mode);
     void scriptSettingsChanged(const ScriptSettings&);
     void scriptRunning();
     void scriptStopped();
@@ -238,7 +234,6 @@ inline QSettings& operator <<(QSettings& out, FormDataView* frm)
     out.setValue("ViewMaximized", wnd->isMaximized());
     out.setValue("ViewRect", frm->parentGeometry());
 
-    out << frm->displayMode();
     out << frm->dataDisplayMode();
     out << frm->byteOrder();
     out << frm->displayDefinition();
@@ -259,9 +254,6 @@ inline QSettings& operator <<(QSettings& out, FormDataView* frm)
 inline QSettings& operator >>(QSettings& in, FormDataView* frm)
 {
     if(!frm) return in;
-
-    DisplayMode displayMode;
-    in >> displayMode;
 
     DataDisplayMode dataDisplayMode;
     in >> dataDisplayMode;
@@ -299,7 +291,6 @@ inline QSettings& operator >>(QSettings& in, FormDataView* frm)
     if(isMinimized) wnd->setWindowState(Qt::WindowMinimized);
     if(isMaximized) wnd->setWindowState(Qt::WindowMaximized);
 
-    frm->setDisplayMode(displayMode);
     frm->setDataDisplayMode(dataDisplayMode);
     frm->setByteOrder(byteOrder);
     frm->setDisplayDefinition(displayDefinition);
@@ -334,7 +325,6 @@ inline QXmlStreamWriter& operator <<(QXmlStreamWriter& xml, FormDataView* frm)
     const auto panel = frm->property("SplitPanel").toString();
     if(!panel.isEmpty())
         xml.writeAttribute("Panel", panel);
-    xml.writeAttribute("DisplayMode", enumToString<DisplayMode>(frm->displayMode()));
     xml.writeAttribute("DataDisplayMode", enumToString<DataDisplayMode>(frm->dataDisplayMode()));
     xml.writeAttribute("DisplayHexAddresses", boolToString(frm->displayHexAddresses()));
     xml.writeAttribute("Codepage", frm->codepage());
@@ -439,11 +429,6 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, FormDataView* frm)
         QHash<quint16, ModbusSimulationParams> simulations;
 
         const QXmlStreamAttributes attributes = xml.attributes();
-
-        if (attributes.hasAttribute("DisplayMode")) {
-            const DisplayMode mode = enumFromString<DisplayMode>(attributes.value("DisplayMode").toString());
-            frm->setDisplayMode(mode);
-        }
 
         if (attributes.hasAttribute("DataDisplayMode")) {
             ddm = enumFromString<DataDisplayMode>(attributes.value("DataDisplayMode").toString());

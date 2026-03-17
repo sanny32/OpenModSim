@@ -127,7 +127,7 @@
 <context>
     <name>AppProject</name>
     <message>
-        <location filename="../appproject.cpp" line="457"/>
+        <location filename="../appproject.cpp" line="447"/>
         <source>Capture Error:<byte value="xd"/>
 %1</source>
         <translation type="unfinished">Ошибка захвата:
@@ -1891,7 +1891,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formdataview.cpp" line="537"/>
+        <location filename="../formdataview.cpp" line="495"/>
         <source>Address Base: %1
 Start Address: %2
 Length: %3</source>
@@ -1900,7 +1900,7 @@ Length: %3</source>
 Количество: %3</translation>
     </message>
     <message>
-        <location filename="../formdataview.cpp" line="540"/>
+        <location filename="../formdataview.cpp" line="498"/>
         <source>Unit Identifier: %1
 MODBUS Point Type:
 %2</source>
@@ -2193,14 +2193,14 @@ MODBUS Point Type:
 %2</translation>
     </message>
     <message>
-        <location filename="../formscriptview.cpp" line="68"/>
-        <location filename="../formscriptview.cpp" line="286"/>
+        <location filename="../formscriptview.cpp" line="66"/>
+        <location filename="../formscriptview.cpp" line="284"/>
         <source> ms</source>
         <translation type="unfinished"> мс</translation>
     </message>
     <message>
-        <location filename="../formscriptview.cpp" line="70"/>
-        <location filename="../formscriptview.cpp" line="290"/>
+        <location filename="../formscriptview.cpp" line="68"/>
+        <location filename="../formscriptview.cpp" line="288"/>
         <source>Run on startup</source>
         <translation type="unfinished">Запускать при открытии</translation>
     </message>
@@ -2346,28 +2346,28 @@ MODBUS Point Type:
         <translation type="obsolete">Заменить</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="48"/>
+        <location filename="../formtrafficview.cpp" line="46"/>
         <source>Unit:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="54"/>
-        <location filename="../formtrafficview.cpp" line="67"/>
+        <location filename="../formtrafficview.cpp" line="52"/>
+        <location filename="../formtrafficview.cpp" line="65"/>
         <source>All</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="55"/>
+        <location filename="../formtrafficview.cpp" line="53"/>
         <source>0 = all unit ids</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="85"/>
+        <location filename="../formtrafficview.cpp" line="83"/>
         <source>Rows:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="63"/>
+        <location filename="../formtrafficview.cpp" line="61"/>
         <source>Function:</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3156,7 +3156,7 @@ Script.onInit(()=&gt;{
     <message>
         <location filename="../mainwindow.ui" line="979"/>
         <location filename="../mainwindow.ui" line="982"/>
-        <location filename="../mainwindow.cpp" line="336"/>
+        <location filename="../mainwindow.cpp" line="328"/>
         <source>Script Help</source>
         <translation>Справка по скриптам</translation>
     </message>
@@ -3243,7 +3243,7 @@ Script.onInit(()=&gt;{
         <translation>Шестнадцатиричные адреса</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="764"/>
+        <location filename="../mainwindow.cpp" line="756"/>
         <source>All files (*)</source>
         <translation>Все файлы (*)</translation>
     </message>
@@ -3252,12 +3252,12 @@ Script.onInit(()=&gt;{
         <translation type="vanished">XML файлы (*.xml)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="317"/>
+        <location filename="../mainwindow.cpp" line="309"/>
         <source>Project</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="373"/>
+        <location filename="../mainwindow.cpp" line="365"/>
         <source>Output</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3266,13 +3266,13 @@ Script.onInit(()=&gt;{
         <translation type="obsolete">Данные</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="763"/>
-        <location filename="../mainwindow.cpp" line="779"/>
+        <location filename="../mainwindow.cpp" line="755"/>
+        <location filename="../mainwindow.cpp" line="771"/>
         <source>Project files (*.msimprj)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1504"/>
+        <location filename="../mainwindow.cpp" line="1490"/>
         <source>JavaScript files (*.js);;All files (*)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3884,77 +3884,77 @@ Script.onInit(()=&gt;{
 <context>
     <name>OutputDataWidget</name>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1014"/>
+        <location filename="../controls/outputdatawidget.cpp" line="982"/>
         <source>Set Value of %1</source>
         <translation type="unfinished">Записать значение по адресу %1</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1020"/>
+        <location filename="../controls/outputdatawidget.cpp" line="988"/>
         <source>Add Description</source>
         <translation type="unfinished">Добавить описание</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1020"/>
+        <location filename="../controls/outputdatawidget.cpp" line="988"/>
         <source>Edit Description</source>
         <translation type="unfinished">Редактировать описание</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1023"/>
+        <location filename="../controls/outputdatawidget.cpp" line="991"/>
         <source>%1: Enter Description</source>
         <translation type="unfinished">%1: Введите описание</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1032"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1000"/>
         <source>Remove Color</source>
         <translation type="unfinished">Удалить цвет</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1043"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1011"/>
         <source>Yellow</source>
         <translation type="unfinished">Желтый</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1044"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1012"/>
         <source>Cyan</source>
         <translation type="unfinished">Циан</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1045"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1013"/>
         <source>Magenta</source>
         <translation type="unfinished">Пурпурный</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1046"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1014"/>
         <source>LightGreen</source>
         <translation type="unfinished">Светло-зеленый</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1047"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1015"/>
         <source>Orange</source>
         <translation type="unfinished">Оранжевый</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1048"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1016"/>
         <source>LightBlue</source>
         <translation type="unfinished">Светло-синий</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1049"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1017"/>
         <source>LightGray</source>
         <translation type="unfinished">Светло-серый</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1134"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1102"/>
         <source>NOT CONNECTED!</source>
         <translation type="unfinished">НЕ ПОДКЛЮЧЕНО!</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1142"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1110"/>
         <source>Invalid Data Length Specified</source>
         <translation type="unfinished">Указана недопустимая длина данных</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1177"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1145"/>
         <source>Zoom: %1%</source>
         <translation type="unfinished">Увеличение: %1%</translation>
     </message>

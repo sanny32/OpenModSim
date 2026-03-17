@@ -112,14 +112,6 @@ void applySharedDisplayDefaults(ScriptViewDefinitions& target, const ScriptViewD
     target.ScriptCfg = defaults.ScriptCfg;
 }
 
-DisplayMode displayModeOfForm(QWidget* widget)
-{
-    if (auto* frm = qobject_cast<FormDataView*>(widget)) return frm->displayMode();
-    if (qobject_cast<FormTrafficView*>(widget)) return DisplayMode::Traffic;
-    if (qobject_cast<FormScriptView*>(widget)) return DisplayMode::Script;
-    return DisplayMode::Data;
-}
-
 DataDisplayMode dataDisplayModeOfForm(QWidget* widget)
 {
     if (auto* frm = qobject_cast<FormDataView*>(widget)) return frm->dataDisplayMode();
@@ -533,7 +525,7 @@ void MainWindow::on_awake()
     ui->menuWindow->setEnabled(frm != nullptr);
 
     ui->actionPrintSetup->setEnabled(_selectedPrinter != nullptr && dataLikeFrm != nullptr);
-    ui->actionPrint->setEnabled(_selectedPrinter != nullptr && dataLikeFrm != nullptr && displayModeOfForm(dataLikeFrm) == DisplayMode::Data);
+    ui->actionPrint->setEnabled(_selectedPrinter != nullptr && dataFrm != nullptr);
 
     ui->actionUndo->setEnabled(scriptFrm != nullptr);
     ui->actionRedo->setEnabled(scriptFrm != nullptr);
@@ -1395,26 +1387,20 @@ void MainWindow::updateHelpWidgetState()
 {
     auto frm = _project->currentMdiChild();
     if(!frm) return;
+    if (qobject_cast<FormScriptView*>(frm)) {
+        if(!_helpDockWidget->isVisible() &&
+            _helpDockWidget->property("WasShown").toBool())
+        {
+            _helpDockWidget->setVisible(true);
+        }
+        return;
+    }
 
-    switch(displayModeOfForm(frm))
+    if(_helpDockWidget->isVisible() &&
+        !_helpDockWidget->isFloating())
     {
-        case DisplayMode::Data:
-        case DisplayMode::Traffic:
-            if(_helpDockWidget->isVisible() &&
-                !_helpDockWidget->isFloating())
-            {
-                _helpDockWidget->setProperty("WasShown", true);
-                _helpDockWidget->setVisible(false);
-            }
-        break;
-
-        case DisplayMode::Script:
-            if(!_helpDockWidget->isVisible() &&
-                _helpDockWidget->property("WasShown").toBool())
-            {
-                _helpDockWidget->setVisible(true);
-            }
-        break;
+        _helpDockWidget->setProperty("WasShown", true);
+        _helpDockWidget->setVisible(false);
     }
 }
 
@@ -1682,7 +1668,7 @@ void MainWindow::presetRegs(QModbusDataUnit::RegisterType type)
     ModbusWriteParams params;
     params.DeviceId = presetParams.DeviceId;
     params.Address = presetParams.PointAddress;
-    params.DisplayMode = frm->dataDisplayMode();
+    params.DataMode = frm->dataDisplayMode();
     params.Order = frm->byteOrder();
     params.Codepage = frm->codepage();
     params.ZeroBasedAddress = dd.ZeroBasedAddress;

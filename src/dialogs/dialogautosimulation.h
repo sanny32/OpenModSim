@@ -35,7 +35,7 @@ private:
 
 private:
     ModbusSimulationParams& _params;
-    DataDisplayMode _displayMode;
+    DataDisplayMode _dataMode;
 };
 
 #endif // DIALOGAUTOSIMULATION_H

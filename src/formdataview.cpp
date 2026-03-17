@@ -39,8 +39,6 @@ FormDataView::FormDataView(int id, ModbusMultiServer& server, DataSimulator* sim
     ui->lineEditDeviceId->setHexButtonVisible(true);
     server.addDeviceId(ui->lineEditDeviceId->value<int>());
 
-    ui->outputWidget->enforceDataMode();
-
     const auto mbDefs = _mbMultiServer.getModbusDefinitions();
 
     ui->lineEditAddress->setLeadingZeroes(true);
@@ -238,26 +236,6 @@ void FormDataView::setDisplayDefinitionValue(const FormDisplayDefinition& dd)
 {
     if (const auto value = std::get_if<DataViewDefinitions>(&dd))
         setDisplayDefinition(*value);
-}
-
-///
-/// \brief FormDataView::displayMode
-/// \return
-///
-DisplayMode FormDataView::displayMode() const
-{
-    return ui->outputWidget->displayMode();
-}
-
-///
-/// \brief FormDataView::setDisplayMode
-/// \param mode
-///
-void FormDataView::setDisplayMode(DisplayMode mode)
-{
-    if (mode != DisplayMode::Script)
-        ui->outputWidget->setDisplayMode(mode);
-    emit displayModeChanged(displayMode());
 }
 
 ///
@@ -1036,7 +1014,7 @@ void FormDataView::on_outputWidget_itemDoubleClicked(quint16 addr, const QVarian
             params.DeviceId = deviceId;
             params.Address = addr;
             params.Value = value;
-            params.DisplayMode = mode;
+            params.DataMode = mode;
             params.AddrSpace = addrSpace;
             params.Order = byteOrder();
             params.Codepage = codepage();
@@ -1057,7 +1035,7 @@ void FormDataView::on_outputWidget_itemDoubleClicked(quint16 addr, const QVarian
             params.DeviceId = deviceId;
             params.Address = addr;
             params.Value = value;
-            params.DisplayMode = mode;
+            params.DataMode = mode;
             params.AddrSpace = addrSpace;
             params.Order = byteOrder();
             params.Codepage = codepage();

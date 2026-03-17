@@ -414,7 +414,6 @@ OutputDataWidget::OutputDataWidget(QWidget *parent) :
      QWidget(parent)
    , ui(new Ui::OutputDataWidget)
    ,_displayHexAddreses(false)
-   ,_displayMode(DisplayMode::Data)
    ,_dataDisplayMode(DataDisplayMode::Hex)
    ,_byteOrder(ByteOrder::Direct)
    ,_listModel(new OutputDataListModel(this))
@@ -875,37 +874,6 @@ void OutputDataWidget::setSimulated(DataDisplayMode mode, quint8 deviceId, QModb
     }
     else {
         _listModel->setData(index, OutputDataListModel::SimulationIconNone, Qt::DecorationRole);
-    }
-}
-
-///
-/// \brief OutputDataWidget::displayMode
-/// \return
-///
-DisplayMode OutputDataWidget::displayMode() const
-{
-    return _displayMode;
-}
-
-///
-/// \brief OutputDataWidget::setDisplayMode
-/// \param mode
-///
-void OutputDataWidget::setDisplayMode(DisplayMode mode)
-{
-    _displayMode = mode;
-    switch(mode)
-    {
-        case DisplayMode::Data:
-            ui->stackedWidget->setCurrentIndex(0);
-        break;
-
-        case DisplayMode::Traffic:
-            ui->stackedWidget->setCurrentIndex(1);
-        break;
-
-        default:
-        break;
     }
 }
 

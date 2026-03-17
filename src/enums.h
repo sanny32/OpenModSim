@@ -100,46 +100,6 @@ inline QSettings& operator >>(QSettings& in, AddressSpace& asp)
 }
 
 ///
-/// \brief The DisplayMode enum
-///
-enum class DisplayMode
-{
-    Data = 0,
-    Traffic,
-    Script
-};
-Q_DECLARE_METATYPE(DisplayMode)
-DECLARE_ENUM_STRINGS(DisplayMode,
-                {   DisplayMode::Data,      "Data"      },
-                {   DisplayMode::Traffic,   "Traffic"   },
-                {   DisplayMode::Script,    "Script"    }
-)
-
-///
-/// \brief operator <<
-/// \param out
-/// \param params
-/// \return
-///
-inline QSettings& operator <<(QSettings& out, const DisplayMode& mode)
-{
-    out.setValue("DisplayMode", (uint)mode);
-    return out;
-}
-
-///
-/// \brief operator >>
-/// \param in
-/// \param params
-/// \return
-///
-inline QSettings& operator >>(QSettings& in, DisplayMode& mode)
-{
-    mode = (DisplayMode)in.value("DisplayMode").toUInt();
-    return in;
-}
-
-///
 /// \brief The DataDisplayMode enum
 ///
 enum class DataDisplayMode

@@ -97,14 +97,9 @@ public:
     explicit OutputDataWidget(QWidget* parent = nullptr);
     ~OutputDataWidget() override;
 
-    void enforceDataMode() { setDisplayMode(DisplayMode::Data); }
-
     QVector<quint16> data() const;
 
     void setup(const DataViewDefinitions& dd, const ModbusSimulationMap2& simulations, const QModbusDataUnit& data);
-
-    DisplayMode displayMode() const;
-    void setDisplayMode(DisplayMode mode);
 
     DataDisplayMode dataDisplayMode() const;
     void setDataDisplayMode(DataDisplayMode mode);
@@ -178,7 +173,6 @@ private:
     int _zoomPercent = 100;
 
     bool _displayHexAddreses;
-    DisplayMode _displayMode;
     DataDisplayMode _dataDisplayMode;
     ByteOrder _byteOrder;
     QString _codepage;
