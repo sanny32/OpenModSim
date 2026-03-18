@@ -237,7 +237,6 @@ MainWindow::MainWindow(const QString& profile, bool useSession, QWidget *parent)
     setUnifiedTitleAndToolBarOnMac(true);
     setStatusBar(new MainStatusBar(_mbMultiServer, this));
 
-    ui->actionNew->setIcon(QIcon(":/res/icon-new-form.svg"));
     ui->actionNew->setMenu(ui->menuNew);
     if (auto* newButton = qobject_cast<QToolButton*>(ui->toolBarMain->widgetForAction(ui->actionNew))) {
         newButton->setPopupMode(QToolButton::MenuButtonPopup);

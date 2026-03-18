@@ -217,7 +217,6 @@
    <addaction name="actionNew"/>
    <addaction name="actionOpenProject"/>
    <addaction name="actionSaveProject"/>
-   <addaction name="actionSaveProjectAs"/>
    <addaction name="separator"/>
    <addaction name="actionUndo"/>
    <addaction name="actionRedo"/>
@@ -260,29 +259,25 @@
   <action name="actionOpenProject">
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/res/icon-project-open.svg</normaloff>:/res/icon-project-open.svg</iconset>
+     <normaloff>:/res/actionOpen.png</normaloff>:/res/actionOpen.png</iconset>
    </property>
    <property name="text">
     <string>Open Project...</string>
    </property>
    <property name="shortcut">
-    <string notr="true">Ctrl+O</string>
+    <string>Ctrl+O</string>
    </property>
   </action>
   <action name="actionSaveProject">
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/res/icon-project-save.svg</normaloff>:/res/icon-project-save.svg</iconset>
+     <normaloff>:/res/actionSave.png</normaloff>:/res/actionSave.png</iconset>
    </property>
    <property name="text">
     <string>Save Project</string>
    </property>
   </action>
   <action name="actionSaveProjectAs">
-   <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/res/icon-project-save-as.svg</normaloff>:/res/icon-project-save-as.svg</iconset>
-   </property>
    <property name="text">
     <string>Save Project As...</string>
    </property>
