@@ -23,9 +23,13 @@
 
 // Forward declaration (defined later in this file)
 static QString getSettingsFilePath();
+static QString createSessionProjectFilePath();
 namespace {
 constexpr const char* kSplitAutoCloneProperty = "SplitAutoClone";
 constexpr const char* kNewFormKindKey = "NewFormKind";
+constexpr const char* kRecentProjectsKey = "RecentProjects";
+constexpr const char* kSessionProjectPathKey = "SessionProjectPath";
+constexpr int kMaxRecentProjects = 10;
 
 ProjectFormKind newFormKindFromSetting(int value)
 {
@@ -102,8 +106,9 @@ void applySharedDisplayDefaults(TDefinitions& target, const TDefinitions& defaul
 
 void applySharedDisplayDefaults(TrafficViewDefinitions& target, const TrafficViewDefinitions& defaults)
 {
-    applySharedDisplayDefaults<TrafficViewDefinitions>(target, defaults);
-    target.ScriptCfg = defaults.ScriptCfg;
+    target.LogViewLimit = defaults.LogViewLimit;
+    target.UnitFilter = defaults.UnitFilter;
+    target.FunctionCodeFilter = defaults.FunctionCodeFilter;
 }
 
 void applySharedDisplayDefaults(ScriptViewDefinitions& target, const ScriptViewDefinitions& defaults)
@@ -241,6 +246,11 @@ MainWindow::MainWindow(const QString& profile, bool useSession, QWidget *parent)
     if (auto* newButton = qobject_cast<QToolButton*>(ui->toolBarMain->widgetForAction(ui->actionNew))) {
         newButton->setPopupMode(QToolButton::MenuButtonPopup);
     }
+    _openRecentMenu = new QMenu(tr("Open Recent"), this);
+    _clearRecentAction = _openRecentMenu->addAction(tr("Clear List"));
+    connect(_clearRecentAction, &QAction::triggered, this, &MainWindow::clearRecentProjects);
+    ui->menuFile->insertMenu(ui->actionSaveProject, _openRecentMenu);
+    ui->menuFile->insertSeparator(ui->actionSaveProject);
 
     _ansiMenu = new AnsiMenu(this);
     connect(_ansiMenu, &AnsiMenu::codepageSelected, this, &MainWindow::setCodepage);
@@ -346,20 +356,14 @@ MainWindow::MainWindow(const QString& profile, bool useSession, QWidget *parent)
     });
     connect(&_mbMultiServer, &ModbusMultiServer::connectionError, this, &MainWindow::on_connectionError);
 
+    loadAppSettings(profile);
+    rebuildRecentProjectsMenu();
+
+    if(_sessionProjectPath.isEmpty())
+        _sessionProjectPath = createSessionProjectFilePath();
     if(_useSession) {
-        if(!loadProfile(profile)) {
+        if(!loadSessionProject() && !loadLegacySessionFromIni())
             ui->actionNew->trigger();
-        }
-    }
-    else {
-        // Load AppPreferences even without a session
-        const QString settingsFile = getSettingsFilePath();
-        if(QFile::exists(settingsFile)) {
-            QSettings m(settingsFile, QSettings::IniFormat);
-            AppPreferences::instance().load(m);
-            _newFormKind = newFormKindFromSetting(
-                m.value(kNewFormKindKey, newFormKindToSetting(ProjectFormKind::Data)).toInt());
-        }
     }
 }
 
@@ -414,16 +418,14 @@ void MainWindow::changeEvent(QEvent* event)
 ///
 void MainWindow::closeEvent(QCloseEvent *event)
 {
-    if(_useSession) {
-        saveProfile(); // also saves AppPreferences
+    if(hasProjectContext()) {
+        if(!confirmSaveOnClose()) {
+            event->ignore();
+            return;
+        }
     }
-    else {
-        // Save preferences even when session tracking is off
-        const QString filepath = getSettingsFilePath();
-        QSettings m(filepath, QSettings::IniFormat, this);
-        AppPreferences::instance().save(m);
-        m.setValue(kNewFormKindKey, newFormKindToSetting(_newFormKind));
-    }
+
+    saveAppSettings();
 
     ui->mdiArea->closeAllSubWindows();
     if (ui->mdiArea->currentSubWindow())
@@ -720,6 +722,7 @@ void MainWindow::on_actionOpenProject_triggered()
 
     _project->setSavePath(QFileInfo(filename).absoluteDir().absolutePath());
     loadProject(filename);
+    addRecentProject(QFileInfo(filename).absoluteFilePath());
 }
 
 ///
@@ -728,11 +731,16 @@ void MainWindow::on_actionOpenProject_triggered()
 void MainWindow::on_actionSaveProject_triggered()
 {
     if(_projectFilePath.isEmpty()) {
-        on_actionSaveProjectAs_triggered();
+        if(_useSession) {
+            saveSessionProject();
+        } else {
+            on_actionSaveProjectAs_triggered();
+        }
         return;
     }
 
     saveProject(_projectFilePath);
+    addRecentProject(_projectFilePath);
 }
 
 ///
@@ -751,6 +759,7 @@ void MainWindow::on_actionSaveProjectAs_triggered()
 
     _project->setSavePath(QFileInfo(filename).absoluteDir().absolutePath());
     saveProject(filename);
+    addRecentProject(QFileInfo(filename).absoluteFilePath());
 }
 
 ///
@@ -761,6 +770,8 @@ void MainWindow::on_actionCloseProject_triggered()
     _project->closeProject();
     _projectFilePath.clear();
     updateProjectWindowTitle();
+    if(_useSession)
+        saveSessionProject();
 }
 
 ///
@@ -1655,6 +1666,7 @@ void MainWindow::loadProject(const QString& filename)
 {
     _project->loadProject(filename);
     _projectFilePath = QFileInfo(filename).absoluteFilePath();
+    _project->setSavePath(QFileInfo(filename).absoluteDir().absolutePath());
     updateProjectWindowTitle();
 }
 
@@ -1666,6 +1678,7 @@ void MainWindow::saveProject(const QString& filename)
 {
     _project->saveProject(filename);
     _projectFilePath = QFileInfo(filename).absoluteFilePath();
+    _project->setSavePath(QFileInfo(filename).absoluteDir().absolutePath());
     updateProjectWindowTitle();
 }
 
@@ -1785,16 +1798,27 @@ static QString getSettingsFilePath()
     return QDir(QStandardPaths::writableLocation(QStandardPaths::ConfigLocation)).filePath(filename);
 }
 
+///
+/// \brief createSessionProjectFilePath
+/// \return
+///
+static QString createSessionProjectFilePath()
+{
+    const QString tempDir = QStandardPaths::writableLocation(QStandardPaths::TempLocation);
+    const QString guid = QUuid::createUuid().toString(QUuid::WithoutBraces);
+    return QDir(tempDir).filePath(QStringLiteral("omodsim/%1.msimprj").arg(guid));
+}
 
 ///
-/// \brief MainWindow::loadProfile
+/// \brief MainWindow::loadAppSettings
 /// \param filename
 /// \return
 ///
-bool MainWindow::loadProfile(const QString& filename)
+bool MainWindow::loadAppSettings(const QString& filename)
 {
     _profile = filename.isEmpty() ? getSettingsFilePath() : filename;
-    if(!QFile::exists(_profile)) return false;
+    if(!QFile::exists(_profile))
+        return false;
 
     QSettings m(_profile, QSettings::IniFormat, this);
 
@@ -1803,19 +1827,97 @@ bool MainWindow::loadProfile(const QString& filename)
         m.value(kNewFormKindKey, newFormKindToSetting(ProjectFormKind::Data)).toInt());
 
     restoreGeometry(m.value("WindowGeometry").toByteArray());
-
-    const auto viewMode = (QMdiArea::ViewMode)qBound(0, m.value("ViewMode", QMdiArea::TabbedView).toInt(), 1);
-    setViewMode(viewMode);
-    const bool splitView = m.value("SplitView", false).toBool();
-    if(ui->mdiArea->viewMode() == QMdiArea::TabbedView && ui->mdiArea->isSplitView() != splitView)
-        ui->mdiArea->setSplitViewEnabled(splitView);
+    restoreState(m.value("WindowState").toByteArray());
 
     statusBar()->setVisible(m.value("StatusBar", true).toBool());
-
     _lang = m.value("Language", translationLang()).toString();
     setLanguage(_lang);
 
     _project->setSavePath(m.value("SavePath").toString());
+    _recentProjects = m.value(kRecentProjectsKey).toStringList();
+    _recentProjects.removeAll(QString());
+    _recentProjects.removeDuplicates();
+    _sessionProjectPath = m.value(kSessionProjectPathKey).toString();
+
+    return true;
+}
+
+///
+/// \brief MainWindow::saveAppSettings
+///
+void MainWindow::saveAppSettings()
+{
+    const QString filepath = _profile.isEmpty() ? getSettingsFilePath() : _profile;
+    QSettings m(filepath, QSettings::IniFormat, this);
+
+    m.clear();
+    m.sync();
+
+    AppPreferences::instance().save(m);
+    m.setValue("WindowGeometry", saveGeometry());
+    m.setValue("WindowState", saveState());
+    m.setValue("StatusBar", statusBar()->isVisible());
+    m.setValue("Language", _lang);
+    m.setValue("SavePath", _project->savePath());
+    m.setValue(kNewFormKindKey, newFormKindToSetting(_newFormKind));
+    m.setValue(kRecentProjectsKey, _recentProjects);
+    m.setValue(kSessionProjectPathKey, _sessionProjectPath);
+}
+
+bool MainWindow::loadSessionProject()
+{
+    if(!_useSession)
+        return false;
+    if(_sessionProjectPath.isEmpty())
+        _sessionProjectPath = createSessionProjectFilePath();
+    if(!QFile::exists(_sessionProjectPath))
+        return false;
+
+    _project->loadProject(_sessionProjectPath);
+    _projectFilePath.clear();
+    updateProjectWindowTitle();
+    return true;
+}
+
+bool MainWindow::saveSessionProject()
+{
+    if(!_useSession)
+        return false;
+    if(_sessionProjectPath.isEmpty())
+        _sessionProjectPath = createSessionProjectFilePath();
+
+    const auto info = QFileInfo(_sessionProjectPath);
+    QDir().mkpath(info.absolutePath());
+    _project->saveProject(_sessionProjectPath);
+    return true;
+}
+
+bool MainWindow::loadLegacySessionFromIni()
+{
+    if(!_useSession || !QFile::exists(_profile))
+        return false;
+
+    QSettings m(_profile, QSettings::IniFormat, this);
+    const QStringList groups = m.childGroups();
+    bool hasLegacy = false;
+    for(const auto& group : groups) {
+        if(group.startsWith("Form_")) {
+            hasLegacy = true;
+            break;
+        }
+    }
+    hasLegacy = hasLegacy || m.contains("ViewMode") || m.contains("SplitView") ||
+                m.contains("ActiveWindow") || m.contains("ActivePrimaryWindow") ||
+                m.contains("ActiveSecondaryWindow");
+    if(!hasLegacy)
+        return false;
+
+    const auto viewMode = static_cast<QMdiArea::ViewMode>(
+        qBound(0, m.value("ViewMode", QMdiArea::TabbedView).toInt(), 1));
+    setViewMode(viewMode);
+    const bool splitView = m.value("SplitView", false).toBool();
+    if(ui->mdiArea->viewMode() == QMdiArea::TabbedView && ui->mdiArea->isSplitView() != splitView)
+        ui->mdiArea->setSplitViewEnabled(splitView);
 
     ModbusDefinitions defs;
     m >> defs;
@@ -1823,41 +1925,42 @@ bool MainWindow::loadProfile(const QString& filename)
 
     m >> qobject_cast<MenuConnect*>(ui->actionConnect->menu());
 
-    const QStringList groups = m.childGroups();
     for (const QString& g : groups) {
-        if (g.startsWith("Form_")) {
-            m.beginGroup(g);
-            const int id = _project->windowCounter() + 1;
-            _project->setWindowCounter(qMax(_project->windowCounter(), id));
-            const auto kind = static_cast<ProjectFormKind>(m.value("FormKind", static_cast<int>(ProjectFormKind::Data)).toInt());
-            MdiArea* targetArea = ui->mdiArea->primaryArea();
-            const auto panel = m.value("SplitPanel", "L").toString();
-            if(splitView && panel.compare("R", Qt::CaseInsensitive) == 0)
-                if(auto secondary = _project->splitSecondaryArea())
-                    targetArea = secondary;
+        if (!g.startsWith("Form_"))
+            continue;
 
-            switch (kind) {
-                case ProjectFormKind::Data:
-                    if (auto* frm = _project->createDataMdiChildOnArea(id, targetArea, true)) {
-                        frm->loadSettings(m);
-                        frm->show();
-                    }
-                    break;
-                case ProjectFormKind::Traffic:
-                    if (auto* frm = _project->createTrafficMdiChildOnArea(id, targetArea, true)) {
-                        frm->loadSettings(m);
-                        frm->show();
-                    }
-                    break;
-                case ProjectFormKind::Script:
-                    if (auto* frm = _project->createScriptMdiChildOnArea(id, targetArea, true)) {
-                        frm->loadSettings(m);
-                        frm->show();
-                    }
-                    break;
-            }
-            m.endGroup();
+        m.beginGroup(g);
+        const int id = _project->windowCounter() + 1;
+        _project->setWindowCounter(qMax(_project->windowCounter(), id));
+        const auto kind = static_cast<ProjectFormKind>(
+            m.value("FormKind", static_cast<int>(ProjectFormKind::Data)).toInt());
+        MdiArea* targetArea = ui->mdiArea->primaryArea();
+        const auto panel = m.value("SplitPanel", "L").toString();
+        if(splitView && panel.compare("R", Qt::CaseInsensitive) == 0)
+            if(auto secondary = _project->splitSecondaryArea())
+                targetArea = secondary;
+
+        switch (kind) {
+            case ProjectFormKind::Data:
+                if (auto* frm = _project->createDataMdiChildOnArea(id, targetArea, true)) {
+                    frm->loadSettings(m);
+                    frm->show();
+                }
+                break;
+            case ProjectFormKind::Traffic:
+                if (auto* frm = _project->createTrafficMdiChildOnArea(id, targetArea, true)) {
+                    frm->loadSettings(m);
+                    frm->show();
+                }
+                break;
+            case ProjectFormKind::Script:
+                if (auto* frm = _project->createScriptMdiChildOnArea(id, targetArea, true)) {
+                    frm->loadSettings(m);
+                    frm->show();
+                }
+                break;
         }
+        m.endGroup();
     }
 
     if(splitView)
@@ -1873,7 +1976,6 @@ bool MainWindow::loadProfile(const QString& filename)
                     }
     }
 
-    // activate window
     const auto activePrimaryTitle = m.value("ActivePrimaryWindow", m.value("ActiveWindow")).toString();
     if(!activePrimaryTitle.isEmpty()) {
         const auto primaryList = ui->mdiArea->primaryArea()
@@ -1889,80 +1991,120 @@ bool MainWindow::loadProfile(const QString& filename)
         }
     }
 
-    restoreState(m.value("WindowState").toByteArray());
-
+    saveSessionProject();
     return true;
 }
 
-///
-/// \brief MainWindow::saveProfile
-///
-void MainWindow::saveProfile()
+bool MainWindow::confirmSaveOnClose()
 {
-    const QString filepath = _profile.isEmpty() ? getSettingsFilePath() : _profile;
-    QSettings m(filepath, QSettings::IniFormat, this);
+    const auto button = QMessageBox::question(this,
+                                              tr("Save Project"),
+                                              tr("Save project before closing?"),
+                                              QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel,
+                                              QMessageBox::Save);
+    if(button == QMessageBox::Cancel)
+        return false;
 
-    m.clear();
-    m.sync();
+    if(button != QMessageBox::Save)
+        return true;
 
-    AppPreferences::instance().save(m);
-
-    m.setValue("WindowGeometry", saveGeometry());
-    m.setValue("WindowState", saveState());
-
-    const auto frm = _project->currentMdiChild();
-    if(frm) m.setValue("ActiveWindow", frm->windowTitle());
-
-    if(auto primary = ui->mdiArea->primaryArea())
-        if(auto wnd = primary->activeSubWindow())
-            if(auto frmPrimary = wnd->widget())
-                m.setValue("ActivePrimaryWindow", frmPrimary->windowTitle());
-
-    m.setValue("ViewMode", ui->mdiArea->viewMode());
-    m.setValue("SplitView", ui->mdiArea->isSplitView());
-    m.setValue("StatusBar", statusBar()->isVisible());
-    m.setValue("Language", _lang);
-    m.setValue("SavePath", _project->savePath());
-    m.setValue(kNewFormKindKey, newFormKindToSetting(_newFormKind));
-
-    m << _mbMultiServer.getModbusDefinitions();
-
-    m << qobject_cast<MenuConnect*>(ui->actionConnect->menu());
-
-    auto* secondary = _project->splitSecondaryArea();
-    const auto subWindowList = ui->mdiArea->subWindowList();
-    int groupIndex = 0;
-    for(int i = 0; i < subWindowList.size(); ++i) {
-        auto* widget = subWindowList[i] ? subWindowList[i]->widget() : nullptr;
-        if(!widget || widget->property(kSplitAutoCloneProperty).toBool())
-            continue;
-
-        bool okKind = false;
-        const auto formKind = projectFormKindFromWidget(widget, &okKind);
-        if(!okKind)
-            continue;
-
-        ++groupIndex;
-        m.beginGroup("Form_" + QString::number(groupIndex));
-        m.setValue("FormKind", static_cast<int>(formKind));
-        const bool onRight = secondary && secondary->localSubWindowList().contains(subWindowList[i]);
-        m.setValue("SplitPanel", onRight ? "R" : "L");
-
-        if (auto* dataFrm = qobject_cast<FormDataView*>(widget)) {
-            dataFrm->saveSettings(m);
-        } else if (auto* trafficFrm = qobject_cast<FormTrafficView*>(widget)) {
-            trafficFrm->saveSettings(m);
-        } else if (auto* scriptFrm = qobject_cast<FormScriptView*>(widget)) {
-            scriptFrm->saveSettings(m);
-        }
-
-        m.endGroup();
+    if(!_projectFilePath.isEmpty()) {
+        saveProject(_projectFilePath);
+        addRecentProject(_projectFilePath);
+        return true;
     }
 
-    if(_project->isSplitTabbedView())
-        if(auto secondary = _project->splitSecondaryArea())
-            if(auto wnd = secondary->activeSubWindow())
-                if(auto frm = wnd->widget())
-                    m.setValue("ActiveSecondaryWindow", frm->windowTitle());
+    if(_useSession)
+        return saveSessionProject();
+
+    const QString before = _projectFilePath;
+    on_actionSaveProjectAs_triggered();
+    return before != _projectFilePath && !_projectFilePath.isEmpty();
+}
+
+bool MainWindow::hasProjectContext() const
+{
+    return !_projectFilePath.isEmpty()
+        || _project->firstMdiChild() != nullptr
+        || !_project->closedDataForms().isEmpty()
+        || !_project->closedTrafficForms().isEmpty()
+        || !_project->closedScriptForms().isEmpty();
+}
+
+void MainWindow::addRecentProject(const QString& filePath)
+{
+    if(filePath.isEmpty())
+        return;
+
+    const QString absolutePath = QFileInfo(filePath).absoluteFilePath();
+    if(absolutePath.isEmpty())
+        return;
+    if(!_sessionProjectPath.isEmpty() && QFileInfo(absolutePath) == QFileInfo(_sessionProjectPath))
+        return;
+
+    for (int i = _recentProjects.size() - 1; i >= 0; --i) {
+        if (_recentProjects[i].compare(absolutePath, Qt::CaseInsensitive) == 0)
+            _recentProjects.removeAt(i);
+    }
+    _recentProjects.prepend(absolutePath);
+    while (_recentProjects.size() > kMaxRecentProjects)
+        _recentProjects.removeLast();
+
+    rebuildRecentProjectsMenu();
+}
+
+void MainWindow::rebuildRecentProjectsMenu()
+{
+    if(!_openRecentMenu)
+        return;
+
+    _openRecentMenu->clear();
+    QStringList existing;
+    existing.reserve(_recentProjects.size());
+    for (const auto& path : _recentProjects) {
+        if(path.isEmpty())
+            continue;
+        if(!_sessionProjectPath.isEmpty() && QFileInfo(path) == QFileInfo(_sessionProjectPath))
+            continue;
+        if(!QFile::exists(path))
+            continue;
+        existing.append(path);
+    }
+    _recentProjects = existing;
+
+    if(_recentProjects.isEmpty()) {
+        auto* empty = _openRecentMenu->addAction(tr("No Recent Projects"));
+        empty->setEnabled(false);
+    } else {
+        for(const auto& path : _recentProjects) {
+            auto* action = _openRecentMenu->addAction(path);
+            connect(action, &QAction::triggered, this, [this, path]() {
+                openRecentProject(path);
+            });
+        }
+    }
+
+    _openRecentMenu->addSeparator();
+    _clearRecentAction = _openRecentMenu->addAction(tr("Clear List"));
+    _clearRecentAction->setEnabled(!_recentProjects.isEmpty());
+    connect(_clearRecentAction, &QAction::triggered, this, &MainWindow::clearRecentProjects);
+}
+
+void MainWindow::clearRecentProjects()
+{
+    _recentProjects.clear();
+    rebuildRecentProjectsMenu();
+}
+
+void MainWindow::openRecentProject(const QString& filePath)
+{
+    if(!QFile::exists(filePath)) {
+        _recentProjects.removeAll(filePath);
+        rebuildRecentProjectsMenu();
+        return;
+    }
+
+    loadProject(filePath);
+    addRecentProject(filePath);
 }
 

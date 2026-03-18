@@ -47,9 +47,6 @@ void OutputTrafficWidget::setup(const TrafficViewDefinitions& dd)
 {
     _displayDefinition = dd;
     setLogViewLimit(dd.LogViewLimit);
-    setAutosctollLogView(dd.AutoscrollLog);
-    ui->logView->setShowLeadingZeros(dd.LeadingZeros);
-    ui->modbusMsg->setShowLeadingZeros(dd.LeadingZeros);
 }
 
 ///

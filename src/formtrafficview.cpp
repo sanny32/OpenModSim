@@ -64,6 +64,8 @@ FormTrafficView::FormTrafficView(int id, ModbusMultiServer& server, MainWindow* 
     ui->toolBarTraffic->addWidget(_unitIdFilter);
     addToolbarSpacer(8);
     connect(_unitIdFilter, qOverload<int>(&QSpinBox::valueChanged), this, [this](int) {
+        if (_unitIdFilter)
+            _displayDefinition.UnitFilter = static_cast<quint8>(_unitIdFilter->value());
         _requestCount = 0;
         _responseCount = 0;
     });
@@ -88,6 +90,8 @@ FormTrafficView::FormTrafficView(int id, ModbusMultiServer& server, MainWindow* 
     ui->toolBarTraffic->addWidget(_funcCodeFilter);
     addToolbarSpacer(8);
     connect(_funcCodeFilter, qOverload<int>(&QComboBox::currentIndexChanged), this, [this](int) {
+        if (_funcCodeFilter)
+            _displayDefinition.FunctionCodeFilter = static_cast<qint16>(_funcCodeFilter->currentData().toInt());
         _requestCount = 0;
         _responseCount = 0;
     });
@@ -121,23 +125,19 @@ FormTrafficView::FormTrafficView(int id, ModbusMultiServer& server, MainWindow* 
     ui->toolBarTraffic->addSeparator();
     ui->toolBarTraffic->addAction(ui->actionClearTraffic);
 
-    const auto mbDefs = server.getModbusDefinitions();
     _displayDefinition.FormName = windowTitle();
-    _displayDefinition.DeviceId = 1;
-    _displayDefinition.PointAddress = 1;
-    _displayDefinition.PointType = QModbusDataUnit::HoldingRegisters;
-    _displayDefinition.Length = 100;
+    _displayDefinition.UnitFilter = 0;
+    _displayDefinition.FunctionCodeFilter = -1;
     _displayDefinition.LogViewLimit = ui->outputWidget->logViewLimit();
-    _displayDefinition.AutoscrollLog = ui->outputWidget->autoscrollLogView();
-    _displayDefinition.VerboseLogging = true;
-    _displayDefinition.HexAddress = false;
-    _displayDefinition.HexViewAddress = false;
-    _displayDefinition.HexViewDeviceId = false;
-    _displayDefinition.HexViewLength = false;
-    _displayDefinition.AddrSpace = mbDefs.AddrSpace;
-    _displayDefinition.DataViewColumnsDistance = 16;
-    _displayDefinition.LeadingZeros = true;
     _displayDefinition.normalize();
+    if (_unitIdFilter)
+        _unitIdFilter->setValue(_displayDefinition.UnitFilter);
+    if (_funcCodeFilter) {
+        int idx = _funcCodeFilter->findData(_displayDefinition.FunctionCodeFilter);
+        if (idx < 0)
+            idx = 0;
+        _funcCodeFilter->setCurrentIndex(idx);
+    }
     if (_rowLimitCombo) {
         int idx = _rowLimitCombo->findData(_displayDefinition.LogViewLimit);
         if (idx < 0) {
@@ -148,8 +148,6 @@ FormTrafficView::FormTrafficView(int id, ModbusMultiServer& server, MainWindow* 
             _rowLimitCombo->setCurrentIndex(idx);
     }
 
-    server.addDeviceId(_displayDefinition.DeviceId);
-
     ui->outputWidget->setFocus();
 
     setLogViewState(server.isConnected() ? LogViewState::Running : LogViewState::Unknown);
@@ -159,9 +157,6 @@ FormTrafficView::FormTrafficView(int id, ModbusMultiServer& server, MainWindow* 
     connect(&server, &ModbusMultiServer::connected, this, &FormTrafficView::on_mbConnected);
     connect(&server, &ModbusMultiServer::disconnected, this, &FormTrafficView::on_mbDisconnected);
     connect(&server, &ModbusMultiServer::definitionsChanged, this, &FormTrafficView::on_mbDefinitionsChanged);
-
-    const auto addr = _displayDefinition.PointAddress - (_displayDefinition.ZeroBasedAddress ? 0 : 1);
-    _mbMultiServer.addUnitMap(_formId, _displayDefinition.DeviceId, _displayDefinition.PointType, addr, _displayDefinition.Length);
     ui->outputWidget->setup(_displayDefinition);
 }
 
@@ -213,10 +208,6 @@ void FormTrafficView::changeEvent(QEvent* e)
 ///
 void FormTrafficView::closeEvent(QCloseEvent* event)
 {
-    const auto deviceId = _displayDefinition.DeviceId;
-    _mbMultiServer.removeDeviceId(deviceId);
-    _mbMultiServer.removeUnitMap(_formId, deviceId);
-
     emit closing();
     QWidget::closeEvent(event);
 }
@@ -234,12 +225,11 @@ TrafficViewDefinitions FormTrafficView::displayDefinition() const
 {
     TrafficViewDefinitions dd = _displayDefinition;
     dd.FormName = windowTitle();
+    if (_unitIdFilter)
+        dd.UnitFilter = static_cast<quint8>(_unitIdFilter->value());
+    if (_funcCodeFilter)
+        dd.FunctionCodeFilter = static_cast<qint16>(_funcCodeFilter->currentData().toInt());
     dd.LogViewLimit = ui->outputWidget->logViewLimit();
-    dd.AutoscrollLog = ui->outputWidget->autoscrollLogView();
-    dd.VerboseLogging = _displayDefinition.VerboseLogging;
-    dd.HexAddress = _displayDefinition.HexAddress;
-    dd.AddrSpace = _mbMultiServer.getModbusDefinitions().AddrSpace;
-    dd.DataViewColumnsDistance = _displayDefinition.DataViewColumnsDistance;
     dd.normalize();
     return dd;
 }
@@ -256,21 +246,19 @@ void FormTrafficView::setDisplayDefinition(const TrafficViewDefinitions& dd)
     else
         next.FormName = windowTitle();
 
-    const auto defs = _mbMultiServer.getModbusDefinitions();
-    next.AddrSpace = defs.AddrSpace;
     next.normalize();
-
-    const auto oldDeviceId = _displayDefinition.DeviceId;
     _displayDefinition = next;
 
-    if (oldDeviceId != _displayDefinition.DeviceId) {
-        _mbMultiServer.removeDeviceId(oldDeviceId);
-        _mbMultiServer.removeUnitMap(_formId, oldDeviceId);
-        _mbMultiServer.addDeviceId(_displayDefinition.DeviceId);
-    }
-
     ui->outputWidget->setLogViewLimit(_displayDefinition.LogViewLimit);
-    ui->outputWidget->setAutosctollLogView(_displayDefinition.AutoscrollLog);
+
+    if (_unitIdFilter)
+        _unitIdFilter->setValue(_displayDefinition.UnitFilter);
+    if (_funcCodeFilter) {
+        int idx = _funcCodeFilter->findData(_displayDefinition.FunctionCodeFilter);
+        if (idx < 0)
+            idx = 0;
+        _funcCodeFilter->setCurrentIndex(idx);
+    }
     if (_rowLimitCombo) {
         int idx = _rowLimitCombo->findData(_displayDefinition.LogViewLimit);
         if (idx < 0) {
@@ -280,9 +268,6 @@ void FormTrafficView::setDisplayDefinition(const TrafficViewDefinitions& dd)
         if (idx >= 0)
             _rowLimitCombo->setCurrentIndex(idx);
     }
-
-    const auto addr = _displayDefinition.PointAddress - (_displayDefinition.ZeroBasedAddress ? 0 : 1);
-    _mbMultiServer.addUnitMap(_formId, _displayDefinition.DeviceId, _displayDefinition.PointType, addr, _displayDefinition.Length);
     ui->outputWidget->setup(_displayDefinition);
 }
 
@@ -465,11 +450,7 @@ void FormTrafficView::on_mbDataChanged(quint8 deviceId, const QModbusDataUnit&)
 ///
 void FormTrafficView::on_mbDefinitionsChanged(const ModbusDefinitions& defs)
 {
-    _displayDefinition.AddrSpace = defs.AddrSpace;
-    _displayDefinition.normalize();
-    const auto dd = displayDefinition();
-    const auto addr = dd.PointAddress - (dd.ZeroBasedAddress ? 0 : 1);
-    ui->outputWidget->setup(dd);
+    Q_UNUSED(defs);
 }
 
 ///

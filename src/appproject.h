@@ -90,7 +90,7 @@ public:
     // (avoids dangling QTextDocument pointers in QPlainTextEdit during QObject cleanup).
     void destroyContentForShutdown();
 
-    // Accessors for MainWindow (loadProfile/saveProfile/eventFilter)
+    // Accessors for MainWindow (loadAppSettings/saveAppSettings/eventFilter)
     const QList<FormDataView*>& closedDataForms() const { return _closedDataForms; }
     const QList<FormTrafficView*>& closedTrafficForms() const { return _closedTrafficForms; }
     const QList<FormScriptView*>& closedScriptForms() const { return _closedScriptForms; }

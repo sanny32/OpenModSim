@@ -1064,7 +1064,8 @@ void AppProject::loadProject(const QString& filename)
         if (xml.name() == QLatin1String("OpenModSim")) {
             while (xml.readNextStartElement()) {
                 if (xml.name() == QLatin1String("AppPreferences")) {
-                    AppPreferences::instance().loadXml(xml);
+                    // Backward compatibility: ignore legacy app-preferences block in project files.
+                    xml.skipCurrentElement();
                 }
                 else if (xml.name() == QLatin1String("ViewSettings")) {
                     const auto attrs = xml.attributes();
@@ -1199,8 +1200,6 @@ void AppProject::saveProject(const QString& filename)
     w.writeStartDocument();
     w.writeStartElement("OpenModSim");
     w.writeAttribute("Version", qApp->applicationVersion());
-
-    AppPreferences::instance().saveXml(w);
 
     w << _mbServer.getModbusDefinitions();
 

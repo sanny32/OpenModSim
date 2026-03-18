@@ -21,6 +21,8 @@ class MdiArea;
 class FormDataView;
 class FormTrafficView;
 class FormScriptView;
+class QMenu;
+class QAction;
 
 ///
 /// \brief The MainWindow class
@@ -181,8 +183,17 @@ private:
     void forceCoils(QModbusDataUnit::RegisterType type);
     void presetRegs(QModbusDataUnit::RegisterType type);
 
-    bool loadProfile(const QString& filename);
-    void saveProfile();
+    bool loadAppSettings(const QString& filename);
+    void saveAppSettings();
+    bool loadSessionProject();
+    bool saveSessionProject();
+    bool loadLegacySessionFromIni();
+    bool confirmSaveOnClose();
+    bool hasProjectContext() const;
+    void addRecentProject(const QString& filePath);
+    void rebuildRecentProjectsMenu();
+    void clearRecentProjects();
+    void openRecentProject(const QString& filePath);
     void updateProjectWindowTitle();
 
 private:
@@ -209,6 +220,10 @@ private:
     QString _profile;
     QString _projectFilePath;
     ProjectFormKind _newFormKind = ProjectFormKind::Data;
+    QStringList _recentProjects;
+    QString _sessionProjectPath;
+    QMenu* _openRecentMenu = nullptr;
+    QAction* _clearRecentAction = nullptr;
 
     AppProject* _project = nullptr;
 };
