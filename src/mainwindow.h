@@ -6,7 +6,6 @@
 #include <QTranslator>
 #include "helpwidget.h"
 #include "modbusmultiserver.h"
-#include "windowactionlist.h"
 #include "controls/consoleoutput.h"
 #include "controls/projecttreewidget.h"
 #include "appproject.h"
@@ -124,7 +123,6 @@ private slots:
     /* Window menu slots */
     void on_actionCascade_triggered();
     void on_actionTile_triggered();
-    void on_actionWindows_triggered();
 
     /* Help menu slots */
     void on_actionAbout_triggered();
@@ -179,7 +177,6 @@ private:
 
     ModbusMultiServer _mbMultiServer;
 
-    WindowActionList* _windowActionList;
     QSharedPointer<QPrinter> _selectedPrinter;
     DataSimulator* _dataSimulator = nullptr;
     QString _profile;

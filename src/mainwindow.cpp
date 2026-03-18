@@ -7,7 +7,6 @@
 #include "dialogabout.h"
 #include "dialogmsgparser.h"
 #include "dialogpreferences.h"
-#include "dialogwindowsmanager.h"
 #include "dialogprintsettings.h"
 #include "dialogselectserviceport.h"
 #include "dialogsetupserialport.h"
@@ -256,9 +255,6 @@ MainWindow::MainWindow(const QString& profile, bool useSession, QWidget *parent)
     if(!defaultPrinter.isNull())
         _selectedPrinter = QSharedPointer<QPrinter>(new QPrinter(defaultPrinter));
 
-    _windowActionList = new WindowActionList(ui->menuWindow, ui->actionWindows);
-    connect(_windowActionList, &WindowActionList::triggered, this, &MainWindow::windowActivate);
-
     _projectTree = new ProjectTreeWidget(this);
     _projectDockWidget = new QDockWidget(tr("Project"), this);
     _projectDockWidget->setObjectName("projectDockWidget");
@@ -267,7 +263,7 @@ MainWindow::MainWindow(const QString& profile, bool useSession, QWidget *parent)
     addDockWidget(Qt::LeftDockWidgetArea, _projectDockWidget);
 
     _project = new AppProject(ui->mdiArea, _mbMultiServer, _dataSimulator,
-                               _projectTree, _windowActionList, this, this);
+                               _projectTree, this, this);
 
     auto dispatcher = QAbstractEventDispatcher::instance();
     connect(dispatcher, &QAbstractEventDispatcher::awake, this, &MainWindow::on_awake);
@@ -311,10 +307,6 @@ MainWindow::MainWindow(const QString& profile, bool useSession, QWidget *parent)
             return;
         _project->deleteForm(ref.widget);
     });
-    connect(_projectTree, &ProjectTreeWidget::formRenamed, this, [this](ProjectFormRef) {
-        _windowActionList->update();
-    });
-
     _globalConsole = new ConsoleOutput(this);
     _consoleDockWidget = new QDockWidget(tr("Output"), this);
     _consoleDockWidget->setObjectName("consoleDockWidget");
@@ -430,7 +422,6 @@ bool MainWindow::eventFilter(QObject* obj, QEvent* e)
         case QEvent::Close:
             if(auto wnd = qobject_cast<QMdiSubWindow*>(obj))
             {
-                _windowActionList->removeWindow(wnd);
                 auto* frm = wnd->widget();
                 if (frm && !frm->property(kSplitAutoCloneProperty).toBool()) {
                     // Primary form: reparent before subwindow is destroyed so frm survives
@@ -1095,14 +1086,6 @@ void MainWindow::on_actionTile_triggered()
     ui->mdiArea->tileSubWindows();
 }
 
-///
-/// \brief MainWindow::on_actionWindows_triggered
-///
-void MainWindow::on_actionWindows_triggered()
-{
-    DialogWindowsManager dlg(_windowActionList->actionList(), nullptr, this);
-    dlg.exec();
-}
 
 ///
 /// \brief MainWindow::on_actionAbout_triggered
@@ -1167,7 +1150,6 @@ void MainWindow::updateMenuWindow()
     {
         wnd->setProperty("isActive", wnd == activeWnd);
     }
-    _windowActionList->update();
 }
 
 ///

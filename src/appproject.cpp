@@ -6,7 +6,6 @@
 #include "mainwindow.h"
 #include "controls/mdiareaex.h"
 #include "controls/projecttreewidget.h"
-#include "windowactionlist.h"
 #include "formdataview.h"
 #include "formtrafficview.h"
 #include "formscriptview.h"
@@ -139,7 +138,6 @@ AppProject::AppProject(MdiAreaEx* mdiArea,
                        ModbusMultiServer& mbServer,
                        DataSimulator* dataSimulator,
                        ProjectTreeWidget* projectTree,
-                       WindowActionList* windowActionList,
                        MainWindow* mainWindow,
                        QObject* parent)
     : QObject(parent)
@@ -147,7 +145,6 @@ AppProject::AppProject(MdiAreaEx* mdiArea,
     , _mbServer(mbServer)
     , _dataSimulator(dataSimulator)
     , _projectTree(projectTree)
-    , _windowActionList(windowActionList)
     , _mainWindow(mainWindow)
 {
     Q_ASSERT(_dataSimulator != nullptr);
@@ -487,7 +484,6 @@ void AppProject::setupMdiChild(QWidget* frm, QMdiSubWindow* wnd, bool addToWindo
     });
 
     if(addToWindowList) {
-        _windowActionList->addWindow(wnd);
         bool okKind = false;
         const auto kind = projectFormKindFromWidget(frm, &okKind);
         if(okKind)
@@ -546,7 +542,6 @@ void AppProject::rewrapMdiChild(QWidget* frm)
         resetSplitViewIfEmpty();
     });
 
-    _windowActionList->addWindow(wnd);
     _projectTree->setFormOpen(frm, true);
     _projectTree->activateForm(frm);
 

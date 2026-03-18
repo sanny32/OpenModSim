@@ -129,8 +129,6 @@
     </property>
     <addaction name="actionCascade"/>
     <addaction name="actionTile"/>
-    <addaction name="separator"/>
-    <addaction name="actionWindows"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
     <property name="title">
@@ -324,11 +322,7 @@
     <string>Status Bar</string>
    </property>
   </action>
-  <action name="actionWindows">
-   <property name="text">
-    <string>Windows...</string>
-   </property>
-  </action>
+
   <action name="actionForceCoils">
    <property name="icon">
     <iconset resource="resources.qrc">

@@ -191,7 +191,6 @@ set(SOURCES
     quintvalidator.cpp
     recentfileactionlist.cpp
     updatechecker.cpp
-    windowactionlist.cpp
 )
 
 # Header files
@@ -322,7 +321,6 @@ set(HEADERS
     scriptsettings.h
     serialportutils.h
     uiutils.h
-    windowactionlist.h
 )
 
 # UI Forms

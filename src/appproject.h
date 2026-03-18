@@ -14,7 +14,6 @@ class MdiAreaEx;
 class MdiArea;
 class QMdiSubWindow;
 class ProjectTreeWidget;
-class WindowActionList;
 class MainWindow;
 
 enum class ProjectFormKind
@@ -40,7 +39,6 @@ public:
                         ModbusMultiServer& mbServer,
                         DataSimulator* dataSimulator,
                         ProjectTreeWidget* projectTree,
-                        WindowActionList* windowActionList,
                         MainWindow* mainWindow,
                         QObject* parent = nullptr);
     ~AppProject() override;
@@ -114,7 +112,6 @@ private:
     ModbusMultiServer&            _mbServer;
     DataSimulator*                _dataSimulator;
     ProjectTreeWidget*            _projectTree;
-    WindowActionList*             _windowActionList;
     MainWindow*                   _mainWindow;
 
     int                _windowCounter = 0;
