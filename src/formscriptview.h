@@ -84,6 +84,7 @@ public:
 
     void runScript();
     void stopScript();
+    void linkRunStopTo(FormScriptView* master);
 
     bool isAutoCompleteEnabled() const;
     void enableAutoComplete(bool enable);
@@ -103,6 +104,7 @@ public slots:
     void connectEditSlots();
     void disconnectEditSlots();
     void on_windowTitleChanged(const QString& title);
+    void setPeerRunning(bool running);
 
 signals:
     void showed();
@@ -130,6 +132,7 @@ private:
     QSpinBox* _scriptIntervalSpin = nullptr;
     QCheckBox* _scriptRunOnStartupCheck = nullptr;
     ByteOrder _byteOrder = ByteOrder::Direct;
+    bool _peerRunning = false;
 };
 
 ///

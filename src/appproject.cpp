@@ -741,6 +741,7 @@ QWidget* AppProject::createCloneOnArea(QWidget* source, MdiArea* area)
                 if(cloneScript->windowTitle() != title)
                     cloneScript->setFormName(title);
             });
+            cloneScript->linkRunStopTo(srcScript);
         }
     }
 

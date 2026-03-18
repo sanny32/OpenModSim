@@ -371,7 +371,7 @@ void FormScriptView::setZoomPercent(int zoomPercent)
 ///
 bool FormScriptView::canRunScript() const
 {
-    return !ui->scriptControl->script().isEmpty() && !ui->scriptControl->isRunning();
+    return !_peerRunning && !ui->scriptControl->script().isEmpty() && !ui->scriptControl->isRunning();
 }
 
 ///
@@ -380,7 +380,7 @@ bool FormScriptView::canRunScript() const
 ///
 bool FormScriptView::canStopScript() const
 {
-    return ui->scriptControl->isRunning();
+    return _peerRunning || ui->scriptControl->isRunning();
 }
 
 ///
@@ -425,6 +425,35 @@ void FormScriptView::runScript()
 void FormScriptView::stopScript()
 {
     ui->scriptControl->stopScript();
+}
+
+///
+/// \brief FormScriptView::setPeerRunning
+/// Called by a linked peer (split-view clone) to mirror the master's running state.
+///
+void FormScriptView::setPeerRunning(bool running)
+{
+    if(_peerRunning == running) return;
+    _peerRunning = running;
+    updateScriptBar();
+}
+
+///
+/// \brief FormScriptView::linkRunStopTo
+/// Makes this form a visual mirror of \a master:
+/// - Run/Stop toolbar buttons delegate to master.
+/// - Toolbar state reflects master's running state via setPeerRunning.
+///
+void FormScriptView::linkRunStopTo(FormScriptView* master)
+{
+    if(!master) return;
+    disconnect(ui->actionRunScript,  &QAction::triggered, this, &FormScriptView::runScript);
+    disconnect(ui->actionStopScript, &QAction::triggered, this, &FormScriptView::stopScript);
+    connect(ui->actionRunScript,  &QAction::triggered, master, &FormScriptView::runScript);
+    connect(ui->actionStopScript, &QAction::triggered, master, &FormScriptView::stopScript);
+    connect(master, &FormScriptView::scriptRunning, this, [this]() { setPeerRunning(true); });
+    connect(master, &FormScriptView::scriptStopped, this, [this]() { setPeerRunning(false); });
+    setPeerRunning(master->canStopScript());
 }
 
 ///
