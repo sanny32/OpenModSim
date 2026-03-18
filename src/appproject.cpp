@@ -1182,6 +1182,8 @@ void AppProject::loadProject(const QString& filename)
     QString activePrimaryWin;
     QString activeSecWin;
     bool viewPreparedForForms = false;
+    QStringList secondaryForms;
+    bool hasSecondaryFormsSaved = false;
 
     QXmlStreamReader xml(&file);
     while (xml.readNextStartElement()) {
@@ -1265,6 +1267,14 @@ void AppProject::loadProject(const QString& filename)
                         }
                     }
                 }
+                else if (xml.name() == QLatin1String("SplitSecondaryForms")) {
+                    hasSecondaryFormsSaved = true;
+                    while(xml.readNextStartElement()) {
+                        if(xml.name() == QLatin1String("FormRef"))
+                            secondaryForms << xml.attributes().value("title").toString();
+                        xml.skipCurrentElement();
+                    }
+                }
                 else if (xml.name() == QLatin1String("Scripts")) {
                     xml.skipCurrentElement();
                 }
@@ -1285,6 +1295,27 @@ void AppProject::loadProject(const QString& filename)
     }
 
     _mainWindow->applyConnections(defs, conns);
+
+    // Restore secondary panel state.
+    if(splitView && splitSecondaryArea()) {
+        if(hasSecondaryFormsSaved) {
+            // Restore exactly the forms that were open on the secondary panel.
+            if(auto* primary = _mdiArea->primaryArea()) {
+                for(const QString& title : secondaryForms) {
+                    for(auto* wnd : primary->localSubWindowList()) {
+                        auto* w = wnd ? wnd->widget() : nullptr;
+                        if(w && w->windowTitle() == title) {
+                            createCloneOnArea(w, splitSecondaryArea());
+                            break;
+                        }
+                    }
+                }
+            }
+        } else {
+            // Old project file without SplitSecondaryForms: duplicate all primary forms.
+            duplicatePrimaryTabsToSecondary();
+        }
+    }
 
     if(!activePrimaryWin.isEmpty())
         if(auto primary = _mdiArea->primaryArea())
@@ -1373,6 +1404,21 @@ void AppProject::saveProject(const QString& filename)
         }
     }
     w.writeEndElement(); // Forms
+
+    if(isSplitTabbedView()) {
+        if(auto* secondary = splitSecondaryArea()) {
+            w.writeStartElement("SplitSecondaryForms");
+            for(auto* wnd : secondary->localSubWindowList()) {
+                auto* widget = wnd ? wnd->widget() : nullptr;
+                if(!widget || !widget->property(kSplitAutoCloneProperty).toBool())
+                    continue;
+                w.writeStartElement("FormRef");
+                w.writeAttribute("title", widget->windowTitle());
+                w.writeEndElement(); // FormRef
+            }
+            w.writeEndElement(); // SplitSecondaryForms
+        }
+    }
 
     w.writeEndElement(); // OpenModSim
     w.writeEndDocument();
