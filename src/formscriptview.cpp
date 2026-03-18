@@ -14,7 +14,6 @@ FormScriptView::FormScriptView(int id, ModbusMultiServer& server, DataSimulator*
     , _formId(id)
 {
     Q_ASSERT(parent != nullptr);
-    Q_UNUSED(server);
     Q_UNUSED(simulator);
 
     ui->setupUi(this);
@@ -26,6 +25,8 @@ FormScriptView::FormScriptView(int id, ModbusMultiServer& server, DataSimulator*
     _displayDefinition.ScriptCfg = _scriptSettings;
     _displayDefinition.normalize();
 
+    ui->scriptControl->setModbusMultiServer(&server);
+    ui->scriptControl->setByteOrder(&_byteOrder);
     ui->scriptControl->setScriptSource(windowTitle());
     connect(ui->scriptControl, &JScriptControl::helpContext, this, &FormScriptView::helpContextRequested);
     connect(ui->scriptControl, &JScriptControl::scriptStopped, this, &FormScriptView::scriptStopped);

@@ -2188,14 +2188,14 @@ MODBUS Point Type:
 %2</translation>
     </message>
     <message>
-        <location filename="../formscriptview.cpp" line="67"/>
-        <location filename="../formscriptview.cpp" line="274"/>
+        <location filename="../formscriptview.cpp" line="68"/>
+        <location filename="../formscriptview.cpp" line="275"/>
         <source> ms</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formscriptview.cpp" line="69"/>
-        <location filename="../formscriptview.cpp" line="278"/>
+        <location filename="../formscriptview.cpp" line="70"/>
+        <location filename="../formscriptview.cpp" line="279"/>
         <source>Run on startup</source>
         <translation type="unfinished"></translation>
     </message>

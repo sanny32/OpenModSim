@@ -126,6 +126,7 @@ private:
     RunModeComboBox* _scriptRunModeCombo = nullptr;
     QSpinBox* _scriptIntervalSpin = nullptr;
     QCheckBox* _scriptRunOnStartupCheck = nullptr;
+    ByteOrder _byteOrder = ByteOrder::Direct;
 };
 
 ///
