@@ -577,9 +577,9 @@ QWidget* MainWindow::createNewForm(ProjectFormKind kind)
         }
         case ProjectFormKind::Script: {
             if (auto* scriptFrm = qobject_cast<FormScriptView*>(frm)) {
-                auto dd = scriptFrm->displayDefinition();
+                auto dd = scriptFrm->definitions();
                 applySharedDisplayDefaults(dd, prefs.scriptViewDefinitions());
-                scriptFrm->setDisplayDefinition(dd);
+                scriptFrm->setDefinitions(dd);
             }
             break;
         }
@@ -872,9 +872,9 @@ void MainWindow::applyScriptViewDefaults(const ScriptViewDefinitions& dd)
 {
     for (auto&& wnd : ui->mdiArea->subWindowList()) {
         if (auto* frm = qobject_cast<FormScriptView*>(wnd->widget())) {
-            auto cur = frm->displayDefinition();
+            auto cur = frm->definitions();
             applySharedDisplayDefaults(cur, dd);
-            frm->setDisplayDefinition(cur);
+            frm->setDefinitions(cur);
         }
     }
 }

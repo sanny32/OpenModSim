@@ -42,8 +42,8 @@ public:
     explicit FormScriptView(int id, ModbusMultiServer& server, DataSimulator* simulator, MainWindow* parent);
     ~FormScriptView();
 
-    ScriptViewDefinitions displayDefinition() const;
-    void setDisplayDefinition(const ScriptViewDefinitions& dd);
+    ScriptViewDefinitions definitions() const;
+    void setDefinitions(const ScriptViewDefinitions& dd);
 
     ScriptSettings scriptSettings() const;
     void setScriptSettings(const ScriptSettings& ss);
@@ -102,6 +102,7 @@ public slots:
     void show();
     void connectEditSlots();
     void disconnectEditSlots();
+    void on_windowTitleChanged(const QString& title);
 
 signals:
     void showed();
@@ -151,7 +152,7 @@ inline QSettings& operator <<(QSettings& out, FormScriptView* frm)
     out.setValue("ViewMaximized", wnd->isMaximized());
     out.setValue("ViewRect", wnd->geometry());
 
-    out << frm->displayDefinition();
+    out << frm->definitions();
     out << frm->scriptControl();
 
     return out;
@@ -191,7 +192,7 @@ inline QSettings& operator >>(QSettings& in, FormScriptView* frm)
     if(isMinimized) wnd->setWindowState(Qt::WindowMinimized);
     if(isMaximized) wnd->setWindowState(Qt::WindowMaximized);
 
-    frm->setDisplayDefinition(displayDefinition);
+    frm->setDefinitions(displayDefinition);
 
     if(displayDefinition.ScriptCfg.RunOnStartup) {
         frm->runScript();
@@ -247,7 +248,7 @@ inline QXmlStreamWriter& operator <<(QXmlStreamWriter& xml, FormScriptView* frm)
     xml.writeAttribute("Value", QString("%1%").arg(frm->zoomPercent()));
     xml.writeEndElement();
 
-    const auto dd = frm->displayDefinition();
+    const auto dd = frm->definitions();
     xml << dd;
 
     xml << frm->scriptControl();
@@ -358,7 +359,7 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, FormScriptView* frm)
             }
             else if (xml.name() == QLatin1String("ScriptViewDefinitions")) {
                 xml >> dd;
-                frm->setDisplayDefinition(dd);
+                frm->setDefinitions(dd);
             }
             else if (xml.name() == QLatin1String("JScriptControl")) {
                 auto scriptControl = frm->scriptControl();

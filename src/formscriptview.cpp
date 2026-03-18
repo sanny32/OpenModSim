@@ -7,6 +7,13 @@
 #include "formscriptview.h"
 #include "ui_formscriptview.h"
 
+///
+/// \brief FormScriptView::FormScriptView
+/// \param id
+/// \param server
+/// \param simulator
+/// \param parent
+///
 FormScriptView::FormScriptView(int id, ModbusMultiServer& server, DataSimulator* simulator, MainWindow* parent)
     : QWidget(parent)
     , ui(new Ui::FormScriptView)
@@ -28,6 +35,8 @@ FormScriptView::FormScriptView(int id, ModbusMultiServer& server, DataSimulator*
     ui->scriptControl->setModbusMultiServer(&server);
     ui->scriptControl->setByteOrder(&_byteOrder);
     ui->scriptControl->setScriptSource(windowTitle());
+
+    connect(this, &QWidget::windowTitleChanged, this, &FormScriptView::on_windowTitleChanged);
     connect(ui->scriptControl, &JScriptControl::helpContext, this, &FormScriptView::helpContextRequested);
     connect(ui->scriptControl, &JScriptControl::scriptStopped, this, &FormScriptView::scriptStopped);
     connect(ui->scriptControl, &JScriptControl::consoleMessage, this, &FormScriptView::consoleMessage);
@@ -35,31 +44,63 @@ FormScriptView::FormScriptView(int id, ModbusMultiServer& server, DataSimulator*
     setupScriptBar();
 }
 
+///
+/// \brief FormScriptView::~FormScriptView
+///
 FormScriptView::~FormScriptView()
 {
     delete ui;
 }
 
+///
+/// \brief FormScriptView::saveSettings
+/// \param out
+///
 void FormScriptView::saveSettings(QSettings& out) const
 {
     out << const_cast<FormScriptView*>(this);
 }
 
+///
+/// \brief FormScriptView::loadSettings
+/// \param in
+///
 void FormScriptView::loadSettings(QSettings& in)
 {
     in >> this;
 }
 
+///
+/// \brief FormScriptView::saveXml
+/// \param xml
+///
 void FormScriptView::saveXml(QXmlStreamWriter& xml) const
 {
     xml << const_cast<FormScriptView*>(this);
 }
 
+///
+/// \brief FormScriptView::loadXml
+/// \param xml
+///
 void FormScriptView::loadXml(QXmlStreamReader& xml)
 {
     xml >> this;
 }
 
+///
+/// \brief FormScriptView::on_windowTitleChanged
+/// \param title
+///
+void FormScriptView::on_windowTitleChanged(const QString& title)
+{
+    ui->scriptControl->setScriptSource(title);
+}
+
+///
+/// \brief FormScriptView::changeEvent
+/// \param e
+///
 void FormScriptView::changeEvent(QEvent* e)
 {
     if (e->type() == QEvent::LanguageChange) {
@@ -72,18 +113,30 @@ void FormScriptView::changeEvent(QEvent* e)
     QWidget::changeEvent(e);
 }
 
+///
+/// \brief FormScriptView::closeEvent
+/// \param event
+///
 void FormScriptView::closeEvent(QCloseEvent* event)
 {
     emit closing();
     QWidget::closeEvent(event);
 }
 
+///
+/// \brief FormScriptView::mouseDoubleClickEvent
+/// \param event
+///
 void FormScriptView::mouseDoubleClickEvent(QMouseEvent* event)
 {
     QWidget::mouseDoubleClickEvent(event);
 }
 
-ScriptViewDefinitions FormScriptView::displayDefinition() const
+///
+/// \brief FormScriptView::definitions
+/// \return
+///
+ScriptViewDefinitions FormScriptView::definitions() const
 {
     ScriptViewDefinitions dd = _displayDefinition;
     dd.FormName = windowTitle();
@@ -92,7 +145,11 @@ ScriptViewDefinitions FormScriptView::displayDefinition() const
     return dd;
 }
 
-void FormScriptView::setDisplayDefinition(const ScriptViewDefinitions& dd)
+///
+/// \brief FormScriptView::setDefinitions
+/// \param dd
+///
+void FormScriptView::setDefinitions(const ScriptViewDefinitions& dd)
 {
     ScriptViewDefinitions next = dd;
     if (!next.FormName.isEmpty())
@@ -106,11 +163,19 @@ void FormScriptView::setDisplayDefinition(const ScriptViewDefinitions& dd)
     setScriptSettings(_displayDefinition.ScriptCfg);
 }
 
+///
+/// \brief FormScriptView::scriptSettings
+/// \return
+///
 ScriptSettings FormScriptView::scriptSettings() const
 {
     return _scriptSettings;
 }
 
+///
+/// \brief FormScriptView::setScriptSettings
+/// \param ss
+///
 void FormScriptView::setScriptSettings(const ScriptSettings& ss)
 {
     if(_scriptSettings == ss)
@@ -125,27 +190,47 @@ void FormScriptView::setScriptSettings(const ScriptSettings& ss)
     emit scriptSettingsChanged(ss);
 }
 
+///
+/// \brief FormScriptView::script
+/// \return
+///
 QString FormScriptView::script() const
 {
     return ui->scriptControl->script();
 }
 
+///
+/// \brief FormScriptView::setFormName
+/// \param name
+///
 void FormScriptView::setFormName(const QString& name)
 {
     setWindowTitle(name);
     ui->scriptControl->setScriptSource(name);
 }
 
+///
+/// \brief FormScriptView::setScript
+/// \param text
+///
 void FormScriptView::setScript(const QString& text)
 {
     ui->scriptControl->setScript(text);
 }
 
+///
+/// \brief FormScriptView::scriptDocument
+/// \return
+///
 QTextDocument* FormScriptView::scriptDocument() const
 {
     return ui->scriptControl->scriptDocument();
 }
 
+///
+/// \brief FormScriptView::setScriptDocument
+/// \param document
+///
 void FormScriptView::setScriptDocument(QTextDocument* document)
 {
     auto* oldDoc = ui->scriptControl->scriptDocument();
@@ -158,36 +243,64 @@ void FormScriptView::setScriptDocument(QTextDocument* document)
         connect(document, &QTextDocument::contentsChanged, this, &FormScriptView::updateScriptBar);
 }
 
+///
+/// \brief FormScriptView::scriptCursorPosition
+/// \return
+///
 int FormScriptView::scriptCursorPosition() const
 {
     return ui->scriptControl->cursorPosition();
 }
 
+///
+/// \brief FormScriptView::setScriptCursorPosition
+/// \param pos
+///
 void FormScriptView::setScriptCursorPosition(int pos)
 {
     ui->scriptControl->setCursorPosition(pos);
 }
 
+///
+/// \brief FormScriptView::scriptScrollPosition
+/// \return
+///
 int FormScriptView::scriptScrollPosition() const
 {
     return ui->scriptControl->scrollPosition();
 }
 
+///
+/// \brief FormScriptView::setScriptScrollPosition
+/// \param pos
+///
 void FormScriptView::setScriptScrollPosition(int pos)
 {
     ui->scriptControl->setScrollPosition(pos);
 }
 
+///
+/// \brief FormScriptView::searchText
+/// \return
+///
 QString FormScriptView::searchText() const
 {
     return ui->scriptControl->searchText();
 }
 
+///
+/// \brief FormScriptView::backgroundColor
+/// \return
+///
 QColor FormScriptView::backgroundColor() const
 {
     return ui->scriptControl->palette().color(QPalette::Base);
 }
 
+///
+/// \brief FormScriptView::setBackgroundColor
+/// \param clr
+///
 void FormScriptView::setBackgroundColor(const QColor& clr)
 {
     auto pal = ui->scriptControl->palette();
@@ -196,11 +309,19 @@ void FormScriptView::setBackgroundColor(const QColor& clr)
     ui->scriptControl->setPalette(pal);
 }
 
+///
+/// \brief FormScriptView::foregroundColor
+/// \return
+///
 QColor FormScriptView::foregroundColor() const
 {
     return ui->scriptControl->palette().color(QPalette::Text);
 }
 
+///
+/// \brief FormScriptView::setForegroundColor
+/// \param clr
+///
 void FormScriptView::setForegroundColor(const QColor& clr)
 {
     auto pal = ui->scriptControl->palette();
@@ -208,77 +329,134 @@ void FormScriptView::setForegroundColor(const QColor& clr)
     ui->scriptControl->setPalette(pal);
 }
 
+///
+/// \brief FormScriptView::font
+/// \return
+///
 QFont FormScriptView::font() const
 {
     return ui->scriptControl->font();
 }
 
+///
+/// \brief FormScriptView::setFont
+/// \param font
+///
 void FormScriptView::setFont(const QFont& font)
 {
     ui->scriptControl->setFont(font);
 }
 
+///
+/// \brief FormScriptView::zoomPercent
+/// \return
+///
 int FormScriptView::zoomPercent() const
 {
     return 100;
 }
 
+///
+/// \brief FormScriptView::setZoomPercent
+/// \param zoomPercent
+///
 void FormScriptView::setZoomPercent(int zoomPercent)
 {
     Q_UNUSED(zoomPercent);
 }
 
+///
+/// \brief FormScriptView::canRunScript
+/// \return
+///
 bool FormScriptView::canRunScript() const
 {
     return !ui->scriptControl->script().isEmpty() && !ui->scriptControl->isRunning();
 }
 
+///
+/// \brief FormScriptView::canStopScript
+/// \return
+///
 bool FormScriptView::canStopScript() const
 {
     return ui->scriptControl->isRunning();
 }
 
+///
+/// \brief FormScriptView::canUndo
+/// \return
+///
 bool FormScriptView::canUndo() const
 {
     return ui->scriptControl->canUndo();
 }
 
+///
+/// \brief FormScriptView::canRedo
+/// \return
+///
 bool FormScriptView::canRedo() const
 {
     return ui->scriptControl->canRedo();
 }
 
+///
+/// \brief FormScriptView::canPaste
+/// \return
+///
 bool FormScriptView::canPaste() const
 {
     return ui->scriptControl->canPaste();
 }
 
+///
+/// \brief FormScriptView::runScript
+///
 void FormScriptView::runScript()
 {
     ui->scriptControl->runScript(_scriptSettings.Mode, _scriptSettings.Interval);
     emit scriptRunning();
 }
 
+///
+/// \brief FormScriptView::stopScript
+///
 void FormScriptView::stopScript()
 {
     ui->scriptControl->stopScript();
 }
 
+///
+/// \brief FormScriptView::scriptControl
+/// \return
+///
 JScriptControl* FormScriptView::scriptControl()
 {
     return ui->scriptControl;
 }
 
+///
+/// \brief FormScriptView::isAutoCompleteEnabled
+/// \return
+///
 bool FormScriptView::isAutoCompleteEnabled() const
 {
     return ui->scriptControl->isAutoCompleteEnabled();
 }
 
+///
+/// \brief FormScriptView::enableAutoComplete
+/// \param enable
+///
 void FormScriptView::enableAutoComplete(bool enable)
 {
     ui->scriptControl->enableAutoComplete(enable);
 }
 
+///
+/// \brief FormScriptView::setupScriptBar
+///
 void FormScriptView::setupScriptBar()
 {
     _scriptRunModeCombo = new RunModeComboBox(ui->toolBarScript);
@@ -362,6 +540,9 @@ void FormScriptView::setupScriptBar()
     updateScriptBar();
 }
 
+///
+/// \brief FormScriptView::updateScriptBar
+///
 void FormScriptView::updateScriptBar()
 {
     const bool running = canStopScript();
@@ -375,6 +556,9 @@ void FormScriptView::updateScriptBar()
         _scriptRunOnStartupCheck->setEnabled(!running);
 }
 
+///
+/// \brief FormScriptView::show
+///
 void FormScriptView::show()
 {
     QWidget::show();
@@ -382,6 +566,9 @@ void FormScriptView::show()
     emit showed();
 }
 
+///
+/// \brief FormScriptView::connectEditSlots
+///
 void FormScriptView::connectEditSlots()
 {
     disconnectEditSlots();
@@ -391,6 +578,9 @@ void FormScriptView::connectEditSlots()
     connect(_parent, &MainWindow::replace, ui->scriptControl, &JScriptControl::showReplace);
 }
 
+///
+/// \brief FormScriptView::disconnectEditSlots
+///
 void FormScriptView::disconnectEditSlots()
 {
     disconnect(_parent, &MainWindow::selectAll, ui->scriptControl, &JScriptControl::selectAll);
