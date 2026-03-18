@@ -1717,7 +1717,7 @@
     </message>
     <message>
         <location filename="../dialogs/dialogwriteregister.ui" line="118"/>
-        <location filename="../dialogs/dialogwriteregister.cpp" line="234"/>
+        <location filename="../dialogs/dialogwriteregister.cpp" line="235"/>
         <source>Auto Simulation: OFF</source>
         <translation>РЎРёРјСѓР»СЏС†РёСЏ: Р’С‹РєР»</translation>
     </message>
@@ -1737,8 +1737,8 @@
         <translation>Р—РЅР°С‡РµРЅРёРµ, (ANSI): </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwriteregister.cpp" line="228"/>
-        <location filename="../dialogs/dialogwriteregister.cpp" line="241"/>
+        <location filename="../dialogs/dialogwriteregister.cpp" line="229"/>
+        <location filename="../dialogs/dialogwriteregister.cpp" line="242"/>
         <source>Auto Simulation: ON</source>
         <translation>РЎРёРјСѓР»СЏС†РёСЏ: Р’РєР»</translation>
     </message>
@@ -1901,7 +1901,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formdataview.cpp" line="469"/>
+        <location filename="../formdataview.cpp" line="484"/>
         <source>Address Base: %1
 Start Address: %2
 Length: %3</source>
@@ -1910,7 +1910,7 @@ Length: %3</source>
 РљРѕР»РёС‡РµСЃС‚РІРѕ: %3</translation>
     </message>
     <message>
-        <location filename="../formdataview.cpp" line="472"/>
+        <location filename="../formdataview.cpp" line="487"/>
         <source>Unit Identifier: %1
 MODBUS Point Type:
 %2</source>

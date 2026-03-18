@@ -369,7 +369,9 @@ QColor FormDataView::backgroundColor() const
 ///
 void FormDataView::setBackgroundColor(const QColor& clr)
 {
+    if(backgroundColor() == clr) return;
     ui->outputWidget->setBackgroundColor(clr);
+    emit backgroundColorChanged(clr);
 }
 
 ///
@@ -387,7 +389,9 @@ QColor FormDataView::foregroundColor() const
 ///
 void FormDataView::setForegroundColor(const QColor& clr)
 {
+    if(foregroundColor() == clr) return;
     ui->outputWidget->setForegroundColor(clr);
+    emit foregroundColorChanged(clr);
 }
 
 ///
@@ -405,7 +409,9 @@ QColor FormDataView::statusColor() const
 ///
 void FormDataView::setStatusColor(const QColor& clr)
 {
+    if(statusColor() == clr) return;
     ui->outputWidget->setStatusColor(clr);
+    emit statusColorChanged(clr);
 }
 
 ///
@@ -423,7 +429,9 @@ QFont FormDataView::font() const
 ///
 void FormDataView::setFont(const QFont& font)
 {
+    if(this->font() == font) return;
     ui->outputWidget->setFont(font);
+    emit fontChanged(font);
 }
 
 ///
@@ -700,6 +708,14 @@ void FormDataView::linkTo(FormDataView* other)
     connect(other, &FormDataView::dataDisplayModeChanged, this,  &FormDataView::setDataDisplayMode);
     connect(this,  &FormDataView::displayHexAddressesChanged, other, &FormDataView::setDisplayHexAddresses);
     connect(other, &FormDataView::displayHexAddressesChanged, this,  &FormDataView::setDisplayHexAddresses);
+    connect(this,  &FormDataView::fontChanged, other, &FormDataView::setFont);
+    connect(other, &FormDataView::fontChanged, this,  &FormDataView::setFont);
+    connect(this,  &FormDataView::foregroundColorChanged, other, &FormDataView::setForegroundColor);
+    connect(other, &FormDataView::foregroundColorChanged, this,  &FormDataView::setForegroundColor);
+    connect(this,  &FormDataView::backgroundColorChanged, other, &FormDataView::setBackgroundColor);
+    connect(other, &FormDataView::backgroundColorChanged, this,  &FormDataView::setBackgroundColor);
+    connect(this,  &FormDataView::statusColorChanged, other, &FormDataView::setStatusColor);
+    connect(other, &FormDataView::statusColorChanged, this,  &FormDataView::setStatusColor);
 }
 
 ///

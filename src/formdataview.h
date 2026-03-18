@@ -115,6 +115,10 @@ signals:
     void pointTypeChanged(QModbusDataUnit::RegisterType);
     void dataDisplayModeChanged(DataDisplayMode);
     void displayHexAddressesChanged(bool);
+    void fontChanged(const QFont&);
+    void foregroundColorChanged(const QColor&);
+    void backgroundColorChanged(const QColor&);
+    void statusColorChanged(const QColor&);
 
 private slots:
     void on_awake();

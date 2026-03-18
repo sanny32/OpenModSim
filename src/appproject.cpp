@@ -725,6 +725,7 @@ QWidget* AppProject::createCloneOnArea(QWidget* source, MdiArea* area)
         originId = formIdOf(source);
 
     cloneMdiChildState(source, clone);
+    clone->setFont(source->font()); // copy form-level font (affects definitions panel labels)
     clone->setProperty(kSplitOriginIdProperty, originId);
     clone->setProperty(kSplitAutoCloneProperty, true);
     clone->setProperty(kSplitScriptRunning, source->property(kSplitScriptRunning));
