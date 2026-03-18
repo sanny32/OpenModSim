@@ -352,6 +352,52 @@ void FormTrafficView::setLogViewState(LogViewState state)
     ui->actionPauseTraffic->setChecked(state == LogViewState::Paused);
     ui->actionPauseTraffic->blockSignals(false);
     ui->actionPauseTraffic->setEnabled(state != LogViewState::Unknown);
+    emit logViewStateChanged(state);
+}
+
+///
+/// \brief FormTrafficView::setDisplayDefinitionSilent
+/// Updates filter controls and definition without emitting definitionChanged.
+/// Used for peer sync to prevent signal loops.
+///
+void FormTrafficView::setDisplayDefinitionSilent(const TrafficViewDefinitions& dd)
+{
+    _displayDefinition.UnitFilter = dd.UnitFilter;
+    _displayDefinition.FunctionCodeFilter = dd.FunctionCodeFilter;
+    _displayDefinition.LogViewLimit = dd.LogViewLimit;
+
+    if(_unitIdFilter) {
+        QSignalBlocker b(_unitIdFilter);
+        _unitIdFilter->setValue(dd.UnitFilter);
+    }
+    if(_funcCodeFilter) {
+        QSignalBlocker b(_funcCodeFilter);
+        const int idx = _funcCodeFilter->findData(dd.FunctionCodeFilter);
+        _funcCodeFilter->setCurrentIndex(idx < 0 ? 0 : idx);
+    }
+    if(_rowLimitCombo) {
+        QSignalBlocker b(_rowLimitCombo);
+        const int idx = _rowLimitCombo->findData(static_cast<int>(dd.LogViewLimit));
+        if(idx >= 0) _rowLimitCombo->setCurrentIndex(idx);
+    }
+    ui->outputWidget->setLogViewLimit(dd.LogViewLimit);
+}
+
+///
+/// \brief FormTrafficView::linkTo
+/// Bidirectionally syncs filter settings and pause state with \a other.
+///
+void FormTrafficView::linkTo(FormTrafficView* other)
+{
+    if(!other) return;
+    connect(this,  &FormTrafficView::definitionChanged, other, [this, other]() {
+        other->setDisplayDefinitionSilent(displayDefinition());
+    });
+    connect(other, &FormTrafficView::definitionChanged, this, [this, other]() {
+        setDisplayDefinitionSilent(other->displayDefinition());
+    });
+    connect(this,  &FormTrafficView::logViewStateChanged, other, &FormTrafficView::setLogViewState);
+    connect(other, &FormTrafficView::logViewStateChanged, this,  &FormTrafficView::setLogViewState);
 }
 
 ///

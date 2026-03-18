@@ -59,6 +59,8 @@ public:
     LogViewState logViewState() const;
     void setLogViewState(LogViewState state);
 
+    void linkTo(FormTrafficView* other);
+
     void saveSettings(QSettings& out) const;
     void loadSettings(QSettings& in);
     void saveXml(QXmlStreamWriter& xml) const;
@@ -77,6 +79,7 @@ signals:
     void showed();
     void closing();
     void definitionChanged();
+    void logViewStateChanged(LogViewState state);
 
 private slots:
     void on_mbConnected(const ConnectionDetails& cd);
@@ -87,6 +90,7 @@ private slots:
     void on_mbDefinitionsChanged(const ModbusDefinitions& defs);
 
 private:
+    void setDisplayDefinitionSilent(const TrafficViewDefinitions& dd);
     bool matchesTrafficFilter(QSharedPointer<const ModbusMessage> msg) const;
 
 private:

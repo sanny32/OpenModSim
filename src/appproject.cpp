@@ -745,6 +745,12 @@ QWidget* AppProject::createCloneOnArea(QWidget* source, MdiArea* area)
         }
     }
 
+    if(auto* srcTraffic = qobject_cast<FormTrafficView*>(source)) {
+        if(auto* cloneTraffic = qobject_cast<FormTrafficView*>(clone)) {
+            cloneTraffic->linkTo(srcTraffic);
+        }
+    }
+
     clone->show();
     if(auto* cloneWnd = qobject_cast<QMdiSubWindow*>(clone->parentWidget()))
         if(area->viewMode() == QMdiArea::TabbedView)
