@@ -288,19 +288,8 @@ MainWindow::MainWindow(const QString& profile, bool useSession, QWidget *parent)
     });
 
     connect(_projectTree, &ProjectTreeWidget::formActivated, this, [this](ProjectFormRef ref) {
-        auto* frm = ref.widget;
-        if(!frm)
-            return;
-        // If the form is currently open in a tab, activate it
-        for (auto wnd : ui->mdiArea->subWindowList()) {
-            if (wnd->widget() == frm) {
-                ui->mdiArea->setActiveSubWindow(wnd);
-                return;
-            }
-        }
-        // Form tab was closed but form is still alive — re-open it
-        if (_project->isFormClosed(frm))
-            _project->rewrapMdiChild(frm);
+        if(ref.widget)
+            _project->openFormOnActivePanel(ref.widget);
     });
     connect(_projectTree, &ProjectTreeWidget::formDeleteRequested, this, [this](ProjectFormRef ref) {
         if(!ref.widget)

@@ -60,6 +60,7 @@ public:
     void        rewrapMdiChild(QWidget* frm);
     void        closeMdiChild(QWidget* frm);
     void        deleteForm(QWidget* frm);
+    void        openFormOnActivePanel(QWidget* frm);
 
     QWidget* currentMdiChild() const;
     FormDataView* currentDataMdiChild() const;
@@ -68,6 +69,7 @@ public:
     QWidget* findMdiChild(int id) const;
     QWidget* findMdiChildInArea(MdiArea* area, int id) const;
     QWidget* firstMdiChild() const;
+    QWidget* resolveFormForActiveArea(QWidget* primaryForm) const;
     bool        cloneMdiChildState(QWidget* source, QWidget* target) const;
 
     // Split-view
@@ -100,6 +102,7 @@ public:
 
 private:
     void setupMdiChild(QWidget* frm, QMdiSubWindow* wnd, bool addToWindowList);
+    QWidget* createCloneOnArea(QWidget* source, MdiArea* area);
     MdiArea* activeCreateArea() const;
     MdiArea* areaOfForm(QWidget* frm) const;
     void addClosedForm(QWidget* frm);

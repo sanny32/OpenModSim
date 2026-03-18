@@ -665,6 +665,144 @@ QWidget* AppProject::findMdiChildInArea(MdiArea* area, int id) const
 }
 
 ///
+/// \brief AppProject::resolveFormForActiveArea
+/// \param primaryForm
+/// \return The clone of primaryForm in the secondary area if the secondary area is active,
+///         otherwise primaryForm itself.
+///
+QWidget* AppProject::resolveFormForActiveArea(QWidget* primaryForm) const
+{
+    if(!primaryForm || !isSplitTabbedView())
+        return primaryForm;
+
+    auto* secondary = splitSecondaryArea();
+    if(!secondary)
+        return primaryForm;
+
+    if(activeCreateArea() != secondary)
+        return primaryForm;
+
+    const int originId = formIdOf(primaryForm);
+    for(auto* wnd : secondary->localSubWindowList())
+    {
+        auto* cloneFrm = qobject_cast<QWidget*>(wnd ? wnd->widget() : nullptr);
+        if(cloneFrm &&
+           cloneFrm->property(kSplitAutoCloneProperty).toBool() &&
+           cloneFrm->property(kSplitOriginIdProperty).toInt() == originId)
+        {
+            return cloneFrm;
+        }
+    }
+
+    return primaryForm;
+}
+
+///
+/// \brief AppProject::createCloneOnArea
+/// Creates a visual clone of \a source on \a area. Returns the clone widget, or nullptr on failure.
+///
+QWidget* AppProject::createCloneOnArea(QWidget* source, MdiArea* area)
+{
+    if(!source || !area)
+        return nullptr;
+
+    bool okKind = false;
+    const auto cloneKind = projectFormKindFromWidget(source, &okKind);
+    if(!okKind)
+        return nullptr;
+
+    int cloneId = _windowCounter + 1;
+    while(findMdiChild(cloneId))
+        ++cloneId;
+    _windowCounter = cloneId;
+
+    auto* clone = createMdiChildOnArea(cloneId, cloneKind, area, false);
+    if(!clone)
+        return nullptr;
+
+    int originId = source->property(kSplitOriginIdProperty).toInt();
+    if(originId <= 0)
+        originId = formIdOf(source);
+
+    cloneMdiChildState(source, clone);
+    clone->setProperty(kSplitOriginIdProperty, originId);
+    clone->setProperty(kSplitAutoCloneProperty, true);
+    clone->setProperty(kSplitScriptRunning, source->property(kSplitScriptRunning));
+
+    if(auto* srcScript = qobject_cast<FormScriptView*>(source)) {
+        if(auto* cloneScript = qobject_cast<FormScriptView*>(clone)) {
+            cloneScript->setScriptDocument(srcScript->scriptDocument());
+            cloneScript->setScriptSettings(srcScript->scriptSettings());
+            connect(srcScript,   &FormScriptView::scriptSettingsChanged,
+                    cloneScript, &FormScriptView::setScriptSettings);
+            connect(cloneScript, &FormScriptView::scriptSettingsChanged,
+                    srcScript,   &FormScriptView::setScriptSettings);
+            connect(srcScript, &QWidget::windowTitleChanged, cloneScript, [cloneScript](const QString& title) {
+                if(cloneScript->windowTitle() != title)
+                    cloneScript->setFormName(title);
+            });
+        }
+    }
+
+    clone->show();
+    if(auto* cloneWnd = qobject_cast<QMdiSubWindow*>(clone->parentWidget()))
+        if(area->viewMode() == QMdiArea::TabbedView)
+            cloneWnd->showMaximized();
+
+    return clone;
+}
+
+///
+/// \brief AppProject::openFormOnActivePanel
+/// Activates \a frm (or its split clone) on the active panel.
+/// If the form is not present there, opens it on that panel.
+///
+void AppProject::openFormOnActivePanel(QWidget* frm)
+{
+    if(!frm)
+        return;
+
+    auto* panel = _mdiArea->activePanel();
+
+    // Search in active panel for frm or its clone (clones share the same title)
+    if(panel) {
+        const QString title = frm->windowTitle();
+        for(auto* wnd : panel->localSubWindowList()) {
+            auto* w = wnd ? wnd->widget() : nullptr;
+            if(!w) continue;
+            if(w == frm || (w->property(kSplitAutoCloneProperty).toBool() && w->windowTitle() == title)) {
+                _mdiArea->setActiveSubWindow(wnd);
+                return;
+            }
+        }
+    }
+
+    // Form is closed — rewrap on the active panel
+    if(containsClosedForm(frm)) {
+        rewrapMdiChild(frm);
+        return;
+    }
+
+    // Form is open in the other panel — create a clone on the active panel
+    if(isSplitTabbedView() && panel) {
+        auto* clone = createCloneOnArea(frm, panel);
+        if(clone) {
+            if(auto* cloneWnd = qobject_cast<QMdiSubWindow*>(clone->parentWidget()))
+                _mdiArea->setActiveSubWindow(cloneWnd);
+            return;
+        }
+    }
+
+    // Fallback: activate wherever the form is open
+    for(auto* wnd : _mdiArea->subWindowList()) {
+        if(wnd->widget() == frm) {
+            _mdiArea->setActiveSubWindow(wnd);
+            return;
+        }
+    }
+}
+
+///
 /// \brief AppProject::firstMdiChild
 /// \return
 ///
@@ -730,13 +868,6 @@ MdiArea* AppProject::activeCreateArea() const
     if(!secondary)
         return primary;
 
-    if(auto activeWnd = _mdiArea->activeSubWindow()) {
-        if(secondary->localSubWindowList().contains(activeWnd))
-            return secondary;
-        if(primary->localSubWindowList().contains(activeWnd))
-            return primary;
-    }
-
     if(auto* focus = QApplication::focusWidget()) {
         if(secondary->isAncestorOf(focus))
             return secondary;
@@ -744,7 +875,9 @@ MdiArea* AppProject::activeCreateArea() const
             return primary;
     }
 
-    return primary;
+    // Focus is outside both areas (e.g., project tree, menu bar).
+    // Use the last area where a subwindow was activated.
+    return _mdiArea->activePanel();
 }
 
 ///
@@ -990,44 +1123,11 @@ int AppProject::duplicatePrimaryTabsToSecondary()
             continue;
         }
 
-        int cloneId = _windowCounter + 1;
-        while(findMdiChild(cloneId))
-            ++cloneId;
-        _windowCounter = cloneId;
-
         // Split clones are visual peers only: do not add them to project tree/window menu.
-        bool okKind = false;
-        const auto cloneKind = projectFormKindFromWidget(source, &okKind);
-        if(!okKind)
-            continue;
-        auto* clone = createMdiChildOnArea(cloneId, cloneKind, secondary, false);
+        auto* clone = createCloneOnArea(source, secondary);
         if(!clone)
             continue;
 
-        cloneMdiChildState(source, clone);
-        clone->setProperty(kSplitOriginIdProperty, originId);
-        clone->setProperty(kSplitAutoCloneProperty, true);
-        clone->setProperty(kSplitScriptRunning, source->property(kSplitScriptRunning));
-
-        // For script views: share one document and keep ScriptViewDefinitions in sync.
-        if(auto* srcScript = qobject_cast<FormScriptView*>(source)) {
-            if(auto* cloneScript = qobject_cast<FormScriptView*>(clone)) {
-                cloneScript->setScriptDocument(srcScript->scriptDocument());
-                cloneScript->setScriptSettings(srcScript->scriptSettings());
-                connect(srcScript,   &FormScriptView::scriptSettingsChanged,
-                        cloneScript, &FormScriptView::setScriptSettings);
-                connect(cloneScript, &FormScriptView::scriptSettingsChanged,
-                        srcScript,   &FormScriptView::setScriptSettings);
-                connect(srcScript, &QWidget::windowTitleChanged, cloneScript, [cloneScript](const QString& title) {
-                    if(cloneScript->windowTitle() != title)
-                        cloneScript->setFormName(title);
-                });
-            }
-        }
-
-        clone->show();
-        if(auto* cloneWnd = qobject_cast<QMdiSubWindow*>(clone->parentWidget()))
-            normalizeTabbedState(cloneWnd, secondary);
         ++movedOrDuplicated;
 
         if(originId == activeOriginId)
