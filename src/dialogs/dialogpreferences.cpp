@@ -154,8 +154,6 @@ void DialogPreferences::loadFromPreferences()
     ui->checkBoxHexAddress->setChecked(dataDd.HexAddress);
     ui->checkBoxLeadingZeros->setChecked(dataDd.LeadingZeros);
     ui->spinBoxColumnsDistance->setValue(dataDd.DataViewColumnsDistance);
-    ui->checkBoxAutoscrollLog->setChecked(dataDd.AutoscrollLog);
-    ui->checkBoxVerboseLogging->setChecked(dataDd.VerboseLogging);
     ui->spinBoxLogLimit->setValue(trafficDd.LogViewLimit);
 
     // Script — font
@@ -213,21 +211,16 @@ void DialogPreferences::apply()
     const bool leadingZeros = ui->checkBoxLeadingZeros->isChecked();
     const int columnsDistance = ui->spinBoxColumnsDistance->value();
     const bool autoscrollLog = ui->checkBoxAutoscrollLog->isChecked();
-    const bool verboseLogging = ui->checkBoxVerboseLogging->isChecked();
     const int logLimit = ui->spinBoxLogLimit->value();
 
-    auto applyDefaults = [=](auto& dd) {
+    auto applyDataDefaults = [=](auto& dd) {
         dd.ZeroBasedAddress = zeroBasedAddress;
         dd.HexAddress = hexAddress;
         dd.LeadingZeros = leadingZeros;
         dd.DataViewColumnsDistance = columnsDistance;
-        dd.AutoscrollLog = autoscrollLog;
-        dd.VerboseLogging = verboseLogging;
-        dd.LogViewLimit = logLimit;
     };
 
-    applyDefaults(dataDd);
-    applyDefaults(scriptDd);
+    applyDataDefaults(dataDd);
     trafficDd.LogViewLimit = static_cast<quint16>(logLimit);
 
     const bool runOnStartup = ui->checkBoxRunOnStartup->isChecked();

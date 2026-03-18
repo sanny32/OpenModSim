@@ -80,6 +80,9 @@ FormDataView::FormDataView(int id, ModbusMultiServer& server, DataSimulator* sim
     connect(_dataSimulator, &DataSimulator::simulationStopped, this, &FormDataView::on_simulationStopped);
     connect(_dataSimulator, &DataSimulator::dataSimulated, this, &FormDataView::on_dataSimulated);
 
+    auto dispatcher = QAbstractEventDispatcher::instance();
+    connect(dispatcher, &QAbstractEventDispatcher::awake, this, &FormDataView::on_awake);
+
     setupDisplayBar();
 }
 
@@ -91,21 +94,46 @@ FormDataView::~FormDataView()
     delete ui;
 }
 
+///
+/// \brief FormDataView::on_awake
+///
+void FormDataView::on_awake()
+{
+    updateDisplayBar();
+    ui->actionDisplayHexAddresses->setChecked(displayHexAddresses());
+}
+
+///
+/// \brief FormDataView::saveSettings
+/// \param out
+///
 void FormDataView::saveSettings(QSettings& out) const
 {
     out << const_cast<FormDataView*>(this);
 }
 
+///
+/// \brief FormDataView::loadSettings
+/// \param in
+///
 void FormDataView::loadSettings(QSettings& in)
 {
     in >> this;
 }
 
+///
+/// \brief FormDataView::saveXml
+/// \param xml
+///
 void FormDataView::saveXml(QXmlStreamWriter& xml) const
 {
     xml << const_cast<FormDataView*>(this);
 }
 
+///
+/// \brief FormDataView::loadXml
+/// \param xml
+///
 void FormDataView::loadXml(QXmlStreamReader& xml)
 {
     xml >> this;
@@ -172,9 +200,6 @@ DataViewDefinitions FormDataView::displayDefinition() const
     dd.PointType = ui->comboBoxModbusPointType->currentPointType();
     dd.Length = ui->lineEditLength->value<int>();
     dd.ZeroBasedAddress = ui->lineEditAddress->range<int>().from() == 0;
-    dd.LogViewLimit = 30;
-    dd.AutoscrollLog = false;
-    dd.VerboseLogging = true;
     dd.HexAddress = displayHexAddresses();
     dd.HexViewAddress  = ui->lineEditAddress->hexView();
     dd.HexViewDeviceId = ui->lineEditDeviceId->hexView();
@@ -897,6 +922,10 @@ void FormDataView::setupDisplayBar()
 
     connect(ui->actionDisplaySwapBytes, &QAction::triggered, this, [this](bool checked) {
         setByteOrder(checked ? ByteOrder::Swapped : ByteOrder::Direct);
+    });
+
+    connect(ui->actionDisplayHexAddresses, &QAction::triggered, this, [this](bool checked) {
+        setDisplayHexAddresses(checked);
     });
 
     updateDisplayBar();

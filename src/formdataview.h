@@ -113,6 +113,7 @@ signals:
     void pointTypeChanged(QModbusDataUnit::RegisterType);
 
 private slots:
+    void on_awake();
     void on_lineEditAddress_valueChanged(const QVariant&);
     void on_lineEditLength_valueChanged(const QVariant&);
     void on_lineEditDeviceId_valueChanged(const QVariant&, const QVariant&);

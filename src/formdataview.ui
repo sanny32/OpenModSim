@@ -388,6 +388,12 @@
    <property name="text">
     <string>Binary</string>
    </property>
+   <property name="shortcut">
+    <string notr="true">Ctrl+1</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ShortcutContext::WidgetWithChildrenShortcut</enum>
+   </property>
   </action>
   <action name="actionDisplayHex">
    <property name="checkable">
@@ -399,6 +405,12 @@
    </property>
    <property name="text">
     <string>Hex</string>
+   </property>
+   <property name="shortcut">
+    <string notr="true">Ctrl+2</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ShortcutContext::WidgetWithChildrenShortcut</enum>
    </property>
   </action>
   <action name="actionDisplayAnsi">
@@ -424,6 +436,12 @@
    <property name="text">
     <string>16-bit Integer</string>
    </property>
+   <property name="shortcut">
+    <string notr="true">Ctrl+3</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ShortcutContext::WidgetWithChildrenShortcut</enum>
+   </property>
   </action>
   <action name="actionDisplayUInt16">
    <property name="checkable">
@@ -435,6 +453,12 @@
    </property>
    <property name="text">
     <string>Unsigned 16-bit Integer</string>
+   </property>
+   <property name="shortcut">
+    <string notr="true">Ctrl+4</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ShortcutContext::WidgetWithChildrenShortcut</enum>
    </property>
   </action>
   <action name="actionDisplayInt32">
@@ -448,6 +472,12 @@
    <property name="text">
     <string>32-bit Integer (MSRF)</string>
    </property>
+   <property name="shortcut">
+    <string notr="true">Ctrl+5</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ShortcutContext::WidgetWithChildrenShortcut</enum>
+   </property>
   </action>
   <action name="actionDisplaySwappedInt32">
    <property name="checkable">
@@ -459,6 +489,12 @@
    </property>
    <property name="text">
     <string>32-bit Integer (LSRF)</string>
+   </property>
+   <property name="shortcut">
+    <string notr="true">Ctrl+Alt+5</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ShortcutContext::WidgetWithChildrenShortcut</enum>
    </property>
   </action>
   <action name="actionDisplayUInt32">
@@ -472,6 +508,12 @@
    <property name="text">
     <string>Unsigned 32-bit Integer (MSRF)</string>
    </property>
+   <property name="shortcut">
+    <string notr="true">Ctrl+6</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ShortcutContext::WidgetWithChildrenShortcut</enum>
+   </property>
   </action>
   <action name="actionDisplaySwappedUInt32">
    <property name="checkable">
@@ -483,6 +525,12 @@
    </property>
    <property name="text">
     <string>Unsigned 32-bit Integer (LSRF)</string>
+   </property>
+   <property name="shortcut">
+    <string notr="true">Ctrl+Alt+6</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ShortcutContext::WidgetWithChildrenShortcut</enum>
    </property>
   </action>
   <action name="actionDisplayInt64">
@@ -496,6 +544,12 @@
    <property name="text">
     <string>64-bit Integer (MSRF)</string>
    </property>
+   <property name="shortcut">
+    <string notr="true">Ctrl+7</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ShortcutContext::WidgetWithChildrenShortcut</enum>
+   </property>
   </action>
   <action name="actionDisplaySwappedInt64">
    <property name="checkable">
@@ -507,6 +561,12 @@
    </property>
    <property name="text">
     <string>64-bit Integer (LSRF)</string>
+   </property>
+   <property name="shortcut">
+    <string notr="true">Ctrl+Alt+7</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ShortcutContext::WidgetWithChildrenShortcut</enum>
    </property>
   </action>
   <action name="actionDisplayUInt64">
@@ -520,6 +580,12 @@
    <property name="text">
     <string>Unsigned 64-bit Integer (MSRF)</string>
    </property>
+   <property name="shortcut">
+    <string notr="true">Ctrl+8</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ShortcutContext::WidgetWithChildrenShortcut</enum>
+   </property>
   </action>
   <action name="actionDisplaySwappedUInt64">
    <property name="checkable">
@@ -531,6 +597,12 @@
    </property>
    <property name="text">
     <string>Unsigned 64-bit Integer (LSRF)</string>
+   </property>
+   <property name="shortcut">
+    <string notr="true">Ctrl+Alt+8</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ShortcutContext::WidgetWithChildrenShortcut</enum>
    </property>
   </action>
   <action name="actionDisplayFloatingPt">
@@ -544,6 +616,12 @@
    <property name="text">
     <string>Float (MSRF)</string>
    </property>
+   <property name="shortcut">
+    <string notr="true">Ctrl+9</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ShortcutContext::WidgetWithChildrenShortcut</enum>
+   </property>
   </action>
   <action name="actionDisplaySwappedFP">
    <property name="checkable">
@@ -555,6 +633,12 @@
    </property>
    <property name="text">
     <string>Float (LSRF)</string>
+   </property>
+   <property name="shortcut">
+    <string notr="true">Ctrl+Alt+9</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ShortcutContext::WidgetWithChildrenShortcut</enum>
    </property>
   </action>
   <action name="actionDisplayDblFloat">
@@ -568,6 +652,12 @@
    <property name="text">
     <string>Double (MSRF)</string>
    </property>
+   <property name="shortcut">
+    <string notr="true">Ctrl+0</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ShortcutContext::WidgetWithChildrenShortcut</enum>
+   </property>
   </action>
   <action name="actionDisplaySwappedDbl">
    <property name="checkable">
@@ -580,6 +670,12 @@
    <property name="text">
     <string>Double (LSRF)</string>
    </property>
+   <property name="shortcut">
+    <string notr="true">Ctrl+Alt+0</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ShortcutContext::WidgetWithChildrenShortcut</enum>
+   </property>
   </action>
   <action name="actionDisplaySwapBytes">
    <property name="checkable">
@@ -590,7 +686,15 @@
      <normaloff>:/res/actionSwapBytes.png</normaloff>:/res/actionSwapBytes.png</iconset>
    </property>
    <property name="text">
-    <string>Swap Bytes</string>
+    <string>Swap Bytes (0xAB &#x2192; 0xBA)</string>
+   </property>
+  </action>
+  <action name="actionDisplayHexAddresses">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Hex Addresses</string>
    </property>
   </action>
  </widget>

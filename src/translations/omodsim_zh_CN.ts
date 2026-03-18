@@ -1050,13 +1050,13 @@
     </message>
     <message>
         <location filename="../dialogs/dialogpreferences.ui" line="368"/>
-        <location filename="../dialogs/dialogpreferences.ui" line="696"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="689"/>
         <source>Font</source>
         <translation>е­—дЅ“</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogpreferences.ui" line="405"/>
-        <location filename="../dialogs/dialogpreferences.ui" line="733"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="726"/>
         <source>Size:</source>
         <translation>е¤§е°Џпјљ</translation>
     </message>
@@ -1067,7 +1067,7 @@
     </message>
     <message>
         <location filename="../dialogs/dialogpreferences.ui" line="383"/>
-        <location filename="../dialogs/dialogpreferences.ui" line="711"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="704"/>
         <source>Family:</source>
         <translation>е­—дЅ“ж—Џпјљ</translation>
     </message>
@@ -1088,7 +1088,7 @@
     </message>
     <message>
         <location filename="../dialogs/dialogpreferences.ui" line="480"/>
-        <location filename="../dialogs/dialogpreferences.ui" line="767"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="760"/>
         <source>Antialias</source>
         <translation>жЉ—й”ЇйЅї</translation>
     </message>
@@ -1128,17 +1128,16 @@
         <translation>и‡ЄеЉЁж»љеЉЁ</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="619"/>
         <source>Verbose Logging</source>
-        <translation>иЇ¦з»†ж—Ґеї—и®°еЅ•</translation>
+        <translation type="vanished">иЇ¦з»†ж—Ґеї—и®°еЅ•</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="626"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="619"/>
         <source>Log View Limit:</source>
         <translation>ж—Ґеї—й™ђе€¶пјљ</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="661"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="654"/>
         <source>Script</source>
         <translation type="unfinished">и„љжњ¬</translation>
     </message>
@@ -1147,17 +1146,17 @@
         <translation type="vanished">&lt;b&gt;жіЁж„Џпјљ&lt;/b&gt;иї™дє›и®ѕзЅ®д»…йЂ‚з”ЁдєЋж–°ж‰“ејЂзљ„зЄ—еЏЈгЂ‚</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="777"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="770"/>
         <source>Editor</source>
         <translation>зј–иѕ‘е™Ё</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="783"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="776"/>
         <source>Enable code auto-complete</source>
         <translation>еђЇз”Ёд»Јз&#xa0;Ѓи‡ЄеЉЁиЎҐе…Ё</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="667"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="660"/>
         <source>Run script on startup</source>
         <translation type="unfinished">ењЁзі»з»џеђЇеЉЁж—¶иїђиЎЊи„љжњ¬</translation>
     </message>
@@ -1906,7 +1905,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formdataview.cpp" line="444"/>
+        <location filename="../formdataview.cpp" line="469"/>
         <source>Address Base: %1
 Start Address: %2
 Length: %3</source>
@@ -1915,7 +1914,7 @@ Length: %3</source>
 й•їеє¦: %3</translation>
     </message>
     <message>
-        <location filename="../formdataview.cpp" line="447"/>
+        <location filename="../formdataview.cpp" line="472"/>
         <source>Unit Identifier: %1
 MODBUS Point Type:
 %2</source>
@@ -1937,89 +1936,94 @@ MODBUS Point Type:
         <translation type="unfinished">дєЊиї›е€¶</translation>
     </message>
     <message>
-        <location filename="../formdataview.ui" line="401"/>
+        <location filename="../formdataview.ui" line="407"/>
         <source>Hex</source>
         <translation type="unfinished">еЌЃе…­иї›е€¶</translation>
     </message>
     <message>
-        <location filename="../formdataview.ui" line="413"/>
+        <location filename="../formdataview.ui" line="425"/>
         <source>Ansi</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formdataview.ui" line="425"/>
+        <location filename="../formdataview.ui" line="437"/>
         <source>16-bit Integer</source>
         <translation type="unfinished">16дЅЌж•ґж•°</translation>
     </message>
     <message>
-        <location filename="../formdataview.ui" line="437"/>
+        <location filename="../formdataview.ui" line="455"/>
         <source>Unsigned 16-bit Integer</source>
         <translation type="unfinished">ж—&#xa0;з¬¦еЏ·64дЅЌж•ґж•° {16-?}</translation>
     </message>
     <message>
-        <location filename="../formdataview.ui" line="449"/>
+        <location filename="../formdataview.ui" line="473"/>
         <source>32-bit Integer (MSRF)</source>
         <translation type="unfinished">32дЅЌж•ґж•°пј€MSRFпј‰</translation>
     </message>
     <message>
-        <location filename="../formdataview.ui" line="461"/>
+        <location filename="../formdataview.ui" line="491"/>
         <source>32-bit Integer (LSRF)</source>
         <translation type="unfinished">32дЅЌж•ґж•°пј€LSRFпј‰</translation>
     </message>
     <message>
-        <location filename="../formdataview.ui" line="473"/>
+        <location filename="../formdataview.ui" line="509"/>
         <source>Unsigned 32-bit Integer (MSRF)</source>
         <translation type="unfinished">ж—&#xa0;з¬¦еЏ·32дЅЌж•ґж•°пј€MSRFпј‰</translation>
     </message>
     <message>
-        <location filename="../formdataview.ui" line="485"/>
+        <location filename="../formdataview.ui" line="527"/>
         <source>Unsigned 32-bit Integer (LSRF)</source>
         <translation type="unfinished">ж—&#xa0;з¬¦еЏ·32дЅЌж•ґж•°пј€LSRFпј‰</translation>
     </message>
     <message>
-        <location filename="../formdataview.ui" line="497"/>
+        <location filename="../formdataview.ui" line="545"/>
         <source>64-bit Integer (MSRF)</source>
         <translation type="unfinished">64дЅЌж•ґж•°пј€MSRFпј‰</translation>
     </message>
     <message>
-        <location filename="../formdataview.ui" line="509"/>
+        <location filename="../formdataview.ui" line="563"/>
         <source>64-bit Integer (LSRF)</source>
         <translation type="unfinished">64дЅЌж•ґж•°пј€LSRFпј‰</translation>
     </message>
     <message>
-        <location filename="../formdataview.ui" line="521"/>
+        <location filename="../formdataview.ui" line="581"/>
         <source>Unsigned 64-bit Integer (MSRF)</source>
         <translation type="unfinished">ж—&#xa0;з¬¦еЏ·64дЅЌж•ґж•°пј€MSRFпј‰</translation>
     </message>
     <message>
-        <location filename="../formdataview.ui" line="533"/>
+        <location filename="../formdataview.ui" line="599"/>
         <source>Unsigned 64-bit Integer (LSRF)</source>
         <translation type="unfinished">ж—&#xa0;з¬¦еЏ·64дЅЌж•ґж•°пј€LSRFпј‰</translation>
     </message>
     <message>
-        <location filename="../formdataview.ui" line="545"/>
+        <location filename="../formdataview.ui" line="617"/>
         <source>Float (MSRF)</source>
         <translation type="unfinished">жµ®з‚№ж•°пј€MSRFпј‰</translation>
     </message>
     <message>
-        <location filename="../formdataview.ui" line="557"/>
+        <location filename="../formdataview.ui" line="635"/>
         <source>Float (LSRF)</source>
         <translation type="unfinished">жµ®з‚№ж•°пј€LSRFпј‰</translation>
     </message>
     <message>
-        <location filename="../formdataview.ui" line="569"/>
+        <location filename="../formdataview.ui" line="653"/>
         <source>Double (MSRF)</source>
         <translation type="unfinished">еЏЊеЂЌпј€MSRFпј‰</translation>
     </message>
     <message>
-        <location filename="../formdataview.ui" line="581"/>
+        <location filename="../formdataview.ui" line="671"/>
         <source>Double (LSRF)</source>
         <translation type="unfinished">еЏЊеЂЌпј€LSRFпј‰</translation>
     </message>
     <message>
-        <location filename="../formdataview.ui" line="593"/>
-        <source>Swap Bytes</source>
+        <location filename="../formdataview.ui" line="689"/>
+        <source>Swap Bytes (0xAB → 0xBA)</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../formdataview.ui" line="697"/>
+        <source>Hex Addresses</source>
+        <translation type="unfinished">еЌЃе…­иї›е€¶ењ°еќЂ</translation>
     </message>
 </context>
 <context>
@@ -2659,35 +2663,33 @@ Script.onInit(()=&gt;{
         <translation>и®ѕзЅ®</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="121"/>
         <source>Display Options</source>
-        <translation>жѕз¤єж&#xa0;јејЏи®ѕзЅ®</translation>
+        <translation type="vanished">жѕз¤єж&#xa0;јејЏи®ѕзЅ®</translation>
     </message>
     <message>
         <source>Byte Order</source>
         <translation type="vanished">РџРѕСЂСЏРґРѕРє Р±Р°Р№С‚</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="151"/>
         <source>Extended</source>
-        <translation>й«зє§йЂ‰йЎ№</translation>
+        <translation type="vanished">й«зє§йЂ‰йЎ№</translation>
     </message>
     <message>
         <source>Script</source>
         <translation type="vanished">и„љжњ¬</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="173"/>
+        <location filename="../mainwindow.ui" line="128"/>
         <source>Window</source>
         <translation>зЄ—еЏЈ</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="182"/>
+        <location filename="../mainwindow.ui" line="137"/>
         <source>Help</source>
         <translation>её®еЉ©</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="188"/>
+        <location filename="../mainwindow.ui" line="143"/>
         <source>View</source>
         <translation>и§†е›ѕ</translation>
     </message>
@@ -2709,33 +2711,25 @@ Script.onInit(()=&gt;{
     </message>
     <message>
         <location filename="../mainwindow.ui" line="67"/>
-        <location filename="../mainwindow.ui" line="245"/>
+        <location filename="../mainwindow.ui" line="202"/>
         <source>New</source>
         <translation>ж–°е»є</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="389"/>
-        <location filename="../mainwindow.ui" line="392"/>
         <source>Float (MSRF)</source>
-        <translation>жµ®з‚№ж•°пј€MSRFпј‰</translation>
+        <translation type="vanished">жµ®з‚№ж•°пј€MSRFпј‰</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="407"/>
-        <location filename="../mainwindow.ui" line="410"/>
         <source>Float (LSRF)</source>
-        <translation>жµ®з‚№ж•°пј€LSRFпј‰</translation>
+        <translation type="vanished">жµ®з‚№ж•°пј€LSRFпј‰</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="425"/>
-        <location filename="../mainwindow.ui" line="431"/>
         <source>Double (MSRF)</source>
-        <translation>еЏЊеЂЌпј€MSRFпј‰</translation>
+        <translation type="vanished">еЏЊеЂЌпј€MSRFпј‰</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="446"/>
-        <location filename="../mainwindow.ui" line="449"/>
         <source>Double (LSRF)</source>
-        <translation>еЏЊеЂЌпј€LSRFпј‰</translation>
+        <translation type="vanished">еЏЊеЂЌпј€LSRFпј‰</translation>
     </message>
     <message>
         <source>Swap Bytes (0xAB в†’ 0xBA)</source>
@@ -2746,106 +2740,88 @@ Script.onInit(()=&gt;{
         <translation type="vanished">32дЅЌж•ґж•°</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="750"/>
-        <location filename="../mainwindow.ui" line="753"/>
         <source>32-bit Integer (MSRF)</source>
-        <translation>32дЅЌж•ґж•°пј€MSRFпј‰</translation>
+        <translation type="vanished">32дЅЌж•ґж•°пј€MSRFпј‰</translation>
     </message>
     <message>
         <source>Swapped 32-bit Integer</source>
         <translation type="vanished">32дЅЌж•ґж•°(е­—иЉ‚дє¤жЌў)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="768"/>
-        <location filename="../mainwindow.ui" line="771"/>
         <source>32-bit Integer (LSRF)</source>
-        <translation>32дЅЌж•ґж•°пј€LSRFпј‰</translation>
+        <translation type="vanished">32дЅЌж•ґж•°пј€LSRFпј‰</translation>
     </message>
     <message>
         <source>Unsigned 32-bit Integer</source>
         <translation type="vanished">ж—&#xa0;з¬¦еЏ·32дЅЌж•ґж•°</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="786"/>
-        <location filename="../mainwindow.ui" line="789"/>
         <source>Unsigned 32-bit Integer (MSRF)</source>
-        <translation>ж—&#xa0;з¬¦еЏ·32дЅЌж•ґж•°пј€MSRFпј‰</translation>
+        <translation type="vanished">ж—&#xa0;з¬¦еЏ·32дЅЌж•ґж•°пј€MSRFпј‰</translation>
     </message>
     <message>
         <source>Swapped Unsigned 32-bit Integer</source>
         <translation type="vanished">ж—&#xa0;з¬¦еЏ·32дЅЌж•ґж•°(е­—иЉ‚дє¤жЌў)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="804"/>
-        <location filename="../mainwindow.ui" line="807"/>
         <source>Unsigned 32-bit Integer (LSRF)</source>
-        <translation>ж—&#xa0;з¬¦еЏ·32дЅЌж•ґж•°пј€LSRFпј‰</translation>
+        <translation type="vanished">ж—&#xa0;з¬¦еЏ·32дЅЌж•ґж•°пј€LSRFпј‰</translation>
     </message>
     <message>
         <source>64-bit Integer</source>
         <translation type="vanished">64дЅЌж•ґж•°</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="850"/>
-        <location filename="../mainwindow.ui" line="853"/>
         <source>64-bit Integer (MSRF)</source>
-        <translation>64дЅЌж•ґж•°пј€MSRFпј‰</translation>
+        <translation type="vanished">64дЅЌж•ґж•°пј€MSRFпј‰</translation>
     </message>
     <message>
         <source>Swapped 64-bit Integer</source>
         <translation type="vanished">64дЅЌж•ґж•°(е­—иЉ‚дє¤жЌў)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="868"/>
-        <location filename="../mainwindow.ui" line="871"/>
         <source>64-bit Integer (LSRF)</source>
-        <translation>64дЅЌж•ґж•°пј€LSRFпј‰</translation>
+        <translation type="vanished">64дЅЌж•ґж•°пј€LSRFпј‰</translation>
     </message>
     <message>
         <source>Unsigned 64-bit Integer</source>
         <translation type="vanished">ж—&#xa0;з¬¦еЏ·64дЅЌж•ґж•°</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="886"/>
-        <location filename="../mainwindow.ui" line="889"/>
         <source>Unsigned 64-bit Integer (MSRF)</source>
-        <translation>ж—&#xa0;з¬¦еЏ·64дЅЌж•ґж•°пј€MSRFпј‰</translation>
+        <translation type="vanished">ж—&#xa0;з¬¦еЏ·64дЅЌж•ґж•°пј€MSRFпј‰</translation>
     </message>
     <message>
         <source>Swapped Unsigned 64-bit Integer</source>
         <translation type="vanished">ж—&#xa0;з¬¦еЏ·64дЅЌж•ґж•°(е­—иЉ‚дє¤жЌў)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="904"/>
-        <location filename="../mainwindow.ui" line="907"/>
         <source>Unsigned 64-bit Integer (LSRF)</source>
-        <translation>ж—&#xa0;з¬¦еЏ·64дЅЌж•ґж•°пј€LSRFпј‰</translation>
+        <translation type="vanished">ж—&#xa0;з¬¦еЏ·64дЅЌж•ґж•°пј€LSRFпј‰</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="922"/>
         <source>ANSI</source>
-        <translation>ANSI</translation>
+        <translation type="vanished">ANSI</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="934"/>
-        <location filename="../mainwindow.ui" line="937"/>
+        <location filename="../mainwindow.ui" line="476"/>
+        <location filename="../mainwindow.ui" line="479"/>
         <source>Modbus Definitions</source>
         <translation>Modbusе®љд№‰</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="945"/>
+        <location filename="../mainwindow.ui" line="487"/>
         <source>Tabbed View</source>
         <translation>ж&#xa0;‡з­ѕйЎµи§†е›ѕ</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="953"/>
+        <location filename="../mainwindow.ui" line="495"/>
         <source>Close All Windows</source>
         <translation>е…ій—­ж‰Ђжњ‰зЄ—еЏЈ</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="964"/>
         <source>Raw Data Log</source>
-        <translation>еЋџе§‹ж•°жЌ®ж—Ґеї—</translation>
+        <translation type="vanished">еЋџе§‹ж•°жЌ®ж—Ґеї—</translation>
     </message>
     <message>
         <source>Long Integer</source>
@@ -2864,17 +2840,15 @@ Script.onInit(()=&gt;{
         <translation type="vanished">ж—&#xa0;з¬¦еЏ·й•їж•ґећ‹пј€е­—иЉ‚дє¤жЌўпј‰</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="815"/>
         <source>Text Capture</source>
-        <translation>ж–‡жњ¬жЌ•иЋ·</translation>
+        <translation type="vanished">ж–‡жњ¬жЌ•иЋ·</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="820"/>
         <source>Capture Off</source>
-        <translation>жЌ•иЋ·е…ій—­</translation>
+        <translation type="vanished">жЌ•иЋ·е…ій—­</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="829"/>
+        <location filename="../mainwindow.ui" line="458"/>
         <source>Msg Parser</source>
         <translation>жЉҐж–‡и§Јжћђ</translation>
     </message>
@@ -2883,7 +2857,7 @@ Script.onInit(()=&gt;{
         <translation type="vanished">ж‰“ејЂ...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="253"/>
+        <location filename="../mainwindow.ui" line="210"/>
         <source>Close</source>
         <translation>е…ій—­</translation>
     </message>
@@ -2904,99 +2878,92 @@ Script.onInit(()=&gt;{
         <translation type="vanished">жЃўе¤Ќжµ‹иЇ•й…ЌзЅ®</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="265"/>
+        <location filename="../mainwindow.ui" line="222"/>
         <source>Open Project...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="268"/>
+        <location filename="../mainwindow.ui" line="225"/>
         <source>Ctrl+O</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="277"/>
-        <location filename="../mainwindow.cpp" line="2001"/>
+        <location filename="../mainwindow.ui" line="234"/>
+        <location filename="../mainwindow.cpp" line="1615"/>
         <source>Save Project</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="282"/>
+        <location filename="../mainwindow.ui" line="239"/>
         <source>Save Project As...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="287"/>
+        <location filename="../mainwindow.ui" line="244"/>
         <source>Close Project</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="296"/>
+        <location filename="../mainwindow.ui" line="253"/>
         <source>Print...</source>
         <translation>ж‰“еЌ°...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="304"/>
+        <location filename="../mainwindow.ui" line="261"/>
         <source>Print Setup...</source>
         <translation>ж‰“еЌ°и®ѕзЅ®...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="309"/>
+        <location filename="../mainwindow.ui" line="266"/>
         <source>Recent File</source>
         <translation>жњЂиї‘ж–‡д»¶</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="314"/>
+        <location filename="../mainwindow.ui" line="271"/>
         <source>Exit</source>
         <translation>йЂЂе‡є</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="323"/>
+        <location filename="../mainwindow.ui" line="280"/>
         <source>Connect</source>
         <translation>иїћжЋҐ</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="332"/>
+        <location filename="../mainwindow.ui" line="289"/>
         <source>Disconnect</source>
         <translation>ж–­ејЂиїћжЋҐ</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="344"/>
         <source>Binary</source>
-        <translation>дєЊиї›е€¶</translation>
+        <translation type="vanished">дєЊиї›е€¶</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="591"/>
-        <location filename="../mainwindow.ui" line="594"/>
-        <source>Swap Bytes (0xAB → 0xBA)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.ui" line="1005"/>
+        <location filename="../mainwindow.ui" line="525"/>
         <source>Preferences</source>
         <translation>й¦–йЂ‰йЎ№</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1014"/>
+        <location filename="../mainwindow.ui" line="534"/>
         <source>New Data View</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1023"/>
+        <location filename="../mainwindow.ui" line="543"/>
         <source>New Traffic View</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1032"/>
+        <location filename="../mainwindow.ui" line="552"/>
         <source>New Script</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1037"/>
+        <location filename="../mainwindow.ui" line="557"/>
         <source>Import Script...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1049"/>
+        <location filename="../mainwindow.ui" line="569"/>
         <source>Split View</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3005,9 +2972,8 @@ Script.onInit(()=&gt;{
         <translation type="vanished">ж—&#xa0;з¬¦еЏ·еЌЃиї›е€¶</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="374"/>
         <source>Hex</source>
-        <translation>еЌЃе…­иї›е€¶</translation>
+        <translation type="vanished">еЌЃе…­иї›е€¶</translation>
     </message>
     <message>
         <source>Floating Point</source>
@@ -3026,17 +2992,17 @@ Script.onInit(()=&gt;{
         <translation type="vanished">64дЅЌжµ®з‚№ж•°пј€е­—иЉ‚дє¤жЌўпј‰</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="457"/>
+        <location filename="../mainwindow.ui" line="294"/>
         <source>Cascade</source>
         <translation>е±‚еЏ&#xa0;</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="462"/>
+        <location filename="../mainwindow.ui" line="299"/>
         <source>Tile</source>
         <translation>е№ій“є</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="471"/>
+        <location filename="../mainwindow.ui" line="308"/>
         <source>About Open ModSim...</source>
         <translation>е…ідєЋOpen ModSim...</translation>
     </message>
@@ -3045,137 +3011,127 @@ Script.onInit(()=&gt;{
         <translation type="vanished">ж•ґећ‹</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="498"/>
-        <location filename="../mainwindow.ui" line="501"/>
         <source>Show Data</source>
-        <translation>жѕз¤єж•°жЌ®</translation>
+        <translation type="vanished">жѕз¤єж•°жЌ®</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="513"/>
-        <location filename="../mainwindow.ui" line="516"/>
         <source>Show Traffic</source>
-        <translation>жѕз¤єжµЃй‡Џ</translation>
+        <translation type="vanished">жѕз¤єжµЃй‡Џ</translation>
     </message>
     <message>
         <source>Data Definition</source>
         <translation type="vanished">ж•°жЌ®ж&#xa0;јејЏ</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="554"/>
+        <location filename="../mainwindow.ui" line="338"/>
         <source>Force Coils</source>
         <translation>ејєе€¶зєїењ€</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="563"/>
+        <location filename="../mainwindow.ui" line="347"/>
         <source>Preset Holding Regs</source>
         <translation>йў„и®ѕдїќжЊЃеЇ„е­е™Ё</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="603"/>
+        <location filename="../mainwindow.ui" line="356"/>
         <source>Preset Input Regs</source>
         <translation>йў„и®ѕиѕ“е…ҐеЇ„е­е™Ё</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="612"/>
+        <location filename="../mainwindow.ui" line="365"/>
         <source>Force Discretes</source>
         <translation>ејєе€¶з¦»ж•ЈеЂј</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="624"/>
         <source>Show Script</source>
-        <translation>жѕз¤єи„љжњ¬</translation>
+        <translation type="vanished">жѕз¤єи„љжњ¬</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="633"/>
-        <location filename="../mainwindow.ui" line="636"/>
         <source>Run Script</source>
-        <translation>иїђиЎЊи„љжњ¬</translation>
+        <translation type="vanished">иїђиЎЊи„љжњ¬</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="648"/>
-        <location filename="../mainwindow.ui" line="651"/>
         <source>Stop Script</source>
-        <translation>еЃњж­ўи„љжњ¬</translation>
+        <translation type="vanished">еЃњж­ўи„љжњ¬</translation>
     </message>
     <message>
         <source>Script Settings</source>
         <translation type="vanished">и„љжњ¬и®ѕзЅ®</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="663"/>
+        <location filename="../mainwindow.ui" line="374"/>
         <source>Undo</source>
         <translation>еЏ–ж¶€</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="675"/>
+        <location filename="../mainwindow.ui" line="386"/>
         <source>Redo</source>
         <translation>жЃўе¤Ќ</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="687"/>
+        <location filename="../mainwindow.ui" line="398"/>
         <source>Cut</source>
         <translation>е‰Єе€‡</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="699"/>
+        <location filename="../mainwindow.ui" line="410"/>
         <source>Copy</source>
         <translation>е¤Ќе€¶</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="711"/>
+        <location filename="../mainwindow.ui" line="422"/>
         <source>Paste</source>
         <translation>зІиґґ</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="719"/>
+        <location filename="../mainwindow.ui" line="430"/>
         <source>Select All</source>
         <translation>йЂ‰ж‹©ж‰Ђжњ‰</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="727"/>
+        <location filename="../mainwindow.ui" line="438"/>
         <source>Find...</source>
         <translation>жџҐж‰ѕ...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="735"/>
+        <location filename="../mainwindow.ui" line="446"/>
         <source>Replace...</source>
         <translation>ж›їжЌў...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="738"/>
+        <location filename="../mainwindow.ui" line="449"/>
         <source>Ctrl+H</source>
         <translation>Ctrl+H</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="978"/>
         <source>Reset Ctrs</source>
-        <translation>й‡ЌзЅ®и®Ўж•°е™Ё</translation>
+        <translation type="vanished">й‡ЌзЅ®и®Ўж•°е™Ё</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="986"/>
-        <location filename="../mainwindow.ui" line="989"/>
-        <location filename="../mainwindow.cpp" line="300"/>
+        <location filename="../mainwindow.ui" line="506"/>
+        <location filename="../mainwindow.ui" line="509"/>
+        <location filename="../mainwindow.cpp" line="282"/>
         <source>Script Help</source>
         <translation>и„љжњ¬её®еЉ©</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="992"/>
+        <location filename="../mainwindow.ui" line="512"/>
         <source>F1</source>
         <translation>F1</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1000"/>
+        <location filename="../mainwindow.ui" line="520"/>
         <source>Console Output</source>
         <translation>жЋ§е€¶еЏ°иѕ“е‡є</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="209"/>
-        <location filename="../mainwindow.ui" line="524"/>
+        <location filename="../mainwindow.ui" line="166"/>
+        <location filename="../mainwindow.ui" line="316"/>
         <source>Toolbar</source>
         <translation>е·Ґе…·ж&#xa0;Џ</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="532"/>
+        <location filename="../mainwindow.ui" line="324"/>
         <source>Status Bar</source>
         <translation>зЉ¶жЂЃж&#xa0;Џ</translation>
     </message>
@@ -3188,9 +3144,8 @@ Script.onInit(()=&gt;{
         <translation type="vanished">и„љжњ¬ж&#xa0;Џ</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="359"/>
         <source>Unsigned 16-bit Intger</source>
-        <translation>ж—&#xa0;з¬¦еЏ·16дЅЌж•ґж•°</translation>
+        <translation type="vanished">ж—&#xa0;з¬¦еЏ·16дЅЌж•ґж•°</translation>
     </message>
     <message>
         <source>Float</source>
@@ -3201,18 +3156,16 @@ Script.onInit(()=&gt;{
         <translation type="vanished">жµ®з‚№ж•°(е­—иЉ‚дє¤жЌў)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="428"/>
         <source>Double</source>
-        <translation>еЏЊзІѕеє¦жµ®з‚№ж•°</translation>
+        <translation type="vanished">еЏЊзІѕеє¦жµ®з‚№ж•°</translation>
     </message>
     <message>
         <source>Swapped Double</source>
         <translation type="vanished">еЏЊзІѕеє¦жµ®з‚№ж•°(е­—иЉ‚дє¤жЌў)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="483"/>
         <source>16-bit Integer</source>
-        <translation>16дЅЌж•ґж•°</translation>
+        <translation type="vanished">16дЅЌж•ґж•°</translation>
     </message>
     <message>
         <source>Font</source>
@@ -3231,14 +3184,13 @@ Script.onInit(()=&gt;{
         <translation type="vanished">зЉ¶жЂЃ</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="537"/>
+        <location filename="../mainwindow.ui" line="329"/>
         <source>Windows...</source>
         <translation>зЄ—еЏЈ...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="545"/>
         <source>Hex Addresses</source>
-        <translation>еЌЃе…­иї›е€¶ењ°еќЂ</translation>
+        <translation type="vanished">еЌЃе…­иї›е€¶ењ°еќЂ</translation>
     </message>
     <message>
         <source>English</source>
@@ -3249,7 +3201,7 @@ Script.onInit(()=&gt;{
         <translation type="vanished">дї„иЇ­</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="718"/>
+        <location filename="../mainwindow.cpp" line="619"/>
         <source>All files (*)</source>
         <translation>ж‰Ђжњ‰ж–‡д»¶ (*)</translation>
     </message>
@@ -3258,12 +3210,12 @@ Script.onInit(()=&gt;{
         <translation type="vanished">XML ж–‡д»¶(*.xml)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="281"/>
+        <location filename="../mainwindow.cpp" line="263"/>
         <source>Project</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="337"/>
+        <location filename="../mainwindow.cpp" line="319"/>
         <source>Output</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3272,34 +3224,34 @@ Script.onInit(()=&gt;{
         <translation type="obsolete">ж•°жЌ®</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="717"/>
-        <location filename="../mainwindow.cpp" line="752"/>
+        <location filename="../mainwindow.cpp" line="618"/>
+        <location filename="../mainwindow.cpp" line="653"/>
         <source>Project files (*.msimprj)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="249"/>
+        <location filename="../mainwindow.cpp" line="235"/>
         <source>Open Recent</source>
         <translation>打开最近项目</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="250"/>
-        <location filename="../mainwindow.cpp" line="2088"/>
+        <location filename="../mainwindow.cpp" line="236"/>
+        <location filename="../mainwindow.cpp" line="1702"/>
         <source>Clear List</source>
         <translation>清空列表</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1461"/>
+        <location filename="../mainwindow.cpp" line="1132"/>
         <source>JavaScript files (*.js);;All files (*)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2076"/>
+        <location filename="../mainwindow.cpp" line="1690"/>
         <source>No Recent Projects</source>
         <translation>没有最近项目</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2002"/>
+        <location filename="../mainwindow.cpp" line="1616"/>
         <source>Save project before closing?</source>
         <translation>关闭前保存项目吗？</translation>
     </message>

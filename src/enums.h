@@ -264,20 +264,6 @@ DECLARE_ENUM_STRINGS(TransmissionMode,
 )
 
 ///
-/// \brief The CaptureMode enum
-///
-enum class CaptureMode
-{
-    Off = 0,
-    TextCapture
-};
-Q_DECLARE_METATYPE(CaptureMode)
-DECLARE_ENUM_STRINGS(CaptureMode,
-                {   CaptureMode::Off,         "Off"           },
-                {   CaptureMode::TextCapture, "TextCapture"   }
-)
-
-///
 /// \brief The SimulationMode enum
 ///
 enum class SimulationMode

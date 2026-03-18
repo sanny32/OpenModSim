@@ -835,7 +835,7 @@ void AppProject::updateSplitPairScriptIcons(QWidget* frm)
             return;
 
         if(running)
-            crossFadeWindowIcon(targetWnd, targetWnd->windowIcon(), _mainWindow->runScriptIcon());
+            crossFadeWindowIcon(targetWnd, targetWnd->windowIcon(), QIcon(":/res/actionRunScript.png"));
         else
             crossFadeWindowIcon(targetWnd, targetWnd->windowIcon(), target->windowIcon());
     };

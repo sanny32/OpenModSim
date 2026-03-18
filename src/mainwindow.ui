@@ -116,57 +116,12 @@
     <property name="title">
      <string>Setup</string>
     </property>
-    <widget class="QMenu" name="menuDisplay_Options">
-     <property name="title">
-      <string>Display Options</string>
-     </property>
-     <addaction name="actionShowData"/>
-     <addaction name="actionShowTraffic"/>
-     <addaction name="actionShowScript"/>
-     <addaction name="separator"/>
-     <addaction name="actionBinary"/>
-     <addaction name="actionHex"/>
-     <addaction name="actionAnsi"/>
-     <addaction name="actionInt16"/>
-     <addaction name="actionUInt16"/>
-     <addaction name="actionInt32"/>
-     <addaction name="actionSwappedInt32"/>
-     <addaction name="actionUInt32"/>
-     <addaction name="actionSwappedUInt32"/>
-     <addaction name="actionInt64"/>
-     <addaction name="actionSwappedInt64"/>
-     <addaction name="actionUInt64"/>
-     <addaction name="actionSwappedUInt64"/>
-     <addaction name="actionFloatingPt"/>
-     <addaction name="actionSwappedFP"/>
-     <addaction name="actionDblFloat"/>
-     <addaction name="actionSwappedDbl"/>
-     <addaction name="separator"/>
-     <addaction name="actionSwapBytes"/>
-     <addaction name="separator"/>
-     <addaction name="actionHexAddresses"/>
-    </widget>
-    <widget class="QMenu" name="menuExtended">
-     <property name="title">
-      <string>Extended</string>
-     </property>
-     <addaction name="actionMbDefinitions"/>
-     <addaction name="separator"/>
-     <addaction name="actionForceCoils"/>
-     <addaction name="actionForceDiscretes"/>
-     <addaction name="actionPresetInputRegs"/>
-     <addaction name="actionPresetHoldingRegs"/>
-     <addaction name="separator"/>
-     <addaction name="actionMsgParser"/>
-     <addaction name="actionRawDataLog"/>
-    </widget>
+    <addaction name="actionMbDefinitions"/>
     <addaction name="separator"/>
-    <addaction name="menuDisplay_Options"/>
-    <addaction name="menuExtended"/>
-    <addaction name="actionTextCapture"/>
-    <addaction name="actionCaptureOff"/>
-    <addaction name="actionResetCtrs"/>
-    <addaction name="separator"/>
+    <addaction name="actionForceCoils"/>
+    <addaction name="actionForceDiscretes"/>
+    <addaction name="actionPresetInputRegs"/>
+    <addaction name="actionPresetHoldingRegs"/>
    </widget>
    <widget class="QMenu" name="menuWindow">
     <property name="title">
@@ -195,6 +150,8 @@
     <addaction name="separator"/>
     <addaction name="actionScriptHelp"/>
     <addaction name="actionConsoleOutput"/>
+    <addaction name="separator"/>
+    <addaction name="actionMsgParser"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuEdit"/>
@@ -332,126 +289,6 @@
     <string>Disconnect</string>
    </property>
   </action>
-  <action name="actionBinary">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/res/actionBinary.png</normaloff>:/res/actionBinary.png</iconset>
-   </property>
-   <property name="text">
-    <string>Binary</string>
-   </property>
-   <property name="shortcut">
-    <string notr="true">Ctrl+1</string>
-   </property>
-  </action>
-  <action name="actionUInt16">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/res/actionUInt16.png</normaloff>:/res/actionUInt16.png</iconset>
-   </property>
-   <property name="text">
-    <string>Unsigned 16-bit Intger</string>
-   </property>
-   <property name="shortcut">
-    <string notr="true">Ctrl+4</string>
-   </property>
-  </action>
-  <action name="actionHex">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/res/actionHex.png</normaloff>:/res/actionHex.png</iconset>
-   </property>
-   <property name="text">
-    <string>Hex</string>
-   </property>
-   <property name="shortcut">
-    <string notr="true">Ctrl+2</string>
-   </property>
-  </action>
-  <action name="actionFloatingPt">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/res/actionFloatingPt.png</normaloff>:/res/actionFloatingPt.png</iconset>
-   </property>
-   <property name="text">
-    <string>Float (MSRF)</string>
-   </property>
-   <property name="toolTip">
-    <string>Float (MSRF)</string>
-   </property>
-   <property name="shortcut">
-    <string notr="true">Ctrl+9</string>
-   </property>
-  </action>
-  <action name="actionSwappedFP">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/res/actionSwappedFP.png</normaloff>:/res/actionSwappedFP.png</iconset>
-   </property>
-   <property name="text">
-    <string>Float (LSRF)</string>
-   </property>
-   <property name="toolTip">
-    <string>Float (LSRF)</string>
-   </property>
-   <property name="shortcut">
-    <string notr="true">Ctrl+Alt+9</string>
-   </property>
-  </action>
-  <action name="actionDblFloat">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/res/actionDblFloat.png</normaloff>:/res/actionDblFloat.png</iconset>
-   </property>
-   <property name="text">
-    <string>Double (MSRF)</string>
-   </property>
-   <property name="iconText">
-    <string>Double</string>
-   </property>
-   <property name="toolTip">
-    <string>Double (MSRF)</string>
-   </property>
-   <property name="shortcut">
-    <string notr="true">Ctrl+0</string>
-   </property>
-  </action>
-  <action name="actionSwappedDbl">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/res/actionSwappedDbl.png</normaloff>:/res/actionSwappedDbl.png</iconset>
-   </property>
-   <property name="text">
-    <string>Double (LSRF)</string>
-   </property>
-   <property name="toolTip">
-    <string>Double (LSRF)</string>
-   </property>
-   <property name="shortcut">
-    <string notr="true">Ctrl+Alt+0</string>
-   </property>
-  </action>
   <action name="actionCascade">
    <property name="text">
     <string>Cascade</string>
@@ -469,51 +306,6 @@
    </property>
    <property name="text">
     <string>About Open ModSim...</string>
-   </property>
-  </action>
-  <action name="actionInt16">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/res/actionInt16.png</normaloff>:/res/actionInt16.png</iconset>
-   </property>
-   <property name="text">
-    <string>16-bit Integer</string>
-   </property>
-   <property name="shortcut">
-    <string notr="true">Ctrl+3</string>
-   </property>
-  </action>
-  <action name="actionShowData">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/res/actionShowData.png</normaloff>:/res/actionShowData.png</iconset>
-   </property>
-   <property name="text">
-    <string>Show Data</string>
-   </property>
-   <property name="toolTip">
-    <string>Show Data</string>
-   </property>
-  </action>
-  <action name="actionShowTraffic">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/res/actionShowTraffic.png</normaloff>:/res/actionShowTraffic.png</iconset>
-   </property>
-   <property name="text">
-    <string>Show Traffic</string>
-   </property>
-   <property name="toolTip">
-    <string>Show Traffic</string>
    </property>
   </action>
   <action name="actionToolbar">
@@ -537,14 +329,6 @@
     <string>Windows...</string>
    </property>
   </action>
-  <action name="actionHexAddresses">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="text">
-    <string>Hex Addresses</string>
-   </property>
-  </action>
   <action name="actionForceCoils">
    <property name="icon">
     <iconset resource="resources.qrc">
@@ -563,37 +347,6 @@
     <string>Preset Holding Regs</string>
    </property>
   </action>
-  <action name="actionBigEndian">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="text">
-    <string notr="true">Big-Endian</string>
-   </property>
-  </action>
-  <action name="actionLittleEndian">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="text">
-    <string notr="true">Little-Endian</string>
-   </property>
-  </action>
-  <action name="actionSwapBytes">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/res/actionSwapBytes.png</normaloff>:/res/actionSwapBytes.png</iconset>
-   </property>
-   <property name="text">
-    <string>Swap Bytes (0xAB → 0xBA)</string>
-   </property>
-   <property name="toolTip">
-    <string>Swap Bytes (0xAB → 0xBA)</string>
-   </property>
-  </action>
   <action name="actionPresetInputRegs">
    <property name="icon">
     <iconset resource="resources.qrc">
@@ -610,48 +363,6 @@
    </property>
    <property name="text">
     <string>Force Discretes</string>
-   </property>
-  </action>
-  <action name="actionShowScript">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/res/actionShowScript.png</normaloff>:/res/actionShowScript.png</iconset>
-   </property>
-   <property name="text">
-    <string>Show Script</string>
-   </property>
-  </action>
-  <action name="actionRunScript">
-   <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/res/actionRunScript.png</normaloff>:/res/actionRunScript.png</iconset>
-   </property>
-   <property name="text">
-    <string>Run Script</string>
-   </property>
-   <property name="toolTip">
-    <string>Run Script</string>
-   </property>
-   <property name="shortcut">
-    <string notr="true">Ctrl+R</string>
-   </property>
-  </action>
-  <action name="actionStopScript">
-   <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/res/actionStopScript.png</normaloff>:/res/actionStopScript.png</iconset>
-   </property>
-   <property name="text">
-    <string>Stop Script</string>
-   </property>
-   <property name="toolTip">
-    <string>Stop Script</string>
-   </property>
-   <property name="shortcut">
-    <string notr="true">Ctrl+B</string>
    </property>
   </action>
   <action name="actionUndo">
@@ -738,88 +449,6 @@
     <string>Ctrl+H</string>
    </property>
   </action>
-  <action name="actionInt32">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/res/actionInt32.png</normaloff>:/res/actionInt32.png</iconset>
-   </property>
-   <property name="text">
-    <string>32-bit Integer (MSRF)</string>
-   </property>
-   <property name="toolTip">
-    <string>32-bit Integer (MSRF)</string>
-   </property>
-   <property name="shortcut">
-    <string notr="true">Ctrl+5</string>
-   </property>
-  </action>
-  <action name="actionSwappedInt32">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/res/actionSwappedInt32.png</normaloff>:/res/actionSwappedInt32.png</iconset>
-   </property>
-   <property name="text">
-    <string>32-bit Integer (LSRF)</string>
-   </property>
-   <property name="toolTip">
-    <string>32-bit Integer (LSRF)</string>
-   </property>
-   <property name="shortcut">
-    <string notr="true">Ctrl+Alt+5</string>
-   </property>
-  </action>
-  <action name="actionUInt32">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/res/actionUInt32.png</normaloff>:/res/actionUInt32.png</iconset>
-   </property>
-   <property name="text">
-    <string>Unsigned 32-bit Integer (MSRF)</string>
-   </property>
-   <property name="toolTip">
-    <string>Unsigned 32-bit Integer (MSRF)</string>
-   </property>
-   <property name="shortcut">
-    <string notr="true">Ctrl+6</string>
-   </property>
-  </action>
-  <action name="actionSwappedUInt32">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/res/actionSwappedUInt32.png</normaloff>:/res/actionSwappedUInt32.png</iconset>
-   </property>
-   <property name="text">
-    <string>Unsigned 32-bit Integer (LSRF)</string>
-   </property>
-   <property name="toolTip">
-    <string>Unsigned 32-bit Integer (LSRF)</string>
-   </property>
-   <property name="shortcut">
-    <string notr="true">Ctrl+Alt+6</string>
-   </property>
-  </action>
-  <action name="actionTextCapture">
-   <property name="text">
-    <string>Text Capture</string>
-   </property>
-  </action>
-  <action name="actionCaptureOff">
-   <property name="text">
-    <string>Capture Off</string>
-   </property>
-  </action>
   <action name="actionMsgParser">
    <property name="icon">
     <iconset resource="resources.qrc">
@@ -836,93 +465,6 @@
    </property>
    <property name="autoRepeat">
     <bool>false</bool>
-   </property>
-  </action>
-  <action name="actionInt64">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/res/actionInt64.png</normaloff>:/res/actionInt64.png</iconset>
-   </property>
-   <property name="text">
-    <string>64-bit Integer (MSRF)</string>
-   </property>
-   <property name="toolTip">
-    <string>64-bit Integer (MSRF)</string>
-   </property>
-   <property name="shortcut">
-    <string notr="true">Ctrl+7</string>
-   </property>
-  </action>
-  <action name="actionSwappedInt64">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/res/actionSwappedInt64.png</normaloff>:/res/actionSwappedInt64.png</iconset>
-   </property>
-   <property name="text">
-    <string>64-bit Integer (LSRF)</string>
-   </property>
-   <property name="toolTip">
-    <string>64-bit Integer (LSRF)</string>
-   </property>
-   <property name="shortcut">
-    <string notr="true">Ctrl+Alt+7</string>
-   </property>
-  </action>
-  <action name="actionUInt64">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/res/actionUInt64.png</normaloff>:/res/actionUInt64.png</iconset>
-   </property>
-   <property name="text">
-    <string>Unsigned 64-bit Integer (MSRF)</string>
-   </property>
-   <property name="toolTip">
-    <string>Unsigned 64-bit Integer (MSRF)</string>
-   </property>
-   <property name="shortcut">
-    <string notr="true">Ctrl+8</string>
-   </property>
-  </action>
-  <action name="actionSwappedUInt64">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/res/actionSwappedUInt64.png</normaloff>:/res/actionSwappedUInt64.png</iconset>
-   </property>
-   <property name="text">
-    <string>Unsigned 64-bit Integer (LSRF)</string>
-   </property>
-   <property name="toolTip">
-    <string>Unsigned 64-bit Integer (LSRF)</string>
-   </property>
-   <property name="shortcut">
-    <string notr="true">Ctrl+Alt+8</string>
-   </property>
-  </action>
-  <action name="actionAnsi">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/res/actionAnsi.png</normaloff>:/res/actionAnsi.png</iconset>
-   </property>
-   <property name="text">
-    <string>ANSI</string>
-   </property>
-   <property name="menuRole">
-    <enum>QAction::MenuRole::TextHeuristicRole</enum>
    </property>
   </action>
   <action name="actionMbDefinitions">
@@ -954,28 +496,6 @@
    </property>
    <property name="shortcut">
     <string notr="true">Ctrl+Shift+W</string>
-   </property>
-  </action>
-  <action name="actionRawDataLog">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="text">
-    <string>Raw Data Log</string>
-   </property>
-   <property name="shortcut">
-    <string notr="true">F10</string>
-   </property>
-   <property name="shortcutContext">
-    <enum>Qt::ShortcutContext::ApplicationShortcut</enum>
-   </property>
-   <property name="autoRepeat">
-    <bool>false</bool>
-   </property>
-  </action>
-  <action name="actionResetCtrs">
-   <property name="text">
-    <string>Reset Ctrs</string>
    </property>
   </action>
   <action name="actionScriptHelp">

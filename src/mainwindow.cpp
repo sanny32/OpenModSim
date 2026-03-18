@@ -99,9 +99,6 @@ void applySharedDisplayDefaults(TDefinitions& target, const TDefinitions& defaul
     target.HexAddress = defaults.HexAddress;
     target.LeadingZeros = defaults.LeadingZeros;
     target.DataViewColumnsDistance = defaults.DataViewColumnsDistance;
-    target.AutoscrollLog = defaults.AutoscrollLog;
-    target.VerboseLogging = defaults.VerboseLogging;
-    target.LogViewLimit = defaults.LogViewLimit;
 }
 
 void applySharedDisplayDefaults(TrafficViewDefinitions& target, const TrafficViewDefinitions& defaults)
@@ -113,7 +110,6 @@ void applySharedDisplayDefaults(TrafficViewDefinitions& target, const TrafficVie
 
 void applySharedDisplayDefaults(ScriptViewDefinitions& target, const ScriptViewDefinitions& defaults)
 {
-    applySharedDisplayDefaults<ScriptViewDefinitions>(target, defaults);
     target.ScriptCfg = defaults.ScriptCfg;
 }
 
@@ -139,11 +135,6 @@ void setByteOrderOnForm(QWidget* widget, ByteOrder order)
     if (auto* frm = qobject_cast<FormDataView*>(widget)) frm->setByteOrder(order);
 }
 
-void resetCtrsOnForm(QWidget* widget)
-{
-    Q_UNUSED(widget)
-}
-
 bool displayHexAddressesOfForm(QWidget* widget)
 {
     if (auto* frm = qobject_cast<FormDataView*>(widget)) return frm->displayHexAddresses();
@@ -158,11 +149,6 @@ void setDisplayHexAddressesOnForm(QWidget* widget, bool on)
 void printOnForm(QWidget* widget, QPrinter* printer)
 {
     if (auto* frm = qobject_cast<FormDataView*>(widget)) frm->print(printer);
-}
-
-void setCodepageOnForm(QWidget* widget, const QString& name)
-{
-    if (auto* frm = qobject_cast<FormDataView*>(widget)) frm->setCodepage(name);
 }
 
 QColor statusColorOfForm(QWidget* widget)
@@ -251,10 +237,6 @@ MainWindow::MainWindow(const QString& profile, bool useSession, QWidget *parent)
     connect(_clearRecentAction, &QAction::triggered, this, &MainWindow::clearRecentProjects);
     ui->menuFile->insertMenu(ui->actionSaveProject, _openRecentMenu);
     ui->menuFile->insertSeparator(ui->actionSaveProject);
-
-    _ansiMenu = new AnsiMenu(this);
-    connect(_ansiMenu, &AnsiMenu::codepageSelected, this, &MainWindow::setCodepage);
-    ui->actionAnsi->setMenu(_ansiMenu);
 
     auto menuConnect = new MenuConnect(MenuConnect::ConnectMenu, _mbMultiServer, this);
     connect(menuConnect, &MenuConnect::connectAction, this, &MainWindow::on_connectAction);
@@ -499,38 +481,7 @@ void MainWindow::on_awake()
     ui->actionFind->setEnabled(isScriptActive);
     ui->actionReplace->setEnabled(isScriptActive);
 
-    ui->actionShowData->setEnabled(true);
-    ui->actionShowTraffic->setEnabled(true);
-    ui->actionShowScript->setEnabled(true);
-    ui->actionBinary->setEnabled(dataLikeFrm != nullptr);
-    ui->actionUInt16->setEnabled(dataLikeFrm != nullptr);
-    ui->actionInt16->setEnabled(dataLikeFrm != nullptr);
-    ui->actionInt32->setEnabled(dataLikeFrm != nullptr);
-    ui->actionSwappedInt32->setEnabled(dataLikeFrm != nullptr);
-    ui->actionUInt32->setEnabled(dataLikeFrm != nullptr);
-    ui->actionSwappedUInt32->setEnabled(dataLikeFrm != nullptr);
-    ui->actionInt64->setEnabled(dataLikeFrm != nullptr);
-    ui->actionSwappedInt64->setEnabled(dataLikeFrm != nullptr);
-    ui->actionUInt64->setEnabled(dataLikeFrm != nullptr);
-    ui->actionSwappedUInt64->setEnabled(dataLikeFrm != nullptr);
-    ui->actionHex->setEnabled(dataLikeFrm != nullptr);
-    ui->actionAnsi->setEnabled(dataLikeFrm != nullptr);
-    ui->actionHex->setEnabled(dataLikeFrm != nullptr);
-    ui->actionFloatingPt->setEnabled(dataLikeFrm != nullptr);
-    ui->actionSwappedFP->setEnabled(dataLikeFrm != nullptr);
-    ui->actionDblFloat->setEnabled(dataLikeFrm != nullptr);
-    ui->actionSwappedDbl->setEnabled(dataLikeFrm != nullptr);
-    ui->actionSwapBytes->setEnabled(dataLikeFrm != nullptr);
-
-    ui->actionRawDataLog->setChecked(false);
-
-    ui->actionTextCapture->setEnabled(false);
-    ui->actionCaptureOff->setEnabled(false);
-
-    const bool scriptRunning = scriptFrm && _project->isScriptRunningOnSplitPair(scriptFrm);
     ui->actionImportScript->setEnabled(scriptFrm != nullptr);
-    ui->actionRunScript->setEnabled(scriptFrm && !scriptRunning && scriptFrm->canRunScript());
-    ui->actionStopScript->setEnabled(scriptRunning);
 
     ui->actionTabbedView->setChecked(ui->mdiArea->viewMode() == QMdiArea::TabbedView);
     ui->actionSplitView->setVisible(ui->mdiArea->viewMode() == QMdiArea::TabbedView);
@@ -546,56 +497,6 @@ void MainWindow::on_awake()
     ui->actionTile->setEnabled(ui->mdiArea->viewMode() == QMdiArea::SubWindowView);
     ui->actionCascade->setEnabled(ui->mdiArea->viewMode() == QMdiArea::SubWindowView);
 
-    if(dataLikeFrm != nullptr)
-    {
-        const auto dd = dataFrm ? dataFrm->displayDefinition()
-                                : toDataViewDefinitions(trafficFrm->displayDefinition());
-        ui->actionUInt16->setEnabled(dd.PointType > QModbusDataUnit::Coils);
-        ui->actionInt16->setEnabled(dd.PointType > QModbusDataUnit::Coils);
-        ui->actionHex->setEnabled(dd.PointType > QModbusDataUnit::Coils);
-        ui->actionInt32->setEnabled(dd.PointType > QModbusDataUnit::Coils);
-        ui->actionSwappedInt32->setEnabled(dd.PointType > QModbusDataUnit::Coils);
-        ui->actionUInt32->setEnabled(dd.PointType > QModbusDataUnit::Coils);
-        ui->actionSwappedUInt32->setEnabled(dd.PointType > QModbusDataUnit::Coils);
-        ui->actionInt64->setEnabled(dd.PointType > QModbusDataUnit::Coils);
-        ui->actionSwappedInt64->setEnabled(dd.PointType > QModbusDataUnit::Coils);
-        ui->actionUInt64->setEnabled(dd.PointType > QModbusDataUnit::Coils);
-        ui->actionSwappedUInt64->setEnabled(dd.PointType > QModbusDataUnit::Coils);
-        ui->actionAnsi->setEnabled(dd.PointType > QModbusDataUnit::Coils);
-        ui->actionFloatingPt->setEnabled(dd.PointType > QModbusDataUnit::Coils);
-        ui->actionSwappedFP->setEnabled(dd.PointType > QModbusDataUnit::Coils);
-        ui->actionDblFloat->setEnabled(dd.PointType > QModbusDataUnit::Coils);
-        ui->actionSwappedDbl->setEnabled(dd.PointType > QModbusDataUnit::Coils);
-        ui->actionSwapBytes->setEnabled(dd.PointType > QModbusDataUnit::Coils);
-
-        const auto ddm = dataDisplayModeOfForm(dataLikeFrm);
-        ui->actionBinary->setChecked(ddm == DataDisplayMode::Binary);
-        ui->actionUInt16->setChecked(ddm == DataDisplayMode::UInt16);
-        ui->actionInt16->setChecked(ddm == DataDisplayMode::Int16);
-        ui->actionInt32->setChecked(ddm == DataDisplayMode::Int32);
-        ui->actionSwappedInt32->setChecked(ddm == DataDisplayMode::SwappedInt32);
-        ui->actionUInt32->setChecked(ddm == DataDisplayMode::UInt32);
-        ui->actionSwappedUInt32->setChecked(ddm == DataDisplayMode::SwappedUInt32);
-        ui->actionInt64->setChecked(ddm == DataDisplayMode::Int64);
-        ui->actionSwappedInt64->setChecked(ddm == DataDisplayMode::SwappedInt64);
-        ui->actionUInt64->setChecked(ddm == DataDisplayMode::UInt64);
-        ui->actionSwappedUInt64->setChecked(ddm == DataDisplayMode::SwappedUInt64);
-        ui->actionHex->setChecked(ddm == DataDisplayMode::Hex);
-        ui->actionAnsi->setChecked(ddm == DataDisplayMode::Ansi);
-        ui->actionFloatingPt->setChecked(ddm == DataDisplayMode::FloatingPt);
-        ui->actionSwappedFP->setChecked(ddm == DataDisplayMode::SwappedFP);
-        ui->actionDblFloat->setChecked(ddm == DataDisplayMode::DblFloat);
-        ui->actionSwappedDbl->setChecked(ddm == DataDisplayMode::SwappedDbl);
-
-        const auto byteOrder = byteOrderOfForm(dataLikeFrm);
-        ui->actionSwapBytes->setChecked(byteOrder == ByteOrder::Swapped);
-
-        ui->actionHexAddresses->setChecked(displayHexAddressesOfForm(dataLikeFrm));
-    }
-
-    ui->actionShowData->setChecked(dataFrm != nullptr);
-    ui->actionShowTraffic->setChecked(trafficFrm != nullptr);
-    ui->actionShowScript->setChecked(scriptFrm != nullptr);
 
     if(frm)
         _projectTree->activateForm(frm);
@@ -1047,200 +948,6 @@ void MainWindow::on_actionMbDefinitions_triggered()
 }
 
 ///
-/// \brief MainWindow::on_actionShowData_triggered
-///
-void MainWindow::on_actionShowData_triggered()
-{
-    _project->setWindowCounter(_project->windowCounter() + 1);
-    if (auto frm = _project->createDataMdiChild(_project->windowCounter())) {
-        frm->show();
-    }
-}
-
-///
-/// \brief MainWindow::on_actionShowTraffic_triggered
-///
-void MainWindow::on_actionShowTraffic_triggered()
-{
-    _project->setWindowCounter(_project->windowCounter() + 1);
-    if (auto frm = _project->createTrafficMdiChild(_project->windowCounter())) {
-        frm->show();
-    }
-}
-
-///
-/// \brief MainWindow::on_actionShowScript_triggered
-/// Opens a new standalone script document.
-///
-void MainWindow::on_actionShowScript_triggered()
-{
-    _project->setWindowCounter(_project->windowCounter() + 1);
-    if (auto frm = _project->createScriptMdiChild(_project->windowCounter())) {
-        frm->show();
-    }
-}
-
-///
-/// \brief MainWindow::on_actionBinary_triggered
-///
-void MainWindow::on_actionBinary_triggered()
-{
-    updateDataDisplayMode(DataDisplayMode::Binary);
-}
-
-///
-/// \brief MainWindow::on_actionUInt16_triggered
-///
-void MainWindow::on_actionUInt16_triggered()
-{
-    updateDataDisplayMode(DataDisplayMode::UInt16);
-}
-
-///
-/// \brief MainWindow::on_actionInt16_triggered
-///
-void MainWindow::on_actionInt16_triggered()
-{
-    updateDataDisplayMode(DataDisplayMode::Int16);
-}
-
-///
-/// \brief MainWindow::on_actionInt32_triggered
-///
-void MainWindow::on_actionInt32_triggered()
-{
-    updateDataDisplayMode(DataDisplayMode::Int32);
-}
-
-///
-/// \brief MainWindow::on_actionSwappedInt32_triggered
-///
-void MainWindow::on_actionSwappedInt32_triggered()
-{
-    updateDataDisplayMode(DataDisplayMode::SwappedInt32);
-}
-
-///
-/// \brief MainWindow::on_actionUInt32_triggered
-///
-void MainWindow::on_actionUInt32_triggered()
-{
-    updateDataDisplayMode(DataDisplayMode::UInt32);
-}
-
-void MainWindow::on_actionSwappedUInt32_triggered()
-{
-    updateDataDisplayMode(DataDisplayMode::SwappedUInt32);
-}
-
-///
-/// \brief MainWindow::on_actionInt64_triggered
-///
-void MainWindow::on_actionInt64_triggered()
-{
-    updateDataDisplayMode(DataDisplayMode::Int64);
-}
-
-///
-/// \brief MainWindow::on_actionSwappedInt64_triggered
-///
-void MainWindow::on_actionSwappedInt64_triggered()
-{
-    updateDataDisplayMode(DataDisplayMode::SwappedInt64);
-}
-
-///
-/// \brief MainWindow::on_actionUInt64_triggered
-///
-void MainWindow::on_actionUInt64_triggered()
-{
-    updateDataDisplayMode(DataDisplayMode::UInt64);
-}
-
-///
-/// \brief MainWindow::on_actionSwappedUInt64_triggered
-///
-void MainWindow::on_actionSwappedUInt64_triggered()
-{
-    updateDataDisplayMode(DataDisplayMode::SwappedUInt64);
-}
-
-///
-/// \brief MainWindow::on_actionHex_triggered
-///
-void MainWindow::on_actionHex_triggered()
-{
-    updateDataDisplayMode(DataDisplayMode::Hex);
-}
-
-///
-/// \brief MainWindow::on_actionAnsi_triggered
-///
-void MainWindow::on_actionAnsi_triggered()
-{
-    updateDataDisplayMode(DataDisplayMode::Ansi);
-}
-
-///
-/// \brief MainWindow::on_actionFloatingPt_triggered
-///
-void MainWindow::on_actionFloatingPt_triggered()
-{
-    updateDataDisplayMode(DataDisplayMode::FloatingPt);
-}
-
-///
-/// \brief MainWindow::on_actionSwappedFP_triggered
-///
-void MainWindow::on_actionSwappedFP_triggered()
-{
-    updateDataDisplayMode(DataDisplayMode::SwappedFP);
-}
-
-///
-/// \brief MainWindow::on_actionSwapBytes_triggered
-///
-void MainWindow::on_actionSwapBytes_triggered()
-{
-    auto* frm = currentDataOrTrafficForm();
-    if(!frm) return;
-
-    switch (byteOrderOfForm(frm)) {
-    case ByteOrder::Swapped:
-        setByteOrderOnForm(frm, ByteOrder::Direct);
-        break;
-    case ByteOrder::Direct:
-        setByteOrderOnForm(frm, ByteOrder::Swapped);
-        break;
-    }
-}
-
-///
-/// \brief MainWindow::on_actionDblFloat_triggered
-///
-void MainWindow::on_actionDblFloat_triggered()
-{
-    updateDataDisplayMode(DataDisplayMode::DblFloat);
-}
-
-///
-/// \brief MainWindow::on_actionSwappedDbl_triggered
-///
-void MainWindow::on_actionSwappedDbl_triggered()
-{
-    updateDataDisplayMode(DataDisplayMode::SwappedDbl);
-}
-
-///
-/// \brief MainWindow::on_actionHexAddresses_triggered
-///
-void MainWindow::on_actionHexAddresses_triggered()
-{
-    auto* frm = currentDataOrTrafficForm();
-    if(frm) setDisplayHexAddressesOnForm(frm, !displayHexAddressesOfForm(frm));
-}
-
-///
 /// \brief MainWindow::on_actionForceCoils_triggered
 ///
 void MainWindow::on_actionForceCoils_triggered()
@@ -1283,42 +990,6 @@ void MainWindow::on_actionMsgParser_triggered()
     auto dlg = new DialogMsgParser(mode, ModbusMessage::Rtu);
     dlg->setAttribute(Qt::WA_DeleteOnClose, true);
     dlg->show();
-}
-
-///
-/// \brief MainWindow::on_actionRawDataLog_triggered
-///
-void MainWindow::on_actionRawDataLog_triggered()
-{
-    on_actionShowTraffic_triggered();
-}
-
-///
-/// \brief MainWindow::on_actionTextCapture_triggered
-///
-void MainWindow::on_actionTextCapture_triggered()
-{
-    // Text capture is not supported in typed form architecture.
-}
-
-///
-/// \brief MainWindow::on_actionCaptureOff_triggered
-///
-void MainWindow::on_actionCaptureOff_triggered()
-{
-    // Text capture is not supported in typed form architecture.
-}
-
-///
-/// \brief MainWindow::on_actionResetCtrs_triggered
-///
-void MainWindow::on_actionResetCtrs_triggered()
-{
-    auto* frm = currentDataOrTrafficForm();
-    if(!frm)
-        return;
-
-    resetCtrsOnForm(frm);
 }
 
 ///
@@ -1468,32 +1139,6 @@ void MainWindow::on_actionImportScript_triggered()
 }
 
 ///
-/// \brief MainWindow::on_actionRunScript_triggered
-///
-void MainWindow::on_actionRunScript_triggered()
-{
-    auto* frm = currentScriptForm();
-    if(!frm) return;
-
-    if(_project->isScriptRunningOnSplitPair(frm))
-        return;
-
-    frm->runScript();
-}
-
-///
-/// \brief MainWindow::on_actionStopScript_triggered
-///
-void MainWindow::on_actionStopScript_triggered()
-{
-    auto* frm = currentScriptForm();
-    if(!frm) return;
-
-    if(frm->canStopScript())
-        frm->stopScript();
-}
-
-///
 /// \brief MainWindow::on_searchText
 /// \param text
 ///
@@ -1558,29 +1203,6 @@ QWidget* MainWindow::currentDataOrTrafficForm() const
     if (auto* data = currentDataForm())
         return data;
     return currentTrafficForm();
-}
-
-///
-/// \brief MainWindow::setCodepage
-/// \param name
-///
-void MainWindow::setCodepage(const QString& name)
-{
-    auto* frm = currentForm();
-    if(!frm) return;
-
-    setCodepageOnForm(frm, name);
-}
-
-
-///
-/// \brief MainWindow::updateDisplayMode
-/// \param mode
-///
-void MainWindow::updateDataDisplayMode(DataDisplayMode mode)
-{
-    auto* frm = currentDataOrTrafficForm();
-    if(frm) setDataDisplayModeOnForm(frm, mode);
 }
 
 ///
@@ -1707,7 +1329,7 @@ void MainWindow::updateProjectWindowTitle()
 ///
 void MainWindow::selectAnsiCodepage(const QString& name)
 {
-    _ansiMenu->selectCodepage(name);
+    Q_UNUSED(name)
 }
 
 ///
@@ -1727,14 +1349,6 @@ void MainWindow::showHelpContext(const QString& helpKey)
     _helpDockWidget->setVisible(true);
     if (!helpKey.isEmpty())
         _helpWidget->showHelp(helpKey);
-}
-
-///
-/// \brief MainWindow::runScriptIcon
-///
-QIcon MainWindow::runScriptIcon() const
-{
-    return ui->actionRunScript->icon();
 }
 
 ///
@@ -2000,7 +1614,7 @@ bool MainWindow::confirmSaveOnClose()
     const auto button = QMessageBox::question(this,
                                               tr("Save Project"),
                                               tr("Save project before closing?"),
-                                              QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel,
+                                              QMessageBox::Save | QMessageBox::No | QMessageBox::Cancel,
                                               QMessageBox::Save);
     if(button == QMessageBox::Cancel)
         return false;

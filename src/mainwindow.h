@@ -5,7 +5,6 @@
 #include <QDockWidget>
 #include <QTranslator>
 #include "helpwidget.h"
-#include "ansimenu.h"
 #include "modbusmultiserver.h"
 #include "windowactionlist.h"
 #include "controls/consoleoutput.h"
@@ -52,7 +51,6 @@ public:
     void selectAnsiCodepage(const QString& name);
     void showConsoleMessage(const QString& source, const QString& text, ConsoleOutput::MessageType type);
     void showHelpContext(const QString& helpKey);
-    QIcon runScriptIcon() const;
     void applyConnections(const ModbusDefinitions& defs, const QList<ConnectionDetails>& conns);
     ModbusMultiServer& mbMultiServer() { return _mbMultiServer; }
     const ModbusMultiServer& mbMultiServer() const { return _mbMultiServer; }
@@ -74,8 +72,6 @@ protected:
 public slots:
     void windowActivate(QMdiSubWindow* wnd);
     void updateHelpWidgetState();
-    void setCodepage(const QString& name);
-
 private slots:
     void on_awake();
 
@@ -111,37 +107,11 @@ private slots:
     void on_actionMbDefinitions_triggered();
 
     /* Setup menu slots*/
-    void on_actionShowData_triggered();
-    void on_actionShowTraffic_triggered();
-    void on_actionShowScript_triggered();
-    void on_actionBinary_triggered();
-    void on_actionUInt16_triggered();
-    void on_actionInt16_triggered();
-    void on_actionInt32_triggered();
-    void on_actionSwappedInt32_triggered();
-    void on_actionUInt32_triggered();
-    void on_actionSwappedUInt32_triggered();
-    void on_actionInt64_triggered();
-    void on_actionSwappedInt64_triggered();
-    void on_actionUInt64_triggered();
-    void on_actionSwappedUInt64_triggered();
-    void on_actionHex_triggered();
-    void on_actionAnsi_triggered();
-    void on_actionFloatingPt_triggered();
-    void on_actionSwappedFP_triggered();
-    void on_actionDblFloat_triggered();
-    void on_actionSwappedDbl_triggered();
-    void on_actionSwapBytes_triggered();
-    void on_actionHexAddresses_triggered();
     void on_actionForceCoils_triggered();
     void on_actionForceDiscretes_triggered();
     void on_actionPresetInputRegs_triggered();
     void on_actionPresetHoldingRegs_triggered();
     void on_actionMsgParser_triggered();
-    void on_actionRawDataLog_triggered();
-    void on_actionTextCapture_triggered();
-    void on_actionCaptureOff_triggered();
-    void on_actionResetCtrs_triggered();
 
     /* View menu slots */
     void on_actionTabbedView_triggered();
@@ -162,8 +132,6 @@ private slots:
     /* Script slots */
     void on_actionNewScript_triggered();
     void on_actionImportScript_triggered();
-    void on_actionRunScript_triggered();
-    void on_actionStopScript_triggered();
 
     void on_searchText(const QString& text);
 
@@ -178,8 +146,6 @@ private:
     FormTrafficView* currentTrafficForm() const;
     FormScriptView* currentScriptForm() const;
     QWidget* currentDataOrTrafficForm() const;
-    void updateDataDisplayMode(DataDisplayMode mode);
-
     void forceCoils(QModbusDataUnit::RegisterType type);
     void presetRegs(QModbusDataUnit::RegisterType type);
 
@@ -213,7 +179,6 @@ private:
 
     ModbusMultiServer _mbMultiServer;
 
-    AnsiMenu* _ansiMenu;
     WindowActionList* _windowActionList;
     QSharedPointer<QPrinter> _selectedPrinter;
     DataSimulator* _dataSimulator = nullptr;
