@@ -528,13 +528,13 @@ void MainWindow::on_actionNewTrafficView_triggered()
 /// \brief MainWindow::createNewForm
 /// \param kind
 ///
-void MainWindow::createNewForm(ProjectFormKind kind)
+QWidget* MainWindow::createNewForm(ProjectFormKind kind)
 {
     const auto cur = _project->currentMdiChild();
     _project->setWindowCounter(_project->windowCounter() + 1);
     auto* frm = _project->createMdiChild(_project->windowCounter(), kind);
     if(!frm)
-        return;
+        return nullptr;
 
     markModified();
 
@@ -586,6 +586,7 @@ void MainWindow::createNewForm(ProjectFormKind kind)
     }
 
     frm->show();
+    return frm;
 }
 
 ///
@@ -1126,10 +1127,9 @@ void MainWindow::on_actionImportScript_triggered()
 
     const auto script = QTextStream(&file).readAll();
 
-    createNewForm(ProjectFormKind::Script);
-    if(auto* frm = currentScriptForm()) {
+    if(auto* frm = qobject_cast<FormScriptView*>(createNewForm(ProjectFormKind::Script))) {
         frm->setScript(script);
-        frm->setWindowTitle(QFileInfo(filename).completeBaseName());
+        frm->setFormName(QFileInfo(filename).completeBaseName());
         _projectTree->updateFormTitle(frm);
     }
 }

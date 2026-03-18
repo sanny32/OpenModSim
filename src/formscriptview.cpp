@@ -128,6 +128,12 @@ QString FormScriptView::script() const
     return ui->scriptControl->script();
 }
 
+void FormScriptView::setFormName(const QString& name)
+{
+    setWindowTitle(name);
+    ui->scriptControl->setScriptSource(name);
+}
+
 void FormScriptView::setScript(const QString& text)
 {
     ui->scriptControl->setScript(text);

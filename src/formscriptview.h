@@ -48,6 +48,8 @@ public:
     ScriptSettings scriptSettings() const;
     void setScriptSettings(const ScriptSettings& ss);
 
+    void setFormName(const QString& name);
+
     QString script() const;
     void setScript(const QString& text);
     QTextDocument* scriptDocument() const;

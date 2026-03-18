@@ -139,7 +139,7 @@ private slots:
     void updateMenuWindow();
 
 private:
-    void createNewForm(ProjectFormKind kind);
+    QWidget* createNewForm(ProjectFormKind kind);
     QWidget* currentForm() const;
     FormDataView* currentDataForm() const;
     FormTrafficView* currentTrafficForm() const;

@@ -2193,13 +2193,13 @@ MODBUS Point Type:
     </message>
     <message>
         <location filename="../formscriptview.cpp" line="68"/>
-        <location filename="../formscriptview.cpp" line="275"/>
+        <location filename="../formscriptview.cpp" line="281"/>
         <source> ms</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../formscriptview.cpp" line="70"/>
-        <location filename="../formscriptview.cpp" line="279"/>
+        <location filename="../formscriptview.cpp" line="285"/>
         <source>Run on startup</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3200,7 +3200,7 @@ Script.onInit(()=&gt;{
         <translation type="vanished">дї„иЇ­</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="617"/>
+        <location filename="../mainwindow.cpp" line="618"/>
         <source>All files (*)</source>
         <translation>ж‰Ђжњ‰ж–‡д»¶ (*)</translation>
     </message>
@@ -3223,8 +3223,8 @@ Script.onInit(()=&gt;{
         <translation type="obsolete">ж•°жЌ®</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="616"/>
-        <location filename="../mainwindow.cpp" line="651"/>
+        <location filename="../mainwindow.cpp" line="617"/>
+        <location filename="../mainwindow.cpp" line="652"/>
         <source>Project files (*.msimprj)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3240,7 +3240,7 @@ Script.onInit(()=&gt;{
         <translation>清空列表</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1121"/>
+        <location filename="../mainwindow.cpp" line="1122"/>
         <source>JavaScript files (*.js);;All files (*)</source>
         <translation type="unfinished"></translation>
     </message>
