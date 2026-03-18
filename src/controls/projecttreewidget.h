@@ -31,6 +31,7 @@ public:
 
     void addForm(ProjectFormType type, QWidget* frm);
     void removeForm(QWidget* frm);
+    void updateFormTitle(QWidget* frm);
     void setFormScriptRunning(QWidget* frm, bool running);
     void setFormOpen(QWidget* frm, bool open);
     void activateForm(QWidget* frm);

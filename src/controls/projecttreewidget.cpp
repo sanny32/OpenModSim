@@ -115,6 +115,16 @@ void ProjectTreeWidget::removeForm(QWidget* frm)
 }
 
 ///
+/// \brief ProjectTreeWidget::updateFormTitle
+///
+void ProjectTreeWidget::updateFormTitle(QWidget* frm)
+{
+    auto item = itemForForm(frm);
+    if (item)
+        item->setText(0, frm->windowTitle());
+}
+
+///
 /// \brief ProjectTreeWidget::setFormScriptRunning
 ///
 void ProjectTreeWidget::setFormScriptRunning(QWidget* frm, bool running)

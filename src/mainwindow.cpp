@@ -475,7 +475,7 @@ void MainWindow::on_awake()
     ui->actionFind->setEnabled(isScriptActive);
     ui->actionReplace->setEnabled(isScriptActive);
 
-    ui->actionImportScript->setEnabled(scriptFrm != nullptr);
+    ui->actionImportScript->setEnabled(true);
 
     ui->actionTabbedView->setChecked(ui->mdiArea->viewMode() == QMdiArea::TabbedView);
     ui->actionSplitView->setVisible(ui->mdiArea->viewMode() == QMdiArea::TabbedView);
@@ -1118,16 +1118,20 @@ void MainWindow::on_actionNewScript_triggered()
 ///
 void MainWindow::on_actionImportScript_triggered()
 {
-    auto* frm = currentScriptForm();
-    if(!frm) return;
-
     const auto filename = QFileDialog::getOpenFileName(this, QString(), QString(), tr("JavaScript files (*.js);;All files (*)"));
     if(filename.isEmpty()) return;
 
     QFile file(filename);
     if(!file.open(QFile::ReadOnly | QFile::Text)) return;
 
-    frm->setScript(QTextStream(&file).readAll());
+    const auto script = QTextStream(&file).readAll();
+
+    createNewForm(ProjectFormKind::Script);
+    if(auto* frm = currentScriptForm()) {
+        frm->setScript(script);
+        frm->setWindowTitle(QFileInfo(filename).completeBaseName());
+        _projectTree->updateFormTitle(frm);
+    }
 }
 
 ///

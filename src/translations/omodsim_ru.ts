@@ -2937,7 +2937,7 @@ Script.onInit(()=&gt;{
     </message>
     <message>
         <location filename="../mainwindow.ui" line="232"/>
-        <location filename="../mainwindow.cpp" line="1517"/>
+        <location filename="../mainwindow.cpp" line="1521"/>
         <source>Save Project</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3255,22 +3255,22 @@ Script.onInit(()=&gt;{
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="235"/>
-        <location filename="../mainwindow.cpp" line="1604"/>
+        <location filename="../mainwindow.cpp" line="1608"/>
         <source>Clear List</source>
         <translation>Очистить список</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1124"/>
+        <location filename="../mainwindow.cpp" line="1121"/>
         <source>JavaScript files (*.js);;All files (*)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1592"/>
+        <location filename="../mainwindow.cpp" line="1596"/>
         <source>No Recent Projects</source>
         <translation>Нет недавних проектов</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1518"/>
+        <location filename="../mainwindow.cpp" line="1522"/>
         <source>Save project before closing?</source>
         <translation>Сохранить проект перед закрытием?</translation>
     </message>
@@ -4105,29 +4105,29 @@ Script.onInit(()=&gt;{
     <name>ProjectTreeWidget</name>
     <message>
         <location filename="../controls/projecttreewidget.cpp" line="50"/>
-        <location filename="../controls/projecttreewidget.cpp" line="237"/>
+        <location filename="../controls/projecttreewidget.cpp" line="247"/>
         <source>Data</source>
         <translation type="unfinished">Р”Р°РЅРЅС‹Рµ</translation>
     </message>
     <message>
         <location filename="../controls/projecttreewidget.cpp" line="53"/>
-        <location filename="../controls/projecttreewidget.cpp" line="238"/>
+        <location filename="../controls/projecttreewidget.cpp" line="248"/>
         <source>Traffic</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../controls/projecttreewidget.cpp" line="56"/>
-        <location filename="../controls/projecttreewidget.cpp" line="239"/>
+        <location filename="../controls/projecttreewidget.cpp" line="249"/>
         <source>Script</source>
         <translation type="unfinished">РЎРєСЂРёРїС‚</translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="276"/>
+        <location filename="../controls/projecttreewidget.cpp" line="286"/>
         <source>Delete</source>
         <translation>РЈРґР°Р»РёС‚СЊ</translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="281"/>
+        <location filename="../controls/projecttreewidget.cpp" line="291"/>
         <source>Delete Form</source>
         <translation>РЈРґР°Р»РёС‚СЊ С„РѕСЂРјСѓ</translation>
     </message>
@@ -4136,7 +4136,7 @@ Script.onInit(()=&gt;{
         <translation type="vanished">РЈРґР°Р»РёС‚СЊ СЃРєСЂРёРїС‚</translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="282"/>
+        <location filename="../controls/projecttreewidget.cpp" line="292"/>
         <source>Delete &quot;%1&quot; from the project?</source>
         <translation>РЈРґР°Р»РёС‚СЊ &quot;%1&quot; РёР· РїСЂРѕРµРєС‚Р°?</translation>
     </message>
