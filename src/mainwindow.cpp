@@ -407,6 +407,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
         }
     }
 
+    saveSessionProject();
     saveAppSettings();
 
     ui->mdiArea->closeAllSubWindows();

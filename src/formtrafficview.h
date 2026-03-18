@@ -321,6 +321,7 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, FormTrafficView* frm
             }
             else if (xml.name() == QLatin1String("TrafficViewDefinitions")) {
                 xml >> dd;
+                xml.skipCurrentElement();
                 frm->setDisplayDefinition(dd);
             }
             else {

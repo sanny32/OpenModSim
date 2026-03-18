@@ -2889,7 +2889,7 @@ Script.onInit(()=&gt;{
     </message>
     <message>
         <location filename="../mainwindow.ui" line="234"/>
-        <location filename="../mainwindow.cpp" line="1615"/>
+        <location filename="../mainwindow.cpp" line="1616"/>
         <source>Save Project</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3201,7 +3201,7 @@ Script.onInit(()=&gt;{
         <translation type="vanished">дї„иЇ­</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="619"/>
+        <location filename="../mainwindow.cpp" line="620"/>
         <source>All files (*)</source>
         <translation>ж‰Ђжњ‰ж–‡д»¶ (*)</translation>
     </message>
@@ -3224,8 +3224,8 @@ Script.onInit(()=&gt;{
         <translation type="obsolete">ж•°жЌ®</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="618"/>
-        <location filename="../mainwindow.cpp" line="653"/>
+        <location filename="../mainwindow.cpp" line="619"/>
+        <location filename="../mainwindow.cpp" line="654"/>
         <source>Project files (*.msimprj)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3236,22 +3236,22 @@ Script.onInit(()=&gt;{
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="236"/>
-        <location filename="../mainwindow.cpp" line="1702"/>
+        <location filename="../mainwindow.cpp" line="1703"/>
         <source>Clear List</source>
         <translation>清空列表</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1132"/>
+        <location filename="../mainwindow.cpp" line="1133"/>
         <source>JavaScript files (*.js);;All files (*)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1690"/>
+        <location filename="../mainwindow.cpp" line="1691"/>
         <source>No Recent Projects</source>
         <translation>没有最近项目</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1616"/>
+        <location filename="../mainwindow.cpp" line="1617"/>
         <source>Save project before closing?</source>
         <translation>关闭前保存项目吗？</translation>
     </message>

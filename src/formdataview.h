@@ -472,6 +472,7 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, FormDataView* frm)
             }
             else if (xml.name() == QLatin1String("DataViewDefinitions")) {
                 xml >> dd;
+                xml.skipCurrentElement();
                 frm->setDisplayDefinition(dd);
             }
             else if (xml.name() == QLatin1String("ModbusSimulationMap")) {
