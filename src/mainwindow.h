@@ -152,7 +152,6 @@ private:
     void saveAppSettings();
     bool loadSessionProject();
     bool saveSessionProject();
-    bool loadLegacySessionFromIni();
     bool confirmSaveOnClose();
     bool hasProjectContext() const;
     void addRecentProject(const QString& filePath);

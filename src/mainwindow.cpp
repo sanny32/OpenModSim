@@ -337,7 +337,7 @@ MainWindow::MainWindow(const QString& profile, bool useSession, QWidget *parent)
     if(_sessionProjectPath.isEmpty())
         _sessionProjectPath = createSessionProjectFilePath();
     if(_useSession) {
-        if(!loadSessionProject() && !loadLegacySessionFromIni())
+        if(!loadSessionProject())
             ui->actionNew->trigger();
     }
 }
@@ -1510,109 +1510,6 @@ bool MainWindow::saveSessionProject()
     return true;
 }
 
-bool MainWindow::loadLegacySessionFromIni()
-{
-    if(!_useSession || !QFile::exists(_profile))
-        return false;
-
-    QSettings m(_profile, QSettings::IniFormat, this);
-    const QStringList groups = m.childGroups();
-    bool hasLegacy = false;
-    for(const auto& group : groups) {
-        if(group.startsWith("Form_")) {
-            hasLegacy = true;
-            break;
-        }
-    }
-    hasLegacy = hasLegacy || m.contains("ViewMode") || m.contains("SplitView") ||
-                m.contains("ActiveWindow") || m.contains("ActivePrimaryWindow") ||
-                m.contains("ActiveSecondaryWindow");
-    if(!hasLegacy)
-        return false;
-
-    const auto viewMode = static_cast<QMdiArea::ViewMode>(
-        qBound(0, m.value("ViewMode", QMdiArea::TabbedView).toInt(), 1));
-    setViewMode(viewMode);
-    const bool splitView = m.value("SplitView", false).toBool();
-    if(ui->mdiArea->viewMode() == QMdiArea::TabbedView && ui->mdiArea->isSplitView() != splitView)
-        ui->mdiArea->setSplitViewEnabled(splitView);
-
-    ModbusDefinitions defs;
-    m >> defs;
-    _mbMultiServer.setModbusDefinitions(defs);
-
-    m >> qobject_cast<MenuConnect*>(ui->actionConnect->menu());
-
-    for (const QString& g : groups) {
-        if (!g.startsWith("Form_"))
-            continue;
-
-        m.beginGroup(g);
-        const int id = _project->windowCounter() + 1;
-        _project->setWindowCounter(qMax(_project->windowCounter(), id));
-        const auto kind = static_cast<ProjectFormKind>(
-            m.value("FormKind", static_cast<int>(ProjectFormKind::Data)).toInt());
-        MdiArea* targetArea = ui->mdiArea->primaryArea();
-        const auto panel = m.value("SplitPanel", "L").toString();
-        if(splitView && panel.compare("R", Qt::CaseInsensitive) == 0)
-            if(auto secondary = _project->splitSecondaryArea())
-                targetArea = secondary;
-
-        switch (kind) {
-            case ProjectFormKind::Data:
-                if (auto* frm = _project->createDataMdiChildOnArea(id, targetArea, true)) {
-                    frm->loadSettings(m);
-                    frm->show();
-                }
-                break;
-            case ProjectFormKind::Traffic:
-                if (auto* frm = _project->createTrafficMdiChildOnArea(id, targetArea, true)) {
-                    frm->loadSettings(m);
-                    frm->show();
-                }
-                break;
-            case ProjectFormKind::Script:
-                if (auto* frm = _project->createScriptMdiChildOnArea(id, targetArea, true)) {
-                    frm->loadSettings(m);
-                    frm->show();
-                }
-                break;
-        }
-        m.endGroup();
-    }
-
-    if(splitView)
-    {
-        const auto activeSecWin = m.value("ActiveSecondaryWindow").toString();
-        if(!activeSecWin.isEmpty())
-            if(auto secondary = _project->splitSecondaryArea())
-                for(auto&& wnd : secondary->localSubWindowList())
-                    if(wnd && wnd->widget() && wnd->widget()->windowTitle() == activeSecWin)
-                    {
-                        secondary->setActiveSubWindow(wnd);
-                        break;
-                    }
-    }
-
-    const auto activePrimaryTitle = m.value("ActivePrimaryWindow", m.value("ActiveWindow")).toString();
-    if(!activePrimaryTitle.isEmpty()) {
-        const auto primaryList = ui->mdiArea->primaryArea()
-            ? ui->mdiArea->primaryArea()->localSubWindowList()
-            : ui->mdiArea->localSubWindowList();
-        for(auto&& wnd : primaryList)
-        {
-            auto* frm = wnd ? wnd->widget() : nullptr;
-            if(frm && frm->windowTitle() == activePrimaryTitle) {
-                ui->mdiArea->setActiveSubWindow(wnd);
-                break;
-            }
-        }
-    }
-
-    saveSessionProject();
-    _isModified = false;
-    return true;
-}
 
 bool MainWindow::confirmSaveOnClose()
 {
