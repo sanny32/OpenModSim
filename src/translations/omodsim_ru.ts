@@ -4104,30 +4104,30 @@ Script.onInit(()=&gt;{
 <context>
     <name>ProjectTreeWidget</name>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="50"/>
-        <location filename="../controls/projecttreewidget.cpp" line="247"/>
+        <location filename="../controls/projecttreewidget.cpp" line="52"/>
+        <location filename="../controls/projecttreewidget.cpp" line="252"/>
         <source>Data</source>
         <translation type="unfinished">Р”Р°РЅРЅС‹Рµ</translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="53"/>
-        <location filename="../controls/projecttreewidget.cpp" line="248"/>
+        <location filename="../controls/projecttreewidget.cpp" line="56"/>
+        <location filename="../controls/projecttreewidget.cpp" line="253"/>
         <source>Traffic</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="56"/>
-        <location filename="../controls/projecttreewidget.cpp" line="249"/>
+        <location filename="../controls/projecttreewidget.cpp" line="60"/>
+        <location filename="../controls/projecttreewidget.cpp" line="254"/>
         <source>Script</source>
         <translation type="unfinished">РЎРєСЂРёРїС‚</translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="286"/>
+        <location filename="../controls/projecttreewidget.cpp" line="291"/>
         <source>Delete</source>
         <translation>РЈРґР°Р»РёС‚СЊ</translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="291"/>
+        <location filename="../controls/projecttreewidget.cpp" line="296"/>
         <source>Delete Form</source>
         <translation>РЈРґР°Р»РёС‚СЊ С„РѕСЂРјСѓ</translation>
     </message>
@@ -4136,7 +4136,7 @@ Script.onInit(()=&gt;{
         <translation type="vanished">РЈРґР°Р»РёС‚СЊ СЃРєСЂРёРїС‚</translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="292"/>
+        <location filename="../controls/projecttreewidget.cpp" line="297"/>
         <source>Delete &quot;%1&quot; from the project?</source>
         <translation>РЈРґР°Р»РёС‚СЊ &quot;%1&quot; РёР· РїСЂРѕРµРєС‚Р°?</translation>
     </message>

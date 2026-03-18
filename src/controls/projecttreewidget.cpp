@@ -47,13 +47,18 @@ ProjectTreeWidget::ProjectTreeWidget(QWidget* parent)
     setContextMenuPolicy(Qt::CustomContextMenu);
     setEditTriggers(QAbstractItemView::EditKeyPressed | QAbstractItemView::SelectedClicked);
 
+    const QIcon iconDir(":/res/icon-directory.png");
+
     _dataRoot = new QTreeWidgetItem(this, QStringList{tr("Data")});
+    _dataRoot->setIcon(0, iconDir);
     _dataRoot->setExpanded(true);
 
     _trafficRoot = new QTreeWidgetItem(this, QStringList{tr("Traffic")});
+    _trafficRoot->setIcon(0, iconDir);
     _trafficRoot->setExpanded(true);
 
     _scriptRoot = new QTreeWidgetItem(this, QStringList{tr("Script")});
+    _scriptRoot->setIcon(0, iconDir);
     _scriptRoot->setExpanded(true);
 
     connect(this, &QTreeWidget::itemActivated,

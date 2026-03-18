@@ -88,5 +88,6 @@
         <file>res/actionNewScript.png</file>
         <file>res/icon-hex.svg</file>
         <file alias="res/icon-new-form.svg">icon-new-form.svg</file>
+        <file>res/icon-directory.png</file>
     </qresource>
 </RCC>

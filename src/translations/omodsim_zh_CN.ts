@@ -4070,35 +4070,35 @@ Script.onInit(()=&gt;{
 <context>
     <name>ProjectTreeWidget</name>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="50"/>
-        <location filename="../controls/projecttreewidget.cpp" line="247"/>
+        <location filename="../controls/projecttreewidget.cpp" line="52"/>
+        <location filename="../controls/projecttreewidget.cpp" line="252"/>
         <source>Data</source>
         <translation type="unfinished">ж•°жЌ®</translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="53"/>
-        <location filename="../controls/projecttreewidget.cpp" line="248"/>
+        <location filename="../controls/projecttreewidget.cpp" line="56"/>
+        <location filename="../controls/projecttreewidget.cpp" line="253"/>
         <source>Traffic</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="56"/>
-        <location filename="../controls/projecttreewidget.cpp" line="249"/>
+        <location filename="../controls/projecttreewidget.cpp" line="60"/>
+        <location filename="../controls/projecttreewidget.cpp" line="254"/>
         <source>Script</source>
         <translation type="unfinished">и„љжњ¬</translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="286"/>
+        <location filename="../controls/projecttreewidget.cpp" line="291"/>
         <source>Delete</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="291"/>
+        <location filename="../controls/projecttreewidget.cpp" line="296"/>
         <source>Delete Form</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="292"/>
+        <location filename="../controls/projecttreewidget.cpp" line="297"/>
         <source>Delete &quot;%1&quot; from the project?</source>
         <translation type="unfinished"></translation>
     </message>
