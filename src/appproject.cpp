@@ -751,6 +751,12 @@ QWidget* AppProject::createCloneOnArea(QWidget* source, MdiArea* area)
         }
     }
 
+    if(auto* srcData = qobject_cast<FormDataView*>(source)) {
+        if(auto* cloneData = qobject_cast<FormDataView*>(clone)) {
+            cloneData->linkTo(srcData);
+        }
+    }
+
     clone->show();
     if(auto* cloneWnd = qobject_cast<QMdiSubWindow*>(clone->parentWidget()))
         if(area->viewMode() == QMdiArea::TabbedView)

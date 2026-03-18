@@ -88,6 +88,8 @@ public:
     AddressColorMap colorMap() const;
     void setColor(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr, const QColor& clr);
 
+    void linkTo(FormDataView* other);
+
     void saveSettings(QSettings& out) const;
     void loadSettings(QSettings& in);
     void saveXml(QXmlStreamWriter& xml) const;
@@ -111,6 +113,8 @@ signals:
     void codepageChanged(const QString&);
     void definitionChanged();
     void pointTypeChanged(QModbusDataUnit::RegisterType);
+    void dataDisplayModeChanged(DataDisplayMode);
+    void displayHexAddressesChanged(bool);
 
 private slots:
     void on_awake();
@@ -131,6 +135,7 @@ private slots:
 private:
     void updateStatus();
     void onDefinitionChanged();
+    void setDisplayDefinitionSilent(const DataViewDefinitions& dd);
 
     void setupDisplayBar();
     void updateDisplayBar();

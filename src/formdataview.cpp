@@ -279,11 +279,13 @@ bool FormDataView::displayHexAddresses() const
 ///
 void FormDataView::setDisplayHexAddresses(bool on)
 {
+    if(displayHexAddresses() == on) return;
     ui->outputWidget->setDisplayHexAddresses(on);
 
     const auto defs = _mbMultiServer.getModbusDefinitions();
     ui->lineEditAddress->setInputMode(on ? NumericLineEdit::HexMode : NumericLineEdit::Int32Mode);
     ui->lineEditAddress->setInputRange(ModbusLimits::addressRange(defs.AddrSpace, ui->comboBoxAddressBase->currentAddressBase() == AddressBase::Base0));
+    emit displayHexAddressesChanged(on);
 }
 
 ///
@@ -292,6 +294,7 @@ void FormDataView::setDisplayHexAddresses(bool on)
 ///
 void FormDataView::setDataDisplayMode(DataDisplayMode mode)
 {
+    const auto prev = dataDisplayMode();
     const auto dd = displayDefinition();
     switch(dd.PointType) {
         case QModbusDataUnit::Coils:
@@ -305,6 +308,8 @@ void FormDataView::setDataDisplayMode(DataDisplayMode mode)
         default: break;
     }
     updateDisplayBar();
+    if(dataDisplayMode() != prev)
+        emit dataDisplayModeChanged(dataDisplayMode());
 }
 
 ///
@@ -322,6 +327,7 @@ ByteOrder FormDataView::byteOrder() const
 ///
 void FormDataView::setByteOrder(ByteOrder order)
 {
+    if(byteOrder() == order) return;
     ui->outputWidget->setByteOrder(order);
     emit byteOrderChanged(order);
     updateDisplayBar();
@@ -342,6 +348,7 @@ QString FormDataView::codepage() const
 ///
 void FormDataView::setCodepage(const QString& name)
 {
+    if(codepage() == name) return;
     ui->outputWidget->setCodepage(name);
     emit codepageChanged(name);
     if (_ansiMenu) _ansiMenu->selectCodepage(name);
@@ -613,6 +620,86 @@ AddressColorMap FormDataView::colorMap() const
 void FormDataView::setColor(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr, const QColor& clr)
 {
     ui->outputWidget->setColor(deviceId, type, addr, clr);
+}
+
+///
+/// \brief FormDataView::setDisplayDefinitionSilent
+/// Updates all definition controls and server registration without emitting definitionChanged.
+/// Used for peer sync to prevent signal loops.
+///
+void FormDataView::setDisplayDefinitionSilent(const DataViewDefinitions& dd)
+{
+    if(!dd.FormName.isEmpty())
+        setWindowTitle(dd.FormName);
+
+    const auto defs = _mbMultiServer.getModbusDefinitions();
+
+    // Handle device ID change (reference counting in server).
+    {
+        QSignalBlocker b(ui->lineEditDeviceId);
+        const auto oldId = ui->lineEditDeviceId->value<quint8>();
+        const auto newId = static_cast<quint8>(dd.DeviceId);
+        if(oldId != newId) {
+            _mbMultiServer.removeDeviceId(oldId);
+            _mbMultiServer.addDeviceId(newId);
+        }
+        ui->lineEditDeviceId->setLeadingZeroes(dd.LeadingZeros);
+        ui->lineEditDeviceId->setValue(dd.DeviceId);
+        ui->lineEditDeviceId->setHexView(dd.HexViewDeviceId);
+    }
+
+    {
+        QSignalBlocker b(ui->comboBoxAddressBase);
+        ui->comboBoxAddressBase->setCurrentAddressBase(dd.ZeroBasedAddress ? AddressBase::Base0 : AddressBase::Base1);
+    }
+    {
+        QSignalBlocker b(ui->lineEditAddress);
+        ui->lineEditAddress->setLeadingZeroes(dd.LeadingZeros);
+        ui->lineEditAddress->setInputRange(ModbusLimits::addressRange(defs.AddrSpace, dd.ZeroBasedAddress));
+        ui->lineEditAddress->setValue(dd.PointAddress);
+        ui->lineEditAddress->setHexView(dd.HexViewAddress);
+    }
+    {
+        QSignalBlocker b(ui->lineEditLength);
+        ui->lineEditLength->setLeadingZeroes(dd.LeadingZeros);
+        ui->lineEditLength->setInputRange(ModbusLimits::lengthRange(dd.PointAddress, dd.ZeroBasedAddress, defs.AddrSpace));
+        ui->lineEditLength->setValue(dd.Length);
+        ui->lineEditLength->setHexView(dd.HexViewLength);
+    }
+    {
+        QSignalBlocker b(ui->comboBoxModbusPointType);
+        ui->comboBoxModbusPointType->setCurrentPointType(dd.PointType);
+    }
+
+    ui->outputWidget->setDataViewColumnsDistance(dd.DataViewColumnsDistance);
+    setDisplayHexAddresses(dd.HexAddress);
+
+    // Re-register unit map and refresh output widget.
+    onDefinitionChanged();
+    updateDisplayBar();
+}
+
+///
+/// \brief FormDataView::linkTo
+/// Bidirectionally syncs display definition, display mode, byte order, and codepage with \a other.
+///
+void FormDataView::linkTo(FormDataView* other)
+{
+    if(!other) return;
+    connect(this, &FormDataView::definitionChanged, other, [this, other]() {
+        other->setDisplayDefinitionSilent(displayDefinition());
+    });
+    connect(other, &FormDataView::definitionChanged, this, [this, other]() {
+        setDisplayDefinitionSilent(other->displayDefinition());
+    });
+    connect(this,  &FormDataView::byteOrderChanged, other, &FormDataView::setByteOrder);
+    connect(other, &FormDataView::byteOrderChanged, this,  &FormDataView::setByteOrder);
+    connect(this,  &FormDataView::codepageChanged, other, &FormDataView::setCodepage);
+    connect(other, &FormDataView::codepageChanged, this,  &FormDataView::setCodepage);
+    connect(this,  &FormDataView::dataDisplayModeChanged, other, &FormDataView::setDataDisplayMode);
+    connect(other, &FormDataView::dataDisplayModeChanged, this,  &FormDataView::setDataDisplayMode);
+    connect(this,  &FormDataView::displayHexAddressesChanged, other, &FormDataView::setDisplayHexAddresses);
+    connect(other, &FormDataView::displayHexAddressesChanged, this,  &FormDataView::setDisplayHexAddresses);
 }
 
 ///
