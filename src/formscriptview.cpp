@@ -113,6 +113,8 @@ ScriptSettings FormScriptView::scriptSettings() const
 
 void FormScriptView::setScriptSettings(const ScriptSettings& ss)
 {
+    if(_scriptSettings == ss)
+        return;
     _scriptSettings = ss;
     if (_scriptRunModeCombo)
         _scriptRunModeCombo->setCurrentRunMode(ss.Mode);
@@ -146,7 +148,14 @@ QTextDocument* FormScriptView::scriptDocument() const
 
 void FormScriptView::setScriptDocument(QTextDocument* document)
 {
+    auto* oldDoc = ui->scriptControl->scriptDocument();
+    if(oldDoc == document)
+        return;
+    if(oldDoc)
+        disconnect(oldDoc, &QTextDocument::contentsChanged, this, &FormScriptView::updateScriptBar);
     ui->scriptControl->setScriptDocument(document);
+    if(document)
+        connect(document, &QTextDocument::contentsChanged, this, &FormScriptView::updateScriptBar);
 }
 
 int FormScriptView::scriptCursorPosition() const
@@ -319,15 +328,23 @@ void FormScriptView::setupScriptBar()
         ui->toolBarScript->addSeparator();
 
     connect(_scriptRunModeCombo, &RunModeComboBox::runModeChanged, this, [this](RunMode mode) {
+        if(_scriptSettings.Mode == mode) return;
         _scriptSettings.Mode = mode;
+        emit scriptSettingsChanged(_scriptSettings);
     });
 
     connect(_scriptIntervalSpin, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged), this, [this](int value) {
-        _scriptSettings.Interval = static_cast<uint>(value);
+        const auto v = static_cast<uint>(value);
+        if(_scriptSettings.Interval == v) return;
+        _scriptSettings.Interval = v;
+        emit scriptSettingsChanged(_scriptSettings);
     });
 
     connect(_scriptRunOnStartupCheck, &QCheckBox::stateChanged, this, [this](int state) {
-        _scriptSettings.RunOnStartup = (state == Qt::Checked);
+        const bool checked = (state == Qt::Checked);
+        if(_scriptSettings.RunOnStartup == checked) return;
+        _scriptSettings.RunOnStartup = checked;
+        emit scriptSettingsChanged(_scriptSettings);
     });
 
     if (auto* runButton = qobject_cast<QToolButton*>(ui->toolBarScript->widgetForAction(ui->actionRunScript)))

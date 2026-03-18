@@ -1008,6 +1008,23 @@ int AppProject::duplicatePrimaryTabsToSecondary()
         clone->setProperty(kSplitOriginIdProperty, originId);
         clone->setProperty(kSplitAutoCloneProperty, true);
         clone->setProperty(kSplitScriptRunning, source->property(kSplitScriptRunning));
+
+        // For script views: share one document and keep ScriptViewDefinitions in sync.
+        if(auto* srcScript = qobject_cast<FormScriptView*>(source)) {
+            if(auto* cloneScript = qobject_cast<FormScriptView*>(clone)) {
+                cloneScript->setScriptDocument(srcScript->scriptDocument());
+                cloneScript->setScriptSettings(srcScript->scriptSettings());
+                connect(srcScript,   &FormScriptView::scriptSettingsChanged,
+                        cloneScript, &FormScriptView::setScriptSettings);
+                connect(cloneScript, &FormScriptView::scriptSettingsChanged,
+                        srcScript,   &FormScriptView::setScriptSettings);
+                connect(srcScript, &QWidget::windowTitleChanged, cloneScript, [cloneScript](const QString& title) {
+                    if(cloneScript->windowTitle() != title)
+                        cloneScript->setFormName(title);
+                });
+            }
+        }
+
         clone->show();
         if(auto* cloneWnd = qobject_cast<QMdiSubWindow*>(clone->parentWidget()))
             normalizeTabbedState(cloneWnd, secondary);

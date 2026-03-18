@@ -19,6 +19,12 @@ struct ScriptSettings
         Mode = qBound(RunMode::Once, Mode, RunMode::Periodically);
         Interval = qBound(500U, Interval, 10000U);
     }
+
+    bool operator==(const ScriptSettings& o) const
+    {
+        return Mode == o.Mode && Interval == o.Interval && RunOnStartup == o.RunOnStartup;
+    }
+    bool operator!=(const ScriptSettings& o) const { return !(*this == o); }
 };
 Q_DECLARE_METATYPE(ScriptSettings)
 
