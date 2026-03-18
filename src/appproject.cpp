@@ -1,6 +1,7 @@
 #include <QtWidgets>
 #include <QBuffer>
 #include <QSet>
+#include <QTextDocument>
 #include "apppreferences.h"
 #include "appproject.h"
 #include "mainwindow.h"
@@ -482,6 +483,15 @@ void AppProject::setupMdiChild(QWidget* frm, QMdiSubWindow* wnd, bool addToWindo
     connect(wnd, &QObject::destroyed, _mdiArea, [this]() {
         resetSplitViewIfEmpty();
     });
+
+    if (auto* data = qobject_cast<FormDataView*>(frm)) {
+        connect(data, &FormDataView::definitionChanged, _mainWindow, &MainWindow::markModified);
+    } else if (auto* traffic = qobject_cast<FormTrafficView*>(frm)) {
+        connect(traffic, &FormTrafficView::definitionChanged, _mainWindow, &MainWindow::markModified);
+    } else if (auto* script = qobject_cast<FormScriptView*>(frm)) {
+        connect(script, &FormScriptView::scriptSettingsChanged, _mainWindow, [this](const ScriptSettings&) { _mainWindow->markModified(); });
+        connect(script->scriptDocument(), &QTextDocument::contentsChanged, _mainWindow, &MainWindow::markModified);
+    }
 
     if(addToWindowList) {
         bool okKind = false;

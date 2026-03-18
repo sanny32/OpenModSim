@@ -68,6 +68,7 @@ FormTrafficView::FormTrafficView(int id, ModbusMultiServer& server, MainWindow* 
             _displayDefinition.UnitFilter = static_cast<quint8>(_unitIdFilter->value());
         _requestCount = 0;
         _responseCount = 0;
+        emit definitionChanged();
     });
 
     _labelFuncCode = new QLabel(ui->toolBarTraffic);
@@ -94,6 +95,7 @@ FormTrafficView::FormTrafficView(int id, ModbusMultiServer& server, MainWindow* 
             _displayDefinition.FunctionCodeFilter = static_cast<qint16>(_funcCodeFilter->currentData().toInt());
         _requestCount = 0;
         _responseCount = 0;
+        emit definitionChanged();
     });
 
     _labelRowLimit = new QLabel(ui->toolBarTraffic);
@@ -116,6 +118,7 @@ FormTrafficView::FormTrafficView(int id, ModbusMultiServer& server, MainWindow* 
             return;
         ui->outputWidget->setLogViewLimit(limit);
         _displayDefinition.LogViewLimit = static_cast<quint16>(limit);
+        emit definitionChanged();
     });
 
     _trafficFilterStretch = new QWidget(ui->toolBarTraffic);

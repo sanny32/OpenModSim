@@ -307,6 +307,7 @@ MainWindow::MainWindow(const QString& profile, bool useSession, QWidget *parent)
             return;
         _project->deleteForm(ref.widget);
     });
+    connect(_projectTree, &ProjectTreeWidget::formRenamed, this, [this](ProjectFormRef) { markModified(); });
     _globalConsole = new ConsoleOutput(this);
     _consoleDockWidget = new QDockWidget(tr("Output"), this);
     _consoleDockWidget->setObjectName("consoleDockWidget");
@@ -392,7 +393,7 @@ void MainWindow::changeEvent(QEvent* event)
 ///
 void MainWindow::closeEvent(QCloseEvent *event)
 {
-    if(hasProjectContext()) {
+    if(_isModified) {
         if(!confirmSaveOnClose()) {
             event->ignore();
             return;
@@ -426,6 +427,7 @@ bool MainWindow::eventFilter(QObject* obj, QEvent* e)
                 if (frm && !frm->property(kSplitAutoCloneProperty).toBool()) {
                     // Primary form: reparent before subwindow is destroyed so frm survives
                     _project->markFormClosed(frm);
+                    markModified();
                 }
             }
         break;
@@ -531,6 +533,8 @@ void MainWindow::createNewForm(ProjectFormKind kind)
     auto* frm = _project->createMdiChild(_project->windowCounter(), kind);
     if(!frm)
         return;
+
+    markModified();
 
     const auto& prefs = AppPreferences::instance();
 
@@ -662,6 +666,7 @@ void MainWindow::on_actionCloseProject_triggered()
 {
     _project->closeProject();
     _projectFilePath.clear();
+    _isModified = false;
     updateProjectWindowTitle();
     if(_useSession)
         saveSessionProject();
@@ -1161,6 +1166,11 @@ void MainWindow::windowActivate(QMdiSubWindow* wnd)
     if(wnd) ui->mdiArea->setActiveSubWindow(wnd);
 }
 
+void MainWindow::markModified()
+{
+    _isModified = true;
+}
+
 QWidget* MainWindow::currentForm() const
 {
     return _project->currentMdiChild();
@@ -1273,6 +1283,7 @@ void MainWindow::loadProject(const QString& filename)
     _projectFilePath = QFileInfo(filename).absoluteFilePath();
     _project->setSavePath(QFileInfo(filename).absoluteDir().absolutePath());
     updateProjectWindowTitle();
+    _isModified = false;
 }
 
 ///
@@ -1285,6 +1296,7 @@ void MainWindow::saveProject(const QString& filename)
     _projectFilePath = QFileInfo(filename).absoluteFilePath();
     _project->setSavePath(QFileInfo(filename).absoluteDir().absolutePath());
     updateProjectWindowTitle();
+    _isModified = false;
 }
 
 ///
@@ -1473,6 +1485,7 @@ bool MainWindow::loadSessionProject()
     _project->loadProject(_sessionProjectPath);
     _projectFilePath.clear();
     updateProjectWindowTitle();
+    _isModified = false;
     return true;
 }
 
@@ -1589,6 +1602,7 @@ bool MainWindow::loadLegacySessionFromIni()
     }
 
     saveSessionProject();
+    _isModified = false;
     return true;
 }
 

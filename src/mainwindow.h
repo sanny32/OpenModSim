@@ -71,6 +71,7 @@ protected:
 public slots:
     void windowActivate(QMdiSubWindow* wnd);
     void updateHelpWidgetState();
+    void markModified();
 private slots:
     void on_awake();
 
@@ -184,6 +185,7 @@ private:
     ProjectFormKind _newFormKind = ProjectFormKind::Data;
     QStringList _recentProjects;
     QString _sessionProjectPath;
+    bool _isModified = false;
     QMenu* _openRecentMenu = nullptr;
     QAction* _clearRecentAction = nullptr;
 

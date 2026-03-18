@@ -76,6 +76,7 @@ public slots:
 signals:
     void showed();
     void closing();
+    void definitionChanged();
 
 private slots:
     void on_mbConnected(const ConnectionDetails& cd);
