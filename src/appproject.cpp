@@ -468,11 +468,13 @@ void AppProject::setupMdiChild(QWidget* frm, QMdiSubWindow* wnd, bool addToWindo
     auto onScriptRunning = [this, frm]()
     {
         frm->setProperty(kSplitScriptRunning, true);
+        _projectTree->setFormScriptRunning(frm, true);
         updateSplitPairScriptIcons(frm);
     };
     auto onScriptStopped = [this, frm]()
     {
         frm->setProperty(kSplitScriptRunning, false);
+        _projectTree->setFormScriptRunning(frm, false);
         updateSplitPairScriptIcons(frm);
     };
     if (auto* script = qobject_cast<FormScriptView*>(frm)) {

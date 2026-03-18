@@ -240,8 +240,8 @@ bool FormScriptView::canPaste() const
 
 void FormScriptView::runScript()
 {
-    emit scriptRunning();
     ui->scriptControl->runScript(_scriptSettings.Mode, _scriptSettings.Interval);
+    emit scriptRunning();
 }
 
 void FormScriptView::stopScript()
