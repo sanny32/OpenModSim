@@ -194,7 +194,7 @@
   <action name="actionNew">
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/res/actionNew.png</normaloff>:/res/actionNew.png</iconset>
+     <normaloff>:/res/actionNewData.png</normaloff>:/res/actionNewData.png</iconset>
    </property>
    <property name="text">
     <string>New</string>
@@ -522,7 +522,7 @@
   <action name="actionNewDataView">
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/res/actionShowData.png</normaloff>:/res/actionShowData.png</iconset>
+     <normaloff>:/res/actionNewData.png</normaloff>:/res/actionNewData.png</iconset>
    </property>
    <property name="text">
     <string>New Data View</string>
@@ -531,7 +531,7 @@
   <action name="actionNewTrafficView">
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/res/actionShowTraffic.png</normaloff>:/res/actionShowTraffic.png</iconset>
+     <normaloff>:/res/actionNewTraffic.png</normaloff>:/res/actionNewTraffic.png</iconset>
    </property>
    <property name="text">
     <string>New Traffic View</string>
@@ -540,7 +540,7 @@
   <action name="actionNewScript">
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/res/actionShowScript.png</normaloff>:/res/actionShowScript.png</iconset>
+     <normaloff>:/res/actionNewScript.png</normaloff>:/res/actionNewScript.png</iconset>
    </property>
    <property name="text">
     <string>New Script</string>

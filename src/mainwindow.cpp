@@ -510,6 +510,7 @@ void MainWindow::on_actionNew_triggered()
 void MainWindow::on_actionNewDataView_triggered()
 {
     _newFormKind = ProjectFormKind::Data;
+    ui->actionNew->setIcon(ui->actionNewDataView->icon());
     createNewForm(_newFormKind);
 }
 
@@ -519,6 +520,7 @@ void MainWindow::on_actionNewDataView_triggered()
 void MainWindow::on_actionNewTrafficView_triggered()
 {
     _newFormKind = ProjectFormKind::Traffic;
+    ui->actionNew->setIcon(ui->actionNewTrafficView->icon());
     createNewForm(_newFormKind);
 }
 
@@ -1107,6 +1109,7 @@ void MainWindow::on_actionAbout_triggered()
 void MainWindow::on_actionNewScript_triggered()
 {
     _newFormKind = ProjectFormKind::Script;
+    ui->actionNew->setIcon(ui->actionNewScript->icon());
     createNewForm(_newFormKind);
 }
 
@@ -1434,6 +1437,11 @@ bool MainWindow::loadAppSettings(const QString& filename)
     AppPreferences::instance().load(m);
     _newFormKind = newFormKindFromSetting(
         m.value(kNewFormKindKey, newFormKindToSetting(ProjectFormKind::Data)).toInt());
+    switch(_newFormKind) {
+        case ProjectFormKind::Traffic: ui->actionNew->setIcon(ui->actionNewTrafficView->icon()); break;
+        case ProjectFormKind::Script:  ui->actionNew->setIcon(ui->actionNewScript->icon());      break;
+        default:                       ui->actionNew->setIcon(ui->actionNewDataView->icon());     break;
+    }
 
     restoreGeometry(m.value("WindowGeometry").toByteArray());
     restoreState(m.value("WindowState").toByteArray());

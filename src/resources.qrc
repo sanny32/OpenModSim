@@ -83,6 +83,9 @@
         <file>res/icon-bell.svg</file>
         <file>res/icon-bell-dot.svg</file>
         <file>res/actionSplitView.png</file>
+        <file>res/actionNewData.png</file>
+        <file>res/actionNewTraffic.png</file>
+        <file>res/actionNewScript.png</file>
         <file>res/icon-hex.svg</file>
         <file alias="res/icon-new-form.svg">icon-new-form.svg</file>
     </qresource>
