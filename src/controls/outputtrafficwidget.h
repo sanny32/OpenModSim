@@ -36,6 +36,7 @@ public:
 
     bool autoscrollLogView() const;
     void setAutosctollLogView(bool on);
+    bool exportLogToTextFile(const QString& filePath);
 
     void updateTraffic(QSharedPointer<const ModbusMessage> msg);
 

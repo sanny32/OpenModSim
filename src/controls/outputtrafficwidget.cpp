@@ -146,6 +146,16 @@ void OutputTrafficWidget::setAutosctollLogView(bool on)
 }
 
 ///
+/// \brief OutputTrafficWidget::exportLogToTextFile
+/// \param filePath
+/// \return
+///
+bool OutputTrafficWidget::exportLogToTextFile(const QString& filePath)
+{
+    return ui->logView->exportToTextFile(filePath);
+}
+
+///
 /// \brief OutputTrafficWidget::clearLogView
 ///
 void OutputTrafficWidget::clearLogView()

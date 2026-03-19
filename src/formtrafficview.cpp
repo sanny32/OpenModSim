@@ -41,8 +41,19 @@ FormTrafficView::FormTrafficView(int id, ModbusMultiServer& server, MainWindow* 
         _requestCount = 0;
         _responseCount = 0;
     });
+    connect(ui->actionExportTrafficLog, &QAction::triggered, this, [this]() {
+        const auto filename = QFileDialog::getSaveFileName(this, QString(), QString(), tr("Text files (*.txt)"));
+        if (filename.isEmpty())
+            return;
+
+        if (ui->outputWidget->exportLogToTextFile(filename))
+            QMessageBox::information(this, windowTitle(), tr("Log exported successfully to file %1").arg(filename));
+        else
+            QMessageBox::critical(this, windowTitle(), tr("Export log error!"));
+    });
     ui->toolBarTraffic->removeAction(ui->actionPauseTraffic);
     ui->toolBarTraffic->removeAction(ui->actionClearTraffic);
+    ui->toolBarTraffic->removeAction(ui->actionExportTrafficLog);
 
     const auto addToolbarSpacer = [this](int width) {
         auto* spacer = new QWidget(ui->toolBarTraffic);
@@ -127,6 +138,8 @@ FormTrafficView::FormTrafficView(int id, ModbusMultiServer& server, MainWindow* 
     ui->toolBarTraffic->addAction(ui->actionPauseTraffic);
     ui->toolBarTraffic->addSeparator();
     ui->toolBarTraffic->addAction(ui->actionClearTraffic);
+    ui->toolBarTraffic->addSeparator();
+    ui->toolBarTraffic->addAction(ui->actionExportTrafficLog);
 
     _displayDefinition.FormName = windowTitle();
     _displayDefinition.UnitFilter = 0;

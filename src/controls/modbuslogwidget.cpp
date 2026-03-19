@@ -172,6 +172,28 @@ QSharedPointer<const ModbusMessage> ModbusLogWidget::itemAt(const QModelIndex& i
 }
 
 ///
+/// \brief ModbusLogWidget::exportToTextFile
+/// \param filePath
+/// \return
+///
+bool ModbusLogWidget::exportToTextFile(const QString& filePath)
+{
+    if (!model())
+        return false;
+
+    return ((ModbusLogModel*)model())->exportToTextFile(filePath, [this](const QSharedPointer<const ModbusMessage>& msg) {
+        if (!msg)
+            return QString();
+
+        const QString direction = msg->isRequest() ? QStringLiteral("[Rx]") : QStringLiteral("[Tx]");
+        return QString("%1 %2 %3").arg(
+            msg->timestamp().toString(Qt::ISODateWithMs),
+            direction,
+            msg->toString(dataDisplayMode(), showLeadingZeros()));
+    });
+}
+
+///
 /// \brief ModbusLogWidget::dataDisplayMode
 /// \return
 ///

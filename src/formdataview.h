@@ -11,9 +11,7 @@
 #include "datasimulator.h"
 #include "modbusmultiserver.h"
 #include "displaydefinition.h"
-#include "controls/outputdatawidget.h"
-#include "consoleoutput.h"
-#include "apppreferences.h"
+#include "outputtypes.h"
 #include "ansimenu.h"
 
 ///

@@ -39,6 +39,7 @@ public:
 
     void addItem(QSharedPointer<const ModbusMessage> msg);
     QSharedPointer<const ModbusMessage> itemAt(const QModelIndex& index);
+    bool exportToTextFile(const QString& filePath);
 
     DataDisplayMode dataDisplayMode() const;
     void setDataDisplayMode(DataDisplayMode mode);

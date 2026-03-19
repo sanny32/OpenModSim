@@ -2361,42 +2361,62 @@ MODBUS Point Type:
         <translation type="obsolete">Р—Р°РјРµРЅРёС‚СЊ</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="55"/>
+        <location filename="../formtrafficview.cpp" line="45"/>
+        <source>Text files (*.txt)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../formtrafficview.cpp" line="50"/>
+        <source>Log exported successfully to file %1</source>
+        <translation type="unfinished">Р›РѕРі СѓСЃРїРµС€РЅРѕ СЌРєСЃРїРѕСЂС‚РёСЂРѕРІР°РЅ РІ С„Р°Р№Р» %1</translation>
+    </message>
+    <message>
+        <location filename="../formtrafficview.cpp" line="52"/>
+        <source>Export log error!</source>
+        <translation type="unfinished">РћС€РёР±РєР° СЌРєСЃРїРѕСЂС‚Р° Р»РѕРіР°!</translation>
+    </message>
+    <message>
+        <location filename="../formtrafficview.cpp" line="66"/>
         <source>Unit:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="62"/>
-        <location filename="../formtrafficview.cpp" line="80"/>
+        <location filename="../formtrafficview.cpp" line="73"/>
+        <location filename="../formtrafficview.cpp" line="91"/>
         <source>All</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="63"/>
+        <location filename="../formtrafficview.cpp" line="74"/>
         <source>0 = all unit ids</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="102"/>
+        <location filename="../formtrafficview.cpp" line="113"/>
         <source>Rows:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="75"/>
+        <location filename="../formtrafficview.cpp" line="86"/>
         <source>Function:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formtrafficview.ui" line="63"/>
+        <location filename="../formtrafficview.ui" line="64"/>
         <source>Clear</source>
         <translation type="unfinished">РћС‡РёСЃС‚РёС‚СЊ</translation>
+    </message>
+    <message>
+        <location filename="../formtrafficview.ui" line="73"/>
+        <source>Export</source>
+        <translation type="unfinished">Р­РєСЃРїРѕСЂС‚</translation>
     </message>
     <message>
         <source>Resume</source>
         <translation type="obsolete">Р’РѕР·РѕР±РЅРѕРІРёС‚СЊ</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.ui" line="54"/>
+        <location filename="../formtrafficview.ui" line="55"/>
         <source>Pause</source>
         <translation type="unfinished">РџР°СѓР·Р°</translation>
     </message>

@@ -32,10 +32,11 @@
       <size>
        <width>24</width>
        <height>24</height>
-      </size>
+     </size>
      </property>
      <addaction name="actionPauseTraffic"/>
      <addaction name="actionClearTraffic"/>
+     <addaction name="actionExportTrafficLog"/>
     </widget>
    </item>
    <item>
@@ -61,6 +62,15 @@
    </property>
    <property name="text">
     <string>Clear</string>
+   </property>
+  </action>
+  <action name="actionExportTrafficLog">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/res/icon-export.svg</normaloff>:/res/icon-export.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Export</string>
    </property>
   </action>
  </widget>
