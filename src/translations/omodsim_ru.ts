@@ -2402,12 +2402,12 @@ MODBUS Point Type:
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formtrafficview.ui" line="64"/>
+        <location filename="../formtrafficview.ui" line="58"/>
         <source>Clear</source>
         <translation type="unfinished">РћС‡РёСЃС‚РёС‚СЊ</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.ui" line="73"/>
+        <location filename="../formtrafficview.ui" line="67"/>
         <source>Export</source>
         <translation type="unfinished">Р­РєСЃРїРѕСЂС‚</translation>
     </message>
@@ -2416,7 +2416,7 @@ MODBUS Point Type:
         <translation type="obsolete">Р’РѕР·РѕР±РЅРѕРІРёС‚СЊ</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.ui" line="55"/>
+        <location filename="../formtrafficview.ui" line="49"/>
         <source>Pause</source>
         <translation type="unfinished">РџР°СѓР·Р°</translation>
     </message>
@@ -2957,7 +2957,7 @@ Script.onInit(()=&gt;{
     </message>
     <message>
         <location filename="../mainwindow.ui" line="232"/>
-        <location filename="../mainwindow.cpp" line="1510"/>
+        <location filename="../mainwindow.cpp" line="1534"/>
         <source>Save Project</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3158,7 +3158,7 @@ Script.onInit(()=&gt;{
     <message>
         <location filename="../mainwindow.ui" line="500"/>
         <location filename="../mainwindow.ui" line="503"/>
-        <location filename="../mainwindow.cpp" line="278"/>
+        <location filename="../mainwindow.cpp" line="290"/>
         <source>Script Help</source>
         <translation>РЎРїСЂР°РІРєР° РїРѕ СЃРєСЂРёРїС‚Р°Рј</translation>
     </message>
@@ -3240,7 +3240,7 @@ Script.onInit(()=&gt;{
         <translation type="vanished">РЁРµСЃС‚РЅР°РґС†Р°С‚РёСЂРёС‡РЅС‹Рµ Р°РґСЂРµСЃР°</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="607"/>
+        <location filename="../mainwindow.cpp" line="619"/>
         <source>All files (*)</source>
         <translation>Р’СЃРµ С„Р°Р№Р»С‹ (*)</translation>
     </message>
@@ -3249,12 +3249,12 @@ Script.onInit(()=&gt;{
         <translation type="vanished">XML С„Р°Р№Р»С‹ (*.xml)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="259"/>
+        <location filename="../mainwindow.cpp" line="271"/>
         <source>Project</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="301"/>
+        <location filename="../mainwindow.cpp" line="313"/>
         <source>Output</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3263,34 +3263,34 @@ Script.onInit(()=&gt;{
         <translation type="obsolete">Р”Р°РЅРЅС‹Рµ</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="606"/>
-        <location filename="../mainwindow.cpp" line="641"/>
+        <location filename="../mainwindow.cpp" line="618"/>
+        <location filename="../mainwindow.cpp" line="653"/>
         <source>Project files (*.msimprj)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="234"/>
+        <location filename="../mainwindow.cpp" line="246"/>
         <source>Open Recent</source>
         <translation>Открыть недавние</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="235"/>
-        <location filename="../mainwindow.cpp" line="1597"/>
+        <location filename="../mainwindow.cpp" line="247"/>
+        <location filename="../mainwindow.cpp" line="1621"/>
         <source>Clear List</source>
         <translation>Очистить список</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1111"/>
+        <location filename="../mainwindow.cpp" line="1123"/>
         <source>JavaScript files (*.js);;All files (*)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1585"/>
+        <location filename="../mainwindow.cpp" line="1609"/>
         <source>No Recent Projects</source>
         <translation>Нет недавних проектов</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1511"/>
+        <location filename="../mainwindow.cpp" line="1535"/>
         <source>Save project before closing?</source>
         <translation>Сохранить проект перед закрытием?</translation>
     </message>

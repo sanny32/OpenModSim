@@ -28,12 +28,6 @@
    </property>
    <item>
     <widget class="QToolBar" name="toolBarTraffic">
-     <property name="iconSize">
-      <size>
-       <width>24</width>
-       <height>24</height>
-     </size>
-     </property>
      <addaction name="actionPauseTraffic"/>
      <addaction name="actionClearTraffic"/>
      <addaction name="actionExportTrafficLog"/>

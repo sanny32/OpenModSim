@@ -47,6 +47,18 @@ int newFormKindToSetting(ProjectFormKind kind)
     return static_cast<int>(kind);
 }
 
+SetupPresetParams toPresetParams(const DataViewDefinitions& dd)
+{
+    return SetupPresetParams{
+        dd.DeviceId,
+        dd.PointAddress,
+        dd.Length,
+        dd.ZeroBasedAddress,
+        dd.AddrSpace,
+        dd.LeadingZeros
+    };
+}
+
 template<typename MdiAreaT, typename Fn>
 void forEachTypedForm(MdiAreaT* mdiArea, Fn&& fn)
 {
@@ -1201,25 +1213,31 @@ QWidget* MainWindow::currentDataOrTrafficForm() const
 void MainWindow::forceCoils(QModbusDataUnit::RegisterType type)
 {
     auto* frm = currentDataForm();
-    if(!frm) return;
+    auto dd = frm ? frm->displayDefinition() : AppPreferences::instance().dataViewDefinitions();
+    dd.AddrSpace = _mbMultiServer.getModbusDefinitions().AddrSpace;
 
-    const auto dd = frm->displayDefinition();
-    SetupPresetParams presetParams = { dd.DeviceId, dd.PointAddress, dd.Length, dd.ZeroBasedAddress, dd.AddrSpace, dd.LeadingZeros };
+    SetupPresetParams presetParams = toPresetParams(dd);
+    if(frm) {
+        _presetParams[type] = presetParams;
+    } else if(_presetParams.contains(type)) {
+        presetParams = _presetParams.value(type);
+    }
 
     {
         DialogSetupPresetData dlg(presetParams, type, dd, this);
         if(dlg.exec() != QDialog::Accepted) return;
     }
+    _presetParams[type] = presetParams;
 
     ModbusWriteParams params;
     params.DeviceId = presetParams.DeviceId;
     params.Address = presetParams.PointAddress;
-    params.ZeroBasedAddress = dd.ZeroBasedAddress;
-    params.AddrSpace = dd.AddrSpace;
+    params.ZeroBasedAddress = presetParams.ZeroBasedAddress;
+    params.AddrSpace = presetParams.AddrSpace;
 
     if(dd.PointType == type)
     {
-        const auto data = _mbMultiServer.data(presetParams.DeviceId, type, presetParams.PointAddress - (dd.ZeroBasedAddress ? 0 : 1), presetParams.Length);
+        const auto data = _mbMultiServer.data(presetParams.DeviceId, type, presetParams.PointAddress - (presetParams.ZeroBasedAddress ? 0 : 1), presetParams.Length);
         params.Value = QVariant::fromValue(data.values());
     }
 
@@ -1237,28 +1255,34 @@ void MainWindow::forceCoils(QModbusDataUnit::RegisterType type)
 void MainWindow::presetRegs(QModbusDataUnit::RegisterType type)
 {
     auto* frm = currentDataForm();
-    if(!frm) return;
+    auto dd = frm ? frm->displayDefinition() : AppPreferences::instance().dataViewDefinitions();
+    dd.AddrSpace = _mbMultiServer.getModbusDefinitions().AddrSpace;
 
-    const auto dd = frm->displayDefinition();
-    SetupPresetParams presetParams = { dd.DeviceId, dd.PointAddress, dd.Length, dd.ZeroBasedAddress, dd.AddrSpace, dd.LeadingZeros };
+    SetupPresetParams presetParams = toPresetParams(dd);
+    if(frm) {
+        _presetParams[type] = presetParams;
+    } else if(_presetParams.contains(type)) {
+        presetParams = _presetParams.value(type);
+    }
 
     {
         DialogSetupPresetData dlg(presetParams, type, dd, this);
         if(dlg.exec() != QDialog::Accepted) return;
     }
+    _presetParams[type] = presetParams;
 
     ModbusWriteParams params;
     params.DeviceId = presetParams.DeviceId;
     params.Address = presetParams.PointAddress;
-    params.DataMode = frm->dataDisplayMode();
-    params.Order = frm->byteOrder();
-    params.Codepage = frm->codepage();
-    params.ZeroBasedAddress = dd.ZeroBasedAddress;
-    params.AddrSpace = dd.AddrSpace;
+    params.DataMode = frm ? frm->dataDisplayMode() : DataDisplayMode::Hex;
+    params.Order = frm ? frm->byteOrder() : ByteOrder::Direct;
+    params.Codepage = frm ? frm->codepage() : QString();
+    params.ZeroBasedAddress = presetParams.ZeroBasedAddress;
+    params.AddrSpace = presetParams.AddrSpace;
 
     if(dd.PointType == type)
     {
-        const auto data = _mbMultiServer.data(presetParams.DeviceId, type, presetParams.PointAddress - (dd.ZeroBasedAddress ? 0 : 1), presetParams.Length);
+        const auto data = _mbMultiServer.data(presetParams.DeviceId, type, presetParams.PointAddress - (presetParams.ZeroBasedAddress ? 0 : 1), presetParams.Length);
         params.Value = QVariant::fromValue(data.values());
     }
 

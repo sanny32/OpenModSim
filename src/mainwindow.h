@@ -4,11 +4,13 @@
 #include <QMainWindow>
 #include <QDockWidget>
 #include <QTranslator>
+#include <QHash>
 #include "helpwidget.h"
 #include "modbusmultiserver.h"
 #include "controls/consoleoutput.h"
 #include "controls/projecttreewidget.h"
 #include "appproject.h"
+#include "dialogs/dialogsetuppresetdata.h"
 
 namespace Ui {
 class MainWindow;
@@ -187,6 +189,7 @@ private:
     bool _isModified = false;
     QMenu* _openRecentMenu = nullptr;
     QAction* _clearRecentAction = nullptr;
+    QHash<QModbusDataUnit::RegisterType, SetupPresetParams> _presetParams;
 
     AppProject* _project = nullptr;
 };

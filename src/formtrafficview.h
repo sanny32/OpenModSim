@@ -5,11 +5,8 @@
 #include <QTimer>
 #include <QXmlStreamWriter>
 #include "fontutils.h"
-#include "datasimulator.h"
 #include "modbusmultiserver.h"
 #include "displaydefinition.h"
-#include "controls/outputtrafficwidget.h"
-#include "consoleoutput.h"
 #include "apppreferences.h"
 
 ///
@@ -107,6 +104,8 @@ private:
     QSpinBox* _unitIdFilter = nullptr;
     QLabel* _labelFuncCode = nullptr;
     QComboBox* _funcCodeFilter = nullptr;
+    QLabel* _labelSource = nullptr;
+    QComboBox* _sourceFilter = nullptr;
     QLabel* _labelRowLimit = nullptr;
     QComboBox* _rowLimitCombo = nullptr;
     QWidget* _trafficFilterStretch = nullptr;

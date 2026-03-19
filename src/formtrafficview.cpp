@@ -173,8 +173,10 @@ FormTrafficView::FormTrafficView(int id, ModbusMultiServer& server, MainWindow* 
     connect(&server, &ModbusMultiServer::connected, this, &FormTrafficView::on_mbConnected);
     connect(&server, &ModbusMultiServer::disconnected, this, &FormTrafficView::on_mbDisconnected);
     connect(&server, &ModbusMultiServer::definitionsChanged, this, &FormTrafficView::on_mbDefinitionsChanged);
+
     auto dispatcher = QAbstractEventDispatcher::instance();
     connect(dispatcher, &QAbstractEventDispatcher::awake, this, &FormTrafficView::on_awake);
+
     ui->outputWidget->setup(_displayDefinition);
     on_awake();
 }
