@@ -306,8 +306,10 @@ void MdiArea::on_closeTab(int index)
 ///
 void MdiArea::on_moveTab(int from, int to)
 {
-    Q_UNUSED(from)
-    Q_UNUSED(to)
+    if(from == to)
+        return;
+
+    emit tabsReordered();
 }
 
 ///

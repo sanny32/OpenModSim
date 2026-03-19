@@ -57,6 +57,7 @@ public:
 
 signals:
     void tabBarLayoutChanged();
+    void tabsReordered();
 
 protected:
     bool eventFilter(QObject* obj, QEvent* event) override;

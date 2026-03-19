@@ -6,6 +6,7 @@
 #include "appproject.h"
 #include "mainwindow.h"
 #include "controls/mdiareaex.h"
+#include "controls/mditabbar.h"
 #include "controls/projecttreewidget.h"
 #include "formdataview.h"
 #include "formtrafficview.h"
@@ -128,6 +129,52 @@ void loadXmlOfForm(QWidget* widget, QXmlStreamReader& r)
     else if (auto* frm = qobject_cast<FormTrafficView*>(widget)) frm->loadXml(r);
     else if (auto* frm = qobject_cast<FormScriptView*>(widget)) frm->loadXml(r);
     else r.skipCurrentElement();
+}
+
+QStringList tabTitlesForArea(const MdiArea* area)
+{
+    QStringList titles;
+    if(!area)
+        return titles;
+
+    const auto* tabBar = qobject_cast<const MdiTabBar*>(area->tabBar());
+    if(!tabBar)
+        return titles;
+
+    titles.reserve(tabBar->count());
+    for(int i = 0; i < tabBar->count(); ++i) {
+        const auto* wnd = tabBar->subWindowAt(i);
+        const auto* widget = wnd ? wnd->widget() : nullptr;
+        if(widget)
+            titles << widget->windowTitle();
+    }
+    return titles;
+}
+
+void applyTabOrderToArea(MdiArea* area, const QStringList& orderedTitles)
+{
+    if(!area || orderedTitles.isEmpty())
+        return;
+
+    auto* tabBar = qobject_cast<MdiTabBar*>(area->tabBar());
+    if(!tabBar)
+        return;
+
+    for(int targetIndex = 0; targetIndex < orderedTitles.size(); ++targetIndex) {
+        const QString& wantedTitle = orderedTitles.at(targetIndex);
+        int currentIndex = -1;
+        for(int i = 0; i < tabBar->count(); ++i) {
+            auto* wnd = tabBar->subWindowAt(i);
+            auto* widget = wnd ? wnd->widget() : nullptr;
+            if(widget && widget->windowTitle() == wantedTitle) {
+                currentIndex = i;
+                break;
+            }
+        }
+
+        if(currentIndex >= 0 && currentIndex != targetIndex)
+            tabBar->moveTab(currentIndex, targetIndex);
+    }
 }
 
 }
@@ -1240,6 +1287,8 @@ void AppProject::loadProject(const QString& filename)
     bool viewPreparedForForms = false;
     QStringList secondaryForms;
     bool hasSecondaryFormsSaved = false;
+    QStringList primaryTabOrder;
+    QStringList secondaryTabOrder;
 
     QXmlStreamReader xml(&file);
     while (xml.readNextStartElement()) {
@@ -1331,6 +1380,19 @@ void AppProject::loadProject(const QString& filename)
                         xml.skipCurrentElement();
                     }
                 }
+                else if (xml.name() == QLatin1String("TabOrder")) {
+                    const auto attrs = xml.attributes();
+                    const QString panel = attrs.value("Panel").toString();
+                    QStringList* targetOrder = &primaryTabOrder;
+                    if(panel.compare(QLatin1String(kPanelRight), Qt::CaseInsensitive) == 0)
+                        targetOrder = &secondaryTabOrder;
+
+                    while(xml.readNextStartElement()) {
+                        if(xml.name() == QLatin1String("TabRef"))
+                            targetOrder->append(xml.attributes().value("title").toString());
+                        xml.skipCurrentElement();
+                    }
+                }
                 else if (xml.name() == QLatin1String("Scripts")) {
                     xml.skipCurrentElement();
                 }
@@ -1372,6 +1434,12 @@ void AppProject::loadProject(const QString& filename)
             duplicatePrimaryTabsToSecondary();
         }
     }
+
+    if(auto* primary = _mdiArea->primaryArea())
+        applyTabOrderToArea(primary, primaryTabOrder);
+    if(splitView)
+        if(auto* secondary = splitSecondaryArea())
+            applyTabOrderToArea(secondary, secondaryTabOrder);
 
     if(!activePrimaryWin.isEmpty())
         if(auto primary = _mdiArea->primaryArea())
@@ -1473,6 +1541,35 @@ void AppProject::saveProject(const QString& filename)
                 w.writeEndElement(); // FormRef
             }
             w.writeEndElement(); // SplitSecondaryForms
+        }
+    }
+
+    if(auto* primary = _mdiArea->primaryArea()) {
+        const auto primaryOrder = tabTitlesForArea(primary);
+        if(!primaryOrder.isEmpty()) {
+            w.writeStartElement("TabOrder");
+            w.writeAttribute("Panel", kPanelLeft);
+            for(const auto& title : primaryOrder) {
+                w.writeStartElement("TabRef");
+                w.writeAttribute("title", title);
+                w.writeEndElement(); // TabRef
+            }
+            w.writeEndElement(); // TabOrder
+        }
+    }
+    if(isSplitTabbedView()) {
+        if(auto* secondary = splitSecondaryArea()) {
+            const auto secondaryOrder = tabTitlesForArea(secondary);
+            if(!secondaryOrder.isEmpty()) {
+                w.writeStartElement("TabOrder");
+                w.writeAttribute("Panel", kPanelRight);
+                for(const auto& title : secondaryOrder) {
+                    w.writeStartElement("TabRef");
+                    w.writeAttribute("title", title);
+                    w.writeEndElement(); // TabRef
+                }
+                w.writeEndElement(); // TabOrder
+            }
         }
     }
 

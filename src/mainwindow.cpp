@@ -323,6 +323,7 @@ MainWindow::MainWindow(const QString& profile, bool useSession, QWidget *parent)
 
     ui->mdiArea->setActivationOrder(QMdiArea::ActivationHistoryOrder);
     connect(ui->mdiArea, &MdiAreaEx::subWindowActivated, this, &MainWindow::updateMenuWindow);
+    connect(ui->mdiArea, &MdiAreaEx::tabsReordered, this, &MainWindow::markModified);
     connect(ui->mdiArea, &MdiAreaEx::splitViewAboutToDisable, this, [this]() {
         _project->removeSplitAutoClonesFromSecondary();
     });

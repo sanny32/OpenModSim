@@ -85,6 +85,7 @@ signals:
     void subWindowActivated(QMdiSubWindow* wnd);
     void splitViewAboutToDisable();
     void splitViewToggled(bool enabled);
+    void tabsReordered();
 
 protected:
     bool eventFilter(QObject* obj, QEvent* event) override;

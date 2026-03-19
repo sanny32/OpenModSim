@@ -677,6 +677,7 @@ void MdiAreaEx::connectPanel(MdiArea* area)
 
     connect(area, &QMdiArea::subWindowActivated, this, &MdiAreaEx::on_panelSubWindowActivated, Qt::UniqueConnection);
     connect(area, &MdiArea::tabBarLayoutChanged, this, &MdiAreaEx::on_panelTabBarLayoutChanged, Qt::UniqueConnection);
+    connect(area, &MdiArea::tabsReordered, this, &MdiAreaEx::tabsReordered, Qt::UniqueConnection);
 }
 
 ///
