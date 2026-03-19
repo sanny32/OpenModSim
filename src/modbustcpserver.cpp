@@ -1,4 +1,4 @@
-#include <QUrl>
+﻿#include <QUrl>
 #include <QTimer>
 #include <QTcpSocket>
 #include <QRandomGenerator>
@@ -87,15 +87,24 @@ void ModbusTcpServer::on_newConnection()
 
     auto buffer = new QByteArray();
 
+///
+/// \brief QObject::connect
+///
     QObject::connect(socket, &QObject::destroyed, socket, [buffer]() {
         // cleanup buffer
         delete buffer;
     });
+///
+/// \brief QObject::connect
+///
     QObject::connect(socket, &QTcpSocket::disconnected, this, [socket, this]() {
         _connections.removeAll(socket);
         emit modbusClientDisconnected(socket);
         socket->deleteLater();
     });
+///
+/// \brief QObject::connect
+///
     QObject::connect(socket, &QTcpSocket::readyRead, this, [buffer, socket, this]() {
         if (!socket)
             return;

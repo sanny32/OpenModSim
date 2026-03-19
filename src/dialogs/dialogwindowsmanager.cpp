@@ -1,4 +1,4 @@
-#include <QAction>
+﻿#include <QAction>
 #include <QAbstractEventDispatcher>
 #include "dialogwindowsmanager.h"
 #include "ui_dialogwindowsmanager.h"
@@ -54,6 +54,9 @@ DialogWindowsManager::~DialogWindowsManager()
 
 ///
 /// rief DialogWindowsManager::changeEvent
+///
+///
+/// \brief DialogWindowsManager::changeEvent
 ///
 void DialogWindowsManager::changeEvent(QEvent* event)
 {

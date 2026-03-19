@@ -67,6 +67,9 @@ DialogSetupPresetData::~DialogSetupPresetData()
 ///
 /// rief DialogSetupPresetData::changeEvent
 ///
+///
+/// \brief DialogSetupPresetData::changeEvent
+///
 void DialogSetupPresetData::changeEvent(QEvent* event)
 {
     if (event->type() == QEvent::LanguageChange)

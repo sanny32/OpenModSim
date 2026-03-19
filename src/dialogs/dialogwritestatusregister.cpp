@@ -1,4 +1,4 @@
-#include "modbuslimits.h"
+﻿#include "modbuslimits.h"
 #include "modbusmultiserver.h"
 #include "datasimulator.h"
 #include "dialogcoilsimulation.h"
@@ -57,6 +57,9 @@ DialogWriteStatusRegister::~DialogWriteStatusRegister()
 
 ///
 /// rief DialogWriteStatusRegister::changeEvent
+///
+///
+/// \brief DialogWriteStatusRegister::changeEvent
 ///
 void DialogWriteStatusRegister::changeEvent(QEvent* event)
 {

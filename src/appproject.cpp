@@ -1,4 +1,4 @@
-#include <QtWidgets>
+﻿#include <QtWidgets>
 #include <QBuffer>
 #include <QSet>
 #include <QTextDocument>
@@ -158,6 +158,9 @@ AppProject::~AppProject()
 {
 }
 
+///
+/// \brief AppProject::addClosedForm
+///
 void AppProject::addClosedForm(QWidget* frm)
 {
     if(!frm)
@@ -179,6 +182,9 @@ void AppProject::addClosedForm(QWidget* frm)
     }
 }
 
+///
+/// \brief AppProject::removeClosedForm
+///
 void AppProject::removeClosedForm(QWidget* frm)
 {
     if(!frm)
@@ -197,6 +203,9 @@ void AppProject::removeClosedForm(QWidget* frm)
     }
 }
 
+///
+/// \brief AppProject::containsClosedForm
+///
 bool AppProject::containsClosedForm(QWidget* frm) const
 {
     if(!frm)
@@ -211,6 +220,9 @@ bool AppProject::containsClosedForm(QWidget* frm) const
     return false;
 }
 
+///
+/// \brief AppProject::allClosedForms
+///
 QList<QWidget*> AppProject::allClosedForms() const
 {
     QList<QWidget*> forms;
@@ -224,6 +236,9 @@ QList<QWidget*> AppProject::allClosedForms() const
     return forms;
 }
 
+///
+/// \brief AppProject::isFormClosed
+///
 bool AppProject::isFormClosed(QWidget* frm) const
 {
     return containsClosedForm(qobject_cast<QWidget*>(frm));
@@ -253,7 +268,7 @@ void AppProject::closeProject()
 
 ///
 /// \brief AppProject::markFormClosed
-/// Called when a primary form's subwindow is being closed — reparents the form so it survives.
+/// Called when a primary form's subwindow is being closed вЂ” reparents the form so it survives.
 ///
 void AppProject::markFormClosed(QWidget* frm)
 {
@@ -272,31 +287,49 @@ void AppProject::markFormClosed(QWidget* frm)
     _projectTree->setFormOpen(frm, false);
 }
 
+///
+/// \brief AppProject::createDataMdiChild
+///
 FormDataView* AppProject::createDataMdiChild(int id)
 {
     return qobject_cast<FormDataView*>(createMdiChild(id, ProjectFormKind::Data));
 }
 
+///
+/// \brief AppProject::createTrafficMdiChild
+///
 FormTrafficView* AppProject::createTrafficMdiChild(int id)
 {
     return qobject_cast<FormTrafficView*>(createMdiChild(id, ProjectFormKind::Traffic));
 }
 
+///
+/// \brief AppProject::createScriptMdiChild
+///
 FormScriptView* AppProject::createScriptMdiChild(int id)
 {
     return qobject_cast<FormScriptView*>(createMdiChild(id, ProjectFormKind::Script));
 }
 
+///
+/// \brief AppProject::createDataMdiChildOnArea
+///
 FormDataView* AppProject::createDataMdiChildOnArea(int id, MdiArea* area, bool addToWindowList)
 {
     return qobject_cast<FormDataView*>(createMdiChildOnArea(id, ProjectFormKind::Data, area, addToWindowList));
 }
 
+///
+/// \brief AppProject::createTrafficMdiChildOnArea
+///
 FormTrafficView* AppProject::createTrafficMdiChildOnArea(int id, MdiArea* area, bool addToWindowList)
 {
     return qobject_cast<FormTrafficView*>(createMdiChildOnArea(id, ProjectFormKind::Traffic, area, addToWindowList));
 }
 
+///
+/// \brief AppProject::createScriptMdiChildOnArea
+///
 FormScriptView* AppProject::createScriptMdiChildOnArea(int id, MdiArea* area, bool addToWindowList)
 {
     return qobject_cast<FormScriptView*>(createMdiChildOnArea(id, ProjectFormKind::Script, area, addToWindowList));
@@ -581,7 +614,7 @@ void AppProject::deleteForm(QWidget* frm)
     // Close the MDI subwindow if the form is currently open
     for (auto wnd : _mdiArea->subWindowList()) {
         if (wnd && wnd->widget() == frm) {
-            wnd->close(); // triggers closing signal → moves frm to _closedForms
+            wnd->close(); // triggers closing signal в†’ moves frm to _closedForms
             break;
         }
     }
@@ -613,16 +646,25 @@ QWidget* AppProject::currentMdiChild() const
     return wnd ? qobject_cast<QWidget*>(wnd->widget()) : nullptr;
 }
 
+///
+/// \brief AppProject::currentDataMdiChild
+///
 FormDataView* AppProject::currentDataMdiChild() const
 {
     return qobject_cast<FormDataView*>(currentMdiChild());
 }
 
+///
+/// \brief AppProject::currentTrafficMdiChild
+///
 FormTrafficView* AppProject::currentTrafficMdiChild() const
 {
     return qobject_cast<FormTrafficView*>(currentMdiChild());
 }
 
+///
+/// \brief AppProject::currentScriptMdiChild
+///
 FormScriptView* AppProject::currentScriptMdiChild() const
 {
     return qobject_cast<FormScriptView*>(currentMdiChild());
@@ -791,13 +833,13 @@ void AppProject::openFormOnActivePanel(QWidget* frm)
         }
     }
 
-    // Form is closed — rewrap on the active panel
+    // Form is closed вЂ” rewrap on the active panel
     if(containsClosedForm(frm)) {
         rewrapMdiChild(frm);
         return;
     }
 
-    // Form is open in the other panel — create a clone on the active panel
+    // Form is open in the other panel вЂ” create a clone on the active panel
     if(isSplitTabbedView() && panel) {
         auto* clone = createCloneOnArea(frm, panel);
         if(clone) {

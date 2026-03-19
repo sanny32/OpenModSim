@@ -201,6 +201,9 @@ void OutputTrafficWidget::updateTraffic(QSharedPointer<const ModbusMessage> msg)
     updateLogView(msg);
 }
 
+///
+/// \brief OutputTrafficWidget::showModbusMessage
+///
 void OutputTrafficWidget::showModbusMessage(const QModelIndex& index)
 {
     const auto msg = ui->logView->itemAt(index);
@@ -213,12 +216,18 @@ void OutputTrafficWidget::showModbusMessage(const QModelIndex& index)
     }
 }
 
+///
+/// \brief OutputTrafficWidget::hideModbusMessage
+///
 void OutputTrafficWidget::hideModbusMessage()
 {
     ui->splitter->setSizes({1, 0});
     ui->splitter->widget(1)->hide();
 }
 
+///
+/// \brief OutputTrafficWidget::updateLogView
+///
 void OutputTrafficWidget::updateLogView(QSharedPointer<const ModbusMessage> msg)
 {
     ui->logView->addItem(msg);

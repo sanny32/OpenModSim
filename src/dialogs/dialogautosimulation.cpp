@@ -1,4 +1,4 @@
-#include <float.h>
+﻿#include <float.h>
 #include <QPushButton>
 #include "dialogautosimulation.h"
 #include "ui_dialogautosimulation.h"
@@ -127,6 +127,9 @@ DialogAutoSimulation::~DialogAutoSimulation()
 
 ///
 /// rief DialogAutoSimulation::changeEvent
+///
+///
+/// \brief DialogAutoSimulation::changeEvent
 ///
 void DialogAutoSimulation::changeEvent(QEvent* event)
 {

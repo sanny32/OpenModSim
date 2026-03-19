@@ -1,4 +1,4 @@
-#include <QMetaEnum>
+﻿#include <QMetaEnum>
 #include <QScrollBar>
 #include "modbusmultiserver.h"
 #include "findreplacebar.h"
@@ -408,11 +408,17 @@ bool JScriptControl::executeScript()
     return true;
 }
 
+///
+/// \brief JScriptControl::cursorPosition
+///
 int JScriptControl::cursorPosition() const
 {
     return ui->codeEditor->textCursor().position();
 }
 
+///
+/// \brief JScriptControl::setCursorPosition
+///
 void JScriptControl::setCursorPosition(int pos)
 {
     auto cursor = ui->codeEditor->textCursor();
@@ -420,11 +426,17 @@ void JScriptControl::setCursorPosition(int pos)
     ui->codeEditor->setTextCursor(cursor);
 }
 
+///
+/// \brief JScriptControl::scrollPosition
+///
 int JScriptControl::scrollPosition() const
 {
     return ui->codeEditor->verticalScrollBar()->value();
 }
 
+///
+/// \brief JScriptControl::setScrollPosition
+///
 void JScriptControl::setScrollPosition(int pos)
 {
     ui->codeEditor->verticalScrollBar()->setValue(pos);

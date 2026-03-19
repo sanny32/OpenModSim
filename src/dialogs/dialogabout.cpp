@@ -1,4 +1,4 @@
-#include <QFile>
+﻿#include <QFile>
 #include <QApplication>
 #include <QPlainTextEdit>
 #include "aboutdatawidget.h"
@@ -169,6 +169,9 @@ DialogAbout::~DialogAbout()
 ///
 /// rief DialogAbout::changeEvent
 ///
+///
+/// \brief DialogAbout::changeEvent
+///
 void DialogAbout::changeEvent(QEvent* event)
 {
     if (event->type() == QEvent::LanguageChange)
@@ -231,6 +234,9 @@ void DialogAbout::adjustSize()
 /// \param version
 /// \param description
 /// \param url
+///
+///
+/// \brief DialogAbout::addComponent
 ///
 void DialogAbout::addComponent(QLayout* layout, const QString& title, const QString& version, const QString& description, const QString& url)
 {

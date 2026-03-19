@@ -71,6 +71,9 @@ DialogForceMultipleCoils::~DialogForceMultipleCoils()
 ///
 /// rief DialogForceMultipleCoils::changeEvent
 ///
+///
+/// \brief DialogForceMultipleCoils::changeEvent
+///
 void DialogForceMultipleCoils::changeEvent(QEvent* event)
 {
     if (event->type() == QEvent::LanguageChange)
@@ -231,6 +234,9 @@ void DialogForceMultipleCoils::on_pushButtonExport_clicked()
     {
         ts << formatAddress(_type, _writeParams.Address + i, _writeParams.AddrSpace, _hexAddress)
         << delim
+///
+/// \brief QString::number
+///
         << QString::number(_data[i])
         << "\n";
     }

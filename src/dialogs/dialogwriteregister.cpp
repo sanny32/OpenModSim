@@ -1,4 +1,4 @@
-#include <float.h>
+﻿#include <float.h>
 #include "modbuslimits.h"
 #include "numericutils.h"
 #include "modbusmultiserver.h"
@@ -196,6 +196,9 @@ DialogWriteRegister::~DialogWriteRegister()
 
 ///
 /// rief DialogWriteRegister::changeEvent
+///
+///
+/// \brief DialogWriteRegister::changeEvent
 ///
 void DialogWriteRegister::changeEvent(QEvent* event)
 {

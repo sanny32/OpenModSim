@@ -1,4 +1,4 @@
-#include <QPainter>
+﻿#include <QPainter>
 #include <QPalette>
 #include <QDateTime>
 #include <QHelpEngine>
@@ -536,6 +536,9 @@ ModbusSimulationMap2 FormDataView::simulationMap() const
 /// \param length
 /// \return
 ///
+///
+/// \brief FormDataView::serializeModbusDataUnit
+///
 QModbusDataUnit FormDataView::serializeModbusDataUnit(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 startAddress, quint16 length) const
 {
     QModbusDataUnit dataUnit;
@@ -969,6 +972,9 @@ void FormDataView::on_simulationStopped(DataDisplayMode mode, quint8 deviceId, Q
 /// \param type
 /// \param startAddress
 /// \param value
+///
+///
+/// \brief FormDataView::on_dataSimulated
 ///
 void FormDataView::on_dataSimulated(DataDisplayMode mode, quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 startAddress, QVariant value)
 {

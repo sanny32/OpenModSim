@@ -1,4 +1,4 @@
-#include <QCoreApplication>
+﻿#include <QCoreApplication>
 #include "server.h"
 #include "ansiutils.h"
 #include "byteorderutils.h"
@@ -52,6 +52,9 @@ Server::~Server()
     // BlockingQueuedConnection must NOT be used here: if the worker is blocked on
     // sem.acquire() waiting for the main thread to process an invokeMethod event,
     // using BlockingQueuedConnection would cause a deadlock.
+///
+/// \brief QMetaObject::invokeMethod
+///
     QMetaObject::invokeMethod(_mbMultiServer, [mbms = _mbMultiServer]()
     {
         mbms->setRequestHandler(nullptr);
@@ -584,7 +587,10 @@ void Server::onRequest(const QJSValue& func)
 
     if(!func.isCallable())
     {
-        // Post async cleanup — do NOT use BlockingQueuedConnection here (deadlock risk).
+        // Post async cleanup вЂ” do NOT use BlockingQueuedConnection here (deadlock risk).
+///
+/// \brief QMetaObject::invokeMethod
+///
         QMetaObject::invokeMethod(_mbMultiServer, [mbms = _mbMultiServer]()
         {
             mbms->setRequestHandler(nullptr);
@@ -603,7 +609,7 @@ void Server::onRequest(const QJSValue& func)
             bool handled = false;
             QSemaphore sem;
 
-            // Target QCoreApplication::instance() — never destroyed, so the queued
+            // Target QCoreApplication::instance() вЂ” never destroyed, so the queued
             // event is guaranteed to be delivered and sem.release() will always be
             // called (unlike targeting 'this' which gets cancelled on Server destruction).
             QMetaObject::invokeMethod(QCoreApplication::instance(),
@@ -621,6 +627,9 @@ void Server::onRequest(const QJSValue& func)
 
     // Post setup to worker thread via QueuedConnection to avoid deadlock
     // if onRequest() is called from within the request callback itself.
+///
+/// \brief QMetaObject::invokeMethod
+///
     QMetaObject::invokeMethod(_mbMultiServer, [mbms = _mbMultiServer, handler]()
     {
         mbms->setRequestHandler(handler);
@@ -634,6 +643,9 @@ void Server::onRequest(const QJSValue& func)
 /// \param deviceId
 /// \param response
 /// \return
+///
+///
+/// \brief Server::runJsHandler
 ///
 bool Server::runJsHandler(const JsCallStatePtr& state, const QModbusPdu& pdu, int deviceId, QModbusResponse& response)
 {

@@ -69,6 +69,8 @@ protected:
 
 public slots:
     void show();
+    void connectEditSlots();
+    void disconnectEditSlots();
 
 signals:
     void showed();

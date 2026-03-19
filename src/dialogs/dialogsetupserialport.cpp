@@ -1,4 +1,4 @@
-#include "dialogsetupserialport.h"
+﻿#include "dialogsetupserialport.h"
 #include "ui_dialogsetupserialport.h"
 
 ///
@@ -33,6 +33,9 @@ DialogSetupSerialPort::~DialogSetupSerialPort()
 
 ///
 /// rief DialogSetupSerialPort::changeEvent
+///
+///
+/// \brief DialogSetupSerialPort::changeEvent
 ///
 void DialogSetupSerialPort::changeEvent(QEvent* event)
 {

@@ -1,4 +1,4 @@
-#include <QPushButton>
+﻿#include <QPushButton>
 #include "dialogcoilsimulation.h"
 #include "ui_dialogcoilsimulation.h"
 
@@ -36,6 +36,9 @@ DialogCoilSimulation::~DialogCoilSimulation()
 
 ///
 /// rief DialogCoilSimulation::changeEvent
+///
+///
+/// \brief DialogCoilSimulation::changeEvent
 ///
 void DialogCoilSimulation::changeEvent(QEvent* event)
 {

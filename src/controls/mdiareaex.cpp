@@ -1005,12 +1005,21 @@ void MdiAreaEx::requestEqualSplitterSizes()
     _pendingSplitterEqualize = true;
     _pendingSplitterEqualizePasses = 8;
     tryEqualizeSplitterSizes();
+///
+/// \brief QTimer::singleShot
+///
     QTimer::singleShot(0, this, [this]() {
         tryEqualizeSplitterSizes();
     });
+///
+/// \brief QTimer::singleShot
+///
     QTimer::singleShot(16, this, [this]() {
         tryEqualizeSplitterSizes();
     });
+///
+/// \brief QTimer::singleShot
+///
     QTimer::singleShot(33, this, [this]() {
         tryEqualizeSplitterSizes();
     });

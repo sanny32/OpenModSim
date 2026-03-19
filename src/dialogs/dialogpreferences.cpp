@@ -1,4 +1,4 @@
-#include <QtWidgets>
+﻿#include <QtWidgets>
 #include "colorswatch.h"
 #include "controls/addressbasecombobox.h"
 #include "dialogpreferences.h"
@@ -19,9 +19,9 @@ DialogPreferences::DialogPreferences(MainWindow* mainWindow, QWidget* parent)
         ui->listWidget->item(i)->setSizeHint(QSize(0, 28));
 
     ui->comboBoxLanguage->addItem("English",                       "en");
-    ui->comboBoxLanguage->addItem(QString::fromUtf8("Русский"),    "ru");
-    ui->comboBoxLanguage->addItem(QString::fromUtf8("简体中文"),    "zh_CN");
-    ui->comboBoxLanguage->addItem(QString::fromUtf8("繁體中文"),    "zh_TW");
+    ui->comboBoxLanguage->addItem(QString::fromUtf8("Р СѓСЃСЃРєРёР№"),    "ru");
+    ui->comboBoxLanguage->addItem(QString::fromUtf8("з®ЂдЅ“дё­ж–‡"),    "zh_CN");
+    ui->comboBoxLanguage->addItem(QString::fromUtf8("з№Ѓй«”дё­ж–‡"),    "zh_TW");
 
     ui->fontComboBoxFont->setFontFilters(QFontComboBox::MonospacedFonts);
 
@@ -80,6 +80,9 @@ DialogPreferences::~DialogPreferences()
 ///
 /// rief DialogPreferences::changeEvent
 ///
+///
+/// \brief DialogPreferences::changeEvent
+///
 void DialogPreferences::changeEvent(QEvent* event)
 {
     if (event->type() == QEvent::LanguageChange)
@@ -123,7 +126,7 @@ void DialogPreferences::loadFromPreferences()
 {
     const auto& prefs = AppPreferences::instance();
 
-    // Interface — colors
+    // Interface вЂ” colors
     _bgColor     = prefs.backgroundColor();
     _fgColor     = prefs.foregroundColor();
     _statusColor = prefs.statusColor();
@@ -131,14 +134,14 @@ void DialogPreferences::loadFromPreferences()
     ui->pushButtonForegroundColor->setColor(_fgColor);
     ui->pushButtonStatusColor->setColor(_statusColor);
 
-    // Interface — language
+    // Interface вЂ” language
     const int langIdx = ui->comboBoxLanguage->findData(prefs.language());
     ui->comboBoxLanguage->setCurrentIndex(langIdx >= 0 ? langIdx : 0);
 
-    // Interface — updates
+    // Interface вЂ” updates
     ui->checkBoxCheckForUpdates->setChecked(prefs.checkForUpdates());
 
-    // Interface — font
+    // Interface вЂ” font
     const QFont& f = prefs.font();
     ui->fontComboBoxFont->setCurrentFont(f);
     ui->spinBoxFontSize->setValue(f.pointSize() > 0 ? f.pointSize() : 10);
@@ -156,13 +159,13 @@ void DialogPreferences::loadFromPreferences()
     ui->spinBoxColumnsDistance->setValue(dataDd.DataViewColumnsDistance);
     ui->spinBoxLogLimit->setValue(trafficDd.LogViewLimit);
 
-    // Script — font
+    // Script вЂ” font
     const QFont& sf = prefs.scriptFont();
     ui->fontComboBoxScriptFont->setCurrentFont(sf);
     ui->spinBoxScriptFontSize->setValue(sf.pointSize() > 0 ? sf.pointSize() : 10);
     ui->checkBoxScriptFontAntialias->setChecked(!(sf.styleStrategy() & QFont::NoAntialias));
 
-    // Script — editor
+    // Script вЂ” editor
     ui->checkBoxAutoComplete->setChecked(prefs.codeAutoComplete());
     ui->checkBoxRunOnStartup->setChecked(scriptDd.ScriptCfg.RunOnStartup);
 
@@ -176,23 +179,23 @@ void DialogPreferences::apply()
 {
     auto& prefs = AppPreferences::instance();
 
-    // Interface — colors
+    // Interface вЂ” colors
     prefs.setBackgroundColor(_bgColor);
     prefs.setForegroundColor(_fgColor);
     prefs.setStatusColor(_statusColor);
     if (_mainWindow) _mainWindow->applyColors(_bgColor, _fgColor, _statusColor);
 
-    // Interface — language
+    // Interface вЂ” language
     const QString lang = ui->comboBoxLanguage->currentData().toString();
     prefs.setLanguage(lang);
     if (_mainWindow) _mainWindow->setLanguage(lang);
 
-    // Interface — updates
+    // Interface вЂ” updates
     const bool checkUpdates = ui->checkBoxCheckForUpdates->isChecked();
     prefs.setCheckForUpdates(checkUpdates);
     if (_mainWindow) _mainWindow->applyCheckForUpdates(checkUpdates);
 
-    // Interface — font
+    // Interface вЂ” font
     const QFont displayFont = fontFromControls(ui->fontComboBoxFont, ui->spinBoxFontSize, ui->checkBoxFontAntialias);
     prefs.setFont(displayFont);
     prefs.setFontZoom(ui->spinBoxFontZoom->value());
@@ -235,12 +238,12 @@ void DialogPreferences::apply()
         _mainWindow->applyScriptViewDefaults(scriptDd);
     }
 
-    // Script — font
+    // Script вЂ” font
     const QFont scriptFont = fontFromControls(ui->fontComboBoxScriptFont, ui->spinBoxScriptFontSize, ui->checkBoxScriptFontAntialias);
     prefs.setScriptFont(scriptFont);
     if (_mainWindow) _mainWindow->applyScriptFont(scriptFont);
 
-    // Script — editor
+    // Script вЂ” editor
     const bool autoComplete = ui->checkBoxAutoComplete->isChecked();
     prefs.setCodeAutoComplete(autoComplete);
     if (_mainWindow) _mainWindow->applyAutoComplete(autoComplete);

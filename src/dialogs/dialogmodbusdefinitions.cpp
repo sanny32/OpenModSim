@@ -1,4 +1,4 @@
-#include <QPushButton>
+﻿#include <QPushButton>
 #include "dialogmodbusdefinitions.h"
 #include "ui_dialogmodbusdefinitions.h"
 
@@ -60,6 +60,9 @@ DialogModbusDefinitions::~DialogModbusDefinitions()
 
 ///
 /// rief DialogModbusDefinitions::changeEvent
+///
+///
+/// \brief DialogModbusDefinitions::changeEvent
 ///
 void DialogModbusDefinitions::changeEvent(QEvent* event)
 {

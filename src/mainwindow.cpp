@@ -1,4 +1,4 @@
-#include <QtWidgets>
+﻿#include <QtWidgets>
 #include <QBuffer>
 #include <QPrinterInfo>
 #include <QPrintDialog>
@@ -1174,31 +1174,49 @@ void MainWindow::windowActivate(QMdiSubWindow* wnd)
     if(wnd) ui->mdiArea->setActiveSubWindow(wnd);
 }
 
+///
+/// \brief MainWindow::markModified
+///
 void MainWindow::markModified()
 {
     _isModified = true;
 }
 
+///
+/// \brief MainWindow::currentForm
+///
 QWidget* MainWindow::currentForm() const
 {
     return _project->currentMdiChild();
 }
 
+///
+/// \brief MainWindow::currentDataForm
+///
 FormDataView* MainWindow::currentDataForm() const
 {
     return _project->currentDataMdiChild();
 }
 
+///
+/// \brief MainWindow::currentTrafficForm
+///
 FormTrafficView* MainWindow::currentTrafficForm() const
 {
     return _project->currentTrafficMdiChild();
 }
 
+///
+/// \brief MainWindow::currentScriptForm
+///
 FormScriptView* MainWindow::currentScriptForm() const
 {
     return _project->currentScriptMdiChild();
 }
 
+///
+/// \brief MainWindow::currentDataOrTrafficForm
+///
 QWidget* MainWindow::currentDataOrTrafficForm() const
 {
     if (auto* data = currentDataForm())
@@ -1498,6 +1516,9 @@ void MainWindow::saveAppSettings()
     m.setValue(kSessionProjectPathKey, _sessionProjectPath);
 }
 
+///
+/// \brief MainWindow::loadSessionProject
+///
 bool MainWindow::loadSessionProject()
 {
     if(!_useSession)
@@ -1514,6 +1535,9 @@ bool MainWindow::loadSessionProject()
     return true;
 }
 
+///
+/// \brief MainWindow::saveSessionProject
+///
 bool MainWindow::saveSessionProject()
 {
     if(!_useSession)
@@ -1528,6 +1552,9 @@ bool MainWindow::saveSessionProject()
 }
 
 
+///
+/// \brief MainWindow::confirmSaveOnClose
+///
 bool MainWindow::confirmSaveOnClose()
 {
     const auto button = QMessageBox::question(this,
@@ -1555,6 +1582,9 @@ bool MainWindow::confirmSaveOnClose()
     return before != _projectFilePath && !_projectFilePath.isEmpty();
 }
 
+///
+/// \brief MainWindow::hasProjectContext
+///
 bool MainWindow::hasProjectContext() const
 {
     return !_projectFilePath.isEmpty()
@@ -1564,6 +1594,9 @@ bool MainWindow::hasProjectContext() const
         || !_project->closedScriptForms().isEmpty();
 }
 
+///
+/// \brief MainWindow::addRecentProject
+///
 void MainWindow::addRecentProject(const QString& filePath)
 {
     if(filePath.isEmpty())
@@ -1586,6 +1619,9 @@ void MainWindow::addRecentProject(const QString& filePath)
     rebuildRecentProjectsMenu();
 }
 
+///
+/// \brief MainWindow::rebuildRecentProjectsMenu
+///
 void MainWindow::rebuildRecentProjectsMenu()
 {
     if(!_openRecentMenu)
@@ -1623,12 +1659,18 @@ void MainWindow::rebuildRecentProjectsMenu()
     connect(_clearRecentAction, &QAction::triggered, this, &MainWindow::clearRecentProjects);
 }
 
+///
+/// \brief MainWindow::clearRecentProjects
+///
 void MainWindow::clearRecentProjects()
 {
     _recentProjects.clear();
     rebuildRecentProjectsMenu();
 }
 
+///
+/// \brief MainWindow::openRecentProject
+///
 void MainWindow::openRecentProject(const QString& filePath)
 {
     if(!QFile::exists(filePath)) {

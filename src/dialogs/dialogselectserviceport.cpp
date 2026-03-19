@@ -1,4 +1,4 @@
-#include <QNetworkInterface>
+﻿#include <QNetworkInterface>
 #include "dialogselectserviceport.h"
 #include "ui_dialogselectserviceport.h"
 
@@ -50,6 +50,9 @@ DialogSelectServicePort::~DialogSelectServicePort()
 
 ///
 /// rief DialogSelectServicePort::changeEvent
+///
+///
+/// \brief DialogSelectServicePort::changeEvent
 ///
 void DialogSelectServicePort::changeEvent(QEvent* event)
 {

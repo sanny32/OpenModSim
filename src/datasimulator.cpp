@@ -1,4 +1,4 @@
-#include <QDateTime>
+﻿#include <QDateTime>
 #include <QRandomGenerator>
 #include "datasimulator.h"
 
@@ -30,6 +30,9 @@ DataSimulator::~DataSimulator()
 /// \param type
 /// \param addr
 /// \return
+///
+///
+/// \brief DataSimulator::canStartSimulation
 ///
 bool DataSimulator::canStartSimulation(DataDisplayMode mode, quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr) const
 {
@@ -307,6 +310,9 @@ T generateRandom(const QRange<double>& range)
 /// \param addr
 /// \param params
 ///
+///
+/// \brief DataSimulator::randomSimulation
+///
 void DataSimulator::randomSimulation(DataDisplayMode mode, quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr, const RandomSimulationParams& params)
 {
     auto&& value = _simulationMap[{ deviceId, type, addr}].CurrentValue;
@@ -385,6 +391,9 @@ T incrementValue(T value, T step, const QRange<double>& range)
 /// \param addr
 /// \param params
 ///
+///
+/// \brief DataSimulator::incrementSimulation
+///
 void DataSimulator::incrementSimulation(DataDisplayMode mode, quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr, const IncrementSimulationParams& params)
 {
     auto&& value = _simulationMap[{ deviceId, type, addr}].CurrentValue;
@@ -451,6 +460,9 @@ T decrementValue(T value, T step, const QRange<double>& range)
 /// \param type
 /// \param addr
 /// \param params
+///
+///
+/// \brief DataSimulator::decrementSimailation
 ///
 void DataSimulator::decrementSimailation(DataDisplayMode mode, quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr, const DecrementSimulationParams& params)
 {

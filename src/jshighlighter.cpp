@@ -1,4 +1,4 @@
-#include "jshighlighter.h"
+﻿#include "jshighlighter.h"
 
 LanguageData JSHighlighter::keywords = {
     {('i'), QLatin1String("in")},
@@ -367,6 +367,9 @@ void JSHighlighter::highlightSyntax(const QString &text)
     }
 }
 
+///
+/// \brief JSHighlighter::highlightStringLiterals
+///
 int JSHighlighter::highlightStringLiterals(const QChar strType, const QString &text, int i) {
     setFormat(i, 1,  _formats[CodeString]);
     ++i;

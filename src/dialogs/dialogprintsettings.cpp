@@ -1,4 +1,4 @@
-#include <QPrinterInfo>
+﻿#include <QPrinterInfo>
 #include <QPushButton>
 #include "dialogprintsettings.h"
 #include "ui_dialogprintsettings.h"
@@ -40,6 +40,9 @@ DialogPrintSettings::~DialogPrintSettings()
 
 ///
 /// rief DialogPrintSettings::changeEvent
+///
+///
+/// \brief DialogPrintSettings::changeEvent
 ///
 void DialogPrintSettings::changeEvent(QEvent* event)
 {

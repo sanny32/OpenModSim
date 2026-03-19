@@ -1,4 +1,4 @@
-#include <QPainter>
+﻿#include <QPainter>
 #include <QPalette>
 #include <QDateTime>
 #include <QHelpEngine>
@@ -61,21 +61,33 @@ FormTrafficView::~FormTrafficView()
     delete ui;
 }
 
+///
+/// \brief FormTrafficView::saveSettings
+///
 void FormTrafficView::saveSettings(QSettings& out) const
 {
     out << const_cast<FormTrafficView*>(this);
 }
 
+///
+/// \brief FormTrafficView::loadSettings
+///
 void FormTrafficView::loadSettings(QSettings& in)
 {
     in >> this;
 }
 
+///
+/// \brief FormTrafficView::saveXml
+///
 void FormTrafficView::saveXml(QXmlStreamWriter& xml) const
 {
     xml << const_cast<FormTrafficView*>(this);
 }
 
+///
+/// \brief FormTrafficView::loadXml
+///
 void FormTrafficView::loadXml(QXmlStreamReader& xml)
 {
     xml >> this;
@@ -310,6 +322,20 @@ void FormTrafficView::show()
 }
 
 ///
+/// \brief FormTrafficView::connectEditSlots
+///
+void FormTrafficView::connectEditSlots()
+{
+}
+
+///
+/// \brief FormTrafficView::disconnectEditSlots
+///
+void FormTrafficView::disconnectEditSlots()
+{
+}
+
+///
 /// \brief FormTrafficView::on_mbConnected
 ///
 void FormTrafficView::on_mbConnected(const ConnectionDetails&)
@@ -350,6 +376,9 @@ QString FormTrafficView::sourceFilterText(const ConnectionDetails& cd) const
                                           QString::number(cd.SerialParams.StopBits));
 }
 
+///
+/// \brief FormTrafficView::updateSourceFilter
+///
 void FormTrafficView::updateSourceFilter()
 {
     if (!_sourceFilter)
@@ -371,6 +400,9 @@ void FormTrafficView::updateSourceFilter()
     _sourceFilter->setCurrentIndex(idx);
 }
 
+///
+/// \brief FormTrafficView::matchesTrafficFilter
+///
 bool FormTrafficView::matchesTrafficFilter(const ConnectionDetails& cd, QSharedPointer<const ModbusMessage> msg) const
 {
     if (!msg)

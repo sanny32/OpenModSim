@@ -1,4 +1,4 @@
-#include <QtMath>
+﻿#include <QtMath>
 #include <QRandomGenerator>
 #include "uiutils.h"
 #include "formatutils.h"
@@ -187,6 +187,9 @@ DialogForceMultipleRegisters::~DialogForceMultipleRegisters()
 
 ///
 /// rief DialogForceMultipleRegisters::changeEvent
+///
+///
+/// \brief DialogForceMultipleRegisters::changeEvent
 ///
 void DialogForceMultipleRegisters::changeEvent(QEvent* event)
 {
@@ -839,6 +842,9 @@ void DialogForceMultipleRegisters::on_pushButtonExport_clicked()
     {
         ts << formatAddress(_type, _writeParams.Address + i, _writeParams.AddrSpace, _hexAddress)
         << delim
+///
+/// \brief QString::number
+///
         << QString::number(_data[i])
         << "\n";
     }

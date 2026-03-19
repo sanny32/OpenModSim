@@ -288,19 +288,19 @@
         <translation>дЅњиЂ…е’Њз¶­и­·иЂ…</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="243"/>
+        <location filename="../dialogs/dialogabout.cpp" line="249"/>
         <source>Visit component&apos;s homepage
 %1</source>
         <translation>е­еЏ–е…ѓд»¶дё»й&#xa0;Ѓ
 %1</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="264"/>
+        <location filename="../dialogs/dialogabout.cpp" line="270"/>
         <source>Email contributer: %1</source>
         <translation>й›»е­ђйѓµд»¶иІўзЌ»иЂ…пјљ%1</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="273"/>
+        <location filename="../dialogs/dialogabout.cpp" line="279"/>
         <source>Visit user&apos;s homepage
 %1</source>
         <translation>иЁЄе•Џз”Ёж€¶дё»й&#xa0;Ѓ
@@ -344,7 +344,7 @@
         <translation>з°Ўй«”дё­ж–‡е’Њз№Ѓй«”дё­ж–‡</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="269"/>
+        <location filename="../dialogs/dialogabout.cpp" line="275"/>
         <source>Visit github user&apos;s homepage
 %1</source>
         <translation>йЂ&#xa0;иЁЄ GitHub з”Ёж€¶й¦–й&#xa0;Ѓ
@@ -379,7 +379,7 @@
         <translation type="vanished">вЂў Fira Code 6.2 е­—дЅ“</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="297"/>
+        <location filename="../dialogs/dialogabout.cpp" line="303"/>
         <source>License Agreement - %1</source>
         <translation>иЁ±еЏЇеЌ”и­° - %1</translation>
     </message>
@@ -658,40 +658,40 @@
         <translation>еј·е€¶й›ўж•Јијёе…Ґ</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="135"/>
-        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="209"/>
+        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="138"/>
+        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="212"/>
         <source>CSV files (*.csv)</source>
         <translation>CSV жЄ”жЎ€ (*.csv)</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="142"/>
-        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="220"/>
+        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="145"/>
+        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="223"/>
         <source>Error</source>
         <translation>йЊЇиЄ¤</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="176"/>
+        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="179"/>
         <source>Import error</source>
         <translation>еЊЇе…ҐйЊЇиЄ¤</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="176"/>
+        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="179"/>
         <source>Invalid value: %1</source>
         <translation>з„Ўж•€еЂјпјљ%1</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="185"/>
-        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="191"/>
+        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="188"/>
+        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="194"/>
         <source>Warning</source>
         <translation>и­¦е‘Љ</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="185"/>
+        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="188"/>
         <source>No data found in file.</source>
         <translation>жЄ”жЎ€дё­жњЄж‰ѕе€°иі‡ж–™гЂ‚</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="191"/>
+        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="194"/>
         <source>Imported data size (%1) does not match current size (%2).</source>
         <translation>еЊЇе…Ґиі‡ж–™е¤§е°Џ (%1) и€‡з›®е‰Ќе¤§е°Џ (%2) дёЌз¬¦гЂ‚</translation>
     </message>
@@ -822,40 +822,40 @@
         <translation>й&#xa0;ђиЁ­дїќжЊЃжљ«е­е™Ё</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="736"/>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="817"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="739"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="820"/>
         <source>CSV files (*.csv)</source>
         <translation>CSV жЄ”жЎ€ (*.csv)</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="743"/>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="828"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="746"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="831"/>
         <source>Error</source>
         <translation>йЊЇиЄ¤</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="784"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="787"/>
         <source>Import error</source>
         <translation>еЊЇе…ҐйЊЇиЄ¤</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="784"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="787"/>
         <source>Invalid value: %1</source>
         <translation>з„Ўж•€еЂјпјљ%1</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="793"/>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="799"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="796"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="802"/>
         <source>Warning</source>
         <translation>и­¦е‘Љ</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="793"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="796"/>
         <source>No data found in file.</source>
         <translation>жЄ”жЎ€дё­жњЄж‰ѕе€°иі‡ж–™гЂ‚</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="799"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="802"/>
         <source>Imported data size (%1) does not match current size (%2).</source>
         <translation>еЊЇе…Ґиі‡ж–™е¤§е°Џ (%1) и€‡з›®е‰Ќе¤§е°Џ (%2) дёЌз¬¦гЂ‚</translation>
     </message>
@@ -1220,82 +1220,82 @@
         <translation>ж©«еђ‘</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogprintsettings.cpp" line="88"/>
+        <location filename="../dialogs/dialogprintsettings.cpp" line="91"/>
         <source>Ready</source>
         <translation>е°±з·’</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogprintsettings.cpp" line="91"/>
+        <location filename="../dialogs/dialogprintsettings.cpp" line="94"/>
         <source>Printing</source>
         <translation>е€—еЌ°</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogprintsettings.cpp" line="94"/>
+        <location filename="../dialogs/dialogprintsettings.cpp" line="97"/>
         <source>Aborted</source>
         <translation>дё­ж­ў</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogprintsettings.cpp" line="97"/>
+        <location filename="../dialogs/dialogprintsettings.cpp" line="100"/>
         <source>Error</source>
         <translation>йЊЇиЄ¤</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogprintsettings.cpp" line="164"/>
+        <location filename="../dialogs/dialogprintsettings.cpp" line="167"/>
         <source>Only One</source>
         <translation>еЏЄжњ‰дёЂеЂ‹</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogprintsettings.cpp" line="168"/>
+        <location filename="../dialogs/dialogprintsettings.cpp" line="171"/>
         <source>Lower</source>
         <translation>еє•йѓЁ</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogprintsettings.cpp" line="172"/>
+        <location filename="../dialogs/dialogprintsettings.cpp" line="175"/>
         <source>Middle</source>
         <translation>дё­й–“</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogprintsettings.cpp" line="176"/>
+        <location filename="../dialogs/dialogprintsettings.cpp" line="179"/>
         <source>Manual</source>
         <translation>ж‰‹е†Љ</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogprintsettings.cpp" line="180"/>
+        <location filename="../dialogs/dialogprintsettings.cpp" line="183"/>
         <source>Envelope</source>
         <translation>дїЎе°Ѓ</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogprintsettings.cpp" line="184"/>
+        <location filename="../dialogs/dialogprintsettings.cpp" line="187"/>
         <source>Envelope Manual</source>
         <translation>дїЎе°Ѓж‰‹е†Љ</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogprintsettings.cpp" line="188"/>
+        <location filename="../dialogs/dialogprintsettings.cpp" line="191"/>
         <source>Auto</source>
         <translation>и‡Єе‹•</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogprintsettings.cpp" line="192"/>
+        <location filename="../dialogs/dialogprintsettings.cpp" line="195"/>
         <source>Tractor</source>
         <translation>з‰Ѕеј•ж©џ</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogprintsettings.cpp" line="196"/>
+        <location filename="../dialogs/dialogprintsettings.cpp" line="199"/>
         <source>Small Format</source>
         <translation>е°Џе°єеЇёж&#xa0;јејЏ</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogprintsettings.cpp" line="200"/>
+        <location filename="../dialogs/dialogprintsettings.cpp" line="203"/>
         <source>Large Format</source>
         <translation>е¤§е°єеЇёж&#xa0;јејЏ</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogprintsettings.cpp" line="204"/>
+        <location filename="../dialogs/dialogprintsettings.cpp" line="207"/>
         <source>Large Capacity</source>
         <translation>е¤§е®№й‡Џ</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogprintsettings.cpp" line="208"/>
+        <location filename="../dialogs/dialogprintsettings.cpp" line="211"/>
         <source>Cassette</source>
         <translation>зґ™з›’</translation>
     </message>
@@ -1304,7 +1304,7 @@
         <translation type="vanished">жњЂе¤§йЎµйќўжќҐжєђ</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogprintsettings.cpp" line="212"/>
+        <location filename="../dialogs/dialogprintsettings.cpp" line="215"/>
         <source>Custom Source</source>
         <translation>и‡Єе®љзѕ©жєђ</translation>
     </message>
@@ -1717,7 +1717,7 @@
     </message>
     <message>
         <location filename="../dialogs/dialogwriteregister.ui" line="118"/>
-        <location filename="../dialogs/dialogwriteregister.cpp" line="235"/>
+        <location filename="../dialogs/dialogwriteregister.cpp" line="238"/>
         <source>Auto Simulation: OFF</source>
         <translation>и‡Єе‹•жЁЎж“¬пјљй—њй–‰</translation>
     </message>
@@ -1737,8 +1737,8 @@
         <translation>еЂјпјЊ(ANSI)пјљ </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwriteregister.cpp" line="229"/>
-        <location filename="../dialogs/dialogwriteregister.cpp" line="242"/>
+        <location filename="../dialogs/dialogwriteregister.cpp" line="232"/>
+        <location filename="../dialogs/dialogwriteregister.cpp" line="245"/>
         <source>Auto Simulation: ON</source>
         <translation>и‡Єе‹•жЁЎж“¬пјљй–‹е•џ</translation>
     </message>
@@ -1777,13 +1777,13 @@
     </message>
     <message>
         <location filename="../dialogs/dialogwritestatusregister.ui" line="134"/>
-        <location filename="../dialogs/dialogwritestatusregister.cpp" line="96"/>
+        <location filename="../dialogs/dialogwritestatusregister.cpp" line="99"/>
         <source>Auto Simulation: OFF</source>
         <translation>и‡Єе‹•жЁЎж“¬пјљй—њй–‰</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwritestatusregister.cpp" line="90"/>
-        <location filename="../dialogs/dialogwritestatusregister.cpp" line="102"/>
+        <location filename="../dialogs/dialogwritestatusregister.cpp" line="93"/>
+        <location filename="../dialogs/dialogwritestatusregister.cpp" line="105"/>
         <source>Auto Simulation: ON</source>
         <translation>и‡Єе‹•жЁЎж“¬пјљй–‹е•џ</translation>
     </message>
@@ -2329,60 +2329,60 @@ MODBUS Point Type:
         <translation type="obsolete">еЏ–д»Ј</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="475"/>
+        <location filename="../formtrafficview.cpp" line="496"/>
         <source>Text files (*.txt)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="480"/>
+        <location filename="../formtrafficview.cpp" line="501"/>
         <source>Log exported successfully to file %1</source>
         <translation type="unfinished">ж—ҐиЄЊж€ђеЉџеЊЇе‡єи‡і %1</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="482"/>
+        <location filename="../formtrafficview.cpp" line="503"/>
         <source>Export log error!</source>
         <translation type="unfinished">еЊЇе‡єж—ҐиЄЊйЊЇиЄ¤пјЃ</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="493"/>
+        <location filename="../formtrafficview.cpp" line="517"/>
         <source>Unit:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="362"/>
-        <location filename="../formtrafficview.cpp" line="498"/>
-        <location filename="../formtrafficview.cpp" line="511"/>
-        <location filename="../formtrafficview.cpp" line="533"/>
+        <location filename="../formtrafficview.cpp" line="391"/>
+        <location filename="../formtrafficview.cpp" line="522"/>
+        <location filename="../formtrafficview.cpp" line="535"/>
+        <location filename="../formtrafficview.cpp" line="557"/>
         <source>All</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="499"/>
+        <location filename="../formtrafficview.cpp" line="523"/>
         <source>0 = all unit ids</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="530"/>
+        <location filename="../formtrafficview.cpp" line="554"/>
         <source>Source:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="344"/>
+        <location filename="../formtrafficview.cpp" line="370"/>
         <source>Modbus/TCP Srv %1:%2</source>
         <translation type="unfinished">modbus/TCPдјєжњЌе™Ё%1:%2</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="346"/>
+        <location filename="../formtrafficview.cpp" line="372"/>
         <source>Port %1:%2:%3:%4:%5</source>
         <translation type="unfinished">еџ&#xa0; %1:%2:%3:%4:%5</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="541"/>
+        <location filename="../formtrafficview.cpp" line="565"/>
         <source>Rows:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="508"/>
+        <location filename="../formtrafficview.cpp" line="532"/>
         <source>Function:</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2922,7 +2922,7 @@ Script.onInit(()=&gt;{
     </message>
     <message>
         <location filename="../mainwindow.ui" line="232"/>
-        <location filename="../mainwindow.cpp" line="1534"/>
+        <location filename="../mainwindow.cpp" line="1561"/>
         <source>Save Project</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3268,7 +3268,7 @@ Script.onInit(()=&gt;{
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="247"/>
-        <location filename="../mainwindow.cpp" line="1621"/>
+        <location filename="../mainwindow.cpp" line="1657"/>
         <source>Clear List</source>
         <translation>清除清單</translation>
     </message>
@@ -3278,12 +3278,12 @@ Script.onInit(()=&gt;{
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1609"/>
+        <location filename="../mainwindow.cpp" line="1645"/>
         <source>No Recent Projects</source>
         <translation>沒有最近專案</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1535"/>
+        <location filename="../mainwindow.cpp" line="1562"/>
         <source>Save project before closing?</source>
         <translation>關閉前要儲存專案嗎？</translation>
     </message>
@@ -3868,12 +3868,12 @@ Script.onInit(()=&gt;{
 <context>
     <name>ModbusMultiServer</name>
     <message>
-        <location filename="../modbusmultiserver.cpp" line="513"/>
+        <location filename="../modbusmultiserver.cpp" line="552"/>
         <source>An incorrect device ID was specified (%1)</source>
         <translation>жЊ‡е®љдє†йЊЇиЄ¤зљ„иЈќзЅ®ењ°еќЂпј€%1пј‰</translation>
     </message>
     <message>
-        <location filename="../modbusmultiserver.cpp" line="1026"/>
+        <location filename="../modbusmultiserver.cpp" line="1092"/>
         <source>Connection error. %1</source>
         <translation>йЂЈз·љйЊЇиЄ¤ %1</translation>
     </message>
@@ -3881,7 +3881,7 @@ Script.onInit(()=&gt;{
 <context>
     <name>ModbusTcpServer</name>
     <message>
-        <location filename="../modbustcpserver.cpp" line="257"/>
+        <location filename="../modbustcpserver.cpp" line="266"/>
         <source>Invalid connection settings for TCP communication specified.</source>
         <translation>жЊ‡е®љзљ„ TCP йЂљиЁЉйЂЈз·љиЁ­е®љз„Ўж•€гЂ‚</translation>
     </message>
@@ -4208,12 +4208,12 @@ Script.onInit(()=&gt;{
 <context>
     <name>QModbusTcpServer</name>
     <message>
-        <location filename="../modbustcpserver.cpp" line="178"/>
+        <location filename="../modbustcpserver.cpp" line="187"/>
         <source>Requesting socket is closed</source>
         <translation>и«‹ж±‚зљ„еҐ—жЋҐе­—е·Ій—њй–‰</translation>
     </message>
     <message>
-        <location filename="../modbustcpserver.cpp" line="186"/>
+        <location filename="../modbustcpserver.cpp" line="195"/>
         <source>Could not write response to client</source>
         <translation>з„Ўжі•еЇ«е…Ґе°Ќе®ўж€¶з«Їзљ„йџїж‡‰</translation>
     </message>

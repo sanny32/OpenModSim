@@ -1,4 +1,4 @@
-#include <algorithm>
+﻿#include <algorithm>
 #include "numericutils.h"
 #include "modbustcpserver.h"
 #include "modbusrtuserialserver.h"
@@ -49,6 +49,9 @@ void ModbusMultiServer::addDeviceId(quint8 deviceId)
 {
     if(QThread::currentThread() != _workerThread)
     {
+///
+/// \brief QMetaObject::invokeMethod
+///
         QMetaObject::invokeMethod(this, [this, deviceId]() {
             addDeviceId(deviceId);
         }, Qt::BlockingQueuedConnection);
@@ -70,6 +73,9 @@ void ModbusMultiServer::removeDeviceId(quint8 deviceId)
 {
     if(QThread::currentThread() != _workerThread)
     {
+///
+/// \brief QMetaObject::invokeMethod
+///
         QMetaObject::invokeMethod(this, [this, deviceId]() {
             removeDeviceId(deviceId);
         }, Qt::BlockingQueuedConnection);
@@ -104,6 +110,9 @@ void ModbusMultiServer::setUseGlobalUnitMap(bool use)
 {
     if(QThread::currentThread() != _workerThread)
     {
+///
+/// \brief QMetaObject::invokeMethod
+///
         QMetaObject::invokeMethod(this, [this, use]() {
             setUseGlobalUnitMap(use);
         }, Qt::BlockingQueuedConnection);
@@ -129,6 +138,9 @@ void ModbusMultiServer::addUnitMap(int id, quint8 deviceId, QModbusDataUnit::Reg
 {
     if(QThread::currentThread() != _workerThread)
     {
+///
+/// \brief QMetaObject::invokeMethod
+///
         QMetaObject::invokeMethod(this, [this, id, deviceId, pointType, pointAddress, length]() {
             addUnitMap(id, deviceId, pointType, pointAddress, length);
         }, Qt::BlockingQueuedConnection);
@@ -147,6 +159,9 @@ void ModbusMultiServer::removeUnitMap(int id, quint8 deviceId)
 {
     if(QThread::currentThread() != _workerThread)
     {
+///
+/// \brief QMetaObject::invokeMethod
+///
         QMetaObject::invokeMethod(this, [this, id, deviceId]() {
             removeUnitMap(id, deviceId);
         }, Qt::BlockingQueuedConnection);
@@ -202,6 +217,9 @@ QSharedPointer<ModbusServer> ModbusMultiServer::createModbusServer(const Connect
     if(QThread::currentThread() != _workerThread)
     {
         QSharedPointer<ModbusServer> result;
+///
+/// \brief QMetaObject::invokeMethod
+///
         QMetaObject::invokeMethod(this, [&]() {
             result = createModbusServer(cd);
         }, Qt::BlockingQueuedConnection);
@@ -271,6 +289,9 @@ void ModbusMultiServer::connectDevice(const ConnectionDetails& cd)
 {
     if(QThread::currentThread() != _workerThread)
     {
+///
+/// \brief QMetaObject::invokeMethod
+///
         QMetaObject::invokeMethod(this, [this, cd]() {
             connectDevice(cd);
         }, Qt::BlockingQueuedConnection);
@@ -308,6 +329,9 @@ void ModbusMultiServer::disconnectDevice(ConnectionType type, const QString& por
 {
     if(QThread::currentThread() != _workerThread)
     {
+///
+/// \brief QMetaObject::invokeMethod
+///
         QMetaObject::invokeMethod(this, [this, type, port]() {
             disconnectDevice(type, port);
         }, Qt::BlockingQueuedConnection);
@@ -329,6 +353,9 @@ void ModbusMultiServer::closeConnections()
 {
     if(QThread::currentThread() != _workerThread)
     {
+///
+/// \brief QMetaObject::invokeMethod
+///
         QMetaObject::invokeMethod(this, [this]() {
             closeConnections();
         }, Qt::BlockingQueuedConnection);
@@ -371,6 +398,9 @@ void ModbusMultiServer::setModbusDefinitions(const ModbusDefinitions& defs)
 {
     if(QThread::currentThread() != _workerThread)
     {
+///
+/// \brief QMetaObject::invokeMethod
+///
         QMetaObject::invokeMethod(this, [this, defs]() {
             setModbusDefinitions(defs);
         }, Qt::BlockingQueuedConnection);
@@ -394,6 +424,9 @@ void ModbusMultiServer::setRequestHandler(const RequestHandlerPtr& handler)
 {
     if(QThread::currentThread() != _workerThread)
     {
+///
+/// \brief QMetaObject::invokeMethod
+///
         QMetaObject::invokeMethod(this, [this, handler]() {
             setRequestHandler(handler);
         }, Qt::BlockingQueuedConnection);
@@ -435,6 +468,9 @@ void ModbusMultiServer::reconfigureServers()
 {
     if(QThread::currentThread() != _workerThread)
     {
+///
+/// \brief QMetaObject::invokeMethod
+///
         QMetaObject::invokeMethod(this, [this]() {
             reconfigureServers();
         }, Qt::BlockingQueuedConnection);
@@ -503,6 +539,9 @@ void ModbusMultiServer::setData(quint8 deviceId, const QModbusDataUnit& data)
 {
     if(QThread::currentThread() != _workerThread)
     {
+///
+/// \brief QMetaObject::invokeMethod
+///
         QMetaObject::invokeMethod(this, [this, deviceId, data]() {
             setData(deviceId, data);
         }, Qt::BlockingQueuedConnection);
@@ -706,6 +745,9 @@ void ModbusMultiServer::writeValue(quint8 deviceId, QModbusDataUnit::RegisterTyp
 /// \param swapped
 /// \return
 ///
+///
+/// \brief ModbusMultiServer::readInt32
+///
 qint32 ModbusMultiServer::readInt32(quint8 deviceId, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, ByteOrder order, bool swapped)
 {
     const auto data = this->data(deviceId, pointType, pointAddress, 2);
@@ -720,6 +762,9 @@ qint32 ModbusMultiServer::readInt32(quint8 deviceId, QModbusDataUnit::RegisterTy
 /// \param order
 /// \param swapped
 ///
+///
+/// \brief ModbusMultiServer::writeInt32
+///
 void ModbusMultiServer::writeInt32(quint8 deviceId, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, qint32 value, ByteOrder order, bool swapped)
 {
     setData(deviceId, createInt32DataUnit(pointType, pointAddress, value, order, swapped));
@@ -732,6 +777,9 @@ void ModbusMultiServer::writeInt32(quint8 deviceId, QModbusDataUnit::RegisterTyp
 /// \param order
 /// \param swapped
 /// \return
+///
+///
+/// \brief ModbusMultiServer::readUInt32
 ///
 quint32 ModbusMultiServer::readUInt32(quint8 deviceId, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, ByteOrder order, bool swapped)
 {
@@ -746,6 +794,9 @@ quint32 ModbusMultiServer::readUInt32(quint8 deviceId, QModbusDataUnit::Register
 /// \param order
 /// \param swapped
 ///
+///
+/// \brief ModbusMultiServer::writeUInt32
+///
 void ModbusMultiServer::writeUInt32(quint8 deviceId, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, quint32 value, ByteOrder order, bool swapped)
 {
     writeInt32(deviceId, pointType, pointAddress, value, order, swapped);
@@ -758,6 +809,9 @@ void ModbusMultiServer::writeUInt32(quint8 deviceId, QModbusDataUnit::RegisterTy
 /// \param order
 /// \param swapped
 /// \return
+///
+///
+/// \brief ModbusMultiServer::readInt64
 ///
 qint64 ModbusMultiServer::readInt64(quint8 deviceId, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, ByteOrder order, bool swapped)
 {
@@ -774,6 +828,9 @@ qint64 ModbusMultiServer::readInt64(quint8 deviceId, QModbusDataUnit::RegisterTy
 /// \param order
 /// \param swapped
 ///
+///
+/// \brief ModbusMultiServer::writeInt64
+///
 void ModbusMultiServer::writeInt64(quint8 deviceId, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, qint64 value, ByteOrder order, bool swapped)
 {
     setData(deviceId, createInt64DataUnit(pointType, pointAddress, value, order, swapped));
@@ -786,6 +843,9 @@ void ModbusMultiServer::writeInt64(quint8 deviceId, QModbusDataUnit::RegisterTyp
 /// \param order
 /// \param swapped
 /// \return
+///
+///
+/// \brief ModbusMultiServer::readUInt64
 ///
 quint64 ModbusMultiServer::readUInt64(quint8 deviceId, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, ByteOrder order, bool swapped)
 {
@@ -800,6 +860,9 @@ quint64 ModbusMultiServer::readUInt64(quint8 deviceId, QModbusDataUnit::Register
 /// \param order
 /// \param swapped
 ///
+///
+/// \brief ModbusMultiServer::writeUInt64
+///
 void ModbusMultiServer::writeUInt64(quint8 deviceId, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, quint64 value, ByteOrder order, bool swapped)
 {
     writeInt64(deviceId, pointType, pointAddress, value, order, swapped);
@@ -812,6 +875,9 @@ void ModbusMultiServer::writeUInt64(quint8 deviceId, QModbusDataUnit::RegisterTy
 /// \param order
 /// \param swapped
 /// \return
+///
+///
+/// \brief ModbusMultiServer::readFloat
 ///
 float ModbusMultiServer::readFloat(quint8 deviceId, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, ByteOrder order, bool swapped)
 {

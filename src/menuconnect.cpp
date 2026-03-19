@@ -1,4 +1,4 @@
-#include <QEvent>
+﻿#include <QEvent>
 #include "serialportutils.h"
 #include "menuconnect.h"
 
@@ -186,6 +186,9 @@ QList<QAction*> MenuConnect::actions(const QMenu* menu) const
 /// \param type
 /// \param port
 /// \param id
+///
+///
+/// \brief MenuConnect::addAction
 ///
 void MenuConnect::addAction(QMenu* menu, const QString& text, ConnectionType type, const QString& port, const QString& id)
 {
