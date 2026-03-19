@@ -1,5 +1,6 @@
 ﻿#include <QUrl>
 #include <QTimer>
+#include <QPointer>
 #include <QTcpSocket>
 #include <QRandomGenerator>
 #include "modbustcpserver.h"
@@ -170,9 +171,13 @@ void ModbusTcpServer::on_newConnection()
                 responseDelay = QRandomGenerator::global()->bounded(mbDef.ErrorSimulations.responseRandomDelayUpToTime());
             }
 
-            QTimer::singleShot(responseDelay, this,
-                               [this, socket, transactionId, protocolId, unitId, response, request, msgReq]()
+            const QPointer<QTcpSocket> safeSocket(socket);
+            QTimer::singleShot(responseDelay, socket,
+                               [this, safeSocket, transactionId, protocolId, unitId, response, msgReq]()
             {
+                if (!safeSocket)
+                    return;
+
                 qCDebug(QT_MODBUS) << "(TCP server) Response PDU:" << response;
 
                 QByteArray result;
@@ -182,14 +187,14 @@ void ModbusTcpServer::on_newConnection()
                 output << transactionId << protocolId << quint16(response.size() + 1)
                        << unitId << response;
 
-                if (!socket->isOpen()) {
+                if (!safeSocket->isOpen()) {
                     qCDebug(QT_MODBUS) << "(TCP server) Requesting socket has closed.";
                     setError(QModbusTcpServer::tr("Requesting socket is closed"),
                                  QModbusDevice::WriteError);
                     return;
                 }
 
-                qint64 writtenBytes = socket->write(result);
+                qint64 writtenBytes = safeSocket->write(result);
                 if (writtenBytes == -1 || writtenBytes < result.size()) {
                     qCDebug(QT_MODBUS) << "(TCP server) Cannot write requested response to socket.";
                     setError(QModbusTcpServer::tr("Could not write response to client"),
