@@ -1131,7 +1131,16 @@ int AppProject::duplicatePrimaryTabsToSecondary()
     if(!secondary->localSubWindowList().isEmpty())
         return 0;
 
-    const auto primaryWindows = primary->localSubWindowList();
+    // Get windows in visual tab order (not creation order) so that
+    // the secondary panel mirrors the same tab arrangement.
+    QList<QMdiSubWindow*> primaryWindows;
+    if(const auto* tabBar = qobject_cast<const MdiTabBar*>(primary->tabBar())) {
+        for(int i = 0; i < tabBar->count(); ++i)
+            if(auto* wnd = tabBar->subWindowAt(i))
+                primaryWindows.append(wnd);
+    }
+    if(primaryWindows.isEmpty())
+        primaryWindows = primary->localSubWindowList();
     if(primaryWindows.isEmpty())
         return 0;
 
