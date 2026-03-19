@@ -85,8 +85,7 @@ int OutputDataListModel::rowCount(const QModelIndex&) const
 ///
 QVariant OutputDataListModel::data(const QModelIndex& index, int role) const
 {
-    if(!index.isValid() ||
-       !_mapItems.contains(index.row()))
+    if (!index.isValid())
     {
         return QVariant();
     }
@@ -96,59 +95,63 @@ QVariant OutputDataListModel::data(const QModelIndex& index, int role) const
     const auto addrSpace = _parentWidget->_displayDefinition.AddrSpace;
     const auto hexAddresses = _parentWidget->displayHexAddresses();
 
-    const ItemData& itemData = _mapItems[row];
-    const auto addrStr = formatAddress(pointType, itemData.Address, addrSpace, hexAddresses);
+    const auto itemData = _mapItems.find(row);
+    if (itemData == _mapItems.end())
+    {
+        return QVariant();
+    }
 
     switch(role)
     {
         case Qt::DisplayRole:
         {
             QString descr;
-            if (!itemData.Description.isEmpty())
+            if (!itemData->Description.isEmpty())
             {
                 const auto freeSpace = _columnsDistance - 2;
                 if (freeSpace > 0)
                 {
                     descr = QStringLiteral("; ");
-                    if (itemData.Description.length() > freeSpace)
+                    if (itemData->Description.length() > freeSpace)
                     {
                         if (freeSpace > 3)
                         {
-                            descr += itemData.Description.left(freeSpace - 3);
+                            descr += itemData->Description.left(freeSpace - 3);
                             descr += QStringLiteral("...");
                         }
                     }
                     else
                     {
-                        descr += itemData.Description;
+                        descr += itemData->Description;
                     }
                 }
             }
             const auto pad = _columnsDistance - descr.length();
-            return addrStr + QStringLiteral(": ") + itemData.ValueStr + descr + QStringLiteral(" ").repeated(pad);
+            return formatAddress(pointType, itemData->Address, addrSpace, hexAddresses) +
+                QStringLiteral(": ") + itemData->ValueStr + descr + QStringLiteral(" ").repeated(pad);
         }
 
         case CaptureRole:
-            return QString(itemData.ValueStr).remove('<').remove('>');
+            return QString(itemData->ValueStr).remove('<').remove('>');
 
         case AddressStringRole:
-            return addrStr;
+            return formatAddress(pointType, itemData->Address, addrSpace, hexAddresses);
 
         case AddressRole:
-            return itemData.Address;
+            return itemData->Address;
 
         case ValueRole:
-            return itemData.Value;
+            return itemData->Value;
 
         case ColorRole:
-            return itemData.BgColor;
+            return itemData->BgColor;
 
         case DescriptionRole:
-            return itemData.Description;
+            return itemData->Description;
 
         case Qt::DecorationRole:
         {
-            if(itemData.ValueStr.isEmpty())
+            if(itemData->ValueStr.isEmpty())
                 return _iconSimulationOff;
 
             switch(simulationIcon(row))
@@ -178,8 +181,12 @@ QVariant OutputDataListModel::data(const QModelIndex& index, int role) const
 ///
 bool OutputDataListModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
-    if(!index.isValid() ||
-       !_mapItems.contains(index.row()))
+    if (!index.isValid())
+    {
+        return false;
+    }
+    const auto itemData = _mapItems.find(index.row());
+    if (itemData == _mapItems.end())
     {
         return false;
     }
@@ -187,22 +194,22 @@ bool OutputDataListModel::setData(const QModelIndex &index, const QVariant &valu
     switch (role)
     {
         case SimulationRole:
-            _mapItems[index.row()].Simulated = value.toBool();
+            itemData->Simulated = value.toBool();
             emit dataChanged(index, index, QVector<int>() << role);
         return true;
 
         case Qt::DecorationRole:
-            _mapItems[index.row()].SimulationIcon = value.value<SimulationIconType>();
+            itemData->SimulationIcon = value.value<SimulationIconType>();
             emit dataChanged(index, index, QVector<int>() << role);
         return true;
 
         case DescriptionRole:
-            _mapItems[index.row()].Description = value.toString();
+            itemData->Description = value.toString();
             emit dataChanged(index, index, QVector<int>() << role);
         return true;
 
         case ColorRole:
-            _mapItems[index.row()].BgColor = value.value<QColor>();
+            itemData->BgColor = value.value<QColor>();
             emit dataChanged(index, index, QVector<int>() << Qt::DisplayRole);
         return true;
 
@@ -252,20 +259,53 @@ void OutputDataListModel::update()
 ///
 void OutputDataListModel::updateData(const QModbusDataUnit& data)
 {
-    _lastData = data;
-
     const auto mode = _parentWidget->dataDisplayMode();
     const auto leadingZeros = _parentWidget->_displayDefinition.LeadingZeros;
     const auto pointType = _parentWidget->_displayDefinition.PointType;
     const auto byteOrder = *_parentWidget->byteOrder();
     const auto codepage = _parentWidget->codepage();
 
+    const bool all_changed =
+        !_lastData.isValid()
+        || (_lastMode != mode)
+        || (_lastLeadingZeros != leadingZeros)
+        || (_lastPointType != pointType)
+        || (_lastByteOrder != byteOrder)
+        || (_lastCodepage != codepage);
+
+    int first_changed = -1, last_changed = -1;
+
     for(int i = 0; i < rowCount(); i++)
     {
-        const auto value = _lastData.value(i);
+        const auto value = data.value(i);
 
         auto& itemData = _mapItems[i];
         itemData.Address = _parentWidget->_displayDefinition.PointAddress + i;
+
+        // Detect the changed data
+        if (!all_changed && !itemData.ValueStr.isEmpty())
+        {
+            bool skip = true;
+            for (int reg = 0; reg < registersCount(mode); ++reg)
+            {
+                if (data.value(i + reg) != _lastData.value(i + reg))
+                {
+                    skip = false;
+                    break;
+                }
+            }
+            if (skip)
+            {
+                continue;
+            }
+        }
+
+        // Adjust the range of changed data
+        if (first_changed == -1)
+        {
+            first_changed = i;
+        }
+        last_changed = i;
 
         switch(mode)
         {
@@ -291,79 +331,93 @@ void OutputDataListModel::updateData(const QModbusDataUnit& data)
 
             case DataDisplayMode::FloatingPt:
                 // MSRF
-                itemData.ValueStr = formatFloatValue(pointType, _lastData.value(i+1), value, byteOrder,
+                itemData.ValueStr = formatFloatValue(pointType, data.value(i+1), value, byteOrder,
                                                      (i%2) || (i+1>=rowCount()), itemData.Value);
             break;
 
             case DataDisplayMode::SwappedFP:
                 // LSRF
-                itemData.ValueStr = formatFloatValue(pointType, value, _lastData.value(i+1), byteOrder,
+                itemData.ValueStr = formatFloatValue(pointType, value, data.value(i+1), byteOrder,
                                                      (i%2) || (i+1>=rowCount()), itemData.Value);
             break;
 
             case DataDisplayMode::DblFloat:
                 // MSRF
-                itemData.ValueStr = formatDoubleValue(pointType, _lastData.value(i+3), _lastData.value(i+2), _lastData.value(i+1), value,
+                itemData.ValueStr = formatDoubleValue(pointType, data.value(i+3), data.value(i+2), data.value(i+1), value,
                                                       byteOrder, (i%4) || (i+3>=rowCount()), itemData.Value);
             break;
 
             case DataDisplayMode::SwappedDbl:
                 // LSRF
-                itemData.ValueStr = formatDoubleValue(pointType, value, _lastData.value(i+1), _lastData.value(i+2), _lastData.value(i+3),
+                itemData.ValueStr = formatDoubleValue(pointType, value, data.value(i+1), data.value(i+2), data.value(i+3),
                                                       byteOrder, (i%4) || (i+3>=rowCount()), itemData.Value);
             break;
 
             case DataDisplayMode::Int32:
                 // MSRF
-                itemData.ValueStr = formatInt32Value(pointType, _lastData.value(i+1), value, byteOrder,
+                itemData.ValueStr = formatInt32Value(pointType, data.value(i+1), value, byteOrder,
                                                      (i%2) || (i+1>=rowCount()), itemData.Value);
             break;
 
             case DataDisplayMode::SwappedInt32:
                 // LSRF
-                itemData.ValueStr = formatInt32Value(pointType, value, _lastData.value(i+1), byteOrder,
+                itemData.ValueStr = formatInt32Value(pointType, value, data.value(i+1), byteOrder,
                                                      (i%2) || (i+1>=rowCount()), itemData.Value);
             break;
 
             case DataDisplayMode::UInt32:
                 // MSRF
-                itemData.ValueStr = formatUInt32Value(pointType, _lastData.value(i+1), value, byteOrder, leadingZeros,
+                itemData.ValueStr = formatUInt32Value(pointType, data.value(i+1), value, byteOrder, leadingZeros,
                                                       (i%2) || (i+1>=rowCount()), itemData.Value);
             break;
 
             case DataDisplayMode::SwappedUInt32:
                 // LSRF
-                itemData.ValueStr = formatUInt32Value(pointType, value, _lastData.value(i+1), byteOrder, leadingZeros,
+                itemData.ValueStr = formatUInt32Value(pointType, value, data.value(i+1), byteOrder, leadingZeros,
                                                       (i%2) || (i+1>=rowCount()), itemData.Value);
                 break;
 
             case DataDisplayMode::Int64:
                 // MSRF
-                itemData.ValueStr = formatInt64Value(pointType, _lastData.value(i+3), _lastData.value(i+2), _lastData.value(i+1), value,
+                itemData.ValueStr = formatInt64Value(pointType, data.value(i+3), data.value(i+2), data.value(i+1), value,
                                                      byteOrder, (i%4) || (i+3>=rowCount()), itemData.Value);
             break;
 
             case DataDisplayMode::SwappedInt64:
                 // LSRF
-                itemData.ValueStr = formatInt64Value(pointType, value, _lastData.value(i+1), _lastData.value(i+2), _lastData.value(i+3),
+                itemData.ValueStr = formatInt64Value(pointType, value, data.value(i+1), data.value(i+2), data.value(i+3),
                                                      byteOrder, (i%4) || (i+3>=rowCount()), itemData.Value);
                 break;
 
             case DataDisplayMode::UInt64:
                 // MSRF
-                itemData.ValueStr = formatUInt64Value(pointType, _lastData.value(i+3), _lastData.value(i+2), _lastData.value(i+1), value,
+                itemData.ValueStr = formatUInt64Value(pointType, data.value(i+3), data.value(i+2), data.value(i+1), value,
                                                       byteOrder, leadingZeros, (i%4) || (i+3>=rowCount()), itemData.Value);
             break;
 
             case DataDisplayMode::SwappedUInt64:
                 // LSRF
-                itemData.ValueStr = formatUInt64Value(pointType, value, _lastData.value(i+1), _lastData.value(i+2), _lastData.value(i+3),
+                itemData.ValueStr = formatUInt64Value(pointType, value, data.value(i+1), data.value(i+2), data.value(i+3),
                                                       byteOrder, leadingZeros, (i%4) || (i+3>=rowCount()), itemData.Value);
             break;
         }
     }
 
-    emit dataChanged(index(0), index(rowCount() - 1), QVector<int>() << Qt::DisplayRole);
+    if (all_changed || first_changed != -1)
+    {
+        _lastData = data;
+        _lastMode = mode;
+        _lastLeadingZeros = leadingZeros;
+        _lastPointType = pointType;
+        _lastByteOrder = byteOrder;
+        _lastCodepage = codepage;
+
+        // Notify changed data only
+        if (first_changed != -1)
+        {
+            emit dataChanged(index(first_changed), index(last_changed), QVector<int>() << Qt::DisplayRole);
+        }
+    }
 }
 
 ///
@@ -399,8 +453,12 @@ OutputDataListModel::SimulationIconType OutputDataListModel::simulationIcon(int 
         if(row + i >= rowCount())
             return SimulationIconNone;
 
-        if(_mapItems[row + i].Simulated)
-            return _mapItems[row + i].SimulationIcon;
+        const auto itemData = _mapItems.find(row + i);
+        if (itemData == _mapItems.end())
+            return SimulationIconNone;
+
+        if(itemData->Simulated)
+            return itemData->SimulationIcon;
     }
 
     return SimulationIconNone;
@@ -420,6 +478,7 @@ OutputDataWidget::OutputDataWidget(QWidget *parent) :
 {
     ui->setupUi(this);
     ui->stackedWidget->setCurrentIndex(0);
+    ui->listView->setUniformItemSizes(true);
     ui->listView->setModel(_listModel.get());
     ui->listView->setItemDelegate(new DataDelegate( this ));
     ui->labelStatus->setAutoFillBackground(true);

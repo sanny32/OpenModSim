@@ -1,4 +1,4 @@
-﻿#include <algorithm>
+#include <algorithm>
 #include "numericutils.h"
 #include "modbustcpserver.h"
 #include "modbusrtuserialserver.h"
@@ -528,7 +528,10 @@ QModbusDevice::State ModbusMultiServer::state(ConnectionType type, const QString
 ///
 QModbusDataUnit ModbusMultiServer::data(quint8 deviceId, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, quint16 length) const
 {
-    return _modbusDataUnitMaps[deviceId].getData(pointType, pointAddress, length);
+    const auto item = _modbusDataUnitMaps.find(deviceId);
+    return (item != _modbusDataUnitMaps.end())
+        ? item->getData(pointType, pointAddress, length)
+        : QModbusDataUnit();
 }
 
 ///
