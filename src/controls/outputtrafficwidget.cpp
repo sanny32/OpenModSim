@@ -128,6 +128,15 @@ void OutputTrafficWidget::setLogViewLimit(int l)
 }
 
 ///
+/// \brief OutputTrafficWidget::isLogEmpty
+/// \return
+///
+bool OutputTrafficWidget::isLogEmpty() const
+{
+    return ui->logView->rowCount() == 0;
+}
+
+///
 /// \brief OutputTrafficWidget::autoscrollLogView
 /// \return
 ///

@@ -82,6 +82,7 @@ signals:
     void logViewStateChanged(LogViewState state);
 
 private slots:
+    void on_awake();
     void on_mbConnected(const ConnectionDetails& cd);
     void on_mbDisconnected(const ConnectionDetails& cd);
     void on_mbRequest(QSharedPointer<const ModbusMessage> msg);

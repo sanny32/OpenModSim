@@ -33,6 +33,7 @@ public:
 
     int logViewLimit() const;
     void setLogViewLimit(int l);
+    bool isLogEmpty() const;
 
     bool autoscrollLogView() const;
     void setAutosctollLogView(bool on);
