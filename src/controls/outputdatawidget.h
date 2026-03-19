@@ -79,6 +79,11 @@ private:
 
     OutputDataWidget* _parentWidget;
     QModbusDataUnit _lastData;
+    DataDisplayMode _lastMode = DataDisplayMode::Binary;
+    bool _lastLeadingZeros = false;
+    QModbusDataUnit::RegisterType _lastPointType = QModbusDataUnit::RegisterType::Invalid;
+    ByteOrder _lastByteOrder = ByteOrder::Direct;
+    QString _lastCodepage;
     const QPixmap _iconSimulation16Bit;
     const QPixmap _iconSimulation32Bit;
     const QPixmap _iconSimulation64Bit;
