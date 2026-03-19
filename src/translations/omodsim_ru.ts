@@ -2974,7 +2974,7 @@ Script.onInit(()=&gt;{
     </message>
     <message>
         <location filename="../mainwindow.ui" line="232"/>
-        <location filename="../mainwindow.cpp" line="1562"/>
+        <location filename="../mainwindow.cpp" line="1566"/>
         <source>Save Project</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3257,7 +3257,7 @@ Script.onInit(()=&gt;{
         <translation type="vanished">РЁРµСЃС‚РЅР°РґС†Р°С‚РёСЂРёС‡РЅС‹Рµ Р°РґСЂРµСЃР°</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="620"/>
+        <location filename="../mainwindow.cpp" line="624"/>
         <source>All files (*)</source>
         <translation>Р’СЃРµ С„Р°Р№Р»С‹ (*)</translation>
     </message>
@@ -3280,8 +3280,8 @@ Script.onInit(()=&gt;{
         <translation type="obsolete">Р”Р°РЅРЅС‹Рµ</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="619"/>
-        <location filename="../mainwindow.cpp" line="654"/>
+        <location filename="../mainwindow.cpp" line="623"/>
+        <location filename="../mainwindow.cpp" line="658"/>
         <source>Project files (*.msimprj)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3292,22 +3292,22 @@ Script.onInit(()=&gt;{
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="247"/>
-        <location filename="../mainwindow.cpp" line="1658"/>
+        <location filename="../mainwindow.cpp" line="1662"/>
         <source>Clear List</source>
         <translation>Очистить список</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1124"/>
+        <location filename="../mainwindow.cpp" line="1128"/>
         <source>JavaScript files (*.js);;All files (*)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1646"/>
+        <location filename="../mainwindow.cpp" line="1650"/>
         <source>No Recent Projects</source>
         <translation>Нет недавних проектов</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1563"/>
+        <location filename="../mainwindow.cpp" line="1567"/>
         <source>Save project before closing?</source>
         <translation>Сохранить проект перед закрытием?</translation>
     </message>
