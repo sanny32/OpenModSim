@@ -1465,8 +1465,15 @@ void AppProject::loadProject(const QString& filename)
         }
     };
 
-    // Apply once synchronously.
-    restoreActiveWindows();
+    // If the MDI area is already visible (e.g. user opens a project from the menu),
+    // apply immediately so the tab updates synchronously.
+    // If not visible yet (startup: loadProject is called before w.show()),
+    // defer via a zero-timeout timer so it runs after the window is shown and
+    // QMdiArea::setActiveSubWindow properly emits subWindowActivated.
+    if(_mdiArea->isVisible())
+        restoreActiveWindows();
+    else
+        QTimer::singleShot(0, this, restoreActiveWindows);
 }
 
 ///
