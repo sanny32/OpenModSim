@@ -73,6 +73,8 @@ signals:
     void deviceIdsChanged(const QList<int>& deviceIds);
     void request(QSharedPointer<const ModbusMessage> msg);
     void response(QSharedPointer<const ModbusMessage> msgReq, QSharedPointer<const ModbusMessage> msgResp);
+    void requestOnConnection(const ConnectionDetails& cd, QSharedPointer<const ModbusMessage> msg);
+    void responseOnConnection(const ConnectionDetails& cd, QSharedPointer<const ModbusMessage> msgReq, QSharedPointer<const ModbusMessage> msgResp);
     void rawDataReceived(const ConnectionDetails& cd, const QDateTime& time, const QByteArray& data);
     void rawDataSended(const ConnectionDetails& cd, const QDateTime& time, const QByteArray& data);
     void connectionError(const QString& error);

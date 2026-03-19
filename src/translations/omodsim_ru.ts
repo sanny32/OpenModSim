@@ -2361,43 +2361,60 @@ MODBUS Point Type:
         <translation type="obsolete">Р—Р°РјРµРЅРёС‚СЊ</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="45"/>
+        <location filename="../formtrafficview.cpp" line="46"/>
         <source>Text files (*.txt)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="50"/>
+        <location filename="../formtrafficview.cpp" line="51"/>
         <source>Log exported successfully to file %1</source>
         <translation type="unfinished">Р›РѕРі СѓСЃРїРµС€РЅРѕ СЌРєСЃРїРѕСЂС‚РёСЂРѕРІР°РЅ РІ С„Р°Р№Р» %1</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="52"/>
+        <location filename="../formtrafficview.cpp" line="53"/>
         <source>Export log error!</source>
         <translation type="unfinished">РћС€РёР±РєР° СЌРєСЃРїРѕСЂС‚Р° Р»РѕРіР°!</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="66"/>
+        <location filename="../formtrafficview.cpp" line="67"/>
         <source>Unit:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="73"/>
-        <location filename="../formtrafficview.cpp" line="91"/>
+        <location filename="../formtrafficview.cpp" line="74"/>
+        <location filename="../formtrafficview.cpp" line="92"/>
+        <location filename="../formtrafficview.cpp" line="119"/>
+        <location filename="../formtrafficview.cpp" line="508"/>
         <source>All</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="74"/>
+        <location filename="../formtrafficview.cpp" line="75"/>
         <source>0 = all unit ids</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="113"/>
+        <location filename="../formtrafficview.cpp" line="114"/>
+        <source>Source:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../formtrafficview.cpp" line="490"/>
+        <source>Modbus/TCP Srv %1:%2</source>
+        <translation type="unfinished">Modbus/TCP СЃРµСЂРІРµСЂ %1:%2</translation>
+    </message>
+    <message>
+        <location filename="../formtrafficview.cpp" line="492"/>
+        <source>Port %1:%2:%3:%4:%5</source>
+        <translation type="unfinished">РџРѕСЂС‚ %1:%2:%3:%4:%5</translation>
+    </message>
+    <message>
+        <location filename="../formtrafficview.cpp" line="130"/>
         <source>Rows:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="86"/>
+        <location filename="../formtrafficview.cpp" line="87"/>
         <source>Function:</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3881,12 +3898,12 @@ Script.onInit(()=&gt;{
 <context>
     <name>ModbusMultiServer</name>
     <message>
-        <location filename="../modbusmultiserver.cpp" line="505"/>
+        <location filename="../modbusmultiserver.cpp" line="513"/>
         <source>An incorrect device ID was specified (%1)</source>
         <translation>РќРµРєРѕСЂСЂРµРєС‚РЅРѕ Р·РЅР°СЏРµРЅРёРµ РЅРѕРјРµСЂР° СѓСЃС‚СЂРѕР№СЃС‚РІР° (%1)</translation>
     </message>
     <message>
-        <location filename="../modbusmultiserver.cpp" line="1018"/>
+        <location filename="../modbusmultiserver.cpp" line="1026"/>
         <source>Connection error. %1</source>
         <translation>РћС€РёР±РєР° РїРѕРґРєР»СЋС‡РµРЅРёСЏ. %1</translation>
     </message>

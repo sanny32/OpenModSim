@@ -243,8 +243,16 @@ QSharedPointer<ModbusServer> ModbusMultiServer::createModbusServer(const Connect
 
     if(modbusServer)
     {
-        connect(modbusServer.get(), &ModbusServer::modbusRequest, this, &ModbusMultiServer::request);
-        connect(modbusServer.get(), &ModbusServer::modbusResponse, this, &ModbusMultiServer::response);
+        connect(modbusServer.get(), &ModbusServer::modbusRequest, this, [this, modbusServer](QSharedPointer<const ModbusMessage> msg) {
+            const auto cd = modbusServer->property("ConnectionDetails").value<ConnectionDetails>();
+            emit request(msg);
+            emit requestOnConnection(cd, msg);
+        });
+        connect(modbusServer.get(), &ModbusServer::modbusResponse, this, [this, modbusServer](QSharedPointer<const ModbusMessage> msgReq, QSharedPointer<const ModbusMessage> msgResp) {
+            const auto cd = modbusServer->property("ConnectionDetails").value<ConnectionDetails>();
+            emit response(msgReq, msgResp);
+            emit responseOnConnection(cd, msgReq, msgResp);
+        });
         connect(modbusServer.get(), &ModbusServer::dataWritten, this, &ModbusMultiServer::on_dataWritten);
         connect(modbusServer.get(), &ModbusServer::stateChanged, this, &ModbusMultiServer::on_stateChanged);
         connect(modbusServer.get(), &ModbusServer::errorOccurred, this, &ModbusMultiServer::on_errorOccurred);

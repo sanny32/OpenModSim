@@ -9,6 +9,7 @@
 #include <QSizePolicy>
 #include "mainwindow.h"
 #include "modbusmessages.h"
+#include "serialportutils.h"
 #include "formtrafficview.h"
 #include "ui_formtrafficview.h"
 
@@ -109,6 +110,22 @@ FormTrafficView::FormTrafficView(int id, ModbusMultiServer& server, MainWindow* 
         emit definitionChanged();
     });
 
+    _labelSource = new QLabel(ui->toolBarTraffic);
+    _labelSource->setText(tr("Source:"));
+    ui->toolBarTraffic->addWidget(_labelSource);
+    addToolbarSpacer(3);
+
+    _sourceFilter = new QComboBox(ui->toolBarTraffic);
+    _sourceFilter->addItem(tr("All"), QVariant());
+    _sourceFilter->setMinimumWidth(220);
+    _sourceFilter->setSizeAdjustPolicy(QComboBox::AdjustToContents);
+    ui->toolBarTraffic->addWidget(_sourceFilter);
+    addToolbarSpacer(8);
+    connect(_sourceFilter, qOverload<int>(&QComboBox::currentIndexChanged), this, [this](int) {
+        _requestCount = 0;
+        _responseCount = 0;
+    });
+
     _labelRowLimit = new QLabel(ui->toolBarTraffic);
     _labelRowLimit->setText(tr("Rows:"));
     ui->toolBarTraffic->addWidget(_labelRowLimit);
@@ -168,8 +185,8 @@ FormTrafficView::FormTrafficView(int id, ModbusMultiServer& server, MainWindow* 
 
     setLogViewState(server.isConnected() ? LogViewState::Running : LogViewState::Unknown);
 
-    connect(&server, &ModbusMultiServer::request, this, &FormTrafficView::on_mbRequest);
-    connect(&server, &ModbusMultiServer::response, this, &FormTrafficView::on_mbResponse);
+    connect(&server, &ModbusMultiServer::requestOnConnection, this, &FormTrafficView::on_mbRequest);
+    connect(&server, &ModbusMultiServer::responseOnConnection, this, &FormTrafficView::on_mbResponse);
     connect(&server, &ModbusMultiServer::connected, this, &FormTrafficView::on_mbConnected);
     connect(&server, &ModbusMultiServer::disconnected, this, &FormTrafficView::on_mbDisconnected);
     connect(&server, &ModbusMultiServer::definitionsChanged, this, &FormTrafficView::on_mbDefinitionsChanged);
@@ -178,6 +195,7 @@ FormTrafficView::FormTrafficView(int id, ModbusMultiServer& server, MainWindow* 
     connect(dispatcher, &QAbstractEventDispatcher::awake, this, &FormTrafficView::on_awake);
 
     ui->outputWidget->setup(_displayDefinition);
+    updateSourceFilter();
     on_awake();
 }
 
@@ -442,6 +460,7 @@ void FormTrafficView::show()
 ///
 void FormTrafficView::on_mbConnected(const ConnectionDetails&)
 {
+    updateSourceFilter();
     ui->outputWidget->clearLogView();
 
     if(logViewState() == LogViewState::Unknown) {
@@ -454,6 +473,7 @@ void FormTrafficView::on_mbConnected(const ConnectionDetails&)
 ///
 void FormTrafficView::on_mbDisconnected(const ConnectionDetails&)
 {
+    updateSourceFilter();
     if(!_mbMultiServer.isConnected()) {
         setLogViewState(LogViewState::Unknown);
     }
@@ -464,7 +484,40 @@ void FormTrafficView::on_mbDisconnected(const ConnectionDetails&)
 /// \param msg
 /// \return
 ///
-bool FormTrafficView::matchesTrafficFilter(QSharedPointer<const ModbusMessage> msg) const
+QString FormTrafficView::sourceFilterText(const ConnectionDetails& cd) const
+{
+    if (cd.Type == ConnectionType::Tcp)
+        return tr("Modbus/TCP Srv %1:%2").arg(cd.TcpParams.IPAddress, QString::number(cd.TcpParams.ServicePort));
+
+    return tr("Port %1:%2:%3:%4:%5").arg(cd.SerialParams.PortName,
+                                          QString::number(cd.SerialParams.BaudRate),
+                                          QString::number(cd.SerialParams.WordLength),
+                                          Parity_toString(cd.SerialParams.Parity),
+                                          QString::number(cd.SerialParams.StopBits));
+}
+
+void FormTrafficView::updateSourceFilter()
+{
+    if (!_sourceFilter)
+        return;
+
+    const QVariant selectedData = _sourceFilter->currentData();
+    {
+        QSignalBlocker b(_sourceFilter);
+        _sourceFilter->clear();
+        _sourceFilter->addItem(tr("All"), QVariant());
+        const auto activeConnections = _mbMultiServer.connections();
+        for (const auto& cd : activeConnections)
+            _sourceFilter->addItem(sourceFilterText(cd), QVariant::fromValue(cd));
+    }
+
+    int idx = _sourceFilter->findData(selectedData);
+    if (idx < 0)
+        idx = 0;
+    _sourceFilter->setCurrentIndex(idx);
+}
+
+bool FormTrafficView::matchesTrafficFilter(const ConnectionDetails& cd, QSharedPointer<const ModbusMessage> msg) const
 {
     if (!msg)
         return false;
@@ -482,6 +535,12 @@ bool FormTrafficView::matchesTrafficFilter(QSharedPointer<const ModbusMessage> m
             return false;
     }
 
+    if (_sourceFilter && _sourceFilter->currentIndex() > 0) {
+        const auto selected = _sourceFilter->currentData().value<ConnectionDetails>();
+        if (!(selected == cd))
+            return false;
+    }
+
     return true;
 }
 
@@ -489,9 +548,9 @@ bool FormTrafficView::matchesTrafficFilter(QSharedPointer<const ModbusMessage> m
 /// \brief FormTrafficView::on_mbRequest
 /// \param msg
 ///
-void FormTrafficView::on_mbRequest(QSharedPointer<const ModbusMessage> msg)
+void FormTrafficView::on_mbRequest(const ConnectionDetails& cd, QSharedPointer<const ModbusMessage> msg)
 {
-    if(matchesTrafficFilter(msg)) {
+    if(matchesTrafficFilter(cd, msg)) {
         ++_requestCount;
         ui->outputWidget->updateTraffic(msg);
     }
@@ -502,9 +561,9 @@ void FormTrafficView::on_mbRequest(QSharedPointer<const ModbusMessage> msg)
 /// \param msgReq
 /// \param msgResp
 ///
-void FormTrafficView::on_mbResponse(QSharedPointer<const ModbusMessage> msgReq, QSharedPointer<const ModbusMessage> msgResp)
+void FormTrafficView::on_mbResponse(const ConnectionDetails& cd, QSharedPointer<const ModbusMessage> msgReq, QSharedPointer<const ModbusMessage> msgResp)
 {
-    const bool passesFilter = msgReq ? matchesTrafficFilter(msgReq) : matchesTrafficFilter(msgResp);
+    const bool passesFilter = msgReq ? matchesTrafficFilter(cd, msgReq) : matchesTrafficFilter(cd, msgResp);
     if(passesFilter) {
         ++_responseCount;
         ui->outputWidget->updateTraffic(msgResp);

@@ -82,14 +82,16 @@ private slots:
     void on_awake();
     void on_mbConnected(const ConnectionDetails& cd);
     void on_mbDisconnected(const ConnectionDetails& cd);
-    void on_mbRequest(QSharedPointer<const ModbusMessage> msg);
-    void on_mbResponse(QSharedPointer<const ModbusMessage> msgReq, QSharedPointer<const ModbusMessage> msgResp);
+    void on_mbRequest(const ConnectionDetails& cd, QSharedPointer<const ModbusMessage> msg);
+    void on_mbResponse(const ConnectionDetails& cd, QSharedPointer<const ModbusMessage> msgReq, QSharedPointer<const ModbusMessage> msgResp);
     void on_mbDataChanged(quint8 deviceId, const QModbusDataUnit& data);
     void on_mbDefinitionsChanged(const ModbusDefinitions& defs);
 
 private:
     void setDisplayDefinitionSilent(const TrafficViewDefinitions& dd);
-    bool matchesTrafficFilter(QSharedPointer<const ModbusMessage> msg) const;
+    void updateSourceFilter();
+    QString sourceFilterText(const ConnectionDetails& cd) const;
+    bool matchesTrafficFilter(const ConnectionDetails& cd, QSharedPointer<const ModbusMessage> msg) const;
 
 private:
     Ui::FormTrafficView *ui;
