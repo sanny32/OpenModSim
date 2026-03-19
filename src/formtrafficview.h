@@ -69,8 +69,6 @@ protected:
 
 public slots:
     void show();
-    void connectEditSlots();
-    void disconnectEditSlots();
 
 signals:
     void showed();
@@ -88,6 +86,13 @@ private slots:
     void on_mbDefinitionsChanged(const ModbusDefinitions& defs);
 
 private:
+    void setupToolbarActions();
+    void setupFilterControls();
+    void setupToolbarLayout();
+    void initializeDisplayDefinition();
+    void setupServerConnections();
+    void addToolbarSpacer(int width);
+    void resetTrafficCounters();
     void setDisplayDefinitionSilent(const TrafficViewDefinitions& dd);
     void updateSourceFilter();
     QString sourceFilterText(const ConnectionDetails& cd) const;
