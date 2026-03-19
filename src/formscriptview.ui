@@ -39,7 +39,14 @@
     </widget>
    </item>
    <item>
-    <widget class="JScriptControl" name="scriptControl" native="true"/>
+    <widget class="JScriptControl" name="scriptControl">
+     <property name="frameShape">
+      <enum>QFrame::Shape::WinPanel</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Shadow::Sunken</enum>
+     </property>
+    </widget>
    </item>
   </layout>
   <action name="actionRunScript">
@@ -64,7 +71,7 @@
  <customwidgets>
   <customwidget>
    <class>JScriptControl</class>
-   <extends>QWidget</extends>
+   <extends>QFrame</extends>
    <header>jscriptcontrol.h</header>
    <container>1</container>
   </customwidget>

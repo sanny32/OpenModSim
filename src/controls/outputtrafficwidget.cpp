@@ -10,7 +10,7 @@
 /// \param parent
 ///
 OutputTrafficWidget::OutputTrafficWidget(QWidget* parent)
-    : QWidget(parent)
+    : QFrame(parent)
     , ui(new Ui::OutputTrafficWidget)
 {
     ui->setupUi(this);

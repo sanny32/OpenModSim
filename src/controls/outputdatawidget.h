@@ -4,7 +4,7 @@
 #include <QAbstractListModel>
 #include <QPixmap>
 #include <QSharedPointer>
-#include <QWidget>
+#include <QFrame>
 #include "datasimulator.h"
 #include "displaydefinition.h"
 #include "enums.h"
@@ -92,7 +92,7 @@ private:
     QMap<int, ItemData> _mapItems;
 };
 
-class OutputDataWidget : public QWidget
+class OutputDataWidget : public QFrame
 {
     Q_OBJECT
 

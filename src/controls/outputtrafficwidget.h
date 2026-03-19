@@ -2,7 +2,7 @@
 #define OUTPUTTRAFFICWIDGET_H
 
 #include <QSharedPointer>
-#include <QWidget>
+#include <QFrame>
 #include "displaydefinition.h"
 #include "modbusmessage.h"
 
@@ -12,7 +12,7 @@ class OutputTrafficWidget;
 
 class QModelIndex;
 
-class OutputTrafficWidget : public QWidget
+class OutputTrafficWidget : public QFrame
 {
     Q_OBJECT
 

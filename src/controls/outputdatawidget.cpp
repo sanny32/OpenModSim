@@ -469,7 +469,7 @@ OutputDataListModel::SimulationIconType OutputDataListModel::simulationIcon(int 
 /// \param parent
 ///
 OutputDataWidget::OutputDataWidget(QWidget *parent) :
-     QWidget(parent)
+     QFrame(parent)
    , ui(new Ui::OutputDataWidget)
    ,_displayHexAddreses(false)
    ,_dataDisplayMode(DataDisplayMode::Hex)

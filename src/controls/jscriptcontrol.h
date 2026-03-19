@@ -6,6 +6,7 @@
 #include <QPlainTextEdit>
 #include <QTextDocument>
 #include <QXmlStreamWriter>
+#include <QFrame>
 #include "console.h"
 #include "script.h"
 #include "storage.h"
@@ -20,7 +21,7 @@ class JScriptControl;
 ///
 /// \brief The JScriptControl class
 ///
-class JScriptControl : public QWidget
+class JScriptControl : public QFrame
 {
     Q_OBJECT
 

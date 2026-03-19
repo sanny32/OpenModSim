@@ -10,7 +10,7 @@
 /// \param parent
 ///
 JScriptControl::JScriptControl(QWidget *parent)
-    : QWidget(parent)
+    : QFrame(parent)
     , ui(new Ui::JScriptControl)
     ,_script(nullptr)
     ,_storage(nullptr)
@@ -72,7 +72,7 @@ bool JScriptControl::eventFilter(QObject* obj, QEvent* event)
         }
     }
 
-    return QWidget::eventFilter(obj, event);
+    return QFrame::eventFilter(obj, event);
 }
 
 ///
