@@ -24,9 +24,6 @@ public:
     PaletteGuard(QObject* parent) : QObject(parent) { }
     bool eventFilter(QObject *obj, QEvent *ev) override {
         if (ev->type() == QEvent::ApplicationPaletteChange) {
-///
-/// \brief QTimer::singleShot
-///
             QTimer::singleShot(0, [this](){
                 QApplication::setPalette(lightPalette());
             });
