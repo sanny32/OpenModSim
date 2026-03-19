@@ -544,8 +544,18 @@ void OutputDataWidget::setup(const DataViewDefinitions& dd, const ModbusSimulati
 
     _listModel->clear();
 
-    for(auto&& key : simulations.keys())
-        _listModel->setData(_listModel->find(key.DeviceId, key.Type, key.Address), true, SimulationRole);
+    for(auto it = simulations.constBegin(); it != simulations.constEnd(); ++it) {
+        const auto index = _listModel->find(it.key().DeviceId, it.key().Type, it.key().Address);
+        const auto& params = it.value();
+        _listModel->setData(index, true, SimulationRole);
+        if(params.Mode != SimulationMode::Disabled) {
+            switch(registersCount(params.DataMode)) {
+                case 1: _listModel->setData(index, OutputDataListModel::SimulationIcon16Bit, Qt::DecorationRole); break;
+                case 2: _listModel->setData(index, OutputDataListModel::SimulationIcon32Bit, Qt::DecorationRole); break;
+                case 4: _listModel->setData(index, OutputDataListModel::SimulationIcon64Bit, Qt::DecorationRole); break;
+            }
+        }
+    }
 
     for(auto&& key : _descriptionMap.keys())
         setDescription(key.DeviceId, key.Type, key.Address, _descriptionMap[key]);
