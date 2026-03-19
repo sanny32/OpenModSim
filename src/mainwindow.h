@@ -152,8 +152,6 @@ private:
 
     bool loadAppSettings(const QString& filename);
     void saveAppSettings();
-    bool loadSessionProject();
-    bool saveSessionProject();
     bool confirmSaveOnClose();
     bool hasProjectContext() const;
     void addRecentProject(const QString& filePath);
@@ -185,7 +183,7 @@ private:
     QString _projectFilePath;
     ProjectFormKind _newFormKind = ProjectFormKind::Data;
     QStringList _recentProjects;
-    QString _sessionProjectPath;
+    QString _lastProjectPath;
     bool _isModified = false;
     QMenu* _openRecentMenu = nullptr;
     QAction* _clearRecentAction = nullptr;

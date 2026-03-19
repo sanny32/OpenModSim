@@ -22,12 +22,11 @@
 
 // Forward declaration (defined later in this file)
 static QString getSettingsFilePath();
-static QString createSessionProjectFilePath();
 namespace {
 constexpr const char* kSplitAutoCloneProperty = "SplitAutoClone";
 constexpr const char* kNewFormKindKey = "NewFormKind";
 constexpr const char* kRecentProjectsKey = "RecentProjects";
-constexpr const char* kSessionProjectPathKey = "SessionProjectPath";
+constexpr const char* kLastProjectPathKey = "LastProjectPath";
 constexpr int kMaxRecentProjects = 10;
 
 ProjectFormKind newFormKindFromSetting(int value)
@@ -203,17 +202,6 @@ void setForegroundColorOnForm(QWidget* widget, const QColor& clr)
     else if (auto* frm = qobject_cast<FormScriptView*>(widget)) frm->setForegroundColor(clr);
 }
 
-void setScriptFontOnForm(QWidget* widget, const QFont& font)
-{
-    if (auto* frm = qobject_cast<FormScriptView*>(widget)) frm->setFont(font);
-}
-
-void setZoomPercentOnForm(QWidget* widget, int zoomPercent)
-{
-    if (auto* frm = qobject_cast<FormDataView*>(widget)) frm->setZoomPercent(zoomPercent);
-    else if (auto* frm = qobject_cast<FormScriptView*>(widget)) frm->setZoomPercent(zoomPercent);
-}
-
 }
 
 
@@ -340,11 +328,14 @@ MainWindow::MainWindow(const QString& profile, bool useSession, QWidget *parent)
     loadAppSettings(profile);
     rebuildRecentProjectsMenu();
 
-    if(_sessionProjectPath.isEmpty())
-        _sessionProjectPath = createSessionProjectFilePath();
-    if(_useSession) {
-        if(!loadSessionProject())
-            ui->actionNew->trigger();
+    const bool canRestoreLastProject = _useSession
+        && !_lastProjectPath.isEmpty()
+        && QFile::exists(_lastProjectPath);
+    if(canRestoreLastProject) {
+        loadProject(_lastProjectPath);
+        addRecentProject(_lastProjectPath);
+    } else {
+        ui->actionNew->trigger();
     }
 }
 
@@ -399,14 +390,14 @@ void MainWindow::changeEvent(QEvent* event)
 ///
 void MainWindow::closeEvent(QCloseEvent *event)
 {
-    if(_isModified) {
+    const bool shouldAskToSave = hasProjectContext() && (_isModified || _projectFilePath.isEmpty());
+    if(shouldAskToSave) {
         if(!confirmSaveOnClose()) {
             event->ignore();
             return;
         }
     }
 
-    saveSessionProject();
     saveAppSettings();
 
     ui->mdiArea->closeAllSubWindows();
@@ -536,7 +527,6 @@ void MainWindow::on_actionNewTrafficView_triggered()
 ///
 QWidget* MainWindow::createNewForm(ProjectFormKind kind)
 {
-    const auto cur = _project->currentMdiChild();
     _project->setWindowCounter(_project->windowCounter() + 1);
     auto* frm = _project->createMdiChild(_project->windowCounter(), kind);
     if(!frm)
@@ -546,27 +536,16 @@ QWidget* MainWindow::createNewForm(ProjectFormKind kind)
 
     const auto& prefs = AppPreferences::instance();
 
-    if(cur) {
-        setByteOrderOnForm(frm, byteOrderOfForm(cur));
-        setDataDisplayModeOnForm(frm, dataDisplayModeOfForm(cur));
-        frm->setFont(cur->font());
-        setStatusColorOnForm(frm, statusColorOfForm(cur));
-        setBackgroundColorOnForm(frm, backgroundColorOfForm(cur));
-        setForegroundColorOnForm(frm, foregroundColorOfForm(cur));
-    }
-    else {
-        frm->setFont(prefs.font());
-        setBackgroundColorOnForm(frm, prefs.backgroundColor());
-        setForegroundColorOnForm(frm, prefs.foregroundColor());
-        setStatusColorOnForm(frm, prefs.statusColor());
-    }
-    setScriptFontOnForm(frm, prefs.scriptFont());
-    setZoomPercentOnForm(frm, prefs.fontZoom());
-
     switch(kind)
     {
         case ProjectFormKind::Data: {
             if (auto* dataFrm = qobject_cast<FormDataView*>(frm)) {
+                dataFrm->setFont(prefs.font());
+                dataFrm->setBackgroundColor(prefs.backgroundColor());
+                dataFrm->setForegroundColor(prefs.foregroundColor());
+                dataFrm->setStatusColor(prefs.statusColor());
+                dataFrm->setZoomPercent(prefs.fontZoom());
+
                 auto dd = dataFrm->displayDefinition();
                 applySharedDisplayDefaults(dd, prefs.dataViewDefinitions());
                 dataFrm->setDisplayDefinition(dd);
@@ -575,6 +554,10 @@ QWidget* MainWindow::createNewForm(ProjectFormKind kind)
         }
         case ProjectFormKind::Traffic: {
             if (auto* trafficFrm = qobject_cast<FormTrafficView*>(frm)) {
+                trafficFrm->setFont(prefs.font());
+                trafficFrm->setBackgroundColor(prefs.backgroundColor());
+                trafficFrm->setForegroundColor(prefs.foregroundColor());
+
                 auto dd = trafficFrm->displayDefinition();
                 applySharedDisplayDefaults(dd, prefs.trafficViewDefinitions());
                 trafficFrm->setDisplayDefinition(dd);
@@ -583,6 +566,11 @@ QWidget* MainWindow::createNewForm(ProjectFormKind kind)
         }
         case ProjectFormKind::Script: {
             if (auto* scriptFrm = qobject_cast<FormScriptView*>(frm)) {
+                scriptFrm->setBackgroundColor(prefs.backgroundColor());
+                scriptFrm->setForegroundColor(prefs.foregroundColor());
+                scriptFrm->setFont(prefs.scriptFont());
+                scriptFrm->setZoomPercent(prefs.fontZoom());
+
                 auto dd = scriptFrm->definitions();
                 applySharedDisplayDefaults(dd, prefs.scriptViewDefinitions());
                 scriptFrm->setDefinitions(dd);
@@ -637,11 +625,7 @@ void MainWindow::on_actionOpenProject_triggered()
 void MainWindow::on_actionSaveProject_triggered()
 {
     if(_projectFilePath.isEmpty()) {
-        if(_useSession) {
-            saveSessionProject();
-        } else {
-            on_actionSaveProjectAs_triggered();
-        }
+        on_actionSaveProjectAs_triggered();
         return;
     }
 
@@ -677,8 +661,6 @@ void MainWindow::on_actionCloseProject_triggered()
     _projectFilePath.clear();
     _isModified = false;
     updateProjectWindowTitle();
-    if(_useSession)
-        saveSessionProject();
 }
 
 ///
@@ -1324,6 +1306,7 @@ void MainWindow::loadProject(const QString& filename)
 {
     _project->loadProject(filename);
     _projectFilePath = QFileInfo(filename).absoluteFilePath();
+    _lastProjectPath = _projectFilePath;
     _project->setSavePath(QFileInfo(filename).absoluteDir().absolutePath());
     updateProjectWindowTitle();
     _isModified = false;
@@ -1337,6 +1320,7 @@ void MainWindow::saveProject(const QString& filename)
 {
     _project->saveProject(filename);
     _projectFilePath = QFileInfo(filename).absoluteFilePath();
+    _lastProjectPath = _projectFilePath;
     _project->setSavePath(QFileInfo(filename).absoluteDir().absolutePath());
     updateProjectWindowTitle();
     _isModified = false;
@@ -1451,17 +1435,6 @@ static QString getSettingsFilePath()
 }
 
 ///
-/// \brief createSessionProjectFilePath
-/// \return
-///
-static QString createSessionProjectFilePath()
-{
-    const QString tempDir = QStandardPaths::writableLocation(QStandardPaths::TempLocation);
-    const QString guid = QUuid::createUuid().toString(QUuid::WithoutBraces);
-    return QDir(tempDir).filePath(QStringLiteral("omodsim/%1.msimprj").arg(guid));
-}
-
-///
 /// \brief MainWindow::loadAppSettings
 /// \param filename
 /// \return
@@ -1494,7 +1467,7 @@ bool MainWindow::loadAppSettings(const QString& filename)
     _recentProjects = m.value(kRecentProjectsKey).toStringList();
     _recentProjects.removeAll(QString());
     _recentProjects.removeDuplicates();
-    _sessionProjectPath = m.value(kSessionProjectPathKey).toString();
+    _lastProjectPath = m.value(kLastProjectPathKey).toString();
 
     return true;
 }
@@ -1518,42 +1491,7 @@ void MainWindow::saveAppSettings()
     m.setValue("SavePath", _project->savePath());
     m.setValue(kNewFormKindKey, newFormKindToSetting(_newFormKind));
     m.setValue(kRecentProjectsKey, _recentProjects);
-    m.setValue(kSessionProjectPathKey, _sessionProjectPath);
-}
-
-///
-/// \brief MainWindow::loadSessionProject
-///
-bool MainWindow::loadSessionProject()
-{
-    if(!_useSession)
-        return false;
-    if(_sessionProjectPath.isEmpty())
-        _sessionProjectPath = createSessionProjectFilePath();
-    if(!QFile::exists(_sessionProjectPath))
-        return false;
-
-    _project->loadProject(_sessionProjectPath);
-    _projectFilePath.clear();
-    updateProjectWindowTitle();
-    _isModified = false;
-    return true;
-}
-
-///
-/// \brief MainWindow::saveSessionProject
-///
-bool MainWindow::saveSessionProject()
-{
-    if(!_useSession)
-        return false;
-    if(_sessionProjectPath.isEmpty())
-        _sessionProjectPath = createSessionProjectFilePath();
-
-    const auto info = QFileInfo(_sessionProjectPath);
-    QDir().mkpath(info.absolutePath());
-    _project->saveProject(_sessionProjectPath);
-    return true;
+    m.setValue(kLastProjectPathKey, _lastProjectPath);
 }
 
 
@@ -1578,9 +1516,6 @@ bool MainWindow::confirmSaveOnClose()
         addRecentProject(_projectFilePath);
         return true;
     }
-
-    if(_useSession)
-        return saveSessionProject();
 
     const QString before = _projectFilePath;
     on_actionSaveProjectAs_triggered();
@@ -1610,8 +1545,6 @@ void MainWindow::addRecentProject(const QString& filePath)
     const QString absolutePath = QFileInfo(filePath).absoluteFilePath();
     if(absolutePath.isEmpty())
         return;
-    if(!_sessionProjectPath.isEmpty() && QFileInfo(absolutePath) == QFileInfo(_sessionProjectPath))
-        return;
 
     for (int i = _recentProjects.size() - 1; i >= 0; --i) {
         if (_recentProjects[i].compare(absolutePath, Qt::CaseInsensitive) == 0)
@@ -1637,8 +1570,6 @@ void MainWindow::rebuildRecentProjectsMenu()
     existing.reserve(_recentProjects.size());
     for (const auto& path : _recentProjects) {
         if(path.isEmpty())
-            continue;
-        if(!_sessionProjectPath.isEmpty() && QFileInfo(path) == QFileInfo(_sessionProjectPath))
             continue;
         if(!QFile::exists(path))
             continue;
