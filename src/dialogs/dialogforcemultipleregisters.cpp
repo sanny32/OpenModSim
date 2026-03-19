@@ -15,7 +15,7 @@
 /// \param dd
 /// \param parent
 ///
-DialogForceMultipleRegisters::DialogForceMultipleRegisters(ModbusWriteParams& params, QModbusDataUnit::RegisterType type, int length, const DisplayDefinition& dd, QWidget *parent) :
+DialogForceMultipleRegisters::DialogForceMultipleRegisters(ModbusWriteParams& params, QModbusDataUnit::RegisterType type, int length, const DataViewDefinitions& dd, QWidget *parent) :
       QAdjustedSizeDialog(parent)
     , ui(new Ui::DialogForceMultipleRegisters)
     ,_writeParams(params)
@@ -63,7 +63,7 @@ DialogForceMultipleRegisters::DialogForceMultipleRegisters(ModbusWriteParams& pa
     _data = params.Value.value<QVector<quint16>>();
     if(_data.length() != length) _data.resize(length);
 
-    switch(_writeParams.DisplayMode)
+    switch(_writeParams.DataMode)
     {
         case DataDisplayMode::Hex:
             setupLineEdit<quint16>(ui->lineEditValue, NumericLineEdit::HexMode, true);
@@ -206,7 +206,7 @@ template<>
 void DialogForceMultipleRegisters::applyValue<qint32>(qint32 value, int index, ValueOperation op)
 {
     qint32 cur;
-    switch(_writeParams.DisplayMode)
+    switch(_writeParams.DataMode)
     {
         case DataDisplayMode::Int32:        cur = makeInt32(_data[index], _data[index + 1], _writeParams.Order); break;
         case DataDisplayMode::SwappedInt32: cur = makeInt32(_data[index + 1], _data[index], _writeParams.Order); break;
@@ -222,7 +222,7 @@ void DialogForceMultipleRegisters::applyValue<qint32>(qint32 value, int index, V
         case ValueOperation::Divide:    cur /= value; break;
     }
 
-    switch(_writeParams.DisplayMode)
+    switch(_writeParams.DataMode)
     {
         case DataDisplayMode::Int32:        breakInt32(cur, _data[index], _data[index + 1], _writeParams.Order); break;
         case DataDisplayMode::SwappedInt32: breakInt32(cur, _data[index + 1], _data[index], _writeParams.Order); break;
@@ -240,7 +240,7 @@ template<>
 void DialogForceMultipleRegisters::applyValue<quint32>(quint32 value, int index, ValueOperation op)
 {
     quint32 cur;
-    switch(_writeParams.DisplayMode)
+    switch(_writeParams.DataMode)
     {
         case DataDisplayMode::UInt32:        cur = makeUInt32(_data[index], _data[index + 1], _writeParams.Order); break;
         case DataDisplayMode::SwappedUInt32: cur = makeUInt32(_data[index + 1], _data[index], _writeParams.Order); break;
@@ -256,7 +256,7 @@ void DialogForceMultipleRegisters::applyValue<quint32>(quint32 value, int index,
         case ValueOperation::Divide:    cur /= value; break;
     }
 
-    switch(_writeParams.DisplayMode)
+    switch(_writeParams.DataMode)
     {
         case DataDisplayMode::UInt32:        breakUInt32(cur, _data[index], _data[index + 1], _writeParams.Order); break;
         case DataDisplayMode::SwappedUInt32: breakUInt32(cur, _data[index + 1], _data[index], _writeParams.Order); break;
@@ -274,7 +274,7 @@ template<>
 void DialogForceMultipleRegisters::applyValue<float>(float value, int index, ValueOperation op)
 {
     float cur;
-    switch(_writeParams.DisplayMode)
+    switch(_writeParams.DataMode)
     {
         case DataDisplayMode::FloatingPt: cur = makeFloat(_data[index], _data[index + 1], _writeParams.Order); break;
         case DataDisplayMode::SwappedFP:  cur = makeFloat(_data[index + 1], _data[index], _writeParams.Order); break;
@@ -290,7 +290,7 @@ void DialogForceMultipleRegisters::applyValue<float>(float value, int index, Val
         case ValueOperation::Divide:    cur /= value; break;
     }
 
-    switch(_writeParams.DisplayMode)
+    switch(_writeParams.DataMode)
     {
         case DataDisplayMode::FloatingPt: breakFloat(cur, _data[index], _data[index + 1], _writeParams.Order); break;
         case DataDisplayMode::SwappedFP:  breakFloat(cur, _data[index + 1], _data[index], _writeParams.Order); break;
@@ -308,7 +308,7 @@ template<>
 void DialogForceMultipleRegisters::applyValue<qint64>(qint64 value, int index, ValueOperation op)
 {
     qint64 cur;
-    switch(_writeParams.DisplayMode)
+    switch(_writeParams.DataMode)
     {
         case DataDisplayMode::Int64:        cur = makeInt64(_data[index], _data[index + 1], _data[index + 2], _data[index + 3], _writeParams.Order); break;
         case DataDisplayMode::SwappedInt64: cur = makeInt64(_data[index + 3], _data[index + 1], _data[index + 1], _data[index], _writeParams.Order); break;
@@ -324,7 +324,7 @@ void DialogForceMultipleRegisters::applyValue<qint64>(qint64 value, int index, V
         case ValueOperation::Divide:    cur /= value; break;
     }
 
-    switch(_writeParams.DisplayMode)
+    switch(_writeParams.DataMode)
     {
         case DataDisplayMode::Int64:        breakInt64(cur, _data[index], _data[index + 1], _data[index + 2], _data[index + 3], _writeParams.Order); break;
         case DataDisplayMode::SwappedInt64: breakInt64(cur, _data[index + 3], _data[index + 1], _data[index + 1], _data[index], _writeParams.Order); break;
@@ -342,7 +342,7 @@ template<>
 void DialogForceMultipleRegisters::applyValue<quint64>(quint64 value, int index, ValueOperation op)
 {
     quint64 cur;
-    switch(_writeParams.DisplayMode)
+    switch(_writeParams.DataMode)
     {
         case DataDisplayMode::UInt64:        cur = makeUInt64(_data[index], _data[index + 1], _data[index + 2], _data[index + 3], _writeParams.Order); break;
         case DataDisplayMode::SwappedUInt64: cur = makeUInt64(_data[index + 3], _data[index + 1], _data[index + 1], _data[index], _writeParams.Order); break;
@@ -358,7 +358,7 @@ void DialogForceMultipleRegisters::applyValue<quint64>(quint64 value, int index,
         case ValueOperation::Divide:    cur /= value; break;
     }
 
-    switch(_writeParams.DisplayMode)
+    switch(_writeParams.DataMode)
     {
         case DataDisplayMode::UInt64:        breakUInt64(cur, _data[index], _data[index + 1], _data[index + 2], _data[index + 3], _writeParams.Order); break;
         case DataDisplayMode::SwappedUInt64: breakUInt64(cur, _data[index + 3], _data[index + 1], _data[index + 1], _data[index], _writeParams.Order); break;
@@ -376,7 +376,7 @@ template<>
 void DialogForceMultipleRegisters::applyValue<double>(double value, int index, ValueOperation op)
 {
     double cur;
-    switch(_writeParams.DisplayMode)
+    switch(_writeParams.DataMode)
     {
         case DataDisplayMode::DblFloat:   cur = makeDouble(_data[index], _data[index + 1], _data[index + 2], _data[index + 3], _writeParams.Order); break;
         case DataDisplayMode::SwappedDbl: cur = makeDouble(_data[index + 3], _data[index + 1], _data[index + 1], _data[index], _writeParams.Order); break;
@@ -392,7 +392,7 @@ void DialogForceMultipleRegisters::applyValue<double>(double value, int index, V
         case ValueOperation::Divide:    cur /= value; break;
     }
 
-    switch(_writeParams.DisplayMode)
+    switch(_writeParams.DataMode)
     {
         case DataDisplayMode::DblFloat:   breakDouble(cur, _data[index], _data[index + 1], _data[index + 2], _data[index + 3], _writeParams.Order); break;
         case DataDisplayMode::SwappedDbl: breakDouble(cur, _data[index + 3], _data[index + 1], _data[index + 1], _data[index], _writeParams.Order); break;
@@ -409,7 +409,7 @@ void DialogForceMultipleRegisters::applyToAll(ValueOperation op, double value)
 {
     for(int i = 0; i < _data.size(); i++)
     {
-        switch(_writeParams.DisplayMode)
+        switch(_writeParams.DataMode)
         {
             case DataDisplayMode::Hex:
             case DataDisplayMode::Ansi:
@@ -479,7 +479,7 @@ void DialogForceMultipleRegisters::accept()
                 break;
             }
 
-            switch(_writeParams.DisplayMode)
+            switch(_writeParams.DataMode)
             {
                 case DataDisplayMode::Binary:
                 case DataDisplayMode::Hex:
@@ -610,7 +610,7 @@ void DialogForceMultipleRegisters::on_pushButtonRandom_clicked()
 {
     for(int i = 0; i < _data.size(); i++)
     {
-        switch(_writeParams.DisplayMode)
+        switch(_writeParams.DataMode)
         {
         case DataDisplayMode::Binary:
         case DataDisplayMode::Hex:
@@ -674,7 +674,7 @@ void DialogForceMultipleRegisters::on_pushButtonInc_clicked()
 {
     for(int i = 0; i < _data.size(); i++)
     {
-        switch(_writeParams.DisplayMode)
+        switch(_writeParams.DataMode)
         {
             case DataDisplayMode::Hex:
             case DataDisplayMode::Ansi:
@@ -852,7 +852,7 @@ void DialogForceMultipleRegisters::on_pushButtonExport_clicked()
 NumericLineEdit* DialogForceMultipleRegisters::createNumEdit(int idx)
 {
     NumericLineEdit* numEdit = nullptr;
-    switch(_writeParams.DisplayMode)
+    switch(_writeParams.DataMode)
     {
         case DataDisplayMode::Binary:
         case DataDisplayMode::Hex:

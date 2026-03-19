@@ -1,12 +1,11 @@
 #include <QDateTime>
 #include <QPainter>
-#include <QTextStream>
 #include <QInputDialog>
 #include "fontutils.h"
 #include "formatutils.h"
 #include "datadelegate.h"
-#include "outputwidget.h"
-#include "ui_outputwidget.h"
+#include "outputdatawidget.h"
+#include "ui_outputdatawidget.h"
 
 ///
 /// \brief SimulationRole
@@ -56,10 +55,10 @@ static QPixmap emptyPixmap(const QSize& size)
 }
 
 ///
-/// \brief OutputListModel::OutputListModel
+/// \brief OutputDataListModel::OutputDataListModel
 /// \param parent
 ///
-OutputListModel::OutputListModel(OutputWidget* parent)
+OutputDataListModel::OutputDataListModel(OutputDataWidget* parent)
     : QAbstractListModel(parent)
     ,_parentWidget(parent)
     ,_iconSimulation16Bit(QIcon(":/res/icon-simulation-16bit.svg").pixmap(10, 10))
@@ -70,21 +69,21 @@ OutputListModel::OutputListModel(OutputWidget* parent)
 }
 
 ///
-/// \brief OutputListModel::rowCount
+/// \brief OutputDataListModel::rowCount
 /// \return
 ///
-int OutputListModel::rowCount(const QModelIndex&) const
+int OutputDataListModel::rowCount(const QModelIndex&) const
 {
     return _parentWidget->_displayDefinition.Length;
 }
 
 ///
-/// \brief OutputListModel::data
+/// \brief OutputDataListModel::data
 /// \param index
 /// \param role
 /// \return
 ///
-QVariant OutputListModel::data(const QModelIndex& index, int role) const
+QVariant OutputDataListModel::data(const QModelIndex& index, int role) const
 {
     if(!index.isValid() ||
        !_mapItems.contains(index.row()))
@@ -171,13 +170,13 @@ QVariant OutputListModel::data(const QModelIndex& index, int role) const
 }
 
 ///
-/// \brief OutputListModel::setData
+/// \brief OutputDataListModel::setData
 /// \param index
 /// \param value
 /// \param role
 /// \return
 ///
-bool OutputListModel::setData(const QModelIndex &index, const QVariant &value, int role)
+bool OutputDataListModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
     if(!index.isValid() ||
        !_mapItems.contains(index.row()))
@@ -213,45 +212,45 @@ bool OutputListModel::setData(const QModelIndex &index, const QVariant &value, i
 }
 
 ///
-/// \brief OutputListModel::isUpdated
+/// \brief OutputDataListModel::isUpdated
 /// \return
 ///
-bool OutputListModel::isValid() const
+bool OutputDataListModel::isValid() const
 {
     return _lastData.isValid();
 }
 
 ///
-/// \brief OutputListModel::values
+/// \brief OutputDataListModel::values
 /// \return
 ///
-QVector<quint16> OutputListModel::values() const
+QVector<quint16> OutputDataListModel::values() const
 {
     return _lastData.values();
 }
 
 ///
-/// \brief OutputListModel::clear
+/// \brief OutputDataListModel::clear
 ///
-void OutputListModel::clear()
+void OutputDataListModel::clear()
 {
     _mapItems.clear();
     updateData(QModbusDataUnit());
 }
 
 ///
-/// \brief OutputListModel::update
+/// \brief OutputDataListModel::update
 ///
-void OutputListModel::update()
+void OutputDataListModel::update()
 {
     updateData(_lastData);
 }
 
 ///
-/// \brief OutputListModel::updateData
+/// \brief OutputDataListModel::updateData
 /// \param data
 ///
-void OutputListModel::updateData(const QModbusDataUnit& data)
+void OutputDataListModel::updateData(const QModbusDataUnit& data)
 {
     _lastData = data;
 
@@ -368,13 +367,13 @@ void OutputListModel::updateData(const QModbusDataUnit& data)
 }
 
 ///
-/// \brief OutputListModel::find
+/// \brief OutputDataListModel::find
 /// \param deviceId
 /// \param type
 /// \param addr
 /// \return
 ///
-QModelIndex OutputListModel::find(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr) const
+QModelIndex OutputDataListModel::find(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr) const
 {
     if(_parentWidget->_displayDefinition.PointType != type || _parentWidget->_displayDefinition.DeviceId != deviceId)
         return QModelIndex();
@@ -388,11 +387,11 @@ QModelIndex OutputListModel::find(quint8 deviceId, QModbusDataUnit::RegisterType
 }
 
 ///
-/// \brief OutputListModel::simulationIcon
+/// \brief OutputDataListModel::simulationIcon
 /// \param row
 /// \return
 ///
-OutputListModel::SimulationIconType OutputListModel::simulationIcon(int row) const
+OutputDataListModel::SimulationIconType OutputDataListModel::simulationIcon(int row) const
 {
     const auto mode = _parentWidget->dataDisplayMode();
     for(int i = 0; i < registersCount(mode); ++i)
@@ -408,17 +407,16 @@ OutputListModel::SimulationIconType OutputListModel::simulationIcon(int row) con
 }
 
 ///
-/// \brief OutputWidget::OutputWidget
+/// \brief OutputDataWidget::OutputDataWidget
 /// \param parent
 ///
-OutputWidget::OutputWidget(QWidget *parent) :
+OutputDataWidget::OutputDataWidget(QWidget *parent) :
      QWidget(parent)
-   , ui(new Ui::OutputWidget)
+   , ui(new Ui::OutputDataWidget)
    ,_displayHexAddreses(false)
-   ,_displayMode(DisplayMode::Data)
    ,_dataDisplayMode(DataDisplayMode::Hex)
    ,_byteOrder(ByteOrder::Direct)
-   ,_listModel(new OutputListModel(this))
+   ,_listModel(new OutputDataListModel(this))
 {
     ui->setupUi(this);
     ui->stackedWidget->setCurrentIndex(0);
@@ -469,18 +467,18 @@ OutputWidget::OutputWidget(QWidget *parent) :
 }
 
 ///
-/// \brief OutputWidget::~OutputWidget
+/// \brief OutputDataWidget::~OutputDataWidget
 ///
-OutputWidget::~OutputWidget()
+OutputDataWidget::~OutputDataWidget()
 {
     delete ui;
 }
 
 ///
-/// \brief OutputWidget::changeEvent
+/// \brief OutputDataWidget::changeEvent
 /// \param event
 ///
-void OutputWidget::changeEvent(QEvent* event)
+void OutputDataWidget::changeEvent(QEvent* event)
 {
     if (event->type() == QEvent::LanguageChange)
     {
@@ -492,12 +490,12 @@ void OutputWidget::changeEvent(QEvent* event)
 }
 
 ///
-/// \brief OutputWidget::eventFilter
+/// \brief OutputDataWidget::eventFilter
 /// \param obj
 /// \param event
 /// \return
 ///
-bool OutputWidget::eventFilter(QObject* obj, QEvent* event)
+bool OutputDataWidget::eventFilter(QObject* obj, QEvent* event)
 {
     if (obj == ui->listView->viewport() &&
         event->type() == QEvent::Wheel)
@@ -520,29 +518,26 @@ bool OutputWidget::eventFilter(QObject* obj, QEvent* event)
 }
 
 ///
-/// \brief OutputWidget::data
+/// \brief OutputDataWidget::data
 /// \return
 ///
-QVector<quint16> OutputWidget::data() const
+QVector<quint16> OutputDataWidget::data() const
 {
     return _listModel->values();
 }
 
 ///
-/// \brief OutputWidget::setup
+/// \brief OutputDataWidget::setup
 /// \param dd
 /// \param simulations
 /// \param data
 ///
-void OutputWidget::setup(const DisplayDefinition& dd, const ModbusSimulationMap2& simulations, const QModbusDataUnit& data)
+void OutputDataWidget::setup(const DataViewDefinitions& dd, const ModbusSimulationMap2& simulations, const QModbusDataUnit& data)
 {
     _descriptionMap.insert(descriptionMap());
     _colorMap.insert(colorMap());
 
     _displayDefinition = dd;
-
-    setLogViewLimit(dd.LogViewLimit);
-    setAutosctollLogView(dd.AutoscrollLog);
     setDataViewColumnsDistance(dd.DataViewColumnsDistance);
     ui->logView->setShowLeadingZeros(dd.LeadingZeros);
     ui->modbusMsg->setShowLeadingZeros(dd.LeadingZeros);
@@ -562,67 +557,41 @@ void OutputWidget::setup(const DisplayDefinition& dd, const ModbusSimulationMap2
 }
 
 ///
-/// \brief OutputWidget::displayHexAddresses
+/// \brief OutputDataWidget::displayHexAddresses
 /// \return
 ///
-bool OutputWidget::displayHexAddresses() const
+bool OutputDataWidget::displayHexAddresses() const
 {
     return _displayHexAddreses;
 }
 
 ///
-/// \brief OutputWidget::setDisplayHexAddresses
+/// \brief OutputDataWidget::setDisplayHexAddresses
 /// \param on
 ///
-void OutputWidget::setDisplayHexAddresses(bool on)
+void OutputDataWidget::setDisplayHexAddresses(bool on)
 {
     _displayHexAddreses = on;
     _listModel->update();
 }
 
+
+
+
 ///
-/// \brief OutputWidget::captureMode
+/// \brief OutputDataWidget::backgroundColor
 /// \return
 ///
-CaptureMode OutputWidget::captureMode() const
-{
-    return _fileCapture.isOpen() ? CaptureMode::TextCapture : CaptureMode::Off;
-}
-
-///
-/// \brief OutputWidget::startTextCapture
-/// \param file
-///
-void OutputWidget::startTextCapture(const QString& file)
-{
-    _fileCapture.setFileName(file);
-    if(!_fileCapture.open(QFile::Text | QFile::WriteOnly))
-        emit startTextCaptureError(_fileCapture.errorString());
-}
-
-///
-/// \brief OutputWidget::stopTextCapture
-///
-void OutputWidget::stopTextCapture()
-{
-    if(_fileCapture.isOpen())
-        _fileCapture.close();
-}
-
-///
-/// \brief OutputWidget::backgroundColor
-/// \return
-///
-QColor OutputWidget::backgroundColor() const
+QColor OutputDataWidget::backgroundColor() const
 {
     return ui->listView->palette().color(QPalette::Base);
 }
 
 ///
-/// \brief OutputWidget::setBackgroundColor
+/// \brief OutputDataWidget::setBackgroundColor
 /// \param clr
 ///
-void OutputWidget::setBackgroundColor(const QColor& clr)
+void OutputDataWidget::setBackgroundColor(const QColor& clr)
 {
     auto pal = palette();
     pal.setColor(QPalette::Base, clr);
@@ -631,19 +600,19 @@ void OutputWidget::setBackgroundColor(const QColor& clr)
 }
 
 ///
-/// \brief OutputWidget::foregroundColor
+/// \brief OutputDataWidget::foregroundColor
 /// \return
 ///
-QColor OutputWidget::foregroundColor() const
+QColor OutputDataWidget::foregroundColor() const
 {
     return ui->listView->palette().color(QPalette::Text);
 }
 
 ///
-/// \brief OutputWidget::setForegroundColor
+/// \brief OutputDataWidget::setForegroundColor
 /// \param clr
 ///
-void OutputWidget::setForegroundColor(const QColor& clr)
+void OutputDataWidget::setForegroundColor(const QColor& clr)
 {
     auto pal = ui->listView->palette();
     pal.setColor(QPalette::Text, clr);
@@ -651,19 +620,19 @@ void OutputWidget::setForegroundColor(const QColor& clr)
 }
 
 ///
-/// \brief OutputWidget::statusColor
+/// \brief OutputDataWidget::statusColor
 /// \return
 ///
-QColor OutputWidget::statusColor() const
+QColor OutputDataWidget::statusColor() const
 {
     return ui->labelStatus->palette().color(QPalette::WindowText);
 }
 
 ///
-/// \brief OutputWidget::setStatusColor
+/// \brief OutputDataWidget::setStatusColor
 /// \param clr
 ///
-void OutputWidget::setStatusColor(const QColor& clr)
+void OutputDataWidget::setStatusColor(const QColor& clr)
 {
     auto pal = ui->labelStatus->palette();
     pal.setColor(QPalette::WindowText, clr);
@@ -672,19 +641,19 @@ void OutputWidget::setStatusColor(const QColor& clr)
 }
 
 ///
-/// \brief OutputWidget::font
+/// \brief OutputDataWidget::font
 /// \return
 ///
-QFont OutputWidget::font() const
+QFont OutputDataWidget::font() const
 {
     return ui->logView->font();
 }
 
 ///
-/// \brief OutputWidget::setFont
+/// \brief OutputDataWidget::setFont
 /// \param font
 ///
-void OutputWidget::setFont(const QFont& font)
+void OutputDataWidget::setFont(const QFont& font)
 {
     _baseFontSize = font.pointSizeF();
 
@@ -697,19 +666,19 @@ void OutputWidget::setFont(const QFont& font)
 }
 
 ///
-/// \brief OutputWidget::zoomPercent
+/// \brief OutputDataWidget::zoomPercent
 /// \return
 ///
-int OutputWidget::zoomPercent() const
+int OutputDataWidget::zoomPercent() const
 {
     return _zoomPercent;
 }
 
 ///
-/// \brief OutputWidget::setZoomPercent
+/// \brief OutputDataWidget::setZoomPercent
 /// \param zoom
 ///
-void OutputWidget::setZoomPercent(int zoomPercent)
+void OutputDataWidget::setZoomPercent(int zoomPercent)
 {
     _zoomPercent = qBound(50, zoomPercent, 300);
 
@@ -721,83 +690,34 @@ void OutputWidget::setZoomPercent(int zoomPercent)
 }
 
 ///
-/// \brief OutputWidget::dataViewColumnsDistance
+/// \brief OutputDataWidget::dataViewColumnsDistance
 /// \return
 ///
-int OutputWidget::dataViewColumnsDistance() const
+int OutputDataWidget::dataViewColumnsDistance() const
 {
     return _listModel->columnsDistance();
 }
 
 ///
-/// \brief OutputWidget::setDataViewColumnsDistance
+/// \brief OutputDataWidget::setDataViewColumnsDistance
 /// \param value
 ///
-void OutputWidget::setDataViewColumnsDistance(int value)
+void OutputDataWidget::setDataViewColumnsDistance(int value)
 {
     _listModel->setColumnsDistance(value);
 }
 
-///
-/// \brief OutputWidget::logViewLimit
-/// \return
-///
-int OutputWidget::logViewLimit() const
-{
-    return ui->logView->rowLimit();
-}
+
+
+
+
+
 
 ///
-/// \brief OutputWidget::setLogViewLimit
-/// \param l
-///
-void OutputWidget::setLogViewLimit(int l)
-{
-    ui->logView->setRowLimit(l);
-}
-
-///
-/// \brief OutputWidget::pauseLogView
-/// \param pause
-///
-void OutputWidget::setLogViewState(LogViewState state)
-{
-    ui->logView->setState(state);
-}
-
-///
-/// \brief OutputWidget::autoscrollLogView
-/// \return
-///
-bool OutputWidget::autoscrollLogView() const
-{
-    return ui->logView->autoscroll();
-}
-
-///
-/// \brief OutputWidget::setAutosctollLogView
-/// \param on
-///
-void OutputWidget::setAutosctollLogView(bool on)
-{
-    ui->logView->setAutoscroll(on);
-}
-
-///
-/// \brief OutputWidget::clearLogView
-///
-void OutputWidget::clearLogView()
-{
-    ui->logView->clear();
-    ui->modbusMsg->clear();
-    hideModbusMessage();
-}
-
-///
-/// \brief OutputWidget::setStatus
+/// \brief OutputDataWidget::setStatus
 /// \param status
 ///
-void OutputWidget::setStatus(const QString& status)
+void OutputDataWidget::setStatus(const QString& status)
 {
     if(status.isEmpty())
     {
@@ -814,11 +734,11 @@ void OutputWidget::setStatus(const QString& status)
 }
 
 ///
-/// \brief OutputWidget::paint
+/// \brief OutputDataWidget::paint
 /// \param rc
 /// \param painter
 ///
-void OutputWidget::paint(const QRect& rc, QPainter& painter)
+void OutputDataWidget::paint(const QRect& rc, QPainter& painter)
 {
     const auto textStatus = ui->labelStatus->text();
     auto rcStatus = painter.boundingRect(rc.left(), rc.top(), rc.width(), rc.height(), Qt::TextWordWrap, textStatus);
@@ -861,28 +781,20 @@ void OutputWidget::paint(const QRect& rc, QPainter& painter)
     }
 }
 
-///
-/// \brief OutputWidget::updateTraffic
-/// \param msg
-///
-void OutputWidget::updateTraffic(QSharedPointer<const ModbusMessage> msg)
-{
-    updateLogView(msg);
-}
 
 ///
-/// \brief OutputWidget::updateData
+/// \brief OutputDataWidget::updateData
 ///
-void OutputWidget::updateData(const QModbusDataUnit& data)
+void OutputDataWidget::updateData(const QModbusDataUnit& data)
 {
     _listModel->updateData(data);
 }
 
 ///
-/// \brief OutputWidget::colorMap
+/// \brief OutputDataWidget::colorMap
 /// \return
 ///
-AddressColorMap OutputWidget::colorMap() const
+AddressColorMap OutputDataWidget::colorMap() const
 {
     AddressColorMap colorMap;
     for(int i = 0; i < _listModel->rowCount(); i++)
@@ -895,22 +807,22 @@ AddressColorMap OutputWidget::colorMap() const
 }
 
 ///
-/// \brief OutputWidget::setColor
+/// \brief OutputDataWidget::setColor
 /// \param deviceId
 /// \param type
 /// \param addr
 /// \param clr
 ///
-void OutputWidget::setColor(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr, const QColor& clr)
+void OutputDataWidget::setColor(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr, const QColor& clr)
 {
     _listModel->setData(_listModel->find(deviceId, type, addr), clr, ColorRole);
 }
 
 ///
-/// \brief OutputWidget::descriptionMap
+/// \brief OutputDataWidget::descriptionMap
 /// \return
 ///
-AddressDescriptionMap2 OutputWidget::descriptionMap() const
+AddressDescriptionMap2 OutputDataWidget::descriptionMap() const
 {
     AddressDescriptionMap2 descriptionMap;
     for(int i = 0; i < _listModel->rowCount(); i++)
@@ -923,25 +835,25 @@ AddressDescriptionMap2 OutputWidget::descriptionMap() const
 }
 
 ///
-/// \brief OutputWidget::setDescription
+/// \brief OutputDataWidget::setDescription
 /// \param deviceId
 /// \param type
 /// \param addr
 /// \param desc
 ///
-void OutputWidget::setDescription(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr, const QString& desc)
+void OutputDataWidget::setDescription(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr, const QString& desc)
 {
     _listModel->setData(_listModel->find(deviceId, type, addr), desc, DescriptionRole);
 }
 
 ///
-/// \brief OutputWidget::setSimulated
+/// \brief OutputDataWidget::setSimulated
 /// \param deviceId
 /// \param type
 /// \param addr
 /// \param on
 ///
-void OutputWidget::setSimulated(DataDisplayMode mode, quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr, bool on)
+void OutputDataWidget::setSimulated(DataDisplayMode mode, quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr, bool on)
 {
     const auto index = _listModel->find(deviceId, type, addr);
     _listModel->setData(index, on, SimulationRole);
@@ -950,66 +862,35 @@ void OutputWidget::setSimulated(DataDisplayMode mode, quint8 deviceId, QModbusDa
         switch(registersCount(mode))
         {
             case 1:
-                _listModel->setData(index, OutputListModel::SimulationIcon16Bit, Qt::DecorationRole);
+                _listModel->setData(index, OutputDataListModel::SimulationIcon16Bit, Qt::DecorationRole);
             break;
             case 2:
-                _listModel->setData(index, OutputListModel::SimulationIcon32Bit, Qt::DecorationRole);
+                _listModel->setData(index, OutputDataListModel::SimulationIcon32Bit, Qt::DecorationRole);
             break;
             case 4:
-                _listModel->setData(index, OutputListModel::SimulationIcon64Bit, Qt::DecorationRole);
+                _listModel->setData(index, OutputDataListModel::SimulationIcon64Bit, Qt::DecorationRole);
             break;
         }
     }
     else {
-        _listModel->setData(index, OutputListModel::SimulationIconNone, Qt::DecorationRole);
+        _listModel->setData(index, OutputDataListModel::SimulationIconNone, Qt::DecorationRole);
     }
 }
 
 ///
-/// \brief OutputWidget::displayMode
+/// \brief OutputDataWidget::dataDisplayMode
 /// \return
 ///
-DisplayMode OutputWidget::displayMode() const
-{
-    return _displayMode;
-}
-
-///
-/// \brief OutputWidget::setDisplayMode
-/// \param mode
-///
-void OutputWidget::setDisplayMode(DisplayMode mode)
-{
-    _displayMode = mode;
-    switch(mode)
-    {
-        case DisplayMode::Data:
-            ui->stackedWidget->setCurrentIndex(0);
-        break;
-
-        case DisplayMode::Traffic:
-            ui->stackedWidget->setCurrentIndex(1);
-        break;
-
-        default:
-        break;
-    }
-}
-
-///
-/// \brief OutputWidget::dataDisplayMode
-/// \return
-///
-DataDisplayMode OutputWidget::dataDisplayMode() const
+DataDisplayMode OutputDataWidget::dataDisplayMode() const
 {
     return _dataDisplayMode;
 }
 
 ///
-/// \brief OutputWidget::setDataDisplayMode
+/// \brief OutputDataWidget::setDataDisplayMode
 /// \param mode
 ///
-void OutputWidget::setDataDisplayMode(DataDisplayMode mode)
+void OutputDataWidget::setDataDisplayMode(DataDisplayMode mode)
 {
     _dataDisplayMode = mode;
     ui->logView->setDataDisplayMode(mode);
@@ -1019,19 +900,19 @@ void OutputWidget::setDataDisplayMode(DataDisplayMode mode)
 }
 
 ///
-/// \brief OutputWidget::byteOrder
+/// \brief OutputDataWidget::byteOrder
 /// \return
 ///
-const ByteOrder* OutputWidget::byteOrder() const
+const ByteOrder* OutputDataWidget::byteOrder() const
 {
     return &_byteOrder;
 }
 
 ///
-/// \brief OutputWidget::setByteOrder
+/// \brief OutputDataWidget::setByteOrder
 /// \param order
 ///
-void OutputWidget::setByteOrder(ByteOrder order)
+void OutputDataWidget::setByteOrder(ByteOrder order)
 {
     _byteOrder = order;
     ui->modbusMsg->setByteOrder(order);
@@ -1040,19 +921,19 @@ void OutputWidget::setByteOrder(ByteOrder order)
 }
 
 ///
-/// \brief OutputWidget::codepage
+/// \brief OutputDataWidget::codepage
 /// \return
 ///
-QString OutputWidget::codepage() const
+QString OutputDataWidget::codepage() const
 {
     return _codepage;
 }
 
 ///
-/// \brief OutputWidget::setCodepage
+/// \brief OutputDataWidget::setCodepage
 /// \param name
 ///
-void OutputWidget::setCodepage(const QString& name)
+void OutputDataWidget::setCodepage(const QString& name)
 {
     _codepage = name;
     _listModel->update();
@@ -1063,7 +944,7 @@ void OutputWidget::setCodepage(const QString& name)
 /// \param size
 /// \return
 ///
-QIcon drawRemoveColorIcon(int size = 16)
+static QIcon drawRemoveColorIcon(int size = 16)
 {
     QPixmap pm(size, size);
     pm.fill(Qt::transparent);
@@ -1084,10 +965,10 @@ QIcon drawRemoveColorIcon(int size = 16)
 }
 
 ///
-/// \brief OutputWidget::on_listView_customContextMenuRequested
+/// \brief OutputDataWidget::on_listView_customContextMenuRequested
 /// \param pos
 ///
-void OutputWidget::on_listView_customContextMenuRequested(const QPoint &pos)
+void OutputDataWidget::on_listView_customContextMenuRequested(const QPoint &pos)
 {
     QModelIndex index = ui->listView->indexAt(pos);
     if (!index.isValid())
@@ -1152,10 +1033,10 @@ void OutputWidget::on_listView_customContextMenuRequested(const QPoint &pos)
 }
 
 ///
-/// \brief OutputWidget::on_listView_doubleClicked
+/// \brief OutputDataWidget::on_listView_doubleClicked
 /// \param item
 ///
-void OutputWidget::on_listView_doubleClicked(const QModelIndex& index)
+void OutputDataWidget::on_listView_doubleClicked(const QModelIndex& index)
 {
     if(!index.isValid()) return;
 
@@ -1167,11 +1048,11 @@ void OutputWidget::on_listView_doubleClicked(const QModelIndex& index)
 }
 
 ///
-/// \brief OutputWidget::getValueIndex
+/// \brief OutputDataWidget::getValueIndex
 /// \param index
 /// \return
 ///
-QModelIndex OutputWidget::getValueIndex(const QModelIndex& index) const
+QModelIndex OutputDataWidget::getValueIndex(const QModelIndex& index) const
 {
     QModelIndex idx = index;
     switch(_displayDefinition.PointType)
@@ -1214,39 +1095,27 @@ QModelIndex OutputWidget::getValueIndex(const QModelIndex& index) const
 }
 
 ///
-/// \brief OutputWidget::setNotConnectedStatus
+/// \brief OutputDataWidget::setNotConnectedStatus
 ///
-void OutputWidget::setNotConnectedStatus()
+void OutputDataWidget::setNotConnectedStatus()
 {
     setStatus(tr("NOT CONNECTED!"));
 }
 
 ///
-/// \brief OutputWidget::setInvalidLengthStatus
+/// \brief OutputDataWidget::setInvalidLengthStatus
 ///
-void OutputWidget::setInvalidLengthStatus()
+void OutputDataWidget::setInvalidLengthStatus()
 {
     setStatus(tr("Invalid Data Length Specified"));
 }
 
-///
-/// \brief OutputWidget::captureString
-/// \param s
-///
-void OutputWidget::captureString(const QString& s)
-{
-    if(_fileCapture.isOpen())
-    {
-        QTextStream stream(&_fileCapture);
-        stream << s << "\n";
-    }
-}
 
 ///
-/// \brief OutputWidget::showModbusMessage
+/// \brief OutputDataWidget::showModbusMessage
 /// \param index
 ///
-void OutputWidget::showModbusMessage(const QModelIndex& index)
+void OutputDataWidget::showModbusMessage(const QModelIndex& index)
 {
     const auto msg = ui->logView->itemAt(index);
     if(msg) {
@@ -1259,19 +1128,19 @@ void OutputWidget::showModbusMessage(const QModelIndex& index)
 }
 
 ///
-/// \brief OutputWidget::hideModbusMessage
+/// \brief OutputDataWidget::hideModbusMessage
 ///
-void OutputWidget::hideModbusMessage()
+void OutputDataWidget::hideModbusMessage()
 {
     ui->splitter->setSizes({1, 0});
     ui->splitter->widget(1)->hide();
 }
 
 ///
-/// \brief OutputWidget::showZoomOverlay
+/// \brief OutputDataWidget::showZoomOverlay
 /// \param currentFontSize
 ///
-void OutputWidget::showZoomOverlay()
+void OutputDataWidget::showZoomOverlay()
 {
     _zoomLabel->setText(tr("Zoom: %1%").arg(_zoomPercent));
     _zoomLabel->adjustSize();
@@ -1289,20 +1158,6 @@ void OutputWidget::showZoomOverlay()
     _zoomHideTimer->start(800);
 }
 
-///
-/// \brief OutputWidget::updateLogView
-/// \param msg
-///
-void OutputWidget::updateLogView(QSharedPointer<const ModbusMessage> msg)
-{
-    ui->logView->addItem(msg);
-    if(captureMode() == CaptureMode::TextCapture && msg != nullptr)
-    {
-        const auto str = QString("%1: %2 %3 %4").arg(
-            (msg->isRequest()?  "Tx" : "Rx"),
-            msg->timestamp().toString(Qt::ISODateWithMs),
-            (msg->isRequest()?  "<<" : ">>"),
-            msg->toString(DataDisplayMode::Hex, _displayDefinition.LeadingZeros));
-        captureString(str);
-    }
-}
+
+
+

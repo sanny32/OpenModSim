@@ -1,0 +1,734 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>FormDataView</class>
+ <widget class="QWidget" name="FormDataView">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>866</width>
+    <height>410</height>
+   </rect>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout_2">
+   <property name="spacing">
+    <number>0</number>
+   </property>
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
+   <item>
+    <widget class="QToolBar" name="toolBarDisplay">
+     <property name="iconSize">
+      <size>
+       <width>24</width>
+       <height>24</height>
+      </size>
+     </property>
+     <addaction name="actionDisplayBinary"/>
+     <addaction name="actionDisplayHex"/>
+     <addaction name="actionDisplayAnsi"/>
+     <addaction name="separator"/>
+     <addaction name="actionDisplayInt16"/>
+     <addaction name="actionDisplayUInt16"/>
+     <addaction name="separator"/>
+     <addaction name="actionDisplayInt32"/>
+     <addaction name="actionDisplaySwappedInt32"/>
+     <addaction name="separator"/>
+     <addaction name="actionDisplayUInt32"/>
+     <addaction name="actionDisplaySwappedUInt32"/>
+     <addaction name="separator"/>
+     <addaction name="actionDisplayInt64"/>
+     <addaction name="actionDisplaySwappedInt64"/>
+     <addaction name="separator"/>
+     <addaction name="actionDisplayUInt64"/>
+     <addaction name="actionDisplaySwappedUInt64"/>
+     <addaction name="separator"/>
+     <addaction name="actionDisplayFloatingPt"/>
+     <addaction name="actionDisplaySwappedFP"/>
+     <addaction name="separator"/>
+     <addaction name="actionDisplayDblFloat"/>
+     <addaction name="actionDisplaySwappedDbl"/>
+     <addaction name="separator"/>
+     <addaction name="actionDisplaySwapBytes"/>
+    </widget>
+   </item>
+   <item>
+    <widget class="QSplitter" name="splitter">
+     <property name="orientation">
+      <enum>Qt::Orientation::Vertical</enum>
+     </property>
+     <property name="childrenCollapsible">
+      <bool>false</bool>
+     </property>
+     <widget class="QFrame" name="frameDataDefinition">
+      <property name="autoFillBackground">
+       <bool>true</bool>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::Shape::WinPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Shadow::Sunken</enum>
+      </property>
+      <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="0,0,0,0,0">
+       <property name="spacing">
+        <number>9</number>
+       </property>
+       <item>
+        <widget class="QFrame" name="frame_5">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>160</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>180</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <layout class="QFormLayout" name="formLayout">
+          <property name="labelAlignment">
+           <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+          </property>
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
+          <item row="1" column="0">
+           <widget class="QLabel" name="labelAddress">
+            <property name="text">
+             <string>Starting Address:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QLabel" name="labelLength">
+            <property name="text">
+             <string>Length:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="NumericLineEdit" name="lineEditLength">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>26</height>
+             </size>
+            </property>
+            <property name="contextMenuPolicy">
+             <enum>Qt::ContextMenuPolicy::NoContextMenu</enum>
+            </property>
+            <property name="acceptDrops">
+             <bool>false</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="NumericLineEdit" name="lineEditAddress">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>26</height>
+             </size>
+            </property>
+            <property name="contextMenuPolicy">
+             <enum>Qt::ContextMenuPolicy::NoContextMenu</enum>
+            </property>
+            <property name="acceptDrops">
+             <bool>false</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0">
+           <widget class="QLabel" name="labelAddressBase">
+            <property name="text">
+             <string>Address Base:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="AddressBaseComboBox" name="comboBoxAddressBase">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>26</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="Line" name="line">
+         <property name="orientation">
+          <enum>Qt::Orientation::Vertical</enum>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QFrame" name="frame_4">
+         <property name="minimumSize">
+          <size>
+           <width>160</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>190</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_5" stretch="0,0,0,1">
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,0,0">
+            <item>
+             <widget class="QLabel" name="labelDeviceId">
+              <property name="text">
+               <string>Unit Identifier:</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="NumericLineEdit" name="lineEditDeviceId">
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>26</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>65</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="contextMenuPolicy">
+               <enum>Qt::ContextMenuPolicy::NoContextMenu</enum>
+              </property>
+              <property name="acceptDrops">
+               <bool>false</bool>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer name="horizontalSpacer_2">
+              <property name="orientation">
+               <enum>Qt::Orientation::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>0</width>
+                <height>0</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <widget class="QLabel" name="labelMobusPointType">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>26</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>Data Type</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="PointTypeComboBox" name="comboBoxModbusPointType">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>26</height>
+             </size>
+            </property>
+            <property name="focusPolicy">
+             <enum>Qt::FocusPolicy::StrongFocus</enum>
+            </property>
+            <property name="frame">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="verticalSpacer">
+            <property name="orientation">
+             <enum>Qt::Orientation::Vertical</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>0</width>
+              <height>0</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="Line" name="line_2">
+         <property name="orientation">
+          <enum>Qt::Orientation::Vertical</enum>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="horizontalSpacer">
+         <property name="orientation">
+          <enum>Qt::Orientation::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>0</width>
+           <height>0</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QFrame" name="frameOutput">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+        <horstretch>0</horstretch>
+        <verstretch>1</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::Shape::WinPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Shadow::Sunken</enum>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayout_3">
+       <property name="spacing">
+        <number>0</number>
+       </property>
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
+       <item>
+        <widget class="OutputDataWidget" name="outputWidget" native="true">
+         <property name="autoFillBackground">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+  </layout>
+  <action name="actionDisplayBinary">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/res/actionBinary.png</normaloff>:/res/actionBinary.png</iconset>
+   </property>
+   <property name="text">
+    <string>Binary</string>
+   </property>
+   <property name="shortcut">
+    <string notr="true">Ctrl+1</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ShortcutContext::WidgetWithChildrenShortcut</enum>
+   </property>
+  </action>
+  <action name="actionDisplayHex">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/res/actionHex.png</normaloff>:/res/actionHex.png</iconset>
+   </property>
+   <property name="text">
+    <string>Hex</string>
+   </property>
+   <property name="shortcut">
+    <string notr="true">Ctrl+2</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ShortcutContext::WidgetWithChildrenShortcut</enum>
+   </property>
+  </action>
+  <action name="actionDisplayAnsi">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/res/actionAnsi.png</normaloff>:/res/actionAnsi.png</iconset>
+   </property>
+   <property name="text">
+    <string>Ansi</string>
+   </property>
+  </action>
+  <action name="actionDisplayInt16">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/res/actionInt16.png</normaloff>:/res/actionInt16.png</iconset>
+   </property>
+   <property name="text">
+    <string>16-bit Integer</string>
+   </property>
+   <property name="shortcut">
+    <string notr="true">Ctrl+3</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ShortcutContext::WidgetWithChildrenShortcut</enum>
+   </property>
+  </action>
+  <action name="actionDisplayUInt16">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/res/actionUInt16.png</normaloff>:/res/actionUInt16.png</iconset>
+   </property>
+   <property name="text">
+    <string>Unsigned 16-bit Integer</string>
+   </property>
+   <property name="shortcut">
+    <string notr="true">Ctrl+4</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ShortcutContext::WidgetWithChildrenShortcut</enum>
+   </property>
+  </action>
+  <action name="actionDisplayInt32">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/res/actionInt32.png</normaloff>:/res/actionInt32.png</iconset>
+   </property>
+   <property name="text">
+    <string>32-bit Integer (MSRF)</string>
+   </property>
+   <property name="shortcut">
+    <string notr="true">Ctrl+5</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ShortcutContext::WidgetWithChildrenShortcut</enum>
+   </property>
+  </action>
+  <action name="actionDisplaySwappedInt32">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/res/actionSwappedInt32.png</normaloff>:/res/actionSwappedInt32.png</iconset>
+   </property>
+   <property name="text">
+    <string>32-bit Integer (LSRF)</string>
+   </property>
+   <property name="shortcut">
+    <string notr="true">Ctrl+Alt+5</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ShortcutContext::WidgetWithChildrenShortcut</enum>
+   </property>
+  </action>
+  <action name="actionDisplayUInt32">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/res/actionUInt32.png</normaloff>:/res/actionUInt32.png</iconset>
+   </property>
+   <property name="text">
+    <string>Unsigned 32-bit Integer (MSRF)</string>
+   </property>
+   <property name="shortcut">
+    <string notr="true">Ctrl+6</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ShortcutContext::WidgetWithChildrenShortcut</enum>
+   </property>
+  </action>
+  <action name="actionDisplaySwappedUInt32">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/res/actionSwappedUInt32.png</normaloff>:/res/actionSwappedUInt32.png</iconset>
+   </property>
+   <property name="text">
+    <string>Unsigned 32-bit Integer (LSRF)</string>
+   </property>
+   <property name="shortcut">
+    <string notr="true">Ctrl+Alt+6</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ShortcutContext::WidgetWithChildrenShortcut</enum>
+   </property>
+  </action>
+  <action name="actionDisplayInt64">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/res/actionInt64.png</normaloff>:/res/actionInt64.png</iconset>
+   </property>
+   <property name="text">
+    <string>64-bit Integer (MSRF)</string>
+   </property>
+   <property name="shortcut">
+    <string notr="true">Ctrl+7</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ShortcutContext::WidgetWithChildrenShortcut</enum>
+   </property>
+  </action>
+  <action name="actionDisplaySwappedInt64">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/res/actionSwappedInt64.png</normaloff>:/res/actionSwappedInt64.png</iconset>
+   </property>
+   <property name="text">
+    <string>64-bit Integer (LSRF)</string>
+   </property>
+   <property name="shortcut">
+    <string notr="true">Ctrl+Alt+7</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ShortcutContext::WidgetWithChildrenShortcut</enum>
+   </property>
+  </action>
+  <action name="actionDisplayUInt64">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/res/actionUInt64.png</normaloff>:/res/actionUInt64.png</iconset>
+   </property>
+   <property name="text">
+    <string>Unsigned 64-bit Integer (MSRF)</string>
+   </property>
+   <property name="shortcut">
+    <string notr="true">Ctrl+8</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ShortcutContext::WidgetWithChildrenShortcut</enum>
+   </property>
+  </action>
+  <action name="actionDisplaySwappedUInt64">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/res/actionSwappedUInt64.png</normaloff>:/res/actionSwappedUInt64.png</iconset>
+   </property>
+   <property name="text">
+    <string>Unsigned 64-bit Integer (LSRF)</string>
+   </property>
+   <property name="shortcut">
+    <string notr="true">Ctrl+Alt+8</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ShortcutContext::WidgetWithChildrenShortcut</enum>
+   </property>
+  </action>
+  <action name="actionDisplayFloatingPt">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/res/actionFloatingPt.png</normaloff>:/res/actionFloatingPt.png</iconset>
+   </property>
+   <property name="text">
+    <string>Float (MSRF)</string>
+   </property>
+   <property name="shortcut">
+    <string notr="true">Ctrl+9</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ShortcutContext::WidgetWithChildrenShortcut</enum>
+   </property>
+  </action>
+  <action name="actionDisplaySwappedFP">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/res/actionSwappedFP.png</normaloff>:/res/actionSwappedFP.png</iconset>
+   </property>
+   <property name="text">
+    <string>Float (LSRF)</string>
+   </property>
+   <property name="shortcut">
+    <string notr="true">Ctrl+Alt+9</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ShortcutContext::WidgetWithChildrenShortcut</enum>
+   </property>
+  </action>
+  <action name="actionDisplayDblFloat">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/res/actionDblFloat.png</normaloff>:/res/actionDblFloat.png</iconset>
+   </property>
+   <property name="text">
+    <string>Double (MSRF)</string>
+   </property>
+   <property name="shortcut">
+    <string notr="true">Ctrl+0</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ShortcutContext::WidgetWithChildrenShortcut</enum>
+   </property>
+  </action>
+  <action name="actionDisplaySwappedDbl">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/res/actionSwappedDbl.png</normaloff>:/res/actionSwappedDbl.png</iconset>
+   </property>
+   <property name="text">
+    <string>Double (LSRF)</string>
+   </property>
+   <property name="shortcut">
+    <string notr="true">Ctrl+Alt+0</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::ShortcutContext::WidgetWithChildrenShortcut</enum>
+   </property>
+  </action>
+  <action name="actionDisplaySwapBytes">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/res/actionSwapBytes.png</normaloff>:/res/actionSwapBytes.png</iconset>
+   </property>
+   <property name="text">
+    <string>Swap Bytes (0xAB &#x2192; 0xBA)</string>
+   </property>
+  </action>
+  <action name="actionDisplayHexAddresses">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Hex Addresses</string>
+   </property>
+  </action>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>NumericLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header>numericlineedit.h</header>
+  </customwidget>
+  <customwidget>
+   <class>PointTypeComboBox</class>
+   <extends>QComboBox</extends>
+   <header>pointtypecombobox.h</header>
+  </customwidget>
+  <customwidget>
+   <class>AddressBaseComboBox</class>
+   <extends>QComboBox</extends>
+   <header>addressbasecombobox.h</header>
+  </customwidget>
+  <customwidget>
+   <class>OutputDataWidget</class>
+   <extends>QWidget</extends>
+   <header>outputdatawidget.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <tabstops>
+  <tabstop>lineEditAddress</tabstop>
+  <tabstop>lineEditLength</tabstop>
+  <tabstop>lineEditDeviceId</tabstop>
+  <tabstop>comboBoxModbusPointType</tabstop>
+ </tabstops>
+ <resources>
+  <include location="resources.qrc"/>
+ </resources>
+ <connections/>
+</ui>

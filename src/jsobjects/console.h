@@ -11,7 +11,7 @@ class console : public QObject
 {
     Q_OBJECT
 public:
-    explicit console(ConsoleOutput* console);
+    explicit console(QObject* parent = nullptr);
 
     Q_INVOKABLE void clear();
     Q_INVOKABLE void log(const QString& msg);
@@ -19,8 +19,9 @@ public:
     Q_INVOKABLE void warning(const QString& msg);
     Q_INVOKABLE void error(const QString& msg);
 
-private:
-    ConsoleOutput* _console;
+signals:
+    void messageAdded(const QString& text, ConsoleOutput::MessageType type);
+    void clearRequested();
 };
 
 #endif // CONSOLE_H

@@ -1,4 +1,4 @@
-#ifndef DIALOGFORCEMULTIPLECOILS_H
+﻿#ifndef DIALOGFORCEMULTIPLECOILS_H
 #define DIALOGFORCEMULTIPLECOILS_H
 
 #include <QDialog>
@@ -17,7 +17,7 @@ class DialogForceMultipleCoils : public QAdjustedSizeDialog
     Q_OBJECT
 
 public:
-    explicit DialogForceMultipleCoils(ModbusWriteParams& params, QModbusDataUnit::RegisterType type, int length, const DisplayDefinition& dd, QWidget *parent = nullptr);
+    explicit DialogForceMultipleCoils(ModbusWriteParams& params, QModbusDataUnit::RegisterType type, int length, const DataViewDefinitions& dd, QWidget *parent = nullptr);
     ~DialogForceMultipleCoils();
 
     void accept() override;

@@ -1,4 +1,4 @@
-#ifndef DIALOGSETUPPRESETDATA_H
+﻿#ifndef DIALOGSETUPPRESETDATA_H
 #define DIALOGSETUPPRESETDATA_H
 
 #include <QModbusDataUnit>
@@ -28,7 +28,7 @@ class DialogSetupPresetData : public QFixedSizeDialog
     Q_OBJECT
 
 public:
-    explicit DialogSetupPresetData(SetupPresetParams& params, QModbusDataUnit::RegisterType pointType, const DisplayDefinition& dd, QWidget *parent = nullptr);
+    explicit DialogSetupPresetData(SetupPresetParams& params, QModbusDataUnit::RegisterType pointType, const DataViewDefinitions& dd, QWidget *parent = nullptr);
     ~DialogSetupPresetData();
 
     void accept() override;

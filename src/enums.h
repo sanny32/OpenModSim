@@ -100,46 +100,6 @@ inline QSettings& operator >>(QSettings& in, AddressSpace& asp)
 }
 
 ///
-/// \brief The DisplayMode enum
-///
-enum class DisplayMode
-{
-    Data = 0,
-    Traffic,
-    Script
-};
-Q_DECLARE_METATYPE(DisplayMode)
-DECLARE_ENUM_STRINGS(DisplayMode,
-                {   DisplayMode::Data,      "Data"      },
-                {   DisplayMode::Traffic,   "Traffic"   },
-                {   DisplayMode::Script,    "Script"    }
-)
-
-///
-/// \brief operator <<
-/// \param out
-/// \param params
-/// \return
-///
-inline QSettings& operator <<(QSettings& out, const DisplayMode& mode)
-{
-    out.setValue("DisplayMode", (uint)mode);
-    return out;
-}
-
-///
-/// \brief operator >>
-/// \param in
-/// \param params
-/// \return
-///
-inline QSettings& operator >>(QSettings& in, DisplayMode& mode)
-{
-    mode = (DisplayMode)in.value("DisplayMode").toUInt();
-    return in;
-}
-
-///
 /// \brief The DataDisplayMode enum
 ///
 enum class DataDisplayMode
@@ -301,20 +261,6 @@ Q_DECLARE_METATYPE(TransmissionMode)
 DECLARE_ENUM_STRINGS(TransmissionMode,
                 {   TransmissionMode::ASCII, "ASCII"  },
                 {   TransmissionMode::RTU,   "RTU"    }
-)
-
-///
-/// \brief The CaptureMode enum
-///
-enum class CaptureMode
-{
-    Off = 0,
-    TextCapture
-};
-Q_DECLARE_METATYPE(CaptureMode)
-DECLARE_ENUM_STRINGS(CaptureMode,
-                {   CaptureMode::Off,         "Off"           },
-                {   CaptureMode::TextCapture, "TextCapture"   }
 )
 
 ///

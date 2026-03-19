@@ -38,9 +38,9 @@ void AppPreferences::load(QSettings& settings)
     _codeAutoComplete = settings.value("CodeAutoComplete", _codeAutoComplete).toBool();
     _checkForUpdates  = settings.value("CheckForUpdates",  _checkForUpdates).toBool();
 
-    DisplayDefinition dd;
-    settings >> dd;
-    _displayDefinition = dd;
+    settings >> _dataViewDefinitions;
+    settings >> _trafficViewDefinitions;
+    settings >> _scriptViewDefinitions;
 
     settings.endGroup();
 }
@@ -63,7 +63,9 @@ void AppPreferences::save(QSettings& settings) const
     settings.setValue("CodeAutoComplete",_codeAutoComplete);
     settings.setValue("CheckForUpdates", _checkForUpdates);
 
-    settings << _displayDefinition;
+    settings << _dataViewDefinitions;
+    settings << _trafficViewDefinitions;
+    settings << _scriptViewDefinitions;
 
     settings.endGroup();
 }
@@ -83,7 +85,9 @@ void AppPreferences::saveXml(QXmlStreamWriter& xml) const
     xml.writeAttribute("Language",        _language);
     xml.writeAttribute("ScriptFont",      _scriptFont.toString());
     xml.writeAttribute("CodeAutoComplete", boolToString(_codeAutoComplete));
-    xml << _displayDefinition;
+    xml << _dataViewDefinitions;
+    xml << _trafficViewDefinitions;
+    xml << _scriptViewDefinitions;
     xml.writeEndElement();
 }
 
@@ -129,8 +133,12 @@ void AppPreferences::loadXml(QXmlStreamReader& xml)
     }
 
     while (xml.readNextStartElement()) {
-        if (xml.name() == QLatin1String("DisplayDefinition")) {
-            xml >> _displayDefinition;
+        if (xml.name() == QLatin1String("DataViewDefinitions")) {
+            xml >> _dataViewDefinitions;
+        } else if (xml.name() == QLatin1String("TrafficViewDefinitions")) {
+            xml >> _trafficViewDefinitions;
+        } else if (xml.name() == QLatin1String("ScriptViewDefinitions")) {
+            xml >> _scriptViewDefinitions;
         } else {
             xml.skipCurrentElement();
         }

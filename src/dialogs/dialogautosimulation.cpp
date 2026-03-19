@@ -12,7 +12,7 @@ DialogAutoSimulation::DialogAutoSimulation(DataDisplayMode mode, ModbusSimulatio
     : QFixedSizeDialog(parent)
     , ui(new Ui::DialogAutoSimulation)
     ,_params(params)
-    ,_displayMode(mode)
+    ,_dataMode(mode)
 {
     ui->setupUi(this);
     ui->checkBoxEnabled->setChecked(_params.Mode != SimulationMode::Off);
@@ -26,7 +26,7 @@ DialogAutoSimulation::DialogAutoSimulation(DataDisplayMode mode, ModbusSimulatio
     ui->lineEditInterval->setInputRange(100, 6000000);
     ui->lineEditInterval->setValue(_params.Interval);
 
-    switch(_displayMode)
+    switch(_dataMode)
     {
         case DataDisplayMode::Binary:
         break;
@@ -145,7 +145,7 @@ void DialogAutoSimulation::accept()
     {
         _params.Mode = ui->comboBoxSimulationType->currentSimulationMode();
         _params.Interval = ui->lineEditInterval->value<int>();
-        _params.DataMode = _displayMode;
+        _params.DataMode = _dataMode;
 
         switch(_params.Mode)
         {

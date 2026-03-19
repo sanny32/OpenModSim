@@ -23,7 +23,6 @@ public:
     ~MdiAreaEx() override;
 
     QMdiSubWindow* addSubWindow(QWidget* widget, Qt::WindowFlags flags = Qt::WindowFlags());
-    QMdiSubWindow* addSubWindowDirect(QWidget* widget, Qt::WindowFlags flags = Qt::WindowFlags());
     void removeSubWindow(QWidget* widget);
 
     QList<QMdiSubWindow*> subWindowList(QMdiArea::WindowOrder order = QMdiArea::CreationOrder) const;
@@ -80,6 +79,7 @@ public:
     void tileSubWindows();
 
     void setSplitViewEnabled(bool enabled);
+    MdiArea* activePanel() const;
 
 signals:
     void subWindowActivated(QMdiSubWindow* wnd);
@@ -97,7 +97,6 @@ private slots:
 
 private:
     MdiArea* areaForSubWindow(QMdiSubWindow* wnd) const;
-    MdiArea* activePanel() const;
     void connectPanel(MdiArea* area);
     void syncPanelOptions(MdiArea* area) const;
 
@@ -120,7 +119,7 @@ private:
     QSplitter* _splitter = nullptr;
     MdiArea* _primaryArea = nullptr;
     MdiArea* _secondaryArea = nullptr;
-    MdiArea* _lastActiveArea = nullptr;
+    MdiArea* _activePanel = nullptr;
 };
 
 #endif // MDIAREAEX_H

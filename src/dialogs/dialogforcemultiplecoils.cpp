@@ -1,4 +1,4 @@
-#include <QtMath>
+﻿#include <QtMath>
 #include <QLineEdit>
 #include "uiutils.h"
 #include "formatutils.h"
@@ -13,7 +13,7 @@
 /// \param dd
 /// \param parent
 ///
-DialogForceMultipleCoils::DialogForceMultipleCoils(ModbusWriteParams& params, QModbusDataUnit::RegisterType type, int length, const DisplayDefinition& dd, QWidget *parent) :
+DialogForceMultipleCoils::DialogForceMultipleCoils(ModbusWriteParams& params, QModbusDataUnit::RegisterType type, int length, const DataViewDefinitions& dd, QWidget *parent) :
       QAdjustedSizeDialog(parent)
     , ui(new Ui::DialogForceMultipleCoils)
     ,_writeParams(params)

@@ -34,8 +34,6 @@ public:
     explicit JScriptControl(QWidget *parent = nullptr);
     ~JScriptControl();
 
-    bool isConsoleVisible() const;
-
     void setModbusMultiServer(ModbusMultiServer* server);
     void setByteOrder(const ByteOrder* order);
     void setAddressBase(AddressBase base);
@@ -79,15 +77,15 @@ public slots:
     void showFind();
     void showReplace();
 
+    void setScriptSource(const QString& source);
+
     void runScript(RunMode mode, int interval = 0);
     void stopScript();
-
-    void showConsole();
-    void hideConsole();
 
 signals:
     void scriptStopped();
     void helpContext(const QString& helpKey);
+    void consoleMessage(const QString& source, const QString& text, ConsoleOutput::MessageType type);
 
 private slots:
     bool executeScript();
@@ -115,6 +113,7 @@ private:
     ByteOrder* _byteOrder = nullptr;
     AddressBase _addressBase = AddressBase::Base1;
     ModbusMultiServer* _mbMultiServer = nullptr;
+    QString _scriptSource;
 };
 
 #endif // JSCRIPTCONTROL_H

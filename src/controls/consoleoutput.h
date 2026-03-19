@@ -17,7 +17,7 @@ public:
 
     explicit ConsoleOutput(QWidget* parent = nullptr);
 
-    void addMessage(const QString& text, MessageType type);
+    void addMessage(const QString& text, MessageType type, const QString& source = {});
     bool isEmpty() const;
 
 public slots:

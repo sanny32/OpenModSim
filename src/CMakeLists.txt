@@ -111,6 +111,7 @@ target_include_directories(${PROJECT_NAME} PRIVATE
 set(SOURCES
     ansimenu.cpp
     apppreferences.cpp
+    appproject.cpp
     cmdlineparser.cpp
     controls/aboutdatawidget.cpp
     controls/addressbasecombobox.cpp
@@ -133,10 +134,12 @@ set(SOURCES
     controls/mdiareaex.cpp
     controls/mditabbar.cpp
     controls/modbuslogwidget.cpp
+    controls/projecttreewidget.cpp
     controls/modbusmessagewidget.cpp
     controls/numericcombobox.cpp
     controls/numericlineedit.cpp
-    controls/outputwidget.cpp
+    controls/outputdatawidget.cpp
+    controls/outputtrafficwidget.cpp
     controls/paritytypecombobox.cpp
     controls/pointtypecombobox.cpp
     controls/runmodecombobox.cpp
@@ -149,12 +152,10 @@ set(SOURCES
     dialogs/dialogautosimulation.cpp
     dialogs/dialogcoilsimulation.cpp
     dialogs/dialogabout.cpp
-    dialogs/dialogdisplaydefinition.cpp
     dialogs/dialogforcemultiplecoils.cpp
     dialogs/dialogforcemultipleregisters.cpp
     dialogs/dialogmsgparser.cpp
     dialogs/dialogprintsettings.cpp
-    dialogs/dialograwdatalog.cpp
     dialogs/dialogpreferences.cpp
     dialogs/dialogselectserviceport.cpp
     dialogs/dialogmodbusdefinitions.cpp
@@ -169,7 +170,9 @@ set(SOURCES
     jsobjects/script.cpp
     jsobjects/server.cpp
     jsobjects/storage.cpp
-    formmodsim.cpp
+    formdataview.cpp
+    formtrafficview.cpp
+    formscriptview.cpp
     jshighlighter.cpp
     main.cpp
     mainwindow.cpp
@@ -188,7 +191,6 @@ set(SOURCES
     quintvalidator.cpp
     recentfileactionlist.cpp
     updatechecker.cpp
-    windowactionlist.cpp
 )
 
 # Header files
@@ -196,6 +198,7 @@ set(HEADERS
     ansimenu.h
     ansiutils.h
     apppreferences.h
+    appproject.h
     bufferinglistmodel.h
     byteorderutils.h
     cmdlineparser.h
@@ -222,10 +225,13 @@ set(HEADERS
     controls/mdiareaex.h
     controls/mditabbar.h
     controls/modbuslogwidget.h
+    controls/projecttreewidget.h
     controls/modbusmessagewidget.h
     controls/numericcombobox.h
     controls/numericlineedit.h
-    controls/outputwidget.h
+    controls/outputdatawidget.h
+    controls/outputtrafficwidget.h
+    controls/outputtypes.h
     controls/paritytypecombobox.h
     controls/pointtypecombobox.h
     controls/runmodecombobox.h
@@ -238,12 +244,10 @@ set(HEADERS
     dialogs/dialogautosimulation.h
     dialogs/dialogcoilsimulation.h
     dialogs/dialogabout.h
-    dialogs/dialogdisplaydefinition.h
     dialogs/dialogforcemultiplecoils.h
     dialogs/dialogforcemultipleregisters.h
     dialogs/dialogmsgparser.h
     dialogs/dialogprintsettings.h
-    dialogs/dialograwdatalog.h
     dialogs/colorswatch.h
     dialogs/dialogpreferences.h
     dialogs/dialogmodbusdefinitions.h
@@ -264,7 +268,9 @@ set(HEADERS
     displaydefinition.h
     enums.h
     modbusserver.h
-    formmodsim.h
+    formdataview.h
+    formtrafficview.h
+    formscriptview.h
     jshighlighter.h
     mainwindow.h
     menuconnect.h
@@ -315,7 +321,6 @@ set(HEADERS
     scriptsettings.h
     serialportutils.h
     uiutils.h
-    windowactionlist.h
 )
 
 # UI Forms
@@ -323,17 +328,19 @@ set(UI_FILES
     controls/bitpatterncontrol.ui
     controls/findreplacebar.ui
     controls/jscriptcontrol.ui
-    controls/outputwidget.ui
+    controls/outputdatawidget.ui
+    controls/outputtrafficwidget.ui
     controls/statisticwidget.ui
+    formdataview.ui
+    formtrafficview.ui
+    formscriptview.ui
     dialogs/dialogautosimulation.ui
     dialogs/dialogcoilsimulation.ui
     dialogs/dialogabout.ui
-    dialogs/dialogdisplaydefinition.ui
     dialogs/dialogforcemultiplecoils.ui
     dialogs/dialogforcemultipleregisters.ui
     dialogs/dialogmsgparser.ui
     dialogs/dialogprintsettings.ui
-    dialogs/dialograwdatalog.ui
     dialogs/dialogpreferences.ui
     dialogs/dialogselectserviceport.ui
     dialogs/dialogmodbusdefinitions.ui
@@ -342,7 +349,7 @@ set(UI_FILES
     dialogs/dialogwindowsmanager.ui
     dialogs/dialogwritestatusregister.ui
     dialogs/dialogwriteregister.ui
-    formmodsim.ui
+    # formmodsim.ui was replaced by typed forms
     mainwindow.ui
 )
 

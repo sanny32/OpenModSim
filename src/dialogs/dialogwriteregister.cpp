@@ -76,13 +76,13 @@ DialogWriteRegister::DialogWriteRegister(ModbusWriteParams& params, QModbusDataU
     {
         const int simAddr = params.Address - (params.ZeroBasedAddress ? 0 : 1);
         _simParams = _dataSimulator->simulationParams(params.DeviceId, _type, simAddr);
-        if(!_dataSimulator->canStartSimulation(params.DisplayMode, params.DeviceId, _type, simAddr)) {
+        if(!_dataSimulator->canStartSimulation(params.DataMode, params.DeviceId, _type, simAddr)) {
             _simParams.Mode = SimulationMode::Disabled;
         }
     }
     updateSimulationButton();
 
-    switch(params.DisplayMode)
+    switch(params.DataMode)
     {
         case DataDisplayMode::UInt16:
             ui->lineEditValue->setLeadingZeroes(params.LeadingZeros);
@@ -162,6 +162,7 @@ DialogWriteRegister::DialogWriteRegister(ModbusWriteParams& params, QModbusDataU
         ui->groupBoxBitPattern->setCheckState(toCheckState(_writeParams.Value.toUInt()));
 
         connect(ui->lineEditValue, QOverload<const QVariant&>::of(&NumericLineEdit::valueChanged), this, [this](const QVariant& value) {
+            QSignalBlocker blocker(ui->controlBitPattern);
             ui->controlBitPattern->setValue(value.toUInt());
         });
 
@@ -271,9 +272,9 @@ void DialogWriteRegister::updateValue()
 
     const quint8 deviceId = ui->lineEditNode->value<int>();
     const int simAddr = ui->lineEditAddress->value<int>() - (_writeParams.ZeroBasedAddress ? 0 : 1);
-    const int count = registersCount(_writeParams.DisplayMode);
+    const int count = registersCount(_writeParams.DataMode);
     const auto regs = srv->data(deviceId, _type, simAddr, count).values();
-    const auto value = makeValue(regs, _writeParams.DisplayMode, _writeParams.Order);
+    const auto value = makeValue(regs, _writeParams.DataMode, _writeParams.Order);
     if(value.isValid()) ui->lineEditValue->setValue(value);
 }
 
@@ -288,7 +289,7 @@ void DialogWriteRegister::on_lineEditAddress_valueChanged(const QVariant& value)
         const quint8 deviceId = ui->lineEditNode->value<int>();
         const int simAddr = value.toInt() - (_writeParams.ZeroBasedAddress ? 0 : 1);
         _simParams = _dataSimulator->simulationParams(deviceId, _type, simAddr);
-        if(!_dataSimulator->canStartSimulation(_writeParams.DisplayMode, deviceId, _type, simAddr)) {
+        if(!_dataSimulator->canStartSimulation(_writeParams.DataMode, deviceId, _type, simAddr)) {
             _simParams.Mode = SimulationMode::Disabled;
         }
         updateSimulationButton();
@@ -307,7 +308,7 @@ void DialogWriteRegister::on_lineEditNode_valueChanged(const QVariant& value)
         const quint8 deviceId = value.toUInt();
         const int simAddr = ui->lineEditAddress->value<int>() - (_writeParams.ZeroBasedAddress ? 0 : 1);
         _simParams = _dataSimulator->simulationParams(deviceId, _type, simAddr);
-        if(!_dataSimulator->canStartSimulation(_writeParams.DisplayMode, deviceId, _type, simAddr)) {
+        if(!_dataSimulator->canStartSimulation(_writeParams.DataMode, deviceId, _type, simAddr)) {
             _simParams.Mode = SimulationMode::Disabled;
         }
         updateSimulationButton();
@@ -322,7 +323,7 @@ void DialogWriteRegister::on_pushButtonSimulation_clicked()
 {
     if(_dataSimulator == nullptr) return;
 
-    DialogAutoSimulation dlg(_writeParams.DisplayMode, _simParams, this);
+    DialogAutoSimulation dlg(_writeParams.DataMode, _simParams, this);
     if(dlg.exec() == QDialog::Accepted)
     {
         const quint8 deviceId = ui->lineEditNode->value<int>();

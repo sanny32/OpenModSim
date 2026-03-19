@@ -1,57 +1,51 @@
-#ifndef FORMMODSIM_H
-#define FORMMODSIM_H
+#ifndef FORMDATAVIEW_H
+#define FORMDATAVIEW_H
 
 #include <QWidget>
 #include <QTimer>
 #include <QPrinter>
-#include <QVersionNumber>
+#include <QActionGroup>
+#include <QMap>
 #include <QXmlStreamWriter>
 #include "fontutils.h"
 #include "datasimulator.h"
 #include "modbusmultiserver.h"
 #include "displaydefinition.h"
-#include "outputwidget.h"
-#include "jscriptcontrol.h"
+#include "controls/outputdatawidget.h"
+#include "consoleoutput.h"
 #include "apppreferences.h"
+#include "ansimenu.h"
 
 ///
 /// \brief Forward declaration of the MainWindow
 ///
 class MainWindow;
-class QTextDocument;
 
 namespace Ui {
-class FormModSim;
+class FormDataView;
 }
 
 ///
-/// \brief The FormModSim class
+/// \brief The FormDataView class
 ///
-class FormModSim : public QWidget
+class FormDataView : public QWidget
 {
     Q_OBJECT
 
-    friend QSettings& operator <<(QSettings& out, FormModSim* frm);
-    friend QSettings& operator >>(QSettings& in, FormModSim* frm);
+    friend QSettings& operator <<(QSettings& out, FormDataView* frm);
+    friend QSettings& operator >>(QSettings& in, FormDataView* frm);
 
-    friend QXmlStreamWriter& operator <<(QXmlStreamWriter& xml, FormModSim* frm);
-    friend QXmlStreamReader& operator >>(QXmlStreamReader& xml, FormModSim* frm);
+    friend QXmlStreamWriter& operator <<(QXmlStreamWriter& xml, FormDataView* frm);
+    friend QXmlStreamReader& operator >>(QXmlStreamReader& xml, FormDataView* frm);
 
 public:
-    static QVersionNumber VERSION;
-
-    explicit FormModSim(int id, ModbusMultiServer& server, QSharedPointer<DataSimulator> simulator, MainWindow* parent);
-    ~FormModSim();
-
-    int formId() const { return _formId; }
-
-    QString filename() const;
-    void setFilename(const QString& filename);
+    explicit FormDataView(int id, ModbusMultiServer& server, DataSimulator* simulator, MainWindow* parent);
+    ~FormDataView();
 
     QVector<quint16> data() const;
 
-    DisplayDefinition displayDefinition() const;
-    void setDisplayDefinition(const DisplayDefinition& dd);
+    DataViewDefinitions displayDefinition() const;
+    void setDisplayDefinition(const DataViewDefinitions& dd);
 
     ByteOrder byteOrder() const;
     void setByteOrder(ByteOrder order);
@@ -59,34 +53,11 @@ public:
     QString codepage() const;
     void setCodepage(const QString& name);
 
-    DisplayMode displayMode() const;
-    void setDisplayMode(DisplayMode mode);
-
     DataDisplayMode dataDisplayMode() const;
     void setDataDisplayMode(DataDisplayMode mode);
 
-    ScriptSettings scriptSettings() const;
-    void setScriptSettings(const ScriptSettings& ss);
-
-    QString script() const;
-    void setScript(const QString& text);
-    QTextDocument* scriptDocument() const;
-    void setScriptDocument(QTextDocument* document);
-
-    int scriptCursorPosition() const;
-    void setScriptCursorPosition(int pos);
-
-    int scriptScrollPosition() const;
-    void setScriptScrollPosition(int pos);
-
-    QString searchText() const;
-
     bool displayHexAddresses() const;
     void setDisplayHexAddresses(bool on);
-
-    CaptureMode captureMode() const;
-    void startTextCapture(const QString& file);
-    void stopTextCapture();
 
     QColor backgroundColor() const;
     void setBackgroundColor(const QColor& clr);
@@ -103,9 +74,6 @@ public:
     int zoomPercent() const;
     void setZoomPercent(int zoomPercent);
 
-    bool isConsoleOutputVisible() const;
-    void setConsoleOutputVisible(bool visible);
-
     void print(QPrinter* painter);
 
     ModbusSimulationMap2 simulationMap() const;
@@ -120,31 +88,12 @@ public:
     AddressColorMap colorMap() const;
     void setColor(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr, const QColor& clr);
 
-    void resetCtrs();
-    uint requestCount() const;
-    uint responseCount() const;
-    void setStatisticCounters(uint requests, uint responses);
+    void linkTo(FormDataView* other);
 
-    bool canRunScript() const;
-    bool canStopScript() const;
-
-    bool canUndo() const;
-    bool canRedo() const;
-    bool canPaste() const;
-
-    void runScript();
-    void stopScript();
-
-    LogViewState logViewState() const;
-    void setLogViewState(LogViewState state);
-
-    QRect parentGeometry() const;
-    void setParentGeometry(const QRect& geometry);
-
-    bool isAutoCompleteEnabled() const;
-    void enableAutoComplete(bool enable);
-
-    void setScriptFont(const QFont& font);
+    void saveSettings(QSettings& out) const;
+    void loadSettings(QSettings& in);
+    void saveXml(QXmlStreamWriter& xml) const;
+    void loadXml(QXmlStreamReader& xml);
 
 protected:
     void changeEvent(QEvent* event) override;
@@ -164,16 +113,15 @@ signals:
     void codepageChanged(const QString&);
     void definitionChanged();
     void pointTypeChanged(QModbusDataUnit::RegisterType);
-    void displayModeChanged(DisplayMode mode);
-    void scriptSettingsChanged(const ScriptSettings&);
-    void scriptRunning();
-    void scriptStopped();
-    void captureError(const QString& error);
-    void doubleClicked();
-    void statisticCtrsReseted();
-    void statisticLogStateChanged(LogViewState state);
+    void dataDisplayModeChanged(DataDisplayMode);
+    void displayHexAddressesChanged(bool);
+    void fontChanged(const QFont&);
+    void foregroundColorChanged(const QColor&);
+    void backgroundColorChanged(const QColor&);
+    void statusColorChanged(const QColor&);
 
 private slots:
+    void on_awake();
     void on_lineEditAddress_valueChanged(const QVariant&);
     void on_lineEditLength_valueChanged(const QVariant&);
     void on_lineEditDeviceId_valueChanged(const QVariant&, const QVariant&);
@@ -182,8 +130,6 @@ private slots:
     void on_outputWidget_itemDoubleClicked(quint16 addr, const QVariant& value);
     void on_mbConnected(const ConnectionDetails& cd);
     void on_mbDisconnected(const ConnectionDetails& cd);
-    void on_mbRequest(QSharedPointer<const ModbusMessage> msg);
-    void on_mbResponse(QSharedPointer<const ModbusMessage> msgReq, QSharedPointer<const ModbusMessage> msgResp);
     void on_mbDataChanged(quint8 deviceId, const QModbusDataUnit& data);
     void on_mbDefinitionsChanged(const ModbusDefinitions& defs);
     void on_simulationStarted(DataDisplayMode mode, quint8 deviceId, QModbusDataUnit::RegisterType type, const QVector<quint16>& addresses);
@@ -193,19 +139,19 @@ private slots:
 private:
     void updateStatus();
     void onDefinitionChanged();
-    JScriptControl* scriptControl();
-    bool isLoggingRequest(QSharedPointer<const ModbusMessage> msgReq) const;
+    void setDisplayDefinitionSilent(const DataViewDefinitions& dd);
+
+    void setupDisplayBar();
+    void updateDisplayBar();
 
 private:
-    Ui::FormModSim *ui;
+    Ui::FormDataView *ui;
     MainWindow* _parent;
-    int _formId;
-    QString _filename;
-    bool _verboseLogging;
-    ScriptSettings _scriptSettings;
     ModbusMultiServer& _mbMultiServer;
-    QSharedPointer<DataSimulator> _dataSimulator;
-    QRect _parentGeometry;
+    DataSimulator* _dataSimulator;
+
+    AnsiMenu*  _ansiMenu = nullptr;
+    QMap<DataDisplayMode, QAction*> _displayModeActions;
 };
 
 ///
@@ -214,11 +160,10 @@ private:
 /// \param frm
 /// \return
 ///
-inline QSettings& operator <<(QSettings& out, FormModSim* frm)
+inline QSettings& operator <<(QSettings& out, FormDataView* frm)
 {
     if(!frm) return out;
 
-    out.setValue("FormVersion", FormModSim::VERSION.toString());
     out.setValue("Font", frm->font());
     out.setValue("ForegroundColor", frm->foregroundColor());
     out.setValue("BackgroundColor", frm->backgroundColor());
@@ -228,15 +173,13 @@ inline QSettings& operator <<(QSettings& out, FormModSim* frm)
     const auto wnd = frm->parentWidget();
     out.setValue("ViewMinimized", wnd->isMinimized());
     out.setValue("ViewMaximized", wnd->isMaximized());
-    out.setValue("ViewRect", frm->parentGeometry());
+    out.setValue("ViewRect", wnd->geometry());
 
-    out << frm->displayMode();
     out << frm->dataDisplayMode();
     out << frm->byteOrder();
     out << frm->displayDefinition();
     out.setValue("DisplayHexAddresses", frm->displayHexAddresses());
     out.setValue("Codepage", frm->codepage());
-    out << frm->scriptControl();
     out << frm->descriptionMap();
     out << frm->colorMap();
 
@@ -249,15 +192,9 @@ inline QSettings& operator <<(QSettings& out, FormModSim* frm)
 /// \param frm
 /// \return
 ///
-inline QSettings& operator >>(QSettings& in, FormModSim* frm)
+inline QSettings& operator >>(QSettings& in, FormDataView* frm)
 {
     if(!frm) return in;
-
-    QVersionNumber version;
-    version = QVersionNumber::fromString(in.value("FormVersion").toString());
-
-    DisplayMode displayMode;
-    in >> displayMode;
 
     DataDisplayMode dataDisplayMode;
     in >> dataDisplayMode;
@@ -265,22 +202,15 @@ inline QSettings& operator >>(QSettings& in, FormModSim* frm)
     ByteOrder byteOrder;
     in >> byteOrder;
 
-    DisplayDefinition displayDefinition;
+    DataViewDefinitions displayDefinition;
     in >> displayDefinition;
 
-    in >> frm->scriptControl();
 
     AddressDescriptionMap2 descriptionMap;
-    if(version >= QVersionNumber(1, 15))
-    {
-        in >> descriptionMap;
-    }
+    in >> descriptionMap;
 
     AddressColorMap colorMap;
-    if(version >= QVersionNumber(1, 15))
-    {
-        in >> colorMap;
-    }
+    in >> colorMap;
 
     bool isMinimized;
     isMinimized = in.value("ViewMinimized").toBool();
@@ -291,20 +221,16 @@ inline QSettings& operator >>(QSettings& in, FormModSim* frm)
     wndRect = in.value("ViewRect").toRect();
 
     auto wnd = frm->parentWidget();
-    if(!version.isNull() || version >= QVersionNumber(1, 8)) {
-        frm->setFont(in.value("Font", defaultMonospaceFont()).value<QFont>());
-        frm->setForegroundColor(in.value("ForegroundColor", QColor(Qt::black)).value<QColor>());
-        frm->setBackgroundColor(in.value("BackgroundColor", QColor(Qt::white)).value<QColor>());
-        frm->setStatusColor(in.value("StatusColor", QColor(Qt::red)).value<QColor>());
-        frm->setZoomPercent(in.value("ZoomPercent", 100).toInt());
-    }
-    frm->setScriptFont(AppPreferences::instance().scriptFont());
-
-    frm->setParentGeometry(wndRect);
+    frm->setFont(in.value("Font", defaultMonospaceFont()).value<QFont>());
+    frm->setForegroundColor(in.value("ForegroundColor", QColor(Qt::black)).value<QColor>());
+    frm->setBackgroundColor(in.value("BackgroundColor", QColor(Qt::white)).value<QColor>());
+    frm->setStatusColor(in.value("StatusColor", QColor(Qt::red)).value<QColor>());
+    frm->setZoomPercent(in.value("ZoomPercent", 100).toInt());
+    if (wnd && wndRect.isValid() && !wnd->isMaximized() && !wnd->isMinimized())
+        wnd->setGeometry(wndRect);
     if(isMinimized) wnd->setWindowState(Qt::WindowMinimized);
     if(isMaximized) wnd->setWindowState(Qt::WindowMaximized);
 
-    frm->setDisplayMode(displayMode);
     frm->setDataDisplayMode(dataDisplayMode);
     frm->setByteOrder(byteOrder);
     frm->setDisplayDefinition(displayDefinition);
@@ -321,10 +247,6 @@ inline QSettings& operator >>(QSettings& in, FormModSim* frm)
         frm->setColor(it.key().DeviceId, it.key().Type, it.key().Address, it.value());
     }
 
-    if(displayDefinition.ScriptCfg.RunOnStartup) {
-        frm->runScript();
-    }
-
     return in;
 }
 
@@ -334,14 +256,15 @@ inline QSettings& operator >>(QSettings& in, FormModSim* frm)
 /// \param frm
 /// \return
 ///
-inline QXmlStreamWriter& operator <<(QXmlStreamWriter& xml, FormModSim* frm)
+inline QXmlStreamWriter& operator <<(QXmlStreamWriter& xml, FormDataView* frm)
 {
     if (!frm) return xml;
 
-    xml.writeStartElement("FormModSim");
+    xml.writeStartElement("FormDataView");
 
-    xml.writeAttribute("Version", FormModSim::VERSION.toString());
-    xml.writeAttribute("DisplayMode", enumToString<DisplayMode>(frm->displayMode()));
+    const auto panel = frm->property("SplitPanel").toString();
+    if(!panel.isEmpty())
+        xml.writeAttribute("Panel", panel);
     xml.writeAttribute("DataDisplayMode", enumToString<DataDisplayMode>(frm->dataDisplayMode()));
     xml.writeAttribute("DisplayHexAddresses", boolToString(frm->displayHexAddresses()));
     xml.writeAttribute("Codepage", frm->codepage());
@@ -402,7 +325,6 @@ inline QXmlStreamWriter& operator <<(QXmlStreamWriter& xml, FormModSim* frm)
         xml.writeEndElement(); // ModbusSimulationMap
     }
 
-    xml << frm->scriptControl();
     xml << frm->descriptionMap();
     xml << frm->colorMap();
 
@@ -425,7 +347,7 @@ inline QXmlStreamWriter& operator <<(QXmlStreamWriter& xml, FormModSim* frm)
         xml.writeEndElement(); // ModbusDataUnit
     }
 
-    xml.writeEndElement(); // FormModSim
+    xml.writeEndElement(); // FormDataView
 
     return xml;
 }
@@ -436,22 +358,17 @@ inline QXmlStreamWriter& operator <<(QXmlStreamWriter& xml, FormModSim* frm)
 /// \param frm
 /// \return
 ///
-inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, FormModSim* frm)
+inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, FormDataView* frm)
 {
     if (!frm) return xml;
 
-    if (xml.isStartElement() && xml.name() == QLatin1String("FormModSim")) {
+    if (xml.isStartElement() && xml.name() == QLatin1String("FormDataView")) {
         DataDisplayMode ddm;
-        DisplayDefinition dd;
+        DataViewDefinitions dd;
         QHash<quint16, quint16> data;
         QHash<quint16, ModbusSimulationParams> simulations;
 
         const QXmlStreamAttributes attributes = xml.attributes();
-
-        if (attributes.hasAttribute("DisplayMode")) {
-            const DisplayMode mode = enumFromString<DisplayMode>(attributes.value("DisplayMode").toString());
-            frm->setDisplayMode(mode);
-        }
 
         if (attributes.hasAttribute("DataDisplayMode")) {
             ddm = enumFromString<DataDisplayMode>(attributes.value("DataDisplayMode").toString());
@@ -562,8 +479,9 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, FormModSim* frm)
                     xml.skipCurrentElement();
                 }
             }
-            else if (xml.name() == QLatin1String("DisplayDefinition")) {
+            else if (xml.name() == QLatin1String("DataViewDefinitions")) {
                 xml >> dd;
+                xml.skipCurrentElement();
                 frm->setDisplayDefinition(dd);
             }
             else if (xml.name() == QLatin1String("ModbusSimulationMap")) {
@@ -590,8 +508,7 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, FormModSim* frm)
                 }
             }
             else if (xml.name() == QLatin1String("JScriptControl")) {
-                auto scriptControl = frm->scriptControl();
-                xml >> scriptControl;
+                xml.skipCurrentElement();
             }
             else if (xml.name() == QLatin1String("AddressDescriptionMap")) {
                 AddressDescriptionMap2 map;
@@ -681,12 +598,6 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, FormModSim* frm)
                 frm->configureModbusDataUnit(dd.DeviceId, dd.PointType, dd.PointAddress - (dd.ZeroBasedAddress ? 0 : 1), values);
             }
         }
-
-        frm->setScriptFont(AppPreferences::instance().scriptFont());
-
-        if(dd.ScriptCfg.RunOnStartup) {
-            frm->runScript();
-        }
     }
     else {
         xml.skipCurrentElement();
@@ -695,4 +606,6 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, FormModSim* frm)
     return xml;
 }
 
-#endif // FORMMODSIM_H
+#endif // FORMDATAVIEW_H
+
+

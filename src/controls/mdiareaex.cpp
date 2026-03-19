@@ -54,12 +54,23 @@ MdiAreaEx::MdiAreaEx(QWidget* parent)
     _primaryArea->setMinimumSize(0, 0);
     hostLayout->addWidget(_primaryArea);
 
-    _lastActiveArea = _primaryArea;
+    _activePanel = _primaryArea;
 
     connectPanel(_primaryArea);
     createSplitButton();
     syncSplitButtonState();
     updateSplitButtonGeometry();
+
+    connect(qApp, &QApplication::focusChanged, this, [this](QWidget*, QWidget* now) {
+        if (!now || !_secondaryArea)
+            return;
+        if (_secondaryArea->isAncestorOf(now)) {
+            _activePanel = _secondaryArea;
+        }
+        else if (_primaryArea->isAncestorOf(now)) {
+            _activePanel = _primaryArea;
+        }
+    });
 }
 
 ///
@@ -81,30 +92,7 @@ QMdiSubWindow* MdiAreaEx::addSubWindow(QWidget* widget, Qt::WindowFlags flags)
     if (!_primaryArea)
         return nullptr;
 
-    MdiArea* target = _primaryArea;
-    if (_secondaryArea) {
-        if (auto* panel = activePanel())
-            target = panel;
-    }
-
-    auto* wnd = target->addSubWindow(widget, flags);
-    syncSplitButtonState();
-    updateSplitButtonGeometry();
-    return wnd;
-}
-
-///
-/// \brief MdiAreaEx::addSubWindowDirect
-/// \param widget
-/// \param flags
-/// \return
-///
-QMdiSubWindow* MdiAreaEx::addSubWindowDirect(QWidget* widget, Qt::WindowFlags flags)
-{
-    if (!_primaryArea)
-        return nullptr;
-
-    auto* wnd = _primaryArea->addSubWindow(widget, flags);
+    auto* wnd = activePanel()->addSubWindow(widget, flags);
     syncSplitButtonState();
     updateSplitButtonGeometry();
     return wnd;
@@ -242,13 +230,13 @@ void MdiAreaEx::setActiveSubWindow(QMdiSubWindow* wnd)
     if (auto* owner = areaForSubWindow(wnd)) {
         owner->setActiveSubWindow(wnd);
         owner->setFocus(Qt::OtherFocusReason);
-        _lastActiveArea = owner;
+        _activePanel = owner;
         return;
     }
 
     _primaryArea->setActiveSubWindow(wnd);
     _primaryArea->setFocus(Qt::OtherFocusReason);
-    _lastActiveArea = _primaryArea;
+    _activePanel = _primaryArea;
 }
 
 ///
@@ -634,11 +622,7 @@ void MdiAreaEx::on_panelSubWindowActivated(QMdiSubWindow* wnd)
 
     if (wnd) {
         if (auto* owner = areaForSubWindow(wnd))
-            _lastActiveArea = owner;
-    } else {
-        auto* senderArea = qobject_cast<MdiArea*>(sender());
-        if (senderArea == _primaryArea || senderArea == _secondaryArea)
-            _lastActiveArea = senderArea;
+            _activePanel = owner;
     }
 
     emit subWindowActivated(wnd);
@@ -679,24 +663,7 @@ MdiArea* MdiAreaEx::areaForSubWindow(QMdiSubWindow* wnd) const
 ///
 MdiArea* MdiAreaEx::activePanel() const
 {
-    if (!_primaryArea)
-        return nullptr;
-
-    if (!_secondaryArea)
-        return _primaryArea;
-
-    QWidget* focus = QApplication::focusWidget();
-    if (focus) {
-        if (_secondaryArea->isAncestorOf(focus))
-            return _secondaryArea;
-        if (_primaryArea->isAncestorOf(focus))
-            return _primaryArea;
-    }
-
-    if (_lastActiveArea == _secondaryArea || _lastActiveArea == _primaryArea)
-        return _lastActiveArea;
-
-    return _primaryArea;
+    return _activePanel ? _activePanel : _primaryArea;
 }
 
 ///
@@ -975,7 +942,7 @@ void MdiAreaEx::ensureSplitArea(Qt::Orientation orientation)
     }
 
     connectPanel(_secondaryArea);
-    _lastActiveArea = _primaryArea;
+    _activePanel = _primaryArea;
     requestEqualSplitterSizes();
     updateSplitButtonGeometry();
 }
@@ -1021,7 +988,7 @@ void MdiAreaEx::mergeSplitArea()
     _pendingSplitterEqualize = false;
     _pendingSplitterEqualizePasses = 0;
 
-    _lastActiveArea = _primaryArea;
+    _activePanel = _primaryArea;
     _isSplitInProgress = false;
     syncSplitButtonState();
     updateSplitButtonGeometry();

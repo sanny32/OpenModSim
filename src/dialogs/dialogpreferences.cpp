@@ -145,15 +145,16 @@ void DialogPreferences::loadFromPreferences()
     ui->spinBoxFontZoom->setValue(prefs.fontZoom());
     ui->checkBoxFontAntialias->setChecked(!(f.styleStrategy() & QFont::NoAntialias));
 
-    // Display
-    const auto& dd = prefs.displayDefinition();
-    ui->comboBoxAddressBase->setCurrentAddressBase(dd.ZeroBasedAddress ? AddressBase::Base0 : AddressBase::Base1);
-    ui->checkBoxHexAddress->setChecked(dd.HexAddress);
-    ui->checkBoxLeadingZeros->setChecked(dd.LeadingZeros);
-    ui->spinBoxColumnsDistance->setValue(dd.DataViewColumnsDistance);
-    ui->checkBoxAutoscrollLog->setChecked(dd.AutoscrollLog);
-    ui->checkBoxVerboseLogging->setChecked(dd.VerboseLogging);
-    ui->spinBoxLogLimit->setValue(dd.LogViewLimit);
+    // Defaults
+    const auto dataDd = prefs.dataViewDefinitions();
+    const auto trafficDd = prefs.trafficViewDefinitions();
+    const auto scriptDd = prefs.scriptViewDefinitions();
+
+    ui->comboBoxAddressBase->setCurrentAddressBase(dataDd.ZeroBasedAddress ? AddressBase::Base0 : AddressBase::Base1);
+    ui->checkBoxHexAddress->setChecked(dataDd.HexAddress);
+    ui->checkBoxLeadingZeros->setChecked(dataDd.LeadingZeros);
+    ui->spinBoxColumnsDistance->setValue(dataDd.DataViewColumnsDistance);
+    ui->spinBoxLogLimit->setValue(trafficDd.LogViewLimit);
 
     // Script — font
     const QFont& sf = prefs.scriptFont();
@@ -163,7 +164,7 @@ void DialogPreferences::loadFromPreferences()
 
     // Script — editor
     ui->checkBoxAutoComplete->setChecked(prefs.codeAutoComplete());
-    ui->checkBoxRunOnStartup->setChecked(prefs.runScriptOnStartup());
+    ui->checkBoxRunOnStartup->setChecked(scriptDd.ScriptCfg.RunOnStartup);
 
     on_listWidget_currentRowChanged(ui->listWidget->currentRow());
 }
@@ -200,16 +201,39 @@ void DialogPreferences::apply()
         _mainWindow->applyZoom(ui->spinBoxFontZoom->value());
     }
 
-    // Display
-    DisplayDefinition dd = prefs.displayDefinition();
-    dd.ZeroBasedAddress        = (ui->comboBoxAddressBase->currentAddressBase() == AddressBase::Base0);
-    dd.HexAddress              = ui->checkBoxHexAddress->isChecked();
-    dd.LeadingZeros            = ui->checkBoxLeadingZeros->isChecked();
-    dd.DataViewColumnsDistance = ui->spinBoxColumnsDistance->value();
-    dd.AutoscrollLog           = ui->checkBoxAutoscrollLog->isChecked();
-    dd.VerboseLogging          = ui->checkBoxVerboseLogging->isChecked();
-    dd.LogViewLimit            = ui->spinBoxLogLimit->value();
-    prefs.setDisplayDefinition(dd);
+    // Defaults
+    auto dataDd = prefs.dataViewDefinitions();
+    auto trafficDd = prefs.trafficViewDefinitions();
+    auto scriptDd = prefs.scriptViewDefinitions();
+
+    const bool zeroBasedAddress = (ui->comboBoxAddressBase->currentAddressBase() == AddressBase::Base0);
+    const bool hexAddress = ui->checkBoxHexAddress->isChecked();
+    const bool leadingZeros = ui->checkBoxLeadingZeros->isChecked();
+    const int columnsDistance = ui->spinBoxColumnsDistance->value();
+    const bool autoscrollLog = ui->checkBoxAutoscrollLog->isChecked();
+    const int logLimit = ui->spinBoxLogLimit->value();
+
+    auto applyDataDefaults = [=](auto& dd) {
+        dd.ZeroBasedAddress = zeroBasedAddress;
+        dd.HexAddress = hexAddress;
+        dd.LeadingZeros = leadingZeros;
+        dd.DataViewColumnsDistance = columnsDistance;
+    };
+
+    applyDataDefaults(dataDd);
+    trafficDd.LogViewLimit = static_cast<quint16>(logLimit);
+
+    const bool runOnStartup = ui->checkBoxRunOnStartup->isChecked();
+    scriptDd.ScriptCfg.RunOnStartup = runOnStartup;
+
+    prefs.setDataViewDefinitions(dataDd);
+    prefs.setTrafficViewDefinitions(trafficDd);
+    prefs.setScriptViewDefinitions(scriptDd);
+    if (_mainWindow) {
+        _mainWindow->applyDataViewDefaults(dataDd);
+        _mainWindow->applyTrafficViewDefaults(trafficDd);
+        _mainWindow->applyScriptViewDefaults(scriptDd);
+    }
 
     // Script — font
     const QFont scriptFont = fontFromControls(ui->fontComboBoxScriptFont, ui->spinBoxScriptFontSize, ui->checkBoxScriptFontAntialias);
@@ -219,7 +243,6 @@ void DialogPreferences::apply()
     // Script — editor
     const bool autoComplete = ui->checkBoxAutoComplete->isChecked();
     prefs.setCodeAutoComplete(autoComplete);
-    prefs.setRunScriptOnStartup(ui->checkBoxRunOnStartup->isChecked());
     if (_mainWindow) _mainWindow->applyAutoComplete(autoComplete);
 }
 

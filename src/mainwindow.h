@@ -4,13 +4,11 @@
 #include <QMainWindow>
 #include <QDockWidget>
 #include <QTranslator>
-#include <QWidgetAction>
 #include "helpwidget.h"
-#include "formmodsim.h"
-#include "ansimenu.h"
 #include "modbusmultiserver.h"
-#include "windowactionlist.h"
-#include "recentfileactionlist.h"
+#include "controls/consoleoutput.h"
+#include "controls/projecttreewidget.h"
+#include "appproject.h"
 
 namespace Ui {
 class MainWindow;
@@ -18,6 +16,11 @@ class MainWindow;
 
 class MdiAreaEx;
 class MdiArea;
+class FormDataView;
+class FormTrafficView;
+class FormScriptView;
+class QMenu;
+class QAction;
 
 ///
 /// \brief The MainWindow class
@@ -36,10 +39,23 @@ public:
     void applyScriptFont(const QFont& font);
     void applyZoom(int zoomPercent);
     void applyColors(const QColor& bg, const QColor& fg, const QColor& status);
+    void applyDataViewDefaults(const DataViewDefinitions& dd);
+    void applyTrafficViewDefaults(const TrafficViewDefinitions& dd);
+    void applyScriptViewDefaults(const ScriptViewDefinitions& dd);
     void applyCheckForUpdates(bool enabled);
 
-    void loadConfig(const QString& filename);
-    void saveConfig(const QString& filename);
+    void loadProject(const QString& filename);
+    void saveProject(const QString& filename);
+
+    void selectAnsiCodepage(const QString& name);
+    void showConsoleMessage(const QString& source, const QString& text, ConsoleOutput::MessageType type);
+    void showHelpContext(const QString& helpKey);
+    void applyConnections(const ModbusDefinitions& defs, const QList<ConnectionDetails>& conns);
+    ModbusMultiServer& mbMultiServer() { return _mbMultiServer; }
+    const ModbusMultiServer& mbMultiServer() const { return _mbMultiServer; }
+    DataSimulator* dataSimulator() const { return _dataSimulator; }
+
+    void setViewMode(QMdiArea::ViewMode mode);
 
 signals:
     void selectAll();
@@ -52,18 +68,23 @@ protected:
     void closeEvent(QCloseEvent *event) override;
     bool eventFilter(QObject * obj, QEvent * e) override;
 
+public slots:
+    void windowActivate(QMdiSubWindow* wnd);
+    void updateHelpWidgetState();
+    void markModified();
 private slots:
     void on_awake();
 
     /* File menu slots */
     void on_actionNew_triggered();
-    void on_actionOpen_triggered();
+    void on_actionNewDataView_triggered();
+    void on_actionNewTrafficView_triggered();
     void on_actionClose_triggered();
     void on_actionCloseAll_triggered();
-    void on_actionSave_triggered();
-    void on_actionSaveAs_triggered();
-    void on_actionSaveTestConfig_triggered();
-    void on_actionRestoreTestConfig_triggered();
+    void on_actionOpenProject_triggered();
+    void on_actionSaveProject_triggered();
+    void on_actionSaveProjectAs_triggered();
+    void on_actionCloseProject_triggered();
     void on_actionPrint_triggered();
     void on_actionPrintSetup_triggered();
     void on_actionExit_triggered();
@@ -86,136 +107,88 @@ private slots:
     void on_actionMbDefinitions_triggered();
 
     /* Setup menu slots*/
-    void on_actionDataDefinition_triggered();
-    void on_actionShowData_triggered();
-    void on_actionShowTraffic_triggered();
-    void on_actionShowScript_triggered();
-    void on_actionBinary_triggered();
-    void on_actionUInt16_triggered();
-    void on_actionInt16_triggered();
-    void on_actionInt32_triggered();
-    void on_actionSwappedInt32_triggered();
-    void on_actionUInt32_triggered();
-    void on_actionSwappedUInt32_triggered();
-    void on_actionInt64_triggered();
-    void on_actionSwappedInt64_triggered();
-    void on_actionUInt64_triggered();
-    void on_actionSwappedUInt64_triggered();
-    void on_actionHex_triggered();
-    void on_actionAnsi_triggered();
-    void on_actionFloatingPt_triggered();
-    void on_actionSwappedFP_triggered();
-    void on_actionDblFloat_triggered();
-    void on_actionSwappedDbl_triggered();
-    void on_actionSwapBytes_triggered();
-    void on_actionHexAddresses_triggered();
     void on_actionForceCoils_triggered();
     void on_actionForceDiscretes_triggered();
     void on_actionPresetInputRegs_triggered();
     void on_actionPresetHoldingRegs_triggered();
     void on_actionMsgParser_triggered();
-    void on_actionRawDataLog_triggered();
-    void on_actionTextCapture_triggered();
-    void on_actionCaptureOff_triggered();
-    void on_actionResetCtrs_triggered();
 
     /* View menu slots */
     void on_actionTabbedView_triggered();
     void on_actionSplitView_triggered();
     void on_actionToolbar_triggered();
     void on_actionStatusBar_triggered();
-    void on_actionDisplayBar_triggered();
-    void on_actionScriptBar_triggered();
     void on_actionScriptHelp_triggered();
     void on_actionConsoleOutput_triggered();
 
     /* Window menu slots */
     void on_actionCascade_triggered();
     void on_actionTile_triggered();
-    void on_actionWindows_triggered();
 
     /* Help menu slots */
     void on_actionAbout_triggered();
 
-    /* Script menu slots */
+    /* Script slots */
+    void on_actionNewScript_triggered();
     void on_actionImportScript_triggered();
-    void on_actionRunScript_triggered();
-    void on_actionStopScript_triggered();
 
-    void on_runModeChanged(RunMode mode);
     void on_searchText(const QString& text);
 
     void on_connectionError(const QString& error);
 
     void updateMenuWindow();
-    void updateHelpWidgetState();
-    void openFile(const QString& filename);
-    void windowActivate(QMdiSubWindow* wnd);
-    void setCodepage(const QString& name);
 
 private:
-    FormModSim* createMdiChildOnArea(int id, MdiArea* area, bool addToWindowList);
-    void setupMdiChild(FormModSim* frm, QMdiSubWindow* wnd, bool addToWindowList);
-    bool cloneMdiChildState(FormModSim* source, FormModSim* target) const;
-    FormModSim* findMdiChildInArea(MdiArea* area, int id) const;
-    FormModSim* splitPeer(FormModSim* frm) const;
-    bool isScriptRunningOnSplitPair(FormModSim* frm) const;
-    void updateSplitPairScriptIcons(FormModSim* frm);
-    MdiArea* splitSecondaryArea() const;
-    bool isSplitTabbedView() const;
-    void resetSplitViewIfEmpty();
-    void ensureSplitMirrorForForm(FormModSim* frm);
-    void syncSplitPeerDisplayDefinition(FormModSim* frm);
-    void syncSplitPeerState(FormModSim* frm);
-    void syncSplitForms();
-    void clearSplitMirrorsFromSecondary();
-
-    void addRecentFile(const QString& filename);
-    void updateDataDisplayMode(DataDisplayMode mode);
-
+    QWidget* createNewForm(ProjectFormKind kind);
+    QWidget* currentForm() const;
+    FormDataView* currentDataForm() const;
+    FormTrafficView* currentTrafficForm() const;
+    FormScriptView* currentScriptForm() const;
+    QWidget* currentDataOrTrafficForm() const;
     void forceCoils(QModbusDataUnit::RegisterType type);
     void presetRegs(QModbusDataUnit::RegisterType type);
 
-    FormModSim* createMdiChild(int id);
-    FormModSim* currentMdiChild() const;
-    FormModSim* findMdiChild(int id) const;
-    FormModSim* firstMdiChild() const;
-
-    FormModSim* loadMdiChild(const QString& filename);
-    void saveMdiChild(FormModSim* frm);
-    void closeMdiChild(FormModSim* frm);
-
-    bool loadProfile(const QString& filename);
-    void saveProfile();
-
-    void saveAs(FormModSim* frm);
-    void setViewMode(QMdiArea::ViewMode mode);
+    bool loadAppSettings(const QString& filename);
+    void saveAppSettings();
+    bool loadSessionProject();
+    bool saveSessionProject();
+    bool confirmSaveOnClose();
+    bool hasProjectContext() const;
+    void addRecentProject(const QString& filePath);
+    void rebuildRecentProjectsMenu();
+    void clearRecentProjects();
+    void openRecentProject(const QString& filePath);
+    void updateProjectWindowTitle();
 
 private:
     Ui::MainWindow *ui;
-    QWidgetAction* _actionRunMode;
     QDockWidget* _helpDockWidget;
     HelpWidget* _helpWidget;
-
+    QDockWidget* _consoleDockWidget = nullptr;
+    ConsoleOutput* _globalConsole = nullptr;
+    QDockWidget* _projectDockWidget = nullptr;
+    ProjectTreeWidget* _projectTree = nullptr;
     QString _lang;
     QTranslator _qtTranslator;
     QTranslator _appTranslator;
 
 private:
-    int _windowCounter;
     bool _useSession;
 
     ModbusMultiServer _mbMultiServer;
 
-    AnsiMenu* _ansiMenu;
-    WindowActionList* _windowActionList;
-    RecentFileActionList* _recentFileActionList;
     QSharedPointer<QPrinter> _selectedPrinter;
-    QSharedPointer<DataSimulator> _dataSimulator;
-    QString _savePath;
+    DataSimulator* _dataSimulator = nullptr;
     QString _profile;
-    bool _splitDisplayDefinitionSyncInProgress = false;
-    bool _splitDisableInProgress = false;
+    QString _projectFilePath;
+    ProjectFormKind _newFormKind = ProjectFormKind::Data;
+    QStringList _recentProjects;
+    QString _sessionProjectPath;
+    bool _isModified = false;
+    QMenu* _openRecentMenu = nullptr;
+    QAction* _clearRecentAction = nullptr;
+
+    AppProject* _project = nullptr;
 };
 
 #endif // MAINWINDOW_H

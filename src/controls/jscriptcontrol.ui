@@ -24,31 +24,24 @@
     <number>0</number>
    </property>
    <item>
-    <widget class="QSplitter" name="horizontalSplitter">
-     <property name="orientation">
-      <enum>Qt::Orientation::Vertical</enum>
+    <widget class="JSCodeEditor" name="codeEditor">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
      </property>
-     <property name="childrenCollapsible">
-      <bool>false</bool>
+     <property name="minimumSize">
+      <size>
+       <width>320</width>
+       <height>240</height>
+      </size>
      </property>
-     <widget class="JSCodeEditor" name="codeEditor">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-        <horstretch>2</horstretch>
-        <verstretch>4</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="minimumSize">
-       <size>
-        <width>320</width>
-        <height>240</height>
-       </size>
-      </property>
-      <property name="verticalScrollBarPolicy">
-       <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOn</enum>
-      </property>
-      <property name="plainText">
-       <string>Server.addressBase = AddressBase.Base1;
+     <property name="verticalScrollBarPolicy">
+      <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOn</enum>
+     </property>
+     <property name="plainText">
+      <string>Server.addressBase = AddressBase.Base1;
 
 let deviceId = 1;
 let address = 1;
@@ -61,22 +54,13 @@ Script.onInit(()=&gt;{
 
 	/* write your init code here */
 });</string>
-      </property>
-      <property name="tabStopDistance">
-       <double>20.000000000000000</double>
-      </property>
-      <property name="placeholderText">
-       <string/>
-      </property>
-     </widget>
-     <widget class="ConsoleOutput" name="console" native="true">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-        <horstretch>0</horstretch>
-        <verstretch>1</verstretch>
-       </sizepolicy>
-      </property>
-     </widget>
+     </property>
+     <property name="tabStopDistance">
+      <double>20.000000000000000</double>
+     </property>
+     <property name="placeholderText">
+      <string/>
+     </property>
     </widget>
    </item>
   </layout>
@@ -86,11 +70,6 @@ Script.onInit(()=&gt;{
    <class>JSCodeEditor</class>
    <extends>QPlainTextEdit</extends>
    <header>jscodeeditor.h</header>
-  </customwidget>
-  <customwidget>
-   <class>ConsoleOutput</class>
-   <extends>QWidget</extends>
-   <header>consoleoutput.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

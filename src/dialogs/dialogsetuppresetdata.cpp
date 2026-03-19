@@ -1,4 +1,4 @@
-#include "modbuslimits.h"
+﻿#include "modbuslimits.h"
 #include "dialogsetuppresetdata.h"
 #include "ui_dialogsetuppresetdata.h"
 
@@ -9,7 +9,7 @@
 /// \param dd
 /// \param parent
 ///
-DialogSetupPresetData::DialogSetupPresetData(SetupPresetParams& params,  QModbusDataUnit::RegisterType pointType, const DisplayDefinition& dd, QWidget *parent) :
+DialogSetupPresetData::DialogSetupPresetData(SetupPresetParams& params,  QModbusDataUnit::RegisterType pointType, const DataViewDefinitions& dd, QWidget *parent) :
      QFixedSizeDialog(parent)
     , ui(new Ui::DialogSetupPresetData)
     ,_params(params)
