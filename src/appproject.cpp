@@ -315,7 +315,7 @@ void AppProject::closeProject()
 
 ///
 /// \brief AppProject::markFormClosed
-/// Called when a primary form's subwindow is being closed вЂ” reparents the form so it survives.
+/// Called when a primary form's subwindow is being closed - reparents the form so it survives.
 ///
 void AppProject::markFormClosed(QWidget* frm)
 {
@@ -661,7 +661,7 @@ void AppProject::deleteForm(QWidget* frm)
     // Close the MDI subwindow if the form is currently open
     for (auto wnd : _mdiArea->subWindowList()) {
         if (wnd && wnd->widget() == frm) {
-            wnd->close(); // triggers closing signal в†’ moves frm to _closedForms
+            wnd->close(); // triggers closing signal -> moves frm to _closedForms
             break;
         }
     }
@@ -880,13 +880,13 @@ void AppProject::openFormOnActivePanel(QWidget* frm)
         }
     }
 
-    // Form is closed вЂ” rewrap on the active panel
+    // Form is closed - rewrap on the active panel
     if(containsClosedForm(frm)) {
         rewrapMdiChild(frm);
         return;
     }
 
-    // Form is open in the other panel вЂ” create a clone on the active panel
+    // Form is open in the other panel - create a clone on the active panel
     if(isSplitTabbedView() && panel) {
         auto* clone = createCloneOnArea(frm, panel);
         if(clone) {
@@ -1441,26 +1441,32 @@ void AppProject::loadProject(const QString& filename)
         if(auto* secondary = splitSecondaryArea())
             applyTabOrderToArea(secondary, secondaryTabOrder);
 
-    if(!activePrimaryWin.isEmpty())
-        if(auto primary = _mdiArea->primaryArea())
-            for(auto&& wnd : primary->localSubWindowList())
-                if(wnd && wnd->widget() && wnd->widget()->windowTitle() == activePrimaryWin)
-                {
-                    primary->setActiveSubWindow(wnd);
-                    break;
+    const auto restoreActiveWindows = [this, splitView, activePrimaryWin, activeSecWin]() {
+        if(!activePrimaryWin.isEmpty()) {
+            if(auto* primary = _mdiArea->primaryArea()) {
+                for(auto* wnd : primary->localSubWindowList()) {
+                    if(wnd && wnd->widget() && wnd->widget()->windowTitle() == activePrimaryWin) {
+                        primary->setActiveSubWindow(wnd);
+                        break;
+                    }
                 }
+            }
+        }
 
-    if(splitView)
-    {
-        if(!activeSecWin.isEmpty())
-            if(auto secondary = splitSecondaryArea())
-                for(auto&& wnd : secondary->localSubWindowList())
-                    if(wnd && wnd->widget() && wnd->widget()->windowTitle() == activeSecWin)
-                    {
+        if(splitView && !activeSecWin.isEmpty()) {
+            if(auto* secondary = splitSecondaryArea()) {
+                for(auto* wnd : secondary->localSubWindowList()) {
+                    if(wnd && wnd->widget() && wnd->widget()->windowTitle() == activeSecWin) {
                         secondary->setActiveSubWindow(wnd);
                         break;
                     }
-    }
+                }
+            }
+        }
+    };
+
+    // Apply once synchronously.
+    restoreActiveWindows();
 }
 
 ///

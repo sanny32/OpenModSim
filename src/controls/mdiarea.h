@@ -5,6 +5,7 @@
 #include <QMdiSubWindow>
 #include <QTabBar>
 #include <QFrame>
+#include <QPointer>
 #include "mditabbar.h"
 
 class MdiArea : public QMdiArea
@@ -87,6 +88,7 @@ private:
     int _tabBarTrailingInset = 0;
     MdiTabBar* _tabBar = nullptr;
     QFrame* _tabBarBaseLine = nullptr;
+    QPointer<QMdiSubWindow> _lastActivatedSubWindow;
 };
 
 #endif // MDIAREA_H

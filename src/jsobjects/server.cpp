@@ -587,7 +587,7 @@ void Server::onRequest(const QJSValue& func)
 
     if(!func.isCallable())
     {
-        // Post async cleanup вЂ” do NOT use BlockingQueuedConnection here (deadlock risk).
+        // Post async cleanup - do NOT use BlockingQueuedConnection here (deadlock risk).
 ///
 /// \brief QMetaObject::invokeMethod
 ///
@@ -609,7 +609,7 @@ void Server::onRequest(const QJSValue& func)
             bool handled = false;
             QSemaphore sem;
 
-            // Target QCoreApplication::instance() вЂ” never destroyed, so the queued
+            // Target QCoreApplication::instance() - never destroyed, so the queued
             // event is guaranteed to be delivered and sem.release() will always be
             // called (unlike targeting 'this' which gets cancelled on Server destruction).
             QMetaObject::invokeMethod(QCoreApplication::instance(),

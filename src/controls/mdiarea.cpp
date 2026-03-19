@@ -335,6 +335,7 @@ void MdiArea::on_tabBarDestroyed()
 ///
 void MdiArea::on_subWindowActivated(QMdiSubWindow* wnd)
 {
+    _lastActivatedSubWindow = wnd;
     enforceTabbedSubWindowState(wnd);
 
     if (!_tabBar)
@@ -386,8 +387,15 @@ void MdiArea::setupTabbedMode()
         enforceTabbedSubWindowState(wnd);
     }
 
-    if (auto* current = QMdiArea::currentSubWindow())
-        _tabBar->setCurrentSubWindow(current);
+    QMdiSubWindow* preferredCurrent = nullptr;
+    if (_lastActivatedSubWindow && QMdiArea::subWindowList().contains(_lastActivatedSubWindow.data()))
+        preferredCurrent = _lastActivatedSubWindow.data();
+    if (!preferredCurrent)
+        preferredCurrent = QMdiArea::activeSubWindow();
+    if (!preferredCurrent)
+        preferredCurrent = QMdiArea::currentSubWindow();
+    if (preferredCurrent)
+        _tabBar->setCurrentSubWindow(preferredCurrent);
 
     if (isVisible())
         _tabBar->show();

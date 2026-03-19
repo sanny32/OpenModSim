@@ -328,9 +328,7 @@ MainWindow::MainWindow(const QString& profile, bool useSession, QWidget *parent)
     loadAppSettings(profile);
     rebuildRecentProjectsMenu();
 
-    const bool canRestoreLastProject = _useSession
-        && !_lastProjectPath.isEmpty()
-        && QFile::exists(_lastProjectPath);
+    const bool canRestoreLastProject = !_lastProjectPath.isEmpty() && QFile::exists(_lastProjectPath);
     if(canRestoreLastProject) {
         loadProject(_lastProjectPath);
         addRecentProject(_lastProjectPath);
@@ -379,6 +377,7 @@ void MainWindow::changeEvent(QEvent* event)
     if (event->type() == QEvent::LanguageChange)
     {
         ui->retranslateUi(this);
+        updateProjectWindowTitle();
     }
 
     QMainWindow::changeEvent(event);
