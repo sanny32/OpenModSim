@@ -1,9 +1,14 @@
 #ifndef MODBUSTCPSERVER_H
 #define MODBUSTCPSERVER_H
 
+#include <QList>
+#include <QMap>
+#include <QPointer>
 #include <QTcpServer>
 #include <QModbusTcpConnectionObserver>
 #include "modbusserver.h"
+
+class QTimer;
 
 ///
 /// \brief The ModbusTcpServer class
@@ -34,6 +39,19 @@ protected:
     void close() override;
 
 private:
+    struct PendingTcpResponse {
+        QPointer<QTcpSocket> Socket;
+        quint16 TransactionId = 0;
+        quint16 ProtocolId = 0;
+        quint8 UnitId = 0;
+        QModbusResponse Response;
+        QSharedPointer<const ModbusMessage> RequestMessage;
+    };
+
+    void sendTcpResponse(const PendingTcpResponse& pending);
+    void enqueueDelayedResponse(const PendingTcpResponse& pending, int delayMs);
+    void flushDelayedResponses();
+    void armDelayedResponseTimer();
     QModbusResponse forwardProcessRequest(const QModbusRequest &r, int serverAddress);
 
 private:
@@ -46,6 +64,12 @@ private:
 
     static const qint8 mbpaHeaderSize = 7;
     static const qint16 maxBytesModbusADU = 260;
+
+    QTimer* _delayedResponseTimer = nullptr;
+    QMap<qint64, QList<PendingTcpResponse>> _delayedResponses;
+    int _delayedResponseCount = 0;
+    int _maxDelayedResponses = 2048;
+    bool _delayedResponseOverflowLogged = false;
 };
 
 
