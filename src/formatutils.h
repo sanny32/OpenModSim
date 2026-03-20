@@ -191,7 +191,7 @@ inline QString formatInt16Value(QModbusDataUnit::RegisterType pointType, qint16 
         case QModbusDataUnit::HoldingRegisters:
         case QModbusDataUnit::InputRegisters:
             value = toByteOrderValue(value, order);
-            result = QString("<%1>").arg(value, 5, 10, QLatin1Char(' '));
+            result = QString("<%1>").arg(value, 6, 10, QLatin1Char(' '));
             break;
         default:
             break;
@@ -285,7 +285,7 @@ inline QString formatFloatValue(QModbusDataUnit::RegisterType pointType, quint16
 
             const float value = makeFloat(value1, value2, order);
             outValue = value;
-            result = QLocale().toString(value);
+            result = QString("%1").arg(QLocale().toString(value), -14, QLatin1Char(' '));
         }
         break;
         default:
@@ -321,7 +321,7 @@ inline QString formatInt32Value(QModbusDataUnit::RegisterType pointType, quint16
 
             const qint32 value = makeInt32(value1, value2, order);
             outValue = value;
-            result = result = QString("<%1>").arg(value, 10, 10, QLatin1Char(' '));
+            result = result = QString("<%1>").arg(value, 11, 10, QLatin1Char(' '));
         }
         break;
         default:
@@ -396,7 +396,7 @@ inline QString formatDoubleValue(QModbusDataUnit::RegisterType pointType, quint1
 
             const double value = makeDouble(value1, value2, value3, value4, order);
             outValue = value;
-            result = QLocale().toString(value, 'g', 16);
+            result = QString("%1").arg(QLocale().toString(value, 'g', 16), -25, QLatin1Char(' '));
         }
         break;
         default:
