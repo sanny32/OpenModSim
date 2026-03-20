@@ -210,6 +210,7 @@ inline QXmlStreamWriter& operator <<(QXmlStreamWriter& xml, const DataViewDefini
     xml.writeAttribute("ZeroBasedAddress", boolToString(dd.ZeroBasedAddress));
     xml.writeAttribute("DataViewColumnsDistance", QString::number(dd.DataViewColumnsDistance));
     xml.writeAttribute("LeadingZeros", boolToString(dd.LeadingZeros));
+    xml.writeAttribute("HexAddress",       boolToString(dd.HexAddress));
     xml.writeAttribute("HexViewAddress",  boolToString(dd.HexViewAddress));
     xml.writeAttribute("HexViewDeviceId", boolToString(dd.HexViewDeviceId));
     xml.writeAttribute("HexViewLength",   boolToString(dd.HexViewLength));
@@ -293,6 +294,9 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, DataViewDefinitions&
         if (attributes.hasAttribute("LeadingZeros")) {
             dd.LeadingZeros = stringToBool(attributes.value("LeadingZeros").toString());
         }
+
+        if (attributes.hasAttribute("HexAddress"))
+            dd.HexAddress = stringToBool(attributes.value("HexAddress").toString());
 
         if (attributes.hasAttribute("HexViewAddress"))
             dd.HexViewAddress = stringToBool(attributes.value("HexViewAddress").toString());
