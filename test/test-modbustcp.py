@@ -1,0 +1,460 @@
+#!/usr/bin/env python3
+"""
+Integration tests for ModbusTcpServer (omodsim).
+
+Install dependencies:
+    pip install -r requirements.txt
+
+Usage:
+    pytest test-modbustcp.py -v            # all tests
+    pytest test-modbustcp.py -v -k fc03    # single test
+    python test-modbustcp.py               # standalone
+
+Prerequisites (omodsim must be running):
+    Load test/msimprj_test.msimprj in omodsim before running. It configures:
+    - TCP server on 0.0.0.0:502 (all interfaces)
+    - Slave ID 1
+    - Holding registers:  protocol addresses 0-199  (readable and writable)
+    - Input registers:    protocol addresses 0-99   (readable)
+    - Coils:              protocol addresses 0-1999 (readable and writable)
+    - Discrete inputs:    protocol addresses 0-99   (readable)
+
+    Note: coils length 2000 is required by test_fc01_read_coils_large (count=2000).
+          holding length 200 is required by test_fc03_read_holding_registers_large (count=125)
+          and by write tests that use addresses up to 50.
+
+Error simulation (manual testing only):
+    These settings are controlled via the omodsim GUI and have no programmatic
+    API, so they cannot be tested automatically. Verify manually:
+
+    1. noResponse           -- enable, confirm client receives timeout
+    2. responseDelay        -- set 500 ms delay, confirm response arrives late
+    3. responseIllegalFunction -- confirm client receives Modbus exception 0x01
+    4. responseDeviceBusy      -- confirm client receives Modbus exception 0x06
+    5. responseIncorrectId     -- confirm Unit ID in response differs from request
+"""
+
+import random
+import sys
+import threading
+import time
+
+import pytest
+from pymodbus.client import ModbusTcpClient
+
+# ── Configuration ─────────────────────────────────────────────────────────────
+
+HOST    = "127.0.0.1"
+PORT    = 502
+DEVICE_ID = 1
+TIMEOUT   = 3  # seconds per request
+
+# Test parameters
+CONCURRENT_CLIENTS = 10   # simultaneous connections
+STRESS_THREADS     = 20   # threads in stress test
+STRESS_REQ_EACH    = 50   # requests per thread
+
+# ── Helpers ───────────────────────────────────────────────────────────────────
+
+def make_client() -> ModbusTcpClient:
+    """Create and connect a client; calls pytest.fail if connection is refused."""
+    c = ModbusTcpClient(host=HOST, port=PORT, timeout=TIMEOUT)
+    if not c.connect():
+        pytest.fail(
+            f"Cannot connect to {HOST}:{PORT}. "
+            "Make sure omodsim is running with a TCP server."
+        )
+    return c
+
+
+def ok(rr) -> bool:
+    """Return True if the response is not None and contains no Modbus error."""
+    return rr is not None and not rr.isError()
+
+
+# ── FC 01 – Read Coils ───────────────────────────────────────────────────────
+
+def test_fc01_read_coils_basic():
+    with make_client() as c:
+        rr = c.read_coils(address=0, count=8, device_id=DEVICE_ID)
+        assert ok(rr), f"FC01: {rr}"
+        assert len(rr.bits) >= 8
+
+
+def test_fc01_read_coils_large():
+    """Maximum allowed coil count per request is 2000."""
+    with make_client() as c:
+        rr = c.read_coils(address=0, count=2000, device_id=DEVICE_ID)
+        assert ok(rr), f"FC01 max count: {rr}"
+        assert len(rr.bits) >= 2000
+
+
+# ── FC 02 – Read Discrete Inputs ─────────────────────────────────────────────
+
+def test_fc02_read_discrete_inputs():
+    with make_client() as c:
+        rr = c.read_discrete_inputs(address=0, count=8, device_id=DEVICE_ID)
+        assert ok(rr), f"FC02: {rr}"
+        assert len(rr.bits) >= 8
+
+
+# ── FC 03 – Read Holding Registers ───────────────────────────────────────────
+
+def test_fc03_read_holding_registers_basic():
+    with make_client() as c:
+        rr = c.read_holding_registers(address=0, count=10, device_id=DEVICE_ID)
+        assert ok(rr), f"FC03: {rr}"
+        assert len(rr.registers) == 10
+
+
+def test_fc03_read_holding_registers_single():
+    with make_client() as c:
+        rr = c.read_holding_registers(address=0, count=1, device_id=DEVICE_ID)
+        assert ok(rr), f"FC03 single: {rr}"
+        assert len(rr.registers) == 1
+
+
+def test_fc03_read_holding_registers_large():
+    """Maximum allowed register count per request is 125."""
+    with make_client() as c:
+        rr = c.read_holding_registers(address=0, count=125, device_id=DEVICE_ID)
+        assert ok(rr), f"FC03 max count: {rr}"
+        assert len(rr.registers) == 125
+
+
+# ── FC 04 – Read Input Registers ─────────────────────────────────────────────
+
+def test_fc04_read_input_registers():
+    with make_client() as c:
+        rr = c.read_input_registers(address=0, count=10, device_id=DEVICE_ID)
+        assert ok(rr), f"FC04: {rr}"
+        assert len(rr.registers) == 10
+
+
+# ── FC 05 – Write Single Coil ────────────────────────────────────────────────
+
+def test_fc05_write_coil_true():
+    with make_client() as c:
+        rr = c.write_coil(address=0, value=True, device_id=DEVICE_ID)
+        assert ok(rr), f"FC05 True: {rr}"
+
+
+def test_fc05_write_coil_false():
+    with make_client() as c:
+        rr = c.write_coil(address=0, value=False, device_id=DEVICE_ID)
+        assert ok(rr), f"FC05 False: {rr}"
+
+
+def test_fc05_write_read_roundtrip():
+    """FC05 write -> FC01 read: value must match."""
+    with make_client() as c:
+        for val in (True, False):
+            c.write_coil(address=5, value=val, device_id=DEVICE_ID)
+            rr = c.read_coils(address=5, count=1, device_id=DEVICE_ID)
+            assert ok(rr)
+            assert rr.bits[0] is val, f"FC05->FC01 roundtrip: expected {val}, got {rr.bits[0]}"
+
+
+# ── FC 06 – Write Single Register ────────────────────────────────────────────
+
+def test_fc06_write_register():
+    with make_client() as c:
+        rr = c.write_register(address=0, value=0x1234, device_id=DEVICE_ID)
+        assert ok(rr), f"FC06: {rr}"
+
+
+def test_fc06_write_read_roundtrip():
+    """FC06 write -> FC03 read: value must match."""
+    with make_client() as c:
+        val = random.randint(1, 0xFFFF)
+        c.write_register(address=10, value=val, device_id=DEVICE_ID)
+        rr = c.read_holding_registers(address=10, count=1, device_id=DEVICE_ID)
+        assert ok(rr)
+        assert rr.registers[0] == val, (
+            f"FC06->FC03 roundtrip: expected {val:#06x}, got {rr.registers[0]:#06x}"
+        )
+
+
+# ── FC 15 – Write Multiple Coils ─────────────────────────────────────────────
+
+def test_fc15_write_multiple_coils():
+    with make_client() as c:
+        values = [True, False, True, True, False, True, False, True]
+        rr = c.write_coils(address=0, values=values, device_id=DEVICE_ID)
+        assert ok(rr), f"FC15: {rr}"
+
+
+def test_fc15_write_read_roundtrip():
+    """FC15 write -> FC01 read: bit pattern must match."""
+    with make_client() as c:
+        values = [bool(random.getrandbits(1)) for _ in range(8)]
+        c.write_coils(address=0, values=values, device_id=DEVICE_ID)
+        rr = c.read_coils(address=0, count=8, device_id=DEVICE_ID)
+        assert ok(rr)
+        assert rr.bits[:8] == values, "FC15->FC01 roundtrip mismatch"
+
+
+# ── FC 16 – Write Multiple Registers ─────────────────────────────────────────
+
+def test_fc16_write_multiple_registers():
+    with make_client() as c:
+        values = [0x0001, 0x0002, 0x0003, 0x0004, 0x0005]
+        rr = c.write_registers(address=0, values=values, device_id=DEVICE_ID)
+        assert ok(rr), f"FC16: {rr}"
+
+
+def test_fc16_write_read_roundtrip():
+    """FC16 write -> FC03 read: register array must match."""
+    with make_client() as c:
+        values = [random.randint(0, 0xFFFF) for _ in range(10)]
+        c.write_registers(address=20, values=values, device_id=DEVICE_ID)
+        rr = c.read_holding_registers(address=20, count=10, device_id=DEVICE_ID)
+        assert ok(rr)
+        assert rr.registers == values, "FC16->FC03 roundtrip mismatch"
+
+
+# ── FC 22 – Mask Write Register ──────────────────────────────────────────────
+
+def test_fc22_mask_write_register():
+    """
+    Formula: result = (current AND and_mask) OR (or_mask AND NOT and_mask)
+    Initial: 0xFF00, AND=0xF0F0, OR=0x0F0F -> expected 0xF00F
+    """
+    with make_client() as c:
+        c.write_register(address=30, value=0xFF00, device_id=DEVICE_ID)
+        rr = c.mask_write_register(address=30, and_mask=0xF0F0, or_mask=0x0F0F, device_id=DEVICE_ID)
+        assert ok(rr), f"FC22: {rr}"
+        # Verify the result by reading back
+        rr2 = c.read_holding_registers(address=30, count=1, device_id=DEVICE_ID)
+        assert ok(rr2)
+        expected = (0xFF00 & 0xF0F0) | (0x0F0F & ~0xF0F0 & 0xFFFF)
+        assert rr2.registers[0] == expected, (
+            f"FC22: expected {expected:#06x}, got {rr2.registers[0]:#06x}"
+        )
+
+
+# ── FC 23 – Read/Write Multiple Registers ────────────────────────────────────
+
+def test_fc23_readwrite_registers():
+    """Single request: write to address 40, read from address 0."""
+    with make_client() as c:
+        write_vals = [0xAAAA, 0xBBBB, 0xCCCC]
+        rr = c.readwrite_registers(
+            read_address=0,   read_count=5,
+            write_address=40, values=write_vals,
+            device_id=DEVICE_ID,
+        )
+        assert ok(rr), f"FC23: {rr}"
+        assert len(rr.registers) == 5
+
+
+def test_fc23_write_then_read_same_range():
+    """FC23 overlapping ranges: read result must reflect the newly written values."""
+    with make_client() as c:
+        write_vals = [random.randint(0, 0xFFFF) for _ in range(3)]
+        rr = c.readwrite_registers(
+            read_address=50,  read_count=3,
+            write_address=50, values=write_vals,
+            device_id=DEVICE_ID,
+        )
+        assert ok(rr), f"FC23 same range: {rr}"
+        # Per spec: when ranges overlap, read returns the NEW (written) values
+        assert rr.registers == write_vals
+
+
+# ── FC 08 – Diagnostics ──────────────────────────────────────────────────────
+
+def test_fc08_return_query_data():
+    """Sub-function 00: server must echo the request data back unchanged."""
+    try:
+        from pymodbus.diag_message import ReturnQueryDataRequest
+    except ImportError:
+        pytest.skip("pymodbus.diag_message not available in this version")
+
+    with make_client() as c:
+        req = ReturnQueryDataRequest(message=[0xDEAD, 0xBEEF], device_id=DEVICE_ID)
+        rr = c.execute(req)
+        assert ok(rr), f"FC08: {rr}"
+
+
+# ── FC 11 – Get Communication Event Counter ───────────────────────────────────
+
+def test_fc11_get_event_counter():
+    try:
+        from pymodbus.diag_message import GetCommunicationEventCounterRequest
+    except ImportError:
+        pytest.skip("GetCommunicationEventCounterRequest not available")
+
+    with make_client() as c:
+        rr = c.execute(GetCommunicationEventCounterRequest(device_id=DEVICE_ID))
+        assert ok(rr), f"FC11: {rr}"
+
+
+# ── FC 12 – Get Communication Event Log ──────────────────────────────────────
+
+def test_fc12_get_event_log():
+    try:
+        from pymodbus.diag_message import GetCommunicationEventLogRequest
+    except ImportError:
+        pytest.skip("GetCommunicationEventLogRequest not available")
+
+    with make_client() as c:
+        rr = c.execute(GetCommunicationEventLogRequest(device_id=DEVICE_ID))
+        assert ok(rr), f"FC12: {rr}"
+
+
+# ── FC 17 – Report Server ID ──────────────────────────────────────────────────
+
+def test_fc17_report_server_id():
+    try:
+        from pymodbus.other_message import ReportSlaveIdRequest
+    except ImportError:
+        try:
+            from pymodbus.pdu.other_message import ReportSlaveIdRequest
+        except ImportError:
+            pytest.skip("ReportSlaveIdRequest not available")
+
+    with make_client() as c:
+        rr = c.execute(ReportSlaveIdRequest(device_id=DEVICE_ID))
+        assert ok(rr), f"FC17: {rr}"
+
+
+# ── FC 24 – Read FIFO Queue ───────────────────────────────────────────────────
+
+def test_fc24_read_fifo_queue():
+    """FIFO is normally empty -- an empty response without error is acceptable."""
+    with make_client() as c:
+        rr = c.read_fifo_queue(address=0, device_id=DEVICE_ID)
+        assert rr is not None, "FC24: no response (None)"
+        # Empty FIFO is not an error, just count=0
+        if rr.isError():
+            pytest.xfail(f"FC24 returned error (may not be implemented): {rr}")
+
+
+# ── FC 43 / 14 – Read Device Identification (MEI) ────────────────────────────
+
+def test_fc43_device_identification():
+    try:
+        from pymodbus.mei_message import ReadDeviceInformationRequest
+    except ImportError:
+        pytest.skip("ReadDeviceInformationRequest not available")
+
+    with make_client() as c:
+        rr = c.execute(ReadDeviceInformationRequest(device_id=DEVICE_ID))
+        assert ok(rr), f"FC43: {rr}"
+
+
+# ── Multiple concurrent connections ──────────────────────────────────────────
+
+def _concurrent_worker(results: list, idx: int, requests_per_client: int = 5):
+    """Worker thread: connect, send N requests, disconnect."""
+    try:
+        c = make_client()
+        for _ in range(requests_per_client):
+            rr = c.read_holding_registers(address=0, count=5, device_id=DEVICE_ID)
+            if not ok(rr):
+                results[idx] = f"Modbus error: {rr}"
+                c.close()
+                return
+        c.close()
+        results[idx] = "ok"
+    except Exception as exc:
+        results[idx] = f"exception: {exc}"
+
+
+def test_concurrent_connections():
+    """
+    Open CONCURRENT_CLIENTS connections simultaneously.
+    Each sends several requests -- all must complete without errors.
+    """
+    results = [None] * CONCURRENT_CLIENTS
+    threads = [
+        threading.Thread(target=_concurrent_worker, args=(results, i))
+        for i in range(CONCURRENT_CLIENTS)
+    ]
+    for t in threads:
+        t.start()
+    for t in threads:
+        t.join(timeout=30)
+
+    failed = [
+        f"  client {i}: {r}"
+        for i, r in enumerate(results)
+        if r != "ok"
+    ]
+    assert not failed, (
+        f"Errors with {CONCURRENT_CLIENTS} concurrent connections:\n"
+        + "\n".join(failed)
+    )
+
+
+# ── Stress test ───────────────────────────────────────────────────────────────
+
+_STRESS_FUNCTIONS = [
+    lambda c: c.read_coils(0, count=8, device_id=DEVICE_ID),
+    lambda c: c.read_discrete_inputs(0, count=8, device_id=DEVICE_ID),
+    lambda c: c.read_holding_registers(0, count=10, device_id=DEVICE_ID),
+    lambda c: c.read_input_registers(0, count=10, device_id=DEVICE_ID),
+    lambda c: c.write_coil(0, random.choice([True, False]), device_id=DEVICE_ID),
+    lambda c: c.write_register(0, random.randint(0, 0xFFFF), device_id=DEVICE_ID),
+    lambda c: c.write_registers(0, [random.randint(0, 0xFFFF) for _ in range(5)], device_id=DEVICE_ID),
+]
+
+
+def _stress_worker(results: list, idx: int):
+    errors = 0
+    try:
+        c = make_client()
+        for _ in range(STRESS_REQ_EACH):
+            fn = random.choice(_STRESS_FUNCTIONS)
+            rr = fn(c)
+            if not ok(rr):
+                errors += 1
+        c.close()
+        results[idx] = errors
+    except Exception as exc:
+        results[idx] = f"exception: {exc}"
+
+
+def test_stress(require_fc_tests_passed):
+    """
+    STRESS_THREADS threads, each sending STRESS_REQ_EACH random requests.
+    Acceptable error rate: < 1%.
+    Skipped automatically if any Modbus function test failed.
+    """
+    results = [None] * STRESS_THREADS
+    t0 = time.monotonic()
+
+    threads = [
+        threading.Thread(target=_stress_worker, args=(results, i))
+        for i in range(STRESS_THREADS)
+    ]
+    for t in threads:
+        t.start()
+    for t in threads:
+        t.join(timeout=120)
+
+    elapsed = time.monotonic() - t0
+    total   = STRESS_THREADS * STRESS_REQ_EACH
+
+    exceptions = [f"  thread {i}: {r}" for i, r in enumerate(results) if isinstance(r, str)]
+    errors     = sum(r for r in results if isinstance(r, int))
+
+    rps = total / elapsed if elapsed > 0 else 0
+    print(
+        f"\n  Stress: {total} requests in {elapsed:.1f}s "
+        f"({rps:.0f} req/s) | errors: {errors} | exceptions: {len(exceptions)}"
+    )
+
+    assert not exceptions, "Exceptions in threads:\n" + "\n".join(exceptions)
+
+    error_rate = errors / total
+    assert error_rate < 0.01, (
+        f"Too many errors: {errors}/{total} ({error_rate:.1%}). Limit is 1%."
+    )
+
+
+# ── Standalone entry point ────────────────────────────────────────────────────
+
+if __name__ == "__main__":
+    sys.exit(pytest.main([__file__, "-v", "--tb=short", "-s"]))

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<OpenModSim Version="2.0-dev">
+    <ModbusDefinitions AddrSpace="6-Digits" UseGlobalUnitMap="false">
+        <ModbusErrorSimulations NoResponse="false" ResponseIncorrectId="false" ResponseIllegalFunction="false" ResponseDeviceBusy="false" ResponseIncorrectCrc="false" ResponseDelay="false" ResponseRandomDelay="false" ResponseDelayTime="0" ResponseRandomDelayUpToTime="1000"/>
+    </ModbusDefinitions>
+    <Connections>
+        <ConnectionDetails ConnectionType="Tcp">
+            <TcpConnectionParams IPAddress="0.0.0.0" ServicePort="502"/>
+        </ConnectionDetails>
+    </Connections>
+    <ViewSettings ViewMode="1" SplitView="0" ActivePrimaryWindow="HoldingRegs"/>
+    <Forms>
+        <!-- Holding Registers: protocol addresses 0-199
+             Length=200: covers FC03 max-count test (125 regs) and all write tests (up to addr 50) -->
+        <FormDataView Panel="L" DataDisplayMode="Hex" DisplayHexAddresses="false" Codepage="" ByteOrder="Direct">
+            <Window Maximized="false" Minimized="false" Left="0" Top="0" Width="830" Height="280"/>
+            <Colors Background="#ffffff" Foreground="#000000" Status="#ff0000"/>
+            <Font Family="Consolas" Size="10" Bold="false" Italic="false"/>
+            <Zoom Value="100%"/>
+            <DataViewDefinitions FormName="HoldingRegs" DeviceId="1" PointType="HoldingRegisters" PointAddress="1" Length="200" ZeroBasedAddress="false" DataViewColumnsDistance="16" LeadingZeros="true" HexViewAddress="false" HexViewDeviceId="false" HexViewLength="false"/>
+            <ModbusSimulationMap/>
+            <AddressDescriptionMap/>
+            <AddressColorMap/>
+            <ModbusDataUnit/>
+        </FormDataView>
+        <!-- Input Registers: protocol addresses 0-99 -->
+        <FormDataView Panel="L" DataDisplayMode="Hex" DisplayHexAddresses="false" Codepage="" ByteOrder="Direct">
+            <Window Maximized="false" Minimized="false" Left="0" Top="280" Width="830" Height="280"/>
+            <Colors Background="#ffffff" Foreground="#000000" Status="#ff0000"/>
+            <Font Family="Consolas" Size="10" Bold="false" Italic="false"/>
+            <Zoom Value="100%"/>
+            <DataViewDefinitions FormName="InputRegs" DeviceId="1" PointType="InputRegisters" PointAddress="1" Length="100" ZeroBasedAddress="false" DataViewColumnsDistance="16" LeadingZeros="true" HexViewAddress="false" HexViewDeviceId="false" HexViewLength="false"/>
+            <ModbusSimulationMap/>
+            <AddressDescriptionMap/>
+            <AddressColorMap/>
+            <ModbusDataUnit/>
+        </FormDataView>
+        <!-- Coils: protocol addresses 0-1999
+             Length=2000: required by FC01 large-count test (reads 2000 coils) -->
+        <FormDataView Panel="L" DataDisplayMode="Binary" DisplayHexAddresses="false" Codepage="" ByteOrder="Direct">
+            <Window Maximized="false" Minimized="false" Left="0" Top="560" Width="830" Height="280"/>
+            <Colors Background="#ffffff" Foreground="#000000" Status="#ff0000"/>
+            <Font Family="Consolas" Size="10" Bold="false" Italic="false"/>
+            <Zoom Value="100%"/>
+            <DataViewDefinitions FormName="Coils" DeviceId="1" PointType="Coils" PointAddress="1" Length="2000" ZeroBasedAddress="false" DataViewColumnsDistance="16" LeadingZeros="true" HexViewAddress="false" HexViewDeviceId="false" HexViewLength="false"/>
+            <ModbusSimulationMap/>
+            <AddressDescriptionMap/>
+            <AddressColorMap/>
+            <ModbusDataUnit/>
+        </FormDataView>
+        <!-- Discrete Inputs: protocol addresses 0-99 -->
+        <FormDataView Panel="L" DataDisplayMode="Binary" DisplayHexAddresses="false" Codepage="" ByteOrder="Direct">
+            <Window Maximized="false" Minimized="false" Left="0" Top="840" Width="830" Height="280"/>
+            <Colors Background="#ffffff" Foreground="#000000" Status="#ff0000"/>
+            <Font Family="Consolas" Size="10" Bold="false" Italic="false"/>
+            <Zoom Value="100%"/>
+            <DataViewDefinitions FormName="DiscreteInputs" DeviceId="1" PointType="DiscreteInputs" PointAddress="1" Length="100" ZeroBasedAddress="false" DataViewColumnsDistance="16" LeadingZeros="true" HexViewAddress="false" HexViewDeviceId="false" HexViewLength="false"/>
+            <ModbusSimulationMap/>
+            <AddressDescriptionMap/>
+            <AddressColorMap/>
+            <ModbusDataUnit/>
+        </FormDataView>
+        <FormTrafficView Panel="L">
+            <Window Maximized="false" Minimized="false" Left="0" Top="1120" Width="830" Height="265"/>
+            <Colors Background="#ffffff" Foreground="#000000"/>
+            <Font Family="Consolas" Size="10" Bold="false" Italic="false"/>
+            <TrafficViewDefinitions FormName="Traffic" UnitFilter="0" FunctionCodeFilter="-1" LogViewLimit="100"/>
+        </FormTrafficView>
+    </Forms>
+    <TabOrder Panel="L">
+        <TabRef title="HoldingRegs"/>
+        <TabRef title="InputRegs"/>
+        <TabRef title="Coils"/>
+        <TabRef title="DiscreteInputs"/>
+        <TabRef title="Traffic"/>
+    </TabOrder>
+</OpenModSim>
