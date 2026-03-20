@@ -8,12 +8,10 @@
             <TcpConnectionParams IPAddress="0.0.0.0" ServicePort="502"/>
         </ConnectionDetails>
     </Connections>
-    <ViewSettings ViewMode="1" SplitView="0" ActivePrimaryWindow="HoldingRegs"/>
+    <ViewSettings ViewMode="1" SplitView="0" ActivePrimaryWindow="Traffic"/>
     <Forms>
-        <!-- Holding Registers: protocol addresses 0-199
-             Length=200: covers FC03 max-count test (125 regs) and all write tests (up to addr 50) -->
         <FormDataView Panel="L" DataDisplayMode="Hex" DisplayHexAddresses="false" Codepage="" ByteOrder="Direct">
-            <Window Maximized="false" Minimized="false" Left="0" Top="0" Width="830" Height="280"/>
+            <Window Maximized="false" Minimized="false" Left="0" Top="0" Width="830" Height="283"/>
             <Colors Background="#ffffff" Foreground="#000000" Status="#ff0000"/>
             <Font Family="Consolas" Size="10" Bold="false" Italic="false"/>
             <Zoom Value="100%"/>
@@ -21,11 +19,34 @@
             <ModbusSimulationMap/>
             <AddressDescriptionMap/>
             <AddressColorMap/>
-            <ModbusDataUnit/>
+            <ModbusDataUnit>
+                <Value Address="1">1</Value>
+                <Value Address="2">2</Value>
+                <Value Address="3">3</Value>
+                <Value Address="4">4</Value>
+                <Value Address="5">5</Value>
+                <Value Address="11">11136</Value>
+                <Value Address="21">31354</Value>
+                <Value Address="22">31149</Value>
+                <Value Address="23">21520</Value>
+                <Value Address="24">45942</Value>
+                <Value Address="25">20383</Value>
+                <Value Address="26">60613</Value>
+                <Value Address="27">48530</Value>
+                <Value Address="28">15591</Value>
+                <Value Address="29">65211</Value>
+                <Value Address="30">11198</Value>
+                <Value Address="31">65295</Value>
+                <Value Address="41">43690</Value>
+                <Value Address="42">48059</Value>
+                <Value Address="43">52428</Value>
+                <Value Address="51">39123</Value>
+                <Value Address="52">60223</Value>
+                <Value Address="53">10819</Value>
+            </ModbusDataUnit>
         </FormDataView>
-        <!-- Input Registers: protocol addresses 0-99 -->
         <FormDataView Panel="L" DataDisplayMode="Hex" DisplayHexAddresses="false" Codepage="" ByteOrder="Direct">
-            <Window Maximized="false" Minimized="false" Left="0" Top="280" Width="830" Height="280"/>
+            <Window Maximized="false" Minimized="false" Left="0" Top="280" Width="830" Height="283"/>
             <Colors Background="#ffffff" Foreground="#000000" Status="#ff0000"/>
             <Font Family="Consolas" Size="10" Bold="false" Italic="false"/>
             <Zoom Value="100%"/>
@@ -35,22 +56,26 @@
             <AddressColorMap/>
             <ModbusDataUnit/>
         </FormDataView>
-        <!-- Coils: protocol addresses 0-1999
-             Length=2000: required by FC01 large-count test (reads 2000 coils) -->
         <FormDataView Panel="L" DataDisplayMode="Binary" DisplayHexAddresses="false" Codepage="" ByteOrder="Direct">
-            <Window Maximized="false" Minimized="false" Left="0" Top="560" Width="830" Height="280"/>
+            <Window Maximized="false" Minimized="false" Left="0" Top="560" Width="830" Height="283"/>
             <Colors Background="#ffffff" Foreground="#000000" Status="#ff0000"/>
             <Font Family="Consolas" Size="10" Bold="false" Italic="false"/>
             <Zoom Value="100%"/>
-            <DataViewDefinitions FormName="Coils" DeviceId="1" PointType="Coils" PointAddress="1" Length="2000" ZeroBasedAddress="false" DataViewColumnsDistance="16" LeadingZeros="true" HexViewAddress="false" HexViewDeviceId="false" HexViewLength="false"/>
+            <DataViewDefinitions FormName="Coils" DeviceId="1" PointType="Coils" PointAddress="1" Length="200" ZeroBasedAddress="false" DataViewColumnsDistance="16" LeadingZeros="true" HexViewAddress="false" HexViewDeviceId="false" HexViewLength="false"/>
             <ModbusSimulationMap/>
             <AddressDescriptionMap/>
             <AddressColorMap/>
-            <ModbusDataUnit/>
+            <ModbusDataUnit>
+                <Value Address="1">1</Value>
+                <Value Address="2">1</Value>
+                <Value Address="3">1</Value>
+                <Value Address="5">1</Value>
+                <Value Address="6">1</Value>
+                <Value Address="8">1</Value>
+            </ModbusDataUnit>
         </FormDataView>
-        <!-- Discrete Inputs: protocol addresses 0-99 -->
         <FormDataView Panel="L" DataDisplayMode="Binary" DisplayHexAddresses="false" Codepage="" ByteOrder="Direct">
-            <Window Maximized="false" Minimized="false" Left="0" Top="840" Width="830" Height="280"/>
+            <Window Maximized="false" Minimized="false" Left="0" Top="840" Width="830" Height="283"/>
             <Colors Background="#ffffff" Foreground="#000000" Status="#ff0000"/>
             <Font Family="Consolas" Size="10" Bold="false" Italic="false"/>
             <Zoom Value="100%"/>
@@ -61,10 +86,10 @@
             <ModbusDataUnit/>
         </FormDataView>
         <FormTrafficView Panel="L">
-            <Window Maximized="false" Minimized="false" Left="0" Top="1120" Width="830" Height="265"/>
+            <Window Maximized="true" Minimized="false" Left="0" Top="0" Width="814" Height="230"/>
             <Colors Background="#ffffff" Foreground="#000000"/>
             <Font Family="Consolas" Size="10" Bold="false" Italic="false"/>
-            <TrafficViewDefinitions FormName="Traffic" UnitFilter="0" FunctionCodeFilter="-1" LogViewLimit="100"/>
+            <TrafficViewDefinitions FormName="Traffic" UnitFilter="0" FunctionCodeFilter="1" LogViewLimit="300"/>
         </FormTrafficView>
     </Forms>
     <TabOrder Panel="L">
