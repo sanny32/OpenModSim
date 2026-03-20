@@ -4,6 +4,7 @@
 #include <QWidget>
 #include <QTimer>
 #include <QXmlStreamWriter>
+#include <QQueue>
 #include "fontutils.h"
 #include "modbusmultiserver.h"
 #include "displaydefinition.h"
@@ -88,6 +89,13 @@ private slots:
     void on_mbDefinitionsChanged(const ModbusDefinitions& defs);
 
 private:
+    struct TrafficLogEntry {
+        ConnectionDetails Connection;
+        QSharedPointer<const ModbusMessage> DisplayMessage;
+        QSharedPointer<const ModbusMessage> FilterMessage;
+        bool IsRequest = false;
+    };
+
     void setupToolbarActions();
     void setupFilterControls();
     void setupToolbarLayout();
@@ -99,6 +107,13 @@ private:
     void updateSourceFilter();
     QString sourceFilterText(const ConnectionDetails& cd) const;
     bool matchesTrafficFilter(const ConnectionDetails& cd, QSharedPointer<const ModbusMessage> msg) const;
+    void clearTrafficLog();
+    void trimTrafficBufferToLimit();
+    void rebuildVisibleTraffic();
+    void appendTrafficEntry(const ConnectionDetails& cd,
+                            const QSharedPointer<const ModbusMessage>& displayMessage,
+                            const QSharedPointer<const ModbusMessage>& filterMessage,
+                            bool isRequest);
 
 private:
     Ui::FormTrafficView *ui;
@@ -108,6 +123,7 @@ private:
     uint _requestCount = 0;
     uint _responseCount = 0;
     LogViewState _logViewState = LogViewState::Unknown;
+    QQueue<TrafficLogEntry> _trafficBuffer;
 
     QLabel* _labelUnitId = nullptr;
     QSpinBox* _unitIdFilter = nullptr;

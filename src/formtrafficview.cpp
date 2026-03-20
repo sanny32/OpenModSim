@@ -162,17 +162,19 @@ void FormTrafficView::setDisplayDefinition(const TrafficViewDefinitions& dd)
     next.normalize();
     _displayDefinition = next;
 
-    ui->outputWidget->setLogViewLimit(_displayDefinition.LogViewLimit);
-
-    if (_unitIdFilter)
+    if (_unitIdFilter) {
+        QSignalBlocker b(_unitIdFilter);
         _unitIdFilter->setValue(_displayDefinition.UnitFilter);
+    }
     if (_funcCodeFilter) {
+        QSignalBlocker b(_funcCodeFilter);
         int idx = _funcCodeFilter->findData(_displayDefinition.FunctionCodeFilter);
         if (idx < 0)
             idx = 0;
         _funcCodeFilter->setCurrentIndex(idx);
     }
     if (_rowLimitCombo) {
+        QSignalBlocker b(_rowLimitCombo);
         int idx = _rowLimitCombo->findData(_displayDefinition.LogViewLimit);
         if (idx < 0) {
             _rowLimitCombo->addItem(QString::number(_displayDefinition.LogViewLimit), _displayDefinition.LogViewLimit);
@@ -181,7 +183,10 @@ void FormTrafficView::setDisplayDefinition(const TrafficViewDefinitions& dd)
         if (idx >= 0)
             _rowLimitCombo->setCurrentIndex(idx);
     }
+
+    trimTrafficBufferToLimit();
     ui->outputWidget->setup(_displayDefinition);
+    rebuildVisibleTraffic();
 }
 
 ///
@@ -290,7 +295,10 @@ void FormTrafficView::setDisplayDefinitionSilent(const TrafficViewDefinitions& d
         const int idx = _rowLimitCombo->findData(static_cast<int>(dd.LogViewLimit));
         if(idx >= 0) _rowLimitCombo->setCurrentIndex(idx);
     }
+
+    trimTrafficBufferToLimit();
     ui->outputWidget->setLogViewLimit(dd.LogViewLimit);
+    rebuildVisibleTraffic();
 }
 
 ///
@@ -341,7 +349,7 @@ void FormTrafficView::disconnectEditSlots()
 void FormTrafficView::on_mbConnected(const ConnectionDetails&)
 {
     updateSourceFilter();
-    ui->outputWidget->clearLogView();
+    clearTrafficLog();
 
     if(logViewState() == LogViewState::Unknown) {
         setLogViewState(LogViewState::Running);
@@ -436,10 +444,7 @@ bool FormTrafficView::matchesTrafficFilter(const ConnectionDetails& cd, QSharedP
 ///
 void FormTrafficView::on_mbRequest(const ConnectionDetails& cd, QSharedPointer<const ModbusMessage> msg)
 {
-    if(matchesTrafficFilter(cd, msg)) {
-        ++_requestCount;
-        ui->outputWidget->updateTraffic(msg);
-    }
+    appendTrafficEntry(cd, msg, msg, true);
 }
 
 ///
@@ -449,11 +454,7 @@ void FormTrafficView::on_mbRequest(const ConnectionDetails& cd, QSharedPointer<c
 ///
 void FormTrafficView::on_mbResponse(const ConnectionDetails& cd, QSharedPointer<const ModbusMessage> msgReq, QSharedPointer<const ModbusMessage> msgResp)
 {
-    const bool passesFilter = msgReq ? matchesTrafficFilter(cd, msgReq) : matchesTrafficFilter(cd, msgResp);
-    if(passesFilter) {
-        ++_responseCount;
-        ui->outputWidget->updateTraffic(msgResp);
-    }
+    appendTrafficEntry(cd, msgResp, msgReq ? msgReq : msgResp, false);
 }
 
 ///
@@ -488,8 +489,7 @@ void FormTrafficView::setupToolbarActions()
     });
 
     connect(ui->actionClearTraffic, &QAction::triggered, this, [this]() {
-        ui->outputWidget->clearLogView();
-        resetTrafficCounters();
+        clearTrafficLog();
     });
 
     connect(ui->actionExportTrafficLog, &QAction::triggered, this, [this]() {
@@ -524,7 +524,7 @@ void FormTrafficView::setupFilterControls()
     connect(_unitIdFilter, qOverload<int>(&QSpinBox::valueChanged), this, [this](int) {
         if (_unitIdFilter)
             _displayDefinition.UnitFilter = static_cast<quint8>(_unitIdFilter->value());
-        resetTrafficCounters();
+        rebuildVisibleTraffic();
         emit definitionChanged();
     });
 
@@ -546,7 +546,7 @@ void FormTrafficView::setupFilterControls()
     connect(_funcCodeFilter, qOverload<int>(&QComboBox::currentIndexChanged), this, [this](int) {
         if (_funcCodeFilter)
             _displayDefinition.FunctionCodeFilter = static_cast<qint16>(_funcCodeFilter->currentData().toInt());
-        resetTrafficCounters();
+        rebuildVisibleTraffic();
         emit definitionChanged();
     });
 
@@ -558,7 +558,7 @@ void FormTrafficView::setupFilterControls()
     _sourceFilter->setMinimumWidth(220);
     _sourceFilter->setSizeAdjustPolicy(QComboBox::AdjustToContents);
     connect(_sourceFilter, qOverload<int>(&QComboBox::currentIndexChanged), this, [this](int) {
-        resetTrafficCounters();
+        rebuildVisibleTraffic();
     });
 
     _labelRowLimit = new QLabel(ui->toolBarTraffic);
@@ -576,8 +576,10 @@ void FormTrafficView::setupFilterControls()
         const int limit = _rowLimitCombo->itemData(idx).toInt();
         if (limit <= 0)
             return;
-        ui->outputWidget->setLogViewLimit(limit);
         _displayDefinition.LogViewLimit = static_cast<quint16>(limit);
+        trimTrafficBufferToLimit();
+        ui->outputWidget->setLogViewLimit(limit);
+        rebuildVisibleTraffic();
         emit definitionChanged();
     });
 }
@@ -679,6 +681,88 @@ void FormTrafficView::resetTrafficCounters()
 {
     _requestCount = 0;
     _responseCount = 0;
+}
+
+///
+/// \brief FormTrafficView::clearTrafficLog
+///
+void FormTrafficView::clearTrafficLog()
+{
+    _trafficBuffer.clear();
+    ui->outputWidget->clearLogView();
+    resetTrafficCounters();
+}
+
+///
+/// \brief FormTrafficView::trimTrafficBufferToLimit
+///
+void FormTrafficView::trimTrafficBufferToLimit()
+{
+    const int limit = qMax(1, static_cast<int>(_displayDefinition.LogViewLimit));
+    while(_trafficBuffer.size() > limit)
+        _trafficBuffer.dequeue();
+}
+
+///
+/// \brief FormTrafficView::rebuildVisibleTraffic
+///
+void FormTrafficView::rebuildVisibleTraffic()
+{
+    const bool paused = (_logViewState == LogViewState::Paused);
+    if(paused)
+        ui->outputWidget->setLogViewState(LogViewState::Running);
+
+    ui->outputWidget->clearLogView();
+    resetTrafficCounters();
+
+    for(const auto& entry : _trafficBuffer)
+    {
+        if(!entry.DisplayMessage)
+            continue;
+
+        if(matchesTrafficFilter(entry.Connection, entry.FilterMessage))
+        {
+            if(entry.IsRequest)
+                ++_requestCount;
+            else
+                ++_responseCount;
+
+            ui->outputWidget->updateTraffic(entry.DisplayMessage);
+        }
+    }
+
+    if(paused)
+        ui->outputWidget->setLogViewState(LogViewState::Paused);
+}
+
+///
+/// \brief FormTrafficView::appendTrafficEntry
+///
+void FormTrafficView::appendTrafficEntry(const ConnectionDetails& cd,
+                                         const QSharedPointer<const ModbusMessage>& displayMessage,
+                                         const QSharedPointer<const ModbusMessage>& filterMessage,
+                                         bool isRequest)
+{
+    if(!displayMessage)
+        return;
+
+    TrafficLogEntry entry;
+    entry.Connection = cd;
+    entry.DisplayMessage = displayMessage;
+    entry.FilterMessage = filterMessage ? filterMessage : displayMessage;
+    entry.IsRequest = isRequest;
+    _trafficBuffer.enqueue(entry);
+    trimTrafficBufferToLimit();
+
+    if(matchesTrafficFilter(cd, entry.FilterMessage))
+    {
+        if(isRequest)
+            ++_requestCount;
+        else
+            ++_responseCount;
+
+        ui->outputWidget->updateTraffic(displayMessage);
+    }
 }
 
 
