@@ -169,8 +169,6 @@ private slots:
     void on_listView_customContextMenuRequested(const QPoint& pos);
 
 private:
-    void showModbusMessage(const QModelIndex& index);
-    void hideModbusMessage();
     void showZoomOverlay();
     QModelIndex getValueIndex(const QModelIndex& index) const;
 

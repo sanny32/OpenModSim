@@ -477,8 +477,12 @@ OutputDataWidget::OutputDataWidget(QWidget *parent) :
    ,_listModel(new OutputDataListModel(this))
 {
     ui->setupUi(this);
-    ui->stackedWidget->setCurrentIndex(0);
     ui->listView->setUniformItemSizes(true);
+    ui->listView->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+    ui->listView->setHorizontalScrollMode(QAbstractItemView::ScrollPerPixel);
+    ui->listView->setMovement(QListView::Free);
+    ui->listView->setWrapping(true);
+    ui->listView->setFlow(QListView::TopToBottom);
     ui->listView->setModel(_listModel.get());
     ui->listView->setItemDelegate(new DataDelegate( this ));
     ui->labelStatus->setAutoFillBackground(true);
@@ -490,15 +494,6 @@ OutputDataWidget::OutputDataWidget(QWidget *parent) :
 
     setStatusColor(Qt::red);
     setNotConnectedStatus();
-
-    hideModbusMessage();
-
-    connect(ui->logView->selectionModel(),
-            &QItemSelectionModel::selectionChanged,
-            this, [&](const QItemSelection& sel) {
-                if(!sel.indexes().isEmpty())
-                    showModbusMessage(sel.indexes().first());
-            });
 
     _baseFontSize = ui->listView->font().pointSizeF();
     if (_baseFontSize <= 0) _baseFontSize = 10.0;
@@ -598,8 +593,6 @@ void OutputDataWidget::setup(const DataViewDefinitions& dd, const ModbusSimulati
 
     _displayDefinition = dd;
     setDataViewColumnsDistance(dd.DataViewColumnsDistance);
-    ui->logView->setShowLeadingZeros(dd.LeadingZeros);
-    ui->modbusMsg->setShowLeadingZeros(dd.LeadingZeros);
 
     _listModel->clear();
 
@@ -713,7 +706,6 @@ void OutputDataWidget::setStatusColor(const QColor& clr)
     auto pal = ui->labelStatus->palette();
     pal.setColor(QPalette::WindowText, clr);
     ui->labelStatus->setPalette(pal);
-    ui->modbusMsg->setStatusColor(clr);
 }
 
 ///
@@ -722,7 +714,7 @@ void OutputDataWidget::setStatusColor(const QColor& clr)
 ///
 QFont OutputDataWidget::font() const
 {
-    return ui->logView->font();
+    return ui->listView->font();
 }
 
 ///
@@ -735,8 +727,6 @@ void OutputDataWidget::setFont(const QFont& font)
 
     ui->listView->setFont(font);
     ui->labelStatus->setFont(font);
-    ui->logView->setFont(font);
-    ui->modbusMsg->setFont(font);
 
     setZoomPercent(_zoomPercent);
 }
@@ -969,8 +959,6 @@ DataDisplayMode OutputDataWidget::dataDisplayMode() const
 void OutputDataWidget::setDataDisplayMode(DataDisplayMode mode)
 {
     _dataDisplayMode = mode;
-    ui->logView->setDataDisplayMode(mode);
-    ui->modbusMsg->setDataDisplayMode(mode);
 
     _listModel->update();
 }
@@ -991,7 +979,6 @@ const ByteOrder* OutputDataWidget::byteOrder() const
 void OutputDataWidget::setByteOrder(ByteOrder order)
 {
     _byteOrder = order;
-    ui->modbusMsg->setByteOrder(order);
 
     _listModel->update();
 }
@@ -1188,33 +1175,7 @@ void OutputDataWidget::setInvalidLengthStatus()
 
 
 ///
-/// \brief OutputDataWidget::showModbusMessage
-/// \param index
-///
-void OutputDataWidget::showModbusMessage(const QModelIndex& index)
-{
-    const auto msg = ui->logView->itemAt(index);
-    if(msg) {
-        if(ui->splitter->widget(1)->isHidden()) {
-            ui->splitter->setSizes({1, 1});
-            ui->splitter->widget(1)->show();
-        }
-        ui->modbusMsg->setModbusMessage(msg);
-    }
-}
-
-///
-/// \brief OutputDataWidget::hideModbusMessage
-///
-void OutputDataWidget::hideModbusMessage()
-{
-    ui->splitter->setSizes({1, 0});
-    ui->splitter->widget(1)->hide();
-}
-
-///
 /// \brief OutputDataWidget::showZoomOverlay
-/// \param currentFontSize
 ///
 void OutputDataWidget::showZoomOverlay()
 {
