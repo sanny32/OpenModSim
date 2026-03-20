@@ -249,6 +249,11 @@ void MdiArea::resizeEvent(QResizeEvent* event)
 void MdiArea::setVisible(bool visible)
 {
     QMdiArea::setVisible(visible);
+    if (visible) {
+        setupTabbedMode();
+        for (auto* wnd : QMdiArea::subWindowList())
+            enforceTabbedSubWindowState(wnd);
+    }
     if (_tabBar)
         _tabBar->setVisible(visible && viewMode() == QMdiArea::TabbedView);
     updateViewportBaseLine();
