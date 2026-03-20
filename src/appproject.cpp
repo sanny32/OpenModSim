@@ -19,6 +19,7 @@ constexpr const char* kPanelLeft = "L";
 constexpr const char* kPanelRight = "R";
 constexpr const char* kSplitOriginIdProperty = "SplitOriginId";
 constexpr const char* kSplitAutoCloneProperty = "SplitAutoClone";
+constexpr const char* kFormIdProperty = "FormId";
 
 ProjectFormType toProjectFormType(ProjectFormKind kind)
 {
@@ -58,12 +59,16 @@ int formIdOf(QWidget* widget)
     if (!widget)
         return -1;
 
+    bool ok = false;
+    const int propertyId = widget->property(kFormIdProperty).toInt(&ok);
+    if(ok)
+        return propertyId;
+
     const QString title = widget->windowTitle();
     int idx = title.size() - 1;
     while (idx >= 0 && title.at(idx).isDigit())
         --idx;
 
-    bool ok = false;
     const int id = title.mid(idx + 1).toInt(&ok);
     return ok ? id : -1;
 }
@@ -423,6 +428,8 @@ QWidget* AppProject::createMdiChildOnArea(int id, ProjectFormKind kind, MdiArea*
     }
     if(!frm)
         return nullptr;
+
+    frm->setProperty(kFormIdProperty, id);
 
     enableAutoCompleteOnForm(frm, AppPreferences::instance().codeAutoComplete());
 

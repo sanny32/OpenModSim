@@ -20,15 +20,22 @@
 #include "ui_formdataview.h"
 
 namespace {
+constexpr const char* kFormIdProperty = "FormId";
+
 int dataFormId(const QWidget* widget)
 {
     if (!widget)
         return -1;
+
+    bool ok = false;
+    const int propertyId = widget->property(kFormIdProperty).toInt(&ok);
+    if(ok)
+        return propertyId;
+
     const QString title = widget->windowTitle();
     int idx = title.size() - 1;
     while (idx >= 0 && title.at(idx).isDigit())
         --idx;
-    bool ok = false;
     const int id = title.mid(idx + 1).toInt(&ok);
     return ok ? id : -1;
 }
