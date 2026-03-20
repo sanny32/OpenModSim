@@ -59,9 +59,10 @@
         <file>res/emblem-mail.svg</file>
         <file>res/applications-internet.svg</file>
         <file>res/edit-delete.svg</file>
-        <file>res/icon-clear.svg</file>
+        <file>res/icon-clear.png</file>
         <file>res/icon-constant.svg</file>
         <file>res/icon-export.svg</file>
+        <file>res/icon-export.png</file>
         <file>res/icon-import.svg</file>
         <file>res/icon-random.svg</file>
         <file>res/icon-reset.svg</file>

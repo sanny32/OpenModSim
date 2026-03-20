@@ -58,7 +58,7 @@
   <action name="actionClearTraffic">
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/res/icon-clear.svg</normaloff>:/res/icon-clear.svg</iconset>
+     <normaloff>:/res/icon-clear.png</normaloff>:/res/icon-clear.png</iconset>
    </property>
    <property name="text">
     <string>Clear</string>
@@ -67,7 +67,7 @@
   <action name="actionExportTrafficLog">
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/res/icon-export.svg</normaloff>:/res/icon-export.svg</iconset>
+     <normaloff>:/res/icon-export.png</normaloff>:/res/icon-export.png</iconset>
    </property>
    <property name="text">
     <string>Export</string>
