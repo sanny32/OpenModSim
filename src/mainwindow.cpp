@@ -1173,6 +1173,7 @@ void MainWindow::windowActivate(QMdiSubWindow* wnd)
 void MainWindow::markModified()
 {
     _isModified = true;
+    updateProjectWindowTitle();
 }
 
 ///
@@ -1337,18 +1338,20 @@ void MainWindow::saveProject(const QString& filename)
 ///
 void MainWindow::updateProjectWindowTitle()
 {
+    const QString modifiedMark = _isModified ? "*" : "";
+
     if(_projectFilePath.isEmpty()) {
-        setWindowTitle(APP_NAME);
+        setWindowTitle(modifiedMark + APP_NAME);
         return;
     }
 
     const QString projectName = QFileInfo(_projectFilePath).completeBaseName();
     if(projectName.isEmpty()) {
-        setWindowTitle(APP_NAME);
+        setWindowTitle(modifiedMark + APP_NAME);
         return;
     }
 
-    setWindowTitle(QString("%1 - %2").arg(APP_NAME, projectName));
+    setWindowTitle(QString("%1%2 - %3").arg(modifiedMark, APP_NAME, projectName));
 }
 
 ///

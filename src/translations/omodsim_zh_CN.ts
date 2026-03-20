@@ -2932,7 +2932,7 @@ Script.onInit(()=&gt;{
     </message>
     <message>
         <location filename="../mainwindow.ui" line="232"/>
-        <location filename="../mainwindow.cpp" line="1510"/>
+        <location filename="../mainwindow.cpp" line="1513"/>
         <source>Save Project</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3282,7 +3282,7 @@ Script.onInit(()=&gt;{
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="235"/>
-        <location filename="../mainwindow.cpp" line="1599"/>
+        <location filename="../mainwindow.cpp" line="1602"/>
         <source>Clear List</source>
         <translation>清空列表</translation>
     </message>
@@ -3292,12 +3292,12 @@ Script.onInit(()=&gt;{
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1587"/>
+        <location filename="../mainwindow.cpp" line="1590"/>
         <source>No Recent Projects</source>
         <translation>没有最近项目</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1511"/>
+        <location filename="../mainwindow.cpp" line="1514"/>
         <source>Save project before closing?</source>
         <translation>关闭前保存项目吗？</translation>
     </message>
