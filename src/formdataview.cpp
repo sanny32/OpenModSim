@@ -21,6 +21,27 @@
 
 namespace {
 constexpr const char* kFormIdProperty = "FormId";
+constexpr int kBitPointLengthLimit = 2000;
+
+bool isBitPointType(QModbusDataUnit::RegisterType type)
+{
+    return type == QModbusDataUnit::Coils || type == QModbusDataUnit::DiscreteInputs;
+}
+
+QRange<int> lengthRangeForPointType(int address,
+                                    bool zeroBased,
+                                    AddressSpace space,
+                                    QModbusDataUnit::RegisterType pointType)
+{
+    const auto defaultRange = ModbusLimits::lengthRange(address, zeroBased, space);
+    if(!isBitPointType(pointType))
+        return defaultRange;
+
+    const int offset = address - (zeroBased ? 0 : 1);
+    const int maxByAddress = ModbusLimits::addressSpaceSize(space) - offset;
+    const int maxLen = qMin(kBitPointLengthLimit, maxByAddress);
+    return { defaultRange.from(), qMax(defaultRange.from(), maxLen) };
+}
 
 int dataFormId(const QWidget* widget)
 {
@@ -73,7 +94,7 @@ FormDataView::FormDataView(int id, ModbusMultiServer& server, DataSimulator* sim
     ui->lineEditAddress->setValue(0);
     ui->lineEditAddress->setHexButtonVisible(true);
 
-    ui->lineEditLength->setInputRange(ModbusLimits::lengthRange(0, true, mbDefs.AddrSpace));
+    ui->lineEditLength->setInputRange(lengthRangeForPointType(0, true, mbDefs.AddrSpace, QModbusDataUnit::HoldingRegisters));
     ui->lineEditLength->setValue(100);
     ui->lineEditLength->setHexButtonVisible(true);
 
@@ -251,7 +272,7 @@ void FormDataView::setDisplayDefinition(const DataViewDefinitions& dd)
 
     ui->lineEditLength->blockSignals(true);
     ui->lineEditLength->setLeadingZeroes(dd.LeadingZeros);
-    ui->lineEditLength->setInputRange(ModbusLimits::lengthRange(dd.PointAddress, dd.ZeroBasedAddress, defs.AddrSpace));
+    ui->lineEditLength->setInputRange(lengthRangeForPointType(dd.PointAddress, dd.ZeroBasedAddress, defs.AddrSpace, dd.PointType));
     ui->lineEditLength->setValue(dd.Length);
     ui->lineEditLength->blockSignals(false);
 
@@ -689,7 +710,7 @@ void FormDataView::setDisplayDefinitionSilent(const DataViewDefinitions& dd)
     {
         QSignalBlocker b(ui->lineEditLength);
         ui->lineEditLength->setLeadingZeroes(dd.LeadingZeros);
-        ui->lineEditLength->setInputRange(ModbusLimits::lengthRange(dd.PointAddress, dd.ZeroBasedAddress, defs.AddrSpace));
+        ui->lineEditLength->setInputRange(lengthRangeForPointType(dd.PointAddress, dd.ZeroBasedAddress, defs.AddrSpace, dd.PointType));
         ui->lineEditLength->setValue(dd.Length);
         ui->lineEditLength->setHexView(dd.HexViewLength);
     }
@@ -798,7 +819,7 @@ void FormDataView::on_lineEditAddress_valueChanged(const QVariant&)
     const auto defs = _mbMultiServer.getModbusDefinitions();
     const bool zeroBased = (ui->comboBoxAddressBase->currentAddressBase() == AddressBase::Base0);
     const int address = ui->lineEditAddress->value<int>();
-    const auto lenRange = ModbusLimits::lengthRange(address, zeroBased, defs.AddrSpace);
+    const auto lenRange = lengthRangeForPointType(address, zeroBased, defs.AddrSpace, ui->comboBoxModbusPointType->currentPointType());
 
     ui->lineEditLength->setInputRange(lenRange);
     if(ui->lineEditLength->value<int>() > lenRange.to()) {
@@ -845,6 +866,17 @@ void FormDataView::on_comboBoxAddressBase_addressBaseChanged(AddressBase base)
 ///
 void FormDataView::on_comboBoxModbusPointType_pointTypeChanged(QModbusDataUnit::RegisterType type)
 {
+    const auto defs = _mbMultiServer.getModbusDefinitions();
+    const bool zeroBased = (ui->comboBoxAddressBase->currentAddressBase() == AddressBase::Base0);
+    const int address = ui->lineEditAddress->value<int>();
+    const auto lenRange = lengthRangeForPointType(address, zeroBased, defs.AddrSpace, type);
+
+    ui->lineEditLength->setInputRange(lenRange);
+    if(ui->lineEditLength->value<int>() > lenRange.to()) {
+        ui->lineEditLength->setValue(lenRange.to());
+        ui->lineEditLength->update();
+    }
+
     emit definitionChanged();
     emit pointTypeChanged(type);
     updateDisplayBar();
@@ -987,7 +1019,7 @@ void FormDataView::on_mbDefinitionsChanged(const ModbusDefinitions& defs)
     const auto dd = displayDefinition();
     const auto addr = dd.PointAddress - (dd.ZeroBasedAddress ? 0 : 1);
     ui->lineEditAddress->setInputRange(ModbusLimits::addressRange(defs.AddrSpace, dd.ZeroBasedAddress));
-    ui->lineEditLength->setInputRange(ModbusLimits::lengthRange(dd.PointAddress, dd.ZeroBasedAddress, defs.AddrSpace));
+    ui->lineEditLength->setInputRange(lengthRangeForPointType(dd.PointAddress, dd.ZeroBasedAddress, defs.AddrSpace, dd.PointType));
     ui->outputWidget->setup(dd, _dataSimulator->simulationMap(), _mbMultiServer.data(dd.DeviceId, dd.PointType, addr, dd.Length));
 }
 

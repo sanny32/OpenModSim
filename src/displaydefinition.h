@@ -33,8 +33,15 @@ struct DataViewDefinitions
         DeviceId = qMax<quint8>(ModbusLimits::slaveRange().from(), DeviceId);
         PointAddress = qMax<quint16>(ModbusLimits::addressRange(AddrSpace, ZeroBasedAddress).from(), PointAddress);
         PointType = qBound(QModbusDataUnit::DiscreteInputs, PointType, QModbusDataUnit::HoldingRegisters);
-        Length = qBound<quint16>(ModbusLimits::lengthRange().from(), Length,
-                                 (quint16)ModbusLimits::lengthRange(PointAddress, ZeroBasedAddress, AddrSpace).to());
+
+        const bool bitPointType = (PointType == QModbusDataUnit::Coils ||
+                                   PointType == QModbusDataUnit::DiscreteInputs);
+        const int offset = PointAddress - (ZeroBasedAddress ? 0 : 1);
+        const int maxByAddress = ModbusLimits::addressSpaceSize(AddrSpace) - offset;
+        const int maxByType = bitPointType ? 2000 : ModbusLimits::lengthRange().to();
+        const int maxLen = qMax(1, qMin(maxByType, maxByAddress));
+        Length = qBound<quint16>(ModbusLimits::lengthRange().from(), Length, static_cast<quint16>(maxLen));
+
         DataViewColumnsDistance = qBound<quint16>(1, DataViewColumnsDistance, 32);
     }
 };
