@@ -105,10 +105,8 @@ void FormScriptView::changeEvent(QEvent* e)
 {
     if (e->type() == QEvent::LanguageChange) {
         ui->retranslateUi(this);
-        if (_scriptIntervalSpin)
-            _scriptIntervalSpin->setSuffix(tr(" ms"));
-        if (_scriptRunOnStartupCheck)
-            _scriptRunOnStartupCheck->setText(tr("Run on startup"));
+        _scriptIntervalSpin->setSuffix(tr(" ms"));
+        _scriptRunOnStartupCheck->setText(tr("Run on startup"));
     }
     QWidget::changeEvent(e);
 }
@@ -180,13 +178,12 @@ void FormScriptView::setScriptSettings(const ScriptSettings& ss)
 {
     if(_scriptSettings == ss)
         return;
+
     _scriptSettings = ss;
-    if (_scriptRunModeCombo)
-        _scriptRunModeCombo->setCurrentRunMode(ss.Mode);
-    if (_scriptIntervalSpin)
-        _scriptIntervalSpin->setValue(static_cast<int>(ss.Interval));
-    if (_scriptRunOnStartupCheck)
-        _scriptRunOnStartupCheck->setChecked(ss.RunOnStartup);
+    _scriptRunModeCombo->setCurrentRunMode(ss.Mode);
+    _scriptIntervalSpin->setValue(static_cast<int>(ss.Interval));
+    _scriptRunOnStartupCheck->setChecked(ss.RunOnStartup);
+
     emit scriptSettingsChanged(ss);
 }
 
