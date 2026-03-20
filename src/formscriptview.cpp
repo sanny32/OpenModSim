@@ -155,7 +155,6 @@ void FormScriptView::setDefinitions(const ScriptViewDefinitions& dd)
     else
         next.FormName = windowTitle();
 
-    next.ScriptCfg = _scriptSettings;
     next.normalize();
     _displayDefinition = next;
     setScriptSettings(_displayDefinition.ScriptCfg);

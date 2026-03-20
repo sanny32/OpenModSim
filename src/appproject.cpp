@@ -583,8 +583,12 @@ void AppProject::setupMdiChild(QWidget* frm, QMdiSubWindow* wnd, bool addToWindo
     if(addToWindowList) {
         bool okKind = false;
         const auto kind = projectFormKindFromWidget(frm, &okKind);
-        if(okKind)
+        if(okKind) {
             _projectTree->addForm(toProjectFormType(kind), frm);
+            connect(frm, &QWidget::windowTitleChanged, _projectTree, [this, frm](const QString&) {
+                _projectTree->updateFormTitle(frm);
+            });
+        }
     }
 }
 

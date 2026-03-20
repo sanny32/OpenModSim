@@ -83,7 +83,7 @@ inline QXmlStreamWriter& operator <<(QXmlStreamWriter& xml, const ScriptSettings
 ///
 inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, ScriptSettings& settings)
 {
-    if (xml.readNextStartElement() && xml.name() == QLatin1String("ScriptSettings")) {
+    if (xml.isStartElement() && xml.name() == QLatin1String("ScriptSettings")) {
         const QXmlStreamAttributes attributes = xml.attributes();
 
         if (attributes.hasAttribute("Mode")) {
