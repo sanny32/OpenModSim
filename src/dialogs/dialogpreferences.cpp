@@ -167,7 +167,6 @@ void DialogPreferences::loadFromPreferences()
 
     // Script - editor
     ui->checkBoxAutoComplete->setChecked(prefs.codeAutoComplete());
-    ui->checkBoxRunOnStartup->setChecked(scriptDd.ScriptCfg.RunOnStartup);
 
     on_listWidget_currentRowChanged(ui->listWidget->currentRow());
 }
@@ -225,9 +224,6 @@ void DialogPreferences::apply()
 
     applyDataDefaults(dataDd);
     trafficDd.LogViewLimit = static_cast<quint16>(logLimit);
-
-    const bool runOnStartup = ui->checkBoxRunOnStartup->isChecked();
-    scriptDd.ScriptCfg.RunOnStartup = runOnStartup;
 
     prefs.setDataViewDefinitions(dataDd);
     prefs.setTrafficViewDefinitions(trafficDd);
