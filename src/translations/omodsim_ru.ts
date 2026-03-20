@@ -1851,12 +1851,12 @@
         <translation>Р—Р°РјРµРЅРёС‚СЊ РІСЃРµ</translation>
     </message>
     <message>
-        <location filename="../controls/findreplacebar.cpp" line="101"/>
+        <location filename="../controls/findreplacebar.cpp" line="103"/>
         <source>Find Next</source>
         <translation>Р”Р°Р»РµРµ</translation>
     </message>
     <message>
-        <location filename="../controls/findreplacebar.cpp" line="102"/>
+        <location filename="../controls/findreplacebar.cpp" line="104"/>
         <source>Find Previous</source>
         <translation>РќР°Р·Р°Рґ</translation>
     </message>
@@ -2980,7 +2980,7 @@ Script.onInit(()=&gt;{
     </message>
     <message>
         <location filename="../mainwindow.ui" line="232"/>
-        <location filename="../mainwindow.cpp" line="1503"/>
+        <location filename="../mainwindow.cpp" line="1510"/>
         <source>Save Project</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3182,6 +3182,7 @@ Script.onInit(()=&gt;{
         <location filename="../mainwindow.ui" line="500"/>
         <location filename="../mainwindow.ui" line="503"/>
         <location filename="../mainwindow.cpp" line="278"/>
+        <location filename="../mainwindow.cpp" line="382"/>
         <source>Script Help</source>
         <translation>РЎРїСЂР°РІРєР° РїРѕ СЃРєСЂРёРїС‚Р°Рј</translation>
     </message>
@@ -3263,7 +3264,7 @@ Script.onInit(()=&gt;{
         <translation type="vanished">РЁРµСЃС‚РЅР°РґС†Р°С‚РёСЂРёС‡РЅС‹Рµ Р°РґСЂРµСЃР°</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="611"/>
+        <location filename="../mainwindow.cpp" line="618"/>
         <source>All files (*)</source>
         <translation>Р’СЃРµ С„Р°Р№Р»С‹ (*)</translation>
     </message>
@@ -3273,11 +3274,13 @@ Script.onInit(()=&gt;{
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="259"/>
+        <location filename="../mainwindow.cpp" line="381"/>
         <source>Project</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="301"/>
+        <location filename="../mainwindow.cpp" line="383"/>
         <source>Output</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3286,34 +3289,35 @@ Script.onInit(()=&gt;{
         <translation type="obsolete">Р”Р°РЅРЅС‹Рµ</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="610"/>
-        <location filename="../mainwindow.cpp" line="641"/>
+        <location filename="../mainwindow.cpp" line="617"/>
+        <location filename="../mainwindow.cpp" line="648"/>
         <source>Project files (*.msimprj)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="234"/>
+        <location filename="../mainwindow.cpp" line="384"/>
         <source>Open Recent</source>
         <translation>Открыть недавние</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="235"/>
-        <location filename="../mainwindow.cpp" line="1592"/>
+        <location filename="../mainwindow.cpp" line="1599"/>
         <source>Clear List</source>
         <translation>Очистить список</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1109"/>
+        <location filename="../mainwindow.cpp" line="1116"/>
         <source>JavaScript files (*.js);;All files (*)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1580"/>
+        <location filename="../mainwindow.cpp" line="1587"/>
         <source>No Recent Projects</source>
         <translation>Нет недавних проектов</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1504"/>
+        <location filename="../mainwindow.cpp" line="1511"/>
         <source>Save project before closing?</source>
         <translation>Сохранить проект перед закрытием?</translation>
     </message>

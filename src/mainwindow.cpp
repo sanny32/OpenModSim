@@ -377,6 +377,13 @@ void MainWindow::changeEvent(QEvent* event)
     if (event->type() == QEvent::LanguageChange)
     {
         ui->retranslateUi(this);
+
+        _projectDockWidget->setWindowTitle(tr("Project"));
+        _helpDockWidget->setWindowTitle(tr("Script Help"));
+        _consoleDockWidget->setWindowTitle(tr("Output"));
+        _openRecentMenu->setTitle(tr("Open Recent"));
+
+        rebuildRecentProjectsMenu();
         updateProjectWindowTitle();
     }
 
