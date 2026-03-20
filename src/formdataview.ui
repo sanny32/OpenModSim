@@ -115,7 +115,7 @@
            <number>0</number>
           </property>
           <property name="rightMargin">
-           <number>0</number>
+           <number>6</number>
           </property>
           <property name="bottomMargin">
            <number>0</number>
@@ -215,7 +215,7 @@
            <number>0</number>
           </property>
           <property name="rightMargin">
-           <number>0</number>
+           <number>6</number>
           </property>
           <property name="bottomMargin">
            <number>0</number>
@@ -343,7 +343,7 @@
            <number>0</number>
           </property>
           <property name="rightMargin">
-           <number>0</number>
+           <number>6</number>
           </property>
           <property name="bottomMargin">
            <number>0</number>
@@ -429,7 +429,7 @@
            <number>0</number>
           </property>
           <property name="rightMargin">
-           <number>0</number>
+           <number>6</number>
           </property>
           <property name="bottomMargin">
            <number>0</number>
@@ -552,21 +552,21 @@
        </item>
       </layout>
      </widget>
-     <widget class="OutputDataWidget" name="outputWidget" native="true">
+     <widget class="OutputDataWidget" name="outputWidget">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
         <horstretch>0</horstretch>
         <verstretch>1</verstretch>
        </sizepolicy>
       </property>
+      <property name="autoFillBackground">
+       <bool>true</bool>
+      </property>
       <property name="frameShape">
        <enum>QFrame::Shape::WinPanel</enum>
       </property>
       <property name="frameShadow">
        <enum>QFrame::Shadow::Sunken</enum>
-      </property>
-      <property name="autoFillBackground">
-       <bool>true</bool>
       </property>
      </widget>
     </widget>

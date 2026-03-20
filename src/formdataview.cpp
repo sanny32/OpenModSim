@@ -79,6 +79,8 @@ FormDataView::FormDataView(int id, ModbusMultiServer& server, DataSimulator* sim
     setWindowTitle(QString("Data%1").arg(id));
     setWindowIcon(QIcon(":/res/actionShowData.png"));
 
+    ui->lineEditSearchValue->setAllowEmptyValue(true);
+
     ui->lineEditDeviceId->setInputRange(ModbusLimits::slaveRange());
     ui->lineEditDeviceId->setValue(1);
     ui->lineEditDeviceId->setLeadingZeroes(true);
