@@ -2387,11 +2387,6 @@ MODBUS Point Type:
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="584"/>
-        <source>Show Exceptions</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../formtrafficview.cpp" line="411"/>
         <location filename="../formtrafficview.cpp" line="542"/>
         <location filename="../formtrafficview.cpp" line="555"/>
@@ -2418,6 +2413,11 @@ MODBUS Point Type:
         <location filename="../formtrafficview.cpp" line="392"/>
         <source>Port %1:%2:%3:%4:%5</source>
         <translation type="unfinished">РџРѕСЂС‚ %1:%2:%3:%4:%5</translation>
+    </message>
+    <message>
+        <location filename="../formtrafficview.cpp" line="584"/>
+        <source>Exceptions Only</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../formtrafficview.cpp" line="585"/>

@@ -581,7 +581,7 @@ void FormTrafficView::setupFilterControls()
         rebuildVisibleTraffic();
     });
 
-    _exceptionsFilter = new QCheckBox(tr("Show Exceptions"), ui->toolBarTraffic);
+    _exceptionsFilter = new QCheckBox(tr("Exceptions Only"), ui->toolBarTraffic);
     _exceptionsFilter->setToolTip(tr("Show only responses with Modbus exception"));
     connect(_exceptionsFilter, &QCheckBox::toggled, this, [this](bool checked) {
         _displayDefinition.ExceptionsOnly = checked;
