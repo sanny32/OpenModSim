@@ -55,6 +55,7 @@ struct TrafficViewDefinitions
     quint8 UnitFilter = 0;
     qint16 FunctionCodeFilter = -1;
     quint16 LogViewLimit = 30;
+    bool ExceptionsOnly = false;
 
     void normalize()
     {
@@ -118,6 +119,7 @@ inline QSettings& operator <<(QSettings& out, const TrafficViewDefinitions& dd)
     out.setValue("TrafficViewDefinitions/UnitFilter",            dd.UnitFilter);
     out.setValue("TrafficViewDefinitions/FunctionCodeFilter",    dd.FunctionCodeFilter);
     out.setValue("TrafficViewDefinitions/LogViewLimit",          dd.LogViewLimit);
+    out.setValue("TrafficViewDefinitions/ExceptionsOnly",        dd.ExceptionsOnly);
 
     return out;
 }
@@ -170,6 +172,7 @@ inline QSettings& operator >>(QSettings& in, TrafficViewDefinitions& dd)
     dd.UnitFilter = in.value("TrafficViewDefinitions/UnitFilter", 0).toUInt();
     dd.FunctionCodeFilter = in.value("TrafficViewDefinitions/FunctionCodeFilter", -1).toInt();
     dd.LogViewLimit = in.value("TrafficViewDefinitions/LogViewLimit", 30).toUInt();
+    dd.ExceptionsOnly = in.value("TrafficViewDefinitions/ExceptionsOnly", false).toBool();
 
     dd.normalize();
     return in;
@@ -225,6 +228,7 @@ inline QXmlStreamWriter& operator <<(QXmlStreamWriter& xml, const TrafficViewDef
     xml.writeAttribute("UnitFilter", QString::number(dd.UnitFilter));
     xml.writeAttribute("FunctionCodeFilter", QString::number(dd.FunctionCodeFilter));
     xml.writeAttribute("LogViewLimit", QString::number(dd.LogViewLimit));
+    xml.writeAttribute("ExceptionsOnly", boolToString(dd.ExceptionsOnly));
     xml.writeEndElement();
 
     return xml;
@@ -330,6 +334,10 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, TrafficViewDefinitio
         if (attributes.hasAttribute("LogViewLimit")) {
             bool ok; const quint16 logViewLimit = attributes.value("LogViewLimit").toUShort(&ok);
             if (ok) dd.LogViewLimit = logViewLimit;
+        }
+
+        if (attributes.hasAttribute("ExceptionsOnly")) {
+            dd.ExceptionsOnly = stringToBool(attributes.value("ExceptionsOnly").toString());
         }
 
         dd.normalize();

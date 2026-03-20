@@ -2367,60 +2367,70 @@ MODBUS Point Type:
         <translation type="obsolete">Р—Р°РјРµРЅРёС‚СЊ</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="496"/>
+        <location filename="../formtrafficview.cpp" line="516"/>
         <source>Text files (*.txt)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="501"/>
+        <location filename="../formtrafficview.cpp" line="521"/>
         <source>Log exported successfully to file %1</source>
         <translation type="unfinished">Р›РѕРі СѓСЃРїРµС€РЅРѕ СЌРєСЃРїРѕСЂС‚РёСЂРѕРІР°РЅ РІ С„Р°Р№Р» %1</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="503"/>
+        <location filename="../formtrafficview.cpp" line="523"/>
         <source>Export log error!</source>
         <translation type="unfinished">РћС€РёР±РєР° СЌРєСЃРїРѕСЂС‚Р° Р»РѕРіР°!</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="517"/>
+        <location filename="../formtrafficview.cpp" line="537"/>
         <source>Unit:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="399"/>
-        <location filename="../formtrafficview.cpp" line="522"/>
-        <location filename="../formtrafficview.cpp" line="535"/>
-        <location filename="../formtrafficview.cpp" line="557"/>
+        <location filename="../formtrafficview.cpp" line="584"/>
+        <source>Show Exceptions</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../formtrafficview.cpp" line="411"/>
+        <location filename="../formtrafficview.cpp" line="542"/>
+        <location filename="../formtrafficview.cpp" line="555"/>
+        <location filename="../formtrafficview.cpp" line="577"/>
         <source>All</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="523"/>
+        <location filename="../formtrafficview.cpp" line="543"/>
         <source>0 = all unit ids</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="554"/>
+        <location filename="../formtrafficview.cpp" line="574"/>
         <source>Source:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="378"/>
+        <location filename="../formtrafficview.cpp" line="390"/>
         <source>Modbus/TCP Srv %1:%2</source>
         <translation type="unfinished">Modbus/TCP СЃРµСЂРІРµСЂ %1:%2</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="380"/>
+        <location filename="../formtrafficview.cpp" line="392"/>
         <source>Port %1:%2:%3:%4:%5</source>
         <translation type="unfinished">РџРѕСЂС‚ %1:%2:%3:%4:%5</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="565"/>
+        <location filename="../formtrafficview.cpp" line="585"/>
+        <source>Show only responses with Modbus exception</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../formtrafficview.cpp" line="593"/>
         <source>Rows:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="532"/>
+        <location filename="../formtrafficview.cpp" line="552"/>
         <source>Function:</source>
         <translation type="unfinished"></translation>
     </message>

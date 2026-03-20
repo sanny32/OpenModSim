@@ -20,6 +20,7 @@ class QComboBox;
 class QLabel;
 class QWidget;
 class QAction;
+class QCheckBox;
 
 namespace Ui {
 class FormTrafficView;
@@ -106,7 +107,9 @@ private:
     void setDisplayDefinitionSilent(const TrafficViewDefinitions& dd);
     void updateSourceFilter();
     QString sourceFilterText(const ConnectionDetails& cd) const;
-    bool matchesTrafficFilter(const ConnectionDetails& cd, QSharedPointer<const ModbusMessage> msg) const;
+    bool matchesTrafficFilter(const ConnectionDetails& cd,
+                              QSharedPointer<const ModbusMessage> filterMsg,
+                              QSharedPointer<const ModbusMessage> displayMsg) const;
     void clearTrafficLog();
     void trimTrafficBufferToLimit();
     void rebuildVisibleTraffic();
@@ -133,6 +136,7 @@ private:
     QComboBox* _sourceFilter = nullptr;
     QLabel* _labelRowLimit = nullptr;
     QComboBox* _rowLimitCombo = nullptr;
+    QCheckBox* _exceptionsFilter = nullptr;
     QWidget* _trafficFilterStretch = nullptr;
 };
 

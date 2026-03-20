@@ -7,6 +7,7 @@
 #include <QComboBox>
 #include <QLabel>
 #include <QSizePolicy>
+#include <QCheckBox>
 #include <QSignalBlocker>
 #include <QAbstractEventDispatcher>
 #include <QFileDialog>
@@ -143,6 +144,8 @@ TrafficViewDefinitions FormTrafficView::displayDefinition() const
     if (_funcCodeFilter)
         dd.FunctionCodeFilter = static_cast<qint16>(_funcCodeFilter->currentData().toInt());
     dd.LogViewLimit = ui->outputWidget->logViewLimit();
+    if (_exceptionsFilter)
+        dd.ExceptionsOnly = _exceptionsFilter->isChecked();
     dd.normalize();
     return dd;
 }
@@ -182,6 +185,10 @@ void FormTrafficView::setDisplayDefinition(const TrafficViewDefinitions& dd)
         }
         if (idx >= 0)
             _rowLimitCombo->setCurrentIndex(idx);
+    }
+    if (_exceptionsFilter) {
+        QSignalBlocker b(_exceptionsFilter);
+        _exceptionsFilter->setChecked(_displayDefinition.ExceptionsOnly);
     }
 
     trimTrafficBufferToLimit();
@@ -280,6 +287,7 @@ void FormTrafficView::setDisplayDefinitionSilent(const TrafficViewDefinitions& d
     _displayDefinition.UnitFilter = dd.UnitFilter;
     _displayDefinition.FunctionCodeFilter = dd.FunctionCodeFilter;
     _displayDefinition.LogViewLimit = dd.LogViewLimit;
+    _displayDefinition.ExceptionsOnly = dd.ExceptionsOnly;
 
     if(_unitIdFilter) {
         QSignalBlocker b(_unitIdFilter);
@@ -294,6 +302,10 @@ void FormTrafficView::setDisplayDefinitionSilent(const TrafficViewDefinitions& d
         QSignalBlocker b(_rowLimitCombo);
         const int idx = _rowLimitCombo->findData(static_cast<int>(dd.LogViewLimit));
         if(idx >= 0) _rowLimitCombo->setCurrentIndex(idx);
+    }
+    if(_exceptionsFilter) {
+        QSignalBlocker b(_exceptionsFilter);
+        _exceptionsFilter->setChecked(dd.ExceptionsOnly);
     }
 
     trimTrafficBufferToLimit();
@@ -411,27 +423,35 @@ void FormTrafficView::updateSourceFilter()
 ///
 /// \brief FormTrafficView::matchesTrafficFilter
 ///
-bool FormTrafficView::matchesTrafficFilter(const ConnectionDetails& cd, QSharedPointer<const ModbusMessage> msg) const
+bool FormTrafficView::matchesTrafficFilter(const ConnectionDetails& cd,
+                                            QSharedPointer<const ModbusMessage> filterMsg,
+                                            QSharedPointer<const ModbusMessage> displayMsg) const
 {
-    if (!msg)
+    if (!filterMsg)
         return false;
 
     if (!_unitIdFilter || !_funcCodeFilter)
         return true;
 
     const int unitId = _unitIdFilter->value();
-    if (unitId != 0 && msg->deviceId() != unitId)
+    if (unitId != 0 && filterMsg->deviceId() != unitId)
         return false;
 
     if (_funcCodeFilter->currentIndex() > 0) {
         const int fc = _funcCodeFilter->currentData().toInt();
-        if (static_cast<int>(msg->functionCode()) != fc)
+        if (static_cast<int>(filterMsg->functionCode()) != fc)
             return false;
     }
 
     if (_sourceFilter && _sourceFilter->currentIndex() > 0) {
         const auto selected = _sourceFilter->currentData().value<ConnectionDetails>();
         if (!(selected == cd))
+            return false;
+    }
+
+    if (_exceptionsFilter && _exceptionsFilter->isChecked()) {
+        const auto& msg = displayMsg ? displayMsg : filterMsg;
+        if (!msg->isException())
             return false;
     }
 
@@ -561,6 +581,14 @@ void FormTrafficView::setupFilterControls()
         rebuildVisibleTraffic();
     });
 
+    _exceptionsFilter = new QCheckBox(tr("Show Exceptions"), ui->toolBarTraffic);
+    _exceptionsFilter->setToolTip(tr("Show only responses with Modbus exception"));
+    connect(_exceptionsFilter, &QCheckBox::toggled, this, [this](bool checked) {
+        _displayDefinition.ExceptionsOnly = checked;
+        rebuildVisibleTraffic();
+        emit definitionChanged();
+    });
+
     _labelRowLimit = new QLabel(ui->toolBarTraffic);
     _labelRowLimit->setText(tr("Rows:"));
 
@@ -602,6 +630,9 @@ void FormTrafficView::setupToolbarLayout()
     ui->toolBarTraffic->addWidget(_labelSource);
     addToolbarSpacer(3);
     ui->toolBarTraffic->addWidget(_sourceFilter);
+    addToolbarSpacer(8);
+
+    ui->toolBarTraffic->addWidget(_exceptionsFilter);
     addToolbarSpacer(8);
 
     ui->toolBarTraffic->addWidget(_labelRowLimit);
@@ -648,6 +679,9 @@ void FormTrafficView::initializeDisplayDefinition()
         if (idx >= 0)
             _rowLimitCombo->setCurrentIndex(idx);
     }
+
+    if (_exceptionsFilter)
+        _exceptionsFilter->setChecked(_displayDefinition.ExceptionsOnly);
 }
 
 ///
@@ -720,7 +754,7 @@ void FormTrafficView::rebuildVisibleTraffic()
         if(!entry.DisplayMessage)
             continue;
 
-        if(matchesTrafficFilter(entry.Connection, entry.FilterMessage))
+        if(matchesTrafficFilter(entry.Connection, entry.FilterMessage, entry.DisplayMessage))
         {
             if(entry.IsRequest)
                 ++_requestCount;
@@ -754,7 +788,7 @@ void FormTrafficView::appendTrafficEntry(const ConnectionDetails& cd,
     _trafficBuffer.enqueue(entry);
     trimTrafficBufferToLimit();
 
-    if(matchesTrafficFilter(cd, entry.FilterMessage))
+    if(matchesTrafficFilter(cd, entry.FilterMessage, entry.DisplayMessage))
     {
         if(isRequest)
             ++_requestCount;
