@@ -11,7 +11,7 @@ Usage:
     python test-modbustcp.py               # standalone
 
 Prerequisites (omodsim must be running):
-    Load test/msimprj_test.msimprj in omodsim before running. It configures:
+    Load test/test-modbustcp.msimprj in omodsim before running. It configures:
     - TCP server on 0.0.0.0:502 (all interfaces)
     - Slave ID 1
     - Holding registers:  protocol addresses 0-199  (readable and writable)
