@@ -185,6 +185,7 @@ void FormScriptView::setScriptSettings(const ScriptSettings& ss)
     _scriptRunOnStartupCheck->setChecked(ss.RunOnStartup);
 
     emit scriptSettingsChanged(ss);
+    updateScriptBar();
 }
 
 ///
@@ -530,6 +531,7 @@ void FormScriptView::setupScriptBar()
         if(_scriptSettings.Mode == mode) return;
         _scriptSettings.Mode = mode;
         emit scriptSettingsChanged(_scriptSettings);
+        updateScriptBar();
     });
 
     connect(_scriptIntervalSpin, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged), this, [this](int value) {
@@ -572,7 +574,7 @@ void FormScriptView::updateScriptBar()
     if (_scriptRunModeCombo)
         _scriptRunModeCombo->setEnabled(!running);
     if (_scriptIntervalSpin)
-        _scriptIntervalSpin->setEnabled(!running);
+        _scriptIntervalSpin->setEnabled(!running && _scriptSettings.Mode != RunMode::Once);
     if (_scriptRunOnStartupCheck)
         _scriptRunOnStartupCheck->setEnabled(!running);
 }
