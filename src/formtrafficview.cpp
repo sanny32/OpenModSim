@@ -146,6 +146,8 @@ TrafficViewDefinitions FormTrafficView::displayDefinition() const
     dd.LogViewLimit = ui->outputWidget->logViewLimit();
     if (_exceptionsFilter)
         dd.ExceptionsOnly = _exceptionsFilter->isChecked();
+    if (_autoscrollCheck)
+        dd.Autoscroll = _autoscrollCheck->isChecked();
     dd.normalize();
     return dd;
 }
@@ -190,6 +192,11 @@ void FormTrafficView::setDisplayDefinition(const TrafficViewDefinitions& dd)
         QSignalBlocker b(_exceptionsFilter);
         _exceptionsFilter->setChecked(_displayDefinition.ExceptionsOnly);
     }
+    if (_autoscrollCheck) {
+        QSignalBlocker b(_autoscrollCheck);
+        _autoscrollCheck->setChecked(_displayDefinition.Autoscroll);
+    }
+    ui->outputWidget->setAutosctollLogView(_displayDefinition.Autoscroll);
 
     trimTrafficBufferToLimit();
     ui->outputWidget->setup(_displayDefinition);
@@ -288,6 +295,7 @@ void FormTrafficView::setDisplayDefinitionSilent(const TrafficViewDefinitions& d
     _displayDefinition.FunctionCodeFilter = dd.FunctionCodeFilter;
     _displayDefinition.LogViewLimit = dd.LogViewLimit;
     _displayDefinition.ExceptionsOnly = dd.ExceptionsOnly;
+    _displayDefinition.Autoscroll = dd.Autoscroll;
 
     if(_unitIdFilter) {
         QSignalBlocker b(_unitIdFilter);
@@ -307,6 +315,11 @@ void FormTrafficView::setDisplayDefinitionSilent(const TrafficViewDefinitions& d
         QSignalBlocker b(_exceptionsFilter);
         _exceptionsFilter->setChecked(dd.ExceptionsOnly);
     }
+    if(_autoscrollCheck) {
+        QSignalBlocker b(_autoscrollCheck);
+        _autoscrollCheck->setChecked(dd.Autoscroll);
+    }
+    ui->outputWidget->setAutosctollLogView(dd.Autoscroll);
 
     trimTrafficBufferToLimit();
     ui->outputWidget->setLogViewLimit(dd.LogViewLimit);
@@ -589,6 +602,14 @@ void FormTrafficView::setupFilterControls()
         emit definitionChanged();
     });
 
+    _autoscrollCheck = new QCheckBox(tr("Autoscroll"), ui->toolBarTraffic);
+    _autoscrollCheck->setToolTip(tr("Automatically scroll to the latest entry"));
+    connect(_autoscrollCheck, &QCheckBox::toggled, this, [this](bool checked) {
+        _displayDefinition.Autoscroll = checked;
+        ui->outputWidget->setAutosctollLogView(checked);
+        emit definitionChanged();
+    });
+
     _labelRowLimit = new QLabel(ui->toolBarTraffic);
     _labelRowLimit->setText(tr("Rows:"));
 
@@ -633,11 +654,17 @@ void FormTrafficView::setupToolbarLayout()
     addToolbarSpacer(8);
 
     ui->toolBarTraffic->addWidget(_exceptionsFilter);
-    addToolbarSpacer(8);
+
+    addToolbarSpacer(6);
+    ui->toolBarTraffic->addSeparator();
+    addToolbarSpacer(6);
 
     ui->toolBarTraffic->addWidget(_labelRowLimit);
     addToolbarSpacer(3);
     ui->toolBarTraffic->addWidget(_rowLimitCombo);
+    addToolbarSpacer(8);
+
+    ui->toolBarTraffic->addWidget(_autoscrollCheck);
 
     _trafficFilterStretch = new QWidget(ui->toolBarTraffic);
     _trafficFilterStretch->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);

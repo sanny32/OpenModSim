@@ -56,6 +56,7 @@ struct TrafficViewDefinitions
     qint16 FunctionCodeFilter = -1;
     quint16 LogViewLimit = 30;
     bool ExceptionsOnly = false;
+    bool Autoscroll = false;
 
     void normalize()
     {
@@ -120,6 +121,7 @@ inline QSettings& operator <<(QSettings& out, const TrafficViewDefinitions& dd)
     out.setValue("TrafficViewDefinitions/FunctionCodeFilter",    dd.FunctionCodeFilter);
     out.setValue("TrafficViewDefinitions/LogViewLimit",          dd.LogViewLimit);
     out.setValue("TrafficViewDefinitions/ExceptionsOnly",        dd.ExceptionsOnly);
+    out.setValue("TrafficViewDefinitions/Autoscroll",            dd.Autoscroll);
 
     return out;
 }
@@ -173,6 +175,7 @@ inline QSettings& operator >>(QSettings& in, TrafficViewDefinitions& dd)
     dd.FunctionCodeFilter = in.value("TrafficViewDefinitions/FunctionCodeFilter", -1).toInt();
     dd.LogViewLimit = in.value("TrafficViewDefinitions/LogViewLimit", 30).toUInt();
     dd.ExceptionsOnly = in.value("TrafficViewDefinitions/ExceptionsOnly", false).toBool();
+    dd.Autoscroll = in.value("TrafficViewDefinitions/Autoscroll", false).toBool();
 
     dd.normalize();
     return in;
@@ -230,6 +233,7 @@ inline QXmlStreamWriter& operator <<(QXmlStreamWriter& xml, const TrafficViewDef
     xml.writeAttribute("FunctionCodeFilter", QString::number(dd.FunctionCodeFilter));
     xml.writeAttribute("LogViewLimit", QString::number(dd.LogViewLimit));
     xml.writeAttribute("ExceptionsOnly", boolToString(dd.ExceptionsOnly));
+    xml.writeAttribute("Autoscroll", boolToString(dd.Autoscroll));
     xml.writeEndElement();
 
     return xml;
@@ -342,6 +346,10 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, TrafficViewDefinitio
 
         if (attributes.hasAttribute("ExceptionsOnly")) {
             dd.ExceptionsOnly = stringToBool(attributes.value("ExceptionsOnly").toString());
+        }
+
+        if (attributes.hasAttribute("Autoscroll")) {
+            dd.Autoscroll = stringToBool(attributes.value("Autoscroll").toString());
         }
 
         dd.normalize();

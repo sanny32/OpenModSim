@@ -137,6 +137,7 @@ private:
     QLabel* _labelRowLimit = nullptr;
     QComboBox* _rowLimitCombo = nullptr;
     QCheckBox* _exceptionsFilter = nullptr;
+    QCheckBox* _autoscrollCheck = nullptr;
     QWidget* _trafficFilterStretch = nullptr;
 };
 
