@@ -18,10 +18,6 @@
 /// \brief Forward declaration of the MainWindow
 ///
 class MainWindow;
-class QCheckBox;
-class QLabel;
-class QSpinBox;
-class QWidget;
 
 namespace Ui {
 class FormDataView;
@@ -144,9 +140,11 @@ private:
     void setDisplayDefinitionSilent(const DataViewDefinitions& dd);
 
     void setupDisplayBar();
-    void setupSettingsControls();
+    void updateFilterControls();
+    void updateSearchInput();
+    void applyValueSearch();
+    void applyBitHighlight();
     void updateSettingsControls();
-    void updateSettingsControlsText();
     void setLeadingZerosEnabled(bool on);
     void setColumnsDistance(int value);
     void updateDisplayBar();
@@ -159,11 +157,6 @@ private:
 
     AnsiMenu*  _ansiMenu = nullptr;
     QMap<DataDisplayMode, QAction*> _displayModeActions;
-    QCheckBox* _checkBoxHexAddress = nullptr;
-    QCheckBox* _checkBoxLeadingZeros = nullptr;
-    QLabel* _labelColumnsDistance = nullptr;
-    QSpinBox* _spinBoxColumnsDistance = nullptr;
-    QWidget* _settingsPanel = nullptr;
 };
 
 ///

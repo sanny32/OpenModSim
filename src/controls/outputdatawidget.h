@@ -152,6 +152,10 @@ public:
     AddressColorMap colorMap() const;
     void setColor(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr, const QColor& clr);
 
+    void highlightByValue(quint16 value, const QColor& color);
+    void highlightBits(int bitValue, const QColor& color);
+    void clearHighlights();
+
     AddressDescriptionMap2 descriptionMap() const;
     void setDescription(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr, const QString& desc);
 

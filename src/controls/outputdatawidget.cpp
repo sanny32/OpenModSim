@@ -477,7 +477,6 @@ OutputDataWidget::OutputDataWidget(QWidget *parent) :
    ,_listModel(new OutputDataListModel(this))
 {
     ui->setupUi(this);
-    ui->listView->setUniformItemSizes(true);
     ui->listView->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     ui->listView->setHorizontalScrollMode(QAbstractItemView::ScrollPerPixel);
     ui->listView->setMovement(QListView::Free);
@@ -882,6 +881,53 @@ AddressColorMap OutputDataWidget::colorMap() const
 void OutputDataWidget::setColor(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr, const QColor& clr)
 {
     _listModel->setData(_listModel->find(deviceId, type, addr), clr, ColorRole);
+}
+
+///
+/// \brief OutputDataWidget::highlightByValue
+/// Highlights all items whose raw value equals the given register value.
+///
+void OutputDataWidget::highlightByValue(quint16 value, const QColor& color)
+{
+    clearHighlights();
+    const int rows = _listModel->rowCount();
+    for (int row = 0; row < rows; row++)
+    {
+        const QModelIndex idx = _listModel->index(row, 0);
+        if (_listModel->data(idx, ValueRole).toUInt() == value)
+            _listModel->setData(idx, color, ColorRole);
+    }
+}
+
+///
+/// \brief OutputDataWidget::highlightBits
+/// Highlights all items whose value equals the given bit value (0 or 1). Used for coils/discrete inputs.
+///
+void OutputDataWidget::highlightBits(int bitValue, const QColor& color)
+{
+    clearHighlights();
+    const int rows = _listModel->rowCount();
+    for (int row = 0; row < rows; row++)
+    {
+        const QModelIndex idx = _listModel->index(row, 0);
+        if (_listModel->data(idx, ValueRole).toInt() == bitValue)
+            _listModel->setData(idx, color, ColorRole);
+    }
+}
+
+///
+/// \brief OutputDataWidget::clearHighlights
+/// Removes all transient highlight colors from displayed items.
+///
+void OutputDataWidget::clearHighlights()
+{
+    const int rows = _listModel->rowCount();
+    for (int row = 0; row < rows; row++)
+    {
+        const QModelIndex idx = _listModel->index(row, 0);
+        if (_listModel->data(idx, ColorRole).value<QColor>().isValid())
+            _listModel->setData(idx, QColor(), ColorRole);
+    }
 }
 
 ///

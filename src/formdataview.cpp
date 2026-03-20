@@ -4,12 +4,10 @@
 #include <QHelpEngine>
 #include <QHelpContentWidget>
 #include <QCheckBox>
-#include <QHBoxLayout>
-#include <QLabel>
+#include <QLineEdit>
+#include <QPushButton>
 #include <QSignalBlocker>
 #include <QSpinBox>
-#include <QSizePolicy>
-#include <QVBoxLayout>
 #include "modbuslimits.h"
 #include "mainwindow.h"
 #include "modbusmessages.h"
@@ -182,7 +180,6 @@ void FormDataView::changeEvent(QEvent* e)
     if (e->type() == QEvent::LanguageChange)
     {
         ui->retranslateUi(this);
-        updateSettingsControlsText();
         updateStatus();
     }
 
@@ -288,6 +285,7 @@ void FormDataView::setDisplayDefinition(const DataViewDefinitions& dd)
     ui->lineEditLength->setHexView(dd.HexViewLength);
 
     updateSettingsControls();
+    updateFilterControls();
     emit definitionChanged();
 }
 
@@ -345,6 +343,7 @@ void FormDataView::setDataDisplayMode(DataDisplayMode mode)
         default: break;
     }
     updateDisplayBar();
+    updateSearchInput();
     if(dataDisplayMode() != prev)
         emit dataDisplayModeChanged(dataDisplayMode());
 }
@@ -877,6 +876,7 @@ void FormDataView::on_comboBoxModbusPointType_pointTypeChanged(QModbusDataUnit::
         ui->lineEditLength->update();
     }
 
+    updateFilterControls();
     emit definitionChanged();
     emit pointTypeChanged(type);
     updateDisplayBar();
@@ -1007,6 +1007,12 @@ void FormDataView::on_mbDataChanged(quint8 deviceId, const QModbusDataUnit&)
     {
         const auto addr = dd.PointAddress - (dd.ZeroBasedAddress ? 0 : 1);
         ui->outputWidget->updateData(_mbMultiServer.data(deviceId, dd.PointType, addr, dd.Length));
+
+        // Re-apply active filter so highlights reflect updated values
+        if (isBitPointType(dd.PointType))
+            applyBitHighlight();
+        else
+            applyValueSearch();
     }
 }
 
@@ -1128,83 +1134,130 @@ void FormDataView::setupDisplayBar()
         emit definitionChanged();
     });
 
-    setupSettingsControls();
+    // Settings controls
+    connect(ui->checkBoxHexAddress, &QCheckBox::toggled, this, [this](bool checked) {
+        setDisplayHexAddresses(checked);
+        emit definitionChanged();
+    });
+    connect(ui->checkBoxLeadingZeros, &QCheckBox::toggled, this, [this](bool checked) {
+        setLeadingZerosEnabled(checked);
+        emit definitionChanged();
+    });
+    connect(ui->spinBoxColumnsDistance, qOverload<int>(&QSpinBox::valueChanged), this, [this](int value) {
+        setColumnsDistance(value);
+        emit definitionChanged();
+    });
+
+    // Filter controls
+    connect(ui->lineEditSearchValue, qOverload<const QVariant&>(&NumericLineEdit::valueChanged), this, [this](const QVariant&) { applyValueSearch(); });
+    connect(ui->buttonHighlightZeros, &QPushButton::toggled, this, [this](bool checked) {
+        if (checked) {
+            QSignalBlocker blocker(ui->buttonHighlightOnes);
+            ui->buttonHighlightOnes->setChecked(false);
+        }
+        applyBitHighlight();
+    });
+    connect(ui->buttonHighlightOnes, &QPushButton::toggled, this, [this](bool checked) {
+        if (checked) {
+            QSignalBlocker blocker(ui->buttonHighlightZeros);
+            ui->buttonHighlightZeros->setChecked(false);
+        }
+        applyBitHighlight();
+    });
+
+    updateFilterControls();
     updateDisplayBar();
 }
 
 ///
-/// \brief FormDataView::setupSettingsControls
+/// \brief FormDataView::updateFilterControls
+/// Shows either the search row (registers) or the bit-highlight row (coils/DI)
+/// based on the currently selected point type, and clears any active filter.
 ///
-void FormDataView::setupSettingsControls()
+void FormDataView::updateFilterControls()
 {
-    _settingsPanel = new QWidget(ui->frameDataDefinition);
-    _settingsPanel->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
+    const auto type = ui->comboBoxModbusPointType->currentPointType();
+    const bool isRegister = (type == QModbusDataUnit::HoldingRegisters ||
+                             type == QModbusDataUnit::InputRegisters);
 
-    auto* settingsLayout = new QVBoxLayout(_settingsPanel);
-    settingsLayout->setContentsMargins(0, 0, 0, 0);
-    settingsLayout->setSpacing(6);
+    ui->labelSearchValue->setVisible(isRegister);
+    ui->lineEditSearchValue->setVisible(isRegister);
 
-    auto* rowHexAddress = new QWidget(_settingsPanel);
-    rowHexAddress->setFixedHeight(26);
-    auto* rowHexAddressLayout = new QHBoxLayout(rowHexAddress);
-    rowHexAddressLayout->setContentsMargins(0, 0, 0, 0);
-    rowHexAddressLayout->setSpacing(4);
+    ui->labelHighlight->setVisible(!isRegister);
+    ui->buttonHighlightZeros->setVisible(!isRegister);
+    ui->buttonHighlightOnes->setVisible(!isRegister);
 
-    _checkBoxHexAddress = new QCheckBox(rowHexAddress);
-    _checkBoxHexAddress->setChecked(displayHexAddresses());
-    connect(_checkBoxHexAddress, &QCheckBox::toggled, this, [this](bool checked) {
-        setDisplayHexAddresses(checked);
-        emit definitionChanged();
-    });
-    rowHexAddressLayout->addWidget(_checkBoxHexAddress);
-    rowHexAddressLayout->addStretch(1);
-    settingsLayout->addWidget(rowHexAddress);
+    {
+        QSignalBlocker b2(ui->buttonHighlightZeros);
+        ui->buttonHighlightZeros->setChecked(false);
+    }
+    {
+        QSignalBlocker b3(ui->buttonHighlightOnes);
+        ui->buttonHighlightOnes->setChecked(false);
+    }
 
-    auto* rowLeadingZeros = new QWidget(_settingsPanel);
-    rowLeadingZeros->setFixedHeight(26);
-    auto* rowLeadingZerosLayout = new QHBoxLayout(rowLeadingZeros);
-    rowLeadingZerosLayout->setContentsMargins(0, 0, 0, 0);
-    rowLeadingZerosLayout->setSpacing(4);
+    ui->outputWidget->clearHighlights();
+    updateSearchInput();
+}
 
-    _checkBoxLeadingZeros = new QCheckBox(rowLeadingZeros);
-    _checkBoxLeadingZeros->setChecked(ui->lineEditDeviceId->leadingZeroes());
-    connect(_checkBoxLeadingZeros, &QCheckBox::toggled, this, [this](bool checked) {
-        setLeadingZerosEnabled(checked);
-        emit definitionChanged();
-    });
-    rowLeadingZerosLayout->addWidget(_checkBoxLeadingZeros);
-    rowLeadingZerosLayout->addStretch(1);
-    settingsLayout->addWidget(rowLeadingZeros);
+///
+/// \brief FormDataView::updateSearchInput
+/// Configures the search field input mode and range to match the current
+/// data display mode, then clears any previous value.
+///
+void FormDataView::updateSearchInput()
+{
+    QSignalBlocker blocker(ui->lineEditSearchValue);
 
-    auto* columnDistanceRow = new QWidget(_settingsPanel);
-    columnDistanceRow->setFixedHeight(26);
-    auto* columnDistanceLayout = new QHBoxLayout(columnDistanceRow);
-    columnDistanceLayout->setContentsMargins(0, 0, 0, 0);
-    columnDistanceLayout->setSpacing(4);
+    const auto mode = dataDisplayMode();
+    if (mode == DataDisplayMode::Binary || mode == DataDisplayMode::Hex) {
+        ui->lineEditSearchValue->setInputMode(NumericLineEdit::HexMode);
+        ui->lineEditSearchValue->setInputRange<quint32>(0, USHRT_MAX);
+    }
+    else if (mode == DataDisplayMode::Int16) {
+        ui->lineEditSearchValue->setInputMode(NumericLineEdit::Int32Mode);
+        ui->lineEditSearchValue->setInputRange<qint32>(SHRT_MIN, SHRT_MAX);
+    }
+    else {
+        ui->lineEditSearchValue->setInputMode(NumericLineEdit::UInt32Mode);
+        ui->lineEditSearchValue->setInputRange<quint32>(0, USHRT_MAX);
+    }
 
-    _labelColumnsDistance = new QLabel(columnDistanceRow);
-    columnDistanceLayout->addWidget(_labelColumnsDistance);
+    ui->lineEditSearchValue->setValue<quint32>(0);
+    ui->lineEditSearchValue->clear();
+}
 
-    _spinBoxColumnsDistance = new QSpinBox(columnDistanceRow);
-    _spinBoxColumnsDistance->setRange(1, 32);
-    _spinBoxColumnsDistance->setFixedWidth(60);
-    _spinBoxColumnsDistance->setValue(ui->outputWidget->dataViewColumnsDistance());
-    connect(_spinBoxColumnsDistance, qOverload<int>(&QSpinBox::valueChanged), this, [this](int value) {
-        setColumnsDistance(value);
-        emit definitionChanged();
-    });
-    columnDistanceLayout->addWidget(_spinBoxColumnsDistance);
-    columnDistanceLayout->addStretch(1);
+///
+/// \brief FormDataView::applyValueSearch
+/// Highlights all register items whose value matches the text in the search field.
+///
+void FormDataView::applyValueSearch()
+{
+    ui->outputWidget->clearHighlights();
+    if (ui->lineEditSearchValue->text().trimmed().isEmpty())
+        return;
 
-    settingsLayout->addWidget(columnDistanceRow);
-    settingsLayout->addStretch(1);
+    const auto mode = dataDisplayMode();
+    quint16 value = 0;
+    if (mode == DataDisplayMode::Int16)
+        value = static_cast<quint16>(ui->lineEditSearchValue->value<qint32>());
+    else
+        value = static_cast<quint16>(ui->lineEditSearchValue->value<quint32>());
 
-    // Place settings on the same definition panel, near other data-view controls.
-    const int insertIndex = qMax(0, ui->horizontalLayout_3->count() - 1);
-    ui->horizontalLayout_3->insertWidget(insertIndex, _settingsPanel);
+    ui->outputWidget->highlightByValue(value, QColor(255, 220, 0));
+}
 
-    updateSettingsControlsText();
-    updateSettingsControls();
+///
+/// \brief FormDataView::applyBitHighlight
+/// Highlights all coil/DI items whose value matches the checked bit button (0 or 1).
+///
+void FormDataView::applyBitHighlight()
+{
+    ui->outputWidget->clearHighlights();
+    if (ui->buttonHighlightZeros->isChecked())
+        ui->outputWidget->highlightBits(0, QColor(255, 220, 0));
+    else if (ui->buttonHighlightOnes->isChecked())
+        ui->outputWidget->highlightBits(1, QColor(255, 220, 0));
 }
 
 ///
@@ -1212,38 +1265,25 @@ void FormDataView::setupSettingsControls()
 ///
 void FormDataView::updateSettingsControls()
 {
-    if(_checkBoxHexAddress) {
-        QSignalBlocker blocker(_checkBoxHexAddress);
-        _checkBoxHexAddress->setChecked(displayHexAddresses());
+    {
+        QSignalBlocker blocker(ui->checkBoxHexAddress);
+        ui->checkBoxHexAddress->setChecked(displayHexAddresses());
     }
 
-    if(ui->actionDisplayHexAddresses) {
+    {
         QSignalBlocker blocker(ui->actionDisplayHexAddresses);
         ui->actionDisplayHexAddresses->setChecked(displayHexAddresses());
     }
 
-    if(_checkBoxLeadingZeros) {
-        QSignalBlocker blocker(_checkBoxLeadingZeros);
-        _checkBoxLeadingZeros->setChecked(ui->lineEditDeviceId->leadingZeroes());
+    {
+        QSignalBlocker blocker(ui->checkBoxLeadingZeros);
+        ui->checkBoxLeadingZeros->setChecked(ui->lineEditDeviceId->leadingZeroes());
     }
 
-    if(_spinBoxColumnsDistance) {
-        QSignalBlocker blocker(_spinBoxColumnsDistance);
-        _spinBoxColumnsDistance->setValue(ui->outputWidget->dataViewColumnsDistance());
+    {
+        QSignalBlocker blocker(ui->spinBoxColumnsDistance);
+        ui->spinBoxColumnsDistance->setValue(ui->outputWidget->dataViewColumnsDistance());
     }
-}
-
-///
-/// \brief FormDataView::updateSettingsControlsText
-///
-void FormDataView::updateSettingsControlsText()
-{
-    if(_checkBoxHexAddress)
-        _checkBoxHexAddress->setText(QStringLiteral("Hex Address"));
-    if(_checkBoxLeadingZeros)
-        _checkBoxLeadingZeros->setText(QStringLiteral("Leading Zeros"));
-    if(_labelColumnsDistance)
-        _labelColumnsDistance->setText(QStringLiteral("Column Distance:"));
 }
 
 ///
