@@ -174,7 +174,8 @@ void FindReplaceBar::updatePosition()
 
     const int scrollBarWidth = style()->pixelMetric(QStyle::PM_ScrollBarExtent);
     const int x = parentWidget()->width() - width() - scrollBarWidth;
-    move(qMax(0, x), 0);
+    const int y = parentWidget()->contentsRect().top();
+    move(qMax(0, x), y);
 }
 
 ///

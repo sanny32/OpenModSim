@@ -1797,37 +1797,37 @@
 <context>
     <name>FindReplaceBar</name>
     <message>
-        <location filename="../controls/findreplacebar.ui" line="64"/>
+        <location filename="../controls/findreplacebar.ui" line="67"/>
         <source>Toggle Replace</source>
         <translation>РџРµСЂРµРєР»СЋС‡РёС‚СЊ Р·Р°РјРµРЅСѓ</translation>
     </message>
     <message>
-        <location filename="../controls/findreplacebar.ui" line="77"/>
+        <location filename="../controls/findreplacebar.ui" line="80"/>
         <source>Find...</source>
         <translation>РќР°Р№С‚Рё...</translation>
     </message>
     <message>
-        <location filename="../controls/findreplacebar.ui" line="127"/>
+        <location filename="../controls/findreplacebar.ui" line="130"/>
         <source>✕</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/findreplacebar.ui" line="289"/>
+        <location filename="../controls/findreplacebar.ui" line="292"/>
         <source>Match Case</source>
         <translation>РЈС‡РёС‚С‹РІР°С‚СЊ СЂРµРіРёСЃС‚СЂ</translation>
     </message>
     <message>
-        <location filename="../controls/findreplacebar.ui" line="318"/>
+        <location filename="../controls/findreplacebar.ui" line="321"/>
         <source>Match Whole Word</source>
         <translation>РўРѕР»СЊРєРѕ С†РµР»С‹Рµ СЃР»РѕРІР°</translation>
     </message>
     <message>
-        <location filename="../controls/findreplacebar.ui" line="99"/>
+        <location filename="../controls/findreplacebar.ui" line="102"/>
         <source>Next (Enter)</source>
         <translation>Р”Р°Р»РµРµ (Enter)</translation>
     </message>
     <message>
-        <location filename="../controls/findreplacebar.ui" line="124"/>
+        <location filename="../controls/findreplacebar.ui" line="127"/>
         <source>Close (Escape)</source>
         <translation>Р—Р°РєСЂС‹С‚СЊ (Escape)</translation>
     </message>
@@ -1836,27 +1836,27 @@
         <translation type="vanished">вњ•</translation>
     </message>
     <message>
-        <location filename="../controls/findreplacebar.ui" line="179"/>
+        <location filename="../controls/findreplacebar.ui" line="182"/>
         <source>Replace...</source>
         <translation>Р—Р°РјРµРЅРёС‚СЊ...</translation>
     </message>
     <message>
-        <location filename="../controls/findreplacebar.ui" line="201"/>
+        <location filename="../controls/findreplacebar.ui" line="204"/>
         <source>Replace</source>
         <translation>Р—Р°РјРµРЅРёС‚СЊ</translation>
     </message>
     <message>
-        <location filename="../controls/findreplacebar.ui" line="233"/>
+        <location filename="../controls/findreplacebar.ui" line="236"/>
         <source>Replace All</source>
         <translation>Р—Р°РјРµРЅРёС‚СЊ РІСЃРµ</translation>
     </message>
     <message>
-        <location filename="../controls/findreplacebar.cpp" line="103"/>
+        <location filename="../controls/findreplacebar.cpp" line="101"/>
         <source>Find Next</source>
         <translation>Р”Р°Р»РµРµ</translation>
     </message>
     <message>
-        <location filename="../controls/findreplacebar.cpp" line="104"/>
+        <location filename="../controls/findreplacebar.cpp" line="102"/>
         <source>Find Previous</source>
         <translation>РќР°Р·Р°Рґ</translation>
     </message>
@@ -2214,14 +2214,14 @@ MODBUS Point Type:
 %2</translation>
     </message>
     <message>
-        <location filename="../formscriptview.cpp" line="109"/>
-        <location filename="../formscriptview.cpp" line="497"/>
+        <location filename="../formscriptview.cpp" line="108"/>
+        <location filename="../formscriptview.cpp" line="489"/>
         <source> ms</source>
         <translation type="unfinished"> РјСЃ</translation>
     </message>
     <message>
-        <location filename="../formscriptview.cpp" line="111"/>
-        <location filename="../formscriptview.cpp" line="501"/>
+        <location filename="../formscriptview.cpp" line="109"/>
+        <location filename="../formscriptview.cpp" line="493"/>
         <source>Run on startup</source>
         <translation type="unfinished">Р—Р°РїСѓСЃРєР°С‚СЊ РїСЂРё РѕС‚РєСЂС‹С‚РёРё</translation>
     </message>

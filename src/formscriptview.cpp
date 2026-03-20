@@ -291,7 +291,7 @@ QString FormScriptView::searchText() const
 ///
 QColor FormScriptView::backgroundColor() const
 {
-    return ui->scriptControl->palette().color(QPalette::Base);
+    return ui->scriptControl->backgroundColor();
 }
 
 ///
@@ -300,10 +300,7 @@ QColor FormScriptView::backgroundColor() const
 ///
 void FormScriptView::setBackgroundColor(const QColor& clr)
 {
-    auto pal = ui->scriptControl->palette();
-    pal.setColor(QPalette::Base, clr);
-    pal.setColor(QPalette::Window, clr);
-    ui->scriptControl->setPalette(pal);
+    ui->scriptControl->setBackgroundColor(clr);
 }
 
 ///
@@ -312,7 +309,7 @@ void FormScriptView::setBackgroundColor(const QColor& clr)
 ///
 QColor FormScriptView::foregroundColor() const
 {
-    return ui->scriptControl->palette().color(QPalette::Text);
+    return ui->scriptControl->foregroundColor();
 }
 
 ///
@@ -321,9 +318,7 @@ QColor FormScriptView::foregroundColor() const
 ///
 void FormScriptView::setForegroundColor(const QColor& clr)
 {
-    auto pal = ui->scriptControl->palette();
-    pal.setColor(QPalette::Text, clr);
-    ui->scriptControl->setPalette(pal);
+    ui->scriptControl->setForegroundColor(clr);
 }
 
 ///

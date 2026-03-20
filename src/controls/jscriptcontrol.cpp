@@ -139,6 +139,42 @@ void JScriptControl::setFont(const QFont& font)
 }
 
 ///
+/// \brief JScriptControl::backgroundColor
+/// \return
+///
+QColor JScriptControl::backgroundColor() const
+{
+    return ui->codeEditor->backgroundColor();
+}
+
+///
+/// \brief JScriptControl::setBackgroundColor
+/// \param clr
+///
+void JScriptControl::setBackgroundColor(const QColor& clr)
+{
+    ui->codeEditor->setBackgroundColor(clr);
+}
+
+///
+/// \brief JScriptControl::foregroundColor
+/// \return
+///
+QColor JScriptControl::foregroundColor() const
+{
+    return ui->codeEditor->foregroundColor();
+}
+
+///
+/// \brief JScriptControl::setForegroundColor
+/// \param clr
+///
+void JScriptControl::setForegroundColor(const QColor& clr)
+{
+    ui->codeEditor->setForegroundColor(clr);
+}
+
+///
 /// \brief JScriptControl::script
 /// \return
 ///

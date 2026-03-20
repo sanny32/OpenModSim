@@ -1,6 +1,7 @@
 #ifndef JSCRIPTCONTROL_H
 #define JSCRIPTCONTROL_H
 
+#include <QColor>
 #include <QTimer>
 #include <QJSEngine>
 #include <QPlainTextEdit>
@@ -43,6 +44,12 @@ public:
     void enableAutoComplete(bool enable);
 
     void setFont(const QFont& font);
+
+    QColor backgroundColor() const;
+    void setBackgroundColor(const QColor& clr);
+
+    QColor foregroundColor() const;
+    void setForegroundColor(const QColor& clr);
 
     QString script() const;
     void setScript(const QString& text);

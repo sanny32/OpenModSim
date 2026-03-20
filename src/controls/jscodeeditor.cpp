@@ -93,6 +93,15 @@ int JSCodeEditor::lineNumberAreaWidth()
 }
 
 ///
+/// \brief JSCodeEditor::foregroundColor
+/// \return
+///
+QColor JSCodeEditor::foregroundColor() const
+{
+    return palette().color(QPalette::Text);
+}
+
+///
 /// \brief JSCodeEditor::setForegroundColor
 /// \param clr
 ///
@@ -101,6 +110,15 @@ void JSCodeEditor::setForegroundColor(const QColor& clr)
     auto pal = palette();
     pal.setColor(QPalette::Text, clr);
     setPalette(pal);
+}
+
+///
+/// \brief JSCodeEditor::backgroundColor
+/// \return
+///
+QColor JSCodeEditor::backgroundColor() const
+{
+    return palette().color(QPalette::Base);
 }
 
 ///

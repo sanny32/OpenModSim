@@ -24,7 +24,10 @@ public:
     void lineNumberAreaPaintEvent(QPaintEvent *event);
     int lineNumberAreaWidth();
 
+    QColor foregroundColor() const;
     void setForegroundColor(const QColor& clr);
+
+    QColor backgroundColor() const;
     void setBackgroundColor(const QColor& clr);
 
     bool isAutoCompleteEnabled() const;
