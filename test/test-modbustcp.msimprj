@@ -8,10 +8,10 @@
             <TcpConnectionParams IPAddress="0.0.0.0" ServicePort="502"/>
         </ConnectionDetails>
     </Connections>
-    <ViewSettings ViewMode="1" SplitView="0" ActivePrimaryWindow="Traffic"/>
+    <ViewSettings ViewMode="1" SplitView="0" ActivePrimaryWindow="HoldingRegs"/>
     <Forms>
         <FormDataView Panel="L" DataDisplayMode="Hex" DisplayHexAddresses="false" Codepage="" ByteOrder="Direct">
-            <Window Maximized="false" Minimized="false" Left="0" Top="0" Width="830" Height="283"/>
+            <Window Maximized="true" Minimized="false" Left="0" Top="0" Width="610" Height="362"/>
             <Colors Background="#ffffff" Foreground="#000000" Status="#ff0000"/>
             <Font Family="Consolas" Size="10" Bold="false" Italic="false"/>
             <Zoom Value="100%"/>
@@ -86,10 +86,10 @@
             <ModbusDataUnit/>
         </FormDataView>
         <FormTrafficView Panel="L">
-            <Window Maximized="true" Minimized="false" Left="0" Top="0" Width="814" Height="230"/>
+            <Window Maximized="false" Minimized="false" Left="0" Top="0" Width="814" Height="230"/>
             <Colors Background="#ffffff" Foreground="#000000"/>
             <Font Family="Consolas" Size="10" Bold="false" Italic="false"/>
-            <TrafficViewDefinitions FormName="Traffic" UnitFilter="0" FunctionCodeFilter="-1" LogViewLimit="300"/>
+            <TrafficViewDefinitions FormName="Traffic" UnitFilter="0" FunctionCodeFilter="-1" LogViewLimit="300" ExceptionsOnly="false"/>
         </FormTrafficView>
     </Forms>
     <TabOrder Panel="L">

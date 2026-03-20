@@ -67,9 +67,37 @@ def make_client() -> ModbusTcpClient:
     return c
 
 
+_EXCEPTION_NAMES: dict[int, str] = {
+    1:  "IllegalFunction       -- register type not configured or FC not supported",
+    2:  "IllegalDataAddress    -- address/count out of configured range",
+    3:  "IllegalDataValue      -- value rejected by server",
+    4:  "ServerDeviceFailure   -- internal server error",
+    5:  "Acknowledge           -- request accepted, processing",
+    6:  "ServerDeviceBusy      -- server busy (too many pending requests)",
+    8:  "MemoryParityError",
+    10: "GatewayPathUnavailable",
+    11: "GatewayTargetDeviceFailedToRespond",
+}
+
+
 def ok(rr) -> bool:
     """Return True if the response is not None and contains no Modbus error."""
     return rr is not None and not rr.isError()
+
+
+def explain(rr) -> str:
+    """Return a human-readable description of a failed Modbus response."""
+    if rr is None:
+        return "no response (timeout or connection lost)"
+    if rr.isError():
+        exc_code = getattr(rr, "exception_code", None)
+        fc_raw   = getattr(rr, "function_code", 0)
+        fc       = fc_raw & 0x7F  # strip error bit 0x80
+        if exc_code is not None:
+            detail = _EXCEPTION_NAMES.get(exc_code, f"unknown exception code {exc_code}")
+            return f"FC{fc:02d} -> {detail}"
+        return f"FC{fc:02d} error: {rr}"
+    return str(rr)
 
 
 # ── FC 01 – Read Coils ───────────────────────────────────────────────────────
@@ -77,7 +105,7 @@ def ok(rr) -> bool:
 def test_fc01_read_coils_basic():
     with make_client() as c:
         rr = c.read_coils(address=0, count=8, device_id=DEVICE_ID)
-        assert ok(rr), f"FC01: {rr}"
+        assert ok(rr), explain(rr)
         assert len(rr.bits) >= 8
 
 
@@ -85,7 +113,7 @@ def test_fc01_read_coils_large():
     """Maximum allowed coil count per request is 2000."""
     with make_client() as c:
         rr = c.read_coils(address=0, count=2000, device_id=DEVICE_ID)
-        assert ok(rr), f"FC01 max count: {rr}"
+        assert ok(rr), explain(rr)
         assert len(rr.bits) >= 2000
 
 
@@ -94,7 +122,7 @@ def test_fc01_read_coils_large():
 def test_fc02_read_discrete_inputs():
     with make_client() as c:
         rr = c.read_discrete_inputs(address=0, count=8, device_id=DEVICE_ID)
-        assert ok(rr), f"FC02: {rr}"
+        assert ok(rr), explain(rr)
         assert len(rr.bits) >= 8
 
 
@@ -103,14 +131,14 @@ def test_fc02_read_discrete_inputs():
 def test_fc03_read_holding_registers_basic():
     with make_client() as c:
         rr = c.read_holding_registers(address=0, count=10, device_id=DEVICE_ID)
-        assert ok(rr), f"FC03: {rr}"
+        assert ok(rr), explain(rr)
         assert len(rr.registers) == 10
 
 
 def test_fc03_read_holding_registers_single():
     with make_client() as c:
         rr = c.read_holding_registers(address=0, count=1, device_id=DEVICE_ID)
-        assert ok(rr), f"FC03 single: {rr}"
+        assert ok(rr), explain(rr)
         assert len(rr.registers) == 1
 
 
@@ -118,7 +146,7 @@ def test_fc03_read_holding_registers_large():
     """Maximum allowed register count per request is 125."""
     with make_client() as c:
         rr = c.read_holding_registers(address=0, count=125, device_id=DEVICE_ID)
-        assert ok(rr), f"FC03 max count: {rr}"
+        assert ok(rr), explain(rr)
         assert len(rr.registers) == 125
 
 
@@ -127,7 +155,7 @@ def test_fc03_read_holding_registers_large():
 def test_fc04_read_input_registers():
     with make_client() as c:
         rr = c.read_input_registers(address=0, count=10, device_id=DEVICE_ID)
-        assert ok(rr), f"FC04: {rr}"
+        assert ok(rr), explain(rr)
         assert len(rr.registers) == 10
 
 
@@ -136,13 +164,13 @@ def test_fc04_read_input_registers():
 def test_fc05_write_coil_true():
     with make_client() as c:
         rr = c.write_coil(address=0, value=True, device_id=DEVICE_ID)
-        assert ok(rr), f"FC05 True: {rr}"
+        assert ok(rr), explain(rr)
 
 
 def test_fc05_write_coil_false():
     with make_client() as c:
         rr = c.write_coil(address=0, value=False, device_id=DEVICE_ID)
-        assert ok(rr), f"FC05 False: {rr}"
+        assert ok(rr), explain(rr)
 
 
 def test_fc05_write_read_roundtrip():
@@ -151,7 +179,7 @@ def test_fc05_write_read_roundtrip():
         for val in (True, False):
             c.write_coil(address=5, value=val, device_id=DEVICE_ID)
             rr = c.read_coils(address=5, count=1, device_id=DEVICE_ID)
-            assert ok(rr)
+            assert ok(rr), explain(rr)
             assert rr.bits[0] is val, f"FC05->FC01 roundtrip: expected {val}, got {rr.bits[0]}"
 
 
@@ -160,7 +188,7 @@ def test_fc05_write_read_roundtrip():
 def test_fc06_write_register():
     with make_client() as c:
         rr = c.write_register(address=0, value=0x1234, device_id=DEVICE_ID)
-        assert ok(rr), f"FC06: {rr}"
+        assert ok(rr), explain(rr)
 
 
 def test_fc06_write_read_roundtrip():
@@ -169,7 +197,7 @@ def test_fc06_write_read_roundtrip():
         val = random.randint(1, 0xFFFF)
         c.write_register(address=10, value=val, device_id=DEVICE_ID)
         rr = c.read_holding_registers(address=10, count=1, device_id=DEVICE_ID)
-        assert ok(rr)
+        assert ok(rr), explain(rr)
         assert rr.registers[0] == val, (
             f"FC06->FC03 roundtrip: expected {val:#06x}, got {rr.registers[0]:#06x}"
         )
@@ -181,7 +209,7 @@ def test_fc15_write_multiple_coils():
     with make_client() as c:
         values = [True, False, True, True, False, True, False, True]
         rr = c.write_coils(address=0, values=values, device_id=DEVICE_ID)
-        assert ok(rr), f"FC15: {rr}"
+        assert ok(rr), explain(rr)
 
 
 def test_fc15_write_read_roundtrip():
@@ -190,7 +218,7 @@ def test_fc15_write_read_roundtrip():
         values = [bool(random.getrandbits(1)) for _ in range(8)]
         c.write_coils(address=0, values=values, device_id=DEVICE_ID)
         rr = c.read_coils(address=0, count=8, device_id=DEVICE_ID)
-        assert ok(rr)
+        assert ok(rr), explain(rr)
         assert rr.bits[:8] == values, "FC15->FC01 roundtrip mismatch"
 
 
@@ -200,7 +228,7 @@ def test_fc16_write_multiple_registers():
     with make_client() as c:
         values = [0x0001, 0x0002, 0x0003, 0x0004, 0x0005]
         rr = c.write_registers(address=0, values=values, device_id=DEVICE_ID)
-        assert ok(rr), f"FC16: {rr}"
+        assert ok(rr), explain(rr)
 
 
 def test_fc16_write_read_roundtrip():
@@ -209,7 +237,7 @@ def test_fc16_write_read_roundtrip():
         values = [random.randint(0, 0xFFFF) for _ in range(10)]
         c.write_registers(address=20, values=values, device_id=DEVICE_ID)
         rr = c.read_holding_registers(address=20, count=10, device_id=DEVICE_ID)
-        assert ok(rr)
+        assert ok(rr), explain(rr)
         assert rr.registers == values, "FC16->FC03 roundtrip mismatch"
 
 
@@ -223,10 +251,10 @@ def test_fc22_mask_write_register():
     with make_client() as c:
         c.write_register(address=30, value=0xFF00, device_id=DEVICE_ID)
         rr = c.mask_write_register(address=30, and_mask=0xF0F0, or_mask=0x0F0F, device_id=DEVICE_ID)
-        assert ok(rr), f"FC22: {rr}"
+        assert ok(rr), explain(rr)
         # Verify the result by reading back
         rr2 = c.read_holding_registers(address=30, count=1, device_id=DEVICE_ID)
-        assert ok(rr2)
+        assert ok(rr2), explain(rr2)
         expected = (0xFF00 & 0xF0F0) | (0x0F0F & ~0xF0F0 & 0xFFFF)
         assert rr2.registers[0] == expected, (
             f"FC22: expected {expected:#06x}, got {rr2.registers[0]:#06x}"
@@ -244,7 +272,7 @@ def test_fc23_readwrite_registers():
             write_address=40, values=write_vals,
             device_id=DEVICE_ID,
         )
-        assert ok(rr), f"FC23: {rr}"
+        assert ok(rr), explain(rr)
         assert len(rr.registers) == 5
 
 
@@ -257,7 +285,7 @@ def test_fc23_write_then_read_same_range():
             write_address=50, values=write_vals,
             device_id=DEVICE_ID,
         )
-        assert ok(rr), f"FC23 same range: {rr}"
+        assert ok(rr), explain(rr)
         # Per spec: when ranges overlap, read returns the NEW (written) values
         assert rr.registers == write_vals
 
@@ -274,7 +302,7 @@ def test_fc08_return_query_data():
     with make_client() as c:
         req = ReturnQueryDataRequest(message=[0xDEAD, 0xBEEF], device_id=DEVICE_ID)
         rr = c.execute(req)
-        assert ok(rr), f"FC08: {rr}"
+        assert ok(rr), explain(rr)
 
 
 # ── FC 11 – Get Communication Event Counter ───────────────────────────────────
@@ -287,7 +315,7 @@ def test_fc11_get_event_counter():
 
     with make_client() as c:
         rr = c.execute(GetCommunicationEventCounterRequest(device_id=DEVICE_ID))
-        assert ok(rr), f"FC11: {rr}"
+        assert ok(rr), explain(rr)
 
 
 # ── FC 12 – Get Communication Event Log ──────────────────────────────────────
@@ -300,7 +328,7 @@ def test_fc12_get_event_log():
 
     with make_client() as c:
         rr = c.execute(GetCommunicationEventLogRequest(device_id=DEVICE_ID))
-        assert ok(rr), f"FC12: {rr}"
+        assert ok(rr), explain(rr)
 
 
 # ── FC 17 – Report Server ID ──────────────────────────────────────────────────
@@ -316,7 +344,7 @@ def test_fc17_report_server_id():
 
     with make_client() as c:
         rr = c.execute(ReportSlaveIdRequest(device_id=DEVICE_ID))
-        assert ok(rr), f"FC17: {rr}"
+        assert ok(rr), explain(rr)
 
 
 # ── FC 24 – Read FIFO Queue ───────────────────────────────────────────────────
@@ -325,10 +353,10 @@ def test_fc24_read_fifo_queue():
     """FIFO is normally empty -- an empty response without error is acceptable."""
     with make_client() as c:
         rr = c.read_fifo_queue(address=0, device_id=DEVICE_ID)
-        assert rr is not None, "FC24: no response (None)"
+        assert rr is not None, "FC24: no response (timeout or connection lost)"
         # Empty FIFO is not an error, just count=0
         if rr.isError():
-            pytest.xfail(f"FC24 returned error (may not be implemented): {rr}")
+            pytest.xfail(f"FC24: {explain(rr)}")
 
 
 # ── FC 43 / 14 – Read Device Identification (MEI) ────────────────────────────
@@ -341,7 +369,7 @@ def test_fc43_device_identification():
 
     with make_client() as c:
         rr = c.execute(ReadDeviceInformationRequest(device_id=DEVICE_ID))
-        assert ok(rr), f"FC43: {rr}"
+        assert ok(rr), explain(rr)
 
 
 # ── Multiple concurrent connections ──────────────────────────────────────────
@@ -353,7 +381,7 @@ def _concurrent_worker(results: list, idx: int, requests_per_client: int = 5):
         for _ in range(requests_per_client):
             rr = c.read_holding_registers(address=0, count=5, device_id=DEVICE_ID)
             if not ok(rr):
-                results[idx] = f"Modbus error: {rr}"
+                results[idx] = f"Modbus error: {explain(rr)}"
                 c.close()
                 return
         c.close()
