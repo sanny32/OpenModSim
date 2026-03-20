@@ -1882,32 +1882,32 @@
 <context>
     <name>FormDataView</name>
     <message>
-        <location filename="../formdataview.ui" line="126"/>
+        <location filename="../formdataview.ui" line="144"/>
         <source>Starting Address:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formdataview.ui" line="133"/>
+        <location filename="../formdataview.ui" line="151"/>
         <source>Length:</source>
         <translation type="unfinished">РљРѕР»РёС‡РµСЃС‚РІРѕ:</translation>
     </message>
     <message>
-        <location filename="../formdataview.ui" line="172"/>
+        <location filename="../formdataview.ui" line="190"/>
         <source>Address Base:</source>
         <translation type="unfinished">РђРґСЂРµСЃР°С†РёСЏ:</translation>
     </message>
     <message>
-        <location filename="../formdataview.ui" line="228"/>
+        <location filename="../formdataview.ui" line="246"/>
         <source>Unit Identifier:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formdataview.ui" line="278"/>
+        <location filename="../formdataview.ui" line="296"/>
         <source>Data Type</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formdataview.cpp" line="522"/>
+        <location filename="../formdataview.cpp" line="550"/>
         <source>Address Base: %1
 Start Address: %2
 Length: %3</source>
@@ -1916,7 +1916,7 @@ Length: %3</source>
 РљРѕР»РёС‡РµСЃС‚РІРѕ: %3</translation>
     </message>
     <message>
-        <location filename="../formdataview.cpp" line="525"/>
+        <location filename="../formdataview.cpp" line="553"/>
         <source>Unit Identifier: %1
 MODBUS Point Type:
 %2</source>
@@ -1929,7 +1929,7 @@ MODBUS Point Type:
         <translation type="obsolete">РСЃРєР°С‚СЊ:</translation>
     </message>
     <message>
-        <location filename="../formdataview.ui" line="457"/>
+        <location filename="../formdataview.ui" line="475"/>
         <source>Highlight:</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1950,127 +1950,127 @@ MODBUS Point Type:
         <translation type="obsolete">РћСЃС‚Р°РЅРѕРІ</translation>
     </message>
     <message>
-        <location filename="../formdataview.ui" line="360"/>
+        <location filename="../formdataview.ui" line="378"/>
         <source>Hex Address</source>
         <translation type="unfinished">РЁРµСЃС‚РЅР°РґС†Р°С‚РµСЂРёС‡РЅС‹Рµ Р°РґСЂРµСЃР°</translation>
     </message>
     <message>
-        <location filename="../formdataview.ui" line="373"/>
+        <location filename="../formdataview.ui" line="391"/>
         <source>Leading Zeros</source>
         <translation type="unfinished">Р’РµРґСѓС‰РёРµ РЅСѓР»Рё</translation>
     </message>
     <message>
-        <location filename="../formdataview.ui" line="380"/>
+        <location filename="../formdataview.ui" line="398"/>
         <source>Column Distance:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formdataview.ui" line="440"/>
+        <location filename="../formdataview.ui" line="458"/>
         <source>Search:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formdataview.ui" line="493"/>
+        <location filename="../formdataview.ui" line="511"/>
         <source>0</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formdataview.ui" line="515"/>
+        <location filename="../formdataview.ui" line="533"/>
         <source>1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formdataview.ui" line="584"/>
+        <location filename="../formdataview.ui" line="603"/>
         <source>Binary</source>
         <translation type="unfinished">Р”РІРѕРёС‡РЅС‹Р№</translation>
     </message>
     <message>
-        <location filename="../formdataview.ui" line="602"/>
+        <location filename="../formdataview.ui" line="621"/>
         <source>Hex</source>
         <translation type="unfinished">РЁРµСЃС‚Р°РЅРґС†Р°С‚РёСЂРёС‡РЅС‹Р№</translation>
     </message>
     <message>
-        <location filename="../formdataview.ui" line="620"/>
+        <location filename="../formdataview.ui" line="639"/>
         <source>Ansi</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formdataview.ui" line="632"/>
+        <location filename="../formdataview.ui" line="651"/>
         <source>16-bit Integer</source>
         <translation type="unfinished">16-Р±РёС‚ С†РµР»РѕРµ</translation>
     </message>
     <message>
-        <location filename="../formdataview.ui" line="650"/>
+        <location filename="../formdataview.ui" line="669"/>
         <source>Unsigned 16-bit Integer</source>
         <translation type="unfinished">Р‘РµР·Р·РЅР°РєРѕРІРѕРµ 64-Р±РёС‚ С†РµР»РѕРµ {16-?}</translation>
     </message>
     <message>
-        <location filename="../formdataview.ui" line="668"/>
+        <location filename="../formdataview.ui" line="687"/>
         <source>32-bit Integer (MSRF)</source>
         <translation type="unfinished">32-Р±РёС‚ С†РµР»РѕРµ (MSRF)</translation>
     </message>
     <message>
-        <location filename="../formdataview.ui" line="686"/>
+        <location filename="../formdataview.ui" line="705"/>
         <source>32-bit Integer (LSRF)</source>
         <translation type="unfinished">32-Р±РёС‚ С†РµР»РѕРµ (LSRF)</translation>
     </message>
     <message>
-        <location filename="../formdataview.ui" line="704"/>
+        <location filename="../formdataview.ui" line="723"/>
         <source>Unsigned 32-bit Integer (MSRF)</source>
         <translation type="unfinished">Р‘РµР·Р·РЅР°РєРѕРІРѕРµ 32-Р±РёС‚ С†РµР»РѕРµ (MSRF)</translation>
     </message>
     <message>
-        <location filename="../formdataview.ui" line="722"/>
+        <location filename="../formdataview.ui" line="741"/>
         <source>Unsigned 32-bit Integer (LSRF)</source>
         <translation type="unfinished">Р‘РµР·Р·РЅР°РєРѕРІРѕРµ 32-Р±РёС‚ С†РµР»РѕРµ (LSRF)</translation>
     </message>
     <message>
-        <location filename="../formdataview.ui" line="740"/>
+        <location filename="../formdataview.ui" line="759"/>
         <source>64-bit Integer (MSRF)</source>
         <translation type="unfinished">64-Р±РёС‚ С†РµР»РѕРµ (MSRF)</translation>
     </message>
     <message>
-        <location filename="../formdataview.ui" line="758"/>
+        <location filename="../formdataview.ui" line="777"/>
         <source>64-bit Integer (LSRF)</source>
         <translation type="unfinished">64-Р±РёС‚ С†РµР»РѕРµ (LSRF)</translation>
     </message>
     <message>
-        <location filename="../formdataview.ui" line="776"/>
+        <location filename="../formdataview.ui" line="795"/>
         <source>Unsigned 64-bit Integer (MSRF)</source>
         <translation type="unfinished">Р‘РµР·Р·РЅР°РєРѕРІРѕРµ 64-Р±РёС‚ С†РµР»РѕРµ (MSRF)</translation>
     </message>
     <message>
-        <location filename="../formdataview.ui" line="794"/>
+        <location filename="../formdataview.ui" line="813"/>
         <source>Unsigned 64-bit Integer (LSRF)</source>
         <translation type="unfinished">Р‘РµР·Р·РЅР°РєРѕРІРѕРµ 64-Р±РёС‚ С†РµР»РѕРµ (LSRF)</translation>
     </message>
     <message>
-        <location filename="../formdataview.ui" line="812"/>
+        <location filename="../formdataview.ui" line="831"/>
         <source>Float (MSRF)</source>
         <translation type="unfinished">РЎ РїР»Р°РІР°СЋС‰РµР№ С‚РѕС‡РєРѕР№ (MSRF)</translation>
     </message>
     <message>
-        <location filename="../formdataview.ui" line="830"/>
+        <location filename="../formdataview.ui" line="849"/>
         <source>Float (LSRF)</source>
         <translation type="unfinished">РЎ РїР»Р°РІР°СЋС‰РµР№ С‚РѕС‡РєРѕР№ (LSRF)</translation>
     </message>
     <message>
-        <location filename="../formdataview.ui" line="848"/>
+        <location filename="../formdataview.ui" line="867"/>
         <source>Double (MSRF)</source>
         <translation type="unfinished">Р”РІРѕР№РЅРѕР№ С‚РѕС‡РЅРѕСЃС‚Рё (MSRF)</translation>
     </message>
     <message>
-        <location filename="../formdataview.ui" line="866"/>
+        <location filename="../formdataview.ui" line="885"/>
         <source>Double (LSRF)</source>
         <translation type="unfinished">Р”РІРѕР№РЅРѕР№ С‚РѕС‡РЅРѕСЃС‚Рё (LSRF)</translation>
     </message>
     <message>
-        <location filename="../formdataview.ui" line="884"/>
+        <location filename="../formdataview.ui" line="903"/>
         <source>Swap Bytes (0xAB → 0xBA)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formdataview.ui" line="892"/>
+        <location filename="../formdataview.ui" line="911"/>
         <source>Hex Addresses</source>
         <translation type="unfinished">РЁРµСЃС‚РЅР°РґС†Р°С‚РёСЂРёС‡РЅС‹Рµ Р°РґСЂРµСЃР°</translation>
     </message>

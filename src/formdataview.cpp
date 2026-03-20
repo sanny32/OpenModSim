@@ -119,6 +119,11 @@ FormDataView::FormDataView(int id, ModbusMultiServer& server, DataSimulator* sim
     connect(dispatcher, &QAbstractEventDispatcher::awake, this, &FormDataView::on_awake);
 
     setupDisplayBar();
+
+    const auto sa = ui->frameDataDefinition;
+    sa->horizontalScrollBar()->installEventFilter(this);
+    const int contentH = sa->widget()->minimumSizeHint().height();
+    sa->setMinimumHeight(contentH + 2 * sa->frameWidth());
 }
 
 ///
@@ -171,6 +176,29 @@ void FormDataView::saveXml(QXmlStreamWriter& xml) const
 void FormDataView::loadXml(QXmlStreamReader& xml)
 {
     xml >> this;
+}
+
+///
+/// \brief FormDataView::eventFilter
+/// \param obj
+/// \param event
+/// \return
+///
+bool FormDataView::eventFilter(QObject* obj, QEvent* event)
+{
+    if (obj == ui->frameDataDefinition->horizontalScrollBar())
+    {
+        const auto type = event->type();
+        if (type == QEvent::Show || type == QEvent::Hide)
+        {
+            const auto sa = ui->frameDataDefinition;
+            const int contentH = sa->widget()->minimumSizeHint().height();
+            const int frameH = 2 * sa->frameWidth();
+            const int scrollH = (type == QEvent::Show) ? sa->horizontalScrollBar()->sizeHint().height() : 0;
+            sa->setMinimumHeight(contentH + frameH + scrollH);
+        }
+    }
+    return QWidget::eventFilter(obj, event);
 }
 
 ///
