@@ -1315,8 +1315,8 @@ void MainWindow::loadProject(const QString& filename)
     _projectFilePath = QFileInfo(filename).absoluteFilePath();
     _lastProjectPath = _projectFilePath;
     _project->setSavePath(QFileInfo(filename).absoluteDir().absolutePath());
-    updateProjectWindowTitle();
     _isModified = false;
+    updateProjectWindowTitle();
 }
 
 ///
@@ -1329,8 +1329,8 @@ void MainWindow::saveProject(const QString& filename)
     _projectFilePath = QFileInfo(filename).absoluteFilePath();
     _lastProjectPath = _projectFilePath;
     _project->setSavePath(QFileInfo(filename).absoluteDir().absolutePath());
-    updateProjectWindowTitle();
     _isModified = false;
+    updateProjectWindowTitle();
 }
 
 ///
