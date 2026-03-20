@@ -1960,7 +1960,7 @@ MODBUS Point Type:
     <message>
         <location filename="../formdataview.ui" line="511"/>
         <source>0</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">0</translation>
     </message>
     <message>
         <location filename="../formdataview.ui" line="533"/>

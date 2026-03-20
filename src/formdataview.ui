@@ -65,7 +65,7 @@
    <item>
     <widget class="QSplitter" name="splitter">
      <property name="orientation">
-      <enum>Qt::Orientation::Vertical</enum>
+      <enum>Qt::Vertical</enum>
      </property>
      <property name="childrenCollapsible">
       <bool>false</bool>
@@ -75,16 +75,16 @@
        <bool>true</bool>
       </property>
       <property name="frameShape">
-       <enum>QFrame::Shape::WinPanel</enum>
+       <enum>QFrame::WinPanel</enum>
       </property>
       <property name="frameShadow">
-       <enum>QFrame::Shadow::Sunken</enum>
+       <enum>QFrame::Sunken</enum>
       </property>
       <property name="verticalScrollBarPolicy">
-       <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOff</enum>
+       <enum>Qt::ScrollBarAlwaysOff</enum>
       </property>
       <property name="horizontalScrollBarPolicy">
-       <enum>Qt::ScrollBarPolicy::ScrollBarAsNeeded</enum>
+       <enum>Qt::ScrollBarAsNeeded</enum>
       </property>
       <property name="widgetResizable">
        <bool>true</bool>
@@ -124,7 +124,7 @@
           </property>
           <layout class="QFormLayout" name="formLayout">
            <property name="labelAlignment">
-            <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
            </property>
            <property name="leftMargin">
             <number>0</number>
@@ -161,7 +161,7 @@
               </size>
              </property>
              <property name="contextMenuPolicy">
-              <enum>Qt::ContextMenuPolicy::NoContextMenu</enum>
+              <enum>Qt::NoContextMenu</enum>
              </property>
              <property name="acceptDrops">
               <bool>false</bool>
@@ -177,7 +177,7 @@
               </size>
              </property>
              <property name="contextMenuPolicy">
-              <enum>Qt::ContextMenuPolicy::NoContextMenu</enum>
+              <enum>Qt::NoContextMenu</enum>
              </property>
              <property name="acceptDrops">
               <bool>false</bool>
@@ -207,7 +207,7 @@
         <item>
          <widget class="Line" name="line">
           <property name="orientation">
-           <enum>Qt::Orientation::Vertical</enum>
+           <enum>Qt::Vertical</enum>
           </property>
          </widget>
         </item>
@@ -262,7 +262,7 @@
                 </size>
                </property>
                <property name="contextMenuPolicy">
-                <enum>Qt::ContextMenuPolicy::NoContextMenu</enum>
+                <enum>Qt::NoContextMenu</enum>
                </property>
                <property name="acceptDrops">
                 <bool>false</bool>
@@ -272,7 +272,7 @@
              <item>
               <spacer name="horizontalSpacer_2">
                <property name="orientation">
-                <enum>Qt::Orientation::Horizontal</enum>
+                <enum>Qt::Horizontal</enum>
                </property>
                <property name="sizeHint" stdset="0">
                 <size>
@@ -296,7 +296,7 @@
               <string>Data Type</string>
              </property>
              <property name="alignment">
-              <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
+              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
              </property>
             </widget>
            </item>
@@ -309,7 +309,7 @@
               </size>
              </property>
              <property name="focusPolicy">
-              <enum>Qt::FocusPolicy::StrongFocus</enum>
+              <enum>Qt::StrongFocus</enum>
              </property>
              <property name="frame">
               <bool>true</bool>
@@ -319,7 +319,7 @@
            <item>
             <spacer name="verticalSpacer">
              <property name="orientation">
-              <enum>Qt::Orientation::Vertical</enum>
+              <enum>Qt::Vertical</enum>
              </property>
              <property name="sizeHint" stdset="0">
               <size>
@@ -335,7 +335,7 @@
         <item>
          <widget class="Line" name="line_2">
           <property name="orientation">
-           <enum>Qt::Orientation::Vertical</enum>
+           <enum>Qt::Vertical</enum>
           </property>
          </widget>
         </item>
@@ -424,7 +424,7 @@
         <item>
          <widget class="Line" name="line_3">
           <property name="orientation">
-           <enum>Qt::Orientation::Vertical</enum>
+           <enum>Qt::Vertical</enum>
           </property>
          </widget>
         </item>
@@ -438,7 +438,7 @@
           </property>
           <layout class="QFormLayout" name="formLayout_3">
            <property name="labelAlignment">
-            <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
            </property>
            <property name="leftMargin">
             <number>2</number>
@@ -540,7 +540,7 @@
              <item>
               <spacer name="bitsRowSpacer">
                <property name="orientation">
-                <enum>Qt::Orientation::Horizontal</enum>
+                <enum>Qt::Horizontal</enum>
                </property>
                <property name="sizeHint" stdset="0">
                 <size>
@@ -558,7 +558,7 @@
         <item>
          <spacer name="horizontalSpacer">
           <property name="orientation">
-           <enum>Qt::Orientation::Horizontal</enum>
+           <enum>Qt::Horizontal</enum>
           </property>
           <property name="sizeHint" stdset="0">
            <size>
@@ -582,10 +582,10 @@
        <bool>true</bool>
       </property>
       <property name="frameShape">
-       <enum>QFrame::Shape::WinPanel</enum>
+       <enum>QFrame::WinPanel</enum>
       </property>
       <property name="frameShadow">
-       <enum>QFrame::Shadow::Sunken</enum>
+       <enum>QFrame::Sunken</enum>
       </property>
      </widget>
     </widget>
@@ -606,7 +606,7 @@
     <string notr="true">Ctrl+1</string>
    </property>
    <property name="shortcutContext">
-    <enum>Qt::ShortcutContext::WidgetWithChildrenShortcut</enum>
+    <enum>Qt::WidgetWithChildrenShortcut</enum>
    </property>
   </action>
   <action name="actionDisplayHex">
@@ -624,7 +624,7 @@
     <string notr="true">Ctrl+2</string>
    </property>
    <property name="shortcutContext">
-    <enum>Qt::ShortcutContext::WidgetWithChildrenShortcut</enum>
+    <enum>Qt::WidgetWithChildrenShortcut</enum>
    </property>
   </action>
   <action name="actionDisplayAnsi">
@@ -654,7 +654,7 @@
     <string notr="true">Ctrl+3</string>
    </property>
    <property name="shortcutContext">
-    <enum>Qt::ShortcutContext::WidgetWithChildrenShortcut</enum>
+    <enum>Qt::WidgetWithChildrenShortcut</enum>
    </property>
   </action>
   <action name="actionDisplayUInt16">
@@ -672,7 +672,7 @@
     <string notr="true">Ctrl+4</string>
    </property>
    <property name="shortcutContext">
-    <enum>Qt::ShortcutContext::WidgetWithChildrenShortcut</enum>
+    <enum>Qt::WidgetWithChildrenShortcut</enum>
    </property>
   </action>
   <action name="actionDisplayInt32">
@@ -690,7 +690,7 @@
     <string notr="true">Ctrl+5</string>
    </property>
    <property name="shortcutContext">
-    <enum>Qt::ShortcutContext::WidgetWithChildrenShortcut</enum>
+    <enum>Qt::WidgetWithChildrenShortcut</enum>
    </property>
   </action>
   <action name="actionDisplaySwappedInt32">
@@ -708,7 +708,7 @@
     <string notr="true">Ctrl+Alt+5</string>
    </property>
    <property name="shortcutContext">
-    <enum>Qt::ShortcutContext::WidgetWithChildrenShortcut</enum>
+    <enum>Qt::WidgetWithChildrenShortcut</enum>
    </property>
   </action>
   <action name="actionDisplayUInt32">
@@ -726,7 +726,7 @@
     <string notr="true">Ctrl+6</string>
    </property>
    <property name="shortcutContext">
-    <enum>Qt::ShortcutContext::WidgetWithChildrenShortcut</enum>
+    <enum>Qt::WidgetWithChildrenShortcut</enum>
    </property>
   </action>
   <action name="actionDisplaySwappedUInt32">
@@ -744,7 +744,7 @@
     <string notr="true">Ctrl+Alt+6</string>
    </property>
    <property name="shortcutContext">
-    <enum>Qt::ShortcutContext::WidgetWithChildrenShortcut</enum>
+    <enum>Qt::WidgetWithChildrenShortcut</enum>
    </property>
   </action>
   <action name="actionDisplayInt64">
@@ -762,7 +762,7 @@
     <string notr="true">Ctrl+7</string>
    </property>
    <property name="shortcutContext">
-    <enum>Qt::ShortcutContext::WidgetWithChildrenShortcut</enum>
+    <enum>Qt::WidgetWithChildrenShortcut</enum>
    </property>
   </action>
   <action name="actionDisplaySwappedInt64">
@@ -780,7 +780,7 @@
     <string notr="true">Ctrl+Alt+7</string>
    </property>
    <property name="shortcutContext">
-    <enum>Qt::ShortcutContext::WidgetWithChildrenShortcut</enum>
+    <enum>Qt::WidgetWithChildrenShortcut</enum>
    </property>
   </action>
   <action name="actionDisplayUInt64">
@@ -798,7 +798,7 @@
     <string notr="true">Ctrl+8</string>
    </property>
    <property name="shortcutContext">
-    <enum>Qt::ShortcutContext::WidgetWithChildrenShortcut</enum>
+    <enum>Qt::WidgetWithChildrenShortcut</enum>
    </property>
   </action>
   <action name="actionDisplaySwappedUInt64">
@@ -816,7 +816,7 @@
     <string notr="true">Ctrl+Alt+8</string>
    </property>
    <property name="shortcutContext">
-    <enum>Qt::ShortcutContext::WidgetWithChildrenShortcut</enum>
+    <enum>Qt::WidgetWithChildrenShortcut</enum>
    </property>
   </action>
   <action name="actionDisplayFloatingPt">
@@ -834,7 +834,7 @@
     <string notr="true">Ctrl+9</string>
    </property>
    <property name="shortcutContext">
-    <enum>Qt::ShortcutContext::WidgetWithChildrenShortcut</enum>
+    <enum>Qt::WidgetWithChildrenShortcut</enum>
    </property>
   </action>
   <action name="actionDisplaySwappedFP">
@@ -852,7 +852,7 @@
     <string notr="true">Ctrl+Alt+9</string>
    </property>
    <property name="shortcutContext">
-    <enum>Qt::ShortcutContext::WidgetWithChildrenShortcut</enum>
+    <enum>Qt::WidgetWithChildrenShortcut</enum>
    </property>
   </action>
   <action name="actionDisplayDblFloat">
@@ -870,7 +870,7 @@
     <string notr="true">Ctrl+0</string>
    </property>
    <property name="shortcutContext">
-    <enum>Qt::ShortcutContext::WidgetWithChildrenShortcut</enum>
+    <enum>Qt::WidgetWithChildrenShortcut</enum>
    </property>
   </action>
   <action name="actionDisplaySwappedDbl">
@@ -888,7 +888,7 @@
     <string notr="true">Ctrl+Alt+0</string>
    </property>
    <property name="shortcutContext">
-    <enum>Qt::ShortcutContext::WidgetWithChildrenShortcut</enum>
+    <enum>Qt::WidgetWithChildrenShortcut</enum>
    </property>
   </action>
   <action name="actionDisplaySwapBytes">

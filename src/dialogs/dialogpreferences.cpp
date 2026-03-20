@@ -18,10 +18,10 @@ DialogPreferences::DialogPreferences(MainWindow* mainWindow, QWidget* parent)
     for (int i = 0; i < ui->listWidget->count(); ++i)
         ui->listWidget->item(i)->setSizeHint(QSize(0, 28));
 
-    ui->comboBoxLanguage->addItem("English",                       "en");
-    ui->comboBoxLanguage->addItem(QString::fromUtf8("Русский"),        "ru");
-    ui->comboBoxLanguage->addItem(QString::fromUtf8("简体中文"),         "zh_CN");
-    ui->comboBoxLanguage->addItem(QString::fromUtf8("繁體中文"),         "zh_TW");
+    ui->comboBoxLanguage->addItem("English", "en");
+    ui->comboBoxLanguage->addItem("Русский", "ru");
+    ui->comboBoxLanguage->addItem("简体中文", "zh_CN");
+    ui->comboBoxLanguage->addItem("繁體中文", "zh_TW");
 
     ui->fontComboBoxFont->setFontFilters(QFontComboBox::MonospacedFonts);
 

@@ -1,5 +1,6 @@
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QSslSocket>
 #include <QVersionNumber>
 #include "updatechecker.h"
 #include "apppreferences.h"
@@ -19,7 +20,7 @@ UpdateChecker::UpdateChecker(QObject* parent)
     _checkTimer->setInterval(6 * 60 * 60 * 1000);
     connect(_checkTimer, &QTimer::timeout, this, &UpdateChecker::checkForUpdates);
 
-    if(AppPreferences::instance().checkForUpdates())
+    if(AppPreferences::instance().checkForUpdates() && QSslSocket::supportsSsl())
         _checkTimer->start();
 }
 
@@ -29,6 +30,12 @@ UpdateChecker::UpdateChecker(QObject* parent)
 ///
 void UpdateChecker::setEnabled(bool enabled)
 {
+    if(!QSslSocket::supportsSsl())
+    {
+        _checkTimer->stop();
+        return;
+    }
+
     if(enabled)
     {
         _checkTimer->start();
@@ -46,6 +53,12 @@ void UpdateChecker::setEnabled(bool enabled)
 ///
 void UpdateChecker::checkForUpdates()
 {
+    if(!QSslSocket::supportsSsl())
+    {
+        _checkTimer->stop();
+        return;
+    }
+
     QNetworkRequest request(QUrl("https://api.github.com/repos/sanny32/OpenModSim/releases/latest"));
     request.setHeader(QNetworkRequest::UserAgentHeader, "OpenModSim");
     request.setRawHeader("Accept", "application/vnd.github.v3+json");

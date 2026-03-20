@@ -413,6 +413,10 @@ if(TARGET update_translations)
 endif()
 
 if(WIN32)
+    if(MSVC)
+        target_compile_options(${PROJECT_NAME} PRIVATE /utf-8)
+    endif()
+
     set(ICON_FILE "${CMAKE_CURRENT_SOURCE_DIR}/res/omodsim.ico")
 
     configure_file(
