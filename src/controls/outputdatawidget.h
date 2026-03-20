@@ -56,7 +56,13 @@ public:
     }
     void setColumnsDistance(int value)
     {
-        _columnsDistance = qMax(1, value);
+        const int distance = qMax(1, value);
+        if (_columnsDistance == distance)
+            return;
+
+        _columnsDistance = distance;
+        if (rowCount() > 0)
+            emit dataChanged(index(0), index(rowCount() - 1), QVector<int>() << Qt::DisplayRole);
     }
 
     QModelIndex find(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr) const;

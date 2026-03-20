@@ -640,8 +640,15 @@ bool OutputDataWidget::displayHexAddresses() const
 ///
 void OutputDataWidget::setDisplayHexAddresses(bool on)
 {
+    if (_displayHexAddreses == on)
+        return;
+
     _displayHexAddreses = on;
-    _listModel->update();
+    if (_listModel->rowCount() > 0) {
+        emit _listModel->dataChanged(_listModel->index(0),
+                                     _listModel->index(_listModel->rowCount() - 1),
+                                     QVector<int>() << Qt::DisplayRole);
+    }
 }
 
 

@@ -3,6 +3,13 @@
 #include <QDateTime>
 #include <QHelpEngine>
 #include <QHelpContentWidget>
+#include <QCheckBox>
+#include <QHBoxLayout>
+#include <QLabel>
+#include <QSignalBlocker>
+#include <QSpinBox>
+#include <QSizePolicy>
+#include <QVBoxLayout>
 #include "modbuslimits.h"
 #include "mainwindow.h"
 #include "modbusmessages.h"
@@ -100,7 +107,6 @@ FormDataView::~FormDataView()
 void FormDataView::on_awake()
 {
     updateDisplayBar();
-    ui->actionDisplayHexAddresses->setChecked(displayHexAddresses());
 }
 
 ///
@@ -148,6 +154,7 @@ void FormDataView::changeEvent(QEvent* e)
     if (e->type() == QEvent::LanguageChange)
     {
         ui->retranslateUi(this);
+        updateSettingsControlsText();
         updateStatus();
     }
 
@@ -252,6 +259,7 @@ void FormDataView::setDisplayDefinition(const DataViewDefinitions& dd)
     ui->lineEditAddress->setHexView(dd.HexViewAddress);
     ui->lineEditLength->setHexView(dd.HexViewLength);
 
+    updateSettingsControls();
     emit definitionChanged();
 }
 
@@ -285,6 +293,7 @@ void FormDataView::setDisplayHexAddresses(bool on)
     const auto defs = _mbMultiServer.getModbusDefinitions();
     ui->lineEditAddress->setInputMode(on ? NumericLineEdit::HexMode : NumericLineEdit::Int32Mode);
     ui->lineEditAddress->setInputRange(ModbusLimits::addressRange(defs.AddrSpace, ui->comboBoxAddressBase->currentAddressBase() == AddressBase::Base0));
+    updateSettingsControls();
     emit displayHexAddressesChanged(on);
 }
 
@@ -684,10 +693,52 @@ void FormDataView::setDisplayDefinitionSilent(const DataViewDefinitions& dd)
 
     ui->outputWidget->setDataViewColumnsDistance(dd.DataViewColumnsDistance);
     setDisplayHexAddresses(dd.HexAddress);
+    updateSettingsControls();
 
     // Re-register unit map and refresh output widget.
     onDefinitionChanged();
     updateDisplayBar();
+}
+
+///
+/// \brief FormDataView::setLeadingZerosEnabled
+///
+void FormDataView::setLeadingZerosEnabled(bool on)
+{
+    if(ui->lineEditDeviceId->leadingZeroes() == on &&
+       ui->lineEditAddress->leadingZeroes() == on &&
+       ui->lineEditLength->leadingZeroes() == on)
+    {
+        return;
+    }
+
+    const auto deviceId = ui->lineEditDeviceId->value<int>();
+    const auto address = ui->lineEditAddress->value<int>();
+    const auto length = ui->lineEditLength->value<int>();
+
+    ui->lineEditDeviceId->setLeadingZeroes(on);
+    ui->lineEditAddress->setLeadingZeroes(on);
+    ui->lineEditLength->setLeadingZeroes(on);
+
+    // Force text refresh with the same numeric values.
+    ui->lineEditDeviceId->setValue(deviceId);
+    ui->lineEditAddress->setValue(address);
+    ui->lineEditLength->setValue(length);
+
+    updateSettingsControls();
+}
+
+///
+/// \brief FormDataView::setColumnsDistance
+///
+void FormDataView::setColumnsDistance(int value)
+{
+    const int normalized = qBound(1, value, 32);
+    if(ui->outputWidget->dataViewColumnsDistance() == normalized)
+        return;
+
+    ui->outputWidget->setDataViewColumnsDistance(normalized);
+    updateSettingsControls();
 }
 
 ///
@@ -1035,9 +1086,125 @@ void FormDataView::setupDisplayBar()
 
     connect(ui->actionDisplayHexAddresses, &QAction::triggered, this, [this](bool checked) {
         setDisplayHexAddresses(checked);
+        emit definitionChanged();
     });
 
+    setupSettingsControls();
     updateDisplayBar();
+}
+
+///
+/// \brief FormDataView::setupSettingsControls
+///
+void FormDataView::setupSettingsControls()
+{
+    _settingsPanel = new QWidget(ui->frameDataDefinition);
+    _settingsPanel->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
+
+    auto* settingsLayout = new QVBoxLayout(_settingsPanel);
+    settingsLayout->setContentsMargins(0, 0, 0, 0);
+    settingsLayout->setSpacing(6);
+
+    auto* rowHexAddress = new QWidget(_settingsPanel);
+    rowHexAddress->setFixedHeight(26);
+    auto* rowHexAddressLayout = new QHBoxLayout(rowHexAddress);
+    rowHexAddressLayout->setContentsMargins(0, 0, 0, 0);
+    rowHexAddressLayout->setSpacing(4);
+
+    _checkBoxHexAddress = new QCheckBox(rowHexAddress);
+    _checkBoxHexAddress->setChecked(displayHexAddresses());
+    connect(_checkBoxHexAddress, &QCheckBox::toggled, this, [this](bool checked) {
+        setDisplayHexAddresses(checked);
+        emit definitionChanged();
+    });
+    rowHexAddressLayout->addWidget(_checkBoxHexAddress);
+    rowHexAddressLayout->addStretch(1);
+    settingsLayout->addWidget(rowHexAddress);
+
+    auto* rowLeadingZeros = new QWidget(_settingsPanel);
+    rowLeadingZeros->setFixedHeight(26);
+    auto* rowLeadingZerosLayout = new QHBoxLayout(rowLeadingZeros);
+    rowLeadingZerosLayout->setContentsMargins(0, 0, 0, 0);
+    rowLeadingZerosLayout->setSpacing(4);
+
+    _checkBoxLeadingZeros = new QCheckBox(rowLeadingZeros);
+    _checkBoxLeadingZeros->setChecked(ui->lineEditDeviceId->leadingZeroes());
+    connect(_checkBoxLeadingZeros, &QCheckBox::toggled, this, [this](bool checked) {
+        setLeadingZerosEnabled(checked);
+        emit definitionChanged();
+    });
+    rowLeadingZerosLayout->addWidget(_checkBoxLeadingZeros);
+    rowLeadingZerosLayout->addStretch(1);
+    settingsLayout->addWidget(rowLeadingZeros);
+
+    auto* columnDistanceRow = new QWidget(_settingsPanel);
+    columnDistanceRow->setFixedHeight(26);
+    auto* columnDistanceLayout = new QHBoxLayout(columnDistanceRow);
+    columnDistanceLayout->setContentsMargins(0, 0, 0, 0);
+    columnDistanceLayout->setSpacing(4);
+
+    _labelColumnsDistance = new QLabel(columnDistanceRow);
+    columnDistanceLayout->addWidget(_labelColumnsDistance);
+
+    _spinBoxColumnsDistance = new QSpinBox(columnDistanceRow);
+    _spinBoxColumnsDistance->setRange(1, 32);
+    _spinBoxColumnsDistance->setFixedWidth(60);
+    _spinBoxColumnsDistance->setValue(ui->outputWidget->dataViewColumnsDistance());
+    connect(_spinBoxColumnsDistance, qOverload<int>(&QSpinBox::valueChanged), this, [this](int value) {
+        setColumnsDistance(value);
+        emit definitionChanged();
+    });
+    columnDistanceLayout->addWidget(_spinBoxColumnsDistance);
+    columnDistanceLayout->addStretch(1);
+
+    settingsLayout->addWidget(columnDistanceRow);
+    settingsLayout->addStretch(1);
+
+    // Place settings on the same definition panel, near other data-view controls.
+    const int insertIndex = qMax(0, ui->horizontalLayout_3->count() - 1);
+    ui->horizontalLayout_3->insertWidget(insertIndex, _settingsPanel);
+
+    updateSettingsControlsText();
+    updateSettingsControls();
+}
+
+///
+/// \brief FormDataView::updateSettingsControls
+///
+void FormDataView::updateSettingsControls()
+{
+    if(_checkBoxHexAddress) {
+        QSignalBlocker blocker(_checkBoxHexAddress);
+        _checkBoxHexAddress->setChecked(displayHexAddresses());
+    }
+
+    if(ui->actionDisplayHexAddresses) {
+        QSignalBlocker blocker(ui->actionDisplayHexAddresses);
+        ui->actionDisplayHexAddresses->setChecked(displayHexAddresses());
+    }
+
+    if(_checkBoxLeadingZeros) {
+        QSignalBlocker blocker(_checkBoxLeadingZeros);
+        _checkBoxLeadingZeros->setChecked(ui->lineEditDeviceId->leadingZeroes());
+    }
+
+    if(_spinBoxColumnsDistance) {
+        QSignalBlocker blocker(_spinBoxColumnsDistance);
+        _spinBoxColumnsDistance->setValue(ui->outputWidget->dataViewColumnsDistance());
+    }
+}
+
+///
+/// \brief FormDataView::updateSettingsControlsText
+///
+void FormDataView::updateSettingsControlsText()
+{
+    if(_checkBoxHexAddress)
+        _checkBoxHexAddress->setText(QStringLiteral("Hex Address"));
+    if(_checkBoxLeadingZeros)
+        _checkBoxLeadingZeros->setText(QStringLiteral("Leading Zeros"));
+    if(_labelColumnsDistance)
+        _labelColumnsDistance->setText(QStringLiteral("Column Distance:"));
 }
 
 ///
@@ -1066,6 +1233,8 @@ void FormDataView::updateDisplayBar()
 
     // Sync ANSI codepage menu
     if (_ansiMenu) _ansiMenu->selectCodepage(codepage());
+
+    updateSettingsControls();
 }
 
 ///
