@@ -2736,7 +2736,7 @@ Script.onInit(()=&gt;{
 <context>
     <name>ModbusTcpServer</name>
     <message>
-        <location filename="../modbustcpserver.cpp" line="271"/>
+        <location filename="../modbustcpserver.cpp" line="347"/>
         <source>Invalid connection settings for TCP communication specified.</source>
         <translation>Указаны некорректные настройки для TCP соединения.</translation>
     </message>
@@ -2901,12 +2901,12 @@ Script.onInit(()=&gt;{
 <context>
     <name>QModbusTcpServer</name>
     <message>
-        <location filename="../modbustcpserver.cpp" line="178"/>
+        <location filename="../modbustcpserver.cpp" line="229"/>
         <source>Requesting socket is closed</source>
         <translation>Запрашивающий сокет закрыт</translation>
     </message>
     <message>
-        <location filename="../modbustcpserver.cpp" line="186"/>
+        <location filename="../modbustcpserver.cpp" line="236"/>
         <source>Could not write response to client</source>
         <translation>Не удалось создать ответ клиенту</translation>
     </message>

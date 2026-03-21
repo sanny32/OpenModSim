@@ -2742,7 +2742,7 @@ Script.onInit(()=&gt;{
 <context>
     <name>ModbusTcpServer</name>
     <message>
-        <location filename="../modbustcpserver.cpp" line="271"/>
+        <location filename="../modbustcpserver.cpp" line="347"/>
         <source>Invalid connection settings for TCP communication specified.</source>
         <translation>指定的 TCP 通讯连接设定无效。</translation>
     </message>
@@ -2907,12 +2907,12 @@ Script.onInit(()=&gt;{
 <context>
     <name>QModbusTcpServer</name>
     <message>
-        <location filename="../modbustcpserver.cpp" line="178"/>
+        <location filename="../modbustcpserver.cpp" line="229"/>
         <source>Requesting socket is closed</source>
         <translation>请求的套接字已关闭</translation>
     </message>
     <message>
-        <location filename="../modbustcpserver.cpp" line="186"/>
+        <location filename="../modbustcpserver.cpp" line="236"/>
         <source>Could not write response to client</source>
         <translation>无法写入对客户端的响应</translation>
     </message>

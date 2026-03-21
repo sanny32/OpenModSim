@@ -1,5 +1,7 @@
-#include <QUrl>
+﻿#include <QUrl>
 #include <QTimer>
+#include <QPointer>
+#include <QSharedPointer>
 #include <QTcpSocket>
 #include <QRandomGenerator>
 #include "modbustcpserver.h"
@@ -12,7 +14,10 @@ ModbusTcpServer::ModbusTcpServer(QObject *parent)
     : ModbusServer(parent)
 {
     _server = new QTcpServer(this);
+    _delayedResponseTimer = new QTimer(this);
+    _delayedResponseTimer->setSingleShot(true);
 
+    QObject::connect(_delayedResponseTimer, &QTimer::timeout, this, &ModbusTcpServer::flushDelayedResponses);
     QObject::connect(_server, &QTcpServer::newConnection, this, &ModbusTcpServer::on_newConnection);
     QObject::connect(_server, &QTcpServer::acceptError, this, &ModbusTcpServer::on_acceptError);
     QObject::connect(this, &ModbusServer::rawDataReceived, this, &ModbusTcpServer::on_rawDataReceived);
@@ -23,7 +28,7 @@ ModbusTcpServer::ModbusTcpServer(QObject *parent)
 ///
 ModbusTcpServer::~ModbusTcpServer()
 {
-    close();
+    ModbusTcpServer::close();
 }
 
 ///
@@ -87,15 +92,24 @@ void ModbusTcpServer::on_newConnection()
 
     auto buffer = new QByteArray();
 
+    ///
+    /// \brief QObject::connect
+    ///
     QObject::connect(socket, &QObject::destroyed, socket, [buffer]() {
         // cleanup buffer
         delete buffer;
     });
+    ///
+    /// \brief QObject::connect
+    ///
     QObject::connect(socket, &QTcpSocket::disconnected, this, [socket, this]() {
         _connections.removeAll(socket);
         emit modbusClientDisconnected(socket);
         socket->deleteLater();
     });
+    ///
+    /// \brief QObject::connect
+    ///
     QObject::connect(socket, &QTcpSocket::readyRead, this, [buffer, socket, this]() {
         if (!socket)
             return;
@@ -161,41 +175,117 @@ void ModbusTcpServer::on_newConnection()
                 responseDelay = QRandomGenerator::global()->bounded(mbDef.ErrorSimulations.responseRandomDelayUpToTime());
             }
 
-            QTimer::singleShot(responseDelay, this,
-                               [this, socket, transactionId, protocolId, unitId, response, request, msgReq]()
-            {
-                qCDebug(QT_MODBUS) << "(TCP server) Response PDU:" << response;
+            PendingTcpResponse pending;
+            pending.Socket = QPointer<QTcpSocket>(socket);
+            pending.TransactionId = transactionId;
+            pending.ProtocolId = protocolId;
+            pending.UnitId = unitId;
+            pending.Response = response;
+            pending.RequestMessage = msgReq;
 
-                QByteArray result;
-                QDataStream output(&result, QIODevice::WriteOnly);
-                // The length field is the byte count of the following fields, including the Unit
-                // Identifier and PDU fields, so we add one byte to the response size.
-                output << transactionId << protocolId << quint16(response.size() + 1)
-                       << unitId << response;
+            if (responseDelay <= 0) {
+                sendTcpResponse(pending);
+                continue;
+            }
 
-                if (!socket->isOpen()) {
-                    qCDebug(QT_MODBUS) << "(TCP server) Requesting socket has closed.";
-                    setError(QModbusTcpServer::tr("Requesting socket is closed"),
-                                 QModbusDevice::WriteError);
-                    return;
+            if (_delayedResponseCount >= _maxDelayedResponses) {
+                if (!_delayedResponseOverflowLogged) {
+                    qCWarning(QT_MODBUS) << "(TCP server) Delayed response queue overflow:"
+                                         << _delayedResponseCount
+                                         << "limit =" << _maxDelayedResponses
+                                         << ". Returning ServerDeviceBusy.";
+                    _delayedResponseOverflowLogged = true;
                 }
 
-                qint64 writtenBytes = socket->write(result);
-                if (writtenBytes == -1 || writtenBytes < result.size()) {
-                    qCDebug(QT_MODBUS) << "(TCP server) Cannot write requested response to socket.";
-                    setError(QModbusTcpServer::tr("Could not write response to client"),
-                                 QModbusDevice::WriteError);
-                }
-                else {
-                    const QDateTime sndTime = QDateTime::currentDateTime();
-                    emit rawDataSended(sndTime, result);
+                PendingTcpResponse busy = pending;
+                busy.Response = QModbusExceptionResponse(request.functionCode(),
+                                                         QModbusExceptionResponse::ServerDeviceBusy);
+                sendTcpResponse(busy);
+                continue;
+            }
 
-                    const auto msgResp = ModbusMessage::create(result, ModbusMessage::Tcp, sndTime, false);
-                    emit modbusResponse(msgReq, msgResp);
-                }
-            });
+            _delayedResponseOverflowLogged = false;
+            enqueueDelayedResponse(pending, responseDelay);
         }
     });
+}
+
+void ModbusTcpServer::sendTcpResponse(const PendingTcpResponse& pending)
+{
+    if (!pending.Socket)
+        return;
+
+    qCDebug(QT_MODBUS) << "(TCP server) Response PDU:" << pending.Response;
+
+    QByteArray result;
+    QDataStream output(&result, QIODevice::WriteOnly);
+    // The length field is the byte count of the following fields, including the Unit
+    // Identifier and PDU fields, so we add one byte to the response size.
+    output << pending.TransactionId << pending.ProtocolId << quint16(pending.Response.size() + 1)
+           << pending.UnitId << pending.Response;
+
+    if (!pending.Socket->isOpen()) {
+        qCDebug(QT_MODBUS) << "(TCP server) Requesting socket has closed.";
+        setError(QModbusTcpServer::tr("Requesting socket is closed"), QModbusDevice::WriteError);
+        return;
+    }
+
+    const qint64 writtenBytes = pending.Socket->write(result);
+    if (writtenBytes == -1 || writtenBytes < result.size()) {
+        qCDebug(QT_MODBUS) << "(TCP server) Cannot write requested response to socket.";
+        setError(QModbusTcpServer::tr("Could not write response to client"), QModbusDevice::WriteError);
+        return;
+    }
+
+    const QDateTime sndTime = QDateTime::currentDateTime();
+    emit rawDataSended(sndTime, result);
+
+    const auto msgResp = ModbusMessage::create(result, ModbusMessage::Tcp, sndTime, false);
+    emit modbusResponse(pending.RequestMessage, msgResp);
+}
+
+void ModbusTcpServer::enqueueDelayedResponse(const PendingTcpResponse& pending, int delayMs)
+{
+    const qint64 dueAt = QDateTime::currentMSecsSinceEpoch() + qMax(0, delayMs);
+    _delayedResponses[dueAt].append(pending);
+    ++_delayedResponseCount;
+    armDelayedResponseTimer();
+}
+
+void ModbusTcpServer::flushDelayedResponses()
+{
+    const qint64 now = QDateTime::currentMSecsSinceEpoch();
+    auto it = _delayedResponses.begin();
+    while (it != _delayedResponses.end() && it.key() <= now) {
+        const QList<PendingTcpResponse> batch = it.value();
+        _delayedResponseCount -= batch.size();
+        if (_delayedResponseCount < 0)
+            _delayedResponseCount = 0;
+
+        for (const auto& pending : batch)
+            sendTcpResponse(pending);
+
+        it = _delayedResponses.erase(it);
+    }
+
+    armDelayedResponseTimer();
+}
+
+void ModbusTcpServer::armDelayedResponseTimer()
+{
+    if (_delayedResponses.isEmpty()) {
+        _delayedResponseTimer->stop();
+        return;
+    }
+
+    const qint64 now = QDateTime::currentMSecsSinceEpoch();
+    const qint64 nextDue = _delayedResponses.firstKey();
+    const int timeoutMs = int(qMax<qint64>(0, nextDue - now));
+
+    if (!_delayedResponseTimer->isActive()
+        || _delayedResponseTimer->remainingTime() > timeoutMs) {
+        _delayedResponseTimer->start(timeoutMs);
+    }
 }
 
 ///
@@ -236,21 +326,7 @@ QModbusResponse ModbusTcpServer::forwardProcessRequest(const QModbusRequest &r, 
         return QModbusExceptionResponse(r.functionCode(), QModbusExceptionResponse::ServerDeviceBusy);
     }
 
-    QModbusResponse resp;
-    switch (r.functionCode()) {
-    case QModbusRequest::ReadExceptionStatus:
-    case QModbusRequest::Diagnostics:
-    case QModbusRequest::GetCommEventCounter:
-    case QModbusRequest::GetCommEventLog:
-    case QModbusRequest::ReportServerId:
-        resp = QModbusExceptionResponse(r.functionCode(), QModbusExceptionResponse::IllegalFunction);
-        break;
-    default:
-        resp = ModbusServer::processRequest(r, serverAddress);
-        break;
-    }
-
-    return resp;
+    return ModbusServer::processRequest(r, serverAddress);
 }
 
 ///
@@ -292,6 +368,12 @@ void ModbusTcpServer::close()
 
     if (_server->isListening())
         _server->close();
+
+    _delayedResponses.clear();
+    _delayedResponseCount = 0;
+    _delayedResponseOverflowLogged = false;
+    if (_delayedResponseTimer->isActive())
+        _delayedResponseTimer->stop();
 
     for (auto socket : std::as_const(_connections))
         socket->disconnectFromHost();
