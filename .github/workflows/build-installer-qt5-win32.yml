@@ -9,7 +9,7 @@ on:
       branch:
         description: 'Checkout branch'
         required: false
-        default: dev
+        default: release/1.x
       tag:
         description: 'Checkout tag'
         required: false
