@@ -1506,6 +1506,14 @@ MODBUS Point Type:
     </message>
 </context>
 <context>
+    <name>HexViewButton</name>
+    <message>
+        <location filename="../controls/numericlineedit.cpp" line="29"/>
+        <source>Hex View</source>
+        <translation type="unfinished">Шестнадцатиричный режим</translation>
+    </message>
+</context>
+<context>
     <name>JScriptControl</name>
     <message>
         <location filename="../controls/jscriptcontrol.ui" line="55"/>
