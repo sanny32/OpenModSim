@@ -40,7 +40,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           ref: ${{ github.event.inputs.tag || github.event.inputs.branch || github.ref_name }}
 
@@ -67,7 +67,7 @@ jobs:
         run: |
           FULL_VERSION=$(grep -oP 'VERSION\s+\K[0-9]+\.[0-9]+\.[0-9]+' src/CMakeLists.txt)
 
-          if [ "${GITHUB_REF_NAME}" = "dev" ] || [ "${{ github.event.inputs.branch }}" = "dev" ]; then
+          if [ "${GITHUB_REF_NAME}" = "dev" ] || [ "${{ github.event.inputs.branch }}" = "dev" ] || [[ "${GITHUB_REF_NAME}" == release/* ]] || [[ "${{ github.event.inputs.branch }}" == release/* ]]; then
             MAJOR_MINOR=$(echo "$FULL_VERSION" | cut -d. -f1,2)
             APP_VERSION="${MAJOR_MINOR}~dev"
           else
@@ -258,7 +258,7 @@ jobs:
           fi
 
       - name: Upload RPM package
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         if: success()
         with:
           name: ${{ env.RPM_PACKAGE_NAME }}-${{ env.APP_VERSION }}-${{ env.RPM_REVISION }}.${{ env.RPM_ARCH }}
@@ -271,7 +271,7 @@ jobs:
           echo "$GPG_PUBLIC_KEY" > ${{ env.RPM_PACKAGE_NAME }}.rpm.pubkey
 
       - name: Upload public GPG key
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: ${{ env.RPM_PACKAGE_NAME }}.rpm.pubkey
           path: ${{ env.RPM_PACKAGE_NAME }}.rpm.pubkey
