@@ -51,7 +51,7 @@ jobs:
         shell: cmd
 
       - name: Convert version for dev branch
-        if: ${{ github.ref_name == 'dev' || github.event.inputs.branch == 'dev' }}
+        if: ${{ github.ref_name == 'dev' || github.event.inputs.branch == 'dev' || startsWith(github.ref_name, 'release/') || startsWith(github.event.inputs.branch, 'release/') }}
         run: |
           for /f "tokens=1,2 delims=." %%a in ("%APP_VERSION%") do (
             echo APP_VERSION=%%a.%%b-dev>>%GITHUB_ENV%
