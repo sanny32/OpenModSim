@@ -147,6 +147,11 @@ void ModbusMultiServer::addUnitMap(int id, quint8 deviceId, QModbusDataUnit::Reg
         return;
     }
 
+    if(!_modbusDataUnitMaps.contains(deviceId)) {
+        _modbusDataUnitMaps[deviceId].setGlobalMap(_definitions.UseGlobalUnitMap);
+        _modbusDataUnitMaps[deviceId].setAddressSpace(_definitions.AddrSpace);
+    }
+
     _modbusDataUnitMaps[deviceId].addUnitMap(id, pointType, pointAddress, length);
     reconfigureServers();
 }
@@ -408,6 +413,9 @@ void ModbusMultiServer::setModbusDefinitions(const ModbusDefinitions& defs)
     }
 
     _definitions = defs;
+
+    for(auto& map : _modbusDataUnitMaps)
+        map.setGlobalMap(defs.UseGlobalUnitMap);
 
     for(auto&& s : _modbusServerList) {
         s->setDefinitions(defs);
