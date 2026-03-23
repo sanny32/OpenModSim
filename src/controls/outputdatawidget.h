@@ -19,6 +19,19 @@ namespace Ui {
 class OutputDataWidget;
 }
 
+enum OutputDataRole
+{
+    SimulationRole = Qt::UserRole + 1,
+    CaptureRole = Qt::UserRole + 2,
+    DescriptionRole = Qt::UserRole + 3,
+    AddressStringRole = Qt::UserRole + 4,
+    AddressRole = Qt::UserRole + 5,
+    ValueRole = Qt::UserRole + 6,
+    ColorRole = Qt::UserRole + 7,
+    FindMatchRole = Qt::UserRole + 8,
+    FindCurrentRole = Qt::UserRole + 9
+};
+
 class OutputDataWidget;
 
 class OutputDataListModel : public QAbstractListModel
@@ -81,6 +94,8 @@ private:
         SimulationIconType SimulationIcon = SimulationIconNone;
         QColor BgColor;
         QColor FgColor;
+        bool FindMatch = false;
+        bool FindCurrent = false;
     };
 
     OutputDataWidget* _parentWidget;
@@ -155,6 +170,10 @@ public:
     void highlightByValue(quint16 value, const QColor& color);
     void highlightBits(int bitValue, const QColor& color);
     void clearHighlights();
+    void applyFindByValue(const QString& text);
+    bool findNextByValue(const QString& text);
+    bool findPreviousByValue(const QString& text);
+    void clearFindByValue();
 
     AddressDescriptionMap2 descriptionMap() const;
     void setDescription(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr, const QString& desc);
@@ -175,6 +194,11 @@ private slots:
 private:
     void showZoomOverlay();
     QModelIndex getValueIndex(const QModelIndex& index) const;
+    bool parseFindValue(const QString& text, quint16& value) const;
+    void rebuildFindMatches(const QString& text);
+    void updateFindHighlights();
+    void focusCurrentFindMatch();
+    void clearFindMatchState();
 
 private:
     Ui::OutputDataWidget* ui;
@@ -193,6 +217,9 @@ private:
     AddressColorMap _colorMap;
     AddressDescriptionMap2 _descriptionMap;
     QSharedPointer<OutputDataListModel> _listModel;
+    QString _findText;
+    QVector<int> _findRows;
+    int _currentFindIndex = -1;
 };
 
 #endif // OUTPUTDATAWIDGET_H

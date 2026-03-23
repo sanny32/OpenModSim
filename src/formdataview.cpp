@@ -4,11 +4,10 @@
 #include <QHelpEngine>
 #include <QHelpContentWidget>
 #include <QCheckBox>
-#include <QLineEdit>
-#include <QPushButton>
 #include <QSignalBlocker>
 #include <QSpinBox>
 #include "modbuslimits.h"
+#include "findreplacebar.h"
 #include "mainwindow.h"
 #include "modbusmessages.h"
 #include "datasimulator.h"
@@ -79,8 +78,6 @@ FormDataView::FormDataView(int id, ModbusMultiServer& server, DataSimulator* sim
     setWindowTitle(QString("Data%1").arg(id));
     setWindowIcon(QIcon(":/res/actionShowData.png"));
 
-    ui->lineEditSearchValue->setAllowEmptyValue(true);
-
     ui->lineEditDeviceId->setInputRange(ModbusLimits::slaveRange());
     ui->lineEditDeviceId->setValue(1);
     ui->lineEditDeviceId->setLeadingZeroes(true);
@@ -104,6 +101,24 @@ FormDataView::FormDataView(int id, ModbusMultiServer& server, DataSimulator* sim
     connect(this, &FormDataView::definitionChanged, this, &FormDataView::onDefinitionChanged);
     emit definitionChanged();
 
+    _findReplaceBar = new FindReplaceBar(ui->outputWidget);
+    _findReplaceBar->setReplaceEnabled(false);
+    _findReplaceBar->setSearchOptionsVisible(false);
+    connect(_findReplaceBar, &FindReplaceBar::searchTextChanged, this, [this](const QString& text) {
+        ui->outputWidget->applyFindByValue(text);
+    });
+    connect(_findReplaceBar, &FindReplaceBar::findNext, this, [this](const QString& text) {
+        ui->outputWidget->findNextByValue(text);
+    });
+    connect(_findReplaceBar, &FindReplaceBar::findPrevious, this, [this](const QString& text) {
+        ui->outputWidget->findPreviousByValue(text);
+    });
+    connect(_findReplaceBar, &FindReplaceBar::closed, this, [this]() {
+        ui->outputWidget->clearFindByValue();
+        ui->outputWidget->setFocus();
+    });
+
+    ui->outputWidget->installEventFilter(this);
     ui->outputWidget->setFocus();
 
     connect(&_mbMultiServer, &ModbusMultiServer::connected, this, &FormDataView::on_mbConnected);
@@ -197,6 +212,11 @@ bool FormDataView::eventFilter(QObject* obj, QEvent* event)
             const int scrollH = (type == QEvent::Show) ? sa->horizontalScrollBar()->sizeHint().height() : 0;
             sa->setMinimumHeight(contentH + frameH + scrollH);
         }
+    }
+    else if (obj == ui->outputWidget && event->type() == QEvent::Resize)
+    {
+        if (_findReplaceBar)
+            _findReplaceBar->updatePosition();
     }
     return QWidget::eventFilter(obj, event);
 }
@@ -315,7 +335,6 @@ void FormDataView::setDisplayDefinition(const DataViewDefinitions& dd)
     ui->lineEditLength->setHexView(dd.HexViewLength);
 
     updateSettingsControls();
-    updateFilterControls();
     emit definitionChanged();
 }
 
@@ -373,7 +392,8 @@ void FormDataView::setDataDisplayMode(DataDisplayMode mode)
         default: break;
     }
     updateDisplayBar();
-    updateSearchInput();
+    if (_findReplaceBar && !_findReplaceBar->searchText().trimmed().isEmpty())
+        ui->outputWidget->applyFindByValue(_findReplaceBar->searchText());
     if(dataDisplayMode() != prev)
         emit dataDisplayModeChanged(dataDisplayMode());
 }
@@ -841,6 +861,17 @@ void FormDataView::show()
 }
 
 ///
+/// \brief FormDataView::showFind
+///
+void FormDataView::showFind()
+{
+    if (!_findReplaceBar)
+        return;
+
+    _findReplaceBar->showFind();
+}
+
+///
 /// \brief FormDataView::on_lineEditAddress_valueChanged
 ///
 void FormDataView::on_lineEditAddress_valueChanged(const QVariant&)
@@ -906,7 +937,6 @@ void FormDataView::on_comboBoxModbusPointType_pointTypeChanged(QModbusDataUnit::
         ui->lineEditLength->update();
     }
 
-    updateFilterControls();
     emit definitionChanged();
     emit pointTypeChanged(type);
     updateDisplayBar();
@@ -945,6 +975,8 @@ void FormDataView::onDefinitionChanged()
     _mbMultiServer.addUnitMap(dataFormId(this), dd.DeviceId, dd.PointType, addr, dd.Length);
 
     ui->outputWidget->setup(dd, _dataSimulator->simulationMap(), _mbMultiServer.data(dd.DeviceId, dd.PointType, addr, dd.Length));
+    if (_findReplaceBar && !_findReplaceBar->searchText().trimmed().isEmpty())
+        ui->outputWidget->applyFindByValue(_findReplaceBar->searchText());
 }
 
 ///
@@ -1037,12 +1069,8 @@ void FormDataView::on_mbDataChanged(quint8 deviceId, const QModbusDataUnit&)
     {
         const auto addr = dd.PointAddress - (dd.ZeroBasedAddress ? 0 : 1);
         ui->outputWidget->updateData(_mbMultiServer.data(deviceId, dd.PointType, addr, dd.Length));
-
-        // Re-apply active filter so highlights reflect updated values
-        if (isBitPointType(dd.PointType))
-            applyBitHighlight();
-        else
-            applyValueSearch();
+        if (_findReplaceBar && !_findReplaceBar->searchText().trimmed().isEmpty())
+            ui->outputWidget->applyFindByValue(_findReplaceBar->searchText());
     }
 }
 
@@ -1057,6 +1085,8 @@ void FormDataView::on_mbDefinitionsChanged(const ModbusDefinitions& defs)
     ui->lineEditAddress->setInputRange(ModbusLimits::addressRange(defs.AddrSpace, dd.ZeroBasedAddress));
     ui->lineEditLength->setInputRange(lengthRangeForPointType(dd.PointAddress, dd.ZeroBasedAddress, defs.AddrSpace, dd.PointType));
     ui->outputWidget->setup(dd, _dataSimulator->simulationMap(), _mbMultiServer.data(dd.DeviceId, dd.PointType, addr, dd.Length));
+    if (_findReplaceBar && !_findReplaceBar->searchText().trimmed().isEmpty())
+        ui->outputWidget->applyFindByValue(_findReplaceBar->searchText());
 }
 
 ///
@@ -1178,116 +1208,7 @@ void FormDataView::setupDisplayBar()
         emit definitionChanged();
     });
 
-    // Filter controls
-    connect(ui->lineEditSearchValue, qOverload<const QVariant&>(&NumericLineEdit::valueChanged), this, [this](const QVariant&) { applyValueSearch(); });
-    connect(ui->buttonHighlightZeros, &QPushButton::toggled, this, [this](bool checked) {
-        if (checked) {
-            QSignalBlocker blocker(ui->buttonHighlightOnes);
-            ui->buttonHighlightOnes->setChecked(false);
-        }
-        applyBitHighlight();
-    });
-    connect(ui->buttonHighlightOnes, &QPushButton::toggled, this, [this](bool checked) {
-        if (checked) {
-            QSignalBlocker blocker(ui->buttonHighlightZeros);
-            ui->buttonHighlightZeros->setChecked(false);
-        }
-        applyBitHighlight();
-    });
-
-    updateFilterControls();
     updateDisplayBar();
-}
-
-///
-/// \brief FormDataView::updateFilterControls
-/// Shows either the search row (registers) or the bit-highlight row (coils/DI)
-/// based on the currently selected point type, and clears any active filter.
-///
-void FormDataView::updateFilterControls()
-{
-    const auto type = ui->comboBoxModbusPointType->currentPointType();
-    const bool isRegister = (type == QModbusDataUnit::HoldingRegisters ||
-                             type == QModbusDataUnit::InputRegisters);
-
-    ui->labelSearchValue->setVisible(isRegister);
-    ui->lineEditSearchValue->setVisible(isRegister);
-
-    ui->labelHighlight->setVisible(!isRegister);
-    ui->buttonHighlightZeros->setVisible(!isRegister);
-    ui->buttonHighlightOnes->setVisible(!isRegister);
-
-    {
-        QSignalBlocker b2(ui->buttonHighlightZeros);
-        ui->buttonHighlightZeros->setChecked(false);
-    }
-    {
-        QSignalBlocker b3(ui->buttonHighlightOnes);
-        ui->buttonHighlightOnes->setChecked(false);
-    }
-
-    ui->outputWidget->clearHighlights();
-    updateSearchInput();
-}
-
-///
-/// \brief FormDataView::updateSearchInput
-/// Configures the search field input mode and range to match the current
-/// data display mode, then clears any previous value.
-///
-void FormDataView::updateSearchInput()
-{
-    QSignalBlocker blocker(ui->lineEditSearchValue);
-
-    const auto mode = dataDisplayMode();
-    if (mode == DataDisplayMode::Binary || mode == DataDisplayMode::Hex) {
-        ui->lineEditSearchValue->setInputMode(NumericLineEdit::HexMode);
-        ui->lineEditSearchValue->setInputRange<quint32>(0, USHRT_MAX);
-    }
-    else if (mode == DataDisplayMode::Int16) {
-        ui->lineEditSearchValue->setInputMode(NumericLineEdit::Int32Mode);
-        ui->lineEditSearchValue->setInputRange<qint32>(SHRT_MIN, SHRT_MAX);
-    }
-    else {
-        ui->lineEditSearchValue->setInputMode(NumericLineEdit::UInt32Mode);
-        ui->lineEditSearchValue->setInputRange<quint32>(0, USHRT_MAX);
-    }
-
-    ui->lineEditSearchValue->setValue<quint32>(0);
-    ui->lineEditSearchValue->clear();
-}
-
-///
-/// \brief FormDataView::applyValueSearch
-/// Highlights all register items whose value matches the text in the search field.
-///
-void FormDataView::applyValueSearch()
-{
-    ui->outputWidget->clearHighlights();
-    if (ui->lineEditSearchValue->text().trimmed().isEmpty())
-        return;
-
-    const auto mode = dataDisplayMode();
-    quint16 value = 0;
-    if (mode == DataDisplayMode::Int16)
-        value = static_cast<quint16>(ui->lineEditSearchValue->value<qint32>());
-    else
-        value = static_cast<quint16>(ui->lineEditSearchValue->value<quint32>());
-
-    ui->outputWidget->highlightByValue(value, QColor(255, 220, 0));
-}
-
-///
-/// \brief FormDataView::applyBitHighlight
-/// Highlights all coil/DI items whose value matches the checked bit button (0 or 1).
-///
-void FormDataView::applyBitHighlight()
-{
-    ui->outputWidget->clearHighlights();
-    if (ui->buttonHighlightZeros->isChecked())
-        ui->outputWidget->highlightBits(0, QColor(255, 220, 0));
-    else if (ui->buttonHighlightOnes->isChecked())
-        ui->outputWidget->highlightBits(1, QColor(255, 220, 0));
 }
 
 ///
@@ -1351,7 +1272,8 @@ void FormDataView::updateDisplayBar()
 ///
 void FormDataView::connectEditSlots()
 {
-    // Data view has no script editor.
+    disconnectEditSlots();
+    connect(_parent, &MainWindow::find, this, &FormDataView::showFind);
 }
 
 ///
@@ -1359,7 +1281,7 @@ void FormDataView::connectEditSlots()
 ///
 void FormDataView::disconnectEditSlots()
 {
-    // Data view has no script editor.
+    disconnect(_parent, &MainWindow::find, this, &FormDataView::showFind);
 }
 
 

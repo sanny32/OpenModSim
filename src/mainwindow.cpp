@@ -483,9 +483,8 @@ void MainWindow::on_awake()
     ui->actionCopy->setEnabled(scriptFrm != nullptr);
     ui->actionPaste->setEnabled(scriptFrm != nullptr);
     ui->actionSelectAll->setEnabled(scriptFrm != nullptr);
-    const bool isScriptActive = (scriptFrm != nullptr);
-    ui->actionFind->setEnabled(isScriptActive);
-    ui->actionReplace->setEnabled(isScriptActive);
+    ui->actionFind->setEnabled(scriptFrm != nullptr || dataFrm != nullptr);
+    ui->actionReplace->setEnabled(scriptFrm != nullptr);
 
     ui->actionImportScript->setEnabled(true);
 

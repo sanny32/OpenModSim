@@ -1850,12 +1850,12 @@
         <translation>Р—Р°РјРµРЅРёС‚СЊ РІСЃРµ</translation>
     </message>
     <message>
-        <location filename="../controls/findreplacebar.cpp" line="101"/>
+        <location filename="../controls/findreplacebar.cpp" line="102"/>
         <source>Find Next</source>
         <translation>Р”Р°Р»РµРµ</translation>
     </message>
     <message>
-        <location filename="../controls/findreplacebar.cpp" line="102"/>
+        <location filename="../controls/findreplacebar.cpp" line="103"/>
         <source>Find Previous</source>
         <translation>РќР°Р·Р°Рґ</translation>
     </message>
@@ -1906,7 +1906,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formdataview.cpp" line="550"/>
+        <location filename="../formdataview.cpp" line="570"/>
         <source>Address Base: %1
 Start Address: %2
 Length: %3</source>
@@ -1915,7 +1915,7 @@ Length: %3</source>
 РљРѕР»РёС‡РµСЃС‚РІРѕ: %3</translation>
     </message>
     <message>
-        <location filename="../formdataview.cpp" line="553"/>
+        <location filename="../formdataview.cpp" line="573"/>
         <source>Unit Identifier: %1
 MODBUS Point Type:
 %2</source>
@@ -1926,11 +1926,6 @@ MODBUS Point Type:
     <message>
         <source>Find:</source>
         <translation type="obsolete">РСЃРєР°С‚СЊ:</translation>
-    </message>
-    <message>
-        <location filename="../formdataview.ui" line="475"/>
-        <source>Highlight:</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <source> ms</source>
@@ -1964,112 +1959,97 @@ MODBUS Point Type:
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formdataview.ui" line="458"/>
-        <source>Search:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../formdataview.ui" line="511"/>
-        <source>0</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../formdataview.ui" line="533"/>
-        <source>1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../formdataview.ui" line="603"/>
+        <location filename="../formdataview.ui" line="469"/>
         <source>Binary</source>
         <translation type="unfinished">Р”РІРѕРёС‡РЅС‹Р№</translation>
     </message>
     <message>
-        <location filename="../formdataview.ui" line="621"/>
+        <location filename="../formdataview.ui" line="487"/>
         <source>Hex</source>
         <translation type="unfinished">РЁРµСЃС‚Р°РЅРґС†Р°С‚РёСЂРёС‡РЅС‹Р№</translation>
     </message>
     <message>
-        <location filename="../formdataview.ui" line="639"/>
+        <location filename="../formdataview.ui" line="505"/>
         <source>Ansi</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formdataview.ui" line="651"/>
+        <location filename="../formdataview.ui" line="517"/>
         <source>16-bit Integer</source>
         <translation type="unfinished">16-Р±РёС‚ С†РµР»РѕРµ</translation>
     </message>
     <message>
-        <location filename="../formdataview.ui" line="669"/>
+        <location filename="../formdataview.ui" line="535"/>
         <source>Unsigned 16-bit Integer</source>
         <translation type="unfinished">Р‘РµР·Р·РЅР°РєРѕРІРѕРµ 64-Р±РёС‚ С†РµР»РѕРµ {16-?}</translation>
     </message>
     <message>
-        <location filename="../formdataview.ui" line="687"/>
+        <location filename="../formdataview.ui" line="553"/>
         <source>32-bit Integer (MSRF)</source>
         <translation type="unfinished">32-Р±РёС‚ С†РµР»РѕРµ (MSRF)</translation>
     </message>
     <message>
-        <location filename="../formdataview.ui" line="705"/>
+        <location filename="../formdataview.ui" line="571"/>
         <source>32-bit Integer (LSRF)</source>
         <translation type="unfinished">32-Р±РёС‚ С†РµР»РѕРµ (LSRF)</translation>
     </message>
     <message>
-        <location filename="../formdataview.ui" line="723"/>
+        <location filename="../formdataview.ui" line="589"/>
         <source>Unsigned 32-bit Integer (MSRF)</source>
         <translation type="unfinished">Р‘РµР·Р·РЅР°РєРѕРІРѕРµ 32-Р±РёС‚ С†РµР»РѕРµ (MSRF)</translation>
     </message>
     <message>
-        <location filename="../formdataview.ui" line="741"/>
+        <location filename="../formdataview.ui" line="607"/>
         <source>Unsigned 32-bit Integer (LSRF)</source>
         <translation type="unfinished">Р‘РµР·Р·РЅР°РєРѕРІРѕРµ 32-Р±РёС‚ С†РµР»РѕРµ (LSRF)</translation>
     </message>
     <message>
-        <location filename="../formdataview.ui" line="759"/>
+        <location filename="../formdataview.ui" line="625"/>
         <source>64-bit Integer (MSRF)</source>
         <translation type="unfinished">64-Р±РёС‚ С†РµР»РѕРµ (MSRF)</translation>
     </message>
     <message>
-        <location filename="../formdataview.ui" line="777"/>
+        <location filename="../formdataview.ui" line="643"/>
         <source>64-bit Integer (LSRF)</source>
         <translation type="unfinished">64-Р±РёС‚ С†РµР»РѕРµ (LSRF)</translation>
     </message>
     <message>
-        <location filename="../formdataview.ui" line="795"/>
+        <location filename="../formdataview.ui" line="661"/>
         <source>Unsigned 64-bit Integer (MSRF)</source>
         <translation type="unfinished">Р‘РµР·Р·РЅР°РєРѕРІРѕРµ 64-Р±РёС‚ С†РµР»РѕРµ (MSRF)</translation>
     </message>
     <message>
-        <location filename="../formdataview.ui" line="813"/>
+        <location filename="../formdataview.ui" line="679"/>
         <source>Unsigned 64-bit Integer (LSRF)</source>
         <translation type="unfinished">Р‘РµР·Р·РЅР°РєРѕРІРѕРµ 64-Р±РёС‚ С†РµР»РѕРµ (LSRF)</translation>
     </message>
     <message>
-        <location filename="../formdataview.ui" line="831"/>
+        <location filename="../formdataview.ui" line="697"/>
         <source>Float (MSRF)</source>
         <translation type="unfinished">РЎ РїР»Р°РІР°СЋС‰РµР№ С‚РѕС‡РєРѕР№ (MSRF)</translation>
     </message>
     <message>
-        <location filename="../formdataview.ui" line="849"/>
+        <location filename="../formdataview.ui" line="715"/>
         <source>Float (LSRF)</source>
         <translation type="unfinished">РЎ РїР»Р°РІР°СЋС‰РµР№ С‚РѕС‡РєРѕР№ (LSRF)</translation>
     </message>
     <message>
-        <location filename="../formdataview.ui" line="867"/>
+        <location filename="../formdataview.ui" line="733"/>
         <source>Double (MSRF)</source>
         <translation type="unfinished">Р”РІРѕР№РЅРѕР№ С‚РѕС‡РЅРѕСЃС‚Рё (MSRF)</translation>
     </message>
     <message>
-        <location filename="../formdataview.ui" line="885"/>
+        <location filename="../formdataview.ui" line="751"/>
         <source>Double (LSRF)</source>
         <translation type="unfinished">Р”РІРѕР№РЅРѕР№ С‚РѕС‡РЅРѕСЃС‚Рё (LSRF)</translation>
     </message>
     <message>
-        <location filename="../formdataview.ui" line="903"/>
+        <location filename="../formdataview.ui" line="769"/>
         <source>Swap Bytes (0xAB → 0xBA)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formdataview.ui" line="911"/>
+        <location filename="../formdataview.ui" line="777"/>
         <source>Hex Addresses</source>
         <translation type="unfinished">РЁРµСЃС‚РЅР°РґС†Р°С‚РёСЂРёС‡РЅС‹Рµ Р°РґСЂРµСЃР°</translation>
     </message>
@@ -3038,7 +3018,7 @@ Script.onInit(()=&gt;{
     </message>
     <message>
         <location filename="../mainwindow.ui" line="233"/>
-        <location filename="../mainwindow.cpp" line="1531"/>
+        <location filename="../mainwindow.cpp" line="1530"/>
         <source>Save Project</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3327,7 +3307,7 @@ Script.onInit(()=&gt;{
         <translation type="vanished">РЁРµСЃС‚РЅР°РґС†Р°С‚РёСЂРёС‡РЅС‹Рµ Р°РґСЂРµСЃР°</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="628"/>
+        <location filename="../mainwindow.cpp" line="627"/>
         <source>All files (*)</source>
         <translation>Р’СЃРµ С„Р°Р№Р»С‹ (*)</translation>
     </message>
@@ -3352,8 +3332,8 @@ Script.onInit(()=&gt;{
         <translation type="obsolete">Р”Р°РЅРЅС‹Рµ</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="627"/>
-        <location filename="../mainwindow.cpp" line="658"/>
+        <location filename="../mainwindow.cpp" line="626"/>
+        <location filename="../mainwindow.cpp" line="657"/>
         <source>Project files (*.msimprj)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3365,22 +3345,22 @@ Script.onInit(()=&gt;{
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="236"/>
-        <location filename="../mainwindow.cpp" line="1618"/>
+        <location filename="../mainwindow.cpp" line="1617"/>
         <source>Clear List</source>
         <translation>Очистить список</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1134"/>
+        <location filename="../mainwindow.cpp" line="1133"/>
         <source>JavaScript files (*.js);;All files (*)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1606"/>
+        <location filename="../mainwindow.cpp" line="1605"/>
         <source>No Recent Projects</source>
         <translation>Нет недавних проектов</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1532"/>
+        <location filename="../mainwindow.cpp" line="1531"/>
         <source>Save project before closing?</source>
         <translation>Сохранить проект перед закрытием?</translation>
     </message>
@@ -3992,77 +3972,77 @@ Script.onInit(()=&gt;{
 <context>
     <name>OutputDataWidget</name>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1091"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1298"/>
         <source>Set Value of %1</source>
         <translation type="unfinished">Р—Р°РїРёСЃР°С‚СЊ Р·РЅР°С‡РµРЅРёРµ РїРѕ Р°РґСЂРµСЃСѓ %1</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1097"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1304"/>
         <source>Add Description</source>
         <translation type="unfinished">Р”РѕР±Р°РІРёС‚СЊ РѕРїРёСЃР°РЅРёРµ</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1097"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1304"/>
         <source>Edit Description</source>
         <translation type="unfinished">Р&#xa0;РµРґР°РєС‚РёСЂРѕРІР°С‚СЊ РѕРїРёСЃР°РЅРёРµ</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1100"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1307"/>
         <source>%1: Enter Description</source>
         <translation type="unfinished">%1: Р’РІРµРґРёС‚Рµ РѕРїРёСЃР°РЅРёРµ</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1109"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1316"/>
         <source>Remove Color</source>
         <translation type="unfinished">РЈРґР°Р»РёС‚СЊ С†РІРµС‚</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1120"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1327"/>
         <source>Yellow</source>
         <translation type="unfinished">Р–РµР»С‚С‹Р№</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1121"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1328"/>
         <source>Cyan</source>
         <translation type="unfinished">Р¦РёР°РЅ</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1122"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1329"/>
         <source>Magenta</source>
         <translation type="unfinished">РџСѓСЂРїСѓСЂРЅС‹Р№</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1123"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1330"/>
         <source>LightGreen</source>
         <translation type="unfinished">РЎРІРµС‚Р»Рѕ-Р·РµР»РµРЅС‹Р№</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1124"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1331"/>
         <source>Orange</source>
         <translation type="unfinished">РћСЂР°РЅР¶РµРІС‹Р№</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1125"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1332"/>
         <source>LightBlue</source>
         <translation type="unfinished">РЎРІРµС‚Р»Рѕ-СЃРёРЅРёР№</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1126"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1333"/>
         <source>LightGray</source>
         <translation type="unfinished">РЎРІРµС‚Р»Рѕ-СЃРµСЂС‹Р№</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1211"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1418"/>
         <source>NOT CONNECTED!</source>
         <translation type="unfinished">РќР• РџРћР”РљР›Р®Р§Р•РќРћ!</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1219"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1426"/>
         <source>Invalid Data Length Specified</source>
         <translation type="unfinished">РЈРєР°Р·Р°РЅР° РЅРµРґРѕРїСѓСЃС‚РёРјР°СЏ РґР»РёРЅР° РґР°РЅРЅС‹С…</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1228"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1435"/>
         <source>Zoom: %1%</source>
         <translation type="unfinished">РЈРІРµР»РёС‡РµРЅРёРµ: %1%</translation>
     </message>

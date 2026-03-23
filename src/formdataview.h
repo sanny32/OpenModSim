@@ -18,6 +18,7 @@
 /// \brief Forward declaration of the MainWindow
 ///
 class MainWindow;
+class FindReplaceBar;
 
 namespace Ui {
 class FormDataView;
@@ -101,6 +102,7 @@ protected:
 
 public slots:
     void show();
+    void showFind();
     void connectEditSlots();
     void disconnectEditSlots();
 
@@ -141,10 +143,6 @@ private:
     void setDisplayDefinitionSilent(const DataViewDefinitions& dd);
 
     void setupDisplayBar();
-    void updateFilterControls();
-    void updateSearchInput();
-    void applyValueSearch();
-    void applyBitHighlight();
     void updateSettingsControls();
     void setLeadingZerosEnabled(bool on);
     void setColumnsDistance(int value);
@@ -155,6 +153,7 @@ private:
     MainWindow* _parent;
     ModbusMultiServer& _mbMultiServer;
     DataSimulator* _dataSimulator;
+    FindReplaceBar* _findReplaceBar = nullptr;
 
     AnsiMenu*  _ansiMenu = nullptr;
     QMap<DataDisplayMode, QAction*> _displayModeActions;

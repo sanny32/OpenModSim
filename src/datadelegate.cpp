@@ -2,6 +2,7 @@
 #include <QPainter>
 #include <QStyleOptionViewItem>
 #include "datadelegate.h"
+#include "outputdatawidget.h"
 
 ///
 /// \brief DataDelegate::paint
@@ -11,7 +12,12 @@
 ///
 void DataDelegate::paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const
 {
-    const auto color = index.data(Qt::UserRole + 7).value<QColor>();
+    QColor color = index.data(ColorRole).value<QColor>();
+    if (index.data(FindMatchRole).toBool())
+        color = QColor(255, 220, 0);
+    if (index.data(FindCurrentRole).toBool())
+        color = QColor(255, 170, 0);
+
     if ( color.isValid() )
     {
         QStyleOptionViewItem opt = option;

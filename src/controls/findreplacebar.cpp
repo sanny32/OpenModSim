@@ -1,6 +1,7 @@
 #include <QStyle>
 #include <QPainter>
 #include <QMouseEvent>
+#include <QSignalBlocker>
 #include "findreplacebar.h"
 #include "ui_findreplacebar.h"
 
@@ -157,6 +158,9 @@ QString FindReplaceBar::replaceText() const
 QTextDocument::FindFlags FindReplaceBar::findFlags() const
 {
     QTextDocument::FindFlags flags;
+    if (!_searchOptionsVisible)
+        return flags;
+
     if (ui->matchCaseButton->isChecked())
         flags |= QTextDocument::FindCaseSensitively;
     if (ui->matchWordButton->isChecked())
@@ -179,13 +183,79 @@ void FindReplaceBar::updatePosition()
 }
 
 ///
+/// \brief FindReplaceBar::setReplaceEnabled
+/// \param enabled
+///
+void FindReplaceBar::setReplaceEnabled(bool enabled)
+{
+    if (_replaceEnabled == enabled)
+        return;
+
+    _replaceEnabled = enabled;
+    ui->expandButton->setVisible(_replaceEnabled);
+    if (!_replaceEnabled)
+        setReplaceVisible(false);
+}
+
+///
+/// \brief FindReplaceBar::isReplaceEnabled
+/// \return
+///
+bool FindReplaceBar::isReplaceEnabled() const
+{
+    return _replaceEnabled;
+}
+
+///
+/// \brief FindReplaceBar::setSearchOptionsVisible
+/// \param visible
+///
+void FindReplaceBar::setSearchOptionsVisible(bool visible)
+{
+    if (_searchOptionsVisible == visible)
+        return;
+
+    _searchOptionsVisible = visible;
+    ui->matchCaseButton->setVisible(_searchOptionsVisible);
+    ui->matchWordButton->setVisible(_searchOptionsVisible);
+
+    if (_searchOptionsVisible) {
+        ui->horizontalSpacer->changeSize(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+    } else {
+        {
+            QSignalBlocker caseBlocker(ui->matchCaseButton);
+            QSignalBlocker wordBlocker(ui->matchWordButton);
+            ui->matchCaseButton->setChecked(false);
+            ui->matchWordButton->setChecked(false);
+        }
+    }
+
+    ui->horizontalLayout->invalidate();
+    layout()->activate();
+    adjustSize();
+
+    if(!ui->searchEdit->text().isEmpty())
+        emit searchTextChanged(ui->searchEdit->text());
+}
+
+///
+/// \brief FindReplaceBar::isSearchOptionsVisible
+/// \return
+///
+bool FindReplaceBar::isSearchOptionsVisible() const
+{
+    return _searchOptionsVisible;
+}
+
+///
 /// \brief FindReplaceBar::setReplaceVisible
 /// \param visible
 ///
 void FindReplaceBar::setReplaceVisible(bool visible)
 {
-    ui->replaceRow->setVisible(visible);
-    ui->expandButton->setArrowType(visible ? Qt::DownArrow : Qt::RightArrow);
+    const bool showReplace = _replaceEnabled && visible;
+    ui->replaceRow->setVisible(showReplace);
+    ui->expandButton->setArrowType(showReplace ? Qt::DownArrow : Qt::RightArrow);
 }
 
 ///
@@ -217,6 +287,11 @@ void FindReplaceBar::showFind(const QString& selectedText)
 ///
 void FindReplaceBar::showReplace(const QString& selectedText)
 {
+    if (!_replaceEnabled) {
+        showFind(selectedText);
+        return;
+    }
+
     setReplaceVisible(true);
 
     if(!selectedText.isEmpty())
@@ -325,6 +400,9 @@ void FindReplaceBar::onOptionsChanged()
 ///
 void FindReplaceBar::onToggleReplace()
 {
+    if (!_replaceEnabled)
+        return;
+
     setReplaceVisible(!ui->replaceRow->isVisible());
 
     layout()->activate();

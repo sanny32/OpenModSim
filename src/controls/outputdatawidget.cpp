@@ -1,46 +1,12 @@
 #include <QDateTime>
 #include <QPainter>
 #include <QInputDialog>
+#include <climits>
 #include "fontutils.h"
 #include "formatutils.h"
 #include "datadelegate.h"
 #include "outputdatawidget.h"
 #include "ui_outputdatawidget.h"
-
-///
-/// \brief SimulationRole
-///
-const int SimulationRole = Qt::UserRole + 1;
-
-///
-/// \brief CaptureRole
-///
-const int CaptureRole = Qt::UserRole + 2;
-
-///
-/// \brief DescriptionRole
-///
-const int DescriptionRole = Qt::UserRole + 3;
-
-///
-/// \brief AddressStringRole
-///
-const int AddressStringRole = Qt::UserRole + 4;
-
-///
-/// \brief AddressRole
-///
-const int AddressRole = Qt::UserRole + 5;
-
-///
-/// \brief ValueRole
-///
-const int ValueRole = Qt::UserRole + 6;
-
-///
-/// \brief ColorRole
-///
-const int ColorRole = Qt::UserRole + 7;
 
 ///
 /// \brief emptyPixmap
@@ -149,6 +115,12 @@ QVariant OutputDataListModel::data(const QModelIndex& index, int role) const
         case DescriptionRole:
             return itemData->Description;
 
+        case FindMatchRole:
+            return itemData->FindMatch;
+
+        case FindCurrentRole:
+            return itemData->FindCurrent;
+
         case Qt::DecorationRole:
         {
             if(itemData->ValueStr.isEmpty())
@@ -210,6 +182,16 @@ bool OutputDataListModel::setData(const QModelIndex &index, const QVariant &valu
 
         case ColorRole:
             itemData->BgColor = value.value<QColor>();
+            emit dataChanged(index, index, QVector<int>() << Qt::DisplayRole);
+        return true;
+
+        case FindMatchRole:
+            itemData->FindMatch = value.toBool();
+            emit dataChanged(index, index, QVector<int>() << Qt::DisplayRole);
+        return true;
+
+        case FindCurrentRole:
+            itemData->FindCurrent = value.toBool();
             emit dataChanged(index, index, QVector<int>() << Qt::DisplayRole);
         return true;
 
@@ -852,7 +834,23 @@ void OutputDataWidget::paint(const QRect& rc, QPainter& painter)
 ///
 void OutputDataWidget::updateData(const QModbusDataUnit& data)
 {
+    int currentRow = -1;
+    if (_currentFindIndex >= 0 && _currentFindIndex < _findRows.size())
+        currentRow = _findRows.at(_currentFindIndex);
+
     _listModel->updateData(data);
+
+    if (_findText.isEmpty())
+        return;
+
+    const auto findText = _findText;
+    rebuildFindMatches(findText);
+    if (currentRow >= 0) {
+        const int idx = _findRows.indexOf(currentRow);
+        if (idx >= 0)
+            _currentFindIndex = idx;
+    }
+    updateFindHighlights();
 }
 
 ///
@@ -889,14 +887,21 @@ void OutputDataWidget::setColor(quint8 deviceId, QModbusDataUnit::RegisterType t
 ///
 void OutputDataWidget::highlightByValue(quint16 value, const QColor& color)
 {
-    clearHighlights();
+    Q_UNUSED(color);
+    clearFindMatchState();
+
     const int rows = _listModel->rowCount();
     for (int row = 0; row < rows; row++)
     {
         const QModelIndex idx = _listModel->index(row, 0);
         if (_listModel->data(idx, ValueRole).toUInt() == value)
-            _listModel->setData(idx, color, ColorRole);
+            _findRows.append(row);
     }
+
+    if (!_findRows.isEmpty())
+        _currentFindIndex = 0;
+
+    updateFindHighlights();
 }
 
 ///
@@ -905,29 +910,231 @@ void OutputDataWidget::highlightByValue(quint16 value, const QColor& color)
 ///
 void OutputDataWidget::highlightBits(int bitValue, const QColor& color)
 {
-    clearHighlights();
+    Q_UNUSED(color);
+    clearFindMatchState();
+
     const int rows = _listModel->rowCount();
     for (int row = 0; row < rows; row++)
     {
         const QModelIndex idx = _listModel->index(row, 0);
         if (_listModel->data(idx, ValueRole).toInt() == bitValue)
-            _listModel->setData(idx, color, ColorRole);
+            _findRows.append(row);
     }
+
+    if (!_findRows.isEmpty())
+        _currentFindIndex = 0;
+
+    updateFindHighlights();
 }
 
 ///
 /// \brief OutputDataWidget::clearHighlights
-/// Removes all transient highlight colors from displayed items.
+/// Removes transient find highlights from displayed items.
 ///
 void OutputDataWidget::clearHighlights()
+{
+    clearFindByValue();
+}
+
+///
+/// \brief OutputDataWidget::applyFindByValue
+/// \param text
+///
+void OutputDataWidget::applyFindByValue(const QString& text)
+{
+    rebuildFindMatches(text);
+    updateFindHighlights();
+    focusCurrentFindMatch();
+}
+
+///
+/// \brief OutputDataWidget::findNextByValue
+/// \param text
+/// \return
+///
+bool OutputDataWidget::findNextByValue(const QString& text)
+{
+    const auto trimmed = text.trimmed();
+    if (trimmed.isEmpty()) {
+        clearFindByValue();
+        return false;
+    }
+
+    if (trimmed != _findText || _findRows.isEmpty()) {
+        rebuildFindMatches(trimmed);
+    } else {
+        _currentFindIndex = (_currentFindIndex + 1) % _findRows.size();
+    }
+
+    updateFindHighlights();
+    focusCurrentFindMatch();
+    return !_findRows.isEmpty();
+}
+
+///
+/// \brief OutputDataWidget::findPreviousByValue
+/// \param text
+/// \return
+///
+bool OutputDataWidget::findPreviousByValue(const QString& text)
+{
+    const auto trimmed = text.trimmed();
+    if (trimmed.isEmpty()) {
+        clearFindByValue();
+        return false;
+    }
+
+    if (trimmed != _findText || _findRows.isEmpty()) {
+        rebuildFindMatches(trimmed);
+        if (!_findRows.isEmpty())
+            _currentFindIndex = _findRows.size() - 1;
+    } else {
+        _currentFindIndex = (_currentFindIndex - 1 + _findRows.size()) % _findRows.size();
+    }
+
+    updateFindHighlights();
+    focusCurrentFindMatch();
+    return !_findRows.isEmpty();
+}
+
+///
+/// \brief OutputDataWidget::clearFindByValue
+///
+void OutputDataWidget::clearFindByValue()
+{
+    clearFindMatchState();
+}
+
+///
+/// \brief OutputDataWidget::parseFindValue
+/// \param text
+/// \param value
+/// \return
+///
+bool OutputDataWidget::parseFindValue(const QString& text, quint16& value) const
+{
+    auto trimmed = text.trimmed();
+    if (trimmed.isEmpty())
+        return false;
+
+    bool ok = false;
+    switch (_dataDisplayMode)
+    {
+        case DataDisplayMode::Binary:
+        case DataDisplayMode::Hex:
+        {
+            if (trimmed.startsWith("0x", Qt::CaseInsensitive))
+                trimmed = trimmed.mid(2);
+            const auto parsed = trimmed.toUInt(&ok, 16);
+            if (!ok || parsed > USHRT_MAX)
+                return false;
+            value = static_cast<quint16>(parsed);
+            return true;
+        }
+        case DataDisplayMode::Int16:
+        {
+            const auto parsed = trimmed.toInt(&ok, 10);
+            if (!ok || parsed < SHRT_MIN || parsed > SHRT_MAX)
+                return false;
+            value = static_cast<quint16>(static_cast<qint16>(parsed));
+            return true;
+        }
+        default:
+        {
+            const auto parsed = trimmed.toUInt(&ok, 10);
+            if (!ok || parsed > USHRT_MAX)
+                return false;
+            value = static_cast<quint16>(parsed);
+            return true;
+        }
+    }
+}
+
+///
+/// \brief OutputDataWidget::rebuildFindMatches
+/// \param text
+///
+void OutputDataWidget::rebuildFindMatches(const QString& text)
+{
+    clearFindMatchState();
+    _findText = text.trimmed();
+    if (_findText.isEmpty())
+        return;
+
+    quint16 targetValue = 0;
+    if (!parseFindValue(_findText, targetValue))
+        return;
+
+    const int rows = _listModel->rowCount();
+    for (int row = 0; row < rows; ++row)
+    {
+        const QModelIndex idx = _listModel->index(row, 0);
+        if (_listModel->data(idx, ValueRole).toUInt() == targetValue)
+            _findRows.append(row);
+    }
+
+    if (!_findRows.isEmpty())
+        _currentFindIndex = 0;
+}
+
+///
+/// \brief OutputDataWidget::updateFindHighlights
+///
+void OutputDataWidget::updateFindHighlights()
+{
+    const int rows = _listModel->rowCount();
+    for (int row = 0; row < rows; ++row)
+    {
+        const QModelIndex idx = _listModel->index(row, 0);
+        _listModel->setData(idx, false, FindMatchRole);
+        _listModel->setData(idx, false, FindCurrentRole);
+    }
+
+    for (const int row : _findRows)
+    {
+        const QModelIndex idx = _listModel->index(row, 0);
+        _listModel->setData(idx, true, FindMatchRole);
+    }
+
+    if (_currentFindIndex >= 0 && _currentFindIndex < _findRows.size())
+    {
+        const QModelIndex idx = _listModel->index(_findRows.at(_currentFindIndex), 0);
+        _listModel->setData(idx, true, FindCurrentRole);
+    }
+}
+
+///
+/// \brief OutputDataWidget::focusCurrentFindMatch
+///
+void OutputDataWidget::focusCurrentFindMatch()
+{
+    if (_currentFindIndex < 0 || _currentFindIndex >= _findRows.size())
+        return;
+
+    const QModelIndex idx = _listModel->index(_findRows.at(_currentFindIndex), 0);
+    if (!idx.isValid())
+        return;
+
+    ui->listView->setCurrentIndex(idx);
+    ui->listView->scrollTo(idx, QAbstractItemView::PositionAtCenter);
+}
+
+///
+/// \brief OutputDataWidget::clearFindMatchState
+///
+void OutputDataWidget::clearFindMatchState()
 {
     const int rows = _listModel->rowCount();
     for (int row = 0; row < rows; row++)
     {
         const QModelIndex idx = _listModel->index(row, 0);
-        if (_listModel->data(idx, ColorRole).value<QColor>().isValid())
-            _listModel->setData(idx, QColor(), ColorRole);
+        _listModel->setData(idx, false, FindMatchRole);
+        _listModel->setData(idx, false, FindCurrentRole);
     }
+
+    _findText.clear();
+    _findRows.clear();
+    _currentFindIndex = -1;
 }
 
 ///

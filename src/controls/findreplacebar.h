@@ -26,6 +26,10 @@ public:
     QTextDocument::FindFlags findFlags() const;
 
     void updatePosition();
+    void setReplaceEnabled(bool enabled);
+    bool isReplaceEnabled() const;
+    void setSearchOptionsVisible(bool visible);
+    bool isSearchOptionsVisible() const;
 
 public slots:
     void showFind(const QString& selectedText = QString());
@@ -57,6 +61,8 @@ private:
 
 private:
     Ui::FindReplaceBar* ui;
+    bool _replaceEnabled = true;
+    bool _searchOptionsVisible = true;
 };
 
 #endif // FINDREPLACEBAR_H
