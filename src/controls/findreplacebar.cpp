@@ -2,6 +2,8 @@
 #include <QPainter>
 #include <QMouseEvent>
 #include <QSignalBlocker>
+#include <QLabel>
+#include <QHBoxLayout>
 #include "findreplacebar.h"
 #include "ui_findreplacebar.h"
 
@@ -80,6 +82,133 @@ private:
     QPoint   _resizeGlobalStart;
     int      _resizeStartX     = 0;
     int      _resizeStartWidth = 0;
+};
+
+///
+/// \brief The TitleBar class — VS-style draggable title strip for windowed FindReplaceBar
+///
+class TitleBar : public QWidget
+{
+public:
+    explicit TitleBar(const QString& title, QWidget* dragTarget, QWidget* parent = nullptr)
+        : QWidget(parent)
+        , _dragTarget(dragTarget)
+    {
+        setFixedHeight(20);
+        setCursor(Qt::SizeAllCursor);
+
+        _label = new QLabel(title, this);
+        _label->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
+        _label->setAttribute(Qt::WA_TransparentForMouseEvents, true);
+
+        _closeBtn = new QToolButton(this);
+        _closeBtn->setFixedSize(18, 18);
+        _closeBtn->setText("✕");
+        _closeBtn->setAutoRaise(true);
+        _closeBtn->setCursor(Qt::ArrowCursor);
+
+        auto lay = new QHBoxLayout(this);
+        lay->setContentsMargins(6, 0, 2, 0);
+        lay->setSpacing(0);
+        lay->addWidget(_label, 1);
+        lay->addWidget(_closeBtn);
+
+        setAutoFillBackground(true);
+        applyColors();
+    }
+
+    QToolButton* closeButton() const { return _closeBtn; }
+
+protected:
+    void mousePressEvent(QMouseEvent* e) override   { handleMouse(e); }
+    void mouseMoveEvent(QMouseEvent* e) override    { handleMouse(e); }
+    void mouseReleaseEvent(QMouseEvent* e) override { handleMouse(e); }
+
+    void changeEvent(QEvent* e) override
+    {
+        if(e->type() == QEvent::PaletteChange)
+            applyColors();
+        QWidget::changeEvent(e);
+    }
+
+private:
+    void applyColors()
+    {
+        const QColor bg = palette().color(QPalette::Highlight);
+        const QColor fg = palette().color(QPalette::HighlightedText);
+
+        QPalette p = palette();
+        p.setColor(QPalette::Window, bg);
+        setPalette(p);
+
+        if(_label) {
+            QPalette lp = _label->palette();
+            lp.setColor(QPalette::WindowText, fg);
+            _label->setPalette(lp);
+        }
+
+        if(_closeBtn) {
+            _closeBtn->setStyleSheet(
+                QString("QToolButton { color: %1; border: none; background: transparent; }"
+                        "QToolButton:hover { background: rgba(255,255,255,60); }")
+                    .arg(fg.name()));
+        }
+    }
+
+    bool handleMouse(QMouseEvent* e)
+    {
+        switch(e->type())
+        {
+        case QEvent::MouseButtonPress:
+            if(e->button() == Qt::LeftButton) {
+                _dragging = true;
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+                _dragOffset = e->globalPosition().toPoint() - _dragTarget->mapToGlobal(QPoint(0, 0));
+#else
+                _dragOffset = e->globalPos() - _dragTarget->mapToGlobal(QPoint(0, 0));
+#endif
+                e->accept();
+                return true;
+            }
+            break;
+
+        case QEvent::MouseMove:
+            if(_dragging && _dragTarget->parentWidget()) {
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+                QPoint newPos = _dragTarget->parentWidget()->mapFromGlobal(e->globalPosition().toPoint() - _dragOffset);
+#else
+                QPoint newPos = _dragTarget->parentWidget()->mapFromGlobal(e->globalPos() - _dragOffset);
+#endif
+                const QRect pr = _dragTarget->parentWidget()->rect();
+                newPos.setX(qBound(0, newPos.x(), pr.width()  - _dragTarget->width()));
+                newPos.setY(qBound(0, newPos.y(), pr.height() - _dragTarget->height()));
+                _dragTarget->move(newPos);
+                static_cast<FindReplaceBar*>(_dragTarget)->setUserMoved(true);
+                e->accept();
+                return true;
+            }
+            break;
+
+        case QEvent::MouseButtonRelease:
+            if(e->button() == Qt::LeftButton) {
+                _dragging = false;
+                e->accept();
+                return true;
+            }
+            break;
+
+        default:
+            break;
+        }
+        return false;
+    }
+
+private:
+    QWidget*     _dragTarget;
+    QLabel*      _label    = nullptr;
+    QToolButton* _closeBtn = nullptr;
+    bool         _dragging = false;
+    QPoint       _dragOffset;
 };
 
 ///
@@ -173,6 +302,9 @@ QTextDocument::FindFlags FindReplaceBar::findFlags() const
 ///
 void FindReplaceBar::updatePosition()
 {
+    if(_userMoved)
+        return;
+
     if(!parentWidget())
         return;
 
@@ -412,10 +544,57 @@ void FindReplaceBar::onToggleReplace()
 }
 
 ///
+/// \brief FindReplaceBar::setWindowedMode
+/// \param on
+///
+void FindReplaceBar::setWindowedMode(bool on)
+{
+    if(_windowedMode == on)
+        return;
+
+    _windowedMode = on;
+
+    if(on) {
+        if(!_titleBar) {
+            auto bar = new TitleBar(tr("Find"), this, this);
+            connect(bar->closeButton(), &QToolButton::clicked, this, &FindReplaceBar::onClose);
+            _titleBar = bar;
+            qobject_cast<QVBoxLayout*>(layout())->insertWidget(0, _titleBar);
+        }
+        _titleBar->show();
+        ui->closeButton->hide();
+    } else {
+        if(_titleBar)
+            _titleBar->hide();
+        ui->closeButton->show();
+        _userMoved = false;
+    }
+}
+
+///
+/// \brief FindReplaceBar::isWindowedMode
+/// \return
+///
+bool FindReplaceBar::isWindowedMode() const
+{
+    return _windowedMode;
+}
+
+///
+/// \brief FindReplaceBar::setUserMoved
+/// \param moved
+///
+void FindReplaceBar::setUserMoved(bool moved)
+{
+    _userMoved = moved;
+}
+
+///
 /// \brief FindReplaceBar::onClose
 ///
 void FindReplaceBar::onClose()
 {
     setVisible(false);
+    _userMoved = false;
     emit closed();
 }

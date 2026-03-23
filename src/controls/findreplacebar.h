@@ -30,6 +30,9 @@ public:
     bool isReplaceEnabled() const;
     void setSearchOptionsVisible(bool visible);
     bool isSearchOptionsVisible() const;
+    void setWindowedMode(bool on);
+    bool isWindowedMode() const;
+    void setUserMoved(bool moved);
 
 public slots:
     void showFind(const QString& selectedText = QString());
@@ -63,6 +66,9 @@ private:
     Ui::FindReplaceBar* ui;
     bool _replaceEnabled = true;
     bool _searchOptionsVisible = true;
+    bool _windowedMode = false;
+    bool _userMoved = false;
+    QWidget* _titleBar = nullptr;
 };
 
 #endif // FINDREPLACEBAR_H

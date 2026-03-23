@@ -28,7 +28,7 @@ ModbusTcpServer::ModbusTcpServer(QObject *parent)
 ///
 ModbusTcpServer::~ModbusTcpServer()
 {
-    close();
+    ModbusTcpServer::close();
 }
 
 ///

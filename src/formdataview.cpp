@@ -104,6 +104,7 @@ FormDataView::FormDataView(int id, ModbusMultiServer& server, DataSimulator* sim
     _findReplaceBar = new FindReplaceBar(ui->outputWidget);
     _findReplaceBar->setReplaceEnabled(false);
     _findReplaceBar->setSearchOptionsVisible(false);
+    _findReplaceBar->setWindowedMode(true);
     connect(_findReplaceBar, &FindReplaceBar::searchTextChanged, this, [this](const QString& text) {
         ui->outputWidget->applyFindByValue(text);
     });

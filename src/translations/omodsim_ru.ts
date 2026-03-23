@@ -1850,12 +1850,17 @@
         <translation>Р—Р°РјРµРЅРёС‚СЊ РІСЃРµ</translation>
     </message>
     <message>
-        <location filename="../controls/findreplacebar.cpp" line="102"/>
+        <location filename="../controls/findreplacebar.cpp" line="559"/>
+        <source>Find</source>
+        <translation type="unfinished">РќР°Р№С‚Рё</translation>
+    </message>
+    <message>
+        <location filename="../controls/findreplacebar.cpp" line="231"/>
         <source>Find Next</source>
         <translation>Р”Р°Р»РµРµ</translation>
     </message>
     <message>
-        <location filename="../controls/findreplacebar.cpp" line="103"/>
+        <location filename="../controls/findreplacebar.cpp" line="232"/>
         <source>Find Previous</source>
         <translation>РќР°Р·Р°Рґ</translation>
     </message>
@@ -1906,7 +1911,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formdataview.cpp" line="570"/>
+        <location filename="../formdataview.cpp" line="571"/>
         <source>Address Base: %1
 Start Address: %2
 Length: %3</source>
@@ -1915,7 +1920,7 @@ Length: %3</source>
 РљРѕР»РёС‡РµСЃС‚РІРѕ: %3</translation>
     </message>
     <message>
-        <location filename="../formdataview.cpp" line="573"/>
+        <location filename="../formdataview.cpp" line="574"/>
         <source>Unit Identifier: %1
 MODBUS Point Type:
 %2</source>
