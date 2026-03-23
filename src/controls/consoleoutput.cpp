@@ -23,14 +23,14 @@ struct MessageStyle {
 static MessageStyle styleForType(ConsoleOutput::MessageType type)
 {
     switch (type) {
-    case ConsoleOutput::MessageType::Warning:
-        return { QColor("#FFF8E1"), QColor("#F9A825"), QColor("#F9A825"), QColor("#4a3000"), "⚠" };
-    case ConsoleOutput::MessageType::Error:
-        return { QColor("#FFEBEE"), QColor("#E53935"), QColor("#E53935"), QColor("#7f0000"), "✖" };
-    case ConsoleOutput::MessageType::Debug:
-        return { Qt::white, QColor(), QColor("#1565C0"), QColor("#37474F"), "●" };
-    default: // Log
-        return { Qt::white, QColor(), QColor(), Qt::black, "" };
+        case ConsoleOutput::MessageType::Warning:
+            return { QColor("#FFF8E1"), QColor("#F9A825"), QColor("#F9A825"), QColor("#4a3000"), "⚠" };
+        case ConsoleOutput::MessageType::Error:
+            return { QColor("#FFEBEE"), QColor("#E53935"), QColor("#E53935"), QColor("#7f0000"), "✖" };
+        case ConsoleOutput::MessageType::Debug:
+            return { Qt::white, QColor(), QColor("#1565C0"), QColor("#37474F"), "●" };
+        default: // Log
+            return { Qt::white, QColor(), QColor(), Qt::black, "" };
     }
 }
 
@@ -40,11 +40,9 @@ class ConsoleItemDelegate : public QStyledItemDelegate
 public:
     using QStyledItemDelegate::QStyledItemDelegate;
 
-    void paint(QPainter* painter, const QStyleOptionViewItem& option,
-               const QModelIndex& index) const override
+    void paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const override
     {
-        const auto type  = static_cast<ConsoleOutput::MessageType>(
-                               index.data(MessageTypeRole).toInt());
+        const auto type  = static_cast<ConsoleOutput::MessageType>(index.data(MessageTypeRole).toInt());
         const auto style = styleForType(type);
 
         painter->save();
@@ -57,8 +55,7 @@ public:
 
         // Left border strip (3 px)
         if (style.border.isValid())
-            painter->fillRect(option.rect.left(), option.rect.top(),
-                              3, option.rect.height(), style.border);
+            painter->fillRect(option.rect.left(), option.rect.top(), 3, option.rect.height(), style.border);
 
         // Selection overlay
         if (option.state & QStyle::State_Selected) {
@@ -84,8 +81,7 @@ public:
             QFont f = option.font;
             f.setPointSize(9);
             painter->setFont(f);
-            const QRect iconRect(option.rect.left() + leftPad, option.rect.top(),
-                                 iconW, option.rect.height());
+            const QRect iconRect(option.rect.left() + leftPad, option.rect.top(), iconW, option.rect.height());
             painter->drawText(iconRect, Qt::AlignVCenter | Qt::AlignHCenter, style.icon);
         }
 
@@ -150,6 +146,9 @@ ConsoleOutput::ConsoleOutput(QWidget* parent)
     connect(ui->listWidget,     &QWidget::customContextMenuRequested, this, &ConsoleOutput::on_customContextMenuRequested);
 }
 
+///
+/// \brief ConsoleOutput::~ConsoleOutput
+///
 ConsoleOutput::~ConsoleOutput()
 {
     delete ui;
