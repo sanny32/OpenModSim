@@ -75,6 +75,7 @@ public:
     void setAllowEmptyValue(bool allow);
 
     bool isEmpty() const;
+    void clear();
     void clearValue();
 
 signals:

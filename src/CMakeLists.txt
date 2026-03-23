@@ -188,6 +188,8 @@ set(SOURCES
     qfixedsizedialog.cpp
     qhexvalidator.cpp
     qint64validator.cpp
+    qdoublevalidatorex.cpp
+    qintvalidatorex.cpp
     quintvalidator.cpp
     recentfileactionlist.cpp
     updatechecker.cpp
@@ -315,6 +317,8 @@ set(HEADERS
     qmodbuscommevent.h
     qmodbusadutcp.h
     qrange.h
+    qdoublevalidatorex.h
+    qintvalidatorex.h
     quintvalidator.h
     recentfileactionlist.h
     updatechecker.h
