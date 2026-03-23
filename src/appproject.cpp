@@ -15,6 +15,7 @@
 
 namespace {
 constexpr const char* kFormPanelProperty = "SplitPanel";
+constexpr const char* kFormClosedProperty = "Closed";
 constexpr const char* kPanelLeft = "L";
 constexpr const char* kPanelRight = "R";
 constexpr const char* kSplitOriginIdProperty = "SplitOriginId";
@@ -1198,6 +1199,7 @@ void AppProject::loadProject(const QString& filename)
                             MdiArea* targetArea = _mdiArea->primaryArea();
                             const auto attrs = xml.attributes();
                             const QString panel = attrs.value("Panel").toString();
+                            const bool isClosed = attrs.value("Closed").toString() == "1";
                             if(splitView && panel.compare(QLatin1String(kPanelRight), Qt::CaseInsensitive) == 0) {
                                 if(auto* secondary = secondaryArea())
                                     targetArea = secondary;
@@ -1206,7 +1208,15 @@ void AppProject::loadProject(const QString& filename)
                             auto frm = createMdiChildOnArea(++_windowCounter, kind, targetArea, true);
                             if (frm) {
                                 loadXmlOfForm(frm, xml);
-                                frm->show();
+                                if (isClosed) {
+                                    // Close the temporary subwindow - the event filter in MainWindow
+                                    // will call markFormClosed, which reparents the form to _mainWindow
+                                    // and adds it to _closedForms.
+                                    if (auto* wnd = qobject_cast<QMdiSubWindow*>(frm->parentWidget()))
+                                        wnd->close();
+                                } else {
+                                    frm->show();
+                                }
                             } else {
                                 xml.skipCurrentElement();
                             }
@@ -1374,8 +1384,10 @@ void AppProject::saveProject(const QString& filename)
     for (auto&& frm : closed) {
         if (frm) {
             frm->setProperty(kFormPanelProperty, QLatin1String(kPanelLeft));
+            frm->setProperty(kFormClosedProperty, true);
             saveXmlOfForm(frm, w);
             frm->setProperty(kFormPanelProperty, QVariant());
+            frm->setProperty(kFormClosedProperty, QVariant());
         }
     }
     w.writeEndElement(); // Forms

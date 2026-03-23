@@ -220,6 +220,8 @@ inline QXmlStreamWriter& operator <<(QXmlStreamWriter& xml, FormTrafficView* frm
     const auto panel = frm->property("SplitPanel").toString();
     if(!panel.isEmpty())
         xml.writeAttribute("Panel", panel);
+    if(frm->property("Closed").toBool())
+        xml.writeAttribute("Closed", "1");
 
     const auto wnd = frm->parentWidget();
     xml.writeStartElement("Window");
