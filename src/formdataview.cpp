@@ -6,6 +6,7 @@
 #include <QCheckBox>
 #include <QSignalBlocker>
 #include <QSpinBox>
+#include <QStyle>
 #include "modbuslimits.h"
 #include "findreplacebar.h"
 #include "mainwindow.h"
@@ -101,7 +102,7 @@ FormDataView::FormDataView(int id, ModbusMultiServer& server, DataSimulator* sim
     connect(this, &FormDataView::definitionChanged, this, &FormDataView::onDefinitionChanged);
     emit definitionChanged();
 
-    _findReplaceBar = new FindReplaceBar(ui->outputWidget);
+    _findReplaceBar = new FindReplaceBar(this);
     _findReplaceBar->setReplaceEnabled(false);
     _findReplaceBar->setSearchOptionsVisible(false);
     _findReplaceBar->setWindowedMode(true);
@@ -870,6 +871,12 @@ void FormDataView::showFind()
         return;
 
     _findReplaceBar->showFind();
+
+    const QPoint outputTopLeft = ui->outputWidget->mapTo(this, QPoint(0, 0));
+    const int frameWidth = ui->outputWidget->frameWidth();
+    const int x = outputTopLeft.x() + ui->outputWidget->width() - _findReplaceBar->width() - frameWidth;
+    const int y = outputTopLeft.y() + frameWidth;
+    _findReplaceBar->move(qMax(0, x), qMax(0, y));
 }
 
 ///
@@ -1254,7 +1261,7 @@ void FormDataView::updateDisplayBar()
         it.value()->setChecked(true);
 
     // Enable/disable non-binary actions for coil/discrete types
-    for (auto action : _displayModeActions) {
+    for (auto&& action : _displayModeActions) {
         action->setEnabled(!coilType || action == _displayModeActions.value(DataDisplayMode::Binary));
     }
 
