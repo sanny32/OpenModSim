@@ -1204,7 +1204,6 @@ void AppProject::removeSplitAutoClonesFromSecondary()
     if(!isSplitTabbedView())
         return;
 
-    auto* primary = _mdiArea->primaryArea();
     auto* secondary = splitSecondaryArea();
     if(!secondary)
         return;
@@ -1216,14 +1215,6 @@ void AppProject::removeSplitAutoClonesFromSecondary()
         if(frm && frm->property(kSplitAutoCloneProperty).toBool())
             wnd->close();
     }
-
-    auto* primaryActiveWnd = _mdiArea->activePrimarySubWindow();
-    if(!primaryActiveWnd)
-        return;
-
-    QTimer::singleShot(0, this, [primary, primaryActiveWnd]() {
-        primary->setActiveSubWindow(primaryActiveWnd);
-    });
 }
 
 ///

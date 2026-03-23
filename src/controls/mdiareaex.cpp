@@ -985,6 +985,9 @@ void MdiAreaEx::mergeSplitArea()
         return;
 
     _isSplitInProgress = true;
+    QPointer<QMdiSubWindow> preferredActive = activeSubWindow();
+    if (!preferredActive)
+        preferredActive = activePrimarySubWindow();
 
     const auto secondaryWindows = _secondaryArea->localSubWindowList();
     for (auto* wnd : secondaryWindows) {
@@ -1021,6 +1024,32 @@ void MdiAreaEx::mergeSplitArea()
     _isSplitInProgress = false;
     syncSplitButtonState();
     updateSplitButtonGeometry();
+
+    // Restore active tab and keyboard focus after deferred deletions settle.
+    auto restoreFocus = [this, preferredActive]() {
+        if (!_primaryArea)
+            return;
+
+        QMdiSubWindow* target = preferredActive.data();
+        if (!target || !_primaryArea->localSubWindowList().contains(target))
+            target = activePrimarySubWindow();
+
+        if (!target) {
+            const auto windows = _primaryArea->localSubWindowList(QMdiArea::ActivationHistoryOrder);
+            if (!windows.isEmpty())
+                target = windows.first();
+        }
+
+        if (target) {
+            setActiveSubWindow(target); // Also focuses the primary panel.
+            if (auto* widget = target->widget())
+                widget->setFocus(Qt::OtherFocusReason); // Return focus to the form/editor widget.
+        } else {
+            _primaryArea->setFocus(Qt::OtherFocusReason);
+        }
+    };
+
+    QTimer::singleShot(0, this, restoreFocus);
 }
 
 ///
@@ -1034,21 +1063,15 @@ void MdiAreaEx::requestEqualSplitterSizes()
     _pendingSplitterEqualize = true;
     _pendingSplitterEqualizePasses = 8;
     tryEqualizeSplitterSizes();
-///
-/// \brief QTimer::singleShot
-///
+
     QTimer::singleShot(0, this, [this]() {
         tryEqualizeSplitterSizes();
     });
-///
-/// \brief QTimer::singleShot
-///
+
     QTimer::singleShot(16, this, [this]() {
         tryEqualizeSplitterSizes();
     });
-///
-/// \brief QTimer::singleShot
-///
+
     QTimer::singleShot(33, this, [this]() {
         tryEqualizeSplitterSizes();
     });
