@@ -7,6 +7,7 @@
 #include <QStyle>
 #include <QTimer>
 #include "mdiareaex.h"
+#include "mditabbar.h"
 
 ///
 /// \brief setEqualSplitterSizes
@@ -209,6 +210,29 @@ QMdiSubWindow* MdiAreaEx::activeSubWindow() const
         return wnd;
 
     return _secondaryArea->activeSubWindow();
+}
+
+///
+/// \brief MdiAreaEx::activePrimarySubWindow
+/// Returns the best available active subwindow of the primary panel, trying
+/// multiple sources in order: activeSubWindow, currentSubWindow, MdiTabBar,
+/// and finally the window saved before the last split operation.
+/// \return
+///
+QMdiSubWindow* MdiAreaEx::activePrimarySubWindow() const
+{
+    if (!_primaryArea)
+        return nullptr;
+
+    if (auto* wnd = _primaryArea->activeSubWindow())
+        return wnd;
+    if (auto* wnd = _primaryArea->currentSubWindow())
+        return wnd;
+    if (auto* tb = qobject_cast<MdiTabBar*>(_primaryArea->tabBar()))
+        if (auto* wnd = tb->currentSubWindow())
+            return wnd;
+
+    return _preSplitActiveWindow;
 }
 
 ///
@@ -874,6 +898,10 @@ void MdiAreaEx::setSplitViewEnabled(bool enabled)
     const bool wasSplit = isSplitView();
 
     if (enabled) {
+        // Save the active window before ensureSplitArea reparents _primaryArea,
+        // which resets QMdiArea's internal active/current window state.
+        _preSplitActiveWindow = activePrimarySubWindow();
+
         ensureSplitArea(Qt::Horizontal);
         if (!_secondaryArea)
             return;

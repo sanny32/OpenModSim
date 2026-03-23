@@ -1101,10 +1101,9 @@ void AppProject::updateSplitPairScriptIcons(QWidget* frm)
 
 ///
 /// \brief AppProject::duplicatePrimaryTabsToSecondary
-/// Rebuilds split tabs from primary panel:
-/// - creates a secondary copy for tabs that exist once;
-/// - reuses previously auto-cloned tabs (moves one back to secondary) to avoid growth.
-/// \return number of tabs moved/duplicated into secondary
+/// Opens a clone of the currently active primary tab on the secondary panel.
+/// Reuses an existing auto-clone on primary (leftover from a previous split) if available.
+/// \return 1 if a window was placed on secondary, 0 otherwise
 ///
 int AppProject::duplicatePrimaryTabsToSecondary()
 {
@@ -1120,150 +1119,78 @@ int AppProject::duplicatePrimaryTabsToSecondary()
     primary->setOption(QMdiArea::DontMaximizeSubWindowOnActivation, false);
     secondary->setOption(QMdiArea::DontMaximizeSubWindowOnActivation, false);
 
-    auto normalizeTabbedState = [](QMdiSubWindow* wnd, MdiArea* area)
-    {
-        if(!wnd || !area)
-            return;
-
-        if(area->viewMode() == QMdiArea::TabbedView && !wnd->isMaximized())
-            wnd->showMaximized();
-    };
-
-    auto normalizeAllTabbedStates = [normalizeTabbedState](MdiArea* area)
-    {
-        if(!area || area->viewMode() != QMdiArea::TabbedView)
-            return;
-
-        for(auto* wnd : area->localSubWindowList())
-            normalizeTabbedState(wnd, area);
-    };
-
-    // Split was just enabled: secondary must be empty.
+    // Secondary must be empty when split is just enabled.
     if(!secondary->localSubWindowList().isEmpty())
         return 0;
 
-    // Get windows in visual tab order (not creation order) so that
-    // the secondary panel mirrors the same tab arrangement.
-    QList<QMdiSubWindow*> primaryWindows;
-    if(const auto* tabBar = qobject_cast<const MdiTabBar*>(primary->tabBar())) {
-        for(int i = 0; i < tabBar->count(); ++i)
-            if(auto* wnd = tabBar->subWindowAt(i))
-                primaryWindows.append(wnd);
-    }
-    if(primaryWindows.isEmpty())
-        primaryWindows = primary->localSubWindowList();
-    if(primaryWindows.isEmpty())
+    auto* primaryActiveWnd = _mdiArea->activePrimarySubWindow();
+    if(!primaryActiveWnd)
         return 0;
 
-    auto* primaryActive = primary->activeSubWindow();
-    QMdiSubWindow* secondaryActive = nullptr;
-    int movedOrDuplicated = 0;
+    auto* activeFrm = qobject_cast<QWidget*>(primaryActiveWnd->widget());
+    if(!activeFrm)
+        return 0;
 
-    QHash<int, QList<QMdiSubWindow*>> groupsByOrigin;
-    QList<int> orderedOrigins;
-    QList<int> autoOnlyOrigins;
-    QSet<int> seenNonAuto;
-    QSet<int> seenAny;
-    int activeOriginId = 0;
-
-    for(auto* wnd : primaryWindows)
-    {
-        auto* frm = qobject_cast<QWidget*>(wnd ? wnd->widget() : nullptr);
-        if(!frm)
-            continue;
-
-        int originId = frm->property(kSplitOriginIdProperty).toInt();
-        if(originId <= 0) {
-            originId = formIdOf(frm);
-            frm->setProperty(kSplitOriginIdProperty, originId);
-        }
-        if(!frm->property(kSplitAutoCloneProperty).isValid())
-            frm->setProperty(kSplitAutoCloneProperty, false);
-
-        const bool isAutoClone = frm->property(kSplitAutoCloneProperty).toBool();
-        groupsByOrigin[originId].append(wnd);
-        if(wnd == primaryActive)
-            activeOriginId = originId;
-
-        if(!isAutoClone) {
-            if(!seenNonAuto.contains(originId)) {
-                orderedOrigins.append(originId);
-                seenNonAuto.insert(originId);
-            }
-        } else if(!seenAny.contains(originId)) {
-            autoOnlyOrigins.append(originId);
-        }
-        seenAny.insert(originId);
+    // Ensure origin tracking properties are initialized.
+    int activeOriginId = activeFrm->property(kSplitOriginIdProperty).toInt();
+    if(activeOriginId <= 0) {
+        activeOriginId = formIdOf(activeFrm);
+        activeFrm->setProperty(kSplitOriginIdProperty, activeOriginId);
     }
+    if(!activeFrm->property(kSplitAutoCloneProperty).isValid())
+        activeFrm->setProperty(kSplitAutoCloneProperty, false);
 
-    for(int originId : autoOnlyOrigins)
-        if(!seenNonAuto.contains(originId))
-            orderedOrigins.append(originId);
-
-    for(int originId : orderedOrigins)
-    {
-        const auto group = groupsByOrigin.value(originId);
-        if(group.isEmpty())
-            continue;
-
-        QMdiSubWindow* sourceWnd = nullptr;
-        for(auto* candidate : group) {
-            auto* candidateFrm = qobject_cast<QWidget*>(candidate ? candidate->widget() : nullptr);
-            if(candidateFrm && !candidateFrm->property(kSplitAutoCloneProperty).toBool()) {
-                sourceWnd = candidate;
+    // If the active window is itself an auto-clone, resolve to its non-clone counterpart.
+    if(activeFrm->property(kSplitAutoCloneProperty).toBool()) {
+        for(auto* wnd : primary->localSubWindowList()) {
+            auto* frm = qobject_cast<QWidget*>(wnd ? wnd->widget() : nullptr);
+            if(frm
+                && frm->property(kSplitOriginIdProperty).toInt() == activeOriginId
+                && !frm->property(kSplitAutoCloneProperty).toBool()) {
+                activeFrm = frm;
+                primaryActiveWnd = wnd;
                 break;
             }
         }
-        if(!sourceWnd)
-            sourceWnd = group.first();
-
-        auto* source = qobject_cast<QWidget*>(sourceWnd ? sourceWnd->widget() : nullptr);
-        if(!source)
-            continue;
-
-        if(group.size() > 1)
-        {
-            QMdiSubWindow* toMove = nullptr;
-            for(auto* candidate : group) {
-                auto* candidateFrm = qobject_cast<QWidget*>(candidate ? candidate->widget() : nullptr);
-                if(candidateFrm && candidateFrm->property(kSplitAutoCloneProperty).toBool()) {
-                    toMove = candidate;
-                    break;
-                }
-            }
-            if(!toMove)
-                toMove = group.last();
-
-            primary->removeSubWindow(toMove);
-            secondary->addSubWindow(toMove, Qt::WindowFlags());
-            if(auto* movedFrm = qobject_cast<QWidget*>(toMove->widget()))
-                movedFrm->show();
-            normalizeTabbedState(toMove, secondary);
-
-            ++movedOrDuplicated;
-            if(originId == activeOriginId)
-                secondaryActive = toMove;
-            continue;
-        }
-
-        // Split clones are visual peers only: do not add them to project tree/window menu.
-        auto* clone = createCloneOnArea(source, secondary);
-        if(!clone)
-            continue;
-
-        ++movedOrDuplicated;
-
-        if(originId == activeOriginId)
-            secondaryActive = qobject_cast<QMdiSubWindow*>(clone->parentWidget());
     }
 
-    if(secondaryActive)
-        secondary->setActiveSubWindow(secondaryActive);
+    // Check for an existing auto-clone of the active form on primary (leftover from a previous split).
+    QMdiSubWindow* toMove = nullptr;
+    for(auto* wnd : primary->localSubWindowList()) {
+        auto* frm = qobject_cast<QWidget*>(wnd ? wnd->widget() : nullptr);
+        if(frm
+            && frm->property(kSplitOriginIdProperty).toInt() == activeOriginId
+            && frm->property(kSplitAutoCloneProperty).toBool()) {
+            toMove = wnd;
+            break;
+        }
+    }
 
-    // Final synchronous normalization.
-    normalizeAllTabbedStates(secondary);
+    QMdiSubWindow* secondaryWnd = nullptr;
+    if(toMove) {
+        // Reuse the existing auto-clone rather than creating a new one.
+        primary->removeSubWindow(toMove);
+        secondary->addSubWindow(toMove, Qt::WindowFlags());
+        if(auto* frm = qobject_cast<QWidget*>(toMove->widget()))
+            frm->show();
+        secondaryWnd = toMove;
+    } else {
+        // Split clones are visual peers only: do not add them to project tree/window menu.
+        auto* clone = createCloneOnArea(activeFrm, secondary);
+        if(clone)
+            secondaryWnd = qobject_cast<QMdiSubWindow*>(clone->parentWidget());
+    }
 
-    return movedOrDuplicated;
+    if(secondaryWnd) {
+        if(secondary->viewMode() == QMdiArea::TabbedView && !secondaryWnd->isMaximized())
+            secondaryWnd->showMaximized();
+        secondary->setActiveSubWindow(secondaryWnd);
+    }
+
+    // Restore the primary panel's active tab (moving toMove may have shifted focus).
+    primary->setActiveSubWindow(primaryActiveWnd);
+
+    return secondaryWnd ? 1 : 0;
 }
 
 ///

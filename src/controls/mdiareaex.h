@@ -1,6 +1,7 @@
 #ifndef MDIAREAEX_H
 #define MDIAREAEX_H
 
+#include <QPointer>
 #include <QWidget>
 #include <QMdiArea>
 #include <QMdiSubWindow>
@@ -81,6 +82,8 @@ public:
     void setSplitViewEnabled(bool enabled);
     MdiArea* activePanel() const;
 
+    QMdiSubWindow* activePrimarySubWindow() const;
+
 signals:
     void subWindowActivated(QMdiSubWindow* wnd);
     void splitViewAboutToDisable();
@@ -112,6 +115,7 @@ private:
 
 private:
     bool _isSplitInProgress = false;
+    QPointer<QMdiSubWindow> _preSplitActiveWindow;
     bool _destroying = false;
     bool _pendingSplitterEqualize = false;
     int _pendingSplitterEqualizePasses = 0;
