@@ -227,9 +227,9 @@ void ConsoleOutput::applyFilters()
         const auto type = static_cast<MessageType>(item->data(MessageTypeRole).toInt());
         bool visible;
         switch (type) {
-        case MessageType::Warning: visible = showWarn;  break;
-        case MessageType::Error:   visible = showError; break;
-        default:                   visible = showLog;   break;
+            case MessageType::Warning: visible = showWarn;  break;
+            case MessageType::Error:   visible = showError; break;
+            default:                   visible = showLog;   break;
         }
         item->setHidden(!visible);
     }
