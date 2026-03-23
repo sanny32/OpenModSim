@@ -300,8 +300,13 @@ void MdiArea::on_closeTab(int index)
         return;
 
     auto* wnd = subWindowAtIndex(index);
-    if (wnd)
-        wnd->close();
+    if (!wnd)
+        return;
+
+    if (_tabBar->count() == 1)
+        emit lastTabAboutToClose();
+
+    wnd->close();
 }
 
 ///
