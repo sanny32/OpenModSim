@@ -17,6 +17,7 @@
 #include "mainstatusbar.h"
 #include "menuconnect.h"
 #include "controls/mdiareaex.h"
+#include "formscriptview.h"
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
@@ -297,6 +298,14 @@ MainWindow::MainWindow(const QString& profile, bool useSession, QWidget *parent)
         _project->deleteForm(ref.widget);
     });
     connect(_projectTree, &ProjectTreeWidget::formRenamed, this, [this](ProjectFormRef) { markModified(); });
+    connect(_projectTree, &ProjectTreeWidget::formRunScriptRequested, this, [this](ProjectFormRef ref) {
+        if (auto* script = qobject_cast<FormScriptView*>(ref.widget))
+            script->runScript();
+    });
+    connect(_projectTree, &ProjectTreeWidget::formStopScriptRequested, this, [this](ProjectFormRef ref) {
+        if (auto* script = qobject_cast<FormScriptView*>(ref.widget))
+            script->stopScript();
+    });
     _globalConsole = new ConsoleOutput(this);
     _consoleDockWidget = new QDockWidget(tr("Output"), this);
     _consoleDockWidget->setObjectName("consoleDockWidget");

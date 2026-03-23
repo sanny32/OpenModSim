@@ -5,8 +5,9 @@
 #include "projecttreewidget.h"
 
 namespace {
-constexpr int ItemTypeRole = Qt::UserRole + 1;
-constexpr int ItemTypeForm = 1;
+constexpr int ItemTypeRole        = Qt::UserRole + 1;
+constexpr int ItemTypeForm        = 1;
+constexpr int ItemScriptRunning   = Qt::UserRole + 3;
 
 QIcon dimmedIcon(const QString& path)
 {
@@ -137,6 +138,8 @@ void ProjectTreeWidget::setFormScriptRunning(QWidget* frm, bool running)
     auto item = itemForForm(frm);
     if (!item)
         return;
+
+    item->setData(0, ItemScriptRunning, running);
 
     if (running) {
         item->setIcon(0, _iconScriptRunning);
@@ -288,8 +291,30 @@ void ProjectTreeWidget::on_contextMenu(const QPoint& pos)
     ref.widget = static_cast<QWidget*>(ptr);
 
     QMenu menu(this);
+
+    QAction* runAction  = nullptr;
+    QAction* stopAction = nullptr;
+    if (ref.type == ProjectFormType::Script) {
+        const bool running = item->data(0, ItemScriptRunning).toBool();
+        runAction  = menu.addAction(QIcon(":/res/actionRunScript.png"),  tr("Run Script"));
+        stopAction = menu.addAction(QIcon(":/res/actionStopScript.png"), tr("Stop Script"));
+        runAction->setEnabled(!running);
+        stopAction->setEnabled(running);
+        menu.addSeparator();
+    }
+
     auto deleteAction = menu.addAction(tr("Delete"));
-    if (menu.exec(viewport()->mapToGlobal(pos)) != deleteAction)
+    auto selected = menu.exec(viewport()->mapToGlobal(pos));
+
+    if (selected == runAction) {
+        emit formRunScriptRequested(ref);
+        return;
+    }
+    if (selected == stopAction) {
+        emit formStopScriptRequested(ref);
+        return;
+    }
+    if (selected != deleteAction)
         return;
 
     const int ret = QMessageBox::question(this,

@@ -40,6 +40,8 @@ signals:
     void formActivated(ProjectFormRef ref);
     void formDeleteRequested(ProjectFormRef ref);
     void formRenamed(ProjectFormRef ref);
+    void formRunScriptRequested(ProjectFormRef ref);
+    void formStopScriptRequested(ProjectFormRef ref);
 
 protected:
     void changeEvent(QEvent* event) override;
