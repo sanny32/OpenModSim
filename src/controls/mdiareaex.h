@@ -118,7 +118,6 @@ private:
     QPointer<QMdiSubWindow> _preSplitActiveWindow;
     bool _destroying = false;
     bool _pendingSplitterEqualize = false;
-    int _pendingSplitterEqualizePasses = 0;
     bool _updatingSplitButtonGeometry = false;
     QToolButton* _splitButton = nullptr;
     QSplitter* _splitter = nullptr;

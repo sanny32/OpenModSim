@@ -619,7 +619,6 @@ bool MdiAreaEx::eventFilter(QObject* obj, QEvent* event)
 void MdiAreaEx::resizeEvent(QResizeEvent* event)
 {
     QWidget::resizeEvent(event);
-    tryEqualizeSplitterSizes();
     updateSplitButtonGeometry();
 }
 
@@ -959,7 +958,6 @@ void MdiAreaEx::ensureSplitArea(Qt::Orientation orientation)
     _splitter->addWidget(_secondaryArea);
     _splitter->setStretchFactor(0, 1);
     _splitter->setStretchFactor(1, 1);
-    setEqualSplitterSizes(_splitter);
 
     if (auto* boxLayout = qobject_cast<QBoxLayout*>(hostLayout)) {
         if (hostIndex >= 0)
@@ -1018,7 +1016,6 @@ void MdiAreaEx::mergeSplitArea()
     _splitter->deleteLater();
     _splitter = nullptr;
     _pendingSplitterEqualize = false;
-    _pendingSplitterEqualizePasses = 0;
 
     _activePanel = _primaryArea;
     _isSplitInProgress = false;
@@ -1061,18 +1058,9 @@ void MdiAreaEx::requestEqualSplitterSizes()
         return;
 
     _pendingSplitterEqualize = true;
-    _pendingSplitterEqualizePasses = 8;
     tryEqualizeSplitterSizes();
 
     QTimer::singleShot(0, this, [this]() {
-        tryEqualizeSplitterSizes();
-    });
-
-    QTimer::singleShot(16, this, [this]() {
-        tryEqualizeSplitterSizes();
-    });
-
-    QTimer::singleShot(33, this, [this]() {
         tryEqualizeSplitterSizes();
     });
 }
@@ -1088,9 +1076,8 @@ void MdiAreaEx::tryEqualizeSplitterSizes()
     if (!setEqualSplitterSizes(_splitter))
         return;
 
-    if (_pendingSplitterEqualizePasses > 0)
-        --_pendingSplitterEqualizePasses;
-
-    if (_pendingSplitterEqualizePasses <= 0)
+    // Stop once the layout has stabilized at 50/50
+    const auto sizes = _splitter->sizes();
+    if (sizes.size() >= 2 && qAbs(sizes[0] - sizes[1]) <= 1)
         _pendingSplitterEqualize = false;
 }
