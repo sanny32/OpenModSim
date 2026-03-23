@@ -215,23 +215,8 @@ AppProject::~AppProject()
 ///
 void AppProject::addClosedForm(QWidget* frm)
 {
-    if(!frm)
-        return;
-
-    if(auto* data = qobject_cast<FormDataView*>(frm)) {
-        if(!_closedDataForms.contains(data))
-            _closedDataForms.append(data);
-        return;
-    }
-    if(auto* traffic = qobject_cast<FormTrafficView*>(frm)) {
-        if(!_closedTrafficForms.contains(traffic))
-            _closedTrafficForms.append(traffic);
-        return;
-    }
-    if(auto* script = qobject_cast<FormScriptView*>(frm)) {
-        if(!_closedScriptForms.contains(script))
-            _closedScriptForms.append(script);
-    }
+    if(frm && !_closedForms.contains(frm))
+        _closedForms.append(frm);
 }
 
 ///
@@ -239,20 +224,7 @@ void AppProject::addClosedForm(QWidget* frm)
 ///
 void AppProject::removeClosedForm(QWidget* frm)
 {
-    if(!frm)
-        return;
-
-    if(auto* data = qobject_cast<FormDataView*>(frm)) {
-        _closedDataForms.removeOne(data);
-        return;
-    }
-    if(auto* traffic = qobject_cast<FormTrafficView*>(frm)) {
-        _closedTrafficForms.removeOne(traffic);
-        return;
-    }
-    if(auto* script = qobject_cast<FormScriptView*>(frm)) {
-        _closedScriptForms.removeOne(script);
-    }
+    _closedForms.removeOne(frm);
 }
 
 ///
@@ -260,32 +232,7 @@ void AppProject::removeClosedForm(QWidget* frm)
 ///
 bool AppProject::containsClosedForm(QWidget* frm) const
 {
-    if(!frm)
-        return false;
-
-    if(auto* data = qobject_cast<FormDataView*>(frm))
-        return _closedDataForms.contains(data);
-    if(auto* traffic = qobject_cast<FormTrafficView*>(frm))
-        return _closedTrafficForms.contains(traffic);
-    if(auto* script = qobject_cast<FormScriptView*>(frm))
-        return _closedScriptForms.contains(script);
-    return false;
-}
-
-///
-/// \brief AppProject::allClosedForms
-///
-QList<QWidget*> AppProject::allClosedForms() const
-{
-    QList<QWidget*> forms;
-    forms.reserve(_closedDataForms.size() + _closedTrafficForms.size() + _closedScriptForms.size());
-    for(auto* f : _closedDataForms)
-        forms.append(f);
-    for(auto* f : _closedTrafficForms)
-        forms.append(f);
-    for(auto* f : _closedScriptForms)
-        forms.append(f);
-    return forms;
+    return frm && _closedForms.contains(frm);
 }
 
 ///
@@ -306,15 +253,12 @@ void AppProject::closeProject()
     _mdiArea->closeAllSubWindows();
 
     // Delete forms that were closed (hidden)
-    const auto closed = allClosedForms();
+    const auto closed = _closedForms;
     for (auto&& frm : closed) {
         _projectTree->removeForm(frm);
         delete frm;
     }
-    _closedDataForms.clear();
-    _closedTrafficForms.clear();
-    _closedScriptForms.clear();
-
+    _closedForms.clear();
     _windowCounter = 0;
 }
 
@@ -337,54 +281,6 @@ void AppProject::markFormClosed(QWidget* frm)
     frm->hide();
     addClosedForm(frm);
     _projectTree->setFormOpen(frm, false);
-}
-
-///
-/// \brief AppProject::createDataMdiChild
-///
-FormDataView* AppProject::createDataMdiChild(int id)
-{
-    return qobject_cast<FormDataView*>(createMdiChild(id, ProjectFormKind::Data));
-}
-
-///
-/// \brief AppProject::createTrafficMdiChild
-///
-FormTrafficView* AppProject::createTrafficMdiChild(int id)
-{
-    return qobject_cast<FormTrafficView*>(createMdiChild(id, ProjectFormKind::Traffic));
-}
-
-///
-/// \brief AppProject::createScriptMdiChild
-///
-FormScriptView* AppProject::createScriptMdiChild(int id)
-{
-    return qobject_cast<FormScriptView*>(createMdiChild(id, ProjectFormKind::Script));
-}
-
-///
-/// \brief AppProject::createDataMdiChildOnArea
-///
-FormDataView* AppProject::createDataMdiChildOnArea(int id, MdiArea* area, bool addToWindowList)
-{
-    return qobject_cast<FormDataView*>(createMdiChildOnArea(id, ProjectFormKind::Data, area, addToWindowList));
-}
-
-///
-/// \brief AppProject::createTrafficMdiChildOnArea
-///
-FormTrafficView* AppProject::createTrafficMdiChildOnArea(int id, MdiArea* area, bool addToWindowList)
-{
-    return qobject_cast<FormTrafficView*>(createMdiChildOnArea(id, ProjectFormKind::Traffic, area, addToWindowList));
-}
-
-///
-/// \brief AppProject::createScriptMdiChildOnArea
-///
-FormScriptView* AppProject::createScriptMdiChildOnArea(int id, MdiArea* area, bool addToWindowList)
-{
-    return qobject_cast<FormScriptView*>(createMdiChildOnArea(id, ProjectFormKind::Script, area, addToWindowList));
 }
 
 ///
@@ -1279,14 +1175,12 @@ void AppProject::loadProject(const QString& filename)
 
                     _mdiArea->closeAllSubWindows();
                     // Clean up forms that were already closed (hidden)
-                    const auto closed = allClosedForms();
+                    const auto closed = _closedForms;
                     for (auto&& frm : closed) {
                         _projectTree->removeForm(frm);
                         delete frm;
                     }
-                    _closedDataForms.clear();
-                    _closedTrafficForms.clear();
-                    _closedScriptForms.clear();
+                    _closedForms.clear();
                     while (xml.readNextStartElement()) {
                         ProjectFormKind kind;
                         bool isForm = true;
@@ -1472,16 +1366,11 @@ void AppProject::saveProject(const QString& filename)
 
         const bool onRight = areaOfForm(qobject_cast<QWidget*>(widget)) == splitSecondaryArea();
         widget->setProperty(kFormPanelProperty, onRight ? QLatin1String(kPanelRight) : QLatin1String(kPanelLeft));
-        if (auto* frm = qobject_cast<FormDataView*>(widget))
-            frm->saveXml(w);
-        else if (auto* frm = qobject_cast<FormTrafficView*>(widget))
-            frm->saveXml(w);
-        else if (auto* frm = qobject_cast<FormScriptView*>(widget))
-            frm->saveXml(w);
+        saveXmlOfForm(widget, w);
         widget->setProperty(kFormPanelProperty, QVariant());
     }
     // Also save forms that are closed (hidden in project tree)
-    const auto closed = allClosedForms();
+    const auto closed = _closedForms;
     for (auto&& frm : closed) {
         if (frm) {
             frm->setProperty(kFormPanelProperty, QLatin1String(kPanelLeft));
@@ -1506,34 +1395,22 @@ void AppProject::saveProject(const QString& filename)
         }
     }
 
-    if(auto* primary = _mdiArea->primaryArea()) {
-        const auto primaryOrder = tabTitlesForArea(primary);
-        if(!primaryOrder.isEmpty()) {
-            w.writeStartElement("TabOrder");
-            w.writeAttribute("Panel", kPanelLeft);
-            for(const auto& title : primaryOrder) {
-                w.writeStartElement("TabRef");
-                w.writeAttribute("title", title);
-                w.writeEndElement(); // TabRef
-            }
-            w.writeEndElement(); // TabOrder
+    auto writeTabOrder = [&](MdiArea* area, const char* panel) {
+        const auto order = tabTitlesForArea(area);
+        if(order.isEmpty())
+            return;
+        w.writeStartElement("TabOrder");
+        w.writeAttribute("Panel", panel);
+        for(const auto& title : order) {
+            w.writeStartElement("TabRef");
+            w.writeAttribute("title", title);
+            w.writeEndElement(); // TabRef
         }
-    }
-    if(isSplitTabbedView()) {
-        if(auto* secondary = splitSecondaryArea()) {
-            const auto secondaryOrder = tabTitlesForArea(secondary);
-            if(!secondaryOrder.isEmpty()) {
-                w.writeStartElement("TabOrder");
-                w.writeAttribute("Panel", kPanelRight);
-                for(const auto& title : secondaryOrder) {
-                    w.writeStartElement("TabRef");
-                    w.writeAttribute("title", title);
-                    w.writeEndElement(); // TabRef
-                }
-                w.writeEndElement(); // TabOrder
-            }
-        }
-    }
+        w.writeEndElement(); // TabOrder
+    };
+    writeTabOrder(_mdiArea->primaryArea(), kPanelLeft);
+    if(isSplitTabbedView())
+        writeTabOrder(splitSecondaryArea(), kPanelRight);
 
     w.writeEndElement(); // OpenModSim
     w.writeEndDocument();

@@ -48,13 +48,6 @@ public:
     void markFormClosed(QWidget* frm);
 
     // Forms
-    FormDataView* createDataMdiChild(int id);
-    FormTrafficView* createTrafficMdiChild(int id);
-    FormScriptView* createScriptMdiChild(int id);
-    FormDataView* createDataMdiChildOnArea(int id, MdiArea* area, bool addToWindowList);
-    FormTrafficView* createTrafficMdiChildOnArea(int id, MdiArea* area, bool addToWindowList);
-    FormScriptView* createScriptMdiChildOnArea(int id, MdiArea* area, bool addToWindowList);
-
     QWidget* createMdiChild(int id, ProjectFormKind kind = ProjectFormKind::Data);
     QWidget* createMdiChildOnArea(int id, ProjectFormKind kind, MdiArea* area, bool addToWindowList);
     void        rewrapMdiChild(QWidget* frm);
@@ -91,9 +84,7 @@ public:
     void destroyContentForShutdown();
 
     // Accessors for MainWindow (loadAppSettings/saveAppSettings/eventFilter)
-    const QList<FormDataView*>& closedDataForms() const { return _closedDataForms; }
-    const QList<FormTrafficView*>& closedTrafficForms() const { return _closedTrafficForms; }
-    const QList<FormScriptView*>& closedScriptForms() const { return _closedScriptForms; }
+    const QList<QWidget*>& closedForms() const { return _closedForms; }
     bool isFormClosed(QWidget* frm) const;
     QString savePath() const        { return _savePath; }
     void    setSavePath(const QString& p) { _savePath = p; }
@@ -108,7 +99,6 @@ private:
     void addClosedForm(QWidget* frm);
     void removeClosedForm(QWidget* frm);
     bool containsClosedForm(QWidget* frm) const;
-    QList<QWidget*> allClosedForms() const;
 
 private:
     MdiAreaEx*                    _mdiArea;
@@ -118,9 +108,7 @@ private:
     MainWindow*                   _mainWindow;
 
     int                _windowCounter = 0;
-    QList<FormDataView*> _closedDataForms;
-    QList<FormTrafficView*> _closedTrafficForms;
-    QList<FormScriptView*> _closedScriptForms;
+    QList<QWidget*>      _closedForms;
     QString            _savePath;
 };
 

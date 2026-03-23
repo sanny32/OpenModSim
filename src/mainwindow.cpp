@@ -1538,9 +1538,7 @@ bool MainWindow::hasProjectContext() const
 {
     return !_projectFilePath.isEmpty()
         || _project->firstMdiChild() != nullptr
-        || !_project->closedDataForms().isEmpty()
-        || !_project->closedTrafficForms().isEmpty()
-        || !_project->closedScriptForms().isEmpty();
+        || !_project->closedForms().isEmpty();
 }
 
 ///

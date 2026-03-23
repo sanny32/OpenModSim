@@ -3341,7 +3341,7 @@ Script.onInit(()=&gt;{
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="235"/>
-        <location filename="../mainwindow.cpp" line="1602"/>
+        <location filename="../mainwindow.cpp" line="1600"/>
         <source>Clear List</source>
         <translation>清空列表</translation>
     </message>
@@ -3351,7 +3351,7 @@ Script.onInit(()=&gt;{
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1590"/>
+        <location filename="../mainwindow.cpp" line="1588"/>
         <source>No Recent Projects</source>
         <translation>没有最近项目</translation>
     </message>
