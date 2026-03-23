@@ -172,9 +172,6 @@
      <property name="frameShape">
       <enum>QFrame::Shape::NoFrame</enum>
      </property>
-     <property name="horizontalScrollBarPolicy">
-      <enum>Qt::ScrollBarPolicy::ScrollBarAsNeeded</enum>
-     </property>
      <property name="selectionMode">
       <enum>QAbstractItemView::SelectionMode::ExtendedSelection</enum>
      </property>

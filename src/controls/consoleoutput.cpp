@@ -49,9 +49,9 @@ public:
 
         painter->save();
 
-        // Background (alternating rows for log/debug)
+        // Background
         QColor bg = style.bg;
-        if (!style.border.isValid() && index.row() % 2 != 0)
+        if (!style.border.isValid() && (option.features & QStyleOptionViewItem::Alternate))
             bg = QColor("#F8F8F8");
         painter->fillRect(option.rect, bg);
 
