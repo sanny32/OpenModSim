@@ -2813,7 +2813,7 @@ Script.onInit(()=&gt;{
     </message>
     <message>
         <location filename="../mainwindow.ui" line="67"/>
-        <location filename="../mainwindow.ui" line="200"/>
+        <location filename="../mainwindow.ui" line="201"/>
         <source>New</source>
         <translation>ж–°е»є</translation>
     </message>
@@ -2906,18 +2906,18 @@ Script.onInit(()=&gt;{
         <translation type="vanished">ANSI</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="470"/>
-        <location filename="../mainwindow.ui" line="473"/>
+        <location filename="../mainwindow.ui" line="471"/>
+        <location filename="../mainwindow.ui" line="474"/>
         <source>Modbus Definitions</source>
         <translation>Modbusе®љд№‰</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="481"/>
+        <location filename="../mainwindow.ui" line="482"/>
         <source>Tabbed View</source>
         <translation>ж&#xa0;‡з­ѕйЎµи§†е›ѕ</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="489"/>
+        <location filename="../mainwindow.ui" line="490"/>
         <source>Close All Windows</source>
         <translation>е…ій—­ж‰Ђжњ‰зЄ—еЏЈ</translation>
     </message>
@@ -2950,7 +2950,7 @@ Script.onInit(()=&gt;{
         <translation type="vanished">жЌ•иЋ·е…ій—­</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="452"/>
+        <location filename="../mainwindow.ui" line="453"/>
         <source>Msg Parser</source>
         <translation>жЉҐж–‡и§Јжћђ</translation>
     </message>
@@ -2959,7 +2959,7 @@ Script.onInit(()=&gt;{
         <translation type="vanished">ж‰“ејЂ...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="208"/>
+        <location filename="../mainwindow.ui" line="209"/>
         <source>Close</source>
         <translation>е…ій—­</translation>
     </message>
@@ -2980,92 +2980,97 @@ Script.onInit(()=&gt;{
         <translation type="vanished">жЃўе¤Ќжµ‹иЇ•й…ЌзЅ®</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="220"/>
+        <location filename="../mainwindow.ui" line="221"/>
         <source>Open Project...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="223"/>
+        <location filename="../mainwindow.ui" line="224"/>
         <source>Ctrl+O</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="232"/>
-        <location filename="../mainwindow.cpp" line="1513"/>
+        <location filename="../mainwindow.ui" line="233"/>
+        <location filename="../mainwindow.cpp" line="1522"/>
         <source>Save Project</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="237"/>
+        <location filename="../mainwindow.ui" line="238"/>
         <source>Save Project As...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="242"/>
+        <location filename="../mainwindow.ui" line="243"/>
         <source>Close Project</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="251"/>
+        <location filename="../mainwindow.ui" line="252"/>
         <source>Print...</source>
         <translation>ж‰“еЌ°...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="259"/>
+        <location filename="../mainwindow.ui" line="260"/>
         <source>Print Setup...</source>
         <translation>ж‰“еЌ°и®ѕзЅ®...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="264"/>
+        <location filename="../mainwindow.ui" line="265"/>
         <source>Recent File</source>
         <translation>жњЂиї‘ж–‡д»¶</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="269"/>
+        <location filename="../mainwindow.ui" line="270"/>
         <source>Exit</source>
         <translation>йЂЂе‡є</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="278"/>
+        <location filename="../mainwindow.ui" line="279"/>
         <source>Connect</source>
         <translation>иїћжЋҐ</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="287"/>
+        <location filename="../mainwindow.ui" line="288"/>
         <source>Disconnect</source>
         <translation>ж–­ејЂиїћжЋҐ</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="523"/>
+        <source>Project Tree</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Binary</source>
         <translation type="vanished">дєЊиї›е€¶</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="519"/>
+        <location filename="../mainwindow.ui" line="528"/>
         <source>Preferences</source>
         <translation>й¦–йЂ‰йЎ№</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="528"/>
+        <location filename="../mainwindow.ui" line="537"/>
         <source>New Data View</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="537"/>
+        <location filename="../mainwindow.ui" line="546"/>
         <source>New Traffic View</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="546"/>
+        <location filename="../mainwindow.ui" line="555"/>
         <source>New Script</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="551"/>
+        <location filename="../mainwindow.ui" line="560"/>
         <source>Import Script...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="563"/>
+        <location filename="../mainwindow.ui" line="572"/>
         <source>Split View</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3094,17 +3099,17 @@ Script.onInit(()=&gt;{
         <translation type="vanished">64дЅЌжµ®з‚№ж•°пј€е­—иЉ‚дє¤жЌўпј‰</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="292"/>
+        <location filename="../mainwindow.ui" line="293"/>
         <source>Cascade</source>
         <translation>е±‚еЏ&#xa0;</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="297"/>
+        <location filename="../mainwindow.ui" line="298"/>
         <source>Tile</source>
         <translation>е№ій“є</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="306"/>
+        <location filename="../mainwindow.ui" line="307"/>
         <source>About Open ModSim...</source>
         <translation>е…ідєЋOpen ModSim...</translation>
     </message>
@@ -3125,22 +3130,22 @@ Script.onInit(()=&gt;{
         <translation type="vanished">ж•°жЌ®ж&#xa0;јејЏ</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="332"/>
+        <location filename="../mainwindow.ui" line="333"/>
         <source>Force Coils</source>
         <translation>ејєе€¶зєїењ€</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="341"/>
+        <location filename="../mainwindow.ui" line="342"/>
         <source>Preset Holding Regs</source>
         <translation>йў„и®ѕдїќжЊЃеЇ„е­е™Ё</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="350"/>
+        <location filename="../mainwindow.ui" line="351"/>
         <source>Preset Input Regs</source>
         <translation>йў„и®ѕиѕ“е…ҐеЇ„е­е™Ё</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="359"/>
+        <location filename="../mainwindow.ui" line="360"/>
         <source>Force Discretes</source>
         <translation>ејєе€¶з¦»ж•ЈеЂј</translation>
     </message>
@@ -3161,47 +3166,47 @@ Script.onInit(()=&gt;{
         <translation type="vanished">и„љжњ¬и®ѕзЅ®</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="368"/>
+        <location filename="../mainwindow.ui" line="369"/>
         <source>Undo</source>
         <translation>еЏ–ж¶€</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="380"/>
+        <location filename="../mainwindow.ui" line="381"/>
         <source>Redo</source>
         <translation>жЃўе¤Ќ</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="392"/>
+        <location filename="../mainwindow.ui" line="393"/>
         <source>Cut</source>
         <translation>е‰Єе€‡</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="404"/>
+        <location filename="../mainwindow.ui" line="405"/>
         <source>Copy</source>
         <translation>е¤Ќе€¶</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="416"/>
+        <location filename="../mainwindow.ui" line="417"/>
         <source>Paste</source>
         <translation>зІиґґ</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="424"/>
+        <location filename="../mainwindow.ui" line="425"/>
         <source>Select All</source>
         <translation>йЂ‰ж‹©ж‰Ђжњ‰</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="432"/>
+        <location filename="../mainwindow.ui" line="433"/>
         <source>Find...</source>
         <translation>жџҐж‰ѕ...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="440"/>
+        <location filename="../mainwindow.ui" line="441"/>
         <source>Replace...</source>
         <translation>ж›їжЌў...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="443"/>
+        <location filename="../mainwindow.ui" line="444"/>
         <source>Ctrl+H</source>
         <translation>Ctrl+H</translation>
     </message>
@@ -3210,31 +3215,31 @@ Script.onInit(()=&gt;{
         <translation type="vanished">й‡ЌзЅ®и®Ўж•°е™Ё</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="500"/>
-        <location filename="../mainwindow.ui" line="503"/>
+        <location filename="../mainwindow.ui" line="501"/>
+        <location filename="../mainwindow.ui" line="504"/>
         <location filename="../mainwindow.cpp" line="278"/>
         <location filename="../mainwindow.cpp" line="382"/>
         <source>Script Help</source>
         <translation>и„љжњ¬её®еЉ©</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="506"/>
+        <location filename="../mainwindow.ui" line="507"/>
         <source>F1</source>
         <translation>F1</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="514"/>
+        <location filename="../mainwindow.ui" line="515"/>
         <source>Console Output</source>
         <translation>жЋ§е€¶еЏ°иѕ“е‡є</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="164"/>
-        <location filename="../mainwindow.ui" line="314"/>
+        <location filename="../mainwindow.ui" line="165"/>
+        <location filename="../mainwindow.ui" line="315"/>
         <source>Toolbar</source>
         <translation>е·Ґе…·ж&#xa0;Џ</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="322"/>
+        <location filename="../mainwindow.ui" line="323"/>
         <source>Status Bar</source>
         <translation>зЉ¶жЂЃж&#xa0;Џ</translation>
     </message>
@@ -3303,7 +3308,7 @@ Script.onInit(()=&gt;{
         <translation type="vanished">дї„иЇ­</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="618"/>
+        <location filename="../mainwindow.cpp" line="619"/>
         <source>All files (*)</source>
         <translation>ж‰Ђжњ‰ж–‡д»¶ (*)</translation>
     </message>
@@ -3328,8 +3333,8 @@ Script.onInit(()=&gt;{
         <translation type="obsolete">ж•°жЌ®</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="617"/>
-        <location filename="../mainwindow.cpp" line="648"/>
+        <location filename="../mainwindow.cpp" line="618"/>
+        <location filename="../mainwindow.cpp" line="649"/>
         <source>Project files (*.msimprj)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3341,22 +3346,22 @@ Script.onInit(()=&gt;{
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="235"/>
-        <location filename="../mainwindow.cpp" line="1600"/>
+        <location filename="../mainwindow.cpp" line="1609"/>
         <source>Clear List</source>
         <translation>清空列表</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1116"/>
+        <location filename="../mainwindow.cpp" line="1125"/>
         <source>JavaScript files (*.js);;All files (*)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1588"/>
+        <location filename="../mainwindow.cpp" line="1597"/>
         <source>No Recent Projects</source>
         <translation>没有最近项目</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1514"/>
+        <location filename="../mainwindow.cpp" line="1523"/>
         <source>Save project before closing?</source>
         <translation>关闭前保存项目吗？</translation>
     </message>

@@ -120,6 +120,7 @@ private slots:
     void on_actionSplitView_triggered();
     void on_actionToolbar_triggered();
     void on_actionStatusBar_triggered();
+    void on_actionProjectTree_triggered();
     void on_actionScriptHelp_triggered();
     void on_actionConsoleOutput_triggered();
 

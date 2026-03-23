@@ -146,6 +146,7 @@
     <addaction name="actionToolbar"/>
     <addaction name="actionStatusBar"/>
     <addaction name="separator"/>
+    <addaction name="actionProjectTree"/>
     <addaction name="actionScriptHelp"/>
     <addaction name="actionConsoleOutput"/>
     <addaction name="separator"/>
@@ -512,6 +513,14 @@
    </property>
    <property name="text">
     <string>Console Output</string>
+   </property>
+  </action>
+  <action name="actionProjectTree">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Project Tree</string>
    </property>
   </action>
   <action name="actionPreferences">

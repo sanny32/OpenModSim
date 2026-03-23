@@ -490,6 +490,7 @@ void MainWindow::on_awake()
     ui->actionScriptHelp->setVisible(formInScriptMode);
     ui->actionConsoleOutput->setVisible(true);
     ui->actionConsoleOutput->setChecked(_consoleDockWidget->isVisible());
+    ui->actionProjectTree->setChecked(_projectDockWidget->isVisible());
 
     ui->actionTile->setEnabled(ui->mdiArea->viewMode() == QMdiArea::SubWindowView);
     ui->actionCascade->setEnabled(ui->mdiArea->viewMode() == QMdiArea::SubWindowView);
@@ -1054,6 +1055,14 @@ void MainWindow::on_actionToolbar_triggered()
 void MainWindow::on_actionStatusBar_triggered()
 {
     statusBar()->setVisible(!statusBar()->isVisible());
+}
+
+///
+/// \brief MainWindow::on_actionProjectTree_triggered
+///
+void MainWindow::on_actionProjectTree_triggered()
+{
+    _projectDockWidget->setVisible(!_projectDockWidget->isVisible());
 }
 
 ///
