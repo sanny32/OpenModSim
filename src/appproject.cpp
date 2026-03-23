@@ -671,7 +671,7 @@ QWidget* AppProject::resolveFormForActiveArea(QWidget* primaryForm) const
     if(!primaryForm || !isSplitTabbedView())
         return primaryForm;
 
-    auto* secondary = splitSecondaryArea();
+    auto* secondary = secondaryArea();
     if(!secondary)
         return primaryForm;
 
@@ -874,7 +874,7 @@ MdiArea* AppProject::activeCreateArea() const
     if(!isSplitTabbedView())
         return primary;
 
-    auto* secondary = splitSecondaryArea();
+    auto* secondary = secondaryArea();
     if(!secondary)
         return primary;
 
@@ -911,7 +911,7 @@ MdiArea* AppProject::areaOfForm(QWidget* frm) const
     if(primary->localSubWindowList().contains(wnd))
         return primary;
 
-    if(auto* secondary = splitSecondaryArea())
+    if(auto* secondary = secondaryArea())
         if(secondary->localSubWindowList().contains(wnd))
             return secondary;
 
@@ -919,10 +919,10 @@ MdiArea* AppProject::areaOfForm(QWidget* frm) const
 }
 
 ///
-/// \brief AppProject::splitSecondaryArea
+/// \brief AppProject::secondaryArea
 /// \return
 ///
-MdiArea* AppProject::splitSecondaryArea() const
+MdiArea* AppProject::secondaryArea() const
 {
     return _mdiArea->secondaryArea();
 }
@@ -935,7 +935,7 @@ bool AppProject::isSplitTabbedView() const
 {
     return _mdiArea->viewMode() == QMdiArea::TabbedView &&
            _mdiArea->isSplitView() &&
-           splitSecondaryArea() != nullptr;
+           secondaryArea() != nullptr;
 }
 
 ///
@@ -946,7 +946,7 @@ void AppProject::resetSplitViewIfEmpty()
     if(!isSplitTabbedView())
         return;
 
-    auto* secondary = splitSecondaryArea();
+    auto* secondary = secondaryArea();
     if(!secondary || !secondary->localSubWindowList().isEmpty())
         return;
 
@@ -1007,7 +1007,7 @@ int AppProject::duplicatePrimaryTabsToSecondary()
         return 0;
 
     auto* primary = _mdiArea->primaryArea();
-    auto* secondary = splitSecondaryArea();
+    auto* secondary = secondaryArea();
     if(!primary || !secondary)
         return 0;
 
@@ -1100,7 +1100,7 @@ void AppProject::removeSplitAutoClonesFromSecondary()
     if(!isSplitTabbedView())
         return;
 
-    auto* secondary = splitSecondaryArea();
+    auto* secondary = secondaryArea();
     if(!secondary)
         return;
 
@@ -1199,7 +1199,7 @@ void AppProject::loadProject(const QString& filename)
                             const auto attrs = xml.attributes();
                             const QString panel = attrs.value("Panel").toString();
                             if(splitView && panel.compare(QLatin1String(kPanelRight), Qt::CaseInsensitive) == 0) {
-                                if(auto* secondary = splitSecondaryArea())
+                                if(auto* secondary = secondaryArea())
                                     targetArea = secondary;
                             }
 
@@ -1258,7 +1258,7 @@ void AppProject::loadProject(const QString& filename)
     _mainWindow->applyConnections(defs, conns);
 
     // Restore secondary panel state.
-    if(splitView && splitSecondaryArea()) {
+    if(splitView && secondaryArea()) {
         if(hasSecondaryFormsSaved) {
             // Restore exactly the forms that were open on the secondary panel.
             if(auto* primary = _mdiArea->primaryArea()) {
@@ -1266,7 +1266,7 @@ void AppProject::loadProject(const QString& filename)
                     for(auto* wnd : primary->localSubWindowList()) {
                         auto* w = wnd ? wnd->widget() : nullptr;
                         if(w && w->windowTitle() == title) {
-                            createCloneOnArea(w, splitSecondaryArea());
+                            createCloneOnArea(w, secondaryArea());
                             break;
                         }
                     }
@@ -1281,7 +1281,7 @@ void AppProject::loadProject(const QString& filename)
     if(auto* primary = _mdiArea->primaryArea())
         applyTabOrderToArea(primary, primaryTabOrder);
     if(splitView)
-        if(auto* secondary = splitSecondaryArea())
+        if(auto* secondary = secondaryArea())
             applyTabOrderToArea(secondary, secondaryTabOrder);
 
     const auto restoreActiveWindows = [this, splitView, activePrimaryWin, activeSecWin]() {
@@ -1297,7 +1297,7 @@ void AppProject::loadProject(const QString& filename)
         }
 
         if(splitView && !activeSecWin.isEmpty()) {
-            if(auto* secondary = splitSecondaryArea()) {
+            if(auto* secondary = secondaryArea()) {
                 for(auto* wnd : secondary->localSubWindowList()) {
                     if(wnd && wnd->widget() && wnd->widget()->windowTitle() == activeSecWin) {
                         secondary->setActiveSubWindow(wnd);
@@ -1352,7 +1352,7 @@ void AppProject::saveProject(const QString& filename)
             if(auto frm = wnd->widget())
                 w.writeAttribute("ActivePrimaryWindow", frm->windowTitle());
     if(isSplitTabbedView())
-        if(auto secondary = splitSecondaryArea())
+        if(auto secondary = secondaryArea())
             if(auto wnd = secondary->activeSubWindow())
                 if(auto frm = wnd->widget())
                     w.writeAttribute("ActiveSecondaryWindow", frm->windowTitle());
@@ -1364,7 +1364,7 @@ void AppProject::saveProject(const QString& filename)
         if(!widget || widget->property(kSplitAutoCloneProperty).toBool())
             continue;
 
-        const bool onRight = areaOfForm(qobject_cast<QWidget*>(widget)) == splitSecondaryArea();
+        const bool onRight = areaOfForm(qobject_cast<QWidget*>(widget)) == secondaryArea();
         widget->setProperty(kFormPanelProperty, onRight ? QLatin1String(kPanelRight) : QLatin1String(kPanelLeft));
         saveXmlOfForm(widget, w);
         widget->setProperty(kFormPanelProperty, QVariant());
@@ -1381,7 +1381,7 @@ void AppProject::saveProject(const QString& filename)
     w.writeEndElement(); // Forms
 
     if(isSplitTabbedView()) {
-        if(auto* secondary = splitSecondaryArea()) {
+        if(auto* secondary = secondaryArea()) {
             w.writeStartElement("SplitSecondaryForms");
             for(auto* wnd : secondary->localSubWindowList()) {
                 auto* widget = wnd ? wnd->widget() : nullptr;
@@ -1410,7 +1410,7 @@ void AppProject::saveProject(const QString& filename)
     };
     writeTabOrder(_mdiArea->primaryArea(), kPanelLeft);
     if(isSplitTabbedView())
-        writeTabOrder(splitSecondaryArea(), kPanelRight);
+        writeTabOrder(secondaryArea(), kPanelRight);
 
     w.writeEndElement(); // OpenModSim
     w.writeEndDocument();

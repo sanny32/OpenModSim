@@ -66,7 +66,7 @@ public:
     bool        cloneMdiChildState(QWidget* source, QWidget* target) const;
 
     // Split-view
-    MdiArea*    splitSecondaryArea() const;
+    MdiArea*    secondaryArea() const;
     bool        isSplitTabbedView() const;
     bool        isScriptRunningOnSplitPair(QWidget* frm) const;
     void        updateSplitPairScriptIcons(QWidget* frm);
