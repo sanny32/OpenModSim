@@ -191,18 +191,17 @@
 <context>
     <name>ConsoleOutput</name>
     <message>
-        <location filename="../controls/consoleoutput.cpp" line="123"/>
-        <location filename="../controls/consoleoutput.cpp" line="210"/>
+        <location filename="../controls/consoleoutput.ui" line="61"/>
         <source>Clear console</source>
         <translation>жё…й™¤жЋ§е€¶еЏ°</translation>
     </message>
     <message>
-        <location filename="../controls/consoleoutput.cpp" line="335"/>
+        <location filename="../controls/consoleoutput.cpp" line="260"/>
         <source>Copy</source>
         <translation>и¤‡иЈЅ</translation>
     </message>
     <message>
-        <location filename="../controls/consoleoutput.cpp" line="346"/>
+        <location filename="../controls/consoleoutput.cpp" line="271"/>
         <source>Clear</source>
         <translation>жё…й™¤</translation>
     </message>

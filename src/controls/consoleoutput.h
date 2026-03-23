@@ -3,8 +3,9 @@
 
 #include <QWidget>
 
-class QListWidget;
-class QToolButton;
+namespace Ui {
+class ConsoleOutput;
+}
 
 ///
 /// \brief The ConsoleOutput class
@@ -16,6 +17,7 @@ public:
     enum class MessageType { Log, Debug, Warning, Error };
 
     explicit ConsoleOutput(QWidget* parent = nullptr);
+    ~ConsoleOutput();
 
     void addMessage(const QString& text, MessageType type, const QString& source = {});
     bool isEmpty() const;
@@ -34,23 +36,13 @@ private slots:
     void applyFilters();
 
 private:
-    QToolButton* createToolButton(QWidget* parent,
-                                  const QString& text,
-                                  const QIcon& icon = QIcon(),
-                                  const QString& toolTip = QString(),
-                                  const QSize& size = {24, 24},
-                                  const QSize& iconSize = {12, 12});
     void updateFilterButtons();
 
 private:
-    QListWidget*  _listWidget;
-    QToolButton*  _clearButton;
-    QToolButton*  _filterLog;
-    QToolButton*  _filterWarn;
-    QToolButton*  _filterError;
-    int           _logCount   = 0;
-    int           _warnCount  = 0;
-    int           _errorCount = 0;
+    Ui::ConsoleOutput* ui;
+    int _logCount   = 0;
+    int _warnCount  = 0;
+    int _errorCount = 0;
 };
 
 #endif // CONSOLEOUTPUT_H

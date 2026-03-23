@@ -5,10 +5,8 @@
 #include <QStyledItemDelegate>
 #include <QPainter>
 #include <QToolButton>
-#include <QVBoxLayout>
-#include <QHBoxLayout>
-#include <QAbstractItemView>
 #include "consoleoutput.h"
+#include "ui_consoleoutput.h"
 
 // ── Custom data role ─────────────────────────────────────────────────────────
 static const int MessageTypeRole = Qt::UserRole;
@@ -110,95 +108,51 @@ public:
 // ── ConsoleOutput ────────────────────────────────────────────────────────────
 ConsoleOutput::ConsoleOutput(QWidget* parent)
     : QWidget(parent)
-    , _listWidget(new QListWidget(this))
+    , ui(new Ui::ConsoleOutput)
 {
-    // ── Header ───────────────────────────────────────────────────────────────
-    auto header       = new QWidget(this);
-    auto headerLayout = new QHBoxLayout(header);
-    headerLayout->setContentsMargins(4, 0, 4, 2);
-    headerLayout->setSpacing(4);
+    ui->setupUi(this);
 
-    _clearButton = createToolButton(header, QString(),
-                                    QIcon(":/res/edit-delete.svg"),
-                                    tr("Clear console"));
-
-    // Filter buttons factory (lambda)
-    auto makeFilter = [&](const QString& initText,
-                          const QString& checkedQss,
-                          const QString& uncheckedQss) -> QToolButton* {
-        auto btn = new QToolButton(header);
-        btn->setCheckable(true);
-        btn->setChecked(true);
-        btn->setText(initText);
-        btn->setToolButtonStyle(Qt::ToolButtonTextOnly);
-        btn->setAutoRaise(false);
-        btn->setVisible(false);
-        btn->setStyleSheet(
-            QString("QToolButton { %1 }"
-                    "QToolButton:!checked { %2 }").arg(checkedQss, uncheckedQss));
-        return btn;
-    };
-
+    // Filter button stylesheets
     const QString uncheckedQss =
         "color:#9E9E9E; background:transparent;"
         "border:1px solid #BDBDBD; border-radius:3px; padding:1px 5px; font-size:11px;";
 
-    _filterLog = makeFilter("ℹ 0",
+    auto applyFilterStyle = [&](QToolButton* btn, const QString& checkedQss) {
+        btn->setStyleSheet(
+            QString("QToolButton { %1 }"
+                    "QToolButton:!checked { %2 }").arg(checkedQss, uncheckedQss));
+    };
+
+    applyFilterStyle(ui->filterLog,
         "color:#1565C0; background:#E3F2FD;"
-        "border:1px solid #64B5F6; border-radius:3px; padding:1px 5px; font-size:11px;",
-        uncheckedQss);
+        "border:1px solid #64B5F6; border-radius:3px; padding:1px 5px; font-size:11px;");
 
-    _filterWarn = makeFilter("⚠ 0",
+    applyFilterStyle(ui->filterWarn,
         "color:#E65100; background:#FFF8E1;"
-        "border:1px solid #FFA726; border-radius:3px; padding:1px 5px; font-size:11px;",
-        uncheckedQss);
+        "border:1px solid #FFA726; border-radius:3px; padding:1px 5px; font-size:11px;");
 
-    _filterError = makeFilter("✖ 0",
+    applyFilterStyle(ui->filterError,
         "color:#C62828; background:#FFEBEE;"
-        "border:1px solid #E57373; border-radius:3px; padding:1px 5px; font-size:11px;",
-        uncheckedQss);
+        "border:1px solid #E57373; border-radius:3px; padding:1px 5px; font-size:11px;");
 
-    auto collapseButton = createToolButton(header, "✕");
+    // List widget setup
+    ui->listWidget->setItemDelegate(new ConsoleItemDelegate(ui->listWidget));
 
-    headerLayout->addWidget(_clearButton);
-    headerLayout->addSpacerItem(new QSpacerItem(10, 0, QSizePolicy::Expanding));
-    headerLayout->addWidget(_filterLog);
-    headerLayout->addWidget(_filterWarn);
-    headerLayout->addWidget(_filterError);
-    headerLayout->addWidget(collapseButton);
-
-    // ── List widget ──────────────────────────────────────────────────────────
-    _listWidget->setItemDelegate(new ConsoleItemDelegate(_listWidget));
-    _listWidget->setFont(QFont("Fira Code"));
-    _listWidget->setSelectionMode(QAbstractItemView::ExtendedSelection);
-    _listWidget->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
-    _listWidget->setFrameShape(QFrame::NoFrame);
-    _listWidget->setContextMenuPolicy(Qt::CustomContextMenu);
-
-    auto pal = _listWidget->palette();
-    pal.setColor(QPalette::Base, Qt::white);
-    _listWidget->setPalette(pal);
-
-    // ── Main layout ──────────────────────────────────────────────────────────
-    auto mainLayout = new QVBoxLayout(this);
-    mainLayout->setContentsMargins(0, 0, 0, 0);
-    mainLayout->setSpacing(0);
-    mainLayout->addWidget(header);
-    mainLayout->addWidget(_listWidget);
-
-    header->setFixedHeight(header->sizeHint().height());
-
+    // Computed minimum height
     const int lineHeight = QFontMetrics(QFont("Fira Code")).lineSpacing() * 2;
-    setMinimumHeight(header->height() + lineHeight);
+    setMinimumHeight(ui->clearButton->sizeHint().height() + lineHeight);
 
-    // ── Connections ──────────────────────────────────────────────────────────
-    connect(_clearButton,  &QToolButton::clicked,  this, &ConsoleOutput::clear);
-    connect(collapseButton, &QToolButton::clicked, this, &ConsoleOutput::collapse);
-    connect(_filterLog,    &QToolButton::toggled,  this, &ConsoleOutput::applyFilters);
-    connect(_filterWarn,   &QToolButton::toggled,  this, &ConsoleOutput::applyFilters);
-    connect(_filterError,  &QToolButton::toggled,  this, &ConsoleOutput::applyFilters);
-    connect(_listWidget, &QWidget::customContextMenuRequested,
-            this, &ConsoleOutput::on_customContextMenuRequested);
+    // Connections
+    connect(ui->clearButton,    &QToolButton::clicked,  this, &ConsoleOutput::clear);
+    connect(ui->filterLog,      &QToolButton::toggled,  this, &ConsoleOutput::applyFilters);
+    connect(ui->filterWarn,     &QToolButton::toggled,  this, &ConsoleOutput::applyFilters);
+    connect(ui->filterError,    &QToolButton::toggled,  this, &ConsoleOutput::applyFilters);
+    connect(ui->listWidget,     &QWidget::customContextMenuRequested, this, &ConsoleOutput::on_customContextMenuRequested);
+}
+
+ConsoleOutput::~ConsoleOutput()
+{
+    delete ui;
 }
 
 ///
@@ -207,7 +161,8 @@ ConsoleOutput::ConsoleOutput(QWidget* parent)
 void ConsoleOutput::changeEvent(QEvent* event)
 {
     if (event->type() == QEvent::LanguageChange)
-        _clearButton->setToolTip(tr("Clear console"));
+        ui->retranslateUi(this);
+    QWidget::changeEvent(event);
 }
 
 ///
@@ -216,29 +171,29 @@ void ConsoleOutput::changeEvent(QEvent* event)
 void ConsoleOutput::addMessage(const QString& text, MessageType type, const QString& source)
 {
     const QString displayText = source.isEmpty() ? text : QString("[%1] %2").arg(source, text);
-    auto item = new QListWidgetItem(displayText, _listWidget);
+    auto item = new QListWidgetItem(displayText, ui->listWidget);
     item->setData(MessageTypeRole, static_cast<int>(type));
     item->setToolTip(displayText);
 
     bool visible = true;
     switch (type) {
     case MessageType::Warning:
-        visible = _filterWarn->isChecked();
+        visible = ui->filterWarn->isChecked();
         _warnCount++;
         break;
     case MessageType::Error:
-        visible = _filterError->isChecked();
+        visible = ui->filterError->isChecked();
         _errorCount++;
         break;
     default:
-        visible = _filterLog->isChecked();
+        visible = ui->filterLog->isChecked();
         _logCount++;
         break;
     }
     item->setHidden(!visible);
 
     updateFilterButtons();
-    _listWidget->scrollToBottom();
+    ui->listWidget->scrollToBottom();
 }
 
 ///
@@ -246,7 +201,7 @@ void ConsoleOutput::addMessage(const QString& text, MessageType type, const QStr
 ///
 void ConsoleOutput::clear()
 {
-    _listWidget->clear();
+    ui->listWidget->clear();
     _logCount = _warnCount = _errorCount = 0;
     updateFilterButtons();
 }
@@ -256,7 +211,7 @@ void ConsoleOutput::clear()
 ///
 bool ConsoleOutput::isEmpty() const
 {
-    return _listWidget->count() == 0;
+    return ui->listWidget->count() == 0;
 }
 
 ///
@@ -264,12 +219,12 @@ bool ConsoleOutput::isEmpty() const
 ///
 void ConsoleOutput::applyFilters()
 {
-    const bool showLog   = _filterLog->isChecked();
-    const bool showWarn  = _filterWarn->isChecked();
-    const bool showError = _filterError->isChecked();
+    const bool showLog   = ui->filterLog->isChecked();
+    const bool showWarn  = ui->filterWarn->isChecked();
+    const bool showError = ui->filterError->isChecked();
 
-    for (int i = 0; i < _listWidget->count(); ++i) {
-        auto item = _listWidget->item(i);
+    for (int i = 0; i < ui->listWidget->count(); ++i) {
+        auto item = ui->listWidget->item(i);
         const auto type = static_cast<MessageType>(item->data(MessageTypeRole).toInt());
         bool visible;
         switch (type) {
@@ -286,43 +241,13 @@ void ConsoleOutput::applyFilters()
 ///
 void ConsoleOutput::updateFilterButtons()
 {
-    _filterLog->setText(QString("ℹ %1").arg(_logCount));
-    _filterWarn->setText(QString("⚠ %1").arg(_warnCount));
-    _filterError->setText(QString("✖ %1").arg(_errorCount));
+    ui->filterLog->setText(QString("ℹ %1").arg(_logCount));
+    ui->filterWarn->setText(QString("⚠ %1").arg(_warnCount));
+    ui->filterError->setText(QString("✖ %1").arg(_errorCount));
 
-    _filterLog->setVisible(_logCount > 0);
-    _filterWarn->setVisible(_warnCount > 0);
-    _filterError->setVisible(_errorCount > 0);
-}
-
-///
-/// \brief ConsoleOutput::createToolButton
-///
-QToolButton* ConsoleOutput::createToolButton(QWidget* parent, const QString& text,
-                                              const QIcon& icon, const QString& toolTip,
-                                              const QSize& size, const QSize& iconSize)
-{
-    auto btn = new QToolButton(parent);
-    btn->setText(text);
-    btn->setIcon(icon);
-
-    if (!iconSize.isEmpty())
-        btn->setIconSize(iconSize);
-
-    if (!size.isEmpty())
-        btn->setFixedSize(size);
-
-    btn->setToolTip(toolTip);
-    btn->setAutoRaise(true);
-
-    if (text.isEmpty() && !icon.isNull())
-        btn->setToolButtonStyle(Qt::ToolButtonIconOnly);
-    else if (!text.isEmpty() && !icon.isNull())
-        btn->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
-    else
-        btn->setToolButtonStyle(Qt::ToolButtonTextOnly);
-
-    return btn;
+    ui->filterLog->setVisible(_logCount > 0);
+    ui->filterWarn->setVisible(_warnCount > 0);
+    ui->filterError->setVisible(_errorCount > 0);
 }
 
 ///
@@ -330,21 +255,21 @@ QToolButton* ConsoleOutput::createToolButton(QWidget* parent, const QString& tex
 ///
 void ConsoleOutput::on_customContextMenuRequested(const QPoint& pos)
 {
-    QMenu menu(_listWidget);
+    QMenu menu(ui->listWidget);
 
     auto copyAction = menu.addAction(QIcon(":/res/actionCopy.png"), tr("Copy"), this, [this]() {
         QStringList lines;
-        for (auto* item : _listWidget->selectedItems())
+        for (auto* item : ui->listWidget->selectedItems())
             lines << item->text();
         if (!lines.isEmpty())
             QApplication::clipboard()->setText(lines.join('\n'));
     });
-    copyAction->setEnabled(!_listWidget->selectedItems().isEmpty());
+    copyAction->setEnabled(!ui->listWidget->selectedItems().isEmpty());
 
     menu.addSeparator();
 
     auto clearAction = menu.addAction(tr("Clear"), this, [this]() { clear(); });
     clearAction->setEnabled(!isEmpty());
 
-    menu.exec(_listWidget->mapToGlobal(pos));
+    menu.exec(ui->listWidget->mapToGlobal(pos));
 }
