@@ -9,12 +9,16 @@
 ///
 quint16 getDataValue(const QModbusDataUnitMap& modbusMap, QModbusDataUnit::RegisterType pointType, quint16 pointAddress)
 {
-    const auto length = modbusMap[pointType].valueCount();
-    const auto startAddress = modbusMap[pointType].startAddress();
-    if(pointAddress < startAddress || pointAddress > startAddress + length)
+    const auto it = modbusMap.constFind(pointType);
+    if(it == modbusMap.constEnd())
         return 0;
-    else
-        return modbusMap[pointType].value(pointAddress - startAddress);
+
+    const auto& dataUnit = it.value();
+    const int idx = pointAddress - dataUnit.startAddress();
+    if(idx < 0 || idx >= dataUnit.valueCount())
+        return 0;
+
+    return dataUnit.value(idx);
 }
 
 ///
@@ -26,9 +30,14 @@ quint16 getDataValue(const QModbusDataUnitMap& modbusMap, QModbusDataUnit::Regis
 ///
 void setDataValue(QModbusDataUnitMap& modbusMap, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, quint16 value)
 {
-    const auto startAddress = modbusMap[pointType].startAddress();
-    const auto idx = pointAddress - startAddress;
-    if(idx >= 0) modbusMap[pointType].setValue(idx, value);
+    auto it = modbusMap.find(pointType);
+    if(it == modbusMap.end())
+        return;
+
+    auto& dataUnit = it.value();
+    const int idx = pointAddress - dataUnit.startAddress();
+    if(idx >= 0 && idx < dataUnit.valueCount())
+        dataUnit.setValue(idx, value);
 }
 
 ///

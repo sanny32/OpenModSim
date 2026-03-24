@@ -501,6 +501,15 @@ QModbusDevice::State ModbusMultiServer::state(ConnectionType type, const QString
 ///
 QModbusDataUnit ModbusMultiServer::data(quint8 deviceId, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, quint16 length) const
 {
+    if(QThread::currentThread() != _workerThread)
+    {
+        QModbusDataUnit result;
+        QMetaObject::invokeMethod(const_cast<ModbusMultiServer*>(this), [this, &result, deviceId, pointType, pointAddress, length]() {
+            result = data(deviceId, pointType, pointAddress, length);
+        }, Qt::BlockingQueuedConnection);
+        return result;
+    }
+
     const auto item = _modbusDataUnitMaps.find(deviceId);
     return (item != _modbusDataUnitMaps.end())
         ? item->getData(pointType, pointAddress, length)

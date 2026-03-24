@@ -4040,12 +4040,12 @@ Script.onInit(()=&gt;{
 <context>
     <name>ModbusMultiServer</name>
     <message>
-        <location filename="../modbusmultiserver.cpp" line="525"/>
+        <location filename="../modbusmultiserver.cpp" line="534"/>
         <source>An incorrect device ID was specified (%1)</source>
         <translation>жЊ‡е®љдє†йЊЇиЄ¤зљ„иЈќзЅ®ењ°еќЂпј€%1пј‰</translation>
     </message>
     <message>
-        <location filename="../modbusmultiserver.cpp" line="1065"/>
+        <location filename="../modbusmultiserver.cpp" line="1074"/>
         <source>Connection error. %1</source>
         <translation>йЂЈз·љйЊЇиЄ¤ %1</translation>
     </message>
