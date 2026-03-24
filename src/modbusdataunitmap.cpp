@@ -60,7 +60,7 @@ ModbusDataUnitMap::ModbusDataUnitMap()
 /// \param pointAddress
 /// \param length
 ///
-void ModbusDataUnitMap::addUnitMap(int id, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, quint16 length)
+void ModbusDataUnitMap::addUnitMap(QUuid id, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, quint16 length)
 {
     if(_isGlobal)
         return;
@@ -73,7 +73,7 @@ void ModbusDataUnitMap::addUnitMap(int id, QModbusDataUnit::RegisterType pointTy
 /// \brief ModbusDataUnitMap::removeUnitMap
 /// \param pointType
 ///
-void ModbusDataUnitMap::removeUnitMap(int id)
+void ModbusDataUnitMap::removeUnitMap(QUuid id)
 {
     _dataUnits.remove(id);
     updateDataUnitMap();

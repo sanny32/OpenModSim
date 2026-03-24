@@ -41,31 +41,20 @@ QRange<int> lengthRangeForPointType(int address,
     return { defaultRange.from(), qMax(defaultRange.from(), maxLen) };
 }
 
-int dataFormId(const QWidget* widget)
+QUuid dataFormId(const QWidget* widget)
 {
     if (!widget)
-        return -1;
+        return {};
 
-    bool ok = false;
-    const int propertyId = widget->property(kFormIdProperty).toInt(&ok);
-    if(ok)
-        return propertyId;
-
-    const QString title = widget->windowTitle();
-    int idx = title.size() - 1;
-    while (idx >= 0 && title.at(idx).isDigit())
-        --idx;
-    const int id = title.mid(idx + 1).toInt(&ok);
-    return ok ? id : -1;
+    return widget->property(kFormIdProperty).toUuid();
 }
 }
 
 ///
 /// \brief FormDataView::FormDataView
-/// \param num
 /// \param parent
 ///
-FormDataView::FormDataView(int id, ModbusMultiServer& server, DataSimulator* simulator, MainWindow* parent)
+FormDataView::FormDataView(ModbusMultiServer& server, DataSimulator* simulator, MainWindow* parent)
     : QWidget(parent)
     , ui(new Ui::FormDataView)
     ,_parent(parent)
@@ -76,7 +65,6 @@ FormDataView::FormDataView(int id, ModbusMultiServer& server, DataSimulator* sim
     Q_ASSERT(_dataSimulator != nullptr);
 
     ui->setupUi(this);
-    setWindowTitle(QString("Data%1").arg(id));
     setWindowIcon(QIcon(":/res/actionShowData.png"));
 
     ui->lineEditDeviceId->setInputRange(ModbusLimits::slaveRange());

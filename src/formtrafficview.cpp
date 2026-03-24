@@ -28,17 +28,14 @@ constexpr int TrafficUiFlushChunkSize = 300;
 /// \param num
 /// \param parent
 ///
-FormTrafficView::FormTrafficView(int id, ModbusMultiServer& server, MainWindow* parent)
+FormTrafficView::FormTrafficView(ModbusMultiServer& server, MainWindow* parent)
     : QWidget(parent)
     , ui(new Ui::FormTrafficView)
-    , _formId(id)
     , _mbMultiServer(server)
 {
     Q_ASSERT(parent != nullptr);
 
     ui->setupUi(this);
-
-    setWindowTitle(QString("Traffic%1").arg(_formId));
     setWindowIcon(QIcon(":/res/actionShowTraffic.png"));
     setupToolbarActions();
     setupFilterControls();

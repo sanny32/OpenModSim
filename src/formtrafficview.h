@@ -40,7 +40,7 @@ class FormTrafficView : public QWidget
     friend QXmlStreamReader& operator >>(QXmlStreamReader& xml, FormTrafficView* frm);
 
 public:
-    explicit FormTrafficView(int id, ModbusMultiServer& server, MainWindow* parent);
+    explicit FormTrafficView(ModbusMultiServer& server, MainWindow* parent);
     ~FormTrafficView();
 
     TrafficViewDefinitions displayDefinition() const;
@@ -123,7 +123,6 @@ private:
 
 private:
     Ui::FormTrafficView *ui;
-    int _formId;
     TrafficViewDefinitions _displayDefinition;
     ModbusMultiServer& _mbMultiServer;
     uint _requestCount = 0;

@@ -3,6 +3,7 @@
 
 #include <QThread>
 #include <QModbusServer>
+#include <QUuid>
 #include "modbusdataunitmap.h"
 #include "modbuswriteparams.h"
 #include "connectiondetails.h"
@@ -26,8 +27,8 @@ public:
     bool useGlobalUnitMap() const;
     void setUseGlobalUnitMap(bool use);
 
-    void addUnitMap(int id, quint8 deviceId, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, quint16 length);
-    void removeUnitMap(int id, quint8 deviceId);
+    void addUnitMap(QUuid id, quint8 deviceId, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, quint16 length);
+    void removeUnitMap(QUuid id, quint8 deviceId);
 
     void setRequestHandler(const RequestHandlerPtr& handler);
 

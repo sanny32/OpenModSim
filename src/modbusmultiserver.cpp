@@ -126,7 +126,7 @@ void ModbusMultiServer::setUseGlobalUnitMap(bool use)
 /// \param pointAddress
 /// \param length
 ///
-void ModbusMultiServer::addUnitMap(int id, quint8 deviceId, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, quint16 length)
+void ModbusMultiServer::addUnitMap(QUuid id, quint8 deviceId, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, quint16 length)
 {
     if(QThread::currentThread() != _workerThread)
     {
@@ -149,7 +149,7 @@ void ModbusMultiServer::addUnitMap(int id, quint8 deviceId, QModbusDataUnit::Reg
 /// \brief ModbusMultiServer::removeUnitMap
 /// \param id
 ///
-void ModbusMultiServer::removeUnitMap(int id, quint8 deviceId)
+void ModbusMultiServer::removeUnitMap(QUuid id, quint8 deviceId)
 {
     if(QThread::currentThread() != _workerThread)
     {

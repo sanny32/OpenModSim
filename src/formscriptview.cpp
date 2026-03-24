@@ -14,18 +14,15 @@
 /// \param simulator
 /// \param parent
 ///
-FormScriptView::FormScriptView(int id, ModbusMultiServer& server, DataSimulator* simulator, MainWindow* parent)
+FormScriptView::FormScriptView(ModbusMultiServer& server, DataSimulator* simulator, MainWindow* parent)
     : QWidget(parent)
     , ui(new Ui::FormScriptView)
     , _parent(parent)
-    , _formId(id)
 {
     Q_ASSERT(parent != nullptr);
     Q_UNUSED(simulator);
 
     ui->setupUi(this);
-
-    setWindowTitle(QString("Script%1").arg(_formId));
     setWindowIcon(QIcon(":/res/actionShowScript.png"));
 
     _displayDefinition.FormName = windowTitle();

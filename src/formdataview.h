@@ -38,7 +38,7 @@ class FormDataView : public QWidget
     friend QXmlStreamReader& operator >>(QXmlStreamReader& xml, FormDataView* frm);
 
 public:
-    explicit FormDataView(int id, ModbusMultiServer& server, DataSimulator* simulator, MainWindow* parent);
+    explicit FormDataView(ModbusMultiServer& server, DataSimulator* simulator, MainWindow* parent);
     ~FormDataView();
 
     QVector<quint16> data() const;

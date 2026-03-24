@@ -39,7 +39,7 @@ class FormScriptView : public QWidget
     friend QXmlStreamReader& operator >>(QXmlStreamReader& xml, FormScriptView* frm);
 
 public:
-    explicit FormScriptView(int id, ModbusMultiServer& server, DataSimulator* simulator, MainWindow* parent);
+    explicit FormScriptView(ModbusMultiServer& server, DataSimulator* simulator, MainWindow* parent);
     ~FormScriptView();
 
     ScriptViewDefinitions definitions() const;
@@ -124,7 +124,6 @@ private:
 private:
     Ui::FormScriptView *ui;
     MainWindow* _parent;
-    int _formId;
     ScriptSettings _scriptSettings;
     ScriptViewDefinitions _displayDefinition;
 

@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QList>
 #include <QMdiArea>
+#include <QUuid>
 #include "modbusmultiserver.h"
 #include "datasimulator.h"
 #include "formdataview.h"
@@ -48,8 +49,8 @@ public:
     void markFormClosed(QWidget* frm);
 
     // Forms
-    QWidget* createMdiChild(int id, ProjectFormKind kind = ProjectFormKind::Data);
-    QWidget* createMdiChildOnArea(int id, ProjectFormKind kind, MdiArea* area, bool addToWindowList);
+    QWidget* createMdiChild(ProjectFormKind kind = ProjectFormKind::Data);
+    QWidget* createMdiChildOnArea(ProjectFormKind kind, MdiArea* area, bool addToWindowList);
     void        rewrapMdiChild(QWidget* frm);
     void        closeMdiChild(QWidget* frm);
     void        deleteForm(QWidget* frm);
@@ -59,8 +60,8 @@ public:
     FormDataView* currentDataMdiChild() const;
     FormTrafficView* currentTrafficMdiChild() const;
     FormScriptView* currentScriptMdiChild() const;
-    QWidget* findMdiChild(int id) const;
-    QWidget* findMdiChildInArea(MdiArea* area, int id) const;
+    QWidget* findMdiChild(QUuid id) const;
+    QWidget* findMdiChildInArea(MdiArea* area, QUuid id) const;
     QWidget* firstMdiChild() const;
     QWidget* resolveFormForActiveArea(QWidget* primaryForm) const;
     bool        cloneMdiChildState(QWidget* source, QWidget* target) const;
@@ -88,8 +89,7 @@ public:
     bool isFormClosed(QWidget* frm) const;
     QString savePath() const        { return _savePath; }
     void    setSavePath(const QString& p) { _savePath = p; }
-    int     windowCounter() const   { return _windowCounter; }
-    void    setWindowCounter(int v) { _windowCounter = v; }
+    int     nextFormDisplayNumber(ProjectFormKind kind);
 
 private:
     void setupMdiChild(QWidget* frm, QMdiSubWindow* wnd, bool addToWindowList);
@@ -107,7 +107,9 @@ private:
     ProjectTreeWidget*            _projectTree;
     MainWindow*                   _mainWindow;
 
-    int                _windowCounter = 0;
+    int                _dataCounter = 0;
+    int                _trafficCounter = 0;
+    int                _scriptCounter = 0;
     QList<QWidget*>      _closedForms;
     QString            _savePath;
 };

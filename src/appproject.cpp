@@ -1,5 +1,6 @@
 ﻿#include <QtWidgets>
 #include <QBuffer>
+#include <QUuid>
 #include <QSet>
 #include <QTextDocument>
 #include "apppreferences.h"
@@ -55,23 +56,12 @@ ProjectFormKind projectFormKindFromWidget(QWidget* widget, bool* ok = nullptr)
     return ProjectFormKind::Data;
 }
 
-int formIdOf(QWidget* widget)
+QUuid formIdOf(QWidget* widget)
 {
     if (!widget)
-        return -1;
+        return {};
 
-    bool ok = false;
-    const int propertyId = widget->property(kFormIdProperty).toInt(&ok);
-    if(ok)
-        return propertyId;
-
-    const QString title = widget->windowTitle();
-    int idx = title.size() - 1;
-    while (idx >= 0 && title.at(idx).isDigit())
-        --idx;
-
-    const int id = title.mid(idx + 1).toInt(&ok);
-    return ok ? id : -1;
+    return widget->property(kFormIdProperty).toUuid();
 }
 
 void enableAutoCompleteOnForm(QWidget* widget, bool enable)
@@ -260,7 +250,9 @@ void AppProject::closeProject()
         delete frm;
     }
     _closedForms.clear();
-    _windowCounter = 0;
+    _dataCounter = 0;
+    _trafficCounter = 0;
+    _scriptCounter = 0;
 }
 
 ///
@@ -285,27 +277,37 @@ void AppProject::markFormClosed(QWidget* frm)
 }
 
 ///
+/// \brief AppProject::nextFormDisplayNumber
+/// Returns the next sequential display number for the given form kind.
+///
+int AppProject::nextFormDisplayNumber(ProjectFormKind kind)
+{
+    switch(kind)
+    {
+        case ProjectFormKind::Data:    return ++_dataCounter;
+        case ProjectFormKind::Traffic: return ++_trafficCounter;
+        case ProjectFormKind::Script:  return ++_scriptCounter;
+    }
+    return 0;
+}
+
+///
 /// \brief AppProject::createMdiChild
-/// \param id
 /// \return
 ///
-QWidget* AppProject::createMdiChild(int id, ProjectFormKind kind)
+QWidget* AppProject::createMdiChild(ProjectFormKind kind)
 {
-    while(findMdiChild(id))
-        ++id;
-
-    _windowCounter = qMax(_windowCounter, id);
-    return createMdiChildOnArea(id, kind, activeCreateArea(), true);
+    return createMdiChildOnArea(kind, activeCreateArea(), true);
 }
 
 ///
 /// \brief AppProject::createMdiChildOnArea
-/// \param id
+/// \param kind
 /// \param area
 /// \param addToWindowList
 /// \return
 ///
-QWidget* AppProject::createMdiChildOnArea(int id, ProjectFormKind kind, MdiArea* area, bool addToWindowList)
+QWidget* AppProject::createMdiChildOnArea(ProjectFormKind kind, MdiArea* area, bool addToWindowList)
 {
     if(!area)
         return nullptr;
@@ -314,19 +316,30 @@ QWidget* AppProject::createMdiChildOnArea(int id, ProjectFormKind kind, MdiArea*
     switch (kind)
     {
         case ProjectFormKind::Data:
-            frm = new FormDataView(id, _mbServer, _dataSimulator, _mainWindow);
+            frm = new FormDataView(_mbServer, _dataSimulator, _mainWindow);
             break;
         case ProjectFormKind::Traffic:
-            frm = new FormTrafficView(id, _mbServer, _mainWindow);
+            frm = new FormTrafficView(_mbServer, _mainWindow);
             break;
         case ProjectFormKind::Script:
-            frm = new FormScriptView(id, _mbServer, _dataSimulator, _mainWindow);
+            frm = new FormScriptView(_mbServer, _dataSimulator, _mainWindow);
             break;
     }
     if(!frm)
         return nullptr;
 
-    frm->setProperty(kFormIdProperty, id);
+    frm->setProperty(kFormIdProperty, QUuid::createUuid());
+
+    if(addToWindowList)
+    {
+        const int num = nextFormDisplayNumber(kind);
+        switch(kind)
+        {
+            case ProjectFormKind::Data:    frm->setWindowTitle(QString("Data%1").arg(num));    break;
+            case ProjectFormKind::Traffic: frm->setWindowTitle(QString("Traffic%1").arg(num)); break;
+            case ProjectFormKind::Script:  frm->setWindowTitle(QString("Script%1").arg(num));  break;
+        }
+    }
 
     enableAutoCompleteOnForm(frm, AppPreferences::instance().codeAutoComplete());
 
@@ -630,7 +643,7 @@ FormScriptView* AppProject::currentScriptMdiChild() const
 /// \param id
 /// \return
 ///
-QWidget* AppProject::findMdiChild(int id) const
+QWidget* AppProject::findMdiChild(QUuid id) const
 {
     for(auto&& wnd : _mdiArea->subWindowList())
     {
@@ -646,7 +659,7 @@ QWidget* AppProject::findMdiChild(int id) const
 /// \param id
 /// \return
 ///
-QWidget* AppProject::findMdiChildInArea(MdiArea* area, int id) const
+QWidget* AppProject::findMdiChildInArea(MdiArea* area, QUuid id) const
 {
     if(!area)
         return nullptr;
@@ -679,13 +692,13 @@ QWidget* AppProject::resolveFormForActiveArea(QWidget* primaryForm) const
     if(activeCreateArea() != secondary)
         return primaryForm;
 
-    const int originId = formIdOf(primaryForm);
+    const QUuid originId = formIdOf(primaryForm);
     for(auto* wnd : secondary->localSubWindowList())
     {
         auto* cloneFrm = qobject_cast<QWidget*>(wnd ? wnd->widget() : nullptr);
         if(cloneFrm &&
            cloneFrm->property(kSplitAutoCloneProperty).toBool() &&
-           cloneFrm->property(kSplitOriginIdProperty).toInt() == originId)
+           cloneFrm->property(kSplitOriginIdProperty).toUuid() == originId)
         {
             return cloneFrm;
         }
@@ -708,17 +721,12 @@ QWidget* AppProject::createCloneOnArea(QWidget* source, MdiArea* area)
     if(!okKind)
         return nullptr;
 
-    int cloneId = _windowCounter + 1;
-    while(findMdiChild(cloneId))
-        ++cloneId;
-    _windowCounter = cloneId;
-
-    auto* clone = createMdiChildOnArea(cloneId, cloneKind, area, false);
+    auto* clone = createMdiChildOnArea(cloneKind, area, false);
     if(!clone)
         return nullptr;
 
-    int originId = source->property(kSplitOriginIdProperty).toInt();
-    if(originId <= 0)
+    QUuid originId = source->property(kSplitOriginIdProperty).toUuid();
+    if(originId.isNull())
         originId = formIdOf(source);
 
     cloneMdiChildState(source, clone);
@@ -1029,8 +1037,8 @@ int AppProject::duplicatePrimaryTabsToSecondary()
         return 0;
 
     // Ensure origin tracking properties are initialized.
-    int activeOriginId = activeFrm->property(kSplitOriginIdProperty).toInt();
-    if(activeOriginId <= 0) {
+    QUuid activeOriginId = activeFrm->property(kSplitOriginIdProperty).toUuid();
+    if(activeOriginId.isNull()) {
         activeOriginId = formIdOf(activeFrm);
         activeFrm->setProperty(kSplitOriginIdProperty, activeOriginId);
     }
@@ -1042,7 +1050,7 @@ int AppProject::duplicatePrimaryTabsToSecondary()
         for(auto* wnd : primary->localSubWindowList()) {
             auto* frm = qobject_cast<QWidget*>(wnd ? wnd->widget() : nullptr);
             if(frm
-                && frm->property(kSplitOriginIdProperty).toInt() == activeOriginId
+                && frm->property(kSplitOriginIdProperty).toUuid() == activeOriginId
                 && !frm->property(kSplitAutoCloneProperty).toBool()) {
                 activeFrm = frm;
                 primaryActiveWnd = wnd;
@@ -1056,7 +1064,7 @@ int AppProject::duplicatePrimaryTabsToSecondary()
     for(auto* wnd : primary->localSubWindowList()) {
         auto* frm = qobject_cast<QWidget*>(wnd ? wnd->widget() : nullptr);
         if(frm
-            && frm->property(kSplitOriginIdProperty).toInt() == activeOriginId
+            && frm->property(kSplitOriginIdProperty).toUuid() == activeOriginId
             && frm->property(kSplitAutoCloneProperty).toBool()) {
             toMove = wnd;
             break;
@@ -1205,7 +1213,7 @@ void AppProject::loadProject(const QString& filename)
                                     targetArea = secondary;
                             }
 
-                            auto frm = createMdiChildOnArea(++_windowCounter, kind, targetArea, true);
+                            auto frm = createMdiChildOnArea(kind, targetArea, true);
                             if (frm) {
                                 loadXmlOfForm(frm, xml);
                                 if (isClosed) {

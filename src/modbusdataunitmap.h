@@ -2,6 +2,7 @@
 #define MODBUSDATAUNITMAP_H
 
 #include <QModbusDataUnit>
+#include <QUuid>
 #include "enums.h"
 
 ///
@@ -12,8 +13,8 @@ class ModbusDataUnitMap
 public:
     explicit ModbusDataUnitMap();
 
-    void addUnitMap(int id, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, quint16 length);
-    void removeUnitMap(int id);
+    void addUnitMap(QUuid id, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, quint16 length);
+    void removeUnitMap(QUuid id);
 
     AddressSpace addressSpace() const;
     void setAddressSpace(AddressSpace space);
@@ -45,7 +46,7 @@ private:
 private:
     bool _isGlobal;
     AddressSpace _addressSpace;
-    QMap<int, QModbusDataUnit> _dataUnits;
+    QMap<QUuid, QModbusDataUnit> _dataUnits;
     QModbusDataUnitMap _modbusDataUnitMap;
     QModbusDataUnitMap _modbusDataUnitGlobalMap;
 };

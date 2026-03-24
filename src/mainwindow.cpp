@@ -550,8 +550,7 @@ void MainWindow::on_actionNewTrafficView_triggered()
 ///
 QWidget* MainWindow::createNewForm(ProjectFormKind kind)
 {
-    _project->setWindowCounter(_project->windowCounter() + 1);
-    auto* frm = _project->createMdiChild(_project->windowCounter(), kind);
+    auto* frm = _project->createMdiChild(kind);
     if(!frm)
         return nullptr;
 
