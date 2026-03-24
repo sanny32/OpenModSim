@@ -383,8 +383,6 @@ void JScriptControl::runScript(RunMode mode, int interval)
     _jsEngine.globalObject().setProperty("AddressSpace", newEnumObject(Address::staticMetaObject, "Space"));
     _jsEngine.setInterrupted(false);
 
-
-
     if(!executeScript())
         return;
 
