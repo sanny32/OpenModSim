@@ -1911,7 +1911,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formdataview.cpp" line="572"/>
+        <location filename="../formdataview.cpp" line="562"/>
         <source>Address Base: %1
 Start Address: %2
 Length: %3</source>
@@ -1920,7 +1920,7 @@ Length: %3</source>
 РљРѕР»РёС‡РµСЃС‚РІРѕ: %3</translation>
     </message>
     <message>
-        <location filename="../formdataview.cpp" line="575"/>
+        <location filename="../formdataview.cpp" line="565"/>
         <source>Unit Identifier: %1
 MODBUS Point Type:
 %2</source>

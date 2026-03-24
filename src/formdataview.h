@@ -97,7 +97,6 @@ public:
 protected:
     void changeEvent(QEvent* event) override;
     void closeEvent(QCloseEvent* event) override;
-    void mouseDoubleClickEvent(QMouseEvent* event) override;
     bool eventFilter(QObject* obj, QEvent* event) override;
 
 public slots:
@@ -129,8 +128,6 @@ private slots:
     void on_comboBoxAddressBase_addressBaseChanged(AddressBase base);
     void on_comboBoxModbusPointType_pointTypeChanged(QModbusDataUnit::RegisterType value);
     void on_outputWidget_itemDoubleClicked(quint16 addr, const QVariant& value);
-    void on_mbConnected(const ConnectionDetails& cd);
-    void on_mbDisconnected(const ConnectionDetails& cd);
     void on_mbDataChanged(quint8 deviceId, const QModbusDataUnit& data);
     void on_mbDefinitionsChanged(const ModbusDefinitions& defs);
     void on_simulationStarted(DataDisplayMode mode, quint8 deviceId, QModbusDataUnit::RegisterType type, const QVector<quint16>& addresses);
@@ -139,6 +136,7 @@ private slots:
 
 private:
     void updateStatus();
+    void reapplyFind();
     void onDefinitionChanged();
     void setDisplayDefinitionSilent(const DataViewDefinitions& dd);
 
