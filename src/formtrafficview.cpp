@@ -12,11 +12,17 @@
 #include <QAbstractEventDispatcher>
 #include <QFileDialog>
 #include <QMessageBox>
+#include <QVector>
 #include "mainwindow.h"
 #include "modbusmessages.h"
 #include "serialportutils.h"
 #include "formtrafficview.h"
 #include "ui_formtrafficview.h"
+
+namespace {
+constexpr int TrafficUiFlushIntervalMs = 20;
+constexpr int TrafficUiFlushChunkSize = 300;
+}
 
 ///
 /// \brief FormTrafficView::FormTrafficView
@@ -48,6 +54,11 @@ FormTrafficView::FormTrafficView(int id, ModbusMultiServer& server, MainWindow* 
 
     auto dispatcher = QAbstractEventDispatcher::instance();
     connect(dispatcher, &QAbstractEventDispatcher::awake, this, &FormTrafficView::on_awake);
+
+    _logUiFlushTimer = new QTimer(this);
+    _logUiFlushTimer->setSingleShot(true);
+    _logUiFlushTimer->setInterval(TrafficUiFlushIntervalMs);
+    connect(_logUiFlushTimer, &QTimer::timeout, this, &FormTrafficView::on_logUiFlushTimeout);
 
     ui->outputWidget->setup(_displayDefinition);
     updateSourceFilter();
@@ -99,7 +110,27 @@ void FormTrafficView::loadXml(QXmlStreamReader& xml)
 ///
 void FormTrafficView::on_awake()
 {
-    ui->actionExportTrafficLog->setEnabled(!ui->outputWidget->isLogEmpty());
+    ui->actionExportTrafficLog->setEnabled(!ui->outputWidget->isLogEmpty() || !_pendingLogViewUpdates.isEmpty());
+}
+
+///
+/// \brief FormTrafficView::on_logUiFlushTimeout
+///
+void FormTrafficView::on_logUiFlushTimeout()
+{
+    if (_pendingLogViewUpdates.isEmpty())
+        return;
+
+    const int batchSize = qMin(TrafficUiFlushChunkSize, _pendingLogViewUpdates.size());
+    QVector<QSharedPointer<const ModbusMessage>> batch;
+    batch.reserve(batchSize);
+    for (int i = 0; i < batchSize; ++i)
+        batch.push_back(_pendingLogViewUpdates.dequeue());
+
+    ui->outputWidget->updateTrafficBatch(batch);
+
+    if (!_pendingLogViewUpdates.isEmpty())
+        _logUiFlushTimer->start();
 }
 
 ///
@@ -530,6 +561,8 @@ void FormTrafficView::setupToolbarActions()
         if (filename.isEmpty())
             return;
 
+        flushPendingTrafficUiAll();
+
         if (ui->outputWidget->exportLogToTextFile(filename))
             QMessageBox::information(this, windowTitle(), tr("Log exported successfully to file %1").arg(filename));
         else
@@ -749,9 +782,41 @@ void FormTrafficView::resetTrafficCounters()
 ///
 void FormTrafficView::clearTrafficLog()
 {
+    if (_logUiFlushTimer)
+        _logUiFlushTimer->stop();
+    _pendingLogViewUpdates.clear();
     _trafficBuffer.clear();
     ui->outputWidget->clearLogView();
     resetTrafficCounters();
+}
+
+///
+/// \brief FormTrafficView::flushPendingTrafficUiAll
+///
+void FormTrafficView::flushPendingTrafficUiAll()
+{
+    if (_logUiFlushTimer)
+        _logUiFlushTimer->stop();
+
+    while (!_pendingLogViewUpdates.isEmpty()) {
+        const int batchSize = qMin(TrafficUiFlushChunkSize, _pendingLogViewUpdates.size());
+        QVector<QSharedPointer<const ModbusMessage>> batch;
+        batch.reserve(batchSize);
+        for (int i = 0; i < batchSize; ++i)
+            batch.push_back(_pendingLogViewUpdates.dequeue());
+        ui->outputWidget->updateTrafficBatch(batch);
+    }
+}
+
+///
+/// \brief FormTrafficView::scheduleTrafficUiFlush
+///
+void FormTrafficView::scheduleTrafficUiFlush()
+{
+    if (!_logUiFlushTimer || _pendingLogViewUpdates.isEmpty() || _logUiFlushTimer->isActive())
+        return;
+
+    _logUiFlushTimer->start();
 }
 
 ///
@@ -769,12 +834,18 @@ void FormTrafficView::trimTrafficBufferToLimit()
 ///
 void FormTrafficView::rebuildVisibleTraffic()
 {
+    if (_logUiFlushTimer)
+        _logUiFlushTimer->stop();
+    _pendingLogViewUpdates.clear();
+
     const bool paused = (_logViewState == LogViewState::Paused);
     if(paused)
         ui->outputWidget->setLogViewState(LogViewState::Running);
 
     ui->outputWidget->clearLogView();
     resetTrafficCounters();
+    QVector<QSharedPointer<const ModbusMessage>> visibleMessages;
+    visibleMessages.reserve(_trafficBuffer.size());
 
     for(const auto& entry : _trafficBuffer)
     {
@@ -788,9 +859,11 @@ void FormTrafficView::rebuildVisibleTraffic()
             else
                 ++_responseCount;
 
-            ui->outputWidget->updateTraffic(entry.DisplayMessage);
+            visibleMessages.push_back(entry.DisplayMessage);
         }
     }
+
+    ui->outputWidget->updateTrafficBatch(visibleMessages);
 
     if(paused)
         ui->outputWidget->setLogViewState(LogViewState::Paused);
@@ -822,7 +895,8 @@ void FormTrafficView::appendTrafficEntry(const ConnectionDetails& cd,
         else
             ++_responseCount;
 
-        ui->outputWidget->updateTraffic(displayMessage);
+        _pendingLogViewUpdates.enqueue(displayMessage);
+        scheduleTrafficUiFlush();
     }
 }
 

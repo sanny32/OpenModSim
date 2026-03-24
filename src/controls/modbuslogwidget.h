@@ -2,6 +2,7 @@
 #define MODBUSLOGWIDGET_H
 
 #include <QQueue>
+#include <QVector>
 #include <QListView>
 #include "bufferinglistmodel.h"
 #include "modbusmessage.h"
@@ -38,6 +39,7 @@ public:
     QModelIndex index(int row);
 
     void addItem(QSharedPointer<const ModbusMessage> msg);
+    void addItems(const QVector<QSharedPointer<const ModbusMessage>>& messages);
     QSharedPointer<const ModbusMessage> itemAt(const QModelIndex& index);
     bool exportToTextFile(const QString& filePath);
 

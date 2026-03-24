@@ -2,6 +2,7 @@
 #define OUTPUTTRAFFICWIDGET_H
 
 #include <QSharedPointer>
+#include <QVector>
 #include <QFrame>
 #include "displaydefinition.h"
 #include "modbusmessage.h"
@@ -40,6 +41,7 @@ public:
     bool exportLogToTextFile(const QString& filePath);
 
     void updateTraffic(QSharedPointer<const ModbusMessage> msg);
+    void updateTrafficBatch(const QVector<QSharedPointer<const ModbusMessage>>& messages);
 
 public slots:
     void clearLogView();
@@ -52,6 +54,7 @@ private:
     void showModbusMessage(const QModelIndex& index);
     void hideModbusMessage();
     void updateLogView(QSharedPointer<const ModbusMessage> msg);
+    void updateLogViewBatch(const QVector<QSharedPointer<const ModbusMessage>>& messages);
 
 private:
     Ui::OutputTrafficWidget* ui;

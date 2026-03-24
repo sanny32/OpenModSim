@@ -5,6 +5,7 @@
 #include <QTextLayout>
 #include <QApplication>
 #include <QStyledItemDelegate>
+#include <QMap>
 #include "fontutils.h"
 #include "modbuslogwidget.h"
 
@@ -12,58 +13,7 @@ namespace {
 
 constexpr int HorizontalPadding = 2;
 constexpr int VerticalPadding   = 3;
-
-static QString buildLogLayout(const ModbusMessage& msg,
-                              const ModbusLogWidget* widget,
-                              const QStyleOptionViewItem& opt,
-                              QList<QTextLayout::FormatRange>& formats)
-{
-    const QString timestamp = msg.timestamp().toString(Qt::ISODateWithMs);
-    const QString direction = msg.isRequest() ? "[Rx] \u2190" : "[Tx] \u2192";
-    const QString data      = widget
-                              ? msg.toString(widget->dataDisplayMode(), widget->showLeadingZeros())
-                              : msg.toString(DataDisplayMode::Hex, true);
-
-    const bool selected = opt.state & QStyle::State_Selected;
-
-    QColor tsColor, dirColor, dataColor;
-    if (selected) {
-        const QPalette::ColorGroup group = (opt.state & QStyle::State_Active)
-                                           ? QPalette::Active : QPalette::Inactive;
-        const QColor fg = opt.palette.color(group, QPalette::HighlightedText);
-        tsColor = dirColor = dataColor = fg;
-    } else {
-        tsColor   = QColor(0x44, 0x44, 0x44);
-        dirColor  = msg.isRequest() ? QColor(0x00, 0x99, 0x33) : QColor(0x00, 0x66, 0xcc);
-        dataColor = (msg.isException() || !msg.isValid()) ? QColor(0xcc, 0x00, 0x00)
-                                                          : QColor(0x00, 0x00, 0x00);
-    }
-
-    const QString sep  = " ";
-    const QString full = timestamp + sep + direction + sep + data;
-
-    const int tsEnd     = timestamp.length();
-    const int dirStart  = tsEnd + sep.length();
-    const int dirEnd    = dirStart + direction.length();
-    const int dataStart = dirEnd + sep.length();
-
-    auto makeRange = [](int start, int len, const QColor& color) {
-        QTextLayout::FormatRange r;
-        r.start  = start;
-        r.length = len;
-        r.format.setForeground(color);
-        return r;
-    };
-
-    auto dirRange = makeRange(dirStart, direction.length(), dirColor);
-    dirRange.format.setFontWeight(QFont::Bold);
-
-    formats.append(makeRange(0,         tsEnd,           tsColor));
-    formats.append(dirRange);
-    formats.append(makeRange(dataStart, data.length(),   dataColor));
-
-    return full;
-}
+constexpr int LayoutCacheLimit  = 4096;
 
 static qreal doLayout(QTextLayout& layout, qreal lineWidth)
 {
@@ -81,6 +31,147 @@ static qreal doLayout(QTextLayout& layout, qreal lineWidth)
     return y;
 }
 
+struct LogTextData
+{
+    QString text;
+    int timestampLen = 0;
+    int directionStart = 0;
+    int directionLen = 0;
+    int dataStart = 0;
+};
+
+struct LayoutCacheKey
+{
+    quintptr messagePtr = 0;
+    quint64 messageSignature = 0;
+    QString fontKey;
+    int lineWidth = 0;
+    quint32 modeKey = 0;
+
+    bool operator<(const LayoutCacheKey& other) const noexcept
+    {
+        if (messagePtr != other.messagePtr) return messagePtr < other.messagePtr;
+        if (messageSignature != other.messageSignature) return messageSignature < other.messageSignature;
+        if (fontKey != other.fontKey)       return fontKey < other.fontKey;
+        if (lineWidth != other.lineWidth)   return lineWidth < other.lineWidth;
+        return modeKey < other.modeKey;
+    }
+};
+
+struct CachedLayoutEntry
+{
+    explicit CachedLayoutEntry(const LogTextData& data, const QFont& font, qreal lineWidth)
+        : textData(data)
+        , layout(textData.text, font)
+    {
+        QTextOption textOption;
+        textOption.setWrapMode(QTextOption::WordWrap);
+        layout.setTextOption(textOption);
+        height = doLayout(layout, lineWidth);
+    }
+
+    LogTextData textData;
+    QTextLayout layout;
+    qreal height = 0;
+};
+
+static quint32 makeModeKey(const ModbusLogWidget* widget)
+{
+    if (!widget) {
+        return (static_cast<quint32>(DataDisplayMode::Hex) << 1u) | 1u;
+    }
+
+    return (static_cast<quint32>(widget->dataDisplayMode()) << 1u)
+           | (widget->showLeadingZeros() ? 1u : 0u);
+}
+
+static quint64 makeMessageSignature(const ModbusMessage& msg)
+{
+    const quint64 ts = static_cast<quint64>(msg.timestamp().toMSecsSinceEpoch());
+    const quint64 req = msg.isRequest() ? (1ull << 63) : 0ull;
+    const quint64 fc = static_cast<quint64>(msg.functionCode()) << 48;
+    const quint64 dev = static_cast<quint64>(msg.deviceId() & 0xFF) << 40;
+    const quint64 proto = static_cast<quint64>(msg.protocolType()) << 32;
+    const quint64 rawHash = static_cast<quint64>(qHash(msg.rawData()));
+    return ts ^ req ^ fc ^ dev ^ proto ^ rawHash;
+}
+
+static LogTextData buildLogTextData(const ModbusMessage& msg, const ModbusLogWidget* widget)
+{
+    const QString timestamp = msg.timestamp().toString(Qt::ISODateWithMs);
+    const QString direction = msg.isRequest() ? QStringLiteral("[Rx] \u2190")
+                                              : QStringLiteral("[Tx] \u2192");
+    const QString data = widget
+                         ? msg.toString(widget->dataDisplayMode(), widget->showLeadingZeros())
+                         : msg.toString(DataDisplayMode::Hex, true);
+
+    LogTextData result;
+    result.timestampLen  = timestamp.length();
+    result.directionStart = result.timestampLen + 1;
+    result.directionLen   = direction.length();
+    result.dataStart      = result.directionStart + result.directionLen + 1;
+
+    result.text.reserve(result.dataStart + data.length());
+    result.text += timestamp;
+    result.text += QLatin1Char(' ');
+    result.text += direction;
+    result.text += QLatin1Char(' ');
+    result.text += data;
+    return result;
+}
+
+static QList<QTextLayout::FormatRange> buildLogFormats(const ModbusMessage& msg,
+                                                       const QStyleOptionViewItem& opt,
+                                                       const LogTextData& textData)
+{
+    static const QColor TsColor(0x44, 0x44, 0x44);
+    static const QColor RxColor(0x00, 0x99, 0x33);
+    static const QColor TxColor(0x00, 0x66, 0xcc);
+    static const QColor ErrorColor(0xcc, 0x00, 0x00);
+    static const QColor NormalDataColor(0x00, 0x00, 0x00);
+
+    const bool selected = opt.state & QStyle::State_Selected;
+    const int textLen = textData.text.length();
+    const int dataLen = qMax(0, textLen - textData.dataStart);
+
+    auto makeRange = [](int start, int len, const QColor& color) {
+        QTextLayout::FormatRange r;
+        r.start  = start;
+        r.length = len;
+        r.format.setForeground(color);
+        return r;
+    };
+
+    QList<QTextLayout::FormatRange> formats;
+    if (selected) {
+        const QPalette::ColorGroup group = (opt.state & QStyle::State_Active)
+                                           ? QPalette::Active
+                                           : QPalette::Inactive;
+        const QColor fg = opt.palette.color(group, QPalette::HighlightedText);
+
+        formats.reserve(2);
+        formats.append(makeRange(0, textLen, fg));
+
+        auto dirRange = makeRange(textData.directionStart, textData.directionLen, fg);
+        dirRange.format.setFontWeight(QFont::Bold);
+        formats.append(dirRange);
+        return formats;
+    }
+
+    formats.reserve(3);
+    formats.append(makeRange(0, textData.timestampLen, TsColor));
+
+    auto dirRange = makeRange(textData.directionStart,
+                              textData.directionLen,
+                              msg.isRequest() ? RxColor : TxColor);
+    dirRange.format.setFontWeight(QFont::Bold);
+    formats.append(dirRange);
+
+    const QColor dataColor = (msg.isException() || !msg.isValid()) ? ErrorColor : NormalDataColor;
+    formats.append(makeRange(textData.dataStart, dataLen, dataColor));
+    return formats;
+}
+
 ///
 /// \brief The ModbusLogDelegate class
 /// Lightweight delegate for ModbusLogWidget.
@@ -90,14 +181,15 @@ static qreal doLayout(QTextLayout& layout, qreal lineWidth)
 class ModbusLogDelegate : public QStyledItemDelegate
 {
 public:
-    explicit ModbusLogDelegate(QObject* parent = nullptr)
-        : QStyledItemDelegate(parent) {}
+    explicit ModbusLogDelegate(ModbusLogWidget* parent = nullptr)
+        : QStyledItemDelegate(parent)
+        , _widget(parent)
+    {}
 
     void paint(QPainter* painter, const QStyleOptionViewItem& option,
                const QModelIndex& index) const override
     {
-        QStyleOptionViewItem opt = option;
-        initStyleOption(&opt, index);
+        const QStyleOptionViewItem opt(option);
 
         {
             const bool selected = opt.state & QStyle::State_Selected;
@@ -115,25 +207,16 @@ public:
         if (!msg)
             return;
 
-        const auto* widget = qobject_cast<const ModbusLogWidget*>(parent());
-
-        QList<QTextLayout::FormatRange> formats;
-        const QString text = buildLogLayout(*msg, widget, opt, formats);
-
-        QTextLayout layout(text, opt.font);
-        layout.setFormats(formats);
-
-        QTextOption textOption;
-        textOption.setWrapMode(QTextOption::WordWrap);
-        layout.setTextOption(textOption);
-
-        const qreal lineWidth = opt.rect.width() - HorizontalPadding * 2;
-        doLayout(layout, lineWidth);
+        const int lineWidth = qMax(1, opt.rect.width() - HorizontalPadding * 2);
+        const auto& cachedLayout = ensureLayout(*msg, opt.font, lineWidth);
+        const QList<QTextLayout::FormatRange> formats = buildLogFormats(*msg, opt, cachedLayout.textData);
 
         painter->save();
         painter->setClipRect(opt.rect, Qt::ReplaceClip);
-        layout.draw(painter, QPointF(opt.rect.left() + HorizontalPadding,
-                                     opt.rect.top()  + VerticalPadding));
+        cachedLayout.layout.draw(painter,
+                                 QPointF(opt.rect.left() + HorizontalPadding,
+                                         opt.rect.top()  + VerticalPadding),
+                                 formats);
         painter->restore();
     }
 
@@ -146,26 +229,44 @@ public:
             return QSize(option.rect.width(), fm.height() + VerticalPadding * 2);
         }
 
-        const auto* widget = qobject_cast<const ModbusLogWidget*>(parent());
-
-        QList<QTextLayout::FormatRange> formats;
-        const QString text = buildLogLayout(*msg, widget, option, formats);
-
-        QTextLayout layout(text, option.font);
-        layout.setFormats(formats);
-
-        QTextOption textOption;
-        textOption.setWrapMode(QTextOption::WordWrap);
-        layout.setTextOption(textOption);
-
-        const qreal lineWidth = option.rect.width() > 0
-                                ? option.rect.width() - HorizontalPadding * 2
-                                : 9999.0;
-        const qreal contentH = doLayout(layout, lineWidth);
+        const int lineWidth = option.rect.width() > 0
+                              ? qMax(1, option.rect.width() - HorizontalPadding * 2)
+                              : 9999;
+        const auto& cachedLayout = ensureLayout(*msg, option.font, lineWidth);
 
         return QSize(option.rect.width(),
-                     static_cast<int>(contentH) + VerticalPadding * 2);
+                     static_cast<int>(cachedLayout.height) + VerticalPadding * 2);
     }
+
+private:
+    const CachedLayoutEntry& ensureLayout(const ModbusMessage& msg,
+                                          const QFont& font,
+                                          int lineWidth) const
+    {
+        const LayoutCacheKey key{
+            reinterpret_cast<quintptr>(&msg),
+            makeMessageSignature(msg),
+            font.key(),
+            lineWidth,
+            makeModeKey(_widget)
+        };
+
+        auto it = _layoutCache.constFind(key);
+        if (it != _layoutCache.constEnd())
+            return *it.value();
+
+        if (_layoutCache.size() >= LayoutCacheLimit)
+            _layoutCache.clear();
+
+        auto cached = QSharedPointer<CachedLayoutEntry>::create(
+            buildLogTextData(msg, _widget), font, lineWidth);
+        _layoutCache.insert(key, cached);
+        return *cached;
+    }
+
+private:
+    const ModbusLogWidget* _widget = nullptr;
+    mutable QMap<LayoutCacheKey, QSharedPointer<CachedLayoutEntry>> _layoutCache;
 };
 
 } // namespace
@@ -308,6 +409,18 @@ void ModbusLogWidget::addItem(QSharedPointer<const ModbusMessage> msg)
     if(model()) {
         ((ModbusLogModel*)model())->append(msg);
     }
+}
+
+///
+/// \brief ModbusLogWidget::addItems
+/// \param messages
+///
+void ModbusLogWidget::addItems(const QVector<QSharedPointer<const ModbusMessage>>& messages)
+{
+    if (!model() || messages.isEmpty())
+        return;
+
+    ((ModbusLogModel*)model())->appendBatch(messages);
 }
 
 ///

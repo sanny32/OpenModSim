@@ -82,6 +82,7 @@ signals:
 
 private slots:
     void on_awake();
+    void on_logUiFlushTimeout();
     void on_mbConnected(const ConnectionDetails& cd);
     void on_mbDisconnected(const ConnectionDetails& cd);
     void on_mbRequest(const ConnectionDetails& cd, QSharedPointer<const ModbusMessage> msg);
@@ -111,6 +112,8 @@ private:
                               QSharedPointer<const ModbusMessage> filterMsg,
                               QSharedPointer<const ModbusMessage> displayMsg) const;
     void clearTrafficLog();
+    void flushPendingTrafficUiAll();
+    void scheduleTrafficUiFlush();
     void trimTrafficBufferToLimit();
     void rebuildVisibleTraffic();
     void appendTrafficEntry(const ConnectionDetails& cd,
@@ -127,6 +130,8 @@ private:
     uint _responseCount = 0;
     LogViewState _logViewState = LogViewState::Unknown;
     QQueue<TrafficLogEntry> _trafficBuffer;
+    QQueue<QSharedPointer<const ModbusMessage>> _pendingLogViewUpdates;
+    QTimer* _logUiFlushTimer = nullptr;
 
     QLabel* _labelUnitId = nullptr;
     QSpinBox* _unitIdFilter = nullptr;

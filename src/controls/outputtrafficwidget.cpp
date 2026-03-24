@@ -202,6 +202,15 @@ void OutputTrafficWidget::updateTraffic(QSharedPointer<const ModbusMessage> msg)
 }
 
 ///
+/// \brief OutputTrafficWidget::updateTrafficBatch
+/// \param messages
+///
+void OutputTrafficWidget::updateTrafficBatch(const QVector<QSharedPointer<const ModbusMessage>>& messages)
+{
+    updateLogViewBatch(messages);
+}
+
+///
 /// \brief OutputTrafficWidget::showModbusMessage
 ///
 void OutputTrafficWidget::showModbusMessage(const QModelIndex& index)
@@ -231,4 +240,13 @@ void OutputTrafficWidget::hideModbusMessage()
 void OutputTrafficWidget::updateLogView(QSharedPointer<const ModbusMessage> msg)
 {
     ui->logView->addItem(msg);
+}
+
+///
+/// \brief OutputTrafficWidget::updateLogViewBatch
+/// \param messages
+///
+void OutputTrafficWidget::updateLogViewBatch(const QVector<QSharedPointer<const ModbusMessage>>& messages)
+{
+    ui->logView->addItems(messages);
 }
