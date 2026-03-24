@@ -81,7 +81,6 @@ signals:
     void logViewStateChanged(LogViewState state);
 
 private slots:
-    void on_awake();
     void on_logUiFlushTimeout();
     void on_mbConnected(const ConnectionDetails& cd);
     void on_mbDisconnected(const ConnectionDetails& cd);
@@ -111,6 +110,7 @@ private:
     bool matchesTrafficFilter(const ConnectionDetails& cd,
                               QSharedPointer<const ModbusMessage> filterMsg,
                               QSharedPointer<const ModbusMessage> displayMsg) const;
+    void updateExportActionState();
     void clearTrafficLog();
     void flushPendingTrafficUiAll();
     void scheduleTrafficUiFlush();

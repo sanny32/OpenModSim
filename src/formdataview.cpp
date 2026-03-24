@@ -132,9 +132,6 @@ FormDataView::FormDataView(int id, ModbusMultiServer& server, DataSimulator* sim
     connect(_dataSimulator, &DataSimulator::simulationStopped, this, &FormDataView::on_simulationStopped);
     connect(_dataSimulator, &DataSimulator::dataSimulated, this, &FormDataView::on_dataSimulated);
 
-    auto dispatcher = QAbstractEventDispatcher::instance();
-    connect(dispatcher, &QAbstractEventDispatcher::awake, this, &FormDataView::on_awake);
-
     setupDisplayBar();
 
     const auto sa = ui->frameDataDefinition;
@@ -152,14 +149,6 @@ FormDataView::~FormDataView()
     _mbMultiServer.removeDeviceId(deviceId);
     _mbMultiServer.removeUnitMap(dataFormId(this), deviceId);
     delete ui;
-}
-
-///
-/// \brief FormDataView::on_awake
-///
-void FormDataView::on_awake()
-{
-    updateDisplayBar();
 }
 
 ///
@@ -968,6 +957,7 @@ void FormDataView::onDefinitionChanged()
     _mbMultiServer.addUnitMap(dataFormId(this), dd.DeviceId, dd.PointType, addr, dd.Length);
 
     ui->outputWidget->setup(dd, _dataSimulator->simulationMap(), _mbMultiServer.data(dd.DeviceId, dd.PointType, addr, dd.Length));
+    updateDisplayBar();
     reapplyFind();
 }
 
