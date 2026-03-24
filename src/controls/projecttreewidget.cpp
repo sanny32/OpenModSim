@@ -1,4 +1,5 @@
 ﻿#include <QHeaderView>
+#include <QInputDialog>
 #include <QMenu>
 #include <QMessageBox>
 #include <QPainter>
@@ -303,6 +304,8 @@ void ProjectTreeWidget::on_contextMenu(const QPoint& pos)
         menu.addSeparator();
     }
 
+    auto renameAction = menu.addAction(tr("Rename"));
+    menu.addSeparator();
     auto deleteAction = menu.addAction(tr("Delete"));
     auto selected = menu.exec(viewport()->mapToGlobal(pos));
 
@@ -312,6 +315,16 @@ void ProjectTreeWidget::on_contextMenu(const QPoint& pos)
     }
     if (selected == stopAction) {
         emit formStopScriptRequested(ref);
+        return;
+    }
+    if (selected == renameAction) {
+        const QString current = ref.widget ? ref.widget->windowTitle() : QString();
+        bool ok = false;
+        const QString newName = QInputDialog::getText(this, tr("Rename"), tr("New name:"),
+                                                      QLineEdit::Normal, current, &ok).trimmed();
+        if (ok && !newName.isEmpty() && newName != current) {
+            item->setText(0, newName);
+        }
         return;
     }
     if (selected != deleteAction)
