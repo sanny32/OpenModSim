@@ -61,6 +61,9 @@ public:
     bool codeAutoComplete() const { return _codeAutoComplete; }
     void setCodeAutoComplete(bool enable) { _codeAutoComplete = enable; }
 
+    bool autoShowConsoleOutput() const { return _autoShowConsoleOutput; }
+    void setAutoShowConsoleOutput(bool enable) { _autoShowConsoleOutput = enable; }
+
     // ----- Persistence -----
     void load(QSettings& settings);
     void save(QSettings& settings) const;
@@ -85,6 +88,7 @@ private:
     ScriptViewDefinitions _scriptViewDefinitions;
     QFont         _scriptFont;
     bool          _codeAutoComplete{ true };
+    bool          _autoShowConsoleOutput{ true };
 };
 
 #endif // APPPREFERENCES_H

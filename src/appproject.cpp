@@ -441,7 +441,7 @@ void AppProject::setupMdiChild(QWidget* frm, QMdiSubWindow* wnd, bool addToWindo
     }
 
     auto onConsoleMessage = [this](const QString& source, const QString& text, ConsoleOutput::MessageType type) {
-        _mainWindow->showConsoleMessage(source, text, type);
+        _mainWindow->appendConsoleMessage(source, text, type);
     };
     if (auto* script = qobject_cast<FormScriptView*>(frm)) {
         connect(script, &FormScriptView::consoleMessage, _mainWindow, onConsoleMessage);

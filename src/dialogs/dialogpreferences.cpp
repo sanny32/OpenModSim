@@ -167,6 +167,7 @@ void DialogPreferences::loadFromPreferences()
 
     // Script - editor
     ui->checkBoxAutoComplete->setChecked(prefs.codeAutoComplete());
+    ui->checkBoxAutoShowConsole->setChecked(prefs.autoShowConsoleOutput());
 
     on_listWidget_currentRowChanged(ui->listWidget->currentRow());
 }
@@ -243,6 +244,9 @@ void DialogPreferences::apply()
     const bool autoComplete = ui->checkBoxAutoComplete->isChecked();
     prefs.setCodeAutoComplete(autoComplete);
     if (_mainWindow) _mainWindow->applyAutoComplete(autoComplete);
+
+    const bool autoShowConsole = ui->checkBoxAutoShowConsole->isChecked();
+    prefs.setAutoShowConsoleOutput(autoShowConsole);
 }
 
 ///

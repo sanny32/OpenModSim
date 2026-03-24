@@ -36,6 +36,7 @@ void AppPreferences::load(QSettings& settings)
     _language        = settings.value("Language", _language).toString();
     _scriptFont.fromString(settings.value("ScriptFont", _scriptFont.toString()).toString());
     _codeAutoComplete = settings.value("CodeAutoComplete", _codeAutoComplete).toBool();
+    _autoShowConsoleOutput = settings.value("AutoShowConsoleOutput", _autoShowConsoleOutput).toBool();
     _checkForUpdates  = settings.value("CheckForUpdates",  _checkForUpdates).toBool();
 
     settings >> _dataViewDefinitions;
@@ -61,6 +62,7 @@ void AppPreferences::save(QSettings& settings) const
     settings.setValue("Language",        _language);
     settings.setValue("ScriptFont",      _scriptFont.toString());
     settings.setValue("CodeAutoComplete",_codeAutoComplete);
+    settings.setValue("AutoShowConsoleOutput", _autoShowConsoleOutput);
     settings.setValue("CheckForUpdates", _checkForUpdates);
 
     settings << _dataViewDefinitions;
@@ -85,6 +87,7 @@ void AppPreferences::saveXml(QXmlStreamWriter& xml) const
     xml.writeAttribute("Language",        _language);
     xml.writeAttribute("ScriptFont",      _scriptFont.toString());
     xml.writeAttribute("CodeAutoComplete", boolToString(_codeAutoComplete));
+    xml.writeAttribute("AutoShowConsoleOutput", boolToString(_autoShowConsoleOutput));
     xml << _dataViewDefinitions;
     xml << _trafficViewDefinitions;
     xml << _scriptViewDefinitions;
@@ -130,6 +133,10 @@ void AppPreferences::loadXml(QXmlStreamReader& xml)
 
     if (attributes.hasAttribute("CodeAutoComplete")) {
         _codeAutoComplete = stringToBool(attributes.value("CodeAutoComplete").toString());
+    }
+
+    if (attributes.hasAttribute("AutoShowConsoleOutput")) {
+        _autoShowConsoleOutput = stringToBool(attributes.value("AutoShowConsoleOutput").toString());
     }
 
     while (xml.readNextStartElement()) {

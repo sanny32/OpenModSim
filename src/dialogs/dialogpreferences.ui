@@ -767,6 +767,13 @@
                   </property>
                  </widget>
                 </item>
+                <item>
+                 <widget class="QCheckBox" name="checkBoxAutoShowConsole">
+                  <property name="text">
+                   <string>Automatically show output console</string>
+                  </property>
+                 </widget>
+                </item>
                </layout>
               </widget>
              </item>

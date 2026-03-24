@@ -1389,11 +1389,12 @@ void MainWindow::selectAnsiCodepage(const QString& name)
 }
 
 ///
-/// \brief MainWindow::showConsoleMessage
+/// \brief MainWindow::appendConsoleMessage
 ///
-void MainWindow::showConsoleMessage(const QString& source, const QString& text, ConsoleOutput::MessageType type)
+void MainWindow::appendConsoleMessage(const QString& source, const QString& text, ConsoleOutput::MessageType type)
 {
-    _consoleDockWidget->setVisible(true);
+    if (AppPreferences::instance().autoShowConsoleOutput())
+        _consoleDockWidget->setVisible(true);
     _globalConsole->addMessage(text, type, source);
 }
 

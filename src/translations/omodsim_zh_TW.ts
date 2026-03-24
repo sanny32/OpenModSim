@@ -1100,6 +1100,11 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../dialogs/dialogpreferences.ui" line="773"/>
+        <source>Automatically show output console</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../dialogs/dialogpreferences.ui" line="383"/>
         <location filename="../dialogs/dialogpreferences.ui" line="694"/>
         <source>Family:</source>
@@ -3020,8 +3025,8 @@ Script.onInit(()=&gt;{
     </message>
     <message>
         <location filename="../mainwindow.ui" line="233"/>
-        <location filename="../mainwindow.cpp" line="1538"/>
-        <location filename="../mainwindow.cpp" line="1538"/>
+        <location filename="../mainwindow.cpp" line="1539"/>
+        <location filename="../mainwindow.cpp" line="1539"/>
         <source>Save Project</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3382,8 +3387,8 @@ Script.onInit(()=&gt;{
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="236"/>
-        <location filename="../mainwindow.cpp" line="1625"/>
-        <location filename="../mainwindow.cpp" line="1625"/>
+        <location filename="../mainwindow.cpp" line="1626"/>
+        <location filename="../mainwindow.cpp" line="1626"/>
         <source>Clear List</source>
         <translation>清除清單</translation>
     </message>
@@ -3393,12 +3398,12 @@ Script.onInit(()=&gt;{
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1613"/>
+        <location filename="../mainwindow.cpp" line="1614"/>
         <source>No Recent Projects</source>
         <translation>沒有最近專案</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1539"/>
+        <location filename="../mainwindow.cpp" line="1540"/>
         <source>Save project before closing?</source>
         <translation>關閉前要儲存專案嗎？</translation>
     </message>
