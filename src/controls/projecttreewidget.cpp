@@ -277,37 +277,67 @@ void ProjectTreeWidget::retranslateUi()
 void ProjectTreeWidget::on_contextMenu(const QPoint& pos)
 {
     auto item = itemAt(pos);
-    if (!item)
-        return;
-
-    if (item->data(0, ItemTypeRole).toInt() != ItemTypeForm)
-        return;
-
-    auto ptr = item->data(0, Qt::UserRole).value<void*>();
-    if (!ptr)
-        return;
-
-    ProjectFormRef ref;
-    ref.type = static_cast<ProjectFormType>(item->data(0, ItemTypeRole + 1).toInt());
-    ref.widget = static_cast<QWidget*>(ptr);
+    const bool isFormItem = item && (item->data(0, ItemTypeRole).toInt() == ItemTypeForm);
 
     QMenu menu(this);
 
-    QAction* runAction  = nullptr;
-    QAction* stopAction = nullptr;
-    if (ref.type == ProjectFormType::Script) {
-        const bool running = item->data(0, ItemScriptRunning).toBool();
-        runAction  = menu.addAction(QIcon(":/res/actionRunScript.png"),  tr("Run Script"));
-        stopAction = menu.addAction(QIcon(":/res/actionStopScript.png"), tr("Stop Script"));
-        runAction->setEnabled(!running);
-        stopAction->setEnabled(running);
+    // "New …" actions are available for all nodes
+    auto newDataAction    = menu.addAction(_iconData,        tr("New Data View"));
+    auto newTrafficAction = menu.addAction(_iconTraffic,     tr("New Traffic View"));
+    auto newScriptAction  = menu.addAction(_iconScriptIdle,  tr("New Script"));
+
+    QAction* runAction    = nullptr;
+    QAction* stopAction   = nullptr;
+    QAction* renameAction = nullptr;
+    QAction* deleteAction = nullptr;
+
+    if (isFormItem) {
+        auto ptr = item->data(0, Qt::UserRole).value<void*>();
+        if (!ptr)
+            return;
+
+        const auto formType = static_cast<ProjectFormType>(item->data(0, ItemTypeRole + 1).toInt());
+
         menu.addSeparator();
+
+        if (formType == ProjectFormType::Script) {
+            const bool running = item->data(0, ItemScriptRunning).toBool();
+            runAction  = menu.addAction(QIcon(":/res/actionRunScript.png"),  tr("Run Script"));
+            stopAction = menu.addAction(QIcon(":/res/actionStopScript.png"), tr("Stop Script"));
+            runAction->setEnabled(!running);
+            stopAction->setEnabled(running);
+            menu.addSeparator();
+        }
+
+        renameAction = menu.addAction(tr("Rename"));
+        menu.addSeparator();
+        deleteAction = menu.addAction(tr("Delete"));
     }
 
-    auto renameAction = menu.addAction(tr("Rename"));
-    menu.addSeparator();
-    auto deleteAction = menu.addAction(tr("Delete"));
     auto selected = menu.exec(viewport()->mapToGlobal(pos));
+    if (!selected)
+        return;
+
+    if (selected == newDataAction) {
+        emit formCreateRequested(ProjectFormType::Data);
+        return;
+    }
+    if (selected == newTrafficAction) {
+        emit formCreateRequested(ProjectFormType::Traffic);
+        return;
+    }
+    if (selected == newScriptAction) {
+        emit formCreateRequested(ProjectFormType::Script);
+        return;
+    }
+
+    if (!isFormItem)
+        return;
+
+    auto ptr = item->data(0, Qt::UserRole).value<void*>();
+    ProjectFormRef ref;
+    ref.type   = static_cast<ProjectFormType>(item->data(0, ItemTypeRole + 1).toInt());
+    ref.widget = static_cast<QWidget*>(ptr);
 
     if (selected == runAction) {
         emit formRunScriptRequested(ref);
@@ -322,20 +352,18 @@ void ProjectTreeWidget::on_contextMenu(const QPoint& pos)
         bool ok = false;
         const QString newName = QInputDialog::getText(this, tr("Rename"), tr("New name:"),
                                                       QLineEdit::Normal, current, &ok).trimmed();
-        if (ok && !newName.isEmpty() && newName != current) {
+        if (ok && !newName.isEmpty() && newName != current)
             item->setText(0, newName);
-        }
         return;
     }
-    if (selected != deleteAction)
-        return;
-
-    const int ret = QMessageBox::question(this,
-                                          tr("Delete Form"),
-                                          tr("Delete \"%1\" from the project?").arg(ref.widget ? ref.widget->windowTitle() : QString()),
-                                          QMessageBox::Yes | QMessageBox::No);
-    if (ret == QMessageBox::Yes)
-        emit formDeleteRequested(ref);
+    if (selected == deleteAction) {
+        const int ret = QMessageBox::question(this,
+                                              tr("Delete Form"),
+                                              tr("Delete \"%1\" from the project?").arg(ref.widget ? ref.widget->windowTitle() : QString()),
+                                              QMessageBox::Yes | QMessageBox::No);
+        if (ret == QMessageBox::Yes)
+            emit formDeleteRequested(ref);
+    }
 }
 
 ///

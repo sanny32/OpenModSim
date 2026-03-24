@@ -306,6 +306,9 @@ MainWindow::MainWindow(const QString& profile, bool useSession, QWidget *parent)
         if (auto* script = qobject_cast<FormScriptView*>(ref.widget))
             script->stopScript();
     });
+    connect(_projectTree, &ProjectTreeWidget::formCreateRequested, this, [this](ProjectFormType type) {
+        createNewForm(static_cast<ProjectFormKind>(type));
+    });
     _globalConsole = new ConsoleOutput(this);
     _consoleDockWidget = new QDockWidget(tr("Output"), this);
     _consoleDockWidget->setObjectName("consoleDockWidget");
