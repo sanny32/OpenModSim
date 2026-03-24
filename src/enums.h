@@ -7,11 +7,7 @@
 
 template<typename Enum>
 struct EnumStrings {
-    static const QMap<Enum, QString>& mapping() {
-        static_assert(false, "Use DECLARE_ENUM_STRINGS() macro to define: " __FUNCTION__);
-        static const QMap<Enum, QString> map;
-        return map;
-    }
+    static const QMap<Enum, QString>& mapping() = delete; // Use DECLARE_ENUM_STRINGS() macro
 };
 
 #define DECLARE_ENUM_STRINGS(EnumType, ...) \
