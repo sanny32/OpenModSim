@@ -354,6 +354,11 @@ MainWindow::MainWindow(const QString& profile, bool useSession, QWidget *parent)
 ///
 MainWindow::~MainWindow()
 {
+    // Important: destroy forms while _mbMultiServer is still alive.
+    // FormDataView::~FormDataView() calls removeDeviceId/removeUnitMap.
+    if(_project)
+        _project->destroyContentForShutdown();
+
     delete ui;
 }
 
