@@ -316,6 +316,7 @@ ModbusLogWidget::ModbusLogWidget(QWidget* parent)
     : QListView(parent)
     , _autoscroll(false)
     , _showLeadingZeros(true)
+    ,_dataDisplayMode(DataDisplayMode::Hex)
 {
     setFocusPolicy(Qt::StrongFocus);
     setFont(defaultMonospaceFont());

@@ -40,13 +40,22 @@ OutputTrafficWidget::~OutputTrafficWidget()
 }
 
 ///
-/// \brief OutputTrafficWidget::setup
-/// \param dd
+/// \brief OutputTrafficWidget::dataDisplayMode
+/// \return
 ///
-void OutputTrafficWidget::setup(const TrafficViewDefinitions& dd)
+DataDisplayMode OutputTrafficWidget::dataDisplayMode() const
 {
-    _displayDefinition = dd;
-    setLogViewLimit(dd.LogViewLimit);
+    return ui->logView->dataDisplayMode();
+}
+
+///
+/// \brief OutputTrafficWidget::setDataDisplayMode
+/// \param mode
+///
+void OutputTrafficWidget::setDataDisplayMode(DataDisplayMode mode)
+{
+    ui->logView->setDataDisplayMode(mode);
+    ui->modbusMsg->setDataDisplayMode(mode);
 }
 
 ///

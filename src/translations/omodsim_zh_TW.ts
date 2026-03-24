@@ -2402,83 +2402,83 @@ MODBUS Point Type:
         <translation type="obsolete">еЏ–д»Ј</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="560"/>
+        <location filename="../formtrafficview.cpp" line="575"/>
         <source>Text files (*.txt)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="567"/>
+        <location filename="../formtrafficview.cpp" line="582"/>
         <source>Log exported successfully to file %1</source>
         <translation type="unfinished">ж—ҐиЄЊж€ђеЉџеЊЇе‡єи‡і %1</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="569"/>
+        <location filename="../formtrafficview.cpp" line="584"/>
         <source>Export log error!</source>
         <translation type="unfinished">еЊЇе‡єж—ҐиЄЊйЊЇиЄ¤пјЃ</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="583"/>
+        <location filename="../formtrafficview.cpp" line="598"/>
         <source>Unit:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="455"/>
-        <location filename="../formtrafficview.cpp" line="588"/>
-        <location filename="../formtrafficview.cpp" line="601"/>
-        <location filename="../formtrafficview.cpp" line="623"/>
-        <location filename="../formtrafficview.cpp" line="588"/>
-        <location filename="../formtrafficview.cpp" line="601"/>
-        <location filename="../formtrafficview.cpp" line="623"/>
+        <location filename="../formtrafficview.cpp" line="470"/>
+        <location filename="../formtrafficview.cpp" line="603"/>
+        <location filename="../formtrafficview.cpp" line="616"/>
+        <location filename="../formtrafficview.cpp" line="638"/>
+        <location filename="../formtrafficview.cpp" line="603"/>
+        <location filename="../formtrafficview.cpp" line="616"/>
+        <location filename="../formtrafficview.cpp" line="638"/>
         <source>All</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="589"/>
+        <location filename="../formtrafficview.cpp" line="604"/>
         <source>0 = all unit ids</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="620"/>
+        <location filename="../formtrafficview.cpp" line="635"/>
         <source>Source:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="434"/>
+        <location filename="../formtrafficview.cpp" line="449"/>
         <source>Modbus/TCP Srv %1:%2</source>
         <translation type="unfinished">modbus/TCPдјєжњЌе™Ё%1:%2</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="436"/>
+        <location filename="../formtrafficview.cpp" line="451"/>
         <source>Port %1:%2:%3:%4:%5</source>
         <translation type="unfinished">еџ&#xa0; %1:%2:%3:%4:%5</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="630"/>
+        <location filename="../formtrafficview.cpp" line="645"/>
         <source>Exceptions Only</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="631"/>
+        <location filename="../formtrafficview.cpp" line="646"/>
         <source>Show only responses with Modbus exception</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="638"/>
+        <location filename="../formtrafficview.cpp" line="653"/>
         <source>Autoscroll</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="639"/>
+        <location filename="../formtrafficview.cpp" line="654"/>
         <source>Automatically scroll to the latest entry</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="647"/>
+        <location filename="../formtrafficview.cpp" line="662"/>
         <source>Rows:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="598"/>
+        <location filename="../formtrafficview.cpp" line="613"/>
         <source>Function:</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3450,16 +3450,16 @@ Script.onInit(()=&gt;{
 <context>
     <name>ModbusLogWidget</name>
     <message>
-        <location filename="../controls/modbuslogwidget.cpp" line="326"/>
-        <location filename="../controls/modbuslogwidget.cpp" line="369"/>
-        <location filename="../controls/modbuslogwidget.cpp" line="369"/>
+        <location filename="../controls/modbuslogwidget.cpp" line="327"/>
+        <location filename="../controls/modbuslogwidget.cpp" line="370"/>
+        <location filename="../controls/modbuslogwidget.cpp" line="370"/>
         <source>Copy Text</source>
         <translation>и¤‡иЈЅж–‡е­—</translation>
     </message>
     <message>
-        <location filename="../controls/modbuslogwidget.cpp" line="338"/>
-        <location filename="../controls/modbuslogwidget.cpp" line="370"/>
-        <location filename="../controls/modbuslogwidget.cpp" line="370"/>
+        <location filename="../controls/modbuslogwidget.cpp" line="339"/>
+        <location filename="../controls/modbuslogwidget.cpp" line="371"/>
+        <location filename="../controls/modbuslogwidget.cpp" line="371"/>
         <source>Copy Bytes</source>
         <translation>и¤‡иЈЅдЅЌе…ѓзµ„</translation>
     </message>

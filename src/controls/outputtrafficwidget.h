@@ -16,12 +16,14 @@ class QModelIndex;
 class OutputTrafficWidget : public QFrame
 {
     Q_OBJECT
+    Q_PROPERTY(DataDisplayMode dataDisplayMode READ dataDisplayMode WRITE setDataDisplayMode)
 
 public:
     explicit OutputTrafficWidget(QWidget* parent = nullptr);
     ~OutputTrafficWidget() override;
 
-    void setup(const TrafficViewDefinitions& dd);
+    DataDisplayMode dataDisplayMode() const;
+    void setDataDisplayMode(DataDisplayMode mode);
 
     QColor backgroundColor() const;
     void setBackgroundColor(const QColor& clr);
@@ -58,7 +60,6 @@ private:
 
 private:
     Ui::OutputTrafficWidget* ui;
-    TrafficViewDefinitions _displayDefinition;
 };
 
 #endif // OUTPUTTRAFFICWIDGET_H

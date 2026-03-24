@@ -56,7 +56,7 @@ FormTrafficView::FormTrafficView(int id, ModbusMultiServer& server, MainWindow* 
     _logUiFlushTimer->setInterval(TrafficUiFlushIntervalMs);
     connect(_logUiFlushTimer, &QTimer::timeout, this, &FormTrafficView::on_logUiFlushTimeout);
 
-    ui->outputWidget->setup(_displayDefinition);
+    ui->outputWidget->setLogViewLimit(_displayDefinition.LogViewLimit);
     updateSourceFilter();
     updateExportActionState();
 }
@@ -170,15 +170,25 @@ TrafficViewDefinitions FormTrafficView::displayDefinition() const
 {
     TrafficViewDefinitions dd = _displayDefinition;
     dd.FormName = windowTitle();
-    if (_unitIdFilter)
+
+    if (_unitIdFilter) {
         dd.UnitFilter = static_cast<quint8>(_unitIdFilter->value());
-    if (_funcCodeFilter)
+    }
+
+    if (_funcCodeFilter) {
         dd.FunctionCodeFilter = static_cast<qint16>(_funcCodeFilter->currentData().toInt());
+    }
+
     dd.LogViewLimit = ui->outputWidget->logViewLimit();
-    if (_exceptionsFilter)
+
+    if (_exceptionsFilter) {
         dd.ExceptionsOnly = _exceptionsFilter->isChecked();
-    if (_autoscrollCheck)
+    }
+
+    if (_autoscrollCheck) {
         dd.Autoscroll = _autoscrollCheck->isChecked();
+    }
+
     dd.normalize();
     return dd;
 }
@@ -202,6 +212,7 @@ void FormTrafficView::setDisplayDefinition(const TrafficViewDefinitions& dd)
         QSignalBlocker b(_unitIdFilter);
         _unitIdFilter->setValue(_displayDefinition.UnitFilter);
     }
+
     if (_funcCodeFilter) {
         QSignalBlocker b(_funcCodeFilter);
         int idx = _funcCodeFilter->findData(_displayDefinition.FunctionCodeFilter);
@@ -209,6 +220,7 @@ void FormTrafficView::setDisplayDefinition(const TrafficViewDefinitions& dd)
             idx = 0;
         _funcCodeFilter->setCurrentIndex(idx);
     }
+
     if (_rowLimitCombo) {
         QSignalBlocker b(_rowLimitCombo);
         int idx = _rowLimitCombo->findData(_displayDefinition.LogViewLimit);
@@ -219,18 +231,21 @@ void FormTrafficView::setDisplayDefinition(const TrafficViewDefinitions& dd)
         if (idx >= 0)
             _rowLimitCombo->setCurrentIndex(idx);
     }
+
     if (_exceptionsFilter) {
         QSignalBlocker b(_exceptionsFilter);
         _exceptionsFilter->setChecked(_displayDefinition.ExceptionsOnly);
     }
+
     if (_autoscrollCheck) {
         QSignalBlocker b(_autoscrollCheck);
         _autoscrollCheck->setChecked(_displayDefinition.Autoscroll);
     }
+
     ui->outputWidget->setAutosctollLogView(_displayDefinition.Autoscroll);
 
     trimTrafficBufferToLimit();
-    ui->outputWidget->setup(_displayDefinition);
+    ui->outputWidget->setLogViewLimit(_displayDefinition.LogViewLimit);
     rebuildVisibleTraffic();
 }
 
