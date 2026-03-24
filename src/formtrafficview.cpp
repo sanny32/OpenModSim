@@ -804,7 +804,7 @@ void FormTrafficView::appendTrafficEntry(const ConnectionDetails& cd,
                                          const QSharedPointer<const ModbusMessage>& filterMessage,
                                          bool isRequest)
 {
-    if(!displayMessage)
+    if(!isVisible() || !displayMessage)
         return;
 
     TrafficLogEntry entry;
