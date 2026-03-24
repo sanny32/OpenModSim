@@ -52,9 +52,6 @@ Server::~Server()
     // BlockingQueuedConnection must NOT be used here: if the worker is blocked on
     // sem.acquire() waiting for the main thread to process an invokeMethod event,
     // using BlockingQueuedConnection would cause a deadlock.
-///
-/// \brief QMetaObject::invokeMethod
-///
     QMetaObject::invokeMethod(_mbMultiServer, [mbms = _mbMultiServer]()
     {
         mbms->setRequestHandler(nullptr);
