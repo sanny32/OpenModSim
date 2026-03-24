@@ -1,11 +1,174 @@
 #include <QMenu>
 #include <QEvent>
 #include <QClipboard>
-#include <QTextDocument>
+#include <QPainter>
+#include <QTextLayout>
 #include <QApplication>
+#include <QStyledItemDelegate>
 #include "fontutils.h"
-#include "htmldelegate.h"
 #include "modbuslogwidget.h"
+
+namespace {
+
+constexpr int HorizontalPadding = 2;
+constexpr int VerticalPadding   = 3;
+
+static QString buildLogLayout(const ModbusMessage& msg,
+                              const ModbusLogWidget* widget,
+                              const QStyleOptionViewItem& opt,
+                              QList<QTextLayout::FormatRange>& formats)
+{
+    const QString timestamp = msg.timestamp().toString(Qt::ISODateWithMs);
+    const QString direction = msg.isRequest() ? "[Rx] \u2190" : "[Tx] \u2192";
+    const QString data      = widget
+                              ? msg.toString(widget->dataDisplayMode(), widget->showLeadingZeros())
+                              : msg.toString(DataDisplayMode::Hex, true);
+
+    const bool selected = opt.state & QStyle::State_Selected;
+
+    QColor tsColor, dirColor, dataColor;
+    if (selected) {
+        const QPalette::ColorGroup group = (opt.state & QStyle::State_Active)
+                                           ? QPalette::Active : QPalette::Inactive;
+        const QColor fg = opt.palette.color(group, QPalette::HighlightedText);
+        tsColor = dirColor = dataColor = fg;
+    } else {
+        tsColor   = QColor(0x44, 0x44, 0x44);
+        dirColor  = msg.isRequest() ? QColor(0x00, 0x99, 0x33) : QColor(0x00, 0x66, 0xcc);
+        dataColor = (msg.isException() || !msg.isValid()) ? QColor(0xcc, 0x00, 0x00)
+                                                          : QColor(0x00, 0x00, 0x00);
+    }
+
+    const QString sep  = " ";
+    const QString full = timestamp + sep + direction + sep + data;
+
+    const int tsEnd     = timestamp.length();
+    const int dirStart  = tsEnd + sep.length();
+    const int dirEnd    = dirStart + direction.length();
+    const int dataStart = dirEnd + sep.length();
+
+    auto makeRange = [](int start, int len, const QColor& color) {
+        QTextLayout::FormatRange r;
+        r.start  = start;
+        r.length = len;
+        r.format.setForeground(color);
+        return r;
+    };
+
+    auto dirRange = makeRange(dirStart, direction.length(), dirColor);
+    dirRange.format.setFontWeight(QFont::Bold);
+
+    formats.append(makeRange(0,         tsEnd,           tsColor));
+    formats.append(dirRange);
+    formats.append(makeRange(dataStart, data.length(),   dataColor));
+
+    return full;
+}
+
+static qreal doLayout(QTextLayout& layout, qreal lineWidth)
+{
+    layout.beginLayout();
+    qreal y = 0;
+    while (true) {
+        QTextLine line = layout.createLine();
+        if (!line.isValid())
+            break;
+        line.setLineWidth(lineWidth);
+        line.setPosition(QPointF(0, y));
+        y += line.height();
+    }
+    layout.endLayout();
+    return y;
+}
+
+///
+/// \brief The ModbusLogDelegate class
+/// Lightweight delegate for ModbusLogWidget.
+/// Paints colored text segments directly via QTextLayout (word-wrap aware),
+/// avoiding QTextDocument/HTML parsing on every repaint.
+///
+class ModbusLogDelegate : public QStyledItemDelegate
+{
+public:
+    explicit ModbusLogDelegate(QObject* parent = nullptr)
+        : QStyledItemDelegate(parent) {}
+
+    void paint(QPainter* painter, const QStyleOptionViewItem& option,
+               const QModelIndex& index) const override
+    {
+        QStyleOptionViewItem opt = option;
+        initStyleOption(&opt, index);
+
+        {
+            const bool selected = opt.state & QStyle::State_Selected;
+            const QPalette::ColorGroup cg = (opt.state & QStyle::State_Active)
+                                            ? QPalette::Active : QPalette::Inactive;
+            if (selected)
+                painter->fillRect(opt.rect, opt.palette.brush(cg, QPalette::Highlight));
+            else if (opt.features & QStyleOptionViewItem::Alternate)
+                painter->fillRect(opt.rect, opt.palette.brush(cg, QPalette::AlternateBase));
+            else
+                painter->fillRect(opt.rect, opt.palette.brush(cg, QPalette::Base));
+        }
+
+        const auto msg = index.data(Qt::UserRole).value<QSharedPointer<const ModbusMessage>>();
+        if (!msg)
+            return;
+
+        const auto* widget = qobject_cast<const ModbusLogWidget*>(parent());
+
+        QList<QTextLayout::FormatRange> formats;
+        const QString text = buildLogLayout(*msg, widget, opt, formats);
+
+        QTextLayout layout(text, opt.font);
+        layout.setFormats(formats);
+
+        QTextOption textOption;
+        textOption.setWrapMode(QTextOption::WordWrap);
+        layout.setTextOption(textOption);
+
+        const qreal lineWidth = opt.rect.width() - HorizontalPadding * 2;
+        doLayout(layout, lineWidth);
+
+        painter->save();
+        painter->setClipRect(opt.rect, Qt::ReplaceClip);
+        layout.draw(painter, QPointF(opt.rect.left() + HorizontalPadding,
+                                     opt.rect.top()  + VerticalPadding));
+        painter->restore();
+    }
+
+    QSize sizeHint(const QStyleOptionViewItem& option,
+                   const QModelIndex& index) const override
+    {
+        const auto msg = index.data(Qt::UserRole).value<QSharedPointer<const ModbusMessage>>();
+        if (!msg) {
+            const QFontMetrics fm(option.font);
+            return QSize(option.rect.width(), fm.height() + VerticalPadding * 2);
+        }
+
+        const auto* widget = qobject_cast<const ModbusLogWidget*>(parent());
+
+        QList<QTextLayout::FormatRange> formats;
+        const QString text = buildLogLayout(*msg, widget, option, formats);
+
+        QTextLayout layout(text, option.font);
+        layout.setFormats(formats);
+
+        QTextOption textOption;
+        textOption.setWrapMode(QTextOption::WordWrap);
+        layout.setTextOption(textOption);
+
+        const qreal lineWidth = option.rect.width() > 0
+                                ? option.rect.width() - HorizontalPadding * 2
+                                : 9999.0;
+        const qreal contentH = doLayout(layout, lineWidth);
+
+        return QSize(option.rect.width(),
+                     static_cast<int>(contentH) + VerticalPadding * 2);
+    }
+};
+
+} // namespace
 
 ///
 /// \brief ModbusLogModel::ModbusLogModel
@@ -32,15 +195,9 @@ QVariant ModbusLogModel::data(const QModelIndex& index, int role) const
     switch(role)
     {
         case Qt::DisplayRole:
-            return QString(R"(
-                    <span style="color:#444444">%1</span>
-                    <b style="color:%2">%3</b>
-                    <span style="color:%4">%5</span>
-                )")
+            return QString("%1 %2 %3")
                 .arg(item->timestamp().toString(Qt::ISODateWithMs),
-                     item->isRequest() ? "#009933" : "#0066cc",
-                     item->isRequest() ? "[Rx] ←" : "[Tx] →",
-                     (item->isException() || !item->isValid()) ? "#cc0000" : "#000000",
+                     item->isRequest() ? "[Rx] \u2190" : "[Tx] \u2192",
                      item->toString(_parentWidget->dataDisplayMode(), _parentWidget->showLeadingZeros()));
 
         case Qt::UserRole:
@@ -62,7 +219,7 @@ ModbusLogWidget::ModbusLogWidget(QWidget* parent)
     setFocusPolicy(Qt::StrongFocus);
     setFont(defaultMonospaceFont());
     setContextMenuPolicy(Qt::CustomContextMenu);
-    setItemDelegate(new HtmlDelegate(this));
+    setItemDelegate(new ModbusLogDelegate(this));
     setModel(new ModbusLogModel(this));
 
     _copyAct = new QAction(QIcon(":/res/actionCopy.png"), tr("Copy Text"), this);
@@ -72,12 +229,9 @@ ModbusLogWidget::ModbusLogWidget(QWidget* parent)
     addAction(_copyAct);
 
     connect(_copyAct, &QAction::triggered, this, [this]() {
-        QModelIndex index = currentIndex();
-        if (index.isValid()) {
-            QTextDocument doc;
-            doc.setHtml(index.data(Qt::DisplayRole).toString());
-            QApplication::clipboard()->setText(doc.toPlainText());
-        }
+        const QModelIndex index = currentIndex();
+        if (index.isValid())
+            QApplication::clipboard()->setText(index.data(Qt::DisplayRole).toString());
     });
 
     _copyBytesAct = new QAction(tr("Copy Bytes"), this);

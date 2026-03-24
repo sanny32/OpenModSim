@@ -178,16 +178,6 @@ void ModbusMessageWidget::setShowLeadingZeros(bool value)
 }
 
 ///
-/// \brief ModbusMessageWidget::setStatusColor
-/// \param clr
-///
-void ModbusMessageWidget::setStatusColor(const QColor& clr)
-{
-    _statusClr = clr;
-    update();
-}
-
-///
 /// \brief ModbusMessageWidget::backgroundColor
 /// \return
 ///

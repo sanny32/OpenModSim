@@ -1,7 +1,9 @@
 ﻿#include <QDateTime>
+#include <QApplication>
 #include <QItemSelectionModel>
 #include <QPalette>
 #include "fontutils.h"
+#include "modbuslogwidget.h"
 #include "outputtrafficwidget.h"
 #include "ui_outputtrafficwidget.h"
 
@@ -19,8 +21,6 @@ OutputTrafficWidget::OutputTrafficWidget(QWidget* parent)
     setAutoFillBackground(true);
     setForegroundColor(Qt::black);
     setBackgroundColor(Qt::white);
-    ui->modbusMsg->setStatusColor(Qt::red);
-
     hideModbusMessage();
 
     connect(ui->logView->selectionModel(),

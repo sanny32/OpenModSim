@@ -30,8 +30,6 @@ public:
     bool showLeadingZeros() const;
     void setShowLeadingZeros(bool value);
 
-    void setStatusColor(const QColor& clr);
-
     QColor backgroundColor() const;
     void setBackGroundColor(const QColor& clr);
 
