@@ -8,6 +8,7 @@
 #include "connectiondetails.h"
 #include "modbusmessage.h"
 #include "modbusserver.h"
+#include "qcountedset.h"
 
 ///
 /// \brief The ModbusMultiServer class
@@ -99,7 +100,7 @@ private:
     void removeModbusServer(QSharedPointer<ModbusServer> server);
 
 private:
-    QList<int> _deviceIds;
+    QCountedSet<int> _deviceIds;
     QThread* _workerThread;
     ModbusDefinitions _definitions;
     RequestHandlerPtr _requestHandler;

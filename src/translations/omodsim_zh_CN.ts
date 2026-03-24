@@ -1915,7 +1915,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formdataview.cpp" line="562"/>
+        <location filename="../formdataview.cpp" line="561"/>
         <source>Address Base: %1
 Start Address: %2
 Length: %3</source>
@@ -1924,7 +1924,7 @@ Length: %3</source>
 й•їеє¦: %3</translation>
     </message>
     <message>
-        <location filename="../formdataview.cpp" line="565"/>
+        <location filename="../formdataview.cpp" line="564"/>
         <source>Unit Identifier: %1
 MODBUS Point Type:
 %2</source>
@@ -3938,12 +3938,12 @@ Script.onInit(()=&gt;{
 <context>
     <name>ModbusMultiServer</name>
     <message>
-        <location filename="../modbusmultiserver.cpp" line="563"/>
+        <location filename="../modbusmultiserver.cpp" line="525"/>
         <source>An incorrect device ID was specified (%1)</source>
         <translation>жЊ‡е®љдє†й”™иЇЇзљ„и®ѕе¤‡ењ°еќЂпј€%1пј‰</translation>
     </message>
     <message>
-        <location filename="../modbusmultiserver.cpp" line="1103"/>
+        <location filename="../modbusmultiserver.cpp" line="1065"/>
         <source>Connection error. %1</source>
         <translation>иїћжЋҐй”™иЇЇ %1</translation>
     </message>

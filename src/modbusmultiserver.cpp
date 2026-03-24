@@ -5,11 +5,10 @@
 #include "modbusmultiserver.h"
 
 namespace {
-QList<int> normalizedDeviceIds(const QList<int>& deviceIds)
+QList<int> normalizedDeviceIds(const QCountedSet<int>& deviceIds)
 {
-    auto ids = deviceIds;
+    auto ids = deviceIds.values();
     std::sort(ids.begin(), ids.end());
-    ids.erase(std::unique(ids.begin(), ids.end()), ids.end());
     return ids;
 }
 }
@@ -49,20 +48,19 @@ void ModbusMultiServer::addDeviceId(quint8 deviceId)
 {
     if(QThread::currentThread() != _workerThread)
     {
-///
-/// \brief QMetaObject::invokeMethod
-///
         QMetaObject::invokeMethod(this, [this, deviceId]() {
             addDeviceId(deviceId);
         }, Qt::BlockingQueuedConnection);
         return;
     }
 
-    _deviceIds.append(deviceId);
-    for(auto&& s : _modbusServerList)
-        s->addServerAddress(deviceId);
-
-    emit deviceIdsChanged(normalizedDeviceIds(_deviceIds));
+    const bool isNew = !_deviceIds.contains(deviceId);
+    _deviceIds.insert(deviceId);
+    if (isNew) {
+        for(auto&& s : _modbusServerList)
+            s->addServerAddress(deviceId);
+        emit deviceIdsChanged(normalizedDeviceIds(_deviceIds));
+    }
 }
 
 ///
@@ -73,21 +71,18 @@ void ModbusMultiServer::removeDeviceId(quint8 deviceId)
 {
     if(QThread::currentThread() != _workerThread)
     {
-///
-/// \brief QMetaObject::invokeMethod
-///
         QMetaObject::invokeMethod(this, [this, deviceId]() {
             removeDeviceId(deviceId);
         }, Qt::BlockingQueuedConnection);
         return;
     }
 
-    _deviceIds.removeOne(deviceId);
-    for(auto&& s : _modbusServerList) {
-        s->removeServerAddress(deviceId);
+    _deviceIds.remove(deviceId);
+    if (!_deviceIds.contains(deviceId)) {
+        for(auto&& s : _modbusServerList)
+            s->removeServerAddress(deviceId);
+        emit deviceIdsChanged(normalizedDeviceIds(_deviceIds));
     }
-
-    emit deviceIdsChanged(normalizedDeviceIds(_deviceIds));
 }
 
 ///
@@ -110,9 +105,6 @@ void ModbusMultiServer::setUseGlobalUnitMap(bool use)
 {
     if(QThread::currentThread() != _workerThread)
     {
-///
-/// \brief QMetaObject::invokeMethod
-///
         QMetaObject::invokeMethod(this, [this, use]() {
             setUseGlobalUnitMap(use);
         }, Qt::BlockingQueuedConnection);
@@ -138,9 +130,6 @@ void ModbusMultiServer::addUnitMap(int id, quint8 deviceId, QModbusDataUnit::Reg
 {
     if(QThread::currentThread() != _workerThread)
     {
-///
-/// \brief QMetaObject::invokeMethod
-///
         QMetaObject::invokeMethod(this, [this, id, deviceId, pointType, pointAddress, length]() {
             addUnitMap(id, deviceId, pointType, pointAddress, length);
         }, Qt::BlockingQueuedConnection);
@@ -164,9 +153,6 @@ void ModbusMultiServer::removeUnitMap(int id, quint8 deviceId)
 {
     if(QThread::currentThread() != _workerThread)
     {
-///
-/// \brief QMetaObject::invokeMethod
-///
         QMetaObject::invokeMethod(this, [this, id, deviceId]() {
             removeUnitMap(id, deviceId);
         }, Qt::BlockingQueuedConnection);
@@ -222,9 +208,6 @@ QSharedPointer<ModbusServer> ModbusMultiServer::createModbusServer(const Connect
     if(QThread::currentThread() != _workerThread)
     {
         QSharedPointer<ModbusServer> result;
-///
-/// \brief QMetaObject::invokeMethod
-///
         QMetaObject::invokeMethod(this, [&]() {
             result = createModbusServer(cd);
         }, Qt::BlockingQueuedConnection);
@@ -294,9 +277,6 @@ void ModbusMultiServer::connectDevice(const ConnectionDetails& cd)
 {
     if(QThread::currentThread() != _workerThread)
     {
-///
-/// \brief QMetaObject::invokeMethod
-///
         QMetaObject::invokeMethod(this, [this, cd]() {
             connectDevice(cd);
         }, Qt::BlockingQueuedConnection);
@@ -311,7 +291,7 @@ void ModbusMultiServer::connectDevice(const ConnectionDetails& cd)
     }
 
     modbusServer->removeAllServerAddresses();
-    for(auto&& deviceId: _deviceIds) {
+    for(auto&& deviceId: _deviceIds.values()) {
         modbusServer->addServerAddress(deviceId);
         modbusServer->setMap(_modbusDataUnitMaps[deviceId], deviceId);
 
@@ -334,9 +314,6 @@ void ModbusMultiServer::disconnectDevice(ConnectionType type, const QString& por
 {
     if(QThread::currentThread() != _workerThread)
     {
-///
-/// \brief QMetaObject::invokeMethod
-///
         QMetaObject::invokeMethod(this, [this, type, port]() {
             disconnectDevice(type, port);
         }, Qt::BlockingQueuedConnection);
@@ -358,9 +335,6 @@ void ModbusMultiServer::closeConnections()
 {
     if(QThread::currentThread() != _workerThread)
     {
-///
-/// \brief QMetaObject::invokeMethod
-///
         QMetaObject::invokeMethod(this, [this]() {
             closeConnections();
         }, Qt::BlockingQueuedConnection);
@@ -403,9 +377,6 @@ void ModbusMultiServer::setModbusDefinitions(const ModbusDefinitions& defs)
 {
     if(QThread::currentThread() != _workerThread)
     {
-///
-/// \brief QMetaObject::invokeMethod
-///
         QMetaObject::invokeMethod(this, [this, defs]() {
             setModbusDefinitions(defs);
         }, Qt::BlockingQueuedConnection);
@@ -432,9 +403,6 @@ void ModbusMultiServer::setRequestHandler(const RequestHandlerPtr& handler)
 {
     if(QThread::currentThread() != _workerThread)
     {
-///
-/// \brief QMetaObject::invokeMethod
-///
         QMetaObject::invokeMethod(this, [this, handler]() {
             setRequestHandler(handler);
         }, Qt::BlockingQueuedConnection);
@@ -476,9 +444,6 @@ void ModbusMultiServer::reconfigureServers()
 {
     if(QThread::currentThread() != _workerThread)
     {
-///
-/// \brief QMetaObject::invokeMethod
-///
         QMetaObject::invokeMethod(this, [this]() {
             reconfigureServers();
         }, Qt::BlockingQueuedConnection);
@@ -550,9 +515,6 @@ void ModbusMultiServer::setData(quint8 deviceId, const QModbusDataUnit& data)
 {
     if(QThread::currentThread() != _workerThread)
     {
-///
-/// \brief QMetaObject::invokeMethod
-///
         QMetaObject::invokeMethod(this, [this, deviceId, data]() {
             setData(deviceId, data);
         }, Qt::BlockingQueuedConnection);

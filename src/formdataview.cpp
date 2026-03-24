@@ -148,6 +148,9 @@ FormDataView::FormDataView(int id, ModbusMultiServer& server, DataSimulator* sim
 ///
 FormDataView::~FormDataView()
 {
+    const auto deviceId = ui->lineEditDeviceId->value<quint8>();
+    _mbMultiServer.removeDeviceId(deviceId);
+    _mbMultiServer.removeUnitMap(dataFormId(this), deviceId);
     delete ui;
 }
 
@@ -244,10 +247,6 @@ void FormDataView::changeEvent(QEvent* e)
 ///
 void FormDataView::closeEvent(QCloseEvent* event)
 {
-    const auto deviceId = ui->lineEditDeviceId->value<quint8>();
-    _mbMultiServer.removeDeviceId(deviceId);
-    _mbMultiServer.removeUnitMap(dataFormId(this), deviceId);
-
     emit closing();
     QWidget::closeEvent(event);
 }
