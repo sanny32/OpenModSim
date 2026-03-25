@@ -4,6 +4,7 @@
 #include <QSharedPointer>
 #include <QVector>
 #include <QFrame>
+#include <QPrinter>
 #include "displaydefinition.h"
 #include "modbusmessage.h"
 
@@ -41,6 +42,8 @@ public:
     bool autoscrollLogView() const;
     void setAutosctollLogView(bool on);
     bool exportLogToTextFile(const QString& filePath);
+
+    void print(QPrinter* printer);
 
     void updateTraffic(QSharedPointer<const ModbusMessage> msg);
     void updateTrafficBatch(const QVector<QSharedPointer<const ModbusMessage>>& messages);

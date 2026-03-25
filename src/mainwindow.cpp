@@ -160,6 +160,8 @@ void setDisplayHexAddressesOnForm(QWidget* widget, bool on)
 void printOnForm(QWidget* widget, QPrinter* printer)
 {
     if (auto* frm = qobject_cast<FormDataView*>(widget)) frm->print(printer);
+    else if (auto* frm = qobject_cast<FormTrafficView*>(widget)) frm->print(printer);
+    else if (auto* frm = qobject_cast<FormScriptView*>(widget)) frm->print(printer);
 }
 
 QColor statusColorOfForm(QWidget* widget)
@@ -482,8 +484,8 @@ void MainWindow::on_awake()
     ui->menuSetup->setEnabled(frm != nullptr);
     ui->menuWindow->setEnabled(frm != nullptr);
 
-    ui->actionPrintSetup->setEnabled(_selectedPrinter != nullptr && dataLikeFrm != nullptr);
-    ui->actionPrint->setEnabled(_selectedPrinter != nullptr && dataFrm != nullptr);
+    ui->actionPrintSetup->setEnabled(_selectedPrinter != nullptr && frm != nullptr);
+    ui->actionPrint->setEnabled(_selectedPrinter != nullptr && frm != nullptr);
 
     ui->actionUndo->setEnabled(scriptFrm != nullptr);
     ui->actionRedo->setEnabled(scriptFrm != nullptr);
@@ -690,7 +692,7 @@ void MainWindow::on_actionCloseProject_triggered()
 ///
 void MainWindow::on_actionPrint_triggered()
 {
-    auto* frm = currentDataOrTrafficForm();
+    auto* frm = currentForm();
     if(!frm) return;
 
     QPrintDialog dlg(_selectedPrinter.get(), this);

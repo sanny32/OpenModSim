@@ -2,6 +2,8 @@
 #include <QSizePolicy>
 #include <QSpinBox>
 #include <QToolButton>
+#include <QDateTime>
+#include <QTextDocument>
 #include "mainwindow.h"
 #include "controls/runmodecombobox.h"
 #include "formscriptview.h"
@@ -56,6 +58,23 @@ FormScriptView::~FormScriptView()
 void FormScriptView::saveSettings(QSettings& out) const
 {
     out << const_cast<FormScriptView*>(this);
+}
+
+///
+/// \brief FormScriptView::print
+/// \param printer
+///
+void FormScriptView::print(QPrinter* printer)
+{
+    if (!printer) return;
+
+    const auto header = QLocale().toString(QDateTime::currentDateTime(), QLocale::ShortFormat);
+    const auto text = header + "\n\n" + script();
+
+    QTextDocument doc;
+    doc.setDefaultFont(font());
+    doc.setPlainText(text);
+    doc.print(printer);
 }
 
 ///

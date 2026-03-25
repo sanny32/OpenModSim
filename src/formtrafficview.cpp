@@ -67,6 +67,16 @@ FormTrafficView::~FormTrafficView()
 }
 
 ///
+/// \brief FormTrafficView::print
+/// \param printer
+///
+void FormTrafficView::print(QPrinter* printer)
+{
+    if (!printer) return;
+    ui->outputWidget->print(printer);
+}
+
+///
 /// \brief FormTrafficView::saveSettings
 ///
 void FormTrafficView::saveSettings(QSettings& out) const

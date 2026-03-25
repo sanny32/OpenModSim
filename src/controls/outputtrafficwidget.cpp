@@ -2,6 +2,7 @@
 #include <QApplication>
 #include <QItemSelectionModel>
 #include <QPalette>
+#include <QTextDocument>
 #include "fontutils.h"
 #include "modbuslogwidget.h"
 #include "outputtrafficwidget.h"
@@ -258,4 +259,29 @@ void OutputTrafficWidget::updateLogView(QSharedPointer<const ModbusMessage> msg)
 void OutputTrafficWidget::updateLogViewBatch(const QVector<QSharedPointer<const ModbusMessage>>& messages)
 {
     ui->logView->addItems(messages);
+}
+
+///
+/// \brief OutputTrafficWidget::print
+/// \param printer
+///
+void OutputTrafficWidget::print(QPrinter* printer)
+{
+    if (!printer) return;
+
+    const auto header = QLocale().toString(QDateTime::currentDateTime(), QLocale::ShortFormat);
+
+    QString text = header + "\n\n";
+    const auto* model = ui->logView->model();
+    const int rows = ui->logView->rowCount();
+    for (int i = 0; i < rows; ++i)
+    {
+        if (i > 0) text += '\n';
+        text += model->data(model->index(i, 0), Qt::DisplayRole).toString();
+    }
+
+    QTextDocument doc;
+    doc.setDefaultFont(ui->logView->font());
+    doc.setPlainText(text);
+    doc.print(printer);
 }

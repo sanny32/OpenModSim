@@ -5,6 +5,7 @@
 #include <QTimer>
 #include <QXmlStreamWriter>
 #include <QQueue>
+#include <QPrinter>
 #include "fontutils.h"
 #include "modbusmultiserver.h"
 #include "displaydefinition.h"
@@ -59,6 +60,8 @@ public:
     void setLogViewState(LogViewState state);
 
     void linkTo(FormTrafficView* other);
+
+    void print(QPrinter* printer);
 
     void saveSettings(QSettings& out) const;
     void loadSettings(QSettings& in);

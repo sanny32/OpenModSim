@@ -1932,27 +1932,27 @@
 <context>
     <name>FormDataView</name>
     <message>
-        <location filename="../formdataview.ui" line="144"/>
+        <location filename="../formdataview.ui" line="137"/>
         <source>Starting Address:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formdataview.ui" line="151"/>
+        <location filename="../formdataview.ui" line="144"/>
         <source>Length:</source>
         <translation type="unfinished">РљРѕР»РёС‡РµСЃС‚РІРѕ:</translation>
     </message>
     <message>
-        <location filename="../formdataview.ui" line="190"/>
+        <location filename="../formdataview.ui" line="183"/>
         <source>Address Base:</source>
         <translation type="unfinished">РђРґСЂРµСЃР°С†РёСЏ:</translation>
     </message>
     <message>
-        <location filename="../formdataview.ui" line="246"/>
+        <location filename="../formdataview.ui" line="239"/>
         <source>Unit Identifier:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formdataview.ui" line="296"/>
+        <location filename="../formdataview.ui" line="289"/>
         <source>Data Type</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1995,112 +1995,112 @@ MODBUS Point Type:
         <translation type="obsolete">РћСЃС‚Р°РЅРѕРІ</translation>
     </message>
     <message>
-        <location filename="../formdataview.ui" line="378"/>
+        <location filename="../formdataview.ui" line="371"/>
         <source>Hex Address</source>
         <translation type="unfinished">РЁРµСЃС‚РЅР°РґС†Р°С‚РµСЂРёС‡РЅС‹Рµ Р°РґСЂРµСЃР°</translation>
     </message>
     <message>
-        <location filename="../formdataview.ui" line="391"/>
+        <location filename="../formdataview.ui" line="384"/>
         <source>Leading Zeros</source>
         <translation type="unfinished">Р’РµРґСѓС‰РёРµ РЅСѓР»Рё</translation>
     </message>
     <message>
-        <location filename="../formdataview.ui" line="398"/>
+        <location filename="../formdataview.ui" line="391"/>
         <source>Column Distance:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formdataview.ui" line="469"/>
+        <location filename="../formdataview.ui" line="463"/>
         <source>Binary</source>
         <translation type="unfinished">Р”РІРѕРёС‡РЅС‹Р№</translation>
     </message>
     <message>
-        <location filename="../formdataview.ui" line="487"/>
+        <location filename="../formdataview.ui" line="481"/>
         <source>Hex</source>
         <translation type="unfinished">РЁРµСЃС‚Р°РЅРґС†Р°С‚РёСЂРёС‡РЅС‹Р№</translation>
     </message>
     <message>
-        <location filename="../formdataview.ui" line="505"/>
+        <location filename="../formdataview.ui" line="499"/>
         <source>Ansi</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formdataview.ui" line="517"/>
+        <location filename="../formdataview.ui" line="511"/>
         <source>16-bit Integer</source>
         <translation type="unfinished">16-Р±РёС‚ С†РµР»РѕРµ</translation>
     </message>
     <message>
-        <location filename="../formdataview.ui" line="535"/>
+        <location filename="../formdataview.ui" line="529"/>
         <source>Unsigned 16-bit Integer</source>
         <translation type="unfinished">Р‘РµР·Р·РЅР°РєРѕРІРѕРµ 64-Р±РёС‚ С†РµР»РѕРµ {16-?}</translation>
     </message>
     <message>
-        <location filename="../formdataview.ui" line="553"/>
+        <location filename="../formdataview.ui" line="547"/>
         <source>32-bit Integer (MSRF)</source>
         <translation type="unfinished">32-Р±РёС‚ С†РµР»РѕРµ (MSRF)</translation>
     </message>
     <message>
-        <location filename="../formdataview.ui" line="571"/>
+        <location filename="../formdataview.ui" line="565"/>
         <source>32-bit Integer (LSRF)</source>
         <translation type="unfinished">32-Р±РёС‚ С†РµР»РѕРµ (LSRF)</translation>
     </message>
     <message>
-        <location filename="../formdataview.ui" line="589"/>
+        <location filename="../formdataview.ui" line="583"/>
         <source>Unsigned 32-bit Integer (MSRF)</source>
         <translation type="unfinished">Р‘РµР·Р·РЅР°РєРѕРІРѕРµ 32-Р±РёС‚ С†РµР»РѕРµ (MSRF)</translation>
     </message>
     <message>
-        <location filename="../formdataview.ui" line="607"/>
+        <location filename="../formdataview.ui" line="601"/>
         <source>Unsigned 32-bit Integer (LSRF)</source>
         <translation type="unfinished">Р‘РµР·Р·РЅР°РєРѕРІРѕРµ 32-Р±РёС‚ С†РµР»РѕРµ (LSRF)</translation>
     </message>
     <message>
-        <location filename="../formdataview.ui" line="625"/>
+        <location filename="../formdataview.ui" line="619"/>
         <source>64-bit Integer (MSRF)</source>
         <translation type="unfinished">64-Р±РёС‚ С†РµР»РѕРµ (MSRF)</translation>
     </message>
     <message>
-        <location filename="../formdataview.ui" line="643"/>
+        <location filename="../formdataview.ui" line="637"/>
         <source>64-bit Integer (LSRF)</source>
         <translation type="unfinished">64-Р±РёС‚ С†РµР»РѕРµ (LSRF)</translation>
     </message>
     <message>
-        <location filename="../formdataview.ui" line="661"/>
+        <location filename="../formdataview.ui" line="655"/>
         <source>Unsigned 64-bit Integer (MSRF)</source>
         <translation type="unfinished">Р‘РµР·Р·РЅР°РєРѕРІРѕРµ 64-Р±РёС‚ С†РµР»РѕРµ (MSRF)</translation>
     </message>
     <message>
-        <location filename="../formdataview.ui" line="679"/>
+        <location filename="../formdataview.ui" line="673"/>
         <source>Unsigned 64-bit Integer (LSRF)</source>
         <translation type="unfinished">Р‘РµР·Р·РЅР°РєРѕРІРѕРµ 64-Р±РёС‚ С†РµР»РѕРµ (LSRF)</translation>
     </message>
     <message>
-        <location filename="../formdataview.ui" line="697"/>
+        <location filename="../formdataview.ui" line="691"/>
         <source>Float (MSRF)</source>
         <translation type="unfinished">РЎ РїР»Р°РІР°СЋС‰РµР№ С‚РѕС‡РєРѕР№ (MSRF)</translation>
     </message>
     <message>
-        <location filename="../formdataview.ui" line="715"/>
+        <location filename="../formdataview.ui" line="709"/>
         <source>Float (LSRF)</source>
         <translation type="unfinished">РЎ РїР»Р°РІР°СЋС‰РµР№ С‚РѕС‡РєРѕР№ (LSRF)</translation>
     </message>
     <message>
-        <location filename="../formdataview.ui" line="733"/>
+        <location filename="../formdataview.ui" line="727"/>
         <source>Double (MSRF)</source>
         <translation type="unfinished">Р”РІРѕР№РЅРѕР№ С‚РѕС‡РЅРѕСЃС‚Рё (MSRF)</translation>
     </message>
     <message>
-        <location filename="../formdataview.ui" line="751"/>
+        <location filename="../formdataview.ui" line="745"/>
         <source>Double (LSRF)</source>
         <translation type="unfinished">Р”РІРѕР№РЅРѕР№ С‚РѕС‡РЅРѕСЃС‚Рё (LSRF)</translation>
     </message>
     <message>
-        <location filename="../formdataview.ui" line="769"/>
+        <location filename="../formdataview.ui" line="763"/>
         <source>Swap Bytes (0xAB → 0xBA)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formdataview.ui" line="777"/>
+        <location filename="../formdataview.ui" line="771"/>
         <source>Hex Addresses</source>
         <translation type="unfinished">РЁРµСЃС‚РЅР°РґС†Р°С‚РёСЂРёС‡РЅС‹Рµ Р°РґСЂРµСЃР°</translation>
     </message>
@@ -2283,16 +2283,16 @@ MODBUS Point Type:
 %2</translation>
     </message>
     <message>
-        <location filename="../formscriptview.cpp" line="105"/>
-        <location filename="../formscriptview.cpp" line="486"/>
-        <location filename="../formscriptview.cpp" line="486"/>
+        <location filename="../formscriptview.cpp" line="124"/>
+        <location filename="../formscriptview.cpp" line="505"/>
+        <location filename="../formscriptview.cpp" line="505"/>
         <source> ms</source>
         <translation type="unfinished"> РјСЃ</translation>
     </message>
     <message>
-        <location filename="../formscriptview.cpp" line="106"/>
-        <location filename="../formscriptview.cpp" line="490"/>
-        <location filename="../formscriptview.cpp" line="490"/>
+        <location filename="../formscriptview.cpp" line="125"/>
+        <location filename="../formscriptview.cpp" line="509"/>
+        <location filename="../formscriptview.cpp" line="509"/>
         <source>Run on startup</source>
         <translation type="unfinished">Р—Р°РїСѓСЃРєР°С‚СЊ РїСЂРё РѕС‚РєСЂС‹С‚РёРё</translation>
     </message>
@@ -2438,83 +2438,83 @@ MODBUS Point Type:
         <translation type="obsolete">Р—Р°РјРµРЅРёС‚СЊ</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="591"/>
+        <location filename="../formtrafficview.cpp" line="601"/>
         <source>Text files (*.txt)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="598"/>
+        <location filename="../formtrafficview.cpp" line="608"/>
         <source>Log exported successfully to file %1</source>
         <translation type="unfinished">Р›РѕРі СѓСЃРїРµС€РЅРѕ СЌРєСЃРїРѕСЂС‚РёСЂРѕРІР°РЅ РІ С„Р°Р№Р» %1</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="600"/>
+        <location filename="../formtrafficview.cpp" line="610"/>
         <source>Export log error!</source>
         <translation type="unfinished">РћС€РёР±РєР° СЌРєСЃРїРѕСЂС‚Р° Р»РѕРіР°!</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="631"/>
+        <location filename="../formtrafficview.cpp" line="641"/>
         <source>Unit:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="481"/>
-        <location filename="../formtrafficview.cpp" line="636"/>
-        <location filename="../formtrafficview.cpp" line="649"/>
-        <location filename="../formtrafficview.cpp" line="671"/>
-        <location filename="../formtrafficview.cpp" line="636"/>
-        <location filename="../formtrafficview.cpp" line="649"/>
-        <location filename="../formtrafficview.cpp" line="671"/>
+        <location filename="../formtrafficview.cpp" line="491"/>
+        <location filename="../formtrafficview.cpp" line="646"/>
+        <location filename="../formtrafficview.cpp" line="659"/>
+        <location filename="../formtrafficview.cpp" line="681"/>
+        <location filename="../formtrafficview.cpp" line="646"/>
+        <location filename="../formtrafficview.cpp" line="659"/>
+        <location filename="../formtrafficview.cpp" line="681"/>
         <source>All</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="637"/>
+        <location filename="../formtrafficview.cpp" line="647"/>
         <source>0 = all unit ids</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="668"/>
+        <location filename="../formtrafficview.cpp" line="678"/>
         <source>Source:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="460"/>
+        <location filename="../formtrafficview.cpp" line="470"/>
         <source>Modbus/TCP Srv %1:%2</source>
         <translation type="unfinished">Modbus/TCP СЃРµСЂРІРµСЂ %1:%2</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="462"/>
+        <location filename="../formtrafficview.cpp" line="472"/>
         <source>Port %1:%2:%3:%4:%5</source>
         <translation type="unfinished">РџРѕСЂС‚ %1:%2:%3:%4:%5</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="678"/>
+        <location filename="../formtrafficview.cpp" line="688"/>
         <source>Exceptions Only</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="679"/>
+        <location filename="../formtrafficview.cpp" line="689"/>
         <source>Show only responses with Modbus exception</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="686"/>
+        <location filename="../formtrafficview.cpp" line="696"/>
         <source>Autoscroll</source>
         <translation type="unfinished">РђРІС‚РѕРїСЂРѕРєСЂСѓС‚РєР°</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="687"/>
+        <location filename="../formtrafficview.cpp" line="697"/>
         <source>Automatically scroll to the latest entry</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="695"/>
+        <location filename="../formtrafficview.cpp" line="705"/>
         <source>Rows:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="646"/>
+        <location filename="../formtrafficview.cpp" line="656"/>
         <source>Function:</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3086,8 +3086,8 @@ Script.onInit(()=&gt;{
     </message>
     <message>
         <location filename="../mainwindow.ui" line="233"/>
-        <location filename="../mainwindow.cpp" line="1538"/>
-        <location filename="../mainwindow.cpp" line="1538"/>
+        <location filename="../mainwindow.cpp" line="1540"/>
+        <location filename="../mainwindow.cpp" line="1540"/>
         <source>Save Project</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3293,10 +3293,10 @@ Script.onInit(()=&gt;{
     <message>
         <location filename="../mainwindow.ui" line="501"/>
         <location filename="../mainwindow.ui" line="504"/>
-        <location filename="../mainwindow.cpp" line="279"/>
-        <location filename="../mainwindow.cpp" line="399"/>
-        <location filename="../mainwindow.cpp" line="279"/>
-        <location filename="../mainwindow.cpp" line="399"/>
+        <location filename="../mainwindow.cpp" line="281"/>
+        <location filename="../mainwindow.cpp" line="401"/>
+        <location filename="../mainwindow.cpp" line="281"/>
+        <location filename="../mainwindow.cpp" line="401"/>
         <source>Script Help</source>
         <translation>РЎРїСЂР°РІРєР° РїРѕ СЃРєСЂРёРїС‚Р°Рј</translation>
     </message>
@@ -3378,7 +3378,7 @@ Script.onInit(()=&gt;{
         <translation type="vanished">РЁРµСЃС‚РЅР°РґС†Р°С‚РёСЂРёС‡РЅС‹Рµ Р°РґСЂРµСЃР°</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="634"/>
+        <location filename="../mainwindow.cpp" line="636"/>
         <source>All files (*)</source>
         <translation>Р’СЃРµ С„Р°Р№Р»С‹ (*)</translation>
     </message>
@@ -3387,16 +3387,16 @@ Script.onInit(()=&gt;{
         <translation type="vanished">XML С„Р°Р№Р»С‹ (*.xml)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="260"/>
-        <location filename="../mainwindow.cpp" line="398"/>
-        <location filename="../mainwindow.cpp" line="398"/>
+        <location filename="../mainwindow.cpp" line="262"/>
+        <location filename="../mainwindow.cpp" line="400"/>
+        <location filename="../mainwindow.cpp" line="400"/>
         <source>Project</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="313"/>
-        <location filename="../mainwindow.cpp" line="400"/>
-        <location filename="../mainwindow.cpp" line="400"/>
+        <location filename="../mainwindow.cpp" line="315"/>
+        <location filename="../mainwindow.cpp" line="402"/>
+        <location filename="../mainwindow.cpp" line="402"/>
         <source>Output</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3405,38 +3405,38 @@ Script.onInit(()=&gt;{
         <translation type="obsolete">Р”Р°РЅРЅС‹Рµ</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="633"/>
-        <location filename="../mainwindow.cpp" line="664"/>
-        <location filename="../mainwindow.cpp" line="664"/>
+        <location filename="../mainwindow.cpp" line="635"/>
+        <location filename="../mainwindow.cpp" line="666"/>
+        <location filename="../mainwindow.cpp" line="666"/>
         <source>Project files (*.msimprj)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="235"/>
-        <location filename="../mainwindow.cpp" line="401"/>
-        <location filename="../mainwindow.cpp" line="401"/>
+        <location filename="../mainwindow.cpp" line="237"/>
+        <location filename="../mainwindow.cpp" line="403"/>
+        <location filename="../mainwindow.cpp" line="403"/>
         <source>Open Recent</source>
         <translation>Открыть недавние</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="236"/>
-        <location filename="../mainwindow.cpp" line="1625"/>
-        <location filename="../mainwindow.cpp" line="1625"/>
+        <location filename="../mainwindow.cpp" line="238"/>
+        <location filename="../mainwindow.cpp" line="1627"/>
+        <location filename="../mainwindow.cpp" line="1627"/>
         <source>Clear List</source>
         <translation>Очистить список</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1140"/>
+        <location filename="../mainwindow.cpp" line="1142"/>
         <source>JavaScript files (*.js);;All files (*)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1613"/>
+        <location filename="../mainwindow.cpp" line="1615"/>
         <source>No Recent Projects</source>
         <translation>Нет недавних проектов</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1539"/>
+        <location filename="../mainwindow.cpp" line="1541"/>
         <source>Save project before closing?</source>
         <translation>Сохранить проект перед закрытием?</translation>
     </message>

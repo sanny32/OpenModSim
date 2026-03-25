@@ -4,6 +4,7 @@
 #include <QWidget>
 #include <QTimer>
 #include <QXmlStreamWriter>
+#include <QPrinter>
 #include "fontutils.h"
 #include "displaydefinition.h"
 #include "jscriptcontrol.h"
@@ -88,6 +89,8 @@ public:
 
     bool isAutoCompleteEnabled() const;
     void enableAutoComplete(bool enable);
+
+    void print(QPrinter* printer);
 
     void saveSettings(QSettings& out) const;
     void loadSettings(QSettings& in);
