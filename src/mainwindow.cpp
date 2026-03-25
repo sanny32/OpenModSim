@@ -484,8 +484,12 @@ void MainWindow::on_awake()
     ui->menuSetup->setEnabled(frm != nullptr);
     ui->menuWindow->setEnabled(frm != nullptr);
 
+    const bool canPrint = _selectedPrinter != nullptr &&
+                          (dataFrm != nullptr ||
+                           (trafficFrm != nullptr && !trafficFrm->isLogEmpty()) ||
+                           (scriptFrm  != nullptr && !scriptFrm->script().isEmpty()));
     ui->actionPrintSetup->setEnabled(_selectedPrinter != nullptr && frm != nullptr);
-    ui->actionPrint->setEnabled(_selectedPrinter != nullptr && frm != nullptr);
+    ui->actionPrint->setEnabled(canPrint);
 
     ui->actionUndo->setEnabled(scriptFrm != nullptr);
     ui->actionRedo->setEnabled(scriptFrm != nullptr);

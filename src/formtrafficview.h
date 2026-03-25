@@ -61,6 +61,7 @@ public:
 
     void linkTo(FormTrafficView* other);
 
+    bool isLogEmpty() const;
     void print(QPrinter* printer);
 
     void saveSettings(QSettings& out) const;

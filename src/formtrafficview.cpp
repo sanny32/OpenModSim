@@ -68,6 +68,15 @@ FormTrafficView::~FormTrafficView()
 }
 
 ///
+/// \brief FormTrafficView::isLogEmpty
+/// \return
+///
+bool FormTrafficView::isLogEmpty() const
+{
+    return ui->outputWidget->isLogEmpty();
+}
+
+///
 /// \brief FormTrafficView::print
 /// \param printer
 ///
