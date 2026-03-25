@@ -1,4 +1,5 @@
 ﻿#include <QPainter>
+#include <QPrinter>
 #include <QPalette>
 #include <QDateTime>
 #include <QHelpEngine>
@@ -73,7 +74,67 @@ FormTrafficView::~FormTrafficView()
 void FormTrafficView::print(QPrinter* printer)
 {
     if (!printer) return;
-    ui->outputWidget->print(printer);
+
+    const QString unitText = (_unitIdFilter && _unitIdFilter->value() > 0)
+        ? QString::number(_unitIdFilter->value())
+        : tr("All");
+
+    const QString funcText = _funcCodeFilter
+        ? _funcCodeFilter->currentText()
+        : tr("All");
+
+    const QString sourceText = _sourceFilter
+        ? _sourceFilter->currentText()
+        : tr("All");
+
+    const bool exceptionsOnly = _exceptionsFilter && _exceptionsFilter->isChecked();
+
+    QString filterText = QString(tr("Unit: %1\nFunction: %2\nSource: %3"))
+        .arg(unitText, funcText, sourceText);
+    if (exceptionsOnly)
+        filterText += QStringLiteral("\n") + tr("Exceptions Only");
+
+    const auto pageRect   = printer->pageRect(QPrinter::DevicePixel).toRect();
+    const int  marginX    = qMax(pageRect.width()  / 40, 10);
+    const int  marginY    = qMax(pageRect.height() / 40, 10);
+    const int  pageWidth  = pageRect.width()  - 2 * marginX;
+    const int  pageHeight = pageRect.height() - 2 * marginY;
+    const int  cx         = pageRect.left() + marginX;
+    const int  cy         = pageRect.top()  + marginY;
+
+    QPainter painter(printer);
+    painter.setRenderHint(QPainter::Antialiasing);
+    painter.setRenderHint(QPainter::TextAntialiasing);
+
+    const auto textTime   = QLocale().toString(QDateTime::currentDateTime(), QLocale::ShortFormat);
+    auto rcTime   = painter.boundingRect(cx, cy, pageWidth, pageHeight, Qt::TextSingleLine, textTime);
+    auto rcFilter = painter.boundingRect(cx, cy, pageWidth, pageHeight, Qt::TextWordWrap,  filterText);
+    rcTime.moveTopRight({ pageRect.right() - marginX, cy });
+
+    const int lineGap    = qMax(pageRect.height() / 60, 10);
+    const int lineY      = rcFilter.bottom() + lineGap;
+    const int pageNumH   = painter.boundingRect(cx, cy, pageWidth, pageHeight, Qt::TextSingleLine, QStringLiteral("0")).height();
+    auto      rcOutput   = pageRect.adjusted(marginX, 0, -marginX, -marginY);
+    rcOutput.setTop(lineY + lineGap);
+    rcOutput.setBottom(rcOutput.bottom() - pageNumH - lineGap);
+
+    const int totalRows = ui->outputWidget->rowCount();
+    int startRow = 0;
+    int pageNum  = 1;
+    do {
+        painter.drawText(rcTime,   Qt::TextSingleLine, textTime);
+        painter.drawText(rcFilter, Qt::TextWordWrap,   filterText);
+        painter.drawLine(pageRect.left() + marginX, lineY, pageRect.right() - marginX, lineY);
+        startRow = ui->outputWidget->paint(rcOutput, painter, startRow);
+
+        const auto textPage = QString::number(pageNum++);
+        auto rcPage = painter.boundingRect(cx, cy, pageWidth, pageHeight, Qt::TextSingleLine, textPage);
+        rcPage.moveBottomRight({ pageRect.right() - marginX, pageRect.bottom() - marginY });
+        painter.drawText(rcPage, Qt::TextSingleLine, textPage);
+
+        if (startRow < totalRows)
+            printer->newPage();
+    } while (startRow < totalRows);
 }
 
 ///

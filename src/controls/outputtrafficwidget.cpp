@@ -2,7 +2,7 @@
 #include <QApplication>
 #include <QItemSelectionModel>
 #include <QPalette>
-#include <QTextDocument>
+#include <QPainter>
 #include "fontutils.h"
 #include "modbuslogwidget.h"
 #include "outputtrafficwidget.h"
@@ -262,26 +262,40 @@ void OutputTrafficWidget::updateLogViewBatch(const QVector<QSharedPointer<const 
 }
 
 ///
-/// \brief OutputTrafficWidget::print
-/// \param printer
+/// \brief OutputTrafficWidget::rowCount
+/// \return
 ///
-void OutputTrafficWidget::print(QPrinter* printer)
+int OutputTrafficWidget::rowCount() const
 {
-    if (!printer) return;
+    return ui->logView->rowCount();
+}
 
-    const auto header = QLocale().toString(QDateTime::currentDateTime(), QLocale::ShortFormat);
-
-    QString text = header + "\n\n";
+///
+/// \brief OutputTrafficWidget::paint
+/// \param rc
+/// \param painter
+/// \param startRow
+/// \return next row index to print (== rowCount() if all rows fit)
+///
+int OutputTrafficWidget::paint(const QRect& rc, QPainter& painter, int startRow)
+{
+    painter.save();
+    painter.setFont(ui->logView->font());
+    int cy = rc.top();
     const auto* model = ui->logView->model();
-    const int rows = ui->logView->rowCount();
-    for (int i = 0; i < rows; ++i)
+    const int total = ui->logView->rowCount();
+    for (int i = startRow; i < total; ++i)
     {
-        if (i > 0) text += '\n';
-        text += model->data(model->index(i, 0), Qt::DisplayRole).toString();
+        const auto text = model->data(model->index(i, 0), Qt::DisplayRole).toString();
+        auto rcItem = painter.boundingRect(rc.left(), cy, rc.right() - rc.left(), rc.bottom() - cy, Qt::TextWordWrap, text);
+        if (rcItem.bottom() > rc.bottom())
+        {
+            painter.restore();
+            return i;
+        }
+        painter.drawText(rcItem, Qt::TextWordWrap, text);
+        cy = rcItem.bottom() + 2;
     }
-
-    QTextDocument doc;
-    doc.setDefaultFont(ui->logView->font());
-    doc.setPlainText(text);
-    doc.print(printer);
+    painter.restore();
+    return total;
 }

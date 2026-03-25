@@ -43,7 +43,8 @@ public:
     void setAutosctollLogView(bool on);
     bool exportLogToTextFile(const QString& filePath);
 
-    void print(QPrinter* printer);
+    int rowCount() const;
+    int paint(const QRect& rc, QPainter& painter, int startRow = 0);
 
     void updateTraffic(QSharedPointer<const ModbusMessage> msg);
     void updateTrafficBatch(const QVector<QSharedPointer<const ModbusMessage>>& messages);
