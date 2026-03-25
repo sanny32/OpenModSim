@@ -37,6 +37,7 @@ public:
 
     void setLanguage(const QString& lang);
     void applyAutoComplete(bool enable);
+    void applyConsoleMaxLines(int n);
     void applyFont(const QFont& font);
     void applyScriptFont(const QFont& font);
     void applyZoom(int zoomPercent);

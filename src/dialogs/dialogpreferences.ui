@@ -81,7 +81,7 @@
         </item>
         <item>
          <property name="text">
-          <string>Script Editor</string>
+          <string>Script</string>
          </property>
          <property name="icon">
           <iconset resource="../resources.qrc">
@@ -131,7 +131,7 @@
             <bool>true</bool>
            </property>
            <property name="currentIndex">
-            <number>1</number>
+            <number>2</number>
            </property>
            <widget class="QWidget" name="pageInterface">
             <layout class="QVBoxLayout" name="vlInterface">
@@ -602,7 +602,7 @@
                <property name="title">
                 <string>Traffic View</string>
                </property>
-               <layout class="QFormLayout" name="formLogView">
+               <layout class="QFormLayout" name="formTrafficView">
                 <property name="horizontalSpacing">
                  <number>12</number>
                 </property>
@@ -653,6 +653,19 @@
                 </item>
                </layout>
               </widget>
+             </item>
+             <item>
+              <spacer name="verticalSpacer">
+               <property name="orientation">
+                <enum>Qt::Orientation::Vertical</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>20</width>
+                 <height>40</height>
+                </size>
+               </property>
+              </spacer>
              </item>
             </layout>
            </widget>
@@ -759,15 +772,74 @@
                <property name="title">
                 <string>Editor</string>
                </property>
-               <layout class="QVBoxLayout" name="vlEditor">
-                <item>
+               <layout class="QFormLayout" name="formEditor">
+                <property name="horizontalSpacing">
+                 <number>12</number>
+                </property>
+                <property name="verticalSpacing">
+                 <number>8</number>
+                </property>
+                <item row="0" column="0" colspan="2">
                  <widget class="QCheckBox" name="checkBoxAutoComplete">
                   <property name="text">
                    <string>Enable code auto-complete</string>
                   </property>
                  </widget>
                 </item>
-                <item>
+               </layout>
+              </widget>
+             </item>
+             <item>
+              <widget class="QGroupBox" name="groupBoxConsole">
+               <property name="title">
+                <string>Console</string>
+               </property>
+               <layout class="QFormLayout" name="formConsole">
+                <property name="horizontalSpacing">
+                 <number>12</number>
+                </property>
+                <property name="verticalSpacing">
+                 <number>8</number>
+                </property>
+                <item row="3" column="0">
+                 <widget class="QLabel" name="labelConsoleMaxLines">
+                  <property name="text">
+                   <string>Console Output Limit:</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="3" column="1">
+                 <widget class="QSpinBox" name="spinBoxConsoleMaxLines">
+                  <property name="minimumSize">
+                   <size>
+                    <width>60</width>
+                    <height>0</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>60</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <property name="alignment">
+                   <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+                  </property>
+                  <property name="minimum">
+                   <number>100</number>
+                  </property>
+                  <property name="maximum">
+                   <number>10000</number>
+                  </property>
+                  <property name="singleStep">
+                   <number>100</number>
+                  </property>
+                  <property name="value">
+                   <number>500</number>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="0" colspan="2">
                  <widget class="QCheckBox" name="checkBoxAutoShowConsole">
                   <property name="text">
                    <string>Automatically show output console</string>
@@ -793,19 +865,6 @@
             </layout>
            </widget>
           </widget>
-         </item>
-         <item>
-          <spacer name="verticalSpacer_2">
-           <property name="orientation">
-            <enum>Qt::Orientation::Vertical</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>20</width>
-             <height>40</height>
-            </size>
-           </property>
-          </spacer>
          </item>
          <item>
           <widget class="Line" name="line">

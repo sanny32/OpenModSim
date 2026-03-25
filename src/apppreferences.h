@@ -64,6 +64,9 @@ public:
     bool autoShowConsoleOutput() const { return _autoShowConsoleOutput; }
     void setAutoShowConsoleOutput(bool enable) { _autoShowConsoleOutput = enable; }
 
+    int consoleMaxLines() const { return _consoleMaxLines; }
+    void setConsoleMaxLines(int n) { _consoleMaxLines = n; }
+
     // ----- Persistence -----
     void load(QSettings& settings);
     void save(QSettings& settings) const;
@@ -89,6 +92,7 @@ private:
     QFont         _scriptFont;
     bool          _codeAutoComplete{ true };
     bool          _autoShowConsoleOutput{ true };
+    int           _consoleMaxLines{ 500 };
 };
 
 #endif // APPPREFERENCES_H

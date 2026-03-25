@@ -168,6 +168,7 @@ void DialogPreferences::loadFromPreferences()
     // Script - editor
     ui->checkBoxAutoComplete->setChecked(prefs.codeAutoComplete());
     ui->checkBoxAutoShowConsole->setChecked(prefs.autoShowConsoleOutput());
+    ui->spinBoxConsoleMaxLines->setValue(prefs.consoleMaxLines());
 
     on_listWidget_currentRowChanged(ui->listWidget->currentRow());
 }
@@ -247,6 +248,10 @@ void DialogPreferences::apply()
 
     const bool autoShowConsole = ui->checkBoxAutoShowConsole->isChecked();
     prefs.setAutoShowConsoleOutput(autoShowConsole);
+
+    const int consoleMaxLines = ui->spinBoxConsoleMaxLines->value();
+    prefs.setConsoleMaxLines(consoleMaxLines);
+    if (_mainWindow) _mainWindow->applyConsoleMaxLines(consoleMaxLines);
 }
 
 ///

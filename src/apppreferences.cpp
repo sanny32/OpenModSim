@@ -37,6 +37,7 @@ void AppPreferences::load(QSettings& settings)
     _scriptFont.fromString(settings.value("ScriptFont", _scriptFont.toString()).toString());
     _codeAutoComplete = settings.value("CodeAutoComplete", _codeAutoComplete).toBool();
     _autoShowConsoleOutput = settings.value("AutoShowConsoleOutput", _autoShowConsoleOutput).toBool();
+    _consoleMaxLines = settings.value("ConsoleMaxLines", _consoleMaxLines).toInt();
     _checkForUpdates  = settings.value("CheckForUpdates",  _checkForUpdates).toBool();
 
     settings >> _dataViewDefinitions;
@@ -63,6 +64,7 @@ void AppPreferences::save(QSettings& settings) const
     settings.setValue("ScriptFont",      _scriptFont.toString());
     settings.setValue("CodeAutoComplete",_codeAutoComplete);
     settings.setValue("AutoShowConsoleOutput", _autoShowConsoleOutput);
+    settings.setValue("ConsoleMaxLines", _consoleMaxLines);
     settings.setValue("CheckForUpdates", _checkForUpdates);
 
     settings << _dataViewDefinitions;
@@ -88,6 +90,7 @@ void AppPreferences::saveXml(QXmlStreamWriter& xml) const
     xml.writeAttribute("ScriptFont",      _scriptFont.toString());
     xml.writeAttribute("CodeAutoComplete", boolToString(_codeAutoComplete));
     xml.writeAttribute("AutoShowConsoleOutput", boolToString(_autoShowConsoleOutput));
+    xml.writeAttribute("ConsoleMaxLines", QString::number(_consoleMaxLines));
     xml << _dataViewDefinitions;
     xml << _trafficViewDefinitions;
     xml << _scriptViewDefinitions;
@@ -137,6 +140,11 @@ void AppPreferences::loadXml(QXmlStreamReader& xml)
 
     if (attributes.hasAttribute("AutoShowConsoleOutput")) {
         _autoShowConsoleOutput = stringToBool(attributes.value("AutoShowConsoleOutput").toString());
+    }
+
+    if (attributes.hasAttribute("ConsoleMaxLines")) {
+        bool ok; const int n = attributes.value("ConsoleMaxLines").toInt(&ok);
+        if (ok) _consoleMaxLines = n;
     }
 
     while (xml.readNextStartElement()) {

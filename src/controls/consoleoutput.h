@@ -21,6 +21,7 @@ public:
 
     void addMessage(const QString& text, MessageType type, const QString& source = {});
     bool isEmpty() const;
+    void setMaxLines(int n);
 
 public slots:
     void clear();
@@ -43,6 +44,7 @@ private:
     int _logCount   = 0;
     int _warnCount  = 0;
     int _errorCount = 0;
+    int _maxLines   = 500;
 };
 
 #endif // CONSOLEOUTPUT_H

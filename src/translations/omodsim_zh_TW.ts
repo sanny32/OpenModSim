@@ -216,12 +216,12 @@
         <translation>жё…й™¤жЋ§е€¶еЏ°</translation>
     </message>
     <message>
-        <location filename="../controls/consoleoutput.cpp" line="259"/>
+        <location filename="../controls/consoleoutput.cpp" line="289"/>
         <source>Copy</source>
         <translation>и¤‡иЈЅ</translation>
     </message>
     <message>
-        <location filename="../controls/consoleoutput.cpp" line="270"/>
+        <location filename="../controls/consoleoutput.cpp" line="300"/>
         <source>Clear</source>
         <translation>жё…й™¤</translation>
     </message>
@@ -1036,9 +1036,8 @@
         <translation type="vanished">йЎЇз¤є</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="84"/>
         <source>Script Editor</source>
-        <translation>и…іжњ¬з·ЁијЇе™Ё</translation>
+        <translation type="vanished">и…іжњ¬з·ЁијЇе™Ё</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogpreferences.ui" line="156"/>
@@ -1074,13 +1073,13 @@
     </message>
     <message>
         <location filename="../dialogs/dialogpreferences.ui" line="368"/>
-        <location filename="../dialogs/dialogpreferences.ui" line="679"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="692"/>
         <source>Font</source>
         <translation>е­—ећ‹</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogpreferences.ui" line="405"/>
-        <location filename="../dialogs/dialogpreferences.ui" line="716"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="729"/>
         <source>Size:</source>
         <translation>е¤§е°Џпјљ</translation>
     </message>
@@ -1100,13 +1099,23 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="773"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="795"/>
+        <source>Console</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogpreferences.ui" line="845"/>
         <source>Automatically show output console</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../dialogs/dialogpreferences.ui" line="807"/>
+        <source>Console Output Limit:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../dialogs/dialogpreferences.ui" line="383"/>
-        <location filename="../dialogs/dialogpreferences.ui" line="694"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="707"/>
         <source>Family:</source>
         <translation>е­—ећ‹ж—Џпјљ</translation>
     </message>
@@ -1127,7 +1136,7 @@
     </message>
     <message>
         <location filename="../dialogs/dialogpreferences.ui" line="480"/>
-        <location filename="../dialogs/dialogpreferences.ui" line="750"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="763"/>
         <source>Antialias</source>
         <translation>еЏЌй‹ёйЅ’</translation>
     </message>
@@ -1174,20 +1183,21 @@
         <translation>ж—ҐиЄЊй™ђе€¶пјљ</translation>
     </message>
     <message>
+        <location filename="../dialogs/dialogpreferences.ui" line="84"/>
         <source>Script</source>
-        <translation type="obsolete">жЊ‡д»¤зўј</translation>
+        <translation type="unfinished">жЊ‡д»¤зўј</translation>
     </message>
     <message>
         <source>&lt;b&gt;Note:&lt;/b&gt; These settings apply to newly opened windows only.</source>
         <translation type="vanished">&lt;b&gt;жіЁж„Џпјљ&lt;/b&gt;йЂ™дє›иЁ­е®љеѓ…йЃ©з”Ёж–јж–°й–‹е•џзљ„и¦–зЄ—гЂ‚</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="760"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="773"/>
         <source>Editor</source>
         <translation>з·ЁијЇе™Ё</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="766"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="785"/>
         <source>Enable code auto-complete</source>
         <translation>е•џз”ЁзЁ‹ејЏзўји‡Єе‹•е®Њж€ђ</translation>
     </message>
@@ -3065,8 +3075,8 @@ Script.onInit(()=&gt;{
     </message>
     <message>
         <location filename="../mainwindow.ui" line="233"/>
-        <location filename="../mainwindow.cpp" line="1544"/>
-        <location filename="../mainwindow.cpp" line="1544"/>
+        <location filename="../mainwindow.cpp" line="1554"/>
+        <location filename="../mainwindow.cpp" line="1554"/>
         <source>Save Project</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3293,9 +3303,9 @@ Script.onInit(()=&gt;{
         <location filename="../mainwindow.ui" line="501"/>
         <location filename="../mainwindow.ui" line="504"/>
         <location filename="../mainwindow.cpp" line="281"/>
-        <location filename="../mainwindow.cpp" line="401"/>
+        <location filename="../mainwindow.cpp" line="402"/>
         <location filename="../mainwindow.cpp" line="281"/>
-        <location filename="../mainwindow.cpp" line="401"/>
+        <location filename="../mainwindow.cpp" line="402"/>
         <source>Script Help</source>
         <translation>жЊ‡д»¤зЁїиЄЄжЋ</translation>
     </message>
@@ -3385,7 +3395,7 @@ Script.onInit(()=&gt;{
         <translation type="vanished">дї„иЇ­</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="640"/>
+        <location filename="../mainwindow.cpp" line="641"/>
         <source>All files (*)</source>
         <translation>ж‰Ђжњ‰жЄ”жЎ€ (*)</translation>
     </message>
@@ -3395,15 +3405,15 @@ Script.onInit(()=&gt;{
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="262"/>
-        <location filename="../mainwindow.cpp" line="400"/>
-        <location filename="../mainwindow.cpp" line="400"/>
+        <location filename="../mainwindow.cpp" line="401"/>
+        <location filename="../mainwindow.cpp" line="401"/>
         <source>Project</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="315"/>
-        <location filename="../mainwindow.cpp" line="402"/>
-        <location filename="../mainwindow.cpp" line="402"/>
+        <location filename="../mainwindow.cpp" line="316"/>
+        <location filename="../mainwindow.cpp" line="403"/>
+        <location filename="../mainwindow.cpp" line="403"/>
         <source>Output</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3412,38 +3422,38 @@ Script.onInit(()=&gt;{
         <translation type="obsolete">иі‡ж–™</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="639"/>
-        <location filename="../mainwindow.cpp" line="670"/>
-        <location filename="../mainwindow.cpp" line="670"/>
+        <location filename="../mainwindow.cpp" line="640"/>
+        <location filename="../mainwindow.cpp" line="671"/>
+        <location filename="../mainwindow.cpp" line="671"/>
         <source>Project files (*.msimprj)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="237"/>
-        <location filename="../mainwindow.cpp" line="403"/>
-        <location filename="../mainwindow.cpp" line="403"/>
+        <location filename="../mainwindow.cpp" line="404"/>
+        <location filename="../mainwindow.cpp" line="404"/>
         <source>Open Recent</source>
         <translation>開啟最近專案</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="238"/>
-        <location filename="../mainwindow.cpp" line="1631"/>
-        <location filename="../mainwindow.cpp" line="1631"/>
+        <location filename="../mainwindow.cpp" line="1641"/>
+        <location filename="../mainwindow.cpp" line="1641"/>
         <source>Clear List</source>
         <translation>清除清單</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1146"/>
+        <location filename="../mainwindow.cpp" line="1156"/>
         <source>JavaScript files (*.js);;All files (*)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1619"/>
+        <location filename="../mainwindow.cpp" line="1629"/>
         <source>No Recent Projects</source>
         <translation>沒有最近專案</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1545"/>
+        <location filename="../mainwindow.cpp" line="1555"/>
         <source>Save project before closing?</source>
         <translation>關閉前要儲存專案嗎？</translation>
     </message>

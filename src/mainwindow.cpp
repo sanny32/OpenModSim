@@ -312,6 +312,7 @@ MainWindow::MainWindow(const QString& profile, bool useSession, QWidget *parent)
         createNewForm(static_cast<ProjectFormKind>(type));
     });
     _globalConsole = new ConsoleOutput(this);
+    _globalConsole->setMaxLines(AppPreferences::instance().consoleMaxLines());
     _consoleDockWidget = new QDockWidget(tr("Output"), this);
     _consoleDockWidget->setObjectName("consoleDockWidget");
     _consoleDockWidget->setWidget(_globalConsole);
@@ -811,6 +812,15 @@ void MainWindow::applyAutoComplete(bool enable)
         if (auto* script = qobject_cast<FormScriptView*>(frm))
             script->enableAutoComplete(enable);
     });
+}
+
+///
+/// \brief MainWindow::applyConsoleMaxLines
+/// \param n
+///
+void MainWindow::applyConsoleMaxLines(int n)
+{
+    _globalConsole->setMaxLines(n);
 }
 
 ///

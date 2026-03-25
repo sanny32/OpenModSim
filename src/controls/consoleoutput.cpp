@@ -165,10 +165,40 @@ void ConsoleOutput::changeEvent(QEvent* event)
 }
 
 ///
+/// \brief ConsoleOutput::setMaxLines
+///
+void ConsoleOutput::setMaxLines(int n)
+{
+    _maxLines = qMax(1, n);
+    // Evict oldest items if the current count already exceeds the new limit
+    while (ui->listWidget->count() > _maxLines) {
+        const auto evictType = static_cast<MessageType>(ui->listWidget->item(0)->data(MessageTypeRole).toInt());
+        switch (evictType) {
+            case MessageType::Warning: _warnCount--; break;
+            case MessageType::Error:   _errorCount--; break;
+            default:                   _logCount--;   break;
+        }
+        delete ui->listWidget->takeItem(0);
+    }
+    updateFilterButtons();
+}
+
+///
 /// \brief ConsoleOutput::addMessage
 ///
 void ConsoleOutput::addMessage(const QString& text, MessageType type, const QString& source)
 {
+    // Evict the oldest item when the limit is reached
+    while (ui->listWidget->count() >= _maxLines) {
+        const auto evictType = static_cast<MessageType>(ui->listWidget->item(0)->data(MessageTypeRole).toInt());
+        switch (evictType) {
+            case MessageType::Warning: _warnCount--; break;
+            case MessageType::Error:   _errorCount--; break;
+            default:                   _logCount--;   break;
+        }
+        delete ui->listWidget->takeItem(0);
+    }
+
     const QString displayText = source.isEmpty() ? text : QString("[%1] %2").arg(source, text);
     auto item = new QListWidgetItem(displayText, ui->listWidget);
     item->setData(MessageTypeRole, static_cast<int>(type));
