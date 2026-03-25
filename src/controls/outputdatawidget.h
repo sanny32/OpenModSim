@@ -161,7 +161,8 @@ public:
     void setNotConnectedStatus();
     void setInvalidLengthStatus();
 
-    void paint(const QRect& rc, QPainter& painter);
+    int rowCount() const;
+    int paint(const QRect& rc, QPainter& painter, int startRow = 0);
     void updateData(const QModbusDataUnit& data);
 
     AddressColorMap colorMap() const;

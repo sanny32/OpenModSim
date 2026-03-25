@@ -524,7 +524,6 @@ void FormDataView::print(QPrinter* printer)
 
     const int pageWidth = pageRect.width();
     const int pageHeight = pageRect.height();
-
     const int cx = pageRect.left();
     const int cy = pageRect.top();
 
@@ -532,26 +531,42 @@ void FormDataView::print(QPrinter* printer)
     painter.setRenderHint(QPainter::Antialiasing);
     painter.setRenderHint(QPainter::TextAntialiasing);
 
+    // Header content is the same for all pages — compute once
     const auto textTime = QLocale().toString(QDateTime::currentDateTime(), QLocale::ShortFormat);
-    auto rcTime = painter.boundingRect(cx, cy, pageWidth, pageHeight, Qt::TextSingleLine, textTime);
+    const auto textAddrLen = QString(tr("Address Base: %1\nStarting Address: %2\nLength: %3"))
+        .arg(ui->comboBoxAddressBase->currentText(), ui->lineEditAddress->text(), ui->lineEditLength->text());
+    const auto textDevIdType = QString(tr("Unit Identifier: %1\nData Type:\n%2"))
+        .arg(ui->lineEditDeviceId->text(), ui->comboBoxModbusPointType->currentText());
 
-    const auto textAddrLen = QString(tr("Address Base: %1\nStart Address: %2\nLength: %3")).arg(ui->comboBoxAddressBase->currentText(), ui->lineEditAddress->text(), ui->lineEditLength->text());
-    auto rcAddrLen = painter.boundingRect(cx, cy, pageWidth, pageHeight, Qt::TextWordWrap, textAddrLen);
-
-    const auto textDevIdType = QString(tr("Unit Identifier: %1\nMODBUS Point Type:\n%2")).arg(ui->lineEditDeviceId->text(), ui->comboBoxModbusPointType->currentText());
+    // Header geometry is also the same for all pages — compute once
+    auto rcTime    = painter.boundingRect(cx, cy, pageWidth, pageHeight, Qt::TextSingleLine, textTime);
+    auto rcAddrLen = painter.boundingRect(cx, cy, pageWidth, pageHeight, Qt::TextWordWrap,   textAddrLen);
     auto rcDevIdType = painter.boundingRect(cx, cy, pageWidth, pageHeight, Qt::TextWordWrap, textDevIdType);
+    rcTime.moveTopRight({ pageRect.right(), cy });
+    rcDevIdType.moveTopLeft({ rcAddrLen.right() + 40, rcAddrLen.top() });
 
-    rcTime.moveTopRight({ pageRect.right(), 10 });
-    rcDevIdType.moveTopLeft({ rcAddrLen.right() + 40, rcAddrLen.top()});
-
-    painter.drawText(rcTime, Qt::TextSingleLine, textTime);
-    painter.drawText(rcAddrLen, Qt::TextWordWrap, textAddrLen);
-    painter.drawText(rcDevIdType, Qt::TextWordWrap, textDevIdType);
-
+    const int lineGap = qMax(pageRect.height() / 60, 10);  // ~1.6% page height, min 10px
     auto rcOutput = pageRect;
-    rcOutput.setTop(rcAddrLen.bottom() + 20);
+    rcOutput.setTop(rcAddrLen.bottom() + lineGap * 2);
 
-    ui->outputWidget->paint(rcOutput, painter);
+    // Separator line position — centered between header block and data area
+    const int lineY = rcAddrLen.bottom() + lineGap;
+
+    const int totalRows = ui->outputWidget->rowCount();
+    int startRow = 0;
+    do
+    {
+        painter.drawText(rcTime,      Qt::TextSingleLine, textTime);
+        painter.drawText(rcAddrLen,   Qt::TextWordWrap,   textAddrLen);
+        painter.drawText(rcDevIdType, Qt::TextWordWrap,   textDevIdType);
+        painter.drawLine(pageRect.left(), lineY, pageRect.right(), lineY);
+
+        startRow = ui->outputWidget->paint(rcOutput, painter, startRow);
+
+        if (startRow < totalRows)
+            printer->newPage();
+
+    } while (startRow < totalRows);
 }
 
 ///

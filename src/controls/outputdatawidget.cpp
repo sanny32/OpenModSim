@@ -785,47 +785,74 @@ void OutputDataWidget::setStatus(const QString& status)
 /// \param rc
 /// \param painter
 ///
-void OutputDataWidget::paint(const QRect& rc, QPainter& painter)
+///
+/// \brief OutputDataWidget::rowCount
+/// \return
+///
+int OutputDataWidget::rowCount() const
 {
-    const auto textStatus = ui->labelStatus->text();
-    auto rcStatus = painter.boundingRect(rc.left(), rc.top(), rc.width(), rc.height(), Qt::TextWordWrap, textStatus);
-    painter.drawText(rcStatus, Qt::TextWordWrap, textStatus);
+    return _listModel->rowCount();
+}
 
-    rcStatus.setBottom(rcStatus.bottom() + 4);
-    painter.drawLine(rc.left(), rcStatus.bottom(), rc.right(), rcStatus.bottom());
-    rcStatus.setBottom(rcStatus.bottom() + 4);
+///
+/// \brief OutputDataWidget::paint
+/// \param rc      - printable area on current page
+/// \param painter
+/// \param startRow - first row to render (for multi-page printing)
+/// \return index of the next row to render (== rowCount() when all rows are done)
+///
+int OutputDataWidget::paint(const QRect& rc, QPainter& painter, int startRow)
+{
+    painter.save();
+    painter.setFont(ui->listView->font());
+
+    int cy = rc.top();
+    const auto textStatus = ui->labelStatus->text();
+    if (!textStatus.isEmpty())
+    {
+        auto rcStatus = painter.boundingRect(rc.left(), cy, rc.width(), rc.height() - cy, Qt::TextWordWrap, textStatus);
+        painter.drawText(rcStatus, Qt::TextWordWrap, textStatus);
+        cy = rcStatus.bottom() + 4;
+    }
+    const int dataTop = cy;  // top of the data area — used to reset cy on column transition
 
     int cx = rc.left();
-    int cy = rcStatus.bottom();
     int maxWidth = 0;
-    for(int i = 0; i < _listModel->rowCount(); ++i)
-    {
-        QTextDocument doc;
-        doc.setHtml(_listModel->data(_listModel->index(i), Qt::DisplayRole).toString());
-        const auto text = doc.toPlainText().trimmed();
+    const int total = _listModel->rowCount();
 
-        auto rcItem = painter.boundingRect(cx, cy, rc.width() - cx, rc.height() - cy, Qt::TextSingleLine, text);
+    for (int i = startRow; i < total; ++i)
+    {
+        const auto text = _listModel->data(_listModel->index(i), Qt::DisplayRole).toString().trimmed();
+
+        auto rcItem = painter.boundingRect(cx, cy, rc.right() - cx, rc.bottom() - cy, Qt::TextSingleLine, text);
         maxWidth = qMax(maxWidth, rcItem.width());
 
-        if(rcItem.right() > rc.right()) break;
-        else if(rcItem.bottom() < rc.bottom())
+        if (rcItem.bottom() <= rc.bottom())
         {
             painter.drawText(rcItem, Qt::TextSingleLine, text);
         }
         else
         {
-            cy = rcStatus.bottom();
+            // Current column is full — try the next column
+            cy = dataTop;
             cx = rcItem.left() + maxWidth + 10;
 
-            rcItem = painter.boundingRect(cx, cy, rc.width() - cx, rc.height() - cy, Qt::TextSingleLine, text);
-            if(rcItem.right() > rc.right()) break;
+            rcItem = painter.boundingRect(cx, cy, rc.right() - cx, rc.bottom() - cy, Qt::TextSingleLine, text);
+            if (rcItem.right() > rc.right())
+            {
+                // All columns on this page are exhausted — signal caller to start a new page
+                painter.restore();
+                return i;
+            }
 
             painter.drawText(rcItem, Qt::TextSingleLine, text);
         }
 
-
         cy += rcItem.height();
     }
+
+    painter.restore();
+    return total;
 }
 
 
