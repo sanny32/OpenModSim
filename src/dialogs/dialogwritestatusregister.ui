@@ -6,12 +6,12 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>345</width>
+    <width>357</width>
     <height>160</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>05: Write Single Coil</string>
+   <string>Write Status Register</string>
   </property>
   <layout class="QFormLayout" name="formLayout">
    <property name="labelAlignment">
