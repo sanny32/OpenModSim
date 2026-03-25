@@ -630,6 +630,7 @@ void NumericLineEdit::focusInEvent(QFocusEvent* e)
     internalSetValue(_value); // sets text without "0x" prefix first
 
     QLineEdit::focusInEvent(e);
+    QLineEdit::selectAll();
 }
 
 ///
