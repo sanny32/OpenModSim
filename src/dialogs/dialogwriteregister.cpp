@@ -97,7 +97,6 @@ DialogWriteRegister::DialogWriteRegister(ModbusWriteParams& params, QModbusDataU
 
         case DataDisplayMode::Binary:
         case DataDisplayMode::Hex:
-            ui->lineEditValue->setInputRange(0, USHRT_MAX);
             ui->labelValue->setText(tr("Value, (HEX): "));
             ui->lineEditValue->setLeadingZeroes(true);
             ui->lineEditValue->setInputMode(NumericLineEdit::HexMode);

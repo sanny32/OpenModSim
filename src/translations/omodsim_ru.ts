@@ -1735,9 +1735,13 @@
 <context>
     <name>DialogWriteRegister</name>
     <message>
-        <location filename="../dialogs/dialogwriteregister.ui" line="14"/>
         <source>06: Write Holding Register</source>
-        <translation>06: Р—Р°РїРёСЃСЊ РІ СЂРµРіРёСЃС‚СЂ С…СЂР°РЅРµРЅРёСЏ</translation>
+        <translation type="vanished">06: Р—Р°РїРёСЃСЊ РІ СЂРµРіРёСЃС‚СЂ С…СЂР°РЅРµРЅРёСЏ</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogwriteregister.ui" line="14"/>
+        <source>Write Register</source>
+        <translation type="unfinished">Р—Р°РїРёСЃСЊ РІ СЂРµРіРёСЃС‚СЂ</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogwriteregister.ui" line="23"/>
@@ -1756,8 +1760,8 @@
     </message>
     <message>
         <location filename="../dialogs/dialogwriteregister.ui" line="118"/>
-        <location filename="../dialogs/dialogwriteregister.cpp" line="238"/>
-        <location filename="../dialogs/dialogwriteregister.cpp" line="238"/>
+        <location filename="../dialogs/dialogwriteregister.cpp" line="237"/>
+        <location filename="../dialogs/dialogwriteregister.cpp" line="237"/>
         <source>Auto Simulation: OFF</source>
         <translation>РЎРёРјСѓР»СЏС†РёСЏ: Р’С‹РєР»</translation>
     </message>
@@ -1767,19 +1771,19 @@
         <translation>Р‘РёС‚РѕРІС‹Р№ С€Р°Р±Р»РѕРЅ: </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwriteregister.cpp" line="101"/>
+        <location filename="../dialogs/dialogwriteregister.cpp" line="100"/>
         <source>Value, (HEX): </source>
         <translation>Р—РЅР°С‡РµРЅРёРµ, (HEX): </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwriteregister.cpp" line="108"/>
+        <location filename="../dialogs/dialogwriteregister.cpp" line="107"/>
         <source>Value, (ANSI): </source>
         <translation>Р—РЅР°С‡РµРЅРёРµ, (ANSI): </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwriteregister.cpp" line="232"/>
-        <location filename="../dialogs/dialogwriteregister.cpp" line="245"/>
-        <location filename="../dialogs/dialogwriteregister.cpp" line="245"/>
+        <location filename="../dialogs/dialogwriteregister.cpp" line="231"/>
+        <location filename="../dialogs/dialogwriteregister.cpp" line="244"/>
+        <location filename="../dialogs/dialogwriteregister.cpp" line="244"/>
         <source>Auto Simulation: ON</source>
         <translation>РЎРёРјСѓР»СЏС†РёСЏ: Р’РєР»</translation>
     </message>
@@ -1787,9 +1791,13 @@
 <context>
     <name>DialogWriteStatusRegister</name>
     <message>
-        <location filename="../dialogs/dialogwritestatusregister.ui" line="14"/>
         <source>05: Write Single Coil</source>
-        <translation>05: Р—Р°РїРёСЃСЊ РѕРґРЅРѕР№ РєР°С‚СѓС€РєРё</translation>
+        <translation type="vanished">05: Р—Р°РїРёСЃСЊ РѕРґРЅРѕР№ РєР°С‚СѓС€РєРё</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogwritestatusregister.ui" line="14"/>
+        <source>Write Status Register</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../dialogs/dialogwritestatusregister.ui" line="23"/>

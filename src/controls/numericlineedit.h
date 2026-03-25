@@ -76,7 +76,6 @@ public:
 
     bool isEmpty() const;
     void clear();
-    void clearValue();
 
 signals:
     void valueChanged(const QVariant& newValue);
