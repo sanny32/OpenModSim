@@ -108,6 +108,9 @@ FormDataView::FormDataView(ModbusMultiServer& server, DataSimulator* simulator, 
         ui->outputWidget->setFocus();
     });
 
+    connect(ui->outputWidget, &OutputDataWidget::colorChanged, this, &FormDataView::colorChanged);
+    connect(ui->outputWidget, &OutputDataWidget::descriptionChanged, this, &FormDataView::descriptionChanged);
+
     ui->outputWidget->installEventFilter(this);
     ui->outputWidget->setFocus();
 
@@ -826,6 +829,26 @@ void FormDataView::linkTo(FormDataView* other)
     connect(other, &FormDataView::backgroundColorChanged, this,  &FormDataView::setBackgroundColor);
     connect(this,  &FormDataView::statusColorChanged, other, &FormDataView::setStatusColor);
     connect(other, &FormDataView::statusColorChanged, this,  &FormDataView::setStatusColor);
+    connect(this, &FormDataView::colorChanged, other,
+        [other](quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr, const QColor& clr) {
+            QSignalBlocker blocker(other);
+            other->setColor(deviceId, type, addr, clr);
+        });
+    connect(other, &FormDataView::colorChanged, this,
+        [this](quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr, const QColor& clr) {
+            QSignalBlocker blocker(this);
+            this->setColor(deviceId, type, addr, clr);
+        });
+    connect(this, &FormDataView::descriptionChanged, other,
+        [other](quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr, const QString& desc) {
+            QSignalBlocker blocker(other);
+            other->setDescription(deviceId, type, addr, desc);
+        });
+    connect(other, &FormDataView::descriptionChanged, this,
+        [this](quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr, const QString& desc) {
+            QSignalBlocker blocker(this);
+            this->setDescription(deviceId, type, addr, desc);
+        });
 }
 
 ///

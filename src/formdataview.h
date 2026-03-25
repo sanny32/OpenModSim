@@ -119,6 +119,8 @@ signals:
     void foregroundColorChanged(const QColor&);
     void backgroundColorChanged(const QColor&);
     void statusColorChanged(const QColor&);
+    void colorChanged(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr, const QColor& clr);
+    void descriptionChanged(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr, const QString& desc);
 
 private slots:
     void on_lineEditAddress_valueChanged(const QVariant&);

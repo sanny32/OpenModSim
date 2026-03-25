@@ -2109,14 +2109,14 @@ MODBUS Point Type:
         <translation type="unfinished">еЌЃе…­йЂІдЅЌе€¶ењ°еќЂ</translation>
     </message>
     <message>
-        <location filename="../formdataview.cpp" line="536"/>
+        <location filename="../formdataview.cpp" line="539"/>
         <source>Address Base: %1
 Starting Address: %2
 Length: %3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formdataview.cpp" line="538"/>
+        <location filename="../formdataview.cpp" line="541"/>
         <source>Unit Identifier: %1
 Data Type:
 %2</source>
@@ -4111,77 +4111,77 @@ Script.onInit(()=&gt;{
 <context>
     <name>OutputDataWidget</name>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1325"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1327"/>
         <source>Set Value of %1</source>
         <translation type="unfinished">е°‡еЂјеЇ«е…Ґ %1</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1331"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1336"/>
         <source>Add Description</source>
         <translation type="unfinished">ж·»еЉ&#xa0;жЏЏиї°</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1331"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1336"/>
         <source>Edit Description</source>
         <translation type="unfinished">з·ЁијЇжЏЏиї°</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1334"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1339"/>
         <source>%1: Enter Description</source>
         <translation type="unfinished">%1:ијёе…ҐжЏЏиї°</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1343"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1348"/>
         <source>Remove Color</source>
         <translation type="unfinished">еЋ»й™¤йЎЏи‰І</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1354"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1359"/>
         <source>Yellow</source>
         <translation type="unfinished">й»ѓи‰Ізљ„</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1355"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1360"/>
         <source>Cyan</source>
         <translation type="unfinished">йќ’и‰І</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1356"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1361"/>
         <source>Magenta</source>
         <translation type="unfinished">е“Ѓзґ…</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1357"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1362"/>
         <source>LightGreen</source>
         <translation type="unfinished">ж·єз¶&#xa0;и‰І</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1358"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1363"/>
         <source>Orange</source>
         <translation type="unfinished">ж©е­ђ</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1359"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1364"/>
         <source>LightBlue</source>
         <translation type="unfinished">ж·єи—Ќи‰І</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1360"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1365"/>
         <source>LightGray</source>
         <translation type="unfinished">ж·єзЃ°и‰І</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1445"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1450"/>
         <source>NOT CONNECTED!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1453"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1458"/>
         <source>Invalid Data Length Specified</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1462"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1467"/>
         <source>Zoom: %1%</source>
         <translation type="unfinished">йЈ›жјІпјљ %1%</translation>
     </message>

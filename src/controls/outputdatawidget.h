@@ -183,6 +183,8 @@ public:
 
 signals:
     void itemDoubleClicked(quint16 address, const QVariant& value);
+    void colorChanged(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr, const QColor& clr);
+    void descriptionChanged(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr, const QString& desc);
 
 protected:
     void changeEvent(QEvent* event) override;

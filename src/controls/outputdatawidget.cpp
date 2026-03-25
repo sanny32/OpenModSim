@@ -906,6 +906,7 @@ AddressColorMap OutputDataWidget::colorMap() const
 void OutputDataWidget::setColor(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr, const QColor& clr)
 {
     _listModel->setData(_listModel->find(deviceId, type, addr), clr, ColorRole);
+    emit colorChanged(deviceId, type, addr, clr);
 }
 
 ///
@@ -1190,6 +1191,7 @@ AddressDescriptionMap2 OutputDataWidget::descriptionMap() const
 void OutputDataWidget::setDescription(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr, const QString& desc)
 {
     _listModel->setData(_listModel->find(deviceId, type, addr), desc, DescriptionRole);
+    emit descriptionChanged(deviceId, type, addr, desc);
 }
 
 ///
@@ -1327,14 +1329,17 @@ void OutputDataWidget::on_listView_customContextMenuRequested(const QPoint &pos)
         emit ui->listView->doubleClicked(index);
     });
 
+    const quint16 addrKey = static_cast<quint16>(
+        _listModel->data(index, AddressRole).toUInt() - (_displayDefinition.ZeroBasedAddress ? 0 : 1));
+
     const auto desc = _listModel->data(index, DescriptionRole).toString();
     QAction* addDescrAction = menu.addAction(desc.isEmpty() ? tr("Add Description") : tr("Edit Description"));
-    connect(addDescrAction, &QAction::triggered, this, [this, index, address](){
+    connect(addDescrAction, &QAction::triggered, this, [this, index, addrKey](){
         QInputDialog dlg(this);
         dlg.setLabelText(QString(tr("%1: Enter Description")).arg(_listModel->data(index, AddressStringRole).toString()));
         dlg.setTextValue(_listModel->data(index, DescriptionRole).toString());
         if(dlg.exec() == QDialog::Accepted) {
-            _listModel->setData(index, dlg.textValue(), DescriptionRole);
+            setDescription(_displayDefinition.DeviceId, _displayDefinition.PointType, addrKey, dlg.textValue());
         }
     });
 
@@ -1343,8 +1348,8 @@ void OutputDataWidget::on_listView_customContextMenuRequested(const QPoint &pos)
     QAction* removeColorAction = menu.addAction(drawRemoveColorIcon(), tr("Remove Color"));
     const auto clr = _listModel->data(index, ColorRole).value<QColor>();
     removeColorAction->setEnabled(clr.isValid());
-    connect(removeColorAction, &QAction::triggered, this, [this, index](){
-        _listModel->setData(index, QColor(), ColorRole);
+    connect(removeColorAction, &QAction::triggered, this, [this, addrKey](){
+        setColor(_displayDefinition.DeviceId, _displayDefinition.PointType, addrKey, QColor());
     });
 
     menu.addSeparator();
@@ -1367,8 +1372,8 @@ void OutputDataWidget::on_listView_customContextMenuRequested(const QPoint &pos)
         QIcon icon(pixmap);
 
         QAction* colorAction = menu.addAction(icon, c.name);
-        connect(colorAction, &QAction::triggered, this, [this, index, c](){
-            _listModel->setData(index, c.color, ColorRole);
+        connect(colorAction, &QAction::triggered, this, [this, addrKey, c](){
+            setColor(_displayDefinition.DeviceId, _displayDefinition.PointType, addrKey, c.color);
         });
     }
 
