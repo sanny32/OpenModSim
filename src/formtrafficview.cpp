@@ -186,6 +186,8 @@ TrafficViewDefinitions FormTrafficView::displayDefinition() const
         dd.Autoscroll = _autoscrollCheck->isChecked();
     }
 
+    dd.HexView = ui->actionHexView->isChecked();
+
     dd.normalize();
     return dd;
 }
@@ -238,6 +240,12 @@ void FormTrafficView::setDisplayDefinition(const TrafficViewDefinitions& dd)
         QSignalBlocker b(_autoscrollCheck);
         _autoscrollCheck->setChecked(_displayDefinition.Autoscroll);
     }
+
+    {
+        QSignalBlocker b(ui->actionHexView);
+        ui->actionHexView->setChecked(_displayDefinition.HexView);
+    }
+    ui->outputWidget->setDataDisplayMode(_displayDefinition.HexView ? DataDisplayMode::Hex : DataDisplayMode::UInt16);
 
     ui->outputWidget->setAutosctollLogView(_displayDefinition.Autoscroll);
 
@@ -339,6 +347,7 @@ void FormTrafficView::setDisplayDefinitionSilent(const TrafficViewDefinitions& d
     _displayDefinition.LogViewLimit = dd.LogViewLimit;
     _displayDefinition.ExceptionsOnly = dd.ExceptionsOnly;
     _displayDefinition.Autoscroll = dd.Autoscroll;
+    _displayDefinition.HexView = dd.HexView;
 
     if(_unitIdFilter) {
         QSignalBlocker b(_unitIdFilter);
@@ -362,6 +371,11 @@ void FormTrafficView::setDisplayDefinitionSilent(const TrafficViewDefinitions& d
         QSignalBlocker b(_autoscrollCheck);
         _autoscrollCheck->setChecked(dd.Autoscroll);
     }
+    {
+        QSignalBlocker b(ui->actionHexView);
+        ui->actionHexView->setChecked(dd.HexView);
+    }
+    ui->outputWidget->setDataDisplayMode(dd.HexView ? DataDisplayMode::Hex : DataDisplayMode::UInt16);
     ui->outputWidget->setAutosctollLogView(dd.Autoscroll);
 
     trimTrafficBufferToLimit();
@@ -551,39 +565,61 @@ void FormTrafficView::on_mbDefinitionsChanged(const ModbusDefinitions& defs)
 }
 
 ///
+/// \brief FormTrafficView::on_actionPauseTraffic_toggled
+/// \param checked
+///
+void FormTrafficView::on_actionPauseTraffic_toggled(bool checked)
+{
+    if (_logViewState == LogViewState::Unknown)
+        return;
+    setLogViewState(checked ? LogViewState::Paused : LogViewState::Running);
+}
+
+///
+/// \brief FormTrafficView::on_actionClearTraffic_triggered
+///
+void FormTrafficView::on_actionClearTraffic_triggered()
+{
+    clearTrafficLog();
+}
+
+///
+/// \brief FormTrafficView::on_actionExportTrafficLog_triggered
+///
+void FormTrafficView::on_actionExportTrafficLog_triggered()
+{
+    const auto filename = QFileDialog::getSaveFileName(this, QString(), QString(), tr("Text files (*.txt)"));
+    if (filename.isEmpty())
+        return;
+
+    flushPendingTrafficUiAll();
+
+    if (ui->outputWidget->exportLogToTextFile(filename))
+        QMessageBox::information(this, windowTitle(), tr("Log exported successfully to file %1").arg(filename));
+    else
+        QMessageBox::critical(this, windowTitle(), tr("Export log error!"));
+}
+
+///
+/// \brief FormTrafficView::on_actionHexView_toggled
+/// \param checked
+///
+void FormTrafficView::on_actionHexView_toggled(bool checked)
+{
+    ui->outputWidget->setDataDisplayMode(checked ? DataDisplayMode::Hex : DataDisplayMode::UInt16);
+}
+
+///
 /// \brief FormTrafficView::setupToolbarActions
 ///
 void FormTrafficView::setupToolbarActions()
 {
     ui->toolBarTraffic->setVisible(true);
-    ui->actionPauseTraffic->setChecked(false);
-
-    connect(ui->actionPauseTraffic, &QAction::toggled, this, [this](bool paused) {
-        if (_logViewState == LogViewState::Unknown)
-            return;
-        setLogViewState(paused ? LogViewState::Paused : LogViewState::Running);
-    });
-
-    connect(ui->actionClearTraffic, &QAction::triggered, this, [this]() {
-        clearTrafficLog();
-    });
-
-    connect(ui->actionExportTrafficLog, &QAction::triggered, this, [this]() {
-        const auto filename = QFileDialog::getSaveFileName(this, QString(), QString(), tr("Text files (*.txt)"));
-        if (filename.isEmpty())
-            return;
-
-        flushPendingTrafficUiAll();
-
-        if (ui->outputWidget->exportLogToTextFile(filename))
-            QMessageBox::information(this, windowTitle(), tr("Log exported successfully to file %1").arg(filename));
-        else
-            QMessageBox::critical(this, windowTitle(), tr("Export log error!"));
-    });
 
     ui->toolBarTraffic->removeAction(ui->actionPauseTraffic);
     ui->toolBarTraffic->removeAction(ui->actionClearTraffic);
     ui->toolBarTraffic->removeAction(ui->actionExportTrafficLog);
+    ui->toolBarTraffic->removeAction(ui->actionHexView);
 }
 
 ///
@@ -710,6 +746,10 @@ void FormTrafficView::setupToolbarLayout()
     addToolbarSpacer(8);
 
     ui->toolBarTraffic->addWidget(_autoscrollCheck);
+    addToolbarSpacer(6);
+    ui->toolBarTraffic->addSeparator();
+    addToolbarSpacer(6);
+    ui->toolBarTraffic->addAction(ui->actionHexView);
 
     _trafficFilterStretch = new QWidget(ui->toolBarTraffic);
     _trafficFilterStretch->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
@@ -730,6 +770,7 @@ void FormTrafficView::initializeDisplayDefinition()
     _displayDefinition.UnitFilter = 0;
     _displayDefinition.FunctionCodeFilter = -1;
     _displayDefinition.LogViewLimit = ui->outputWidget->logViewLimit();
+    _displayDefinition.HexView = true;
     _displayDefinition.normalize();
 
     if (_unitIdFilter)

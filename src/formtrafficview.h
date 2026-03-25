@@ -88,6 +88,10 @@ private slots:
     void on_mbResponse(const ConnectionDetails& cd, QSharedPointer<const ModbusMessage> msgReq, QSharedPointer<const ModbusMessage> msgResp);
     void on_mbDataChanged(quint8 deviceId, const QModbusDataUnit& data);
     void on_mbDefinitionsChanged(const ModbusDefinitions& defs);
+    void on_actionPauseTraffic_toggled(bool checked);
+    void on_actionClearTraffic_triggered();
+    void on_actionExportTrafficLog_triggered();
+    void on_actionHexView_toggled(bool checked);
 
 private:
     struct TrafficLogEntry {

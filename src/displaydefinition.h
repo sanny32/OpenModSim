@@ -57,6 +57,7 @@ struct TrafficViewDefinitions
     quint16 LogViewLimit = 30;
     bool ExceptionsOnly = false;
     bool Autoscroll = false;
+    bool HexView = true;
 
     void normalize()
     {
@@ -122,6 +123,7 @@ inline QSettings& operator <<(QSettings& out, const TrafficViewDefinitions& dd)
     out.setValue("TrafficViewDefinitions/LogViewLimit",          dd.LogViewLimit);
     out.setValue("TrafficViewDefinitions/ExceptionsOnly",        dd.ExceptionsOnly);
     out.setValue("TrafficViewDefinitions/Autoscroll",            dd.Autoscroll);
+    out.setValue("TrafficViewDefinitions/HexView",               dd.HexView);
 
     return out;
 }
@@ -176,6 +178,7 @@ inline QSettings& operator >>(QSettings& in, TrafficViewDefinitions& dd)
     dd.LogViewLimit = in.value("TrafficViewDefinitions/LogViewLimit", 30).toUInt();
     dd.ExceptionsOnly = in.value("TrafficViewDefinitions/ExceptionsOnly", false).toBool();
     dd.Autoscroll = in.value("TrafficViewDefinitions/Autoscroll", false).toBool();
+    dd.HexView = in.value("TrafficViewDefinitions/HexView", true).toBool();
 
     dd.normalize();
     return in;
@@ -234,6 +237,7 @@ inline QXmlStreamWriter& operator <<(QXmlStreamWriter& xml, const TrafficViewDef
     xml.writeAttribute("LogViewLimit", QString::number(dd.LogViewLimit));
     xml.writeAttribute("ExceptionsOnly", boolToString(dd.ExceptionsOnly));
     xml.writeAttribute("Autoscroll", boolToString(dd.Autoscroll));
+    xml.writeAttribute("HexView", boolToString(dd.HexView));
     xml.writeEndElement();
 
     return xml;
@@ -350,6 +354,10 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, TrafficViewDefinitio
 
         if (attributes.hasAttribute("Autoscroll")) {
             dd.Autoscroll = stringToBool(attributes.value("Autoscroll").toString());
+        }
+
+        if (attributes.hasAttribute("HexView")) {
+            dd.HexView = stringToBool(attributes.value("HexView").toString());
         }
 
         dd.normalize();
