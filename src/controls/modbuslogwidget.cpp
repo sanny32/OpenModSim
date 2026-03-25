@@ -120,7 +120,7 @@ static LogTextData buildLogTextData(const ModbusMessage& msg, const ModbusLogWid
     return result;
 }
 
-static QList<QTextLayout::FormatRange> buildLogFormats(const ModbusMessage& msg,
+static QVector<QTextLayout::FormatRange> buildLogFormats(const ModbusMessage& msg,
                                                        const QStyleOptionViewItem& opt,
                                                        const LogTextData& textData)
 {
@@ -142,7 +142,7 @@ static QList<QTextLayout::FormatRange> buildLogFormats(const ModbusMessage& msg,
         return r;
     };
 
-    QList<QTextLayout::FormatRange> formats;
+    QVector<QTextLayout::FormatRange> formats;
     if (selected) {
         const QPalette::ColorGroup group = (opt.state & QStyle::State_Active)
                                            ? QPalette::Active
@@ -209,7 +209,7 @@ public:
 
         const int lineWidth = qMax(1, opt.rect.width() - HorizontalPadding * 2);
         const auto& cachedLayout = ensureLayout(*msg, opt.font, lineWidth);
-        const QList<QTextLayout::FormatRange> formats = buildLogFormats(*msg, opt, cachedLayout.textData);
+        const QVector<QTextLayout::FormatRange> formats = buildLogFormats(*msg, opt, cachedLayout.textData);
 
         painter->save();
         painter->setClipRect(opt.rect, Qt::ReplaceClip);
