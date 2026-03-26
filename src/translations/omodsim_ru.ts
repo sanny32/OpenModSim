@@ -1077,13 +1077,13 @@
     </message>
     <message>
         <location filename="../dialogs/dialogpreferences.ui" line="368"/>
-        <location filename="../dialogs/dialogpreferences.ui" line="692"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="732"/>
         <source>Font</source>
         <translation>РЁСЂРёС„С‚</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogpreferences.ui" line="405"/>
-        <location filename="../dialogs/dialogpreferences.ui" line="729"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="769"/>
         <source>Size:</source>
         <translation>Р&#xa0;Р°Р·РјРµСЂ:</translation>
     </message>
@@ -1103,23 +1103,23 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="795"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="835"/>
         <source>Console</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="845"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="885"/>
         <source>Automatically show output console</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="807"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="847"/>
         <source>Console Output Limit:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../dialogs/dialogpreferences.ui" line="383"/>
-        <location filename="../dialogs/dialogpreferences.ui" line="707"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="747"/>
         <source>Family:</source>
         <translation>РЎРµРјРµР№СЃС‚РІРѕ:</translation>
     </message>
@@ -1140,7 +1140,7 @@
     </message>
     <message>
         <location filename="../dialogs/dialogpreferences.ui" line="480"/>
-        <location filename="../dialogs/dialogpreferences.ui" line="763"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="803"/>
         <source>Antialias</source>
         <translation>РЎРіР»Р°Р¶РёРІР°РЅРёРµ</translation>
     </message>
@@ -1192,16 +1192,17 @@
         <translation type="unfinished">РЎРєСЂРёРїС‚</translation>
     </message>
     <message>
+        <location filename="../dialogs/dialogpreferences.ui" line="700"/>
         <source>&lt;b&gt;Note:&lt;/b&gt; These settings apply to newly opened windows only.</source>
-        <translation type="vanished">&lt;b&gt;РџСЂРёРјРµС‡Р°РЅРёРµ:&lt;/b&gt; Р­С‚Рё РЅР°СЃС‚СЂРѕР№РєРё РїСЂРёРјРµРЅСЏСЋС‚СЃСЏ С‚РѕР»СЊРєРѕ Рє РЅРѕРІС‹Рј РѕРєРЅР°Рј.</translation>
+        <translation>&lt;b&gt;РџСЂРёРјРµС‡Р°РЅРёРµ:&lt;/b&gt; Р­С‚Рё РЅР°СЃС‚СЂРѕР№РєРё РїСЂРёРјРµРЅСЏСЋС‚СЃСЏ С‚РѕР»СЊРєРѕ Рє РЅРѕРІС‹Рј РѕРєРЅР°Рј.</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="773"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="813"/>
         <source>Editor</source>
         <translation>Р&#xa0;РµРґР°РєС‚РѕСЂ</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="785"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="825"/>
         <source>Enable code auto-complete</source>
         <translation>Р’РєР»СЋС‡РёС‚СЊ Р°РІС‚РѕРґРѕРїРѕР»РЅРµРЅРёРµ РєРѕРґР°</translation>
     </message>
@@ -3123,8 +3124,8 @@ Script.onInit(()=&gt;{
     </message>
     <message>
         <location filename="../mainwindow.ui" line="233"/>
-        <location filename="../mainwindow.cpp" line="1595"/>
-        <location filename="../mainwindow.cpp" line="1595"/>
+        <location filename="../mainwindow.cpp" line="1550"/>
+        <location filename="../mainwindow.cpp" line="1550"/>
         <source>Save Project</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3457,28 +3458,28 @@ Script.onInit(()=&gt;{
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="238"/>
-        <location filename="../mainwindow.cpp" line="1682"/>
-        <location filename="../mainwindow.cpp" line="1682"/>
+        <location filename="../mainwindow.cpp" line="1637"/>
+        <location filename="../mainwindow.cpp" line="1637"/>
         <source>Clear List</source>
         <translation>Очистить список</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1158"/>
+        <location filename="../mainwindow.cpp" line="1113"/>
         <source>JavaScript files (*.js);;All files (*)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1218"/>
+        <location filename="../mainwindow.cpp" line="1173"/>
         <source>Move to Other Panel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1670"/>
+        <location filename="../mainwindow.cpp" line="1625"/>
         <source>No Recent Projects</source>
         <translation>Нет недавних проектов</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1596"/>
+        <location filename="../mainwindow.cpp" line="1551"/>
         <source>Save project before closing?</source>
         <translation>Сохранить проект перед закрытием?</translation>
     </message>

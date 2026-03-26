@@ -230,11 +230,6 @@ void DialogPreferences::apply()
     prefs.setDataViewDefinitions(dataDd);
     prefs.setTrafficViewDefinitions(trafficDd);
     prefs.setScriptViewDefinitions(scriptDd);
-    if (_mainWindow) {
-        _mainWindow->applyDataViewDefaults(dataDd);
-        _mainWindow->applyTrafficViewDefaults(trafficDd);
-        _mainWindow->applyScriptViewDefaults(scriptDd);
-    }
 
     // Script - font
     const QFont scriptFont = fontFromControls(ui->fontComboBoxScriptFont, ui->spinBoxScriptFontSize, ui->checkBoxScriptFontAntialias);

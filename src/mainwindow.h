@@ -42,9 +42,6 @@ public:
     void applyScriptFont(const QFont& font);
     void applyZoom(int zoomPercent);
     void applyColors(const QColor& bg, const QColor& fg, const QColor& status);
-    void applyDataViewDefaults(const DataViewDefinitions& dd);
-    void applyTrafficViewDefaults(const TrafficViewDefinitions& dd);
-    void applyScriptViewDefaults(const ScriptViewDefinitions& dd);
     void applyCheckForUpdates(bool enabled);
 
     void loadProject(const QString& filename);

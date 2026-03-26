@@ -863,51 +863,6 @@ void MainWindow::applyColors(const QColor& bg, const QColor& fg, const QColor& s
 }
 
 ///
-/// \brief MainWindow::applyDataViewDefaults
-/// \param dd
-///
-void MainWindow::applyDataViewDefaults(const DataViewDefinitions& dd)
-{
-    for (auto&& wnd : ui->mdiArea->subWindowList()) {
-        if (auto* frm = qobject_cast<FormDataView*>(wnd->widget())) {
-            auto cur = frm->displayDefinition();
-            applySharedDisplayDefaults(cur, dd);
-            frm->setDisplayDefinition(cur);
-        }
-    }
-}
-
-///
-/// \brief MainWindow::applyTrafficViewDefaults
-/// \param dd
-///
-void MainWindow::applyTrafficViewDefaults(const TrafficViewDefinitions& dd)
-{
-    for (auto&& wnd : ui->mdiArea->subWindowList()) {
-        if (auto* frm = qobject_cast<FormTrafficView*>(wnd->widget())) {
-            auto cur = frm->displayDefinition();
-            applySharedDisplayDefaults(cur, dd);
-            frm->setDisplayDefinition(cur);
-        }
-    }
-}
-
-///
-/// \brief MainWindow::applyScriptViewDefaults
-/// \param dd
-///
-void MainWindow::applyScriptViewDefaults(const ScriptViewDefinitions& dd)
-{
-    for (auto&& wnd : ui->mdiArea->subWindowList()) {
-        if (auto* frm = qobject_cast<FormScriptView*>(wnd->widget())) {
-            auto cur = frm->definitions();
-            applySharedDisplayDefaults(cur, dd);
-            frm->setDefinitions(cur);
-        }
-    }
-}
-
-///
 /// \brief MainWindow::applyCheckForUpdates
 /// \param enabled
 ///
