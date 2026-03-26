@@ -18,25 +18,75 @@ void DataDelegate::paint(QPainter* painter, const QStyleOptionViewItem& option, 
     if (index.data(FindCurrentRole).toBool())
         color = QColor(255, 170, 0);
 
-    if ( color.isValid() )
+    QStyleOptionViewItem opt = option;
+    initStyleOption(&opt, index);
+
+    const auto* widget = opt.widget;
+    const auto* style  = widget ? widget->style() : QApplication::style();
+    const QFontMetrics fm(opt.font);
+    const QRect textRect = style->subElementRect(QStyle::SE_ItemViewItemText, &opt, widget);
+
+    // 1. Draw item background (selection highlight, hover, etc.) without text.
+    style->drawPrimitive(QStyle::PE_PanelItemViewItem, &opt, painter, widget);
+
+    // 2. Draw custom colored background (for highlighted cells) on top.
+    if (color.isValid())
     {
-        QStyleOptionViewItem opt = option;
-        initStyleOption(&opt, index);
-
-        auto style = opt.widget ? opt.widget->style() : QApplication::style();
         auto text = opt.text.trimmed();
-        const auto descr_index = text.indexOf(';');
-        if (descr_index > 0)
-        {
-            text = text.left(descr_index);
-        }
+        const int di = text.indexOf(';');
+        if (di > 0) text = text.left(di);
 
-        QFontMetrics fm(opt.font);
-        auto rect = style->subElementRect(QStyle::SE_ItemViewItemText, &opt, opt.widget);
-        rect.setWidth(style->itemTextRect(fm, opt.rect, opt.displayAlignment, true, text).width());
-        rect.adjust(2, 1, 2, -1);
-        painter->fillRect(rect, color);
+        QRect colorRect = textRect;
+        colorRect.setWidth(style->itemTextRect(fm, opt.rect, opt.displayAlignment, true, text).width());
+        painter->fillRect(colorRect, color);
     }
 
-    QStyledItemDelegate::paint(painter, option, index);
+    // 3. Draw text parts with different colors (single pass, no double rendering).
+    const bool selected = opt.state & QStyle::State_Selected;
+    const QPalette& pal = opt.palette;
+    const QColor mainColor = selected ? pal.color(QPalette::HighlightedText) : pal.color(QPalette::Text);
+    const QColor dimColor  = selected ? pal.color(QPalette::HighlightedText) : pal.color(QPalette::PlaceholderText);
+
+    const QString fullText = opt.text;
+    const int colonPos = fullText.indexOf(QLatin1String(": "));
+    const int descrPos = fullText.indexOf(QLatin1Char(';'));
+
+    const QString addrPart  = (colonPos >= 0) ? fullText.left(colonPos + 2) : QString();
+    const QString valuePart = (colonPos >= 0)
+                                  ? ((descrPos > colonPos) ? fullText.mid(colonPos + 2, descrPos - colonPos - 2)
+                                                           : fullText.mid(colonPos + 2))
+                                  : fullText;
+    const QString descrPart = (descrPos > 0) ? fullText.mid(descrPos) : QString();
+
+    painter->save();
+    painter->setFont(opt.font);
+    painter->setClipRect(textRect);
+
+    int x = textRect.x();
+    const int y = textRect.y();
+    const int h = textRect.height();
+
+    auto drawPart = [&](const QString& text, const QColor& c)
+    {
+        if (text.isEmpty()) return;
+        const int w = fm.horizontalAdvance(text);
+        painter->setPen(c);
+        painter->drawText(QRect(x, y, w, h), Qt::AlignVCenter | Qt::TextSingleLine, text);
+        x += w;
+    };
+
+    drawPart(addrPart,  dimColor);
+    drawPart(valuePart, mainColor);
+    drawPart(descrPart, dimColor);
+
+    painter->restore();
+
+    // 4. Draw focus rect if needed.
+    if (opt.state & QStyle::State_HasFocus)
+    {
+        QStyleOptionFocusRect focusOpt;
+        focusOpt.QStyleOption::operator=(opt);
+        focusOpt.rect = style->subElementRect(QStyle::SE_ItemViewItemFocusRect, &opt, widget);
+        style->drawPrimitive(QStyle::PE_FrameFocusRect, &focusOpt, painter, widget);
+    }
 }
