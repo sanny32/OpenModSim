@@ -775,7 +775,7 @@ void FormTrafficView::setupFilterControls()
     _labelRowLimit->setText(tr("Rows:"));
 
     _rowLimitCombo = new QComboBox(ui->toolBarTraffic);
-    _rowLimitCombo->setEditable(false);
+    _rowLimitCombo->setEditable(true);
     _rowLimitCombo->addItem(QStringLiteral("30"), 30);
     _rowLimitCombo->addItem(QStringLiteral("100"), 100);
     _rowLimitCombo->addItem(QStringLiteral("300"), 300);
