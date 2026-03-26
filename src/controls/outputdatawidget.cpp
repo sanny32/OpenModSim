@@ -10,12 +10,14 @@
 
 ///
 /// \brief emptyPixmap
-/// \param size
+/// \param physicalSize
+/// \param dpr
 /// \return
 ///
-static QPixmap emptyPixmap(const QSize& size)
+static QPixmap emptyPixmap(const QSize& physicalSize, qreal dpr = 1.0)
 {
-    QPixmap pm(size);
+    QPixmap pm(physicalSize);
+    pm.setDevicePixelRatio(dpr);
     pm.fill(Qt::transparent);
     return pm;
 }
@@ -30,7 +32,7 @@ OutputDataListModel::OutputDataListModel(OutputDataWidget* parent)
     ,_iconSimulation16Bit(QIcon(":/res/icon-simulation-16bit.svg").pixmap(10, 10))
     ,_iconSimulation32Bit(QIcon(":/res/icon-simulation-32bit.svg").pixmap(10, 10))
     ,_iconSimulation64Bit(QIcon(":/res/icon-simulation-64bit.svg").pixmap(10, 10))
-    ,_iconSimulationOff(emptyPixmap(_iconSimulation16Bit.size()))
+    ,_iconSimulationOff(emptyPixmap(_iconSimulation16Bit.size(), _iconSimulation16Bit.devicePixelRatio()))
 {
 }
 

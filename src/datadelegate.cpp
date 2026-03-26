@@ -29,7 +29,14 @@ void DataDelegate::paint(QPainter* painter, const QStyleOptionViewItem& option, 
     // 1. Draw item background (selection highlight, hover, etc.) without text.
     style->drawPrimitive(QStyle::PE_PanelItemViewItem, &opt, painter, widget);
 
-    // 2. Draw custom colored background (for highlighted cells) on top.
+    // 2. Draw decoration (simulation icon).
+    if (!opt.icon.isNull())
+    {
+        const QRect decorationRect = style->subElementRect(QStyle::SE_ItemViewItemDecoration, &opt, widget);
+        opt.icon.paint(painter, decorationRect, opt.decorationAlignment);
+    }
+
+    // 3. Draw custom colored background (for highlighted cells) on top.
     if (color.isValid())
     {
         auto text = opt.text.trimmed();
@@ -41,7 +48,7 @@ void DataDelegate::paint(QPainter* painter, const QStyleOptionViewItem& option, 
         painter->fillRect(colorRect, color);
     }
 
-    // 3. Draw text parts with different colors (single pass, no double rendering).
+    // 4. Draw text parts with different colors (single pass, no double rendering).
     const bool selected = opt.state & QStyle::State_Selected;
     const QPalette& pal = opt.palette;
     const QColor mainColor = selected ? pal.color(QPalette::HighlightedText) : pal.color(QPalette::Text);
@@ -83,7 +90,7 @@ void DataDelegate::paint(QPainter* painter, const QStyleOptionViewItem& option, 
 
     painter->restore();
 
-    // 4. Draw focus rect if needed.
+    // 5. Draw focus rect if needed.
     if (opt.state & QStyle::State_HasFocus)
     {
         QStyleOptionFocusRect focusOpt;

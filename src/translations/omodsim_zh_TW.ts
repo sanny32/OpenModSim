@@ -4134,77 +4134,77 @@ Script.onInit(()=&gt;{
 <context>
     <name>OutputDataWidget</name>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1381"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1383"/>
         <source>Set Value of %1</source>
         <translation type="unfinished">е°‡еЂјеЇ«е…Ґ %1</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1390"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1392"/>
         <source>Add Description</source>
         <translation type="unfinished">ж·»еЉ&#xa0;жЏЏиї°</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1390"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1392"/>
         <source>Edit Description</source>
         <translation type="unfinished">з·ЁијЇжЏЏиї°</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1393"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1395"/>
         <source>%1: Enter Description</source>
         <translation type="unfinished">%1:ијёе…ҐжЏЏиї°</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1402"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1404"/>
         <source>Remove Color</source>
         <translation type="unfinished">еЋ»й™¤йЎЏи‰І</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1413"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1415"/>
         <source>Yellow</source>
         <translation type="unfinished">й»ѓи‰Ізљ„</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1414"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1416"/>
         <source>Cyan</source>
         <translation type="unfinished">йќ’и‰І</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1415"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1417"/>
         <source>Magenta</source>
         <translation type="unfinished">е“Ѓзґ…</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1416"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1418"/>
         <source>LightGreen</source>
         <translation type="unfinished">ж·єз¶&#xa0;и‰І</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1417"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1419"/>
         <source>Orange</source>
         <translation type="unfinished">ж©е­ђ</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1418"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1420"/>
         <source>LightBlue</source>
         <translation type="unfinished">ж·єи—Ќи‰І</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1419"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1421"/>
         <source>LightGray</source>
         <translation type="unfinished">ж·єзЃ°и‰І</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1504"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1506"/>
         <source>NOT CONNECTED!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1512"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1514"/>
         <source>Invalid Data Length Specified</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1521"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1523"/>
         <source>Zoom: %1%</source>
         <translation type="unfinished">йЈ›жјІпјљ %1%</translation>
     </message>
