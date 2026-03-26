@@ -662,6 +662,71 @@ void MdiAreaEx::on_panelTabBarLayoutChanged()
 }
 
 ///
+/// \brief MdiAreaEx::on_panelTabContextMenuRequested
+/// \param subWnd
+/// \param globalPos
+///
+void MdiAreaEx::on_panelTabContextMenuRequested(QMdiSubWindow* subWnd, QPoint globalPos)
+{
+    if (auto* source = qobject_cast<MdiArea*>(sender()))
+        emit tabContextMenuRequested(subWnd, source, globalPos);
+}
+
+///
+/// \brief MdiAreaEx::on_panelTabDraggedOutside
+/// \param subWnd
+/// \param globalPos
+///
+void MdiAreaEx::on_panelTabDraggedOutside(QMdiSubWindow* subWnd, QPoint globalPos)
+{
+    if (!subWnd || !isSplitView())
+        return;
+
+    auto* source = areaForSubWindow(subWnd);
+    if (!source)
+        return;
+
+    auto* target = (source == _primaryArea) ? _secondaryArea : _primaryArea;
+    if (!target)
+        return;
+
+    // Only move if the mouse was released inside the target panel's bounds.
+    const QRect targetGlobalRect(target->mapToGlobal(QPoint(0, 0)), target->size());
+    if (targetGlobalRect.contains(globalPos))
+        emit moveTabToOtherPanelRequested(subWnd);
+}
+
+///
+/// \brief MdiAreaEx::moveSubWindowToOtherPanel
+/// \param subWnd
+///
+void MdiAreaEx::moveSubWindowToOtherPanel(QMdiSubWindow* subWnd)
+{
+    if (!subWnd || !_primaryArea || !_secondaryArea)
+        return;
+
+    auto* source = areaForSubWindow(subWnd);
+    if (!source)
+        return;
+
+    auto* target = (source == _primaryArea) ? _secondaryArea : _primaryArea;
+
+    source->removeSubWindow(subWnd);
+    target->addSubWindow(subWnd, Qt::WindowFlags());
+
+    if (auto* frm = subWnd->widget())
+        frm->show();
+    if (target->viewMode() == QMdiArea::TabbedView && !subWnd->isMaximized())
+        subWnd->showMaximized();
+
+    setActiveSubWindow(subWnd);
+
+    // Collapse split if secondary is now empty.
+    if (_secondaryArea && _secondaryArea->localSubWindowList().isEmpty())
+        setSplitViewEnabled(false);
+}
+
+///
 /// \brief MdiAreaEx::areaForSubWindow
 /// \param wnd
 /// \return
@@ -701,6 +766,8 @@ void MdiAreaEx::connectPanel(MdiArea* area)
     connect(area, &QMdiArea::subWindowActivated, this, &MdiAreaEx::on_panelSubWindowActivated, Qt::UniqueConnection);
     connect(area, &MdiArea::tabBarLayoutChanged, this, &MdiAreaEx::on_panelTabBarLayoutChanged, Qt::UniqueConnection);
     connect(area, &MdiArea::tabsReordered, this, &MdiAreaEx::tabsReordered, Qt::UniqueConnection);
+    connect(area, &MdiArea::tabContextMenuRequested, this, &MdiAreaEx::on_panelTabContextMenuRequested, Qt::UniqueConnection);
+    connect(area, &MdiArea::tabDraggedOutside, this, &MdiAreaEx::on_panelTabDraggedOutside, Qt::UniqueConnection);
     connect(area, &MdiArea::lastTabAboutToClose, this, [this, area]() {
         if (area == _secondaryArea)
             setSplitViewEnabled(false);

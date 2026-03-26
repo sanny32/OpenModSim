@@ -948,6 +948,62 @@ bool AppProject::isSplitTabbedView() const
 }
 
 ///
+/// \brief AppProject::canMoveFormToOtherPanel
+/// Returns true when \a frm can be moved to the opposite panel.
+/// Auto-clones are excluded; split view must be active.
+///
+bool AppProject::canMoveFormToOtherPanel(QWidget* frm) const
+{
+    if(!frm || !isSplitTabbedView())
+        return false;
+
+    if(frm->property(kSplitAutoCloneProperty).toBool())
+        return false;
+
+    return areaOfForm(frm) != nullptr;
+}
+
+///
+/// \brief AppProject::moveFormToOtherPanel
+/// Moves \a frm from its current panel to the opposite panel.
+/// If an auto-clone of this form already exists in the target panel it is
+/// deleted first, so there is never a duplicate.
+///
+void AppProject::moveFormToOtherPanel(QWidget* frm)
+{
+    if(!canMoveFormToOtherPanel(frm))
+        return;
+
+    auto* sourceArea    = areaOfForm(frm);
+    auto* primaryArea   = _mdiArea->primaryArea();
+    auto* secondaryArea = _mdiArea->secondaryArea();
+    auto* targetArea    = (sourceArea == primaryArea) ? secondaryArea : primaryArea;
+    if(!targetArea)
+        return;
+
+    // Remove auto-clone of this form from target panel (if any).
+    const QUuid originId = frm->property(kSplitOriginIdProperty).toUuid().isNull()
+                               ? formIdOf(frm)
+                               : frm->property(kSplitOriginIdProperty).toUuid();
+
+    for(auto* wnd : targetArea->localSubWindowList()) {
+        auto* candidate = qobject_cast<QWidget*>(wnd ? wnd->widget() : nullptr);
+        if(candidate
+            && candidate->property(kSplitAutoCloneProperty).toBool()
+            && candidate->property(kSplitOriginIdProperty).toUuid() == originId)
+        {
+            // WA_DeleteOnClose is set; auto-clones bypass markFormClosed (see eventFilter guard)
+            wnd->close();
+            break;
+        }
+    }
+
+    auto* subWnd = qobject_cast<QMdiSubWindow*>(frm->parentWidget());
+    if(subWnd)
+        _mdiArea->moveSubWindowToOtherPanel(subWnd);
+}
+
+///
 /// \brief AppProject::resetSplitViewIfEmpty
 ///
 void AppProject::resetSplitViewIfEmpty()

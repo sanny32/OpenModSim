@@ -80,6 +80,7 @@ public:
     void tileSubWindows();
 
     void setSplitViewEnabled(bool enabled);
+    void moveSubWindowToOtherPanel(QMdiSubWindow* subWnd);
     MdiArea* activePanel() const;
 
     QMdiSubWindow* activePrimarySubWindow() const;
@@ -89,6 +90,8 @@ signals:
     void splitViewAboutToDisable();
     void splitViewToggled(bool enabled);
     void tabsReordered();
+    void tabContextMenuRequested(QMdiSubWindow* subWnd, MdiArea* sourcePanel, QPoint globalPos);
+    void moveTabToOtherPanelRequested(QMdiSubWindow* subWnd);
 
 protected:
     bool eventFilter(QObject* obj, QEvent* event) override;
@@ -98,6 +101,8 @@ protected:
 private slots:
     void on_panelSubWindowActivated(QMdiSubWindow* wnd);
     void on_panelTabBarLayoutChanged();
+    void on_panelTabContextMenuRequested(QMdiSubWindow* subWnd, QPoint globalPos);
+    void on_panelTabDraggedOutside(QMdiSubWindow* subWnd, QPoint globalPos);
 
 private:
     MdiArea* areaForSubWindow(QMdiSubWindow* wnd) const;

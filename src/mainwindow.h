@@ -141,6 +141,8 @@ private slots:
     void on_connectionError(const QString& error);
 
     void updateMenuWindow();
+    void on_tabContextMenuRequested(QMdiSubWindow* subWnd, MdiArea* sourcePanel, QPoint globalPos);
+    void on_moveTabToOtherPanelRequested(QMdiSubWindow* subWnd);
 
 private:
     QWidget* createNewForm(ProjectFormKind kind);

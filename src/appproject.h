@@ -66,6 +66,10 @@ public:
     QWidget* resolveFormForActiveArea(QWidget* primaryForm) const;
     bool        cloneMdiChildState(QWidget* source, QWidget* target) const;
 
+    // Move tab between panels
+    bool        canMoveFormToOtherPanel(QWidget* frm) const;
+    void        moveFormToOtherPanel(QWidget* frm);
+
     // Split-view
     MdiArea*    secondaryArea() const;
     bool        isSplitTabbedView() const;

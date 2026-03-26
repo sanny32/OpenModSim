@@ -1,6 +1,7 @@
 #ifndef MDITABBAR_H
 #define MDITABBAR_H
 
+#include <QPointer>
 #include <QTabBar>
 
 class QMdiSubWindow;
@@ -23,11 +24,21 @@ public:
     QMdiSubWindow* currentSubWindow() const;
     void setCurrentSubWindow(QMdiSubWindow* wnd);
 
+signals:
+    void tabDraggedOutside(QMdiSubWindow* subWnd, QPoint globalPos);
+
+protected:
+    void mousePressEvent(QMouseEvent* event) override;
+    void mouseMoveEvent(QMouseEvent* event) override;
+    void mouseReleaseEvent(QMouseEvent* event) override;
+
 private:
     void updateSubWindowState(QMdiSubWindow* wnd);
 
 private:
     bool _indicatorActive = true;
+    QPointer<QMdiSubWindow> _dragSubWindow;
+    bool _dragCursorSet = false;
 };
 
 #endif // MDITABBAR_H

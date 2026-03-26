@@ -2,6 +2,7 @@
 #include <QApplication>
 #include <QMdiArea>
 #include <QMdiSubWindow>
+#include <QMouseEvent>
 #include <QPainter>
 #include <QProxyStyle>
 #include <QStyleOptionTab>
@@ -232,6 +233,73 @@ void MdiTabBar::setCurrentSubWindow(QMdiSubWindow* wnd)
     const int index = indexOfSubWindow(wnd);
     if(index != -1)
         setCurrentIndex(index);
+}
+
+///
+/// \brief MdiTabBar::mousePressEvent
+/// \param event
+///
+void MdiTabBar::mousePressEvent(QMouseEvent* event)
+{
+    // Record the subwindow before Qt's press handler can reorder tabs.
+    if (event->button() == Qt::LeftButton)
+        _dragSubWindow = subWindowAt(tabAt(event->position().toPoint()));
+    QTabBar::mousePressEvent(event);
+}
+
+///
+/// \brief MdiTabBar::mouseMoveEvent
+/// \param event
+///
+void MdiTabBar::mouseMoveEvent(QMouseEvent* event)
+{
+    if (_dragSubWindow && (event->buttons() & Qt::LeftButton)) {
+        // When the cursor leaves the parent MdiArea's bounds, show a drag cursor.
+        auto* par = parentWidget();
+        if (par) {
+            const QPoint posInParent = mapTo(par, event->position().toPoint());
+            const bool outside = !par->rect().contains(posInParent);
+            if (outside && !_dragCursorSet) {
+                QApplication::setOverrideCursor(Qt::DragMoveCursor);
+                _dragCursorSet = true;
+            } else if (!outside && _dragCursorSet) {
+                QApplication::restoreOverrideCursor();
+                _dragCursorSet = false;
+            }
+        }
+    }
+    QTabBar::mouseMoveEvent(event);
+}
+
+///
+/// \brief MdiTabBar::mouseReleaseEvent
+/// \param event
+///
+void MdiTabBar::mouseReleaseEvent(QMouseEvent* event)
+{
+    if (event->button() == Qt::LeftButton) {
+        if (_dragCursorSet) {
+            QApplication::restoreOverrideCursor();
+            _dragCursorSet = false;
+        }
+
+        if (_dragSubWindow) {
+            // Check if the mouse was released outside the parent MdiArea's bounds.
+            auto* par = parentWidget();
+            if (par) {
+                const QPoint posInParent = mapTo(par, event->position().toPoint());
+                if (!par->rect().contains(posInParent)) {
+                    QMdiSubWindow* subWnd = _dragSubWindow;
+                    _dragSubWindow = nullptr;
+                    QTabBar::mouseReleaseEvent(event);
+                    emit tabDraggedOutside(subWnd, event->globalPosition().toPoint());
+                    return;
+                }
+            }
+            _dragSubWindow = nullptr;
+        }
+    }
+    QTabBar::mouseReleaseEvent(event);
 }
 
 ///

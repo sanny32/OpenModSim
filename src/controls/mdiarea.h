@@ -60,6 +60,8 @@ signals:
     void tabBarLayoutChanged();
     void tabsReordered();
     void lastTabAboutToClose();
+    void tabContextMenuRequested(QMdiSubWindow* subWnd, QPoint globalPos);
+    void tabDraggedOutside(QMdiSubWindow* subWnd, QPoint globalPos);
 
 protected:
     bool eventFilter(QObject* obj, QEvent* event) override;
@@ -68,6 +70,7 @@ protected:
 
 private slots:
     void on_tabBarClicked(int index);
+    void on_tabBarContextMenu(const QPoint& pos);
     void on_currentTabChanged(int index);
     void on_closeTab(int index);
     void on_moveTab(int from, int to);

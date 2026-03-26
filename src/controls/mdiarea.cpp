@@ -422,6 +422,12 @@ void MdiArea::setupTabbedMode()
     connect(_tabBar, &QTabBar::currentChanged, this, &MdiArea::on_currentTabChanged, Qt::UniqueConnection);
     connect(_tabBar, &QTabBar::tabCloseRequested, this, &MdiArea::on_closeTab, Qt::UniqueConnection);
     connect(_tabBar, &QTabBar::tabMoved, this, &MdiArea::on_moveTab, Qt::UniqueConnection);
+
+    _tabBar->setContextMenuPolicy(Qt::CustomContextMenu);
+    connect(_tabBar, &QTabBar::customContextMenuRequested,
+            this, &MdiArea::on_tabBarContextMenu, Qt::UniqueConnection);
+    connect(_tabBar, &MdiTabBar::tabDraggedOutside,
+            this, &MdiArea::tabDraggedOutside, Qt::UniqueConnection);
 }
 
 ///
@@ -610,4 +616,20 @@ void MdiArea::enforceTabbedSubWindowState(QMdiSubWindow* wnd)
 QMdiSubWindow* MdiArea::subWindowAtIndex(int index) const
 {
     return _tabBar ? _tabBar->subWindowAt(index) : nullptr;
+}
+
+///
+/// \brief MdiArea::on_tabBarContextMenu
+/// \param pos
+///
+void MdiArea::on_tabBarContextMenu(const QPoint& pos)
+{
+    if (!_tabBar)
+        return;
+
+    auto* subWnd = subWindowAtIndex(_tabBar->tabAt(pos));
+    if (!subWnd)
+        return;
+
+    emit tabContextMenuRequested(subWnd, _tabBar->mapToGlobal(pos));
 }

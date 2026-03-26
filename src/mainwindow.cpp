@@ -331,6 +331,8 @@ MainWindow::MainWindow(const QString& profile, bool useSession, QWidget *parent)
             markModified();
     });
     connect(ui->mdiArea, &MdiAreaEx::tabsReordered, this, &MainWindow::markModified);
+    connect(ui->mdiArea, &MdiAreaEx::tabContextMenuRequested, this, &MainWindow::on_tabContextMenuRequested);
+    connect(ui->mdiArea, &MdiAreaEx::moveTabToOtherPanelRequested, this, &MainWindow::on_moveTabToOtherPanelRequested);
     connect(ui->mdiArea, &MdiAreaEx::splitViewAboutToDisable, this, [this]() {
         _project->removeSplitAutoClonesFromSecondary();
     });
@@ -1196,6 +1198,45 @@ void MainWindow::updateMenuWindow()
     {
         wnd->setProperty("isActive", wnd == activeWnd);
     }
+}
+
+///
+/// \brief MainWindow::on_tabContextMenuRequested
+/// \param subWnd
+/// \param sourcePanel
+/// \param globalPos
+///
+void MainWindow::on_tabContextMenuRequested(QMdiSubWindow* subWnd, MdiArea* /*sourcePanel*/, QPoint globalPos)
+{
+    auto* frm = subWnd ? subWnd->widget() : nullptr;
+    if(!frm || !_project)
+        return;
+
+    QMenu menu(this);
+    if(_project->canMoveFormToOtherPanel(frm))
+    {
+        auto* act = menu.addAction(tr("Move to Other Panel"));
+        connect(act, &QAction::triggered, this, [this, frm]() {
+            _project->moveFormToOtherPanel(frm);
+            markModified();
+        });
+    }
+    if(!menu.isEmpty())
+        menu.exec(globalPos);
+}
+
+///
+/// \brief MainWindow::on_moveTabToOtherPanelRequested
+/// \param subWnd
+///
+void MainWindow::on_moveTabToOtherPanelRequested(QMdiSubWindow* subWnd)
+{
+    auto* frm = subWnd ? subWnd->widget() : nullptr;
+    if(!frm || !_project)
+        return;
+
+    _project->moveFormToOtherPanel(frm);
+    markModified();
 }
 
 ///
