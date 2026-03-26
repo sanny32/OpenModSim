@@ -2461,98 +2461,98 @@ MODBUS Point Type:
         <translation type="obsolete">Р—Р°РјРµРЅРёС‚СЊ</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="671"/>
+        <location filename="../formtrafficview.cpp" line="663"/>
         <source>Text files (*.txt)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="678"/>
+        <location filename="../formtrafficview.cpp" line="670"/>
         <source>Log exported successfully to file %1</source>
         <translation type="unfinished">Р›РѕРі СѓСЃРїРµС€РЅРѕ СЌРєСЃРїРѕСЂС‚РёСЂРѕРІР°РЅ РІ С„Р°Р№Р» %1</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="680"/>
+        <location filename="../formtrafficview.cpp" line="672"/>
         <source>Export log error!</source>
         <translation type="unfinished">РћС€РёР±РєР° СЌРєСЃРїРѕСЂС‚Р° Р»РѕРіР°!</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="711"/>
+        <location filename="../formtrafficview.cpp" line="703"/>
         <source>Unit:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="89"/>
-        <location filename="../formtrafficview.cpp" line="93"/>
-        <location filename="../formtrafficview.cpp" line="97"/>
-        <location filename="../formtrafficview.cpp" line="561"/>
-        <location filename="../formtrafficview.cpp" line="716"/>
-        <location filename="../formtrafficview.cpp" line="729"/>
-        <location filename="../formtrafficview.cpp" line="751"/>
-        <location filename="../formtrafficview.cpp" line="93"/>
-        <location filename="../formtrafficview.cpp" line="97"/>
-        <location filename="../formtrafficview.cpp" line="561"/>
-        <location filename="../formtrafficview.cpp" line="716"/>
-        <location filename="../formtrafficview.cpp" line="729"/>
-        <location filename="../formtrafficview.cpp" line="751"/>
+        <location filename="../formtrafficview.cpp" line="88"/>
+        <location filename="../formtrafficview.cpp" line="92"/>
+        <location filename="../formtrafficview.cpp" line="96"/>
+        <location filename="../formtrafficview.cpp" line="553"/>
+        <location filename="../formtrafficview.cpp" line="708"/>
+        <location filename="../formtrafficview.cpp" line="721"/>
+        <location filename="../formtrafficview.cpp" line="743"/>
+        <location filename="../formtrafficview.cpp" line="92"/>
+        <location filename="../formtrafficview.cpp" line="96"/>
+        <location filename="../formtrafficview.cpp" line="553"/>
+        <location filename="../formtrafficview.cpp" line="708"/>
+        <location filename="../formtrafficview.cpp" line="721"/>
+        <location filename="../formtrafficview.cpp" line="743"/>
         <source>All</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="101"/>
+        <location filename="../formtrafficview.cpp" line="100"/>
         <source>Unit: %1
 Function: %2
 Source: %3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="717"/>
+        <location filename="../formtrafficview.cpp" line="709"/>
         <source>0 = all unit ids</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="748"/>
+        <location filename="../formtrafficview.cpp" line="740"/>
         <source>Source:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="540"/>
+        <location filename="../formtrafficview.cpp" line="532"/>
         <source>Modbus/TCP Srv %1:%2</source>
         <translation type="unfinished">Modbus/TCP СЃРµСЂРІРµСЂ %1:%2</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="542"/>
+        <location filename="../formtrafficview.cpp" line="534"/>
         <source>Port %1:%2:%3:%4:%5</source>
         <translation type="unfinished">РџРѕСЂС‚ %1:%2:%3:%4:%5</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="104"/>
-        <location filename="../formtrafficview.cpp" line="758"/>
-        <location filename="../formtrafficview.cpp" line="758"/>
+        <location filename="../formtrafficview.cpp" line="103"/>
+        <location filename="../formtrafficview.cpp" line="750"/>
+        <location filename="../formtrafficview.cpp" line="750"/>
         <source>Exceptions Only</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="759"/>
+        <location filename="../formtrafficview.cpp" line="751"/>
         <source>Show only responses with Modbus exception</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="766"/>
+        <location filename="../formtrafficview.cpp" line="758"/>
         <source>Autoscroll</source>
         <translation type="unfinished">РђРІС‚РѕРїСЂРѕРєСЂСѓС‚РєР°</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="767"/>
+        <location filename="../formtrafficview.cpp" line="759"/>
         <source>Automatically scroll to the latest entry</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="775"/>
+        <location filename="../formtrafficview.cpp" line="767"/>
         <source>Rows:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="726"/>
+        <location filename="../formtrafficview.cpp" line="718"/>
         <source>Function:</source>
         <translation type="unfinished"></translation>
     </message>

@@ -10,6 +10,7 @@
 #include "modbusmultiserver.h"
 #include "displaydefinition.h"
 #include "apppreferences.h"
+#include "controls/numericcombobox.h"
 
 ///
 /// \brief Forward declaration of the MainWindow
@@ -17,7 +18,6 @@
 class MainWindow;
 class QTextDocument;
 class QSpinBox;
-class QComboBox;
 class QLabel;
 class QWidget;
 class QAction;
@@ -147,7 +147,7 @@ private:
     QLabel* _labelSource = nullptr;
     QComboBox* _sourceFilter = nullptr;
     QLabel* _labelRowLimit = nullptr;
-    QComboBox* _rowLimitCombo = nullptr;
+    NumericComboBox* _rowLimitCombo = nullptr;
     QCheckBox* _exceptionsFilter = nullptr;
     QCheckBox* _autoscrollCheck = nullptr;
     QWidget* _trafficFilterStretch = nullptr;

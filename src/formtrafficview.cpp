@@ -5,7 +5,6 @@
 #include <QHelpEngine>
 #include <QHelpContentWidget>
 #include <QSpinBox>
-#include <QComboBox>
 #include <QLabel>
 #include <QSizePolicy>
 #include <QCheckBox>
@@ -302,13 +301,7 @@ void FormTrafficView::setDisplayDefinition(const TrafficViewDefinitions& dd)
 
     if (_rowLimitCombo) {
         QSignalBlocker b(_rowLimitCombo);
-        int idx = _rowLimitCombo->findData(_displayDefinition.LogViewLimit);
-        if (idx < 0) {
-            _rowLimitCombo->addItem(QString::number(_displayDefinition.LogViewLimit), _displayDefinition.LogViewLimit);
-            idx = _rowLimitCombo->findData(_displayDefinition.LogViewLimit);
-        }
-        if (idx >= 0)
-            _rowLimitCombo->setCurrentIndex(idx);
+        _rowLimitCombo->setCurrentValue(_displayDefinition.LogViewLimit);
     }
 
     if (_exceptionsFilter) {
@@ -440,8 +433,7 @@ void FormTrafficView::setDisplayDefinitionSilent(const TrafficViewDefinitions& d
     }
     if(_rowLimitCombo) {
         QSignalBlocker b(_rowLimitCombo);
-        const int idx = _rowLimitCombo->findData(static_cast<int>(dd.LogViewLimit));
-        if(idx >= 0) _rowLimitCombo->setCurrentIndex(idx);
+        _rowLimitCombo->setCurrentValue(static_cast<int>(dd.LogViewLimit));
     }
     if(_exceptionsFilter) {
         QSignalBlocker b(_exceptionsFilter);
@@ -774,21 +766,16 @@ void FormTrafficView::setupFilterControls()
     _labelRowLimit = new QLabel(ui->toolBarTraffic);
     _labelRowLimit->setText(tr("Rows:"));
 
-    _rowLimitCombo = new QComboBox(ui->toolBarTraffic);
-    _rowLimitCombo->setEditable(true);
-    _rowLimitCombo->addItem(QStringLiteral("30"), 30);
-    _rowLimitCombo->addItem(QStringLiteral("100"), 100);
-    _rowLimitCombo->addItem(QStringLiteral("300"), 300);
-    _rowLimitCombo->addItem(QStringLiteral("1000"), 1000);
-    connect(_rowLimitCombo, qOverload<int>(&QComboBox::currentIndexChanged), this, [this](int idx) {
-        if (idx < 0)
-            return;
-        const int limit = _rowLimitCombo->itemData(idx).toInt();
-        if (limit <= 0)
-            return;
-        _displayDefinition.LogViewLimit = static_cast<quint16>(limit);
+    _rowLimitCombo = new NumericComboBox(ui->toolBarTraffic);
+    _rowLimitCombo->setRange(30, 10000);
+    _rowLimitCombo->addValue(30);
+    _rowLimitCombo->addValue(100);
+    _rowLimitCombo->addValue(300);
+    _rowLimitCombo->addValue(1000);
+    connect(_rowLimitCombo, &NumericComboBox::currentValueChanged, this, [this](int value) {
+        _displayDefinition.LogViewLimit = static_cast<quint16>(value);
         trimTrafficBufferToLimit();
-        ui->outputWidget->setLogViewLimit(limit);
+        ui->outputWidget->setLogViewLimit(value);
         rebuildVisibleTraffic();
         emit definitionChanged();
     });
@@ -863,15 +850,8 @@ void FormTrafficView::initializeDisplayDefinition()
         _funcCodeFilter->setCurrentIndex(idx);
     }
 
-    if (_rowLimitCombo) {
-        int idx = _rowLimitCombo->findData(_displayDefinition.LogViewLimit);
-        if (idx < 0) {
-            _rowLimitCombo->addItem(QString::number(_displayDefinition.LogViewLimit), _displayDefinition.LogViewLimit);
-            idx = _rowLimitCombo->findData(_displayDefinition.LogViewLimit);
-        }
-        if (idx >= 0)
-            _rowLimitCombo->setCurrentIndex(idx);
-    }
+    if (_rowLimitCombo)
+        _rowLimitCombo->setCurrentValue(_displayDefinition.LogViewLimit);
 
     if (_exceptionsFilter)
         _exceptionsFilter->setChecked(_displayDefinition.ExceptionsOnly);
