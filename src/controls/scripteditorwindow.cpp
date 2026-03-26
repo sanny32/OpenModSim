@@ -127,11 +127,19 @@ void ScriptEditorWindow::setupScriptBar()
     // Run on startup checkbox
     _runOnStartupCheck = new QCheckBox(tr("Run on startup"), _scriptBar);
     _runOnStartupCheck->setChecked(_document->settings().RunOnStartup);
+#if QT_VERSION >= QT_VERSION_CHECK(6, 7, 0)
     connect(_runOnStartupCheck, &QCheckBox::checkStateChanged, this, [this](Qt::CheckState state) {
         auto ss = _document->settings();
         ss.RunOnStartup = (state == Qt::Checked);
         _document->setSettings(ss);
     });
+#else
+    connect(_runOnStartupCheck, &QCheckBox::stateChanged, this, [this](int state) {
+        auto ss = _document->settings();
+        ss.RunOnStartup = (static_cast<Qt::CheckState>(state) == Qt::Checked);
+        _document->setSettings(ss);
+    });
+#endif
     auto startupAction = new QWidgetAction(_scriptBar);
     startupAction->setDefaultWidget(_runOnStartupCheck);
     _scriptBar->addAction(startupAction);

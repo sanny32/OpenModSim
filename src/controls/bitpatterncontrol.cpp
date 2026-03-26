@@ -15,7 +15,7 @@ BitPatternControl::BitPatternControl(QWidget *parent)
         auto chb = findChild<QCheckBox*>(QString("checkBox%1").arg(i));
         if(chb)
         {
-#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+#if QT_VERSION >= QT_VERSION_CHECK(6, 7, 0)
             connect(chb, &QCheckBox::checkStateChanged, this, &BitPatternControl::on_checkStateChanged);
 #else
             connect(chb, &QCheckBox::stateChanged, this, [this](int state)
