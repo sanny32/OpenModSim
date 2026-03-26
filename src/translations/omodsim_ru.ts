@@ -4365,70 +4365,70 @@ Script.onInit(()=&gt;{
 <context>
     <name>ProjectTreeWidget</name>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="54"/>
-        <location filename="../controls/projecttreewidget.cpp" line="256"/>
-        <location filename="../controls/projecttreewidget.cpp" line="256"/>
+        <location filename="../controls/projecttreewidget.cpp" line="55"/>
+        <location filename="../controls/projecttreewidget.cpp" line="259"/>
+        <location filename="../controls/projecttreewidget.cpp" line="259"/>
         <source>Data</source>
         <translation type="unfinished">Р”Р°РЅРЅС‹Рµ</translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="58"/>
-        <location filename="../controls/projecttreewidget.cpp" line="257"/>
-        <location filename="../controls/projecttreewidget.cpp" line="257"/>
+        <location filename="../controls/projecttreewidget.cpp" line="59"/>
+        <location filename="../controls/projecttreewidget.cpp" line="260"/>
+        <location filename="../controls/projecttreewidget.cpp" line="260"/>
         <source>Traffic</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="62"/>
-        <location filename="../controls/projecttreewidget.cpp" line="258"/>
-        <location filename="../controls/projecttreewidget.cpp" line="258"/>
+        <location filename="../controls/projecttreewidget.cpp" line="63"/>
+        <location filename="../controls/projecttreewidget.cpp" line="261"/>
+        <location filename="../controls/projecttreewidget.cpp" line="261"/>
         <source>Script</source>
         <translation type="unfinished">РЎРєСЂРёРїС‚</translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="285"/>
+        <location filename="../controls/projecttreewidget.cpp" line="288"/>
         <source>New Data View</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="286"/>
+        <location filename="../controls/projecttreewidget.cpp" line="289"/>
         <source>New Traffic View</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="287"/>
+        <location filename="../controls/projecttreewidget.cpp" line="290"/>
         <source>New Script</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="305"/>
+        <location filename="../controls/projecttreewidget.cpp" line="308"/>
         <source>Run Script</source>
         <translation type="unfinished">Р—Р°РїСѓСЃРє</translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="306"/>
+        <location filename="../controls/projecttreewidget.cpp" line="309"/>
         <source>Stop Script</source>
         <translation type="unfinished">РћСЃС‚Р°РЅРѕРІ</translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="312"/>
-        <location filename="../controls/projecttreewidget.cpp" line="353"/>
-        <location filename="../controls/projecttreewidget.cpp" line="353"/>
+        <location filename="../controls/projecttreewidget.cpp" line="315"/>
+        <location filename="../controls/projecttreewidget.cpp" line="356"/>
+        <location filename="../controls/projecttreewidget.cpp" line="356"/>
         <source>Rename</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="314"/>
+        <location filename="../controls/projecttreewidget.cpp" line="317"/>
         <source>Delete</source>
         <translation>РЈРґР°Р»РёС‚СЊ</translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="353"/>
+        <location filename="../controls/projecttreewidget.cpp" line="356"/>
         <source>New name:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="361"/>
+        <location filename="../controls/projecttreewidget.cpp" line="364"/>
         <source>Delete Form</source>
         <translation>РЈРґР°Р»РёС‚СЊ С„РѕСЂРјСѓ</translation>
     </message>
@@ -4437,7 +4437,7 @@ Script.onInit(()=&gt;{
         <translation type="vanished">РЈРґР°Р»РёС‚СЊ СЃРєСЂРёРїС‚</translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="362"/>
+        <location filename="../controls/projecttreewidget.cpp" line="365"/>
         <source>Delete &quot;%1&quot; from the project?</source>
         <translation>РЈРґР°Р»РёС‚СЊ &quot;%1&quot; РёР· РїСЂРѕРµРєС‚Р°?</translation>
     </message>

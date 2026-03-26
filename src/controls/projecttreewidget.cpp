@@ -9,6 +9,7 @@ namespace {
 constexpr int ItemTypeRole        = Qt::UserRole + 1;
 constexpr int ItemTypeForm        = 1;
 constexpr int ItemScriptRunning   = Qt::UserRole + 3;
+constexpr int ItemOpenRole        = Qt::UserRole + 4;
 
 QIcon dimmedIcon(const QString& path)
 {
@@ -147,7 +148,7 @@ void ProjectTreeWidget::setFormScriptRunning(QWidget* frm, bool running)
         return;
     }
 
-    const bool isOpen = !item->font(0).italic();
+    const bool isOpen = item->data(0, ItemOpenRole).toBool();
     const auto type = static_cast<ProjectFormType>(item->data(0, ItemTypeRole + 1).toInt());
     item->setIcon(0, iconFor(type, isOpen, running, _iconData, _iconDataClosed, _iconTraffic,
                               _iconTrafficClosed, _iconScriptIdle, _iconScriptClosed, _iconScriptRunning));
@@ -166,9 +167,11 @@ void ProjectTreeWidget::setFormOpen(QWidget* frm, bool open)
     item->setIcon(0, iconFor(type, open, false, _iconData, _iconDataClosed, _iconTraffic,
                               _iconTrafficClosed, _iconScriptIdle, _iconScriptClosed, _iconScriptRunning));
 
-    QFont f = item->font(0);
-    f.setItalic(!open);
-    item->setFont(0, f);
+    item->setData(0, ItemOpenRole, open);
+
+    QColor textColor = palette().color(QPalette::Text);
+    textColor.setAlpha(open ? 255 : 100);
+    item->setForeground(0, textColor);
 }
 
 ///
