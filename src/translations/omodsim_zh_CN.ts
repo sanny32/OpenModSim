@@ -4248,70 +4248,70 @@ Script.onInit(()=&gt;{
     <name>ProjectTreeWidget</name>
     <message>
         <location filename="../controls/projecttreewidget.cpp" line="55"/>
-        <location filename="../controls/projecttreewidget.cpp" line="259"/>
+        <location filename="../controls/projecttreewidget.cpp" line="260"/>
         <source>Data</source>
         <translation type="unfinished">ж•°жЌ®</translation>
     </message>
     <message>
         <location filename="../controls/projecttreewidget.cpp" line="59"/>
-        <location filename="../controls/projecttreewidget.cpp" line="260"/>
+        <location filename="../controls/projecttreewidget.cpp" line="261"/>
         <source>Traffic</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../controls/projecttreewidget.cpp" line="63"/>
-        <location filename="../controls/projecttreewidget.cpp" line="261"/>
+        <location filename="../controls/projecttreewidget.cpp" line="262"/>
         <source>Script</source>
         <translation type="unfinished">и„љжњ¬</translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="288"/>
+        <location filename="../controls/projecttreewidget.cpp" line="289"/>
         <source>New Data View</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="289"/>
+        <location filename="../controls/projecttreewidget.cpp" line="290"/>
         <source>New Traffic View</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="290"/>
+        <location filename="../controls/projecttreewidget.cpp" line="291"/>
         <source>New Script</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="308"/>
+        <location filename="../controls/projecttreewidget.cpp" line="309"/>
         <source>Run Script</source>
         <translation type="unfinished">иїђиЎЊи„љжњ¬</translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="309"/>
+        <location filename="../controls/projecttreewidget.cpp" line="310"/>
         <source>Stop Script</source>
         <translation type="unfinished">еЃњж­ўи„љжњ¬</translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="315"/>
-        <location filename="../controls/projecttreewidget.cpp" line="356"/>
+        <location filename="../controls/projecttreewidget.cpp" line="316"/>
+        <location filename="../controls/projecttreewidget.cpp" line="357"/>
         <source>Rename</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="317"/>
+        <location filename="../controls/projecttreewidget.cpp" line="318"/>
         <source>Delete</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="356"/>
+        <location filename="../controls/projecttreewidget.cpp" line="357"/>
         <source>New name:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="364"/>
+        <location filename="../controls/projecttreewidget.cpp" line="365"/>
         <source>Delete Form</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="365"/>
+        <location filename="../controls/projecttreewidget.cpp" line="366"/>
         <source>Delete &quot;%1&quot; from the project?</source>
         <translation type="unfinished"></translation>
     </message>

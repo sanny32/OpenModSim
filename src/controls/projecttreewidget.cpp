@@ -103,6 +103,7 @@ void ProjectTreeWidget::addForm(ProjectFormType type, QWidget* frm)
     item->setData(0, Qt::UserRole, QVariant::fromValue(static_cast<void*>(frm)));
     item->setData(0, ItemTypeRole, ItemTypeForm);
     item->setData(0, ItemTypeRole + 1, static_cast<int>(type));
+    item->setData(0, ItemOpenRole, true);
     item->setFlags(item->flags() | Qt::ItemIsEditable);
 
     root->setExpanded(true);
