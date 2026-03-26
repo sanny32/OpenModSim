@@ -25,6 +25,7 @@ JSCodeEditor::JSCodeEditor(QWidget *parent)
     connect(this, &JSCodeEditor::cursorPositionChanged, this, &JSCodeEditor::highlightCurrentLine);
 
     setBackgroundColor(Qt::white);
+    setLineWrapMode(QPlainTextEdit::NoWrap);
 
     setFont(QFont("Fira Code"));
     setTabStopDistance(fontMetrics().horizontalAdvance(' ') * 4);
