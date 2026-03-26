@@ -28,16 +28,20 @@ private:
     void updateDeviceIdsInfo();
     void updateConnectionInfo(QLabel* label, const ConnectionDetails& cd);
     void updateErrorSimInfo();
+    void updateRequestCountInfo();
     void onNewVersionAvailable(const QString& version, const QString& url);
 
 private:
     QList<QLabel*> _labels;
     QLabel* _deviceIdsLabel;
     QLabel* _errorSimLabel;
+    QLabel* _requestCountLabel;
     QList<int> _deviceIds;
     ModbusErrorSimulations _errorSimulations;
     QToolButton* _bellButton;
     UpdateChecker* _updateChecker;
+    quint64 _requestCount  = 0;
+    quint64 _responseCount = 0;
 };
 
 #endif // MAINSTATUSBAR_H

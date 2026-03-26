@@ -2742,21 +2742,21 @@ Script.onInit(()=&gt;{
         <translation type="vanished">ж&#xa0;‡и®°</translation>
     </message>
     <message>
-        <location filename="../controls/mainstatusbar.cpp" line="37"/>
-        <location filename="../controls/mainstatusbar.cpp" line="120"/>
-        <location filename="../controls/mainstatusbar.cpp" line="120"/>
+        <location filename="../controls/mainstatusbar.cpp" line="42"/>
+        <location filename="../controls/mainstatusbar.cpp" line="145"/>
+        <location filename="../controls/mainstatusbar.cpp" line="145"/>
         <source>No updates available</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/mainstatusbar.cpp" line="118"/>
-        <location filename="../controls/mainstatusbar.cpp" line="225"/>
-        <location filename="../controls/mainstatusbar.cpp" line="225"/>
+        <location filename="../controls/mainstatusbar.cpp" line="143"/>
+        <location filename="../controls/mainstatusbar.cpp" line="258"/>
+        <location filename="../controls/mainstatusbar.cpp" line="258"/>
         <source>New version %1 is available. Click to download.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/mainstatusbar.cpp" line="145"/>
+        <location filename="../controls/mainstatusbar.cpp" line="170"/>
         <source>Unit Identifiers: %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2765,12 +2765,12 @@ Script.onInit(()=&gt;{
         <translation type="obsolete">и®ѕе¤‡ењ°еќЂпјљ%1</translation>
     </message>
     <message>
-        <location filename="../controls/mainstatusbar.cpp" line="193"/>
+        <location filename="../controls/mainstatusbar.cpp" line="218"/>
         <source>Modbus/TCP Srv %1:%2</source>
         <translation>modbus/TCPдјєжњЌе™Ё%1:%2</translation>
     </message>
     <message>
-        <location filename="../controls/mainstatusbar.cpp" line="197"/>
+        <location filename="../controls/mainstatusbar.cpp" line="222"/>
         <source>Port %1:%2:%3:%4:%5</source>
         <translation>еџ&#xa0; %1:%2:%3:%4:%5</translation>
     </message>
@@ -2787,39 +2787,44 @@ Script.onInit(()=&gt;{
         <translation type="vanished">з«ЇеЏЈ %1: %2</translation>
     </message>
     <message>
-        <location filename="../controls/mainstatusbar.cpp" line="157"/>
+        <location filename="../controls/mainstatusbar.cpp" line="182"/>
         <source>No Resp</source>
         <translation>з„Ўйџїж‡‰</translation>
     </message>
     <message>
-        <location filename="../controls/mainstatusbar.cpp" line="159"/>
+        <location filename="../controls/mainstatusbar.cpp" line="184"/>
         <source>Bad ID</source>
         <translation>йЊЇиЄ¤ID</translation>
     </message>
     <message>
-        <location filename="../controls/mainstatusbar.cpp" line="161"/>
+        <location filename="../controls/mainstatusbar.cpp" line="186"/>
         <source>Ill Func</source>
         <translation>йќћжі•еЉџиѓЅ</translation>
     </message>
     <message>
-        <location filename="../controls/mainstatusbar.cpp" line="163"/>
+        <location filename="../controls/mainstatusbar.cpp" line="188"/>
         <source>Dev Busy</source>
         <translation>иЈќзЅ®еї™зўЊ</translation>
     </message>
     <message>
-        <location filename="../controls/mainstatusbar.cpp" line="165"/>
+        <location filename="../controls/mainstatusbar.cpp" line="190"/>
         <source>Bad CRC</source>
         <translation>йЊЇиЄ¤CRC</translation>
     </message>
     <message>
-        <location filename="../controls/mainstatusbar.cpp" line="167"/>
+        <location filename="../controls/mainstatusbar.cpp" line="192"/>
         <source>Delay %1ms</source>
         <translation>е»¶йЃІ %1жЇ«з§’</translation>
     </message>
     <message>
-        <location filename="../controls/mainstatusbar.cpp" line="169"/>
+        <location filename="../controls/mainstatusbar.cpp" line="194"/>
         <source>Rnd Delay %1ms</source>
         <translation>йљЁж©џе»¶йЃІ %1жЇ«з§’</translation>
+    </message>
+    <message>
+        <location filename="../controls/mainstatusbar.cpp" line="246"/>
+        <source>Req: %1  Resp: %2</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

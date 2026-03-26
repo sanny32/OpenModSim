@@ -14,8 +14,13 @@ MainStatusBar::MainStatusBar(const ModbusMultiServer& server, QWidget* parent)
     : QStatusBar(parent)
     , _deviceIdsLabel(new QLabel(this))
     , _errorSimLabel(new QLabel(this))
+    , _requestCountLabel(new QLabel(this))
     , _updateChecker(new UpdateChecker(this))
 {
+    _requestCountLabel->setContentsMargins(6, 0, 6, 0);
+    insertPermanentWidget(0, _requestCountLabel);
+    updateRequestCountInfo();
+
     _deviceIdsLabel->setContentsMargins(6, 0, 6, 0);
     addPermanentWidget(_deviceIdsLabel);
     updateDeviceIdsInfo();
@@ -82,6 +87,26 @@ MainStatusBar::MainStatusBar(const ModbusMultiServer& server, QWidget* parent)
                 break;
             }
         }
+
+        if(_labels.isEmpty())
+        {
+            _requestCount  = 0;
+            _responseCount = 0;
+            updateRequestCountInfo();
+        }
+    });
+
+    connect(&server, &ModbusMultiServer::request, this, [this](const QSharedPointer<const ModbusMessage>&)
+    {
+        _requestCount++;
+        updateRequestCountInfo();
+    });
+
+    connect(&server, &ModbusMultiServer::response, this, [this](const QSharedPointer<const ModbusMessage>&,
+                                                                  const QSharedPointer<const ModbusMessage>&)
+    {
+        _responseCount++;
+        updateRequestCountInfo();
     });
 
     // Initial check after a short delay
@@ -211,6 +236,14 @@ void MainStatusBar::setCheckForUpdates(bool enabled)
 {
     _bellButton->setVisible(enabled);
     _updateChecker->setEnabled(enabled);
+}
+
+///
+/// \brief MainStatusBar::updateRequestCountInfo
+///
+void MainStatusBar::updateRequestCountInfo()
+{
+    _requestCountLabel->setText(tr("Req: %1  Resp: %2").arg(_requestCount).arg(_responseCount));
 }
 
 ///
