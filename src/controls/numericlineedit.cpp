@@ -654,6 +654,8 @@ void NumericLineEdit::focusOutEvent(QFocusEvent* e)
 ///
 void NumericLineEdit::keyPressEvent(QKeyEvent* e)
 {
+    if (e->key() == Qt::Key_Return || e->key() == Qt::Key_Enter)
+        updateValue();
     QLineEdit::keyPressEvent(e);
 }
 
