@@ -1229,13 +1229,13 @@ void MainWindow::on_tabContextMenuRequested(QMdiSubWindow* subWnd, MdiArea* /*so
 /// \brief MainWindow::on_moveTabToOtherPanelRequested
 /// \param subWnd
 ///
-void MainWindow::on_moveTabToOtherPanelRequested(QMdiSubWindow* subWnd)
+void MainWindow::on_moveTabToOtherPanelRequested(QMdiSubWindow* subWnd, QPoint globalDropPos)
 {
     auto* frm = subWnd ? subWnd->widget() : nullptr;
     if(!frm || !_project)
         return;
 
-    _project->moveFormToOtherPanel(frm);
+    _project->moveFormToOtherPanel(frm, globalDropPos);
     markModified();
 }
 

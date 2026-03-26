@@ -142,7 +142,7 @@ private slots:
 
     void updateMenuWindow();
     void on_tabContextMenuRequested(QMdiSubWindow* subWnd, MdiArea* sourcePanel, QPoint globalPos);
-    void on_moveTabToOtherPanelRequested(QMdiSubWindow* subWnd);
+    void on_moveTabToOtherPanelRequested(QMdiSubWindow* subWnd, QPoint globalDropPos);
 
 private:
     QWidget* createNewForm(ProjectFormKind kind);

@@ -619,6 +619,28 @@ QMdiSubWindow* MdiArea::subWindowAtIndex(int index) const
 }
 
 ///
+/// \brief MdiArea::moveTabToPosition
+/// Repositions \a subWnd's tab to the index under \a globalPos.
+/// Call this after addSubWindow() to insert at the drop location rather than the end.
+///
+void MdiArea::moveTabToPosition(QMdiSubWindow* subWnd, QPoint globalPos)
+{
+    if (!_tabBar || !subWnd || globalPos.isNull())
+        return;
+
+    const int currentIndex = _tabBar->indexOfSubWindow(subWnd);
+    if (currentIndex < 0)
+        return;
+
+    const QPoint localPos = _tabBar->mapFromGlobal(globalPos);
+    const int targetIndex = _tabBar->tabAt(localPos);
+    if (targetIndex < 0 || targetIndex == currentIndex)
+        return;
+
+    _tabBar->moveTab(currentIndex, targetIndex);
+}
+
+///
 /// \brief MdiArea::on_tabBarContextMenu
 /// \param pos
 ///

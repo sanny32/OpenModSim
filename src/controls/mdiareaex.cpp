@@ -693,14 +693,14 @@ void MdiAreaEx::on_panelTabDraggedOutside(QMdiSubWindow* subWnd, QPoint globalPo
     // Only move if the mouse was released inside the target panel's bounds.
     const QRect targetGlobalRect(target->mapToGlobal(QPoint(0, 0)), target->size());
     if (targetGlobalRect.contains(globalPos))
-        emit moveTabToOtherPanelRequested(subWnd);
+        emit moveTabToOtherPanelRequested(subWnd, globalPos);
 }
 
 ///
 /// \brief MdiAreaEx::moveSubWindowToOtherPanel
 /// \param subWnd
 ///
-void MdiAreaEx::moveSubWindowToOtherPanel(QMdiSubWindow* subWnd)
+void MdiAreaEx::moveSubWindowToOtherPanel(QMdiSubWindow* subWnd, QPoint globalDropPos)
 {
     if (!subWnd || !_primaryArea || !_secondaryArea)
         return;
@@ -713,6 +713,9 @@ void MdiAreaEx::moveSubWindowToOtherPanel(QMdiSubWindow* subWnd)
 
     source->removeSubWindow(subWnd);
     target->addSubWindow(subWnd, Qt::WindowFlags());
+
+    // Reposition the tab to the drop location if a position was supplied.
+    target->moveTabToPosition(subWnd, globalDropPos);
 
     if (auto* frm = subWnd->widget())
         frm->show();

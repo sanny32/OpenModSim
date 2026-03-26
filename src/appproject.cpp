@@ -969,7 +969,7 @@ bool AppProject::canMoveFormToOtherPanel(QWidget* frm) const
 /// If an auto-clone of this form already exists in the target panel it is
 /// deleted first, so there is never a duplicate.
 ///
-void AppProject::moveFormToOtherPanel(QWidget* frm)
+void AppProject::moveFormToOtherPanel(QWidget* frm, QPoint globalDropPos)
 {
     if(!canMoveFormToOtherPanel(frm))
         return;
@@ -1000,7 +1000,7 @@ void AppProject::moveFormToOtherPanel(QWidget* frm)
 
     auto* subWnd = qobject_cast<QMdiSubWindow*>(frm->parentWidget());
     if(subWnd)
-        _mdiArea->moveSubWindowToOtherPanel(subWnd);
+        _mdiArea->moveSubWindowToOtherPanel(subWnd, globalDropPos);
 }
 
 ///

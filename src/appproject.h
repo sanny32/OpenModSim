@@ -68,7 +68,7 @@ public:
 
     // Move tab between panels
     bool        canMoveFormToOtherPanel(QWidget* frm) const;
-    void        moveFormToOtherPanel(QWidget* frm);
+    void        moveFormToOtherPanel(QWidget* frm, QPoint globalDropPos = QPoint());
 
     // Split-view
     MdiArea*    secondaryArea() const;
