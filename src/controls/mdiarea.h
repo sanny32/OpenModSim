@@ -94,6 +94,7 @@ private:
     MdiTabBar* _tabBar = nullptr;
     QFrame* _tabBarBaseLine = nullptr;
     QPointer<QMdiSubWindow> _lastActivatedSubWindow;
+    QList<QPointer<QMdiSubWindow>> _tabHistory;
 };
 
 #endif // MDIAREA_H

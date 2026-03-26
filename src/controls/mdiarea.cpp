@@ -306,7 +306,20 @@ void MdiArea::on_closeTab(int index)
     if (_tabBar->count() == 1)
         emit lastTabAboutToClose();
 
+    // Find the previously active window to restore after close
+    QMdiSubWindow* prev = nullptr;
+    for (auto& ptr : _tabHistory) {
+        if (ptr && ptr != wnd) {
+            prev = ptr;
+            break;
+        }
+    }
+
+    _tabHistory.removeAll(wnd);
     wnd->close();
+
+    if (prev)
+        setActiveSubWindow(prev);
 }
 
 ///
@@ -353,6 +366,11 @@ void MdiArea::on_subWindowActivated(QMdiSubWindow* wnd)
 
     _tabBar->setCurrentSubWindow(wnd);
     updateTabBarGeometry();
+
+    if (wnd) {
+        _tabHistory.removeAll(wnd);
+        _tabHistory.prepend(wnd);
+    }
 }
 
 ///
