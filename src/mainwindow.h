@@ -21,6 +21,7 @@ class MdiArea;
 class FormDataView;
 class FormTrafficView;
 class FormScriptView;
+class FormRegisterMapView;
 class QMenu;
 class QAction;
 
@@ -80,6 +81,7 @@ private slots:
     void on_actionNew_triggered();
     void on_actionNewDataView_triggered();
     void on_actionNewTrafficView_triggered();
+    void on_actionNewRegisterMapView_triggered();
     void on_actionClose_triggered();
     void on_actionCloseAll_triggered();
     void on_actionOpenProject_triggered();

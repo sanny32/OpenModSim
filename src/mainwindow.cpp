@@ -18,6 +18,7 @@
 #include "menuconnect.h"
 #include "controls/mdiareaex.h"
 #include "formscriptview.h"
+#include "formregistermapview.h"
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
@@ -36,6 +37,7 @@ ProjectFormKind newFormKindFromSetting(int value)
         case ProjectFormKind::Data:
         case ProjectFormKind::Traffic:
         case ProjectFormKind::Script:
+        case ProjectFormKind::RegisterMap:
             return static_cast<ProjectFormKind>(value);
         default:
             return ProjectFormKind::Data;
@@ -81,6 +83,10 @@ void forEachTypedForm(MdiAreaT* mdiArea, Fn&& fn)
             fn(frm);
             continue;
         }
+        if (auto* frm = qobject_cast<FormRegisterMapView*>(wnd->widget())) {
+            fn(frm);
+            continue;
+        }
     }
 }
 
@@ -97,6 +103,10 @@ ProjectFormKind projectFormKindFromWidget(QWidget* widget, bool* ok = nullptr)
     if (qobject_cast<FormScriptView*>(widget)) {
         if(ok) *ok = true;
         return ProjectFormKind::Script;
+    }
+    if (qobject_cast<FormRegisterMapView*>(widget)) {
+        if(ok) *ok = true;
+        return ProjectFormKind::RegisterMap;
     }
 
     if(ok) *ok = false;
@@ -175,6 +185,7 @@ QColor backgroundColorOfForm(QWidget* widget)
     if (auto* frm = qobject_cast<FormDataView*>(widget)) return frm->backgroundColor();
     if (auto* frm = qobject_cast<FormTrafficView*>(widget)) return frm->backgroundColor();
     if (auto* frm = qobject_cast<FormScriptView*>(widget)) return frm->backgroundColor();
+    if (auto* frm = qobject_cast<FormRegisterMapView*>(widget)) return frm->backgroundColor();
     return QColor();
 }
 
@@ -183,6 +194,7 @@ QColor foregroundColorOfForm(QWidget* widget)
     if (auto* frm = qobject_cast<FormDataView*>(widget)) return frm->foregroundColor();
     if (auto* frm = qobject_cast<FormTrafficView*>(widget)) return frm->foregroundColor();
     if (auto* frm = qobject_cast<FormScriptView*>(widget)) return frm->foregroundColor();
+    if (auto* frm = qobject_cast<FormRegisterMapView*>(widget)) return frm->foregroundColor();
     return QColor();
 }
 
@@ -196,6 +208,7 @@ void setBackgroundColorOnForm(QWidget* widget, const QColor& clr)
     if (auto* frm = qobject_cast<FormDataView*>(widget)) frm->setBackgroundColor(clr);
     else if (auto* frm = qobject_cast<FormTrafficView*>(widget)) frm->setBackgroundColor(clr);
     else if (auto* frm = qobject_cast<FormScriptView*>(widget)) frm->setBackgroundColor(clr);
+    else if (auto* frm = qobject_cast<FormRegisterMapView*>(widget)) frm->setBackgroundColor(clr);
 }
 
 void setForegroundColorOnForm(QWidget* widget, const QColor& clr)
@@ -203,6 +216,7 @@ void setForegroundColorOnForm(QWidget* widget, const QColor& clr)
     if (auto* frm = qobject_cast<FormDataView*>(widget)) frm->setForegroundColor(clr);
     else if (auto* frm = qobject_cast<FormTrafficView*>(widget)) frm->setForegroundColor(clr);
     else if (auto* frm = qobject_cast<FormScriptView*>(widget)) frm->setForegroundColor(clr);
+    else if (auto* frm = qobject_cast<FormRegisterMapView*>(widget)) frm->setForegroundColor(clr);
 }
 
 }
@@ -554,6 +568,16 @@ void MainWindow::on_actionNewTrafficView_triggered()
 }
 
 ///
+/// \brief MainWindow::on_actionNewRegisterMapView_triggered
+///
+void MainWindow::on_actionNewRegisterMapView_triggered()
+{
+    _newFormKind = ProjectFormKind::RegisterMap;
+    ui->actionNew->setIcon(ui->actionNewRegisterMapView->icon());
+    createNewForm(_newFormKind);
+}
+
+///
 /// \brief MainWindow::createNewForm
 /// \param kind
 ///
@@ -607,6 +631,14 @@ QWidget* MainWindow::createNewForm(ProjectFormKind kind)
                 auto dd = scriptFrm->definitions();
                 applySharedDisplayDefaults(dd, prefs.scriptViewDefinitions());
                 scriptFrm->setDefinitions(dd);
+            }
+            break;
+        }
+        case ProjectFormKind::RegisterMap: {
+            if (auto* mapFrm = qobject_cast<FormRegisterMapView*>(frm)) {
+                mapFrm->setFont(prefs.font());
+                mapFrm->setBackgroundColor(prefs.backgroundColor());
+                mapFrm->setForegroundColor(prefs.foregroundColor());
             }
             break;
         }

@@ -173,6 +173,7 @@ set(SOURCES
     formdataview.cpp
     formtrafficview.cpp
     formscriptview.cpp
+    formregistermapview.cpp
     jshighlighter.cpp
     main.cpp
     mainwindow.cpp
@@ -273,6 +274,7 @@ set(HEADERS
     formdataview.h
     formtrafficview.h
     formscriptview.h
+    formregistermapview.h
     jshighlighter.h
     mainwindow.h
     menuconnect.h
@@ -339,6 +341,7 @@ set(UI_FILES
     formdataview.ui
     formtrafficview.ui
     formscriptview.ui
+    formregistermapview.ui
     dialogs/dialogautosimulation.ui
     dialogs/dialogcoilsimulation.ui
     dialogs/dialogabout.ui
