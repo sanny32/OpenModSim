@@ -83,7 +83,7 @@ void FormTrafficView::print(QPrinter* printer)
 {
     if (!printer) return;
 
-    const QString unitText = (_unitIdFilter && _unitIdFilter->value() > 0)
+    const QString unitText = (_unitIdFilter && _unitIdFilter->value() >= 0)
         ? QString::number(_unitIdFilter->value())
         : tr("All");
 
@@ -248,7 +248,7 @@ TrafficViewDefinitions FormTrafficView::displayDefinition() const
     dd.FormName = windowTitle();
 
     if (_unitIdFilter) {
-        dd.UnitFilter = static_cast<quint8>(_unitIdFilter->value());
+        dd.UnitFilter = static_cast<qint16>(_unitIdFilter->value());
     }
 
     if (_funcCodeFilter) {
@@ -576,7 +576,7 @@ bool FormTrafficView::matchesTrafficFilter(const ConnectionDetails& cd,
         return true;
 
     const int unitId = _unitIdFilter->value();
-    if (unitId != 0 && filterMsg->deviceId() != unitId)
+    if (unitId != -1 && filterMsg->deviceId() != unitId)
         return false;
 
     if (_funcCodeFilter->currentIndex() > 0) {
@@ -703,13 +703,13 @@ void FormTrafficView::setupFilterControls()
     _labelUnitId->setText(tr("Unit:"));
 
     _unitIdFilter = new QSpinBox(ui->toolBarTraffic);
-    _unitIdFilter->setRange(0, 247);
-    _unitIdFilter->setValue(0);
+    _unitIdFilter->setRange(-1, 255);
+    _unitIdFilter->setValue(-1);
     _unitIdFilter->setSpecialValueText(tr("All"));
-    _unitIdFilter->setToolTip(tr("0 = all unit ids"));
+    _unitIdFilter->setToolTip(tr("-1 = all unit ids"));
     connect(_unitIdFilter, qOverload<int>(&QSpinBox::valueChanged), this, [this](int) {
         if (_unitIdFilter)
-            _displayDefinition.UnitFilter = static_cast<quint8>(_unitIdFilter->value());
+            _displayDefinition.UnitFilter = static_cast<qint16>(_unitIdFilter->value());
         rebuildVisibleTraffic();
         emit definitionChanged();
     });
@@ -834,7 +834,7 @@ void FormTrafficView::setupToolbarLayout()
 void FormTrafficView::initializeDisplayDefinition()
 {
     _displayDefinition.FormName = windowTitle();
-    _displayDefinition.UnitFilter = 0;
+    _displayDefinition.UnitFilter = -1;
     _displayDefinition.FunctionCodeFilter = -1;
     _displayDefinition.LogViewLimit = ui->outputWidget->logViewLimit();
     _displayDefinition.HexView = true;

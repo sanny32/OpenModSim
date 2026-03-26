@@ -52,7 +52,7 @@ struct DataViewDefinitions
 struct TrafficViewDefinitions
 {
     QString FormName;
-    quint8 UnitFilter = 0;
+    qint16 UnitFilter = -1;
     qint16 FunctionCodeFilter = -1;
     quint16 LogViewLimit = 30;
     bool ExceptionsOnly = false;
@@ -61,7 +61,7 @@ struct TrafficViewDefinitions
 
     void normalize()
     {
-        UnitFilter = qBound<quint8>(0, UnitFilter, 247);
+        UnitFilter = qBound(qint16(-1), UnitFilter, qint16(255));
         static const QSet<qint16> kAllowedFunctionCodes = {
             1, 2, 3, 4, 5, 6, 15, 16, 22, 23
         };
@@ -173,7 +173,7 @@ inline QSettings& operator >>(QSettings& in, DataViewDefinitions& dd)
 inline QSettings& operator >>(QSettings& in, TrafficViewDefinitions& dd)
 {
     dd.FormName = in.value("TrafficViewDefinitions/FormName").toString();
-    dd.UnitFilter = in.value("TrafficViewDefinitions/UnitFilter", 0).toUInt();
+    dd.UnitFilter = in.value("TrafficViewDefinitions/UnitFilter", -1).toInt();
     dd.FunctionCodeFilter = in.value("TrafficViewDefinitions/FunctionCodeFilter", -1).toInt();
     dd.LogViewLimit = in.value("TrafficViewDefinitions/LogViewLimit", 30).toUInt();
     dd.ExceptionsOnly = in.value("TrafficViewDefinitions/ExceptionsOnly", false).toBool();
@@ -334,7 +334,7 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, TrafficViewDefinitio
         }
 
         if (attributes.hasAttribute("UnitFilter")) {
-            bool ok; const quint8 unitFilter = attributes.value("UnitFilter").toUShort(&ok);
+            bool ok; const qint16 unitFilter = attributes.value("UnitFilter").toShort(&ok);
             if (ok) dd.UnitFilter = unitFilter;
         }
 

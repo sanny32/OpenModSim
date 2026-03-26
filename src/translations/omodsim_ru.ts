@@ -2517,11 +2517,6 @@ Source: %3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="709"/>
-        <source>0 = all unit ids</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../formtrafficview.cpp" line="740"/>
         <source>Source:</source>
         <translation type="unfinished"></translation>
@@ -2541,6 +2536,11 @@ Source: %3</source>
         <location filename="../formtrafficview.cpp" line="750"/>
         <location filename="../formtrafficview.cpp" line="750"/>
         <source>Exceptions Only</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../formtrafficview.cpp" line="709"/>
+        <source>-1 = all unit ids</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
