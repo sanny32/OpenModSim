@@ -49,6 +49,7 @@ public:
 
     void selectAnsiCodepage(const QString& name);
     void appendConsoleMessage(const QString& source, const QString& text, ConsoleOutput::MessageType type);
+    void showOutputConsole();
     void showHelpContext(const QString& helpKey);
     void applyConnections(const ModbusDefinitions& defs, const QList<ConnectionDetails>& conns);
     ModbusMultiServer& mbMultiServer() { return _mbMultiServer; }

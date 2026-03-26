@@ -475,6 +475,7 @@ void AppProject::setupMdiChild(QWidget* frm, QMdiSubWindow* wnd, bool addToWindo
         frm->setProperty(kSplitScriptRunning, true);
         _projectTree->setFormScriptRunning(frm, true);
         updateSplitPairScriptIcons(frm);
+        _mainWindow->showOutputConsole();
     };
     auto onScriptStopped = [this, frm]()
     {
