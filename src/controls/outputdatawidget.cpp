@@ -115,6 +115,14 @@ QVariant OutputDataListModel::data(const QModelIndex& index, int role) const
         case DescriptionRole:
             return itemData->Description;
 
+        case Qt::ToolTipRole:
+        {
+            const auto freeSpace = _columnsDistance - 2;
+            if (!itemData->Description.isEmpty() && itemData->Description.length() > freeSpace)
+                return itemData->Description;
+            return QVariant();
+        }
+
         case FindMatchRole:
             return itemData->FindMatch;
 
