@@ -38,7 +38,10 @@ private:
 private:
     bool _indicatorActive = true;
     QPointer<QMdiSubWindow> _dragSubWindow;
-    bool _dragCursorSet = false;
+    QPixmap  _dragPixmap;
+    QPoint   _dragHotspot;
+    QWidget* _dragOverlay  = nullptr;
+    bool     _dragCursorSet = false;
 };
 
 #endif // MDITABBAR_H

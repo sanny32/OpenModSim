@@ -8,6 +8,34 @@
 #include <QStyleOptionTab>
 #include <QVariant>
 
+///
+/// \brief The DragTabOverlay class renders a semi-transparent tab image
+/// that follows the cursor when a tab is dragged outside its panel.
+///
+class DragTabOverlay : public QWidget
+{
+public:
+    explicit DragTabOverlay(const QPixmap& px)
+        : QWidget(nullptr, Qt::ToolTip | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint)
+        , _px(px)
+    {
+        setAttribute(Qt::WA_TranslucentBackground);
+        setAttribute(Qt::WA_ShowWithoutActivating);
+        resize(px.size());
+    }
+
+protected:
+    void paintEvent(QPaintEvent*) override
+    {
+        QPainter p(this);
+        p.setOpacity(0.75);
+        p.drawPixmap(0, 0, _px);
+    }
+
+private:
+    QPixmap _px;
+};
+
 class MdiTabBarStyle : public QProxyStyle
 {
 public:
@@ -241,9 +269,19 @@ void MdiTabBar::setCurrentSubWindow(QMdiSubWindow* wnd)
 ///
 void MdiTabBar::mousePressEvent(QMouseEvent* event)
 {
-    // Record the subwindow before Qt's press handler can reorder tabs.
-    if (event->button() == Qt::LeftButton)
-        _dragSubWindow = subWindowAt(tabAt(event->position().toPoint()));
+    // Record subwindow and grab tab image BEFORE Qt's press handler can reorder tabs.
+    if (event->button() == Qt::LeftButton) {
+        const int idx = tabAt(event->position().toPoint());
+        _dragSubWindow = subWindowAt(idx);
+        if (_dragSubWindow) {
+            const QRect tr = tabRect(idx);
+            _dragPixmap  = grab(tr);
+            _dragHotspot = (event->position() - tr.topLeft()).toPoint();
+        } else {
+            _dragPixmap  = QPixmap();
+            _dragHotspot = QPoint();
+        }
+    }
     QTabBar::mousePressEvent(event);
 }
 
@@ -254,17 +292,32 @@ void MdiTabBar::mousePressEvent(QMouseEvent* event)
 void MdiTabBar::mouseMoveEvent(QMouseEvent* event)
 {
     if (_dragSubWindow && (event->buttons() & Qt::LeftButton)) {
-        // When the cursor leaves the parent MdiArea's bounds, show a drag cursor.
         auto* par = parentWidget();
         if (par) {
             const QPoint posInParent = mapTo(par, event->position().toPoint());
             const bool outside = !par->rect().contains(posInParent);
-            if (outside && !_dragCursorSet) {
-                QApplication::setOverrideCursor(Qt::DragMoveCursor);
-                _dragCursorSet = true;
-            } else if (!outside && _dragCursorSet) {
-                QApplication::restoreOverrideCursor();
-                _dragCursorSet = false;
+
+            if (outside) {
+                // Create overlay on first exit from the panel.
+                if (!_dragOverlay && !_dragPixmap.isNull()) {
+                    _dragOverlay = new DragTabOverlay(_dragPixmap);
+                }
+                if (_dragOverlay) {
+                    _dragOverlay->move(event->globalPosition().toPoint() - _dragHotspot);
+                    _dragOverlay->show();
+                }
+                if (!_dragCursorSet) {
+                    QApplication::setOverrideCursor(Qt::DragMoveCursor);
+                    _dragCursorSet = true;
+                }
+            } else {
+                // Cursor returned inside the source panel — hide overlay.
+                if (_dragOverlay)
+                    _dragOverlay->hide();
+                if (_dragCursorSet) {
+                    QApplication::restoreOverrideCursor();
+                    _dragCursorSet = false;
+                }
             }
         }
     }
@@ -278,6 +331,9 @@ void MdiTabBar::mouseMoveEvent(QMouseEvent* event)
 void MdiTabBar::mouseReleaseEvent(QMouseEvent* event)
 {
     if (event->button() == Qt::LeftButton) {
+        delete _dragOverlay;
+        _dragOverlay = nullptr;
+
         if (_dragCursorSet) {
             QApplication::restoreOverrideCursor();
             _dragCursorSet = false;
