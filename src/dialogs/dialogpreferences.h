@@ -48,6 +48,8 @@ private:
     QColor _bgColor;
     QColor _fgColor;
     QColor _statusColor;
+    QColor _addrColor;
+    QColor _commentColor;
 };
 
 #endif // DIALOGPREFERENCES_H

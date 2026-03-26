@@ -67,6 +67,12 @@ public:
     QColor statusColor() const;
     void setStatusColor(const QColor& clr);
 
+    QColor addressColor() const;
+    void setAddressColor(const QColor& clr);
+
+    QColor commentColor() const;
+    void setCommentColor(const QColor& clr);
+
     QFont font() const;
     void setFont(const QFont& font);
 
@@ -119,6 +125,8 @@ signals:
     void foregroundColorChanged(const QColor&);
     void backgroundColorChanged(const QColor&);
     void statusColorChanged(const QColor&);
+    void addressColorChanged(const QColor&);
+    void commentColorChanged(const QColor&);
     void colorChanged(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr, const QColor& clr);
     void descriptionChanged(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr, const QString& desc);
 
@@ -167,12 +175,6 @@ private:
 inline QSettings& operator <<(QSettings& out, FormDataView* frm)
 {
     if(!frm) return out;
-
-    out.setValue("Font", frm->font());
-    out.setValue("ForegroundColor", frm->foregroundColor());
-    out.setValue("BackgroundColor", frm->backgroundColor());
-    out.setValue("StatusColor", frm->statusColor());
-    out.setValue("ZoomPercent", frm->zoomPercent());
 
     const auto wnd = frm->parentWidget();
     out.setValue("ViewMinimized", wnd->isMinimized());
@@ -225,11 +227,6 @@ inline QSettings& operator >>(QSettings& in, FormDataView* frm)
     wndRect = in.value("ViewRect").toRect();
 
     auto wnd = frm->parentWidget();
-    frm->setFont(in.value("Font", defaultMonospaceFont()).value<QFont>());
-    frm->setForegroundColor(in.value("ForegroundColor", QColor(Qt::black)).value<QColor>());
-    frm->setBackgroundColor(in.value("BackgroundColor", QColor(Qt::white)).value<QColor>());
-    frm->setStatusColor(in.value("StatusColor", QColor(Qt::red)).value<QColor>());
-    frm->setZoomPercent(in.value("ZoomPercent", 100).toInt());
     if (wnd && wndRect.isValid() && !wnd->isMaximized() && !wnd->isMinimized())
         wnd->setGeometry(wndRect);
     if(isMinimized) wnd->setWindowState(Qt::WindowMinimized);
@@ -288,24 +285,6 @@ inline QXmlStreamWriter& operator <<(QXmlStreamWriter& xml, FormDataView* frm)
     const auto windowSize = (wnd->isMinimized() || wnd->isMaximized()) ? wnd->sizeHint() : wnd->size();
     xml.writeAttribute("Width", QString::number(windowSize.width()));
     xml.writeAttribute("Height", QString::number(windowSize.height()));
-    xml.writeEndElement();
-
-    xml.writeStartElement("Colors");
-    xml.writeAttribute("Background", frm->backgroundColor().name());
-    xml.writeAttribute("Foreground", frm->foregroundColor().name());
-    xml.writeAttribute("Status", frm->statusColor().name());
-    xml.writeEndElement();
-
-    xml.writeStartElement("Font");
-    const QFont font = frm->font();
-    xml.writeAttribute("Family", font.family());
-    xml.writeAttribute("Size", QString::number(font.pointSize()));
-    xml.writeAttribute("Bold", boolToString(font.bold()));
-    xml.writeAttribute("Italic", boolToString(font.italic()));
-    xml.writeEndElement();
-
-    xml.writeStartElement("Zoom");
-    xml.writeAttribute("Value", QString("%1%").arg(frm->zoomPercent()));
     xml.writeEndElement();
 
     const auto dd = frm->displayDefinition();
@@ -432,58 +411,6 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, FormDataView* frm)
 
                 }
                 xml.skipCurrentElement();
-            }
-            else if (xml.name() == QLatin1String("Colors")) {
-                const QXmlStreamAttributes colorAttrs = xml.attributes();
-
-                if (colorAttrs.hasAttribute("Background")) {
-                    QColor color(colorAttrs.value("Background").toString());
-                    if (color.isValid()) frm->setBackgroundColor(color);
-                }
-
-                if (colorAttrs.hasAttribute("Foreground")) {
-                    QColor color(colorAttrs.value("Foreground").toString());
-                    if (color.isValid()) frm->setForegroundColor(color);
-                }
-
-                if (colorAttrs.hasAttribute("Status")) {
-                    QColor color(colorAttrs.value("Status").toString());
-                    if (color.isValid()) frm->setStatusColor(color);
-                }
-                xml.skipCurrentElement();
-            }
-            else if (xml.name() == QLatin1String("Font")) {
-                const QXmlStreamAttributes fontAttrs = xml.attributes();
-
-                QFont font = frm->font();
-
-                if (fontAttrs.hasAttribute("Family")) {
-                    font.setFamily(fontAttrs.value("Family").toString());
-                }
-
-                if (fontAttrs.hasAttribute("Size")) {
-                    bool ok; const int size = fontAttrs.value("Size").toInt(&ok);
-                    if (ok && size > 0) font.setPointSize(size);
-                }
-
-                if (fontAttrs.hasAttribute("Bold")) {
-                    font.setBold(stringToBool(fontAttrs.value("Bold").toString()));
-                }
-
-                if (fontAttrs.hasAttribute("Italic")) {
-                    font.setItalic(stringToBool(fontAttrs.value("Italic").toString()));
-                }
-
-                frm->setFont(font);
-                xml.skipCurrentElement();
-            }
-            else if(xml.name() == QLatin1String("Zoom")) {
-                const QXmlStreamAttributes zoomAttrs = xml.attributes();
-                if (zoomAttrs.hasAttribute("Value")) {
-                    bool ok; const int zoom = zoomAttrs.value("Value").toString().remove("%").toInt(&ok);
-                    if(ok) frm->setZoomPercent(zoom);
-                    xml.skipCurrentElement();
-                }
             }
             else if (xml.name() == QLatin1String("DataViewDefinitions")) {
                 xml >> dd;

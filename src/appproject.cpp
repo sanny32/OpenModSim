@@ -121,7 +121,17 @@ void saveXmlOfForm(QWidget* widget, QXmlStreamWriter& w)
 
 void loadXmlOfForm(QWidget* widget, QXmlStreamReader& r)
 {
-    if (auto* frm = qobject_cast<FormDataView*>(widget)) frm->loadXml(r);
+    if (auto* frm = qobject_cast<FormDataView*>(widget)) {
+        frm->loadXml(r);
+        const AppPreferences& prefs = AppPreferences::instance();
+        frm->setFont(prefs.font());
+        frm->setZoomPercent(prefs.fontZoom());
+        frm->setForegroundColor(prefs.foregroundColor());
+        frm->setBackgroundColor(prefs.backgroundColor());
+        frm->setStatusColor(prefs.statusColor());
+        frm->setAddressColor(prefs.addressColor());
+        frm->setCommentColor(prefs.commentColor());
+    }
     else if (auto* frm = qobject_cast<FormTrafficView*>(widget)) frm->loadXml(r);
     else if (auto* frm = qobject_cast<FormScriptView*>(widget)) frm->loadXml(r);
     else r.skipCurrentElement();

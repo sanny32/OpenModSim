@@ -698,6 +698,52 @@ void OutputDataWidget::setStatusColor(const QColor& clr)
 }
 
 ///
+/// \brief OutputDataWidget::addressColor
+/// \return
+///
+QColor OutputDataWidget::addressColor() const
+{
+    auto* delegate = qobject_cast<DataDelegate*>(ui->listView->itemDelegate());
+    return delegate ? delegate->addressColor() : QColor(128, 128, 128);
+}
+
+///
+/// \brief OutputDataWidget::setAddressColor
+/// \param clr
+///
+void OutputDataWidget::setAddressColor(const QColor& clr)
+{
+    auto* delegate = qobject_cast<DataDelegate*>(ui->listView->itemDelegate());
+    if (delegate) {
+        delegate->setAddressColor(clr);
+        ui->listView->viewport()->update();
+    }
+}
+
+///
+/// \brief OutputDataWidget::commentColor
+/// \return
+///
+QColor OutputDataWidget::commentColor() const
+{
+    auto* delegate = qobject_cast<DataDelegate*>(ui->listView->itemDelegate());
+    return delegate ? delegate->commentColor() : QColor(128, 128, 128);
+}
+
+///
+/// \brief OutputDataWidget::setCommentColor
+/// \param clr
+///
+void OutputDataWidget::setCommentColor(const QColor& clr)
+{
+    auto* delegate = qobject_cast<DataDelegate*>(ui->listView->itemDelegate());
+    if (delegate) {
+        delegate->setCommentColor(clr);
+        ui->listView->viewport()->update();
+    }
+}
+
+///
 /// \brief OutputDataWidget::font
 /// \return
 ///

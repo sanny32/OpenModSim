@@ -45,7 +45,7 @@ void DataDelegate::paint(QPainter* painter, const QStyleOptionViewItem& option, 
     const bool selected = opt.state & QStyle::State_Selected;
     const QPalette& pal = opt.palette;
     const QColor mainColor = selected ? pal.color(QPalette::HighlightedText) : pal.color(QPalette::Text);
-    const QColor dimColor  = selected ? pal.color(QPalette::HighlightedText) : pal.color(QPalette::PlaceholderText);
+    const QColor dimColor  = selected ? pal.color(QPalette::HighlightedText) : _addressColor;
 
     const QString fullText = opt.text;
     const int colonPos = fullText.indexOf(QLatin1String(": "));
@@ -75,9 +75,11 @@ void DataDelegate::paint(QPainter* painter, const QStyleOptionViewItem& option, 
         x += w;
     };
 
+    const QColor commentColor = selected ? pal.color(QPalette::HighlightedText) : _commentColor;
+
     drawPart(addrPart,  dimColor);
     drawPart(valuePart, mainColor);
-    drawPart(descrPart, dimColor);
+    drawPart(descrPart, commentColor);
 
     painter->restore();
 

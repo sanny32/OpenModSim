@@ -575,6 +575,8 @@ QWidget* MainWindow::createNewForm(ProjectFormKind kind)
                 dataFrm->setBackgroundColor(prefs.backgroundColor());
                 dataFrm->setForegroundColor(prefs.foregroundColor());
                 dataFrm->setStatusColor(prefs.statusColor());
+                dataFrm->setAddressColor(prefs.addressColor());
+                dataFrm->setCommentColor(prefs.commentColor());
                 dataFrm->setZoomPercent(prefs.fontZoom());
 
                 auto dd = dataFrm->displayDefinition();
@@ -852,13 +854,16 @@ void MainWindow::applyScriptFont(const QFont& font)
 /// \param fg
 /// \param status
 ///
-void MainWindow::applyColors(const QColor& bg, const QColor& fg, const QColor& status)
+void MainWindow::applyColors(const QColor& bg, const QColor& fg, const QColor& status, const QColor& addr, const QColor& comment)
 {
-    forEachTypedForm(ui->mdiArea, [&bg, &fg, &status](auto* frm) {
+    forEachTypedForm(ui->mdiArea, [&bg, &fg, &status, &addr, &comment](auto* frm) {
         frm->setBackgroundColor(bg);
         frm->setForegroundColor(fg);
-        if (auto* data = qobject_cast<FormDataView*>(frm))
+        if (auto* data = qobject_cast<FormDataView*>(frm)) {
             data->setStatusColor(status);
+            data->setAddressColor(addr);
+            data->setCommentColor(comment);
+        }
     });
 }
 

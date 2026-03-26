@@ -36,6 +36,12 @@ public:
     QColor statusColor() const { return _statusColor; }
     void setStatusColor(const QColor& c) { _statusColor = c; }
 
+    QColor addressColor() const { return _addressColor; }
+    void setAddressColor(const QColor& c) { _addressColor = c; }
+
+    QColor commentColor() const { return _commentColor; }
+    void setCommentColor(const QColor& c) { _commentColor = c; }
+
     // ----- Updates -----
     bool checkForUpdates() const { return _checkForUpdates; }
     void setCheckForUpdates(bool enable) { _checkForUpdates = enable; }
@@ -85,6 +91,8 @@ private:
     QColor        _backgroundColor{ Qt::white };
     QColor        _foregroundColor{ Qt::black };
     QColor        _statusColor{ Qt::red };
+    QColor        _addressColor{ 128, 128, 128 };
+    QColor        _commentColor{ 128, 128, 128 };
     QString       _language{ translationLang() };
     DataViewDefinitions _dataViewDefinitions;
     TrafficViewDefinitions _trafficViewDefinitions;

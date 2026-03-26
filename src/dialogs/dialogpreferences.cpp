@@ -61,6 +61,30 @@ DialogPreferences::DialogPreferences(MainWindow* mainWindow, QWidget* parent)
         ui->pushButtonStatusColor->setColor(_statusColor);
     });
 
+    connect(ui->pushButtonAddressColor, &QPushButton::clicked, this, [this]() {
+        QColorDialog dlg(_addrColor, this);
+        if (dlg.exec() == QDialog::Accepted) {
+            _addrColor = dlg.currentColor();
+            ui->pushButtonAddressColor->setColor(_addrColor);
+        }
+    });
+    connect(ui->pushButtonResetAddressColor, &QPushButton::clicked, this, [this]() {
+        _addrColor = QColor(128, 128, 128);
+        ui->pushButtonAddressColor->setColor(_addrColor);
+    });
+
+    connect(ui->pushButtonCommentColor, &QPushButton::clicked, this, [this]() {
+        QColorDialog dlg(_commentColor, this);
+        if (dlg.exec() == QDialog::Accepted) {
+            _commentColor = dlg.currentColor();
+            ui->pushButtonCommentColor->setColor(_commentColor);
+        }
+    });
+    connect(ui->pushButtonResetCommentColor, &QPushButton::clicked, this, [this]() {
+        _commentColor = QColor(128, 128, 128);
+        ui->pushButtonCommentColor->setColor(_commentColor);
+    });
+
     connect(ui->listWidget, &QListWidget::currentRowChanged,
             this, &DialogPreferences::on_listWidget_currentRowChanged);
     connect(ui->buttonBox, &QDialogButtonBox::clicked,
@@ -130,9 +154,13 @@ void DialogPreferences::loadFromPreferences()
     _bgColor     = prefs.backgroundColor();
     _fgColor     = prefs.foregroundColor();
     _statusColor = prefs.statusColor();
+    _addrColor    = prefs.addressColor();
+    _commentColor = prefs.commentColor();
     ui->pushButtonBackgroundColor->setColor(_bgColor);
     ui->pushButtonForegroundColor->setColor(_fgColor);
     ui->pushButtonStatusColor->setColor(_statusColor);
+    ui->pushButtonAddressColor->setColor(_addrColor);
+    ui->pushButtonCommentColor->setColor(_commentColor);
 
     // Interface - language
     const int langIdx = ui->comboBoxLanguage->findData(prefs.language());
@@ -184,7 +212,9 @@ void DialogPreferences::apply()
     prefs.setBackgroundColor(_bgColor);
     prefs.setForegroundColor(_fgColor);
     prefs.setStatusColor(_statusColor);
-    if (_mainWindow) _mainWindow->applyColors(_bgColor, _fgColor, _statusColor);
+    prefs.setAddressColor(_addrColor);
+    prefs.setCommentColor(_commentColor);
+    if (_mainWindow) _mainWindow->applyColors(_bgColor, _fgColor, _statusColor, _addrColor, _commentColor);
 
     // Interface - language
     const QString lang = ui->comboBoxLanguage->currentData().toString();

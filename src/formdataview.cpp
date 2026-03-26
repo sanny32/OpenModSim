@@ -472,6 +472,46 @@ void FormDataView::setStatusColor(const QColor& clr)
 }
 
 ///
+/// \brief FormDataView::addressColor
+/// \return
+///
+QColor FormDataView::addressColor() const
+{
+    return ui->outputWidget->addressColor();
+}
+
+///
+/// \brief FormDataView::setAddressColor
+/// \param clr
+///
+void FormDataView::setAddressColor(const QColor& clr)
+{
+    if(addressColor() == clr) return;
+    ui->outputWidget->setAddressColor(clr);
+    emit addressColorChanged(clr);
+}
+
+///
+/// \brief FormDataView::commentColor
+/// \return
+///
+QColor FormDataView::commentColor() const
+{
+    return ui->outputWidget->commentColor();
+}
+
+///
+/// \brief FormDataView::setCommentColor
+/// \param clr
+///
+void FormDataView::setCommentColor(const QColor& clr)
+{
+    if(commentColor() == clr) return;
+    ui->outputWidget->setCommentColor(clr);
+    emit commentColorChanged(clr);
+}
+
+///
 /// \brief FormDataView::font
 /// \return
 ///
@@ -827,6 +867,10 @@ void FormDataView::linkTo(FormDataView* other)
     connect(other, &FormDataView::foregroundColorChanged, this,  &FormDataView::setForegroundColor);
     connect(this,  &FormDataView::backgroundColorChanged, other, &FormDataView::setBackgroundColor);
     connect(other, &FormDataView::backgroundColorChanged, this,  &FormDataView::setBackgroundColor);
+    connect(this,  &FormDataView::addressColorChanged, other, &FormDataView::setAddressColor);
+    connect(other, &FormDataView::addressColorChanged, this,  &FormDataView::setAddressColor);
+    connect(this,  &FormDataView::commentColorChanged, other, &FormDataView::setCommentColor);
+    connect(other, &FormDataView::commentColorChanged, this,  &FormDataView::setCommentColor);
     connect(this,  &FormDataView::statusColorChanged, other, &FormDataView::setStatusColor);
     connect(other, &FormDataView::statusColorChanged, this,  &FormDataView::setStatusColor);
     connect(this, &FormDataView::colorChanged, other,

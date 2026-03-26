@@ -148,6 +148,12 @@ public:
     QColor statusColor() const;
     void setStatusColor(const QColor& clr);
 
+    QColor addressColor() const;
+    void setAddressColor(const QColor& clr);
+
+    QColor commentColor() const;
+    void setCommentColor(const QColor& clr);
+
     QFont font() const;
     void setFont(const QFont& font);
 

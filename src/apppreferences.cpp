@@ -33,6 +33,8 @@ void AppPreferences::load(QSettings& settings)
     _backgroundColor = QColor(settings.value("BackgroundColor", _backgroundColor.name()).toString());
     _foregroundColor = QColor(settings.value("ForegroundColor", _foregroundColor.name()).toString());
     _statusColor     = QColor(settings.value("StatusColor",     _statusColor.name()).toString());
+    _addressColor    = QColor(settings.value("AddressColor",    _addressColor.name()).toString());
+    _commentColor    = QColor(settings.value("CommentColor",    _commentColor.name()).toString());
     _language        = settings.value("Language", _language).toString();
     _scriptFont.fromString(settings.value("ScriptFont", _scriptFont.toString()).toString());
     _codeAutoComplete = settings.value("CodeAutoComplete", _codeAutoComplete).toBool();
@@ -60,6 +62,8 @@ void AppPreferences::save(QSettings& settings) const
     settings.setValue("BackgroundColor", _backgroundColor.name());
     settings.setValue("ForegroundColor", _foregroundColor.name());
     settings.setValue("StatusColor",     _statusColor.name());
+    settings.setValue("AddressColor",    _addressColor.name());
+    settings.setValue("CommentColor",    _commentColor.name());
     settings.setValue("Language",        _language);
     settings.setValue("ScriptFont",      _scriptFont.toString());
     settings.setValue("CodeAutoComplete",_codeAutoComplete);
@@ -86,6 +90,8 @@ void AppPreferences::saveXml(QXmlStreamWriter& xml) const
     xml.writeAttribute("BackgroundColor", _backgroundColor.name());
     xml.writeAttribute("ForegroundColor", _foregroundColor.name());
     xml.writeAttribute("StatusColor",     _statusColor.name());
+    xml.writeAttribute("AddressColor",    _addressColor.name());
+    xml.writeAttribute("CommentColor",    _commentColor.name());
     xml.writeAttribute("Language",        _language);
     xml.writeAttribute("ScriptFont",      _scriptFont.toString());
     xml.writeAttribute("CodeAutoComplete", boolToString(_codeAutoComplete));
@@ -124,6 +130,14 @@ void AppPreferences::loadXml(QXmlStreamReader& xml)
 
     if (attributes.hasAttribute("StatusColor")) {
         _statusColor = QColor(attributes.value("StatusColor").toString());
+    }
+
+    if (attributes.hasAttribute("AddressColor")) {
+        _addressColor = QColor(attributes.value("AddressColor").toString());
+    }
+
+    if (attributes.hasAttribute("CommentColor")) {
+        _commentColor = QColor(attributes.value("CommentColor").toString());
     }
 
     if (attributes.hasAttribute("Language")) {

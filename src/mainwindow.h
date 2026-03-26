@@ -41,7 +41,7 @@ public:
     void applyFont(const QFont& font);
     void applyScriptFont(const QFont& font);
     void applyZoom(int zoomPercent);
-    void applyColors(const QColor& bg, const QColor& fg, const QColor& status);
+    void applyColors(const QColor& bg, const QColor& fg, const QColor& status, const QColor& addr, const QColor& comment);
     void applyCheckForUpdates(bool enabled);
 
     void loadProject(const QString& filename);

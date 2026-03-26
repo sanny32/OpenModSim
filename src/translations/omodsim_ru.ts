@@ -1052,6 +1052,8 @@
         <location filename="../dialogs/dialogpreferences.ui" line="208"/>
         <location filename="../dialogs/dialogpreferences.ui" line="267"/>
         <location filename="../dialogs/dialogpreferences.ui" line="326"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="385"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="444"/>
         <source>Reset</source>
         <translation>РЎР±СЂРѕСЃ</translation>
     </message>
@@ -1072,54 +1074,64 @@
     </message>
     <message>
         <location filename="../dialogs/dialogpreferences.ui" line="348"/>
+        <source>Address Color:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogpreferences.ui" line="407"/>
+        <source>Comment Color:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogpreferences.ui" line="466"/>
         <source>Language:</source>
         <translation>РЇР·С‹Рє:</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="368"/>
-        <location filename="../dialogs/dialogpreferences.ui" line="732"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="486"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="850"/>
         <source>Font</source>
         <translation>РЁСЂРёС„С‚</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="405"/>
-        <location filename="../dialogs/dialogpreferences.ui" line="769"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="523"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="887"/>
         <source>Size:</source>
         <translation>Р&#xa0;Р°Р·РјРµСЂ:</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="437"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="555"/>
         <source>Zoom:</source>
         <translation>РњР°СЃС€С‚Р°Р±:</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="522"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="640"/>
         <source>Data View</source>
         <translation type="unfinished">Р”Р°РЅРЅС‹Рµ</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="603"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="721"/>
         <source>Traffic View</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="835"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="953"/>
         <source>Console</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="885"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="1003"/>
         <source>Automatically show output console</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="847"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="965"/>
         <source>Console Output Limit:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="383"/>
-        <location filename="../dialogs/dialogpreferences.ui" line="747"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="501"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="865"/>
         <source>Family:</source>
         <translation>РЎРµРјРµР№СЃС‚РІРѕ:</translation>
     </message>
@@ -1129,18 +1141,18 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="358"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="476"/>
         <source>Check for updates</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="459"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="577"/>
         <source>%</source>
         <translation>%</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="480"/>
-        <location filename="../dialogs/dialogpreferences.ui" line="803"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="598"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="921"/>
         <source>Antialias</source>
         <translation>РЎРіР»Р°Р¶РёРІР°РЅРёРµ</translation>
     </message>
@@ -1149,22 +1161,22 @@
         <translation type="vanished">РћС‚РѕР±СЂР°Р¶РµРЅРёРµ РґР°РЅРЅС‹С…</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="534"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="652"/>
         <source>Address Base:</source>
         <translation>РђРґСЂРµСЃР°С†РёСЏ:</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="551"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="669"/>
         <source>Hex Address</source>
         <translation>РЁРµСЃС‚РЅР°РґС†Р°С‚РµСЂРёС‡РЅС‹Рµ Р°РґСЂРµСЃР°</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="558"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="676"/>
         <source>Leading Zeros</source>
         <translation>Р’РµРґСѓС‰РёРµ РЅСѓР»Рё</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="565"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="683"/>
         <source>Columns Distance:</source>
         <translation>Р&#xa0;Р°СЃСЃС‚РѕСЏРЅРёРµ РјРµР¶РґСѓ СЃС‚РѕР»Р±С†Р°РјРё:</translation>
     </message>
@@ -1173,7 +1185,7 @@
         <translation type="vanished">Р–СѓСЂРЅР°Р»</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="615"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="733"/>
         <source>Autoscroll</source>
         <translation>РђРІС‚РѕРїСЂРѕРєСЂСѓС‚РєР°</translation>
     </message>
@@ -1182,7 +1194,7 @@
         <translation type="vanished">РџРѕРґСЂРѕР±РЅРѕРµ Р»РѕРіРёСЂРѕРІР°РЅРёРµ</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="622"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="740"/>
         <source>Log View Limit:</source>
         <translation>Р›РёРјРёС‚ Р»РѕРіР°:</translation>
     </message>
@@ -1192,17 +1204,17 @@
         <translation type="unfinished">РЎРєСЂРёРїС‚</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="700"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="818"/>
         <source>&lt;b&gt;Note:&lt;/b&gt; These settings apply to newly opened windows only.</source>
         <translation>&lt;b&gt;РџСЂРёРјРµС‡Р°РЅРёРµ:&lt;/b&gt; Р­С‚Рё РЅР°СЃС‚СЂРѕР№РєРё РїСЂРёРјРµРЅСЏСЋС‚СЃСЏ С‚РѕР»СЊРєРѕ Рє РЅРѕРІС‹Рј РѕРєРЅР°Рј.</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="813"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="931"/>
         <source>Editor</source>
         <translation>Р&#xa0;РµРґР°РєС‚РѕСЂ</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="825"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="943"/>
         <source>Enable code auto-complete</source>
         <translation>Р’РєР»СЋС‡РёС‚СЊ Р°РІС‚РѕРґРѕРїРѕР»РЅРµРЅРёРµ РєРѕРґР°</translation>
     </message>
@@ -2114,14 +2126,14 @@ MODBUS Point Type:
         <translation type="unfinished">РЁРµСЃС‚РЅР°РґС†Р°С‚РёСЂРёС‡РЅС‹Рµ Р°РґСЂРµСЃР°</translation>
     </message>
     <message>
-        <location filename="../formdataview.cpp" line="539"/>
+        <location filename="../formdataview.cpp" line="579"/>
         <source>Address Base: %1
 Starting Address: %2
 Length: %3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formdataview.cpp" line="541"/>
+        <location filename="../formdataview.cpp" line="581"/>
         <source>Unit Identifier: %1
 Data Type:
 %2</source>
@@ -3129,8 +3141,8 @@ Script.onInit(()=&gt;{
     </message>
     <message>
         <location filename="../mainwindow.ui" line="233"/>
-        <location filename="../mainwindow.cpp" line="1550"/>
-        <location filename="../mainwindow.cpp" line="1550"/>
+        <location filename="../mainwindow.cpp" line="1555"/>
+        <location filename="../mainwindow.cpp" line="1555"/>
         <source>Save Project</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3421,7 +3433,7 @@ Script.onInit(()=&gt;{
         <translation type="vanished">РЁРµСЃС‚РЅР°РґС†Р°С‚РёСЂРёС‡РЅС‹Рµ Р°РґСЂРµСЃР°</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="643"/>
+        <location filename="../mainwindow.cpp" line="645"/>
         <source>All files (*)</source>
         <translation>Р’СЃРµ С„Р°Р№Р»С‹ (*)</translation>
     </message>
@@ -3448,9 +3460,9 @@ Script.onInit(()=&gt;{
         <translation type="obsolete">Р”Р°РЅРЅС‹Рµ</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="642"/>
-        <location filename="../mainwindow.cpp" line="673"/>
-        <location filename="../mainwindow.cpp" line="673"/>
+        <location filename="../mainwindow.cpp" line="644"/>
+        <location filename="../mainwindow.cpp" line="675"/>
+        <location filename="../mainwindow.cpp" line="675"/>
         <source>Project files (*.msimprj)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3463,28 +3475,28 @@ Script.onInit(()=&gt;{
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="238"/>
-        <location filename="../mainwindow.cpp" line="1637"/>
-        <location filename="../mainwindow.cpp" line="1637"/>
+        <location filename="../mainwindow.cpp" line="1642"/>
+        <location filename="../mainwindow.cpp" line="1642"/>
         <source>Clear List</source>
         <translation>Очистить список</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1113"/>
+        <location filename="../mainwindow.cpp" line="1118"/>
         <source>JavaScript files (*.js);;All files (*)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1173"/>
+        <location filename="../mainwindow.cpp" line="1178"/>
         <source>Move to Other Panel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1625"/>
+        <location filename="../mainwindow.cpp" line="1630"/>
         <source>No Recent Projects</source>
         <translation>Нет недавних проектов</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1551"/>
+        <location filename="../mainwindow.cpp" line="1556"/>
         <source>Save project before closing?</source>
         <translation>Сохранить проект перед закрытием?</translation>
     </message>
@@ -4148,77 +4160,77 @@ Script.onInit(()=&gt;{
 <context>
     <name>OutputDataWidget</name>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1335"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1381"/>
         <source>Set Value of %1</source>
         <translation type="unfinished">Р—Р°РїРёСЃР°С‚СЊ Р·РЅР°С‡РµРЅРёРµ РїРѕ Р°РґСЂРµСЃСѓ %1</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1344"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1390"/>
         <source>Add Description</source>
         <translation type="unfinished">Р”РѕР±Р°РІРёС‚СЊ РѕРїРёСЃР°РЅРёРµ</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1344"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1390"/>
         <source>Edit Description</source>
         <translation type="unfinished">Р&#xa0;РµРґР°РєС‚РёСЂРѕРІР°С‚СЊ РѕРїРёСЃР°РЅРёРµ</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1347"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1393"/>
         <source>%1: Enter Description</source>
         <translation type="unfinished">%1: Р’РІРµРґРёС‚Рµ РѕРїРёСЃР°РЅРёРµ</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1356"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1402"/>
         <source>Remove Color</source>
         <translation type="unfinished">РЈРґР°Р»РёС‚СЊ С†РІРµС‚</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1367"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1413"/>
         <source>Yellow</source>
         <translation type="unfinished">Р–РµР»С‚С‹Р№</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1368"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1414"/>
         <source>Cyan</source>
         <translation type="unfinished">Р¦РёР°РЅ</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1369"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1415"/>
         <source>Magenta</source>
         <translation type="unfinished">РџСѓСЂРїСѓСЂРЅС‹Р№</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1370"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1416"/>
         <source>LightGreen</source>
         <translation type="unfinished">РЎРІРµС‚Р»Рѕ-Р·РµР»РµРЅС‹Р№</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1371"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1417"/>
         <source>Orange</source>
         <translation type="unfinished">РћСЂР°РЅР¶РµРІС‹Р№</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1372"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1418"/>
         <source>LightBlue</source>
         <translation type="unfinished">РЎРІРµС‚Р»Рѕ-СЃРёРЅРёР№</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1373"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1419"/>
         <source>LightGray</source>
         <translation type="unfinished">РЎРІРµС‚Р»Рѕ-СЃРµСЂС‹Р№</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1458"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1504"/>
         <source>NOT CONNECTED!</source>
         <translation type="unfinished">РќР• РџРћР”РљР›Р®Р§Р•РќРћ!</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1466"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1512"/>
         <source>Invalid Data Length Specified</source>
         <translation type="unfinished">РЈРєР°Р·Р°РЅР° РЅРµРґРѕРїСѓСЃС‚РёРјР°СЏ РґР»РёРЅР° РґР°РЅРЅС‹С…</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1475"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1521"/>
         <source>Zoom: %1%</source>
         <translation type="unfinished">РЈРІРµР»РёС‡РµРЅРёРµ: %1%</translation>
     </message>
