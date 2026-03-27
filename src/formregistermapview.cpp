@@ -292,7 +292,7 @@ FormRegisterMapView::FormRegisterMapView(ModbusMultiServer& server, MainWindow* 
     hdr->resizeSection(ColAddress,   70);
     hdr->resizeSection(ColFormat,    80);
     hdr->resizeSection(ColComment,   200);
-    hdr->resizeSection(ColValue,     80);
+    hdr->resizeSection(ColValue,     140);
     hdr->resizeSection(ColTimestamp, 160);
 
     ui->tableWidget->verticalHeader()->setDefaultSectionSize(20);
@@ -453,13 +453,6 @@ void FormRegisterMapView::on_mbDataChanged(quint8 deviceId, const QModbusDataUni
                 const int row = findRow(key);
                 if (row >= 0) updateValue(row, key, value);
             }
-        } else {
-            Entry entry;
-            entry.value     = value;
-            entry.format    = DataDisplayMode::Int16;
-            entry.timestamp = now;
-            _registerMap[key] = entry;
-            insertEntry(key, entry);
         }
     }
 }
@@ -902,3 +895,4 @@ ItemMapKey FormRegisterMapView::keyFromRow(int row) const
     key.Address  = static_cast<quint16>(item->data(RoleAddress).toInt());
     return key;
 }
+

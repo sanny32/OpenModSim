@@ -2325,28 +2325,28 @@ MODBUS Point Type:
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="826"/>
-        <location filename="../formregistermapview.cpp" line="839"/>
-        <location filename="../formregistermapview.cpp" line="839"/>
+        <location filename="../formregistermapview.cpp" line="819"/>
+        <location filename="../formregistermapview.cpp" line="832"/>
+        <location filename="../formregistermapview.cpp" line="832"/>
         <source>Coils</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="827"/>
-        <location filename="../formregistermapview.cpp" line="840"/>
-        <location filename="../formregistermapview.cpp" line="840"/>
+        <location filename="../formregistermapview.cpp" line="820"/>
+        <location filename="../formregistermapview.cpp" line="833"/>
+        <location filename="../formregistermapview.cpp" line="833"/>
         <source>Discrete Inputs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="828"/>
-        <location filename="../formregistermapview.cpp" line="841"/>
-        <location filename="../formregistermapview.cpp" line="841"/>
+        <location filename="../formregistermapview.cpp" line="821"/>
+        <location filename="../formregistermapview.cpp" line="834"/>
+        <location filename="../formregistermapview.cpp" line="834"/>
         <source>Input Registers</source>
         <translation type="unfinished">Значения реистров</translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="829"/>
+        <location filename="../formregistermapview.cpp" line="822"/>
         <source>Holding Registers</source>
         <translation type="unfinished"></translation>
     </message>
