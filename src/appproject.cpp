@@ -82,7 +82,6 @@ void connectEditSlotsOnForm(QWidget* widget)
     if (auto* frm = qobject_cast<FormDataView*>(widget)) frm->connectEditSlots();
     else if (auto* frm = qobject_cast<FormTrafficView*>(widget)) frm->connectEditSlots();
     else if (auto* frm = qobject_cast<FormScriptView*>(widget)) frm->connectEditSlots();
-    else if (auto* frm = qobject_cast<FormRegisterMapView*>(widget)) frm->connectEditSlots();
 }
 
 void disconnectEditSlotsOnForm(QWidget* widget)
@@ -90,7 +89,6 @@ void disconnectEditSlotsOnForm(QWidget* widget)
     if (auto* frm = qobject_cast<FormDataView*>(widget)) frm->disconnectEditSlots();
     else if (auto* frm = qobject_cast<FormTrafficView*>(widget)) frm->disconnectEditSlots();
     else if (auto* frm = qobject_cast<FormScriptView*>(widget)) frm->disconnectEditSlots();
-    else if (auto* frm = qobject_cast<FormRegisterMapView*>(widget)) frm->disconnectEditSlots();
 }
 
 DataDisplayMode dataDisplayModeOfForm(QWidget* widget)

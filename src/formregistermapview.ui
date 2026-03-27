@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>700</width>
+    <width>900</width>
     <height>480</height>
    </rect>
   </property>
@@ -30,9 +30,26 @@
     <number>0</number>
    </property>
    <item>
+    <widget class="QToolBar" name="toolBar">
+     <property name="movable">
+      <bool>false</bool>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>16</width>
+       <height>16</height>
+      </size>
+     </property>
+     <addaction name="actionAdd"/>
+     <addaction name="actionDelete"/>
+     <addaction name="separator"/>
+     <addaction name="actionClear"/>
+    </widget>
+   </item>
+   <item>
     <widget class="QTableWidget" name="tableWidget">
      <property name="selectionMode">
-      <enum>QAbstractItemView::SingleSelection</enum>
+      <enum>QAbstractItemView::ExtendedSelection</enum>
      </property>
      <property name="selectionBehavior">
       <enum>QAbstractItemView::SelectRows</enum>
@@ -42,7 +59,7 @@
      </property>
      <column>
       <property name="text">
-       <string>DevId</string>
+       <string>Unit</string>
       </property>
      </column>
      <column>
@@ -57,18 +74,53 @@
      </column>
      <column>
       <property name="text">
+       <string>Format</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Comment</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
        <string>Value</string>
       </property>
      </column>
      <column>
       <property name="text">
-       <string>Description</string>
+       <string>Timestamp</string>
       </property>
      </column>
     </widget>
    </item>
   </layout>
+  <action name="actionAdd">
+   <property name="text">
+    <string>Add</string>
+   </property>
+  </action>
+  <action name="actionDelete">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/res/edit-delete.png</normaloff>:/res/edit-delete.png</iconset>
+   </property>
+   <property name="text">
+    <string>Delete</string>
+   </property>
+  </action>
+  <action name="actionClear">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/res/icon-clear.png</normaloff>:/res/icon-clear.png</iconset>
+   </property>
+   <property name="text">
+    <string>Clear Register Map</string>
+   </property>
+  </action>
  </widget>
- <resources/>
+ <resources>
+  <include location="resources.qrc"/>
+ </resources>
  <connections/>
 </ui>

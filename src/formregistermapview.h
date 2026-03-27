@@ -3,7 +3,7 @@
 
 #include <QWidget>
 #include <QMap>
-#include <QToolBar>
+#include <QDateTime>
 #include <QXmlStreamWriter>
 #include <QXmlStreamReader>
 #include <QSettings>
@@ -45,20 +45,8 @@ public:
     RegisterMapViewDefinitions displayDefinition() const;
     void setDisplayDefinition(const RegisterMapViewDefinitions& dd);
 
-    QColor backgroundColor() const;
-    void setBackgroundColor(const QColor& clr);
-
-    QColor foregroundColor() const;
-    void setForegroundColor(const QColor& clr);
-
-    QFont font() const;
-    void setFont(const QFont& font);
-
     void saveXml(QXmlStreamWriter& xml) const;
     void loadXml(QXmlStreamReader& xml);
-
-    void connectEditSlots();
-    void disconnectEditSlots();
 
 protected:
     void changeEvent(QEvent* event) override;
@@ -75,23 +63,35 @@ signals:
 private slots:
     void on_mbRequest(const ConnectionDetails& cd, QSharedPointer<const ModbusMessage> msg);
     void on_mbDataChanged(quint8 deviceId, const QModbusDataUnit& data);
-    void on_actionClearMap_triggered();
+    void on_actionAdd_triggered();
+    void on_actionDelete_triggered();
+    void on_actionClear_triggered();
     void on_tableWidget_cellChanged(int row, int col);
 
 private:
     struct Entry {
         quint16 value = 0;
-        QString description;
+        QString comment;
+        DataDisplayMode format = DataDisplayMode::Int16;
+        QDateTime timestamp;
     };
+
+    // Column indices
+    enum Col { ColUnit = 0, ColType, ColAddress, ColFormat, ColComment, ColValue, ColTimestamp };
 
     void processRequest(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 startAddress, quint16 count);
     int  findRow(const ItemMapKey& key) const;
-    void insertEntry(const ItemMapKey& key, quint16 value, const QString& description);
-    void updateValue(int row, quint16 value);
-    void setupToolbar();
+    void insertEntry(const ItemMapKey& key, const Entry& entry);
+    void updateValue(int row, const ItemMapKey& key, quint16 value);
+    void updateAddressCells();
     void setupServerConnections();
+
     QString registerTypeToString(QModbusDataUnit::RegisterType type) const;
-    QString formatValue(QModbusDataUnit::RegisterType type, quint16 value) const;
+    QModbusDataUnit::RegisterType stringToRegisterType(const QString& str) const;
+    QString formatValue(QModbusDataUnit::RegisterType type, DataDisplayMode fmt, quint16 value) const;
+    QString addressToDisplay(quint16 addr) const;
+    quint16 addressFromDisplay(const QString& text, bool* ok = nullptr) const;
+    ItemMapKey keyFromRow(int row) const;
 
 private:
     Ui::FormRegisterMapView* ui;
@@ -99,7 +99,6 @@ private:
     RegisterMapViewDefinitions _displayDefinition;
     QMap<ItemMapKey, Entry> _registerMap;
     bool _updatingTable = false;
-    QToolBar* _toolBar = nullptr;
 };
 
 ///
@@ -129,19 +128,6 @@ inline QXmlStreamWriter& operator <<(QXmlStreamWriter& xml, FormRegisterMapView*
     xml.writeAttribute("Height", QString::number(windowSize.height()));
     xml.writeEndElement(); // Window
 
-    xml.writeStartElement("Colors");
-    xml.writeAttribute("Background", frm->backgroundColor().name());
-    xml.writeAttribute("Foreground", frm->foregroundColor().name());
-    xml.writeEndElement(); // Colors
-
-    xml.writeStartElement("Font");
-    const QFont font = frm->font();
-    xml.writeAttribute("Family", font.family());
-    xml.writeAttribute("Size",   QString::number(font.pointSize()));
-    xml.writeAttribute("Bold",   boolToString(font.bold()));
-    xml.writeAttribute("Italic", boolToString(font.italic()));
-    xml.writeEndElement(); // Font
-
     xml.writeStartElement("RegisterMapViewDefinitions");
     xml.writeAttribute("FormName", frm->_displayDefinition.FormName);
     xml.writeEndElement();
@@ -149,12 +135,14 @@ inline QXmlStreamWriter& operator <<(QXmlStreamWriter& xml, FormRegisterMapView*
     xml.writeStartElement("RegisterMap");
     for (auto it = frm->_registerMap.cbegin(); it != frm->_registerMap.cend(); ++it) {
         xml.writeStartElement("Entry");
-        xml.writeAttribute("DeviceId", QString::number(it.key().DeviceId));
-        xml.writeAttribute("Type",     QString::number(it.key().Type));
-        xml.writeAttribute("Address",  QString::number(it.key().Address));
-        xml.writeAttribute("Value",    QString::number(it.value().value));
-        if (!it.value().description.isEmpty())
-            xml.writeCDATA(it.value().description);
+        xml.writeAttribute("DeviceId",  QString::number(it.key().DeviceId));
+        xml.writeAttribute("Type",      QString::number(it.key().Type));
+        xml.writeAttribute("Address",   QString::number(it.key().Address));
+        xml.writeAttribute("Format",    QString::number(static_cast<int>(it.value().format)));
+        xml.writeAttribute("Value",     QString::number(it.value().value));
+        xml.writeAttribute("Timestamp", it.value().timestamp.toString(Qt::ISODateWithMs));
+        if (!it.value().comment.isEmpty())
+            xml.writeCDATA(it.value().comment);
         xml.writeEndElement(); // Entry
     }
     xml.writeEndElement(); // RegisterMap
@@ -198,32 +186,6 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, FormRegisterMapView*
             }
             xml.skipCurrentElement();
         }
-        else if (xml.name() == QLatin1String("Colors")) {
-            const auto attrs = xml.attributes();
-            if (attrs.hasAttribute("Background")) {
-                const QColor c(attrs.value("Background").toString());
-                if (c.isValid()) frm->setBackgroundColor(c);
-            }
-            if (attrs.hasAttribute("Foreground")) {
-                const QColor c(attrs.value("Foreground").toString());
-                if (c.isValid()) frm->setForegroundColor(c);
-            }
-            xml.skipCurrentElement();
-        }
-        else if (xml.name() == QLatin1String("Font")) {
-            const auto attrs = xml.attributes();
-            QFont font = frm->font();
-            if (attrs.hasAttribute("Family")) font.setFamily(attrs.value("Family").toString());
-            if (attrs.hasAttribute("Size")) {
-                bool ok;
-                const int sz = attrs.value("Size").toInt(&ok);
-                if (ok && sz > 0) font.setPointSize(sz);
-            }
-            if (attrs.hasAttribute("Bold"))   font.setBold(stringToBool(attrs.value("Bold").toString()));
-            if (attrs.hasAttribute("Italic")) font.setItalic(stringToBool(attrs.value("Italic").toString()));
-            frm->setFont(font);
-            xml.skipCurrentElement();
-        }
         else if (xml.name() == QLatin1String("RegisterMapViewDefinitions")) {
             RegisterMapViewDefinitions dd;
             dd.FormName = xml.attributes().value("FormName").toString();
@@ -242,14 +204,15 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, FormRegisterMapView*
                     if (!ok) { xml.skipCurrentElement(); continue; }
                     key.Address = attrs.value("Address").toUShort(&ok);
                     if (!ok) { xml.skipCurrentElement(); continue; }
-                    const quint16 value = attrs.value("Value").toUShort();
-                    const QString description = xml.readElementText(QXmlStreamReader::IncludeChildElements).trimmed();
 
                     FormRegisterMapView::Entry entry;
-                    entry.value = value;
-                    entry.description = description;
+                    entry.value  = attrs.value("Value").toUShort();
+                    entry.format = static_cast<DataDisplayMode>(attrs.value("Format").toInt());
+                    entry.timestamp = QDateTime::fromString(attrs.value("Timestamp").toString(), Qt::ISODateWithMs);
+                    entry.comment = xml.readElementText(QXmlStreamReader::IncludeChildElements).trimmed();
+
                     frm->_registerMap[key] = entry;
-                    frm->insertEntry(key, value, description);
+                    frm->insertEntry(key, entry);
                 }
                 else {
                     xml.skipCurrentElement();

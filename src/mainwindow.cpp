@@ -83,10 +83,6 @@ void forEachTypedForm(MdiAreaT* mdiArea, Fn&& fn)
             fn(frm);
             continue;
         }
-        if (auto* frm = qobject_cast<FormRegisterMapView*>(wnd->widget())) {
-            fn(frm);
-            continue;
-        }
     }
 }
 
@@ -185,7 +181,6 @@ QColor backgroundColorOfForm(QWidget* widget)
     if (auto* frm = qobject_cast<FormDataView*>(widget)) return frm->backgroundColor();
     if (auto* frm = qobject_cast<FormTrafficView*>(widget)) return frm->backgroundColor();
     if (auto* frm = qobject_cast<FormScriptView*>(widget)) return frm->backgroundColor();
-    if (auto* frm = qobject_cast<FormRegisterMapView*>(widget)) return frm->backgroundColor();
     return QColor();
 }
 
@@ -194,7 +189,6 @@ QColor foregroundColorOfForm(QWidget* widget)
     if (auto* frm = qobject_cast<FormDataView*>(widget)) return frm->foregroundColor();
     if (auto* frm = qobject_cast<FormTrafficView*>(widget)) return frm->foregroundColor();
     if (auto* frm = qobject_cast<FormScriptView*>(widget)) return frm->foregroundColor();
-    if (auto* frm = qobject_cast<FormRegisterMapView*>(widget)) return frm->foregroundColor();
     return QColor();
 }
 
@@ -208,7 +202,6 @@ void setBackgroundColorOnForm(QWidget* widget, const QColor& clr)
     if (auto* frm = qobject_cast<FormDataView*>(widget)) frm->setBackgroundColor(clr);
     else if (auto* frm = qobject_cast<FormTrafficView*>(widget)) frm->setBackgroundColor(clr);
     else if (auto* frm = qobject_cast<FormScriptView*>(widget)) frm->setBackgroundColor(clr);
-    else if (auto* frm = qobject_cast<FormRegisterMapView*>(widget)) frm->setBackgroundColor(clr);
 }
 
 void setForegroundColorOnForm(QWidget* widget, const QColor& clr)
@@ -216,7 +209,6 @@ void setForegroundColorOnForm(QWidget* widget, const QColor& clr)
     if (auto* frm = qobject_cast<FormDataView*>(widget)) frm->setForegroundColor(clr);
     else if (auto* frm = qobject_cast<FormTrafficView*>(widget)) frm->setForegroundColor(clr);
     else if (auto* frm = qobject_cast<FormScriptView*>(widget)) frm->setForegroundColor(clr);
-    else if (auto* frm = qobject_cast<FormRegisterMapView*>(widget)) frm->setForegroundColor(clr);
 }
 
 }
@@ -634,14 +626,8 @@ QWidget* MainWindow::createNewForm(ProjectFormKind kind)
             }
             break;
         }
-        case ProjectFormKind::RegisterMap: {
-            if (auto* mapFrm = qobject_cast<FormRegisterMapView*>(frm)) {
-                mapFrm->setFont(prefs.font());
-                mapFrm->setBackgroundColor(prefs.backgroundColor());
-                mapFrm->setForegroundColor(prefs.foregroundColor());
-            }
+        case ProjectFormKind::RegisterMap:
             break;
-        }
     }
 
     frm->show();

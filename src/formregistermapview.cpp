@@ -1,8 +1,102 @@
 #include <QtWidgets>
 #include "mainwindow.h"
+#include "apppreferences.h"
 #include "formregistermapview.h"
+#include "formatutils.h"
 #include "modbusmessages/modbusmessages.h"
 #include "ui_formregistermapview.h"
+
+namespace {
+
+constexpr int RoleDeviceId  = Qt::UserRole;
+constexpr int RoleType      = Qt::UserRole + 1;
+constexpr int RoleAddress   = Qt::UserRole + 2;
+constexpr int RoleTypeValue = Qt::UserRole + 3;
+
+const QString TimestampFormat = QStringLiteral("dd.MM.yyyy hh:mm:ss");
+
+///
+/// \brief TypeItemDelegate — inline combo box for register type column
+///
+class TypeItemDelegate : public QStyledItemDelegate
+{
+public:
+    using QStyledItemDelegate::QStyledItemDelegate;
+
+    QWidget* createEditor(QWidget* parent, const QStyleOptionViewItem&, const QModelIndex&) const override
+    {
+        auto* cb = new QComboBox(parent);
+        cb->addItem(tr("Coils"),            static_cast<int>(QModbusDataUnit::Coils));
+        cb->addItem(tr("Discrete Inputs"),  static_cast<int>(QModbusDataUnit::DiscreteInputs));
+        cb->addItem(tr("Input Registers"),  static_cast<int>(QModbusDataUnit::InputRegisters));
+        cb->addItem(tr("Holding Registers"),static_cast<int>(QModbusDataUnit::HoldingRegisters));
+        return cb;
+    }
+
+    void setEditorData(QWidget* editor, const QModelIndex& index) const override
+    {
+        auto* cb = qobject_cast<QComboBox*>(editor);
+        if (!cb) return;
+        const QString current = index.data(Qt::DisplayRole).toString();
+        const int idx = cb->findText(current);
+        if (idx >= 0) cb->setCurrentIndex(idx);
+    }
+
+    void setModelData(QWidget* editor, QAbstractItemModel* model, const QModelIndex& index) const override
+    {
+        auto* cb = qobject_cast<QComboBox*>(editor);
+        if (!cb) return;
+        model->setData(index, cb->currentText(), Qt::DisplayRole);
+        model->setData(index, cb->currentData(),  RoleTypeValue);
+    }
+
+    void updateEditorGeometry(QWidget* editor, const QStyleOptionViewItem& option, const QModelIndex&) const override
+    {
+        editor->setGeometry(option.rect);
+    }
+};
+
+///
+/// \brief FormatItemDelegate — inline combo box for DataDisplayMode column
+///
+class FormatItemDelegate : public QStyledItemDelegate
+{
+public:
+    using QStyledItemDelegate::QStyledItemDelegate;
+
+    QWidget* createEditor(QWidget* parent, const QStyleOptionViewItem&, const QModelIndex&) const override
+    {
+        auto* cb = new QComboBox(parent);
+        for (auto it = EnumStrings<DataDisplayMode>::mapping().cbegin();
+             it != EnumStrings<DataDisplayMode>::mapping().cend(); ++it) {
+            cb->addItem(it.value(), static_cast<int>(it.key()));
+        }
+        return cb;
+    }
+
+    void setEditorData(QWidget* editor, const QModelIndex& index) const override
+    {
+        auto* cb = qobject_cast<QComboBox*>(editor);
+        if (!cb) return;
+        const QString current = index.data(Qt::DisplayRole).toString();
+        const int idx = cb->findText(current);
+        if (idx >= 0) cb->setCurrentIndex(idx);
+    }
+
+    void setModelData(QWidget* editor, QAbstractItemModel* model, const QModelIndex& index) const override
+    {
+        auto* cb = qobject_cast<QComboBox*>(editor);
+        if (!cb) return;
+        model->setData(index, cb->currentText(), Qt::DisplayRole);
+    }
+
+    void updateEditorGeometry(QWidget* editor, const QStyleOptionViewItem& option, const QModelIndex&) const override
+    {
+        editor->setGeometry(option.rect);
+    }
+};
+
+} // anonymous namespace
 
 ///
 /// \brief FormRegisterMapView::FormRegisterMapView
@@ -14,18 +108,28 @@ FormRegisterMapView::FormRegisterMapView(ModbusMultiServer& server, MainWindow* 
 {
     ui->setupUi(this);
 
-    setupToolbar();
+    auto* hdr = ui->tableWidget->horizontalHeader();
+    hdr->setSectionResizeMode(ColUnit,      QHeaderView::Interactive);
+    hdr->setSectionResizeMode(ColType,      QHeaderView::Interactive);
+    hdr->setSectionResizeMode(ColAddress,   QHeaderView::Interactive);
+    hdr->setSectionResizeMode(ColFormat,    QHeaderView::Interactive);
+    hdr->setSectionResizeMode(ColComment,   QHeaderView::Interactive);
+    hdr->setSectionResizeMode(ColValue,     QHeaderView::Interactive);
+    hdr->setSectionResizeMode(ColTimestamp, QHeaderView::Interactive);
 
-    ui->tableWidget->horizontalHeader()->setSectionResizeMode(0, QHeaderView::ResizeToContents);
-    ui->tableWidget->horizontalHeader()->setSectionResizeMode(1, QHeaderView::ResizeToContents);
-    ui->tableWidget->horizontalHeader()->setSectionResizeMode(2, QHeaderView::ResizeToContents);
-    ui->tableWidget->horizontalHeader()->setSectionResizeMode(3, QHeaderView::ResizeToContents);
-    ui->tableWidget->horizontalHeader()->setSectionResizeMode(4, QHeaderView::Stretch);
+    hdr->resizeSection(ColUnit,      40);
+    hdr->resizeSection(ColType,      120);
+    hdr->resizeSection(ColAddress,   70);
+    hdr->resizeSection(ColFormat,    80);
+    hdr->resizeSection(ColComment,   200);
+    hdr->resizeSection(ColValue,     80);
+    hdr->resizeSection(ColTimestamp, 160);
+
     ui->tableWidget->verticalHeader()->setDefaultSectionSize(20);
     ui->tableWidget->verticalHeader()->hide();
 
-    connect(ui->tableWidget, &QTableWidget::cellChanged,
-            this, &FormRegisterMapView::on_tableWidget_cellChanged);
+    ui->tableWidget->setItemDelegateForColumn(ColType,   new TypeItemDelegate(ui->tableWidget));
+    ui->tableWidget->setItemDelegateForColumn(ColFormat, new FormatItemDelegate(ui->tableWidget));
 
     setupServerConnections();
 
@@ -58,60 +162,6 @@ void FormRegisterMapView::setDisplayDefinition(const RegisterMapViewDefinitions&
         setWindowTitle(dd.FormName);
 }
 
-///
-/// \brief FormRegisterMapView::backgroundColor
-///
-QColor FormRegisterMapView::backgroundColor() const
-{
-    return ui->tableWidget->palette().color(QPalette::Base);
-}
-
-///
-/// \brief FormRegisterMapView::setBackgroundColor
-///
-void FormRegisterMapView::setBackgroundColor(const QColor& clr)
-{
-    if (!clr.isValid()) return;
-    auto pal = ui->tableWidget->palette();
-    pal.setColor(QPalette::Base, clr);
-    pal.setColor(QPalette::AlternateBase, clr.lighter(108));
-    ui->tableWidget->setPalette(pal);
-}
-
-///
-/// \brief FormRegisterMapView::foregroundColor
-///
-QColor FormRegisterMapView::foregroundColor() const
-{
-    return ui->tableWidget->palette().color(QPalette::Text);
-}
-
-///
-/// \brief FormRegisterMapView::setForegroundColor
-///
-void FormRegisterMapView::setForegroundColor(const QColor& clr)
-{
-    if (!clr.isValid()) return;
-    auto pal = ui->tableWidget->palette();
-    pal.setColor(QPalette::Text, clr);
-    ui->tableWidget->setPalette(pal);
-}
-
-///
-/// \brief FormRegisterMapView::font
-///
-QFont FormRegisterMapView::font() const
-{
-    return ui->tableWidget->font();
-}
-
-///
-/// \brief FormRegisterMapView::setFont
-///
-void FormRegisterMapView::setFont(const QFont& font)
-{
-    ui->tableWidget->setFont(font);
-}
 
 ///
 /// \brief FormRegisterMapView::saveXml
@@ -130,20 +180,6 @@ void FormRegisterMapView::loadXml(QXmlStreamReader& xml)
 }
 
 ///
-/// \brief FormRegisterMapView::connectEditSlots
-///
-void FormRegisterMapView::connectEditSlots()
-{
-}
-
-///
-/// \brief FormRegisterMapView::disconnectEditSlots
-///
-void FormRegisterMapView::disconnectEditSlots()
-{
-}
-
-///
 /// \brief FormRegisterMapView::show
 ///
 void FormRegisterMapView::show()
@@ -157,14 +193,8 @@ void FormRegisterMapView::show()
 ///
 void FormRegisterMapView::changeEvent(QEvent* event)
 {
-    if (event->type() == QEvent::LanguageChange) {
+    if (event->type() == QEvent::LanguageChange)
         ui->retranslateUi(this);
-        ui->tableWidget->horizontalHeaderItem(0)->setText(tr("DevId"));
-        ui->tableWidget->horizontalHeaderItem(1)->setText(tr("Type"));
-        ui->tableWidget->horizontalHeaderItem(2)->setText(tr("Address"));
-        ui->tableWidget->horizontalHeaderItem(3)->setText(tr("Value"));
-        ui->tableWidget->horizontalHeaderItem(4)->setText(tr("Description"));
-    }
     QWidget::changeEvent(event);
 }
 
@@ -243,16 +273,70 @@ void FormRegisterMapView::on_mbDataChanged(quint8 deviceId, const QModbusDataUni
         if (it != _registerMap.end()) {
             const quint16 value = static_cast<quint16>(data.value(i));
             it->value = value;
+            it->timestamp = QDateTime::currentDateTime();
             const int row = findRow(key);
-            if (row >= 0) updateValue(row, value);
+            if (row >= 0) updateValue(row, key, value);
         }
     }
 }
 
 ///
-/// \brief FormRegisterMapView::on_actionClearMap_triggered
+/// \brief FormRegisterMapView::on_actionAdd_triggered
 ///
-void FormRegisterMapView::on_actionClearMap_triggered()
+void FormRegisterMapView::on_actionAdd_triggered()
+{
+    // Default: Unit=1, HoldingRegisters, address=0 (internal 0-based), Int16 format
+    ItemMapKey key{ 1, QModbusDataUnit::HoldingRegisters, 0 };
+
+    // If the key already exists, shift the address to avoid collision
+    while (_registerMap.contains(key)) {
+        if (key.Address < 0xFFFF) ++key.Address;
+        else break;
+    }
+
+    Entry entry;
+    entry.format = DataDisplayMode::Int16;
+    const auto unit = _mbMultiServer.data(key.DeviceId, key.Type, key.Address, 1);
+    entry.value = unit.isValid() ? static_cast<quint16>(unit.value(0)) : 0;
+
+    _registerMap[key] = entry;
+    insertEntry(key, entry);
+
+    // Start editing the Unit cell of the new row
+    const int newRow = ui->tableWidget->rowCount() - 1;
+    ui->tableWidget->setCurrentCell(newRow, ColUnit);
+    ui->tableWidget->editItem(ui->tableWidget->item(newRow, ColUnit));
+}
+
+///
+/// \brief FormRegisterMapView::on_actionDelete_triggered
+///
+void FormRegisterMapView::on_actionDelete_triggered()
+{
+    const auto selectedRanges = ui->tableWidget->selectedRanges();
+    if (selectedRanges.isEmpty()) return;
+
+    // Collect rows in descending order to remove without shifting indices
+    QList<int> rows;
+    for (const auto& range : selectedRanges) {
+        for (int r = range.topRow(); r <= range.bottomRow(); ++r)
+            if (!rows.contains(r)) rows.append(r);
+    }
+    std::sort(rows.begin(), rows.end(), std::greater<int>());
+
+    _updatingTable = true;
+    for (int row : rows) {
+        const ItemMapKey key = keyFromRow(row);
+        _registerMap.remove(key);
+        ui->tableWidget->removeRow(row);
+    }
+    _updatingTable = false;
+}
+
+///
+/// \brief FormRegisterMapView::on_actionClear_triggered
+///
+void FormRegisterMapView::on_actionClear_triggered()
 {
     _registerMap.clear();
     _updatingTable = true;
@@ -265,20 +349,132 @@ void FormRegisterMapView::on_actionClearMap_triggered()
 ///
 void FormRegisterMapView::on_tableWidget_cellChanged(int row, int col)
 {
-    if (_updatingTable || col != 4) return;
+    if (_updatingTable) return;
 
-    const auto* keyItem = ui->tableWidget->item(row, 0);
-    if (!keyItem) return;
+    // Handle Value column
+    if (col == ColValue) {
+        const ItemMapKey key = keyFromRow(row);
+        auto it = _registerMap.find(key);
+        if (it == _registerMap.end()) return;
 
-    ItemMapKey key;
-    key.DeviceId = static_cast<quint8>(keyItem->data(Qt::UserRole).toInt());
-    key.Type     = static_cast<QModbusDataUnit::RegisterType>(keyItem->data(Qt::UserRole + 1).toInt());
-    key.Address  = static_cast<quint16>(keyItem->data(Qt::UserRole + 2).toInt());
+        auto* valItem = ui->tableWidget->item(row, ColValue);
+        if (!valItem) return;
 
-    auto it = _registerMap.find(key);
-    if (it != _registerMap.end()) {
-        const auto* descItem = ui->tableWidget->item(row, 4);
-        it->description = descItem ? descItem->text() : QString();
+        bool ok = false;
+        const QString text = valItem->text().trimmed();
+        quint16 newValue = 0;
+        if (text.startsWith("0x") || text.startsWith("0X"))
+            newValue = static_cast<quint16>(text.toUInt(&ok, 16));
+        else if (it->format == DataDisplayMode::Int16)
+            newValue = static_cast<quint16>(text.toShort(&ok));
+        else
+            newValue = text.toUShort(&ok);
+
+        if (!ok) {
+            // Restore previous value on invalid input
+            _updatingTable = true;
+            valItem->setText(formatValue(key.Type, it->format, it->value));
+            _updatingTable = false;
+            return;
+        }
+
+        it->value = newValue;
+        it->timestamp = QDateTime::currentDateTime();
+
+        QModbusDataUnit unit(key.Type, key.Address, 1);
+        unit.setValue(0, newValue);
+        _mbMultiServer.setData(key.DeviceId, unit);
+
+        _updatingTable = true;
+        valItem->setText(formatValue(key.Type, it->format, newValue));
+        auto* tsItem = ui->tableWidget->item(row, ColTimestamp);
+        if (tsItem) tsItem->setText(it->timestamp.toString(TimestampFormat));
+        _updatingTable = false;
+        return;
+    }
+
+    // Handle Comment column
+    if (col == ColComment) {
+        const ItemMapKey key = keyFromRow(row);
+        auto it = _registerMap.find(key);
+        if (it != _registerMap.end()) {
+            const auto* item = ui->tableWidget->item(row, ColComment);
+            it->comment = item ? item->text() : QString();
+        }
+        return;
+    }
+
+    // Handle Format column
+    if (col == ColFormat) {
+        const ItemMapKey key = keyFromRow(row);
+        auto it = _registerMap.find(key);
+        if (it == _registerMap.end()) return;
+
+        const auto* fmtItem = ui->tableWidget->item(row, ColFormat);
+        if (!fmtItem) return;
+        const QString fmtStr = fmtItem->text();
+        for (auto mit = EnumStrings<DataDisplayMode>::mapping().cbegin();
+             mit != EnumStrings<DataDisplayMode>::mapping().cend(); ++mit) {
+            if (mit.value() == fmtStr) {
+                it->format = mit.key();
+                break;
+            }
+        }
+
+        // Update displayed value with new format
+        _updatingTable = true;
+        auto* valItem = ui->tableWidget->item(row, ColValue);
+        if (valItem) valItem->setText(formatValue(key.Type, it->format, it->value));
+        _updatingTable = false;
+        return;
+    }
+
+    // Handle Unit (col 0), Type (col 1), Address (col 2) — key change
+    if (col == ColUnit || col == ColType || col == ColAddress) {
+        // Read old key stored in UserRole
+        auto* unitItem = ui->tableWidget->item(row, ColUnit);
+        if (!unitItem) return;
+
+        const ItemMapKey oldKey = keyFromRow(row);
+
+        // Build new key from current cell texts
+        const auto* typeItem    = ui->tableWidget->item(row, ColType);
+        const auto* addrItem    = ui->tableWidget->item(row, ColAddress);
+
+        const quint8  newDevId  = static_cast<quint8>(unitItem->text().toUShort());
+        const auto    newType   = stringToRegisterType(typeItem ? typeItem->text() : QString());
+        const quint16 newAddr   = addressFromDisplay(addrItem ? addrItem->text() : QStringLiteral("1"));
+
+        const ItemMapKey newKey{ newDevId, newType, newAddr };
+
+        if (newKey.DeviceId == oldKey.DeviceId &&
+            newKey.Type    == oldKey.Type    &&
+            newKey.Address == oldKey.Address) return;
+
+        // Preserve existing entry data
+        Entry entry = _registerMap.value(oldKey);
+        _registerMap.remove(oldKey);
+
+        // Read fresh value from server
+        const auto unit = _mbMultiServer.data(newDevId, newType, newAddr, 1);
+        entry.value = unit.isValid() ? static_cast<quint16>(unit.value(0)) : 0;
+        entry.timestamp = unit.isValid() ? QDateTime::currentDateTime() : QDateTime();
+        _registerMap[newKey] = entry;
+
+        // Update UserRole data and dependent cells
+        _updatingTable = true;
+        unitItem->setData(RoleDeviceId, static_cast<int>(newKey.DeviceId));
+        unitItem->setData(RoleType,     static_cast<int>(newKey.Type));
+        unitItem->setData(RoleAddress,  static_cast<int>(newKey.Address));
+
+        auto* valItem = ui->tableWidget->item(row, ColValue);
+        if (valItem) valItem->setText(formatValue(newType, entry.format, entry.value));
+
+        auto* tsItem = ui->tableWidget->item(row, ColTimestamp);
+        if (tsItem) tsItem->setText(entry.timestamp.isValid()
+                                        ? entry.timestamp.toString(TimestampFormat)
+                                        : QString());
+        _updatingTable = false;
     }
 }
 
@@ -299,14 +495,17 @@ void FormRegisterMapView::processRequest(quint8 deviceId, QModbusDataUnit::Regis
         if (it != _registerMap.end()) {
             if (it->value != value) {
                 it->value = value;
+                it->timestamp = QDateTime::currentDateTime();
                 const int row = findRow(key);
-                if (row >= 0) updateValue(row, value);
+                if (row >= 0) updateValue(row, key, value);
             }
         } else {
             Entry entry;
             entry.value = value;
+            entry.format = DataDisplayMode::Int16;
+            entry.timestamp = QDateTime::currentDateTime();
             _registerMap[key] = entry;
-            insertEntry(key, value, QString());
+            insertEntry(key, entry);
         }
     }
 }
@@ -317,11 +516,11 @@ void FormRegisterMapView::processRequest(quint8 deviceId, QModbusDataUnit::Regis
 int FormRegisterMapView::findRow(const ItemMapKey& key) const
 {
     for (int i = 0; i < ui->tableWidget->rowCount(); ++i) {
-        const auto* item = ui->tableWidget->item(i, 0);
+        const auto* item = ui->tableWidget->item(i, ColUnit);
         if (!item) continue;
-        if (item->data(Qt::UserRole).toInt()     == static_cast<int>(key.DeviceId) &&
-            item->data(Qt::UserRole + 1).toInt() == static_cast<int>(key.Type)     &&
-            item->data(Qt::UserRole + 2).toInt() == static_cast<int>(key.Address))
+        if (item->data(RoleDeviceId).toInt() == static_cast<int>(key.DeviceId) &&
+            item->data(RoleType).toInt()     == static_cast<int>(key.Type)     &&
+            item->data(RoleAddress).toInt()  == static_cast<int>(key.Address))
             return i;
     }
     return -1;
@@ -330,37 +529,53 @@ int FormRegisterMapView::findRow(const ItemMapKey& key) const
 ///
 /// \brief FormRegisterMapView::insertEntry
 ///
-void FormRegisterMapView::insertEntry(const ItemMapKey& key, quint16 value, const QString& description)
+void FormRegisterMapView::insertEntry(const ItemMapKey& key, const Entry& entry)
 {
     _updatingTable = true;
 
     const int row = ui->tableWidget->rowCount();
     ui->tableWidget->insertRow(row);
 
-    auto* devItem = new QTableWidgetItem(QString::number(key.DeviceId));
-    devItem->setFlags(devItem->flags() & ~Qt::ItemIsEditable);
-    devItem->setData(Qt::UserRole,     static_cast<int>(key.DeviceId));
-    devItem->setData(Qt::UserRole + 1, static_cast<int>(key.Type));
-    devItem->setData(Qt::UserRole + 2, static_cast<int>(key.Address));
+    // Col 0: Unit (editable) — stores key in UserRole
+    auto* unitItem = new QTableWidgetItem(QString::number(key.DeviceId));
+    unitItem->setData(RoleDeviceId, static_cast<int>(key.DeviceId));
+    unitItem->setData(RoleType,     static_cast<int>(key.Type));
+    unitItem->setData(RoleAddress,  static_cast<int>(key.Address));
+    unitItem->setTextAlignment(Qt::AlignCenter);
 
+    // Col 1: Type (editable via delegate)
     auto* typeItem = new QTableWidgetItem(registerTypeToString(key.Type));
-    typeItem->setFlags(typeItem->flags() & ~Qt::ItemIsEditable);
+    typeItem->setTextAlignment(Qt::AlignCenter);
 
-    auto* addrItem = new QTableWidgetItem(QString::number(key.Address + 1)); // 1-based display
-    addrItem->setFlags(addrItem->flags() & ~Qt::ItemIsEditable);
+    // Col 2: Address (editable)
+    auto* addrItem = new QTableWidgetItem(addressToDisplay(key.Address));
     addrItem->setTextAlignment(Qt::AlignRight | Qt::AlignVCenter);
 
-    auto* valItem = new QTableWidgetItem(formatValue(key.Type, value));
-    valItem->setFlags(valItem->flags() & ~Qt::ItemIsEditable);
+    // Col 3: Format (editable via delegate)
+    auto* fmtItem = new QTableWidgetItem(EnumStrings<DataDisplayMode>::mapping().value(entry.format));
+    fmtItem->setTextAlignment(Qt::AlignCenter);
+
+    // Col 4: Comment (editable)
+    auto* commentItem = new QTableWidgetItem(entry.comment);
+
+    // Col 5: Value (editable)
+    auto* valItem = new QTableWidgetItem(formatValue(key.Type, entry.format, entry.value));
     valItem->setTextAlignment(Qt::AlignRight | Qt::AlignVCenter);
 
-    auto* descItem = new QTableWidgetItem(description);
+    // Col 6: Timestamp (read-only)
+    auto* tsItem = new QTableWidgetItem(entry.timestamp.isValid()
+                                            ? entry.timestamp.toString(TimestampFormat)
+                                            : QString());
+    tsItem->setFlags(tsItem->flags() & ~Qt::ItemIsEditable);
+    tsItem->setTextAlignment(Qt::AlignCenter);
 
-    ui->tableWidget->setItem(row, 0, devItem);
-    ui->tableWidget->setItem(row, 1, typeItem);
-    ui->tableWidget->setItem(row, 2, addrItem);
-    ui->tableWidget->setItem(row, 3, valItem);
-    ui->tableWidget->setItem(row, 4, descItem);
+    ui->tableWidget->setItem(row, ColUnit,      unitItem);
+    ui->tableWidget->setItem(row, ColType,      typeItem);
+    ui->tableWidget->setItem(row, ColAddress,   addrItem);
+    ui->tableWidget->setItem(row, ColFormat,    fmtItem);
+    ui->tableWidget->setItem(row, ColComment,   commentItem);
+    ui->tableWidget->setItem(row, ColValue,     valItem);
+    ui->tableWidget->setItem(row, ColTimestamp, tsItem);
 
     _updatingTable = false;
 }
@@ -368,32 +583,36 @@ void FormRegisterMapView::insertEntry(const ItemMapKey& key, quint16 value, cons
 ///
 /// \brief FormRegisterMapView::updateValue
 ///
-void FormRegisterMapView::updateValue(int row, quint16 value)
+void FormRegisterMapView::updateValue(int row, const ItemMapKey& key, quint16 value)
 {
-    auto* keyItem = ui->tableWidget->item(row, 0);
-    if (!keyItem) return;
-
-    const auto type = static_cast<QModbusDataUnit::RegisterType>(keyItem->data(Qt::UserRole + 1).toInt());
+    auto it = _registerMap.find(key);
+    const DataDisplayMode fmt = (it != _registerMap.end()) ? it->format : DataDisplayMode::Int16;
+    const QDateTime ts = (it != _registerMap.end()) ? it->timestamp : QDateTime::currentDateTime();
 
     _updatingTable = true;
-    auto* valItem = ui->tableWidget->item(row, 3);
-    if (valItem) valItem->setText(formatValue(type, value));
+    auto* valItem = ui->tableWidget->item(row, ColValue);
+    if (valItem) valItem->setText(formatValue(key.Type, fmt, value));
+
+    auto* tsItem = ui->tableWidget->item(row, ColTimestamp);
+    if (tsItem) tsItem->setText(ts.toString(TimestampFormat));
     _updatingTable = false;
 }
 
 ///
-/// \brief FormRegisterMapView::setupToolbar
+/// \brief FormRegisterMapView::updateAddressCells
+/// Refreshes all address cells when global address base setting changes.
 ///
-void FormRegisterMapView::setupToolbar()
+void FormRegisterMapView::updateAddressCells()
 {
-    _toolBar = new QToolBar(this);
-    _toolBar->setIconSize(QSize(16, 16));
-    _toolBar->setMovable(false);
-
-    auto* clearAction = _toolBar->addAction(QIcon(":/res/icon-clear.png"), tr("Clear Register Map"));
-    connect(clearAction, &QAction::triggered, this, &FormRegisterMapView::on_actionClearMap_triggered);
-
-    qobject_cast<QVBoxLayout*>(layout())->insertWidget(0, _toolBar);
+    _updatingTable = true;
+    for (int row = 0; row < ui->tableWidget->rowCount(); ++row) {
+        const auto* unitItem = ui->tableWidget->item(row, ColUnit);
+        if (!unitItem) continue;
+        const quint16 rawAddr = static_cast<quint16>(unitItem->data(RoleAddress).toInt());
+        auto* addrItem = ui->tableWidget->item(row, ColAddress);
+        if (addrItem) addrItem->setText(addressToDisplay(rawAddr));
+    }
+    _updatingTable = false;
 }
 
 ///
@@ -423,11 +642,78 @@ QString FormRegisterMapView::registerTypeToString(QModbusDataUnit::RegisterType 
 }
 
 ///
+/// \brief FormRegisterMapView::stringToRegisterType
+///
+QModbusDataUnit::RegisterType FormRegisterMapView::stringToRegisterType(const QString& str) const
+{
+    if (str == tr("Coils"))            return QModbusDataUnit::Coils;
+    if (str == tr("Discrete Inputs"))  return QModbusDataUnit::DiscreteInputs;
+    if (str == tr("Input Registers"))  return QModbusDataUnit::InputRegisters;
+    return QModbusDataUnit::HoldingRegisters;
+}
+
+///
 /// \brief FormRegisterMapView::formatValue
 ///
-QString FormRegisterMapView::formatValue(QModbusDataUnit::RegisterType type, quint16 value) const
+QString FormRegisterMapView::formatValue(QModbusDataUnit::RegisterType type,
+                                         DataDisplayMode fmt, quint16 value) const
 {
     if (type == QModbusDataUnit::Coils || type == QModbusDataUnit::DiscreteInputs)
         return value ? QStringLiteral("1") : QStringLiteral("0");
-    return QStringLiteral("0x%1").arg(value, 4, 16, QChar('0')).toUpper();
+
+    switch (fmt) {
+        case DataDisplayMode::Binary:
+            return QString::number(value, 2).rightJustified(16, '0');
+        case DataDisplayMode::UInt16:
+            return QString::number(value);
+        case DataDisplayMode::Int16:
+            return QString::number(static_cast<qint16>(value));
+        case DataDisplayMode::Hex:
+            return QStringLiteral("0x%1").arg(value, 4, 16, QChar('0')).toUpper();
+        default:
+            // For multi-register formats, show hex of the raw quint16
+            return QStringLiteral("0x%1").arg(value, 4, 16, QChar('0')).toUpper();
+    }
+}
+
+///
+/// \brief FormRegisterMapView::addressToDisplay
+///
+QString FormRegisterMapView::addressToDisplay(quint16 addr) const
+{
+    const bool zeroBased = AppPreferences::instance().dataViewDefinitions().ZeroBasedAddress;
+    return QString::number(zeroBased ? addr : static_cast<quint32>(addr) + 1);
+}
+
+///
+/// \brief FormRegisterMapView::addressFromDisplay
+///
+quint16 FormRegisterMapView::addressFromDisplay(const QString& text, bool* ok) const
+{
+    bool localOk = false;
+    const quint32 v = text.toUInt(&localOk);
+    if (ok) *ok = localOk;
+    if (!localOk) return 0;
+
+    const bool zeroBased = AppPreferences::instance().dataViewDefinitions().ZeroBasedAddress;
+    if (zeroBased)
+        return static_cast<quint16>(qMin(v, static_cast<quint32>(0xFFFF)));
+
+    // Base-1: subtract 1, clamp to 0
+    return static_cast<quint16>(v > 0 ? qMin(v - 1, static_cast<quint32>(0xFFFF)) : 0);
+}
+
+///
+/// \brief FormRegisterMapView::keyFromRow
+/// Reads the ItemMapKey stored in UserRole data of the Unit cell.
+///
+ItemMapKey FormRegisterMapView::keyFromRow(int row) const
+{
+    const auto* item = ui->tableWidget->item(row, ColUnit);
+    if (!item) return { 0, QModbusDataUnit::HoldingRegisters, 0 };
+    ItemMapKey key;
+    key.DeviceId = static_cast<quint8>(item->data(RoleDeviceId).toInt());
+    key.Type     = static_cast<QModbusDataUnit::RegisterType>(item->data(RoleType).toInt());
+    key.Address  = static_cast<quint16>(item->data(RoleAddress).toInt());
+    return key;
 }
