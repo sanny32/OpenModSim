@@ -62,9 +62,6 @@ ModbusDataUnitMap::ModbusDataUnitMap()
 ///
 void ModbusDataUnitMap::addUnitMap(QUuid id, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, quint16 length)
 {
-    if(_isGlobal)
-        return;
-
     _dataUnits.insert(id, {pointType, pointAddress, length});
     updateDataUnitMap();
 }
