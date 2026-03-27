@@ -517,6 +517,30 @@ QModbusDataUnit ModbusMultiServer::data(quint8 deviceId, QModbusDataUnit::Regist
 }
 
 ///
+/// \brief ModbusMultiServer::timestamp
+/// \param deviceId
+/// \param type
+/// \param address
+/// \return
+///
+QDateTime ModbusMultiServer::timestamp(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 address) const
+{
+    if(QThread::currentThread() != _workerThread)
+    {
+        QDateTime result;
+        QMetaObject::invokeMethod(const_cast<ModbusMultiServer*>(this), [this, &result, deviceId, type, address]() {
+            result = timestamp(deviceId, type, address);
+        }, Qt::BlockingQueuedConnection);
+        return result;
+    }
+
+    const auto it = _modbusDataUnitMaps.constFind(deviceId);
+    return (it != _modbusDataUnitMaps.constEnd())
+        ? it->timestamp(type, address)
+        : QDateTime();
+}
+
+///
 /// \brief ModbusMultiServer::setData
 /// \param data
 ///

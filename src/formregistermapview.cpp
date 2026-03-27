@@ -440,15 +440,26 @@ void FormRegisterMapView::on_mbDataChanged(quint8 deviceId, const QModbusDataUni
 {
     if (!data.isValid()) return;
 
+    const QDateTime now = QDateTime::currentDateTime();
     for (quint32 i = 0; i < data.valueCount(); ++i) {
         const ItemMapKey key{ deviceId, data.registerType(), static_cast<quint16>(data.startAddress() + i) };
+        const quint16 value = static_cast<quint16>(data.value(i));
+
         auto it = _registerMap.find(key);
         if (it != _registerMap.end()) {
-            const quint16 value = static_cast<quint16>(data.value(i));
-            it->value = value;
-            it->timestamp = QDateTime::currentDateTime();
-            const int row = findRow(key);
-            if (row >= 0) updateValue(row, key, value);
+            if (it->value != value) {
+                it->value     = value;
+                it->timestamp = now;
+                const int row = findRow(key);
+                if (row >= 0) updateValue(row, key, value);
+            }
+        } else {
+            Entry entry;
+            entry.value     = value;
+            entry.format    = DataDisplayMode::Int16;
+            entry.timestamp = now;
+            _registerMap[key] = entry;
+            insertEntry(key, entry);
         }
     }
 }
@@ -468,7 +479,8 @@ void FormRegisterMapView::on_actionAdd_triggered()
     }
 
     Entry entry;
-    entry.format = DataDisplayMode::Int16;
+    entry.format    = DataDisplayMode::Int16;
+    entry.timestamp = _mbMultiServer.timestamp(key.DeviceId, key.Type, key.Address);
     const auto unit = _mbMultiServer.data(key.DeviceId, key.Type, key.Address, 1);
     entry.value = unit.isValid() ? static_cast<quint16>(unit.value(0)) : 0;
 

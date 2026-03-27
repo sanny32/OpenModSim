@@ -2325,28 +2325,28 @@ MODBUS Point Type:
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="814"/>
-        <location filename="../formregistermapview.cpp" line="827"/>
-        <location filename="../formregistermapview.cpp" line="827"/>
+        <location filename="../formregistermapview.cpp" line="826"/>
+        <location filename="../formregistermapview.cpp" line="839"/>
+        <location filename="../formregistermapview.cpp" line="839"/>
         <source>Coils</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="815"/>
-        <location filename="../formregistermapview.cpp" line="828"/>
-        <location filename="../formregistermapview.cpp" line="828"/>
+        <location filename="../formregistermapview.cpp" line="827"/>
+        <location filename="../formregistermapview.cpp" line="840"/>
+        <location filename="../formregistermapview.cpp" line="840"/>
         <source>Discrete Inputs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="816"/>
-        <location filename="../formregistermapview.cpp" line="829"/>
-        <location filename="../formregistermapview.cpp" line="829"/>
+        <location filename="../formregistermapview.cpp" line="828"/>
+        <location filename="../formregistermapview.cpp" line="841"/>
+        <location filename="../formregistermapview.cpp" line="841"/>
         <source>Input Registers</source>
         <translation type="unfinished">Значения реистров</translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="817"/>
+        <location filename="../formregistermapview.cpp" line="829"/>
         <source>Holding Registers</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4212,12 +4212,12 @@ Script.onInit(()=&gt;{
 <context>
     <name>ModbusMultiServer</name>
     <message>
-        <location filename="../modbusmultiserver.cpp" line="534"/>
+        <location filename="../modbusmultiserver.cpp" line="558"/>
         <source>An incorrect device ID was specified (%1)</source>
         <translation>Некорректно знаяение номера устройства (%1)</translation>
     </message>
     <message>
-        <location filename="../modbusmultiserver.cpp" line="1074"/>
+        <location filename="../modbusmultiserver.cpp" line="1098"/>
         <source>Connection error. %1</source>
         <translation>Ошибка подключения. %1</translation>
     </message>
