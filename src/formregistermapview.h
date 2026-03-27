@@ -83,6 +83,9 @@ private:
     void updateAddressCells();
     void setupServerConnections();
 
+    QList<int> columnWidths() const;
+    void setColumnWidths(const QList<int>& widths);
+
     QString registerTypeToString(QModbusDataUnit::RegisterType type) const;
     QModbusDataUnit::RegisterType stringToRegisterType(const QString& str) const;
     QString formatValue(QModbusDataUnit::RegisterType type, DataDisplayMode fmt, quint16 value) const;
@@ -127,6 +130,19 @@ inline QXmlStreamWriter& operator <<(QXmlStreamWriter& xml, FormRegisterMapView*
 
     xml.writeStartElement("RegisterMapViewDefinitions");
     xml.writeAttribute("FormName", frm->_displayDefinition.FormName);
+    xml.writeEndElement();
+
+    xml.writeStartElement("ColumnWidths");
+    const auto ws = frm->columnWidths();
+    if (ws.size() == 7) {
+        xml.writeAttribute("Unit",      QString::number(ws[0]));
+        xml.writeAttribute("Type",      QString::number(ws[1]));
+        xml.writeAttribute("Address",   QString::number(ws[2]));
+        xml.writeAttribute("Format",    QString::number(ws[3]));
+        xml.writeAttribute("Comment",   QString::number(ws[4]));
+        xml.writeAttribute("Value",     QString::number(ws[5]));
+        xml.writeAttribute("Timestamp", QString::number(ws[6]));
+    }
     xml.writeEndElement();
 
     xml.writeStartElement("RegisterMap");
@@ -187,6 +203,16 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, FormRegisterMapView*
             RegisterMapViewDefinitions dd;
             dd.FormName = xml.attributes().value("FormName").toString();
             frm->setDisplayDefinition(dd);
+            xml.skipCurrentElement();
+        }
+        else if (xml.name() == QLatin1String("ColumnWidths")) {
+            const auto& a = xml.attributes();
+            auto w = [&](const char* name) {
+                bool ok;
+                const int v = a.value(QLatin1String(name)).toInt(&ok);
+                return (ok && v > 0) ? v : -1;
+            };
+            frm->setColumnWidths({w("Unit"), w("Type"), w("Address"), w("Format"), w("Comment"), w("Value"), w("Timestamp")});
             xml.skipCurrentElement();
         }
         else if (xml.name() == QLatin1String("RegisterMap")) {

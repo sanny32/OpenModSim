@@ -279,6 +279,10 @@ FormRegisterMapView::FormRegisterMapView(ModbusMultiServer& server, MainWindow* 
     ui->setupUi(this);
 
     auto* hdr = ui->tableWidget->horizontalHeader();
+    auto hdrFont = hdr->font();
+    hdrFont.setBold(true);
+    hdr->setFont(hdrFont);
+
     hdr->setSectionResizeMode(ColUnit,      QHeaderView::Interactive);
     hdr->setSectionResizeMode(ColType,      QHeaderView::Interactive);
     hdr->setSectionResizeMode(ColAddress,   QHeaderView::Interactive);
@@ -894,5 +898,27 @@ ItemMapKey FormRegisterMapView::keyFromRow(int row) const
     key.Type     = static_cast<QModbusDataUnit::RegisterType>(item->data(RoleType).toInt());
     key.Address  = static_cast<quint16>(item->data(RoleAddress).toInt());
     return key;
+}
+
+///
+/// \brief FormRegisterMapView::columnWidths
+///
+QList<int> FormRegisterMapView::columnWidths() const
+{
+    const auto* hdr = ui->tableWidget->horizontalHeader();
+    QList<int> widths;
+    for (int i = 0; i < hdr->count(); ++i)
+        widths.append(hdr->sectionSize(i));
+    return widths;
+}
+
+///
+/// \brief FormRegisterMapView::setColumnWidths
+///
+void FormRegisterMapView::setColumnWidths(const QList<int>& widths)
+{
+    auto* hdr = ui->tableWidget->horizontalHeader();
+    for (int i = 0; i < widths.size() && i < hdr->count(); ++i)
+        if (widths[i] > 0) hdr->resizeSection(i, widths[i]);
 }
 
