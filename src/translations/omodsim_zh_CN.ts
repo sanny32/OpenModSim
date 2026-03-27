@@ -2313,28 +2313,28 @@ MODBUS Point Type:
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="636"/>
-        <location filename="../formregistermapview.cpp" line="649"/>
-        <location filename="../formregistermapview.cpp" line="649"/>
+        <location filename="../formregistermapview.cpp" line="814"/>
+        <location filename="../formregistermapview.cpp" line="827"/>
+        <location filename="../formregistermapview.cpp" line="827"/>
         <source>Coils</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="637"/>
-        <location filename="../formregistermapview.cpp" line="650"/>
-        <location filename="../formregistermapview.cpp" line="650"/>
+        <location filename="../formregistermapview.cpp" line="815"/>
+        <location filename="../formregistermapview.cpp" line="828"/>
+        <location filename="../formregistermapview.cpp" line="828"/>
         <source>Discrete Inputs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="638"/>
-        <location filename="../formregistermapview.cpp" line="651"/>
-        <location filename="../formregistermapview.cpp" line="651"/>
+        <location filename="../formregistermapview.cpp" line="816"/>
+        <location filename="../formregistermapview.cpp" line="829"/>
+        <location filename="../formregistermapview.cpp" line="829"/>
         <source>Input Registers</source>
         <translation type="unfinished">输入寄存器</translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="639"/>
+        <location filename="../formregistermapview.cpp" line="817"/>
         <source>Holding Registers</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4823,22 +4823,22 @@ Script.onInit(()=&gt;{
 <context>
     <name>TypeItemDelegate</name>
     <message>
-        <location filename="../formregistermapview.cpp" line="29"/>
+        <location filename="../formregistermapview.cpp" line="30"/>
         <source>Coils</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="30"/>
+        <location filename="../formregistermapview.cpp" line="31"/>
         <source>Discrete Inputs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="31"/>
+        <location filename="../formregistermapview.cpp" line="32"/>
         <source>Input Registers</source>
         <translation type="unfinished">输入寄存器</translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="32"/>
+        <location filename="../formregistermapview.cpp" line="33"/>
         <source>Holding Registers</source>
         <translation type="unfinished"></translation>
     </message>

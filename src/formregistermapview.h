@@ -76,9 +76,6 @@ private:
         QDateTime timestamp;
     };
 
-    // Column indices
-    enum Col { ColUnit = 0, ColType, ColAddress, ColFormat, ColComment, ColValue, ColTimestamp };
-
     void processRequest(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 startAddress, quint16 count);
     int  findRow(const ItemMapKey& key) const;
     void insertEntry(const ItemMapKey& key, const Entry& entry);

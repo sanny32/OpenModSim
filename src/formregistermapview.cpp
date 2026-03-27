@@ -4,6 +4,7 @@
 #include "formregistermapview.h"
 #include "formatutils.h"
 #include "modbusmessages/modbusmessages.h"
+#include "controls/numericlineedit.h"
 #include "ui_formregistermapview.h"
 
 namespace {
@@ -13,7 +14,7 @@ constexpr int RoleType      = Qt::UserRole + 1;
 constexpr int RoleAddress   = Qt::UserRole + 2;
 constexpr int RoleTypeValue = Qt::UserRole + 3;
 
-const QString TimestampFormat = QStringLiteral("dd.MM.yyyy hh:mm:ss");
+enum Col { ColUnit = 0, ColType, ColAddress, ColFormat, ColComment, ColValue, ColTimestamp };
 
 ///
 /// \brief TypeItemDelegate — inline combo box for register type column
@@ -96,6 +97,175 @@ public:
     }
 };
 
+///
+/// \brief UnitItemDelegate — NumericLineEdit editor for the Unit (device ID) column
+///
+class UnitItemDelegate : public QStyledItemDelegate
+{
+public:
+    using QStyledItemDelegate::QStyledItemDelegate;
+
+    QWidget* createEditor(QWidget* parent, const QStyleOptionViewItem&, const QModelIndex&) const override
+    {
+        auto* editor = new NumericLineEdit(parent);
+        editor->setInputMode(NumericLineEdit::UInt32Mode);
+        editor->setInputRange<quint32>(1, 255);
+        return editor;
+    }
+
+    void setEditorData(QWidget* editor, const QModelIndex& index) const override
+    {
+        auto* le = qobject_cast<NumericLineEdit*>(editor);
+        if (!le) return;
+        le->setValue<quint32>(index.data(RoleDeviceId).toUInt());
+    }
+
+    void setModelData(QWidget* editor, QAbstractItemModel* model, const QModelIndex& index) const override
+    {
+        auto* le = qobject_cast<NumericLineEdit*>(editor);
+        if (!le) return;
+        model->setData(index, QString::number(le->value<quint32>()), Qt::EditRole);
+    }
+
+    void updateEditorGeometry(QWidget* editor, const QStyleOptionViewItem& option, const QModelIndex&) const override
+    {
+        editor->setGeometry(option.rect);
+    }
+};
+
+///
+/// \brief AddressItemDelegate — NumericLineEdit editor for the Address column
+///
+class AddressItemDelegate : public QStyledItemDelegate
+{
+public:
+    using QStyledItemDelegate::QStyledItemDelegate;
+
+    QWidget* createEditor(QWidget* parent, const QStyleOptionViewItem&, const QModelIndex&) const override
+    {
+        const bool zeroBased = AppPreferences::instance().dataViewDefinitions().ZeroBasedAddress;
+        auto* editor = new NumericLineEdit(parent);
+        editor->setInputMode(NumericLineEdit::UInt32Mode);
+        editor->setInputRange<quint32>(zeroBased ? 0 : 1, zeroBased ? 65535 : 65536);
+        return editor;
+    }
+
+    void setEditorData(QWidget* editor, const QModelIndex& index) const override
+    {
+        auto* le = qobject_cast<NumericLineEdit*>(editor);
+        if (!le) return;
+        const quint16 rawAddr = static_cast<quint16>(
+            index.siblingAtColumn(ColUnit).data(RoleAddress).toUInt());
+        const bool zeroBased = AppPreferences::instance().dataViewDefinitions().ZeroBasedAddress;
+        le->setValue<quint32>(zeroBased ? rawAddr : static_cast<quint32>(rawAddr) + 1);
+    }
+
+    void setModelData(QWidget* editor, QAbstractItemModel* model, const QModelIndex& index) const override
+    {
+        auto* le = qobject_cast<NumericLineEdit*>(editor);
+        if (!le) return;
+        model->setData(index, QString::number(le->value<quint32>()), Qt::EditRole);
+    }
+
+    void updateEditorGeometry(QWidget* editor, const QStyleOptionViewItem& option, const QModelIndex&) const override
+    {
+        editor->setGeometry(option.rect);
+    }
+};
+
+///
+/// \brief ValueItemDelegate — NumericLineEdit editor for the Value column
+///
+class ValueItemDelegate : public QStyledItemDelegate
+{
+public:
+    using QStyledItemDelegate::QStyledItemDelegate;
+
+    QWidget* createEditor(QWidget* parent, const QStyleOptionViewItem&, const QModelIndex& index) const override
+    {
+        const auto regType = static_cast<QModbusDataUnit::RegisterType>(
+            index.siblingAtColumn(ColUnit).data(RoleType).toInt());
+
+        const QString fmtStr = index.siblingAtColumn(ColFormat).data(Qt::DisplayRole).toString();
+        DataDisplayMode fmt = DataDisplayMode::Int16;
+        for (auto it = EnumStrings<DataDisplayMode>::mapping().cbegin();
+             it != EnumStrings<DataDisplayMode>::mapping().cend(); ++it) {
+            if (it.value() == fmtStr) { fmt = it.key(); break; }
+        }
+
+        auto* editor = new NumericLineEdit(parent);
+
+        if (regType == QModbusDataUnit::Coils || regType == QModbusDataUnit::DiscreteInputs) {
+            editor->setInputMode(NumericLineEdit::UInt32Mode);
+            editor->setInputRange<quint32>(0, 1);
+        } else {
+            switch (fmt) {
+                case DataDisplayMode::Int16:
+                    editor->setInputMode(NumericLineEdit::Int32Mode);
+                    editor->setInputRange<qint32>(-32768, 32767);
+                    break;
+                case DataDisplayMode::UInt16:
+                    editor->setInputMode(NumericLineEdit::UInt32Mode);
+                    editor->setInputRange<quint32>(0, 65535);
+                    break;
+                default: // Binary, Hex, and multi-register formats
+                    editor->setInputMode(NumericLineEdit::HexMode);
+                    editor->setInputRange<quint16>(0, 0xFFFF);
+                    break;
+            }
+        }
+        return editor;
+    }
+
+    void setEditorData(QWidget* editor, const QModelIndex& index) const override
+    {
+        auto* le = qobject_cast<NumericLineEdit*>(editor);
+        if (!le) return;
+
+        const quint16 rawValue = static_cast<quint16>(index.data(Qt::UserRole).toUInt());
+        switch (le->inputMode()) {
+            case NumericLineEdit::Int32Mode:
+                le->setValue<qint32>(static_cast<qint16>(rawValue));
+                break;
+            case NumericLineEdit::HexMode:
+                le->setValue<quint16>(rawValue);
+                break;
+            default:
+                le->setValue<quint32>(rawValue);
+                break;
+        }
+    }
+
+    void setModelData(QWidget* editor, QAbstractItemModel* model, const QModelIndex& index) const override
+    {
+        auto* le = qobject_cast<NumericLineEdit*>(editor);
+        if (!le) return;
+
+        quint16 newValue;
+        QString text;
+        switch (le->inputMode()) {
+            case NumericLineEdit::Int32Mode:
+                newValue = static_cast<quint16>(le->value<qint32>());
+                text = QString::number(static_cast<qint16>(newValue));
+                break;
+            case NumericLineEdit::HexMode:
+                newValue = le->value<quint16>();
+                text = QStringLiteral("0x%1").arg(newValue, 4, 16, QChar('0')).toUpper();
+                break;
+            default:
+                newValue = static_cast<quint16>(le->value<quint32>());
+                text = QString::number(newValue);
+                break;
+        }
+        model->setData(index, text, Qt::EditRole);
+    }
+
+    void updateEditorGeometry(QWidget* editor, const QStyleOptionViewItem& option, const QModelIndex&) const override
+    {
+        editor->setGeometry(option.rect);
+    }
+};
+
 } // anonymous namespace
 
 ///
@@ -128,8 +298,11 @@ FormRegisterMapView::FormRegisterMapView(ModbusMultiServer& server, MainWindow* 
     ui->tableWidget->verticalHeader()->setDefaultSectionSize(20);
     ui->tableWidget->verticalHeader()->hide();
 
+    ui->tableWidget->setItemDelegateForColumn(ColUnit,    new UnitItemDelegate(ui->tableWidget));
     ui->tableWidget->setItemDelegateForColumn(ColType,   new TypeItemDelegate(ui->tableWidget));
+    ui->tableWidget->setItemDelegateForColumn(ColAddress, new AddressItemDelegate(ui->tableWidget));
     ui->tableWidget->setItemDelegateForColumn(ColFormat, new FormatItemDelegate(ui->tableWidget));
+    ui->tableWidget->setItemDelegateForColumn(ColValue,  new ValueItemDelegate(ui->tableWidget));
 
     setupServerConnections();
 
@@ -386,9 +559,10 @@ void FormRegisterMapView::on_tableWidget_cellChanged(int row, int col)
         _mbMultiServer.setData(key.DeviceId, unit);
 
         _updatingTable = true;
+        valItem->setData(Qt::UserRole, static_cast<quint32>(newValue));
         valItem->setText(formatValue(key.Type, it->format, newValue));
         auto* tsItem = ui->tableWidget->item(row, ColTimestamp);
-        if (tsItem) tsItem->setText(it->timestamp.toString(TimestampFormat));
+        if (tsItem) tsItem->setText(it->timestamp.toString(Qt::ISODate));
         _updatingTable = false;
         return;
     }
@@ -472,7 +646,7 @@ void FormRegisterMapView::on_tableWidget_cellChanged(int row, int col)
 
         auto* tsItem = ui->tableWidget->item(row, ColTimestamp);
         if (tsItem) tsItem->setText(entry.timestamp.isValid()
-                                        ? entry.timestamp.toString(TimestampFormat)
+                                        ? entry.timestamp.toString(Qt::ISODate)
                                         : QString());
         _updatingTable = false;
     }
@@ -560,11 +734,12 @@ void FormRegisterMapView::insertEntry(const ItemMapKey& key, const Entry& entry)
 
     // Col 5: Value (editable)
     auto* valItem = new QTableWidgetItem(formatValue(key.Type, entry.format, entry.value));
+    valItem->setData(Qt::UserRole, static_cast<quint32>(entry.value));
     valItem->setTextAlignment(Qt::AlignRight | Qt::AlignVCenter);
 
     // Col 6: Timestamp (read-only)
     auto* tsItem = new QTableWidgetItem(entry.timestamp.isValid()
-                                            ? entry.timestamp.toString(TimestampFormat)
+                                            ? entry.timestamp.toString(Qt::ISODate)
                                             : QString());
     tsItem->setFlags(tsItem->flags() & ~Qt::ItemIsEditable);
     tsItem->setTextAlignment(Qt::AlignCenter);
@@ -591,10 +766,13 @@ void FormRegisterMapView::updateValue(int row, const ItemMapKey& key, quint16 va
 
     _updatingTable = true;
     auto* valItem = ui->tableWidget->item(row, ColValue);
-    if (valItem) valItem->setText(formatValue(key.Type, fmt, value));
+    if (valItem) {
+        valItem->setData(Qt::UserRole, static_cast<quint32>(value));
+        valItem->setText(formatValue(key.Type, fmt, value));
+    }
 
     auto* tsItem = ui->tableWidget->item(row, ColTimestamp);
-    if (tsItem) tsItem->setText(ts.toString(TimestampFormat));
+    if (tsItem) tsItem->setText(ts.toString(Qt::ISODate));
     _updatingTable = false;
 }
 
@@ -658,21 +836,16 @@ QModbusDataUnit::RegisterType FormRegisterMapView::stringToRegisterType(const QS
 QString FormRegisterMapView::formatValue(QModbusDataUnit::RegisterType type,
                                          DataDisplayMode fmt, quint16 value) const
 {
-    if (type == QModbusDataUnit::Coils || type == QModbusDataUnit::DiscreteInputs)
-        return value ? QStringLiteral("1") : QStringLiteral("0");
-
+    QVariant outValue;
     switch (fmt) {
         case DataDisplayMode::Binary:
-            return QString::number(value, 2).rightJustified(16, '0');
+            return formatBinaryValue(type, value, ByteOrder::Direct, outValue, false);
         case DataDisplayMode::UInt16:
-            return QString::number(value);
+            return formatUInt16Value(type, value, ByteOrder::Direct, false, outValue, false);
         case DataDisplayMode::Int16:
-            return QString::number(static_cast<qint16>(value));
-        case DataDisplayMode::Hex:
-            return QStringLiteral("0x%1").arg(value, 4, 16, QChar('0')).toUpper();
+            return formatInt16Value(type, static_cast<qint16>(value), ByteOrder::Direct, outValue, false);
         default:
-            // For multi-register formats, show hex of the raw quint16
-            return QStringLiteral("0x%1").arg(value, 4, 16, QChar('0')).toUpper();
+            return formatHexValue(type, value, ByteOrder::Direct, outValue, false);
     }
 }
 
