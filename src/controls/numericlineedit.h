@@ -75,7 +75,7 @@ public:
     void setAllowEmptyValue(bool allow);
 
     bool isEmpty() const;
-    void clearValue();
+    void clear();
 
 signals:
     void valueChanged(const QVariant& newValue);

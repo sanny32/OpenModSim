@@ -170,6 +170,8 @@ set(SOURCES
     qfixedsizedialog.cpp
     qhexvalidator.cpp
     qint64validator.cpp
+    qdoublevalidatorex.cpp
+    qintvalidatorex.cpp
     quintvalidator.cpp
     recentfileactionlist.cpp
     tscrollarea.cpp
@@ -279,6 +281,8 @@ set(HEADERS
     qfixedsizedialog.h
     qhexvalidator.h
     qint64validator.h
+    qdoublevalidatorex.h
+    qintvalidatorex.h
     qmodbusadu.h
     qmodbusadurtu.h
     qcountedset.h

@@ -22,7 +22,21 @@ QInt64Validator::QInt64Validator(qint64 bottom, qint64 top, QObject *parent)
     ,_bottom(bottom)
     ,_top(top)
 {
+}
 
+///
+/// \brief QInt64Validator::QInt64Validator
+/// \param bottom
+/// \param top
+/// \param allowEmpty
+/// \param parent
+///
+QInt64Validator::QInt64Validator(qint64 bottom, qint64 top, bool allowEmpty, QObject *parent)
+    : QValidator(parent)
+    ,_bottom(bottom)
+    ,_top(top)
+    ,_allowEmpty(allowEmpty)
+{
 }
 
 ///
@@ -31,6 +45,9 @@ QInt64Validator::QInt64Validator(qint64 bottom, qint64 top, QObject *parent)
 ///
 QValidator::State QInt64Validator::validate(QString& input, int &) const
 {
+    if(input.isEmpty())
+        return _allowEmpty ? QValidator::Acceptable : QValidator::Intermediate;
+
     bool ok = false;
     const auto value = input.toLongLong(&ok, 10);
 
@@ -40,4 +57,16 @@ QValidator::State QInt64Validator::validate(QString& input, int &) const
     }
 
     return QValidator::Invalid;
+}
+
+///
+/// \brief QInt64Validator::fixup
+/// \param input
+///
+void QInt64Validator::fixup(QString& input) const
+{
+    if(_allowEmpty && input.isEmpty())
+        return;
+
+    QValidator::fixup(input);
 }

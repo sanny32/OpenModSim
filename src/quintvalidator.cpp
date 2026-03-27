@@ -22,7 +22,21 @@ QUIntValidator::QUIntValidator(quint64 bottom, quint64 top, QObject *parent)
     ,_bottom(bottom)
     ,_top(top)
 {
+}
 
+///
+/// \brief QUIntValidator::QUIntValidator
+/// \param bottom
+/// \param top
+/// \param allowEmpty
+/// \param parent
+///
+QUIntValidator::QUIntValidator(quint64 bottom, quint64 top, bool allowEmpty, QObject *parent)
+    : QValidator(parent)
+    ,_bottom(bottom)
+    ,_top(top)
+    ,_allowEmpty(allowEmpty)
+{
 }
 
 ///
@@ -32,7 +46,7 @@ QUIntValidator::QUIntValidator(quint64 bottom, quint64 top, QObject *parent)
 QValidator::State QUIntValidator::validate(QString& input, int &) const
 {
     if(input.isEmpty())
-        return QValidator::Intermediate;
+        return _allowEmpty ? QValidator::Acceptable : QValidator::Intermediate;
 
     bool ok = false;
     const auto value = input.toULongLong(&ok, 10);
@@ -51,9 +65,11 @@ QValidator::State QUIntValidator::validate(QString& input, int &) const
 ///
 void QUIntValidator::fixup(QString& input) const
 {
+    if(_allowEmpty && input.isEmpty())
+        return;
+
     QValidator::fixup(input);
 
-    if(input.isEmpty()) {
+    if(input.isEmpty())
         input = QString::number(_bottom);
-    }
 }

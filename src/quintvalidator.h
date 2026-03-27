@@ -13,6 +13,7 @@ class QUIntValidator : public QValidator
 public:
     explicit QUIntValidator(QObject *parent = nullptr);
     QUIntValidator(quint64 bottom, quint64 top, QObject *parent = nullptr);
+    QUIntValidator(quint64 bottom, quint64 top, bool allowEmpty, QObject *parent = nullptr);
 
     State validate(QString&, int&) const override;
     void fixup(QString& input) const override;
@@ -20,6 +21,7 @@ public:
 private:
     quint64 _bottom;
     quint64 _top;
+    bool _allowEmpty = false;
 };
 
 #endif // QUINTVALIDATOR_H

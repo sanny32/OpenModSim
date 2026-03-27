@@ -12,6 +12,8 @@
 #include "qhexvalidator.h"
 #include "quintvalidator.h"
 #include "qint64validator.h"
+#include "qintvalidatorex.h"
+#include "qdoublevalidatorex.h"
 #include "numericlineedit.h"
 
 namespace
@@ -72,11 +74,10 @@ NumericLineEdit::NumericLineEdit(QWidget* parent)
     ,_hexButtonVisible(false)
     ,_allowEmptyValue(false)
 {
-    connect(_hexButton, &QToolButton::toggled, this, &NumericLineEdit::on_hexViewToggled);
-
     setInputMode(Int32Mode);
     setValue(0);
 
+    connect(_hexButton, &QToolButton::toggled, this, &NumericLineEdit::on_hexViewToggled);
     connect(this, &QLineEdit::editingFinished, this, &NumericLineEdit::on_editingFinished);
     connect(this, &QLineEdit::textChanged, this, &NumericLineEdit::on_textChanged);
     connect(this, &NumericLineEdit::rangeChanged, this, &NumericLineEdit::on_rangeChanged);
@@ -96,11 +97,10 @@ NumericLineEdit::NumericLineEdit(NumericLineEdit::InputMode mode, QWidget *paren
     ,_hexButtonVisible(false)
     ,_allowEmptyValue(false)
 {
-    connect(_hexButton, &QToolButton::toggled, this, &NumericLineEdit::on_hexViewToggled);
-
     setInputMode(mode);
     setValue(0);
 
+    connect(_hexButton, &QToolButton::toggled, this, &NumericLineEdit::on_hexViewToggled);
     connect(this, &QLineEdit::editingFinished, this, &NumericLineEdit::on_editingFinished);
     connect(this, &QLineEdit::textChanged, this, &NumericLineEdit::on_textChanged);
     connect(this, &NumericLineEdit::rangeChanged, this, &NumericLineEdit::on_rangeChanged);
@@ -260,8 +260,7 @@ void NumericLineEdit::updateButtons()
     const bool hexVisible = _hexButtonVisible && isHexViewApplicable();
     _hexButton->setVisible(hexVisible);
 
-    if(hexVisible)
-    {
+    if(hexVisible) {
         _hexButton->setGeometry(width() - h - 4, 4, h, h);
         _hexButton->setIconSize(QSize(h, h));
     }
@@ -304,8 +303,7 @@ void NumericLineEdit::setAllowEmptyValue(bool allow)
 {
     _allowEmptyValue = allow;
     setClearButtonEnabled(allow);
-    if(!allow && !_value.isValid())
-        internalSetValue(_minValue);
+    clear();
 }
 
 ///
@@ -317,12 +315,16 @@ bool NumericLineEdit::isEmpty() const
 }
 
 ///
-/// \brief NumericLineEdit::clearValue
+/// \brief NumericLineEdit::clear
 ///
-void NumericLineEdit::clearValue()
+void NumericLineEdit::clear()
 {
-    if(_allowEmptyValue)
+    if(_allowEmptyValue) {
         internalSetValue(QVariant());
+        return;
+    }
+
+    internalSetValue(0);
 }
 
 ///
@@ -335,8 +337,10 @@ void NumericLineEdit::internalSetValue(QVariant value)
     {
         const auto oldValue = _value;
         _value = QVariant();
+
         if(!QLineEdit::text().isEmpty())
             QLineEdit::setText(QString());
+
         if(oldValue.isValid())
         {
             emit valueChanged(_value);
@@ -617,11 +621,16 @@ void NumericLineEdit::updateValue()
 ///
 void NumericLineEdit::focusInEvent(QFocusEvent* e)
 {
-    internalSetValue(_value); // sets text without "0x" prefix first
-    // Reduce max length after text is updated to avoid truncation via setMaxLength
-    if(_inputMode == HexMode || _hexView)
+    QSignalBlocker blocker(this);
+
+    // Reduce max length before text is updated to avoid truncation via setMaxLength
+    if(_inputMode == HexMode || _hexView) {
         setMaxLength(_leadingZeroWidth);
+    }
+    internalSetValue(_value); // sets text without "0x" prefix first
+
     QLineEdit::focusInEvent(e);
+    QLineEdit::selectAll();
 }
 
 ///
@@ -631,8 +640,10 @@ void NumericLineEdit::focusInEvent(QFocusEvent* e)
 void NumericLineEdit::focusOutEvent(QFocusEvent* e)
 {
     // Restore max length before updateValue so setText("0x...") is not truncated
-    if(_inputMode == HexMode || _hexView)
+    if(_inputMode == HexMode || _hexView) {
         setMaxLength(_leadingZeroWidth + 2);
+    }
+
     updateValue();
     QLineEdit::focusOutEvent(e);
 }
@@ -643,6 +654,8 @@ void NumericLineEdit::focusOutEvent(QFocusEvent* e)
 ///
 void NumericLineEdit::keyPressEvent(QKeyEvent* e)
 {
+    if (e->key() == Qt::Key_Return || e->key() == Qt::Key_Enter)
+        updateValue();
     QLineEdit::keyPressEvent(e);
 }
 
@@ -821,13 +834,13 @@ void NumericLineEdit::on_rangeChanged(const QVariant& bottom, const QVariant& to
             {
                 _leadingZeroWidth = qMax(1, (int)QString::number(static_cast<uint>(top.toInt()), 16).length());
                 setMaxLength(_leadingZeroWidth + 2); // +2 for "0x"
-                setValidator(new QHexValidator(this));
+                setValidator(new QHexValidator(this, _allowEmptyValue));
             }
             else
             {
                 const int nums = QString::number(top.toInt()).length();
                 setMaxLength(qMax(2, nums + 1));
-                setValidator(new QIntValidator(bottom.toInt(), top.toInt(), this));
+                setValidator(new QIntValidatorEx(bottom.toInt(), top.toInt(), _allowEmptyValue, this));
             }
         }
         break;
@@ -838,14 +851,14 @@ void NumericLineEdit::on_rangeChanged(const QVariant& bottom, const QVariant& to
             {
                 _leadingZeroWidth = qMax(1, (int)QString::number(top.toUInt(), 16).length());
                 setMaxLength(_leadingZeroWidth + 2); // +2 for "0x"
-                setValidator(new QHexValidator(this));
+                setValidator(new QHexValidator(this, _allowEmptyValue));
             }
             else
             {
                 const int nums = QString::number(top.toUInt()).length();
                 _leadingZeroWidth = qMax(1, nums);
                 setMaxLength(qMax(1, nums));
-                setValidator(new QUIntValidator(bottom.toUInt(), top.toUInt(), this));
+                setValidator(new QUIntValidator(bottom.toUInt(), top.toUInt(), _allowEmptyValue, this));
             }
         }
         break;
@@ -855,7 +868,7 @@ void NumericLineEdit::on_rangeChanged(const QVariant& bottom, const QVariant& to
             const int nums = QString::number(top.toUInt(), 16).length();
             _leadingZeroWidth = qMax(1, nums);
             setMaxLength(qMax(1, nums + 2));
-            setValidator(new QHexValidator(bottom.toUInt(), top.toUInt(), this));
+            setValidator(new QHexValidator(bottom.toUInt(), top.toUInt(), this, _allowEmptyValue));
         }
         break;
 
@@ -866,7 +879,7 @@ void NumericLineEdit::on_rangeChanged(const QVariant& bottom, const QVariant& to
         case FloatMode:
         case DoubleMode:
             setMaxLength(INT16_MAX);
-            setValidator(new QDoubleValidator(bottom.toDouble(), top.toDouble(), 6, this));
+            setValidator(new QDoubleValidatorEx(bottom.toDouble(), top.toDouble(), 6, _allowEmptyValue, this));
         break;
 
         case Int64Mode:
@@ -880,7 +893,7 @@ void NumericLineEdit::on_rangeChanged(const QVariant& bottom, const QVariant& to
             {
                 const int nums = QString::number(top.toLongLong()).length();
                 setMaxLength(qMax(2, nums + 1));
-                setValidator(new QInt64Validator(bottom.toLongLong(), top.toLongLong(), this));
+                setValidator(new QInt64Validator(bottom.toLongLong(), top.toLongLong(), _allowEmptyValue, this));
             }
         }
         break;
@@ -897,7 +910,7 @@ void NumericLineEdit::on_rangeChanged(const QVariant& bottom, const QVariant& to
                 const int nums = QString::number(top.toULongLong()).length();
                 _leadingZeroWidth = qMax(1, nums);
                 setMaxLength(qMax(1, nums));
-                setValidator(new QUIntValidator(bottom.toULongLong(), top.toULongLong(), this));
+                setValidator(new QUIntValidator(bottom.toULongLong(), top.toULongLong(), _allowEmptyValue, this));
             }
         }
         break;
