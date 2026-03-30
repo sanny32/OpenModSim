@@ -2330,28 +2330,28 @@ MODBUS Point Type:
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="907"/>
-        <location filename="../formregistermapview.cpp" line="920"/>
-        <location filename="../formregistermapview.cpp" line="920"/>
+        <location filename="../formregistermapview.cpp" line="1037"/>
+        <location filename="../formregistermapview.cpp" line="1050"/>
+        <location filename="../formregistermapview.cpp" line="1050"/>
         <source>Coils</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="908"/>
-        <location filename="../formregistermapview.cpp" line="921"/>
-        <location filename="../formregistermapview.cpp" line="921"/>
+        <location filename="../formregistermapview.cpp" line="1038"/>
+        <location filename="../formregistermapview.cpp" line="1051"/>
+        <location filename="../formregistermapview.cpp" line="1051"/>
         <source>Discrete Inputs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="909"/>
-        <location filename="../formregistermapview.cpp" line="922"/>
-        <location filename="../formregistermapview.cpp" line="922"/>
+        <location filename="../formregistermapview.cpp" line="1039"/>
+        <location filename="../formregistermapview.cpp" line="1052"/>
+        <location filename="../formregistermapview.cpp" line="1052"/>
         <source>Input Registers</source>
         <translation type="unfinished">Значения реистров</translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="910"/>
+        <location filename="../formregistermapview.cpp" line="1040"/>
         <source>Holding Registers</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4874,22 +4874,22 @@ Script.onInit(()=&gt;{
 <context>
     <name>TypeItemDelegate</name>
     <message>
-        <location filename="../formregistermapview.cpp" line="30"/>
+        <location filename="../formregistermapview.cpp" line="31"/>
         <source>Coils</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="31"/>
+        <location filename="../formregistermapview.cpp" line="32"/>
         <source>Discrete Inputs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="32"/>
+        <location filename="../formregistermapview.cpp" line="33"/>
         <source>Input Registers</source>
         <translation type="unfinished">Значения реистров</translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="33"/>
+        <location filename="../formregistermapview.cpp" line="34"/>
         <source>Holding Registers</source>
         <translation type="unfinished"></translation>
     </message>

@@ -89,7 +89,8 @@ private:
 
     QString registerTypeToString(QModbusDataUnit::RegisterType type) const;
     QModbusDataUnit::RegisterType stringToRegisterType(const QString& str) const;
-    QString formatValue(QModbusDataUnit::RegisterType regType, DataType type, RegisterOrder order, quint16 value) const;
+    QVector<quint16> regsForKey(const ItemMapKey& key, DataType type) const;
+    QString formatValue(QModbusDataUnit::RegisterType regType, DataType type, RegisterOrder order, const QVector<quint16>& regs) const;
     QString addressToDisplay(quint16 addr) const;
     quint16 addressFromDisplay(const QString& text, bool* ok = nullptr) const;
     ItemMapKey keyFromRow(int row) const;

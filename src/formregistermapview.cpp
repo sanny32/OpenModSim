@@ -3,6 +3,7 @@
 #include "apppreferences.h"
 #include "formregistermapview.h"
 #include "formatutils.h"
+#include "numericutils.h"
 #include "modbusmessages/modbusmessages.h"
 #include "controls/numericlineedit.h"
 #include "ui_formregistermapview.h"
@@ -252,7 +253,25 @@ public:
                     editor->setInputMode(NumericLineEdit::UInt32Mode);
                     editor->setInputRange<quint32>(0, 65535);
                     break;
-                default: // Binary, Hex, and multi-register formats
+                case DataType::Float32:
+                    editor->setInputMode(NumericLineEdit::FloatMode);
+                    break;
+                case DataType::Float64:
+                    editor->setInputMode(NumericLineEdit::DoubleMode);
+                    break;
+                case DataType::Int32:
+                    editor->setInputMode(NumericLineEdit::Int32Mode);
+                    break;
+                case DataType::UInt32:
+                    editor->setInputMode(NumericLineEdit::UInt32Mode);
+                    break;
+                case DataType::Int64:
+                    editor->setInputMode(NumericLineEdit::Int64Mode);
+                    break;
+                case DataType::UInt64:
+                    editor->setInputMode(NumericLineEdit::UInt64Mode);
+                    break;
+                default: // Binary, Hex, Ansi
                     editor->setInputMode(NumericLineEdit::HexMode);
                     editor->setInputRange<quint16>(0, 0xFFFF);
                     break;
@@ -266,17 +285,44 @@ public:
         auto* le = qobject_cast<NumericLineEdit*>(editor);
         if (!le) return;
 
-        const quint16 rawValue = static_cast<quint16>(index.data(Qt::UserRole).toUInt());
-        switch (le->inputMode()) {
-            case NumericLineEdit::Int32Mode:
-                le->setValue<qint32>(static_cast<qint16>(rawValue));
+        const DataType type = enumFromString<DataType>(
+            index.siblingAtColumn(ColDataType).data(Qt::DisplayRole).toString(), DataType::Int16);
+        const QString text = index.data(Qt::DisplayRole).toString();
+
+        switch (type) {
+            case DataType::Float32:
+                le->setValue<float>(text.toFloat());
                 break;
-            case NumericLineEdit::HexMode:
-                le->setValue<quint16>(rawValue);
+            case DataType::Float64:
+                le->setValue<double>(text.toDouble());
                 break;
-            default:
-                le->setValue<quint32>(rawValue);
+            case DataType::Int32:
+                le->setValue<qint32>(static_cast<qint32>(text.toLong()));
                 break;
+            case DataType::UInt32:
+                le->setValue<quint32>(static_cast<quint32>(text.toULong()));
+                break;
+            case DataType::Int64:
+                le->setValue<qint64>(text.toLongLong());
+                break;
+            case DataType::UInt64:
+                le->setValue<quint64>(text.toULongLong());
+                break;
+            default: {
+                const quint16 rawValue = static_cast<quint16>(index.data(Qt::UserRole).toUInt());
+                switch (le->inputMode()) {
+                    case NumericLineEdit::Int32Mode:
+                        le->setValue<qint32>(static_cast<qint16>(rawValue));
+                        break;
+                    case NumericLineEdit::HexMode:
+                        le->setValue<quint16>(rawValue);
+                        break;
+                    default:
+                        le->setValue<quint32>(rawValue);
+                        break;
+                }
+                break;
+            }
         }
     }
 
@@ -285,21 +331,47 @@ public:
         auto* le = qobject_cast<NumericLineEdit*>(editor);
         if (!le) return;
 
-        quint16 newValue;
+        const DataType type = enumFromString<DataType>(
+            index.siblingAtColumn(ColDataType).data(Qt::DisplayRole).toString(), DataType::Int16);
+
         QString text;
-        switch (le->inputMode()) {
-            case NumericLineEdit::Int32Mode:
-                newValue = static_cast<quint16>(le->value<qint32>());
-                text = QString::number(static_cast<qint16>(newValue));
+        switch (type) {
+            case DataType::Float32:
+                text = QString::number(le->value<float>());
                 break;
-            case NumericLineEdit::HexMode:
-                newValue = le->value<quint16>();
-                text = QStringLiteral("0x%1").arg(newValue, 4, 16, QChar('0')).toUpper();
+            case DataType::Float64:
+                text = QString::number(le->value<double>());
                 break;
-            default:
-                newValue = static_cast<quint16>(le->value<quint32>());
-                text = QString::number(newValue);
+            case DataType::Int32:
+                text = QString::number(le->value<qint32>());
                 break;
+            case DataType::UInt32:
+                text = QString::number(le->value<quint32>());
+                break;
+            case DataType::Int64:
+                text = QString::number(le->value<qint64>());
+                break;
+            case DataType::UInt64:
+                text = QString::number(le->value<quint64>());
+                break;
+            default: {
+                quint16 newValue;
+                switch (le->inputMode()) {
+                    case NumericLineEdit::Int32Mode:
+                        newValue = static_cast<quint16>(le->value<qint32>());
+                        text = QString::number(static_cast<qint16>(newValue));
+                        break;
+                    case NumericLineEdit::HexMode:
+                        newValue = le->value<quint16>();
+                        text = QStringLiteral("0x%1").arg(newValue, 4, 16, QChar('0')).toUpper();
+                        break;
+                    default:
+                        newValue = static_cast<quint16>(le->value<quint32>());
+                        text = QString::number(newValue);
+                        break;
+                }
+                break;
+            }
         }
         model->setData(index, text, Qt::EditRole);
     }
@@ -340,9 +412,9 @@ FormRegisterMapView::FormRegisterMapView(ModbusMultiServer& server, MainWindow* 
     hdr->resizeSection(ColType,      120);
     hdr->resizeSection(ColAddress,   70);
     hdr->resizeSection(ColDataType,  70);
-    hdr->resizeSection(ColOrder,     55);
+    hdr->resizeSection(ColOrder,     65);
     hdr->resizeSection(ColComment,   200);
-    hdr->resizeSection(ColValue,     140);
+    hdr->resizeSection(ColValue,     160);
     hdr->resizeSection(ColTimestamp, 160);
 
     ui->tableWidget->verticalHeader()->setDefaultSectionSize(20);
@@ -592,32 +664,90 @@ void FormRegisterMapView::on_tableWidget_cellChanged(int row, int col)
 
         bool ok = false;
         const QString text = valItem->text().trimmed();
-        quint16 newValue = 0;
-        if (text.startsWith("0x") || text.startsWith("0X"))
-            newValue = static_cast<quint16>(text.toUInt(&ok, 16));
-        else if (it->type == DataType::Int16)
-            newValue = static_cast<quint16>(text.toShort(&ok));
-        else
-            newValue = text.toUShort(&ok);
+        const int regCount = registersCount(it->type);
+        const bool lsrf = (it->order == RegisterOrder::LSRF);
+        QVector<quint16> regs(regCount, 0);
+
+        switch (it->type) {
+            case DataType::Float32: {
+                const float f = text.toFloat(&ok);
+                if (ok) {
+                    if (lsrf) breakFloat(f, regs[0], regs[1], ByteOrder::Direct);
+                    else       breakFloat(f, regs[1], regs[0], ByteOrder::Direct);
+                }
+                break;
+            }
+            case DataType::Float64: {
+                const double d = text.toDouble(&ok);
+                if (ok) {
+                    if (lsrf) breakDouble(d, regs[0], regs[1], regs[2], regs[3], ByteOrder::Direct);
+                    else       breakDouble(d, regs[3], regs[2], regs[1], regs[0], ByteOrder::Direct);
+                }
+                break;
+            }
+            case DataType::Int32: {
+                const qint32 v = static_cast<qint32>(text.toLong(&ok));
+                if (ok) {
+                    if (lsrf) breakInt32(v, regs[0], regs[1], ByteOrder::Direct);
+                    else       breakInt32(v, regs[1], regs[0], ByteOrder::Direct);
+                }
+                break;
+            }
+            case DataType::UInt32: {
+                const quint32 v = static_cast<quint32>(text.toULong(&ok));
+                if (ok) {
+                    if (lsrf) breakUInt32(v, regs[0], regs[1], ByteOrder::Direct);
+                    else       breakUInt32(v, regs[1], regs[0], ByteOrder::Direct);
+                }
+                break;
+            }
+            case DataType::Int64: {
+                const qint64 v = text.toLongLong(&ok);
+                if (ok) {
+                    if (lsrf) breakInt64(v, regs[0], regs[1], regs[2], regs[3], ByteOrder::Direct);
+                    else       breakInt64(v, regs[3], regs[2], regs[1], regs[0], ByteOrder::Direct);
+                }
+                break;
+            }
+            case DataType::UInt64: {
+                const quint64 v = text.toULongLong(&ok);
+                if (ok) {
+                    if (lsrf) breakUInt64(v, regs[0], regs[1], regs[2], regs[3], ByteOrder::Direct);
+                    else       breakUInt64(v, regs[3], regs[2], regs[1], regs[0], ByteOrder::Direct);
+                }
+                break;
+            }
+            default: {
+                quint16 newValue = 0;
+                if (text.startsWith("0x") || text.startsWith("0X"))
+                    newValue = static_cast<quint16>(text.toUInt(&ok, 16));
+                else if (it->type == DataType::Int16)
+                    newValue = static_cast<quint16>(text.toShort(&ok));
+                else
+                    newValue = text.toUShort(&ok);
+                if (ok) regs[0] = newValue;
+                break;
+            }
+        }
 
         if (!ok) {
             // Restore previous value on invalid input
             _updatingTable = true;
-            valItem->setText(formatValue(key.Type, it->type, it->order, it->value));
+            valItem->setText(formatValue(key.Type, it->type, it->order, regsForKey(key, it->type)));
             _updatingTable = false;
             return;
         }
 
-        it->value = newValue;
+        it->value = regs[0];
         it->timestamp = QDateTime::currentDateTime();
 
-        QModbusDataUnit unit(key.Type, key.Address, 1);
-        unit.setValue(0, newValue);
+        QModbusDataUnit unit(key.Type, key.Address, regCount);
+        for (int i = 0; i < regCount; ++i) unit.setValue(i, regs[i]);
         _mbMultiServer.setData(key.DeviceId, unit);
 
         _updatingTable = true;
-        valItem->setData(Qt::UserRole, static_cast<quint32>(newValue));
-        valItem->setText(formatValue(key.Type, it->type, it->order, newValue));
+        valItem->setData(Qt::UserRole, static_cast<quint32>(regs[0]));
+        valItem->setText(formatValue(key.Type, it->type, it->order, regsForKey(key, it->type)));
         auto* tsItem = ui->tableWidget->item(row, ColTimestamp);
         if (tsItem) tsItem->setText(it->timestamp.toString(Qt::ISODate));
         _updatingTable = false;
@@ -661,10 +791,10 @@ void FormRegisterMapView::on_tableWidget_cellChanged(int row, int col)
         }
         _updatingTable = false;
 
-        // Update displayed value with new type
+        // Update displayed value with new type (read all required registers from server)
         _updatingTable = true;
         auto* valItem = ui->tableWidget->item(row, ColValue);
-        if (valItem) valItem->setText(formatValue(key.Type, it->type, it->order, it->value));
+        if (valItem) valItem->setText(formatValue(key.Type, it->type, it->order, regsForKey(key, it->type)));
         _updatingTable = false;
         return;
     }
@@ -681,7 +811,7 @@ void FormRegisterMapView::on_tableWidget_cellChanged(int row, int col)
 
         _updatingTable = true;
         auto* valItem = ui->tableWidget->item(row, ColValue);
-        if (valItem) valItem->setText(formatValue(key.Type, it->type, it->order, it->value));
+        if (valItem) valItem->setText(formatValue(key.Type, it->type, it->order, regsForKey(key, it->type)));
         _updatingTable = false;
         return;
     }
@@ -725,7 +855,7 @@ void FormRegisterMapView::on_tableWidget_cellChanged(int row, int col)
         unitItem->setData(RoleAddress,  static_cast<int>(newKey.Address));
 
         auto* valItem = ui->tableWidget->item(row, ColValue);
-        if (valItem) valItem->setText(formatValue(newType, entry.type, entry.order, entry.value));
+        if (valItem) valItem->setText(formatValue(newType, entry.type, entry.order, regsForKey(newKey, entry.type)));
 
         auto* tsItem = ui->tableWidget->item(row, ColTimestamp);
         if (tsItem) tsItem->setText(entry.timestamp.isValid()
@@ -824,7 +954,7 @@ void FormRegisterMapView::insertEntry(const ItemMapKey& key, const Entry& entry)
     auto* commentItem = new QTableWidgetItem(entry.comment);
 
     // Col 6: Value (editable)
-    auto* valItem = new QTableWidgetItem(formatValue(key.Type, entry.type, entry.order, entry.value));
+    auto* valItem = new QTableWidgetItem(formatValue(key.Type, entry.type, entry.order, regsForKey(key, entry.type)));
     valItem->setData(Qt::UserRole, static_cast<quint32>(entry.value));
     valItem->setTextAlignment(Qt::AlignRight | Qt::AlignVCenter);
 
@@ -861,7 +991,7 @@ void FormRegisterMapView::updateValue(int row, const ItemMapKey& key, quint16 va
     auto* valItem = ui->tableWidget->item(row, ColValue);
     if (valItem) {
         valItem->setData(Qt::UserRole, static_cast<quint32>(value));
-        valItem->setText(formatValue(key.Type, type, order, value));
+        valItem->setText(formatValue(key.Type, type, order, regsForKey(key, type)));
     }
 
     auto* tsItem = ui->tableWidget->item(row, ColTimestamp);
@@ -924,21 +1054,39 @@ QModbusDataUnit::RegisterType FormRegisterMapView::stringToRegisterType(const QS
 }
 
 ///
+/// \brief FormRegisterMapView::regsForKey
+///
+QVector<quint16> FormRegisterMapView::regsForKey(const ItemMapKey& key, DataType type) const
+{
+    const int count = registersCount(type);
+    const QModbusDataUnit unit = _mbMultiServer.data(key.DeviceId, key.Type, key.Address, count);
+    QVector<quint16> regs;
+    for (int i = 0; i < count; ++i)
+        regs << (unit.isValid() ? static_cast<quint16>(unit.value(i)) : 0);
+    return regs;
+}
+
+///
 /// \brief FormRegisterMapView::formatValue
 ///
 QString FormRegisterMapView::formatValue(QModbusDataUnit::RegisterType regType,
-                                         DataType type, RegisterOrder /*order*/, quint16 value) const
+                                         DataType type, RegisterOrder order, const QVector<quint16>& regs) const
 {
+    if (regs.isEmpty()) return QString();
     QVariant outValue;
     switch (type) {
         case DataType::Binary:
-            return formatBinaryValue(regType, value, ByteOrder::Direct, outValue, false);
+            return formatBinaryValue(regType, regs[0], ByteOrder::Direct, outValue, false);
         case DataType::UInt16:
-            return formatUInt16Value(regType, value, ByteOrder::Direct, false, outValue, false);
+            return formatUInt16Value(regType, regs[0], ByteOrder::Direct, false, outValue, false);
         case DataType::Int16:
-            return formatInt16Value(regType, static_cast<qint16>(value), ByteOrder::Direct, outValue, false);
+            return formatInt16Value(regType, static_cast<qint16>(regs[0]), ByteOrder::Direct, outValue, false);
         default:
-            return formatHexValue(regType, value, ByteOrder::Direct, outValue, false);
+            if (isMultiRegisterType(type) && regs.size() >= registersCount(type)) {
+                const QVariant val = makeValue(regs, type, order, ByteOrder::Direct);
+                if (val.isValid()) return val.toString();
+            }
+            return formatHexValue(regType, regs[0], ByteOrder::Direct, outValue, false);
     }
 }
 
