@@ -72,7 +72,8 @@ private:
     struct Entry {
         quint16 value = 0;
         QString comment;
-        DataDisplayMode format = DataDisplayMode::Int16;
+        DataType      type  = DataType::Int16;
+        RegisterOrder order = RegisterOrder::MSRF;
         QDateTime timestamp;
     };
 
@@ -88,7 +89,7 @@ private:
 
     QString registerTypeToString(QModbusDataUnit::RegisterType type) const;
     QModbusDataUnit::RegisterType stringToRegisterType(const QString& str) const;
-    QString formatValue(QModbusDataUnit::RegisterType type, DataDisplayMode fmt, quint16 value) const;
+    QString formatValue(QModbusDataUnit::RegisterType regType, DataType type, RegisterOrder order, quint16 value) const;
     QString addressToDisplay(quint16 addr) const;
     quint16 addressFromDisplay(const QString& text, bool* ok = nullptr) const;
     ItemMapKey keyFromRow(int row) const;
@@ -134,14 +135,15 @@ inline QXmlStreamWriter& operator <<(QXmlStreamWriter& xml, FormRegisterMapView*
 
     xml.writeStartElement("ColumnWidths");
     const auto ws = frm->columnWidths();
-    if (ws.size() == 7) {
+    if (ws.size() == 8) {
         xml.writeAttribute("Unit",      QString::number(ws[0]));
         xml.writeAttribute("Type",      QString::number(ws[1]));
         xml.writeAttribute("Address",   QString::number(ws[2]));
-        xml.writeAttribute("Format",    QString::number(ws[3]));
-        xml.writeAttribute("Comment",   QString::number(ws[4]));
-        xml.writeAttribute("Value",     QString::number(ws[5]));
-        xml.writeAttribute("Timestamp", QString::number(ws[6]));
+        xml.writeAttribute("DataType",  QString::number(ws[3]));
+        xml.writeAttribute("Order",     QString::number(ws[4]));
+        xml.writeAttribute("Comment",   QString::number(ws[5]));
+        xml.writeAttribute("Value",     QString::number(ws[6]));
+        xml.writeAttribute("Timestamp", QString::number(ws[7]));
     }
     xml.writeEndElement();
 
@@ -151,7 +153,9 @@ inline QXmlStreamWriter& operator <<(QXmlStreamWriter& xml, FormRegisterMapView*
         xml.writeAttribute("DeviceId",  QString::number(it.key().DeviceId));
         xml.writeAttribute("Type",      QString::number(it.key().Type));
         xml.writeAttribute("Address",   QString::number(it.key().Address));
-        xml.writeAttribute("Format",    QString::number(static_cast<int>(it.value().format)));
+        xml.writeAttribute("DataType",   enumToString(it.value().type));
+        if(isMultiRegisterType(it.value().type))
+            xml.writeAttribute("Order", enumToString(it.value().order));
         xml.writeAttribute("Value",     QString::number(it.value().value));
         xml.writeAttribute("Timestamp", it.value().timestamp.toString(Qt::ISODateWithMs));
         if (!it.value().comment.isEmpty())
@@ -212,7 +216,7 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, FormRegisterMapView*
                 const int v = a.value(QLatin1String(name)).toInt(&ok);
                 return (ok && v > 0) ? v : -1;
             };
-            frm->setColumnWidths({w("Unit"), w("Type"), w("Address"), w("Format"), w("Comment"), w("Value"), w("Timestamp")});
+            frm->setColumnWidths({w("Unit"), w("Type"), w("Address"), w("DataType"), w("Order"), w("Comment"), w("Value"), w("Timestamp")});
             xml.skipCurrentElement();
         }
         else if (xml.name() == QLatin1String("RegisterMap")) {
@@ -230,7 +234,8 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, FormRegisterMapView*
 
                     FormRegisterMapView::Entry entry;
                     entry.value  = attrs.value("Value").toUShort();
-                    entry.format = static_cast<DataDisplayMode>(attrs.value("Format").toInt());
+                    entry.type   = enumFromString<DataType>(attrs.value("DataType").toString(), DataType::Int16);
+                    entry.order  = enumFromString<RegisterOrder>(attrs.value("Order").toString(), RegisterOrder::MSRF);
                     entry.timestamp = QDateTime::fromString(attrs.value("Timestamp").toString(), Qt::ISODateWithMs);
                     entry.comment = xml.readElementText(QXmlStreamReader::IncludeChildElements).trimmed();
 

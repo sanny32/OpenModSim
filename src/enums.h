@@ -20,6 +20,39 @@ template<> \
 };
 
 ///
+/// \brief enumToString
+/// \param value
+/// \return
+///
+template<typename Enum>
+inline QString enumToString(Enum value) {
+    const auto& map = EnumStrings<Enum>::mapping();
+    if (auto it = map.find(value); it != map.end())
+        return it.value();
+    return QString::number(static_cast<int>(value));
+}
+
+///
+/// \brief enumFromString
+/// \param str
+/// \param defaultValue
+/// \return
+///
+template<typename Enum>
+inline Enum enumFromString(const QString& str, Enum defaultValue = static_cast<Enum>(0)) {
+    const auto& map = EnumStrings<Enum>::mapping();
+    for (auto it = map.begin(); it != map.end(); ++it) {
+        if (it.value().compare(str, Qt::CaseInsensitive) == 0)
+            return it.key();
+    }
+    bool ok;
+    int val = str.toInt(&ok);
+    if (ok)
+        return static_cast<Enum>(val);
+    return defaultValue;
+}
+
+///
 /// \brief The AddressBase enum
 ///
 enum class AddressBase
@@ -96,96 +129,137 @@ inline QSettings& operator >>(QSettings& in, AddressSpace& asp)
 }
 
 ///
-/// \brief The DataDisplayMode enum
+/// \brief The DataType enum
 ///
-enum class DataDisplayMode
+enum class DataType
 {
     Binary = 0,
     UInt16,
     Int16,
     Hex,
-    FloatingPt,
-    SwappedFP,
-    DblFloat,
-    SwappedDbl,
+    Float32,
+    Float64,
     Int32,
-    SwappedInt32,
     UInt32,
-    SwappedUInt32,
     Int64,
-    SwappedInt64,
     UInt64,
-    SwappedUInt64,
     Ansi
 };
-Q_DECLARE_METATYPE(DataDisplayMode)
-DECLARE_ENUM_STRINGS(DataDisplayMode,
-                {   DataDisplayMode::Binary,          "Binary"        },
-                {   DataDisplayMode::UInt16,          "UInt16"        },
-                {   DataDisplayMode::Int16,           "Int16"         },
-                {   DataDisplayMode::Hex,             "Hex"           },
-                {   DataDisplayMode::FloatingPt,      "FloatingPt"    },
-                {   DataDisplayMode::SwappedFP,       "SwappedFP"     },
-                {   DataDisplayMode::DblFloat,        "DblFloat"      },
-                {   DataDisplayMode::SwappedDbl,      "SwappedDbl"    },
-                {   DataDisplayMode::Int32,           "Int32"         },
-                {   DataDisplayMode::SwappedInt32,    "SwappedInt32"  },
-                {   DataDisplayMode::UInt32,          "UInt32"        },
-                {   DataDisplayMode::SwappedUInt32,   "SwappedUInt32" },
-                {   DataDisplayMode::Int64,           "Int64"         },
-                {   DataDisplayMode::SwappedInt64,    "SwappedInt64"  },
-                {   DataDisplayMode::UInt64,          "UInt64"        },
-                {   DataDisplayMode::SwappedUInt64,   "SwappedUInt64" },
-                {   DataDisplayMode::Ansi,            "Ansi"          },
+Q_DECLARE_METATYPE(DataType)
+DECLARE_ENUM_STRINGS(DataType,
+                {   DataType::Binary,   "Binary"  },
+                {   DataType::UInt16,   "UInt16"  },
+                {   DataType::Int16,    "Int16"   },
+                {   DataType::Hex,      "Hex"     },
+                {   DataType::Float32,  "Float32" },
+                {   DataType::Float64,  "Float64" },
+                {   DataType::Int32,    "Int32"   },
+                {   DataType::UInt32,   "UInt32"  },
+                {   DataType::Int64,    "Int64"   },
+                {   DataType::UInt64,   "UInt64"  },
+                {   DataType::Ansi,     "Ansi"    },
 )
 
 ///
 /// \brief operator <<
 /// \param out
-/// \param mode
+/// \param type
 /// \return
 ///
-inline QSettings& operator <<(QSettings& out, const DataDisplayMode& mode)
+inline QSettings& operator <<(QSettings& out, const DataType& type)
 {
-    out.setValue("DataDisplayMode", (uint)mode);
+    out.setValue("DataType", enumToString(type));
     return out;
 }
 
 ///
 /// \brief operator >>
 /// \param in
-/// \param mode
+/// \param type
 /// \return
 ///
-inline QSettings& operator >>(QSettings& in, DataDisplayMode& mode)
+inline QSettings& operator >>(QSettings& in, DataType& type)
 {
-    mode = (DataDisplayMode)in.value("DataDisplayMode").toUInt();
+    type = enumFromString<DataType>(in.value("DataType").toString(), DataType::UInt16);
     return in;
 }
 
 ///
-/// \brief registersCount
-/// \param mode
+/// \brief The RegisterOrder enum
+///
+enum class RegisterOrder
+{
+    MSRF = 0,  // Most Significant Register First
+    LSRF       // Least Significant Register First
+};
+Q_DECLARE_METATYPE(RegisterOrder)
+DECLARE_ENUM_STRINGS(RegisterOrder,
+                {   RegisterOrder::MSRF, "MSRF" },
+                {   RegisterOrder::LSRF, "LSRF" },
+)
+
+///
+/// \brief operator <<
+/// \param out
+/// \param order
 /// \return
 ///
-inline static int registersCount(DataDisplayMode mode)
+inline QSettings& operator <<(QSettings& out, const RegisterOrder& order)
 {
-    switch(mode)
+    out.setValue("RegisterOrder", enumToString(order));
+    return out;
+}
+
+///
+/// \brief operator >>
+/// \param in
+/// \param order
+/// \return
+///
+inline QSettings& operator >>(QSettings& in, RegisterOrder& order)
+{
+    order = enumFromString<RegisterOrder>(in.value("RegisterOrder").toString(), RegisterOrder::MSRF);
+    return in;
+}
+
+///
+/// \brief isMultiRegisterType
+/// \param type
+/// \return
+///
+inline static bool isMultiRegisterType(DataType type)
+{
+    switch(type)
     {
-        case DataDisplayMode::FloatingPt:
-        case DataDisplayMode::SwappedFP:
-        case DataDisplayMode::Int32:
-        case DataDisplayMode::SwappedInt32:
-        case DataDisplayMode::UInt32:
-        case DataDisplayMode::SwappedUInt32:
+        case DataType::Float32:
+        case DataType::Float64:
+        case DataType::Int32:
+        case DataType::UInt32:
+        case DataType::Int64:
+        case DataType::UInt64:
+            return true;
+        default:
+            return false;
+    }
+}
+
+///
+/// \brief registersCount
+/// \param type
+/// \return
+///
+inline static int registersCount(DataType type)
+{
+    switch(type)
+    {
+        case DataType::Float32:
+        case DataType::Int32:
+        case DataType::UInt32:
             return 2;
 
-        case DataDisplayMode::DblFloat:
-        case DataDisplayMode::SwappedDbl:
-        case DataDisplayMode::Int64:
-        case DataDisplayMode::SwappedInt64:
-        case DataDisplayMode::UInt64:
-        case DataDisplayMode::SwappedUInt64:
+        case DataType::Float64:
+        case DataType::Int64:
+        case DataType::UInt64:
             return 4;
 
         default:
@@ -329,39 +403,6 @@ inline bool stringToBool(const QString& str)
 {
     const QString lower = str.toLower();
     return (lower == "true" || lower == "1" || lower == "yes" || lower == "on");
-}
-
-///
-/// \brief enumToString
-/// \param value
-/// \return
-///
-template<typename Enum>
-inline QString enumToString(Enum value) {
-    const auto& map = EnumStrings<Enum>::mapping();
-    if (auto it = map.find(value); it != map.end())
-        return it.value();
-    return QString::number(static_cast<int>(value));
-}
-
-///
-/// \brief enumFromString
-/// \param str
-/// \param defaultValue
-/// \return
-///
-template<typename Enum>
-inline Enum enumFromString(const QString& str, Enum defaultValue = static_cast<Enum>(0)) {
-    const auto& map = EnumStrings<Enum>::mapping();
-    for (auto it = map.begin(); it != map.end(); ++it) {
-        if (it.value().compare(str, Qt::CaseInsensitive) == 0)
-            return it.key();
-    }
-    bool ok;
-    int val = str.toInt(&ok);
-    if (ok)
-        return static_cast<Enum>(val);
-    return defaultValue;
 }
 
 #endif // ENUMS_H

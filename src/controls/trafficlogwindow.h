@@ -19,8 +19,8 @@ class TrafficLogWindow : public QWidget
 public:
     explicit TrafficLogWindow(ModbusMultiServer& server, QWidget* parent = nullptr);
 
-    DataDisplayMode dataDisplayMode() const;
-    void setDataDisplayMode(DataDisplayMode mode);
+    DataType dataType() const;
+    void setDataType(DataType type);
 
 protected:
     void changeEvent(QEvent* event) override;

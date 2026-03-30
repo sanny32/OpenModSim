@@ -967,48 +967,37 @@ void ModbusMultiServer::writeRegister(QModbusDataUnit::RegisterType pointType, c
 
             case QModbusDataUnit::InputRegisters:
             case QModbusDataUnit::HoldingRegisters:
+            {
+                const bool lsrf = params.RegOrder == RegisterOrder::LSRF;
                 switch(params.DataMode)
                 {
-                    case DataDisplayMode::Binary:
-                    case DataDisplayMode::UInt16:
-                    case DataDisplayMode::Int16:
-                    case DataDisplayMode::Hex:
-                    case DataDisplayMode::Ansi:
+                    case DataType::Binary:
+                    case DataType::UInt16:
+                    case DataType::Int16:
+                    case DataType::Hex:
+                    case DataType::Ansi:
                         data = createDataUnit(pointType, addr, params.Value.toUInt(), params.Order);
                     break;
-                    case DataDisplayMode::FloatingPt:
-                        data = createFloatDataUnit(pointType, addr, params.Value.toFloat(), params.Order, false);
-                    break;
-                    case DataDisplayMode::SwappedFP:
-                        data = createFloatDataUnit(pointType, addr, params.Value.toFloat(), params.Order, true);
-                    break;
-                    case DataDisplayMode::DblFloat:
-                        data = createDoubleDataUnit(pointType, addr, params.Value.toDouble(), params.Order, false);
-                    break;
-                    case DataDisplayMode::SwappedDbl:
-                        data = createDoubleDataUnit(pointType, addr, params.Value.toDouble(), params.Order, true);
-                    break;
-                        
-                    case DataDisplayMode::Int32:
-                    case DataDisplayMode::UInt32:
-                        data = createInt32DataUnit(pointType, addr, params.Value.toInt(), params.Order, false);
+
+                    case DataType::Float32:
+                        data = createFloatDataUnit(pointType, addr, params.Value.toFloat(), params.Order, lsrf);
                     break;
 
-                    case DataDisplayMode::SwappedInt32:
-                    case DataDisplayMode::SwappedUInt32:
-                        data = createInt32DataUnit(pointType, addr, params.Value.toInt(), params.Order, true);
+                    case DataType::Float64:
+                        data = createDoubleDataUnit(pointType, addr, params.Value.toDouble(), params.Order, lsrf);
                     break;
 
-                    case DataDisplayMode::Int64:
-                    case DataDisplayMode::UInt64:
-                        data = createInt64DataUnit(pointType, addr, params.Value.toLongLong(), params.Order, false);
-                        break;
+                    case DataType::Int32:
+                    case DataType::UInt32:
+                        data = createInt32DataUnit(pointType, addr, params.Value.toInt(), params.Order, lsrf);
+                    break;
 
-                    case DataDisplayMode::SwappedInt64:
-                    case DataDisplayMode::SwappedUInt64:
-                        data = createInt64DataUnit(pointType, addr, params.Value.toLongLong(), params.Order, true);
+                    case DataType::Int64:
+                    case DataType::UInt64:
+                        data = createInt64DataUnit(pointType, addr, params.Value.toLongLong(), params.Order, lsrf);
                     break;
                 }
+            }
             break;
 
             default:

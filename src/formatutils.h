@@ -28,12 +28,12 @@ inline QString wrapValue(const QString& s, bool brackets)
 /// \param c
 /// \return
 ///
-inline QString formatUInt8Value(DataDisplayMode mode, bool leadingZeros, quint8 c)
+inline QString formatUInt8Value(DataType type, bool leadingZeros, quint8 c)
 {
-    switch(mode)
+    switch(type)
     {
-        case DataDisplayMode::UInt16:
-        case DataDisplayMode::Int16:
+        case DataType::UInt16:
+        case DataType::Int16:
             return QString("%1").arg(QString::number(c), 3, QLatin1Char(leadingZeros ? '0' : ' '));
 
         default:
@@ -48,14 +48,14 @@ inline QString formatUInt8Value(DataDisplayMode mode, bool leadingZeros, quint8 
 /// \param ar
 /// \return
 ///
-inline QString formatUInt8Array(DataDisplayMode mode, bool leadingZeros, const QByteArray& ar)
+inline QString formatUInt8Array(DataType type, bool leadingZeros, const QByteArray& ar)
 {
     QStringList values;
     for(quint8 i : ar)
-        switch(mode)
+        switch(type)
         {
-            case DataDisplayMode::UInt16:
-            case DataDisplayMode::Int16:
+            case DataType::UInt16:
+            case DataType::Int16:
                 values += QString("%1").arg(QString::number(i), 3, QLatin1Char(leadingZeros ? '0' : ' '));
             break;
 
@@ -75,16 +75,16 @@ inline QString formatUInt8Array(DataDisplayMode mode, bool leadingZeros, const Q
 /// \param order
 /// \return
 ///
-inline QString formatUInt16Array(DataDisplayMode mode, bool leadingZeros, const QByteArray& ar, ByteOrder order)
+inline QString formatUInt16Array(DataType type, bool leadingZeros, const QByteArray& ar, ByteOrder order)
 {
     QStringList values;
     for(int i = 0; i < ar.size(); i+=2)
     {
         const quint16 value = makeUInt16(ar[i+1], ar[i], order);
-        switch(mode)
+        switch(type)
         {
-            case DataDisplayMode::UInt16:
-            case DataDisplayMode::Int16:
+            case DataType::UInt16:
+            case DataType::Int16:
                 values += QString("%1").arg(QString::number(value), 5, QLatin1Char(leadingZeros ? '0' : ' '));
                 break;
 
@@ -104,12 +104,12 @@ inline QString formatUInt16Array(DataDisplayMode mode, bool leadingZeros, const 
 /// \param v
 /// \return
 ///
-inline QString formatUInt16Value(DataDisplayMode mode, bool leadingZeros, quint16 v)
+inline QString formatUInt16Value(DataType type, bool leadingZeros, quint16 v)
 {
-    switch(mode)
+    switch(type)
     {
-        case DataDisplayMode::UInt16:
-        case DataDisplayMode::Int16:
+        case DataType::UInt16:
+        case DataType::Int16:
             return QString("%1").arg(QString::number(v), 5, QLatin1Char(leadingZeros ? '0' : ' '));
 
         default:

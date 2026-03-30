@@ -74,7 +74,12 @@
      </column>
      <column>
       <property name="text">
-       <string>Format</string>
+       <string>DataType</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Order</string>
       </property>
      </column>
      <column>

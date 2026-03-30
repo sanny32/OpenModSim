@@ -91,15 +91,15 @@ void disconnectEditSlotsOnForm(QWidget* widget)
     else if (auto* frm = qobject_cast<FormScriptView*>(widget)) frm->disconnectEditSlots();
 }
 
-DataDisplayMode dataDisplayModeOfForm(QWidget* widget)
+DataType dataTypeOfForm(QWidget* widget)
 {
-    if (auto* frm = qobject_cast<FormDataView*>(widget)) return frm->dataDisplayMode();
-    return DataDisplayMode::Hex;
+    if (auto* frm = qobject_cast<FormDataView*>(widget)) return frm->dataType();
+    return DataType::Hex;
 }
 
-void setDataDisplayModeOnForm(QWidget* widget, DataDisplayMode mode)
+void setDataTypeOnForm(QWidget* widget, DataType type)
 {
-    if (auto* frm = qobject_cast<FormDataView*>(widget)) frm->setDataDisplayMode(mode);
+    if (auto* frm = qobject_cast<FormDataView*>(widget)) frm->setDataType(type);
 }
 
 ScriptSettings scriptSettingsOfForm(QWidget* widget)
@@ -426,15 +426,15 @@ void AppProject::setupMdiChild(QWidget* frm, QMdiSubWindow* wnd, bool addToWindo
         {
             case QModbusDataUnit::Coils:
             case QModbusDataUnit::DiscreteInputs:
-                frm->setProperty("PrevDataDisplayMode", QVariant::fromValue(dataDisplayModeOfForm(frm)));
-                setDataDisplayModeOnForm(frm, DataDisplayMode::Binary);
+                frm->setProperty("PrevDataType", QVariant::fromValue(dataTypeOfForm(frm)));
+                setDataTypeOnForm(frm, DataType::Binary);
                 break;
             case QModbusDataUnit::HoldingRegisters:
             case QModbusDataUnit::InputRegisters:
             {
-                const auto mode = frm->property("PrevDataDisplayMode");
-                if(mode.isValid())
-                    setDataDisplayModeOnForm(frm, mode.value<DataDisplayMode>());
+                const auto prevType = frm->property("PrevDataType");
+                if(prevType.isValid())
+                    setDataTypeOnForm(frm, prevType.value<DataType>());
             }
             break;
             default:

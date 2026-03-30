@@ -270,61 +270,52 @@ inline double makeDouble(quint16 lolo, quint16 lohi, quint16 hilo, quint16 hihi,
 ///
 /// \brief makeValue
 /// \param regs
-/// \param mode
-/// \param order
+/// \param type
+/// \param regOrder
+/// \param byteOrder
 /// \return
 ///
-inline QVariant makeValue(const QVector<quint16>& regs, DataDisplayMode mode, ByteOrder order)
+inline QVariant makeValue(const QVector<quint16>& regs, DataType type, RegisterOrder regOrder, ByteOrder byteOrder)
 {
-    const int count = registersCount(mode);
+    const int count = registersCount(type);
     if(regs.size() < count) return QVariant();
 
-    switch(mode)
+    const bool lsrf = (regOrder == RegisterOrder::LSRF);
+
+    switch(type)
     {
-        case DataDisplayMode::Binary:
-        case DataDisplayMode::UInt16:
-        case DataDisplayMode::Hex:
-        case DataDisplayMode::Ansi:
+        case DataType::Binary:
+        case DataType::UInt16:
+        case DataType::Hex:
+        case DataType::Ansi:
             return regs[0];
 
-        case DataDisplayMode::Int16:
+        case DataType::Int16:
             return (qint16)regs[0];
 
-        case DataDisplayMode::FloatingPt:
-            return makeFloat(regs[1], regs[0], order);
+        case DataType::Float32:
+            return lsrf ? makeFloat(regs[0], regs[1], byteOrder)
+                        : makeFloat(regs[1], regs[0], byteOrder);
 
-        case DataDisplayMode::SwappedFP:
-            return makeFloat(regs[0], regs[1], order);
+        case DataType::Int32:
+            return lsrf ? makeInt32(regs[0], regs[1], byteOrder)
+                        : makeInt32(regs[1], regs[0], byteOrder);
 
-        case DataDisplayMode::Int32:
-            return makeInt32(regs[1], regs[0], order);
+        case DataType::UInt32:
+            return lsrf ? makeUInt32(regs[0], regs[1], byteOrder)
+                        : makeUInt32(regs[1], regs[0], byteOrder);
 
-        case DataDisplayMode::SwappedInt32:
-            return makeInt32(regs[0], regs[1], order);
+        case DataType::Float64:
+            return lsrf ? makeDouble(regs[0], regs[1], regs[2], regs[3], byteOrder)
+                        : makeDouble(regs[3], regs[2], regs[1], regs[0], byteOrder);
 
-        case DataDisplayMode::UInt32:
-            return makeUInt32(regs[1], regs[0], order);
+        case DataType::Int64:
+            return lsrf ? makeInt64(regs[0], regs[1], regs[2], regs[3], byteOrder)
+                        : makeInt64(regs[3], regs[2], regs[1], regs[0], byteOrder);
 
-        case DataDisplayMode::SwappedUInt32:
-            return makeUInt32(regs[0], regs[1], order);
-
-        case DataDisplayMode::DblFloat:
-            return  makeDouble(regs[3], regs[2], regs[1], regs[0], order);
-
-        case DataDisplayMode::SwappedDbl:
-            return  makeDouble(regs[0], regs[1], regs[2], regs[3], order);
-
-        case DataDisplayMode::Int64:
-            return makeInt64(regs[3], regs[2], regs[1], regs[0], order);
-
-        case DataDisplayMode::SwappedInt64:
-            return makeInt64(regs[0], regs[1], regs[2], regs[3], order);
-
-        case DataDisplayMode::UInt64:
-            return makeUInt64(regs[3], regs[2], regs[1], regs[0], order);
-
-        case DataDisplayMode::SwappedUInt64:
-            return makeUInt64(regs[0], regs[1], regs[2], regs[3], order);
+        case DataType::UInt64:
+            return lsrf ? makeUInt64(regs[0], regs[1], regs[2], regs[3], byteOrder)
+                        : makeUInt64(regs[3], regs[2], regs[1], regs[0], byteOrder);
     }
 
     return QVariant();

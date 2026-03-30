@@ -13,7 +13,7 @@ class DialogAutoSimulation : public QFixedSizeDialog
     Q_OBJECT
 
 public:
-    explicit DialogAutoSimulation(DataDisplayMode mode, ModbusSimulationParams& params, QWidget *parent = nullptr);
+    explicit DialogAutoSimulation(DataType type, ModbusSimulationParams& params, QWidget *parent = nullptr);
     ~DialogAutoSimulation();
 
     void accept() override;
@@ -35,7 +35,7 @@ private:
 
 private:
     ModbusSimulationParams& _params;
-    DataDisplayMode _dataMode;
+    DataType _dataMode;
 };
 
 #endif // DIALOGAUTOSIMULATION_H

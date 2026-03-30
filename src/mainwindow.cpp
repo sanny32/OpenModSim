@@ -130,15 +130,15 @@ void applySharedDisplayDefaults(ScriptViewDefinitions& target, const ScriptViewD
     target.ScriptCfg = defaults.ScriptCfg;
 }
 
-DataDisplayMode dataDisplayModeOfForm(QWidget* widget)
+DataType dataTypeOfForm(QWidget* widget)
 {
-    if (auto* frm = qobject_cast<FormDataView*>(widget)) return frm->dataDisplayMode();
-    return DataDisplayMode::Hex;
+    if (auto* frm = qobject_cast<FormDataView*>(widget)) return frm->dataType();
+    return DataType::Hex;
 }
 
-void setDataDisplayModeOnForm(QWidget* widget, DataDisplayMode mode)
+void setDataTypeOnForm(QWidget* widget, DataType type)
 {
-    if (auto* frm = qobject_cast<FormDataView*>(widget)) frm->setDataDisplayMode(mode);
+    if (auto* frm = qobject_cast<FormDataView*>(widget)) frm->setDataType(type);
 }
 
 ByteOrder byteOrderOfForm(QWidget* widget)
@@ -991,9 +991,9 @@ void MainWindow::on_actionPresetHoldingRegs_triggered()
 void MainWindow::on_actionMsgParser_triggered()
 {
     auto* frm = currentDataOrTrafficForm();
-    const auto mode = frm ? dataDisplayModeOfForm(frm) : DataDisplayMode::Hex;
+    const auto type = frm ? dataTypeOfForm(frm) : DataType::Hex;
 
-    auto dlg = new DialogMsgParser(mode, ModbusMessage::Rtu);
+    auto dlg = new DialogMsgParser(type, ModbusMessage::Rtu);
     dlg->setAttribute(Qt::WA_DeleteOnClose, true);
     dlg->show();
 }
@@ -1345,7 +1345,8 @@ void MainWindow::presetRegs(QModbusDataUnit::RegisterType type)
     ModbusWriteParams params;
     params.DeviceId = presetParams.DeviceId;
     params.Address = presetParams.PointAddress;
-    params.DataMode = frm ? frm->dataDisplayMode() : DataDisplayMode::Hex;
+    params.DataMode = frm ? frm->dataType() : DataType::Hex;
+    params.RegOrder = frm ? frm->registerOrder() : RegisterOrder::MSRF;
     params.Order = frm ? frm->byteOrder() : ByteOrder::Direct;
     params.Codepage = frm ? frm->codepage() : QString();
     params.ZeroBasedAddress = presetParams.ZeroBasedAddress;

@@ -251,7 +251,9 @@ void OutputDataListModel::update()
 ///
 void OutputDataListModel::updateData(const QModbusDataUnit& data)
 {
-    const auto mode = _parentWidget->dataDisplayMode();
+    const auto type = _parentWidget->dataType();
+    const auto order = _parentWidget->registerOrder();
+    const bool lsrf = (order == RegisterOrder::LSRF);
     const auto leadingZeros = _parentWidget->_displayDefinition.LeadingZeros;
     const auto pointType = _parentWidget->_displayDefinition.PointType;
     const auto byteOrder = *_parentWidget->byteOrder();
@@ -259,7 +261,8 @@ void OutputDataListModel::updateData(const QModbusDataUnit& data)
 
     const bool all_changed =
         !_lastData.isValid()
-        || (_lastMode != mode)
+        || (_lastType != type)
+        || (_lastOrder != order)
         || (_lastLeadingZeros != leadingZeros)
         || (_lastPointType != pointType)
         || (_lastByteOrder != byteOrder)
@@ -278,7 +281,7 @@ void OutputDataListModel::updateData(const QModbusDataUnit& data)
         if (!all_changed && !itemData.ValueStr.isEmpty())
         {
             bool skip = true;
-            for (int reg = 0; reg < registersCount(mode); ++reg)
+            for (int reg = 0; reg < registersCount(type); ++reg)
             {
                 if (data.value(i + reg) != _lastData.value(i + reg))
                 {
@@ -299,98 +302,62 @@ void OutputDataListModel::updateData(const QModbusDataUnit& data)
         }
         last_changed = i;
 
-        switch(mode)
+        switch(type)
         {
-            case DataDisplayMode::Binary:
+            case DataType::Binary:
                 itemData.ValueStr = formatBinaryValue(pointType, value, byteOrder, itemData.Value);
             break;
 
-            case DataDisplayMode::UInt16:
+            case DataType::UInt16:
                 itemData.ValueStr = formatUInt16Value(pointType, value, byteOrder, leadingZeros, itemData.Value);
             break;
 
-            case DataDisplayMode::Int16:
+            case DataType::Int16:
                 itemData.ValueStr = formatInt16Value(pointType, value, byteOrder, itemData.Value);
             break;
 
-            case DataDisplayMode::Hex:
+            case DataType::Hex:
                 itemData.ValueStr = formatHexValue(pointType, value, byteOrder, itemData.Value);
             break;
 
-            case DataDisplayMode::Ansi:
+            case DataType::Ansi:
                 itemData.ValueStr = formatAnsiValue(pointType, value, byteOrder, codepage, itemData.Value);
                 break;
 
-            case DataDisplayMode::FloatingPt:
-                // MSRF
-                itemData.ValueStr = formatFloatValue(pointType, data.value(i+1), value, byteOrder,
-                                                     (i%2) || (i+1>=rowCount()), itemData.Value);
+            case DataType::Float32:
+                itemData.ValueStr = lsrf
+                    ? formatFloatValue(pointType, value, data.value(i+1), byteOrder, (i%2) || (i+1>=rowCount()), itemData.Value)
+                    : formatFloatValue(pointType, data.value(i+1), value, byteOrder, (i%2) || (i+1>=rowCount()), itemData.Value);
             break;
 
-            case DataDisplayMode::SwappedFP:
-                // LSRF
-                itemData.ValueStr = formatFloatValue(pointType, value, data.value(i+1), byteOrder,
-                                                     (i%2) || (i+1>=rowCount()), itemData.Value);
+            case DataType::Float64:
+                itemData.ValueStr = lsrf
+                    ? formatDoubleValue(pointType, value, data.value(i+1), data.value(i+2), data.value(i+3), byteOrder, (i%4) || (i+3>=rowCount()), itemData.Value)
+                    : formatDoubleValue(pointType, data.value(i+3), data.value(i+2), data.value(i+1), value, byteOrder, (i%4) || (i+3>=rowCount()), itemData.Value);
             break;
 
-            case DataDisplayMode::DblFloat:
-                // MSRF
-                itemData.ValueStr = formatDoubleValue(pointType, data.value(i+3), data.value(i+2), data.value(i+1), value,
-                                                      byteOrder, (i%4) || (i+3>=rowCount()), itemData.Value);
+            case DataType::Int32:
+                itemData.ValueStr = lsrf
+                    ? formatInt32Value(pointType, value, data.value(i+1), byteOrder, (i%2) || (i+1>=rowCount()), itemData.Value)
+                    : formatInt32Value(pointType, data.value(i+1), value, byteOrder, (i%2) || (i+1>=rowCount()), itemData.Value);
             break;
 
-            case DataDisplayMode::SwappedDbl:
-                // LSRF
-                itemData.ValueStr = formatDoubleValue(pointType, value, data.value(i+1), data.value(i+2), data.value(i+3),
-                                                      byteOrder, (i%4) || (i+3>=rowCount()), itemData.Value);
+            case DataType::UInt32:
+                itemData.ValueStr = lsrf
+                    ? formatUInt32Value(pointType, value, data.value(i+1), byteOrder, leadingZeros, (i%2) || (i+1>=rowCount()), itemData.Value)
+                    : formatUInt32Value(pointType, data.value(i+1), value, byteOrder, leadingZeros, (i%2) || (i+1>=rowCount()), itemData.Value);
             break;
 
-            case DataDisplayMode::Int32:
-                // MSRF
-                itemData.ValueStr = formatInt32Value(pointType, data.value(i+1), value, byteOrder,
-                                                     (i%2) || (i+1>=rowCount()), itemData.Value);
+            case DataType::Int64:
+                itemData.ValueStr = lsrf
+                    ? formatInt64Value(pointType, value, data.value(i+1), data.value(i+2), data.value(i+3), byteOrder, (i%4) || (i+3>=rowCount()), itemData.Value)
+                    : formatInt64Value(pointType, data.value(i+3), data.value(i+2), data.value(i+1), value, byteOrder, (i%4) || (i+3>=rowCount()), itemData.Value);
             break;
 
-            case DataDisplayMode::SwappedInt32:
-                // LSRF
-                itemData.ValueStr = formatInt32Value(pointType, value, data.value(i+1), byteOrder,
-                                                     (i%2) || (i+1>=rowCount()), itemData.Value);
-            break;
-
-            case DataDisplayMode::UInt32:
-                // MSRF
-                itemData.ValueStr = formatUInt32Value(pointType, data.value(i+1), value, byteOrder, leadingZeros,
-                                                      (i%2) || (i+1>=rowCount()), itemData.Value);
-            break;
-
-            case DataDisplayMode::SwappedUInt32:
-                // LSRF
-                itemData.ValueStr = formatUInt32Value(pointType, value, data.value(i+1), byteOrder, leadingZeros,
-                                                      (i%2) || (i+1>=rowCount()), itemData.Value);
-                break;
-
-            case DataDisplayMode::Int64:
-                // MSRF
-                itemData.ValueStr = formatInt64Value(pointType, data.value(i+3), data.value(i+2), data.value(i+1), value,
-                                                     byteOrder, (i%4) || (i+3>=rowCount()), itemData.Value);
-            break;
-
-            case DataDisplayMode::SwappedInt64:
-                // LSRF
-                itemData.ValueStr = formatInt64Value(pointType, value, data.value(i+1), data.value(i+2), data.value(i+3),
-                                                     byteOrder, (i%4) || (i+3>=rowCount()), itemData.Value);
-                break;
-
-            case DataDisplayMode::UInt64:
-                // MSRF
-                itemData.ValueStr = formatUInt64Value(pointType, data.value(i+3), data.value(i+2), data.value(i+1), value,
-                                                      byteOrder, leadingZeros, (i%4) || (i+3>=rowCount()), itemData.Value);
-            break;
-
-            case DataDisplayMode::SwappedUInt64:
-                // LSRF
-                itemData.ValueStr = formatUInt64Value(pointType, value, data.value(i+1), data.value(i+2), data.value(i+3),
-                                                      byteOrder, leadingZeros, (i%4) || (i+3>=rowCount()), itemData.Value);
+            case DataType::UInt64:
+                itemData.ValueStr = lsrf
+                    ? formatUInt64Value(pointType, value, data.value(i+1), data.value(i+2), data.value(i+3), byteOrder, leadingZeros, (i%4) || (i+3>=rowCount()), itemData.Value)
+                    : formatUInt64Value(pointType, data.value(i+3), data.value(i+2), data.value(i+1), value, byteOrder, leadingZeros, (i%4) || (i+3>=rowCount()), itemData.Value);
             break;
         }
     }
@@ -398,7 +365,8 @@ void OutputDataListModel::updateData(const QModbusDataUnit& data)
     if (all_changed || first_changed != -1)
     {
         _lastData = data;
-        _lastMode = mode;
+        _lastType = type;
+        _lastOrder = order;
         _lastLeadingZeros = leadingZeros;
         _lastPointType = pointType;
         _lastByteOrder = byteOrder;
@@ -439,8 +407,8 @@ QModelIndex OutputDataListModel::find(quint8 deviceId, QModbusDataUnit::Register
 ///
 OutputDataListModel::SimulationIconType OutputDataListModel::simulationIcon(int row) const
 {
-    const auto mode = _parentWidget->dataDisplayMode();
-    for(int i = 0; i < registersCount(mode); ++i)
+    const auto type = _parentWidget->dataType();
+    for(int i = 0; i < registersCount(type); ++i)
     {
         if(row + i >= rowCount())
             return SimulationIconNone;
@@ -464,7 +432,8 @@ OutputDataWidget::OutputDataWidget(QWidget *parent) :
      QFrame(parent)
    , ui(new Ui::OutputDataWidget)
    ,_displayHexAddreses(false)
-   ,_dataDisplayMode(DataDisplayMode::Hex)
+   ,_dataType(DataType::Hex)
+   ,_regOrder(RegisterOrder::MSRF)
    ,_byteOrder(ByteOrder::Direct)
    ,_listModel(new OutputDataListModel(this))
 {
@@ -592,7 +561,7 @@ void OutputDataWidget::setup(const DataViewDefinitions& dd, const ModbusSimulati
         const auto& params = it.value();
         _listModel->setData(index, true, SimulationRole);
         if(params.Mode != SimulationMode::Disabled) {
-            switch(registersCount(params.DataMode)) {
+            switch(registersCount(params.DataMode)) { // DataMode is DataType
                 case 1: _listModel->setData(index, OutputDataListModel::SimulationIcon16Bit, Qt::DecorationRole); break;
                 case 2: _listModel->setData(index, OutputDataListModel::SimulationIcon32Bit, Qt::DecorationRole); break;
                 case 4: _listModel->setData(index, OutputDataListModel::SimulationIcon64Bit, Qt::DecorationRole); break;
@@ -1102,10 +1071,10 @@ bool OutputDataWidget::parseFindValue(const QString& text, quint16& value) const
         return false;
 
     bool ok = false;
-    switch (_dataDisplayMode)
+    switch (_dataType)
     {
-        case DataDisplayMode::Binary:
-        case DataDisplayMode::Hex:
+        case DataType::Binary:
+        case DataType::Hex:
         {
             if (trimmed.startsWith("0x", Qt::CaseInsensitive))
                 trimmed = trimmed.mid(2);
@@ -1115,7 +1084,7 @@ bool OutputDataWidget::parseFindValue(const QString& text, quint16& value) const
             value = static_cast<quint16>(parsed);
             return true;
         }
-        case DataDisplayMode::Int16:
+        case DataType::Int16:
         {
             const auto parsed = trimmed.toInt(&ok, 10);
             if (!ok || parsed < SHRT_MIN || parsed > SHRT_MAX)
@@ -1257,13 +1226,13 @@ void OutputDataWidget::setDescription(quint8 deviceId, QModbusDataUnit::Register
 /// \param addr
 /// \param on
 ///
-void OutputDataWidget::setSimulated(DataDisplayMode mode, quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr, bool on)
+void OutputDataWidget::setSimulated(DataType type, RegisterOrder /*order*/, quint8 deviceId, QModbusDataUnit::RegisterType regType, quint16 addr, bool on)
 {
-    const auto index = _listModel->find(deviceId, type, addr);
+    const auto index = _listModel->find(deviceId, regType, addr);
     _listModel->setData(index, on, SimulationRole);
 
     if(on) {
-        switch(registersCount(mode))
+        switch(registersCount(type))
         {
             case 1:
                 _listModel->setData(index, OutputDataListModel::SimulationIcon16Bit, Qt::DecorationRole);
@@ -1282,22 +1251,40 @@ void OutputDataWidget::setSimulated(DataDisplayMode mode, quint8 deviceId, QModb
 }
 
 ///
-/// \brief OutputDataWidget::dataDisplayMode
+/// \brief OutputDataWidget::dataType
 /// \return
 ///
-DataDisplayMode OutputDataWidget::dataDisplayMode() const
+DataType OutputDataWidget::dataType() const
 {
-    return _dataDisplayMode;
+    return _dataType;
 }
 
 ///
-/// \brief OutputDataWidget::setDataDisplayMode
-/// \param mode
+/// \brief OutputDataWidget::setDataType
+/// \param type
 ///
-void OutputDataWidget::setDataDisplayMode(DataDisplayMode mode)
+void OutputDataWidget::setDataType(DataType type)
 {
-    _dataDisplayMode = mode;
+    _dataType = type;
+    _listModel->update();
+}
 
+///
+/// \brief OutputDataWidget::registerOrder
+/// \return
+///
+RegisterOrder OutputDataWidget::registerOrder() const
+{
+    return _regOrder;
+}
+
+///
+/// \brief OutputDataWidget::setRegisterOrder
+/// \param order
+///
+void OutputDataWidget::setRegisterOrder(RegisterOrder order)
+{
+    _regOrder = order;
     _listModel->update();
 }
 
@@ -1464,24 +1451,18 @@ QModelIndex OutputDataWidget::getValueIndex(const QModelIndex& index) const
         case QModbusDataUnit::HoldingRegisters:
         case QModbusDataUnit::InputRegisters:
         {
-            switch(_dataDisplayMode)
+            switch(_dataType)
             {
-                case DataDisplayMode::FloatingPt:
-                case DataDisplayMode::SwappedFP:
-                case DataDisplayMode::Int32:
-                case DataDisplayMode::SwappedInt32:
-                case DataDisplayMode::UInt32:
-                case DataDisplayMode::SwappedUInt32:
+                case DataType::Float32:
+                case DataType::Int32:
+                case DataType::UInt32:
                     if(index.row() % 2)
                         idx = _listModel->index(index.row() - 1);
                     break;
 
-                case DataDisplayMode::DblFloat:
-                case DataDisplayMode::SwappedDbl:
-                case DataDisplayMode::Int64:
-                case DataDisplayMode::SwappedInt64:
-                case DataDisplayMode::UInt64:
-                case DataDisplayMode::SwappedUInt64:
+                case DataType::Float64:
+                case DataType::Int64:
+                case DataType::UInt64:
                     if(index.row() % 4)
                         idx = _listModel->index(index.row() - index.row() % 4);
                     break;

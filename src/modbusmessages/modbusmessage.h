@@ -207,8 +207,8 @@ public:
     /// \param leadingZeros
     /// \return
     ///
-    QString toString(DataDisplayMode mode, bool leadingZeros = true) const {
-        return formatUInt8Array(mode, leadingZeros, *this);
+    QString toString(DataType type, bool leadingZeros = true) const {
+        return formatUInt8Array(type, leadingZeros, *this);
     }
 
     ///

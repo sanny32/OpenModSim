@@ -161,7 +161,8 @@ struct ModbusSimulationParams
     IncrementSimulationParams IncrementParams;
     DecrementSimulationParams DecrementParams;
     quint32 Interval = 1000;
-    DataDisplayMode DataMode = DataDisplayMode::Hex;
+    DataType        DataMode  = DataType::Hex;
+    RegisterOrder   RegOrder  = RegisterOrder::MSRF;
 };
 Q_DECLARE_METATYPE(ModbusSimulationParams)
 
@@ -176,7 +177,9 @@ inline QXmlStreamWriter& operator <<(QXmlStreamWriter& xml, const ModbusSimulati
     xml.writeStartElement("ModbusSimulationParams");
     xml.writeAttribute("Mode", enumToString<SimulationMode>(params.Mode));
     xml.writeAttribute("Interval", QString::number(params.Interval));
-    xml.writeAttribute("DataDisplayMode", enumToString<DataDisplayMode>(params.DataMode));
+    xml.writeAttribute("DataType", enumToString<DataType>(params.DataMode));
+    if(isMultiRegisterType(params.DataMode))
+        xml.writeAttribute("RegisterOrder", enumToString<RegisterOrder>(params.RegOrder));
 
     switch(params.Mode) {
     case SimulationMode::Random:
@@ -215,8 +218,12 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, ModbusSimulationPara
             }
         }
 
-        if (attributes.hasAttribute("DataDisplayMode")) {
-            params.DataMode = enumFromString<DataDisplayMode>(attributes.value("DataDisplayMode").toString(), DataDisplayMode::Hex);
+        if (attributes.hasAttribute("DataType")) {
+            params.DataMode = enumFromString<DataType>(attributes.value("DataType").toString(), DataType::Hex);
+        }
+
+        if (attributes.hasAttribute("RegisterOrder")) {
+            params.RegOrder = enumFromString<RegisterOrder>(attributes.value("RegisterOrder").toString(), RegisterOrder::MSRF);
         }
 
         while (xml.readNextStartElement()) {

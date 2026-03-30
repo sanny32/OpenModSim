@@ -9,7 +9,7 @@
 /// \param protocol
 /// \param parent
 ///
-DialogMsgParser::DialogMsgParser(DataDisplayMode mode, ModbusMessage::ProtocolType protocol, QWidget *parent)
+DialogMsgParser::DialogMsgParser(DataType type, ModbusMessage::ProtocolType protocol, QWidget *parent)
     : QDialog(parent)
     , ui(new Ui::DialogMsgParser)
     ,_mm(nullptr)
@@ -21,7 +21,7 @@ DialogMsgParser::DialogMsgParser(DataDisplayMode mode, ModbusMessage::ProtocolTy
                    Qt::WindowTitleHint);
 
     ui->info->setShowTimestamp(false);
-    ui->hexView->setCheckState(mode == DataDisplayMode::Hex ? Qt::Checked : Qt::Unchecked);
+    ui->hexView->setCheckState(type == DataType::Hex ? Qt::Checked : Qt::Unchecked);
     ui->buttonRtu->setChecked(protocol == ModbusMessage::Rtu);
     ui->buttonTcp->setChecked(protocol == ModbusMessage::Tcp);
 
@@ -66,7 +66,7 @@ void DialogMsgParser::on_awake()
 void DialogMsgParser::on_hexView_toggled(bool checked)
 {
     ui->bytesData->setInputMode(checked ? ByteListTextEdit::HexMode : ByteListTextEdit::DecMode);
-    ui->info->setDataDisplayMode(checked ? DataDisplayMode::Hex : DataDisplayMode::UInt16);
+    ui->info->setDataType(checked ? DataType::Hex : DataType::UInt16);
 }
 
 ///

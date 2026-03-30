@@ -34,17 +34,17 @@ DataSimulator::~DataSimulator()
 ///
 /// \brief DataSimulator::canStartSimulation
 ///
-bool DataSimulator::canStartSimulation(DataDisplayMode mode, quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr) const
+bool DataSimulator::canStartSimulation(DataType type, quint8 deviceId, QModbusDataUnit::RegisterType regType, quint16 addr) const
 {
-    const auto count = registersCount(mode);
+    const auto count = registersCount(type);
 
-    const auto it = _simulationMap.find({ deviceId, type, addr });
+    const auto it = _simulationMap.find({ deviceId, regType, addr });
     if(it != _simulationMap.end() && it->Params.Mode != SimulationMode::Disabled)
         return true;
 
     for(int i = 1; i < count; ++i)
     {
-        if(hasSimulation(deviceId, type, addr + i))
+        if(hasSimulation(deviceId, regType, addr + i))
             return false;
     }
 
@@ -65,12 +65,12 @@ void DataSimulator::startSimulation(quint8 deviceId, QModbusDataUnit::RegisterTy
     {
         case SimulationMode::Increment:
             value = params.IncrementParams.Range.from();
-            emit dataSimulated(params.DataMode, deviceId, type, addr, value);
+            emit dataSimulated(params.DataMode, params.RegOrder, deviceId, type, addr, value);
         break;
 
         case SimulationMode::Decrement:
             value = params.DecrementParams.Range.to();
-            emit dataSimulated(params.DataMode, deviceId, type, addr, value);
+            emit dataSimulated(params.DataMode, params.RegOrder, deviceId, type, addr, value);
         break;
 
         default:
@@ -91,11 +91,11 @@ void DataSimulator::startSimulation(quint8 deviceId, QModbusDataUnit::RegisterTy
             simParams.Mode = SimulationMode::Disabled;
         }
 
-        _simulationMap[key] = { params.DataMode, simParams, value };
+        _simulationMap[key] = { params.DataMode, params.RegOrder, simParams, value };
     }
 
     scheduleNextRun();
-    emit simulationStarted(params.DataMode, deviceId, type, addresses);
+    emit simulationStarted(params.DataMode, params.RegOrder, deviceId, type, addresses);
 }
 
 ///
@@ -111,10 +111,11 @@ void DataSimulator::stopSimulation(quint8 deviceId, QModbusDataUnit::RegisterTyp
     if(!_simulationMap.contains(key))
         return;
 
-    const auto mode = _simulationMap[key].Mode;
+    const auto simType  = _simulationMap[key].Type;
+    const auto simOrder = _simulationMap[key].Order;
 
     QVector<quint16> addresses;
-    for(int i = 0; i < registersCount(mode); ++i) {
+    for(int i = 0; i < registersCount(simType); ++i) {
         addresses << addr + i;
     }
 
@@ -122,7 +123,7 @@ void DataSimulator::stopSimulation(quint8 deviceId, QModbusDataUnit::RegisterTyp
         _simulationMap.remove({ deviceId, type, a});
     }
 
-    emit simulationStopped(mode, deviceId, type, addresses);
+    emit simulationStopped(simType, simOrder, deviceId, type, addresses);
     scheduleNextRun();
 }
 
@@ -159,7 +160,6 @@ void DataSimulator::restartSimulations()
     pauseSimulations();
     for(auto&& key : _simulationMap.keys())
     {
-        const auto mode = _simulationMap[key].Mode;
         const auto params = _simulationMap[key].Params;
         startSimulation(key.DeviceId, key.Type, key.Address, params);
     }
@@ -249,7 +249,8 @@ void DataSimulator::on_timeout()
 
         auto& sim = it.value();
         const auto& key = it.key();
-        const auto mode = sim.Mode;
+        const auto simType  = sim.Type;
+        const auto simOrder = sim.Order;
         const auto params = sim.Params;
         const auto interval = params.Interval;
 
@@ -264,15 +265,15 @@ void DataSimulator::on_timeout()
         switch(params.Mode)
         {
             case SimulationMode::Random:
-                randomSimulation(mode, key.DeviceId, key.Type, key.Address, params.RandomParams);
+                randomSimulation(simType, simOrder, key.DeviceId, key.Type, key.Address, params.RandomParams);
                 break;
 
             case SimulationMode::Increment:
-                incrementSimulation(mode, key.DeviceId, key.Type, key.Address, params.IncrementParams);
+                incrementSimulation(simType, simOrder, key.DeviceId, key.Type, key.Address, params.IncrementParams);
                 break;
 
             case SimulationMode::Decrement:
-                decrementSimailation(mode, key.DeviceId, key.Type, key.Address, params.DecrementParams);
+                decrementSimailation(simType, simOrder, key.DeviceId, key.Type, key.Address, params.DecrementParams);
                 break;
 
             case SimulationMode::Toggle:
@@ -313,10 +314,10 @@ T generateRandom(const QRange<double>& range)
 ///
 /// \brief DataSimulator::randomSimulation
 ///
-void DataSimulator::randomSimulation(DataDisplayMode mode, quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr, const RandomSimulationParams& params)
+void DataSimulator::randomSimulation(DataType type, RegisterOrder order, quint8 deviceId, QModbusDataUnit::RegisterType regType, quint16 addr, const RandomSimulationParams& params)
 {
-    auto&& value = _simulationMap[{ deviceId, type, addr}].CurrentValue;
-    switch(type)
+    auto&& value = _simulationMap[{ deviceId, regType, addr}].CurrentValue;
+    switch(regType)
     {
         case QModbusDataUnit::Coils:
         case QModbusDataUnit::DiscreteInputs:
@@ -325,43 +326,37 @@ void DataSimulator::randomSimulation(DataDisplayMode mode, quint8 deviceId, QMod
 
         case QModbusDataUnit::HoldingRegisters:
         case QModbusDataUnit::InputRegisters:
-            switch(mode)
+            switch(type)
             {
-                case DataDisplayMode::Binary:
-                case DataDisplayMode::Int16:
-                case DataDisplayMode::UInt16:
-                case DataDisplayMode::Hex:
-                case DataDisplayMode::Ansi:
+                case DataType::Binary:
+                case DataType::Int16:
+                case DataType::UInt16:
+                case DataType::Hex:
+                case DataType::Ansi:
                     value = generateRandom<quint16>(params.Range.from(), params.Range.to() + 1);
                 break;
 
-                case DataDisplayMode::Int32:
-                case DataDisplayMode::SwappedInt32:
+                case DataType::Int32:
                     value = generateRandom<qint32>(params.Range);
                 break;
 
-                case DataDisplayMode::UInt32:
-                case DataDisplayMode::SwappedUInt32:
+                case DataType::UInt32:
                     value = generateRandom<quint32>(params.Range);
                 break;
 
-                case DataDisplayMode::FloatingPt:
-                case DataDisplayMode::SwappedFP:
+                case DataType::Float32:
                    value = generateRandom<float>(params.Range);
                 break;
 
-                case DataDisplayMode::DblFloat:
-                case DataDisplayMode::SwappedDbl:
+                case DataType::Float64:
                    value = generateRandom<double>(params.Range);
                 break;
 
-                case DataDisplayMode::Int64:
-                case DataDisplayMode::SwappedInt64:
+                case DataType::Int64:
                     value = generateRandom<qint64>(params.Range);
-                    break;
+                break;
 
-                case DataDisplayMode::UInt64:
-                case DataDisplayMode::SwappedUInt64:
+                case DataType::UInt64:
                     value = generateRandom<quint64>(params.Range);
                 break;
             }
@@ -372,7 +367,7 @@ void DataSimulator::randomSimulation(DataDisplayMode mode, quint8 deviceId, QMod
     }
 
     if(value.isValid())
-        emit dataSimulated(mode, deviceId, type, addr, value);
+        emit dataSimulated(type, order, deviceId, regType, addr, value);
 }
 
 template<typename T>
@@ -394,55 +389,49 @@ T incrementValue(T value, T step, const QRange<double>& range)
 ///
 /// \brief DataSimulator::incrementSimulation
 ///
-void DataSimulator::incrementSimulation(DataDisplayMode mode, quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr, const IncrementSimulationParams& params)
+void DataSimulator::incrementSimulation(DataType type, RegisterOrder order, quint8 deviceId, QModbusDataUnit::RegisterType regType, quint16 addr, const IncrementSimulationParams& params)
 {
-    auto&& value = _simulationMap[{ deviceId, type, addr}].CurrentValue;
-    switch(mode)
+    auto&& value = _simulationMap[{ deviceId, regType, addr}].CurrentValue;
+    switch(type)
     {
-        case DataDisplayMode::Int16:
+        case DataType::Int16:
             value = incrementValue<qint16>(value.toInt(), params.Step, params.Range);
         break;
 
-        case DataDisplayMode::Binary:
-        case DataDisplayMode::UInt16:
-        case DataDisplayMode::Hex:
-        case DataDisplayMode::Ansi:
+        case DataType::Binary:
+        case DataType::UInt16:
+        case DataType::Hex:
+        case DataType::Ansi:
             value = incrementValue<quint16>(value.toUInt(), params.Step, params.Range);
         break;
 
-        case DataDisplayMode::Int32:
-        case DataDisplayMode::SwappedInt32:
-            value = incrementValue<qint32>(value.toInt(),  params.Step, params.Range);
+        case DataType::Int32:
+            value = incrementValue<qint32>(value.toInt(), params.Step, params.Range);
         break;
 
-        case DataDisplayMode::UInt32:
-        case DataDisplayMode::SwappedUInt32:
-            value = incrementValue<quint32>(value.toUInt(),  params.Step, params.Range);
+        case DataType::UInt32:
+            value = incrementValue<quint32>(value.toUInt(), params.Step, params.Range);
         break;
 
-        case DataDisplayMode::FloatingPt:
-        case DataDisplayMode::SwappedFP:
+        case DataType::Float32:
             value = incrementValue<float>(value.toFloat(), params.Step, params.Range);
         break;
 
-        case DataDisplayMode::DblFloat:
-        case DataDisplayMode::SwappedDbl:
+        case DataType::Float64:
             value = incrementValue<double>(value.toDouble(), params.Step, params.Range);
         break;
 
-        case DataDisplayMode::Int64:
-        case DataDisplayMode::SwappedInt64:
+        case DataType::Int64:
             value = incrementValue<qint64>(value.toLongLong(), params.Step, params.Range);
-            break;
+        break;
 
-        case DataDisplayMode::UInt64:
-        case DataDisplayMode::SwappedUInt64:
+        case DataType::UInt64:
             value = incrementValue<quint64>(value.toULongLong(), params.Step, params.Range);
         break;
     }
 
     if(value.isValid())
-        emit dataSimulated(mode, deviceId, type, addr, value);
+        emit dataSimulated(type, order, deviceId, regType, addr, value);
 }
 
 template<typename T>
@@ -464,55 +453,49 @@ T decrementValue(T value, T step, const QRange<double>& range)
 ///
 /// \brief DataSimulator::decrementSimailation
 ///
-void DataSimulator::decrementSimailation(DataDisplayMode mode, quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr, const DecrementSimulationParams& params)
+void DataSimulator::decrementSimailation(DataType type, RegisterOrder order, quint8 deviceId, QModbusDataUnit::RegisterType regType, quint16 addr, const DecrementSimulationParams& params)
 {
-    auto&& value = _simulationMap[{ deviceId, type, addr}].CurrentValue;
-    switch(mode)
+    auto&& value = _simulationMap[{ deviceId, regType, addr}].CurrentValue;
+    switch(type)
     {
-        case DataDisplayMode::Int16:
+        case DataType::Int16:
             value = decrementValue<qint16>(value.toInt(), params.Step, params.Range);
         break;
 
-        case DataDisplayMode::Binary:
-        case DataDisplayMode::UInt16:
-        case DataDisplayMode::Hex:
-        case DataDisplayMode::Ansi:
+        case DataType::Binary:
+        case DataType::UInt16:
+        case DataType::Hex:
+        case DataType::Ansi:
             value = decrementValue<quint16>(value.toUInt(), params.Step, params.Range);
         break;
 
-        case DataDisplayMode::Int32:
-        case DataDisplayMode::SwappedInt32:
-            value = decrementValue<qint32>(value.toInt(),  params.Step, params.Range);
+        case DataType::Int32:
+            value = decrementValue<qint32>(value.toInt(), params.Step, params.Range);
         break;
 
-        case DataDisplayMode::UInt32:
-        case DataDisplayMode::SwappedUInt32:
-            value = decrementValue<quint32>(value.toUInt(),  params.Step, params.Range);
+        case DataType::UInt32:
+            value = decrementValue<quint32>(value.toUInt(), params.Step, params.Range);
         break;
 
-        case DataDisplayMode::FloatingPt:
-        case DataDisplayMode::SwappedFP:
+        case DataType::Float32:
             value = decrementValue<float>(value.toFloat(), params.Step, params.Range);
         break;
 
-        case DataDisplayMode::DblFloat:
-        case DataDisplayMode::SwappedDbl:
+        case DataType::Float64:
             value = decrementValue<double>(value.toDouble(), params.Step, params.Range);
         break;
 
-        case DataDisplayMode::Int64:
-        case DataDisplayMode::SwappedInt64:
+        case DataType::Int64:
             value = decrementValue<qint64>(value.toLongLong(), params.Step, params.Range);
-            break;
+        break;
 
-        case DataDisplayMode::UInt64:
-        case DataDisplayMode::SwappedUInt64:
+        case DataType::UInt64:
             value = decrementValue<quint64>(value.toULongLong(), params.Step, params.Range);
         break;
     }
 
     if(value.isValid())
-        emit dataSimulated(mode, deviceId, type, addr, value);
+        emit dataSimulated(type, order, deviceId, regType, addr, value);
 }
 
 ///
@@ -526,5 +509,5 @@ void DataSimulator::toggleSimulation(quint8 deviceId, QModbusDataUnit::RegisterT
     auto&& value = _simulationMap[{ deviceId, type, addr}].CurrentValue;
     value = !value.toBool();
 
-    emit dataSimulated(DataDisplayMode::Binary, deviceId, type, addr, value);
+    emit dataSimulated(DataType::Binary, RegisterOrder::MSRF, deviceId, type, addr, value);
 }

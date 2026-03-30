@@ -52,8 +52,11 @@ public:
     QString codepage() const;
     void setCodepage(const QString& name);
 
-    DataDisplayMode dataDisplayMode() const;
-    void setDataDisplayMode(DataDisplayMode mode);
+    DataType dataType() const;
+    void setDataType(DataType type);
+
+    RegisterOrder registerOrder() const;
+    void setRegisterOrder(RegisterOrder order);
 
     bool displayHexAddresses() const;
     void setDisplayHexAddresses(bool on);
@@ -119,7 +122,8 @@ signals:
     void codepageChanged(const QString&);
     void definitionChanged();
     void pointTypeChanged(QModbusDataUnit::RegisterType);
-    void dataDisplayModeChanged(DataDisplayMode);
+    void dataTypeChanged(DataType);
+    void registerOrderChanged(RegisterOrder);
     void displayHexAddressesChanged(bool);
     void fontChanged(const QFont&);
     void foregroundColorChanged(const QColor&);
@@ -139,9 +143,9 @@ private slots:
     void on_outputWidget_itemDoubleClicked(quint16 addr, const QVariant& value);
     void on_mbDataChanged(quint8 deviceId, const QModbusDataUnit& data);
     void on_mbDefinitionsChanged(const ModbusDefinitions& defs);
-    void on_simulationStarted(DataDisplayMode mode, quint8 deviceId, QModbusDataUnit::RegisterType type, const QVector<quint16>& addresses);
-    void on_simulationStopped(DataDisplayMode mode, quint8 deviceId, QModbusDataUnit::RegisterType type, const QVector<quint16>& addresses);
-    void on_dataSimulated(DataDisplayMode mode, quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 startAddress, QVariant value);
+    void on_simulationStarted(DataType type, RegisterOrder order, quint8 deviceId, QModbusDataUnit::RegisterType regType, const QVector<quint16>& addresses);
+    void on_simulationStopped(DataType type, RegisterOrder order, quint8 deviceId, QModbusDataUnit::RegisterType regType, const QVector<quint16>& addresses);
+    void on_dataSimulated(DataType type, RegisterOrder order, quint8 deviceId, QModbusDataUnit::RegisterType regType, quint16 startAddress, QVariant value);
 
 private:
     void updateStatus();
@@ -163,7 +167,7 @@ private:
     FindReplaceBar* _findReplaceBar = nullptr;
 
     AnsiMenu*  _ansiMenu = nullptr;
-    QMap<DataDisplayMode, QAction*> _displayModeActions;
+    QMap<QPair<DataType, RegisterOrder>, QAction*> _displayModeActions;
 };
 
 ///
@@ -181,7 +185,8 @@ inline QSettings& operator <<(QSettings& out, FormDataView* frm)
     out.setValue("ViewMaximized", wnd->isMaximized());
     out.setValue("ViewRect", wnd->geometry());
 
-    out << frm->dataDisplayMode();
+    out << frm->dataType();
+    out << frm->registerOrder();
     out << frm->byteOrder();
     out << frm->displayDefinition();
     out.setValue("DisplayHexAddresses", frm->displayHexAddresses());
@@ -202,8 +207,11 @@ inline QSettings& operator >>(QSettings& in, FormDataView* frm)
 {
     if(!frm) return in;
 
-    DataDisplayMode dataDisplayMode;
-    in >> dataDisplayMode;
+    DataType dataType;
+    in >> dataType;
+
+    RegisterOrder regOrder;
+    in >> regOrder;
 
     ByteOrder byteOrder;
     in >> byteOrder;
@@ -232,7 +240,8 @@ inline QSettings& operator >>(QSettings& in, FormDataView* frm)
     if(isMinimized) wnd->setWindowState(Qt::WindowMinimized);
     if(isMaximized) wnd->setWindowState(Qt::WindowMaximized);
 
-    frm->setDataDisplayMode(dataDisplayMode);
+    frm->setDataType(dataType);
+    frm->setRegisterOrder(regOrder);
     frm->setByteOrder(byteOrder);
     frm->setDisplayDefinition(displayDefinition);
 
@@ -268,7 +277,8 @@ inline QXmlStreamWriter& operator <<(QXmlStreamWriter& xml, FormDataView* frm)
         xml.writeAttribute("Panel", panel);
     if(frm->property("Closed").toBool())
         xml.writeAttribute("Closed", "1");
-    xml.writeAttribute("DataDisplayMode", enumToString<DataDisplayMode>(frm->dataDisplayMode()));
+    xml.writeAttribute("DataType", enumToString<DataType>(frm->dataType()));
+    xml.writeAttribute("RegisterOrder", enumToString<RegisterOrder>(frm->registerOrder()));
     xml.writeAttribute("DisplayHexAddresses", boolToString(frm->displayHexAddresses()));
     xml.writeAttribute("Codepage", frm->codepage());
     xml.writeAttribute("ByteOrder", enumToString<ByteOrder>(frm->byteOrder()));
@@ -348,15 +358,20 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, FormDataView* frm)
     if (!frm) return xml;
 
     if (xml.isStartElement() && xml.name() == QLatin1String("FormDataView")) {
-        DataDisplayMode ddm;
+        DataType dataType = DataType::UInt16;
+        RegisterOrder regOrder = RegisterOrder::MSRF;
         DataViewDefinitions dd;
         QHash<quint16, quint16> data;
         QHash<quint16, ModbusSimulationParams> simulations;
 
         const QXmlStreamAttributes attributes = xml.attributes();
 
-        if (attributes.hasAttribute("DataDisplayMode")) {
-            ddm = enumFromString<DataDisplayMode>(attributes.value("DataDisplayMode").toString());
+        if (attributes.hasAttribute("DataType")) {
+            dataType = enumFromString<DataType>(attributes.value("DataType").toString(), DataType::UInt16);
+        }
+
+        if (attributes.hasAttribute("RegisterOrder")) {
+            regOrder = enumFromString<RegisterOrder>(attributes.value("RegisterOrder").toString(), RegisterOrder::MSRF);
         }
 
         if (attributes.hasAttribute("DisplayHexAddresses")) {
@@ -485,7 +500,8 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, FormDataView* frm)
         }
 
         if(dd.PointType != QModbusDataUnit::Invalid) {
-            frm->setDataDisplayMode(ddm);
+            frm->setDataType(dataType);
+            frm->setRegisterOrder(regOrder);
 
             if(!simulations.isEmpty()) {
                 QHashIterator it(simulations);

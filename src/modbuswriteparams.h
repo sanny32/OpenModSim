@@ -14,7 +14,8 @@ struct ModbusWriteParams
     quint32 DeviceId;
     quint16 Address;
     QVariant Value;
-    DataDisplayMode DataMode;
+    DataType        DataMode;
+    RegisterOrder   RegOrder = RegisterOrder::MSRF;
     AddressSpace AddrSpace = AddressSpace::Addr6Digits;
     ByteOrder Order;
     QString Codepage;

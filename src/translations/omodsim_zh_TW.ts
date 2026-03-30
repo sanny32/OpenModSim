@@ -839,43 +839,43 @@
         <translation>預設保持暫存器</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="739"/>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="820"/>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="820"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="616"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="697"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="697"/>
         <source>CSV files (*.csv)</source>
         <translation>CSV 檔案 (*.csv)</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="746"/>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="831"/>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="831"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="623"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="708"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="708"/>
         <source>Error</source>
         <translation>錯誤</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="787"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="664"/>
         <source>Import error</source>
         <translation>匯入錯誤</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="787"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="664"/>
         <source>Invalid value: %1</source>
         <translation>無效值：%1</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="796"/>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="802"/>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="802"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="673"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="679"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="679"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="796"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="673"/>
         <source>No data found in file.</source>
         <translation>檔案中未找到資料。</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="802"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="679"/>
         <source>Imported data size (%1) does not match current size (%2).</source>
         <translation>匯入資料大小 (%1) 與目前大小 (%2) 不符。</translation>
     </message>
@@ -1771,8 +1771,8 @@
     </message>
     <message>
         <location filename="../dialogs/dialogwriteregister.ui" line="118"/>
-        <location filename="../dialogs/dialogwriteregister.cpp" line="237"/>
-        <location filename="../dialogs/dialogwriteregister.cpp" line="237"/>
+        <location filename="../dialogs/dialogwriteregister.cpp" line="231"/>
+        <location filename="../dialogs/dialogwriteregister.cpp" line="231"/>
         <source>Auto Simulation: OFF</source>
         <translation>自動模擬：關閉</translation>
     </message>
@@ -1792,9 +1792,9 @@
         <translation>值，(ANSI)： </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwriteregister.cpp" line="231"/>
-        <location filename="../dialogs/dialogwriteregister.cpp" line="244"/>
-        <location filename="../dialogs/dialogwriteregister.cpp" line="244"/>
+        <location filename="../dialogs/dialogwriteregister.cpp" line="225"/>
+        <location filename="../dialogs/dialogwriteregister.cpp" line="238"/>
+        <location filename="../dialogs/dialogwriteregister.cpp" line="238"/>
         <source>Auto Simulation: ON</source>
         <translation>自動模擬：開啟</translation>
     </message>
@@ -2098,14 +2098,14 @@ MODBUS Point Type:
         <translation type="unfinished">十六進位制地址</translation>
     </message>
     <message>
-        <location filename="../formdataview.cpp" line="579"/>
+        <location filename="../formdataview.cpp" line="602"/>
         <source>Address Base: %1
 Starting Address: %2
 Length: %3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formdataview.cpp" line="581"/>
+        <location filename="../formdataview.cpp" line="604"/>
         <source>Unit Identifier: %1
 Data Type:
 %2</source>
@@ -2265,7 +2265,17 @@ MODBUS Point Type:
         <translation type="unfinished">地址</translation>
     </message>
     <message>
-        <location filename="../formregistermapview.ui" line="87"/>
+        <location filename="../formregistermapview.ui" line="77"/>
+        <source>DataType</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../formregistermapview.ui" line="82"/>
+        <source>Order</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../formregistermapview.ui" line="92"/>
         <source>Value</source>
         <translation type="unfinished">值</translation>
     </message>
@@ -2275,58 +2285,53 @@ MODBUS Point Type:
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formregistermapview.ui" line="77"/>
-        <source>Format</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../formregistermapview.ui" line="82"/>
+        <location filename="../formregistermapview.ui" line="87"/>
         <source>Comment</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formregistermapview.ui" line="92"/>
+        <location filename="../formregistermapview.ui" line="97"/>
         <source>Timestamp</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formregistermapview.ui" line="100"/>
+        <location filename="../formregistermapview.ui" line="105"/>
         <source>Add</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formregistermapview.ui" line="109"/>
+        <location filename="../formregistermapview.ui" line="114"/>
         <source>Delete</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formregistermapview.ui" line="118"/>
+        <location filename="../formregistermapview.ui" line="123"/>
         <source>Clear Register Map</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="823"/>
-        <location filename="../formregistermapview.cpp" line="836"/>
-        <location filename="../formregistermapview.cpp" line="836"/>
+        <location filename="../formregistermapview.cpp" line="907"/>
+        <location filename="../formregistermapview.cpp" line="920"/>
+        <location filename="../formregistermapview.cpp" line="920"/>
         <source>Coils</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="824"/>
-        <location filename="../formregistermapview.cpp" line="837"/>
-        <location filename="../formregistermapview.cpp" line="837"/>
+        <location filename="../formregistermapview.cpp" line="908"/>
+        <location filename="../formregistermapview.cpp" line="921"/>
+        <location filename="../formregistermapview.cpp" line="921"/>
         <source>Discrete Inputs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="825"/>
-        <location filename="../formregistermapview.cpp" line="838"/>
-        <location filename="../formregistermapview.cpp" line="838"/>
+        <location filename="../formregistermapview.cpp" line="909"/>
+        <location filename="../formregistermapview.cpp" line="922"/>
+        <location filename="../formregistermapview.cpp" line="922"/>
         <source>Input Registers</source>
         <translation type="unfinished">輸入暫存器</translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="826"/>
+        <location filename="../formregistermapview.cpp" line="910"/>
         <source>Holding Registers</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3153,8 +3158,8 @@ Script.onInit(()=&gt;{
     </message>
     <message>
         <location filename="../mainwindow.ui" line="234"/>
-        <location filename="../mainwindow.cpp" line="1580"/>
-        <location filename="../mainwindow.cpp" line="1580"/>
+        <location filename="../mainwindow.cpp" line="1581"/>
+        <location filename="../mainwindow.cpp" line="1581"/>
         <source>Save Project</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3495,8 +3500,8 @@ Script.onInit(()=&gt;{
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="244"/>
-        <location filename="../mainwindow.cpp" line="1667"/>
-        <location filename="../mainwindow.cpp" line="1667"/>
+        <location filename="../mainwindow.cpp" line="1668"/>
+        <location filename="../mainwindow.cpp" line="1668"/>
         <source>Clear List</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3520,12 +3525,12 @@ Script.onInit(()=&gt;{
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1581"/>
+        <location filename="../mainwindow.cpp" line="1582"/>
         <source>Save project before closing?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1655"/>
+        <location filename="../mainwindow.cpp" line="1656"/>
         <source>No Recent Projects</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4183,7 +4188,7 @@ Script.onInit(()=&gt;{
         <translation>指定了錯誤的裝置地址（%1）</translation>
     </message>
     <message>
-        <location filename="../modbusmultiserver.cpp" line="1098"/>
+        <location filename="../modbusmultiserver.cpp" line="1087"/>
         <source>Connection error. %1</source>
         <translation>連線錯誤 %1</translation>
     </message>
@@ -4199,77 +4204,77 @@ Script.onInit(()=&gt;{
 <context>
     <name>OutputDataWidget</name>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1383"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1370"/>
         <source>Set Value of %1</source>
         <translation type="unfinished">將值寫入 %1</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1392"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1379"/>
         <source>Add Description</source>
         <translation type="unfinished">添加描述</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1392"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1379"/>
         <source>Edit Description</source>
         <translation type="unfinished">編輯描述</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1395"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1382"/>
         <source>%1: Enter Description</source>
         <translation type="unfinished">%1:輸入描述</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1404"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1391"/>
         <source>Remove Color</source>
         <translation type="unfinished">去除顏色</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1415"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1402"/>
         <source>Yellow</source>
         <translation type="unfinished">黃色的</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1416"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1403"/>
         <source>Cyan</source>
         <translation type="unfinished">青色</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1417"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1404"/>
         <source>Magenta</source>
         <translation type="unfinished">品紅</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1418"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1405"/>
         <source>LightGreen</source>
         <translation type="unfinished">淺綠色</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1419"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1406"/>
         <source>Orange</source>
         <translation type="unfinished">橘子</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1420"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1407"/>
         <source>LightBlue</source>
         <translation type="unfinished">淺藍色</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1421"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1408"/>
         <source>LightGray</source>
         <translation type="unfinished">淺灰色</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1506"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1487"/>
         <source>NOT CONNECTED!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1514"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1495"/>
         <source>Invalid Data Length Specified</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1523"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1504"/>
         <source>Zoom: %1%</source>
         <translation type="unfinished">飛漲： %1%</translation>
     </message>

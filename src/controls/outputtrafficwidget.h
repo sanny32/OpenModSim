@@ -17,14 +17,14 @@ class QModelIndex;
 class OutputTrafficWidget : public QFrame
 {
     Q_OBJECT
-    Q_PROPERTY(DataDisplayMode dataDisplayMode READ dataDisplayMode WRITE setDataDisplayMode)
+    Q_PROPERTY(DataType dataType READ dataType WRITE setDataType)
 
 public:
     explicit OutputTrafficWidget(QWidget* parent = nullptr);
     ~OutputTrafficWidget() override;
 
-    DataDisplayMode dataDisplayMode() const;
-    void setDataDisplayMode(DataDisplayMode mode);
+    DataType dataType() const;
+    void setDataType(DataType type);
 
     QColor backgroundColor() const;
     void setBackgroundColor(const QColor& clr);

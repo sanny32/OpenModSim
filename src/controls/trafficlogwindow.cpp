@@ -19,19 +19,19 @@ TrafficLogWindow::TrafficLogWindow(ModbusMultiServer& server, QWidget* parent)
 }
 
 ///
-/// \brief TrafficLogWindow::dataDisplayMode
+/// \brief TrafficLogWindow::dataType
 ///
-DataDisplayMode TrafficLogWindow::dataDisplayMode() const
+DataType TrafficLogWindow::dataType() const
 {
-    return _logWidget->dataDisplayMode();
+    return _logWidget->dataType();
 }
 
 ///
-/// \brief TrafficLogWindow::setDataDisplayMode
+/// \brief TrafficLogWindow::setDataType
 ///
-void TrafficLogWindow::setDataDisplayMode(DataDisplayMode mode)
+void TrafficLogWindow::setDataType(DataType type)
 {
-    _logWidget->setDataDisplayMode(mode);
+    _logWidget->setDataType(type);
 }
 
 ///
