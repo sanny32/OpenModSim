@@ -45,6 +45,9 @@ public:
     RegisterMapViewDefinitions displayDefinition() const;
     void setDisplayDefinition(const RegisterMapViewDefinitions& dd);
 
+    bool autoAddOnRequest() const { return _autoAddOnRequest; }
+    void setAutoAddOnRequest(bool value) { _autoAddOnRequest = value; }
+
     void saveXml(QXmlStreamWriter& xml) const;
     void loadXml(QXmlStreamReader& xml);
 
@@ -102,6 +105,7 @@ private:
     RegisterMapViewDefinitions _displayDefinition;
     QMap<ItemMapKey, Entry> _registerMap;
     bool _updatingTable = false;
+    bool _autoAddOnRequest = true;
 };
 
 ///
@@ -240,6 +244,12 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, FormRegisterMapView*
                     entry.order  = enumFromString<RegisterOrder>(attrs.value("Order").toString(), RegisterOrder::MSRF);
                     entry.timestamp = QDateTime::fromString(attrs.value("Timestamp").toString(), Qt::ISODateWithMs);
                     entry.comment = xml.readElementText(QXmlStreamReader::IncludeChildElements).trimmed();
+
+                    if (key.Type == QModbusDataUnit::Coils ||
+                        key.Type == QModbusDataUnit::DiscreteInputs) {
+                        entry.type  = DataType::Binary;
+                        entry.order = RegisterOrder::MSRF;
+                    }
 
                     frm->_registerMap[key] = entry;
                     frm->insertEntry(key, entry);

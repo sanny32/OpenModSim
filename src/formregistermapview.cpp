@@ -66,12 +66,43 @@ class DataTypeItemDelegate : public QStyledItemDelegate
 public:
     using QStyledItemDelegate::QStyledItemDelegate;
 
-    QWidget* createEditor(QWidget* parent, const QStyleOptionViewItem&, const QModelIndex&) const override
+    static bool isBitType(const QModelIndex& index)
     {
+        const int regType = index.siblingAtColumn(ColType).data(RoleTypeValue).toInt();
+        return regType == QModbusDataUnit::Coils ||
+               regType == QModbusDataUnit::DiscreteInputs;
+    }
+
+    static QString tooltipFor(DataType type, bool bitType = false)
+    {
+        switch (type) {
+            case DataType::Binary:  return bitType
+                                        ? tr("1-bit value (Coils / Discrete Inputs)")
+                                        : tr("16-bit register value shown as 16 binary digits");
+            case DataType::UInt16:  return tr("Unsigned 16-bit integer  (0 … 65535)");
+            case DataType::Int16:   return tr("Signed 16-bit integer  (−32768 … 32767)");
+            case DataType::Hex:     return tr("16-bit value displayed as hexadecimal");
+            case DataType::Ansi:    return tr("16-bit value displayed as ANSI character");
+            case DataType::Float32: return tr("IEEE 754 single-precision float  (2 registers)");
+            case DataType::Float64: return tr("IEEE 754 double-precision float  (4 registers)");
+            case DataType::Int32:   return tr("Signed 32-bit integer  (2 registers)");
+            case DataType::UInt32:  return tr("Unsigned 32-bit integer  (2 registers)");
+            case DataType::Int64:   return tr("Signed 64-bit integer  (4 registers)");
+            case DataType::UInt64:  return tr("Unsigned 64-bit integer  (4 registers)");
+        }
+        return {};
+    }
+
+    QWidget* createEditor(QWidget* parent, const QStyleOptionViewItem&, const QModelIndex& index) const override
+    {
+        if (isBitType(index))
+            return nullptr;
+
         auto* cb = new QComboBox(parent);
         for (auto it = EnumStrings<DataType>::mapping().cbegin();
              it != EnumStrings<DataType>::mapping().cend(); ++it) {
             cb->addItem(it.value(), static_cast<int>(it.key()));
+            cb->setItemData(cb->count() - 1, tooltipFor(it.key()), Qt::ToolTipRole);
         }
         auto* self = const_cast<DataTypeItemDelegate*>(this);
         connect(cb, QOverload<int>::of(&QComboBox::activated), self, [self, cb](int) {
@@ -100,6 +131,17 @@ public:
     {
         editor->setGeometry(option.rect);
     }
+
+    bool helpEvent(QHelpEvent* e, QAbstractItemView* view, const QStyleOptionViewItem& option, const QModelIndex& index) override
+    {
+        if (e->type() == QEvent::ToolTip) {
+            const bool bit = isBitType(index);
+            const QString tip = tooltipFor(enumFromString<DataType>(index.data(Qt::DisplayRole).toString(), DataType::Int16), bit);
+            QToolTip::showText(e->globalPos(), tip, view);
+            return true;
+        }
+        return QStyledItemDelegate::helpEvent(e, view, option, index);
+    }
 };
 
 ///
@@ -110,12 +152,22 @@ class OrderItemDelegate : public QStyledItemDelegate
 public:
     using QStyledItemDelegate::QStyledItemDelegate;
 
+    static QString tooltipFor(RegisterOrder order)
+    {
+        switch (order) {
+            case RegisterOrder::MSRF: return tr("Most Significant Register First — big-endian word order");
+            case RegisterOrder::LSRF: return tr("Least Significant Register First — little-endian word order");
+        }
+        return {};
+    }
+
     QWidget* createEditor(QWidget* parent, const QStyleOptionViewItem&, const QModelIndex&) const override
     {
         auto* cb = new QComboBox(parent);
         for (auto it = EnumStrings<RegisterOrder>::mapping().cbegin();
              it != EnumStrings<RegisterOrder>::mapping().cend(); ++it) {
             cb->addItem(it.value(), static_cast<int>(it.key()));
+            cb->setItemData(cb->count() - 1, tooltipFor(it.key()), Qt::ToolTipRole);
         }
         auto* self = const_cast<OrderItemDelegate*>(this);
         connect(cb, QOverload<int>::of(&QComboBox::activated), self, [self, cb](int) {
@@ -143,6 +195,16 @@ public:
     void updateEditorGeometry(QWidget* editor, const QStyleOptionViewItem& option, const QModelIndex&) const override
     {
         editor->setGeometry(option.rect);
+    }
+
+    bool helpEvent(QHelpEvent* e, QAbstractItemView* view, const QStyleOptionViewItem& option, const QModelIndex& index) override
+    {
+        if (e->type() == QEvent::ToolTip) {
+            const auto order = enumFromString<RegisterOrder>(index.data(Qt::DisplayRole).toString(), RegisterOrder::MSRF);
+            QToolTip::showText(e->globalPos(), tooltipFor(order), view);
+            return true;
+        }
+        return QStyledItemDelegate::helpEvent(e, view, option, index);
     }
 };
 
@@ -875,6 +937,14 @@ void FormRegisterMapView::on_tableWidget_cellChanged(int row, int col)
         Entry entry = _registerMap.value(oldKey);
         _registerMap.remove(oldKey);
 
+        // Force Binary for bit-type registers
+        const bool bitType = (newType == QModbusDataUnit::Coils ||
+                              newType == QModbusDataUnit::DiscreteInputs);
+        if (bitType) {
+            entry.type  = DataType::Binary;
+            entry.order = RegisterOrder::MSRF;
+        }
+
         // Read fresh value from server
         const auto unit = _mbMultiServer.data(newDevId, newType, newAddr, 1);
         entry.value = unit.isValid() ? static_cast<quint16>(unit.value(0)) : 0;
@@ -886,6 +956,18 @@ void FormRegisterMapView::on_tableWidget_cellChanged(int row, int col)
         unitItem->setData(RoleDeviceId, static_cast<int>(newKey.DeviceId));
         unitItem->setData(RoleType,     static_cast<int>(newKey.Type));
         unitItem->setData(RoleAddress,  static_cast<int>(newKey.Address));
+
+        if (auto* typeItem2 = ui->tableWidget->item(row, ColType))
+            typeItem2->setData(RoleTypeValue, static_cast<int>(newKey.Type));
+
+        if (bitType) {
+            if (auto* dtItem = ui->tableWidget->item(row, ColDataType))
+                dtItem->setText(enumToString(DataType::Binary));
+            if (auto* ordItem = ui->tableWidget->item(row, ColOrder)) {
+                ordItem->setText(QString());
+                ordItem->setFlags(ordItem->flags() & ~Qt::ItemIsEditable);
+            }
+        }
 
         auto* valItem = ui->tableWidget->item(row, ColValue);
         if (valItem) valItem->setText(formatValue(newType, entry.type, entry.order, regsForKey(newKey, entry.type)));
@@ -919,10 +1001,12 @@ void FormRegisterMapView::processRequest(quint8 deviceId, QModbusDataUnit::Regis
                 const int row = findRow(key);
                 if (row >= 0) updateValue(row, key, value);
             }
-        } else {
+        } else if (_autoAddOnRequest) {
             Entry entry;
             entry.value = value;
-            entry.type  = DataType::Int16;
+            entry.type  = (type == QModbusDataUnit::Coils ||
+                           type == QModbusDataUnit::DiscreteInputs)
+                          ? DataType::Binary : DataType::Int16;
             entry.order = RegisterOrder::MSRF;
             entry.timestamp = QDateTime::currentDateTime();
             _registerMap[key] = entry;
@@ -966,6 +1050,7 @@ void FormRegisterMapView::insertEntry(const ItemMapKey& key, const Entry& entry)
 
     // Col 1: Type (editable via delegate)
     auto* typeItem = new QTableWidgetItem(registerTypeToString(key.Type));
+    typeItem->setData(RoleTypeValue, static_cast<int>(key.Type));
     typeItem->setTextAlignment(Qt::AlignCenter);
 
     // Col 2: Address (editable)
