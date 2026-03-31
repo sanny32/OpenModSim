@@ -427,10 +427,14 @@ FormRegisterMapView::FormRegisterMapView(ModbusMultiServer& server, MainWindow* 
     ui->tableWidget->setItemDelegateForColumn(ColOrder,    new OrderItemDelegate(ui->tableWidget));
     ui->tableWidget->setItemDelegateForColumn(ColValue,    new ValueItemDelegate(ui->tableWidget));
 
+    auto* spacer = new QWidget(ui->toolBar);
+    spacer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+    ui->toolBar->addWidget(spacer);
+    ui->toolBar->addAction(ui->actionClear);
+
     setupServerConnections();
 
     setWindowIcon(QIcon(":/res/actionShowData.png"));
-
 }
 
 ///
@@ -458,7 +462,6 @@ void FormRegisterMapView::setDisplayDefinition(const RegisterMapViewDefinitions&
     if (!dd.FormName.isEmpty())
         setWindowTitle(dd.FormName);
 }
-
 
 ///
 /// \brief FormRegisterMapView::saveXml
