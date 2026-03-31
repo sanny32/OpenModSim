@@ -8,6 +8,24 @@
 #include <QStyleOptionTab>
 #include <QVariant>
 
+static inline QPoint mouseEventPos(const QMouseEvent* e)
+{
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+    return e->position().toPoint();
+#else
+    return e->pos();
+#endif
+}
+
+static inline QPoint mouseEventGlobalPos(const QMouseEvent* e)
+{
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+    return e->globalPosition().toPoint();
+#else
+    return e->globalPos();
+#endif
+}
+
 ///
 /// \brief The DragTabOverlay class renders a semi-transparent tab image
 /// that follows the cursor when a tab is dragged outside its panel.
@@ -271,12 +289,12 @@ void MdiTabBar::mousePressEvent(QMouseEvent* event)
 {
     // Record subwindow and grab tab image BEFORE Qt's press handler can reorder tabs.
     if (event->button() == Qt::LeftButton) {
-        const int idx = tabAt(event->position().toPoint());
+        const int idx = tabAt(mouseEventPos(event));
         _dragSubWindow = subWindowAt(idx);
         if (_dragSubWindow) {
             const QRect tr = tabRect(idx);
             _dragPixmap  = grab(tr);
-            _dragHotspot = (event->position() - tr.topLeft()).toPoint();
+            _dragHotspot = mouseEventPos(event) - tr.topLeft();
         } else {
             _dragPixmap  = QPixmap();
             _dragHotspot = QPoint();
@@ -294,7 +312,7 @@ void MdiTabBar::mouseMoveEvent(QMouseEvent* event)
     if (_dragSubWindow && (event->buttons() & Qt::LeftButton)) {
         auto* par = parentWidget();
         if (par) {
-            const QPoint posInParent = mapTo(par, event->position().toPoint());
+            const QPoint posInParent = mapTo(par, mouseEventPos(event));
             const bool outside = !par->rect().contains(posInParent);
 
             if (outside) {
@@ -303,7 +321,7 @@ void MdiTabBar::mouseMoveEvent(QMouseEvent* event)
                     _dragOverlay = new DragTabOverlay(_dragPixmap);
                 }
                 if (_dragOverlay) {
-                    _dragOverlay->move(event->globalPosition().toPoint() - _dragHotspot);
+                    _dragOverlay->move(mouseEventGlobalPos(event) - _dragHotspot);
                     _dragOverlay->show();
                 }
                 if (!_dragCursorSet) {
@@ -343,12 +361,12 @@ void MdiTabBar::mouseReleaseEvent(QMouseEvent* event)
             // Check if the mouse was released outside the parent MdiArea's bounds.
             auto* par = parentWidget();
             if (par) {
-                const QPoint posInParent = mapTo(par, event->position().toPoint());
+                const QPoint posInParent = mapTo(par, mouseEventPos(event));
                 if (!par->rect().contains(posInParent)) {
                     QMdiSubWindow* subWnd = _dragSubWindow;
                     _dragSubWindow = nullptr;
                     QTabBar::mouseReleaseEvent(event);
-                    emit tabDraggedOutside(subWnd, event->globalPosition().toPoint());
+                    emit tabDraggedOutside(subWnd, mouseEventGlobalPos(event));
                     return;
                 }
             }
