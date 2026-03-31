@@ -693,8 +693,21 @@ void FormRegisterMapView::on_mbDataChanged(quint8 deviceId, const QModbusDataUni
 ///
 void FormRegisterMapView::on_actionAdd_triggered()
 {
-    // Default: Unit=1, HoldingRegisters, address=0 (internal 0-based), Int16 format
+    // Inherit from last row if available, otherwise use defaults
     ItemMapKey key{ 1, QModbusDataUnit::HoldingRegisters, 0 };
+    Entry entry;
+    entry.type  = DataType::Int16;
+    entry.order = RegisterOrder::MSRF;
+
+    if (!_registerMap.isEmpty()) {
+        const auto last = std::prev(_registerMap.cend());
+        key.DeviceId = last.key().DeviceId;
+        key.Type     = last.key().Type;
+        key.Address  = last.key().Address < 0xFFFF ? last.key().Address + 1 : last.key().Address;
+        entry.type   = last.value().type;
+        entry.order  = last.value().order;
+        entry.comment = last.value().comment;
+    }
 
     // If the key already exists, shift the address to avoid collision
     while (_registerMap.contains(key)) {
@@ -702,9 +715,6 @@ void FormRegisterMapView::on_actionAdd_triggered()
         else break;
     }
 
-    Entry entry;
-    entry.type      = DataType::Int16;
-    entry.order     = RegisterOrder::MSRF;
     entry.timestamp = _mbMultiServer.timestamp(key.DeviceId, key.Type, key.Address);
     const auto unit = _mbMultiServer.data(key.DeviceId, key.Type, key.Address, 1);
     entry.value = unit.isValid() ? static_cast<quint16>(unit.value(0)) : 0;
