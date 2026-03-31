@@ -429,9 +429,26 @@ FormRegisterMapView::FormRegisterMapView(ModbusMultiServer& server, MainWindow* 
 
     auto* spacer = new QWidget(ui->toolBar);
     spacer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
-    ui->toolBar->addWidget(spacer);
-    ui->toolBar->addAction(ui->actionClear);
+    ui->toolBar->insertWidget(ui->actionClear, spacer);
 
+    ui->tableWidget->setContextMenuPolicy(Qt::CustomContextMenu);
+    connect(ui->tableWidget, &QTableWidget::customContextMenuRequested, this, [this](const QPoint& pos) {
+        QMenu menu(this);
+        menu.addAction(ui->actionAdd);
+        menu.addAction(ui->actionDelete);
+        menu.addSeparator();
+        menu.addAction(ui->actionClear);
+        menu.exec(ui->tableWidget->viewport()->mapToGlobal(pos));
+    });
+
+    connect(ui->tableWidget->selectionModel(), &QItemSelectionModel::selectionChanged,
+            this, &FormRegisterMapView::updateActionState);
+    connect(ui->tableWidget->model(), &QAbstractItemModel::rowsInserted,
+            this, &FormRegisterMapView::updateActionState);
+    connect(ui->tableWidget->model(), &QAbstractItemModel::rowsRemoved,
+            this, &FormRegisterMapView::updateActionState);
+
+    updateActionState();
     setupServerConnections();
 
     setWindowIcon(QIcon(":/res/actionShowData.png"));
@@ -612,6 +629,7 @@ void FormRegisterMapView::on_actionAdd_triggered()
     const int newRow = ui->tableWidget->rowCount() - 1;
     ui->tableWidget->setCurrentCell(newRow, ColUnit);
     ui->tableWidget->editItem(ui->tableWidget->item(newRow, ColUnit));
+    updateActionState();
 }
 
 ///
@@ -637,6 +655,7 @@ void FormRegisterMapView::on_actionDelete_triggered()
         ui->tableWidget->removeRow(row);
     }
     _updatingTable = false;
+    updateActionState();
 }
 
 ///
@@ -648,6 +667,16 @@ void FormRegisterMapView::on_actionClear_triggered()
     _updatingTable = true;
     ui->tableWidget->setRowCount(0);
     _updatingTable = false;
+    updateActionState();
+}
+
+///
+/// \brief FormRegisterMapView::updateActionState
+///
+void FormRegisterMapView::updateActionState()
+{
+    ui->actionDelete->setEnabled(!ui->tableWidget->selectedRanges().isEmpty());
+    ui->actionClear->setEnabled(ui->tableWidget->rowCount() > 0);
 }
 
 ///

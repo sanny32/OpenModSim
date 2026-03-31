@@ -67,6 +67,7 @@ private slots:
     void on_actionDelete_triggered();
     void on_actionClear_triggered();
     void on_tableWidget_cellChanged(int row, int col);
+    void updateActionState();
 
 private:
     struct Entry {
