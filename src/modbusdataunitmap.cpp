@@ -168,11 +168,17 @@ void ModbusDataUnitMap::setData(const QModbusDataUnit& data)
     const auto addr = data.startAddress();
     const auto length = data.valueCount();
     const auto type = data.registerType();
+    const QDateTime now = QDateTime::currentDateTime();
 
     for(uint i = 0; i < length; i++)
     {
-        setDataValue(_modbusDataUnitMap, type, addr + i, data.value(i));
-        setDataValue(_modbusDataUnitGlobalMap, type, addr + i, data.value(i));
+        const quint16 newValue = data.value(i);
+        const quint16 oldValue = getDataValue(_modbusDataUnitGlobalMap, type, addr + i);
+        if(newValue != oldValue)
+            _timestamps[(static_cast<quint32>(type) << 16) | (addr + i)] = now;
+
+        setDataValue(_modbusDataUnitMap, type, addr + i, newValue);
+        setDataValue(_modbusDataUnitGlobalMap, type, addr + i, newValue);
     }
 }
 
@@ -193,6 +199,17 @@ QModbusDataUnit ModbusDataUnitMap::getData(QModbusDataUnit::RegisterType pointTy
     }
 
     return data;
+}
+
+///
+/// \brief ModbusDataUnitMap::timestamp
+/// \param type
+/// \param address
+/// \return
+///
+QDateTime ModbusDataUnitMap::timestamp(QModbusDataUnit::RegisterType type, quint16 address) const
+{
+    return _timestamps.value((static_cast<quint32>(type) << 16) | address);
 }
 
 ///

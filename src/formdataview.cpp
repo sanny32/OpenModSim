@@ -311,12 +311,21 @@ void FormDataView::setDisplayDefinition(const DataViewDefinitions& dd)
 }
 
 ///
-/// \brief FormDataView::dataDisplayMode
+/// \brief FormDataView::dataType
 /// \return
 ///
-DataDisplayMode FormDataView::dataDisplayMode() const
+DataType FormDataView::dataType() const
 {
-    return ui->outputWidget->dataDisplayMode();
+    return ui->outputWidget->dataType();
+}
+
+///
+/// \brief FormDataView::registerOrder
+/// \return
+///
+RegisterOrder FormDataView::registerOrder() const
+{
+    return ui->outputWidget->registerOrder();
 }
 
 ///
@@ -345,28 +354,42 @@ void FormDataView::setDisplayHexAddresses(bool on)
 }
 
 ///
-/// \brief FormDataView::setDataDisplayMode
-/// \param mode
+/// \brief FormDataView::setDataType
+/// \param type
 ///
-void FormDataView::setDataDisplayMode(DataDisplayMode mode)
+void FormDataView::setDataType(DataType type)
 {
-    const auto prev = dataDisplayMode();
+    const auto prevType = dataType();
     const auto dd = displayDefinition();
     switch(dd.PointType) {
         case QModbusDataUnit::Coils:
         case QModbusDataUnit::DiscreteInputs:
-            ui->outputWidget->setDataDisplayMode(DataDisplayMode::Binary);
+            ui->outputWidget->setDataType(DataType::Binary);
             break;
         case QModbusDataUnit::InputRegisters:
         case QModbusDataUnit::HoldingRegisters:
-            ui->outputWidget->setDataDisplayMode(mode);
+            ui->outputWidget->setDataType(type);
             break;
         default: break;
     }
     updateDisplayBar();
     reapplyFind();
-    if(dataDisplayMode() != prev)
-        emit dataDisplayModeChanged(dataDisplayMode());
+    if(dataType() != prevType)
+        emit dataTypeChanged(dataType());
+}
+
+///
+/// \brief FormDataView::setRegisterOrder
+/// \param order
+///
+void FormDataView::setRegisterOrder(RegisterOrder order)
+{
+    const auto prev = registerOrder();
+    ui->outputWidget->setRegisterOrder(order);
+    updateDisplayBar();
+    reapplyFind();
+    if(registerOrder() != prev)
+        emit registerOrderChanged(registerOrder());
 }
 
 ///
@@ -857,8 +880,10 @@ void FormDataView::linkTo(FormDataView* other)
     connect(other, &FormDataView::byteOrderChanged, this,  &FormDataView::setByteOrder);
     connect(this,  &FormDataView::codepageChanged, other, &FormDataView::setCodepage);
     connect(other, &FormDataView::codepageChanged, this,  &FormDataView::setCodepage);
-    connect(this,  &FormDataView::dataDisplayModeChanged, other, &FormDataView::setDataDisplayMode);
-    connect(other, &FormDataView::dataDisplayModeChanged, this,  &FormDataView::setDataDisplayMode);
+    connect(this,  &FormDataView::dataTypeChanged,      other, &FormDataView::setDataType);
+    connect(other, &FormDataView::dataTypeChanged,      this,  &FormDataView::setDataType);
+    connect(this,  &FormDataView::registerOrderChanged, other, &FormDataView::setRegisterOrder);
+    connect(other, &FormDataView::registerOrderChanged, this,  &FormDataView::setRegisterOrder);
     connect(this,  &FormDataView::displayHexAddressesChanged, other, &FormDataView::setDisplayHexAddresses);
     connect(other, &FormDataView::displayHexAddressesChanged, this,  &FormDataView::setDisplayHexAddresses);
     connect(this,  &FormDataView::fontChanged, other, &FormDataView::setFont);
@@ -1051,7 +1076,8 @@ void FormDataView::on_outputWidget_itemDoubleClicked(quint16 addr, const QVarian
     params.DeviceId = ui->lineEditDeviceId->value<quint8>();
     params.Address = addr;
     params.Value = value;
-    params.DataMode = dataDisplayMode();
+    params.DataMode = dataType();
+    params.RegOrder = registerOrder();
     params.AddrSpace = _mbMultiServer.getModbusDefinitions().AddrSpace;
     params.Order = byteOrder();
     params.Codepage = codepage();
@@ -1119,50 +1145,43 @@ void FormDataView::on_mbDefinitionsChanged(const ModbusDefinitions& defs)
 /// \param type
 /// \param addresses
 ///
-void FormDataView::on_simulationStarted(DataDisplayMode mode, quint8 deviceId, QModbusDataUnit::RegisterType type, const QVector<quint16>& addresses)
+void FormDataView::on_simulationStarted(DataType type, RegisterOrder order, quint8 deviceId, QModbusDataUnit::RegisterType regType, const QVector<quint16>& addresses)
 {
     if(deviceId != ui->lineEditDeviceId->value<quint8>())
         return;
 
     for(auto&& addr : addresses)
-        ui->outputWidget->setSimulated(mode, deviceId, type, addr, true);
+        ui->outputWidget->setSimulated(type, order, deviceId, regType, addr, true);
 }
 
 ///
 /// \brief FormDataView::on_simulationStopped
-/// \param mode
-/// \param deviceId
 /// \param type
+/// \param order
+/// \param deviceId
+/// \param regType
 /// \param addresses
 ///
-void FormDataView::on_simulationStopped(DataDisplayMode mode, quint8 deviceId, QModbusDataUnit::RegisterType type, const QVector<quint16>& addresses)
+void FormDataView::on_simulationStopped(DataType type, RegisterOrder order, quint8 deviceId, QModbusDataUnit::RegisterType regType, const QVector<quint16>& addresses)
 {
     if(deviceId != ui->lineEditDeviceId->value<quint8>())
         return;
 
     for(auto&& addr : addresses)
-        ui->outputWidget->setSimulated(mode, deviceId, type, addr, false);
+        ui->outputWidget->setSimulated(type, order, deviceId, regType, addr, false);
 }
 
 ///
 /// \brief FormDataView::on_dataSimulated
-/// \param mode
-/// \param deviceId
-/// \param type
-/// \param startAddress
-/// \param value
 ///
-///
-/// \brief FormDataView::on_dataSimulated
-///
-void FormDataView::on_dataSimulated(DataDisplayMode mode, quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 startAddress, QVariant value)
+void FormDataView::on_dataSimulated(DataType type, RegisterOrder order, quint8 deviceId, QModbusDataUnit::RegisterType regType, quint16 startAddress, QVariant value)
 {
     const auto dd = displayDefinition();
     const auto pointAddr = dd.PointAddress - (dd.ZeroBasedAddress ? 0 : 1);
-    if(deviceId == dd.DeviceId && type == dd.PointType && startAddress >= pointAddr && startAddress <= pointAddr + dd.Length)
+    if(deviceId == dd.DeviceId && regType == dd.PointType && startAddress >= pointAddr && startAddress <= pointAddr + dd.Length)
     {
-        const ModbusWriteParams params = { dd.DeviceId, startAddress, value, mode, dd.AddrSpace, byteOrder(), codepage(), true };
-        _mbMultiServer.writeRegister(type, params);
+        const ModbusWriteParams params = { dd.DeviceId, startAddress, value, type, order, dd.AddrSpace, byteOrder(), codepage(), true };
+        _mbMultiServer.writeRegister(regType, params);
     }
 }
 
@@ -1174,32 +1193,35 @@ void FormDataView::setupDisplayBar()
     auto group = new QActionGroup(ui->toolBarDisplay);
     group->setExclusive(true);
 
-    auto addModeAction = [&](DataDisplayMode mode, QAction* action)
+    auto addModeAction = [&](DataType type, RegisterOrder order, QAction* action)
     {
         group->addAction(action);
-        _displayModeActions[mode] = action;
-        connect(action, &QAction::triggered, this, [this, mode](bool checked) {
-            if (checked) setDataDisplayMode(mode);
+        _displayModeActions[{type, order}] = action;
+        connect(action, &QAction::triggered, this, [this, type, order](bool checked) {
+            if (checked) { setDataType(type); setRegisterOrder(order); }
         });
     };
 
-    addModeAction(DataDisplayMode::Binary, ui->actionDisplayBinary);
-    addModeAction(DataDisplayMode::Hex, ui->actionDisplayHex);
-    addModeAction(DataDisplayMode::Ansi, ui->actionDisplayAnsi);
-    addModeAction(DataDisplayMode::Int16, ui->actionDisplayInt16);
-    addModeAction(DataDisplayMode::UInt16, ui->actionDisplayUInt16);
-    addModeAction(DataDisplayMode::Int32, ui->actionDisplayInt32);
-    addModeAction(DataDisplayMode::SwappedInt32, ui->actionDisplaySwappedInt32);
-    addModeAction(DataDisplayMode::UInt32, ui->actionDisplayUInt32);
-    addModeAction(DataDisplayMode::SwappedUInt32, ui->actionDisplaySwappedUInt32);
-    addModeAction(DataDisplayMode::Int64, ui->actionDisplayInt64);
-    addModeAction(DataDisplayMode::SwappedInt64, ui->actionDisplaySwappedInt64);
-    addModeAction(DataDisplayMode::UInt64, ui->actionDisplayUInt64);
-    addModeAction(DataDisplayMode::SwappedUInt64, ui->actionDisplaySwappedUInt64);
-    addModeAction(DataDisplayMode::FloatingPt, ui->actionDisplayFloatingPt);
-    addModeAction(DataDisplayMode::SwappedFP, ui->actionDisplaySwappedFP);
-    addModeAction(DataDisplayMode::DblFloat, ui->actionDisplayDblFloat);
-    addModeAction(DataDisplayMode::SwappedDbl, ui->actionDisplaySwappedDbl);
+    const auto msrf = RegisterOrder::MSRF;
+    const auto lsrf = RegisterOrder::LSRF;
+
+    addModeAction(DataType::Binary,  msrf, ui->actionDisplayBinary);
+    addModeAction(DataType::Hex,     msrf, ui->actionDisplayHex);
+    addModeAction(DataType::Ansi,    msrf, ui->actionDisplayAnsi);
+    addModeAction(DataType::Int16,   msrf, ui->actionDisplayInt16);
+    addModeAction(DataType::UInt16,  msrf, ui->actionDisplayUInt16);
+    addModeAction(DataType::Int32,   msrf, ui->actionDisplayInt32);
+    addModeAction(DataType::Int32,   lsrf, ui->actionDisplayInt32LSRF);
+    addModeAction(DataType::UInt32,  msrf, ui->actionDisplayUInt32);
+    addModeAction(DataType::UInt32,  lsrf, ui->actionDisplayUInt32LSRF);
+    addModeAction(DataType::Int64,   msrf, ui->actionDisplayInt64);
+    addModeAction(DataType::Int64,   lsrf, ui->actionDisplayInt64LSRF);
+    addModeAction(DataType::UInt64,  msrf, ui->actionDisplayUInt64);
+    addModeAction(DataType::UInt64,  lsrf, ui->actionDisplayUInt64LSRF);
+    addModeAction(DataType::Float32, msrf, ui->actionDisplayFloat32);
+    addModeAction(DataType::Float32, lsrf, ui->actionDisplayFloat32LSRF);
+    addModeAction(DataType::Float64, msrf, ui->actionDisplayFloat64);
+    addModeAction(DataType::Float64, lsrf, ui->actionDisplayFloat64LSRF);
 
     _ansiMenu = new AnsiMenu(this);
     connect(_ansiMenu, &AnsiMenu::codepageSelected, this, &FormDataView::setCodepage);
@@ -1265,19 +1287,19 @@ void FormDataView::updateSettingsControls()
 ///
 void FormDataView::updateDisplayBar()
 {
-    const auto ddm = dataDisplayMode();
     const auto dd = displayDefinition();
     const bool coilType = (dd.PointType == QModbusDataUnit::Coils ||
                            dd.PointType == QModbusDataUnit::DiscreteInputs);
 
     // Check the matching mode action
-    const auto it = _displayModeActions.find(ddm);
+    const auto it = _displayModeActions.find({dataType(), registerOrder()});
     if (it != _displayModeActions.end())
         it.value()->setChecked(true);
 
     // Enable/disable non-binary actions for coil/discrete types
+    const auto* binaryAction = _displayModeActions.value({DataType::Binary, RegisterOrder::MSRF});
     for (auto&& action : _displayModeActions) {
-        action->setEnabled(!coilType || action == _displayModeActions.value(DataDisplayMode::Binary));
+        action->setEnabled(!coilType || action == binaryAction);
     }
 
     // Sync swap bytes

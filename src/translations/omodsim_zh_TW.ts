@@ -6,11 +6,13 @@
     <message>
         <location filename="../controls/addressbasecombobox.cpp" line="11"/>
         <location filename="../controls/addressbasecombobox.cpp" line="30"/>
+        <location filename="../controls/addressbasecombobox.cpp" line="30"/>
         <source>0-based</source>
         <translation>基地址為-0</translation>
     </message>
     <message>
         <location filename="../controls/addressbasecombobox.cpp" line="12"/>
+        <location filename="../controls/addressbasecombobox.cpp" line="34"/>
         <location filename="../controls/addressbasecombobox.cpp" line="34"/>
         <source>1-based</source>
         <translation>基地址為-1</translation>
@@ -21,11 +23,13 @@
     <message>
         <location filename="../controls/addressspacecombobox.cpp" line="11"/>
         <location filename="../controls/addressspacecombobox.cpp" line="30"/>
+        <location filename="../controls/addressspacecombobox.cpp" line="30"/>
         <source>5-digits</source>
         <translation>5位數字</translation>
     </message>
     <message>
         <location filename="../controls/addressspacecombobox.cpp" line="12"/>
+        <location filename="../controls/addressspacecombobox.cpp" line="34"/>
         <location filename="../controls/addressspacecombobox.cpp" line="34"/>
         <source>6-digits</source>
         <translation>6位數字</translation>
@@ -36,11 +40,13 @@
     <message>
         <location filename="../ansimenu.cpp" line="12"/>
         <location filename="../ansimenu.cpp" line="53"/>
+        <location filename="../ansimenu.cpp" line="53"/>
         <source>Arabic</source>
         <translation>阿拉伯語</translation>
     </message>
     <message>
         <location filename="../ansimenu.cpp" line="13"/>
+        <location filename="../ansimenu.cpp" line="54"/>
         <location filename="../ansimenu.cpp" line="54"/>
         <source>Baltic</source>
         <translation>波羅的語</translation>
@@ -48,11 +54,13 @@
     <message>
         <location filename="../ansimenu.cpp" line="14"/>
         <location filename="../ansimenu.cpp" line="55"/>
+        <location filename="../ansimenu.cpp" line="55"/>
         <source>Celtic</source>
         <translation>凱爾特語</translation>
     </message>
     <message>
         <location filename="../ansimenu.cpp" line="15"/>
+        <location filename="../ansimenu.cpp" line="56"/>
         <location filename="../ansimenu.cpp" line="56"/>
         <source>Cyrillic</source>
         <translation>西里爾語</translation>
@@ -60,11 +68,13 @@
     <message>
         <location filename="../ansimenu.cpp" line="16"/>
         <location filename="../ansimenu.cpp" line="57"/>
+        <location filename="../ansimenu.cpp" line="57"/>
         <source>Central European</source>
         <translation>中歐語</translation>
     </message>
     <message>
         <location filename="../ansimenu.cpp" line="17"/>
+        <location filename="../ansimenu.cpp" line="58"/>
         <location filename="../ansimenu.cpp" line="58"/>
         <source>Chinese</source>
         <translation>中文</translation>
@@ -72,11 +82,13 @@
     <message>
         <location filename="../ansimenu.cpp" line="18"/>
         <location filename="../ansimenu.cpp" line="59"/>
+        <location filename="../ansimenu.cpp" line="59"/>
         <source>Eastern European</source>
         <translation>東歐語</translation>
     </message>
     <message>
         <location filename="../ansimenu.cpp" line="19"/>
+        <location filename="../ansimenu.cpp" line="60"/>
         <location filename="../ansimenu.cpp" line="60"/>
         <source>Greek</source>
         <translation>希臘語</translation>
@@ -84,11 +96,13 @@
     <message>
         <location filename="../ansimenu.cpp" line="20"/>
         <location filename="../ansimenu.cpp" line="61"/>
+        <location filename="../ansimenu.cpp" line="61"/>
         <source>Hebrew</source>
         <translation>希伯來語</translation>
     </message>
     <message>
         <location filename="../ansimenu.cpp" line="21"/>
+        <location filename="../ansimenu.cpp" line="62"/>
         <location filename="../ansimenu.cpp" line="62"/>
         <source>Japanese</source>
         <translation>日語</translation>
@@ -96,11 +110,13 @@
     <message>
         <location filename="../ansimenu.cpp" line="22"/>
         <location filename="../ansimenu.cpp" line="63"/>
+        <location filename="../ansimenu.cpp" line="63"/>
         <source>Korean</source>
         <translation>韓語</translation>
     </message>
     <message>
         <location filename="../ansimenu.cpp" line="23"/>
+        <location filename="../ansimenu.cpp" line="64"/>
         <location filename="../ansimenu.cpp" line="64"/>
         <source>Thai</source>
         <translation>泰語</translation>
@@ -108,17 +124,20 @@
     <message>
         <location filename="../ansimenu.cpp" line="24"/>
         <location filename="../ansimenu.cpp" line="65"/>
+        <location filename="../ansimenu.cpp" line="65"/>
         <source>Turkish</source>
         <translation>土耳其語</translation>
     </message>
     <message>
         <location filename="../ansimenu.cpp" line="25"/>
         <location filename="../ansimenu.cpp" line="66"/>
+        <location filename="../ansimenu.cpp" line="66"/>
         <source>Western European</source>
         <translation>西歐語</translation>
     </message>
     <message>
         <location filename="../ansimenu.cpp" line="26"/>
+        <location filename="../ansimenu.cpp" line="67"/>
         <location filename="../ansimenu.cpp" line="67"/>
         <source>Vietnamese</source>
         <translation>越南語</translation>
@@ -178,6 +197,7 @@
     </message>
     <message>
         <location filename="../cmdlineparser.cpp" line="15"/>
+        <location filename="../cmdlineparser.cpp" line="18"/>
         <location filename="../cmdlineparser.cpp" line="18"/>
         <source>file path</source>
         <translation>檔案路徑</translation>
@@ -323,11 +343,13 @@
     <message>
         <location filename="../dialogs/dialogabout.cpp" line="102"/>
         <location filename="../dialogs/dialogabout.cpp" line="109"/>
+        <location filename="../dialogs/dialogabout.cpp" line="109"/>
         <source>Underlying platform.</source>
         <translation>底層平台。</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogabout.cpp" line="127"/>
+        <location filename="../dialogs/dialogabout.cpp" line="132"/>
         <location filename="../dialogs/dialogabout.cpp" line="132"/>
         <source>Contributor</source>
         <translation>貢獻者</translation>
@@ -575,6 +597,7 @@
     <message>
         <location filename="../dialogs/dialogforcemultiplecoils.ui" line="20"/>
         <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="30"/>
+        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="30"/>
         <source>FORCE MULTIPLE COILS</source>
         <translation>強制多個線圈</translation>
     </message>
@@ -655,11 +678,13 @@
     <message>
         <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="138"/>
         <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="212"/>
+        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="212"/>
         <source>CSV files (*.csv)</source>
         <translation>CSV 檔案 (*.csv)</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="145"/>
+        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="223"/>
         <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="223"/>
         <source>Error</source>
         <translation>錯誤</translation>
@@ -676,6 +701,7 @@
     </message>
     <message>
         <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="188"/>
+        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="194"/>
         <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="194"/>
         <source>Warning</source>
         <translation>警告</translation>
@@ -813,40 +839,43 @@
         <translation>預設保持暫存器</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="739"/>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="820"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="616"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="697"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="697"/>
         <source>CSV files (*.csv)</source>
         <translation>CSV 檔案 (*.csv)</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="746"/>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="831"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="623"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="708"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="708"/>
         <source>Error</source>
         <translation>錯誤</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="787"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="664"/>
         <source>Import error</source>
         <translation>匯入錯誤</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="787"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="664"/>
         <source>Invalid value: %1</source>
         <translation>無效值：%1</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="796"/>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="802"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="673"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="679"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="679"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="796"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="673"/>
         <source>No data found in file.</source>
         <translation>檔案中未找到資料。</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="802"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="679"/>
         <source>Imported data size (%1) does not match current size (%2).</source>
         <translation>匯入資料大小 (%1) 與目前大小 (%2) 不符。</translation>
     </message>
@@ -1742,7 +1771,8 @@
     </message>
     <message>
         <location filename="../dialogs/dialogwriteregister.ui" line="118"/>
-        <location filename="../dialogs/dialogwriteregister.cpp" line="237"/>
+        <location filename="../dialogs/dialogwriteregister.cpp" line="231"/>
+        <location filename="../dialogs/dialogwriteregister.cpp" line="231"/>
         <source>Auto Simulation: OFF</source>
         <translation>自動模擬：關閉</translation>
     </message>
@@ -1762,8 +1792,9 @@
         <translation>值，(ANSI)： </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwriteregister.cpp" line="231"/>
-        <location filename="../dialogs/dialogwriteregister.cpp" line="244"/>
+        <location filename="../dialogs/dialogwriteregister.cpp" line="225"/>
+        <location filename="../dialogs/dialogwriteregister.cpp" line="238"/>
+        <location filename="../dialogs/dialogwriteregister.cpp" line="238"/>
         <source>Auto Simulation: ON</source>
         <translation>自動模擬：開啟</translation>
     </message>
@@ -1807,11 +1838,13 @@
     <message>
         <location filename="../dialogs/dialogwritestatusregister.ui" line="134"/>
         <location filename="../dialogs/dialogwritestatusregister.cpp" line="99"/>
+        <location filename="../dialogs/dialogwritestatusregister.cpp" line="99"/>
         <source>Auto Simulation: OFF</source>
         <translation>自動模擬：關閉</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogwritestatusregister.cpp" line="93"/>
+        <location filename="../dialogs/dialogwritestatusregister.cpp" line="105"/>
         <location filename="../dialogs/dialogwritestatusregister.cpp" line="105"/>
         <source>Auto Simulation: ON</source>
         <translation>自動模擬：開啟</translation>
@@ -2065,14 +2098,14 @@ MODBUS Point Type:
         <translation type="unfinished">十六進位制地址</translation>
     </message>
     <message>
-        <location filename="../formdataview.cpp" line="579"/>
+        <location filename="../formdataview.cpp" line="602"/>
         <source>Address Base: %1
 Starting Address: %2
 Length: %3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formdataview.cpp" line="581"/>
+        <location filename="../formdataview.cpp" line="604"/>
         <source>Unit Identifier: %1
 Data Type:
 %2</source>
@@ -2215,6 +2248,90 @@ MODBUS Point Type:
     </message>
 </context>
 <context>
+    <name>FormRegisterMapView</name>
+    <message>
+        <location filename="../formregistermapview.ui" line="66"/>
+        <source>Type</source>
+        <translation type="unfinished">型別</translation>
+    </message>
+    <message>
+        <location filename="../formregistermapview.ui" line="71"/>
+        <source>Address</source>
+        <translation type="unfinished">地址</translation>
+    </message>
+    <message>
+        <location filename="../formregistermapview.ui" line="76"/>
+        <source>DataType</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../formregistermapview.ui" line="81"/>
+        <source>Order</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../formregistermapview.ui" line="91"/>
+        <source>Value</source>
+        <translation type="unfinished">值</translation>
+    </message>
+    <message>
+        <location filename="../formregistermapview.ui" line="108"/>
+        <source>Add Row</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../formregistermapview.ui" line="117"/>
+        <source>Delete Row</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../formregistermapview.ui" line="61"/>
+        <source>Unit</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../formregistermapview.ui" line="86"/>
+        <source>Comment</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../formregistermapview.ui" line="96"/>
+        <source>Timestamp</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../formregistermapview.ui" line="126"/>
+        <source>Clear Register Map</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../formregistermapview.cpp" line="1070"/>
+        <location filename="../formregistermapview.cpp" line="1083"/>
+        <location filename="../formregistermapview.cpp" line="1083"/>
+        <source>Coils</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../formregistermapview.cpp" line="1071"/>
+        <location filename="../formregistermapview.cpp" line="1084"/>
+        <location filename="../formregistermapview.cpp" line="1084"/>
+        <source>Discrete Inputs</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../formregistermapview.cpp" line="1072"/>
+        <location filename="../formregistermapview.cpp" line="1085"/>
+        <location filename="../formregistermapview.cpp" line="1085"/>
+        <source>Input Registers</source>
+        <translation type="unfinished">輸入暫存器</translation>
+    </message>
+    <message>
+        <location filename="../formregistermapview.cpp" line="1073"/>
+        <source>Holding Registers</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>FormScriptView</name>
     <message>
         <source>Length:</source>
@@ -2247,11 +2364,13 @@ MODBUS Point Type:
     <message>
         <location filename="../formscriptview.cpp" line="124"/>
         <location filename="../formscriptview.cpp" line="505"/>
+        <location filename="../formscriptview.cpp" line="505"/>
         <source> ms</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../formscriptview.cpp" line="125"/>
+        <location filename="../formscriptview.cpp" line="509"/>
         <location filename="../formscriptview.cpp" line="509"/>
         <source>Run on startup</source>
         <translation type="unfinished"></translation>
@@ -2395,6 +2514,7 @@ Source: %3</source>
     <message>
         <location filename="../formtrafficview.cpp" line="103"/>
         <location filename="../formtrafficview.cpp" line="750"/>
+        <location filename="../formtrafficview.cpp" line="750"/>
         <source>Exceptions Only</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2455,6 +2575,12 @@ Source: %3</source>
     </message>
     <message>
         <location filename="../formtrafficview.cpp" line="88"/>
+        <location filename="../formtrafficview.cpp" line="92"/>
+        <location filename="../formtrafficview.cpp" line="96"/>
+        <location filename="../formtrafficview.cpp" line="553"/>
+        <location filename="../formtrafficview.cpp" line="708"/>
+        <location filename="../formtrafficview.cpp" line="721"/>
+        <location filename="../formtrafficview.cpp" line="743"/>
         <location filename="../formtrafficview.cpp" line="92"/>
         <location filename="../formtrafficview.cpp" line="96"/>
         <location filename="../formtrafficview.cpp" line="553"/>
@@ -2564,6 +2690,7 @@ Source: %3</source>
     <message>
         <location filename="../controls/helpbrowser.h" line="21"/>
         <location filename="../controls/helpbrowser.h" line="39"/>
+        <location filename="../controls/helpbrowser.h" line="39"/>
         <source>qthelp://omodsim/doc/index.html</source>
         <translation>qthelp://omodsim/doc/index.html</translation>
     </message>
@@ -2598,11 +2725,13 @@ Source: %3</source>
     <message>
         <location filename="../controls/helpwidget.cpp" line="35"/>
         <location filename="../controls/helpwidget.cpp" line="89"/>
+        <location filename="../controls/helpwidget.cpp" line="89"/>
         <source>Find</source>
         <translation>尋找</translation>
     </message>
     <message>
         <location filename="../controls/helpwidget.cpp" line="41"/>
+        <location filename="../controls/helpwidget.cpp" line="90"/>
         <location filename="../controls/helpwidget.cpp" line="90"/>
         <source>Previous (Shift+Enter)</source>
         <translation>上一頁 (Shift+Enter)</translation>
@@ -2610,11 +2739,13 @@ Source: %3</source>
     <message>
         <location filename="../controls/helpwidget.cpp" line="47"/>
         <location filename="../controls/helpwidget.cpp" line="91"/>
+        <location filename="../controls/helpwidget.cpp" line="91"/>
         <source>Next (Enter)</source>
         <translation>下一個 (Enter)</translation>
     </message>
     <message>
         <location filename="../controls/helpwidget.cpp" line="57"/>
+        <location filename="../controls/helpwidget.cpp" line="92"/>
         <location filename="../controls/helpwidget.cpp" line="92"/>
         <source>Close (Escape)</source>
         <translation>關閉 (Escape)</translation>
@@ -2685,11 +2816,13 @@ Script.onInit(()=&gt;{
     <message>
         <location filename="../controls/mainstatusbar.cpp" line="42"/>
         <location filename="../controls/mainstatusbar.cpp" line="145"/>
+        <location filename="../controls/mainstatusbar.cpp" line="145"/>
         <source>No updates available</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../controls/mainstatusbar.cpp" line="143"/>
+        <location filename="../controls/mainstatusbar.cpp" line="258"/>
         <location filename="../controls/mainstatusbar.cpp" line="258"/>
         <source>New version %1 is available. Click to download.</source>
         <translation type="unfinished"></translation>
@@ -2779,17 +2912,17 @@ Script.onInit(()=&gt;{
         <translation>檔案</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="92"/>
+        <location filename="../mainwindow.ui" line="93"/>
         <source>Edit</source>
         <translation>編輯</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="110"/>
+        <location filename="../mainwindow.ui" line="111"/>
         <source>Connection</source>
         <translation>連線</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="117"/>
+        <location filename="../mainwindow.ui" line="118"/>
         <source>Setup</source>
         <translation>設定</translation>
     </message>
@@ -2810,17 +2943,17 @@ Script.onInit(()=&gt;{
         <translation type="vanished">指令碼</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="128"/>
+        <location filename="../mainwindow.ui" line="129"/>
         <source>Window</source>
         <translation>視窗</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="135"/>
+        <location filename="../mainwindow.ui" line="136"/>
         <source>Help</source>
         <translation>幫助</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="141"/>
+        <location filename="../mainwindow.ui" line="142"/>
         <source>View</source>
         <translation>檢視</translation>
     </message>
@@ -2842,7 +2975,7 @@ Script.onInit(()=&gt;{
     </message>
     <message>
         <location filename="../mainwindow.ui" line="67"/>
-        <location filename="../mainwindow.ui" line="201"/>
+        <location filename="../mainwindow.ui" line="202"/>
         <source>New</source>
         <translation>新建</translation>
     </message>
@@ -2935,18 +3068,18 @@ Script.onInit(()=&gt;{
         <translation type="vanished">ANSI</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="471"/>
-        <location filename="../mainwindow.ui" line="474"/>
+        <location filename="../mainwindow.ui" line="472"/>
+        <location filename="../mainwindow.ui" line="475"/>
         <source>Modbus Definitions</source>
         <translation>Modbus定義</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="482"/>
+        <location filename="../mainwindow.ui" line="483"/>
         <source>Tabbed View</source>
         <translation>標籤頁檢視</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="490"/>
+        <location filename="../mainwindow.ui" line="491"/>
         <source>Close All Windows</source>
         <translation>關閉所有視窗</translation>
     </message>
@@ -2979,7 +3112,7 @@ Script.onInit(()=&gt;{
         <translation type="vanished">捕獲關閉</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="453"/>
+        <location filename="../mainwindow.ui" line="454"/>
         <source>Msg Parser</source>
         <translation>報文解析</translation>
     </message>
@@ -2988,7 +3121,7 @@ Script.onInit(()=&gt;{
         <translation type="vanished">開啟...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="209"/>
+        <location filename="../mainwindow.ui" line="210"/>
         <source>Close</source>
         <translation>關閉</translation>
     </message>
@@ -3009,63 +3142,64 @@ Script.onInit(()=&gt;{
         <translation type="vanished">恢復測試配置</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="221"/>
+        <location filename="../mainwindow.ui" line="222"/>
         <source>Open Project...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="224"/>
+        <location filename="../mainwindow.ui" line="225"/>
         <source>Ctrl+O</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="233"/>
-        <location filename="../mainwindow.cpp" line="1562"/>
+        <location filename="../mainwindow.ui" line="234"/>
+        <location filename="../mainwindow.cpp" line="1581"/>
+        <location filename="../mainwindow.cpp" line="1581"/>
         <source>Save Project</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="238"/>
+        <location filename="../mainwindow.ui" line="239"/>
         <source>Save Project As...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="243"/>
+        <location filename="../mainwindow.ui" line="244"/>
         <source>Close Project</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="252"/>
+        <location filename="../mainwindow.ui" line="253"/>
         <source>Print...</source>
         <translation>列印...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="260"/>
+        <location filename="../mainwindow.ui" line="261"/>
         <source>Print Setup...</source>
         <translation>列印設定...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="265"/>
+        <location filename="../mainwindow.ui" line="266"/>
         <source>Recent File</source>
         <translation>最近檔案</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="270"/>
+        <location filename="../mainwindow.ui" line="271"/>
         <source>Exit</source>
         <translation>退出</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="279"/>
+        <location filename="../mainwindow.ui" line="280"/>
         <source>Connect</source>
         <translation>連線</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="288"/>
+        <location filename="../mainwindow.ui" line="289"/>
         <source>Disconnect</source>
         <translation>斷開連線</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="523"/>
+        <location filename="../mainwindow.ui" line="524"/>
         <source>Project Tree</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3074,32 +3208,37 @@ Script.onInit(()=&gt;{
         <translation type="vanished">二進位制</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="528"/>
+        <location filename="../mainwindow.ui" line="529"/>
         <source>Preferences</source>
         <translation>偏好設定</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="537"/>
+        <location filename="../mainwindow.ui" line="538"/>
         <source>New Data View</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="546"/>
+        <location filename="../mainwindow.ui" line="547"/>
         <source>New Traffic View</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="555"/>
+        <location filename="../mainwindow.ui" line="556"/>
         <source>New Script</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="560"/>
+        <location filename="../mainwindow.ui" line="565"/>
+        <source>New Register Map</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="570"/>
         <source>Import Script...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="572"/>
+        <location filename="../mainwindow.ui" line="582"/>
         <source>Split View</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3128,17 +3267,17 @@ Script.onInit(()=&gt;{
         <translation type="vanished">64位浮点数（字节交换）</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="293"/>
+        <location filename="../mainwindow.ui" line="294"/>
         <source>Cascade</source>
         <translation>層疊</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="298"/>
+        <location filename="../mainwindow.ui" line="299"/>
         <source>Tile</source>
         <translation>平鋪</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="307"/>
+        <location filename="../mainwindow.ui" line="308"/>
         <source>About Open ModSim...</source>
         <translation>關於Open ModSim...</translation>
     </message>
@@ -3159,22 +3298,22 @@ Script.onInit(()=&gt;{
         <translation type="vanished">資料格式</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="333"/>
+        <location filename="../mainwindow.ui" line="334"/>
         <source>Force Coils</source>
         <translation>強制線圈</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="342"/>
+        <location filename="../mainwindow.ui" line="343"/>
         <source>Preset Holding Regs</source>
         <translation>預設保持暫存器</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="351"/>
+        <location filename="../mainwindow.ui" line="352"/>
         <source>Preset Input Regs</source>
         <translation>預設輸入暫存器</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="360"/>
+        <location filename="../mainwindow.ui" line="361"/>
         <source>Force Discretes</source>
         <translation>強制離散值</translation>
     </message>
@@ -3195,47 +3334,47 @@ Script.onInit(()=&gt;{
         <translation type="vanished">指令碼設定</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="369"/>
+        <location filename="../mainwindow.ui" line="370"/>
         <source>Undo</source>
         <translation>取消</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="381"/>
+        <location filename="../mainwindow.ui" line="382"/>
         <source>Redo</source>
         <translation>恢復</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="393"/>
+        <location filename="../mainwindow.ui" line="394"/>
         <source>Cut</source>
         <translation>剪下</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="405"/>
+        <location filename="../mainwindow.ui" line="406"/>
         <source>Copy</source>
         <translation>複製</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="417"/>
+        <location filename="../mainwindow.ui" line="418"/>
         <source>Paste</source>
         <translation>貼上</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="425"/>
+        <location filename="../mainwindow.ui" line="426"/>
         <source>Select All</source>
         <translation>選擇所有</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="433"/>
+        <location filename="../mainwindow.ui" line="434"/>
         <source>Find...</source>
         <translation>尋找...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="441"/>
+        <location filename="../mainwindow.ui" line="442"/>
         <source>Replace...</source>
         <translation>取代...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="444"/>
+        <location filename="../mainwindow.ui" line="445"/>
         <source>Ctrl+H</source>
         <translation>Ctrl+H</translation>
     </message>
@@ -3244,31 +3383,33 @@ Script.onInit(()=&gt;{
         <translation type="vanished">重設計數器</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="501"/>
-        <location filename="../mainwindow.ui" line="504"/>
-        <location filename="../mainwindow.cpp" line="281"/>
-        <location filename="../mainwindow.cpp" line="404"/>
+        <location filename="../mainwindow.ui" line="502"/>
+        <location filename="../mainwindow.ui" line="505"/>
+        <location filename="../mainwindow.cpp" line="287"/>
+        <location filename="../mainwindow.cpp" line="410"/>
+        <location filename="../mainwindow.cpp" line="287"/>
+        <location filename="../mainwindow.cpp" line="410"/>
         <source>Script Help</source>
         <translation>指令稿說明</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="507"/>
+        <location filename="../mainwindow.ui" line="508"/>
         <source>F1</source>
         <translation>F1</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="515"/>
+        <location filename="../mainwindow.ui" line="516"/>
         <source>Console Output</source>
         <translation>控制台輸出</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="165"/>
-        <location filename="../mainwindow.ui" line="315"/>
+        <location filename="../mainwindow.ui" line="166"/>
+        <location filename="../mainwindow.ui" line="316"/>
         <source>Toolbar</source>
         <translation>工具欄</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="323"/>
+        <location filename="../mainwindow.ui" line="324"/>
         <source>Status Bar</source>
         <translation>狀態列</translation>
     </message>
@@ -3337,7 +3478,7 @@ Script.onInit(()=&gt;{
         <translation type="vanished">俄语</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="645"/>
+        <location filename="../mainwindow.cpp" line="663"/>
         <source>All files (*)</source>
         <translation>所有檔案 (*)</translation>
     </message>
@@ -3346,41 +3487,45 @@ Script.onInit(()=&gt;{
         <translation type="vanished">XML 檔案(*.xml)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="237"/>
-        <location filename="../mainwindow.cpp" line="406"/>
+        <location filename="../mainwindow.cpp" line="243"/>
+        <location filename="../mainwindow.cpp" line="412"/>
+        <location filename="../mainwindow.cpp" line="412"/>
         <source>Open Recent</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="238"/>
-        <location filename="../mainwindow.cpp" line="1649"/>
+        <location filename="../mainwindow.cpp" line="244"/>
+        <location filename="../mainwindow.cpp" line="1668"/>
+        <location filename="../mainwindow.cpp" line="1668"/>
         <source>Clear List</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="262"/>
-        <location filename="../mainwindow.cpp" line="403"/>
+        <location filename="../mainwindow.cpp" line="268"/>
+        <location filename="../mainwindow.cpp" line="409"/>
+        <location filename="../mainwindow.cpp" line="409"/>
         <source>Project</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="316"/>
-        <location filename="../mainwindow.cpp" line="405"/>
+        <location filename="../mainwindow.cpp" line="322"/>
+        <location filename="../mainwindow.cpp" line="411"/>
+        <location filename="../mainwindow.cpp" line="411"/>
         <source>Output</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1178"/>
+        <location filename="../mainwindow.cpp" line="1196"/>
         <source>Move to Other Panel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1563"/>
+        <location filename="../mainwindow.cpp" line="1582"/>
         <source>Save project before closing?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1637"/>
+        <location filename="../mainwindow.cpp" line="1656"/>
         <source>No Recent Projects</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3389,13 +3534,14 @@ Script.onInit(()=&gt;{
         <translation type="obsolete">資料</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="644"/>
-        <location filename="../mainwindow.cpp" line="675"/>
+        <location filename="../mainwindow.cpp" line="662"/>
+        <location filename="../mainwindow.cpp" line="693"/>
+        <location filename="../mainwindow.cpp" line="693"/>
         <source>Project files (*.msimprj)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1118"/>
+        <location filename="../mainwindow.cpp" line="1136"/>
         <source>JavaScript files (*.js);;All files (*)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3411,11 +3557,13 @@ Script.onInit(()=&gt;{
     <message>
         <location filename="../menuconnect.cpp" line="18"/>
         <location filename="../menuconnect.cpp" line="104"/>
+        <location filename="../menuconnect.cpp" line="104"/>
         <source>Modbus/TCP Srv</source>
         <translation>Modbus/TCP伺服器</translation>
     </message>
     <message>
         <location filename="../menuconnect.cpp" line="22"/>
+        <location filename="../menuconnect.cpp" line="94"/>
         <location filename="../menuconnect.cpp" line="94"/>
         <source>Modbus/RTU Srv</source>
         <translation>Modbus/RTU伺服器</translation>
@@ -3424,11 +3572,14 @@ Script.onInit(()=&gt;{
         <location filename="../menuconnect.cpp" line="24"/>
         <location filename="../menuconnect.cpp" line="45"/>
         <location filename="../menuconnect.cpp" line="109"/>
+        <location filename="../menuconnect.cpp" line="45"/>
+        <location filename="../menuconnect.cpp" line="109"/>
         <source>Port %1</source>
         <translation>埠 %1</translation>
     </message>
     <message>
         <location filename="../menuconnect.cpp" line="40"/>
+        <location filename="../menuconnect.cpp" line="106"/>
         <location filename="../menuconnect.cpp" line="106"/>
         <source>Modbus/TCP Srv %1</source>
         <translation>Modbus/TCP伺服器 %1</translation>
@@ -3439,11 +3590,13 @@ Script.onInit(()=&gt;{
     <message>
         <location filename="../controls/modbuslogwidget.cpp" line="327"/>
         <location filename="../controls/modbuslogwidget.cpp" line="370"/>
+        <location filename="../controls/modbuslogwidget.cpp" line="370"/>
         <source>Copy Text</source>
         <translation>複製文字</translation>
     </message>
     <message>
         <location filename="../controls/modbuslogwidget.cpp" line="339"/>
+        <location filename="../controls/modbuslogwidget.cpp" line="371"/>
         <location filename="../controls/modbuslogwidget.cpp" line="371"/>
         <source>Copy Bytes</source>
         <translation>複製位元組</translation>
@@ -3454,11 +3607,13 @@ Script.onInit(()=&gt;{
     <message>
         <location filename="../controls/modbusmessagewidget.cpp" line="33"/>
         <location filename="../controls/modbusmessagewidget.cpp" line="89"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="89"/>
         <source>Copy Text</source>
         <translation>複製文字</translation>
     </message>
     <message>
         <location filename="../controls/modbusmessagewidget.cpp" line="49"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="90"/>
         <location filename="../controls/modbusmessagewidget.cpp" line="90"/>
         <source>Copy Values</source>
         <translation>複製數值</translation>
@@ -3475,6 +3630,7 @@ Script.onInit(()=&gt;{
     </message>
     <message>
         <location filename="../controls/modbusmessagewidget.cpp" line="254"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="259"/>
         <location filename="../controls/modbusmessagewidget.cpp" line="259"/>
         <source>Checksum</source>
         <translation>校驗和</translation>
@@ -3515,6 +3671,10 @@ Script.onInit(()=&gt;{
         <location filename="../controls/modbusmessagewidget.cpp" line="324"/>
         <location filename="../controls/modbusmessagewidget.cpp" line="343"/>
         <location filename="../controls/modbusmessagewidget.cpp" line="362"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="305"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="324"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="343"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="362"/>
         <source>Length</source>
         <translation>長度</translation>
     </message>
@@ -3543,11 +3703,25 @@ Script.onInit(()=&gt;{
         <location filename="../controls/modbusmessagewidget.cpp" line="323"/>
         <location filename="../controls/modbusmessagewidget.cpp" line="342"/>
         <location filename="../controls/modbusmessagewidget.cpp" line="361"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="323"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="342"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="361"/>
         <source>Start Address</source>
         <translation>起始地址</translation>
     </message>
     <message>
         <location filename="../controls/modbusmessagewidget.cpp" line="312"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="331"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="350"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="369"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="460"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="478"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="501"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="520"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="531"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="539"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="608"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="626"/>
         <location filename="../controls/modbusmessagewidget.cpp" line="331"/>
         <location filename="../controls/modbusmessagewidget.cpp" line="350"/>
         <location filename="../controls/modbusmessagewidget.cpp" line="369"/>
@@ -3576,6 +3750,8 @@ Script.onInit(()=&gt;{
         <location filename="../controls/modbusmessagewidget.cpp" line="351"/>
         <location filename="../controls/modbusmessagewidget.cpp" line="400"/>
         <location filename="../controls/modbusmessagewidget.cpp" line="408"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="400"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="408"/>
         <source>Register Value</source>
         <translation>暫存器值</translation>
     </message>
@@ -3587,17 +3763,20 @@ Script.onInit(()=&gt;{
     <message>
         <location filename="../controls/modbusmessagewidget.cpp" line="380"/>
         <location filename="../controls/modbusmessagewidget.cpp" line="388"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="388"/>
         <source>Output Address</source>
         <translation>輸出地址</translation>
     </message>
     <message>
         <location filename="../controls/modbusmessagewidget.cpp" line="381"/>
         <location filename="../controls/modbusmessagewidget.cpp" line="389"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="389"/>
         <source>Output Value</source>
         <translation>輸出值</translation>
     </message>
     <message>
         <location filename="../controls/modbusmessagewidget.cpp" line="399"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="407"/>
         <location filename="../controls/modbusmessagewidget.cpp" line="407"/>
         <source>Register Address</source>
         <translation>暫存器地址</translation>
@@ -3609,6 +3788,7 @@ Script.onInit(()=&gt;{
     </message>
     <message>
         <location filename="../controls/modbusmessagewidget.cpp" line="427"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="435"/>
         <location filename="../controls/modbusmessagewidget.cpp" line="435"/>
         <source>Sub-function</source>
         <translation>子功能</translation>
@@ -3622,17 +3802,26 @@ Script.onInit(()=&gt;{
         <location filename="../controls/modbusmessagewidget.cpp" line="551"/>
         <location filename="../controls/modbusmessagewidget.cpp" line="559"/>
         <location filename="../controls/modbusmessagewidget.cpp" line="636"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="436"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="521"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="532"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="540"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="551"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="559"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="636"/>
         <source>Data</source>
         <translation>資料</translation>
     </message>
     <message>
         <location filename="../controls/modbusmessagewidget.cpp" line="446"/>
         <location filename="../controls/modbusmessagewidget.cpp" line="461"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="461"/>
         <source>Status</source>
         <translation>狀態</translation>
     </message>
     <message>
         <location filename="../controls/modbusmessagewidget.cpp" line="447"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="462"/>
         <location filename="../controls/modbusmessagewidget.cpp" line="462"/>
         <source>Event Count</source>
         <translation>事件計數</translation>
@@ -3652,11 +3841,15 @@ Script.onInit(()=&gt;{
         <location filename="../controls/modbusmessagewidget.cpp" line="486"/>
         <location filename="../controls/modbusmessagewidget.cpp" line="499"/>
         <location filename="../controls/modbusmessagewidget.cpp" line="509"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="486"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="499"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="509"/>
         <source>Starting Address</source>
         <translation>起始地址</translation>
     </message>
     <message>
         <location filename="../controls/modbusmessagewidget.cpp" line="477"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="487"/>
         <location filename="../controls/modbusmessagewidget.cpp" line="487"/>
         <source>Quantity of Outputs</source>
         <translation>輸出數量</translation>
@@ -3669,11 +3862,13 @@ Script.onInit(()=&gt;{
     <message>
         <location filename="../controls/modbusmessagewidget.cpp" line="500"/>
         <location filename="../controls/modbusmessagewidget.cpp" line="510"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="510"/>
         <source>Quantity of Registers</source>
         <translation>暫存器數量</translation>
     </message>
     <message>
         <location filename="../controls/modbusmessagewidget.cpp" line="502"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="609"/>
         <location filename="../controls/modbusmessagewidget.cpp" line="609"/>
         <source>Registers Value</source>
         <translation>暫存器值</translation>
@@ -3691,17 +3886,20 @@ Script.onInit(()=&gt;{
     <message>
         <location filename="../controls/modbusmessagewidget.cpp" line="570"/>
         <location filename="../controls/modbusmessagewidget.cpp" line="580"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="580"/>
         <source>Address</source>
         <translation>地址</translation>
     </message>
     <message>
         <location filename="../controls/modbusmessagewidget.cpp" line="571"/>
         <location filename="../controls/modbusmessagewidget.cpp" line="581"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="581"/>
         <source>And Mask</source>
         <translation>與運算</translation>
     </message>
     <message>
         <location filename="../controls/modbusmessagewidget.cpp" line="572"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="582"/>
         <location filename="../controls/modbusmessagewidget.cpp" line="582"/>
         <source>Or Mask</source>
         <translation>或運算</translation>
@@ -3980,12 +4178,12 @@ Script.onInit(()=&gt;{
 <context>
     <name>ModbusMultiServer</name>
     <message>
-        <location filename="../modbusmultiserver.cpp" line="534"/>
+        <location filename="../modbusmultiserver.cpp" line="558"/>
         <source>An incorrect device ID was specified (%1)</source>
         <translation>指定了錯誤的裝置地址（%1）</translation>
     </message>
     <message>
-        <location filename="../modbusmultiserver.cpp" line="1074"/>
+        <location filename="../modbusmultiserver.cpp" line="1087"/>
         <source>Connection error. %1</source>
         <translation>連線錯誤 %1</translation>
     </message>
@@ -4001,77 +4199,77 @@ Script.onInit(()=&gt;{
 <context>
     <name>OutputDataWidget</name>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1383"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1370"/>
         <source>Set Value of %1</source>
         <translation type="unfinished">將值寫入 %1</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1392"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1379"/>
         <source>Add Description</source>
         <translation type="unfinished">添加描述</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1392"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1379"/>
         <source>Edit Description</source>
         <translation type="unfinished">編輯描述</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1395"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1382"/>
         <source>%1: Enter Description</source>
         <translation type="unfinished">%1:輸入描述</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1404"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1391"/>
         <source>Remove Color</source>
         <translation type="unfinished">去除顏色</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1415"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1402"/>
         <source>Yellow</source>
         <translation type="unfinished">黃色的</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1416"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1403"/>
         <source>Cyan</source>
         <translation type="unfinished">青色</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1417"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1404"/>
         <source>Magenta</source>
         <translation type="unfinished">品紅</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1418"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1405"/>
         <source>LightGreen</source>
         <translation type="unfinished">淺綠色</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1419"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1406"/>
         <source>Orange</source>
         <translation type="unfinished">橘子</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1420"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1407"/>
         <source>LightBlue</source>
         <translation type="unfinished">淺藍色</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1421"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1408"/>
         <source>LightGray</source>
         <translation type="unfinished">淺灰色</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1506"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1487"/>
         <source>NOT CONNECTED!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1514"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1495"/>
         <source>Invalid Data Length Specified</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1523"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1504"/>
         <source>Zoom: %1%</source>
         <translation type="unfinished">飛漲： %1%</translation>
     </message>
@@ -4215,71 +4413,87 @@ Script.onInit(()=&gt;{
 <context>
     <name>ProjectTreeWidget</name>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="55"/>
-        <location filename="../controls/projecttreewidget.cpp" line="260"/>
+        <location filename="../controls/projecttreewidget.cpp" line="57"/>
+        <location filename="../controls/projecttreewidget.cpp" line="272"/>
+        <location filename="../controls/projecttreewidget.cpp" line="272"/>
         <source>Data</source>
         <translation type="unfinished">資料</translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="59"/>
-        <location filename="../controls/projecttreewidget.cpp" line="261"/>
+        <location filename="../controls/projecttreewidget.cpp" line="61"/>
+        <location filename="../controls/projecttreewidget.cpp" line="273"/>
+        <location filename="../controls/projecttreewidget.cpp" line="273"/>
         <source>Traffic</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="63"/>
-        <location filename="../controls/projecttreewidget.cpp" line="262"/>
+        <location filename="../controls/projecttreewidget.cpp" line="65"/>
+        <location filename="../controls/projecttreewidget.cpp" line="274"/>
+        <location filename="../controls/projecttreewidget.cpp" line="274"/>
         <source>Script</source>
         <translation type="unfinished">指令碼</translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="289"/>
+        <location filename="../controls/projecttreewidget.cpp" line="69"/>
+        <location filename="../controls/projecttreewidget.cpp" line="275"/>
+        <location filename="../controls/projecttreewidget.cpp" line="275"/>
+        <source>Register Map</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../controls/projecttreewidget.cpp" line="303"/>
         <source>New Data View</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="290"/>
+        <location filename="../controls/projecttreewidget.cpp" line="304"/>
         <source>New Traffic View</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="291"/>
+        <location filename="../controls/projecttreewidget.cpp" line="305"/>
         <source>New Script</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="309"/>
+        <location filename="../controls/projecttreewidget.cpp" line="306"/>
+        <source>New Register Map</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../controls/projecttreewidget.cpp" line="324"/>
         <source>Run Script</source>
         <translation type="unfinished">執行指令碼</translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="310"/>
+        <location filename="../controls/projecttreewidget.cpp" line="325"/>
         <source>Stop Script</source>
         <translation type="unfinished">停止指令碼</translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="316"/>
-        <location filename="../controls/projecttreewidget.cpp" line="357"/>
+        <location filename="../controls/projecttreewidget.cpp" line="331"/>
+        <location filename="../controls/projecttreewidget.cpp" line="376"/>
+        <location filename="../controls/projecttreewidget.cpp" line="376"/>
         <source>Rename</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="318"/>
+        <location filename="../controls/projecttreewidget.cpp" line="333"/>
         <source>Delete</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="357"/>
+        <location filename="../controls/projecttreewidget.cpp" line="376"/>
         <source>New name:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="365"/>
+        <location filename="../controls/projecttreewidget.cpp" line="384"/>
         <source>Delete Form</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="366"/>
+        <location filename="../controls/projecttreewidget.cpp" line="385"/>
         <source>Delete &quot;%1&quot; from the project?</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4407,11 +4621,13 @@ Script.onInit(()=&gt;{
     <message>
         <location filename="../controls/runmodecombobox.cpp" line="11"/>
         <location filename="../controls/runmodecombobox.cpp" line="31"/>
+        <location filename="../controls/runmodecombobox.cpp" line="31"/>
         <source>Once</source>
         <translation>一次</translation>
     </message>
     <message>
         <location filename="../controls/runmodecombobox.cpp" line="12"/>
+        <location filename="../controls/runmodecombobox.cpp" line="35"/>
         <location filename="../controls/runmodecombobox.cpp" line="35"/>
         <source>Periodically</source>
         <translation>週期</translation>
@@ -4502,6 +4718,7 @@ Script.onInit(()=&gt;{
     <message>
         <location filename="../controls/searchlineedit.cpp" line="11"/>
         <location filename="../controls/searchlineedit.cpp" line="27"/>
+        <location filename="../controls/searchlineedit.cpp" line="27"/>
         <source>Type text to search...</source>
         <translation>輸入文字進行搜尋...</translation>
     </message>
@@ -4510,6 +4727,7 @@ Script.onInit(()=&gt;{
     <name>SimulationModeComboBox</name>
     <message>
         <location filename="../controls/simulationmodecombobox.cpp" line="42"/>
+        <location filename="../controls/simulationmodecombobox.cpp" line="48"/>
         <location filename="../controls/simulationmodecombobox.cpp" line="48"/>
         <source>Random</source>
         <translation>隨機數</translation>
@@ -4559,6 +4777,7 @@ Script.onInit(()=&gt;{
     <message>
         <location filename="../controls/statisticwidget.cpp" line="108"/>
         <location filename="../controls/statisticwidget.cpp" line="112"/>
+        <location filename="../controls/statisticwidget.cpp" line="112"/>
         <source>Pause Logging</source>
         <translation>暫停日誌記錄</translation>
     </message>
@@ -4591,6 +4810,29 @@ Script.onInit(()=&gt;{
     <message>
         <source>Resume</source>
         <translation type="obsolete">恢復</translation>
+    </message>
+</context>
+<context>
+    <name>TypeItemDelegate</name>
+    <message>
+        <location filename="../formregistermapview.cpp" line="31"/>
+        <source>Coils</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../formregistermapview.cpp" line="32"/>
+        <source>Discrete Inputs</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../formregistermapview.cpp" line="33"/>
+        <source>Input Registers</source>
+        <translation type="unfinished">輸入暫存器</translation>
+    </message>
+    <message>
+        <location filename="../formregistermapview.cpp" line="34"/>
+        <source>Holding Registers</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

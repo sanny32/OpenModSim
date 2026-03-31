@@ -47,6 +47,7 @@ public:
 
     QModbusDataUnit data(quint8 deviceId, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, quint16 length) const;
     void setData(quint8 deviceId, const QModbusDataUnit& data);
+    QDateTime timestamp(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 address) const;
 
     void writeValue(quint8 deviceId, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, quint16 value, ByteOrder order);
     void writeRegister(QModbusDataUnit::RegisterType pointType, const ModbusWriteParams& params);

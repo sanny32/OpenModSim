@@ -43,8 +43,8 @@ public:
     QSharedPointer<const ModbusMessage> itemAt(const QModelIndex& index);
     bool exportToTextFile(const QString& filePath);
 
-    DataDisplayMode dataDisplayMode() const;
-    void setDataDisplayMode(DataDisplayMode mode);
+    DataType dataType() const;
+    void setDataType(DataType type);
 
     bool showLeadingZeros() const;
     void setShowLeadingZeros(bool value);
@@ -72,7 +72,7 @@ private:
     QAction* _copyAct;
     QAction* _copyBytesAct;
     LogViewState _state = LogViewState::Running;
-    DataDisplayMode _dataDisplayMode;
+    DataType _dataType;
     bool _showLeadingZeros = true;
 };
 

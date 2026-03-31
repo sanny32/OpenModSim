@@ -100,7 +100,8 @@ private:
 
     OutputDataWidget* _parentWidget;
     QModbusDataUnit _lastData;
-    DataDisplayMode _lastMode = DataDisplayMode::Binary;
+    DataType      _lastType  = DataType::Binary;
+    RegisterOrder _lastOrder = RegisterOrder::MSRF;
     bool _lastLeadingZeros = false;
     QModbusDataUnit::RegisterType _lastPointType = QModbusDataUnit::RegisterType::Invalid;
     ByteOrder _lastByteOrder = ByteOrder::Direct;
@@ -127,8 +128,11 @@ public:
 
     void setup(const DataViewDefinitions& dd, const ModbusSimulationMap2& simulations, const QModbusDataUnit& data);
 
-    DataDisplayMode dataDisplayMode() const;
-    void setDataDisplayMode(DataDisplayMode mode);
+    DataType dataType() const;
+    void setDataType(DataType type);
+
+    RegisterOrder registerOrder() const;
+    void setRegisterOrder(RegisterOrder order);
 
     const ByteOrder* byteOrder() const;
     void setByteOrder(ByteOrder order);
@@ -185,7 +189,7 @@ public:
     AddressDescriptionMap2 descriptionMap() const;
     void setDescription(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr, const QString& desc);
 
-    void setSimulated(DataDisplayMode mode, quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr, bool on);
+    void setSimulated(DataType type, RegisterOrder order, quint8 deviceId, QModbusDataUnit::RegisterType regType, quint16 addr, bool on);
 
 signals:
     void itemDoubleClicked(quint16 address, const QVariant& value);
@@ -219,7 +223,8 @@ private:
     int _zoomPercent = 100;
 
     bool _displayHexAddreses;
-    DataDisplayMode _dataDisplayMode;
+    DataType      _dataType  = DataType::Binary;
+    RegisterOrder _regOrder  = RegisterOrder::MSRF;
     ByteOrder _byteOrder;
     QString _codepage;
     DataViewDefinitions _displayDefinition;

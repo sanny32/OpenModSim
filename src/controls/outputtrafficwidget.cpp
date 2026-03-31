@@ -41,22 +41,22 @@ OutputTrafficWidget::~OutputTrafficWidget()
 }
 
 ///
-/// \brief OutputTrafficWidget::dataDisplayMode
+/// \brief OutputTrafficWidget::dataType
 /// \return
 ///
-DataDisplayMode OutputTrafficWidget::dataDisplayMode() const
+DataType OutputTrafficWidget::dataType() const
 {
-    return ui->logView->dataDisplayMode();
+    return ui->logView->dataType();
 }
 
 ///
-/// \brief OutputTrafficWidget::setDataDisplayMode
-/// \param mode
+/// \brief OutputTrafficWidget::setDataType
+/// \param type
 ///
-void OutputTrafficWidget::setDataDisplayMode(DataDisplayMode mode)
+void OutputTrafficWidget::setDataType(DataType type)
 {
-    ui->logView->setDataDisplayMode(mode);
-    ui->modbusMsg->setDataDisplayMode(mode);
+    ui->logView->setDataType(type);
+    ui->modbusMsg->setDataType(type);
 }
 
 ///

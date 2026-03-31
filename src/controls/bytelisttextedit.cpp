@@ -70,17 +70,17 @@ void ByteListTextEdit::setValue(const QByteArray& value)
     {
         case DecMode:
         {
-            const auto text = formatUInt8Array(DataDisplayMode::UInt16, true, value);
+            const auto text = formatUInt8Array(DataType::UInt16, true, value);
             if(text != toPlainText())
-                setPlainText(formatUInt8Array(DataDisplayMode::UInt16, true, value));
+                setPlainText(formatUInt8Array(DataType::UInt16, true, value));
         }
         break;
 
         case HexMode:
         {
-            const auto text = formatUInt8Array(DataDisplayMode::Hex, true, value);
+            const auto text = formatUInt8Array(DataType::Hex, true, value);
             if(text != toPlainText())
-                setPlainText(formatUInt8Array(DataDisplayMode::Hex, true, value));
+                setPlainText(formatUInt8Array(DataType::Hex, true, value));
         }
         break;
     }

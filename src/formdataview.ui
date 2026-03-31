@@ -42,22 +42,22 @@
      <addaction name="actionDisplayUInt16"/>
      <addaction name="separator"/>
      <addaction name="actionDisplayInt32"/>
-     <addaction name="actionDisplaySwappedInt32"/>
+     <addaction name="actionDisplayInt32LSRF"/>
      <addaction name="separator"/>
      <addaction name="actionDisplayUInt32"/>
-     <addaction name="actionDisplaySwappedUInt32"/>
+     <addaction name="actionDisplayUInt32LSRF"/>
      <addaction name="separator"/>
      <addaction name="actionDisplayInt64"/>
-     <addaction name="actionDisplaySwappedInt64"/>
+     <addaction name="actionDisplayInt64LSRF"/>
      <addaction name="separator"/>
      <addaction name="actionDisplayUInt64"/>
-     <addaction name="actionDisplaySwappedUInt64"/>
+     <addaction name="actionDisplayUInt64LSRF"/>
      <addaction name="separator"/>
-     <addaction name="actionDisplayFloatingPt"/>
-     <addaction name="actionDisplaySwappedFP"/>
+     <addaction name="actionDisplayFloat32"/>
+     <addaction name="actionDisplayFloat32LSRF"/>
      <addaction name="separator"/>
-     <addaction name="actionDisplayDblFloat"/>
-     <addaction name="actionDisplaySwappedDbl"/>
+     <addaction name="actionDisplayFloat64"/>
+     <addaction name="actionDisplayFloat64LSRF"/>
      <addaction name="separator"/>
      <addaction name="actionDisplaySwapBytes"/>
     </widget>
@@ -554,7 +554,7 @@
     <enum>Qt::ShortcutContext::WidgetWithChildrenShortcut</enum>
    </property>
   </action>
-  <action name="actionDisplaySwappedInt32">
+  <action name="actionDisplayInt32LSRF">
    <property name="checkable">
     <bool>true</bool>
    </property>
@@ -590,7 +590,7 @@
     <enum>Qt::ShortcutContext::WidgetWithChildrenShortcut</enum>
    </property>
   </action>
-  <action name="actionDisplaySwappedUInt32">
+  <action name="actionDisplayUInt32LSRF">
    <property name="checkable">
     <bool>true</bool>
    </property>
@@ -626,7 +626,7 @@
     <enum>Qt::ShortcutContext::WidgetWithChildrenShortcut</enum>
    </property>
   </action>
-  <action name="actionDisplaySwappedInt64">
+  <action name="actionDisplayInt64LSRF">
    <property name="checkable">
     <bool>true</bool>
    </property>
@@ -662,7 +662,7 @@
     <enum>Qt::ShortcutContext::WidgetWithChildrenShortcut</enum>
    </property>
   </action>
-  <action name="actionDisplaySwappedUInt64">
+  <action name="actionDisplayUInt64LSRF">
    <property name="checkable">
     <bool>true</bool>
    </property>
@@ -680,7 +680,7 @@
     <enum>Qt::ShortcutContext::WidgetWithChildrenShortcut</enum>
    </property>
   </action>
-  <action name="actionDisplayFloatingPt">
+  <action name="actionDisplayFloat32">
    <property name="checkable">
     <bool>true</bool>
    </property>
@@ -698,7 +698,7 @@
     <enum>Qt::ShortcutContext::WidgetWithChildrenShortcut</enum>
    </property>
   </action>
-  <action name="actionDisplaySwappedFP">
+  <action name="actionDisplayFloat32LSRF">
    <property name="checkable">
     <bool>true</bool>
    </property>
@@ -716,7 +716,7 @@
     <enum>Qt::ShortcutContext::WidgetWithChildrenShortcut</enum>
    </property>
   </action>
-  <action name="actionDisplayDblFloat">
+  <action name="actionDisplayFloat64">
    <property name="checkable">
     <bool>true</bool>
    </property>
@@ -734,7 +734,7 @@
     <enum>Qt::ShortcutContext::WidgetWithChildrenShortcut</enum>
    </property>
   </action>
-  <action name="actionDisplaySwappedDbl">
+  <action name="actionDisplayFloat64LSRF">
    <property name="checkable">
     <bool>true</bool>
    </property>

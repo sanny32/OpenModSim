@@ -15,8 +15,8 @@ public:
 
     void clear();
 
-    DataDisplayMode dataDisplayMode() const;
-    void setDataDisplayMode(DataDisplayMode mode);
+    DataType dataType() const;
+    void setDataType(DataType type);
 
     ByteOrder byteOrder() const;
     void setByteOrder(ByteOrder order);
@@ -45,7 +45,7 @@ private:
 private:
     QColor _statusClr;
     ByteOrder _byteOrder;
-    DataDisplayMode _dataDisplayMode;
+    DataType _dataType;
     bool _showLeadingZeros;
     bool _showTimestamp;
     QAction* _copyAct;

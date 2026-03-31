@@ -318,7 +318,7 @@ void FormTrafficView::setDisplayDefinition(const TrafficViewDefinitions& dd)
         QSignalBlocker b(ui->actionHexView);
         ui->actionHexView->setChecked(_displayDefinition.HexView);
     }
-    ui->outputWidget->setDataDisplayMode(_displayDefinition.HexView ? DataDisplayMode::Hex : DataDisplayMode::UInt16);
+    ui->outputWidget->setDataType(_displayDefinition.HexView ? DataType::Hex : DataType::UInt16);
 
     ui->outputWidget->setAutosctollLogView(_displayDefinition.Autoscroll);
 
@@ -447,7 +447,7 @@ void FormTrafficView::setDisplayDefinitionSilent(const TrafficViewDefinitions& d
         QSignalBlocker b(ui->actionHexView);
         ui->actionHexView->setChecked(dd.HexView);
     }
-    ui->outputWidget->setDataDisplayMode(dd.HexView ? DataDisplayMode::Hex : DataDisplayMode::UInt16);
+    ui->outputWidget->setDataType(dd.HexView ? DataType::Hex : DataType::UInt16);
     ui->outputWidget->setAutosctollLogView(dd.Autoscroll);
 
     trimTrafficBufferToLimit();
@@ -678,7 +678,7 @@ void FormTrafficView::on_actionExportTrafficLog_triggered()
 ///
 void FormTrafficView::on_actionHexView_toggled(bool checked)
 {
-    ui->outputWidget->setDataDisplayMode(checked ? DataDisplayMode::Hex : DataDisplayMode::UInt16);
+    ui->outputWidget->setDataType(checked ? DataType::Hex : DataType::UInt16);
 }
 
 ///

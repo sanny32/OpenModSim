@@ -78,10 +78,10 @@ struct CachedLayoutEntry
 static quint32 makeModeKey(const ModbusLogWidget* widget)
 {
     if (!widget) {
-        return (static_cast<quint32>(DataDisplayMode::Hex) << 1u) | 1u;
+        return (static_cast<quint32>(DataType::Hex) << 1u) | 1u;
     }
 
-    return (static_cast<quint32>(widget->dataDisplayMode()) << 1u)
+    return (static_cast<quint32>(widget->dataType()) << 1u)
            | (widget->showLeadingZeros() ? 1u : 0u);
 }
 
@@ -102,8 +102,8 @@ static LogTextData buildLogTextData(const ModbusMessage& msg, const ModbusLogWid
     const QString direction = msg.isRequest() ? QStringLiteral("[Rx] \u2190")
                                               : QStringLiteral("[Tx] \u2192");
     const QString data = widget
-                         ? msg.toString(widget->dataDisplayMode(), widget->showLeadingZeros())
-                         : msg.toString(DataDisplayMode::Hex, true);
+                         ? msg.toString(widget->dataType(), widget->showLeadingZeros())
+                         : msg.toString(DataType::Hex, true);
 
     LogTextData result;
     result.timestampLen  = timestamp.length();
@@ -299,7 +299,7 @@ QVariant ModbusLogModel::data(const QModelIndex& index, int role) const
             return QString("%1 %2 %3")
                 .arg(item->timestamp().toString(Qt::ISODateWithMs),
                      item->isRequest() ? "[Rx] \u2190" : "[Tx] \u2192",
-                     item->toString(_parentWidget->dataDisplayMode(), _parentWidget->showLeadingZeros()));
+                     item->toString(_parentWidget->dataType(), _parentWidget->showLeadingZeros()));
 
         case Qt::UserRole:
             return QVariant::fromValue(item);
@@ -316,7 +316,7 @@ ModbusLogWidget::ModbusLogWidget(QWidget* parent)
     : QListView(parent)
     , _autoscroll(false)
     , _showLeadingZeros(true)
-    ,_dataDisplayMode(DataDisplayMode::Hex)
+    , _dataType(DataType::Hex)
 {
     setFocusPolicy(Qt::StrongFocus);
     setFont(defaultMonospaceFont());
@@ -346,7 +346,7 @@ ModbusLogWidget::ModbusLogWidget(QWidget* parent)
         QModelIndex index = currentIndex();
         if (index.isValid()) {
             auto msg = index.data(Qt::UserRole).value<QSharedPointer<const ModbusMessage>>();
-            if (msg) QApplication::clipboard()->setText(msg->toString(dataDisplayMode(), _showLeadingZeros));
+            if (msg) QApplication::clipboard()->setText(msg->toString(dataType(), _showLeadingZeros));
         }
     });
 
@@ -457,26 +457,26 @@ bool ModbusLogWidget::exportToTextFile(const QString& filePath)
         return QString("%1 %2 %3").arg(
             msg->timestamp().toString(Qt::ISODateWithMs),
             direction,
-            msg->toString(dataDisplayMode(), showLeadingZeros()));
+            msg->toString(dataType(), showLeadingZeros()));
     });
 }
 
 ///
-/// \brief ModbusLogWidget::dataDisplayMode
+/// \brief ModbusLogWidget::dataType
 /// \return
 ///
-DataDisplayMode ModbusLogWidget::dataDisplayMode() const
+DataType ModbusLogWidget::dataType() const
 {
-    return _dataDisplayMode;
+    return _dataType;
 }
 
 ///
-/// \brief ModbusLogWidget::setDataDisplayMode
-/// \param mode
+/// \brief ModbusLogWidget::setDataType
+/// \param type
 ///
-void ModbusLogWidget::setDataDisplayMode(DataDisplayMode mode)
+void ModbusLogWidget::setDataType(DataType type)
 {
-    _dataDisplayMode = mode;
+    _dataType = type;
 
     if(model()) {
         ((ModbusLogModel*)model())->update();

@@ -31,9 +31,9 @@ struct SimButtonColors
 /// \param registersCount
 /// \return
 ///
-static SimButtonColors simColors(DataDisplayMode mode)
+static SimButtonColors simColors(DataType type)
 {
-    switch(registersCount(mode))
+    switch(registersCount(type))
     {
         case 2:
             return { "#5680D0", "#4E75C0", "#466AB0", "#3E5FA0" };
@@ -84,70 +84,64 @@ DialogWriteRegister::DialogWriteRegister(ModbusWriteParams& params, QModbusDataU
 
     switch(params.DataMode)
     {
-        case DataDisplayMode::UInt16:
+        case DataType::UInt16:
             ui->lineEditValue->setLeadingZeroes(params.LeadingZeros);
             ui->lineEditValue->setInputRange(0, USHRT_MAX);
             ui->lineEditValue->setValue(params.Value.toUInt());
         break;
 
-        case DataDisplayMode::Int16:
+        case DataType::Int16:
             ui->lineEditValue->setInputRange(SHRT_MIN, SHRT_MAX);
             ui->lineEditValue->setValue(params.Value.toInt());
         break;
 
-        case DataDisplayMode::Binary:
-        case DataDisplayMode::Hex:
+        case DataType::Binary:
+        case DataType::Hex:
             ui->labelValue->setText(tr("Value, (HEX): "));
             ui->lineEditValue->setLeadingZeroes(true);
             ui->lineEditValue->setInputMode(NumericLineEdit::HexMode);
             ui->lineEditValue->setValue(params.Value.toUInt());
         break;
 
-        case DataDisplayMode::Ansi:
+        case DataType::Ansi:
             ui->labelValue->setText(tr("Value, (ANSI): "));
             ui->lineEditValue->setInputMode(NumericLineEdit::AnsiMode);
             ui->lineEditValue->setCodepage(params.Codepage);
             ui->lineEditValue->setValue(params.Value.toUInt());
         break;
 
-        case DataDisplayMode::FloatingPt:
-        case DataDisplayMode::SwappedFP:
+        case DataType::Float32:
             ui->lineEditValue->setInputMode(NumericLineEdit::FloatMode);
             ui->lineEditValue->setValue(params.Value.toFloat());
             ui->controlBitPattern->setEnabled(false);
         break;
 
-        case DataDisplayMode::DblFloat:
-        case DataDisplayMode::SwappedDbl:
+        case DataType::Float64:
             ui->lineEditValue->setInputMode(NumericLineEdit::DoubleMode);
             ui->lineEditValue->setValue(params.Value.toDouble());
             ui->controlBitPattern->setEnabled(false);
         break;
 
-        case DataDisplayMode::Int32:
-        case DataDisplayMode::SwappedInt32:
+        case DataType::Int32:
             ui->lineEditValue->setInputMode(NumericLineEdit::Int32Mode);
             ui->lineEditValue->setValue(params.Value.toInt());
             ui->controlBitPattern->setEnabled(false);
         break;
 
-        case DataDisplayMode::UInt32:
-        case DataDisplayMode::SwappedUInt32:
+        case DataType::UInt32:
             ui->lineEditValue->setLeadingZeroes(params.LeadingZeros);
             ui->lineEditValue->setInputMode(NumericLineEdit::UInt32Mode);
             ui->lineEditValue->setValue(params.Value.toUInt());
             ui->controlBitPattern->setEnabled(false);
         break;
 
-        case DataDisplayMode::Int64:
-        case DataDisplayMode::SwappedInt64:
+        case DataType::Int64:
             ui->lineEditValue->setInputMode(NumericLineEdit::Int64Mode);
             ui->lineEditValue->setValue(params.Value.toLongLong());
             ui->controlBitPattern->setEnabled(false);
         break;
 
-        case DataDisplayMode::UInt64:
-        case DataDisplayMode::SwappedUInt64:
+        case DataType::UInt64:
             ui->lineEditValue->setLeadingZeroes(params.LeadingZeros);
             ui->lineEditValue->setInputMode(NumericLineEdit::UInt64Mode);
             ui->lineEditValue->setValue(params.Value.toULongLong());
@@ -276,7 +270,7 @@ void DialogWriteRegister::updateValue()
     const int simAddr = ui->lineEditAddress->value<int>() - (_writeParams.ZeroBasedAddress ? 0 : 1);
     const int count = registersCount(_writeParams.DataMode);
     const auto regs = srv->data(deviceId, _type, simAddr, count).values();
-    const auto value = makeValue(regs, _writeParams.DataMode, _writeParams.Order);
+    const auto value = makeValue(regs, _writeParams.DataMode, _writeParams.RegOrder, _writeParams.Order);
     if(value.isValid()) ui->lineEditValue->setValue(value);
 }
 
