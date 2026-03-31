@@ -521,7 +521,32 @@ FormRegisterMapView::FormRegisterMapView(ModbusMultiServer& server, MainWindow* 
 ///
 FormRegisterMapView::~FormRegisterMapView()
 {
+    for (auto it = _registerMap.cbegin(); it != _registerMap.cend(); ++it)
+        unregisterEntry(it.key());
     delete ui;
+}
+
+///
+/// \brief FormRegisterMapView::registerEntry
+///
+void FormRegisterMapView::registerEntry(const ItemMapKey& key, const Entry& entry)
+{
+    if (!_rowUuids.contains(key))
+        _rowUuids[key] = QUuid::createUuid();
+    _mbMultiServer.addDeviceId(key.DeviceId);
+    _mbMultiServer.addUnitMap(_rowUuids[key], key.DeviceId, key.Type,
+                               key.Address, registersCount(entry.type));
+}
+
+///
+/// \brief FormRegisterMapView::unregisterEntry
+///
+void FormRegisterMapView::unregisterEntry(const ItemMapKey& key)
+{
+    const QUuid uuid = _rowUuids.take(key);
+    if (uuid.isNull()) return;
+    _mbMultiServer.removeUnitMap(uuid, key.DeviceId);
+    _mbMultiServer.removeDeviceId(key.DeviceId);
 }
 
 ///
@@ -713,6 +738,7 @@ void FormRegisterMapView::on_actionDelete_triggered()
     _updatingTable = true;
     for (int row : rows) {
         const ItemMapKey key = keyFromRow(row);
+        unregisterEntry(key);
         _registerMap.remove(key);
         ui->tableWidget->removeRow(row);
     }
@@ -725,6 +751,8 @@ void FormRegisterMapView::on_actionDelete_triggered()
 ///
 void FormRegisterMapView::on_actionClear_triggered()
 {
+    for (auto it = _registerMap.cbegin(); it != _registerMap.cend(); ++it)
+        unregisterEntry(it.key());
     _registerMap.clear();
     _updatingTable = true;
     ui->tableWidget->setRowCount(0);
@@ -891,6 +919,9 @@ void FormRegisterMapView::on_tableWidget_cellChanged(int row, int col)
         auto* valItem = ui->tableWidget->item(row, ColValue);
         if (valItem) valItem->setText(formatValue(key.Type, it->type, it->order, regsForKey(key, it->type)));
         _updatingTable = false;
+
+        // Re-register with updated length (DataType affects registersCount)
+        registerEntry(key, *it);
         return;
     }
 
@@ -935,6 +966,7 @@ void FormRegisterMapView::on_tableWidget_cellChanged(int row, int col)
 
         // Preserve existing entry data
         Entry entry = _registerMap.value(oldKey);
+        unregisterEntry(oldKey);
         _registerMap.remove(oldKey);
 
         // Force Binary for bit-type registers
@@ -950,6 +982,7 @@ void FormRegisterMapView::on_tableWidget_cellChanged(int row, int col)
         entry.value = unit.isValid() ? static_cast<quint16>(unit.value(0)) : 0;
         entry.timestamp = unit.isValid() ? QDateTime::currentDateTime() : QDateTime();
         _registerMap[newKey] = entry;
+        registerEntry(newKey, entry);
 
         // Update UserRole data and dependent cells
         _updatingTable = true;
@@ -1093,6 +1126,8 @@ void FormRegisterMapView::insertEntry(const ItemMapKey& key, const Entry& entry)
     ui->tableWidget->setItem(row, ColTimestamp, tsItem);
 
     _updatingTable = false;
+
+    registerEntry(key, entry);
 }
 
 ///

@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include <QMap>
+#include <QUuid>
 #include <QDateTime>
 #include <QXmlStreamWriter>
 #include <QXmlStreamReader>
@@ -84,6 +85,8 @@ private:
     void processRequest(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 startAddress, quint16 count);
     int  findRow(const ItemMapKey& key) const;
     void insertEntry(const ItemMapKey& key, const Entry& entry);
+    void registerEntry(const ItemMapKey& key, const Entry& entry);
+    void unregisterEntry(const ItemMapKey& key);
     void updateValue(int row, const ItemMapKey& key, quint16 value);
     void updateAddressCells();
     void setupServerConnections();
@@ -104,8 +107,9 @@ private:
     ModbusMultiServer& _mbMultiServer;
     RegisterMapViewDefinitions _displayDefinition;
     QMap<ItemMapKey, Entry> _registerMap;
+    QMap<ItemMapKey, QUuid> _rowUuids;
     bool _updatingTable = false;
-    bool _autoAddOnRequest = true;
+    bool _autoAddOnRequest = false;
 };
 
 ///

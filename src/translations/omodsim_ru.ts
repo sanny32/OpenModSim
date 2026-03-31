@@ -2392,28 +2392,28 @@ MODBUS Point Type:
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="1155"/>
-        <location filename="../formregistermapview.cpp" line="1168"/>
-        <location filename="../formregistermapview.cpp" line="1168"/>
+        <location filename="../formregistermapview.cpp" line="1190"/>
+        <location filename="../formregistermapview.cpp" line="1203"/>
+        <location filename="../formregistermapview.cpp" line="1203"/>
         <source>Coils</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="1156"/>
-        <location filename="../formregistermapview.cpp" line="1169"/>
-        <location filename="../formregistermapview.cpp" line="1169"/>
+        <location filename="../formregistermapview.cpp" line="1191"/>
+        <location filename="../formregistermapview.cpp" line="1204"/>
+        <location filename="../formregistermapview.cpp" line="1204"/>
         <source>Discrete Inputs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="1157"/>
-        <location filename="../formregistermapview.cpp" line="1170"/>
-        <location filename="../formregistermapview.cpp" line="1170"/>
+        <location filename="../formregistermapview.cpp" line="1192"/>
+        <location filename="../formregistermapview.cpp" line="1205"/>
+        <location filename="../formregistermapview.cpp" line="1205"/>
         <source>Input Registers</source>
         <translation type="unfinished">Значения реистров</translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="1158"/>
+        <location filename="../formregistermapview.cpp" line="1193"/>
         <source>Holding Registers</source>
         <translation type="unfinished"></translation>
     </message>
