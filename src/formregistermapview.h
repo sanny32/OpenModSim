@@ -131,7 +131,7 @@ inline QXmlStreamWriter& operator <<(QXmlStreamWriter& xml, FormRegisterMapView*
     xml.writeEndElement(); // Window
 
     xml.writeStartElement("RegisterMapViewDefinitions");
-    xml.writeAttribute("FormName", frm->_displayDefinition.FormName);
+    xml.writeAttribute("FormName", frm->displayDefinition().FormName);
     xml.writeEndElement();
 
     xml.writeStartElement("ColumnWidths");

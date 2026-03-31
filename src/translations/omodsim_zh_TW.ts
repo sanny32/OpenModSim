@@ -2250,88 +2250,83 @@ MODBUS Point Type:
 <context>
     <name>FormRegisterMapView</name>
     <message>
-        <location filename="../formregistermapview.ui" line="14"/>
-        <source>Register Map</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../formregistermapview.ui" line="67"/>
+        <location filename="../formregistermapview.ui" line="64"/>
         <source>Type</source>
         <translation type="unfinished">型別</translation>
     </message>
     <message>
-        <location filename="../formregistermapview.ui" line="72"/>
+        <location filename="../formregistermapview.ui" line="69"/>
         <source>Address</source>
         <translation type="unfinished">地址</translation>
     </message>
     <message>
-        <location filename="../formregistermapview.ui" line="77"/>
+        <location filename="../formregistermapview.ui" line="74"/>
         <source>DataType</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formregistermapview.ui" line="82"/>
+        <location filename="../formregistermapview.ui" line="79"/>
         <source>Order</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formregistermapview.ui" line="92"/>
+        <location filename="../formregistermapview.ui" line="89"/>
         <source>Value</source>
         <translation type="unfinished">值</translation>
     </message>
     <message>
-        <location filename="../formregistermapview.ui" line="62"/>
+        <location filename="../formregistermapview.ui" line="59"/>
         <source>Unit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formregistermapview.ui" line="87"/>
+        <location filename="../formregistermapview.ui" line="84"/>
         <source>Comment</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formregistermapview.ui" line="97"/>
+        <location filename="../formregistermapview.ui" line="94"/>
         <source>Timestamp</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formregistermapview.ui" line="105"/>
+        <location filename="../formregistermapview.ui" line="102"/>
         <source>Add</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formregistermapview.ui" line="114"/>
+        <location filename="../formregistermapview.ui" line="111"/>
         <source>Delete</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formregistermapview.ui" line="123"/>
+        <location filename="../formregistermapview.ui" line="120"/>
         <source>Clear Register Map</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../formregistermapview.cpp" line="1037"/>
-        <location filename="../formregistermapview.cpp" line="1050"/>
-        <location filename="../formregistermapview.cpp" line="1050"/>
-        <source>Coils</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../formregistermapview.cpp" line="1038"/>
         <location filename="../formregistermapview.cpp" line="1051"/>
         <location filename="../formregistermapview.cpp" line="1051"/>
-        <source>Discrete Inputs</source>
+        <source>Coils</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../formregistermapview.cpp" line="1039"/>
         <location filename="../formregistermapview.cpp" line="1052"/>
         <location filename="../formregistermapview.cpp" line="1052"/>
+        <source>Discrete Inputs</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../formregistermapview.cpp" line="1040"/>
+        <location filename="../formregistermapview.cpp" line="1053"/>
+        <location filename="../formregistermapview.cpp" line="1053"/>
         <source>Input Registers</source>
         <translation type="unfinished">輸入暫存器</translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="1040"/>
+        <location filename="../formregistermapview.cpp" line="1041"/>
         <source>Holding Registers</source>
         <translation type="unfinished"></translation>
     </message>

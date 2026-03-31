@@ -430,6 +430,7 @@ FormRegisterMapView::FormRegisterMapView(ModbusMultiServer& server, MainWindow* 
     setupServerConnections();
 
     setWindowIcon(QIcon(":/res/actionShowData.png"));
+
 }
 
 ///
