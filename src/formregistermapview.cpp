@@ -114,7 +114,7 @@ public:
     {
         auto* cb = qobject_cast<QComboBox*>(editor);
         if (!cb) return;
-        const int idx = cb->findText(index.data(Qt::DisplayRole).toString());
+        const int idx = cb->findText(index.data(Qt::EditRole).toString());
         if (idx >= 0) cb->setCurrentIndex(idx);
     }
 
@@ -179,7 +179,7 @@ public:
     {
         auto* cb = qobject_cast<QComboBox*>(editor);
         if (!cb) return;
-        const int idx = cb->findText(index.data(Qt::DisplayRole).toString());
+        const int idx = cb->findText(index.data(Qt::EditRole).toString());
         if (idx >= 0) cb->setCurrentIndex(idx);
     }
 
@@ -967,7 +967,7 @@ void FormRegisterMapView::setupToolBar()
     filterLayout->setSpacing(6);
     filterLayout->addWidget(new QLabel(tr("Unit:"), filterWidget));
     filterLayout->addWidget(_filterUnitSpin);
-    filterLayout->addWidget(new QLabel(tr("Type:"), filterWidget));
+    filterLayout->addWidget(new QLabel(tr("Data Type:"), filterWidget));
     filterLayout->addWidget(_filterTypeCombo);
 
     ui->toolBar->insertWidget(ui->actionClear, filterWidget);

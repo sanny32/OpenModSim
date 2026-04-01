@@ -4739,42 +4739,107 @@ Script.onInit(()=&gt;{
 <context>
     <name>RegisterMapDataModel</name>
     <message>
-        <location filename="../registermapdatamodel.cpp" line="438"/>
+        <location filename="../registermapdatamodel.cpp" line="216"/>
+        <source>Binary</source>
+        <translation type="unfinished">二進位制</translation>
+    </message>
+    <message>
+        <location filename="../registermapdatamodel.cpp" line="217"/>
+        <source>UInt16</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../registermapdatamodel.cpp" line="218"/>
+        <source>Int16</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../registermapdatamodel.cpp" line="219"/>
+        <source>Hex</source>
+        <translation type="unfinished">十六進位制</translation>
+    </message>
+    <message>
+        <location filename="../registermapdatamodel.cpp" line="220"/>
+        <source>Float32</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../registermapdatamodel.cpp" line="221"/>
+        <source>Float64</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../registermapdatamodel.cpp" line="222"/>
+        <source>Int32</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../registermapdatamodel.cpp" line="223"/>
+        <source>UInt32</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../registermapdatamodel.cpp" line="224"/>
+        <source>Int64</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../registermapdatamodel.cpp" line="225"/>
+        <source>UInt64</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../registermapdatamodel.cpp" line="226"/>
+        <source>Ansi</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../registermapdatamodel.cpp" line="236"/>
+        <source>MSRF</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../registermapdatamodel.cpp" line="236"/>
+        <source>LSRF</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../registermapdatamodel.cpp" line="457"/>
         <source>Unit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../registermapdatamodel.cpp" line="439"/>
+        <location filename="../registermapdatamodel.cpp" line="458"/>
         <source>Type</source>
         <translation type="unfinished">型別</translation>
     </message>
     <message>
-        <location filename="../registermapdatamodel.cpp" line="440"/>
+        <location filename="../registermapdatamodel.cpp" line="459"/>
         <source>Address</source>
         <translation type="unfinished">地址</translation>
     </message>
     <message>
-        <location filename="../registermapdatamodel.cpp" line="441"/>
-        <source>DataType</source>
+        <location filename="../registermapdatamodel.cpp" line="460"/>
+        <source>Data Type</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../registermapdatamodel.cpp" line="442"/>
+        <location filename="../registermapdatamodel.cpp" line="461"/>
         <source>Order</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../registermapdatamodel.cpp" line="443"/>
+        <location filename="../registermapdatamodel.cpp" line="462"/>
         <source>Comment</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../registermapdatamodel.cpp" line="444"/>
+        <location filename="../registermapdatamodel.cpp" line="463"/>
         <source>Value</source>
         <translation type="unfinished">值</translation>
     </message>
     <message>
-        <location filename="../registermapdatamodel.cpp" line="445"/>
+        <location filename="../registermapdatamodel.cpp" line="464"/>
         <source>Timestamp</source>
         <translation type="unfinished"></translation>
     </message>
