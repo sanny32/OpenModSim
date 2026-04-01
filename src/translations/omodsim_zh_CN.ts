@@ -2338,67 +2338,72 @@ MODBUS Point Type:
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formregistermapview.ui" line="77"/>
+        <location filename="../formregistermapview.ui" line="73"/>
+        <source>Insert Row</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../formregistermapview.ui" line="82"/>
         <source>Delete Row</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formregistermapview.ui" line="98"/>
+        <location filename="../formregistermapview.ui" line="103"/>
         <source>Clear Register Map</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="870"/>
+        <location filename="../formregistermapview.cpp" line="938"/>
         <source>1-based</source>
         <translation type="unfinished">基地址为-1</translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="871"/>
+        <location filename="../formregistermapview.cpp" line="939"/>
         <source>0-based</source>
         <translation type="unfinished">基地址为-0</translation>
     </message>
     <message>
-        <location filename="../formregistermapview.ui" line="89"/>
+        <location filename="../formregistermapview.ui" line="94"/>
         <source>Hex View</source>
         <translation type="unfinished">十六进制视图</translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="879"/>
+        <location filename="../formregistermapview.cpp" line="947"/>
         <source>Address Base:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="894"/>
+        <location filename="../formregistermapview.cpp" line="962"/>
         <source>All Types</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="895"/>
+        <location filename="../formregistermapview.cpp" line="963"/>
         <source>Coils</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="896"/>
+        <location filename="../formregistermapview.cpp" line="964"/>
         <source>Discrete Inputs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="897"/>
+        <location filename="../formregistermapview.cpp" line="965"/>
         <source>Input Registers</source>
         <translation type="unfinished">输入寄存器</translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="898"/>
+        <location filename="../formregistermapview.cpp" line="966"/>
         <source>Holding Registers</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="905"/>
+        <location filename="../formregistermapview.cpp" line="973"/>
         <source>Unit:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="907"/>
+        <location filename="../formregistermapview.cpp" line="975"/>
         <source>Type:</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2407,7 +2412,7 @@ MODBUS Point Type:
         <translation type="obsolete">类型： </translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="890"/>
+        <location filename="../formregistermapview.cpp" line="958"/>
         <source>All</source>
         <translation type="unfinished"></translation>
     </message>

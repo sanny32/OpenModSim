@@ -69,12 +69,15 @@ private slots:
     void on_mbRequest(const ConnectionDetails& cd, QSharedPointer<const ModbusMessage> msg);
     void on_mbDataChanged(quint8 deviceId, const QModbusDataUnit& data);
     void on_actionAdd_triggered();
+    void on_actionInsert_triggered();
     void on_actionDelete_triggered();
     void on_actionClear_triggered();
     void on_actionHexView_toggled(bool checked);
     void updateActionState();
 
 private:
+    int addRowAndReturnSourceRow(int referenceSourceRow = -1);
+    void editSourceRow(int sourceRow);
     void processRequest(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 startAddress, quint16 count);
     void setupToolBar();
     void setupServerConnections();

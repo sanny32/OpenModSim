@@ -68,6 +68,11 @@
     <string>Add Row</string>
    </property>
   </action>
+  <action name="actionInsert">
+   <property name="text">
+    <string>Insert Row</string>
+   </property>
+  </action>
   <action name="actionDelete">
    <property name="icon">
     <iconset resource="resources.qrc">

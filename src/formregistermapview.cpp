@@ -565,8 +565,14 @@ FormRegisterMapView::FormRegisterMapView(ModbusMultiServer& server, MainWindow* 
     // Context menu on table
     ui->tableView->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(ui->tableView, &QTableView::customContextMenuRequested, this, [this](const QPoint& pos) {
+        const QModelIndex clickedIndex = ui->tableView->indexAt(pos);
+        if (clickedIndex.isValid())
+            ui->tableView->setCurrentIndex(clickedIndex);
+        updateActionState();
+
         QMenu menu(this);
         menu.addAction(ui->actionAdd);
+        menu.addAction(ui->actionInsert);
         menu.addAction(ui->actionDelete);
         menu.addSeparator();
         menu.addAction(ui->actionClear);
@@ -575,6 +581,8 @@ FormRegisterMapView::FormRegisterMapView(ModbusMultiServer& server, MainWindow* 
 
     // Selection and row count signals
     connect(ui->tableView->selectionModel(), &QItemSelectionModel::selectionChanged,
+            this, &FormRegisterMapView::updateActionState);
+    connect(ui->tableView->selectionModel(), &QItemSelectionModel::currentChanged,
             this, &FormRegisterMapView::updateActionState);
     connect(_proxy, &QAbstractItemModel::rowsInserted,
             this, &FormRegisterMapView::updateActionState);
@@ -730,16 +738,25 @@ void FormRegisterMapView::on_mbDataChanged(quint8 deviceId, const QModbusDataUni
 }
 
 ///
-/// \brief FormRegisterMapView::on_actionAdd_triggered
+/// \brief FormRegisterMapView::addRowAndReturnSourceRow
 ///
-void FormRegisterMapView::on_actionAdd_triggered()
+int FormRegisterMapView::addRowAndReturnSourceRow(int referenceSourceRow)
 {
     ItemMapKey key{ 1, QModbusDataUnit::HoldingRegisters, 0 };
     RegisterMapEntry entry;
     entry.type  = DataType::Int16;
     entry.order = RegisterOrder::MSRF;
 
-    if (!_model->isEmpty()) {
+    if (referenceSourceRow >= 0 && referenceSourceRow < _model->rowCount()) {
+        const ItemMapKey referenceKey = _model->keyForRow(referenceSourceRow);
+        const auto& referenceEntry = _model->entries()[referenceKey];
+        key.DeviceId  = referenceKey.DeviceId;
+        key.Type      = referenceKey.Type;
+        key.Address   = referenceKey.Address < 0xFFFF ? referenceKey.Address + 1 : referenceKey.Address;
+        entry.type    = referenceEntry.type;
+        entry.order   = referenceEntry.order;
+        entry.comment = referenceEntry.comment;
+    } else if (!_model->isEmpty()) {
         const ItemMapKey last = _model->lastKey();
         const auto& lastEntry = _model->entries()[last];
         key.DeviceId  = last.DeviceId;
@@ -760,16 +777,62 @@ void FormRegisterMapView::on_actionAdd_triggered()
     const auto unit = _mbMultiServer.data(key.DeviceId, key.Type, key.Address, 1);
     entry.value = unit.isValid() ? static_cast<quint16>(unit.value(0)) : 0;
 
+    const int sourceRow = _model->rowCount();
     _model->addEntry(key, entry);
+    return sourceRow;
+}
 
-    // Start editing the Unit cell of the new row (if visible through current filter)
-    const QModelIndex srcIdx   = _model->index(_model->rowCount() - 1, ColUnit);
+///
+/// \brief FormRegisterMapView::editSourceRow
+///
+void FormRegisterMapView::editSourceRow(int sourceRow)
+{
+    if (sourceRow < 0 || sourceRow >= _model->rowCount()) return;
+
+    const QModelIndex srcIdx   = _model->index(sourceRow, ColAddress);
     const QModelIndex proxyIdx = _proxy->mapFromSource(srcIdx);
-    if (proxyIdx.isValid()) {
-        ui->tableView->scrollTo(proxyIdx);
-        ui->tableView->setCurrentIndex(proxyIdx);
-        ui->tableView->edit(proxyIdx);
+    if (!proxyIdx.isValid()) return;
+
+    ui->tableView->scrollTo(proxyIdx);
+    ui->tableView->setCurrentIndex(proxyIdx);
+    ui->tableView->edit(proxyIdx);
+}
+
+///
+/// \brief FormRegisterMapView::on_actionAdd_triggered
+///
+void FormRegisterMapView::on_actionAdd_triggered()
+{
+    const int newSourceRow = addRowAndReturnSourceRow();
+    editSourceRow(newSourceRow);
+    updateActionState();
+}
+
+///
+/// \brief FormRegisterMapView::on_actionInsert_triggered
+///
+void FormRegisterMapView::on_actionInsert_triggered()
+{
+    const QModelIndex currentProxyIdx = ui->tableView->currentIndex();
+    if (!currentProxyIdx.isValid()) return;
+
+    const QModelIndex currentSourceIdx = _proxy->mapToSource(currentProxyIdx.siblingAtColumn(ColUnit));
+    if (!currentSourceIdx.isValid()) return;
+
+    const int insertAfterSourceRow = currentSourceIdx.row();
+
+    const int newSourceRow = addRowAndReturnSourceRow(insertAfterSourceRow);
+    int targetSourceRow = newSourceRow;
+
+    const int insertTargetRow = insertAfterSourceRow + 1;
+    if (insertTargetRow >= 0 &&
+        insertTargetRow < _model->rowCount() &&
+        insertTargetRow != newSourceRow &&
+        _model->moveRows({}, newSourceRow, 1, {}, insertTargetRow)) {
+        targetSourceRow = insertTargetRow;
     }
+
+    editSourceRow(targetSourceRow);
     updateActionState();
 }
 
@@ -818,7 +881,12 @@ void FormRegisterMapView::on_actionHexView_toggled(bool checked)
 ///
 void FormRegisterMapView::updateActionState()
 {
-    ui->actionDelete->setEnabled(!ui->tableView->selectionModel()->selectedRows().isEmpty());
+    const QModelIndex currentProxyIdx = ui->tableView->currentIndex();
+    const bool hasCurrentRow = currentProxyIdx.isValid() &&
+                               _proxy->mapToSource(currentProxyIdx.siblingAtColumn(ColUnit)).isValid();
+    const bool hasSelection = !ui->tableView->selectionModel()->selectedRows().isEmpty();
+    ui->actionInsert->setEnabled(hasCurrentRow);
+    ui->actionDelete->setEnabled(hasSelection);
     ui->actionClear->setEnabled(_proxy->rowCount() > 0);
 }
 
