@@ -802,9 +802,9 @@ void FormRegisterMapView::setupToolBar()
     auto* filterLayout = new QHBoxLayout(filterWidget);
     filterLayout->setContentsMargins(9, 0, 9, 0);
     filterLayout->setSpacing(6);
-    filterLayout->addWidget(new QLabel(tr("Unit: "), filterWidget));
+    filterLayout->addWidget(new QLabel(tr("Unit:"), filterWidget));
     filterLayout->addWidget(_filterUnitSpin);
-    filterLayout->addWidget(new QLabel(tr("Type: "), filterWidget));
+    filterLayout->addWidget(new QLabel(tr("Type:"), filterWidget));
     filterLayout->addWidget(_filterTypeCombo);
 
     ui->toolBar->insertWidget(ui->actionClear, filterWidget);

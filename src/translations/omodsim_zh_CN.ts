@@ -2373,14 +2373,18 @@ MODBUS Point Type:
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="807"/>
-        <source>Type: </source>
-        <translation type="unfinished">类型： </translation>
+        <location filename="../formregistermapview.cpp" line="805"/>
+        <source>Unit:</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="805"/>
-        <source>Unit: </source>
+        <location filename="../formregistermapview.cpp" line="807"/>
+        <source>Type:</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Type: </source>
+        <translation type="obsolete">类型： </translation>
     </message>
     <message>
         <location filename="../formregistermapview.cpp" line="790"/>

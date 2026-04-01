@@ -2389,14 +2389,18 @@ MODBUS Point Type:
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="807"/>
-        <source>Type: </source>
-        <translation type="unfinished">Тип: </translation>
+        <location filename="../formregistermapview.cpp" line="805"/>
+        <source>Unit:</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="805"/>
-        <source>Unit: </source>
+        <location filename="../formregistermapview.cpp" line="807"/>
+        <source>Type:</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Type: </source>
+        <translation type="obsolete">Тип: </translation>
     </message>
     <message>
         <location filename="../formregistermapview.cpp" line="790"/>
