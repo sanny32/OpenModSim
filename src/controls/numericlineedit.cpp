@@ -423,7 +423,7 @@ void NumericLineEdit::internalSetValue(QVariant value)
         case FloatMode:
         {
             value = qBound(_minValue.toFloat(), value.toFloat(), _maxValue.toFloat());
-            const auto text = QLocale().toString(value.toFloat());
+            const auto text = QLocale().toString(value.toFloat(), 'g', QLocale::FloatingPointShortest);
             if(text != QLineEdit::text())
                 QLineEdit::setText(text);
         }
@@ -432,7 +432,7 @@ void NumericLineEdit::internalSetValue(QVariant value)
         case DoubleMode:
         {
             value = qBound(_minValue.toDouble(), value.toDouble(), _maxValue.toDouble());
-            const auto text = QLocale().toString(value.toFloat());
+            const auto text = QLocale().toString(value.toDouble(), 'g', QLocale::FloatingPointShortest);
             if(text != QLineEdit::text())
                 QLineEdit::setText(text);
         }
@@ -877,9 +877,13 @@ void NumericLineEdit::on_rangeChanged(const QVariant& bottom, const QVariant& to
         break;
 
         case FloatMode:
+            setMaxLength(INT16_MAX);
+            setValidator(new QDoubleValidatorEx(bottom.toDouble(), top.toDouble(), 9, _allowEmptyValue, this));
+        break;
+
         case DoubleMode:
             setMaxLength(INT16_MAX);
-            setValidator(new QDoubleValidatorEx(bottom.toDouble(), top.toDouble(), 6, _allowEmptyValue, this));
+            setValidator(new QDoubleValidatorEx(bottom.toDouble(), top.toDouble(), 17, _allowEmptyValue, this));
         break;
 
         case Int64Mode:

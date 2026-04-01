@@ -444,10 +444,10 @@ public:
         QString text;
         switch (type) {
             case DataType::Float32:
-                text = QString::number(le->value<float>());
+                text = QString::number(le->value<float>(), 'g', QLocale::FloatingPointShortest);
                 break;
             case DataType::Float64:
-                text = QString::number(le->value<double>());
+                text = QString::number(le->value<double>(), 'g', QLocale::FloatingPointShortest);
                 break;
             case DataType::Int32:
                 text = QString::number(le->value<qint32>());

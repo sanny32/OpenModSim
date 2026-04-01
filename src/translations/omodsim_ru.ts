@@ -2380,8 +2380,8 @@ MODBUS Point Type:
     </message>
     <message>
         <location filename="../formregistermapview.cpp" line="871"/>
-        <source>Address base:</source>
-        <translation type="unfinished"></translation>
+        <source>Address Base:</source>
+        <translation type="unfinished">Адресация:</translation>
     </message>
     <message>
         <location filename="../formregistermapview.cpp" line="886"/>
