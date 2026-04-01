@@ -4,6 +4,7 @@
 #include "formregistermapview.h"
 #include "modbusmessages/modbusmessages.h"
 #include "controls/numericlineedit.h"
+#include "formatutils.h"
 #include "ui_formregistermapview.h"
 
 namespace {
@@ -213,11 +214,29 @@ class UnitItemDelegate : public QStyledItemDelegate
 public:
     using QStyledItemDelegate::QStyledItemDelegate;
 
-    QWidget* createEditor(QWidget* parent, const QStyleOptionViewItem&, const QModelIndex&) const override
+    static bool hexViewFromIndex(const QModelIndex& index)
+    {
+        auto* proxy = qobject_cast<const QSortFilterProxyModel*>(index.model());
+        auto* src = proxy ? qobject_cast<RegisterMapDataModel*>(proxy->sourceModel()) : nullptr;
+        return src ? src->hexView() : false;
+    }
+
+    void initStyleOption(QStyleOptionViewItem* option, const QModelIndex& index) const override
+    {
+        QStyledItemDelegate::initStyleOption(option, index);
+        if (hexViewFromIndex(index)) {
+            bool ok;
+            const quint8 v = static_cast<quint8>(option->text.toUShort(&ok));
+            if (ok) option->text = formatUInt8Value(DataType::Hex, false, v);
+        }
+    }
+
+    QWidget* createEditor(QWidget* parent, const QStyleOptionViewItem&, const QModelIndex& index) const override
     {
         auto* editor = new NumericLineEdit(parent);
         editor->setInputMode(NumericLineEdit::UInt32Mode);
         editor->setInputRange<quint32>(1, 255);
+        editor->setHexView(hexViewFromIndex(index));
         return editor;
     }
 
@@ -249,12 +268,41 @@ class AddressItemDelegate : public QStyledItemDelegate
 public:
     using QStyledItemDelegate::QStyledItemDelegate;
 
-    QWidget* createEditor(QWidget* parent, const QStyleOptionViewItem&, const QModelIndex&) const override
+    static RegisterMapDataModel* sourceModel(const QModelIndex& index)
     {
-        const bool zeroBased = AppPreferences::instance().dataViewDefinitions().ZeroBasedAddress;
+        auto* proxy = qobject_cast<const QSortFilterProxyModel*>(index.model());
+        return proxy ? qobject_cast<RegisterMapDataModel*>(proxy->sourceModel()) : nullptr;
+    }
+
+    static bool zeroBasedFromIndex(const QModelIndex& index)
+    {
+        auto* src = sourceModel(index);
+        return src ? src->zeroBased() : false;
+    }
+
+    static bool hexViewFromIndex(const QModelIndex& index)
+    {
+        auto* src = sourceModel(index);
+        return src ? src->hexView() : false;
+    }
+
+    void initStyleOption(QStyleOptionViewItem* option, const QModelIndex& index) const override
+    {
+        QStyledItemDelegate::initStyleOption(option, index);
+        if (hexViewFromIndex(index)) {
+            bool ok;
+            const quint16 v = option->text.toUShort(&ok);
+            if (ok) option->text = formatUInt16Value(DataType::Hex, false, v);
+        }
+    }
+
+    QWidget* createEditor(QWidget* parent, const QStyleOptionViewItem&, const QModelIndex& index) const override
+    {
+        const bool zeroBased = zeroBasedFromIndex(index);
         auto* editor = new NumericLineEdit(parent);
         editor->setInputMode(NumericLineEdit::UInt32Mode);
         editor->setInputRange<quint32>(zeroBased ? 0 : 1, zeroBased ? 65535 : 65536);
+        editor->setHexView(hexViewFromIndex(index));
         return editor;
     }
 
@@ -264,7 +312,7 @@ public:
         if (!le) return;
         const quint16 rawAddr = static_cast<quint16>(
             index.siblingAtColumn(ColUnit).data(RoleAddress).toUInt());
-        const bool zeroBased = AppPreferences::instance().dataViewDefinitions().ZeroBasedAddress;
+        const bool zeroBased = zeroBasedFromIndex(index);
         le->setValue<quint32>(zeroBased ? rawAddr : static_cast<quint32>(rawAddr) + 1);
     }
 
@@ -455,6 +503,8 @@ FormRegisterMapView::FormRegisterMapView(ModbusMultiServer& server, MainWindow* 
 
     // Create model and filter proxy
     _model = new RegisterMapDataModel(_mbMultiServer, this);
+    _displayDefinition.ZeroBasedAddress = AppPreferences::instance().dataViewDefinitions().ZeroBasedAddress;
+    _model->setZeroBased(_displayDefinition.ZeroBasedAddress);
     _proxy = new RegisterMapFilterProxy(this);
     _proxy->setSourceModel(_model);
     ui->tableView->setModel(_proxy);
@@ -542,7 +592,10 @@ FormRegisterMapView::~FormRegisterMapView()
 ///
 RegisterMapViewDefinitions FormRegisterMapView::displayDefinition() const
 {
-    return _displayDefinition;
+    RegisterMapViewDefinitions dd = _displayDefinition;
+    dd.ZeroBasedAddress = _model->zeroBased();
+    dd.HexView          = ui->actionHexView->isChecked();
+    return dd;
 }
 
 ///
@@ -553,6 +606,14 @@ void FormRegisterMapView::setDisplayDefinition(const RegisterMapViewDefinitions&
     _displayDefinition = dd;
     if (!dd.FormName.isEmpty())
         setWindowTitle(dd.FormName);
+    _model->setZeroBased(dd.ZeroBasedAddress);
+    _model->setHexView(dd.HexView);
+    if (_addrBaseCombo)
+        _addrBaseCombo->setCurrentIndex(dd.ZeroBasedAddress ? 1 : 0);
+    {
+        QSignalBlocker b(ui->actionHexView);
+        ui->actionHexView->setChecked(dd.HexView);
+    }
 }
 
 ///
@@ -735,6 +796,16 @@ void FormRegisterMapView::on_actionClear_triggered()
 }
 
 ///
+/// \brief FormRegisterMapView::on_actionHexView_toggled
+///
+void FormRegisterMapView::on_actionHexView_toggled(bool checked)
+{
+    _displayDefinition.HexView = checked;
+    _model->setHexView(checked);
+    emit definitionChanged();
+}
+
+///
 /// \brief FormRegisterMapView::updateActionState
 ///
 void FormRegisterMapView::updateActionState()
@@ -774,23 +845,36 @@ void FormRegisterMapView::processRequest(quint8 deviceId, QModbusDataUnit::Regis
 }
 
 ///
-/// \brief FormRegisterMapView::updateAddressCells
-/// Refreshes all address cells when global address base setting changes.
-///
-void FormRegisterMapView::updateAddressCells()
-{
-    _model->refreshAddressColumn();
-}
-
-///
 /// \brief FormRegisterMapView::setupToolBar
 ///
 void FormRegisterMapView::setupToolBar()
 {
-    // Expanding spacer
+    // Expanding spacer before filter area
     auto* spacerWidget = new QWidget(ui->toolBar);
     spacerWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
-    ui->toolBar->insertWidget(ui->actionClear, spacerWidget);
+    auto* spacerAction = ui->toolBar->insertWidget(ui->actionClear, spacerWidget);
+
+    // Separator between Delete and address base widget
+    ui->toolBar->insertSeparator(spacerAction);
+
+    // Address base combobox wrapped in a labeled layout widget
+    _addrBaseCombo = new QComboBox(ui->toolBar);
+    _addrBaseCombo->addItem(tr("1-based")); // index 0
+    _addrBaseCombo->addItem(tr("0-based")); // index 1
+    _addrBaseCombo->setCurrentIndex(_model->zeroBased() ? 1 : 0);
+    _addrBaseCombo->setFixedWidth(80);
+
+    auto* addrBaseWidget = new QWidget(ui->toolBar);
+    auto* addrBaseLayout = new QHBoxLayout(addrBaseWidget);
+    addrBaseLayout->setContentsMargins(9, 0, 9, 0);
+    addrBaseLayout->setSpacing(6);
+    addrBaseLayout->addWidget(new QLabel(tr("Address Base:"), addrBaseWidget));
+    addrBaseLayout->addWidget(_addrBaseCombo);
+    ui->toolBar->insertWidget(spacerAction, addrBaseWidget);
+
+    // Separator between address base widget and Hex View action
+    ui->toolBar->insertSeparator(spacerAction);
+    ui->toolBar->insertAction(spacerAction, ui->actionHexView);
 
     // Filter widgets
     _filterUnitSpin = new QSpinBox;
@@ -818,6 +902,12 @@ void FormRegisterMapView::setupToolBar()
     ui->toolBar->insertWidget(ui->actionClear, filterWidget);
     ui->toolBar->insertSeparator(ui->actionClear);
 
+    connect(_addrBaseCombo, qOverload<int>(&QComboBox::currentIndexChanged), this, [this](int idx) {
+        const bool zeroBased = (idx == 1);
+        _displayDefinition.ZeroBasedAddress = zeroBased;
+        _model->setZeroBased(zeroBased);
+        emit definitionChanged();
+    });
     connect(_filterTypeCombo, qOverload<int>(&QComboBox::currentIndexChanged),
             this, [this](int idx) { _proxy->setFilterTypeIndex(idx); updateActionState(); });
     connect(_filterUnitSpin, qOverload<int>(&QSpinBox::valueChanged),

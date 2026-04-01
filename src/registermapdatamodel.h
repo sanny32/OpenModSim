@@ -93,8 +93,13 @@ public:
     // External Modbus data update
     void applyMbDataChange(quint8 deviceId, const QModbusDataUnit& data);
 
-    // Refresh address column display (call when ZeroBasedAddress preference changes)
-    void refreshAddressColumn();
+    bool zeroBased() const { return _zeroBased; }
+    bool hexView()   const { return _hexView; }
+    void setZeroBased(bool v);
+    void setHexView(bool v);
+
+    // Refresh Unit and Address column display
+    void refreshUnitAndAddressColumns();
 
 private:
     int  rowForKey(const ItemMapKey& key) const;
@@ -105,7 +110,9 @@ private:
     QList<ItemMapKey>                _keys;
     QMap<ItemMapKey, RegisterMapEntry> _data;
     QMap<ItemMapKey, QUuid>          _uuids;
-    bool                             _inSetData = false;
+    bool                             _inSetData  = false;
+    bool                             _zeroBased  = false;
+    bool                             _hexView    = false;
 };
 
 ///

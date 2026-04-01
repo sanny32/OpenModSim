@@ -24,6 +24,8 @@ class FormRegisterMapView;
 struct RegisterMapViewDefinitions
 {
     QString FormName;
+    bool    ZeroBasedAddress = false;
+    bool    HexView          = false;
     void normalize() {}
 };
 Q_DECLARE_METATYPE(RegisterMapViewDefinitions)
@@ -69,11 +71,11 @@ private slots:
     void on_actionAdd_triggered();
     void on_actionDelete_triggered();
     void on_actionClear_triggered();
+    void on_actionHexView_toggled(bool checked);
     void updateActionState();
 
 private:
     void processRequest(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 startAddress, quint16 count);
-    void updateAddressCells();
     void setupToolBar();
     void setupServerConnections();
 
@@ -88,6 +90,7 @@ private:
     RegisterMapFilterProxy*     _proxy           = nullptr;
     QComboBox*                  _filterTypeCombo = nullptr;
     QSpinBox*                   _filterUnitSpin  = nullptr;
+    QComboBox*                  _addrBaseCombo   = nullptr;
     bool                        _autoAddOnRequest = false;
 };
 
@@ -119,7 +122,9 @@ inline QXmlStreamWriter& operator <<(QXmlStreamWriter& xml, FormRegisterMapView*
     xml.writeEndElement(); // Window
 
     xml.writeStartElement("RegisterMapViewDefinitions");
-    xml.writeAttribute("FormName", frm->displayDefinition().FormName);
+    xml.writeAttribute("FormName",         frm->displayDefinition().FormName);
+    xml.writeAttribute("ZeroBasedAddress", boolToString(frm->displayDefinition().ZeroBasedAddress));
+    xml.writeAttribute("HexView",          boolToString(frm->displayDefinition().HexView));
     xml.writeEndElement();
 
     xml.writeStartElement("ColumnWidths");
@@ -196,8 +201,11 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, FormRegisterMapView*
             xml.skipCurrentElement();
         }
         else if (xml.name() == QLatin1String("RegisterMapViewDefinitions")) {
+            const auto attrs = xml.attributes();
             RegisterMapViewDefinitions dd;
-            dd.FormName = xml.attributes().value("FormName").toString();
+            dd.FormName        = attrs.value("FormName").toString();
+            dd.ZeroBasedAddress = stringToBool(attrs.value("ZeroBasedAddress").toString());
+            dd.HexView          = stringToBool(attrs.value("HexView").toString());
             frm->setDisplayDefinition(dd);
             xml.skipCurrentElement();
         }

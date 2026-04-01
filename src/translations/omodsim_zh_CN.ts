@@ -229,62 +229,62 @@
 <context>
     <name>DataTypeItemDelegate</name>
     <message>
-        <location filename="../formregistermapview.cpp" line="77"/>
+        <location filename="../formregistermapview.cpp" line="78"/>
         <source>1-bit value (Coils / Discrete Inputs)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="78"/>
+        <location filename="../formregistermapview.cpp" line="79"/>
         <source>16-bit register value shown as 16 binary digits</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="79"/>
+        <location filename="../formregistermapview.cpp" line="80"/>
         <source>Unsigned 16-bit integer  (0 … 65535)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="80"/>
+        <location filename="../formregistermapview.cpp" line="81"/>
         <source>Signed 16-bit integer  (−32768 … 32767)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="81"/>
+        <location filename="../formregistermapview.cpp" line="82"/>
         <source>16-bit value displayed as hexadecimal</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="82"/>
+        <location filename="../formregistermapview.cpp" line="83"/>
         <source>16-bit value displayed as ANSI character</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="83"/>
+        <location filename="../formregistermapview.cpp" line="84"/>
         <source>IEEE 754 single-precision float  (2 registers)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="84"/>
+        <location filename="../formregistermapview.cpp" line="85"/>
         <source>IEEE 754 double-precision float  (4 registers)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="85"/>
+        <location filename="../formregistermapview.cpp" line="86"/>
         <source>Signed 32-bit integer  (2 registers)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="86"/>
+        <location filename="../formregistermapview.cpp" line="87"/>
         <source>Unsigned 32-bit integer  (2 registers)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="87"/>
+        <location filename="../formregistermapview.cpp" line="88"/>
         <source>Signed 64-bit integer  (4 registers)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="88"/>
+        <location filename="../formregistermapview.cpp" line="89"/>
         <source>Unsigned 64-bit integer  (4 registers)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2343,42 +2343,62 @@ MODBUS Point Type:
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formregistermapview.ui" line="86"/>
+        <location filename="../formregistermapview.ui" line="98"/>
         <source>Clear Register Map</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="802"/>
+        <location filename="../formregistermapview.cpp" line="862"/>
+        <source>1-based</source>
+        <translation type="unfinished">基地址为-1</translation>
+    </message>
+    <message>
+        <location filename="../formregistermapview.cpp" line="863"/>
+        <source>0-based</source>
+        <translation type="unfinished">基地址为-0</translation>
+    </message>
+    <message>
+        <location filename="../formregistermapview.ui" line="89"/>
+        <source>Hex View</source>
+        <translation type="unfinished">十六进制视图</translation>
+    </message>
+    <message>
+        <location filename="../formregistermapview.cpp" line="871"/>
+        <source>Address base:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../formregistermapview.cpp" line="886"/>
         <source>All Types</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="803"/>
+        <location filename="../formregistermapview.cpp" line="887"/>
         <source>Coils</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="804"/>
+        <location filename="../formregistermapview.cpp" line="888"/>
         <source>Discrete Inputs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="805"/>
+        <location filename="../formregistermapview.cpp" line="889"/>
         <source>Input Registers</source>
         <translation type="unfinished">输入寄存器</translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="806"/>
+        <location filename="../formregistermapview.cpp" line="890"/>
         <source>Holding Registers</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="813"/>
+        <location filename="../formregistermapview.cpp" line="897"/>
         <source>Unit:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="815"/>
+        <location filename="../formregistermapview.cpp" line="899"/>
         <source>Type:</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2387,7 +2407,7 @@ MODBUS Point Type:
         <translation type="obsolete">类型： </translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="798"/>
+        <location filename="../formregistermapview.cpp" line="882"/>
         <source>All</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4260,12 +4280,12 @@ Script.onInit(()=&gt;{
 <context>
     <name>OrderItemDelegate</name>
     <message>
-        <location filename="../formregistermapview.cpp" line="155"/>
+        <location filename="../formregistermapview.cpp" line="156"/>
         <source>Most Significant Register First — big-endian word order</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="156"/>
+        <location filename="../formregistermapview.cpp" line="157"/>
         <source>Least Significant Register First — little-endian word order</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4657,28 +4677,28 @@ Script.onInit(()=&gt;{
 <context>
     <name>QObject</name>
     <message>
+        <location filename="../registermapdatamodel.cpp" line="16"/>
+        <location filename="../registermapdatamodel.cpp" line="29"/>
+        <location filename="../registermapdatamodel.cpp" line="29"/>
+        <source>Coils</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../registermapdatamodel.cpp" line="17"/>
         <location filename="../registermapdatamodel.cpp" line="30"/>
         <location filename="../registermapdatamodel.cpp" line="30"/>
-        <source>Coils</source>
+        <source>Discrete Inputs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../registermapdatamodel.cpp" line="18"/>
         <location filename="../registermapdatamodel.cpp" line="31"/>
         <location filename="../registermapdatamodel.cpp" line="31"/>
-        <source>Discrete Inputs</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../registermapdatamodel.cpp" line="19"/>
-        <location filename="../registermapdatamodel.cpp" line="32"/>
-        <location filename="../registermapdatamodel.cpp" line="32"/>
         <source>Input Registers</source>
         <translation type="unfinished">输入寄存器</translation>
     </message>
     <message>
-        <location filename="../registermapdatamodel.cpp" line="20"/>
+        <location filename="../registermapdatamodel.cpp" line="19"/>
         <source>Holding Registers</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4722,42 +4742,42 @@ Script.onInit(()=&gt;{
 <context>
     <name>RegisterMapDataModel</name>
     <message>
-        <location filename="../registermapdatamodel.cpp" line="394"/>
+        <location filename="../registermapdatamodel.cpp" line="391"/>
         <source>Unit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../registermapdatamodel.cpp" line="395"/>
+        <location filename="../registermapdatamodel.cpp" line="392"/>
         <source>Type</source>
         <translation type="unfinished">类型</translation>
     </message>
     <message>
-        <location filename="../registermapdatamodel.cpp" line="396"/>
+        <location filename="../registermapdatamodel.cpp" line="393"/>
         <source>Address</source>
         <translation type="unfinished">地址</translation>
     </message>
     <message>
-        <location filename="../registermapdatamodel.cpp" line="397"/>
+        <location filename="../registermapdatamodel.cpp" line="394"/>
         <source>DataType</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../registermapdatamodel.cpp" line="398"/>
+        <location filename="../registermapdatamodel.cpp" line="395"/>
         <source>Order</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../registermapdatamodel.cpp" line="399"/>
+        <location filename="../registermapdatamodel.cpp" line="396"/>
         <source>Comment</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../registermapdatamodel.cpp" line="400"/>
+        <location filename="../registermapdatamodel.cpp" line="397"/>
         <source>Value</source>
         <translation type="unfinished">值</translation>
     </message>
     <message>
-        <location filename="../registermapdatamodel.cpp" line="401"/>
+        <location filename="../registermapdatamodel.cpp" line="398"/>
         <source>Timestamp</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4961,22 +4981,22 @@ Script.onInit(()=&gt;{
 <context>
     <name>TypeItemDelegate</name>
     <message>
-        <location filename="../formregistermapview.cpp" line="28"/>
+        <location filename="../formregistermapview.cpp" line="29"/>
         <source>Coils</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="29"/>
+        <location filename="../formregistermapview.cpp" line="30"/>
         <source>Discrete Inputs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="30"/>
+        <location filename="../formregistermapview.cpp" line="31"/>
         <source>Input Registers</source>
         <translation type="unfinished">输入寄存器</translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="31"/>
+        <location filename="../formregistermapview.cpp" line="32"/>
         <source>Holding Registers</source>
         <translation type="unfinished"></translation>
     </message>

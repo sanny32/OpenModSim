@@ -2,7 +2,6 @@
 #include <QMimeData>
 #include <QDataStream>
 #include "registermapdatamodel.h"
-#include "apppreferences.h"
 #include "formatutils.h"
 #include "numericutils.h"
 
@@ -36,23 +35,21 @@ QModbusDataUnit::RegisterType stringToRegisterType(const QString& str)
 ///
 /// \brief addressToDisplay
 ///
-QString addressToDisplay(quint16 addr)
+QString addressToDisplay(quint16 addr, bool zeroBased)
 {
-    const bool zeroBased = AppPreferences::instance().dataViewDefinitions().ZeroBasedAddress;
     return QString::number(zeroBased ? addr : static_cast<quint32>(addr) + 1);
 }
 
 ///
 /// \brief addressFromDisplay
 ///
-quint16 addressFromDisplay(const QString& text, bool* ok = nullptr)
+quint16 addressFromDisplay(const QString& text, bool zeroBased, bool* ok = nullptr)
 {
     bool localOk = false;
     const quint32 v = text.toUInt(&localOk);
     if (ok) *ok = localOk;
     if (!localOk) return 0;
 
-    const bool zeroBased = AppPreferences::instance().dataViewDefinitions().ZeroBasedAddress;
     if (zeroBased)
         return static_cast<quint16>(qMin(v, static_cast<quint32>(0xFFFF)));
 
@@ -172,7 +169,7 @@ QVariant RegisterMapDataModel::data(const QModelIndex& index, int role) const
 
         case ColAddress:
             if (role == Qt::DisplayRole || role == Qt::EditRole)
-                return addressToDisplay(key.Address);
+                return addressToDisplay(key.Address, _zeroBased);
             break;
 
         case ColDataType:
@@ -347,7 +344,7 @@ bool RegisterMapDataModel::setData(const QModelIndex& index, const QVariant& val
             else
                 newKey.Type = stringToRegisterType(value.toString());
         } else {
-            newKey.Address = addressFromDisplay(value.toString());
+            newKey.Address = addressFromDisplay(value.toString(), _zeroBased);
         }
 
         if (newKey.DeviceId == oldKey.DeviceId &&
@@ -631,12 +628,32 @@ void RegisterMapDataModel::applyMbDataChange(quint8 deviceId, const QModbusDataU
 }
 
 ///
-/// \brief RegisterMapDataModel::refreshAddressColumn
+/// \brief RegisterMapDataModel::setZeroBased
 ///
-void RegisterMapDataModel::refreshAddressColumn()
+void RegisterMapDataModel::setZeroBased(bool v)
+{
+    if (_zeroBased == v) return;
+    _zeroBased = v;
+    refreshUnitAndAddressColumns();
+}
+
+///
+/// \brief RegisterMapDataModel::setHexView
+///
+void RegisterMapDataModel::setHexView(bool v)
+{
+    if (_hexView == v) return;
+    _hexView = v;
+    refreshUnitAndAddressColumns();
+}
+
+///
+/// \brief RegisterMapDataModel::refreshUnitAndAddressColumns
+///
+void RegisterMapDataModel::refreshUnitAndAddressColumns()
 {
     if (_keys.isEmpty()) return;
-    emit dataChanged(createIndex(0, ColAddress),
+    emit dataChanged(createIndex(0, ColUnit),
                      createIndex(_keys.size() - 1, ColAddress));
 }
 
