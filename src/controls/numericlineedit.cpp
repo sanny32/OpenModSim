@@ -423,7 +423,7 @@ void NumericLineEdit::internalSetValue(QVariant value)
         case FloatMode:
         {
             value = qBound(_minValue.toFloat(), value.toFloat(), _maxValue.toFloat());
-            const auto text = QLocale().toString(value.toFloat(), 'g', QLocale::FloatingPointShortest);
+            const auto text = QLocale().toString(value.toFloat(), 'g');
             if(text != QLineEdit::text())
                 QLineEdit::setText(text);
         }
