@@ -69,9 +69,17 @@ public:
     bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::EditRole) override;
     QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
     Qt::ItemFlags flags(const QModelIndex& index) const override;
+    Qt::DropActions supportedDropActions() const override;
+    QStringList mimeTypes() const override;
+    QMimeData* mimeData(const QModelIndexList& indexes) const override;
+    bool canDropMimeData(const QMimeData* data, Qt::DropAction action, int row, int column, const QModelIndex& parent) const override;
+    bool dropMimeData(const QMimeData* data, Qt::DropAction action, int row, int column, const QModelIndex& parent) override;
+    bool moveRows(const QModelIndex& sourceParent, int sourceRow, int count,
+                  const QModelIndex& destinationParent, int destinationChild) override;
 
     // Data access
     ItemMapKey keyForRow(int row) const;
+    const QList<ItemMapKey>& keys() const { return _keys; }
     const QMap<ItemMapKey, RegisterMapEntry>& entries() const;
     const QMap<ItemMapKey, QUuid>& uuids() const;
     bool contains(const ItemMapKey& key) const;
