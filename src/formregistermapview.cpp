@@ -486,6 +486,14 @@ FormRegisterMapView::FormRegisterMapView(ModbusMultiServer& server, MainWindow* 
     ui->tableView->verticalHeader()->setDefaultSectionSize(20);
     ui->tableView->verticalHeader()->hide();
 
+    // Drag-and-drop row reordering
+    ui->tableView->setDragEnabled(true);
+    ui->tableView->setAcceptDrops(true);
+    ui->tableView->setDragDropMode(QAbstractItemView::InternalMove);
+    ui->tableView->setDragDropOverwriteMode(false);
+    ui->tableView->setDropIndicatorShown(true);
+    ui->tableView->setDefaultDropAction(Qt::MoveAction);
+
     // Item delegates (unchanged, work with QTableView via QModelIndex interface)
     ui->tableView->setItemDelegateForColumn(ColUnit,     new UnitItemDelegate(ui->tableView));
     ui->tableView->setItemDelegateForColumn(ColType,     new TypeItemDelegate(ui->tableView));

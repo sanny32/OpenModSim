@@ -2348,37 +2348,37 @@ MODBUS Point Type:
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="794"/>
+        <location filename="../formregistermapview.cpp" line="802"/>
         <source>All Types</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="795"/>
+        <location filename="../formregistermapview.cpp" line="803"/>
         <source>Coils</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="796"/>
+        <location filename="../formregistermapview.cpp" line="804"/>
         <source>Discrete Inputs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="797"/>
+        <location filename="../formregistermapview.cpp" line="805"/>
         <source>Input Registers</source>
         <translation type="unfinished">输入寄存器</translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="798"/>
+        <location filename="../formregistermapview.cpp" line="806"/>
         <source>Holding Registers</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="805"/>
+        <location filename="../formregistermapview.cpp" line="813"/>
         <source>Unit:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="807"/>
+        <location filename="../formregistermapview.cpp" line="815"/>
         <source>Type:</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2387,7 +2387,7 @@ MODBUS Point Type:
         <translation type="obsolete">类型： </translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="790"/>
+        <location filename="../formregistermapview.cpp" line="798"/>
         <source>All</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4657,28 +4657,28 @@ Script.onInit(()=&gt;{
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../registermapdatamodel.cpp" line="15"/>
-        <location filename="../registermapdatamodel.cpp" line="28"/>
-        <location filename="../registermapdatamodel.cpp" line="28"/>
+        <location filename="../registermapdatamodel.cpp" line="17"/>
+        <location filename="../registermapdatamodel.cpp" line="30"/>
+        <location filename="../registermapdatamodel.cpp" line="30"/>
         <source>Coils</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../registermapdatamodel.cpp" line="16"/>
-        <location filename="../registermapdatamodel.cpp" line="29"/>
-        <location filename="../registermapdatamodel.cpp" line="29"/>
+        <location filename="../registermapdatamodel.cpp" line="18"/>
+        <location filename="../registermapdatamodel.cpp" line="31"/>
+        <location filename="../registermapdatamodel.cpp" line="31"/>
         <source>Discrete Inputs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../registermapdatamodel.cpp" line="17"/>
-        <location filename="../registermapdatamodel.cpp" line="30"/>
-        <location filename="../registermapdatamodel.cpp" line="30"/>
+        <location filename="../registermapdatamodel.cpp" line="19"/>
+        <location filename="../registermapdatamodel.cpp" line="32"/>
+        <location filename="../registermapdatamodel.cpp" line="32"/>
         <source>Input Registers</source>
         <translation type="unfinished">输入寄存器</translation>
     </message>
     <message>
-        <location filename="../registermapdatamodel.cpp" line="18"/>
+        <location filename="../registermapdatamodel.cpp" line="20"/>
         <source>Holding Registers</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4722,42 +4722,42 @@ Script.onInit(()=&gt;{
 <context>
     <name>RegisterMapDataModel</name>
     <message>
-        <location filename="../registermapdatamodel.cpp" line="392"/>
+        <location filename="../registermapdatamodel.cpp" line="394"/>
         <source>Unit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../registermapdatamodel.cpp" line="393"/>
+        <location filename="../registermapdatamodel.cpp" line="395"/>
         <source>Type</source>
         <translation type="unfinished">类型</translation>
     </message>
     <message>
-        <location filename="../registermapdatamodel.cpp" line="394"/>
+        <location filename="../registermapdatamodel.cpp" line="396"/>
         <source>Address</source>
         <translation type="unfinished">地址</translation>
     </message>
     <message>
-        <location filename="../registermapdatamodel.cpp" line="395"/>
+        <location filename="../registermapdatamodel.cpp" line="397"/>
         <source>DataType</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../registermapdatamodel.cpp" line="396"/>
+        <location filename="../registermapdatamodel.cpp" line="398"/>
         <source>Order</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../registermapdatamodel.cpp" line="397"/>
+        <location filename="../registermapdatamodel.cpp" line="399"/>
         <source>Comment</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../registermapdatamodel.cpp" line="398"/>
+        <location filename="../registermapdatamodel.cpp" line="400"/>
         <source>Value</source>
         <translation type="unfinished">值</translation>
     </message>
     <message>
-        <location filename="../registermapdatamodel.cpp" line="399"/>
+        <location filename="../registermapdatamodel.cpp" line="401"/>
         <source>Timestamp</source>
         <translation type="unfinished"></translation>
     </message>

@@ -1,4 +1,6 @@
 #include <QtWidgets>
+#include <QMimeData>
+#include <QDataStream>
 #include "registermapdatamodel.h"
 #include "apppreferences.h"
 #include "formatutils.h"
@@ -407,9 +409,13 @@ QVariant RegisterMapDataModel::headerData(int section, Qt::Orientation orientati
 Qt::ItemFlags RegisterMapDataModel::flags(const QModelIndex& index) const
 {
     Qt::ItemFlags f = QAbstractTableModel::flags(index);
-    if (!index.isValid()) return f;
+    if (!index.isValid())
+        return f | Qt::ItemIsDropEnabled;
 
-    if (index.column() == ColTimestamp) return f; // read-only
+    f |= Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled;
+
+    if (index.column() == ColTimestamp)
+        return f; // read-only
 
     f |= Qt::ItemIsEditable;
 
@@ -420,6 +426,91 @@ Qt::ItemFlags RegisterMapDataModel::flags(const QModelIndex& index) const
     }
 
     return f;
+}
+
+///
+/// \brief RegisterMapDataModel::supportedDropActions
+///
+Qt::DropActions RegisterMapDataModel::supportedDropActions() const
+{
+    return Qt::MoveAction;
+}
+
+///
+/// \brief RegisterMapDataModel::mimeTypes
+///
+QStringList RegisterMapDataModel::mimeTypes() const
+{
+    return { QStringLiteral("application/x-omodsim-registermap-row") };
+}
+
+///
+/// \brief RegisterMapDataModel::mimeData
+///
+QMimeData* RegisterMapDataModel::mimeData(const QModelIndexList& indexes) const
+{
+    if (indexes.isEmpty()) return nullptr;
+    auto* data = new QMimeData;
+    QByteArray encoded;
+    QDataStream stream(&encoded, QIODevice::WriteOnly);
+    stream << indexes.first().row();
+    data->setData(QStringLiteral("application/x-omodsim-registermap-row"), encoded);
+    return data;
+}
+
+///
+/// \brief RegisterMapDataModel::canDropMimeData
+///
+bool RegisterMapDataModel::canDropMimeData(const QMimeData* data, Qt::DropAction action,
+                                            int row, int column, const QModelIndex& parent) const
+{
+    Q_UNUSED(row); Q_UNUSED(column); Q_UNUSED(parent);
+    return action == Qt::MoveAction &&
+           data->hasFormat(QStringLiteral("application/x-omodsim-registermap-row"));
+}
+
+///
+/// \brief RegisterMapDataModel::dropMimeData
+///
+bool RegisterMapDataModel::dropMimeData(const QMimeData* data, Qt::DropAction action,
+                                         int row, int column, const QModelIndex& parent)
+{
+    if (!canDropMimeData(data, action, row, column, parent))
+        return false;
+
+    QByteArray encoded = data->data(QStringLiteral("application/x-omodsim-registermap-row"));
+    QDataStream stream(&encoded, QIODevice::ReadOnly);
+    int fromRow;
+    stream >> fromRow;
+
+    const int toRow = (row == -1) ? rowCount() : row;
+    return moveRows({}, fromRow, 1, {}, toRow);
+}
+
+///
+/// \brief RegisterMapDataModel::moveRows
+///
+bool RegisterMapDataModel::moveRows(const QModelIndex& sourceParent, int sourceRow, int count,
+                                     const QModelIndex& destinationParent, int destinationChild)
+{
+    if (sourceParent.isValid() || destinationParent.isValid() || count != 1)
+        return false;
+    if (sourceRow < 0 || sourceRow >= _keys.size())
+        return false;
+    if (destinationChild < 0 || destinationChild > _keys.size())
+        return false;
+    if (sourceRow == destinationChild || sourceRow == destinationChild - 1)
+        return false;
+
+    if (!beginMoveRows({}, sourceRow, sourceRow, {}, destinationChild))
+        return false;
+
+    const ItemMapKey key = _keys.takeAt(sourceRow);
+    const int insertPos = (destinationChild > sourceRow) ? destinationChild - 1 : destinationChild;
+    _keys.insert(insertPos, key);
+
+    endMoveRows();
+    return true;
 }
 
 ///

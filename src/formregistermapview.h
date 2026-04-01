@@ -137,19 +137,21 @@ inline QXmlStreamWriter& operator <<(QXmlStreamWriter& xml, FormRegisterMapView*
     xml.writeEndElement();
 
     xml.writeStartElement("RegisterMap");
+    const auto& orderedKeys = frm->_model->keys();
     const auto& map = frm->_model->entries();
-    for (auto it = map.cbegin(); it != map.cend(); ++it) {
+    for (const auto& key : orderedKeys) {
+        const auto& e = map[key];
         xml.writeStartElement("Entry");
-        xml.writeAttribute("DeviceId",  QString::number(it.key().DeviceId));
-        xml.writeAttribute("Type",      QString::number(it.key().Type));
-        xml.writeAttribute("Address",   QString::number(it.key().Address));
-        xml.writeAttribute("DataType",   enumToString(it.value().type));
-        if (isMultiRegisterType(it.value().type))
-            xml.writeAttribute("Order", enumToString(it.value().order));
-        xml.writeAttribute("Value",     QString::number(it.value().value));
-        xml.writeAttribute("Timestamp", it.value().timestamp.toString(Qt::ISODateWithMs));
-        if (!it.value().comment.isEmpty())
-            xml.writeCDATA(it.value().comment);
+        xml.writeAttribute("DeviceId",  QString::number(key.DeviceId));
+        xml.writeAttribute("Type",      QString::number(key.Type));
+        xml.writeAttribute("Address",   QString::number(key.Address));
+        xml.writeAttribute("DataType",  enumToString(e.type));
+        if (isMultiRegisterType(e.type))
+            xml.writeAttribute("Order", enumToString(e.order));
+        xml.writeAttribute("Value",     QString::number(e.value));
+        xml.writeAttribute("Timestamp", e.timestamp.toString(Qt::ISODateWithMs));
+        if (!e.comment.isEmpty())
+            xml.writeCDATA(e.comment);
         xml.writeEndElement(); // Entry
     }
     xml.writeEndElement(); // RegisterMap
