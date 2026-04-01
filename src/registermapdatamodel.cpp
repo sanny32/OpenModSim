@@ -194,8 +194,15 @@ QVariant RegisterMapDataModel::data(const QModelIndex& index, int role) const
             break;
 
         case ColValue:
-            if (role == Qt::DisplayRole || role == Qt::EditRole)
+            if (role == Qt::DisplayRole)
                 return formatValue(key.Type, e.type, e.order, regsForKey(_server, key, e.type));
+            if (role == Qt::EditRole) {
+                const auto regs = regsForKey(_server, key, e.type);
+                if ((e.type == DataType::Float32 || e.type == DataType::Float64) &&
+                    regs.size() >= registersCount(e.type))
+                    return makeValue(regs, e.type, e.order, ByteOrder::Direct);
+                return formatValue(key.Type, e.type, e.order, regs);
+            }
             if (role == Qt::UserRole)
                 return static_cast<quint32>(e.value);
             break;

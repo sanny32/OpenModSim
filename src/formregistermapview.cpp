@@ -394,14 +394,14 @@ public:
 
         const DataType type = enumFromString<DataType>(
             index.siblingAtColumn(ColDataType).data(Qt::DisplayRole).toString(), DataType::Int16);
-        const QString text = index.data(Qt::DisplayRole).toString();
 
+        const QString text = index.data(Qt::DisplayRole).toString();
         switch (type) {
             case DataType::Float32:
-                le->setValue<float>(text.toFloat());
+                le->setValue<float>(index.data(Qt::EditRole).toFloat());
                 break;
             case DataType::Float64:
-                le->setValue<double>(text.toDouble());
+                le->setValue<double>(index.data(Qt::EditRole).toDouble());
                 break;
             case DataType::Int32:
                 le->setValue<qint32>(static_cast<qint32>(text.toLong()));
