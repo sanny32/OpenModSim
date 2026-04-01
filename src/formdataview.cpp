@@ -1193,10 +1193,24 @@ void FormDataView::setupDisplayBar()
     auto group = new QActionGroup(ui->toolBarDisplay);
     group->setExclusive(true);
 
+    auto modeHint = [](DataType type, RegisterOrder order)
+    {
+        const auto typeName = enumToString(type);
+        if (isMultiRegisterType(type))
+            return QStringLiteral("%1 (%2)").arg(typeName, enumToString(order));
+        return typeName;
+    };
+
     auto addModeAction = [&](DataType type, RegisterOrder order, QAction* action)
     {
         group->addAction(action);
         _displayModeActions[{type, order}] = action;
+
+        const auto hint = modeHint(type, order);
+        action->setToolTip(hint);
+        action->setStatusTip(hint);
+        action->setWhatsThis(hint);
+
         connect(action, &QAction::triggered, this, [this, type, order](bool checked) {
             if (checked) { setDataType(type); setRegisterOrder(order); }
         });
