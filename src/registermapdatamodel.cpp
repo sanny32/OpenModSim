@@ -108,6 +108,8 @@ QString formatValue(QModbusDataUnit::RegisterType regType,
             return formatUInt16Value(regType, regs[0], ByteOrder::Direct, false, outValue, false);
         case DataType::Int16:
             return formatInt16Value(regType, static_cast<qint16>(regs[0]), ByteOrder::Direct, outValue, false);
+        case DataType::Ansi:
+            return formatAnsiValue(regType, regs[0], ByteOrder::Direct, QString(), outValue, false);
         case DataType::Float32:
             if (regs.size() >= 2) {
                 const QVariant val = makeValue(regs, type, order, ByteOrder::Direct);

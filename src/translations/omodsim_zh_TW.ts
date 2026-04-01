@@ -2340,12 +2340,12 @@ MODBUS Point Type:
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="862"/>
+        <location filename="../formregistermapview.cpp" line="870"/>
         <source>1-based</source>
         <translation type="unfinished">基地址為-1</translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="863"/>
+        <location filename="../formregistermapview.cpp" line="871"/>
         <source>0-based</source>
         <translation type="unfinished">基地址為-0</translation>
     </message>
@@ -2355,42 +2355,42 @@ MODBUS Point Type:
         <translation type="unfinished">十六進位制檢視</translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="871"/>
+        <location filename="../formregistermapview.cpp" line="879"/>
         <source>Address Base:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="886"/>
+        <location filename="../formregistermapview.cpp" line="894"/>
         <source>All Types</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="887"/>
+        <location filename="../formregistermapview.cpp" line="895"/>
         <source>Coils</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="888"/>
+        <location filename="../formregistermapview.cpp" line="896"/>
         <source>Discrete Inputs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="889"/>
+        <location filename="../formregistermapview.cpp" line="897"/>
         <source>Input Registers</source>
         <translation type="unfinished">輸入暫存器</translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="890"/>
+        <location filename="../formregistermapview.cpp" line="898"/>
         <source>Holding Registers</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="897"/>
+        <location filename="../formregistermapview.cpp" line="905"/>
         <source>Unit:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="899"/>
+        <location filename="../formregistermapview.cpp" line="907"/>
         <source>Type:</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2399,7 +2399,7 @@ MODBUS Point Type:
         <translation type="obsolete">型別： </translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="882"/>
+        <location filename="../formregistermapview.cpp" line="890"/>
         <source>All</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4734,42 +4734,42 @@ Script.onInit(()=&gt;{
 <context>
     <name>RegisterMapDataModel</name>
     <message>
-        <location filename="../registermapdatamodel.cpp" line="436"/>
+        <location filename="../registermapdatamodel.cpp" line="438"/>
         <source>Unit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../registermapdatamodel.cpp" line="437"/>
+        <location filename="../registermapdatamodel.cpp" line="439"/>
         <source>Type</source>
         <translation type="unfinished">型別</translation>
     </message>
     <message>
-        <location filename="../registermapdatamodel.cpp" line="438"/>
+        <location filename="../registermapdatamodel.cpp" line="440"/>
         <source>Address</source>
         <translation type="unfinished">地址</translation>
     </message>
     <message>
-        <location filename="../registermapdatamodel.cpp" line="439"/>
+        <location filename="../registermapdatamodel.cpp" line="441"/>
         <source>DataType</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../registermapdatamodel.cpp" line="440"/>
+        <location filename="../registermapdatamodel.cpp" line="442"/>
         <source>Order</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../registermapdatamodel.cpp" line="441"/>
+        <location filename="../registermapdatamodel.cpp" line="443"/>
         <source>Comment</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../registermapdatamodel.cpp" line="442"/>
+        <location filename="../registermapdatamodel.cpp" line="444"/>
         <source>Value</source>
         <translation type="unfinished">值</translation>
     </message>
     <message>
-        <location filename="../registermapdatamodel.cpp" line="443"/>
+        <location filename="../registermapdatamodel.cpp" line="445"/>
         <source>Timestamp</source>
         <translation type="unfinished"></translation>
     </message>

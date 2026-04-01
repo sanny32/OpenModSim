@@ -378,7 +378,11 @@ public:
                 case DataType::UInt64:
                     editor->setInputMode(NumericLineEdit::UInt64Mode);
                     break;
-                default: // Binary, Hex, Ansi
+                case DataType::Ansi:
+                    editor->setInputMode(NumericLineEdit::AnsiMode);
+                    editor->setInputRange<quint16>(0, 0xFFFF);
+                    break;
+                default: // Binary, Hex
                     editor->setInputMode(NumericLineEdit::HexMode);
                     editor->setInputRange<quint16>(0, 0xFFFF);
                     break;
@@ -471,6 +475,10 @@ public:
                     case NumericLineEdit::HexMode:
                         newValue = le->value<quint16>();
                         text = QStringLiteral("0x%1").arg(newValue, 4, 16, QChar('0')).toUpper();
+                        break;
+                    case NumericLineEdit::AnsiMode:
+                        newValue = le->value<quint16>();
+                        text = QString::number(newValue);
                         break;
                     default:
                         newValue = static_cast<quint16>(le->value<quint32>());
