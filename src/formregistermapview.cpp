@@ -881,11 +881,8 @@ void FormRegisterMapView::on_actionHexView_toggled(bool checked)
 ///
 void FormRegisterMapView::updateActionState()
 {
-    const QModelIndex currentProxyIdx = ui->tableView->currentIndex();
-    const bool hasCurrentRow = currentProxyIdx.isValid() &&
-                               _proxy->mapToSource(currentProxyIdx.siblingAtColumn(ColUnit)).isValid();
     const bool hasSelection = !ui->tableView->selectionModel()->selectedRows().isEmpty();
-    ui->actionInsert->setEnabled(hasCurrentRow);
+    ui->actionInsert->setEnabled(hasSelection);
     ui->actionDelete->setEnabled(hasSelection);
     ui->actionClear->setEnabled(_proxy->rowCount() > 0);
 }
