@@ -7,13 +7,13 @@
 #include <QStyledItemDelegate>
 #include <QToolBar>
 #include <QToolButton>
-#include "consoleoutput.h"
-#include "ui_consoleoutput.h"
+#include "applogoutput.h"
+#include "ui_applogoutput.h"
 
 namespace {
-static const int MessageTypeRole = Qt::UserRole;
+static const int EventTypeRole = Qt::UserRole;
 
-struct MessageStyle {
+struct EventStyle {
     QColor bg;
     QColor border;
     QColor iconColor;
@@ -21,36 +21,31 @@ struct MessageStyle {
     QString icon;
 };
 
-MessageStyle styleForType(ConsoleOutput::MessageType type)
+EventStyle styleForType(AppLogOutput::EventType type)
 {
     switch (type) {
-        case ConsoleOutput::MessageType::Warning:
+        case AppLogOutput::EventType::Warning:
             return { QColor("#FFF8E1"), QColor("#F9A825"), QColor("#F9A825"), QColor("#4A3000"), QStringLiteral("\u26A0") };
-        case ConsoleOutput::MessageType::Error:
+        case AppLogOutput::EventType::Error:
             return { QColor("#FFEBEE"), QColor("#E53935"), QColor("#E53935"), QColor("#7F0000"), QStringLiteral("\u2716") };
-        case ConsoleOutput::MessageType::Debug:
-            return { Qt::white, QColor(), QColor("#1565C0"), QColor("#37474F"), QStringLiteral("\u25CF") };
         default:
-            return { Qt::white, QColor(), QColor(), Qt::black, QString() };
+            return { Qt::white, QColor(), QColor("#1565C0"), QColor("#202020"), QString() };
     }
 }
 
-class ConsoleItemDelegate final : public QStyledItemDelegate
+class AppLogItemDelegate final : public QStyledItemDelegate
 {
 public:
     using QStyledItemDelegate::QStyledItemDelegate;
 
     void paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const override
     {
-        const auto type = static_cast<ConsoleOutput::MessageType>(index.data(MessageTypeRole).toInt());
+        const auto type = static_cast<AppLogOutput::EventType>(index.data(EventTypeRole).toInt());
         const auto style = styleForType(type);
 
         painter->save();
 
-        QColor bg = style.bg;
-        if (!style.border.isValid() && (option.features & QStyleOptionViewItem::Alternate))
-            bg = QColor("#F8F8F8");
-        painter->fillRect(option.rect, bg);
+        painter->fillRect(option.rect, style.bg);
 
         if (style.border.isValid())
             painter->fillRect(option.rect.left(), option.rect.top(), 3, option.rect.height(), style.border);
@@ -60,9 +55,6 @@ public:
             sel.setAlpha(55);
             painter->fillRect(option.rect, sel);
         }
-
-        painter->setPen(QColor("#E0E0E0"));
-        painter->drawLine(option.rect.bottomLeft(), option.rect.bottomRight());
 
         constexpr int leftPad = 8;
         constexpr int iconW = 16;
@@ -96,11 +88,11 @@ public:
 } // namespace
 
 ///
-/// \brief ConsoleOutput::ConsoleOutput
+/// \brief AppLogOutput::AppLogOutput
 ///
-ConsoleOutput::ConsoleOutput(QWidget* parent)
+AppLogOutput::AppLogOutput(QWidget* parent)
     : QWidget(parent)
-    , ui(new Ui::ConsoleOutput)
+    , ui(new Ui::AppLogOutput)
 {
     ui->setupUi(this);
 
@@ -123,7 +115,7 @@ ConsoleOutput::ConsoleOutput(QWidget* parent)
                     "QToolButton:!checked { %2 }").arg(checkedQss, uncheckedQss));
     };
 
-    styleFilterBtn(ui->actionFilterLog,
+    styleFilterBtn(ui->actionFilterInfo,
         "color:#1565C0; background:#E3F2FD;"
         "border:1px solid #64B5F6; border-radius:4px;"
         "min-width:22px; max-width:22px; min-height:22px; max-height:22px;"
@@ -143,33 +135,33 @@ ConsoleOutput::ConsoleOutput(QWidget* parent)
 
     auto* filterSpacer = new QWidget(ui->toolBar);
     filterSpacer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
-    ui->toolBar->insertWidget(ui->actionFilterLog, filterSpacer);
+    ui->toolBar->insertWidget(ui->actionFilterInfo, filterSpacer);
 
-    ui->listWidget->setItemDelegate(new ConsoleItemDelegate(ui->listWidget));
+    ui->listWidget->setItemDelegate(new AppLogItemDelegate(ui->listWidget));
 
     const int lineHeight = QFontMetrics(QFont("Fira Code")).lineSpacing() * 2;
     setMinimumHeight(ui->toolBar->sizeHint().height() + lineHeight);
 
-    connect(ui->actionClear, &QAction::triggered, this, &ConsoleOutput::clear);
-    connect(ui->actionFilterLog, &QAction::toggled, this, &ConsoleOutput::applyFilters);
-    connect(ui->actionFilterWarn, &QAction::toggled, this, &ConsoleOutput::applyFilters);
-    connect(ui->actionFilterError, &QAction::toggled, this, &ConsoleOutput::applyFilters);
+    connect(ui->actionClear, &QAction::triggered, this, &AppLogOutput::clear);
+    connect(ui->actionFilterInfo, &QAction::toggled, this, &AppLogOutput::applyFilters);
+    connect(ui->actionFilterWarn, &QAction::toggled, this, &AppLogOutput::applyFilters);
+    connect(ui->actionFilterError, &QAction::toggled, this, &AppLogOutput::applyFilters);
     connect(ui->listWidget, &QWidget::customContextMenuRequested,
-            this, &ConsoleOutput::on_customContextMenuRequested);
+            this, &AppLogOutput::on_customContextMenuRequested);
 }
 
 ///
-/// \brief ConsoleOutput::~ConsoleOutput
+/// \brief AppLogOutput::~AppLogOutput
 ///
-ConsoleOutput::~ConsoleOutput()
+AppLogOutput::~AppLogOutput()
 {
     delete ui;
 }
 
 ///
-/// \brief ConsoleOutput::changeEvent
+/// \brief AppLogOutput::changeEvent
 ///
-void ConsoleOutput::changeEvent(QEvent* event)
+void AppLogOutput::changeEvent(QEvent* event)
 {
     if (event->type() == QEvent::LanguageChange)
         ui->retranslateUi(this);
@@ -177,17 +169,17 @@ void ConsoleOutput::changeEvent(QEvent* event)
 }
 
 ///
-/// \brief ConsoleOutput::setMaxLines
+/// \brief AppLogOutput::setMaxLines
 ///
-void ConsoleOutput::setMaxLines(int n)
+void AppLogOutput::setMaxLines(int n)
 {
     _maxLines = qMax(1, n);
     while (ui->listWidget->count() > _maxLines) {
-        const auto evictType = static_cast<MessageType>(ui->listWidget->item(0)->data(MessageTypeRole).toInt());
+        const auto evictType = static_cast<EventType>(ui->listWidget->item(0)->data(EventTypeRole).toInt());
         switch (evictType) {
-            case MessageType::Warning: _warnCount--; break;
-            case MessageType::Error:   _errorCount--; break;
-            default:                   _logCount--;   break;
+            case EventType::Warning: _warnCount--;  break;
+            case EventType::Error:   _errorCount--; break;
+            default:                 _infoCount--;  break;
         }
         delete ui->listWidget->takeItem(0);
     }
@@ -195,38 +187,37 @@ void ConsoleOutput::setMaxLines(int n)
 }
 
 ///
-/// \brief ConsoleOutput::addMessage
+/// \brief AppLogOutput::addEvent
 ///
-void ConsoleOutput::addMessage(const QString& text, MessageType type, const QString& source)
+void AppLogOutput::addEvent(const QString& text, EventType type)
 {
     while (ui->listWidget->count() >= _maxLines) {
-        const auto evictType = static_cast<MessageType>(ui->listWidget->item(0)->data(MessageTypeRole).toInt());
+        const auto evictType = static_cast<EventType>(ui->listWidget->item(0)->data(EventTypeRole).toInt());
         switch (evictType) {
-            case MessageType::Warning: _warnCount--; break;
-            case MessageType::Error:   _errorCount--; break;
-            default:                   _logCount--;   break;
+            case EventType::Warning: _warnCount--;  break;
+            case EventType::Error:   _errorCount--; break;
+            default:                 _infoCount--;  break;
         }
         delete ui->listWidget->takeItem(0);
     }
 
-    const QString displayText = source.isEmpty() ? text : QString("[%1] %2").arg(source, text);
-    auto* item = new QListWidgetItem(displayText, ui->listWidget);
-    item->setData(MessageTypeRole, static_cast<int>(type));
-    item->setToolTip(displayText);
+    auto* item = new QListWidgetItem(text, ui->listWidget);
+    item->setData(EventTypeRole, static_cast<int>(type));
+    item->setToolTip(text);
 
     bool visible = true;
     switch (type) {
-        case MessageType::Warning:
+        case EventType::Warning:
             visible = ui->actionFilterWarn->isChecked();
             _warnCount++;
             break;
-        case MessageType::Error:
+        case EventType::Error:
             visible = ui->actionFilterError->isChecked();
             _errorCount++;
             break;
         default:
-            visible = ui->actionFilterLog->isChecked();
-            _logCount++;
+            visible = ui->actionFilterInfo->isChecked();
+            _infoCount++;
             break;
     }
     item->setHidden(!visible);
@@ -236,67 +227,67 @@ void ConsoleOutput::addMessage(const QString& text, MessageType type, const QStr
 }
 
 ///
-/// \brief ConsoleOutput::clear
+/// \brief AppLogOutput::clear
 ///
-void ConsoleOutput::clear()
+void AppLogOutput::clear()
 {
     ui->listWidget->clear();
-    _logCount = _warnCount = _errorCount = 0;
+    _infoCount = _warnCount = _errorCount = 0;
     updateFilterButtons();
 }
 
 ///
-/// \brief ConsoleOutput::isEmpty
+/// \brief AppLogOutput::isEmpty
 ///
-bool ConsoleOutput::isEmpty() const
+bool AppLogOutput::isEmpty() const
 {
     return ui->listWidget->count() == 0;
 }
 
 ///
-/// \brief ConsoleOutput::applyFilters
+/// \brief AppLogOutput::applyFilters
 ///
-void ConsoleOutput::applyFilters()
+void AppLogOutput::applyFilters()
 {
-    const bool showLog = ui->actionFilterLog->isChecked();
+    const bool showInfo = ui->actionFilterInfo->isChecked();
     const bool showWarn = ui->actionFilterWarn->isChecked();
     const bool showError = ui->actionFilterError->isChecked();
 
     for (int i = 0; i < ui->listWidget->count(); ++i) {
         auto* item = ui->listWidget->item(i);
-        const auto type = static_cast<MessageType>(item->data(MessageTypeRole).toInt());
+        const auto type = static_cast<EventType>(item->data(EventTypeRole).toInt());
         bool visible = true;
         switch (type) {
-            case MessageType::Warning: visible = showWarn;  break;
-            case MessageType::Error:   visible = showError; break;
-            default:                   visible = showLog;   break;
+            case EventType::Warning: visible = showWarn;  break;
+            case EventType::Error:   visible = showError; break;
+            default:                 visible = showInfo;  break;
         }
         item->setHidden(!visible);
     }
 }
 
 ///
-/// \brief ConsoleOutput::updateFilterButtons
+/// \brief AppLogOutput::updateFilterButtons
 ///
-void ConsoleOutput::updateFilterButtons()
+void AppLogOutput::updateFilterButtons()
 {
-    ui->actionFilterLog->setText(QStringLiteral("\u2139"));
+    ui->actionFilterInfo->setText(QStringLiteral("\u2139"));
     ui->actionFilterWarn->setText(QStringLiteral("\u26A0"));
     ui->actionFilterError->setText(QStringLiteral("\u2716"));
 
-    ui->actionFilterLog->setToolTip(QStringLiteral("\u2139 %1").arg(_logCount));
+    ui->actionFilterInfo->setToolTip(QStringLiteral("\u2139 %1").arg(_infoCount));
     ui->actionFilterWarn->setToolTip(QStringLiteral("\u26A0 %1").arg(_warnCount));
     ui->actionFilterError->setToolTip(QStringLiteral("\u2716 %1").arg(_errorCount));
 
-    ui->actionFilterLog->setVisible(_logCount > 0);
+    ui->actionFilterInfo->setVisible(_infoCount > 0);
     ui->actionFilterWarn->setVisible(_warnCount > 0);
     ui->actionFilterError->setVisible(_errorCount > 0);
 }
 
 ///
-/// \brief ConsoleOutput::on_customContextMenuRequested
+/// \brief AppLogOutput::on_customContextMenuRequested
 ///
-void ConsoleOutput::on_customContextMenuRequested(const QPoint& pos)
+void AppLogOutput::on_customContextMenuRequested(const QPoint& pos)
 {
     QMenu menu(ui->listWidget);
 

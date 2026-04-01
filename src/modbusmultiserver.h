@@ -84,6 +84,12 @@ signals:
     void errorOccured(quint8 deviceId, const QString& error);
     void dataChanged(quint8 deviceId, const QModbusDataUnit& data);
     void definitionsChanged(const ModbusDefinitions& defs);
+    void deviceIdAdded(quint8 deviceId);
+    void deviceIdRemoved(quint8 deviceId);
+    void unitMapAdded(QUuid id, quint8 deviceId,
+                      QModbusDataUnit::RegisterType pointType,
+                      quint16 pointAddress, quint16 length);
+    void unitMapRemoved(QUuid id, quint8 deviceId);
 
 private slots:
     void on_rawDataReceived(const QDateTime& time, const QByteArray& data);

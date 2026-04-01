@@ -8,6 +8,7 @@
 #include "helpwidget.h"
 #include "modbusmultiserver.h"
 #include "controls/consoleoutput.h"
+#include "controls/outputpanel.h"
 #include "controls/projecttreewidget.h"
 #include "appproject.h"
 #include "dialogs/dialogsetuppresetdata.h"
@@ -169,7 +170,7 @@ private:
     QDockWidget* _helpDockWidget;
     HelpWidget* _helpWidget;
     QDockWidget* _consoleDockWidget = nullptr;
-    ConsoleOutput* _globalConsole = nullptr;
+    OutputPanel* _outputPanel = nullptr;
     QDockWidget* _projectDockWidget = nullptr;
     ProjectTreeWidget* _projectTree = nullptr;
     QString _lang;

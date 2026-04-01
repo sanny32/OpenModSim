@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>ConsoleOutput</class>
- <widget class="QWidget" name="ConsoleOutput">
+ <class>AppLogOutput</class>
+ <widget class="QWidget" name="AppLogOutput">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -16,10 +16,10 @@
      <normaloff>:/res/edit-delete.svg</normaloff>:/res/edit-delete.svg</iconset>
    </property>
    <property name="toolTip">
-    <string>Clear console</string>
+    <string>Clear log</string>
    </property>
   </action>
-  <action name="actionFilterLog">
+  <action name="actionFilterInfo">
    <property name="checkable">
     <bool>true</bool>
    </property>
@@ -93,7 +93,7 @@
      </property>
      <addaction name="actionClear"/>
      <addaction name="separator"/>
-     <addaction name="actionFilterLog"/>
+     <addaction name="actionFilterInfo"/>
      <addaction name="actionFilterWarn"/>
      <addaction name="actionFilterError"/>
     </widget>

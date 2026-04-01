@@ -121,7 +121,9 @@ set(SOURCES
     controls/bytelisttextedit.cpp
     controls/checkablegroupbox.cpp
     controls/clickablelabel.cpp
+    controls/applogoutput.cpp
     controls/consoleoutput.cpp
+    controls/outputpanel.cpp
     controls/customframe.cpp
     controls/findreplacebar.cpp
     controls/customlineedit.cpp
@@ -215,7 +217,9 @@ set(HEADERS
     controls/bytelisttextedit.h
     controls/checkablegroupbox.h
     controls/clickablelabel.h
+    controls/applogoutput.h
     controls/consoleoutput.h
+    controls/outputpanel.h
     controls/customframe.h
     controls/findreplacebar.h
     controls/customlineedit.h
@@ -334,7 +338,9 @@ set(HEADERS
 # UI Forms
 set(UI_FILES
     controls/bitpatterncontrol.ui
+    controls/applogoutput.ui
     controls/consoleoutput.ui
+    controls/outputpanel.ui
     controls/findreplacebar.ui
     controls/jscriptcontrol.ui
     controls/outputdatawidget.ui

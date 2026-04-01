@@ -19,6 +19,7 @@
 #include "controls/mdiareaex.h"
 #include "formscriptview.h"
 #include "formregistermapview.h"
+#include "controls/applogoutput.h"
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
@@ -317,16 +318,16 @@ MainWindow::MainWindow(const QString& profile, bool useSession, QWidget *parent)
     connect(_projectTree, &ProjectTreeWidget::formCreateRequested, this, [this](ProjectFormType type) {
         createNewForm(static_cast<ProjectFormKind>(type));
     });
-    _globalConsole = new ConsoleOutput(this);
-    _globalConsole->setMaxLines(AppPreferences::instance().consoleMaxLines());
+    _outputPanel = new OutputPanel(this);
+    _outputPanel->jsConsole()->setMaxLines(AppPreferences::instance().consoleMaxLines());
     _consoleDockWidget = new QDockWidget(tr("Output"), this);
     _consoleDockWidget->setObjectName("consoleDockWidget");
-    _consoleDockWidget->setWidget(_globalConsole);
+    _consoleDockWidget->setWidget(_outputPanel);
     _consoleDockWidget->setAllowedAreas(Qt::BottomDockWidgetArea | Qt::TopDockWidgetArea);
     addDockWidget(Qt::BottomDockWidgetArea, _consoleDockWidget);
     _consoleDockWidget->setVisible(false);
 
-    connect(_globalConsole, &ConsoleOutput::collapse, this, [this]() {
+    connect(_outputPanel, &OutputPanel::collapse, this, [this]() {
         _consoleDockWidget->setVisible(false);
     });
 
@@ -347,6 +348,56 @@ MainWindow::MainWindow(const QString& profile, bool useSession, QWidget *parent)
             _project->duplicatePrimaryTabsToSecondary();
     });
     connect(&_mbMultiServer, &ModbusMultiServer::connectionError, this, &MainWindow::on_connectionError);
+
+    connect(&_mbMultiServer, &ModbusMultiServer::connected,
+            this, [this](const ConnectionDetails& cd) {
+        const QString addr = (cd.Type == ConnectionType::Tcp)
+            ? QString("%1:%2").arg(cd.TcpParams.IPAddress).arg(cd.TcpParams.ServicePort)
+            : cd.SerialParams.PortName;
+        _outputPanel->appLog()->addEvent(tr("Server connected: %1").arg(addr),
+                                         AppLogOutput::EventType::Info);
+    });
+    connect(&_mbMultiServer, &ModbusMultiServer::disconnected,
+            this, [this](const ConnectionDetails& cd) {
+        const QString addr = (cd.Type == ConnectionType::Tcp)
+            ? QString("%1:%2").arg(cd.TcpParams.IPAddress).arg(cd.TcpParams.ServicePort)
+            : cd.SerialParams.PortName;
+        _outputPanel->appLog()->addEvent(tr("Server disconnected: %1").arg(addr),
+                                         AppLogOutput::EventType::Warning);
+    });
+    connect(&_mbMultiServer, &ModbusMultiServer::errorOccured,
+            this, [this](quint8 deviceId, const QString& error) {
+        _outputPanel->appLog()->addEvent(
+            tr("[Device %1] %2").arg(deviceId).arg(error),
+            AppLogOutput::EventType::Error);
+    });
+    connect(&_mbMultiServer, &ModbusMultiServer::deviceIdAdded,
+            this, [this](quint8 deviceId) {
+        _outputPanel->appLog()->addEvent(
+            tr("Unit ID added: %1").arg(deviceId),
+            AppLogOutput::EventType::Info);
+    });
+    connect(&_mbMultiServer, &ModbusMultiServer::deviceIdRemoved,
+            this, [this](quint8 deviceId) {
+        _outputPanel->appLog()->addEvent(
+            tr("Unit ID removed: %1").arg(deviceId),
+            AppLogOutput::EventType::Info);
+    });
+    connect(&_mbMultiServer, &ModbusMultiServer::unitMapAdded,
+            this, [this](QUuid /*id*/, quint8 deviceId,
+                         QModbusDataUnit::RegisterType type,
+                         quint16 addr, quint16 len) {
+        _outputPanel->appLog()->addEvent(
+            tr("Address space added: device %1, type %2, addr %3, len %4")
+                .arg(deviceId).arg(static_cast<int>(type)).arg(addr).arg(len),
+            AppLogOutput::EventType::Info);
+    });
+    connect(&_mbMultiServer, &ModbusMultiServer::unitMapRemoved,
+            this, [this](QUuid /*id*/, quint8 deviceId) {
+        _outputPanel->appLog()->addEvent(
+            tr("Address space removed: device %1").arg(deviceId),
+            AppLogOutput::EventType::Info);
+    });
 
     loadAppSettings(profile);
     rebuildRecentProjectsMenu();
@@ -842,7 +893,7 @@ void MainWindow::applyAutoComplete(bool enable)
 ///
 void MainWindow::applyConsoleMaxLines(int n)
 {
-    _globalConsole->setMaxLines(n);
+    _outputPanel->jsConsole()->setMaxLines(n);
 }
 
 ///
@@ -1163,6 +1214,7 @@ void MainWindow::on_searchText(const QString& text)
 ///
 void MainWindow::on_connectionError(const QString& error)
 {
+    _outputPanel->appLog()->addEvent(error, AppLogOutput::EventType::Error);
     QMessageBox::warning(this, windowTitle(), error);
 }
 
@@ -1428,7 +1480,7 @@ void MainWindow::selectAnsiCodepage(const QString& name)
 ///
 void MainWindow::appendConsoleMessage(const QString& source, const QString& text, ConsoleOutput::MessageType type)
 {
-    _globalConsole->addMessage(text, type, source);
+    _outputPanel->jsConsole()->addMessage(text, type, source);
 }
 
 ///
@@ -1436,8 +1488,10 @@ void MainWindow::appendConsoleMessage(const QString& source, const QString& text
 ///
 void MainWindow::showOutputConsole()
 {
-    if (AppPreferences::instance().autoShowConsoleOutput())
+    if (AppPreferences::instance().autoShowConsoleOutput()) {
         _consoleDockWidget->setVisible(true);
+        _outputPanel->switchToJsConsole();
+    }
 }
 
 ///

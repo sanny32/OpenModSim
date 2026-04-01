@@ -60,6 +60,7 @@ void ModbusMultiServer::addDeviceId(quint8 deviceId)
         for(auto&& s : _modbusServerList)
             s->addServerAddress(deviceId);
         emit deviceIdsChanged(normalizedDeviceIds(_deviceIds));
+        emit deviceIdAdded(deviceId);
     }
 }
 
@@ -82,6 +83,7 @@ void ModbusMultiServer::removeDeviceId(quint8 deviceId)
         for(auto&& s : _modbusServerList)
             s->removeServerAddress(deviceId);
         emit deviceIdsChanged(normalizedDeviceIds(_deviceIds));
+        emit deviceIdRemoved(deviceId);
     }
 }
 
@@ -143,6 +145,7 @@ void ModbusMultiServer::addUnitMap(QUuid id, quint8 deviceId, QModbusDataUnit::R
 
     _modbusDataUnitMaps[deviceId].addUnitMap(id, pointType, pointAddress, length);
     reconfigureServers();
+    emit unitMapAdded(id, deviceId, pointType, pointAddress, length);
 }
 
 ///
@@ -161,6 +164,7 @@ void ModbusMultiServer::removeUnitMap(QUuid id, quint8 deviceId)
 
     _modbusDataUnitMaps[deviceId].removeUnitMap(id);
     reconfigureServers();
+    emit unitMapRemoved(id, deviceId);
 }
 
 ///
