@@ -52,6 +52,10 @@
    <property name="checkable">
     <bool>true</bool>
    </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/res/icon-pause.png</normaloff>:/res/icon-pause.png</iconset>
+   </property>
    <property name="text">
     <string>Pause</string>
    </property>

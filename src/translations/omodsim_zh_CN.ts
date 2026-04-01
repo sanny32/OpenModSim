@@ -2658,17 +2658,17 @@ Source: %3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formtrafficview.ui" line="65"/>
+        <location filename="../formtrafficview.ui" line="69"/>
         <source>Clear</source>
         <translation type="unfinished">清除</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.ui" line="74"/>
+        <location filename="../formtrafficview.ui" line="78"/>
         <source>Export</source>
         <translation type="unfinished">导出</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.ui" line="89"/>
+        <location filename="../formtrafficview.ui" line="93"/>
         <source>Hex View</source>
         <translation type="unfinished">十六进制视图</translation>
     </message>
@@ -2677,7 +2677,7 @@ Source: %3</source>
         <translation type="obsolete">恢复</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.ui" line="56"/>
+        <location filename="../formtrafficview.ui" line="60"/>
         <source>Pause</source>
         <translation type="unfinished">暂停</translation>
     </message>

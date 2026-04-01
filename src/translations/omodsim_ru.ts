@@ -2690,17 +2690,17 @@ Source: %3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formtrafficview.ui" line="65"/>
+        <location filename="../formtrafficview.ui" line="69"/>
         <source>Clear</source>
         <translation type="unfinished">Очистить</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.ui" line="74"/>
+        <location filename="../formtrafficview.ui" line="78"/>
         <source>Export</source>
         <translation type="unfinished">Экспорт</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.ui" line="89"/>
+        <location filename="../formtrafficview.ui" line="93"/>
         <source>Hex View</source>
         <translation type="unfinished">Шестнадцатиричный режим</translation>
     </message>
@@ -2709,7 +2709,7 @@ Source: %3</source>
         <translation type="obsolete">Возобновить</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.ui" line="56"/>
+        <location filename="../formtrafficview.ui" line="60"/>
         <source>Pause</source>
         <translation type="unfinished">Пауза</translation>
     </message>

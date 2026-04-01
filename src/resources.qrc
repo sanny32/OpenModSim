@@ -85,10 +85,12 @@
         <file>res/actionNewTraffic.png</file>
         <file>res/actionNewScript.png</file>
         <file>res/icon-hex.svg</file>
+        <file>res/icon-pause.svg</file>
         <file>res/icon-directory.png</file>
         <file>res/icon-hex.png</file>
         <file>res/edit-delete.png</file>
         <file>res/icon-add.png</file>
         <file>res/icon-remove.png</file>
+        <file>res/icon-pause.png</file>
     </qresource>
 </RCC>
