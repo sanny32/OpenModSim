@@ -131,7 +131,7 @@ Script.onInit(init);
 ```
 
 # Building
-  Building is available via cmake (with installed Qt version 5.15 and above) or Qt Creator. Supports both OS Microsoft Windows and Linux.
+  Building is available via cmake (with installed Qt version 5.15 and above) or Qt Creator. Supports Microsoft Windows, Linux and macOS.
 
 ## Microsoft Windows Building
 
@@ -176,10 +176,41 @@ cd OpenModSim
 If you need to specify Qt framework major version (5 or 6), you can do it in the parameters
   - `./build.sh -qt5` or  `./build.sh -qt6`
 
+## macOS Building
+
+The minimum supported version of macOS for building OpenModSim from sources is macOS 11 (Big Sur).
+
+1. Install [Homebrew](https://brew.sh) if not already installed
+2. Install required dependencies:
+```bash
+brew install qt@6 cmake ninja
+```
+3. Clone OpenModSim sources from github repository:
+```bash
+git clone https://github.com/sanny32/OpenModSim.git
+```
+4. Go to OpenModSim folder:
+```bash
+cd OpenModSim
+```
+5. Run the build script:
+```bash
+./build-macos.sh
+```
+
+If you need to specify Qt framework major version (5 or 6), you can do it in the parameters
+  - `./build-macos.sh -qt5` or  `./build-macos.sh -qt6`
+
+The build script generates a macOS application bundle (`omodsim.app`). To run the application:
+```bash
+open build-omodsim-Qt_*/omodsim.app
+```
+
 # About supported operating systems
 
 The following minimum operating system versions are supported for OpenModSim:
 
+- <img src="docs/icons/logo_apple.svg" width="16" height="16" /> **macOS 11 (Big Sur)** and later (Intel and Apple Silicon)
 - <img src="docs/icons/logo_windows7.svg" width="16" height="16" /> **Microsoft Windows 7**
 - <img src="docs/icons/logo_debian.svg" width="16" height="16" /> **Debian Linux 11**
 - <img src="docs/icons/logo_ubuntu.svg" width="16" height="16" /> **Ubuntu Linux 22.04**
