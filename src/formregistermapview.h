@@ -74,6 +74,7 @@ private slots:
 private:
     void processRequest(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 startAddress, quint16 count);
     void updateAddressCells();
+    void setupToolBar();
     void setupServerConnections();
 
     QList<int> columnWidths() const;

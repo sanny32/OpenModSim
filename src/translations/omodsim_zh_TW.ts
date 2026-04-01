@@ -2340,43 +2340,43 @@ MODBUS Point Type:
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="503"/>
+        <location filename="../formregistermapview.cpp" line="794"/>
         <source>All Types</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="504"/>
+        <location filename="../formregistermapview.cpp" line="795"/>
         <source>Coils</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="505"/>
+        <location filename="../formregistermapview.cpp" line="796"/>
         <source>Discrete Inputs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="506"/>
+        <location filename="../formregistermapview.cpp" line="797"/>
         <source>Input Registers</source>
         <translation type="unfinished">輸入暫存器</translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="507"/>
+        <location filename="../formregistermapview.cpp" line="798"/>
         <source>Holding Registers</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="512"/>
+        <location filename="../formregistermapview.cpp" line="807"/>
+        <source>Type: </source>
+        <translation type="unfinished">型別： </translation>
+    </message>
+    <message>
+        <location filename="../formregistermapview.cpp" line="805"/>
+        <source>Unit: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../formregistermapview.cpp" line="790"/>
         <source>All</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../formregistermapview.cpp" line="518"/>
-        <source> Type: </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../formregistermapview.cpp" line="516"/>
-        <source>  Unit: </source>
         <translation type="unfinished"></translation>
     </message>
 </context>

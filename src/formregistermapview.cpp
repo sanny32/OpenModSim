@@ -494,34 +494,7 @@ FormRegisterMapView::FormRegisterMapView(ModbusMultiServer& server, MainWindow* 
     ui->tableView->setItemDelegateForColumn(ColOrder,    new OrderItemDelegate(ui->tableView));
     ui->tableView->setItemDelegateForColumn(ColValue,    new ValueItemDelegate(ui->tableView));
 
-    // Toolbar: separator + filter widgets before the expanding spacer
-    auto* spacerWidget = new QWidget(ui->toolBar);
-    spacerWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
-    auto* spacerAction = ui->toolBar->insertWidget(ui->actionClear, spacerWidget);
-
-    _filterTypeCombo = new QComboBox(ui->toolBar);
-    _filterTypeCombo->addItem(tr("All Types"));
-    _filterTypeCombo->addItem(tr("Coils"));
-    _filterTypeCombo->addItem(tr("Discrete Inputs"));
-    _filterTypeCombo->addItem(tr("Input Registers"));
-    _filterTypeCombo->addItem(tr("Holding Registers"));
-    _filterTypeCombo->setFixedWidth(130);
-
-    _filterUnitSpin = new QSpinBox(ui->toolBar);
-    _filterUnitSpin->setRange(0, 255);
-    _filterUnitSpin->setSpecialValueText(tr("All"));
-    _filterUnitSpin->setFixedWidth(60);
-
-    ui->toolBar->insertSeparator(spacerAction);
-    ui->toolBar->insertWidget(spacerAction, new QLabel(tr("  Unit: "), ui->toolBar));
-    ui->toolBar->insertWidget(spacerAction, _filterUnitSpin);
-    ui->toolBar->insertWidget(spacerAction, new QLabel(tr(" Type: "), ui->toolBar));
-    ui->toolBar->insertWidget(spacerAction, _filterTypeCombo);
-
-    connect(_filterTypeCombo, qOverload<int>(&QComboBox::currentIndexChanged),
-            this, [this](int idx) { _proxy->setFilterTypeIndex(idx); updateActionState(); });
-    connect(_filterUnitSpin, qOverload<int>(&QSpinBox::valueChanged),
-            this, [this](int val) { _proxy->setFilterUnit(val); updateActionState(); });
+    setupToolBar();
 
     // Context menu on table
     ui->tableView->setContextMenuPolicy(Qt::CustomContextMenu);
@@ -799,6 +772,48 @@ void FormRegisterMapView::processRequest(quint8 deviceId, QModbusDataUnit::Regis
 void FormRegisterMapView::updateAddressCells()
 {
     _model->refreshAddressColumn();
+}
+
+///
+/// \brief FormRegisterMapView::setupToolBar
+///
+void FormRegisterMapView::setupToolBar()
+{
+    // Expanding spacer
+    auto* spacerWidget = new QWidget(ui->toolBar);
+    spacerWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+    ui->toolBar->insertWidget(ui->actionClear, spacerWidget);
+
+    // Filter widgets
+    _filterUnitSpin = new QSpinBox;
+    _filterUnitSpin->setRange(0, 255);
+    _filterUnitSpin->setSpecialValueText(tr("All"));
+    _filterUnitSpin->setFixedWidth(60);
+
+    _filterTypeCombo = new QComboBox;
+    _filterTypeCombo->addItem(tr("All Types"));
+    _filterTypeCombo->addItem(tr("Coils"));
+    _filterTypeCombo->addItem(tr("Discrete Inputs"));
+    _filterTypeCombo->addItem(tr("Input Registers"));
+    _filterTypeCombo->addItem(tr("Holding Registers"));
+    _filterTypeCombo->setFixedWidth(130);
+
+    auto* filterWidget = new QWidget(ui->toolBar);
+    auto* filterLayout = new QHBoxLayout(filterWidget);
+    filterLayout->setContentsMargins(9, 0, 9, 0);
+    filterLayout->setSpacing(6);
+    filterLayout->addWidget(new QLabel(tr("Unit: "), filterWidget));
+    filterLayout->addWidget(_filterUnitSpin);
+    filterLayout->addWidget(new QLabel(tr("Type: "), filterWidget));
+    filterLayout->addWidget(_filterTypeCombo);
+
+    ui->toolBar->insertWidget(ui->actionClear, filterWidget);
+    ui->toolBar->insertSeparator(ui->actionClear);
+
+    connect(_filterTypeCombo, qOverload<int>(&QComboBox::currentIndexChanged),
+            this, [this](int idx) { _proxy->setFilterTypeIndex(idx); updateActionState(); });
+    connect(_filterUnitSpin, qOverload<int>(&QSpinBox::valueChanged),
+            this, [this](int val) { _proxy->setFilterUnit(val); updateActionState(); });
 }
 
 ///
