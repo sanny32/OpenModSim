@@ -4742,42 +4742,42 @@ Script.onInit(()=&gt;{
 <context>
     <name>RegisterMapDataModel</name>
     <message>
-        <location filename="../registermapdatamodel.cpp" line="404"/>
+        <location filename="../registermapdatamodel.cpp" line="436"/>
         <source>Unit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../registermapdatamodel.cpp" line="405"/>
+        <location filename="../registermapdatamodel.cpp" line="437"/>
         <source>Type</source>
         <translation type="unfinished">类型</translation>
     </message>
     <message>
-        <location filename="../registermapdatamodel.cpp" line="406"/>
+        <location filename="../registermapdatamodel.cpp" line="438"/>
         <source>Address</source>
         <translation type="unfinished">地址</translation>
     </message>
     <message>
-        <location filename="../registermapdatamodel.cpp" line="407"/>
+        <location filename="../registermapdatamodel.cpp" line="439"/>
         <source>DataType</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../registermapdatamodel.cpp" line="408"/>
+        <location filename="../registermapdatamodel.cpp" line="440"/>
         <source>Order</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../registermapdatamodel.cpp" line="409"/>
+        <location filename="../registermapdatamodel.cpp" line="441"/>
         <source>Comment</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../registermapdatamodel.cpp" line="410"/>
+        <location filename="../registermapdatamodel.cpp" line="442"/>
         <source>Value</source>
         <translation type="unfinished">值</translation>
     </message>
     <message>
-        <location filename="../registermapdatamodel.cpp" line="411"/>
+        <location filename="../registermapdatamodel.cpp" line="443"/>
         <source>Timestamp</source>
         <translation type="unfinished"></translation>
     </message>

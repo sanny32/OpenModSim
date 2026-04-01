@@ -70,6 +70,30 @@ QVector<quint16> regsForKey(ModbusMultiServer& server, const ItemMapKey& key, Da
 }
 
 ///
+/// \brief parseLocalizedFloat
+///
+bool parseLocalizedFloat(const QString& text, float& value)
+{
+    bool ok = false;
+    value = QLocale().toFloat(text, &ok);
+    if (!ok)
+        value = QLocale::c().toFloat(text, &ok);
+    return ok;
+}
+
+///
+/// \brief parseLocalizedDouble
+///
+bool parseLocalizedDouble(const QString& text, double& value)
+{
+    bool ok = false;
+    value = QLocale().toDouble(text, &ok);
+    if (!ok)
+        value = QLocale::c().toDouble(text, &ok);
+    return ok;
+}
+
+///
 /// \brief formatValue
 ///
 QString formatValue(QModbusDataUnit::RegisterType regType,
@@ -87,7 +111,13 @@ QString formatValue(QModbusDataUnit::RegisterType regType,
         case DataType::Float32:
             if (regs.size() >= 2) {
                 const QVariant val = makeValue(regs, type, order, ByteOrder::Direct);
-                if (val.isValid()) return QString::number(val.toFloat(), 'g');
+                if (val.isValid()) return QLocale().toString(val.toFloat(), 'g');
+            }
+            return formatHexValue(regType, regs[0], ByteOrder::Direct, outValue, false);
+        case DataType::Float64:
+            if (regs.size() >= 4) {
+                const QVariant val = makeValue(regs, type, order, ByteOrder::Direct);
+                if (val.isValid()) return QLocale().toString(val.toDouble(), 'g');
             }
             return formatHexValue(regType, regs[0], ByteOrder::Direct, outValue, false);
         default:
@@ -244,7 +274,8 @@ bool RegisterMapDataModel::setData(const QModelIndex& index, const QVariant& val
 
         switch (entry.type) {
             case DataType::Float32: {
-                const float f = text.toFloat(&ok);
+                float f = 0.0f;
+                ok = parseLocalizedFloat(text, f);
                 if (ok) {
                     if (lsrf) breakFloat(f, regs[0], regs[1], ByteOrder::Direct);
                     else       breakFloat(f, regs[1], regs[0], ByteOrder::Direct);
@@ -252,7 +283,8 @@ bool RegisterMapDataModel::setData(const QModelIndex& index, const QVariant& val
                 break;
             }
             case DataType::Float64: {
-                const double d = text.toDouble(&ok);
+                double d = 0.0;
+                ok = parseLocalizedDouble(text, d);
                 if (ok) {
                     if (lsrf) breakDouble(d, regs[0], regs[1], regs[2], regs[3], ByteOrder::Direct);
                     else       breakDouble(d, regs[3], regs[2], regs[1], regs[0], ByteOrder::Direct);
