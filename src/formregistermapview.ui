@@ -43,7 +43,7 @@
     </widget>
    </item>
    <item>
-    <widget class="QTableWidget" name="tableWidget">
+    <widget class="QTableView" name="tableView">
      <property name="frameShape">
       <enum>QFrame::Shape::WinPanel</enum>
      </property>
@@ -56,46 +56,6 @@
      <property name="selectionBehavior">
       <enum>QAbstractItemView::SelectionBehavior::SelectRows</enum>
      </property>
-     <column>
-      <property name="text">
-       <string>Unit</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>Type</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>Address</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>DataType</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>Order</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>Comment</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>Value</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>Timestamp</string>
-      </property>
-     </column>
     </widget>
    </item>
   </layout>

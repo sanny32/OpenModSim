@@ -2,16 +2,15 @@
 #define FORMREGISTERMAPVIEW_H
 
 #include <QWidget>
-#include <QMap>
-#include <QUuid>
-#include <QDateTime>
+#include <QComboBox>
+#include <QSpinBox>
 #include <QXmlStreamWriter>
 #include <QXmlStreamReader>
-#include <QSettings>
 #include "modbusmultiserver.h"
 #include "connectiondetails.h"
 #include "controls/outputtypes.h"
 #include "enums.h"
+#include "registermapdatamodel.h"
 
 class MainWindow;
 
@@ -70,46 +69,25 @@ private slots:
     void on_actionAdd_triggered();
     void on_actionDelete_triggered();
     void on_actionClear_triggered();
-    void on_tableWidget_cellChanged(int row, int col);
     void updateActionState();
 
 private:
-    struct Entry {
-        quint16 value = 0;
-        QString comment;
-        DataType      type  = DataType::Int16;
-        RegisterOrder order = RegisterOrder::MSRF;
-        QDateTime timestamp;
-    };
-
     void processRequest(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 startAddress, quint16 count);
-    int  findRow(const ItemMapKey& key) const;
-    void insertEntry(const ItemMapKey& key, const Entry& entry);
-    void registerEntry(const ItemMapKey& key, const Entry& entry);
-    void unregisterEntry(const ItemMapKey& key);
-    void updateValue(int row, const ItemMapKey& key, quint16 value);
     void updateAddressCells();
     void setupServerConnections();
 
     QList<int> columnWidths() const;
     void setColumnWidths(const QList<int>& widths);
 
-    QString registerTypeToString(QModbusDataUnit::RegisterType type) const;
-    QModbusDataUnit::RegisterType stringToRegisterType(const QString& str) const;
-    QVector<quint16> regsForKey(const ItemMapKey& key, DataType type) const;
-    QString formatValue(QModbusDataUnit::RegisterType regType, DataType type, RegisterOrder order, const QVector<quint16>& regs) const;
-    QString addressToDisplay(quint16 addr) const;
-    quint16 addressFromDisplay(const QString& text, bool* ok = nullptr) const;
-    ItemMapKey keyFromRow(int row) const;
-
 private:
-    Ui::FormRegisterMapView* ui;
-    ModbusMultiServer& _mbMultiServer;
-    RegisterMapViewDefinitions _displayDefinition;
-    QMap<ItemMapKey, Entry> _registerMap;
-    QMap<ItemMapKey, QUuid> _rowUuids;
-    bool _updatingTable = false;
-    bool _autoAddOnRequest = false;
+    Ui::FormRegisterMapView*    ui;
+    ModbusMultiServer&          _mbMultiServer;
+    RegisterMapViewDefinitions  _displayDefinition;
+    RegisterMapDataModel*       _model           = nullptr;
+    RegisterMapFilterProxy*     _proxy           = nullptr;
+    QComboBox*                  _filterTypeCombo = nullptr;
+    QSpinBox*                   _filterUnitSpin  = nullptr;
+    bool                        _autoAddOnRequest = false;
 };
 
 ///
@@ -158,13 +136,14 @@ inline QXmlStreamWriter& operator <<(QXmlStreamWriter& xml, FormRegisterMapView*
     xml.writeEndElement();
 
     xml.writeStartElement("RegisterMap");
-    for (auto it = frm->_registerMap.cbegin(); it != frm->_registerMap.cend(); ++it) {
+    const auto& map = frm->_model->entries();
+    for (auto it = map.cbegin(); it != map.cend(); ++it) {
         xml.writeStartElement("Entry");
         xml.writeAttribute("DeviceId",  QString::number(it.key().DeviceId));
         xml.writeAttribute("Type",      QString::number(it.key().Type));
         xml.writeAttribute("Address",   QString::number(it.key().Address));
         xml.writeAttribute("DataType",   enumToString(it.value().type));
-        if(isMultiRegisterType(it.value().type))
+        if (isMultiRegisterType(it.value().type))
             xml.writeAttribute("Order", enumToString(it.value().order));
         xml.writeAttribute("Value",     QString::number(it.value().value));
         xml.writeAttribute("Timestamp", it.value().timestamp.toString(Qt::ISODateWithMs));
@@ -242,12 +221,12 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, FormRegisterMapView*
                     key.Address = attrs.value("Address").toUShort(&ok);
                     if (!ok) { xml.skipCurrentElement(); continue; }
 
-                    FormRegisterMapView::Entry entry;
-                    entry.value  = attrs.value("Value").toUShort();
-                    entry.type   = enumFromString<DataType>(attrs.value("DataType").toString(), DataType::Int16);
-                    entry.order  = enumFromString<RegisterOrder>(attrs.value("Order").toString(), RegisterOrder::MSRF);
+                    RegisterMapEntry entry;
+                    entry.value     = attrs.value("Value").toUShort();
+                    entry.type      = enumFromString<DataType>(attrs.value("DataType").toString(), DataType::Int16);
+                    entry.order     = enumFromString<RegisterOrder>(attrs.value("Order").toString(), RegisterOrder::MSRF);
                     entry.timestamp = QDateTime::fromString(attrs.value("Timestamp").toString(), Qt::ISODateWithMs);
-                    entry.comment = xml.readElementText(QXmlStreamReader::IncludeChildElements).trimmed();
+                    entry.comment   = xml.readElementText(QXmlStreamReader::IncludeChildElements).trimmed();
 
                     if (key.Type == QModbusDataUnit::Coils ||
                         key.Type == QModbusDataUnit::DiscreteInputs) {
@@ -255,8 +234,7 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, FormRegisterMapView*
                         entry.order = RegisterOrder::MSRF;
                     }
 
-                    frm->_registerMap[key] = entry;
-                    frm->insertEntry(key, entry);
+                    frm->_model->addEntry(key, entry);
                 }
                 else {
                     xml.skipCurrentElement();

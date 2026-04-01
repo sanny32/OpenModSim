@@ -174,6 +174,7 @@ set(SOURCES
     formtrafficview.cpp
     formscriptview.cpp
     formregistermapview.cpp
+    registermapdatamodel.cpp
     jshighlighter.cpp
     main.cpp
     mainwindow.cpp
@@ -275,6 +276,7 @@ set(HEADERS
     formtrafficview.h
     formscriptview.h
     formregistermapview.h
+    registermapdatamodel.h
     jshighlighter.h
     mainwindow.h
     menuconnect.h

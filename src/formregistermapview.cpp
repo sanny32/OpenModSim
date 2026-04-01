@@ -2,20 +2,17 @@
 #include "mainwindow.h"
 #include "apppreferences.h"
 #include "formregistermapview.h"
-#include "formatutils.h"
-#include "numericutils.h"
 #include "modbusmessages/modbusmessages.h"
 #include "controls/numericlineedit.h"
 #include "ui_formregistermapview.h"
 
 namespace {
 
-constexpr int RoleDeviceId  = Qt::UserRole;
-constexpr int RoleType      = Qt::UserRole + 1;
-constexpr int RoleAddress   = Qt::UserRole + 2;
-constexpr int RoleTypeValue = Qt::UserRole + 3;
-
-enum Col { ColUnit = 0, ColType, ColAddress, ColDataType, ColOrder, ColComment, ColValue, ColTimestamp };
+// Role aliases so delegates compile without change
+constexpr int RoleDeviceId  = RegisterMapRole::DeviceId;
+constexpr int RoleType      = RegisterMapRole::Type;
+constexpr int RoleAddress   = RegisterMapRole::Address;
+constexpr int RoleTypeValue = RegisterMapRole::TypeValue;
 
 ///
 /// \brief TypeItemDelegate — inline combo box for register type column
@@ -456,7 +453,14 @@ FormRegisterMapView::FormRegisterMapView(ModbusMultiServer& server, MainWindow* 
 {
     ui->setupUi(this);
 
-    auto* hdr = ui->tableWidget->horizontalHeader();
+    // Create model and filter proxy
+    _model = new RegisterMapDataModel(_mbMultiServer, this);
+    _proxy = new RegisterMapFilterProxy(this);
+    _proxy->setSourceModel(_model);
+    ui->tableView->setModel(_proxy);
+
+    // Header setup
+    auto* hdr = ui->tableView->horizontalHeader();
     auto hdrFont = hdr->font();
     hdrFont.setBold(true);
     hdr->setFont(hdrFont);
@@ -479,35 +483,63 @@ FormRegisterMapView::FormRegisterMapView(ModbusMultiServer& server, MainWindow* 
     hdr->resizeSection(ColValue,     160);
     hdr->resizeSection(ColTimestamp, 160);
 
-    ui->tableWidget->verticalHeader()->setDefaultSectionSize(20);
-    ui->tableWidget->verticalHeader()->hide();
+    ui->tableView->verticalHeader()->setDefaultSectionSize(20);
+    ui->tableView->verticalHeader()->hide();
 
-    ui->tableWidget->setItemDelegateForColumn(ColUnit,     new UnitItemDelegate(ui->tableWidget));
-    ui->tableWidget->setItemDelegateForColumn(ColType,     new TypeItemDelegate(ui->tableWidget));
-    ui->tableWidget->setItemDelegateForColumn(ColAddress,  new AddressItemDelegate(ui->tableWidget));
-    ui->tableWidget->setItemDelegateForColumn(ColDataType, new DataTypeItemDelegate(ui->tableWidget));
-    ui->tableWidget->setItemDelegateForColumn(ColOrder,    new OrderItemDelegate(ui->tableWidget));
-    ui->tableWidget->setItemDelegateForColumn(ColValue,    new ValueItemDelegate(ui->tableWidget));
+    // Item delegates (unchanged, work with QTableView via QModelIndex interface)
+    ui->tableView->setItemDelegateForColumn(ColUnit,     new UnitItemDelegate(ui->tableView));
+    ui->tableView->setItemDelegateForColumn(ColType,     new TypeItemDelegate(ui->tableView));
+    ui->tableView->setItemDelegateForColumn(ColAddress,  new AddressItemDelegate(ui->tableView));
+    ui->tableView->setItemDelegateForColumn(ColDataType, new DataTypeItemDelegate(ui->tableView));
+    ui->tableView->setItemDelegateForColumn(ColOrder,    new OrderItemDelegate(ui->tableView));
+    ui->tableView->setItemDelegateForColumn(ColValue,    new ValueItemDelegate(ui->tableView));
 
-    auto* spacer = new QWidget(ui->toolBar);
-    spacer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
-    ui->toolBar->insertWidget(ui->actionClear, spacer);
+    // Toolbar: separator + filter widgets before the expanding spacer
+    auto* spacerWidget = new QWidget(ui->toolBar);
+    spacerWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+    auto* spacerAction = ui->toolBar->insertWidget(ui->actionClear, spacerWidget);
 
-    ui->tableWidget->setContextMenuPolicy(Qt::CustomContextMenu);
-    connect(ui->tableWidget, &QTableWidget::customContextMenuRequested, this, [this](const QPoint& pos) {
+    _filterTypeCombo = new QComboBox(ui->toolBar);
+    _filterTypeCombo->addItem(tr("All Types"));
+    _filterTypeCombo->addItem(tr("Coils"));
+    _filterTypeCombo->addItem(tr("Discrete Inputs"));
+    _filterTypeCombo->addItem(tr("Input Registers"));
+    _filterTypeCombo->addItem(tr("Holding Registers"));
+    _filterTypeCombo->setFixedWidth(130);
+
+    _filterUnitSpin = new QSpinBox(ui->toolBar);
+    _filterUnitSpin->setRange(0, 255);
+    _filterUnitSpin->setSpecialValueText(tr("All"));
+    _filterUnitSpin->setFixedWidth(60);
+
+    ui->toolBar->insertSeparator(spacerAction);
+    ui->toolBar->insertWidget(spacerAction, new QLabel(tr("  Unit: "), ui->toolBar));
+    ui->toolBar->insertWidget(spacerAction, _filterUnitSpin);
+    ui->toolBar->insertWidget(spacerAction, new QLabel(tr(" Type: "), ui->toolBar));
+    ui->toolBar->insertWidget(spacerAction, _filterTypeCombo);
+
+    connect(_filterTypeCombo, qOverload<int>(&QComboBox::currentIndexChanged),
+            this, [this](int idx) { _proxy->setFilterTypeIndex(idx); updateActionState(); });
+    connect(_filterUnitSpin, qOverload<int>(&QSpinBox::valueChanged),
+            this, [this](int val) { _proxy->setFilterUnit(val); updateActionState(); });
+
+    // Context menu on table
+    ui->tableView->setContextMenuPolicy(Qt::CustomContextMenu);
+    connect(ui->tableView, &QTableView::customContextMenuRequested, this, [this](const QPoint& pos) {
         QMenu menu(this);
         menu.addAction(ui->actionAdd);
         menu.addAction(ui->actionDelete);
         menu.addSeparator();
         menu.addAction(ui->actionClear);
-        menu.exec(ui->tableWidget->viewport()->mapToGlobal(pos));
+        menu.exec(ui->tableView->viewport()->mapToGlobal(pos));
     });
 
-    connect(ui->tableWidget->selectionModel(), &QItemSelectionModel::selectionChanged,
+    // Selection and row count signals
+    connect(ui->tableView->selectionModel(), &QItemSelectionModel::selectionChanged,
             this, &FormRegisterMapView::updateActionState);
-    connect(ui->tableWidget->model(), &QAbstractItemModel::rowsInserted,
+    connect(_proxy, &QAbstractItemModel::rowsInserted,
             this, &FormRegisterMapView::updateActionState);
-    connect(ui->tableWidget->model(), &QAbstractItemModel::rowsRemoved,
+    connect(_proxy, &QAbstractItemModel::rowsRemoved,
             this, &FormRegisterMapView::updateActionState);
 
     updateActionState();
@@ -521,32 +553,7 @@ FormRegisterMapView::FormRegisterMapView(ModbusMultiServer& server, MainWindow* 
 ///
 FormRegisterMapView::~FormRegisterMapView()
 {
-    for (auto it = _registerMap.cbegin(); it != _registerMap.cend(); ++it)
-        unregisterEntry(it.key());
     delete ui;
-}
-
-///
-/// \brief FormRegisterMapView::registerEntry
-///
-void FormRegisterMapView::registerEntry(const ItemMapKey& key, const Entry& entry)
-{
-    if (!_rowUuids.contains(key))
-        _rowUuids[key] = QUuid::createUuid();
-    _mbMultiServer.addDeviceId(key.DeviceId);
-    _mbMultiServer.addUnitMap(_rowUuids[key], key.DeviceId, key.Type,
-                               key.Address, registersCount(entry.type));
-}
-
-///
-/// \brief FormRegisterMapView::unregisterEntry
-///
-void FormRegisterMapView::unregisterEntry(const ItemMapKey& key)
-{
-    const QUuid uuid = _rowUuids.take(key);
-    if (uuid.isNull()) return;
-    _mbMultiServer.removeUnitMap(uuid, key.DeviceId);
-    _mbMultiServer.removeDeviceId(key.DeviceId);
 }
 
 ///
@@ -669,23 +676,7 @@ void FormRegisterMapView::on_mbRequest(const ConnectionDetails& /*cd*/, QSharedP
 ///
 void FormRegisterMapView::on_mbDataChanged(quint8 deviceId, const QModbusDataUnit& data)
 {
-    if (!data.isValid()) return;
-
-    const QDateTime now = QDateTime::currentDateTime();
-    for (quint32 i = 0; i < data.valueCount(); ++i) {
-        const ItemMapKey key{ deviceId, data.registerType(), static_cast<quint16>(data.startAddress() + i) };
-        const quint16 value = static_cast<quint16>(data.value(i));
-
-        auto it = _registerMap.find(key);
-        if (it != _registerMap.end()) {
-            if (it->value != value) {
-                it->value     = value;
-                it->timestamp = now;
-                const int row = findRow(key);
-                if (row >= 0) updateValue(row, key, value);
-            }
-        }
-    }
+    _model->applyMbDataChange(deviceId, data);
 }
 
 ///
@@ -693,24 +684,24 @@ void FormRegisterMapView::on_mbDataChanged(quint8 deviceId, const QModbusDataUni
 ///
 void FormRegisterMapView::on_actionAdd_triggered()
 {
-    // Inherit from last row if available, otherwise use defaults
     ItemMapKey key{ 1, QModbusDataUnit::HoldingRegisters, 0 };
-    Entry entry;
+    RegisterMapEntry entry;
     entry.type  = DataType::Int16;
     entry.order = RegisterOrder::MSRF;
 
-    if (!_registerMap.isEmpty()) {
-        const auto last = std::prev(_registerMap.cend());
-        key.DeviceId = last.key().DeviceId;
-        key.Type     = last.key().Type;
-        key.Address  = last.key().Address < 0xFFFF ? last.key().Address + 1 : last.key().Address;
-        entry.type   = last.value().type;
-        entry.order  = last.value().order;
-        entry.comment = last.value().comment;
+    if (!_model->isEmpty()) {
+        const ItemMapKey last = _model->lastKey();
+        const auto& lastEntry = _model->entries()[last];
+        key.DeviceId  = last.DeviceId;
+        key.Type      = last.Type;
+        key.Address   = last.Address < 0xFFFF ? last.Address + 1 : last.Address;
+        entry.type    = lastEntry.type;
+        entry.order   = lastEntry.order;
+        entry.comment = lastEntry.comment;
     }
 
-    // If the key already exists, shift the address to avoid collision
-    while (_registerMap.contains(key)) {
+    // Skip duplicate keys
+    while (_model->contains(key)) {
         if (key.Address < 0xFFFF) ++key.Address;
         else break;
     }
@@ -719,13 +710,16 @@ void FormRegisterMapView::on_actionAdd_triggered()
     const auto unit = _mbMultiServer.data(key.DeviceId, key.Type, key.Address, 1);
     entry.value = unit.isValid() ? static_cast<quint16>(unit.value(0)) : 0;
 
-    _registerMap[key] = entry;
-    insertEntry(key, entry);
+    _model->addEntry(key, entry);
 
-    // Start editing the Unit cell of the new row
-    const int newRow = ui->tableWidget->rowCount() - 1;
-    ui->tableWidget->setCurrentCell(newRow, ColUnit);
-    ui->tableWidget->editItem(ui->tableWidget->item(newRow, ColUnit));
+    // Start editing the Unit cell of the new row (if visible through current filter)
+    const QModelIndex srcIdx   = _model->index(_model->rowCount() - 1, ColUnit);
+    const QModelIndex proxyIdx = _proxy->mapFromSource(srcIdx);
+    if (proxyIdx.isValid()) {
+        ui->tableView->scrollTo(proxyIdx);
+        ui->tableView->setCurrentIndex(proxyIdx);
+        ui->tableView->edit(proxyIdx);
+    }
     updateActionState();
 }
 
@@ -734,25 +728,14 @@ void FormRegisterMapView::on_actionAdd_triggered()
 ///
 void FormRegisterMapView::on_actionDelete_triggered()
 {
-    const auto selectedRanges = ui->tableWidget->selectedRanges();
-    if (selectedRanges.isEmpty()) return;
+    const auto selected = ui->tableView->selectionModel()->selectedRows();
+    if (selected.isEmpty()) return;
 
-    // Collect rows in descending order to remove without shifting indices
-    QList<int> rows;
-    for (const auto& range : selectedRanges) {
-        for (int r = range.topRow(); r <= range.bottomRow(); ++r)
-            if (!rows.contains(r)) rows.append(r);
-    }
-    std::sort(rows.begin(), rows.end(), std::greater<int>());
+    QList<int> sourceRows;
+    for (const auto& proxyIdx : selected)
+        sourceRows.append(_proxy->mapToSource(proxyIdx).row());
 
-    _updatingTable = true;
-    for (int row : rows) {
-        const ItemMapKey key = keyFromRow(row);
-        unregisterEntry(key);
-        _registerMap.remove(key);
-        ui->tableWidget->removeRow(row);
-    }
-    _updatingTable = false;
+    _model->removeEntries(sourceRows);
     updateActionState();
 }
 
@@ -761,12 +744,12 @@ void FormRegisterMapView::on_actionDelete_triggered()
 ///
 void FormRegisterMapView::on_actionClear_triggered()
 {
-    for (auto it = _registerMap.cbegin(); it != _registerMap.cend(); ++it)
-        unregisterEntry(it.key());
-    _registerMap.clear();
-    _updatingTable = true;
-    ui->tableWidget->setRowCount(0);
-    _updatingTable = false;
+    // Collect source rows of all currently visible (proxy) rows
+    QList<int> sourceRows;
+    for (int pr = 0; pr < _proxy->rowCount(); ++pr)
+        sourceRows.append(_proxy->mapToSource(_proxy->index(pr, 0)).row());
+
+    _model->removeEntries(sourceRows);
     updateActionState();
 }
 
@@ -775,258 +758,15 @@ void FormRegisterMapView::on_actionClear_triggered()
 ///
 void FormRegisterMapView::updateActionState()
 {
-    ui->actionDelete->setEnabled(!ui->tableWidget->selectedRanges().isEmpty());
-    ui->actionClear->setEnabled(ui->tableWidget->rowCount() > 0);
-}
-
-///
-/// \brief FormRegisterMapView::on_tableWidget_cellChanged
-///
-void FormRegisterMapView::on_tableWidget_cellChanged(int row, int col)
-{
-    if (_updatingTable) return;
-
-    // Handle Value column
-    if (col == ColValue) {
-        const ItemMapKey key = keyFromRow(row);
-        auto it = _registerMap.find(key);
-        if (it == _registerMap.end()) return;
-
-        auto* valItem = ui->tableWidget->item(row, ColValue);
-        if (!valItem) return;
-
-        bool ok = false;
-        const QString text = valItem->text().trimmed();
-        const int regCount = registersCount(it->type);
-        const bool lsrf = (it->order == RegisterOrder::LSRF);
-        QVector<quint16> regs(regCount, 0);
-
-        switch (it->type) {
-            case DataType::Float32: {
-                const float f = text.toFloat(&ok);
-                if (ok) {
-                    if (lsrf) breakFloat(f, regs[0], regs[1], ByteOrder::Direct);
-                    else       breakFloat(f, regs[1], regs[0], ByteOrder::Direct);
-                }
-                break;
-            }
-            case DataType::Float64: {
-                const double d = text.toDouble(&ok);
-                if (ok) {
-                    if (lsrf) breakDouble(d, regs[0], regs[1], regs[2], regs[3], ByteOrder::Direct);
-                    else       breakDouble(d, regs[3], regs[2], regs[1], regs[0], ByteOrder::Direct);
-                }
-                break;
-            }
-            case DataType::Int32: {
-                const qint32 v = static_cast<qint32>(text.toLong(&ok));
-                if (ok) {
-                    if (lsrf) breakInt32(v, regs[0], regs[1], ByteOrder::Direct);
-                    else       breakInt32(v, regs[1], regs[0], ByteOrder::Direct);
-                }
-                break;
-            }
-            case DataType::UInt32: {
-                const quint32 v = static_cast<quint32>(text.toULong(&ok));
-                if (ok) {
-                    if (lsrf) breakUInt32(v, regs[0], regs[1], ByteOrder::Direct);
-                    else       breakUInt32(v, regs[1], regs[0], ByteOrder::Direct);
-                }
-                break;
-            }
-            case DataType::Int64: {
-                const qint64 v = text.toLongLong(&ok);
-                if (ok) {
-                    if (lsrf) breakInt64(v, regs[0], regs[1], regs[2], regs[3], ByteOrder::Direct);
-                    else       breakInt64(v, regs[3], regs[2], regs[1], regs[0], ByteOrder::Direct);
-                }
-                break;
-            }
-            case DataType::UInt64: {
-                const quint64 v = text.toULongLong(&ok);
-                if (ok) {
-                    if (lsrf) breakUInt64(v, regs[0], regs[1], regs[2], regs[3], ByteOrder::Direct);
-                    else       breakUInt64(v, regs[3], regs[2], regs[1], regs[0], ByteOrder::Direct);
-                }
-                break;
-            }
-            default: {
-                quint16 newValue = 0;
-                if (text.startsWith("0x") || text.startsWith("0X"))
-                    newValue = static_cast<quint16>(text.toUInt(&ok, 16));
-                else if (it->type == DataType::Int16)
-                    newValue = static_cast<quint16>(text.toShort(&ok));
-                else
-                    newValue = text.toUShort(&ok);
-                if (ok) regs[0] = newValue;
-                break;
-            }
-        }
-
-        if (!ok) {
-            // Restore previous value on invalid input
-            _updatingTable = true;
-            valItem->setText(formatValue(key.Type, it->type, it->order, regsForKey(key, it->type)));
-            _updatingTable = false;
-            return;
-        }
-
-        it->value = regs[0];
-        it->timestamp = QDateTime::currentDateTime();
-
-        QModbusDataUnit unit(key.Type, key.Address, regCount);
-        for (int i = 0; i < regCount; ++i) unit.setValue(i, regs[i]);
-        _mbMultiServer.setData(key.DeviceId, unit);
-
-        _updatingTable = true;
-        valItem->setData(Qt::UserRole, static_cast<quint32>(regs[0]));
-        valItem->setText(formatValue(key.Type, it->type, it->order, regsForKey(key, it->type)));
-        auto* tsItem = ui->tableWidget->item(row, ColTimestamp);
-        if (tsItem) tsItem->setText(it->timestamp.toString(Qt::ISODate));
-        _updatingTable = false;
-        return;
-    }
-
-    // Handle Comment column
-    if (col == ColComment) {
-        const ItemMapKey key = keyFromRow(row);
-        auto it = _registerMap.find(key);
-        if (it != _registerMap.end()) {
-            const auto* item = ui->tableWidget->item(row, ColComment);
-            it->comment = item ? item->text() : QString();
-        }
-        return;
-    }
-
-    // Handle DataType column
-    if (col == ColDataType) {
-        const ItemMapKey key = keyFromRow(row);
-        auto it = _registerMap.find(key);
-        if (it == _registerMap.end()) return;
-
-        const auto* typeItem = ui->tableWidget->item(row, ColDataType);
-        if (!typeItem) return;
-        it->type = enumFromString<DataType>(typeItem->text(), DataType::Int16);
-
-        _updatingTable = true;
-        auto* orderItem = ui->tableWidget->item(row, ColOrder);
-        if (orderItem) {
-            if (isMultiRegisterType(it->type)) {
-                // Enable editing and show current order for multi-register types
-                orderItem->setFlags(orderItem->flags() | Qt::ItemIsEditable);
-                orderItem->setText(enumToString(it->order));
-            } else {
-                // Disable editing and clear cell for single-register types
-                it->order = RegisterOrder::MSRF;
-                orderItem->setFlags(orderItem->flags() & ~Qt::ItemIsEditable);
-                orderItem->setText(QString());
-            }
-        }
-        _updatingTable = false;
-
-        // Update displayed value with new type (read all required registers from server)
-        _updatingTable = true;
-        auto* valItem = ui->tableWidget->item(row, ColValue);
-        if (valItem) valItem->setText(formatValue(key.Type, it->type, it->order, regsForKey(key, it->type)));
-        _updatingTable = false;
-
-        // Re-register with updated length (DataType affects registersCount)
-        registerEntry(key, *it);
-        return;
-    }
-
-    // Handle Order column
-    if (col == ColOrder) {
-        const ItemMapKey key = keyFromRow(row);
-        auto it = _registerMap.find(key);
-        if (it == _registerMap.end()) return;
-
-        const auto* orderItem = ui->tableWidget->item(row, ColOrder);
-        if (!orderItem) return;
-        it->order = enumFromString<RegisterOrder>(orderItem->text(), RegisterOrder::MSRF);
-
-        _updatingTable = true;
-        auto* valItem = ui->tableWidget->item(row, ColValue);
-        if (valItem) valItem->setText(formatValue(key.Type, it->type, it->order, regsForKey(key, it->type)));
-        _updatingTable = false;
-        return;
-    }
-
-    // Handle Unit (col 0), Type (col 1), Address (col 2) — key change
-    if (col == ColUnit || col == ColType || col == ColAddress) {
-        // Read old key stored in UserRole
-        auto* unitItem = ui->tableWidget->item(row, ColUnit);
-        if (!unitItem) return;
-
-        const ItemMapKey oldKey = keyFromRow(row);
-
-        // Build new key from current cell texts
-        const auto* typeItem    = ui->tableWidget->item(row, ColType);
-        const auto* addrItem    = ui->tableWidget->item(row, ColAddress);
-
-        const quint8  newDevId  = static_cast<quint8>(unitItem->text().toUShort());
-        const auto    newType   = stringToRegisterType(typeItem ? typeItem->text() : QString());
-        const quint16 newAddr   = addressFromDisplay(addrItem ? addrItem->text() : QStringLiteral("1"));
-
-        const ItemMapKey newKey{ newDevId, newType, newAddr };
-
-        if (newKey.DeviceId == oldKey.DeviceId &&
-            newKey.Type    == oldKey.Type    &&
-            newKey.Address == oldKey.Address) return;
-
-        // Preserve existing entry data
-        Entry entry = _registerMap.value(oldKey);
-        unregisterEntry(oldKey);
-        _registerMap.remove(oldKey);
-
-        // Force Binary for bit-type registers
-        const bool bitType = (newType == QModbusDataUnit::Coils ||
-                              newType == QModbusDataUnit::DiscreteInputs);
-        if (bitType) {
-            entry.type  = DataType::Binary;
-            entry.order = RegisterOrder::MSRF;
-        }
-
-        // Read fresh value from server
-        const auto unit = _mbMultiServer.data(newDevId, newType, newAddr, 1);
-        entry.value = unit.isValid() ? static_cast<quint16>(unit.value(0)) : 0;
-        entry.timestamp = unit.isValid() ? QDateTime::currentDateTime() : QDateTime();
-        _registerMap[newKey] = entry;
-        registerEntry(newKey, entry);
-
-        // Update UserRole data and dependent cells
-        _updatingTable = true;
-        unitItem->setData(RoleDeviceId, static_cast<int>(newKey.DeviceId));
-        unitItem->setData(RoleType,     static_cast<int>(newKey.Type));
-        unitItem->setData(RoleAddress,  static_cast<int>(newKey.Address));
-
-        if (auto* typeItem2 = ui->tableWidget->item(row, ColType))
-            typeItem2->setData(RoleTypeValue, static_cast<int>(newKey.Type));
-
-        if (bitType) {
-            if (auto* dtItem = ui->tableWidget->item(row, ColDataType))
-                dtItem->setText(enumToString(DataType::Binary));
-            if (auto* ordItem = ui->tableWidget->item(row, ColOrder)) {
-                ordItem->setText(QString());
-                ordItem->setFlags(ordItem->flags() & ~Qt::ItemIsEditable);
-            }
-        }
-
-        auto* valItem = ui->tableWidget->item(row, ColValue);
-        if (valItem) valItem->setText(formatValue(newType, entry.type, entry.order, regsForKey(newKey, entry.type)));
-
-        auto* tsItem = ui->tableWidget->item(row, ColTimestamp);
-        if (tsItem) tsItem->setText(entry.timestamp.isValid()
-                                        ? entry.timestamp.toString(Qt::ISODate)
-                                        : QString());
-        _updatingTable = false;
-    }
+    ui->actionDelete->setEnabled(!ui->tableView->selectionModel()->selectedRows().isEmpty());
+    ui->actionClear->setEnabled(_proxy->rowCount() > 0);
 }
 
 ///
 /// \brief FormRegisterMapView::processRequest
 ///
-void FormRegisterMapView::processRequest(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 startAddress, quint16 count)
+void FormRegisterMapView::processRequest(quint8 deviceId, QModbusDataUnit::RegisterType type,
+                                         quint16 startAddress, quint16 count)
 {
     if (count == 0 || count > 2000) return;
 
@@ -1036,130 +776,20 @@ void FormRegisterMapView::processRequest(quint8 deviceId, QModbusDataUnit::Regis
         const ItemMapKey key{ deviceId, type, static_cast<quint16>(startAddress + i) };
         const quint16 value = unit.isValid() ? static_cast<quint16>(unit.value(i)) : 0;
 
-        auto it = _registerMap.find(key);
-        if (it != _registerMap.end()) {
-            if (it->value != value) {
-                it->value = value;
-                it->timestamp = QDateTime::currentDateTime();
-                const int row = findRow(key);
-                if (row >= 0) updateValue(row, key, value);
-            }
+        if (_model->contains(key)) {
+            const QModbusDataUnit singleUnit(type, startAddress + i, QVector<quint16>{value});
+            _model->applyMbDataChange(deviceId, singleUnit);
         } else if (_autoAddOnRequest) {
-            Entry entry;
+            RegisterMapEntry entry;
             entry.value = value;
             entry.type  = (type == QModbusDataUnit::Coils ||
                            type == QModbusDataUnit::DiscreteInputs)
                           ? DataType::Binary : DataType::Int16;
-            entry.order = RegisterOrder::MSRF;
+            entry.order     = RegisterOrder::MSRF;
             entry.timestamp = QDateTime::currentDateTime();
-            _registerMap[key] = entry;
-            insertEntry(key, entry);
+            _model->addEntry(key, entry);
         }
     }
-}
-
-///
-/// \brief FormRegisterMapView::findRow
-///
-int FormRegisterMapView::findRow(const ItemMapKey& key) const
-{
-    for (int i = 0; i < ui->tableWidget->rowCount(); ++i) {
-        const auto* item = ui->tableWidget->item(i, ColUnit);
-        if (!item) continue;
-        if (item->data(RoleDeviceId).toInt() == static_cast<int>(key.DeviceId) &&
-            item->data(RoleType).toInt()     == static_cast<int>(key.Type)     &&
-            item->data(RoleAddress).toInt()  == static_cast<int>(key.Address))
-            return i;
-    }
-    return -1;
-}
-
-///
-/// \brief FormRegisterMapView::insertEntry
-///
-void FormRegisterMapView::insertEntry(const ItemMapKey& key, const Entry& entry)
-{
-    _updatingTable = true;
-
-    const int row = ui->tableWidget->rowCount();
-    ui->tableWidget->insertRow(row);
-
-    // Col 0: Unit (editable) — stores key in UserRole
-    auto* unitItem = new QTableWidgetItem(QString::number(key.DeviceId));
-    unitItem->setData(RoleDeviceId, static_cast<int>(key.DeviceId));
-    unitItem->setData(RoleType,     static_cast<int>(key.Type));
-    unitItem->setData(RoleAddress,  static_cast<int>(key.Address));
-    unitItem->setTextAlignment(Qt::AlignCenter);
-
-    // Col 1: Type (editable via delegate)
-    auto* typeItem = new QTableWidgetItem(registerTypeToString(key.Type));
-    typeItem->setData(RoleTypeValue, static_cast<int>(key.Type));
-    typeItem->setTextAlignment(Qt::AlignCenter);
-
-    // Col 2: Address (editable)
-    auto* addrItem = new QTableWidgetItem(addressToDisplay(key.Address));
-    addrItem->setTextAlignment(Qt::AlignRight | Qt::AlignVCenter);
-
-    // Col 3: DataType (editable via delegate)
-    auto* dataTypeItem = new QTableWidgetItem(enumToString(entry.type));
-    dataTypeItem->setTextAlignment(Qt::AlignCenter);
-
-    // Col 4: Order (editable only for multi-register types)
-    const bool multiReg = isMultiRegisterType(entry.type);
-    auto* orderItem = new QTableWidgetItem(multiReg ? enumToString(entry.order) : QString());
-    orderItem->setTextAlignment(Qt::AlignCenter);
-    if (!multiReg)
-        orderItem->setFlags(orderItem->flags() & ~Qt::ItemIsEditable);
-
-    // Col 5: Comment (editable)
-    auto* commentItem = new QTableWidgetItem(entry.comment);
-
-    // Col 6: Value (editable)
-    auto* valItem = new QTableWidgetItem(formatValue(key.Type, entry.type, entry.order, regsForKey(key, entry.type)));
-    valItem->setData(Qt::UserRole, static_cast<quint32>(entry.value));
-    valItem->setTextAlignment(Qt::AlignRight | Qt::AlignVCenter);
-
-    // Col 7: Timestamp (read-only)
-    auto* tsItem = new QTableWidgetItem(entry.timestamp.isValid()
-                                            ? entry.timestamp.toString(Qt::ISODate)
-                                            : QString());
-    tsItem->setFlags(tsItem->flags() & ~Qt::ItemIsEditable);
-    tsItem->setTextAlignment(Qt::AlignCenter);
-
-    ui->tableWidget->setItem(row, ColUnit,     unitItem);
-    ui->tableWidget->setItem(row, ColType,     typeItem);
-    ui->tableWidget->setItem(row, ColAddress,  addrItem);
-    ui->tableWidget->setItem(row, ColDataType, dataTypeItem);
-    ui->tableWidget->setItem(row, ColOrder,    orderItem);
-    ui->tableWidget->setItem(row, ColComment,  commentItem);
-    ui->tableWidget->setItem(row, ColValue,    valItem);
-    ui->tableWidget->setItem(row, ColTimestamp, tsItem);
-
-    _updatingTable = false;
-
-    registerEntry(key, entry);
-}
-
-///
-/// \brief FormRegisterMapView::updateValue
-///
-void FormRegisterMapView::updateValue(int row, const ItemMapKey& key, quint16 value)
-{
-    auto it = _registerMap.find(key);
-    const DataType      type  = (it != _registerMap.end()) ? it->type  : DataType::Int16;
-    const RegisterOrder order = (it != _registerMap.end()) ? it->order : RegisterOrder::MSRF;
-    const QDateTime ts        = (it != _registerMap.end()) ? it->timestamp : QDateTime::currentDateTime();
-
-    _updatingTable = true;
-    auto* valItem = ui->tableWidget->item(row, ColValue);
-    if (valItem) {
-        valItem->setData(Qt::UserRole, static_cast<quint32>(value));
-        valItem->setText(formatValue(key.Type, type, order, regsForKey(key, type)));
-    }
-
-    auto* tsItem = ui->tableWidget->item(row, ColTimestamp);
-    if (tsItem) tsItem->setText(ts.toString(Qt::ISODate));
-    _updatingTable = false;
 }
 
 ///
@@ -1168,15 +798,7 @@ void FormRegisterMapView::updateValue(int row, const ItemMapKey& key, quint16 va
 ///
 void FormRegisterMapView::updateAddressCells()
 {
-    _updatingTable = true;
-    for (int row = 0; row < ui->tableWidget->rowCount(); ++row) {
-        const auto* unitItem = ui->tableWidget->item(row, ColUnit);
-        if (!unitItem) continue;
-        const quint16 rawAddr = static_cast<quint16>(unitItem->data(RoleAddress).toInt());
-        auto* addrItem = ui->tableWidget->item(row, ColAddress);
-        if (addrItem) addrItem->setText(addressToDisplay(rawAddr));
-    }
-    _updatingTable = false;
+    _model->refreshAddressColumn();
 }
 
 ///
@@ -1191,116 +813,11 @@ void FormRegisterMapView::setupServerConnections()
 }
 
 ///
-/// \brief FormRegisterMapView::registerTypeToString
-///
-QString FormRegisterMapView::registerTypeToString(QModbusDataUnit::RegisterType type) const
-{
-    switch (type)
-    {
-        case QModbusDataUnit::Coils:            return tr("Coils");
-        case QModbusDataUnit::DiscreteInputs:   return tr("Discrete Inputs");
-        case QModbusDataUnit::InputRegisters:   return tr("Input Registers");
-        case QModbusDataUnit::HoldingRegisters: return tr("Holding Registers");
-        default:                                return QString();
-    }
-}
-
-///
-/// \brief FormRegisterMapView::stringToRegisterType
-///
-QModbusDataUnit::RegisterType FormRegisterMapView::stringToRegisterType(const QString& str) const
-{
-    if (str == tr("Coils"))            return QModbusDataUnit::Coils;
-    if (str == tr("Discrete Inputs"))  return QModbusDataUnit::DiscreteInputs;
-    if (str == tr("Input Registers"))  return QModbusDataUnit::InputRegisters;
-    return QModbusDataUnit::HoldingRegisters;
-}
-
-///
-/// \brief FormRegisterMapView::regsForKey
-///
-QVector<quint16> FormRegisterMapView::regsForKey(const ItemMapKey& key, DataType type) const
-{
-    const int count = registersCount(type);
-    const QModbusDataUnit unit = _mbMultiServer.data(key.DeviceId, key.Type, key.Address, count);
-    QVector<quint16> regs;
-    for (int i = 0; i < count; ++i)
-        regs << (unit.isValid() ? static_cast<quint16>(unit.value(i)) : 0);
-    return regs;
-}
-
-///
-/// \brief FormRegisterMapView::formatValue
-///
-QString FormRegisterMapView::formatValue(QModbusDataUnit::RegisterType regType,
-                                         DataType type, RegisterOrder order, const QVector<quint16>& regs) const
-{
-    if (regs.isEmpty()) return QString();
-    QVariant outValue;
-    switch (type) {
-        case DataType::Binary:
-            return formatBinaryValue(regType, regs[0], ByteOrder::Direct, outValue, false);
-        case DataType::UInt16:
-            return formatUInt16Value(regType, regs[0], ByteOrder::Direct, false, outValue, false);
-        case DataType::Int16:
-            return formatInt16Value(regType, static_cast<qint16>(regs[0]), ByteOrder::Direct, outValue, false);
-        default:
-            if (isMultiRegisterType(type) && regs.size() >= registersCount(type)) {
-                const QVariant val = makeValue(regs, type, order, ByteOrder::Direct);
-                if (val.isValid()) return val.toString();
-            }
-            return formatHexValue(regType, regs[0], ByteOrder::Direct, outValue, false);
-    }
-}
-
-///
-/// \brief FormRegisterMapView::addressToDisplay
-///
-QString FormRegisterMapView::addressToDisplay(quint16 addr) const
-{
-    const bool zeroBased = AppPreferences::instance().dataViewDefinitions().ZeroBasedAddress;
-    return QString::number(zeroBased ? addr : static_cast<quint32>(addr) + 1);
-}
-
-///
-/// \brief FormRegisterMapView::addressFromDisplay
-///
-quint16 FormRegisterMapView::addressFromDisplay(const QString& text, bool* ok) const
-{
-    bool localOk = false;
-    const quint32 v = text.toUInt(&localOk);
-    if (ok) *ok = localOk;
-    if (!localOk) return 0;
-
-    const bool zeroBased = AppPreferences::instance().dataViewDefinitions().ZeroBasedAddress;
-    if (zeroBased)
-        return static_cast<quint16>(qMin(v, static_cast<quint32>(0xFFFF)));
-
-    // Base-1: subtract 1, clamp to 0
-    return static_cast<quint16>(v > 0 ? qMin(v - 1, static_cast<quint32>(0xFFFF)) : 0);
-}
-
-///
-/// \brief FormRegisterMapView::keyFromRow
-/// Reads the ItemMapKey stored in UserRole data of the Unit cell.
-///
-ItemMapKey FormRegisterMapView::keyFromRow(int row) const
-{
-    const auto* item = ui->tableWidget->item(row, ColUnit);
-    if (!item) return { 0, QModbusDataUnit::HoldingRegisters, 0 };
-    ItemMapKey key;
-    key.DeviceId = static_cast<quint8>(item->data(RoleDeviceId).toInt());
-    key.Type     = static_cast<QModbusDataUnit::RegisterType>(item->data(RoleType).toInt());
-    key.Address  = static_cast<quint16>(item->data(RoleAddress).toInt());
-    return key;
-}
-
-///
 /// \brief FormRegisterMapView::columnWidths
 ///
 QList<int> FormRegisterMapView::columnWidths() const
 {
-    const auto* hdr = ui->tableWidget->horizontalHeader();
+    const auto* hdr = ui->tableView->horizontalHeader();
     QList<int> widths;
     for (int i = 0; i < hdr->count(); ++i)
         widths.append(hdr->sectionSize(i));
@@ -1312,8 +829,7 @@ QList<int> FormRegisterMapView::columnWidths() const
 ///
 void FormRegisterMapView::setColumnWidths(const QList<int>& widths)
 {
-    auto* hdr = ui->tableWidget->horizontalHeader();
+    auto* hdr = ui->tableView->horizontalHeader();
     for (int i = 0; i < widths.size() && i < hdr->count(); ++i)
         if (widths[i] > 0) hdr->resizeSection(i, widths[i]);
 }
-
