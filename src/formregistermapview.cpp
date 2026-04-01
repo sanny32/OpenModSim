@@ -755,7 +755,6 @@ int FormRegisterMapView::addRowAndReturnSourceRow(int referenceSourceRow)
         key.Address   = referenceKey.Address < 0xFFFF ? referenceKey.Address + 1 : referenceKey.Address;
         entry.type    = referenceEntry.type;
         entry.order   = referenceEntry.order;
-        entry.comment = referenceEntry.comment;
     } else if (!_model->isEmpty()) {
         const ItemMapKey last = _model->lastKey();
         const auto& lastEntry = _model->entries()[last];
@@ -764,7 +763,6 @@ int FormRegisterMapView::addRowAndReturnSourceRow(int referenceSourceRow)
         key.Address   = last.Address < 0xFFFF ? last.Address + 1 : last.Address;
         entry.type    = lastEntry.type;
         entry.order   = lastEntry.order;
-        entry.comment = lastEntry.comment;
     }
 
     // Skip duplicate keys

@@ -2353,12 +2353,12 @@ MODBUS Point Type:
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="935"/>
+        <location filename="../formregistermapview.cpp" line="933"/>
         <source>1-based</source>
         <translation type="unfinished">基地址为-1</translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="936"/>
+        <location filename="../formregistermapview.cpp" line="934"/>
         <source>0-based</source>
         <translation type="unfinished">基地址为-0</translation>
     </message>
@@ -2368,42 +2368,42 @@ MODBUS Point Type:
         <translation type="unfinished">十六进制视图</translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="944"/>
+        <location filename="../formregistermapview.cpp" line="942"/>
         <source>Address Base:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="959"/>
+        <location filename="../formregistermapview.cpp" line="957"/>
         <source>All Types</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="960"/>
+        <location filename="../formregistermapview.cpp" line="958"/>
         <source>Coils</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="961"/>
+        <location filename="../formregistermapview.cpp" line="959"/>
         <source>Discrete Inputs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="962"/>
+        <location filename="../formregistermapview.cpp" line="960"/>
         <source>Input Registers</source>
         <translation type="unfinished">输入寄存器</translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="963"/>
+        <location filename="../formregistermapview.cpp" line="961"/>
         <source>Holding Registers</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="970"/>
+        <location filename="../formregistermapview.cpp" line="968"/>
         <source>Unit:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="972"/>
+        <location filename="../formregistermapview.cpp" line="970"/>
         <source>Type:</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2412,7 +2412,7 @@ MODBUS Point Type:
         <translation type="obsolete">类型： </translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="955"/>
+        <location filename="../formregistermapview.cpp" line="953"/>
         <source>All</source>
         <translation type="unfinished"></translation>
     </message>

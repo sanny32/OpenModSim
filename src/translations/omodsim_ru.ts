@@ -2369,12 +2369,12 @@ MODBUS Point Type:
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="935"/>
+        <location filename="../formregistermapview.cpp" line="933"/>
         <source>1-based</source>
         <translation type="unfinished">1-первый</translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="936"/>
+        <location filename="../formregistermapview.cpp" line="934"/>
         <source>0-based</source>
         <translation type="unfinished">0-первый</translation>
     </message>
@@ -2384,42 +2384,42 @@ MODBUS Point Type:
         <translation type="unfinished">Шестнадцатиричный режим</translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="944"/>
+        <location filename="../formregistermapview.cpp" line="942"/>
         <source>Address Base:</source>
         <translation type="unfinished">Адресация:</translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="959"/>
+        <location filename="../formregistermapview.cpp" line="957"/>
         <source>All Types</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="960"/>
+        <location filename="../formregistermapview.cpp" line="958"/>
         <source>Coils</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="961"/>
+        <location filename="../formregistermapview.cpp" line="959"/>
         <source>Discrete Inputs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="962"/>
+        <location filename="../formregistermapview.cpp" line="960"/>
         <source>Input Registers</source>
         <translation type="unfinished">Значения реистров</translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="963"/>
+        <location filename="../formregistermapview.cpp" line="961"/>
         <source>Holding Registers</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="970"/>
+        <location filename="../formregistermapview.cpp" line="968"/>
         <source>Unit:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="972"/>
+        <location filename="../formregistermapview.cpp" line="970"/>
         <source>Type:</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2428,7 +2428,7 @@ MODBUS Point Type:
         <translation type="obsolete">Тип: </translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="955"/>
+        <location filename="../formregistermapview.cpp" line="953"/>
         <source>All</source>
         <translation type="unfinished"></translation>
     </message>
