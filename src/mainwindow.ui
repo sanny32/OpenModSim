@@ -149,7 +149,7 @@
     <addaction name="separator"/>
     <addaction name="actionProjectTree"/>
     <addaction name="actionScriptHelp"/>
-    <addaction name="actionConsoleOutput"/>
+    <addaction name="actionOutputWindow"/>
     <addaction name="separator"/>
     <addaction name="actionMsgParser"/>
    </widget>
@@ -324,7 +324,6 @@
     <string>Status Bar</string>
    </property>
   </action>
-
   <action name="actionForceCoils">
    <property name="icon">
     <iconset resource="resources.qrc">
@@ -508,12 +507,15 @@
     <string>F1</string>
    </property>
   </action>
-  <action name="actionConsoleOutput">
+  <action name="actionOutputWindow">
    <property name="checkable">
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Console Output</string>
+    <string>Output Window</string>
+   </property>
+   <property name="toolTip">
+    <string>Output Window</string>
    </property>
   </action>
   <action name="actionProjectTree">

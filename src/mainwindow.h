@@ -124,7 +124,7 @@ private slots:
     void on_actionStatusBar_triggered();
     void on_actionProjectTree_triggered();
     void on_actionScriptHelp_triggered();
-    void on_actionConsoleOutput_triggered();
+    void on_actionOutputWindow_triggered();
 
     /* Window menu slots */
     void on_actionCascade_triggered();

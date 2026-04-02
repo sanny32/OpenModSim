@@ -558,8 +558,8 @@ void MainWindow::on_awake()
     ui->actionScriptHelp->setChecked(_helpDockWidget->isVisible());
     const bool formInScriptMode = (scriptFrm != nullptr);
     ui->actionScriptHelp->setVisible(formInScriptMode);
-    ui->actionConsoleOutput->setVisible(true);
-    ui->actionConsoleOutput->setChecked(_consoleDockWidget->isVisible());
+    ui->actionOutputWindow->setVisible(true);
+    ui->actionOutputWindow->setChecked(_consoleDockWidget->isVisible());
     ui->actionProjectTree->setChecked(_projectDockWidget->isVisible());
 
     ui->actionTile->setEnabled(ui->mdiArea->viewMode() == QMdiArea::SubWindowView);
@@ -1124,9 +1124,9 @@ void MainWindow::on_actionScriptHelp_triggered()
 }
 
 ///
-/// \brief MainWindow::on_actionConsoleOutput_triggered
+/// \brief MainWindow::on_actionOutputWindow_triggered
 ///
-void MainWindow::on_actionConsoleOutput_triggered()
+void MainWindow::on_actionOutputWindow_triggered()
 {
     _consoleDockWidget->setVisible(!_consoleDockWidget->isVisible());
 }
