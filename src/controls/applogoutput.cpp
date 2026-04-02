@@ -171,12 +171,19 @@ AppLogOutput::AppLogOutput(QWidget* parent)
     const int lineHeight = QFontMetrics(QFont("Fira Code")).lineSpacing() * 2;
     setMinimumHeight(ui->toolBar->sizeHint().height() + lineHeight);
 
-    connect(ui->actionClear, &QAction::triggered, this, &AppLogOutput::clear);
-    connect(ui->actionFilterInfo, &QAction::toggled, this, &AppLogOutput::applyFilters);
-    connect(ui->actionFilterWarn, &QAction::toggled, this, &AppLogOutput::applyFilters);
-    connect(ui->actionFilterError, &QAction::toggled, this, &AppLogOutput::applyFilters);
+    connect(ui->actionClear,       &QAction::triggered, this, &AppLogOutput::clear);
+    connect(ui->actionExport,      &QAction::triggered, this, &AppLogOutput::exportLog);
+    connect(ui->actionFilterInfo,  &QAction::toggled,   this, &AppLogOutput::applyFilters);
+    connect(ui->actionFilterWarn,  &QAction::toggled,   this, &AppLogOutput::applyFilters);
+    connect(ui->actionFilterError, &QAction::toggled,   this, &AppLogOutput::applyFilters);
     connect(ui->listWidget, &QWidget::customContextMenuRequested,
             this, &AppLogOutput::on_customContextMenuRequested);
+
+    _copyAllAction = new QAction(tr("Copy All"), this);
+    _copyAllAction->setShortcut(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_C));
+    _copyAllAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
+    addAction(_copyAllAction);
+    connect(_copyAllAction, &QAction::triggered, this, &AppLogOutput::copyAllToClipboard);
 
     s_instance = this;
     s_prevHandler = qInstallMessageHandler(appMessageHandler);
@@ -335,10 +342,52 @@ void AppLogOutput::on_customContextMenuRequested(const QPoint& pos)
     });
     copyAction->setEnabled(!ui->listWidget->selectedItems().isEmpty());
 
+    auto copyAllAction = menu.addAction(QIcon(":/res/actionCopy.png"), tr("Copy All"), this,
+                                        &AppLogOutput::copyAllToClipboard);
+    copyAllAction->setShortcut(_copyAllAction->shortcut());
+    copyAllAction->setEnabled(!isEmpty());
+
+    menu.addSeparator();
+
+    auto exportAction = menu.addAction(QIcon(":/res/icon-export.png"), tr("Export..."), this,
+                                       &AppLogOutput::exportLog);
+    exportAction->setEnabled(!isEmpty());
+
     menu.addSeparator();
 
     auto clearAction = menu.addAction(tr("Clear"), this, [this]() { clear(); });
     clearAction->setEnabled(!isEmpty());
 
     menu.exec(ui->listWidget->mapToGlobal(pos));
+}
+
+///
+/// \brief AppLogOutput::copyAllToClipboard
+///
+void AppLogOutput::copyAllToClipboard()
+{
+    if (isEmpty()) return;
+    QStringList lines;
+    for (int i = 0; i < ui->listWidget->count(); ++i)
+        lines << ui->listWidget->item(i)->text();
+    QApplication::clipboard()->setText(lines.join('\n'));
+}
+
+///
+/// \brief AppLogOutput::exportLog
+///
+void AppLogOutput::exportLog()
+{
+    const QString filename = QFileDialog::getSaveFileName(
+        this, QString(), QString(), tr("Text files (*.txt)"));
+    if (filename.isEmpty()) return;
+
+    QFile file(filename);
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+        QMessageBox::warning(this, tr("Export"), tr("Cannot open file for writing:\n%1").arg(filename));
+        return;
+    }
+    QTextStream out(&file);
+    for (int i = 0; i < ui->listWidget->count(); ++i)
+        out << ui->listWidget->item(i)->text() << '\n';
 }

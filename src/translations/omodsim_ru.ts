@@ -146,19 +146,52 @@
 <context>
     <name>AppLogOutput</name>
     <message>
-        <location filename="../controls/applogoutput.ui" line="96"/>
+        <location filename="../controls/applogoutput.ui" line="97"/>
+        <source>Export log</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../controls/applogoutput.ui" line="106"/>
         <source>Clear log</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/applogoutput.cpp" line="329"/>
+        <location filename="../controls/applogoutput.cpp" line="182"/>
+        <location filename="../controls/applogoutput.cpp" line="345"/>
+        <location filename="../controls/applogoutput.cpp" line="345"/>
+        <source>Copy All</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../controls/applogoutput.cpp" line="336"/>
         <source>Copy</source>
         <translation type="unfinished">Копировать</translation>
     </message>
     <message>
-        <location filename="../controls/applogoutput.cpp" line="340"/>
+        <location filename="../controls/applogoutput.cpp" line="352"/>
+        <source>Export...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../controls/applogoutput.cpp" line="358"/>
         <source>Clear</source>
         <translation type="unfinished">Очистить</translation>
+    </message>
+    <message>
+        <location filename="../controls/applogoutput.cpp" line="382"/>
+        <source>Text files (*.txt)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../controls/applogoutput.cpp" line="387"/>
+        <source>Export</source>
+        <translation type="unfinished">Экспорт</translation>
+    </message>
+    <message>
+        <location filename="../controls/applogoutput.cpp" line="387"/>
+        <source>Cannot open file for writing:
+%1</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

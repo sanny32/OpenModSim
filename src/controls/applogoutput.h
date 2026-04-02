@@ -38,12 +38,15 @@ protected:
 private slots:
     void on_customContextMenuRequested(const QPoint& pos);
     void applyFilters();
+    void exportLog();
+    void copyAllToClipboard();
 
 private:
     void updateFilterButtons();
 
 private:
     Ui::AppLogOutput* ui;
+    QAction* _copyAllAction = nullptr;
     int _infoCount  = 0;
     int _warnCount  = 0;
     int _errorCount = 0;

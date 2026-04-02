@@ -35,6 +35,7 @@
       <bool>false</bool>
      </property>
      <addaction name="actionClear"/>
+     <addaction name="actionExport"/>
      <addaction name="separator"/>
      <addaction name="actionFilterInfo"/>
      <addaction name="actionFilterWarn"/>
@@ -87,6 +88,15 @@
     </widget>
    </item>
   </layout>
+  <action name="actionExport">
+   <property name="icon">
+    <iconset resource="../resources.qrc">
+     <normaloff>:/res/icon-export.png</normaloff>:/res/icon-export.png</iconset>
+   </property>
+   <property name="toolTip">
+    <string>Export log</string>
+   </property>
+  </action>
   <action name="actionClear">
    <property name="icon">
     <iconset resource="../resources.qrc">
