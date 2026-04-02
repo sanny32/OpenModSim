@@ -1,8 +1,10 @@
 #ifndef ENUMS_H
 #define ENUMS_H
 
+#include <QCoreApplication>
 #include <QMetaType>
 #include <QMetaEnum>
+#include <QModbusDataUnit>
 #include <QSettings>
 
 template<typename Enum>
@@ -403,6 +405,22 @@ inline bool stringToBool(const QString& str)
 {
     const QString lower = str.toLower();
     return (lower == "true" || lower == "1" || lower == "yes" || lower == "on");
+}
+
+///
+/// \brief registerTypeName
+/// \param type
+/// \return Human-readable, translatable name of the Modbus register type
+///
+inline QString registerTypeName(QModbusDataUnit::RegisterType type)
+{
+    switch (type) {
+        case QModbusDataUnit::Coils:            return QCoreApplication::translate("ModbusRegisterType", "Coils");
+        case QModbusDataUnit::DiscreteInputs:   return QCoreApplication::translate("ModbusRegisterType", "Discrete Inputs");
+        case QModbusDataUnit::InputRegisters:   return QCoreApplication::translate("ModbusRegisterType", "Input Registers");
+        case QModbusDataUnit::HoldingRegisters: return QCoreApplication::translate("ModbusRegisterType", "Holding Registers");
+        default:                                return QString::number(static_cast<int>(type));
+    }
 }
 
 #endif // ENUMS_H

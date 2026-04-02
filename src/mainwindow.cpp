@@ -365,7 +365,7 @@ MainWindow::MainWindow(const QString& profile, bool useSession, QWidget *parent)
     });
     connect(&_mbMultiServer, &ModbusMultiServer::errorOccured,
             this, [this](quint8 deviceId, const QString& error) {
-        qCritical(lcApp) << tr("[Device %1] %2").arg(deviceId).arg(error);
+        qCritical(lcApp) << tr("[Unit %1] %2").arg(deviceId).arg(error);
     });
     connect(&_mbMultiServer, &ModbusMultiServer::deviceIdAdded,
             this, [this](quint8 deviceId) {
@@ -379,12 +379,12 @@ MainWindow::MainWindow(const QString& profile, bool useSession, QWidget *parent)
             this, [this](QUuid /*id*/, quint8 deviceId,
                          QModbusDataUnit::RegisterType type,
                          quint16 addr, quint16 len) {
-        qInfo(lcApp) << tr("Address space added: device %1, type %2, addr %3, len %4")
-                            .arg(deviceId).arg(static_cast<int>(type)).arg(addr).arg(len);
+        qInfo(lcApp) << tr("Address space added: unit %1, %2, starting address %3, length %4")
+                            .arg(deviceId).arg(registerTypeName(type)).arg(addr).arg(len);
     });
     connect(&_mbMultiServer, &ModbusMultiServer::unitMapRemoved,
             this, [this](QUuid /*id*/, quint8 deviceId) {
-        qInfo(lcApp) << tr("Address space removed: device %1").arg(deviceId);
+        qInfo(lcApp) << tr("Address space removed: unit %1").arg(deviceId);
     });
 
     loadAppSettings(profile);
