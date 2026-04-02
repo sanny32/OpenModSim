@@ -1,7 +1,10 @@
 #ifndef APPLOGOUTPUT_H
 #define APPLOGOUTPUT_H
 
+#include <QLoggingCategory>
 #include <QWidget>
+
+Q_DECLARE_LOGGING_CATEGORY(lcApp)
 
 namespace Ui {
 class AppLogOutput;

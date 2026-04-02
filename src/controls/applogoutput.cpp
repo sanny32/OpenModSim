@@ -3,12 +3,15 @@
 #include <QListWidget>
 #include <QMenu>
 #include <QPainter>
+#include <QPointer>
 #include <QSizePolicy>
 #include <QStyledItemDelegate>
 #include <QToolBar>
 #include <QToolButton>
 #include "applogoutput.h"
 #include "ui_applogoutput.h"
+
+Q_LOGGING_CATEGORY(lcApp, "omodsim")
 
 namespace {
 static const int EventTypeRole = Qt::UserRole;
@@ -87,6 +90,32 @@ public:
 };
 } // namespace
 
+static AppLogOutput*   s_instance    = nullptr;
+static QtMessageHandler s_prevHandler = nullptr;
+
+static void appMessageHandler(QtMsgType type, const QMessageLogContext& ctx, const QString& msg)
+{
+    if (s_prevHandler) s_prevHandler(type, ctx, msg);
+    if (!s_instance || qstrcmp(ctx.category, "omodsim") != 0) return;
+
+    AppLogOutput::EventType evType;
+    switch (type) {
+        case QtWarningMsg:  evType = AppLogOutput::EventType::Warning; break;
+        case QtCriticalMsg:
+        case QtFatalMsg:    evType = AppLogOutput::EventType::Error;   break;
+        default:            evType = AppLogOutput::EventType::Info;    break;
+    }
+    QString text = msg;
+    if (text.length() >= 2 && text.startsWith('"') && text.endsWith('"'))
+        text = text.mid(1, text.length() - 2);
+    text.prepend(QStringLiteral("[") + QDateTime::currentDateTime().toString(Qt::ISODate) + QStringLiteral("] "));
+
+    QPointer<AppLogOutput> guard(s_instance);
+    QMetaObject::invokeMethod(s_instance, [guard, text, evType]() {
+        if (guard) guard->addEvent(text, evType);
+    }, Qt::QueuedConnection);
+}
+
 ///
 /// \brief AppLogOutput::AppLogOutput
 ///
@@ -148,6 +177,9 @@ AppLogOutput::AppLogOutput(QWidget* parent)
     connect(ui->actionFilterError, &QAction::toggled, this, &AppLogOutput::applyFilters);
     connect(ui->listWidget, &QWidget::customContextMenuRequested,
             this, &AppLogOutput::on_customContextMenuRequested);
+
+    s_instance = this;
+    s_prevHandler = qInstallMessageHandler(appMessageHandler);
 }
 
 ///
@@ -155,6 +187,9 @@ AppLogOutput::AppLogOutput(QWidget* parent)
 ///
 AppLogOutput::~AppLogOutput()
 {
+    qInstallMessageHandler(s_prevHandler);
+    s_instance    = nullptr;
+    s_prevHandler = nullptr;
     delete ui;
 }
 

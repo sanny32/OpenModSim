@@ -354,49 +354,37 @@ MainWindow::MainWindow(const QString& profile, bool useSession, QWidget *parent)
         const QString addr = (cd.Type == ConnectionType::Tcp)
             ? QString("%1:%2").arg(cd.TcpParams.IPAddress).arg(cd.TcpParams.ServicePort)
             : cd.SerialParams.PortName;
-        _outputPanel->appLog()->addEvent(tr("Server connected: %1").arg(addr),
-                                         AppLogOutput::EventType::Info);
+        qInfo(lcApp) << tr("Server connected: %1").arg(addr);
     });
     connect(&_mbMultiServer, &ModbusMultiServer::disconnected,
             this, [this](const ConnectionDetails& cd) {
         const QString addr = (cd.Type == ConnectionType::Tcp)
             ? QString("%1:%2").arg(cd.TcpParams.IPAddress).arg(cd.TcpParams.ServicePort)
             : cd.SerialParams.PortName;
-        _outputPanel->appLog()->addEvent(tr("Server disconnected: %1").arg(addr),
-                                         AppLogOutput::EventType::Warning);
+        qWarning(lcApp) << tr("Server disconnected: %1").arg(addr);
     });
     connect(&_mbMultiServer, &ModbusMultiServer::errorOccured,
             this, [this](quint8 deviceId, const QString& error) {
-        _outputPanel->appLog()->addEvent(
-            tr("[Device %1] %2").arg(deviceId).arg(error),
-            AppLogOutput::EventType::Error);
+        qCritical(lcApp) << tr("[Device %1] %2").arg(deviceId).arg(error);
     });
     connect(&_mbMultiServer, &ModbusMultiServer::deviceIdAdded,
             this, [this](quint8 deviceId) {
-        _outputPanel->appLog()->addEvent(
-            tr("Unit ID added: %1").arg(deviceId),
-            AppLogOutput::EventType::Info);
+        qInfo(lcApp) << tr("Unit ID added: %1").arg(deviceId);
     });
     connect(&_mbMultiServer, &ModbusMultiServer::deviceIdRemoved,
             this, [this](quint8 deviceId) {
-        _outputPanel->appLog()->addEvent(
-            tr("Unit ID removed: %1").arg(deviceId),
-            AppLogOutput::EventType::Info);
+        qInfo(lcApp) << tr("Unit ID removed: %1").arg(deviceId);
     });
     connect(&_mbMultiServer, &ModbusMultiServer::unitMapAdded,
             this, [this](QUuid /*id*/, quint8 deviceId,
                          QModbusDataUnit::RegisterType type,
                          quint16 addr, quint16 len) {
-        _outputPanel->appLog()->addEvent(
-            tr("Address space added: device %1, type %2, addr %3, len %4")
-                .arg(deviceId).arg(static_cast<int>(type)).arg(addr).arg(len),
-            AppLogOutput::EventType::Info);
+        qInfo(lcApp) << tr("Address space added: device %1, type %2, addr %3, len %4")
+                            .arg(deviceId).arg(static_cast<int>(type)).arg(addr).arg(len);
     });
     connect(&_mbMultiServer, &ModbusMultiServer::unitMapRemoved,
             this, [this](QUuid /*id*/, quint8 deviceId) {
-        _outputPanel->appLog()->addEvent(
-            tr("Address space removed: device %1").arg(deviceId),
-            AppLogOutput::EventType::Info);
+        qInfo(lcApp) << tr("Address space removed: device %1").arg(deviceId);
     });
 
     loadAppSettings(profile);
@@ -1214,7 +1202,7 @@ void MainWindow::on_searchText(const QString& text)
 ///
 void MainWindow::on_connectionError(const QString& error)
 {
-    _outputPanel->appLog()->addEvent(error, AppLogOutput::EventType::Error);
+    qCritical(lcApp) << error;
     QMessageBox::warning(this, windowTitle(), error);
 }
 
