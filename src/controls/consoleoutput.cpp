@@ -31,7 +31,7 @@ MessageStyle styleForType(ConsoleOutput::MessageType type)
         case ConsoleOutput::MessageType::Debug:
             return { Qt::white, QColor(), QColor("#1565C0"), QColor("#37474F"), QStringLiteral("\u25CF") };
         default:
-            return { Qt::white, QColor(), QColor(), Qt::black, QString() };
+            return { Qt::white, QColor(), QColor("#1565C0"), Qt::black, QStringLiteral("\u2139") };
     }
 }
 
@@ -82,15 +82,25 @@ public:
         painter->setPen(style.textColor);
         painter->setFont(option.font);
         const QString text = index.data(Qt::DisplayRole).toString();
-        const QString elided = option.fontMetrics.elidedText(text, Qt::ElideRight, textRect.width());
-        painter->drawText(textRect, Qt::AlignVCenter | Qt::AlignLeft, elided);
+        painter->drawText(textRect, Qt::AlignVCenter | Qt::AlignLeft | Qt::TextSingleLine, text);
 
         painter->restore();
     }
 
-    QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex&) const override
+    QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const override
     {
-        return { -1, option.fontMetrics.height() + 10 };
+        const auto type = static_cast<ConsoleOutput::MessageType>(index.data(MessageTypeRole).toInt());
+        const auto style = styleForType(type);
+
+        constexpr int leftPad = 8;
+        constexpr int iconW = 16;
+        constexpr int rightPad = 6;
+        const bool hasIcon = !style.icon.isEmpty();
+        const int textLeft = leftPad + (hasIcon ? iconW + 4 : 0);
+        const QString text = index.data(Qt::DisplayRole).toString();
+        const int textWidth = option.fontMetrics.horizontalAdvance(text);
+
+        return { textLeft + textWidth + rightPad, option.fontMetrics.height() + 10 };
     }
 };
 } // namespace
@@ -146,6 +156,9 @@ ConsoleOutput::ConsoleOutput(QWidget* parent)
     ui->toolBar->insertWidget(ui->actionFilterLog, filterSpacer);
 
     ui->listWidget->setItemDelegate(new ConsoleItemDelegate(ui->listWidget));
+    ui->listWidget->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+    ui->listWidget->setHorizontalScrollMode(QAbstractItemView::ScrollPerPixel);
+    ui->listWidget->setTextElideMode(Qt::ElideNone);
 
     const int lineHeight = QFontMetrics(QFont("Fira Code")).lineSpacing() * 2;
     setMinimumHeight(ui->toolBar->sizeHint().height() + lineHeight);
@@ -212,7 +225,6 @@ void ConsoleOutput::addMessage(const QString& text, MessageType type, const QStr
     const QString displayText = source.isEmpty() ? text : QString("[%1] %2").arg(source, text);
     auto* item = new QListWidgetItem(displayText, ui->listWidget);
     item->setData(MessageTypeRole, static_cast<int>(type));
-    item->setToolTip(displayText);
 
     bool visible = true;
     switch (type) {

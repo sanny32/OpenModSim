@@ -32,7 +32,7 @@ EventStyle styleForType(AppLogOutput::EventType type)
         case AppLogOutput::EventType::Error:
             return { QColor("#FFEBEE"), QColor("#E53935"), QColor("#E53935"), QColor("#7F0000"), QStringLiteral("\u2716") };
         default:
-            return { Qt::white, QColor(), QColor("#1565C0"), QColor("#202020"), QString() };
+            return { Qt::white, QColor(), QColor("#1565C0"), QColor("#202020"), QStringLiteral("\u2139") };
     }
 }
 
@@ -77,15 +77,25 @@ public:
         painter->setPen(style.textColor);
         painter->setFont(option.font);
         const QString text = index.data(Qt::DisplayRole).toString();
-        const QString elided = option.fontMetrics.elidedText(text, Qt::ElideRight, textRect.width());
-        painter->drawText(textRect, Qt::AlignVCenter | Qt::AlignLeft, elided);
+        painter->drawText(textRect, Qt::AlignVCenter | Qt::AlignLeft | Qt::TextSingleLine, text);
 
         painter->restore();
     }
 
-    QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex&) const override
+    QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const override
     {
-        return { -1, option.fontMetrics.height() + 4 };
+        const auto type = static_cast<AppLogOutput::EventType>(index.data(EventTypeRole).toInt());
+        const auto style = styleForType(type);
+
+        constexpr int leftPad = 8;
+        constexpr int iconW = 16;
+        constexpr int rightPad = 6;
+        const bool hasIcon = !style.icon.isEmpty();
+        const int textLeft = leftPad + (hasIcon ? iconW + 4 : 0);
+        const QString text = index.data(Qt::DisplayRole).toString();
+        const int textWidth = option.fontMetrics.horizontalAdvance(text);
+
+        return { textLeft + textWidth + rightPad, option.fontMetrics.height() + 4 };
     }
 };
 } // namespace
@@ -167,6 +177,9 @@ AppLogOutput::AppLogOutput(QWidget* parent)
     ui->toolBar->insertWidget(ui->actionFilterInfo, filterSpacer);
 
     ui->listWidget->setItemDelegate(new AppLogItemDelegate(ui->listWidget));
+    ui->listWidget->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+    ui->listWidget->setHorizontalScrollMode(QAbstractItemView::ScrollPerPixel);
+    ui->listWidget->setTextElideMode(Qt::ElideNone);
 
     const int lineHeight = QFontMetrics(QFont("Fira Code")).lineSpacing() * 2;
     setMinimumHeight(ui->toolBar->sizeHint().height() + lineHeight);
@@ -245,7 +258,6 @@ void AppLogOutput::addEvent(const QString& text, EventType type)
 
     auto* item = new QListWidgetItem(text, ui->listWidget);
     item->setData(EventTypeRole, static_cast<int>(type));
-    item->setToolTip(text);
 
     bool visible = true;
     switch (type) {

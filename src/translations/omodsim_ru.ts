@@ -156,39 +156,39 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/applogoutput.cpp" line="182"/>
-        <location filename="../controls/applogoutput.cpp" line="345"/>
-        <location filename="../controls/applogoutput.cpp" line="345"/>
+        <location filename="../controls/applogoutput.cpp" line="195"/>
+        <location filename="../controls/applogoutput.cpp" line="357"/>
+        <location filename="../controls/applogoutput.cpp" line="357"/>
         <source>Copy All</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/applogoutput.cpp" line="336"/>
+        <location filename="../controls/applogoutput.cpp" line="348"/>
         <source>Copy</source>
         <translation type="unfinished">Копировать</translation>
     </message>
     <message>
-        <location filename="../controls/applogoutput.cpp" line="352"/>
+        <location filename="../controls/applogoutput.cpp" line="364"/>
         <source>Export...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/applogoutput.cpp" line="358"/>
+        <location filename="../controls/applogoutput.cpp" line="370"/>
         <source>Clear</source>
         <translation type="unfinished">Очистить</translation>
     </message>
     <message>
-        <location filename="../controls/applogoutput.cpp" line="382"/>
+        <location filename="../controls/applogoutput.cpp" line="394"/>
         <source>Text files (*.txt)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/applogoutput.cpp" line="387"/>
+        <location filename="../controls/applogoutput.cpp" line="399"/>
         <source>Export</source>
         <translation type="unfinished">Экспорт</translation>
     </message>
     <message>
-        <location filename="../controls/applogoutput.cpp" line="387"/>
+        <location filename="../controls/applogoutput.cpp" line="399"/>
         <source>Cannot open file for writing:
 %1</source>
         <translation type="unfinished"></translation>
@@ -267,12 +267,12 @@
         <translation>Очистить консоль</translation>
     </message>
     <message>
-        <location filename="../controls/consoleoutput.cpp" line="303"/>
+        <location filename="../controls/consoleoutput.cpp" line="315"/>
         <source>Copy</source>
         <translation>Копировать</translation>
     </message>
     <message>
-        <location filename="../controls/consoleoutput.cpp" line="314"/>
+        <location filename="../controls/consoleoutput.cpp" line="326"/>
         <source>Clear</source>
         <translation>Очистить</translation>
     </message>
@@ -3687,7 +3687,17 @@ Script.onInit(()=&gt;{
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="368"/>
-        <source>[Device %1] %2</source>
+        <source>[Unit %1] %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cpp" line="382"/>
+        <source>Address space added: unit %1, %2, starting address %3, length %4</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cpp" line="387"/>
+        <source>Address space removed: unit %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -3698,16 +3708,6 @@ Script.onInit(()=&gt;{
     <message>
         <location filename="../mainwindow.cpp" line="376"/>
         <source>Unit ID removed: %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.cpp" line="382"/>
-        <source>Address space added: device %1, type %2, addr %3, len %4</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.cpp" line="387"/>
-        <source>Address space removed: device %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -4388,6 +4388,29 @@ Script.onInit(()=&gt;{
         <location filename="../modbusmultiserver.cpp" line="1091"/>
         <source>Connection error. %1</source>
         <translation>Ошибка подключения. %1</translation>
+    </message>
+</context>
+<context>
+    <name>ModbusRegisterType</name>
+    <message>
+        <location filename="../enums.h" line="418"/>
+        <source>Coils</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../enums.h" line="419"/>
+        <source>Discrete Inputs</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../enums.h" line="420"/>
+        <source>Input Registers</source>
+        <translation type="unfinished">Значения реистров</translation>
+    </message>
+    <message>
+        <location filename="../enums.h" line="421"/>
+        <source>Holding Registers</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
