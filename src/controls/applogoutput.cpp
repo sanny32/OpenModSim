@@ -82,7 +82,7 @@ public:
 
     QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex&) const override
     {
-        return { -1, option.fontMetrics.height() + 10 };
+        return { -1, option.fontMetrics.height() + 4 };
     }
 };
 } // namespace
