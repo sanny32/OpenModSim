@@ -15,16 +15,6 @@ OutputPanel::OutputPanel(QWidget* parent)
 
     connect(ui->appLog,    &AppLogOutput::collapse,  this, &OutputPanel::collapse);
     connect(ui->jsConsole, &ConsoleOutput::collapse, this, &OutputPanel::collapse);
-
-    // When the user clicks a different tab, move focus to the tab bar before
-    // the outgoing tab widget is hidden. Without this, Qt transfers focus from
-    // the focused child (e.g. the log list widget) to the first widget in the
-    // global focus chain, which happens to be a child of the first MDI
-    // sub-window, causing an unintended MDI tab switch.
-    connect(ui->tabWidget->tabBar(), &QTabBar::tabBarClicked, this, [this](int index) {
-        if (index != ui->tabWidget->currentIndex())
-            ui->tabWidget->tabBar()->setFocus(Qt::OtherFocusReason);
-    });
 }
 
 ///
