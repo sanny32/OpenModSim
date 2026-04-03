@@ -739,6 +739,14 @@ void FormRegisterMapView::on_mbDataChanged(quint8 deviceId, const QModbusDataUni
 }
 
 ///
+/// \brief FormRegisterMapView::on_mbDescriptionChanged
+///
+void FormRegisterMapView::on_mbDescriptionChanged(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 address, const QString& description)
+{
+    _model->applyDescriptionChange(deviceId, type, address, description);
+}
+
+///
 /// \brief FormRegisterMapView::addRowAndReturnSourceRow
 ///
 int FormRegisterMapView::addRowAndReturnSourceRow(int referenceSourceRow)
@@ -995,6 +1003,8 @@ void FormRegisterMapView::setupServerConnections()
             this, &FormRegisterMapView::on_mbRequest);
     connect(&_mbMultiServer, &ModbusMultiServer::dataChanged,
             this, &FormRegisterMapView::on_mbDataChanged);
+    connect(&_mbMultiServer, &ModbusMultiServer::descriptionChanged,
+            this, &FormRegisterMapView::on_mbDescriptionChanged);
 }
 
 ///

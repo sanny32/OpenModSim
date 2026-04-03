@@ -229,7 +229,6 @@ private:
     QString _codepage;
     DataViewDefinitions _displayDefinition;
     AddressColorMap _colorMap;
-    AddressDescriptionMap2 _descriptionMap;
     QSharedPointer<OutputDataListModel> _listModel;
     QString _findText;
     QVector<int> _findRows;

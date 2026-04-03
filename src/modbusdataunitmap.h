@@ -6,6 +6,7 @@
 #include <QModbusDataUnit>
 #include <QUuid>
 #include "enums.h"
+#include "controls/outputtypes.h"
 
 ///
 /// \brief The ModbusDataUnitMap class
@@ -30,6 +31,11 @@ public:
     void setData(const QModbusDataUnit& data);
     QModbusDataUnit getData(QModbusDataUnit::RegisterType pointType, quint16 pointAddress, quint16 length) const;
     QDateTime timestamp(QModbusDataUnit::RegisterType type, quint16 address) const;
+    QString description(QModbusDataUnit::RegisterType type, quint16 address) const;
+    void setDescription(QModbusDataUnit::RegisterType type, quint16 address, const QString& description);
+    AddressDescriptionMap descriptionMap() const;
+    AddressDescriptionMap descriptionMap(QModbusDataUnit::RegisterType type, quint16 startAddress, quint16 length) const;
+    void clearDescriptions();
 
     QModbusDataUnitMap::ConstIterator begin();
     QModbusDataUnitMap::Iterator end();
@@ -52,6 +58,7 @@ private:
     QMap<QUuid, QModbusDataUnit> _dataUnits;
     QModbusDataUnitMap _modbusDataUnitMap;
     QModbusDataUnitMap _modbusDataUnitGlobalMap;
+    AddressDescriptionMap _descriptions;
     // Key: (RegisterType << 16) | address
     QHash<quint32, QDateTime> _timestamps;
 };

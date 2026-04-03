@@ -143,6 +143,7 @@ private slots:
     void on_outputWidget_itemDoubleClicked(quint16 addr, const QVariant& value);
     void on_mbDataChanged(quint8 deviceId, const QModbusDataUnit& data);
     void on_mbDefinitionsChanged(const ModbusDefinitions& defs);
+    void on_mbDescriptionChanged(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr, const QString& desc);
     void on_simulationStarted(DataType type, RegisterOrder order, quint8 deviceId, QModbusDataUnit::RegisterType regType, const QVector<quint16>& addresses);
     void on_simulationStopped(DataType type, RegisterOrder order, quint8 deviceId, QModbusDataUnit::RegisterType regType, const QVector<quint16>& addresses);
     void on_dataSimulated(DataType type, RegisterOrder order, quint8 deviceId, QModbusDataUnit::RegisterType regType, quint16 startAddress, QVariant value);
@@ -150,6 +151,7 @@ private slots:
 private:
     void updateStatus();
     void reapplyFind();
+    void syncDescriptionsFromServer();
     void onDefinitionChanged();
     void setDisplayDefinitionSilent(const DataViewDefinitions& dd);
 
@@ -300,47 +302,7 @@ inline QXmlStreamWriter& operator <<(QXmlStreamWriter& xml, FormDataView* frm)
     const auto dd = frm->displayDefinition();
     xml << dd;
 
-    {
-        const auto simulationMap = frm->simulationMap();
-        xml.writeStartElement("ModbusSimulationMap");
-
-        for (auto it = simulationMap.constBegin(); it != simulationMap.constEnd(); ++it) {
-            const ModbusSimulationMapKey& key = it.key();
-            const ModbusSimulationParams& params = it.value();
-
-            if(params.Mode != SimulationMode::Off && params.Mode != SimulationMode::Disabled && key.DeviceId == dd.DeviceId && key.Type == dd.PointType)
-            {
-                xml.writeStartElement("Simulation");
-                xml.writeAttribute("Address", QString::number(key.Address + (dd.ZeroBasedAddress ? 0 : 1)));
-                xml << params;
-                xml.writeEndElement();
-            }
-        }
-
-        xml.writeEndElement(); // ModbusSimulationMap
-    }
-
-    xml << frm->descriptionMap();
     xml << frm->colorMap();
-
-    {
-        const auto unit = frm->serializeModbusDataUnit(dd.DeviceId, dd.PointType, dd.PointAddress - (dd.ZeroBasedAddress ? 0 : 1), dd.Length);
-        xml.writeStartElement("ModbusDataUnit");
-
-        quint16 address = dd.PointAddress;
-        const auto values = unit.values();
-        for (const auto& value : values) {
-            if(value != 0) {
-                xml.writeStartElement("Value");
-                xml.writeAttribute("Address", QString::number(address));
-                xml.writeCharacters(QString::number(value));
-                xml.writeEndElement();
-            }
-            address++;
-        }
-
-        xml.writeEndElement(); // ModbusDataUnit
-    }
 
     xml.writeEndElement(); // FormDataView
 

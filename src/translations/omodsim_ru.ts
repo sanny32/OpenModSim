@@ -2190,14 +2190,14 @@ MODBUS Point Type:
         <translation type="unfinished">Шестнадцатиричные адреса</translation>
     </message>
     <message>
-        <location filename="../formdataview.cpp" line="602"/>
+        <location filename="../formdataview.cpp" line="607"/>
         <source>Address Base: %1
 Starting Address: %2
 Length: %3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formdataview.cpp" line="604"/>
+        <location filename="../formdataview.cpp" line="609"/>
         <source>Unit Identifier: %1
 Data Type:
 %2</source>
@@ -2386,12 +2386,12 @@ MODBUS Point Type:
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="934"/>
+        <location filename="../formregistermapview.cpp" line="942"/>
         <source>1-based</source>
         <translation type="unfinished">1-первый</translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="935"/>
+        <location filename="../formregistermapview.cpp" line="943"/>
         <source>0-based</source>
         <translation type="unfinished">0-первый</translation>
     </message>
@@ -2401,42 +2401,42 @@ MODBUS Point Type:
         <translation type="unfinished">Шестнадцатиричный режим</translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="943"/>
+        <location filename="../formregistermapview.cpp" line="951"/>
         <source>Address Base:</source>
         <translation type="unfinished">Адресация:</translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="958"/>
+        <location filename="../formregistermapview.cpp" line="966"/>
         <source>All Types</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="959"/>
+        <location filename="../formregistermapview.cpp" line="967"/>
         <source>Coils</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="960"/>
+        <location filename="../formregistermapview.cpp" line="968"/>
         <source>Discrete Inputs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="961"/>
+        <location filename="../formregistermapview.cpp" line="969"/>
         <source>Input Registers</source>
         <translation type="unfinished">Значения реистров</translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="962"/>
+        <location filename="../formregistermapview.cpp" line="970"/>
         <source>Holding Registers</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="969"/>
+        <location filename="../formregistermapview.cpp" line="977"/>
         <source>Unit:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="971"/>
+        <location filename="../formregistermapview.cpp" line="979"/>
         <source>Data Type:</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2445,7 +2445,7 @@ MODBUS Point Type:
         <translation type="obsolete">Тип: </translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="954"/>
+        <location filename="../formregistermapview.cpp" line="962"/>
         <source>All</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4275,12 +4275,12 @@ Script.onInit(()=&gt;{
 <context>
     <name>ModbusMultiServer</name>
     <message>
-        <location filename="../modbusmultiserver.cpp" line="566"/>
+        <location filename="../modbusmultiserver.cpp" line="738"/>
         <source>An incorrect device ID was specified (%1)</source>
         <translation>Некорректно знаяение номера устройства (%1)</translation>
     </message>
     <message>
-        <location filename="../modbusmultiserver.cpp" line="1095"/>
+        <location filename="../modbusmultiserver.cpp" line="1267"/>
         <source>Connection error. %1</source>
         <translation>Ошибка подключения. %1</translation>
     </message>
@@ -4863,42 +4863,42 @@ Script.onInit(()=&gt;{
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../registermapdatamodel.cpp" line="457"/>
+        <location filename="../registermapdatamodel.cpp" line="459"/>
         <source>Unit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../registermapdatamodel.cpp" line="458"/>
+        <location filename="../registermapdatamodel.cpp" line="460"/>
         <source>Type</source>
         <translation type="unfinished">Тип</translation>
     </message>
     <message>
-        <location filename="../registermapdatamodel.cpp" line="459"/>
+        <location filename="../registermapdatamodel.cpp" line="461"/>
         <source>Address</source>
         <translation type="unfinished">Адрес</translation>
     </message>
     <message>
-        <location filename="../registermapdatamodel.cpp" line="460"/>
+        <location filename="../registermapdatamodel.cpp" line="462"/>
         <source>Data Type</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../registermapdatamodel.cpp" line="461"/>
+        <location filename="../registermapdatamodel.cpp" line="463"/>
         <source>Order</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../registermapdatamodel.cpp" line="462"/>
+        <location filename="../registermapdatamodel.cpp" line="464"/>
         <source>Comment</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../registermapdatamodel.cpp" line="463"/>
+        <location filename="../registermapdatamodel.cpp" line="465"/>
         <source>Value</source>
         <translation type="unfinished">Значение</translation>
     </message>
     <message>
-        <location filename="../registermapdatamodel.cpp" line="464"/>
+        <location filename="../registermapdatamodel.cpp" line="466"/>
         <source>Timestamp</source>
         <translation type="unfinished"></translation>
     </message>

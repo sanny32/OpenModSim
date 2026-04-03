@@ -264,6 +264,7 @@ void AppProject::closeProject()
         delete frm;
     }
     _closedForms.clear();
+    _mbServer.clearDescriptions();
     _dataCounter        = 0;
     _trafficCounter     = 0;
     _scriptCounter      = 0;
@@ -1235,6 +1236,8 @@ void AppProject::loadProject(const QString& filename)
     if(!file.open(QFile::ReadOnly))
         return;
 
+    _mbServer.clearDescriptions();
+
     ModbusDefinitions defs;
     QList<ConnectionDetails> conns;
     QMdiArea::ViewMode viewMode = QMdiArea::TabbedView;
@@ -1246,6 +1249,16 @@ void AppProject::loadProject(const QString& filename)
     bool hasSecondaryFormsSaved = false;
     QStringList primaryTabOrder;
     QStringList secondaryTabOrder;
+
+    AddressDescriptionMap2 globalDescriptionMap;
+    bool hasGlobalDescriptionMap = false;
+    struct PendingValue {
+        quint8 deviceId;
+        QModbusDataUnit::RegisterType type;
+        quint16 address;
+        quint16 value;
+    };
+    QList<PendingValue> pendingValues;
 
     QXmlStreamReader xml(&file);
     while (xml.readNextStartElement()) {
@@ -1364,6 +1377,63 @@ void AppProject::loadProject(const QString& filename)
                 else if (xml.name() == QLatin1String("Scripts")) {
                     xml.skipCurrentElement();
                 }
+                else if (xml.name() == QLatin1String("AddressSpace")) {
+                    while (xml.readNextStartElement()) {
+                        if (xml.name() == QLatin1String("AddressDescriptionMap")) {
+                            hasGlobalDescriptionMap = true;
+                            xml >> globalDescriptionMap;
+                        }
+                        else if (xml.name() == QLatin1String("ModbusSimulationMap")) {
+                            while (xml.readNextStartElement()) {
+                                if (xml.name() == QLatin1String("Simulation")) {
+                                    const auto attrs = xml.attributes();
+                                    bool ok;
+                                    const quint8 deviceId = static_cast<quint8>(attrs.value("DeviceId").toUShort(&ok));
+                                    if (ok) {
+                                        const auto type = static_cast<QModbusDataUnit::RegisterType>(attrs.value("Type").toInt(&ok));
+                                        if (ok) {
+                                            const quint16 addr = attrs.value("Address").toUShort(&ok);
+                                            if (ok && xml.readNextStartElement()) {
+                                                ModbusSimulationParams params;
+                                                xml >> params;
+                                                _dataSimulator->startSimulation(deviceId, type, addr, params);
+                                            }
+                                        }
+                                    }
+                                    xml.skipCurrentElement();
+                                } else {
+                                    xml.skipCurrentElement();
+                                }
+                            }
+                        }
+                        else if (xml.name() == QLatin1String("ModbusDataValues")) {
+                            while (xml.readNextStartElement()) {
+                                if (xml.name() == QLatin1String("Value")) {
+                                    const auto attrs = xml.attributes();
+                                    bool ok;
+                                    const quint8 deviceId = static_cast<quint8>(attrs.value("DeviceId").toUShort(&ok));
+                                    if (ok) {
+                                        const auto type = static_cast<QModbusDataUnit::RegisterType>(attrs.value("Type").toInt(&ok));
+                                        if (ok) {
+                                            const quint16 address = attrs.value("Address").toUShort(&ok);
+                                            if (ok) {
+                                                const quint16 value = xml.readElementText().toUShort(&ok);
+                                                if (ok) pendingValues.append({deviceId, type, address, value});
+                                                continue;
+                                            }
+                                        }
+                                    }
+                                    xml.skipCurrentElement();
+                                } else {
+                                    xml.skipCurrentElement();
+                                }
+                            }
+                        }
+                        else {
+                            xml.skipCurrentElement();
+                        }
+                    }
+                }
                 else {
                     xml.skipCurrentElement();
                 }
@@ -1379,6 +1449,17 @@ void AppProject::loadProject(const QString& filename)
         if(_mdiArea->viewMode() == QMdiArea::TabbedView && _mdiArea->isSplitView() != splitView)
             _mdiArea->setSplitViewEnabled(splitView);
     }
+
+    // Apply values from <AddressSpace> (requires forms to exist so _mbServer has unit maps)
+    for (const auto& pv : std::as_const(pendingValues)) {
+        QModbusDataUnit unit(pv.type, pv.address, 1);
+        unit.setValue(0, pv.value);
+        _mbServer.setData(pv.deviceId, unit);
+    }
+
+    // Prefer global AddressSpace descriptions when present; otherwise keep legacy per-form descriptions.
+    if (hasGlobalDescriptionMap)
+        _mbServer.setDescriptionMap(globalDescriptionMap);
 
     _mainWindow->applyConnections(defs, conns);
 
@@ -1482,6 +1563,62 @@ void AppProject::saveProject(const QString& filename)
         w << cd;
     }
     w.writeEndElement(); // Connections
+
+    {
+        const auto globalDescriptionMap = _mbServer.descriptionMap();
+
+        w.writeStartElement("AddressSpace");
+
+        w << globalDescriptionMap;
+
+        {
+            const auto simMap = _dataSimulator->simulationMap();
+            w.writeStartElement("ModbusSimulationMap");
+            for (auto it = simMap.constBegin(); it != simMap.constEnd(); ++it) {
+                const auto& key = it.key();
+                const auto& params = it.value();
+                if (params.Mode != SimulationMode::Off && params.Mode != SimulationMode::Disabled) {
+                    w.writeStartElement("Simulation");
+                    w.writeAttribute("DeviceId", QString::number(key.DeviceId));
+                    w.writeAttribute("Type", QString::number(key.Type));
+                    w.writeAttribute("Address", QString::number(key.Address));
+                    w << params;
+                    w.writeEndElement(); // Simulation
+                }
+            }
+            w.writeEndElement(); // ModbusSimulationMap
+        }
+
+        {
+            const auto maxLen = (_mbServer.getModbusDefinitions().AddrSpace == AddressSpace::Addr6Digits)
+                                ? quint16(65535) : quint16(9999);
+            const QList<QModbusDataUnit::RegisterType> regTypes = {
+                QModbusDataUnit::Coils, QModbusDataUnit::DiscreteInputs,
+                QModbusDataUnit::InputRegisters, QModbusDataUnit::HoldingRegisters
+            };
+            w.writeStartElement("ModbusDataValues");
+            for (const int deviceId : _mbServer.registeredDeviceIds()) {
+                for (auto regType : regTypes) {
+                    const auto unit = _mbServer.data(static_cast<quint8>(deviceId), regType, 0, maxLen);
+                    quint16 address = 0;
+                    for (const auto value : unit.values()) {
+                        if (value != 0) {
+                            w.writeStartElement("Value");
+                            w.writeAttribute("DeviceId", QString::number(deviceId));
+                            w.writeAttribute("Type", QString::number(regType));
+                            w.writeAttribute("Address", QString::number(address));
+                            w.writeCharacters(QString::number(value));
+                            w.writeEndElement(); // Value
+                        }
+                        address++;
+                    }
+                }
+            }
+            w.writeEndElement(); // ModbusDataValues
+        }
+
+        w.writeEndElement(); // AddressSpace
+    }
 
     w.writeStartElement("ViewSettings");
     w.writeAttribute("ViewMode", QString::number(_mdiArea->viewMode()));

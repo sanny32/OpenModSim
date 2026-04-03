@@ -548,7 +548,6 @@ QVector<quint16> OutputDataWidget::data() const
 ///
 void OutputDataWidget::setup(const DataViewDefinitions& dd, const ModbusSimulationMap2& simulations, const QModbusDataUnit& data)
 {
-    _descriptionMap.insert(descriptionMap());
     _colorMap.insert(colorMap());
 
     _displayDefinition = dd;
@@ -568,9 +567,6 @@ void OutputDataWidget::setup(const DataViewDefinitions& dd, const ModbusSimulati
             }
         }
     }
-
-    for(auto&& key : _descriptionMap.keys())
-        setDescription(key.DeviceId, key.Type, key.Address, _descriptionMap[key]);
 
     for(auto&& key : _colorMap.keys())
         setColor(key.DeviceId, key.Type, key.Address, _colorMap[key]);
@@ -1215,7 +1211,11 @@ AddressDescriptionMap2 OutputDataWidget::descriptionMap() const
 ///
 void OutputDataWidget::setDescription(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr, const QString& desc)
 {
-    _listModel->setData(_listModel->find(deviceId, type, addr), desc, DescriptionRole);
+    const auto index = _listModel->find(deviceId, type, addr);
+    if(!index.isValid())
+        return;
+
+    _listModel->setData(index, desc, DescriptionRole);
     emit descriptionChanged(deviceId, type, addr, desc);
 }
 

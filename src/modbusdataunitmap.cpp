@@ -231,6 +231,77 @@ QDateTime ModbusDataUnitMap::timestamp(QModbusDataUnit::RegisterType type, quint
 }
 
 ///
+/// \brief ModbusDataUnitMap::description
+/// \param type
+/// \param address
+/// \return
+///
+QString ModbusDataUnitMap::description(QModbusDataUnit::RegisterType type, quint16 address) const
+{
+    return _descriptions.value(qMakePair(type, address));
+}
+
+///
+/// \brief ModbusDataUnitMap::setDescription
+/// \param type
+/// \param address
+/// \param description
+///
+void ModbusDataUnitMap::setDescription(QModbusDataUnit::RegisterType type, quint16 address, const QString& description)
+{
+    if(description.isEmpty())
+        _descriptions.remove(qMakePair(type, address));
+    else
+        _descriptions.insert(qMakePair(type, address), description);
+}
+
+///
+/// \brief ModbusDataUnitMap::descriptionMap
+/// \return
+///
+AddressDescriptionMap ModbusDataUnitMap::descriptionMap() const
+{
+    return _descriptions;
+}
+
+///
+/// \brief ModbusDataUnitMap::descriptionMap
+/// \param type
+/// \param startAddress
+/// \param length
+/// \return
+///
+AddressDescriptionMap ModbusDataUnitMap::descriptionMap(QModbusDataUnit::RegisterType type, quint16 startAddress, quint16 length) const
+{
+    AddressDescriptionMap result;
+    if(length == 0)
+        return result;
+
+    const quint32 endAddress = static_cast<quint32>(startAddress) + length;
+    for(auto it = _descriptions.constBegin(); it != _descriptions.constEnd(); ++it)
+    {
+        if(it.key().first != type)
+            continue;
+
+        const auto addr = it.key().second;
+        if(addr < startAddress || static_cast<quint32>(addr) >= endAddress)
+            continue;
+
+        result.insert(it.key(), it.value());
+    }
+
+    return result;
+}
+
+///
+/// \brief ModbusDataUnitMap::clearDescriptions
+///
+void ModbusDataUnitMap::clearDescriptions()
+{
+    _descriptions.clear();
+}
+
+///
 /// \brief ModbusDataUnitMap::updateDataUnitMap
 ///
 void ModbusDataUnitMap::updateDataUnitMap()

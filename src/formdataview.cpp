@@ -109,7 +109,11 @@ FormDataView::FormDataView(ModbusMultiServer& server, DataSimulator* simulator, 
     });
 
     connect(ui->outputWidget, &OutputDataWidget::colorChanged, this, &FormDataView::colorChanged);
-    connect(ui->outputWidget, &OutputDataWidget::descriptionChanged, this, &FormDataView::descriptionChanged);
+    connect(ui->outputWidget, &OutputDataWidget::descriptionChanged, this,
+            [this](quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr, const QString& desc) {
+        _mbMultiServer.setDescription(deviceId, type, addr, desc);
+        emit descriptionChanged(deviceId, type, addr, desc);
+    });
 
     ui->outputWidget->installEventFilter(this);
     ui->outputWidget->setFocus();
@@ -117,6 +121,7 @@ FormDataView::FormDataView(ModbusMultiServer& server, DataSimulator* simulator, 
     connect(&_mbMultiServer, &ModbusMultiServer::connected, this, [this](const ConnectionDetails&) { updateStatus(); });
     connect(&_mbMultiServer, &ModbusMultiServer::disconnected, this, [this](const ConnectionDetails&) { updateStatus(); });
     connect(&_mbMultiServer, &ModbusMultiServer::dataChanged, this, &FormDataView::on_mbDataChanged);
+    connect(&_mbMultiServer, &ModbusMultiServer::descriptionChanged, this, &FormDataView::on_mbDescriptionChanged);
     connect(&_mbMultiServer, &ModbusMultiServer::definitionsChanged, this, &FormDataView::on_mbDefinitionsChanged);
 
     connect(_dataSimulator, &DataSimulator::simulationStarted, this, &FormDataView::on_simulationStarted);
@@ -728,7 +733,13 @@ void FormDataView::configureModbusDataUnit(quint8 deviceId, QModbusDataUnit::Reg
 ///
 AddressDescriptionMap2 FormDataView::descriptionMap() const
 {
-    return ui->outputWidget->descriptionMap();
+    AddressDescriptionMap2 result;
+    const auto dd = displayDefinition();
+    const auto startAddress = static_cast<quint16>(dd.PointAddress - (dd.ZeroBasedAddress ? 0 : 1));
+    const auto map = _mbMultiServer.descriptionMap(dd.DeviceId, dd.PointType, startAddress, dd.Length);
+    for(auto it = map.constBegin(); it != map.constEnd(); ++it)
+        result.insert({dd.DeviceId, it.key().first, it.key().second}, it.value());
+    return result;
 }
 
 ///
@@ -740,7 +751,17 @@ AddressDescriptionMap2 FormDataView::descriptionMap() const
 ///
 void FormDataView::setDescription(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr, const QString& desc)
 {
-    ui->outputWidget->setDescription(deviceId, type, addr, desc);
+    _mbMultiServer.setDescription(deviceId, type, addr, desc);
+
+    const auto dd = displayDefinition();
+    if(deviceId == dd.DeviceId && type == dd.PointType) {
+        const auto startAddress = static_cast<quint16>(dd.PointAddress - (dd.ZeroBasedAddress ? 0 : 1));
+        const quint32 endAddress = static_cast<quint32>(startAddress) + dd.Length;
+        if(addr >= startAddress && static_cast<quint32>(addr) < endAddress) {
+            QSignalBlocker blocker(ui->outputWidget);
+            ui->outputWidget->setDescription(deviceId, type, addr, desc);
+        }
+    }
 }
 
 ///
@@ -1052,6 +1073,7 @@ void FormDataView::onDefinitionChanged()
     _mbMultiServer.addUnitMap(dataFormId(this), dd.DeviceId, dd.PointType, addr, dd.Length);
 
     ui->outputWidget->setup(dd, _dataSimulator->simulationMap(), _mbMultiServer.data(dd.DeviceId, dd.PointType, addr, dd.Length));
+    syncDescriptionsFromServer();
     updateDisplayBar();
     reapplyFind();
 }
@@ -1060,6 +1082,17 @@ void FormDataView::reapplyFind()
 {
     if (_findReplaceBar && !_findReplaceBar->searchText().trimmed().isEmpty())
         ui->outputWidget->applyFindByValue(_findReplaceBar->searchText());
+}
+
+void FormDataView::syncDescriptionsFromServer()
+{
+    const auto dd = displayDefinition();
+    const auto startAddress = static_cast<quint16>(dd.PointAddress - (dd.ZeroBasedAddress ? 0 : 1));
+    const auto map = _mbMultiServer.descriptionMap(dd.DeviceId, dd.PointType, startAddress, dd.Length);
+
+    QSignalBlocker blocker(ui->outputWidget);
+    for(auto it = map.constBegin(); it != map.constEnd(); ++it)
+        ui->outputWidget->setDescription(dd.DeviceId, dd.PointType, it.key().second, it.value());
 }
 
 ///
@@ -1135,7 +1168,30 @@ void FormDataView::on_mbDefinitionsChanged(const ModbusDefinitions& defs)
     ui->lineEditAddress->setInputRange(ModbusLimits::addressRange(defs.AddrSpace, dd.ZeroBasedAddress));
     ui->lineEditLength->setInputRange(lengthRangeForPointType(dd.PointAddress, dd.ZeroBasedAddress, defs.AddrSpace, dd.PointType));
     ui->outputWidget->setup(dd, _dataSimulator->simulationMap(), _mbMultiServer.data(dd.DeviceId, dd.PointType, addr, dd.Length));
+    syncDescriptionsFromServer();
     reapplyFind();
+}
+
+///
+/// \brief FormDataView::on_mbDescriptionChanged
+/// \param deviceId
+/// \param type
+/// \param addr
+/// \param desc
+///
+void FormDataView::on_mbDescriptionChanged(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr, const QString& desc)
+{
+    const auto dd = displayDefinition();
+    if(deviceId != dd.DeviceId || type != dd.PointType)
+        return;
+
+    const auto startAddress = static_cast<quint16>(dd.PointAddress - (dd.ZeroBasedAddress ? 0 : 1));
+    const quint32 endAddress = static_cast<quint32>(startAddress) + dd.Length;
+    if(addr < startAddress || static_cast<quint32>(addr) >= endAddress)
+        return;
+
+    QSignalBlocker blocker(ui->outputWidget);
+    ui->outputWidget->setDescription(deviceId, type, addr, desc);
 }
 
 ///

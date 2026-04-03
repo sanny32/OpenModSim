@@ -375,6 +375,7 @@ bool RegisterMapDataModel::setData(const QModelIndex& index, const QVariant& val
     else if (col == ColComment && (role == Qt::EditRole || role == Qt::DisplayRole)) {
         entry.comment  = value.toString();
         _data[oldKey]  = entry;
+        _server.setDescription(oldKey.DeviceId, oldKey.Type, oldKey.Address, entry.comment);
         emit dataChanged(index, index);
         handled = true;
     }
@@ -433,6 +434,7 @@ bool RegisterMapDataModel::setData(const QModelIndex& index, const QVariant& val
             const auto unit   = _server.data(newKey.DeviceId, newKey.Type, newKey.Address, 1);
             entry.value       = unit.isValid() ? static_cast<quint16>(unit.value(0)) : 0;
             entry.timestamp   = unit.isValid() ? QDateTime::currentDateTime() : QDateTime();
+            entry.comment     = _server.description(newKey.DeviceId, newKey.Type, newKey.Address);
 
             _keys[row] = newKey;
             _data[newKey] = entry;
@@ -631,10 +633,18 @@ ItemMapKey RegisterMapDataModel::lastKey() const
 ///
 void RegisterMapDataModel::addEntry(const ItemMapKey& key, const RegisterMapEntry& entry)
 {
+    RegisterMapEntry normalizedEntry = entry;
+    const auto backendDesc = _server.description(key.DeviceId, key.Type, key.Address);
+    if (!backendDesc.isEmpty()) {
+        normalizedEntry.comment = backendDesc;
+    } else if (!normalizedEntry.comment.isEmpty()) {
+        _server.setDescription(key.DeviceId, key.Type, key.Address, normalizedEntry.comment);
+    }
+
     if (_data.contains(key)) {
         // Update existing entry in place
         const int row = rowForKey(key);
-        _data[key] = entry;
+        _data[key] = normalizedEntry;
         if (row >= 0)
             emit dataChanged(createIndex(row, 0), createIndex(row, ColCount - 1));
         return;
@@ -643,10 +653,10 @@ void RegisterMapDataModel::addEntry(const ItemMapKey& key, const RegisterMapEntr
     const int row = _keys.size();
     beginInsertRows({}, row, row);
     _keys.append(key);
-    _data[key] = entry;
+    _data[key] = normalizedEntry;
     endInsertRows();
 
-    registerEntry(key, entry);
+    registerEntry(key, normalizedEntry);
 }
 
 ///
@@ -691,6 +701,26 @@ void RegisterMapDataModel::applyMbDataChange(quint8 deviceId, const QModbusDataU
         if (row >= 0)
             emit dataChanged(createIndex(row, ColValue), createIndex(row, ColTimestamp));
     }
+}
+
+///
+/// \brief RegisterMapDataModel::applyDescriptionChange
+/// Applies backend description update to existing register-map rows.
+///
+void RegisterMapDataModel::applyDescriptionChange(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 address, const QString& description)
+{
+    const ItemMapKey key{deviceId, type, address};
+    auto it = _data.find(key);
+    if (it == _data.end())
+        return;
+
+    if (it->comment == description)
+        return;
+
+    it->comment = description;
+    const int row = rowForKey(key);
+    if (row >= 0)
+        emit dataChanged(createIndex(row, ColComment), createIndex(row, ColComment));
 }
 
 ///
