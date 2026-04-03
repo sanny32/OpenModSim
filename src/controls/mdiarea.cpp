@@ -375,8 +375,7 @@ void MdiArea::on_subWindowActivated(QMdiSubWindow* wnd)
         updateTabbedEnabledState(_lastActivatedSubWindow.data());
         // Keep Qt's hidden native tabbar on the last known document. This
         // prevents fallback activation to the first tab when focus leaves MDI.
-        if (_lastActivatedSubWindow && QMdiArea::subWindowList().contains(_lastActivatedSubWindow.data()))
-            syncNativeTabBarSelection(_lastActivatedSubWindow.data());
+        syncNativeTabBarSelection(_lastActivatedSubWindow.data());
 
         if (_tabBar)
             updateTabBarGeometry();
