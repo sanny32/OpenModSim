@@ -166,7 +166,8 @@ void ModbusMultiServer::removeUnitMap(QUuid id, quint8 deviceId)
 
     _modbusDataUnitMaps[deviceId].removeUnitMap(id);
     reconfigureServers();
-    emit unitMapRemoved(id, deviceId);
+    if (!_modbusDataUnitMaps[deviceId].hasRegistrations())
+        emit unitMapRemoved(id, deviceId);
 }
 
 ///

@@ -77,6 +77,15 @@ void ModbusDataUnitMap::removeUnitMap(QUuid id)
 }
 
 ///
+/// \brief ModbusDataUnitMap::hasRegistrations
+/// \return
+///
+bool ModbusDataUnitMap::hasRegistrations() const
+{
+    return !_dataUnits.isEmpty();
+}
+
+///
 /// \brief ModbusDataUnitMap::addressSpace
 /// \return
 ///
