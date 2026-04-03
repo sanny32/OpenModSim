@@ -18,6 +18,7 @@ public:
     QMdiSubWindow* addSubWindow(QWidget* widget, Qt::WindowFlags flags = Qt::WindowFlags());
     void removeSubWindow(QWidget* widget);
     QList<QMdiSubWindow*> localSubWindowList(WindowOrder order = CreationOrder) const;
+    void setActiveSubWindow(QMdiSubWindow* wnd);
 
     void setViewMode(ViewMode mode);
 
@@ -83,6 +84,8 @@ private:
     void refreshTabBar();
     void updateTabBarGeometry();
     void updateViewportBaseLine();
+    void syncNativeTabBarSelection(QMdiSubWindow* wnd);
+    void updateTabbedEnabledState(QMdiSubWindow* activeWnd);
     void enforceTabbedSubWindowState(QMdiSubWindow* wnd);
     QMdiSubWindow* subWindowAtIndex(int index) const;
 
@@ -91,6 +94,7 @@ private:
     bool _tabsExpanding = false;
     bool _updatingTabBarGeometry = false;
     int _tabBarTrailingInset = 0;
+    QPointer<QTabBar> _nativeTabBar;
     MdiTabBar* _tabBar = nullptr;
     QFrame* _tabBarBaseLine = nullptr;
     QPointer<QMdiSubWindow> _lastActivatedSubWindow;

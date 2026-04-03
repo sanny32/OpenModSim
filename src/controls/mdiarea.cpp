@@ -2,6 +2,7 @@
 #include <QPainter>
 #include <QScrollBar>
 #include <QScopedValueRollback>
+#include <QSignalBlocker>
 #include <QSplitter>
 #include <QStyle>
 #include <QStyleOptionTabBarBase>
@@ -122,6 +123,17 @@ QList<QMdiSubWindow*> MdiArea::localSubWindowList(WindowOrder order) const
 }
 
 ///
+/// \brief MdiArea::setActiveSubWindow
+/// \param wnd
+///
+void MdiArea::setActiveSubWindow(QMdiSubWindow* wnd)
+{
+    if (wnd && !wnd->isEnabled())
+        wnd->setEnabled(true);
+    QMdiArea::setActiveSubWindow(wnd);
+}
+
+///
 /// \brief MdiArea::setViewMode
 /// \param mode
 ///
@@ -140,6 +152,7 @@ void MdiArea::setViewMode(ViewMode mode)
             _tabBarBaseLine->hide();
     }
 
+    updateTabbedEnabledState(QMdiArea::activeSubWindow());
     emit tabBarLayoutChanged();
 }
 
@@ -358,19 +371,34 @@ void MdiArea::on_tabBarDestroyed()
 ///
 void MdiArea::on_subWindowActivated(QMdiSubWindow* wnd)
 {
+    if (!wnd) {
+        updateTabbedEnabledState(_lastActivatedSubWindow.data());
+        // Keep Qt's hidden native tabbar on the last known document. This
+        // prevents fallback activation to the first tab when focus leaves MDI.
+        if (_lastActivatedSubWindow && QMdiArea::subWindowList().contains(_lastActivatedSubWindow.data()))
+            syncNativeTabBarSelection(_lastActivatedSubWindow.data());
+
+        if (_tabBar)
+            updateTabBarGeometry();
+        return;
+    }
+
     _lastActivatedSubWindow = wnd;
+    updateTabbedEnabledState(wnd);
     enforceTabbedSubWindowState(wnd);
 
     if (!_tabBar)
         return;
 
-    _tabBar->setCurrentSubWindow(wnd);
+    if (_tabBar->currentSubWindow() != wnd) {
+        const QSignalBlocker blocker(_tabBar);
+        _tabBar->setCurrentSubWindow(wnd);
+    }
+    syncNativeTabBarSelection(wnd);
     updateTabBarGeometry();
 
-    if (wnd) {
-        _tabHistory.removeAll(wnd);
-        _tabHistory.prepend(wnd);
-    }
+    _tabHistory.removeAll(wnd);
+    _tabHistory.prepend(wnd);
 }
 
 ///
@@ -399,6 +427,7 @@ void MdiArea::setupTabbedMode()
     if (!nativeTabBar)
         return;
 
+    _nativeTabBar = nativeTabBar;
     nativeTabBar->hide();
     nativeTabBar->lower();
     nativeTabBar->setAttribute(Qt::WA_TransparentForMouseEvents, true);
@@ -424,6 +453,8 @@ void MdiArea::setupTabbedMode()
         preferredCurrent = QMdiArea::currentSubWindow();
     if (preferredCurrent)
         _tabBar->setCurrentSubWindow(preferredCurrent);
+    syncNativeTabBarSelection(preferredCurrent);
+    updateTabbedEnabledState(preferredCurrent);
 
     if (isVisible())
         _tabBar->show();
@@ -446,6 +477,65 @@ void MdiArea::setupTabbedMode()
             this, &MdiArea::on_tabBarContextMenu, Qt::UniqueConnection);
     connect(_tabBar, &MdiTabBar::tabDraggedOutside,
             this, &MdiArea::tabDraggedOutside, Qt::UniqueConnection);
+}
+
+///
+/// \brief MdiArea::updateTabbedEnabledState
+/// \param activeWnd
+///
+void MdiArea::updateTabbedEnabledState(QMdiSubWindow* activeWnd)
+{
+    const auto windows = QMdiArea::subWindowList();
+    if (windows.isEmpty())
+        return;
+
+    if (viewMode() != QMdiArea::TabbedView) {
+        for (auto* wnd : windows) {
+            if (wnd && !wnd->isEnabled())
+                wnd->setEnabled(true);
+        }
+        return;
+    }
+
+    QMdiSubWindow* keepEnabled = activeWnd;
+    if (keepEnabled && !windows.contains(keepEnabled))
+        keepEnabled = nullptr;
+    if (!keepEnabled && _tabBar)
+        keepEnabled = _tabBar->currentSubWindow();
+    if (!keepEnabled && _lastActivatedSubWindow && windows.contains(_lastActivatedSubWindow.data()))
+        keepEnabled = _lastActivatedSubWindow.data();
+    if (!keepEnabled)
+        keepEnabled = QMdiArea::currentSubWindow();
+
+    for (auto* wnd : windows) {
+        if (!wnd)
+            continue;
+
+        const bool shouldEnable = (!keepEnabled) || (wnd == keepEnabled);
+        if (wnd->isEnabled() != shouldEnable)
+            wnd->setEnabled(shouldEnable);
+    }
+}
+
+///
+/// \brief MdiArea::syncNativeTabBarSelection
+/// \param wnd
+///
+void MdiArea::syncNativeTabBarSelection(QMdiSubWindow* wnd)
+{
+    if (!_nativeTabBar || !wnd)
+        return;
+
+    const auto windows = QMdiArea::subWindowList();
+    const int index = windows.indexOf(wnd);
+    if (index < 0 || index >= _nativeTabBar->count())
+        return;
+
+    if (_nativeTabBar->currentIndex() == index)
+        return;
+
+    const QSignalBlocker blocker(_nativeTabBar);
+    _nativeTabBar->setCurrentIndex(index);
 }
 
 ///
