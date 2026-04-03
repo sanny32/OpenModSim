@@ -145,9 +145,10 @@ void ModbusMultiServer::addUnitMap(QUuid id, quint8 deviceId, QModbusDataUnit::R
         _modbusDataUnitMaps[deviceId].setAddressSpace(_definitions.AddrSpace);
     }
 
-    _modbusDataUnitMaps[deviceId].addUnitMap(id, pointType, pointAddress, length);
+    const bool changed = _modbusDataUnitMaps[deviceId].addUnitMap(id, pointType, pointAddress, length);
     reconfigureServers();
-    emit unitMapAdded(id, deviceId, pointType, pointAddress, length);
+    if (changed)
+        emit unitMapAdded(id, deviceId, pointType, pointAddress, length);
 }
 
 ///
@@ -164,9 +165,9 @@ void ModbusMultiServer::removeUnitMap(QUuid id, quint8 deviceId)
         return;
     }
 
-    _modbusDataUnitMaps[deviceId].removeUnitMap(id);
+    const bool changed = _modbusDataUnitMaps[deviceId].removeUnitMap(id);
     reconfigureServers();
-    if (!_modbusDataUnitMaps[deviceId].hasRegistrations())
+    if (changed)
         emit unitMapRemoved(id, deviceId);
 }
 

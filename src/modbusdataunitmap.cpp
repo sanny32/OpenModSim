@@ -1,5 +1,18 @@
 #include "modbusdataunitmap.h"
 
+static bool unitMapsEqual(const QModbusDataUnitMap& a, const QModbusDataUnitMap& b)
+{
+    if (a.keys() != b.keys())
+        return false;
+    for (auto it = a.constBegin(); it != a.constEnd(); ++it) {
+        const auto& u = it.value();
+        const auto& v = b[it.key()];
+        if (u.startAddress() != v.startAddress() || u.valueCount() != v.valueCount())
+            return false;
+    }
+    return true;
+}
+
 ///
 /// \brief getDataValue
 /// \param modbusMap
@@ -60,30 +73,26 @@ ModbusDataUnitMap::ModbusDataUnitMap()
 /// \param pointAddress
 /// \param length
 ///
-void ModbusDataUnitMap::addUnitMap(QUuid id, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, quint16 length)
+bool ModbusDataUnitMap::addUnitMap(QUuid id, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, quint16 length)
 {
+    const auto before = _modbusDataUnitMap;
     _dataUnits.insert(id, {pointType, pointAddress, length});
     updateDataUnitMap();
+    return !unitMapsEqual(_modbusDataUnitMap, before);
 }
 
 ///
 /// \brief ModbusDataUnitMap::removeUnitMap
 /// \param pointType
 ///
-void ModbusDataUnitMap::removeUnitMap(QUuid id)
+bool ModbusDataUnitMap::removeUnitMap(QUuid id)
 {
+    const auto before = _modbusDataUnitMap;
     _dataUnits.remove(id);
     updateDataUnitMap();
+    return !unitMapsEqual(_modbusDataUnitMap, before);
 }
 
-///
-/// \brief ModbusDataUnitMap::hasRegistrations
-/// \return
-///
-bool ModbusDataUnitMap::hasRegistrations() const
-{
-    return !_dataUnits.isEmpty();
-}
 
 ///
 /// \brief ModbusDataUnitMap::addressSpace

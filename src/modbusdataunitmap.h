@@ -15,9 +15,8 @@ class ModbusDataUnitMap
 public:
     explicit ModbusDataUnitMap();
 
-    void addUnitMap(QUuid id, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, quint16 length);
-    void removeUnitMap(QUuid id);
-    bool hasRegistrations() const;
+    bool addUnitMap(QUuid id, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, quint16 length);
+    bool removeUnitMap(QUuid id);
 
     AddressSpace addressSpace() const;
     void setAddressSpace(AddressSpace space);
