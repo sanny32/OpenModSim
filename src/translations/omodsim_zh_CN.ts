@@ -4355,12 +4355,12 @@ Script.onInit(()=&gt;{
 <context>
     <name>ModbusMultiServer</name>
     <message>
-        <location filename="../modbusmultiserver.cpp" line="562"/>
+        <location filename="../modbusmultiserver.cpp" line="564"/>
         <source>An incorrect device ID was specified (%1)</source>
         <translation>指定了错误的设备地址（%1）</translation>
     </message>
     <message>
-        <location filename="../modbusmultiserver.cpp" line="1091"/>
+        <location filename="../modbusmultiserver.cpp" line="1093"/>
         <source>Connection error. %1</source>
         <translation>连接错误 %1</translation>
     </message>
