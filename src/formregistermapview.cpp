@@ -609,6 +609,7 @@ FormRegisterMapView::~FormRegisterMapView()
 RegisterMapViewDefinitions FormRegisterMapView::displayDefinition() const
 {
     RegisterMapViewDefinitions dd = _displayDefinition;
+    dd.FormName         = windowTitle();
     dd.ZeroBasedAddress = _model->zeroBased();
     dd.HexView          = ui->actionHexView->isChecked();
     return dd;

@@ -630,11 +630,15 @@ QWidget* AppProject::currentMdiChild() const
         // because _q_currentTabChanged is posted via QueuedConnection while
         // awake() fires before posted events are processed. Read the tab bar
         // directly to get the correct subwindow.
-        const auto tabBar = _mdiArea->tabBar();
-        const auto list = _mdiArea->subWindowList();
-        const auto idx = tabBar ? tabBar->currentIndex() : -1;
-        if(idx >= 0 && idx < list.size())
-            wnd = list.at(idx);
+        if (const auto* tabBar = qobject_cast<const MdiTabBar*>(_mdiArea->tabBar())) {
+            wnd = tabBar->subWindowAt(tabBar->currentIndex());
+        } else {
+            const auto* fallbackTabBar = _mdiArea->tabBar();
+            const auto list = _mdiArea->subWindowList();
+            const auto idx = fallbackTabBar ? fallbackTabBar->currentIndex() : -1;
+            if(idx >= 0 && idx < list.size())
+                wnd = list.at(idx);
+        }
     }
     return wnd ? qobject_cast<QWidget*>(wnd->widget()) : nullptr;
 }
@@ -763,10 +767,20 @@ QWidget* AppProject::createCloneOnArea(QWidget* source, MdiArea* area)
         originId = formIdOf(source);
 
     cloneMdiChildState(source, clone);
+    clone->setWindowTitle(source->windowTitle());
+    clone->setWindowIcon(source->windowIcon());
     clone->setFont(source->font()); // copy form-level font (affects definitions panel labels)
     clone->setProperty(kSplitOriginIdProperty, originId);
     clone->setProperty(kSplitAutoCloneProperty, true);
     clone->setProperty(kSplitScriptRunning, source->property(kSplitScriptRunning));
+
+    connect(source, &QWidget::windowTitleChanged, clone, [clone](const QString& title) {
+        if(clone->windowTitle() != title)
+            clone->setWindowTitle(title);
+    });
+    connect(source, &QWidget::windowIconChanged, clone, [clone](const QIcon& icon) {
+        clone->setWindowIcon(icon);
+    });
 
     if(auto* srcScript = qobject_cast<FormScriptView*>(source)) {
         if(auto* cloneScript = qobject_cast<FormScriptView*>(clone)) {
@@ -1308,11 +1322,13 @@ void AppProject::loadProject(const QString& filename)
                             if (frm) {
                                 loadXmlOfForm(frm, xml);
                                 if (isClosed) {
-                                    // Close the temporary subwindow - the event filter in MainWindow
-                                    // will call markFormClosed, which reparents the form to _mainWindow
-                                    // and adds it to _closedForms.
-                                    if (auto* wnd = qobject_cast<QMdiSubWindow*>(frm->parentWidget()))
-                                        wnd->close();
+                                    // Park closed forms directly without emitting close/activation churn.
+                                    auto* wnd = qobject_cast<QMdiSubWindow*>(frm->parentWidget());
+                                    markFormClosed(frm);
+                                    if (wnd) {
+                                        targetArea->removeSubWindow(wnd);
+                                        wnd->deleteLater();
+                                    }
                                 } else {
                                     frm->show();
                                 }
@@ -1415,17 +1431,31 @@ void AppProject::loadProject(const QString& filename)
                 }
             }
         }
+
+        // Final safety sync: make sure the visible tab and the active QMdi page
+        // are aligned after all restore operations.
+        if (auto* primary = _mdiArea->primaryArea()) {
+            if (auto* tabBar = qobject_cast<MdiTabBar*>(primary->tabBar())) {
+                if (auto* tabWnd = tabBar->currentSubWindow())
+                    primary->setActiveSubWindow(tabWnd);
+            }
+        }
+    };
+
+    auto applyRestoreRobustly = [this, restoreActiveWindows]() {
+        // Run more than once to survive late activation events posted by MDI
+        // while closed forms are being torn down during project restore.
+        restoreActiveWindows();
+        QTimer::singleShot(0, this, restoreActiveWindows);
+        QTimer::singleShot(50, this, restoreActiveWindows);
     };
 
     // If the MDI area is already visible (e.g. user opens a project from the menu),
-    // apply immediately so the tab updates synchronously.
-    // If not visible yet (startup: loadProject is called before w.show()),
-    // defer via a zero-timeout timer so it runs after the window is shown and
-    // QMdiArea::setActiveSubWindow properly emits subWindowActivated.
+    // apply immediately. If not visible yet (startup), defer until first event turn.
     if(_mdiArea->isVisible())
-        restoreActiveWindows();
+        applyRestoreRobustly();
     else
-        QTimer::singleShot(0, this, restoreActiveWindows);
+        QTimer::singleShot(0, this, applyRestoreRobustly);
 }
 
 ///
