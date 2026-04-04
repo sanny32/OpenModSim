@@ -13,6 +13,21 @@ static bool unitMapsEqual(const QModbusDataUnitMap& a, const QModbusDataUnitMap&
     return true;
 }
 
+static const QDateTime kApplicationStartTimestamp = QDateTime::currentDateTime();
+
+static bool unitMapContainsAddress(const QModbusDataUnitMap& map, QModbusDataUnit::RegisterType type, quint16 address)
+{
+    const auto it = map.constFind(type);
+    if (it == map.constEnd())
+        return false;
+
+    const auto& unit = it.value();
+    const quint32 start = unit.startAddress();
+    const quint32 end = start + unit.valueCount();
+    const quint32 point = address;
+    return point >= start && point < end;
+}
+
 ///
 /// \brief getDataValue
 /// \param modbusMap
@@ -232,7 +247,14 @@ QModbusDataUnit ModbusDataUnitMap::getData(QModbusDataUnit::RegisterType pointTy
 ///
 QDateTime ModbusDataUnitMap::timestamp(QModbusDataUnit::RegisterType type, quint16 address) const
 {
-    return _timestamps.value(makeLocalKey(type, address));
+    const auto key = makeLocalKey(type, address);
+    const auto it = _timestamps.constFind(key);
+    if (it != _timestamps.constEnd())
+        return it.value();
+
+    return unitMapContainsAddress(_modbusDataUnitMap, type, address)
+        ? kApplicationStartTimestamp
+        : QDateTime();
 }
 
 ///

@@ -664,6 +664,18 @@ void RegisterMapDataModel::addEntry(const ItemMapKey& key, const RegisterMapEntr
     endInsertRows();
 
     registerEntry(key, normalizedEntry);
+
+    // For freshly added keys, backend timestamp can become available only after
+    // the unit map is registered in registerEntry().
+    if (!normalizedEntry.timestamp.isValid()) {
+        const auto backendTsAfterRegister = _server.timestamp(key.DeviceId, key.Type, key.Address);
+        if (backendTsAfterRegister.isValid()) {
+            _data[key].timestamp = backendTsAfterRegister;
+            const int insertedRow = rowForKey(key);
+            if (insertedRow >= 0)
+                emit dataChanged(createIndex(insertedRow, ColTimestamp), createIndex(insertedRow, ColTimestamp));
+        }
+    }
 }
 
 ///
