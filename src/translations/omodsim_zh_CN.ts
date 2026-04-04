@@ -4821,42 +4821,42 @@ Script.onInit(()=&gt;{
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../registermapdatamodel.cpp" line="459"/>
+        <location filename="../registermapdatamodel.cpp" line="467"/>
         <source>Unit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../registermapdatamodel.cpp" line="460"/>
+        <location filename="../registermapdatamodel.cpp" line="468"/>
         <source>Type</source>
         <translation type="unfinished">类型</translation>
     </message>
     <message>
-        <location filename="../registermapdatamodel.cpp" line="461"/>
+        <location filename="../registermapdatamodel.cpp" line="469"/>
         <source>Address</source>
         <translation type="unfinished">地址</translation>
     </message>
     <message>
-        <location filename="../registermapdatamodel.cpp" line="462"/>
+        <location filename="../registermapdatamodel.cpp" line="470"/>
         <source>Data Type</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../registermapdatamodel.cpp" line="463"/>
+        <location filename="../registermapdatamodel.cpp" line="471"/>
         <source>Order</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../registermapdatamodel.cpp" line="464"/>
+        <location filename="../registermapdatamodel.cpp" line="472"/>
         <source>Comment</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../registermapdatamodel.cpp" line="465"/>
+        <location filename="../registermapdatamodel.cpp" line="473"/>
         <source>Value</source>
         <translation type="unfinished">值</translation>
     </message>
     <message>
-        <location filename="../registermapdatamodel.cpp" line="466"/>
+        <location filename="../registermapdatamodel.cpp" line="474"/>
         <source>Timestamp</source>
         <translation type="unfinished"></translation>
     </message>

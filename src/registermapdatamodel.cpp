@@ -440,6 +440,14 @@ bool RegisterMapDataModel::setData(const QModelIndex& index, const QVariant& val
             _data[newKey] = entry;
             registerEntry(newKey, entry);
 
+            // Timestamp for a new key/type can become available only after
+            // registerEntry() has updated backend unit maps.
+            if (!_data[newKey].timestamp.isValid()) {
+                const auto backendTsAfterRegister = _server.timestamp(newKey.DeviceId, newKey.Type, newKey.Address);
+                if (backendTsAfterRegister.isValid())
+                    _data[newKey].timestamp = backendTsAfterRegister;
+            }
+
             emit dataChanged(createIndex(row, ColUnit), createIndex(row, ColTimestamp));
             handled = true;
         }
