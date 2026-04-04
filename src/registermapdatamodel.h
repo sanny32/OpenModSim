@@ -92,6 +92,7 @@ public:
 
     // External Modbus data update
     void applyMbDataChange(quint8 deviceId, const QModbusDataUnit& data);
+    void applyTimestampChange(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 address, const QDateTime& timestamp);
     void applyDescriptionChange(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 address, const QString& description);
 
     bool zeroBased() const { return _zeroBased; }

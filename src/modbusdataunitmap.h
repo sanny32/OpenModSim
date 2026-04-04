@@ -2,7 +2,6 @@
 #define MODBUSDATAUNITMAP_H
 
 #include <QDateTime>
-#include <QHash>
 #include <QModbusDataUnit>
 #include <QUuid>
 #include "enums.h"
@@ -31,11 +30,15 @@ public:
     void setData(const QModbusDataUnit& data);
     QModbusDataUnit getData(QModbusDataUnit::RegisterType pointType, quint16 pointAddress, quint16 length) const;
     QDateTime timestamp(QModbusDataUnit::RegisterType type, quint16 address) const;
+    void setTimestamp(QModbusDataUnit::RegisterType type, quint16 address, const QDateTime& timestamp);
+    AddressTimestampMap timestampMap() const;
+    AddressTimestampMap timestampMap(QModbusDataUnit::RegisterType type, quint16 startAddress, quint16 length) const;
     QString description(QModbusDataUnit::RegisterType type, quint16 address) const;
     void setDescription(QModbusDataUnit::RegisterType type, quint16 address, const QString& description);
     AddressDescriptionMap descriptionMap() const;
     AddressDescriptionMap descriptionMap(QModbusDataUnit::RegisterType type, quint16 startAddress, quint16 length) const;
     void clearDescriptions();
+    void clearTimestamps();
 
     QModbusDataUnitMap::ConstIterator begin();
     QModbusDataUnitMap::Iterator end();
@@ -59,8 +62,7 @@ private:
     QModbusDataUnitMap _modbusDataUnitMap;
     QModbusDataUnitMap _modbusDataUnitGlobalMap;
     AddressDescriptionMap _descriptions;
-    // Key: (RegisterType << 16) | address
-    QHash<quint32, QDateTime> _timestamps;
+    AddressTimestampMap _timestamps;
 };
 
 

@@ -53,6 +53,11 @@ void setDataValue(QModbusDataUnitMap& modbusMap, QModbusDataUnit::RegisterType p
         dataUnit.setValue(idx, value);
 }
 
+ItemMapKey makeLocalKey(QModbusDataUnit::RegisterType type, quint16 address)
+{
+    return {0, type, address};
+}
+
 ///
 /// \brief ModbusDataUnitMap::ModbusDataUnitMap
 ///
@@ -193,7 +198,7 @@ void ModbusDataUnitMap::setData(const QModbusDataUnit& data)
         const quint16 newValue = data.value(i);
         const quint16 oldValue = getDataValue(_modbusDataUnitGlobalMap, type, addr + i);
         if(newValue != oldValue)
-            _timestamps[(static_cast<quint32>(type) << 16) | (addr + i)] = now;
+            setTimestamp(type, static_cast<quint16>(addr + i), now);
 
         setDataValue(_modbusDataUnitMap, type, addr + i, newValue);
         setDataValue(_modbusDataUnitGlobalMap, type, addr + i, newValue);
@@ -227,7 +232,60 @@ QModbusDataUnit ModbusDataUnitMap::getData(QModbusDataUnit::RegisterType pointTy
 ///
 QDateTime ModbusDataUnitMap::timestamp(QModbusDataUnit::RegisterType type, quint16 address) const
 {
-    return _timestamps.value((static_cast<quint32>(type) << 16) | address);
+    return _timestamps.value(makeLocalKey(type, address));
+}
+
+///
+/// \brief ModbusDataUnitMap::setTimestamp
+/// \param type
+/// \param address
+/// \param timestamp
+///
+void ModbusDataUnitMap::setTimestamp(QModbusDataUnit::RegisterType type, quint16 address, const QDateTime& timestamp)
+{
+    const auto key = makeLocalKey(type, address);
+    if (timestamp.isValid())
+        _timestamps.insert(key, timestamp);
+    else
+        _timestamps.remove(key);
+}
+
+///
+/// \brief ModbusDataUnitMap::timestampMap
+/// \return
+///
+AddressTimestampMap ModbusDataUnitMap::timestampMap() const
+{
+    return _timestamps;
+}
+
+///
+/// \brief ModbusDataUnitMap::timestampMap
+/// \param type
+/// \param startAddress
+/// \param length
+/// \return
+///
+AddressTimestampMap ModbusDataUnitMap::timestampMap(QModbusDataUnit::RegisterType type, quint16 startAddress, quint16 length) const
+{
+    AddressTimestampMap result;
+    if(length == 0)
+        return result;
+
+    const quint32 endAddress = static_cast<quint32>(startAddress) + length;
+    for (auto it = _timestamps.constBegin(); it != _timestamps.constEnd(); ++it) {
+        if (it.key().Type != type)
+            continue;
+
+        const auto address = it.key().Address;
+        if (address < startAddress || static_cast<quint32>(address) >= endAddress)
+            continue;
+
+        if (it.value().isValid())
+            result.insert(it.key(), it.value());
+    }
+
+    return result;
 }
 
 ///
@@ -238,7 +296,7 @@ QDateTime ModbusDataUnitMap::timestamp(QModbusDataUnit::RegisterType type, quint
 ///
 QString ModbusDataUnitMap::description(QModbusDataUnit::RegisterType type, quint16 address) const
 {
-    return _descriptions.value(qMakePair(type, address));
+    return _descriptions.value(makeLocalKey(type, address));
 }
 
 ///
@@ -249,10 +307,11 @@ QString ModbusDataUnitMap::description(QModbusDataUnit::RegisterType type, quint
 ///
 void ModbusDataUnitMap::setDescription(QModbusDataUnit::RegisterType type, quint16 address, const QString& description)
 {
+    const auto key = makeLocalKey(type, address);
     if(description.isEmpty())
-        _descriptions.remove(qMakePair(type, address));
+        _descriptions.remove(key);
     else
-        _descriptions.insert(qMakePair(type, address), description);
+        _descriptions.insert(key, description);
 }
 
 ///
@@ -280,10 +339,10 @@ AddressDescriptionMap ModbusDataUnitMap::descriptionMap(QModbusDataUnit::Registe
     const quint32 endAddress = static_cast<quint32>(startAddress) + length;
     for(auto it = _descriptions.constBegin(); it != _descriptions.constEnd(); ++it)
     {
-        if(it.key().first != type)
+        if(it.key().Type != type)
             continue;
 
-        const auto addr = it.key().second;
+        const auto addr = it.key().Address;
         if(addr < startAddress || static_cast<quint32>(addr) >= endAddress)
             continue;
 
@@ -299,6 +358,14 @@ AddressDescriptionMap ModbusDataUnitMap::descriptionMap(QModbusDataUnit::Registe
 void ModbusDataUnitMap::clearDescriptions()
 {
     _descriptions.clear();
+}
+
+///
+/// \brief ModbusDataUnitMap::clearTimestamps
+///
+void ModbusDataUnitMap::clearTimestamps()
+{
+    _timestamps.clear();
 }
 
 ///

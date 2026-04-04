@@ -731,15 +731,11 @@ void FormDataView::configureModbusDataUnit(quint8 deviceId, QModbusDataUnit::Reg
 /// \brief FormDataView::descriptionMap
 /// \return
 ///
-AddressDescriptionMap2 FormDataView::descriptionMap() const
+AddressDescriptionMap FormDataView::descriptionMap() const
 {
-    AddressDescriptionMap2 result;
     const auto dd = displayDefinition();
     const auto startAddress = static_cast<quint16>(dd.PointAddress - (dd.ZeroBasedAddress ? 0 : 1));
-    const auto map = _mbMultiServer.descriptionMap(dd.DeviceId, dd.PointType, startAddress, dd.Length);
-    for(auto it = map.constBegin(); it != map.constEnd(); ++it)
-        result.insert({dd.DeviceId, it.key().first, it.key().second}, it.value());
-    return result;
+    return _mbMultiServer.descriptionMap(dd.DeviceId, dd.PointType, startAddress, dd.Length);
 }
 
 ///
@@ -1092,7 +1088,7 @@ void FormDataView::syncDescriptionsFromServer()
 
     QSignalBlocker blocker(ui->outputWidget);
     for(auto it = map.constBegin(); it != map.constEnd(); ++it)
-        ui->outputWidget->setDescription(dd.DeviceId, dd.PointType, it.key().second, it.value());
+        ui->outputWidget->setDescription(it.key().DeviceId, it.key().Type, it.key().Address, it.value());
 }
 
 ///

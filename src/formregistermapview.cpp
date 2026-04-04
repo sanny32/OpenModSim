@@ -739,6 +739,14 @@ void FormRegisterMapView::on_mbDataChanged(quint8 deviceId, const QModbusDataUni
 }
 
 ///
+/// \brief FormRegisterMapView::on_mbTimestampChanged
+///
+void FormRegisterMapView::on_mbTimestampChanged(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 address, const QDateTime& timestamp)
+{
+    _model->applyTimestampChange(deviceId, type, address, timestamp);
+}
+
+///
 /// \brief FormRegisterMapView::on_mbDescriptionChanged
 ///
 void FormRegisterMapView::on_mbDescriptionChanged(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 address, const QString& description)
@@ -918,7 +926,7 @@ void FormRegisterMapView::processRequest(quint8 deviceId, QModbusDataUnit::Regis
                            type == QModbusDataUnit::DiscreteInputs)
                           ? DataType::Binary : DataType::Int16;
             entry.order     = RegisterOrder::MSRF;
-            entry.timestamp = QDateTime::currentDateTime();
+            entry.timestamp = _mbMultiServer.timestamp(deviceId, type, static_cast<quint16>(startAddress + i));
             _model->addEntry(key, entry);
         }
     }
@@ -1003,6 +1011,8 @@ void FormRegisterMapView::setupServerConnections()
             this, &FormRegisterMapView::on_mbRequest);
     connect(&_mbMultiServer, &ModbusMultiServer::dataChanged,
             this, &FormRegisterMapView::on_mbDataChanged);
+    connect(&_mbMultiServer, &ModbusMultiServer::timestampChanged,
+            this, &FormRegisterMapView::on_mbTimestampChanged);
     connect(&_mbMultiServer, &ModbusMultiServer::descriptionChanged,
             this, &FormRegisterMapView::on_mbDescriptionChanged);
 }

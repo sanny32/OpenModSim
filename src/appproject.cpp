@@ -1,4 +1,4 @@
-﻿#include <QtWidgets>
+#include <QtWidgets>
 #include <QBuffer>
 #include <QUuid>
 #include <QSet>
@@ -265,6 +265,7 @@ void AppProject::closeProject()
     }
     _closedForms.clear();
     _mbServer.clearDescriptions();
+    _mbServer.clearTimestamps();
     _dataCounter        = 0;
     _trafficCounter     = 0;
     _scriptCounter      = 0;
@@ -1237,6 +1238,7 @@ void AppProject::loadProject(const QString& filename)
         return;
 
     _mbServer.clearDescriptions();
+    _mbServer.clearTimestamps();
 
     ModbusDefinitions defs;
     QList<ConnectionDetails> conns;
@@ -1250,8 +1252,10 @@ void AppProject::loadProject(const QString& filename)
     QStringList primaryTabOrder;
     QStringList secondaryTabOrder;
 
-    AddressDescriptionMap2 globalDescriptionMap;
+    AddressDescriptionMap globalDescriptionMap;
     bool hasGlobalDescriptionMap = false;
+    AddressTimestampMap globalTimestampMap;
+    bool hasGlobalTimestampMap = false;
     struct PendingValue {
         quint8 deviceId;
         QModbusDataUnit::RegisterType type;
@@ -1383,6 +1387,10 @@ void AppProject::loadProject(const QString& filename)
                             hasGlobalDescriptionMap = true;
                             xml >> globalDescriptionMap;
                         }
+                        else if (xml.name() == QLatin1String("AddressTimestampMap")) {
+                            hasGlobalTimestampMap = true;
+                            xml >> globalTimestampMap;
+                        }
                         else if (xml.name() == QLatin1String("ModbusSimulationMap")) {
                             while (xml.readNextStartElement()) {
                                 if (xml.name() == QLatin1String("Simulation")) {
@@ -1457,9 +1465,11 @@ void AppProject::loadProject(const QString& filename)
         _mbServer.setData(pv.deviceId, unit);
     }
 
-    // Prefer global AddressSpace descriptions when present; otherwise keep legacy per-form descriptions.
+    // Prefer global AddressSpace metadata when present; otherwise keep legacy per-form values.
     if (hasGlobalDescriptionMap)
         _mbServer.setDescriptionMap(globalDescriptionMap);
+    if (hasGlobalTimestampMap)
+        _mbServer.setTimestampMap(globalTimestampMap);
 
     _mainWindow->applyConnections(defs, conns);
 
@@ -1566,10 +1576,12 @@ void AppProject::saveProject(const QString& filename)
 
     {
         const auto globalDescriptionMap = _mbServer.descriptionMap();
+        const auto globalTimestampMap = _mbServer.timestampMap();
 
         w.writeStartElement("AddressSpace");
 
         w << globalDescriptionMap;
+        w << globalTimestampMap;
 
         {
             const auto simMap = _dataSimulator->simulationMap();

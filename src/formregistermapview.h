@@ -68,6 +68,7 @@ signals:
 private slots:
     void on_mbRequest(const ConnectionDetails& cd, QSharedPointer<const ModbusMessage> msg);
     void on_mbDataChanged(quint8 deviceId, const QModbusDataUnit& data);
+    void on_mbTimestampChanged(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 address, const QDateTime& timestamp);
     void on_mbDescriptionChanged(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 address, const QString& description);
     void on_actionAdd_triggered();
     void on_actionInsert_triggered();
@@ -158,7 +159,6 @@ inline QXmlStreamWriter& operator <<(QXmlStreamWriter& xml, FormRegisterMapView*
         if (isMultiRegisterType(e.type))
             xml.writeAttribute("Order", enumToString(e.order));
         xml.writeAttribute("Value",     QString::number(e.value));
-        xml.writeAttribute("Timestamp", e.timestamp.toString(Qt::ISODateWithMs));
         if (!e.comment.isEmpty())
             xml.writeCDATA(e.comment);
         xml.writeEndElement(); // Entry

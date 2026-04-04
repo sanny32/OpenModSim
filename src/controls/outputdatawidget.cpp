@@ -1190,9 +1190,9 @@ void OutputDataWidget::clearFindMatchState()
 /// \brief OutputDataWidget::descriptionMap
 /// \return
 ///
-AddressDescriptionMap2 OutputDataWidget::descriptionMap() const
+AddressDescriptionMap OutputDataWidget::descriptionMap() const
 {
-    AddressDescriptionMap2 descriptionMap;
+    AddressDescriptionMap descriptionMap;
     for(int i = 0; i < _listModel->rowCount(); i++)
     {
         const auto desc = _listModel->data(_listModel->index(i), DescriptionRole).toString();

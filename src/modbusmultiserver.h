@@ -49,11 +49,16 @@ public:
     QModbusDataUnit data(quint8 deviceId, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, quint16 length) const;
     void setData(quint8 deviceId, const QModbusDataUnit& data);
     QDateTime timestamp(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 address) const;
+    AddressTimestampMap timestampMap(quint8 deviceId, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, quint16 length) const;
+    AddressTimestampMap timestampMap() const;
+    void setTimestamp(quint8 deviceId, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, const QDateTime& timestamp);
+    void setTimestampMap(const AddressTimestampMap& timestamps);
+    void clearTimestamps();
     QString description(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 address) const;
     AddressDescriptionMap descriptionMap(quint8 deviceId, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, quint16 length) const;
-    AddressDescriptionMap2 descriptionMap() const;
+    AddressDescriptionMap descriptionMap() const;
     void setDescription(quint8 deviceId, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, const QString& description);
-    void setDescriptionMap(const AddressDescriptionMap2& descriptions);
+    void setDescriptionMap(const AddressDescriptionMap& descriptions);
     void clearDescriptions();
 
     void writeValue(quint8 deviceId, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, quint16 value, ByteOrder order);
@@ -90,6 +95,7 @@ signals:
     void connectionError(const QString& error);
     void errorOccured(quint8 deviceId, const QString& error);
     void dataChanged(quint8 deviceId, const QModbusDataUnit& data);
+    void timestampChanged(quint8 deviceId, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, const QDateTime& timestamp);
     void descriptionChanged(quint8 deviceId, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, const QString& description);
     void definitionsChanged(const ModbusDefinitions& defs);
     void deviceIdAdded(quint8 deviceId);

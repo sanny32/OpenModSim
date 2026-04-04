@@ -6,11 +6,13 @@
     <message>
         <location filename="../controls/addressbasecombobox.cpp" line="11"/>
         <location filename="../controls/addressbasecombobox.cpp" line="30"/>
+        <location filename="../controls/addressbasecombobox.cpp" line="30"/>
         <source>0-based</source>
         <translation>0-первый</translation>
     </message>
     <message>
         <location filename="../controls/addressbasecombobox.cpp" line="12"/>
+        <location filename="../controls/addressbasecombobox.cpp" line="34"/>
         <location filename="../controls/addressbasecombobox.cpp" line="34"/>
         <source>1-based</source>
         <translation>1-первый</translation>
@@ -21,11 +23,13 @@
     <message>
         <location filename="../controls/addressspacecombobox.cpp" line="11"/>
         <location filename="../controls/addressspacecombobox.cpp" line="30"/>
+        <location filename="../controls/addressspacecombobox.cpp" line="30"/>
         <source>5-digits</source>
         <translation>5-цифровое</translation>
     </message>
     <message>
         <location filename="../controls/addressspacecombobox.cpp" line="12"/>
+        <location filename="../controls/addressspacecombobox.cpp" line="34"/>
         <location filename="../controls/addressspacecombobox.cpp" line="34"/>
         <source>6-digits</source>
         <translation>6-цифровое</translation>
@@ -36,11 +40,13 @@
     <message>
         <location filename="../ansimenu.cpp" line="12"/>
         <location filename="../ansimenu.cpp" line="53"/>
+        <location filename="../ansimenu.cpp" line="53"/>
         <source>Arabic</source>
         <translation>Арабский</translation>
     </message>
     <message>
         <location filename="../ansimenu.cpp" line="13"/>
+        <location filename="../ansimenu.cpp" line="54"/>
         <location filename="../ansimenu.cpp" line="54"/>
         <source>Baltic</source>
         <translation>Балтийский</translation>
@@ -48,11 +54,13 @@
     <message>
         <location filename="../ansimenu.cpp" line="14"/>
         <location filename="../ansimenu.cpp" line="55"/>
+        <location filename="../ansimenu.cpp" line="55"/>
         <source>Celtic</source>
         <translation>Кельтский</translation>
     </message>
     <message>
         <location filename="../ansimenu.cpp" line="15"/>
+        <location filename="../ansimenu.cpp" line="56"/>
         <location filename="../ansimenu.cpp" line="56"/>
         <source>Cyrillic</source>
         <translation>Кириллица</translation>
@@ -60,11 +68,13 @@
     <message>
         <location filename="../ansimenu.cpp" line="16"/>
         <location filename="../ansimenu.cpp" line="57"/>
+        <location filename="../ansimenu.cpp" line="57"/>
         <source>Central European</source>
         <translation>Центрально-Европейский</translation>
     </message>
     <message>
         <location filename="../ansimenu.cpp" line="17"/>
+        <location filename="../ansimenu.cpp" line="58"/>
         <location filename="../ansimenu.cpp" line="58"/>
         <source>Chinese</source>
         <translation>Китайский</translation>
@@ -72,11 +82,13 @@
     <message>
         <location filename="../ansimenu.cpp" line="18"/>
         <location filename="../ansimenu.cpp" line="59"/>
+        <location filename="../ansimenu.cpp" line="59"/>
         <source>Eastern European</source>
         <translation>Восточно-Европейский</translation>
     </message>
     <message>
         <location filename="../ansimenu.cpp" line="19"/>
+        <location filename="../ansimenu.cpp" line="60"/>
         <location filename="../ansimenu.cpp" line="60"/>
         <source>Greek</source>
         <translation>Греческий</translation>
@@ -84,11 +96,13 @@
     <message>
         <location filename="../ansimenu.cpp" line="20"/>
         <location filename="../ansimenu.cpp" line="61"/>
+        <location filename="../ansimenu.cpp" line="61"/>
         <source>Hebrew</source>
         <translation>Иврит</translation>
     </message>
     <message>
         <location filename="../ansimenu.cpp" line="21"/>
+        <location filename="../ansimenu.cpp" line="62"/>
         <location filename="../ansimenu.cpp" line="62"/>
         <source>Japanese</source>
         <translation>Японский</translation>
@@ -96,11 +110,13 @@
     <message>
         <location filename="../ansimenu.cpp" line="22"/>
         <location filename="../ansimenu.cpp" line="63"/>
+        <location filename="../ansimenu.cpp" line="63"/>
         <source>Korean</source>
         <translation>Корейский</translation>
     </message>
     <message>
         <location filename="../ansimenu.cpp" line="23"/>
+        <location filename="../ansimenu.cpp" line="64"/>
         <location filename="../ansimenu.cpp" line="64"/>
         <source>Thai</source>
         <translation>Тайский</translation>
@@ -108,17 +124,20 @@
     <message>
         <location filename="../ansimenu.cpp" line="24"/>
         <location filename="../ansimenu.cpp" line="65"/>
+        <location filename="../ansimenu.cpp" line="65"/>
         <source>Turkish</source>
         <translation>Турецкий</translation>
     </message>
     <message>
         <location filename="../ansimenu.cpp" line="25"/>
         <location filename="../ansimenu.cpp" line="66"/>
+        <location filename="../ansimenu.cpp" line="66"/>
         <source>Western European</source>
         <translation>Западно-Европейский</translation>
     </message>
     <message>
         <location filename="../ansimenu.cpp" line="26"/>
+        <location filename="../ansimenu.cpp" line="67"/>
         <location filename="../ansimenu.cpp" line="67"/>
         <source>Vietnamese</source>
         <translation>Вьетнамский</translation>
@@ -138,6 +157,7 @@
     </message>
     <message>
         <location filename="../controls/applogoutput.cpp" line="195"/>
+        <location filename="../controls/applogoutput.cpp" line="357"/>
         <location filename="../controls/applogoutput.cpp" line="357"/>
         <source>Copy All</source>
         <translation type="unfinished"></translation>
@@ -228,6 +248,7 @@
     </message>
     <message>
         <location filename="../cmdlineparser.cpp" line="15"/>
+        <location filename="../cmdlineparser.cpp" line="18"/>
         <location filename="../cmdlineparser.cpp" line="18"/>
         <source>file path</source>
         <translation>файл</translation>
@@ -436,11 +457,13 @@
     <message>
         <location filename="../dialogs/dialogabout.cpp" line="102"/>
         <location filename="../dialogs/dialogabout.cpp" line="109"/>
+        <location filename="../dialogs/dialogabout.cpp" line="109"/>
         <source>Underlying platform.</source>
         <translation>Базовая платформа.</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogabout.cpp" line="127"/>
+        <location filename="../dialogs/dialogabout.cpp" line="132"/>
         <location filename="../dialogs/dialogabout.cpp" line="132"/>
         <source>Contributor</source>
         <translation>Сопровождение</translation>
@@ -692,6 +715,7 @@
     <message>
         <location filename="../dialogs/dialogforcemultiplecoils.ui" line="20"/>
         <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="30"/>
+        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="30"/>
         <source>FORCE MULTIPLE COILS</source>
         <translation>Предустановка дискретных регистров</translation>
     </message>
@@ -772,11 +796,13 @@
     <message>
         <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="138"/>
         <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="212"/>
+        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="212"/>
         <source>CSV files (*.csv)</source>
         <translation>Файлы CSV (*.csv)</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="145"/>
+        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="223"/>
         <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="223"/>
         <source>Error</source>
         <translation>Ошибка</translation>
@@ -793,6 +819,7 @@
     </message>
     <message>
         <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="188"/>
+        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="194"/>
         <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="194"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
@@ -932,11 +959,13 @@
     <message>
         <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="616"/>
         <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="697"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="697"/>
         <source>CSV files (*.csv)</source>
         <translation>Файлы CSV (*.csv)</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="623"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="708"/>
         <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="708"/>
         <source>Error</source>
         <translation>Ошибка</translation>
@@ -953,6 +982,7 @@
     </message>
     <message>
         <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="673"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="679"/>
         <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="679"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
@@ -1860,6 +1890,7 @@
     <message>
         <location filename="../dialogs/dialogwriteregister.ui" line="118"/>
         <location filename="../dialogs/dialogwriteregister.cpp" line="231"/>
+        <location filename="../dialogs/dialogwriteregister.cpp" line="231"/>
         <source>Auto Simulation: OFF</source>
         <translation>Симуляция: Выкл</translation>
     </message>
@@ -1880,6 +1911,7 @@
     </message>
     <message>
         <location filename="../dialogs/dialogwriteregister.cpp" line="225"/>
+        <location filename="../dialogs/dialogwriteregister.cpp" line="238"/>
         <location filename="../dialogs/dialogwriteregister.cpp" line="238"/>
         <source>Auto Simulation: ON</source>
         <translation>Симуляция: Вкл</translation>
@@ -1924,11 +1956,13 @@
     <message>
         <location filename="../dialogs/dialogwritestatusregister.ui" line="134"/>
         <location filename="../dialogs/dialogwritestatusregister.cpp" line="99"/>
+        <location filename="../dialogs/dialogwritestatusregister.cpp" line="99"/>
         <source>Auto Simulation: OFF</source>
         <translation>Симуляция: Выкл</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogwritestatusregister.cpp" line="93"/>
+        <location filename="../dialogs/dialogwritestatusregister.cpp" line="105"/>
         <location filename="../dialogs/dialogwritestatusregister.cpp" line="105"/>
         <source>Auto Simulation: ON</source>
         <translation>Симуляция: Вкл</translation>
@@ -2386,12 +2420,12 @@ MODBUS Point Type:
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="942"/>
+        <location filename="../formregistermapview.cpp" line="950"/>
         <source>1-based</source>
         <translation type="unfinished">1-первый</translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="943"/>
+        <location filename="../formregistermapview.cpp" line="951"/>
         <source>0-based</source>
         <translation type="unfinished">0-первый</translation>
     </message>
@@ -2401,42 +2435,42 @@ MODBUS Point Type:
         <translation type="unfinished">Шестнадцатиричный режим</translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="951"/>
+        <location filename="../formregistermapview.cpp" line="959"/>
         <source>Address Base:</source>
         <translation type="unfinished">Адресация:</translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="966"/>
+        <location filename="../formregistermapview.cpp" line="974"/>
         <source>All Types</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="967"/>
+        <location filename="../formregistermapview.cpp" line="975"/>
         <source>Coils</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="968"/>
+        <location filename="../formregistermapview.cpp" line="976"/>
         <source>Discrete Inputs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="969"/>
+        <location filename="../formregistermapview.cpp" line="977"/>
         <source>Input Registers</source>
         <translation type="unfinished">Значения реистров</translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="970"/>
+        <location filename="../formregistermapview.cpp" line="978"/>
         <source>Holding Registers</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="977"/>
+        <location filename="../formregistermapview.cpp" line="985"/>
         <source>Unit:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="979"/>
+        <location filename="../formregistermapview.cpp" line="987"/>
         <source>Data Type:</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2445,7 +2479,7 @@ MODBUS Point Type:
         <translation type="obsolete">Тип: </translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="962"/>
+        <location filename="../formregistermapview.cpp" line="970"/>
         <source>All</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2487,11 +2521,13 @@ MODBUS Point Type:
     <message>
         <location filename="../formscriptview.cpp" line="124"/>
         <location filename="../formscriptview.cpp" line="505"/>
+        <location filename="../formscriptview.cpp" line="505"/>
         <source> ms</source>
         <translation type="unfinished"> мс</translation>
     </message>
     <message>
         <location filename="../formscriptview.cpp" line="125"/>
+        <location filename="../formscriptview.cpp" line="509"/>
         <location filename="../formscriptview.cpp" line="509"/>
         <source>Run on startup</source>
         <translation type="unfinished">Запускать при открытии</translation>
@@ -2647,6 +2683,7 @@ Source: %3</source>
     <message>
         <location filename="../formtrafficview.cpp" line="103"/>
         <location filename="../formtrafficview.cpp" line="750"/>
+        <location filename="../formtrafficview.cpp" line="750"/>
         <source>Exceptions Only</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2707,6 +2744,12 @@ Source: %3</source>
     </message>
     <message>
         <location filename="../formtrafficview.cpp" line="88"/>
+        <location filename="../formtrafficview.cpp" line="92"/>
+        <location filename="../formtrafficview.cpp" line="96"/>
+        <location filename="../formtrafficview.cpp" line="553"/>
+        <location filename="../formtrafficview.cpp" line="708"/>
+        <location filename="../formtrafficview.cpp" line="721"/>
+        <location filename="../formtrafficview.cpp" line="743"/>
         <location filename="../formtrafficview.cpp" line="92"/>
         <location filename="../formtrafficview.cpp" line="96"/>
         <location filename="../formtrafficview.cpp" line="553"/>
@@ -2816,6 +2859,7 @@ Source: %3</source>
     <message>
         <location filename="../controls/helpbrowser.h" line="21"/>
         <location filename="../controls/helpbrowser.h" line="39"/>
+        <location filename="../controls/helpbrowser.h" line="39"/>
         <source>qthelp://omodsim/doc/index.html</source>
         <translation>qthelp://omodsim/doc/index_ru.html</translation>
     </message>
@@ -2850,11 +2894,13 @@ Source: %3</source>
     <message>
         <location filename="../controls/helpwidget.cpp" line="35"/>
         <location filename="../controls/helpwidget.cpp" line="89"/>
+        <location filename="../controls/helpwidget.cpp" line="89"/>
         <source>Find</source>
         <translation>Найти</translation>
     </message>
     <message>
         <location filename="../controls/helpwidget.cpp" line="41"/>
+        <location filename="../controls/helpwidget.cpp" line="90"/>
         <location filename="../controls/helpwidget.cpp" line="90"/>
         <source>Previous (Shift+Enter)</source>
         <translation>Назад (Shift+Enter)</translation>
@@ -2862,11 +2908,13 @@ Source: %3</source>
     <message>
         <location filename="../controls/helpwidget.cpp" line="47"/>
         <location filename="../controls/helpwidget.cpp" line="91"/>
+        <location filename="../controls/helpwidget.cpp" line="91"/>
         <source>Next (Enter)</source>
         <translation>Далее (Enter)</translation>
     </message>
     <message>
         <location filename="../controls/helpwidget.cpp" line="57"/>
+        <location filename="../controls/helpwidget.cpp" line="92"/>
         <location filename="../controls/helpwidget.cpp" line="92"/>
         <source>Close (Escape)</source>
         <translation>Закрыть (Escape)</translation>
@@ -2937,11 +2985,13 @@ Script.onInit(()=&gt;{
     <message>
         <location filename="../controls/mainstatusbar.cpp" line="42"/>
         <location filename="../controls/mainstatusbar.cpp" line="145"/>
+        <location filename="../controls/mainstatusbar.cpp" line="145"/>
         <source>No updates available</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../controls/mainstatusbar.cpp" line="143"/>
+        <location filename="../controls/mainstatusbar.cpp" line="258"/>
         <location filename="../controls/mainstatusbar.cpp" line="258"/>
         <source>New version %1 is available. Click to download.</source>
         <translation type="unfinished"></translation>
@@ -3293,6 +3343,7 @@ Script.onInit(()=&gt;{
     <message>
         <location filename="../mainwindow.ui" line="234"/>
         <location filename="../mainwindow.cpp" line="1623"/>
+        <location filename="../mainwindow.cpp" line="1623"/>
         <source>Save Project</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3511,6 +3562,8 @@ Script.onInit(()=&gt;{
         <location filename="../mainwindow.ui" line="504"/>
         <location filename="../mainwindow.cpp" line="288"/>
         <location filename="../mainwindow.cpp" line="449"/>
+        <location filename="../mainwindow.cpp" line="288"/>
+        <location filename="../mainwindow.cpp" line="449"/>
         <source>Script Help</source>
         <translation>Справка по скриптам</translation>
     </message>
@@ -3602,11 +3655,13 @@ Script.onInit(()=&gt;{
     <message>
         <location filename="../mainwindow.cpp" line="244"/>
         <location filename="../mainwindow.cpp" line="451"/>
+        <location filename="../mainwindow.cpp" line="451"/>
         <source>Open Recent</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="245"/>
+        <location filename="../mainwindow.cpp" line="1710"/>
         <location filename="../mainwindow.cpp" line="1710"/>
         <source>Clear List</source>
         <translation type="unfinished"></translation>
@@ -3614,11 +3669,13 @@ Script.onInit(()=&gt;{
     <message>
         <location filename="../mainwindow.cpp" line="269"/>
         <location filename="../mainwindow.cpp" line="448"/>
+        <location filename="../mainwindow.cpp" line="448"/>
         <source>Project</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="323"/>
+        <location filename="../mainwindow.cpp" line="450"/>
         <location filename="../mainwindow.cpp" line="450"/>
         <source>Output</source>
         <translation type="unfinished"></translation>
@@ -3680,6 +3737,7 @@ Script.onInit(()=&gt;{
     <message>
         <location filename="../mainwindow.cpp" line="701"/>
         <location filename="../mainwindow.cpp" line="732"/>
+        <location filename="../mainwindow.cpp" line="732"/>
         <source>Project files (*.msimprj)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3706,11 +3764,13 @@ Script.onInit(()=&gt;{
     <message>
         <location filename="../menuconnect.cpp" line="18"/>
         <location filename="../menuconnect.cpp" line="104"/>
+        <location filename="../menuconnect.cpp" line="104"/>
         <source>Modbus/TCP Srv</source>
         <translation>Modbus/TCP сервер</translation>
     </message>
     <message>
         <location filename="../menuconnect.cpp" line="22"/>
+        <location filename="../menuconnect.cpp" line="94"/>
         <location filename="../menuconnect.cpp" line="94"/>
         <source>Modbus/RTU Srv</source>
         <translation>Modbus/RTU сервер</translation>
@@ -3719,11 +3779,14 @@ Script.onInit(()=&gt;{
         <location filename="../menuconnect.cpp" line="24"/>
         <location filename="../menuconnect.cpp" line="45"/>
         <location filename="../menuconnect.cpp" line="109"/>
+        <location filename="../menuconnect.cpp" line="45"/>
+        <location filename="../menuconnect.cpp" line="109"/>
         <source>Port %1</source>
         <translation>Порт %1</translation>
     </message>
     <message>
         <location filename="../menuconnect.cpp" line="40"/>
+        <location filename="../menuconnect.cpp" line="106"/>
         <location filename="../menuconnect.cpp" line="106"/>
         <source>Modbus/TCP Srv %1</source>
         <translation>Modbus/TCP сервер %1</translation>
@@ -3734,11 +3797,13 @@ Script.onInit(()=&gt;{
     <message>
         <location filename="../controls/modbuslogwidget.cpp" line="327"/>
         <location filename="../controls/modbuslogwidget.cpp" line="370"/>
+        <location filename="../controls/modbuslogwidget.cpp" line="370"/>
         <source>Copy Text</source>
         <translation>Копировать текст</translation>
     </message>
     <message>
         <location filename="../controls/modbuslogwidget.cpp" line="339"/>
+        <location filename="../controls/modbuslogwidget.cpp" line="371"/>
         <location filename="../controls/modbuslogwidget.cpp" line="371"/>
         <source>Copy Bytes</source>
         <translation>Копировать байты</translation>
@@ -3749,11 +3814,13 @@ Script.onInit(()=&gt;{
     <message>
         <location filename="../controls/modbusmessagewidget.cpp" line="33"/>
         <location filename="../controls/modbusmessagewidget.cpp" line="89"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="89"/>
         <source>Copy Text</source>
         <translation>Копировать текст</translation>
     </message>
     <message>
         <location filename="../controls/modbusmessagewidget.cpp" line="49"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="90"/>
         <location filename="../controls/modbusmessagewidget.cpp" line="90"/>
         <source>Copy Values</source>
         <translation>Копировать значения</translation>
@@ -3770,6 +3837,7 @@ Script.onInit(()=&gt;{
     </message>
     <message>
         <location filename="../controls/modbusmessagewidget.cpp" line="254"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="259"/>
         <location filename="../controls/modbusmessagewidget.cpp" line="259"/>
         <source>Checksum</source>
         <translation>Контрольная сумма</translation>
@@ -3810,6 +3878,10 @@ Script.onInit(()=&gt;{
         <location filename="../controls/modbusmessagewidget.cpp" line="324"/>
         <location filename="../controls/modbusmessagewidget.cpp" line="343"/>
         <location filename="../controls/modbusmessagewidget.cpp" line="362"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="305"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="324"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="343"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="362"/>
         <source>Length</source>
         <translation>Количество</translation>
     </message>
@@ -3838,11 +3910,25 @@ Script.onInit(()=&gt;{
         <location filename="../controls/modbusmessagewidget.cpp" line="323"/>
         <location filename="../controls/modbusmessagewidget.cpp" line="342"/>
         <location filename="../controls/modbusmessagewidget.cpp" line="361"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="323"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="342"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="361"/>
         <source>Start Address</source>
         <translation>Начальный адрес</translation>
     </message>
     <message>
         <location filename="../controls/modbusmessagewidget.cpp" line="312"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="331"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="350"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="369"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="460"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="478"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="501"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="520"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="531"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="539"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="608"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="626"/>
         <location filename="../controls/modbusmessagewidget.cpp" line="331"/>
         <location filename="../controls/modbusmessagewidget.cpp" line="350"/>
         <location filename="../controls/modbusmessagewidget.cpp" line="369"/>
@@ -3871,6 +3957,8 @@ Script.onInit(()=&gt;{
         <location filename="../controls/modbusmessagewidget.cpp" line="351"/>
         <location filename="../controls/modbusmessagewidget.cpp" line="400"/>
         <location filename="../controls/modbusmessagewidget.cpp" line="408"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="400"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="408"/>
         <source>Register Value</source>
         <translation>Значения регистров</translation>
     </message>
@@ -3882,17 +3970,20 @@ Script.onInit(()=&gt;{
     <message>
         <location filename="../controls/modbusmessagewidget.cpp" line="380"/>
         <location filename="../controls/modbusmessagewidget.cpp" line="388"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="388"/>
         <source>Output Address</source>
         <translation>Адрес</translation>
     </message>
     <message>
         <location filename="../controls/modbusmessagewidget.cpp" line="381"/>
         <location filename="../controls/modbusmessagewidget.cpp" line="389"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="389"/>
         <source>Output Value</source>
         <translation>Значение</translation>
     </message>
     <message>
         <location filename="../controls/modbusmessagewidget.cpp" line="399"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="407"/>
         <location filename="../controls/modbusmessagewidget.cpp" line="407"/>
         <source>Register Address</source>
         <translation>Адрес</translation>
@@ -3904,6 +3995,7 @@ Script.onInit(()=&gt;{
     </message>
     <message>
         <location filename="../controls/modbusmessagewidget.cpp" line="427"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="435"/>
         <location filename="../controls/modbusmessagewidget.cpp" line="435"/>
         <source>Sub-function</source>
         <translation>Подфункция</translation>
@@ -3917,17 +4009,26 @@ Script.onInit(()=&gt;{
         <location filename="../controls/modbusmessagewidget.cpp" line="551"/>
         <location filename="../controls/modbusmessagewidget.cpp" line="559"/>
         <location filename="../controls/modbusmessagewidget.cpp" line="636"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="436"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="521"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="532"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="540"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="551"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="559"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="636"/>
         <source>Data</source>
         <translation>Данные</translation>
     </message>
     <message>
         <location filename="../controls/modbusmessagewidget.cpp" line="446"/>
         <location filename="../controls/modbusmessagewidget.cpp" line="461"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="461"/>
         <source>Status</source>
         <translation>Статус</translation>
     </message>
     <message>
         <location filename="../controls/modbusmessagewidget.cpp" line="447"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="462"/>
         <location filename="../controls/modbusmessagewidget.cpp" line="462"/>
         <source>Event Count</source>
         <translation>Количество событий</translation>
@@ -3947,11 +4048,15 @@ Script.onInit(()=&gt;{
         <location filename="../controls/modbusmessagewidget.cpp" line="486"/>
         <location filename="../controls/modbusmessagewidget.cpp" line="499"/>
         <location filename="../controls/modbusmessagewidget.cpp" line="509"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="486"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="499"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="509"/>
         <source>Starting Address</source>
         <translation>Начальный адрес</translation>
     </message>
     <message>
         <location filename="../controls/modbusmessagewidget.cpp" line="477"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="487"/>
         <location filename="../controls/modbusmessagewidget.cpp" line="487"/>
         <source>Quantity of Outputs</source>
         <translation>Количество</translation>
@@ -3964,11 +4069,13 @@ Script.onInit(()=&gt;{
     <message>
         <location filename="../controls/modbusmessagewidget.cpp" line="500"/>
         <location filename="../controls/modbusmessagewidget.cpp" line="510"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="510"/>
         <source>Quantity of Registers</source>
         <translation>Количество регистров</translation>
     </message>
     <message>
         <location filename="../controls/modbusmessagewidget.cpp" line="502"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="609"/>
         <location filename="../controls/modbusmessagewidget.cpp" line="609"/>
         <source>Registers Value</source>
         <translation>Значения регистров</translation>
@@ -3986,17 +4093,20 @@ Script.onInit(()=&gt;{
     <message>
         <location filename="../controls/modbusmessagewidget.cpp" line="570"/>
         <location filename="../controls/modbusmessagewidget.cpp" line="580"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="580"/>
         <source>Address</source>
         <translation>Адрес</translation>
     </message>
     <message>
         <location filename="../controls/modbusmessagewidget.cpp" line="571"/>
         <location filename="../controls/modbusmessagewidget.cpp" line="581"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="581"/>
         <source>And Mask</source>
         <translation>Маска «И»</translation>
     </message>
     <message>
         <location filename="../controls/modbusmessagewidget.cpp" line="572"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="582"/>
         <location filename="../controls/modbusmessagewidget.cpp" line="582"/>
         <source>Or Mask</source>
         <translation>Маска «ИЛИ»</translation>
@@ -4275,12 +4385,12 @@ Script.onInit(()=&gt;{
 <context>
     <name>ModbusMultiServer</name>
     <message>
-        <location filename="../modbusmultiserver.cpp" line="738"/>
+        <location filename="../modbusmultiserver.cpp" line="898"/>
         <source>An incorrect device ID was specified (%1)</source>
         <translation>Некорректно знаяение номера устройства (%1)</translation>
     </message>
     <message>
-        <location filename="../modbusmultiserver.cpp" line="1267"/>
+        <location filename="../modbusmultiserver.cpp" line="1427"/>
         <source>Connection error. %1</source>
         <translation>Ошибка подключения. %1</translation>
     </message>
@@ -4569,11 +4679,13 @@ Script.onInit(()=&gt;{
     <message>
         <location filename="../controls/projecttreewidget.cpp" line="57"/>
         <location filename="../controls/projecttreewidget.cpp" line="272"/>
+        <location filename="../controls/projecttreewidget.cpp" line="272"/>
         <source>Data</source>
         <translation type="unfinished">Данные</translation>
     </message>
     <message>
         <location filename="../controls/projecttreewidget.cpp" line="61"/>
+        <location filename="../controls/projecttreewidget.cpp" line="273"/>
         <location filename="../controls/projecttreewidget.cpp" line="273"/>
         <source>Traffic</source>
         <translation type="unfinished"></translation>
@@ -4581,11 +4693,13 @@ Script.onInit(()=&gt;{
     <message>
         <location filename="../controls/projecttreewidget.cpp" line="65"/>
         <location filename="../controls/projecttreewidget.cpp" line="274"/>
+        <location filename="../controls/projecttreewidget.cpp" line="274"/>
         <source>Script</source>
         <translation type="unfinished">Скрипт</translation>
     </message>
     <message>
         <location filename="../controls/projecttreewidget.cpp" line="69"/>
+        <location filename="../controls/projecttreewidget.cpp" line="275"/>
         <location filename="../controls/projecttreewidget.cpp" line="275"/>
         <source>Register Map</source>
         <translation type="unfinished"></translation>
@@ -4622,6 +4736,7 @@ Script.onInit(()=&gt;{
     </message>
     <message>
         <location filename="../controls/projecttreewidget.cpp" line="331"/>
+        <location filename="../controls/projecttreewidget.cpp" line="376"/>
         <location filename="../controls/projecttreewidget.cpp" line="376"/>
         <source>Rename</source>
         <translation type="unfinished"></translation>
@@ -4738,17 +4853,20 @@ Script.onInit(()=&gt;{
     <message>
         <location filename="../registermapdatamodel.cpp" line="16"/>
         <location filename="../registermapdatamodel.cpp" line="29"/>
+        <location filename="../registermapdatamodel.cpp" line="29"/>
         <source>Coils</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../registermapdatamodel.cpp" line="17"/>
         <location filename="../registermapdatamodel.cpp" line="30"/>
+        <location filename="../registermapdatamodel.cpp" line="30"/>
         <source>Discrete Inputs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../registermapdatamodel.cpp" line="18"/>
+        <location filename="../registermapdatamodel.cpp" line="31"/>
         <location filename="../registermapdatamodel.cpp" line="31"/>
         <source>Input Registers</source>
         <translation type="unfinished">Значения реистров</translation>
@@ -4908,11 +5026,13 @@ Script.onInit(()=&gt;{
     <message>
         <location filename="../controls/runmodecombobox.cpp" line="11"/>
         <location filename="../controls/runmodecombobox.cpp" line="31"/>
+        <location filename="../controls/runmodecombobox.cpp" line="31"/>
         <source>Once</source>
         <translation>Однократно</translation>
     </message>
     <message>
         <location filename="../controls/runmodecombobox.cpp" line="12"/>
+        <location filename="../controls/runmodecombobox.cpp" line="35"/>
         <location filename="../controls/runmodecombobox.cpp" line="35"/>
         <source>Periodically</source>
         <translation>Периодически</translation>
@@ -5011,6 +5131,7 @@ Script.onInit(()=&gt;{
     <message>
         <location filename="../controls/searchlineedit.cpp" line="11"/>
         <location filename="../controls/searchlineedit.cpp" line="27"/>
+        <location filename="../controls/searchlineedit.cpp" line="27"/>
         <source>Type text to search...</source>
         <translation>Поиск...</translation>
     </message>
@@ -5019,6 +5140,7 @@ Script.onInit(()=&gt;{
     <name>SimulationModeComboBox</name>
     <message>
         <location filename="../controls/simulationmodecombobox.cpp" line="42"/>
+        <location filename="../controls/simulationmodecombobox.cpp" line="48"/>
         <location filename="../controls/simulationmodecombobox.cpp" line="48"/>
         <source>Random</source>
         <translation>Случайное</translation>
@@ -5067,6 +5189,7 @@ Script.onInit(()=&gt;{
     </message>
     <message>
         <location filename="../controls/statisticwidget.cpp" line="108"/>
+        <location filename="../controls/statisticwidget.cpp" line="112"/>
         <location filename="../controls/statisticwidget.cpp" line="112"/>
         <source>Pause Logging</source>
         <translation>Приостановить логирование</translation>

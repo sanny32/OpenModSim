@@ -358,13 +358,13 @@ bool RegisterMapDataModel::setData(const QModelIndex& index, const QVariant& val
         }
 
         if (ok) {
-            entry.value     = regs[0];
-            entry.timestamp = QDateTime::currentDateTime();
-            _data[oldKey]   = entry;
-
             QModbusDataUnit unit(oldKey.Type, oldKey.Address, regCount);
             for (int i = 0; i < regCount; ++i) unit.setValue(i, regs[i]);
             _server.setData(oldKey.DeviceId, unit);
+
+            entry.value     = regs[0];
+            entry.timestamp = _server.timestamp(oldKey.DeviceId, oldKey.Type, oldKey.Address);
+            _data[oldKey]   = entry;
         }
         // Always refresh the cell (restores previous value if parse failed)
         emit dataChanged(createIndex(row, ColValue), createIndex(row, ColTimestamp));
@@ -433,7 +433,7 @@ bool RegisterMapDataModel::setData(const QModelIndex& index, const QVariant& val
 
             const auto unit   = _server.data(newKey.DeviceId, newKey.Type, newKey.Address, 1);
             entry.value       = unit.isValid() ? static_cast<quint16>(unit.value(0)) : 0;
-            entry.timestamp   = unit.isValid() ? QDateTime::currentDateTime() : QDateTime();
+            entry.timestamp   = _server.timestamp(newKey.DeviceId, newKey.Type, newKey.Address);
             entry.comment     = _server.description(newKey.DeviceId, newKey.Type, newKey.Address);
 
             _keys[row] = newKey;
@@ -634,6 +634,13 @@ ItemMapKey RegisterMapDataModel::lastKey() const
 void RegisterMapDataModel::addEntry(const ItemMapKey& key, const RegisterMapEntry& entry)
 {
     RegisterMapEntry normalizedEntry = entry;
+    const auto backendTs = _server.timestamp(key.DeviceId, key.Type, key.Address);
+    if (backendTs.isValid()) {
+        normalizedEntry.timestamp = backendTs;
+    } else if (normalizedEntry.timestamp.isValid()) {
+        _server.setTimestamp(key.DeviceId, key.Type, key.Address, normalizedEntry.timestamp);
+    }
+
     const auto backendDesc = _server.description(key.DeviceId, key.Type, key.Address);
     if (!backendDesc.isEmpty()) {
         normalizedEntry.comment = backendDesc;
@@ -684,7 +691,6 @@ void RegisterMapDataModel::applyMbDataChange(quint8 deviceId, const QModbusDataU
 {
     if (!data.isValid() || _inSetData) return;
 
-    const QDateTime now = QDateTime::currentDateTime();
     for (quint32 i = 0; i < data.valueCount(); ++i) {
         const ItemMapKey key{ deviceId, data.registerType(),
                               static_cast<quint16>(data.startAddress() + i) };
@@ -695,12 +701,32 @@ void RegisterMapDataModel::applyMbDataChange(quint8 deviceId, const QModbusDataU
         if (it->value == value) continue;
 
         it->value     = value;
-        it->timestamp = now;
+        it->timestamp = _server.timestamp(deviceId, key.Type, key.Address);
 
         const int row = rowForKey(key);
         if (row >= 0)
             emit dataChanged(createIndex(row, ColValue), createIndex(row, ColTimestamp));
     }
+}
+
+///
+/// \brief RegisterMapDataModel::applyTimestampChange
+/// Applies backend timestamp update to existing register-map rows.
+///
+void RegisterMapDataModel::applyTimestampChange(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 address, const QDateTime& timestamp)
+{
+    const ItemMapKey key{deviceId, type, address};
+    auto it = _data.find(key);
+    if (it == _data.end())
+        return;
+
+    if (it->timestamp == timestamp)
+        return;
+
+    it->timestamp = timestamp;
+    const int row = rowForKey(key);
+    if (row >= 0)
+        emit dataChanged(createIndex(row, ColTimestamp), createIndex(row, ColTimestamp));
 }
 
 ///

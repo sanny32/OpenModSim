@@ -90,7 +90,7 @@ public:
     QModbusDataUnit serializeModbusDataUnit(quint8 deviceId, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, quint16 length) const;
     void configureModbusDataUnit(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 startAddress, const QVector<quint16>& values) const;
 
-    AddressDescriptionMap2 descriptionMap() const;
+    AddressDescriptionMap descriptionMap() const;
     void setDescription(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr, const QString& desc);
 
     AddressColorMap colorMap() const;
@@ -222,7 +222,7 @@ inline QSettings& operator >>(QSettings& in, FormDataView* frm)
     in >> displayDefinition;
 
 
-    AddressDescriptionMap2 descriptionMap;
+    AddressDescriptionMap descriptionMap;
     in >> descriptionMap;
 
     AddressColorMap colorMap;
@@ -421,7 +421,7 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, FormDataView* frm)
                 xml.skipCurrentElement();
             }
             else if (xml.name() == QLatin1String("AddressDescriptionMap")) {
-                AddressDescriptionMap2 map;
+                AddressDescriptionMap map;
                 xml >> map;
                 for(auto it = map.cbegin(); it != map.cend(); ++it)
                 {

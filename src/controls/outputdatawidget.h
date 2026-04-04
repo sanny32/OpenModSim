@@ -186,7 +186,7 @@ public:
     bool findPreviousByValue(const QString& text);
     void clearFindByValue();
 
-    AddressDescriptionMap2 descriptionMap() const;
+    AddressDescriptionMap descriptionMap() const;
     void setDescription(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr, const QString& desc);
 
     void setSimulated(DataType type, RegisterOrder order, quint8 deviceId, QModbusDataUnit::RegisterType regType, quint16 addr, bool on);
