@@ -1084,19 +1084,7 @@ void MdiAreaEx::mergeSplitArea()
         }
     }
 
-    _secondaryArea->deleteLater();
-    _secondaryArea = nullptr;
-
-    _splitter->deleteLater();
-    _splitter = nullptr;
-    _pendingSplitterEqualize = false;
-
-    _activePanel = _primaryArea;
-    _isSplitInProgress = false;
-    syncSplitButtonState();
-    updateSplitButtonGeometry();
-
-    // Restore active tab and keyboard focus after deferred deletions settle.
+    // Restore active tab and keyboard focus after split widgets are actually deleted.
     auto restoreFocus = [this, preferredActive]() {
         if (!_primaryArea)
             return;
@@ -1120,7 +1108,27 @@ void MdiAreaEx::mergeSplitArea()
         }
     };
 
-    QTimer::singleShot(0, this, restoreFocus);
+    QPointer<QSplitter> splitterToDelete = _splitter;
+    if (splitterToDelete) {
+        connect(splitterToDelete, &QObject::destroyed, this, [restoreFocus]() {
+            restoreFocus();
+        });
+    }
+
+    _secondaryArea->deleteLater();
+    _secondaryArea = nullptr;
+
+    _splitter->deleteLater();
+    _splitter = nullptr;
+    _pendingSplitterEqualize = false;
+
+    _activePanel = _primaryArea;
+    _isSplitInProgress = false;
+    syncSplitButtonState();
+    updateSplitButtonGeometry();
+
+    if (!splitterToDelete)
+        restoreFocus();
 }
 
 ///
