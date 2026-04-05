@@ -110,6 +110,7 @@ target_include_directories(${PROJECT_NAME} PRIVATE
 # Source files
 set(SOURCES
     ansimenu.cpp
+    applogger.cpp
     apppreferences.cpp
     appproject.cpp
     cmdlineparser.cpp
@@ -203,6 +204,7 @@ set(SOURCES
 set(HEADERS
     ansimenu.h
     ansiutils.h
+    applogger.h
     apppreferences.h
     appproject.h
     bufferinglistmodel.h
