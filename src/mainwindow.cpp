@@ -87,29 +87,6 @@ void forEachTypedForm(MdiAreaT* mdiArea, Fn&& fn)
     }
 }
 
-ProjectFormKind projectFormKindFromWidget(QWidget* widget, bool* ok = nullptr)
-{
-    if (qobject_cast<FormDataView*>(widget)) {
-        if(ok) *ok = true;
-        return ProjectFormKind::Data;
-    }
-    if (qobject_cast<FormTrafficView*>(widget)) {
-        if(ok) *ok = true;
-        return ProjectFormKind::Traffic;
-    }
-    if (qobject_cast<FormScriptView*>(widget)) {
-        if(ok) *ok = true;
-        return ProjectFormKind::Script;
-    }
-    if (qobject_cast<FormRegisterMapView*>(widget)) {
-        if(ok) *ok = true;
-        return ProjectFormKind::RegisterMap;
-    }
-
-    if(ok) *ok = false;
-    return ProjectFormKind::Data;
-}
-
 template<typename TDefinitions>
 void applySharedDisplayDefaults(TDefinitions& target, const TDefinitions& defaults)
 {
