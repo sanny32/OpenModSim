@@ -13,6 +13,7 @@
 #include "formtrafficview.h"
 #include "formscriptview.h"
 #include "uiutils.h"
+#include "apptrace.h"
 
 namespace {
 constexpr const char* kFormPanelProperty = "SplitPanel";
@@ -22,6 +23,53 @@ constexpr const char* kPanelRight = "R";
 constexpr const char* kSplitOriginIdProperty = "SplitOriginId";
 constexpr const char* kSplitAutoCloneProperty = "SplitAutoClone";
 constexpr const char* kFormIdProperty = "FormId";
+
+QUuid formIdOf(QWidget* widget);
+
+QString panelName(const MdiAreaEx* mdi, const MdiArea* area)
+{
+    if (!mdi || !area)
+        return QStringLiteral("null");
+    if (area == mdi->primaryArea())
+        return QStringLiteral("primary");
+    if (area == mdi->secondaryArea())
+        return QStringLiteral("secondary");
+    return QStringLiteral("unknown");
+}
+
+QString mdiExState(const MdiAreaEx* mdi)
+{
+    if (!mdi)
+        return QStringLiteral("mdiEx=null");
+
+    return QStringLiteral("%1 split=%2 activePanel=%3 primary={%4} secondary={%5}")
+        .arg(AppTrace::objectTag(mdi))
+        .arg(mdi->isSplitView())
+        .arg(panelName(mdi, mdi->activePanel()))
+        .arg(AppTrace::mdiAreaState(mdi->primaryArea()))
+        .arg(AppTrace::mdiAreaState(mdi->secondaryArea()));
+}
+
+QString formTag(const QWidget* frm)
+{
+    if (!frm)
+        return QStringLiteral("null");
+    return QStringLiteral("%1 id=%2")
+        .arg(AppTrace::widgetTag(frm))
+        .arg(formIdOf(const_cast<QWidget*>(frm)).toString(QUuid::WithoutBraces));
+}
+
+void traceMdiActivationRequest(const char* scope, const MdiAreaEx* mdi, QMdiSubWindow* wnd, const QString& reason)
+{
+    if (!AppTrace::isEnabled())
+        return;
+
+    AppTrace::log(scope,
+                  QStringLiteral("reason=\"%1\" request=%2 state=%3")
+                      .arg(reason)
+                      .arg(AppTrace::subWindowTag(wnd))
+                      .arg(mdiExState(mdi)));
+}
 
 ProjectFormType toProjectFormType(ProjectFormKind kind)
 {
@@ -206,6 +254,15 @@ AppProject::AppProject(MdiAreaEx* mdiArea,
     , _mainWindow(mainWindow)
 {
     Q_ASSERT(_dataSimulator != nullptr);
+
+    AppTrace::log("AppProject::AppProject",
+                  QStringLiteral("constructed state=%1").arg(mdiExState(_mdiArea)));
+    connect(_mdiArea, &MdiAreaEx::subWindowActivated, this, [this](QMdiSubWindow* wnd) {
+        AppTrace::log("AppProject::onMdiSubWindowActivated",
+                      QStringLiteral("wnd=%1 state=%2")
+                          .arg(AppTrace::subWindowTag(wnd))
+                          .arg(mdiExState(_mdiArea)));
+    });
 }
 
 ///
@@ -213,6 +270,8 @@ AppProject::AppProject(MdiAreaEx* mdiArea,
 ///
 AppProject::~AppProject()
 {
+    AppTrace::log("AppProject::~AppProject",
+                  QStringLiteral("destroyed state=%1").arg(mdiExState(_mdiArea)));
 }
 
 ///
@@ -449,9 +508,16 @@ void AppProject::setupMdiChild(QWidget* frm, QMdiSubWindow* wnd, bool addToWindo
 
     auto onShowed = [this, frm]
     {
+        AppTrace::log("AppProject::onShowed",
+                      QStringLiteral("form=%1 state=%2")
+                          .arg(formTag(frm))
+                          .arg(mdiExState(_mdiArea)));
         // Activate whichever subwindow currently holds this form
         for (auto w : _mdiArea->subWindowList()) {
             if (w && w->widget() == frm) {
+                AppTrace::log("AppProject::onShowed",
+                              QStringLiteral("calling MainWindow::windowActivate %1")
+                                  .arg(AppTrace::subWindowTag(w)));
                 _mainWindow->windowActivate(w);
                 break;
             }
@@ -581,6 +647,8 @@ void AppProject::rewrapMdiChild(QWidget* frm)
     });
 
     _projectTree->setFormOpen(frm, true);
+    AppTrace::log("AppProject::rewrapMdiChild",
+                  QStringLiteral("activateForm form=%1").arg(formTag(frm)));
     _projectTree->activateForm(frm);
 
     frm->show();
@@ -627,6 +695,12 @@ void AppProject::deleteForm(QWidget* frm)
 QWidget* AppProject::currentMdiChild() const
 {
     auto wnd = _mdiArea->currentSubWindow();
+    if (!wnd) {
+        AppTrace::log("AppProject::currentMdiChild",
+                      QStringLiteral("mdiArea->currentSubWindow() is null; state=%1")
+                          .arg(mdiExState(_mdiArea)));
+    }
+
     if(!wnd && _mdiArea->viewMode() == QMdiArea::TabbedView) {
         // Qt5: d->active may still be null on the first event loop iteration
         // because _q_currentTabChanged is posted via QueuedConnection while
@@ -641,7 +715,15 @@ QWidget* AppProject::currentMdiChild() const
             if(idx >= 0 && idx < list.size())
                 wnd = list.at(idx);
         }
+
+        AppTrace::log("AppProject::currentMdiChild",
+                      QStringLiteral("fallback picked wnd=%1 state=%2")
+                          .arg(AppTrace::subWindowTag(wnd))
+                          .arg(mdiExState(_mdiArea)));
     }
+
+    AppTrace::log("AppProject::currentMdiChild",
+                  QStringLiteral("result=%1").arg(AppTrace::subWindowTag(wnd)));
     return wnd ? qobject_cast<QWidget*>(wnd->widget()) : nullptr;
 }
 
@@ -839,6 +921,9 @@ void AppProject::openFormOnActivePanel(QWidget* frm)
             auto* w = wnd ? wnd->widget() : nullptr;
             if(!w) continue;
             if(w == frm || (w->property(kSplitAutoCloneProperty).toBool() && w->windowTitle() == title)) {
+                traceMdiActivationRequest("AppProject::openFormOnActivePanel",
+                                          _mdiArea, wnd,
+                                          QStringLiteral("found target on active panel"));
                 _mdiArea->setActiveSubWindow(wnd);
                 return;
             }
@@ -855,8 +940,12 @@ void AppProject::openFormOnActivePanel(QWidget* frm)
     if(isSplitTabbedView() && panel) {
         auto* clone = createCloneOnArea(frm, panel);
         if(clone) {
-            if(auto* cloneWnd = qobject_cast<QMdiSubWindow*>(clone->parentWidget()))
+            if(auto* cloneWnd = qobject_cast<QMdiSubWindow*>(clone->parentWidget())) {
+                traceMdiActivationRequest("AppProject::openFormOnActivePanel",
+                                          _mdiArea, cloneWnd,
+                                          QStringLiteral("activating newly created clone"));
                 _mdiArea->setActiveSubWindow(cloneWnd);
+            }
             return;
         }
     }
@@ -864,6 +953,9 @@ void AppProject::openFormOnActivePanel(QWidget* frm)
     // Fallback: activate wherever the form is open
     for(auto* wnd : _mdiArea->subWindowList()) {
         if(wnd->widget() == frm) {
+            traceMdiActivationRequest("AppProject::openFormOnActivePanel",
+                                      _mdiArea, wnd,
+                                      QStringLiteral("fallback activate existing window"));
             _mdiArea->setActiveSubWindow(wnd);
             return;
         }
@@ -1194,11 +1286,17 @@ int AppProject::duplicatePrimaryTabsToSecondary()
     if(secondaryWnd) {
         if(secondary->viewMode() == QMdiArea::TabbedView && !secondaryWnd->isMaximized())
             secondaryWnd->showMaximized();
+        AppTrace::log("AppProject::splitActiveFormToSecondary",
+                      QStringLiteral("secondary->setActiveSubWindow %1")
+                          .arg(AppTrace::subWindowTag(secondaryWnd)));
         secondary->setActiveSubWindow(secondaryWnd);
     }
 
     // Restore the primary panel's active tab (moving toMove may have shifted focus).
     QTimer::singleShot(0, primary, [primary, primaryActiveWnd]() {
+        AppTrace::log("AppProject::splitActiveFormToSecondary",
+                      QStringLiteral("restore primary->setActiveSubWindow %1")
+                          .arg(AppTrace::subWindowTag(primaryActiveWnd)));
         primary->setActiveSubWindow(primaryActiveWnd);
     });
 
@@ -1505,6 +1603,9 @@ void AppProject::loadProject(const QString& filename)
             if(auto* primary = _mdiArea->primaryArea()) {
                 for(auto* wnd : primary->localSubWindowList()) {
                     if(wnd && wnd->widget() && wnd->widget()->windowTitle() == activePrimaryWin) {
+                        AppTrace::log("AppProject::loadProject.restoreActiveWindows",
+                                      QStringLiteral("primary->setActiveSubWindow %1")
+                                          .arg(AppTrace::subWindowTag(wnd)));
                         primary->setActiveSubWindow(wnd);
                         break;
                     }
@@ -1516,6 +1617,9 @@ void AppProject::loadProject(const QString& filename)
             if(auto* secondary = secondaryArea()) {
                 for(auto* wnd : secondary->localSubWindowList()) {
                     if(wnd && wnd->widget() && wnd->widget()->windowTitle() == activeSecWin) {
+                        AppTrace::log("AppProject::loadProject.restoreActiveWindows",
+                                      QStringLiteral("secondary->setActiveSubWindow %1")
+                                          .arg(AppTrace::subWindowTag(wnd)));
                         secondary->setActiveSubWindow(wnd);
                         break;
                     }
@@ -1527,8 +1631,12 @@ void AppProject::loadProject(const QString& filename)
         // are aligned after all restore operations.
         if (auto* primary = _mdiArea->primaryArea()) {
             if (auto* tabBar = qobject_cast<MdiTabBar*>(primary->tabBar())) {
-                if (auto* tabWnd = tabBar->currentSubWindow())
+                if (auto* tabWnd = tabBar->currentSubWindow()) {
+                    AppTrace::log("AppProject::loadProject.restoreActiveWindows",
+                                  QStringLiteral("sync primary->setActiveSubWindow(tabCurrent) %1")
+                                      .arg(AppTrace::subWindowTag(tabWnd)));
                     primary->setActiveSubWindow(tabWnd);
+                }
             }
         }
     };

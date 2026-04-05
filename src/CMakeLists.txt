@@ -207,6 +207,7 @@ set(HEADERS
     applogger.h
     apppreferences.h
     appproject.h
+    apptrace.h
     bufferinglistmodel.h
     byteorderutils.h
     cmdlineparser.h

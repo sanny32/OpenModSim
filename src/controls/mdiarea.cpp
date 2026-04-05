@@ -1,4 +1,5 @@
 #include "mdiarea.h"
+#include <QApplication>
 #include <QPainter>
 #include <QScrollBar>
 #include <QScopedValueRollback>
@@ -7,6 +8,7 @@
 #include <QStyle>
 #include <QStyleOptionTabBarBase>
 #include <QTimer>
+#include "../apptrace.h"
 
 ///
 /// \brief The TabBarBaseLineWidget class
@@ -48,6 +50,32 @@ private:
     MdiArea* _owner;
 };
 
+static bool isInterestingTraceEvent(QEvent::Type type)
+{
+    switch (type) {
+        case QEvent::FocusIn:
+        case QEvent::FocusOut:
+        case QEvent::WindowActivate:
+        case QEvent::WindowDeactivate:
+        case QEvent::MouseButtonPress:
+        case QEvent::MouseButtonRelease:
+        case QEvent::ShortcutOverride:
+        case QEvent::KeyPress:
+        case QEvent::KeyRelease:
+        case QEvent::Close:
+            return true;
+        default:
+            return false;
+    }
+}
+
+static QString areaTag(const MdiArea* area)
+{
+    return QStringLiteral("%1 state={%2}")
+        .arg(AppTrace::objectTag(area))
+        .arg(AppTrace::mdiAreaState(area));
+}
+
 ///
 /// \brief MdiArea::MdiArea
 /// \param parent
@@ -57,6 +85,8 @@ MdiArea::MdiArea(QWidget* parent)
 {
     setViewMode(QMdiArea::TabbedView);
     connect(this, &QMdiArea::subWindowActivated, this, &MdiArea::on_subWindowActivated);
+    AppTrace::log("MdiArea::MdiArea",
+                  QStringLiteral("constructed %1").arg(areaTag(this)));
 }
 
 ///
@@ -65,6 +95,8 @@ MdiArea::MdiArea(QWidget* parent)
 MdiArea::~MdiArea()
 {
     _destroying = true;
+    AppTrace::log("MdiArea::~MdiArea",
+                  QStringLiteral("destroying %1").arg(areaTag(this)));
 }
 
 ///
@@ -75,6 +107,12 @@ MdiArea::~MdiArea()
 ///
 QMdiSubWindow* MdiArea::addSubWindow(QWidget* widget, Qt::WindowFlags flags)
 {
+    AppTrace::log("MdiArea::addSubWindow",
+                  QStringLiteral("%1 request widget=%2 flags=0x%3")
+                      .arg(AppTrace::objectTag(this))
+                      .arg(AppTrace::widgetTag(widget))
+                      .arg(QString::number(quint32(flags), 16)));
+
     auto* wnd = QMdiArea::addSubWindow(widget, flags);
     if (!wnd)
         return nullptr;
@@ -85,6 +123,12 @@ QMdiSubWindow* MdiArea::addSubWindow(QWidget* widget, Qt::WindowFlags flags)
         _tabBar->addSubWindow(wnd);
 
     updateTabBarGeometry();
+
+    AppTrace::log("MdiArea::addSubWindow",
+                  QStringLiteral("%1 added=%2 after=%3")
+                      .arg(AppTrace::objectTag(this))
+                      .arg(AppTrace::subWindowTag(wnd))
+                      .arg(AppTrace::mdiAreaState(this)));
     return wnd;
 }
 
@@ -94,6 +138,11 @@ QMdiSubWindow* MdiArea::addSubWindow(QWidget* widget, Qt::WindowFlags flags)
 ///
 void MdiArea::removeSubWindow(QWidget* widget)
 {
+    AppTrace::log("MdiArea::removeSubWindow",
+                  QStringLiteral("%1 request widget=%2")
+                      .arg(AppTrace::objectTag(this))
+                      .arg(AppTrace::widgetTag(widget)));
+
     if (_tabBar) {
         auto* wnd = qobject_cast<QMdiSubWindow*>(widget);
         if (!wnd) {
@@ -111,6 +160,11 @@ void MdiArea::removeSubWindow(QWidget* widget)
 
     QMdiArea::removeSubWindow(widget);
     updateTabBarGeometry();
+
+    AppTrace::log("MdiArea::removeSubWindow",
+                  QStringLiteral("%1 after=%2")
+                      .arg(AppTrace::objectTag(this))
+                      .arg(AppTrace::mdiAreaState(this)));
 }
 
 ///
@@ -129,6 +183,14 @@ QList<QMdiSubWindow*> MdiArea::localSubWindowList(WindowOrder order) const
 ///
 void MdiArea::setActiveSubWindow(QMdiSubWindow* wnd)
 {
+    const auto beforeState = AppTrace::mdiAreaState(this);
+    AppTrace::log("MdiArea::setActiveSubWindow",
+                  QStringLiteral("%1 request=%2 focus=%3 before=%4")
+                      .arg(AppTrace::objectTag(this))
+                      .arg(AppTrace::subWindowTag(wnd))
+                      .arg(AppTrace::widgetTag(QApplication::focusWidget()))
+                      .arg(beforeState));
+
     if (wnd && !wnd->isEnabled())
         wnd->setEnabled(true);
 
@@ -172,6 +234,14 @@ void MdiArea::setActiveSubWindow(QMdiSubWindow* wnd)
             keepEnabled = QMdiArea::currentSubWindow();
         updateTabbedEnabledState(keepEnabled);
     }
+
+    const QMdiSubWindow* tabCurrent = _tabBar ? _tabBar->currentSubWindow() : nullptr;
+    AppTrace::log("MdiArea::setActiveSubWindow",
+                  QStringLiteral("%1 done tabCurrent=%2 lastActivated=%3 after=%4")
+                      .arg(AppTrace::objectTag(this))
+                      .arg(AppTrace::subWindowTag(tabCurrent))
+                      .arg(AppTrace::subWindowTag(_lastActivatedSubWindow.data()))
+                      .arg(AppTrace::mdiAreaState(this)));
 }
 
 ///
@@ -263,6 +333,24 @@ void MdiArea::setTabBarTrailingInset(int inset)
 ///
 bool MdiArea::eventFilter(QObject* obj, QEvent* event)
 {
+    if (AppTrace::isEnabled() && event && isInterestingTraceEvent(event->type())) {
+        bool related = (obj == this || obj == _tabBar || obj == _nativeTabBar || obj == viewport());
+        if (!related) {
+            if (const auto* widget = qobject_cast<const QWidget*>(obj))
+                related = (widget == this) || isAncestorOf(widget);
+        }
+
+        if (related) {
+            AppTrace::log("MdiArea::eventFilter",
+                          QStringLiteral("%1 obj=%2 event=%3 focus=%4 state=%5")
+                              .arg(AppTrace::objectTag(this))
+                              .arg(AppTrace::objectTag(obj))
+                              .arg(AppTrace::eventTypeName(event->type()))
+                              .arg(AppTrace::widgetTag(QApplication::focusWidget()))
+                              .arg(AppTrace::mdiAreaState(this)));
+        }
+    }
+
     if (obj == _tabBar) {
         switch (event->type()) {
             case QEvent::Paint:
@@ -302,6 +390,12 @@ void MdiArea::resizeEvent(QResizeEvent* event)
 ///
 void MdiArea::setVisible(bool visible)
 {
+    AppTrace::log("MdiArea::setVisible",
+                  QStringLiteral("%1 visible=%2 before=%3")
+                      .arg(AppTrace::objectTag(this))
+                      .arg(visible)
+                      .arg(AppTrace::mdiAreaState(this)));
+
     QMdiArea::setVisible(visible);
     if (visible) {
         setupTabbedMode();
@@ -325,6 +419,12 @@ void MdiArea::setVisible(bool visible)
         _tabBar->setVisible(visible && viewMode() == QMdiArea::TabbedView);
     updateViewportBaseLine();
     emit tabBarLayoutChanged();
+
+    AppTrace::log("MdiArea::setVisible",
+                  QStringLiteral("%1 done visible=%2 after=%3")
+                      .arg(AppTrace::objectTag(this))
+                      .arg(visible)
+                      .arg(AppTrace::mdiAreaState(this)));
 }
 
 ///
@@ -337,6 +437,11 @@ void MdiArea::on_tabBarClicked(int index)
         return;
 
     auto* wnd = subWindowAtIndex(index);
+    AppTrace::log("MdiArea::on_tabBarClicked",
+                  QStringLiteral("%1 index=%2 wnd=%3")
+                      .arg(AppTrace::objectTag(this))
+                      .arg(index)
+                      .arg(AppTrace::subWindowTag(wnd)));
     if (wnd)
         setActiveSubWindow(wnd);
 
@@ -353,6 +458,11 @@ void MdiArea::on_currentTabChanged(int index)
         return;
 
     auto* wnd = subWindowAtIndex(index);
+    AppTrace::log("MdiArea::on_currentTabChanged",
+                  QStringLiteral("%1 index=%2 wnd=%3")
+                      .arg(AppTrace::objectTag(this))
+                      .arg(index)
+                      .arg(AppTrace::subWindowTag(wnd)));
     if (wnd)
         setActiveSubWindow(wnd);
 }
@@ -367,6 +477,11 @@ void MdiArea::on_closeTab(int index)
         return;
 
     auto* wnd = subWindowAtIndex(index);
+    AppTrace::log("MdiArea::on_closeTab",
+                  QStringLiteral("%1 index=%2 wnd=%3")
+                      .arg(AppTrace::objectTag(this))
+                      .arg(index)
+                      .arg(AppTrace::subWindowTag(wnd)));
     if (!wnd)
         return;
 
@@ -425,6 +540,13 @@ void MdiArea::on_tabBarDestroyed()
 ///
 void MdiArea::on_subWindowActivated(QMdiSubWindow* wnd)
 {
+    AppTrace::log("MdiArea::on_subWindowActivated",
+                  QStringLiteral("%1 signal wnd=%2 focus=%3 state=%4")
+                      .arg(AppTrace::objectTag(this))
+                      .arg(AppTrace::subWindowTag(wnd))
+                      .arg(AppTrace::widgetTag(QApplication::focusWidget()))
+                      .arg(AppTrace::mdiAreaState(this)));
+
     if (!wnd) {
         QMdiSubWindow* keepEnabled = _lastActivatedSubWindow.data();
         if (!keepEnabled && _tabBar)
@@ -439,6 +561,12 @@ void MdiArea::on_subWindowActivated(QMdiSubWindow* wnd)
 
         if (_tabBar)
             updateTabBarGeometry();
+
+        AppTrace::log("MdiArea::on_subWindowActivated",
+                      QStringLiteral("%1 null-activation keepEnabled=%2 after=%3")
+                          .arg(AppTrace::objectTag(this))
+                          .arg(AppTrace::subWindowTag(keepEnabled))
+                          .arg(AppTrace::mdiAreaState(this)));
         return;
     }
 
@@ -458,6 +586,12 @@ void MdiArea::on_subWindowActivated(QMdiSubWindow* wnd)
 
     _tabHistory.removeAll(wnd);
     _tabHistory.prepend(wnd);
+
+    AppTrace::log("MdiArea::on_subWindowActivated",
+                  QStringLiteral("%1 activated=%2 after=%3")
+                      .arg(AppTrace::objectTag(this))
+                      .arg(AppTrace::subWindowTag(wnd))
+                      .arg(AppTrace::mdiAreaState(this)));
 }
 
 ///
@@ -465,12 +599,19 @@ void MdiArea::on_subWindowActivated(QMdiSubWindow* wnd)
 ///
 void MdiArea::setupTabbedMode()
 {
+    AppTrace::log("MdiArea::setupTabbedMode",
+                  QStringLiteral("%1 begin state=%2")
+                      .arg(AppTrace::objectTag(this))
+                      .arg(AppTrace::mdiAreaState(this)));
+
     if (_tabBar) {
         refreshTabBar();
         if (isVisible())
             _tabBar->show();
         updateTabBarGeometry();
         updateViewportBaseLine();
+        AppTrace::log("MdiArea::setupTabbedMode",
+                      QStringLiteral("%1 reuse-existing-tabbar").arg(AppTrace::objectTag(this)));
         return;
     }
 
@@ -529,6 +670,12 @@ void MdiArea::setupTabbedMode()
     } else {
         updateTabbedEnabledState(nullptr);
     }
+
+    AppTrace::log("MdiArea::setupTabbedMode",
+                  QStringLiteral("%1 preferredCurrent=%2 state=%3")
+                      .arg(AppTrace::objectTag(this))
+                      .arg(AppTrace::subWindowTag(preferredCurrent))
+                      .arg(AppTrace::mdiAreaState(this)));
 
     if (isVisible())
         _tabBar->show();

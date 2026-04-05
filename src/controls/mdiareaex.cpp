@@ -1,4 +1,4 @@
-﻿#include <QApplication>
+#include <QApplication>
 #include <QBoxLayout>
 #include <QHBoxLayout>
 #include <QLayout>
@@ -8,6 +8,7 @@
 #include <QTimer>
 #include "mdiareaex.h"
 #include "mditabbar.h"
+#include "../apptrace.h"
 
 ///
 /// \brief setEqualSplitterSizes
@@ -39,6 +40,30 @@ static bool setEqualSplitterSizes(QSplitter* splitter)
     return true;
 }
 
+static QString panelName(const MdiAreaEx* owner, const MdiArea* area)
+{
+    if (!owner || !area)
+        return QStringLiteral("null");
+    if (area == owner->primaryArea())
+        return QStringLiteral("primary");
+    if (area == owner->secondaryArea())
+        return QStringLiteral("secondary");
+    return QStringLiteral("unknown");
+}
+
+static QString mdiExState(const MdiAreaEx* mdi)
+{
+    if (!mdi)
+        return QStringLiteral("mdiEx=null");
+
+    return QStringLiteral("%1 split=%2 activePanel=%3 primary={%4} secondary={%5}")
+        .arg(AppTrace::objectTag(mdi))
+        .arg(mdi->isSplitView())
+        .arg(panelName(mdi, mdi->activePanel()))
+        .arg(AppTrace::mdiAreaState(mdi->primaryArea()))
+        .arg(AppTrace::mdiAreaState(mdi->secondaryArea()));
+}
+
 ///
 /// \brief MdiAreaEx::MdiAreaEx
 /// \param parent
@@ -62,14 +87,27 @@ MdiAreaEx::MdiAreaEx(QWidget* parent)
     syncSplitButtonState();
     updateSplitButtonGeometry();
 
-    connect(qApp, &QApplication::focusChanged, this, [this](QWidget*, QWidget* now) {
+    AppTrace::log("MdiAreaEx::MdiAreaEx",
+                  QStringLiteral("constructed %1").arg(mdiExState(this)));
+
+    connect(qApp, &QApplication::focusChanged, this, [this](QWidget* old, QWidget* now) {
+        AppTrace::log("MdiAreaEx::focusChanged",
+                      QStringLiteral("%1 old=%2 now=%3")
+                          .arg(mdiExState(this))
+                          .arg(AppTrace::widgetTag(old))
+                          .arg(AppTrace::widgetTag(now)));
+
         if (!now || !_secondaryArea)
             return;
         if (_secondaryArea->isAncestorOf(now)) {
             _activePanel = _secondaryArea;
+            AppTrace::log("MdiAreaEx::focusChanged",
+                          QStringLiteral("activePanel->secondary %1").arg(mdiExState(this)));
         }
         else if (_primaryArea->isAncestorOf(now)) {
             _activePanel = _primaryArea;
+            AppTrace::log("MdiAreaEx::focusChanged",
+                          QStringLiteral("activePanel->primary %1").arg(mdiExState(this)));
         }
     });
 }
@@ -80,6 +118,8 @@ MdiAreaEx::MdiAreaEx(QWidget* parent)
 MdiAreaEx::~MdiAreaEx()
 {
     _destroying = true;
+    AppTrace::log("MdiAreaEx::~MdiAreaEx",
+                  QStringLiteral("destroying %1").arg(mdiExState(this)));
 }
 
 ///
@@ -93,9 +133,21 @@ QMdiSubWindow* MdiAreaEx::addSubWindow(QWidget* widget, Qt::WindowFlags flags)
     if (!_primaryArea)
         return nullptr;
 
+    AppTrace::log("MdiAreaEx::addSubWindow",
+                  QStringLiteral("%1 request widget=%2 flags=0x%3 targetPanel=%4")
+                      .arg(AppTrace::objectTag(this))
+                      .arg(AppTrace::widgetTag(widget))
+                      .arg(QString::number(quint32(flags), 16))
+                      .arg(panelName(this, activePanel())));
+
     auto* wnd = activePanel()->addSubWindow(widget, flags);
     syncSplitButtonState();
     updateSplitButtonGeometry();
+    AppTrace::log("MdiAreaEx::addSubWindow",
+                  QStringLiteral("%1 added=%2 state=%3")
+                      .arg(AppTrace::objectTag(this))
+                      .arg(AppTrace::subWindowTag(wnd))
+                      .arg(mdiExState(this)));
     return wnd;
 }
 
@@ -107,6 +159,12 @@ void MdiAreaEx::removeSubWindow(QWidget* widget)
 {
     if (!_primaryArea || !widget)
         return;
+
+    AppTrace::log("MdiAreaEx::removeSubWindow",
+                  QStringLiteral("%1 request widget=%2 state=%3")
+                      .arg(AppTrace::objectTag(this))
+                      .arg(AppTrace::widgetTag(widget))
+                      .arg(mdiExState(this)));
 
     QMdiSubWindow* wnd = qobject_cast<QMdiSubWindow*>(widget);
     if (!wnd) {
@@ -134,6 +192,11 @@ void MdiAreaEx::removeSubWindow(QWidget* widget)
     owner->removeSubWindow(widget);
     syncSplitButtonState();
     updateSplitButtonGeometry();
+    AppTrace::log("MdiAreaEx::removeSubWindow",
+                  QStringLiteral("%1 done owner=%2 state=%3")
+                      .arg(AppTrace::objectTag(this))
+                      .arg(panelName(this, owner))
+                      .arg(mdiExState(this)));
 }
 
 ///
@@ -173,19 +236,31 @@ QMdiSubWindow* MdiAreaEx::currentSubWindow() const
     if (!_primaryArea)
         return nullptr;
 
-    if (!_secondaryArea)
-        return _primaryArea->currentSubWindow();
+    QMdiSubWindow* result = nullptr;
+    if (!_secondaryArea) {
+        result = _primaryArea->currentSubWindow();
+    } else {
+        auto* panel = activePanel();
+        if (panel == _secondaryArea) {
+            if (auto* wnd = _secondaryArea->currentSubWindow())
+                result = wnd;
+        }
 
-    auto* panel = activePanel();
-    if (panel == _secondaryArea) {
-        if (auto* wnd = _secondaryArea->currentSubWindow())
-            return wnd;
+        if (!result) {
+            if (auto* wnd = _primaryArea->currentSubWindow())
+                result = wnd;
+        }
+
+        if (!result)
+            result = _secondaryArea->currentSubWindow();
     }
 
-    if (auto* wnd = _primaryArea->currentSubWindow())
-        return wnd;
+    if (!result && AppTrace::isEnabled() && !subWindowList().isEmpty()) {
+        AppTrace::log("MdiAreaEx::currentSubWindow",
+                      QStringLiteral("returned null with non-empty list: %1").arg(mdiExState(this)));
+    }
 
-    return _secondaryArea->currentSubWindow();
+    return result;
 }
 
 ///
@@ -197,19 +272,31 @@ QMdiSubWindow* MdiAreaEx::activeSubWindow() const
     if (!_primaryArea)
         return nullptr;
 
-    if (!_secondaryArea)
-        return _primaryArea->activeSubWindow();
+    QMdiSubWindow* result = nullptr;
+    if (!_secondaryArea) {
+        result = _primaryArea->activeSubWindow();
+    } else {
+        auto* panel = activePanel();
+        if (panel == _secondaryArea) {
+            if (auto* wnd = _secondaryArea->activeSubWindow())
+                result = wnd;
+        }
 
-    auto* panel = activePanel();
-    if (panel == _secondaryArea) {
-        if (auto* wnd = _secondaryArea->activeSubWindow())
-            return wnd;
+        if (!result) {
+            if (auto* wnd = _primaryArea->activeSubWindow())
+                result = wnd;
+        }
+
+        if (!result)
+            result = _secondaryArea->activeSubWindow();
     }
 
-    if (auto* wnd = _primaryArea->activeSubWindow())
-        return wnd;
+    if (!result && AppTrace::isEnabled() && !subWindowList().isEmpty()) {
+        AppTrace::log("MdiAreaEx::activeSubWindow",
+                      QStringLiteral("returned null with non-empty list: %1").arg(mdiExState(this)));
+    }
 
-    return _secondaryArea->activeSubWindow();
+    return result;
 }
 
 ///
@@ -244,10 +331,17 @@ void MdiAreaEx::setActiveSubWindow(QMdiSubWindow* wnd)
     if (!_primaryArea)
         return;
 
+    AppTrace::log("MdiAreaEx::setActiveSubWindow",
+                  QStringLiteral("%1 request=%2")
+                      .arg(mdiExState(this))
+                      .arg(AppTrace::subWindowTag(wnd)));
+
     if (!wnd) {
         _primaryArea->setActiveSubWindow(nullptr);
         if (_secondaryArea)
             _secondaryArea->setActiveSubWindow(nullptr);
+        AppTrace::log("MdiAreaEx::setActiveSubWindow",
+                      QStringLiteral("cleared active window %1").arg(mdiExState(this)));
         return;
     }
 
@@ -255,12 +349,18 @@ void MdiAreaEx::setActiveSubWindow(QMdiSubWindow* wnd)
         owner->setActiveSubWindow(wnd);
         owner->setFocus(Qt::OtherFocusReason);
         _activePanel = owner;
+        AppTrace::log("MdiAreaEx::setActiveSubWindow",
+                      QStringLiteral("owner=%1 after=%2")
+                          .arg(panelName(this, owner))
+                          .arg(mdiExState(this)));
         return;
     }
 
     _primaryArea->setActiveSubWindow(wnd);
     _primaryArea->setFocus(Qt::OtherFocusReason);
     _activePanel = _primaryArea;
+    AppTrace::log("MdiAreaEx::setActiveSubWindow",
+                  QStringLiteral("fallback-primary after=%1").arg(mdiExState(this)));
 }
 
 ///
@@ -643,6 +743,13 @@ void MdiAreaEx::on_panelSubWindowActivated(QMdiSubWindow* wnd)
     if (_isSplitInProgress)
         return;
 
+    auto* sourcePanel = qobject_cast<MdiArea*>(sender());
+    AppTrace::log("MdiAreaEx::on_panelSubWindowActivated",
+                  QStringLiteral("source=%1 wnd=%2 before=%3")
+                      .arg(panelName(this, sourcePanel))
+                      .arg(AppTrace::subWindowTag(wnd))
+                      .arg(mdiExState(this)));
+
     if (wnd) {
         if (auto* owner = areaForSubWindow(wnd))
             _activePanel = owner;
@@ -651,6 +758,8 @@ void MdiAreaEx::on_panelSubWindowActivated(QMdiSubWindow* wnd)
     emit subWindowActivated(wnd);
     syncSplitButtonState();
     updateSplitButtonGeometry();
+    AppTrace::log("MdiAreaEx::on_panelSubWindowActivated",
+                  QStringLiteral("after=%1").arg(mdiExState(this)));
 }
 
 ///
@@ -968,6 +1077,9 @@ void MdiAreaEx::setSplitViewEnabled(bool enabled)
     if (!_primaryArea || _primaryArea->viewMode() != QMdiArea::TabbedView)
         return;
 
+    AppTrace::log("MdiAreaEx::setSplitViewEnabled",
+                  QStringLiteral("enabled=%1 before=%2").arg(enabled).arg(mdiExState(this)));
+
     const bool wasSplit = isSplitView();
 
     if (enabled) {
@@ -990,6 +1102,9 @@ void MdiAreaEx::setSplitViewEnabled(bool enabled)
 
     if (wasSplit != isSplitView())
         emit splitViewToggled(isSplitView());
+
+    AppTrace::log("MdiAreaEx::setSplitViewEnabled",
+                  QStringLiteral("done enabled=%1 after=%2").arg(enabled).arg(mdiExState(this)));
 }
 
 ///
