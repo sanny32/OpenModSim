@@ -137,33 +137,6 @@ DataType dataTypeOfForm(QWidget* widget)
     return DataType::Hex;
 }
 
-void setDataTypeOnForm(QWidget* widget, DataType type)
-{
-    if (auto* frm = qobject_cast<FormDataView*>(widget)) frm->setDataType(type);
-}
-
-ByteOrder byteOrderOfForm(QWidget* widget)
-{
-    if (auto* frm = qobject_cast<FormDataView*>(widget)) return frm->byteOrder();
-    return ByteOrder::Direct;
-}
-
-void setByteOrderOnForm(QWidget* widget, ByteOrder order)
-{
-    if (auto* frm = qobject_cast<FormDataView*>(widget)) frm->setByteOrder(order);
-}
-
-bool displayHexAddressesOfForm(QWidget* widget)
-{
-    if (auto* frm = qobject_cast<FormDataView*>(widget)) return frm->displayHexAddresses();
-    return false;
-}
-
-void setDisplayHexAddressesOnForm(QWidget* widget, bool on)
-{
-    if (auto* frm = qobject_cast<FormDataView*>(widget)) frm->setDisplayHexAddresses(on);
-}
-
 void printOnForm(QWidget* widget, QPrinter* printer)
 {
     if (auto* frm = qobject_cast<FormDataView*>(widget)) frm->print(printer);
@@ -171,49 +144,7 @@ void printOnForm(QWidget* widget, QPrinter* printer)
     else if (auto* frm = qobject_cast<FormScriptView*>(widget)) frm->print(printer);
 }
 
-QColor statusColorOfForm(QWidget* widget)
-{
-    if (auto* frm = qobject_cast<FormDataView*>(widget)) return frm->statusColor();
-    return QColor();
 }
-
-QColor backgroundColorOfForm(QWidget* widget)
-{
-    if (auto* frm = qobject_cast<FormDataView*>(widget)) return frm->backgroundColor();
-    if (auto* frm = qobject_cast<FormTrafficView*>(widget)) return frm->backgroundColor();
-    if (auto* frm = qobject_cast<FormScriptView*>(widget)) return frm->backgroundColor();
-    return QColor();
-}
-
-QColor foregroundColorOfForm(QWidget* widget)
-{
-    if (auto* frm = qobject_cast<FormDataView*>(widget)) return frm->foregroundColor();
-    if (auto* frm = qobject_cast<FormTrafficView*>(widget)) return frm->foregroundColor();
-    if (auto* frm = qobject_cast<FormScriptView*>(widget)) return frm->foregroundColor();
-    return QColor();
-}
-
-void setStatusColorOnForm(QWidget* widget, const QColor& clr)
-{
-    if (auto* frm = qobject_cast<FormDataView*>(widget)) frm->setStatusColor(clr);
-}
-
-void setBackgroundColorOnForm(QWidget* widget, const QColor& clr)
-{
-    if (auto* frm = qobject_cast<FormDataView*>(widget)) frm->setBackgroundColor(clr);
-    else if (auto* frm = qobject_cast<FormTrafficView*>(widget)) frm->setBackgroundColor(clr);
-    else if (auto* frm = qobject_cast<FormScriptView*>(widget)) frm->setBackgroundColor(clr);
-}
-
-void setForegroundColorOnForm(QWidget* widget, const QColor& clr)
-{
-    if (auto* frm = qobject_cast<FormDataView*>(widget)) frm->setForegroundColor(clr);
-    else if (auto* frm = qobject_cast<FormTrafficView*>(widget)) frm->setForegroundColor(clr);
-    else if (auto* frm = qobject_cast<FormScriptView*>(widget)) frm->setForegroundColor(clr);
-}
-
-}
-
 
 ///
 /// \brief MainWindow::MainWindow
@@ -527,7 +458,6 @@ void MainWindow::on_awake()
     auto* dataFrm = currentDataForm();
     auto* trafficFrm = currentTrafficForm();
     auto* scriptFrm = currentScriptForm();
-    auto* dataLikeFrm = currentDataOrTrafficForm();
 
     ui->menuSetup->setEnabled(frm != nullptr);
     ui->menuWindow->setEnabled(frm != nullptr);
