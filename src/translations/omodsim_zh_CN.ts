@@ -2404,12 +2404,16 @@ MODBUS Point Type:
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="950"/>
+        <location filename="../formregistermapview.cpp" line="676"/>
+        <location filename="../formregistermapview.cpp" line="1186"/>
+        <location filename="../formregistermapview.cpp" line="1186"/>
         <source>1-based</source>
         <translation type="unfinished">基地址为-1</translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="951"/>
+        <location filename="../formregistermapview.cpp" line="676"/>
+        <location filename="../formregistermapview.cpp" line="1187"/>
+        <location filename="../formregistermapview.cpp" line="1187"/>
         <source>0-based</source>
         <translation type="unfinished">基地址为-0</translation>
     </message>
@@ -2419,42 +2423,51 @@ MODBUS Point Type:
         <translation type="unfinished">十六进制视图</translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="959"/>
+        <location filename="../formregistermapview.cpp" line="1195"/>
         <source>Address Base:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="974"/>
+        <location filename="../formregistermapview.cpp" line="689"/>
+        <location filename="../formregistermapview.cpp" line="1210"/>
+        <location filename="../formregistermapview.cpp" line="1210"/>
         <source>All Types</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="975"/>
+        <location filename="../formregistermapview.cpp" line="691"/>
+        <source>Address Base: %1
+Unit Filter: %2
+Type Filter: %3</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../formregistermapview.cpp" line="1211"/>
         <source>Coils</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="976"/>
+        <location filename="../formregistermapview.cpp" line="1212"/>
         <source>Discrete Inputs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="977"/>
+        <location filename="../formregistermapview.cpp" line="1213"/>
         <source>Input Registers</source>
         <translation type="unfinished">输入寄存器</translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="978"/>
+        <location filename="../formregistermapview.cpp" line="1214"/>
         <source>Holding Registers</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="985"/>
+        <location filename="../formregistermapview.cpp" line="1221"/>
         <source>Unit:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="987"/>
+        <location filename="../formregistermapview.cpp" line="1223"/>
         <source>Data Type:</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2463,7 +2476,9 @@ MODBUS Point Type:
         <translation type="obsolete">类型： </translation>
     </message>
     <message>
-        <location filename="../formregistermapview.cpp" line="970"/>
+        <location filename="../formregistermapview.cpp" line="678"/>
+        <location filename="../formregistermapview.cpp" line="1206"/>
+        <location filename="../formregistermapview.cpp" line="1206"/>
         <source>All</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3290,8 +3305,8 @@ Script.onInit(()=&gt;{
     </message>
     <message>
         <location filename="../mainwindow.ui" line="234"/>
-        <location filename="../mainwindow.cpp" line="1493"/>
-        <location filename="../mainwindow.cpp" line="1493"/>
+        <location filename="../mainwindow.cpp" line="1496"/>
+        <location filename="../mainwindow.cpp" line="1496"/>
         <source>Save Project</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3528,10 +3543,10 @@ Script.onInit(()=&gt;{
     <message>
         <location filename="../mainwindow.ui" line="501"/>
         <location filename="../mainwindow.ui" line="504"/>
-        <location filename="../mainwindow.cpp" line="196"/>
-        <location filename="../mainwindow.cpp" line="320"/>
-        <location filename="../mainwindow.cpp" line="196"/>
-        <location filename="../mainwindow.cpp" line="320"/>
+        <location filename="../mainwindow.cpp" line="197"/>
+        <location filename="../mainwindow.cpp" line="321"/>
+        <location filename="../mainwindow.cpp" line="197"/>
+        <location filename="../mainwindow.cpp" line="321"/>
         <source>Script Help</source>
         <translation>脚本帮助</translation>
     </message>
@@ -3620,7 +3635,7 @@ Script.onInit(()=&gt;{
         <translation type="vanished">俄语</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="572"/>
+        <location filename="../mainwindow.cpp" line="575"/>
         <source>All files (*)</source>
         <translation>所有文件 (*)</translation>
     </message>
@@ -3629,30 +3644,30 @@ Script.onInit(()=&gt;{
         <translation type="vanished">XML 文件(*.xml)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="152"/>
-        <location filename="../mainwindow.cpp" line="322"/>
-        <location filename="../mainwindow.cpp" line="322"/>
+        <location filename="../mainwindow.cpp" line="153"/>
+        <location filename="../mainwindow.cpp" line="323"/>
+        <location filename="../mainwindow.cpp" line="323"/>
         <source>Open Recent</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="153"/>
-        <location filename="../mainwindow.cpp" line="1580"/>
-        <location filename="../mainwindow.cpp" line="1580"/>
+        <location filename="../mainwindow.cpp" line="154"/>
+        <location filename="../mainwindow.cpp" line="1583"/>
+        <location filename="../mainwindow.cpp" line="1583"/>
         <source>Clear List</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="177"/>
-        <location filename="../mainwindow.cpp" line="319"/>
-        <location filename="../mainwindow.cpp" line="319"/>
+        <location filename="../mainwindow.cpp" line="178"/>
+        <location filename="../mainwindow.cpp" line="320"/>
+        <location filename="../mainwindow.cpp" line="320"/>
         <source>Project</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="231"/>
-        <location filename="../mainwindow.cpp" line="321"/>
-        <location filename="../mainwindow.cpp" line="321"/>
+        <location filename="../mainwindow.cpp" line="232"/>
+        <location filename="../mainwindow.cpp" line="322"/>
+        <location filename="../mainwindow.cpp" line="322"/>
         <source>Output</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3692,17 +3707,17 @@ Script.onInit(()=&gt;{
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1106"/>
+        <location filename="../mainwindow.cpp" line="1109"/>
         <source>Move to Other Panel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1494"/>
+        <location filename="../mainwindow.cpp" line="1497"/>
         <source>Save project before closing?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1568"/>
+        <location filename="../mainwindow.cpp" line="1571"/>
         <source>No Recent Projects</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3711,14 +3726,14 @@ Script.onInit(()=&gt;{
         <translation type="obsolete">数据</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="571"/>
-        <location filename="../mainwindow.cpp" line="602"/>
-        <location filename="../mainwindow.cpp" line="602"/>
+        <location filename="../mainwindow.cpp" line="574"/>
+        <location filename="../mainwindow.cpp" line="605"/>
+        <location filename="../mainwindow.cpp" line="605"/>
         <source>Project files (*.msimprj)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1045"/>
+        <location filename="../mainwindow.cpp" line="1048"/>
         <source>JavaScript files (*.js);;All files (*)</source>
         <translation type="unfinished"></translation>
     </message>

@@ -119,6 +119,7 @@ void printOnForm(QWidget* widget, QPrinter* printer)
     if (auto* frm = qobject_cast<FormDataView*>(widget)) frm->print(printer);
     else if (auto* frm = qobject_cast<FormTrafficView*>(widget)) frm->print(printer);
     else if (auto* frm = qobject_cast<FormScriptView*>(widget)) frm->print(printer);
+    else if (auto* frm = qobject_cast<FormRegisterMapView*>(widget)) frm->print(printer);
 }
 
 }
@@ -398,6 +399,7 @@ void MainWindow::on_awake()
     auto* dataFrm = currentDataForm();
     auto* trafficFrm = currentTrafficForm();
     auto* scriptFrm = currentScriptForm();
+    auto* registerMapFrm = qobject_cast<FormRegisterMapView*>(frm);
 
     ui->menuSetup->setEnabled(frm != nullptr);
     ui->menuWindow->setEnabled(frm != nullptr);
@@ -405,7 +407,8 @@ void MainWindow::on_awake()
     const bool canPrint = _selectedPrinter != nullptr &&
                           (dataFrm != nullptr ||
                            (trafficFrm != nullptr && !trafficFrm->isLogEmpty()) ||
-                           (scriptFrm  != nullptr && !scriptFrm->script().isEmpty()));
+                           (scriptFrm  != nullptr && !scriptFrm->script().isEmpty()) ||
+                           (registerMapFrm != nullptr && !registerMapFrm->isEmpty()));
     ui->actionPrintSetup->setEnabled(_selectedPrinter != nullptr && frm != nullptr);
     ui->actionPrint->setEnabled(canPrint);
 

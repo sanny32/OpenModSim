@@ -650,6 +650,242 @@ void FormRegisterMapView::loadXml(QXmlStreamReader& xml)
 }
 
 ///
+/// \brief FormRegisterMapView::print
+/// \param printer
+///
+void FormRegisterMapView::print(QPrinter* printer)
+{
+    if (!printer || !_proxy) return;
+    if (_proxy->rowCount() <= 0) return;
+
+    const QRect pageRect = printer->pageRect(QPrinter::DevicePixel).toRect();
+    if (pageRect.isEmpty()) return;
+
+    const int marginX = qMax(pageRect.width() / 40, 10);
+    const int marginY = qMax(pageRect.height() / 40, 10);
+    const QRect contentRect = pageRect.adjusted(marginX, marginY, -marginX, -marginY);
+    if (contentRect.width() <= 0 || contentRect.height() <= 0) return;
+
+    QPainter painter(printer);
+    painter.setRenderHint(QPainter::Antialiasing, true);
+    painter.setRenderHint(QPainter::TextAntialiasing, true);
+
+    const QString printDateText = QDateTime::currentDateTime().toString(Qt::ISODate);
+    const QString addressBaseText = _addrBaseCombo
+        ? _addrBaseCombo->currentText()
+        : (_model->zeroBased() ? tr("0-based") : tr("1-based"));
+
+    QString unitFilterText = tr("All");
+    if (_filterUnitSpin) {
+        if (_filterUnitSpin->value() > _filterUnitSpin->minimum()) {
+            unitFilterText = QString::number(_filterUnitSpin->value());
+        } else if (!_filterUnitSpin->specialValueText().isEmpty()) {
+            unitFilterText = _filterUnitSpin->specialValueText();
+        }
+    }
+
+    const QString typeFilterText = _filterTypeCombo
+        ? _filterTypeCombo->currentText()
+        : tr("All Types");
+
+    const QString pageHeaderText = QString(tr("Address Base: %1\nUnit Filter: %2\nType Filter: %3"))
+        .arg(addressBaseText, unitFilterText, typeFilterText);
+
+    QVector<int> visibleColumns;
+    QVector<int> baseWidths;
+    if (auto* hdr = ui->tableView->horizontalHeader()) {
+        for (int col = 0; col < _proxy->columnCount(); ++col) {
+            if (ui->tableView->isColumnHidden(col))
+                continue;
+            visibleColumns.append(col);
+            baseWidths.append(qMax(hdr->sectionSize(col), 1));
+        }
+    }
+
+    if (visibleColumns.isEmpty()) {
+        for (int col = 0; col < _proxy->columnCount(); ++col) {
+            visibleColumns.append(col);
+            baseWidths.append(1);
+        }
+    }
+
+    if (visibleColumns.isEmpty()) return;
+
+    const int tableWidth = contentRect.width();
+    int totalBaseWidth = 0;
+    for (int width : baseWidths)
+        totalBaseWidth += width;
+    if (totalBaseWidth <= 0)
+        totalBaseWidth = visibleColumns.size();
+
+    QVector<int> columnWidths(visibleColumns.size(), 1);
+    int consumedWidth = 0;
+    for (int i = 0; i < visibleColumns.size(); ++i) {
+        const int width = (i == visibleColumns.size() - 1)
+            ? qMax(1, tableWidth - consumedWidth)
+            : qMax(1, qRound(static_cast<double>(tableWidth) *
+                             static_cast<double>(baseWidths[i]) /
+                             static_cast<double>(totalBaseWidth)));
+        columnWidths[i] = width;
+        consumedWidth += width;
+    }
+    if (!columnWidths.isEmpty() && consumedWidth != tableWidth)
+        columnWidths.last() += (tableWidth - consumedWidth);
+
+    const int cellPadX = qMax(contentRect.width() / 250, 4);
+    const int cellPadY = qMax(contentRect.height() / 320, 3);
+    const int blockGap = qMax(contentRect.height() / 90, 8);
+    const int footerGap = qMax(contentRect.height() / 120, 6);
+
+    const QFont bodyFont = painter.font();
+    QFont headerFont = bodyFont;
+    headerFont.setBold(true);
+
+    auto cellHeight = [&](const QString& text, int cellWidth, const QFont& font) {
+        const int textWidth = qMax(1, cellWidth - 2 * cellPadX);
+        QFontMetrics fm(font);
+        const QRect bounds = fm.boundingRect(QRect(0, 0, textWidth, 1000000),
+                                             Qt::TextWordWrap | Qt::AlignLeft | Qt::AlignVCenter,
+                                             text);
+        return qMax(bounds.height(), fm.height()) + 2 * cellPadY;
+    };
+
+    auto tableHeaderHeight = [&]() {
+        int result = 0;
+        for (int i = 0; i < visibleColumns.size(); ++i) {
+            const int col = visibleColumns[i];
+            const QString title = _proxy->headerData(col, Qt::Horizontal, Qt::DisplayRole).toString();
+            result = qMax(result, cellHeight(title, columnWidths[i], headerFont));
+        }
+        return qMax(result, QFontMetrics(headerFont).height() + 2 * cellPadY);
+    };
+
+    auto rowHeight = [&](int row) {
+        int result = 0;
+        for (int i = 0; i < visibleColumns.size(); ++i) {
+            const int col = visibleColumns[i];
+            const QString text = _proxy->index(row, col).data(Qt::DisplayRole).toString();
+            result = qMax(result, cellHeight(text, columnWidths[i], bodyFont));
+        }
+        return qMax(result, QFontMetrics(bodyFont).height() + 2 * cellPadY);
+    };
+
+    auto textFlagsForColumn = [](int col) -> int {
+        switch (col) {
+            case ColComment:
+                return static_cast<int>(Qt::TextWordWrap | Qt::AlignLeft | Qt::AlignVCenter);
+            case ColAddress:
+            case ColValue:
+                return static_cast<int>(Qt::TextWordWrap | Qt::AlignRight | Qt::AlignVCenter);
+            default:
+                return static_cast<int>(Qt::TextWordWrap | Qt::AlignHCenter | Qt::AlignVCenter);
+        }
+    };
+
+    const int headerHeight = tableHeaderHeight();
+    const int totalRows = _proxy->rowCount();
+    const int pageNumberHeight = QFontMetrics(bodyFont).height();
+
+    int row = 0;
+    int pageNumber = 1;
+
+    while (true)
+    {
+        painter.setFont(bodyFont);
+
+        QRect dateRect = painter.boundingRect(QRect(0, 0, contentRect.width(), contentRect.height()),
+                                              Qt::TextSingleLine, printDateText);
+        dateRect.moveTopRight(QPoint(contentRect.right(), contentRect.top()));
+
+        const int minHeaderWidth = qMax(contentRect.width() / 2, 1);
+        const int headerTextWidth = qMax(minHeaderWidth, contentRect.width() - dateRect.width() - blockGap);
+        QRect headerRect = painter.boundingRect(QRect(contentRect.left(), contentRect.top(),
+                                                      headerTextWidth, contentRect.height()),
+                                                Qt::TextWordWrap | Qt::AlignLeft | Qt::AlignTop,
+                                                pageHeaderText);
+
+        painter.drawText(headerRect, Qt::TextWordWrap | Qt::AlignLeft | Qt::AlignTop, pageHeaderText);
+        painter.drawText(dateRect, Qt::TextSingleLine | Qt::AlignRight | Qt::AlignTop, printDateText);
+
+        const int headerBottom = qMax(headerRect.bottom(), dateRect.bottom());
+        const int tableTop = headerBottom + blockGap;
+        const int tableBottom = contentRect.bottom() - pageNumberHeight - footerGap;
+        if (tableBottom <= tableTop)
+            break;
+
+        QRect tableRect(contentRect.left(), tableTop, contentRect.width(), tableBottom - tableTop + 1);
+
+        int y = tableRect.top();
+        painter.setFont(headerFont);
+        int x = tableRect.left();
+        for (int i = 0; i < visibleColumns.size(); ++i) {
+            const int col = visibleColumns[i];
+            QRect cellRect(x, y, columnWidths[i], headerHeight);
+            QRect textRect = cellRect.adjusted(cellPadX, cellPadY, -cellPadX, -cellPadY);
+            const QString title = _proxy->headerData(col, Qt::Horizontal, Qt::DisplayRole).toString();
+
+            painter.drawRect(cellRect);
+            painter.drawText(textRect, Qt::TextWordWrap | Qt::AlignCenter, title);
+            x += columnWidths[i];
+        }
+        y += headerHeight;
+
+        painter.setFont(bodyFont);
+        bool printedRowsOnPage = false;
+
+        while (row < totalRows) {
+            int currentRowHeight = rowHeight(row);
+            const int remainingHeight = tableRect.bottom() - y + 1;
+
+            if (currentRowHeight > remainingHeight) {
+                if (!printedRowsOnPage) {
+                    if (remainingHeight <= 2 * cellPadY + 1) {
+                        row = totalRows;
+                        break;
+                    }
+                    currentRowHeight = remainingHeight;
+                } else {
+                    break;
+                }
+            }
+
+            int cellX = tableRect.left();
+            for (int i = 0; i < visibleColumns.size(); ++i) {
+                const int col = visibleColumns[i];
+                const QModelIndex index = _proxy->index(row, col);
+                const QString text = index.data(Qt::DisplayRole).toString();
+                QRect cellRect(cellX, y, columnWidths[i], currentRowHeight);
+                QRect textRect = cellRect.adjusted(cellPadX, cellPadY, -cellPadX, -cellPadY);
+
+                painter.drawRect(cellRect);
+                painter.drawText(textRect, textFlagsForColumn(col), text);
+                cellX += columnWidths[i];
+            }
+
+            y += currentRowHeight;
+            ++row;
+            printedRowsOnPage = true;
+
+            if (y > tableRect.bottom())
+                break;
+        }
+
+        const QString pageNumberText = QString::number(pageNumber++);
+        const QRect pageNumberRect(contentRect.left(),
+                                   contentRect.bottom() - pageNumberHeight + 1,
+                                   contentRect.width(),
+                                   pageNumberHeight);
+        painter.drawText(pageNumberRect, Qt::TextSingleLine | Qt::AlignRight | Qt::AlignBottom, pageNumberText);
+
+        if (row < totalRows) {
+            printer->newPage();
+        } else {
+            break;
+        }
+    }
+}
+
+///
 /// \brief FormRegisterMapView::show
 ///
 void FormRegisterMapView::show()

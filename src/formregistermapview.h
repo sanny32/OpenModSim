@@ -4,6 +4,7 @@
 #include <QWidget>
 #include <QComboBox>
 #include <QSpinBox>
+#include <QPrinter>
 #include <QXmlStreamWriter>
 #include <QXmlStreamReader>
 #include "modbusmultiserver.h"
@@ -49,6 +50,8 @@ public:
 
     bool autoAddOnRequest() const { return _autoAddOnRequest; }
     void setAutoAddOnRequest(bool value) { _autoAddOnRequest = value; }
+    bool isEmpty() const { return !_proxy || _proxy->rowCount() <= 0; }
+    void print(QPrinter* printer);
 
     void saveXml(QXmlStreamWriter& xml) const;
     void loadXml(QXmlStreamReader& xml);
