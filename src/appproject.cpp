@@ -346,6 +346,7 @@ void AppProject::syncAutoRequestMap(const ModbusDefinitions& defs)
         if (auto* map = ensureAutoRequestMap()) {
             map->setAutoAddOnRequest(true);
             map->setProperty(kDeleteLockedProperty, true);
+            _projectTree->updateFormTitle(map);
             openFormOnActivePanel(map);
             _projectTree->activateForm(map);
         }
@@ -355,6 +356,7 @@ void AppProject::syncAutoRequestMap(const ModbusDefinitions& defs)
     if (auto* map = findAutoRequestMap()) {
         map->setAutoAddOnRequest(false);
         map->setProperty(kDeleteLockedProperty, false);
+        _projectTree->updateFormTitle(map);
     }
 }
 
@@ -1277,7 +1279,7 @@ void AppProject::updateSplitPairScriptIcons(QWidget* frm)
             return;
 
         if(running)
-            crossFadeWindowIcon(targetWnd, targetWnd->windowIcon(), QIcon(":/res/actionRunScript.png"));
+            crossFadeWindowIcon(targetWnd, targetWnd->windowIcon(), QIcon(":/res/icon-run-script.png"));
         else
             crossFadeWindowIcon(targetWnd, targetWnd->windowIcon(), target->windowIcon());
     };

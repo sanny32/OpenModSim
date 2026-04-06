@@ -196,7 +196,7 @@
   <action name="actionNew">
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/res/actionNewData.png</normaloff>:/res/actionNewData.png</iconset>
+     <normaloff>:/res/icon-new-data.png</normaloff>:/res/icon-new-data.png</iconset>
    </property>
    <property name="text">
     <string>New</string>
@@ -216,7 +216,7 @@
   <action name="actionOpenProject">
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/res/actionOpen.png</normaloff>:/res/actionOpen.png</iconset>
+     <normaloff>:/res/icon-open.png</normaloff>:/res/icon-open.png</iconset>
    </property>
    <property name="text">
     <string>Open Project...</string>
@@ -228,7 +228,7 @@
   <action name="actionSaveProject">
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/res/actionSave.png</normaloff>:/res/actionSave.png</iconset>
+     <normaloff>:/res/icon-save.png</normaloff>:/res/icon-save.png</iconset>
    </property>
    <property name="text">
     <string>Save Project</string>
@@ -247,7 +247,7 @@
   <action name="actionPrint">
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/res/actionPrint.png</normaloff>:/res/actionPrint.png</iconset>
+     <normaloff>:/res/icon-print.png</normaloff>:/res/icon-print.png</iconset>
    </property>
    <property name="text">
     <string>Print...</string>
@@ -274,7 +274,7 @@
   <action name="actionConnect">
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/res/actionConnect.png</normaloff>:/res/actionConnect.png</iconset>
+     <normaloff>:/res/icon-connect.png</normaloff>:/res/icon-connect.png</iconset>
    </property>
    <property name="text">
     <string>Connect</string>
@@ -283,7 +283,7 @@
   <action name="actionDisconnect">
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/res/actionDisconnect.png</normaloff>:/res/actionDisconnect.png</iconset>
+     <normaloff>:/res/icon-disconnect.png</normaloff>:/res/icon-disconnect.png</iconset>
    </property>
    <property name="text">
     <string>Disconnect</string>
@@ -302,7 +302,7 @@
   <action name="actionAbout">
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/res/actionAbout.png</normaloff>:/res/actionAbout.png</iconset>
+     <normaloff>:/res/icon-about.png</normaloff>:/res/icon-about.png</iconset>
    </property>
    <property name="text">
     <string>About Open ModSim...</string>
@@ -327,7 +327,7 @@
   <action name="actionForceCoils">
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/res/actionForceCoils.png</normaloff>:/res/actionForceCoils.png</iconset>
+     <normaloff>:/res/icon-force-coils.png</normaloff>:/res/icon-force-coils.png</iconset>
    </property>
    <property name="text">
     <string>Force Coils</string>
@@ -336,7 +336,7 @@
   <action name="actionPresetHoldingRegs">
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/res/actionPresetHoldingRegs.png</normaloff>:/res/actionPresetHoldingRegs.png</iconset>
+     <normaloff>:/res/icon-preset-holding-regs.png</normaloff>:/res/icon-preset-holding-regs.png</iconset>
    </property>
    <property name="text">
     <string>Preset Holding Regs</string>
@@ -345,7 +345,7 @@
   <action name="actionPresetInputRegs">
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/res/actionPresetInputRegs.png</normaloff>:/res/actionPresetInputRegs.png</iconset>
+     <normaloff>:/res/icon-preset-input-regs.png</normaloff>:/res/icon-preset-input-regs.png</iconset>
    </property>
    <property name="text">
     <string>Preset Input Regs</string>
@@ -354,7 +354,7 @@
   <action name="actionForceDiscretes">
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/res/actionForceDiscretes.png</normaloff>:/res/actionForceDiscretes.png</iconset>
+     <normaloff>:/res/icon-force-discretes.png</normaloff>:/res/icon-force-discretes.png</iconset>
    </property>
    <property name="text">
     <string>Force Discretes</string>
@@ -363,7 +363,7 @@
   <action name="actionUndo">
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/res/actionUndo.png</normaloff>:/res/actionUndo.png</iconset>
+     <normaloff>:/res/icon-undo.png</normaloff>:/res/icon-undo.png</iconset>
    </property>
    <property name="text">
     <string>Undo</string>
@@ -375,7 +375,7 @@
   <action name="actionRedo">
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/res/actionRedo.png</normaloff>:/res/actionRedo.png</iconset>
+     <normaloff>:/res/icon-redo.png</normaloff>:/res/icon-redo.png</iconset>
    </property>
    <property name="text">
     <string>Redo</string>
@@ -387,7 +387,7 @@
   <action name="actionCut">
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/res/actionCut.png</normaloff>:/res/actionCut.png</iconset>
+     <normaloff>:/res/icon-cut.png</normaloff>:/res/icon-cut.png</iconset>
    </property>
    <property name="text">
     <string>Cut</string>
@@ -399,7 +399,7 @@
   <action name="actionCopy">
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/res/actionCopy.png</normaloff>:/res/actionCopy.png</iconset>
+     <normaloff>:/res/icon-copy.png</normaloff>:/res/icon-copy.png</iconset>
    </property>
    <property name="text">
     <string>Copy</string>
@@ -411,7 +411,7 @@
   <action name="actionPaste">
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/res/actionPaste.png</normaloff>:/res/actionPaste.png</iconset>
+     <normaloff>:/res/icon-paste.png</normaloff>:/res/icon-paste.png</iconset>
    </property>
    <property name="text">
     <string>Paste</string>
@@ -447,7 +447,7 @@
   <action name="actionMsgParser">
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/res/actionMsgParser.png</normaloff>:/res/actionMsgParser.png</iconset>
+     <normaloff>:/res/icon-msg-parser.png</normaloff>:/res/icon-msg-parser.png</iconset>
    </property>
    <property name="text">
     <string>Msg Parser</string>
@@ -465,7 +465,7 @@
   <action name="actionMbDefinitions">
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/res/actionMbDefinitions.png</normaloff>:/res/actionMbDefinitions.png</iconset>
+     <normaloff>:/res/icon-mb-definitions.png</normaloff>:/res/icon-mb-definitions.png</iconset>
    </property>
    <property name="text">
     <string>Modbus Definitions</string>
@@ -534,7 +534,7 @@
   <action name="actionNewDataView">
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/res/actionNewData.png</normaloff>:/res/actionNewData.png</iconset>
+     <normaloff>:/res/icon-new-data.png</normaloff>:/res/icon-new-data.png</iconset>
    </property>
    <property name="text">
     <string>New Data View</string>
@@ -543,7 +543,7 @@
   <action name="actionNewTrafficView">
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/res/actionNewTraffic.png</normaloff>:/res/actionNewTraffic.png</iconset>
+     <normaloff>:/res/icon-new-traffic.png</normaloff>:/res/icon-new-traffic.png</iconset>
    </property>
    <property name="text">
     <string>New Traffic View</string>
@@ -552,7 +552,7 @@
   <action name="actionNewScript">
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/res/actionNewScript.png</normaloff>:/res/actionNewScript.png</iconset>
+     <normaloff>:/res/icon-new-script.png</normaloff>:/res/icon-new-script.png</iconset>
    </property>
    <property name="text">
     <string>New Script</string>
@@ -561,7 +561,7 @@
   <action name="actionNewDataMapView">
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/res/actionNewData.png</normaloff>:/res/actionNewData.png</iconset>
+     <normaloff>:/res/icon-new-data.png</normaloff>:/res/icon-new-data.png</iconset>
    </property>
    <property name="text">
     <string>New Map View</string>
@@ -581,7 +581,7 @@
    </property>
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/res/actionSplitView.png</normaloff>:/res/actionSplitView.png</iconset>
+     <normaloff>:/res/icon-split-view.png</normaloff>:/res/icon-split-view.png</iconset>
    </property>
    <property name="text">
     <string>Split View</string>

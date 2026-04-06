@@ -30,7 +30,7 @@ ModbusMessageWidget::ModbusMessageWidget(QWidget *parent)
     setContextMenuPolicy(Qt::CustomContextMenu);
     setFont(defaultMonospaceFont());
 
-    _copyAct = new QAction(QIcon(":/res/actionCopy.png"), tr("Copy Text"), this);
+    _copyAct = new QAction(QIcon(":/res/icon-copy.png"), tr("Copy Text"), this);
     addAction(_copyAct);
 
     connect(_copyAct, &QAction::triggered, this, [this]() {

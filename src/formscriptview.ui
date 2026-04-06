@@ -52,7 +52,7 @@
   <action name="actionRunScript">
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/res/actionRunScript.png</normaloff>:/res/actionRunScript.png</iconset>
+     <normaloff>:/res/icon-run-script.png</normaloff>:/res/icon-run-script.png</iconset>
    </property>
    <property name="text">
     <string>Run Script</string>
@@ -61,7 +61,7 @@
   <action name="actionStopScript">
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/res/actionStopScript.png</normaloff>:/res/actionStopScript.png</iconset>
+     <normaloff>:/res/icon-stop-script.png</normaloff>:/res/icon-stop-script.png</iconset>
    </property>
    <property name="text">
     <string>Stop Script</string>

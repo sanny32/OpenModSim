@@ -25,7 +25,7 @@ FormScriptView::FormScriptView(ModbusMultiServer& server, DataSimulator* simulat
     Q_UNUSED(simulator);
 
     ui->setupUi(this);
-    setWindowIcon(QIcon(":/res/actionShowScript.png"));
+    setWindowIcon(QIcon(":/res/icon-show-script.png"));
 
     _displayDefinition.FormName = windowTitle();
     _displayDefinition.ScriptCfg = _scriptSettings;

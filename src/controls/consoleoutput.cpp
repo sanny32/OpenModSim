@@ -312,7 +312,7 @@ void ConsoleOutput::on_customContextMenuRequested(const QPoint& pos)
 {
     QMenu menu(ui->listWidget);
 
-    auto copyAction = menu.addAction(QIcon(":/res/actionCopy.png"), tr("Copy"), this, [this]() {
+    auto copyAction = menu.addAction(QIcon(":/res/icon-copy.png"), tr("Copy"), this, [this]() {
         QStringList lines;
         for (auto* item : ui->listWidget->selectedItems())
             lines << item->text();

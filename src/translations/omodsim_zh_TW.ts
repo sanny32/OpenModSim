@@ -388,62 +388,62 @@
 <context>
     <name>DataTypeItemDelegate</name>
     <message>
-        <location filename="../formdatamapview.cpp" line="78"/>
+        <location filename="../formdatamapview.cpp" line="84"/>
         <source>1-bit value (Coils / Discrete Inputs)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="79"/>
+        <location filename="../formdatamapview.cpp" line="85"/>
         <source>16-bit register value shown as 16 binary digits</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="80"/>
+        <location filename="../formdatamapview.cpp" line="86"/>
         <source>Unsigned 16-bit integer  (0 … 65535)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="81"/>
+        <location filename="../formdatamapview.cpp" line="87"/>
         <source>Signed 16-bit integer  (−32768 … 32767)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="82"/>
+        <location filename="../formdatamapview.cpp" line="88"/>
         <source>16-bit value displayed as hexadecimal</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="83"/>
+        <location filename="../formdatamapview.cpp" line="89"/>
         <source>16-bit value displayed as ANSI character</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="84"/>
+        <location filename="../formdatamapview.cpp" line="90"/>
         <source>IEEE 754 single-precision float  (2 registers)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="85"/>
+        <location filename="../formdatamapview.cpp" line="91"/>
         <source>IEEE 754 double-precision float  (4 registers)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="86"/>
+        <location filename="../formdatamapview.cpp" line="92"/>
         <source>Signed 32-bit integer  (2 registers)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="87"/>
+        <location filename="../formdatamapview.cpp" line="93"/>
         <source>Unsigned 32-bit integer  (2 registers)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="88"/>
+        <location filename="../formdatamapview.cpp" line="94"/>
         <source>Signed 64-bit integer  (4 registers)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="89"/>
+        <location filename="../formdatamapview.cpp" line="95"/>
         <source>Unsigned 64-bit integer  (4 registers)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2210,16 +2210,16 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="676"/>
-        <location filename="../formdatamapview.cpp" line="1191"/>
-        <location filename="../formdatamapview.cpp" line="1191"/>
+        <location filename="../formdatamapview.cpp" line="682"/>
+        <location filename="../formdatamapview.cpp" line="1215"/>
+        <location filename="../formdatamapview.cpp" line="1215"/>
         <source>1-based</source>
         <translation type="unfinished">еџєењ°еќЂз‚є-1</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="676"/>
-        <location filename="../formdatamapview.cpp" line="1192"/>
-        <location filename="../formdatamapview.cpp" line="1192"/>
+        <location filename="../formdatamapview.cpp" line="682"/>
+        <location filename="../formdatamapview.cpp" line="1216"/>
+        <location filename="../formdatamapview.cpp" line="1216"/>
         <source>0-based</source>
         <translation type="unfinished">еџєењ°еќЂз‚є-0</translation>
     </message>
@@ -2229,51 +2229,51 @@
         <translation type="unfinished">еЌЃе…­йЂІдЅЌе€¶жЄўи¦–</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="1200"/>
+        <location filename="../formdatamapview.cpp" line="1224"/>
         <source>Address Base:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="689"/>
-        <location filename="../formdatamapview.cpp" line="1215"/>
-        <location filename="../formdatamapview.cpp" line="1215"/>
+        <location filename="../formdatamapview.cpp" line="695"/>
+        <location filename="../formdatamapview.cpp" line="1239"/>
+        <location filename="../formdatamapview.cpp" line="1239"/>
         <source>All Types</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="691"/>
+        <location filename="../formdatamapview.cpp" line="697"/>
         <source>Address Base: %1
 Unit Filter: %2
 Type Filter: %3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="1216"/>
+        <location filename="../formdatamapview.cpp" line="1240"/>
         <source>Coils</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="1217"/>
+        <location filename="../formdatamapview.cpp" line="1241"/>
         <source>Discrete Inputs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="1218"/>
+        <location filename="../formdatamapview.cpp" line="1242"/>
         <source>Input Registers</source>
         <translation type="unfinished">ијёе…Ґжљ«е­е™Ё</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="1219"/>
+        <location filename="../formdatamapview.cpp" line="1243"/>
         <source>Holding Registers</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="1226"/>
+        <location filename="../formdatamapview.cpp" line="1250"/>
         <source>Unit:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="1228"/>
+        <location filename="../formdatamapview.cpp" line="1252"/>
         <source>Data Type:</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2282,9 +2282,9 @@ Type Filter: %3</source>
         <translation type="obsolete">ећ‹е€Ґпјљ </translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="678"/>
-        <location filename="../formdatamapview.cpp" line="1211"/>
-        <location filename="../formdatamapview.cpp" line="1211"/>
+        <location filename="../formdatamapview.cpp" line="684"/>
+        <location filename="../formdatamapview.cpp" line="1235"/>
+        <location filename="../formdatamapview.cpp" line="1235"/>
         <source>All</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4536,12 +4536,12 @@ Script.onInit(()=&gt;{
 <context>
     <name>OrderItemDelegate</name>
     <message>
-        <location filename="../formdatamapview.cpp" line="156"/>
+        <location filename="../formdatamapview.cpp" line="162"/>
         <source>Most Significant Register First — big-endian word order</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="157"/>
+        <location filename="../formdatamapview.cpp" line="163"/>
         <source>Least Significant Register First — little-endian word order</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4776,87 +4776,87 @@ Script.onInit(()=&gt;{
 <context>
     <name>ProjectTreeWidget</name>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="57"/>
-        <location filename="../controls/projecttreewidget.cpp" line="278"/>
-        <location filename="../controls/projecttreewidget.cpp" line="278"/>
+        <location filename="../controls/projecttreewidget.cpp" line="59"/>
+        <location filename="../controls/projecttreewidget.cpp" line="288"/>
+        <location filename="../controls/projecttreewidget.cpp" line="288"/>
         <source>Data</source>
         <translation type="unfinished">иі‡ж–™</translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="65"/>
-        <location filename="../controls/projecttreewidget.cpp" line="279"/>
-        <location filename="../controls/projecttreewidget.cpp" line="279"/>
+        <location filename="../controls/projecttreewidget.cpp" line="67"/>
+        <location filename="../controls/projecttreewidget.cpp" line="289"/>
+        <location filename="../controls/projecttreewidget.cpp" line="289"/>
         <source>Traffic</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="61"/>
-        <location filename="../controls/projecttreewidget.cpp" line="281"/>
-        <location filename="../controls/projecttreewidget.cpp" line="281"/>
+        <location filename="../controls/projecttreewidget.cpp" line="63"/>
+        <location filename="../controls/projecttreewidget.cpp" line="291"/>
+        <location filename="../controls/projecttreewidget.cpp" line="291"/>
         <source>Map</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="69"/>
-        <location filename="../controls/projecttreewidget.cpp" line="280"/>
-        <location filename="../controls/projecttreewidget.cpp" line="280"/>
+        <location filename="../controls/projecttreewidget.cpp" line="71"/>
+        <location filename="../controls/projecttreewidget.cpp" line="290"/>
+        <location filename="../controls/projecttreewidget.cpp" line="290"/>
         <source>Script</source>
         <translation type="unfinished">жЊ‡д»¤зўј</translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="309"/>
+        <location filename="../controls/projecttreewidget.cpp" line="319"/>
         <source>New Data View</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="310"/>
+        <location filename="../controls/projecttreewidget.cpp" line="320"/>
         <source>New Map View</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="311"/>
+        <location filename="../controls/projecttreewidget.cpp" line="321"/>
         <source>New Traffic View</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="312"/>
+        <location filename="../controls/projecttreewidget.cpp" line="322"/>
         <source>New Script</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="332"/>
+        <location filename="../controls/projecttreewidget.cpp" line="342"/>
         <source>Run Script</source>
         <translation type="unfinished">еџ·иЎЊжЊ‡д»¤зўј</translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="333"/>
+        <location filename="../controls/projecttreewidget.cpp" line="343"/>
         <source>Stop Script</source>
         <translation type="unfinished">еЃњж­ўжЊ‡д»¤зўј</translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="339"/>
-        <location filename="../controls/projecttreewidget.cpp" line="386"/>
-        <location filename="../controls/projecttreewidget.cpp" line="386"/>
+        <location filename="../controls/projecttreewidget.cpp" line="349"/>
+        <location filename="../controls/projecttreewidget.cpp" line="396"/>
+        <location filename="../controls/projecttreewidget.cpp" line="396"/>
         <source>Rename</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="342"/>
+        <location filename="../controls/projecttreewidget.cpp" line="352"/>
         <source>Delete</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="386"/>
+        <location filename="../controls/projecttreewidget.cpp" line="396"/>
         <source>New name:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="394"/>
+        <location filename="../controls/projecttreewidget.cpp" line="404"/>
         <source>Delete Form</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="395"/>
+        <location filename="../controls/projecttreewidget.cpp" line="405"/>
         <source>Delete &quot;%1&quot; from the project?</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5207,22 +5207,22 @@ Script.onInit(()=&gt;{
 <context>
     <name>TypeItemDelegate</name>
     <message>
-        <location filename="../formdatamapview.cpp" line="29"/>
+        <location filename="../formdatamapview.cpp" line="35"/>
         <source>Coils</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="30"/>
+        <location filename="../formdatamapview.cpp" line="36"/>
         <source>Discrete Inputs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="31"/>
+        <location filename="../formdatamapview.cpp" line="37"/>
         <source>Input Registers</source>
         <translation type="unfinished">ијёе…Ґжљ«е­е™Ё</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="32"/>
+        <location filename="../formdatamapview.cpp" line="38"/>
         <source>Holding Registers</source>
         <translation type="unfinished"></translation>
     </message>

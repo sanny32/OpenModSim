@@ -458,7 +458,7 @@
    </property>
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/res/actionBinary.png</normaloff>:/res/actionBinary.png</iconset>
+     <normaloff>:/res/icon-binary.png</normaloff>:/res/icon-binary.png</iconset>
    </property>
    <property name="text">
     <string>Binary</string>
@@ -476,7 +476,7 @@
    </property>
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/res/actionHex.png</normaloff>:/res/actionHex.png</iconset>
+     <normaloff>:/res/icon-hex.png</normaloff>:/res/icon-hex.png</iconset>
    </property>
    <property name="text">
     <string>Hex</string>
@@ -494,7 +494,7 @@
    </property>
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/res/actionAnsi.png</normaloff>:/res/actionAnsi.png</iconset>
+     <normaloff>:/res/icon-ansi.png</normaloff>:/res/icon-ansi.png</iconset>
    </property>
    <property name="text">
     <string>Ansi</string>
@@ -506,7 +506,7 @@
    </property>
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/res/actionInt16.png</normaloff>:/res/actionInt16.png</iconset>
+     <normaloff>:/res/icon-int16.png</normaloff>:/res/icon-int16.png</iconset>
    </property>
    <property name="text">
     <string>16-bit Integer</string>
@@ -524,7 +524,7 @@
    </property>
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/res/actionUInt16.png</normaloff>:/res/actionUInt16.png</iconset>
+     <normaloff>:/res/icon-uint16.png</normaloff>:/res/icon-uint16.png</iconset>
    </property>
    <property name="text">
     <string>Unsigned 16-bit Integer</string>
@@ -542,7 +542,7 @@
    </property>
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/res/actionInt32.png</normaloff>:/res/actionInt32.png</iconset>
+     <normaloff>:/res/icon-int32.png</normaloff>:/res/icon-int32.png</iconset>
    </property>
    <property name="text">
     <string>32-bit Integer (MSRF)</string>
@@ -560,7 +560,7 @@
    </property>
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/res/actionSwappedInt32.png</normaloff>:/res/actionSwappedInt32.png</iconset>
+     <normaloff>:/res/icon-swapped-int32.png</normaloff>:/res/icon-swapped-int32.png</iconset>
    </property>
    <property name="text">
     <string>32-bit Integer (LSRF)</string>
@@ -578,7 +578,7 @@
    </property>
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/res/actionUInt32.png</normaloff>:/res/actionUInt32.png</iconset>
+     <normaloff>:/res/icon-uint32.png</normaloff>:/res/icon-uint32.png</iconset>
    </property>
    <property name="text">
     <string>Unsigned 32-bit Integer (MSRF)</string>
@@ -596,7 +596,7 @@
    </property>
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/res/actionSwappedUInt32.png</normaloff>:/res/actionSwappedUInt32.png</iconset>
+     <normaloff>:/res/icon-swapped-uint32.png</normaloff>:/res/icon-swapped-uint32.png</iconset>
    </property>
    <property name="text">
     <string>Unsigned 32-bit Integer (LSRF)</string>
@@ -614,7 +614,7 @@
    </property>
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/res/actionInt64.png</normaloff>:/res/actionInt64.png</iconset>
+     <normaloff>:/res/icon-int64.png</normaloff>:/res/icon-int64.png</iconset>
    </property>
    <property name="text">
     <string>64-bit Integer (MSRF)</string>
@@ -632,7 +632,7 @@
    </property>
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/res/actionSwappedInt64.png</normaloff>:/res/actionSwappedInt64.png</iconset>
+     <normaloff>:/res/icon-swapped-int64.png</normaloff>:/res/icon-swapped-int64.png</iconset>
    </property>
    <property name="text">
     <string>64-bit Integer (LSRF)</string>
@@ -650,7 +650,7 @@
    </property>
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/res/actionUInt64.png</normaloff>:/res/actionUInt64.png</iconset>
+     <normaloff>:/res/icon-uint64.png</normaloff>:/res/icon-uint64.png</iconset>
    </property>
    <property name="text">
     <string>Unsigned 64-bit Integer (MSRF)</string>
@@ -668,7 +668,7 @@
    </property>
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/res/actionSwappedUInt64.png</normaloff>:/res/actionSwappedUInt64.png</iconset>
+     <normaloff>:/res/icon-swapped-uint64.png</normaloff>:/res/icon-swapped-uint64.png</iconset>
    </property>
    <property name="text">
     <string>Unsigned 64-bit Integer (LSRF)</string>
@@ -686,7 +686,7 @@
    </property>
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/res/actionFloatingPt.png</normaloff>:/res/actionFloatingPt.png</iconset>
+     <normaloff>:/res/icon-floating-pt.png</normaloff>:/res/icon-floating-pt.png</iconset>
    </property>
    <property name="text">
     <string>Float (MSRF)</string>
@@ -704,7 +704,7 @@
    </property>
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/res/actionSwappedFP.png</normaloff>:/res/actionSwappedFP.png</iconset>
+     <normaloff>:/res/icon-swapped-fp.png</normaloff>:/res/icon-swapped-fp.png</iconset>
    </property>
    <property name="text">
     <string>Float (LSRF)</string>
@@ -722,7 +722,7 @@
    </property>
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/res/actionDblFloat.png</normaloff>:/res/actionDblFloat.png</iconset>
+     <normaloff>:/res/icon-dbl-float.png</normaloff>:/res/icon-dbl-float.png</iconset>
    </property>
    <property name="text">
     <string>Double (MSRF)</string>
@@ -740,7 +740,7 @@
    </property>
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/res/actionSwappedDbl.png</normaloff>:/res/actionSwappedDbl.png</iconset>
+     <normaloff>:/res/icon-swapped-dbl.png</normaloff>:/res/icon-swapped-dbl.png</iconset>
    </property>
    <property name="text">
     <string>Double (LSRF)</string>
@@ -758,7 +758,7 @@
    </property>
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/res/actionSwapBytes.png</normaloff>:/res/actionSwapBytes.png</iconset>
+     <normaloff>:/res/icon-swap-bytes.png</normaloff>:/res/icon-swap-bytes.png</iconset>
    </property>
    <property name="text">
     <string>Swap Bytes (0xAB → 0xBA)</string>

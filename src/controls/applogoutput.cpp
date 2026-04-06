@@ -345,7 +345,7 @@ void AppLogOutput::on_customContextMenuRequested(const QPoint& pos)
 {
     QMenu menu(ui->listWidget);
 
-    auto copyAction = menu.addAction(QIcon(":/res/actionCopy.png"), tr("Copy"), this, [this]() {
+    auto copyAction = menu.addAction(QIcon(":/res/icon-copy.png"), tr("Copy"), this, [this]() {
         QStringList lines;
         for (auto* item : ui->listWidget->selectedItems())
             lines << item->text();
@@ -354,7 +354,7 @@ void AppLogOutput::on_customContextMenuRequested(const QPoint& pos)
     });
     copyAction->setEnabled(!ui->listWidget->selectedItems().isEmpty());
 
-    auto copyAllAction = menu.addAction(QIcon(":/res/actionCopy.png"), tr("Copy All"), this,
+    auto copyAllAction = menu.addAction(QIcon(":/res/icon-copy.png"), tr("Copy All"), this,
                                         &AppLogOutput::copyAllToClipboard);
     copyAllAction->setShortcut(_copyAllAction->shortcut());
     copyAllAction->setEnabled(!isEmpty());

@@ -919,7 +919,7 @@ void MdiAreaEx::createSplitButton()
 
     _splitButton = new QToolButton(this);
     _splitButton->setAutoRaise(true);
-    _splitButton->setIcon(QIcon(":/res/actionSplitView.png"));
+    _splitButton->setIcon(QIcon(":/res/icon-split-view.png"));
     _splitButton->setToolTip(QStringLiteral("Split view"));
     _splitButton->setCheckable(true);
 

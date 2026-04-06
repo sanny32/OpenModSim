@@ -51,7 +51,7 @@ public:
     bool autoAddOnRequest() const { return _autoAddOnRequest; }
     void setAutoAddOnRequest(bool value) { _autoAddOnRequest = value; }
     bool isAutoRequestMap() const { return _autoRequestMap; }
-    void setAutoRequestMap(bool value) { _autoRequestMap = value; }
+    void setAutoRequestMap(bool value);
     bool isEmpty() const { return !_proxy || _proxy->rowCount() <= 0; }
     void print(QPrinter* printer);
 
@@ -88,6 +88,7 @@ private:
     void processRequest(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 startAddress, quint16 count);
     void setupToolBar();
     void setupServerConnections();
+    void updateWindowIcon();
 
     QList<int> columnWidths() const;
     void setColumnWidths(const QList<int>& widths);

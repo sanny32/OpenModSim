@@ -1,58 +1,57 @@
 <RCC>
     <qresource prefix="/">
         <file>res/license.txt</file>
-        <file>res/actionBinary.png</file>
-        <file>res/actionDblFloat.png</file>
-        <file>res/actionFloatingPt.png</file>
-        <file>res/actionHex.png</file>
-        <file>res/actionSwappedDbl.png</file>
-        <file>res/actionSwappedFP.png</file>
-        <file>res/actionAbout.png</file>
-        <file>res/actionNew.png</file>
-        <file>res/actionOpen.png</file>
-        <file>res/actionPrint.png</file>
-        <file>res/actionShowData.png</file>
-        <file>res/actionShowTraffic.png</file>
+        <file>res/icon-binary.png</file>
+        <file>res/icon-dbl-float.png</file>
+        <file>res/icon-floating-pt.png</file>
+        <file>res/icon-swapped-dbl.png</file>
+        <file>res/icon-swapped-fp.png</file>
+        <file>res/icon-about.png</file>
+        <file>res/icon-new.png</file>
+        <file>res/icon-open.png</file>
+        <file>res/icon-print.png</file>
+        <file>res/icon-show-data.png</file>
+        <file>res/icon-show-traffic.png</file>
         <file>res/iconLandscape.png</file>
         <file>res/iconPortrait.png</file>
-        <file>res/actionConnect.png</file>
-        <file>res/actionDisconnect.png</file>
-        <file>res/actionSave.png</file>
-        <file>res/actionDefineData.png</file>
+        <file>res/icon-connect.png</file>
+        <file>res/icon-disconnect.png</file>
+        <file>res/icon-save.png</file>
+        <file>res/icon-define-data.png</file>
         <file>res/omodsim.png</file>
         <file>res/iconAbout.png</file>
         <file>translations/omodsim_ru.qm</file>
-        <file>res/actionShowScript.png</file>
+        <file>res/icon-show-script.png</file>
         <file>fonts/firacode.ttf</file>
-        <file>res/actionRunScript.png</file>
-        <file>res/actionStopScript.png</file>
+        <file>res/icon-run-script.png</file>
+        <file>res/icon-stop-script.png</file>
         <file>res/iconFunc.png</file>
         <file>res/iconProp.png</file>
-        <file>res/actionCopy.png</file>
-        <file>res/actionCut.png</file>
-        <file>res/actionFind.png</file>
-        <file>res/actionPaste.png</file>
-        <file>res/actionRedo.png</file>
-        <file>res/actionUndo.png</file>
+        <file>res/icon-copy.png</file>
+        <file>res/icon-cut.png</file>
+        <file>res/icon-find.png</file>
+        <file>res/icon-paste.png</file>
+        <file>res/icon-redo.png</file>
+        <file>res/icon-undo.png</file>
         <file>res/iconEnum.png</file>
-        <file>res/actionInt16.png</file>
-        <file>res/actionInt32.png</file>
-        <file>res/actionInt64.png</file>
-        <file>res/actionSwappedInt32.png</file>
-        <file>res/actionSwappedInt64.png</file>
-        <file>res/actionSwappedUInt32.png</file>
-        <file>res/actionSwappedUInt64.png</file>
-        <file>res/actionUInt16.png</file>
-        <file>res/actionUInt32.png</file>
-        <file>res/actionUInt64.png</file>
-        <file>res/actionSwapBytes.png</file>
-        <file>res/actionAnsi.png</file>
-        <file>res/actionMbDefinitions.png</file>
-        <file>res/actionMsgParser.png</file>
-        <file>res/actionForceCoils.png</file>
-        <file>res/actionForceDiscretes.png</file>
-        <file>res/actionPresetInputRegs.png</file>
-        <file>res/actionPresetHoldingRegs.png</file>
+        <file>res/icon-int16.png</file>
+        <file>res/icon-int32.png</file>
+        <file>res/icon-int64.png</file>
+        <file>res/icon-swapped-int32.png</file>
+        <file>res/icon-swapped-int64.png</file>
+        <file>res/icon-swapped-uint32.png</file>
+        <file>res/icon-swapped-uint64.png</file>
+        <file>res/icon-uint16.png</file>
+        <file>res/icon-uint32.png</file>
+        <file>res/icon-uint64.png</file>
+        <file>res/icon-swap-bytes.png</file>
+        <file>res/icon-ansi.png</file>
+        <file>res/icon-mb-definitions.png</file>
+        <file>res/icon-msg-parser.png</file>
+        <file>res/icon-force-coils.png</file>
+        <file>res/icon-force-discretes.png</file>
+        <file>res/icon-preset-input-regs.png</file>
+        <file>res/icon-preset-holding-regs.png</file>
         <file>translations/omodsim_zh_CN.qm</file>
         <file>translations/omodsim_zh_TW.qm</file>
         <file>res/emblem-github.svg</file>
@@ -80,14 +79,16 @@
         <file>res/pref-interface.png</file>
         <file>res/icon-bell.svg</file>
         <file>res/icon-bell-dot.svg</file>
-        <file>res/actionSplitView.png</file>
-        <file>res/actionNewData.png</file>
-        <file>res/actionNewTraffic.png</file>
-        <file>res/actionNewScript.png</file>
+        <file>res/icon-split-view.png</file>
+        <file>res/icon-new-data.png</file>
+        <file>res/icon-new-traffic.png</file>
+        <file>res/icon-new-script.png</file>
+        <file>res/icon-hex.png</file>
         <file>res/icon-hex.svg</file>
         <file>res/icon-pause.svg</file>
         <file>res/icon-directory.png</file>
-        <file>res/icon-hex.png</file>
+        <file>res/icon-data-locked.png</file>
+        <file>res/icon-hex-view.png</file>
         <file>res/edit-delete.png</file>
         <file>res/icon-add.png</file>
         <file>res/icon-remove.png</file>

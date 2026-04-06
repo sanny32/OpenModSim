@@ -9,6 +9,12 @@
 
 namespace {
 
+QString dataMapWindowIconPath(bool autoRequestMap)
+{
+    return autoRequestMap ? QStringLiteral(":/res/icon-data-locked.png")
+                          : QStringLiteral(":/res/icon-show-data.png");
+}
+
 // Role aliases so delegates compile without change
 constexpr int RoleDeviceId  = DataMapRole::DeviceId;
 constexpr int RoleType      = DataMapRole::Type;
@@ -592,7 +598,7 @@ FormDataMapView::FormDataMapView(ModbusMultiServer& server, MainWindow* parent)
     updateActionState();
     setupServerConnections();
 
-    setWindowIcon(QIcon(":/res/actionShowData.png"));
+    updateWindowIcon();
 }
 
 ///
@@ -1171,6 +1177,24 @@ void FormDataMapView::processRequest(quint8 deviceId, QModbusDataUnit::RegisterT
 
     if (addedEntries)
         emit definitionChanged();
+}
+
+void FormDataMapView::setAutoRequestMap(bool value)
+{
+    if (_autoRequestMap == value)
+        return;
+
+    _autoRequestMap = value;
+    updateWindowIcon();
+}
+
+void FormDataMapView::updateWindowIcon()
+{
+    const QIcon icon(dataMapWindowIconPath(_autoRequestMap));
+    setWindowIcon(icon);
+
+    if (auto* wnd = qobject_cast<QMdiSubWindow*>(parentWidget()))
+        wnd->setWindowIcon(icon);
 }
 
 ///

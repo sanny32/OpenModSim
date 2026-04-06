@@ -324,7 +324,7 @@ ModbusLogWidget::ModbusLogWidget(QWidget* parent)
     setItemDelegate(new ModbusLogDelegate(this));
     setModel(new ModbusLogModel(this));
 
-    _copyAct = new QAction(QIcon(":/res/actionCopy.png"), tr("Copy Text"), this);
+    _copyAct = new QAction(QIcon(":/res/icon-copy.png"), tr("Copy Text"), this);
     _copyAct->setShortcut(QKeySequence::Copy);
     _copyAct->setShortcutContext(Qt::WidgetShortcut);
     _copyAct->setShortcutVisibleInContextMenu(true);

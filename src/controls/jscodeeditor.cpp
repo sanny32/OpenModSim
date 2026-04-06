@@ -592,11 +592,11 @@ void JSCodeEditor::contextMenuEvent(QContextMenuEvent *event)
     for(QAction* action : menu->actions())
     {
         const QString name = action->objectName();
-        if     (name == "edit-undo")  action->setIcon(QIcon(":/res/actionUndo.png"));
-        else if(name == "edit-redo")  action->setIcon(QIcon(":/res/actionRedo.png"));
-        else if(name == "edit-cut")   action->setIcon(QIcon(":/res/actionCut.png"));
-        else if(name == "edit-copy")  action->setIcon(QIcon(":/res/actionCopy.png"));
-        else if(name == "edit-paste") action->setIcon(QIcon(":/res/actionPaste.png"));
+        if     (name == "edit-undo")  action->setIcon(QIcon(":/res/icon-undo.png"));
+        else if(name == "edit-redo")  action->setIcon(QIcon(":/res/icon-redo.png"));
+        else if(name == "edit-cut")   action->setIcon(QIcon(":/res/icon-cut.png"));
+        else if(name == "edit-copy")  action->setIcon(QIcon(":/res/icon-copy.png"));
+        else if(name == "edit-paste") action->setIcon(QIcon(":/res/icon-paste.png"));
         else                          action->setIcon(QIcon());
     }
 

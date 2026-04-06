@@ -143,7 +143,7 @@ void TrafficLogWindow::setupToolbar()
     // Pause / Clear buttons
     _pauseButton = new QToolButton(toolbar);
     _pauseButton->setCheckable(true);
-    _pauseButton->setIcon(QIcon(":/res/actionStopScript.png"));
+    _pauseButton->setIcon(QIcon(":/res/icon-stop-script.png"));
     _pauseButton->setToolTip(tr("Pause"));
     _pauseButton->setAutoRaise(true);
 

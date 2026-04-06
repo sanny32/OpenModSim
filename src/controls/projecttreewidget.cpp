@@ -32,18 +32,20 @@ QIcon dimmedIcon(const QString& path)
 ///
 ProjectTreeWidget::ProjectTreeWidget(QWidget* parent)
     : QTreeWidget(parent)
-    , _iconData(QIcon(":/res/actionShowData.png"))
-    , _iconTraffic(QIcon(":/res/actionShowTraffic.png"))
-    , _iconScriptIdle(QIcon(":/res/actionShowScript.png"))
-    , _iconScriptRunning(QIcon(":/res/actionRunScript.png"))
+    , _iconData(QIcon(":/res/icon-show-data.png"))
+    , _iconTraffic(QIcon(":/res/icon-show-traffic.png"))
+    , _iconScriptIdle(QIcon(":/res/icon-show-script.png"))
+    , _iconScriptRunning(QIcon(":/res/icon-run-script.png"))
+    , _iconDataMapLocked(QIcon(":/res/icon-data-locked.png"))
 {
     qRegisterMetaType<ProjectFormRef>("ProjectFormRef");
 
-    _iconDataClosed = dimmedIcon(":/res/actionShowData.png");
-    _iconTrafficClosed = dimmedIcon(":/res/actionShowTraffic.png");
-    _iconScriptClosed = dimmedIcon(":/res/actionShowScript.png");
-    _iconDataMap = QIcon(":/res/actionShowData.png");
-    _iconDataMapClosed = dimmedIcon(":/res/actionShowData.png");
+    _iconDataClosed = dimmedIcon(":/res/icon-show-data.png");
+    _iconTrafficClosed = dimmedIcon(":/res/icon-show-traffic.png");
+    _iconScriptClosed = dimmedIcon(":/res/icon-show-script.png");
+    _iconDataMap = QIcon(":/res/icon-show-data.png");
+    _iconDataMapClosed = dimmedIcon(":/res/icon-show-data.png");
+    _iconDataMapLockedClosed = dimmedIcon(":/res/icon-data-locked.png");
 
     setHeaderHidden(true);
     setRootIsDecorated(true);
@@ -108,6 +110,9 @@ void ProjectTreeWidget::addForm(ProjectFormType type, QWidget* frm)
             break;
     }
 
+    if (type == ProjectFormType::DataMap && frm->property("DeleteLocked").toBool())
+        baseIcon = _iconDataMapLocked;
+
     auto item = new QTreeWidgetItem(root, QStringList{frm->windowTitle()});
     item->setIcon(0, baseIcon);
     item->setData(0, Qt::UserRole, QVariant::fromValue(static_cast<void*>(frm)));
@@ -115,6 +120,7 @@ void ProjectTreeWidget::addForm(ProjectFormType type, QWidget* frm)
     item->setData(0, ItemTypeRole + 1, static_cast<int>(type));
     item->setData(0, ItemOpenRole, true);
     item->setFlags(item->flags() | Qt::ItemIsEditable);
+    refreshFormItem(item, frm);
 
     root->setExpanded(true);
 }
@@ -139,8 +145,10 @@ void ProjectTreeWidget::removeForm(QWidget* frm)
 void ProjectTreeWidget::updateFormTitle(QWidget* frm)
 {
     auto item = itemForForm(frm);
-    if (item)
+    if (item) {
         item->setText(0, frm->windowTitle());
+        refreshFormItem(item, frm);
+    }
 }
 
 ///
@@ -153,17 +161,7 @@ void ProjectTreeWidget::setFormScriptRunning(QWidget* frm, bool running)
         return;
 
     item->setData(0, ItemScriptRunning, running);
-
-    if (running) {
-        item->setIcon(0, _iconScriptRunning);
-        return;
-    }
-
-    const bool isOpen = item->data(0, ItemOpenRole).toBool();
-    const auto type = static_cast<ProjectFormType>(item->data(0, ItemTypeRole + 1).toInt());
-    item->setIcon(0, iconFor(type, isOpen, running, _iconData, _iconDataClosed, _iconTraffic,
-                              _iconTrafficClosed, _iconScriptIdle, _iconScriptClosed, _iconScriptRunning,
-                              _iconDataMap, _iconDataMapClosed));
+    refreshFormItem(item, frm);
 }
 
 ///
@@ -175,16 +173,8 @@ void ProjectTreeWidget::setFormOpen(QWidget* frm, bool open)
     if (!item)
         return;
 
-    const auto type = static_cast<ProjectFormType>(item->data(0, ItemTypeRole + 1).toInt());
-    item->setIcon(0, iconFor(type, open, false, _iconData, _iconDataClosed, _iconTraffic,
-                              _iconTrafficClosed, _iconScriptIdle, _iconScriptClosed, _iconScriptRunning,
-                              _iconDataMap, _iconDataMapClosed));
-
     item->setData(0, ItemOpenRole, open);
-
-    QColor textColor = palette().color(QPalette::Text);
-    textColor.setAlpha(open ? 255 : 100);
-    item->setForeground(0, textColor);
+    refreshFormItem(item, frm);
 }
 
 ///
@@ -199,6 +189,26 @@ void ProjectTreeWidget::activateForm(QWidget* frm)
     blockSignals(true);
     setCurrentItem(item);
     blockSignals(false);
+}
+
+void ProjectTreeWidget::refreshFormItem(QTreeWidgetItem* item, QWidget* frm)
+{
+    if (!item || !frm)
+        return;
+
+    const bool open = item->data(0, ItemOpenRole).toBool();
+    const bool running = item->data(0, ItemScriptRunning).toBool();
+    const auto type = static_cast<ProjectFormType>(item->data(0, ItemTypeRole + 1).toInt());
+    const bool deleteLocked = frm->property("DeleteLocked").toBool();
+
+    item->setIcon(0, iconFor(type, open, running, _iconData, _iconDataClosed, _iconTraffic,
+                              _iconTrafficClosed, _iconScriptIdle, _iconScriptClosed, _iconScriptRunning,
+                              deleteLocked ? _iconDataMapLocked : _iconDataMap,
+                              deleteLocked ? _iconDataMapLockedClosed : _iconDataMapClosed));
+
+    QColor textColor = palette().color(QPalette::Text);
+    textColor.setAlpha(open ? 255 : 100);
+    item->setForeground(0, textColor);
 }
 
 ///
@@ -329,8 +339,8 @@ void ProjectTreeWidget::on_contextMenu(const QPoint& pos)
 
         if (formType == ProjectFormType::Script) {
             const bool running = item->data(0, ItemScriptRunning).toBool();
-            runAction  = menu.addAction(QIcon(":/res/actionRunScript.png"),  tr("Run Script"));
-            stopAction = menu.addAction(QIcon(":/res/actionStopScript.png"), tr("Stop Script"));
+            runAction  = menu.addAction(QIcon(":/res/icon-run-script.png"),  tr("Run Script"));
+            stopAction = menu.addAction(QIcon(":/res/icon-stop-script.png"), tr("Stop Script"));
             runAction->setEnabled(!running);
             stopAction->setEnabled(running);
             menu.addSeparator();

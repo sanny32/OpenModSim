@@ -87,7 +87,7 @@
    </property>
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/res/icon-hex.png</normaloff>:/res/icon-hex.png</iconset>
+     <normaloff>:/res/icon-hex-view.png</normaloff>:/res/icon-hex-view.png</iconset>
    </property>
    <property name="text">
     <string>Hex View</string>
