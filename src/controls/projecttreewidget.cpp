@@ -301,7 +301,7 @@ void ProjectTreeWidget::on_contextMenu(const QPoint& pos)
 
     // "New" actions are available for all nodes
     auto newDataAction        = menu.addAction(_iconData,         tr("New Data View"));
-    auto newDataMapAction = menu.addAction(_iconDataMap,  tr("New DataMap"));
+    auto newDataMapAction     = menu.addAction(_iconDataMap,      tr("New Map View"));
     auto newTrafficAction     = menu.addAction(_iconTraffic,      tr("New Traffic View"));
     auto newScriptAction      = menu.addAction(_iconScriptIdle,   tr("New Script"));
 

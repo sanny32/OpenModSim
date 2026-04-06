@@ -1,4 +1,4 @@
-#include <QtWidgets>
+﻿#include <QtWidgets>
 #include <QBuffer>
 #include <QPrinterInfo>
 #include <QPrintDialog>
@@ -285,7 +285,7 @@ MainWindow::MainWindow(const QString& profile, bool useSession, QWidget *parent)
     // New form kind wiring
     connect(ui->actionNewDataView,        &QAction::triggered, this, [this]{ activateNewFormKind(ProjectFormKind::Data,        ui->actionNewDataView); });
     connect(ui->actionNewTrafficView,     &QAction::triggered, this, [this]{ activateNewFormKind(ProjectFormKind::Traffic,     ui->actionNewTrafficView); });
-    connect(ui->actionNewDataMapView, &QAction::triggered, this, [this]{ activateNewFormKind(ProjectFormKind::DataMap, ui->actionNewDataMapView); });
+    connect(ui->actionNewDataMapView,     &QAction::triggered, this, [this]{ activateNewFormKind(ProjectFormKind::DataMap,     ui->actionNewDataMapView); });
     connect(ui->actionNewScript,          &QAction::triggered, this, [this]{ activateNewFormKind(ProjectFormKind::Script,      ui->actionNewScript); });
 
     loadAppSettings(profile);
@@ -605,7 +605,7 @@ void MainWindow::on_actionCloseAll_triggered()
 void MainWindow::on_actionOpenProject_triggered()
 {
     QStringList filters;
-    filters << tr("Project files (*.msimprj)");
+    filters << tr("Project files (*.oms)");
     filters << tr("All files (*)");
 
     const auto filename = QFileDialog::getOpenFileName(this, QString(), _project->savePath(), filters.join(";;"));
@@ -636,13 +636,13 @@ void MainWindow::on_actionSaveProject_triggered()
 void MainWindow::on_actionSaveProjectAs_triggered()
 {
     QStringList filters;
-    filters << tr("Project files (*.msimprj)");
+    filters << tr("Project files (*.oms)");
     auto filename = QFileDialog::getSaveFileName(this, QString(), _project->savePath(), filters.join(";;"));
 
     if(filename.isEmpty()) return;
 
-    if(!filename.endsWith(".msimprj", Qt::CaseInsensitive))
-        filename.append(".msimprj");
+    if(!filename.endsWith(".oms", Qt::CaseInsensitive))
+        filename.append(".oms");
 
     _project->setSavePath(QFileInfo(filename).absoluteDir().absolutePath());
     saveProject(filename);

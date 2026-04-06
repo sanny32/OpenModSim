@@ -11,7 +11,7 @@ Usage:
     python test-modbustcp.py               # standalone
 
 Prerequisites (omodsim must be running):
-    Load test/test-modbustcp.msimprj in omodsim before running. It configures:
+    Load test/test-modbustcp.oms in omodsim before running. It configures:
     - TCP server on 0.0.0.0:502 (all interfaces)
     - Slave ID 1
     - Holding registers:  protocol addresses 0-199  (readable and writable)
@@ -42,7 +42,7 @@ import time
 import pytest
 from pymodbus.client import ModbusTcpClient
 
-# ── Configuration ─────────────────────────────────────────────────────────────
+# в”Ђв”Ђ Configuration в”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђ
 
 HOST    = "127.0.0.1"
 PORT    = 502
@@ -54,7 +54,7 @@ CONCURRENT_CLIENTS = 10   # simultaneous connections
 STRESS_THREADS     = 20   # threads in stress test
 STRESS_REQ_EACH    = 50   # requests per thread
 
-# ── Helpers ───────────────────────────────────────────────────────────────────
+# в”Ђв”Ђ Helpers в”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђ
 
 def make_client() -> ModbusTcpClient:
     """Create and connect a client; calls pytest.fail if connection is refused."""
@@ -100,7 +100,7 @@ def explain(rr) -> str:
     return str(rr)
 
 
-# ── FC 01 – Read Coils ───────────────────────────────────────────────────────
+# в”Ђв”Ђ FC 01 вЂ“ Read Coils в”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђ
 
 def test_fc01_read_coils_basic():
     with make_client() as c:
@@ -117,7 +117,7 @@ def test_fc01_read_coils_large():
         assert len(rr.bits) >= 2000
 
 
-# ── FC 02 – Read Discrete Inputs ─────────────────────────────────────────────
+# в”Ђв”Ђ FC 02 вЂ“ Read Discrete Inputs в”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђ
 
 def test_fc02_read_discrete_inputs():
     with make_client() as c:
@@ -126,7 +126,7 @@ def test_fc02_read_discrete_inputs():
         assert len(rr.bits) >= 8
 
 
-# ── FC 03 – Read Holding Registers ───────────────────────────────────────────
+# в”Ђв”Ђ FC 03 вЂ“ Read Holding Registers в”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђ
 
 def test_fc03_read_holding_registers_basic():
     with make_client() as c:
@@ -150,7 +150,7 @@ def test_fc03_read_holding_registers_large():
         assert len(rr.registers) == 125
 
 
-# ── FC 04 – Read Input Registers ─────────────────────────────────────────────
+# в”Ђв”Ђ FC 04 вЂ“ Read Input Registers в”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђ
 
 def test_fc04_read_input_registers():
     with make_client() as c:
@@ -159,7 +159,7 @@ def test_fc04_read_input_registers():
         assert len(rr.registers) == 10
 
 
-# ── FC 05 – Write Single Coil ────────────────────────────────────────────────
+# в”Ђв”Ђ FC 05 вЂ“ Write Single Coil в”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђ
 
 def test_fc05_write_coil_true():
     with make_client() as c:
@@ -183,7 +183,7 @@ def test_fc05_write_read_roundtrip():
             assert rr.bits[0] is val, f"FC05->FC01 roundtrip: expected {val}, got {rr.bits[0]}"
 
 
-# ── FC 06 – Write Single Register ────────────────────────────────────────────
+# в”Ђв”Ђ FC 06 вЂ“ Write Single Register в”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђ
 
 def test_fc06_write_register():
     with make_client() as c:
@@ -203,7 +203,7 @@ def test_fc06_write_read_roundtrip():
         )
 
 
-# ── FC 15 – Write Multiple Coils ─────────────────────────────────────────────
+# в”Ђв”Ђ FC 15 вЂ“ Write Multiple Coils в”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђ
 
 def test_fc15_write_multiple_coils():
     with make_client() as c:
@@ -222,7 +222,7 @@ def test_fc15_write_read_roundtrip():
         assert rr.bits[:8] == values, "FC15->FC01 roundtrip mismatch"
 
 
-# ── FC 16 – Write Multiple Registers ─────────────────────────────────────────
+# в”Ђв”Ђ FC 16 вЂ“ Write Multiple Registers в”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђ
 
 def test_fc16_write_multiple_registers():
     with make_client() as c:
@@ -241,7 +241,7 @@ def test_fc16_write_read_roundtrip():
         assert rr.registers == values, "FC16->FC03 roundtrip mismatch"
 
 
-# ── FC 22 – Mask Write Register ──────────────────────────────────────────────
+# в”Ђв”Ђ FC 22 вЂ“ Mask Write Register в”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђ
 
 def test_fc22_mask_write_register():
     """
@@ -261,7 +261,7 @@ def test_fc22_mask_write_register():
         )
 
 
-# ── FC 23 – Read/Write Multiple Registers ────────────────────────────────────
+# в”Ђв”Ђ FC 23 вЂ“ Read/Write Multiple Registers в”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђ
 
 def test_fc23_readwrite_registers():
     """Single request: write to address 40, read from address 0."""
@@ -290,7 +290,7 @@ def test_fc23_write_then_read_same_range():
         assert rr.registers == write_vals
 
 
-# ── FC 08 – Diagnostics ──────────────────────────────────────────────────────
+# в”Ђв”Ђ FC 08 вЂ“ Diagnostics в”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђ
 
 def test_fc08_return_query_data():
     """Sub-function 00: server must echo the request data back unchanged."""
@@ -305,7 +305,7 @@ def test_fc08_return_query_data():
         assert ok(rr), explain(rr)
 
 
-# ── FC 11 – Get Communication Event Counter ───────────────────────────────────
+# в”Ђв”Ђ FC 11 вЂ“ Get Communication Event Counter в”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђ
 
 def test_fc11_get_event_counter():
     try:
@@ -318,7 +318,7 @@ def test_fc11_get_event_counter():
         assert ok(rr), explain(rr)
 
 
-# ── FC 12 – Get Communication Event Log ──────────────────────────────────────
+# в”Ђв”Ђ FC 12 вЂ“ Get Communication Event Log в”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђ
 
 def test_fc12_get_event_log():
     try:
@@ -331,7 +331,7 @@ def test_fc12_get_event_log():
         assert ok(rr), explain(rr)
 
 
-# ── FC 17 – Report Server ID ──────────────────────────────────────────────────
+# в”Ђв”Ђ FC 17 вЂ“ Report Server ID в”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђ
 
 def test_fc17_report_server_id():
     try:
@@ -347,7 +347,7 @@ def test_fc17_report_server_id():
         assert ok(rr), explain(rr)
 
 
-# ── FC 24 – Read FIFO Queue ───────────────────────────────────────────────────
+# в”Ђв”Ђ FC 24 вЂ“ Read FIFO Queue в”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђ
 
 def test_fc24_read_fifo_queue():
     """FIFO is normally empty -- an empty response without error is acceptable."""
@@ -359,7 +359,7 @@ def test_fc24_read_fifo_queue():
             pytest.xfail(f"FC24: {explain(rr)}")
 
 
-# ── FC 43 / 14 – Read Device Identification (MEI) ────────────────────────────
+# в”Ђв”Ђ FC 43 / 14 вЂ“ Read Device Identification (MEI) в”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђ
 
 def test_fc43_device_identification():
     try:
@@ -372,7 +372,7 @@ def test_fc43_device_identification():
         assert ok(rr), explain(rr)
 
 
-# ── Multiple concurrent connections ──────────────────────────────────────────
+# в”Ђв”Ђ Multiple concurrent connections в”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђ
 
 def _concurrent_worker(results: list, idx: int, requests_per_client: int = 5):
     """Worker thread: connect, send N requests, disconnect."""
@@ -416,7 +416,7 @@ def test_concurrent_connections():
     )
 
 
-# ── Stress test ───────────────────────────────────────────────────────────────
+# в”Ђв”Ђ Stress test в”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђ
 
 _STRESS_FUNCTIONS = [
     lambda c: c.read_coils(0, count=8, device_id=DEVICE_ID),
@@ -482,7 +482,7 @@ def test_stress(require_fc_tests_passed):
     )
 
 
-# ── Standalone entry point ────────────────────────────────────────────────────
+# в”Ђв”Ђ Standalone entry point в”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђ
 
 if __name__ == "__main__":
     sys.exit(pytest.main([__file__, "-v", "--tb=short", "-s"]))

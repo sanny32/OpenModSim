@@ -3478,11 +3478,6 @@ Script.onInit(()=&gt;{
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="567"/>
-        <source>New DataMap</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Binary</source>
         <translation type="vanished">дєЊйЂІдЅЌе€¶</translation>
     </message>
@@ -3507,12 +3502,18 @@ Script.onInit(()=&gt;{
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="572"/>
+        <location filename="../mainwindow.ui" line="567"/>
+        <location filename="../mainwindow.ui" line="570"/>
+        <source>New Map View</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="575"/>
         <source>Import Script...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="584"/>
+        <location filename="../mainwindow.ui" line="587"/>
         <source>Split View</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3788,6 +3789,13 @@ Script.onInit(()=&gt;{
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../mainwindow.cpp" line="608"/>
+        <location filename="../mainwindow.cpp" line="639"/>
+        <location filename="../mainwindow.cpp" line="639"/>
+        <source>Project files (*.oms)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../applogger.cpp" line="24"/>
         <source>Server connected: %1</source>
         <translation type="unfinished"></translation>
@@ -3840,13 +3848,6 @@ Script.onInit(()=&gt;{
     <message>
         <source>Data</source>
         <translation type="obsolete">иі‡ж–™</translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.cpp" line="608"/>
-        <location filename="../mainwindow.cpp" line="639"/>
-        <location filename="../mainwindow.cpp" line="639"/>
-        <source>Project files (*.msimprj)</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="930"/>
@@ -4804,7 +4805,7 @@ Script.onInit(()=&gt;{
     </message>
     <message>
         <location filename="../controls/projecttreewidget.cpp" line="304"/>
-        <source>New DataMap</source>
+        <source>New Map View</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

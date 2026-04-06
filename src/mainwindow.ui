@@ -64,7 +64,7 @@
     </property>
     <widget class="QMenu" name="menuNew">
      <property name="title">
-     <string>New</string>
+      <string>New</string>
      </property>
      <addaction name="actionNewDataView"/>
      <addaction name="actionNewDataMapView"/>
@@ -564,7 +564,10 @@
      <normaloff>:/res/actionNewData.png</normaloff>:/res/actionNewData.png</iconset>
    </property>
    <property name="text">
-    <string>New DataMap</string>
+    <string>New Map View</string>
+   </property>
+   <property name="toolTip">
+    <string>New Map View</string>
    </property>
   </action>
   <action name="actionImportScript">
@@ -598,4 +601,3 @@
  </resources>
  <connections/>
 </ui>
-
