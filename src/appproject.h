@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QList>
 #include <QMdiArea>
+#include <QPointer>
 #include <QUuid>
 #include "modbusmultiserver.h"
 #include "datasimulator.h"
@@ -108,7 +109,7 @@ private:
     bool containsClosedForm(QWidget* frm) const;
 
 private:
-    MdiAreaEx*                    _mdiArea;
+    QPointer<MdiAreaEx>           _mdiArea;
     ModbusMultiServer&            _mbServer;
     DataSimulator*                _dataSimulator;
     ProjectTreeWidget*            _projectTree;
