@@ -343,6 +343,7 @@ set(UI_FILES
     controls/bitpatterncontrol.ui
     controls/applogoutput.ui
     controls/consoleoutput.ui
+    controls/mdiareaex.ui
     controls/outputpanel.ui
     controls/findreplacebar.ui
     controls/jscriptcontrol.ui

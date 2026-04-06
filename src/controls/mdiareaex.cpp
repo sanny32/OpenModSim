@@ -1,7 +1,4 @@
 #include <QApplication>
-#include <QBoxLayout>
-#include <QHBoxLayout>
-#include <QLayout>
 #include <QScopedValueRollback>
 #include <QSignalBlocker>
 #include <QStyle>
@@ -71,18 +68,23 @@ static QString mdiExState(const MdiAreaEx* mdi)
 MdiAreaEx::MdiAreaEx(QWidget* parent)
     : QWidget(parent)
 {
-    auto* hostLayout = new QHBoxLayout(this);
-    hostLayout->setContentsMargins(0, 0, 0, 0);
-    hostLayout->setSpacing(0);
+    ui = new Ui::MdiAreaEx;
+    ui->setupUi(this);
 
-    _primaryArea = new MdiArea(this);
-    _primaryArea->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Expanding);
-    _primaryArea->setMinimumSize(0, 0);
-    hostLayout->addWidget(_primaryArea);
+    _splitter      = ui->_splitter;
+    _primaryArea   = ui->_primaryArea;
+    _secondaryArea = ui->_secondaryArea;
 
     _activePanel = _primaryArea;
 
+    _splitter->installEventFilter(this);
+    _splitter->setStretchFactor(0, 1);
+    _splitter->setStretchFactor(1, 1);
+
     connectPanel(_primaryArea);
+    connectPanel(_secondaryArea);
+    syncPanelOptions(_secondaryArea);
+
     createSplitButton();
     syncSplitButtonState();
     updateSplitButtonGeometry();
@@ -97,7 +99,7 @@ MdiAreaEx::MdiAreaEx(QWidget* parent)
                           .arg(AppTrace::widgetTag(old))
                           .arg(AppTrace::widgetTag(now)));
 
-        if (!now || !_secondaryArea)
+        if (!now || !_secondaryArea->isVisible())
             return;
         if (_secondaryArea->isAncestorOf(now)) {
             _activePanel = _secondaryArea;
@@ -120,6 +122,7 @@ MdiAreaEx::~MdiAreaEx()
     _destroying = true;
     AppTrace::log("MdiAreaEx::~MdiAreaEx",
                   QStringLiteral("destroying %1").arg(mdiExState(this)));
+    delete ui;
 }
 
 ///
@@ -422,7 +425,7 @@ void MdiAreaEx::toggleVerticalSplit()
 ///
 bool MdiAreaEx::isSplitView() const
 {
-    return _splitter && _secondaryArea;
+    return _secondaryArea && _secondaryArea->isVisible();
 }
 
 ///
@@ -1013,9 +1016,7 @@ void MdiAreaEx::updateSplitButtonGeometry()
         return;
     }
 
-    QWidget* splitButtonHost = _primaryArea;
-    if (isSplitView() && _splitter && _splitter->parentWidget())
-        splitButtonHost = _splitter->parentWidget();
+    QWidget* splitButtonHost = _splitter->parentWidget(); // always 'this'
 
     if (_splitButton->parentWidget() != splitButtonHost)
         _splitButton->setParent(splitButtonHost);
@@ -1083,8 +1084,7 @@ void MdiAreaEx::setSplitViewEnabled(bool enabled)
     const bool wasSplit = isSplitView();
 
     if (enabled) {
-        // Save the active window before ensureSplitArea reparents _primaryArea,
-        // which resets QMdiArea's internal active/current window state.
+        // Save the active window before the split layout changes.
         _preSplitActiveWindow = activePrimarySubWindow();
 
         ensureSplitArea(Qt::Horizontal);
@@ -1113,51 +1113,21 @@ void MdiAreaEx::setSplitViewEnabled(bool enabled)
 ///
 void MdiAreaEx::ensureSplitArea(Qt::Orientation orientation)
 {
-    if (!_primaryArea)
+    if (!_primaryArea || !_secondaryArea || !_splitter)
         return;
 
-    if (_splitter && _secondaryArea) {
-        _splitter->setOrientation(orientation);
+    _splitter->setOrientation(orientation);
+
+    if (_secondaryArea->isVisible()) {
         requestEqualSplitterSizes();
         updateSplitButtonGeometry();
         return;
     }
 
-    auto* hostLayout = layout();
-    if (!hostLayout)
-        return;
-
-    const int hostIndex = hostLayout->indexOf(_primaryArea);
-
-    _splitter = new QSplitter(orientation, this);
-    _splitter->setChildrenCollapsible(false);
-    _splitter->installEventFilter(this);
-
-    hostLayout->removeWidget(_primaryArea);
-    _primaryArea->setParent(_splitter);
-    _primaryArea->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Expanding);
-    _primaryArea->setMinimumSize(0, 0);
-    _splitter->addWidget(_primaryArea);
-
-    _secondaryArea = new MdiArea(_splitter);
-    _secondaryArea->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Expanding);
-    _secondaryArea->setMinimumSize(0, 0);
     syncPanelOptions(_secondaryArea);
     _secondaryArea->setViewMode(viewMode());
-    _splitter->addWidget(_secondaryArea);
-    _splitter->setStretchFactor(0, 1);
-    _splitter->setStretchFactor(1, 1);
+    _secondaryArea->show();
 
-    if (auto* boxLayout = qobject_cast<QBoxLayout*>(hostLayout)) {
-        if (hostIndex >= 0)
-            boxLayout->insertWidget(hostIndex, _splitter);
-        else
-            boxLayout->addWidget(_splitter);
-    } else {
-        hostLayout->addWidget(_splitter);
-    }
-
-    connectPanel(_secondaryArea);
     _activePanel = _primaryArea;
     requestEqualSplitterSizes();
     updateSplitButtonGeometry();
@@ -1168,82 +1138,43 @@ void MdiAreaEx::ensureSplitArea(Qt::Orientation orientation)
 ///
 void MdiAreaEx::mergeSplitArea()
 {
-    if (!_splitter || !_secondaryArea || !_primaryArea)
+    if (!_secondaryArea || !_secondaryArea->isVisible() || !_primaryArea)
         return;
 
     _isSplitInProgress = true;
+
     QPointer<QMdiSubWindow> preferredActive = activeSubWindow();
     if (!preferredActive)
         preferredActive = activePrimarySubWindow();
 
-    const auto secondaryWindows = _secondaryArea->localSubWindowList();
-    for (auto* wnd : secondaryWindows) {
-        _secondaryArea->removeSubWindow(wnd);
-        _primaryArea->addSubWindow(wnd, Qt::WindowFlags());
-    }
+    _secondaryArea->closeAllSubWindows();
 
-    auto* hostLayout = layout();
-    if (hostLayout) {
-        const int hostIndex = hostLayout->indexOf(_splitter);
-        hostLayout->removeWidget(_splitter);
-
-        _primaryArea->setParent(this);
-
-        if (auto* boxLayout = qobject_cast<QBoxLayout*>(hostLayout)) {
-            if (hostIndex >= 0)
-                boxLayout->insertWidget(hostIndex, _primaryArea);
-            else
-                boxLayout->addWidget(_primaryArea);
-        } else {
-            hostLayout->addWidget(_primaryArea);
-        }
-    }
-
-    // Restore active tab and keyboard focus after split widgets are actually deleted.
-    auto restoreFocus = [this, preferredActive]() {
-        if (!_primaryArea)
-            return;
-
-        QMdiSubWindow* target = preferredActive.data();
-        if (!target || !_primaryArea->localSubWindowList().contains(target))
-            target = activePrimarySubWindow();
-
-        if (!target) {
-            const auto windows = _primaryArea->localSubWindowList(QMdiArea::ActivationHistoryOrder);
-            if (!windows.isEmpty())
-                target = windows.first();
-        }
-
-        if (target) {
-            setActiveSubWindow(target); // Also focuses the primary panel.
-            if (auto* widget = target->widget())
-                widget->setFocus(Qt::OtherFocusReason); // Return focus to the form/editor widget.
-        } else {
-            _primaryArea->setFocus(Qt::OtherFocusReason);
-        }
-    };
-
-    QPointer<QSplitter> splitterToDelete = _splitter;
-    if (splitterToDelete) {
-        connect(splitterToDelete, &QObject::destroyed, this, [restoreFocus]() {
-            restoreFocus();
-        });
-    }
-
-    _secondaryArea->deleteLater();
-    _secondaryArea = nullptr;
-
-    _splitter->deleteLater();
-    _splitter = nullptr;
+    _secondaryArea->hide();
     _pendingSplitterEqualize = false;
-
     _activePanel = _primaryArea;
     _isSplitInProgress = false;
+
     syncSplitButtonState();
     updateSplitButtonGeometry();
 
-    if (!splitterToDelete)
-        restoreFocus();
+    // Restore active tab and keyboard focus synchronously.
+    QMdiSubWindow* target = preferredActive.data();
+    if (!target || !_primaryArea->localSubWindowList().contains(target))
+        target = activePrimarySubWindow();
+
+    if (!target) {
+        const auto windows = _primaryArea->localSubWindowList(QMdiArea::ActivationHistoryOrder);
+        if (!windows.isEmpty())
+            target = windows.first();
+    }
+
+    if (target) {
+        setActiveSubWindow(target);
+        if (auto* widget = target->widget())
+            widget->setFocus(Qt::OtherFocusReason);
+    } else {
+        _primaryArea->setFocus(Qt::OtherFocusReason);
+    }
 }
 
 ///
@@ -1251,7 +1182,7 @@ void MdiAreaEx::mergeSplitArea()
 ///
 void MdiAreaEx::requestEqualSplitterSizes()
 {
-    if (!_splitter)
+    if (!_secondaryArea || !_secondaryArea->isVisible())
         return;
 
     _pendingSplitterEqualize = true;

@@ -11,6 +11,7 @@
 #include <QToolButton>
 #include <QSplitter>
 #include "mdiarea.h"
+#include "ui_mdiareaex.h"
 
 class MdiAreaEx : public QWidget
 {
@@ -119,6 +120,7 @@ private:
     void tryEqualizeSplitterSizes();
 
 private:
+    Ui::MdiAreaEx* ui = nullptr;
     bool _isSplitInProgress = false;
     QPointer<QMdiSubWindow> _preSplitActiveWindow;
     bool _destroying = false;

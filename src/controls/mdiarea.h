@@ -65,10 +65,12 @@ signals:
     void tabContextMenuRequested(QMdiSubWindow* subWnd, QPoint globalPos);
     void tabDraggedOutside(QMdiSubWindow* subWnd, QPoint globalPos);
 
+public:
+    void setVisible(bool visible) override;
+
 protected:
     bool eventFilter(QObject* obj, QEvent* event) override;
     void resizeEvent(QResizeEvent* event) override;
-    void setVisible(bool visible) override;
 
 private slots:
     void on_tabBarClicked(int index);
