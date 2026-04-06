@@ -555,6 +555,11 @@ QWidget* MainWindow::createNewForm(ProjectFormKind kind)
     return frm;
 }
 
+///
+/// \brief MainWindow::activateNewFormKind
+/// \param kind
+/// \param sourceAction
+///
 void MainWindow::activateNewFormKind(ProjectFormKind kind, QAction* sourceAction)
 {
     _newFormKind = kind;
@@ -562,6 +567,9 @@ void MainWindow::activateNewFormKind(ProjectFormKind kind, QAction* sourceAction
     createNewForm(_newFormKind);
 }
 
+///
+/// \brief MainWindow::restoreNewFormKindIcon
+///
 void MainWindow::restoreNewFormKindIcon()
 {
     switch(_newFormKind) {
