@@ -81,9 +81,6 @@ private slots:
 
     /* File menu slots */
     void on_actionNew_triggered();
-    void on_actionNewDataView_triggered();
-    void on_actionNewTrafficView_triggered();
-    void on_actionNewRegisterMapView_triggered();
     void on_actionClose_triggered();
     void on_actionCloseAll_triggered();
     void on_actionOpenProject_triggered();
@@ -92,19 +89,8 @@ private slots:
     void on_actionCloseProject_triggered();
     void on_actionPrint_triggered();
     void on_actionPrintSetup_triggered();
-    void on_actionExit_triggered();
 
     void on_actionPreferences_triggered();
-
-    /* Edit menu slots */
-    void on_actionUndo_triggered();
-    void on_actionRedo_triggered();
-    void on_actionCut_triggered();
-    void on_actionCopy_triggered();
-    void on_actionPaste_triggered();
-    void on_actionSelectAll_triggered();
-    void on_actionFind_triggered();
-    void on_actionReplace_triggered();
 
     /* Connection menu slots */
     void on_connectAction(ConnectionDetails& cd);
@@ -120,25 +106,12 @@ private slots:
 
     /* View menu slots */
     void on_actionTabbedView_triggered();
-    void on_actionSplitView_triggered();
-    void on_actionToolbar_triggered();
-    void on_actionStatusBar_triggered();
-    void on_actionProjectTree_triggered();
-    void on_actionScriptHelp_triggered();
-    void on_actionOutputWindow_triggered();
-
-    /* Window menu slots */
-    void on_actionCascade_triggered();
-    void on_actionTile_triggered();
 
     /* Help menu slots */
     void on_actionAbout_triggered();
 
     /* Script slots */
-    void on_actionNewScript_triggered();
     void on_actionImportScript_triggered();
-
-    void on_searchText(const QString& text);
 
     void on_connectionError(const QString& error);
 
@@ -148,13 +121,21 @@ private slots:
 
 private:
     QWidget* createNewForm(ProjectFormKind kind);
+    void activateNewFormKind(ProjectFormKind kind, QAction* sourceAction);
+    void restoreNewFormKindIcon();
     QWidget* currentForm() const;
     FormDataView* currentDataForm() const;
     FormTrafficView* currentTrafficForm() const;
     FormScriptView* currentScriptForm() const;
+    FormRegisterMapView* currentRegisterMapForm() const;
     QWidget* currentDataOrTrafficForm() const;
     void forceCoils(QModbusDataUnit::RegisterType type);
     void presetRegs(QModbusDataUnit::RegisterType type);
+    bool prepareWriteParams(QModbusDataUnit::RegisterType type,
+                            FormDataView*& outFrm,
+                            DataViewDefinitions& outDd,
+                            SetupPresetParams& outPreset,
+                            ModbusWriteParams& outParams);
 
     bool loadAppSettings(const QString& filename);
     void saveAppSettings();
