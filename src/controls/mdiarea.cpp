@@ -661,40 +661,28 @@ void MdiArea::on_subWindowActivated(QMdiSubWindow* wnd)
     const bool focusInsideWnd = focus && (focus == wnd || wnd->isAncestorOf(focus));
     const bool focusInsideOtherWnd = focusOwner && focusOwner != wnd;
 
-    QMdiSubWindow* tabCurrent = nullptr;
-    if (_tabBar) {
-        tabCurrent = _tabBar->currentSubWindow();
-        if ((!tabCurrent || !windows.contains(tabCurrent)) && _tabBar->currentIndex() >= 0)
-            tabCurrent = subWindowAtIndex(_tabBar->currentIndex());
-        if (tabCurrent && !windows.contains(tabCurrent))
-            tabCurrent = nullptr;
-    }
+    QMdiSubWindow* tabCurrent = _tabBar ? subWindowAtIndex(_tabBar->currentIndex()) : nullptr;
 
-    QMdiSubWindow* stable = nullptr;
-    if (tabCurrent)
-        stable = tabCurrent;
+    QMdiSubWindow* stable = tabCurrent;
     if (!stable && _lastActivatedSubWindow && windows.contains(_lastActivatedSubWindow.data()))
         stable = _lastActivatedSubWindow.data();
     if (!stable && focusOwner && windows.contains(focusOwner))
         stable = focusOwner;
-
-    const bool tabMismatch = tabCurrent && tabCurrent != wnd;
 
     const bool transientActivation =
         !activationRequested &&
         stable &&
         stable != wnd &&
         !focusInsideWnd &&
-        (tabMismatch || (!focus) || focusInsideOtherWnd || !focusInsideMdi);
+        ((tabCurrent && tabCurrent != wnd) || !focus || focusInsideOtherWnd || !focusInsideMdi);
 
     if (transientActivation) {
         AppTrace::log("MdiArea::on_subWindowActivated",
-                      QStringLiteral("%1 blocked transient activation wnd=%2 stable=%3 tabCurrent=%4 tabMismatch=%5 requested=%6 focusOwner=%7 focusInsideMdi=%8 focusInsideWnd=%9")
+                      QStringLiteral("%1 blocked transient activation wnd=%2 stable=%3 tabCurrent=%4 requested=%5 focusOwner=%6 focusInsideMdi=%7 focusInsideWnd=%8")
                           .arg(AppTrace::objectTag(this))
                           .arg(AppTrace::subWindowTag(wnd))
                           .arg(AppTrace::subWindowTag(stable))
                           .arg(AppTrace::subWindowTag(tabCurrent))
-                          .arg(tabMismatch)
                           .arg(activationRequested)
                           .arg(AppTrace::subWindowTag(focusOwner))
                           .arg(focusInsideMdi)
