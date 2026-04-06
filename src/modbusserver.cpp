@@ -502,6 +502,9 @@ bool ModbusServer::matchingServerAddress(quint8 unitId) const
     if(_serverAddresses.contains(unitId))
         return true;
 
+    if (_definitions.AutoAddRegistersOnRequest)
+        return true;
+
     qCDebug(QT_MODBUS) << "(server) Wrong server unit identifier address, expected one of"
                        << _serverAddresses.values() << "got" << unitId;
     return false;
