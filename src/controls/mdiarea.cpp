@@ -76,6 +76,15 @@ static QString areaTag(const MdiArea* area)
         .arg(AppTrace::mdiAreaState(area));
 }
 
+static QMdiSubWindow* mdiOwnerOf(QWidget* widget)
+{
+    for (QWidget* it = widget; it; it = it->parentWidget()) {
+        if (auto* sub = qobject_cast<QMdiSubWindow*>(it))
+            return sub;
+    }
+    return nullptr;
+}
+
 ///
 /// \brief MdiArea::MdiArea
 /// \param parent
@@ -119,8 +128,10 @@ QMdiSubWindow* MdiArea::addSubWindow(QWidget* widget, Qt::WindowFlags flags)
 
     wnd->installEventFilter(this);
     enforceTabbedSubWindowState(wnd);
-    if (_tabBar)
+    if (_tabBar) {
+        QScopedValueRollback<QPointer<QMdiSubWindow>> requestedActivationGuard(_requestedActivation, wnd);
         _tabBar->addSubWindow(wnd);
+    }
 
     updateTabBarGeometry();
 
@@ -183,6 +194,8 @@ QList<QMdiSubWindow*> MdiArea::localSubWindowList(WindowOrder order) const
 ///
 void MdiArea::setActiveSubWindow(QMdiSubWindow* wnd)
 {
+    QScopedValueRollback<QPointer<QMdiSubWindow>> requestedActivationGuard(_requestedActivation, wnd);
+
     const auto beforeState = AppTrace::mdiAreaState(this);
     AppTrace::log("MdiArea::setActiveSubWindow",
                   QStringLiteral("%1 request=%2 focus=%3 before=%4")
@@ -351,6 +364,40 @@ bool MdiArea::eventFilter(QObject* obj, QEvent* event)
         }
     }
 
+    if (event && event->type() == QEvent::FocusIn && viewMode() == QMdiArea::TabbedView && _tabBar) {
+        auto* widget = qobject_cast<QWidget*>(obj);
+        auto* owner = mdiOwnerOf(widget);
+        const auto windows = QMdiArea::subWindowList();
+
+        if (owner && windows.contains(owner)) {
+            QMdiSubWindow* tabCurrent = _tabBar->currentSubWindow();
+            if ((!tabCurrent || !windows.contains(tabCurrent)) && _tabBar->currentIndex() >= 0)
+                tabCurrent = subWindowAtIndex(_tabBar->currentIndex());
+            if (tabCurrent && !windows.contains(tabCurrent))
+                tabCurrent = nullptr;
+
+            const bool activationRequested = _requestedActivation && _requestedActivation == owner;
+            if (!activationRequested && tabCurrent && owner != tabCurrent) {
+                AppTrace::log("MdiArea::eventFilter",
+                              QStringLiteral("%1 blocked foreign FocusIn obj=%2 owner=%3 tabCurrent=%4")
+                                  .arg(AppTrace::objectTag(this))
+                                  .arg(AppTrace::objectTag(obj))
+                                  .arg(AppTrace::subWindowTag(owner))
+                                  .arg(AppTrace::subWindowTag(tabCurrent)));
+
+                QPointer<QMdiSubWindow> stable = tabCurrent;
+                QTimer::singleShot(0, this, [this, stable]() {
+                    if (!stable)
+                        return;
+                    if (!QMdiArea::subWindowList().contains(stable.data()))
+                        return;
+                    setActiveSubWindow(stable.data());
+                });
+                return true;
+            }
+        }
+    }
+
     if (obj == _tabBar) {
         switch (event->type()) {
             case QEvent::Paint:
@@ -458,11 +505,51 @@ void MdiArea::on_currentTabChanged(int index)
         return;
 
     auto* wnd = subWindowAtIndex(index);
+    const bool activationRequested = _requestedActivation && _requestedActivation == wnd;
+    const auto windows = QMdiArea::subWindowList();
+    QWidget* focus = QApplication::focusWidget();
+    QMdiSubWindow* focusOwner = mdiOwnerOf(focus);
+    const bool focusInsideMdi = focus && (focus == this || isAncestorOf(focus));
+    const bool focusInsideWnd = wnd && focus && (focus == wnd || wnd->isAncestorOf(focus));
+    const bool focusInsideOtherWnd = wnd && focusOwner && focusOwner != wnd;
     AppTrace::log("MdiArea::on_currentTabChanged",
-                  QStringLiteral("%1 index=%2 wnd=%3")
-                      .arg(AppTrace::objectTag(this))
-                      .arg(index)
-                      .arg(AppTrace::subWindowTag(wnd)));
+                  QStringLiteral("%1 index=%2 wnd=%3 requested=%4 focus=%5 focusOwner=%6 focusInsideMdi=%7 focusInsideWnd=%8 focusInsideOtherWnd=%9")
+                       .arg(AppTrace::objectTag(this))
+                       .arg(index)
+                       .arg(AppTrace::subWindowTag(wnd))
+                       .arg(activationRequested)
+                       .arg(AppTrace::widgetTag(focus))
+                       .arg(AppTrace::subWindowTag(focusOwner))
+                       .arg(focusInsideMdi)
+                       .arg(focusInsideWnd)
+                       .arg(focusInsideOtherWnd));
+
+    // Ignore transient tab changes coming from outside MDI focus context
+    // (for example, when external tab widgets switch pages) and from cases
+    // where focus still belongs to another MDI subwindow.
+    if (!activationRequested && wnd && ((!focusInsideMdi && !focusInsideWnd) || focusInsideOtherWnd)) {
+        QMdiSubWindow* stable = focusOwner;
+        if (!stable || !windows.contains(stable))
+            stable = _lastActivatedSubWindow.data();
+        if (!stable || !windows.contains(stable))
+            stable = QMdiArea::activeSubWindow();
+        if (!stable || !windows.contains(stable))
+            stable = QMdiArea::currentSubWindow();
+
+        if (stable && stable != wnd) {
+            const QSignalBlocker blocker(_tabBar);
+            _tabBar->setCurrentSubWindow(stable);
+            syncNativeTabBarSelection(stable);
+            AppTrace::log("MdiArea::on_currentTabChanged",
+                          QStringLiteral("%1 blocked transient change wnd=%2 stable=%3 focusOwner=%4")
+                              .arg(AppTrace::objectTag(this))
+                              .arg(AppTrace::subWindowTag(wnd))
+                              .arg(AppTrace::subWindowTag(stable))
+                              .arg(AppTrace::subWindowTag(focusOwner)));
+            return;
+        }
+    }
+
     if (wnd)
         setActiveSubWindow(wnd);
 }
@@ -540,11 +627,14 @@ void MdiArea::on_tabBarDestroyed()
 ///
 void MdiArea::on_subWindowActivated(QMdiSubWindow* wnd)
 {
+    QWidget* focus = QApplication::focusWidget();
+    QMdiSubWindow* focusOwner = mdiOwnerOf(focus);
+
     AppTrace::log("MdiArea::on_subWindowActivated",
                   QStringLiteral("%1 signal wnd=%2 focus=%3 state=%4")
                       .arg(AppTrace::objectTag(this))
                       .arg(AppTrace::subWindowTag(wnd))
-                      .arg(AppTrace::widgetTag(QApplication::focusWidget()))
+                      .arg(AppTrace::widgetTag(focus))
                       .arg(AppTrace::mdiAreaState(this)));
 
     if (!wnd) {
@@ -567,6 +657,62 @@ void MdiArea::on_subWindowActivated(QMdiSubWindow* wnd)
                           .arg(AppTrace::objectTag(this))
                           .arg(AppTrace::subWindowTag(keepEnabled))
                           .arg(AppTrace::mdiAreaState(this)));
+        return;
+    }
+
+    const auto windows = QMdiArea::subWindowList();
+    const bool activationRequested = _requestedActivation && _requestedActivation == wnd;
+    const bool focusInsideMdi = focus && (focus == this || isAncestorOf(focus));
+    const bool focusInsideWnd = focus && (focus == wnd || wnd->isAncestorOf(focus));
+    const bool focusInsideOtherWnd = focusOwner && focusOwner != wnd;
+
+    QMdiSubWindow* tabCurrent = nullptr;
+    if (_tabBar) {
+        tabCurrent = _tabBar->currentSubWindow();
+        if ((!tabCurrent || !windows.contains(tabCurrent)) && _tabBar->currentIndex() >= 0)
+            tabCurrent = subWindowAtIndex(_tabBar->currentIndex());
+        if (tabCurrent && !windows.contains(tabCurrent))
+            tabCurrent = nullptr;
+    }
+
+    QMdiSubWindow* stable = nullptr;
+    if (tabCurrent)
+        stable = tabCurrent;
+    if (!stable && _lastActivatedSubWindow && windows.contains(_lastActivatedSubWindow.data()))
+        stable = _lastActivatedSubWindow.data();
+    if (!stable && focusOwner && windows.contains(focusOwner))
+        stable = focusOwner;
+
+    const bool tabMismatch = tabCurrent && tabCurrent != wnd;
+
+    const bool transientActivation =
+        !activationRequested &&
+        stable &&
+        stable != wnd &&
+        !focusInsideWnd &&
+        (tabMismatch || (!focus) || focusInsideOtherWnd || !focusInsideMdi);
+
+    if (transientActivation) {
+        AppTrace::log("MdiArea::on_subWindowActivated",
+                      QStringLiteral("%1 blocked transient activation wnd=%2 stable=%3 tabCurrent=%4 tabMismatch=%5 requested=%6 focusOwner=%7 focusInsideMdi=%8 focusInsideWnd=%9")
+                          .arg(AppTrace::objectTag(this))
+                          .arg(AppTrace::subWindowTag(wnd))
+                          .arg(AppTrace::subWindowTag(stable))
+                          .arg(AppTrace::subWindowTag(tabCurrent))
+                          .arg(tabMismatch)
+                          .arg(activationRequested)
+                          .arg(AppTrace::subWindowTag(focusOwner))
+                          .arg(focusInsideMdi)
+                          .arg(focusInsideWnd));
+
+        if (_tabBar && _tabBar->currentSubWindow() != stable) {
+            const QSignalBlocker blocker(_tabBar);
+            _tabBar->setCurrentSubWindow(stable);
+        }
+        syncNativeTabBarSelection(stable);
+
+        if (QMdiArea::activeSubWindow() != stable || QMdiArea::currentSubWindow() != stable)
+            setActiveSubWindow(stable);
         return;
     }
 

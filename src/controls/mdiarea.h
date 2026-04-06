@@ -100,6 +100,7 @@ private:
     MdiTabBar* _tabBar = nullptr;
     QFrame* _tabBarBaseLine = nullptr;
     QPointer<QMdiSubWindow> _lastActivatedSubWindow;
+    QPointer<QMdiSubWindow> _requestedActivation;
     QList<QPointer<QMdiSubWindow>> _tabHistory;
 };
 
