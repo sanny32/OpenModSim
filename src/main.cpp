@@ -184,10 +184,10 @@ int main(int argc, char *argv[])
     const bool noSession = parser.isSet(CmdLineParser::_no_session);
 
     MainWindow w(profile, !noSession);
+    w.show();
     if(!cfg.isEmpty()) {
         w.loadProject(cfg);
     }
-    w.show();
 
     return a.exec();
 }

@@ -67,6 +67,7 @@ signals:
     void replace();
 
 protected:
+    void showEvent(QShowEvent* event) override;
     void changeEvent(QEvent* event) override;
     void closeEvent(QCloseEvent *event) override;
     bool eventFilter(QObject * obj, QEvent * e) override;

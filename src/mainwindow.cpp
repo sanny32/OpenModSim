@@ -308,6 +308,16 @@ void MainWindow::setLanguage(const QString& lang)
 }
 
 ///
+/// \brief MainWindow::showEvent
+/// \param event
+///
+void MainWindow::showEvent(QShowEvent* event)
+{
+    QMainWindow::showEvent(event);
+    _project->restoreActiveWindows();
+}
+
+///
 /// \brief MainWindow::changeEvent
 /// \param event
 ///

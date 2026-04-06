@@ -1293,12 +1293,10 @@ int AppProject::duplicatePrimaryTabsToSecondary()
     }
 
     // Restore the primary panel's active tab (moving toMove may have shifted focus).
-    QTimer::singleShot(0, primary, [primary, primaryActiveWnd]() {
-        AppTrace::log("AppProject::splitActiveFormToSecondary",
-                      QStringLiteral("restore primary->setActiveSubWindow %1")
-                          .arg(AppTrace::subWindowTag(primaryActiveWnd)));
-        primary->setActiveSubWindow(primaryActiveWnd);
-    });
+    AppTrace::log("AppProject::splitActiveFormToSecondary",
+                  QStringLiteral("restore primary->setActiveSubWindow %1")
+                      .arg(AppTrace::subWindowTag(primaryActiveWnd)));
+    primary->setActiveSubWindow(primaryActiveWnd);
 
     return secondaryWnd ? 1 : 0;
 }
@@ -1598,63 +1596,66 @@ void AppProject::loadProject(const QString& filename)
         if(auto* secondary = secondaryArea())
             applyTabOrderToArea(secondary, secondaryTabOrder);
 
-    const auto restoreActiveWindows = [this, splitView, activePrimaryWin, activeSecWin]() {
-        if(!activePrimaryWin.isEmpty()) {
-            if(auto* primary = _mdiArea->primaryArea()) {
-                for(auto* wnd : primary->localSubWindowList()) {
-                    if(wnd && wnd->widget() && wnd->widget()->windowTitle() == activePrimaryWin) {
-                        AppTrace::log("AppProject::loadProject.restoreActiveWindows",
-                                      QStringLiteral("primary->setActiveSubWindow %1")
-                                          .arg(AppTrace::subWindowTag(wnd)));
-                        primary->setActiveSubWindow(wnd);
-                        break;
-                    }
-                }
-            }
-        }
+    _pendingActivePrimaryWin = activePrimaryWin;
+    _pendingActiveSecWin = splitView ? activeSecWin : QString();
 
-        if(splitView && !activeSecWin.isEmpty()) {
-            if(auto* secondary = secondaryArea()) {
-                for(auto* wnd : secondary->localSubWindowList()) {
-                    if(wnd && wnd->widget() && wnd->widget()->windowTitle() == activeSecWin) {
-                        AppTrace::log("AppProject::loadProject.restoreActiveWindows",
-                                      QStringLiteral("secondary->setActiveSubWindow %1")
-                                          .arg(AppTrace::subWindowTag(wnd)));
-                        secondary->setActiveSubWindow(wnd);
-                        break;
-                    }
-                }
-            }
-        }
-
-        // Final safety sync: make sure the visible tab and the active QMdi page
-        // are aligned after all restore operations.
-        if (auto* primary = _mdiArea->primaryArea()) {
-            if (auto* tabBar = qobject_cast<MdiTabBar*>(primary->tabBar())) {
-                if (auto* tabWnd = tabBar->currentSubWindow()) {
-                    AppTrace::log("AppProject::loadProject.restoreActiveWindows",
-                                  QStringLiteral("sync primary->setActiveSubWindow(tabCurrent) %1")
-                                      .arg(AppTrace::subWindowTag(tabWnd)));
-                    primary->setActiveSubWindow(tabWnd);
-                }
-            }
-        }
-    };
-
-    auto applyRestoreRobustly = [this, restoreActiveWindows]() {
-        // Run more than once to survive late activation events posted by MDI
-        // while closed forms are being torn down during project restore.
-        restoreActiveWindows();
-        QTimer::singleShot(0, this, restoreActiveWindows);
-        QTimer::singleShot(50, this, restoreActiveWindows);
-    };
-
-    // If the MDI area is already visible (e.g. user opens a project from the menu),
-    // apply immediately. If not visible yet (startup), defer until first event turn.
     if(_mdiArea->isVisible())
-        applyRestoreRobustly();
-    else
-        QTimer::singleShot(0, this, applyRestoreRobustly);
+        restoreActiveWindows();
+}
+
+///
+/// \brief AppProject::restoreActiveWindows
+/// Restores the active sub-window selection after a project load.
+/// Called immediately if the MDI area is already visible, or deferred via
+/// MainWindow::showEvent if the window has not been shown yet.
+///
+void AppProject::restoreActiveWindows()
+{
+    if(_pendingActivePrimaryWin.isEmpty() && _pendingActiveSecWin.isEmpty())
+        return;
+
+    if(!_pendingActivePrimaryWin.isEmpty()) {
+        if(auto* primary = _mdiArea->primaryArea()) {
+            for(auto* wnd : primary->localSubWindowList()) {
+                if(wnd && wnd->widget() && wnd->widget()->windowTitle() == _pendingActivePrimaryWin) {
+                    AppTrace::log("AppProject::restoreActiveWindows",
+                                  QStringLiteral("primary->setActiveSubWindow %1")
+                                      .arg(AppTrace::subWindowTag(wnd)));
+                    primary->setActiveSubWindow(wnd);
+                    break;
+                }
+            }
+        }
+    }
+
+    if(!_pendingActiveSecWin.isEmpty()) {
+        if(auto* secondary = secondaryArea()) {
+            for(auto* wnd : secondary->localSubWindowList()) {
+                if(wnd && wnd->widget() && wnd->widget()->windowTitle() == _pendingActiveSecWin) {
+                    AppTrace::log("AppProject::restoreActiveWindows",
+                                  QStringLiteral("secondary->setActiveSubWindow %1")
+                                      .arg(AppTrace::subWindowTag(wnd)));
+                    secondary->setActiveSubWindow(wnd);
+                    break;
+                }
+            }
+        }
+    }
+
+    // Final safety sync: make sure the visible tab and the active QMdi page are aligned.
+    if (auto* primary = _mdiArea->primaryArea()) {
+        if (auto* tabBar = qobject_cast<MdiTabBar*>(primary->tabBar())) {
+            if (auto* tabWnd = tabBar->currentSubWindow()) {
+                AppTrace::log("AppProject::restoreActiveWindows",
+                              QStringLiteral("sync primary->setActiveSubWindow(tabCurrent) %1")
+                                  .arg(AppTrace::subWindowTag(tabWnd)));
+                primary->setActiveSubWindow(tabWnd);
+            }
+        }
+    }
+
+    _pendingActivePrimaryWin.clear();
+    _pendingActiveSecWin.clear();
 }
 
 ///
