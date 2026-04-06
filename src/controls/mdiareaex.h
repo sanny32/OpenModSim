@@ -116,15 +116,13 @@ private:
     void updateSplitButtonGeometry();
     void ensureSplitArea(Qt::Orientation orientation);
     void mergeSplitArea();
-    void requestEqualSplitterSizes();
-    void tryEqualizeSplitterSizes();
+    void equalizeSplitterSizes();
 
 private:
     Ui::MdiAreaEx* ui = nullptr;
     bool _isSplitInProgress = false;
     QPointer<QMdiSubWindow> _preSplitActiveWindow;
     bool _destroying = false;
-    bool _pendingSplitterEqualize = false;
     bool _updatingSplitButtonGeometry = false;
     QToolButton* _splitButton = nullptr;
     QSplitter* _splitter = nullptr;

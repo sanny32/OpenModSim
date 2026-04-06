@@ -499,8 +499,6 @@ void MdiAreaEx::setTabsClosable(bool closable)
 
     if (_secondaryArea)
         _secondaryArea->setTabsClosable(closable);
-
-    updateSplitButtonGeometry();
 }
 
 ///
@@ -523,8 +521,6 @@ void MdiAreaEx::setTabsMovable(bool movable)
 
     if (_secondaryArea)
         _secondaryArea->setTabsMovable(movable);
-
-    updateSplitButtonGeometry();
 }
 
 ///
@@ -704,7 +700,6 @@ bool MdiAreaEx::eventFilter(QObject* obj, QEvent* event)
             case QEvent::Show:
             case QEvent::Resize:
             case QEvent::LayoutRequest:
-                tryEqualizeSplitterSizes();
                 updateSplitButtonGeometry();
                 break;
             default:
@@ -1091,7 +1086,7 @@ void MdiAreaEx::setSplitViewEnabled(bool enabled)
         if (!_secondaryArea)
             return;
 
-        requestEqualSplitterSizes();
+        equalizeSplitterSizes();
     } else {
         emit splitViewAboutToDisable();
         mergeSplitArea();
@@ -1119,7 +1114,7 @@ void MdiAreaEx::ensureSplitArea(Qt::Orientation orientation)
     _splitter->setOrientation(orientation);
 
     if (_secondaryArea->isVisible()) {
-        requestEqualSplitterSizes();
+        equalizeSplitterSizes();
         updateSplitButtonGeometry();
         return;
     }
@@ -1129,7 +1124,7 @@ void MdiAreaEx::ensureSplitArea(Qt::Orientation orientation)
     _secondaryArea->show();
 
     _activePanel = _primaryArea;
-    requestEqualSplitterSizes();
+    equalizeSplitterSizes();
     updateSplitButtonGeometry();
 }
 
@@ -1150,7 +1145,6 @@ void MdiAreaEx::mergeSplitArea()
     _secondaryArea->closeAllSubWindows();
 
     _secondaryArea->hide();
-    _pendingSplitterEqualize = false;
     _activePanel = _primaryArea;
     _isSplitInProgress = false;
 
@@ -1178,34 +1172,10 @@ void MdiAreaEx::mergeSplitArea()
 }
 
 ///
-/// \brief MdiAreaEx::requestEqualSplitterSizes
+/// \brief MdiAreaEx::equalizeSplitterSizes
 ///
-void MdiAreaEx::requestEqualSplitterSizes()
+void MdiAreaEx::equalizeSplitterSizes()
 {
-    if (!_secondaryArea || !_secondaryArea->isVisible())
-        return;
-
-    _pendingSplitterEqualize = true;
-    tryEqualizeSplitterSizes();
-
-    QTimer::singleShot(0, this, [this]() {
-        tryEqualizeSplitterSizes();
-    });
-}
-
-///
-/// \brief MdiAreaEx::tryEqualizeSplitterSizes
-///
-void MdiAreaEx::tryEqualizeSplitterSizes()
-{
-    if (!_pendingSplitterEqualize || !_splitter)
-        return;
-
-    if (!setEqualSplitterSizes(_splitter))
-        return;
-
-    // Stop once the layout has stabilized at 50/50
-    const auto sizes = _splitter->sizes();
-    if (sizes.size() >= 2 && qAbs(sizes[0] - sizes[1]) <= 1)
-        _pendingSplitterEqualize = false;
+    setEqualSplitterSizes(_splitter);
+    QTimer::singleShot(0, this, [this]() { setEqualSplitterSizes(_splitter); });
 }

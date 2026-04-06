@@ -238,14 +238,14 @@ void MdiArea::setActiveSubWindow(QMdiSubWindow* wnd)
         }
 
         syncNativeTabBarSelection(actual);
-        updateTabbedEnabledState(actual);
+        updateTabbedEnabledState();
     } else {
         QMdiSubWindow* keepEnabled = _lastActivatedSubWindow.data();
         if (!keepEnabled && _tabBar)
             keepEnabled = _tabBar->currentSubWindow();
         if (!keepEnabled)
             keepEnabled = QMdiArea::currentSubWindow();
-        updateTabbedEnabledState(keepEnabled);
+        updateTabbedEnabledState();
     }
 
     const QMdiSubWindow* tabCurrent = _tabBar ? _tabBar->currentSubWindow() : nullptr;
@@ -276,7 +276,7 @@ void MdiArea::setViewMode(ViewMode mode)
             _tabBarBaseLine->hide();
     }
 
-    updateTabbedEnabledState(QMdiArea::activeSubWindow());
+    updateTabbedEnabledState();
     emit tabBarLayoutChanged();
 }
 
@@ -575,16 +575,11 @@ void MdiArea::on_closeTab(int index)
     if (_tabBar->count() == 1)
         emit lastTabAboutToClose();
 
-    // Find the previously active window to restore after close
+    // Find the previously active window using Qt's built-in activation history.
     QMdiSubWindow* prev = nullptr;
-    for (auto& ptr : _tabHistory) {
-        if (ptr && ptr != wnd) {
-            prev = ptr;
-            break;
-        }
-    }
+    for (auto* c : QMdiArea::subWindowList(ActivationHistoryOrder))
+        if (c && c != wnd) { prev = c; break; }
 
-    _tabHistory.removeAll(wnd);
     wnd->close();
 
     if (prev)
@@ -644,7 +639,7 @@ void MdiArea::on_subWindowActivated(QMdiSubWindow* wnd)
         if (!keepEnabled)
             keepEnabled = QMdiArea::currentSubWindow();
 
-        updateTabbedEnabledState(keepEnabled);
+        updateTabbedEnabledState();
         // Keep Qt's hidden native tabbar on the last known document. This
         // prevents fallback activation to the first tab when focus leaves MDI.
         syncNativeTabBarSelection(keepEnabled);
@@ -717,7 +712,7 @@ void MdiArea::on_subWindowActivated(QMdiSubWindow* wnd)
     }
 
     _lastActivatedSubWindow = wnd;
-    updateTabbedEnabledState(wnd);
+    updateTabbedEnabledState();
     enforceTabbedSubWindowState(wnd);
 
     if (!_tabBar)
@@ -729,9 +724,6 @@ void MdiArea::on_subWindowActivated(QMdiSubWindow* wnd)
     }
     syncNativeTabBarSelection(wnd);
     updateTabBarGeometry();
-
-    _tabHistory.removeAll(wnd);
-    _tabHistory.prepend(wnd);
 
     AppTrace::log("MdiArea::on_subWindowActivated",
                   QStringLiteral("%1 activated=%2 after=%3")
@@ -814,7 +806,7 @@ void MdiArea::setupTabbedMode()
         // strictly aligned when tabbed mode is (re)initialized.
         setActiveSubWindow(preferredCurrent);
     } else {
-        updateTabbedEnabledState(nullptr);
+        updateTabbedEnabledState();
     }
 
     AppTrace::log("MdiArea::setupTabbedMode",
@@ -848,11 +840,9 @@ void MdiArea::setupTabbedMode()
 
 ///
 /// \brief MdiArea::updateTabbedEnabledState
-/// \param activeWnd
 ///
-void MdiArea::updateTabbedEnabledState(QMdiSubWindow* activeWnd)
+void MdiArea::updateTabbedEnabledState()
 {
-    Q_UNUSED(activeWnd)
     // Keep all MDI subwindows enabled. Disabling non-active windows can desync
     // Qt's internal tab stack from our custom tab bar on some startup paths.
     const auto windows = QMdiArea::subWindowList();
@@ -1068,31 +1058,13 @@ void MdiArea::enforceTabbedSubWindowState(QMdiSubWindow* wnd)
 ///
 QMdiSubWindow* MdiArea::subWindowAtIndex(int index) const
 {
-    const auto windows = QMdiArea::subWindowList();
-    if (index < 0)
-        return nullptr;
-
     if (_tabBar) {
-        if (index < _tabBar->count()) {
-            const QString title = _tabBar->tabText(index);
-            if (!title.isEmpty()) {
-                for (auto* candidate : windows) {
-                    if (candidate && candidate->windowTitle() == title)
-                        return candidate;
-                }
-            }
-        }
-
-        if (auto* wnd = _tabBar->subWindowAt(index)) {
-            if (windows.contains(wnd))
+        if (auto* wnd = _tabBar->subWindowAt(index))
+            if (QMdiArea::subWindowList().contains(wnd))
                 return wnd;
-        }
     }
-
-    if (index < windows.size())
-        return windows.at(index);
-
-    return nullptr;
+    const auto windows = QMdiArea::subWindowList();
+    return (index >= 0 && index < windows.size()) ? windows.at(index) : nullptr;
 }
 
 ///

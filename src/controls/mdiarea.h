@@ -87,7 +87,7 @@ private:
     void updateTabBarGeometry();
     void updateViewportBaseLine();
     void syncNativeTabBarSelection(QMdiSubWindow* wnd);
-    void updateTabbedEnabledState(QMdiSubWindow* activeWnd);
+    void updateTabbedEnabledState();
     void enforceTabbedSubWindowState(QMdiSubWindow* wnd);
     QMdiSubWindow* subWindowAtIndex(int index) const;
 
@@ -101,7 +101,6 @@ private:
     QFrame* _tabBarBaseLine = nullptr;
     QPointer<QMdiSubWindow> _lastActivatedSubWindow;
     QPointer<QMdiSubWindow> _requestedActivation;
-    QList<QPointer<QMdiSubWindow>> _tabHistory;
 };
 
 #endif // MDIAREA_H
