@@ -105,6 +105,10 @@ private:
     QWidget* createCloneOnArea(QWidget* source, MdiArea* area);
     MdiArea* activeCreateArea() const;
     MdiArea* areaOfForm(QWidget* frm) const;
+    QList<QWidget*> allProjectForms() const;
+    FormDataMapView* findAutoRequestMap() const;
+    FormDataMapView* ensureAutoRequestMap();
+    void syncAutoRequestMap(const ModbusDefinitions& defs);
     void addClosedForm(QWidget* frm);
     void removeClosedForm(QWidget* frm);
     bool containsClosedForm(QWidget* frm) const;

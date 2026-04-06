@@ -23,6 +23,7 @@ constexpr const char* kPanelRight = "R";
 constexpr const char* kSplitOriginIdProperty = "SplitOriginId";
 constexpr const char* kSplitAutoCloneProperty = "SplitAutoClone";
 constexpr const char* kFormIdProperty = "FormId";
+constexpr const char* kDeleteLockedProperty = "DeleteLocked";
 
 QUuid formIdOf(QWidget* widget);
 
@@ -263,6 +264,8 @@ AppProject::AppProject(MdiAreaEx* mdiArea,
                           .arg(AppTrace::subWindowTag(wnd))
                           .arg(mdiExState(_mdiArea)));
     });
+    connect(&_mbServer, &ModbusMultiServer::definitionsChanged,
+            this, &AppProject::syncAutoRequestMap);
 }
 
 ///
@@ -272,6 +275,87 @@ AppProject::~AppProject()
 {
     AppTrace::log("AppProject::~AppProject",
                   QStringLiteral("destroyed state=%1").arg(mdiExState(_mdiArea)));
+}
+
+///
+/// \brief AppProject::allProjectForms
+///
+QList<QWidget*> AppProject::allProjectForms() const
+{
+    QList<QWidget*> result;
+    for (auto* wnd : _mdiArea->subWindowList()) {
+        auto* widget = wnd ? wnd->widget() : nullptr;
+        if (!widget || widget->property(kSplitAutoCloneProperty).toBool())
+            continue;
+        if (!result.contains(widget))
+            result.append(widget);
+    }
+
+    for (auto* frm : _closedForms) {
+        if (frm && !result.contains(frm))
+            result.append(frm);
+    }
+
+    return result;
+}
+
+///
+/// \brief AppProject::findAutoRequestMap
+///
+FormDataMapView* AppProject::findAutoRequestMap() const
+{
+    for (auto* widget : allProjectForms()) {
+        auto* map = qobject_cast<FormDataMapView*>(widget);
+        if (map && map->isAutoRequestMap())
+            return map;
+    }
+
+    return nullptr;
+}
+
+///
+/// \brief AppProject::ensureAutoRequestMap
+///
+FormDataMapView* AppProject::ensureAutoRequestMap()
+{
+    if (auto* map = findAutoRequestMap()) {
+        map->setAutoRequestMap(true);
+        if (containsClosedForm(map))
+            rewrapMdiChild(map);
+        return map;
+    }
+
+    auto* widget = createMdiChildOnArea(ProjectFormKind::DataMap,
+                                        _mdiArea->primaryArea() ? _mdiArea->primaryArea() : activeCreateArea(),
+                                        true);
+    auto* map = qobject_cast<FormDataMapView*>(widget);
+    if (!map)
+        return nullptr;
+
+    map->setAutoRequestMap(true);
+    map->setWindowTitle(QStringLiteral("AutoMap"));
+    return map;
+}
+
+///
+/// \brief AppProject::syncAutoRequestMap
+///
+void AppProject::syncAutoRequestMap(const ModbusDefinitions& defs)
+{
+    if (defs.AutoAddRegistersOnRequest) {
+        if (auto* map = ensureAutoRequestMap()) {
+            map->setAutoAddOnRequest(true);
+            map->setProperty(kDeleteLockedProperty, true);
+            openFormOnActivePanel(map);
+            _projectTree->activateForm(map);
+        }
+        return;
+    }
+
+    if (auto* map = findAutoRequestMap()) {
+        map->setAutoAddOnRequest(false);
+        map->setProperty(kDeleteLockedProperty, false);
+    }
 }
 
 ///
@@ -673,6 +757,8 @@ void AppProject::closeMdiChild(QWidget* frm)
 void AppProject::deleteForm(QWidget* frm)
 {
     if (!frm) return;
+    if (frm->property(kDeleteLockedProperty).toBool())
+        return;
 
     // Close the MDI subwindow if the form is currently open
     for (auto wnd : _mdiArea->subWindowList()) {
@@ -1568,6 +1654,7 @@ void AppProject::loadProject(const QString& filename)
         _mbServer.setTimestampMap(globalTimestampMap);
 
     _mainWindow->applyConnections(defs, conns);
+    syncAutoRequestMap(_mbServer.getModbusDefinitions());
 
     // Restore secondary panel state.
     if(splitView && secondaryArea()) {

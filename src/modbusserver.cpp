@@ -395,6 +395,9 @@ bool ModbusServer::setData(const QModbusDataUnit &newData, int serverAddress)
 ///
 bool ModbusServer::writeData(const QModbusDataUnit &newData, int serverAddress)
 {
+    ensureAutoAddRange(newData.registerType(), newData.startAddress(),
+                       static_cast<quint16>(newData.valueCount()), serverAddress);
+
     if (!_modbusDataUnitMaps[serverAddress].contains(newData.registerType()))
         return false;
 
@@ -435,6 +438,10 @@ bool ModbusServer::writeData(const QModbusDataUnit &newData, int serverAddress)
 ///
 bool ModbusServer::readData(QModbusDataUnit *newData, int serverAddress) const
 {
+    if (newData)
+        ensureAutoAddRange(newData->registerType(), newData->startAddress(),
+                           static_cast<quint16>(newData->valueCount()), serverAddress);
+
     if ((!newData) || (!_modbusDataUnitMaps[serverAddress].contains(newData->registerType())))
         return false;
 
@@ -462,6 +469,27 @@ bool ModbusServer::readData(QModbusDataUnit *newData, int serverAddress) const
 
     newData->setValues(current.values().mid(newData->startAddress() - current.startAddress(), newData->valueCount()));
     return true;
+}
+
+///
+/// \brief ModbusServer::ensureAutoAddRange
+///
+bool ModbusServer::ensureAutoAddRange(QModbusDataUnit::RegisterType table, quint16 address, quint16 count, int serverAddress) const
+{
+    if (!_definitions.AutoAddRegistersOnRequest || count == 0)
+        return false;
+
+    auto it = _modbusDataUnitMaps.find(serverAddress);
+    if (it == _modbusDataUnitMaps.end()) {
+        ModbusDataUnitMap map;
+        map.setAddressSpace(_definitions.AddrSpace);
+        map.setGlobalMap(_definitions.UseGlobalUnitMap);
+        it = _modbusDataUnitMaps.insert(serverAddress, map);
+    }
+
+    it->setAddressSpace(_definitions.AddrSpace);
+    it->setGlobalMap(_definitions.UseGlobalUnitMap);
+    return it->ensureRange(table, address, count);
 }
 
 ///

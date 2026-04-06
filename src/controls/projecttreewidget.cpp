@@ -249,6 +249,12 @@ void ProjectTreeWidget::on_itemChanged(QTreeWidgetItem* item, int column)
 
     auto frm = static_cast<QWidget*>(ptr);
     const QString current = frm->windowTitle();
+    if (frm->property("DeleteLocked").toBool()) {
+        if (item->text(0) != current)
+            item->setText(0, current);
+        return;
+    }
+
     const QString newName = item->text(0).trimmed();
     if (newName.isEmpty()) {
         item->setText(0, current);
@@ -315,7 +321,9 @@ void ProjectTreeWidget::on_contextMenu(const QPoint& pos)
         if (!ptr)
             return;
 
+        auto* formWidget = static_cast<QWidget*>(ptr);
         const auto formType = static_cast<ProjectFormType>(item->data(0, ItemTypeRole + 1).toInt());
+        const bool deleteLocked = formWidget->property("DeleteLocked").toBool();
 
         menu.addSeparator();
 
@@ -329,8 +337,10 @@ void ProjectTreeWidget::on_contextMenu(const QPoint& pos)
         }
 
         renameAction = menu.addAction(tr("Rename"));
+        renameAction->setEnabled(!deleteLocked);
         menu.addSeparator();
         deleteAction = menu.addAction(tr("Delete"));
+        deleteAction->setEnabled(!deleteLocked);
     }
 
     auto selected = menu.exec(viewport()->mapToGlobal(pos));

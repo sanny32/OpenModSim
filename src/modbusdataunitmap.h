@@ -17,11 +17,13 @@ public:
 
     bool addUnitMap(QUuid id, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, quint16 length);
     bool removeUnitMap(QUuid id);
+    bool ensureRange(QModbusDataUnit::RegisterType pointType, quint16 pointAddress, quint16 length);
 
     AddressSpace addressSpace() const;
     void setAddressSpace(AddressSpace space);
 
     bool contains(QModbusDataUnit::RegisterType pointType) const;
+    bool containsRange(QModbusDataUnit::RegisterType pointType, quint16 pointAddress, quint16 length) const;
     QModbusDataUnit value(QModbusDataUnit::RegisterType pointType) const;
 
     bool isGlobalMap() const;

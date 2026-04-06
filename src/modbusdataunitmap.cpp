@@ -113,6 +113,37 @@ bool ModbusDataUnitMap::removeUnitMap(QUuid id)
     return !unitMapsEqual(_modbusDataUnitMap, before);
 }
 
+///
+/// \brief ModbusDataUnitMap::ensureRange
+///
+bool ModbusDataUnitMap::ensureRange(QModbusDataUnit::RegisterType pointType, quint16 pointAddress, quint16 length)
+{
+    if (_isGlobal || length == 0)
+        return false;
+
+    if (containsRange(pointType, pointAddress, length))
+        return false;
+
+    const auto it = _modbusDataUnitMap.constFind(pointType);
+    quint32 startAddress = pointAddress;
+    quint32 endAddress = static_cast<quint32>(pointAddress) + length;
+
+    if (it != _modbusDataUnitMap.constEnd()) {
+        startAddress = qMin<quint32>(startAddress, it.value().startAddress());
+        endAddress = qMax<quint32>(endAddress, static_cast<quint32>(it.value().startAddress()) + it.value().valueCount());
+    }
+
+    QModbusDataUnit expanded(pointType, static_cast<quint16>(startAddress),
+                             static_cast<quint16>(endAddress - startAddress));
+    for (quint32 address = startAddress; address < endAddress; ++address) {
+        expanded.setValue(static_cast<int>(address - startAddress),
+                          getDataValue(_modbusDataUnitGlobalMap, pointType, static_cast<quint16>(address)));
+    }
+
+    _modbusDataUnitMap.insert(pointType, expanded);
+    return true;
+}
+
 
 ///
 /// \brief ModbusDataUnitMap::addressSpace
@@ -149,6 +180,26 @@ void ModbusDataUnitMap::setAddressSpace(AddressSpace space)
 bool ModbusDataUnitMap::contains(QModbusDataUnit::RegisterType pointType) const
 {
     return _isGlobal ? true : _modbusDataUnitMap.contains(pointType);
+}
+
+///
+/// \brief ModbusDataUnitMap::containsRange
+///
+bool ModbusDataUnitMap::containsRange(QModbusDataUnit::RegisterType pointType, quint16 pointAddress, quint16 length) const
+{
+    if (length == 0)
+        return false;
+
+    const auto map = _isGlobal ? _modbusDataUnitGlobalMap : _modbusDataUnitMap;
+    const auto it = map.constFind(pointType);
+    if (it == map.constEnd())
+        return false;
+
+    const quint32 startAddress = pointAddress;
+    const quint32 endAddress = startAddress + length;
+    const quint32 currentStart = it.value().startAddress();
+    const quint32 currentEnd = currentStart + it.value().valueCount();
+    return startAddress >= currentStart && endAddress <= currentEnd;
 }
 
 ///

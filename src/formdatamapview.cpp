@@ -1142,11 +1142,12 @@ void FormDataMapView::updateActionState()
 /// \brief FormDataMapView::processRequest
 ///
 void FormDataMapView::processRequest(quint8 deviceId, QModbusDataUnit::RegisterType type,
-                                         quint16 startAddress, quint16 count)
+                                     quint16 startAddress, quint16 count)
 {
     if (count == 0 || count > 2000) return;
 
     const QModbusDataUnit unit = _mbMultiServer.data(deviceId, type, startAddress, count);
+    bool addedEntries = false;
 
     for (quint16 i = 0; i < count; ++i) {
         const ItemMapKey key{ deviceId, type, static_cast<quint16>(startAddress + i) };
@@ -1164,8 +1165,12 @@ void FormDataMapView::processRequest(quint8 deviceId, QModbusDataUnit::RegisterT
             entry.order     = RegisterOrder::MSRF;
             entry.timestamp = _mbMultiServer.timestamp(deviceId, type, static_cast<quint16>(startAddress + i));
             _model->addEntry(key, entry);
+            addedEntries = true;
         }
     }
+
+    if (addedEntries)
+        emit definitionChanged();
 }
 
 ///

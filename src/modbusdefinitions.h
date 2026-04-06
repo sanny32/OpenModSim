@@ -11,10 +11,13 @@ struct ModbusDefinitions
 {
     AddressSpace AddrSpace = AddressSpace::Addr6Digits;
     bool UseGlobalUnitMap = false;
+    bool AutoAddRegistersOnRequest = false;
     ModbusErrorSimulations ErrorSimulations;
 
     void normalize() {
         AddrSpace = qBound(AddressSpace::Addr6Digits, AddrSpace, AddressSpace::Addr5Digits);
+        if (AutoAddRegistersOnRequest)
+            UseGlobalUnitMap = false;
     }
 };
 Q_DECLARE_METATYPE(ModbusDefinitions)
@@ -32,6 +35,7 @@ inline QSettings& operator <<(QSettings& out, const ModbusDefinitions& defs)
     out << defs.ErrorSimulations;
     out << defs.AddrSpace;
     out.setValue("UseGlobalUnitMap", defs.UseGlobalUnitMap);
+    out.setValue("AutoAddRegistersOnRequest", defs.AutoAddRegistersOnRequest);
 
     out.endGroup();
 
@@ -51,6 +55,7 @@ inline QSettings& operator >>(QSettings& in, ModbusDefinitions& defs)
     in >> defs.ErrorSimulations;
     in >> defs.AddrSpace;
     defs.UseGlobalUnitMap = in.value("UseGlobalUnitMap", false).toBool();
+    defs.AutoAddRegistersOnRequest = in.value("AutoAddRegistersOnRequest", false).toBool();
 
     in.endGroup();
 
@@ -70,6 +75,7 @@ inline QXmlStreamWriter& operator <<(QXmlStreamWriter& xml, const ModbusDefiniti
 
     xml.writeAttribute("AddrSpace", enumToString(definitions.AddrSpace));
     xml.writeAttribute("UseGlobalUnitMap", boolToString(definitions.UseGlobalUnitMap));
+    xml.writeAttribute("AutoAddRegistersOnRequest", boolToString(definitions.AutoAddRegistersOnRequest));
 
     xml << definitions.ErrorSimulations;
 
@@ -94,6 +100,10 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, ModbusDefinitions& d
 
         if (attributes.hasAttribute("UseGlobalUnitMap")) {
             definitions.UseGlobalUnitMap = stringToBool(attributes.value("UseGlobalUnitMap").toString());
+        }
+
+        if (attributes.hasAttribute("AutoAddRegistersOnRequest")) {
+            definitions.AutoAddRegistersOnRequest = stringToBool(attributes.value("AutoAddRegistersOnRequest").toString());
         }
 
         if (xml.readNextStartElement() && xml.name() == QLatin1String("ModbusErrorSimulations")) {

@@ -50,6 +50,8 @@ public:
 
     bool autoAddOnRequest() const { return _autoAddOnRequest; }
     void setAutoAddOnRequest(bool value) { _autoAddOnRequest = value; }
+    bool isAutoRequestMap() const { return _autoRequestMap; }
+    void setAutoRequestMap(bool value) { _autoRequestMap = value; }
     bool isEmpty() const { return !_proxy || _proxy->rowCount() <= 0; }
     void print(QPrinter* printer);
 
@@ -99,6 +101,7 @@ private:
     QComboBox*                  _filterTypeCombo = nullptr;
     QSpinBox*                   _filterUnitSpin  = nullptr;
     QComboBox*                  _addrBaseCombo   = nullptr;
+    bool                        _autoRequestMap = false;
     bool                        _autoAddOnRequest = false;
 };
 
@@ -133,6 +136,8 @@ inline QXmlStreamWriter& operator <<(QXmlStreamWriter& xml, FormDataMapView* frm
     xml.writeAttribute("FormName",         frm->displayDefinition().FormName);
     xml.writeAttribute("ZeroBasedAddress", boolToString(frm->displayDefinition().ZeroBasedAddress));
     xml.writeAttribute("HexView",          boolToString(frm->displayDefinition().HexView));
+    xml.writeAttribute("AutoAddOnRequest", boolToString(frm->autoAddOnRequest()));
+    xml.writeAttribute("AutoRequestMap",   boolToString(frm->isAutoRequestMap()));
     xml.writeEndElement();
 
     xml.writeStartElement("ColumnWidths");
@@ -214,6 +219,8 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, FormDataMapView* frm
             dd.ZeroBasedAddress = stringToBool(attrs.value("ZeroBasedAddress").toString());
             dd.HexView          = stringToBool(attrs.value("HexView").toString());
             frm->setDisplayDefinition(dd);
+            frm->setAutoAddOnRequest(stringToBool(attrs.value("AutoAddOnRequest").toString()));
+            frm->setAutoRequestMap(stringToBool(attrs.value("AutoRequestMap").toString()));
             xml.skipCurrentElement();
         }
         else if (xml.name() == QLatin1String("ColumnWidths")) {

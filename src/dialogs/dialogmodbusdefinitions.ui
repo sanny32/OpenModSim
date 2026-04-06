@@ -51,6 +51,13 @@
          </property>
         </widget>
        </item>
+       <item row="2" column="0" colspan="2">
+        <widget class="QCheckBox" name="checkBoxAutoAddRegistersOnRequest">
+         <property name="text">
+          <string>Automatically add registers on request</string>
+         </property>
+        </widget>
+       </item>
       </layout>
      </widget>
      <widget class="QWidget" name="tabErrSimulations">

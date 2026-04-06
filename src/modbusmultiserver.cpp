@@ -409,12 +409,15 @@ void ModbusMultiServer::setModbusDefinitions(const ModbusDefinitions& defs)
     }
 
     _definitions = defs;
+    _definitions.normalize();
 
-    for(auto& map : _modbusDataUnitMaps)
-        map.setGlobalMap(defs.UseGlobalUnitMap);
+    for(auto& map : _modbusDataUnitMaps) {
+        map.setGlobalMap(_definitions.UseGlobalUnitMap);
+        map.setAddressSpace(_definitions.AddrSpace);
+    }
 
     for(auto&& s : _modbusServerList) {
-        s->setDefinitions(defs);
+        s->setDefinitions(_definitions);
     }
 
     emit definitionsChanged(_definitions);

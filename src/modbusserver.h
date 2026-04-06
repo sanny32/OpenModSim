@@ -147,6 +147,7 @@ protected:
 
     virtual bool writeData(const QModbusDataUnit &unit, int serverAddress);
     virtual bool readData(QModbusDataUnit *newData, int serverAddress) const;
+    bool ensureAutoAddRange(QModbusDataUnit::RegisterType table, quint16 address, quint16 count, int serverAddress) const;
 
     virtual bool matchingServerAddress(quint8 unitId) const;
 
@@ -190,7 +191,7 @@ private:
     QCountedSet<int> _serverAddresses;
     QHash<int, std::array<quint16, 20>> _counters;
     QHash<int, QHash<int, QVariant>> _serversOptions;
-    QHash<int, ModbusDataUnitMap> _modbusDataUnitMaps;
+    mutable QHash<int, ModbusDataUnitMap> _modbusDataUnitMaps;
     std::deque<quint8> _commEventLog;
 
     QModbusDevice::State _state = QModbusDevice::UnconnectedState;

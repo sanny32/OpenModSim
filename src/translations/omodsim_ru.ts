@@ -1145,48 +1145,53 @@
         <translation>РСЃРїРѕР»СЊР·РѕРІР°С‚СЊ РіР»РѕР±Р°Р»СЊРЅСѓСЋ РєР°СЂС‚Сѓ Р°РґСЂРµСЃРѕРІ</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusdefinitions.ui" line="58"/>
+        <location filename="../dialogs/dialogmodbusdefinitions.ui" line="57"/>
+        <source>Automatically add registers on request</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogmodbusdefinitions.ui" line="65"/>
         <source>Error Simulations</source>
         <translation>РЎРёРјСѓР»СЏС†РёСЏ РѕС€РёР±РѕРє</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusdefinitions.ui" line="70"/>
+        <location filename="../dialogs/dialogmodbusdefinitions.ui" line="77"/>
         <source>Response with incorrect IDs</source>
         <translation>РћС‚РІРµС‡Р°С‚СЊ РЅРµРєРѕСЂСЂРµРєС‚РЅС‹Рј ID</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusdefinitions.ui" line="83"/>
+        <location filename="../dialogs/dialogmodbusdefinitions.ui" line="90"/>
         <source>Response with ILLEGAL FUNCTION</source>
         <translation>РћС‚РІРµС‡Р°С‚СЊ РѕС€РёР±РєРѕР№ ILLEGAL FUNCTION</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusdefinitions.ui" line="96"/>
+        <location filename="../dialogs/dialogmodbusdefinitions.ui" line="103"/>
         <source>Response with DEVICE BUSY</source>
         <translation>РћС‚РІРµС‡Р°С‚СЊ РѕС€РёР±РєРѕР№ DEVICE BUSY</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusdefinitions.ui" line="109"/>
+        <location filename="../dialogs/dialogmodbusdefinitions.ui" line="116"/>
         <source>Response with incorrect CRC (Serial Line only)</source>
         <translation>РћС‚РІРµС‡Р°С‚СЊ СЃ РЅРµРєРѕСЂСЂРµРєС‚РЅРѕР№ CRC (С‚РѕР»СЊРєРѕ РґР»СЏ РїРѕСЃР»РµРґРѕРІР°С‚РµР»СЊРЅРѕРіРѕ РёРЅС‚РµСЂС„РµР№СЃР°)</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusdefinitions.ui" line="121"/>
+        <location filename="../dialogs/dialogmodbusdefinitions.ui" line="128"/>
         <source>Response with delay</source>
         <translation>РћС‚РІРµС‡Р°С‚СЊ СЃ Р·Р°РґРµСЂР¶РєРѕР№</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusdefinitions.ui" line="157"/>
-        <location filename="../dialogs/dialogmodbusdefinitions.ui" line="223"/>
+        <location filename="../dialogs/dialogmodbusdefinitions.ui" line="164"/>
+        <location filename="../dialogs/dialogmodbusdefinitions.ui" line="230"/>
         <source>ms</source>
         <translation>РјСЃ</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusdefinitions.ui" line="184"/>
+        <location filename="../dialogs/dialogmodbusdefinitions.ui" line="191"/>
         <source>Response with random delay from 0 to</source>
         <translation>РћС‚РІРµС‡Р°С‚СЊ СЃРѕ СЃР»СѓС‡Р°Р№РЅРѕР№ Р·Р°РґРµСЂР¶РєРѕР№ РѕС‚ 0 РґРѕ</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmodbusdefinitions.ui" line="251"/>
+        <location filename="../dialogs/dialogmodbusdefinitions.ui" line="258"/>
         <source>No response</source>
         <translation>РќРµ РѕС‚РІРµС‡Р°С‚СЊ РЅР° Р·Р°РїСЂРѕСЃС‹</translation>
     </message>
@@ -2214,15 +2219,15 @@
     </message>
     <message>
         <location filename="../formdatamapview.cpp" line="676"/>
-        <location filename="../formdatamapview.cpp" line="1186"/>
-        <location filename="../formdatamapview.cpp" line="1186"/>
+        <location filename="../formdatamapview.cpp" line="1191"/>
+        <location filename="../formdatamapview.cpp" line="1191"/>
         <source>1-based</source>
         <translation type="unfinished">1-РїРµСЂРІС‹Р№</translation>
     </message>
     <message>
         <location filename="../formdatamapview.cpp" line="676"/>
-        <location filename="../formdatamapview.cpp" line="1187"/>
-        <location filename="../formdatamapview.cpp" line="1187"/>
+        <location filename="../formdatamapview.cpp" line="1192"/>
+        <location filename="../formdatamapview.cpp" line="1192"/>
         <source>0-based</source>
         <translation type="unfinished">0-РїРµСЂРІС‹Р№</translation>
     </message>
@@ -2232,14 +2237,14 @@
         <translation type="unfinished">РЁРµСЃС‚РЅР°РґС†Р°С‚РёСЂРёС‡РЅС‹Р№ СЂРµР¶РёРј</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="1195"/>
+        <location filename="../formdatamapview.cpp" line="1200"/>
         <source>Address Base:</source>
         <translation type="unfinished">РђРґСЂРµСЃР°С†РёСЏ:</translation>
     </message>
     <message>
         <location filename="../formdatamapview.cpp" line="689"/>
-        <location filename="../formdatamapview.cpp" line="1210"/>
-        <location filename="../formdatamapview.cpp" line="1210"/>
+        <location filename="../formdatamapview.cpp" line="1215"/>
+        <location filename="../formdatamapview.cpp" line="1215"/>
         <source>All Types</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2251,32 +2256,32 @@ Type Filter: %3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="1211"/>
+        <location filename="../formdatamapview.cpp" line="1216"/>
         <source>Coils</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="1212"/>
+        <location filename="../formdatamapview.cpp" line="1217"/>
         <source>Discrete Inputs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="1213"/>
+        <location filename="../formdatamapview.cpp" line="1218"/>
         <source>Input Registers</source>
         <translation type="unfinished">Р—РЅР°С‡РµРЅРёСЏ СЂРµРёСЃС‚СЂРѕРІ</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="1214"/>
+        <location filename="../formdatamapview.cpp" line="1219"/>
         <source>Holding Registers</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="1221"/>
+        <location filename="../formdatamapview.cpp" line="1226"/>
         <source>Unit:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="1223"/>
+        <location filename="../formdatamapview.cpp" line="1228"/>
         <source>Data Type:</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2286,8 +2291,8 @@ Type Filter: %3</source>
     </message>
     <message>
         <location filename="../formdatamapview.cpp" line="678"/>
-        <location filename="../formdatamapview.cpp" line="1206"/>
-        <location filename="../formdatamapview.cpp" line="1206"/>
+        <location filename="../formdatamapview.cpp" line="1211"/>
+        <location filename="../formdatamapview.cpp" line="1211"/>
         <source>All</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4525,12 +4530,12 @@ Script.onInit(()=&gt;{
 <context>
     <name>ModbusMultiServer</name>
     <message>
-        <location filename="../modbusmultiserver.cpp" line="898"/>
+        <location filename="../modbusmultiserver.cpp" line="901"/>
         <source>An incorrect device ID was specified (%1)</source>
         <translation>РќРµРєРѕСЂСЂРµРєС‚РЅРѕ Р·РЅР°СЏРµРЅРёРµ РЅРѕРјРµСЂР° СѓСЃС‚СЂРѕР№СЃС‚РІР° (%1)</translation>
     </message>
     <message>
-        <location filename="../modbusmultiserver.cpp" line="1427"/>
+        <location filename="../modbusmultiserver.cpp" line="1430"/>
         <source>Connection error. %1</source>
         <translation>РћС€РёР±РєР° РїРѕРґРєР»СЋС‡РµРЅРёСЏ. %1</translation>
     </message>
@@ -4818,81 +4823,81 @@ Script.onInit(()=&gt;{
     <name>ProjectTreeWidget</name>
     <message>
         <location filename="../controls/projecttreewidget.cpp" line="57"/>
-        <location filename="../controls/projecttreewidget.cpp" line="272"/>
-        <location filename="../controls/projecttreewidget.cpp" line="272"/>
+        <location filename="../controls/projecttreewidget.cpp" line="278"/>
+        <location filename="../controls/projecttreewidget.cpp" line="278"/>
         <source>Data</source>
         <translation type="unfinished">Р”Р°РЅРЅС‹Рµ</translation>
     </message>
     <message>
         <location filename="../controls/projecttreewidget.cpp" line="65"/>
-        <location filename="../controls/projecttreewidget.cpp" line="273"/>
-        <location filename="../controls/projecttreewidget.cpp" line="273"/>
+        <location filename="../controls/projecttreewidget.cpp" line="279"/>
+        <location filename="../controls/projecttreewidget.cpp" line="279"/>
         <source>Traffic</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../controls/projecttreewidget.cpp" line="61"/>
-        <location filename="../controls/projecttreewidget.cpp" line="275"/>
-        <location filename="../controls/projecttreewidget.cpp" line="275"/>
+        <location filename="../controls/projecttreewidget.cpp" line="281"/>
+        <location filename="../controls/projecttreewidget.cpp" line="281"/>
         <source>Map</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../controls/projecttreewidget.cpp" line="69"/>
-        <location filename="../controls/projecttreewidget.cpp" line="274"/>
-        <location filename="../controls/projecttreewidget.cpp" line="274"/>
+        <location filename="../controls/projecttreewidget.cpp" line="280"/>
+        <location filename="../controls/projecttreewidget.cpp" line="280"/>
         <source>Script</source>
         <translation type="unfinished">РЎРєСЂРёРїС‚</translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="303"/>
+        <location filename="../controls/projecttreewidget.cpp" line="309"/>
         <source>New Data View</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="304"/>
+        <location filename="../controls/projecttreewidget.cpp" line="310"/>
         <source>New Map View</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="305"/>
+        <location filename="../controls/projecttreewidget.cpp" line="311"/>
         <source>New Traffic View</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="306"/>
+        <location filename="../controls/projecttreewidget.cpp" line="312"/>
         <source>New Script</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="324"/>
+        <location filename="../controls/projecttreewidget.cpp" line="332"/>
         <source>Run Script</source>
         <translation type="unfinished">Р—Р°РїСѓСЃРє</translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="325"/>
+        <location filename="../controls/projecttreewidget.cpp" line="333"/>
         <source>Stop Script</source>
         <translation type="unfinished">РћСЃС‚Р°РЅРѕРІ</translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="331"/>
-        <location filename="../controls/projecttreewidget.cpp" line="376"/>
-        <location filename="../controls/projecttreewidget.cpp" line="376"/>
+        <location filename="../controls/projecttreewidget.cpp" line="339"/>
+        <location filename="../controls/projecttreewidget.cpp" line="386"/>
+        <location filename="../controls/projecttreewidget.cpp" line="386"/>
         <source>Rename</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="333"/>
+        <location filename="../controls/projecttreewidget.cpp" line="342"/>
         <source>Delete</source>
         <translation>РЈРґР°Р»РёС‚СЊ</translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="376"/>
+        <location filename="../controls/projecttreewidget.cpp" line="386"/>
         <source>New name:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="384"/>
+        <location filename="../controls/projecttreewidget.cpp" line="394"/>
         <source>Delete Form</source>
         <translation>РЈРґР°Р»РёС‚СЊ С„РѕСЂРјСѓ</translation>
     </message>
@@ -4901,7 +4906,7 @@ Script.onInit(()=&gt;{
         <translation type="vanished">РЈРґР°Р»РёС‚СЊ СЃРєСЂРёРїС‚</translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="385"/>
+        <location filename="../controls/projecttreewidget.cpp" line="395"/>
         <source>Delete &quot;%1&quot; from the project?</source>
         <translation>РЈРґР°Р»РёС‚СЊ &quot;%1&quot; РёР· РїСЂРѕРµРєС‚Р°?</translation>
     </message>
