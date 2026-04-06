@@ -1,4 +1,4 @@
-﻿#ifndef OUTPUTTRAFFICWIDGET_H
+#ifndef OUTPUTTRAFFICWIDGET_H
 #define OUTPUTTRAFFICWIDGET_H
 
 #include <QSharedPointer>
@@ -67,3 +67,4 @@ private:
 };
 
 #endif // OUTPUTTRAFFICWIDGET_H
+

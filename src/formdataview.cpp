@@ -1,4 +1,4 @@
-﻿#include <QPainter>
+#include <QPainter>
 #include <QPalette>
 #include <QDateTime>
 #include <QHelpEngine>
@@ -602,14 +602,14 @@ void FormDataView::print(QPrinter* printer)
     painter.setRenderHint(QPainter::Antialiasing);
     painter.setRenderHint(QPainter::TextAntialiasing);
 
-    // Header content is the same for all pages — compute once
+    // Header content is the same for all pages - compute once
     const auto textTime = QLocale().toString(QDateTime::currentDateTime(), QLocale::ShortFormat);
     const auto textAddrLen = QString(tr("Address Base: %1\nStarting Address: %2\nLength: %3"))
         .arg(ui->comboBoxAddressBase->currentText(), ui->lineEditAddress->text(), ui->lineEditLength->text());
     const auto textDevIdType = QString(tr("Unit Identifier: %1\nData Type:\n%2"))
         .arg(ui->lineEditDeviceId->text(), ui->comboBoxModbusPointType->currentText());
 
-    // Header geometry is also the same for all pages — compute once
+    // Header geometry is also the same for all pages - compute once
     auto rcTime    = painter.boundingRect(cx, cy, pageWidth, pageHeight, Qt::TextSingleLine, textTime);
     auto rcAddrLen = painter.boundingRect(cx, cy, pageWidth, pageHeight, Qt::TextWordWrap,   textAddrLen);
     auto rcDevIdType = painter.boundingRect(cx, cy, pageWidth, pageHeight, Qt::TextWordWrap, textDevIdType);
@@ -620,7 +620,7 @@ void FormDataView::print(QPrinter* printer)
     auto rcOutput = pageRect;
     rcOutput.setTop(rcAddrLen.bottom() + lineGap * 2);
 
-    // Separator line position — centered between header block and data area
+    // Separator line position - centered between header block and data area
     const int lineY = rcAddrLen.bottom() + lineGap;
 
     const int totalRows = ui->outputWidget->rowCount();
@@ -1394,6 +1394,7 @@ void FormDataView::disconnectEditSlots()
 {
     disconnect(_parent, &MainWindow::find, this, &FormDataView::showFind);
 }
+
 
 
 

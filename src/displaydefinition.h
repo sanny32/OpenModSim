@@ -393,3 +393,4 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, ScriptViewDefinition
 }
 
 #endif // DISPLAYDEFINITION_H
+

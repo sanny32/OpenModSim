@@ -1,7 +1,7 @@
 #include <QtWidgets>
 #include <QMimeData>
 #include <QDataStream>
-#include "registermapdatamodel.h"
+#include "datamapdatamodel.h"
 #include "formatutils.h"
 #include "numericutils.h"
 
@@ -134,47 +134,47 @@ QString formatValue(QModbusDataUnit::RegisterType regType,
 } // anonymous namespace
 
 // ─────────────────────────────────────────────────────────────────────────────
-// RegisterMapDataModel
+// DataMapDataModel
 // ─────────────────────────────────────────────────────────────────────────────
 
 ///
-/// \brief RegisterMapDataModel::RegisterMapDataModel
+/// \brief DataMapDataModel::DataMapDataModel
 ///
-RegisterMapDataModel::RegisterMapDataModel(ModbusMultiServer& server, QObject* parent)
+DataMapDataModel::DataMapDataModel(ModbusMultiServer& server, QObject* parent)
     : QAbstractTableModel(parent)
     , _server(server)
 {
 }
 
 ///
-/// \brief RegisterMapDataModel::~RegisterMapDataModel
+/// \brief DataMapDataModel::~DataMapDataModel
 ///
-RegisterMapDataModel::~RegisterMapDataModel()
+DataMapDataModel::~DataMapDataModel()
 {
     for (const ItemMapKey& key : _keys)
         unregisterEntry(key);
 }
 
 ///
-/// \brief RegisterMapDataModel::rowCount
+/// \brief DataMapDataModel::rowCount
 ///
-int RegisterMapDataModel::rowCount(const QModelIndex& parent) const
+int DataMapDataModel::rowCount(const QModelIndex& parent) const
 {
     return parent.isValid() ? 0 : _keys.size();
 }
 
 ///
-/// \brief RegisterMapDataModel::columnCount
+/// \brief DataMapDataModel::columnCount
 ///
-int RegisterMapDataModel::columnCount(const QModelIndex& parent) const
+int DataMapDataModel::columnCount(const QModelIndex& parent) const
 {
     return parent.isValid() ? 0 : ColCount;
 }
 
 ///
-/// \brief RegisterMapDataModel::data
+/// \brief DataMapDataModel::data
 ///
-QVariant RegisterMapDataModel::data(const QModelIndex& index, int role) const
+QVariant DataMapDataModel::data(const QModelIndex& index, int role) const
 {
     if (!index.isValid()) return {};
     const int row = index.row();
@@ -182,7 +182,7 @@ QVariant RegisterMapDataModel::data(const QModelIndex& index, int role) const
     if (row < 0 || row >= _keys.size()) return {};
 
     const ItemMapKey& key   = _keys[row];
-    const RegisterMapEntry& e = _data[key];
+    const DataMapEntry& e = _data[key];
 
     if (role == Qt::TextAlignmentRole) {
         if (col == ColComment) return static_cast<int>(Qt::AlignVCenter | Qt::AlignLeft);
@@ -194,15 +194,15 @@ QVariant RegisterMapDataModel::data(const QModelIndex& index, int role) const
         case ColUnit:
             if (role == Qt::DisplayRole || role == Qt::EditRole)
                 return QString::number(key.DeviceId);
-            if (role == RegisterMapRole::DeviceId) return static_cast<int>(key.DeviceId);
-            if (role == RegisterMapRole::Type)     return static_cast<int>(key.Type);
-            if (role == RegisterMapRole::Address)  return static_cast<int>(key.Address);
+            if (role == DataMapRole::DeviceId) return static_cast<int>(key.DeviceId);
+            if (role == DataMapRole::Type)     return static_cast<int>(key.Type);
+            if (role == DataMapRole::Address)  return static_cast<int>(key.Address);
             break;
 
         case ColType:
             if (role == Qt::DisplayRole || role == Qt::EditRole)
                 return registerTypeToString(key.Type);
-            if (role == RegisterMapRole::TypeValue) return static_cast<int>(key.Type);
+            if (role == DataMapRole::TypeValue) return static_cast<int>(key.Type);
             break;
 
         case ColAddress:
@@ -271,9 +271,9 @@ QVariant RegisterMapDataModel::data(const QModelIndex& index, int role) const
 }
 
 ///
-/// \brief RegisterMapDataModel::setData
+/// \brief DataMapDataModel::setData
 ///
-bool RegisterMapDataModel::setData(const QModelIndex& index, const QVariant& value, int role)
+bool DataMapDataModel::setData(const QModelIndex& index, const QVariant& value, int role)
 {
     if (!index.isValid() || _inSetData) return false;
     const int row = index.row();
@@ -282,7 +282,7 @@ bool RegisterMapDataModel::setData(const QModelIndex& index, const QVariant& val
 
     _inSetData = true;
     const ItemMapKey oldKey = _keys[row];
-    RegisterMapEntry entry  = _data[oldKey];
+    DataMapEntry entry  = _data[oldKey];
     bool handled = false;
 
     // ── Value column ──────────────────────────────────────────────────────────
@@ -406,7 +406,7 @@ bool RegisterMapDataModel::setData(const QModelIndex& index, const QVariant& val
         if (col == ColUnit) {
             newKey.DeviceId = static_cast<quint8>(value.toString().toUShort());
         } else if (col == ColType) {
-            if (role == RegisterMapRole::TypeValue)
+            if (role == DataMapRole::TypeValue)
                 newKey.Type = static_cast<QModbusDataUnit::RegisterType>(value.toInt());
             else
                 newKey.Type = stringToRegisterType(value.toString());
@@ -458,9 +458,9 @@ bool RegisterMapDataModel::setData(const QModelIndex& index, const QVariant& val
 }
 
 ///
-/// \brief RegisterMapDataModel::headerData
+/// \brief DataMapDataModel::headerData
 ///
-QVariant RegisterMapDataModel::headerData(int section, Qt::Orientation orientation, int role) const
+QVariant DataMapDataModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
     if (orientation != Qt::Horizontal || role != Qt::DisplayRole) return {};
     switch (section) {
@@ -477,9 +477,9 @@ QVariant RegisterMapDataModel::headerData(int section, Qt::Orientation orientati
 }
 
 ///
-/// \brief RegisterMapDataModel::flags
+/// \brief DataMapDataModel::flags
 ///
-Qt::ItemFlags RegisterMapDataModel::flags(const QModelIndex& index) const
+Qt::ItemFlags DataMapDataModel::flags(const QModelIndex& index) const
 {
     Qt::ItemFlags f = QAbstractTableModel::flags(index);
     if (!index.isValid())
@@ -502,56 +502,56 @@ Qt::ItemFlags RegisterMapDataModel::flags(const QModelIndex& index) const
 }
 
 ///
-/// \brief RegisterMapDataModel::supportedDropActions
+/// \brief DataMapDataModel::supportedDropActions
 ///
-Qt::DropActions RegisterMapDataModel::supportedDropActions() const
+Qt::DropActions DataMapDataModel::supportedDropActions() const
 {
     return Qt::MoveAction;
 }
 
 ///
-/// \brief RegisterMapDataModel::mimeTypes
+/// \brief DataMapDataModel::mimeTypes
 ///
-QStringList RegisterMapDataModel::mimeTypes() const
+QStringList DataMapDataModel::mimeTypes() const
 {
-    return { QStringLiteral("application/x-omodsim-registermap-row") };
+    return { QStringLiteral("application/x-omodsim-DataMap-row") };
 }
 
 ///
-/// \brief RegisterMapDataModel::mimeData
+/// \brief DataMapDataModel::mimeData
 ///
-QMimeData* RegisterMapDataModel::mimeData(const QModelIndexList& indexes) const
+QMimeData* DataMapDataModel::mimeData(const QModelIndexList& indexes) const
 {
     if (indexes.isEmpty()) return nullptr;
     auto* data = new QMimeData;
     QByteArray encoded;
     QDataStream stream(&encoded, QIODevice::WriteOnly);
     stream << indexes.first().row();
-    data->setData(QStringLiteral("application/x-omodsim-registermap-row"), encoded);
+    data->setData(QStringLiteral("application/x-omodsim-DataMap-row"), encoded);
     return data;
 }
 
 ///
-/// \brief RegisterMapDataModel::canDropMimeData
+/// \brief DataMapDataModel::canDropMimeData
 ///
-bool RegisterMapDataModel::canDropMimeData(const QMimeData* data, Qt::DropAction action,
+bool DataMapDataModel::canDropMimeData(const QMimeData* data, Qt::DropAction action,
                                             int row, int column, const QModelIndex& parent) const
 {
     Q_UNUSED(row); Q_UNUSED(column); Q_UNUSED(parent);
     return action == Qt::MoveAction &&
-           data->hasFormat(QStringLiteral("application/x-omodsim-registermap-row"));
+           data->hasFormat(QStringLiteral("application/x-omodsim-DataMap-row"));
 }
 
 ///
-/// \brief RegisterMapDataModel::dropMimeData
+/// \brief DataMapDataModel::dropMimeData
 ///
-bool RegisterMapDataModel::dropMimeData(const QMimeData* data, Qt::DropAction action,
+bool DataMapDataModel::dropMimeData(const QMimeData* data, Qt::DropAction action,
                                          int row, int column, const QModelIndex& parent)
 {
     if (!canDropMimeData(data, action, row, column, parent))
         return false;
 
-    QByteArray encoded = data->data(QStringLiteral("application/x-omodsim-registermap-row"));
+    QByteArray encoded = data->data(QStringLiteral("application/x-omodsim-DataMap-row"));
     QDataStream stream(&encoded, QIODevice::ReadOnly);
     int fromRow;
     stream >> fromRow;
@@ -561,9 +561,9 @@ bool RegisterMapDataModel::dropMimeData(const QMimeData* data, Qt::DropAction ac
 }
 
 ///
-/// \brief RegisterMapDataModel::moveRows
+/// \brief DataMapDataModel::moveRows
 ///
-bool RegisterMapDataModel::moveRows(const QModelIndex& sourceParent, int sourceRow, int count,
+bool DataMapDataModel::moveRows(const QModelIndex& sourceParent, int sourceRow, int count,
                                      const QModelIndex& destinationParent, int destinationChild)
 {
     if (sourceParent.isValid() || destinationParent.isValid() || count != 1)
@@ -587,61 +587,61 @@ bool RegisterMapDataModel::moveRows(const QModelIndex& sourceParent, int sourceR
 }
 
 ///
-/// \brief RegisterMapDataModel::keyForRow
+/// \brief DataMapDataModel::keyForRow
 ///
-ItemMapKey RegisterMapDataModel::keyForRow(int row) const
+ItemMapKey DataMapDataModel::keyForRow(int row) const
 {
     if (row < 0 || row >= _keys.size()) return { 0, QModbusDataUnit::HoldingRegisters, 0 };
     return _keys[row];
 }
 
 ///
-/// \brief RegisterMapDataModel::entries
+/// \brief DataMapDataModel::entries
 ///
-const QMap<ItemMapKey, RegisterMapEntry>& RegisterMapDataModel::entries() const
+const QMap<ItemMapKey, DataMapEntry>& DataMapDataModel::entries() const
 {
     return _data;
 }
 
 ///
-/// \brief RegisterMapDataModel::uuids
+/// \brief DataMapDataModel::uuids
 ///
-const QMap<ItemMapKey, QUuid>& RegisterMapDataModel::uuids() const
+const QMap<ItemMapKey, QUuid>& DataMapDataModel::uuids() const
 {
     return _uuids;
 }
 
 ///
-/// \brief RegisterMapDataModel::contains
+/// \brief DataMapDataModel::contains
 ///
-bool RegisterMapDataModel::contains(const ItemMapKey& key) const
+bool DataMapDataModel::contains(const ItemMapKey& key) const
 {
     return _data.contains(key);
 }
 
 ///
-/// \brief RegisterMapDataModel::isEmpty
+/// \brief DataMapDataModel::isEmpty
 ///
-bool RegisterMapDataModel::isEmpty() const
+bool DataMapDataModel::isEmpty() const
 {
     return _keys.isEmpty();
 }
 
 ///
-/// \brief RegisterMapDataModel::lastKey
+/// \brief DataMapDataModel::lastKey
 ///
-ItemMapKey RegisterMapDataModel::lastKey() const
+ItemMapKey DataMapDataModel::lastKey() const
 {
     if (_keys.isEmpty()) return { 1, QModbusDataUnit::HoldingRegisters, 0 };
     return _keys.last();
 }
 
 ///
-/// \brief RegisterMapDataModel::addEntry
+/// \brief DataMapDataModel::addEntry
 ///
-void RegisterMapDataModel::addEntry(const ItemMapKey& key, const RegisterMapEntry& entry)
+void DataMapDataModel::addEntry(const ItemMapKey& key, const DataMapEntry& entry)
 {
-    RegisterMapEntry normalizedEntry = entry;
+    DataMapEntry normalizedEntry = entry;
     const auto backendTs = _server.timestamp(key.DeviceId, key.Type, key.Address);
     if (backendTs.isValid()) {
         normalizedEntry.timestamp = backendTs;
@@ -687,9 +687,9 @@ void RegisterMapDataModel::addEntry(const ItemMapKey& key, const RegisterMapEntr
 }
 
 ///
-/// \brief RegisterMapDataModel::removeEntries
+/// \brief DataMapDataModel::removeEntries
 ///
-void RegisterMapDataModel::removeEntries(QList<int> sourceRows)
+void DataMapDataModel::removeEntries(QList<int> sourceRows)
 {
     // Sort descending so removing by index doesn't shift subsequent indices
     std::sort(sourceRows.begin(), sourceRows.end(), std::greater<int>());
@@ -705,9 +705,9 @@ void RegisterMapDataModel::removeEntries(QList<int> sourceRows)
 }
 
 ///
-/// \brief RegisterMapDataModel::applyMbDataChange
+/// \brief DataMapDataModel::applyMbDataChange
 ///
-void RegisterMapDataModel::applyMbDataChange(quint8 deviceId, const QModbusDataUnit& data)
+void DataMapDataModel::applyMbDataChange(quint8 deviceId, const QModbusDataUnit& data)
 {
     if (!data.isValid() || _inSetData) return;
 
@@ -730,10 +730,10 @@ void RegisterMapDataModel::applyMbDataChange(quint8 deviceId, const QModbusDataU
 }
 
 ///
-/// \brief RegisterMapDataModel::applyTimestampChange
+/// \brief DataMapDataModel::applyTimestampChange
 /// Applies backend timestamp update to existing register-map rows.
 ///
-void RegisterMapDataModel::applyTimestampChange(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 address, const QDateTime& timestamp)
+void DataMapDataModel::applyTimestampChange(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 address, const QDateTime& timestamp)
 {
     const ItemMapKey key{deviceId, type, address};
     auto it = _data.find(key);
@@ -750,10 +750,10 @@ void RegisterMapDataModel::applyTimestampChange(quint8 deviceId, QModbusDataUnit
 }
 
 ///
-/// \brief RegisterMapDataModel::applyDescriptionChange
+/// \brief DataMapDataModel::applyDescriptionChange
 /// Applies backend description update to existing register-map rows.
 ///
-void RegisterMapDataModel::applyDescriptionChange(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 address, const QString& description)
+void DataMapDataModel::applyDescriptionChange(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 address, const QString& description)
 {
     const ItemMapKey key{deviceId, type, address};
     auto it = _data.find(key);
@@ -770,9 +770,9 @@ void RegisterMapDataModel::applyDescriptionChange(quint8 deviceId, QModbusDataUn
 }
 
 ///
-/// \brief RegisterMapDataModel::setZeroBased
+/// \brief DataMapDataModel::setZeroBased
 ///
-void RegisterMapDataModel::setZeroBased(bool v)
+void DataMapDataModel::setZeroBased(bool v)
 {
     if (_zeroBased == v) return;
     _zeroBased = v;
@@ -780,9 +780,9 @@ void RegisterMapDataModel::setZeroBased(bool v)
 }
 
 ///
-/// \brief RegisterMapDataModel::setHexView
+/// \brief DataMapDataModel::setHexView
 ///
-void RegisterMapDataModel::setHexView(bool v)
+void DataMapDataModel::setHexView(bool v)
 {
     if (_hexView == v) return;
     _hexView = v;
@@ -790,9 +790,9 @@ void RegisterMapDataModel::setHexView(bool v)
 }
 
 ///
-/// \brief RegisterMapDataModel::refreshUnitAndAddressColumns
+/// \brief DataMapDataModel::refreshUnitAndAddressColumns
 ///
-void RegisterMapDataModel::refreshUnitAndAddressColumns()
+void DataMapDataModel::refreshUnitAndAddressColumns()
 {
     if (_keys.isEmpty()) return;
     emit dataChanged(createIndex(0, ColUnit),
@@ -800,9 +800,9 @@ void RegisterMapDataModel::refreshUnitAndAddressColumns()
 }
 
 ///
-/// \brief RegisterMapDataModel::rowForKey
+/// \brief DataMapDataModel::rowForKey
 ///
-int RegisterMapDataModel::rowForKey(const ItemMapKey& key) const
+int DataMapDataModel::rowForKey(const ItemMapKey& key) const
 {
     for (int i = 0; i < _keys.size(); ++i) {
         const ItemMapKey& k = _keys[i];
@@ -813,9 +813,9 @@ int RegisterMapDataModel::rowForKey(const ItemMapKey& key) const
 }
 
 ///
-/// \brief RegisterMapDataModel::registerEntry
+/// \brief DataMapDataModel::registerEntry
 ///
-void RegisterMapDataModel::registerEntry(const ItemMapKey& key, const RegisterMapEntry& entry)
+void DataMapDataModel::registerEntry(const ItemMapKey& key, const DataMapEntry& entry)
 {
     if (!_uuids.contains(key))
         _uuids[key] = QUuid::createUuid();
@@ -825,9 +825,9 @@ void RegisterMapDataModel::registerEntry(const ItemMapKey& key, const RegisterMa
 }
 
 ///
-/// \brief RegisterMapDataModel::unregisterEntry
+/// \brief DataMapDataModel::unregisterEntry
 ///
-void RegisterMapDataModel::unregisterEntry(const ItemMapKey& key)
+void DataMapDataModel::unregisterEntry(const ItemMapKey& key)
 {
     const QUuid uuid = _uuids.take(key);
     if (uuid.isNull()) return;
@@ -836,21 +836,21 @@ void RegisterMapDataModel::unregisterEntry(const ItemMapKey& key)
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// RegisterMapFilterProxy
+// DataMapFilterProxy
 // ─────────────────────────────────────────────────────────────────────────────
 
 ///
-/// \brief RegisterMapFilterProxy::RegisterMapFilterProxy
+/// \brief DataMapFilterProxy::DataMapFilterProxy
 ///
-RegisterMapFilterProxy::RegisterMapFilterProxy(QObject* parent)
+DataMapFilterProxy::DataMapFilterProxy(QObject* parent)
     : QSortFilterProxyModel(parent)
 {
 }
 
 ///
-/// \brief RegisterMapFilterProxy::setFilterUnit
+/// \brief DataMapFilterProxy::setFilterUnit
 ///
-void RegisterMapFilterProxy::setFilterUnit(int unit)
+void DataMapFilterProxy::setFilterUnit(int unit)
 {
     if (_filterUnit == unit) return;
     _filterUnit = unit;
@@ -858,9 +858,9 @@ void RegisterMapFilterProxy::setFilterUnit(int unit)
 }
 
 ///
-/// \brief RegisterMapFilterProxy::setFilterTypeIndex
+/// \brief DataMapFilterProxy::setFilterTypeIndex
 ///
-void RegisterMapFilterProxy::setFilterTypeIndex(int index)
+void DataMapFilterProxy::setFilterTypeIndex(int index)
 {
     if (_filterTypeIndex == index) return;
     _filterTypeIndex = index;
@@ -868,11 +868,11 @@ void RegisterMapFilterProxy::setFilterTypeIndex(int index)
 }
 
 ///
-/// \brief RegisterMapFilterProxy::filterAcceptsRow
+/// \brief DataMapFilterProxy::filterAcceptsRow
 ///
-bool RegisterMapFilterProxy::filterAcceptsRow(int sourceRow, const QModelIndex& /*sourceParent*/) const
+bool DataMapFilterProxy::filterAcceptsRow(int sourceRow, const QModelIndex& /*sourceParent*/) const
 {
-    const auto* src = static_cast<const RegisterMapDataModel*>(sourceModel());
+    const auto* src = static_cast<const DataMapDataModel*>(sourceModel());
     if (!src) return true;
 
     const ItemMapKey key = src->keyForRow(sourceRow);
@@ -893,3 +893,5 @@ bool RegisterMapFilterProxy::filterAcceptsRow(int sourceRow, const QModelIndex& 
 
     return true;
 }
+
+

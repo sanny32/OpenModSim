@@ -74,3 +74,4 @@ void BitPatternControl::on_checkStateChanged(Qt::CheckState)
 {
     emit valueChanged(value());
 }
+

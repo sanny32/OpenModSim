@@ -614,3 +614,4 @@ QString JSCodeEditor::textUnderCursor() const
     tc.select(QTextCursor::WordUnderCursor);
     return tc.selectedText();
 }
+

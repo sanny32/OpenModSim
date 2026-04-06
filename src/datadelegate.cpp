@@ -99,3 +99,4 @@ void DataDelegate::paint(QPainter* painter, const QStyleOptionViewItem& option, 
         style->drawPrimitive(QStyle::PE_FrameFocusRect, &focusOpt, painter, widget);
     }
 }
+

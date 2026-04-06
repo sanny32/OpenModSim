@@ -38,3 +38,4 @@ private:
 };
 
 #endif // DIALOGMODBUSDEFINITIONS_H
+

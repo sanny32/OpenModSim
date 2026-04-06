@@ -42,3 +42,4 @@ private:
 };
 
 #endif // HELPWIDGET_H
+

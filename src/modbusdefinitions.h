@@ -109,3 +109,4 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, ModbusDefinitions& d
 }
 
 #endif // MODBUSDEFINITIONS_H
+

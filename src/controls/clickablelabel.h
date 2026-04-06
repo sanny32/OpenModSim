@@ -22,3 +22,4 @@ protected:
 };
 
 #endif // CLICKABLELABEL_H
+

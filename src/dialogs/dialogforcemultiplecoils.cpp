@@ -1,4 +1,4 @@
-﻿#include <QtMath>
+#include <QtMath>
 #include <QLineEdit>
 #include "uiutils.h"
 #include "formatutils.h"
@@ -310,3 +310,4 @@ void DialogForceMultipleCoils::updateTableWidget()
     ui->tableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Fixed);
     ui->tableWidget->verticalHeader()->setSectionResizeMode(QHeaderView::Fixed);
 }
+

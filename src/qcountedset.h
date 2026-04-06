@@ -55,3 +55,4 @@ private:
 };
 
 #endif // QCOUNTEDSET_H
+

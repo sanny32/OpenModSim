@@ -191,3 +191,4 @@ void AboutDataWidget::updateLinkButton()
     _linkButton->setVisible(shouldBeVisible);
     _linkButton->setToolTip(_linkUrl.toString());
 }
+

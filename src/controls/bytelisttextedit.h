@@ -57,3 +57,4 @@ private:
 };
 
 #endif // BYTELISTTEXTEDIT_H
+

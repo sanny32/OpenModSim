@@ -38,3 +38,4 @@ private:
 };
 
 #endif // UPDATECHECKER_H
+

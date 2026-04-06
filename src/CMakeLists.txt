@@ -176,8 +176,8 @@ set(SOURCES
     formdataview.cpp
     formtrafficview.cpp
     formscriptview.cpp
-    formregistermapview.cpp
-    registermapdatamodel.cpp
+    formdatamapview.cpp
+    datamapdatamodel.cpp
     jshighlighter.cpp
     main.cpp
     mainwindow.cpp
@@ -282,8 +282,8 @@ set(HEADERS
     formdataview.h
     formtrafficview.h
     formscriptview.h
-    formregistermapview.h
-    registermapdatamodel.h
+    formdatamapview.h
+    datamapdatamodel.h
     jshighlighter.h
     mainwindow.h
     menuconnect.h
@@ -353,7 +353,7 @@ set(UI_FILES
     formdataview.ui
     formtrafficview.ui
     formscriptview.ui
-    formregistermapview.ui
+    formdatamapview.ui
     dialogs/dialogautosimulation.ui
     dialogs/dialogcoilsimulation.ui
     dialogs/dialogabout.ui
@@ -483,4 +483,6 @@ if(LINUX)
     install(CODE "execute_process(COMMAND update-desktop-database -q ${CMAKE_INSTALL_PREFIX}/share/applications)")
     install(CODE "execute_process(COMMAND gtk-update-icon-cache -q -t -f ${CMAKE_INSTALL_PREFIX}/share/icons/hicolor)")
 endif()
+
+
 

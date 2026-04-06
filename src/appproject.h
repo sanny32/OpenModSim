@@ -11,7 +11,7 @@
 #include "formdataview.h"
 #include "formtrafficview.h"
 #include "formscriptview.h"
-#include "formregistermapview.h"
+#include "formdatamapview.h"
 
 class MdiAreaEx;
 class MdiArea;
@@ -24,7 +24,7 @@ enum class ProjectFormKind
     Data = 0,
     Traffic,
     Script,
-    RegisterMap
+    DataMap
 };
 
 ///
@@ -63,7 +63,7 @@ public:
     FormDataView* currentDataMdiChild() const;
     FormTrafficView* currentTrafficMdiChild() const;
     FormScriptView* currentScriptMdiChild() const;
-    FormRegisterMapView* currentRegisterMapMdiChild() const;
+    FormDataMapView* currentDataMapMdiChild() const;
     QWidget* findMdiChild(QUuid id) const;
     QWidget* findMdiChildInArea(MdiArea* area, QUuid id) const;
     QWidget* firstMdiChild() const;
@@ -119,7 +119,7 @@ private:
     int                _dataCounter        = 0;
     int                _trafficCounter     = 0;
     int                _scriptCounter      = 0;
-    int                _registerMapCounter = 0;
+    int                _DataMapCounter = 0;
     QList<QWidget*>      _closedForms;
     QString            _savePath;
     QString            _pendingActivePrimaryWin;
@@ -127,3 +127,4 @@ private:
 };
 
 #endif // APPPROJECT_H
+

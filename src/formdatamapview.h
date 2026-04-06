@@ -1,5 +1,5 @@
-#ifndef FORMREGISTERMAPVIEW_H
-#define FORMREGISTERMAPVIEW_H
+#ifndef FORMDATAMAPVIEW_H
+#define FORMDATAMAPVIEW_H
 
 #include <QWidget>
 #include <QComboBox>
@@ -11,42 +11,42 @@
 #include "connectiondetails.h"
 #include "controls/outputtypes.h"
 #include "enums.h"
-#include "registermapdatamodel.h"
+#include "datamapdatamodel.h"
 
 class MainWindow;
 
 namespace Ui {
-class FormRegisterMapView;
+class FormDataMapView;
 }
 
 ///
-/// \brief The RegisterMapViewDefinitions struct
+/// \brief The DataMapViewDefinitions struct
 ///
-struct RegisterMapViewDefinitions
+struct DataMapViewDefinitions
 {
     QString FormName;
     bool    ZeroBasedAddress = false;
     bool    HexView          = false;
     void normalize() {}
 };
-Q_DECLARE_METATYPE(RegisterMapViewDefinitions)
+Q_DECLARE_METATYPE(DataMapViewDefinitions)
 
 ///
-/// \brief The FormRegisterMapView class
+/// \brief The FormDataMapView class
 ///
-class FormRegisterMapView : public QWidget
+class FormDataMapView : public QWidget
 {
     Q_OBJECT
 
-    friend QXmlStreamWriter& operator <<(QXmlStreamWriter& xml, FormRegisterMapView* frm);
-    friend QXmlStreamReader& operator >>(QXmlStreamReader& xml, FormRegisterMapView* frm);
+    friend QXmlStreamWriter& operator <<(QXmlStreamWriter& xml, FormDataMapView* frm);
+    friend QXmlStreamReader& operator >>(QXmlStreamReader& xml, FormDataMapView* frm);
 
 public:
-    explicit FormRegisterMapView(ModbusMultiServer& server, MainWindow* parent);
-    ~FormRegisterMapView();
+    explicit FormDataMapView(ModbusMultiServer& server, MainWindow* parent);
+    ~FormDataMapView();
 
-    RegisterMapViewDefinitions displayDefinition() const;
-    void setDisplayDefinition(const RegisterMapViewDefinitions& dd);
+    DataMapViewDefinitions displayDefinition() const;
+    void setDisplayDefinition(const DataMapViewDefinitions& dd);
 
     bool autoAddOnRequest() const { return _autoAddOnRequest; }
     void setAutoAddOnRequest(bool value) { _autoAddOnRequest = value; }
@@ -91,11 +91,11 @@ private:
     void setColumnWidths(const QList<int>& widths);
 
 private:
-    Ui::FormRegisterMapView*    ui;
+    Ui::FormDataMapView*        ui;
     ModbusMultiServer&          _mbMultiServer;
-    RegisterMapViewDefinitions  _displayDefinition;
-    RegisterMapDataModel*       _model           = nullptr;
-    RegisterMapFilterProxy*     _proxy           = nullptr;
+    DataMapViewDefinitions  _displayDefinition;
+    DataMapDataModel*       _model           = nullptr;
+    DataMapFilterProxy*     _proxy           = nullptr;
     QComboBox*                  _filterTypeCombo = nullptr;
     QSpinBox*                   _filterUnitSpin  = nullptr;
     QComboBox*                  _addrBaseCombo   = nullptr;
@@ -105,11 +105,11 @@ private:
 ///
 /// \brief operator << (XML writer)
 ///
-inline QXmlStreamWriter& operator <<(QXmlStreamWriter& xml, FormRegisterMapView* frm)
+inline QXmlStreamWriter& operator <<(QXmlStreamWriter& xml, FormDataMapView* frm)
 {
     if (!frm) return xml;
 
-    xml.writeStartElement("FormRegisterMapView");
+    xml.writeStartElement("FormDataMapView");
 
     const auto panel = frm->property("SplitPanel").toString();
     if (!panel.isEmpty())
@@ -129,7 +129,7 @@ inline QXmlStreamWriter& operator <<(QXmlStreamWriter& xml, FormRegisterMapView*
     xml.writeAttribute("Height", QString::number(windowSize.height()));
     xml.writeEndElement(); // Window
 
-    xml.writeStartElement("RegisterMapViewDefinitions");
+    xml.writeStartElement("DataMapViewDefinitions");
     xml.writeAttribute("FormName",         frm->displayDefinition().FormName);
     xml.writeAttribute("ZeroBasedAddress", boolToString(frm->displayDefinition().ZeroBasedAddress));
     xml.writeAttribute("HexView",          boolToString(frm->displayDefinition().HexView));
@@ -149,7 +149,7 @@ inline QXmlStreamWriter& operator <<(QXmlStreamWriter& xml, FormRegisterMapView*
     }
     xml.writeEndElement();
 
-    xml.writeStartElement("RegisterMap");
+    xml.writeStartElement("DataMap");
     const auto& orderedKeys = frm->_model->keys();
     const auto& map = frm->_model->entries();
     for (const auto& key : orderedKeys) {
@@ -166,20 +166,20 @@ inline QXmlStreamWriter& operator <<(QXmlStreamWriter& xml, FormRegisterMapView*
             xml.writeCDATA(e.comment);
         xml.writeEndElement(); // Entry
     }
-    xml.writeEndElement(); // RegisterMap
+    xml.writeEndElement(); // DataMap
 
-    xml.writeEndElement(); // FormRegisterMapView
+    xml.writeEndElement(); // FormDataMapView
     return xml;
 }
 
 ///
 /// \brief operator >> (XML reader)
 ///
-inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, FormRegisterMapView* frm)
+inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, FormDataMapView* frm)
 {
     if (!frm) return xml;
 
-    if (!xml.isStartElement() || xml.name() != QLatin1String("FormRegisterMapView")) {
+    if (!xml.isStartElement() || xml.name() != QLatin1String("FormDataMapView")) {
         xml.skipCurrentElement();
         return xml;
     }
@@ -207,9 +207,9 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, FormRegisterMapView*
             }
             xml.skipCurrentElement();
         }
-        else if (xml.name() == QLatin1String("RegisterMapViewDefinitions")) {
+        else if (xml.name() == QLatin1String("DataMapViewDefinitions")) {
             const auto attrs = xml.attributes();
-            RegisterMapViewDefinitions dd;
+            DataMapViewDefinitions dd;
             dd.FormName        = attrs.value("FormName").toString();
             dd.ZeroBasedAddress = stringToBool(attrs.value("ZeroBasedAddress").toString());
             dd.HexView          = stringToBool(attrs.value("HexView").toString());
@@ -226,7 +226,7 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, FormRegisterMapView*
             frm->setColumnWidths({w("Unit"), w("Type"), w("Address"), w("DataType"), w("Order"), w("Comment"), w("Value"), w("Timestamp")});
             xml.skipCurrentElement();
         }
-        else if (xml.name() == QLatin1String("RegisterMap")) {
+        else if (xml.name() == QLatin1String("DataMap")) {
             while (xml.readNextStartElement()) {
                 if (xml.name() == QLatin1String("Entry")) {
                     const auto attrs = xml.attributes();
@@ -239,7 +239,7 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, FormRegisterMapView*
                     key.Address = attrs.value("Address").toUShort(&ok);
                     if (!ok) { xml.skipCurrentElement(); continue; }
 
-                    RegisterMapEntry entry;
+                    DataMapEntry entry;
                     entry.value     = attrs.value("Value").toUShort();
                     entry.type      = enumFromString<DataType>(attrs.value("DataType").toString(), DataType::Int16);
                     entry.order     = enumFromString<RegisterOrder>(attrs.value("Order").toString(), RegisterOrder::MSRF);
@@ -267,4 +267,6 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, FormRegisterMapView*
     return xml;
 }
 
-#endif // FORMREGISTERMAPVIEW_H
+#endif // FORMDATAMAPVIEW_H
+
+

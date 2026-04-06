@@ -1179,3 +1179,4 @@ void MdiAreaEx::equalizeSplitterSizes()
     setEqualSplitterSizes(_splitter);
     QTimer::singleShot(0, this, [this]() { setEqualSplitterSizes(_splitter); });
 }
+

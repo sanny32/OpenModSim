@@ -1,4 +1,4 @@
-﻿#include <QCoreApplication>
+#include <QCoreApplication>
 #include "server.h"
 #include "ansiutils.h"
 #include "byteorderutils.h"
@@ -902,3 +902,4 @@ void Server::on_errorOccured(quint8 deviceId, const QString& error)
 
     _mapOnError[deviceId].call(QJSValueList() << error);
 }
+

@@ -389,3 +389,4 @@ void MdiTabBar::updateSubWindowState(QMdiSubWindow* wnd)
     setTabIcon(index, wnd->windowIcon());
     setTabText(index, tabTextForWindow(wnd));
 }
+

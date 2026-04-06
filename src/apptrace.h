@@ -139,3 +139,4 @@ inline void log(const char* scope, const QString& message)
 } // namespace AppTrace
 
 #endif // APPTRACE_H
+

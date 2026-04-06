@@ -57,3 +57,4 @@ inline QStringList getAvailableSerialPorts()
 }
 
 #endif // SERIALPORTUTILS_H
+

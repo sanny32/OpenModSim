@@ -322,3 +322,4 @@ inline QVariant makeValue(const QVector<quint16>& regs, DataType type, RegisterO
 }
 
 #endif // NUMERICUTILS_H
+

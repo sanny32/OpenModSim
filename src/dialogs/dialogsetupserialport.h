@@ -32,3 +32,4 @@ private:
 };
 
 #endif // DIALOGSETUPSERIALPORT_H
+

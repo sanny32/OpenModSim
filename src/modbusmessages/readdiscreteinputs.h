@@ -121,3 +121,4 @@ public:
 };
 
 #endif // READDISCRETEINPUTS_H
+

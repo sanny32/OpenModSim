@@ -35,3 +35,4 @@ void QDoubleValidatorEx::fixup(QString& input) const
     if(_allowEmpty && input.isEmpty()) return;
     QDoubleValidator::fixup(input);
 }
+

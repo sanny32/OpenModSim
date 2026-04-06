@@ -24,3 +24,4 @@ private:
 };
 
 #endif // QADJUSTEDSIZEDIALOG_H
+

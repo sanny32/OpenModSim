@@ -604,3 +604,4 @@ void ModbusLogWidget::on_customContextMenuRequested(const QPoint &pos)
     menu.addAction(_copyBytesAct);
     menu.exec(viewport()->mapToGlobal(pos));
 }
+

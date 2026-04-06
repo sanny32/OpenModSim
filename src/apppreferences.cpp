@@ -173,3 +173,4 @@ void AppPreferences::loadXml(QXmlStreamReader& xml)
         }
     }
 }
+

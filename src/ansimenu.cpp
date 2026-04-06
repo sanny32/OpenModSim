@@ -159,3 +159,4 @@ void AnsiMenu::resetState()
             ma->setChecked(false);
     }
 }
+

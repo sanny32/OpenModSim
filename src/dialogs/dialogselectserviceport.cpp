@@ -1,4 +1,4 @@
-﻿#include <QNetworkInterface>
+#include <QNetworkInterface>
 #include "dialogselectserviceport.h"
 #include "ui_dialogselectserviceport.h"
 
@@ -71,3 +71,4 @@ void DialogSelectServicePort::accept()
     _params.IPAddress = ui->comboBoxIp->currentText();
     QFixedSizeDialog::accept();
 }
+

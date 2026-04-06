@@ -39,3 +39,4 @@ private:
 };
 
 #endif // DIALOGAUTOSIMULATION_H
+

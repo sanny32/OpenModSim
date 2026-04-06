@@ -18,3 +18,4 @@ public:
 };
 
 #endif // PARITYTYPECOMBOBOX_H
+

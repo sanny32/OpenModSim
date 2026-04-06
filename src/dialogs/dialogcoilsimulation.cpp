@@ -1,4 +1,4 @@
-﻿#include <QPushButton>
+#include <QPushButton>
 #include "dialogcoilsimulation.h"
 #include "ui_dialogcoilsimulation.h"
 
@@ -88,3 +88,4 @@ void DialogCoilSimulation::on_comboBoxSimulationType_currentIndexChanged(int idx
 {
     ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(idx != -1);
 }
+

@@ -45,3 +45,4 @@ private:
 };
 
 #endif // MAINSTATUSBAR_H
+

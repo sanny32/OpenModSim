@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>FormRegisterMapView</class>
- <widget class="QWidget" name="FormRegisterMapView">
+ <class>FormDataMapView</class>
+ <widget class="QWidget" name="FormDataMapView">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -100,7 +100,7 @@
      <normaloff>:/res/edit-delete.png</normaloff>:/res/edit-delete.png</iconset>
    </property>
    <property name="text">
-    <string>Clear Register Map</string>
+    <string>Clear DataMap</string>
    </property>
   </action>
  </widget>
@@ -109,3 +109,4 @@
  </resources>
  <connections/>
 </ui>
+

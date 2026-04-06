@@ -1,4 +1,4 @@
-﻿#include <QEvent>
+#include <QEvent>
 #include "serialportutils.h"
 #include "menuconnect.h"
 
@@ -282,3 +282,4 @@ QSettings& operator >>(QSettings& in, MenuConnect* menu)
 
     return in;
 }
+

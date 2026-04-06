@@ -1,4 +1,4 @@
-﻿#include <QDateTime>
+#include <QDateTime>
 #include <QApplication>
 #include <QItemSelectionModel>
 #include <QPalette>
@@ -299,3 +299,4 @@ int OutputTrafficWidget::paint(const QRect& rc, QPainter& painter, int startRow)
     painter.restore();
     return total;
 }
+

@@ -36,3 +36,4 @@ private:
 };
 
 #endif // COLORSWATCH_H
+

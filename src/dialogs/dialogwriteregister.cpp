@@ -1,4 +1,4 @@
-﻿#include <float.h>
+#include <float.h>
 #include "modbuslimits.h"
 #include "numericutils.h"
 #include "modbusmultiserver.h"
@@ -331,3 +331,4 @@ void DialogWriteRegister::on_pushButtonSimulation_clicked()
         done(2);
     }
 }
+

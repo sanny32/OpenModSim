@@ -117,3 +117,4 @@ QXmlStreamReader& operator >>(QXmlStreamReader& xml, ScriptDocument* doc)
 
     return xml;
 }
+

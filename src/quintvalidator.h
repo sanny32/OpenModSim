@@ -25,3 +25,4 @@ private:
 };
 
 #endif // QUINTVALIDATOR_H
+

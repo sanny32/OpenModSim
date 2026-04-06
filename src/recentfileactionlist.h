@@ -33,3 +33,4 @@ private:
 };
 
 #endif // RECENTFILEACTIONLIST_H
+

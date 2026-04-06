@@ -43,3 +43,4 @@ void PointTypeComboBox::on_currentIndexChanged(int index)
 {
     emit pointTypeChanged(itemData(index).value<QModbusDataUnit::RegisterType>());
 }
+

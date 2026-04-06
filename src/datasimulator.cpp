@@ -1,4 +1,4 @@
-﻿#include <QDateTime>
+#include <QDateTime>
 #include <QRandomGenerator>
 #include "datasimulator.h"
 
@@ -511,3 +511,4 @@ void DataSimulator::toggleSimulation(quint8 deviceId, QModbusDataUnit::RegisterT
 
     emit dataSimulated(DataType::Binary, RegisterOrder::MSRF, deviceId, type, addr, value);
 }
+

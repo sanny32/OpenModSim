@@ -169,3 +169,4 @@ void ModbusErrorSimulations::setResponseRandomDelayUpToTime(int value)
 {
     _responseRandomDelayUpToTime = qMax(0, value);
 }
+

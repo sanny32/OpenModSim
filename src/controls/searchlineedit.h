@@ -24,3 +24,4 @@ private slots:
 };
 
 #endif // SEARCHLINEEDIT_H
+

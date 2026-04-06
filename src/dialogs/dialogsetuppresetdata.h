@@ -1,4 +1,4 @@
-﻿#ifndef DIALOGSETUPPRESETDATA_H
+#ifndef DIALOGSETUPPRESETDATA_H
 #define DIALOGSETUPPRESETDATA_H
 
 #include <QModbusDataUnit>
@@ -46,3 +46,4 @@ private:
 };
 
 #endif // DIALOGSETUPPRESETDATA_H
+

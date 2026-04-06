@@ -241,3 +241,4 @@ inline QXmlStreamReader& operator>>(QXmlStreamReader& in, AddressColorMap& map)
 }
 
 #endif // OUTPUTTYPES_H
+

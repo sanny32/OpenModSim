@@ -54,3 +54,4 @@ private:
 };
 
 #endif // MODBUSMESSAGEWIDGET_H
+

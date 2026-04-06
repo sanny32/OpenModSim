@@ -103,3 +103,4 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, QRange<double>& rang
 }
 
 #endif // QRANGE_H
+

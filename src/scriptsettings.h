@@ -108,3 +108,4 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, ScriptSettings& sett
 }
 
 #endif // SCRIPTSETTINGS_H
+

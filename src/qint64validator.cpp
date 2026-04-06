@@ -70,3 +70,4 @@ void QInt64Validator::fixup(QString& input) const
 
     QValidator::fixup(input);
 }
+

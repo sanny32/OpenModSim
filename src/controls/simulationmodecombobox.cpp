@@ -63,3 +63,4 @@ void SimulationModeComboBox::on_currentIndexChanged(int index)
 {
     emit simulationModeChanged(itemData(index).value<SimulationMode>());
 }
+

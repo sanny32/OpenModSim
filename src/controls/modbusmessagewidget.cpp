@@ -666,3 +666,4 @@ void ModbusMessageWidget::on_customContextMenuRequested(const QPoint &pos)
 
     menu.exec(viewport()->mapToGlobal(pos));
 }
+

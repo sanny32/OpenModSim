@@ -19,3 +19,4 @@ public:
 };
 
 #endif // FLOWCONTROLTYPECOMBOBOX_H
+

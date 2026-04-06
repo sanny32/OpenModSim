@@ -67,3 +67,4 @@ void Storage::clear()
 {
     _storage.clear();
 }
+

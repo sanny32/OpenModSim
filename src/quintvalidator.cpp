@@ -73,3 +73,4 @@ void QUIntValidator::fixup(QString& input) const
     if(input.isEmpty())
         input = QString::number(_bottom);
 }
+

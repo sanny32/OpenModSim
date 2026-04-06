@@ -1092,3 +1092,4 @@ void MdiArea::on_tabBarContextMenu(const QPoint& pos)
 
     emit tabContextMenuRequested(subWnd, _tabBar->mapToGlobal(pos));
 }
+

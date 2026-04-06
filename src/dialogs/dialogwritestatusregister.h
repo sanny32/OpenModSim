@@ -48,3 +48,4 @@ private:
 };
 
 #endif // DIALOGWRITESTATUSREGISTER_H
+

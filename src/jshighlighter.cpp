@@ -1,4 +1,4 @@
-﻿#include "jshighlighter.h"
+#include "jshighlighter.h"
 
 LanguageData JSHighlighter::keywords = {
     {('i'), QLatin1String("in")},
@@ -563,3 +563,4 @@ int JSHighlighter::highlightNumericLiterals(const QString &text, int i)
     //decrement so that the index is at the last number, not after it
     return --i;
 }
+

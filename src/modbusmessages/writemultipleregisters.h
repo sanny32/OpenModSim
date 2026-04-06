@@ -135,3 +135,4 @@ public:
 };
 
 #endif // WRITEMULTIPLEREGISTERS_H
+

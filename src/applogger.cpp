@@ -69,3 +69,4 @@ void AppLogger::logConnectionError(const QString& error)
 {
     qCritical(lcApp) << error;
 }
+

@@ -28,3 +28,4 @@ private:
 };
 
 #endif // DATADELEGATE_H
+

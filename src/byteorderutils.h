@@ -26,3 +26,4 @@ inline T toByteOrderValue(T value, ByteOrder order)
 }
 
 #endif // BYTEORDERUTILS_H
+

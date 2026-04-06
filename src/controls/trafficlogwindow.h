@@ -52,3 +52,4 @@ private:
 };
 
 #endif // TRAFFICLOGWINDOW_H
+

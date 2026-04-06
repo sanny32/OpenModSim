@@ -1,4 +1,4 @@
-﻿#include <QUrl>
+#include <QUrl>
 #include <QTimer>
 #include <QPointer>
 #include <QSharedPointer>
@@ -380,3 +380,4 @@ void ModbusTcpServer::close()
 
     setState(QModbusDevice::UnconnectedState);
 }
+

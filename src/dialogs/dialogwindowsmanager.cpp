@@ -1,4 +1,4 @@
-﻿#include <QAction>
+#include <QAction>
 #include <QAbstractEventDispatcher>
 #include "dialogwindowsmanager.h"
 #include "ui_dialogwindowsmanager.h"
@@ -124,3 +124,4 @@ void DialogWindowsManager::on_pushButtonClose_clicked()
     wnd->close();
     delete item;
 }
+

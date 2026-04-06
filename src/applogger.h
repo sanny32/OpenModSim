@@ -16,3 +16,4 @@ public:
 };
 
 #endif // APPLOGGER_H
+

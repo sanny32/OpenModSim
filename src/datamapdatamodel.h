@@ -1,5 +1,5 @@
-#ifndef REGISTERMAPDATAMODEL_H
-#define REGISTERMAPDATAMODEL_H
+#ifndef DATAMAPDATAMODEL_H
+#define DATAMAPDATAMODEL_H
 
 #include <QAbstractTableModel>
 #include <QSortFilterProxyModel>
@@ -14,9 +14,9 @@
 #include "enums.h"
 
 ///
-/// \brief Column indices for the register map table (shared between model and delegates)
+/// \brief Column indices for the DataMap table (shared between model and delegates)
 ///
-enum RegisterMapColumn {
+enum DataMapColumn {
     ColUnit = 0,
     ColType,
     ColAddress,
@@ -29,9 +29,9 @@ enum RegisterMapColumn {
 };
 
 ///
-/// \brief Custom roles shared between RegisterMapDataModel and item delegates
+/// \brief Custom roles shared between DataMapDataModel and item delegates
 ///
-namespace RegisterMapRole {
+namespace DataMapRole {
     constexpr int DeviceId  = Qt::UserRole;       // ColUnit: DeviceId as int
     constexpr int Type      = Qt::UserRole + 1;   // ColUnit: RegisterType as int
     constexpr int Address   = Qt::UserRole + 2;   // ColUnit: Address as int
@@ -40,9 +40,9 @@ namespace RegisterMapRole {
 }
 
 ///
-/// \brief Register map entry data
+/// \brief DataMap entry data
 ///
-struct RegisterMapEntry
+struct DataMapEntry
 {
     quint16       value   = 0;
     QString       comment;
@@ -52,15 +52,15 @@ struct RegisterMapEntry
 };
 
 ///
-/// \brief The RegisterMapDataModel class — QAbstractTableModel backing the register map view
+/// \brief The DataMapDataModel class — QAbstractTableModel backing the DataMap view
 ///
-class RegisterMapDataModel : public QAbstractTableModel
+class DataMapDataModel : public QAbstractTableModel
 {
     Q_OBJECT
 
 public:
-    explicit RegisterMapDataModel(ModbusMultiServer& server, QObject* parent = nullptr);
-    ~RegisterMapDataModel() override;
+    explicit DataMapDataModel(ModbusMultiServer& server, QObject* parent = nullptr);
+    ~DataMapDataModel() override;
 
     // QAbstractTableModel interface
     int rowCount(const QModelIndex& parent = {}) const override;
@@ -80,14 +80,14 @@ public:
     // Data access
     ItemMapKey keyForRow(int row) const;
     const QList<ItemMapKey>& keys() const { return _keys; }
-    const QMap<ItemMapKey, RegisterMapEntry>& entries() const;
+    const QMap<ItemMapKey, DataMapEntry>& entries() const;
     const QMap<ItemMapKey, QUuid>& uuids() const;
     bool contains(const ItemMapKey& key) const;
     bool isEmpty() const;
     ItemMapKey lastKey() const;
 
     // Modification
-    void addEntry(const ItemMapKey& key, const RegisterMapEntry& entry);
+    void addEntry(const ItemMapKey& key, const DataMapEntry& entry);
     void removeEntries(QList<int> sourceRows);
 
     // External Modbus data update
@@ -105,12 +105,12 @@ public:
 
 private:
     int  rowForKey(const ItemMapKey& key) const;
-    void registerEntry(const ItemMapKey& key, const RegisterMapEntry& entry);
+    void registerEntry(const ItemMapKey& key, const DataMapEntry& entry);
     void unregisterEntry(const ItemMapKey& key);
 
     ModbusMultiServer&               _server;
     QList<ItemMapKey>                _keys;
-    QMap<ItemMapKey, RegisterMapEntry> _data;
+    QMap<ItemMapKey, DataMapEntry> _data;
     QMap<ItemMapKey, QUuid>          _uuids;
     bool                             _inSetData  = false;
     bool                             _zeroBased  = false;
@@ -118,14 +118,14 @@ private:
 };
 
 ///
-/// \brief The RegisterMapFilterProxy class — filters register map rows by Type and Unit
+/// \brief The DataMapFilterProxy class — filters DataMap rows by Type and Unit
 ///
-class RegisterMapFilterProxy : public QSortFilterProxyModel
+class DataMapFilterProxy : public QSortFilterProxyModel
 {
     Q_OBJECT
 
 public:
-    explicit RegisterMapFilterProxy(QObject* parent = nullptr);
+    explicit DataMapFilterProxy(QObject* parent = nullptr);
 
     void setFilterUnit(int unit);       // 0 = show all
     void setFilterTypeIndex(int index); // 0 = show all, 1-4 = Coils/Discrete/Input/Holding
@@ -138,4 +138,6 @@ private:
     int _filterTypeIndex = 0;
 };
 
-#endif // REGISTERMAPDATAMODEL_H
+#endif // DATAMAPDATAMODEL_H
+
+

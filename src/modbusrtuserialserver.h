@@ -57,3 +57,4 @@ private:
 };
 
 #endif // MODBUSRTUSERIALSERVER_H
+

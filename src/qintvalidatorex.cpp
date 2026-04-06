@@ -34,3 +34,4 @@ void QIntValidatorEx::fixup(QString& input) const
     if(_allowEmpty && input.isEmpty()) return;
     QIntValidator::fixup(input);
 }
+

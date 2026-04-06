@@ -78,7 +78,7 @@ ProjectFormType toProjectFormType(ProjectFormKind kind)
         case ProjectFormKind::Data:        return ProjectFormType::Data;
         case ProjectFormKind::Traffic:     return ProjectFormType::Traffic;
         case ProjectFormKind::Script:      return ProjectFormType::Script;
-        case ProjectFormKind::RegisterMap: return ProjectFormType::RegisterMap;
+        case ProjectFormKind::DataMap: return ProjectFormType::DataMap;
     }
     return ProjectFormType::Data;
 }
@@ -97,9 +97,9 @@ ProjectFormKind projectFormKindFromWidget(QWidget* widget, bool* ok = nullptr)
         if(ok) *ok = true;
         return ProjectFormKind::Script;
     }
-    if (qobject_cast<FormRegisterMapView*>(widget)) {
+    if (qobject_cast<FormDataMapView*>(widget)) {
         if(ok) *ok = true;
-        return ProjectFormKind::RegisterMap;
+        return ProjectFormKind::DataMap;
     }
 
     if(ok) *ok = false;
@@ -167,7 +167,7 @@ void saveXmlOfForm(QWidget* widget, QXmlStreamWriter& w)
     if (auto* frm = qobject_cast<FormDataView*>(widget)) frm->saveXml(w);
     else if (auto* frm = qobject_cast<FormTrafficView*>(widget)) frm->saveXml(w);
     else if (auto* frm = qobject_cast<FormScriptView*>(widget)) frm->saveXml(w);
-    else if (auto* frm = qobject_cast<FormRegisterMapView*>(widget)) frm->saveXml(w);
+    else if (auto* frm = qobject_cast<FormDataMapView*>(widget)) frm->saveXml(w);
 }
 
 void loadXmlOfForm(QWidget* widget, QXmlStreamReader& r)
@@ -185,7 +185,7 @@ void loadXmlOfForm(QWidget* widget, QXmlStreamReader& r)
     }
     else if (auto* frm = qobject_cast<FormTrafficView*>(widget)) frm->loadXml(r);
     else if (auto* frm = qobject_cast<FormScriptView*>(widget)) frm->loadXml(r);
-    else if (auto* frm = qobject_cast<FormRegisterMapView*>(widget)) frm->loadXml(r);
+    else if (auto* frm = qobject_cast<FormDataMapView*>(widget)) frm->loadXml(r);
     else r.skipCurrentElement();
 }
 
@@ -328,7 +328,7 @@ void AppProject::closeProject()
     _dataCounter        = 0;
     _trafficCounter     = 0;
     _scriptCounter      = 0;
-    _registerMapCounter = 0;
+    _DataMapCounter = 0;
 }
 
 ///
@@ -363,7 +363,7 @@ int AppProject::nextFormDisplayNumber(ProjectFormKind kind)
         case ProjectFormKind::Data:        return ++_dataCounter;
         case ProjectFormKind::Traffic:     return ++_trafficCounter;
         case ProjectFormKind::Script:      return ++_scriptCounter;
-        case ProjectFormKind::RegisterMap: return ++_registerMapCounter;
+        case ProjectFormKind::DataMap: return ++_DataMapCounter;
     }
     return 0;
 }
@@ -401,8 +401,8 @@ QWidget* AppProject::createMdiChildOnArea(ProjectFormKind kind, MdiArea* area, b
         case ProjectFormKind::Script:
             frm = new FormScriptView(_mbServer, _dataSimulator, _mainWindow);
             break;
-        case ProjectFormKind::RegisterMap:
-            frm = new FormRegisterMapView(_mbServer, _mainWindow);
+        case ProjectFormKind::DataMap:
+            frm = new FormDataMapView(_mbServer, _mainWindow);
             break;
     }
     if(!frm)
@@ -418,7 +418,7 @@ QWidget* AppProject::createMdiChildOnArea(ProjectFormKind kind, MdiArea* area, b
             case ProjectFormKind::Data:        frm->setWindowTitle(QString("Data%1").arg(num));        break;
             case ProjectFormKind::Traffic:     frm->setWindowTitle(QString("Traffic%1").arg(num));     break;
             case ProjectFormKind::Script:      frm->setWindowTitle(QString("Script%1").arg(num));      break;
-            case ProjectFormKind::RegisterMap: frm->setWindowTitle(QString("RegisterMap%1").arg(num)); break;
+            case ProjectFormKind::DataMap:     frm->setWindowTitle(QString("Map%1").arg(num));         break;
         }
     }
 
@@ -529,8 +529,8 @@ void AppProject::setupMdiChild(QWidget* frm, QMdiSubWindow* wnd, bool addToWindo
         connect(traffic, &FormTrafficView::showed, _mainWindow, onShowed);
     } else if (auto* script = qobject_cast<FormScriptView*>(frm)) {
         connect(script, &FormScriptView::showed, _mainWindow, onShowed);
-    } else if (auto* regMap = qobject_cast<FormRegisterMapView*>(frm)) {
-        connect(regMap, &FormRegisterMapView::showed, _mainWindow, onShowed);
+    } else if (auto* regMap = qobject_cast<FormDataMapView*>(frm)) {
+        connect(regMap, &FormDataMapView::showed, _mainWindow, onShowed);
     }
 
     auto onHelpRequested = [this](const QString& helpKey)
@@ -576,8 +576,8 @@ void AppProject::setupMdiChild(QWidget* frm, QMdiSubWindow* wnd, bool addToWindo
         connect(data, &FormDataView::definitionChanged, _mainWindow, &MainWindow::markModified);
     } else if (auto* traffic = qobject_cast<FormTrafficView*>(frm)) {
         connect(traffic, &FormTrafficView::definitionChanged, _mainWindow, &MainWindow::markModified);
-    } else if (auto* regMap = qobject_cast<FormRegisterMapView*>(frm)) {
-        connect(regMap, &FormRegisterMapView::definitionChanged, _mainWindow, &MainWindow::markModified);
+    } else if (auto* regMap = qobject_cast<FormDataMapView*>(frm)) {
+        connect(regMap, &FormDataMapView::definitionChanged, _mainWindow, &MainWindow::markModified);
     } else if (auto* script = qobject_cast<FormScriptView*>(frm)) {
         connect(script, &FormScriptView::scriptSettingsChanged, _mainWindow, [this](const ScriptSettings&) { _mainWindow->markModified(); });
         connect(script->scriptDocument(), &QTextDocument::contentsChanged, _mainWindow, &MainWindow::markModified);
@@ -752,11 +752,11 @@ FormScriptView* AppProject::currentScriptMdiChild() const
 }
 
 ///
-/// \brief AppProject::currentRegisterMapMdiChild
+/// \brief AppProject::currentDataMapMdiChild
 ///
-FormRegisterMapView* AppProject::currentRegisterMapMdiChild() const
+FormDataMapView* AppProject::currentDataMapMdiChild() const
 {
-    return qobject_cast<FormRegisterMapView*>(currentMdiChild());
+    return qobject_cast<FormDataMapView*>(currentMdiChild());
 }
 
 ///
@@ -1415,8 +1415,8 @@ void AppProject::loadProject(const QString& filename)
                             kind = ProjectFormKind::Traffic;
                         } else if (xml.name() == QLatin1String("FormScriptView")) {
                             kind = ProjectFormKind::Script;
-                        } else if (xml.name() == QLatin1String("FormRegisterMapView")) {
-                            kind = ProjectFormKind::RegisterMap;
+                        } else if (xml.name() == QLatin1String("FormDataMapView")) {
+                            kind = ProjectFormKind::DataMap;
                         } else {
                             isForm = false;
                         }
@@ -1822,3 +1822,4 @@ void AppProject::destroyContentForShutdown()
 {
     closeProject();
 }
+

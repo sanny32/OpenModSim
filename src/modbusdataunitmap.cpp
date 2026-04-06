@@ -424,3 +424,4 @@ void ModbusDataUnitMap::updateDataUnitMap()
     }
     _modbusDataUnitMap = modbusMap;
 }
+

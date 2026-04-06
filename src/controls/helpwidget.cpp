@@ -206,3 +206,4 @@ void HelpWidget::showHelp(const QString& helpKey)
 {
     _helpBrowser->showHelp(helpKey);
 }
+

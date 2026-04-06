@@ -58,3 +58,4 @@ void OutputPanel::switchToJsConsole()
 {
     ui->tabWidget->setCurrentWidget(ui->jsConsole);
 }
+

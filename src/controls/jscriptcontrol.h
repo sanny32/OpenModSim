@@ -125,3 +125,4 @@ private:
 };
 
 #endif // JSCRIPTCONTROL_H
+

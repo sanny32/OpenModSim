@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>DialogCoilSimulation</class>
  <widget class="QDialog" name="DialogCoilSimulation">
@@ -124,3 +124,4 @@
   </connection>
  </connections>
 </ui>
+

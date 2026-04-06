@@ -60,3 +60,4 @@ private:
 };
 
 #endif // SCRIPTEDITORWINDOW_H
+

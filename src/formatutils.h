@@ -548,3 +548,4 @@ inline QString formatAddress(QModbusDataUnit::RegisterType pointType, quint16 ad
 }
 
 #endif // FORMATUTILS_H
+

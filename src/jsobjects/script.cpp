@@ -80,3 +80,4 @@ int Script::period() const
 {
     return _period;
 }
+

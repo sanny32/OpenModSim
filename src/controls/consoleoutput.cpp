@@ -328,3 +328,4 @@ void ConsoleOutput::on_customContextMenuRequested(const QPoint& pos)
 
     menu.exec(ui->listWidget->mapToGlobal(pos));
 }
+

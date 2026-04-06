@@ -21,3 +21,4 @@ protected:
 };
 
 #endif // HTMLDELEGATE_H
+

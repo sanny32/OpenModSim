@@ -246,3 +246,4 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, ModbusSimulationPara
 }
 
 #endif // MODBUSSIMULATIONPARAMS_H
+

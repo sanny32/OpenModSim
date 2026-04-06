@@ -1,4 +1,4 @@
-﻿#include <QHeaderView>
+#include <QHeaderView>
 #include <QInputDialog>
 #include <QMenu>
 #include <QMessageBox>
@@ -42,8 +42,8 @@ ProjectTreeWidget::ProjectTreeWidget(QWidget* parent)
     _iconDataClosed = dimmedIcon(":/res/actionShowData.png");
     _iconTrafficClosed = dimmedIcon(":/res/actionShowTraffic.png");
     _iconScriptClosed = dimmedIcon(":/res/actionShowScript.png");
-    _iconRegisterMap = QIcon(":/res/actionShowData.png");
-    _iconRegisterMapClosed = dimmedIcon(":/res/actionShowData.png");
+    _iconDataMap = QIcon(":/res/actionShowData.png");
+    _iconDataMapClosed = dimmedIcon(":/res/actionShowData.png");
 
     setHeaderHidden(true);
     setRootIsDecorated(true);
@@ -58,6 +58,10 @@ ProjectTreeWidget::ProjectTreeWidget(QWidget* parent)
     _dataRoot->setIcon(0, iconDir);
     _dataRoot->setExpanded(true);
 
+    _dataMapRoot = new QTreeWidgetItem(this, QStringList{tr("Map")});
+    _dataMapRoot->setIcon(0, iconDir);
+    _dataMapRoot->setExpanded(true);
+
     _trafficRoot = new QTreeWidgetItem(this, QStringList{tr("Traffic")});
     _trafficRoot->setIcon(0, iconDir);
     _trafficRoot->setExpanded(true);
@@ -65,10 +69,6 @@ ProjectTreeWidget::ProjectTreeWidget(QWidget* parent)
     _scriptRoot = new QTreeWidgetItem(this, QStringList{tr("Script")});
     _scriptRoot->setIcon(0, iconDir);
     _scriptRoot->setExpanded(true);
-
-    _registerMapRoot = new QTreeWidgetItem(this, QStringList{tr("Register Map")});
-    _registerMapRoot->setIcon(0, iconDir);
-    _registerMapRoot->setExpanded(true);
 
     connect(this, &QTreeWidget::itemActivated,
             this, &ProjectTreeWidget::on_itemActivated);
@@ -102,9 +102,9 @@ void ProjectTreeWidget::addForm(ProjectFormType type, QWidget* frm)
             root = _scriptRoot;
             baseIcon = _iconScriptIdle;
             break;
-        case ProjectFormType::RegisterMap:
-            root = _registerMapRoot;
-            baseIcon = _iconRegisterMap;
+        case ProjectFormType::DataMap:
+            root = _dataMapRoot;
+            baseIcon = _iconDataMap;
             break;
     }
 
@@ -163,7 +163,7 @@ void ProjectTreeWidget::setFormScriptRunning(QWidget* frm, bool running)
     const auto type = static_cast<ProjectFormType>(item->data(0, ItemTypeRole + 1).toInt());
     item->setIcon(0, iconFor(type, isOpen, running, _iconData, _iconDataClosed, _iconTraffic,
                               _iconTrafficClosed, _iconScriptIdle, _iconScriptClosed, _iconScriptRunning,
-                              _iconRegisterMap, _iconRegisterMapClosed));
+                              _iconDataMap, _iconDataMapClosed));
 }
 
 ///
@@ -178,7 +178,7 @@ void ProjectTreeWidget::setFormOpen(QWidget* frm, bool open)
     const auto type = static_cast<ProjectFormType>(item->data(0, ItemTypeRole + 1).toInt());
     item->setIcon(0, iconFor(type, open, false, _iconData, _iconDataClosed, _iconTraffic,
                               _iconTrafficClosed, _iconScriptIdle, _iconScriptClosed, _iconScriptRunning,
-                              _iconRegisterMap, _iconRegisterMapClosed));
+                              _iconDataMap, _iconDataMapClosed));
 
     item->setData(0, ItemOpenRole, open);
 
@@ -272,7 +272,7 @@ void ProjectTreeWidget::retranslateUi()
     _dataRoot->setText(0, tr("Data"));
     _trafficRoot->setText(0, tr("Traffic"));
     _scriptRoot->setText(0, tr("Script"));
-    _registerMapRoot->setText(0, tr("Register Map"));
+    _dataMapRoot->setText(0, tr("Map"));
 
     auto retranslateRoot = [](QTreeWidgetItem* root) {
         for (int i = 0; i < root->childCount(); ++i) {
@@ -286,7 +286,7 @@ void ProjectTreeWidget::retranslateUi()
     retranslateRoot(_dataRoot);
     retranslateRoot(_trafficRoot);
     retranslateRoot(_scriptRoot);
-    retranslateRoot(_registerMapRoot);
+    retranslateRoot(_dataMapRoot);
 }
 
 ///
@@ -299,11 +299,11 @@ void ProjectTreeWidget::on_contextMenu(const QPoint& pos)
 
     QMenu menu(this);
 
-    // "New …" actions are available for all nodes
+    // "New" actions are available for all nodes
     auto newDataAction        = menu.addAction(_iconData,         tr("New Data View"));
+    auto newDataMapAction = menu.addAction(_iconDataMap,  tr("New DataMap"));
     auto newTrafficAction     = menu.addAction(_iconTraffic,      tr("New Traffic View"));
     auto newScriptAction      = menu.addAction(_iconScriptIdle,   tr("New Script"));
-    auto newRegisterMapAction = menu.addAction(_iconRegisterMap,  tr("New Register Map"));
 
     QAction* runAction    = nullptr;
     QAction* stopAction   = nullptr;
@@ -341,16 +341,16 @@ void ProjectTreeWidget::on_contextMenu(const QPoint& pos)
         emit formCreateRequested(ProjectFormType::Data);
         return;
     }
+    if (selected == newDataMapAction) {
+        emit formCreateRequested(ProjectFormType::DataMap);
+        return;
+    }
     if (selected == newTrafficAction) {
         emit formCreateRequested(ProjectFormType::Traffic);
         return;
     }
     if (selected == newScriptAction) {
         emit formCreateRequested(ProjectFormType::Script);
-        return;
-    }
-    if (selected == newRegisterMapAction) {
-        emit formCreateRequested(ProjectFormType::RegisterMap);
         return;
     }
 
@@ -409,7 +409,7 @@ QTreeWidgetItem* ProjectTreeWidget::itemForForm(QWidget* frm) const
         return item;
     if (auto item = findInRoot(_scriptRoot))
         return item;
-    if (auto item = findInRoot(_registerMapRoot))
+    if (auto item = findInRoot(_dataMapRoot))
         return item;
 
     return nullptr;
@@ -418,7 +418,7 @@ QTreeWidgetItem* ProjectTreeWidget::itemForForm(QWidget* frm) const
 QIcon ProjectTreeWidget::iconFor(ProjectFormType type, bool open, bool running, const QIcon& dataOpen,
                                  const QIcon& dataClosed, const QIcon& trafficOpen, const QIcon& trafficClosed,
                                  const QIcon& scriptIdle, const QIcon& scriptClosed, const QIcon& scriptRunning,
-                                 const QIcon& registerMapOpen, const QIcon& registerMapClosed)
+                                 const QIcon& DataMapOpen, const QIcon& DataMapClosed)
 {
     if (running)
         return scriptRunning;
@@ -431,8 +431,10 @@ QIcon ProjectTreeWidget::iconFor(ProjectFormType type, bool open, bool running, 
             return open ? trafficOpen : trafficClosed;
         case ProjectFormType::Script:
             return open ? scriptIdle : scriptClosed;
-        case ProjectFormType::RegisterMap:
-            return open ? registerMapOpen : registerMapClosed;
+        case ProjectFormType::DataMap:
+            return open ? DataMapOpen : DataMapClosed;
     }
     return QIcon();
 }
+
+

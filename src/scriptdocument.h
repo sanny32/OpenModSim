@@ -60,3 +60,4 @@ QXmlStreamWriter& operator <<(QXmlStreamWriter& xml, const ScriptDocument* doc);
 QXmlStreamReader& operator >>(QXmlStreamReader& xml, ScriptDocument* doc);
 
 #endif // SCRIPTDOCUMENT_H
+

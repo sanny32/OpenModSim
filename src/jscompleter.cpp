@@ -241,3 +241,4 @@ void JSCompleter::setCompletionKey(const QString& key)
     ((JSCompleterModel*)model())->setCompletionKey(key);
 }
 
+

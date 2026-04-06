@@ -52,3 +52,4 @@ void console::error(const QString& msg)
 {
     emit messageAdded(msg, ConsoleOutput::MessageType::Error);
 }
+

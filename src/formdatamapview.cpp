@@ -1,19 +1,19 @@
 #include <QtWidgets>
 #include "mainwindow.h"
 #include "apppreferences.h"
-#include "formregistermapview.h"
+#include "formdatamapview.h"
 #include "modbusmessages/modbusmessages.h"
 #include "controls/numericlineedit.h"
 #include "formatutils.h"
-#include "ui_formregistermapview.h"
+#include "ui_formdatamapview.h"
 
 namespace {
 
 // Role aliases so delegates compile without change
-constexpr int RoleDeviceId  = RegisterMapRole::DeviceId;
-constexpr int RoleType      = RegisterMapRole::Type;
-constexpr int RoleAddress   = RegisterMapRole::Address;
-constexpr int RoleTypeValue = RegisterMapRole::TypeValue;
+constexpr int RoleDeviceId  = DataMapRole::DeviceId;
+constexpr int RoleType      = DataMapRole::Type;
+constexpr int RoleAddress   = DataMapRole::Address;
+constexpr int RoleTypeValue = DataMapRole::TypeValue;
 
 ///
 /// \brief TypeItemDelegate — inline combo box for register type column
@@ -217,7 +217,7 @@ public:
     static bool hexViewFromIndex(const QModelIndex& index)
     {
         auto* proxy = qobject_cast<const QSortFilterProxyModel*>(index.model());
-        auto* src = proxy ? qobject_cast<RegisterMapDataModel*>(proxy->sourceModel()) : nullptr;
+        auto* src = proxy ? qobject_cast<DataMapDataModel*>(proxy->sourceModel()) : nullptr;
         return src ? src->hexView() : false;
     }
 
@@ -268,10 +268,10 @@ class AddressItemDelegate : public QStyledItemDelegate
 public:
     using QStyledItemDelegate::QStyledItemDelegate;
 
-    static RegisterMapDataModel* sourceModel(const QModelIndex& index)
+    static DataMapDataModel* sourceModel(const QModelIndex& index)
     {
         auto* proxy = qobject_cast<const QSortFilterProxyModel*>(index.model());
-        return proxy ? qobject_cast<RegisterMapDataModel*>(proxy->sourceModel()) : nullptr;
+        return proxy ? qobject_cast<DataMapDataModel*>(proxy->sourceModel()) : nullptr;
     }
 
     static bool zeroBasedFromIndex(const QModelIndex& index)
@@ -500,20 +500,20 @@ public:
 } // anonymous namespace
 
 ///
-/// \brief FormRegisterMapView::FormRegisterMapView
+/// \brief FormDataMapView::FormDataMapView
 ///
-FormRegisterMapView::FormRegisterMapView(ModbusMultiServer& server, MainWindow* parent)
+FormDataMapView::FormDataMapView(ModbusMultiServer& server, MainWindow* parent)
     : QWidget(static_cast<QWidget*>(parent))
-    , ui(new Ui::FormRegisterMapView)
+    , ui(new Ui::FormDataMapView)
     , _mbMultiServer(server)
 {
     ui->setupUi(this);
 
     // Create model and filter proxy
-    _model = new RegisterMapDataModel(_mbMultiServer, this);
+    _model = new DataMapDataModel(_mbMultiServer, this);
     _displayDefinition.ZeroBasedAddress = AppPreferences::instance().dataViewDefinitions().ZeroBasedAddress;
     _model->setZeroBased(_displayDefinition.ZeroBasedAddress);
-    _proxy = new RegisterMapFilterProxy(this);
+    _proxy = new DataMapFilterProxy(this);
     _proxy->setSourceModel(_model);
     ui->tableView->setModel(_proxy);
 
@@ -581,13 +581,13 @@ FormRegisterMapView::FormRegisterMapView(ModbusMultiServer& server, MainWindow* 
 
     // Selection and row count signals
     connect(ui->tableView->selectionModel(), &QItemSelectionModel::selectionChanged,
-            this, &FormRegisterMapView::updateActionState);
+            this, &FormDataMapView::updateActionState);
     connect(ui->tableView->selectionModel(), &QItemSelectionModel::currentChanged,
-            this, &FormRegisterMapView::updateActionState);
+            this, &FormDataMapView::updateActionState);
     connect(_proxy, &QAbstractItemModel::rowsInserted,
-            this, &FormRegisterMapView::updateActionState);
+            this, &FormDataMapView::updateActionState);
     connect(_proxy, &QAbstractItemModel::rowsRemoved,
-            this, &FormRegisterMapView::updateActionState);
+            this, &FormDataMapView::updateActionState);
 
     updateActionState();
     setupServerConnections();
@@ -596,19 +596,19 @@ FormRegisterMapView::FormRegisterMapView(ModbusMultiServer& server, MainWindow* 
 }
 
 ///
-/// \brief FormRegisterMapView::~FormRegisterMapView
+/// \brief FormDataMapView::~FormDataMapView
 ///
-FormRegisterMapView::~FormRegisterMapView()
+FormDataMapView::~FormDataMapView()
 {
     delete ui;
 }
 
 ///
-/// \brief FormRegisterMapView::displayDefinition
+/// \brief FormDataMapView::displayDefinition
 ///
-RegisterMapViewDefinitions FormRegisterMapView::displayDefinition() const
+DataMapViewDefinitions FormDataMapView::displayDefinition() const
 {
-    RegisterMapViewDefinitions dd = _displayDefinition;
+    DataMapViewDefinitions dd = _displayDefinition;
     dd.FormName         = windowTitle();
     dd.ZeroBasedAddress = _model->zeroBased();
     dd.HexView          = ui->actionHexView->isChecked();
@@ -616,9 +616,9 @@ RegisterMapViewDefinitions FormRegisterMapView::displayDefinition() const
 }
 
 ///
-/// \brief FormRegisterMapView::setDisplayDefinition
+/// \brief FormDataMapView::setDisplayDefinition
 ///
-void FormRegisterMapView::setDisplayDefinition(const RegisterMapViewDefinitions& dd)
+void FormDataMapView::setDisplayDefinition(const DataMapViewDefinitions& dd)
 {
     _displayDefinition = dd;
     if (!dd.FormName.isEmpty())
@@ -634,26 +634,26 @@ void FormRegisterMapView::setDisplayDefinition(const RegisterMapViewDefinitions&
 }
 
 ///
-/// \brief FormRegisterMapView::saveXml
+/// \brief FormDataMapView::saveXml
 ///
-void FormRegisterMapView::saveXml(QXmlStreamWriter& xml) const
+void FormDataMapView::saveXml(QXmlStreamWriter& xml) const
 {
-    xml << const_cast<FormRegisterMapView*>(this);
+    xml << const_cast<FormDataMapView*>(this);
 }
 
 ///
-/// \brief FormRegisterMapView::loadXml
+/// \brief FormDataMapView::loadXml
 ///
-void FormRegisterMapView::loadXml(QXmlStreamReader& xml)
+void FormDataMapView::loadXml(QXmlStreamReader& xml)
 {
     xml >> this;
 }
 
 ///
-/// \brief FormRegisterMapView::print
+/// \brief FormDataMapView::print
 /// \param printer
 ///
-void FormRegisterMapView::print(QPrinter* printer)
+void FormDataMapView::print(QPrinter* printer)
 {
     if (!printer || !_proxy) return;
     if (_proxy->rowCount() <= 0) return;
@@ -886,18 +886,18 @@ void FormRegisterMapView::print(QPrinter* printer)
 }
 
 ///
-/// \brief FormRegisterMapView::show
+/// \brief FormDataMapView::show
 ///
-void FormRegisterMapView::show()
+void FormDataMapView::show()
 {
     QWidget::show();
     emit showed();
 }
 
 ///
-/// \brief FormRegisterMapView::changeEvent
+/// \brief FormDataMapView::changeEvent
 ///
-void FormRegisterMapView::changeEvent(QEvent* event)
+void FormDataMapView::changeEvent(QEvent* event)
 {
     if (event->type() == QEvent::LanguageChange)
         ui->retranslateUi(this);
@@ -905,18 +905,18 @@ void FormRegisterMapView::changeEvent(QEvent* event)
 }
 
 ///
-/// \brief FormRegisterMapView::closeEvent
+/// \brief FormDataMapView::closeEvent
 ///
-void FormRegisterMapView::closeEvent(QCloseEvent* event)
+void FormDataMapView::closeEvent(QCloseEvent* event)
 {
     emit closing();
     QWidget::closeEvent(event);
 }
 
 ///
-/// \brief FormRegisterMapView::on_mbRequest
+/// \brief FormDataMapView::on_mbRequest
 ///
-void FormRegisterMapView::on_mbRequest(const ConnectionDetails& /*cd*/, QSharedPointer<const ModbusMessage> msg)
+void FormDataMapView::on_mbRequest(const ConnectionDetails& /*cd*/, QSharedPointer<const ModbusMessage> msg)
 {
     if (!msg || !msg->isRequest()) return;
 
@@ -967,36 +967,36 @@ void FormRegisterMapView::on_mbRequest(const ConnectionDetails& /*cd*/, QSharedP
 }
 
 ///
-/// \brief FormRegisterMapView::on_mbDataChanged
+/// \brief FormDataMapView::on_mbDataChanged
 ///
-void FormRegisterMapView::on_mbDataChanged(quint8 deviceId, const QModbusDataUnit& data)
+void FormDataMapView::on_mbDataChanged(quint8 deviceId, const QModbusDataUnit& data)
 {
     _model->applyMbDataChange(deviceId, data);
 }
 
 ///
-/// \brief FormRegisterMapView::on_mbTimestampChanged
+/// \brief FormDataMapView::on_mbTimestampChanged
 ///
-void FormRegisterMapView::on_mbTimestampChanged(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 address, const QDateTime& timestamp)
+void FormDataMapView::on_mbTimestampChanged(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 address, const QDateTime& timestamp)
 {
     _model->applyTimestampChange(deviceId, type, address, timestamp);
 }
 
 ///
-/// \brief FormRegisterMapView::on_mbDescriptionChanged
+/// \brief FormDataMapView::on_mbDescriptionChanged
 ///
-void FormRegisterMapView::on_mbDescriptionChanged(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 address, const QString& description)
+void FormDataMapView::on_mbDescriptionChanged(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 address, const QString& description)
 {
     _model->applyDescriptionChange(deviceId, type, address, description);
 }
 
 ///
-/// \brief FormRegisterMapView::addRowAndReturnSourceRow
+/// \brief FormDataMapView::addRowAndReturnSourceRow
 ///
-int FormRegisterMapView::addRowAndReturnSourceRow(int referenceSourceRow)
+int FormDataMapView::addRowAndReturnSourceRow(int referenceSourceRow)
 {
     ItemMapKey key{ 1, QModbusDataUnit::HoldingRegisters, 0 };
-    RegisterMapEntry entry;
+    DataMapEntry entry;
     entry.type  = DataType::Int16;
     entry.order = RegisterOrder::MSRF;
 
@@ -1034,9 +1034,9 @@ int FormRegisterMapView::addRowAndReturnSourceRow(int referenceSourceRow)
 }
 
 ///
-/// \brief FormRegisterMapView::editSourceRow
+/// \brief FormDataMapView::editSourceRow
 ///
-void FormRegisterMapView::editSourceRow(int sourceRow)
+void FormDataMapView::editSourceRow(int sourceRow)
 {
     if (sourceRow < 0 || sourceRow >= _model->rowCount()) return;
 
@@ -1050,9 +1050,9 @@ void FormRegisterMapView::editSourceRow(int sourceRow)
 }
 
 ///
-/// \brief FormRegisterMapView::on_actionAdd_triggered
+/// \brief FormDataMapView::on_actionAdd_triggered
 ///
-void FormRegisterMapView::on_actionAdd_triggered()
+void FormDataMapView::on_actionAdd_triggered()
 {
     const int newSourceRow = addRowAndReturnSourceRow();
     editSourceRow(newSourceRow);
@@ -1060,9 +1060,9 @@ void FormRegisterMapView::on_actionAdd_triggered()
 }
 
 ///
-/// \brief FormRegisterMapView::on_actionInsert_triggered
+/// \brief FormDataMapView::on_actionInsert_triggered
 ///
-void FormRegisterMapView::on_actionInsert_triggered()
+void FormDataMapView::on_actionInsert_triggered()
 {
     const QModelIndex currentProxyIdx = ui->tableView->currentIndex();
     if (!currentProxyIdx.isValid()) return;
@@ -1088,9 +1088,9 @@ void FormRegisterMapView::on_actionInsert_triggered()
 }
 
 ///
-/// \brief FormRegisterMapView::on_actionDelete_triggered
+/// \brief FormDataMapView::on_actionDelete_triggered
 ///
-void FormRegisterMapView::on_actionDelete_triggered()
+void FormDataMapView::on_actionDelete_triggered()
 {
     const auto selected = ui->tableView->selectionModel()->selectedRows();
     if (selected.isEmpty()) return;
@@ -1104,9 +1104,9 @@ void FormRegisterMapView::on_actionDelete_triggered()
 }
 
 ///
-/// \brief FormRegisterMapView::on_actionClear_triggered
+/// \brief FormDataMapView::on_actionClear_triggered
 ///
-void FormRegisterMapView::on_actionClear_triggered()
+void FormDataMapView::on_actionClear_triggered()
 {
     // Collect source rows of all currently visible (proxy) rows
     QList<int> sourceRows;
@@ -1118,9 +1118,9 @@ void FormRegisterMapView::on_actionClear_triggered()
 }
 
 ///
-/// \brief FormRegisterMapView::on_actionHexView_toggled
+/// \brief FormDataMapView::on_actionHexView_toggled
 ///
-void FormRegisterMapView::on_actionHexView_toggled(bool checked)
+void FormDataMapView::on_actionHexView_toggled(bool checked)
 {
     _displayDefinition.HexView = checked;
     _model->setHexView(checked);
@@ -1128,9 +1128,9 @@ void FormRegisterMapView::on_actionHexView_toggled(bool checked)
 }
 
 ///
-/// \brief FormRegisterMapView::updateActionState
+/// \brief FormDataMapView::updateActionState
 ///
-void FormRegisterMapView::updateActionState()
+void FormDataMapView::updateActionState()
 {
     const bool hasSelection = !ui->tableView->selectionModel()->selectedRows().isEmpty();
     ui->actionInsert->setEnabled(hasSelection);
@@ -1139,9 +1139,9 @@ void FormRegisterMapView::updateActionState()
 }
 
 ///
-/// \brief FormRegisterMapView::processRequest
+/// \brief FormDataMapView::processRequest
 ///
-void FormRegisterMapView::processRequest(quint8 deviceId, QModbusDataUnit::RegisterType type,
+void FormDataMapView::processRequest(quint8 deviceId, QModbusDataUnit::RegisterType type,
                                          quint16 startAddress, quint16 count)
 {
     if (count == 0 || count > 2000) return;
@@ -1156,7 +1156,7 @@ void FormRegisterMapView::processRequest(quint8 deviceId, QModbusDataUnit::Regis
             const QModbusDataUnit singleUnit(type, startAddress + i, QVector<quint16>{value});
             _model->applyMbDataChange(deviceId, singleUnit);
         } else if (_autoAddOnRequest) {
-            RegisterMapEntry entry;
+            DataMapEntry entry;
             entry.value = value;
             entry.type  = (type == QModbusDataUnit::Coils ||
                            type == QModbusDataUnit::DiscreteInputs)
@@ -1169,9 +1169,9 @@ void FormRegisterMapView::processRequest(quint8 deviceId, QModbusDataUnit::Regis
 }
 
 ///
-/// \brief FormRegisterMapView::setupToolBar
+/// \brief FormDataMapView::setupToolBar
 ///
-void FormRegisterMapView::setupToolBar()
+void FormDataMapView::setupToolBar()
 {
     // Expanding spacer before filter area
     auto* spacerWidget = new QWidget(ui->toolBar);
@@ -1239,24 +1239,24 @@ void FormRegisterMapView::setupToolBar()
 }
 
 ///
-/// \brief FormRegisterMapView::setupServerConnections
+/// \brief FormDataMapView::setupServerConnections
 ///
-void FormRegisterMapView::setupServerConnections()
+void FormDataMapView::setupServerConnections()
 {
     connect(&_mbMultiServer, &ModbusMultiServer::requestOnConnection,
-            this, &FormRegisterMapView::on_mbRequest);
+            this, &FormDataMapView::on_mbRequest);
     connect(&_mbMultiServer, &ModbusMultiServer::dataChanged,
-            this, &FormRegisterMapView::on_mbDataChanged);
+            this, &FormDataMapView::on_mbDataChanged);
     connect(&_mbMultiServer, &ModbusMultiServer::timestampChanged,
-            this, &FormRegisterMapView::on_mbTimestampChanged);
+            this, &FormDataMapView::on_mbTimestampChanged);
     connect(&_mbMultiServer, &ModbusMultiServer::descriptionChanged,
-            this, &FormRegisterMapView::on_mbDescriptionChanged);
+            this, &FormDataMapView::on_mbDescriptionChanged);
 }
 
 ///
-/// \brief FormRegisterMapView::columnWidths
+/// \brief FormDataMapView::columnWidths
 ///
-QList<int> FormRegisterMapView::columnWidths() const
+QList<int> FormDataMapView::columnWidths() const
 {
     const auto* hdr = ui->tableView->horizontalHeader();
     QList<int> widths;
@@ -1266,11 +1266,12 @@ QList<int> FormRegisterMapView::columnWidths() const
 }
 
 ///
-/// \brief FormRegisterMapView::setColumnWidths
+/// \brief FormDataMapView::setColumnWidths
 ///
-void FormRegisterMapView::setColumnWidths(const QList<int>& widths)
+void FormDataMapView::setColumnWidths(const QList<int>& widths)
 {
     auto* hdr = ui->tableView->horizontalHeader();
     for (int i = 0; i < widths.size() && i < hdr->count(); ++i)
         if (widths[i] > 0) hdr->resizeSection(i, widths[i]);
 }
+

@@ -1,4 +1,4 @@
-﻿#include "modbuslimits.h"
+#include "modbuslimits.h"
 #include "modbusmultiserver.h"
 #include "datasimulator.h"
 #include "dialogcoilsimulation.h"
@@ -188,3 +188,4 @@ void DialogWriteStatusRegister::on_pushButtonSimulation_clicked()
         done(2);
     }
 }
+

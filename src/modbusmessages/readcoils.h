@@ -122,3 +122,4 @@ public:
 };
 
 #endif // READCOILS_H
+

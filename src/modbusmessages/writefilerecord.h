@@ -121,3 +121,4 @@ public:
 };
 
 #endif // WRITEFILERECORD_H
+

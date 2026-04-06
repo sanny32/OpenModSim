@@ -1,4 +1,4 @@
-﻿#include <QFile>
+#include <QFile>
 #include <QApplication>
 #include <QPlainTextEdit>
 #include "aboutdatawidget.h"
@@ -319,3 +319,4 @@ void DialogAbout::on_labelLicense_clicked()
     dlg->setLayout(layout);
     dlg->show();
 }
+

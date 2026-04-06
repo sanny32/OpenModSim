@@ -38,3 +38,4 @@ QHexValidator::State QHexValidator::validate(QString& input, int&) const
 
     return QValidator::Invalid;
 }
+

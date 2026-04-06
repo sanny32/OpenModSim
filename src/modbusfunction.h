@@ -132,3 +132,4 @@ private:
 };
 
 #endif // MODBUSFUNCTION_H
+

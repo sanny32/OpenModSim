@@ -30,3 +30,4 @@ void QFixedSizeDialog::showEvent(QShowEvent* e)
         }
     }
 }
+

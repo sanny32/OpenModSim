@@ -17,3 +17,4 @@ protected:
 };
 
 #endif // CUSTOMFRAME_H
+

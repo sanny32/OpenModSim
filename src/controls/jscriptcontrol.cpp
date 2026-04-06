@@ -1,4 +1,4 @@
-﻿#include <QMetaEnum>
+#include <QMetaEnum>
 #include <QScrollBar>
 #include "modbusmultiserver.h"
 #include "findreplacebar.h"
@@ -597,4 +597,5 @@ QXmlStreamReader& operator>>(QXmlStreamReader& xml, JScriptControl* ctrl)
 
     return xml;
 }
+
 

@@ -10,7 +10,7 @@ enum class ProjectFormType
     Data = 0,
     Traffic,
     Script,
-    RegisterMap
+    DataMap
 };
 
 struct ProjectFormRef
@@ -59,13 +59,13 @@ private:
     static QIcon iconFor(ProjectFormType type, bool open, bool running, const QIcon& dataOpen,
                          const QIcon& dataClosed, const QIcon& trafficOpen, const QIcon& trafficClosed,
                          const QIcon& scriptIdle, const QIcon& scriptClosed, const QIcon& scriptRunning,
-                         const QIcon& registerMapOpen, const QIcon& registerMapClosed);
+                         const QIcon& DataMapOpen, const QIcon& DataMapClosed);
 
 private:
-    QTreeWidgetItem* _dataRoot        = nullptr;
-    QTreeWidgetItem* _trafficRoot     = nullptr;
-    QTreeWidgetItem* _scriptRoot      = nullptr;
-    QTreeWidgetItem* _registerMapRoot = nullptr;
+    QTreeWidgetItem* _dataRoot    = nullptr;
+    QTreeWidgetItem* _dataMapRoot = nullptr;
+    QTreeWidgetItem* _trafficRoot = nullptr;
+    QTreeWidgetItem* _scriptRoot  = nullptr;
 
     QIcon _iconData;
     QIcon _iconDataClosed;
@@ -74,8 +74,9 @@ private:
     QIcon _iconScriptIdle;
     QIcon _iconScriptClosed;
     QIcon _iconScriptRunning;
-    QIcon _iconRegisterMap;
-    QIcon _iconRegisterMapClosed;
+    QIcon _iconDataMap;
+    QIcon _iconDataMapClosed;
 };
 
 #endif // PROJECTTREEWIDGET_H
+

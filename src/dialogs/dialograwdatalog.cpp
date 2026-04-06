@@ -342,3 +342,4 @@ void DialogRawDataLog::on_comboBoxRowLimit_currentTextChanged(const QString& tex
 
     ui->comboBoxRowLimit->setCurrentText(QString::number(model->rowLimit()));
 }
+

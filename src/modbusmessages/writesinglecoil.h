@@ -120,3 +120,4 @@ public:
 };
 
 #endif // WRITESINGLECOIL_H
+

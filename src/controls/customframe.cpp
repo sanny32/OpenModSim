@@ -31,3 +31,4 @@ void CustomFrame::paintEvent(QPaintEvent* e)
 
     QFrame::paintEvent(e);
 }
+

@@ -99,3 +99,4 @@ void DialogMsgParser::on_pushButtonParse_clicked()
     _mm = ModbusMessage::create(data, protocol, QDateTime::currentDateTime(), ui->request->isChecked());
     ui->info->setModbusMessage(_mm);
 }
+

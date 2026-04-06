@@ -57,3 +57,4 @@ inline QFont defaultMonospaceFont(int pointSize = -1)
 }
 
 #endif // FONTUTILS_H
+

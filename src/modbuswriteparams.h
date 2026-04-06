@@ -40,3 +40,4 @@ struct ModbusMaskWriteParams
 Q_DECLARE_METATYPE(ModbusMaskWriteParams)
 
 #endif // MODBUSWRITEPARAMS_H
+

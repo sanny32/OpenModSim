@@ -46,3 +46,4 @@ void SearchLineEdit::on_textEdited(const QString& text)
 {
     emit searchText(text);
 }
+

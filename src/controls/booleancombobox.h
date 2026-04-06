@@ -14,3 +14,4 @@ public:
 };
 
 #endif // BOOLEANCOMBOBOX_H
+

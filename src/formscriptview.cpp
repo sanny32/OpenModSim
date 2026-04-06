@@ -626,3 +626,4 @@ void FormScriptView::disconnectEditSlots()
     disconnect(_parent, &MainWindow::find, ui->scriptControl, &JScriptControl::showFind);
     disconnect(_parent, &MainWindow::replace, ui->scriptControl, &JScriptControl::showReplace);
 }
+

@@ -136,3 +136,4 @@ public:
 };
 
 #endif // WRITEMULTIPLECOILS_H
+

@@ -1,4 +1,4 @@
-﻿#include "modbuslimits.h"
+#include "modbuslimits.h"
 #include "dialogsetuppresetdata.h"
 #include "ui_dialogsetuppresetdata.h"
 
@@ -103,3 +103,4 @@ void DialogSetupPresetData::accept()
     _params.Length = ui->lineEditNumberOfPoints->value<int>();
     QFixedSizeDialog::accept();
 }
+

@@ -75,3 +75,4 @@ void CheckableGroupBox::paintEvent(QPaintEvent*)
 
     paint.drawComplexControl(QStyle::CC_GroupBox, option);
 }
+

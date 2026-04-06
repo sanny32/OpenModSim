@@ -1,4 +1,4 @@
-﻿#include <QtWidgets>
+#include <QtWidgets>
 #include "colorswatch.h"
 #include "controls/addressbasecombobox.h"
 #include "dialogpreferences.h"
@@ -289,3 +289,4 @@ QFont DialogPreferences::fontFromControls(QFontComboBox* familyCombo, QSpinBox* 
     font.setStyleStrategy(antialiasCheck->isChecked() ? QFont::PreferAntialias : QFont::NoAntialias);
     return font;
 }
+

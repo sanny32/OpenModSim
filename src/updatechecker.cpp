@@ -101,3 +101,4 @@ void UpdateChecker::onReplyFinished(QNetworkReply* reply)
         emit newVersionAvailable(versionStr, htmlUrl);
     }
 }
+

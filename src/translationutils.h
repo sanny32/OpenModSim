@@ -36,3 +36,4 @@ inline QString translationLang()
 }
 
 #endif // TRANSLATIONUTILS_H
+

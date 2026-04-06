@@ -403,3 +403,4 @@ void AppLogOutput::exportLog()
     for (int i = 0; i < ui->listWidget->count(); ++i)
         out << ui->listWidget->item(i)->text() << '\n';
 }
+

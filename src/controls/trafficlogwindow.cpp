@@ -208,3 +208,4 @@ void TrafficLogWindow::retranslateUi()
     // Retranslate FC combo first item
     _funcCodeFilter->setItemText(0, tr("All"));
 }
+

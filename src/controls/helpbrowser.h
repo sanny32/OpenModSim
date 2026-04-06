@@ -46,3 +46,4 @@ private:
 };
 
 #endif // HELPBROWSER_H
+

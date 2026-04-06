@@ -29,3 +29,4 @@ private:
 };
 
 #endif // BITPATTERNCONTROL_H
+

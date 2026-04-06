@@ -668,3 +668,4 @@ QModbusResponse ModbusRtuSerialServer::forwardProcessRequest(const QModbusPdu &r
 
     return resp;
 }
+

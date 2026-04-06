@@ -30,3 +30,4 @@ void FlowControlTypeComboBox::setCurrentFlowControl(QSerialPort::FlowControl fct
     const auto idx = findData(fctrl);
     setCurrentIndex(idx);
 }
+

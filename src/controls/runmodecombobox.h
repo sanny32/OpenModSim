@@ -27,3 +27,4 @@ private slots:
 };
 
 #endif // RUNMODECOMBOBOX_H
+

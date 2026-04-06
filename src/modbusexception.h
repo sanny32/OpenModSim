@@ -66,3 +66,4 @@ private:
 };
 
 #endif // MODBUSEXCEPTION_H
+

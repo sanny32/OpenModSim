@@ -70,3 +70,4 @@ inline QModbusCommEvent::EventByte operator|(QModbusCommEvent::ReceiveFlag rf,
                                              QModbusCommEvent::EventByte b) { return operator|(b, rf); }
 
 #endif // QMODBUSCOMMEVENT_H
+

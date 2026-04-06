@@ -27,3 +27,4 @@ private slots:
 };
 
 #endif // ADDRESSBASECOMBOBOX_H
+

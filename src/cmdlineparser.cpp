@@ -21,3 +21,4 @@ CmdLineParser::CmdLineParser()
     QCommandLineOption noSessionOption(QStringList() << _no_session, tr("Do not use program session."));
     addOption(noSessionOption);
 }
+

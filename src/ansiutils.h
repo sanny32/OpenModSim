@@ -66,3 +66,4 @@ inline QString printableAnsi(const QByteArray& ansi, const QString& codepage, co
 }
 
 #endif // ANSIUTILS_H
+

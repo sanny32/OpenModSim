@@ -1,4 +1,4 @@
-﻿#include <QBitArray>
+#include <QBitArray>
 #include <QModbusDeviceIdentification>
 #include <QLoggingCategory>
 #include "modbusserver.h"
@@ -1318,3 +1318,4 @@ void ModbusServer::storeModbusCommEvent(const QModbusCommEvent &eventByte)
 
 #undef CHECK_SIZE_EQUALS
 #undef CHECK_SIZE_LESS_THAN
+

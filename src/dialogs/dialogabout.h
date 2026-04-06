@@ -34,3 +34,4 @@ private:
 };
 
 #endif // DIALOGABOUT_H
+

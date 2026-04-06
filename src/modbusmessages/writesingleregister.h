@@ -118,3 +118,4 @@ public:
 };
 
 #endif // WRITESINGLEREGISTER_H
+

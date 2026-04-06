@@ -135,3 +135,4 @@ void RecentFileActionList::updateMenu()
 
     _placeholder->setVisible(isEmpty());
 }
+

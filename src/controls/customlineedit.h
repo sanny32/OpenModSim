@@ -16,3 +16,4 @@ public:
 };
 
 #endif // CUSTOMLINEEDIT_H
+

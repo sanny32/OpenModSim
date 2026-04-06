@@ -74,3 +74,4 @@ void AddressBaseComboBox::on_currentIndexChanged(int index)
 {
     emit addressBaseChanged(itemData(index).value<AddressBase>());
 }
+

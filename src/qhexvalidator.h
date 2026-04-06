@@ -19,3 +19,4 @@ private:
 };
 
 #endif // QHEXVALIDATOR_H
+

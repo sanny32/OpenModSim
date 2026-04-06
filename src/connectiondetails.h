@@ -512,3 +512,4 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, ConnectionDetails& c
 }
 
 #endif // CONNECTIONDETAILS_H
+

@@ -30,3 +30,4 @@ void ParityTypeComboBox::setCurrentParity(QSerialPort::Parity parity)
     const auto idx = findData(parity);
     setCurrentIndex(idx);
 }
+

@@ -94,3 +94,4 @@ public:
 };
 
 #endif // GETCOMMEVENTCOUNTER_H
+

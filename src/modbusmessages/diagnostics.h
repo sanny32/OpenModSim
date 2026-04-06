@@ -119,3 +119,4 @@ public:
 };
 
 #endif // DIAGNOSTICS_H
+

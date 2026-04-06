@@ -424,3 +424,4 @@ inline QString registerTypeName(QModbusDataUnit::RegisterType type)
 }
 
 #endif // ENUMS_H
+

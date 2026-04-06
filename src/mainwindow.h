@@ -22,7 +22,7 @@ class MdiArea;
 class FormDataView;
 class FormTrafficView;
 class FormScriptView;
-class FormRegisterMapView;
+class FormDataMapView;
 class QMenu;
 class QAction;
 
@@ -127,7 +127,7 @@ private:
     FormDataView* currentDataForm() const;
     FormTrafficView* currentTrafficForm() const;
     FormScriptView* currentScriptForm() const;
-    FormRegisterMapView* currentRegisterMapForm() const;
+    FormDataMapView* currentDataMapForm() const;
     QWidget* currentDataOrTrafficForm() const;
     void forceCoils(QModbusDataUnit::RegisterType type);
     void presetRegs(QModbusDataUnit::RegisterType type);
@@ -180,3 +180,4 @@ private:
 };
 
 #endif // MAINWINDOW_H
+

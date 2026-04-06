@@ -184,3 +184,4 @@ void ScriptEditorWindow::updateScriptBar()
     if (_intervalSpin) _intervalSpin->setEnabled(!running);
     if (_runOnStartupCheck) _runOnStartupCheck->setEnabled(!running);
 }
+

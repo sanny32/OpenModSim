@@ -134,3 +134,4 @@ public:
 };
 
 #endif // MASKWRITEREGISTER_H
+

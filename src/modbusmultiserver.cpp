@@ -1458,3 +1458,4 @@ void ModbusMultiServer::on_dataWritten(int deviceId, QModbusDataUnit::RegisterTy
 
     setData(deviceId, data);
 }
+

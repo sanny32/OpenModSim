@@ -29,3 +29,4 @@ void BooleanComboBox::setCurrentValue(bool value)
     const auto idx = findData(value);
     setCurrentIndex(idx);
 }
+

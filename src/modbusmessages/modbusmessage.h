@@ -251,3 +251,4 @@ Q_DECLARE_METATYPE(ModbusMessage::ProtocolType)
 Q_DECLARE_METATYPE(QSharedPointer<const ModbusMessage>)
 
 #endif // MODBUSMESSAGE_H
+

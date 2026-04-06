@@ -891,3 +891,4 @@ void DialogForceMultipleRegisters::updateTableWidget()
     ui->tableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Fixed);
     ui->tableWidget->verticalHeader()->setSectionResizeMode(QHeaderView::Fixed);
 }
+

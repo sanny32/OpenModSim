@@ -45,3 +45,4 @@ private:
 };
 
 #endif // MDITABBAR_H
+

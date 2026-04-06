@@ -1,4 +1,4 @@
-﻿#include "dialogsetupserialport.h"
+#include "dialogsetupserialport.h"
 #include "ui_dialogsetupserialport.h"
 
 ///
@@ -68,3 +68,4 @@ void DialogSetupSerialPort::on_comboBoxFlowControl_currentIndexChanged(int)
     const auto fc = ui->comboBoxFlowControl->currentFlowControl();
     ui->comboBoxRTSControl->setEnabled(fc != QSerialPort::HardwareControl);
 }
+

@@ -13,3 +13,4 @@ TranspScrollArea::TranspScrollArea(QWidget* parent)
     p.setColor(QPalette::Window, Qt::transparent);
     setPalette(p);
 }
+

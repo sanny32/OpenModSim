@@ -116,3 +116,4 @@ private:
 };
 
 #endif // NUMERICLINEEDIT_H
+

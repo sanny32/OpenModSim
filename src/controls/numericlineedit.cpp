@@ -933,3 +933,4 @@ void NumericLineEdit::on_hexViewToggled(bool on)
     on_rangeChanged(_minValue, _maxValue);
     emit hexViewChanged(on);
 }
+

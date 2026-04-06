@@ -1,4 +1,4 @@
-﻿#include "modbusmessages.h"
+#include "modbusmessages.h"
 
 
 ///
@@ -198,3 +198,4 @@ QSharedPointer<const ModbusMessage> ModbusMessage::create(const QByteArray& data
             return QSharedPointer<const ModbusMessage>(new ModbusMessage(data, protocol, timestamp, request));
     }
 }
+

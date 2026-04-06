@@ -1,4 +1,4 @@
-﻿#include <QPainter>
+#include <QPainter>
 #include <QPrinter>
 #include <QPalette>
 #include <QDateTime>
@@ -1018,6 +1018,7 @@ void FormTrafficView::appendTrafficEntry(const ConnectionDetails& cd,
         updateExportActionState();
     }
 }
+
 
 
 

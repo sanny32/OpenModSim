@@ -258,3 +258,4 @@ void MainStatusBar::onNewVersionAvailable(const QString& version, const QString&
     _bellButton->setToolTip(tr("New version %1 is available. Click to download.").arg(version));
 }
 
+

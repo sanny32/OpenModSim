@@ -104,3 +104,4 @@ private:
 };
 
 #endif // MDIAREA_H
+

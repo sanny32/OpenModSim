@@ -27,3 +27,4 @@ private:
 };
 
 #endif // CHECKABLEGROUPBOX_H
+

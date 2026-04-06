@@ -51,3 +51,4 @@ private:
 };
 
 #endif // DIALOGWRITEREGISTER_H
+

@@ -25,3 +25,4 @@ private:
 };
 
 #endif // QINT64VALIDATOR_H
+

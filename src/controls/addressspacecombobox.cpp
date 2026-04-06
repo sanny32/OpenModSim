@@ -77,3 +77,4 @@ void AddressSpaceComboBox::on_currentIndexChanged(int index)
         emit addressSpaceChanged(_currentValue);
     }
 }
+

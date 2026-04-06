@@ -104,3 +104,4 @@ private:
 };
 
 #endif // APPPREFERENCES_H
+

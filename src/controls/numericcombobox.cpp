@@ -122,3 +122,4 @@ void NumericComboBox::onCurrentTextChanged(const QString& text)
     if (ok)
         emit currentValueChanged(qBound(minimum(), value, maximum()));
 }
+

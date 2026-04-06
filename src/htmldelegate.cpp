@@ -104,3 +104,4 @@ QSize HtmlDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelInd
 
     return QSize(doc.idealWidth(), doc.size().height());
 }
+

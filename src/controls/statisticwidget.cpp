@@ -149,3 +149,4 @@ void StatisticWidget::updateStatistic()
     ui->labelNumberRequests->setText(QString(tr("Requests: %1")).arg(_requests));
     ui->labelNumberResponses->setText(QString(tr("Responses: %1")).arg(_responses));
 }
+

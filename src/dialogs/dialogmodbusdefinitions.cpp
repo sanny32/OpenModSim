@@ -1,4 +1,4 @@
-﻿#include <QPushButton>
+#include <QPushButton>
 #include "dialogmodbusdefinitions.h"
 #include "ui_dialogmodbusdefinitions.h"
 
@@ -139,3 +139,4 @@ void DialogModbusDefinitions::updateModbusDefinitions(const ModbusDefinitions& d
 
     ui->buttonBox->button(QDialogButtonBox::Apply)->setEnabled(false);
 }
+

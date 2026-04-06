@@ -68,3 +68,4 @@ void RunModeComboBox::on_currentIndexChanged(int index)
 {
     emit runModeChanged(itemData(index).value<RunMode>());
 }
+

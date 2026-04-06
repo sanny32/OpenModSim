@@ -18,3 +18,4 @@ void CustomLineEdit::setText(const QString& text)
     QLineEdit::setText(text);
     emit textChanged(text);
 }
+

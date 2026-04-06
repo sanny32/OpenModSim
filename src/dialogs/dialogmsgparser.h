@@ -35,3 +35,4 @@ private:
 };
 
 #endif // DIALOGMSGPARSER_H
+

@@ -77,3 +77,4 @@ private:
 };
 
 #endif // MODBUSLOGWIDGET_H
+

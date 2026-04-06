@@ -1,4 +1,4 @@
-﻿#include <QtWidgets>
+#include <QtWidgets>
 #include <QBuffer>
 #include <QPrinterInfo>
 #include <QPrintDialog>
@@ -18,7 +18,7 @@
 #include "menuconnect.h"
 #include "controls/mdiareaex.h"
 #include "formscriptview.h"
-#include "formregistermapview.h"
+#include "formdatamapview.h"
 #include "applogger.h"
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
@@ -38,7 +38,7 @@ ProjectFormKind newFormKindFromSetting(int value)
         case ProjectFormKind::Data:
         case ProjectFormKind::Traffic:
         case ProjectFormKind::Script:
-        case ProjectFormKind::RegisterMap:
+        case ProjectFormKind::DataMap:
             return static_cast<ProjectFormKind>(value);
         default:
             return ProjectFormKind::Data;
@@ -119,7 +119,7 @@ void printOnForm(QWidget* widget, QPrinter* printer)
     if (auto* frm = qobject_cast<FormDataView*>(widget)) frm->print(printer);
     else if (auto* frm = qobject_cast<FormTrafficView*>(widget)) frm->print(printer);
     else if (auto* frm = qobject_cast<FormScriptView*>(widget)) frm->print(printer);
-    else if (auto* frm = qobject_cast<FormRegisterMapView*>(widget)) frm->print(printer);
+    else if (auto* frm = qobject_cast<FormDataMapView*>(widget)) frm->print(printer);
 }
 
 }
@@ -285,7 +285,7 @@ MainWindow::MainWindow(const QString& profile, bool useSession, QWidget *parent)
     // New form kind wiring
     connect(ui->actionNewDataView,        &QAction::triggered, this, [this]{ activateNewFormKind(ProjectFormKind::Data,        ui->actionNewDataView); });
     connect(ui->actionNewTrafficView,     &QAction::triggered, this, [this]{ activateNewFormKind(ProjectFormKind::Traffic,     ui->actionNewTrafficView); });
-    connect(ui->actionNewRegisterMapView, &QAction::triggered, this, [this]{ activateNewFormKind(ProjectFormKind::RegisterMap, ui->actionNewRegisterMapView); });
+    connect(ui->actionNewDataMapView, &QAction::triggered, this, [this]{ activateNewFormKind(ProjectFormKind::DataMap, ui->actionNewDataMapView); });
     connect(ui->actionNewScript,          &QAction::triggered, this, [this]{ activateNewFormKind(ProjectFormKind::Script,      ui->actionNewScript); });
 
     loadAppSettings(profile);
@@ -449,7 +449,7 @@ void MainWindow::on_awake()
         } else if (auto* f = qobject_cast<FormScriptView*>(frm)) {
             isScript = true;
             canPrint = _selectedPrinter != nullptr && !f->script().isEmpty();
-        } else if (auto* f = qobject_cast<FormRegisterMapView*>(frm)) {
+        } else if (auto* f = qobject_cast<FormDataMapView*>(frm)) {
             canPrint = _selectedPrinter != nullptr && !f->isEmpty();
         }
     }
@@ -547,7 +547,7 @@ QWidget* MainWindow::createNewForm(ProjectFormKind kind)
             }
             break;
         }
-        case ProjectFormKind::RegisterMap:
+        case ProjectFormKind::DataMap:
             break;
     }
 
@@ -575,7 +575,7 @@ void MainWindow::restoreNewFormKindIcon()
     switch(_newFormKind) {
         case ProjectFormKind::Traffic:     ui->actionNew->setIcon(ui->actionNewTrafficView->icon());     break;
         case ProjectFormKind::Script:      ui->actionNew->setIcon(ui->actionNewScript->icon());          break;
-        case ProjectFormKind::RegisterMap: ui->actionNew->setIcon(ui->actionNewRegisterMapView->icon()); break;
+        case ProjectFormKind::DataMap: ui->actionNew->setIcon(ui->actionNewDataMapView->icon()); break;
         default:                           ui->actionNew->setIcon(ui->actionNewDataView->icon());        break;
     }
 }
@@ -1053,9 +1053,9 @@ FormScriptView* MainWindow::currentScriptForm() const
     return _project->currentScriptMdiChild();
 }
 
-FormRegisterMapView* MainWindow::currentRegisterMapForm() const
+FormDataMapView* MainWindow::currentDataMapForm() const
 {
-    return _project->currentRegisterMapMdiChild();
+    return _project->currentDataMapMdiChild();
 }
 
 ///
@@ -1466,4 +1466,5 @@ void MainWindow::openRecentProject(const QString& filePath)
     loadProject(filePath);
     addRecentProject(filePath);
 }
+
 

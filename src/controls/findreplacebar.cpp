@@ -598,3 +598,4 @@ void FindReplaceBar::onClose()
     _userMoved = false;
     emit closed();
 }
+

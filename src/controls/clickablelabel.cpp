@@ -19,3 +19,4 @@ void ClickableLabel::mouseReleaseEvent(QMouseEvent* event)
     emit clicked();
     QLabel::mouseReleaseEvent(event);
 }
+

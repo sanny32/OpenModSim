@@ -188,3 +188,4 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, ModbusErrorSimulatio
 }
 
 #endif // MODBUSERRORSIMULATIONS_H
+

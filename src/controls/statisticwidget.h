@@ -56,3 +56,4 @@ private:
 };
 
 #endif // STATISTICWIDGET_H
+

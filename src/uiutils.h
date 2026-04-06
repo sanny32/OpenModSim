@@ -78,3 +78,4 @@ inline void crossFadeWindowIcon(QWidget* wnd, const QIcon& from, const QIcon& to
 }
 
 #endif // UIUTILS_H
+

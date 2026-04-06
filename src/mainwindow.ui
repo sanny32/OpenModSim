@@ -64,12 +64,12 @@
     </property>
     <widget class="QMenu" name="menuNew">
      <property name="title">
-      <string>New</string>
+     <string>New</string>
      </property>
      <addaction name="actionNewDataView"/>
+     <addaction name="actionNewDataMapView"/>
      <addaction name="actionNewTrafficView"/>
      <addaction name="actionNewScript"/>
-     <addaction name="actionNewRegisterMapView"/>
     </widget>
     <addaction name="menuNew"/>
     <addaction name="separator"/>
@@ -558,13 +558,13 @@
     <string>New Script</string>
    </property>
   </action>
-  <action name="actionNewRegisterMapView">
+  <action name="actionNewDataMapView">
    <property name="icon">
     <iconset resource="resources.qrc">
      <normaloff>:/res/actionNewData.png</normaloff>:/res/actionNewData.png</iconset>
    </property>
    <property name="text">
-    <string>New Register Map</string>
+    <string>New DataMap</string>
    </property>
   </action>
   <action name="actionImportScript">
@@ -598,3 +598,4 @@
  </resources>
  <connections/>
 </ui>
+

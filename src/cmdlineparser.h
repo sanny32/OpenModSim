@@ -22,3 +22,4 @@ public:
 };
 
 #endif // CMDLINEPARSER_H
+

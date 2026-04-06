@@ -1,4 +1,4 @@
-﻿#include <QPrinterInfo>
+#include <QPrinterInfo>
 #include <QPushButton>
 #include "dialogprintsettings.h"
 #include "ui_dialogprintsettings.h"
@@ -225,3 +225,4 @@ QList<PapeSource> DialogPrintSettings::supportedPaperSources(const QPrinter* pri
 
     return listPaperSource;
 }
+

@@ -310,3 +310,4 @@ void ByteListTextEdit::updateValue()
         break;
     }
 }
+

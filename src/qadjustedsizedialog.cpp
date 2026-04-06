@@ -30,3 +30,4 @@ void QAdjustedSizeDialog::showEvent(QShowEvent* e)
         }
     }
 }
+

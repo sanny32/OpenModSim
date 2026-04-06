@@ -25,3 +25,4 @@ signals:
 };
 
 #endif // CONSOLE_H
+
