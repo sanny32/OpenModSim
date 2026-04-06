@@ -27,6 +27,12 @@ constexpr const char* kDeleteLockedProperty = "DeleteLocked";
 
 QUuid formIdOf(QWidget* widget);
 
+QString dataMapIconPath(bool deleteLocked)
+{
+    return deleteLocked ? QStringLiteral(":/res/icon-data-locked.png")
+                        : QStringLiteral(":/res/icon-show-data.png");
+}
+
 QString panelName(const MdiAreaEx* mdi, const MdiArea* area)
 {
     if (!mdi || !area)
@@ -346,6 +352,7 @@ void AppProject::syncAutoRequestMap(const ModbusDefinitions& defs)
         if (auto* map = ensureAutoRequestMap()) {
             map->setAutoAddOnRequest(true);
             map->setProperty(kDeleteLockedProperty, true);
+            map->setWindowIcon(QIcon(dataMapIconPath(true)));
             _projectTree->updateFormTitle(map);
             openFormOnActivePanel(map);
             _projectTree->activateForm(map);
@@ -356,6 +363,7 @@ void AppProject::syncAutoRequestMap(const ModbusDefinitions& defs)
     if (auto* map = findAutoRequestMap()) {
         map->setAutoAddOnRequest(false);
         map->setProperty(kDeleteLockedProperty, false);
+        map->setWindowIcon(QIcon(dataMapIconPath(false)));
         _projectTree->updateFormTitle(map);
     }
 }
