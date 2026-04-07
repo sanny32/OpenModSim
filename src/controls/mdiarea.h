@@ -95,6 +95,7 @@ private:
     bool _destroying = false;
     bool _tabsExpanding = false;
     bool _updatingTabBarGeometry = false;
+    bool _focusMovedFromOutsideMdi = false;
     int _tabBarTrailingInset = 0;
     QPointer<QTabBar> _nativeTabBar;
     MdiTabBar* _tabBar = nullptr;

@@ -92,8 +92,21 @@ static QMdiSubWindow* mdiOwnerOf(QWidget* widget)
 MdiArea::MdiArea(QWidget* parent)
     : QMdiArea(parent)
 {
+    // Suppress Qt's built-in showNormal()/showMaximized() cycle on window
+    // activation changes. We manage maximization ourselves via
+    // enforceTabbedSubWindowState(), so Qt's automatic behaviour only causes
+    // spurious repaints and visual glitches when focus moves through MDI children.
+    setOption(QMdiArea::DontMaximizeSubWindowOnActivation, true);
     setViewMode(QMdiArea::TabbedView);
     connect(this, &QMdiArea::subWindowActivated, this, &MdiArea::on_subWindowActivated);
+
+    // Track whether focus moved into MDI from outside. Connected here — before
+    // any QMdiSubWindow is created — so our slot fires first (Qt FIFO order),
+    // ahead of QMdiSubWindowPrivate::_q_focusChanged. That guarantees the flag
+    // is set by the time on_subWindowActivated() is called.
+    connect(qApp, &QApplication::focusChanged, this, [this](QWidget* old, QWidget*) {
+        _focusMovedFromOutsideMdi = old && old != this && !isAncestorOf(old);
+    });
     AppTrace::log("MdiArea::MdiArea",
                   QStringLiteral("constructed %1").arg(areaTag(this)));
 }
@@ -364,40 +377,6 @@ bool MdiArea::eventFilter(QObject* obj, QEvent* event)
         }
     }
 
-    if (event && event->type() == QEvent::FocusIn && viewMode() == QMdiArea::TabbedView && _tabBar) {
-        auto* widget = qobject_cast<QWidget*>(obj);
-        auto* owner = mdiOwnerOf(widget);
-        const auto windows = QMdiArea::subWindowList();
-
-        if (owner && windows.contains(owner)) {
-            QMdiSubWindow* tabCurrent = _tabBar->currentSubWindow();
-            if ((!tabCurrent || !windows.contains(tabCurrent)) && _tabBar->currentIndex() >= 0)
-                tabCurrent = subWindowAtIndex(_tabBar->currentIndex());
-            if (tabCurrent && !windows.contains(tabCurrent))
-                tabCurrent = nullptr;
-
-            const bool activationRequested = _requestedActivation && _requestedActivation == owner;
-            if (!activationRequested && tabCurrent && owner != tabCurrent) {
-                AppTrace::log("MdiArea::eventFilter",
-                              QStringLiteral("%1 blocked foreign FocusIn obj=%2 owner=%3 tabCurrent=%4")
-                                  .arg(AppTrace::objectTag(this))
-                                  .arg(AppTrace::objectTag(obj))
-                                  .arg(AppTrace::subWindowTag(owner))
-                                  .arg(AppTrace::subWindowTag(tabCurrent)));
-
-                QPointer<QMdiSubWindow> stable = tabCurrent;
-                QTimer::singleShot(0, this, [this, stable]() {
-                    if (!stable)
-                        return;
-                    if (!QMdiArea::subWindowList().contains(stable.data()))
-                        return;
-                    setActiveSubWindow(stable.data());
-                });
-                return true;
-            }
-        }
-    }
-
     if (obj == _tabBar) {
         switch (event->type()) {
             case QEvent::Paint:
@@ -410,6 +389,14 @@ bool MdiArea::eventFilter(QObject* obj, QEvent* event)
             default:
                 break;
         }
+    }
+
+    if (event->type() == QEvent::Show) {
+        // enforceTabbedSubWindowState requires isVisible() == true, which is
+        // guaranteed here. Handles the case where DontMaximizeSubWindowOnActivation
+        // suppresses Qt's own showMaximized() inside emitWindowActivated().
+        if (auto* wnd = qobject_cast<QMdiSubWindow*>(obj))
+            enforceTabbedSubWindowState(wnd);
     }
 
     if (event->type() == QEvent::Close) {
@@ -655,6 +642,11 @@ void MdiArea::on_subWindowActivated(QMdiSubWindow* wnd)
         return;
     }
 
+    // Consume the flag that was set by our focusChanged handler (which fires
+    // before QMdiSubWindow's _q_focusChanged due to FIFO connection order).
+    const bool focusFromOutside = _focusMovedFromOutsideMdi;
+    _focusMovedFromOutsideMdi = false;
+
     const auto windows = QMdiArea::subWindowList();
     const bool activationRequested = _requestedActivation && _requestedActivation == wnd;
     const bool focusInsideMdi = focus && (focus == this || isAncestorOf(focus));
@@ -669,16 +661,24 @@ void MdiArea::on_subWindowActivated(QMdiSubWindow* wnd)
     if (!stable && focusOwner && windows.contains(focusOwner))
         stable = focusOwner;
 
+    // A window not yet registered in _tabBar is newly added — never treat it as
+    // transient even if focus arrived from outside MDI at the same moment.
+    const bool isNewWindow = _tabBar && _tabBar->indexOfSubWindow(wnd) < 0;
+
+    // focusFromOutside covers the case where focus moved from a dock widget (or
+    // any non-MDI widget) into a wrong MDI subwindow: at that point focusInsideWnd
+    // is already true, so the plain !focusInsideWnd guard would miss it.
     const bool transientActivation =
         !activationRequested &&
+        !isNewWindow &&
         stable &&
         stable != wnd &&
-        !focusInsideWnd &&
+        (!focusInsideWnd || focusFromOutside) &&
         ((tabCurrent && tabCurrent != wnd) || !focus || focusInsideOtherWnd || !focusInsideMdi);
 
     if (transientActivation) {
         AppTrace::log("MdiArea::on_subWindowActivated",
-                      QStringLiteral("%1 blocked transient activation wnd=%2 stable=%3 tabCurrent=%4 requested=%5 focusOwner=%6 focusInsideMdi=%7 focusInsideWnd=%8")
+                      QStringLiteral("%1 blocked transient activation wnd=%2 stable=%3 tabCurrent=%4 requested=%5 focusOwner=%6 focusInsideMdi=%7 focusInsideWnd=%8 focusFromOutside=%9 isNewWindow=%10")
                           .arg(AppTrace::objectTag(this))
                           .arg(AppTrace::subWindowTag(wnd))
                           .arg(AppTrace::subWindowTag(stable))
@@ -686,7 +686,9 @@ void MdiArea::on_subWindowActivated(QMdiSubWindow* wnd)
                           .arg(activationRequested)
                           .arg(AppTrace::subWindowTag(focusOwner))
                           .arg(focusInsideMdi)
-                          .arg(focusInsideWnd));
+                          .arg(focusInsideWnd)
+                          .arg(focusFromOutside)
+                          .arg(isNewWindow));
 
         if (_tabBar && _tabBar->currentSubWindow() != stable) {
             const QSignalBlocker blocker(_tabBar);
@@ -1029,9 +1031,8 @@ void MdiArea::enforceTabbedSubWindowState(QMdiSubWindow* wnd)
     if(!wnd->isVisible())
         return;
 
-    if (testOption(QMdiArea::DontMaximizeSubWindowOnActivation))
-        return;
-
+    // DontMaximizeSubWindowOnActivation is always set, so we handle
+    // maximize/restore ourselves — do not guard on that option here.
     if (wnd->isMinimized())
         wnd->showNormal();
 
