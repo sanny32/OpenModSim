@@ -10,6 +10,8 @@ constexpr int ItemTypeRole        = Qt::UserRole + 1;
 constexpr int ItemTypeForm        = 1;
 constexpr int ItemScriptRunning   = Qt::UserRole + 3;
 constexpr int ItemOpenRole        = Qt::UserRole + 4;
+constexpr const char* kSplitAutoCloneProperty = "SplitAutoClone";
+constexpr const char* kSplitOriginIdProperty  = "SplitOriginId";
 
 QIcon dimmedIcon(const QString& path)
 {
@@ -183,6 +185,36 @@ void ProjectTreeWidget::setFormOpen(QWidget* frm, bool open)
 void ProjectTreeWidget::activateForm(QWidget* frm)
 {
     auto item = itemForForm(frm);
+    if (!item && frm && frm->property(kSplitAutoCloneProperty).toBool()) {
+        const QUuid originId = frm->property(kSplitOriginIdProperty).toUuid();
+        const QString title = frm->windowTitle();
+
+        auto findOriginalInRoot = [&](QTreeWidgetItem* root) -> QTreeWidgetItem* {
+            if (!root)
+                return nullptr;
+
+            for (int i = 0; i < root->childCount(); ++i) {
+                auto* candidateItem = root->child(i);
+                auto* candidateForm = static_cast<QWidget*>(candidateItem->data(0, Qt::UserRole).value<void*>());
+                if (!candidateForm)
+                    continue;
+
+                const bool sameOrigin = !originId.isNull()
+                                        && candidateForm->property(kSplitOriginIdProperty).toUuid() == originId;
+                const bool sameTitle = candidateForm->windowTitle() == title;
+                if (sameOrigin || sameTitle)
+                    return candidateItem;
+            }
+
+            return nullptr;
+        };
+
+        item = findOriginalInRoot(_dataRoot);
+        if (!item) item = findOriginalInRoot(_trafficRoot);
+        if (!item) item = findOriginalInRoot(_scriptRoot);
+        if (!item) item = findOriginalInRoot(_dataMapRoot);
+    }
+
     if (!item)
         return;
 

@@ -243,10 +243,14 @@ MainWindow::MainWindow(const QString& profile, bool useSession, QWidget *parent)
     ui->mdiArea->setActivationOrder(QMdiArea::ActivationHistoryOrder);
     connect(ui->mdiArea, &MdiAreaEx::subWindowActivated, this, &MainWindow::updateMenuWindow);
     connect(ui->mdiArea, &MdiAreaEx::subWindowActivated, this, [this](QMdiSubWindow* wnd) {
-        if(wnd) {
+        if(wnd)
             markModified();
-            _projectTree->activateForm(wnd->widget());
-        }
+
+        QMdiSubWindow* stableWnd = ui->mdiArea->activeSubWindow();
+        if(!stableWnd)
+            stableWnd = ui->mdiArea->currentSubWindow();
+        if(stableWnd)
+            _projectTree->activateForm(stableWnd->widget());
     });
     connect(ui->mdiArea, &MdiAreaEx::tabsReordered, this, &MainWindow::markModified);
     connect(ui->mdiArea, &MdiAreaEx::tabContextMenuRequested, this, &MainWindow::on_tabContextMenuRequested);
