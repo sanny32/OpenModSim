@@ -1753,58 +1753,88 @@ void AppProject::restoreActiveWindows()
     if(_pendingActivePrimaryWin.isEmpty() && _pendingActiveSecWin.isEmpty() && _pendingActivePanel.isEmpty())
         return;
 
+    auto findWindowByTitle = [](MdiArea* area, const QString& title) -> QMdiSubWindow* {
+        if(!area || title.isEmpty())
+            return nullptr;
+
+        for(auto* wnd : area->localSubWindowList()) {
+            if(wnd && wnd->widget() && wnd->widget()->windowTitle() == title)
+                return wnd;
+        }
+
+        return nullptr;
+    };
+
+    QMdiSubWindow* primaryTarget = nullptr;
     if(!_pendingActivePrimaryWin.isEmpty()) {
         if(auto* primary = _mdiArea->primaryArea()) {
-            for(auto* wnd : primary->localSubWindowList()) {
-                if(wnd && wnd->widget() && wnd->widget()->windowTitle() == _pendingActivePrimaryWin) {
-                    AppTrace::log("AppProject::restoreActiveWindows",
-                                  QStringLiteral("primary->setActiveSubWindow %1")
-                                      .arg(AppTrace::subWindowTag(wnd)));
-                    primary->setActiveSubWindow(wnd);
-                    break;
-                }
+            primaryTarget = findWindowByTitle(primary, _pendingActivePrimaryWin);
+            if(primaryTarget) {
+                AppTrace::log("AppProject::restoreActiveWindows",
+                              QStringLiteral("primary->setActiveSubWindow %1")
+                                  .arg(AppTrace::subWindowTag(primaryTarget)));
+                primary->setActiveSubWindow(primaryTarget);
             }
         }
     }
 
+    QMdiSubWindow* secondaryTarget = nullptr;
     if(!_pendingActiveSecWin.isEmpty()) {
         if(auto* secondary = secondaryArea()) {
-            for(auto* wnd : secondary->localSubWindowList()) {
-                if(wnd && wnd->widget() && wnd->widget()->windowTitle() == _pendingActiveSecWin) {
-                    AppTrace::log("AppProject::restoreActiveWindows",
-                                  QStringLiteral("secondary->setActiveSubWindow %1")
-                                      .arg(AppTrace::subWindowTag(wnd)));
-                    secondary->setActiveSubWindow(wnd);
-                    break;
-                }
+            secondaryTarget = findWindowByTitle(secondary, _pendingActiveSecWin);
+            if(secondaryTarget) {
+                AppTrace::log("AppProject::restoreActiveWindows",
+                              QStringLiteral("secondary->setActiveSubWindow %1")
+                                  .arg(AppTrace::subWindowTag(secondaryTarget)));
+                secondary->setActiveSubWindow(secondaryTarget);
             }
         }
     }
 
-    // Final safety sync: make sure the visible tab and the active QMdi page are aligned.
-    if (auto* primary = _mdiArea->primaryArea()) {
-        if (auto* tabBar = qobject_cast<MdiTabBar*>(primary->tabBar())) {
-            if (auto* tabWnd = tabBar->currentSubWindow()) {
-                AppTrace::log("AppProject::restoreActiveWindows",
-                              QStringLiteral("sync primary->setActiveSubWindow(tabCurrent) %1")
-                                  .arg(AppTrace::subWindowTag(tabWnd)));
-                primary->setActiveSubWindow(tabWnd);
-            }
-        }
-    }
+    QMdiSubWindow* finalTarget = nullptr;
 
     if (_pendingActivePanel.compare(QLatin1String(kPanelRight), Qt::CaseInsensitive) == 0) {
-        if (auto* secondary = secondaryArea())
-            if (auto* wnd = secondary->activeSubWindow())
-                _mdiArea->setActiveSubWindow(wnd);
-    } else if (auto* primary = _mdiArea->primaryArea()) {
-        if (auto* wnd = primary->activeSubWindow())
-            _mdiArea->setActiveSubWindow(wnd);
+        finalTarget = secondaryTarget;
+        if(!finalTarget)
+            if(auto* secondary = secondaryArea())
+                finalTarget = secondary->activeSubWindow();
+    } else {
+        finalTarget = primaryTarget;
+        if(!finalTarget)
+            if(auto* primary = _mdiArea->primaryArea())
+                finalTarget = primary->activeSubWindow();
     }
+
+    if(finalTarget) {
+        AppTrace::log("AppProject::restoreActiveWindows",
+                      QStringLiteral("mdiArea->setActiveSubWindow(finalTarget) %1")
+                          .arg(AppTrace::subWindowTag(finalTarget)));
+        _mdiArea->setActiveSubWindow(finalTarget);
+    }
+
+    QPointer<QMdiSubWindow> queuedPrimaryTarget = primaryTarget;
+    QPointer<QMdiSubWindow> queuedSecondaryTarget = secondaryTarget;
+    QPointer<QMdiSubWindow> queuedFinalTarget = finalTarget;
 
     _pendingActivePrimaryWin.clear();
     _pendingActiveSecWin.clear();
     _pendingActivePanel.clear();
+
+    QTimer::singleShot(0, _mdiArea, [this, queuedPrimaryTarget, queuedSecondaryTarget, queuedFinalTarget]() {
+        if(!_mdiArea)
+            return;
+
+        if(queuedPrimaryTarget)
+            if(auto* primary = _mdiArea->primaryArea())
+                primary->setActiveSubWindow(queuedPrimaryTarget);
+
+        if(queuedSecondaryTarget)
+            if(auto* secondary = secondaryArea())
+                secondary->setActiveSubWindow(queuedSecondaryTarget);
+
+        if(queuedFinalTarget)
+            _mdiArea->setActiveSubWindow(queuedFinalTarget);
+    });
 }
 
 ///
