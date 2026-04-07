@@ -3145,21 +3145,21 @@ Script.onInit(()=&gt;{
         <translation type="vanished">РњР°СЂРєРµСЂ</translation>
     </message>
     <message>
-        <location filename="../controls/mainstatusbar.cpp" line="42"/>
-        <location filename="../controls/mainstatusbar.cpp" line="145"/>
-        <location filename="../controls/mainstatusbar.cpp" line="145"/>
+        <location filename="../controls/mainstatusbar.cpp" line="48"/>
+        <location filename="../controls/mainstatusbar.cpp" line="164"/>
+        <location filename="../controls/mainstatusbar.cpp" line="164"/>
         <source>No updates available</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/mainstatusbar.cpp" line="143"/>
-        <location filename="../controls/mainstatusbar.cpp" line="258"/>
-        <location filename="../controls/mainstatusbar.cpp" line="258"/>
+        <location filename="../controls/mainstatusbar.cpp" line="162"/>
+        <location filename="../controls/mainstatusbar.cpp" line="286"/>
+        <location filename="../controls/mainstatusbar.cpp" line="286"/>
         <source>New version %1 is available. Click to download.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/mainstatusbar.cpp" line="170"/>
+        <location filename="../controls/mainstatusbar.cpp" line="190"/>
         <source>Unit Identifiers: %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3168,12 +3168,12 @@ Script.onInit(()=&gt;{
         <translation type="obsolete">РЈР·РµР»: %1</translation>
     </message>
     <message>
-        <location filename="../controls/mainstatusbar.cpp" line="218"/>
+        <location filename="../controls/mainstatusbar.cpp" line="246"/>
         <source>Modbus/TCP Srv %1:%2</source>
         <translation>Modbus/TCP СЃРµСЂРІРµСЂ %1:%2</translation>
     </message>
     <message>
-        <location filename="../controls/mainstatusbar.cpp" line="222"/>
+        <location filename="../controls/mainstatusbar.cpp" line="250"/>
         <source>Port %1:%2:%3:%4:%5</source>
         <translation>РџРѕСЂС‚ %1:%2:%3:%4:%5</translation>
     </message>
@@ -3190,42 +3190,47 @@ Script.onInit(()=&gt;{
         <translation type="vanished">РџРѕСЂС‚ %1: %2</translation>
     </message>
     <message>
-        <location filename="../controls/mainstatusbar.cpp" line="182"/>
+        <location filename="../controls/mainstatusbar.cpp" line="202"/>
         <source>No Resp</source>
         <translation>РќРµС‚ РѕС‚РІ.</translation>
     </message>
     <message>
-        <location filename="../controls/mainstatusbar.cpp" line="184"/>
+        <location filename="../controls/mainstatusbar.cpp" line="204"/>
         <source>Bad ID</source>
         <translation>РџР»РѕС…РѕР№ ID</translation>
     </message>
     <message>
-        <location filename="../controls/mainstatusbar.cpp" line="186"/>
+        <location filename="../controls/mainstatusbar.cpp" line="206"/>
         <source>Ill Func</source>
         <translation>РќРµР». С„СѓРЅРєС†.</translation>
     </message>
     <message>
-        <location filename="../controls/mainstatusbar.cpp" line="188"/>
+        <location filename="../controls/mainstatusbar.cpp" line="208"/>
         <source>Dev Busy</source>
         <translation>РЈСЃС‚СЂ. Р·Р°РЅСЏС‚Рѕ</translation>
     </message>
     <message>
-        <location filename="../controls/mainstatusbar.cpp" line="190"/>
+        <location filename="../controls/mainstatusbar.cpp" line="210"/>
         <source>Bad CRC</source>
         <translation>РџР»РѕС…РѕР№ CRC</translation>
     </message>
     <message>
-        <location filename="../controls/mainstatusbar.cpp" line="192"/>
+        <location filename="../controls/mainstatusbar.cpp" line="212"/>
         <source>Delay %1ms</source>
         <translation>Р—Р°РґРµСЂР¶РєР° %1РјСЃ</translation>
     </message>
     <message>
-        <location filename="../controls/mainstatusbar.cpp" line="194"/>
+        <location filename="../controls/mainstatusbar.cpp" line="214"/>
         <source>Rnd Delay %1ms</source>
         <translation>РЎР»СѓС‡. Р·Р°РґРµСЂР¶РєР° %1РјСЃ</translation>
     </message>
     <message>
-        <location filename="../controls/mainstatusbar.cpp" line="246"/>
+        <location filename="../controls/mainstatusbar.cpp" line="232"/>
+        <source>Clients: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../controls/mainstatusbar.cpp" line="274"/>
         <source>Req: %1  Resp: %2</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4583,12 +4588,12 @@ Script.onInit(()=&gt;{
 <context>
     <name>ModbusMultiServer</name>
     <message>
-        <location filename="../modbusmultiserver.cpp" line="908"/>
+        <location filename="../modbusmultiserver.cpp" line="929"/>
         <source>An incorrect device ID was specified (%1)</source>
         <translation>РќРµРєРѕСЂСЂРµРєС‚РЅРѕ Р·РЅР°СЏРµРЅРёРµ РЅРѕРјРµСЂР° СѓСЃС‚СЂРѕР№СЃС‚РІР° (%1)</translation>
     </message>
     <message>
-        <location filename="../modbusmultiserver.cpp" line="1457"/>
+        <location filename="../modbusmultiserver.cpp" line="1478"/>
         <source>Connection error. %1</source>
         <translation>РћС€РёР±РєР° РїРѕРґРєР»СЋС‡РµРЅРёСЏ. %1</translation>
     </message>

@@ -23,6 +23,7 @@ public:
 
     QVariant connectionParameter(QModbusDevice::ConnectionParameter parameter) const override;
     void setConnectionParameter(QModbusDevice::ConnectionParameter parameter, const QVariant &value) override;
+    int connectedClientCount() const { return _connections.size(); }
 
     QIODevice *device() const override {return nullptr; }
 

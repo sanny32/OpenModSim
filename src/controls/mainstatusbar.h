@@ -28,12 +28,15 @@ private:
     void updateDeviceIdsInfo();
     void updateConnectionInfo(QLabel* label, const ConnectionDetails& cd);
     void updateErrorSimInfo();
+    void updateClientCountInfo();
     void updateRequestCountInfo();
     void onNewVersionAvailable(const QString& version, const QString& url);
 
 private:
     QList<QLabel*> _labels;
+    const ModbusMultiServer& _server;
     QLabel* _deviceIdsLabel;
+    QLabel* _clientCountLabel;
     QLabel* _errorSimLabel;
     QLabel* _requestCountLabel;
     QList<int> _deviceIds;

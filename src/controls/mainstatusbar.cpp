@@ -12,7 +12,9 @@
 ///
 MainStatusBar::MainStatusBar(const ModbusMultiServer& server, QWidget* parent)
     : QStatusBar(parent)
+    , _server(server)
     , _deviceIdsLabel(new QLabel(this))
+    , _clientCountLabel(new QLabel(this))
     , _errorSimLabel(new QLabel(this))
     , _requestCountLabel(new QLabel(this))
     , _updateChecker(new UpdateChecker(this))
@@ -20,6 +22,10 @@ MainStatusBar::MainStatusBar(const ModbusMultiServer& server, QWidget* parent)
     _requestCountLabel->setContentsMargins(6, 0, 6, 0);
     insertPermanentWidget(0, _requestCountLabel);
     updateRequestCountInfo();
+
+    _clientCountLabel->setContentsMargins(6, 0, 6, 0);
+    insertPermanentWidget(1, _clientCountLabel);
+    updateClientCountInfo();
 
     _deviceIdsLabel->setContentsMargins(6, 0, 6, 0);
     addPermanentWidget(_deviceIdsLabel);
@@ -62,6 +68,16 @@ MainStatusBar::MainStatusBar(const ModbusMultiServer& server, QWidget* parent)
         updateDeviceIdsInfo();
     });
 
+    connect(&server, &ModbusMultiServer::clientConnected, this, [this](const ConnectionDetails&, const QString&, quint16)
+    {
+        updateClientCountInfo();
+    });
+
+    connect(&server, &ModbusMultiServer::clientDisconnected, this, [this](const ConnectionDetails&, const QString&, quint16)
+    {
+        updateClientCountInfo();
+    });
+
     connect(&server, &ModbusMultiServer::connected, this, [&](const ConnectionDetails& cd)
     {
         auto label = new QLabel(this);
@@ -73,6 +89,7 @@ MainStatusBar::MainStatusBar(const ModbusMultiServer& server, QWidget* parent)
 
         _labels.append(label);
         insertWidget(_labels.size() - 1, label);
+        updateClientCountInfo();
     });
 
     connect(&server, &ModbusMultiServer::disconnected, this, [&](const ConnectionDetails& cd)
@@ -94,6 +111,8 @@ MainStatusBar::MainStatusBar(const ModbusMultiServer& server, QWidget* parent)
             _responseCount = 0;
             updateRequestCountInfo();
         }
+
+        updateClientCountInfo();
     });
 
     connect(&server, &ModbusMultiServer::request, this, [this](const QSharedPointer<const ModbusMessage>&)
@@ -146,6 +165,7 @@ void MainStatusBar::changeEvent(QEvent* event)
 
         updateDeviceIdsInfo();
         updateErrorSimInfo();
+        updateClientCountInfo();
     }
 
     QStatusBar::changeEvent(event);
@@ -202,6 +222,14 @@ void MainStatusBar::updateErrorSimInfo()
         _errorSimLabel->setText(warn + flags.join(", "));
         _errorSimLabel->setVisible(true);
     }
+}
+
+///
+/// \brief MainStatusBar::updateClientCountInfo
+///
+void MainStatusBar::updateClientCountInfo()
+{
+    _clientCountLabel->setText(tr("Clients: %1").arg(_server.connectedClientCount()));
 }
 
 ///

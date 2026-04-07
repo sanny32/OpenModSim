@@ -392,6 +392,27 @@ QList<ConnectionDetails> ModbusMultiServer::connections() const
     return conns;
 }
 
+int ModbusMultiServer::connectedClientCount() const
+{
+    if(QThread::currentThread() != _workerThread)
+    {
+        int result = 0;
+        QMetaObject::invokeMethod(const_cast<ModbusMultiServer*>(this), [this, &result]() {
+            result = connectedClientCount();
+        }, Qt::BlockingQueuedConnection);
+        return result;
+    }
+
+    int count = 0;
+    for (auto&& s : _modbusServerList)
+    {
+        if (auto tcpServer = qobject_cast<ModbusTcpServer*>(s.get()))
+            count += tcpServer->connectedClientCount();
+    }
+
+    return count;
+}
+
 ///
 /// \brief ModbusMultiServer::getModbusDefinitions
 /// \return

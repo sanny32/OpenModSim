@@ -38,6 +38,7 @@ public:
     void closeConnections();
 
     QList<ConnectionDetails> connections() const;
+    int connectedClientCount() const;
 
     ModbusDefinitions getModbusDefinitions() const;
     void setModbusDefinitions(const ModbusDefinitions& defs);
