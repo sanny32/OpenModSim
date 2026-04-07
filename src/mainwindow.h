@@ -25,6 +25,7 @@ class FormScriptView;
 class FormDataMapView;
 class QMenu;
 class QAction;
+class QComboBox;
 
 ///
 /// \brief The MainWindow class
@@ -45,6 +46,8 @@ public:
     void applyZoom(int zoomPercent);
     void applyColors(const QColor& bg, const QColor& fg, const QColor& status, const QColor& addr, const QColor& comment);
     void applyCheckForUpdates(bool enabled);
+    void applyGlobalAddressBase(bool zeroBased, bool persist = true);
+    void applyGlobalHexView(bool enabled, bool persist = true);
 
     void loadProject(const QString& filename);
     void saveProject(const QString& filename);
@@ -149,6 +152,9 @@ private:
     void clearRecentProjects();
     void openRecentProject(const QString& filePath);
     void updateProjectWindowTitle();
+    void setupGlobalViewToolbar();
+    void syncGlobalViewControls();
+    void applyGlobalViewStateToForm(QWidget* frm);
 
 private:
     Ui::MainWindow *ui;
@@ -177,6 +183,8 @@ private:
     bool _isModified = false;
     QMenu* _openRecentMenu = nullptr;
     QAction* _clearRecentAction = nullptr;
+    QComboBox* _globalAddressBaseCombo = nullptr;
+    QWidget* _globalAddressBaseWidget = nullptr;
     QHash<QModbusDataUnit::RegisterType, SetupPresetParams> _presetParams;
 
     AppProject* _project = nullptr;

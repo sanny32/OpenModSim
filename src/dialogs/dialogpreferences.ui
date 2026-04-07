@@ -646,45 +646,21 @@
                 <property name="verticalSpacing">
                  <number>8</number>
                 </property>
-                <item row="0" column="0">
-                 <widget class="QLabel" name="labelAddressBase">
-                  <property name="text">
-                   <string>Address Base:</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="1">
-                 <widget class="AddressBaseComboBox" name="comboBoxAddressBase">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                 </widget>
-                </item>
-                <item row="1" column="0" colspan="2">
-                 <widget class="QCheckBox" name="checkBoxHexAddress">
-                  <property name="text">
-                   <string>Hex Address</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="2" column="0" colspan="2">
+                <item row="0" column="0" colspan="2">
                  <widget class="QCheckBox" name="checkBoxLeadingZeros">
                   <property name="text">
-                   <string>Leading Zeros</string>
+                   <string>Leading Zeros for Unsigned</string>
                   </property>
                  </widget>
                 </item>
-                <item row="3" column="0">
+                <item row="1" column="0">
                  <widget class="QLabel" name="labelColumnsDistance">
                   <property name="text">
                    <string>Columns Distance:</string>
                   </property>
                  </widget>
                 </item>
-                <item row="3" column="1">
+                <item row="1" column="1">
                  <widget class="QSpinBox" name="spinBoxColumnsDistance">
                   <property name="minimumSize">
                    <size>
@@ -1051,11 +1027,6 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>AddressBaseComboBox</class>
-   <extends>QComboBox</extends>
-   <header>addressbasecombobox.h</header>
-  </customwidget>
-  <customwidget>
    <class>ColorSwatch</class>
    <extends>QPushButton</extends>
    <header>colorswatch.h</header>
@@ -1099,4 +1070,3 @@
   </connection>
  </connections>
 </ui>
-

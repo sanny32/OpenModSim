@@ -46,6 +46,8 @@ public:
 
     TrafficViewDefinitions displayDefinition() const;
     void setDisplayDefinition(const TrafficViewDefinitions& dd);
+    bool hexView() const { return _displayDefinition.HexView; }
+    void setHexView(bool enabled);
 
     QColor backgroundColor() const;
     void setBackgroundColor(const QColor& clr);
@@ -95,7 +97,6 @@ private slots:
     void on_actionPauseTraffic_toggled(bool checked);
     void on_actionClearTraffic_triggered();
     void on_actionExportTrafficLog_triggered();
-    void on_actionHexView_toggled(bool checked);
 
 private:
     struct TrafficLogEntry {
@@ -175,7 +176,13 @@ inline QSettings& operator <<(QSettings& out, FormTrafficView* frm)
         : frm->property("ParentGeometry").toRect();
     out.setValue("ViewRect", currentRect);
 
-    out << frm->displayDefinition();
+    const auto dd = frm->displayDefinition();
+    out.setValue("TrafficViewDefinitions/FormName", dd.FormName);
+    out.setValue("TrafficViewDefinitions/UnitFilter", dd.UnitFilter);
+    out.setValue("TrafficViewDefinitions/FunctionCodeFilter", dd.FunctionCodeFilter);
+    out.setValue("TrafficViewDefinitions/LogViewLimit", dd.LogViewLimit);
+    out.setValue("TrafficViewDefinitions/ExceptionsOnly", dd.ExceptionsOnly);
+    out.setValue("TrafficViewDefinitions/Autoscroll", dd.Autoscroll);
 
     return out;
 }
@@ -263,7 +270,14 @@ inline QXmlStreamWriter& operator <<(QXmlStreamWriter& xml, FormTrafficView* frm
     xml.writeEndElement();
 
     const auto dd = frm->displayDefinition();
-    xml << dd;
+    xml.writeStartElement("TrafficViewDefinitions");
+    xml.writeAttribute("FormName", dd.FormName);
+    xml.writeAttribute("UnitFilter", QString::number(dd.UnitFilter));
+    xml.writeAttribute("FunctionCodeFilter", QString::number(dd.FunctionCodeFilter));
+    xml.writeAttribute("LogViewLimit", QString::number(dd.LogViewLimit));
+    xml.writeAttribute("ExceptionsOnly", boolToString(dd.ExceptionsOnly));
+    xml.writeAttribute("Autoscroll", boolToString(dd.Autoscroll));
+    xml.writeEndElement();
 
     xml.writeEndElement(); // FormTrafficView
 

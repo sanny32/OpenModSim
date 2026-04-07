@@ -16,6 +16,7 @@
 #include "dialogmodbusdefinitions.h"
 #include "mainstatusbar.h"
 #include "menuconnect.h"
+#include "controls/addressbasecombobox.h"
 #include "controls/mdiareaex.h"
 #include "formscriptview.h"
 #include "formdatamapview.h"
@@ -84,14 +85,16 @@ void forEachTypedForm(MdiAreaT* mdiArea, Fn&& fn)
             fn(frm);
             continue;
         }
+        if (auto* frm = qobject_cast<FormDataMapView*>(wnd->widget())) {
+            fn(frm);
+            continue;
+        }
     }
 }
 
 template<typename TDefinitions>
 void applySharedDisplayDefaults(TDefinitions& target, const TDefinitions& defaults)
 {
-    target.ZeroBasedAddress = defaults.ZeroBasedAddress;
-    target.HexAddress = defaults.HexAddress;
     target.LeadingZeros = defaults.LeadingZeros;
     target.DataViewColumnsDistance = defaults.DataViewColumnsDistance;
 }
@@ -101,6 +104,8 @@ void applySharedDisplayDefaults(TrafficViewDefinitions& target, const TrafficVie
     target.LogViewLimit = defaults.LogViewLimit;
     target.UnitFilter = defaults.UnitFilter;
     target.FunctionCodeFilter = defaults.FunctionCodeFilter;
+    target.ExceptionsOnly = defaults.ExceptionsOnly;
+    target.Autoscroll = defaults.Autoscroll;
 }
 
 void applySharedDisplayDefaults(ScriptViewDefinitions& target, const ScriptViewDefinitions& defaults)
@@ -169,6 +174,7 @@ MainWindow::MainWindow(const QString& profile, bool useSession, QWidget *parent)
     ui->actionDisconnect->setMenu(menuDisconnect);
     qobject_cast<QToolButton*>(ui->toolBarMain->widgetForAction(ui->actionDisconnect))->setPopupMode(QToolButton::InstantPopup);
     qobject_cast<QToolButton*>(ui->toolBarMain->widgetForAction(ui->actionDisconnect))->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+    setupGlobalViewToolbar();
 
     const auto defaultPrinter = QPrinterInfo::defaultPrinter();
     if(!defaultPrinter.isNull())
@@ -254,6 +260,7 @@ MainWindow::MainWindow(const QString& profile, bool useSession, QWidget *parent)
             stableWnd = ui->mdiArea->currentSubWindow();
         if(stableWnd)
             _projectTree->activateForm(stableWnd->widget());
+        syncGlobalViewControls();
     });
     connect(ui->mdiArea, &MdiAreaEx::tabsReordered, this, &MainWindow::markModified);
     connect(ui->mdiArea, &MdiAreaEx::tabContextMenuRequested, this, &MainWindow::on_tabContextMenuRequested);
@@ -583,6 +590,7 @@ QWidget* MainWindow::createNewForm(ProjectFormKind kind)
             break;
     }
 
+    applyGlobalViewStateToForm(frm);
     frm->show();
     return frm;
 }
@@ -1108,6 +1116,11 @@ bool MainWindow::prepareWriteParams(QModbusDataUnit::RegisterType type,
 {
     outFrm = currentDataForm();
     outDd = outFrm ? outFrm->displayDefinition() : AppPreferences::instance().dataViewDefinitions();
+    if (!outFrm) {
+        const auto& prefs = AppPreferences::instance();
+        outDd.ZeroBasedAddress = prefs.globalZeroBasedAddress();
+        outDd.HexAddress = prefs.globalHexView();
+    }
     outDd.AddrSpace = _mbMultiServer.getModbusDefinitions().AddrSpace;
 
     outPreset = toPresetParams(outDd);
@@ -1179,6 +1192,9 @@ void MainWindow::presetRegs(QModbusDataUnit::RegisterType type)
 void MainWindow::loadProject(const QString& filename)
 {
     _project->loadProject(filename);
+    applyGlobalAddressBase(AppPreferences::instance().globalZeroBasedAddress(), false);
+    applyGlobalHexView(AppPreferences::instance().globalHexView(), false);
+    syncGlobalViewControls();
     _projectFilePath = QFileInfo(filename).absoluteFilePath();
     _lastProjectPath = _projectFilePath;
     _project->setSavePath(QFileInfo(filename).absoluteDir().absolutePath());
@@ -1350,6 +1366,7 @@ bool MainWindow::loadAppSettings(const QString& filename)
     _recentProjects.removeAll(QString());
     _recentProjects.removeDuplicates();
     _lastProjectPath = m.value(kLastProjectPathKey).toString();
+    syncGlobalViewControls();
 
     return true;
 }
@@ -1374,6 +1391,149 @@ void MainWindow::saveAppSettings()
     m.setValue(kNewFormKindKey, newFormKindToSetting(_newFormKind));
     m.setValue(kRecentProjectsKey, _recentProjects);
     m.setValue(kLastProjectPathKey, _lastProjectPath);
+}
+
+void MainWindow::setupGlobalViewToolbar()
+{
+    _globalAddressBaseCombo = new QComboBox(ui->toolBarMain);
+    _globalAddressBaseCombo->addItem(tr("1-based"), false);
+    _globalAddressBaseCombo->addItem(tr("0-based"), true);
+    _globalAddressBaseCombo->setMinimumWidth(84);
+
+    auto* label = new QLabel(tr("Address Base:"), ui->toolBarMain);
+    _globalAddressBaseWidget = new QWidget(ui->toolBarMain);
+    auto* layout = new QHBoxLayout(_globalAddressBaseWidget);
+    layout->setContentsMargins(9, 0, 9, 0);
+    layout->setSpacing(6);
+    layout->addWidget(label);
+    layout->addWidget(_globalAddressBaseCombo);
+
+    QAction* insertBefore = ui->actionMbDefinitions;
+    const auto actions = ui->toolBarMain->actions();
+    const int defsIndex = actions.indexOf(ui->actionMbDefinitions);
+    if (defsIndex > 0 && actions.at(defsIndex - 1)->isSeparator())
+        insertBefore = actions.at(defsIndex - 1);
+
+    ui->toolBarMain->insertSeparator(insertBefore);
+    ui->toolBarMain->insertWidget(insertBefore, _globalAddressBaseWidget);
+    ui->toolBarMain->insertAction(insertBefore, ui->actionHexView);
+
+    connect(_globalAddressBaseCombo, qOverload<int>(&QComboBox::currentIndexChanged), this, [this](int index) {
+        if (!_globalAddressBaseCombo)
+            return;
+        applyGlobalAddressBase(_globalAddressBaseCombo->itemData(index).toBool());
+    });
+    connect(ui->actionHexView, &QAction::toggled, this, [this](bool checked) {
+        applyGlobalHexView(checked);
+    });
+}
+
+///
+/// \brief MainWindow::syncGlobalViewControls
+///
+void MainWindow::syncGlobalViewControls()
+{
+    const auto& prefs = AppPreferences::instance();
+
+    if (_globalAddressBaseCombo) {
+        const QSignalBlocker blocker(_globalAddressBaseCombo);
+        const int index = _globalAddressBaseCombo->findData(prefs.globalZeroBasedAddress());
+        _globalAddressBaseCombo->setCurrentIndex(index >= 0 ? index : 0);
+    }
+
+    const QSignalBlocker blocker(ui->actionHexView);
+    ui->actionHexView->setChecked(prefs.globalHexView());
+}
+
+///
+/// \brief MainWindow::applyGlobalViewStateToForm
+/// \param frm
+///
+void MainWindow::applyGlobalViewStateToForm(QWidget* frm)
+{
+    if (!frm)
+        return;
+
+    const auto& prefs = AppPreferences::instance();
+    if (auto* data = qobject_cast<FormDataView*>(frm)) {
+        data->setZeroBasedAddress(prefs.globalZeroBasedAddress());
+        data->setDisplayHexAddresses(prefs.globalHexView());
+    } else if (auto* traffic = qobject_cast<FormTrafficView*>(frm)) {
+        traffic->setHexView(prefs.globalHexView());
+    } else if (auto* map = qobject_cast<FormDataMapView*>(frm)) {
+        map->setZeroBasedAddress(prefs.globalZeroBasedAddress());
+        map->setHexView(prefs.globalHexView());
+    }
+}
+
+///
+/// \brief MainWindow::applyGlobalAddressBase
+/// \param zeroBased
+/// \param persist
+///
+void MainWindow::applyGlobalAddressBase(bool zeroBased, bool persist)
+{
+    auto& prefs = AppPreferences::instance();
+    if (persist)
+        prefs.setGlobalZeroBasedAddress(zeroBased);
+
+    for (auto* frm : _project->forms(ProjectFormKind::Data))
+        if (auto* data = qobject_cast<FormDataView*>(frm))
+            data->setZeroBasedAddress(zeroBased);
+
+    for (auto* frm : _project->forms(ProjectFormKind::DataMap))
+        if (auto* map = qobject_cast<FormDataMapView*>(frm))
+            map->setZeroBasedAddress(zeroBased);
+
+    forEachTypedForm(ui->mdiArea, [zeroBased](auto* frm) {
+        if (!frm || !frm->property(kSplitAutoCloneProperty).toBool())
+            return;
+
+        if (auto* data = qobject_cast<FormDataView*>(frm))
+            data->setZeroBasedAddress(zeroBased);
+        else if (auto* map = qobject_cast<FormDataMapView*>(frm))
+            map->setZeroBasedAddress(zeroBased);
+    });
+
+    syncGlobalViewControls();
+}
+
+///
+/// \brief MainWindow::applyGlobalHexView
+/// \param enabled
+/// \param persist
+///
+void MainWindow::applyGlobalHexView(bool enabled, bool persist)
+{
+    auto& prefs = AppPreferences::instance();
+    if (persist)
+        prefs.setGlobalHexView(enabled);
+
+    for (auto* frm : _project->forms(ProjectFormKind::Data))
+        if (auto* data = qobject_cast<FormDataView*>(frm))
+            data->setDisplayHexAddresses(enabled);
+
+    for (auto* frm : _project->forms(ProjectFormKind::Traffic))
+        if (auto* traffic = qobject_cast<FormTrafficView*>(frm))
+            traffic->setHexView(enabled);
+
+    for (auto* frm : _project->forms(ProjectFormKind::DataMap))
+        if (auto* map = qobject_cast<FormDataMapView*>(frm))
+            map->setHexView(enabled);
+
+    forEachTypedForm(ui->mdiArea, [enabled](auto* frm) {
+        if (!frm || !frm->property(kSplitAutoCloneProperty).toBool())
+            return;
+
+        if (auto* data = qobject_cast<FormDataView*>(frm))
+            data->setDisplayHexAddresses(enabled);
+        else if (auto* traffic = qobject_cast<FormTrafficView*>(frm))
+            traffic->setHexView(enabled);
+        else if (auto* map = qobject_cast<FormDataMapView*>(frm))
+            map->setHexView(enabled);
+    });
+
+    syncGlobalViewControls();
 }
 
 

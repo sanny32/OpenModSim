@@ -265,7 +265,7 @@ TrafficViewDefinitions FormTrafficView::displayDefinition() const
         dd.Autoscroll = _autoscrollCheck->isChecked();
     }
 
-    dd.HexView = ui->actionHexView->isChecked();
+    dd.HexView = _displayDefinition.HexView;
 
     dd.normalize();
     return dd;
@@ -314,10 +314,6 @@ void FormTrafficView::setDisplayDefinition(const TrafficViewDefinitions& dd)
         _autoscrollCheck->setChecked(_displayDefinition.Autoscroll);
     }
 
-    {
-        QSignalBlocker b(ui->actionHexView);
-        ui->actionHexView->setChecked(_displayDefinition.HexView);
-    }
     ui->outputWidget->setDataType(_displayDefinition.HexView ? DataType::Hex : DataType::UInt16);
 
     ui->outputWidget->setAutosctollLogView(_displayDefinition.Autoscroll);
@@ -442,10 +438,6 @@ void FormTrafficView::setDisplayDefinitionSilent(const TrafficViewDefinitions& d
     if(_autoscrollCheck) {
         QSignalBlocker b(_autoscrollCheck);
         _autoscrollCheck->setChecked(dd.Autoscroll);
-    }
-    {
-        QSignalBlocker b(ui->actionHexView);
-        ui->actionHexView->setChecked(dd.HexView);
     }
     ui->outputWidget->setDataType(dd.HexView ? DataType::Hex : DataType::UInt16);
     ui->outputWidget->setAutosctollLogView(dd.Autoscroll);
@@ -673,12 +665,16 @@ void FormTrafficView::on_actionExportTrafficLog_triggered()
 }
 
 ///
-/// \brief FormTrafficView::on_actionHexView_toggled
-/// \param checked
+/// \brief FormTrafficView::setHexView
+/// \param enabled
 ///
-void FormTrafficView::on_actionHexView_toggled(bool checked)
+void FormTrafficView::setHexView(bool enabled)
 {
-    ui->outputWidget->setDataType(checked ? DataType::Hex : DataType::UInt16);
+    if (_displayDefinition.HexView == enabled)
+        return;
+
+    _displayDefinition.HexView = enabled;
+    ui->outputWidget->setDataType(enabled ? DataType::Hex : DataType::UInt16);
 }
 
 ///
@@ -691,7 +687,6 @@ void FormTrafficView::setupToolbarActions()
     ui->toolBarTraffic->removeAction(ui->actionPauseTraffic);
     ui->toolBarTraffic->removeAction(ui->actionClearTraffic);
     ui->toolBarTraffic->removeAction(ui->actionExportTrafficLog);
-    ui->toolBarTraffic->removeAction(ui->actionHexView);
 }
 
 ///
@@ -814,10 +809,6 @@ void FormTrafficView::setupToolbarLayout()
 
     ui->toolBarTraffic->addWidget(_autoscrollCheck);
     addToolbarSpacer(6);
-    ui->toolBarTraffic->addSeparator();
-    addToolbarSpacer(6);
-    ui->toolBarTraffic->addAction(ui->actionHexView);
-
     _trafficFilterStretch = new QWidget(ui->toolBarTraffic);
     _trafficFilterStretch->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
     ui->toolBarTraffic->addWidget(_trafficFilterStretch);

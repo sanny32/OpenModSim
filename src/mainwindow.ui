@@ -180,6 +180,7 @@
    <addaction name="separator"/>
    <addaction name="actionConnect"/>
    <addaction name="actionDisconnect"/>
+   <addaction name="actionHexView"/>
    <addaction name="separator"/>
    <addaction name="actionMbDefinitions"/>
    <addaction name="separator"/>
@@ -287,6 +288,21 @@
    </property>
    <property name="text">
     <string>Disconnect</string>
+   </property>
+  </action>
+  <action name="actionHexView">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/res/icon-hex-view.png</normaloff>:/res/icon-hex-view.png</iconset>
+   </property>
+   <property name="text">
+    <string>Hex View</string>
+   </property>
+   <property name="toolTip">
+    <string>Hex View</string>
    </property>
   </action>
   <action name="actionCascade">

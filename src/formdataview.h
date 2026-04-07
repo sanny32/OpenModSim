@@ -58,6 +58,9 @@ public:
     RegisterOrder registerOrder() const;
     void setRegisterOrder(RegisterOrder order);
 
+    bool zeroBasedAddress() const;
+    void setZeroBasedAddress(bool zeroBased);
+
     bool displayHexAddresses() const;
     void setDisplayHexAddresses(bool on);
 
@@ -138,7 +141,6 @@ private slots:
     void on_lineEditAddress_valueChanged(const QVariant&);
     void on_lineEditLength_valueChanged(const QVariant&);
     void on_lineEditDeviceId_valueChanged(const QVariant&, const QVariant&);
-    void on_comboBoxAddressBase_addressBaseChanged(AddressBase base);
     void on_comboBoxModbusPointType_pointTypeChanged(QModbusDataUnit::RegisterType value);
     void on_outputWidget_itemDoubleClicked(quint16 addr, const QVariant& value);
     void on_mbDataChanged(quint8 deviceId, const QModbusDataUnit& data);
@@ -191,7 +193,6 @@ inline QSettings& operator <<(QSettings& out, FormDataView* frm)
     out << frm->registerOrder();
     out << frm->byteOrder();
     out << frm->displayDefinition();
-    out.setValue("DisplayHexAddresses", frm->displayHexAddresses());
     out.setValue("Codepage", frm->codepage());
     out << frm->descriptionMap();
     out << frm->colorMap();
@@ -246,8 +247,6 @@ inline QSettings& operator >>(QSettings& in, FormDataView* frm)
     frm->setRegisterOrder(regOrder);
     frm->setByteOrder(byteOrder);
     frm->setDisplayDefinition(displayDefinition);
-
-    frm->setDisplayHexAddresses(in.value("DisplayHexAddresses").toBool());
     frm->setCodepage(in.value("Codepage").toString());
 
     for(auto it = descriptionMap.cbegin(); it != descriptionMap.cend(); ++it)
@@ -281,7 +280,6 @@ inline QXmlStreamWriter& operator <<(QXmlStreamWriter& xml, FormDataView* frm)
         xml.writeAttribute("Closed", "1");
     xml.writeAttribute("DataType", enumToString<DataType>(frm->dataType()));
     xml.writeAttribute("RegisterOrder", enumToString<RegisterOrder>(frm->registerOrder()));
-    xml.writeAttribute("DisplayHexAddresses", boolToString(frm->displayHexAddresses()));
     xml.writeAttribute("Codepage", frm->codepage());
     xml.writeAttribute("ByteOrder", enumToString<ByteOrder>(frm->byteOrder()));
 

@@ -130,6 +130,7 @@ private:
     QString            _savePath;
     QString            _pendingActivePrimaryWin;
     QString            _pendingActiveSecWin;
+    QString            _pendingActivePanel;
 };
 
 #endif // APPPROJECT_H

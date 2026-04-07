@@ -60,6 +60,12 @@ public:
     ScriptViewDefinitions scriptViewDefinitions() const { return _scriptViewDefinitions; }
     void setScriptViewDefinitions(const ScriptViewDefinitions& dd) { _scriptViewDefinitions = dd; }
 
+    bool globalZeroBasedAddress() const { return _globalZeroBasedAddress; }
+    void setGlobalZeroBasedAddress(bool value) { _globalZeroBasedAddress = value; }
+
+    bool globalHexView() const { return _globalHexView; }
+    void setGlobalHexView(bool value) { _globalHexView = value; }
+
     // ----- Script Editor -----
     QFont scriptFont() const { return _scriptFont; }
     void setScriptFont(const QFont& f) { _scriptFont = f; }
@@ -97,6 +103,8 @@ private:
     DataViewDefinitions _dataViewDefinitions;
     TrafficViewDefinitions _trafficViewDefinitions;
     ScriptViewDefinitions _scriptViewDefinitions;
+    bool          _globalZeroBasedAddress{ false };
+    bool          _globalHexView{ false };
     QFont         _scriptFont;
     bool          _codeAutoComplete{ true };
     bool          _autoShowConsoleOutput{ true };

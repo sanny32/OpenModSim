@@ -181,8 +181,6 @@ void DialogPreferences::loadFromPreferences()
     const auto trafficDd = prefs.trafficViewDefinitions();
     const auto scriptDd = prefs.scriptViewDefinitions();
 
-    ui->comboBoxAddressBase->setCurrentAddressBase(dataDd.ZeroBasedAddress ? AddressBase::Base0 : AddressBase::Base1);
-    ui->checkBoxHexAddress->setChecked(dataDd.HexAddress);
     ui->checkBoxLeadingZeros->setChecked(dataDd.LeadingZeros);
     ui->spinBoxColumnsDistance->setValue(dataDd.DataViewColumnsDistance);
     ui->spinBoxLogLimit->setValue(trafficDd.LogViewLimit);
@@ -240,16 +238,11 @@ void DialogPreferences::apply()
     auto trafficDd = prefs.trafficViewDefinitions();
     auto scriptDd = prefs.scriptViewDefinitions();
 
-    const bool zeroBasedAddress = (ui->comboBoxAddressBase->currentAddressBase() == AddressBase::Base0);
-    const bool hexAddress = ui->checkBoxHexAddress->isChecked();
     const bool leadingZeros = ui->checkBoxLeadingZeros->isChecked();
     const int columnsDistance = ui->spinBoxColumnsDistance->value();
-    const bool autoscrollLog = ui->checkBoxAutoscrollLog->isChecked();
     const int logLimit = ui->spinBoxLogLimit->value();
 
     auto applyDataDefaults = [=](auto& dd) {
-        dd.ZeroBasedAddress = zeroBasedAddress;
-        dd.HexAddress = hexAddress;
         dd.LeadingZeros = leadingZeros;
         dd.DataViewColumnsDistance = columnsDistance;
     };

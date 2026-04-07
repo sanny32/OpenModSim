@@ -69,22 +69,22 @@ FormDataView::FormDataView(ModbusMultiServer& server, DataSimulator* simulator, 
 
     ui->lineEditDeviceId->setInputRange(ModbusLimits::slaveRange());
     ui->lineEditDeviceId->setValue(1);
-    ui->lineEditDeviceId->setLeadingZeroes(true);
-    ui->lineEditDeviceId->setHexButtonVisible(true);
+    ui->lineEditDeviceId->setLeadingZeroes(false);
+    ui->lineEditDeviceId->setHexButtonVisible(false);
     server.addDeviceId(ui->lineEditDeviceId->value<int>());
 
     const auto mbDefs = _mbMultiServer.getModbusDefinitions();
 
-    ui->lineEditAddress->setLeadingZeroes(true);
-    ui->lineEditAddress->setInputRange(ModbusLimits::addressRange(mbDefs.AddrSpace, true));
-    ui->lineEditAddress->setValue(0);
-    ui->lineEditAddress->setHexButtonVisible(true);
+    ui->lineEditAddress->setLeadingZeroes(false);
+    ui->lineEditAddress->setInputRange(ModbusLimits::addressRange(mbDefs.AddrSpace, false));
+    ui->lineEditAddress->setValue(1);
+    ui->lineEditAddress->setHexButtonVisible(false);
 
-    ui->lineEditLength->setInputRange(lengthRangeForPointType(0, true, mbDefs.AddrSpace, QModbusDataUnit::HoldingRegisters));
+    ui->lineEditLength->setInputRange(lengthRangeForPointType(1, false, mbDefs.AddrSpace, QModbusDataUnit::HoldingRegisters));
     ui->lineEditLength->setValue(100);
-    ui->lineEditLength->setHexButtonVisible(true);
+    ui->lineEditLength->setLeadingZeroes(false);
+    ui->lineEditLength->setHexButtonVisible(false);
 
-    ui->comboBoxAddressBase->setCurrentAddressBase(AddressBase::Base1);
     ui->comboBoxModbusPointType->setCurrentPointType(QModbusDataUnit::HoldingRegisters);
 
     connect(this, &FormDataView::definitionChanged, this, &FormDataView::onDefinitionChanged);
@@ -257,14 +257,11 @@ DataViewDefinitions FormDataView::displayDefinition() const
     dd.PointAddress = ui->lineEditAddress->value<int>();
     dd.PointType = ui->comboBoxModbusPointType->currentPointType();
     dd.Length = ui->lineEditLength->value<int>();
-    dd.ZeroBasedAddress = ui->lineEditAddress->range<int>().from() == 0;
+    dd.ZeroBasedAddress = zeroBasedAddress();
     dd.HexAddress = displayHexAddresses();
-    dd.HexViewAddress  = ui->lineEditAddress->hexView();
-    dd.HexViewDeviceId = ui->lineEditDeviceId->hexView();
-    dd.HexViewLength   = ui->lineEditLength->hexView();
     dd.AddrSpace = _mbMultiServer.getModbusDefinitions().AddrSpace;
     dd.DataViewColumnsDistance = ui->outputWidget->dataViewColumnsDistance();
-    dd.LeadingZeros = ui->lineEditDeviceId->leadingZeroes();
+    dd.LeadingZeros = ui->checkBoxLeadingZeros->isChecked();
 
     return dd;
 }
@@ -280,24 +277,24 @@ void FormDataView::setDisplayDefinition(const DataViewDefinitions& dd)
 
     const auto defs = _mbMultiServer.getModbusDefinitions();
 
-    ui->lineEditDeviceId->setLeadingZeroes(dd.LeadingZeros);
+    ui->lineEditDeviceId->setLeadingZeroes(false);
     ui->lineEditDeviceId->setValue(dd.DeviceId);
 
     {
-        QSignalBlocker b(ui->comboBoxAddressBase);
-        ui->comboBoxAddressBase->setCurrentAddressBase(dd.ZeroBasedAddress ? AddressBase::Base0 : AddressBase::Base1);
-    }
-    {
         QSignalBlocker b(ui->lineEditAddress);
-        ui->lineEditAddress->setLeadingZeroes(dd.LeadingZeros);
+        ui->lineEditAddress->setLeadingZeroes(false);
         ui->lineEditAddress->setInputRange(ModbusLimits::addressRange(defs.AddrSpace, dd.ZeroBasedAddress));
         ui->lineEditAddress->setValue(dd.PointAddress);
     }
     {
         QSignalBlocker b(ui->lineEditLength);
-        ui->lineEditLength->setLeadingZeroes(dd.LeadingZeros);
+        ui->lineEditLength->setLeadingZeroes(false);
         ui->lineEditLength->setInputRange(lengthRangeForPointType(dd.PointAddress, dd.ZeroBasedAddress, defs.AddrSpace, dd.PointType));
         ui->lineEditLength->setValue(dd.Length);
+    }
+    {
+        QSignalBlocker b(ui->checkBoxLeadingZeros);
+        ui->checkBoxLeadingZeros->setChecked(dd.LeadingZeros);
     }
     {
         QSignalBlocker b(ui->comboBoxModbusPointType);
@@ -306,10 +303,6 @@ void FormDataView::setDisplayDefinition(const DataViewDefinitions& dd)
     ui->outputWidget->setDataViewColumnsDistance(dd.DataViewColumnsDistance);
 
     setDisplayHexAddresses(dd.HexAddress);
-
-    ui->lineEditDeviceId->setHexView(dd.HexViewDeviceId);
-    ui->lineEditAddress->setHexView(dd.HexViewAddress);
-    ui->lineEditLength->setHexView(dd.HexViewLength);
 
     updateSettingsControls();
     emit definitionChanged();
@@ -334,6 +327,30 @@ RegisterOrder FormDataView::registerOrder() const
 }
 
 ///
+/// \brief FormDataView::zeroBasedAddress
+/// \return
+///
+bool FormDataView::zeroBasedAddress() const
+{
+    return ui->lineEditAddress->range<int>().from() == 0;
+}
+
+///
+/// \brief FormDataView::setZeroBasedAddress
+/// \param zeroBased
+///
+void FormDataView::setZeroBasedAddress(bool zeroBased)
+{
+    if (zeroBasedAddress() == zeroBased)
+        return;
+
+    auto dd = displayDefinition();
+    dd.PointAddress = zeroBased ? qMax(0, dd.PointAddress - 1) : qMax(1, dd.PointAddress + 1);
+    dd.ZeroBasedAddress = zeroBased;
+    setDisplayDefinitionSilent(dd);
+}
+
+///
 /// \brief FormDataView::displayHexAddresses
 /// \return
 ///
@@ -351,9 +368,9 @@ void FormDataView::setDisplayHexAddresses(bool on)
     if(displayHexAddresses() == on) return;
     ui->outputWidget->setDisplayHexAddresses(on);
 
-    const auto defs = _mbMultiServer.getModbusDefinitions();
-    ui->lineEditAddress->setInputMode(on ? NumericLineEdit::HexMode : NumericLineEdit::Int32Mode);
-    ui->lineEditAddress->setInputRange(ModbusLimits::addressRange(defs.AddrSpace, ui->comboBoxAddressBase->currentAddressBase() == AddressBase::Base0));
+    ui->lineEditDeviceId->setHexView(on);
+    ui->lineEditAddress->setHexView(on);
+    ui->lineEditLength->setHexView(on);
     updateSettingsControls();
     emit displayHexAddressesChanged(on);
 }
@@ -604,8 +621,9 @@ void FormDataView::print(QPrinter* printer)
 
     // Header content is the same for all pages - compute once
     const auto textTime = QLocale().toString(QDateTime::currentDateTime(), QLocale::ShortFormat);
+    const QString addressBaseText = zeroBasedAddress() ? tr("0-based") : tr("1-based");
     const auto textAddrLen = QString(tr("Address Base: %1\nStarting Address: %2\nLength: %3"))
-        .arg(ui->comboBoxAddressBase->currentText(), ui->lineEditAddress->text(), ui->lineEditLength->text());
+        .arg(addressBaseText, ui->lineEditAddress->text(), ui->lineEditLength->text());
     const auto textDevIdType = QString(tr("Unit Identifier: %1\nData Type:\n%2"))
         .arg(ui->lineEditDeviceId->text(), ui->comboBoxModbusPointType->currentText());
 
@@ -802,32 +820,29 @@ void FormDataView::setDisplayDefinitionSilent(const DataViewDefinitions& dd)
             _mbMultiServer.removeDeviceId(oldId);
             _mbMultiServer.addDeviceId(newId);
         }
-        ui->lineEditDeviceId->setLeadingZeroes(dd.LeadingZeros);
+        ui->lineEditDeviceId->setLeadingZeroes(false);
         ui->lineEditDeviceId->setValue(dd.DeviceId);
-        ui->lineEditDeviceId->setHexView(dd.HexViewDeviceId);
     }
 
     {
-        QSignalBlocker b(ui->comboBoxAddressBase);
-        ui->comboBoxAddressBase->setCurrentAddressBase(dd.ZeroBasedAddress ? AddressBase::Base0 : AddressBase::Base1);
-    }
-    {
         QSignalBlocker b(ui->lineEditAddress);
-        ui->lineEditAddress->setLeadingZeroes(dd.LeadingZeros);
+        ui->lineEditAddress->setLeadingZeroes(false);
         ui->lineEditAddress->setInputRange(ModbusLimits::addressRange(defs.AddrSpace, dd.ZeroBasedAddress));
         ui->lineEditAddress->setValue(dd.PointAddress);
-        ui->lineEditAddress->setHexView(dd.HexViewAddress);
     }
     {
         QSignalBlocker b(ui->lineEditLength);
-        ui->lineEditLength->setLeadingZeroes(dd.LeadingZeros);
+        ui->lineEditLength->setLeadingZeroes(false);
         ui->lineEditLength->setInputRange(lengthRangeForPointType(dd.PointAddress, dd.ZeroBasedAddress, defs.AddrSpace, dd.PointType));
         ui->lineEditLength->setValue(dd.Length);
-        ui->lineEditLength->setHexView(dd.HexViewLength);
     }
     {
         QSignalBlocker b(ui->comboBoxModbusPointType);
         ui->comboBoxModbusPointType->setCurrentPointType(dd.PointType);
+    }
+    {
+        QSignalBlocker b(ui->checkBoxLeadingZeros);
+        ui->checkBoxLeadingZeros->setChecked(dd.LeadingZeros);
     }
 
     ui->outputWidget->setDataViewColumnsDistance(dd.DataViewColumnsDistance);
@@ -844,25 +859,10 @@ void FormDataView::setDisplayDefinitionSilent(const DataViewDefinitions& dd)
 ///
 void FormDataView::setLeadingZerosEnabled(bool on)
 {
-    if(ui->lineEditDeviceId->leadingZeroes() == on &&
-       ui->lineEditAddress->leadingZeroes() == on &&
-       ui->lineEditLength->leadingZeroes() == on)
+    if (ui->checkBoxLeadingZeros->isChecked() == on)
     {
         return;
     }
-
-    const auto deviceId = ui->lineEditDeviceId->value<int>();
-    const auto address = ui->lineEditAddress->value<int>();
-    const auto length = ui->lineEditLength->value<int>();
-
-    ui->lineEditDeviceId->setLeadingZeroes(on);
-    ui->lineEditAddress->setLeadingZeroes(on);
-    ui->lineEditLength->setLeadingZeroes(on);
-
-    // Force text refresh with the same numeric values.
-    ui->lineEditDeviceId->setValue(deviceId);
-    ui->lineEditAddress->setValue(address);
-    ui->lineEditLength->setValue(length);
 
     updateSettingsControls();
 }
@@ -971,7 +971,7 @@ void FormDataView::showFind()
 void FormDataView::on_lineEditAddress_valueChanged(const QVariant&)
 {
     const auto defs = _mbMultiServer.getModbusDefinitions();
-    const bool zeroBased = (ui->comboBoxAddressBase->currentAddressBase() == AddressBase::Base0);
+    const bool zeroBased = zeroBasedAddress();
     const int address = ui->lineEditAddress->value<int>();
     const auto lenRange = lengthRangeForPointType(address, zeroBased, defs.AddrSpace, ui->comboBoxModbusPointType->currentPointType());
 
@@ -1004,24 +1004,12 @@ void FormDataView::on_lineEditDeviceId_valueChanged(const QVariant& oldValue, co
 }
 
 ///
-/// \brief FormDataView::on_comboBoxAddressBase_addressBaseChanged
-/// \param base
-///
-void FormDataView::on_comboBoxAddressBase_addressBaseChanged(AddressBase base)
-{
-    auto dd = displayDefinition();
-    dd.PointAddress = (base == AddressBase::Base1 ? qMax(1, dd.PointAddress + 1) : qMax(0, dd.PointAddress - 1));
-    dd.ZeroBasedAddress = (base == AddressBase::Base0);
-    setDisplayDefinition(dd);
-}
-
-///
 /// \brief FormDataView::on_comboBoxModbusPointType_pointTypeChanged
 ///
 void FormDataView::on_comboBoxModbusPointType_pointTypeChanged(QModbusDataUnit::RegisterType type)
 {
     const auto defs = _mbMultiServer.getModbusDefinitions();
-    const bool zeroBased = (ui->comboBoxAddressBase->currentAddressBase() == AddressBase::Base0);
+    const bool zeroBased = zeroBasedAddress();
     const int address = ui->lineEditAddress->value<int>();
     const auto lenRange = lengthRangeForPointType(address, zeroBased, defs.AddrSpace, type);
 
@@ -1300,16 +1288,6 @@ void FormDataView::setupDisplayBar()
         setByteOrder(checked ? ByteOrder::Swapped : ByteOrder::Direct);
     });
 
-    connect(ui->actionDisplayHexAddresses, &QAction::triggered, this, [this](bool checked) {
-        setDisplayHexAddresses(checked);
-        emit definitionChanged();
-    });
-
-    // Settings controls
-    connect(ui->checkBoxHexAddress, &QCheckBox::toggled, this, [this](bool checked) {
-        setDisplayHexAddresses(checked);
-        emit definitionChanged();
-    });
     connect(ui->checkBoxLeadingZeros, &QCheckBox::toggled, this, [this](bool checked) {
         setLeadingZerosEnabled(checked);
         emit definitionChanged();
@@ -1328,18 +1306,8 @@ void FormDataView::setupDisplayBar()
 void FormDataView::updateSettingsControls()
 {
     {
-        QSignalBlocker blocker(ui->checkBoxHexAddress);
-        ui->checkBoxHexAddress->setChecked(displayHexAddresses());
-    }
-
-    {
-        QSignalBlocker blocker(ui->actionDisplayHexAddresses);
-        ui->actionDisplayHexAddresses->setChecked(displayHexAddresses());
-    }
-
-    {
         QSignalBlocker blocker(ui->checkBoxLeadingZeros);
-        ui->checkBoxLeadingZeros->setChecked(ui->lineEditDeviceId->leadingZeroes());
+        ui->checkBoxLeadingZeros->setChecked(displayDefinition().LeadingZeros);
     }
 
     {

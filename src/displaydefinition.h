@@ -103,11 +103,6 @@ inline QSettings& operator <<(QSettings& out, const DataViewDefinitions& dd)
     out.setValue("DataViewDefinitions/Length",                dd.Length);
     out.setValue("DataViewDefinitions/DataViewColumnSpace",   dd.DataViewColumnsDistance);
     out.setValue("DataViewDefinitions/LeadingZeros",          dd.LeadingZeros);
-    out.setValue("DataViewDefinitions/ZeroBasedAddress",      dd.ZeroBasedAddress);
-    out.setValue("DataViewDefinitions/HexAddress",            dd.HexAddress);
-    out.setValue("DataViewDefinitions/HexViewAddress",        dd.HexViewAddress);
-    out.setValue("DataViewDefinitions/HexViewDeviceId",       dd.HexViewDeviceId);
-    out.setValue("DataViewDefinitions/HexViewLength",         dd.HexViewLength);
 
     return out;
 }
@@ -123,7 +118,6 @@ inline QSettings& operator <<(QSettings& out, const TrafficViewDefinitions& dd)
     out.setValue("TrafficViewDefinitions/LogViewLimit",          dd.LogViewLimit);
     out.setValue("TrafficViewDefinitions/ExceptionsOnly",        dd.ExceptionsOnly);
     out.setValue("TrafficViewDefinitions/Autoscroll",            dd.Autoscroll);
-    out.setValue("TrafficViewDefinitions/HexView",               dd.HexView);
 
     return out;
 }
@@ -213,13 +207,8 @@ inline QXmlStreamWriter& operator <<(QXmlStreamWriter& xml, const DataViewDefini
     xml.writeAttribute("PointType", enumToString<QModbusDataUnit::RegisterType>(dd.PointType));
     xml.writeAttribute("PointAddress", QString::number(dd.PointAddress));
     xml.writeAttribute("Length", QString::number(dd.Length));
-    xml.writeAttribute("ZeroBasedAddress", boolToString(dd.ZeroBasedAddress));
     xml.writeAttribute("DataViewColumnsDistance", QString::number(dd.DataViewColumnsDistance));
     xml.writeAttribute("LeadingZeros", boolToString(dd.LeadingZeros));
-    xml.writeAttribute("HexAddress",       boolToString(dd.HexAddress));
-    xml.writeAttribute("HexViewAddress",  boolToString(dd.HexViewAddress));
-    xml.writeAttribute("HexViewDeviceId", boolToString(dd.HexViewDeviceId));
-    xml.writeAttribute("HexViewLength",   boolToString(dd.HexViewLength));
     xml.writeEndElement();
 
     return xml;
@@ -237,7 +226,6 @@ inline QXmlStreamWriter& operator <<(QXmlStreamWriter& xml, const TrafficViewDef
     xml.writeAttribute("LogViewLimit", QString::number(dd.LogViewLimit));
     xml.writeAttribute("ExceptionsOnly", boolToString(dd.ExceptionsOnly));
     xml.writeAttribute("Autoscroll", boolToString(dd.Autoscroll));
-    xml.writeAttribute("HexView", boolToString(dd.HexView));
     xml.writeEndElement();
 
     return xml;

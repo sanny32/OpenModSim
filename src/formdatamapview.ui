@@ -82,18 +82,6 @@
     <string>Delete Row</string>
    </property>
   </action>
-  <action name="actionHexView">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/res/icon-hex-view.png</normaloff>:/res/icon-hex-view.png</iconset>
-   </property>
-   <property name="text">
-    <string>Hex View</string>
-   </property>
-  </action>
   <action name="actionClear">
    <property name="icon">
     <iconset resource="resources.qrc">

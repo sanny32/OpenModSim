@@ -617,7 +617,7 @@ DataMapViewDefinitions FormDataMapView::displayDefinition() const
     DataMapViewDefinitions dd = _displayDefinition;
     dd.FormName         = windowTitle();
     dd.ZeroBasedAddress = _model->zeroBased();
-    dd.HexView          = ui->actionHexView->isChecked();
+    dd.HexView          = _model->hexView();
     return dd;
 }
 
@@ -631,12 +631,53 @@ void FormDataMapView::setDisplayDefinition(const DataMapViewDefinitions& dd)
         setWindowTitle(dd.FormName);
     _model->setZeroBased(dd.ZeroBasedAddress);
     _model->setHexView(dd.HexView);
-    if (_addrBaseCombo)
-        _addrBaseCombo->setCurrentIndex(dd.ZeroBasedAddress ? 1 : 0);
-    {
-        QSignalBlocker b(ui->actionHexView);
-        ui->actionHexView->setChecked(dd.HexView);
-    }
+}
+
+QColor FormDataMapView::backgroundColor() const
+{
+    return ui->tableView->palette().color(QPalette::Base);
+}
+
+void FormDataMapView::setBackgroundColor(const QColor& color)
+{
+    QPalette palette = ui->tableView->palette();
+    palette.setColor(QPalette::Base, color);
+    palette.setColor(QPalette::AlternateBase, color.lighter(103));
+    ui->tableView->setPalette(palette);
+    ui->tableView->viewport()->setPalette(palette);
+}
+
+QColor FormDataMapView::foregroundColor() const
+{
+    return ui->tableView->palette().color(QPalette::Text);
+}
+
+void FormDataMapView::setForegroundColor(const QColor& color)
+{
+    QPalette palette = ui->tableView->palette();
+    palette.setColor(QPalette::Text, color);
+    palette.setColor(QPalette::WindowText, color);
+    palette.setColor(QPalette::ButtonText, color);
+    ui->tableView->setPalette(palette);
+    ui->tableView->viewport()->setPalette(palette);
+}
+
+void FormDataMapView::setZeroBasedAddress(bool zeroBased)
+{
+    if (_model->zeroBased() == zeroBased)
+        return;
+
+    _displayDefinition.ZeroBasedAddress = zeroBased;
+    _model->setZeroBased(zeroBased);
+}
+
+void FormDataMapView::setHexView(bool enabled)
+{
+    if (_model->hexView() == enabled)
+        return;
+
+    _displayDefinition.HexView = enabled;
+    _model->setHexView(enabled);
 }
 
 ///
@@ -677,9 +718,7 @@ void FormDataMapView::print(QPrinter* printer)
     painter.setRenderHint(QPainter::TextAntialiasing, true);
 
     const QString printDateText = QDateTime::currentDateTime().toString(Qt::ISODate);
-    const QString addressBaseText = _addrBaseCombo
-        ? _addrBaseCombo->currentText()
-        : (_model->zeroBased() ? tr("0-based") : tr("1-based"));
+    const QString addressBaseText = _model->zeroBased() ? tr("0-based") : tr("1-based");
 
     QString unitFilterText = tr("All");
     if (_filterUnitSpin) {
@@ -1124,16 +1163,6 @@ void FormDataMapView::on_actionClear_triggered()
 }
 
 ///
-/// \brief FormDataMapView::on_actionHexView_toggled
-///
-void FormDataMapView::on_actionHexView_toggled(bool checked)
-{
-    _displayDefinition.HexView = checked;
-    _model->setHexView(checked);
-    emit definitionChanged();
-}
-
-///
 /// \brief FormDataMapView::updateActionState
 ///
 void FormDataMapView::updateActionState()
@@ -1207,28 +1236,6 @@ void FormDataMapView::setupToolBar()
     spacerWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
     auto* spacerAction = ui->toolBar->insertWidget(ui->actionClear, spacerWidget);
 
-    // Separator between Delete and address base widget
-    ui->toolBar->insertSeparator(spacerAction);
-
-    // Address base combobox wrapped in a labeled layout widget
-    _addrBaseCombo = new QComboBox(ui->toolBar);
-    _addrBaseCombo->addItem(tr("1-based")); // index 0
-    _addrBaseCombo->addItem(tr("0-based")); // index 1
-    _addrBaseCombo->setCurrentIndex(_model->zeroBased() ? 1 : 0);
-    _addrBaseCombo->setFixedWidth(80);
-
-    auto* addrBaseWidget = new QWidget(ui->toolBar);
-    auto* addrBaseLayout = new QHBoxLayout(addrBaseWidget);
-    addrBaseLayout->setContentsMargins(9, 0, 9, 0);
-    addrBaseLayout->setSpacing(6);
-    addrBaseLayout->addWidget(new QLabel(tr("Address Base:"), addrBaseWidget));
-    addrBaseLayout->addWidget(_addrBaseCombo);
-    ui->toolBar->insertWidget(spacerAction, addrBaseWidget);
-
-    // Separator between address base widget and Hex View action
-    ui->toolBar->insertSeparator(spacerAction);
-    ui->toolBar->insertAction(spacerAction, ui->actionHexView);
-
     // Filter widgets
     _filterUnitSpin = new QSpinBox;
     _filterUnitSpin->setRange(0, 255);
@@ -1255,12 +1262,6 @@ void FormDataMapView::setupToolBar()
     ui->toolBar->insertWidget(ui->actionClear, filterWidget);
     ui->toolBar->insertSeparator(ui->actionClear);
 
-    connect(_addrBaseCombo, qOverload<int>(&QComboBox::currentIndexChanged), this, [this](int idx) {
-        const bool zeroBased = (idx == 1);
-        _displayDefinition.ZeroBasedAddress = zeroBased;
-        _model->setZeroBased(zeroBased);
-        emit definitionChanged();
-    });
     connect(_filterTypeCombo, qOverload<int>(&QComboBox::currentIndexChanged),
             this, [this](int idx) { _proxy->setFilterTypeIndex(idx); updateActionState(); });
     connect(_filterUnitSpin, qOverload<int>(&QSpinBox::valueChanged),

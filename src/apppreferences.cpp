@@ -45,6 +45,9 @@ void AppPreferences::load(QSettings& settings)
     settings >> _dataViewDefinitions;
     settings >> _trafficViewDefinitions;
     settings >> _scriptViewDefinitions;
+    _globalZeroBasedAddress = settings.value("GlobalZeroBasedAddress", _dataViewDefinitions.ZeroBasedAddress).toBool();
+    _globalHexView = settings.value("GlobalHexView",
+                                    _dataViewDefinitions.HexAddress || _trafficViewDefinitions.HexView).toBool();
 
     settings.endGroup();
 }
@@ -74,6 +77,8 @@ void AppPreferences::save(QSettings& settings) const
     settings << _dataViewDefinitions;
     settings << _trafficViewDefinitions;
     settings << _scriptViewDefinitions;
+    settings.setValue("GlobalZeroBasedAddress", _globalZeroBasedAddress);
+    settings.setValue("GlobalHexView", _globalHexView);
 
     settings.endGroup();
 }
@@ -97,6 +102,8 @@ void AppPreferences::saveXml(QXmlStreamWriter& xml) const
     xml.writeAttribute("CodeAutoComplete", boolToString(_codeAutoComplete));
     xml.writeAttribute("AutoShowConsoleOutput", boolToString(_autoShowConsoleOutput));
     xml.writeAttribute("ConsoleMaxLines", QString::number(_consoleMaxLines));
+    xml.writeAttribute("GlobalZeroBasedAddress", boolToString(_globalZeroBasedAddress));
+    xml.writeAttribute("GlobalHexView", boolToString(_globalHexView));
     xml << _dataViewDefinitions;
     xml << _trafficViewDefinitions;
     xml << _scriptViewDefinitions;
@@ -159,6 +166,14 @@ void AppPreferences::loadXml(QXmlStreamReader& xml)
     if (attributes.hasAttribute("ConsoleMaxLines")) {
         bool ok; const int n = attributes.value("ConsoleMaxLines").toInt(&ok);
         if (ok) _consoleMaxLines = n;
+    }
+
+    if (attributes.hasAttribute("GlobalZeroBasedAddress")) {
+        _globalZeroBasedAddress = stringToBool(attributes.value("GlobalZeroBasedAddress").toString());
+    }
+
+    if (attributes.hasAttribute("GlobalHexView")) {
+        _globalHexView = stringToBool(attributes.value("GlobalHexView").toString());
     }
 
     while (xml.readNextStartElement()) {

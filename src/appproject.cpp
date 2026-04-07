@@ -1459,6 +1459,11 @@ void AppProject::loadProject(const QString& filename)
     bool splitView = false;
     QString activePrimaryWin;
     QString activeSecWin;
+    QString activePanel;
+    bool hasProjectGlobalZeroBasedAddress = false;
+    bool projectGlobalZeroBasedAddress = false;
+    bool hasProjectGlobalHexView = false;
+    bool projectGlobalHexView = false;
     bool viewPreparedForForms = false;
     QStringList secondaryForms;
     bool hasSecondaryFormsSaved = false;
@@ -1491,6 +1496,15 @@ void AppProject::loadProject(const QString& filename)
                     splitView = attrs.value("SplitView").toInt() != 0;
                     activePrimaryWin = attrs.value("ActivePrimaryWindow").toString();
                     activeSecWin = attrs.value("ActiveSecondaryWindow").toString();
+                    activePanel = attrs.value("ActivePanel").toString();
+                    if (attrs.hasAttribute("GlobalZeroBasedAddress")) {
+                        hasProjectGlobalZeroBasedAddress = true;
+                        projectGlobalZeroBasedAddress = attrs.value("GlobalZeroBasedAddress").toInt() != 0;
+                    }
+                    if (attrs.hasAttribute("GlobalHexView")) {
+                        hasProjectGlobalHexView = true;
+                        projectGlobalHexView = attrs.value("GlobalHexView").toInt() != 0;
+                    }
                     xml.skipCurrentElement();
                 }
                 else if (xml.name() == QLatin1String("ModbusDefinitions")) {
@@ -1687,6 +1701,12 @@ void AppProject::loadProject(const QString& filename)
     _mainWindow->applyConnections(defs, conns);
     syncAutoRequestMap(_mbServer.getModbusDefinitions());
 
+    auto& prefs = AppPreferences::instance();
+    if (hasProjectGlobalZeroBasedAddress)
+        prefs.setGlobalZeroBasedAddress(projectGlobalZeroBasedAddress);
+    if (hasProjectGlobalHexView)
+        prefs.setGlobalHexView(projectGlobalHexView);
+
     // Restore secondary panel state.
     if(splitView && secondaryArea()) {
         if(hasSecondaryFormsSaved) {
@@ -1716,6 +1736,7 @@ void AppProject::loadProject(const QString& filename)
 
     _pendingActivePrimaryWin = activePrimaryWin;
     _pendingActiveSecWin = splitView ? activeSecWin : QString();
+    _pendingActivePanel = activePanel;
 
     if(_mdiArea->isVisible())
         restoreActiveWindows();
@@ -1729,7 +1750,7 @@ void AppProject::loadProject(const QString& filename)
 ///
 void AppProject::restoreActiveWindows()
 {
-    if(_pendingActivePrimaryWin.isEmpty() && _pendingActiveSecWin.isEmpty())
+    if(_pendingActivePrimaryWin.isEmpty() && _pendingActiveSecWin.isEmpty() && _pendingActivePanel.isEmpty())
         return;
 
     if(!_pendingActivePrimaryWin.isEmpty()) {
@@ -1772,8 +1793,18 @@ void AppProject::restoreActiveWindows()
         }
     }
 
+    if (_pendingActivePanel.compare(QLatin1String(kPanelRight), Qt::CaseInsensitive) == 0) {
+        if (auto* secondary = secondaryArea())
+            if (auto* wnd = secondary->activeSubWindow())
+                _mdiArea->setActiveSubWindow(wnd);
+    } else if (auto* primary = _mdiArea->primaryArea()) {
+        if (auto* wnd = primary->activeSubWindow())
+            _mdiArea->setActiveSubWindow(wnd);
+    }
+
     _pendingActivePrimaryWin.clear();
     _pendingActiveSecWin.clear();
+    _pendingActivePanel.clear();
 }
 
 ///
@@ -1862,6 +1893,14 @@ void AppProject::saveProject(const QString& filename)
     w.writeStartElement("ViewSettings");
     w.writeAttribute("ViewMode", QString::number(_mdiArea->viewMode()));
     w.writeAttribute("SplitView", _mdiArea->isSplitView() ? "1" : "0");
+    w.writeAttribute("GlobalZeroBasedAddress", AppPreferences::instance().globalZeroBasedAddress() ? "1" : "0");
+    w.writeAttribute("GlobalHexView", AppPreferences::instance().globalHexView() ? "1" : "0");
+    if (auto* activePanel = _mdiArea->activePanel()) {
+        if (activePanel == _mdiArea->primaryArea())
+            w.writeAttribute("ActivePanel", kPanelLeft);
+        else if (activePanel == secondaryArea())
+            w.writeAttribute("ActivePanel", kPanelRight);
+    }
     if(auto primary = _mdiArea->primaryArea())
         if(auto wnd = primary->activeSubWindow())
             if(auto frm = wnd->widget())

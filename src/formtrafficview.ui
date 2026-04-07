@@ -27,8 +27,7 @@
     <number>0</number>
    </property>
    <item>
-    <widget class="QToolBar" name="toolBarTraffic">
-     <addaction name="actionHexView"/>
+   <widget class="QToolBar" name="toolBarTraffic">
      <addaction name="actionPauseTraffic"/>
      <addaction name="actionClearTraffic"/>
      <addaction name="actionExportTrafficLog"/>

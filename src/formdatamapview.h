@@ -47,6 +47,14 @@ public:
 
     DataMapViewDefinitions displayDefinition() const;
     void setDisplayDefinition(const DataMapViewDefinitions& dd);
+    QColor backgroundColor() const;
+    void setBackgroundColor(const QColor& color);
+    QColor foregroundColor() const;
+    void setForegroundColor(const QColor& color);
+    bool zeroBasedAddress() const { return _model && _model->zeroBased(); }
+    void setZeroBasedAddress(bool zeroBased);
+    bool hexView() const { return _model && _model->hexView(); }
+    void setHexView(bool enabled);
 
     bool autoAddOnRequest() const { return _autoAddOnRequest; }
     void setAutoAddOnRequest(bool value) { _autoAddOnRequest = value; }
@@ -79,7 +87,6 @@ private slots:
     void on_actionInsert_triggered();
     void on_actionDelete_triggered();
     void on_actionClear_triggered();
-    void on_actionHexView_toggled(bool checked);
     void updateActionState();
 
 private:
@@ -101,7 +108,6 @@ private:
     DataMapFilterProxy*     _proxy           = nullptr;
     QComboBox*                  _filterTypeCombo = nullptr;
     QSpinBox*                   _filterUnitSpin  = nullptr;
-    QComboBox*                  _addrBaseCombo   = nullptr;
     bool                        _autoRequestMap = false;
     bool                        _autoAddOnRequest = false;
 };
@@ -135,8 +141,6 @@ inline QXmlStreamWriter& operator <<(QXmlStreamWriter& xml, FormDataMapView* frm
 
     xml.writeStartElement("DataMapViewDefinitions");
     xml.writeAttribute("FormName",         frm->displayDefinition().FormName);
-    xml.writeAttribute("ZeroBasedAddress", boolToString(frm->displayDefinition().ZeroBasedAddress));
-    xml.writeAttribute("HexView",          boolToString(frm->displayDefinition().HexView));
     xml.writeAttribute("AutoAddOnRequest", boolToString(frm->autoAddOnRequest()));
     xml.writeAttribute("AutoRequestMap",   boolToString(frm->isAutoRequestMap()));
     xml.writeEndElement();
@@ -216,7 +220,7 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, FormDataMapView* frm
         else if (xml.name() == QLatin1String("DataMapViewDefinitions")) {
             const auto attrs = xml.attributes();
             DataMapViewDefinitions dd;
-            dd.FormName        = attrs.value("FormName").toString();
+            dd.FormName         = attrs.value("FormName").toString();
             dd.ZeroBasedAddress = stringToBool(attrs.value("ZeroBasedAddress").toString());
             dd.HexView          = stringToBool(attrs.value("HexView").toString());
             frm->setDisplayDefinition(dd);
