@@ -89,6 +89,7 @@ void ModbusTcpServer::on_newConnection()
     }
 
     _connections.append(socket);
+    emit modbusClientConnected(socket->peerAddress().toString(), socket->peerPort());
 
     auto buffer = new QByteArray();
 
@@ -104,7 +105,7 @@ void ModbusTcpServer::on_newConnection()
 ///
     QObject::connect(socket, &QTcpSocket::disconnected, this, [socket, this]() {
         _connections.removeAll(socket);
-        emit modbusClientDisconnected(socket);
+        emit modbusClientDisconnected(socket->peerAddress().toString(), socket->peerPort());
         socket->deleteLater();
     });
 ///

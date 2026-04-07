@@ -31,6 +31,20 @@ void AppLogger::setupModbusMultiServerLogging(ModbusMultiServer& server, QObject
                                .arg(connectionAddress(cd));
     });
 
+    QObject::connect(&server, &ModbusMultiServer::clientConnected, context,
+                     [](const ConnectionDetails& cd, const QString& clientAddress, quint16 clientPort) {
+        qInfo(lcApp) << QCoreApplication::translate("MainWindow", "Modbus client connected: %1 -> %2")
+                            .arg(QString("%1:%2").arg(clientAddress).arg(clientPort))
+                            .arg(connectionAddress(cd));
+    });
+
+    QObject::connect(&server, &ModbusMultiServer::clientDisconnected, context,
+                     [](const ConnectionDetails& cd, const QString& clientAddress, quint16 clientPort) {
+        qInfo(lcApp) << QCoreApplication::translate("MainWindow", "Modbus client disconnected: %1 -> %2")
+                            .arg(QString("%1:%2").arg(clientAddress).arg(clientPort))
+                            .arg(connectionAddress(cd));
+    });
+
     QObject::connect(&server, &ModbusMultiServer::errorOccured, context,
                      [](quint8 deviceId, const QString& error) {
         qCritical(lcApp) << QCoreApplication::translate("MainWindow", "[Unit %1] %2")

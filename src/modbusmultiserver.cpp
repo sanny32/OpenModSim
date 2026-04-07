@@ -289,6 +289,13 @@ QSharedPointer<ModbusServer> ModbusMultiServer::createModbusServer(const Connect
         connect(modbusServer.get(), &ModbusServer::errorOccurred, this, &ModbusMultiServer::on_errorOccurred);
         connect(modbusServer.get(), &ModbusServer::rawDataReceived, this, &ModbusMultiServer::on_rawDataReceived);
         connect(modbusServer.get(), &ModbusServer::rawDataSended, this, &ModbusMultiServer::on_rawDataSended);
+
+        if (auto tcpServer = qobject_cast<ModbusTcpServer*>(modbusServer.get())) {
+            connect(tcpServer, &ModbusTcpServer::modbusClientConnected,
+                    this, &ModbusMultiServer::on_clientConnected);
+            connect(tcpServer, &ModbusTcpServer::modbusClientDisconnected,
+                    this, &ModbusMultiServer::on_clientDisconnected);
+        }
     }
 
     return modbusServer;
@@ -1363,6 +1370,26 @@ void ModbusMultiServer::on_rawDataReceived(const QDateTime& time, const QByteArr
     const auto cd = server->property("ConnectionDetails").value<ConnectionDetails>();
 
     emit rawDataReceived(cd, time, data);
+}
+
+void ModbusMultiServer::on_clientConnected(const QString& clientAddress, quint16 clientPort)
+{
+    auto server = qobject_cast<ModbusServer*>(sender());
+    if (!server)
+        return;
+
+    const auto cd = server->property("ConnectionDetails").value<ConnectionDetails>();
+    emit clientConnected(cd, clientAddress, clientPort);
+}
+
+void ModbusMultiServer::on_clientDisconnected(const QString& clientAddress, quint16 clientPort)
+{
+    auto server = qobject_cast<ModbusServer*>(sender());
+    if (!server)
+        return;
+
+    const auto cd = server->property("ConnectionDetails").value<ConnectionDetails>();
+    emit clientDisconnected(cd, clientAddress, clientPort);
 }
 
 ///

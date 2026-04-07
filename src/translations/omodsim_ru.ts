@@ -3844,26 +3844,36 @@ Script.onInit(()=&gt;{
     </message>
     <message>
         <location filename="../applogger.cpp" line="36"/>
+        <source>Modbus client connected: %1 -&gt; %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../applogger.cpp" line="43"/>
+        <source>Modbus client disconnected: %1 -&gt; %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../applogger.cpp" line="50"/>
         <source>[Unit %1] %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../applogger.cpp" line="55"/>
+        <location filename="../applogger.cpp" line="69"/>
         <source>Address space added: unit %1, %2, starting address %3, length %4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../applogger.cpp" line="63"/>
+        <location filename="../applogger.cpp" line="77"/>
         <source>Address space removed: unit %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../applogger.cpp" line="42"/>
+        <location filename="../applogger.cpp" line="56"/>
         <source>Unit ID added: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../applogger.cpp" line="48"/>
+        <location filename="../applogger.cpp" line="62"/>
         <source>Unit ID removed: %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4530,12 +4540,12 @@ Script.onInit(()=&gt;{
 <context>
     <name>ModbusMultiServer</name>
     <message>
-        <location filename="../modbusmultiserver.cpp" line="901"/>
+        <location filename="../modbusmultiserver.cpp" line="908"/>
         <source>An incorrect device ID was specified (%1)</source>
         <translation>РќРµРєРѕСЂСЂРµРєС‚РЅРѕ Р·РЅР°СЏРµРЅРёРµ РЅРѕРјРµСЂР° СѓСЃС‚СЂРѕР№СЃС‚РІР° (%1)</translation>
     </message>
     <message>
-        <location filename="../modbusmultiserver.cpp" line="1430"/>
+        <location filename="../modbusmultiserver.cpp" line="1457"/>
         <source>Connection error. %1</source>
         <translation>РћС€РёР±РєР° РїРѕРґРєР»СЋС‡РµРЅРёСЏ. %1</translation>
     </message>
@@ -4566,7 +4576,7 @@ Script.onInit(()=&gt;{
 <context>
     <name>ModbusTcpServer</name>
     <message>
-        <location filename="../modbustcpserver.cpp" line="347"/>
+        <location filename="../modbustcpserver.cpp" line="348"/>
         <source>Invalid connection settings for TCP communication specified.</source>
         <translation>РЈРєР°Р·Р°РЅС‹ РЅРµРєРѕСЂСЂРµРєС‚РЅС‹Рµ РЅР°СЃС‚СЂРѕР№РєРё РґР»СЏ TCP СЃРѕРµРґРёРЅРµРЅРёСЏ.</translation>
     </message>
@@ -4983,12 +4993,12 @@ Script.onInit(()=&gt;{
 <context>
     <name>QModbusTcpServer</name>
     <message>
-        <location filename="../modbustcpserver.cpp" line="229"/>
+        <location filename="../modbustcpserver.cpp" line="230"/>
         <source>Requesting socket is closed</source>
         <translation>Р—Р°РїСЂР°С€РёРІР°СЋС‰РёР№ СЃРѕРєРµС‚ Р·Р°РєСЂС‹С‚</translation>
     </message>
     <message>
-        <location filename="../modbustcpserver.cpp" line="236"/>
+        <location filename="../modbustcpserver.cpp" line="237"/>
         <source>Could not write response to client</source>
         <translation>РќРµ СѓРґР°Р»РѕСЃСЊ СЃРѕР·РґР°С‚СЊ РѕС‚РІРµС‚ РєР»РёРµРЅС‚Сѓ</translation>
     </message>

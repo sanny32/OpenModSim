@@ -85,6 +85,8 @@ public:
 signals:
     void connected(const ConnectionDetails& cd);
     void disconnected(const ConnectionDetails& cd);
+    void clientConnected(const ConnectionDetails& cd, const QString& clientAddress, quint16 clientPort);
+    void clientDisconnected(const ConnectionDetails& cd, const QString& clientAddress, quint16 clientPort);
     void deviceIdsChanged(const QList<int>& deviceIds);
     void request(QSharedPointer<const ModbusMessage> msg);
     void response(QSharedPointer<const ModbusMessage> msgReq, QSharedPointer<const ModbusMessage> msgResp);
@@ -104,6 +106,8 @@ signals:
     void unitMapRemoved(QUuid id, quint8 deviceId);
 
 private slots:
+    void on_clientConnected(const QString& clientAddress, quint16 clientPort);
+    void on_clientDisconnected(const QString& clientAddress, quint16 clientPort);
     void on_rawDataReceived(const QDateTime& time, const QByteArray& data);
     void on_rawDataSended(const QDateTime& time, const QByteArray& data);
     void on_stateChanged(QModbusDevice::State state);
