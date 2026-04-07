@@ -3504,8 +3504,8 @@ Script.onInit(()=&gt;{
     </message>
     <message>
         <location filename="../mainwindow.ui" line="235"/>
-        <location filename="../mainwindow.cpp" line="1546"/>
-        <location filename="../mainwindow.cpp" line="1546"/>
+        <location filename="../mainwindow.cpp" line="1549"/>
+        <location filename="../mainwindow.cpp" line="1549"/>
         <source>Save Project</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3824,8 +3824,8 @@ Script.onInit(()=&gt;{
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="159"/>
-        <location filename="../mainwindow.cpp" line="1633"/>
-        <location filename="../mainwindow.cpp" line="1633"/>
+        <location filename="../mainwindow.cpp" line="1636"/>
+        <location filename="../mainwindow.cpp" line="1636"/>
         <source>Clear List</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3848,6 +3848,11 @@ Script.onInit(()=&gt;{
         <location filename="../mainwindow.cpp" line="679"/>
         <location filename="../mainwindow.cpp" line="679"/>
         <source>Project files (*.oms)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cpp" line="1406"/>
+        <source>Address Base</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -3901,19 +3906,18 @@ Script.onInit(()=&gt;{
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1399"/>
+        <location filename="../mainwindow.cpp" line="1402"/>
         <source>1-based</source>
         <translation type="unfinished">1-РїРµСЂРІС‹Р№</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1400"/>
+        <location filename="../mainwindow.cpp" line="1403"/>
         <source>0-based</source>
         <translation type="unfinished">0-РїРµСЂРІС‹Р№</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1403"/>
         <source>Address Base:</source>
-        <translation type="unfinished">РђРґСЂРµСЃР°С†РёСЏ:</translation>
+        <translation type="obsolete">РђРґСЂРµСЃР°С†РёСЏ:</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="302"/>
@@ -3922,12 +3926,12 @@ Script.onInit(()=&gt;{
         <translation type="unfinished">РЁРµСЃС‚РЅР°РґС†Р°С‚РёСЂРёС‡РЅС‹Р№ СЂРµР¶РёРј</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1547"/>
+        <location filename="../mainwindow.cpp" line="1550"/>
         <source>Save project before closing?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1621"/>
+        <location filename="../mainwindow.cpp" line="1624"/>
         <source>No Recent Projects</source>
         <translation type="unfinished"></translation>
     </message>
