@@ -305,6 +305,16 @@ QList<QWidget*> AppProject::allProjectForms() const
     return result;
 }
 
+QList<FormScriptView*> AppProject::scriptForms() const
+{
+    QList<FormScriptView*> result;
+    for (auto* widget : allProjectForms()) {
+        if (auto* script = qobject_cast<FormScriptView*>(widget))
+            result.append(script);
+    }
+    return result;
+}
+
 ///
 /// \brief AppProject::findAutoRequestMap
 ///

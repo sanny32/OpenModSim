@@ -43,6 +43,8 @@ signals:
     void formRenamed(ProjectFormRef ref);
     void formRunScriptRequested(ProjectFormRef ref);
     void formStopScriptRequested(ProjectFormRef ref);
+    void runAllScriptsRequested();
+    void stopAllScriptsRequested();
     void formCreateRequested(ProjectFormType type);
 
 protected:

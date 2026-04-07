@@ -123,6 +123,8 @@ private:
     QWidget* createNewForm(ProjectFormKind kind);
     void activateNewFormKind(ProjectFormKind kind, QAction* sourceAction);
     void restoreNewFormKindIcon();
+    void runAllScripts();
+    void stopAllScripts();
     QWidget* currentForm() const;
     FormDataView* currentDataForm() const;
     FormTrafficView* currentTrafficForm() const;

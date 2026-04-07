@@ -64,6 +64,7 @@ public:
     FormTrafficView* currentTrafficMdiChild() const;
     FormScriptView* currentScriptMdiChild() const;
     FormDataMapView* currentDataMapMdiChild() const;
+    QList<FormScriptView*> scriptForms() const;
     QWidget* findMdiChild(QUuid id) const;
     QWidget* findMdiChildInArea(MdiArea* area, QUuid id) const;
     QWidget* firstMdiChild() const;

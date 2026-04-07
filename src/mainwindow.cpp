@@ -224,6 +224,8 @@ MainWindow::MainWindow(const QString& profile, bool useSession, QWidget *parent)
         if (auto* script = qobject_cast<FormScriptView*>(ref.widget))
             script->stopScript();
     });
+    connect(_projectTree, &ProjectTreeWidget::runAllScriptsRequested, this, &MainWindow::runAllScripts);
+    connect(_projectTree, &ProjectTreeWidget::stopAllScriptsRequested, this, &MainWindow::stopAllScripts);
     connect(_projectTree, &ProjectTreeWidget::formCreateRequested, this, [this](ProjectFormType type) {
         createNewForm(static_cast<ProjectFormKind>(type));
     });
@@ -348,6 +350,22 @@ void MainWindow::showEvent(QShowEvent* event)
 {
     QMainWindow::showEvent(event);
     _project->restoreActiveWindows();
+}
+
+void MainWindow::runAllScripts()
+{
+    for (auto* script : _project->scriptForms()) {
+        if (script && script->canRunScript())
+            script->runScript();
+    }
+}
+
+void MainWindow::stopAllScripts()
+{
+    for (auto* script : _project->scriptForms()) {
+        if (script && script->canStopScript())
+            script->stopScript();
+    }
 }
 
 ///

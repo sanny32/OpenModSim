@@ -3,6 +3,7 @@
 #include <QMenu>
 #include <QMessageBox>
 #include <QPainter>
+#include "formscriptview.h"
 #include "projecttreewidget.h"
 
 namespace {
@@ -344,6 +345,7 @@ void ProjectTreeWidget::on_contextMenu(const QPoint& pos)
 {
     auto item = itemAt(pos);
     const bool isFormItem = item && (item->data(0, ItemTypeRole).toInt() == ItemTypeForm);
+    const bool isScriptRootItem = (item == _scriptRoot);
 
     QMenu menu(this);
 
@@ -355,8 +357,33 @@ void ProjectTreeWidget::on_contextMenu(const QPoint& pos)
 
     QAction* runAction    = nullptr;
     QAction* stopAction   = nullptr;
+    QAction* runAllAction = nullptr;
+    QAction* stopAllAction = nullptr;
     QAction* renameAction = nullptr;
     QAction* deleteAction = nullptr;
+
+    if (isScriptRootItem) {
+        bool canRunAny = false;
+        bool canStopAny = false;
+
+        for (int i = 0; i < _scriptRoot->childCount(); ++i) {
+            auto* child = _scriptRoot->child(i);
+            auto* script = qobject_cast<FormScriptView*>(static_cast<QWidget*>(child->data(0, Qt::UserRole).value<void*>()));
+            if (!script)
+                continue;
+
+            canRunAny = canRunAny || script->canRunScript();
+            canStopAny = canStopAny || script->canStopScript();
+            if (canRunAny && canStopAny)
+                break;
+        }
+
+        menu.addSeparator();
+        runAllAction = menu.addAction(QIcon(":/res/icon-run-script.png"), tr("Run All Scripts"));
+        stopAllAction = menu.addAction(QIcon(":/res/icon-stop-script.png"), tr("Stop All Scripts"));
+        runAllAction->setEnabled(canRunAny);
+        stopAllAction->setEnabled(canStopAny);
+    }
 
     if (isFormItem) {
         auto ptr = item->data(0, Qt::UserRole).value<void*>();
@@ -403,6 +430,14 @@ void ProjectTreeWidget::on_contextMenu(const QPoint& pos)
     }
     if (selected == newScriptAction) {
         emit formCreateRequested(ProjectFormType::Script);
+        return;
+    }
+    if (selected == runAllAction) {
+        emit runAllScriptsRequested();
+        return;
+    }
+    if (selected == stopAllAction) {
+        emit stopAllScriptsRequested();
         return;
     }
 
