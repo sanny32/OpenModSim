@@ -1393,6 +1393,9 @@ void MainWindow::saveAppSettings()
     m.setValue(kLastProjectPathKey, _lastProjectPath);
 }
 
+///
+/// \brief MainWindow::setupGlobalViewToolbar
+///
 void MainWindow::setupGlobalViewToolbar()
 {
     _globalAddressBaseCombo = new QComboBox(ui->toolBarMain);
@@ -1400,7 +1403,7 @@ void MainWindow::setupGlobalViewToolbar()
     _globalAddressBaseCombo->addItem(tr("0-based"), true);
     _globalAddressBaseCombo->setMinimumWidth(84);
 
-    auto* label = new QLabel(tr("Address Base:"), ui->toolBarMain);
+    auto* label = new QLabel(tr("Address Base"), ui->toolBarMain);
     _globalAddressBaseWidget = new QWidget(ui->toolBarMain);
     auto* layout = new QHBoxLayout(_globalAddressBaseWidget);
     layout->setContentsMargins(9, 0, 9, 0);
