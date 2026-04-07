@@ -787,22 +787,68 @@ void AppProject::closeMdiChild(QWidget* frm)
 ///
 void AppProject::deleteForm(QWidget* frm)
 {
-    if (!frm) return;
-    if (frm->property(kDeleteLockedProperty).toBool())
+    if (!frm)
         return;
 
-    // Close the MDI subwindow if the form is currently open
-    for (auto wnd : _mdiArea->subWindowList()) {
-        if (wnd && wnd->widget() == frm) {
-            wnd->close(); // triggers closing signal -> moves frm to _closedForms
+    const QUuid originId = frm->property(kSplitOriginIdProperty).toUuid().isNull()
+                               ? formIdOf(frm)
+                               : frm->property(kSplitOriginIdProperty).toUuid();
+
+    QWidget* projectForm = frm;
+    if (frm->property(kSplitAutoCloneProperty).toBool()) {
+        projectForm = nullptr;
+
+        for (auto* closedFrm : _closedForms) {
+            if (closedFrm
+                && !closedFrm->property(kSplitAutoCloneProperty).toBool()
+                && formIdOf(closedFrm) == originId) {
+                projectForm = closedFrm;
+                break;
+            }
+        }
+
+        if (!projectForm) {
+            for (auto* wnd : _mdiArea->subWindowList()) {
+                auto* candidate = qobject_cast<QWidget*>(wnd ? wnd->widget() : nullptr);
+                if (candidate
+                    && !candidate->property(kSplitAutoCloneProperty).toBool()
+                    && formIdOf(candidate) == originId) {
+                    projectForm = candidate;
+                    break;
+                }
+            }
+        }
+    }
+
+    if (!projectForm)
+        return;
+
+    if (projectForm->property(kDeleteLockedProperty).toBool())
+        return;
+
+    // Close all split auto-clones for this form pair first.
+    const auto subWindows = _mdiArea->subWindowList();
+    for (auto* wnd : subWindows) {
+        auto* candidate = qobject_cast<QWidget*>(wnd ? wnd->widget() : nullptr);
+        if (candidate
+            && candidate->property(kSplitAutoCloneProperty).toBool()
+            && candidate->property(kSplitOriginIdProperty).toUuid() == originId) {
+            wnd->close();
+        }
+    }
+
+    // Close the project form itself if it is currently open.
+    for (auto* wnd : subWindows) {
+        if (wnd && wnd->widget() == projectForm) {
+            wnd->close(); // triggers closing signal -> moves projectForm to _closedForms
             break;
         }
     }
 
-    // Now frm is either in _closedForms (just closed) or was already there
-    removeClosedForm(frm);
-    _projectTree->removeForm(frm);
-    delete frm;
+    removeClosedForm(projectForm);
+    _projectTree->removeForm(projectForm);
+    delete projectForm;
+    resetSplitViewIfEmpty();
 }
 
 ///
