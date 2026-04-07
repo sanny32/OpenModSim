@@ -2643,17 +2643,27 @@ MODBUS Point Type:
 %2</translation>
     </message>
     <message>
-        <location filename="../formscriptview.cpp" line="124"/>
-        <location filename="../formscriptview.cpp" line="505"/>
-        <location filename="../formscriptview.cpp" line="505"/>
+        <location filename="../formscriptview.cpp" line="126"/>
+        <location filename="../formscriptview.cpp" line="509"/>
+        <location filename="../formscriptview.cpp" line="509"/>
         <source> ms</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formscriptview.cpp" line="125"/>
-        <location filename="../formscriptview.cpp" line="509"/>
-        <location filename="../formscriptview.cpp" line="509"/>
+        <location filename="../formscriptview.cpp" line="128"/>
+        <location filename="../formscriptview.cpp" line="518"/>
+        <location filename="../formscriptview.cpp" line="518"/>
         <source>Run on startup</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../formscriptview.cpp" line="606"/>
+        <source>Script run mode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../formscriptview.cpp" line="608"/>
+        <source>Script run interval</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

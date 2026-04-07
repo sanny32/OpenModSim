@@ -1,4 +1,5 @@
 #include <QCheckBox>
+#include <QHBoxLayout>
 #include <QSizePolicy>
 #include <QSpinBox>
 #include <QToolButton>
@@ -121,8 +122,11 @@ void FormScriptView::changeEvent(QEvent* e)
 {
     if (e->type() == QEvent::LanguageChange) {
         ui->retranslateUi(this);
-        _scriptIntervalSpin->setSuffix(tr(" ms"));
-        _scriptRunOnStartupCheck->setText(tr("Run on startup"));
+        if (_scriptIntervalSpin)
+            _scriptIntervalSpin->setSuffix(tr(" ms"));
+        if (_scriptRunOnStartupCheck)
+            _scriptRunOnStartupCheck->setText(tr("Run on startup"));
+        updateScriptBarToolTips();
     }
     QWidget::changeEvent(e);
 }
@@ -506,41 +510,46 @@ void FormScriptView::setupScriptBar()
     _scriptIntervalSpin->setValue(static_cast<int>(_scriptSettings.Interval));
     _scriptIntervalSpin->setFixedWidth(90);
 
-    _scriptRunOnStartupCheck = new QCheckBox(tr("Run on startup"), ui->toolBarScript);
-    _scriptRunOnStartupCheck->setChecked(_scriptSettings.RunOnStartup);
-
     QAction* firstAction = nullptr;
     const auto toolbarActions = ui->toolBarScript->actions();
     if (!toolbarActions.isEmpty())
         firstAction = toolbarActions.first();
 
-    const auto addToolbarWidget = [this, firstAction](QWidget* widget) {
+    _scriptRunOnStartupCheck = new QCheckBox(tr("Run on startup"), ui->toolBarScript);
+    _scriptRunOnStartupCheck->setChecked(_scriptSettings.RunOnStartup);
+
+    auto* leftWidget = new QWidget(ui->toolBarScript);
+    auto* leftLayout = new QHBoxLayout(leftWidget);
+    leftLayout->setContentsMargins(9, 0, 9, 0);
+    leftLayout->setSpacing(6);
+    leftLayout->addWidget(_scriptRunModeCombo);
+    leftLayout->addWidget(_scriptIntervalSpin);
+
+    auto* rightSpacer = new QWidget(ui->toolBarScript);
+    rightSpacer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+
+    auto* rightWidget = new QWidget(ui->toolBarScript);
+    auto* rightLayout = new QHBoxLayout(rightWidget);
+    rightLayout->setContentsMargins(9, 0, 9, 0);
+    rightLayout->setSpacing(0);
+    rightLayout->addWidget(_scriptRunOnStartupCheck);
+
+    const auto prependToolbarWidget = [this, firstAction](QWidget* widget) {
         if (firstAction)
             ui->toolBarScript->insertWidget(firstAction, widget);
         else
             ui->toolBarScript->addWidget(widget);
     };
 
-    const auto addToolbarSpacer = [this, firstAction](int width) {
-        auto* spacer = new QWidget(ui->toolBarScript);
-        spacer->setFixedWidth(width);
-        spacer->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
-        if (firstAction)
-            ui->toolBarScript->insertWidget(firstAction, spacer);
-        else
-            ui->toolBarScript->addWidget(spacer);
-    };
-
-    addToolbarWidget(_scriptRunModeCombo);
-    addToolbarSpacer(6);
-    addToolbarWidget(_scriptIntervalSpin);
-    addToolbarSpacer(8);
-    addToolbarWidget(_scriptRunOnStartupCheck);
+    prependToolbarWidget(leftWidget);
 
     if (firstAction)
         ui->toolBarScript->insertSeparator(firstAction);
     else
         ui->toolBarScript->addSeparator();
+
+    ui->toolBarScript->addWidget(rightSpacer);
+    ui->toolBarScript->addWidget(rightWidget);
 
     connect(_scriptRunModeCombo, &RunModeComboBox::runModeChanged, this, [this](RunMode mode) {
         if(_scriptSettings.Mode == mode) return;
@@ -568,14 +577,36 @@ void FormScriptView::setupScriptBar()
     if (auto* stopButton = qobject_cast<QToolButton*>(ui->toolBarScript->widgetForAction(ui->actionStopScript)))
         stopButton->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
 
+    updateScriptBarToolTips();
+
     connect(ui->actionRunScript, &QAction::triggered, this, &FormScriptView::runScript);
     connect(ui->actionStopScript, &QAction::triggered, this, &FormScriptView::stopScript);
     connect(this, &FormScriptView::scriptRunning, this, &FormScriptView::updateScriptBar);
     connect(this, &FormScriptView::scriptStopped, this, &FormScriptView::updateScriptBar);
-    connect(ui->scriptControl->scriptDocument(), &QTextDocument::contentsChanged,
-            this, &FormScriptView::updateScriptBar);
+    connect(ui->scriptControl->scriptDocument(), &QTextDocument::contentsChanged, this, &FormScriptView::updateScriptBar);
 
     updateScriptBar();
+}
+
+///
+/// \brief FormScriptView::updateScriptBarToolTips
+///
+void FormScriptView::updateScriptBarToolTips()
+{
+    ui->actionRunScript->setToolTip(ui->actionRunScript->text());
+    ui->actionStopScript->setToolTip(ui->actionStopScript->text());
+
+    if (auto* runButton = qobject_cast<QToolButton*>(ui->toolBarScript->widgetForAction(ui->actionRunScript)))
+        runButton->setToolTip(ui->actionRunScript->toolTip());
+    if (auto* stopButton = qobject_cast<QToolButton*>(ui->toolBarScript->widgetForAction(ui->actionStopScript)))
+        stopButton->setToolTip(ui->actionStopScript->toolTip());
+
+    if (_scriptRunModeCombo)
+        _scriptRunModeCombo->setToolTip(tr("Script run mode"));
+    if (_scriptIntervalSpin)
+        _scriptIntervalSpin->setToolTip(tr("Script run interval"));
+    if (_scriptRunOnStartupCheck)
+        _scriptRunOnStartupCheck->setToolTip(_scriptRunOnStartupCheck->text());
 }
 
 ///

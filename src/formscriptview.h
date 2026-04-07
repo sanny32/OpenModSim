@@ -123,6 +123,7 @@ private:
 
     void setupScriptBar();
     void updateScriptBar();
+    void updateScriptBarToolTips();
 
 private:
     Ui::FormScriptView *ui;
