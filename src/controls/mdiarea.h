@@ -5,6 +5,7 @@
 #include <QMdiSubWindow>
 #include <QTabBar>
 #include <QFrame>
+#include <QList>
 #include <QPointer>
 #include "mditabbar.h"
 
@@ -89,6 +90,9 @@ private:
     void syncNativeTabBarSelection(QMdiSubWindow* wnd);
     void updateTabbedEnabledState();
     void enforceTabbedSubWindowState(QMdiSubWindow* wnd);
+    void rememberActivation(QMdiSubWindow* wnd);
+    void forgetActivation(QMdiSubWindow* wnd);
+    QMdiSubWindow* previousActivatedSubWindow(QMdiSubWindow* excluding = nullptr) const;
     QMdiSubWindow* subWindowAtIndex(int index) const;
 
 private:
@@ -102,6 +106,7 @@ private:
     QFrame* _tabBarBaseLine = nullptr;
     QPointer<QMdiSubWindow> _lastActivatedSubWindow;
     QPointer<QMdiSubWindow> _requestedActivation;
+    QList<QPointer<QMdiSubWindow>> _activationHistory;
 };
 
 #endif // MDIAREA_H

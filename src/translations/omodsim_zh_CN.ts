@@ -2657,12 +2657,12 @@ MODBUS Point Type:
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formscriptview.cpp" line="606"/>
+        <location filename="../formscriptview.cpp" line="605"/>
         <source>Script run mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formscriptview.cpp" line="608"/>
+        <location filename="../formscriptview.cpp" line="607"/>
         <source>Script run interval</source>
         <translation type="unfinished"></translation>
     </message>

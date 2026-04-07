@@ -167,19 +167,23 @@ void MdiArea::removeSubWindow(QWidget* widget)
                       .arg(AppTrace::objectTag(this))
                       .arg(AppTrace::widgetTag(widget)));
 
-    if (_tabBar) {
-        auto* wnd = qobject_cast<QMdiSubWindow*>(widget);
-        if (!wnd) {
-            for (auto* candidate : QMdiArea::subWindowList()) {
-                if (candidate && candidate->widget() == widget) {
-                    wnd = candidate;
-                    break;
-                }
+    auto* wnd = qobject_cast<QMdiSubWindow*>(widget);
+    if (!wnd) {
+        for (auto* candidate : QMdiArea::subWindowList()) {
+            if (candidate && candidate->widget() == widget) {
+                wnd = candidate;
+                break;
             }
         }
+    }
 
-        if (wnd)
+    if (wnd)
+        forgetActivation(wnd);
+
+    if (_tabBar) {
+        if (wnd) {
             _tabBar->removeSubWindow(wnd);
+        }
     }
 
     QMdiArea::removeSubWindow(widget);
@@ -244,6 +248,7 @@ void MdiArea::setActiveSubWindow(QMdiSubWindow* wnd)
 
     if (actual) {
         _lastActivatedSubWindow = actual;
+        rememberActivation(actual);
 
         if (_tabBar && _tabBar->currentSubWindow() != actual) {
             const QSignalBlocker blocker(_tabBar);
@@ -401,6 +406,8 @@ bool MdiArea::eventFilter(QObject* obj, QEvent* event)
 
     if (event->type() == QEvent::Close) {
         auto* wnd = qobject_cast<QMdiSubWindow*>(obj);
+        if (wnd)
+            forgetActivation(wnd);
         if (_tabBar)
             _tabBar->removeSubWindow(wnd);
     }
@@ -562,10 +569,10 @@ void MdiArea::on_closeTab(int index)
     if (_tabBar->count() == 1)
         emit lastTabAboutToClose();
 
-    // Find the previously active window using Qt's built-in activation history.
-    QMdiSubWindow* prev = nullptr;
-    for (auto* c : QMdiArea::subWindowList(ActivationHistoryOrder))
-        if (c && c != wnd) { prev = c; break; }
+    const bool closingActive = (wnd == QMdiArea::activeSubWindow())
+        || (wnd == QMdiArea::currentSubWindow())
+        || (_tabBar->currentSubWindow() == wnd);
+    QMdiSubWindow* prev = closingActive ? previousActivatedSubWindow(wnd) : nullptr;
 
     wnd->close();
 
@@ -702,6 +709,7 @@ void MdiArea::on_subWindowActivated(QMdiSubWindow* wnd)
     }
 
     _lastActivatedSubWindow = wnd;
+    rememberActivation(wnd);
     updateTabbedEnabledState();
     enforceTabbedSubWindowState(wnd);
 
@@ -1038,6 +1046,40 @@ void MdiArea::enforceTabbedSubWindowState(QMdiSubWindow* wnd)
 
     if (!wnd->isMaximized())
         wnd->showMaximized();
+}
+
+void MdiArea::rememberActivation(QMdiSubWindow* wnd)
+{
+    if (!wnd)
+        return;
+
+    forgetActivation(wnd);
+    _activationHistory.append(QPointer<QMdiSubWindow>(wnd));
+}
+
+void MdiArea::forgetActivation(QMdiSubWindow* wnd)
+{
+    for (int i = _activationHistory.size() - 1; i >= 0; --i) {
+        const auto& candidate = _activationHistory.at(i);
+        if (candidate.isNull() || candidate == wnd)
+            _activationHistory.removeAt(i);
+    }
+
+    if (_lastActivatedSubWindow == wnd)
+        _lastActivatedSubWindow = previousActivatedSubWindow();
+}
+
+QMdiSubWindow* MdiArea::previousActivatedSubWindow(QMdiSubWindow* excluding) const
+{
+    const auto windows = QMdiArea::subWindowList();
+    for (int i = _activationHistory.size() - 1; i >= 0; --i) {
+        auto* wnd = _activationHistory.at(i).data();
+        if (!wnd || wnd == excluding)
+            continue;
+        if (windows.contains(wnd))
+            return wnd;
+    }
+    return nullptr;
 }
 
 ///
