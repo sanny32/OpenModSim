@@ -45,6 +45,7 @@ signals:
     void formStopScriptRequested(ProjectFormRef ref);
     void runAllScriptsRequested();
     void stopAllScriptsRequested();
+    void deleteAllFormsRequested(ProjectFormType type);
     void formCreateRequested(ProjectFormType type);
 
 protected:

@@ -125,6 +125,7 @@ private:
     void restoreNewFormKindIcon();
     void runAllScripts();
     void stopAllScripts();
+    void deleteAllForms(ProjectFormType type);
     QWidget* currentForm() const;
     FormDataView* currentDataForm() const;
     FormTrafficView* currentTrafficForm() const;

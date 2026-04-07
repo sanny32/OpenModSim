@@ -226,6 +226,7 @@ MainWindow::MainWindow(const QString& profile, bool useSession, QWidget *parent)
     });
     connect(_projectTree, &ProjectTreeWidget::runAllScriptsRequested, this, &MainWindow::runAllScripts);
     connect(_projectTree, &ProjectTreeWidget::stopAllScriptsRequested, this, &MainWindow::stopAllScripts);
+    connect(_projectTree, &ProjectTreeWidget::deleteAllFormsRequested, this, &MainWindow::deleteAllForms);
     connect(_projectTree, &ProjectTreeWidget::formCreateRequested, this, [this](ProjectFormType type) {
         createNewForm(static_cast<ProjectFormKind>(type));
     });
@@ -365,6 +366,15 @@ void MainWindow::stopAllScripts()
     for (auto* script : _project->scriptForms()) {
         if (script && script->canStopScript())
             script->stopScript();
+    }
+}
+
+void MainWindow::deleteAllForms(ProjectFormType type)
+{
+    const auto forms = _project->forms(static_cast<ProjectFormKind>(type));
+    for (auto* form : forms) {
+        if (form && !form->property("DeleteLocked").toBool())
+            _project->deleteForm(form);
     }
 }
 

@@ -305,6 +305,17 @@ QList<QWidget*> AppProject::allProjectForms() const
     return result;
 }
 
+QList<QWidget*> AppProject::forms(ProjectFormKind kind) const
+{
+    QList<QWidget*> result;
+    for (auto* widget : allProjectForms()) {
+        bool okKind = false;
+        if (projectFormKindFromWidget(widget, &okKind) == kind && okKind)
+            result.append(widget);
+    }
+    return result;
+}
+
 QList<FormScriptView*> AppProject::scriptForms() const
 {
     QList<FormScriptView*> result;

@@ -345,7 +345,17 @@ void ProjectTreeWidget::on_contextMenu(const QPoint& pos)
 {
     auto item = itemAt(pos);
     const bool isFormItem = item && (item->data(0, ItemTypeRole).toInt() == ItemTypeForm);
+    const bool isRootItem = item == _dataRoot || item == _dataMapRoot || item == _trafficRoot || item == _scriptRoot;
     const bool isScriptRootItem = (item == _scriptRoot);
+    ProjectFormType rootType = ProjectFormType::Data;
+    if (item == _dataRoot)
+        rootType = ProjectFormType::Data;
+    else if (item == _dataMapRoot)
+        rootType = ProjectFormType::DataMap;
+    else if (item == _trafficRoot)
+        rootType = ProjectFormType::Traffic;
+    else if (item == _scriptRoot)
+        rootType = ProjectFormType::Script;
 
     QMenu menu(this);
 
@@ -359,8 +369,25 @@ void ProjectTreeWidget::on_contextMenu(const QPoint& pos)
     QAction* stopAction   = nullptr;
     QAction* runAllAction = nullptr;
     QAction* stopAllAction = nullptr;
+    QAction* deleteAllAction = nullptr;
     QAction* renameAction = nullptr;
     QAction* deleteAction = nullptr;
+
+    if (isRootItem) {
+        bool canDeleteAny = false;
+        for (int i = 0; i < item->childCount(); ++i) {
+            auto* child = item->child(i);
+            auto* form = static_cast<QWidget*>(child->data(0, Qt::UserRole).value<void*>());
+            if (form && !form->property("DeleteLocked").toBool()) {
+                canDeleteAny = true;
+                break;
+            }
+        }
+
+        menu.addSeparator();
+        deleteAllAction = menu.addAction(tr("Delete All"));
+        deleteAllAction->setEnabled(canDeleteAny);
+    }
 
     if (isScriptRootItem) {
         bool canRunAny = false;
@@ -438,6 +465,16 @@ void ProjectTreeWidget::on_contextMenu(const QPoint& pos)
     }
     if (selected == stopAllAction) {
         emit stopAllScriptsRequested();
+        return;
+    }
+    if (selected == deleteAllAction) {
+        const QString nodeName = item ? item->text(0) : QString();
+        const int ret = QMessageBox::question(this,
+                                              tr("Delete All"),
+                                              tr("Delete all in \"%1\"?").arg(nodeName),
+                                              QMessageBox::Yes | QMessageBox::No);
+        if (ret == QMessageBox::Yes)
+            emit deleteAllFormsRequested(rootType);
         return;
     }
 
