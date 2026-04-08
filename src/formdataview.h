@@ -276,6 +276,9 @@ inline QXmlStreamWriter& operator <<(QXmlStreamWriter& xml, FormDataView* frm)
     const auto panel = frm->property("SplitPanel").toString();
     if(!panel.isEmpty())
         xml.writeAttribute("Panel", panel);
+    xml.writeAttribute("Title", frm->windowTitle());
+    if(frm->property("SplitAutoClone").toBool())
+        xml.writeAttribute("AutoClone", "1");
     if(frm->property("Closed").toBool())
         xml.writeAttribute("Closed", "1");
     xml.writeAttribute("DataType", enumToString<DataType>(frm->dataType()));
@@ -471,12 +474,12 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, FormDataView* frm)
                         case QModbusDataUnit::Coils:
                         case QModbusDataUnit::DiscreteInputs:
                             if(item->Mode == SimulationMode::Toggle || item->Mode == SimulationMode::Random)
-                                frm->startSimulation(dd.PointType, item.key() - (dd.ZeroBasedAddress ? 0 : 1), item.value());
+                                frm->startSimulation(dd.PointType, item.key() - (frm->zeroBasedAddress() ? 0 : 1), item.value());
                             break;
                         case QModbusDataUnit::InputRegisters:
                         case QModbusDataUnit::HoldingRegisters:
                             if(item->Mode != SimulationMode::Off && item->Mode != SimulationMode::Toggle)
-                                frm->startSimulation(dd.PointType, item.key() - (dd.ZeroBasedAddress ? 0 : 1), item.value());
+                                frm->startSimulation(dd.PointType, item.key() - (frm->zeroBasedAddress() ? 0 : 1), item.value());
                             break;
                         default: break;
                     }
@@ -504,7 +507,7 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, FormDataView* frm)
                     if(index >= values.length()) break;
                 }
 
-                frm->configureModbusDataUnit(dd.DeviceId, dd.PointType, dd.PointAddress - (dd.ZeroBasedAddress ? 0 : 1), values);
+                frm->configureModbusDataUnit(dd.DeviceId, dd.PointType, dd.PointAddress - (frm->zeroBasedAddress() ? 0 : 1), values);
             }
         }
     }

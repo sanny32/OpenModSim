@@ -222,6 +222,9 @@ inline QXmlStreamWriter& operator <<(QXmlStreamWriter& xml, FormScriptView* frm)
     const auto panel = frm->property("SplitPanel").toString();
     if(!panel.isEmpty())
         xml.writeAttribute("Panel", panel);
+    xml.writeAttribute("Title", frm->windowTitle());
+    if(frm->property("SplitAutoClone").toBool())
+        xml.writeAttribute("AutoClone", "1");
     if(frm->property("Closed").toBool())
         xml.writeAttribute("Closed", "1");
 

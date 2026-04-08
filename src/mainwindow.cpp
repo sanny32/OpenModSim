@@ -51,18 +51,6 @@ int newFormKindToSetting(ProjectFormKind kind)
     return static_cast<int>(kind);
 }
 
-SetupPresetParams toPresetParams(const DataViewDefinitions& dd)
-{
-    return SetupPresetParams{
-        dd.DeviceId,
-        dd.PointAddress,
-        dd.Length,
-        dd.ZeroBasedAddress,
-        dd.AddrSpace,
-        dd.LeadingZeros
-    };
-}
-
 template<typename MdiAreaT, typename Fn>
 void forEachTypedForm(MdiAreaT* mdiArea, Fn&& fn)
 {
@@ -1116,14 +1104,19 @@ bool MainWindow::prepareWriteParams(QModbusDataUnit::RegisterType type,
 {
     outFrm = currentDataForm();
     outDd = outFrm ? outFrm->displayDefinition() : AppPreferences::instance().dataViewDefinitions();
-    if (!outFrm) {
-        const auto& prefs = AppPreferences::instance();
-        outDd.ZeroBasedAddress = prefs.globalZeroBasedAddress();
-        outDd.HexAddress = prefs.globalHexView();
-    }
-    outDd.AddrSpace = _mbMultiServer.getModbusDefinitions().AddrSpace;
+    const auto& prefs = AppPreferences::instance();
+    const bool zeroBasedAddress = outFrm ? outFrm->zeroBasedAddress() : prefs.globalZeroBasedAddress();
+    const bool displayHexAddresses = outFrm ? outFrm->displayHexAddresses() : prefs.globalHexView();
+    const auto addrSpace = _mbMultiServer.getModbusDefinitions().AddrSpace;
 
-    outPreset = toPresetParams(outDd);
+    outPreset = SetupPresetParams{
+        outDd.DeviceId,
+        outDd.PointAddress,
+        outDd.Length,
+        zeroBasedAddress,
+        addrSpace,
+        outDd.LeadingZeros
+    };
     if(outFrm) {
         _presetParams[type] = outPreset;
     } else if(_presetParams.contains(type)) {
@@ -1131,7 +1124,7 @@ bool MainWindow::prepareWriteParams(QModbusDataUnit::RegisterType type,
     }
 
     {
-        DialogSetupPresetData dlg(outPreset, type, outDd, this);
+        DialogSetupPresetData dlg(outPreset, type, displayHexAddresses, this);
         if(dlg.exec() != QDialog::Accepted) return false;
     }
     _presetParams[type] = outPreset;
@@ -1161,7 +1154,8 @@ void MainWindow::forceCoils(QModbusDataUnit::RegisterType type)
     FormDataView* frm; DataViewDefinitions dd; SetupPresetParams preset; ModbusWriteParams params;
     if(!prepareWriteParams(type, frm, dd, preset, params)) return;
 
-    DialogForceMultipleCoils dlg(params, type, preset.Length, dd, this);
+    const bool displayHexAddresses = frm ? frm->displayHexAddresses() : AppPreferences::instance().globalHexView();
+    DialogForceMultipleCoils dlg(params, type, preset.Length, displayHexAddresses, this);
     if(dlg.exec() == QDialog::Accepted)
         _mbMultiServer.writeRegister(type, params);
 }
@@ -1180,7 +1174,8 @@ void MainWindow::presetRegs(QModbusDataUnit::RegisterType type)
     params.Order    = frm ? frm->byteOrder()     : ByteOrder::Direct;
     params.Codepage = frm ? frm->codepage()      : QString();
 
-    DialogForceMultipleRegisters dlg(params, type, preset.Length, dd, this);
+    const bool displayHexAddresses = frm ? frm->displayHexAddresses() : AppPreferences::instance().globalHexView();
+    DialogForceMultipleRegisters dlg(params, type, preset.Length, displayHexAddresses, this);
     if(dlg.exec() == QDialog::Accepted)
         _mbMultiServer.writeRegister(type, params);
 }

@@ -19,28 +19,16 @@ struct DataViewDefinitions
     quint16 PointAddress = 1;
     QModbusDataUnit::RegisterType PointType = QModbusDataUnit::HoldingRegisters;
     quint16 Length = 100;
-    bool ZeroBasedAddress = false;
-    bool HexAddress = false;
-    bool HexViewAddress  = false;
-    bool HexViewDeviceId = false;
-    bool HexViewLength   = false;
-    AddressSpace AddrSpace = AddressSpace::Addr6Digits;
     quint16 DataViewColumnsDistance = 16;
     bool LeadingZeros = true;
 
     void normalize()
     {
         DeviceId = qMax<quint8>(ModbusLimits::slaveRange().from(), DeviceId);
-        PointAddress = qMax<quint16>(ModbusLimits::addressRange(AddrSpace, ZeroBasedAddress).from(), PointAddress);
+        PointAddress = qMax<quint16>(1, PointAddress);
         PointType = qBound(QModbusDataUnit::DiscreteInputs, PointType, QModbusDataUnit::HoldingRegisters);
-
-        const bool bitPointType = (PointType == QModbusDataUnit::Coils ||
-                                   PointType == QModbusDataUnit::DiscreteInputs);
-        const int offset = PointAddress - (ZeroBasedAddress ? 0 : 1);
-        const int maxByAddress = ModbusLimits::addressSpaceSize(AddrSpace) - offset;
-        const int maxByType = bitPointType ? 2000 : ModbusLimits::lengthRange().to();
-        const int maxLen = qMax(1, qMin(maxByType, maxByAddress));
-        Length = qBound<quint16>(ModbusLimits::lengthRange().from(), Length, static_cast<quint16>(maxLen));
+        Length = qBound<quint16>(ModbusLimits::lengthRange().from(), Length,
+                                 static_cast<quint16>(ModbusLimits::lengthRange().to()));
 
         DataViewColumnsDistance = qBound<quint16>(1, DataViewColumnsDistance, 32);
     }
@@ -84,9 +72,22 @@ struct ScriptViewDefinitions
         ScriptCfg.normalize();
     }
 };
+
+///
+/// \brief The DataMapViewDefinitions class
+///
+struct DataMapViewDefinitions
+{
+    QString FormName;
+    bool    ZeroBasedAddress = false;
+    bool    HexView          = false;
+    void normalize() {}
+};
+
 Q_DECLARE_METATYPE(DataViewDefinitions)
 Q_DECLARE_METATYPE(TrafficViewDefinitions)
 Q_DECLARE_METATYPE(ScriptViewDefinitions)
+Q_DECLARE_METATYPE(DataMapViewDefinitions)
 
 ///
 /// \brief QSettings writer for DataViewDefinitions
@@ -151,11 +152,6 @@ inline QSettings& operator >>(QSettings& in, DataViewDefinitions& dd)
     dd.Length = in.value("DataViewDefinitions/Length", 100).toUInt();
     dd.DataViewColumnsDistance = in.value("DataViewDefinitions/DataViewColumnSpace", 16).toUInt();
     dd.LeadingZeros = in.value("DataViewDefinitions/LeadingZeros", true).toBool();
-    dd.ZeroBasedAddress = in.value("DataViewDefinitions/ZeroBasedAddress").toBool();
-    dd.HexAddress = in.value("DataViewDefinitions/HexAddress").toBool();
-    dd.HexViewAddress  = in.value("DataViewDefinitions/HexViewAddress",  false).toBool();
-    dd.HexViewDeviceId = in.value("DataViewDefinitions/HexViewDeviceId", false).toBool();
-    dd.HexViewLength   = in.value("DataViewDefinitions/HexViewLength",   false).toBool();
 
     dd.normalize();
     return in;
@@ -278,10 +274,6 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, DataViewDefinitions&
             if (ok) dd.Length = length;
         }
 
-        if (attributes.hasAttribute("ZeroBasedAddress")) {
-            dd.ZeroBasedAddress = stringToBool(attributes.value("ZeroBasedAddress").toString());
-        }
-
         if (attributes.hasAttribute("DataViewColumnsDistance")) {
             bool ok; const quint16 distance = attributes.value("DataViewColumnsDistance").toUShort(&ok);
             if (ok) dd.DataViewColumnsDistance = distance;
@@ -290,18 +282,6 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, DataViewDefinitions&
         if (attributes.hasAttribute("LeadingZeros")) {
             dd.LeadingZeros = stringToBool(attributes.value("LeadingZeros").toString());
         }
-
-        if (attributes.hasAttribute("HexAddress"))
-            dd.HexAddress = stringToBool(attributes.value("HexAddress").toString());
-
-        if (attributes.hasAttribute("HexViewAddress"))
-            dd.HexViewAddress = stringToBool(attributes.value("HexViewAddress").toString());
-
-        if (attributes.hasAttribute("HexViewDeviceId"))
-            dd.HexViewDeviceId = stringToBool(attributes.value("HexViewDeviceId").toString());
-
-        if (attributes.hasAttribute("HexViewLength"))
-            dd.HexViewLength = stringToBool(attributes.value("HexViewLength").toString());
 
         dd.normalize();
     }

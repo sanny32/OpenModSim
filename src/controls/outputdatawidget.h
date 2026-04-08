@@ -126,7 +126,11 @@ public:
 
     QVector<quint16> data() const;
 
-    void setup(const DataViewDefinitions& dd, const ModbusSimulationMap2& simulations, const QModbusDataUnit& data);
+    void setup(const DataViewDefinitions& dd,
+               bool zeroBasedAddress,
+               AddressSpace addrSpace,
+               const ModbusSimulationMap2& simulations,
+               const QModbusDataUnit& data);
 
     DataType dataType() const;
     void setDataType(DataType type);
@@ -228,6 +232,8 @@ private:
     ByteOrder _byteOrder;
     QString _codepage;
     DataViewDefinitions _displayDefinition;
+    bool _zeroBasedAddress = false;
+    AddressSpace _addrSpace = AddressSpace::Addr6Digits;
     AddressColorMap _colorMap;
     QSharedPointer<OutputDataListModel> _listModel;
     QString _findText;

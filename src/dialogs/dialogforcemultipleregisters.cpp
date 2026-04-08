@@ -15,31 +15,29 @@
 /// \param dd
 /// \param parent
 ///
-DialogForceMultipleRegisters::DialogForceMultipleRegisters(ModbusWriteParams& params, QModbusDataUnit::RegisterType type, int length, const DataViewDefinitions& dd, QWidget *parent) :
+DialogForceMultipleRegisters::DialogForceMultipleRegisters(ModbusWriteParams& params, QModbusDataUnit::RegisterType type, int length, bool displayHexAddresses, QWidget *parent) :
       QAdjustedSizeDialog(parent)
     , ui(new Ui::DialogForceMultipleRegisters)
     ,_writeParams(params)
     ,_type(type)
-    ,_hexAddress(dd.HexAddress)
-    ,_hexViewDeviceId(dd.HexViewDeviceId)
-    ,_hexViewLength(dd.HexViewLength)
+    ,_hexAddress(displayHexAddresses)
 {
     ui->setupUi(this);
 
-    const auto deviceIdStr = _hexViewDeviceId
+    const auto deviceIdStr = displayHexAddresses
         ? QString("0x%1").arg(QString::number(params.DeviceId, 16).toUpper(), 2, '0')
         : QString::number(params.DeviceId);
-    const auto lengthStr = _hexViewLength
+    const auto lengthStr = displayHexAddresses
         ? QString("0x%1").arg(QString::number(length, 16).toUpper(), 4, '0')
         : QString::number(length);
 
     ui->labelAddress->setText(QString(ui->labelAddress->text()).arg(
-        formatAddress(type, params.Address, params.AddrSpace, _hexAddress || dd.HexViewAddress)));
+        formatAddress(type, params.Address, params.AddrSpace, _hexAddress)));
     ui->labelLength->setText(QString(ui->labelLength->text()).arg(lengthStr));
     ui->labelSlaveDevice->setText(QString(ui->labelSlaveDevice->text()).arg(deviceIdStr));
     ui->labelAddresses->setText(QString(ui->labelAddresses->text()).arg(
-        formatAddress(type, params.Address, params.AddrSpace, _hexAddress || dd.HexViewAddress),
-        formatAddress(type, params.Address + length - 1, params.AddrSpace, _hexAddress || dd.HexViewAddress)));
+        formatAddress(type, params.Address, params.AddrSpace, _hexAddress),
+        formatAddress(type, params.Address + length - 1, params.AddrSpace, _hexAddress)));
 
     ui->lineEditStep->setValue(1);
 

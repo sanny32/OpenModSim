@@ -1517,8 +1517,6 @@ void AppProject::loadProject(const QString& filename)
     bool hasProjectGlobalHexView = false;
     bool projectGlobalHexView = false;
     bool viewPreparedForForms = false;
-    QStringList secondaryForms;
-    bool hasSecondaryFormsSaved = false;
     QStringList primaryTabOrder;
     QStringList secondaryTabOrder;
 
@@ -1608,13 +1606,40 @@ void AppProject::loadProject(const QString& filename)
                             MdiArea* targetArea = _mdiArea->primaryArea();
                             const auto attrs = xml.attributes();
                             const QString panel = attrs.value("Panel").toString();
+                            const QString savedTitle = attrs.value("Title").toString();
                             const bool isClosed = attrs.value("Closed").toString() == "1";
-                            if(splitView && panel.compare(QLatin1String(kPanelRight), Qt::CaseInsensitive) == 0) {
+                            const bool isAutoClone = attrs.value("AutoClone").toString() == "1";
+                            const bool onRightPanel = splitView && panel.compare(QLatin1String(kPanelRight), Qt::CaseInsensitive) == 0;
+                            if(onRightPanel) {
                                 if(auto* secondary = secondaryArea())
                                     targetArea = secondary;
                             }
 
-                            auto frm = createMdiChildOnArea(kind, targetArea, true);
+                            QWidget* frm = nullptr;
+                            if(onRightPanel && isAutoClone && targetArea == secondaryArea()) {
+                                QWidget* sourceForm = nullptr;
+                                if(auto* primary = _mdiArea->primaryArea()) {
+                                    for(auto* wnd : primary->localSubWindowList()) {
+                                        auto* candidate = qobject_cast<QWidget*>(wnd ? wnd->widget() : nullptr);
+                                        bool okCandidate = false;
+                                        if(!candidate || candidate->property(kSplitAutoCloneProperty).toBool())
+                                            continue;
+                                        if(projectFormKindFromWidget(candidate, &okCandidate) == kind &&
+                                           okCandidate &&
+                                           candidate->windowTitle() == savedTitle) {
+                                            sourceForm = candidate;
+                                            break;
+                                        }
+                                    }
+                                }
+
+                                if(sourceForm)
+                                    frm = createCloneOnArea(sourceForm, targetArea);
+                            }
+
+                            if(!frm)
+                                frm = createMdiChildOnArea(kind, targetArea, !isAutoClone);
+
                             if (frm) {
                                 loadXmlOfForm(frm, xml);
                                 if (isClosed) {
@@ -1634,14 +1659,6 @@ void AppProject::loadProject(const QString& filename)
                         } else {
                             xml.skipCurrentElement();
                         }
-                    }
-                }
-                else if (xml.name() == QLatin1String("SplitSecondaryForms")) {
-                    hasSecondaryFormsSaved = true;
-                    while(xml.readNextStartElement()) {
-                        if(xml.name() == QLatin1String("FormRef"))
-                            secondaryForms << xml.attributes().value("title").toString();
-                        xml.skipCurrentElement();
                     }
                 }
                 else if (xml.name() == QLatin1String("TabOrder")) {
@@ -1758,27 +1775,6 @@ void AppProject::loadProject(const QString& filename)
         prefs.setGlobalZeroBasedAddress(projectGlobalZeroBasedAddress);
     if (hasProjectGlobalHexView)
         prefs.setGlobalHexView(projectGlobalHexView);
-
-    // Restore secondary panel state.
-    if(splitView && secondaryArea()) {
-        if(hasSecondaryFormsSaved) {
-            // Restore exactly the forms that were open on the secondary panel.
-            if(auto* primary = _mdiArea->primaryArea()) {
-                for(const QString& title : secondaryForms) {
-                    for(auto* wnd : primary->localSubWindowList()) {
-                        auto* w = wnd ? wnd->widget() : nullptr;
-                        if(w && w->windowTitle() == title) {
-                            createCloneOnArea(w, secondaryArea());
-                            break;
-                        }
-                    }
-                }
-            }
-        } else {
-            // Old project file without SplitSecondaryForms: duplicate all primary forms.
-            duplicatePrimaryTabsToSecondary();
-        }
-    }
 
     if(auto* primary = _mdiArea->primaryArea())
         applyTabOrderToArea(primary, primaryTabOrder);
@@ -1995,15 +1991,28 @@ void AppProject::saveProject(const QString& filename)
     w.writeEndElement(); // ViewSettings
 
     w.writeStartElement("Forms");
-    for(auto&& wnd : _mdiArea->subWindowList()) {
-        auto* widget = wnd ? wnd->widget() : nullptr;
-        if(!widget || widget->property(kSplitAutoCloneProperty).toBool())
-            continue;
+    auto saveOpenFormsFromArea = [&](MdiArea* area, const char* panel, bool autoClonesOnly) {
+        if(!area)
+            return;
 
-        const bool onRight = areaOfForm(qobject_cast<QWidget*>(widget)) == secondaryArea();
-        widget->setProperty(kFormPanelProperty, onRight ? QLatin1String(kPanelRight) : QLatin1String(kPanelLeft));
-        saveXmlOfForm(widget, w);
-        widget->setProperty(kFormPanelProperty, QVariant());
+        for(auto* wnd : area->localSubWindowList()) {
+            auto* widget = qobject_cast<QWidget*>(wnd ? wnd->widget() : nullptr);
+            if(!widget)
+                continue;
+
+            const bool isAutoClone = widget->property(kSplitAutoCloneProperty).toBool();
+            if(isAutoClone != autoClonesOnly)
+                continue;
+
+            widget->setProperty(kFormPanelProperty, QLatin1String(panel));
+            saveXmlOfForm(widget, w);
+            widget->setProperty(kFormPanelProperty, QVariant());
+        }
+    };
+    saveOpenFormsFromArea(_mdiArea->primaryArea(), kPanelLeft, false);
+    if(isSplitTabbedView()) {
+        saveOpenFormsFromArea(secondaryArea(), kPanelRight, false);
+        saveOpenFormsFromArea(secondaryArea(), kPanelRight, true);
     }
     // Also save forms that are closed (hidden in project tree)
     const auto closed = _closedForms;
@@ -2017,21 +2026,6 @@ void AppProject::saveProject(const QString& filename)
         }
     }
     w.writeEndElement(); // Forms
-
-    if(isSplitTabbedView()) {
-        if(auto* secondary = secondaryArea()) {
-            w.writeStartElement("SplitSecondaryForms");
-            for(auto* wnd : secondary->localSubWindowList()) {
-                auto* widget = wnd ? wnd->widget() : nullptr;
-                if(!widget || !widget->property(kSplitAutoCloneProperty).toBool())
-                    continue;
-                w.writeStartElement("FormRef");
-                w.writeAttribute("title", widget->windowTitle());
-                w.writeEndElement(); // FormRef
-            }
-            w.writeEndElement(); // SplitSecondaryForms
-        }
-    }
 
     auto writeTabOrder = [&](MdiArea* area, const char* panel) {
         const auto order = tabTitlesForArea(area);

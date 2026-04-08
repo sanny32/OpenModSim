@@ -517,7 +517,7 @@ FormDataMapView::FormDataMapView(ModbusMultiServer& server, MainWindow* parent)
 
     // Create model and filter proxy
     _model = new DataMapDataModel(_mbMultiServer, this);
-    _displayDefinition.ZeroBasedAddress = AppPreferences::instance().dataViewDefinitions().ZeroBasedAddress;
+    _displayDefinition.ZeroBasedAddress = AppPreferences::instance().globalZeroBasedAddress();
     _model->setZeroBased(_displayDefinition.ZeroBasedAddress);
     _proxy = new DataMapFilterProxy(this);
     _proxy->setSourceModel(_model);

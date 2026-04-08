@@ -257,9 +257,6 @@ DataViewDefinitions FormDataView::displayDefinition() const
     dd.PointAddress = ui->lineEditAddress->value<int>();
     dd.PointType = ui->comboBoxModbusPointType->currentPointType();
     dd.Length = ui->lineEditLength->value<int>();
-    dd.ZeroBasedAddress = zeroBasedAddress();
-    dd.HexAddress = displayHexAddresses();
-    dd.AddrSpace = _mbMultiServer.getModbusDefinitions().AddrSpace;
     dd.DataViewColumnsDistance = ui->outputWidget->dataViewColumnsDistance();
     dd.LeadingZeros = ui->checkBoxLeadingZeros->isChecked();
 
@@ -283,13 +280,13 @@ void FormDataView::setDisplayDefinition(const DataViewDefinitions& dd)
     {
         QSignalBlocker b(ui->lineEditAddress);
         ui->lineEditAddress->setLeadingZeroes(false);
-        ui->lineEditAddress->setInputRange(ModbusLimits::addressRange(defs.AddrSpace, dd.ZeroBasedAddress));
+        ui->lineEditAddress->setInputRange(ModbusLimits::addressRange(defs.AddrSpace, zeroBasedAddress()));
         ui->lineEditAddress->setValue(dd.PointAddress);
     }
     {
         QSignalBlocker b(ui->lineEditLength);
         ui->lineEditLength->setLeadingZeroes(false);
-        ui->lineEditLength->setInputRange(lengthRangeForPointType(dd.PointAddress, dd.ZeroBasedAddress, defs.AddrSpace, dd.PointType));
+        ui->lineEditLength->setInputRange(lengthRangeForPointType(dd.PointAddress, zeroBasedAddress(), defs.AddrSpace, dd.PointType));
         ui->lineEditLength->setValue(dd.Length);
     }
     {
@@ -301,8 +298,6 @@ void FormDataView::setDisplayDefinition(const DataViewDefinitions& dd)
         ui->comboBoxModbusPointType->setCurrentPointType(dd.PointType);
     }
     ui->outputWidget->setDataViewColumnsDistance(dd.DataViewColumnsDistance);
-
-    setDisplayHexAddresses(dd.HexAddress);
 
     updateSettingsControls();
     emit definitionChanged();
@@ -346,7 +341,6 @@ void FormDataView::setZeroBasedAddress(bool zeroBased)
 
     auto dd = displayDefinition();
     dd.PointAddress = zeroBased ? qMax(0, dd.PointAddress - 1) : qMax(1, dd.PointAddress + 1);
-    dd.ZeroBasedAddress = zeroBased;
     setDisplayDefinitionSilent(dd);
 }
 
@@ -665,7 +659,7 @@ void FormDataView::print(QPrinter* printer)
 ModbusSimulationMap2 FormDataView::simulationMap() const
 {
     const auto dd = displayDefinition();
-    const auto startAddr = dd.PointAddress - (dd.ZeroBasedAddress ? 0 : 1);
+    const auto startAddr = dd.PointAddress - (zeroBasedAddress() ? 0 : 1);
     const auto endAddr = startAddr + dd.Length;
 
     ModbusSimulationMap2 result;
@@ -752,7 +746,7 @@ void FormDataView::configureModbusDataUnit(quint8 deviceId, QModbusDataUnit::Reg
 AddressDescriptionMap FormDataView::descriptionMap() const
 {
     const auto dd = displayDefinition();
-    const auto startAddress = static_cast<quint16>(dd.PointAddress - (dd.ZeroBasedAddress ? 0 : 1));
+    const auto startAddress = static_cast<quint16>(dd.PointAddress - (zeroBasedAddress() ? 0 : 1));
     return _mbMultiServer.descriptionMap(dd.DeviceId, dd.PointType, startAddress, dd.Length);
 }
 
@@ -769,7 +763,7 @@ void FormDataView::setDescription(quint8 deviceId, QModbusDataUnit::RegisterType
 
     const auto dd = displayDefinition();
     if(deviceId == dd.DeviceId && type == dd.PointType) {
-        const auto startAddress = static_cast<quint16>(dd.PointAddress - (dd.ZeroBasedAddress ? 0 : 1));
+        const auto startAddress = static_cast<quint16>(dd.PointAddress - (zeroBasedAddress() ? 0 : 1));
         const quint32 endAddress = static_cast<quint32>(startAddress) + dd.Length;
         if(addr >= startAddress && static_cast<quint32>(addr) < endAddress) {
             QSignalBlocker blocker(ui->outputWidget);
@@ -827,13 +821,13 @@ void FormDataView::setDisplayDefinitionSilent(const DataViewDefinitions& dd)
     {
         QSignalBlocker b(ui->lineEditAddress);
         ui->lineEditAddress->setLeadingZeroes(false);
-        ui->lineEditAddress->setInputRange(ModbusLimits::addressRange(defs.AddrSpace, dd.ZeroBasedAddress));
+        ui->lineEditAddress->setInputRange(ModbusLimits::addressRange(defs.AddrSpace, zeroBasedAddress()));
         ui->lineEditAddress->setValue(dd.PointAddress);
     }
     {
         QSignalBlocker b(ui->lineEditLength);
         ui->lineEditLength->setLeadingZeroes(false);
-        ui->lineEditLength->setInputRange(lengthRangeForPointType(dd.PointAddress, dd.ZeroBasedAddress, defs.AddrSpace, dd.PointType));
+        ui->lineEditLength->setInputRange(lengthRangeForPointType(dd.PointAddress, zeroBasedAddress(), defs.AddrSpace, dd.PointType));
         ui->lineEditLength->setValue(dd.Length);
     }
     {
@@ -846,7 +840,6 @@ void FormDataView::setDisplayDefinitionSilent(const DataViewDefinitions& dd)
     }
 
     ui->outputWidget->setDataViewColumnsDistance(dd.DataViewColumnsDistance);
-    setDisplayHexAddresses(dd.HexAddress);
     updateSettingsControls();
 
     // Re-register unit map and refresh output widget.
@@ -882,25 +875,27 @@ void FormDataView::setColumnsDistance(int value)
 
 ///
 /// \brief FormDataView::linkTo
-/// Bidirectionally syncs display definition, display mode, byte order, and codepage with \a other.
+/// Bidirectionally syncs shared display settings with \a other.
+/// Data presentation selection and local formatting options stay independent per split panel.
 ///
 void FormDataView::linkTo(FormDataView* other)
 {
     if(!other) return;
-    connect(this, &FormDataView::definitionChanged, other, [this, other]() {
-        other->setDisplayDefinitionSilent(displayDefinition());
+    const auto syncSharedDefinition = [](FormDataView* source, FormDataView* target) {
+        auto targetDefinition = source->displayDefinition();
+        const auto localDefinition = target->displayDefinition();
+        targetDefinition.LeadingZeros = localDefinition.LeadingZeros;
+        targetDefinition.DataViewColumnsDistance = localDefinition.DataViewColumnsDistance;
+        target->setDisplayDefinitionSilent(targetDefinition);
+    };
+    connect(this, &FormDataView::definitionChanged, other, [this, other, syncSharedDefinition]() {
+        syncSharedDefinition(this, other);
     });
-    connect(other, &FormDataView::definitionChanged, this, [this, other]() {
-        setDisplayDefinitionSilent(other->displayDefinition());
+    connect(other, &FormDataView::definitionChanged, this, [this, other, syncSharedDefinition]() {
+        syncSharedDefinition(other, this);
     });
-    connect(this,  &FormDataView::byteOrderChanged, other, &FormDataView::setByteOrder);
-    connect(other, &FormDataView::byteOrderChanged, this,  &FormDataView::setByteOrder);
     connect(this,  &FormDataView::codepageChanged, other, &FormDataView::setCodepage);
     connect(other, &FormDataView::codepageChanged, this,  &FormDataView::setCodepage);
-    connect(this,  &FormDataView::dataTypeChanged,      other, &FormDataView::setDataType);
-    connect(other, &FormDataView::dataTypeChanged,      this,  &FormDataView::setDataType);
-    connect(this,  &FormDataView::registerOrderChanged, other, &FormDataView::setRegisterOrder);
-    connect(other, &FormDataView::registerOrderChanged, this,  &FormDataView::setRegisterOrder);
     connect(this,  &FormDataView::displayHexAddressesChanged, other, &FormDataView::setDisplayHexAddresses);
     connect(other, &FormDataView::displayHexAddressesChanged, this,  &FormDataView::setDisplayHexAddresses);
     connect(this,  &FormDataView::fontChanged, other, &FormDataView::setFont);
@@ -1033,7 +1028,7 @@ void FormDataView::updateStatus()
     if(_mbMultiServer.isConnected())
     {
         const auto defs = _mbMultiServer.getModbusDefinitions();
-        const auto addr = dd.PointAddress - (dd.ZeroBasedAddress ? 0 : 1);
+        const auto addr = dd.PointAddress - (zeroBasedAddress() ? 0 : 1);
         if(addr + dd.Length <= ModbusLimits::addressRange(defs.AddrSpace).to())
             ui->outputWidget->setStatus(QString());
         else
@@ -1053,10 +1048,11 @@ void FormDataView::onDefinitionChanged()
     updateStatus();
 
     const auto dd = displayDefinition();
-    const auto addr = dd.PointAddress - (dd.ZeroBasedAddress ? 0 : 1);
+    const auto addr = dd.PointAddress - (zeroBasedAddress() ? 0 : 1);
     _mbMultiServer.addUnitMap(dataFormId(this), dd.DeviceId, dd.PointType, addr, dd.Length);
 
-    ui->outputWidget->setup(dd, _dataSimulator->simulationMap(), _mbMultiServer.data(dd.DeviceId, dd.PointType, addr, dd.Length));
+    ui->outputWidget->setup(dd, zeroBasedAddress(), _mbMultiServer.getModbusDefinitions().AddrSpace,
+                           _dataSimulator->simulationMap(), _mbMultiServer.data(dd.DeviceId, dd.PointType, addr, dd.Length));
     syncDescriptionsFromServer();
     updateDisplayBar();
     reapplyFind();
@@ -1071,7 +1067,7 @@ void FormDataView::reapplyFind()
 void FormDataView::syncDescriptionsFromServer()
 {
     const auto dd = displayDefinition();
-    const auto startAddress = static_cast<quint16>(dd.PointAddress - (dd.ZeroBasedAddress ? 0 : 1));
+    const auto startAddress = static_cast<quint16>(dd.PointAddress - (zeroBasedAddress() ? 0 : 1));
     const auto map = _mbMultiServer.descriptionMap(dd.DeviceId, dd.PointType, startAddress, dd.Length);
 
     QSignalBlocker blocker(ui->outputWidget);
@@ -1098,7 +1094,7 @@ void FormDataView::on_outputWidget_itemDoubleClicked(quint16 addr, const QVarian
     params.AddrSpace = _mbMultiServer.getModbusDefinitions().AddrSpace;
     params.Order = byteOrder();
     params.Codepage = codepage();
-    params.ZeroBasedAddress = dd.ZeroBasedAddress;
+    params.ZeroBasedAddress = zeroBasedAddress();
     params.LeadingZeros = dd.LeadingZeros;
     params.Server = &_mbMultiServer;
 
@@ -1135,7 +1131,7 @@ void FormDataView::on_mbDataChanged(quint8 deviceId, const QModbusDataUnit&)
     const auto dd = displayDefinition();
     if(deviceId == dd.DeviceId)
     {
-        const auto addr = dd.PointAddress - (dd.ZeroBasedAddress ? 0 : 1);
+        const auto addr = dd.PointAddress - (zeroBasedAddress() ? 0 : 1);
         ui->outputWidget->updateData(_mbMultiServer.data(deviceId, dd.PointType, addr, dd.Length));
         reapplyFind();
     }
@@ -1148,10 +1144,11 @@ void FormDataView::on_mbDataChanged(quint8 deviceId, const QModbusDataUnit&)
 void FormDataView::on_mbDefinitionsChanged(const ModbusDefinitions& defs)
 {
     const auto dd = displayDefinition();
-    const auto addr = dd.PointAddress - (dd.ZeroBasedAddress ? 0 : 1);
-    ui->lineEditAddress->setInputRange(ModbusLimits::addressRange(defs.AddrSpace, dd.ZeroBasedAddress));
-    ui->lineEditLength->setInputRange(lengthRangeForPointType(dd.PointAddress, dd.ZeroBasedAddress, defs.AddrSpace, dd.PointType));
-    ui->outputWidget->setup(dd, _dataSimulator->simulationMap(), _mbMultiServer.data(dd.DeviceId, dd.PointType, addr, dd.Length));
+    const auto addr = dd.PointAddress - (zeroBasedAddress() ? 0 : 1);
+    ui->lineEditAddress->setInputRange(ModbusLimits::addressRange(defs.AddrSpace, zeroBasedAddress()));
+    ui->lineEditLength->setInputRange(lengthRangeForPointType(dd.PointAddress, zeroBasedAddress(), defs.AddrSpace, dd.PointType));
+    ui->outputWidget->setup(dd, zeroBasedAddress(), defs.AddrSpace,
+                           _dataSimulator->simulationMap(), _mbMultiServer.data(dd.DeviceId, dd.PointType, addr, dd.Length));
     syncDescriptionsFromServer();
     reapplyFind();
 }
@@ -1169,7 +1166,7 @@ void FormDataView::on_mbDescriptionChanged(quint8 deviceId, QModbusDataUnit::Reg
     if(deviceId != dd.DeviceId || type != dd.PointType)
         return;
 
-    const auto startAddress = static_cast<quint16>(dd.PointAddress - (dd.ZeroBasedAddress ? 0 : 1));
+    const auto startAddress = static_cast<quint16>(dd.PointAddress - (zeroBasedAddress() ? 0 : 1));
     const quint32 endAddress = static_cast<quint32>(startAddress) + dd.Length;
     if(addr < startAddress || static_cast<quint32>(addr) >= endAddress)
         return;
@@ -1217,10 +1214,11 @@ void FormDataView::on_simulationStopped(DataType type, RegisterOrder order, quin
 void FormDataView::on_dataSimulated(DataType type, RegisterOrder order, quint8 deviceId, QModbusDataUnit::RegisterType regType, quint16 startAddress, QVariant value)
 {
     const auto dd = displayDefinition();
-    const auto pointAddr = dd.PointAddress - (dd.ZeroBasedAddress ? 0 : 1);
+    const auto pointAddr = dd.PointAddress - (zeroBasedAddress() ? 0 : 1);
     if(deviceId == dd.DeviceId && regType == dd.PointType && startAddress >= pointAddr && startAddress <= pointAddr + dd.Length)
     {
-        const ModbusWriteParams params = { dd.DeviceId, startAddress, value, type, order, dd.AddrSpace, byteOrder(), codepage(), true };
+        const ModbusWriteParams params = { dd.DeviceId, startAddress, value, type, order,
+                                           _mbMultiServer.getModbusDefinitions().AddrSpace, byteOrder(), codepage(), true };
         _mbMultiServer.writeRegister(regType, params);
     }
 }

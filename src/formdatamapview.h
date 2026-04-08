@@ -20,18 +20,6 @@ class FormDataMapView;
 }
 
 ///
-/// \brief The DataMapViewDefinitions struct
-///
-struct DataMapViewDefinitions
-{
-    QString FormName;
-    bool    ZeroBasedAddress = false;
-    bool    HexView          = false;
-    void normalize() {}
-};
-Q_DECLARE_METATYPE(DataMapViewDefinitions)
-
-///
 /// \brief The FormDataMapView class
 ///
 class FormDataMapView : public QWidget
@@ -124,6 +112,9 @@ inline QXmlStreamWriter& operator <<(QXmlStreamWriter& xml, FormDataMapView* frm
     const auto panel = frm->property("SplitPanel").toString();
     if (!panel.isEmpty())
         xml.writeAttribute("Panel", panel);
+    xml.writeAttribute("Title", frm->windowTitle());
+    if (frm->property("SplitAutoClone").toBool())
+        xml.writeAttribute("AutoClone", "1");
     if (frm->property("Closed").toBool())
         xml.writeAttribute("Closed", "1");
 
@@ -140,7 +131,10 @@ inline QXmlStreamWriter& operator <<(QXmlStreamWriter& xml, FormDataMapView* frm
     xml.writeEndElement(); // Window
 
     xml.writeStartElement("DataMapViewDefinitions");
-    xml.writeAttribute("FormName",         frm->displayDefinition().FormName);
+    const auto dd = frm->displayDefinition();
+    xml.writeAttribute("FormName",         dd.FormName);
+    xml.writeAttribute("ZeroBasedAddress", boolToString(dd.ZeroBasedAddress));
+    xml.writeAttribute("HexView",          boolToString(dd.HexView));
     xml.writeAttribute("AutoAddOnRequest", boolToString(frm->autoAddOnRequest()));
     xml.writeAttribute("AutoRequestMap",   boolToString(frm->isAutoRequestMap()));
     xml.writeEndElement();
@@ -280,5 +274,3 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, FormDataMapView* frm
 }
 
 #endif // FORMDATAMAPVIEW_H
-
-

@@ -60,7 +60,7 @@ QVariant OutputDataListModel::data(const QModelIndex& index, int role) const
 
     const auto row = index.row();
     const auto pointType = _parentWidget->_displayDefinition.PointType;
-    const auto addrSpace = _parentWidget->_displayDefinition.AddrSpace;
+    const auto addrSpace = _parentWidget->_addrSpace;
     const auto hexAddresses = _parentWidget->displayHexAddresses();
 
     const auto itemData = _mapItems.find(row);
@@ -393,7 +393,7 @@ QModelIndex OutputDataListModel::find(quint8 deviceId, QModbusDataUnit::Register
         return QModelIndex();
 
     const auto dd =  _parentWidget->_displayDefinition;
-    const int row = addr - (dd.PointAddress - (dd.ZeroBasedAddress ? 0 : 1));
+    const int row = addr - (dd.PointAddress - (_parentWidget->_zeroBasedAddress ? 0 : 1));
     if(row >= 0 && row < rowCount())
         return index(row);
 
@@ -546,11 +546,17 @@ QVector<quint16> OutputDataWidget::data() const
 /// \param simulations
 /// \param data
 ///
-void OutputDataWidget::setup(const DataViewDefinitions& dd, const ModbusSimulationMap2& simulations, const QModbusDataUnit& data)
+void OutputDataWidget::setup(const DataViewDefinitions& dd,
+                             bool zeroBasedAddress,
+                             AddressSpace addrSpace,
+                             const ModbusSimulationMap2& simulations,
+                             const QModbusDataUnit& data)
 {
     _colorMap.insert(colorMap());
 
     _displayDefinition = dd;
+    _zeroBasedAddress = zeroBasedAddress;
+    _addrSpace = addrSpace;
     setDataViewColumnsDistance(dd.DataViewColumnsDistance);
 
     _listModel->clear();
@@ -911,7 +917,7 @@ AddressColorMap OutputDataWidget::colorMap() const
     for(int i = 0; i < _listModel->rowCount(); i++)
     {
         const auto clr = _listModel->data(_listModel->index(i), ColorRole).value<QColor>();
-        const quint16 addr = _listModel->data(_listModel->index(i), AddressRole).toUInt() - (_displayDefinition.ZeroBasedAddress ? 0 : 1);
+        const quint16 addr = _listModel->data(_listModel->index(i), AddressRole).toUInt() - (_zeroBasedAddress ? 0 : 1);
         colorMap[{_displayDefinition.DeviceId, _displayDefinition.PointType, addr }] = clr;
     }
     return colorMap;
@@ -1196,7 +1202,7 @@ AddressDescriptionMap OutputDataWidget::descriptionMap() const
     for(int i = 0; i < _listModel->rowCount(); i++)
     {
         const auto desc = _listModel->data(_listModel->index(i), DescriptionRole).toString();
-        const quint16 addr = _listModel->data(_listModel->index(i), AddressRole).toUInt() - (_displayDefinition.ZeroBasedAddress ? 0 : 1);
+        const quint16 addr = _listModel->data(_listModel->index(i), AddressRole).toUInt() - (_zeroBasedAddress ? 0 : 1);
         descriptionMap[{_displayDefinition.DeviceId, _displayDefinition.PointType, addr }] = desc;
     }
     return descriptionMap;
@@ -1373,7 +1379,7 @@ void OutputDataWidget::on_listView_customContextMenuRequested(const QPoint &pos)
     });
 
     const quint16 addrKey = static_cast<quint16>(
-        _listModel->data(index, AddressRole).toUInt() - (_displayDefinition.ZeroBasedAddress ? 0 : 1));
+        _listModel->data(index, AddressRole).toUInt() - (_zeroBasedAddress ? 0 : 1));
 
     const auto desc = _listModel->data(index, DescriptionRole).toString();
     QAction* addDescrAction = menu.addAction(desc.isEmpty() ? tr("Add Description") : tr("Edit Description"));

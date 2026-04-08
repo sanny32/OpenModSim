@@ -239,6 +239,9 @@ inline QXmlStreamWriter& operator <<(QXmlStreamWriter& xml, FormTrafficView* frm
     const auto panel = frm->property("SplitPanel").toString();
     if(!panel.isEmpty())
         xml.writeAttribute("Panel", panel);
+    xml.writeAttribute("Title", frm->windowTitle());
+    if(frm->property("SplitAutoClone").toBool())
+        xml.writeAttribute("AutoClone", "1");
     if(frm->property("Closed").toBool())
         xml.writeAttribute("Closed", "1");
 
@@ -277,6 +280,7 @@ inline QXmlStreamWriter& operator <<(QXmlStreamWriter& xml, FormTrafficView* frm
     xml.writeAttribute("LogViewLimit", QString::number(dd.LogViewLimit));
     xml.writeAttribute("ExceptionsOnly", boolToString(dd.ExceptionsOnly));
     xml.writeAttribute("Autoscroll", boolToString(dd.Autoscroll));
+    xml.writeAttribute("HexView", boolToString(dd.HexView));
     xml.writeEndElement();
 
     xml.writeEndElement(); // FormTrafficView

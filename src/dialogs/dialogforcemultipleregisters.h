@@ -22,7 +22,7 @@ class DialogForceMultipleRegisters : public QAdjustedSizeDialog
     Q_OBJECT
 
 public:
-    explicit DialogForceMultipleRegisters(ModbusWriteParams& params, QModbusDataUnit::RegisterType type, int length, const DataViewDefinitions& dd, QWidget *parent = nullptr);
+    explicit DialogForceMultipleRegisters(ModbusWriteParams& params, QModbusDataUnit::RegisterType type, int length, bool displayHexAddresses, QWidget *parent = nullptr);
     ~DialogForceMultipleRegisters();
 
     void accept() override;
@@ -85,8 +85,6 @@ private:
     ModbusWriteParams& _writeParams;
     QModbusDataUnit::RegisterType _type;
     bool _hexAddress = false;
-    bool _hexViewDeviceId = false;
-    bool _hexViewLength   = false;
 };
 
 #endif // DIALOGFORCEMULTIPLEREGISTERS_H
