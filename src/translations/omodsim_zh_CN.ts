@@ -1743,22 +1743,22 @@
         <translation>з‚№ж•°пјљ </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogsetuppresetdata.cpp" line="41"/>
+        <location filename="../dialogs/dialogsetuppresetdata.cpp" line="40"/>
         <source>PRESET COILS</source>
         <translation>йў„и®ѕзєїењ€</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogsetuppresetdata.cpp" line="44"/>
+        <location filename="../dialogs/dialogsetuppresetdata.cpp" line="43"/>
         <source>PRESET DISCRETE INPUTS</source>
         <translation>йў„и®ѕз¦»ж•Јиѕ“е…Ґ</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogsetuppresetdata.cpp" line="47"/>
+        <location filename="../dialogs/dialogsetuppresetdata.cpp" line="46"/>
         <source>PRESET INPUT REGISTERS</source>
         <translation>йў„и®ѕиѕ“е…ҐеЇ„е­е™Ё</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogsetuppresetdata.cpp" line="50"/>
+        <location filename="../dialogs/dialogsetuppresetdata.cpp" line="49"/>
         <source>PRESET HOLDING REGISTERS</source>
         <translation>йў„и®ѕдїќжЊЃеЇ„е­е™Ё</translation>
     </message>
@@ -3449,8 +3449,8 @@ Script.onInit(()=&gt;{
     </message>
     <message>
         <location filename="../mainwindow.ui" line="235"/>
-        <location filename="../mainwindow.cpp" line="1544"/>
-        <location filename="../mainwindow.cpp" line="1544"/>
+        <location filename="../mainwindow.cpp" line="1543"/>
+        <location filename="../mainwindow.cpp" line="1543"/>
         <source>Save Project</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3797,8 +3797,8 @@ Script.onInit(()=&gt;{
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="147"/>
-        <location filename="../mainwindow.cpp" line="1631"/>
-        <location filename="../mainwindow.cpp" line="1631"/>
+        <location filename="../mainwindow.cpp" line="1630"/>
+        <location filename="../mainwindow.cpp" line="1630"/>
         <source>Clear List</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3824,7 +3824,7 @@ Script.onInit(()=&gt;{
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1401"/>
+        <location filename="../mainwindow.cpp" line="1400"/>
         <source>Address Base</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3879,12 +3879,12 @@ Script.onInit(()=&gt;{
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1397"/>
+        <location filename="../mainwindow.cpp" line="1396"/>
         <source>1-based</source>
         <translation type="unfinished">еџєењ°еќЂдёє-1</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1398"/>
+        <location filename="../mainwindow.cpp" line="1397"/>
         <source>0-based</source>
         <translation type="unfinished">еџєењ°еќЂдёє-0</translation>
     </message>
@@ -3895,12 +3895,12 @@ Script.onInit(()=&gt;{
         <translation type="unfinished">еЌЃе…­иї›е€¶и§†е›ѕ</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1545"/>
+        <location filename="../mainwindow.cpp" line="1544"/>
         <source>Save project before closing?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1619"/>
+        <location filename="../mainwindow.cpp" line="1618"/>
         <source>No Recent Projects</source>
         <translation type="unfinished"></translation>
     </message>

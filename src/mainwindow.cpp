@@ -1106,7 +1106,6 @@ bool MainWindow::prepareWriteParams(QModbusDataUnit::RegisterType type,
     outDd = outFrm ? outFrm->displayDefinition() : AppPreferences::instance().dataViewDefinitions();
     const auto& prefs = AppPreferences::instance();
     const bool zeroBasedAddress = outFrm ? outFrm->zeroBasedAddress() : prefs.globalZeroBasedAddress();
-    const bool displayHexAddresses = outFrm ? outFrm->displayHexAddresses() : prefs.globalHexView();
     const auto addrSpace = _mbMultiServer.getModbusDefinitions().AddrSpace;
 
     outPreset = SetupPresetParams{
@@ -1124,7 +1123,7 @@ bool MainWindow::prepareWriteParams(QModbusDataUnit::RegisterType type,
     }
 
     {
-        DialogSetupPresetData dlg(outPreset, type, displayHexAddresses, this);
+        DialogSetupPresetData dlg(outPreset, type, this);
         if(dlg.exec() != QDialog::Accepted) return false;
     }
     _presetParams[type] = outPreset;
