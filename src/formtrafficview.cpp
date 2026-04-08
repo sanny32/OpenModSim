@@ -449,19 +449,11 @@ void FormTrafficView::setDisplayDefinitionSilent(const TrafficViewDefinitions& d
 
 ///
 /// \brief FormTrafficView::linkTo
-/// Bidirectionally syncs filter settings and pause state with \a other.
+/// Keeps split peers independent; traffic filters, view settings, and pause state are local per panel.
 ///
 void FormTrafficView::linkTo(FormTrafficView* other)
 {
-    if(!other) return;
-    connect(this,  &FormTrafficView::definitionChanged, other, [this, other]() {
-        other->setDisplayDefinitionSilent(displayDefinition());
-    });
-    connect(other, &FormTrafficView::definitionChanged, this, [this, other]() {
-        setDisplayDefinitionSilent(other->displayDefinition());
-    });
-    connect(this,  &FormTrafficView::logViewStateChanged, other, &FormTrafficView::setLogViewState);
-    connect(other, &FormTrafficView::logViewStateChanged, this,  &FormTrafficView::setLogViewState);
+    Q_UNUSED(other);
 }
 
 ///
