@@ -1,11 +1,25 @@
 #include <QtMath>
 #include <QRandomGenerator>
+#include <QActionGroup>
+#include <QToolButton>
+#include <QRegularExpression>
+#include <QRegularExpressionValidator>
+#include "ansimenu.h"
 #include "uiutils.h"
 #include "formatutils.h"
 #include "numericutils.h"
 #include "numericlineedit.h"
 #include "dialogforcemultipleregisters.h"
 #include "ui_dialogforcemultipleregisters.h"
+
+namespace {
+quint16 parseBinary16(const QString& text, quint16 fallback = 0)
+{
+    bool ok = false;
+    const auto value = text.trimmed().toUShort(&ok, 2);
+    return ok ? value : fallback;
+}
+}
 
 ///
 /// \brief DialogForceMultipleRegisters::DialogForceMultipleRegisters
@@ -61,88 +75,8 @@ DialogForceMultipleRegisters::DialogForceMultipleRegisters(ModbusWriteParams& pa
     _data = params.Value.value<QVector<quint16>>();
     if(_data.length() != length) _data.resize(length);
 
-    const bool lsrf = _writeParams.RegOrder == RegisterOrder::LSRF;
-
-    switch(_writeParams.DataMode)
-    {
-        case DataType::Hex:
-            setupLineEdit<quint16>(ui->lineEditValue, NumericLineEdit::HexMode, true);
-            setupLineEdit<quint16>(ui->lineEditStartValue, NumericLineEdit::HexMode, true);
-            setupLineEdit<quint16>(ui->lineEditStep, NumericLineEdit::HexMode, true);
-            ui->lineEditStartValue->setValue(toByteOrderValue(_data[0], _writeParams.Order));
-        break;
-
-        case DataType::Ansi:
-            setupLineEdit<quint16>(ui->lineEditValue, NumericLineEdit::AnsiMode);
-            ui->lineEditValue->setCodepage(params.Codepage);
-            setupLineEdit<quint16>(ui->lineEditStartValue, NumericLineEdit::UInt32Mode);
-            setupLineEdit<qint16>(ui->lineEditStep, NumericLineEdit::Int32Mode);
-            ui->lineEditStartValue->setValue(toByteOrderValue(_data[0], _writeParams.Order));
-        break;
-
-        case DataType::Int16:
-            setupLineEdit<qint16>(ui->lineEditValue, NumericLineEdit::Int32Mode);
-            setupLineEdit<qint16>(ui->lineEditStartValue, NumericLineEdit::Int32Mode);
-            setupLineEdit<qint16>(ui->lineEditStep, NumericLineEdit::Int32Mode);
-            ui->lineEditStartValue->setValue(toByteOrderValue(_data[0], _writeParams.Order));
-        break;
-
-        case DataType::Binary:
-        case DataType::UInt16:
-            setupLineEdit<quint16>(ui->lineEditValue, NumericLineEdit::UInt32Mode, true);
-            setupLineEdit<quint16>(ui->lineEditStartValue, NumericLineEdit::UInt32Mode, true);
-            setupLineEdit<qint16>(ui->lineEditStep, NumericLineEdit::Int32Mode);
-            ui->lineEditStartValue->setValue(toByteOrderValue(_data[0], _writeParams.Order));
-            break;
-
-        case DataType::Int32:
-            setupLineEdit<qint32>(ui->lineEditValue, NumericLineEdit::Int32Mode);
-            setupLineEdit<qint32>(ui->lineEditStartValue, NumericLineEdit::Int32Mode);
-            setupLineEdit<qint32>(ui->lineEditStep, NumericLineEdit::Int32Mode);
-            ui->lineEditStartValue->setValue(lsrf ? makeInt32(_data[1], _data[0], _writeParams.Order)
-                                                  : makeInt32(_data[0], _data[1], _writeParams.Order));
-        break;
-
-        case DataType::UInt32:
-            setupLineEdit<quint32>(ui->lineEditValue, NumericLineEdit::UInt32Mode);
-            setupLineEdit<quint32>(ui->lineEditStartValue, NumericLineEdit::UInt32Mode);
-            setupLineEdit<qint32>(ui->lineEditStep, NumericLineEdit::Int32Mode);
-            ui->lineEditStartValue->setValue(lsrf ? makeUInt32(_data[1], _data[0], _writeParams.Order)
-                                                  : makeUInt32(_data[0], _data[1], _writeParams.Order));
-        break;
-
-        case DataType::Int64:
-            setupLineEdit<qint64>(ui->lineEditValue, NumericLineEdit::Int64Mode);
-            setupLineEdit<qint64>(ui->lineEditStartValue, NumericLineEdit::Int64Mode);
-            setupLineEdit<qint64>(ui->lineEditStep, NumericLineEdit::Int64Mode);
-            ui->lineEditStartValue->setValue(lsrf ? makeInt64(_data[3], _data[2], _data[1], _data[0], _writeParams.Order)
-                                                  : makeInt64(_data[0], _data[1], _data[2], _data[3], _writeParams.Order));
-        break;
-
-        case DataType::UInt64:
-            setupLineEdit<quint64>(ui->lineEditValue, NumericLineEdit::UInt64Mode);
-            setupLineEdit<quint64>(ui->lineEditStartValue, NumericLineEdit::UInt64Mode);
-            setupLineEdit<qint64>(ui->lineEditStep, NumericLineEdit::Int64Mode);
-            ui->lineEditStartValue->setValue(lsrf ? makeUInt64(_data[3], _data[2], _data[1], _data[0], _writeParams.Order)
-                                                  : makeUInt64(_data[0], _data[1], _data[2], _data[3], _writeParams.Order));
-        break;
-
-        case DataType::Float32:
-            setupLineEdit<float>(ui->lineEditValue, NumericLineEdit::FloatMode);
-            setupLineEdit<float>(ui->lineEditStartValue, NumericLineEdit::FloatMode);
-            setupLineEdit<float>(ui->lineEditStep, NumericLineEdit::FloatMode);
-            ui->lineEditStartValue->setValue(lsrf ? makeFloat(_data[1], _data[0], _writeParams.Order)
-                                                  : makeFloat(_data[0], _data[1], _writeParams.Order));
-        break;
-
-        case DataType::Float64:
-            setupLineEdit<double>(ui->lineEditValue, NumericLineEdit::DoubleMode);
-            setupLineEdit<double>(ui->lineEditStartValue, NumericLineEdit::DoubleMode);
-            setupLineEdit<double>(ui->lineEditStep, NumericLineEdit::DoubleMode);
-            ui->lineEditStartValue->setValue(lsrf ? makeDouble(_data[3], _data[2], _data[1], _data[0], _writeParams.Order)
-                                                  : makeDouble(_data[0], _data[1], _data[2], _data[3], _writeParams.Order));
-        break;
-    }
+    setupDisplayBar();
+    setupEditorInputs();
 
     updateTableWidget();
 }
@@ -167,6 +101,215 @@ void DialogForceMultipleRegisters::changeEvent(QEvent* event)
         ui->retranslateUi(this);
 
     QDialog::changeEvent(event);
+}
+
+///
+/// \brief DialogForceMultipleRegisters::setupDisplayBar
+///
+void DialogForceMultipleRegisters::setupDisplayBar()
+{
+    auto group = new QActionGroup(ui->frameDisplay);
+    group->setExclusive(true);
+
+    auto addModeAction = [&](DataType type, RegisterOrder order, QAction* action)
+    {
+        group->addAction(action);
+        _displayModeActions[{type, order}] = action;
+
+        connect(action, &QAction::triggered, this, [this, type, order](bool checked) {
+            if (!checked) return;
+            _writeParams.DataMode = type;
+            _writeParams.RegOrder = order;
+            setupEditorInputs();
+            updateTableWidget();
+            updateDisplayBar();
+        });
+    };
+
+    const auto msrf = RegisterOrder::MSRF;
+    const auto lsrf = RegisterOrder::LSRF;
+
+    addModeAction(DataType::Binary,  msrf, ui->actionDisplayBinary);
+    addModeAction(DataType::Hex,     msrf, ui->actionDisplayHex);
+    addModeAction(DataType::Ansi,    msrf, ui->actionDisplayAnsi);
+    addModeAction(DataType::Int16,   msrf, ui->actionDisplayInt16);
+    addModeAction(DataType::UInt16,  msrf, ui->actionDisplayUInt16);
+    addModeAction(DataType::Int32,   msrf, ui->actionDisplayInt32);
+    addModeAction(DataType::Int32,   lsrf, ui->actionDisplayInt32LSRF);
+    addModeAction(DataType::UInt32,  msrf, ui->actionDisplayUInt32);
+    addModeAction(DataType::UInt32,  lsrf, ui->actionDisplayUInt32LSRF);
+    addModeAction(DataType::Int64,   msrf, ui->actionDisplayInt64);
+    addModeAction(DataType::Int64,   lsrf, ui->actionDisplayInt64LSRF);
+    addModeAction(DataType::UInt64,  msrf, ui->actionDisplayUInt64);
+    addModeAction(DataType::UInt64,  lsrf, ui->actionDisplayUInt64LSRF);
+    addModeAction(DataType::Float32, msrf, ui->actionDisplayFloat32);
+    addModeAction(DataType::Float32, lsrf, ui->actionDisplayFloat32LSRF);
+    addModeAction(DataType::Float64, msrf, ui->actionDisplayFloat64);
+    addModeAction(DataType::Float64, lsrf, ui->actionDisplayFloat64LSRF);
+
+    auto bindButton = [](QToolButton* button, QAction* action) {
+        button->setIconSize(QSize(24, 24));
+        button->setToolButtonStyle(Qt::ToolButtonIconOnly);
+        button->setDefaultAction(action);
+    };
+
+    bindButton(ui->toolButtonDisplayBinary, ui->actionDisplayBinary);
+    bindButton(ui->toolButtonDisplayHex, ui->actionDisplayHex);
+    bindButton(ui->toolButtonDisplayAnsi, ui->actionDisplayAnsi);
+    bindButton(ui->toolButtonDisplayInt16, ui->actionDisplayInt16);
+    bindButton(ui->toolButtonDisplayUInt16, ui->actionDisplayUInt16);
+    bindButton(ui->toolButtonDisplayInt32, ui->actionDisplayInt32);
+    bindButton(ui->toolButtonDisplayInt32LSRF, ui->actionDisplayInt32LSRF);
+    bindButton(ui->toolButtonDisplayUInt32, ui->actionDisplayUInt32);
+    bindButton(ui->toolButtonDisplayUInt32LSRF, ui->actionDisplayUInt32LSRF);
+    bindButton(ui->toolButtonDisplayInt64, ui->actionDisplayInt64);
+    bindButton(ui->toolButtonDisplayInt64LSRF, ui->actionDisplayInt64LSRF);
+    bindButton(ui->toolButtonDisplayUInt64, ui->actionDisplayUInt64);
+    bindButton(ui->toolButtonDisplayUInt64LSRF, ui->actionDisplayUInt64LSRF);
+    bindButton(ui->toolButtonDisplayFloat32, ui->actionDisplayFloat32);
+    bindButton(ui->toolButtonDisplayFloat32LSRF, ui->actionDisplayFloat32LSRF);
+    bindButton(ui->toolButtonDisplayFloat64, ui->actionDisplayFloat64);
+    bindButton(ui->toolButtonDisplayFloat64LSRF, ui->actionDisplayFloat64LSRF);
+    bindButton(ui->toolButtonDisplaySwapBytes, ui->actionDisplaySwapBytes);
+
+    _ansiMenu = new AnsiMenu(this);
+    connect(_ansiMenu, &AnsiMenu::codepageSelected, this, [this](const QString& name) {
+        _writeParams.Codepage = name;
+        if (_writeParams.DataMode == DataType::Ansi) {
+            setupEditorInputs();
+            updateTableWidget();
+            updateDisplayBar();
+        }
+    });
+    ui->actionDisplayAnsi->setMenu(_ansiMenu);
+    ui->toolButtonDisplayAnsi->setPopupMode(QToolButton::DelayedPopup);
+
+    connect(ui->actionDisplaySwapBytes, &QAction::triggered, this, [this](bool checked) {
+        _writeParams.Order = checked ? ByteOrder::Swapped : ByteOrder::Direct;
+        setupEditorInputs();
+        updateTableWidget();
+        updateDisplayBar();
+    });
+
+    updateDisplayBar();
+}
+
+///
+/// \brief DialogForceMultipleRegisters::updateDisplayBar
+///
+void DialogForceMultipleRegisters::updateDisplayBar()
+{
+    const auto it = _displayModeActions.find({_writeParams.DataMode, _writeParams.RegOrder});
+    if (it != _displayModeActions.end()) {
+        it.value()->setChecked(true);
+    } else {
+        const auto fallback = _displayModeActions.find({_writeParams.DataMode, RegisterOrder::MSRF});
+        if (fallback != _displayModeActions.end())
+            fallback.value()->setChecked(true);
+    }
+
+    ui->actionDisplaySwapBytes->setChecked(_writeParams.Order == ByteOrder::Swapped);
+
+    if (_ansiMenu) {
+        _ansiMenu->selectCodepage(_writeParams.Codepage);
+    }
+}
+
+///
+/// \brief DialogForceMultipleRegisters::setupEditorInputs
+///
+void DialogForceMultipleRegisters::setupEditorInputs()
+{
+    ui->lineEditValue->setValidator(nullptr);
+    ui->lineEditStartValue->setValidator(nullptr);
+    ui->lineEditStep->setValidator(nullptr);
+
+    const bool lsrf = _writeParams.RegOrder == RegisterOrder::LSRF;
+    const quint16 firstReg = _data.isEmpty() ? 0 : _data[0];
+    const quint16 secondReg = _data.size() > 1 ? _data[1] : 0;
+    const quint16 thirdReg = _data.size() > 2 ? _data[2] : 0;
+    const quint16 fourthReg = _data.size() > 3 ? _data[3] : 0;
+
+    switch(_writeParams.DataMode)
+    {
+        case DataType::Binary:
+        case DataType::Hex:
+            setupLineEdit<quint16>(ui->lineEditValue, NumericLineEdit::HexMode, true);
+            setupLineEdit<quint16>(ui->lineEditStartValue, NumericLineEdit::HexMode, true);
+            setupLineEdit<quint16>(ui->lineEditStep, NumericLineEdit::HexMode, true);
+            ui->lineEditStartValue->setValue(toByteOrderValue(firstReg, _writeParams.Order));
+        break;
+
+        case DataType::Ansi:
+            setupLineEdit<quint16>(ui->lineEditValue, NumericLineEdit::AnsiMode);
+            ui->lineEditValue->setCodepage(_writeParams.Codepage);
+            setupLineEdit<quint16>(ui->lineEditStartValue, NumericLineEdit::UInt32Mode);
+            setupLineEdit<qint16>(ui->lineEditStep, NumericLineEdit::Int32Mode);
+            ui->lineEditStartValue->setValue(toByteOrderValue(firstReg, _writeParams.Order));
+        break;
+
+        case DataType::Int16:
+            setupLineEdit<qint16>(ui->lineEditValue, NumericLineEdit::Int32Mode);
+            setupLineEdit<qint16>(ui->lineEditStartValue, NumericLineEdit::Int32Mode);
+            setupLineEdit<qint16>(ui->lineEditStep, NumericLineEdit::Int32Mode);
+            ui->lineEditStartValue->setValue(toByteOrderValue(firstReg, _writeParams.Order));
+        break;
+
+        case DataType::UInt16:
+            setupLineEdit<quint16>(ui->lineEditValue, NumericLineEdit::UInt32Mode);
+            setupLineEdit<quint16>(ui->lineEditStartValue, NumericLineEdit::UInt32Mode);
+            setupLineEdit<qint16>(ui->lineEditStep, NumericLineEdit::Int32Mode);
+            ui->lineEditStartValue->setValue(toByteOrderValue(firstReg, _writeParams.Order));
+        break;
+
+        case DataType::Int32:
+            setupLineEdit<qint32>(ui->lineEditValue, NumericLineEdit::Int32Mode);
+            setupLineEdit<qint32>(ui->lineEditStartValue, NumericLineEdit::Int32Mode);
+            setupLineEdit<qint32>(ui->lineEditStep, NumericLineEdit::Int32Mode);
+            ui->lineEditStartValue->setValue(lsrf ? makeInt32(secondReg, firstReg, _writeParams.Order)
+                                                  : makeInt32(firstReg, secondReg, _writeParams.Order));
+        break;
+
+        case DataType::UInt32:
+            setupLineEdit<quint32>(ui->lineEditValue, NumericLineEdit::UInt32Mode);
+            setupLineEdit<quint32>(ui->lineEditStartValue, NumericLineEdit::UInt32Mode);
+            setupLineEdit<qint32>(ui->lineEditStep, NumericLineEdit::Int32Mode);
+            ui->lineEditStartValue->setValue(lsrf ? makeUInt32(secondReg, firstReg, _writeParams.Order)
+                                                  : makeUInt32(firstReg, secondReg, _writeParams.Order));
+        break;
+
+        case DataType::Int64:
+            setupLineEdit<qint64>(ui->lineEditValue, NumericLineEdit::Int64Mode);
+            setupLineEdit<qint64>(ui->lineEditStartValue, NumericLineEdit::Int64Mode);
+            setupLineEdit<qint64>(ui->lineEditStep, NumericLineEdit::Int64Mode);
+            ui->lineEditStartValue->setValue(lsrf ? makeInt64(fourthReg, thirdReg, secondReg, firstReg, _writeParams.Order)
+                                                  : makeInt64(firstReg, secondReg, thirdReg, fourthReg, _writeParams.Order));
+        break;
+
+        case DataType::UInt64:
+            setupLineEdit<quint64>(ui->lineEditValue, NumericLineEdit::UInt64Mode);
+            setupLineEdit<quint64>(ui->lineEditStartValue, NumericLineEdit::UInt64Mode);
+            setupLineEdit<qint64>(ui->lineEditStep, NumericLineEdit::Int64Mode);
+            ui->lineEditStartValue->setValue(lsrf ? makeUInt64(fourthReg, thirdReg, secondReg, firstReg, _writeParams.Order)
+                                                  : makeUInt64(firstReg, secondReg, thirdReg, fourthReg, _writeParams.Order));
+        break;
+
+        case DataType::Float32:
+            setupLineEdit<float>(ui->lineEditValue, NumericLineEdit::FloatMode);
+            setupLineEdit<float>(ui->lineEditStartValue, NumericLineEdit::FloatMode);
+            setupLineEdit<float>(ui->lineEditStep, NumericLineEdit::FloatMode);
+            ui->lineEditStartValue->setValue(lsrf ? makeFloat(secondReg, firstReg, _writeParams.Order)
+                                                  : makeFloat(firstReg, secondReg, _writeParams.Order));
+        break;
+
+        case DataType::Float64:
+            setupLineEdit<double>(ui->lineEditValue, NumericLineEdit::DoubleMode);
+            setupLineEdit<double>(ui->lineEditStartValue, NumericLineEdit::DoubleMode);
+            setupLineEdit<double>(ui->lineEditStep, NumericLineEdit::DoubleMode);
+            ui->lineEditStartValue->setValue(lsrf ? makeDouble(fourthReg, thirdReg, secondReg, firstReg, _writeParams.Order)
+                                                  : makeDouble(firstReg, secondReg, thirdReg, fourthReg, _writeParams.Order));
+        break;
+    }
 }
 
 ///
@@ -415,6 +558,16 @@ void DialogForceMultipleRegisters::accept()
             switch(_writeParams.DataMode)
             {
                 case DataType::Binary:
+                {
+                    auto* lineEdit = qobject_cast<QLineEdit*>(ui->tableWidget->cellWidget(i, j));
+                    bool ok = false;
+                    const auto parsed = lineEdit ? lineEdit->text().trimmed().toUShort(&ok, 2) : 0;
+                    if (ok) {
+                        _data[idx] = toByteOrderValue(parsed, _writeParams.Order);
+                    }
+                }
+                break;
+
                 case DataType::Hex:
                 case DataType::Ansi:
                 case DataType::UInt16:
@@ -548,6 +701,11 @@ void DialogForceMultipleRegisters::on_pushButtonRandom_clicked()
 ///
 void DialogForceMultipleRegisters::on_pushButtonValue_clicked()
 {
+    if (_writeParams.DataMode == DataType::Binary) {
+        applyToAll(ValueOperation::Set, parseBinary16(ui->lineEditValue->text()));
+        return;
+    }
+
     applyToAll(ValueOperation::Set, ui->lineEditValue->value<double>());
 }
 
@@ -560,9 +718,16 @@ void DialogForceMultipleRegisters::on_pushButtonInc_clicked()
     {
         switch(_writeParams.DataMode)
         {
+            case DataType::Binary:
+            {
+                const quint16 start = parseBinary16(ui->lineEditStartValue->text(), 0);
+                const quint16 step = parseBinary16(ui->lineEditStep->text(), 1);
+                applyValue<quint16>(start + i * step, i, ValueOperation::Set);
+            }
+            break;
+
             case DataType::Hex:
             case DataType::Ansi:
-            case DataType::Binary:
             case DataType::UInt16:
                 applyValue<quint16>(ui->lineEditStartValue->value<quint16>() + i * ui->lineEditStep->value<qint16>(), i, ValueOperation::Set);
             break;
@@ -737,7 +902,6 @@ NumericLineEdit* DialogForceMultipleRegisters::createNumEdit(int idx)
 
     switch(_writeParams.DataMode)
     {
-        case DataType::Binary:
         case DataType::Hex:
             numEdit = new NumericLineEdit(NumericLineEdit::HexMode, ui->tableWidget);
             numEdit->setInputRange(0, USHRT_MAX);
@@ -846,6 +1010,19 @@ QLineEdit* DialogForceMultipleRegisters::createLineEdit()
     return lineEdit;
 }
 
+QLineEdit* DialogForceMultipleRegisters::createBinaryEdit(int idx)
+{
+    auto* lineEdit = new QLineEdit(ui->tableWidget);
+    const auto value = toByteOrderValue(_data[idx], _writeParams.Order);
+    lineEdit->setText(QStringLiteral("%1").arg(value, 16, 2, QLatin1Char('0')));
+    lineEdit->setFrame(false);
+    lineEdit->setFixedWidth(150);
+    lineEdit->setAlignment(Qt::AlignCenter);
+    lineEdit->setToolTip(QString("%1").arg(_writeParams.Address + idx, 5, 10, QLatin1Char('0')));
+    lineEdit->setValidator(new QRegularExpressionValidator(QRegularExpression("^[01]{1,16}$"), lineEdit));
+    return lineEdit;
+}
+
 ///
 /// \brief DialogForceMultipleRegisters::updateTableWidget
 ///
@@ -875,9 +1052,13 @@ void DialogForceMultipleRegisters::updateTableWidget()
             const auto idx = i * columns + j;
             if(idx < length)
             {
-                auto numEdit = createNumEdit(idx);
-                if(numEdit) ui->tableWidget->setCellWidget(i, j, numEdit);
-                else ui->tableWidget->setCellWidget(i, j, createLineEdit());
+                if (_writeParams.DataMode == DataType::Binary) {
+                    ui->tableWidget->setCellWidget(i, j, createBinaryEdit(idx));
+                } else {
+                    auto numEdit = createNumEdit(idx);
+                    if(numEdit) ui->tableWidget->setCellWidget(i, j, numEdit);
+                    else ui->tableWidget->setCellWidget(i, j, createLineEdit());
+                }
             }
             else
             {
@@ -889,4 +1070,3 @@ void DialogForceMultipleRegisters::updateTableWidget()
     ui->tableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Fixed);
     ui->tableWidget->verticalHeader()->setSectionResizeMode(QHeaderView::Fixed);
 }
-

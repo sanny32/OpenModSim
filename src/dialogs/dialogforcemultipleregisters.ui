@@ -30,28 +30,28 @@
        <item>
         <widget class="QLabel" name="labelSlaveDevice">
          <property name="text">
-          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Unit Identifier: &lt;span style=" font-weight:700;"&gt;%1&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Unit Identifier: &lt;span style=&quot; font-weight:700;&quot;&gt;%1&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
         </widget>
        </item>
        <item>
         <widget class="QLabel" name="labelAddress">
          <property name="text">
-          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Starting Address: &lt;span style=" font-weight:700;"&gt;%1&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Starting Address: &lt;span style=&quot; font-weight:700;&quot;&gt;%1&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
         </widget>
        </item>
        <item>
         <widget class="QLabel" name="labelLength">
          <property name="text">
-          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Length: &lt;span style=" font-weight:700;"&gt;%1&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Length: &lt;span style=&quot; font-weight:700;&quot;&gt;%1&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
         </widget>
        </item>
       </layout>
      </item>
      <item>
-      <spacer name="horizontalSpacer">
+      <spacer name="horizontalSpacer_2">
        <property name="orientation">
         <enum>Qt::Orientation::Horizontal</enum>
        </property>
@@ -112,10 +112,345 @@
     </layout>
    </item>
    <item>
-    <widget class="Line" name="line_3">
-     <property name="orientation">
-      <enum>Qt::Orientation::Vertical</enum>
-     </property>
+    <widget class="QGroupBox" name="groupBox_2">
+     <layout class="QHBoxLayout" name="horizontalLayout_4">
+      <item>
+       <widget class="QFrame" name="frameDisplay">
+        <layout class="QHBoxLayout" name="horizontalLayoutDisplay">
+         <property name="spacing">
+          <number>2</number>
+         </property>
+         <property name="leftMargin">
+          <number>4</number>
+         </property>
+         <property name="topMargin">
+          <number>0</number>
+         </property>
+         <property name="rightMargin">
+          <number>4</number>
+         </property>
+         <property name="bottomMargin">
+          <number>0</number>
+         </property>
+         <item>
+          <widget class="QToolButton" name="toolButtonDisplayBinary">
+           <property name="icon">
+            <iconset resource="../resources.qrc">
+             <normaloff>:/res/icon-binary.png</normaloff>:/res/icon-binary.png</iconset>
+           </property>
+           <property name="autoRaise">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="toolButtonDisplayHex">
+           <property name="icon">
+            <iconset resource="../resources.qrc">
+             <normaloff>:/res/icon-hex.png</normaloff>:/res/icon-hex.png</iconset>
+           </property>
+           <property name="autoRaise">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="toolButtonDisplayAnsi">
+           <property name="icon">
+            <iconset resource="../resources.qrc">
+             <normaloff>:/res/icon-ansi.png</normaloff>:/res/icon-ansi.png</iconset>
+           </property>
+           <property name="autoRaise">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="Line" name="lineDisplay1">
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>24</height>
+            </size>
+           </property>
+           <property name="orientation">
+            <enum>Qt::Orientation::Vertical</enum>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="toolButtonDisplayInt16">
+           <property name="icon">
+            <iconset resource="../resources.qrc">
+             <normaloff>:/res/icon-int16.png</normaloff>:/res/icon-int16.png</iconset>
+           </property>
+           <property name="autoRaise">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="toolButtonDisplayUInt16">
+           <property name="icon">
+            <iconset resource="../resources.qrc">
+             <normaloff>:/res/icon-uint16.png</normaloff>:/res/icon-uint16.png</iconset>
+           </property>
+           <property name="autoRaise">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="Line" name="lineDisplay2">
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>24</height>
+            </size>
+           </property>
+           <property name="orientation">
+            <enum>Qt::Orientation::Vertical</enum>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="toolButtonDisplayInt32">
+           <property name="icon">
+            <iconset resource="../resources.qrc">
+             <normaloff>:/res/icon-int32.png</normaloff>:/res/icon-int32.png</iconset>
+           </property>
+           <property name="autoRaise">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="toolButtonDisplayInt32LSRF">
+           <property name="icon">
+            <iconset resource="../resources.qrc">
+             <normaloff>:/res/icon-swapped-int32.png</normaloff>:/res/icon-swapped-int32.png</iconset>
+           </property>
+           <property name="autoRaise">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="Line" name="lineDisplay3">
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>24</height>
+            </size>
+           </property>
+           <property name="orientation">
+            <enum>Qt::Orientation::Vertical</enum>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="toolButtonDisplayUInt32">
+           <property name="icon">
+            <iconset resource="../resources.qrc">
+             <normaloff>:/res/icon-uint32.png</normaloff>:/res/icon-uint32.png</iconset>
+           </property>
+           <property name="autoRaise">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="toolButtonDisplayUInt32LSRF">
+           <property name="icon">
+            <iconset resource="../resources.qrc">
+             <normaloff>:/res/icon-swapped-uint32.png</normaloff>:/res/icon-swapped-uint32.png</iconset>
+           </property>
+           <property name="autoRaise">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="Line" name="lineDisplay4">
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>24</height>
+            </size>
+           </property>
+           <property name="orientation">
+            <enum>Qt::Orientation::Vertical</enum>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="toolButtonDisplayInt64">
+           <property name="icon">
+            <iconset resource="../resources.qrc">
+             <normaloff>:/res/icon-int64.png</normaloff>:/res/icon-int64.png</iconset>
+           </property>
+           <property name="autoRaise">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="toolButtonDisplayInt64LSRF">
+           <property name="icon">
+            <iconset resource="../resources.qrc">
+             <normaloff>:/res/icon-swapped-int64.png</normaloff>:/res/icon-swapped-int64.png</iconset>
+           </property>
+           <property name="autoRaise">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="Line" name="lineDisplay5">
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>24</height>
+            </size>
+           </property>
+           <property name="orientation">
+            <enum>Qt::Orientation::Vertical</enum>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="toolButtonDisplayUInt64">
+           <property name="icon">
+            <iconset resource="../resources.qrc">
+             <normaloff>:/res/icon-uint64.png</normaloff>:/res/icon-uint64.png</iconset>
+           </property>
+           <property name="autoRaise">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="toolButtonDisplayUInt64LSRF">
+           <property name="icon">
+            <iconset resource="../resources.qrc">
+             <normaloff>:/res/icon-swapped-uint64.png</normaloff>:/res/icon-swapped-uint64.png</iconset>
+           </property>
+           <property name="autoRaise">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="Line" name="lineDisplay6">
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>24</height>
+            </size>
+           </property>
+           <property name="orientation">
+            <enum>Qt::Orientation::Vertical</enum>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="toolButtonDisplayFloat32">
+           <property name="icon">
+            <iconset resource="../resources.qrc">
+             <normaloff>:/res/icon-floating-pt.png</normaloff>:/res/icon-floating-pt.png</iconset>
+           </property>
+           <property name="autoRaise">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="toolButtonDisplayFloat32LSRF">
+           <property name="icon">
+            <iconset resource="../resources.qrc">
+             <normaloff>:/res/icon-swapped-fp.png</normaloff>:/res/icon-swapped-fp.png</iconset>
+           </property>
+           <property name="autoRaise">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="Line" name="lineDisplay7">
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>24</height>
+            </size>
+           </property>
+           <property name="orientation">
+            <enum>Qt::Orientation::Vertical</enum>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="toolButtonDisplayFloat64">
+           <property name="icon">
+            <iconset resource="../resources.qrc">
+             <normaloff>:/res/icon-dbl-float.png</normaloff>:/res/icon-dbl-float.png</iconset>
+           </property>
+           <property name="autoRaise">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="toolButtonDisplayFloat64LSRF">
+           <property name="icon">
+            <iconset resource="../resources.qrc">
+             <normaloff>:/res/icon-swapped-dbl.png</normaloff>:/res/icon-swapped-dbl.png</iconset>
+           </property>
+           <property name="autoRaise">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="Line" name="lineDisplay8">
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>24</height>
+            </size>
+           </property>
+           <property name="orientation">
+            <enum>Qt::Orientation::Vertical</enum>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="toolButtonDisplaySwapBytes">
+           <property name="icon">
+            <iconset resource="../resources.qrc">
+             <normaloff>:/res/icon-swap-bytes.png</normaloff>:/res/icon-swap-bytes.png</iconset>
+           </property>
+           <property name="autoRaise">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item>
+       <spacer name="horizontalSpacer">
+        <property name="orientation">
+         <enum>Qt::Orientation::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+     </layout>
     </widget>
    </item>
    <item>
@@ -186,7 +521,13 @@
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
-        </property><property name="minimumSize"><size><width>0</width><height>26</height></size></property>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>26</height>
+         </size>
+        </property>
         <property name="maximumSize">
          <size>
           <width>150</width>
@@ -235,7 +576,13 @@
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
-          </property><property name="minimumSize"><size><width>0</width><height>26</height></size></property>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>26</height>
+           </size>
+          </property>
           <property name="maximumSize">
            <size>
             <width>150</width>
@@ -258,7 +605,13 @@
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
-          </property><property name="minimumSize"><size><width>0</width><height>26</height></size></property>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>26</height>
+           </size>
+          </property>
           <property name="maximumSize">
            <size>
             <width>80</width>
@@ -324,7 +677,7 @@
      <item>
       <widget class="QLabel" name="labelAddresses">
        <property name="text">
-        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Starting Address: &lt;span style=" font-weight:700;"&gt;%1 &lt;/span&gt;→ Ending Address: &lt;span style=" font-weight:700;"&gt;%2&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Starting Address: &lt;span style=&quot; font-weight:700;&quot;&gt;%1 &lt;/span&gt;→ Ending Address: &lt;span style=&quot; font-weight:700;&quot;&gt;%2&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
        </property>
       </widget>
      </item>
@@ -341,6 +694,222 @@
     </layout>
    </item>
   </layout>
+  <action name="actionDisplayBinary">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../resources.qrc">
+     <normaloff>:/res/icon-binary.png</normaloff>:/res/icon-binary.png</iconset>
+   </property>
+   <property name="text">
+    <string>Binary</string>
+   </property>
+  </action>
+  <action name="actionDisplayHex">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../resources.qrc">
+     <normaloff>:/res/icon-hex.png</normaloff>:/res/icon-hex.png</iconset>
+   </property>
+   <property name="text">
+    <string>Hex</string>
+   </property>
+  </action>
+  <action name="actionDisplayAnsi">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../resources.qrc">
+     <normaloff>:/res/icon-ansi.png</normaloff>:/res/icon-ansi.png</iconset>
+   </property>
+   <property name="text">
+    <string>Ansi</string>
+   </property>
+  </action>
+  <action name="actionDisplayInt16">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../resources.qrc">
+     <normaloff>:/res/icon-int16.png</normaloff>:/res/icon-int16.png</iconset>
+   </property>
+   <property name="text">
+    <string>16-bit Integer</string>
+   </property>
+  </action>
+  <action name="actionDisplayUInt16">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../resources.qrc">
+     <normaloff>:/res/icon-uint16.png</normaloff>:/res/icon-uint16.png</iconset>
+   </property>
+   <property name="text">
+    <string>Unsigned 16-bit Integer</string>
+   </property>
+  </action>
+  <action name="actionDisplayInt32">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../resources.qrc">
+     <normaloff>:/res/icon-int32.png</normaloff>:/res/icon-int32.png</iconset>
+   </property>
+   <property name="text">
+    <string>32-bit Integer (MSRF)</string>
+   </property>
+  </action>
+  <action name="actionDisplayInt32LSRF">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../resources.qrc">
+     <normaloff>:/res/icon-swapped-int32.png</normaloff>:/res/icon-swapped-int32.png</iconset>
+   </property>
+   <property name="text">
+    <string>32-bit Integer (LSRF)</string>
+   </property>
+  </action>
+  <action name="actionDisplayUInt32">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../resources.qrc">
+     <normaloff>:/res/icon-uint32.png</normaloff>:/res/icon-uint32.png</iconset>
+   </property>
+   <property name="text">
+    <string>Unsigned 32-bit Integer (MSRF)</string>
+   </property>
+  </action>
+  <action name="actionDisplayUInt32LSRF">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../resources.qrc">
+     <normaloff>:/res/icon-swapped-uint32.png</normaloff>:/res/icon-swapped-uint32.png</iconset>
+   </property>
+   <property name="text">
+    <string>Unsigned 32-bit Integer (LSRF)</string>
+   </property>
+  </action>
+  <action name="actionDisplayInt64">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../resources.qrc">
+     <normaloff>:/res/icon-int64.png</normaloff>:/res/icon-int64.png</iconset>
+   </property>
+   <property name="text">
+    <string>64-bit Integer (MSRF)</string>
+   </property>
+  </action>
+  <action name="actionDisplayInt64LSRF">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../resources.qrc">
+     <normaloff>:/res/icon-swapped-int64.png</normaloff>:/res/icon-swapped-int64.png</iconset>
+   </property>
+   <property name="text">
+    <string>64-bit Integer (LSRF)</string>
+   </property>
+  </action>
+  <action name="actionDisplayUInt64">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../resources.qrc">
+     <normaloff>:/res/icon-uint64.png</normaloff>:/res/icon-uint64.png</iconset>
+   </property>
+   <property name="text">
+    <string>Unsigned 64-bit Integer (MSRF)</string>
+   </property>
+  </action>
+  <action name="actionDisplayUInt64LSRF">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../resources.qrc">
+     <normaloff>:/res/icon-swapped-uint64.png</normaloff>:/res/icon-swapped-uint64.png</iconset>
+   </property>
+   <property name="text">
+    <string>Unsigned 64-bit Integer (LSRF)</string>
+   </property>
+  </action>
+  <action name="actionDisplayFloat32">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../resources.qrc">
+     <normaloff>:/res/icon-floating-pt.png</normaloff>:/res/icon-floating-pt.png</iconset>
+   </property>
+   <property name="text">
+    <string>Float (MSRF)</string>
+   </property>
+  </action>
+  <action name="actionDisplayFloat32LSRF">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../resources.qrc">
+     <normaloff>:/res/icon-swapped-fp.png</normaloff>:/res/icon-swapped-fp.png</iconset>
+   </property>
+   <property name="text">
+    <string>Float (LSRF)</string>
+   </property>
+  </action>
+  <action name="actionDisplayFloat64">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../resources.qrc">
+     <normaloff>:/res/icon-dbl-float.png</normaloff>:/res/icon-dbl-float.png</iconset>
+   </property>
+   <property name="text">
+    <string>Double (MSRF)</string>
+   </property>
+  </action>
+  <action name="actionDisplayFloat64LSRF">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../resources.qrc">
+     <normaloff>:/res/icon-swapped-dbl.png</normaloff>:/res/icon-swapped-dbl.png</iconset>
+   </property>
+   <property name="text">
+    <string>Double (LSRF)</string>
+   </property>
+  </action>
+  <action name="actionDisplaySwapBytes">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../resources.qrc">
+     <normaloff>:/res/icon-swap-bytes.png</normaloff>:/res/icon-swap-bytes.png</iconset>
+   </property>
+   <property name="text">
+    <string>Swap Bytes (0xAB → 0xBA)</string>
+   </property>
+  </action>
  </widget>
  <customwidgets>
   <customwidget>
@@ -350,7 +919,7 @@
   </customwidget>
  </customwidgets>
  <resources>
-  <include location="../resources.qrc" />
+  <include location="../resources.qrc"/>
  </resources>
  <connections>
   <connection>
@@ -387,4 +956,3 @@
   </connection>
  </connections>
 </ui>
-

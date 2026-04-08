@@ -984,33 +984,123 @@
         <translation>еЊЇе‡є</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="133"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="468"/>
         <source>Reset</source>
         <translation>й‡ЌиЁ­</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="150"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="485"/>
         <source>Random</source>
         <translation>йљЁж©џж•ё</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="174"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="509"/>
         <source>Constant Value</source>
         <translation>еёёй‡ЏеЂј</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="216"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="557"/>
         <source>Increment Value</source>
         <translation>еўћй‡ЏеЂј</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="227"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="568"/>
         <source>From:</source>
         <translation>еѕћпјљ</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="327"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="680"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Starting Address: &lt;span style=&quot; font-weight:700;&quot;&gt;%1 &lt;/span&gt;→ Ending Address: &lt;span style=&quot; font-weight:700;&quot;&gt;%2&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="706"/>
+        <source>Binary</source>
+        <translation type="unfinished">дєЊйЂІдЅЌе€¶</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="718"/>
+        <source>Hex</source>
+        <translation type="unfinished">еЌЃе…­йЂІдЅЌе€¶</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="730"/>
+        <source>Ansi</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="742"/>
+        <source>16-bit Integer</source>
+        <translation type="unfinished">16дЅЌж•ґж•ё</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="754"/>
+        <source>Unsigned 16-bit Integer</source>
+        <translation type="unfinished">з„Ўз¬¦и™џ64дЅЌж•ґж•ё {16-?}</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="766"/>
+        <source>32-bit Integer (MSRF)</source>
+        <translation type="unfinished">32дЅЌж•ґж•ёпј€MSRFпј‰</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="778"/>
+        <source>32-bit Integer (LSRF)</source>
+        <translation type="unfinished">32дЅЌж•ґж•ёпј€LSRFпј‰</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="790"/>
+        <source>Unsigned 32-bit Integer (MSRF)</source>
+        <translation type="unfinished">з„Ўз¬¦и™џ32дЅЌж•ґж•ёпј€MSRFпј‰</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="802"/>
+        <source>Unsigned 32-bit Integer (LSRF)</source>
+        <translation type="unfinished">з„Ўз¬¦и™џ32дЅЌж•ґж•ёпј€LSRFпј‰</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="814"/>
+        <source>64-bit Integer (MSRF)</source>
+        <translation type="unfinished">64дЅЌж•ґж•ёпј€MSRFпј‰</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="826"/>
+        <source>64-bit Integer (LSRF)</source>
+        <translation type="unfinished">64дЅЌж•ґж•ёпј€LSRFпј‰</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="838"/>
+        <source>Unsigned 64-bit Integer (MSRF)</source>
+        <translation type="unfinished">з„Ўз¬¦и™џ64дЅЌж•ґж•ё(MSRF)</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="850"/>
+        <source>Unsigned 64-bit Integer (LSRF)</source>
+        <translation type="unfinished">з„Ўз¬¦и™џ64дЅЌж•ґж•ё(LSRF)</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="862"/>
+        <source>Float (MSRF)</source>
+        <translation type="unfinished">жµ®й»ћж•ёпј€MSRFпј‰</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="874"/>
+        <source>Float (LSRF)</source>
+        <translation type="unfinished">жµ®й»ћж•ёпј€LSRFпј‰</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="886"/>
+        <source>Double (MSRF)</source>
+        <translation type="unfinished">й›™еЂЌпј€MSRFпј‰</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="898"/>
+        <source>Double (LSRF)</source>
+        <translation type="unfinished">й›™еЂЌпј€LSRFпј‰</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="910"/>
+        <source>Swap Bytes (0xAB → 0xBA)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1030,7 +1120,7 @@
         <translation type="vanished">й–‹е§‹пјљ</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="250"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="597"/>
         <source>Step:</source>
         <translation>ж­Ґпјљ</translation>
     </message>
@@ -1059,53 +1149,53 @@
         <translation type="vanished">й•їеє¦пјљ%1</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="52"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="66"/>
         <source>PRESET INPUT REGISTERS</source>
         <translation>й&#xa0;ђиЁ­ијёе…Ґжљ«е­е™Ё</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="55"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="69"/>
         <source>PRESET HOLDING REGISTERS</source>
         <translation>й&#xa0;ђиЁ­дїќжЊЃжљ«е­е™Ё</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="614"/>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="695"/>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="695"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="779"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="860"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="860"/>
         <source>CSV files (*.csv)</source>
         <translation>CSV жЄ”жЎ€ (*.csv)</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="621"/>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="706"/>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="706"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="786"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="871"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="871"/>
         <source>Error</source>
         <translation>йЊЇиЄ¤</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="662"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="827"/>
         <source>Import error</source>
         <translation>еЊЇе…ҐйЊЇиЄ¤</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="662"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="827"/>
         <source>Invalid value: %1</source>
         <translation>з„Ўж•€еЂјпјљ%1</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="671"/>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="677"/>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="677"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="836"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="842"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="842"/>
         <source>Warning</source>
         <translation>и­¦е‘Љ</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="671"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="836"/>
         <source>No data found in file.</source>
         <translation>жЄ”жЎ€дё­жњЄж‰ѕе€°иі‡ж–™гЂ‚</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="677"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="842"/>
         <source>Imported data size (%1) does not match current size (%2).</source>
         <translation>еЊЇе…Ґиі‡ж–™е¤§е°Џ (%1) и€‡з›®е‰Ќе¤§е°Џ (%2) дёЌз¬¦гЂ‚</translation>
     </message>
