@@ -2106,8 +2106,8 @@
     </message>
     <message>
         <location filename="../dialogs/dialogwriteregister.ui" line="118"/>
-        <location filename="../dialogs/dialogwriteregister.cpp" line="231"/>
-        <location filename="../dialogs/dialogwriteregister.cpp" line="231"/>
+        <location filename="../dialogs/dialogwriteregister.cpp" line="234"/>
+        <location filename="../dialogs/dialogwriteregister.cpp" line="234"/>
         <source>Auto Simulation: OFF</source>
         <translation>и‡ЄеЉЁжЁЎж‹џпјље…ій—­</translation>
     </message>
@@ -2117,19 +2117,19 @@
         <translation>дЅЌжЁЎејЏпјљ </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwriteregister.cpp" line="100"/>
+        <location filename="../dialogs/dialogwriteregister.cpp" line="103"/>
         <source>Value, (HEX): </source>
         <translation>еЂјпј€еЌЃе…­иї›е€¶пј‰пјљ </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwriteregister.cpp" line="107"/>
+        <location filename="../dialogs/dialogwriteregister.cpp" line="110"/>
         <source>Value, (ANSI): </source>
         <translation>еЂјпјЊ(ANSI)пјљ </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwriteregister.cpp" line="225"/>
-        <location filename="../dialogs/dialogwriteregister.cpp" line="238"/>
-        <location filename="../dialogs/dialogwriteregister.cpp" line="238"/>
+        <location filename="../dialogs/dialogwriteregister.cpp" line="228"/>
+        <location filename="../dialogs/dialogwriteregister.cpp" line="241"/>
+        <location filename="../dialogs/dialogwriteregister.cpp" line="241"/>
         <source>Auto Simulation: ON</source>
         <translation>и‡ЄеЉЁжЁЎж‹џпјљејЂеђЇ</translation>
     </message>
@@ -2172,15 +2172,15 @@
     </message>
     <message>
         <location filename="../dialogs/dialogwritestatusregister.ui" line="134"/>
-        <location filename="../dialogs/dialogwritestatusregister.cpp" line="99"/>
-        <location filename="../dialogs/dialogwritestatusregister.cpp" line="99"/>
+        <location filename="../dialogs/dialogwritestatusregister.cpp" line="102"/>
+        <location filename="../dialogs/dialogwritestatusregister.cpp" line="102"/>
         <source>Auto Simulation: OFF</source>
         <translation>и‡ЄеЉЁжЁЎж‹џпјље…ій—­</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwritestatusregister.cpp" line="93"/>
-        <location filename="../dialogs/dialogwritestatusregister.cpp" line="105"/>
-        <location filename="../dialogs/dialogwritestatusregister.cpp" line="105"/>
+        <location filename="../dialogs/dialogwritestatusregister.cpp" line="96"/>
+        <location filename="../dialogs/dialogwritestatusregister.cpp" line="108"/>
+        <location filename="../dialogs/dialogwritestatusregister.cpp" line="108"/>
         <source>Auto Simulation: ON</source>
         <translation>и‡ЄеЉЁжЁЎж‹џпјљејЂеђЇ</translation>
     </message>

@@ -22,12 +22,15 @@ DialogWriteStatusRegister::DialogWriteStatusRegister(ModbusWriteParams& params, 
 {
     ui->setupUi(this);
 
-    ui->lineEditNode->setLeadingZeroes(params.LeadingZeros);
+    const bool hexView = hexAddress;
+
+    ui->lineEditNode->setLeadingZeroes(hexView || params.LeadingZeros);
+    ui->lineEditNode->setInputMode(hexView ? NumericLineEdit::HexMode : NumericLineEdit::Int32Mode);
     ui->lineEditNode->setInputRange(ModbusLimits::slaveRange());
     ui->lineEditNode->setValue(params.DeviceId);
 
-    ui->lineEditAddress->setLeadingZeroes(params.LeadingZeros);
-    ui->lineEditAddress->setInputMode(hexAddress ? NumericLineEdit::HexMode : NumericLineEdit::Int32Mode);
+    ui->lineEditAddress->setLeadingZeroes(hexView || params.LeadingZeros);
+    ui->lineEditAddress->setInputMode(hexView ? NumericLineEdit::HexMode : NumericLineEdit::Int32Mode);
     ui->lineEditAddress->setInputRange(ModbusLimits::addressRange(params.AddrSpace, params.ZeroBasedAddress));
     ui->lineEditAddress->setValue(params.Address);
 
