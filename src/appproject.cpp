@@ -370,13 +370,19 @@ FormDataMapView* AppProject::ensureAutoRequestMap()
 void AppProject::syncAutoRequestMap(const ModbusDefinitions& defs)
 {
     if (defs.AutoAddRegistersOnRequest) {
+        auto* existingMap = findAutoRequestMap();
+        const bool wasClosed = existingMap && containsClosedForm(existingMap);
+        const bool shouldRevealMap = !existingMap || wasClosed;
+
         if (auto* map = ensureAutoRequestMap()) {
             map->setAutoAddOnRequest(true);
             map->setProperty(kDeleteLockedProperty, true);
             map->setWindowIcon(QIcon(dataMapIconPath(true)));
             _projectTree->updateFormTitle(map);
-            openFormOnActivePanel(map);
-            _projectTree->activateForm(map);
+            if (shouldRevealMap) {
+                openFormOnActivePanel(map);
+                _projectTree->activateForm(map);
+            }
         }
         return;
     }
