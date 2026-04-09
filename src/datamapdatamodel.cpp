@@ -181,8 +181,10 @@ QVariant DataMapDataModel::data(const QModelIndex& index, int role) const
     const int col = index.column();
     if (row < 0 || row >= _keys.size()) return {};
 
-    const ItemMapKey& key   = _keys[row];
-    const DataMapEntry& e = _data[key];
+    const ItemMapKey& key = _keys[row];
+    const auto it = _data.constFind(key);
+    if (it == _data.cend()) return {};
+    const DataMapEntry& e = it.value();
 
     if (role == Qt::TextAlignmentRole) {
         if (col == ColComment) return static_cast<int>(Qt::AlignVCenter | Qt::AlignLeft);
@@ -421,8 +423,10 @@ bool DataMapDataModel::setData(const QModelIndex& index, const QVariant& value, 
             emit dataChanged(createIndex(row, ColUnit), createIndex(row, ColTimestamp));
             handled = true;
         } else {
-            unregisterEntry(oldKey);
-            _data.remove(oldKey);
+            if (!hasAnyRowWithKey(oldKey, row)) {
+                unregisterEntry(oldKey);
+                _data.remove(oldKey);
+            }
 
             const bool bitType = (newKey.Type == QModbusDataUnit::Coils ||
                                   newKey.Type == QModbusDataUnit::DiscreteInputs);
@@ -494,7 +498,8 @@ Qt::ItemFlags DataMapDataModel::flags(const QModelIndex& index) const
 
     if (index.column() == ColOrder) {
         const ItemMapKey& key = _keys[index.row()];
-        if (!isMultiRegisterType(_data[key].type))
+        const auto it = _data.constFind(key);
+        if (it == _data.cend() || !isMultiRegisterType(it->type))
             f &= ~Qt::ItemIsEditable;
     }
 
@@ -696,11 +701,14 @@ void DataMapDataModel::removeEntries(QList<int> sourceRows)
     for (int row : sourceRows) {
         if (row < 0 || row >= _keys.size()) continue;
         const ItemMapKey key = _keys[row];
-        unregisterEntry(key);
         beginRemoveRows({}, row, row);
         _keys.removeAt(row);
-        _data.remove(key);
         endRemoveRows();
+
+        if (!hasAnyRowWithKey(key)) {
+            unregisterEntry(key);
+            _data.remove(key);
+        }
     }
 }
 
@@ -810,6 +818,23 @@ int DataMapDataModel::rowForKey(const ItemMapKey& key) const
             return i;
     }
     return -1;
+}
+
+///
+/// \brief DataMapDataModel::hasAnyRowWithKey
+///
+bool DataMapDataModel::hasAnyRowWithKey(const ItemMapKey& key, int exceptRow) const
+{
+    for (int i = 0; i < _keys.size(); ++i) {
+        if (i == exceptRow)
+            continue;
+
+        const ItemMapKey& k = _keys[i];
+        if (k.DeviceId == key.DeviceId && k.Type == key.Type && k.Address == key.Address)
+            return true;
+    }
+
+    return false;
 }
 
 ///

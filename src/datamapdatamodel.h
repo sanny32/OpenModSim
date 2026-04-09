@@ -105,6 +105,7 @@ public:
 
 private:
     int  rowForKey(const ItemMapKey& key) const;
+    bool hasAnyRowWithKey(const ItemMapKey& key, int exceptRow = -1) const;
     void registerEntry(const ItemMapKey& key, const DataMapEntry& entry);
     void unregisterEntry(const ItemMapKey& key);
 

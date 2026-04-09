@@ -280,107 +280,107 @@
 <context>
     <name>DataMapDataModel</name>
     <message>
-        <location filename="../datamapdatamodel.cpp" line="216"/>
+        <location filename="../datamapdatamodel.cpp" line="218"/>
         <source>Binary</source>
         <translation type="unfinished">дєЊиї›е€¶</translation>
     </message>
     <message>
-        <location filename="../datamapdatamodel.cpp" line="217"/>
+        <location filename="../datamapdatamodel.cpp" line="219"/>
         <source>UInt16</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../datamapdatamodel.cpp" line="218"/>
+        <location filename="../datamapdatamodel.cpp" line="220"/>
         <source>Int16</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../datamapdatamodel.cpp" line="219"/>
+        <location filename="../datamapdatamodel.cpp" line="221"/>
         <source>Hex</source>
         <translation type="unfinished">еЌЃе…­иї›е€¶</translation>
     </message>
     <message>
-        <location filename="../datamapdatamodel.cpp" line="220"/>
+        <location filename="../datamapdatamodel.cpp" line="222"/>
         <source>Float32</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../datamapdatamodel.cpp" line="221"/>
+        <location filename="../datamapdatamodel.cpp" line="223"/>
         <source>Float64</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../datamapdatamodel.cpp" line="222"/>
+        <location filename="../datamapdatamodel.cpp" line="224"/>
         <source>Int32</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../datamapdatamodel.cpp" line="223"/>
+        <location filename="../datamapdatamodel.cpp" line="225"/>
         <source>UInt32</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../datamapdatamodel.cpp" line="224"/>
+        <location filename="../datamapdatamodel.cpp" line="226"/>
         <source>Int64</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../datamapdatamodel.cpp" line="225"/>
+        <location filename="../datamapdatamodel.cpp" line="227"/>
         <source>UInt64</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../datamapdatamodel.cpp" line="226"/>
+        <location filename="../datamapdatamodel.cpp" line="228"/>
         <source>Ansi</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../datamapdatamodel.cpp" line="236"/>
+        <location filename="../datamapdatamodel.cpp" line="238"/>
         <source>MSRF</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../datamapdatamodel.cpp" line="236"/>
+        <location filename="../datamapdatamodel.cpp" line="238"/>
         <source>LSRF</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../datamapdatamodel.cpp" line="467"/>
+        <location filename="../datamapdatamodel.cpp" line="471"/>
         <source>Unit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../datamapdatamodel.cpp" line="468"/>
+        <location filename="../datamapdatamodel.cpp" line="472"/>
         <source>Type</source>
         <translation type="unfinished">з±»ећ‹</translation>
     </message>
     <message>
-        <location filename="../datamapdatamodel.cpp" line="469"/>
+        <location filename="../datamapdatamodel.cpp" line="473"/>
         <source>Address</source>
         <translation type="unfinished">ењ°еќЂ</translation>
     </message>
     <message>
-        <location filename="../datamapdatamodel.cpp" line="470"/>
+        <location filename="../datamapdatamodel.cpp" line="474"/>
         <source>Data Type</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../datamapdatamodel.cpp" line="471"/>
+        <location filename="../datamapdatamodel.cpp" line="475"/>
         <source>Order</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../datamapdatamodel.cpp" line="472"/>
+        <location filename="../datamapdatamodel.cpp" line="476"/>
         <source>Comment</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../datamapdatamodel.cpp" line="473"/>
+        <location filename="../datamapdatamodel.cpp" line="477"/>
         <source>Value</source>
         <translation type="unfinished">еЂј</translation>
     </message>
     <message>
-        <location filename="../datamapdatamodel.cpp" line="474"/>
+        <location filename="../datamapdatamodel.cpp" line="478"/>
         <source>Timestamp</source>
         <translation type="unfinished"></translation>
     </message>
