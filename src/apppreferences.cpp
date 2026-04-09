@@ -46,7 +46,7 @@ void AppPreferences::load(QSettings& settings)
     settings >> _trafficViewDefinitions;
     settings >> _scriptViewDefinitions;
     _globalZeroBasedAddress = settings.value("GlobalZeroBasedAddress", _globalZeroBasedAddress).toBool();
-    _globalHexView = settings.value("GlobalHexView", _trafficViewDefinitions.HexView).toBool();
+    _globalHexView = settings.value("GlobalHexView", false).toBool();
 
     settings.endGroup();
 }
