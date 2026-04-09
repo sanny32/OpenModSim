@@ -57,19 +57,6 @@ public:
     }
 
     ///
-    /// \brief setTransactionId
-    /// \param id
-    ///
-    void setTransactionId(quint16 id) {
-        if (_data.size() < MinTcpFrameSize)
-            return;
-
-        quint8 lo,hi;
-        breakUInt16(id, lo, hi, ByteOrder::Direct);
-        _data[1] = lo; _data[0] = hi;
-    }
-
-    ///
     /// \brief protocolId
     /// \return
     ///

@@ -18,7 +18,6 @@ public:
     explicit MainStatusBar(const ModbusMultiServer& server, QWidget* parent = nullptr);
     ~MainStatusBar();
 
-    UpdateChecker* updateChecker() const { return _updateChecker; }
     void setCheckForUpdates(bool enabled);
 
 protected:

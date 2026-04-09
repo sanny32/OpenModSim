@@ -58,7 +58,6 @@ public:
     void applyConnections(const ModbusDefinitions& defs, const QList<ConnectionDetails>& conns);
     ModbusMultiServer& mbMultiServer() { return _mbMultiServer; }
     const ModbusMultiServer& mbMultiServer() const { return _mbMultiServer; }
-    DataSimulator* dataSimulator() const { return _dataSimulator; }
 
     void setViewMode(QMdiArea::ViewMode mode);
 

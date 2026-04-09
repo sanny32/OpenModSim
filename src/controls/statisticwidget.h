@@ -19,9 +19,6 @@ public:
     explicit StatisticWidget(QWidget *parent = nullptr);
     ~StatisticWidget();
 
-    uint numberRequets() const { return _requests; }
-    uint numberResposes() const { return _responses; }
-
     void increaseRequests();
     void increaseResponses();
     void resetCtrs();

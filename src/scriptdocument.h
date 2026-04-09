@@ -39,9 +39,6 @@ public:
     int scrollPosition() const { return _scrollPos; }
     void setScrollPosition(int pos) { _scrollPos = pos; }
 
-    bool isModified() const { return _document->isModified(); }
-    void setModified(bool modified) { _document->setModified(modified); }
-
 signals:
     void nameChanged(const QString& name);
     void settingsChanged(const ScriptSettings& settings);

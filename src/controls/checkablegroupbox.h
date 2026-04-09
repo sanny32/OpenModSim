@@ -10,7 +10,6 @@ class CheckableGroupBox : public QGroupBox
 public:
     explicit CheckableGroupBox(QWidget* parent = nullptr);
 
-    Qt::CheckState checkState() const { return _checkState; }
     void setCheckState(Qt::CheckState state);
 
 signals:

@@ -54,10 +54,6 @@ public:
 
     void setTabBarTrailingInset(int inset);
     void moveTabToPosition(QMdiSubWindow* subWnd, QPoint globalPos);
-    int tabBarTrailingInset() const
-    {
-        return _tabBarTrailingInset;
-    }
 
 signals:
     void tabBarLayoutChanged();
