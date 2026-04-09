@@ -4075,7 +4075,7 @@ Script.onInit(()=&gt;{
     </message>
     <message>
         <location filename="../applogger.cpp" line="69"/>
-        <source>Address space added: unit %1, %2, starting address %3, length %4</source>
+        <source>Address space added: unit %1, %2, starting address %3₀ (0-based), length %4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

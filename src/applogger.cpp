@@ -6,6 +6,11 @@
 
 namespace {
 
+///
+/// \brief connectionAddress
+/// \param cd
+/// \return
+///
 QString connectionAddress(const ConnectionDetails& cd)
 {
     return (cd.Type == ConnectionType::Tcp)
@@ -15,6 +20,11 @@ QString connectionAddress(const ConnectionDetails& cd)
 
 }
 
+///
+/// \brief AppLogger::setupModbusMultiServerLogging
+/// \param server
+/// \param context
+///
 void AppLogger::setupModbusMultiServerLogging(ModbusMultiServer& server, QObject* context)
 {
     Q_ASSERT(context != nullptr);
@@ -68,7 +78,7 @@ void AppLogger::setupModbusMultiServerLogging(ModbusMultiServer& server, QObject
                         quint16 addr, quint16 len) {
         qInfo(lcApp) << QCoreApplication::translate(
                             "MainWindow",
-                            "Address space added: unit %1, %2, starting address %3, length %4")
+                            "Address space added: unit %1, %2, starting address %3 (0-based), length %4")
                             .arg(deviceId).arg(registerTypeName(type)).arg(addr).arg(len);
     });
 
@@ -79,6 +89,10 @@ void AppLogger::setupModbusMultiServerLogging(ModbusMultiServer& server, QObject
     });
 }
 
+///
+/// \brief AppLogger::logConnectionError
+/// \param error
+///
 void AppLogger::logConnectionError(const QString& error)
 {
     qCritical(lcApp) << error;
