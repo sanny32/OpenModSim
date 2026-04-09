@@ -52,7 +52,6 @@ public:
     void loadProject(const QString& filename);
     void saveProject(const QString& filename);
 
-    void selectAnsiCodepage(const QString& name);
     void appendConsoleMessage(const QString& source, const QString& text, ConsoleOutput::MessageType type);
     void showOutputConsole();
     void showHelpContext(const QString& helpKey);

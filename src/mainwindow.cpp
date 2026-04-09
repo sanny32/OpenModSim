@@ -1096,6 +1096,15 @@ QWidget* MainWindow::currentDataOrTrafficForm() const
     return currentTrafficForm();
 }
 
+///
+/// \brief MainWindow::prepareWriteParams
+/// \param type
+/// \param outFrm
+/// \param outDd
+/// \param outPreset
+/// \param outParams
+/// \return
+///
 bool MainWindow::prepareWriteParams(QModbusDataUnit::RegisterType type,
                                     FormDataView*& outFrm,
                                     DataViewDefinitions& outDd,
@@ -1120,6 +1129,17 @@ bool MainWindow::prepareWriteParams(QModbusDataUnit::RegisterType type,
         _presetParams[type] = outPreset;
     } else if(_presetParams.contains(type)) {
         outPreset = _presetParams.value(type);
+        if (outPreset.ZeroBasedAddress != zeroBasedAddress) {
+            int adjustedAddress = static_cast<int>(outPreset.PointAddress);
+            if (zeroBasedAddress) {
+                adjustedAddress = qMax(0, adjustedAddress - 1);
+            } else if (adjustedAddress < std::numeric_limits<quint16>::max()) {
+                adjustedAddress += 1;
+            }
+            outPreset.PointAddress = static_cast<quint16>(adjustedAddress);
+            outPreset.ZeroBasedAddress = zeroBasedAddress;
+        }
+        outPreset.AddrSpace = addrSpace;
     }
 
     {
@@ -1229,15 +1249,6 @@ void MainWindow::updateProjectWindowTitle()
     }
 
     setWindowTitle(QString("%1%2 - %3").arg(modifiedMark, APP_NAME, projectName));
-}
-
-///
-/// \brief MainWindow::selectAnsiCodepage
-/// \param name
-///
-void MainWindow::selectAnsiCodepage(const QString& name)
-{
-    Q_UNUSED(name)
 }
 
 ///

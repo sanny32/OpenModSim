@@ -126,12 +126,6 @@ void enableAutoCompleteOnForm(QWidget* widget, bool enable)
     if (auto* frm = qobject_cast<FormScriptView*>(widget)) frm->enableAutoComplete(enable);
 }
 
-QString codepageOfForm(QWidget* widget)
-{
-    if (auto* frm = qobject_cast<FormDataView*>(widget)) return frm->codepage();
-    return QString();
-}
-
 void connectEditSlotsOnForm(QWidget* widget)
 {
     if (auto* frm = qobject_cast<FormDataView*>(widget)) frm->connectEditSlots();
@@ -576,23 +570,13 @@ void AppProject::setupMdiChild(QWidget* frm, QMdiSubWindow* wnd, bool addToWindo
     connect(frm, &QWidget::windowTitleChanged, wnd, &QMdiSubWindow::setWindowTitle);
     connect(frm, &QWidget::windowIconChanged, wnd, &QMdiSubWindow::setWindowIcon);
 
-    auto updateCodepage = [this](const QString& name)
-    {
-        _mainWindow->selectAnsiCodepage(name);
-    };
-
-    if (auto* data = qobject_cast<FormDataView*>(frm)) {
-        connect(data, &FormDataView::codepageChanged, _mainWindow, [updateCodepage](const QString& name) { updateCodepage(name); });
-    }
-
     connect(wnd, &QMdiSubWindow::windowStateChanged, _mainWindow,
-            [this, frm, updateCodepage](Qt::WindowStates, Qt::WindowStates newState)
+            [this, frm](Qt::WindowStates, Qt::WindowStates newState)
     {
         switch(newState & ~Qt::WindowMaximized & ~Qt::WindowMinimized)
         {
             case Qt::WindowActive:
                 _mainWindow->updateHelpWidgetState();
-                updateCodepage(codepageOfForm(frm));
                 connectEditSlotsOnForm(frm);
             break;
 
@@ -746,15 +730,13 @@ void AppProject::rewrapMdiChild(QWidget* frm)
     wnd->setWindowIcon(frm->windowIcon());
 
     // Window-specific connections (new wnd each time)
-    auto updateCodepage = [this](const QString& name) { _mainWindow->selectAnsiCodepage(name); };
     connect(wnd, &QMdiSubWindow::windowStateChanged, _mainWindow,
-            [this, frm, updateCodepage](Qt::WindowStates, Qt::WindowStates newState)
+            [this, frm](Qt::WindowStates, Qt::WindowStates newState)
     {
         switch(newState & ~Qt::WindowMaximized & ~Qt::WindowMinimized)
         {
             case Qt::WindowActive:
                 _mainWindow->updateHelpWidgetState();
-                updateCodepage(codepageOfForm(frm));
                 connectEditSlotsOnForm(frm);
             break;
             case Qt::WindowNoState:

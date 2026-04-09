@@ -2543,24 +2543,24 @@ MODBUS Point Type:
         <translation type="unfinished">еЌЃе…­иї›е€¶ењ°еќЂ</translation>
     </message>
     <message>
-        <location filename="../formdataview.cpp" line="618"/>
+        <location filename="../formdataview.cpp" line="627"/>
         <source>0-based</source>
         <translation type="unfinished">еџєењ°еќЂдёє-0</translation>
     </message>
     <message>
-        <location filename="../formdataview.cpp" line="618"/>
+        <location filename="../formdataview.cpp" line="627"/>
         <source>1-based</source>
         <translation type="unfinished">еџєењ°еќЂдёє-1</translation>
     </message>
     <message>
-        <location filename="../formdataview.cpp" line="619"/>
+        <location filename="../formdataview.cpp" line="628"/>
         <source>Address Base: %1
 Starting Address: %2
 Length: %3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formdataview.cpp" line="621"/>
+        <location filename="../formdataview.cpp" line="630"/>
         <source>Unit Identifier: %1
 Data Type:
 %2</source>
@@ -3539,8 +3539,8 @@ Script.onInit(()=&gt;{
     </message>
     <message>
         <location filename="../mainwindow.ui" line="235"/>
-        <location filename="../mainwindow.cpp" line="1543"/>
-        <location filename="../mainwindow.cpp" line="1543"/>
+        <location filename="../mainwindow.cpp" line="1554"/>
+        <location filename="../mainwindow.cpp" line="1554"/>
         <source>Save Project</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3887,8 +3887,8 @@ Script.onInit(()=&gt;{
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="147"/>
-        <location filename="../mainwindow.cpp" line="1630"/>
-        <location filename="../mainwindow.cpp" line="1630"/>
+        <location filename="../mainwindow.cpp" line="1641"/>
+        <location filename="../mainwindow.cpp" line="1641"/>
         <source>Clear List</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3914,7 +3914,7 @@ Script.onInit(()=&gt;{
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1400"/>
+        <location filename="../mainwindow.cpp" line="1411"/>
         <source>Address Base</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3969,12 +3969,12 @@ Script.onInit(()=&gt;{
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1396"/>
+        <location filename="../mainwindow.cpp" line="1407"/>
         <source>1-based</source>
         <translation type="unfinished">еџєењ°еќЂдёє-1</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1397"/>
+        <location filename="../mainwindow.cpp" line="1408"/>
         <source>0-based</source>
         <translation type="unfinished">еџєењ°еќЂдёє-0</translation>
     </message>
@@ -3985,12 +3985,12 @@ Script.onInit(()=&gt;{
         <translation type="unfinished">еЌЃе…­иї›е€¶и§†е›ѕ</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1544"/>
+        <location filename="../mainwindow.cpp" line="1555"/>
         <source>Save project before closing?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1618"/>
+        <location filename="../mainwindow.cpp" line="1629"/>
         <source>No Recent Projects</source>
         <translation type="unfinished"></translation>
     </message>

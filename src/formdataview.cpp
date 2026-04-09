@@ -341,6 +341,15 @@ void FormDataView::setZeroBasedAddress(bool zeroBased)
 
     auto dd = displayDefinition();
     dd.PointAddress = zeroBased ? qMax(0, dd.PointAddress - 1) : qMax(1, dd.PointAddress + 1);
+
+    // Switch address base first so setDisplayDefinitionSilent() uses the new base
+    // when recalculating input ranges.
+    {
+        QSignalBlocker b(ui->lineEditAddress);
+        const auto defs = _mbMultiServer.getModbusDefinitions();
+        ui->lineEditAddress->setInputRange(ModbusLimits::addressRange(defs.AddrSpace, zeroBased));
+    }
+
     setDisplayDefinitionSilent(dd);
 }
 
