@@ -4009,47 +4009,47 @@ Script.onInit(()=&gt;{
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../applogger.cpp" line="24"/>
+        <location filename="../applogger.cpp" line="34"/>
         <source>Server connected: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../applogger.cpp" line="30"/>
+        <location filename="../applogger.cpp" line="40"/>
         <source>Server disconnected: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../applogger.cpp" line="36"/>
+        <location filename="../applogger.cpp" line="46"/>
         <source>Modbus client connected: %1 -&gt; %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../applogger.cpp" line="43"/>
+        <location filename="../applogger.cpp" line="53"/>
         <source>Modbus client disconnected: %1 -&gt; %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../applogger.cpp" line="50"/>
+        <location filename="../applogger.cpp" line="60"/>
         <source>[Unit %1] %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../applogger.cpp" line="69"/>
-        <source>Address space added: unit %1, %2, starting address %3₀ (0-based), length %4</source>
+        <location filename="../applogger.cpp" line="79"/>
+        <source>Address space added: unit %1, %2, starting address %3 (0-based), length %4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../applogger.cpp" line="77"/>
+        <location filename="../applogger.cpp" line="87"/>
         <source>Address space removed: unit %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../applogger.cpp" line="56"/>
+        <location filename="../applogger.cpp" line="66"/>
         <source>Unit ID added: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../applogger.cpp" line="62"/>
+        <location filename="../applogger.cpp" line="72"/>
         <source>Unit ID removed: %1</source>
         <translation type="unfinished"></translation>
     </message>
