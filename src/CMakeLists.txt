@@ -7,6 +7,7 @@ project(omodsim
 
 option(USE_QT5 "Force Qt5 usage" OFF)
 option(USE_QT6 "Force Qt6 usage" OFF)
+option(PRE_RELEASE "Project Pre-release" OFF)
 
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
@@ -90,12 +91,14 @@ endif()
 
 if(${GIT_BRANCH} MATCHES dev OR ${GIT_BRANCH} MATCHES "release/")
     set(PROJECT_VERSION ${VERSION_MAJOR}.${VERSION_MINOR}-dev)
+elseif(PRE_RELESE)
+    set(PROJECT_PRERELEASE "b")
 endif()
 
 # Define compile definitions
 add_compile_definitions(APP_NAME="${PRODUCT_NAME}")
 add_compile_definitions(APP_DESCRIPTION="${PROJECT_DESCRIPTION}")
-add_compile_definitions(APP_VERSION="${PROJECT_VERSION}")
+add_compile_definitions(APP_VERSION="${PROJECT_VERSION}${PROJECT_PRERELEASE}")
 add_compile_definitions(BUILD_YEAR="${CURRENT_YEAR}")
 
 # Include directories
@@ -437,6 +440,8 @@ if(WIN32)
         target_compile_options(${PROJECT_NAME} PRIVATE /utf-8)
     endif()
 
+    set(FILE_VERSION "${PROJECT_VERSION}${PROJECT_PRERELEASE}")
+    set(PRODUCT_VERSION "${PROJECT_VERSION}${PROJECT_PRERELEASE}")
     set(ICON_FILE "${CMAKE_CURRENT_SOURCE_DIR}/res/omodsim.ico")
 
     configure_file(
