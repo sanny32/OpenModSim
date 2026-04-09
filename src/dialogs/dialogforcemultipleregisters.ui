@@ -861,6 +861,15 @@
    <property name="text">
     <string>Float (MSRF)</string>
    </property>
+   <property name="toolTip">
+    <string>32-bit Float (MSRF)</string>
+   </property>
+   <property name="statusTip">
+    <string>32-bit Float (MSRF)</string>
+   </property>
+   <property name="whatsThis">
+    <string>32-bit Float (MSRF)</string>
+   </property>
   </action>
   <action name="actionDisplayFloat32LSRF">
    <property name="checkable">
@@ -872,6 +881,15 @@
    </property>
    <property name="text">
     <string>Float (LSRF)</string>
+   </property>
+   <property name="toolTip">
+    <string>32-bit Float (LSRF)</string>
+   </property>
+   <property name="statusTip">
+    <string>32-bit Float (LSRF)</string>
+   </property>
+   <property name="whatsThis">
+    <string>32-bit Float (LSRF)</string>
    </property>
   </action>
   <action name="actionDisplayFloat64">
@@ -885,6 +903,15 @@
    <property name="text">
     <string>Double (MSRF)</string>
    </property>
+   <property name="toolTip">
+    <string>64-bit Float (MSRF)</string>
+   </property>
+   <property name="statusTip">
+    <string>64-bit Float (MSRF)</string>
+   </property>
+   <property name="whatsThis">
+    <string>64-bit Float (MSRF)</string>
+   </property>
   </action>
   <action name="actionDisplayFloat64LSRF">
    <property name="checkable">
@@ -896,6 +923,15 @@
    </property>
    <property name="text">
     <string>Double (LSRF)</string>
+   </property>
+   <property name="toolTip">
+    <string>64-bit Float (LSRF)</string>
+   </property>
+   <property name="statusTip">
+    <string>64-bit Float (LSRF)</string>
+   </property>
+   <property name="whatsThis">
+    <string>64-bit Float (LSRF)</string>
    </property>
   </action>
   <action name="actionDisplaySwapBytes">

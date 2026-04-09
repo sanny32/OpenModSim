@@ -1088,22 +1088,50 @@
         <translation type="unfinished">РЎ РїР»Р°РІР°СЋС‰РµР№ С‚РѕС‡РєРѕР№ (MSRF)</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="874"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="865"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="868"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="871"/>
+        <source>32-bit Float (MSRF)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="883"/>
         <source>Float (LSRF)</source>
         <translation type="unfinished">РЎ РїР»Р°РІР°СЋС‰РµР№ С‚РѕС‡РєРѕР№ (LSRF)</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogforcemultipleregisters.ui" line="886"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="889"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="892"/>
+        <source>32-bit Float (LSRF)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="904"/>
         <source>Double (MSRF)</source>
         <translation type="unfinished">Р”РІРѕР№РЅРѕР№ С‚РѕС‡РЅРѕСЃС‚Рё (MSRF)</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="898"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="907"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="910"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="913"/>
+        <source>64-bit Float (MSRF)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="925"/>
         <source>Double (LSRF)</source>
         <translation type="unfinished">Р”РІРѕР№РЅРѕР№ С‚РѕС‡РЅРѕСЃС‚Рё (LSRF)</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="910"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="928"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="931"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="934"/>
+        <source>64-bit Float (LSRF)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="946"/>
         <source>Swap Bytes (0xAB → 0xBA)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2461,91 +2489,161 @@ MODBUS Point Type:
     </message>
     <message>
         <location filename="../formdataview.ui" line="407"/>
+        <location filename="../formdataview.ui" line="410"/>
+        <location filename="../formdataview.ui" line="413"/>
+        <location filename="../formdataview.ui" line="416"/>
         <source>Binary</source>
         <translation type="unfinished">Р”РІРѕРёС‡РЅС‹Р№</translation>
     </message>
     <message>
-        <location filename="../formdataview.ui" line="425"/>
+        <location filename="../formdataview.ui" line="434"/>
+        <location filename="../formdataview.ui" line="437"/>
+        <location filename="../formdataview.ui" line="440"/>
+        <location filename="../formdataview.ui" line="443"/>
         <source>Hex</source>
         <translation type="unfinished">РЁРµСЃС‚Р°РЅРґС†Р°С‚РёСЂРёС‡РЅС‹Р№</translation>
     </message>
     <message>
-        <location filename="../formdataview.ui" line="443"/>
+        <location filename="../formdataview.ui" line="461"/>
+        <location filename="../formdataview.ui" line="464"/>
+        <location filename="../formdataview.ui" line="467"/>
+        <location filename="../formdataview.ui" line="470"/>
         <source>Ansi</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formdataview.ui" line="455"/>
+        <location filename="../formdataview.ui" line="482"/>
+        <location filename="../formdataview.ui" line="485"/>
+        <location filename="../formdataview.ui" line="488"/>
+        <location filename="../formdataview.ui" line="491"/>
         <source>16-bit Integer</source>
         <translation type="unfinished">16-Р±РёС‚ С†РµР»РѕРµ</translation>
     </message>
     <message>
-        <location filename="../formdataview.ui" line="473"/>
+        <location filename="../formdataview.ui" line="509"/>
+        <location filename="../formdataview.ui" line="512"/>
+        <location filename="../formdataview.ui" line="515"/>
+        <location filename="../formdataview.ui" line="518"/>
         <source>Unsigned 16-bit Integer</source>
         <translation type="unfinished">Р‘РµР·Р·РЅР°РєРѕРІРѕРµ 64-Р±РёС‚ С†РµР»РѕРµ {16-?}</translation>
     </message>
     <message>
-        <location filename="../formdataview.ui" line="491"/>
+        <location filename="../formdataview.ui" line="536"/>
+        <location filename="../formdataview.ui" line="539"/>
+        <location filename="../formdataview.ui" line="542"/>
+        <location filename="../formdataview.ui" line="545"/>
         <source>32-bit Integer (MSRF)</source>
         <translation type="unfinished">32-Р±РёС‚ С†РµР»РѕРµ (MSRF)</translation>
     </message>
     <message>
-        <location filename="../formdataview.ui" line="509"/>
+        <location filename="../formdataview.ui" line="563"/>
+        <location filename="../formdataview.ui" line="566"/>
+        <location filename="../formdataview.ui" line="569"/>
+        <location filename="../formdataview.ui" line="572"/>
         <source>32-bit Integer (LSRF)</source>
         <translation type="unfinished">32-Р±РёС‚ С†РµР»РѕРµ (LSRF)</translation>
     </message>
     <message>
-        <location filename="../formdataview.ui" line="527"/>
+        <location filename="../formdataview.ui" line="590"/>
+        <location filename="../formdataview.ui" line="593"/>
+        <location filename="../formdataview.ui" line="596"/>
+        <location filename="../formdataview.ui" line="599"/>
         <source>Unsigned 32-bit Integer (MSRF)</source>
         <translation type="unfinished">Р‘РµР·Р·РЅР°РєРѕРІРѕРµ 32-Р±РёС‚ С†РµР»РѕРµ (MSRF)</translation>
     </message>
     <message>
-        <location filename="../formdataview.ui" line="545"/>
+        <location filename="../formdataview.ui" line="617"/>
+        <location filename="../formdataview.ui" line="620"/>
+        <location filename="../formdataview.ui" line="623"/>
+        <location filename="../formdataview.ui" line="626"/>
         <source>Unsigned 32-bit Integer (LSRF)</source>
         <translation type="unfinished">Р‘РµР·Р·РЅР°РєРѕРІРѕРµ 32-Р±РёС‚ С†РµР»РѕРµ (LSRF)</translation>
     </message>
     <message>
-        <location filename="../formdataview.ui" line="563"/>
+        <location filename="../formdataview.ui" line="644"/>
+        <location filename="../formdataview.ui" line="647"/>
+        <location filename="../formdataview.ui" line="650"/>
+        <location filename="../formdataview.ui" line="653"/>
         <source>64-bit Integer (MSRF)</source>
         <translation type="unfinished">64-Р±РёС‚ С†РµР»РѕРµ (MSRF)</translation>
     </message>
     <message>
-        <location filename="../formdataview.ui" line="581"/>
+        <location filename="../formdataview.ui" line="671"/>
+        <location filename="../formdataview.ui" line="674"/>
+        <location filename="../formdataview.ui" line="677"/>
+        <location filename="../formdataview.ui" line="680"/>
         <source>64-bit Integer (LSRF)</source>
         <translation type="unfinished">64-Р±РёС‚ С†РµР»РѕРµ (LSRF)</translation>
     </message>
     <message>
-        <location filename="../formdataview.ui" line="599"/>
+        <location filename="../formdataview.ui" line="698"/>
+        <location filename="../formdataview.ui" line="701"/>
+        <location filename="../formdataview.ui" line="704"/>
+        <location filename="../formdataview.ui" line="707"/>
         <source>Unsigned 64-bit Integer (MSRF)</source>
         <translation type="unfinished">Р‘РµР·Р·РЅР°РєРѕРІРѕРµ 64-Р±РёС‚ С†РµР»РѕРµ (MSRF)</translation>
     </message>
     <message>
-        <location filename="../formdataview.ui" line="617"/>
+        <location filename="../formdataview.ui" line="725"/>
+        <location filename="../formdataview.ui" line="728"/>
+        <location filename="../formdataview.ui" line="731"/>
+        <location filename="../formdataview.ui" line="734"/>
         <source>Unsigned 64-bit Integer (LSRF)</source>
         <translation type="unfinished">Р‘РµР·Р·РЅР°РєРѕРІРѕРµ 64-Р±РёС‚ С†РµР»РѕРµ (LSRF)</translation>
     </message>
     <message>
-        <location filename="../formdataview.ui" line="635"/>
+        <location filename="../formdataview.ui" line="752"/>
         <source>Float (MSRF)</source>
         <translation type="unfinished">РЎ РїР»Р°РІР°СЋС‰РµР№ С‚РѕС‡РєРѕР№ (MSRF)</translation>
     </message>
     <message>
-        <location filename="../formdataview.ui" line="653"/>
+        <location filename="../formdataview.ui" line="755"/>
+        <location filename="../formdataview.ui" line="758"/>
+        <location filename="../formdataview.ui" line="761"/>
+        <source>32-bit Float (MSRF)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../formdataview.ui" line="779"/>
         <source>Float (LSRF)</source>
         <translation type="unfinished">РЎ РїР»Р°РІР°СЋС‰РµР№ С‚РѕС‡РєРѕР№ (LSRF)</translation>
     </message>
     <message>
-        <location filename="../formdataview.ui" line="671"/>
+        <location filename="../formdataview.ui" line="782"/>
+        <location filename="../formdataview.ui" line="785"/>
+        <location filename="../formdataview.ui" line="788"/>
+        <source>32-bit Float (LSRF)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../formdataview.ui" line="806"/>
         <source>Double (MSRF)</source>
         <translation type="unfinished">Р”РІРѕР№РЅРѕР№ С‚РѕС‡РЅРѕСЃС‚Рё (MSRF)</translation>
     </message>
     <message>
-        <location filename="../formdataview.ui" line="689"/>
+        <location filename="../formdataview.ui" line="809"/>
+        <location filename="../formdataview.ui" line="812"/>
+        <location filename="../formdataview.ui" line="815"/>
+        <source>64-bit Float (MSRF)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../formdataview.ui" line="833"/>
         <source>Double (LSRF)</source>
         <translation type="unfinished">Р”РІРѕР№РЅРѕР№ С‚РѕС‡РЅРѕСЃС‚Рё (LSRF)</translation>
     </message>
     <message>
-        <location filename="../formdataview.ui" line="707"/>
+        <location filename="../formdataview.ui" line="836"/>
+        <location filename="../formdataview.ui" line="839"/>
+        <location filename="../formdataview.ui" line="842"/>
+        <source>64-bit Float (LSRF)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../formdataview.ui" line="860"/>
+        <location filename="../formdataview.ui" line="863"/>
+        <location filename="../formdataview.ui" line="866"/>
+        <location filename="../formdataview.ui" line="869"/>
         <source>Swap Bytes (0xAB → 0xBA)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2554,7 +2652,7 @@ MODBUS Point Type:
         <translation type="obsolete">РџРѕСЂСЏРґРѕРє Р±Р°Р№С‚ (0xAB в†’ 0xBA)</translation>
     </message>
     <message>
-        <location filename="../formdataview.ui" line="715"/>
+        <location filename="../formdataview.ui" line="877"/>
         <source>Hex Addresses</source>
         <translation type="unfinished">РЁРµСЃС‚РЅР°РґС†Р°С‚РёСЂРёС‡РЅС‹Рµ Р°РґСЂРµСЃР°</translation>
     </message>

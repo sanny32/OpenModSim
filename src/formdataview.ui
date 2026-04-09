@@ -406,6 +406,15 @@
    <property name="text">
     <string>Binary</string>
    </property>
+   <property name="toolTip">
+    <string>Binary</string>
+   </property>
+   <property name="statusTip">
+    <string>Binary</string>
+   </property>
+   <property name="whatsThis">
+    <string>Binary</string>
+   </property>
    <property name="shortcut">
     <string notr="true">Ctrl+1</string>
    </property>
@@ -422,6 +431,15 @@
      <normaloff>:/res/icon-hex.png</normaloff>:/res/icon-hex.png</iconset>
    </property>
    <property name="text">
+    <string>Hex</string>
+   </property>
+   <property name="toolTip">
+    <string>Hex</string>
+   </property>
+   <property name="statusTip">
+    <string>Hex</string>
+   </property>
+   <property name="whatsThis">
     <string>Hex</string>
    </property>
    <property name="shortcut">
@@ -442,6 +460,15 @@
    <property name="text">
     <string>Ansi</string>
    </property>
+   <property name="toolTip">
+    <string>Ansi</string>
+   </property>
+   <property name="statusTip">
+    <string>Ansi</string>
+   </property>
+   <property name="whatsThis">
+    <string>Ansi</string>
+   </property>
   </action>
   <action name="actionDisplayInt16">
    <property name="checkable">
@@ -452,6 +479,15 @@
      <normaloff>:/res/icon-int16.png</normaloff>:/res/icon-int16.png</iconset>
    </property>
    <property name="text">
+    <string>16-bit Integer</string>
+   </property>
+   <property name="toolTip">
+    <string>16-bit Integer</string>
+   </property>
+   <property name="statusTip">
+    <string>16-bit Integer</string>
+   </property>
+   <property name="whatsThis">
     <string>16-bit Integer</string>
    </property>
    <property name="shortcut">
@@ -472,6 +508,15 @@
    <property name="text">
     <string>Unsigned 16-bit Integer</string>
    </property>
+   <property name="toolTip">
+    <string>Unsigned 16-bit Integer</string>
+   </property>
+   <property name="statusTip">
+    <string>Unsigned 16-bit Integer</string>
+   </property>
+   <property name="whatsThis">
+    <string>Unsigned 16-bit Integer</string>
+   </property>
    <property name="shortcut">
     <string notr="true">Ctrl+4</string>
    </property>
@@ -488,6 +533,15 @@
      <normaloff>:/res/icon-int32.png</normaloff>:/res/icon-int32.png</iconset>
    </property>
    <property name="text">
+    <string>32-bit Integer (MSRF)</string>
+   </property>
+   <property name="toolTip">
+    <string>32-bit Integer (MSRF)</string>
+   </property>
+   <property name="statusTip">
+    <string>32-bit Integer (MSRF)</string>
+   </property>
+   <property name="whatsThis">
     <string>32-bit Integer (MSRF)</string>
    </property>
    <property name="shortcut">
@@ -508,6 +562,15 @@
    <property name="text">
     <string>32-bit Integer (LSRF)</string>
    </property>
+   <property name="toolTip">
+    <string>32-bit Integer (LSRF)</string>
+   </property>
+   <property name="statusTip">
+    <string>32-bit Integer (LSRF)</string>
+   </property>
+   <property name="whatsThis">
+    <string>32-bit Integer (LSRF)</string>
+   </property>
    <property name="shortcut">
     <string notr="true">Ctrl+Alt+5</string>
    </property>
@@ -524,6 +587,15 @@
      <normaloff>:/res/icon-uint32.png</normaloff>:/res/icon-uint32.png</iconset>
    </property>
    <property name="text">
+    <string>Unsigned 32-bit Integer (MSRF)</string>
+   </property>
+   <property name="toolTip">
+    <string>Unsigned 32-bit Integer (MSRF)</string>
+   </property>
+   <property name="statusTip">
+    <string>Unsigned 32-bit Integer (MSRF)</string>
+   </property>
+   <property name="whatsThis">
     <string>Unsigned 32-bit Integer (MSRF)</string>
    </property>
    <property name="shortcut">
@@ -544,6 +616,15 @@
    <property name="text">
     <string>Unsigned 32-bit Integer (LSRF)</string>
    </property>
+   <property name="toolTip">
+    <string>Unsigned 32-bit Integer (LSRF)</string>
+   </property>
+   <property name="statusTip">
+    <string>Unsigned 32-bit Integer (LSRF)</string>
+   </property>
+   <property name="whatsThis">
+    <string>Unsigned 32-bit Integer (LSRF)</string>
+   </property>
    <property name="shortcut">
     <string notr="true">Ctrl+Alt+6</string>
    </property>
@@ -560,6 +641,15 @@
      <normaloff>:/res/icon-int64.png</normaloff>:/res/icon-int64.png</iconset>
    </property>
    <property name="text">
+    <string>64-bit Integer (MSRF)</string>
+   </property>
+   <property name="toolTip">
+    <string>64-bit Integer (MSRF)</string>
+   </property>
+   <property name="statusTip">
+    <string>64-bit Integer (MSRF)</string>
+   </property>
+   <property name="whatsThis">
     <string>64-bit Integer (MSRF)</string>
    </property>
    <property name="shortcut">
@@ -580,6 +670,15 @@
    <property name="text">
     <string>64-bit Integer (LSRF)</string>
    </property>
+   <property name="toolTip">
+    <string>64-bit Integer (LSRF)</string>
+   </property>
+   <property name="statusTip">
+    <string>64-bit Integer (LSRF)</string>
+   </property>
+   <property name="whatsThis">
+    <string>64-bit Integer (LSRF)</string>
+   </property>
    <property name="shortcut">
     <string notr="true">Ctrl+Alt+7</string>
    </property>
@@ -596,6 +695,15 @@
      <normaloff>:/res/icon-uint64.png</normaloff>:/res/icon-uint64.png</iconset>
    </property>
    <property name="text">
+    <string>Unsigned 64-bit Integer (MSRF)</string>
+   </property>
+   <property name="toolTip">
+    <string>Unsigned 64-bit Integer (MSRF)</string>
+   </property>
+   <property name="statusTip">
+    <string>Unsigned 64-bit Integer (MSRF)</string>
+   </property>
+   <property name="whatsThis">
     <string>Unsigned 64-bit Integer (MSRF)</string>
    </property>
    <property name="shortcut">
@@ -616,6 +724,15 @@
    <property name="text">
     <string>Unsigned 64-bit Integer (LSRF)</string>
    </property>
+   <property name="toolTip">
+    <string>Unsigned 64-bit Integer (LSRF)</string>
+   </property>
+   <property name="statusTip">
+    <string>Unsigned 64-bit Integer (LSRF)</string>
+   </property>
+   <property name="whatsThis">
+    <string>Unsigned 64-bit Integer (LSRF)</string>
+   </property>
    <property name="shortcut">
     <string notr="true">Ctrl+Alt+8</string>
    </property>
@@ -633,6 +750,15 @@
    </property>
    <property name="text">
     <string>Float (MSRF)</string>
+   </property>
+   <property name="toolTip">
+    <string>32-bit Float (MSRF)</string>
+   </property>
+   <property name="statusTip">
+    <string>32-bit Float (MSRF)</string>
+   </property>
+   <property name="whatsThis">
+    <string>32-bit Float (MSRF)</string>
    </property>
    <property name="shortcut">
     <string notr="true">Ctrl+9</string>
@@ -652,6 +778,15 @@
    <property name="text">
     <string>Float (LSRF)</string>
    </property>
+   <property name="toolTip">
+    <string>32-bit Float (LSRF)</string>
+   </property>
+   <property name="statusTip">
+    <string>32-bit Float (LSRF)</string>
+   </property>
+   <property name="whatsThis">
+    <string>32-bit Float (LSRF)</string>
+   </property>
    <property name="shortcut">
     <string notr="true">Ctrl+Alt+9</string>
    </property>
@@ -669,6 +804,15 @@
    </property>
    <property name="text">
     <string>Double (MSRF)</string>
+   </property>
+   <property name="toolTip">
+    <string>64-bit Float (MSRF)</string>
+   </property>
+   <property name="statusTip">
+    <string>64-bit Float (MSRF)</string>
+   </property>
+   <property name="whatsThis">
+    <string>64-bit Float (MSRF)</string>
    </property>
    <property name="shortcut">
     <string notr="true">Ctrl+0</string>
@@ -688,6 +832,15 @@
    <property name="text">
     <string>Double (LSRF)</string>
    </property>
+   <property name="toolTip">
+    <string>64-bit Float (LSRF)</string>
+   </property>
+   <property name="statusTip">
+    <string>64-bit Float (LSRF)</string>
+   </property>
+   <property name="whatsThis">
+    <string>64-bit Float (LSRF)</string>
+   </property>
    <property name="shortcut">
     <string notr="true">Ctrl+Alt+0</string>
    </property>
@@ -704,6 +857,15 @@
      <normaloff>:/res/icon-swap-bytes.png</normaloff>:/res/icon-swap-bytes.png</iconset>
    </property>
    <property name="text">
+    <string>Swap Bytes (0xAB → 0xBA)</string>
+   </property>
+   <property name="toolTip">
+    <string>Swap Bytes (0xAB → 0xBA)</string>
+   </property>
+   <property name="statusTip">
+    <string>Swap Bytes (0xAB → 0xBA)</string>
+   </property>
+   <property name="whatsThis">
     <string>Swap Bytes (0xAB → 0xBA)</string>
    </property>
   </action>
