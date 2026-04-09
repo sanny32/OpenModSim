@@ -1181,53 +1181,53 @@
         <translation type="vanished">й•їеє¦пјљ%1</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="66"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="64"/>
         <source>PRESET INPUT REGISTERS</source>
         <translation>йў„и®ѕиѕ“е…ҐеЇ„е­е™Ё</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="69"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="67"/>
         <source>PRESET HOLDING REGISTERS</source>
         <translation>йў„и®ѕдїќжЊЃеЇ„е­е™Ё</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="779"/>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="860"/>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="860"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="685"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="766"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="766"/>
         <source>CSV files (*.csv)</source>
         <translation>CSV ж–‡д»¶ (*.csv)</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="786"/>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="871"/>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="871"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="692"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="777"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="777"/>
         <source>Error</source>
         <translation>й”™иЇЇ</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="827"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="733"/>
         <source>Import error</source>
         <translation>еЇје…Ґй”™иЇЇ</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="827"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="733"/>
         <source>Invalid value: %1</source>
         <translation>ж—&#xa0;ж•€еЂјпјљ%1</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="836"/>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="842"/>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="842"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="742"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="748"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="748"/>
         <source>Warning</source>
         <translation>и­¦е‘Љ</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="836"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="742"/>
         <source>No data found in file.</source>
         <translation>ж–‡д»¶дё­жњЄж‰ѕе€°ж•°жЌ®гЂ‚</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="842"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="748"/>
         <source>Imported data size (%1) does not match current size (%2).</source>
         <translation>еЇје…Ґж•°жЌ®е¤§е°Џ (%1) дёЋеЅ“е‰Ќе¤§е°Џ (%2) дёЌеЊ№й…ЌгЂ‚</translation>
     </message>
@@ -3233,7 +3233,7 @@ Source: %3</source>
 <context>
     <name>HexViewButton</name>
     <message>
-        <location filename="../controls/numericlineedit.cpp" line="31"/>
+        <location filename="../controls/numericlineedit.cpp" line="33"/>
         <source>Hex View</source>
         <translation type="unfinished">еЌЃе…­иї›е€¶и§†е›ѕ</translation>
     </message>

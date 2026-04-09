@@ -56,8 +56,7 @@ private:
 
     void updateTableWidget();
     QLineEdit* createLineEdit();
-    QLineEdit* createBinaryEdit(int idx);
-    NumericLineEdit* createNumEdit(int idx);
+    QLineEdit* createNumEdit(int idx);
 
     template<typename T>
     void applyValue(T value, int index, ValueOperation op)

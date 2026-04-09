@@ -21,6 +21,7 @@ public:
         Int32Mode = 0,
         UInt32Mode,
         HexMode,
+        BinaryMode,
         FloatMode,
         DoubleMode,
         Int64Mode,
