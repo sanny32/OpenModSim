@@ -565,12 +565,21 @@ void FormScriptView::setupScriptBar()
         emit scriptSettingsChanged(_scriptSettings);
     });
 
+#if QT_VERSION >= QT_VERSION_CHECK(6, 7, 0)
+    connect(_scriptRunOnStartupCheck, &QCheckBox::checkStateChanged, this, [this](Qt::CheckState state) {
+        const bool checked = (state == Qt::Checked);
+        if(_scriptSettings.RunOnStartup == checked) return;
+        _scriptSettings.RunOnStartup = checked;
+        emit scriptSettingsChanged(_scriptSettings);
+    });
+#else
     connect(_scriptRunOnStartupCheck, &QCheckBox::stateChanged, this, [this](int state) {
         const bool checked = (state == Qt::Checked);
         if(_scriptSettings.RunOnStartup == checked) return;
         _scriptSettings.RunOnStartup = checked;
         emit scriptSettingsChanged(_scriptSettings);
     });
+#endif
 
     if (auto* runButton = qobject_cast<QToolButton*>(ui->toolBarScript->widgetForAction(ui->actionRunScript)))
         runButton->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
@@ -657,4 +666,3 @@ void FormScriptView::disconnectEditSlots()
     disconnect(_parent, &MainWindow::find, ui->scriptControl, &JScriptControl::showFind);
     disconnect(_parent, &MainWindow::replace, ui->scriptControl, &JScriptControl::showReplace);
 }
-
