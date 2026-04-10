@@ -50,6 +50,11 @@ private:
     MdiArea* _owner;
 };
 
+///
+/// \brief isInterestingTraceEvent
+/// \param type
+/// \return
+///
 static bool isInterestingTraceEvent(QEvent::Type type)
 {
     switch (type) {
@@ -69,6 +74,11 @@ static bool isInterestingTraceEvent(QEvent::Type type)
     }
 }
 
+///
+/// \brief areaTag
+/// \param area
+/// \return
+///
 static QString areaTag(const MdiArea* area)
 {
     return QStringLiteral("%1 state={%2}")
@@ -76,6 +86,11 @@ static QString areaTag(const MdiArea* area)
         .arg(AppTrace::mdiAreaState(area));
 }
 
+///
+/// \brief mdiOwnerOf
+/// \param widget
+/// \return
+///
 static QMdiSubWindow* mdiOwnerOf(QWidget* widget)
 {
     for (QWidget* it = widget; it; it = it->parentWidget()) {
@@ -972,19 +987,27 @@ void MdiArea::updateViewportBaseLine()
         _tabBarBaseLine = new TabBarBaseLineWidget(this);
 
     const QRect vpRect = vp->geometry();
+
+    // Compute the overlap height so the baseline widget matches the style's
+    // PE_FrameTabBarBase drawing area (e.g. Fusion draws at rect.bottom()-1
+    // which requires at least 2px height).
+    QStyleOptionTabBarBase baseOpt;
+    baseOpt.initFrom(_tabBar);
+    const int overlap = qMax(1, style()->pixelMetric(QStyle::PM_TabBarBaseOverlap, &baseOpt, _tabBar));
+
     QRect lineRect;
     switch (tabPosition()) {
         case QTabWidget::North:
-            lineRect = QRect(vpRect.left(), vpRect.top() - 1, vpRect.width(), 1);
+            lineRect = QRect(vpRect.left(), vpRect.top() - overlap, vpRect.width(), overlap);
             break;
         case QTabWidget::South:
-            lineRect = QRect(vpRect.left(), vpRect.bottom() + 1, vpRect.width(), 1);
+            lineRect = QRect(vpRect.left(), vpRect.bottom() + 1, vpRect.width(), overlap);
             break;
         case QTabWidget::East:
-            lineRect = QRect(vpRect.right() + 1, vpRect.top(), 1, vpRect.height());
+            lineRect = QRect(vpRect.right() + 1, vpRect.top(), overlap, vpRect.height());
             break;
         case QTabWidget::West:
-            lineRect = QRect(vpRect.left() - 1, vpRect.top(), 1, vpRect.height());
+            lineRect = QRect(vpRect.left() - overlap, vpRect.top(), overlap, vpRect.height());
             break;
         default:
             _tabBarBaseLine->hide();
@@ -1007,17 +1030,17 @@ void MdiArea::updateViewportBaseLine()
         const int tabRight = qMin(lineRect.width() - 1, tabBarRect.right() - lineRect.left());
 
         if (tabLeft > 0)
-            mask += QRect(0, 0, tabLeft, 1);
+            mask += QRect(0, 0, tabLeft, lineRect.height());
         if (tabRight + 1 < lineRect.width())
-            mask += QRect(tabRight + 1, 0, lineRect.width() - (tabRight + 1), 1);
+            mask += QRect(tabRight + 1, 0, lineRect.width() - (tabRight + 1), lineRect.height());
     } else {
         const int tabTop = qMax(0, tabBarRect.top() - lineRect.top());
         const int tabBottom = qMin(lineRect.height() - 1, tabBarRect.bottom() - lineRect.top());
 
         if (tabTop > 0)
-            mask += QRect(0, 0, 1, tabTop);
+            mask += QRect(0, 0, lineRect.width(), tabTop);
         if (tabBottom + 1 < lineRect.height())
-            mask += QRect(0, tabBottom + 1, 1, lineRect.height() - (tabBottom + 1));
+            mask += QRect(0, tabBottom + 1, lineRect.width(), lineRect.height() - (tabBottom + 1));
     }
 
     _tabBarBaseLine->setMask(mask);

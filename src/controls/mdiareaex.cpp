@@ -37,6 +37,12 @@ static bool setEqualSplitterSizes(QSplitter* splitter)
     return true;
 }
 
+///
+/// \brief panelName
+/// \param owner
+/// \param area
+/// \return
+///
 static QString panelName(const MdiAreaEx* owner, const MdiArea* area)
 {
     if (!owner || !area)
@@ -48,6 +54,11 @@ static QString panelName(const MdiAreaEx* owner, const MdiArea* area)
     return QStringLiteral("unknown");
 }
 
+///
+/// \brief mdiExState
+/// \param mdi
+/// \return
+///
 static QString mdiExState(const MdiAreaEx* mdi)
 {
     if (!mdi)
