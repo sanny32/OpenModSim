@@ -262,7 +262,7 @@ QVariant DataMapDataModel::data(const QModelIndex& index, int role) const
 
         case ColTimestamp:
             if (role == Qt::DisplayRole)
-                return e.timestamp.isValid() ? e.timestamp.toString(Qt::ISODate) : QString();
+                return e.timestamp.isValid() ? e.timestamp.toString(Qt::ISODateWithMs) : QString();
             break;
 
         default:
