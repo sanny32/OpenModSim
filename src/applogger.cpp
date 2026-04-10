@@ -2,8 +2,7 @@
 
 #include <QCoreApplication>
 #include <QMetaType>
-#include <QObject>
-#include "controls/applogoutput.h"
+#include "applogoutput.h"
 
 namespace {
 
@@ -97,7 +96,7 @@ void AppLogger::setupModbusMultiServerLogging(ModbusMultiServer& server, QObject
                         quint16 addr, quint16 len) {
         qInfo(lcApp) << QCoreApplication::translate(
                             "MainWindow",
-                            "Address space added: unit %1, %2, starting address %3 (0-based), length %4")
+                            "Address space added: unit %1, %2, starting address %3, length %4")
                             .arg(deviceId).arg(registerTypeName(type)).arg(addr).arg(len);
     });
 
@@ -106,6 +105,45 @@ void AppLogger::setupModbusMultiServerLogging(ModbusMultiServer& server, QObject
         qInfo(lcApp) << QCoreApplication::translate("MainWindow", "Address space removed: unit %1")
                             .arg(deviceId);
     });
+}
+
+///
+/// \brief AppLogger::setupDataSimulatorLogging
+/// \param simulator
+/// \param context
+///
+void AppLogger::setupDataSimulatorLogging(DataSimulator& simulator, QObject* context)
+{
+    Q_ASSERT(context != nullptr);
+
+    QObject::connect(&simulator, &DataSimulator::simulationStarted, context,
+                     [&simulator](DataType /*type*/, RegisterOrder /*order*/, quint8 deviceId,
+                                  QModbusDataUnit::RegisterType regType, const QVector<quint16>& addresses) {
+        if (addresses.isEmpty())
+            return;
+
+        const quint16 address = addresses.first();
+        const auto mode = simulator.simulationParams(deviceId, regType, address).Mode;
+        qInfo(lcApp) << QCoreApplication::translate("MainWindow",
+                                                    "Auto simulation enabled (%1): unit %2, %3, address %4")
+                            .arg(enumToString(mode))
+                            .arg(deviceId)
+                            .arg(registerTypeName(regType))
+                            .arg(address);
+    }, Qt::QueuedConnection);
+
+    QObject::connect(&simulator, &DataSimulator::simulationStopped, context,
+                     [](DataType /*type*/, RegisterOrder /*order*/, quint8 deviceId,
+                        QModbusDataUnit::RegisterType regType, const QVector<quint16>& addresses) {
+        if (addresses.isEmpty())
+            return;
+
+        qInfo(lcApp) << QCoreApplication::translate("MainWindow",
+                                                    "Auto simulation disabled: unit %1, %2, address %3")
+                            .arg(deviceId)
+                            .arg(registerTypeName(regType))
+                            .arg(addresses.first());
+    }, Qt::QueuedConnection);
 }
 
 ///
@@ -129,37 +167,9 @@ void AppLogger::logUserRegisterWrite(QModbusDataUnit::RegisterType pointType, co
         : static_cast<int>(params.Address) - 1;
 
     qInfo(lcApp) << QCoreApplication::translate("MainWindow",
-                                                "Manual write: unit %1, %2, address %3 (0-based), value %4")
+                                                "Manual write: unit %1, %2, address %3, value %4")
                         .arg(params.DeviceId)
                         .arg(registerTypeName(pointType))
                         .arg(address0Based)
                         .arg(formatWriteValue(params.Value));
 }
-
-///
-/// \brief AppLogger::logUserSimulationChanged
-/// \param deviceId
-/// \param pointType
-/// \param address
-/// \param zeroBasedAddress
-/// \param mode
-///
-void AppLogger::logUserSimulationChanged(quint8 deviceId, QModbusDataUnit::RegisterType pointType,
-                                         quint16 address, bool zeroBasedAddress, SimulationMode mode)
-{
-    const int address0Based = zeroBasedAddress
-        ? static_cast<int>(address)
-        : static_cast<int>(address) - 1;
-
-    const QString state = (mode == SimulationMode::Off)
-        ? QCoreApplication::translate("MainWindow", "disabled")
-        : QCoreApplication::translate("MainWindow", "enabled (%1)").arg(enumToString(mode));
-
-    qInfo(lcApp) << QCoreApplication::translate("MainWindow",
-                                                "Auto simulation %1: unit %2, %3, address %4 (0-based)")
-                        .arg(state)
-                        .arg(deviceId)
-                        .arg(registerTypeName(pointType))
-                        .arg(address0Based);
-}
-

@@ -2134,8 +2134,8 @@
     </message>
     <message>
         <location filename="../dialogs/dialogwriteregister.ui" line="118"/>
-        <location filename="../dialogs/dialogwriteregister.cpp" line="235"/>
-        <location filename="../dialogs/dialogwriteregister.cpp" line="235"/>
+        <location filename="../dialogs/dialogwriteregister.cpp" line="234"/>
+        <location filename="../dialogs/dialogwriteregister.cpp" line="234"/>
         <source>Auto Simulation: OFF</source>
         <translation>и‡ЄеЉЁжЁЎж‹џпјље…ій—­</translation>
     </message>
@@ -2145,19 +2145,19 @@
         <translation>дЅЌжЁЎејЏпјљ </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwriteregister.cpp" line="104"/>
+        <location filename="../dialogs/dialogwriteregister.cpp" line="103"/>
         <source>Value, (HEX): </source>
         <translation>еЂјпј€еЌЃе…­иї›е€¶пј‰пјљ </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwriteregister.cpp" line="111"/>
+        <location filename="../dialogs/dialogwriteregister.cpp" line="110"/>
         <source>Value, (ANSI): </source>
         <translation>еЂјпјЊ(ANSI)пјљ </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwriteregister.cpp" line="229"/>
-        <location filename="../dialogs/dialogwriteregister.cpp" line="242"/>
-        <location filename="../dialogs/dialogwriteregister.cpp" line="242"/>
+        <location filename="../dialogs/dialogwriteregister.cpp" line="228"/>
+        <location filename="../dialogs/dialogwriteregister.cpp" line="241"/>
+        <location filename="../dialogs/dialogwriteregister.cpp" line="241"/>
         <source>Auto Simulation: ON</source>
         <translation>и‡ЄеЉЁжЁЎж‹џпјљејЂеђЇ</translation>
     </message>
@@ -2200,15 +2200,15 @@
     </message>
     <message>
         <location filename="../dialogs/dialogwritestatusregister.ui" line="134"/>
-        <location filename="../dialogs/dialogwritestatusregister.cpp" line="103"/>
-        <location filename="../dialogs/dialogwritestatusregister.cpp" line="103"/>
+        <location filename="../dialogs/dialogwritestatusregister.cpp" line="102"/>
+        <location filename="../dialogs/dialogwritestatusregister.cpp" line="102"/>
         <source>Auto Simulation: OFF</source>
         <translation>и‡ЄеЉЁжЁЎж‹џпјље…ій—­</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwritestatusregister.cpp" line="97"/>
-        <location filename="../dialogs/dialogwritestatusregister.cpp" line="109"/>
-        <location filename="../dialogs/dialogwritestatusregister.cpp" line="109"/>
+        <location filename="../dialogs/dialogwritestatusregister.cpp" line="96"/>
+        <location filename="../dialogs/dialogwritestatusregister.cpp" line="108"/>
+        <location filename="../dialogs/dialogwritestatusregister.cpp" line="108"/>
         <source>Auto Simulation: ON</source>
         <translation>и‡ЄеЉЁжЁЎж‹џпјљејЂеђЇ</translation>
     </message>
@@ -3637,8 +3637,8 @@ Script.onInit(()=&gt;{
     </message>
     <message>
         <location filename="../mainwindow.ui" line="235"/>
-        <location filename="../mainwindow.cpp" line="1557"/>
-        <location filename="../mainwindow.cpp" line="1557"/>
+        <location filename="../mainwindow.cpp" line="1558"/>
+        <location filename="../mainwindow.cpp" line="1558"/>
         <source>Save Project</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3877,9 +3877,9 @@ Script.onInit(()=&gt;{
         <location filename="../mainwindow.ui" line="517"/>
         <location filename="../mainwindow.ui" line="520"/>
         <location filename="../mainwindow.cpp" line="190"/>
-        <location filename="../mainwindow.cpp" line="386"/>
+        <location filename="../mainwindow.cpp" line="387"/>
         <location filename="../mainwindow.cpp" line="190"/>
-        <location filename="../mainwindow.cpp" line="386"/>
+        <location filename="../mainwindow.cpp" line="387"/>
         <source>Script Help</source>
         <translation>и„љжњ¬её®еЉ©</translation>
     </message>
@@ -3968,7 +3968,7 @@ Script.onInit(()=&gt;{
         <translation type="vanished">дї„иЇ­</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="636"/>
+        <location filename="../mainwindow.cpp" line="637"/>
         <source>All files (*)</source>
         <translation>ж‰Ђжњ‰ж–‡д»¶ (*)</translation>
     </message>
@@ -3978,121 +3978,116 @@ Script.onInit(()=&gt;{
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="145"/>
-        <location filename="../mainwindow.cpp" line="388"/>
-        <location filename="../mainwindow.cpp" line="388"/>
+        <location filename="../mainwindow.cpp" line="389"/>
+        <location filename="../mainwindow.cpp" line="389"/>
         <source>Open Recent</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="146"/>
-        <location filename="../mainwindow.cpp" line="1644"/>
-        <location filename="../mainwindow.cpp" line="1644"/>
+        <location filename="../mainwindow.cpp" line="1645"/>
+        <location filename="../mainwindow.cpp" line="1645"/>
         <source>Clear List</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="171"/>
-        <location filename="../mainwindow.cpp" line="385"/>
-        <location filename="../mainwindow.cpp" line="385"/>
+        <location filename="../mainwindow.cpp" line="386"/>
+        <location filename="../mainwindow.cpp" line="386"/>
         <source>Project</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="228"/>
-        <location filename="../mainwindow.cpp" line="387"/>
-        <location filename="../mainwindow.cpp" line="387"/>
+        <location filename="../mainwindow.cpp" line="388"/>
+        <location filename="../mainwindow.cpp" line="388"/>
         <source>Output</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="635"/>
-        <location filename="../mainwindow.cpp" line="666"/>
-        <location filename="../mainwindow.cpp" line="666"/>
+        <location filename="../mainwindow.cpp" line="636"/>
+        <location filename="../mainwindow.cpp" line="667"/>
+        <location filename="../mainwindow.cpp" line="667"/>
         <source>Project files (*.oms)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1414"/>
+        <location filename="../mainwindow.cpp" line="1415"/>
         <source>Address Base</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../applogger.cpp" line="53"/>
+        <location filename="../applogger.cpp" line="52"/>
         <source>Server connected: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../applogger.cpp" line="59"/>
+        <location filename="../applogger.cpp" line="58"/>
         <source>Server disconnected: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../applogger.cpp" line="65"/>
+        <location filename="../applogger.cpp" line="64"/>
         <source>Modbus client connected: %1 -&gt; %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../applogger.cpp" line="72"/>
+        <location filename="../applogger.cpp" line="71"/>
         <source>Modbus client disconnected: %1 -&gt; %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../applogger.cpp" line="79"/>
+        <location filename="../applogger.cpp" line="78"/>
         <source>[Unit %1] %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../applogger.cpp" line="98"/>
-        <source>Address space added: unit %1, %2, starting address %3 (0-based), length %4</source>
+        <location filename="../applogger.cpp" line="97"/>
+        <source>Address space added: unit %1, %2, starting address %3, length %4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../applogger.cpp" line="106"/>
+        <location filename="../applogger.cpp" line="127"/>
+        <source>Auto simulation enabled (%1): unit %2, %3, address %4</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../applogger.cpp" line="141"/>
+        <source>Auto simulation disabled: unit %1, %2, address %3</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../applogger.cpp" line="169"/>
+        <source>Manual write: unit %1, %2, address %3, value %4</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../applogger.cpp" line="105"/>
         <source>Address space removed: unit %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../applogger.cpp" line="131"/>
-        <source>Manual write: unit %1, %2, address %3 (0-based), value %4</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../applogger.cpp" line="158"/>
-        <source>Auto simulation %1: unit %2, %3, address %4 (0-based)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../applogger.cpp" line="155"/>
-        <source>disabled</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../applogger.cpp" line="156"/>
-        <source>enabled (%1)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../applogger.cpp" line="85"/>
+        <location filename="../applogger.cpp" line="84"/>
         <source>Unit ID added: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../applogger.cpp" line="91"/>
+        <location filename="../applogger.cpp" line="90"/>
         <source>Unit ID removed: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1009"/>
+        <location filename="../mainwindow.cpp" line="1010"/>
         <source>Move to Other Panel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1410"/>
+        <location filename="../mainwindow.cpp" line="1411"/>
         <source>1-based</source>
         <translation type="unfinished">еџєењ°еќЂдёє-1</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1411"/>
+        <location filename="../mainwindow.cpp" line="1412"/>
         <source>0-based</source>
         <translation type="unfinished">еџєењ°еќЂдёє-0</translation>
     </message>
@@ -4103,12 +4098,12 @@ Script.onInit(()=&gt;{
         <translation type="unfinished">еЌЃе…­иї›е€¶и§†е›ѕ</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1558"/>
+        <location filename="../mainwindow.cpp" line="1559"/>
         <source>Save project before closing?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1632"/>
+        <location filename="../mainwindow.cpp" line="1633"/>
         <source>No Recent Projects</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4117,7 +4112,7 @@ Script.onInit(()=&gt;{
         <translation type="obsolete">ж•°жЌ®</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="957"/>
+        <location filename="../mainwindow.cpp" line="958"/>
         <source>JavaScript files (*.js);;All files (*)</source>
         <translation type="unfinished"></translation>
     </message>

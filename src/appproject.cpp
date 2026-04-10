@@ -1512,7 +1512,14 @@ void AppProject::loadProject(const QString& filename)
         quint16 address;
         quint16 value;
     };
+    struct PendingSimulation {
+        quint8 deviceId;
+        QModbusDataUnit::RegisterType type;
+        quint16 address;
+        ModbusSimulationParams params;
+    };
     QList<PendingValue> pendingValues;
+    QList<PendingSimulation> pendingSimulations;
 
     QXmlStreamReader xml(&file);
     while (xml.readNextStartElement()) {
@@ -1682,7 +1689,7 @@ void AppProject::loadProject(const QString& filename)
                                             if (ok && xml.readNextStartElement()) {
                                                 ModbusSimulationParams params;
                                                 xml >> params;
-                                                _dataSimulator->startSimulation(deviceId, type, addr, params);
+                                                pendingSimulations.append({deviceId, type, addr, params});
                                             }
                                         }
                                     }
@@ -1742,6 +1749,10 @@ void AppProject::loadProject(const QString& filename)
         unit.setValue(0, pv.value);
         _mbServer.setData(pv.deviceId, unit);
     }
+
+    // Apply simulations after initial values are restored.
+    for (const auto& ps : std::as_const(pendingSimulations))
+        _dataSimulator->startSimulation(ps.deviceId, ps.type, ps.address, ps.params);
 
     // Prefer global AddressSpace metadata when present; otherwise keep legacy per-form values.
     if (hasGlobalDescriptionMap)

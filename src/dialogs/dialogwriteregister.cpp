@@ -3,7 +3,6 @@
 #include "numericutils.h"
 #include "modbusmultiserver.h"
 #include "datasimulator.h"
-#include "applogger.h"
 #include "dialogautosimulation.h"
 #include "dialogwriteregister.h"
 #include "ui_dialogwriteregister.h"
@@ -328,8 +327,6 @@ void DialogWriteRegister::on_pushButtonSimulation_clicked()
     {
         const quint8 deviceId = ui->lineEditNode->value<int>();
         const int simAddr = ui->lineEditAddress->value<int>() - (_writeParams.ZeroBasedAddress ? 0 : 1);
-        AppLogger::logUserSimulationChanged(deviceId, _type, ui->lineEditAddress->value<quint16>(),
-                                            _writeParams.ZeroBasedAddress, _simParams.Mode);
         if(_simParams.Mode == SimulationMode::Off)
             _dataSimulator->stopSimulation(deviceId, _type, simAddr);
         else
