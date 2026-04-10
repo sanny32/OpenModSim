@@ -1,6 +1,7 @@
 #include "modbuslimits.h"
 #include "modbusmultiserver.h"
 #include "datasimulator.h"
+#include "applogger.h"
 #include "dialogcoilsimulation.h"
 #include "dialogwritestatusregister.h"
 #include "ui_dialogwritestatusregister.h"
@@ -184,6 +185,8 @@ void DialogWriteStatusRegister::on_pushButtonSimulation_clicked()
     {
         const quint8 deviceId = ui->lineEditNode->value<int>();
         const int simAddr = ui->lineEditAddress->value<int>() - (_writeParams.ZeroBasedAddress ? 0 : 1);
+        AppLogger::logUserSimulationChanged(deviceId, _type, ui->lineEditAddress->value<quint16>(),
+                                            _writeParams.ZeroBasedAddress, _simParams.Mode);
         if(_simParams.Mode == SimulationMode::Off)
             _dataSimulator->stopSimulation(deviceId, _type, simAddr);
         else

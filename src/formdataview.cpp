@@ -14,6 +14,7 @@
 #include "datasimulator.h"
 #include "dialogwritestatusregister.h"
 #include "dialogwriteregister.h"
+#include "applogger.h"
 #include "formdataview.h"
 #include "ui_formdataview.h"
 
@@ -1113,8 +1114,10 @@ void FormDataView::on_outputWidget_itemDoubleClicked(quint16 addr, const QVarian
         case QModbusDataUnit::DiscreteInputs:
         {
             DialogWriteStatusRegister dlg(params, pointType, displayHexAddresses(), _dataSimulator, _parent);
-            if(dlg.exec() == QDialog::Accepted)
+            if(dlg.exec() == QDialog::Accepted) {
+                AppLogger::logUserRegisterWrite(pointType, params);
                 _mbMultiServer.writeRegister(pointType, params);
+            }
         }
         break;
 
@@ -1122,8 +1125,10 @@ void FormDataView::on_outputWidget_itemDoubleClicked(quint16 addr, const QVarian
         case QModbusDataUnit::HoldingRegisters:
         {
             DialogWriteRegister dlg(params, pointType, displayHexAddresses(), _dataSimulator, _parent);
-            if(dlg.exec() == QDialog::Accepted)
+            if(dlg.exec() == QDialog::Accepted) {
+                AppLogger::logUserRegisterWrite(pointType, params);
                 _mbMultiServer.writeRegister(pointType, params);
+            }
         }
         break;
 
