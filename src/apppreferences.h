@@ -22,62 +22,62 @@ public:
 
     // ----- Font & Colors -----
     QFont font() const { return _font; }
-    void setFont(const QFont& f) { _font = f; }
+    void setFont(const QFont& f);
 
     int fontZoom() const { return _fontZoom; }
-    void setFontZoom(int zoom) { _fontZoom = zoom; }
+    void setFontZoom(int zoom);
 
     QColor backgroundColor() const { return _backgroundColor; }
-    void setBackgroundColor(const QColor& c) { _backgroundColor = c; }
+    void setBackgroundColor(const QColor& c);
 
     QColor foregroundColor() const { return _foregroundColor; }
-    void setForegroundColor(const QColor& c) { _foregroundColor = c; }
+    void setForegroundColor(const QColor& c);
 
     QColor statusColor() const { return _statusColor; }
-    void setStatusColor(const QColor& c) { _statusColor = c; }
+    void setStatusColor(const QColor& c);
 
     QColor addressColor() const { return _addressColor; }
-    void setAddressColor(const QColor& c) { _addressColor = c; }
+    void setAddressColor(const QColor& c);
 
     QColor commentColor() const { return _commentColor; }
-    void setCommentColor(const QColor& c) { _commentColor = c; }
+    void setCommentColor(const QColor& c);
 
     // ----- Updates -----
     bool checkForUpdates() const { return _checkForUpdates; }
-    void setCheckForUpdates(bool enable) { _checkForUpdates = enable; }
+    void setCheckForUpdates(bool enable);
 
     // ----- Language -----
     QString language() const { return _language; }
-    void setLanguage(const QString& lang) { _language = lang; }
+    void setLanguage(const QString& lang);
 
     // ----- Default View Definitions -----
     DataViewDefinitions dataViewDefinitions() const { return _dataViewDefinitions; }
-    void setDataViewDefinitions(const DataViewDefinitions& dd) { _dataViewDefinitions = dd; }
+    void setDataViewDefinitions(const DataViewDefinitions& dd);
 
     TrafficViewDefinitions trafficViewDefinitions() const { return _trafficViewDefinitions; }
-    void setTrafficViewDefinitions(const TrafficViewDefinitions& dd) { _trafficViewDefinitions = dd; }
+    void setTrafficViewDefinitions(const TrafficViewDefinitions& dd);
 
     ScriptViewDefinitions scriptViewDefinitions() const { return _scriptViewDefinitions; }
-    void setScriptViewDefinitions(const ScriptViewDefinitions& dd) { _scriptViewDefinitions = dd; }
+    void setScriptViewDefinitions(const ScriptViewDefinitions& dd);
 
     bool globalZeroBasedAddress() const { return _globalZeroBasedAddress; }
-    void setGlobalZeroBasedAddress(bool value) { _globalZeroBasedAddress = value; }
+    void setGlobalZeroBasedAddress(bool value);
 
     bool globalHexView() const { return _globalHexView; }
-    void setGlobalHexView(bool value) { _globalHexView = value; }
+    void setGlobalHexView(bool value);
 
     // ----- Script Editor -----
     QFont scriptFont() const { return _scriptFont; }
-    void setScriptFont(const QFont& f) { _scriptFont = f; }
+    void setScriptFont(const QFont& f);
 
     bool codeAutoComplete() const { return _codeAutoComplete; }
-    void setCodeAutoComplete(bool enable) { _codeAutoComplete = enable; }
+    void setCodeAutoComplete(bool enable);
 
     bool autoShowConsoleOutput() const { return _autoShowConsoleOutput; }
-    void setAutoShowConsoleOutput(bool enable) { _autoShowConsoleOutput = enable; }
+    void setAutoShowConsoleOutput(bool enable);
 
     int consoleMaxLines() const { return _consoleMaxLines; }
-    void setConsoleMaxLines(int n) { _consoleMaxLines = n; }
+    void setConsoleMaxLines(int n);
 
     // ----- Persistence -----
     void load(QSettings& settings);

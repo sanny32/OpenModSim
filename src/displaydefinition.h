@@ -32,6 +32,19 @@ struct DataViewDefinitions
 
         DataViewColumnsDistance = qBound<quint16>(1, DataViewColumnsDistance, 32);
     }
+
+    bool operator==(const DataViewDefinitions& o) const
+    {
+        return FormName == o.FormName
+            && DeviceId == o.DeviceId
+            && PointAddress == o.PointAddress
+            && PointType == o.PointType
+            && Length == o.Length
+            && DataViewColumnsDistance == o.DataViewColumnsDistance
+            && LeadingZeros == o.LeadingZeros;
+    }
+
+    bool operator!=(const DataViewDefinitions& o) const { return !(*this == o); }
 };
 
 ///
@@ -57,6 +70,19 @@ struct TrafficViewDefinitions
             FunctionCodeFilter = -1;
         LogViewLimit = qBound<quint16>(4, LogViewLimit, 1000);
     }
+
+    bool operator==(const TrafficViewDefinitions& o) const
+    {
+        return FormName == o.FormName
+            && UnitFilter == o.UnitFilter
+            && FunctionCodeFilter == o.FunctionCodeFilter
+            && LogViewLimit == o.LogViewLimit
+            && ExceptionsOnly == o.ExceptionsOnly
+            && Autoscroll == o.Autoscroll
+            && HexView == o.HexView;
+    }
+
+    bool operator!=(const TrafficViewDefinitions& o) const { return !(*this == o); }
 };
 
 ///
@@ -71,6 +97,14 @@ struct ScriptViewDefinitions
     {
         ScriptCfg.normalize();
     }
+
+    bool operator==(const ScriptViewDefinitions& o) const
+    {
+        return FormName == o.FormName
+            && ScriptCfg == o.ScriptCfg;
+    }
+
+    bool operator!=(const ScriptViewDefinitions& o) const { return !(*this == o); }
 };
 
 ///

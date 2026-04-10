@@ -184,6 +184,7 @@ void DialogPreferences::loadFromPreferences()
     ui->checkBoxLeadingZeros->setChecked(dataDd.LeadingZeros);
     ui->spinBoxColumnsDistance->setValue(dataDd.DataViewColumnsDistance);
     ui->spinBoxLogLimit->setValue(trafficDd.LogViewLimit);
+    ui->checkBoxAutoscrollLog->setChecked(trafficDd.Autoscroll);
 
     // Script - font
     const QFont& sf = prefs.scriptFont();
@@ -241,6 +242,7 @@ void DialogPreferences::apply()
     const bool leadingZeros = ui->checkBoxLeadingZeros->isChecked();
     const int columnsDistance = ui->spinBoxColumnsDistance->value();
     const int logLimit = ui->spinBoxLogLimit->value();
+    const bool autoScrollLog = ui->checkBoxAutoscrollLog->isChecked();
 
     auto applyDataDefaults = [=](auto& dd) {
         dd.LeadingZeros = leadingZeros;
@@ -249,6 +251,7 @@ void DialogPreferences::apply()
 
     applyDataDefaults(dataDd);
     trafficDd.LogViewLimit = static_cast<quint16>(logLimit);
+    trafficDd.Autoscroll = autoScrollLog;
 
     prefs.setDataViewDefinitions(dataDd);
     prefs.setTrafficViewDefinitions(trafficDd);
