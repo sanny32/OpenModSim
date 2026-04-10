@@ -1,7 +1,6 @@
 #include "applogger.h"
 
 #include <QCoreApplication>
-#include <QMetaType>
 #include "applogoutput.h"
 
 namespace {
@@ -18,22 +17,15 @@ QString connectionAddress(const ConnectionDetails& cd)
         : cd.SerialParams.PortName;
 }
 
-///
-/// \brief formatWriteValue
-/// \param value
-/// \return
-///
-QString formatWriteValue(const QVariant& value)
+QString formatWrittenValues(const QModbusDataUnit& data)
 {
-    if(value.userType() == qMetaTypeId<QVector<quint16>>()) {
-        const auto values = value.value<QVector<quint16>>();
-        return QString("[%1 values]").arg(values.size());
-    }
+    if(data.valueCount() <= 0)
+        return QStringLiteral("[]");
 
-    if(value.userType() == QMetaType::Bool)
-        return value.toBool() ? QStringLiteral("1") : QStringLiteral("0");
+    if(data.valueCount() == 1)
+        return QString::number(data.value(0));
 
-    return value.toString();
+    return QCoreApplication::translate("MainWindow", "[%1 values]").arg(data.valueCount());
 }
 
 }
@@ -105,6 +97,38 @@ void AppLogger::setupModbusMultiServerLogging(ModbusMultiServer& server, QObject
         qInfo(lcApp) << QCoreApplication::translate("MainWindow", "Address space removed: unit %1")
                             .arg(deviceId);
     });
+
+    QObject::connect(&server, &ModbusMultiServer::dataChanged, context,
+                     [](quint8 deviceId, const QModbusDataUnit& data, WriteSource source,
+                        const QString& clientAddress, quint16 clientPort) {
+        switch(source) {
+            case WriteSource::User:
+                qInfo(lcApp) << QCoreApplication::translate("MainWindow",
+                                                        "Manual write: unit %1, %2, address %3, value %4")
+                                .arg(deviceId)
+                                .arg(registerTypeName(data.registerType()))
+                                .arg(data.startAddress())
+                                .arg(formatWrittenValues(data));
+            break;
+            case WriteSource::ModbusClient:
+            {
+                const QString endpoint = clientAddress.isEmpty()
+                    ? QCoreApplication::translate("MainWindow", "unknown client")
+                    : QString("%1:%2").arg(clientAddress).arg(clientPort);
+
+                qInfo(lcApp) << QCoreApplication::translate("MainWindow",
+                                                            "Client write: %1 -> unit %2, %3, address %4, value %5")
+                                    .arg(endpoint)
+                                    .arg(deviceId)
+                                    .arg(registerTypeName(data.registerType()))
+                                    .arg(data.startAddress())
+                                    .arg(formatWrittenValues(data));
+            }
+            break;
+            default: break;
+        }
+
+    });
 }
 
 ///
@@ -153,23 +177,4 @@ void AppLogger::setupDataSimulatorLogging(DataSimulator& simulator, QObject* con
 void AppLogger::logConnectionError(const QString& error)
 {
     qCritical(lcApp) << error;
-}
-
-///
-/// \brief AppLogger::logUserRegisterWrite
-/// \param pointType
-/// \param params
-///
-void AppLogger::logUserRegisterWrite(QModbusDataUnit::RegisterType pointType, const ModbusWriteParams& params)
-{
-    const int address0Based = params.ZeroBasedAddress
-        ? static_cast<int>(params.Address)
-        : static_cast<int>(params.Address) - 1;
-
-    qInfo(lcApp) << QCoreApplication::translate("MainWindow",
-                                                "Manual write: unit %1, %2, address %3, value %4")
-                        .arg(params.DeviceId)
-                        .arg(registerTypeName(pointType))
-                        .arg(address0Based)
-                        .arg(formatWriteValue(params.Value));
 }

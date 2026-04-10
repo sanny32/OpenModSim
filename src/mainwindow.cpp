@@ -1176,7 +1176,6 @@ void MainWindow::forceCoils(QModbusDataUnit::RegisterType type)
     const bool displayHexAddresses = frm ? frm->displayHexAddresses() : AppPreferences::instance().globalHexView();
     DialogForceMultipleCoils dlg(params, type, preset.Length, displayHexAddresses, this);
     if(dlg.exec() == QDialog::Accepted) {
-        AppLogger::logUserRegisterWrite(type, params);
         _mbMultiServer.writeRegister(type, params);
     }
 }
@@ -1198,7 +1197,6 @@ void MainWindow::presetRegs(QModbusDataUnit::RegisterType type)
     const bool displayHexAddresses = frm ? frm->displayHexAddresses() : AppPreferences::instance().globalHexView();
     DialogForceMultipleRegisters dlg(params, type, preset.Length, displayHexAddresses, this);
     if(dlg.exec() == QDialog::Accepted) {
-        AppLogger::logUserRegisterWrite(type, params);
         _mbMultiServer.writeRegister(type, params);
     }
 }

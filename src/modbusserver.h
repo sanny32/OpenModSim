@@ -118,7 +118,8 @@ signals:
 
     void stateChanged(QModbusDevice::State state);
     void errorOccurred(QModbusDevice::Error error, int serverAddress);
-    void dataWritten(int serverAddress, QModbusDataUnit::RegisterType table, int address, int size);
+    void dataWritten(int serverAddress, QModbusDataUnit::RegisterType table, int address, int size,
+                     const QString& clientAddress, quint16 clientPort);
 
 protected:
     enum Counter {
@@ -141,6 +142,8 @@ protected:
 
     void setState(QModbusDevice::State newState);
     void setError(const QString &errorText, QModbusDevice::Error error, int serverAddress = 0);
+    void setCurrentRequestClient(const QString& clientAddress, quint16 clientPort);
+    void clearCurrentRequestClient();
 
     virtual bool open() = 0;
     virtual void close() = 0;
@@ -197,6 +200,8 @@ private:
     QModbusDevice::State _state = QModbusDevice::UnconnectedState;
     QHash<int, QModbusDevice::Error> _errors;
     QHash<int, QString> _errorsString;
+    QString _currentRequestClientAddress;
+    quint16 _currentRequestClientPort = 0;
 };
 
 Q_DECLARE_METATYPE(QModbusRequest)
@@ -214,4 +219,3 @@ Q_DECLARE_LOGGING_CATEGORY(QT_MODBUS)
 Q_DECLARE_LOGGING_CATEGORY(QT_MODBUS_LOW)
 
 #endif // IMODBUSSERVER_H
-

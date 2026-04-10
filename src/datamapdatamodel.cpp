@@ -2,7 +2,6 @@
 #include <QMimeData>
 #include <QDataStream>
 #include "datamapdatamodel.h"
-#include "applogger.h"
 #include "formatutils.h"
 #include "numericutils.h"
 
@@ -361,18 +360,9 @@ bool DataMapDataModel::setData(const QModelIndex& index, const QVariant& value, 
         }
 
         if (ok) {
-            ModbusWriteParams writeParams;
-            writeParams.DeviceId = oldKey.DeviceId;
-            writeParams.Address = oldKey.Address;
-            writeParams.Value = text;
-            writeParams.DataMode = entry.type;
-            writeParams.RegOrder = entry.order;
-            writeParams.ZeroBasedAddress = _zeroBased;
-            AppLogger::logUserRegisterWrite(oldKey.Type, writeParams);
-
             QModbusDataUnit unit(oldKey.Type, oldKey.Address, regCount);
             for (int i = 0; i < regCount; ++i) unit.setValue(i, regs[i]);
-            _server.setData(oldKey.DeviceId, unit);
+            _server.setData(oldKey.DeviceId, unit, WriteSource::User);
 
             entry.value     = regs[0];
             entry.timestamp = _server.timestamp(oldKey.DeviceId, oldKey.Type, oldKey.Address);

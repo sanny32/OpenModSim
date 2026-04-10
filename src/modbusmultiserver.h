@@ -11,6 +11,16 @@
 #include "modbusserver.h"
 #include "qcountedset.h"
 
+enum class WriteSource
+{
+    User = 0,
+    Simulator,
+    ProjectLoad,
+    ModbusClient,
+    Internal
+};
+Q_DECLARE_METATYPE(WriteSource)
+
 ///
 /// \brief The ModbusMultiServer class
 ///
@@ -48,7 +58,9 @@ public:
     QModbusDevice::State state(ConnectionType type, const QString& port) const;
 
     QModbusDataUnit data(quint8 deviceId, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, quint16 length) const;
-    void setData(quint8 deviceId, const QModbusDataUnit& data);
+    void setData(quint8 deviceId, const QModbusDataUnit& data,
+                 WriteSource source = WriteSource::Internal,
+                 const QString& clientAddress = QString(), quint16 clientPort = 0);
     QDateTime timestamp(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 address) const;
     AddressTimestampMap timestampMap(quint8 deviceId, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, quint16 length) const;
     AddressTimestampMap timestampMap() const;
@@ -63,7 +75,7 @@ public:
     void clearDescriptions();
 
     void writeValue(quint8 deviceId, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, quint16 value, ByteOrder order);
-    void writeRegister(QModbusDataUnit::RegisterType pointType, const ModbusWriteParams& params);
+    void writeRegister(QModbusDataUnit::RegisterType pointType, const ModbusWriteParams& params, WriteSource source = WriteSource::User);
 
     qint32 readInt32(quint8 deviceId, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, ByteOrder order, bool swapped);
     void writeInt32(quint8 deviceId, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, qint32 value, ByteOrder order, bool swapped);
@@ -97,7 +109,8 @@ signals:
     void rawDataSended(const ConnectionDetails& cd, const QDateTime& time, const QByteArray& data);
     void connectionError(const QString& error);
     void errorOccured(quint8 deviceId, const QString& error);
-    void dataChanged(quint8 deviceId, const QModbusDataUnit& data);
+    void dataChanged(quint8 deviceId, const QModbusDataUnit& data,
+                     WriteSource source, const QString& clientAddress, quint16 clientPort);
     void timestampChanged(quint8 deviceId, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, const QDateTime& timestamp);
     void descriptionChanged(quint8 deviceId, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, const QString& description);
     void definitionsChanged(const ModbusDefinitions& defs);
@@ -113,7 +126,8 @@ private slots:
     void on_rawDataSended(const QDateTime& time, const QByteArray& data);
     void on_stateChanged(QModbusDevice::State state);
     void on_errorOccurred(QModbusDevice::Error error, int deviceId);
-    void on_dataWritten(int deviceId, QModbusDataUnit::RegisterType table, int address, int size);
+    void on_dataWritten(int deviceId, QModbusDataUnit::RegisterType table, int address, int size,
+                        const QString& clientAddress, quint16 clientPort);
 
 private:
     QSharedPointer<ModbusServer> findModbusServer(const ConnectionDetails& cd) const;

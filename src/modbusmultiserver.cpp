@@ -11,6 +11,7 @@ QList<int> normalizedDeviceIds(const QCountedSet<int>& deviceIds)
     std::sort(ids.begin(), ids.end());
     return ids;
 }
+
 }
 
 ///
@@ -21,6 +22,8 @@ ModbusMultiServer::ModbusMultiServer(QObject *parent)
     : QObject{parent}
     ,_workerThread(new QThread(this))
 {
+    qRegisterMetaType<WriteSource>("WriteSource");
+
     moveToThread(_workerThread);
     _workerThread->start();
 
@@ -915,12 +918,13 @@ void ModbusMultiServer::clearDescriptions()
 /// \brief ModbusMultiServer::setData
 /// \param data
 ///
-void ModbusMultiServer::setData(quint8 deviceId, const QModbusDataUnit& data)
+void ModbusMultiServer::setData(quint8 deviceId, const QModbusDataUnit& data,
+                                WriteSource source, const QString& clientAddress, quint16 clientPort)
 {
     if(QThread::currentThread() != _workerThread)
     {
-        QMetaObject::invokeMethod(this, [this, deviceId, data]() {
-            setData(deviceId, data);
+        QMetaObject::invokeMethod(this, [this, deviceId, data, source, clientAddress, clientPort]() {
+            setData(deviceId, data, source, clientAddress, clientPort);
         }, Qt::BlockingQueuedConnection);
         return;
     }
@@ -943,10 +947,11 @@ void ModbusMultiServer::setData(quint8 deviceId, const QModbusDataUnit& data)
         s->blockSignals(false);
     }
 
-    if(error.isEmpty())
-        emit dataChanged(deviceId, data);
-    else
+    if(error.isEmpty()) {
+        emit dataChanged(deviceId, data, source, clientAddress, clientPort);
+    } else {
         emit errorOccured(deviceId, error);
+    }
 }
 
 ///
@@ -1305,7 +1310,7 @@ void ModbusMultiServer::writeDouble(quint8 deviceId, QModbusDataUnit::RegisterTy
 /// \param pointType
 /// \param params
 ///
-void ModbusMultiServer::writeRegister(QModbusDataUnit::RegisterType pointType, const ModbusWriteParams& params)
+void ModbusMultiServer::writeRegister(QModbusDataUnit::RegisterType pointType, const ModbusWriteParams& params, WriteSource source)
 {
     QModbusDataUnit data;
     const auto addr = params.Address - (params.ZeroBasedAddress ? 0 : 1);
@@ -1377,7 +1382,7 @@ void ModbusMultiServer::writeRegister(QModbusDataUnit::RegisterType pointType, c
     }
 
     if(data.isValid())
-        setData(params.DeviceId, data);
+        setData(params.DeviceId, data, source);
 }
 
 ///
@@ -1489,7 +1494,8 @@ void ModbusMultiServer::on_errorOccurred(QModbusDevice::Error error, int deviceI
 /// \param address
 /// \param size
 ///
-void ModbusMultiServer::on_dataWritten(int deviceId, QModbusDataUnit::RegisterType table, int address, int size)
+void ModbusMultiServer::on_dataWritten(int deviceId, QModbusDataUnit::RegisterType table, int address, int size,
+                                       const QString& clientAddress, quint16 clientPort)
 {
     auto server = qobject_cast<ModbusServer*>(sender());
 
@@ -1507,6 +1513,6 @@ void ModbusMultiServer::on_dataWritten(int deviceId, QModbusDataUnit::RegisterTy
         data.setValues(values);
     }
 
-    setData(deviceId, data);
+    setData(deviceId, data, WriteSource::ModbusClient, clientAddress, clientPort);
 }
 

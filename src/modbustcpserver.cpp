@@ -163,7 +163,9 @@ void ModbusTcpServer::on_newConnection()
             if(mbDef.ErrorSimulations.noResponse())
                 return;
 
+            setCurrentRequestClient(socket->peerAddress().toString(), socket->peerPort());
             const QModbusResponse response = forwardProcessRequest(request, unitId);
+            clearCurrentRequestClient();
 
             if(mbDef.ErrorSimulations.responseIncorrectId())
                 unitId++;

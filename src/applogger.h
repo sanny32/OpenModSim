@@ -3,7 +3,6 @@
 
 #include <QObject>
 #include "modbusmultiserver.h"
-#include "modbuswriteparams.h"
 #include "datasimulator.h"
 
 ///
@@ -15,8 +14,6 @@ public:
     static void setupModbusMultiServerLogging(ModbusMultiServer& server, QObject* context);
     static void setupDataSimulatorLogging(DataSimulator& simulator, QObject* context);
     static void logConnectionError(const QString& error);
-    static void logUserRegisterWrite(QModbusDataUnit::RegisterType pointType, const ModbusWriteParams& params);
 };
 
 #endif // APPLOGGER_H
-

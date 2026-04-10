@@ -329,6 +329,18 @@ void ModbusServer::setError(const QString &errorText, QModbusDevice::Error error
     emit errorOccurred(error, serverAddress);
 }
 
+void ModbusServer::setCurrentRequestClient(const QString& clientAddress, quint16 clientPort)
+{
+    _currentRequestClientAddress = clientAddress;
+    _currentRequestClientPort = clientPort;
+}
+
+void ModbusServer::clearCurrentRequestClient()
+{
+    _currentRequestClientAddress.clear();
+    _currentRequestClientPort = 0;
+}
+
 ///
 /// \brief ModbusServer::error
 /// \param serverAddress
@@ -425,8 +437,10 @@ bool ModbusServer::writeData(const QModbusDataUnit &newData, int serverAddress)
         current.setValue(translatedIndex, newValue);
     }
 
-    if (changeRequired)
-        emit dataWritten(serverAddress, newData.registerType(), newData.startAddress(), newData.valueCount());
+    if (changeRequired) {
+        emit dataWritten(serverAddress, newData.registerType(), newData.startAddress(), newData.valueCount(),
+                         _currentRequestClientAddress, _currentRequestClientPort);
+    }
     return true;
 }
 

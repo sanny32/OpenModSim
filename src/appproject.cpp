@@ -1747,7 +1747,7 @@ void AppProject::loadProject(const QString& filename)
     for (const auto& pv : std::as_const(pendingValues)) {
         QModbusDataUnit unit(pv.type, pv.address, 1);
         unit.setValue(0, pv.value);
-        _mbServer.setData(pv.deviceId, unit);
+        _mbServer.setData(pv.deviceId, unit, WriteSource::ProjectLoad);
     }
 
     // Apply simulations after initial values are restored.
