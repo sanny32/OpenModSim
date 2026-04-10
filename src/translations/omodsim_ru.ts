@@ -2329,13 +2329,13 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Delete</source>
-        <translation type="obsolete">РЈРґР°Р»РёС‚СЊ</translation>
+        <location filename="../formdatamapview.ui" line="91"/>
+        <source>Clear</source>
+        <translation type="unfinished">РћС‡РёСЃС‚РёС‚СЊ</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.ui" line="91"/>
-        <source>Clear DataMap</source>
-        <translation type="unfinished"></translation>
+        <source>Delete</source>
+        <translation type="obsolete">РЈРґР°Р»РёС‚СЊ</translation>
     </message>
     <message>
         <location filename="../formdatamapview.cpp" line="721"/>
