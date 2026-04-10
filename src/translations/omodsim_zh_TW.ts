@@ -195,6 +195,174 @@
     </message>
 </context>
 <context>
+    <name>AppPreferences</name>
+    <message>
+        <location filename="../apppreferences.cpp" line="114"/>
+        <source>Font</source>
+        <translation type="unfinished">е­—ећ‹</translation>
+    </message>
+    <message>
+        <location filename="../apppreferences.cpp" line="124"/>
+        <source>FontZoom</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../apppreferences.cpp" line="134"/>
+        <source>BackgroundColor</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../apppreferences.cpp" line="144"/>
+        <source>ForegroundColor</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../apppreferences.cpp" line="154"/>
+        <source>StatusColor</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../apppreferences.cpp" line="164"/>
+        <source>AddressColor</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../apppreferences.cpp" line="174"/>
+        <source>CommentColor</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../apppreferences.cpp" line="184"/>
+        <source>CheckForUpdates</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../apppreferences.cpp" line="194"/>
+        <source>Language</source>
+        <translation type="unfinished">иЄћиЁЂ</translation>
+    </message>
+    <message>
+        <location filename="../apppreferences.cpp" line="204"/>
+        <source>DataView.FormName</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../apppreferences.cpp" line="205"/>
+        <source>DataView.DeviceId</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../apppreferences.cpp" line="206"/>
+        <source>DataView.PointAddress</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../apppreferences.cpp" line="207"/>
+        <source>DataView.PointType</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../apppreferences.cpp" line="208"/>
+        <source>DataView.Length</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../apppreferences.cpp" line="209"/>
+        <source>DataView.ColumnsDistance</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../apppreferences.cpp" line="210"/>
+        <source>DataView.LeadingZeros</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../apppreferences.cpp" line="221"/>
+        <source>TrafficView.FormName</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../apppreferences.cpp" line="222"/>
+        <source>TrafficView.UnitFilter</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../apppreferences.cpp" line="223"/>
+        <source>TrafficView.FunctionCodeFilter</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../apppreferences.cpp" line="224"/>
+        <source>TrafficView.LogLimit</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../apppreferences.cpp" line="225"/>
+        <source>TrafficView.ExceptionsOnly</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../apppreferences.cpp" line="226"/>
+        <source>TrafficView.AutoScroll</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../apppreferences.cpp" line="227"/>
+        <source>TrafficView.HexView</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../apppreferences.cpp" line="238"/>
+        <source>ScriptView.FormName</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../apppreferences.cpp" line="239"/>
+        <source>ScriptView.RunMode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../apppreferences.cpp" line="240"/>
+        <source>ScriptView.Interval</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../apppreferences.cpp" line="241"/>
+        <source>ScriptView.RunOnStartup</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../apppreferences.cpp" line="252"/>
+        <source>Address Base</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../apppreferences.cpp" line="262"/>
+        <source>Hex View</source>
+        <translation type="unfinished">еЌЃе…­йЂІдЅЌе€¶жЄўи¦–</translation>
+    </message>
+    <message>
+        <location filename="../apppreferences.cpp" line="272"/>
+        <source>ScriptFont</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../apppreferences.cpp" line="282"/>
+        <source>CodeAutoComplete</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../apppreferences.cpp" line="292"/>
+        <source>AutoShowConsoleOutput</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../apppreferences.cpp" line="302"/>
+        <source>ConsoleMaxLines</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>AppProject</name>
     <message>
         <source>Capture Error:<byte value="xd"/>
