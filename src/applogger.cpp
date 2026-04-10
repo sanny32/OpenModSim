@@ -147,7 +147,6 @@ void AppLogger::setupModbusMultiServerLogging(ModbusMultiServer& server, QObject
             break;
             default: break;
         }
-
     });
 }
 

@@ -956,6 +956,24 @@ void ModbusMultiServer::setData(quint8 deviceId, const QModbusDataUnit& data,
         return;
     }
 
+    bool changed = true;
+    const auto currentData = _modbusDataUnitMaps[deviceId].getData(
+        data.registerType(),
+        static_cast<quint16>(data.startAddress()),
+        static_cast<quint16>(data.valueCount()));
+    if(currentData.isValid() && currentData.valueCount() == data.valueCount()) {
+        changed = false;
+        for(int i = 0; i < data.valueCount(); ++i) {
+            if(currentData.value(i) != data.value(i)) {
+                changed = true;
+                break;
+            }
+        }
+    }
+
+    if(!changed)
+        return;
+
     _modbusDataUnitMaps[deviceId].setData(data);
 
     QString error;
@@ -1538,4 +1556,3 @@ void ModbusMultiServer::on_dataWritten(int deviceId, QModbusDataUnit::RegisterTy
     const auto cd = server->property("ConnectionDetails").value<ConnectionDetails>();
     setData(deviceId, data, WriteSource::ModbusClient, makeClientInfo(cd, clientAddress, clientPort));
 }
-

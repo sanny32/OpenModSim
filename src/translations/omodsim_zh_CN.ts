@@ -4062,12 +4062,12 @@ Script.onInit(()=&gt;{
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../applogger.cpp" line="171"/>
+        <location filename="../applogger.cpp" line="170"/>
         <source>Auto simulation enabled (%1): unit %2, %3, address %4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../applogger.cpp" line="185"/>
+        <location filename="../applogger.cpp" line="184"/>
         <source>Auto simulation disabled: unit %1, %2, address %3</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4774,7 +4774,7 @@ Script.onInit(()=&gt;{
         <translation>жЊ‡е®љдє†й”™иЇЇзљ„и®ѕе¤‡ењ°еќЂпј€%1пј‰</translation>
     </message>
     <message>
-        <location filename="../modbusmultiserver.cpp" line="1505"/>
+        <location filename="../modbusmultiserver.cpp" line="1523"/>
         <source>Connection error. %1</source>
         <translation>иїћжЋҐй”™иЇЇ %1</translation>
     </message>
