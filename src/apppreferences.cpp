@@ -15,6 +15,26 @@ QString boolToText(bool value)
 }
 
 ///
+/// \brief addressBaseToText
+/// \param zeroBased
+/// \return
+///
+QString addressBaseToText(bool zeroBased)
+{
+    return zeroBased ? QStringLiteral("0-based") : QStringLiteral("1-based");
+}
+
+///
+/// \brief enabledToText
+/// \param enabled
+/// \return
+///
+QString enabledToText(bool enabled)
+{
+    return enabled ? QStringLiteral("enabled") : QStringLiteral("disabled");
+}
+
+///
 /// \brief fontToText
 /// \param font
 /// \return
@@ -40,6 +60,21 @@ void logPreferenceChange(const QString& name, const QString& oldValue, const QSt
                               .arg(name, oldValue, newValue);
 }
 
+///
+/// \brief logSettingChange
+/// \param name
+/// \param oldValue
+/// \param newValue
+///
+void logSettingChange(const QString& name, const QString& oldValue, const QString& newValue)
+{
+    if (oldValue == newValue)
+        return;
+
+    qInfo(lcApp).noquote() << QStringLiteral("%1: %2 -> %3")
+                              .arg(name, oldValue, newValue);
+}
+
 }
 
 ///
@@ -61,6 +96,10 @@ AppPreferences& AppPreferences::instance()
     return inst;
 }
 
+///
+/// \brief AppPreferences::setFont
+/// \param f
+///
 void AppPreferences::setFont(const QFont& f)
 {
     if (_font == f)
@@ -69,6 +108,10 @@ void AppPreferences::setFont(const QFont& f)
     _font = f;
 }
 
+///
+/// \brief AppPreferences::setFontZoom
+/// \param zoom
+///
 void AppPreferences::setFontZoom(int zoom)
 {
     if (_fontZoom == zoom)
@@ -77,6 +120,10 @@ void AppPreferences::setFontZoom(int zoom)
     _fontZoom = zoom;
 }
 
+///
+/// \brief AppPreferences::setBackgroundColor
+/// \param c
+///
 void AppPreferences::setBackgroundColor(const QColor& c)
 {
     if (_backgroundColor == c)
@@ -85,6 +132,10 @@ void AppPreferences::setBackgroundColor(const QColor& c)
     _backgroundColor = c;
 }
 
+///
+/// \brief AppPreferences::setForegroundColor
+/// \param c
+///
 void AppPreferences::setForegroundColor(const QColor& c)
 {
     if (_foregroundColor == c)
@@ -93,6 +144,10 @@ void AppPreferences::setForegroundColor(const QColor& c)
     _foregroundColor = c;
 }
 
+///
+/// \brief AppPreferences::setStatusColor
+/// \param c
+///
 void AppPreferences::setStatusColor(const QColor& c)
 {
     if (_statusColor == c)
@@ -101,6 +156,10 @@ void AppPreferences::setStatusColor(const QColor& c)
     _statusColor = c;
 }
 
+///
+/// \brief AppPreferences::setAddressColor
+/// \param c
+///
 void AppPreferences::setAddressColor(const QColor& c)
 {
     if (_addressColor == c)
@@ -109,6 +168,10 @@ void AppPreferences::setAddressColor(const QColor& c)
     _addressColor = c;
 }
 
+///
+/// \brief AppPreferences::setCommentColor
+/// \param c
+///
 void AppPreferences::setCommentColor(const QColor& c)
 {
     if (_commentColor == c)
@@ -117,6 +180,10 @@ void AppPreferences::setCommentColor(const QColor& c)
     _commentColor = c;
 }
 
+///
+/// \brief AppPreferences::setCheckForUpdates
+/// \param enable
+///
 void AppPreferences::setCheckForUpdates(bool enable)
 {
     if (_checkForUpdates == enable)
@@ -125,6 +192,10 @@ void AppPreferences::setCheckForUpdates(bool enable)
     _checkForUpdates = enable;
 }
 
+///
+/// \brief AppPreferences::setLanguage
+/// \param lang
+///
 void AppPreferences::setLanguage(const QString& lang)
 {
     if (_language == lang)
@@ -133,6 +204,10 @@ void AppPreferences::setLanguage(const QString& lang)
     _language = lang;
 }
 
+///
+/// \brief AppPreferences::setDataViewDefinitions
+/// \param dd
+///
 void AppPreferences::setDataViewDefinitions(const DataViewDefinitions& dd)
 {
     if (_dataViewDefinitions == dd)
@@ -155,6 +230,10 @@ void AppPreferences::setDataViewDefinitions(const DataViewDefinitions& dd)
     _dataViewDefinitions = dd;
 }
 
+///
+/// \brief AppPreferences::setTrafficViewDefinitions
+/// \param dd
+///
 void AppPreferences::setTrafficViewDefinitions(const TrafficViewDefinitions& dd)
 {
     if (_trafficViewDefinitions == dd)
@@ -179,6 +258,10 @@ void AppPreferences::setTrafficViewDefinitions(const TrafficViewDefinitions& dd)
     _trafficViewDefinitions = dd;
 }
 
+///
+/// \brief AppPreferences::setScriptViewDefinitions
+/// \param dd
+///
 void AppPreferences::setScriptViewDefinitions(const ScriptViewDefinitions& dd)
 {
     if (_scriptViewDefinitions == dd)
@@ -198,22 +281,38 @@ void AppPreferences::setScriptViewDefinitions(const ScriptViewDefinitions& dd)
     _scriptViewDefinitions = dd;
 }
 
+///
+/// \brief AppPreferences::setGlobalZeroBasedAddress
+/// \param value
+///
 void AppPreferences::setGlobalZeroBasedAddress(bool value)
 {
     if (_globalZeroBasedAddress == value)
         return;
-    logPreferenceChange(QStringLiteral("GlobalZeroBasedAddress"), boolToText(_globalZeroBasedAddress), boolToText(value));
+    logSettingChange(QStringLiteral("Address Base"),
+                     addressBaseToText(_globalZeroBasedAddress),
+                     addressBaseToText(value));
     _globalZeroBasedAddress = value;
 }
 
+///
+/// \brief AppPreferences::setGlobalHexView
+/// \param value
+///
 void AppPreferences::setGlobalHexView(bool value)
 {
     if (_globalHexView == value)
         return;
-    logPreferenceChange(QStringLiteral("GlobalHexView"), boolToText(_globalHexView), boolToText(value));
+    logSettingChange(QStringLiteral("Hex View"),
+                     enabledToText(_globalHexView),
+                     enabledToText(value));
     _globalHexView = value;
 }
 
+///
+/// \brief AppPreferences::setScriptFont
+/// \param f
+///
 void AppPreferences::setScriptFont(const QFont& f)
 {
     if (_scriptFont == f)
@@ -222,6 +321,10 @@ void AppPreferences::setScriptFont(const QFont& f)
     _scriptFont = f;
 }
 
+///
+/// \brief AppPreferences::setCodeAutoComplete
+/// \param enable
+///
 void AppPreferences::setCodeAutoComplete(bool enable)
 {
     if (_codeAutoComplete == enable)
@@ -230,6 +333,10 @@ void AppPreferences::setCodeAutoComplete(bool enable)
     _codeAutoComplete = enable;
 }
 
+///
+/// \brief AppPreferences::setAutoShowConsoleOutput
+/// \param enable
+///
 void AppPreferences::setAutoShowConsoleOutput(bool enable)
 {
     if (_autoShowConsoleOutput == enable)
@@ -238,6 +345,10 @@ void AppPreferences::setAutoShowConsoleOutput(bool enable)
     _autoShowConsoleOutput = enable;
 }
 
+///
+/// \brief AppPreferences::setConsoleMaxLines
+/// \param n
+///
 void AppPreferences::setConsoleMaxLines(int n)
 {
     if (_consoleMaxLines == n)
