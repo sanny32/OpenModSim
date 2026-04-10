@@ -52,13 +52,13 @@ public:
 
     // ----- Default View Definitions -----
     DataViewDefinitions dataViewDefinitions() const { return _dataViewDefinitions; }
-    void setDataViewDefinitions(const DataViewDefinitions& dd);
+    void setDataViewDefinitions(const DataViewDefinitions& def);
 
     TrafficViewDefinitions trafficViewDefinitions() const { return _trafficViewDefinitions; }
-    void setTrafficViewDefinitions(const TrafficViewDefinitions& dd);
+    void setTrafficViewDefinitions(const TrafficViewDefinitions& def);
 
     ScriptViewDefinitions scriptViewDefinitions() const { return _scriptViewDefinitions; }
-    void setScriptViewDefinitions(const ScriptViewDefinitions& dd);
+    void setScriptViewDefinitions(const ScriptViewDefinitions& def);
 
     bool globalZeroBasedAddress() const { return _globalZeroBasedAddress; }
     void setGlobalZeroBasedAddress(bool value);
