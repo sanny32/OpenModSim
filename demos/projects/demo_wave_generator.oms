@@ -10,14 +10,14 @@
     </Connections>
     <AddressSpace>
         <AddressDescriptionMap>
-            <Description DeviceId="1" Type="4" Address="1"><![CDATA[Sine]]></Description>
-            <Description DeviceId="1" Type="4" Address="2"><![CDATA[Cosine]]></Description>
-            <Description DeviceId="1" Type="4" Address="3"><![CDATA[Sawtooth]]></Description>
-            <Description DeviceId="1" Type="4" Address="4"><![CDATA[Square]]></Description>
-            <Description DeviceId="1" Type="4" Address="5"><![CDATA[Triangle]]></Description>
-            <Description DeviceId="1" Type="4" Address="6"><![CDATA[Noise]]></Description>
-            <Description DeviceId="1" Type="4" Address="7"><![CDATA[Phase Step (deg/tick)]]></Description>
-            <Description DeviceId="1" Type="4" Address="8"><![CDATA[Amplitude (%)]]></Description>
+            <Description DeviceId="1" Type="4" Address="0"><![CDATA[Sine]]></Description>
+            <Description DeviceId="1" Type="4" Address="1"><![CDATA[Cosine]]></Description>
+            <Description DeviceId="1" Type="4" Address="2"><![CDATA[Sawtooth]]></Description>
+            <Description DeviceId="1" Type="4" Address="3"><![CDATA[Square]]></Description>
+            <Description DeviceId="1" Type="4" Address="4"><![CDATA[Triangle]]></Description>
+            <Description DeviceId="1" Type="4" Address="5"><![CDATA[Noise]]></Description>
+            <Description DeviceId="1" Type="4" Address="6"><![CDATA[Phase Step (deg/tick)]]></Description>
+            <Description DeviceId="1" Type="4" Address="7"><![CDATA[Amplitude (%)]]></Description>
         </AddressDescriptionMap>
         <AddressTimestampMap>
             <Timestamp DeviceId="1" Type="4" Address="6" Value="2026-04-10T18:06:58.831"/>
@@ -33,7 +33,7 @@
     <Forms>
         <FormDataView Panel="L" Title="WaveValues" DataType="UInt16" RegisterOrder="MSRF" Codepage="" ByteOrder="Direct">
             <Window Maximized="true" Minimized="false" Left="0" Top="0" Width="610" Height="331"/>
-            <DataViewDefinitions FormName="WaveValues" DeviceId="1" PointType="HoldingRegisters" PointAddress="1" Length="9" DataViewColumnsDistance="25" LeadingZeros="true"/>
+            <DataViewDefinitions FormName="WaveValues" DeviceId="1" PointType="HoldingRegisters" PointAddress="1" Length="8" DataViewColumnsDistance="25" LeadingZeros="true"/>
             <AddressColorMap/>
         </FormDataView>
         <FormScriptView Panel="L" Title="WaveGenerator">
@@ -124,9 +124,25 @@ tick();
                 <AutoComplete Enabled="true"/>
             </JScriptControl>
         </FormScriptView>
+        <FormDataMapView Panel="L" Title="DataMap">
+            <Window Maximized="true" Minimized="false" Left="0" Top="0" Width="409" Height="226"/>
+            <DataMapViewDefinitions FormName="DataMap" ZeroBasedAddress="false" HexView="false" AutoAddOnRequest="false" AutoRequestMap="false"/>
+            <ColumnWidths Unit="40" Type="120" Address="70" DataType="70" Order="65" Comment="200" Value="160" Timestamp="160"/>
+            <DataMap>
+                <Entry DeviceId="1" Type="4" Address="0" DataType="UInt16" Value="0"/>
+                <Entry DeviceId="1" Type="4" Address="1" DataType="UInt16" Value="0"/>
+                <Entry DeviceId="1" Type="4" Address="2" DataType="UInt16" Value="0"/>
+                <Entry DeviceId="1" Type="4" Address="3" DataType="UInt16" Value="0"/>
+                <Entry DeviceId="1" Type="4" Address="4" DataType="UInt16" Value="0"/>
+                <Entry DeviceId="1" Type="4" Address="5" DataType="UInt16" Value="0"/>
+                <Entry DeviceId="1" Type="4" Address="6" DataType="UInt16" Value="2"/>
+                <Entry DeviceId="1" Type="4" Address="7" DataType="UInt16" Value="100"/>
+            </DataMap>
+        </FormDataMapView>
     </Forms>
     <TabOrder Panel="L">
         <TabRef title="WaveValues"/>
         <TabRef title="WaveGenerator"/>
+        <TabRef title="DataMap"/>
     </TabOrder>
 </OpenModSim>
