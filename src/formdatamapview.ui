@@ -88,7 +88,7 @@
      <normaloff>:/res/edit-delete.png</normaloff>:/res/edit-delete.png</iconset>
    </property>
    <property name="text">
-    <string>Clear</string>
+    <string>Clear Table</string>
    </property>
   </action>
  </widget>

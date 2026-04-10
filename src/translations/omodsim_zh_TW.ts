@@ -2326,8 +2326,12 @@
     </message>
     <message>
         <location filename="../formdatamapview.ui" line="91"/>
+        <source>Clear Table</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Clear</source>
-        <translation type="unfinished">жё…й™¤</translation>
+        <translation type="obsolete">жё…й™¤</translation>
     </message>
     <message>
         <location filename="../formdatamapview.cpp" line="721"/>

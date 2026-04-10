@@ -2330,8 +2330,12 @@
     </message>
     <message>
         <location filename="../formdatamapview.ui" line="91"/>
+        <source>Clear Table</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Clear</source>
-        <translation type="unfinished">РћС‡РёСЃС‚РёС‚СЊ</translation>
+        <translation type="obsolete">РћС‡РёСЃС‚РёС‚СЊ</translation>
     </message>
     <message>
         <source>Delete</source>
