@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<OpenModSim Version="2.0-dev">
+    <ModbusDefinitions AddrSpace="6-Digits" UseGlobalUnitMap="false" AutoAddRegistersOnRequest="false">
+        <ModbusErrorSimulations NoResponse="false" ResponseIncorrectId="false" ResponseIllegalFunction="false" ResponseDeviceBusy="false" ResponseIncorrectCrc="false" ResponseDelay="false" ResponseRandomDelay="false" ResponseDelayTime="0" ResponseRandomDelayUpToTime="1000"/>
+    </ModbusDefinitions>
+    <Connections>
+        <ConnectionDetails ConnectionType="Tcp">
+            <TcpConnectionParams IPAddress="0.0.0.0" ServicePort="502"/>
+        </ConnectionDetails>
+    </Connections>
+    <AddressSpace>
+        <AddressDescriptionMap>
+            <Description DeviceId="1" Type="1" Address="0"><![CDATA[Motor Running]]></Description>
+            <Description DeviceId="1" Type="1" Address="1"><![CDATA[Motor Fault]]></Description>
+            <Description DeviceId="1" Type="1" Address="2"><![CDATA[Pump Running]]></Description>
+            <Description DeviceId="1" Type="1" Address="3"><![CDATA[High Level Alarm]]></Description>
+            <Description DeviceId="1" Type="1" Address="4"><![CDATA[Low Level Alarm]]></Description>
+            <Description DeviceId="1" Type="2" Address="0"><![CDATA[Motor Start]]></Description>
+            <Description DeviceId="1" Type="2" Address="1"><![CDATA[Motor Stop]]></Description>
+            <Description DeviceId="1" Type="2" Address="2"><![CDATA[Pump Enable]]></Description>
+            <Description DeviceId="1" Type="2" Address="3"><![CDATA[Alarm Reset]]></Description>
+            <Description DeviceId="1" Type="3" Address="0"><![CDATA[Tank Level (0..1000)]]></Description>
+            <Description DeviceId="1" Type="3" Address="1"><![CDATA[Motor Speed actual (RPM)]]></Description>
+            <Description DeviceId="1" Type="3" Address="2"><![CDATA[Motor Current (x0.1 A)]]></Description>
+            <Description DeviceId="1" Type="3" Address="3"><![CDATA[Pump Flow (L/min)]]></Description>
+            <Description DeviceId="1" Type="4" Address="0"><![CDATA[Tank High Level setpoint (0..1000)]]></Description>
+            <Description DeviceId="1" Type="4" Address="1"><![CDATA[Tank Low Level setpoint (0..1000)]]></Description>
+            <Description DeviceId="1" Type="4" Address="2"><![CDATA[Motor Speed setpoint (0..1500 RPM)]]></Description>
+        </AddressDescriptionMap>
+        <AddressTimestampMap>
+            <Timestamp DeviceId="1" Type="1" Address="0" Value="2026-04-10T18:12:39.922"/>
+            <Timestamp DeviceId="1" Type="2" Address="0" Value="2026-04-10T18:12:39.643"/>
+            <Timestamp DeviceId="1" Type="3" Address="0" Value="2026-04-10T18:13:17.964"/>
+            <Timestamp DeviceId="1" Type="3" Address="1" Value="2026-04-10T18:12:39.923"/>
+            <Timestamp DeviceId="1" Type="3" Address="2" Value="2026-04-10T18:12:39.923"/>
+            <Timestamp DeviceId="1" Type="4" Address="0" Value="2026-04-10T18:11:03.904"/>
+            <Timestamp DeviceId="1" Type="4" Address="1" Value="2026-04-10T18:11:03.904"/>
+            <Timestamp DeviceId="1" Type="4" Address="2" Value="2026-04-10T18:11:03.904"/>
+        </AddressTimestampMap>
+        <ModbusSimulationMap/>
+        <ModbusDataValues>
+            <Value DeviceId="1" Type="3" Address="0">510</Value>
+            <Value DeviceId="1" Type="4" Address="0">800</Value>
+            <Value DeviceId="1" Type="4" Address="1">200</Value>
+            <Value DeviceId="1" Type="4" Address="2">900</Value>
+            <Value DeviceId="1" Type="4" Address="6">2</Value>
+            <Value DeviceId="1" Type="4" Address="7">100</Value>
+        </ModbusDataValues>
+    </AddressSpace>
+    <ViewSettings ViewMode="1" SplitView="0" GlobalZeroBasedAddress="0" GlobalHexView="0" ActivePanel="L" ActivePrimaryWindow="PLCSimulator"/>
+    <Forms>
+        <FormDataView Panel="L" Title="Setpoints" DataType="UInt16" RegisterOrder="MSRF" Codepage="" ByteOrder="Direct">
+            <Window Maximized="true" Minimized="false" Left="0" Top="0" Width="610" Height="331"/>
+            <DataViewDefinitions FormName="Setpoints" DeviceId="1" PointType="HoldingRegisters" PointAddress="1" Length="3" DataViewColumnsDistance="1" LeadingZeros="true"/>
+            <AddressColorMap/>
+        </FormDataView>
+        <FormDataView Panel="L" Title="ProcessValues" DataType="UInt16" RegisterOrder="MSRF" Codepage="" ByteOrder="Direct">
+            <Window Maximized="true" Minimized="false" Left="0" Top="0" Width="610" Height="331"/>
+            <DataViewDefinitions FormName="ProcessValues" DeviceId="1" PointType="InputRegisters" PointAddress="1" Length="4" DataViewColumnsDistance="1" LeadingZeros="true"/>
+            <AddressColorMap/>
+        </FormDataView>
+        <FormDataView Panel="L" Title="Commands" DataType="Binary" RegisterOrder="MSRF" Codepage="" ByteOrder="Direct">
+            <Window Maximized="true" Minimized="false" Left="0" Top="0" Width="610" Height="331"/>
+            <DataViewDefinitions FormName="Commands" DeviceId="1" PointType="Coils" PointAddress="1" Length="4" DataViewColumnsDistance="1" LeadingZeros="true"/>
+            <AddressColorMap/>
+        </FormDataView>
+        <FormDataView Panel="L" Title="Status" DataType="Binary" RegisterOrder="MSRF" Codepage="" ByteOrder="Direct">
+            <Window Maximized="true" Minimized="false" Left="0" Top="0" Width="610" Height="331"/>
+            <DataViewDefinitions FormName="Status" DeviceId="1" PointType="DiscreteInputs" PointAddress="1" Length="5" DataViewColumnsDistance="1" LeadingZeros="true"/>
+            <AddressColorMap/>
+        </FormDataView>
+        <FormScriptView Panel="L" Title="PLCSimulator">
+            <Window Maximized="true" Minimized="false" Left="0" Top="0" Width="523" Height="278"/>
+            <Colors Background="#ffffff" Foreground="#000000"/>
+            <Font Family="Segoe UI" Size="9" Bold="false" Italic="false"/>
+            <Zoom Value="100%"/>
+            <ScriptViewDefinitions FormName="PLCSimulator">
+                <ScriptSettings Mode="Periodically" Interval="500" RunOnStartup="false"/>
+            </ScriptViewDefinitions>
+            <JScriptControl>
+                <Script CursorPosition="0" ScrollPosition="0"><![CDATA[/**************************************************************************/
+/*
+/* PLC I/O Simulator Demo
+/* Simulates a simple PLC with digital/analog inputs and outputs
+/*
+/* Coils (outputs, writable by client):
+/*   Coil[1]  - Motor Start command
+/*   Coil[2]  - Motor Stop command
+/*   Coil[3]  - Pump Enable
+/*   Coil[4]  - Alarm Reset
+/*
+/* Discrete Inputs (read-only status):
+/*   DI[1]  - Motor Running (set automatically from coils)
+/*   DI[2]  - Motor Fault (set if running > 30 sec without stop)
+/*   DI[3]  - Pump Running
+/*   DI[4]  - High Level Alarm
+/*   DI[5]  - Low Level Alarm
+/*
+/* Holding Registers (writable setpoints):
+/*   HR[1]  - Setpoint: Tank High Level (default 800)
+/*   HR[2]  - Setpoint: Tank Low Level  (default 200)
+/*   HR[3]  - Motor Speed Setpoint RPM  (0..1500)
+/*
+/* Input Registers (process values, read-only):
+/*   IR[1]  - Tank Level   (0..1000, simulated)
+/*   IR[2]  - Motor Speed  (actual RPM, follows setpoint with ramp)
+/*   IR[3]  - Motor Current (simulated 0..100, 10ths of Amp)
+/*   IR[4]  - Pump Flow    (0..500 L/min)
+/*
+/* Run mode: periodic (e.g. 500 ms)
+/*
+***************************************************************************/
+
+Server.addressBase = AddressBase.Base1;
+
+var deviceId = 1;
+
+var motorRunning  = false;
+var motorFault    = false;
+var motorRunTicks = 0;
+var actualRpm     = 0;
+var tankLevel     = 500;
+var pumpRunning   = false;
+
+var FAULT_TICKS   = 60;   /* fault after 60 ticks without stop */
+
+function tick()
+{
+    /* --- Read coil commands --- */
+    var cmdStart  = Server.readCoil(1, deviceId);
+    var cmdStop   = Server.readCoil(2, deviceId);
+    var cmdPump   = Server.readCoil(3, deviceId);
+    var cmdReset  = Server.readCoil(4, deviceId);
+
+    /* --- Alarm reset --- */
+    if(cmdReset && motorFault)
+    {
+        motorFault    = false;
+        motorRunning  = false;
+        motorRunTicks = 0;
+        actualRpm     = 0;
+        Server.writeCoil(4, false, deviceId);
+        console.log("Alarm reset");
+    }
+
+    /* --- Motor logic --- */
+    if(!motorFault)
+    {
+        if(cmdStart && !motorRunning)
+        {
+            motorRunning = true;
+            motorRunTicks = 0;
+            console.log("Motor started");
+        }
+        if(cmdStop && motorRunning)
+        {
+            motorRunning  = false;
+            motorRunTicks = 0;
+            actualRpm     = 0;
+            console.log("Motor stopped");
+        }
+    }
+
+    if(motorRunning)
+    {
+        motorRunTicks++;
+        if(motorRunTicks >= FAULT_TICKS)
+        {
+            motorFault   = true;
+            motorRunning = false;
+            actualRpm    = 0;
+            console.warning("Motor FAULT: timeout without stop command!");
+        }
+    }
+
+    /* --- Speed ramp --- */
+    var setpointRpm = Server.readHolding(3, deviceId);
+    if(setpointRpm < 0)   setpointRpm = 0;
+    if(setpointRpm > 1500) setpointRpm = 1500;
+
+    var targetRpm = motorRunning ? setpointRpm : 0;
+    var ramp = 50; /* RPM per tick */
+    if(actualRpm < targetRpm)
+        actualRpm = Math.min(actualRpm + ramp, targetRpm);
+    else if(actualRpm > targetRpm)
+        actualRpm = Math.max(actualRpm - ramp, targetRpm);
+
+    /* --- Pump logic --- */
+    pumpRunning = cmdPump && !motorFault;
+
+    /* --- Tank level simulation --- */
+    var hiLevel = Server.readHolding(1, deviceId);
+    var loLevel = Server.readHolding(2, deviceId);
+
+    /* Pump drains tank, time fills it slowly */
+    if(pumpRunning)
+        tankLevel -= 15;
+    else
+        tankLevel += 5;
+
+    tankLevel += (Math.random() - 0.5) * 10;
+    tankLevel = Math.max(0, Math.min(1000, Math.round(tankLevel)));
+
+    var hiAlarm = (tankLevel >= hiLevel);
+    var loAlarm = (tankLevel <= loLevel);
+
+    /* --- Motor current simulation --- */
+    var motorCurrent = motorRunning
+        ? Math.round(20 + (actualRpm / 1500) * 60 + (Math.random() - 0.5) * 10)
+        : 0;
+
+    /* --- Pump flow simulation --- */
+    var pumpFlow = pumpRunning
+        ? Math.round(200 + (Math.random() - 0.5) * 50)
+        : 0;
+
+    /* --- Write outputs --- */
+    Server.writeDiscrete(1, motorRunning,  deviceId);
+    Server.writeDiscrete(2, motorFault,    deviceId);
+    Server.writeDiscrete(3, pumpRunning,   deviceId);
+    Server.writeDiscrete(4, hiAlarm,       deviceId);
+    Server.writeDiscrete(5, loAlarm,       deviceId);
+
+    Server.writeInput(1, tankLevel,     deviceId);
+    Server.writeInput(2, actualRpm,     deviceId);
+    Server.writeInput(3, motorCurrent,  deviceId);
+    Server.writeInput(4, pumpFlow,      deviceId);
+}
+
+function init()
+{
+    /* Default setpoints */
+    Server.writeHolding(1, 800, deviceId);  /* high level */
+    Server.writeHolding(2, 200, deviceId);  /* low level  */
+    Server.writeHolding(3, 900, deviceId);  /* speed setpoint */
+
+    /* Initial coil states */
+    Server.writeCoil(1, false, deviceId);
+    Server.writeCoil(2, false, deviceId);
+    Server.writeCoil(3, false, deviceId);
+    Server.writeCoil(4, false, deviceId);
+
+    Server.onError(deviceId, function(error) {
+        console.error("Communication error: " + error);
+    });
+
+    console.log("=== PLC Simulator started ===");
+    console.log("Coils: [1]Start [2]Stop [3]PumpEnable [4]AlarmReset");
+    console.log("DI:    [1]MotorRunning [2]MotorFault [3]PumpRunning [4]HiAlarm [5]LoAlarm");
+    console.log("HR:    [1]HiLevel(800) [2]LoLevel(200) [3]SpeedSP(900 RPM)");
+    console.log("IR:    [1]TankLevel [2]ActualRPM [3]Current(x0.1A) [4]PumpFlow(L/min)");
+}
+
+Script.onInit(init);
+tick();
+]]></Script>
+                <AutoComplete Enabled="true"/>
+            </JScriptControl>
+        </FormScriptView>
+        <FormDataMapView Panel="L" Title="DataMap">
+            <Window Maximized="true" Minimized="false" Left="0" Top="0" Width="409" Height="226"/>
+            <DataMapViewDefinitions FormName="DataMap" ZeroBasedAddress="false" HexView="false" AutoAddOnRequest="false" AutoRequestMap="false"/>
+            <ColumnWidths Unit="40" Type="120" Address="70" DataType="70" Order="65" Comment="200" Value="160" Timestamp="160"/>
+            <DataMap>
+                <Entry DeviceId="1" Type="4" Address="0" DataType="UInt16" Value="800"/>
+                <Entry DeviceId="1" Type="4" Address="1" DataType="UInt16" Value="200"/>
+                <Entry DeviceId="1" Type="4" Address="2" DataType="UInt16" Value="900"/>
+                <Entry DeviceId="1" Type="3" Address="0" DataType="UInt16" Value="0"/>
+                <Entry DeviceId="1" Type="3" Address="1" DataType="UInt16" Value="0"/>
+                <Entry DeviceId="1" Type="3" Address="2" DataType="UInt16" Value="0"/>
+                <Entry DeviceId="1" Type="3" Address="3" DataType="UInt16" Value="0"/>
+                <Entry DeviceId="1" Type="2" Address="0" DataType="Binary" Value="0"/>
+                <Entry DeviceId="1" Type="2" Address="1" DataType="Binary" Value="0"/>
+                <Entry DeviceId="1" Type="2" Address="2" DataType="Binary" Value="0"/>
+                <Entry DeviceId="1" Type="2" Address="3" DataType="Binary" Value="0"/>
+                <Entry DeviceId="1" Type="1" Address="0" DataType="Binary" Value="0"/>
+                <Entry DeviceId="1" Type="1" Address="1" DataType="Binary" Value="0"/>
+                <Entry DeviceId="1" Type="1" Address="2" DataType="Binary" Value="0"/>
+                <Entry DeviceId="1" Type="1" Address="3" DataType="Binary" Value="0"/>
+                <Entry DeviceId="1" Type="1" Address="4" DataType="Binary" Value="0"/>
+            </DataMap>
+        </FormDataMapView>
+    </Forms>
+    <TabOrder Panel="L">
+        <TabRef title="Setpoints"/>
+        <TabRef title="ProcessValues"/>
+        <TabRef title="Commands"/>
+        <TabRef title="Status"/>
+        <TabRef title="PLCSimulator"/>
+        <TabRef title="DataMap"/>
+    </TabOrder>
+</OpenModSim>
