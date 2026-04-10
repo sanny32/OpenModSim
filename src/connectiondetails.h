@@ -394,6 +394,27 @@ struct ConnectionDetails
 Q_DECLARE_METATYPE(ConnectionDetails)
 
 ///
+/// \brief Modbus client identity for events/logging.
+///
+struct ModbusClientInfo
+{
+    ConnectionDetails Connection;
+    QString Address;
+    quint16 Port = 0;
+
+    bool isValid() const
+    {
+        return !Address.isEmpty();
+    }
+
+    friend bool operator==(const ModbusClientInfo& a, const ModbusClientInfo& b) noexcept
+    {
+        return a.Connection == b.Connection && a.Address == b.Address && a.Port == b.Port;
+    }
+};
+Q_DECLARE_METATYPE(ModbusClientInfo)
+
+///
 /// \brief operator <<
 /// \param out
 /// \param params

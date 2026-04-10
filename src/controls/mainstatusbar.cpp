@@ -68,12 +68,12 @@ MainStatusBar::MainStatusBar(const ModbusMultiServer& server, QWidget* parent)
         updateDeviceIdsInfo();
     });
 
-    connect(&server, &ModbusMultiServer::clientConnected, this, [this](const ConnectionDetails&, const QString&, quint16)
+    connect(&server, &ModbusMultiServer::clientConnected, this, [this](const ModbusClientInfo&)
     {
         updateClientCountInfo();
     });
 
-    connect(&server, &ModbusMultiServer::clientDisconnected, this, [this](const ConnectionDetails&, const QString&, quint16)
+    connect(&server, &ModbusMultiServer::clientDisconnected, this, [this](const ModbusClientInfo&)
     {
         updateClientCountInfo();
     });

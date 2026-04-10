@@ -5,11 +5,32 @@
 #include "modbusmultiserver.h"
 
 namespace {
+///
+/// \brief normalizedDeviceIds
+/// \param deviceIds
+/// \return
+///
 QList<int> normalizedDeviceIds(const QCountedSet<int>& deviceIds)
 {
     auto ids = deviceIds.values();
     std::sort(ids.begin(), ids.end());
     return ids;
+}
+
+///
+/// \brief makeClientInfo
+/// \param connection
+/// \param address
+/// \param port
+/// \return
+///
+ModbusClientInfo makeClientInfo(const ConnectionDetails& connection, const QString& address, quint16 port)
+{
+    ModbusClientInfo info;
+    info.Connection = connection;
+    info.Address = address;
+    info.Port = port;
+    return info;
 }
 
 }
@@ -23,6 +44,7 @@ ModbusMultiServer::ModbusMultiServer(QObject *parent)
     ,_workerThread(new QThread(this))
 {
     qRegisterMetaType<WriteSource>("WriteSource");
+    qRegisterMetaType<ModbusClientInfo>("ModbusClientInfo");
 
     moveToThread(_workerThread);
     _workerThread->start();
@@ -919,12 +941,12 @@ void ModbusMultiServer::clearDescriptions()
 /// \param data
 ///
 void ModbusMultiServer::setData(quint8 deviceId, const QModbusDataUnit& data,
-                                WriteSource source, const QString& clientAddress, quint16 clientPort)
+                                WriteSource source, const ModbusClientInfo& client)
 {
     if(QThread::currentThread() != _workerThread)
     {
-        QMetaObject::invokeMethod(this, [this, deviceId, data, source, clientAddress, clientPort]() {
-            setData(deviceId, data, source, clientAddress, clientPort);
+        QMetaObject::invokeMethod(this, [this, deviceId, data, source, client]() {
+            setData(deviceId, data, source, client);
         }, Qt::BlockingQueuedConnection);
         return;
     }
@@ -948,7 +970,7 @@ void ModbusMultiServer::setData(quint8 deviceId, const QModbusDataUnit& data,
     }
 
     if(error.isEmpty()) {
-        emit dataChanged(deviceId, data, source, clientAddress, clientPort);
+        emit dataChanged(deviceId, data, source, client);
     } else {
         emit errorOccured(deviceId, error);
     }
@@ -1405,7 +1427,7 @@ void ModbusMultiServer::on_clientConnected(const QString& clientAddress, quint16
         return;
 
     const auto cd = server->property("ConnectionDetails").value<ConnectionDetails>();
-    emit clientConnected(cd, clientAddress, clientPort);
+    emit clientConnected(makeClientInfo(cd, clientAddress, clientPort));
 }
 
 void ModbusMultiServer::on_clientDisconnected(const QString& clientAddress, quint16 clientPort)
@@ -1415,7 +1437,7 @@ void ModbusMultiServer::on_clientDisconnected(const QString& clientAddress, quin
         return;
 
     const auto cd = server->property("ConnectionDetails").value<ConnectionDetails>();
-    emit clientDisconnected(cd, clientAddress, clientPort);
+    emit clientDisconnected(makeClientInfo(cd, clientAddress, clientPort));
 }
 
 ///
@@ -1513,6 +1535,7 @@ void ModbusMultiServer::on_dataWritten(int deviceId, QModbusDataUnit::RegisterTy
         data.setValues(values);
     }
 
-    setData(deviceId, data, WriteSource::ModbusClient, clientAddress, clientPort);
+    const auto cd = server->property("ConnectionDetails").value<ConnectionDetails>();
+    setData(deviceId, data, WriteSource::ModbusClient, makeClientInfo(cd, clientAddress, clientPort));
 }
 

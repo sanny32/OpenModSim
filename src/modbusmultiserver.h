@@ -58,15 +58,15 @@ public:
     QModbusDevice::State state(ConnectionType type, const QString& port) const;
 
     QModbusDataUnit data(quint8 deviceId, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, quint16 length) const;
-    void setData(quint8 deviceId, const QModbusDataUnit& data,
-                 WriteSource source = WriteSource::Internal,
-                 const QString& clientAddress = QString(), quint16 clientPort = 0);
+    void setData(quint8 deviceId, const QModbusDataUnit& data, WriteSource source = WriteSource::Internal, const ModbusClientInfo& client = {});
+
     QDateTime timestamp(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 address) const;
     AddressTimestampMap timestampMap(quint8 deviceId, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, quint16 length) const;
     AddressTimestampMap timestampMap() const;
     void setTimestamp(quint8 deviceId, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, const QDateTime& timestamp);
     void setTimestampMap(const AddressTimestampMap& timestamps);
     void clearTimestamps();
+
     QString description(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 address) const;
     AddressDescriptionMap descriptionMap(quint8 deviceId, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, quint16 length) const;
     AddressDescriptionMap descriptionMap() const;
@@ -98,24 +98,31 @@ public:
 signals:
     void connected(const ConnectionDetails& cd);
     void disconnected(const ConnectionDetails& cd);
-    void clientConnected(const ConnectionDetails& cd, const QString& clientAddress, quint16 clientPort);
-    void clientDisconnected(const ConnectionDetails& cd, const QString& clientAddress, quint16 clientPort);
+
+    void clientConnected(const ModbusClientInfo& client);
+    void clientDisconnected(const ModbusClientInfo& client);
+
     void deviceIdsChanged(const QList<int>& deviceIds);
+
     void request(QSharedPointer<const ModbusMessage> msg);
     void response(QSharedPointer<const ModbusMessage> msgReq, QSharedPointer<const ModbusMessage> msgResp);
     void requestOnConnection(const ConnectionDetails& cd, QSharedPointer<const ModbusMessage> msg);
     void responseOnConnection(const ConnectionDetails& cd, QSharedPointer<const ModbusMessage> msgReq, QSharedPointer<const ModbusMessage> msgResp);
+
     void rawDataReceived(const ConnectionDetails& cd, const QDateTime& time, const QByteArray& data);
     void rawDataSended(const ConnectionDetails& cd, const QDateTime& time, const QByteArray& data);
+
     void connectionError(const QString& error);
     void errorOccured(quint8 deviceId, const QString& error);
-    void dataChanged(quint8 deviceId, const QModbusDataUnit& data,
-                     WriteSource source, const QString& clientAddress, quint16 clientPort);
+
+    void dataChanged(quint8 deviceId, const QModbusDataUnit& data, WriteSource source, const ModbusClientInfo& client);
     void timestampChanged(quint8 deviceId, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, const QDateTime& timestamp);
     void descriptionChanged(quint8 deviceId, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, const QString& description);
     void definitionsChanged(const ModbusDefinitions& defs);
+
     void deviceIdAdded(quint8 deviceId);
     void deviceIdRemoved(quint8 deviceId);
+
     void unitMapAdded(QUuid id, quint8 deviceId, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, quint16 length);
     void unitMapRemoved(QUuid id, quint8 deviceId);
 
@@ -126,8 +133,7 @@ private slots:
     void on_rawDataSended(const QDateTime& time, const QByteArray& data);
     void on_stateChanged(QModbusDevice::State state);
     void on_errorOccurred(QModbusDevice::Error error, int deviceId);
-    void on_dataWritten(int deviceId, QModbusDataUnit::RegisterType table, int address, int size,
-                        const QString& clientAddress, quint16 clientPort);
+    void on_dataWritten(int deviceId, QModbusDataUnit::RegisterType table, int address, int size, const QString& clientAddress, quint16 clientPort);
 
 private:
     QSharedPointer<ModbusServer> findModbusServer(const ConnectionDetails& cd) const;

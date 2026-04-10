@@ -4017,72 +4017,82 @@ Script.onInit(()=&gt;{
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../applogger.cpp" line="44"/>
+        <location filename="../applogger.cpp" line="64"/>
         <source>Server connected: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../applogger.cpp" line="50"/>
+        <location filename="../applogger.cpp" line="70"/>
         <source>Server disconnected: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../applogger.cpp" line="56"/>
+        <location filename="../applogger.cpp" line="76"/>
         <source>Modbus client connected: %1 -&gt; %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../applogger.cpp" line="63"/>
+        <location filename="../applogger.cpp" line="83"/>
         <source>Modbus client disconnected: %1 -&gt; %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../applogger.cpp" line="70"/>
+        <location filename="../applogger.cpp" line="90"/>
         <source>[Unit %1] %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../applogger.cpp" line="89"/>
+        <location filename="../applogger.cpp" line="109"/>
         <source>Address space added: unit %1, %2, starting address %3, length %4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../applogger.cpp" line="106"/>
-        <source>Manual write: unit %1, %2, address %3, value %4</source>
+        <location filename="../applogger.cpp" line="126"/>
+        <source>Manual write: unit %1, %2, starting address %3, value %4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../applogger.cpp" line="116"/>
+        <location filename="../applogger.cpp" line="139"/>
+        <source>Client write: %1 -&gt; unit %2, %3, starting address %4, value %5</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../applogger.cpp" line="136"/>
         <source>unknown client</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../applogger.cpp" line="119"/>
-        <source>Client write: %1 -&gt; unit %2, %3, address %4, value %5</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../applogger.cpp" line="151"/>
+        <location filename="../applogger.cpp" line="171"/>
         <source>Auto simulation enabled (%1): unit %2, %3, address %4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../applogger.cpp" line="165"/>
+        <location filename="../applogger.cpp" line="185"/>
         <source>Auto simulation disabled: unit %1, %2, address %3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../applogger.cpp" line="97"/>
+        <location filename="../applogger.cpp" line="117"/>
         <source>Address space removed: unit %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../applogger.cpp" line="76"/>
+        <location filename="../applogger.cpp" line="42"/>
+        <source>, ...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../applogger.cpp" line="45"/>
+        <source>[%1 values: %2%3]</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../applogger.cpp" line="96"/>
         <source>Unit ID added: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../applogger.cpp" line="82"/>
+        <location filename="../applogger.cpp" line="102"/>
         <source>Unit ID removed: %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4131,11 +4141,6 @@ Script.onInit(()=&gt;{
 %1</source>
         <translation type="vanished">жЌ•иЋ·й”™иЇЇпјљ
 %1</translation>
-    </message>
-    <message>
-        <location filename="../applogger.cpp" line="28"/>
-        <source>[%1 values]</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -4764,12 +4769,12 @@ Script.onInit(()=&gt;{
 <context>
     <name>ModbusMultiServer</name>
     <message>
-        <location filename="../modbusmultiserver.cpp" line="933"/>
+        <location filename="../modbusmultiserver.cpp" line="955"/>
         <source>An incorrect device ID was specified (%1)</source>
         <translation>жЊ‡е®љдє†й”™иЇЇзљ„и®ѕе¤‡ењ°еќЂпј€%1пј‰</translation>
     </message>
     <message>
-        <location filename="../modbusmultiserver.cpp" line="1483"/>
+        <location filename="../modbusmultiserver.cpp" line="1505"/>
         <source>Connection error. %1</source>
         <translation>иїћжЋҐй”™иЇЇ %1</translation>
     </message>

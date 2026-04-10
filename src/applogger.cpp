@@ -17,7 +17,13 @@ QString connectionAddress(const ConnectionDetails& cd)
         : cd.SerialParams.PortName;
 }
 
-QString formatWrittenValues(const QModbusDataUnit& data)
+///
+/// \brief formatWrittenValues
+/// \param data
+/// \param previewLimit
+/// \return
+///
+QString formatWrittenValues(const QModbusDataUnit& data, int previewLimit = 16)
 {
     if(data.valueCount() <= 0)
         return QStringLiteral("[]");
@@ -25,7 +31,21 @@ QString formatWrittenValues(const QModbusDataUnit& data)
     if(data.valueCount() == 1)
         return QString::number(data.value(0));
 
-    return QCoreApplication::translate("MainWindow", "[%1 values]").arg(data.valueCount());
+    QStringList values;
+    values.reserve(qMin(data.valueCount(), previewLimit));
+
+    const int previewCount = qMin(data.valueCount(), previewLimit);
+    for(int i = 0; i < previewCount; ++i)
+        values << QString::number(data.value(i));
+
+    const QString suffix = (data.valueCount() > previewLimit)
+        ? QCoreApplication::translate("MainWindow", ", ...")
+        : QString();
+
+    return QCoreApplication::translate("MainWindow", "[%1 values: %2%3]")
+        .arg(data.valueCount())
+        .arg(values.join(", "))
+        .arg(suffix);
 }
 
 }
@@ -52,17 +72,17 @@ void AppLogger::setupModbusMultiServerLogging(ModbusMultiServer& server, QObject
     });
 
     QObject::connect(&server, &ModbusMultiServer::clientConnected, context,
-                     [](const ConnectionDetails& cd, const QString& clientAddress, quint16 clientPort) {
+                     [](const ModbusClientInfo& client) {
         qInfo(lcApp) << QCoreApplication::translate("MainWindow", "Modbus client connected: %1 -> %2")
-                            .arg(QString("%1:%2").arg(clientAddress).arg(clientPort))
-                            .arg(connectionAddress(cd));
+                            .arg(QString("%1:%2").arg(client.Address).arg(client.Port))
+                            .arg(connectionAddress(client.Connection));
     });
 
     QObject::connect(&server, &ModbusMultiServer::clientDisconnected, context,
-                     [](const ConnectionDetails& cd, const QString& clientAddress, quint16 clientPort) {
+                     [](const ModbusClientInfo& client) {
         qInfo(lcApp) << QCoreApplication::translate("MainWindow", "Modbus client disconnected: %1 -> %2")
-                            .arg(QString("%1:%2").arg(clientAddress).arg(clientPort))
-                            .arg(connectionAddress(cd));
+                            .arg(QString("%1:%2").arg(client.Address).arg(client.Port))
+                            .arg(connectionAddress(client.Connection));
     });
 
     QObject::connect(&server, &ModbusMultiServer::errorOccured, context,
@@ -100,11 +120,11 @@ void AppLogger::setupModbusMultiServerLogging(ModbusMultiServer& server, QObject
 
     QObject::connect(&server, &ModbusMultiServer::dataChanged, context,
                      [](quint8 deviceId, const QModbusDataUnit& data, WriteSource source,
-                        const QString& clientAddress, quint16 clientPort) {
+                        const ModbusClientInfo& client) {
         switch(source) {
             case WriteSource::User:
                 qInfo(lcApp) << QCoreApplication::translate("MainWindow",
-                                                        "Manual write: unit %1, %2, address %3, value %4")
+                                                        "Manual write: unit %1, %2, starting address %3, value %4")
                                 .arg(deviceId)
                                 .arg(registerTypeName(data.registerType()))
                                 .arg(data.startAddress())
@@ -112,12 +132,12 @@ void AppLogger::setupModbusMultiServerLogging(ModbusMultiServer& server, QObject
             break;
             case WriteSource::ModbusClient:
             {
-                const QString endpoint = clientAddress.isEmpty()
+                const QString endpoint = client.Address.isEmpty()
                     ? QCoreApplication::translate("MainWindow", "unknown client")
-                    : QString("%1:%2").arg(clientAddress).arg(clientPort);
+                    : QString("%1:%2").arg(client.Address).arg(client.Port);
 
                 qInfo(lcApp) << QCoreApplication::translate("MainWindow",
-                                                            "Client write: %1 -> unit %2, %3, address %4, value %5")
+                                                            "Client write: %1 -> unit %2, %3, starting address %4, value %5")
                                     .arg(endpoint)
                                     .arg(deviceId)
                                     .arg(registerTypeName(data.registerType()))
