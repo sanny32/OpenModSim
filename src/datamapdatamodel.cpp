@@ -192,6 +192,12 @@ QVariant DataMapDataModel::data(const QModelIndex& index, int role) const
         return static_cast<int>(Qt::AlignCenter);
     }
 
+    if (role == Qt::BackgroundRole || role == DataMapRole::RowColor) {
+        if (e.color.isValid())
+            return QBrush(e.color);
+        return {};
+    }
+
     switch (col) {
         case ColUnit:
             if (role == Qt::DisplayRole || role == Qt::EditRole)
@@ -455,6 +461,15 @@ bool DataMapDataModel::setData(const QModelIndex& index, const QVariant& value, 
             emit dataChanged(createIndex(row, ColUnit), createIndex(row, ColTimestamp));
             handled = true;
         }
+    }
+
+    // ── Row highlight color ───────────────────────────────────────────────────
+    if (!handled && role == DataMapRole::RowColor) {
+        entry.color  = value.value<QColor>();
+        _data[oldKey] = entry;
+        emit dataChanged(createIndex(row, 0), createIndex(row, ColCount - 1),
+                         {Qt::BackgroundRole, DataMapRole::RowColor});
+        handled = true;
     }
 
     _inSetData = false;

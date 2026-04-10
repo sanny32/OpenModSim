@@ -3,6 +3,7 @@
 
 #include <QAbstractTableModel>
 #include <QSortFilterProxyModel>
+#include <QColor>
 #include <QMap>
 #include <QList>
 #include <QUuid>
@@ -36,6 +37,7 @@ namespace DataMapRole {
     constexpr int Type      = Qt::UserRole + 1;   // ColUnit: RegisterType as int
     constexpr int Address   = Qt::UserRole + 2;   // ColUnit: Address as int
     constexpr int TypeValue = Qt::UserRole + 3;   // ColType: RegisterType as int
+    constexpr int RowColor  = Qt::UserRole + 4;   // any column: row highlight color as QColor
     // Qt::UserRole on ColValue: raw quint16 value
 }
 
@@ -49,6 +51,7 @@ struct DataMapEntry
     DataType      type    = DataType::Int16;
     RegisterOrder order   = RegisterOrder::MSRF;
     QDateTime     timestamp;
+    QColor        color;
 };
 
 ///

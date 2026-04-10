@@ -166,6 +166,8 @@ inline QXmlStreamWriter& operator <<(QXmlStreamWriter& xml, FormDataMapView* frm
         if (isMultiRegisterType(e.type))
             xml.writeAttribute("Order", enumToString(e.order));
         xml.writeAttribute("Value",     QString::number(e.value));
+        if (e.color.isValid())
+            xml.writeAttribute("Color", e.color.name());
         if (!e.comment.isEmpty())
             xml.writeCDATA(e.comment);
         xml.writeEndElement(); // Entry
@@ -250,6 +252,8 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, FormDataMapView* frm
                     entry.type      = enumFromString<DataType>(attrs.value("DataType").toString(), DataType::Int16);
                     entry.order     = enumFromString<RegisterOrder>(attrs.value("Order").toString(), RegisterOrder::MSRF);
                     entry.timestamp = QDateTime::fromString(attrs.value("Timestamp").toString(), Qt::ISODateWithMs);
+                    if (attrs.hasAttribute("Color"))
+                        entry.color = QColor(attrs.value("Color").toString());
                     entry.comment   = xml.readElementText(QXmlStreamReader::IncludeChildElements).trimmed();
 
                     if (key.Type == QModbusDataUnit::Coils ||

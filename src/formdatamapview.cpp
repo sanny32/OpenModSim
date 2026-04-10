@@ -582,6 +582,57 @@ FormDataMapView::FormDataMapView(ModbusMultiServer& server, MainWindow* parent)
         menu.addAction(ui->actionDelete);
         menu.addSeparator();
         menu.addAction(ui->actionClear);
+
+        if (clickedIndex.isValid()) {
+            const QModelIndex sourceIndex = _proxy->mapToSource(clickedIndex);
+
+            menu.addSeparator();
+
+            // Build remove-color icon (white box with red diagonal)
+            auto makeRemoveColorIcon = [](int size = 16) {
+                QPixmap pm(size, size);
+                pm.fill(Qt::transparent);
+                QPainter p(&pm);
+                p.setRenderHint(QPainter::Antialiasing, true);
+                QRect r(2, 2, size - 4, size - 4);
+                p.setBrush(Qt::white);
+                p.setPen(QPen(Qt::black, 0.1));
+                p.drawRect(r);
+                p.setPen(QPen(Qt::red, 1));
+                p.drawLine(0, size, size, 0);
+                return QIcon(pm);
+            };
+
+            const QColor currentColor = _model->data(sourceIndex, DataMapRole::RowColor).value<QColor>();
+            QAction* removeColorAction = menu.addAction(makeRemoveColorIcon(), tr("Remove Color"));
+            removeColorAction->setEnabled(currentColor.isValid());
+            connect(removeColorAction, &QAction::triggered, this, [this, sourceIndex]() {
+                _model->setData(sourceIndex, QColor(), DataMapRole::RowColor);
+            });
+
+            menu.addSeparator();
+
+            struct ColorItem { QString name; QColor color; };
+            const QVector<ColorItem> colors = {
+                { tr("Yellow"),     QColor(Qt::yellow) },
+                { tr("Cyan"),       QColor(Qt::cyan) },
+                { tr("Magenta"),    QColor(Qt::magenta) },
+                { tr("LightGreen"), QColor(144, 238, 144) },
+                { tr("Orange"),     QColor(255, 165, 0) },
+                { tr("LightBlue"),  QColor(173, 216, 230) },
+                { tr("LightGray"),  QColor(Qt::lightGray) }
+            };
+
+            for (const auto& c : colors) {
+                QPixmap px(16, 16);
+                px.fill(c.color);
+                QAction* act = menu.addAction(QIcon(px), c.name);
+                connect(act, &QAction::triggered, this, [this, sourceIndex, c]() {
+                    _model->setData(sourceIndex, c.color, DataMapRole::RowColor);
+                });
+            }
+        }
+
         menu.exec(ui->tableView->viewport()->mapToGlobal(pos));
     });
 
