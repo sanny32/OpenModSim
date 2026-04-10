@@ -118,6 +118,24 @@ void AppLogger::setupModbusMultiServerLogging(ModbusMultiServer& server, QObject
                             .arg(deviceId);
     });
 
+    QObject::connect(&server, &ModbusMultiServer::descriptionChanged, context,
+                     [](quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 address,
+                        const QString& description, WriteSource source) {
+        if (source != WriteSource::User)
+            return;
+
+        const QString text = description.isEmpty()
+            ? QCoreApplication::translate("MainWindow", "<empty>")
+            : description;
+        qInfo(lcApp) << QCoreApplication::translate(
+                            "MainWindow",
+                            "Address comment changed: unit %1, %2, address %3: '%4'")
+                            .arg(deviceId)
+                            .arg(registerTypeName(type))
+                            .arg(address)
+                            .arg(text);
+    });
+
     QObject::connect(&server, &ModbusMultiServer::dataChanged, context,
                      [](quint8 deviceId, const QModbusDataUnit& data, WriteSource source,
                         const ModbusClientInfo& client) {

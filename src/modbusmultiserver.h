@@ -70,8 +70,9 @@ public:
     QString description(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 address) const;
     AddressDescriptionMap descriptionMap(quint8 deviceId, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, quint16 length) const;
     AddressDescriptionMap descriptionMap() const;
-    void setDescription(quint8 deviceId, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, const QString& description);
-    void setDescriptionMap(const AddressDescriptionMap& descriptions);
+    void setDescription(quint8 deviceId, QModbusDataUnit::RegisterType pointType, quint16 pointAddress,
+                        const QString& description, WriteSource source = WriteSource::User);
+    void setDescriptionMap(const AddressDescriptionMap& descriptions, WriteSource source = WriteSource::Internal);
     void clearDescriptions();
 
     void writeValue(quint8 deviceId, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, quint16 value, ByteOrder order);
@@ -117,7 +118,8 @@ signals:
 
     void dataChanged(quint8 deviceId, const QModbusDataUnit& data, WriteSource source, const ModbusClientInfo& client);
     void timestampChanged(quint8 deviceId, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, const QDateTime& timestamp);
-    void descriptionChanged(quint8 deviceId, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, const QString& description);
+    void descriptionChanged(quint8 deviceId, QModbusDataUnit::RegisterType pointType, quint16 pointAddress,
+                            const QString& description, WriteSource source);
     void definitionsChanged(const ModbusDefinitions& defs);
 
     void deviceIdAdded(quint8 deviceId);

@@ -1756,7 +1756,7 @@ void AppProject::loadProject(const QString& filename)
 
     // Prefer global AddressSpace metadata when present; otherwise keep legacy per-form values.
     if (hasGlobalDescriptionMap)
-        _mbServer.setDescriptionMap(globalDescriptionMap);
+        _mbServer.setDescriptionMap(globalDescriptionMap, WriteSource::ProjectLoad);
     if (hasGlobalTimestampMap)
         _mbServer.setTimestampMap(globalTimestampMap);
 

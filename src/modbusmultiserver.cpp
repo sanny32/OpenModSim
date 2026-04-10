@@ -864,12 +864,13 @@ AddressDescriptionMap ModbusMultiServer::descriptionMap() const
 /// \param pointAddress
 /// \param description
 ///
-void ModbusMultiServer::setDescription(quint8 deviceId, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, const QString& description)
+void ModbusMultiServer::setDescription(quint8 deviceId, QModbusDataUnit::RegisterType pointType, quint16 pointAddress,
+                                       const QString& description, WriteSource source)
 {
     if(QThread::currentThread() != _workerThread)
     {
-        QMetaObject::invokeMethod(this, [this, deviceId, pointType, pointAddress, description]() {
-            setDescription(deviceId, pointType, pointAddress, description);
+        QMetaObject::invokeMethod(this, [this, deviceId, pointType, pointAddress, description, source]() {
+            setDescription(deviceId, pointType, pointAddress, description, source);
         }, Qt::BlockingQueuedConnection);
         return;
     }
@@ -884,19 +885,19 @@ void ModbusMultiServer::setDescription(quint8 deviceId, QModbusDataUnit::Registe
         return;
 
     _modbusDataUnitMaps[deviceId].setDescription(pointType, pointAddress, description);
-    emit descriptionChanged(deviceId, pointType, pointAddress, description);
+    emit descriptionChanged(deviceId, pointType, pointAddress, description, source);
 }
 
 ///
 /// \brief ModbusMultiServer::setDescriptionMap
 /// \param descriptions
 ///
-void ModbusMultiServer::setDescriptionMap(const AddressDescriptionMap& descriptions)
+void ModbusMultiServer::setDescriptionMap(const AddressDescriptionMap& descriptions, WriteSource source)
 {
     if(QThread::currentThread() != _workerThread)
     {
-        QMetaObject::invokeMethod(this, [this, descriptions]() {
-            setDescriptionMap(descriptions);
+        QMetaObject::invokeMethod(this, [this, descriptions, source]() {
+            setDescriptionMap(descriptions, source);
         }, Qt::BlockingQueuedConnection);
         return;
     }
@@ -915,7 +916,7 @@ void ModbusMultiServer::setDescriptionMap(const AddressDescriptionMap& descripti
         }
 
         _modbusDataUnitMaps[key.DeviceId].setDescription(key.Type, key.Address, it.value());
-        emit descriptionChanged(key.DeviceId, key.Type, key.Address, it.value());
+        emit descriptionChanged(key.DeviceId, key.Type, key.Address, it.value(), source);
     }
 }
 

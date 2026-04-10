@@ -448,107 +448,107 @@
 <context>
     <name>DataMapDataModel</name>
     <message>
-        <location filename="../datamapdatamodel.cpp" line="218"/>
+        <location filename="../datamapdatamodel.cpp" line="224"/>
         <source>Binary</source>
         <translation type="unfinished">Р”РІРѕРёС‡РЅС‹Р№</translation>
     </message>
     <message>
-        <location filename="../datamapdatamodel.cpp" line="219"/>
+        <location filename="../datamapdatamodel.cpp" line="225"/>
         <source>UInt16</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../datamapdatamodel.cpp" line="220"/>
+        <location filename="../datamapdatamodel.cpp" line="226"/>
         <source>Int16</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../datamapdatamodel.cpp" line="221"/>
+        <location filename="../datamapdatamodel.cpp" line="227"/>
         <source>Hex</source>
         <translation type="unfinished">РЁРµСЃС‚Р°РЅРґС†Р°С‚РёСЂРёС‡РЅС‹Р№</translation>
     </message>
     <message>
-        <location filename="../datamapdatamodel.cpp" line="222"/>
+        <location filename="../datamapdatamodel.cpp" line="228"/>
         <source>Float32</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../datamapdatamodel.cpp" line="223"/>
+        <location filename="../datamapdatamodel.cpp" line="229"/>
         <source>Float64</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../datamapdatamodel.cpp" line="224"/>
+        <location filename="../datamapdatamodel.cpp" line="230"/>
         <source>Int32</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../datamapdatamodel.cpp" line="225"/>
+        <location filename="../datamapdatamodel.cpp" line="231"/>
         <source>UInt32</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../datamapdatamodel.cpp" line="226"/>
+        <location filename="../datamapdatamodel.cpp" line="232"/>
         <source>Int64</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../datamapdatamodel.cpp" line="227"/>
+        <location filename="../datamapdatamodel.cpp" line="233"/>
         <source>UInt64</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../datamapdatamodel.cpp" line="228"/>
+        <location filename="../datamapdatamodel.cpp" line="234"/>
         <source>Ansi</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../datamapdatamodel.cpp" line="238"/>
+        <location filename="../datamapdatamodel.cpp" line="244"/>
         <source>MSRF</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../datamapdatamodel.cpp" line="238"/>
+        <location filename="../datamapdatamodel.cpp" line="244"/>
         <source>LSRF</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../datamapdatamodel.cpp" line="471"/>
+        <location filename="../datamapdatamodel.cpp" line="486"/>
         <source>Unit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../datamapdatamodel.cpp" line="472"/>
+        <location filename="../datamapdatamodel.cpp" line="487"/>
         <source>Type</source>
         <translation type="unfinished">РўРёРї</translation>
     </message>
     <message>
-        <location filename="../datamapdatamodel.cpp" line="473"/>
+        <location filename="../datamapdatamodel.cpp" line="488"/>
         <source>Address</source>
         <translation type="unfinished">РђРґСЂРµСЃ</translation>
     </message>
     <message>
-        <location filename="../datamapdatamodel.cpp" line="474"/>
+        <location filename="../datamapdatamodel.cpp" line="489"/>
         <source>Data Type</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../datamapdatamodel.cpp" line="475"/>
+        <location filename="../datamapdatamodel.cpp" line="490"/>
         <source>Order</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../datamapdatamodel.cpp" line="476"/>
+        <location filename="../datamapdatamodel.cpp" line="491"/>
         <source>Comment</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../datamapdatamodel.cpp" line="477"/>
+        <location filename="../datamapdatamodel.cpp" line="492"/>
         <source>Value</source>
         <translation type="unfinished">Р—РЅР°С‡РµРЅРёРµ</translation>
     </message>
     <message>
-        <location filename="../datamapdatamodel.cpp" line="478"/>
+        <location filename="../datamapdatamodel.cpp" line="493"/>
         <source>Timestamp</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2510,12 +2510,12 @@
         <translation type="obsolete">РЈРґР°Р»РёС‚СЊ</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="721"/>
+        <location filename="../formdatamapview.cpp" line="772"/>
         <source>1-based</source>
         <translation type="unfinished">1-РїРµСЂРІС‹Р№</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="721"/>
+        <location filename="../formdatamapview.cpp" line="772"/>
         <source>0-based</source>
         <translation type="unfinished">0-РїРµСЂРІС‹Р№</translation>
     </message>
@@ -2528,46 +2528,86 @@
         <translation type="obsolete">РђРґСЂРµСЃР°С†РёСЏ:</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="734"/>
-        <location filename="../formdatamapview.cpp" line="1246"/>
-        <location filename="../formdatamapview.cpp" line="1246"/>
+        <location filename="../formdatamapview.cpp" line="607"/>
+        <source>Remove Color</source>
+        <translation type="unfinished">РЈРґР°Р»РёС‚СЊ С†РІРµС‚</translation>
+    </message>
+    <message>
+        <location filename="../formdatamapview.cpp" line="617"/>
+        <source>Yellow</source>
+        <translation type="unfinished">Р–РµР»С‚С‹Р№</translation>
+    </message>
+    <message>
+        <location filename="../formdatamapview.cpp" line="618"/>
+        <source>Cyan</source>
+        <translation type="unfinished">Р¦РёР°РЅ</translation>
+    </message>
+    <message>
+        <location filename="../formdatamapview.cpp" line="619"/>
+        <source>Magenta</source>
+        <translation type="unfinished">РџСѓСЂРїСѓСЂРЅС‹Р№</translation>
+    </message>
+    <message>
+        <location filename="../formdatamapview.cpp" line="620"/>
+        <source>LightGreen</source>
+        <translation type="unfinished">РЎРІРµС‚Р»Рѕ-Р·РµР»РµРЅС‹Р№</translation>
+    </message>
+    <message>
+        <location filename="../formdatamapview.cpp" line="621"/>
+        <source>Orange</source>
+        <translation type="unfinished">РћСЂР°РЅР¶РµРІС‹Р№</translation>
+    </message>
+    <message>
+        <location filename="../formdatamapview.cpp" line="622"/>
+        <source>LightBlue</source>
+        <translation type="unfinished">РЎРІРµС‚Р»Рѕ-СЃРёРЅРёР№</translation>
+    </message>
+    <message>
+        <location filename="../formdatamapview.cpp" line="623"/>
+        <source>LightGray</source>
+        <translation type="unfinished">РЎРІРµС‚Р»Рѕ-СЃРµСЂС‹Р№</translation>
+    </message>
+    <message>
+        <location filename="../formdatamapview.cpp" line="785"/>
+        <location filename="../formdatamapview.cpp" line="1297"/>
+        <location filename="../formdatamapview.cpp" line="1297"/>
         <source>All Types</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="736"/>
+        <location filename="../formdatamapview.cpp" line="787"/>
         <source>Address Base: %1
 Unit Filter: %2
 Type Filter: %3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="1247"/>
+        <location filename="../formdatamapview.cpp" line="1298"/>
         <source>Coils</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="1248"/>
+        <location filename="../formdatamapview.cpp" line="1299"/>
         <source>Discrete Inputs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="1249"/>
+        <location filename="../formdatamapview.cpp" line="1300"/>
         <source>Input Registers</source>
         <translation type="unfinished">Р—РЅР°С‡РµРЅРёСЏ СЂРµРёСЃС‚СЂРѕРІ</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="1250"/>
+        <location filename="../formdatamapview.cpp" line="1301"/>
         <source>Holding Registers</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="1257"/>
+        <location filename="../formdatamapview.cpp" line="1308"/>
         <source>Unit:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="1259"/>
+        <location filename="../formdatamapview.cpp" line="1310"/>
         <source>Data Type:</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2576,9 +2616,9 @@ Type Filter: %3</source>
         <translation type="obsolete">РўРёРї: </translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="723"/>
-        <location filename="../formdatamapview.cpp" line="1242"/>
-        <location filename="../formdatamapview.cpp" line="1242"/>
+        <location filename="../formdatamapview.cpp" line="774"/>
+        <location filename="../formdatamapview.cpp" line="1293"/>
+        <location filename="../formdatamapview.cpp" line="1293"/>
         <source>All</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4251,27 +4291,37 @@ Script.onInit(()=&gt;{
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../applogger.cpp" line="126"/>
+        <location filename="../applogger.cpp" line="128"/>
+        <source>&lt;empty&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../applogger.cpp" line="144"/>
         <source>Manual write: unit %1, %2, starting address %3, value %4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../applogger.cpp" line="139"/>
+        <location filename="../applogger.cpp" line="157"/>
         <source>Client write: %1 -&gt; unit %2, %3, starting address %4, value %5</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../applogger.cpp" line="136"/>
+        <location filename="../applogger.cpp" line="154"/>
         <source>unknown client</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../applogger.cpp" line="170"/>
+        <location filename="../applogger.cpp" line="130"/>
+        <source>Address comment changed: unit %1, %2, address %3: &apos;%4&apos;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../applogger.cpp" line="188"/>
         <source>Auto simulation enabled (%1): unit %2, %3, address %4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../applogger.cpp" line="184"/>
+        <location filename="../applogger.cpp" line="202"/>
         <source>Auto simulation disabled: unit %1, %2, address %3</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4983,12 +5033,12 @@ Script.onInit(()=&gt;{
 <context>
     <name>ModbusMultiServer</name>
     <message>
-        <location filename="../modbusmultiserver.cpp" line="955"/>
+        <location filename="../modbusmultiserver.cpp" line="956"/>
         <source>An incorrect device ID was specified (%1)</source>
         <translation>РќРµРєРѕСЂСЂРµРєС‚РЅРѕ Р·РЅР°СЏРµРЅРёРµ РЅРѕРјРµСЂР° СѓСЃС‚СЂРѕР№СЃС‚РІР° (%1)</translation>
     </message>
     <message>
-        <location filename="../modbusmultiserver.cpp" line="1523"/>
+        <location filename="../modbusmultiserver.cpp" line="1524"/>
         <source>Connection error. %1</source>
         <translation>РћС€РёР±РєР° РїРѕРґРєР»СЋС‡РµРЅРёСЏ. %1</translation>
     </message>
