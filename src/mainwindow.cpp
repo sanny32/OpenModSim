@@ -262,6 +262,7 @@ MainWindow::MainWindow(const QString& profile, bool useSession, QWidget *parent)
     connect(&_mbMultiServer, &ModbusMultiServer::connectionError, this, &MainWindow::on_connectionError);
     AppLogger::setupModbusMultiServerLogging(_mbMultiServer, this);
     AppLogger::setupDataSimulatorLogging(*_dataSimulator, this);
+    AppLogger::setupAppProjectLogging(*_project, this);
 
     // View / window trivial action wiring
     connect(ui->actionExit,           &QAction::triggered, this, [this]{ close(); });
@@ -685,12 +686,17 @@ void MainWindow::on_actionSaveProjectAs_triggered()
 ///
 void MainWindow::on_actionCloseProject_triggered()
 {
+    const bool shouldAskToSave = hasProjectContext() && (_isModified || _projectFilePath.isEmpty());
+    if(shouldAskToSave) {
+        if(!confirmSaveOnClose())
+            return;
+    }
+
     _project->closeProject();
     _projectFilePath.clear();
     _isModified = false;
     updateProjectWindowTitle();
     updateMainToolbarState();
-    AppLogger::clear();
 }
 
 ///

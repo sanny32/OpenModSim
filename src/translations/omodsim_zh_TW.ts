@@ -3474,8 +3474,9 @@ Script.onInit(()=&gt;{
         <translation type="vanished">й«йљЋйЃёй&#xa0;…</translation>
     </message>
     <message>
+        <location filename="../applogger.cpp" line="64"/>
         <source>Script</source>
-        <translation type="vanished">жЊ‡д»¤зўј</translation>
+        <translation>жЊ‡д»¤зўј</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="129"/>
@@ -3688,8 +3689,8 @@ Script.onInit(()=&gt;{
     </message>
     <message>
         <location filename="../mainwindow.ui" line="244"/>
-        <location filename="../mainwindow.cpp" line="1599"/>
-        <location filename="../mainwindow.cpp" line="1599"/>
+        <location filename="../mainwindow.cpp" line="1605"/>
+        <location filename="../mainwindow.cpp" line="1605"/>
         <source>Save Project</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3928,9 +3929,9 @@ Script.onInit(()=&gt;{
         <location filename="../mainwindow.ui" line="526"/>
         <location filename="../mainwindow.ui" line="529"/>
         <location filename="../mainwindow.cpp" line="190"/>
-        <location filename="../mainwindow.cpp" line="387"/>
+        <location filename="../mainwindow.cpp" line="388"/>
         <location filename="../mainwindow.cpp" line="190"/>
-        <location filename="../mainwindow.cpp" line="387"/>
+        <location filename="../mainwindow.cpp" line="388"/>
         <source>Script Help</source>
         <translation>жЊ‡д»¤зЁїиЄЄжЋ</translation>
     </message>
@@ -4019,7 +4020,7 @@ Script.onInit(()=&gt;{
         <translation type="vanished">дї„иЇ­</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="640"/>
+        <location filename="../mainwindow.cpp" line="641"/>
         <source>All files (*)</source>
         <translation>ж‰Ђжњ‰жЄ”жЎ€ (*)</translation>
     </message>
@@ -4029,146 +4030,211 @@ Script.onInit(()=&gt;{
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="145"/>
-        <location filename="../mainwindow.cpp" line="389"/>
-        <location filename="../mainwindow.cpp" line="389"/>
+        <location filename="../mainwindow.cpp" line="390"/>
+        <location filename="../mainwindow.cpp" line="390"/>
         <source>Open Recent</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="146"/>
-        <location filename="../mainwindow.cpp" line="1686"/>
-        <location filename="../mainwindow.cpp" line="1686"/>
+        <location filename="../mainwindow.cpp" line="1692"/>
+        <location filename="../mainwindow.cpp" line="1692"/>
         <source>Clear List</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="171"/>
-        <location filename="../mainwindow.cpp" line="386"/>
-        <location filename="../mainwindow.cpp" line="386"/>
+        <location filename="../mainwindow.cpp" line="387"/>
+        <location filename="../mainwindow.cpp" line="387"/>
         <source>Project</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="228"/>
-        <location filename="../mainwindow.cpp" line="388"/>
-        <location filename="../mainwindow.cpp" line="388"/>
+        <location filename="../mainwindow.cpp" line="389"/>
+        <location filename="../mainwindow.cpp" line="389"/>
         <source>Output</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="639"/>
-        <location filename="../mainwindow.cpp" line="670"/>
-        <location filename="../mainwindow.cpp" line="670"/>
+        <location filename="../mainwindow.cpp" line="640"/>
+        <location filename="../mainwindow.cpp" line="671"/>
+        <location filename="../mainwindow.cpp" line="671"/>
         <source>Project files (*.oms)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1428"/>
+        <location filename="../mainwindow.cpp" line="1434"/>
         <source>Address Base</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../applogger.cpp" line="64"/>
+        <location filename="../applogger.cpp" line="96"/>
         <source>Server connected: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../applogger.cpp" line="70"/>
+        <location filename="../applogger.cpp" line="102"/>
         <source>Server disconnected: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../applogger.cpp" line="76"/>
+        <location filename="../applogger.cpp" line="108"/>
         <source>Modbus client connected: %1 -&gt; %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../applogger.cpp" line="83"/>
+        <location filename="../applogger.cpp" line="115"/>
         <source>Modbus client disconnected: %1 -&gt; %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../applogger.cpp" line="90"/>
+        <location filename="../applogger.cpp" line="122"/>
         <source>[Unit %1] %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../applogger.cpp" line="109"/>
+        <location filename="../applogger.cpp" line="141"/>
         <source>Address space added: unit %1, %2, starting address %3, length %4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../applogger.cpp" line="128"/>
+        <location filename="../applogger.cpp" line="163"/>
         <source>&lt;empty&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../applogger.cpp" line="144"/>
+        <location filename="../applogger.cpp" line="179"/>
         <source>Manual write: unit %1, %2, starting address %3, value %4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../applogger.cpp" line="157"/>
+        <location filename="../applogger.cpp" line="192"/>
         <source>Client write: %1 -&gt; unit %2, %3, starting address %4, value %5</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../applogger.cpp" line="154"/>
+        <location filename="../applogger.cpp" line="189"/>
         <source>unknown client</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../applogger.cpp" line="130"/>
+        <location filename="../applogger.cpp" line="165"/>
         <source>Address comment changed: unit %1, %2, address %3: &apos;%4&apos;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../applogger.cpp" line="188"/>
+        <location filename="../applogger.cpp" line="223"/>
         <source>Auto simulation enabled (%1): unit %2, %3, address %4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../applogger.cpp" line="202"/>
+        <location filename="../applogger.cpp" line="237"/>
         <source>Auto simulation disabled: unit %1, %2, address %3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../applogger.cpp" line="117"/>
-        <source>Address space removed: unit %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../applogger.cpp" line="42"/>
+        <location filename="../applogger.cpp" line="48"/>
         <source>, ...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../applogger.cpp" line="45"/>
+        <location filename="../applogger.cpp" line="51"/>
         <source>[%1 values: %2%3]</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../applogger.cpp" line="96"/>
+        <location filename="../applogger.cpp" line="62"/>
+        <source>Traffic</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../applogger.cpp" line="66"/>
+        <source>Map</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../applogger.cpp" line="67"/>
+        <source>Form</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../applogger.cpp" line="73"/>
+        <source>&lt;null&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../applogger.cpp" line="76"/>
+        <source>&lt;untitled&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../applogger.cpp" line="79"/>
+        <source>%1 &apos;%2&apos;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../applogger.cpp" line="128"/>
         <source>Unit ID added: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../applogger.cpp" line="102"/>
+        <location filename="../applogger.cpp" line="134"/>
         <source>Unit ID removed: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1015"/>
+        <location filename="../applogger.cpp" line="150"/>
+        <source>Address space removed: unit %1, %2, starting address %3, length %4</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../applogger.cpp" line="256"/>
+        <source>Project opened: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../applogger.cpp" line="263"/>
+        <source>&lt;unsaved&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../applogger.cpp" line="266"/>
+        <source>Project closed: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../applogger.cpp" line="272"/>
+        <source>Form created: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../applogger.cpp" line="278"/>
+        <source>Form opened: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../applogger.cpp" line="284"/>
+        <source>Form closed: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../applogger.cpp" line="290"/>
+        <source>Form deleted: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cpp" line="1021"/>
         <source>Move to Other Panel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1424"/>
+        <location filename="../mainwindow.cpp" line="1430"/>
         <source>1-based</source>
         <translation type="unfinished">еџєењ°еќЂз‚є-1</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1425"/>
+        <location filename="../mainwindow.cpp" line="1431"/>
         <source>0-based</source>
         <translation type="unfinished">еџєењ°еќЂз‚є-0</translation>
     </message>
@@ -4179,21 +4245,22 @@ Script.onInit(()=&gt;{
         <translation type="unfinished">еЌЃе…­йЂІдЅЌе€¶жЄўи¦–</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1600"/>
+        <location filename="../mainwindow.cpp" line="1606"/>
         <source>Save project before closing?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1674"/>
+        <location filename="../mainwindow.cpp" line="1680"/>
         <source>No Recent Projects</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../applogger.cpp" line="60"/>
         <source>Data</source>
-        <translation type="obsolete">иі‡ж–™</translation>
+        <translation type="unfinished">иі‡ж–™</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="963"/>
+        <location filename="../mainwindow.cpp" line="969"/>
         <source>JavaScript files (*.js);;All files (*)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4830,12 +4897,12 @@ Script.onInit(()=&gt;{
 <context>
     <name>ModbusMultiServer</name>
     <message>
-        <location filename="../modbusmultiserver.cpp" line="956"/>
+        <location filename="../modbusmultiserver.cpp" line="961"/>
         <source>An incorrect device ID was specified (%1)</source>
         <translation>жЊ‡е®љдє†йЊЇиЄ¤зљ„иЈќзЅ®ењ°еќЂпј€%1пј‰</translation>
     </message>
     <message>
-        <location filename="../modbusmultiserver.cpp" line="1524"/>
+        <location filename="../modbusmultiserver.cpp" line="1529"/>
         <source>Connection error. %1</source>
         <translation>йЂЈз·љйЊЇиЄ¤ %1</translation>
     </message>

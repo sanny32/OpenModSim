@@ -102,6 +102,14 @@ public:
     void    setSavePath(const QString& p) { _savePath = p; }
     int     nextFormDisplayNumber(ProjectFormKind kind);
 
+signals:
+    void projectOpened(const QString& filename);
+    void projectClosed(const QString& filename);
+    void formCreated(QWidget* form);
+    void formOpened(QWidget* form);
+    void formClosed(QWidget* form);
+    void formDeleted(QWidget* form);
+
 private:
     void setupMdiChild(QWidget* frm, QMdiSubWindow* wnd, bool addToWindowList);
     QWidget* createCloneOnArea(QWidget* source, MdiArea* area);
@@ -128,6 +136,7 @@ private:
     int                _DataMapCounter = 0;
     QList<QWidget*>      _closedForms;
     QString            _savePath;
+    QString            _projectFilename;
     QString            _pendingActivePrimaryWin;
     QString            _pendingActiveSecWin;
     QString            _pendingActivePanel;

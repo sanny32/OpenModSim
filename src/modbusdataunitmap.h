@@ -17,6 +17,7 @@ public:
 
     bool addUnitMap(QUuid id, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, quint16 length);
     bool removeUnitMap(QUuid id);
+    bool unitMap(QUuid id, QModbusDataUnit& unit) const;
     bool ensureRange(QModbusDataUnit::RegisterType pointType, quint16 pointAddress, quint16 length);
 
     AddressSpace addressSpace() const;

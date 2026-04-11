@@ -1,7 +1,13 @@
 #include "applogger.h"
 
 #include <QCoreApplication>
+#include <QWidget>
+#include "appproject.h"
 #include "applogoutput.h"
+#include "formdatamapview.h"
+#include "formdataview.h"
+#include "formscriptview.h"
+#include "formtrafficview.h"
 
 namespace {
 
@@ -46,6 +52,32 @@ QString formatWrittenValues(const QModbusDataUnit& data, int previewLimit = 16)
         .arg(data.valueCount())
         .arg(values.join(", "))
         .arg(suffix);
+}
+
+QString formTypeName(const QWidget* form)
+{
+    if (qobject_cast<const FormDataView*>(form))
+        return QCoreApplication::translate("MainWindow", "Data");
+    if (qobject_cast<const FormTrafficView*>(form))
+        return QCoreApplication::translate("MainWindow", "Traffic");
+    if (qobject_cast<const FormScriptView*>(form))
+        return QCoreApplication::translate("MainWindow", "Script");
+    if (qobject_cast<const FormDataMapView*>(form))
+        return QCoreApplication::translate("MainWindow", "Map");
+    return QCoreApplication::translate("MainWindow", "Form");
+}
+
+QString formDisplayName(const QWidget* form)
+{
+    if (!form)
+        return QCoreApplication::translate("MainWindow", "<null>");
+
+    const QString title = form->windowTitle().isEmpty()
+        ? QCoreApplication::translate("MainWindow", "<untitled>")
+        : form->windowTitle();
+
+    return QCoreApplication::translate("MainWindow", "%1 '%2'")
+        .arg(formTypeName(form), title);
 }
 
 }
@@ -113,9 +145,12 @@ void AppLogger::setupModbusMultiServerLogging(ModbusMultiServer& server, QObject
     }, Qt::DirectConnection);
 
     QObject::connect(&server, &ModbusMultiServer::unitMapRemoved, context,
-                     [](QUuid /*id*/, quint8 deviceId) {
-        qInfo(lcApp) << QCoreApplication::translate("MainWindow", "Address space removed: unit %1")
-                            .arg(deviceId);
+                     [](QUuid /*id*/, quint8 deviceId, QModbusDataUnit::RegisterType type,
+                        quint16 addr, quint16 len) {
+        qInfo(lcApp) << QCoreApplication::translate(
+                            "MainWindow",
+                            "Address space removed: unit %1, %2, starting address %3, length %4")
+                            .arg(deviceId).arg(registerTypeName(type)).arg(addr).arg(len);
     }, Qt::DirectConnection);
 
     QObject::connect(&server, &ModbusMultiServer::descriptionChanged, context,
@@ -205,6 +240,56 @@ void AppLogger::setupDataSimulatorLogging(DataSimulator& simulator, QObject* con
                             .arg(registerTypeName(regType))
                             .arg(addresses.first());
     });
+}
+
+///
+/// \brief AppLogger::setupAppProjectLogging
+/// \param project
+/// \param context
+///
+void AppLogger::setupAppProjectLogging(AppProject& project, QObject* context)
+{
+    Q_ASSERT(context != nullptr);
+
+    QObject::connect(&project, &AppProject::projectOpened, context,
+                     [](const QString& filename) {
+        qInfo(lcApp) << QCoreApplication::translate("MainWindow", "Project opened: %1")
+                            .arg(filename);
+    }, Qt::DirectConnection);
+
+    QObject::connect(&project, &AppProject::projectClosed, context,
+                     [](const QString& filename) {
+        const QString displayName = filename.isEmpty()
+            ? QCoreApplication::translate("MainWindow", "<unsaved>")
+            : filename;
+
+        qInfo(lcApp) << QCoreApplication::translate("MainWindow", "Project closed: %1")
+                            .arg(displayName);
+    }, Qt::DirectConnection);
+
+    QObject::connect(&project, &AppProject::formCreated, context,
+                     [](QWidget* form) {
+        qInfo(lcApp) << QCoreApplication::translate("MainWindow", "Form created: %1")
+                            .arg(formDisplayName(form));
+    }, Qt::DirectConnection);
+
+    QObject::connect(&project, &AppProject::formOpened, context,
+                     [](QWidget* form) {
+        qInfo(lcApp) << QCoreApplication::translate("MainWindow", "Form opened: %1")
+                            .arg(formDisplayName(form));
+    }, Qt::DirectConnection);
+
+    QObject::connect(&project, &AppProject::formClosed, context,
+                     [](QWidget* form) {
+        qInfo(lcApp) << QCoreApplication::translate("MainWindow", "Form closed: %1")
+                            .arg(formDisplayName(form));
+    }, Qt::DirectConnection);
+
+    QObject::connect(&project, &AppProject::formDeleted, context,
+                     [](QWidget* form) {
+        qInfo(lcApp) << QCoreApplication::translate("MainWindow", "Form deleted: %1")
+                            .arg(formDisplayName(form));
+    }, Qt::DirectConnection);
 }
 
 ///

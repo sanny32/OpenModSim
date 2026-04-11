@@ -440,6 +440,7 @@ void AppProject::closeProject()
         _projectTree->removeForm(frm);
         delete frm;
     }
+    
     _closedForms.clear();
     _mbServer.clearDescriptions();
     _mbServer.clearTimestamps();
@@ -447,6 +448,11 @@ void AppProject::closeProject()
     _trafficCounter     = 0;
     _scriptCounter      = 0;
     _DataMapCounter = 0;
+
+    if (!_projectFilename.isEmpty()) {
+        emit projectClosed(_projectFilename);
+        _projectFilename.clear();
+    }
 }
 
 ///
@@ -455,6 +461,9 @@ void AppProject::closeProject()
 ///
 void AppProject::markFormClosed(QWidget* frm)
 {
+    if (!frm)
+        return;
+
     // Remove the QMdiSubWindow's event filter from frm before reparenting.
     // QMdiSubWindow installs this filter via setWidget(). After reparenting frm,
     // the subwindow is DeferredDeleted via WA_DeleteOnClose. Without this call,
@@ -468,6 +477,7 @@ void AppProject::markFormClosed(QWidget* frm)
     frm->hide();
     addClosedForm(frm);
     _projectTree->setFormOpen(frm, false);
+    emit formClosed(frm);
 }
 
 ///
@@ -492,7 +502,10 @@ int AppProject::nextFormDisplayNumber(ProjectFormKind kind)
 ///
 QWidget* AppProject::createMdiChild(ProjectFormKind kind)
 {
-    return createMdiChildOnArea(kind, activeCreateArea(), true);
+    auto* frm = createMdiChildOnArea(kind, activeCreateArea(), true);
+    if (frm)
+        emit formCreated(frm);
+    return frm;
 }
 
 ///
@@ -817,6 +830,8 @@ void AppProject::deleteForm(QWidget* frm)
     if (projectForm->property(kDeleteLockedProperty).toBool())
         return;
 
+    emit formDeleted(projectForm);
+
     // Close all split auto-clones for this form pair first.
     const auto subWindows = _mdiArea->subWindowList();
     for (auto* wnd : subWindows) {
@@ -1087,6 +1102,7 @@ void AppProject::openFormOnActivePanel(QWidget* frm)
     // Form is closed - rewrap on the active panel
     if(containsClosedForm(frm)) {
         rewrapMdiChild(frm);
+        emit formOpened(frm);
         return;
     }
 
@@ -1486,6 +1502,9 @@ void AppProject::loadProject(const QString& filename)
     QFile file(filename);
     if(!file.open(QFile::ReadOnly))
         return;
+
+    _projectFilename = QFileInfo(filename).absoluteFilePath();
+    emit projectOpened(_projectFilename);
 
     _mbServer.clearDescriptions();
     _mbServer.clearTimestamps();
@@ -1887,6 +1906,8 @@ void AppProject::restoreActiveWindows()
 ///
 void AppProject::saveProject(const QString& filename)
 {
+    _projectFilename = QFileInfo(filename).absoluteFilePath();
+
     QFile file(filename);
     if(!file.open(QFile::WriteOnly))
         return;

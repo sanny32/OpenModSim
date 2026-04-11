@@ -190,10 +190,15 @@ void ModbusMultiServer::removeUnitMap(QUuid id, quint8 deviceId)
         return;
     }
 
+    QModbusDataUnit removedUnit;
+    const bool hasRemovedUnit = _modbusDataUnitMaps[deviceId].unitMap(id, removedUnit);
     const bool changed = _modbusDataUnitMaps[deviceId].removeUnitMap(id);
     reconfigureServers();
-    if (changed)
-        emit unitMapRemoved(id, deviceId);
+    if (changed && hasRemovedUnit) {
+        emit unitMapRemoved(id, deviceId, removedUnit.registerType(),
+                            static_cast<quint16>(removedUnit.startAddress()),
+                            static_cast<quint16>(removedUnit.valueCount()));
+    }
 }
 
 ///

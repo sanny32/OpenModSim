@@ -113,6 +113,16 @@ bool ModbusDataUnitMap::removeUnitMap(QUuid id)
     return !unitMapsEqual(_modbusDataUnitMap, before);
 }
 
+bool ModbusDataUnitMap::unitMap(QUuid id, QModbusDataUnit& unit) const
+{
+    const auto it = _dataUnits.constFind(id);
+    if (it == _dataUnits.constEnd())
+        return false;
+
+    unit = it.value();
+    return true;
+}
+
 ///
 /// \brief ModbusDataUnitMap::ensureRange
 ///
