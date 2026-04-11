@@ -432,8 +432,8 @@ void AppProject::closeProject()
     _mdiArea->closeAllSubWindows();
 
     // Delete forms that were closed (hidden)
-    const auto closed = _closedForms;
-    for (auto&& frm : closed) {
+    const auto closedForms = _closedForms;
+    for (auto&& frm : closedForms) {
         _projectTree->removeForm(frm);
         delete frm;
     }

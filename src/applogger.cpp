@@ -63,45 +63,45 @@ void AppLogger::setupModbusMultiServerLogging(ModbusMultiServer& server, QObject
                      [](const ConnectionDetails& cd) {
         qInfo(lcApp) << QCoreApplication::translate("MainWindow", "Server connected: %1")
                             .arg(connectionAddress(cd));
-    });
+    }, Qt::DirectConnection);
 
     QObject::connect(&server, &ModbusMultiServer::disconnected, context,
                      [](const ConnectionDetails& cd) {
         qWarning(lcApp) << QCoreApplication::translate("MainWindow", "Server disconnected: %1")
                                .arg(connectionAddress(cd));
-    });
+    }, Qt::DirectConnection);
 
     QObject::connect(&server, &ModbusMultiServer::clientConnected, context,
                      [](const ModbusClientInfo& client) {
         qInfo(lcApp) << QCoreApplication::translate("MainWindow", "Modbus client connected: %1 -> %2")
                             .arg(QString("%1:%2").arg(client.Address).arg(client.Port))
                             .arg(connectionAddress(client.Connection));
-    });
+    }, Qt::DirectConnection);
 
     QObject::connect(&server, &ModbusMultiServer::clientDisconnected, context,
                      [](const ModbusClientInfo& client) {
         qInfo(lcApp) << QCoreApplication::translate("MainWindow", "Modbus client disconnected: %1 -> %2")
                             .arg(QString("%1:%2").arg(client.Address).arg(client.Port))
                             .arg(connectionAddress(client.Connection));
-    });
+    }, Qt::DirectConnection);
 
     QObject::connect(&server, &ModbusMultiServer::errorOccured, context,
                      [](quint8 deviceId, const QString& error) {
         qCritical(lcApp) << QCoreApplication::translate("MainWindow", "[Unit %1] %2")
                                 .arg(deviceId).arg(error);
-    });
+    }, Qt::DirectConnection);
 
     QObject::connect(&server, &ModbusMultiServer::deviceIdAdded, context,
                      [](quint8 deviceId) {
         qInfo(lcApp) << QCoreApplication::translate("MainWindow", "Unit ID added: %1")
                             .arg(deviceId);
-    });
+    }, Qt::DirectConnection);
 
     QObject::connect(&server, &ModbusMultiServer::deviceIdRemoved, context,
                      [](quint8 deviceId) {
         qInfo(lcApp) << QCoreApplication::translate("MainWindow", "Unit ID removed: %1")
                             .arg(deviceId);
-    });
+    }, Qt::DirectConnection);
 
     QObject::connect(&server, &ModbusMultiServer::unitMapAdded, context,
                      [](QUuid /*id*/, quint8 deviceId, QModbusDataUnit::RegisterType type,
@@ -110,13 +110,13 @@ void AppLogger::setupModbusMultiServerLogging(ModbusMultiServer& server, QObject
                             "MainWindow",
                             "Address space added: unit %1, %2, starting address %3, length %4")
                             .arg(deviceId).arg(registerTypeName(type)).arg(addr).arg(len);
-    });
+    }, Qt::DirectConnection);
 
     QObject::connect(&server, &ModbusMultiServer::unitMapRemoved, context,
                      [](QUuid /*id*/, quint8 deviceId) {
         qInfo(lcApp) << QCoreApplication::translate("MainWindow", "Address space removed: unit %1")
                             .arg(deviceId);
-    });
+    }, Qt::DirectConnection);
 
     QObject::connect(&server, &ModbusMultiServer::descriptionChanged, context,
                      [](quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 address,
@@ -134,7 +134,7 @@ void AppLogger::setupModbusMultiServerLogging(ModbusMultiServer& server, QObject
                             .arg(registerTypeName(type))
                             .arg(address)
                             .arg(text);
-    });
+    }, Qt::DirectConnection);
 
     QObject::connect(&server, &ModbusMultiServer::dataChanged, context,
                      [](quint8 deviceId, const QModbusDataUnit& data, WriteSource source,
@@ -165,7 +165,7 @@ void AppLogger::setupModbusMultiServerLogging(ModbusMultiServer& server, QObject
             break;
             default: break;
         }
-    });
+    }, Qt::DirectConnection);
 }
 
 ///
@@ -191,7 +191,7 @@ void AppLogger::setupDataSimulatorLogging(DataSimulator& simulator, QObject* con
                             .arg(deviceId)
                             .arg(registerTypeName(regType))
                             .arg(address);
-    }, Qt::QueuedConnection);
+    });
 
     QObject::connect(&simulator, &DataSimulator::simulationStopped, context,
                      [](DataType /*type*/, RegisterOrder /*order*/, quint8 deviceId,
@@ -204,7 +204,16 @@ void AppLogger::setupDataSimulatorLogging(DataSimulator& simulator, QObject* con
                             .arg(deviceId)
                             .arg(registerTypeName(regType))
                             .arg(addresses.first());
-    }, Qt::QueuedConnection);
+    });
+}
+
+///
+/// \brief AppLogger::clear
+///
+void AppLogger::clear()
+{
+    if (auto* log = AppLogOutput::instance())
+        log->clear();
 }
 
 ///

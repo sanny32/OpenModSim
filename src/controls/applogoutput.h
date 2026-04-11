@@ -22,6 +22,8 @@ public:
     explicit AppLogOutput(QWidget* parent = nullptr);
     ~AppLogOutput();
 
+    static AppLogOutput* instance();
+
     void addEvent(const QString& text, EventType type);
     bool isEmpty() const;
     void setMaxLines(int n);

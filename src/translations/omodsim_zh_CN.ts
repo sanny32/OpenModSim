@@ -156,39 +156,39 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/applogoutput.cpp" line="195"/>
-        <location filename="../controls/applogoutput.cpp" line="357"/>
-        <location filename="../controls/applogoutput.cpp" line="357"/>
+        <location filename="../controls/applogoutput.cpp" line="199"/>
+        <location filename="../controls/applogoutput.cpp" line="371"/>
+        <location filename="../controls/applogoutput.cpp" line="371"/>
         <source>Copy All</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/applogoutput.cpp" line="348"/>
+        <location filename="../controls/applogoutput.cpp" line="362"/>
         <source>Copy</source>
         <translation type="unfinished">е¤Ќе€¶</translation>
     </message>
     <message>
-        <location filename="../controls/applogoutput.cpp" line="364"/>
+        <location filename="../controls/applogoutput.cpp" line="378"/>
         <source>Export...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/applogoutput.cpp" line="370"/>
+        <location filename="../controls/applogoutput.cpp" line="384"/>
         <source>Clear</source>
         <translation type="unfinished">жё…й™¤</translation>
     </message>
     <message>
-        <location filename="../controls/applogoutput.cpp" line="394"/>
+        <location filename="../controls/applogoutput.cpp" line="408"/>
         <source>Text files (*.txt)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../controls/applogoutput.cpp" line="399"/>
+        <location filename="../controls/applogoutput.cpp" line="413"/>
         <source>Export</source>
         <translation type="unfinished">еЇје‡є</translation>
     </message>
     <message>
-        <location filename="../controls/applogoutput.cpp" line="399"/>
+        <location filename="../controls/applogoutput.cpp" line="413"/>
         <source>Cannot open file for writing:
 %1</source>
         <translation type="unfinished"></translation>
@@ -3696,8 +3696,8 @@ Script.onInit(()=&gt;{
     </message>
     <message>
         <location filename="../mainwindow.ui" line="244"/>
-        <location filename="../mainwindow.cpp" line="1556"/>
-        <location filename="../mainwindow.cpp" line="1556"/>
+        <location filename="../mainwindow.cpp" line="1566"/>
+        <location filename="../mainwindow.cpp" line="1566"/>
         <source>Save Project</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4044,8 +4044,8 @@ Script.onInit(()=&gt;{
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="146"/>
-        <location filename="../mainwindow.cpp" line="1643"/>
-        <location filename="../mainwindow.cpp" line="1643"/>
+        <location filename="../mainwindow.cpp" line="1653"/>
+        <location filename="../mainwindow.cpp" line="1653"/>
         <source>Clear List</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4071,7 +4071,7 @@ Script.onInit(()=&gt;{
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1413"/>
+        <location filename="../mainwindow.cpp" line="1423"/>
         <source>Address Base</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4166,17 +4166,17 @@ Script.onInit(()=&gt;{
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1010"/>
+        <location filename="../mainwindow.cpp" line="1011"/>
         <source>Move to Other Panel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1409"/>
+        <location filename="../mainwindow.cpp" line="1419"/>
         <source>1-based</source>
         <translation type="unfinished">еџєењ°еќЂдёє-1</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1410"/>
+        <location filename="../mainwindow.cpp" line="1420"/>
         <source>0-based</source>
         <translation type="unfinished">еџєењ°еќЂдёє-0</translation>
     </message>
@@ -4187,12 +4187,12 @@ Script.onInit(()=&gt;{
         <translation type="unfinished">еЌЃе…­иї›е€¶и§†е›ѕ</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1557"/>
+        <location filename="../mainwindow.cpp" line="1567"/>
         <source>Save project before closing?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1631"/>
+        <location filename="../mainwindow.cpp" line="1641"/>
         <source>No Recent Projects</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4201,7 +4201,7 @@ Script.onInit(()=&gt;{
         <translation type="obsolete">ж•°жЌ®</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="958"/>
+        <location filename="../mainwindow.cpp" line="959"/>
         <source>JavaScript files (*.js);;All files (*)</source>
         <translation type="unfinished"></translation>
     </message>

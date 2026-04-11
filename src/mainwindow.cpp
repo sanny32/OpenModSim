@@ -686,6 +686,7 @@ void MainWindow::on_actionCloseProject_triggered()
     _projectFilePath.clear();
     _isModified = false;
     updateProjectWindowTitle();
+    AppLogger::clear();
 }
 
 ///
@@ -1207,6 +1208,15 @@ void MainWindow::presetRegs(QModbusDataUnit::RegisterType type)
 ///
 void MainWindow::loadProject(const QString& filename)
 {
+    if (hasProjectContext()) {
+        _project->closeProject();
+        _projectFilePath.clear();
+        _isModified = false;
+        updateProjectWindowTitle();
+    }
+
+    AppLogger::clear();
+
     _project->loadProject(filename);
     applyGlobalAddressBase(AppPreferences::instance().globalZeroBasedAddress(), false);
     applyGlobalHexView(AppPreferences::instance().globalHexView(), false);

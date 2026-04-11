@@ -1,4 +1,5 @@
 #include <QApplication>
+#include <atomic>
 #include <QClipboard>
 #include <QListWidget>
 #include <QMenu>
@@ -102,6 +103,7 @@ public:
 
 static AppLogOutput*   s_instance    = nullptr;
 static QtMessageHandler s_prevHandler = nullptr;
+static std::atomic<quint64> s_logEpoch { 0 };
 
 static void appMessageHandler(QtMsgType type, const QMessageLogContext& ctx, const QString& msg)
 {
@@ -120,9 +122,11 @@ static void appMessageHandler(QtMsgType type, const QMessageLogContext& ctx, con
         text = text.mid(1, text.length() - 2);
     text.prepend(QStringLiteral("[") + QDateTime::currentDateTime().toString(Qt::ISODate) + QStringLiteral("] "));
 
+    const quint64 epoch = s_logEpoch.load(std::memory_order_relaxed);
     QPointer<AppLogOutput> guard(s_instance);
-    QMetaObject::invokeMethod(s_instance, [guard, text, evType]() {
-        if (guard) guard->addEvent(text, evType);
+    QMetaObject::invokeMethod(s_instance, [guard, text, evType, epoch]() {
+        if (guard && s_logEpoch.load(std::memory_order_relaxed) == epoch)
+            guard->addEvent(text, evType);
     }, Qt::QueuedConnection);
 }
 
@@ -214,6 +218,15 @@ AppLogOutput::~AppLogOutput()
 }
 
 ///
+/// \brief AppLogOutput::instance
+/// \return
+///
+AppLogOutput* AppLogOutput::instance()
+{
+    return s_instance;
+}
+
+///
 /// \brief AppLogOutput::changeEvent
 ///
 void AppLogOutput::changeEvent(QEvent* event)
@@ -285,6 +298,7 @@ void AppLogOutput::addEvent(const QString& text, EventType type)
 ///
 void AppLogOutput::clear()
 {
+    s_logEpoch.fetch_add(1, std::memory_order_relaxed);
     ui->listWidget->clear();
     _infoCount = _warnCount = _errorCount = 0;
     updateFilterButtons();

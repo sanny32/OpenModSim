@@ -77,6 +77,7 @@ public slots:
     void windowActivate(QMdiSubWindow* wnd);
     void updateHelpWidgetState();
     void markModified();
+    
 private slots:
     void on_awake();
 

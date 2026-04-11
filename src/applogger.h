@@ -13,6 +13,7 @@ class AppLogger final
 public:
     static void setupModbusMultiServerLogging(ModbusMultiServer& server, QObject* context);
     static void setupDataSimulatorLogging(DataSimulator& simulator, QObject* context);
+    static void clear();
     static void logConnectionError(const QString& error);
 };
 
