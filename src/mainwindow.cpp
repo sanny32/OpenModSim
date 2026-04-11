@@ -462,6 +462,7 @@ bool MainWindow::eventFilter(QObject* obj, QEvent* e)
 void MainWindow::on_awake()
 {
     auto* frm = currentForm();
+    const bool hasProject = hasProjectContext();
 
     const bool tabbedView    = ui->mdiArea->viewMode() == QMdiArea::TabbedView;
     const bool subWindowView = ui->mdiArea->viewMode() == QMdiArea::SubWindowView;
@@ -481,9 +482,9 @@ void MainWindow::on_awake()
         }
     }
 
-    ui->menuSetup->setEnabled(frm != nullptr);
+    ui->menuSetup->setEnabled(hasProject);
     ui->menuWindow->setEnabled(frm != nullptr);
-    ui->actionPrintSetup->setEnabled(_selectedPrinter != nullptr && frm != nullptr);
+    ui->actionPrintSetup->setEnabled(hasProject && _selectedPrinter != nullptr && frm != nullptr);
     ui->actionPrint->setEnabled(canPrint);
 
     ui->actionUndo->setEnabled(isScript);
@@ -507,6 +508,7 @@ void MainWindow::on_awake()
 
     ui->actionTile->setEnabled(subWindowView);
     ui->actionCascade->setEnabled(subWindowView);
+    updateMainToolbarState();
 }
 
 ///
@@ -580,6 +582,7 @@ QWidget* MainWindow::createNewForm(ProjectFormKind kind)
 
     applyGlobalViewStateToForm(frm);
     frm->show();
+    updateMainToolbarState();
     return frm;
 }
 
@@ -686,6 +689,7 @@ void MainWindow::on_actionCloseProject_triggered()
     _projectFilePath.clear();
     _isModified = false;
     updateProjectWindowTitle();
+    updateMainToolbarState();
     AppLogger::clear();
 }
 
@@ -1226,6 +1230,7 @@ void MainWindow::loadProject(const QString& filename)
     _project->setSavePath(QFileInfo(filename).absoluteDir().absolutePath());
     _isModified = false;
     updateProjectWindowTitle();
+    updateMainToolbarState();
 }
 
 ///
@@ -1484,6 +1489,34 @@ void MainWindow::applyGlobalViewStateToForm(QWidget* frm)
         map->setZeroBasedAddress(prefs.globalZeroBasedAddress());
         map->setHexView(prefs.globalHexView());
     }
+}
+
+///
+/// \brief MainWindow::updateMainToolbarState
+///
+void MainWindow::updateMainToolbarState()
+{
+    const bool hasProject = hasProjectContext();
+
+    ui->actionNew->setEnabled(true);
+    ui->actionOpenProject->setEnabled(true);
+    ui->actionSaveProject->setEnabled(hasProject);
+    ui->actionPrint->setEnabled(hasProject && ui->actionPrint->isEnabled());
+    ui->actionPrintSetup->setEnabled(hasProject && ui->actionPrintSetup->isEnabled());
+    ui->actionUndo->setEnabled(hasProject && ui->actionUndo->isEnabled());
+    ui->actionRedo->setEnabled(hasProject && ui->actionRedo->isEnabled());
+    ui->actionConnect->setEnabled(hasProject);
+    ui->actionDisconnect->setEnabled(hasProject);
+    ui->actionHexView->setEnabled(hasProject);
+    ui->actionMbDefinitions->setEnabled(hasProject);
+    ui->actionForceCoils->setEnabled(hasProject);
+    ui->actionForceDiscretes->setEnabled(hasProject);
+    ui->actionPresetInputRegs->setEnabled(hasProject);
+    ui->actionPresetHoldingRegs->setEnabled(hasProject);
+    ui->actionCloseProject->setEnabled(hasProject);
+
+    if (_globalAddressBaseWidget)
+        _globalAddressBaseWidget->setEnabled(hasProject);
 }
 
 ///

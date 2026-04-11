@@ -428,6 +428,9 @@ bool AppProject::isFormClosed(QWidget* frm) const
 ///
 void AppProject::closeProject()
 {
+    _dataSimulator->stopSimulations();
+    _mbServer.closeConnections();
+
     // Close open MDI windows (QWidget windows)
     _mdiArea->closeAllSubWindows();
 

@@ -154,6 +154,7 @@ private:
     void setupGlobalViewToolbar();
     void syncGlobalViewControls();
     void applyGlobalViewStateToForm(QWidget* frm);
+    void updateMainToolbarState();
 
 private:
     Ui::MainWindow *ui;
