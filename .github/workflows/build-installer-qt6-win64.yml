@@ -9,7 +9,7 @@ on:
       branch:
         description: 'Checkout branch'
         required: false
-        default: dev
+        default: release/1.x
       tag:
         description: 'Checkout tag'
         required: false
@@ -41,7 +41,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           ref: ${{ github.event.inputs.tag || github.event.inputs.branch || github.ref_name }}
 
@@ -51,7 +51,7 @@ jobs:
         shell: cmd
 
       - name: Convert version for dev branch
-        if: ${{ github.ref_name == 'dev' || github.event.inputs.branch == 'dev' }}
+        if: ${{ github.ref_name == 'dev' || github.event.inputs.branch == 'dev' || startsWith(github.ref_name, 'release/') || startsWith(github.event.inputs.branch, 'release/') }}
         run: |
           for /f "tokens=1,2 delims=." %%a in ("%APP_VERSION%") do (
             echo APP_VERSION=%%a.%%b-dev>>%GITHUB_ENV%
@@ -90,7 +90,7 @@ jobs:
         shell: cmd
 
       - name: Install Python (for aqtinstall)
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: "3.11"
 
@@ -131,7 +131,7 @@ jobs:
 
       - name: Upload Executable
         id: upload-exe
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         if: success()
         with:
           name: omodsim-${{ env.APP_VERSION }}_${{ env.CMAKE_ARCH }}.exe
@@ -152,7 +152,7 @@ jobs:
           wait-for-completion-timeout-in-seconds: 3600
 
       - name: Upload signed Executable
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         if: success() && env.SIGNING_POLICY_SLUG != 'none'
         with:
           name: omodsim-${{ env.APP_VERSION }}_${{ env.CMAKE_ARCH }}-signed.exe
@@ -201,7 +201,7 @@ jobs:
 
       - name: Upload Installer
         id: upload-installer
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         if: success()
         with:
           name: qt6-omodsim-${{ env.APP_VERSION }}_${{ env.CMAKE_ARCH }}
@@ -222,7 +222,7 @@ jobs:
           wait-for-completion-timeout-in-seconds: 3600
 
       - name: Upload signed Installer
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         if: success() && env.SIGNING_POLICY_SLUG != 'none'
         with:
           name: qt6-omodsim-${{ env.APP_VERSION }}_${{ env.CMAKE_ARCH }}-signed

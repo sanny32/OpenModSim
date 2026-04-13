@@ -3,14 +3,17 @@
 ///
 /// \brief QHexValidator::QHexValidator
 /// \param parent
+/// \param allowEmpty
 ///
-QHexValidator::QHexValidator(QObject *parent)
+QHexValidator::QHexValidator(QObject *parent, bool allowEmpty)
     : QIntValidator{parent}
+    , _allowEmpty(allowEmpty)
 {
 }
 
-QHexValidator::QHexValidator(int bottom, int top, QObject* parent)
+QHexValidator::QHexValidator(int bottom, int top, QObject* parent, bool allowEmpty)
     : QIntValidator(bottom, top, parent)
+    , _allowEmpty(allowEmpty)
 {
 }
 
@@ -21,10 +24,14 @@ QHexValidator::QHexValidator(int bottom, int top, QObject* parent)
 ///
 QHexValidator::State QHexValidator::validate(QString& input, int&) const
 {
+    if(input.isEmpty()) {
+        return _allowEmpty ? QValidator::Acceptable : QValidator::Intermediate;
+    }
+
     bool ok = false;
     input.toInt(&ok, 16);
 
-    if (ok || input.isEmpty())
+    if(ok)
     {
         return QValidator::Acceptable;
     }

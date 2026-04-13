@@ -131,7 +131,7 @@ Script.onInit(init);
 ```
 
 # Building
-  Building is available via cmake (with installed Qt version 5.15 and above) or Qt Creator. Supports both OS Microsoft Windows and Linux.
+  Building is available via cmake (with installed Qt version 5.15 and above) or Qt Creator. Supports Microsoft Windows, Linux and macOS.
 
 ## Microsoft Windows Building
 
@@ -176,11 +176,39 @@ cd OpenModSim
 If you need to specify Qt framework major version (5 or 6), you can do it in the parameters
   - `./build.sh -qt5` or  `./build.sh -qt6`
 
+## macOS Building
+
+The minimum supported version of macOS for building OpenModSim from sources is macOS 11 (Big Sur).
+
+1. Install [Homebrew](https://brew.sh) if not already installed
+2. Install required dependencies:
+```bash
+brew install qt@6 cmake ninja
+```
+3. Clone OpenModSim sources from github repository:
+```bash
+git clone https://github.com/sanny32/OpenModSim.git
+```
+4. Go to OpenModSim folder:
+```bash
+cd OpenModSim
+```
+5. Run the build script:
+```bash
+./build-macos.sh
+```
+
+The build script generates a macOS application bundle (`omodsim.app`). To run the application:
+```bash
+open build-omodsim-Qt_*/omodsim.app
+```
+
 # About supported operating systems
 
 The following minimum operating system versions are supported for OpenModSim:
 
 - <img src="docs/icons/logo_windows7.svg" width="16" height="16" /> **Microsoft Windows 7**
+- <img src="docs/icons/logo_apple.svg" width="16" height="16" /> **macOS 11 (Big Sur)** (experimental support)
 - <img src="docs/icons/logo_debian.svg" width="16" height="16" /> **Debian Linux 11**
 - <img src="docs/icons/logo_ubuntu.svg" width="16" height="16" /> **Ubuntu Linux 22.04**
 - <img src="docs/icons/logo_mint.png"  width="16" height="16" /> **Mint Linux 22**
@@ -191,6 +219,7 @@ The following minimum operating system versions are supported for OpenModSim:
 - <img src="docs/icons/logo_alt.png" width="16" height="16" /> **Alt Linux 11**
 - <img src="docs/icons/logo_astra.png"  width="18" height="18" /> **Astra Linux 1.7**
 - <img src="docs/icons/logo_redos.png" width="16" height="16" /> **RedOS 8**
+
   
 # Install from [binary distributions](https://github.com/sanny32/OpenModSim/releases/latest)
 
@@ -199,18 +228,18 @@ Below are the methods for installing the OpenModSim for different OS
 ## <img src="docs/icons/logo_windows.svg" width="16" height="16"> Microsoft Windows
 Run the installer:
 
-- For 32-bit Windows: `qt5-omodsim_1.12.0_x86.exe`
-- For 64-bit Windows: `qt5-omodsim_1.12.0_x64.exe` or `qt6-omodsim_1.12.0_x64.exe`
+- For 32-bit Windows: `qt5-omodsim_1.12.1_x86.exe`
+- For 64-bit Windows: `qt5-omodsim_1.12.1_x64.exe` or `qt6-omodsim_1.12.1_x64.exe`
 
 ## <img src="docs/icons/logo_debian.svg" width="20" height="20"> Debian / <img src="docs/icons/logo_ubuntu.svg" width="20" height="20"> Ubuntu / <img width="20" height="20" src="docs/icons/logo_mint.png" /> Mint / <img src="docs/icons/logo_zorin.png" width="20" height="20"> Zorin / <img width="22" height="22" src="docs/icons/logo_astra.png" /> Astra Linux
 ### Install
 Install the DEB package from the command line:
 ```bash
-sudo apt install ./qt6-omodsim_1.12.0-1_amd64.deb
+sudo apt install ./qt6-omodsim_1.12.1-1_amd64.deb
 ```
 or if you want to use Qt5 libraries:
 ```bash
-sudo apt install ./qt5-omodsim_1.12.0-1_amd64.deb
+sudo apt install ./qt5-omodsim_1.12.1-1_amd64.deb
 ```
 
 ### Remove
@@ -227,7 +256,7 @@ sudo apt remove qt5-omodsim
 ### Install
 Install the RPM package from the command line:
 ```bash
-sudo dnf install ./qt6-omodsim-1.12.0-1.x86_64.rpm
+sudo dnf install ./qt6-omodsim-1.12.1-1.x86_64.rpm
 ```
 
 ### Remove
@@ -240,7 +269,7 @@ sudo dnf remove qt6-omodsim
 ### Install
 Install the RPM package from the command line as root user:
 ```bash
-apt-get install ./qt6-omodsim-1.12.0-1.x86_64.rpm
+apt-get install ./qt6-omodsim-1.12.1-1.x86_64.rpm
 ```
 
 ### Remove
@@ -257,7 +286,7 @@ sudo rpm --import qt6-omodsim.rpm.pubkey
 ```
 Install the RPM package using Zypper:
 ```bash
-sudo zypper install ./qt6-omodsim-1.12.0-1.x86_64.rpm
+sudo zypper install ./qt6-omodsim-1.12.1-1.x86_64.rpm
 ```
 
 ### Remove
@@ -265,7 +294,12 @@ To remove the RPM package run:
 ```bash
 sudo zypper remove qt6-omodsim
 ```
-  
+
+# Code Signing Sponsor
+Windows binaries for this project are signed thanks to **SignPath Foundation**.
+*   🔐 **Free code signing service:** [SignPath.io](https://signpath.io)
+*   📜 **Certificate provider:** [SignPath Foundation](https://signpath.org)
+
 # MIT License
 Copyright 2023-2026 Alexandr Ananev [mail@ananev.org]
 

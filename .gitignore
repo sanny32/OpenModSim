@@ -55,8 +55,13 @@ out
 CMakePresets.json
 CMakeUserPresets.json
 
+# Python
+.pytest_cache
+__pycache__
+
 .claude
 .directory
+*.cmd
 *.bat
 *.qmake.stash
 *.idx
@@ -68,3 +73,4 @@ src/res/license.txt
 /docs/README.md
 /docs/SITE_STRUCTURE.md
 /docs/DEPLOYMENT.md
+/AGENTS.md
