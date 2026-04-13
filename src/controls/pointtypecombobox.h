@@ -19,6 +19,9 @@ public:
 signals:
     void pointTypeChanged(QModbusDataUnit::RegisterType value);
 
+protected:
+    void changeEvent(QEvent* event) override;
+
 private slots:
     void on_currentIndexChanged(int);
 };
