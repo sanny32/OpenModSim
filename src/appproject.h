@@ -133,8 +133,8 @@ private:
     int                _dataCounter        = 0;
     int                _trafficCounter     = 0;
     int                _scriptCounter      = 0;
-    int                _DataMapCounter = 0;
-    QList<QWidget*>      _closedForms;
+    int                _dataMapCounter     = 0;
+    QList<QWidget*>    _closedForms;
     QString            _savePath;
     QString            _projectFilename;
     QString            _pendingActivePrimaryWin;

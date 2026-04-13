@@ -3,6 +3,7 @@
 #include <QUuid>
 #include <QSet>
 #include <QTextDocument>
+#include <algorithm>
 #include "apppreferences.h"
 #include "appproject.h"
 #include "mainwindow.h"
@@ -431,23 +432,36 @@ void AppProject::closeProject()
     _dataSimulator->stopSimulations();
     _mbServer.closeConnections();
 
-    // Close open MDI windows (QWidget windows)
+    // Close any remaining windows (for example split auto-clones).
     _mdiArea->closeAllSubWindows();
 
-    // Delete forms that were closed (hidden)
-    const auto closedForms = _closedForms;
-    for (auto&& frm : closedForms) {
-        _projectTree->removeForm(frm);
-        delete frm;
-    }
-    
+    const auto deleteClosedForms = [this](auto&& shouldDelete) {
+        const auto snapshot = _closedForms;
+        for (auto* frm : snapshot) {
+            if (!frm || !shouldDelete(frm))
+                continue;
+
+            _closedForms.removeOne(frm);
+            _projectTree->removeForm(frm);
+            delete frm;
+        }
+    };
+
+    // Delete DataMap forms first. They own per-address registrations; removing them
+    // before Data forms prevents noisy "Address space removed ... length 1" cascades
+    // during shutdown and keeps teardown logs consistent.
+    deleteClosedForms([](QWidget* frm) {
+        return projectFormKindFromWidget(frm) == ProjectFormKind::DataMap;
+    });
+    deleteClosedForms([](QWidget*) { return true; });
+
     _closedForms.clear();
     _mbServer.clearDescriptions();
     _mbServer.clearTimestamps();
     _dataCounter        = 0;
     _trafficCounter     = 0;
     _scriptCounter      = 0;
-    _DataMapCounter = 0;
+    _dataMapCounter = 0;
 
     if (!_projectFilename.isEmpty()) {
         emit projectClosed(_projectFilename);
@@ -491,7 +505,7 @@ int AppProject::nextFormDisplayNumber(ProjectFormKind kind)
         case ProjectFormKind::Data:        return ++_dataCounter;
         case ProjectFormKind::Traffic:     return ++_trafficCounter;
         case ProjectFormKind::Script:      return ++_scriptCounter;
-        case ProjectFormKind::DataMap: return ++_DataMapCounter;
+        case ProjectFormKind::DataMap: return ++_dataMapCounter;
     }
     return 0;
 }
@@ -2077,4 +2091,3 @@ void AppProject::destroyContentForShutdown()
 {
     closeProject();
 }
-
