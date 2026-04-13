@@ -210,7 +210,6 @@ open build-omodsim-Qt_*/omodsim.app
 
 The following minimum operating system versions are supported for OpenModSim:
 
-- <img src="docs/icons/logo_apple.svg" width="16" height="16" /> **macOS 11 (Big Sur)** and later (Intel and Apple Silicon)
 - <img src="docs/icons/logo_windows7.svg" width="16" height="16" /> **Microsoft Windows 7**
 - <img src="docs/icons/logo_debian.svg" width="16" height="16" /> **Debian Linux 11**
 - <img src="docs/icons/logo_ubuntu.svg" width="16" height="16" /> **Ubuntu Linux 22.04**
@@ -222,6 +221,7 @@ The following minimum operating system versions are supported for OpenModSim:
 - <img src="docs/icons/logo_alt.png" width="16" height="16" /> **Alt Linux 11**
 - <img src="docs/icons/logo_astra.png"  width="18" height="18" /> **Astra Linux 1.7**
 - <img src="docs/icons/logo_redos.png" width="16" height="16" /> **RedOS 8**
+- <img src="docs/icons/logo_apple.svg" width="16" height="16" /> **macOS 11 (Big Sur)** (experimental support)
   
 # Install from [binary distributions](https://github.com/sanny32/OpenModSim/releases/latest)
 
