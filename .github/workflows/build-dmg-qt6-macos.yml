@@ -34,7 +34,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           ref: ${{ github.event.inputs.tag || github.event.inputs.branch || github.ref_name }}
 
@@ -70,10 +70,11 @@ jobs:
 
       - name: Install dependencies
         run: |
-          brew install ninja cmake
+          brew list --versions ninja >/dev/null || brew install ninja
+          brew list --versions cmake >/dev/null || brew install cmake
 
       - name: Install Python (for aqtinstall)
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: "3.12"
 
@@ -130,7 +131,7 @@ jobs:
             "$DMG_NAME"
 
       - name: Upload DMG
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         if: success()
         with:
           name: ${{ env.DMG_NAME }}
