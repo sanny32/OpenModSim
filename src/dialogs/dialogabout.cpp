@@ -109,6 +109,13 @@ DialogAbout::DialogAbout(QWidget *parent) :
                      tr("Underlying platform."));
     #endif
 
+    #ifdef Q_OS_MAC
+        addComponent(vboxLayout,
+                     QSysInfo::prettyProductName(),
+                     QSysInfo::currentCpuArchitecture(),
+                     tr("Underlying platform."));
+    #endif
+
         vboxLayout->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Minimum, QSizePolicy::Expanding));
         ui->scrollAreaComponentsWidget->setLayout(vboxLayout);
     }

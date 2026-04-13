@@ -343,6 +343,15 @@ find_program(QHELP_GENERATOR_EXECUTABLE qhelpgenerator
              HINTS "${QT_BINARY_DIR}" "${QT_LIBEXEC_DIR}" "${QT_INSTALL_LIBEXECS}")
 
 if(NOT QHELP_GENERATOR_EXECUTABLE)
+    # Homebrew on macOS installs qhelpgenerator in share/qt/libexec
+    get_filename_component(_qt_share_libexec "${QT_BINARY_DIR}/../share/qt/libexec" REALPATH)
+    find_program(QHELP_GENERATOR_EXECUTABLE qhelpgenerator
+                 HINTS "${_qt_share_libexec}"
+                       "${CMAKE_PREFIX_PATH}/share/qt/libexec"
+                       "${CMAKE_PREFIX_PATH}/libexec")
+endif()
+
+if(NOT QHELP_GENERATOR_EXECUTABLE)
     find_program(QHELP_GENERATOR_EXECUTABLE qhelpgenerator)
 endif()
 
@@ -390,6 +399,25 @@ if(WIN32)
 
     target_sources(${PROJECT_NAME} PRIVATE ${ICON_PATH} "${CMAKE_BINARY_DIR}/omodsim.rc")
     set_target_properties(${PROJECT_NAME} PROPERTIES WIN32_EXECUTABLE ON)
+elseif(APPLE)
+    set(MACOSX_ICON "${CMAKE_CURRENT_SOURCE_DIR}/res/omodsim.icns")
+    set_source_files_properties(${MACOSX_ICON} PROPERTIES MACOSX_PACKAGE_LOCATION "Resources")
+    target_sources(${PROJECT_NAME} PRIVATE ${MACOSX_ICON})
+
+    configure_file(
+        "${CMAKE_CURRENT_SOURCE_DIR}/omodsim.plist.in"
+        "${CMAKE_BINARY_DIR}/Info.plist"
+        @ONLY
+    )
+
+    set_target_properties(${PROJECT_NAME} PROPERTIES
+        MACOSX_BUNDLE ON
+        MACOSX_BUNDLE_INFO_PLIST "${CMAKE_BINARY_DIR}/Info.plist"
+        MACOSX_BUNDLE_ICON_FILE omodsim.icns
+        MACOSX_BUNDLE_BUNDLE_NAME "${PRODUCT_NAME}"
+        MACOSX_BUNDLE_BUNDLE_VERSION "${PROJECT_VERSION}"
+        MACOSX_BUNDLE_SHORT_VERSION_STRING "${PROJECT_VERSION}"
+    )
 elseif(LINUX)
     target_link_options(${PROJECT_NAME} PRIVATE -static-libgcc -static-libstdc++)
 endif()
@@ -409,7 +437,9 @@ add_custom_command(
 add_custom_target(helpgenerator ALL DEPENDS ${JSHELP_QCH} ${JSHELP_QHC})
 add_dependencies(${PROJECT_NAME} helpgenerator)
 
-if(LINUX)
+if(APPLE)
+    install(TARGETS ${PROJECT_NAME} BUNDLE DESTINATION .)
+elseif(LINUX)
     configure_file(
         "${CMAKE_CURRENT_SOURCE_DIR}/omodsim.desktop.in"
         "${CMAKE_CURRENT_BINARY_DIR}/omodsim.desktop"
