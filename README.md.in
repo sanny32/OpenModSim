@@ -130,6 +130,23 @@ function init()
 Script.onInit(init);
 ```
 
+# About supported operating systems
+
+The following minimum operating system versions are supported for OpenModSim:
+
+- <img src="docs/icons/logo_windows7.svg" width="16" height="16" /> **Microsoft Windows 7**
+- <img src="docs/icons/logo_apple.svg" width="16" height="16" /> **macOS 11 (Big Sur)** (experimental support)
+- <img src="docs/icons/logo_debian.svg" width="16" height="16" /> **Debian Linux 11**
+- <img src="docs/icons/logo_ubuntu.svg" width="16" height="16" /> **Ubuntu Linux 22.04**
+- <img src="docs/icons/logo_mint.png"  width="16" height="16" /> **Mint Linux 22**
+- <img src="docs/icons/logo_zorin.png" width="16" height="16" /> **Zorin OS 18**
+- <img src="docs/icons/logo_fedora.svg" width="16" height="16" /> **Fedora Linux 41**
+- <img src="docs/icons/logo_rocky.png" width="16" height="16" /> **Rocky Linux 9.7**
+- <img src="docs/icons/logo_opensuse.svg" width="16" height="16" /> **OpenSuse Linux 15.6**
+- <img src="docs/icons/logo_alt.png" width="16" height="16" /> **Alt Linux 11**
+- <img src="docs/icons/logo_astra.png"  width="18" height="18" /> **Astra Linux 1.7**
+- <img src="docs/icons/logo_redos.png" width="16" height="16" /> **RedOS 8**
+
 # Building
   Building is available via cmake (with installed Qt version 5.15 and above) or Qt Creator. Supports both OS Microsoft Windows and Linux.
 
@@ -176,21 +193,32 @@ cd OpenModSim
 If you need to specify Qt framework major version (5 or 6), you can do it in the parameters
   - `./build.sh -qt5` or  `./build.sh -qt6`
 
-# About supported operating systems
+## macOS Building
 
-The following minimum operating system versions are supported for OpenModSim:
+The minimum supported version of macOS for building OpenModSim from sources is macOS 11 (Big Sur).
 
-- <img src="docs/icons/logo_windows7.svg" width="16" height="16" /> **Microsoft Windows 7**
-- <img src="docs/icons/logo_debian.svg" width="16" height="16" /> **Debian Linux 11**
-- <img src="docs/icons/logo_ubuntu.svg" width="16" height="16" /> **Ubuntu Linux 22.04**
-- <img src="docs/icons/logo_mint.png"  width="16" height="16" /> **Mint Linux 22**
-- <img src="docs/icons/logo_zorin.png" width="16" height="16" /> **Zorin OS 18**
-- <img src="docs/icons/logo_fedora.svg" width="16" height="16" /> **Fedora Linux 41**
-- <img src="docs/icons/logo_rocky.png" width="16" height="16" /> **Rocky Linux 9.7**
-- <img src="docs/icons/logo_opensuse.svg" width="16" height="16" /> **OpenSuse Linux 15.6**
-- <img src="docs/icons/logo_alt.png" width="16" height="16" /> **Alt Linux 11**
-- <img src="docs/icons/logo_astra.png"  width="18" height="18" /> **Astra Linux 1.7**
-- <img src="docs/icons/logo_redos.png" width="16" height="16" /> **RedOS 8**
+1. Install [Homebrew](https://brew.sh) if not already installed
+2. Install required dependencies:
+```bash
+brew install qt@6 cmake ninja
+```
+3. Clone OpenModSim sources from github repository:
+```bash
+git clone https://github.com/sanny32/OpenModSim.git
+```
+4. Go to OpenModSim folder:
+```bash
+cd OpenModSim
+```
+5. Run the build script:
+```bash
+./build-macos.sh
+```
+
+The build script generates a macOS application bundle (`omodsim.app`). To run the application:
+```bash
+open build-omodsim-Qt_*/omodsim.app
+```
   
 # Install from [binary distributions](https://github.com/sanny32/OpenModSim/releases/latest)
 

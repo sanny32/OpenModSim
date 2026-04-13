@@ -109,6 +109,13 @@ DialogAbout::DialogAbout(QWidget *parent) :
                      tr("Underlying platform."));
     #endif
 
+    #ifdef Q_OS_MAC
+        addComponent(vboxLayout,
+                     QSysInfo::prettyProductName(),
+                     QSysInfo::currentCpuArchitecture(),
+                     tr("Underlying platform."));
+    #endif
+
         vboxLayout->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Minimum, QSizePolicy::Expanding));
         ui->scrollAreaComponentsWidget->setLayout(vboxLayout);
     }
@@ -123,14 +130,19 @@ DialogAbout::DialogAbout(QWidget *parent) :
                   "mailto: mail@ananev.org");
 
         addAuthor(vboxLayout,
+                  "Nikolay Raspopov",
+                  tr("Contributor"),
+                  "mailto: raspopov@cherubicsoft.com");
+
+        addAuthor(vboxLayout,
                   "Pedro Cobucci",
                   tr("Contributor"),
                   "https://github.com/PedroCobucci");
 
         addAuthor(vboxLayout,
-                  "Nikolay Raspopov",
+                  "nash_su",
                   tr("Contributor"),
-                  "mailto: raspopov@cherubicsoft.com");
+                  "mailto: nash.yong@gmail.com");
 
         vboxLayout->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Minimum, QSizePolicy::Expanding));
         ui->scrollAreaAuthorsWidget->setLayout(vboxLayout);
@@ -143,7 +155,6 @@ DialogAbout::DialogAbout(QWidget *parent) :
         addAuthor(vboxLayout,
                   "Alexandr Ananev",
                   tr("Russian"));
-
 
         addAuthor(vboxLayout,
                   "CWZ7605",
