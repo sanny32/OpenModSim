@@ -88,7 +88,6 @@ FormDataView::FormDataView(ModbusMultiServer& server, DataSimulator* simulator, 
     ui->comboBoxModbusPointType->setCurrentPointType(QModbusDataUnit::HoldingRegisters);
 
     connect(this, &FormDataView::definitionChanged, this, &FormDataView::onDefinitionChanged);
-    emit definitionChanged();
 
     _findReplaceBar = new FindReplaceBar(this);
     _findReplaceBar->setReplaceEnabled(false);
@@ -820,6 +819,7 @@ void FormDataView::setDisplayDefinitionSilent(const DataViewDefinitions& dd)
         const auto oldId = ui->lineEditDeviceId->value<quint8>();
         const auto newId = static_cast<quint8>(dd.DeviceId);
         if(oldId != newId) {
+            _mbMultiServer.removeUnitMap(dataFormId(this), oldId);
             _mbMultiServer.removeDeviceId(oldId);
             _mbMultiServer.addDeviceId(newId);
         }
@@ -946,6 +946,9 @@ void FormDataView::linkTo(FormDataView* other)
 ///
 void FormDataView::show()
 {
+    if(!_initialMapSynced && !dataFormId(this).isNull())
+        emit definitionChanged();
+
     QWidget::show();
     connectEditSlots();
 
@@ -1001,6 +1004,7 @@ void FormDataView::on_lineEditLength_valueChanged(const QVariant&)
 ///
 void FormDataView::on_lineEditDeviceId_valueChanged(const QVariant& oldValue, const QVariant& newValue)
 {
+    _mbMultiServer.removeUnitMap(dataFormId(this), oldValue.toInt());
     _mbMultiServer.removeDeviceId(oldValue.toInt());
     _mbMultiServer.addDeviceId(newValue.toInt());
 
@@ -1058,7 +1062,11 @@ void FormDataView::onDefinitionChanged()
 
     const auto dd = displayDefinition();
     const auto addr = dd.PointAddress - (zeroBasedAddress() ? 0 : 1);
-    _mbMultiServer.addUnitMap(dataFormId(this), dd.DeviceId, dd.PointType, addr, dd.Length);
+    const auto formId = dataFormId(this);
+    if(!formId.isNull()) {
+        _mbMultiServer.addUnitMap(formId, dd.DeviceId, dd.PointType, addr, dd.Length);
+        _initialMapSynced = true;
+    }
 
     ui->outputWidget->setup(dd, zeroBasedAddress(), _mbMultiServer.getModbusDefinitions().AddrSpace,
                            _dataSimulator->simulationMap(), _mbMultiServer.data(dd.DeviceId, dd.PointType, addr, dd.Length));

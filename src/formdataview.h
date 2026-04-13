@@ -168,6 +168,7 @@ private:
     MainWindow* _parent;
     ModbusMultiServer& _mbMultiServer;
     DataSimulator* _dataSimulator;
+    bool _initialMapSynced = false;
     FindReplaceBar* _findReplaceBar = nullptr;
 
     AnsiMenu*  _ansiMenu = nullptr;

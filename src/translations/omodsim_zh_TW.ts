@@ -539,24 +539,24 @@
         <translation>и·Ёе№іеЏ°ж‡‰з”ЁзЁ‹ејЏй–‹з™јжЎ†жћ¶гЂ‚</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="122"/>
+        <location filename="../dialogs/dialogabout.cpp" line="129"/>
         <source>Author and Maintainer</source>
         <translation>дЅњиЂ…е’Њз¶­и­·иЂ…</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="249"/>
+        <location filename="../dialogs/dialogabout.cpp" line="260"/>
         <source>Visit component&apos;s homepage
 %1</source>
         <translation>е­еЏ–е…ѓд»¶дё»й&#xa0;Ѓ
 %1</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="270"/>
+        <location filename="../dialogs/dialogabout.cpp" line="281"/>
         <source>Email contributer: %1</source>
         <translation>й›»е­ђйѓµд»¶иІўзЌ»иЂ…пјљ%1</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="279"/>
+        <location filename="../dialogs/dialogabout.cpp" line="290"/>
         <source>Visit user&apos;s homepage
 %1</source>
         <translation>иЁЄе•Џз”Ёж€¶дё»й&#xa0;Ѓ
@@ -580,29 +580,33 @@
     <message>
         <location filename="../dialogs/dialogabout.cpp" line="102"/>
         <location filename="../dialogs/dialogabout.cpp" line="109"/>
+        <location filename="../dialogs/dialogabout.cpp" line="116"/>
         <location filename="../dialogs/dialogabout.cpp" line="109"/>
+        <location filename="../dialogs/dialogabout.cpp" line="116"/>
         <source>Underlying platform.</source>
         <translation>еє•е±¤е№іеЏ°гЂ‚</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="127"/>
-        <location filename="../dialogs/dialogabout.cpp" line="132"/>
-        <location filename="../dialogs/dialogabout.cpp" line="132"/>
+        <location filename="../dialogs/dialogabout.cpp" line="134"/>
+        <location filename="../dialogs/dialogabout.cpp" line="139"/>
+        <location filename="../dialogs/dialogabout.cpp" line="144"/>
+        <location filename="../dialogs/dialogabout.cpp" line="139"/>
+        <location filename="../dialogs/dialogabout.cpp" line="144"/>
         <source>Contributor</source>
         <translation>иІўзЌ»иЂ…</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="145"/>
+        <location filename="../dialogs/dialogabout.cpp" line="157"/>
         <source>Russian</source>
         <translation>дї„ж–‡</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="150"/>
+        <location filename="../dialogs/dialogabout.cpp" line="161"/>
         <source>Simplified Chinese and Traditional Chinese</source>
         <translation>з°Ўй«”дё­ж–‡е’Њз№Ѓй«”дё­ж–‡</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="275"/>
+        <location filename="../dialogs/dialogabout.cpp" line="286"/>
         <source>Visit github user&apos;s homepage
 %1</source>
         <translation>йЂ&#xa0;иЁЄ GitHub з”Ёж€¶й¦–й&#xa0;Ѓ
@@ -637,7 +641,7 @@
         <translation type="vanished">вЂў Fira Code 6.2 е­—дЅ“</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="303"/>
+        <location filename="../dialogs/dialogabout.cpp" line="314"/>
         <source>License Agreement - %1</source>
         <translation>иЁ±еЏЇеЌ”и­° - %1</translation>
     </message>
@@ -2692,24 +2696,24 @@ MODBUS Point Type:
         <translation type="unfinished">еЌЃе…­йЂІдЅЌе€¶ењ°еќЂ</translation>
     </message>
     <message>
-        <location filename="../formdataview.cpp" line="627"/>
+        <location filename="../formdataview.cpp" line="626"/>
         <source>0-based</source>
         <translation type="unfinished">еџєењ°еќЂз‚є-0</translation>
     </message>
     <message>
-        <location filename="../formdataview.cpp" line="627"/>
+        <location filename="../formdataview.cpp" line="626"/>
         <source>1-based</source>
         <translation type="unfinished">еџєењ°еќЂз‚є-1</translation>
     </message>
     <message>
-        <location filename="../formdataview.cpp" line="628"/>
+        <location filename="../formdataview.cpp" line="627"/>
         <source>Address Base: %1
 Starting Address: %2
 Length: %3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formdataview.cpp" line="630"/>
+        <location filename="../formdataview.cpp" line="629"/>
         <source>Unit Identifier: %1
 Data Type:
 %2</source>
