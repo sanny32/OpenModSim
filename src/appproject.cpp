@@ -1591,6 +1591,11 @@ void AppProject::loadProject(const QString& filename)
                     }
 
                     _mdiArea->closeAllSubWindows();
+                    // Force immediate destruction of MDI subwindows (WA_DeleteOnClose uses
+                    // deleteLater, so without this their destructors run after new forms are
+                    // already created, causing deviceIdAdded/unitMapAdded signals to be
+                    // suppressed for the newly opened project).
+                    QCoreApplication::sendPostedEvents(nullptr, QEvent::DeferredDelete);
                     // Clean up forms that were already closed (hidden)
                     const auto closed = _closedForms;
                     for (auto&& frm : closed) {
