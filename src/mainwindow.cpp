@@ -349,6 +349,9 @@ void MainWindow::showEvent(QShowEvent* event)
     _project->restoreActiveWindows();
 }
 
+///
+/// \brief MainWindow::runAllScripts
+///
 void MainWindow::runAllScripts()
 {
     for (auto* script : _project->scriptForms()) {
@@ -357,6 +360,9 @@ void MainWindow::runAllScripts()
     }
 }
 
+///
+/// \brief MainWindow::stopAllScripts
+///
 void MainWindow::stopAllScripts()
 {
     for (auto* script : _project->scriptForms()) {
@@ -365,6 +371,10 @@ void MainWindow::stopAllScripts()
     }
 }
 
+///
+/// \brief MainWindow::deleteAllForms
+/// \param type
+///
 void MainWindow::deleteAllForms(ProjectFormType type)
 {
     const auto forms = _project->forms(static_cast<ProjectFormKind>(type));
@@ -499,6 +509,7 @@ void MainWindow::on_awake()
 
     ui->actionTabbedView->setChecked(tabbedView);
     ui->actionSplitView->setVisible(tabbedView);
+    ui->actionSplitView->setEnabled(hasProject);
     ui->actionSplitView->setChecked(ui->mdiArea->isSplitView());
     ui->actionToolbar->setChecked(ui->toolBarMain->isVisible());
     ui->actionStatusBar->setChecked(statusBar()->isVisible());
