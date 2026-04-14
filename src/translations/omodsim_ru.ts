@@ -3782,17 +3782,17 @@ Script.onInit(()=&gt;{
 <context>
     <name>ParityTypeComboBox</name>
     <message>
-        <location filename="../controls/paritytypecombobox.cpp" line="53"/>
+        <location filename="../controls/paritytypecombobox.cpp" line="54"/>
         <source>ODD</source>
         <translation>Нечет</translation>
     </message>
     <message>
-        <location filename="../controls/paritytypecombobox.cpp" line="54"/>
+        <location filename="../controls/paritytypecombobox.cpp" line="55"/>
         <source>EVEN</source>
         <translation>Чёт</translation>
     </message>
     <message>
-        <location filename="../controls/paritytypecombobox.cpp" line="55"/>
+        <location filename="../controls/paritytypecombobox.cpp" line="56"/>
         <source>NONE</source>
         <translation>Нет</translation>
     </message>
