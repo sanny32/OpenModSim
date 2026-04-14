@@ -15,6 +15,12 @@ public:
 
     QSerialPort::Parity currentParity() const;
     void setCurrentParity(QSerialPort::Parity parity);
+
+protected:
+    void changeEvent(QEvent* event) override;
+
+private:
+    void retranslateUi();
 };
 
 #endif // PARITYTYPECOMBOBOX_H
