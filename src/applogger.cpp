@@ -2,6 +2,7 @@
 
 #include <QCoreApplication>
 #include <QWidget>
+#include "apppreferences.h"
 #include "appproject.h"
 #include "applogoutput.h"
 #include "formdatamapview.h"
@@ -90,6 +91,91 @@ QString formDisplayName(const QWidget* form)
         .arg(formTypeName(form), title);
 }
 
+///
+/// \brief preferenceLabel
+/// \param key
+/// \return
+///
+QString preferenceLabel(const QString& key)
+{
+    if (key == QLatin1String("Font")) return QCoreApplication::translate("MainWindow", "Font");
+    if (key == QLatin1String("FontZoom")) return QCoreApplication::translate("MainWindow", "FontZoom");
+    if (key == QLatin1String("BackgroundColor")) return QCoreApplication::translate("MainWindow", "BackgroundColor");
+    if (key == QLatin1String("ForegroundColor")) return QCoreApplication::translate("MainWindow", "ForegroundColor");
+    if (key == QLatin1String("AddressColor")) return QCoreApplication::translate("MainWindow", "AddressColor");
+    if (key == QLatin1String("CommentColor")) return QCoreApplication::translate("MainWindow", "CommentColor");
+    if (key == QLatin1String("CheckForUpdates")) return QCoreApplication::translate("MainWindow", "CheckForUpdates");
+    if (key == QLatin1String("Language")) return QCoreApplication::translate("MainWindow", "Language");
+    if (key == QLatin1String("ScriptFont")) return QCoreApplication::translate("MainWindow", "ScriptFont");
+    if (key == QLatin1String("CodeAutoComplete")) return QCoreApplication::translate("MainWindow", "CodeAutoComplete");
+    if (key == QLatin1String("AutoShowConsoleOutput")) return QCoreApplication::translate("MainWindow", "AutoShowConsoleOutput");
+    if (key == QLatin1String("ConsoleMaxLines")) return QCoreApplication::translate("MainWindow", "ConsoleMaxLines");
+    if (key == QLatin1String("DataView.ColumnsDistance")) return QCoreApplication::translate("MainWindow", "DataView.ColumnsDistance");
+    if (key == QLatin1String("DataView.LeadingZeros")) return QCoreApplication::translate("MainWindow", "DataView.LeadingZeros");
+    if (key == QLatin1String("TrafficView.LogLimit")) return QCoreApplication::translate("MainWindow", "TrafficView.LogLimit");
+    if (key == QLatin1String("TrafficView.AutoScroll")) return QCoreApplication::translate("MainWindow", "TrafficView.AutoScroll");
+    if (key == QLatin1String("GlobalAddressBase")) return QCoreApplication::translate("MainWindow", "Address Base");
+    if (key == QLatin1String("GlobalHexView")) return QCoreApplication::translate("MainWindow", "Hex View");
+    return key;
+}
+
+///
+/// \brief normalizedBoolText
+/// \param value
+/// \return
+///
+QString normalizedBoolText(const QString& value)
+{
+    if (value == QLatin1String("true"))
+        return QCoreApplication::translate("MainWindow", "true");
+    if (value == QLatin1String("false"))
+        return QCoreApplication::translate("MainWindow", "false");
+    return value;
+}
+
+///
+/// \brief addressBaseText
+/// \param value
+/// \return
+///
+QString addressBaseText(const QString& value)
+{
+    if (value == QLatin1String("true"))
+        return QCoreApplication::translate("MainWindow", "0-based");
+    if (value == QLatin1String("false"))
+        return QCoreApplication::translate("MainWindow", "1-based");
+    return value;
+}
+
+///
+/// \brief enabledText
+/// \param value
+/// \return
+///
+QString enabledText(const QString& value)
+{
+    if (value == QLatin1String("true"))
+        return QCoreApplication::translate("MainWindow", "enabled");
+    if (value == QLatin1String("false"))
+        return QCoreApplication::translate("MainWindow", "disabled");
+    return value;
+}
+
+///
+/// \brief settingValueText
+/// \param key
+/// \param value
+/// \return
+///
+QString settingValueText(const QString& key, const QString& value)
+{
+    if (key == QLatin1String("GlobalAddressBase"))
+        return addressBaseText(value);
+    if (key == QLatin1String("GlobalHexView"))
+        return enabledText(value);
+    return normalizedBoolText(value);
+}
+
 }
 
 ///
@@ -111,6 +197,11 @@ void AppLogger::setupModbusMultiServerLogging(ModbusMultiServer& server, QObject
                      [](const ConnectionDetails& cd) {
         qWarning(lcApp) << QCoreApplication::translate("MainWindow", "Server disconnected: %1")
                                .arg(connectionAddress(cd));
+    }, Qt::DirectConnection);
+
+    QObject::connect(&server, &ModbusMultiServer::connectionError, context,
+                     [](const QString& error) {
+        qCritical(lcApp) << error;
     }, Qt::DirectConnection);
 
     QObject::connect(&server, &ModbusMultiServer::clientConnected, context,
@@ -303,6 +394,34 @@ void AppLogger::setupAppProjectLogging(AppProject& project, QObject* context)
 }
 
 ///
+/// \brief AppLogger::setupAppPreferencesLogging
+/// \param preferences
+/// \param context
+///
+void AppLogger::setupAppPreferencesLogging(AppPreferences& preferences, QObject* context)
+{
+    Q_ASSERT(context != nullptr);
+
+    QObject::connect(&preferences, &AppPreferences::preferenceChanged, context,
+                     [](const QString& name, const QString& oldValue, const QString& newValue) {
+        if (oldValue == newValue)
+            return;
+
+        qInfo(lcApp) << QCoreApplication::translate("MainWindow", "Preference changed: %1: %2 -> %3")
+                            .arg(preferenceLabel(name), normalizedBoolText(oldValue), normalizedBoolText(newValue));
+    }, Qt::DirectConnection);
+
+    QObject::connect(&preferences, &AppPreferences::settingChanged, context,
+                     [](const QString& name, const QString& oldValue, const QString& newValue) {
+        if (oldValue == newValue)
+            return;
+
+        qInfo(lcApp) << QCoreApplication::translate("MainWindow", "%1 changed: %2 -> %3")
+                            .arg(preferenceLabel(name), settingValueText(name, oldValue), settingValueText(name, newValue));
+    }, Qt::DirectConnection);
+}
+
+///
 /// \brief AppLogger::clear
 ///
 void AppLogger::clear()
@@ -311,11 +430,3 @@ void AppLogger::clear()
         log->clear();
 }
 
-///
-/// \brief AppLogger::logConnectionError
-/// \param error
-///
-void AppLogger::logConnectionError(const QString& error)
-{
-    qCritical(lcApp) << error;
-}

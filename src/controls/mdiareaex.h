@@ -95,6 +95,7 @@ signals:
     void moveTabToOtherPanelRequested(QMdiSubWindow* subWnd, QPoint globalDropPos);
 
 protected:
+    void changeEvent(QEvent* event) override;
     bool eventFilter(QObject* obj, QEvent* event) override;
     void resizeEvent(QResizeEvent* event) override;
     void setVisible(bool visible) override;

@@ -699,6 +699,20 @@ void MdiAreaEx::tileSubWindows()
 }
 
 ///
+/// \brief MdiAreaEx::changeEvent
+/// \param event
+///
+void MdiAreaEx::changeEvent(QEvent* event)
+{
+    if(event->type() == QEvent::LanguageChange)
+    {
+        _splitButton->setToolTip(tr("Split view"));
+    }
+
+    QWidget::changeEvent(event);
+}
+
+///
 /// \brief MdiAreaEx::eventFilter
 /// \param obj
 /// \param event
@@ -931,7 +945,7 @@ void MdiAreaEx::createSplitButton()
     _splitButton = new QToolButton(this);
     _splitButton->setAutoRaise(true);
     _splitButton->setIcon(QIcon(":/res/icon-split-view.png"));
-    _splitButton->setToolTip(QStringLiteral("Split view"));
+    _splitButton->setToolTip(tr("Split view"));
     _splitButton->setCheckable(true);
 
     const QSize sh = _splitButton->sizeHint();

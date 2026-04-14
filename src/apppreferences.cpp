@@ -1,20 +1,8 @@
 #include "fontutils.h"
 #include "enums.h"
 #include "apppreferences.h"
-#include "controls/applogoutput.h"
-#include <QCoreApplication>
 
 namespace {
-
-///
-/// \brief transl
-/// \param source
-/// \return
-///
-QString transl(const char* source)
-{
-    return QCoreApplication::translate("AppPreferences", source);
-}
 
 ///
 /// \brief boolToText
@@ -27,26 +15,6 @@ QString boolToText(bool value)
 }
 
 ///
-/// \brief addressBaseToText
-/// \param zeroBased
-/// \return
-///
-QString addressBaseToText(AddressBase base)
-{
-    return base == AddressBase::Base0 ? transl("0-based") : transl("1-based");
-}
-
-///
-/// \brief enabledToText
-/// \param enabled
-/// \return
-///
-QString enabledToText(bool enabled)
-{
-    return enabled ? transl("enabled") : transl("disabled");
-}
-
-///
 /// \brief fontToText
 /// \param font
 /// \return
@@ -55,34 +23,6 @@ QString fontToText(const QFont& font)
 {
     const int pointSize = font.pointSize() > 0 ? font.pointSize() : 10;
     return QStringLiteral("%1, %2").arg(font.family()).arg(pointSize);
-}
-
-///
-/// \brief logPreferenceChange
-/// \param name
-/// \param oldValue
-/// \param newValue
-///
-void logPreferenceChange(const QString& name, const QString& oldValue, const QString& newValue)
-{
-    if (oldValue == newValue)
-        return;
-
-    qInfo(lcApp) << transl("Preference changed: %1: %2 -> %3").arg(name, oldValue, newValue);
-}
-
-///
-/// \brief logSettingChange
-/// \param name
-/// \param oldValue
-/// \param newValue
-///
-void logSettingChange(const QString& name, const QString& oldValue, const QString& newValue)
-{
-    if (oldValue == newValue)
-        return;
-
-    qInfo(lcApp) << transl("%1 changed: %2 -> %3").arg(name, oldValue, newValue);
 }
 
 }
@@ -112,7 +52,10 @@ AppPreferences& AppPreferences::instance()
 ///
 void AppPreferences::setFont(const QFont& f)
 {
-    logPreferenceChange(transl("Font"), fontToText(_font), fontToText(f));
+    if (_font == f)
+        return;
+
+    emit preferenceChanged("Font", fontToText(_font), fontToText(f));
     _font = f;
 }
 
@@ -122,7 +65,10 @@ void AppPreferences::setFont(const QFont& f)
 ///
 void AppPreferences::setFontZoom(int zoom)
 {
-    logPreferenceChange(transl("FontZoom"), QString::number(_fontZoom), QString::number(zoom));
+    if (_fontZoom == zoom)
+        return;
+
+    emit preferenceChanged("FontZoom", QString::number(_fontZoom), QString::number(zoom));
     _fontZoom = zoom;
 }
 
@@ -132,7 +78,10 @@ void AppPreferences::setFontZoom(int zoom)
 ///
 void AppPreferences::setBackgroundColor(const QColor& c)
 {
-    logPreferenceChange(transl("BackgroundColor"), _backgroundColor.name(), c.name());
+    if (_backgroundColor == c)
+        return;
+
+    emit preferenceChanged("BackgroundColor", _backgroundColor.name(), c.name());
     _backgroundColor = c;
 }
 
@@ -142,7 +91,10 @@ void AppPreferences::setBackgroundColor(const QColor& c)
 ///
 void AppPreferences::setForegroundColor(const QColor& c)
 {
-    logPreferenceChange(transl("ForegroundColor"), _foregroundColor.name(), c.name());
+    if (_foregroundColor == c)
+        return;
+
+    emit preferenceChanged("ForegroundColor", _foregroundColor.name(), c.name());
     _foregroundColor = c;
 }
 
@@ -152,7 +104,10 @@ void AppPreferences::setForegroundColor(const QColor& c)
 ///
 void AppPreferences::setAddressColor(const QColor& c)
 {
-    logPreferenceChange(transl("AddressColor"), _addressColor.name(), c.name());
+    if (_addressColor == c)
+        return;
+
+    emit preferenceChanged("AddressColor", _addressColor.name(), c.name());
     _addressColor = c;
 }
 
@@ -162,7 +117,10 @@ void AppPreferences::setAddressColor(const QColor& c)
 ///
 void AppPreferences::setCommentColor(const QColor& c)
 {
-    logPreferenceChange(transl("CommentColor"), _commentColor.name(), c.name());
+    if (_commentColor == c)
+        return;
+
+    emit preferenceChanged("CommentColor", _commentColor.name(), c.name());
     _commentColor = c;
 }
 
@@ -172,7 +130,10 @@ void AppPreferences::setCommentColor(const QColor& c)
 ///
 void AppPreferences::setCheckForUpdates(bool enable)
 {
-    logPreferenceChange(transl("CheckForUpdates"), boolToText(_checkForUpdates), boolToText(enable));
+    if (_checkForUpdates == enable)
+        return;
+
+    emit preferenceChanged("CheckForUpdates", boolToText(_checkForUpdates), boolToText(enable));
     _checkForUpdates = enable;
 }
 
@@ -182,7 +143,10 @@ void AppPreferences::setCheckForUpdates(bool enable)
 ///
 void AppPreferences::setLanguage(const QString& lang)
 {
-    logPreferenceChange(transl("Language"), _language, lang);
+    if (_language == lang)
+        return;
+
+    emit preferenceChanged("Language", _language, lang);
     _language = lang;
 }
 
@@ -192,13 +156,13 @@ void AppPreferences::setLanguage(const QString& lang)
 ///
 void AppPreferences::setDataViewDefinitions(const DataViewDefinitions& def)
 {
-    logPreferenceChange(transl("DataView.FormName"),       _dataViewDefinitions.FormName, def.FormName);
-    logPreferenceChange(transl("DataView.DeviceId"),       QString::number(_dataViewDefinitions.DeviceId), QString::number(def.DeviceId));
-    logPreferenceChange(transl("DataView.PointAddress"),   QString::number(_dataViewDefinitions.PointAddress), QString::number(def.PointAddress));
-    logPreferenceChange(transl("DataView.PointType"),      enumToString<QModbusDataUnit::RegisterType>(_dataViewDefinitions.PointType), enumToString<QModbusDataUnit::RegisterType>(def.PointType));
-    logPreferenceChange(transl("DataView.Length"),         QString::number(_dataViewDefinitions.Length), QString::number(def.Length));
-    logPreferenceChange(transl("DataView.ColumnsDistance"),QString::number(_dataViewDefinitions.DataViewColumnsDistance), QString::number(def.DataViewColumnsDistance));
-    logPreferenceChange(transl("DataView.LeadingZeros"),   boolToText(_dataViewDefinitions.LeadingZeros),boolToText(def.LeadingZeros));
+    emit preferenceChanged("DataView.FormName", _dataViewDefinitions.FormName, def.FormName);
+    emit preferenceChanged("DataView.DeviceId", QString::number(_dataViewDefinitions.DeviceId), QString::number(def.DeviceId));
+    emit preferenceChanged("DataView.PointAddress", QString::number(_dataViewDefinitions.PointAddress), QString::number(def.PointAddress));
+    emit preferenceChanged("DataView.PointType", enumToString<QModbusDataUnit::RegisterType>(_dataViewDefinitions.PointType), enumToString<QModbusDataUnit::RegisterType>(def.PointType));
+    emit preferenceChanged("DataView.Length", QString::number(_dataViewDefinitions.Length), QString::number(def.Length));
+    emit preferenceChanged("DataView.ColumnsDistance", QString::number(_dataViewDefinitions.DataViewColumnsDistance), QString::number(def.DataViewColumnsDistance));
+    emit preferenceChanged("DataView.LeadingZeros", boolToText(_dataViewDefinitions.LeadingZeros), boolToText(def.LeadingZeros));
 
     _dataViewDefinitions = def;
 }
@@ -209,13 +173,13 @@ void AppPreferences::setDataViewDefinitions(const DataViewDefinitions& def)
 ///
 void AppPreferences::setTrafficViewDefinitions(const TrafficViewDefinitions& def)
 {
-    logPreferenceChange(transl("TrafficView.FormName"),            _trafficViewDefinitions.FormName, def.FormName);
-    logPreferenceChange(transl("TrafficView.UnitFilter"),          QString::number(_trafficViewDefinitions.UnitFilter), QString::number(def.UnitFilter));
-    logPreferenceChange(transl("TrafficView.FunctionCodeFilter"),  QString::number(_trafficViewDefinitions.FunctionCodeFilter), QString::number(def.FunctionCodeFilter));
-    logPreferenceChange(transl("TrafficView.LogLimit"),            QString::number(_trafficViewDefinitions.LogViewLimit), QString::number(def.LogViewLimit));
-    logPreferenceChange(transl("TrafficView.ExceptionsOnly"),      boolToText(_trafficViewDefinitions.ExceptionsOnly), boolToText(def.ExceptionsOnly));
-    logPreferenceChange(transl("TrafficView.AutoScroll"),          boolToText(_trafficViewDefinitions.Autoscroll), boolToText(def.Autoscroll));
-    logPreferenceChange(transl("TrafficView.HexView"),             boolToText(_trafficViewDefinitions.HexView), boolToText(def.HexView));
+    emit preferenceChanged("TrafficView.FormName", _trafficViewDefinitions.FormName, def.FormName);
+    emit preferenceChanged("TrafficView.UnitFilter", QString::number(_trafficViewDefinitions.UnitFilter), QString::number(def.UnitFilter));
+    emit preferenceChanged("TrafficView.FunctionCodeFilter", QString::number(_trafficViewDefinitions.FunctionCodeFilter), QString::number(def.FunctionCodeFilter));
+    emit preferenceChanged("TrafficView.LogLimit", QString::number(_trafficViewDefinitions.LogViewLimit), QString::number(def.LogViewLimit));
+    emit preferenceChanged("TrafficView.ExceptionsOnly", boolToText(_trafficViewDefinitions.ExceptionsOnly), boolToText(def.ExceptionsOnly));
+    emit preferenceChanged("TrafficView.AutoScroll", boolToText(_trafficViewDefinitions.Autoscroll), boolToText(def.Autoscroll));
+    emit preferenceChanged("TrafficView.HexView", boolToText(_trafficViewDefinitions.HexView), boolToText(def.HexView));
 
     _trafficViewDefinitions = def;
 }
@@ -226,10 +190,10 @@ void AppPreferences::setTrafficViewDefinitions(const TrafficViewDefinitions& def
 ///
 void AppPreferences::setScriptViewDefinitions(const ScriptViewDefinitions& def)
 {
-    logPreferenceChange(transl("ScriptView.FormName"),     _scriptViewDefinitions.FormName, def.FormName);
-    logPreferenceChange(transl("ScriptView.RunMode"),      enumToString<RunMode>(_scriptViewDefinitions.ScriptCfg.Mode), enumToString<RunMode>(def.ScriptCfg.Mode));
-    logPreferenceChange(transl("ScriptView.Interval"),     QString::number(_scriptViewDefinitions.ScriptCfg.Interval), QString::number(def.ScriptCfg.Interval));
-    logPreferenceChange(transl("ScriptView.RunOnStartup"), boolToText(_scriptViewDefinitions.ScriptCfg.RunOnStartup), boolToText(def.ScriptCfg.RunOnStartup));
+    emit preferenceChanged("ScriptView.FormName", _scriptViewDefinitions.FormName, def.FormName);
+    emit preferenceChanged("ScriptView.RunMode", enumToString<RunMode>(_scriptViewDefinitions.ScriptCfg.Mode), enumToString<RunMode>(def.ScriptCfg.Mode));
+    emit preferenceChanged("ScriptView.Interval", QString::number(_scriptViewDefinitions.ScriptCfg.Interval), QString::number(def.ScriptCfg.Interval));
+    emit preferenceChanged("ScriptView.RunOnStartup", boolToText(_scriptViewDefinitions.ScriptCfg.RunOnStartup), boolToText(def.ScriptCfg.RunOnStartup));
 
     _scriptViewDefinitions = def;
 }
@@ -240,7 +204,10 @@ void AppPreferences::setScriptViewDefinitions(const ScriptViewDefinitions& def)
 ///
 void AppPreferences::setGlobalAddressBase(AddressBase base)
 {
-    logSettingChange(transl("Address Base"), addressBaseToText(_globalAddressBase), addressBaseToText(base));
+    if (_globalAddressBase == base)
+        return;
+
+    emit settingChanged("GlobalAddressBase", boolToText(_globalAddressBase == AddressBase::Base0), boolToText(base == AddressBase::Base0));
     _globalAddressBase = base;
 }
 
@@ -250,7 +217,10 @@ void AppPreferences::setGlobalAddressBase(AddressBase base)
 ///
 void AppPreferences::setGlobalHexView(bool value)
 {
-    logSettingChange(transl("Hex View"), enabledToText(_globalHexView), enabledToText(value));
+    if (_globalHexView == value)
+        return;
+
+    emit settingChanged("GlobalHexView", boolToText(_globalHexView), boolToText(value));
     _globalHexView = value;
 }
 
@@ -260,7 +230,10 @@ void AppPreferences::setGlobalHexView(bool value)
 ///
 void AppPreferences::setScriptFont(const QFont& f)
 {
-    logPreferenceChange(transl("ScriptFont"), fontToText(_scriptFont), fontToText(f));
+    if (_scriptFont == f)
+        return;
+
+    emit preferenceChanged("ScriptFont", fontToText(_scriptFont), fontToText(f));
     _scriptFont = f;
 }
 
@@ -270,7 +243,10 @@ void AppPreferences::setScriptFont(const QFont& f)
 ///
 void AppPreferences::setCodeAutoComplete(bool enable)
 {
-    logPreferenceChange(transl("CodeAutoComplete"), boolToText(_codeAutoComplete), boolToText(enable));
+    if (_codeAutoComplete == enable)
+        return;
+
+    emit preferenceChanged("CodeAutoComplete", boolToText(_codeAutoComplete), boolToText(enable));
     _codeAutoComplete = enable;
 }
 
@@ -280,7 +256,10 @@ void AppPreferences::setCodeAutoComplete(bool enable)
 ///
 void AppPreferences::setAutoShowConsoleOutput(bool enable)
 {
-    logPreferenceChange(transl("AutoShowConsoleOutput"), boolToText(_autoShowConsoleOutput), boolToText(enable));
+    if (_autoShowConsoleOutput == enable)
+        return;
+
+    emit preferenceChanged("AutoShowConsoleOutput", boolToText(_autoShowConsoleOutput), boolToText(enable));
     _autoShowConsoleOutput = enable;
 }
 
@@ -290,7 +269,10 @@ void AppPreferences::setAutoShowConsoleOutput(bool enable)
 ///
 void AppPreferences::setConsoleMaxLines(int n)
 {
-    logPreferenceChange(transl("ConsoleMaxLines"), QString::number(_consoleMaxLines), QString::number(n));
+    if (_consoleMaxLines == n)
+        return;
+
+    emit preferenceChanged("ConsoleMaxLines", QString::number(_consoleMaxLines), QString::number(n));
     _consoleMaxLines = n;
 }
 

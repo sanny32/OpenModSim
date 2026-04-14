@@ -117,8 +117,6 @@ private slots:
     /* Script slots */
     void on_actionImportScript_triggered();
 
-    void on_connectionError(const QString& error);
-
     void updateMenuWindow();
     void on_tabContextMenuRequested(QMdiSubWindow* subWnd, MdiArea* sourcePanel, QPoint globalPos);
     void on_moveTabToOtherPanelRequested(QMdiSubWindow* subWnd, QPoint globalDropPos);

@@ -259,10 +259,10 @@ MainWindow::MainWindow(const QString& profile, bool useSession, QWidget *parent)
         if(enabled)
             _project->duplicatePrimaryTabsToSecondary();
     });
-    connect(&_mbMultiServer, &ModbusMultiServer::connectionError, this, &MainWindow::on_connectionError);
     AppLogger::setupModbusMultiServerLogging(_mbMultiServer, this);
     AppLogger::setupDataSimulatorLogging(*_dataSimulator, this);
     AppLogger::setupAppProjectLogging(*_project, this);
+    AppLogger::setupAppPreferencesLogging(AppPreferences::instance(), this);
 
     // View / window trivial action wiring
     connect(ui->actionExit,           &QAction::triggered, this, [this]{ close(); });
@@ -1000,16 +1000,6 @@ void MainWindow::on_actionImportScript_triggered()
         frm->setFormName(QFileInfo(filename).completeBaseName());
         _projectTree->updateFormTitle(frm);
     }
-}
-
-///
-/// \brief MainWindow::on_connectionError
-/// \param error
-///
-void MainWindow::on_connectionError(const QString& error)
-{
-    AppLogger::logConnectionError(error);
-    QMessageBox::warning(this, windowTitle(), error);
 }
 
 ///

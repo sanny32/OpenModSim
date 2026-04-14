@@ -1,6 +1,7 @@
 #ifndef APPPREFERENCES_H
 #define APPPREFERENCES_H
 
+#include <QObject>
 #include <QFont>
 #include <QColor>
 #include <QSettings>
@@ -16,7 +17,10 @@
 /// via load()/save() which operate on the currently active QSettings group.
 ///
 class AppPreferences
+    : public QObject
 {
+    Q_OBJECT
+
 public:
     static AppPreferences& instance();
 
@@ -82,6 +86,10 @@ public:
 
     void loadXml(QXmlStreamReader& xml);
     void saveXml(QXmlStreamWriter& xml) const;
+
+signals:
+    void preferenceChanged(const QString& name, const QString& oldValue, const QString& newValue);
+    void settingChanged(const QString& name, const QString& oldValue, const QString& newValue);
 
 private:
     AppPreferences();

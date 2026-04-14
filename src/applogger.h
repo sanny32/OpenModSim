@@ -7,6 +7,7 @@
 
 class QWidget;
 class AppProject;
+class AppPreferences;
 
 ///
 /// \brief The AppLogger class
@@ -17,8 +18,8 @@ public:
     static void setupModbusMultiServerLogging(ModbusMultiServer& server, QObject* context);
     static void setupDataSimulatorLogging(DataSimulator& simulator, QObject* context);
     static void setupAppProjectLogging(AppProject& project, QObject* context);
+    static void setupAppPreferencesLogging(AppPreferences& preferences, QObject* context);
     static void clear();
-    static void logConnectionError(const QString& error);
 };
 
 #endif // APPLOGGER_H
