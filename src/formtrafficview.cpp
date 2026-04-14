@@ -253,7 +253,7 @@ TrafficViewDefinitions FormTrafficView::displayDefinition() const
     }
 
     if (_funcCodeFilter) {
-        dd.FunctionCodeFilter = static_cast<qint16>(_funcCodeFilter->currentData().toInt());
+        dd.FunctionCodeFilter = static_cast<qint16>(_funcCodeFilter->currentFunctionCode());
     }
 
     dd.LogViewLimit = ui->outputWidget->logViewLimit();
@@ -294,10 +294,7 @@ void FormTrafficView::setDisplayDefinition(const TrafficViewDefinitions& dd)
 
     if (_funcCodeFilter) {
         QSignalBlocker b(_funcCodeFilter);
-        int idx = _funcCodeFilter->findData(_displayDefinition.FunctionCodeFilter);
-        if (idx < 0)
-            idx = 0;
-        _funcCodeFilter->setCurrentIndex(idx);
+        _funcCodeFilter->setCurrentFunctionCode(_displayDefinition.FunctionCodeFilter);
     }
 
     if (_rowLimitCombo) {
@@ -425,8 +422,7 @@ void FormTrafficView::setDisplayDefinitionSilent(const TrafficViewDefinitions& d
     }
     if(_funcCodeFilter) {
         QSignalBlocker b(_funcCodeFilter);
-        const int idx = _funcCodeFilter->findData(dd.FunctionCodeFilter);
-        _funcCodeFilter->setCurrentIndex(idx < 0 ? 0 : idx);
+        _funcCodeFilter->setCurrentFunctionCode(dd.FunctionCodeFilter);
     }
     if(_rowLimitCombo) {
         QSignalBlocker b(_rowLimitCombo);
@@ -565,7 +561,7 @@ bool FormTrafficView::matchesTrafficFilter(const ConnectionDetails& cd,
         return false;
 
     if (_funcCodeFilter->currentIndex() > 0) {
-        const int fc = _funcCodeFilter->currentData().toInt();
+        const int fc = _funcCodeFilter->currentFunctionCode();
         if (static_cast<int>(filterMsg->functionCode()) != fc)
             return false;
     }
@@ -705,21 +701,10 @@ void FormTrafficView::setupFilterControls()
     _labelFuncCode = new QLabel(ui->toolBarTraffic);
     _labelFuncCode->setText(tr("Function:"));
 
-    _funcCodeFilter = new QComboBox(ui->toolBarTraffic);
-    _funcCodeFilter->addItem(tr("All"), -1);
-    _funcCodeFilter->addItem(QStringLiteral("01 Read Coils"), static_cast<int>(QModbusPdu::ReadCoils));
-    _funcCodeFilter->addItem(QStringLiteral("02 Read Discrete Inputs"), static_cast<int>(QModbusPdu::ReadDiscreteInputs));
-    _funcCodeFilter->addItem(QStringLiteral("03 Read Holding Registers"), static_cast<int>(QModbusPdu::ReadHoldingRegisters));
-    _funcCodeFilter->addItem(QStringLiteral("04 Read Input Registers"), static_cast<int>(QModbusPdu::ReadInputRegisters));
-    _funcCodeFilter->addItem(QStringLiteral("05 Write Single Coil"), static_cast<int>(QModbusPdu::WriteSingleCoil));
-    _funcCodeFilter->addItem(QStringLiteral("06 Write Single Register"), static_cast<int>(QModbusPdu::WriteSingleRegister));
-    _funcCodeFilter->addItem(QStringLiteral("15 Write Multiple Coils"), static_cast<int>(QModbusPdu::WriteMultipleCoils));
-    _funcCodeFilter->addItem(QStringLiteral("16 Write Multiple Registers"), static_cast<int>(QModbusPdu::WriteMultipleRegisters));
-    _funcCodeFilter->addItem(QStringLiteral("22 Mask Write Register"), static_cast<int>(QModbusPdu::MaskWriteRegister));
-    _funcCodeFilter->addItem(QStringLiteral("23 Read/Write Multiple Registers"), static_cast<int>(QModbusPdu::ReadWriteMultipleRegisters));
-    connect(_funcCodeFilter, qOverload<int>(&QComboBox::currentIndexChanged), this, [this](int) {
+    _funcCodeFilter = new FuncCodeFilterComboBox(ui->toolBarTraffic);
+    connect(_funcCodeFilter, &FuncCodeFilterComboBox::functionCodeChanged, this, [this](int value) {
         if (_funcCodeFilter)
-            _displayDefinition.FunctionCodeFilter = static_cast<qint16>(_funcCodeFilter->currentData().toInt());
+            _displayDefinition.FunctionCodeFilter = static_cast<qint16>(value);
         rebuildVisibleTraffic();
         emit definitionChanged();
     });
@@ -830,10 +815,7 @@ void FormTrafficView::initializeDisplayDefinition()
         _unitIdFilter->setValue(_displayDefinition.UnitFilter);
 
     if (_funcCodeFilter) {
-        int idx = _funcCodeFilter->findData(_displayDefinition.FunctionCodeFilter);
-        if (idx < 0)
-            idx = 0;
-        _funcCodeFilter->setCurrentIndex(idx);
+        _funcCodeFilter->setCurrentFunctionCode(_displayDefinition.FunctionCodeFilter);
     }
 
     if (_rowLimitCombo)
@@ -882,27 +864,6 @@ void FormTrafficView::retranslateToolbarControls()
 
     if (_labelFuncCode)
         _labelFuncCode->setText(tr("Function:"));
-
-    if (_funcCodeFilter) {
-        const QVariant currentData = _funcCodeFilter->currentData();
-        const QSignalBlocker blocker(_funcCodeFilter);
-        _funcCodeFilter->clear();
-        _funcCodeFilter->addItem(tr("All"), -1);
-        _funcCodeFilter->addItem(tr("01 Read Coils"), static_cast<int>(QModbusPdu::ReadCoils));
-        _funcCodeFilter->addItem(tr("02 Read Discrete Inputs"), static_cast<int>(QModbusPdu::ReadDiscreteInputs));
-        _funcCodeFilter->addItem(tr("03 Read Holding Registers"), static_cast<int>(QModbusPdu::ReadHoldingRegisters));
-        _funcCodeFilter->addItem(tr("04 Read Input Registers"), static_cast<int>(QModbusPdu::ReadInputRegisters));
-        _funcCodeFilter->addItem(tr("05 Write Single Coil"), static_cast<int>(QModbusPdu::WriteSingleCoil));
-        _funcCodeFilter->addItem(tr("06 Write Single Register"), static_cast<int>(QModbusPdu::WriteSingleRegister));
-        _funcCodeFilter->addItem(tr("15 Write Multiple Coils"), static_cast<int>(QModbusPdu::WriteMultipleCoils));
-        _funcCodeFilter->addItem(tr("16 Write Multiple Registers"), static_cast<int>(QModbusPdu::WriteMultipleRegisters));
-        _funcCodeFilter->addItem(tr("22 Mask Write Register"), static_cast<int>(QModbusPdu::MaskWriteRegister));
-        _funcCodeFilter->addItem(tr("23 Read/Write Multiple Registers"), static_cast<int>(QModbusPdu::ReadWriteMultipleRegisters));
-        int idx = _funcCodeFilter->findData(currentData);
-        if (idx < 0)
-            idx = 0;
-        _funcCodeFilter->setCurrentIndex(idx);
-    }
 
     if (_labelSource)
         _labelSource->setText(tr("Source:"));

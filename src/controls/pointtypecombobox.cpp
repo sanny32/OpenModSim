@@ -8,6 +8,8 @@
 PointTypeComboBox::PointTypeComboBox(QWidget *parent)
     : QComboBox(parent)
 {
+    setSizeAdjustPolicy(QComboBox::AdjustToContents);
+
     addItem(tr("Coils (Read-Write)"), QModbusDataUnit::Coils);
     addItem(tr("Discrete Inputs (Read Only)"), QModbusDataUnit::DiscreteInputs);
     addItem(tr("Holding Registers (Read-Write)"), QModbusDataUnit::HoldingRegisters);

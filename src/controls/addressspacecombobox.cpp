@@ -8,6 +8,8 @@
 AddressSpaceComboBox::AddressSpaceComboBox(QWidget* parent)
     : QComboBox(parent)
 {
+    setSizeAdjustPolicy(QComboBox::AdjustToContents);
+
     addItem(tr("5-digits"), QVariant::fromValue(AddressSpace::Addr5Digits));
     addItem(tr("6-digits"), QVariant::fromValue(AddressSpace::Addr6Digits));
 

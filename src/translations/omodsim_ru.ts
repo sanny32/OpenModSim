@@ -4,16 +4,16 @@
 <context>
     <name>AddressBaseComboBox</name>
     <message>
-        <location filename="../controls/addressbasecombobox.cpp" line="11"/>
-        <location filename="../controls/addressbasecombobox.cpp" line="30"/>
-        <location filename="../controls/addressbasecombobox.cpp" line="30"/>
+        <location filename="../controls/addressbasecombobox.cpp" line="13"/>
+        <location filename="../controls/addressbasecombobox.cpp" line="32"/>
+        <location filename="../controls/addressbasecombobox.cpp" line="32"/>
         <source>0-based</source>
         <translation>0-первый</translation>
     </message>
     <message>
-        <location filename="../controls/addressbasecombobox.cpp" line="12"/>
-        <location filename="../controls/addressbasecombobox.cpp" line="34"/>
-        <location filename="../controls/addressbasecombobox.cpp" line="34"/>
+        <location filename="../controls/addressbasecombobox.cpp" line="14"/>
+        <location filename="../controls/addressbasecombobox.cpp" line="36"/>
+        <location filename="../controls/addressbasecombobox.cpp" line="36"/>
         <source>1-based</source>
         <translation>1-первый</translation>
     </message>
@@ -21,16 +21,16 @@
 <context>
     <name>AddressSpaceComboBox</name>
     <message>
-        <location filename="../controls/addressspacecombobox.cpp" line="11"/>
-        <location filename="../controls/addressspacecombobox.cpp" line="30"/>
-        <location filename="../controls/addressspacecombobox.cpp" line="30"/>
+        <location filename="../controls/addressspacecombobox.cpp" line="13"/>
+        <location filename="../controls/addressspacecombobox.cpp" line="32"/>
+        <location filename="../controls/addressspacecombobox.cpp" line="32"/>
         <source>5-digits</source>
         <translation>5-цифровое</translation>
     </message>
     <message>
-        <location filename="../controls/addressspacecombobox.cpp" line="12"/>
-        <location filename="../controls/addressspacecombobox.cpp" line="34"/>
-        <location filename="../controls/addressspacecombobox.cpp" line="34"/>
+        <location filename="../controls/addressspacecombobox.cpp" line="14"/>
+        <location filename="../controls/addressspacecombobox.cpp" line="36"/>
+        <location filename="../controls/addressspacecombobox.cpp" line="36"/>
         <source>6-digits</source>
         <translation>6-цифровое</translation>
     </message>
@@ -2186,162 +2186,148 @@ Source: %3</source>
     </message>
     <message>
         <location filename="../formtrafficview.cpp" line="103"/>
-        <location filename="../formtrafficview.cpp" line="738"/>
-        <location filename="../formtrafficview.cpp" line="913"/>
-        <location filename="../formtrafficview.cpp" line="738"/>
-        <location filename="../formtrafficview.cpp" line="913"/>
+        <location filename="../formtrafficview.cpp" line="723"/>
+        <location filename="../formtrafficview.cpp" line="874"/>
+        <location filename="../formtrafficview.cpp" line="723"/>
+        <location filename="../formtrafficview.cpp" line="874"/>
         <source>Exceptions Only</source>
         <translation>Только исключения</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="517"/>
+        <location filename="../formtrafficview.cpp" line="513"/>
         <source>Modbus/TCP Srv %1:%2</source>
         <translation>Modbus/TCP сервер %1:%2</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="519"/>
+        <location filename="../formtrafficview.cpp" line="515"/>
         <source>Port %1:%2:%3:%4:%5</source>
         <translation>Порт %1:%2:%3:%4:%5</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="648"/>
+        <location filename="../formtrafficview.cpp" line="644"/>
         <source>Text files (*.txt)</source>
         <translation>Текстовые файлы (*.txt)</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="655"/>
+        <location filename="../formtrafficview.cpp" line="651"/>
         <source>Log exported successfully to file %1</source>
         <translation>Лог успешно экспортирован в файл %1</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="657"/>
+        <location filename="../formtrafficview.cpp" line="653"/>
         <source>Export log error!</source>
         <translation>Ошибка экспорта лога!</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="691"/>
-        <location filename="../formtrafficview.cpp" line="876"/>
-        <location filename="../formtrafficview.cpp" line="876"/>
+        <location filename="../formtrafficview.cpp" line="687"/>
+        <location filename="../formtrafficview.cpp" line="858"/>
+        <location filename="../formtrafficview.cpp" line="858"/>
         <source>Unit:</source>
         <translation>Устройство:</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="697"/>
-        <location filename="../formtrafficview.cpp" line="880"/>
-        <location filename="../formtrafficview.cpp" line="880"/>
+        <location filename="../formtrafficview.cpp" line="693"/>
+        <location filename="../formtrafficview.cpp" line="862"/>
+        <location filename="../formtrafficview.cpp" line="862"/>
         <source>-1 = all unit ids</source>
         <translation>-1 = все устройства</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="728"/>
-        <location filename="../formtrafficview.cpp" line="908"/>
-        <location filename="../formtrafficview.cpp" line="908"/>
+        <location filename="../formtrafficview.cpp" line="713"/>
+        <location filename="../formtrafficview.cpp" line="869"/>
+        <location filename="../formtrafficview.cpp" line="869"/>
         <source>Source:</source>
         <translation>Источник:</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="739"/>
-        <location filename="../formtrafficview.cpp" line="914"/>
-        <location filename="../formtrafficview.cpp" line="914"/>
+        <location filename="../formtrafficview.cpp" line="724"/>
+        <location filename="../formtrafficview.cpp" line="875"/>
+        <location filename="../formtrafficview.cpp" line="875"/>
         <source>Show only responses with Modbus exception</source>
         <translation>Показывать только ответы с исключением Modbus</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="746"/>
-        <location filename="../formtrafficview.cpp" line="918"/>
-        <location filename="../formtrafficview.cpp" line="918"/>
+        <location filename="../formtrafficview.cpp" line="731"/>
+        <location filename="../formtrafficview.cpp" line="879"/>
+        <location filename="../formtrafficview.cpp" line="879"/>
         <source>Autoscroll</source>
         <translation>Автопрокрутка</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="747"/>
-        <location filename="../formtrafficview.cpp" line="919"/>
-        <location filename="../formtrafficview.cpp" line="919"/>
+        <location filename="../formtrafficview.cpp" line="732"/>
+        <location filename="../formtrafficview.cpp" line="880"/>
+        <location filename="../formtrafficview.cpp" line="880"/>
         <source>Automatically scroll to the latest entry</source>
         <translation>Автоматически прокручивать к последней записи</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="891"/>
         <source>01 Read Coils</source>
-        <translation>01 Чтение флагов</translation>
+        <translation type="vanished">01 Чтение флагов</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="892"/>
         <source>02 Read Discrete Inputs</source>
-        <translation>02 Чтение дискретных входов</translation>
+        <translation type="vanished">02 Чтение дискретных входов</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="893"/>
         <source>03 Read Holding Registers</source>
-        <translation>03 Чтение регистров хранения</translation>
+        <translation type="vanished">03 Чтение регистров хранения</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="894"/>
         <source>04 Read Input Registers</source>
-        <translation>04 Чтение регистров вода</translation>
+        <translation type="vanished">04 Чтение регистров вода</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="895"/>
         <source>05 Write Single Coil</source>
-        <translation>05 Запись одного флага</translation>
+        <translation type="vanished">05 Запись одного флага</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="896"/>
         <source>06 Write Single Register</source>
-        <translation>06 Запись одного регистра харенения</translation>
+        <translation type="vanished">06 Запись одного регистра харенения</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="897"/>
         <source>15 Write Multiple Coils</source>
-        <translation>15 Запись нескольких флагов</translation>
+        <translation type="vanished">15 Запись нескольких флагов</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="898"/>
         <source>16 Write Multiple Registers</source>
-        <translation>16 Запись нескольких регистров хранения</translation>
+        <translation type="vanished">16 Запись нескольких регистров хранения</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="899"/>
         <source>22 Mask Write Register</source>
-        <translation>22 Запись регистра хранения по маске</translation>
+        <translation type="vanished">22 Запись регистра хранения по маске</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="900"/>
         <source>23 Read/Write Multiple Registers</source>
-        <translation>23 Чтение/запись нескольких регистров хранения</translation>
+        <translation type="vanished">23 Чтение/запись нескольких регистров хранения</translation>
     </message>
     <message>
         <location filename="../formtrafficview.cpp" line="88"/>
         <location filename="../formtrafficview.cpp" line="92"/>
         <location filename="../formtrafficview.cpp" line="96"/>
-        <location filename="../formtrafficview.cpp" line="538"/>
-        <location filename="../formtrafficview.cpp" line="696"/>
-        <location filename="../formtrafficview.cpp" line="709"/>
-        <location filename="../formtrafficview.cpp" line="731"/>
-        <location filename="../formtrafficview.cpp" line="879"/>
-        <location filename="../formtrafficview.cpp" line="890"/>
+        <location filename="../formtrafficview.cpp" line="534"/>
+        <location filename="../formtrafficview.cpp" line="692"/>
+        <location filename="../formtrafficview.cpp" line="716"/>
+        <location filename="../formtrafficview.cpp" line="861"/>
         <location filename="../formtrafficview.cpp" line="92"/>
         <location filename="../formtrafficview.cpp" line="96"/>
-        <location filename="../formtrafficview.cpp" line="538"/>
-        <location filename="../formtrafficview.cpp" line="696"/>
-        <location filename="../formtrafficview.cpp" line="709"/>
-        <location filename="../formtrafficview.cpp" line="731"/>
-        <location filename="../formtrafficview.cpp" line="879"/>
-        <location filename="../formtrafficview.cpp" line="890"/>
+        <location filename="../formtrafficview.cpp" line="534"/>
+        <location filename="../formtrafficview.cpp" line="692"/>
+        <location filename="../formtrafficview.cpp" line="716"/>
+        <location filename="../formtrafficview.cpp" line="861"/>
         <source>All</source>
         <translation>Все</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="755"/>
-        <location filename="../formtrafficview.cpp" line="923"/>
-        <location filename="../formtrafficview.cpp" line="923"/>
+        <location filename="../formtrafficview.cpp" line="740"/>
+        <location filename="../formtrafficview.cpp" line="884"/>
+        <location filename="../formtrafficview.cpp" line="884"/>
         <source>Rows:</source>
         <translation>Строк:</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="706"/>
-        <location filename="../formtrafficview.cpp" line="884"/>
-        <location filename="../formtrafficview.cpp" line="884"/>
+        <location filename="../formtrafficview.cpp" line="702"/>
+        <location filename="../formtrafficview.cpp" line="866"/>
+        <location filename="../formtrafficview.cpp" line="866"/>
         <source>Function:</source>
         <translation>Функция:</translation>
     </message>
@@ -2364,6 +2350,64 @@ Source: %3</source>
         <location filename="../formtrafficview.ui" line="59"/>
         <source>Pause</source>
         <translation>Пауза</translation>
+    </message>
+</context>
+<context>
+    <name>FuncCodeFilterComboBox</name>
+    <message>
+        <location filename="../controls/funccodefiltercombobox.cpp" line="73"/>
+        <source>All</source>
+        <translation>Все</translation>
+    </message>
+    <message>
+        <location filename="../controls/funccodefiltercombobox.cpp" line="74"/>
+        <source>01 Read Coils</source>
+        <translation>01 Чтение флагов</translation>
+    </message>
+    <message>
+        <location filename="../controls/funccodefiltercombobox.cpp" line="75"/>
+        <source>02 Read Discrete Inputs</source>
+        <translation>02 Чтение дискретных входов</translation>
+    </message>
+    <message>
+        <location filename="../controls/funccodefiltercombobox.cpp" line="76"/>
+        <source>03 Read Holding Registers</source>
+        <translation>03 Чтение регистров хранения</translation>
+    </message>
+    <message>
+        <location filename="../controls/funccodefiltercombobox.cpp" line="77"/>
+        <source>04 Read Input Registers</source>
+        <translation>04 Чтение регистров вода</translation>
+    </message>
+    <message>
+        <location filename="../controls/funccodefiltercombobox.cpp" line="78"/>
+        <source>05 Write Single Coil</source>
+        <translation>05 Запись одного флага</translation>
+    </message>
+    <message>
+        <location filename="../controls/funccodefiltercombobox.cpp" line="79"/>
+        <source>06 Write Single Register</source>
+        <translation>06 Запись одного регистра харенения</translation>
+    </message>
+    <message>
+        <location filename="../controls/funccodefiltercombobox.cpp" line="80"/>
+        <source>15 Write Multiple Coils</source>
+        <translation>15 Запись нескольких флагов</translation>
+    </message>
+    <message>
+        <location filename="../controls/funccodefiltercombobox.cpp" line="81"/>
+        <source>16 Write Multiple Registers</source>
+        <translation>16 Запись нескольких регистров хранения</translation>
+    </message>
+    <message>
+        <location filename="../controls/funccodefiltercombobox.cpp" line="82"/>
+        <source>22 Mask Write Register</source>
+        <translation>22 Запись регистра хранения по маске</translation>
+    </message>
+    <message>
+        <location filename="../controls/funccodefiltercombobox.cpp" line="83"/>
+        <source>23 Read/Write Multiple Registers</source>
+        <translation>23 Чтение/запись нескольких регистров хранения</translation>
     </message>
 </context>
 <context>
@@ -3756,30 +3800,30 @@ Script.onInit(()=&gt;{
 <context>
     <name>PointTypeComboBox</name>
     <message>
-        <location filename="../controls/pointtypecombobox.cpp" line="11"/>
-        <location filename="../controls/pointtypecombobox.cpp" line="32"/>
-        <location filename="../controls/pointtypecombobox.cpp" line="32"/>
+        <location filename="../controls/pointtypecombobox.cpp" line="13"/>
+        <location filename="../controls/pointtypecombobox.cpp" line="34"/>
+        <location filename="../controls/pointtypecombobox.cpp" line="34"/>
         <source>Coils (Read-Write)</source>
         <translation>Регистры флагов (чтение-запись)</translation>
     </message>
     <message>
-        <location filename="../controls/pointtypecombobox.cpp" line="12"/>
-        <location filename="../controls/pointtypecombobox.cpp" line="36"/>
-        <location filename="../controls/pointtypecombobox.cpp" line="36"/>
+        <location filename="../controls/pointtypecombobox.cpp" line="14"/>
+        <location filename="../controls/pointtypecombobox.cpp" line="38"/>
+        <location filename="../controls/pointtypecombobox.cpp" line="38"/>
         <source>Discrete Inputs (Read Only)</source>
         <translation>Дискретные входы (чтение)</translation>
     </message>
     <message>
-        <location filename="../controls/pointtypecombobox.cpp" line="13"/>
-        <location filename="../controls/pointtypecombobox.cpp" line="40"/>
-        <location filename="../controls/pointtypecombobox.cpp" line="40"/>
+        <location filename="../controls/pointtypecombobox.cpp" line="15"/>
+        <location filename="../controls/pointtypecombobox.cpp" line="42"/>
+        <location filename="../controls/pointtypecombobox.cpp" line="42"/>
         <source>Holding Registers (Read-Write)</source>
         <translation>Регистры хранения (чтение-запись)</translation>
     </message>
     <message>
-        <location filename="../controls/pointtypecombobox.cpp" line="14"/>
-        <location filename="../controls/pointtypecombobox.cpp" line="44"/>
-        <location filename="../controls/pointtypecombobox.cpp" line="44"/>
+        <location filename="../controls/pointtypecombobox.cpp" line="16"/>
+        <location filename="../controls/pointtypecombobox.cpp" line="46"/>
+        <location filename="../controls/pointtypecombobox.cpp" line="46"/>
         <source>Input Registers (Read Only)</source>
         <translation>Регистры ввода (чтение)</translation>
     </message>

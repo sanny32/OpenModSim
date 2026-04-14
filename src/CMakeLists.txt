@@ -121,6 +121,7 @@ set(SOURCES
     controls/addressbasecombobox.cpp
     controls/addressspacecombobox.cpp
     controls/bitpatterncontrol.cpp
+    controls/funccodefiltercombobox.cpp
     controls/booleancombobox.cpp
     controls/bytelisttextedit.cpp
     controls/checkablegroupbox.cpp
@@ -219,6 +220,7 @@ set(HEADERS
     controls/addressbasecombobox.h
     controls/addressspacecombobox.h
     controls/bitpatterncontrol.h
+    controls/funccodefiltercombobox.h
     controls/booleancombobox.h
     controls/bytelisttextedit.h
     controls/checkablegroupbox.h

@@ -10,6 +10,7 @@
 #include "modbusmultiserver.h"
 #include "displaydefinition.h"
 #include "apppreferences.h"
+#include "controls/funccodefiltercombobox.h"
 #include "controls/numericcombobox.h"
 
 ///
@@ -145,7 +146,7 @@ private:
     QLabel* _labelUnitId = nullptr;
     QSpinBox* _unitIdFilter = nullptr;
     QLabel* _labelFuncCode = nullptr;
-    QComboBox* _funcCodeFilter = nullptr;
+    FuncCodeFilterComboBox* _funcCodeFilter = nullptr;
     QLabel* _labelSource = nullptr;
     QComboBox* _sourceFilter = nullptr;
     QLabel* _labelRowLimit = nullptr;

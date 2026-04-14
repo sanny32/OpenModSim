@@ -8,6 +8,8 @@
 AddressBaseComboBox::AddressBaseComboBox(QWidget* parent)
     : QComboBox(parent)
 {
+    setSizeAdjustPolicy(QComboBox::AdjustToContents);
+
     addItem(tr("0-based"), QVariant::fromValue(AddressBase::Base0));
     addItem(tr("1-based"), QVariant::fromValue(AddressBase::Base1));
 
