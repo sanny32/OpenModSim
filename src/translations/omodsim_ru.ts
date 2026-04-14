@@ -2642,7 +2642,7 @@ Script.onInit(()=&gt;{
         <location filename="../mainwindow.ui" line="592"/>
         <location filename="../mainwindow.ui" line="595"/>
         <source>New Map View</source>
-        <translation>Новый просмотр карты</translation>
+        <translation>Новый просмотр карты регистров</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="600"/>
@@ -2667,7 +2667,7 @@ Script.onInit(()=&gt;{
     <message>
         <location filename="../mainwindow.ui" line="333"/>
         <source>About Open ModSim...</source>
-        <translation>О программе Open ModSim...</translation>
+        <translation type="unfinished">О программе OpenModSim...</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="358"/>
