@@ -54,6 +54,11 @@ QString formatWrittenValues(const QModbusDataUnit& data, int previewLimit = 16)
         .arg(suffix);
 }
 
+///
+/// \brief formTypeName
+/// \param form
+/// \return
+///
 QString formTypeName(const QWidget* form)
 {
     if (qobject_cast<const FormDataView*>(form))
@@ -67,6 +72,11 @@ QString formTypeName(const QWidget* form)
     return QCoreApplication::translate("MainWindow", "Form");
 }
 
+///
+/// \brief formDisplayName
+/// \param form
+/// \return
+///
 QString formDisplayName(const QWidget* form)
 {
     if (!form)
