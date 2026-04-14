@@ -648,7 +648,7 @@ void MainWindow::on_actionCloseAll_triggered()
 void MainWindow::on_actionOpenProject_triggered()
 {
     QStringList filters;
-    filters << tr("Project files (*.oms)");
+    filters << tr("Project files (*.omp)");
     filters << tr("All files (*)");
 
     const auto filename = QFileDialog::getOpenFileName(this, QString(), _project->savePath(), filters.join(";;"));
@@ -679,13 +679,13 @@ void MainWindow::on_actionSaveProject_triggered()
 void MainWindow::on_actionSaveProjectAs_triggered()
 {
     QStringList filters;
-    filters << tr("Project files (*.oms)");
+    filters << tr("Project files (*.omp)");
     auto filename = QFileDialog::getSaveFileName(this, QString(), _project->savePath(), filters.join(";;"));
 
     if(filename.isEmpty()) return;
 
-    if(!filename.endsWith(".oms", Qt::CaseInsensitive))
-        filename.append(".oms");
+    if(!filename.endsWith(".omp", Qt::CaseInsensitive))
+        filename.append(".omp");
 
     _project->setSavePath(QFileInfo(filename).absoluteDir().absolutePath());
     saveProject(filename);
