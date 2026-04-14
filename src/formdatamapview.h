@@ -9,7 +9,7 @@
 #include <QXmlStreamReader>
 #include "modbusmultiserver.h"
 #include "connectiondetails.h"
-#include "controls/outputtypes.h"
+#include "outputtypes.h"
 #include "enums.h"
 #include "datamapdatamodel.h"
 
@@ -35,10 +35,7 @@ public:
 
     DataMapViewDefinitions displayDefinition() const;
     void setDisplayDefinition(const DataMapViewDefinitions& dd);
-    QColor backgroundColor() const;
-    void setBackgroundColor(const QColor& color);
-    QColor foregroundColor() const;
-    void setForegroundColor(const QColor& color);
+
     bool zeroBasedAddress() const { return _model && _model->zeroBased(); }
     void setZeroBasedAddress(bool zeroBased);
     bool hexView() const { return _model && _model->hexView(); }
@@ -91,9 +88,9 @@ private:
 private:
     Ui::FormDataMapView*        ui;
     ModbusMultiServer&          _mbMultiServer;
-    DataMapViewDefinitions  _displayDefinition;
-    DataMapDataModel*       _model           = nullptr;
-    DataMapFilterProxy*     _proxy           = nullptr;
+    DataMapViewDefinitions      _displayDefinition;
+    DataMapDataModel*           _model           = nullptr;
+    DataMapFilterProxy*         _proxy           = nullptr;
     QComboBox*                  _filterTypeCombo = nullptr;
     QSpinBox*                   _filterUnitSpin  = nullptr;
     bool                        _autoRequestMap = false;

@@ -684,35 +684,6 @@ void FormDataMapView::setDisplayDefinition(const DataMapViewDefinitions& dd)
     _model->setHexView(dd.HexView);
 }
 
-QColor FormDataMapView::backgroundColor() const
-{
-    return ui->tableView->palette().color(QPalette::Base);
-}
-
-void FormDataMapView::setBackgroundColor(const QColor& color)
-{
-    QPalette palette = ui->tableView->palette();
-    palette.setColor(QPalette::Base, color);
-    palette.setColor(QPalette::AlternateBase, color.lighter(103));
-    ui->tableView->setPalette(palette);
-    ui->tableView->viewport()->setPalette(palette);
-}
-
-QColor FormDataMapView::foregroundColor() const
-{
-    return ui->tableView->palette().color(QPalette::Text);
-}
-
-void FormDataMapView::setForegroundColor(const QColor& color)
-{
-    QPalette palette = ui->tableView->palette();
-    palette.setColor(QPalette::Text, color);
-    palette.setColor(QPalette::WindowText, color);
-    palette.setColor(QPalette::ButtonText, color);
-    ui->tableView->setPalette(palette);
-    ui->tableView->viewport()->setPalette(palette);
-}
-
 void FormDataMapView::setZeroBasedAddress(bool zeroBased)
 {
     if (_model->zeroBased() == zeroBased)

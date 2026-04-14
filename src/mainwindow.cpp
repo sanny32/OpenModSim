@@ -770,7 +770,10 @@ void MainWindow::applyConsoleMaxLines(int n)
 ///
 void MainWindow::applyFont(const QFont& font)
 {
-    forEachTypedForm(ui->mdiArea, [&font](auto* frm) { frm->setFont(font); });
+    forEachTypedForm(ui->mdiArea, [&font](auto* frm) {
+        if (!qobject_cast<FormDataMapView*>(frm))
+            frm->setFont(font);
+    });
 }
 
 ///
@@ -794,12 +797,18 @@ void MainWindow::applyScriptFont(const QFont& font)
 void MainWindow::applyColors(const QColor& bg, const QColor& fg, const QColor& status, const QColor& addr, const QColor& comment)
 {
     forEachTypedForm(ui->mdiArea, [&bg, &fg, &status, &addr, &comment](auto* frm) {
-        frm->setBackgroundColor(bg);
-        frm->setForegroundColor(fg);
         if (auto* data = qobject_cast<FormDataView*>(frm)) {
+            data->setBackgroundColor(bg);
+            data->setForegroundColor(fg);
             data->setStatusColor(status);
             data->setAddressColor(addr);
             data->setCommentColor(comment);
+        } else if (auto* traffic = qobject_cast<FormTrafficView*>(frm)) {
+            traffic->setBackgroundColor(bg);
+            traffic->setForegroundColor(fg);
+        } else if (auto* script = qobject_cast<FormScriptView*>(frm)) {
+            script->setBackgroundColor(bg);
+            script->setForegroundColor(fg);
         }
     });
 }
