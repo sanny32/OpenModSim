@@ -181,7 +181,6 @@ void loadXmlOfForm(QWidget* widget, QXmlStreamReader& r)
         frm->setZoomPercent(prefs.fontZoom());
         frm->setForegroundColor(prefs.foregroundColor());
         frm->setBackgroundColor(prefs.backgroundColor());
-        frm->setStatusColor(prefs.statusColor());
         frm->setAddressColor(prefs.addressColor());
         frm->setCommentColor(prefs.commentColor());
     }

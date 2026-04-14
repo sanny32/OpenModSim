@@ -44,19 +44,6 @@
       <number>0</number>
      </property>
      <item>
-      <widget class="QLabel" name="labelStatus">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="autoFillBackground">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item>
       <widget class="QListView" name="listView">
        <property name="focusPolicy">
         <enum>Qt::NoFocus</enum>

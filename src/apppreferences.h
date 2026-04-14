@@ -33,9 +33,6 @@ public:
     QColor foregroundColor() const { return _foregroundColor; }
     void setForegroundColor(const QColor& c);
 
-    QColor statusColor() const { return _statusColor; }
-    void setStatusColor(const QColor& c);
-
     QColor addressColor() const { return _addressColor; }
     void setAddressColor(const QColor& c);
 
@@ -96,7 +93,6 @@ private:
     bool          _checkForUpdates{ true };
     QColor        _backgroundColor{ Qt::white };
     QColor        _foregroundColor{ Qt::black };
-    QColor        _statusColor{ Qt::red };
     QColor        _addressColor{ 128, 128, 128 };
     QColor        _commentColor{ 128, 128, 128 };
     QString       _language{ translationLang() };

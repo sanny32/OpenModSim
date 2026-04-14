@@ -70,9 +70,6 @@ public:
     QColor foregroundColor() const;
     void setForegroundColor(const QColor& clr);
 
-    QColor statusColor() const;
-    void setStatusColor(const QColor& clr);
-
     QColor addressColor() const;
     void setAddressColor(const QColor& clr);
 
@@ -131,7 +128,6 @@ signals:
     void fontChanged(const QFont&);
     void foregroundColorChanged(const QColor&);
     void backgroundColorChanged(const QColor&);
-    void statusColorChanged(const QColor&);
     void addressColorChanged(const QColor&);
     void commentColorChanged(const QColor&);
     void colorChanged(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr, const QColor& clr);

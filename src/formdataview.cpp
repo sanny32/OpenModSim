@@ -499,26 +499,6 @@ void FormDataView::setForegroundColor(const QColor& clr)
 }
 
 ///
-/// \brief FormDataView::statusColor
-/// \return
-///
-QColor FormDataView::statusColor() const
-{
-    return ui->outputWidget->statusColor();
-}
-
-///
-/// \brief FormDataView::setStatusColor
-/// \param clr
-///
-void FormDataView::setStatusColor(const QColor& clr)
-{
-    if(statusColor() == clr) return;
-    ui->outputWidget->setStatusColor(clr);
-    emit statusColorChanged(clr);
-}
-
-///
 /// \brief FormDataView::addressColor
 /// \return
 ///
@@ -917,8 +897,6 @@ void FormDataView::linkTo(FormDataView* other)
     connect(other, &FormDataView::addressColorChanged, this,  &FormDataView::setAddressColor);
     connect(this,  &FormDataView::commentColorChanged, other, &FormDataView::setCommentColor);
     connect(other, &FormDataView::commentColorChanged, this,  &FormDataView::setCommentColor);
-    connect(this,  &FormDataView::statusColorChanged, other, &FormDataView::setStatusColor);
-    connect(other, &FormDataView::statusColorChanged, this,  &FormDataView::setStatusColor);
     connect(this, &FormDataView::colorChanged, other,
         [other](quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr, const QColor& clr) {
             QSignalBlocker blocker(other);
@@ -1037,20 +1015,6 @@ void FormDataView::on_comboBoxModbusPointType_pointTypeChanged(QModbusDataUnit::
 ///
 void FormDataView::updateStatus()
 {
-    const auto dd = displayDefinition();
-    if(_mbMultiServer.isConnected())
-    {
-        const auto defs = _mbMultiServer.getModbusDefinitions();
-        const auto addr = dd.PointAddress - (zeroBasedAddress() ? 0 : 1);
-        if(addr + dd.Length <= ModbusLimits::addressRange(defs.AddrSpace).to())
-            ui->outputWidget->setStatus(QString());
-        else
-            ui->outputWidget->setInvalidLengthStatus();
-    }
-    else
-    {
-        ui->outputWidget->setNotConnectedStatus();
-    }
 }
 
 ///

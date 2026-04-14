@@ -445,15 +445,10 @@ OutputDataWidget::OutputDataWidget(QWidget *parent) :
     ui->listView->setFlow(QListView::TopToBottom);
     ui->listView->setModel(_listModel.get());
     ui->listView->setItemDelegate(new DataDelegate( this ));
-    ui->labelStatus->setAutoFillBackground(true);
-
     setFont(defaultMonospaceFont());
     setAutoFillBackground(true);
     setForegroundColor(Qt::black);
     setBackgroundColor(Qt::white);
-
-    setStatusColor(Qt::red);
-    setNotConnectedStatus();
 
     _baseFontSize = ui->listView->font().pointSizeF();
     if (_baseFontSize <= 0) _baseFontSize = 10.0;
@@ -494,12 +489,6 @@ OutputDataWidget::~OutputDataWidget()
 ///
 void OutputDataWidget::changeEvent(QEvent* event)
 {
-    if (event->type() == QEvent::LanguageChange)
-    {
-        if(!_listModel->isValid())
-            setNotConnectedStatus();
-    }
-
     QWidget::changeEvent(event);
 }
 
@@ -651,26 +640,6 @@ void OutputDataWidget::setForegroundColor(const QColor& clr)
 }
 
 ///
-/// \brief OutputDataWidget::statusColor
-/// \return
-///
-QColor OutputDataWidget::statusColor() const
-{
-    return ui->labelStatus->palette().color(QPalette::WindowText);
-}
-
-///
-/// \brief OutputDataWidget::setStatusColor
-/// \param clr
-///
-void OutputDataWidget::setStatusColor(const QColor& clr)
-{
-    auto pal = ui->labelStatus->palette();
-    pal.setColor(QPalette::WindowText, clr);
-    ui->labelStatus->setPalette(pal);
-}
-
-///
 /// \brief OutputDataWidget::addressColor
 /// \return
 ///
@@ -734,7 +703,6 @@ void OutputDataWidget::setFont(const QFont& font)
     _baseFontSize = font.pointSizeF();
 
     ui->listView->setFont(font);
-    ui->labelStatus->setFont(font);
 
     setZoomPercent(_zoomPercent);
 }
@@ -760,7 +728,6 @@ void OutputDataWidget::setZoomPercent(int zoomPercent)
     font.setPointSizeF(_baseFontSize * _zoomPercent / 100.0);
 
     ui->listView->setFont(font);
-    ui->labelStatus->setFont(font);
 }
 
 ///
@@ -786,26 +753,6 @@ void OutputDataWidget::setDataViewColumnsDistance(int value)
 
 
 
-
-///
-/// \brief OutputDataWidget::setStatus
-/// \param status
-///
-void OutputDataWidget::setStatus(const QString& status)
-{
-    if(status.isEmpty())
-    {
-        ui->labelStatus->setText(status);
-    }
-    else
-    {
-        const auto info = QString("*** %1 ***").arg(status);
-        if(info != ui->labelStatus->text())
-        {
-            ui->labelStatus->setText(info);
-        }
-    }
-}
 
 ///
 /// \brief OutputDataWidget::paint
@@ -834,14 +781,7 @@ int OutputDataWidget::paint(const QRect& rc, QPainter& painter, int startRow)
     painter.setFont(ui->listView->font());
 
     int cy = rc.top();
-    const auto textStatus = ui->labelStatus->text();
-    if (!textStatus.isEmpty())
-    {
-        auto rcStatus = painter.boundingRect(rc.left(), cy, rc.width(), rc.height() - cy, Qt::TextWordWrap, textStatus);
-        painter.drawText(rcStatus, Qt::TextWordWrap, textStatus);
-        cy = rcStatus.bottom() + 4;
-    }
-    const int dataTop = cy;  // top of the data area — used to reset cy on column transition
+    const int dataTop = rc.top();
 
     int cx = rc.left();
     int maxWidth = 0;
@@ -1484,23 +1424,6 @@ QModelIndex OutputDataWidget::getValueIndex(const QModelIndex& index) const
     }
     return idx;
 }
-
-///
-/// \brief OutputDataWidget::setNotConnectedStatus
-///
-void OutputDataWidget::setNotConnectedStatus()
-{
-    setStatus(tr("NOT CONNECTED!"));
-}
-
-///
-/// \brief OutputDataWidget::setInvalidLengthStatus
-///
-void OutputDataWidget::setInvalidLengthStatus()
-{
-    setStatus(tr("Invalid Data Length Specified"));
-}
-
 
 ///
 /// \brief OutputDataWidget::showZoomOverlay

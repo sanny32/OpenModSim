@@ -153,9 +153,6 @@ public:
     QColor foregroundColor() const;
     void setForegroundColor(const QColor& clr);
 
-    QColor statusColor() const;
-    void setStatusColor(const QColor& clr);
-
     QColor addressColor() const;
     void setAddressColor(const QColor& clr);
 
@@ -171,9 +168,6 @@ public:
     int dataViewColumnsDistance() const;
     void setDataViewColumnsDistance(int value);
 
-    void setStatus(const QString& status);
-    void setNotConnectedStatus();
-    void setInvalidLengthStatus();
 
     int rowCount() const;
     int paint(const QRect& rc, QPainter& painter, int startRow = 0);

@@ -49,18 +49,6 @@ DialogPreferences::DialogPreferences(MainWindow* mainWindow, QWidget* parent)
         ui->pushButtonForegroundColor->setColor(_fgColor);
     });
 
-    connect(ui->pushButtonStatusColor, &QPushButton::clicked, this, [this]() {
-        QColorDialog dlg(_statusColor, this);
-        if (dlg.exec() == QDialog::Accepted) {
-            _statusColor = dlg.currentColor();
-            ui->pushButtonStatusColor->setColor(_statusColor);
-        }
-    });
-    connect(ui->pushButtonResetStatusColor, &QPushButton::clicked, this, [this]() {
-        _statusColor = Qt::red;
-        ui->pushButtonStatusColor->setColor(_statusColor);
-    });
-
     connect(ui->pushButtonAddressColor, &QPushButton::clicked, this, [this]() {
         QColorDialog dlg(_addrColor, this);
         if (dlg.exec() == QDialog::Accepted) {
@@ -153,12 +141,10 @@ void DialogPreferences::loadFromPreferences()
     // Interface - colors
     _bgColor     = prefs.backgroundColor();
     _fgColor     = prefs.foregroundColor();
-    _statusColor = prefs.statusColor();
     _addrColor    = prefs.addressColor();
     _commentColor = prefs.commentColor();
     ui->pushButtonBackgroundColor->setColor(_bgColor);
     ui->pushButtonForegroundColor->setColor(_fgColor);
-    ui->pushButtonStatusColor->setColor(_statusColor);
     ui->pushButtonAddressColor->setColor(_addrColor);
     ui->pushButtonCommentColor->setColor(_commentColor);
 
@@ -210,10 +196,9 @@ void DialogPreferences::apply()
     // Interface - colors
     prefs.setBackgroundColor(_bgColor);
     prefs.setForegroundColor(_fgColor);
-    prefs.setStatusColor(_statusColor);
     prefs.setAddressColor(_addrColor);
     prefs.setCommentColor(_commentColor);
-    if (_mainWindow) _mainWindow->applyColors(_bgColor, _fgColor, _statusColor, _addrColor, _commentColor);
+    if (_mainWindow) _mainWindow->applyColors(_bgColor, _fgColor, _addrColor, _commentColor);
 
     // Interface - language
     const QString lang = ui->comboBoxLanguage->currentData().toString();
