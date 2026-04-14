@@ -129,6 +129,10 @@ jobs:
         run: xcopy %CD%\${{ env.BUILD_DIR }}\docs %CD%\${{ env.BUILD_DIR }}\${{ env.BUILD_TYPE }}\docs /E /I /Y
         shell: cmd
 
+      - name: Copy demos
+        run: xcopy %CD%\demos %CD%\${{ env.BUILD_DIR }}\${{ env.BUILD_TYPE }}\demos /E /I /Y
+        shell: cmd
+
       - name: Upload Executable
         id: upload-exe
         uses: actions/upload-artifact@v7

@@ -177,6 +177,9 @@ jobs:
       - name: Copy OpenModsim docs
         run: rsync -a "${{ env.BUILD_DIR }}/docs/" "${{ env.DEB_SRC_DIR }}/opt/OpenModSim/docs/"
 
+      - name: Copy demos
+        run: rsync -a "demos/" "${{ env.DEB_SRC_DIR }}/opt/OpenModSim/demos/"
+
       - name: Create Debian control file
         run: |
           sed -e "s|@PACKAGE_NAME@|${{ env.DEB_PACKAGE_NAME }}|g" \

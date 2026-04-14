@@ -120,6 +120,11 @@ jobs:
           mkdir -p "${{ env.BUILD_DIR }}/omodsim.app/Contents/Resources/docs"
           cp -R "${{ env.BUILD_DIR }}/docs/"* "${{ env.BUILD_DIR }}/omodsim.app/Contents/Resources/docs/"
 
+      - name: Copy demos into app bundle
+        run: |
+          mkdir -p "${{ env.BUILD_DIR }}/omodsim.app/Contents/Resources/demos"
+          cp -R "demos/"* "${{ env.BUILD_DIR }}/omodsim.app/Contents/Resources/demos/"
+
       - name: Create DMG
         run: |
           DMG_NAME="${{ env.DMG_PACKAGE_NAME }}_${{ env.APP_VERSION }}_macos.dmg"

@@ -203,6 +203,9 @@ jobs:
       - name: Copy OpenModsim docs
         run: rsync -a "${{ env.BUILD_DIR }}/docs/" "${{ env.BUILD_RPM_DIR }}/SOURCES/omodsim/opt/OpenModSim/docs/"
 
+      - name: Copy demos
+        run: rsync -a "demos/" "${{ env.BUILD_RPM_DIR }}/SOURCES/omodsim/opt/OpenModSim/demos/"
+
       - name: Create RPM spec file
         run: |
           sed -e "s|@PACKAGE_NAME@|${{ env.RPM_PACKAGE_NAME }}|g" \
