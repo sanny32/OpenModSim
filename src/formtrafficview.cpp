@@ -218,6 +218,7 @@ void FormTrafficView::changeEvent(QEvent* e)
     if (e->type() == QEvent::LanguageChange)
     {
         ui->retranslateUi(this);
+        retranslateToolbarControls();
     }
 
     QWidget::changeEvent(e);
@@ -766,6 +767,8 @@ void FormTrafficView::setupFilterControls()
         rebuildVisibleTraffic();
         emit definitionChanged();
     });
+
+    retranslateToolbarControls();
 }
 
 ///
@@ -862,6 +865,62 @@ void FormTrafficView::addToolbarSpacer(int width)
     spacer->setFixedWidth(width);
     spacer->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
     ui->toolBarTraffic->addWidget(spacer);
+}
+
+///
+/// \brief FormTrafficView::retranslateToolbarControls
+///
+void FormTrafficView::retranslateToolbarControls()
+{
+    if (_labelUnitId)
+        _labelUnitId->setText(tr("Unit:"));
+
+    if (_unitIdFilter) {
+        _unitIdFilter->setSpecialValueText(tr("All"));
+        _unitIdFilter->setToolTip(tr("-1 = all unit ids"));
+    }
+
+    if (_labelFuncCode)
+        _labelFuncCode->setText(tr("Function:"));
+
+    if (_funcCodeFilter) {
+        const QVariant currentData = _funcCodeFilter->currentData();
+        const QSignalBlocker blocker(_funcCodeFilter);
+        _funcCodeFilter->clear();
+        _funcCodeFilter->addItem(tr("All"), -1);
+        _funcCodeFilter->addItem(tr("01 Read Coils"), static_cast<int>(QModbusPdu::ReadCoils));
+        _funcCodeFilter->addItem(tr("02 Read Discrete Inputs"), static_cast<int>(QModbusPdu::ReadDiscreteInputs));
+        _funcCodeFilter->addItem(tr("03 Read Holding Registers"), static_cast<int>(QModbusPdu::ReadHoldingRegisters));
+        _funcCodeFilter->addItem(tr("04 Read Input Registers"), static_cast<int>(QModbusPdu::ReadInputRegisters));
+        _funcCodeFilter->addItem(tr("05 Write Single Coil"), static_cast<int>(QModbusPdu::WriteSingleCoil));
+        _funcCodeFilter->addItem(tr("06 Write Single Register"), static_cast<int>(QModbusPdu::WriteSingleRegister));
+        _funcCodeFilter->addItem(tr("15 Write Multiple Coils"), static_cast<int>(QModbusPdu::WriteMultipleCoils));
+        _funcCodeFilter->addItem(tr("16 Write Multiple Registers"), static_cast<int>(QModbusPdu::WriteMultipleRegisters));
+        _funcCodeFilter->addItem(tr("22 Mask Write Register"), static_cast<int>(QModbusPdu::MaskWriteRegister));
+        _funcCodeFilter->addItem(tr("23 Read/Write Multiple Registers"), static_cast<int>(QModbusPdu::ReadWriteMultipleRegisters));
+        int idx = _funcCodeFilter->findData(currentData);
+        if (idx < 0)
+            idx = 0;
+        _funcCodeFilter->setCurrentIndex(idx);
+    }
+
+    if (_labelSource)
+        _labelSource->setText(tr("Source:"));
+
+    updateSourceFilter();
+
+    if (_exceptionsFilter) {
+        _exceptionsFilter->setText(tr("Exceptions Only"));
+        _exceptionsFilter->setToolTip(tr("Show only responses with Modbus exception"));
+    }
+
+    if (_autoscrollCheck) {
+        _autoscrollCheck->setText(tr("Autoscroll"));
+        _autoscrollCheck->setToolTip(tr("Automatically scroll to the latest entry"));
+    }
+
+    if (_labelRowLimit)
+        _labelRowLimit->setText(tr("Rows:"));
 }
 
 ///

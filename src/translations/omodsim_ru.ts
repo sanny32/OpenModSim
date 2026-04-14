@@ -2186,90 +2186,162 @@ Source: %3</source>
     </message>
     <message>
         <location filename="../formtrafficview.cpp" line="103"/>
-        <location filename="../formtrafficview.cpp" line="737"/>
-        <location filename="../formtrafficview.cpp" line="737"/>
+        <location filename="../formtrafficview.cpp" line="738"/>
+        <location filename="../formtrafficview.cpp" line="913"/>
+        <location filename="../formtrafficview.cpp" line="738"/>
+        <location filename="../formtrafficview.cpp" line="913"/>
         <source>Exceptions Only</source>
         <translation>Только исключения</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="516"/>
+        <location filename="../formtrafficview.cpp" line="517"/>
         <source>Modbus/TCP Srv %1:%2</source>
         <translation>Modbus/TCP сервер %1:%2</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="518"/>
+        <location filename="../formtrafficview.cpp" line="519"/>
         <source>Port %1:%2:%3:%4:%5</source>
         <translation>Порт %1:%2:%3:%4:%5</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="647"/>
+        <location filename="../formtrafficview.cpp" line="648"/>
         <source>Text files (*.txt)</source>
         <translation>Текстовые файлы (*.txt)</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="654"/>
+        <location filename="../formtrafficview.cpp" line="655"/>
         <source>Log exported successfully to file %1</source>
         <translation>Лог успешно экспортирован в файл %1</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="656"/>
+        <location filename="../formtrafficview.cpp" line="657"/>
         <source>Export log error!</source>
         <translation>Ошибка экспорта лога!</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="690"/>
+        <location filename="../formtrafficview.cpp" line="691"/>
+        <location filename="../formtrafficview.cpp" line="876"/>
+        <location filename="../formtrafficview.cpp" line="876"/>
         <source>Unit:</source>
         <translation>Устройство:</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="696"/>
+        <location filename="../formtrafficview.cpp" line="697"/>
+        <location filename="../formtrafficview.cpp" line="880"/>
+        <location filename="../formtrafficview.cpp" line="880"/>
         <source>-1 = all unit ids</source>
         <translation>-1 = все устройства</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="727"/>
+        <location filename="../formtrafficview.cpp" line="728"/>
+        <location filename="../formtrafficview.cpp" line="908"/>
+        <location filename="../formtrafficview.cpp" line="908"/>
         <source>Source:</source>
         <translation>Источник:</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="738"/>
+        <location filename="../formtrafficview.cpp" line="739"/>
+        <location filename="../formtrafficview.cpp" line="914"/>
+        <location filename="../formtrafficview.cpp" line="914"/>
         <source>Show only responses with Modbus exception</source>
         <translation>Показывать только ответы с исключением Modbus</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="745"/>
+        <location filename="../formtrafficview.cpp" line="746"/>
+        <location filename="../formtrafficview.cpp" line="918"/>
+        <location filename="../formtrafficview.cpp" line="918"/>
         <source>Autoscroll</source>
         <translation>Автопрокрутка</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="746"/>
+        <location filename="../formtrafficview.cpp" line="747"/>
+        <location filename="../formtrafficview.cpp" line="919"/>
+        <location filename="../formtrafficview.cpp" line="919"/>
         <source>Automatically scroll to the latest entry</source>
         <translation>Автоматически прокручивать к последней записи</translation>
+    </message>
+    <message>
+        <location filename="../formtrafficview.cpp" line="891"/>
+        <source>01 Read Coils</source>
+        <translation>01 Чтение флагов</translation>
+    </message>
+    <message>
+        <location filename="../formtrafficview.cpp" line="892"/>
+        <source>02 Read Discrete Inputs</source>
+        <translation>02 Чтение дискретных входов</translation>
+    </message>
+    <message>
+        <location filename="../formtrafficview.cpp" line="893"/>
+        <source>03 Read Holding Registers</source>
+        <translation>03 Чтение регистров хранения</translation>
+    </message>
+    <message>
+        <location filename="../formtrafficview.cpp" line="894"/>
+        <source>04 Read Input Registers</source>
+        <translation>04 Чтение регистров вода</translation>
+    </message>
+    <message>
+        <location filename="../formtrafficview.cpp" line="895"/>
+        <source>05 Write Single Coil</source>
+        <translation>05 Запись одного флага</translation>
+    </message>
+    <message>
+        <location filename="../formtrafficview.cpp" line="896"/>
+        <source>06 Write Single Register</source>
+        <translation>06 Запись одного регистра харенения</translation>
+    </message>
+    <message>
+        <location filename="../formtrafficview.cpp" line="897"/>
+        <source>15 Write Multiple Coils</source>
+        <translation>15 Запись нескольких флагов</translation>
+    </message>
+    <message>
+        <location filename="../formtrafficview.cpp" line="898"/>
+        <source>16 Write Multiple Registers</source>
+        <translation>16 Запись нескольких регистров хранения</translation>
+    </message>
+    <message>
+        <location filename="../formtrafficview.cpp" line="899"/>
+        <source>22 Mask Write Register</source>
+        <translation>22 Запись регистра хранения по маске</translation>
+    </message>
+    <message>
+        <location filename="../formtrafficview.cpp" line="900"/>
+        <source>23 Read/Write Multiple Registers</source>
+        <translation>23 Чтение/запись нескольких регистров хранения</translation>
     </message>
     <message>
         <location filename="../formtrafficview.cpp" line="88"/>
         <location filename="../formtrafficview.cpp" line="92"/>
         <location filename="../formtrafficview.cpp" line="96"/>
-        <location filename="../formtrafficview.cpp" line="537"/>
-        <location filename="../formtrafficview.cpp" line="695"/>
-        <location filename="../formtrafficview.cpp" line="708"/>
-        <location filename="../formtrafficview.cpp" line="730"/>
+        <location filename="../formtrafficview.cpp" line="538"/>
+        <location filename="../formtrafficview.cpp" line="696"/>
+        <location filename="../formtrafficview.cpp" line="709"/>
+        <location filename="../formtrafficview.cpp" line="731"/>
+        <location filename="../formtrafficview.cpp" line="879"/>
+        <location filename="../formtrafficview.cpp" line="890"/>
         <location filename="../formtrafficview.cpp" line="92"/>
         <location filename="../formtrafficview.cpp" line="96"/>
-        <location filename="../formtrafficview.cpp" line="537"/>
-        <location filename="../formtrafficview.cpp" line="695"/>
-        <location filename="../formtrafficview.cpp" line="708"/>
-        <location filename="../formtrafficview.cpp" line="730"/>
+        <location filename="../formtrafficview.cpp" line="538"/>
+        <location filename="../formtrafficview.cpp" line="696"/>
+        <location filename="../formtrafficview.cpp" line="709"/>
+        <location filename="../formtrafficview.cpp" line="731"/>
+        <location filename="../formtrafficview.cpp" line="879"/>
+        <location filename="../formtrafficview.cpp" line="890"/>
         <source>All</source>
         <translation>Все</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="754"/>
+        <location filename="../formtrafficview.cpp" line="755"/>
+        <location filename="../formtrafficview.cpp" line="923"/>
+        <location filename="../formtrafficview.cpp" line="923"/>
         <source>Rows:</source>
         <translation>Строк:</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="705"/>
+        <location filename="../formtrafficview.cpp" line="706"/>
+        <location filename="../formtrafficview.cpp" line="884"/>
+        <location filename="../formtrafficview.cpp" line="884"/>
         <source>Function:</source>
         <translation>Функция:</translation>
     </message>

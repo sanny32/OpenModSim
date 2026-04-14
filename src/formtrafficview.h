@@ -112,6 +112,7 @@ private:
     void initializeDisplayDefinition();
     void setupServerConnections();
     void addToolbarSpacer(int width);
+    void retranslateToolbarControls();
     void resetTrafficCounters();
     void setDisplayDefinitionSilent(const TrafficViewDefinitions& dd);
     void updateSourceFilter();
