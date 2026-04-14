@@ -13,10 +13,10 @@ namespace {
 QString registerTypeToString(QModbusDataUnit::RegisterType type)
 {
     switch (type) {
-        case QModbusDataUnit::Coils:            return QObject::tr("Coils");
-        case QModbusDataUnit::DiscreteInputs:   return QObject::tr("Discrete Inputs");
-        case QModbusDataUnit::InputRegisters:   return QObject::tr("Input Registers");
-        case QModbusDataUnit::HoldingRegisters: return QObject::tr("Holding Registers");
+        case QModbusDataUnit::Coils:            return QCoreApplication::translate("DataMapDataModel", "Coils");
+        case QModbusDataUnit::DiscreteInputs:   return QCoreApplication::translate("DataMapDataModel", "Discrete Inputs");
+        case QModbusDataUnit::InputRegisters:   return QCoreApplication::translate("DataMapDataModel", "Input Registers");
+        case QModbusDataUnit::HoldingRegisters: return QCoreApplication::translate("DataMapDataModel", "Holding Registers");
         default:                                return {};
     }
 }
@@ -26,9 +26,9 @@ QString registerTypeToString(QModbusDataUnit::RegisterType type)
 ///
 QModbusDataUnit::RegisterType stringToRegisterType(const QString& str)
 {
-    if (str == QObject::tr("Coils"))           return QModbusDataUnit::Coils;
-    if (str == QObject::tr("Discrete Inputs")) return QModbusDataUnit::DiscreteInputs;
-    if (str == QObject::tr("Input Registers")) return QModbusDataUnit::InputRegisters;
+    if (str == QCoreApplication::translate("DataMapDataModel", "Coils"))           return QModbusDataUnit::Coils;
+    if (str == QCoreApplication::translate("DataMapDataModel", "Discrete Inputs")) return QModbusDataUnit::DiscreteInputs;
+    if (str == QCoreApplication::translate("DataMapDataModel", "Input Registers")) return QModbusDataUnit::InputRegisters;
     return QModbusDataUnit::HoldingRegisters;
 }
 
@@ -219,31 +219,12 @@ QVariant DataMapDataModel::data(const QModelIndex& index, int role) const
             break;
 
         case ColDataType:
-            if (role == Qt::DisplayRole) {
-                switch (e.type) {
-                    case DataType::Binary:  return tr("Binary");
-                    case DataType::UInt16:  return tr("UInt16");
-                    case DataType::Int16:   return tr("Int16");
-                    case DataType::Hex:     return tr("Hex");
-                    case DataType::Float32: return tr("Float32");
-                    case DataType::Float64: return tr("Float64");
-                    case DataType::Int32:   return tr("Int32");
-                    case DataType::UInt32:  return tr("UInt32");
-                    case DataType::Int64:   return tr("Int64");
-                    case DataType::UInt64:  return tr("UInt64");
-                    case DataType::Ansi:    return tr("Ansi");
-                }
-            }
-            if (role == Qt::EditRole)
+            if (role == Qt::DisplayRole || role == Qt::EditRole)
                 return enumToString(e.type);
             break;
 
         case ColOrder:
-            if (role == Qt::DisplayRole) {
-                if (!isMultiRegisterType(e.type)) return QString();
-                return (e.order == RegisterOrder::MSRF) ? tr("MSRF") : tr("LSRF");
-            }
-            if (role == Qt::EditRole)
+            if (role == Qt::DisplayRole || role == Qt::EditRole)
                 return isMultiRegisterType(e.type) ? enumToString(e.order) : QString();
             break;
 

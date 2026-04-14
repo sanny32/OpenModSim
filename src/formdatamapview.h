@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include <QComboBox>
+#include <QLabel>
 #include <QSpinBox>
 #include <QPrinter>
 #include <QXmlStreamWriter>
@@ -91,8 +92,10 @@ private:
     DataMapViewDefinitions      _displayDefinition;
     DataMapDataModel*           _model           = nullptr;
     DataMapFilterProxy*         _proxy           = nullptr;
-    QComboBox*                  _filterTypeCombo = nullptr;
-    QSpinBox*                   _filterUnitSpin  = nullptr;
+    QComboBox*                  _filterTypeCombo  = nullptr;
+    QSpinBox*                   _filterUnitSpin   = nullptr;
+    QLabel*                     _filterUnitLabel  = nullptr;
+    QLabel*                     _filterTypeLabel  = nullptr;
     bool                        _autoRequestMap = false;
     bool                        _autoAddOnRequest = false;
 };

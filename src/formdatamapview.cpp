@@ -26,6 +26,7 @@ constexpr int RoleTypeValue = DataMapRole::TypeValue;
 ///
 class TypeItemDelegate : public QStyledItemDelegate
 {
+    Q_DECLARE_TR_FUNCTIONS(TypeItemDelegate)
 public:
     using QStyledItemDelegate::QStyledItemDelegate;
 
@@ -43,8 +44,8 @@ public:
     {
         auto* cb = qobject_cast<QComboBox*>(editor);
         if (!cb) return;
-        const QString current = index.data(Qt::DisplayRole).toString();
-        const int idx = cb->findText(current);
+        const int value = index.data(RoleTypeValue).toInt();
+        const int idx = cb->findData(value);
         if (idx >= 0) cb->setCurrentIndex(idx);
     }
 
@@ -52,8 +53,7 @@ public:
     {
         auto* cb = qobject_cast<QComboBox*>(editor);
         if (!cb) return;
-        model->setData(index, cb->currentText(), Qt::DisplayRole);
-        model->setData(index, cb->currentData(),  RoleTypeValue);
+        model->setData(index, cb->currentData(), RoleTypeValue);
     }
 
     void updateEditorGeometry(QWidget* editor, const QStyleOptionViewItem& option, const QModelIndex&) const override
@@ -67,6 +67,7 @@ public:
 ///
 class DataTypeItemDelegate : public QStyledItemDelegate
 {
+    Q_DECLARE_TR_FUNCTIONS(DataTypeItemDelegate)
 public:
     using QStyledItemDelegate::QStyledItemDelegate;
 
@@ -153,6 +154,7 @@ public:
 ///
 class OrderItemDelegate : public QStyledItemDelegate
 {
+    Q_DECLARE_TR_FUNCTIONS(OrderItemDelegate)
 public:
     using QStyledItemDelegate::QStyledItemDelegate;
 
@@ -509,7 +511,7 @@ public:
 /// \brief FormDataMapView::FormDataMapView
 ///
 FormDataMapView::FormDataMapView(ModbusMultiServer& server, MainWindow* parent)
-    : QWidget(static_cast<QWidget*>(parent))
+    : QWidget(parent)
     , ui(new Ui::FormDataMapView)
     , _mbMultiServer(server)
 {
@@ -967,8 +969,35 @@ void FormDataMapView::show()
 ///
 void FormDataMapView::changeEvent(QEvent* event)
 {
-    if (event->type() == QEvent::LanguageChange)
+    if (event->type() == QEvent::LanguageChange) {
         ui->retranslateUi(this);
+
+        if (_filterUnitLabel)  _filterUnitLabel->setText(tr("Unit:"));
+        if (_filterTypeLabel)  _filterTypeLabel->setText(tr("Data Type:"));
+        if (_filterUnitSpin)   _filterUnitSpin->setSpecialValueText(tr("All"));
+        if (_filterTypeCombo) {
+            const int idx = _filterTypeCombo->currentIndex();
+            // Block signals to avoid spurious filter updates while repopulating
+            const QSignalBlocker blocker(_filterTypeCombo);
+            _filterTypeCombo->clear();
+            _filterTypeCombo->addItem(tr("All Types"));
+            _filterTypeCombo->addItem(tr("Coils"));
+            _filterTypeCombo->addItem(tr("Discrete Inputs"));
+            _filterTypeCombo->addItem(tr("Input Registers"));
+            _filterTypeCombo->addItem(tr("Holding Registers"));
+            _filterTypeCombo->setCurrentIndex(idx);
+        }
+
+        if (_model) {
+            // Force column headers to repaint with the new language
+            _model->headerDataChanged(Qt::Horizontal, 0, ColCount - 1);
+            // Force Type column cells to repaint (text is derived from translation)
+            const int rows = _model->rowCount();
+            if (rows > 0)
+                emit _model->dataChanged(_model->index(0, ColType),
+                                         _model->index(rows - 1, ColType));
+        }
+    }
     QWidget::changeEvent(event);
 }
 
@@ -1277,9 +1306,11 @@ void FormDataMapView::setupToolBar()
     auto* filterLayout = new QHBoxLayout(filterWidget);
     filterLayout->setContentsMargins(9, 0, 9, 0);
     filterLayout->setSpacing(6);
-    filterLayout->addWidget(new QLabel(tr("Unit:"), filterWidget));
+    _filterUnitLabel = new QLabel(tr("Unit:"), filterWidget);
+    _filterTypeLabel = new QLabel(tr("Data Type:"), filterWidget);
+    filterLayout->addWidget(_filterUnitLabel);
     filterLayout->addWidget(_filterUnitSpin);
-    filterLayout->addWidget(new QLabel(tr("Data Type:"), filterWidget));
+    filterLayout->addWidget(_filterTypeLabel);
     filterLayout->addWidget(_filterTypeCombo);
 
     ui->toolBar->insertWidget(ui->actionClear, filterWidget);
