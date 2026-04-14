@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QDockWidget>
+#include <QLabel>
 #include <QTranslator>
 #include <QHash>
 #include "helpwidget.h"
@@ -11,6 +12,7 @@
 #include "controls/outputpanel.h"
 #include "controls/projecttreewidget.h"
 #include "appproject.h"
+#include "controls/addressbasecombobox.h"
 #include "dialogs/dialogsetuppresetdata.h"
 
 namespace Ui {
@@ -46,7 +48,7 @@ public:
     void applyZoom(int zoomPercent);
     void applyColors(const QColor& bg, const QColor& fg, const QColor& addr, const QColor& comment);
     void applyCheckForUpdates(bool enabled);
-    void applyGlobalAddressBase(bool zeroBased, bool persist = true);
+    void applyGlobalAddressBase(AddressBase base, bool persist = true);
     void applyGlobalHexView(bool enabled, bool persist = true);
 
     void loadProject(const QString& filename);
@@ -183,8 +185,9 @@ private:
     bool _isModified = false;
     QMenu* _openRecentMenu = nullptr;
     QAction* _clearRecentAction = nullptr;
-    QComboBox* _globalAddressBaseCombo = nullptr;
-    QWidget* _globalAddressBaseWidget = nullptr;
+    AddressBaseComboBox* _globalAddressBaseCombo = nullptr;
+    QWidget*             _globalAddressBaseWidget = nullptr;
+    QLabel*              _globalAddressBaseLabel = nullptr;
     QHash<QModbusDataUnit::RegisterType, SetupPresetParams> _presetParams;
 
     AppProject* _project = nullptr;

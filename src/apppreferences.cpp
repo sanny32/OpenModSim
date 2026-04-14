@@ -1,4 +1,5 @@
 #include "fontutils.h"
+#include "enums.h"
 #include "apppreferences.h"
 #include "controls/applogoutput.h"
 #include <QCoreApplication>
@@ -30,9 +31,9 @@ QString boolToText(bool value)
 /// \param zeroBased
 /// \return
 ///
-QString addressBaseToText(bool zeroBased)
+QString addressBaseToText(AddressBase base)
 {
-    return zeroBased ? transl("0-based") : transl("1-based");
+    return base == AddressBase::Base0 ? transl("0-based") : transl("1-based");
 }
 
 ///
@@ -234,13 +235,13 @@ void AppPreferences::setScriptViewDefinitions(const ScriptViewDefinitions& def)
 }
 
 ///
-/// \brief AppPreferences::setGlobalZeroBasedAddress
-/// \param value
+/// \brief AppPreferences::setGlobalAddressBase
+/// \param base
 ///
-void AppPreferences::setGlobalZeroBasedAddress(bool value)
+void AppPreferences::setGlobalAddressBase(AddressBase base)
 {
-    logSettingChange(transl("Address Base"), addressBaseToText(_globalZeroBasedAddress), addressBaseToText(value));
-    _globalZeroBasedAddress = value;
+    logSettingChange(transl("Address Base"), addressBaseToText(_globalAddressBase), addressBaseToText(base));
+    _globalAddressBase = base;
 }
 
 ///
@@ -317,7 +318,7 @@ void AppPreferences::load(QSettings& settings)
     settings >> _dataViewDefinitions;
     settings >> _trafficViewDefinitions;
     settings >> _scriptViewDefinitions;
-    _globalZeroBasedAddress = settings.value("GlobalZeroBasedAddress", _globalZeroBasedAddress).toBool();
+    _globalAddressBase = settings.value("GlobalZeroBasedAddress", false).toBool() ? AddressBase::Base0 : AddressBase::Base1;
     _globalHexView = settings.value("GlobalHexView", false).toBool();
 
     settings.endGroup();
@@ -347,7 +348,7 @@ void AppPreferences::save(QSettings& settings) const
     settings << _dataViewDefinitions;
     settings << _trafficViewDefinitions;
     settings << _scriptViewDefinitions;
-    settings.setValue("GlobalZeroBasedAddress", _globalZeroBasedAddress);
+    settings.setValue("GlobalZeroBasedAddress", _globalAddressBase == AddressBase::Base0);
     settings.setValue("GlobalHexView", _globalHexView);
 
     settings.endGroup();
@@ -371,7 +372,7 @@ void AppPreferences::saveXml(QXmlStreamWriter& xml) const
     xml.writeAttribute("CodeAutoComplete", boolToString(_codeAutoComplete));
     xml.writeAttribute("AutoShowConsoleOutput", boolToString(_autoShowConsoleOutput));
     xml.writeAttribute("ConsoleMaxLines", QString::number(_consoleMaxLines));
-    xml.writeAttribute("GlobalZeroBasedAddress", boolToString(_globalZeroBasedAddress));
+    xml.writeAttribute("GlobalZeroBasedAddress", boolToString(_globalAddressBase == AddressBase::Base0));
     xml.writeAttribute("GlobalHexView", boolToString(_globalHexView));
     xml << _dataViewDefinitions;
     xml << _trafficViewDefinitions;
@@ -434,7 +435,7 @@ void AppPreferences::loadXml(QXmlStreamReader& xml)
     }
 
     if (attributes.hasAttribute("GlobalZeroBasedAddress")) {
-        _globalZeroBasedAddress = stringToBool(attributes.value("GlobalZeroBasedAddress").toString());
+        _globalAddressBase = stringToBool(attributes.value("GlobalZeroBasedAddress").toString()) ? AddressBase::Base0 : AddressBase::Base1;
     }
 
     if (attributes.hasAttribute("GlobalHexView")) {

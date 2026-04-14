@@ -330,11 +330,12 @@ bool FormDataView::zeroBasedAddress() const
 }
 
 ///
-/// \brief FormDataView::setZeroBasedAddress
-/// \param zeroBased
+/// \brief FormDataView::setAddressBase
+/// \param base
 ///
-void FormDataView::setZeroBasedAddress(bool zeroBased)
+void FormDataView::setAddressBase(AddressBase base)
 {
+    const bool zeroBased = (base == AddressBase::Base0);
     if (zeroBasedAddress() == zeroBased)
         return;
 

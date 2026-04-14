@@ -399,6 +399,9 @@ void MainWindow::changeEvent(QEvent* event)
         _consoleDockWidget->setWindowTitle(tr("Output"));
         _openRecentMenu->setTitle(tr("Open Recent"));
 
+        if (_globalAddressBaseLabel)
+            _globalAddressBaseLabel->setText(tr("Address Base"));
+
         rebuildRecentProjectsMenu();
         updateProjectWindowTitle();
     }
@@ -1143,7 +1146,7 @@ bool MainWindow::prepareWriteParams(QModbusDataUnit::RegisterType type,
     outFrm = currentDataForm();
     outDd = outFrm ? outFrm->displayDefinition() : AppPreferences::instance().dataViewDefinitions();
     const auto& prefs = AppPreferences::instance();
-    const bool zeroBasedAddress = outFrm ? outFrm->zeroBasedAddress() : prefs.globalZeroBasedAddress();
+    const bool zeroBasedAddress = outFrm ? outFrm->zeroBasedAddress() : (prefs.globalAddressBase() == AddressBase::Base0);
     const auto addrSpace = _mbMultiServer.getModbusDefinitions().AddrSpace;
 
     outPreset = SetupPresetParams{
@@ -1246,7 +1249,7 @@ void MainWindow::loadProject(const QString& filename)
     AppLogger::clear();
 
     _project->loadProject(filename);
-    applyGlobalAddressBase(AppPreferences::instance().globalZeroBasedAddress(), false);
+    applyGlobalAddressBase(AppPreferences::instance().globalAddressBase(), false);
     applyGlobalHexView(AppPreferences::instance().globalHexView(), false);
     syncGlobalViewControls();
     _projectFilePath = QFileInfo(filename).absoluteFilePath();
@@ -1444,17 +1447,15 @@ void MainWindow::saveAppSettings()
 ///
 void MainWindow::setupGlobalViewToolbar()
 {
-    _globalAddressBaseCombo = new QComboBox(ui->toolBarMain);
-    _globalAddressBaseCombo->addItem(tr("1-based"), false);
-    _globalAddressBaseCombo->addItem(tr("0-based"), true);
+    _globalAddressBaseCombo = new AddressBaseComboBox(ui->toolBarMain);
     _globalAddressBaseCombo->setMinimumWidth(84);
 
-    auto* label = new QLabel(tr("Address Base"), ui->toolBarMain);
+    _globalAddressBaseLabel = new QLabel(tr("Address Base"), ui->toolBarMain);
     _globalAddressBaseWidget = new QWidget(ui->toolBarMain);
     auto* layout = new QHBoxLayout(_globalAddressBaseWidget);
     layout->setContentsMargins(9, 0, 9, 0);
     layout->setSpacing(6);
-    layout->addWidget(label);
+    layout->addWidget(_globalAddressBaseLabel);
     layout->addWidget(_globalAddressBaseCombo);
 
     QAction* insertBefore = ui->actionMbDefinitions;
@@ -1467,10 +1468,8 @@ void MainWindow::setupGlobalViewToolbar()
     ui->toolBarMain->insertWidget(insertBefore, _globalAddressBaseWidget);
     ui->toolBarMain->insertAction(insertBefore, ui->actionHexView);
 
-    connect(_globalAddressBaseCombo, qOverload<int>(&QComboBox::currentIndexChanged), this, [this](int index) {
-        if (!_globalAddressBaseCombo)
-            return;
-        applyGlobalAddressBase(_globalAddressBaseCombo->itemData(index).toBool());
+    connect(_globalAddressBaseCombo, &AddressBaseComboBox::addressBaseChanged, this, [this](AddressBase base) {
+        applyGlobalAddressBase(base);
     });
     connect(ui->actionHexView, &QAction::toggled, this, [this](bool checked) {
         applyGlobalHexView(checked);
@@ -1486,8 +1485,7 @@ void MainWindow::syncGlobalViewControls()
 
     if (_globalAddressBaseCombo) {
         const QSignalBlocker blocker(_globalAddressBaseCombo);
-        const int index = _globalAddressBaseCombo->findData(prefs.globalZeroBasedAddress());
-        _globalAddressBaseCombo->setCurrentIndex(index >= 0 ? index : 0);
+        _globalAddressBaseCombo->setCurrentAddressBase(prefs.globalAddressBase());
     }
 
     const QSignalBlocker blocker(ui->actionHexView);
@@ -1505,12 +1503,12 @@ void MainWindow::applyGlobalViewStateToForm(QWidget* frm)
 
     const auto& prefs = AppPreferences::instance();
     if (auto* data = qobject_cast<FormDataView*>(frm)) {
-        data->setZeroBasedAddress(prefs.globalZeroBasedAddress());
+        data->setAddressBase(prefs.globalAddressBase());
         data->setDisplayHexAddresses(prefs.globalHexView());
     } else if (auto* traffic = qobject_cast<FormTrafficView*>(frm)) {
         traffic->setHexView(prefs.globalHexView());
     } else if (auto* map = qobject_cast<FormDataMapView*>(frm)) {
-        map->setZeroBasedAddress(prefs.globalZeroBasedAddress());
+        map->setAddressBase(prefs.globalAddressBase());
         map->setHexView(prefs.globalHexView());
     }
 }
@@ -1548,28 +1546,28 @@ void MainWindow::updateMainToolbarState()
 /// \param zeroBased
 /// \param persist
 ///
-void MainWindow::applyGlobalAddressBase(bool zeroBased, bool persist)
+void MainWindow::applyGlobalAddressBase(AddressBase base, bool persist)
 {
     auto& prefs = AppPreferences::instance();
     if (persist)
-        prefs.setGlobalZeroBasedAddress(zeroBased);
+        prefs.setGlobalAddressBase(base);
 
     for (auto* frm : _project->forms(ProjectFormKind::Data))
         if (auto* data = qobject_cast<FormDataView*>(frm))
-            data->setZeroBasedAddress(zeroBased);
+            data->setAddressBase(base);
 
     for (auto* frm : _project->forms(ProjectFormKind::DataMap))
         if (auto* map = qobject_cast<FormDataMapView*>(frm))
-            map->setZeroBasedAddress(zeroBased);
+            map->setAddressBase(base);
 
-    forEachTypedForm(ui->mdiArea, [zeroBased](auto* frm) {
+    forEachTypedForm(ui->mdiArea, [base](auto* frm) {
         if (!frm || !frm->property(kSplitAutoCloneProperty).toBool())
             return;
 
         if (auto* data = qobject_cast<FormDataView*>(frm))
-            data->setZeroBasedAddress(zeroBased);
+            data->setAddressBase(base);
         else if (auto* map = qobject_cast<FormDataMapView*>(frm))
-            map->setZeroBasedAddress(zeroBased);
+            map->setAddressBase(base);
     });
 
     syncGlobalViewControls();

@@ -1805,7 +1805,7 @@ void AppProject::loadProject(const QString& filename)
 
     auto& prefs = AppPreferences::instance();
     if (hasProjectGlobalZeroBasedAddress)
-        prefs.setGlobalZeroBasedAddress(projectGlobalZeroBasedAddress);
+        prefs.setGlobalAddressBase(projectGlobalZeroBasedAddress ? AddressBase::Base0 : AddressBase::Base1);
     if (hasProjectGlobalHexView)
         prefs.setGlobalHexView(projectGlobalHexView);
 
@@ -2006,7 +2006,7 @@ void AppProject::saveProject(const QString& filename)
     w.writeStartElement("ViewSettings");
     w.writeAttribute("ViewMode", QString::number(_mdiArea->viewMode()));
     w.writeAttribute("SplitView", _mdiArea->isSplitView() ? "1" : "0");
-    w.writeAttribute("GlobalZeroBasedAddress", AppPreferences::instance().globalZeroBasedAddress() ? "1" : "0");
+    w.writeAttribute("GlobalZeroBasedAddress", AppPreferences::instance().globalAddressBase() == AddressBase::Base0 ? "1" : "0");
     w.writeAttribute("GlobalHexView", AppPreferences::instance().globalHexView() ? "1" : "0");
     if (auto* activePanel = _mdiArea->activePanel()) {
         if (activePanel == _mdiArea->primaryArea())

@@ -59,7 +59,7 @@ public:
     void setRegisterOrder(RegisterOrder order);
 
     bool zeroBasedAddress() const;
-    void setZeroBasedAddress(bool zeroBased);
+    void setAddressBase(AddressBase base);
 
     bool displayHexAddresses() const;
     void setDisplayHexAddresses(bool on);

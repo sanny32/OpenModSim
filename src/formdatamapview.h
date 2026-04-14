@@ -37,7 +37,7 @@ public:
     void setDisplayDefinition(const DataMapViewDefinitions& dd);
 
     bool zeroBasedAddress() const { return _model && _model->zeroBased(); }
-    void setZeroBasedAddress(bool zeroBased);
+    void setAddressBase(AddressBase base);
     bool hexView() const { return _model && _model->hexView(); }
     void setHexView(bool enabled);
 

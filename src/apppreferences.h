@@ -57,8 +57,8 @@ public:
     ScriptViewDefinitions scriptViewDefinitions() const { return _scriptViewDefinitions; }
     void setScriptViewDefinitions(const ScriptViewDefinitions& def);
 
-    bool globalZeroBasedAddress() const { return _globalZeroBasedAddress; }
-    void setGlobalZeroBasedAddress(bool value);
+    AddressBase globalAddressBase() const { return _globalAddressBase; }
+    void setGlobalAddressBase(AddressBase base);
 
     bool globalHexView() const { return _globalHexView; }
     void setGlobalHexView(bool value);
@@ -99,7 +99,7 @@ private:
     DataViewDefinitions _dataViewDefinitions;
     TrafficViewDefinitions _trafficViewDefinitions;
     ScriptViewDefinitions _scriptViewDefinitions;
-    bool          _globalZeroBasedAddress{ false };
+    AddressBase   _globalAddressBase{ AddressBase::Base1 };
     bool          _globalHexView{ false };
     QFont         _scriptFont;
     bool          _codeAutoComplete{ true };
