@@ -98,7 +98,7 @@
         <location filename="../ansimenu.cpp" line="61"/>
         <location filename="../ansimenu.cpp" line="61"/>
         <source>Hebrew</source>
-        <translation>РРІСЂРёС‚</translation>
+        <translation>Иврит</translation>
     </message>
     <message>
         <location filename="../ansimenu.cpp" line="21"/>
@@ -607,7 +607,7 @@
     <message>
         <location filename="../dialogs/dialogautosimulation.ui" line="61"/>
         <source>Change Interval (msecs):</source>
-        <translation>РРЅС‚РµСЂРІР°Р» (РјСЃРµРє):</translation>
+        <translation>Интервал (мсек):</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogautosimulation.ui" line="68"/>
@@ -660,7 +660,7 @@
     <message>
         <location filename="../dialogs/dialogcoilsimulation.ui" line="58"/>
         <source>Change Interval (secs):</source>
-        <translation>РРЅС‚РµСЂРІР°Р» (СЃРµРє):</translation>
+        <translation>Интервал (сек):</translation>
     </message>
 </context>
 <context>
@@ -690,7 +690,7 @@
     <message>
         <location filename="../dialogs/dialogforcemultiplecoils.ui" line="81"/>
         <source>Import</source>
-        <translation>РРјРїРѕСЂС‚</translation>
+        <translation>Импорт</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogforcemultiplecoils.ui" line="104"/>
@@ -789,7 +789,7 @@
     <message>
         <location filename="../dialogs/dialogforcemultipleregisters.ui" line="81"/>
         <source>Import</source>
-        <translation>РРјРїРѕСЂС‚</translation>
+        <translation>Импорт</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogforcemultipleregisters.ui" line="104"/>
@@ -1021,7 +1021,7 @@
     <message>
         <location filename="../dialogs/dialogmodbusdefinitions.ui" line="50"/>
         <source>Use Global Address Map (Unallocated registers will be zero)</source>
-        <translation>РСЃРїРѕР»СЊР·РѕРІР°С‚СЊ РіР»РѕР±Р°Р»СЊРЅСѓСЋ РєР°СЂС‚Сѓ Р°РґСЂРµСЃРѕРІ</translation>
+        <translation>Использовать глобальную карту адресов</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogmodbusdefinitions.ui" line="57"/>
@@ -1123,19 +1123,18 @@
     <message>
         <location filename="../dialogs/dialogpreferences.ui" line="66"/>
         <source>Interface</source>
-        <translation>РРЅС‚РµСЂС„РµР№СЃ</translation>
+        <translation>Интерфейс</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogpreferences.ui" line="156"/>
         <source>User Interface</source>
-        <translation>РРЅС‚РµСЂС„РµР№СЃ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ</translation>
+        <translation>Интерфейс пользователя</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogpreferences.ui" line="208"/>
         <location filename="../dialogs/dialogpreferences.ui" line="267"/>
         <location filename="../dialogs/dialogpreferences.ui" line="326"/>
         <location filename="../dialogs/dialogpreferences.ui" line="385"/>
-        <location filename="../dialogs/dialogpreferences.ui" line="444"/>
         <source>Reset</source>
         <translation>Сброс</translation>
     </message>
@@ -1150,65 +1149,64 @@
         <translation>Цвет текста:</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="289"/>
         <source>Status Color:</source>
-        <translation>Цвет статуса:</translation>
+        <translation type="vanished">Цвет статуса:</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="348"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="289"/>
         <source>Address Color:</source>
         <translation>Цвет адреса:</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="407"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="348"/>
         <source>Comment Color:</source>
         <translation>Цвет комментария:</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="466"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="407"/>
         <source>Language:</source>
         <translation>Язык:</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="486"/>
-        <location filename="../dialogs/dialogpreferences.ui" line="826"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="427"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="767"/>
         <source>Font</source>
         <translation>Шрифт</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="523"/>
-        <location filename="../dialogs/dialogpreferences.ui" line="863"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="464"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="804"/>
         <source>Size:</source>
         <translation>Размер:</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="555"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="496"/>
         <source>Zoom:</source>
         <translation>Масштаб:</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="652"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="593"/>
         <source>Leading Zeros for Unsigned</source>
         <translation>Ведущие нули для беззнаковых</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="929"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="870"/>
         <source>Console</source>
         <translation>Консоль</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="941"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="882"/>
         <source>Console Output Limit:</source>
         <translation>Ограничение вывода консоли:</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="979"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="920"/>
         <source>Automatically show output console</source>
         <translation>Автоматически показывать консоль вывода</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="501"/>
-        <location filename="../dialogs/dialogpreferences.ui" line="841"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="442"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="782"/>
         <source>Family:</source>
         <translation>Семейство:</translation>
     </message>
@@ -1218,33 +1216,33 @@
         <translation>По умолчанию</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="476"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="417"/>
         <source>Check for updates</source>
         <translation>Проверить обновления</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="577"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="518"/>
         <source>%</source>
         <translation>%</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="598"/>
-        <location filename="../dialogs/dialogpreferences.ui" line="897"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="539"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="838"/>
         <source>Antialias</source>
         <translation>Сглаживание</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="659"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="600"/>
         <source>Columns Distance:</source>
         <translation>Расстояние между столбцами:</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="709"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="650"/>
         <source>Autoscroll</source>
         <translation>Автопрокрутка</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="716"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="657"/>
         <source>Log View Limit:</source>
         <translation>Лимит лога:</translation>
     </message>
@@ -1254,27 +1252,27 @@
         <translation>Скрипт</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="640"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="581"/>
         <source>Data View</source>
         <translation>Данные</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="697"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="638"/>
         <source>Traffic View</source>
         <translation>Просмотр трафика</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="794"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="735"/>
         <source>&lt;b&gt;Note:&lt;/b&gt; These settings apply to newly opened windows only.</source>
         <translation>&lt;b&gt;Примечание:&lt;/b&gt; Эти настройки применяются только к новым окнам.</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="907"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="848"/>
         <source>Editor</source>
         <translation>Редактор</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="919"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="860"/>
         <source>Enable code auto-complete</source>
         <translation>Включить автодополнение кода</translation>
     </message>
@@ -1294,7 +1292,7 @@
     <message>
         <location filename="../dialogs/dialogprintsettings.ui" line="41"/>
         <source>Name: </source>
-        <translation>РРјСЏ: </translation>
+        <translation>Имя: </translation>
     </message>
     <message>
         <location filename="../dialogs/dialogprintsettings.ui" line="70"/>
@@ -1832,12 +1830,12 @@
         <translation>Очистить таблицу</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="772"/>
+        <location filename="../formdatamapview.cpp" line="744"/>
         <source>1-based</source>
         <translation>1-первый</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="772"/>
+        <location filename="../formdatamapview.cpp" line="744"/>
         <source>0-based</source>
         <translation>0-первый</translation>
     </message>
@@ -1882,14 +1880,14 @@
         <translation>Светло-серый</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="785"/>
-        <location filename="../formdatamapview.cpp" line="1297"/>
-        <location filename="../formdatamapview.cpp" line="1297"/>
+        <location filename="../formdatamapview.cpp" line="757"/>
+        <location filename="../formdatamapview.cpp" line="1269"/>
+        <location filename="../formdatamapview.cpp" line="1269"/>
         <source>All Types</source>
         <translation>Все типы</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="787"/>
+        <location filename="../formdatamapview.cpp" line="759"/>
         <source>Address Base: %1
 Unit Filter: %2
 Type Filter: %3</source>
@@ -1898,39 +1896,39 @@ Type Filter: %3</source>
 Фильтр типов: %3</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="1298"/>
+        <location filename="../formdatamapview.cpp" line="1270"/>
         <source>Coils</source>
         <translation>Регистры флагов</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="1299"/>
+        <location filename="../formdatamapview.cpp" line="1271"/>
         <source>Discrete Inputs</source>
         <translation>Дискретные входы</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="1300"/>
+        <location filename="../formdatamapview.cpp" line="1272"/>
         <source>Input Registers</source>
         <translation>Регистры ввода</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="1301"/>
+        <location filename="../formdatamapview.cpp" line="1273"/>
         <source>Holding Registers</source>
         <translation>Регистры хранения</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="1308"/>
+        <location filename="../formdatamapview.cpp" line="1280"/>
         <source>Unit:</source>
         <translation>Устройство:</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="1310"/>
+        <location filename="../formdatamapview.cpp" line="1282"/>
         <source>Data Type:</source>
         <translation>Тип данных:</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="774"/>
-        <location filename="../formdatamapview.cpp" line="1293"/>
-        <location filename="../formdatamapview.cpp" line="1293"/>
+        <location filename="../formdatamapview.cpp" line="746"/>
+        <location filename="../formdatamapview.cpp" line="1265"/>
+        <location filename="../formdatamapview.cpp" line="1265"/>
         <source>All</source>
         <translation>Все</translation>
     </message>
@@ -2133,17 +2131,17 @@ Type Filter: %3</source>
         <translation>Шестнадцатиричные адреса</translation>
     </message>
     <message>
-        <location filename="../formdataview.cpp" line="626"/>
+        <location filename="../formdataview.cpp" line="607"/>
         <source>0-based</source>
         <translation>0-первый</translation>
     </message>
     <message>
-        <location filename="../formdataview.cpp" line="626"/>
+        <location filename="../formdataview.cpp" line="607"/>
         <source>1-based</source>
         <translation>1-первый</translation>
     </message>
     <message>
-        <location filename="../formdataview.cpp" line="627"/>
+        <location filename="../formdataview.cpp" line="608"/>
         <source>Address Base: %1
 Starting Address: %2
 Length: %3</source>
@@ -2152,7 +2150,7 @@ Length: %3</source>
 Длина: %3</translation>
     </message>
     <message>
-        <location filename="../formdataview.cpp" line="629"/>
+        <location filename="../formdataview.cpp" line="610"/>
         <source>Unit Identifier: %1
 Data Type:
 %2</source>
@@ -2593,8 +2591,8 @@ Script.onInit(()=&gt;{
     </message>
     <message>
         <location filename="../mainwindow.ui" line="244"/>
-        <location filename="../mainwindow.cpp" line="1616"/>
-        <location filename="../mainwindow.cpp" line="1616"/>
+        <location filename="../mainwindow.cpp" line="1621"/>
+        <location filename="../mainwindow.cpp" line="1621"/>
         <source>Save Project</source>
         <translation>Сохранить проект</translation>
     </message>
@@ -2667,7 +2665,7 @@ Script.onInit(()=&gt;{
     <message>
         <location filename="../mainwindow.ui" line="333"/>
         <source>About Open ModSim...</source>
-        <translation type="unfinished">О программе OpenModSim...</translation>
+        <translation>О программе OpenModSim...</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="358"/>
@@ -2772,7 +2770,7 @@ Script.onInit(()=&gt;{
         <translation>Строка состояния</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="652"/>
+        <location filename="../mainwindow.cpp" line="654"/>
         <source>All files (*)</source>
         <translation>Все файлы (*)</translation>
     </message>
@@ -2785,8 +2783,8 @@ Script.onInit(()=&gt;{
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="146"/>
-        <location filename="../mainwindow.cpp" line="1703"/>
-        <location filename="../mainwindow.cpp" line="1703"/>
+        <location filename="../mainwindow.cpp" line="1708"/>
+        <location filename="../mainwindow.cpp" line="1708"/>
         <source>Clear List</source>
         <translation>Очистить список</translation>
     </message>
@@ -2805,14 +2803,16 @@ Script.onInit(()=&gt;{
         <translation>Вывод</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="651"/>
-        <location filename="../mainwindow.cpp" line="682"/>
-        <location filename="../mainwindow.cpp" line="682"/>
-        <source>Project files (*.oms)</source>
-        <translation>Файлы проекта (*.oms)</translation>
+        <location filename="../mainwindow.cpp" line="653"/>
+        <location filename="../mainwindow.cpp" line="684"/>
+        <location filename="../mainwindow.cpp" line="684"/>
+        <source>Project files (*.omp)</source>
+        <translation>Файлы проекта (*.omp)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1445"/>
+        <location filename="../mainwindow.cpp" line="403"/>
+        <location filename="../mainwindow.cpp" line="1453"/>
+        <location filename="../mainwindow.cpp" line="1453"/>
         <source>Address Base</source>
         <translation>Адресация</translation>
     </message>
@@ -2972,19 +2972,17 @@ Script.onInit(()=&gt;{
         <translation>Форма удалена: %1</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1032"/>
+        <location filename="../mainwindow.cpp" line="1042"/>
         <source>Move to Other Panel</source>
         <translation>Переместить на другую панель</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1441"/>
         <source>1-based</source>
-        <translation>1-первый</translation>
+        <translation type="vanished">1-первый</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1442"/>
         <source>0-based</source>
-        <translation>0-первый</translation>
+        <translation type="vanished">0-первый</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="311"/>
@@ -2993,12 +2991,12 @@ Script.onInit(()=&gt;{
         <translation>Шестнадцатиричный режим</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1617"/>
+        <location filename="../mainwindow.cpp" line="1622"/>
         <source>Save project before closing?</source>
         <translation>Сохранить проект перед закрытием?</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1691"/>
+        <location filename="../mainwindow.cpp" line="1696"/>
         <source>No Recent Projects</source>
         <translation>Нет недавних проектов</translation>
     </message>
@@ -3008,7 +3006,7 @@ Script.onInit(()=&gt;{
         <translation>Данные</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="980"/>
+        <location filename="../mainwindow.cpp" line="990"/>
         <source>JavaScript files (*.js);;All files (*)</source>
         <translation>Файлы JavaScript (*.js);;Все файлы (*)</translation>
     </message>
@@ -3119,12 +3117,12 @@ Script.onInit(()=&gt;{
     <message>
         <location filename="../controls/modbusmessagewidget.cpp" line="273"/>
         <source>Transaction ID</source>
-        <translation>РРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ С‚СЂР°РЅР·Р°РєС†РёРё</translation>
+        <translation>Идентификатор транзакции</translation>
     </message>
     <message>
         <location filename="../controls/modbusmessagewidget.cpp" line="274"/>
         <source>Protocol ID</source>
-        <translation>РРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ РїСЂРѕС‚РѕРєРѕР»Р°</translation>
+        <translation>Идентификатор протокола</translation>
     </message>
     <message>
         <location filename="../controls/modbusmessagewidget.cpp" line="275"/>
@@ -3356,14 +3354,14 @@ Script.onInit(()=&gt;{
         <location filename="../controls/modbusmessagewidget.cpp" line="581"/>
         <location filename="../controls/modbusmessagewidget.cpp" line="581"/>
         <source>And Mask</source>
-        <translation>РњР°СЃРєР° В«РВ»</translation>
+        <translation>Маска «И»</translation>
     </message>
     <message>
         <location filename="../controls/modbusmessagewidget.cpp" line="572"/>
         <location filename="../controls/modbusmessagewidget.cpp" line="582"/>
         <location filename="../controls/modbusmessagewidget.cpp" line="582"/>
         <source>Or Mask</source>
-        <translation>РњР°СЃРєР° В«РР›РВ»</translation>
+        <translation>Маска «ИЛИ»</translation>
     </message>
     <message>
         <location filename="../controls/modbusmessagewidget.cpp" line="596"/>
@@ -3476,77 +3474,75 @@ Script.onInit(()=&gt;{
 <context>
     <name>OutputDataWidget</name>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1376"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1316"/>
         <source>Set Value of %1</source>
         <translation>Записать значение по адресу %1</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1385"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1325"/>
         <source>Add Description</source>
         <translation>Добавить описание</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1385"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1325"/>
         <source>Edit Description</source>
         <translation>Редактировать описание</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1388"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1328"/>
         <source>%1: Enter Description</source>
         <translation>%1: Введите описание</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1397"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1337"/>
         <source>Remove Color</source>
         <translation>Удалить цвет</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1408"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1348"/>
         <source>Yellow</source>
         <translation>Желтый</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1409"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1349"/>
         <source>Cyan</source>
         <translation>Циан</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1410"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1350"/>
         <source>Magenta</source>
         <translation>Пурпурный</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1411"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1351"/>
         <source>LightGreen</source>
         <translation>Светло-зеленый</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1412"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1352"/>
         <source>Orange</source>
         <translation>Оранжевый</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1413"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1353"/>
         <source>LightBlue</source>
         <translation>Светло-синий</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1414"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1354"/>
         <source>LightGray</source>
         <translation>Светло-серый</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1493"/>
         <source>NOT CONNECTED!</source>
-        <translation>НЕ ПОДКЛЮЧЕНО!</translation>
+        <translation type="vanished">НЕ ПОДКЛЮЧЕНО!</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1501"/>
         <source>Invalid Data Length Specified</source>
-        <translation>Указана недопустимая длина данных</translation>
+        <translation type="vanished">Указана недопустимая длина данных</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1510"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1433"/>
         <source>Zoom: %1%</source>
         <translation>Увеличение: %1%</translation>
     </message>
