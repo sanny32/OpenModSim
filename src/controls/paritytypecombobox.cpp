@@ -7,6 +7,7 @@
 ParityTypeComboBox::ParityTypeComboBox(QWidget* parent)
     :QComboBox(parent)
 {
+    setSizeAdjustPolicy(QComboBox::AdjustToContents);
     retranslateUi();
 }
 
