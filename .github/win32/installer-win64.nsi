@@ -10,7 +10,7 @@
 #--------------------------------
 # Custom defines
   !define MUI_ICON ${ICON_FILE}
-  !define NAME "Open ModSim"
+  !define NAME "Open ModSim 2"
   !define PUBLISHER "Alexandr Ananev"
   !define APPFILE "omodsim.exe"
   !define ICOFILE "omodsim.exe"

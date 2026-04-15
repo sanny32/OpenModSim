@@ -180,16 +180,16 @@ jobs:
       - name: Bundle Qt libraries and plugins throught cqtdeployer
         run: |
           CQtDeployer -bin ${{ env.BUILD_DIR }}/omodsim \
-            -targetDir ${{ env.DEB_SRC_DIR }}/opt/OpenModSim \
+            -targetDir ${{ env.DEB_SRC_DIR }}/opt/OpenModSim2 \
             -libDir ${{ env.QT_INSTALL_DIR }}/${{ env.QT_VERSION }}/${{ env.CMAKE_COMPILER }}/lib \
             -ignore libcrypto.so.3,libmysqlclient.so.21,libpq.so.5,libssl.so.3,libqsqlmimer.so,libqsqlmysql.so,libqsqlodbc.so,libqsqlpsql.so \
             -extraLibs icudata,icui18n,icuuc,libxcb-util
 
       - name: Copy OpenModsim docs
-        run: rsync -a "${{ env.BUILD_DIR }}/docs/" "${{ env.DEB_SRC_DIR }}/opt/OpenModSim/docs/"
+        run: rsync -a "${{ env.BUILD_DIR }}/docs/" "${{ env.DEB_SRC_DIR }}/opt/OpenModSim2/docs/"
 
       - name: Copy demos
-        run: rsync -a "demos/" "${{ env.DEB_SRC_DIR }}/opt/OpenModSim/demos/"
+        run: rsync -a "demos/" "${{ env.DEB_SRC_DIR }}/opt/OpenModSim2/demos/"
 
       - name: Create Debian control file
         run: |
@@ -245,7 +245,7 @@ jobs:
           cat -n ${{ env.DEB_SRC_DIR }}/usr/share/applications/omodsim.desktop
 
       - name: Patch binary file
-        run: patchelf --set-rpath /opt/OpenModSim/lib "${{ env.DEB_SRC_DIR }}/opt/OpenModSim/bin/omodsim"
+        run: patchelf --set-rpath /opt/OpenModSim2/lib "${{ env.DEB_SRC_DIR }}/opt/OpenModSim2/bin/omodsim"
 
       - name: Build DEB package
         working-directory: ${{ env.DEB_SRC_DIR }}

@@ -33,7 +33,7 @@ if [ ! -f /etc/udev/rules.d/99-omodscan.rules ]; then
 fi
 udevadm trigger
 
-ln -sf /opt/OpenModSim/omodsim.sh /usr/bin/omodsim
+ln -sf /opt/OpenModSim2/omodsim.sh /usr/bin/omodsim
 xdg-desktop-menu forceupdate || true
 
 %postun
@@ -46,7 +46,7 @@ xdg-desktop-menu forceupdate || true
 rm -f /usr/bin/omodsim
 
 %files
-/opt/OpenModSim
+/opt/OpenModSim2
 /usr/share/applications
 /usr/share/applications/*
 /usr/share/icons
@@ -54,4 +54,4 @@ rm -f /usr/bin/omodsim
 /usr/share/metainfo
 /usr/share/metainfo/*
 
-%caps(cap_net_bind_service=+ep) /opt/OpenModSim/bin/omodsim
+%caps(cap_net_bind_service=+ep) /opt/OpenModSim2/bin/omodsim

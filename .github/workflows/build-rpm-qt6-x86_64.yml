@@ -205,17 +205,17 @@ jobs:
       - name: Bundle Qt libraries and plugins throught cqtdeployer
         run: |
           CQtDeployer -bin ${{ env.BUILD_DIR }}/omodsim \
-            -targetDir ${{ env.BUILD_RPM_DIR }}/SOURCES/omodsim/opt/OpenModSim \
+            -targetDir ${{ env.BUILD_RPM_DIR }}/SOURCES/omodsim/opt/OpenModSim2 \
             -libDir ${{ env.QT_INSTALL_DIR }}/${{ env.QT_VERSION }}/${{ env.CMAKE_COMPILER }}/lib \
             -ignore libcrypto.so.3,libmysqlclient.so.21,libpq.so.5,libssl.so.3,libqsqlmimer.so,libqsqlmysql.so,libqsqlodbc.so,libqsqlpsql.so,libqsqlibase.so,libqsqloci.so \
             -extraLibs icudata,icui18n,icuuc \
             -customScript 'export QT_QPA_PLATFORM=${{ env.QT_QPA_PLATFORM }}'
 
       - name: Copy OpenModsim docs
-        run: rsync -a "${{ env.BUILD_DIR }}/docs/" "${{ env.BUILD_RPM_DIR }}/SOURCES/omodsim/opt/OpenModSim/docs/"
+        run: rsync -a "${{ env.BUILD_DIR }}/docs/" "${{ env.BUILD_RPM_DIR }}/SOURCES/omodsim/opt/OpenModSim2/docs/"
 
       - name: Copy demos
-        run: rsync -a "demos/" "${{ env.BUILD_RPM_DIR }}/SOURCES/omodsim/opt/OpenModSim/demos/"
+        run: rsync -a "demos/" "${{ env.BUILD_RPM_DIR }}/SOURCES/omodsim/opt/OpenModSim2/demos/"
 
       - name: Create RPM spec file
         run: |
@@ -245,7 +245,7 @@ jobs:
           cat -n ${{ env.BUILD_RPM_DIR }}/SOURCES/omodsim/usr/share/applications/omodsim.desktop
 
       - name: Patch binary file
-        run: patchelf --set-rpath /opt/OpenModSim/lib "${{ env.BUILD_RPM_DIR }}/SOURCES/omodsim/opt/OpenModSim/bin/omodsim"
+        run: patchelf --set-rpath /opt/OpenModSim2/lib "${{ env.BUILD_RPM_DIR }}/SOURCES/omodsim/opt/OpenModSim2/bin/omodsim"
 
       - name: Import GPG keys
         env:

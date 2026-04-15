@@ -13,7 +13,7 @@ fi
 
 udevadm trigger
 
-setcap 'cap_net_bind_service=+ep' /opt/OpenModSim/bin/omodsim || true
-ln -sf /opt/OpenModSim/omodsim.sh /usr/bin/omodsim
+setcap 'cap_net_bind_service=+ep' /opt/OpenModSim2/bin/omodsim || true
+ln -sf /opt/OpenModSim2/omodsim.sh /usr/bin/omodsim
 
 xdg-desktop-menu forceupdate
