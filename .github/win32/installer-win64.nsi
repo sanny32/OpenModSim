@@ -174,6 +174,14 @@ FunctionEnd
     ${GetSize} "$INSTDIR" "/S=0K" $0 $1 $2
     IntFmt $0 "0x%08X" $0
 	  WriteRegDWORD HKLM64 "Software\Microsoft\Windows\CurrentVersion\Uninstall\${NAME}" "EstimatedSize" "$0"
+
+    # File association for .omp project files
+    WriteRegStr HKLM64 "Software\Classes\.omp" "" "OpenModSim.Project"
+    WriteRegStr HKLM64 "Software\Classes\OpenModSim.Project" "" "Open ModSim Project"
+    WriteRegStr HKLM64 "Software\Classes\OpenModSim.Project\DefaultIcon" "" "$INSTDIR\${APPFILE},1"
+    WriteRegStr HKLM64 "Software\Classes\OpenModSim.Project\shell" "" "open"
+    WriteRegStr HKLM64 "Software\Classes\OpenModSim.Project\shell\open\command" "" '$\"$INSTDIR\${APPFILE}$\" $\"%1$\"'
+    System::Call 'shell32::SHChangeNotify(i 0x08000000, i 0, p 0, p 0)'
   SectionEnd
 
  Section "Visual Studio Runtime"
@@ -258,6 +266,10 @@ ProcessStillRunning:
   Quit 
 
 ProcessNotFound:
+  DeleteRegKey HKLM64 "Software\Classes\OpenModSim.Project"
+  DeleteRegValue HKLM64 "Software\Classes\.omp" ""
+  System::Call 'shell32::SHChangeNotify(i 0x08000000, i 0, p 0, p 0)'
+
   # Delete Shortcut
   Delete "$DESKTOP\${NAME}.lnk"
 

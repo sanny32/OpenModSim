@@ -1,0 +1,27 @@
+<svg width="512" height="512" version="1.1" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+ <defs>
+  <linearGradient id="paper" x1="219.17" x2="497.89" y1="82.274" y2="361" gradientTransform="scale(.83954 1.1911)" gradientUnits="userSpaceOnUse">
+   <stop stop-color="#fafafa" offset="0"/>
+   <stop stop-color="#e7e7e7" offset="1"/>
+  </linearGradient>
+ </defs>
+ <rect width="512" height="512" fill="none"/>
+ <g transform="translate(-17.615 -7.1876)">
+  <path d="m184 98h152l82 92v240h-234z" fill="url(#paper)"/>
+  <path d="m336 98v66c0 14.36 11.64 26 26 26h56z" fill="#f7f7f7"/>
+  <path d="m336 98 82 92h-56c-14.36 0-26-11.64-26-26z" fill="#fff"/>
+  <path d="m184 98h152l82 92v240h-234z" fill="none" stroke="#d1d1d1" stroke-width="2"/>
+  <path d="m336 98 82 92h-56c-14.36 0-26-11.64-26-26z" fill="none" stroke="#d1d1d1" stroke-width="2"/>
+  <path d="m230 286c18-100 36-100 54 0s36 100 54 0 24-88 36-38" fill="none" stroke="#e7e7e7" stroke-linecap="round" stroke-width="16"/>
+  <g transform="translate(130,295)" opacity=".16">
+   <rect width="160" height="88"/>
+  </g>
+  <g transform="translate(130,292)">
+   <rect width="160" height="88" fill="none" stroke="#d1d1d1" stroke-width="6"/>
+   <rect width="80" height="44" fill="#29d5ee"/>
+   <rect x="80" width="80" height="44" fill="#f5f5f5"/>
+   <rect y="44" width="80" height="44" fill="#eef8ff"/>
+   <rect x="80" y="44" width="80" height="44" fill="#1753d8"/>
+  </g>
+ </g>
+</svg>

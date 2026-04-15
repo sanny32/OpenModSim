@@ -454,6 +454,7 @@ if(WIN32)
     set(FILE_VERSION "${PROJECT_VERSION}${PROJECT_PRERELEASE}")
     set(PRODUCT_VERSION "${PROJECT_VERSION}${PROJECT_PRERELEASE}")
     set(ICON_FILE "${CMAKE_CURRENT_SOURCE_DIR}/res/omodsim.ico")
+    set(OMP_ICON_FILE "${CMAKE_CURRENT_SOURCE_DIR}/res/omp.ico")
 
     configure_file(
             "${CMAKE_CURRENT_SOURCE_DIR}/omodsim.rc.in"
