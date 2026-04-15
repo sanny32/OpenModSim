@@ -73,7 +73,7 @@
        <item>
         <widget class="QLabel" name="labelAppName">
          <property name="text">
-          <string>Open ModSim</string>
+          <string notr="true">Open ModSim</string>
          </property>
         </widget>
        </item>

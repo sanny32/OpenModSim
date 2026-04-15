@@ -236,16 +236,12 @@
     <message>
         <location filename="../cmdlineparser.cpp" line="21"/>
         <source>Project file to open.</source>
-        <translation type="unfinished"></translation>
+        <translation>要開啟的專案檔案。</translation>
     </message>
     <message>
         <location filename="../cmdlineparser.cpp" line="21"/>
         <source>[project]</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Setup test config file.</source>
-        <translation type="vanished">設定測試配置檔案。</translation>
+        <translation>[專案]</translation>
     </message>
     <message>
         <location filename="../cmdlineparser.cpp" line="15"/>
@@ -1134,7 +1130,7 @@
     <message>
         <location filename="../dialogs/dialogpreferences.ui" line="424"/>
         <source>Show Welcome dialog on startup</source>
-        <translation type="unfinished"></translation>
+        <translation>啟動時顯示歡迎對話框</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogpreferences.ui" line="434"/>
@@ -1573,46 +1569,37 @@
     <message>
         <location filename="../dialogs/dialogwelcome.ui" line="14"/>
         <source>Welcome</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../dialogs/dialogwelcome.ui" line="76"/>
-        <source>Open ModSim</source>
-        <translation type="unfinished">開啟ModSim</translation>
+        <translation>歡迎</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogwelcome.ui" line="83"/>
         <source>Modbus Slave Simulator</source>
-        <translation type="unfinished"></translation>
+        <translation>Modbus從站模擬器</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogwelcome.ui" line="132"/>
         <source>Open:</source>
-        <translation type="unfinished"></translation>
+        <translation>開啟：</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogwelcome.ui" line="170"/>
         <source>New Project</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Open Project...</source>
-        <translation type="obsolete">開啟專案...</translation>
+        <translation>新增專案</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogwelcome.ui" line="195"/>
         <source>Don&apos;t show this dialog again</source>
-        <translation type="unfinished"></translation>
+        <translation>不再顯示此對話框</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogwelcome.cpp" line="23"/>
         <source>Welcome to %1</source>
-        <translation type="unfinished"></translation>
+        <translation>歡迎使用%1</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogwelcome.ui" line="186"/>
         <source>Open Project</source>
-        <translation type="unfinished"></translation>
+        <translation>開啟專案</translation>
     </message>
 </context>
 <context>
@@ -2679,8 +2666,8 @@ Script.onInit(()=&gt;{
     </message>
     <message>
         <location filename="../mainwindow.ui" line="244"/>
-        <location filename="../mainwindow.cpp" line="1678"/>
-        <location filename="../mainwindow.cpp" line="1678"/>
+        <location filename="../mainwindow.cpp" line="1689"/>
+        <location filename="../mainwindow.cpp" line="1689"/>
         <source>Save Project</source>
         <translation>儲存專案</translation>
     </message>
@@ -2891,8 +2878,8 @@ Script.onInit(()=&gt;{
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="187"/>
-        <location filename="../mainwindow.cpp" line="1765"/>
-        <location filename="../mainwindow.cpp" line="1765"/>
+        <location filename="../mainwindow.cpp" line="1776"/>
+        <location filename="../mainwindow.cpp" line="1776"/>
         <source>Clear List</source>
         <translation>清除清單</translation>
     </message>
@@ -2918,11 +2905,16 @@ Script.onInit(()=&gt;{
         <translation>專案檔案 (*.omp)</translation>
     </message>
     <message>
+        <location filename="../mainwindow.cpp" line="1346"/>
+        <source>Untitled</source>
+        <translation>未命名</translation>
+    </message>
+    <message>
         <location filename="../applogger.cpp" line="117"/>
         <location filename="../mainwindow.cpp" line="469"/>
-        <location filename="../mainwindow.cpp" line="1510"/>
+        <location filename="../mainwindow.cpp" line="1521"/>
         <location filename="../mainwindow.cpp" line="469"/>
-        <location filename="../mainwindow.cpp" line="1510"/>
+        <location filename="../mainwindow.cpp" line="1521"/>
         <source>Address Base</source>
         <translation>地址基準</translation>
     </message>
@@ -3192,7 +3184,7 @@ Script.onInit(()=&gt;{
         <translation>%1 已更改：%2 → %3</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1097"/>
+        <location filename="../mainwindow.cpp" line="1100"/>
         <source>Move to Other Panel</source>
         <translation>移至其他面板</translation>
     </message>
@@ -3215,12 +3207,12 @@ Script.onInit(()=&gt;{
         <translation>十六進位檢視</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1679"/>
+        <location filename="../mainwindow.cpp" line="1690"/>
         <source>Save project before closing?</source>
         <translation>關閉前儲存專案？</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1753"/>
+        <location filename="../mainwindow.cpp" line="1764"/>
         <source>No Recent Projects</source>
         <translation>無最近專案</translation>
     </message>
@@ -3230,7 +3222,7 @@ Script.onInit(()=&gt;{
         <translation>資料</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1055"/>
+        <location filename="../mainwindow.cpp" line="1058"/>
         <source>JavaScript files (*.js);;All files (*)</source>
         <translation>JavaScript檔案 (*.js);;所有檔案 (*)</translation>
     </message>

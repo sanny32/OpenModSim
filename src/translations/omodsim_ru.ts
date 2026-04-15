@@ -236,16 +236,12 @@
     <message>
         <location filename="../cmdlineparser.cpp" line="21"/>
         <source>Project file to open.</source>
-        <translation type="unfinished"></translation>
+        <translation>Файл проекта для открытия.</translation>
     </message>
     <message>
         <location filename="../cmdlineparser.cpp" line="21"/>
         <source>[project]</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Setup test config file.</source>
-        <translation type="vanished">Задать файл конфига.</translation>
+        <translation>[проект]</translation>
     </message>
     <message>
         <location filename="../cmdlineparser.cpp" line="15"/>
@@ -1117,10 +1113,6 @@
         <translation>Цвет текста:</translation>
     </message>
     <message>
-        <source>Status Color:</source>
-        <translation type="vanished">Цвет статуса:</translation>
-    </message>
-    <message>
         <location filename="../dialogs/dialogpreferences.ui" line="289"/>
         <source>Address Color:</source>
         <translation>Цвет адреса:</translation>
@@ -1138,7 +1130,7 @@
     <message>
         <location filename="../dialogs/dialogpreferences.ui" line="424"/>
         <source>Show Welcome dialog on startup</source>
-        <translation type="unfinished"></translation>
+        <translation>Показывать диалог приветствия при запуске</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogpreferences.ui" line="434"/>
@@ -1577,46 +1569,37 @@
     <message>
         <location filename="../dialogs/dialogwelcome.ui" line="14"/>
         <source>Welcome</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../dialogs/dialogwelcome.ui" line="76"/>
-        <source>Open ModSim</source>
-        <translation type="unfinished"></translation>
+        <translation>Добро пожаловать</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogwelcome.ui" line="83"/>
         <source>Modbus Slave Simulator</source>
-        <translation type="unfinished"></translation>
+        <translation>Симулятор устройств Modbus</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogwelcome.ui" line="132"/>
         <source>Open:</source>
-        <translation type="unfinished"></translation>
+        <translation>Открыть:</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogwelcome.ui" line="170"/>
         <source>New Project</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Open Project...</source>
-        <translation type="obsolete">Открыть проект...</translation>
+        <translation>Новый проект</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogwelcome.ui" line="195"/>
         <source>Don&apos;t show this dialog again</source>
-        <translation type="unfinished"></translation>
+        <translation>Больше не показывать этот диалог</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogwelcome.cpp" line="23"/>
         <source>Welcome to %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Добро пожаловать в %1</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogwelcome.ui" line="186"/>
         <source>Open Project</source>
-        <translation type="unfinished"></translation>
+        <translation>Открыть проект</translation>
     </message>
 </context>
 <context>
@@ -2320,46 +2303,6 @@ Source: %3</source>
         <translation>Автоматически прокручивать к последней записи</translation>
     </message>
     <message>
-        <source>01 Read Coils</source>
-        <translation type="vanished">01 Чтение флагов</translation>
-    </message>
-    <message>
-        <source>02 Read Discrete Inputs</source>
-        <translation type="vanished">02 Чтение дискретных входов</translation>
-    </message>
-    <message>
-        <source>03 Read Holding Registers</source>
-        <translation type="vanished">03 Чтение регистров хранения</translation>
-    </message>
-    <message>
-        <source>04 Read Input Registers</source>
-        <translation type="vanished">04 Чтение регистров вода</translation>
-    </message>
-    <message>
-        <source>05 Write Single Coil</source>
-        <translation type="vanished">05 Запись одного флага</translation>
-    </message>
-    <message>
-        <source>06 Write Single Register</source>
-        <translation type="vanished">06 Запись одного регистра харенения</translation>
-    </message>
-    <message>
-        <source>15 Write Multiple Coils</source>
-        <translation type="vanished">15 Запись нескольких флагов</translation>
-    </message>
-    <message>
-        <source>16 Write Multiple Registers</source>
-        <translation type="vanished">16 Запись нескольких регистров хранения</translation>
-    </message>
-    <message>
-        <source>22 Mask Write Register</source>
-        <translation type="vanished">22 Запись регистра хранения по маске</translation>
-    </message>
-    <message>
-        <source>23 Read/Write Multiple Registers</source>
-        <translation type="vanished">23 Чтение/запись нескольких регистров хранения</translation>
-    </message>
-    <message>
         <location filename="../formtrafficview.cpp" line="88"/>
         <location filename="../formtrafficview.cpp" line="92"/>
         <location filename="../formtrafficview.cpp" line="96"/>
@@ -2743,8 +2686,8 @@ Script.onInit(()=&gt;{
     </message>
     <message>
         <location filename="../mainwindow.ui" line="244"/>
-        <location filename="../mainwindow.cpp" line="1678"/>
-        <location filename="../mainwindow.cpp" line="1678"/>
+        <location filename="../mainwindow.cpp" line="1689"/>
+        <location filename="../mainwindow.cpp" line="1689"/>
         <source>Save Project</source>
         <translation>Сохранить проект</translation>
     </message>
@@ -2935,8 +2878,8 @@ Script.onInit(()=&gt;{
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="187"/>
-        <location filename="../mainwindow.cpp" line="1765"/>
-        <location filename="../mainwindow.cpp" line="1765"/>
+        <location filename="../mainwindow.cpp" line="1776"/>
+        <location filename="../mainwindow.cpp" line="1776"/>
         <source>Clear List</source>
         <translation>Очистить список</translation>
     </message>
@@ -2962,11 +2905,16 @@ Script.onInit(()=&gt;{
         <translation>Файлы проекта (*.omp)</translation>
     </message>
     <message>
+        <location filename="../mainwindow.cpp" line="1346"/>
+        <source>Untitled</source>
+        <translation>Без имени</translation>
+    </message>
+    <message>
         <location filename="../applogger.cpp" line="117"/>
         <location filename="../mainwindow.cpp" line="469"/>
-        <location filename="../mainwindow.cpp" line="1510"/>
+        <location filename="../mainwindow.cpp" line="1521"/>
         <location filename="../mainwindow.cpp" line="469"/>
-        <location filename="../mainwindow.cpp" line="1510"/>
+        <location filename="../mainwindow.cpp" line="1521"/>
         <source>Address Base</source>
         <translation>Адресация</translation>
     </message>
@@ -3236,7 +3184,7 @@ Script.onInit(()=&gt;{
         <translation>%1 изменено: %2 -&gt; %3</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1097"/>
+        <location filename="../mainwindow.cpp" line="1100"/>
         <source>Move to Other Panel</source>
         <translation>Переместить на другую панель</translation>
     </message>
@@ -3259,12 +3207,12 @@ Script.onInit(()=&gt;{
         <translation>Шестнадцатиричный режим</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1679"/>
+        <location filename="../mainwindow.cpp" line="1690"/>
         <source>Save project before closing?</source>
         <translation>Сохранить проект перед закрытием?</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1753"/>
+        <location filename="../mainwindow.cpp" line="1764"/>
         <source>No Recent Projects</source>
         <translation>Нет недавних проектов</translation>
     </message>
@@ -3274,7 +3222,7 @@ Script.onInit(()=&gt;{
         <translation>Данные</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1055"/>
+        <location filename="../mainwindow.cpp" line="1058"/>
         <source>JavaScript files (*.js);;All files (*)</source>
         <translation>Файлы JavaScript (*.js);;Все файлы (*)</translation>
     </message>
@@ -3810,14 +3758,6 @@ Script.onInit(()=&gt;{
         <location filename="../controls/outputdatawidget.cpp" line="1354"/>
         <source>LightGray</source>
         <translation>Светло-серый</translation>
-    </message>
-    <message>
-        <source>NOT CONNECTED!</source>
-        <translation type="vanished">НЕ ПОДКЛЮЧЕНО!</translation>
-    </message>
-    <message>
-        <source>Invalid Data Length Specified</source>
-        <translation type="vanished">Указана недопустимая длина данных</translation>
     </message>
     <message>
         <location filename="../controls/outputdatawidget.cpp" line="1433"/>
