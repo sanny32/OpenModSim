@@ -10,19 +10,20 @@
 #--------------------------------
 # Custom defines
   !define MUI_ICON ${ICON_FILE}
-  !define NAME "Open ModSim 2"
+  !define PROJECTNAME "Open ModSim"
+  !define NAME "${PROJECTNAME} 2"
   !define PUBLISHER "Alexandr Ananev"
   !define APPFILE "omodsim.exe"
   !define ICOFILE "omodsim.exe"
   !define PACKAGENAME "omodsim_${VERSION}_x64"
-  !define SLUG "${NAME} v${VERSION}"
+  !define SLUG "${PROJECTNAME} v${VERSION}"
   !define UPDATEURL "https://github.com/sanny32/OpenModSim/releases"
 
   !define MUI_WELCOMEFINISHPAGE_BITMAP "${WELCOMEFINISHPAGE_BITMAP}"
-  !define MUI_FINISHPAGE_TEXT "${NAME} v${VERSION} has been installed on your computer."
+  !define MUI_FINISHPAGE_TEXT "${PROJECTNAME} v${VERSION} has been installed on your computer."
   !define MUI_FINISHPAGE_RUN
   !define MUI_FINISHPAGE_RUN_FUNCTION LaunchWithProfile
-  !define MUI_FINISHPAGE_RUN_TEXT "Launch ${NAME}"
+  !define MUI_FINISHPAGE_RUN_TEXT "Launch ${PROJECTNAME}"
   !define MUI_FINISHPAGE_RUN_CHECKED
 
 Function LaunchWithProfile
@@ -54,7 +55,7 @@ FunctionEnd
 #--------------------------------
 # General
 
-  Name "${NAME} v${VERSION}"
+  Name "${PROJECTNAME} v${VERSION}"
   OutFile "${OUTPUT_FILE}"
   InstallDir "$PROGRAMFILES64\${NAME}"
   RequestExecutionLevel admin
@@ -66,8 +67,8 @@ FunctionEnd
   VIFileVersion    "${VERSIONMAJOR}.${VERSIONMINOR}.${VERSIONPATCH}.${VERSIONBUILD}"
   VIAddVersionKey /LANG=0 "ProductVersion"   "${VERSION}"
   VIAddVersionKey /LANG=0 "FileVersion"      "${VERSION}"
-  VIAddVersionKey /LANG=0 "ProductName"      "${NAME}"
-  VIAddVersionKey /LANG=0 "FileDescription"  "${NAME}"
+  VIAddVersionKey /LANG=0 "ProductName"      "${PROJECTNAME}"
+  VIAddVersionKey /LANG=0 "FileDescription"  "${PROJECTNAME}"
   VIAddVersionKey /LANG=0 "LegalCopyright"   "Copyright (c) ${COPYRIGHT}"
 
 #--------------------------------

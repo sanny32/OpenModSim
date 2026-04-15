@@ -10,20 +10,20 @@
 #--------------------------------
 # Custom defines
   !define MUI_ICON ${ICON_FILE}
-
-  !define NAME "Open ModSim 2"
+  !define PROJECTNAME "Open ModSim"
+  !define NAME "${PROJECTNAME} 2"
   !define PUBLISHER "Alexandr Ananev"
   !define APPFILE "omodsim.exe"
   !define ICOFILE "omodsim.exe"
   !define PACKAGENAME "omodsim_${VERSION}_x86"
-  !define SLUG "${NAME} v${VERSION}"
+  !define SLUG "${PROJECTNAME} v${VERSION}"
   !define UPDATEURL "https://github.com/sanny32/OpenModSim/releases"
 
   !define MUI_WELCOMEFINISHPAGE_BITMAP "${WELCOMEFINISHPAGE_BITMAP}"
-  !define MUI_FINISHPAGE_TEXT "${NAME} v${VERSION} (x86) has been installed on your computer."
+  !define MUI_FINISHPAGE_TEXT "${PROJECTNAME} v${VERSION} (x86) has been installed on your computer."
   !define MUI_FINISHPAGE_RUN
   !define MUI_FINISHPAGE_RUN_FUNCTION LaunchWithProfile
-  !define MUI_FINISHPAGE_RUN_TEXT "Launch ${NAME}"
+  !define MUI_FINISHPAGE_RUN_TEXT "Launch ${PROJECTNAME}"
   !define MUI_FINISHPAGE_RUN_CHECKED
 
 Function LaunchWithProfile
@@ -56,7 +56,7 @@ FunctionEnd
 #--------------------------------
 # General
 
-  Name "${NAME} v${VERSION} (x86)"
+  Name "${PROJECTNAME} v${VERSION} (x86)"
   OutFile "${OUTPUT_FILE}"
   InstallDir "$PROGRAMFILES\${NAME}"
   RequestExecutionLevel admin
