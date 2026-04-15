@@ -66,15 +66,25 @@ jobs:
         id: extract_version
         run: |
           FULL_VERSION=$(grep -oP 'VERSION\s+\K[0-9]+\.[0-9]+\.[0-9]+' src/CMakeLists.txt)
+          PRE_RELEASE_ENABLED=false
+          grep -q 'option(PRE_RELEASE .* ON)' src/CMakeLists.txt && PRE_RELEASE_ENABLED=true
+          TAG_NAME="${{ github.event.inputs.tag || github.ref_name }}"
+          if [[ "$TAG_NAME" == *b ]]; then
+            PRE_RELEASE_ENABLED=true
+          fi
 
           if [ "${GITHUB_REF_NAME}" = "dev" ] || [ "${{ github.event.inputs.branch }}" = "dev" ] || [[ "${GITHUB_REF_NAME}" == release/* ]] || [[ "${{ github.event.inputs.branch }}" == release/* ]]; then
             MAJOR_MINOR=$(echo "$FULL_VERSION" | cut -d. -f1,2)
             APP_VERSION="${MAJOR_MINOR}~dev"
           else
             APP_VERSION="$FULL_VERSION"
+            if [ "$PRE_RELEASE_ENABLED" = "true" ]; then
+              APP_VERSION="${APP_VERSION}b"
+            fi
           fi
 
           echo "APP_VERSION=$APP_VERSION" >> $GITHUB_ENV
+          echo "PRE_RELEASE_FLAG=$PRE_RELEASE_ENABLED" >> $GITHUB_ENV
           echo "Extracted version: $APP_VERSION"
 
       - name: Install dependencies
@@ -153,7 +163,8 @@ jobs:
             cmake src -B ${{ env.BUILD_DIR }} \
             -G "${{ env.CMAKE_GENERATOR }}" \
             -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} \
-            -DCMAKE_PREFIX_PATH=${{ env.QT_INSTALL_DIR }}/${{ env.QT_VERSION }}/${{ env.CMAKE_COMPILER }}
+            -DCMAKE_PREFIX_PATH=${{ env.QT_INSTALL_DIR }}/${{ env.QT_VERSION }}/${{ env.CMAKE_COMPILER }} \
+            -DPRE_RELEASE=$PRE_RELEASE_FLAG
 
       - name: Build
         run: cmake --build ${{ env.BUILD_DIR }} --config ${{ env.BUILD_TYPE }} --parallel
@@ -284,6 +295,7 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           draft: true
+          prerelease: ${{ env.PRE_RELEASE_FLAG }}
           tag_name: ${{ github.ref_name }}
           name: Open ModSim ${{ env.APP_VERSION }}
           files: |

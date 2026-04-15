@@ -91,7 +91,7 @@ endif()
 
 if(DEFINED GIT_BRANCH AND "${GIT_BRANCH}" MATCHES "^(dev|release/.*)$")
     set(PROJECT_VERSION ${VERSION_MAJOR}.${VERSION_MINOR}-dev)
-elseif(PRE_RELESE)
+elseif(PRE_RELEASE)
     set(PROJECT_PRERELEASE "b")
 endif()
 

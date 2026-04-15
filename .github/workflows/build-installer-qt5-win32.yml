@@ -48,7 +48,15 @@ jobs:
 
       - name: Extract version from CMakeLists.txt
         run: |
-          for /f "tokens=2" %%i in ('findstr /R /C:"VERSION [0-9]*\.[0-9]*\.[0-9]*" src\CMakeLists.txt') do echo APP_VERSION=%%i>>%GITHUB_ENV%
+          for /f "tokens=2" %%i in ('findstr /R /C:"VERSION [0-9]*\.[0-9]*\.[0-9]*" src\CMakeLists.txt') do set APP_VERSION=%%i
+          set PRE_RELEASE_ENABLED=false
+          findstr /R /C:"option(PRE_RELEASE .* ON)" src\CMakeLists.txt >nul && set PRE_RELEASE_ENABLED=true
+          set TAG_NAME=${{ github.event.inputs.tag }}
+          if "%TAG_NAME%"=="" set TAG_NAME=${{ github.ref_name }}
+          if "%TAG_NAME:~-1%"=="b" set PRE_RELEASE_ENABLED=true
+          if "%PRE_RELEASE_ENABLED%"=="true" set APP_VERSION=%APP_VERSION%b
+          echo APP_VERSION=%APP_VERSION%>>%GITHUB_ENV%
+          echo PRE_RELEASE_FLAG=%PRE_RELEASE_ENABLED%>>%GITHUB_ENV%
         shell: cmd
 
       - name: Convert version for dev branch
@@ -123,7 +131,7 @@ jobs:
 
       - name: Configure CMake
         run: |
-          cmake src -B ${{ env.BUILD_DIR }} -G "${{ env.CMAKE_GENERATOR }}" -A ${{ env.CMAKE_ARCH }} -T v142 -DCMAKE_PREFIX_PATH="C:/Qt/${{ env.QT_VERSION }}/${{ env.CMAKE_COMPILER }}"
+          cmake src -B ${{ env.BUILD_DIR }} -G "${{ env.CMAKE_GENERATOR }}" -A ${{ env.CMAKE_ARCH }} -T v142 -DCMAKE_PREFIX_PATH="C:/Qt/${{ env.QT_VERSION }}/${{ env.CMAKE_COMPILER }}" -DPRE_RELEASE=%PRE_RELEASE_FLAG%
         shell: cmd
 
       - name: Build
@@ -233,6 +241,7 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           draft: true
+          prerelease: ${{ env.PRE_RELEASE_FLAG }}
           tag_name: ${{ github.ref_name }}
           name: Open ModSim ${{ env.APP_VERSION }}
           files: |
