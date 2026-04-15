@@ -15,10 +15,19 @@ CmdLineParser::CmdLineParser()
     QCommandLineOption profileOption(QStringList() << _profile, tr("Load settings profile from ini file."), tr("file path"));
     addOption(profileOption);
 
-    QCommandLineOption configOption(QStringList() << _config, tr("Setup test config file."), tr("file path"));
-    addOption(configOption);
-
     QCommandLineOption noSessionOption(QStringList() << _no_session, tr("Do not use program session."));
     addOption(noSessionOption);
+
+    addPositionalArgument("project", tr("Project file to open."), tr("[project]"));
+}
+
+///
+/// \brief CmdLineParser::projectFile
+/// \return
+///
+QString CmdLineParser::projectFile() const
+{
+    const auto args = positionalArguments();
+    return args.isEmpty() ? QString() : args.first();
 }
 

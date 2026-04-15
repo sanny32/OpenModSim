@@ -175,12 +175,7 @@ int main(int argc, char *argv[])
         profile = parser.value(CmdLineParser::_profile);
     }
 
-    QString cfg;
-    if(parser.isSet(CmdLineParser::_config))
-    {
-        cfg = parser.value(CmdLineParser::_config);
-    }
-
+    const QString cfg = parser.projectFile();
     const bool noSession = parser.isSet(CmdLineParser::_no_session);
 
     MainWindow w(profile, !noSession);
