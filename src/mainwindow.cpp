@@ -747,7 +747,10 @@ void MainWindow::on_actionSaveProjectAs_triggered()
 {
     QStringList filters;
     filters << tr("Project files (*.omp)");
-    auto filename = QFileDialog::getSaveFileName(this, QString(), _project->savePath(), filters.join(";;"));
+    const QString initialPath = _projectFilePath.isEmpty()
+        ? _project->savePath() + "/" + projectName() + ".omp"
+        : _projectFilePath;
+    auto filename = QFileDialog::getSaveFileName(this, QString(), initialPath, filters.join(";;"));
 
     if(filename.isEmpty()) return;
 
@@ -1331,24 +1334,32 @@ void MainWindow::saveProject(const QString& filename)
 }
 
 ///
+/// \brief MainWindow::projectName
+/// \return current project name: base filename if saved, "Untitled" if unsaved with context, empty otherwise
+///
+QString MainWindow::projectName() const
+{
+    if(!_projectFilePath.isEmpty())
+        return QFileInfo(_projectFilePath).completeBaseName();
+
+    if(hasProjectContext())
+        return tr("Untitled");
+
+    return QString();
+}
+
+///
 /// \brief MainWindow::updateProjectWindowTitle
 ///
 void MainWindow::updateProjectWindowTitle()
 {
     const QString modifiedMark = _isModified ? "*" : "";
+    const QString name = projectName();
 
-    if(_projectFilePath.isEmpty()) {
+    if(name.isEmpty())
         setWindowTitle(modifiedMark + APP_NAME);
-        return;
-    }
-
-    const QString projectName = QFileInfo(_projectFilePath).completeBaseName();
-    if(projectName.isEmpty()) {
-        setWindowTitle(modifiedMark + APP_NAME);
-        return;
-    }
-
-    setWindowTitle(QString("%1%2 - %3").arg(modifiedMark, APP_NAME, projectName));
+    else
+        setWindowTitle(QString("%1%2 - %3").arg(modifiedMark, APP_NAME, name));
 }
 
 ///

@@ -150,6 +150,7 @@ private:
     void rebuildRecentProjectsMenu();
     void clearRecentProjects();
     void openRecentProject(const QString& filePath);
+    QString projectName() const;
     void updateProjectWindowTitle();
     void setupGlobalViewToolbar();
     void syncGlobalViewControls();
