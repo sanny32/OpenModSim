@@ -234,19 +234,26 @@
         <translation>Загрузить профиль настроек из ini-файла.</translation>
     </message>
     <message>
-        <location filename="../cmdlineparser.cpp" line="18"/>
+        <location filename="../cmdlineparser.cpp" line="21"/>
+        <source>Project file to open.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../cmdlineparser.cpp" line="21"/>
+        <source>[project]</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Setup test config file.</source>
-        <translation>Задать файл конфига.</translation>
+        <translation type="vanished">Задать файл конфига.</translation>
     </message>
     <message>
         <location filename="../cmdlineparser.cpp" line="15"/>
-        <location filename="../cmdlineparser.cpp" line="18"/>
-        <location filename="../cmdlineparser.cpp" line="18"/>
         <source>file path</source>
         <translation>файл</translation>
     </message>
     <message>
-        <location filename="../cmdlineparser.cpp" line="21"/>
+        <location filename="../cmdlineparser.cpp" line="18"/>
         <source>Do not use program session.</source>
         <translation>Не использовать сессии приложения.</translation>
     </message>

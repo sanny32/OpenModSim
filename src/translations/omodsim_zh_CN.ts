@@ -234,19 +234,26 @@
         <translation>从ini文件加载设置配置文件。</translation>
     </message>
     <message>
-        <location filename="../cmdlineparser.cpp" line="18"/>
+        <location filename="../cmdlineparser.cpp" line="21"/>
+        <source>Project file to open.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../cmdlineparser.cpp" line="21"/>
+        <source>[project]</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Setup test config file.</source>
-        <translation>设置测试配置文件。</translation>
+        <translation type="vanished">设置测试配置文件。</translation>
     </message>
     <message>
         <location filename="../cmdlineparser.cpp" line="15"/>
-        <location filename="../cmdlineparser.cpp" line="18"/>
-        <location filename="../cmdlineparser.cpp" line="18"/>
         <source>file path</source>
         <translation>文件路径</translation>
     </message>
     <message>
-        <location filename="../cmdlineparser.cpp" line="21"/>
+        <location filename="../cmdlineparser.cpp" line="18"/>
         <source>Do not use program session.</source>
         <translation>不要使用程序对话。</translation>
     </message>
