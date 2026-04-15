@@ -1136,45 +1136,50 @@
         <translation>Язык:</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="427"/>
-        <location filename="../dialogs/dialogpreferences.ui" line="767"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="424"/>
+        <source>Show Welcome dialog on startup</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogpreferences.ui" line="434"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="774"/>
         <source>Font</source>
         <translation>Шрифт</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="464"/>
-        <location filename="../dialogs/dialogpreferences.ui" line="804"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="471"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="811"/>
         <source>Size:</source>
         <translation>Размер:</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="496"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="503"/>
         <source>Zoom:</source>
         <translation>Масштаб:</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="593"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="600"/>
         <source>Leading Zeros for Unsigned</source>
         <translation>Ведущие нули для беззнаковых</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="870"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="877"/>
         <source>Console</source>
         <translation>Консоль</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="882"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="889"/>
         <source>Console Output Limit:</source>
         <translation>Ограничение вывода консоли:</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="920"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="927"/>
         <source>Automatically show output console</source>
         <translation>Автоматически показывать консоль вывода</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="442"/>
-        <location filename="../dialogs/dialogpreferences.ui" line="782"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="449"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="789"/>
         <source>Family:</source>
         <translation>Семейство:</translation>
     </message>
@@ -1189,28 +1194,28 @@
         <translation>Проверять обновления</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="518"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="525"/>
         <source>%</source>
         <translation>%</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="539"/>
-        <location filename="../dialogs/dialogpreferences.ui" line="838"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="546"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="845"/>
         <source>Antialias</source>
         <translation>Сглаживание</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="600"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="607"/>
         <source>Columns Distance:</source>
         <translation>Расстояние между столбцами:</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="650"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="657"/>
         <source>Autoscroll</source>
         <translation>Автопрокрутка</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="657"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="664"/>
         <source>Log View Limit:</source>
         <translation>Лимит лога:</translation>
     </message>
@@ -1220,27 +1225,27 @@
         <translation>Скрипт</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="581"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="588"/>
         <source>Data View</source>
         <translation>Данные</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="638"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="645"/>
         <source>Traffic View</source>
         <translation>Просмотр трафика</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="735"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="742"/>
         <source>&lt;b&gt;Note:&lt;/b&gt; These settings apply to newly opened windows only.</source>
         <translation>&lt;b&gt;Примечание:&lt;/b&gt; Эти настройки применяются только к новым окнам.</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="848"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="855"/>
         <source>Editor</source>
         <translation>Редактор</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="860"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="867"/>
         <source>Enable code auto-complete</source>
         <translation>Включить автодополнение кода</translation>
     </message>
@@ -1565,6 +1570,53 @@
         <location filename="../dialogs/dialogsetupserialport.ui" line="260"/>
         <source>RTS Control: </source>
         <translation>Управление RTS: </translation>
+    </message>
+</context>
+<context>
+    <name>DialogWelcome</name>
+    <message>
+        <location filename="../dialogs/dialogwelcome.ui" line="14"/>
+        <source>Welcome</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogwelcome.ui" line="76"/>
+        <source>Open ModSim</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogwelcome.ui" line="83"/>
+        <source>Modbus Slave Simulator</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogwelcome.ui" line="132"/>
+        <source>Open:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogwelcome.ui" line="170"/>
+        <source>New Project</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Open Project...</source>
+        <translation type="obsolete">Открыть проект...</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogwelcome.ui" line="195"/>
+        <source>Don&apos;t show this dialog again</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogwelcome.cpp" line="23"/>
+        <source>Welcome to %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogwelcome.ui" line="186"/>
+        <source>Open Project</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2691,8 +2743,8 @@ Script.onInit(()=&gt;{
     </message>
     <message>
         <location filename="../mainwindow.ui" line="244"/>
-        <location filename="../mainwindow.cpp" line="1611"/>
-        <location filename="../mainwindow.cpp" line="1611"/>
+        <location filename="../mainwindow.cpp" line="1678"/>
+        <location filename="../mainwindow.cpp" line="1678"/>
         <source>Save Project</source>
         <translation>Сохранить проект</translation>
     </message>
@@ -2846,10 +2898,10 @@ Script.onInit(()=&gt;{
     <message>
         <location filename="../mainwindow.ui" line="526"/>
         <location filename="../mainwindow.ui" line="529"/>
-        <location filename="../mainwindow.cpp" line="190"/>
-        <location filename="../mainwindow.cpp" line="398"/>
-        <location filename="../mainwindow.cpp" line="190"/>
-        <location filename="../mainwindow.cpp" line="398"/>
+        <location filename="../mainwindow.cpp" line="231"/>
+        <location filename="../mainwindow.cpp" line="464"/>
+        <location filename="../mainwindow.cpp" line="231"/>
+        <location filename="../mainwindow.cpp" line="464"/>
         <source>Script Help</source>
         <translation>Справка по скриптам</translation>
     </message>
@@ -2870,51 +2922,51 @@ Script.onInit(()=&gt;{
         <translation>Строка состояния</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="654"/>
+        <location filename="../mainwindow.cpp" line="720"/>
         <source>All files (*)</source>
         <translation>Все файлы (*)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="145"/>
-        <location filename="../mainwindow.cpp" line="400"/>
-        <location filename="../mainwindow.cpp" line="400"/>
+        <location filename="../mainwindow.cpp" line="186"/>
+        <location filename="../mainwindow.cpp" line="466"/>
+        <location filename="../mainwindow.cpp" line="466"/>
         <source>Open Recent</source>
         <translation>Открыть недавние</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="146"/>
-        <location filename="../mainwindow.cpp" line="1698"/>
-        <location filename="../mainwindow.cpp" line="1698"/>
+        <location filename="../mainwindow.cpp" line="187"/>
+        <location filename="../mainwindow.cpp" line="1765"/>
+        <location filename="../mainwindow.cpp" line="1765"/>
         <source>Clear List</source>
         <translation>Очистить список</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="171"/>
-        <location filename="../mainwindow.cpp" line="397"/>
-        <location filename="../mainwindow.cpp" line="397"/>
+        <location filename="../mainwindow.cpp" line="212"/>
+        <location filename="../mainwindow.cpp" line="463"/>
+        <location filename="../mainwindow.cpp" line="463"/>
         <source>Project</source>
         <translation>Проект</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="228"/>
-        <location filename="../mainwindow.cpp" line="399"/>
-        <location filename="../mainwindow.cpp" line="399"/>
+        <location filename="../mainwindow.cpp" line="269"/>
+        <location filename="../mainwindow.cpp" line="465"/>
+        <location filename="../mainwindow.cpp" line="465"/>
         <source>Output</source>
         <translation>Вывод</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="653"/>
-        <location filename="../mainwindow.cpp" line="684"/>
-        <location filename="../mainwindow.cpp" line="684"/>
+        <location filename="../mainwindow.cpp" line="719"/>
+        <location filename="../mainwindow.cpp" line="749"/>
+        <location filename="../mainwindow.cpp" line="749"/>
         <source>Project files (*.omp)</source>
         <translation>Файлы проекта (*.omp)</translation>
     </message>
     <message>
         <location filename="../applogger.cpp" line="117"/>
-        <location filename="../mainwindow.cpp" line="403"/>
-        <location filename="../mainwindow.cpp" line="1443"/>
-        <location filename="../mainwindow.cpp" line="403"/>
-        <location filename="../mainwindow.cpp" line="1443"/>
+        <location filename="../mainwindow.cpp" line="469"/>
+        <location filename="../mainwindow.cpp" line="1510"/>
+        <location filename="../mainwindow.cpp" line="469"/>
+        <location filename="../mainwindow.cpp" line="1510"/>
         <source>Address Base</source>
         <translation>Адресация</translation>
     </message>
@@ -3184,7 +3236,7 @@ Script.onInit(()=&gt;{
         <translation>%1 изменено: %2 -&gt; %3</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1032"/>
+        <location filename="../mainwindow.cpp" line="1097"/>
         <source>Move to Other Panel</source>
         <translation>Переместить на другую панель</translation>
     </message>
@@ -3207,12 +3259,12 @@ Script.onInit(()=&gt;{
         <translation>Шестнадцатиричный режим</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1612"/>
+        <location filename="../mainwindow.cpp" line="1679"/>
         <source>Save project before closing?</source>
         <translation>Сохранить проект перед закрытием?</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1686"/>
+        <location filename="../mainwindow.cpp" line="1753"/>
         <source>No Recent Projects</source>
         <translation>Нет недавних проектов</translation>
     </message>
@@ -3222,7 +3274,7 @@ Script.onInit(()=&gt;{
         <translation>Данные</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="990"/>
+        <location filename="../mainwindow.cpp" line="1055"/>
         <source>JavaScript files (*.js);;All files (*)</source>
         <translation>Файлы JavaScript (*.js);;Все файлы (*)</translation>
     </message>

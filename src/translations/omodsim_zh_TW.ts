@@ -1132,45 +1132,50 @@
         <translation>語言：</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="427"/>
-        <location filename="../dialogs/dialogpreferences.ui" line="767"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="424"/>
+        <source>Show Welcome dialog on startup</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogpreferences.ui" line="434"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="774"/>
         <source>Font</source>
         <translation>字型</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="464"/>
-        <location filename="../dialogs/dialogpreferences.ui" line="804"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="471"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="811"/>
         <source>Size:</source>
         <translation>大小：</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="496"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="503"/>
         <source>Zoom:</source>
         <translation>縮放：</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="593"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="600"/>
         <source>Leading Zeros for Unsigned</source>
         <translation>無符號數前導零</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="870"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="877"/>
         <source>Console</source>
         <translation>主控台</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="882"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="889"/>
         <source>Console Output Limit:</source>
         <translation>主控台輸出限制：</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="920"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="927"/>
         <source>Automatically show output console</source>
         <translation>自動顯示輸出主控台</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="442"/>
-        <location filename="../dialogs/dialogpreferences.ui" line="782"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="449"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="789"/>
         <source>Family:</source>
         <translation>字型族：</translation>
     </message>
@@ -1185,28 +1190,28 @@
         <translation>檢查更新</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="518"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="525"/>
         <source>%</source>
         <translation>%</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="539"/>
-        <location filename="../dialogs/dialogpreferences.ui" line="838"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="546"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="845"/>
         <source>Antialias</source>
         <translation>反鋸齒</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="600"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="607"/>
         <source>Columns Distance:</source>
         <translation>欄間距：</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="650"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="657"/>
         <source>Autoscroll</source>
         <translation>自動捲動</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="657"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="664"/>
         <source>Log View Limit:</source>
         <translation>日誌限制：</translation>
     </message>
@@ -1216,27 +1221,27 @@
         <translation>腳本</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="581"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="588"/>
         <source>Data View</source>
         <translation>資料檢視</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="638"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="645"/>
         <source>Traffic View</source>
         <translation>流量檢視</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="735"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="742"/>
         <source>&lt;b&gt;Note:&lt;/b&gt; These settings apply to newly opened windows only.</source>
         <translation>&lt;b&gt;注意：&lt;/b&gt;這些設定僅適用於新開啟的視窗。</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="848"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="855"/>
         <source>Editor</source>
         <translation>編輯器</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="860"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="867"/>
         <source>Enable code auto-complete</source>
         <translation>啟用程式碼自動完成</translation>
     </message>
@@ -1561,6 +1566,53 @@
         <location filename="../dialogs/dialogsetupserialport.ui" line="260"/>
         <source>RTS Control: </source>
         <translation>RTS控制： </translation>
+    </message>
+</context>
+<context>
+    <name>DialogWelcome</name>
+    <message>
+        <location filename="../dialogs/dialogwelcome.ui" line="14"/>
+        <source>Welcome</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogwelcome.ui" line="76"/>
+        <source>Open ModSim</source>
+        <translation type="unfinished">開啟ModSim</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogwelcome.ui" line="83"/>
+        <source>Modbus Slave Simulator</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogwelcome.ui" line="132"/>
+        <source>Open:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogwelcome.ui" line="170"/>
+        <source>New Project</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Open Project...</source>
+        <translation type="obsolete">開啟專案...</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogwelcome.ui" line="195"/>
+        <source>Don&apos;t show this dialog again</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogwelcome.cpp" line="23"/>
+        <source>Welcome to %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogwelcome.ui" line="186"/>
+        <source>Open Project</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2627,8 +2679,8 @@ Script.onInit(()=&gt;{
     </message>
     <message>
         <location filename="../mainwindow.ui" line="244"/>
-        <location filename="../mainwindow.cpp" line="1611"/>
-        <location filename="../mainwindow.cpp" line="1611"/>
+        <location filename="../mainwindow.cpp" line="1678"/>
+        <location filename="../mainwindow.cpp" line="1678"/>
         <source>Save Project</source>
         <translation>儲存專案</translation>
     </message>
@@ -2802,10 +2854,10 @@ Script.onInit(()=&gt;{
     <message>
         <location filename="../mainwindow.ui" line="526"/>
         <location filename="../mainwindow.ui" line="529"/>
-        <location filename="../mainwindow.cpp" line="190"/>
-        <location filename="../mainwindow.cpp" line="398"/>
-        <location filename="../mainwindow.cpp" line="190"/>
-        <location filename="../mainwindow.cpp" line="398"/>
+        <location filename="../mainwindow.cpp" line="231"/>
+        <location filename="../mainwindow.cpp" line="464"/>
+        <location filename="../mainwindow.cpp" line="231"/>
+        <location filename="../mainwindow.cpp" line="464"/>
         <source>Script Help</source>
         <translation>指令稿說明</translation>
     </message>
@@ -2826,51 +2878,51 @@ Script.onInit(()=&gt;{
         <translation>狀態列</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="654"/>
+        <location filename="../mainwindow.cpp" line="720"/>
         <source>All files (*)</source>
         <translation>所有檔案 (*)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="145"/>
-        <location filename="../mainwindow.cpp" line="400"/>
-        <location filename="../mainwindow.cpp" line="400"/>
+        <location filename="../mainwindow.cpp" line="186"/>
+        <location filename="../mainwindow.cpp" line="466"/>
+        <location filename="../mainwindow.cpp" line="466"/>
         <source>Open Recent</source>
         <translation>最近開啟</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="146"/>
-        <location filename="../mainwindow.cpp" line="1698"/>
-        <location filename="../mainwindow.cpp" line="1698"/>
+        <location filename="../mainwindow.cpp" line="187"/>
+        <location filename="../mainwindow.cpp" line="1765"/>
+        <location filename="../mainwindow.cpp" line="1765"/>
         <source>Clear List</source>
         <translation>清除清單</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="171"/>
-        <location filename="../mainwindow.cpp" line="397"/>
-        <location filename="../mainwindow.cpp" line="397"/>
+        <location filename="../mainwindow.cpp" line="212"/>
+        <location filename="../mainwindow.cpp" line="463"/>
+        <location filename="../mainwindow.cpp" line="463"/>
         <source>Project</source>
         <translation>專案</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="228"/>
-        <location filename="../mainwindow.cpp" line="399"/>
-        <location filename="../mainwindow.cpp" line="399"/>
+        <location filename="../mainwindow.cpp" line="269"/>
+        <location filename="../mainwindow.cpp" line="465"/>
+        <location filename="../mainwindow.cpp" line="465"/>
         <source>Output</source>
         <translation>輸出</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="653"/>
-        <location filename="../mainwindow.cpp" line="684"/>
-        <location filename="../mainwindow.cpp" line="684"/>
+        <location filename="../mainwindow.cpp" line="719"/>
+        <location filename="../mainwindow.cpp" line="749"/>
+        <location filename="../mainwindow.cpp" line="749"/>
         <source>Project files (*.omp)</source>
         <translation>專案檔案 (*.omp)</translation>
     </message>
     <message>
         <location filename="../applogger.cpp" line="117"/>
-        <location filename="../mainwindow.cpp" line="403"/>
-        <location filename="../mainwindow.cpp" line="1443"/>
-        <location filename="../mainwindow.cpp" line="403"/>
-        <location filename="../mainwindow.cpp" line="1443"/>
+        <location filename="../mainwindow.cpp" line="469"/>
+        <location filename="../mainwindow.cpp" line="1510"/>
+        <location filename="../mainwindow.cpp" line="469"/>
+        <location filename="../mainwindow.cpp" line="1510"/>
         <source>Address Base</source>
         <translation>地址基準</translation>
     </message>
@@ -3140,7 +3192,7 @@ Script.onInit(()=&gt;{
         <translation>%1 已更改：%2 → %3</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1032"/>
+        <location filename="../mainwindow.cpp" line="1097"/>
         <source>Move to Other Panel</source>
         <translation>移至其他面板</translation>
     </message>
@@ -3163,12 +3215,12 @@ Script.onInit(()=&gt;{
         <translation>十六進位檢視</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1612"/>
+        <location filename="../mainwindow.cpp" line="1679"/>
         <source>Save project before closing?</source>
         <translation>關閉前儲存專案？</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1686"/>
+        <location filename="../mainwindow.cpp" line="1753"/>
         <source>No Recent Projects</source>
         <translation>無最近專案</translation>
     </message>
@@ -3178,7 +3230,7 @@ Script.onInit(()=&gt;{
         <translation>資料</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="990"/>
+        <location filename="../mainwindow.cpp" line="1055"/>
         <source>JavaScript files (*.js);;All files (*)</source>
         <translation>JavaScript檔案 (*.js);;所有檔案 (*)</translation>
     </message>

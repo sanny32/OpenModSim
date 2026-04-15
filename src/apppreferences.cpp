@@ -277,6 +277,19 @@ void AppPreferences::setConsoleMaxLines(int n)
 }
 
 ///
+/// \brief AppPreferences::setShowWelcomeDialog
+/// \param enable
+///
+void AppPreferences::setShowWelcomeDialog(bool enable)
+{
+    if (_showWelcomeDialog == enable)
+        return;
+
+    emit preferenceChanged("ShowWelcomeDialog", boolToText(_showWelcomeDialog), boolToText(enable));
+    _showWelcomeDialog = enable;
+}
+
+///
 /// \brief AppPreferences::load
 /// \param settings
 ///
@@ -296,6 +309,7 @@ void AppPreferences::load(QSettings& settings)
     _autoShowConsoleOutput = settings.value("AutoShowConsoleOutput", _autoShowConsoleOutput).toBool();
     _consoleMaxLines = settings.value("ConsoleMaxLines", _consoleMaxLines).toInt();
     _checkForUpdates  = settings.value("CheckForUpdates",  _checkForUpdates).toBool();
+    _showWelcomeDialog = settings.value("ShowWelcomeDialog", _showWelcomeDialog).toBool();
 
     settings >> _dataViewDefinitions;
     settings >> _trafficViewDefinitions;
@@ -326,6 +340,7 @@ void AppPreferences::save(QSettings& settings) const
     settings.setValue("AutoShowConsoleOutput", _autoShowConsoleOutput);
     settings.setValue("ConsoleMaxLines", _consoleMaxLines);
     settings.setValue("CheckForUpdates", _checkForUpdates);
+    settings.setValue("ShowWelcomeDialog", _showWelcomeDialog);
 
     settings << _dataViewDefinitions;
     settings << _trafficViewDefinitions;

@@ -77,6 +77,9 @@ public:
     bool autoShowConsoleOutput() const { return _autoShowConsoleOutput; }
     void setAutoShowConsoleOutput(bool enable);
 
+    bool showWelcomeDialog() const { return _showWelcomeDialog; }
+    void setShowWelcomeDialog(bool enable);
+
     int consoleMaxLines() const { return _consoleMaxLines; }
     void setConsoleMaxLines(int n);
 
@@ -113,6 +116,7 @@ private:
     bool          _codeAutoComplete{ true };
     bool          _autoShowConsoleOutput{ true };
     int           _consoleMaxLines{ 500 };
+    bool          _showWelcomeDialog{ true };
 };
 
 #endif // APPPREFERENCES_H

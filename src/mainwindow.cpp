@@ -14,6 +14,7 @@
 #include "dialogforcemultiplecoils.h"
 #include "dialogforcemultipleregisters.h"
 #include "dialogmodbusdefinitions.h"
+#include "dialogwelcome.h"
 #include "mainstatusbar.h"
 #include "menuconnect.h"
 #include "mdiareaex.h"
@@ -32,6 +33,11 @@ constexpr const char* kRecentProjectsKey = "RecentProjects";
 constexpr const char* kLastProjectPathKey = "LastProjectPath";
 constexpr int kMaxRecentProjects = 10;
 
+///
+/// \brief newFormKindFromSetting
+/// \param value
+/// \return
+///
 ProjectFormKind newFormKindFromSetting(int value)
 {
     switch (static_cast<ProjectFormKind>(value)) {
@@ -45,11 +51,21 @@ ProjectFormKind newFormKindFromSetting(int value)
     }
 }
 
+///
+/// \brief newFormKindToSetting
+/// \param kind
+/// \return
+///
 int newFormKindToSetting(ProjectFormKind kind)
 {
     return static_cast<int>(kind);
 }
 
+///
+/// \brief forEachTypedForm
+/// \param mdiArea
+/// \param fn
+///
 template<typename MdiAreaT, typename Fn>
 void forEachTypedForm(MdiAreaT* mdiArea, Fn&& fn)
 {
@@ -79,6 +95,11 @@ void forEachTypedForm(MdiAreaT* mdiArea, Fn&& fn)
     }
 }
 
+///
+/// \brief applySharedDisplayDefaults
+/// \param target
+/// \param defaults
+///
 template<typename TDefinitions>
 void applySharedDisplayDefaults(TDefinitions& target, const TDefinitions& defaults)
 {
@@ -86,6 +107,11 @@ void applySharedDisplayDefaults(TDefinitions& target, const TDefinitions& defaul
     target.DataViewColumnsDistance = defaults.DataViewColumnsDistance;
 }
 
+///
+/// \brief applySharedDisplayDefaults
+/// \param target
+/// \param defaults
+///
 void applySharedDisplayDefaults(TrafficViewDefinitions& target, const TrafficViewDefinitions& defaults)
 {
     target.LogViewLimit = defaults.LogViewLimit;
@@ -95,17 +121,32 @@ void applySharedDisplayDefaults(TrafficViewDefinitions& target, const TrafficVie
     target.Autoscroll = defaults.Autoscroll;
 }
 
+///
+/// \brief applySharedDisplayDefaults
+/// \param target
+/// \param defaults
+///
 void applySharedDisplayDefaults(ScriptViewDefinitions& target, const ScriptViewDefinitions& defaults)
 {
     target.ScriptCfg = defaults.ScriptCfg;
 }
 
+///
+/// \brief dataTypeOfForm
+/// \param widget
+/// \return
+///
 DataType dataTypeOfForm(QWidget* widget)
 {
     if (auto* frm = qobject_cast<FormDataView*>(widget)) return frm->dataType();
     return DataType::Hex;
 }
 
+///
+/// \brief printOnForm
+/// \param widget
+/// \param printer
+///
 void printOnForm(QWidget* widget, QPrinter* printer)
 {
     if (auto* frm = qobject_cast<FormDataView*>(widget)) frm->print(printer);
@@ -291,13 +332,14 @@ MainWindow::MainWindow(const QString& profile, bool useSession, QWidget *parent)
     connect(ui->actionNewDataMapView,     &QAction::triggered, this, [this]{ activateNewFormKind(ProjectFormKind::DataMap,     ui->actionNewDataMapView); });
     connect(ui->actionNewScript,          &QAction::triggered, this, [this]{ activateNewFormKind(ProjectFormKind::Script,      ui->actionNewScript); });
 
-    loadAppSettings(profile);
+    const bool profileLoaded = loadAppSettings(profile);
     rebuildRecentProjectsMenu();
 
     const bool canRestoreLastProject = !_lastProjectPath.isEmpty() && QFile::exists(_lastProjectPath);
-    if(canRestoreLastProject) {
+    if(AppPreferences::instance().showWelcomeDialog()) {
+        _pendingWelcomeDialog = true;  // shown in showEvent after the window is visible
+    } else if(canRestoreLastProject) {
         loadProject(_lastProjectPath);
-        addRecentProject(_lastProjectPath);
     } else {
         ui->actionNew->trigger();
     }
@@ -346,7 +388,31 @@ void MainWindow::setLanguage(const QString& lang)
 void MainWindow::showEvent(QShowEvent* event)
 {
     QMainWindow::showEvent(event);
-    _project->restoreActiveWindows();
+
+    if(_pendingWelcomeDialog) {
+        _pendingWelcomeDialog = false;
+        QTimer::singleShot(0, this, [this] {
+            DialogWelcome dlg(_recentProjects, this);
+            if(dlg.exec() == QDialog::Accepted) {
+                switch(dlg.action()) {
+                case DialogWelcome::Action::OpenProject:
+                    ui->actionOpenProject->trigger();
+                    break;
+                case DialogWelcome::Action::OpenFile:
+                    loadProject(dlg.filePath());
+                    break;
+                default: // NewProject
+                    ui->actionNew->trigger();
+                    break;
+                }
+            }
+            if(dlg.dontShowAgain())
+                AppPreferences::instance().setShowWelcomeDialog(false);
+        });
+    }
+    else {
+        _project->restoreActiveWindows();
+    }
 }
 
 ///
@@ -658,7 +724,6 @@ void MainWindow::on_actionOpenProject_triggered()
 
     _project->setSavePath(QFileInfo(filename).absoluteDir().absolutePath());
     loadProject(filename);
-    addRecentProject(QFileInfo(filename).absoluteFilePath());
 }
 
 ///
@@ -1248,6 +1313,7 @@ void MainWindow::loadProject(const QString& filename)
     _isModified = false;
     updateProjectWindowTitle();
     updateMainToolbarState();
+    addRecentProject(_projectFilePath);
 }
 
 ///
@@ -1393,7 +1459,8 @@ bool MainWindow::loadAppSettings(const QString& filename)
         m.value(kNewFormKindKey, newFormKindToSetting(ProjectFormKind::Data)).toInt());
     restoreNewFormKindIcon();
 
-    restoreGeometry(m.value("WindowGeometry").toByteArray());
+    const QByteArray geometry = m.value("WindowGeometry").toByteArray();
+    restoreGeometry(geometry);
     restoreState(m.value("WindowState").toByteArray());
 
     statusBar()->setVisible(m.value("StatusBar", true).toBool());
@@ -1721,7 +1788,6 @@ void MainWindow::openRecentProject(const QString& filePath)
     }
 
     loadProject(filePath);
-    addRecentProject(filePath);
 }
 
 

@@ -181,6 +181,7 @@ private:
     QStringList _recentProjects;
     QString _lastProjectPath;
     bool _isModified = false;
+    bool _pendingWelcomeDialog = false;
     QMenu* _openRecentMenu = nullptr;
     QAction* _clearRecentAction = nullptr;
     AddressBaseComboBox* _globalAddressBaseCombo = nullptr;

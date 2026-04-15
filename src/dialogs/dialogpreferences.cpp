@@ -154,6 +154,7 @@ void DialogPreferences::loadFromPreferences()
 
     // Interface - updates
     ui->checkBoxCheckForUpdates->setChecked(prefs.checkForUpdates());
+    ui->checkBoxShowWelcomeDialog->setChecked(prefs.showWelcomeDialog());
 
     // Interface - font
     const QFont& f = prefs.font();
@@ -209,6 +210,8 @@ void DialogPreferences::apply()
     const bool checkUpdates = ui->checkBoxCheckForUpdates->isChecked();
     prefs.setCheckForUpdates(checkUpdates);
     if (_mainWindow) _mainWindow->applyCheckForUpdates(checkUpdates);
+
+    prefs.setShowWelcomeDialog(ui->checkBoxShowWelcomeDialog->isChecked());
 
     // Interface - font
     const QFont displayFont = fontFromControls(ui->fontComboBoxFont, ui->spinBoxFontSize, ui->checkBoxFontAntialias);
