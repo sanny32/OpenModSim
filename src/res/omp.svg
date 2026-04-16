@@ -11,8 +11,8 @@
   <path d="m336 98v66c0 14.36 11.64 26 26 26h56z" fill="#f7f7f7"/>
   <path d="m336 98 82 92h-56c-14.36 0-26-11.64-26-26z" fill="#fff"/>
   <path d="m184 98h152l82 92v240h-234z" fill="none" stroke="#d1d1d1" stroke-width="2"/>
-  <path d="m336 98 82 92h-56c-14.36 0-26-11.64-26-26z" fill="none" stroke="#d1d1d1" stroke-width="2"/>
-  <path d="m230 286c18-100 36-100 54 0s36 100 54 0 24-88 36-38" fill="none" stroke="#e7e7e7" stroke-linecap="round" stroke-width="16"/>
+  <path d="m336 98 82 92h-56c-14.36 0-26-11.64-26-26z" fill="none" stroke="#d1d1d1" stroke-linejoin="round" stroke-width="2"/>
+  <path d="m230 286c18-100 36-100 54 0s36 100 54 0 24-88 36-38" fill="none" stroke="#498BA7" stroke-linecap="round" stroke-width="16"/>
   <g transform="translate(130,295)" opacity=".16">
    <rect width="160" height="88"/>
   </g>
