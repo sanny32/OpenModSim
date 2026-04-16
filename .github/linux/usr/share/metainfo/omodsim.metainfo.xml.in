@@ -25,18 +25,25 @@
 
   <screenshots>
     <screenshot type="default">
-      <image>https://raw.githubusercontent.com/sanny32/OpenModSim/refs/@REF_TYPE@/@REF_NAME@/.github/assets/omodsim-main.png</image>
-      <caption>Main window</caption>
-      <caption xml:lang="zh_TW">主視窗</caption>
-      <caption xml:lang="zh_CN">主窗口</caption>
-      <caption xml:lang="ru">Главное окно</caption>
+      <image>https://raw.githubusercontent.com/sanny32/OpenModSim/refs/@REF_TYPE@/@REF_NAME@/.github/assets/omodsim-dataview.png</image>
+      <caption>DataView</caption>
+      <caption xml:lang="zh_TW">數據視窗</caption>
+      <caption xml:lang="zh_CN">数据窗口</caption>
+      <caption xml:lang="ru">Окно данных</caption>
     </screenshot>
     <screenshot>
-      <image>https://raw.githubusercontent.com/sanny32/OpenModSim/refs/@REF_TYPE@/@REF_NAME@/.github/assets/omodsim-log.png</image>
-      <caption>Log window</caption>
-      <caption xml:lang="zh_TW">日誌視窗</caption>
-      <caption xml:lang="zh_CN">日志窗口</caption>
-      <caption xml:lang="ru">Окно логирования</caption>
+      <image>https://raw.githubusercontent.com/sanny32/OpenModSim/refs/@REF_TYPE@/@REF_NAME@/.github/assets/omodsim-mapview.png</image>
+      <caption>Register Map View</caption>
+      <caption xml:lang="zh_TW">寄存器地圖視窗</caption>
+      <caption xml:lang="zh_CN">寄存器地图窗口</caption>
+      <caption xml:lang="ru">Окно карты адресов</caption>
+    </screenshot>
+     <screenshot>
+      <image>https://raw.githubusercontent.com/sanny32/OpenModSim/refs/@REF_TYPE@/@REF_NAME@/.github/assets/omodsim-trafficview.png</image>
+      <caption>Traffic View</caption>
+      <caption xml:lang="zh_TW">流量視窗</caption>
+      <caption xml:lang="zh_CN">流量窗口</caption>
+      <caption xml:lang="ru">Окно трафика</caption>
     </screenshot>
     <screenshot>
       <image>https://raw.githubusercontent.com/sanny32/OpenModSim/refs/@REF_TYPE@/@REF_NAME@/.github/assets/omodsim-script.png</image>
