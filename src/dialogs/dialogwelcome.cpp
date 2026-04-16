@@ -110,7 +110,7 @@ QString DialogWelcome::demosDir()
 ///
 QSize DialogWelcome::sizeHint() const
 {
-    const QSize natural = size();
+    const QSize natural = QFixedSizeDialog::sizeHint();
     const int w = qMax(natural.width(), natural.height() * 4 / 3);
     return { w, w * 3 / 4 };
 }

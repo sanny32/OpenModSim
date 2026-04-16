@@ -105,6 +105,7 @@ QString preferenceLabel(const QString& key)
     if (key == QLatin1String("AddressColor")) return QCoreApplication::translate("MainWindow", "AddressColor");
     if (key == QLatin1String("CommentColor")) return QCoreApplication::translate("MainWindow", "CommentColor");
     if (key == QLatin1String("CheckForUpdates")) return QCoreApplication::translate("MainWindow", "CheckForUpdates");
+    if (key == QLatin1String("ShowWelcomeDialog")) return QCoreApplication::translate("MainWindow", "ShowWelcomeDialog");
     if (key == QLatin1String("Language")) return QCoreApplication::translate("MainWindow", "Language");
     if (key == QLatin1String("ScriptFont")) return QCoreApplication::translate("MainWindow", "ScriptFont");
     if (key == QLatin1String("CodeAutoComplete")) return QCoreApplication::translate("MainWindow", "CodeAutoComplete");
