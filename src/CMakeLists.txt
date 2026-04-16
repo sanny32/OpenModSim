@@ -506,6 +506,7 @@ add_custom_target(helpgenerator ALL DEPENDS ${JSHELP_QCH} ${JSHELP_QHC})
 add_dependencies(${PROJECT_NAME} helpgenerator)
 
 install(DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/../demos" DESTINATION .)
+install(DIRECTORY "${CMAKE_BINARY_DIR}/docs" DESTINATION .)
 
 if(APPLE)
     install(TARGETS ${PROJECT_NAME} BUNDLE DESTINATION .)
