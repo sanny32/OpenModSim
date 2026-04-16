@@ -53,7 +53,10 @@ const translations = {
         'footer.issues': 'Report Issues',
         'footer.license': 'License',
         'footer.license.text': 'Licensed under MIT License',
-        'footer.license.free': 'Free to use, modify and distribute'
+        'footer.license.free': 'Free to use, modify and distribute',
+        'footer.signing': 'Code Signing',
+        'footer.signing.desc': 'Windows binaries signed by',
+        'footer.signing.provider': 'SignPath Foundation'
     },
     ru: {
         'nav.features': 'Возможности',
@@ -109,7 +112,10 @@ const translations = {
         'footer.issues': 'Сообщить о проблеме',
         'footer.license': 'Лицензия',
         'footer.license.text': 'Лицензировано под MIT License',
-        'footer.license.free': 'Бесплатно для использования, изменения и распространения'
+        'footer.license.free': 'Бесплатно для использования, изменения и распространения',
+        'footer.signing': 'Цифровая подпись',
+        'footer.signing.desc': 'Windows файлы подписаны',
+        'footer.signing.provider': 'SignPath Foundation'
     },
     zh_CN: {
         'nav.features': '功能',
@@ -165,7 +171,10 @@ const translations = {
         'footer.issues': '提交问题',
         'footer.license': '许可证',
         'footer.license.text': '根据 MIT 许可证授权',
-        'footer.license.free': '可免费使用、修改和分发'
+        'footer.license.free': '可免费使用、修改和分发',
+        'footer.signing': '代码签名',
+        'footer.signing.desc': 'Windows 二进制文件签名方',
+        'footer.signing.provider': 'SignPath Foundation'
     },
     zh_TW: {
         'nav.features': '功能',
@@ -221,7 +230,10 @@ const translations = {
         'footer.issues': '提交問題',
         'footer.license': '授權',
         'footer.license.text': '根據 MIT 授權條款授權',
-        'footer.license.free': '可免費使用、修改和分發'
+        'footer.license.free': '可免費使用、修改和分發',
+        'footer.signing': '程式碼簽章',
+        'footer.signing.desc': 'Windows 二進位檔由以下機構簽章',
+        'footer.signing.provider': 'SignPath Foundation'
     }
 };
 

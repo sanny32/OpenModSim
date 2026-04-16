@@ -16,18 +16,39 @@ function initTabs() {
     });
 }
 
-// Fetch latest release information from GitHub
+function extractMajorVersion(tagName) {
+    if (!tagName) return null;
+
+    const normalized = String(tagName).trim().replace(/^v/i, '');
+    const match = normalized.match(/^(\d+)/);
+    return match ? parseInt(match[1], 10) : null;
+}
+
+function isSupportedRelease(release) {
+    if (!release || release.draft || release.prerelease) return false;
+
+    const major = extractMajorVersion(release.tag_name);
+    return major !== null && major >= 2;
+}
+
+// Fetch latest supported release information from GitHub
 async function fetchLatestRelease() {
-    const GITHUB_API = 'https://api.github.com/repos/sanny32/OpenModSim/releases/latest';
+    const GITHUB_API = 'https://api.github.com/repos/sanny32/OpenModSim/releases?per_page=20';
 
     try {
-        console.log('Fetching latest release from GitHub...');
+        console.log('Fetching supported releases from GitHub...');
         const response = await fetch(GITHUB_API);
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
 
-        const release = await response.json();
+        const releases = await response.json();
+        const release = Array.isArray(releases) ? releases.find(isSupportedRelease) : null;
+
+        if (!release) {
+            throw new Error('No supported release found with major version 2 or higher');
+        }
+
         updateDownloadLinks(release);
     } catch (error) {
         console.error('Error fetching release:', error);
