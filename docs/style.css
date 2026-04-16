@@ -368,13 +368,26 @@ body {
     margin-bottom: 2rem;
 }
 
-.screenshot-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+.screenshot-carousel {
+    position: relative;
+    display: block;
+}
+
+.screenshot-viewport {
+    overflow: hidden;
+    width: 100%;
+}
+
+.screenshot-track {
+    --slides-per-view: 3;
+    display: flex;
     gap: 2rem;
+    transition: transform 0.35s ease;
+    will-change: transform;
 }
 
 .screenshot-item {
+    flex: 0 0 calc((100% - (2rem * (var(--slides-per-view) - 1))) / var(--slides-per-view));
     background: var(--bg-white);
     border: 1px solid var(--border-color);
     border-radius: 8px;
@@ -395,6 +408,69 @@ body {
     border-radius: 0;
     border: none;
     margin-bottom: 0;
+}
+
+.screenshot-carousel-btn {
+    position: absolute;
+    top: 50%;
+    z-index: 2;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border: 1px solid var(--border-color);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.94);
+    color: var(--primary-color);
+    box-shadow: 0 10px 24px rgba(15, 23, 42, 0.08);
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s, color 0.2s, background-color 0.2s;
+    transform: translateY(-50%);
+}
+
+.screenshot-carousel-prev {
+    left: -24px;
+}
+
+.screenshot-carousel-next {
+    right: -24px;
+}
+
+.screenshot-carousel-btn:hover {
+    transform: translateY(calc(-50% - 1px));
+    box-shadow: 0 14px 28px rgba(15, 23, 42, 0.12);
+}
+
+.screenshot-carousel-btn:disabled {
+    opacity: 0.45;
+    cursor: default;
+    transform: translateY(-50%);
+    box-shadow: 0 4px 14px rgba(15, 23, 42, 0.06);
+}
+
+.screenshot-dots {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.65rem;
+    margin-top: 1.5rem;
+}
+
+.screenshot-dot {
+    width: 10px;
+    height: 10px;
+    border: none;
+    border-radius: 999px;
+    padding: 0;
+    background: rgba(24, 119, 200, 0.22);
+    cursor: pointer;
+    transition: transform 0.2s, background-color 0.2s;
+}
+
+.screenshot-dot.active {
+    background: var(--primary-color);
+    transform: scale(1.15);
 }
 
 
@@ -992,14 +1068,22 @@ footer {
     .tab-columns {
         grid-template-columns: 1fr;
     }
+
+    .screenshot-track {
+        --slides-per-view: 2;
+    }
+
+    .screenshot-carousel-prev {
+        left: -12px;
+    }
+
+    .screenshot-carousel-next {
+        right: -12px;
+    }
 }
 
 @media (max-width: 768px) {
     .nav-menu {
-        display: none;
-    }
-
-    .screenshots {
         display: none;
     }
 
@@ -1016,9 +1100,55 @@ footer {
         font-size: 2rem;
     }
 
-    .features-grid,
-    .screenshot-grid {
+    .features-grid {
         grid-template-columns: 1fr;
+    }
+
+    .screenshot-track {
+        --slides-per-view: 1;
+        gap: 1rem;
+    }
+
+    .screenshot-carousel-btn {
+        position: static;
+        width: 42px;
+        height: 42px;
+        transform: none;
+        margin-top: 1rem;
+    }
+
+    .screenshot-carousel {
+        display: grid;
+        grid-template-columns: 42px minmax(0, 1fr) 42px;
+        align-items: center;
+        column-gap: 0.75rem;
+    }
+
+    .screenshot-viewport {
+        grid-column: 2;
+        grid-row: 1;
+    }
+
+    .screenshot-carousel-prev,
+    .screenshot-carousel-next {
+        top: auto;
+        left: auto;
+        right: auto;
+    }
+
+    .screenshot-carousel-prev {
+        grid-column: 1;
+        grid-row: 1;
+    }
+
+    .screenshot-carousel-next {
+        grid-column: 3;
+        grid-row: 1;
+    }
+
+    .screenshot-carousel-btn:hover,
+    .screenshot-carousel-btn:disabled {
+        transform: none;
     }
 
     .tab-nav {

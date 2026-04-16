@@ -1980,172 +1980,172 @@ Type Filter: %3</source>
         <translation>資料類型：</translation>
     </message>
     <message>
-        <location filename="../formdataview.ui" line="347"/>
+        <location filename="../formdataview.ui" line="341"/>
         <source>Leading Zeros for Unsigned</source>
         <translation>無符號數前導零</translation>
     </message>
     <message>
+        <location filename="../formdataview.ui" line="401"/>
+        <location filename="../formdataview.ui" line="404"/>
         <location filename="../formdataview.ui" line="407"/>
         <location filename="../formdataview.ui" line="410"/>
-        <location filename="../formdataview.ui" line="413"/>
-        <location filename="../formdataview.ui" line="416"/>
         <source>Binary</source>
         <translation>二進制</translation>
     </message>
     <message>
+        <location filename="../formdataview.ui" line="428"/>
+        <location filename="../formdataview.ui" line="431"/>
         <location filename="../formdataview.ui" line="434"/>
         <location filename="../formdataview.ui" line="437"/>
-        <location filename="../formdataview.ui" line="440"/>
-        <location filename="../formdataview.ui" line="443"/>
         <source>Hex</source>
         <translation>十六進制</translation>
     </message>
     <message>
+        <location filename="../formdataview.ui" line="455"/>
+        <location filename="../formdataview.ui" line="458"/>
         <location filename="../formdataview.ui" line="461"/>
         <location filename="../formdataview.ui" line="464"/>
-        <location filename="../formdataview.ui" line="467"/>
-        <location filename="../formdataview.ui" line="470"/>
         <source>Ansi</source>
         <translation>ANSI</translation>
     </message>
     <message>
+        <location filename="../formdataview.ui" line="476"/>
+        <location filename="../formdataview.ui" line="479"/>
         <location filename="../formdataview.ui" line="482"/>
         <location filename="../formdataview.ui" line="485"/>
-        <location filename="../formdataview.ui" line="488"/>
-        <location filename="../formdataview.ui" line="491"/>
         <source>16-bit Integer</source>
         <translation>16位元整數</translation>
     </message>
     <message>
+        <location filename="../formdataview.ui" line="503"/>
+        <location filename="../formdataview.ui" line="506"/>
         <location filename="../formdataview.ui" line="509"/>
         <location filename="../formdataview.ui" line="512"/>
-        <location filename="../formdataview.ui" line="515"/>
-        <location filename="../formdataview.ui" line="518"/>
         <source>Unsigned 16-bit Integer</source>
         <translation>無符號16位元整數</translation>
     </message>
     <message>
+        <location filename="../formdataview.ui" line="530"/>
+        <location filename="../formdataview.ui" line="533"/>
         <location filename="../formdataview.ui" line="536"/>
         <location filename="../formdataview.ui" line="539"/>
-        <location filename="../formdataview.ui" line="542"/>
-        <location filename="../formdataview.ui" line="545"/>
         <source>32-bit Integer (MSRF)</source>
         <translation>32位元整數（MSRF）</translation>
     </message>
     <message>
+        <location filename="../formdataview.ui" line="557"/>
+        <location filename="../formdataview.ui" line="560"/>
         <location filename="../formdataview.ui" line="563"/>
         <location filename="../formdataview.ui" line="566"/>
-        <location filename="../formdataview.ui" line="569"/>
-        <location filename="../formdataview.ui" line="572"/>
         <source>32-bit Integer (LSRF)</source>
         <translation>32位元整數（LSRF）</translation>
     </message>
     <message>
+        <location filename="../formdataview.ui" line="584"/>
+        <location filename="../formdataview.ui" line="587"/>
         <location filename="../formdataview.ui" line="590"/>
         <location filename="../formdataview.ui" line="593"/>
-        <location filename="../formdataview.ui" line="596"/>
-        <location filename="../formdataview.ui" line="599"/>
         <source>Unsigned 32-bit Integer (MSRF)</source>
         <translation>無符號32位元整數（MSRF）</translation>
     </message>
     <message>
+        <location filename="../formdataview.ui" line="611"/>
+        <location filename="../formdataview.ui" line="614"/>
         <location filename="../formdataview.ui" line="617"/>
         <location filename="../formdataview.ui" line="620"/>
-        <location filename="../formdataview.ui" line="623"/>
-        <location filename="../formdataview.ui" line="626"/>
         <source>Unsigned 32-bit Integer (LSRF)</source>
         <translation>無符號32位元整數（LSRF）</translation>
     </message>
     <message>
+        <location filename="../formdataview.ui" line="638"/>
+        <location filename="../formdataview.ui" line="641"/>
         <location filename="../formdataview.ui" line="644"/>
         <location filename="../formdataview.ui" line="647"/>
-        <location filename="../formdataview.ui" line="650"/>
-        <location filename="../formdataview.ui" line="653"/>
         <source>64-bit Integer (MSRF)</source>
         <translation>64位元整數（MSRF）</translation>
     </message>
     <message>
+        <location filename="../formdataview.ui" line="665"/>
+        <location filename="../formdataview.ui" line="668"/>
         <location filename="../formdataview.ui" line="671"/>
         <location filename="../formdataview.ui" line="674"/>
-        <location filename="../formdataview.ui" line="677"/>
-        <location filename="../formdataview.ui" line="680"/>
         <source>64-bit Integer (LSRF)</source>
         <translation>64位元整數（LSRF）</translation>
     </message>
     <message>
+        <location filename="../formdataview.ui" line="692"/>
+        <location filename="../formdataview.ui" line="695"/>
         <location filename="../formdataview.ui" line="698"/>
         <location filename="../formdataview.ui" line="701"/>
-        <location filename="../formdataview.ui" line="704"/>
-        <location filename="../formdataview.ui" line="707"/>
         <source>Unsigned 64-bit Integer (MSRF)</source>
         <translation>無符號64位元整數（MSRF）</translation>
     </message>
     <message>
+        <location filename="../formdataview.ui" line="719"/>
+        <location filename="../formdataview.ui" line="722"/>
         <location filename="../formdataview.ui" line="725"/>
         <location filename="../formdataview.ui" line="728"/>
-        <location filename="../formdataview.ui" line="731"/>
-        <location filename="../formdataview.ui" line="734"/>
         <source>Unsigned 64-bit Integer (LSRF)</source>
         <translation>無符號64位元整數（LSRF）</translation>
     </message>
     <message>
-        <location filename="../formdataview.ui" line="752"/>
+        <location filename="../formdataview.ui" line="746"/>
         <source>Float (MSRF)</source>
         <translation>浮點數（MSRF）</translation>
     </message>
     <message>
+        <location filename="../formdataview.ui" line="749"/>
+        <location filename="../formdataview.ui" line="752"/>
         <location filename="../formdataview.ui" line="755"/>
-        <location filename="../formdataview.ui" line="758"/>
-        <location filename="../formdataview.ui" line="761"/>
         <source>32-bit Float (MSRF)</source>
         <translation>32位元浮點數（MSRF）</translation>
     </message>
     <message>
-        <location filename="../formdataview.ui" line="779"/>
+        <location filename="../formdataview.ui" line="773"/>
         <source>Float (LSRF)</source>
         <translation>浮點數（LSRF）</translation>
     </message>
     <message>
+        <location filename="../formdataview.ui" line="776"/>
+        <location filename="../formdataview.ui" line="779"/>
         <location filename="../formdataview.ui" line="782"/>
-        <location filename="../formdataview.ui" line="785"/>
-        <location filename="../formdataview.ui" line="788"/>
         <source>32-bit Float (LSRF)</source>
         <translation>32位元浮點數（LSRF）</translation>
     </message>
     <message>
-        <location filename="../formdataview.ui" line="806"/>
+        <location filename="../formdataview.ui" line="800"/>
         <source>Double (MSRF)</source>
         <translation>雙精度（MSRF）</translation>
     </message>
     <message>
+        <location filename="../formdataview.ui" line="803"/>
+        <location filename="../formdataview.ui" line="806"/>
         <location filename="../formdataview.ui" line="809"/>
-        <location filename="../formdataview.ui" line="812"/>
-        <location filename="../formdataview.ui" line="815"/>
         <source>64-bit Float (MSRF)</source>
         <translation>64位元浮點數（MSRF）</translation>
     </message>
     <message>
-        <location filename="../formdataview.ui" line="833"/>
+        <location filename="../formdataview.ui" line="827"/>
         <source>Double (LSRF)</source>
         <translation>雙精度（LSRF）</translation>
     </message>
     <message>
+        <location filename="../formdataview.ui" line="830"/>
+        <location filename="../formdataview.ui" line="833"/>
         <location filename="../formdataview.ui" line="836"/>
-        <location filename="../formdataview.ui" line="839"/>
-        <location filename="../formdataview.ui" line="842"/>
         <source>64-bit Float (LSRF)</source>
         <translation>64位元浮點數（LSRF）</translation>
     </message>
     <message>
+        <location filename="../formdataview.ui" line="854"/>
+        <location filename="../formdataview.ui" line="857"/>
         <location filename="../formdataview.ui" line="860"/>
         <location filename="../formdataview.ui" line="863"/>
-        <location filename="../formdataview.ui" line="866"/>
-        <location filename="../formdataview.ui" line="869"/>
         <source>Swap Bytes (0xAB → 0xBA)</source>
         <translation>交換位元組（0xAB → 0xBA）</translation>
     </message>
     <message>
-        <location filename="../formdataview.ui" line="877"/>
+        <location filename="../formdataview.ui" line="871"/>
         <source>Hex Addresses</source>
         <translation>十六進位地址</translation>
     </message>
@@ -2509,68 +2509,68 @@ Script.onInit(()=&gt;{
     </message>
     <message>
         <location filename="../controls/mainstatusbar.cpp" line="162"/>
-        <location filename="../controls/mainstatusbar.cpp" line="286"/>
-        <location filename="../controls/mainstatusbar.cpp" line="286"/>
+        <location filename="../controls/mainstatusbar.cpp" line="287"/>
+        <location filename="../controls/mainstatusbar.cpp" line="287"/>
         <source>New version %1 is available. Click to download.</source>
         <translation>新版本 %1 可用。點擊下載。</translation>
     </message>
     <message>
-        <location filename="../controls/mainstatusbar.cpp" line="190"/>
+        <location filename="../controls/mainstatusbar.cpp" line="191"/>
         <source>Unit Identifiers: %1</source>
         <translation>單元識別碼：%1</translation>
     </message>
     <message>
-        <location filename="../controls/mainstatusbar.cpp" line="246"/>
+        <location filename="../controls/mainstatusbar.cpp" line="247"/>
         <source>Modbus/TCP Srv %1:%2</source>
         <translation>Modbus/TCP伺服器%1:%2</translation>
     </message>
     <message>
-        <location filename="../controls/mainstatusbar.cpp" line="250"/>
+        <location filename="../controls/mainstatusbar.cpp" line="251"/>
         <source>Port %1:%2:%3:%4:%5</source>
         <translation>連接埠 %1:%2:%3:%4:%5</translation>
     </message>
     <message>
-        <location filename="../controls/mainstatusbar.cpp" line="202"/>
+        <location filename="../controls/mainstatusbar.cpp" line="203"/>
         <source>No Resp</source>
         <translation>無響應</translation>
     </message>
     <message>
-        <location filename="../controls/mainstatusbar.cpp" line="204"/>
+        <location filename="../controls/mainstatusbar.cpp" line="205"/>
         <source>Bad ID</source>
         <translation>錯誤ID</translation>
     </message>
     <message>
-        <location filename="../controls/mainstatusbar.cpp" line="206"/>
+        <location filename="../controls/mainstatusbar.cpp" line="207"/>
         <source>Ill Func</source>
         <translation>非法功能</translation>
     </message>
     <message>
-        <location filename="../controls/mainstatusbar.cpp" line="208"/>
+        <location filename="../controls/mainstatusbar.cpp" line="209"/>
         <source>Dev Busy</source>
         <translation>裝置忙碌</translation>
     </message>
     <message>
-        <location filename="../controls/mainstatusbar.cpp" line="210"/>
+        <location filename="../controls/mainstatusbar.cpp" line="211"/>
         <source>Bad CRC</source>
         <translation>錯誤CRC</translation>
     </message>
     <message>
-        <location filename="../controls/mainstatusbar.cpp" line="212"/>
+        <location filename="../controls/mainstatusbar.cpp" line="213"/>
         <source>Delay %1ms</source>
         <translation>延遲 %1毫秒</translation>
     </message>
     <message>
-        <location filename="../controls/mainstatusbar.cpp" line="214"/>
+        <location filename="../controls/mainstatusbar.cpp" line="215"/>
         <source>Rnd Delay %1ms</source>
         <translation>隨機延遲 %1毫秒</translation>
     </message>
     <message>
-        <location filename="../controls/mainstatusbar.cpp" line="232"/>
+        <location filename="../controls/mainstatusbar.cpp" line="233"/>
         <source>Clients: %1</source>
         <translation>用戶端：%1</translation>
     </message>
     <message>
-        <location filename="../controls/mainstatusbar.cpp" line="274"/>
+        <location filename="../controls/mainstatusbar.cpp" line="275"/>
         <source>Req: %1  Resp: %2</source>
         <translation>請求：%1  回應：%2</translation>
     </message>

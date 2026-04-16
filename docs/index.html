@@ -92,7 +92,7 @@
                 </div>
                 <div class="hero-image-wrapper">
                     <div class="hero-image">
-                        <img src="screenshot-main.en.png" alt="OpenModSim Screenshot" data-screenshot="main">
+                        <img src="assets/screenshots/en/main.png" alt="OpenModSim Screenshot" data-screenshot="main">
                     </div>
                 </div>
             </div>
@@ -136,17 +136,35 @@
 
                 <div id="screenshots" class="screenshots">
                     <h3 data-i18n="screenshots.title">Screenshots</h3>
-                    <div class="screenshot-grid">
-                        <div class="screenshot-item">
-                            <img src="screenshot-main.en.png" alt="Main Interface" data-screenshot="main">
+                    <div class="screenshot-carousel">
+                        <button class="screenshot-carousel-btn screenshot-carousel-prev" id="screenshotPrev" type="button" aria-label="Previous screenshots">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M15 18l-6-6 6-6"/>
+                            </svg>
+                        </button>
+                        <div class="screenshot-viewport" id="screenshotViewport">
+                            <div class="screenshot-track" id="screenshotTrack">
+                                <div class="screenshot-item">
+                                    <img src="assets/screenshots/en/dataview.png" alt="Data View" data-screenshot="dataview">
+                                </div>
+                                <div class="screenshot-item">
+                                    <img src="assets/screenshots/en/mapview.png" alt="Map View" data-screenshot="mapview">
+                                </div>
+                                <div class="screenshot-item">
+                                    <img src="assets/screenshots/en/trafficview.png" alt="Traffic View" data-screenshot="trafficview">
+                                </div>
+                                <div class="screenshot-item">
+                                    <img src="assets/screenshots/en/script.png" alt="Scripting" data-screenshot="script">
+                                </div>
+                            </div>
                         </div>
-                        <div class="screenshot-item">
-                            <img src="screenshot-log.en.png" alt="Message Logging" data-screenshot="log">
-                        </div>
-                        <div class="screenshot-item">
-                            <img src="screenshot-script.en.png" alt="Scripting" data-screenshot="script">
-                        </div>
+                        <button class="screenshot-carousel-btn screenshot-carousel-next" id="screenshotNext" type="button" aria-label="Next screenshots">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M9 18l6-6-6-6"/>
+                            </svg>
+                        </button>
                     </div>
+                    <div class="screenshot-dots" id="screenshotDots" aria-label="Screenshot navigation"></div>
                 </div>
             </div>
         </section>
