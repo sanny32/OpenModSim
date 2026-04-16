@@ -6,9 +6,9 @@
 
 Open ModSim is a free implimentation of modbus slave (server) utility for modbus-tcp and modbus-rtu protocols.
 
-<img width="1292" height="759" alt="image" src=".github/assets/omodsim-main.png" />
+<img width="1292" height="759" alt="image" src=".github/assets/omodsim-dataview.png" />
 
-<img width="1292" height="759" alt="image" src=".github/assets/omodsim-simulation.png" />
+<img width="1292" height="759" alt="image" src=".github/assets/omodsim-mapview.png" />
 
 
 # Features
@@ -49,7 +49,7 @@ The following simulations are available:
 
 # Modbus Logging
 
-<img width="1292" height="759" alt="image" src=".github/assets/omodsim-log.png" />
+<img width="1292" height="759" alt="image" src=".github/assets/omodsim-trafficview.png" />
 
 
 # Extended Featues
