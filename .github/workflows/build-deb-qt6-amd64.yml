@@ -69,11 +69,11 @@ jobs:
           PRE_RELEASE_ENABLED=false
           grep -q 'option(PRE_RELEASE .* ON)' src/CMakeLists.txt && PRE_RELEASE_ENABLED=true
           TAG_NAME="${{ github.event.inputs.tag || github.ref_name }}"
-          if [[ "$TAG_NAME" == *b ]]; then
+          if [ "$TAG_NAME" == *b ]; then
             PRE_RELEASE_ENABLED=true
           fi
 
-          if [ "${GITHUB_REF_NAME}" = "dev" ] || [ "${{ github.event.inputs.branch }}" = "dev" ] || [[ "${GITHUB_REF_NAME}" == release/* ]] || [[ "${{ github.event.inputs.branch }}" == release/* ]]; then
+          if [ "${GITHUB_REF_NAME}" = "dev" ] || [ "${{ github.event.inputs.branch }}" = "dev" ] || [ "${GITHUB_REF_NAME}" == release/* ] || [ "${{ github.event.inputs.branch }}" == release/* ]; then
             MAJOR_MINOR=$(echo "$FULL_VERSION" | cut -d. -f1,2)
             APP_VERSION="${MAJOR_MINOR}~dev"
           else
