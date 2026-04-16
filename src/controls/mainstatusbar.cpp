@@ -166,6 +166,7 @@ void MainStatusBar::changeEvent(QEvent* event)
         updateDeviceIdsInfo();
         updateErrorSimInfo();
         updateClientCountInfo();
+        updateRequestCountInfo();
     }
 
     QStatusBar::changeEvent(event);
