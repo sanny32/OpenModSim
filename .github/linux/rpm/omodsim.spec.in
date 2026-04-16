@@ -34,7 +34,10 @@ fi
 udevadm trigger
 
 ln -sf /opt/OpenModSim2/omodsim.sh /usr/bin/omodsim2
+update-mime-database /usr/share/mime || true
 xdg-desktop-menu forceupdate || true
+update-desktop-database -q /usr/share/applications || true
+gtk-update-icon-cache -q -t -f /usr/share/icons/hicolor || true
 
 %postun
 if [ -f /etc/udev/rules.d/99-omodsim.rules ]; then
@@ -42,13 +45,18 @@ if [ -f /etc/udev/rules.d/99-omodsim.rules ]; then
     udevadm trigger
 fi
 
+update-mime-database /usr/share/mime || true
 xdg-desktop-menu forceupdate || true
+update-desktop-database -q /usr/share/applications || true
+gtk-update-icon-cache -q -t -f /usr/share/icons/hicolor || true
 rm -f /usr/bin/omodsim
 
 %files
 /opt/OpenModSim2
 /usr/share/applications
 /usr/share/applications/*
+/usr/share/mime
+/usr/share/mime/*
 /usr/share/icons
 /usr/share/icons/*
 /usr/share/metainfo

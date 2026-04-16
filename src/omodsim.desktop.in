@@ -2,7 +2,8 @@
 Type=Application
 Name=@PRODUCT_NAME@
 Comment=@PROJECT_DESCRIPTION@
-Exec=@EXECUTABLE_PATH@
+Exec=@EXECUTABLE_PATH@ %f
 Icon=@PROJECT_NAME@
 Terminal=false
 Categories=Utility;
+MimeType=application/x-openmodsim-project;

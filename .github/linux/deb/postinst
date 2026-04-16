@@ -16,4 +16,7 @@ udevadm trigger
 setcap 'cap_net_bind_service=+ep' /opt/OpenModSim2/bin/omodsim || true
 ln -sf /opt/OpenModSim2/omodsim.sh /usr/bin/omodsim2
 
+update-mime-database /usr/share/mime || true
 xdg-desktop-menu forceupdate
+update-desktop-database -q /usr/share/applications || true
+gtk-update-icon-cache -q -t -f /usr/share/icons/hicolor || true
