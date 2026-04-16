@@ -314,14 +314,8 @@
            <widget class="QSpinBox" name="spinBoxColumnsDistance">
             <property name="minimumSize">
              <size>
-              <width>40</width>
-              <height>0</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
               <width>60</width>
-              <height>16777215</height>
+              <height>26</height>
              </size>
             </property>
             <property name="minimum">
