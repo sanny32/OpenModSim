@@ -39,14 +39,14 @@ QString formatWrittenValues(const QModbusDataUnit& data, int previewLimit = 16)
         return QString::number(data.value(0));
 
     QStringList values;
-    values.reserve(qMin(data.valueCount(), previewLimit));
+    values.reserve(qMin<int>(data.valueCount(), previewLimit));
 
-    const int previewCount = qMin(data.valueCount(), previewLimit);
+    const int previewCount = qMin<int>(data.valueCount(), previewLimit);
     for(int i = 0; i < previewCount; ++i)
         values << QString::number(data.value(i));
 
     const QString suffix = (data.valueCount() > previewLimit)
-        ? QCoreApplication::translate("MainWindow", ", ...")
+        ? QString(", ...")
         : QString();
 
     return QCoreApplication::translate("MainWindow", "[%1 values: %2%3]")
