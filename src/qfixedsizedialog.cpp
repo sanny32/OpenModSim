@@ -25,7 +25,7 @@ void QFixedSizeDialog::showEvent(QShowEvent* e)
 
         if(auto pw = parentWidget() ? parentWidget()->window() : nullptr)
         {
-            const auto center = pw->geometry().center();
+            const auto center = pw->mapToGlobal(pw->rect().center());
             setGeometry(center.x() - width() / 2, center.y() - height() / 2, width(), height());
         }
     }
