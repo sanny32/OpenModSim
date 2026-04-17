@@ -92,7 +92,7 @@ public slots:
     void stopScript();
 
 signals:
-    void scriptStarted();
+    void scriptStarted(RunMode mode, int interval);
     void scriptStopped();
     void helpContext(const QString& helpKey);
     void consoleMessage(const QString& source, const QString& text, ConsoleOutput::MessageType type);

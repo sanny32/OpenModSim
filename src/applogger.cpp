@@ -178,6 +178,23 @@ QString settingValueText(const QString& key, const QString& value)
     return normalizedBoolText(value);
 }
 
+///
+/// \brief runModeText
+/// \param mode
+/// \return
+///
+QString runModeText(RunMode mode)
+{
+    switch (mode) {
+        case RunMode::Once:
+            return QCoreApplication::translate("RunModeComboBox", "Once");
+        case RunMode::Periodically:
+            return QCoreApplication::translate("RunModeComboBox", "Periodically");
+    }
+
+    return enumToString(mode);
+}
+
 }
 
 ///
@@ -446,10 +463,19 @@ void AppLogger::setupScriptControlLogging(JScriptControl& control, QObject* cont
     Q_ASSERT(context != nullptr);
 
     QObject::connect(&control, &JScriptControl::scriptStarted, context,
-                     [&control]() {
+                     [&control](RunMode mode, int interval) {
         control.setProperty("_appLoggerScriptRunning", true);
-        qInfo(lcApp) << QCoreApplication::translate("MainWindow", "Script started: %1")
-                            .arg(control.scriptSource());
+        const QString message = (mode == RunMode::Periodically)
+            ? QCoreApplication::translate("MainWindow",
+                                          "Script started: %1 (mode: %2, interval: %3 ms)")
+                  .arg(control.scriptSource())
+                  .arg(runModeText(mode))
+                  .arg(interval)
+            : QCoreApplication::translate("MainWindow",
+                                          "Script started: %1 (mode: %2)")
+                  .arg(control.scriptSource())
+                  .arg(runModeText(mode));
+        qInfo(lcApp) << message;
     }, Qt::DirectConnection);
 
     QObject::connect(&control, &JScriptControl::scriptStopped, context,

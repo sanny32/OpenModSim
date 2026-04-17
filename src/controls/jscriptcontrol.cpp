@@ -394,7 +394,7 @@ void JScriptControl::runScript(RunMode mode, int interval)
 
     if(!executeScript())
         return;
-    emit scriptStarted();
+    emit scriptStarted(mode, interval);
 
     switch(mode)
     {
