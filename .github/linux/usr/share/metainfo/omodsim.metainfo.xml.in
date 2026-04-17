@@ -5,7 +5,7 @@
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>MIT</project_license>
 
-  <name>Open ModScan</name>
+  <name>Open ModSim</name>
   <summary>An Open Source Modbus Slave (Server) Utility</summary>
   <summary xml:lang="zh_TW">一个开源的 Modbus 从站（服务器）实用程序</summary>
   <summary xml:lang="zh_CN">一個開源的 Modbus 從站（伺服器）實用程序</summary>
