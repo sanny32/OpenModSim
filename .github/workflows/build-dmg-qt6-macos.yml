@@ -72,7 +72,7 @@ jobs:
           else
             APP_VERSION="$FULL_VERSION"
             if [ "$BETA_RELEASE_ENABLED" = "true" ]; then
-              APP_VERSION="${APP_VERSION}~${{ env.BETA_RELEASE }}"
+              APP_VERSION="${APP_VERSION}-${{ env.BETA_RELEASE }}"
             fi
           fi
 
