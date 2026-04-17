@@ -1538,22 +1538,22 @@
         <translation>欢迎</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwelcome.ui" line="83"/>
+        <location filename="../dialogs/dialogwelcome.ui" line="89"/>
         <source>Modbus Slave Simulator</source>
         <translation>Modbus从站模拟器</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwelcome.ui" line="132"/>
+        <location filename="../dialogs/dialogwelcome.ui" line="138"/>
         <source>Open:</source>
         <translation>打开：</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwelcome.ui" line="170"/>
+        <location filename="../dialogs/dialogwelcome.ui" line="176"/>
         <source>New Project</source>
         <translation>新建项目</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwelcome.ui" line="195"/>
+        <location filename="../dialogs/dialogwelcome.ui" line="201"/>
         <source>Don&apos;t show this dialog again</source>
         <translation>不再显示此对话框</translation>
     </message>
@@ -1563,7 +1563,7 @@
         <translation>欢迎使用%1</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwelcome.ui" line="186"/>
+        <location filename="../dialogs/dialogwelcome.ui" line="192"/>
         <source>Open Project</source>
         <translation>打开项目</translation>
     </message>

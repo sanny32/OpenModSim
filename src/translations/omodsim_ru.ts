@@ -1538,22 +1538,22 @@
         <translation>Добро пожаловать</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwelcome.ui" line="83"/>
+        <location filename="../dialogs/dialogwelcome.ui" line="89"/>
         <source>Modbus Slave Simulator</source>
         <translation>Симулятор устройств Modbus</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwelcome.ui" line="132"/>
+        <location filename="../dialogs/dialogwelcome.ui" line="138"/>
         <source>Open:</source>
         <translation>Открыть:</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwelcome.ui" line="170"/>
+        <location filename="../dialogs/dialogwelcome.ui" line="176"/>
         <source>New Project</source>
         <translation>Новый проект</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwelcome.ui" line="195"/>
+        <location filename="../dialogs/dialogwelcome.ui" line="201"/>
         <source>Don&apos;t show this dialog again</source>
         <translation>Больше не показывать этот диалог</translation>
     </message>
@@ -1563,7 +1563,7 @@
         <translation>Добро пожаловать в %1</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwelcome.ui" line="186"/>
+        <location filename="../dialogs/dialogwelcome.ui" line="192"/>
         <source>Open Project</source>
         <translation>Открыть проект</translation>
     </message>

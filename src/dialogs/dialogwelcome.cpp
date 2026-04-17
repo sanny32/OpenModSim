@@ -22,15 +22,6 @@ DialogWelcome::DialogWelcome(const QStringList& recentProjects, QWidget *parent)
     ui->setupUi(this);
     setWindowTitle(tr("Welcome to %1").arg(APP_NAME));
 
-    QFont nameFont = ui->labelAppName->font();
-    nameFont.setPointSize(nameFont.pointSize() + 4);
-    nameFont.setBold(true);
-    ui->labelAppName->setFont(nameFont);
-
-    QFont subtitleFont = ui->labelSubtitle->font();
-    subtitleFont.setItalic(true);
-    ui->labelSubtitle->setFont(subtitleFont);
-
     // Collect all paths: recent projects first, then demos not yet in the list
     QStringList allPaths;
     for (const QString& path : recentProjects) {
