@@ -178,11 +178,8 @@ int main(int argc, char *argv[])
     const QString cfg = parser.projectFile();
     const bool noSession = parser.isSet(CmdLineParser::_no_session);
 
-    MainWindow w(profile, !noSession);
+    MainWindow w(profile, !noSession, cfg);
     w.show();
-    if(!cfg.isEmpty()) {
-        w.loadProject(cfg);
-    }
 
     return a.exec();
 }

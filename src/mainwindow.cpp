@@ -163,7 +163,7 @@ void printOnForm(QWidget* widget, QPrinter* printer)
 /// \param useSession
 /// \param parent
 ///
-MainWindow::MainWindow(const QString& profile, bool useSession, QWidget *parent)
+MainWindow::MainWindow(const QString& profile, bool useSession, const QString& startupProjectFile, QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
     ,_lang(translationLang())
@@ -336,7 +336,9 @@ MainWindow::MainWindow(const QString& profile, bool useSession, QWidget *parent)
     rebuildRecentProjectsMenu();
 
     const bool canRestoreLastProject = !_lastProjectPath.isEmpty() && QFile::exists(_lastProjectPath);
-    if(AppPreferences::instance().showWelcomeDialog()) {
+    if(!startupProjectFile.isEmpty()) {
+        loadProject(startupProjectFile);
+    } else if(AppPreferences::instance().showWelcomeDialog()) {
         _pendingWelcomeDialog = true;  // shown in showEvent after the window is visible
     } else if(canRestoreLastProject) {
         loadProject(_lastProjectPath);

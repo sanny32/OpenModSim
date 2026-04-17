@@ -37,7 +37,7 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit MainWindow(const QString& profile, bool useSession, QWidget *parent = nullptr);
+    explicit MainWindow(const QString& profile, bool useSession, const QString& startupProjectFile = QString(), QWidget *parent = nullptr);
     ~MainWindow();
 
     void setLanguage(const QString& lang);

@@ -2593,7 +2593,7 @@ Script.onInit(()=&gt;{
     </message>
     <message>
         <location filename="../mainwindow.ui" line="244"/>
-        <location filename="../mainwindow.cpp" line="1682"/>
+        <location filename="../mainwindow.cpp" line="1684"/>
         <source>Save Project</source>
         <translation>保存项目</translation>
     </message>
@@ -2768,7 +2768,7 @@ Script.onInit(()=&gt;{
         <location filename="../mainwindow.ui" line="526"/>
         <location filename="../mainwindow.ui" line="529"/>
         <location filename="../mainwindow.cpp" line="231"/>
-        <location filename="../mainwindow.cpp" line="464"/>
+        <location filename="../mainwindow.cpp" line="466"/>
         <source>Script Help</source>
         <translation>脚本帮助</translation>
     </message>
@@ -2789,50 +2789,50 @@ Script.onInit(()=&gt;{
         <translation>状态栏</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="720"/>
+        <location filename="../mainwindow.cpp" line="722"/>
         <source>All files (*)</source>
         <translation>所有文件 (*)</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="186"/>
-        <location filename="../mainwindow.cpp" line="466"/>
+        <location filename="../mainwindow.cpp" line="468"/>
         <source>Open Recent</source>
         <translation>最近打开</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="187"/>
-        <location filename="../mainwindow.cpp" line="1811"/>
+        <location filename="../mainwindow.cpp" line="1813"/>
         <source>Clear List</source>
         <translation>清除列表</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="212"/>
-        <location filename="../mainwindow.cpp" line="463"/>
+        <location filename="../mainwindow.cpp" line="465"/>
         <source>Project</source>
         <translation>项目</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="269"/>
-        <location filename="../mainwindow.cpp" line="465"/>
+        <location filename="../mainwindow.cpp" line="467"/>
         <source>Output</source>
         <translation>输出</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="719"/>
-        <location filename="../mainwindow.cpp" line="1712"/>
+        <location filename="../mainwindow.cpp" line="721"/>
+        <location filename="../mainwindow.cpp" line="1714"/>
         <source>Project files (*.omp)</source>
         <translation>项目文件 (*.omp)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1339"/>
-        <location filename="../mainwindow.cpp" line="1740"/>
+        <location filename="../mainwindow.cpp" line="1341"/>
+        <location filename="../mainwindow.cpp" line="1742"/>
         <source>Untitled</source>
         <translation>未命名</translation>
     </message>
     <message>
         <location filename="../applogger.cpp" line="118"/>
-        <location filename="../mainwindow.cpp" line="469"/>
-        <location filename="../mainwindow.cpp" line="1514"/>
+        <location filename="../mainwindow.cpp" line="471"/>
+        <location filename="../mainwindow.cpp" line="1516"/>
         <source>Address Base</source>
         <translation>地址基准</translation>
     </message>
@@ -3116,7 +3116,7 @@ Script.onInit(()=&gt;{
         <translation>%1 已更改：%2 → %3</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1090"/>
+        <location filename="../mainwindow.cpp" line="1092"/>
         <source>Move to Other Panel</source>
         <translation>移至其他面板</translation>
     </message>
@@ -3138,12 +3138,12 @@ Script.onInit(()=&gt;{
         <translation>十六进制视图</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1683"/>
+        <location filename="../mainwindow.cpp" line="1685"/>
         <source>Save project before closing?</source>
         <translation>关闭前保存项目？</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1799"/>
+        <location filename="../mainwindow.cpp" line="1801"/>
         <source>No Recent Projects</source>
         <translation>没有最近项目</translation>
     </message>
@@ -3153,7 +3153,7 @@ Script.onInit(()=&gt;{
         <translation>数据</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1048"/>
+        <location filename="../mainwindow.cpp" line="1050"/>
         <source>JavaScript files (*.js);;All files (*)</source>
         <translation>JavaScript文件 (*.js);;所有文件 (*)</translation>
     </message>
