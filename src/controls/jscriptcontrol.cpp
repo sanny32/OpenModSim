@@ -212,6 +212,15 @@ void JScriptControl::setScriptDocument(QTextDocument* document)
 }
 
 ///
+/// \brief JScriptControl::scriptSource
+/// \return
+///
+QString JScriptControl::scriptSource() const
+{
+    return _scriptSource;
+}
+
+///
 /// \brief JScriptControl::searchText
 /// \return
 ///
@@ -385,6 +394,7 @@ void JScriptControl::runScript(RunMode mode, int interval)
 
     if(!executeScript())
         return;
+    emit scriptStarted();
 
     switch(mode)
     {

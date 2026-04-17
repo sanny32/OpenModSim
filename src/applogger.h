@@ -8,6 +8,7 @@
 class QWidget;
 class AppProject;
 class AppPreferences;
+class JScriptControl;
 
 ///
 /// \brief The AppLogger class
@@ -19,6 +20,7 @@ public:
     static void setupDataSimulatorLogging(DataSimulator& simulator, QObject* context);
     static void setupAppProjectLogging(AppProject& project, QObject* context);
     static void setupAppPreferencesLogging(AppPreferences& preferences, QObject* context);
+    static void setupScriptControlLogging(JScriptControl& control, QObject* context);
     static void clear();
 };
 

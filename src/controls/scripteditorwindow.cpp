@@ -1,6 +1,7 @@
 #include <QVBoxLayout>
 #include <QWidgetAction>
 #include <QCloseEvent>
+#include "applogger.h"
 #include "scripteditorwindow.h"
 
 ///
@@ -20,6 +21,7 @@ ScriptEditorWindow::ScriptEditorWindow(ScriptDocument* doc,
     _scriptControl->setModbusMultiServer(server);
     _scriptControl->setByteOrder(&_byteOrderStorage);
     _scriptControl->setAddressBase(doc->addressBase());
+    AppLogger::setupScriptControlLogging(*_scriptControl, this);
 
     const auto& prefs = AppPreferences::instance();
     _scriptControl->setFont(prefs.scriptFont());

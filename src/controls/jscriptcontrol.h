@@ -55,6 +55,7 @@ public:
     void setScript(const QString& text);
     QTextDocument* scriptDocument() const;
     void setScriptDocument(QTextDocument* document);
+    QString scriptSource() const;
 
     QString searchText() const;
 
@@ -91,6 +92,7 @@ public slots:
     void stopScript();
 
 signals:
+    void scriptStarted();
     void scriptStopped();
     void helpContext(const QString& helpKey);
     void consoleMessage(const QString& source, const QString& text, ConsoleOutput::MessageType type);

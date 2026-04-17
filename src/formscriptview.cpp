@@ -5,6 +5,7 @@
 #include <QToolButton>
 #include <QDateTime>
 #include <QTextDocument>
+#include "applogger.h"
 #include "mainwindow.h"
 #include "controls/runmodecombobox.h"
 #include "formscriptview.h"
@@ -35,6 +36,7 @@ FormScriptView::FormScriptView(ModbusMultiServer& server, DataSimulator* simulat
     ui->scriptControl->setModbusMultiServer(&server);
     ui->scriptControl->setByteOrder(&_byteOrder);
     ui->scriptControl->setScriptSource(windowTitle());
+    AppLogger::setupScriptControlLogging(*ui->scriptControl, this);
 
     connect(this, &QWidget::windowTitleChanged, this, &FormScriptView::on_windowTitleChanged);
     connect(ui->scriptControl, &JScriptControl::helpContext, this, &FormScriptView::helpContextRequested);

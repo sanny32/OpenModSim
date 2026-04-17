@@ -9,6 +9,7 @@
 #include "formdataview.h"
 #include "formscriptview.h"
 #include "formtrafficview.h"
+#include "jscriptcontrol.h"
 
 namespace {
 
@@ -432,6 +433,34 @@ void AppLogger::setupAppPreferencesLogging(AppPreferences& preferences, QObject*
 
         qInfo(lcApp) << QCoreApplication::translate("MainWindow", "%1 changed: %2 -> %3")
                             .arg(preferenceLabel(name), settingValueText(name, oldValue), settingValueText(name, newValue));
+    }, Qt::DirectConnection);
+}
+
+///
+/// \brief AppLogger::setupScriptControlLogging
+/// \param control
+/// \param context
+///
+void AppLogger::setupScriptControlLogging(JScriptControl& control, QObject* context)
+{
+    Q_ASSERT(context != nullptr);
+
+    QObject::connect(&control, &JScriptControl::scriptStarted, context,
+                     [&control]() {
+        control.setProperty("_appLoggerScriptRunning", true);
+        qInfo(lcApp) << QCoreApplication::translate("MainWindow", "Script started: %1")
+                            .arg(control.scriptSource());
+    }, Qt::DirectConnection);
+
+    QObject::connect(&control, &JScriptControl::scriptStopped, context,
+                     [&control]() {
+        const bool wasRunning = control.property("_appLoggerScriptRunning").toBool();
+        control.setProperty("_appLoggerScriptRunning", false);
+        if (!wasRunning)
+            return;
+
+        qInfo(lcApp) << QCoreApplication::translate("MainWindow", "Script stopped: %1")
+                            .arg(control.scriptSource());
     }, Qt::DirectConnection);
 }
 
