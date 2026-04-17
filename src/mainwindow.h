@@ -52,7 +52,7 @@ public:
     void applyGlobalHexView(bool enabled, bool persist = true);
 
     void loadProject(const QString& filename);
-    void saveProject(const QString& filename);
+    bool saveProject(const QString& filename);
 
     void appendConsoleMessage(const QString& source, const QString& text, ConsoleOutput::MessageType type);
     void showOutputConsole();
@@ -144,6 +144,8 @@ private:
 
     bool loadAppSettings(const QString& filename);
     void saveAppSettings();
+    bool promptSaveProjectAs(const QString& initialPath = QString());
+    QString projectSavePathInProfileDir() const;
     bool confirmSaveOnClose();
     bool hasProjectContext() const;
     void addRecentProject(const QString& filePath);

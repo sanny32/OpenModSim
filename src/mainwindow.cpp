@@ -736,8 +736,12 @@ void MainWindow::on_actionSaveProject_triggered()
         return;
     }
 
-    saveProject(_projectFilePath);
-    addRecentProject(_projectFilePath);
+    if(saveProject(_projectFilePath)) {
+        addRecentProject(_projectFilePath);
+        return;
+    }
+
+    promptSaveProjectAs(projectSavePathInProfileDir());
 }
 
 ///
@@ -745,21 +749,7 @@ void MainWindow::on_actionSaveProject_triggered()
 ///
 void MainWindow::on_actionSaveProjectAs_triggered()
 {
-    QStringList filters;
-    filters << tr("Project files (*.omp)");
-    const QString initialPath = _projectFilePath.isEmpty()
-        ? _project->savePath() + "/" + projectName() + ".omp"
-        : _projectFilePath;
-    auto filename = QFileDialog::getSaveFileName(this, QString(), initialPath, filters.join(";;"));
-
-    if(filename.isEmpty()) return;
-
-    if(!filename.endsWith(".omp", Qt::CaseInsensitive))
-        filename.append(".omp");
-
-    _project->setSavePath(QFileInfo(filename).absoluteDir().absolutePath());
-    saveProject(filename);
-    addRecentProject(QFileInfo(filename).absoluteFilePath());
+    promptSaveProjectAs();
 }
 
 ///
@@ -1323,14 +1313,17 @@ void MainWindow::loadProject(const QString& filename)
 /// \brief MainWindow::saveProject
 /// \param filename
 ///
-void MainWindow::saveProject(const QString& filename)
+bool MainWindow::saveProject(const QString& filename)
 {
-    _project->saveProject(filename);
+    if (!_project->saveProject(filename))
+        return false;
+
     _projectFilePath = QFileInfo(filename).absoluteFilePath();
     _lastProjectPath = _projectFilePath;
     _project->setSavePath(QFileInfo(filename).absoluteDir().absolutePath());
     _isModified = false;
     updateProjectWindowTitle();
+    return true;
 }
 
 ///
@@ -1697,14 +1690,56 @@ bool MainWindow::confirmSaveOnClose()
         return true;
 
     if(!_projectFilePath.isEmpty()) {
-        saveProject(_projectFilePath);
-        addRecentProject(_projectFilePath);
-        return true;
+        if(saveProject(_projectFilePath)) {
+            addRecentProject(_projectFilePath);
+            return true;
+        }
+
+        return promptSaveProjectAs(projectSavePathInProfileDir());
     }
 
-    const QString before = _projectFilePath;
-    on_actionSaveProjectAs_triggered();
-    return before != _projectFilePath && !_projectFilePath.isEmpty();
+    return promptSaveProjectAs();
+}
+
+///
+/// \brief MainWindow::promptSaveProjectAs
+/// \param initialPath
+/// \return
+///
+bool MainWindow::promptSaveProjectAs(const QString& initialPath)
+{
+    QStringList filters;
+    filters << tr("Project files (*.omp)");
+
+    const QString defaultPath = _projectFilePath.isEmpty()
+        ? _project->savePath() + "/" + projectName() + ".omp"
+        : _projectFilePath;
+    const QString dialogPath = initialPath.isEmpty() ? defaultPath : initialPath;
+    auto filename = QFileDialog::getSaveFileName(this, QString(), dialogPath, filters.join(";;"));
+
+    if(filename.isEmpty())
+        return false;
+
+    if(!filename.endsWith(".omp", Qt::CaseInsensitive))
+        filename.append(".omp");
+
+    _project->setSavePath(QFileInfo(filename).absoluteDir().absolutePath());
+    if(!saveProject(filename))
+        return false;
+
+    addRecentProject(QFileInfo(filename).absoluteFilePath());
+    return true;
+}
+
+///
+/// \brief MainWindow::projectSavePathInProfileDir
+/// \return
+///
+QString MainWindow::projectSavePathInProfileDir() const
+{
+    const QString baseName = projectName().isEmpty() ? tr("Untitled") : projectName();
+    const QFileInfo profileInfo(_profile.isEmpty() ? getSettingsFilePath() : _profile);
+    return profileInfo.absoluteDir().filePath(baseName + ".omp");
 }
 
 ///

@@ -369,6 +369,19 @@ void AppLogger::setupAppProjectLogging(AppProject& project, QObject* context)
                             .arg(displayName);
     }, Qt::DirectConnection);
 
+    QObject::connect(&project, &AppProject::projectSaved, context,
+                     [](const QString& filename) {
+        qInfo(lcApp) << QCoreApplication::translate("MainWindow", "Project saved: %1")
+                            .arg(filename);
+    }, Qt::DirectConnection);
+
+    QObject::connect(&project, &AppProject::projectSaveFailed, context,
+                     [](const QString& filename, const QString& error) {
+        qWarning(lcApp) << QCoreApplication::translate("MainWindow",
+                                                       "Project save failed: %1 (%2)")
+                               .arg(filename, error);
+    }, Qt::DirectConnection);
+
     QObject::connect(&project, &AppProject::formCreated, context,
                      [](QWidget* form) {
         qInfo(lcApp) << QCoreApplication::translate("MainWindow", "Form created: %1")
@@ -430,4 +443,3 @@ void AppLogger::clear()
     if (auto* log = AppLogOutput::instance())
         log->clear();
 }
-

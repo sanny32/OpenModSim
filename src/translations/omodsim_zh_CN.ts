@@ -2593,7 +2593,7 @@ Script.onInit(()=&gt;{
     </message>
     <message>
         <location filename="../mainwindow.ui" line="244"/>
-        <location filename="../mainwindow.cpp" line="1689"/>
+        <location filename="../mainwindow.cpp" line="1682"/>
         <source>Save Project</source>
         <translation>保存项目</translation>
     </message>
@@ -2801,7 +2801,7 @@ Script.onInit(()=&gt;{
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="187"/>
-        <location filename="../mainwindow.cpp" line="1776"/>
+        <location filename="../mainwindow.cpp" line="1811"/>
         <source>Clear List</source>
         <translation>清除列表</translation>
     </message>
@@ -2819,19 +2819,20 @@ Script.onInit(()=&gt;{
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="719"/>
-        <location filename="../mainwindow.cpp" line="749"/>
+        <location filename="../mainwindow.cpp" line="1712"/>
         <source>Project files (*.omp)</source>
         <translation>项目文件 (*.omp)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1346"/>
+        <location filename="../mainwindow.cpp" line="1339"/>
+        <location filename="../mainwindow.cpp" line="1740"/>
         <source>Untitled</source>
         <translation>未命名</translation>
     </message>
     <message>
         <location filename="../applogger.cpp" line="118"/>
         <location filename="../mainwindow.cpp" line="469"/>
-        <location filename="../mainwindow.cpp" line="1521"/>
+        <location filename="../mainwindow.cpp" line="1514"/>
         <source>Address Base</source>
         <translation>地址基准</translation>
     </message>
@@ -3076,36 +3077,46 @@ Script.onInit(()=&gt;{
     </message>
     <message>
         <location filename="../applogger.cpp" line="374"/>
+        <source>Project saved: %1</source>
+        <translation>项目已保存：%1</translation>
+    </message>
+    <message>
+        <location filename="../applogger.cpp" line="380"/>
+        <source>Project save failed: %1 (%2)</source>
+        <translation>项目保存失败：%1 (%2)</translation>
+    </message>
+    <message>
+        <location filename="../applogger.cpp" line="387"/>
         <source>Form created: %1</source>
         <translation>窗体已创建：%1</translation>
     </message>
     <message>
-        <location filename="../applogger.cpp" line="380"/>
+        <location filename="../applogger.cpp" line="393"/>
         <source>Form opened: %1</source>
         <translation>窗体已打开：%1</translation>
     </message>
     <message>
-        <location filename="../applogger.cpp" line="386"/>
+        <location filename="../applogger.cpp" line="399"/>
         <source>Form closed: %1</source>
         <translation>窗体已关闭：%1</translation>
     </message>
     <message>
-        <location filename="../applogger.cpp" line="392"/>
+        <location filename="../applogger.cpp" line="405"/>
         <source>Form deleted: %1</source>
         <translation>窗体已删除：%1</translation>
     </message>
     <message>
-        <location filename="../applogger.cpp" line="411"/>
+        <location filename="../applogger.cpp" line="424"/>
         <source>Preference changed: %1: %2 -&gt; %3</source>
         <translation>首选项已更改：%1：%2 → %3</translation>
     </message>
     <message>
-        <location filename="../applogger.cpp" line="420"/>
+        <location filename="../applogger.cpp" line="433"/>
         <source>%1 changed: %2 -&gt; %3</source>
         <translation>%1 已更改：%2 → %3</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1100"/>
+        <location filename="../mainwindow.cpp" line="1090"/>
         <source>Move to Other Panel</source>
         <translation>移至其他面板</translation>
     </message>
@@ -3127,12 +3138,12 @@ Script.onInit(()=&gt;{
         <translation>十六进制视图</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1690"/>
+        <location filename="../mainwindow.cpp" line="1683"/>
         <source>Save project before closing?</source>
         <translation>关闭前保存项目？</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1764"/>
+        <location filename="../mainwindow.cpp" line="1799"/>
         <source>No Recent Projects</source>
         <translation>没有最近项目</translation>
     </message>
@@ -3142,7 +3153,7 @@ Script.onInit(()=&gt;{
         <translation>数据</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1058"/>
+        <location filename="../mainwindow.cpp" line="1048"/>
         <source>JavaScript files (*.js);;All files (*)</source>
         <translation>JavaScript文件 (*.js);;所有文件 (*)</translation>
     </message>
@@ -3874,6 +3885,14 @@ Script.onInit(()=&gt;{
         <location filename="../modbustcpserver.cpp" line="239"/>
         <source>Could not write response to client</source>
         <translation>无法写入对客户端的响应</translation>
+    </message>
+</context>
+<context>
+    <name>QObject</name>
+    <message>
+        <location filename="../appproject.cpp" line="2090"/>
+        <source>Failed to write project XML.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

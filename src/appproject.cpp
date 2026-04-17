@@ -1922,13 +1922,17 @@ void AppProject::restoreActiveWindows()
 /// \brief AppProject::saveProject
 /// \param filename
 ///
-void AppProject::saveProject(const QString& filename)
+bool AppProject::saveProject(const QString& filename)
 {
-    _projectFilename = QFileInfo(filename).absoluteFilePath();
+    const QString absoluteFilename = QFileInfo(filename).absoluteFilePath();
 
     QFile file(filename);
-    if(!file.open(QFile::WriteOnly))
-        return;
+    if(!file.open(QFile::WriteOnly)) {
+        emit projectSaveFailed(absoluteFilename, file.errorString());
+        return false;
+    }
+
+    _projectFilename = absoluteFilename;
 
     QXmlStreamWriter w(&file);
     w.setAutoFormatting(true);
@@ -2081,6 +2085,14 @@ void AppProject::saveProject(const QString& filename)
 
     w.writeEndElement(); // OpenModSim
     w.writeEndDocument();
+
+    if (w.hasError()) {
+        emit projectSaveFailed(_projectFilename, QObject::tr("Failed to write project XML."));
+        return false;
+    }
+
+    emit projectSaved(_projectFilename);
+    return true;
 }
 
 ///

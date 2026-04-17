@@ -87,7 +87,7 @@ public:
 
     // Project I/O
     void loadProject(const QString& filename);
-    void saveProject(const QString& filename);
+    bool saveProject(const QString& filename);
     void restoreActiveWindows();
 
     // Called from MainWindow::~MainWindow() before delete ui.
@@ -105,6 +105,8 @@ public:
 signals:
     void projectOpened(const QString& filename);
     void projectClosed(const QString& filename);
+    void projectSaved(const QString& filename);
+    void projectSaveFailed(const QString& filename, const QString& error);
     void formCreated(QWidget* form);
     void formOpened(QWidget* form);
     void formClosed(QWidget* form);
