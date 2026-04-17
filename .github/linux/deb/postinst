@@ -20,3 +20,8 @@ update-mime-database /usr/share/mime || true
 xdg-desktop-menu forceupdate
 update-desktop-database -q /usr/share/applications || true
 gtk-update-icon-cache -q -t -f /usr/share/icons/hicolor || true
+
+# Astra Linux Fly caches Start Menu icons and may not reload them after package installation.
+if command -v fly-start-menu >/dev/null 2>&1; then
+    killall fly-start-menu || true
+fi
