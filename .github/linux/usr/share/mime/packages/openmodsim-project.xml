@@ -2,6 +2,8 @@
 <mime-info xmlns="http://www.freedesktop.org/standards/shared-mime-info">
     <mime-type type="application/x-openmodsim-project">
         <comment>Open ModSim Project</comment>
+        <icon name="application-x-openmodsim-project"/>
+        <generic-icon name="x-office-document"/>
         <glob pattern="*.omp"/>
     </mime-type>
 </mime-info>
