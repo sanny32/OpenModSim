@@ -35,7 +35,7 @@ jobs:
       BUILD_TYPE: "Release"
       DEB_REVISION: "1"
       DEB_ARCH: "amd64"
-      DEB_PACKAGE_NAME: "qt5-omodsim"
+      DEB_PACKAGE_NAME: "qt5-omodsim2"
 
     steps:
       - name: Checkout repository
@@ -232,17 +232,17 @@ jobs:
               -e "s|@COMPONENT_ID@|omodsim.desktop|g" \
               -e "s|@APP_VERSION@|${{ env.APP_VERSION }}|g" \
               -e "s|@BUILD_DATE@|$(date +%Y-%m-%d)|g" \
-              ${{ env.DEB_SRC_DIR }}/usr/share/metainfo/omodsim.metainfo.xml.in > ${{ env.DEB_SRC_DIR }}/usr/share/metainfo/omodsim.metainfo.xml
+              ${{ env.DEB_SRC_DIR }}/usr/share/metainfo/omodsim.metainfo.xml.in > ${{ env.DEB_SRC_DIR }}/usr/share/metainfo/omodsim2.metainfo.xml
           rm ${{ env.DEB_SRC_DIR }}/usr/share/metainfo/omodsim.metainfo.xml.in
-          cat -n ${{ env.DEB_SRC_DIR }}/usr/share/metainfo/omodsim.metainfo.xml
+          cat -n ${{ env.DEB_SRC_DIR }}/usr/share/metainfo/omodsim2.metainfo.xml
 
       - name: Create desktop file
         run: |
-          sed -e "s|@APP_EXEC@|omodsim|g" \
+          sed -e "s|@APP_EXEC@|omodsim2|g" \
               -e "s|@APP_ICON@|omodsim|g" \
-              ${{ env.DEB_SRC_DIR }}/usr/share/applications/omodsim.desktop.in > ${{ env.DEB_SRC_DIR }}/usr/share/applications/omodsim.desktop
+              ${{ env.DEB_SRC_DIR }}/usr/share/applications/omodsim.desktop.in > ${{ env.DEB_SRC_DIR }}/usr/share/applications/omodsim2.desktop
           rm ${{ env.DEB_SRC_DIR }}/usr/share/applications/omodsim.desktop.in
-          cat -n ${{ env.DEB_SRC_DIR }}/usr/share/applications/omodsim.desktop
+          cat -n ${{ env.DEB_SRC_DIR }}/usr/share/applications/omodsim2.desktop
 
       - name: Patch binary file
         run: patchelf --set-rpath /opt/OpenModSim2/lib "${{ env.DEB_SRC_DIR }}/opt/OpenModSim2/bin/omodsim"

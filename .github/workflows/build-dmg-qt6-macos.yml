@@ -30,7 +30,7 @@ jobs:
       QT_INSTALL_DIR: "${{ github.workspace }}/Qt"
       CMAKE_GENERATOR: "Ninja"
       BUILD_TYPE: "Release"
-      DMG_PACKAGE_NAME: "qt6-omodsim"
+      DMG_PACKAGE_NAME: "qt6-omodsim2"
 
     steps:
       - name: Checkout repository
