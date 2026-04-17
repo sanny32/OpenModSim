@@ -2801,7 +2801,7 @@ Script.onInit(()=&gt;{
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="187"/>
-        <location filename="../mainwindow.cpp" line="1813"/>
+        <location filename="../mainwindow.cpp" line="1821"/>
         <source>Clear List</source>
         <translation>清除列表</translation>
     </message>
@@ -3143,7 +3143,7 @@ Script.onInit(()=&gt;{
         <translation>关闭前保存项目？</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1801"/>
+        <location filename="../mainwindow.cpp" line="1809"/>
         <source>No Recent Projects</source>
         <translation>没有最近项目</translation>
     </message>

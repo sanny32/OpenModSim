@@ -2801,7 +2801,7 @@ Script.onInit(()=&gt;{
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="187"/>
-        <location filename="../mainwindow.cpp" line="1813"/>
+        <location filename="../mainwindow.cpp" line="1821"/>
         <source>Clear List</source>
         <translation>Очистить список</translation>
     </message>
@@ -3143,7 +3143,7 @@ Script.onInit(()=&gt;{
         <translation>Сохранить проект перед закрытием?</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1801"/>
+        <location filename="../mainwindow.cpp" line="1809"/>
         <source>No Recent Projects</source>
         <translation>Нет недавних проектов</translation>
     </message>

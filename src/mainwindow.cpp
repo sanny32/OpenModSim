@@ -1740,8 +1740,15 @@ bool MainWindow::promptSaveProjectAs(const QString& initialPath)
 QString MainWindow::projectSavePathInProfileDir() const
 {
     const QString baseName = projectName().isEmpty() ? tr("Untitled") : projectName();
-    const QFileInfo profileInfo(_profile.isEmpty() ? getSettingsFilePath() : _profile);
-    return profileInfo.absoluteDir().filePath(baseName + ".omp");
+    const QString documentsDir = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
+    if (!documentsDir.isEmpty())
+        return QDir(documentsDir).filePath(baseName + ".omp");
+
+    const QString homeDir = QStandardPaths::writableLocation(QStandardPaths::HomeLocation);
+    if (!homeDir.isEmpty())
+        return QDir(homeDir).filePath(baseName + ".omp");
+
+    return baseName + ".omp";
 }
 
 ///
