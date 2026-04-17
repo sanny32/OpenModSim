@@ -429,7 +429,6 @@ target_link_libraries(${PROJECT_NAME} PRIVATE Qt::Widgets Qt::Network Qt::Xml Qt
 if(Qt6_FOUND)
     qt_add_lupdate(${PROJECT_NAME}
         TS_FILES ${TS_FILES}
-        SOURCES ${SOURCES} ${HEADERS} ${UI_FILES}
     )
     target_link_libraries(${PROJECT_NAME} PRIVATE Qt::Core5Compat)
 else()
