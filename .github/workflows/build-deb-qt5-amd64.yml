@@ -33,6 +33,7 @@ jobs:
       CMAKE_COMPILER: "gcc_64"
       CMAKE_GENERATOR: "Ninja"
       BUILD_TYPE: "Release"
+      BETA_RELEASE: "beta1"
       DEB_REVISION: "1"
       DEB_ARCH: "amd64"
       DEB_PACKAGE_NAME: "qt5-omodsim2"
@@ -65,11 +66,12 @@ jobs:
         id: extract_version
         run: |
           FULL_VERSION=$(grep -oP 'VERSION\s+\K[0-9]+\.[0-9]+\.[0-9]+' src/CMakeLists.txt)
-          PRE_RELEASE_ENABLED=false
-          grep -q 'option(PRE_RELEASE .* ON)' src/CMakeLists.txt && PRE_RELEASE_ENABLED=true
+          BETA_RELEASE_ENABLED=false
+          PROJECT_BETARELEASE=
           TAG_NAME="${{ github.event.inputs.tag || github.ref_name }}"
-          if [ "$TAG_NAME" = *b ]; then
-            PRE_RELEASE_ENABLED=true
+          if [ "$TAG_NAME" = *"${{ env.BETA_RELEASE }}" ]; then
+            BETA_RELEASE_ENABLED=true
+            PROJECT_BETARELEASE="${{ env.BETA_RELEASE }}"
           fi
 
           if [ "${GITHUB_REF_NAME}" = "dev" ] || [ "${{ github.event.inputs.branch }}" = "dev" ] || [ "${GITHUB_REF_NAME}" = release/* ] || [ "${{ github.event.inputs.branch }}" = release/* ]; then
@@ -77,13 +79,14 @@ jobs:
             APP_VERSION="${MAJOR_MINOR}~dev"
           else
             APP_VERSION="$FULL_VERSION"
-            if [ "$PRE_RELEASE_ENABLED" = "true" ]; then
-              APP_VERSION="${APP_VERSION}b"
+            if [ "$BETA_RELEASE_ENABLED" = "true" ]; then
+              APP_VERSION="${APP_VERSION}~${{ env.BETA_RELEASE }}"
             fi
           fi
 
           echo "APP_VERSION=$APP_VERSION" >> $GITHUB_ENV
-          echo "PRE_RELEASE_FLAG=$PRE_RELEASE_ENABLED" >> $GITHUB_ENV
+          echo "PROJECT_BETARELEASE=$PROJECT_BETARELEASE" >> $GITHUB_ENV
+          echo "BETA_RELEASE_FLAG=$BETA_RELEASE_ENABLED" >> $GITHUB_ENV
           echo "Extracted version: $APP_VERSION"
 
       - name: Install dependencies
@@ -140,7 +143,7 @@ jobs:
             -G "${{ env.CMAKE_GENERATOR }}" \
             -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} \
             -DCMAKE_PREFIX_PATH=${{ env.QT_INSTALL_DIR }}/${{ env.QT_VERSION }}/${{ env.CMAKE_COMPILER }} \
-            -DPRE_RELEASE=$PRE_RELEASE_FLAG
+            -DPROJECT_BETARELEASE=${{ env.PROJECT_BETARELEASE }}
 
       - name: Build
         run: cmake --build ${{ env.BUILD_DIR }} --config ${{ env.BUILD_TYPE }} --parallel
@@ -263,7 +266,7 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           draft: true
-          prerelease: ${{ env.PRE_RELEASE_FLAG }}
+          prerelease: ${{ env.BETA_RELEASE_FLAG }}
           tag_name: ${{ github.ref_name }}
           name: Open ModSim ${{ env.APP_VERSION }}
           files: |

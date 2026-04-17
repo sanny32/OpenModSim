@@ -7,7 +7,6 @@ project(omodsim
 
 option(USE_QT5 "Force Qt5 usage" OFF)
 option(USE_QT6 "Force Qt6 usage" OFF)
-option(PRE_RELEASE "Project Pre-release" OFF)
 
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
@@ -17,6 +16,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_INTERPROCEDURAL_OPTIMIZATION ON)
 set(PRODUCT_NAME "Open ModSim")
 set(EXECUTABLE_PATH "${CMAKE_INSTALL_PREFIX}/bin/${PROJECT_NAME}")
+set(PROJECT_BETARELEASE "" CACHE STRING "Beta release suffix, e.g. beta1")
 
 # Split version to major, minor, patch
 string(REPLACE "." ";" VERSION_LIST ${PROJECT_VERSION})
@@ -91,14 +91,14 @@ endif()
 
 if(DEFINED GIT_BRANCH AND "${GIT_BRANCH}" MATCHES "^(dev|release/.*)$")
     set(PROJECT_VERSION ${VERSION_MAJOR}.${VERSION_MINOR}-dev)
-elseif(PRE_RELEASE)
-    set(PROJECT_PRERELEASE "b")
+elseif(PROJECT_BETARELEASE)
+    set(PROJECT_VERSION ${PROJECT_VERSION}-${PROJECT_BETARELEASE})
 endif()
 
 # Define compile definitions
 add_compile_definitions(APP_NAME="${PRODUCT_NAME}")
 add_compile_definitions(APP_DESCRIPTION="${PROJECT_DESCRIPTION}")
-add_compile_definitions(APP_VERSION="${PROJECT_VERSION}${PROJECT_PRERELEASE}")
+add_compile_definitions(APP_VERSION="${PROJECT_VERSION}")
 add_compile_definitions(BUILD_YEAR="${CURRENT_YEAR}")
 
 # Include directories
@@ -377,7 +377,6 @@ set(UI_FILES
     dialogs/dialogwindowsmanager.ui
     dialogs/dialogwritestatusregister.ui
     dialogs/dialogwriteregister.ui
-    # formmodsim.ui was replaced by typed forms
     mainwindow.ui
 )
 
@@ -453,8 +452,8 @@ if(WIN32)
         target_compile_options(${PROJECT_NAME} PRIVATE /utf-8)
     endif()
 
-    set(FILE_VERSION "${PROJECT_VERSION}${PROJECT_PRERELEASE}")
-    set(PRODUCT_VERSION "${PROJECT_VERSION}${PROJECT_PRERELEASE}")
+    set(FILE_VERSION "${PROJECT_VERSION}")
+    set(PRODUCT_VERSION "${PROJECT_VERSION}")
     set(ICON_FILE "${CMAKE_CURRENT_SOURCE_DIR}/res/omodsim.ico")
     set(OMP_ICON_FILE "${CMAKE_CURRENT_SOURCE_DIR}/res/omp.ico")
 
