@@ -10,4 +10,4 @@ update-mime-database /usr/share/mime || true
 xdg-desktop-menu forceupdate
 update-desktop-database -q /usr/share/applications || true
 gtk-update-icon-cache -q -t -f /usr/share/icons/hicolor || true
-rm -f /usr/bin/omodsim
+rm -f /usr/bin/omodsim2
