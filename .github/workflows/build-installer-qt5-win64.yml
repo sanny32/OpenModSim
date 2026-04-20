@@ -50,15 +50,21 @@ jobs:
       - name: Extract version from CMakeLists.txt
         run: |
           for /f "tokens=2" %%i in ('findstr /R /C:"VERSION [0-9]*\.[0-9]*\.[0-9]*" src\CMakeLists.txt') do set APP_VERSION=%%i
+          if not defined APP_VERSION exit /b 1
           set BETA_RELEASE_ENABLED=false
           set PROJECT_BETARELEASE=
           set TAG_NAME=${{ github.event.inputs.tag }}
           if "%TAG_NAME%"=="" set TAG_NAME=${{ github.ref_name }}
-          echo %TAG_NAME% | findstr /I /R "${{ env.BETA_RELEASE }}$" >nul && set BETA_RELEASE_ENABLED=true && set PROJECT_BETARELEASE=${{ env.BETA_RELEASE }}
+          echo %TAG_NAME% | findstr /I /R "${{ env.BETA_RELEASE }}$" >nul
+          if not errorlevel 1 (
+            set BETA_RELEASE_ENABLED=true
+            set PROJECT_BETARELEASE=${{ env.BETA_RELEASE }}
+          )
           if "%BETA_RELEASE_ENABLED%"=="true" set APP_VERSION=%APP_VERSION%-${{ env.BETA_RELEASE }}
           echo APP_VERSION=%APP_VERSION%>>%GITHUB_ENV%
           echo PROJECT_BETARELEASE=%PROJECT_BETARELEASE%>>%GITHUB_ENV%
           echo BETA_RELEASE_FLAG=%BETA_RELEASE_ENABLED%>>%GITHUB_ENV%
+          exit /b 0
         shell: cmd
 
       - name: Convert version for dev branch
