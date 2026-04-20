@@ -98,6 +98,9 @@ endif()
 # Define compile definitions
 add_compile_definitions(APP_NAME="${PRODUCT_NAME}")
 add_compile_definitions(APP_DESCRIPTION="${PROJECT_DESCRIPTION}")
+add_compile_definitions(APP_VERSION_MAJOR="${VERSION_MAJOR}")
+add_compile_definitions(APP_VERSION_MINOR="${VERSION_MINOR}")
+add_compile_definitions(APP_VERSION_PATCH="${VERSION_PATCH}")
 add_compile_definitions(APP_VERSION="${PROJECT_VERSION}")
 add_compile_definitions(BUILD_YEAR="${CURRENT_YEAR}")
 
