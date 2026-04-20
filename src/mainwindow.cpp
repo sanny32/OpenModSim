@@ -1438,21 +1438,13 @@ static bool canWriteFile(const QString& filePath)
 ///
 static QString getSettingsFilePath()
 {
-    const auto settingsName = QFileInfo(qApp->applicationFilePath()).baseName();
-
-    QString filename = QString("%1.ini").arg(settingsName);
+    const QString filename = QString("%1.ini").arg(QFileInfo(qApp->applicationFilePath()).baseName());
     const QString appFilePath = QDir(qApp->applicationDirPath()).filePath(filename);
 
     if (canWriteFile(appFilePath))
         return appFilePath;
 
-    filename = QString("%1%2.ini").arg(settingsName, APP_VERSION_MAJOR);
-    const QString relativePath =
-#ifdef Q_OS_WIN
-        filename;
-#else
-        QDir(APP_NAME).filePath(filename);
-#endif
+    const QString relativePath = QDir(QString("%1 %2").arg(APP_NAME, APP_VERSION_MAJOR)).filePath(filename);
 
     return QDir(QStandardPaths::writableLocation(QStandardPaths::ConfigLocation)).filePath(relativePath);
 }

@@ -40,8 +40,8 @@ Function LaunchWithProfile
   StrCpy $0 "$INSTDIR\${APPFILE}"
   ${GetFileName} "$0" $1
   ${GetBaseName} $1 $2
-  StrCpy $3 "$2${VERSIONMAJOR}.ini"
-  StrCpy $4 "$LOCALAPPDATA\${PROJECTNAME}"
+  StrCpy $3 "$2.ini"
+  StrCpy $4 "$LOCALAPPDATA\${NAME}"
   StrCpy $5 "$4\$3"
   Exec '"$0" --profile "$5"'
   Sleep 300
