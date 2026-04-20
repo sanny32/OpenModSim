@@ -26,17 +26,6 @@
   !define MUI_FINISHPAGE_RUN_TEXT "Launch ${PROJECTNAME}"
   !define MUI_FINISHPAGE_RUN_CHECKED
 
-Function LaunchWithProfile
-  StrCpy $0 "$INSTDIR\${APPFILE}"
-  ${GetFileName} "$0" $1
-  ${GetBaseName} $1 $2
-  StrCpy $3 "$2.ini"
-  StrCpy $4 "$LOCALAPPDATA\${NAME}"
-  StrCpy $5 "$4\$3"
-  Exec '"$0" --profile "$5"'
-  Sleep 300
-FunctionEnd
-
   !searchparse /noerrors ${VERSION} "" VERSIONMAJOR "." VERSIONMINOR "." VERSIONPATCH "." VERSIONBUILD
   !ifndef VERSIONBUILD
     !define VERSIONBUILD "0"
@@ -46,6 +35,17 @@ FunctionEnd
     !searchparse ${VERSION} "" VERSIONMAJOR "." VERSIONMINOR "-"
   !endif
   !searchparse /file ${LICENSE_FILE} "Copyright " COPYRIGHT
+
+Function LaunchWithProfile
+  StrCpy $0 "$INSTDIR\${APPFILE}"
+  ${GetFileName} "$0" $1
+  ${GetBaseName} $1 $2
+  StrCpy $3 "$2${VERSIONMAJOR}.ini"
+  StrCpy $4 "$LOCALAPPDATA\${PROJECTNAME}"
+  StrCpy $5 "$4\$3"
+  Exec '"$0" --profile "$5"'
+  Sleep 300
+FunctionEnd
 
 #--------------------------------
 # Variables
