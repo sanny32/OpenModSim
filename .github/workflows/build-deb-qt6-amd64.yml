@@ -258,7 +258,7 @@ jobs:
         run: |
           sed -e "s|@REF_NAME@|${{ env.REF_NAME }}|g" \
               -e "s|@REF_TYPE@|${{ env.REF_TYPE }}|g" \
-              -e "s|@COMPONENT_ID@|omodsim.desktop|g" \
+              -e "s|@COMPONENT_ID@|omodsim2.desktop|g" \
               -e "s|@APP_VERSION@|${{ env.APP_VERSION }}|g" \
               -e "s|@BUILD_DATE@|$(date +%Y-%m-%d)|g" \
               ${{ env.DEB_SRC_DIR }}/usr/share/metainfo/omodsim.metainfo.xml.in > ${{ env.DEB_SRC_DIR }}/usr/share/metainfo/omodsim2.metainfo.xml
