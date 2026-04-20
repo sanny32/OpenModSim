@@ -236,7 +236,7 @@ jobs:
               -e "s|@APP_VERSION@|${{ env.APP_VERSION }}|g" \
               -e "s|@BUILD_DATE@|$(date +%Y-%m-%d)|g" \
               ${{ env.DEB_SRC_DIR }}/usr/share/metainfo/omodsim.metainfo.xml.in > ${{ env.DEB_SRC_DIR }}/usr/share/metainfo/omodsim2.metainfo.xml
-          rm ${{ env.DEB_SRC_DIR }}/usr/share/metainfo/omodsim2.metainfo.xml.in
+          rm ${{ env.DEB_SRC_DIR }}/usr/share/metainfo/omodsim.metainfo.xml.in
           cat -n ${{ env.DEB_SRC_DIR }}/usr/share/metainfo/omodsim2.metainfo.xml
 
       - name: Create desktop file
