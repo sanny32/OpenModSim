@@ -7,6 +7,12 @@ License:        MIT
 URL:            https://github.com/sanny32/OpenModSim
 Packager:       Alexandr Ananev <mail@ananev.org>
 Source0:        SOURCES/omodsim
+#
+# Qt's xcb platform plugin checks for xcb-cursor support at runtime starting
+# with newer Qt 6 releases, so RPM's automatic ELF dependency generator does
+# not always detect it from the bundled files. Declare it explicitly for RPM
+# families that expose either the RHEL/Fedora-style or RedOS-style package.
+Requires:       (xcb-util-cursor or libxcb-cursor0)
 
 %description
 Open ModSim is an open source Modbus slave (server) utility for testing and debugging Modbus TCP and RTU clients.
