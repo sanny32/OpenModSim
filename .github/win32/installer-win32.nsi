@@ -9,9 +9,19 @@
 
 #--------------------------------
 # Custom defines
+  !searchparse /noerrors ${VERSION} "" VERSIONMAJOR "." VERSIONMINOR "." VERSIONPATCH "." VERSIONBUILD
+  !ifndef VERSIONBUILD
+    !define VERSIONBUILD "0"
+  !endif
+  !ifndef VERSIONPATCH
+    !define VERSIONPATCH "0"
+    !searchparse ${VERSION} "" VERSIONMAJOR "." VERSIONMINOR "-"
+  !endif
+  !searchparse /file ${LICENSE_FILE} "Copyright " COPYRIGHT
+
   !define MUI_ICON ${ICON_FILE}
   !define PROJECTNAME "Open ModSim"
-  !define NAME "${PROJECTNAME} 2"
+  !define NAME "${PROJECTNAME} ${VERSIONMAJOR}"
   !define PUBLISHER "Alexandr Ananev"
   !define APPFILE "omodsim.exe"
   !define ICOFILE "omodsim.exe"
@@ -25,16 +35,6 @@
   !define MUI_FINISHPAGE_RUN_FUNCTION LaunchWithProfile
   !define MUI_FINISHPAGE_RUN_TEXT "Launch ${PROJECTNAME}"
   !define MUI_FINISHPAGE_RUN_CHECKED
-
-  !searchparse /noerrors ${VERSION} "" VERSIONMAJOR "." VERSIONMINOR "." VERSIONPATCH "." VERSIONBUILD
-  !ifndef VERSIONBUILD
-    !define VERSIONBUILD "0"
-  !endif
-  !ifndef VERSIONPATCH
-    !define VERSIONPATCH "0"
-    !searchparse ${VERSION} "" VERSIONMAJOR "." VERSIONMINOR "-"
-  !endif
-  !searchparse /file ${LICENSE_FILE} "Copyright " COPYRIGHT
 
 Function LaunchWithProfile
   StrCpy $0 "$INSTDIR\${APPFILE}"

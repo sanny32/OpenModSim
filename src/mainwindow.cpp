@@ -1444,7 +1444,12 @@ static QString getSettingsFilePath()
     if (canWriteFile(appFilePath))
         return appFilePath;
 
-    const QString relativePath = QDir(QString("%1 %2").arg(APP_NAME, APP_VERSION_MAJOR)).filePath(filename);
+    const QString relativePath =
+#ifdef Q_OS_WIN
+        filename;
+#else
+        QDir(APP_NAME).filePath(filename);
+#endif
 
     return QDir(QStandardPaths::writableLocation(QStandardPaths::ConfigLocation)).filePath(relativePath);
 }

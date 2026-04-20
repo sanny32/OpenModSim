@@ -96,7 +96,7 @@ elseif(PROJECT_BETARELEASE)
 endif()
 
 # Define compile definitions
-add_compile_definitions(APP_NAME="${PRODUCT_NAME}")
+add_compile_definitions(APP_NAME="${PRODUCT_NAME} ${VERSION_MAJOR}")
 add_compile_definitions(APP_DESCRIPTION="${PROJECT_DESCRIPTION}")
 add_compile_definitions(APP_VERSION_MAJOR="${VERSION_MAJOR}")
 add_compile_definitions(APP_VERSION_MINOR="${VERSION_MINOR}")
