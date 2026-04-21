@@ -526,6 +526,8 @@ if(APPLE)
     install(DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/../demos" DESTINATION .)
     install(DIRECTORY "${CMAKE_BINARY_DIR}/docs" DESTINATION .)
 elseif(LINUX)
+    set(EXECUTABLE_PATH "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_BINDIR}/${PROJECT_NAME}${VERSION_MAJOR}")
+
     configure_file(
         "${CMAKE_CURRENT_SOURCE_DIR}/omodsim.desktop.in"
         "${CMAKE_CURRENT_BINARY_DIR}/omodsim.desktop"
