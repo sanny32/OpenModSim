@@ -25,7 +25,6 @@ jobs:
       image: ubuntu:20.04
 
     env:
-      PRODUCT_NAME: "Open ModSim"
       QT_VERSION: "5.15.2"
       QT_HOST: "linux"
       QT_TARGET: "desktop"
@@ -64,10 +63,11 @@ jobs:
           echo "Ref name is: $REF_NAME"
           echo "Ref type is: $REF_TYPE"
 
-      - name: Extract version from CMakeLists.txt
-        id: extract_version
+      - name: Extract info from CMakeLists.txt
+        id: extract_info
         run: |
           FULL_VERSION=$(grep -oP 'VERSION\s+\K[0-9]+\.[0-9]+\.[0-9]+' src/CMakeLists.txt)
+          PRODUCT_NAME=$(grep -oP 'set\(PRODUCT_NAME\s+"\K[^"]+' src/CMakeLists.txt)
           VERSION_MAJOR=$(echo "$FULL_VERSION" | cut -d. -f1)
           BETA_RELEASE_ENABLED=false
           PROJECT_BETARELEASE=
@@ -88,11 +88,15 @@ jobs:
           fi
 
           echo "APP_VERSION=$APP_VERSION" >> $GITHUB_ENV
+          echo "PRODUCT_NAME=$PRODUCT_NAME" >> $GITHUB_ENV
           echo "VERSION_MAJOR=$VERSION_MAJOR" >> $GITHUB_ENV
-          echo "DEB_PACKAGE_NAME=${{ env.DEB_PACKAGE_PREFIX }}${VERSION_MAJOR}" >> $GITHUB_ENV
+          DEB_PACKAGE_NAME="${{ env.DEB_PACKAGE_PREFIX }}${VERSION_MAJOR}"
+          echo "DEB_PACKAGE_NAME=$DEB_PACKAGE_NAME" >> $GITHUB_ENV
           echo "PROJECT_BETARELEASE=$PROJECT_BETARELEASE" >> $GITHUB_ENV
           echo "BETA_RELEASE_FLAG=$BETA_RELEASE_ENABLED" >> $GITHUB_ENV
           echo "Extracted version: $APP_VERSION"
+          echo "Extracted product name: $PRODUCT_NAME"
+          echo "Deb package name: $DEB_PACKAGE_NAME"
 
       - name: Install dependencies
         run: |
