@@ -25,6 +25,7 @@ jobs:
       image: ubuntu:20.04
 
     env:
+      PRODUCT_NAME: "Open ModSim"
       QT_VERSION: "6.9.3"
       QT_HOST: "linux"
       QT_TARGET: "desktop"
@@ -37,7 +38,8 @@ jobs:
       BETA_RELEASE: "beta1"
       DEB_REVISION: "1"
       DEB_ARCH: "amd64"
-      DEB_PACKAGE_NAME: "qt6-omodsim2"
+      DEB_PACKAGE_PREFIX: "qt6-omodsim"
+      APP_INSTALL_PREFIX: "/opt/OpenModSim"
 
     steps:
       - name: Checkout repository
@@ -67,6 +69,7 @@ jobs:
         id: extract_version
         run: |
           FULL_VERSION=$(grep -oP 'VERSION\s+\K[0-9]+\.[0-9]+\.[0-9]+' src/CMakeLists.txt)
+          VERSION_MAJOR=$(echo "$FULL_VERSION" | cut -d. -f1)
           BETA_RELEASE_ENABLED=false
           PROJECT_BETARELEASE=
           TAG_NAME="${{ github.event.inputs.tag || github.ref_name }}"
@@ -86,6 +89,8 @@ jobs:
           fi
 
           echo "APP_VERSION=$APP_VERSION" >> $GITHUB_ENV
+          echo "VERSION_MAJOR=$VERSION_MAJOR" >> $GITHUB_ENV
+          echo "DEB_PACKAGE_NAME=${{ env.DEB_PACKAGE_PREFIX }}${VERSION_MAJOR}" >> $GITHUB_ENV
           echo "PROJECT_BETARELEASE=$PROJECT_BETARELEASE" >> $GITHUB_ENV
           echo "BETA_RELEASE_FLAG=$BETA_RELEASE_ENABLED" >> $GITHUB_ENV
           echo "Extracted version: $APP_VERSION"
@@ -208,17 +213,17 @@ jobs:
       - name: Bundle Qt libraries and plugins throught cqtdeployer
         run: |
           CQtDeployer -bin ${{ env.BUILD_DIR }}/omodsim \
-            -targetDir ${{ env.DEB_SRC_DIR }}/opt/OpenModSim2 \
+            -targetDir ${{ env.DEB_SRC_DIR }}${{ env.APP_INSTALL_PREFIX }}${{ env.VERSION_MAJOR }} \
             -libDir ${{ env.QT_INSTALL_DIR }}/${{ env.QT_VERSION }}/${{ env.CMAKE_COMPILER }}/lib \
             -ignore libcrypto.so.3,libmysqlclient.so.21,libpq.so.5,libssl.so.3,libqsqlmimer.so,libqsqlmysql.so,libqsqlodbc.so,libqsqlpsql.so,libqsqlibase.so,libqsqloci.so \
             -extraLibs icudata,icui18n,icuuc,libxcb-util  \
             -customScript 'export QT_QPA_PLATFORM=${{ env.QT_QPA_PLATFORM }}'
 
       - name: Copy OpenModsim docs
-        run: rsync -a "${{ env.BUILD_DIR }}/docs/" "${{ env.DEB_SRC_DIR }}/opt/OpenModSim2/docs/"
+        run: rsync -a "${{ env.BUILD_DIR }}/docs/" "${{ env.DEB_SRC_DIR }}${{ env.APP_INSTALL_PREFIX }}${{ env.VERSION_MAJOR }}/docs/"
 
       - name: Copy demos
-        run: rsync -a "demos/" "${{ env.DEB_SRC_DIR }}/opt/OpenModSim2/demos/"
+        run: rsync -a "demos/" "${{ env.DEB_SRC_DIR }}${{ env.APP_INSTALL_PREFIX }}${{ env.VERSION_MAJOR }}/demos/"
 
       - name: Create Debian control file
         run: |
@@ -258,23 +263,26 @@ jobs:
         run: |
           sed -e "s|@REF_NAME@|${{ env.REF_NAME }}|g" \
               -e "s|@REF_TYPE@|${{ env.REF_TYPE }}|g" \
-              -e "s|@COMPONENT_ID@|omodsim2.desktop|g" \
+              -e "s|@COMPONENT_ID@|omodsim${{ env.VERSION_MAJOR }}.desktop|g" \
+              -e "s|@APP_NAME@|${{ env.PRODUCT_NAME }} ${{ env.VERSION_MAJOR }}|g" \
+              -e "s|@APP_EXEC@|omodsim${{ env.VERSION_MAJOR }}|g" \
               -e "s|@APP_VERSION@|${{ env.APP_VERSION }}|g" \
               -e "s|@BUILD_DATE@|$(date +%Y-%m-%d)|g" \
-              ${{ env.DEB_SRC_DIR }}/usr/share/metainfo/omodsim.metainfo.xml.in > ${{ env.DEB_SRC_DIR }}/usr/share/metainfo/omodsim2.metainfo.xml
+              ${{ env.DEB_SRC_DIR }}/usr/share/metainfo/omodsim.metainfo.xml.in > ${{ env.DEB_SRC_DIR }}/usr/share/metainfo/omodsim${{ env.VERSION_MAJOR }}.metainfo.xml
           rm ${{ env.DEB_SRC_DIR }}/usr/share/metainfo/omodsim.metainfo.xml.in
-          cat -n ${{ env.DEB_SRC_DIR }}/usr/share/metainfo/omodsim2.metainfo.xml
+          cat -n ${{ env.DEB_SRC_DIR }}/usr/share/metainfo/omodsim${{ env.VERSION_MAJOR }}.metainfo.xml
 
       - name: Create desktop file
         run: |
-          sed -e "s|@APP_EXEC@|omodsim2|g" \
+          sed -e "s|@APP_NAME@|${{ env.PRODUCT_NAME }} ${{ env.VERSION_MAJOR }}|g" \
+              -e "s|@APP_EXEC@|omodsim${{ env.VERSION_MAJOR }}|g" \
               -e "s|@APP_ICON@|omodsim|g" \
-              ${{ env.DEB_SRC_DIR }}/usr/share/applications/omodsim.desktop.in > ${{ env.DEB_SRC_DIR }}/usr/share/applications/omodsim2.desktop
+              ${{ env.DEB_SRC_DIR }}/usr/share/applications/omodsim.desktop.in > ${{ env.DEB_SRC_DIR }}/usr/share/applications/omodsim${{ env.VERSION_MAJOR }}.desktop
           rm ${{ env.DEB_SRC_DIR }}/usr/share/applications/omodsim.desktop.in
-          cat -n ${{ env.DEB_SRC_DIR }}/usr/share/applications/omodsim2.desktop
+          cat -n ${{ env.DEB_SRC_DIR }}/usr/share/applications/omodsim${{ env.VERSION_MAJOR }}.desktop
 
       - name: Patch binary file
-        run: patchelf --set-rpath /opt/OpenModSim2/lib "${{ env.DEB_SRC_DIR }}/opt/OpenModSim2/bin/omodsim"
+        run: patchelf --set-rpath "${{ env.APP_INSTALL_PREFIX }}${{ env.VERSION_MAJOR }}/lib" "${{ env.DEB_SRC_DIR }}${{ env.APP_INSTALL_PREFIX }}${{ env.VERSION_MAJOR }}/bin/omodsim"
 
       - name: Build DEB package
         working-directory: ${{ env.DEB_SRC_DIR }}

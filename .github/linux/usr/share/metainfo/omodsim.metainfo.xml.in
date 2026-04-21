@@ -5,7 +5,7 @@
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>MIT</project_license>
 
-  <name>Open ModSim 2</name>
+  <name>@APP_NAME@</name>
   <summary>An Open Source Modbus Slave (Server) Utility</summary>
   <summary xml:lang="zh_TW">一个开源的 Modbus 从站（服务器）实用程序</summary>
   <summary xml:lang="zh_CN">一個開源的 Modbus 從站（伺服器）實用程序</summary>
@@ -55,7 +55,7 @@
   </screenshots>
 
   <provides>
-    <binary>omodsim2</binary>
+    <binary>@APP_EXEC@</binary>
   </provides>
 
   <url type="homepage">https://github.com/sanny32/OpenModSim</url>
