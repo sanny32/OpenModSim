@@ -521,27 +521,20 @@ echo ""
 
 NINJA_VER=$(ninja --version)
 if verlt "1.11.0" "$NINJA_VER"; then
-    echo "To install Open ModSim, run:"
+    echo "To install or uninstall Open ModSim, run:"
+    echo ""
+    echo -e "    cd $BUILD_DIR"
     echo ""
     if [ "$EUID" -eq 0 ]; then
-        echo -e "    cd $BUILD_DIR && ninja install"
+        echo -e "    ninja install"
+        echo -e "    ninja uninstall"
     else
         if [ "$CAN_SUDO" -eq 1 ]; then
-            echo -e "    cd $BUILD_DIR && sudo ninja install"
+            echo -e "    sudo ninja install"
+            echo -e "    sudo ninja uninstall"
         else
-            echo -e "    cd $BUILD_DIR && su -c 'ninja install'"
-        fi
-    fi
-    echo ""
-    echo "To uninstall Open ModSim, run:"
-    echo ""
-    if [ "$EUID" -eq 0 ]; then
-        echo -e "    cd $BUILD_DIR && ninja uninstall"
-    else
-        if [ "$CAN_SUDO" -eq 1 ]; then
-            echo -e "    cd $BUILD_DIR && sudo ninja uninstall"
-        else
-            echo -e "    cd $BUILD_DIR && su -c 'ninja uninstall'"
+            echo -e "    su -c 'ninja install'"
+            echo -e "    su -c 'ninja uninstall'"
         fi
     fi
     echo ""
