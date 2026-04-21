@@ -138,37 +138,37 @@
     </message>
     <message>
         <location filename="../controls/applogoutput.cpp" line="199"/>
-        <location filename="../controls/applogoutput.cpp" line="371"/>
+        <location filename="../controls/applogoutput.cpp" line="374"/>
         <source>Copy All</source>
         <translation>全部複製</translation>
     </message>
     <message>
-        <location filename="../controls/applogoutput.cpp" line="362"/>
+        <location filename="../controls/applogoutput.cpp" line="365"/>
         <source>Copy</source>
         <translation>複製</translation>
     </message>
     <message>
-        <location filename="../controls/applogoutput.cpp" line="378"/>
+        <location filename="../controls/applogoutput.cpp" line="381"/>
         <source>Export...</source>
         <translation>匯出...</translation>
     </message>
     <message>
-        <location filename="../controls/applogoutput.cpp" line="384"/>
+        <location filename="../controls/applogoutput.cpp" line="387"/>
         <source>Clear</source>
         <translation>清除</translation>
     </message>
     <message>
-        <location filename="../controls/applogoutput.cpp" line="408"/>
+        <location filename="../controls/applogoutput.cpp" line="411"/>
         <source>Text files (*.txt)</source>
         <translation>文字檔案 (*.txt)</translation>
     </message>
     <message>
-        <location filename="../controls/applogoutput.cpp" line="413"/>
+        <location filename="../controls/applogoutput.cpp" line="416"/>
         <source>Export</source>
         <translation>匯出</translation>
     </message>
     <message>
-        <location filename="../controls/applogoutput.cpp" line="413"/>
+        <location filename="../controls/applogoutput.cpp" line="416"/>
         <source>Cannot open file for writing:
 %1</source>
         <translation>無法開啟檔案進行寫入：
@@ -2593,7 +2593,7 @@ Script.onInit(()=&gt;{
     </message>
     <message>
         <location filename="../mainwindow.ui" line="244"/>
-        <location filename="../mainwindow.cpp" line="1730"/>
+        <location filename="../mainwindow.cpp" line="1741"/>
         <source>Save Project</source>
         <translation>儲存專案</translation>
     </message>
@@ -2767,8 +2767,8 @@ Script.onInit(()=&gt;{
     <message>
         <location filename="../mainwindow.ui" line="526"/>
         <location filename="../mainwindow.ui" line="529"/>
-        <location filename="../mainwindow.cpp" line="270"/>
-        <location filename="../mainwindow.cpp" line="505"/>
+        <location filename="../mainwindow.cpp" line="271"/>
+        <location filename="../mainwindow.cpp" line="516"/>
         <source>Script Help</source>
         <translation>指令稿說明</translation>
     </message>
@@ -2789,50 +2789,50 @@ Script.onInit(()=&gt;{
         <translation>狀態列</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="761"/>
+        <location filename="../mainwindow.cpp" line="772"/>
         <source>All files (*)</source>
         <translation>所有檔案 (*)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="228"/>
-        <location filename="../mainwindow.cpp" line="507"/>
+        <location filename="../mainwindow.cpp" line="229"/>
+        <location filename="../mainwindow.cpp" line="518"/>
         <source>Open Recent</source>
         <translation>最近開啟</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="229"/>
-        <location filename="../mainwindow.cpp" line="1866"/>
+        <location filename="../mainwindow.cpp" line="230"/>
+        <location filename="../mainwindow.cpp" line="1877"/>
         <source>Clear List</source>
         <translation>清除清單</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="254"/>
-        <location filename="../mainwindow.cpp" line="504"/>
+        <location filename="../mainwindow.cpp" line="255"/>
+        <location filename="../mainwindow.cpp" line="515"/>
         <source>Project</source>
         <translation>專案</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="308"/>
-        <location filename="../mainwindow.cpp" line="506"/>
+        <location filename="../mainwindow.cpp" line="309"/>
+        <location filename="../mainwindow.cpp" line="517"/>
         <source>Output</source>
         <translation>輸出</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="760"/>
-        <location filename="../mainwindow.cpp" line="1760"/>
+        <location filename="../mainwindow.cpp" line="771"/>
+        <location filename="../mainwindow.cpp" line="1771"/>
         <source>Project files (*.omp)</source>
         <translation>專案檔案 (*.omp)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1380"/>
-        <location filename="../mainwindow.cpp" line="1788"/>
+        <location filename="../mainwindow.cpp" line="1391"/>
+        <location filename="../mainwindow.cpp" line="1799"/>
         <source>Untitled</source>
         <translation>未命名</translation>
     </message>
     <message>
         <location filename="../applogger.cpp" line="119"/>
-        <location filename="../mainwindow.cpp" line="510"/>
-        <location filename="../mainwindow.cpp" line="1562"/>
+        <location filename="../mainwindow.cpp" line="521"/>
+        <location filename="../mainwindow.cpp" line="1573"/>
         <source>Address Base</source>
         <translation>地址基準</translation>
     </message>
@@ -3126,7 +3126,7 @@ Script.onInit(()=&gt;{
         <translation>腳本已啟動：%1（模式：%2）</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1131"/>
+        <location filename="../mainwindow.cpp" line="1142"/>
         <source>Move to Other Panel</source>
         <translation>移至其他面板</translation>
     </message>
@@ -3148,12 +3148,12 @@ Script.onInit(()=&gt;{
         <translation>十六進位檢視</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1731"/>
+        <location filename="../mainwindow.cpp" line="1742"/>
         <source>Save project before closing?</source>
         <translation>關閉前儲存專案？</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1854"/>
+        <location filename="../mainwindow.cpp" line="1865"/>
         <source>No Recent Projects</source>
         <translation>無最近專案</translation>
     </message>
@@ -3163,7 +3163,7 @@ Script.onInit(()=&gt;{
         <translation>資料</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1089"/>
+        <location filename="../mainwindow.cpp" line="1100"/>
         <source>JavaScript files (*.js);;All files (*)</source>
         <translation>JavaScript檔案 (*.js);;所有檔案 (*)</translation>
     </message>

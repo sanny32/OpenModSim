@@ -291,6 +291,9 @@ void AppLogOutput::addEvent(const QString& text, EventType type)
 
     updateFilterButtons();
     ui->listWidget->scrollToBottom();
+
+    if (type != EventType::Info)
+        emit openRequested();
 }
 
 ///

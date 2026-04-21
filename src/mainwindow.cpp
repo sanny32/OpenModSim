@@ -20,6 +20,7 @@
 #include "mdiareaex.h"
 #include "formscriptview.h"
 #include "formdatamapview.h"
+#include "applogoutput.h"
 #include "applogger.h"
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
@@ -314,6 +315,16 @@ MainWindow::MainWindow(const QString& profile, bool useSession, const QString& s
 
     connect(_outputPanel, &OutputPanel::collapse, this, [this]() {
         _consoleDockWidget->setVisible(false);
+    });
+    connect(_outputPanel->appLog(), &AppLogOutput::openRequested, this, [this]() {
+        const bool wasHidden = !_consoleDockWidget->isVisible();
+        _consoleDockWidget->setVisible(true);
+        _outputPanel->switchToAppLog();
+        if (wasHidden)
+            _consoleDockWidget->raise();
+    });
+    connect(_consoleDockWidget, &QDockWidget::visibilityChanged, this, [this](bool visible) {
+        ui->actionOutputWindow->setChecked(visible);
     });
 
     ui->mdiArea->setActivationOrder(QMdiArea::ActivationHistoryOrder);

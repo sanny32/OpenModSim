@@ -33,6 +33,7 @@ public slots:
 
 signals:
     void collapse();
+    void openRequested();
 
 protected:
     void changeEvent(QEvent* event) override;

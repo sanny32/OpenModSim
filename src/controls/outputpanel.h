@@ -23,6 +23,7 @@ public:
     AppLogOutput* appLog() const;
     ConsoleOutput* jsConsole() const;
 
+    void switchToAppLog();
     void switchToJsConsole();
 
 signals:

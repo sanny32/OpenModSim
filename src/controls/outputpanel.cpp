@@ -52,6 +52,14 @@ ConsoleOutput* OutputPanel::jsConsole() const
 }
 
 ///
+/// \brief OutputPanel::switchToAppLog
+///
+void OutputPanel::switchToAppLog()
+{
+    ui->tabWidget->setCurrentWidget(ui->appLog);
+}
+
+///
 /// \brief OutputPanel::switchToJsConsole
 ///
 void OutputPanel::switchToJsConsole()
