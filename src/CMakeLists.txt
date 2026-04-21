@@ -15,7 +15,6 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_INTERPROCEDURAL_OPTIMIZATION ON)
 set(PRODUCT_NAME "Open ModSim")
-set(EXECUTABLE_PATH "${CMAKE_INSTALL_PREFIX}/bin/${PROJECT_NAME}")
 set(PROJECT_BETARELEASE "" CACHE STRING "Beta release suffix, e.g. beta1")
 
 # Split version to major, minor, patch
@@ -23,6 +22,8 @@ string(REPLACE "." ";" VERSION_LIST ${PROJECT_VERSION})
 list(GET VERSION_LIST 0 VERSION_MAJOR)
 list(GET VERSION_LIST 1 VERSION_MINOR)
 list(GET VERSION_LIST 2 VERSION_PATCH)
+set(EXECUTABLE_NAME "${PROJECT_NAME}${VERSION_MAJOR}")
+set(EXECUTABLE_PATH "${CMAKE_INSTALL_PREFIX}/bin/${EXECUTABLE_NAME}")
 
 # Define current year
 string(TIMESTAMP CURRENT_YEAR "%Y")
@@ -529,7 +530,7 @@ elseif(LINUX)
         @ONLY
     )
 
-    install(TARGETS ${PROJECT_NAME} RUNTIME DESTINATION bin)
+    install(PROGRAMS "$<TARGET_FILE:${PROJECT_NAME}>" DESTINATION bin RENAME "${PROJECT_NAME}${PROJECT_VERSION_MAJOR}")
     install(FILES res/omodsim16.png DESTINATION share/icons/hicolor/16x16/apps RENAME omodsim.png)
     install(FILES res/omodsim32.png DESTINATION share/icons/hicolor/32x32/apps RENAME omodsim.png)
     install(FILES res/omodsim64.png DESTINATION share/icons/hicolor/64x64/apps RENAME omodsim.png)
@@ -541,7 +542,7 @@ elseif(LINUX)
     install(FILES res/omp256.png DESTINATION share/icons/hicolor/256x256/mimetypes RENAME omodsim-project.png)
     install(FILES res/omp.svg DESTINATION share/icons/hicolor/scalable/mimetypes RENAME omodsim-project.svg)
     install(FILES "${CMAKE_CURRENT_SOURCE_DIR}/omodsim-project.xml" DESTINATION share/mime/packages)
-    install(FILES "${CMAKE_CURRENT_BINARY_DIR}/omodsim.desktop" DESTINATION share/applications)
+    install(FILES "${CMAKE_CURRENT_BINARY_DIR}/omodsim.desktop" DESTINATION share/applications RENAME "omodsim${PROJECT_VERSION_MAJOR}.desktop")
 
     install(CODE "execute_process(COMMAND update-mime-database ${CMAKE_INSTALL_PREFIX}/share/mime)")
     install(CODE "execute_process(COMMAND update-desktop-database -q ${CMAKE_INSTALL_PREFIX}/share/applications)")
