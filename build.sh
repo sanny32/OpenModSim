@@ -533,4 +533,16 @@ if verlt "1.11.0" "$NINJA_VER"; then
         fi
     fi
     echo ""
+    echo "To uninstall Open ModSim, run:"
+    echo ""
+    if [ "$EUID" -eq 0 ]; then
+        echo -e "    cd $BUILD_DIR && ninja uninstall"
+    else
+        if [ "$CAN_SUDO" -eq 1 ]; then
+            echo -e "    cd $BUILD_DIR && sudo ninja uninstall"
+        else
+            echo -e "    cd $BUILD_DIR && su -c 'ninja uninstall'"
+        fi
+    fi
+    echo ""
 fi

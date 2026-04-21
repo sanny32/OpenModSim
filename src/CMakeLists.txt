@@ -550,6 +550,7 @@ elseif(LINUX)
     install(FILES "${CMAKE_CURRENT_BINARY_DIR}/omodsim.desktop" DESTINATION share/applications RENAME "omodsim${PROJECT_VERSION_MAJOR}.desktop")
 
     install(CODE "execute_process(COMMAND update-mime-database ${CMAKE_INSTALL_PREFIX}/share/mime)")
+    install(CODE "execute_process(COMMAND xdg-desktop-menu forceupdate)")
     install(CODE "execute_process(COMMAND update-desktop-database -q ${CMAKE_INSTALL_PREFIX}/share/applications)")
     install(CODE "execute_process(COMMAND gtk-update-icon-cache -q -t -f ${CMAKE_INSTALL_PREFIX}/share/icons/hicolor)")
 endif()
