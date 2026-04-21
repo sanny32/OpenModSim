@@ -34,6 +34,48 @@ constexpr const char* kLastProjectPathKey = "LastProjectPath";
 constexpr int kMaxRecentProjects = 10;
 
 ///
+/// \brief findExistingFile
+/// \param candidates
+/// \return
+///
+QString findExistingFile(const QStringList& candidates)
+{
+    for (const QString& candidate : candidates) {
+        if (QFile::exists(candidate))
+            return QDir::cleanPath(candidate);
+    }
+
+    return {};
+}
+
+///
+/// \brief findHelpFile
+/// \return
+///
+QString findHelpFile()
+{
+    const QString appDir = QApplication::applicationDirPath();
+    QStringList candidates = {
+        appDir + "/docs/jshelp.qhc",
+        appDir + "/../docs/jshelp.qhc",
+        appDir + "/../../../docs/jshelp.qhc"
+    };
+
+#ifdef Q_OS_LINUX
+    candidates.append(appDir + "/../share/doc/omodsim/jshelp.qhc");
+
+    const QString installedFile = QStandardPaths::locate(
+        QStandardPaths::GenericDataLocation,
+        QStringLiteral("doc/omodsim/jshelp.qhc")
+    );
+    if (!installedFile.isEmpty())
+        candidates.append(installedFile);
+#endif
+
+    return findExistingFile(candidates);
+}
+
+///
 /// \brief newFormKindFromSetting
 /// \param value
 /// \return
@@ -175,7 +217,7 @@ MainWindow::MainWindow(const QString& profile, bool useSession, const QString& s
     ui->setupUi(this);
 
     setLanguage(_lang);
-    setWindowTitle(APP_NAME);
+    setWindowTitle(APP_PRODUCT_NAME);
     setUnifiedTitleAndToolBarOnMac(true);
     setStatusBar(new MainStatusBar(_mbMultiServer, this));
 
@@ -222,10 +264,7 @@ MainWindow::MainWindow(const QString& profile, bool useSession, const QString& s
     connect(dispatcher, &QAbstractEventDispatcher::awake, this, &MainWindow::on_awake);
 
     _helpWidget = new HelpWidget(this);
-    auto helpfile = QApplication::applicationDirPath() + "/docs/jshelp.qhc";
-    if(!QFile::exists(helpfile)){
-        helpfile = QApplication::applicationDirPath() + "/../docs/jshelp.qhc";
-    }
+    const auto helpfile = findHelpFile();
     _helpWidget->setHelp(helpfile);
 
     _helpDockWidget = new QDockWidget(tr("Script Help"), this);
@@ -1352,9 +1391,9 @@ void MainWindow::updateProjectWindowTitle()
     const QString name = projectName();
 
     if(name.isEmpty())
-        setWindowTitle(modifiedMark + APP_NAME);
+        setWindowTitle(modifiedMark + APP_PRODUCT_NAME);
     else
-        setWindowTitle(QString("%1%2 - %3").arg(modifiedMark, APP_NAME, name));
+        setWindowTitle(QString("%1%2 - %3").arg(modifiedMark, APP_PRODUCT_NAME, name));
 }
 
 ///

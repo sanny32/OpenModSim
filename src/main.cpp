@@ -85,7 +85,7 @@ static inline void showVersion()
 {
     const auto version = QString("%1\n").arg(APP_VERSION);
     if(!isConsoleOutputAvailable()){
-        QMessageBox msg(QMessageBox::Information, APP_NAME, qPrintable(version));
+        QMessageBox msg(QMessageBox::Information, APP_PRODUCT_NAME, qPrintable(version));
         msg.setFont(defaultMonospaceFont());
         msg.exec();
     }
@@ -102,7 +102,7 @@ static inline void showVersion()
 static inline void showHelp(const QString& helpText)
 {
     if(!isConsoleOutputAvailable()){
-        QMessageBox msg(QMessageBox::Information, APP_NAME, qPrintable(helpText));
+        QMessageBox msg(QMessageBox::Information, APP_PRODUCT_NAME, qPrintable(helpText));
         msg.setFont(defaultMonospaceFont());
         msg.exec();
     }
@@ -119,7 +119,7 @@ static inline void showHelp(const QString& helpText)
 static void showErrorMessage(const QString &message)
 {
     if(!isConsoleOutputAvailable()){
-        QMessageBox msg(QMessageBox::Critical, APP_NAME, qPrintable(message));
+        QMessageBox msg(QMessageBox::Critical, APP_PRODUCT_NAME, qPrintable(message));
         msg.setFont(defaultMonospaceFont());
         msg.exec();
     }

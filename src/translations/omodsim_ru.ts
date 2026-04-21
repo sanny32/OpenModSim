@@ -1558,7 +1558,7 @@
         <translation>Больше не показывать этот диалог</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwelcome.cpp" line="23"/>
+        <location filename="../dialogs/dialogwelcome.cpp" line="40"/>
         <source>Welcome to %1</source>
         <translation>Добро пожаловать в %1</translation>
     </message>
@@ -2613,7 +2613,7 @@ Script.onInit(()=&gt;{
     </message>
     <message>
         <location filename="../mainwindow.ui" line="244"/>
-        <location filename="../mainwindow.cpp" line="1691"/>
+        <location filename="../mainwindow.cpp" line="1730"/>
         <source>Save Project</source>
         <translation>Сохранить проект</translation>
     </message>
@@ -2767,8 +2767,8 @@ Script.onInit(()=&gt;{
     <message>
         <location filename="../mainwindow.ui" line="526"/>
         <location filename="../mainwindow.ui" line="529"/>
-        <location filename="../mainwindow.cpp" line="231"/>
-        <location filename="../mainwindow.cpp" line="466"/>
+        <location filename="../mainwindow.cpp" line="270"/>
+        <location filename="../mainwindow.cpp" line="505"/>
         <source>Script Help</source>
         <translation>Справка по скриптам</translation>
     </message>
@@ -2789,50 +2789,50 @@ Script.onInit(()=&gt;{
         <translation>Строка состояния</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="722"/>
+        <location filename="../mainwindow.cpp" line="761"/>
         <source>All files (*)</source>
         <translation>Все файлы (*)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="186"/>
-        <location filename="../mainwindow.cpp" line="468"/>
+        <location filename="../mainwindow.cpp" line="228"/>
+        <location filename="../mainwindow.cpp" line="507"/>
         <source>Open Recent</source>
         <translation>Открыть недавние</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="187"/>
-        <location filename="../mainwindow.cpp" line="1827"/>
+        <location filename="../mainwindow.cpp" line="229"/>
+        <location filename="../mainwindow.cpp" line="1866"/>
         <source>Clear List</source>
         <translation>Очистить список</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="212"/>
-        <location filename="../mainwindow.cpp" line="465"/>
+        <location filename="../mainwindow.cpp" line="254"/>
+        <location filename="../mainwindow.cpp" line="504"/>
         <source>Project</source>
         <translation>Проект</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="269"/>
-        <location filename="../mainwindow.cpp" line="467"/>
+        <location filename="../mainwindow.cpp" line="308"/>
+        <location filename="../mainwindow.cpp" line="506"/>
         <source>Output</source>
         <translation>Вывод</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="721"/>
-        <location filename="../mainwindow.cpp" line="1721"/>
+        <location filename="../mainwindow.cpp" line="760"/>
+        <location filename="../mainwindow.cpp" line="1760"/>
         <source>Project files (*.omp)</source>
         <translation>Файлы проекта (*.omp)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1341"/>
-        <location filename="../mainwindow.cpp" line="1749"/>
+        <location filename="../mainwindow.cpp" line="1380"/>
+        <location filename="../mainwindow.cpp" line="1788"/>
         <source>Untitled</source>
         <translation>Без имени</translation>
     </message>
     <message>
         <location filename="../applogger.cpp" line="119"/>
-        <location filename="../mainwindow.cpp" line="471"/>
-        <location filename="../mainwindow.cpp" line="1523"/>
+        <location filename="../mainwindow.cpp" line="510"/>
+        <location filename="../mainwindow.cpp" line="1562"/>
         <source>Address Base</source>
         <translation>Адресация</translation>
     </message>
@@ -3126,7 +3126,7 @@ Script.onInit(()=&gt;{
         <translation>Скрипт запущен: %1 (режим: %2)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1092"/>
+        <location filename="../mainwindow.cpp" line="1131"/>
         <source>Move to Other Panel</source>
         <translation>Переместить на другую панель</translation>
     </message>
@@ -3148,12 +3148,12 @@ Script.onInit(()=&gt;{
         <translation>Шестнадцатиричный режим</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1692"/>
+        <location filename="../mainwindow.cpp" line="1731"/>
         <source>Save project before closing?</source>
         <translation>Сохранить проект перед закрытием?</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1815"/>
+        <location filename="../mainwindow.cpp" line="1854"/>
         <source>No Recent Projects</source>
         <translation>Нет недавних проектов</translation>
     </message>
@@ -3163,7 +3163,7 @@ Script.onInit(()=&gt;{
         <translation>Данные</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1050"/>
+        <location filename="../mainwindow.cpp" line="1089"/>
         <source>JavaScript files (*.js);;All files (*)</source>
         <translation>Файлы JavaScript (*.js);;Все файлы (*)</translation>
     </message>

@@ -2,12 +2,28 @@
 #include <QFont>
 #include <QListWidgetItem>
 #include <QCoreApplication>
+#include <QStandardPaths>
 #include "dialogwelcome.h"
 #include "ui_dialogwelcome.h"
 
 namespace {
 const char* kDemoPlcSimulator  = "demo_plc_simulator.omp";
 const char* kDemoWaveGenerator = "demo_wave_generator.omp";
+
+///
+/// \brief findExistingDirectory
+/// \param candidates
+/// \return
+///
+QString findExistingDirectory(const QStringList& candidates)
+{
+    for (const QString& candidate : candidates) {
+        if (QDir(candidate).exists())
+            return QDir::cleanPath(candidate);
+    }
+
+    return {};
+}
 }
 
 ///
@@ -20,7 +36,8 @@ DialogWelcome::DialogWelcome(const QStringList& recentProjects, QWidget *parent)
     ui(new Ui::DialogWelcome)
 {
     ui->setupUi(this);
-    setWindowTitle(tr("Welcome to %1").arg(APP_NAME));
+    ui->labelAppName->setText(APP_PRODUCT_NAME);
+    setWindowTitle(tr("Welcome to %1").arg(APP_PRODUCT_NAME));
 
     // Collect all paths: recent projects first, then demos not yet in the list
     QStringList allPaths;
@@ -76,23 +93,25 @@ bool DialogWelcome::dontShowAgain() const
 QString DialogWelcome::demosDir()
 {
     const QString appDir = QCoreApplication::applicationDirPath();
+    QStringList candidates = {
+        appDir + "/demos/projects",
+        appDir + "/../demos/projects",
+        appDir + "/../../../demos/projects"
+    };
 
-    // Windows / dev: demos/ next to the executable
-    QString path = appDir + "/demos/projects";
-    if (QDir(path).exists())
-        return QDir::cleanPath(path);
+#ifdef Q_OS_LINUX
+    candidates.append(appDir + "/../share/omodsim/demos/projects");
 
-    // Linux installed: <prefix>/bin/../demos/projects
-    path = appDir + "/../demos/projects";
-    if (QDir(path).exists())
-        return QDir::cleanPath(path);
+    const QString installedDir = QStandardPaths::locate(
+        QStandardPaths::GenericDataLocation,
+        QStringLiteral("omodsim/demos/projects"),
+        QStandardPaths::LocateDirectory
+    );
+    if (!installedDir.isEmpty())
+        candidates.append(installedDir);
+#endif
 
-    // macOS bundle: Contents/MacOS/../../../demos/projects
-    path = appDir + "/../../../demos/projects";
-    if (QDir(path).exists())
-        return QDir::cleanPath(path);
-
-    return {};
+    return findExistingDirectory(candidates);
 }
 
 ///

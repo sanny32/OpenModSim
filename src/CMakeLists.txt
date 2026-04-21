@@ -5,6 +5,8 @@ project(omodsim
         DESCRIPTION "An Open Source Modbus Slave (Server) Utility"
         LANGUAGES CXX)
 
+include(GNUInstallDirs)
+
 option(USE_QT5 "Force Qt5 usage" OFF)
 option(USE_QT6 "Force Qt6 usage" OFF)
 
@@ -22,8 +24,6 @@ string(REPLACE "." ";" VERSION_LIST ${PROJECT_VERSION})
 list(GET VERSION_LIST 0 VERSION_MAJOR)
 list(GET VERSION_LIST 1 VERSION_MINOR)
 list(GET VERSION_LIST 2 VERSION_PATCH)
-set(EXECUTABLE_NAME "${PROJECT_NAME}${VERSION_MAJOR}")
-set(EXECUTABLE_PATH "${CMAKE_INSTALL_PREFIX}/bin/${EXECUTABLE_NAME}")
 
 # Define current year
 string(TIMESTAMP CURRENT_YEAR "%Y")
@@ -98,6 +98,7 @@ endif()
 
 # Define compile definitions
 add_compile_definitions(APP_NAME="${PRODUCT_NAME} ${VERSION_MAJOR}")
+add_compile_definitions(APP_PRODUCT_NAME="${PRODUCT_NAME}")
 add_compile_definitions(APP_DESCRIPTION="${PROJECT_DESCRIPTION}")
 add_compile_definitions(APP_VERSION_MAJOR="${VERSION_MAJOR}")
 add_compile_definitions(APP_VERSION_MINOR="${VERSION_MINOR}")
@@ -507,8 +508,6 @@ add_custom_command(
 add_custom_target(helpgenerator ALL DEPENDS ${JSHELP_QCH} ${JSHELP_QHC})
 add_dependencies(${PROJECT_NAME} helpgenerator)
 
-install(DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/../demos" DESTINATION .)
-install(DIRECTORY "${CMAKE_BINARY_DIR}/docs" DESTINATION .)
 
 configure_file(
     "${CMAKE_CURRENT_SOURCE_DIR}/cmake_uninstall.cmake.in"
@@ -521,14 +520,20 @@ add_custom_target(uninstall
     COMMENT "Uninstalling ${PROJECT_NAME}"
 )
 
+# Installation rules
 if(APPLE)
     install(TARGETS ${PROJECT_NAME} BUNDLE DESTINATION .)
+    install(DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/../demos" DESTINATION .)
+    install(DIRECTORY "${CMAKE_BINARY_DIR}/docs" DESTINATION .)
 elseif(LINUX)
     configure_file(
         "${CMAKE_CURRENT_SOURCE_DIR}/omodsim.desktop.in"
         "${CMAKE_CURRENT_BINARY_DIR}/omodsim.desktop"
         @ONLY
     )
+
+    install(DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/../demos/" DESTINATION "${CMAKE_INSTALL_DATADIR}/${PROJECT_NAME}/demos")
+    install(DIRECTORY "${CMAKE_BINARY_DIR}/docs/" DESTINATION "${CMAKE_INSTALL_DOCDIR}")
 
     install(PROGRAMS "$<TARGET_FILE:${PROJECT_NAME}>" DESTINATION bin RENAME "${PROJECT_NAME}${PROJECT_VERSION_MAJOR}")
     install(FILES res/omodsim16.png DESTINATION share/icons/hicolor/16x16/apps RENAME omodsim.png)
