@@ -140,6 +140,9 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
     a.setApplicationName(APP_NAME);
     a.setApplicationVersion(APP_VERSION);
+#ifdef Q_OS_LINUX
+    a.setDesktopFileName(QStringLiteral("omodsim%1").arg(APP_VERSION_MAJOR));
+#endif
 
 #ifdef Q_OS_WIN
     a.setStyle("windowsvista");
