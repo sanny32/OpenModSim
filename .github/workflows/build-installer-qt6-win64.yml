@@ -73,6 +73,7 @@ jobs:
           for /f "tokens=1,2 delims=." %%a in ("%APP_VERSION%") do (
             echo APP_VERSION=%%a.%%b-dev>>%GITHUB_ENV%
           )
+          exit /b 0
         shell: cmd
 
       - name: Select signing policy
@@ -205,6 +206,7 @@ jobs:
           ) ELSE (
             echo "No qml folder found — nothing to remove"
           )
+          exit /b 0
         shell: cmd
 
       - name: Install NSIS

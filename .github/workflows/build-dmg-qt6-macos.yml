@@ -31,7 +31,8 @@ jobs:
       CMAKE_GENERATOR: "Ninja"
       BUILD_TYPE: "Release"
       BETA_RELEASE: "beta1"
-      DMG_PACKAGE_NAME: "qt6-omodsim2"
+      DMG_PACKAGE_PREFIX: "qt6-omodsim"
+      DMG_STAGING_DIR: "${{ github.workspace }}/dmg-root"
 
     steps:
       - name: Checkout repository
@@ -58,6 +59,7 @@ jobs:
       - name: Extract version from CMakeLists.txt
         run: |
           FULL_VERSION=$(grep -oE 'VERSION\s+[0-9]+\.[0-9]+\.[0-9]+' src/CMakeLists.txt | grep -oE '[0-9]+\.[0-9]+\.[0-9]+')
+          APP_MAJOR_VERSION=$(echo "$FULL_VERSION" | cut -d. -f1)
           BETA_RELEASE_ENABLED=false
           PROJECT_BETARELEASE=
           TAG_NAME="${{ github.event.inputs.tag || github.ref_name }}"
@@ -77,6 +79,7 @@ jobs:
           fi
 
           echo "APP_VERSION=$APP_VERSION" >> $GITHUB_ENV
+          echo "APP_MAJOR_VERSION=$APP_MAJOR_VERSION" >> $GITHUB_ENV
           echo "PROJECT_BETARELEASE=$PROJECT_BETARELEASE" >> $GITHUB_ENV
           echo "BETA_RELEASE_FLAG=$BETA_RELEASE_ENABLED" >> $GITHUB_ENV
           echo "Extracted version: $APP_VERSION"
@@ -117,35 +120,30 @@ jobs:
             -G "${{ env.CMAKE_GENERATOR }}" \
             -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} \
             -DCMAKE_PREFIX_PATH=${{ env.QT_INSTALL_DIR }}/${{ env.QT_VERSION }}/macos \
+            -DCMAKE_INSTALL_PREFIX=/Applications \
             -DUSE_QT6=ON \
             -DPROJECT_BETARELEASE=${{ env.PROJECT_BETARELEASE }}
 
       - name: Build
         run: cmake --build ${{ env.BUILD_DIR }} --config ${{ env.BUILD_TYPE }} --parallel
 
-      - name: Deploy Qt dependencies using macdeployqt
+      - name: Install app bundle into DMG staging directory
         run: |
-          "${{ env.QT_INSTALL_DIR }}/${{ env.QT_VERSION }}/macos/bin/macdeployqt" \
-            "${{ env.BUILD_DIR }}/omodsim.app" \
-            -always-overwrite
+          rm -rf "${{ env.DMG_STAGING_DIR }}"
+          mkdir -p "${{ env.DMG_STAGING_DIR }}"
+          cmake --install "${{ env.BUILD_DIR }}" --config "${{ env.BUILD_TYPE }}" --prefix "${{ env.DMG_STAGING_DIR }}"
 
-      - name: Copy docs into app bundle
+      - name: Add Applications symlink to DMG staging directory
         run: |
-          mkdir -p "${{ env.BUILD_DIR }}/omodsim.app/Contents/Resources/docs"
-          cp -R "${{ env.BUILD_DIR }}/docs/"* "${{ env.BUILD_DIR }}/omodsim.app/Contents/Resources/docs/"
-
-      - name: Copy demos into app bundle
-        run: |
-          mkdir -p "${{ env.BUILD_DIR }}/omodsim.app/Contents/Resources/demos"
-          cp -R "demos/"* "${{ env.BUILD_DIR }}/omodsim.app/Contents/Resources/demos/"
+          ln -s /Applications "${{ env.DMG_STAGING_DIR }}/Applications"
 
       - name: Create DMG
         run: |
-          DMG_NAME="${{ env.DMG_PACKAGE_NAME }}_${{ env.APP_VERSION }}_macos.dmg"
+          DMG_NAME="${{ env.DMG_PACKAGE_PREFIX }}${{ env.APP_MAJOR_VERSION }}_${{ env.APP_VERSION }}_macos.dmg"
           echo "DMG_NAME=$DMG_NAME" >> $GITHUB_ENV
 
           hdiutil create -volname "Open ModSim ${{ env.APP_VERSION }}" \
-            -srcfolder "${{ env.BUILD_DIR }}/omodsim.app" \
+            -srcfolder "${{ env.DMG_STAGING_DIR }}" \
             -ov -format UDZO \
             "$DMG_NAME"
 

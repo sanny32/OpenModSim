@@ -209,6 +209,7 @@ jobs:
           ) ELSE (
             echo "No qml folder found - nothing to remove"
           )
+          exit /b 0
         shell: cmd
 
       - name: Install NSIS
