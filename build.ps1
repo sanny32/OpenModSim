@@ -515,7 +515,7 @@ Set-Location ..
 Write-Host ""
 Write-Host "=== Build finished successfully ==="
 Write-Host ""
-Write-Host "To install or uninstall Open ModSim, run as an Admini:"
+Write-Host "To install or uninstall Open ModSim, run:"
 Write-Host ""
 Write-Host "    cd $BuildDir"
 Write-Host ""
