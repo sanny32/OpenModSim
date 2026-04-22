@@ -23,7 +23,16 @@ else {
 }
 
 $QtMajorVersion = ($QtVersion -replace '^(\d+)\..*$', '$1')
-$InstallPrefix = "C:/Program Files/Open ModSim $QtMajorVersion"
+$SourceCMakeLists = Join-Path $PSScriptRoot "src\CMakeLists.txt"
+$AppVersionMatch = Select-String -Path $SourceCMakeLists -Pattern '^\s*VERSION\s+(\d+)\.(\d+)\.(\d+)' | Select-Object -First 1
+
+if (-not $AppVersionMatch) {
+    Write-Error "Can't detect application version from $SourceCMakeLists"
+    exit 1
+}
+
+$AppMajorVersion = $AppVersionMatch.Matches[0].Groups[1].Value
+$InstallPrefix = "C:/Program Files/Open ModSim $AppMajorVersion"
 
 $ErrorActionPreference = "Stop"
 
