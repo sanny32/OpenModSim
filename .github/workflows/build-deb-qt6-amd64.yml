@@ -280,7 +280,7 @@ jobs:
         run: |
           sed -e "s|@APP_NAME@|${{ env.PRODUCT_NAME }} ${{ env.VERSION_MAJOR }}|g" \
               -e "s|@APP_EXEC@|omodsim${{ env.VERSION_MAJOR }}|g" \
-              -e "s|@APP_ICON@|omodsim|g" \
+              -e "s|@APP_ICON@|omodsim${{ env.VERSION_MAJOR }}|g" \
               ${{ env.DEB_SRC_DIR }}/usr/share/applications/omodsim.desktop.in > ${{ env.DEB_SRC_DIR }}/usr/share/applications/omodsim${{ env.VERSION_MAJOR }}.desktop
           rm ${{ env.DEB_SRC_DIR }}/usr/share/applications/omodsim.desktop.in
           cat -n ${{ env.DEB_SRC_DIR }}/usr/share/applications/omodsim${{ env.VERSION_MAJOR }}.desktop
