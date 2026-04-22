@@ -24,6 +24,9 @@ public:
     bool hasNewVersion() const { return _hasNewVersion; }
 
 signals:
+    void checkStarted();
+    void noUpdatesAvailable();
+    void checkFailed(const QString& errorString);
     void newVersionAvailable(const QString& version, const QString& url);
 
 private:
@@ -34,6 +37,7 @@ private:
     QTimer* _checkTimer;
     QString _latestVersion;
     QString _releaseUrl;
+    bool _isChecking = false;
     bool _hasNewVersion = false;
 };
 

@@ -384,144 +384,187 @@
 <context>
     <name>DialogAbout</name>
     <message>
-        <location filename="../dialogs/dialogabout.ui" line="14"/>
+        <location filename="../dialogs/dialogabout.ui" line="20"/>
         <source>About...</source>
         <translation>關於...</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.ui" line="68"/>
+        <location filename="../dialogs/dialogabout.ui" line="74"/>
         <source>Open Modsim</source>
         <translation>Open Modsim</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.ui" line="75"/>
+        <location filename="../dialogs/dialogabout.ui" line="81"/>
         <source>Version: 1.0.0</source>
         <translation>版本:1.0.0</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.ui" line="106"/>
+        <location filename="../dialogs/dialogabout.ui" line="112"/>
         <source>About</source>
         <translation>關於</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.ui" line="112"/>
+        <location filename="../dialogs/dialogabout.ui" line="118"/>
         <source>An Open Source Modbus Slave (Server) Utility</source>
         <translation>一個開源的 Modbus 從站（伺服器）工具</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.ui" line="174"/>
+        <location filename="../dialogs/dialogabout.ui" line="180"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;a href=&quot;&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Lecense: The MIT License&lt;span&gt;&lt;/a&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;a href=&quot;&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;許可證: MIT 許可證&lt;span&gt;&lt;/a&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.ui" line="195"/>
+        <location filename="../dialogs/dialogabout.ui" line="217"/>
+        <location filename="../dialogs/dialogabout.cpp" line="375"/>
+        <location filename="../dialogs/dialogabout.cpp" line="376"/>
+        <location filename="../dialogs/dialogabout.cpp" line="386"/>
+        <location filename="../dialogs/dialogabout.cpp" line="388"/>
+        <location filename="../dialogs/dialogabout.cpp" line="400"/>
+        <source>Check for updates</source>
+        <translation>檢查更新</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogabout.ui" line="253"/>
         <source>Components</source>
         <translation>成分</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.ui" line="237"/>
+        <location filename="../dialogs/dialogabout.ui" line="295"/>
         <source>Authors</source>
         <translation>作者</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.ui" line="279"/>
+        <location filename="../dialogs/dialogabout.ui" line="337"/>
         <source>Translation</source>
         <translation>翻譯</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="61"/>
+        <location filename="../dialogs/dialogabout.cpp" line="63"/>
         <source>Unknown</source>
         <translation>未知</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="74"/>
+        <location filename="../dialogs/dialogabout.cpp" line="77"/>
         <source>About %1...</source>
         <translation>關於 %1...</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="88"/>
+        <location filename="../dialogs/dialogabout.cpp" line="96"/>
         <source>Using %1 and built against %2</source>
         <translation>使用 %1 並針對 %2 構建</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="89"/>
+        <location filename="../dialogs/dialogabout.cpp" line="97"/>
         <source>Cross-platform application development framework.</source>
         <translation>跨平台應用程式開發框架。</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="129"/>
+        <location filename="../dialogs/dialogabout.cpp" line="137"/>
         <source>Author and Maintainer</source>
         <translation>作者和維護者</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="260"/>
+        <location filename="../dialogs/dialogabout.cpp" line="278"/>
         <source>Visit component&apos;s homepage
 %1</source>
         <translation>存取元件主頁
 %1</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="281"/>
+        <location filename="../dialogs/dialogabout.cpp" line="299"/>
         <source>Email contributer: %1</source>
         <translation>電子郵件貢獻者：%1</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="290"/>
+        <location filename="../dialogs/dialogabout.cpp" line="308"/>
         <source>Visit user&apos;s homepage
 %1</source>
         <translation>訪問用戶主頁
 %1</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="95"/>
+        <location filename="../dialogs/dialogabout.cpp" line="103"/>
         <source>Free monospaced font with programming ligatures.</source>
         <translation>免費等寬字體，附有程式設計連字。</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="42"/>
+        <location filename="../dialogs/dialogabout.cpp" line="44"/>
         <source>%1 build %2</source>
         <translation>%1 構建 %2</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="77"/>
+        <location filename="../dialogs/dialogabout.cpp" line="80"/>
         <source>Version: &lt;b&gt;%1&lt;/b&gt; %2</source>
         <translation>版本：&lt;b&gt;%1&lt;/b&gt; %2</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="102"/>
-        <location filename="../dialogs/dialogabout.cpp" line="109"/>
-        <location filename="../dialogs/dialogabout.cpp" line="116"/>
+        <location filename="../dialogs/dialogabout.cpp" line="110"/>
+        <location filename="../dialogs/dialogabout.cpp" line="117"/>
+        <location filename="../dialogs/dialogabout.cpp" line="124"/>
         <source>Underlying platform.</source>
         <translation>底層平台。</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="134"/>
-        <location filename="../dialogs/dialogabout.cpp" line="139"/>
-        <location filename="../dialogs/dialogabout.cpp" line="144"/>
+        <location filename="../dialogs/dialogabout.cpp" line="142"/>
+        <location filename="../dialogs/dialogabout.cpp" line="147"/>
+        <location filename="../dialogs/dialogabout.cpp" line="152"/>
         <source>Contributor</source>
         <translation>貢獻者</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="157"/>
+        <location filename="../dialogs/dialogabout.cpp" line="165"/>
         <source>Russian</source>
         <translation>俄文</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="161"/>
+        <location filename="../dialogs/dialogabout.cpp" line="169"/>
         <source>Simplified Chinese and Traditional Chinese</source>
         <translation>簡體中文和繁體中文</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="286"/>
+        <location filename="../dialogs/dialogabout.cpp" line="304"/>
         <source>Visit github user&apos;s homepage
 %1</source>
         <translation>造訪 GitHub 用戶首頁
 %1</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="314"/>
+        <location filename="../dialogs/dialogabout.cpp" line="332"/>
         <source>License Agreement - %1</source>
         <translation>許可協議 - %1</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogabout.cpp" line="366"/>
+        <source>Checking...</source>
+        <translation>檢查中...</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogabout.cpp" line="376"/>
+        <source>No updates available.</source>
+        <translation>沒有可用更新。</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogabout.cpp" line="389"/>
+        <source>Failed to check for updates.
+
+%1</source>
+        <translation>檢查更新失敗。
+
+%1</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogabout.cpp" line="403"/>
+        <source>New version available</source>
+        <translation>發現新版本</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogabout.cpp" line="404"/>
+        <source>A new version %1 is available.
+
+Open the download page?</source>
+        <translation>發現新版本 %1。
+
+是否開啟下載頁面？</translation>
     </message>
 </context>
 <context>
@@ -2430,76 +2473,94 @@ Script.onInit(()=&gt;{
 <context>
     <name>MainStatusBar</name>
     <message>
-        <location filename="../controls/mainstatusbar.cpp" line="48"/>
-        <location filename="../controls/mainstatusbar.cpp" line="164"/>
+        <location filename="../controls/mainstatusbar.cpp" line="49"/>
+        <location filename="../controls/mainstatusbar.cpp" line="163"/>
         <source>No updates available</source>
         <translation>無可用更新</translation>
     </message>
     <message>
-        <location filename="../controls/mainstatusbar.cpp" line="162"/>
-        <location filename="../controls/mainstatusbar.cpp" line="287"/>
+        <location filename="../controls/mainstatusbar.cpp" line="305"/>
         <source>New version %1 is available. Click to download.</source>
         <translation>新版本 %1 可用。點擊下載。</translation>
     </message>
     <message>
-        <location filename="../controls/mainstatusbar.cpp" line="191"/>
+        <location filename="../controls/mainstatusbar.cpp" line="190"/>
         <source>Unit Identifiers: %1</source>
         <translation>單元識別碼：%1</translation>
     </message>
     <message>
-        <location filename="../controls/mainstatusbar.cpp" line="247"/>
+        <location filename="../controls/mainstatusbar.cpp" line="246"/>
         <source>Modbus/TCP Srv %1:%2</source>
         <translation>Modbus/TCP伺服器%1:%2</translation>
     </message>
     <message>
-        <location filename="../controls/mainstatusbar.cpp" line="251"/>
+        <location filename="../controls/mainstatusbar.cpp" line="250"/>
         <source>Port %1:%2:%3:%4:%5</source>
         <translation>連接埠 %1:%2:%3:%4:%5</translation>
     </message>
     <message>
-        <location filename="../controls/mainstatusbar.cpp" line="203"/>
+        <location filename="../controls/mainstatusbar.cpp" line="202"/>
         <source>No Resp</source>
         <translation>無響應</translation>
     </message>
     <message>
-        <location filename="../controls/mainstatusbar.cpp" line="205"/>
+        <location filename="../controls/mainstatusbar.cpp" line="161"/>
+        <source>New version %1 is available.</source>
+        <translation>新版本 %1 已發布。</translation>
+    </message>
+    <message>
+        <location filename="../controls/mainstatusbar.cpp" line="204"/>
         <source>Bad ID</source>
         <translation>錯誤ID</translation>
     </message>
     <message>
-        <location filename="../controls/mainstatusbar.cpp" line="207"/>
+        <location filename="../controls/mainstatusbar.cpp" line="206"/>
         <source>Ill Func</source>
         <translation>非法功能</translation>
     </message>
     <message>
-        <location filename="../controls/mainstatusbar.cpp" line="209"/>
+        <location filename="../controls/mainstatusbar.cpp" line="208"/>
         <source>Dev Busy</source>
         <translation>裝置忙碌</translation>
     </message>
     <message>
-        <location filename="../controls/mainstatusbar.cpp" line="211"/>
+        <location filename="../controls/mainstatusbar.cpp" line="210"/>
         <source>Bad CRC</source>
         <translation>錯誤CRC</translation>
     </message>
     <message>
-        <location filename="../controls/mainstatusbar.cpp" line="213"/>
+        <location filename="../controls/mainstatusbar.cpp" line="212"/>
         <source>Delay %1ms</source>
         <translation>延遲 %1毫秒</translation>
     </message>
     <message>
-        <location filename="../controls/mainstatusbar.cpp" line="215"/>
+        <location filename="../controls/mainstatusbar.cpp" line="214"/>
         <source>Rnd Delay %1ms</source>
         <translation>隨機延遲 %1毫秒</translation>
     </message>
     <message>
-        <location filename="../controls/mainstatusbar.cpp" line="233"/>
+        <location filename="../controls/mainstatusbar.cpp" line="232"/>
         <source>Clients: %1</source>
         <translation>用戶端：%1</translation>
     </message>
     <message>
-        <location filename="../controls/mainstatusbar.cpp" line="275"/>
+        <location filename="../controls/mainstatusbar.cpp" line="274"/>
         <source>Req: %1  Resp: %2</source>
         <translation>請求：%1  回應：%2</translation>
+    </message>
+    <message>
+        <location filename="../controls/mainstatusbar.cpp" line="286"/>
+        <source>New version available</source>
+        <translation>發現新版本</translation>
+    </message>
+    <message>
+        <location filename="../controls/mainstatusbar.cpp" line="287"/>
+        <source>A new version %1 is available.
+
+Open the download page?</source>
+        <translation>發現新版本 %1。
+
+是否開啟下載頁面？</translation>
     </message>
 </context>
 <context>
@@ -4065,6 +4126,24 @@ Script.onInit(()=&gt;{
         <location filename="../formdatamapview.cpp" line="39"/>
         <source>Holding Registers</source>
         <translation>保持暫存器</translation>
+    </message>
+</context>
+<context>
+    <name>UpdateChecker</name>
+    <message>
+        <location filename="../updatechecker.cpp" line="62"/>
+        <source>SSL is not supported in this build.</source>
+        <translation>此建置版本不支援 SSL。</translation>
+    </message>
+    <message>
+        <location filename="../updatechecker.cpp" line="94"/>
+        <source>Failed to parse update information.</source>
+        <translation>解析更新資訊失敗。</translation>
+    </message>
+    <message>
+        <location filename="../updatechecker.cpp" line="104"/>
+        <source>Update information is incomplete.</source>
+        <translation>更新資訊不完整。</translation>
     </message>
 </context>
 </TS>

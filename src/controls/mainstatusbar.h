@@ -29,6 +29,7 @@ private:
     void updateErrorSimInfo();
     void updateClientCountInfo();
     void updateRequestCountInfo();
+    void promptDownloadNewVersion();
     void onNewVersionAvailable(const QString& version, const QString& url);
 
 private:

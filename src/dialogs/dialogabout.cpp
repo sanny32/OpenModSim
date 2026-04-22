@@ -1,5 +1,7 @@
 #include <QFile>
 #include <QApplication>
+#include <QDesktopServices>
+#include <QMessageBox>
 #include <QPlainTextEdit>
 #include "aboutdatawidget.h"
 #include "dialogabout.h"
@@ -68,7 +70,8 @@ QString arch()
 ///
 DialogAbout::DialogAbout(QWidget *parent) :
     QFixedSizeDialog(parent),
-    ui(new Ui::DialogAbout)
+    ui(new Ui::DialogAbout),
+    _updateChecker(new UpdateChecker(this))
 {
     ui->setupUi(this);
     setWindowTitle(tr("About %1...").arg(APP_PRODUCT_NAME));
@@ -78,6 +81,11 @@ DialogAbout::DialogAbout(QWidget *parent) :
 
     const auto copyright = QString(ui->labelCopyright->text()).arg(BUILD_YEAR);
     ui->labelCopyright->setText(copyright);
+
+    connect(_updateChecker, &UpdateChecker::checkStarted, this, &DialogAbout::onUpdateCheckStarted);
+    connect(_updateChecker, &UpdateChecker::noUpdatesAvailable, this, &DialogAbout::onNoUpdatesAvailable);
+    connect(_updateChecker, &UpdateChecker::checkFailed, this, &DialogAbout::onUpdateCheckFailed);
+    connect(_updateChecker, &UpdateChecker::newVersionAvailable, this, &DialogAbout::onNewVersionAvailable);
 
     {
         auto vboxLayout = new QVBoxLayout();
@@ -189,6 +197,16 @@ void DialogAbout::changeEvent(QEvent* event)
         ui->retranslateUi(this);
 
     QDialog::changeEvent(event);
+}
+
+///
+/// \brief DialogAbout::sizeHint
+/// \return
+///
+QSize DialogAbout::sizeHint() const
+{
+    const QSize natural = QFixedSizeDialog::sizeHint();
+    return { minimumWidth(), qMax(natural.height(), minimumHeight()) };
 }
 
 ///
@@ -329,5 +347,66 @@ void DialogAbout::on_labelLicense_clicked()
 
     dlg->setLayout(layout);
     dlg->show();
+}
+
+///
+/// \brief DialogAbout::on_buttonCheckForUpdates_clicked
+///
+void DialogAbout::on_buttonCheckForUpdates_clicked()
+{
+    _updateChecker->checkForUpdates();
+}
+
+///
+/// \brief DialogAbout::onUpdateCheckStarted
+///
+void DialogAbout::onUpdateCheckStarted()
+{
+    ui->buttonCheckForUpdates->setEnabled(false);
+    ui->buttonCheckForUpdates->setText(tr("Checking..."));
+}
+
+///
+/// \brief DialogAbout::onNoUpdatesAvailable
+///
+void DialogAbout::onNoUpdatesAvailable()
+{
+    ui->buttonCheckForUpdates->setEnabled(true);
+    ui->buttonCheckForUpdates->setText(tr("Check for updates"));
+    QMessageBox::information(this, tr("Check for updates"), tr("No updates available."));
+}
+
+///
+/// \brief DialogAbout::onUpdateCheckFailed
+/// \param errorString
+///
+void DialogAbout::onUpdateCheckFailed(const QString& errorString)
+{
+    ui->buttonCheckForUpdates->setEnabled(true);
+    ui->buttonCheckForUpdates->setText(tr("Check for updates"));
+    QMessageBox::warning(this,
+                         tr("Check for updates"),
+                         tr("Failed to check for updates.\n\n%1").arg(errorString));
+}
+
+///
+/// \brief DialogAbout::onNewVersionAvailable
+/// \param version
+/// \param url
+///
+void DialogAbout::onNewVersionAvailable(const QString& version, const QString& url)
+{
+    ui->buttonCheckForUpdates->setEnabled(true);
+    ui->buttonCheckForUpdates->setText(tr("Check for updates"));
+
+    const auto answer = QMessageBox::question(this,
+                                              tr("New version available"),
+                                              tr("A new version %1 is available.\n\nOpen the download page?")
+                                                  .arg(version),
+                                              QMessageBox::Yes | QMessageBox::No,
+                                              QMessageBox::Yes);
+
+    if(answer == QMessageBox::Yes)
+        QDesktopServices::openUrl(QUrl(url));
 }
 

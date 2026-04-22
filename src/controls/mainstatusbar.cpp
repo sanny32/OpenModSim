@@ -1,5 +1,6 @@
 #include <QEvent>
 #include <QDesktopServices>
+#include <QMessageBox>
 #include <QMdiSubWindow>
 #include <QUrl>
 #include "apppreferences.h"
@@ -54,9 +55,7 @@ MainStatusBar::MainStatusBar(const ModbusMultiServer& server, QWidget* parent)
     connect(_bellButton, &QToolButton::clicked, this, [this]()
     {
         if(_updateChecker->hasNewVersion())
-        {
-            QDesktopServices::openUrl(QUrl(_updateChecker->releaseUrl()));
-        }
+            promptDownloadNewVersion();
     });
 
     connect(_updateChecker, &UpdateChecker::newVersionAvailable,
@@ -159,7 +158,7 @@ void MainStatusBar::changeEvent(QEvent* event)
         }
 
         if(_updateChecker->hasNewVersion())
-            _bellButton->setToolTip(tr("New version %1 is available. Click to download.").arg(_updateChecker->latestVersion()));
+            _bellButton->setToolTip(tr("New version %1 is available.").arg(_updateChecker->latestVersion()));
         else
             _bellButton->setToolTip(tr("No updates available"));
 
@@ -273,6 +272,25 @@ void MainStatusBar::setCheckForUpdates(bool enabled)
 void MainStatusBar::updateRequestCountInfo()
 {
     _requestCountLabel->setText(tr("Req: %1  Resp: %2").arg(_requestCount).arg(_responseCount));
+}
+
+///
+/// \brief MainStatusBar::promptDownloadNewVersion
+///
+void MainStatusBar::promptDownloadNewVersion()
+{
+    if(!_updateChecker->hasNewVersion())
+        return;
+
+    const auto answer = QMessageBox::question(this,
+                                              tr("New version available"),
+                                              tr("A new version %1 is available.\n\nOpen the download page?")
+                                                  .arg(_updateChecker->latestVersion()),
+                                              QMessageBox::Yes | QMessageBox::No,
+                                              QMessageBox::Yes);
+
+    if(answer == QMessageBox::Yes)
+        QDesktopServices::openUrl(QUrl(_updateChecker->releaseUrl()));
 }
 
 ///
