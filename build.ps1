@@ -17,7 +17,7 @@ if ($qt5) {
     $CMakeGenerator = "Visual Studio 16 2019"
 }
 else {
-    $QtVersion   = "6.10.3"
+    $QtVersion   = "6.9.3"
     $Arch        = "win64"
     $Compiler    = "msvc2022_64"
     $CMakeGenerator = "Visual Studio 17 2022"
