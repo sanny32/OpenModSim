@@ -117,18 +117,6 @@ jobs:
             odbcinst libodbc1 \
             libpq5 libmysqlclient21
 
-      - name: Build and install OpenSSL 3 from sources
-        run: |
-          OPENSSL_VERSION=3.0.20
-          wget https://github.com/openssl/openssl/releases/download/openssl-${OPENSSL_VERSION}/openssl-${OPENSSL_VERSION}.tar.gz
-          tar xvf openssl-${OPENSSL_VERSION}.tar.gz
-          cd openssl-${OPENSSL_VERSION}
-          ./config \
-            shared zlib
-          make -j$(nproc)
-          make install_sw
-          ldconfig
-
       - name: Install Python 3.12 from sources
         run: |
           apt-get install -y libssl-dev \
@@ -225,6 +213,18 @@ jobs:
             -Wno-dev
           cmake --build build --parallel
           cmake --install build
+
+      - name: Build and install OpenSSL 3 from sources
+        run: |
+          OPENSSL_VERSION=3.0.20
+          wget https://github.com/openssl/openssl/releases/download/openssl-${OPENSSL_VERSION}/openssl-${OPENSSL_VERSION}.tar.gz
+          tar xvf openssl-${OPENSSL_VERSION}.tar.gz
+          cd openssl-${OPENSSL_VERSION}
+          ./config \
+            shared zlib
+          make -j$(nproc)
+          make install_sw
+          ldconfig
 
       - name: Bundle Qt libraries and plugins throught cqtdeployer
         run: |
