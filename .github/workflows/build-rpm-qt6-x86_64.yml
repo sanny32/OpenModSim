@@ -220,7 +220,7 @@ jobs:
             -targetDir ${{ env.BUILD_RPM_DIR }}/SOURCES/omodsim${{ env.APP_INSTALL_PREFIX }}${{ env.VERSION_MAJOR }} \
             -libDir ${{ env.QT_INSTALL_DIR }}/${{ env.QT_VERSION }}/${{ env.CMAKE_COMPILER }}/lib \
             -ignore libcrypto.so.3,libmysqlclient.so.21,libpq.so.5,libssl.so.3,libqsqlmimer.so,libqsqlmysql.so,libqsqlodbc.so,libqsqlpsql.so,libqsqlibase.so,libqsqloci.so \
-            -extraLibs icudata,icui18n,icuuc,libxcb-cursor \
+            -extraLibs icudata,icui18n,icuuc,libxcb-util,libxcb-cursor \
             -customScript 'export QT_QPA_PLATFORM=${{ env.QT_QPA_PLATFORM }}'
 
       - name: Copy OpenModsim docs
