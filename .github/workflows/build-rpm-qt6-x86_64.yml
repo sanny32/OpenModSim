@@ -229,6 +229,13 @@ jobs:
       - name: Copy demos
         run: rsync -a "demos/" "${{ env.BUILD_RPM_DIR }}/SOURCES/omodsim${{ env.APP_INSTALL_PREFIX }}${{ env.VERSION_MAJOR }}/demos/"
 
+      - name: Rename app icon files
+        run: |
+          for size in 16x16 32x32 64x64 128x128; do
+            mv "${{ env.BUILD_RPM_DIR }}/SOURCES/omodsim/usr/share/icons/hicolor/${size}/apps/omodsim.png" \
+               "${{ env.BUILD_RPM_DIR }}/SOURCES/omodsim/usr/share/icons/hicolor/${size}/apps/omodsim${{ env.VERSION_MAJOR }}.png"
+          done
+
       - name: Create RPM spec file
         run: |
           sed -e "s|@PACKAGE_NAME@|${{ env.RPM_PACKAGE_NAME }}|g" \
