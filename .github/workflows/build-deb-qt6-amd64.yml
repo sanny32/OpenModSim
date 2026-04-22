@@ -104,7 +104,7 @@ jobs:
           export DEBIAN_FRONTEND=noninteractive
           apt-get update
           apt-get install -y \
-            git build-essential ninja-build cmake patchelf rsync \
+            git build-essential ninja-build cmake patchelf rsync wget perl \
             dh-make debhelper debhelper-compat lintian fakeroot \
             libglu1-mesa libgl1-mesa-dev libxkbcommon0 libxkbcommon-x11-0 \
             libxcb1 libxcb-xinerama0 libxcb-cursor0 libxcb-keysyms1 libxcb-xfixes0 \
@@ -117,9 +117,24 @@ jobs:
             odbcinst libodbc1 \
             libpq5 libmysqlclient21
 
+      - name: Build and install OpenSSL 3 from sources
+        run: |
+          OPENSSL_VERSION=3.0.20
+          wget https://github.com/openssl/openssl/releases/download/openssl-${OPENSSL_VERSION}/openssl-${OPENSSL_VERSION}.tar.gz
+          tar xvf openssl-${OPENSSL_VERSION}.tar.gz
+          cd openssl-${OPENSSL_VERSION}
+          ./config \
+            --prefix=/usr/local/openssl \
+            --openssldir=/usr/local/openssl \
+            --libdir=lib \
+            shared zlib
+          make -j$(nproc)
+          make install_sw
+          ldconfig
+
       - name: Install Python 3.12 from sources
         run: |
-          apt-get install -y wget libssl-dev \
+          apt-get install -y libssl-dev \
             libncurses5-dev libncursesw5-dev libreadline-dev libsqlite3-dev \
             libffi-dev libbz2-dev liblzma-dev libgdbm-dev libnss3-dev \
             libncurses-dev libgdbm-compat-dev xz-utils
@@ -222,6 +237,13 @@ jobs:
             -ignore libcrypto.so.3,libmysqlclient.so.21,libpq.so.5,libssl.so.3,libqsqlmimer.so,libqsqlmysql.so,libqsqlodbc.so,libqsqlpsql.so,libqsqlibase.so,libqsqloci.so \
             -extraLibs icudata,icui18n,icuuc,libxcb-util,libxcb-cursor  \
             -customScript 'export QT_QPA_PLATFORM=${{ env.QT_QPA_PLATFORM }}'
+
+      - name: Copy OpenSSL 3 libraries to package lib directory
+        run: |
+          cp -av \
+            "/usr/local/openssl/lib/libcrypto.so.3" \
+            "/usr/local/openssl/lib/libssl.so.3" \
+            "${{ env.DEB_SRC_DIR }}${{ env.APP_INSTALL_PREFIX }}${{ env.VERSION_MAJOR }}/lib/"
 
       - name: Copy OpenModsim docs
         run: rsync -a "${{ env.BUILD_DIR }}/docs/" "${{ env.DEB_SRC_DIR }}${{ env.APP_INSTALL_PREFIX }}${{ env.VERSION_MAJOR }}/docs/"
