@@ -1,7 +1,8 @@
 param(
     [switch]$qt5,
     [switch]$qt6,
-    [string]$BuildType = "Release"
+    [string]$BuildType = "Release",
+    [string]$PythonVersion = "3.14.4"
 )
 
 if ($qt5 -and $qt6) {
@@ -16,7 +17,7 @@ if ($qt5) {
     $CMakeGenerator = "Visual Studio 16 2019"
 }
 else {
-    $QtVersion   = "6.10.1"
+    $QtVersion   = "6.11.0"
     $Arch        = "win64"
     $Compiler    = "msvc2022_64"
     $CMakeGenerator = "Visual Studio 17 2022"
@@ -43,6 +44,7 @@ Write-Host "Qt Version: $QtVersion"
 Write-Host "Compiler:   $Compiler"
 Write-Host "Generator:  $CMakeGenerator"
 Write-Host "BuildType:  $BuildType"
+Write-Host "Python:     $PythonVersion"
 Write-Host "InstallDir: $InstallPrefix"
 Write-Host "================================"
 
@@ -71,11 +73,11 @@ if ($Arch -eq "win64" -and $architecture -ne "AMD64") {
 
 # Function to install Python
 function Install-Python {
-    $pythonUrl = "https://www.python.org/ftp/python/3.11.9/python-3.11.9-amd64.exe"
+    $pythonUrl = "https://www.python.org/ftp/python/$PythonVersion/python-$PythonVersion-amd64.exe"
     $installerPath = "$env:TEMP\python-installer.exe"
     
     try {
-        Write-Host "Downloading Python 3.11.9..."
+        Write-Host "Downloading Python $PythonVersion..."
         Invoke-WebRequest -Uri $pythonUrl -OutFile $installerPath
         Write-Host "Download completed."
     }
@@ -290,7 +292,7 @@ try {
 }
 catch {
     Write-Host "Python not found."
-    $choice = Read-Host "Do you want to download and install Python 3.11? (y/n)"
+    $choice = Read-Host "Do you want to download and install Python $PythonVersion? (y/n)"
     if ($choice -eq 'y' -or $choice -eq 'Y') {
         $success = Install-Python
         if (-not $success) {
