@@ -37,6 +37,7 @@ $InstallPrefix = "C:/Program Files/Open ModSim $AppMajorVersion"
 
 $ErrorActionPreference = "Stop"
 
+Write-Host ""
 Write-Host "================================"
 Write-Host "=== OpenModSim Build Script ==="
 Write-Host "================================"
