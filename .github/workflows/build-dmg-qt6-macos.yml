@@ -145,7 +145,7 @@ jobs:
 
       - name: Create DMG
         run: |
-          DMG_NAME="${{ env.DMG_PACKAGE_PREFIX }}${{ env.APP_MAJOR_VERSION }}_${{ env.APP_VERSION }}_macos.dmg"
+          DMG_NAME="${{ env.DMG_PACKAGE_PREFIX }}${{ env.APP_MAJOR_VERSION }}_${{ env.APP_VERSION }}.dmg"
           echo "DMG_NAME=$DMG_NAME" >> $GITHUB_ENV
 
           hdiutil create -volname "Open ModSim ${{ env.APP_VERSION }}" \
