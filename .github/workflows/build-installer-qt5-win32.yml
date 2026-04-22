@@ -198,6 +198,20 @@ jobs:
             --plugindir "%CD%\${{ env.BUILD_DIR }}\${{ env.BUILD_TYPE }}\plugins"
         shell: cmd
 
+      - name: Remove qml folder
+        run: |
+          IF EXIST "%CD%\${{ env.BUILD_DIR }}\${{ env.BUILD_TYPE }}\qml" (
+            dir /a /b "%CD%\${{ env.BUILD_DIR }}\${{ env.BUILD_TYPE }}\qml" | findstr . >nul
+            IF ERRORLEVEL 1 (
+              rmdir "%CD%\${{ env.BUILD_DIR }}\${{ env.BUILD_TYPE }}\qml"
+            ) ELSE (
+              echo "qml folder is not empty - keeping it"
+            )
+          ) ELSE (
+            echo "No qml folder found - nothing to remove"
+          )
+        shell: cmd
+
       - name: Install NSIS
         run: |
           choco install nsis -y
