@@ -544,7 +544,8 @@ if(WIN32)
     if(WINDEPLOYQT_EXECUTABLE)
         install(CODE "
             set(_installed_exe \"\$ENV{DESTDIR}\${CMAKE_INSTALL_PREFIX}/omodsim.exe\")
-            set(_plugin_dir \"\$ENV{DESTDIR}\${CMAKE_INSTALL_PREFIX}/plugins\")
+            get_filename_component(_installed_exe_dir \"\${_installed_exe}\" DIRECTORY)
+            set(_plugin_dir \"\${_installed_exe_dir}/plugins\")
 
             if(NOT EXISTS \"\${_installed_exe}\")
                 message(FATAL_ERROR \"Installed executable not found: \${_installed_exe}\")
