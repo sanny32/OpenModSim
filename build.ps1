@@ -23,6 +23,7 @@ else {
 }
 
 $QtMajorVersion = ($QtVersion -replace '^(\d+)\..*$', '$1')
+$InstallPrefix = "C:/Program Files/Open ModSim $QtMajorVersion"
 
 $ErrorActionPreference = "Stop"
 
@@ -33,6 +34,7 @@ Write-Host "Qt Version: $QtVersion"
 Write-Host "Compiler:   $Compiler"
 Write-Host "Generator:  $CMakeGenerator"
 Write-Host "BuildType:  $BuildType"
+Write-Host "InstallDir: $InstallPrefix"
 Write-Host "================================"
 
 # Check Windows version and architecture
@@ -417,7 +419,8 @@ Write-Host "Configuring project with CMake..."
 $cmakeArgs = @(
     "../src",
     "-G", $CMakeGenerator,
-    "-DCMAKE_PREFIX_PATH=`"$QtDir`""
+    "-DCMAKE_PREFIX_PATH=`"$QtDir`"",
+    "-DCMAKE_INSTALL_PREFIX=`"$InstallPrefix`""
 )
 
 if ($QtMajorVersion -eq "5") {
@@ -463,24 +466,28 @@ if (Test-Path $exePath) {
         $currentDir = Get-Location
         Set-Location $exeDir
         
-        # Common windeployqt arguments
+        # Keep deployment flags aligned with the Windows installer workflows.
         $windeployArgs = @(
             "--release"
             "--plugindir", ".\plugins"
-            "--no-compiler-runtime"
             "--no-opengl-sw"
+            "--no-system-d3d-compiler"
         )
 
         if ($QtMajorVersion -eq "6") {
-            # Qt 6 specific options
+            # Qt 6 installer workflow options
             $windeployArgs += @(
+                "--no-system-dxc-compiler"
                 "--skip-plugin-types", "help,generic,networkinformation,qmltooling,tls"
-                "--exclude-plugins", "qsqlibase,qsqlmimer,qsqloci,qsqlodbc,qsqlpsql"
+                "--exclude-plugins", "qgif,qjpeg,qpdf,qsqlibase,qsqlmimer,qsqloci,qsqlodbc,qsqlpsql"
             )
         }
         elseif ($QtMajorVersion -eq "5") {
-            # Qt 5 specific options
-            $windeployArgs += "--no-system-d3d-compiler"
+            # Qt 5 installer workflow options
+            $windeployArgs += @(
+                "--no-angle"
+                "--no-quick"
+            )
         }
 
         # Executable
@@ -507,3 +514,13 @@ if (Test-Path $exePath) {
 Set-Location ..
 Write-Host ""
 Write-Host "=== Build finished successfully ==="
+Write-Host ""
+Write-Host "To install or uninstall Open ModSim, run as an Admini:"
+Write-Host ""
+Write-Host "    cd $BuildDir"
+Write-Host ""
+Write-Host "Install target directory: $InstallPrefix"
+Write-Host ""
+Write-Host "    cmake --install . --config $BuildType"
+Write-Host "    cmake --build . --target uninstall --config $BuildType"
+Write-Host ""

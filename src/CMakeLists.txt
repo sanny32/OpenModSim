@@ -25,6 +25,11 @@ list(GET VERSION_LIST 0 VERSION_MAJOR)
 list(GET VERSION_LIST 1 VERSION_MINOR)
 list(GET VERSION_LIST 2 VERSION_PATCH)
 
+if(WIN32 AND CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
+    set(CMAKE_INSTALL_PREFIX "C:/Program Files/Open ModSim ${VERSION_MAJOR}"
+        CACHE PATH "Install path prefix" FORCE)
+endif()
+
 # Define current year
 string(TIMESTAMP CURRENT_YEAR "%Y")
 
@@ -67,6 +72,16 @@ else()
     get_target_property(QT_BINARY_DIR Qt5::qmake IMPORTED_LOCATION)
     get_filename_component(QT_BINARY_DIR "${QT_BINARY_DIR}" DIRECTORY)
     set(QT_LIBEXEC_DIR "${QT_BINARY_DIR}")
+endif()
+
+if(WIN32)
+    find_program(WINDEPLOYQT_EXECUTABLE windeployqt
+                 HINTS "${QT_BINARY_DIR}" "${QT_LIBEXEC_DIR}" "${QT_INSTALL_LIBEXECS}")
+    if(WINDEPLOYQT_EXECUTABLE)
+        message(STATUS "windeployqt found at: ${WINDEPLOYQT_EXECUTABLE}")
+    else()
+        message(WARNING "windeployqt not found - Windows install will not deploy Qt runtime")
+    endif()
 endif()
 
 # Define target
@@ -521,7 +536,57 @@ add_custom_target(uninstall
 )
 
 # Installation rules
-if(APPLE)
+if(WIN32)
+    install(TARGETS ${PROJECT_NAME} RUNTIME DESTINATION .)
+    install(DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/../demos" DESTINATION .)
+    install(DIRECTORY "${CMAKE_BINARY_DIR}/docs" DESTINATION .)
+
+    if(WINDEPLOYQT_EXECUTABLE)
+        install(CODE "
+            set(_installed_exe \"\$ENV{DESTDIR}\${CMAKE_INSTALL_PREFIX}/omodsim.exe\")
+            set(_plugin_dir \"\$ENV{DESTDIR}\${CMAKE_INSTALL_PREFIX}/plugins\")
+
+            if(NOT EXISTS \"\${_installed_exe}\")
+                message(FATAL_ERROR \"Installed executable not found: \${_installed_exe}\")
+            endif()
+
+            if(CMAKE_INSTALL_CONFIG_NAME MATCHES \"^[Dd]ebug$\")
+                set(_deploy_mode --debug)
+            else()
+                set(_deploy_mode --release)
+            endif()
+
+            set(_windeploy_args
+                \${_deploy_mode}
+                --plugindir \"\${_plugin_dir}\"
+                --no-opengl-sw
+                --no-system-d3d-compiler
+            )
+
+            if(\"${Qt6_FOUND}\" STREQUAL \"TRUE\")
+                list(APPEND _windeploy_args
+                     --no-system-dxc-compiler
+                     --skip-plugin-types help,generic,networkinformation,qmltooling,tls
+                     --exclude-plugins qgif,qjpeg,qpdf,qsqlibase,qsqlmimer,qsqloci,qsqlodbc,qsqlpsql)
+            elseif(\"${Qt5_FOUND}\" STREQUAL \"TRUE\")
+                list(APPEND _windeploy_args
+                     --no-angle
+                     --no-quick)
+            endif()
+
+            list(APPEND _windeploy_args \"\${_installed_exe}\")
+
+            execute_process(
+                COMMAND \"${WINDEPLOYQT_EXECUTABLE}\" \${_windeploy_args}
+                RESULT_VARIABLE _windeployqt_result
+            )
+
+            if(NOT _windeployqt_result EQUAL 0)
+                message(FATAL_ERROR \"windeployqt failed with exit code \${_windeployqt_result}\")
+            endif()
+        ")
+    endif()
+elseif(APPLE)
     install(TARGETS ${PROJECT_NAME} BUNDLE DESTINATION .)
     install(DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/../demos" DESTINATION .)
     install(DIRECTORY "${CMAKE_BINARY_DIR}/docs" DESTINATION .)
