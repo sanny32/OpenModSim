@@ -292,7 +292,7 @@ try {
 }
 catch {
     Write-Host "Python not found."
-    $choice = Read-Host "Do you want to download and install Python $PythonVersion? (y/n)"
+    $choice = Read-Host "Do you want to download and install Python $($PythonVersion)? (y/n)"
     if ($choice -eq 'y' -or $choice -eq 'Y') {
         $success = Install-Python
         if (-not $success) {
