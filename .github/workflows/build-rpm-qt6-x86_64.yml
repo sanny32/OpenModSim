@@ -77,9 +77,9 @@ jobs:
           if [ -z "$TAG_NAME" ] && [ "${{ github.ref_type }}" = "tag" ]; then
             TAG_NAME="${{ github.ref_name }}"
           fi
-          if [[ "$TAG_NAME" =~ (beta[0-9]+|b[0-9]+)$ ]]; then
+          BETA_RELEASE=$(printf '%s\n' "$TAG_NAME" | grep -Eo '(beta[0-9]+|b[0-9]+)$' || true)
+          if [ -n "$BETA_RELEASE" ]; then
             BETA_RELEASE_ENABLED=true
-            BETA_RELEASE="${BASH_REMATCH[1]}"
           fi
 
           if [ "${GITHUB_REF_NAME}" = "dev" ] || [ "${{ github.event.inputs.branch }}" = "dev" ] || [ "${GITHUB_REF_NAME}" = release/* ] || [ "${{ github.event.inputs.branch }}" = release/* ]; then
