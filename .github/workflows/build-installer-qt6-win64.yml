@@ -206,6 +206,15 @@ jobs:
           perl -v
         shell: cmd
 
+      - name: Ensure jom is available
+        run: |
+          where jom >nul 2>nul
+          if errorlevel 1 (
+            choco install jom --version=1.1.2 -y --no-progress
+          )
+          jom /?
+        shell: cmd
+
       - name: Resolve latest OpenSSL 3.5 LTS version
         run: |
           $releases = Invoke-RestMethod -Uri "https://api.github.com/repos/openssl/openssl/releases?per_page=100"
@@ -244,10 +253,12 @@ jobs:
           cd /d "%OPENSSL_SOURCE_DIR%"
           if errorlevel 1 exit /b 1
 
-          perl Configure VC-WIN64A shared no-asm no-tests --prefix="%OPENSSL_INSTALL_DIR%" --openssldir="%OPENSSL_INSTALL_DIR%\ssl"
+          perl Configure VC-WIN64A shared no-apps no-docs no-asm no-tests --prefix="%OPENSSL_INSTALL_DIR%" --openssldir="%OPENSSL_INSTALL_DIR%\ssl"
           if errorlevel 1 exit /b 1
 
-          nmake
+          set JOM_JOBS=%NUMBER_OF_PROCESSORS%
+          if not defined JOM_JOBS set JOM_JOBS=4
+          jom -j %JOM_JOBS%
           if errorlevel 1 exit /b 1
 
           copy /Y "%OPENSSL_SOURCE_DIR%\libssl-3-x64.dll" "%BUILD_OUTPUT_DIR%\"
