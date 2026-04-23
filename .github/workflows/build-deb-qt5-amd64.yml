@@ -114,6 +114,7 @@ jobs:
             libxcb-shape0 libxcb-render-util0 libxcb-icccm4 libxcb-image0 \
             libfontconfig1 libfreetype6 libx11-6 libxext6 libxrender1 \
             zlib1g-dev libpng-dev libjpeg-dev libdbus-1-3 \
+            libssl1.1 \
             libwayland-cursor0 libwayland-egl1-mesa \
             libgtk-3-0 libgdk-pixbuf2.0-0 libpangocairo-1.0-0 libpango-1.0-0 libatk1.0-0 libcairo2 libcairo-gobject2 \
             libcups2 \
@@ -197,9 +198,10 @@ jobs:
         run: |
           CQtDeployer -bin ${{ env.BUILD_DIR }}/omodsim \
             -targetDir ${{ env.DEB_SRC_DIR }}${{ env.APP_INSTALL_PREFIX }}${{ env.VERSION_MAJOR }} \
-            -libDir ${{ env.QT_INSTALL_DIR }}/${{ env.QT_VERSION }}/${{ env.CMAKE_COMPILER }}/lib \
+            -libDir ${{ env.QT_INSTALL_DIR }}/${{ env.QT_VERSION }}/${{ env.CMAKE_COMPILER }}/lib,/usr/lib/x86_64-linux-gnu \
             -ignore libcrypto.so.3,libmysqlclient.so.21,libpq.so.5,libssl.so.3,libqsqlmimer.so,libqsqlmysql.so,libqsqlodbc.so,libqsqlpsql.so \
-            -extraLibs icudata,icui18n,icuuc,libxcb-util,libxcb-cursor
+            -extraLibs icudata,icui18n,icuuc,libxcb-util,libxcb-cursor \
+            -extraDepends libssl.so.1.1,libcrypto.so.1.1
 
       - name: Copy OpenModsim docs
         run: rsync -a "${{ env.BUILD_DIR }}/docs/" "${{ env.DEB_SRC_DIR }}${{ env.APP_INSTALL_PREFIX }}${{ env.VERSION_MAJOR }}/docs/"
