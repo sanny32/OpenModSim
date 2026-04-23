@@ -193,8 +193,50 @@ jobs:
             --no-system-d3d-compiler ^
             --no-system-dxc-compiler ^
             --plugindir "%CD%\${{ env.BUILD_DIR }}\${{ env.BUILD_TYPE }}\plugins" ^
-            --skip-plugin-types help,generic,networkinformation,qmltooling,tls ^
+            --skip-plugin-types help,generic,networkinformation,qmltooling ^
             --exclude-plugins qgif,qjpeg,qpdf,qsqlibase,qsqlmimer,qsqloci,qsqlodbc,qsqlpsql
+        shell: cmd
+
+      - name: Ensure Perl is available
+        run: |
+          where perl >nul 2>nul
+          if errorlevel 1 (
+            choco install strawberryperl -y --no-progress
+          )
+          perl -v
+        shell: cmd
+
+      - name: Build OpenSSL 3 runtime libraries
+        run: |
+          set OPENSSL_VERSION=3.0.20
+          set OPENSSL_SOURCE_DIR=%RUNNER_TEMP%\openssl-%OPENSSL_VERSION%
+          set OPENSSL_ARCHIVE=%RUNNER_TEMP%\openssl-%OPENSSL_VERSION%.tar.gz
+          set OPENSSL_INSTALL_DIR=%RUNNER_TEMP%\openssl-%OPENSSL_VERSION%-install
+          set BUILD_OUTPUT_DIR=%CD%\${{ env.BUILD_DIR }}\${{ env.BUILD_TYPE }}
+
+          powershell -NoProfile -ExecutionPolicy Bypass -Command "Invoke-WebRequest -Uri 'https://github.com/openssl/openssl/releases/download/openssl-%OPENSSL_VERSION%/openssl-%OPENSSL_VERSION%.tar.gz' -OutFile '%OPENSSL_ARCHIVE%'"
+          if errorlevel 1 exit /b 1
+
+          tar -xzf "%OPENSSL_ARCHIVE%" -C "%RUNNER_TEMP%"
+          if errorlevel 1 exit /b 1
+
+          call "${{ env.VS_PATH }}\VC\Auxiliary\Build\vcvars64.bat"
+          if errorlevel 1 exit /b 1
+
+          cd /d "%OPENSSL_SOURCE_DIR%"
+          if errorlevel 1 exit /b 1
+
+          perl Configure VC-WIN64A shared no-asm no-tests --prefix="%OPENSSL_INSTALL_DIR%" --openssldir="%OPENSSL_INSTALL_DIR%\ssl"
+          if errorlevel 1 exit /b 1
+
+          nmake
+          if errorlevel 1 exit /b 1
+
+          copy /Y "%OPENSSL_SOURCE_DIR%\libssl-3-x64.dll" "%BUILD_OUTPUT_DIR%\"
+          if errorlevel 1 exit /b 1
+
+          copy /Y "%OPENSSL_SOURCE_DIR%\libcrypto-3-x64.dll" "%BUILD_OUTPUT_DIR%\"
+          if errorlevel 1 exit /b 1
         shell: cmd
 
       - name: Remove qml folder
