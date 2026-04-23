@@ -206,9 +206,27 @@ jobs:
           perl -v
         shell: cmd
 
+      - name: Resolve latest OpenSSL 3.5 LTS version
+        run: |
+          $releases = Invoke-RestMethod -Uri "https://api.github.com/repos/openssl/openssl/releases?per_page=100"
+          $versions = $releases |
+            Where-Object { -not $_.draft -and -not $_.prerelease -and $_.tag_name -match '^openssl-3\.5\.\d+$' } |
+            ForEach-Object { $_.tag_name -replace '^openssl-', '' }
+
+          if (-not $versions) {
+            throw "No OpenSSL 3.5.x releases found."
+          }
+
+          $latest = $versions |
+            Sort-Object { [version]$_ } -Descending |
+            Select-Object -First 1
+
+          "OPENSSL_VERSION=$latest" >> $env:GITHUB_ENV
+          Write-Host "Resolved OpenSSL version: $latest"
+        shell: pwsh
+
       - name: Build OpenSSL 3 runtime libraries
         run: |
-          set OPENSSL_VERSION=3.0.20
           set OPENSSL_SOURCE_DIR=%RUNNER_TEMP%\openssl-%OPENSSL_VERSION%
           set OPENSSL_ARCHIVE=%RUNNER_TEMP%\openssl-%OPENSSL_VERSION%.tar.gz
           set OPENSSL_INSTALL_DIR=%RUNNER_TEMP%\openssl-%OPENSSL_VERSION%-install
