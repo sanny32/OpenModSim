@@ -234,9 +234,10 @@ jobs:
         run: |
           CQtDeployer -bin ${{ env.BUILD_DIR }}/omodsim \
             -targetDir ${{ env.DEB_SRC_DIR }}${{ env.APP_INSTALL_PREFIX }}${{ env.VERSION_MAJOR }} \
-            -libDir ${{ env.QT_INSTALL_DIR }}/${{ env.QT_VERSION }}/${{ env.CMAKE_COMPILER }}/lib \
+            -libDir ${{ env.QT_INSTALL_DIR }}/${{ env.QT_VERSION }}/${{ env.CMAKE_COMPILER }}/lib,/usr/local/lib,/usr/local/lib64 \
             -ignore libmysqlclient.so.21,libpq.so.5,libqsqlmimer.so,libqsqlmysql.so,libqsqlodbc.so,libqsqlpsql.so,libqsqlibase.so,libqsqloci.so \
-            -extraLibs icudata,icui18n,icuuc,libxcb-util,libxcb-cursor,libcrypto,libssl \
+            -extraLibs icudata,icui18n,icuuc,libxcb-util,libxcb-cursor \
+            -extraDepends libssl.so.3,libcrypto.so.3 \
             -customScript 'export QT_QPA_PLATFORM=${{ env.QT_QPA_PLATFORM }}'
 
       - name: Copy OpenModsim docs
