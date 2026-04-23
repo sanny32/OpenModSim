@@ -198,10 +198,15 @@ jobs:
         run: |
           CQtDeployer -bin ${{ env.BUILD_DIR }}/omodsim \
             -targetDir ${{ env.DEB_SRC_DIR }}${{ env.APP_INSTALL_PREFIX }}${{ env.VERSION_MAJOR }} \
-            -libDir ${{ env.QT_INSTALL_DIR }}/${{ env.QT_VERSION }}/${{ env.CMAKE_COMPILER }}/lib,/usr/lib/x86_64-linux-gnu \
+            -libDir ${{ env.QT_INSTALL_DIR }}/${{ env.QT_VERSION }}/${{ env.CMAKE_COMPILER }}/lib \
             -ignore libcrypto.so.3,libmysqlclient.so.21,libpq.so.5,libssl.so.3,libqsqlmimer.so,libqsqlmysql.so,libqsqlodbc.so,libqsqlpsql.so \
-            -extraLibs icudata,icui18n,icuuc,libxcb-util,libxcb-cursor \
-            -extraDepends libssl.so.1.1,libcrypto.so.1.1
+            -extraLibs icudata,icui18n,icuuc,libxcb-util,libxcb-cursor
+
+      - name: Copy OpenSSL 1 libraries
+        run: |
+          cp /usr/lib/x86_64-linux-gnu/libssl.so.1.1 \
+             /usr/lib/x86_64-linux-gnu/libcrypto.so.1.1 \
+             ${{ env.DEB_SRC_DIR }}${{ env.APP_INSTALL_PREFIX }}${{ env.VERSION_MAJOR }}/lib/
 
       - name: Copy OpenModsim docs
         run: rsync -a "${{ env.BUILD_DIR }}/docs/" "${{ env.DEB_SRC_DIR }}${{ env.APP_INSTALL_PREFIX }}${{ env.VERSION_MAJOR }}/docs/"
