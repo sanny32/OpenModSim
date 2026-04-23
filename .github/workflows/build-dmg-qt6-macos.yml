@@ -31,7 +31,6 @@ jobs:
       CMAKE_GENERATOR: "Ninja"
       CMAKE_OSX_ARCHITECTURES: "x86_64;arm64"
       BUILD_TYPE: "Release"
-      BETA_RELEASE: "beta1"
       DMG_PACKAGE_PREFIX: "qt6-omodsim"
       DMG_STAGING_DIR: "${{ github.workspace }}/dmg-root"
 
@@ -61,12 +60,16 @@ jobs:
         run: |
           FULL_VERSION=$(grep -oE 'VERSION\s+[0-9]+\.[0-9]+\.[0-9]+' src/CMakeLists.txt | grep -oE '[0-9]+\.[0-9]+\.[0-9]+')
           APP_MAJOR_VERSION=$(echo "$FULL_VERSION" | cut -d. -f1)
+          
           BETA_RELEASE_ENABLED=false
-          PROJECT_BETARELEASE=
-          TAG_NAME="${{ github.event.inputs.tag || github.ref_name }}"
-          if [ "$TAG_NAME" = *"${{ env.BETA_RELEASE }}" ]; then
+          BETA_RELEASE=""
+          TAG_NAME="${{ github.event.inputs.tag }}"
+          if [ -z "$TAG_NAME" ] && [ "${{ github.ref_type }}" = "tag" ]; then
+            TAG_NAME="${{ github.ref_name }}"
+          fi
+          if [[ "$TAG_NAME" =~ (beta[0-9]+|b[0-9]+)$ ]]; then
             BETA_RELEASE_ENABLED=true
-            PROJECT_BETARELEASE="${{ env.BETA_RELEASE }}"
+            BETA_RELEASE="${BASH_REMATCH[1]}"
           fi
 
           if [ "${GITHUB_REF_NAME}" = "dev" ] || [ "${{ github.event.inputs.branch }}" = "dev" ]; then
@@ -75,14 +78,15 @@ jobs:
           else
             APP_VERSION="$FULL_VERSION"
             if [ "$BETA_RELEASE_ENABLED" = "true" ]; then
-              APP_VERSION="${APP_VERSION}-${{ env.BETA_RELEASE }}"
+              APP_VERSION="${APP_VERSION}-${BETA_RELEASE}"
             fi
           fi
 
           echo "APP_VERSION=$APP_VERSION" >> $GITHUB_ENV
+          echo "BETA_RELEASE=$BETA_RELEASE" >> $GITHUB_ENV
           echo "APP_MAJOR_VERSION=$APP_MAJOR_VERSION" >> $GITHUB_ENV
-          echo "PROJECT_BETARELEASE=$PROJECT_BETARELEASE" >> $GITHUB_ENV
-          echo "BETA_RELEASE_FLAG=$BETA_RELEASE_ENABLED" >> $GITHUB_ENV
+          echo "BETA_RELEASE_ENABLED=$BETA_RELEASE_ENABLED" >> $GITHUB_ENV
+
           echo "Extracted version: $APP_VERSION"
 
       - name: Install dependencies
@@ -124,7 +128,7 @@ jobs:
             -DCMAKE_INSTALL_PREFIX=/Applications \
             -DCMAKE_OSX_ARCHITECTURES="${{ env.CMAKE_OSX_ARCHITECTURES }}" \
             -DUSE_QT6=ON \
-            -DPROJECT_BETARELEASE=${{ env.PROJECT_BETARELEASE }}
+            -DPROJECT_BETARELEASE=${{ env.BETA_RELEASE }}
 
       - name: Build
         run: cmake --build ${{ env.BUILD_DIR }} --config ${{ env.BUILD_TYPE }} --parallel
@@ -166,7 +170,7 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           draft: true
-          prerelease: ${{ env.BETA_RELEASE_FLAG }}
+          prerelease: ${{ env.BETA_RELEASE_ENABLED }}
           tag_name: ${{ github.ref_name }}
           name: Open ModSim ${{ env.APP_VERSION }}
           files: |

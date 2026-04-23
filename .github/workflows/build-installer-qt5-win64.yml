@@ -28,7 +28,6 @@ env:
   CMAKE_GENERATOR: "Visual Studio 17 2022"
   CMAKE_ARCH: x64
   BUILD_TYPE: Release
-  BETA_RELEASE: beta1
   EXE_PACKAGE_PREFIX: qt5-omodsim2
 
   # SingPath variables
@@ -49,23 +48,27 @@ jobs:
 
       - name: Extract version from CMakeLists.txt
         run: |
-          for /f "tokens=2" %%i in ('findstr /R /C:"VERSION [0-9]*\.[0-9]*\.[0-9]*" src\CMakeLists.txt') do set APP_VERSION=%%i
-          if not defined APP_VERSION exit /b 1
-          set BETA_RELEASE_ENABLED=false
-          set PROJECT_BETARELEASE=
-          set TAG_NAME=${{ github.event.inputs.tag }}
-          if "%TAG_NAME%"=="" set TAG_NAME=${{ github.ref_name }}
-          echo %TAG_NAME% | findstr /I /R "${{ env.BETA_RELEASE }}$" >nul
-          if not errorlevel 1 (
-            set BETA_RELEASE_ENABLED=true
-            set PROJECT_BETARELEASE=${{ env.BETA_RELEASE }}
-          )
-          if "%BETA_RELEASE_ENABLED%"=="true" set APP_VERSION=%APP_VERSION%-${{ env.BETA_RELEASE }}
-          echo APP_VERSION=%APP_VERSION%>>%GITHUB_ENV%
-          echo PROJECT_BETARELEASE=%PROJECT_BETARELEASE%>>%GITHUB_ENV%
-          echo BETA_RELEASE_FLAG=%BETA_RELEASE_ENABLED%>>%GITHUB_ENV%
-          exit /b 0
-        shell: cmd
+          $versionMatch = Select-String -Path src\CMakeLists.txt -Pattern 'VERSION\s+([0-9]+\.[0-9]+\.[0-9]+)' | Select-Object -First 1
+          if (-not $versionMatch) { exit 1 }
+
+          $APP_VERSION = $versionMatch.Matches[0].Groups[1].Value
+          $BETA_RELEASE_ENABLED = 'false'
+          $BETA_RELEASE = ''
+          $TAG_NAME = '${{ github.event.inputs.tag }}'
+          if ([string]::IsNullOrEmpty($TAG_NAME) -and '${{ github.ref_type }}' -eq 'tag') {
+            $TAG_NAME = '${{ github.ref_name }}'
+          }
+
+          if ($TAG_NAME -match '(beta[0-9]+|b[0-9]+)$') {
+            $BETA_RELEASE_ENABLED = 'true'
+            $BETA_RELEASE = $Matches[1]
+            $APP_VERSION = "$APP_VERSION-$BETA_RELEASE"
+          }
+
+          "APP_VERSION=$APP_VERSION" >> $env:GITHUB_ENV
+          "BETA_RELEASE=$BETA_RELEASE" >> $env:GITHUB_ENV
+          "BETA_RELEASE_ENABLED=$BETA_RELEASE_ENABLED" >> $env:GITHUB_ENV
+        shell: pwsh
 
       - name: Convert version for dev branch
         if: ${{ github.ref_name == 'dev' || github.event.inputs.branch == 'dev' || startsWith(github.ref_name, 'release/') || startsWith(github.event.inputs.branch, 'release/') }}
@@ -139,7 +142,7 @@ jobs:
 
       - name: Configure CMake
         run: |
-          cmake src -B ${{ env.BUILD_DIR }} -G "${{ env.CMAKE_GENERATOR }}" -A ${{ env.CMAKE_ARCH }} -T v142 -DCMAKE_PREFIX_PATH="C:/Qt/${{ env.QT_VERSION }}/${{ env.CMAKE_COMPILER }}" -DPROJECT_BETARELEASE=${{ env.PROJECT_BETARELEASE }}
+          cmake src -B ${{ env.BUILD_DIR }} -G "${{ env.CMAKE_GENERATOR }}" -A ${{ env.CMAKE_ARCH }} -T v142 -DCMAKE_PREFIX_PATH="C:/Qt/${{ env.QT_VERSION }}/${{ env.CMAKE_COMPILER }}" -DPROJECT_BETARELEASE=${{ env.BETA_RELEASE }}
         shell: cmd
 
       - name: Build
@@ -264,7 +267,7 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           draft: true
-          prerelease: ${{ env.BETA_RELEASE_FLAG }}
+          prerelease: ${{ env.BETA_RELEASE_ENABLED }}
           tag_name: ${{ github.ref_name }}
           name: Open ModSim ${{ env.APP_VERSION }}
           files: |
