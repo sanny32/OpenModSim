@@ -218,7 +218,7 @@ jobs:
           cmake --build build --parallel
           cmake --install build
 
-      - name: Build and install OpenSSL 3 from sources
+      - name: Build and install OpenSSL 3 runtime libraries
         run: |
           OPENSSL_VERSION=3.0.20
           wget https://github.com/openssl/openssl/releases/download/openssl-${OPENSSL_VERSION}/openssl-${OPENSSL_VERSION}.tar.gz
@@ -227,18 +227,22 @@ jobs:
           ./config \
             shared zlib
           make -j$(nproc)
-          make install_sw
-          ldconfig
+          make install_runtime_libs
 
       - name: Bundle Qt libraries and plugins throught cqtdeployer
         run: |
           CQtDeployer -bin ${{ env.BUILD_DIR }}/omodsim \
             -targetDir ${{ env.BUILD_RPM_DIR }}/SOURCES/omodsim${{ env.APP_INSTALL_PREFIX }}${{ env.VERSION_MAJOR }} \
-            -libDir ${{ env.QT_INSTALL_DIR }}/${{ env.QT_VERSION }}/${{ env.CMAKE_COMPILER }}/lib,/usr/local/lib,/usr/local/lib64 \
-            -ignore libmysqlclient.so.21,libpq.so.5,libqsqlmimer.so,libqsqlmysql.so,libqsqlodbc.so,libqsqlpsql.so,libqsqlibase.so,libqsqloci.so \
+            -libDir ${{ env.QT_INSTALL_DIR }}/${{ env.QT_VERSION }}/${{ env.CMAKE_COMPILER }}/lib \
+            -ignore libcrypto.so.3,libmysqlclient.so.21,libpq.so.5,libssl.so.3,libqsqlmimer.so,libqsqlmysql.so,libqsqlodbc.so,libqsqlpsql.so,libqsqlibase.so,libqsqloci.so \
             -extraLibs icudata,icui18n,icuuc,libxcb-util,libxcb-cursor \
-            -extraDepends libssl.so.3,libcrypto.so.3 \
             -customScript 'export QT_QPA_PLATFORM=${{ env.QT_QPA_PLATFORM }}'
+
+      - name: Copy OpenSSL 3 libraries
+        run: |
+          cp /usr/local/lib64/libssl.so.3 \
+             /usr/local/lib64/libcrypto.so.3 \
+             "${{ env.BUILD_RPM_DIR }}/SOURCES/omodsim${{ env.APP_INSTALL_PREFIX }}${{ env.VERSION_MAJOR }}/lib/"
 
       - name: Copy OpenModsim docs
         run: rsync -a "${{ env.BUILD_DIR }}/docs/" "${{ env.BUILD_RPM_DIR }}/SOURCES/omodsim${{ env.APP_INSTALL_PREFIX }}${{ env.VERSION_MAJOR }}/docs/"
