@@ -294,6 +294,8 @@ jobs:
         run: |
           sed -e "s|@PACKAGE_NAME@|${{ env.RPM_PACKAGE_NAME }}|g" \
               -e "s|@APP_VERSION@|${{ env.APP_VERSION }}|g" \
+              -e "s|@APP_INSTALL_PREFIX@|${{ env.APP_INSTALL_PREFIX }}|g" \
+              -e "s|@VERSION_MAJOR@|${{ env.VERSION_MAJOR }}|g" \
               ${{ env.BUILD_RPM_DIR }}/SPECS/omodsim.spec.in > ${{ env.BUILD_RPM_DIR }}/SPECS/omodsim.spec
           rm ${{ env.BUILD_RPM_DIR }}/SPECS/omodsim.spec.in
           cat -n ${{ env.BUILD_RPM_DIR }}/SPECS/omodsim.spec

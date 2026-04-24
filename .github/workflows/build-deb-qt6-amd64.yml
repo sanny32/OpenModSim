@@ -325,6 +325,14 @@ jobs:
           rm ${{ env.DEB_SRC_DIR }}/debian/rules.in
           cat -n ${{ env.DEB_SRC_DIR }}/debian/rules
 
+      - name: Create Debian postinst file
+        run: |
+          sed -e "s|@APP_INSTALL_PREFIX@|${{ env.APP_INSTALL_PREFIX }}|g" \
+              -e "s|@VERSION_MAJOR@|${{ env.VERSION_MAJOR }}|g" \
+              ${{ env.DEB_SRC_DIR }}/debian/postinst.in > ${{ env.DEB_SRC_DIR }}/debian/postinst
+          rm ${{ env.DEB_SRC_DIR }}/debian/postinst.in
+          cat -n ${{ env.DEB_SRC_DIR }}/debian/postinst
+
       - name: Create metainfo file
         run: |
           sed -e "s|@REF_NAME@|${{ env.REF_NAME }}|g" \
