@@ -320,8 +320,8 @@ void ProjectTreeWidget::retranslateUi()
 {
     _dataRoot->setText(0, tr("Data"));
     _trafficRoot->setText(0, tr("Traffic"));
-    _scriptRoot->setText(0, tr("Script"));
-    _dataMapRoot->setText(0, tr("Map"));
+    _scriptRoot->setText(0, tr("Scripts"));
+    _dataMapRoot->setText(0, tr("Maps"));
 
     auto retranslateRoot = [](QTreeWidgetItem* root) {
         for (int i = 0; i < root->childCount(); ++i) {

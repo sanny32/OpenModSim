@@ -1742,10 +1742,6 @@ Open the download page?</source>
         <translation>尋找...</translation>
     </message>
     <message>
-        <source>✕</source>
-        <translation type="vanished">✕</translation>
-    </message>
-    <message>
         <location filename="../controls/findreplacebar.ui" line="292"/>
         <source>Match Case</source>
         <translation>區分大小寫</translation>
@@ -2967,10 +2963,6 @@ Open the download page?</source>
         <translation>自動模擬已停用：單元 %1, %2, 地址 %3</translation>
     </message>
     <message>
-        <source>, ...</source>
-        <translation type="vanished">, ...</translation>
-    </message>
-    <message>
         <location filename="../applogger.cpp" line="53"/>
         <source>[%1 values: %2%3]</source>
         <translation>[%1 values: %2%3]</translation>
@@ -3231,10 +3223,6 @@ Open the download page?</source>
         <location filename="../mainwindow.cpp" line="1205"/>
         <source>JavaScript files (*.js);;All files (*)</source>
         <translation>JavaScript檔案 (*.js);;所有檔案 (*)</translation>
-    </message>
-    <message>
-        <source>Script started: %1</source>
-        <translation type="vanished">腳本已啟動：%1</translation>
     </message>
     <message>
         <location filename="../applogger.cpp" line="488"/>
@@ -3800,22 +3788,14 @@ Open the download page?</source>
         <translation>流量</translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="324"/>
-        <source>Map</source>
-        <translation>映射</translation>
-    </message>
-    <message>
-        <location filename="../controls/projecttreewidget.cpp" line="323"/>
-        <source>Script</source>
-        <translation>腳本</translation>
-    </message>
-    <message>
         <location filename="../controls/projecttreewidget.cpp" line="66"/>
+        <location filename="../controls/projecttreewidget.cpp" line="324"/>
         <source>Maps</source>
         <translation>地圖</translation>
     </message>
     <message>
         <location filename="../controls/projecttreewidget.cpp" line="74"/>
+        <location filename="../controls/projecttreewidget.cpp" line="323"/>
         <source>Scripts</source>
         <translation>腳本</translation>
     </message>

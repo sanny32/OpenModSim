@@ -1742,10 +1742,6 @@ Open the download page?</source>
         <translation>Найти...</translation>
     </message>
     <message>
-        <source>✕</source>
-        <translation type="vanished">✕</translation>
-    </message>
-    <message>
         <location filename="../controls/findreplacebar.ui" line="292"/>
         <source>Match Case</source>
         <translation>Учитывать регистр</translation>
@@ -2739,10 +2735,6 @@ Open the download page?</source>
         <translation>Каскадно</translation>
     </message>
     <message>
-        <source>New2</source>
-        <translation type="vanished">Создать2</translation>
-    </message>
-    <message>
         <location filename="../mainwindow.ui" line="320"/>
         <source>Tile</source>
         <translation>Замостить</translation>
@@ -2969,10 +2961,6 @@ Open the download page?</source>
         <location filename="../applogger.cpp" line="357"/>
         <source>Auto simulation disabled: unit %1, %2, address %3</source>
         <translation>Автосимуляция отключена: устройство %1, %2, адрес %3</translation>
-    </message>
-    <message>
-        <source>, ...</source>
-        <translation type="vanished">, ...</translation>
     </message>
     <message>
         <location filename="../applogger.cpp" line="53"/>
@@ -3235,10 +3223,6 @@ Open the download page?</source>
         <location filename="../mainwindow.cpp" line="1205"/>
         <source>JavaScript files (*.js);;All files (*)</source>
         <translation>Файлы JavaScript (*.js);;Все файлы (*)</translation>
-    </message>
-    <message>
-        <source>Script started: %1</source>
-        <translation type="vanished">Скрипт запущен: %1</translation>
     </message>
     <message>
         <location filename="../applogger.cpp" line="488"/>
@@ -3804,22 +3788,14 @@ Open the download page?</source>
         <translation>Трафик</translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="324"/>
-        <source>Map</source>
-        <translation>Карта</translation>
-    </message>
-    <message>
-        <location filename="../controls/projecttreewidget.cpp" line="323"/>
-        <source>Script</source>
-        <translation>Скрипт</translation>
-    </message>
-    <message>
         <location filename="../controls/projecttreewidget.cpp" line="66"/>
+        <location filename="../controls/projecttreewidget.cpp" line="324"/>
         <source>Maps</source>
         <translation>Карты</translation>
     </message>
     <message>
         <location filename="../controls/projecttreewidget.cpp" line="74"/>
+        <location filename="../controls/projecttreewidget.cpp" line="323"/>
         <source>Scripts</source>
         <translation>Скрипты</translation>
     </message>
