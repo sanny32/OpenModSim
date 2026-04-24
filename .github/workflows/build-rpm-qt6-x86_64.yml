@@ -258,8 +258,8 @@ jobs:
           tar xvf openssl-${OPENSSL_VERSION}.tar.gz
           cd openssl-${OPENSSL_VERSION}
           ./config \
-            shared zlib
-          make -j$(nproc)
+            shared zlib no-apps no-docs no-tests
+          make -j$(nproc) build_libs
           make install_runtime_libs
 
       - name: Bundle Qt libraries and plugins throught cqtdeployer
