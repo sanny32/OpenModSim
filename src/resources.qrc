@@ -7,7 +7,6 @@
         <file>res/icon-swapped-dbl.png</file>
         <file>res/icon-swapped-fp.png</file>
         <file>res/icon-about.png</file>
-        <file>res/icon-new.png</file>
         <file>res/icon-open.png</file>
         <file>res/icon-print.png</file>
         <file>res/icon-show-data.png</file>
@@ -29,7 +28,6 @@
         <file>res/iconProp.png</file>
         <file>res/icon-copy.png</file>
         <file>res/icon-cut.png</file>
-        <file>res/icon-find.png</file>
         <file>res/icon-paste.png</file>
         <file>res/icon-redo.png</file>
         <file>res/icon-undo.png</file>
@@ -58,7 +56,6 @@
         <file>res/emblem-mail.svg</file>
         <file>res/applications-internet.svg</file>
         <file>res/edit-delete.svg</file>
-        <file>res/icon-clear.png</file>
         <file>res/icon-constant.svg</file>
         <file>res/icon-export.svg</file>
         <file>res/icon-export.png</file>
@@ -75,7 +72,6 @@
         <file>res/icon-whole-word.svg</file>
         <file>res/icon-arrow-right.svg</file>
         <file>res/icon-arrow-left.svg</file>
-        <file>res/banner-js.png</file>
         <file>res/pref-interface.png</file>
         <file>res/icon-bell.svg</file>
         <file>res/icon-bell-dot.svg</file>
@@ -85,7 +81,6 @@
         <file>res/icon-new-script.png</file>
         <file>res/icon-hex.png</file>
         <file>res/icon-hex.svg</file>
-        <file>res/icon-pause.svg</file>
         <file>res/icon-directory.png</file>
         <file>res/icon-data-locked.png</file>
         <file>res/icon-hex-view.png</file>
