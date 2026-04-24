@@ -689,6 +689,25 @@ elseif(LINUX)
     install(FILES "${CMAKE_CURRENT_SOURCE_DIR}/omodsim-project.xml" DESTINATION share/mime/packages)
     install(FILES "${CMAKE_CURRENT_BINARY_DIR}/omodsim.desktop" DESTINATION share/applications RENAME "${APP_EXECUTABLE_NAME}.desktop")
 
+    find_program(SETCAP_EXECUTABLE setcap)
+    if(SETCAP_EXECUTABLE)
+        install(CODE "
+            set(_installed_exe \"\$ENV{DESTDIR}\${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_BINDIR}/${APP_EXECUTABLE_NAME}\")
+            if(NOT EXISTS \"\${_installed_exe}\")
+                message(FATAL_ERROR \"Installed executable not found: \${_installed_exe}\")
+            endif()
+
+            execute_process(
+                COMMAND \"${SETCAP_EXECUTABLE}\" cap_net_bind_service=+ep \"\${_installed_exe}\"
+                RESULT_VARIABLE _setcap_result
+            )
+
+            if(NOT _setcap_result EQUAL 0)
+                message(FATAL_ERROR \"setcap failed with exit code \${_setcap_result}\")
+            endif()
+        ")
+    endif()
+
     install(CODE "execute_process(COMMAND update-mime-database ${CMAKE_INSTALL_PREFIX}/share/mime)")
     install(CODE "execute_process(COMMAND xdg-desktop-menu forceupdate)")
     install(CODE "execute_process(COMMAND update-desktop-database -q ${CMAKE_INSTALL_PREFIX}/share/applications)")
