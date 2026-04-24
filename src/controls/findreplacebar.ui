@@ -127,7 +127,7 @@
         <string>Close (Escape)</string>
        </property>
        <property name="text">
-        <string>✕</string>
+        <string notr="true">✕</string>
        </property>
        <property name="autoRaise">
         <bool>true</bool>
@@ -354,4 +354,3 @@
  </resources>
  <connections/>
 </ui>
-

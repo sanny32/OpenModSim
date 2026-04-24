@@ -222,8 +222,8 @@ MainWindow::MainWindow(const QString& profile, bool useSession, const QString& s
     setUnifiedTitleAndToolBarOnMac(true);
     setStatusBar(new MainStatusBar(_mbMultiServer, this));
 
-    ui->actionNew->setMenu(ui->menuNew);
     if (auto* newButton = qobject_cast<QToolButton*>(ui->toolBarMain->widgetForAction(ui->actionNew))) {
+        newButton->setMenu(ui->menuNew);
         newButton->setPopupMode(QToolButton::MenuButtonPopup);
     }
     _openRecentMenu = new QMenu(tr("Open Recent"), this);
@@ -843,7 +843,7 @@ void MainWindow::restoreNewFormKindIcon()
     switch(_newFormKind) {
         case ProjectFormKind::Traffic:     ui->actionNew->setIcon(ui->actionNewTrafficView->icon());     break;
         case ProjectFormKind::Script:      ui->actionNew->setIcon(ui->actionNewScript->icon());          break;
-        case ProjectFormKind::DataMap: ui->actionNew->setIcon(ui->actionNewDataMapView->icon()); break;
+        case ProjectFormKind::DataMap:     ui->actionNew->setIcon(ui->actionNewDataMapView->icon()); break;
         default:                           ui->actionNew->setIcon(ui->actionNewDataView->icon());        break;
     }
 }
@@ -2006,5 +2006,3 @@ void MainWindow::openRecentProject(const QString& filePath)
 
     loadProject(filePath);
 }
-
-
