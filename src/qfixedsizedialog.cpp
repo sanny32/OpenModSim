@@ -12,6 +12,16 @@ QFixedSizeDialog::QFixedSizeDialog(QWidget *parent, Qt::WindowFlags f)
 }
 
 ///
+/// \brief QFixedSizeDialog::sizeHint
+/// \return
+///
+QSize QFixedSizeDialog::sizeHint() const
+{
+    const QSize natural = QDialog::sizeHint();
+    return { qMax(natural.width(), minimumWidth()), qMax(natural.height(), minimumHeight()) };
+}
+
+///
 /// \brief QFixedSizeDialog::showEvent
 /// \param e
 ///

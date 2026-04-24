@@ -415,11 +415,11 @@
     </message>
     <message>
         <location filename="../dialogs/dialogabout.ui" line="217"/>
-        <location filename="../dialogs/dialogabout.cpp" line="375"/>
+        <location filename="../dialogs/dialogabout.cpp" line="365"/>
+        <location filename="../dialogs/dialogabout.cpp" line="366"/>
         <location filename="../dialogs/dialogabout.cpp" line="376"/>
-        <location filename="../dialogs/dialogabout.cpp" line="386"/>
-        <location filename="../dialogs/dialogabout.cpp" line="388"/>
-        <location filename="../dialogs/dialogabout.cpp" line="400"/>
+        <location filename="../dialogs/dialogabout.cpp" line="378"/>
+        <location filename="../dialogs/dialogabout.cpp" line="390"/>
         <source>Check for updates</source>
         <translation>Проверить обновления</translation>
     </message>
@@ -464,19 +464,19 @@
         <translation>Автор</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="278"/>
+        <location filename="../dialogs/dialogabout.cpp" line="268"/>
         <source>Visit component&apos;s homepage
 %1</source>
         <translation>Посетить домашнюю страницу компонента
 %1</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="299"/>
+        <location filename="../dialogs/dialogabout.cpp" line="289"/>
         <source>Email contributer: %1</source>
         <translation>Написать участнику: %1</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="308"/>
+        <location filename="../dialogs/dialogabout.cpp" line="298"/>
         <source>Visit user&apos;s homepage
 %1</source>
         <translation>Посетить домашнюю страницу пользователя на github
@@ -522,29 +522,29 @@
         <translation>Упрощенный китайский и традиционный китайский</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="304"/>
+        <location filename="../dialogs/dialogabout.cpp" line="294"/>
         <source>Visit github user&apos;s homepage
 %1</source>
         <translation>Посетить домашнюю страницу пользователя на github
 %1</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="332"/>
+        <location filename="../dialogs/dialogabout.cpp" line="322"/>
         <source>License Agreement - %1</source>
         <translation>Лицензионное соглашение - %1</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="366"/>
+        <location filename="../dialogs/dialogabout.cpp" line="356"/>
         <source>Checking...</source>
         <translation>Проверка...</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="376"/>
+        <location filename="../dialogs/dialogabout.cpp" line="366"/>
         <source>No updates available.</source>
         <translation>Обновлений нет.</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="389"/>
+        <location filename="../dialogs/dialogabout.cpp" line="379"/>
         <source>Failed to check for updates.
 
 %1</source>
@@ -553,12 +553,12 @@
 %1</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="403"/>
+        <location filename="../dialogs/dialogabout.cpp" line="393"/>
         <source>New version available</source>
         <translation>Доступна новая версия</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="404"/>
+        <location filename="../dialogs/dialogabout.cpp" line="394"/>
         <source>A new version %1 is available.
 
 Open the download page?</source>

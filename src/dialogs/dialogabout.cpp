@@ -200,16 +200,6 @@ void DialogAbout::changeEvent(QEvent* event)
 }
 
 ///
-/// \brief DialogAbout::sizeHint
-/// \return
-///
-QSize DialogAbout::sizeHint() const
-{
-    const QSize natural = QFixedSizeDialog::sizeHint();
-    return { qMax(natural.width(), minimumWidth()), qMax(natural.height(), minimumHeight()) };
-}
-
-///
 /// \brief DialogAbout::adjustSize
 ///
 void DialogAbout::adjustSize()

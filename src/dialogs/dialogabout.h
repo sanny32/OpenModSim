@@ -19,8 +19,6 @@ public:
     explicit DialogAbout(QWidget *parent = nullptr);
     ~DialogAbout();
 
-    QSize sizeHint() const override;
-
 protected:
     void changeEvent(QEvent* event) override;
 
