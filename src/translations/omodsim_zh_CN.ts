@@ -3800,15 +3800,23 @@ Open the download page?</source>
         <translation>流量</translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="66"/>
         <location filename="../controls/projecttreewidget.cpp" line="324"/>
         <source>Map</source>
         <translation>映射</translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="74"/>
         <location filename="../controls/projecttreewidget.cpp" line="323"/>
         <source>Script</source>
+        <translation>脚本</translation>
+    </message>
+    <message>
+        <location filename="../controls/projecttreewidget.cpp" line="66"/>
+        <source>Maps</source>
+        <translation>地图</translation>
+    </message>
+    <message>
+        <location filename="../controls/projecttreewidget.cpp" line="74"/>
+        <source>Scripts</source>
         <translation>脚本</translation>
     </message>
     <message>

@@ -63,7 +63,7 @@ ProjectTreeWidget::ProjectTreeWidget(QWidget* parent)
     _dataRoot->setIcon(0, iconDir);
     _dataRoot->setExpanded(true);
 
-    _dataMapRoot = new QTreeWidgetItem(this, QStringList{tr("Map")});
+    _dataMapRoot = new QTreeWidgetItem(this, QStringList{tr("Maps")});
     _dataMapRoot->setIcon(0, iconDir);
     _dataMapRoot->setExpanded(true);
 
@@ -71,7 +71,7 @@ ProjectTreeWidget::ProjectTreeWidget(QWidget* parent)
     _trafficRoot->setIcon(0, iconDir);
     _trafficRoot->setExpanded(true);
 
-    _scriptRoot = new QTreeWidgetItem(this, QStringList{tr("Script")});
+    _scriptRoot = new QTreeWidgetItem(this, QStringList{tr("Scripts")});
     _scriptRoot->setIcon(0, iconDir);
     _scriptRoot->setExpanded(true);
 

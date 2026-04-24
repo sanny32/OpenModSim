@@ -3804,16 +3804,24 @@ Open the download page?</source>
         <translation>Трафик</translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="66"/>
         <location filename="../controls/projecttreewidget.cpp" line="324"/>
         <source>Map</source>
         <translation>Карта</translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="74"/>
         <location filename="../controls/projecttreewidget.cpp" line="323"/>
         <source>Script</source>
         <translation>Скрипт</translation>
+    </message>
+    <message>
+        <location filename="../controls/projecttreewidget.cpp" line="66"/>
+        <source>Maps</source>
+        <translation>Карты</translation>
+    </message>
+    <message>
+        <location filename="../controls/projecttreewidget.cpp" line="74"/>
+        <source>Scripts</source>
+        <translation>Скрипты</translation>
     </message>
     <message>
         <location filename="../controls/projecttreewidget.cpp" line="363"/>
