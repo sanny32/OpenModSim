@@ -929,7 +929,6 @@ void FormDataView::show()
         emit definitionChanged();
 
     QWidget::show();
-    connectEditSlots();
 
     emit showed();
 }
@@ -1327,27 +1326,4 @@ void FormDataView::updateDisplayBar()
 
     updateSettingsControls();
 }
-
-///
-/// \brief FormDataView::connectEditSlots
-///
-void FormDataView::connectEditSlots()
-{
-    disconnectEditSlots();
-    connect(_parent, &MainWindow::find, this, &FormDataView::showFind);
-}
-
-///
-/// \brief FormDataView::disconnectEditSlots
-///
-void FormDataView::disconnectEditSlots()
-{
-    disconnect(_parent, &MainWindow::find, this, &FormDataView::showFind);
-}
-
-
-
-
-
-
 

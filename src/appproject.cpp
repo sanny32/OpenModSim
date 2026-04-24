@@ -26,14 +26,30 @@ constexpr const char* kSplitAutoCloneProperty = "SplitAutoClone";
 constexpr const char* kFormIdProperty = "FormId";
 constexpr const char* kDeleteLockedProperty = "DeleteLocked";
 
+///
+/// \brief formIdOf
+/// \param widget
+/// \return
+///
 QUuid formIdOf(QWidget* widget);
 
+///
+/// \brief dataMapIconPath
+/// \param deleteLocked
+/// \return
+///
 QString dataMapIconPath(bool deleteLocked)
 {
     return deleteLocked ? QStringLiteral(":/res/icon-data-locked.png")
                         : QStringLiteral(":/res/icon-show-data.png");
 }
 
+///
+/// \brief panelName
+/// \param mdi
+/// \param area
+/// \return
+///
 QString panelName(const MdiAreaEx* mdi, const MdiArea* area)
 {
     if (!mdi || !area)
@@ -45,6 +61,11 @@ QString panelName(const MdiAreaEx* mdi, const MdiArea* area)
     return QStringLiteral("unknown");
 }
 
+///
+/// \brief mdiExState
+/// \param mdi
+/// \return
+///
 QString mdiExState(const MdiAreaEx* mdi)
 {
     if (!mdi)
@@ -58,6 +79,11 @@ QString mdiExState(const MdiAreaEx* mdi)
         .arg(AppTrace::mdiAreaState(mdi->secondaryArea()));
 }
 
+///
+/// \brief formTag
+/// \param frm
+/// \return
+///
 QString formTag(const QWidget* frm)
 {
     if (!frm)
@@ -67,6 +93,13 @@ QString formTag(const QWidget* frm)
         .arg(formIdOf(const_cast<QWidget*>(frm)).toString(QUuid::WithoutBraces));
 }
 
+///
+/// \brief traceMdiActivationRequest
+/// \param scope
+/// \param mdi
+/// \param wnd
+/// \param reason
+///
 void traceMdiActivationRequest(const char* scope, const MdiAreaEx* mdi, QMdiSubWindow* wnd, const QString& reason)
 {
     if (!AppTrace::isEnabled())
@@ -79,6 +112,11 @@ void traceMdiActivationRequest(const char* scope, const MdiAreaEx* mdi, QMdiSubW
                       .arg(mdiExState(mdi)));
 }
 
+///
+/// \brief toProjectFormType
+/// \param kind
+/// \return
+///
 ProjectFormType toProjectFormType(ProjectFormKind kind)
 {
     switch (kind)
@@ -91,6 +129,12 @@ ProjectFormType toProjectFormType(ProjectFormKind kind)
     return ProjectFormType::Data;
 }
 
+///
+/// \brief projectFormKindFromWidget
+/// \param widget
+/// \param ok
+/// \return
+///
 ProjectFormKind projectFormKindFromWidget(QWidget* widget, bool* ok = nullptr)
 {
     if (qobject_cast<FormDataView*>(widget)) {
@@ -114,6 +158,11 @@ ProjectFormKind projectFormKindFromWidget(QWidget* widget, bool* ok = nullptr)
     return ProjectFormKind::Data;
 }
 
+///
+/// \brief formIdOf
+/// \param widget
+/// \return
+///
 QUuid formIdOf(QWidget* widget)
 {
     if (!widget)
@@ -122,48 +171,84 @@ QUuid formIdOf(QWidget* widget)
     return widget->property(kFormIdProperty).toUuid();
 }
 
+///
+/// \brief enableAutoCompleteOnForm
+/// \param widget
+/// \param enable
+///
 void enableAutoCompleteOnForm(QWidget* widget, bool enable)
 {
     if (auto* frm = qobject_cast<FormScriptView*>(widget)) frm->enableAutoComplete(enable);
 }
 
+///
+/// \brief connectEditSlotsOnForm
+/// \param widget
+///
 void connectEditSlotsOnForm(QWidget* widget)
 {
-    if (auto* frm = qobject_cast<FormDataView*>(widget)) frm->connectEditSlots();
-    else if (auto* frm = qobject_cast<FormTrafficView*>(widget)) frm->connectEditSlots();
+    if (auto* frm = qobject_cast<FormTrafficView*>(widget)) frm->connectEditSlots();
     else if (auto* frm = qobject_cast<FormScriptView*>(widget)) frm->connectEditSlots();
 }
 
+///
+/// \brief disconnectEditSlotsOnForm
+/// \param widget
+///
 void disconnectEditSlotsOnForm(QWidget* widget)
 {
-    if (auto* frm = qobject_cast<FormDataView*>(widget)) frm->disconnectEditSlots();
-    else if (auto* frm = qobject_cast<FormTrafficView*>(widget)) frm->disconnectEditSlots();
+    if (auto* frm = qobject_cast<FormTrafficView*>(widget)) frm->disconnectEditSlots();
     else if (auto* frm = qobject_cast<FormScriptView*>(widget)) frm->disconnectEditSlots();
 }
 
+///
+/// \brief dataTypeOfForm
+/// \param widget
+/// \return
+///
 DataType dataTypeOfForm(QWidget* widget)
 {
     if (auto* frm = qobject_cast<FormDataView*>(widget)) return frm->dataType();
     return DataType::Hex;
 }
 
+///
+/// \brief setDataTypeOnForm
+/// \param widget
+/// \param type
+///
 void setDataTypeOnForm(QWidget* widget, DataType type)
 {
     if (auto* frm = qobject_cast<FormDataView*>(widget)) frm->setDataType(type);
 }
 
+///
+/// \brief scriptSettingsOfForm
+/// \param widget
+/// \return
+///
 ScriptSettings scriptSettingsOfForm(QWidget* widget)
 {
     if (auto* frm = qobject_cast<FormScriptView*>(widget)) return frm->scriptSettings();
     return ScriptSettings();
 }
 
+///
+/// \brief canStopScriptOnForm
+/// \param widget
+/// \return
+///
 bool canStopScriptOnForm(QWidget* widget)
 {
     if (auto* frm = qobject_cast<FormScriptView*>(widget)) return frm->canStopScript();
     return false;
 }
 
+///
+/// \brief saveXmlOfForm
+/// \param widget
+/// \param w
+///
 void saveXmlOfForm(QWidget* widget, QXmlStreamWriter& w)
 {
     if (auto* frm = qobject_cast<FormDataView*>(widget)) frm->saveXml(w);
@@ -172,6 +257,11 @@ void saveXmlOfForm(QWidget* widget, QXmlStreamWriter& w)
     else if (auto* frm = qobject_cast<FormDataMapView*>(widget)) frm->saveXml(w);
 }
 
+///
+/// \brief loadXmlOfForm
+/// \param widget
+/// \param r
+///
 void loadXmlOfForm(QWidget* widget, QXmlStreamReader& r)
 {
     if (auto* frm = qobject_cast<FormDataView*>(widget)) {
@@ -190,6 +280,11 @@ void loadXmlOfForm(QWidget* widget, QXmlStreamReader& r)
     else r.skipCurrentElement();
 }
 
+///
+/// \brief tabTitlesForArea
+/// \param area
+/// \return
+///
 QStringList tabTitlesForArea(const MdiArea* area)
 {
     QStringList titles;
@@ -210,6 +305,11 @@ QStringList tabTitlesForArea(const MdiArea* area)
     return titles;
 }
 
+///
+/// \brief applyTabOrderToArea
+/// \param area
+/// \param orderedTitles
+///
 void applyTabOrderToArea(MdiArea* area, const QStringList& orderedTitles)
 {
     if(!area || orderedTitles.isEmpty())

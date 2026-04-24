@@ -104,6 +104,8 @@ protected:
 
 public slots:
     void show();
+    void showFind();
+    void showReplace();
     void connectEditSlots();
     void disconnectEditSlots();
     void on_windowTitleChanged(const QString& title);

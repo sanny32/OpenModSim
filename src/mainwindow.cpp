@@ -275,35 +275,18 @@ MainWindow::MainWindow(const QString& profile, bool useSession, const QString& s
     addDockWidget(Qt::RightDockWidgetArea, _helpDockWidget);
     _helpDockWidget->setVisible(false);
 
-    connect(_helpDockWidget, &QDockWidget::visibilityChanged, this, [this](bool visible) {
-        if(_helpDockWidget->isVisible())
-            _helpDockWidget->setProperty("WasShown", false);
-    });
+    connect(_helpDockWidget, &QDockWidget::visibilityChanged, this, &MainWindow::on_helpDockVisibilityChanged);
 
-    connect(_projectTree, &ProjectTreeWidget::formActivated, this, [this](ProjectFormRef ref) {
-        if(ref.widget)
-            _project->openFormOnActivePanel(ref.widget);
-    });
-    connect(_projectTree, &ProjectTreeWidget::formDeleteRequested, this, [this](ProjectFormRef ref) {
-        if(!ref.widget)
-            return;
-        _project->deleteForm(ref.widget);
-    });
+    connect(_projectTree, &ProjectTreeWidget::formActivated, this, &MainWindow::on_projectTreeFormActivated);
+    connect(_projectTree, &ProjectTreeWidget::formDeleteRequested, this, &MainWindow::on_projectTreeFormDeleteRequested);
     connect(_projectTree, &ProjectTreeWidget::formRenamed, this, [this](ProjectFormRef) { markModified(); });
-    connect(_projectTree, &ProjectTreeWidget::formRunScriptRequested, this, [this](ProjectFormRef ref) {
-        if (auto* script = qobject_cast<FormScriptView*>(ref.widget))
-            script->runScript();
-    });
-    connect(_projectTree, &ProjectTreeWidget::formStopScriptRequested, this, [this](ProjectFormRef ref) {
-        if (auto* script = qobject_cast<FormScriptView*>(ref.widget))
-            script->stopScript();
-    });
+    connect(_projectTree, &ProjectTreeWidget::formRunScriptRequested, this, &MainWindow::on_projectTreeFormRunScriptRequested);
+    connect(_projectTree, &ProjectTreeWidget::formStopScriptRequested, this, &MainWindow::on_projectTreeFormStopScriptRequested);
     connect(_projectTree, &ProjectTreeWidget::runAllScriptsRequested, this, &MainWindow::runAllScripts);
     connect(_projectTree, &ProjectTreeWidget::stopAllScriptsRequested, this, &MainWindow::stopAllScripts);
     connect(_projectTree, &ProjectTreeWidget::deleteAllFormsRequested, this, &MainWindow::deleteAllForms);
-    connect(_projectTree, &ProjectTreeWidget::formCreateRequested, this, [this](ProjectFormType type) {
-        createNewForm(static_cast<ProjectFormKind>(type));
-    });
+    connect(_projectTree, &ProjectTreeWidget::formCreateRequested, this, &MainWindow::on_projectTreeFormCreateRequested);
+
     _outputPanel = new OutputPanel(this);
     _outputPanel->jsConsole()->setMaxLines(AppPreferences::instance().consoleMaxLines());
     _consoleDockWidget = new QDockWidget(tr("Output"), this);
@@ -313,43 +296,19 @@ MainWindow::MainWindow(const QString& profile, bool useSession, const QString& s
     addDockWidget(Qt::BottomDockWidgetArea, _consoleDockWidget);
     _consoleDockWidget->setVisible(false);
 
-    connect(_outputPanel, &OutputPanel::collapse, this, [this]() {
-        _consoleDockWidget->setVisible(false);
-    });
-    connect(_outputPanel->appLog(), &AppLogOutput::openRequested, this, [this]() {
-        const bool wasHidden = !_consoleDockWidget->isVisible();
-        _consoleDockWidget->setVisible(true);
-        _outputPanel->switchToAppLog();
-        if (wasHidden)
-            _consoleDockWidget->raise();
-    });
-    connect(_consoleDockWidget, &QDockWidget::visibilityChanged, this, [this](bool visible) {
-        ui->actionOutputWindow->setChecked(visible);
-    });
+    connect(_outputPanel, &OutputPanel::collapse, this, &MainWindow::on_outputPanelCollapse);
+    connect(_outputPanel->appLog(), &AppLogOutput::openRequested, this, &MainWindow::on_outputPanelAppLogOpenRequested);
+    connect(_consoleDockWidget, &QDockWidget::visibilityChanged, this, &MainWindow::on_outputDockVisibilityChanged);
 
     ui->mdiArea->setActivationOrder(QMdiArea::ActivationHistoryOrder);
     connect(ui->mdiArea, &MdiAreaEx::subWindowActivated, this, &MainWindow::updateMenuWindow);
-    connect(ui->mdiArea, &MdiAreaEx::subWindowActivated, this, [this](QMdiSubWindow* wnd) {
-        if(wnd)
-            markModified();
-
-        QMdiSubWindow* stableWnd = ui->mdiArea->activeSubWindow();
-        if(!stableWnd)
-            stableWnd = ui->mdiArea->currentSubWindow();
-        if(stableWnd)
-            _projectTree->activateForm(stableWnd->widget());
-        syncGlobalViewControls();
-    });
+    connect(ui->mdiArea, &MdiAreaEx::subWindowActivated, this, &MainWindow::on_mdiSubWindowActivated);
     connect(ui->mdiArea, &MdiAreaEx::tabsReordered, this, &MainWindow::markModified);
     connect(ui->mdiArea, &MdiAreaEx::tabContextMenuRequested, this, &MainWindow::on_tabContextMenuRequested);
     connect(ui->mdiArea, &MdiAreaEx::moveTabToOtherPanelRequested, this, &MainWindow::on_moveTabToOtherPanelRequested);
-    connect(ui->mdiArea, &MdiAreaEx::splitViewAboutToDisable, this, [this]() {
-        _project->removeSplitAutoClonesFromSecondary();
-    });
-    connect(ui->mdiArea, &MdiAreaEx::splitViewToggled, this, [this](bool enabled) {
-        if(enabled)
-            _project->duplicatePrimaryTabsToSecondary();
-    });
+    connect(ui->mdiArea, &MdiAreaEx::splitViewAboutToDisable, this, &MainWindow::on_splitViewAboutToDisable);
+    connect(ui->mdiArea, &MdiAreaEx::splitViewToggled, this, &MainWindow::on_splitViewToggled);
+
     AppLogger::setupModbusMultiServerLogging(_mbMultiServer, this);
     AppLogger::setupDataSimulatorLogging(*_dataSimulator, this);
     AppLogger::setupAppProjectLogging(*_project, this);
@@ -373,8 +332,8 @@ MainWindow::MainWindow(const QString& profile, bool useSession, const QString& s
     connect(ui->actionCopy,      &QAction::triggered, this, [this]{ if (auto* w = QApplication::focusWidget()) QMetaObject::invokeMethod(w, "copy"); });
     connect(ui->actionPaste,     &QAction::triggered, this, [this]{ if (auto* w = QApplication::focusWidget()) QMetaObject::invokeMethod(w, "paste"); });
     connect(ui->actionSelectAll, &QAction::triggered, this, [this]{ emit selectAll(); });
-    connect(ui->actionFind,      &QAction::triggered, this, [this]{ emit find(); });
-    connect(ui->actionReplace,   &QAction::triggered, this, [this]{ emit replace(); });
+    connect(ui->actionFind,      &QAction::triggered, this, &MainWindow::on_findActionTriggered);
+    connect(ui->actionReplace,   &QAction::triggered, this, &MainWindow::on_replaceActionTriggered);
 
     // New form kind wiring
     connect(ui->actionNewDataView,        &QAction::triggered, this, [this]{ activateNewFormKind(ProjectFormKind::Data,        ui->actionNewDataView); });
@@ -395,6 +354,152 @@ MainWindow::MainWindow(const QString& profile, bool useSession, const QString& s
     } else {
         ui->actionNew->trigger();
     }
+}
+
+///
+/// \brief MainWindow::on_helpDockVisibilityChanged
+/// \param visible
+///
+void MainWindow::on_helpDockVisibilityChanged(bool visible)
+{
+    if(visible)
+        _helpDockWidget->setProperty("WasShown", false);
+}
+
+///
+/// \brief MainWindow::on_projectTreeFormActivated
+/// \param ref
+///
+void MainWindow::on_projectTreeFormActivated(ProjectFormRef ref)
+{
+    if(ref.widget)
+        _project->openFormOnActivePanel(ref.widget);
+}
+
+///
+/// \brief MainWindow::on_projectTreeFormDeleteRequested
+/// \param ref
+///
+void MainWindow::on_projectTreeFormDeleteRequested(ProjectFormRef ref)
+{
+    if(!ref.widget)
+        return;
+    _project->deleteForm(ref.widget);
+}
+
+///
+/// \brief MainWindow::on_projectTreeFormRunScriptRequested
+/// \param ref
+///
+void MainWindow::on_projectTreeFormRunScriptRequested(ProjectFormRef ref)
+{
+    if (auto* script = qobject_cast<FormScriptView*>(ref.widget))
+        script->runScript();
+}
+
+///
+/// \brief MainWindow::on_projectTreeFormStopScriptRequested
+/// \param ref
+///
+void MainWindow::on_projectTreeFormStopScriptRequested(ProjectFormRef ref)
+{
+    if (auto* script = qobject_cast<FormScriptView*>(ref.widget))
+        script->stopScript();
+}
+
+///
+/// \brief MainWindow::on_projectTreeFormCreateRequested
+/// \param type
+///
+void MainWindow::on_projectTreeFormCreateRequested(ProjectFormType type)
+{
+    createNewForm(static_cast<ProjectFormKind>(type));
+}
+
+///
+/// \brief MainWindow::on_outputPanelCollapse
+///
+void MainWindow::on_outputPanelCollapse()
+{
+    _consoleDockWidget->setVisible(false);
+}
+
+///
+/// \brief MainWindow::on_outputPanelAppLogOpenRequested
+///
+void MainWindow::on_outputPanelAppLogOpenRequested()
+{
+    const bool wasHidden = !_consoleDockWidget->isVisible();
+    _consoleDockWidget->setVisible(true);
+    _outputPanel->switchToAppLog();
+    if (wasHidden)
+        _consoleDockWidget->raise();
+}
+
+///
+/// \brief MainWindow::on_outputDockVisibilityChanged
+/// \param visible
+///
+void MainWindow::on_outputDockVisibilityChanged(bool visible)
+{
+    ui->actionOutputWindow->setChecked(visible);
+}
+
+///
+/// \brief MainWindow::on_mdiSubWindowActivated
+/// \param wnd
+///
+void MainWindow::on_mdiSubWindowActivated(QMdiSubWindow* wnd)
+{
+    if(wnd)
+        markModified();
+
+    QMdiSubWindow* stableWnd = ui->mdiArea->activeSubWindow();
+    if(!stableWnd)
+        stableWnd = ui->mdiArea->currentSubWindow();
+    if(stableWnd)
+        _projectTree->activateForm(stableWnd->widget());
+    syncGlobalViewControls();
+}
+
+///
+/// \brief MainWindow::on_splitViewAboutToDisable
+///
+void MainWindow::on_splitViewAboutToDisable()
+{
+    _project->removeSplitAutoClonesFromSecondary();
+}
+
+///
+/// \brief MainWindow::on_splitViewToggled
+/// \param enabled
+///
+void MainWindow::on_splitViewToggled(bool enabled)
+{
+    if(enabled)
+        _project->duplicatePrimaryTabsToSecondary();
+}
+
+///
+/// \brief MainWindow::on_findActionTriggered
+///
+void MainWindow::on_findActionTriggered()
+{
+    if (auto* data = currentDataForm()) {
+        data->showFind();
+    }
+    else if (auto* script = currentScriptForm()) {
+        script->showFind();
+    }
+}
+
+///
+/// \brief MainWindow::on_replaceActionTriggered
+///
+void MainWindow::on_replaceActionTriggered()
+{
+    if (auto* script = currentScriptForm())
+        script->showReplace();
 }
 
 ///

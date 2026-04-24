@@ -2654,7 +2654,7 @@ Open the download page?</source>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="244"/>
-        <location filename="../mainwindow.cpp" line="1741"/>
+        <location filename="../mainwindow.cpp" line="1846"/>
         <source>Save Project</source>
         <translation>儲存專案</translation>
     </message>
@@ -2829,7 +2829,7 @@ Open the download page?</source>
         <location filename="../mainwindow.ui" line="526"/>
         <location filename="../mainwindow.ui" line="529"/>
         <location filename="../mainwindow.cpp" line="271"/>
-        <location filename="../mainwindow.cpp" line="516"/>
+        <location filename="../mainwindow.cpp" line="621"/>
         <source>Script Help</source>
         <translation>指令稿說明</translation>
     </message>
@@ -2850,50 +2850,50 @@ Open the download page?</source>
         <translation>狀態列</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="772"/>
+        <location filename="../mainwindow.cpp" line="877"/>
         <source>All files (*)</source>
         <translation>所有檔案 (*)</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="229"/>
-        <location filename="../mainwindow.cpp" line="518"/>
+        <location filename="../mainwindow.cpp" line="623"/>
         <source>Open Recent</source>
         <translation>最近開啟</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="230"/>
-        <location filename="../mainwindow.cpp" line="1877"/>
+        <location filename="../mainwindow.cpp" line="1982"/>
         <source>Clear List</source>
         <translation>清除清單</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="255"/>
-        <location filename="../mainwindow.cpp" line="515"/>
+        <location filename="../mainwindow.cpp" line="620"/>
         <source>Project</source>
         <translation>專案</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="309"/>
-        <location filename="../mainwindow.cpp" line="517"/>
+        <location filename="../mainwindow.cpp" line="292"/>
+        <location filename="../mainwindow.cpp" line="622"/>
         <source>Output</source>
         <translation>輸出</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="771"/>
-        <location filename="../mainwindow.cpp" line="1771"/>
+        <location filename="../mainwindow.cpp" line="876"/>
+        <location filename="../mainwindow.cpp" line="1876"/>
         <source>Project files (*.omp)</source>
         <translation>專案檔案 (*.omp)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1391"/>
-        <location filename="../mainwindow.cpp" line="1799"/>
+        <location filename="../mainwindow.cpp" line="1496"/>
+        <location filename="../mainwindow.cpp" line="1904"/>
         <source>Untitled</source>
         <translation>未命名</translation>
     </message>
     <message>
         <location filename="../applogger.cpp" line="119"/>
-        <location filename="../mainwindow.cpp" line="521"/>
-        <location filename="../mainwindow.cpp" line="1573"/>
+        <location filename="../mainwindow.cpp" line="626"/>
+        <location filename="../mainwindow.cpp" line="1678"/>
         <source>Address Base</source>
         <translation>地址基準</translation>
     </message>
@@ -3187,7 +3187,7 @@ Open the download page?</source>
         <translation>腳本已啟動：%1（模式：%2）</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1142"/>
+        <location filename="../mainwindow.cpp" line="1247"/>
         <source>Move to Other Panel</source>
         <translation>移至其他面板</translation>
     </message>
@@ -3209,12 +3209,12 @@ Open the download page?</source>
         <translation>十六進位檢視</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1742"/>
+        <location filename="../mainwindow.cpp" line="1847"/>
         <source>Save project before closing?</source>
         <translation>關閉前儲存專案？</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1865"/>
+        <location filename="../mainwindow.cpp" line="1970"/>
         <source>No Recent Projects</source>
         <translation>無最近專案</translation>
     </message>
@@ -3224,7 +3224,7 @@ Open the download page?</source>
         <translation>資料</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1100"/>
+        <location filename="../mainwindow.cpp" line="1205"/>
         <source>JavaScript files (*.js);;All files (*)</source>
         <translation>JavaScript檔案 (*.js);;所有檔案 (*)</translation>
     </message>
@@ -3970,7 +3970,7 @@ Open the download page?</source>
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../appproject.cpp" line="2090"/>
+        <location filename="../appproject.cpp" line="2190"/>
         <source>Failed to write project XML.</source>
         <translation>專案 XML 寫入失敗。</translation>
     </message>

@@ -647,6 +647,22 @@ void FormScriptView::show()
 }
 
 ///
+/// \brief FormScriptView::showFind
+///
+void FormScriptView::showFind()
+{
+    ui->scriptControl->showFind();
+}
+
+///
+/// \brief FormScriptView::showReplace
+///
+void FormScriptView::showReplace()
+{
+    ui->scriptControl->showReplace();
+}
+
+///
 /// \brief FormScriptView::connectEditSlots
 ///
 void FormScriptView::connectEditSlots()
@@ -654,8 +670,6 @@ void FormScriptView::connectEditSlots()
     disconnectEditSlots();
     connect(_parent, &MainWindow::selectAll, ui->scriptControl, &JScriptControl::selectAll);
     connect(_parent, &MainWindow::search, ui->scriptControl, &JScriptControl::search);
-    connect(_parent, &MainWindow::find, ui->scriptControl, &JScriptControl::showFind);
-    connect(_parent, &MainWindow::replace, ui->scriptControl, &JScriptControl::showReplace);
 }
 
 ///
@@ -665,6 +679,4 @@ void FormScriptView::disconnectEditSlots()
 {
     disconnect(_parent, &MainWindow::selectAll, ui->scriptControl, &JScriptControl::selectAll);
     disconnect(_parent, &MainWindow::search, ui->scriptControl, &JScriptControl::search);
-    disconnect(_parent, &MainWindow::find, ui->scriptControl, &JScriptControl::showFind);
-    disconnect(_parent, &MainWindow::replace, ui->scriptControl, &JScriptControl::showReplace);
 }

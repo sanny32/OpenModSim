@@ -66,8 +66,6 @@ public:
 signals:
     void selectAll();
     void search(const QString& text);
-    void find();
-    void replace();
 
 protected:
     void showEvent(QShowEvent* event) override;
@@ -116,6 +114,21 @@ private slots:
 
     /* Script slots */
     void on_actionImportScript_triggered();
+
+    void on_helpDockVisibilityChanged(bool visible);
+    void on_projectTreeFormActivated(ProjectFormRef ref);
+    void on_projectTreeFormDeleteRequested(ProjectFormRef ref);
+    void on_projectTreeFormRunScriptRequested(ProjectFormRef ref);
+    void on_projectTreeFormStopScriptRequested(ProjectFormRef ref);
+    void on_projectTreeFormCreateRequested(ProjectFormType type);
+    void on_outputPanelCollapse();
+    void on_outputPanelAppLogOpenRequested();
+    void on_outputDockVisibilityChanged(bool visible);
+    void on_mdiSubWindowActivated(QMdiSubWindow* wnd);
+    void on_splitViewAboutToDisable();
+    void on_splitViewToggled(bool enabled);
+    void on_findActionTriggered();
+    void on_replaceActionTriggered();
 
     void updateMenuWindow();
     void on_tabContextMenuRequested(QMdiSubWindow* subWnd, MdiArea* sourcePanel, QPoint globalPos);

@@ -111,8 +111,6 @@ protected:
 public slots:
     void show();
     void showFind();
-    void connectEditSlots();
-    void disconnectEditSlots();
 
 signals:
     void showed();
