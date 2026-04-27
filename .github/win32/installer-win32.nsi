@@ -189,8 +189,8 @@ FunctionEnd
     IntFmt $0 "0x%08X" $0
 	  WriteRegDWORD HKLM32 "Software\Microsoft\Windows\CurrentVersion\Uninstall\${NAME}" "EstimatedSize" "$0"
 
-    # File association for .omp project files
-    WriteRegStr HKLM32 "Software\Classes\.omp" "" "OpenModSim.Project"
+    # File association for .omsim project files
+    WriteRegStr HKLM32 "Software\Classes\.omsim" "" "OpenModSim.Project"
     WriteRegStr HKLM32 "Software\Classes\OpenModSim.Project" "" "Open ModSim Project"
     WriteRegStr HKLM32 "Software\Classes\OpenModSim.Project\DefaultIcon" "" "$INSTDIR\${APPFILE},1"
     WriteRegStr HKLM32 "Software\Classes\OpenModSim.Project\shell" "" "open"
@@ -281,7 +281,7 @@ ProcessStillRunning:
 
 ProcessNotFound:
   DeleteRegKey HKLM32 "Software\Classes\OpenModSim.Project"
-  DeleteRegValue HKLM32 "Software\Classes\.omp" ""
+  DeleteRegValue HKLM32 "Software\Classes\.omsim" ""
   System::Call 'shell32::SHChangeNotify(i 0x08000000, i 0, p 0, p 0)'
 
   # Delete Shortcut

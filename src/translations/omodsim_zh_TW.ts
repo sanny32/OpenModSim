@@ -1601,7 +1601,7 @@ Open the download page?</source>
         <translation>不再顯示此對話框</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwelcome.cpp" line="40"/>
+        <location filename="../dialogs/dialogwelcome.cpp" line="37"/>
         <source>Welcome to %1</source>
         <translation>歡迎使用%1</translation>
     </message>
@@ -2881,8 +2881,8 @@ Open the download page?</source>
     <message>
         <location filename="../mainwindow.cpp" line="876"/>
         <location filename="../mainwindow.cpp" line="1876"/>
-        <source>Project files (*.omp)</source>
-        <translation>專案檔案 (*.omp)</translation>
+        <source>Project files (*.omsim)</source>
+        <translation>專案檔案 (*.omsim)</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="1496"/>

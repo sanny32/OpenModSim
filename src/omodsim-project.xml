@@ -4,6 +4,6 @@
         <comment>Open ModSim Project</comment>
         <icon name="omodsim-project"/>
         <generic-icon name="omodsim-project"/>
-        <glob pattern="*.omp"/>
+        <glob pattern="*.omsim"/>
     </mime-type>
 </mime-info>

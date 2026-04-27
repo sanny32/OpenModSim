@@ -7,9 +7,6 @@
 #include "ui_dialogwelcome.h"
 
 namespace {
-const char* kDemoPlcSimulator  = "demo_plc_simulator.omp";
-const char* kDemoWaveGenerator = "demo_wave_generator.omp";
-
 ///
 /// \brief findExistingDirectory
 /// \param candidates
@@ -47,10 +44,17 @@ DialogWelcome::DialogWelcome(const QStringList& recentProjects, QWidget *parent)
     }
 
     const QString dir = demosDir();
-    for (const char* name : { kDemoPlcSimulator, kDemoWaveGenerator }) {
-        const QString path = QDir::cleanPath(dir + "/" + name);
-        if (!dir.isEmpty() && QFile::exists(path) && !allPaths.contains(path, Qt::CaseInsensitive))
-            allPaths.append(path);
+    if (!dir.isEmpty()) {
+        const auto entries = QDir(dir).entryInfoList(
+            { QStringLiteral("*.omsim") },
+            QDir::Files | QDir::Readable,
+            QDir::Name | QDir::IgnoreCase
+        );
+        for (const auto& entry : entries) {
+            const QString path = QDir::cleanPath(entry.absoluteFilePath());
+            if (!allPaths.contains(path, Qt::CaseInsensitive))
+                allPaths.append(path);
+        }
     }
 
     for (const QString& path : allPaths) {

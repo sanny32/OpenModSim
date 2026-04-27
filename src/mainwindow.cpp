@@ -873,7 +873,7 @@ void MainWindow::on_actionCloseAll_triggered()
 void MainWindow::on_actionOpenProject_triggered()
 {
     QStringList filters;
-    filters << tr("Project files (*.omp)");
+    filters << tr("Project files (*.omsim)");
     filters << tr("All files (*)");
 
     const auto filename = QFileDialog::getOpenFileName(this, QString(), _project->savePath(), filters.join(";;"));
@@ -1873,10 +1873,10 @@ bool MainWindow::confirmSaveOnClose()
 bool MainWindow::promptSaveProjectAs(const QString& initialPath)
 {
     QStringList filters;
-    filters << tr("Project files (*.omp)");
+    filters << tr("Project files (*.omsim)");
 
     const QString defaultPath = _projectFilePath.isEmpty()
-        ? _project->savePath() + "/" + projectName() + ".omp"
+        ? _project->savePath() + "/" + projectName() + ".omsim"
         : _projectFilePath;
     const QString dialogPath = initialPath.isEmpty() ? defaultPath : initialPath;
     auto filename = QFileDialog::getSaveFileName(this, QString(), dialogPath, filters.join(";;"));
@@ -1884,8 +1884,8 @@ bool MainWindow::promptSaveProjectAs(const QString& initialPath)
     if(filename.isEmpty())
         return false;
 
-    if(!filename.endsWith(".omp", Qt::CaseInsensitive))
-        filename.append(".omp");
+    if(!filename.endsWith(".omsim", Qt::CaseInsensitive))
+        filename.append(".omsim");
 
     _project->setSavePath(QFileInfo(filename).absoluteDir().absolutePath());
     if(!saveProject(filename))
@@ -1904,13 +1904,13 @@ QString MainWindow::projectSavePathInProfileDir() const
     const QString baseName = projectName().isEmpty() ? tr("Untitled") : projectName();
     const QString documentsDir = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
     if (!documentsDir.isEmpty())
-        return QDir(documentsDir).filePath(baseName + ".omp");
+        return QDir(documentsDir).filePath(baseName + ".omsim");
 
     const QString homeDir = QStandardPaths::writableLocation(QStandardPaths::HomeLocation);
     if (!homeDir.isEmpty())
-        return QDir(homeDir).filePath(baseName + ".omp");
+        return QDir(homeDir).filePath(baseName + ".omsim");
 
-    return baseName + ".omp";
+    return baseName + ".omsim";
 }
 
 ///
