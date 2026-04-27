@@ -6,49 +6,408 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1075</width>
-    <height>431</height>
+    <width>929</width>
+    <height>400</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
-    <width>1075</width>
-    <height>320</height>
+    <width>100</width>
+    <height>26</height>
    </size>
   </property>
   <property name="windowTitle">
    <string>PRESET MULTIPLE REGISTERS</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout">
+  <layout class="QVBoxLayout" name="verticalLayout_2" stretch="0,1,0">
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout_2">
      <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_3">
-       <property name="spacing">
-        <number>10</number>
+      <widget class="QGroupBox" name="groupBoxRange">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
        </property>
-       <item>
-        <widget class="QLabel" name="labelSlaveDevice">
-         <property name="text">
-          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Unit Identifier: &lt;span style=&quot; font-weight:700;&quot;&gt;%1&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLabel" name="labelAddress">
-         <property name="text">
-          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Starting Address: &lt;span style=&quot; font-weight:700;&quot;&gt;%1&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLabel" name="labelLength">
-         <property name="text">
-          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Length: &lt;span style=&quot; font-weight:700;&quot;&gt;%1&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
+       <property name="title">
+        <string>Range</string>
+       </property>
+       <layout class="QFormLayout" name="formLayout">
+        <item row="0" column="0">
+         <widget class="QLabel" name="labelSlaveDevice">
+          <property name="text">
+           <string>Unit Identifier:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="NumericLineEdit" name="lineEditDeviceId">
+          <property name="minimumSize">
+           <size>
+            <width>65</width>
+            <height>26</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>80</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="contextMenuPolicy">
+           <enum>Qt::NoContextMenu</enum>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="QLabel" name="labelAddress">
+          <property name="text">
+           <string>Starting Address:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="NumericLineEdit" name="lineEditAddress">
+          <property name="minimumSize">
+           <size>
+            <width>80</width>
+            <height>26</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>80</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="contextMenuPolicy">
+           <enum>Qt::NoContextMenu</enum>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0">
+         <widget class="QLabel" name="labelLength">
+          <property name="text">
+           <string>Length:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="1">
+         <widget class="NumericLineEdit" name="lineEditLength">
+          <property name="minimumSize">
+           <size>
+            <width>80</width>
+            <height>26</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>80</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="contextMenuPolicy">
+           <enum>Qt::NoContextMenu</enum>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item>
+      <widget class="QGroupBox" name="groupBoxRepresentation">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="title">
+        <string>Representation</string>
+       </property>
+       <layout class="QFormLayout" name="formLayout_3">
+        <item row="0" column="0">
+         <widget class="QLabel" name="labelDisplayFormat">
+          <property name="text">
+           <string>Display Format:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QComboBox" name="comboBoxDisplayFormat">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>130</width>
+            <height>26</height>
+           </size>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="QLabel" name="labelRegisterOrder">
+          <property name="text">
+           <string>Register Order:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="QComboBox" name="comboBoxRegisterOrder">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>130</width>
+            <height>26</height>
+           </size>
+          </property>
+          <item>
+           <property name="text">
+            <string notr="true">MSRF</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string notr="true">LSRF</string>
+           </property>
+          </item>
+         </widget>
+        </item>
+        <item row="2" column="0">
+         <widget class="QLabel" name="labelBytes">
+          <property name="text">
+           <string>Bytes Order:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="1">
+         <widget class="QComboBox" name="comboBoxByteOrder">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>130</width>
+            <height>26</height>
+           </size>
+          </property>
+          <item>
+           <property name="text">
+            <string notr="true">Direct</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string notr="true">Swapped</string>
+           </property>
+          </item>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item>
+      <widget class="QGroupBox" name="groupBoxPreset">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="title">
+        <string>Preset</string>
+       </property>
+       <layout class="QGridLayout" name="gridLayout">
+        <item row="0" column="0" colspan="2">
+         <widget class="QComboBox" name="comboBoxPreset"/>
+        </item>
+        <item row="1" column="0" colspan="2">
+         <layout class="QHBoxLayout" name="horizontalLayoutPresetRow">
+          <item>
+           <layout class="QVBoxLayout" name="verticalLayout_3">
+            <item>
+             <widget class="NumericLineEdit" name="lineEditValue">
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>26</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <layout class="QHBoxLayout" name="horizontalLayoutIncrement" stretch="3,1">
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout_3">
+                <item>
+                 <widget class="QLabel" name="labelStart">
+                  <property name="text">
+                   <string>From:</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="NumericLineEdit" name="lineEditStartValue">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="minimumSize">
+                   <size>
+                    <width>0</width>
+                    <height>26</height>
+                   </size>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout_4">
+                <item>
+                 <widget class="QLabel" name="labelStep">
+                  <property name="text">
+                   <string>Step:</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="NumericLineEdit" name="lineEditStep">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="minimumSize">
+                   <size>
+                    <width>0</width>
+                    <height>26</height>
+                   </size>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+             </layout>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <widget class="QWidget" name="widgetPresetApplyRight" native="true">
+            <layout class="QHBoxLayout" name="horizontalLayoutPresetApplyRight">
+             <property name="leftMargin">
+              <number>0</number>
+             </property>
+             <property name="topMargin">
+              <number>0</number>
+             </property>
+             <property name="rightMargin">
+              <number>0</number>
+             </property>
+             <property name="bottomMargin">
+              <number>0</number>
+             </property>
+             <item>
+              <widget class="QPushButton" name="pushButtonValue">
+               <property name="minimumSize">
+                <size>
+                 <width>100</width>
+                 <height>26</height>
+                </size>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">QPushButton {
+            color: white;
+            padding: 4px 12px;
+            background-color: #4CAF50;
+            border: 1px solid #3e8e41;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+        QPushButton:hover {
+            background-color: #45a049;
+        }
+        QPushButton:pressed {
+            background-color: #3e8e41;
+        }
+        QPushButton:disabled {
+            color: #707070;
+            background-color: #e6e6e6;
+            border-color: #c8c8c8;
+        }</string>
+               </property>
+               <property name="text">
+                <string>Apply</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item row="2" column="0" colspan="2">
+         <widget class="QWidget" name="widgetPresetApplyBottom" native="true">
+          <layout class="QHBoxLayout" name="horizontalLayoutPresetApply">
+           <property name="leftMargin">
+            <number>0</number>
+           </property>
+           <property name="topMargin">
+            <number>0</number>
+           </property>
+           <property name="rightMargin">
+            <number>0</number>
+           </property>
+           <property name="bottomMargin">
+            <number>0</number>
+           </property>
+           <item>
+            <spacer name="horizontalSpacerPresetApply">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item row="3" column="0" colspan="2">
+         <spacer name="verticalSpacer_3">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>40</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+       </layout>
+      </widget>
      </item>
      <item>
       <spacer name="horizontalSpacer_2">
@@ -64,579 +423,85 @@
       </spacer>
      </item>
      <item>
-      <widget class="QPushButton" name="pushButtonImport">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="minimumSize">
-        <size>
-         <width>100</width>
-         <height>26</height>
-        </size>
-       </property>
-       <property name="text">
-        <string>Import</string>
-       </property>
-       <property name="icon">
-        <iconset resource="../resources.qrc">
-         <normaloff>:/res/icon-import.svg</normaloff>:/res/icon-import.svg</iconset>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="pushButtonExport">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="minimumSize">
-        <size>
-         <width>100</width>
-         <height>26</height>
-        </size>
-       </property>
-       <property name="text">
-        <string>Export</string>
-       </property>
-       <property name="icon">
-        <iconset resource="../resources.qrc">
-         <normaloff>:/res/icon-export.svg</normaloff>:/res/icon-export.svg</iconset>
-       </property>
-      </widget>
+      <layout class="QVBoxLayout" name="verticalLayout">
+       <item>
+        <spacer name="verticalSpacer_2">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Fixed</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>15</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pushButtonImport">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>100</width>
+           <height>26</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>Import</string>
+         </property>
+         <property name="icon">
+          <iconset resource="../resources.qrc">
+           <normaloff>:/res/icon-import.svg</normaloff>:/res/icon-import.svg</iconset>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pushButtonExport">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>100</width>
+           <height>26</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>Export</string>
+         </property>
+         <property name="icon">
+          <iconset resource="../resources.qrc">
+           <normaloff>:/res/icon-export.svg</normaloff>:/res/icon-export.svg</iconset>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="verticalSpacer">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
      </item>
     </layout>
-   </item>
-   <item>
-    <widget class="QGroupBox" name="groupBox_2">
-     <layout class="QHBoxLayout" name="horizontalLayout_4">
-      <item>
-       <widget class="QFrame" name="frameDisplay">
-        <layout class="QHBoxLayout" name="horizontalLayoutDisplay">
-         <property name="spacing">
-          <number>2</number>
-         </property>
-         <property name="leftMargin">
-          <number>4</number>
-         </property>
-         <property name="topMargin">
-          <number>0</number>
-         </property>
-         <property name="rightMargin">
-          <number>4</number>
-         </property>
-         <property name="bottomMargin">
-          <number>0</number>
-         </property>
-         <item>
-          <widget class="QToolButton" name="toolButtonDisplayBinary">
-           <property name="icon">
-            <iconset resource="../resources.qrc">
-             <normaloff>:/res/icon-binary.png</normaloff>:/res/icon-binary.png</iconset>
-           </property>
-           <property name="autoRaise">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QToolButton" name="toolButtonDisplayHex">
-           <property name="icon">
-            <iconset resource="../resources.qrc">
-             <normaloff>:/res/icon-hex.png</normaloff>:/res/icon-hex.png</iconset>
-           </property>
-           <property name="autoRaise">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QToolButton" name="toolButtonDisplayAnsi">
-           <property name="icon">
-            <iconset resource="../resources.qrc">
-             <normaloff>:/res/icon-ansi.png</normaloff>:/res/icon-ansi.png</iconset>
-           </property>
-           <property name="autoRaise">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="Line" name="lineDisplay1">
-           <property name="maximumSize">
-            <size>
-             <width>16777215</width>
-             <height>24</height>
-            </size>
-           </property>
-           <property name="orientation">
-            <enum>Qt::Vertical</enum>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QToolButton" name="toolButtonDisplayInt16">
-           <property name="icon">
-            <iconset resource="../resources.qrc">
-             <normaloff>:/res/icon-int16.png</normaloff>:/res/icon-int16.png</iconset>
-           </property>
-           <property name="autoRaise">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QToolButton" name="toolButtonDisplayUInt16">
-           <property name="icon">
-            <iconset resource="../resources.qrc">
-             <normaloff>:/res/icon-uint16.png</normaloff>:/res/icon-uint16.png</iconset>
-           </property>
-           <property name="autoRaise">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="Line" name="lineDisplay2">
-           <property name="maximumSize">
-            <size>
-             <width>16777215</width>
-             <height>24</height>
-            </size>
-           </property>
-           <property name="orientation">
-            <enum>Qt::Vertical</enum>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QToolButton" name="toolButtonDisplayInt32">
-           <property name="icon">
-            <iconset resource="../resources.qrc">
-             <normaloff>:/res/icon-int32.png</normaloff>:/res/icon-int32.png</iconset>
-           </property>
-           <property name="autoRaise">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QToolButton" name="toolButtonDisplayInt32LSRF">
-           <property name="icon">
-            <iconset resource="../resources.qrc">
-             <normaloff>:/res/icon-swapped-int32.png</normaloff>:/res/icon-swapped-int32.png</iconset>
-           </property>
-           <property name="autoRaise">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="Line" name="lineDisplay3">
-           <property name="maximumSize">
-            <size>
-             <width>16777215</width>
-             <height>24</height>
-            </size>
-           </property>
-           <property name="orientation">
-            <enum>Qt::Vertical</enum>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QToolButton" name="toolButtonDisplayUInt32">
-           <property name="icon">
-            <iconset resource="../resources.qrc">
-             <normaloff>:/res/icon-uint32.png</normaloff>:/res/icon-uint32.png</iconset>
-           </property>
-           <property name="autoRaise">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QToolButton" name="toolButtonDisplayUInt32LSRF">
-           <property name="icon">
-            <iconset resource="../resources.qrc">
-             <normaloff>:/res/icon-swapped-uint32.png</normaloff>:/res/icon-swapped-uint32.png</iconset>
-           </property>
-           <property name="autoRaise">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="Line" name="lineDisplay4">
-           <property name="maximumSize">
-            <size>
-             <width>16777215</width>
-             <height>24</height>
-            </size>
-           </property>
-           <property name="orientation">
-            <enum>Qt::Vertical</enum>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QToolButton" name="toolButtonDisplayInt64">
-           <property name="icon">
-            <iconset resource="../resources.qrc">
-             <normaloff>:/res/icon-int64.png</normaloff>:/res/icon-int64.png</iconset>
-           </property>
-           <property name="autoRaise">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QToolButton" name="toolButtonDisplayInt64LSRF">
-           <property name="icon">
-            <iconset resource="../resources.qrc">
-             <normaloff>:/res/icon-swapped-int64.png</normaloff>:/res/icon-swapped-int64.png</iconset>
-           </property>
-           <property name="autoRaise">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="Line" name="lineDisplay5">
-           <property name="maximumSize">
-            <size>
-             <width>16777215</width>
-             <height>24</height>
-            </size>
-           </property>
-           <property name="orientation">
-            <enum>Qt::Vertical</enum>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QToolButton" name="toolButtonDisplayUInt64">
-           <property name="icon">
-            <iconset resource="../resources.qrc">
-             <normaloff>:/res/icon-uint64.png</normaloff>:/res/icon-uint64.png</iconset>
-           </property>
-           <property name="autoRaise">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QToolButton" name="toolButtonDisplayUInt64LSRF">
-           <property name="icon">
-            <iconset resource="../resources.qrc">
-             <normaloff>:/res/icon-swapped-uint64.png</normaloff>:/res/icon-swapped-uint64.png</iconset>
-           </property>
-           <property name="autoRaise">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="Line" name="lineDisplay6">
-           <property name="maximumSize">
-            <size>
-             <width>16777215</width>
-             <height>24</height>
-            </size>
-           </property>
-           <property name="orientation">
-            <enum>Qt::Vertical</enum>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QToolButton" name="toolButtonDisplayFloat32">
-           <property name="icon">
-            <iconset resource="../resources.qrc">
-             <normaloff>:/res/icon-floating-pt.png</normaloff>:/res/icon-floating-pt.png</iconset>
-           </property>
-           <property name="autoRaise">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QToolButton" name="toolButtonDisplayFloat32LSRF">
-           <property name="icon">
-            <iconset resource="../resources.qrc">
-             <normaloff>:/res/icon-swapped-fp.png</normaloff>:/res/icon-swapped-fp.png</iconset>
-           </property>
-           <property name="autoRaise">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="Line" name="lineDisplay7">
-           <property name="maximumSize">
-            <size>
-             <width>16777215</width>
-             <height>24</height>
-            </size>
-           </property>
-           <property name="orientation">
-            <enum>Qt::Vertical</enum>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QToolButton" name="toolButtonDisplayFloat64">
-           <property name="icon">
-            <iconset resource="../resources.qrc">
-             <normaloff>:/res/icon-dbl-float.png</normaloff>:/res/icon-dbl-float.png</iconset>
-           </property>
-           <property name="autoRaise">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QToolButton" name="toolButtonDisplayFloat64LSRF">
-           <property name="icon">
-            <iconset resource="../resources.qrc">
-             <normaloff>:/res/icon-swapped-dbl.png</normaloff>:/res/icon-swapped-dbl.png</iconset>
-           </property>
-           <property name="autoRaise">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="Line" name="lineDisplay8">
-           <property name="maximumSize">
-            <size>
-             <width>16777215</width>
-             <height>24</height>
-            </size>
-           </property>
-           <property name="orientation">
-            <enum>Qt::Vertical</enum>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QToolButton" name="toolButtonDisplaySwapBytes">
-           <property name="icon">
-            <iconset resource="../resources.qrc">
-             <normaloff>:/res/icon-swap-bytes.png</normaloff>:/res/icon-swap-bytes.png</iconset>
-           </property>
-           <property name="autoRaise">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </widget>
-      </item>
-      <item>
-       <spacer name="horizontalSpacer">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>40</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-     </layout>
-    </widget>
-   </item>
-   <item>
-    <widget class="QGroupBox" name="groupBox">
-     <layout class="QHBoxLayout" name="horizontalLayout_6">
-      <item>
-       <widget class="QPushButton" name="pushButton0">
-        <property name="minimumSize">
-         <size>
-          <width>100</width>
-          <height>26</height>
-         </size>
-        </property>
-        <property name="text">
-         <string>Reset</string>
-        </property>
-        <property name="icon">
-         <iconset resource="../resources.qrc">
-          <normaloff>:/res/icon-reset.svg</normaloff>:/res/icon-reset.svg</iconset>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="pushButtonRandom">
-        <property name="minimumSize">
-         <size>
-          <width>100</width>
-          <height>26</height>
-         </size>
-        </property>
-        <property name="text">
-         <string>Random</string>
-        </property>
-        <property name="icon">
-         <iconset resource="../resources.qrc">
-          <normaloff>:/res/icon-random.svg</normaloff>:/res/icon-random.svg</iconset>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="Line" name="line">
-        <property name="orientation">
-         <enum>Qt::Vertical</enum>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="pushButtonValue">
-        <property name="minimumSize">
-         <size>
-          <width>120</width>
-          <height>26</height>
-         </size>
-        </property>
-        <property name="text">
-         <string>Constant Value</string>
-        </property>
-        <property name="icon">
-         <iconset resource="../resources.qrc">
-          <normaloff>:/res/icon-constant.svg</normaloff>:/res/icon-constant.svg</iconset>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="NumericLineEdit" name="lineEditValue">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="minimumSize">
-         <size>
-          <width>0</width>
-          <height>26</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>150</width>
-          <height>16777215</height>
-         </size>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="Line" name="line_2">
-        <property name="orientation">
-         <enum>Qt::Vertical</enum>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_5">
-        <item>
-         <widget class="QPushButton" name="pushButtonInc">
-          <property name="minimumSize">
-           <size>
-            <width>120</width>
-            <height>26</height>
-           </size>
-          </property>
-          <property name="text">
-           <string>Increment Value</string>
-          </property>
-          <property name="icon">
-           <iconset resource="../resources.qrc">
-            <normaloff>:/res/icon-increment.svg</normaloff>:/res/icon-increment.svg</iconset>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QLabel" name="labelStart">
-          <property name="text">
-           <string>From:</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="NumericLineEdit" name="lineEditStartValue">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>26</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>150</width>
-            <height>16777215</height>
-           </size>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QLabel" name="labelStep">
-          <property name="text">
-           <string>Step:</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="NumericLineEdit" name="lineEditStep">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>26</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>80</width>
-            <height>16777215</height>
-           </size>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
-      <item>
-       <spacer name="horizontalSpacer_3">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>40</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-     </layout>
-    </widget>
    </item>
    <item>
     <widget class="QTableWidget" name="tableWidget">
@@ -677,12 +542,18 @@
      <item>
       <widget class="QLabel" name="labelAddresses">
        <property name="text">
-        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Starting Address: &lt;span style=&quot; font-weight:700;&quot;&gt;%1 &lt;/span&gt;→ Ending Address: &lt;span style=&quot; font-weight:700;&quot;&gt;%2&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        <string notr="true">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Starting Address: &lt;span style=&quot; font-weight:700;&quot;&gt;%1 &lt;/span&gt;→ Ending Address: &lt;span style=&quot; font-weight:700;&quot;&gt;%2&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QDialogButtonBox" name="buttonBox">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>26</height>
+        </size>
+       </property>
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
        </property>
@@ -694,258 +565,6 @@
     </layout>
    </item>
   </layout>
-  <action name="actionDisplayBinary">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="icon">
-    <iconset resource="../resources.qrc">
-     <normaloff>:/res/icon-binary.png</normaloff>:/res/icon-binary.png</iconset>
-   </property>
-   <property name="text">
-    <string>Binary</string>
-   </property>
-  </action>
-  <action name="actionDisplayHex">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="icon">
-    <iconset resource="../resources.qrc">
-     <normaloff>:/res/icon-hex.png</normaloff>:/res/icon-hex.png</iconset>
-   </property>
-   <property name="text">
-    <string>Hex</string>
-   </property>
-  </action>
-  <action name="actionDisplayAnsi">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="icon">
-    <iconset resource="../resources.qrc">
-     <normaloff>:/res/icon-ansi.png</normaloff>:/res/icon-ansi.png</iconset>
-   </property>
-   <property name="text">
-    <string>Ansi</string>
-   </property>
-  </action>
-  <action name="actionDisplayInt16">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="icon">
-    <iconset resource="../resources.qrc">
-     <normaloff>:/res/icon-int16.png</normaloff>:/res/icon-int16.png</iconset>
-   </property>
-   <property name="text">
-    <string>16-bit Integer</string>
-   </property>
-  </action>
-  <action name="actionDisplayUInt16">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="icon">
-    <iconset resource="../resources.qrc">
-     <normaloff>:/res/icon-uint16.png</normaloff>:/res/icon-uint16.png</iconset>
-   </property>
-   <property name="text">
-    <string>Unsigned 16-bit Integer</string>
-   </property>
-  </action>
-  <action name="actionDisplayInt32">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="icon">
-    <iconset resource="../resources.qrc">
-     <normaloff>:/res/icon-int32.png</normaloff>:/res/icon-int32.png</iconset>
-   </property>
-   <property name="text">
-    <string>32-bit Integer (MSRF)</string>
-   </property>
-  </action>
-  <action name="actionDisplayInt32LSRF">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="icon">
-    <iconset resource="../resources.qrc">
-     <normaloff>:/res/icon-swapped-int32.png</normaloff>:/res/icon-swapped-int32.png</iconset>
-   </property>
-   <property name="text">
-    <string>32-bit Integer (LSRF)</string>
-   </property>
-  </action>
-  <action name="actionDisplayUInt32">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="icon">
-    <iconset resource="../resources.qrc">
-     <normaloff>:/res/icon-uint32.png</normaloff>:/res/icon-uint32.png</iconset>
-   </property>
-   <property name="text">
-    <string>Unsigned 32-bit Integer (MSRF)</string>
-   </property>
-  </action>
-  <action name="actionDisplayUInt32LSRF">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="icon">
-    <iconset resource="../resources.qrc">
-     <normaloff>:/res/icon-swapped-uint32.png</normaloff>:/res/icon-swapped-uint32.png</iconset>
-   </property>
-   <property name="text">
-    <string>Unsigned 32-bit Integer (LSRF)</string>
-   </property>
-  </action>
-  <action name="actionDisplayInt64">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="icon">
-    <iconset resource="../resources.qrc">
-     <normaloff>:/res/icon-int64.png</normaloff>:/res/icon-int64.png</iconset>
-   </property>
-   <property name="text">
-    <string>64-bit Integer (MSRF)</string>
-   </property>
-  </action>
-  <action name="actionDisplayInt64LSRF">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="icon">
-    <iconset resource="../resources.qrc">
-     <normaloff>:/res/icon-swapped-int64.png</normaloff>:/res/icon-swapped-int64.png</iconset>
-   </property>
-   <property name="text">
-    <string>64-bit Integer (LSRF)</string>
-   </property>
-  </action>
-  <action name="actionDisplayUInt64">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="icon">
-    <iconset resource="../resources.qrc">
-     <normaloff>:/res/icon-uint64.png</normaloff>:/res/icon-uint64.png</iconset>
-   </property>
-   <property name="text">
-    <string>Unsigned 64-bit Integer (MSRF)</string>
-   </property>
-  </action>
-  <action name="actionDisplayUInt64LSRF">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="icon">
-    <iconset resource="../resources.qrc">
-     <normaloff>:/res/icon-swapped-uint64.png</normaloff>:/res/icon-swapped-uint64.png</iconset>
-   </property>
-   <property name="text">
-    <string>Unsigned 64-bit Integer (LSRF)</string>
-   </property>
-  </action>
-  <action name="actionDisplayFloat32">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="icon">
-    <iconset resource="../resources.qrc">
-     <normaloff>:/res/icon-floating-pt.png</normaloff>:/res/icon-floating-pt.png</iconset>
-   </property>
-   <property name="text">
-    <string>Float (MSRF)</string>
-   </property>
-   <property name="toolTip">
-    <string>32-bit Float (MSRF)</string>
-   </property>
-   <property name="statusTip">
-    <string>32-bit Float (MSRF)</string>
-   </property>
-   <property name="whatsThis">
-    <string>32-bit Float (MSRF)</string>
-   </property>
-  </action>
-  <action name="actionDisplayFloat32LSRF">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="icon">
-    <iconset resource="../resources.qrc">
-     <normaloff>:/res/icon-swapped-fp.png</normaloff>:/res/icon-swapped-fp.png</iconset>
-   </property>
-   <property name="text">
-    <string>Float (LSRF)</string>
-   </property>
-   <property name="toolTip">
-    <string>32-bit Float (LSRF)</string>
-   </property>
-   <property name="statusTip">
-    <string>32-bit Float (LSRF)</string>
-   </property>
-   <property name="whatsThis">
-    <string>32-bit Float (LSRF)</string>
-   </property>
-  </action>
-  <action name="actionDisplayFloat64">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="icon">
-    <iconset resource="../resources.qrc">
-     <normaloff>:/res/icon-dbl-float.png</normaloff>:/res/icon-dbl-float.png</iconset>
-   </property>
-   <property name="text">
-    <string>Double (MSRF)</string>
-   </property>
-   <property name="toolTip">
-    <string>64-bit Float (MSRF)</string>
-   </property>
-   <property name="statusTip">
-    <string>64-bit Float (MSRF)</string>
-   </property>
-   <property name="whatsThis">
-    <string>64-bit Float (MSRF)</string>
-   </property>
-  </action>
-  <action name="actionDisplayFloat64LSRF">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="icon">
-    <iconset resource="../resources.qrc">
-     <normaloff>:/res/icon-swapped-dbl.png</normaloff>:/res/icon-swapped-dbl.png</iconset>
-   </property>
-   <property name="text">
-    <string>Double (LSRF)</string>
-   </property>
-   <property name="toolTip">
-    <string>64-bit Float (LSRF)</string>
-   </property>
-   <property name="statusTip">
-    <string>64-bit Float (LSRF)</string>
-   </property>
-   <property name="whatsThis">
-    <string>64-bit Float (LSRF)</string>
-   </property>
-  </action>
-  <action name="actionDisplaySwapBytes">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="icon">
-    <iconset resource="../resources.qrc">
-     <normaloff>:/res/icon-swap-bytes.png</normaloff>:/res/icon-swap-bytes.png</iconset>
-   </property>
-   <property name="text">
-    <string>Swap Bytes (0xAB → 0xBA)</string>
-   </property>
-  </action>
  </widget>
  <customwidgets>
   <customwidget>

@@ -1389,6 +1389,7 @@ bool MainWindow::prepareWriteParams(QModbusDataUnit::RegisterType type,
     outParams.Address          = outPreset.PointAddress;
     outParams.ZeroBasedAddress = outPreset.ZeroBasedAddress;
     outParams.AddrSpace        = outPreset.AddrSpace;
+    outParams.Server           = &_mbMultiServer;
 
     if(outDd.PointType == type)
     {

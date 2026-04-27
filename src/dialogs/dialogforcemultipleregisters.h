@@ -5,7 +5,6 @@
 #include <QVariant>
 #include <QTableWidgetItem>
 #include <QModbusDataUnit>
-#include <QMap>
 #include "qadjustedsizedialog.h"
 #include "numericlineedit.h"
 #include "modbuswriteparams.h"
@@ -14,9 +13,6 @@
 namespace Ui {
 class DialogForceMultipleRegisters;
 }
-class QAction;
-class AnsiMenu;
-
 ///
 /// \brief The DialogForceMultipleRegisters class
 ///
@@ -42,9 +38,22 @@ private slots:
     void on_pushButtonExport_clicked();
 
 private:
-    void setupDisplayBar();
-    void updateDisplayBar();
+    void setupAddressControls(int length);
+    void setupDisplayControls();
+    void setupPresetData();
     void setupEditorInputs();
+
+    void updateDisplayBar();
+    void updateAddressSummary();
+    void updatePresetControls();
+    void reloadDataFromServer();
+
+    enum class PresetOperations {
+        Constant,
+        Random,
+        Increment,
+        Zero
+    };
 
     enum class ValueOperation {
         Set,
@@ -92,9 +101,6 @@ private:
     ModbusWriteParams& _writeParams;
     QModbusDataUnit::RegisterType _type;
     bool _hexAddress = false;
-    QMap<QPair<DataType, RegisterOrder>, QAction*> _displayModeActions;
-    AnsiMenu* _ansiMenu = nullptr;
 };
 
 #endif // DIALOGFORCEMULTIPLEREGISTERS_H
-

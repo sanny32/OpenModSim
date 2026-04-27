@@ -1,8 +1,9 @@
 #include <QtMath>
 #include <QRandomGenerator>
-#include <QActionGroup>
-#include <QToolButton>
-#include "ansimenu.h"
+#include <QComboBox>
+#include <QSignalBlocker>
+#include "modbuslimits.h"
+#include "modbusmultiserver.h"
 #include "uiutils.h"
 #include "formatutils.h"
 #include "numericutils.h"
@@ -16,6 +17,11 @@ quint16 parseBinary16(const QString& text, quint16 fallback = 0)
     bool ok = false;
     const auto value = text.trimmed().toUShort(&ok, 2);
     return ok ? value : fallback;
+}
+
+AddressBase addressBase(const ModbusWriteParams& params)
+{
+    return params.ZeroBasedAddress ? AddressBase::Base0 : AddressBase::Base1;
 }
 }
 
@@ -36,27 +42,9 @@ DialogForceMultipleRegisters::DialogForceMultipleRegisters(ModbusWriteParams& pa
 {
     ui->setupUi(this);
 
-    const auto deviceIdStr = displayHexAddresses
-        ? QString("0x%1").arg(QString::number(params.DeviceId, 16).toUpper(), 2, '0')
-        : QString::number(params.DeviceId);
-    const auto lengthStr = displayHexAddresses
-        ? QString("0x%1").arg(QString::number(length, 16).toUpper(), 4, '0')
-        : QString::number(length);
-
-    ui->labelAddress->setText(QString(ui->labelAddress->text()).arg(
-        formatAddress(type, params.Address, params.AddrSpace, _hexAddress)));
-    ui->labelLength->setText(QString(ui->labelLength->text()).arg(lengthStr));
-    ui->labelSlaveDevice->setText(QString(ui->labelSlaveDevice->text()).arg(deviceIdStr));
-    ui->labelAddresses->setText(QString(ui->labelAddresses->text()).arg(
-        formatAddress(type, params.Address, params.AddrSpace, _hexAddress),
-        formatAddress(type, params.Address + length - 1, params.AddrSpace, _hexAddress)));
-
     ui->lineEditStep->setValue(1);
-
     recolorPushButtonIcon(ui->pushButtonExport, Qt::red);
     recolorPushButtonIcon(ui->pushButtonImport, Qt::darkGreen);
-    recolorPushButtonIcon(ui->pushButtonValue, Qt::darkMagenta);
-    recolorPushButtonIcon(ui->pushButtonInc, Qt::darkMagenta);
 
     switch(type)
     {
@@ -72,10 +60,14 @@ DialogForceMultipleRegisters::DialogForceMultipleRegisters(ModbusWriteParams& pa
 
     _data = params.Value.value<QVector<quint16>>();
     if(_data.length() != length) _data.resize(length);
+    if(_writeParams.DataMode == DataType::Ansi) _writeParams.DataMode = DataType::Hex;
 
-    setupDisplayBar();
+    setupAddressControls(length);
+    setupDisplayControls();
+    setupPresetData();
     setupEditorInputs();
 
+    updateAddressSummary();
     updateTableWidget();
 }
 
@@ -95,95 +87,136 @@ DialogForceMultipleRegisters::~DialogForceMultipleRegisters()
 ///
 void DialogForceMultipleRegisters::changeEvent(QEvent* event)
 {
-    if (event->type() == QEvent::LanguageChange)
+    if (event->type() == QEvent::LanguageChange) {
         ui->retranslateUi(this);
+        updateAddressSummary();
+    }
 
     QDialog::changeEvent(event);
 }
 
 ///
-/// \brief DialogForceMultipleRegisters::setupDisplayBar
+/// \brief DialogForceMultipleRegisters::setupAddressControls
 ///
-void DialogForceMultipleRegisters::setupDisplayBar()
+void DialogForceMultipleRegisters::setupAddressControls(int length)
 {
-    auto group = new QActionGroup(ui->frameDisplay);
-    group->setExclusive(true);
+    ui->lineEditDeviceId->setLeadingZeroes(_writeParams.LeadingZeros);
+    ui->lineEditDeviceId->setInputRange(ModbusLimits::slaveRange());
+    ui->lineEditDeviceId->setValue(_writeParams.DeviceId);
+    ui->lineEditDeviceId->setHexView(_hexAddress);
+    ui->lineEditDeviceId->setHexButtonVisible(false);
 
-    auto addModeAction = [&](DataType type, RegisterOrder order, QAction* action)
-    {
-        group->addAction(action);
-        _displayModeActions[{type, order}] = action;
+    ui->lineEditAddress->setLeadingZeroes(_writeParams.LeadingZeros);
+    ui->lineEditAddress->setInputMode(_hexAddress ? NumericLineEdit::HexMode : NumericLineEdit::Int32Mode);
+    ui->lineEditAddress->setInputRange(ModbusLimits::addressRange(_writeParams.AddrSpace, _writeParams.ZeroBasedAddress));
+    ui->lineEditAddress->setValue(_writeParams.Address);
+    ui->lineEditAddress->setHexView(_hexAddress);
+    ui->lineEditAddress->setHexButtonVisible(false);
 
-        connect(action, &QAction::triggered, this, [this, type, order](bool checked) {
-            if (!checked) return;
-            _writeParams.DataMode = type;
-            _writeParams.RegOrder = order;
-            setupEditorInputs();
-            updateTableWidget();
-            updateDisplayBar();
-        });
-    };
+    const auto initialLenRange = ModbusLimits::lengthRange(_writeParams.Address, _writeParams.ZeroBasedAddress, _writeParams.AddrSpace);
+    const int initialLength = qBound(initialLenRange.from(), length, initialLenRange.to());
+    if (_data.size() != initialLength)
+        _data.resize(initialLength);
 
-    const auto msrf = RegisterOrder::MSRF;
-    const auto lsrf = RegisterOrder::LSRF;
+    ui->lineEditLength->setLeadingZeroes(_writeParams.LeadingZeros);
+    ui->lineEditLength->setInputMode(_hexAddress ? NumericLineEdit::HexMode : NumericLineEdit::Int32Mode);
+    ui->lineEditLength->setInputRange(initialLenRange);
+    ui->lineEditLength->setValue(initialLength);
+    ui->lineEditLength->setHexView(_hexAddress);
+    ui->lineEditLength->setHexButtonVisible(false);
 
-    addModeAction(DataType::Binary,  msrf, ui->actionDisplayBinary);
-    addModeAction(DataType::Hex,     msrf, ui->actionDisplayHex);
-    addModeAction(DataType::Ansi,    msrf, ui->actionDisplayAnsi);
-    addModeAction(DataType::Int16,   msrf, ui->actionDisplayInt16);
-    addModeAction(DataType::UInt16,  msrf, ui->actionDisplayUInt16);
-    addModeAction(DataType::Int32,   msrf, ui->actionDisplayInt32);
-    addModeAction(DataType::Int32,   lsrf, ui->actionDisplayInt32LSRF);
-    addModeAction(DataType::UInt32,  msrf, ui->actionDisplayUInt32);
-    addModeAction(DataType::UInt32,  lsrf, ui->actionDisplayUInt32LSRF);
-    addModeAction(DataType::Int64,   msrf, ui->actionDisplayInt64);
-    addModeAction(DataType::Int64,   lsrf, ui->actionDisplayInt64LSRF);
-    addModeAction(DataType::UInt64,  msrf, ui->actionDisplayUInt64);
-    addModeAction(DataType::UInt64,  lsrf, ui->actionDisplayUInt64LSRF);
-    addModeAction(DataType::Float32, msrf, ui->actionDisplayFloat32);
-    addModeAction(DataType::Float32, lsrf, ui->actionDisplayFloat32LSRF);
-    addModeAction(DataType::Float64, msrf, ui->actionDisplayFloat64);
-    addModeAction(DataType::Float64, lsrf, ui->actionDisplayFloat64LSRF);
-
-    auto bindButton = [](QToolButton* button, QAction* action) {
-        button->setIconSize(QSize(24, 24));
-        button->setToolButtonStyle(Qt::ToolButtonIconOnly);
-        button->setDefaultAction(action);
-    };
-
-    bindButton(ui->toolButtonDisplayBinary, ui->actionDisplayBinary);
-    bindButton(ui->toolButtonDisplayHex, ui->actionDisplayHex);
-    bindButton(ui->toolButtonDisplayAnsi, ui->actionDisplayAnsi);
-    bindButton(ui->toolButtonDisplayInt16, ui->actionDisplayInt16);
-    bindButton(ui->toolButtonDisplayUInt16, ui->actionDisplayUInt16);
-    bindButton(ui->toolButtonDisplayInt32, ui->actionDisplayInt32);
-    bindButton(ui->toolButtonDisplayInt32LSRF, ui->actionDisplayInt32LSRF);
-    bindButton(ui->toolButtonDisplayUInt32, ui->actionDisplayUInt32);
-    bindButton(ui->toolButtonDisplayUInt32LSRF, ui->actionDisplayUInt32LSRF);
-    bindButton(ui->toolButtonDisplayInt64, ui->actionDisplayInt64);
-    bindButton(ui->toolButtonDisplayInt64LSRF, ui->actionDisplayInt64LSRF);
-    bindButton(ui->toolButtonDisplayUInt64, ui->actionDisplayUInt64);
-    bindButton(ui->toolButtonDisplayUInt64LSRF, ui->actionDisplayUInt64LSRF);
-    bindButton(ui->toolButtonDisplayFloat32, ui->actionDisplayFloat32);
-    bindButton(ui->toolButtonDisplayFloat32LSRF, ui->actionDisplayFloat32LSRF);
-    bindButton(ui->toolButtonDisplayFloat64, ui->actionDisplayFloat64);
-    bindButton(ui->toolButtonDisplayFloat64LSRF, ui->actionDisplayFloat64LSRF);
-    bindButton(ui->toolButtonDisplaySwapBytes, ui->actionDisplaySwapBytes);
-
-    _ansiMenu = new AnsiMenu(this);
-    connect(_ansiMenu, &AnsiMenu::codepageSelected, this, [this](const QString& name) {
-        _writeParams.Codepage = name;
-        if (_writeParams.DataMode == DataType::Ansi) {
-            setupEditorInputs();
-            updateTableWidget();
-            updateDisplayBar();
-        }
+    connect(ui->lineEditDeviceId,
+            static_cast<void (NumericLineEdit::*)(const QVariant&)>(&NumericLineEdit::valueChanged),
+            this,
+            [this](const QVariant&) {
+        _writeParams.DeviceId = ui->lineEditDeviceId->value<quint32>();
+        reloadDataFromServer();
+        updateTableWidget();
     });
-    ui->actionDisplayAnsi->setMenu(_ansiMenu);
-    ui->toolButtonDisplayAnsi->setPopupMode(QToolButton::DelayedPopup);
 
-    connect(ui->actionDisplaySwapBytes, &QAction::triggered, this, [this](bool checked) {
-        _writeParams.Order = checked ? ByteOrder::Swapped : ByteOrder::Direct;
+    connect(ui->lineEditAddress,
+            static_cast<void (NumericLineEdit::*)(const QVariant&)>(&NumericLineEdit::valueChanged),
+            this,
+            [this](const QVariant&) {
+        const int address = ui->lineEditAddress->value<int>();
+        _writeParams.Address = static_cast<quint16>(address);
+
+        const auto lenRange = ModbusLimits::lengthRange(address, _writeParams.ZeroBasedAddress, _writeParams.AddrSpace);
+        QSignalBlocker lengthBlocker(ui->lineEditLength);
+        ui->lineEditLength->setInputRange(lenRange);
+        if(ui->lineEditLength->value<int>() > lenRange.to()) {
+            ui->lineEditLength->setValue(lenRange.to());
+            ui->lineEditLength->update();
+        }
+
+        reloadDataFromServer();
+        updateAddressSummary();
+        updateTableWidget();
+    });
+
+    connect(ui->lineEditLength,
+            static_cast<void (NumericLineEdit::*)(const QVariant&)>(&NumericLineEdit::valueChanged),
+            this,
+            [this](const QVariant&) {
+        reloadDataFromServer();
+        updateAddressSummary();
+        updateTableWidget();
+    });
+}
+
+///
+/// \brief DialogForceMultipleRegisters::setupDisplayControls
+///
+void DialogForceMultipleRegisters::setupDisplayControls()
+{
+    ui->comboBoxDisplayFormat->clear();
+    auto addFormat = [this](DataType type, const QString& text)
+    {
+        ui->comboBoxDisplayFormat->addItem(text, static_cast<int>(type));
+    };
+
+    addFormat(DataType::Binary,  QStringLiteral("Binary"));
+    addFormat(DataType::Hex,     QStringLiteral("Hex"));
+    addFormat(DataType::Int16,   QStringLiteral("Int16"));
+    addFormat(DataType::UInt16,  QStringLiteral("UInt16"));
+    addFormat(DataType::Int32,   QStringLiteral("Int32"));
+    addFormat(DataType::UInt32,  QStringLiteral("UInt32"));
+    addFormat(DataType::Int64,   QStringLiteral("Int64"));
+    addFormat(DataType::UInt64,  QStringLiteral("UInt64"));
+    addFormat(DataType::Float32, QStringLiteral("Float32"));
+    addFormat(DataType::Float64, QStringLiteral("Float64"));
+
+    ui->comboBoxRegisterOrder->setItemData(0, static_cast<int>(RegisterOrder::MSRF));
+    ui->comboBoxRegisterOrder->setItemData(1, static_cast<int>(RegisterOrder::LSRF));
+    ui->comboBoxByteOrder->setItemData(0, static_cast<int>(ByteOrder::Direct));
+    ui->comboBoxByteOrder->setItemData(1, static_cast<int>(ByteOrder::Swapped));
+
+    auto applyDisplayMode = [this](DataType type, RegisterOrder order)
+    {
+        _writeParams.DataMode = type;
+        _writeParams.RegOrder = isMultiRegisterType(type) ? order : RegisterOrder::MSRF;
+        setupEditorInputs();
+        updateTableWidget();
+        updateDisplayBar();
+    };
+
+    connect(ui->comboBoxDisplayFormat, qOverload<int>(&QComboBox::currentIndexChanged), this, [this, applyDisplayMode](int index) {
+        if (index < 0)
+            return;
+        const auto type = static_cast<DataType>(ui->comboBoxDisplayFormat->itemData(index).toInt());
+        const auto order = static_cast<RegisterOrder>(ui->comboBoxRegisterOrder->currentData().toInt());
+        applyDisplayMode(type, order);
+    });
+
+    connect(ui->comboBoxRegisterOrder, qOverload<int>(&QComboBox::currentIndexChanged), this, [this, applyDisplayMode](int index) {
+        if (index >= 0 && isMultiRegisterType(_writeParams.DataMode))
+            applyDisplayMode(_writeParams.DataMode, static_cast<RegisterOrder>(ui->comboBoxRegisterOrder->itemData(index).toInt()));
+    });
+
+    connect(ui->comboBoxByteOrder, qOverload<int>(&QComboBox::currentIndexChanged), this, [this](int index) {
+        if (index < 0)
+            return;
+        _writeParams.Order = static_cast<ByteOrder>(ui->comboBoxByteOrder->itemData(index).toInt());
         setupEditorInputs();
         updateTableWidget();
         updateDisplayBar();
@@ -197,20 +230,120 @@ void DialogForceMultipleRegisters::setupDisplayBar()
 ///
 void DialogForceMultipleRegisters::updateDisplayBar()
 {
-    const auto it = _displayModeActions.find({_writeParams.DataMode, _writeParams.RegOrder});
-    if (it != _displayModeActions.end()) {
-        it.value()->setChecked(true);
-    } else {
-        const auto fallback = _displayModeActions.find({_writeParams.DataMode, RegisterOrder::MSRF});
-        if (fallback != _displayModeActions.end())
-            fallback.value()->setChecked(true);
+    QSignalBlocker formatBlocker(ui->comboBoxDisplayFormat);
+    const int formatIndex = ui->comboBoxDisplayFormat->findData(static_cast<int>(_writeParams.DataMode));
+    if (formatIndex >= 0)
+        ui->comboBoxDisplayFormat->setCurrentIndex(formatIndex);
+
+    QSignalBlocker orderBlocker(ui->comboBoxRegisterOrder);
+    const int orderIndex = ui->comboBoxRegisterOrder->findData(static_cast<int>(_writeParams.RegOrder));
+    if (orderIndex >= 0)
+        ui->comboBoxRegisterOrder->setCurrentIndex(orderIndex);
+    ui->comboBoxRegisterOrder->setEnabled(isMultiRegisterType(_writeParams.DataMode));
+
+    QSignalBlocker byteOrderBlocker(ui->comboBoxByteOrder);
+    const int byteOrderIndex = ui->comboBoxByteOrder->findData(static_cast<int>(_writeParams.Order));
+    if (byteOrderIndex >= 0)
+        ui->comboBoxByteOrder->setCurrentIndex(byteOrderIndex);
+}
+
+///
+/// \brief DialogForceMultipleRegisters::updateAddressSummary
+///
+void DialogForceMultipleRegisters::updateAddressSummary()
+{
+    const int length = qMax(1, _data.size());
+    ui->labelAddresses->setText(
+        QString("<html><head/><body><p>%3<span style=\" font-weight:700;\">%1 </span>→ %4<span style=\" font-weight:700;\">%2</span></p></body></html>").arg(
+        formatAddress(_type, _writeParams.Address, _writeParams.AddrSpace, _hexAddress, addressBase(_writeParams)),
+        formatAddress(_type, _writeParams.Address + length - 1, _writeParams.AddrSpace, _hexAddress, addressBase(_writeParams)),
+        tr("Starting Address: "), tr("Ending Address: ")));
+}
+
+///
+/// \brief DialogForceMultipleRegisters::reloadDataFromServer
+///
+void DialogForceMultipleRegisters::reloadDataFromServer()
+{
+    const int length = ui->lineEditLength->value<int>();
+    if(length <= 0) {
+        _data.clear();
+        return;
     }
 
-    ui->actionDisplaySwapBytes->setChecked(_writeParams.Order == ByteOrder::Swapped);
-
-    if (_ansiMenu) {
-        _ansiMenu->selectCodepage(_writeParams.Codepage);
+    if(_writeParams.Server == nullptr) {
+        _data.resize(length);
+        return;
     }
+
+    const int serverAddress = _writeParams.Address - (_writeParams.ZeroBasedAddress ? 0 : 1);
+    const auto data = _writeParams.Server->data(
+        static_cast<quint8>(_writeParams.DeviceId),
+        _type,
+        static_cast<quint16>(serverAddress),
+        static_cast<quint16>(length));
+
+    _data = data.values();
+    if(_data.size() != length)
+        _data.resize(length);
+}
+
+///
+/// \brief DialogForceMultipleRegisters::setupPresetData
+///
+void DialogForceMultipleRegisters::setupPresetData()
+{
+    ui->comboBoxPreset->clear();
+
+    auto addOperation = [this](PresetOperations type, const QString& text)
+    {
+        ui->comboBoxPreset->addItem(text, static_cast<int>(type));
+    };
+
+    addOperation(PresetOperations::Constant, tr("Constant"));
+    addOperation(PresetOperations::Random, tr("Random"));
+    addOperation(PresetOperations::Increment, tr("Increment"));
+    addOperation(PresetOperations::Zero, tr("Zero"));
+
+    connect(ui->comboBoxPreset, qOverload<int>(&QComboBox::currentIndexChanged), this, [this](int index) {
+        if (index >= 0)
+            updatePresetControls();
+    });
+
+    ui->comboBoxPreset->setCurrentIndex(0);
+    updatePresetControls();
+}
+
+///
+/// \brief DialogForceMultipleRegisters::updatePresetControls
+///
+void DialogForceMultipleRegisters::updatePresetControls()
+{
+    const auto op = static_cast<PresetOperations>(ui->comboBoxPreset->currentData().toInt());
+    const bool increment = op == PresetOperations::Increment;
+    const bool random = op == PresetOperations::Random;
+    const bool zero = op == PresetOperations::Zero;
+
+    ui->lineEditValue->setVisible(!increment);
+    ui->lineEditValue->setEnabled(!random);
+    ui->lineEditValue->setReadOnly(zero);
+
+    ui->horizontalLayoutPresetApplyRight->removeWidget(ui->pushButtonValue);
+    ui->horizontalLayoutPresetApply->removeWidget(ui->pushButtonValue);
+    if (increment)
+        ui->horizontalLayoutPresetApply->addWidget(ui->pushButtonValue);
+    else
+        ui->horizontalLayoutPresetApplyRight->addWidget(ui->pushButtonValue);
+    ui->widgetPresetApplyRight->setVisible(!increment);
+    ui->widgetPresetApplyBottom->setVisible(increment);
+
+    ui->labelStart->setVisible(increment);
+    ui->lineEditStartValue->setVisible(increment);
+    ui->labelStep->setVisible(increment);
+    ui->lineEditStep->setVisible(increment);
+
+    if (zero)
+        ui->lineEditValue->setValue(0);
 }
 
 ///
@@ -231,18 +364,17 @@ void DialogForceMultipleRegisters::setupEditorInputs()
     switch(_writeParams.DataMode)
     {
         case DataType::Binary:
-        case DataType::Hex:
-            setupLineEdit<quint16>(ui->lineEditValue, NumericLineEdit::HexMode, true);
-            setupLineEdit<quint16>(ui->lineEditStartValue, NumericLineEdit::HexMode, true);
-            setupLineEdit<quint16>(ui->lineEditStep, NumericLineEdit::HexMode, true);
+            setupLineEdit<quint16>(ui->lineEditValue, NumericLineEdit::BinaryMode, true);
+            setupLineEdit<quint16>(ui->lineEditStartValue, NumericLineEdit::BinaryMode, true);
+            setupLineEdit<quint16>(ui->lineEditStep, NumericLineEdit::BinaryMode, true);
             ui->lineEditStartValue->setValue(toByteOrderValue(firstReg, _writeParams.Order));
         break;
 
+        case DataType::Hex:
         case DataType::Ansi:
-            setupLineEdit<quint16>(ui->lineEditValue, NumericLineEdit::AnsiMode);
-            ui->lineEditValue->setCodepage(_writeParams.Codepage);
-            setupLineEdit<quint16>(ui->lineEditStartValue, NumericLineEdit::UInt32Mode);
-            setupLineEdit<qint16>(ui->lineEditStep, NumericLineEdit::Int32Mode);
+            setupLineEdit<quint16>(ui->lineEditValue, NumericLineEdit::HexMode, true);
+            setupLineEdit<quint16>(ui->lineEditStartValue, NumericLineEdit::HexMode, true);
+            setupLineEdit<quint16>(ui->lineEditStep, NumericLineEdit::HexMode, true);
             ui->lineEditStartValue->setValue(toByteOrderValue(firstReg, _writeParams.Order));
         break;
 
@@ -490,9 +622,9 @@ void DialogForceMultipleRegisters::applyToAll(ValueOperation op, double value)
         switch(_writeParams.DataMode)
         {
             case DataType::Hex:
-            case DataType::Ansi:
             case DataType::Binary:
             case DataType::UInt16:
+            case DataType::Ansi:
                 applyValue<quint16>(static_cast<quint16>(value), i, op);
             break;
 
@@ -542,6 +674,8 @@ void DialogForceMultipleRegisters::applyToAll(ValueOperation op, double value)
 void DialogForceMultipleRegisters::accept()
 {
     _writeParams.Value = QVariant::fromValue(_data);
+    _writeParams.DeviceId = ui->lineEditDeviceId->value<quint32>();
+    _writeParams.Address = ui->lineEditAddress->value<quint16>();
     QDialog::accept();
 }
 
@@ -562,40 +696,40 @@ void DialogForceMultipleRegisters::on_pushButtonRandom_clicked()
     {
         switch(_writeParams.DataMode)
         {
-        case DataType::Binary:
-        case DataType::Hex:
-        case DataType::Ansi:
-        case DataType::UInt16:
-            applyValue<quint16>(QRandomGenerator::global()->bounded(0, USHRT_MAX), i, ValueOperation::Set);
-            break;
+            case DataType::Binary:
+            case DataType::Hex:
+            case DataType::UInt16:
+            case DataType::Ansi:
+                applyValue<quint16>(QRandomGenerator::global()->bounded(0, USHRT_MAX), i, ValueOperation::Set);
+                break;
 
-        case DataType::Int16:
-            applyValue<qint16>(QRandomGenerator::global()->bounded(SHRT_MIN, USHRT_MAX), i, ValueOperation::Set);
-            break;
+            case DataType::Int16:
+                applyValue<qint16>(QRandomGenerator::global()->bounded(SHRT_MIN, USHRT_MAX), i, ValueOperation::Set);
+                break;
 
-        case DataType::Int32:
-            applyValue<qint32>(QRandomGenerator::global()->bounded(INT_MIN, INT_MAX), i, ValueOperation::Set);
-            break;
+            case DataType::Int32:
+                applyValue<qint32>(QRandomGenerator::global()->bounded(INT_MIN, INT_MAX), i, ValueOperation::Set);
+                break;
 
-        case DataType::UInt32:
-            applyValue<quint32>(QRandomGenerator::global()->bounded(0U, UINT_MAX), i, ValueOperation::Set);
-            break;
+            case DataType::UInt32:
+                applyValue<quint32>(QRandomGenerator::global()->bounded(0U, UINT_MAX), i, ValueOperation::Set);
+                break;
 
-        case DataType::Float32:
-            applyValue<float>(QRandomGenerator::global()->bounded(100), i, ValueOperation::Set);
-            break;
+            case DataType::Float32:
+                applyValue<float>(QRandomGenerator::global()->bounded(100), i, ValueOperation::Set);
+                break;
 
-        case DataType::Float64:
-            applyValue<double>(QRandomGenerator::global()->bounded(100), i, ValueOperation::Set);
-            break;
+            case DataType::Float64:
+                applyValue<double>(QRandomGenerator::global()->bounded(100), i, ValueOperation::Set);
+                break;
 
-        case DataType::Int64:
-            applyValue<qint64>(QRandomGenerator::global()->generate64(), i, ValueOperation::Set);
-            break;
+            case DataType::Int64:
+                applyValue<qint64>(QRandomGenerator::global()->generate64(), i, ValueOperation::Set);
+                break;
 
-        case DataType::UInt64:
-            applyValue<quint64>(QRandomGenerator::global()->generate64(), i, ValueOperation::Set);
-            break;
+            case DataType::UInt64:
+                applyValue<quint64>(QRandomGenerator::global()->generate64(), i, ValueOperation::Set);
+                break;
         }
     }
 
@@ -607,12 +741,29 @@ void DialogForceMultipleRegisters::on_pushButtonRandom_clicked()
 ///
 void DialogForceMultipleRegisters::on_pushButtonValue_clicked()
 {
-    if (_writeParams.DataMode == DataType::Binary) {
-        applyToAll(ValueOperation::Set, parseBinary16(ui->lineEditValue->text()));
+    const auto op = static_cast<PresetOperations>(ui->comboBoxPreset->currentData().toInt());
+    switch (op) {
+    case PresetOperations::Constant:
+        if (_writeParams.DataMode == DataType::Binary) {
+            applyToAll(ValueOperation::Set, parseBinary16(ui->lineEditValue->text()));
+            return;
+        }
+
+        applyToAll(ValueOperation::Set, ui->lineEditValue->value<double>());
+        return;
+
+    case PresetOperations::Random:
+        on_pushButtonRandom_clicked();
+        return;
+
+    case PresetOperations::Increment:
+        on_pushButtonInc_clicked();
+        return;
+
+    case PresetOperations::Zero:
+        on_pushButton0_clicked();
         return;
     }
-
-    applyToAll(ValueOperation::Set, ui->lineEditValue->value<double>());
 }
 
 ///
@@ -633,8 +784,8 @@ void DialogForceMultipleRegisters::on_pushButtonInc_clicked()
             break;
 
             case DataType::Hex:
-            case DataType::Ansi:
             case DataType::UInt16:
+            case DataType::Ansi:
                 applyValue<quint16>(ui->lineEditStartValue->value<quint16>() + i * ui->lineEditStep->value<qint16>(), i, ValueOperation::Set);
             break;
 
@@ -786,7 +937,7 @@ void DialogForceMultipleRegisters::on_pushButtonExport_clicked()
 
     for(int i = 0; i < _data.size(); i++)
     {
-        ts << formatAddress(_type, _writeParams.Address + i, _writeParams.AddrSpace, _hexAddress)
+        ts << formatAddress(_type, _writeParams.Address + i, _writeParams.AddrSpace, _hexAddress, addressBase(_writeParams))
         << delim
         << QString::number(_data[i])
         << "\n";
@@ -814,18 +965,12 @@ QLineEdit* DialogForceMultipleRegisters::createNumEdit(int idx)
         break;
 
         case DataType::Hex:
+        case DataType::Ansi:
             numEdit = new NumericLineEdit(NumericLineEdit::HexMode, ui->tableWidget);
             numEdit->setInputRange(0, USHRT_MAX);
             numEdit->setLeadingZeroes(true);
             numEdit->setValue(toByteOrderValue(_data[idx], _writeParams.Order));
         break;
-
-        case DataType::Ansi:
-            numEdit = new NumericLineEdit(NumericLineEdit::AnsiMode, ui->tableWidget);
-            numEdit->setInputRange(0, USHRT_MAX);
-            numEdit->setCodepage(_writeParams.Codepage);
-            numEdit->setValue(toByteOrderValue(_data[idx], _writeParams.Order));
-            break;
 
         case DataType::UInt16:
             numEdit = new NumericLineEdit(NumericLineEdit::UInt32Mode, ui->tableWidget);
@@ -989,8 +1134,8 @@ void DialogForceMultipleRegisters::updateTableWidget()
 
     for(int i = 0; i < ui->tableWidget->rowCount(); i++)
     {
-        const auto addressFrom = formatAddress(QModbusDataUnit::HoldingRegisters, _writeParams.Address + i * columns, _writeParams.AddrSpace, _hexAddress);
-        const auto addressTo = formatAddress(QModbusDataUnit::HoldingRegisters, _writeParams.Address + qMin(length - 1, (i + 1) * columns - 1), _writeParams.AddrSpace, _hexAddress);
+        const auto addressFrom = formatAddress(_type, _writeParams.Address + i * columns, _writeParams.AddrSpace, _hexAddress, addressBase(_writeParams));
+        const auto addressTo = formatAddress(_type, _writeParams.Address + qMin(length - 1, (i + 1) * columns - 1), _writeParams.AddrSpace, _hexAddress, addressBase(_writeParams));
         ui->tableWidget->setVerticalHeaderItem(i, new QTableWidgetItem(QString("%1-%2").arg(addressFrom, addressTo)));
 
         for(int j = 0; j < columns; j++)

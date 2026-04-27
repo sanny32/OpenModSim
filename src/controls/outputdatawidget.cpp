@@ -95,7 +95,8 @@ QVariant OutputDataListModel::data(const QModelIndex& index, int role) const
                 }
             }
             const auto pad = _columnsDistance - descr.length();
-            return formatAddress(pointType, itemData->Address, addrSpace, hexAddresses) +
+            return formatAddress(pointType, itemData->Address, addrSpace, hexAddresses,
+                _parentWidget->_zeroBasedAddress ? AddressBase::Base0 : AddressBase::Base1) +
                 QStringLiteral(": ") + itemData->ValueStr + descr + QStringLiteral(" ").repeated(pad);
         }
 
@@ -103,7 +104,8 @@ QVariant OutputDataListModel::data(const QModelIndex& index, int role) const
             return QString(itemData->ValueStr).remove('<').remove('>');
 
         case AddressStringRole:
-            return formatAddress(pointType, itemData->Address, addrSpace, hexAddresses);
+            return formatAddress(pointType, itemData->Address, addrSpace, hexAddresses,
+                _parentWidget->_zeroBasedAddress ? AddressBase::Base0 : AddressBase::Base1);
 
         case AddressRole:
             return itemData->Address;

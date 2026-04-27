@@ -5,6 +5,13 @@
 #include "dialogforcemultiplecoils.h"
 #include "ui_dialogforcemultiplecoils.h"
 
+namespace {
+AddressBase addressBase(const ModbusWriteParams& params)
+{
+    return params.ZeroBasedAddress ? AddressBase::Base0 : AddressBase::Base1;
+}
+}
+
 ///
 /// \brief DialogForceMultipleCoils::DialogForceMultipleCoils
 /// \param params
@@ -42,12 +49,12 @@ DialogForceMultipleCoils::DialogForceMultipleCoils(ModbusWriteParams& params, QM
         : QString::number(length);
 
     ui->labelAddress->setText(QString(ui->labelAddress->text()).arg(
-        formatAddress(type, params.Address, params.AddrSpace, _hexAddress)));
+        formatAddress(type, params.Address, params.AddrSpace, _hexAddress, addressBase(params))));
     ui->labelLength->setText(QString(ui->labelLength->text()).arg(lengthStr));
     ui->labelSlaveDevice->setText(QString(ui->labelSlaveDevice->text()).arg(deviceIdStr));
     ui->labelAddresses->setText(QString(ui->labelAddresses->text()).arg(
-        formatAddress(type, params.Address, params.AddrSpace, _hexAddress),
-        formatAddress(type, params.Address + length - 1, params.AddrSpace, _hexAddress)));
+        formatAddress(type, params.Address, params.AddrSpace, _hexAddress, addressBase(params)),
+        formatAddress(type, params.Address + length - 1, params.AddrSpace, _hexAddress, addressBase(params))));
 
     recolorPushButtonIcon(ui->pushButtonExport, Qt::red);
     recolorPushButtonIcon(ui->pushButtonImport, Qt::darkGreen);
@@ -230,7 +237,7 @@ void DialogForceMultipleCoils::on_pushButtonExport_clicked()
 
     for(int i = 0; i < _data.size(); i++)
     {
-        ts << formatAddress(_type, _writeParams.Address + i, _writeParams.AddrSpace, _hexAddress)
+        ts << formatAddress(_type, _writeParams.Address + i, _writeParams.AddrSpace, _hexAddress, addressBase(_writeParams))
         << delim
 ///
 /// \brief QString::number
@@ -277,8 +284,8 @@ void DialogForceMultipleCoils::updateTableWidget()
 
     for(int i = 0; i < ui->tableWidget->rowCount(); i++)
     {
-        const auto addressFrom = formatAddress(_type, _writeParams.Address + i * columns, _writeParams.AddrSpace, _hexAddress);
-        const auto addressTo = formatAddress(_type, _writeParams.Address + qMin(length - 1, (i + 1) * columns - 1), _writeParams.AddrSpace, _hexAddress);
+        const auto addressFrom = formatAddress(_type, _writeParams.Address + i * columns, _writeParams.AddrSpace, _hexAddress, addressBase(_writeParams));
+        const auto addressTo = formatAddress(_type, _writeParams.Address + qMin(length - 1, (i + 1) * columns - 1), _writeParams.AddrSpace, _hexAddress, addressBase(_writeParams));
         ui->tableWidget->setVerticalHeaderItem(i, new QTableWidgetItem(QString("%1-%2").arg(addressFrom, addressTo)));
 
         for(int j = 0; j < columns; j++)
@@ -289,7 +296,7 @@ void DialogForceMultipleCoils::updateTableWidget()
                 auto item = new QTableWidgetItem(QString::number(_data[idx]));
                 item->setData(Qt::UserRole, idx);
                 item->setTextAlignment(Qt::AlignCenter);
-                item->setToolTip(formatAddress(_type,_writeParams.Address + idx, _writeParams.AddrSpace, _hexAddress));
+                item->setToolTip(formatAddress(_type,_writeParams.Address + idx, _writeParams.AddrSpace, _hexAddress, addressBase(_writeParams)));
                 ui->tableWidget->setItem(i, j, item);
             }
             else
