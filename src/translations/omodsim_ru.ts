@@ -651,18 +651,6 @@ Open the download page?</source>
         <translation>Предустановка регистров флагов</translation>
     </message>
     <message>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Unit Identifier: &lt;span style=&quot; font-weight:700;&quot;&gt;%1&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="vanished">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Адрес устройства: &lt;span style=&quot; font-weight:700;&quot;&gt;%1&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
-    </message>
-    <message>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Starting Address: &lt;span style=&quot; font-weight:700;&quot;&gt;%1&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="vanished">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Начальный адрес: &lt;span style=&quot; font-weight:700;&quot;&gt;%1&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
-    </message>
-    <message>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Length: &lt;span style=&quot; font-weight:700;&quot;&gt;%1&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="vanished">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Длина: &lt;span style=&quot; font-weight:700;&quot;&gt;%1&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
-    </message>
-    <message>
         <location filename="../dialogs/dialogforcemultiplecoils.ui" line="229"/>
         <source>Import</source>
         <translation>Импорт</translation>
@@ -711,14 +699,6 @@ Open the download page?</source>
         <location filename="../dialogs/dialogforcemultiplecoils.ui" line="139"/>
         <source>Random</source>
         <translation>Случайное</translation>
-    </message>
-    <message>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Starting Address: &lt;span style=&quot; font-weight:700;&quot;&gt;%1 &lt;/span&gt;→ Ending Address: &lt;span style=&quot; font-weight:700;&quot;&gt;%2&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="vanished">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Начальный адрес: &lt;span style=&quot; font-weight:700;&quot;&gt;%1 &lt;/span&gt;→ Конечный адрес: &lt;span style=&quot; font-weight:700;&quot;&gt;%2&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
-    </message>
-    <message>
-        <source>FORCE DISCRETE INPUTS</source>
-        <translation type="vanished">Предустановка дискретных входов</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="49"/>
@@ -787,18 +767,6 @@ Open the download page?</source>
         <translation>Предустановка регистров</translation>
     </message>
     <message>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Unit Identifier: &lt;span style=&quot; font-weight:700;&quot;&gt;%1&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="vanished">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Адрес устройства: &lt;span style=&quot; font-weight:700;&quot;&gt;%1&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
-    </message>
-    <message>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Starting Address: &lt;span style=&quot; font-weight:700;&quot;&gt;%1&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="vanished">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Начальный адрес: &lt;span style=&quot; font-weight:700;&quot;&gt;%1&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
-    </message>
-    <message>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Length: &lt;span style=&quot; font-weight:700;&quot;&gt;%1&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="vanished">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Длина: &lt;span style=&quot; font-weight:700;&quot;&gt;%1&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
-    </message>
-    <message>
         <location filename="../dialogs/dialogforcemultipleregisters.ui" line="34"/>
         <source>Range</source>
         <translation>Диапазон</translation>
@@ -859,21 +827,9 @@ Open the download page?</source>
         <translation>Экспорт</translation>
     </message>
     <message>
-        <source>Reset</source>
-        <translation type="vanished">Сброс</translation>
-    </message>
-    <message>
         <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="304"/>
         <source>Random</source>
         <translation>Случайное</translation>
-    </message>
-    <message>
-        <source>Constant Value</source>
-        <translation type="vanished">Постоянное значение</translation>
-    </message>
-    <message>
-        <source>Increment Value</source>
-        <translation type="vanished">Приращение</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogforcemultipleregisters.ui" line="258"/>
@@ -881,109 +837,9 @@ Open the download page?</source>
         <translation>От:</translation>
     </message>
     <message>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Starting Address: &lt;span style=&quot; font-weight:700;&quot;&gt;%1 &lt;/span&gt;→ Ending Address: &lt;span style=&quot; font-weight:700;&quot;&gt;%2&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="vanished">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Начальный адрес: &lt;span style=&quot; font-weight:700;&quot;&gt;%1 &lt;/span&gt;→ Конечный адрес: &lt;span style=&quot; font-weight:700;&quot;&gt;%2&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
-    </message>
-    <message>
-        <source>Binary</source>
-        <translation type="vanished">Двоичный</translation>
-    </message>
-    <message>
-        <source>Hex</source>
-        <translation type="vanished">Шестандцатиричный</translation>
-    </message>
-    <message>
-        <source>Ansi</source>
-        <translation type="vanished">ANSI</translation>
-    </message>
-    <message>
-        <source>16-bit Integer</source>
-        <translation type="vanished">16-бит целое</translation>
-    </message>
-    <message>
-        <source>Unsigned 16-bit Integer</source>
-        <translation type="vanished">Беззнаковое 16-бит целое</translation>
-    </message>
-    <message>
-        <source>32-bit Integer (MSRF)</source>
-        <translation type="vanished">32-бит целое (MSRF)</translation>
-    </message>
-    <message>
-        <source>32-bit Integer (LSRF)</source>
-        <translation type="vanished">32-бит целое (LSRF)</translation>
-    </message>
-    <message>
-        <source>Unsigned 32-bit Integer (MSRF)</source>
-        <translation type="vanished">Беззнаковое 32-бит целое (MSRF)</translation>
-    </message>
-    <message>
-        <source>Unsigned 32-bit Integer (LSRF)</source>
-        <translation type="vanished">Беззнаковое 32-бит целое (LSRF)</translation>
-    </message>
-    <message>
-        <source>64-bit Integer (MSRF)</source>
-        <translation type="vanished">64-бит целое (MSRF)</translation>
-    </message>
-    <message>
-        <source>64-bit Integer (LSRF)</source>
-        <translation type="vanished">64-бит целое (LSRF)</translation>
-    </message>
-    <message>
-        <source>Unsigned 64-bit Integer (MSRF)</source>
-        <translation type="vanished">Беззнаковое 64-бит целое (MSRF)</translation>
-    </message>
-    <message>
-        <source>Unsigned 64-bit Integer (LSRF)</source>
-        <translation type="vanished">Беззнаковое 64-бит целое (LSRF)</translation>
-    </message>
-    <message>
-        <source>Float (MSRF)</source>
-        <translation type="vanished">С плавающей точкой (MSRF)</translation>
-    </message>
-    <message>
-        <source>32-bit Float (MSRF)</source>
-        <translation type="vanished">32-бит с плав. точкой (MSRF)</translation>
-    </message>
-    <message>
-        <source>Float (LSRF)</source>
-        <translation type="vanished">С плавающей точкой (LSRF)</translation>
-    </message>
-    <message>
-        <source>32-bit Float (LSRF)</source>
-        <translation type="vanished">32-бит с плав. точкой (LSRF)</translation>
-    </message>
-    <message>
-        <source>Double (MSRF)</source>
-        <translation type="vanished">Двойной точности (MSRF)</translation>
-    </message>
-    <message>
-        <source>64-bit Float (MSRF)</source>
-        <translation type="vanished">64-бит с плав. точкой (MSRF)</translation>
-    </message>
-    <message>
-        <source>Double (LSRF)</source>
-        <translation type="vanished">Двойной точности (LSRF)</translation>
-    </message>
-    <message>
-        <source>64-bit Float (LSRF)</source>
-        <translation type="vanished">64-бит с плав. точкой (LSRF)</translation>
-    </message>
-    <message>
-        <source>Swap Bytes (0xAB → 0xBA)</source>
-        <translation type="vanished">Перестановка байт (0xAB → 0xBA)</translation>
-    </message>
-    <message>
         <location filename="../dialogs/dialogforcemultipleregisters.ui" line="285"/>
         <source>Step:</source>
         <translation>Шаг:</translation>
-    </message>
-    <message>
-        <source>PRESET INPUT REGISTERS</source>
-        <translation type="vanished">Предустановка регистров ввода (3x)</translation>
-    </message>
-    <message>
-        <source>PRESET HOLDING REGISTERS</source>
-        <translation type="vanished">Предустановка регистров хранения (4x)</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="52"/>
@@ -1505,37 +1361,6 @@ Open the download page?</source>
         <location filename="../dialogs/dialogselectserviceport.ui" line="37"/>
         <source>502</source>
         <translation></translation>
-    </message>
-</context>
-<context>
-    <name>DialogSetupPresetData</name>
-    <message>
-        <source>Unit Identifier:</source>
-        <translation type="vanished">Адрес устройства: </translation>
-    </message>
-    <message>
-        <source>Starting Address: </source>
-        <translation type="vanished">Начальный адрес: </translation>
-    </message>
-    <message>
-        <source>Number of Points: </source>
-        <translation type="vanished">Количество точек: </translation>
-    </message>
-    <message>
-        <source>PRESET COILS</source>
-        <translation type="vanished">Предустановка регистров флагов</translation>
-    </message>
-    <message>
-        <source>PRESET DISCRETE INPUTS</source>
-        <translation type="vanished">Предустановка дискретных входов</translation>
-    </message>
-    <message>
-        <source>PRESET INPUT REGISTERS</source>
-        <translation type="vanished">Предустановка регистров ввода</translation>
-    </message>
-    <message>
-        <source>PRESET HOLDING REGISTERS</source>
-        <translation type="vanished">Предустановка регистров храненеия</translation>
     </message>
 </context>
 <context>

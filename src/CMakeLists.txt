@@ -472,6 +472,7 @@ target_link_libraries(${PROJECT_NAME} PRIVATE Qt::Widgets Qt::Network Qt::Xml Qt
 if(Qt6_FOUND)
     qt_add_lupdate(${PROJECT_NAME}
         TS_FILES ${TS_FILES}
+        OPTIONS -no-obsolete
     )
     target_link_libraries(${PROJECT_NAME} PRIVATE Qt::Core5Compat)
 else()
@@ -479,6 +480,7 @@ else()
         OUTPUT ${TS_FILES}
         COMMAND ${Qt5_LUPDATE_EXECUTABLE}
                 ${SOURCES} ${HEADERS} ${UI_FILES}
+                -no-obsolete
                 -ts ${TS_FILES}
         DEPENDS ${SOURCES} ${HEADERS} ${UI_FILES}
         WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}

@@ -651,18 +651,6 @@ Open the download page?</source>
         <translation>強制多個線圈</translation>
     </message>
     <message>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Unit Identifier: &lt;span style=&quot; font-weight:700;&quot;&gt;%1&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="vanished">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;裝置位址：&lt;span style=&quot; font-weight:700;&quot;&gt;%1&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
-    </message>
-    <message>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Starting Address: &lt;span style=&quot; font-weight:700;&quot;&gt;%1&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="vanished">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;起始位址：&lt;span style=&quot; font-weight:700;&quot;&gt;%1&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
-    </message>
-    <message>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Length: &lt;span style=&quot; font-weight:700;&quot;&gt;%1&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="vanished">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;長度：&lt;span style=&quot; font-weight:700;&quot;&gt;%1&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
-    </message>
-    <message>
         <location filename="../dialogs/dialogforcemultiplecoils.ui" line="229"/>
         <source>Import</source>
         <translation>匯入</translation>
@@ -711,14 +699,6 @@ Open the download page?</source>
         <location filename="../dialogs/dialogforcemultiplecoils.ui" line="139"/>
         <source>Random</source>
         <translation>隨機數</translation>
-    </message>
-    <message>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Starting Address: &lt;span style=&quot; font-weight:700;&quot;&gt;%1 &lt;/span&gt;→ Ending Address: &lt;span style=&quot; font-weight:700;&quot;&gt;%2&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="vanished">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;起始地址：&lt;span style=&quot; font-weight:700;&quot;&gt;%1 &lt;/span&gt;→ 結束地址：&lt;span style=&quot; font-weight:700;&quot;&gt;%2&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
-    </message>
-    <message>
-        <source>FORCE DISCRETE INPUTS</source>
-        <translation type="vanished">強制離散輸入</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="49"/>
@@ -787,18 +767,6 @@ Open the download page?</source>
         <translation>預設多個暫存器</translation>
     </message>
     <message>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Unit Identifier: &lt;span style=&quot; font-weight:700;&quot;&gt;%1&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="vanished">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;裝置位址：&lt;span style=&quot; font-weight:700;&quot;&gt;%1&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
-    </message>
-    <message>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Starting Address: &lt;span style=&quot; font-weight:700;&quot;&gt;%1&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="vanished">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;起始位址：&lt;span style=&quot; font-weight:700;&quot;&gt;%1&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
-    </message>
-    <message>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Length: &lt;span style=&quot; font-weight:700;&quot;&gt;%1&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="vanished">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;長度：&lt;span style=&quot; font-weight:700;&quot;&gt;%1&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
-    </message>
-    <message>
         <location filename="../dialogs/dialogforcemultipleregisters.ui" line="34"/>
         <source>Range</source>
         <translation>範圍</translation>
@@ -859,21 +827,9 @@ Open the download page?</source>
         <translation>匯出</translation>
     </message>
     <message>
-        <source>Reset</source>
-        <translation type="vanished">重設</translation>
-    </message>
-    <message>
         <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="304"/>
         <source>Random</source>
         <translation>隨機數</translation>
-    </message>
-    <message>
-        <source>Constant Value</source>
-        <translation type="vanished">常量值</translation>
-    </message>
-    <message>
-        <source>Increment Value</source>
-        <translation type="vanished">增量值</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogforcemultipleregisters.ui" line="258"/>
@@ -881,109 +837,9 @@ Open the download page?</source>
         <translation>從：</translation>
     </message>
     <message>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Starting Address: &lt;span style=&quot; font-weight:700;&quot;&gt;%1 &lt;/span&gt;→ Ending Address: &lt;span style=&quot; font-weight:700;&quot;&gt;%2&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="vanished">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;起始地址：&lt;span style=&quot; font-weight:700;&quot;&gt;%1 &lt;/span&gt;→ 結束地址：&lt;span style=&quot; font-weight:700;&quot;&gt;%2&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
-    </message>
-    <message>
-        <source>Binary</source>
-        <translation type="vanished">二進制</translation>
-    </message>
-    <message>
-        <source>Hex</source>
-        <translation type="vanished">十六進制</translation>
-    </message>
-    <message>
-        <source>Ansi</source>
-        <translation type="vanished">ANSI</translation>
-    </message>
-    <message>
-        <source>16-bit Integer</source>
-        <translation type="vanished">16位元整數</translation>
-    </message>
-    <message>
-        <source>Unsigned 16-bit Integer</source>
-        <translation type="vanished">無符號16位元整數</translation>
-    </message>
-    <message>
-        <source>32-bit Integer (MSRF)</source>
-        <translation type="vanished">32位元整數（MSRF）</translation>
-    </message>
-    <message>
-        <source>32-bit Integer (LSRF)</source>
-        <translation type="vanished">32位元整數（LSRF）</translation>
-    </message>
-    <message>
-        <source>Unsigned 32-bit Integer (MSRF)</source>
-        <translation type="vanished">無符號32位元整數（MSRF）</translation>
-    </message>
-    <message>
-        <source>Unsigned 32-bit Integer (LSRF)</source>
-        <translation type="vanished">無符號32位元整數（LSRF）</translation>
-    </message>
-    <message>
-        <source>64-bit Integer (MSRF)</source>
-        <translation type="vanished">64位元整數（MSRF）</translation>
-    </message>
-    <message>
-        <source>64-bit Integer (LSRF)</source>
-        <translation type="vanished">64位元整數（LSRF）</translation>
-    </message>
-    <message>
-        <source>Unsigned 64-bit Integer (MSRF)</source>
-        <translation type="vanished">無符號64位元整數（MSRF）</translation>
-    </message>
-    <message>
-        <source>Unsigned 64-bit Integer (LSRF)</source>
-        <translation type="vanished">無符號64位元整數（LSRF）</translation>
-    </message>
-    <message>
-        <source>Float (MSRF)</source>
-        <translation type="vanished">浮點數（MSRF）</translation>
-    </message>
-    <message>
-        <source>32-bit Float (MSRF)</source>
-        <translation type="vanished">32位元浮點數（MSRF）</translation>
-    </message>
-    <message>
-        <source>Float (LSRF)</source>
-        <translation type="vanished">浮點數（LSRF）</translation>
-    </message>
-    <message>
-        <source>32-bit Float (LSRF)</source>
-        <translation type="vanished">32位元浮點數（LSRF）</translation>
-    </message>
-    <message>
-        <source>Double (MSRF)</source>
-        <translation type="vanished">雙精度（MSRF）</translation>
-    </message>
-    <message>
-        <source>64-bit Float (MSRF)</source>
-        <translation type="vanished">64位元浮點數（MSRF）</translation>
-    </message>
-    <message>
-        <source>Double (LSRF)</source>
-        <translation type="vanished">雙精度（LSRF）</translation>
-    </message>
-    <message>
-        <source>64-bit Float (LSRF)</source>
-        <translation type="vanished">64位元浮點數（LSRF）</translation>
-    </message>
-    <message>
-        <source>Swap Bytes (0xAB → 0xBA)</source>
-        <translation type="vanished">交換位元組（0xAB → 0xBA）</translation>
-    </message>
-    <message>
         <location filename="../dialogs/dialogforcemultipleregisters.ui" line="285"/>
         <source>Step:</source>
         <translation>步：</translation>
-    </message>
-    <message>
-        <source>PRESET INPUT REGISTERS</source>
-        <translation type="vanished">預設輸入暫存器</translation>
-    </message>
-    <message>
-        <source>PRESET HOLDING REGISTERS</source>
-        <translation type="vanished">預設保持暫存器</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="52"/>
@@ -1505,37 +1361,6 @@ Open the download page?</source>
         <location filename="../dialogs/dialogselectserviceport.ui" line="37"/>
         <source>502</source>
         <translation>502</translation>
-    </message>
-</context>
-<context>
-    <name>DialogSetupPresetData</name>
-    <message>
-        <source>Unit Identifier:</source>
-        <translation type="vanished">單元識別碼：</translation>
-    </message>
-    <message>
-        <source>Starting Address: </source>
-        <translation type="vanished">起始地址：</translation>
-    </message>
-    <message>
-        <source>Number of Points: </source>
-        <translation type="vanished">點數： </translation>
-    </message>
-    <message>
-        <source>PRESET COILS</source>
-        <translation type="vanished">預設線圈</translation>
-    </message>
-    <message>
-        <source>PRESET DISCRETE INPUTS</source>
-        <translation type="vanished">預設離散輸入</translation>
-    </message>
-    <message>
-        <source>PRESET INPUT REGISTERS</source>
-        <translation type="vanished">預設輸入暫存器</translation>
-    </message>
-    <message>
-        <source>PRESET HOLDING REGISTERS</source>
-        <translation type="vanished">預設保持暫存器</translation>
     </message>
 </context>
 <context>
