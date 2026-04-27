@@ -11,7 +11,7 @@
 
 ///
 /// \brief The TrafficLogWindow class
-/// Global Modbus traffic log with filtering (replaces per-form traffic tab and DialogRawDataLog).
+/// Global Modbus traffic log with filtering.
 ///
 class TrafficLogWindow : public QWidget
 {
