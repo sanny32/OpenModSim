@@ -3,6 +3,7 @@
 #include <QPrinterInfo>
 #include <QPrintDialog>
 #include <QPageSetupDialog>
+#include <limits>
 #include "apppreferences.h"
 #include "dialogabout.h"
 #include "dialogmsgparser.h"
@@ -10,7 +11,6 @@
 #include "dialogprintsettings.h"
 #include "dialogselectserviceport.h"
 #include "dialogsetupserialport.h"
-#include "dialogsetuppresetdata.h"
 #include "dialogforcemultiplecoils.h"
 #include "dialogforcemultipleregisters.h"
 #include "dialogmodbusdefinitions.h"
@@ -1338,14 +1338,14 @@ QWidget* MainWindow::currentDataOrTrafficForm() const
 /// \param type
 /// \param outFrm
 /// \param outDd
-/// \param outPreset
+/// \param outLength
 /// \param outParams
 /// \return
 ///
 bool MainWindow::prepareWriteParams(QModbusDataUnit::RegisterType type,
                                     FormDataView*& outFrm,
                                     DataViewDefinitions& outDd,
-                                    SetupPresetParams& outPreset,
+                                    int& outLength,
                                     ModbusWriteParams& outParams)
 {
     outFrm = currentDataForm();
@@ -1354,7 +1354,7 @@ bool MainWindow::prepareWriteParams(QModbusDataUnit::RegisterType type,
     const bool zeroBasedAddress = outFrm ? outFrm->zeroBasedAddress() : (prefs.globalAddressBase() == AddressBase::Base0);
     const auto addrSpace = _mbMultiServer.getModbusDefinitions().AddrSpace;
 
-    outPreset = SetupPresetParams{
+    ForceRangeParams range{
         outDd.DeviceId,
         outDd.PointAddress,
         outDd.Length,
@@ -1362,44 +1362,52 @@ bool MainWindow::prepareWriteParams(QModbusDataUnit::RegisterType type,
         addrSpace,
         outDd.LeadingZeros
     };
-    if(outFrm) {
-        _presetParams[type] = outPreset;
-    } else if(_presetParams.contains(type)) {
-        outPreset = _presetParams.value(type);
-        if (outPreset.ZeroBasedAddress != zeroBasedAddress) {
-            int adjustedAddress = static_cast<int>(outPreset.PointAddress);
+    if(!outFrm && _forceRangeParams.contains(type)) {
+        range = _forceRangeParams.value(type);
+        if (range.ZeroBasedAddress != zeroBasedAddress) {
+            int adjustedAddress = static_cast<int>(range.Address);
             if (zeroBasedAddress) {
                 adjustedAddress = qMax(0, adjustedAddress - 1);
             } else if (adjustedAddress < std::numeric_limits<quint16>::max()) {
                 adjustedAddress += 1;
             }
-            outPreset.PointAddress = static_cast<quint16>(adjustedAddress);
-            outPreset.ZeroBasedAddress = zeroBasedAddress;
+            range.Address = static_cast<quint16>(adjustedAddress);
+            range.ZeroBasedAddress = zeroBasedAddress;
         }
-        outPreset.AddrSpace = addrSpace;
+        range.AddrSpace = addrSpace;
     }
 
-    {
-        DialogSetupPresetData dlg(outPreset, type, this);
-        if(dlg.exec() != QDialog::Accepted) return false;
-    }
-    _presetParams[type] = outPreset;
-
-    outParams.DeviceId         = outPreset.DeviceId;
-    outParams.Address          = outPreset.PointAddress;
-    outParams.ZeroBasedAddress = outPreset.ZeroBasedAddress;
-    outParams.AddrSpace        = outPreset.AddrSpace;
+    outLength                  = range.Length;
+    outParams.DeviceId         = range.DeviceId;
+    outParams.Address          = range.Address;
+    outParams.ZeroBasedAddress = range.ZeroBasedAddress;
+    outParams.AddrSpace        = range.AddrSpace;
+    outParams.LeadingZeros     = range.LeadingZeros;
     outParams.Server           = &_mbMultiServer;
 
-    if(outDd.PointType == type)
-    {
-        const auto data = _mbMultiServer.data(outPreset.DeviceId, type,
-            outPreset.PointAddress - (outPreset.ZeroBasedAddress ? 0 : 1),
-            outPreset.Length);
-        outParams.Value = QVariant::fromValue(data.values());
-    }
+    const auto data = _mbMultiServer.data(static_cast<quint8>(range.DeviceId), type,
+        range.Address - (range.ZeroBasedAddress ? 0 : 1),
+        range.Length);
+    outParams.Value = QVariant::fromValue(data.values());
 
     return true;
+}
+
+///
+/// \brief MainWindow::rememberForceRangeParams
+/// \param type
+/// \param params
+///
+void MainWindow::rememberForceRangeParams(QModbusDataUnit::RegisterType type, const ModbusWriteParams& params)
+{
+    _forceRangeParams[type] = ForceRangeParams{
+        params.DeviceId,
+        params.Address,
+        static_cast<quint16>(params.Value.value<QVector<quint16>>().size()),
+        params.ZeroBasedAddress,
+        params.AddrSpace,
+        params.LeadingZeros
+    };
 }
 
 ///
@@ -1408,12 +1416,13 @@ bool MainWindow::prepareWriteParams(QModbusDataUnit::RegisterType type,
 ///
 void MainWindow::forceCoils(QModbusDataUnit::RegisterType type)
 {
-    FormDataView* frm; DataViewDefinitions dd; SetupPresetParams preset; ModbusWriteParams params;
-    if(!prepareWriteParams(type, frm, dd, preset, params)) return;
+    FormDataView* frm; DataViewDefinitions dd; int length = 0; ModbusWriteParams params;
+    if(!prepareWriteParams(type, frm, dd, length, params)) return;
 
     const bool displayHexAddresses = frm ? frm->displayHexAddresses() : AppPreferences::instance().globalHexView();
-    DialogForceMultipleCoils dlg(params, type, preset.Length, displayHexAddresses, this);
+    DialogForceMultipleCoils dlg(params, type, length, displayHexAddresses, this);
     if(dlg.exec() == QDialog::Accepted) {
+        rememberForceRangeParams(type, params);
         _mbMultiServer.writeRegister(type, params);
     }
 }
@@ -1424,8 +1433,8 @@ void MainWindow::forceCoils(QModbusDataUnit::RegisterType type)
 ///
 void MainWindow::presetRegs(QModbusDataUnit::RegisterType type)
 {
-    FormDataView* frm; DataViewDefinitions dd; SetupPresetParams preset; ModbusWriteParams params;
-    if(!prepareWriteParams(type, frm, dd, preset, params)) return;
+    FormDataView* frm; DataViewDefinitions dd; int length = 0; ModbusWriteParams params;
+    if(!prepareWriteParams(type, frm, dd, length, params)) return;
 
     params.DataMode = frm ? frm->dataType()      : DataType::Hex;
     params.RegOrder = frm ? frm->registerOrder() : RegisterOrder::MSRF;
@@ -1433,8 +1442,9 @@ void MainWindow::presetRegs(QModbusDataUnit::RegisterType type)
     params.Codepage = frm ? frm->codepage()      : QString();
 
     const bool displayHexAddresses = frm ? frm->displayHexAddresses() : AppPreferences::instance().globalHexView();
-    DialogForceMultipleRegisters dlg(params, type, preset.Length, displayHexAddresses, this);
+    DialogForceMultipleRegisters dlg(params, type, length, displayHexAddresses, this);
     if(dlg.exec() == QDialog::Accepted) {
+        rememberForceRangeParams(type, params);
         _mbMultiServer.writeRegister(type, params);
     }
 }

@@ -190,7 +190,6 @@ set(SOURCES
     dialogs/dialogpreferences.cpp
     dialogs/dialogselectserviceport.cpp
     dialogs/dialogmodbusdefinitions.cpp
-    dialogs/dialogsetuppresetdata.cpp
     dialogs/dialogsetupserialport.cpp
     dialogs/dialogwindowsmanager.cpp
     dialogs/dialogwritestatusregister.cpp
@@ -293,7 +292,6 @@ set(HEADERS
     dialogs/dialogpreferences.h
     dialogs/dialogmodbusdefinitions.h
     dialogs/dialogselectserviceport.h
-    dialogs/dialogsetuppresetdata.h
     dialogs/dialogsetupserialport.h
     dialogs/dialogwindowsmanager.h
     dialogs/dialogwritestatusregister.h
@@ -395,7 +393,6 @@ set(UI_FILES
     dialogs/dialogpreferences.ui
     dialogs/dialogselectserviceport.ui
     dialogs/dialogmodbusdefinitions.ui
-    dialogs/dialogsetuppresetdata.ui
     dialogs/dialogsetupserialport.ui
     dialogs/dialogwindowsmanager.ui
     dialogs/dialogwritestatusregister.ui
