@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>670</width>
+    <width>735</width>
     <height>574</height>
    </rect>
   </property>
@@ -20,7 +20,7 @@
    <item>
     <widget class="QFrame" name="frameMain">
      <property name="frameShape">
-      <enum>QFrame::Shape::NoFrame</enum>
+      <enum>QFrame::NoFrame</enum>
      </property>
      <layout class="QHBoxLayout" name="horizontalLayout">
       <property name="spacing">
@@ -53,7 +53,7 @@
          </size>
         </property>
         <property name="frameShape">
-         <enum>QFrame::Shape::Panel</enum>
+         <enum>QFrame::Panel</enum>
         </property>
         <property name="iconSize">
          <size>
@@ -93,7 +93,7 @@
       <item>
        <widget class="QFrame" name="frameRight">
         <property name="frameShape">
-         <enum>QFrame::Shape::NoFrame</enum>
+         <enum>QFrame::NoFrame</enum>
         </property>
         <layout class="QVBoxLayout" name="verticalLayout_2">
          <property name="rightMargin">
@@ -118,10 +118,10 @@
          <item>
           <widget class="QFrame" name="lineSeparator">
            <property name="frameShape">
-            <enum>QFrame::Shape::HLine</enum>
+            <enum>QFrame::HLine</enum>
            </property>
            <property name="frameShadow">
-            <enum>QFrame::Shadow::Sunken</enum>
+            <enum>QFrame::Sunken</enum>
            </property>
           </widget>
          </item>
@@ -157,7 +157,7 @@
                </property>
                <layout class="QFormLayout" name="formInterface">
                 <property name="fieldGrowthPolicy">
-                 <enum>QFormLayout::FieldGrowthPolicy::FieldsStayAtSizeHint</enum>
+                 <enum>QFormLayout::FieldsStayAtSizeHint</enum>
                 </property>
                 <property name="horizontalSpacing">
                  <number>12</number>
@@ -212,7 +212,7 @@
                   <item>
                    <spacer name="hsBg">
                     <property name="orientation">
-                     <enum>Qt::Orientation::Horizontal</enum>
+                     <enum>Qt::Horizontal</enum>
                     </property>
                     <property name="sizeHint" stdset="0">
                      <size>
@@ -271,7 +271,7 @@
                   <item>
                    <spacer name="hsFg">
                     <property name="orientation">
-                     <enum>Qt::Orientation::Horizontal</enum>
+                     <enum>Qt::Horizontal</enum>
                     </property>
                     <property name="sizeHint" stdset="0">
                      <size>
@@ -330,7 +330,7 @@
                   <item>
                    <spacer name="hsAddress">
                     <property name="orientation">
-                     <enum>Qt::Orientation::Horizontal</enum>
+                     <enum>Qt::Horizontal</enum>
                     </property>
                     <property name="sizeHint" stdset="0">
                      <size>
@@ -389,7 +389,7 @@
                   <item>
                    <spacer name="hsComment">
                     <property name="orientation">
-                     <enum>Qt::Orientation::Horizontal</enum>
+                     <enum>Qt::Horizontal</enum>
                     </property>
                     <property name="sizeHint" stdset="0">
                      <size>
@@ -435,7 +435,7 @@
                </property>
                <layout class="QFormLayout" name="formFont">
                 <property name="fieldGrowthPolicy">
-                 <enum>QFormLayout::FieldGrowthPolicy::ExpandingFieldsGrow</enum>
+                 <enum>QFormLayout::ExpandingFieldsGrow</enum>
                 </property>
                 <property name="horizontalSpacing">
                  <number>12</number>
@@ -487,7 +487,7 @@
                      </size>
                     </property>
                     <property name="alignment">
-                     <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+                     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                     </property>
                     <property name="minimum">
                      <number>6</number>
@@ -519,7 +519,7 @@
                      </size>
                     </property>
                     <property name="alignment">
-                     <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+                     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                     </property>
                     <property name="suffix">
                      <string>%</string>
@@ -553,7 +553,7 @@
              <item>
               <spacer name="vsInterface">
                <property name="orientation">
-                <enum>Qt::Orientation::Vertical</enum>
+                <enum>Qt::Vertical</enum>
                </property>
                <property name="sizeHint" stdset="0">
                 <size>
@@ -623,7 +623,7 @@
                    </size>
                   </property>
                   <property name="alignment">
-                   <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+                   <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                   </property>
                   <property name="minimum">
                    <number>1</number>
@@ -680,7 +680,7 @@
                    </size>
                   </property>
                   <property name="alignment">
-                   <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+                   <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                   </property>
                   <property name="minimum">
                    <number>4</number>
@@ -699,7 +699,7 @@
              <item>
               <spacer name="verticalSpacer">
                <property name="orientation">
-                <enum>Qt::Orientation::Vertical</enum>
+                <enum>Qt::Vertical</enum>
                </property>
                <property name="sizeHint" stdset="0">
                 <size>
@@ -715,10 +715,10 @@
                 <string notr="true">background-color: #E8F4FD; border: 1px solid #B8D9F0; border-radius: 4px;</string>
                </property>
                <property name="frameShape">
-                <enum>QFrame::Shape::StyledPanel</enum>
+                <enum>QFrame::StyledPanel</enum>
                </property>
                <property name="frameShadow">
-                <enum>QFrame::Shadow::Plain</enum>
+                <enum>QFrame::Plain</enum>
                </property>
                <layout class="QHBoxLayout" name="hlDisplayNote">
                 <property name="leftMargin">
@@ -775,7 +775,7 @@
                </property>
                <layout class="QFormLayout" name="formScriptFont">
                 <property name="fieldGrowthPolicy">
-                 <enum>QFormLayout::FieldGrowthPolicy::ExpandingFieldsGrow</enum>
+                 <enum>QFormLayout::ExpandingFieldsGrow</enum>
                 </property>
                 <property name="horizontalSpacing">
                  <number>12</number>
@@ -827,7 +827,7 @@
                      </size>
                     </property>
                     <property name="alignment">
-                     <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+                     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                     </property>
                     <property name="minimum">
                      <number>6</number>
@@ -905,7 +905,7 @@
                    </size>
                   </property>
                   <property name="alignment">
-                   <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+                   <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                   </property>
                   <property name="minimum">
                    <number>100</number>
@@ -934,7 +934,7 @@
              <item>
               <spacer name="vsScript">
                <property name="orientation">
-                <enum>Qt::Orientation::Vertical</enum>
+                <enum>Qt::Vertical</enum>
                </property>
                <property name="sizeHint" stdset="0">
                 <size>
@@ -951,7 +951,7 @@
          <item>
           <widget class="Line" name="line">
            <property name="orientation">
-            <enum>Qt::Orientation::Horizontal</enum>
+            <enum>Qt::Horizontal</enum>
            </property>
           </widget>
          </item>
@@ -964,10 +964,10 @@
    <item>
     <widget class="QDialogButtonBox" name="buttonBox">
      <property name="orientation">
-      <enum>Qt::Orientation::Horizontal</enum>
+      <enum>Qt::Horizontal</enum>
      </property>
      <property name="standardButtons">
-      <set>QDialogButtonBox::StandardButton::Apply|QDialogButtonBox::StandardButton::Cancel|QDialogButtonBox::StandardButton::Ok</set>
+      <set>QDialogButtonBox::Apply|QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
      </property>
     </widget>
    </item>
