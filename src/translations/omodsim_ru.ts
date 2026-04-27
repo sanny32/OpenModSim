@@ -647,95 +647,134 @@ Open the download page?</source>
     <name>DialogForceMultipleCoils</name>
     <message>
         <location filename="../dialogs/dialogforcemultiplecoils.ui" line="20"/>
-        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="28"/>
         <source>FORCE MULTIPLE COILS</source>
         <translation>Предустановка регистров флагов</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultiplecoils.ui" line="33"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Unit Identifier: &lt;span style=&quot; font-weight:700;&quot;&gt;%1&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Адрес устройства: &lt;span style=&quot; font-weight:700;&quot;&gt;%1&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation type="vanished">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Адрес устройства: &lt;span style=&quot; font-weight:700;&quot;&gt;%1&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultiplecoils.ui" line="40"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Starting Address: &lt;span style=&quot; font-weight:700;&quot;&gt;%1&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Начальный адрес: &lt;span style=&quot; font-weight:700;&quot;&gt;%1&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation type="vanished">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Начальный адрес: &lt;span style=&quot; font-weight:700;&quot;&gt;%1&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultiplecoils.ui" line="47"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Length: &lt;span style=&quot; font-weight:700;&quot;&gt;%1&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Длина: &lt;span style=&quot; font-weight:700;&quot;&gt;%1&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation type="vanished">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Длина: &lt;span style=&quot; font-weight:700;&quot;&gt;%1&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultiplecoils.ui" line="81"/>
+        <location filename="../dialogs/dialogforcemultiplecoils.ui" line="229"/>
         <source>Import</source>
         <translation>Импорт</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultiplecoils.ui" line="104"/>
+        <location filename="../dialogs/dialogforcemultiplecoils.ui" line="252"/>
         <source>Export</source>
         <translation>Экспорт</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultiplecoils.ui" line="126"/>
+        <location filename="../dialogs/dialogforcemultiplecoils.ui" line="176"/>
         <source>Reset</source>
-        <translation>Сброс</translation>
+        <translation>Сбросить</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultiplecoils.ui" line="143"/>
+        <location filename="../dialogs/dialogforcemultiplecoils.ui" line="34"/>
+        <source>Range</source>
+        <translation>Диапазон</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcemultiplecoils.ui" line="40"/>
+        <source>Unit Identifier:</source>
+        <translation>Адрес устройства: </translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcemultiplecoils.ui" line="66"/>
+        <source>Starting Address:</source>
+        <translation>Начальный адрес:</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcemultiplecoils.ui" line="92"/>
+        <source>Length:</source>
+        <translation>Количество:</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcemultiplecoils.ui" line="127"/>
+        <source>Preset</source>
+        <translation>Предустановка</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcemultiplecoils.ui" line="163"/>
         <source>Set</source>
         <translation>Установить</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultiplecoils.ui" line="163"/>
+        <location filename="../dialogs/dialogforcemultiplecoils.ui" line="139"/>
         <source>Random</source>
         <translation>Случайное</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultiplecoils.ui" line="226"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Starting Address: &lt;span style=&quot; font-weight:700;&quot;&gt;%1 &lt;/span&gt;→ Ending Address: &lt;span style=&quot; font-weight:700;&quot;&gt;%2&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Начальный адрес: &lt;span style=&quot; font-weight:700;&quot;&gt;%1 &lt;/span&gt;→ Конечный адрес: &lt;span style=&quot; font-weight:700;&quot;&gt;%2&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation type="vanished">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Начальный адрес: &lt;span style=&quot; font-weight:700;&quot;&gt;%1 &lt;/span&gt;→ Конечный адрес: &lt;span style=&quot; font-weight:700;&quot;&gt;%2&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="31"/>
         <source>FORCE DISCRETE INPUTS</source>
-        <translation>Предустановка дискретных входов</translation>
+        <translation type="vanished">Предустановка дискретных входов</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="136"/>
-        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="210"/>
+        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="49"/>
+        <source>FORCE MULTIPLE COILS (0x)</source>
+        <translation>Предустановка регистров флагов (0x)</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="52"/>
+        <source>FORCE DISCRETE INPUTS (1x)</source>
+        <translation>Предустановка дискретных входов (1x)</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="173"/>
+        <source>Starting Address: </source>
+        <translation>Начальный адрес: </translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="173"/>
+        <source>Ending Address: </source>
+        <translation>Конечный адрес: </translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="259"/>
+        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="333"/>
         <source>CSV files (*.csv)</source>
         <translation>Файлы CSV (*.csv)</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="143"/>
-        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="221"/>
+        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="266"/>
+        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="344"/>
         <source>Error</source>
         <translation>Ошибка</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="177"/>
+        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="300"/>
         <source>Import error</source>
         <translation>Ошибка импорта</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="177"/>
+        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="300"/>
         <source>Invalid value: %1</source>
         <translation>Неверное значение: %1</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="186"/>
-        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="192"/>
+        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="309"/>
+        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="315"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="186"/>
+        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="309"/>
         <source>No data found in file.</source>
         <translation>Данные в файле не найдены.</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="192"/>
+        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="315"/>
         <source>Imported data size (%1) does not match current size (%2).</source>
         <translation>Размер импортированных данных (%1) не совпадает с текущим (%2).</translation>
     </message>
@@ -748,228 +787,274 @@ Open the download page?</source>
         <translation>Предустановка регистров</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="33"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Unit Identifier: &lt;span style=&quot; font-weight:700;&quot;&gt;%1&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Адрес устройства: &lt;span style=&quot; font-weight:700;&quot;&gt;%1&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation type="vanished">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Адрес устройства: &lt;span style=&quot; font-weight:700;&quot;&gt;%1&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+    </message>
+    <message>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Starting Address: &lt;span style=&quot; font-weight:700;&quot;&gt;%1&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="vanished">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Начальный адрес: &lt;span style=&quot; font-weight:700;&quot;&gt;%1&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+    </message>
+    <message>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Length: &lt;span style=&quot; font-weight:700;&quot;&gt;%1&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="vanished">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Длина: &lt;span style=&quot; font-weight:700;&quot;&gt;%1&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="34"/>
+        <source>Range</source>
+        <translation>Диапазон</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogforcemultipleregisters.ui" line="40"/>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Starting Address: &lt;span style=&quot; font-weight:700;&quot;&gt;%1&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Начальный адрес: &lt;span style=&quot; font-weight:700;&quot;&gt;%1&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <source>Unit Identifier:</source>
+        <translation>Адрес устройства: </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="47"/>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Length: &lt;span style=&quot; font-weight:700;&quot;&gt;%1&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Длина: &lt;span style=&quot; font-weight:700;&quot;&gt;%1&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="66"/>
+        <source>Starting Address:</source>
+        <translation>Начальный адрес:</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="81"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="92"/>
+        <source>Length:</source>
+        <translation>Количество:</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="127"/>
+        <source>Representation</source>
+        <translation>Представление</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="133"/>
+        <source>Display Format:</source>
+        <translation>Формат отображения: </translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="156"/>
+        <source>Register Order:</source>
+        <translation>Порядок регистров:</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="189"/>
+        <source>Bytes Order:</source>
+        <translation>Порядок байт:</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="231"/>
+        <source>Preset</source>
+        <translation>Предустановка</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="356"/>
+        <source>Apply</source>
+        <translation>Применить</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="458"/>
         <source>Import</source>
         <translation>Импорт</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="104"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="481"/>
         <source>Export</source>
         <translation>Экспорт</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="468"/>
         <source>Reset</source>
-        <translation>Сброс</translation>
+        <translation type="vanished">Сброс</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="485"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="304"/>
         <source>Random</source>
         <translation>Случайное</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="509"/>
         <source>Constant Value</source>
-        <translation>Постоянное значение</translation>
+        <translation type="vanished">Постоянное значение</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="557"/>
         <source>Increment Value</source>
-        <translation>Приращение</translation>
+        <translation type="vanished">Приращение</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="568"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="258"/>
         <source>From:</source>
         <translation>От:</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="680"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Starting Address: &lt;span style=&quot; font-weight:700;&quot;&gt;%1 &lt;/span&gt;→ Ending Address: &lt;span style=&quot; font-weight:700;&quot;&gt;%2&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Начальный адрес: &lt;span style=&quot; font-weight:700;&quot;&gt;%1 &lt;/span&gt;→ Конечный адрес: &lt;span style=&quot; font-weight:700;&quot;&gt;%2&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation type="vanished">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Начальный адрес: &lt;span style=&quot; font-weight:700;&quot;&gt;%1 &lt;/span&gt;→ Конечный адрес: &lt;span style=&quot; font-weight:700;&quot;&gt;%2&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="706"/>
         <source>Binary</source>
-        <translation>Двоичный</translation>
+        <translation type="vanished">Двоичный</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="718"/>
         <source>Hex</source>
-        <translation>Шестандцатиричный</translation>
+        <translation type="vanished">Шестандцатиричный</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="730"/>
         <source>Ansi</source>
-        <translation>ANSI</translation>
+        <translation type="vanished">ANSI</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="742"/>
         <source>16-bit Integer</source>
-        <translation>16-бит целое</translation>
+        <translation type="vanished">16-бит целое</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="754"/>
         <source>Unsigned 16-bit Integer</source>
-        <translation>Беззнаковое 16-бит целое</translation>
+        <translation type="vanished">Беззнаковое 16-бит целое</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="766"/>
         <source>32-bit Integer (MSRF)</source>
-        <translation>32-бит целое (MSRF)</translation>
+        <translation type="vanished">32-бит целое (MSRF)</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="778"/>
         <source>32-bit Integer (LSRF)</source>
-        <translation>32-бит целое (LSRF)</translation>
+        <translation type="vanished">32-бит целое (LSRF)</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="790"/>
         <source>Unsigned 32-bit Integer (MSRF)</source>
-        <translation>Беззнаковое 32-бит целое (MSRF)</translation>
+        <translation type="vanished">Беззнаковое 32-бит целое (MSRF)</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="802"/>
         <source>Unsigned 32-bit Integer (LSRF)</source>
-        <translation>Беззнаковое 32-бит целое (LSRF)</translation>
+        <translation type="vanished">Беззнаковое 32-бит целое (LSRF)</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="814"/>
         <source>64-bit Integer (MSRF)</source>
-        <translation>64-бит целое (MSRF)</translation>
+        <translation type="vanished">64-бит целое (MSRF)</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="826"/>
         <source>64-bit Integer (LSRF)</source>
-        <translation>64-бит целое (LSRF)</translation>
+        <translation type="vanished">64-бит целое (LSRF)</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="838"/>
         <source>Unsigned 64-bit Integer (MSRF)</source>
-        <translation>Беззнаковое 64-бит целое (MSRF)</translation>
+        <translation type="vanished">Беззнаковое 64-бит целое (MSRF)</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="850"/>
         <source>Unsigned 64-bit Integer (LSRF)</source>
-        <translation>Беззнаковое 64-бит целое (LSRF)</translation>
+        <translation type="vanished">Беззнаковое 64-бит целое (LSRF)</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="862"/>
         <source>Float (MSRF)</source>
-        <translation>С плавающей точкой (MSRF)</translation>
+        <translation type="vanished">С плавающей точкой (MSRF)</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="865"/>
-        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="868"/>
-        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="871"/>
         <source>32-bit Float (MSRF)</source>
-        <translation>32-бит с плав. точкой (MSRF)</translation>
+        <translation type="vanished">32-бит с плав. точкой (MSRF)</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="883"/>
         <source>Float (LSRF)</source>
-        <translation>С плавающей точкой (LSRF)</translation>
+        <translation type="vanished">С плавающей точкой (LSRF)</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="886"/>
-        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="889"/>
-        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="892"/>
         <source>32-bit Float (LSRF)</source>
-        <translation>32-бит с плав. точкой (LSRF)</translation>
+        <translation type="vanished">32-бит с плав. точкой (LSRF)</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="904"/>
         <source>Double (MSRF)</source>
-        <translation>Двойной точности (MSRF)</translation>
+        <translation type="vanished">Двойной точности (MSRF)</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="907"/>
-        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="910"/>
-        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="913"/>
         <source>64-bit Float (MSRF)</source>
-        <translation>64-бит с плав. точкой (MSRF)</translation>
+        <translation type="vanished">64-бит с плав. точкой (MSRF)</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="925"/>
         <source>Double (LSRF)</source>
-        <translation>Двойной точности (LSRF)</translation>
+        <translation type="vanished">Двойной точности (LSRF)</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="928"/>
-        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="931"/>
-        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="934"/>
         <source>64-bit Float (LSRF)</source>
-        <translation>64-бит с плав. точкой (LSRF)</translation>
+        <translation type="vanished">64-бит с плав. точкой (LSRF)</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="946"/>
         <source>Swap Bytes (0xAB → 0xBA)</source>
-        <translation>Перестановка байт (0xAB → 0xBA)</translation>
+        <translation type="vanished">Перестановка байт (0xAB → 0xBA)</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="597"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="285"/>
         <source>Step:</source>
         <translation>Шаг:</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="64"/>
         <source>PRESET INPUT REGISTERS</source>
+        <translation type="vanished">Предустановка регистров ввода (3x)</translation>
+    </message>
+    <message>
+        <source>PRESET HOLDING REGISTERS</source>
+        <translation type="vanished">Предустановка регистров хранения (4x)</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="52"/>
+        <source>PRESET INPUT REGISTERS (3x)</source>
         <translation>Предустановка регистров ввода (3x)</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="67"/>
-        <source>PRESET HOLDING REGISTERS</source>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="55"/>
+        <source>PRESET HOLDING REGISTERS (4x)</source>
         <translation>Предустановка регистров хранения (4x)</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="685"/>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="766"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="260"/>
+        <source>Starting Address: </source>
+        <translation>Начальный адрес: </translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="260"/>
+        <source>Ending Address: </source>
+        <translation>Конечный адрес: </translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="303"/>
+        <source>Constant</source>
+        <translation>Константа</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="305"/>
+        <source>Increment</source>
+        <translation>Инкремент</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="306"/>
+        <source>Zero</source>
+        <translation>Ноль</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="836"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="917"/>
         <source>CSV files (*.csv)</source>
         <translation>Файлы CSV (*.csv)</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="692"/>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="777"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="843"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="928"/>
         <source>Error</source>
         <translation>Ошибка</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="733"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="884"/>
         <source>Import error</source>
         <translation>Ошибка импорта</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="733"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="884"/>
         <source>Invalid value: %1</source>
         <translation>Неверное значение: %1</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="742"/>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="748"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="893"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="899"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="742"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="893"/>
         <source>No data found in file.</source>
         <translation>Данные в файле не найдены.</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="748"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="899"/>
         <source>Imported data size (%1) does not match current size (%2).</source>
         <translation>Размер импортированных данных (%1) не совпадает с текущим (%2).</translation>
     </message>
@@ -1425,39 +1510,32 @@ Open the download page?</source>
 <context>
     <name>DialogSetupPresetData</name>
     <message>
-        <location filename="../dialogs/dialogsetuppresetdata.ui" line="23"/>
         <source>Unit Identifier:</source>
-        <translation>Адрес устройства: </translation>
+        <translation type="vanished">Адрес устройства: </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogsetuppresetdata.ui" line="52"/>
         <source>Starting Address: </source>
-        <translation>Начальный адрес: </translation>
+        <translation type="vanished">Начальный адрес: </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogsetuppresetdata.ui" line="81"/>
         <source>Number of Points: </source>
-        <translation>Количество точек: </translation>
+        <translation type="vanished">Количество точек: </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogsetuppresetdata.cpp" line="40"/>
         <source>PRESET COILS</source>
-        <translation>Предустановка регистров флагов</translation>
+        <translation type="vanished">Предустановка регистров флагов</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogsetuppresetdata.cpp" line="43"/>
         <source>PRESET DISCRETE INPUTS</source>
-        <translation>Предустановка дискретных входов</translation>
+        <translation type="vanished">Предустановка дискретных входов</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogsetuppresetdata.cpp" line="46"/>
         <source>PRESET INPUT REGISTERS</source>
-        <translation>Предустановка регистров ввода</translation>
+        <translation type="vanished">Предустановка регистров ввода</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogsetuppresetdata.cpp" line="49"/>
         <source>PRESET HOLDING REGISTERS</source>
-        <translation>Предустановка регистров храненеия</translation>
+        <translation type="vanished">Предустановка регистров храненеия</translation>
     </message>
 </context>
 <context>
@@ -2669,7 +2747,7 @@ Open the download page?</source>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="240"/>
-        <location filename="../mainwindow.cpp" line="1846"/>
+        <location filename="../mainwindow.cpp" line="1857"/>
         <source>Save Project</source>
         <translation>Сохранить проект</translation>
     </message>
@@ -2862,7 +2940,7 @@ Open the download page?</source>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="230"/>
-        <location filename="../mainwindow.cpp" line="1982"/>
+        <location filename="../mainwindow.cpp" line="1993"/>
         <source>Clear List</source>
         <translation>Очистить список</translation>
     </message>
@@ -2880,20 +2958,20 @@ Open the download page?</source>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="876"/>
-        <location filename="../mainwindow.cpp" line="1876"/>
+        <location filename="../mainwindow.cpp" line="1887"/>
         <source>Project files (*.omsim)</source>
         <translation>Файлы проекта (*.omsim)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1496"/>
-        <location filename="../mainwindow.cpp" line="1904"/>
+        <location filename="../mainwindow.cpp" line="1507"/>
+        <location filename="../mainwindow.cpp" line="1915"/>
         <source>Untitled</source>
         <translation>Без имени</translation>
     </message>
     <message>
         <location filename="../applogger.cpp" line="119"/>
         <location filename="../mainwindow.cpp" line="626"/>
-        <location filename="../mainwindow.cpp" line="1678"/>
+        <location filename="../mainwindow.cpp" line="1689"/>
         <source>Address Base</source>
         <translation>Адресация</translation>
     </message>
@@ -3205,12 +3283,12 @@ Open the download page?</source>
         <translation>Шестнадцатиричный режим</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1847"/>
+        <location filename="../mainwindow.cpp" line="1858"/>
         <source>Save project before closing?</source>
         <translation>Сохранить проект перед закрытием?</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1970"/>
+        <location filename="../mainwindow.cpp" line="1981"/>
         <source>No Recent Projects</source>
         <translation>Нет недавних проектов</translation>
     </message>
@@ -3650,67 +3728,67 @@ Open the download page?</source>
 <context>
     <name>OutputDataWidget</name>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1316"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1318"/>
         <source>Set Value of %1</source>
         <translation>Записать значение по адресу %1</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1325"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1327"/>
         <source>Add Description</source>
         <translation>Добавить описание</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1325"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1327"/>
         <source>Edit Description</source>
         <translation>Редактировать описание</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1328"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1330"/>
         <source>%1: Enter Description</source>
         <translation>%1: Введите описание</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1337"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1339"/>
         <source>Remove Color</source>
         <translation>Удалить цвет</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1348"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1350"/>
         <source>Yellow</source>
         <translation>Желтый</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1349"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1351"/>
         <source>Cyan</source>
         <translation>Циан</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1350"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1352"/>
         <source>Magenta</source>
         <translation>Пурпурный</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1351"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1353"/>
         <source>LightGreen</source>
         <translation>Светло-зеленый</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1352"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1354"/>
         <source>Orange</source>
         <translation>Оранжевый</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1353"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1355"/>
         <source>LightBlue</source>
         <translation>Светло-синий</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1354"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1356"/>
         <source>LightGray</source>
         <translation>Светло-серый</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1433"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1435"/>
         <source>Zoom: %1%</source>
         <translation>Масштаб: %1%</translation>
     </message>
