@@ -38,7 +38,7 @@
       </size>
      </property>
      <property name="verticalScrollBarPolicy">
-      <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOn</enum>
+      <enum>Qt::ScrollBarAlwaysOn</enum>
      </property>
      <property name="plainText">
       <string>Server.addressBase = AddressBase.Base1;

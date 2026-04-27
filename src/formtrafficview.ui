@@ -39,10 +39,10 @@
       <bool>true</bool>
      </property>
      <property name="frameShape">
-      <enum>QFrame::Shape::WinPanel</enum>
+      <enum>QFrame::WinPanel</enum>
      </property>
      <property name="frameShadow">
-      <enum>QFrame::Shadow::Sunken</enum>
+      <enum>QFrame::Sunken</enum>
      </property>
     </widget>
    </item>

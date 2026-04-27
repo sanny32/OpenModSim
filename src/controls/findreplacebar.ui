@@ -20,10 +20,10 @@
    <bool>true</bool>
   </property>
   <property name="frameShape">
-   <enum>QFrame::Shape::Panel</enum>
+   <enum>QFrame::Panel</enum>
   </property>
   <property name="frameShadow">
-   <enum>QFrame::Shadow::Raised</enum>
+   <enum>QFrame::Raised</enum>
   </property>
   <property name="sizeGripEnabled" stdset="0">
    <bool>true</bool>
@@ -70,7 +70,7 @@
         <bool>true</bool>
        </property>
        <property name="arrowType">
-        <enum>Qt::ArrowType::RightArrow</enum>
+        <enum>Qt::RightArrow</enum>
        </property>
       </widget>
      </item>
@@ -102,7 +102,7 @@
         <string>Next (Enter)</string>
        </property>
        <property name="popupMode">
-        <enum>QToolButton::ToolButtonPopupMode::MenuButtonPopup</enum>
+        <enum>QToolButton::MenuButtonPopup</enum>
        </property>
        <property name="autoRaise">
         <bool>true</bool>
@@ -139,7 +139,7 @@
    <item>
     <widget class="QFrame" name="replaceRow">
      <property name="frameShape">
-      <enum>QFrame::Shape::NoFrame</enum>
+      <enum>QFrame::NoFrame</enum>
      </property>
      <property name="lineWidth">
       <number>0</number>
@@ -163,10 +163,10 @@
       <item>
        <spacer name="expandSpacer">
         <property name="orientation">
-         <enum>Qt::Orientation::Horizontal</enum>
+         <enum>Qt::Horizontal</enum>
         </property>
         <property name="sizeType">
-         <enum>QSizePolicy::Policy::Fixed</enum>
+         <enum>QSizePolicy::Fixed</enum>
         </property>
         <property name="sizeHint" stdset="0">
          <size>
@@ -253,10 +253,10 @@
       <item>
        <spacer name="horizontalSpacer_2">
         <property name="orientation">
-         <enum>Qt::Orientation::Horizontal</enum>
+         <enum>Qt::Horizontal</enum>
         </property>
         <property name="sizeType">
-         <enum>QSizePolicy::Policy::Fixed</enum>
+         <enum>QSizePolicy::Fixed</enum>
         </property>
         <property name="sizeHint" stdset="0">
          <size>
@@ -335,7 +335,7 @@
      <item>
       <spacer name="horizontalSpacer">
        <property name="orientation">
-        <enum>Qt::Orientation::Horizontal</enum>
+        <enum>Qt::Horizontal</enum>
        </property>
        <property name="sizeHint" stdset="0">
         <size>

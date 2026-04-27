@@ -45,10 +45,10 @@
    <item>
     <widget class="QFrame" name="listFrame">
      <property name="frameShape">
-      <enum>QFrame::Shape::StyledPanel</enum>
+      <enum>QFrame::StyledPanel</enum>
      </property>
      <property name="frameShadow">
-      <enum>QFrame::Shadow::Sunken</enum>
+      <enum>QFrame::Sunken</enum>
      </property>
      <layout class="QVBoxLayout" name="listFrameLayout">
       <property name="spacing">
@@ -74,13 +74,13 @@
          </font>
         </property>
         <property name="contextMenuPolicy">
-         <enum>Qt::ContextMenuPolicy::CustomContextMenu</enum>
+         <enum>Qt::CustomContextMenu</enum>
         </property>
         <property name="frameShape">
-         <enum>QFrame::Shape::NoFrame</enum>
+         <enum>QFrame::NoFrame</enum>
         </property>
         <property name="selectionMode">
-         <enum>QAbstractItemView::SelectionMode::ExtendedSelection</enum>
+         <enum>QAbstractItemView::ExtendedSelection</enum>
         </property>
        </widget>
       </item>
