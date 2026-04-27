@@ -1,5 +1,8 @@
 #include <QtMath>
 #include <QLineEdit>
+#include <QSignalBlocker>
+#include "modbuslimits.h"
+#include "modbusmultiserver.h"
 #include "uiutils.h"
 #include "formatutils.h"
 #include "dialogforcemultiplecoils.h"
@@ -9,6 +12,17 @@ namespace {
 AddressBase addressBase(const ModbusWriteParams& params)
 {
     return params.ZeroBasedAddress ? AddressBase::Base0 : AddressBase::Base1;
+}
+
+constexpr int kBitPointLengthLimit = 2000;
+
+QRange<int> lengthRangeForPointType(int address, bool zeroBased, AddressSpace space)
+{
+    const auto defaultRange = ModbusLimits::lengthRange(address, zeroBased, space);
+    const int offset = address - (zeroBased ? 0 : 1);
+    const int maxByAddress = ModbusLimits::addressSpaceSize(space) - offset;
+    const int maxLen = qMin(kBitPointLengthLimit, maxByAddress);
+    return { defaultRange.from(), qMax(defaultRange.from(), maxLen) };
 }
 }
 
@@ -32,36 +46,24 @@ DialogForceMultipleCoils::DialogForceMultipleCoils(ModbusWriteParams& params, QM
     switch(type)
     {
         case QModbusDataUnit::Coils:
-            setWindowTitle(tr("FORCE MULTIPLE COILS"));
+            setWindowTitle(tr("FORCE MULTIPLE COILS (0x)"));
             break;
         case QModbusDataUnit::DiscreteInputs:
-            setWindowTitle(tr("FORCE DISCRETE INPUTS"));
+            setWindowTitle(tr("FORCE DISCRETE INPUTS (1x)"));
             break;
         default:
             break;
     }
 
-    const auto deviceIdStr = displayHexAddresses
-        ? QString("0x%1").arg(QString::number(params.DeviceId, 16).toUpper(), 2, '0')
-        : QString::number(params.DeviceId);
-    const auto lengthStr = displayHexAddresses
-        ? QString("0x%1").arg(QString::number(length, 16).toUpper(), 4, '0')
-        : QString::number(length);
-
-    ui->labelAddress->setText(QString(ui->labelAddress->text()).arg(
-        formatAddress(type, params.Address, params.AddrSpace, _hexAddress, addressBase(params))));
-    ui->labelLength->setText(QString(ui->labelLength->text()).arg(lengthStr));
-    ui->labelSlaveDevice->setText(QString(ui->labelSlaveDevice->text()).arg(deviceIdStr));
-    ui->labelAddresses->setText(QString(ui->labelAddresses->text()).arg(
-        formatAddress(type, params.Address, params.AddrSpace, _hexAddress, addressBase(params)),
-        formatAddress(type, params.Address + length - 1, params.AddrSpace, _hexAddress, addressBase(params))));
-
     recolorPushButtonIcon(ui->pushButtonExport, Qt::red);
     recolorPushButtonIcon(ui->pushButtonImport, Qt::darkGreen);
 
     _data = params.Value.value<QVector<quint16>>();
-    if(_data.length() != length) _data.resize(length);
+    if(_data.length() != length)
+        _data.resize(length);
 
+    setupAddressControls(length);
+    updateAddressSummary();
     updateTableWidget();
 }
 
@@ -81,10 +83,122 @@ DialogForceMultipleCoils::~DialogForceMultipleCoils()
 ///
 void DialogForceMultipleCoils::changeEvent(QEvent* event)
 {
-    if (event->type() == QEvent::LanguageChange)
+    if (event->type() == QEvent::LanguageChange) {
         ui->retranslateUi(this);
+        updateAddressSummary();
+    }
 
     QDialog::changeEvent(event);
+}
+
+///
+/// \brief DialogForceMultipleCoils::setupAddressControls
+///
+void DialogForceMultipleCoils::setupAddressControls(int length)
+{
+    ui->lineEditDeviceId->setLeadingZeroes(_writeParams.LeadingZeros);
+    ui->lineEditDeviceId->setInputRange(ModbusLimits::slaveRange());
+    ui->lineEditDeviceId->setValue(_writeParams.DeviceId);
+    ui->lineEditDeviceId->setHexView(_hexAddress);
+    ui->lineEditDeviceId->setHexButtonVisible(false);
+
+    ui->lineEditAddress->setLeadingZeroes(_writeParams.LeadingZeros);
+    ui->lineEditAddress->setInputMode(_hexAddress ? NumericLineEdit::HexMode : NumericLineEdit::Int32Mode);
+    ui->lineEditAddress->setInputRange(ModbusLimits::addressRange(_writeParams.AddrSpace, _writeParams.ZeroBasedAddress));
+    ui->lineEditAddress->setValue(_writeParams.Address);
+    ui->lineEditAddress->setHexView(_hexAddress);
+    ui->lineEditAddress->setHexButtonVisible(false);
+
+    const auto initialLenRange = lengthRangeForPointType(_writeParams.Address, _writeParams.ZeroBasedAddress, _writeParams.AddrSpace);
+    const int initialLength = qBound(initialLenRange.from(), length, initialLenRange.to());
+    if(_data.size() != initialLength)
+        _data.resize(initialLength);
+
+    ui->lineEditLength->setLeadingZeroes(_writeParams.LeadingZeros);
+    ui->lineEditLength->setInputMode(_hexAddress ? NumericLineEdit::HexMode : NumericLineEdit::Int32Mode);
+    ui->lineEditLength->setInputRange(initialLenRange);
+    ui->lineEditLength->setValue(initialLength);
+    ui->lineEditLength->setHexView(_hexAddress);
+    ui->lineEditLength->setHexButtonVisible(false);
+
+    connect(ui->lineEditDeviceId,
+            static_cast<void (NumericLineEdit::*)(const QVariant&)>(&NumericLineEdit::valueChanged),
+            this,
+            [this](const QVariant&) {
+        _writeParams.DeviceId = ui->lineEditDeviceId->value<quint32>();
+        reloadDataFromServer();
+        updateTableWidget();
+    });
+
+    connect(ui->lineEditAddress,
+            static_cast<void (NumericLineEdit::*)(const QVariant&)>(&NumericLineEdit::valueChanged),
+            this,
+            [this](const QVariant&) {
+        const int address = ui->lineEditAddress->value<int>();
+        _writeParams.Address = static_cast<quint16>(address);
+
+        const auto lenRange = lengthRangeForPointType(address, _writeParams.ZeroBasedAddress, _writeParams.AddrSpace);
+        QSignalBlocker lengthBlocker(ui->lineEditLength);
+        ui->lineEditLength->setInputRange(lenRange);
+        if(ui->lineEditLength->value<int>() > lenRange.to()) {
+            ui->lineEditLength->setValue(lenRange.to());
+            ui->lineEditLength->update();
+        }
+
+        reloadDataFromServer();
+        updateAddressSummary();
+        updateTableWidget();
+    });
+
+    connect(ui->lineEditLength,
+            static_cast<void (NumericLineEdit::*)(const QVariant&)>(&NumericLineEdit::valueChanged),
+            this,
+            [this](const QVariant&) {
+        reloadDataFromServer();
+        updateAddressSummary();
+        updateTableWidget();
+    });
+}
+
+///
+/// \brief DialogForceMultipleCoils::updateAddressSummary
+///
+void DialogForceMultipleCoils::updateAddressSummary()
+{
+    const int length = qMax(1, _data.size());
+    ui->labelAddresses->setText(
+        QString("<html><head/><body><p>%3<span style=\" font-weight:700;\">%1 </span>→ %4<span style=\" font-weight:700;\">%2</span></p></body></html>").arg(
+        formatAddress(_type, _writeParams.Address, _writeParams.AddrSpace, _hexAddress, addressBase(_writeParams)),
+        formatAddress(_type, _writeParams.Address + length - 1, _writeParams.AddrSpace, _hexAddress, addressBase(_writeParams)),
+        tr("Starting Address: "), tr("Ending Address: ")));
+}
+
+///
+/// \brief DialogForceMultipleCoils::reloadDataFromServer
+///
+void DialogForceMultipleCoils::reloadDataFromServer()
+{
+    const int length = ui->lineEditLength->value<int>();
+    if(length <= 0) {
+        _data.clear();
+        return;
+    }
+
+    if(_writeParams.Server == nullptr) {
+        _data.resize(length);
+        return;
+    }
+
+    const int serverAddress = _writeParams.Address - (_writeParams.ZeroBasedAddress ? 0 : 1);
+    const auto data = _writeParams.Server->data(
+        static_cast<quint8>(_writeParams.DeviceId),
+        _type,
+        static_cast<quint16>(serverAddress),
+        static_cast<quint16>(length));
+
+    _data = data.values();
+    if(_data.size() != length)
+        _data.resize(length);
 }
 
 ///
@@ -93,6 +207,8 @@ void DialogForceMultipleCoils::changeEvent(QEvent* event)
 void DialogForceMultipleCoils::accept()
 {
     _writeParams.Value = QVariant::fromValue(_data);
+    _writeParams.DeviceId = ui->lineEditDeviceId->value<quint32>();
+    _writeParams.Address = ui->lineEditAddress->value<quint16>();
     QDialog::accept();
 }
 

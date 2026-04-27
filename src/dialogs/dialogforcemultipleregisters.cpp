@@ -49,10 +49,10 @@ DialogForceMultipleRegisters::DialogForceMultipleRegisters(ModbusWriteParams& pa
     switch(type)
     {
         case QModbusDataUnit::InputRegisters:
-            setWindowTitle(tr("PRESET INPUT REGISTERS"));
+            setWindowTitle(tr("PRESET INPUT REGISTERS (3x)"));
         break;
         case QModbusDataUnit::HoldingRegisters:
-            setWindowTitle(tr("PRESET HOLDING REGISTERS"));
+            setWindowTitle(tr("PRESET HOLDING REGISTERS (4x)"));
         break;
         default:
             break;

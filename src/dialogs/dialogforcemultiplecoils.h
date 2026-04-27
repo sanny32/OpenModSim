@@ -34,6 +34,9 @@ private slots:
     void on_tableWidget_itemDoubleClicked(QTableWidgetItem *item);
 
 private:
+    void setupAddressControls(int length);
+    void updateAddressSummary();
+    void reloadDataFromServer();
     void updateTableWidget();
 
 private:
