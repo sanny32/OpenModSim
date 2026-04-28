@@ -17,6 +17,9 @@ Q_LOGGING_CATEGORY(lcApp, "omodsim")
 namespace {
 static const int EventTypeRole = Qt::UserRole;
 
+///
+/// \brief The EventStyle class
+///
 struct EventStyle {
     QColor bg;
     QColor border;
@@ -25,6 +28,11 @@ struct EventStyle {
     QString icon;
 };
 
+///
+/// \brief styleForType
+/// \param type
+/// \return
+///
 EventStyle styleForType(AppLogOutput::EventType type)
 {
     switch (type) {
@@ -37,6 +45,9 @@ EventStyle styleForType(AppLogOutput::EventType type)
     }
 }
 
+///
+/// \brief The AppLogItemDelegate class
+///
 class AppLogItemDelegate final : public QStyledItemDelegate
 {
 public:
@@ -105,6 +116,12 @@ static AppLogOutput*   s_instance    = nullptr;
 static QtMessageHandler s_prevHandler = nullptr;
 static std::atomic<quint64> s_logEpoch { 0 };
 
+///
+/// \brief appMessageHandler
+/// \param type
+/// \param ctx
+/// \param msg
+///
 static void appMessageHandler(QtMsgType type, const QMessageLogContext& ctx, const QString& msg)
 {
     if (s_prevHandler) s_prevHandler(type, ctx, msg);
@@ -120,7 +137,7 @@ static void appMessageHandler(QtMsgType type, const QMessageLogContext& ctx, con
     QString text = msg;
     if (text.length() >= 2 && text.startsWith('"') && text.endsWith('"'))
         text = text.mid(1, text.length() - 2);
-    text.prepend(QStringLiteral("[") + QDateTime::currentDateTime().toString(Qt::ISODate) + QStringLiteral("] "));
+    text.prepend(QStringLiteral("[") + QDateTime::currentDateTime().toString(Qt::ISODateWithMs) + QStringLiteral("] "));
 
     const quint64 epoch = s_logEpoch.load(std::memory_order_relaxed);
     QPointer<AppLogOutput> guard(s_instance);
