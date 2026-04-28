@@ -1,4 +1,4 @@
-﻿#include <QtWidgets>
+#include <QtWidgets>
 #include <QBuffer>
 #include <QPrinterInfo>
 #include <QPrintDialog>
@@ -11,7 +11,7 @@
 #include "dialogprintsettings.h"
 #include "dialogselectserviceport.h"
 #include "dialogsetupserialport.h"
-#include "dialogforcemultiplecoils.h"
+#include "dialogforcestatusregisters.h"
 #include "dialogforcemultipleregisters.h"
 #include "dialogmodbusdefinitions.h"
 #include "dialogwelcome.h"
@@ -1420,7 +1420,7 @@ void MainWindow::forceCoils(QModbusDataUnit::RegisterType type)
     if(!prepareWriteParams(type, frm, dd, length, params)) return;
 
     const bool displayHexAddresses = frm ? frm->displayHexAddresses() : AppPreferences::instance().globalHexView();
-    DialogForceMultipleCoils dlg(params, type, length, displayHexAddresses, this);
+    DialogForceStatusRegisters dlg(params, type, length, displayHexAddresses, this);
     if(dlg.exec() == QDialog::Accepted) {
         rememberForceRangeParams(type, params);
         _mbMultiServer.writeRegister(type, params);

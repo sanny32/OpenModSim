@@ -644,122 +644,6 @@ Open the download page?</source>
     </message>
 </context>
 <context>
-    <name>DialogForceMultipleCoils</name>
-    <message>
-        <location filename="../dialogs/dialogforcemultiplecoils.ui" line="20"/>
-        <source>FORCE MULTIPLE COILS</source>
-        <translation>Предустановка регистров флагов</translation>
-    </message>
-    <message>
-        <location filename="../dialogs/dialogforcemultiplecoils.ui" line="229"/>
-        <source>Import</source>
-        <translation>Импорт</translation>
-    </message>
-    <message>
-        <location filename="../dialogs/dialogforcemultiplecoils.ui" line="252"/>
-        <source>Export</source>
-        <translation>Экспорт</translation>
-    </message>
-    <message>
-        <location filename="../dialogs/dialogforcemultiplecoils.ui" line="176"/>
-        <source>Reset</source>
-        <translation>Сбросить</translation>
-    </message>
-    <message>
-        <location filename="../dialogs/dialogforcemultiplecoils.ui" line="34"/>
-        <source>Range</source>
-        <translation>Диапазон</translation>
-    </message>
-    <message>
-        <location filename="../dialogs/dialogforcemultiplecoils.ui" line="40"/>
-        <source>Unit Identifier:</source>
-        <translation>Адрес устройства: </translation>
-    </message>
-    <message>
-        <location filename="../dialogs/dialogforcemultiplecoils.ui" line="66"/>
-        <source>Starting Address:</source>
-        <translation>Начальный адрес:</translation>
-    </message>
-    <message>
-        <location filename="../dialogs/dialogforcemultiplecoils.ui" line="92"/>
-        <source>Length:</source>
-        <translation>Количество:</translation>
-    </message>
-    <message>
-        <location filename="../dialogs/dialogforcemultiplecoils.ui" line="127"/>
-        <source>Preset</source>
-        <translation>Предустановка</translation>
-    </message>
-    <message>
-        <location filename="../dialogs/dialogforcemultiplecoils.ui" line="163"/>
-        <source>Set</source>
-        <translation>Установить</translation>
-    </message>
-    <message>
-        <location filename="../dialogs/dialogforcemultiplecoils.ui" line="139"/>
-        <source>Random</source>
-        <translation>Случайное</translation>
-    </message>
-    <message>
-        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="49"/>
-        <source>FORCE MULTIPLE COILS (0x)</source>
-        <translation>Предустановка регистров флагов (0x)</translation>
-    </message>
-    <message>
-        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="52"/>
-        <source>FORCE DISCRETE INPUTS (1x)</source>
-        <translation>Предустановка дискретных входов (1x)</translation>
-    </message>
-    <message>
-        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="173"/>
-        <source>Starting Address: </source>
-        <translation>Начальный адрес: </translation>
-    </message>
-    <message>
-        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="173"/>
-        <source>Ending Address: </source>
-        <translation>Конечный адрес: </translation>
-    </message>
-    <message>
-        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="259"/>
-        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="333"/>
-        <source>CSV files (*.csv)</source>
-        <translation>Файлы CSV (*.csv)</translation>
-    </message>
-    <message>
-        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="266"/>
-        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="344"/>
-        <source>Error</source>
-        <translation>Ошибка</translation>
-    </message>
-    <message>
-        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="300"/>
-        <source>Import error</source>
-        <translation>Ошибка импорта</translation>
-    </message>
-    <message>
-        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="300"/>
-        <source>Invalid value: %1</source>
-        <translation>Неверное значение: %1</translation>
-    </message>
-    <message>
-        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="309"/>
-        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="315"/>
-        <source>Warning</source>
-        <translation>Предупреждение</translation>
-    </message>
-    <message>
-        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="309"/>
-        <source>No data found in file.</source>
-        <translation>Данные в файле не найдены.</translation>
-    </message>
-    <message>
-        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="315"/>
-        <source>Imported data size (%1) does not match current size (%2).</source>
-        <translation>Размер импортированных данных (%1) не совпадает с текущим (%2).</translation>
-    </message>
-</context>
-<context>
     <name>DialogForceMultipleRegisters</name>
     <message>
         <location filename="../dialogs/dialogforcemultipleregisters.ui" line="20"/>
@@ -911,6 +795,122 @@ Open the download page?</source>
     </message>
     <message>
         <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="923"/>
+        <source>Imported data size (%1) does not match current size (%2).</source>
+        <translation>Размер импортированных данных (%1) не совпадает с текущим (%2).</translation>
+    </message>
+</context>
+<context>
+    <name>DialogForceStatusRegisters</name>
+    <message>
+        <location filename="../dialogs/dialogforcestatusregisters.ui" line="20"/>
+        <source>FORCE MULTIPLE COILS</source>
+        <translation>Предустановка регистров флагов</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcestatusregisters.ui" line="34"/>
+        <source>Range</source>
+        <translation>Диапазон</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcestatusregisters.ui" line="40"/>
+        <source>Unit Identifier:</source>
+        <translation>Адрес устройства: </translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcestatusregisters.ui" line="66"/>
+        <source>Starting Address:</source>
+        <translation>Начальный адрес:</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcestatusregisters.ui" line="92"/>
+        <source>Length:</source>
+        <translation>Количество:</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcestatusregisters.ui" line="127"/>
+        <source>Preset</source>
+        <translation>Предустановка</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcestatusregisters.ui" line="139"/>
+        <source>Random</source>
+        <translation>Случайное</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcestatusregisters.ui" line="163"/>
+        <source>Set</source>
+        <translation>Установить</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcestatusregisters.ui" line="176"/>
+        <source>Reset</source>
+        <translation>Сбросить</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcestatusregisters.ui" line="229"/>
+        <source>Import</source>
+        <translation>Импорт</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcestatusregisters.ui" line="252"/>
+        <source>Export</source>
+        <translation>Экспорт</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcestatusregisters.cpp" line="49"/>
+        <source>FORCE MULTIPLE COILS (0x)</source>
+        <translation>Предустановка регистров флагов (0x)</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcestatusregisters.cpp" line="52"/>
+        <source>FORCE DISCRETE INPUTS (1x)</source>
+        <translation>Предустановка дискретных входов (1x)</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcestatusregisters.cpp" line="173"/>
+        <source>Starting Address: </source>
+        <translation>Начальный адрес: </translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcestatusregisters.cpp" line="173"/>
+        <source>Ending Address: </source>
+        <translation>Конечный адрес: </translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcestatusregisters.cpp" line="259"/>
+        <location filename="../dialogs/dialogforcestatusregisters.cpp" line="333"/>
+        <source>CSV files (*.csv)</source>
+        <translation>Файлы CSV (*.csv)</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcestatusregisters.cpp" line="266"/>
+        <location filename="../dialogs/dialogforcestatusregisters.cpp" line="344"/>
+        <source>Error</source>
+        <translation>Ошибка</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcestatusregisters.cpp" line="300"/>
+        <source>Import error</source>
+        <translation>Ошибка импорта</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcestatusregisters.cpp" line="300"/>
+        <source>Invalid value: %1</source>
+        <translation>Неверное значение: %1</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcestatusregisters.cpp" line="309"/>
+        <location filename="../dialogs/dialogforcestatusregisters.cpp" line="315"/>
+        <source>Warning</source>
+        <translation>Предупреждение</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcestatusregisters.cpp" line="309"/>
+        <source>No data found in file.</source>
+        <translation>Данные в файле не найдены.</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcestatusregisters.cpp" line="315"/>
         <source>Imported data size (%1) does not match current size (%2).</source>
         <translation>Размер импортированных данных (%1) не совпадает с текущим (%2).</translation>
     </message>
@@ -3498,7 +3498,7 @@ Open the download page?</source>
     <message>
         <location filename="../modbusmultiserver.cpp" line="961"/>
         <source>An incorrect device ID was specified (%1)</source>
-        <translation type="unfinished">Некорректное значение номера устройства (%1)</translation>
+        <translation>Некорректное значение номера устройства (%1)</translation>
     </message>
     <message>
         <location filename="../modbusmultiserver.cpp" line="1529"/>

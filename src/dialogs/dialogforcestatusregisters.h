@@ -1,5 +1,5 @@
-#ifndef DIALOGFORCEMULTIPLECOILS_H
-#define DIALOGFORCEMULTIPLECOILS_H
+#ifndef DIALOGFORCESTATUSREGISTERS_H
+#define DIALOGFORCESTATUSREGISTERS_H
 
 #include <QDialog>
 #include <QTableWidgetItem>
@@ -9,16 +9,16 @@
 #include "displaydefinition.h"
 
 namespace Ui {
-class DialogForceMultipleCoils;
+class DialogForceStatusRegisters;
 }
 
-class DialogForceMultipleCoils : public QAdjustedSizeDialog
+class DialogForceStatusRegisters : public QAdjustedSizeDialog
 {
     Q_OBJECT
 
 public:
-    explicit DialogForceMultipleCoils(ModbusWriteParams& params, QModbusDataUnit::RegisterType type, int length, bool displayHexAddresses, QWidget *parent = nullptr);
-    ~DialogForceMultipleCoils();
+    explicit DialogForceStatusRegisters(ModbusWriteParams& params, QModbusDataUnit::RegisterType type, int length, bool displayHexAddresses, QWidget *parent = nullptr);
+    ~DialogForceStatusRegisters();
 
     void accept() override;
 
@@ -40,12 +40,12 @@ private:
     void updateTableWidget();
 
 private:
-    Ui::DialogForceMultipleCoils *ui;
+    Ui::DialogForceStatusRegisters *ui;
     QVector<quint16> _data;
     ModbusWriteParams& _writeParams;
     QModbusDataUnit::RegisterType _type;
     bool _hexAddress;
 };
 
-#endif // DIALOGFORCEMULTIPLECOILS_H
+#endif // DIALOGFORCESTATUSREGISTERS_H
 

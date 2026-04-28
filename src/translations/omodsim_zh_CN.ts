@@ -644,122 +644,6 @@ Open the download page?</source>
     </message>
 </context>
 <context>
-    <name>DialogForceMultipleCoils</name>
-    <message>
-        <location filename="../dialogs/dialogforcemultiplecoils.ui" line="20"/>
-        <source>FORCE MULTIPLE COILS</source>
-        <translation>强制多个线圈</translation>
-    </message>
-    <message>
-        <location filename="../dialogs/dialogforcemultiplecoils.ui" line="229"/>
-        <source>Import</source>
-        <translation>导入</translation>
-    </message>
-    <message>
-        <location filename="../dialogs/dialogforcemultiplecoils.ui" line="252"/>
-        <source>Export</source>
-        <translation>导出</translation>
-    </message>
-    <message>
-        <location filename="../dialogs/dialogforcemultiplecoils.ui" line="176"/>
-        <source>Reset</source>
-        <translation>重置</translation>
-    </message>
-    <message>
-        <location filename="../dialogs/dialogforcemultiplecoils.ui" line="34"/>
-        <source>Range</source>
-        <translation>范围</translation>
-    </message>
-    <message>
-        <location filename="../dialogs/dialogforcemultiplecoils.ui" line="40"/>
-        <source>Unit Identifier:</source>
-        <translation>单元标识符：</translation>
-    </message>
-    <message>
-        <location filename="../dialogs/dialogforcemultiplecoils.ui" line="66"/>
-        <source>Starting Address:</source>
-        <translation>起始地址：</translation>
-    </message>
-    <message>
-        <location filename="../dialogs/dialogforcemultiplecoils.ui" line="92"/>
-        <source>Length:</source>
-        <translation>长度：</translation>
-    </message>
-    <message>
-        <location filename="../dialogs/dialogforcemultiplecoils.ui" line="127"/>
-        <source>Preset</source>
-        <translation>预设</translation>
-    </message>
-    <message>
-        <location filename="../dialogs/dialogforcemultiplecoils.ui" line="163"/>
-        <source>Set</source>
-        <translation>设置</translation>
-    </message>
-    <message>
-        <location filename="../dialogs/dialogforcemultiplecoils.ui" line="139"/>
-        <source>Random</source>
-        <translation>随机数</translation>
-    </message>
-    <message>
-        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="49"/>
-        <source>FORCE MULTIPLE COILS (0x)</source>
-        <translation>强制多个线圈 (0x)</translation>
-    </message>
-    <message>
-        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="52"/>
-        <source>FORCE DISCRETE INPUTS (1x)</source>
-        <translation>强制离散输入 (1x)</translation>
-    </message>
-    <message>
-        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="173"/>
-        <source>Starting Address: </source>
-        <translation>起始地址： </translation>
-    </message>
-    <message>
-        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="173"/>
-        <source>Ending Address: </source>
-        <translation>最终地址： </translation>
-    </message>
-    <message>
-        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="259"/>
-        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="333"/>
-        <source>CSV files (*.csv)</source>
-        <translation>CSV 文件 (*.csv)</translation>
-    </message>
-    <message>
-        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="266"/>
-        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="344"/>
-        <source>Error</source>
-        <translation>错误</translation>
-    </message>
-    <message>
-        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="300"/>
-        <source>Import error</source>
-        <translation>导入错误</translation>
-    </message>
-    <message>
-        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="300"/>
-        <source>Invalid value: %1</source>
-        <translation>无效值：%1</translation>
-    </message>
-    <message>
-        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="309"/>
-        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="315"/>
-        <source>Warning</source>
-        <translation>警告</translation>
-    </message>
-    <message>
-        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="309"/>
-        <source>No data found in file.</source>
-        <translation>文件中未找到数据。</translation>
-    </message>
-    <message>
-        <location filename="../dialogs/dialogforcemultiplecoils.cpp" line="315"/>
-        <source>Imported data size (%1) does not match current size (%2).</source>
-        <translation>导入数据大小 (%1) 与当前大小 (%2) 不匹配。</translation>
-    </message>
-</context>
-<context>
     <name>DialogForceMultipleRegisters</name>
     <message>
         <location filename="../dialogs/dialogforcemultipleregisters.ui" line="20"/>
@@ -911,6 +795,122 @@ Open the download page?</source>
     </message>
     <message>
         <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="923"/>
+        <source>Imported data size (%1) does not match current size (%2).</source>
+        <translation>导入数据大小 (%1) 与当前大小 (%2) 不匹配。</translation>
+    </message>
+</context>
+<context>
+    <name>DialogForceStatusRegisters</name>
+    <message>
+        <location filename="../dialogs/dialogforcestatusregisters.ui" line="20"/>
+        <source>FORCE MULTIPLE COILS</source>
+        <translation>强制多个线圈</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcestatusregisters.ui" line="34"/>
+        <source>Range</source>
+        <translation>范围</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcestatusregisters.ui" line="40"/>
+        <source>Unit Identifier:</source>
+        <translation>单元标识符：</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcestatusregisters.ui" line="66"/>
+        <source>Starting Address:</source>
+        <translation>起始地址：</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcestatusregisters.ui" line="92"/>
+        <source>Length:</source>
+        <translation>长度：</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcestatusregisters.ui" line="127"/>
+        <source>Preset</source>
+        <translation>预设</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcestatusregisters.ui" line="139"/>
+        <source>Random</source>
+        <translation>随机数</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcestatusregisters.ui" line="163"/>
+        <source>Set</source>
+        <translation>设置</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcestatusregisters.ui" line="176"/>
+        <source>Reset</source>
+        <translation>重置</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcestatusregisters.ui" line="229"/>
+        <source>Import</source>
+        <translation>导入</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcestatusregisters.ui" line="252"/>
+        <source>Export</source>
+        <translation>导出</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcestatusregisters.cpp" line="49"/>
+        <source>FORCE MULTIPLE COILS (0x)</source>
+        <translation>强制多个线圈 (0x)</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcestatusregisters.cpp" line="52"/>
+        <source>FORCE DISCRETE INPUTS (1x)</source>
+        <translation>强制离散输入 (1x)</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcestatusregisters.cpp" line="173"/>
+        <source>Starting Address: </source>
+        <translation>起始地址：</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcestatusregisters.cpp" line="173"/>
+        <source>Ending Address: </source>
+        <translation>最终地址： </translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcestatusregisters.cpp" line="259"/>
+        <location filename="../dialogs/dialogforcestatusregisters.cpp" line="333"/>
+        <source>CSV files (*.csv)</source>
+        <translation>CSV 文件 (*.csv)</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcestatusregisters.cpp" line="266"/>
+        <location filename="../dialogs/dialogforcestatusregisters.cpp" line="344"/>
+        <source>Error</source>
+        <translation>错误</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcestatusregisters.cpp" line="300"/>
+        <source>Import error</source>
+        <translation>导入错误</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcestatusregisters.cpp" line="300"/>
+        <source>Invalid value: %1</source>
+        <translation>无效值：%1</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcestatusregisters.cpp" line="309"/>
+        <location filename="../dialogs/dialogforcestatusregisters.cpp" line="315"/>
+        <source>Warning</source>
+        <translation>警告</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcestatusregisters.cpp" line="309"/>
+        <source>No data found in file.</source>
+        <translation>文件中未找到数据。</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcestatusregisters.cpp" line="315"/>
         <source>Imported data size (%1) does not match current size (%2).</source>
         <translation>导入数据大小 (%1) 与当前大小 (%2) 不匹配。</translation>
     </message>

@@ -5,8 +5,8 @@
 #include "modbusmultiserver.h"
 #include "uiutils.h"
 #include "formatutils.h"
-#include "dialogforcemultiplecoils.h"
-#include "ui_dialogforcemultiplecoils.h"
+#include "dialogforcestatusregisters.h"
+#include "ui_dialogforcestatusregisters.h"
 
 namespace {
 AddressBase addressBase(const ModbusWriteParams& params)
@@ -27,16 +27,16 @@ QRange<int> lengthRangeForPointType(int address, bool zeroBased, AddressSpace sp
 }
 
 ///
-/// \brief DialogForceMultipleCoils::DialogForceMultipleCoils
+/// \brief DialogForceStatusRegisters::DialogForceStatusRegisters
 /// \param params
 /// \param type
 /// \param length
 /// \param dd
 /// \param parent
 ///
-DialogForceMultipleCoils::DialogForceMultipleCoils(ModbusWriteParams& params, QModbusDataUnit::RegisterType type, int length, bool displayHexAddresses, QWidget *parent) :
+DialogForceStatusRegisters::DialogForceStatusRegisters(ModbusWriteParams& params, QModbusDataUnit::RegisterType type, int length, bool displayHexAddresses, QWidget *parent) :
       QAdjustedSizeDialog(parent)
-    , ui(new Ui::DialogForceMultipleCoils)
+    , ui(new Ui::DialogForceStatusRegisters)
     ,_writeParams(params)
     ,_type(type)
     ,_hexAddress(displayHexAddresses)
@@ -68,20 +68,20 @@ DialogForceMultipleCoils::DialogForceMultipleCoils(ModbusWriteParams& params, QM
 }
 
 ///
-/// \brief DialogForceMultipleCoils::~DialogForceMultipleCoils
+/// \brief DialogForceStatusRegisters::~DialogForceStatusRegisters
 ///
-DialogForceMultipleCoils::~DialogForceMultipleCoils()
+DialogForceStatusRegisters::~DialogForceStatusRegisters()
 {
     delete ui;
 }
 
 ///
-/// rief DialogForceMultipleCoils::changeEvent
+/// rief DialogForceStatusRegisters::changeEvent
 ///
 ///
-/// \brief DialogForceMultipleCoils::changeEvent
+/// \brief DialogForceStatusRegisters::changeEvent
 ///
-void DialogForceMultipleCoils::changeEvent(QEvent* event)
+void DialogForceStatusRegisters::changeEvent(QEvent* event)
 {
     if (event->type() == QEvent::LanguageChange) {
         ui->retranslateUi(this);
@@ -92,9 +92,9 @@ void DialogForceMultipleCoils::changeEvent(QEvent* event)
 }
 
 ///
-/// \brief DialogForceMultipleCoils::setupAddressControls
+/// \brief DialogForceStatusRegisters::setupAddressControls
 ///
-void DialogForceMultipleCoils::setupAddressControls(int length)
+void DialogForceStatusRegisters::setupAddressControls(int length)
 {
     ui->lineEditDeviceId->setLeadingZeroes(_writeParams.LeadingZeros);
     ui->lineEditDeviceId->setInputRange(ModbusLimits::slaveRange());
@@ -161,9 +161,9 @@ void DialogForceMultipleCoils::setupAddressControls(int length)
 }
 
 ///
-/// \brief DialogForceMultipleCoils::updateAddressSummary
+/// \brief DialogForceStatusRegisters::updateAddressSummary
 ///
-void DialogForceMultipleCoils::updateAddressSummary()
+void DialogForceStatusRegisters::updateAddressSummary()
 {
     const int length = qMax(1, _data.size());
     ui->labelAddresses->setText(
@@ -174,9 +174,9 @@ void DialogForceMultipleCoils::updateAddressSummary()
 }
 
 ///
-/// \brief DialogForceMultipleCoils::reloadDataFromServer
+/// \brief DialogForceStatusRegisters::reloadDataFromServer
 ///
-void DialogForceMultipleCoils::reloadDataFromServer()
+void DialogForceStatusRegisters::reloadDataFromServer()
 {
     const int length = ui->lineEditLength->value<int>();
     if(length <= 0) {
@@ -202,9 +202,9 @@ void DialogForceMultipleCoils::reloadDataFromServer()
 }
 
 ///
-/// \brief DialogForceMultipleCoils::accept
+/// \brief DialogForceStatusRegisters::accept
 ///
-void DialogForceMultipleCoils::accept()
+void DialogForceStatusRegisters::accept()
 {
     _writeParams.Value = QVariant::fromValue(_data);
     _writeParams.DeviceId = ui->lineEditDeviceId->value<quint32>();
@@ -213,9 +213,9 @@ void DialogForceMultipleCoils::accept()
 }
 
 ///
-/// \brief DialogForceMultipleCoils::on_pushButton0_clicked
+/// \brief DialogForceStatusRegisters::on_pushButton0_clicked
 ///
-void DialogForceMultipleCoils::on_pushButton0_clicked()
+void DialogForceStatusRegisters::on_pushButton0_clicked()
 {
     for(auto& v : _data)
     {
@@ -226,9 +226,9 @@ void DialogForceMultipleCoils::on_pushButton0_clicked()
 }
 
 ///
-/// \brief DialogForceMultipleCoils::on_pushButton1_clicked
+/// \brief DialogForceStatusRegisters::on_pushButton1_clicked
 ///
-void DialogForceMultipleCoils::on_pushButton1_clicked()
+void DialogForceStatusRegisters::on_pushButton1_clicked()
 {
     for(auto& v : _data)
     {
@@ -239,9 +239,9 @@ void DialogForceMultipleCoils::on_pushButton1_clicked()
 }
 
 ///
-/// \brief DialogForceMultipleCoils::on_pushButtonRandom_clicked
+/// \brief DialogForceStatusRegisters::on_pushButtonRandom_clicked
 ///
-void DialogForceMultipleCoils::on_pushButtonRandom_clicked()
+void DialogForceStatusRegisters::on_pushButtonRandom_clicked()
 {
     for(auto& v : _data)
     {
@@ -252,9 +252,9 @@ void DialogForceMultipleCoils::on_pushButtonRandom_clicked()
 }
 
 ///
-/// \brief DialogForceMultipleCoils::on_pushButtonImport_clicked
+/// \brief DialogForceStatusRegisters::on_pushButtonImport_clicked
 ///
-void DialogForceMultipleCoils::on_pushButtonImport_clicked()
+void DialogForceStatusRegisters::on_pushButtonImport_clicked()
 {
     auto filename = QFileDialog::getOpenFileName(this, QString(), QString(), tr("CSV files (*.csv)"));
     if(filename.isEmpty())
@@ -326,9 +326,9 @@ void DialogForceMultipleCoils::on_pushButtonImport_clicked()
 }
 
 ///
-/// \brief DialogForceMultipleCoils::on_pushButtonExport_clicked
+/// \brief DialogForceStatusRegisters::on_pushButtonExport_clicked
 ///
-void DialogForceMultipleCoils::on_pushButtonExport_clicked()
+void DialogForceStatusRegisters::on_pushButtonExport_clicked()
 {
     auto filename = QFileDialog::getSaveFileName(this, QString(), QString(), tr("CSV files (*.csv)"));
     if(filename.isEmpty()) return;
@@ -364,10 +364,10 @@ void DialogForceMultipleCoils::on_pushButtonExport_clicked()
 }
 
 ///
-/// \brief DialogForceMultipleCoils::on_tableWidget_itemDoubleClicked
+/// \brief DialogForceStatusRegisters::on_tableWidget_itemDoubleClicked
 /// \param item
 ///
-void DialogForceMultipleCoils::on_tableWidget_itemDoubleClicked(QTableWidgetItem* item)
+void DialogForceStatusRegisters::on_tableWidget_itemDoubleClicked(QTableWidgetItem* item)
 {
     if(item == nullptr) return;
 
@@ -381,9 +381,9 @@ void DialogForceMultipleCoils::on_tableWidget_itemDoubleClicked(QTableWidgetItem
 }
 
 ///
-/// \brief DialogForceMultipleCoils::updateTableWidget
+/// \brief DialogForceStatusRegisters::updateTableWidget
 ///
-void DialogForceMultipleCoils::updateTableWidget()
+void DialogForceStatusRegisters::updateTableWidget()
 {
     const int columns = 8;
     const auto length = _data.length();

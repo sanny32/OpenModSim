@@ -183,7 +183,7 @@ set(SOURCES
     dialogs/dialogcoilsimulation.cpp
     dialogs/dialogabout.cpp
     dialogs/dialogwelcome.cpp
-    dialogs/dialogforcemultiplecoils.cpp
+    dialogs/dialogforcestatusregisters.cpp
     dialogs/dialogforcemultipleregisters.cpp
     dialogs/dialogmsgparser.cpp
     dialogs/dialogprintsettings.cpp
@@ -284,7 +284,7 @@ set(HEADERS
     dialogs/dialogcoilsimulation.h
     dialogs/dialogabout.h
     dialogs/dialogwelcome.h
-    dialogs/dialogforcemultiplecoils.h
+    dialogs/dialogforcestatusregisters.h
     dialogs/dialogforcemultipleregisters.h
     dialogs/dialogmsgparser.h
     dialogs/dialogprintsettings.h
@@ -386,7 +386,7 @@ set(UI_FILES
     dialogs/dialogcoilsimulation.ui
     dialogs/dialogabout.ui
     dialogs/dialogwelcome.ui
-    dialogs/dialogforcemultiplecoils.ui
+    dialogs/dialogforcestatusregisters.ui
     dialogs/dialogforcemultipleregisters.ui
     dialogs/dialogmsgparser.ui
     dialogs/dialogprintsettings.ui

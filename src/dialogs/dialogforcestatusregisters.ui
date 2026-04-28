@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>DialogForceMultipleCoils</class>
- <widget class="QDialog" name="DialogForceMultipleCoils">
+ <class>DialogForceStatusRegisters</class>
+ <widget class="QDialog" name="DialogForceStatusRegisters">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -345,7 +345,7 @@
   <connection>
    <sender>buttonBox</sender>
    <signal>accepted()</signal>
-   <receiver>DialogForceMultipleCoils</receiver>
+   <receiver>DialogForceStatusRegisters</receiver>
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -361,7 +361,7 @@
   <connection>
    <sender>buttonBox</sender>
    <signal>rejected()</signal>
-   <receiver>DialogForceMultipleCoils</receiver>
+   <receiver>DialogForceStatusRegisters</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
