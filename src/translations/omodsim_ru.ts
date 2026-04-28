@@ -817,17 +817,17 @@ Open the download page?</source>
         <translation>Применить</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="458"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="464"/>
         <source>Import</source>
         <translation>Импорт</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="481"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="487"/>
         <source>Export</source>
         <translation>Экспорт</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="304"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="313"/>
         <source>Random</source>
         <translation>Случайное</translation>
     </message>
@@ -842,75 +842,75 @@ Open the download page?</source>
         <translation>Шаг:</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="52"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="61"/>
         <source>PRESET INPUT REGISTERS (3x)</source>
         <translation>Предустановка регистров ввода (3x)</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="55"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="64"/>
         <source>PRESET HOLDING REGISTERS (4x)</source>
         <translation>Предустановка регистров хранения (4x)</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="260"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="269"/>
         <source>Starting Address: </source>
         <translation>Начальный адрес: </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="260"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="269"/>
         <source>Ending Address: </source>
         <translation>Конечный адрес: </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="303"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="312"/>
         <source>Constant</source>
         <translation>Константа</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="305"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="314"/>
         <source>Increment</source>
         <translation>Инкремент</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="306"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="315"/>
         <source>Zero</source>
         <translation>Ноль</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="836"/>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="917"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="845"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="926"/>
         <source>CSV files (*.csv)</source>
         <translation>Файлы CSV (*.csv)</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="843"/>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="928"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="852"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="937"/>
         <source>Error</source>
         <translation>Ошибка</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="884"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="893"/>
         <source>Import error</source>
         <translation>Ошибка импорта</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="884"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="893"/>
         <source>Invalid value: %1</source>
         <translation>Неверное значение: %1</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="893"/>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="899"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="902"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="908"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="893"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="902"/>
         <source>No data found in file.</source>
         <translation>Данные в файле не найдены.</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="899"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="908"/>
         <source>Imported data size (%1) does not match current size (%2).</source>
         <translation>Размер импортированных данных (%1) не совпадает с текущим (%2).</translation>
     </message>
@@ -3498,7 +3498,7 @@ Open the download page?</source>
     <message>
         <location filename="../modbusmultiserver.cpp" line="961"/>
         <source>An incorrect device ID was specified (%1)</source>
-        <translation>Некорректно знаяение номера устройства (%1)</translation>
+        <translation type="unfinished">Некорректное значение номера устройства (%1)</translation>
     </message>
     <message>
         <location filename="../modbusmultiserver.cpp" line="1529"/>
