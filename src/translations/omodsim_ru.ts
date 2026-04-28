@@ -691,6 +691,16 @@ Open the download page?</source>
         <translation>Порядок байт:</translation>
     </message>
     <message>
+        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="209"/>
+        <source>Direct</source>
+        <translation>Прямой</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="214"/>
+        <source>Swapped</source>
+        <translation>Обратный</translation>
+    </message>
+    <message>
         <location filename="../dialogs/dialogforcemultipleregisters.ui" line="231"/>
         <source>Preset</source>
         <translation>Предустановка</translation>

@@ -691,6 +691,16 @@ Open the download page?</source>
         <translation>字节顺序：</translation>
     </message>
     <message>
+        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="209"/>
+        <source>Direct</source>
+        <translation>直接的</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="214"/>
+        <source>Swapped</source>
+        <translation>交换</translation>
+    </message>
+    <message>
         <location filename="../dialogs/dialogforcemultipleregisters.ui" line="231"/>
         <source>Preset</source>
         <translation>预设</translation>
