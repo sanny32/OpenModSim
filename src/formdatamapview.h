@@ -82,6 +82,7 @@ private:
     void setupToolBar();
     void setupServerConnections();
     void updateWindowIcon();
+    void ensureColumnHeadersFit();
 
     QList<int> columnWidths() const;
     void setColumnWidths(const QList<int>& widths);

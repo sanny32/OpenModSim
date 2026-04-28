@@ -991,11 +991,12 @@ void FormDataMapView::changeEvent(QEvent* event)
         if (_model) {
             // Force column headers to repaint with the new language
             _model->headerDataChanged(Qt::Horizontal, 0, ColCount - 1);
+            ensureColumnHeadersFit();
             // Force Type column cells to repaint (text is derived from translation)
             const int rows = _model->rowCount();
             if (rows > 0)
                 emit _model->dataChanged(_model->index(0, ColType),
-                                         _model->index(rows - 1, ColType));
+                                          _model->index(rows - 1, ColType));
         }
     }
     QWidget::changeEvent(event);
@@ -1335,6 +1336,30 @@ void FormDataMapView::setupServerConnections()
             this, &FormDataMapView::on_mbTimestampChanged);
     connect(&_mbMultiServer, &ModbusMultiServer::descriptionChanged,
             this, &FormDataMapView::on_mbDescriptionChanged);
+}
+
+///
+/// \brief FormDataMapView::ensureColumnHeadersFit
+///
+void FormDataMapView::ensureColumnHeadersFit()
+{
+    auto* hdr = ui->tableView->horizontalHeader();
+    if (!hdr || !_proxy)
+        return;
+
+    const QFontMetrics fm(hdr->font());
+    const int horizontalMargin = style()->pixelMetric(QStyle::PM_HeaderMargin, nullptr, hdr);
+    const int padding = horizontalMargin * 2 + 8;
+
+    for (int section = 0; section < hdr->count(); ++section) {
+        const QString title = _proxy->headerData(section, Qt::Horizontal, Qt::DisplayRole).toString();
+        if (title.isEmpty())
+            continue;
+
+        const int requiredWidth = qMax(hdr->minimumSectionSize(), fm.horizontalAdvance(title) + padding);
+        if (hdr->sectionSize(section) < requiredWidth)
+            hdr->resizeSection(section, requiredWidth);
+    }
 }
 
 ///
