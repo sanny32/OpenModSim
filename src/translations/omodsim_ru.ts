@@ -812,105 +812,105 @@ Open the download page?</source>
         <translation>Предустановка</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="356"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="393"/>
         <source>Apply</source>
         <translation>Применить</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="464"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="451"/>
         <source>Import</source>
         <translation>Импорт</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="487"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="474"/>
         <source>Export</source>
         <translation>Экспорт</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="313"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="328"/>
         <source>Random</source>
         <translation>Случайное</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="258"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="295"/>
         <source>From:</source>
         <translation>От:</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="285"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="322"/>
         <source>Step:</source>
         <translation>Шаг:</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="61"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="76"/>
         <source>PRESET INPUT REGISTERS (3x)</source>
         <translation>Предустановка регистров ввода (3x)</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="64"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="79"/>
         <source>PRESET HOLDING REGISTERS (4x)</source>
         <translation>Предустановка регистров хранения (4x)</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="269"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="284"/>
         <source>Starting Address: </source>
         <translation>Начальный адрес: </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="269"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="284"/>
         <source>Ending Address: </source>
         <translation>Конечный адрес: </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="312"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="327"/>
         <source>Constant</source>
         <translation>Константа</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="314"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="329"/>
         <source>Increment</source>
         <translation>Инкремент</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="315"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="330"/>
         <source>Zero</source>
         <translation>Ноль</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="845"/>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="926"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="860"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="941"/>
         <source>CSV files (*.csv)</source>
         <translation>Файлы CSV (*.csv)</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="852"/>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="937"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="867"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="952"/>
         <source>Error</source>
         <translation>Ошибка</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="893"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="908"/>
         <source>Import error</source>
         <translation>Ошибка импорта</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="893"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="908"/>
         <source>Invalid value: %1</source>
         <translation>Неверное значение: %1</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="902"/>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="908"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="917"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="923"/>
         <source>Warning</source>
         <translation>Предупреждение</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="902"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="917"/>
         <source>No data found in file.</source>
         <translation>Данные в файле не найдены.</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="908"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.cpp" line="923"/>
         <source>Imported data size (%1) does not match current size (%2).</source>
         <translation>Размер импортированных данных (%1) не совпадает с текущим (%2).</translation>
     </message>

@@ -12,6 +12,12 @@
 #include "ui_dialogforcemultipleregisters.h"
 
 namespace {
+///
+/// \brief parseBinary16
+/// \param text
+/// \param fallback
+/// \return
+///
 quint16 parseBinary16(const QString& text, quint16 fallback = 0)
 {
     bool ok = false;
@@ -19,9 +25,25 @@ quint16 parseBinary16(const QString& text, quint16 fallback = 0)
     return ok ? value : fallback;
 }
 
+///
+/// \brief addressBase
+/// \param params
+/// \return
+///
 AddressBase addressBase(const ModbusWriteParams& params)
 {
     return params.ZeroBasedAddress ? AddressBase::Base0 : AddressBase::Base1;
+}
+
+///
+/// \brief retainSizeWhenHidden
+/// \param widget
+///
+void retainSizeWhenHidden(QWidget* widget)
+{
+    auto policy = widget->sizePolicy();
+    policy.setRetainSizeWhenHidden(true);
+    widget->setSizePolicy(policy);
 }
 }
 
@@ -41,6 +63,8 @@ DialogForceMultipleRegisters::DialogForceMultipleRegisters(ModbusWriteParams& pa
     ,_hexAddress(displayHexAddresses)
 {
     ui->setupUi(this);
+
+    retainSizeWhenHidden(ui->widgetPresetApplyBottom);
 
     ui->lineEditStep->setValue(1);
     recolorPushButtonIcon(ui->pushButtonExport, Qt::red);
