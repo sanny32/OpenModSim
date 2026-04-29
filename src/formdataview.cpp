@@ -7,6 +7,7 @@
 #include <QSignalBlocker>
 #include <QSpinBox>
 #include <QStyle>
+#include "apppreferences.h"
 #include "modbuslimits.h"
 #include "findreplacebar.h"
 #include "mainwindow.h"
@@ -128,6 +129,12 @@ FormDataView::FormDataView(ModbusMultiServer& server, DataSimulator* simulator, 
     connect(_dataSimulator, &DataSimulator::dataSimulated, this, &FormDataView::on_dataSimulated);
 
     setupDisplayBar();
+    applyGlobalHexView(AppPreferences::instance().globalHexView());
+    connect(&AppPreferences::instance(), &AppPreferences::settingChanged, this,
+            [this](const QString& name, const QString&, const QString& newValue) {
+        if (name == QLatin1String("GlobalHexView"))
+            applyGlobalHexView(stringToBool(newValue));
+    });
 
     const auto sa = ui->frameDataDefinition;
     sa->horizontalScrollBar()->installEventFilter(this);
@@ -354,28 +361,16 @@ void FormDataView::setAddressBase(AddressBase base)
 }
 
 ///
-/// \brief FormDataView::displayHexAddresses
-/// \return
+/// \brief FormDataView::applyGlobalHexView
+/// \param enabled
 ///
-bool FormDataView::displayHexAddresses() const
+void FormDataView::applyGlobalHexView(bool enabled)
 {
-    return ui->outputWidget->displayHexAddresses();
-}
-
-///
-/// \brief FormDataView::setDisplayHexAddresses
-/// \param on
-///
-void FormDataView::setDisplayHexAddresses(bool on)
-{
-    if(displayHexAddresses() == on) return;
-    ui->outputWidget->setDisplayHexAddresses(on);
-
-    ui->lineEditDeviceId->setHexView(on);
-    ui->lineEditAddress->setHexView(on);
-    ui->lineEditLength->setHexView(on);
+    ui->lineEditDeviceId->setHexView(enabled);
+    ui->lineEditAddress->setHexView(enabled);
+    ui->lineEditLength->setHexView(enabled);
+    ui->outputWidget->refreshDisplay();
     updateSettingsControls();
-    emit displayHexAddressesChanged(on);
 }
 
 ///
@@ -886,8 +881,6 @@ void FormDataView::linkTo(FormDataView* other)
     });
     connect(this,  &FormDataView::codepageChanged, other, &FormDataView::setCodepage);
     connect(other, &FormDataView::codepageChanged, this,  &FormDataView::setCodepage);
-    connect(this,  &FormDataView::displayHexAddressesChanged, other, &FormDataView::setDisplayHexAddresses);
-    connect(other, &FormDataView::displayHexAddressesChanged, this,  &FormDataView::setDisplayHexAddresses);
     connect(this,  &FormDataView::fontChanged, other, &FormDataView::setFont);
     connect(other, &FormDataView::fontChanged, this,  &FormDataView::setFont);
     connect(this,  &FormDataView::foregroundColorChanged, other, &FormDataView::setForegroundColor);
@@ -1084,7 +1077,7 @@ void FormDataView::on_outputWidget_itemDoubleClicked(quint16 addr, const QVarian
         case QModbusDataUnit::Coils:
         case QModbusDataUnit::DiscreteInputs:
         {
-            DialogWriteStatusRegister dlg(params, pointType, displayHexAddresses(), _dataSimulator, _parent);
+            DialogWriteStatusRegister dlg(params, pointType, AppPreferences::instance().globalHexView(), _dataSimulator, _parent);
             if(dlg.exec() == QDialog::Accepted) {
                 _mbMultiServer.writeRegister(pointType, params);
             }
@@ -1094,7 +1087,7 @@ void FormDataView::on_outputWidget_itemDoubleClicked(quint16 addr, const QVarian
         case QModbusDataUnit::InputRegisters:
         case QModbusDataUnit::HoldingRegisters:
         {
-            DialogWriteRegister dlg(params, pointType, displayHexAddresses(), _dataSimulator, _parent);
+            DialogWriteRegister dlg(params, pointType, AppPreferences::instance().globalHexView(), _dataSimulator, _parent);
             if(dlg.exec() == QDialog::Accepted) {
                 _mbMultiServer.writeRegister(pointType, params);
             }

@@ -61,9 +61,6 @@ public:
     bool zeroBasedAddress() const;
     void setAddressBase(AddressBase base);
 
-    bool displayHexAddresses() const;
-    void setDisplayHexAddresses(bool on);
-
     QColor backgroundColor() const;
     void setBackgroundColor(const QColor& clr);
 
@@ -122,7 +119,6 @@ signals:
     void pointTypeChanged(QModbusDataUnit::RegisterType);
     void dataTypeChanged(DataType);
     void registerOrderChanged(RegisterOrder);
-    void displayHexAddressesChanged(bool);
     void fontChanged(const QFont&);
     void foregroundColorChanged(const QColor&);
     void backgroundColorChanged(const QColor&);
@@ -150,6 +146,7 @@ private:
     void syncDescriptionsFromServer();
     void onDefinitionChanged();
     void setDisplayDefinitionSilent(const DataViewDefinitions& dd);
+    void applyGlobalHexView(bool enabled);
 
     void setupDisplayBar();
     void updateSettingsControls();
@@ -330,11 +327,6 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, FormDataView* frm)
 
         if (attributes.hasAttribute("RegisterOrder")) {
             regOrder = enumFromString<RegisterOrder>(attributes.value("RegisterOrder").toString(), RegisterOrder::MSRF);
-        }
-
-        if (attributes.hasAttribute("DisplayHexAddresses")) {
-            const bool displayHex = stringToBool(attributes.value("DisplayHexAddresses").toString());
-            frm->setDisplayHexAddresses(displayHex);
         }
 
         if (attributes.hasAttribute("Codepage")) {

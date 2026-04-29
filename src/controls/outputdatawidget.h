@@ -144,8 +144,7 @@ public:
     QString codepage() const;
     void setCodepage(const QString& name);
 
-    bool displayHexAddresses() const;
-    void setDisplayHexAddresses(bool on);
+    void refreshDisplay();
 
     QColor backgroundColor() const;
     void setBackgroundColor(const QColor& clr);
@@ -220,7 +219,6 @@ private:
     qreal _baseFontSize = 0.0;
     int _zoomPercent = 100;
 
-    bool _displayHexAddreses;
     DataType      _dataType  = DataType::Binary;
     RegisterOrder _regOrder  = RegisterOrder::MSRF;
     ByteOrder _byteOrder;

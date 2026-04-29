@@ -1571,7 +1571,7 @@ Open the download page?</source>
     </message>
     <message>
         <location filename="../dialogs/dialogwriteregister.ui" line="118"/>
-        <location filename="../dialogs/dialogwriteregister.cpp" line="234"/>
+        <location filename="../dialogs/dialogwriteregister.cpp" line="224"/>
         <source>Auto Simulation: OFF</source>
         <translation>Симуляция: Выкл</translation>
     </message>
@@ -1581,18 +1581,18 @@ Open the download page?</source>
         <translation>Битовый шаблон: </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwriteregister.cpp" line="103"/>
+        <location filename="../dialogs/dialogwriteregister.cpp" line="93"/>
         <source>Value, (HEX): </source>
         <translation>Значение, (HEX): </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwriteregister.cpp" line="110"/>
+        <location filename="../dialogs/dialogwriteregister.cpp" line="100"/>
         <source>Value, (ANSI): </source>
         <translation>Значение, (ANSI): </translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwriteregister.cpp" line="228"/>
-        <location filename="../dialogs/dialogwriteregister.cpp" line="241"/>
+        <location filename="../dialogs/dialogwriteregister.cpp" line="218"/>
+        <location filename="../dialogs/dialogwriteregister.cpp" line="230"/>
         <source>Auto Simulation: ON</source>
         <translation>Симуляция: Вкл</translation>
     </message>
@@ -1631,13 +1631,13 @@ Open the download page?</source>
     </message>
     <message>
         <location filename="../dialogs/dialogwritestatusregister.ui" line="134"/>
-        <location filename="../dialogs/dialogwritestatusregister.cpp" line="102"/>
+        <location filename="../dialogs/dialogwritestatusregister.cpp" line="103"/>
         <source>Auto Simulation: OFF</source>
         <translation>Симуляция: Выкл</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogwritestatusregister.cpp" line="96"/>
-        <location filename="../dialogs/dialogwritestatusregister.cpp" line="108"/>
+        <location filename="../dialogs/dialogwritestatusregister.cpp" line="97"/>
+        <location filename="../dialogs/dialogwritestatusregister.cpp" line="109"/>
         <source>Auto Simulation: ON</source>
         <translation>Симуляция: Вкл</translation>
     </message>
@@ -2048,22 +2048,17 @@ Type Filter: %3</source>
         <translation>Перестановка байт (0xAB → 0xBA)</translation>
     </message>
     <message>
-        <location filename="../formdataview.ui" line="871"/>
-        <source>Hex Addresses</source>
-        <translation>Шестнадцатиричные адреса</translation>
-    </message>
-    <message>
-        <location filename="../formdataview.cpp" line="607"/>
+        <location filename="../formdataview.cpp" line="602"/>
         <source>0-based</source>
         <translation>0-первый</translation>
     </message>
     <message>
-        <location filename="../formdataview.cpp" line="607"/>
+        <location filename="../formdataview.cpp" line="602"/>
         <source>1-based</source>
         <translation>1-первый</translation>
     </message>
     <message>
-        <location filename="../formdataview.cpp" line="608"/>
+        <location filename="../formdataview.cpp" line="603"/>
         <source>Address Base: %1
 Starting Address: %2
 Length: %3</source>
@@ -2072,7 +2067,7 @@ Length: %3</source>
 Длина: %3</translation>
     </message>
     <message>
-        <location filename="../formdataview.cpp" line="610"/>
+        <location filename="../formdataview.cpp" line="605"/>
         <source>Unit Identifier: %1
 Data Type:
 %2</source>
@@ -2582,7 +2577,7 @@ Open the download page?</source>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="240"/>
-        <location filename="../mainwindow.cpp" line="1857"/>
+        <location filename="../mainwindow.cpp" line="1851"/>
         <source>Save Project</source>
         <translation>Сохранить проект</translation>
     </message>
@@ -2775,7 +2770,7 @@ Open the download page?</source>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="230"/>
-        <location filename="../mainwindow.cpp" line="1993"/>
+        <location filename="../mainwindow.cpp" line="1987"/>
         <source>Clear List</source>
         <translation>Очистить список</translation>
     </message>
@@ -2793,20 +2788,20 @@ Open the download page?</source>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="876"/>
-        <location filename="../mainwindow.cpp" line="1887"/>
+        <location filename="../mainwindow.cpp" line="1881"/>
         <source>Project files (*.omsim)</source>
         <translation>Файлы проекта (*.omsim)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1507"/>
-        <location filename="../mainwindow.cpp" line="1915"/>
+        <location filename="../mainwindow.cpp" line="1508"/>
+        <location filename="../mainwindow.cpp" line="1909"/>
         <source>Untitled</source>
         <translation>Без имени</translation>
     </message>
     <message>
         <location filename="../applogger.cpp" line="119"/>
         <location filename="../mainwindow.cpp" line="626"/>
-        <location filename="../mainwindow.cpp" line="1689"/>
+        <location filename="../mainwindow.cpp" line="1690"/>
         <source>Address Base</source>
         <translation>Адресация</translation>
     </message>
@@ -3118,12 +3113,12 @@ Open the download page?</source>
         <translation>Шестнадцатиричный режим</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1858"/>
+        <location filename="../mainwindow.cpp" line="1852"/>
         <source>Save project before closing?</source>
         <translation>Сохранить проект перед закрытием?</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1981"/>
+        <location filename="../mainwindow.cpp" line="1975"/>
         <source>No Recent Projects</source>
         <translation>Нет недавних проектов</translation>
     </message>
@@ -3563,67 +3558,67 @@ Open the download page?</source>
 <context>
     <name>OutputDataWidget</name>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1318"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1304"/>
         <source>Set Value of %1</source>
         <translation>Записать значение по адресу %1</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1327"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1313"/>
         <source>Add Description</source>
         <translation>Добавить описание</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1327"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1313"/>
         <source>Edit Description</source>
         <translation>Редактировать описание</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1330"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1316"/>
         <source>%1: Enter Description</source>
         <translation>%1: Введите описание</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1339"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1325"/>
         <source>Remove Color</source>
         <translation>Удалить цвет</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1350"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1336"/>
         <source>Yellow</source>
         <translation>Желтый</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1351"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1337"/>
         <source>Cyan</source>
         <translation>Циан</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1352"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1338"/>
         <source>Magenta</source>
         <translation>Пурпурный</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1353"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1339"/>
         <source>LightGreen</source>
         <translation>Светло-зеленый</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1354"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1340"/>
         <source>Orange</source>
         <translation>Оранжевый</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1355"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1341"/>
         <source>LightBlue</source>
         <translation>Светло-синий</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1356"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1342"/>
         <source>LightGray</source>
         <translation>Светло-серый</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1435"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1421"/>
         <source>Zoom: %1%</source>
         <translation>Масштаб: %1%</translation>
     </message>

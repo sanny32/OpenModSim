@@ -220,8 +220,10 @@ void AppPreferences::setGlobalHexView(bool value)
     if (_globalHexView == value)
         return;
 
-    emit settingChanged("GlobalHexView", boolToText(_globalHexView), boolToText(value));
+    const QString oldValue = boolToText(_globalHexView);
+    const QString newValue = boolToText(value);
     _globalHexView = value;
+    emit settingChanged("GlobalHexView", oldValue, newValue);
 }
 
 ///

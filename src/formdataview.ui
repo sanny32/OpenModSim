@@ -863,14 +863,6 @@
     <string>Swap Bytes (0xAB → 0xBA)</string>
    </property>
   </action>
-  <action name="actionDisplayHexAddresses">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="text">
-    <string>Hex Addresses</string>
-   </property>
-  </action>
  </widget>
  <customwidgets>
   <customwidget>

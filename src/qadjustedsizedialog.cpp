@@ -12,6 +12,15 @@ QAdjustedSizeDialog::QAdjustedSizeDialog(QWidget *parent, Qt::WindowFlags f)
 }
 
 ///
+/// \brief QAdjustedSizeDialog::sizeHint
+/// \return
+///
+QSize QAdjustedSizeDialog::sizeHint() const
+{
+    return QDialog::sizeHint().expandedTo(minimumSize());
+}
+
+///
 /// \brief QAdjustedSizeDialog::showEvent
 /// \param e
 ///

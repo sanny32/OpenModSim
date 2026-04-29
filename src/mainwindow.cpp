@@ -1357,7 +1357,7 @@ bool MainWindow::prepareWriteParams(QModbusDataUnit::RegisterType type,
     ForceRangeParams range{
         outDd.DeviceId,
         outDd.PointAddress,
-        outDd.Length,
+        outFrm && outDd.PointType == type ? outDd.Length : ForceRangeParams{}.Length,
         zeroBasedAddress,
         addrSpace,
         outDd.LeadingZeros
@@ -1419,7 +1419,7 @@ void MainWindow::forceCoils(QModbusDataUnit::RegisterType type)
     FormDataView* frm; DataViewDefinitions dd; int length = 0; ModbusWriteParams params;
     if(!prepareWriteParams(type, frm, dd, length, params)) return;
 
-    const bool displayHexAddresses = frm ? frm->displayHexAddresses() : AppPreferences::instance().globalHexView();
+    const bool displayHexAddresses = AppPreferences::instance().globalHexView();
     DialogForceStatusRegisters dlg(params, type, length, displayHexAddresses, this);
     if(dlg.exec() == QDialog::Accepted) {
         rememberForceRangeParams(type, params);
@@ -1436,12 +1436,13 @@ void MainWindow::presetRegs(QModbusDataUnit::RegisterType type)
     FormDataView* frm; DataViewDefinitions dd; int length = 0; ModbusWriteParams params;
     if(!prepareWriteParams(type, frm, dd, length, params)) return;
 
-    params.DataMode = frm ? frm->dataType()      : DataType::Hex;
-    params.RegOrder = frm ? frm->registerOrder() : RegisterOrder::MSRF;
-    params.Order    = frm ? frm->byteOrder()     : ByteOrder::Direct;
-    params.Codepage = frm ? frm->codepage()      : QString();
+    const bool useFormDisplay = frm && dd.PointType == type;
+    params.DataMode = useFormDisplay ? frm->dataType()      : DataType::Hex;
+    params.RegOrder = useFormDisplay ? frm->registerOrder() : RegisterOrder::MSRF;
+    params.Order    = useFormDisplay ? frm->byteOrder()     : ByteOrder::Direct;
+    params.Codepage = useFormDisplay ? frm->codepage()      : QString();
 
-    const bool displayHexAddresses = frm ? frm->displayHexAddresses() : AppPreferences::instance().globalHexView();
+    const bool displayHexAddresses = AppPreferences::instance().globalHexView();
     DialogForceMultipleRegisters dlg(params, type, length, displayHexAddresses, this);
     if(dlg.exec() == QDialog::Accepted) {
         rememberForceRangeParams(type, params);
@@ -1740,7 +1741,6 @@ void MainWindow::applyGlobalViewStateToForm(QWidget* frm)
     const auto& prefs = AppPreferences::instance();
     if (auto* data = qobject_cast<FormDataView*>(frm)) {
         data->setAddressBase(prefs.globalAddressBase());
-        data->setDisplayHexAddresses(prefs.globalHexView());
     } else if (auto* traffic = qobject_cast<FormTrafficView*>(frm)) {
         traffic->setHexView(prefs.globalHexView());
     } else if (auto* map = qobject_cast<FormDataMapView*>(frm)) {
@@ -1820,10 +1820,6 @@ void MainWindow::applyGlobalHexView(bool enabled, bool persist)
     if (persist)
         prefs.setGlobalHexView(enabled);
 
-    for (auto* frm : _project->forms(ProjectFormKind::Data))
-        if (auto* data = qobject_cast<FormDataView*>(frm))
-            data->setDisplayHexAddresses(enabled);
-
     for (auto* frm : _project->forms(ProjectFormKind::Traffic))
         if (auto* traffic = qobject_cast<FormTrafficView*>(frm))
             traffic->setHexView(enabled);
@@ -1836,9 +1832,7 @@ void MainWindow::applyGlobalHexView(bool enabled, bool persist)
         if (!frm || !frm->property(kSplitAutoCloneProperty).toBool())
             return;
 
-        if (auto* data = qobject_cast<FormDataView*>(frm))
-            data->setDisplayHexAddresses(enabled);
-        else if (auto* traffic = qobject_cast<FormTrafficView*>(frm))
+        if (auto* traffic = qobject_cast<FormTrafficView*>(frm))
             traffic->setHexView(enabled);
         else if (auto* map = qobject_cast<FormDataMapView*>(frm))
             map->setHexView(enabled);

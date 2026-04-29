@@ -16,6 +16,8 @@ public:
                                                 Qt::WindowCloseButtonHint |
                                                 Qt::WindowTitleHint);
 
+    QSize sizeHint() const override;
+
 protected:
     void showEvent(QShowEvent* e) override;
 

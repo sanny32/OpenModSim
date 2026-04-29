@@ -2,6 +2,7 @@
 #include <QPainter>
 #include <QInputDialog>
 #include <climits>
+#include "apppreferences.h"
 #include "fontutils.h"
 #include "formatutils.h"
 #include "datadelegate.h"
@@ -61,7 +62,7 @@ QVariant OutputDataListModel::data(const QModelIndex& index, int role) const
     const auto row = index.row();
     const auto pointType = _parentWidget->_displayDefinition.PointType;
     const auto addrSpace = _parentWidget->_addrSpace;
-    const auto hexAddresses = _parentWidget->displayHexAddresses();
+    const auto hexAddresses = AppPreferences::instance().globalHexView();
 
     const auto itemData = _mapItems.find(row);
     if (itemData == _mapItems.end())
@@ -433,7 +434,6 @@ OutputDataListModel::SimulationIconType OutputDataListModel::simulationIcon(int 
 OutputDataWidget::OutputDataWidget(QWidget *parent) :
      QFrame(parent)
    , ui(new Ui::OutputDataWidget)
-   ,_displayHexAddreses(false)
    ,_dataType(DataType::Hex)
    ,_regOrder(RegisterOrder::MSRF)
    ,_byteOrder(ByteOrder::Direct)
@@ -572,24 +572,10 @@ void OutputDataWidget::setup(const DataViewDefinitions& dd,
 }
 
 ///
-/// \brief OutputDataWidget::displayHexAddresses
-/// \return
+/// \brief OutputDataWidget::refreshDisplay
 ///
-bool OutputDataWidget::displayHexAddresses() const
+void OutputDataWidget::refreshDisplay()
 {
-    return _displayHexAddreses;
-}
-
-///
-/// \brief OutputDataWidget::setDisplayHexAddresses
-/// \param on
-///
-void OutputDataWidget::setDisplayHexAddresses(bool on)
-{
-    if (_displayHexAddreses == on)
-        return;
-
-    _displayHexAddreses = on;
     if (_listModel->rowCount() > 0) {
         emit _listModel->dataChanged(_listModel->index(0),
                                      _listModel->index(_listModel->rowCount() - 1),
