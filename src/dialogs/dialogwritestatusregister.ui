@@ -120,7 +120,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="pushButtonSimulation">
+      <widget class="ColoredPushButton" name="pushButtonSimulation">
        <property name="minimumSize">
         <size>
          <width>0</width>
@@ -180,6 +180,11 @@
    <class>NumericLineEdit</class>
    <extends>QLineEdit</extends>
    <header>numericlineedit.h</header>
+  </customwidget>
+  <customwidget>
+   <class>ColoredPushButton</class>
+   <extends>QPushButton</extends>
+   <header>coloredpushbutton.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

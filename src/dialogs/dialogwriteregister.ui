@@ -104,7 +104,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="pushButtonSimulation">
+      <widget class="ColoredPushButton" name="pushButtonSimulation">
        <property name="minimumSize">
         <size>
          <width>0</width>
@@ -213,6 +213,11 @@
    <extends>QGroupBox</extends>
    <header>checkablegroupbox.h</header>
    <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>ColoredPushButton</class>
+   <extends>QPushButton</extends>
+   <header>coloredpushbutton.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>

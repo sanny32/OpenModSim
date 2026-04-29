@@ -1,6 +1,7 @@
 #include "modbuslimits.h"
 #include "modbusmultiserver.h"
 #include "datasimulator.h"
+#include "coloredpushbutton.h"
 #include "dialogcoilsimulation.h"
 #include "dialogwritestatusregister.h"
 #include "ui_dialogwritestatusregister.h"
@@ -94,33 +95,19 @@ void DialogWriteStatusRegister::updateSimulationButton()
         case SimulationMode::Disabled:
             ui->pushButtonSimulation->setEnabled(false);
             ui->pushButtonSimulation->setText(tr("Auto Simulation: ON"));
-            ui->pushButtonSimulation->setStyleSheet("padding: 4px 12px;");
+            ui->pushButtonSimulation->clearColors();
         break;
 
         case SimulationMode::Off:
             ui->pushButtonSimulation->setEnabled(true);
             ui->pushButtonSimulation->setText(tr("Auto Simulation: OFF"));
-            ui->pushButtonSimulation->setStyleSheet("padding: 4px 12px;");
+            ui->pushButtonSimulation->clearColors();
         break;
 
         default:
             ui->pushButtonSimulation->setEnabled(true);
             ui->pushButtonSimulation->setText(tr("Auto Simulation: ON"));
-            ui->pushButtonSimulation->setStyleSheet(R"(
-                        QPushButton {
-                            color: white;
-                            padding: 4px 12px;
-                            background-color: #4CAF50;
-                            border: 1px solid #3e8e41;
-                            border-radius: 4px;
-                        }
-                        QPushButton:hover {
-                            background-color: #45a049;
-                        }
-                        QPushButton:pressed {
-                            background-color: #3e8e41;
-                        }
-                    )");
+            ui->pushButtonSimulation->setColors({ "#4CAF50", "#45A049", "#3E8E41", "#3E8E41" });
         break;
     }
 }

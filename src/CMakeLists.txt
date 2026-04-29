@@ -149,6 +149,8 @@ set(SOURCES
     controls/bytelisttextedit.cpp
     controls/checkablegroupbox.cpp
     controls/clickablelabel.cpp
+    controls/coloredpushbutton.cpp
+    controls/coloredtoolbutton.cpp
     controls/applogoutput.cpp
     controls/consoleoutput.cpp
     controls/outputpanel.cpp
@@ -248,6 +250,8 @@ set(HEADERS
     controls/bytelisttextedit.h
     controls/checkablegroupbox.h
     controls/clickablelabel.h
+    controls/coloredpushbutton.h
+    controls/coloredtoolbutton.h
     controls/applogoutput.h
     controls/consoleoutput.h
     controls/outputpanel.h

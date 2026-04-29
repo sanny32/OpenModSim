@@ -3,6 +3,7 @@
 #include "numericutils.h"
 #include "modbusmultiserver.h"
 #include "datasimulator.h"
+#include "coloredpushbutton.h"
 #include "dialogautosimulation.h"
 #include "dialogwriteregister.h"
 #include "ui_dialogwriteregister.h"
@@ -16,22 +17,11 @@ namespace {
 }
 
 ///
-/// \brief The SimButtonColors class
-///
-struct SimButtonColors
-{
-    QString base;
-    QString hover;
-    QString pressed;
-    QString border;
-};
-
-///
 /// \brief simColors
 /// \param registersCount
 /// \return
 ///
-static SimButtonColors simColors(DataType type)
+static ColoredPushButton::Colors simColors(DataType type)
 {
     switch(registersCount(type))
     {
@@ -226,37 +216,19 @@ void DialogWriteRegister::updateSimulationButton()
         case SimulationMode::Disabled:
             ui->pushButtonSimulation->setEnabled(false);
             ui->pushButtonSimulation->setText(tr("Auto Simulation: ON"));
-            ui->pushButtonSimulation->setStyleSheet("padding: 4px 12px;");
+            ui->pushButtonSimulation->clearColors();
         break;
 
         case SimulationMode::Off:
             ui->pushButtonSimulation->setEnabled(true);
             ui->pushButtonSimulation->setText(tr("Auto Simulation: OFF"));
-            ui->pushButtonSimulation->setStyleSheet("padding: 4px 12px;");
+            ui->pushButtonSimulation->clearColors();
         break;
 
         default:
-        {
             ui->pushButtonSimulation->setEnabled(true);
             ui->pushButtonSimulation->setText(tr("Auto Simulation: ON"));
-
-            const auto c = simColors(_simParams.DataMode);
-            ui->pushButtonSimulation->setStyleSheet(QString(R"(
-                    QPushButton {
-                        color: white;
-                        padding: 4px 12px;
-                        background-color: %1;
-                        border: 1px solid %2;
-                        border-radius: 4px;
-                    }
-                    QPushButton:hover {
-                        background-color: %3;
-                    }
-                    QPushButton:pressed {
-                        background-color: %4;
-                    }
-                )").arg(c.base, c.border, c.hover, c.pressed));
-        }
+            ui->pushButtonSimulation->setColors(simColors(_simParams.DataMode));
         break;
     }
 }
