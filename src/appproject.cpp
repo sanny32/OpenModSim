@@ -555,8 +555,7 @@ void AppProject::closeProject()
     deleteClosedForms([](QWidget*) { return true; });
 
     _closedForms.clear();
-    _mbServer.clearDescriptions();
-    _mbServer.clearTimestamps();
+    _mbServer.clearAddressSpace();
     _dataCounter        = 0;
     _trafficCounter     = 0;
     _scriptCounter      = 0;

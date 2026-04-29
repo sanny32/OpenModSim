@@ -1001,6 +1001,22 @@ void ModbusMultiServer::setData(quint8 deviceId, const QModbusDataUnit& data,
 }
 
 ///
+/// \brief ModbusMultiServer::clearAddressSpace
+///
+void ModbusMultiServer::clearAddressSpace()
+{
+    if(QThread::currentThread() != _workerThread)
+    {
+        QMetaObject::invokeMethod(this, [this]() {
+            clearAddressSpace();
+        }, Qt::BlockingQueuedConnection);
+        return;
+    }
+
+    _modbusDataUnitMaps.clear();
+}
+
+///
 /// \brief createDataUnit
 /// \param type
 /// \param newStartAddress

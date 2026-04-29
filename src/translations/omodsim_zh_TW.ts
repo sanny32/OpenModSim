@@ -3506,7 +3506,7 @@ Open the download page?</source>
         <translation>指定了錯誤的裝置地址（%1）</translation>
     </message>
     <message>
-        <location filename="../modbusmultiserver.cpp" line="1529"/>
+        <location filename="../modbusmultiserver.cpp" line="1545"/>
         <source>Connection error. %1</source>
         <translation>連線錯誤 %1</translation>
     </message>
@@ -3870,7 +3870,7 @@ Open the download page?</source>
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../appproject.cpp" line="2190"/>
+        <location filename="../appproject.cpp" line="2189"/>
         <source>Failed to write project XML.</source>
         <translation>專案 XML 寫入失敗。</translation>
     </message>

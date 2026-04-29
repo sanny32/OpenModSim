@@ -59,6 +59,7 @@ public:
 
     QModbusDataUnit data(quint8 deviceId, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, quint16 length) const;
     void setData(quint8 deviceId, const QModbusDataUnit& data, WriteSource source = WriteSource::Internal, const ModbusClientInfo& client = {});
+    void clearAddressSpace();
 
     QDateTime timestamp(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 address) const;
     AddressTimestampMap timestampMap(quint8 deviceId, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, quint16 length) const;
