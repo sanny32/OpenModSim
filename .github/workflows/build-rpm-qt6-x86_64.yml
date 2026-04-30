@@ -71,15 +71,15 @@ jobs:
           VERSION_MAJOR=$(echo "$FULL_VERSION" | cut -d. -f1)
           RPM_PACKAGE_NAME="${{ env.RPM_PACKAGE_PREFIX }}${VERSION_MAJOR}"
           
-          BETA_RELEASE_ENABLED=false
-          BETA_RELEASE=""
+          PRERELEASE_ENABLED=false
+          PRERELEASE_SUFFIX=""
           TAG_NAME="${{ github.event.inputs.tag }}"
           if [ -z "$TAG_NAME" ] && [ "${{ github.ref_type }}" = "tag" ]; then
             TAG_NAME="${{ github.ref_name }}"
           fi
-          BETA_RELEASE=$(printf '%s\n' "$TAG_NAME" | grep -Eo '(beta[0-9]+|b[0-9]+)$' || true)
-          if [ -n "$BETA_RELEASE" ]; then
-            BETA_RELEASE_ENABLED=true
+          PRERELEASE_SUFFIX=$(printf '%s\n' "$TAG_NAME" | grep -Eo '(beta[0-9]+|b[0-9]+|rc[0-9]+)$' || true)
+          if [ -n "$PRERELEASE_SUFFIX" ]; then
+            PRERELEASE_ENABLED=true
           fi
 
           if [ "${GITHUB_REF_NAME}" = "dev" ] || [ "${{ github.event.inputs.branch }}" = "dev" ] || [ "${GITHUB_REF_NAME}" = release/* ] || [ "${{ github.event.inputs.branch }}" = release/* ]; then
@@ -87,17 +87,17 @@ jobs:
             APP_VERSION="${MAJOR_MINOR}~dev"
           else
             APP_VERSION="$FULL_VERSION"
-            if [ "$BETA_RELEASE_ENABLED" = "true" ]; then
-              APP_VERSION="${APP_VERSION}~${BETA_RELEASE}"
+            if [ "$PRERELEASE_ENABLED" = "true" ]; then
+              APP_VERSION="${APP_VERSION}~${PRERELEASE_SUFFIX}"
             fi
           fi
 
           echo "APP_VERSION=$APP_VERSION" >> $GITHUB_ENV
-          echo "BETA_RELEASE=$BETA_RELEASE" >> $GITHUB_ENV
+          echo "PRERELEASE_SUFFIX=$PRERELEASE_SUFFIX" >> $GITHUB_ENV
           echo "PRODUCT_NAME=$PRODUCT_NAME" >> $GITHUB_ENV
           echo "VERSION_MAJOR=$VERSION_MAJOR" >> $GITHUB_ENV
           echo "RPM_PACKAGE_NAME=$RPM_PACKAGE_NAME" >> $GITHUB_ENV
-          echo "BETA_RELEASE_ENABLED=$BETA_RELEASE_ENABLED" >> $GITHUB_ENV
+          echo "PRERELEASE_ENABLED=$PRERELEASE_ENABLED" >> $GITHUB_ENV
 
           echo "Extracted version: $APP_VERSION"
           echo "Extracted product name: $PRODUCT_NAME"
@@ -180,7 +180,7 @@ jobs:
             -G "${{ env.CMAKE_GENERATOR }}" \
             -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} \
             -DCMAKE_PREFIX_PATH=${{ env.QT_INSTALL_DIR }}/${{ env.QT_VERSION }}/${{ env.CMAKE_COMPILER }} \
-            -DPROJECT_BETARELEASE=${{ env.BETA_RELEASE }}
+            -DPROJECT_BETARELEASE=${{ env.PRERELEASE_SUFFIX }}
 
       - name: Build
         run: cmake --build ${{ env.BUILD_DIR }} --config ${{ env.BUILD_TYPE }} --parallel
@@ -373,7 +373,7 @@ jobs:
         uses: softprops/action-gh-release@v3
         with:
           draft: true
-          prerelease: ${{ env.BETA_RELEASE_ENABLED }}
+          prerelease: ${{ env.PRERELEASE_ENABLED }}
           tag_name: ${{ github.ref_name }}
           name: Open ModSim ${{ env.APP_VERSION }}
           files: |

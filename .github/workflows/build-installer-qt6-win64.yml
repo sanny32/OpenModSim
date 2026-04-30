@@ -52,22 +52,22 @@ jobs:
           if (-not $versionMatch) { exit 1 }
 
           $APP_VERSION = $versionMatch.Matches[0].Groups[1].Value
-          $BETA_RELEASE_ENABLED = 'false'
-          $BETA_RELEASE = ''
+          $PRERELEASE_ENABLED = 'false'
+          $PRERELEASE_SUFFIX = ''
           $TAG_NAME = '${{ github.event.inputs.tag }}'
           if ([string]::IsNullOrEmpty($TAG_NAME) -and '${{ github.ref_type }}' -eq 'tag') {
             $TAG_NAME = '${{ github.ref_name }}'
           }
 
-          if ($TAG_NAME -match '(beta[0-9]+|b[0-9]+)$') {
-            $BETA_RELEASE_ENABLED = 'true'
-            $BETA_RELEASE = $Matches[1]
-            $APP_VERSION = "$APP_VERSION-$BETA_RELEASE"
+          if ($TAG_NAME -match '(beta[0-9]+|b[0-9]+|rc[0-9]+)$') {
+            $PRERELEASE_ENABLED = 'true'
+            $PRERELEASE_SUFFIX = $Matches[1]
+            $APP_VERSION = "$APP_VERSION-$PRERELEASE_SUFFIX"
           }
 
           "APP_VERSION=$APP_VERSION" >> $env:GITHUB_ENV
-          "BETA_RELEASE=$BETA_RELEASE" >> $env:GITHUB_ENV
-          "BETA_RELEASE_ENABLED=$BETA_RELEASE_ENABLED" >> $env:GITHUB_ENV
+          "PRERELEASE_SUFFIX=$PRERELEASE_SUFFIX" >> $env:GITHUB_ENV
+          "PRERELEASE_ENABLED=$PRERELEASE_ENABLED" >> $env:GITHUB_ENV
         shell: pwsh
 
       - name: Convert version for dev branch
@@ -138,7 +138,7 @@ jobs:
 
       - name: Configure CMake
         run: |
-          cmake src -B ${{ env.BUILD_DIR }} -G "${{ env.CMAKE_GENERATOR }}" -A ${{ env.CMAKE_ARCH }} -DCMAKE_PREFIX_PATH="C:/Qt/${{ env.QT_VERSION }}/${{ env.CMAKE_COMPILER }}" -DPROJECT_BETARELEASE=${{ env.BETA_RELEASE }}
+          cmake src -B ${{ env.BUILD_DIR }} -G "${{ env.CMAKE_GENERATOR }}" -A ${{ env.CMAKE_ARCH }} -DCMAKE_PREFIX_PATH="C:/Qt/${{ env.QT_VERSION }}/${{ env.CMAKE_COMPILER }}" -DPROJECT_BETARELEASE=${{ env.PRERELEASE_SUFFIX }}
         shell: cmd
 
       - name: Build
@@ -264,7 +264,7 @@ jobs:
         uses: softprops/action-gh-release@v3
         with:
           draft: true
-          prerelease: ${{ env.BETA_RELEASE_ENABLED }}
+          prerelease: ${{ env.PRERELEASE_ENABLED }}
           tag_name: ${{ github.ref_name }}
           name: Open ModSim ${{ env.APP_VERSION }}
           files: |
