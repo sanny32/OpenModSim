@@ -47,35 +47,35 @@
             <Value DeviceId="1" Type="4" Address="7">100</Value>
         </ModbusDataValues>
     </AddressSpace>
-    <ViewSettings ViewMode="1" SplitView="0" GlobalZeroBasedAddress="0" GlobalHexView="0" ActivePanel="L" ActivePrimaryWindow="PLCSimulator"/>
+    <ViewSettings ViewMode="1" SplitView="0" GlobalZeroBasedAddress="0" GlobalHexView="0" ActivePanel="L" ActivePrimaryWindow="DataMap"/>
     <Forms>
         <FormDataView Panel="L" Title="Setpoints" DataType="UInt16" RegisterOrder="MSRF" Codepage="" ByteOrder="Direct">
-            <Window Maximized="true" Minimized="false" Left="0" Top="0" Width="610" Height="331"/>
+            <Window Maximized="true" Minimized="false" Left="0" Top="0" Width="610" Height="314"/>
             <DataViewDefinitions FormName="Setpoints" DeviceId="1" PointType="HoldingRegisters" PointAddress="1" Length="3" DataViewColumnsDistance="1" LeadingZeros="true"/>
             <AddressColorMap/>
         </FormDataView>
         <FormDataView Panel="L" Title="ProcessValues" DataType="UInt16" RegisterOrder="MSRF" Codepage="" ByteOrder="Direct">
-            <Window Maximized="true" Minimized="false" Left="0" Top="0" Width="610" Height="331"/>
+            <Window Maximized="true" Minimized="false" Left="0" Top="0" Width="610" Height="314"/>
             <DataViewDefinitions FormName="ProcessValues" DeviceId="1" PointType="InputRegisters" PointAddress="1" Length="4" DataViewColumnsDistance="1" LeadingZeros="true"/>
             <AddressColorMap/>
         </FormDataView>
         <FormDataView Panel="L" Title="Commands" DataType="Binary" RegisterOrder="MSRF" Codepage="" ByteOrder="Direct">
-            <Window Maximized="true" Minimized="false" Left="0" Top="0" Width="610" Height="331"/>
+            <Window Maximized="true" Minimized="false" Left="0" Top="0" Width="610" Height="314"/>
             <DataViewDefinitions FormName="Commands" DeviceId="1" PointType="Coils" PointAddress="1" Length="4" DataViewColumnsDistance="1" LeadingZeros="true"/>
             <AddressColorMap/>
         </FormDataView>
         <FormDataView Panel="L" Title="Status" DataType="Binary" RegisterOrder="MSRF" Codepage="" ByteOrder="Direct">
-            <Window Maximized="true" Minimized="false" Left="0" Top="0" Width="610" Height="331"/>
+            <Window Maximized="true" Minimized="false" Left="0" Top="0" Width="610" Height="314"/>
             <DataViewDefinitions FormName="Status" DeviceId="1" PointType="DiscreteInputs" PointAddress="1" Length="5" DataViewColumnsDistance="1" LeadingZeros="true"/>
             <AddressColorMap/>
         </FormDataView>
         <FormScriptView Panel="L" Title="PLCSimulator">
-            <Window Maximized="true" Minimized="false" Left="0" Top="0" Width="523" Height="278"/>
+            <Window Maximized="true" Minimized="false" Left="0" Top="0" Width="683" Height="278"/>
             <Colors Background="#ffffff" Foreground="#000000"/>
             <Font Family="Segoe UI" Size="9" Bold="false" Italic="false"/>
             <Zoom Value="100%"/>
             <ScriptViewDefinitions FormName="PLCSimulator">
-                <ScriptSettings Mode="Periodically" Interval="500" RunOnStartup="false"/>
+                <ScriptSettings Mode="Periodically" Interval="500" RunOnStartup="true"/>
             </ScriptViewDefinitions>
             <JScriptControl>
                 <Script CursorPosition="0" ScrollPosition="0"><![CDATA[/**************************************************************************/
@@ -258,26 +258,26 @@ tick();
             </JScriptControl>
         </FormScriptView>
         <FormDataMapView Panel="L" Title="DataMap">
-            <Window Maximized="true" Minimized="false" Left="0" Top="0" Width="409" Height="226"/>
+            <Window Maximized="true" Minimized="false" Left="0" Top="0" Width="461" Height="226"/>
             <DataMapViewDefinitions FormName="DataMap" ZeroBasedAddress="false" HexView="false" AutoAddOnRequest="false" AutoRequestMap="false"/>
             <ColumnWidths Unit="40" Type="120" Address="70" DataType="70" Order="65" Comment="200" Value="160" Timestamp="160"/>
             <DataMap>
-                <Entry DeviceId="1" Type="4" Address="0" DataType="UInt16" Value="800"/>
-                <Entry DeviceId="1" Type="4" Address="1" DataType="UInt16" Value="200"/>
-                <Entry DeviceId="1" Type="4" Address="2" DataType="UInt16" Value="900"/>
-                <Entry DeviceId="1" Type="3" Address="0" DataType="UInt16" Value="0"/>
-                <Entry DeviceId="1" Type="3" Address="1" DataType="UInt16" Value="0"/>
-                <Entry DeviceId="1" Type="3" Address="2" DataType="UInt16" Value="0"/>
-                <Entry DeviceId="1" Type="3" Address="3" DataType="UInt16" Value="0"/>
-                <Entry DeviceId="1" Type="2" Address="0" DataType="Binary" Value="0"/>
-                <Entry DeviceId="1" Type="2" Address="1" DataType="Binary" Value="0"/>
-                <Entry DeviceId="1" Type="2" Address="2" DataType="Binary" Value="0"/>
-                <Entry DeviceId="1" Type="2" Address="3" DataType="Binary" Value="0"/>
-                <Entry DeviceId="1" Type="1" Address="0" DataType="Binary" Value="0"/>
-                <Entry DeviceId="1" Type="1" Address="1" DataType="Binary" Value="0"/>
-                <Entry DeviceId="1" Type="1" Address="2" DataType="Binary" Value="0"/>
-                <Entry DeviceId="1" Type="1" Address="3" DataType="Binary" Value="0"/>
-                <Entry DeviceId="1" Type="1" Address="4" DataType="Binary" Value="0"/>
+                <Entry DeviceId="1" Type="4" Address="0" DataType="UInt16" Value="800"><![CDATA[Tank High Level setpoint (0..1000)]]></Entry>
+                <Entry DeviceId="1" Type="4" Address="1" DataType="UInt16" Value="200"><![CDATA[Tank Low Level setpoint (0..1000)]]></Entry>
+                <Entry DeviceId="1" Type="4" Address="2" DataType="UInt16" Value="900"><![CDATA[Motor Speed setpoint (0..1500 RPM)]]></Entry>
+                <Entry DeviceId="1" Type="3" Address="0" DataType="UInt16" Value="510"><![CDATA[Tank Level (0..1000)]]></Entry>
+                <Entry DeviceId="1" Type="3" Address="1" DataType="UInt16" Value="0"><![CDATA[Motor Speed actual (RPM)]]></Entry>
+                <Entry DeviceId="1" Type="3" Address="2" DataType="UInt16" Value="0"><![CDATA[Motor Current (x0.1 A)]]></Entry>
+                <Entry DeviceId="1" Type="3" Address="3" DataType="UInt16" Value="0"><![CDATA[Pump Flow (L/min)]]></Entry>
+                <Entry DeviceId="1" Type="2" Address="0" DataType="Binary" Value="0"><![CDATA[Motor Start]]></Entry>
+                <Entry DeviceId="1" Type="2" Address="1" DataType="Binary" Value="0"><![CDATA[Motor Stop]]></Entry>
+                <Entry DeviceId="1" Type="2" Address="2" DataType="Binary" Value="0"><![CDATA[Pump Enable]]></Entry>
+                <Entry DeviceId="1" Type="2" Address="3" DataType="Binary" Value="0"><![CDATA[Alarm Reset]]></Entry>
+                <Entry DeviceId="1" Type="1" Address="0" DataType="Binary" Value="0"><![CDATA[Motor Running]]></Entry>
+                <Entry DeviceId="1" Type="1" Address="1" DataType="Binary" Value="0"><![CDATA[Motor Fault]]></Entry>
+                <Entry DeviceId="1" Type="1" Address="2" DataType="Binary" Value="0"><![CDATA[Pump Running]]></Entry>
+                <Entry DeviceId="1" Type="1" Address="3" DataType="Binary" Value="0"><![CDATA[High Level Alarm]]></Entry>
+                <Entry DeviceId="1" Type="1" Address="4" DataType="Binary" Value="0"><![CDATA[Low Level Alarm]]></Entry>
             </DataMap>
         </FormDataMapView>
     </Forms>
