@@ -22,6 +22,82 @@ constexpr int RoleAddress   = DataMapRole::Address;
 constexpr int RoleTypeValue = DataMapRole::TypeValue;
 
 ///
+/// \brief WrappingHeaderView — table header with word-wrapped section labels
+///
+class WrappingHeaderView : public QHeaderView
+{
+public:
+    explicit WrappingHeaderView(Qt::Orientation orientation, QWidget* parent = nullptr)
+        : QHeaderView(orientation, parent)
+    {
+        connect(this, &QHeaderView::sectionResized, this,
+                [this](int logicalIndex, int, int newSize) {
+                    const int minWidth = minimumWrappedSectionWidth(logicalIndex);
+                    if (minWidth > 0 && newSize < minWidth) {
+                        const QSignalBlocker blocker(this);
+                        resizeSection(logicalIndex, minWidth);
+                    }
+                });
+    }
+
+    QSize sizeHint() const override
+    {
+        QSize size = QHeaderView::sizeHint();
+        const QFontMetrics fm(font());
+        size.setHeight(qMax(size.height(), fm.lineSpacing() * 2 + 14));
+        return size;
+    }
+
+    int minimumWrappedSectionWidth(int logicalIndex) const
+    {
+        const QString text = model()
+            ? model()->headerData(logicalIndex, orientation(), Qt::DisplayRole).toString()
+            : QString();
+        if (text.isEmpty())
+            return minimumSectionSize();
+
+        const QFontMetrics fm(font());
+        int wordWidth = 0;
+        for (const QString& word : text.split(QRegularExpression(QStringLiteral("\\s+")), Qt::SkipEmptyParts))
+            wordWidth = qMax(wordWidth, fm.horizontalAdvance(word));
+
+        const int horizontalMargin = style()->pixelMetric(QStyle::PM_HeaderMargin, nullptr, this);
+        return qMax(minimumSectionSize(), wordWidth + horizontalMargin * 2 + 12);
+    }
+
+protected:
+    void paintSection(QPainter* painter, const QRect& rect, int logicalIndex) const override
+    {
+        if (!painter || !rect.isValid())
+            return;
+
+        QStyleOptionHeader option;
+        initStyleOption(&option);
+        option.rect = rect;
+        option.section = logicalIndex;
+        option.text.clear();
+
+        style()->drawControl(QStyle::CE_Header, &option, painter, this);
+
+        const QString text = model()
+            ? model()->headerData(logicalIndex, orientation(), Qt::DisplayRole).toString()
+            : QString();
+        if (text.isEmpty())
+            return;
+
+        const QRect textRect = style()
+            ->subElementRect(QStyle::SE_HeaderLabel, &option, this)
+            .adjusted(4, 1, -4, -1);
+
+        painter->save();
+        painter->setFont(font());
+        painter->setPen(palette().color(QPalette::ButtonText));
+        painter->drawText(textRect, Qt::AlignCenter | Qt::TextWordWrap, text);
+        painter->restore();
+    }
+};
+
+///
 /// \brief TypeItemDelegate — inline combo box for register type column
 ///
 class TypeItemDelegate : public QStyledItemDelegate
@@ -581,6 +657,7 @@ FormDataMapView::FormDataMapView(ModbusMultiServer& server, MainWindow* parent)
     , _mbMultiServer(server)
 {
     ui->setupUi(this);
+    ui->tableView->setHorizontalHeader(new WrappingHeaderView(Qt::Horizontal, ui->tableView));
 
     // Create model and filter proxy
     _model = new DataMapDataModel(_mbMultiServer, this);
@@ -595,6 +672,7 @@ FormDataMapView::FormDataMapView(ModbusMultiServer& server, MainWindow* parent)
     auto hdrFont = hdr->font();
     hdrFont.setBold(true);
     hdr->setFont(hdrFont);
+    hdr->setMinimumHeight(hdr->sizeHint().height());
 
     hdr->setSectionResizeMode(ColUnit,      QHeaderView::Interactive);
     hdr->setSectionResizeMode(ColType,      QHeaderView::Interactive);
@@ -610,8 +688,8 @@ FormDataMapView::FormDataMapView(ModbusMultiServer& server, MainWindow* parent)
     hdr->resizeSection(ColType,      120);
     hdr->resizeSection(ColAddress,   70);
     hdr->resizeSection(ColDataType,  70);
-    hdr->resizeSection(ColRegistryOrder, 100);
-    hdr->resizeSection(ColByteOrder,     80);
+    hdr->resizeSection(ColRegistryOrder, 70);
+    hdr->resizeSection(ColByteOrder,     65);
     hdr->resizeSection(ColComment,   200);
     hdr->resizeSection(ColValue,     160);
     hdr->resizeSection(ColTimestamp, 160);
@@ -1428,7 +1506,9 @@ void FormDataMapView::ensureColumnHeadersFit()
         if (title.isEmpty())
             continue;
 
-        const int requiredWidth = qMax(hdr->minimumSectionSize(), fm.horizontalAdvance(title) + padding);
+        int requiredWidth = qMax(hdr->minimumSectionSize(), fm.horizontalAdvance(title) + padding);
+        if (auto* wrappingHdr = dynamic_cast<WrappingHeaderView*>(hdr))
+            requiredWidth = wrappingHdr->minimumWrappedSectionWidth(section);
         if (hdr->sectionSize(section) < requiredWidth)
             hdr->resizeSection(section, requiredWidth);
     }

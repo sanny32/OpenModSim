@@ -521,16 +521,16 @@ QVariant DataMapDataModel::headerData(int section, Qt::Orientation orientation, 
 {
     if (orientation != Qt::Horizontal || role != Qt::DisplayRole) return {};
     switch (section) {
-        case ColUnit:      return tr("Unit");
-        case ColType:      return tr("Type");
-        case ColAddress:   return tr("Address");
-        case ColDataType:  return tr("Data Type");
-        case ColRegistryOrder: return tr("Registry Order");
-        case ColByteOrder:     return tr("Byte Order");
-        case ColComment:   return tr("Comment");
-        case ColValue:     return tr("Value");
-        case ColTimestamp: return tr("Timestamp");
-        default:           return {};
+        case ColUnit:           return tr("Unit");
+        case ColType:           return tr("Type");
+        case ColAddress:        return tr("Address");
+        case ColDataType:       return tr("Data Type");
+        case ColRegistryOrder:  return tr("Register Order");
+        case ColByteOrder:      return tr("Byte Order");
+        case ColComment:        return tr("Comment");
+        case ColValue:          return tr("Value");
+        case ColTimestamp:      return tr("Timestamp");
+        default:                return {};
     }
 }
 
