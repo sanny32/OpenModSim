@@ -150,9 +150,9 @@ public:
 };
 
 ///
-/// \brief OrderItemDelegate — inline combo box for RegisterOrder column
+/// \brief RegistryOrderItemDelegate — inline combo box for RegisterOrder column
 ///
-class OrderItemDelegate : public QStyledItemDelegate
+class RegistryOrderItemDelegate : public QStyledItemDelegate
 {
     Q_DECLARE_TR_FUNCTIONS(OrderItemDelegate)
 public:
@@ -175,7 +175,7 @@ public:
             cb->addItem(it.value(), static_cast<int>(it.key()));
             cb->setItemData(cb->count() - 1, tooltipFor(it.key()), Qt::ToolTipRole);
         }
-        auto* self = const_cast<OrderItemDelegate*>(this);
+        auto* self = const_cast<RegistryOrderItemDelegate*>(this);
         connect(cb, QOverload<int>::of(&QComboBox::activated), self, [self, cb](int) {
             emit self->commitData(cb);
             emit self->closeEditor(cb);
@@ -207,6 +207,71 @@ public:
     {
         if (e->type() == QEvent::ToolTip) {
             const auto order = enumFromString<RegisterOrder>(index.data(Qt::DisplayRole).toString(), RegisterOrder::MSRF);
+            QToolTip::showText(e->globalPos(), tooltipFor(order), view);
+            return true;
+        }
+        return QStyledItemDelegate::helpEvent(e, view, option, index);
+    }
+};
+
+///
+/// \brief ByteOrderItemDelegate — inline combo box for ByteOrder column
+///
+class ByteOrderItemDelegate : public QStyledItemDelegate
+{
+    Q_DECLARE_TR_FUNCTIONS(ByteOrderItemDelegate)
+public:
+    using QStyledItemDelegate::QStyledItemDelegate;
+
+    static QString tooltipFor(ByteOrder order)
+    {
+        switch (order) {
+            case ByteOrder::Direct:  return tr("Use bytes in register order");
+            case ByteOrder::Swapped: return tr("Swap bytes inside each 16-bit register");
+        }
+        return {};
+    }
+
+    QWidget* createEditor(QWidget* parent, const QStyleOptionViewItem&, const QModelIndex&) const override
+    {
+        auto* cb = new QComboBox(parent);
+        for (auto it = EnumStrings<ByteOrder>::mapping().cbegin();
+             it != EnumStrings<ByteOrder>::mapping().cend(); ++it) {
+            cb->addItem(it.value(), static_cast<int>(it.key()));
+            cb->setItemData(cb->count() - 1, tooltipFor(it.key()), Qt::ToolTipRole);
+        }
+        auto* self = const_cast<ByteOrderItemDelegate*>(this);
+        connect(cb, QOverload<int>::of(&QComboBox::activated), self, [self, cb](int) {
+            emit self->commitData(cb);
+            emit self->closeEditor(cb);
+        });
+        return cb;
+    }
+
+    void setEditorData(QWidget* editor, const QModelIndex& index) const override
+    {
+        auto* cb = qobject_cast<QComboBox*>(editor);
+        if (!cb) return;
+        const int idx = cb->findText(index.data(Qt::EditRole).toString());
+        if (idx >= 0) cb->setCurrentIndex(idx);
+    }
+
+    void setModelData(QWidget* editor, QAbstractItemModel* model, const QModelIndex& index) const override
+    {
+        auto* cb = qobject_cast<QComboBox*>(editor);
+        if (!cb) return;
+        model->setData(index, cb->currentText(), Qt::DisplayRole);
+    }
+
+    void updateEditorGeometry(QWidget* editor, const QStyleOptionViewItem& option, const QModelIndex&) const override
+    {
+        editor->setGeometry(option.rect);
+    }
+
+    bool helpEvent(QHelpEvent* e, QAbstractItemView* view, const QStyleOptionViewItem& option, const QModelIndex& index) override
+    {
+        if (e->type() == QEvent::ToolTip) {
+            const auto order = enumFromString<ByteOrder>(index.data(Qt::DisplayRole).toString(), ByteOrder::Direct);
             QToolTip::showText(e->globalPos(), tooltipFor(order), view);
             return true;
         }
@@ -535,7 +600,8 @@ FormDataMapView::FormDataMapView(ModbusMultiServer& server, MainWindow* parent)
     hdr->setSectionResizeMode(ColType,      QHeaderView::Interactive);
     hdr->setSectionResizeMode(ColAddress,   QHeaderView::Interactive);
     hdr->setSectionResizeMode(ColDataType,  QHeaderView::Interactive);
-    hdr->setSectionResizeMode(ColOrder,     QHeaderView::Interactive);
+    hdr->setSectionResizeMode(ColRegistryOrder, QHeaderView::Interactive);
+    hdr->setSectionResizeMode(ColByteOrder, QHeaderView::Interactive);
     hdr->setSectionResizeMode(ColComment,   QHeaderView::Interactive);
     hdr->setSectionResizeMode(ColValue,     QHeaderView::Interactive);
     hdr->setSectionResizeMode(ColTimestamp, QHeaderView::Interactive);
@@ -544,7 +610,8 @@ FormDataMapView::FormDataMapView(ModbusMultiServer& server, MainWindow* parent)
     hdr->resizeSection(ColType,      120);
     hdr->resizeSection(ColAddress,   70);
     hdr->resizeSection(ColDataType,  70);
-    hdr->resizeSection(ColOrder,     65);
+    hdr->resizeSection(ColRegistryOrder, 100);
+    hdr->resizeSection(ColByteOrder,     80);
     hdr->resizeSection(ColComment,   200);
     hdr->resizeSection(ColValue,     160);
     hdr->resizeSection(ColTimestamp, 160);
@@ -565,7 +632,8 @@ FormDataMapView::FormDataMapView(ModbusMultiServer& server, MainWindow* parent)
     ui->tableView->setItemDelegateForColumn(ColType,     new TypeItemDelegate(ui->tableView));
     ui->tableView->setItemDelegateForColumn(ColAddress,  new AddressItemDelegate(ui->tableView));
     ui->tableView->setItemDelegateForColumn(ColDataType, new DataTypeItemDelegate(ui->tableView));
-    ui->tableView->setItemDelegateForColumn(ColOrder,    new OrderItemDelegate(ui->tableView));
+    ui->tableView->setItemDelegateForColumn(ColRegistryOrder, new RegistryOrderItemDelegate(ui->tableView));
+    ui->tableView->setItemDelegateForColumn(ColByteOrder,     new ByteOrderItemDelegate(ui->tableView));
     ui->tableView->setItemDelegateForColumn(ColValue,    new ValueItemDelegate(ui->tableView));
 
     setupToolBar();
@@ -1095,8 +1163,9 @@ int FormDataMapView::addRowAndReturnSourceRow(int referenceSourceRow)
 {
     ItemMapKey key{ 1, QModbusDataUnit::HoldingRegisters, 0 };
     DataMapEntry entry;
-    entry.type  = DataType::Int16;
-    entry.order = RegisterOrder::MSRF;
+    entry.type      = DataType::Int16;
+    entry.order     = RegisterOrder::MSRF;
+    entry.byteOrder = ByteOrder::Direct;
 
     if (referenceSourceRow >= 0 && referenceSourceRow < _model->rowCount()) {
         const ItemMapKey referenceKey = _model->keyForRow(referenceSourceRow);
@@ -1104,16 +1173,18 @@ int FormDataMapView::addRowAndReturnSourceRow(int referenceSourceRow)
         key.DeviceId  = referenceKey.DeviceId;
         key.Type      = referenceKey.Type;
         key.Address   = referenceKey.Address < 0xFFFF ? referenceKey.Address + 1 : referenceKey.Address;
-        entry.type    = referenceEntry.type;
-        entry.order   = referenceEntry.order;
+        entry.type      = referenceEntry.type;
+        entry.order     = referenceEntry.order;
+        entry.byteOrder = referenceEntry.byteOrder;
     } else if (!_model->isEmpty()) {
         const ItemMapKey last = _model->lastKey();
         const auto& lastEntry = _model->entries()[last];
         key.DeviceId  = last.DeviceId;
         key.Type      = last.Type;
         key.Address   = last.Address < 0xFFFF ? last.Address + 1 : last.Address;
-        entry.type    = lastEntry.type;
-        entry.order   = lastEntry.order;
+        entry.type      = lastEntry.type;
+        entry.order     = lastEntry.order;
+        entry.byteOrder = lastEntry.byteOrder;
     }
 
     // Skip duplicate keys
@@ -1251,6 +1322,7 @@ void FormDataMapView::processRequest(quint8 deviceId, QModbusDataUnit::RegisterT
                            type == QModbusDataUnit::DiscreteInputs)
                           ? DataType::Binary : DataType::Int16;
             entry.order     = RegisterOrder::MSRF;
+            entry.byteOrder = ByteOrder::Direct;
             entry.timestamp = _mbMultiServer.timestamp(deviceId, type, static_cast<quint16>(startAddress + i));
             _model->addEntry(key, entry);
             addedEntries = true;

@@ -142,15 +142,16 @@ inline QXmlStreamWriter& operator <<(QXmlStreamWriter& xml, FormDataMapView* frm
 
     xml.writeStartElement("ColumnWidths");
     const auto ws = frm->columnWidths();
-    if (ws.size() == 8) {
+    if (ws.size() == 9) {
         xml.writeAttribute("Unit",      QString::number(ws[0]));
         xml.writeAttribute("Type",      QString::number(ws[1]));
         xml.writeAttribute("Address",   QString::number(ws[2]));
         xml.writeAttribute("DataType",  QString::number(ws[3]));
         xml.writeAttribute("Order",     QString::number(ws[4]));
-        xml.writeAttribute("Comment",   QString::number(ws[5]));
-        xml.writeAttribute("Value",     QString::number(ws[6]));
-        xml.writeAttribute("Timestamp", QString::number(ws[7]));
+        xml.writeAttribute("ByteOrder", QString::number(ws[5]));
+        xml.writeAttribute("Comment",   QString::number(ws[6]));
+        xml.writeAttribute("Value",     QString::number(ws[7]));
+        xml.writeAttribute("Timestamp", QString::number(ws[8]));
     }
     xml.writeEndElement();
 
@@ -166,6 +167,9 @@ inline QXmlStreamWriter& operator <<(QXmlStreamWriter& xml, FormDataMapView* frm
         xml.writeAttribute("DataType",  enumToString(e.type));
         if (isMultiRegisterType(e.type))
             xml.writeAttribute("Order", enumToString(e.order));
+        if (key.Type == QModbusDataUnit::HoldingRegisters ||
+            key.Type == QModbusDataUnit::InputRegisters)
+            xml.writeAttribute("ByteOrder", enumToString(e.byteOrder));
         xml.writeAttribute("Value",     QString::number(e.value));
         if (e.color.isValid())
             xml.writeAttribute("Color", e.color.name());
@@ -232,7 +236,7 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, FormDataMapView* frm
                 const int v = a.value(QLatin1String(name)).toInt(&ok);
                 return (ok && v > 0) ? v : -1;
             };
-            frm->setColumnWidths({w("Unit"), w("Type"), w("Address"), w("DataType"), w("Order"), w("Comment"), w("Value"), w("Timestamp")});
+            frm->setColumnWidths({w("Unit"), w("Type"), w("Address"), w("DataType"), w("Order"), w("ByteOrder"), w("Comment"), w("Value"), w("Timestamp")});
             xml.skipCurrentElement();
         }
         else if (xml.name() == QLatin1String("DataMap")) {
@@ -252,6 +256,7 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, FormDataMapView* frm
                     entry.value     = attrs.value("Value").toUShort();
                     entry.type      = enumFromString<DataType>(attrs.value("DataType").toString(), DataType::Int16);
                     entry.order     = enumFromString<RegisterOrder>(attrs.value("Order").toString(), RegisterOrder::MSRF);
+                    entry.byteOrder = enumFromString<ByteOrder>(attrs.value("ByteOrder").toString(), ByteOrder::Direct);
                     entry.timestamp = QDateTime::fromString(attrs.value("Timestamp").toString(), Qt::ISODateWithMs);
                     if (attrs.hasAttribute("Color"))
                         entry.color = QColor(attrs.value("Color").toString());
@@ -259,8 +264,9 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, FormDataMapView* frm
 
                     if (key.Type == QModbusDataUnit::Coils ||
                         key.Type == QModbusDataUnit::DiscreteInputs) {
-                        entry.type  = DataType::Binary;
-                        entry.order = RegisterOrder::MSRF;
+                        entry.type      = DataType::Binary;
+                        entry.order     = RegisterOrder::MSRF;
+                        entry.byteOrder = ByteOrder::Direct;
                     }
 
                     frm->_model->addEntry(key, entry);

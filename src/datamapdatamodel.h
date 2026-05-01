@@ -22,7 +22,8 @@ enum DataMapColumn {
     ColType,
     ColAddress,
     ColDataType,
-    ColOrder,
+    ColRegistryOrder,
+    ColByteOrder,
     ColComment,
     ColValue,
     ColTimestamp,
@@ -50,6 +51,7 @@ struct DataMapEntry
     QString       comment;
     DataType      type    = DataType::Int16;
     RegisterOrder order   = RegisterOrder::MSRF;
+    ByteOrder     byteOrder = ByteOrder::Direct;
     QDateTime     timestamp;
     QColor        color;
 };

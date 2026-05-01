@@ -94,40 +94,67 @@ bool parseLocalizedDouble(const QString& text, double& value)
 }
 
 ///
+/// \brief byteOrderToDisplay
+///
+QString byteOrderToDisplay(ByteOrder order)
+{
+    switch (order) {
+        case ByteOrder::Direct:
+            return QCoreApplication::translate("ByteOrder", "Direct");
+        case ByteOrder::Swapped:
+            return QCoreApplication::translate("ByteOrder", "Swapped");
+    }
+    return {};
+}
+
+///
+/// \brief byteOrderFromDisplay
+///
+ByteOrder byteOrderFromDisplay(const QString& text)
+{
+    if (text.compare(QCoreApplication::translate("ByteOrder", "Direct"), Qt::CaseInsensitive) == 0)
+        return ByteOrder::Direct;
+    if (text.compare(QCoreApplication::translate("ByteOrder", "Swapped"), Qt::CaseInsensitive) == 0)
+        return ByteOrder::Swapped;
+
+    return enumFromString<ByteOrder>(text, ByteOrder::Direct);
+}
+
+///
 /// \brief formatValue
 ///
 QString formatValue(QModbusDataUnit::RegisterType regType,
-                    DataType type, RegisterOrder order, const QVector<quint16>& regs)
+                    DataType type, RegisterOrder order, ByteOrder byteOrder, const QVector<quint16>& regs)
 {
     if (regs.isEmpty()) return {};
     QVariant outValue;
     switch (type) {
         case DataType::Binary:
-            return formatBinaryValue(regType, regs[0], ByteOrder::Direct, outValue, false);
+            return formatBinaryValue(regType, regs[0], byteOrder, outValue, false);
         case DataType::UInt16:
-            return formatUInt16Value(regType, regs[0], ByteOrder::Direct, false, outValue, false);
+            return formatUInt16Value(regType, regs[0], byteOrder, false, outValue, false);
         case DataType::Int16:
-            return formatInt16Value(regType, static_cast<qint16>(regs[0]), ByteOrder::Direct, outValue, false);
+            return formatInt16Value(regType, static_cast<qint16>(regs[0]), byteOrder, outValue, false);
         case DataType::Ansi:
-            return formatAnsiValue(regType, regs[0], ByteOrder::Direct, QString(), outValue, false);
+            return formatAnsiValue(regType, regs[0], byteOrder, QString(), outValue, false);
         case DataType::Float32:
             if (regs.size() >= 2) {
-                const QVariant val = makeValue(regs, type, order, ByteOrder::Direct);
+                const QVariant val = makeValue(regs, type, order, byteOrder);
                 if (val.isValid()) return QLocale().toString(val.toFloat(), 'g');
             }
-            return formatHexValue(regType, regs[0], ByteOrder::Direct, outValue, false);
+            return formatHexValue(regType, regs[0], byteOrder, outValue, false);
         case DataType::Float64:
             if (regs.size() >= 4) {
-                const QVariant val = makeValue(regs, type, order, ByteOrder::Direct);
+                const QVariant val = makeValue(regs, type, order, byteOrder);
                 if (val.isValid()) return QLocale().toString(val.toDouble(), 'g');
             }
-            return formatHexValue(regType, regs[0], ByteOrder::Direct, outValue, false);
+            return formatHexValue(regType, regs[0], byteOrder, outValue, false);
         default:
             if (isMultiRegisterType(type) && regs.size() >= registersCount(type)) {
-                const QVariant val = makeValue(regs, type, order, ByteOrder::Direct);
+                const QVariant val = makeValue(regs, type, order, byteOrder);
                 if (val.isValid()) return val.toString();
             }
-            return formatHexValue(regType, regs[0], ByteOrder::Direct, outValue, false);
+            return formatHexValue(regType, regs[0], byteOrder, outValue, false);
     }
 }
 
@@ -223,9 +250,20 @@ QVariant DataMapDataModel::data(const QModelIndex& index, int role) const
                 return enumToString(e.type);
             break;
 
-        case ColOrder:
+        case ColRegistryOrder:
             if (role == Qt::DisplayRole || role == Qt::EditRole)
                 return isMultiRegisterType(e.type) ? enumToString(e.order) : QString();
+            break;
+
+        case ColByteOrder:
+            if (role == Qt::DisplayRole)
+                return (key.Type == QModbusDataUnit::HoldingRegisters ||
+                        key.Type == QModbusDataUnit::InputRegisters)
+                       ? byteOrderToDisplay(e.byteOrder) : QString();
+            if (role == Qt::EditRole)
+                return (key.Type == QModbusDataUnit::HoldingRegisters ||
+                        key.Type == QModbusDataUnit::InputRegisters)
+                       ? enumToString(e.byteOrder) : QString();
             break;
 
         case ColComment:
@@ -235,16 +273,19 @@ QVariant DataMapDataModel::data(const QModelIndex& index, int role) const
 
         case ColValue:
             if (role == Qt::DisplayRole)
-                return formatValue(key.Type, e.type, e.order, regsForKey(_server, key, e.type));
+                return formatValue(key.Type, e.type, e.order, e.byteOrder, regsForKey(_server, key, e.type));
             if (role == Qt::EditRole) {
                 const auto regs = regsForKey(_server, key, e.type);
                 if ((e.type == DataType::Float32 || e.type == DataType::Float64) &&
                     regs.size() >= registersCount(e.type))
-                    return makeValue(regs, e.type, e.order, ByteOrder::Direct);
-                return formatValue(key.Type, e.type, e.order, regs);
+                    return makeValue(regs, e.type, e.order, e.byteOrder);
+                return formatValue(key.Type, e.type, e.order, e.byteOrder, regs);
             }
             if (role == Qt::UserRole)
-                return static_cast<quint32>(e.value);
+                return (key.Type == QModbusDataUnit::HoldingRegisters ||
+                        key.Type == QModbusDataUnit::InputRegisters)
+                       ? static_cast<quint32>(toByteOrderValue(e.value, e.byteOrder))
+                       : static_cast<quint32>(e.value);
             break;
 
         case ColTimestamp:
@@ -287,8 +328,8 @@ bool DataMapDataModel::setData(const QModelIndex& index, const QVariant& value, 
                 float f = 0.0f;
                 ok = parseLocalizedFloat(text, f);
                 if (ok) {
-                    if (lsrf) breakFloat(f, regs[0], regs[1], ByteOrder::Direct);
-                    else       breakFloat(f, regs[1], regs[0], ByteOrder::Direct);
+                    if (lsrf) breakFloat(f, regs[0], regs[1], entry.byteOrder);
+                    else       breakFloat(f, regs[1], regs[0], entry.byteOrder);
                 }
                 break;
             }
@@ -296,40 +337,40 @@ bool DataMapDataModel::setData(const QModelIndex& index, const QVariant& value, 
                 double d = 0.0;
                 ok = parseLocalizedDouble(text, d);
                 if (ok) {
-                    if (lsrf) breakDouble(d, regs[0], regs[1], regs[2], regs[3], ByteOrder::Direct);
-                    else       breakDouble(d, regs[3], regs[2], regs[1], regs[0], ByteOrder::Direct);
+                    if (lsrf) breakDouble(d, regs[0], regs[1], regs[2], regs[3], entry.byteOrder);
+                    else       breakDouble(d, regs[3], regs[2], regs[1], regs[0], entry.byteOrder);
                 }
                 break;
             }
             case DataType::Int32: {
                 const qint32 v = static_cast<qint32>(text.toLong(&ok));
                 if (ok) {
-                    if (lsrf) breakInt32(v, regs[0], regs[1], ByteOrder::Direct);
-                    else       breakInt32(v, regs[1], regs[0], ByteOrder::Direct);
+                    if (lsrf) breakInt32(v, regs[0], regs[1], entry.byteOrder);
+                    else       breakInt32(v, regs[1], regs[0], entry.byteOrder);
                 }
                 break;
             }
             case DataType::UInt32: {
                 const quint32 v = static_cast<quint32>(text.toULong(&ok));
                 if (ok) {
-                    if (lsrf) breakUInt32(v, regs[0], regs[1], ByteOrder::Direct);
-                    else       breakUInt32(v, regs[1], regs[0], ByteOrder::Direct);
+                    if (lsrf) breakUInt32(v, regs[0], regs[1], entry.byteOrder);
+                    else       breakUInt32(v, regs[1], regs[0], entry.byteOrder);
                 }
                 break;
             }
             case DataType::Int64: {
                 const qint64 v = text.toLongLong(&ok);
                 if (ok) {
-                    if (lsrf) breakInt64(v, regs[0], regs[1], regs[2], regs[3], ByteOrder::Direct);
-                    else       breakInt64(v, regs[3], regs[2], regs[1], regs[0], ByteOrder::Direct);
+                    if (lsrf) breakInt64(v, regs[0], regs[1], regs[2], regs[3], entry.byteOrder);
+                    else       breakInt64(v, regs[3], regs[2], regs[1], regs[0], entry.byteOrder);
                 }
                 break;
             }
             case DataType::UInt64: {
                 const quint64 v = text.toULongLong(&ok);
                 if (ok) {
-                    if (lsrf) breakUInt64(v, regs[0], regs[1], regs[2], regs[3], ByteOrder::Direct);
-                    else       breakUInt64(v, regs[3], regs[2], regs[1], regs[0], ByteOrder::Direct);
+                    if (lsrf) breakUInt64(v, regs[0], regs[1], regs[2], regs[3], entry.byteOrder);
+                    else       breakUInt64(v, regs[3], regs[2], regs[1], regs[0], entry.byteOrder);
                 }
                 break;
             }
@@ -341,7 +382,12 @@ bool DataMapDataModel::setData(const QModelIndex& index, const QVariant& value, 
                     newValue = static_cast<quint16>(text.toShort(&ok));
                 else
                     newValue = text.toUShort(&ok);
-                if (ok) regs[0] = newValue;
+                if (ok) {
+                    regs[0] = (oldKey.Type == QModbusDataUnit::HoldingRegisters ||
+                               oldKey.Type == QModbusDataUnit::InputRegisters)
+                              ? toByteOrderValue(newValue, entry.byteOrder)
+                              : newValue;
+                }
                 break;
             }
         }
@@ -381,10 +427,20 @@ bool DataMapDataModel::setData(const QModelIndex& index, const QVariant& value, 
     }
 
     // ── Order column ──────────────────────────────────────────────────────────
-    else if (col == ColOrder && (role == Qt::EditRole || role == Qt::DisplayRole)) {
+    else if (col == ColRegistryOrder && (role == Qt::EditRole || role == Qt::DisplayRole)) {
         entry.order   = enumFromString<RegisterOrder>(value.toString(), RegisterOrder::MSRF);
         _data[oldKey] = entry;
-        emit dataChanged(createIndex(row, ColOrder), createIndex(row, ColValue));
+        emit dataChanged(createIndex(row, ColRegistryOrder), createIndex(row, ColValue));
+        handled = true;
+    }
+
+    else if (col == ColByteOrder && (role == Qt::EditRole || role == Qt::DisplayRole)) {
+        bool ok = false;
+        const int rawOrder = value.toInt(&ok);
+        entry.byteOrder = ok ? static_cast<ByteOrder>(rawOrder)
+                             : byteOrderFromDisplay(value.toString());
+        _data[oldKey] = entry;
+        emit dataChanged(createIndex(row, ColByteOrder), createIndex(row, ColValue));
         handled = true;
     }
 
@@ -418,8 +474,9 @@ bool DataMapDataModel::setData(const QModelIndex& index, const QVariant& value, 
             const bool bitType = (newKey.Type == QModbusDataUnit::Coils ||
                                   newKey.Type == QModbusDataUnit::DiscreteInputs);
             if (bitType) {
-                entry.type  = DataType::Binary;
-                entry.order = RegisterOrder::MSRF;
+                entry.type      = DataType::Binary;
+                entry.order     = RegisterOrder::MSRF;
+                entry.byteOrder = ByteOrder::Direct;
             }
 
             const auto unit   = _server.data(newKey.DeviceId, newKey.Type, newKey.Address, 1);
@@ -468,7 +525,8 @@ QVariant DataMapDataModel::headerData(int section, Qt::Orientation orientation, 
         case ColType:      return tr("Type");
         case ColAddress:   return tr("Address");
         case ColDataType:  return tr("Data Type");
-        case ColOrder:     return tr("Order");
+        case ColRegistryOrder: return tr("Registry Order");
+        case ColByteOrder:     return tr("Byte Order");
         case ColComment:   return tr("Comment");
         case ColValue:     return tr("Value");
         case ColTimestamp: return tr("Timestamp");
@@ -492,10 +550,17 @@ Qt::ItemFlags DataMapDataModel::flags(const QModelIndex& index) const
 
     f |= Qt::ItemIsEditable;
 
-    if (index.column() == ColOrder) {
+    if (index.column() == ColRegistryOrder) {
         const ItemMapKey& key = _keys[index.row()];
         const auto it = _data.constFind(key);
         if (it == _data.cend() || !isMultiRegisterType(it->type))
+            f &= ~Qt::ItemIsEditable;
+    }
+
+    if (index.column() == ColByteOrder) {
+        const ItemMapKey& key = _keys[index.row()];
+        if (key.Type != QModbusDataUnit::HoldingRegisters &&
+            key.Type != QModbusDataUnit::InputRegisters)
             f &= ~Qt::ItemIsEditable;
     }
 
