@@ -77,7 +77,9 @@ protected:
         option.section = logicalIndex;
         option.text.clear();
 
+        painter->save();
         style()->drawControl(QStyle::CE_Header, &option, painter, this);
+        painter->restore();
 
         const QString text = model()
             ? model()->headerData(logicalIndex, orientation(), Qt::DisplayRole).toString()
@@ -91,7 +93,7 @@ protected:
 
         painter->save();
         painter->setFont(font());
-        painter->setPen(palette().color(QPalette::ButtonText));
+        painter->setPen(option.palette.color(QPalette::ButtonText));
         painter->drawText(textRect, Qt::AlignCenter | Qt::TextWordWrap, text);
         painter->restore();
     }
