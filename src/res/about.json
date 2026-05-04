@@ -1,0 +1,39 @@
+{
+    "authors": [
+        {
+            "name": "Alexandr Ananev",
+            "role": "author_maintainer",
+            "url": "mailto: mail@ananev.org"
+        }
+    ],
+    "contributors": [
+        {
+            "name": "Nikolay Raspopov",
+            "url": "mailto: raspopov@cherubicsoft.com"
+        },
+        {
+            "name": "Pedro Cobucci",
+            "url": "https://github.com/PedroCobucci"
+        },
+        {
+            "name": "nash_su",
+            "url": "mailto: nash.yong@gmail.com"
+        }
+    ],
+    "translators": [
+        {
+            "name": "Alexandr Ananev",
+            "languages": [
+                "russian"
+            ]
+        },
+        {
+            "name": "CWZ7605",
+            "languages": [
+                "simplified_chinese",
+                "traditional_chinese"
+            ],
+            "url": "https://github.com/CWZ7605"
+        }
+    ]
+}

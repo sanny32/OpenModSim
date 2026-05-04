@@ -1,6 +1,7 @@
 <RCC>
     <qresource prefix="/">
         <file>res/license.txt</file>
+        <file>res/about.json</file>
         <file>res/icon-binary.png</file>
         <file>res/icon-dbl-float.png</file>
         <file>res/icon-floating-pt.png</file>

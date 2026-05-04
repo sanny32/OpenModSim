@@ -1,6 +1,9 @@
 #include <QFile>
 #include <QApplication>
 #include <QDesktopServices>
+#include <QJsonArray>
+#include <QJsonDocument>
+#include <QJsonObject>
 #include <QMessageBox>
 #include <QPlainTextEdit>
 #include "aboutdatawidget.h"
@@ -12,6 +15,10 @@
 
 typedef LONG (WINAPI *RtlGetVersionPtr)(PRTL_OSVERSIONINFOW);
 
+///
+/// \brief windowsPrettyName
+/// \return
+///
 QString windowsPrettyName()
 {
     HMODULE hMod = ::GetModuleHandleW(L"ntdll.dll");
@@ -62,6 +69,74 @@ QString arch()
 #else
     return DialogAbout::tr("Unknown");
 #endif
+}
+
+///
+/// \brief aboutData
+/// \return
+///
+QJsonObject aboutData()
+{
+    QFile f(":/res/about.json");
+    if (!f.open(QFile::ReadOnly))
+        return {};
+
+    QJsonParseError error;
+    const auto doc = QJsonDocument::fromJson(f.readAll(), &error);
+    if (error.error != QJsonParseError::NoError || !doc.isObject())
+        return {};
+
+    return doc.object();
+}
+
+///
+/// \brief roleDescription
+/// \param role
+/// \return
+///
+QString roleDescription(const QString& role)
+{
+    if (role == "author_maintainer")
+        return DialogAbout::tr("Author and Maintainer");
+
+    return DialogAbout::tr("Contributor");
+}
+
+///
+/// \brief languageName
+/// \param language
+/// \return
+///
+QString languageName(const QString& language)
+{
+    if (language == "russian")
+        return DialogAbout::tr("Russian");
+    if (language == "simplified_chinese")
+        return DialogAbout::tr("Simplified Chinese");
+    if (language == "traditional_chinese")
+        return DialogAbout::tr("Traditional Chinese");
+
+    return language;
+}
+
+///
+/// \brief languagesDescription
+/// \param languages
+/// \return
+///
+QString languagesDescription(const QJsonArray& languages)
+{
+    QStringList names;
+    for (const auto& value : languages) {
+        const auto language = value.toString();
+        if (!language.isEmpty())
+            names.append(languageName(language));
+    }
+
+    if (names.size() == 2)
+        return DialogAbout::tr("%1 and %2").arg(names.at(0), names.at(1));
+
+    return names.join(", ");
 }
 
 ///
@@ -128,50 +203,8 @@ DialogAbout::DialogAbout(QWidget *parent) :
         ui->scrollAreaComponentsWidget->setLayout(vboxLayout);
     }
 
-    {
-        auto vboxLayout = new QVBoxLayout();
-        vboxLayout->setContentsMargins(0, 0, 0, 0);
-
-        addAuthor(vboxLayout,
-                  "Alexandr Ananev",
-                  tr("Author and Maintainer"),
-                  "mailto: mail@ananev.org");
-
-        addAuthor(vboxLayout,
-                  "Nikolay Raspopov",
-                  tr("Contributor"),
-                  "mailto: raspopov@cherubicsoft.com");
-
-        addAuthor(vboxLayout,
-                  "Pedro Cobucci",
-                  tr("Contributor"),
-                  "https://github.com/PedroCobucci");
-
-        addAuthor(vboxLayout,
-                  "nash_su",
-                  tr("Contributor"),
-                  "mailto: nash.yong@gmail.com");
-
-        vboxLayout->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Minimum, QSizePolicy::Expanding));
-        ui->scrollAreaAuthorsWidget->setLayout(vboxLayout);
-    }
-
-    {
-        auto vboxLayout = new QVBoxLayout();
-        vboxLayout->setContentsMargins(0, 0, 0, 0);
-
-        addAuthor(vboxLayout,
-                  "Alexandr Ananev",
-                  tr("Russian"));
-
-        addAuthor(vboxLayout,
-                  "CWZ7605",
-                  tr("Simplified Chinese and Traditional Chinese"),
-                  "https://github.com/CWZ7605");
-
-        vboxLayout->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Minimum, QSizePolicy::Expanding));
-        ui->scrollAreaTranslationWidget->setLayout(vboxLayout);
-    }
+    loadAuthors();
+    loadTranslators();
 
     adjustSize();
     ui->tabWidget->setCurrentIndex(0);
@@ -244,6 +277,60 @@ void DialogAbout::adjustSize()
 
     ui->tabWidget->setMinimumSize(maxContentSize);
     QFixedSizeDialog::adjustSize();
+}
+
+///
+/// \brief DialogAbout::loadAuthors
+///
+void DialogAbout::loadAuthors()
+{
+    auto vboxLayout = new QVBoxLayout();
+    vboxLayout->setContentsMargins(0, 0, 0, 0);
+
+    const auto data = aboutData();
+    const QStringList sections = { "authors", "contributors" };
+    for (const auto& sectionName : sections) {
+        const auto people = data.value(sectionName).toArray();
+        for (const auto& value : people) {
+            const auto person = value.toObject();
+            const auto name = person.value("name").toString();
+            if (name.isEmpty())
+                continue;
+
+            const auto role = person.value("role").toString();
+            const auto description = roleDescription(role);
+            const auto url = person.value("url").toString();
+            addAuthor(vboxLayout, name, description, url);
+        }
+    }
+
+    vboxLayout->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Minimum, QSizePolicy::Expanding));
+    ui->scrollAreaAuthorsWidget->setLayout(vboxLayout);
+}
+
+///
+/// \brief DialogAbout::loadTranslators
+///
+void DialogAbout::loadTranslators()
+{
+    auto vboxLayout = new QVBoxLayout();
+    vboxLayout->setContentsMargins(0, 0, 0, 0);
+
+    const auto data = aboutData();
+    const auto translators = data.value("translators").toArray();
+    for (const auto& value : translators) {
+        const auto person = value.toObject();
+        const auto name = person.value("name").toString();
+        if (name.isEmpty())
+            continue;
+
+        const auto description = languagesDescription(person.value("languages").toArray());
+        const auto url = person.value("url").toString();
+        addAuthor(vboxLayout, name, description, url);
+    }
+
+    vboxLayout->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Minimum, QSizePolicy::Expanding));
+    ui->scrollAreaTranslationWidget->setLayout(vboxLayout);
 }
 
 ///
@@ -399,4 +486,3 @@ void DialogAbout::onNewVersionAvailable(const QString& version, const QString& u
     if(answer == QMessageBox::Yes)
         QDesktopServices::openUrl(QUrl(url));
 }
-
