@@ -2,7 +2,6 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <QDockWidget>
 #include <QLabel>
 #include <QTranslator>
 #include <QHash>
@@ -183,11 +182,8 @@ private:
 
 private:
     Ui::MainWindow *ui;
-    QDockWidget* _helpDockWidget;
     HelpWidget* _helpWidget;
-    QDockWidget* _consoleDockWidget = nullptr;
     OutputPanel* _outputPanel = nullptr;
-    QDockWidget* _projectDockWidget = nullptr;
     ProjectTreeWidget* _projectTree = nullptr;
     QString _lang;
     QTranslator _qtTranslator;

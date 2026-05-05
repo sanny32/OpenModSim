@@ -212,7 +212,6 @@ MainWindow::MainWindow(const QString& profile, bool useSession, const QString& s
     ,_lang(translationLang())
     ,_useSession(useSession)
     ,_dataSimulator(new DataSimulator(this))
-    ,_helpDockWidget(nullptr)
     ,_helpWidget(nullptr)
 {
     ui->setupUi(this);
@@ -251,12 +250,7 @@ MainWindow::MainWindow(const QString& profile, bool useSession, const QString& s
     if(!defaultPrinter.isNull())
         _selectedPrinter = QSharedPointer<QPrinter>(new QPrinter(defaultPrinter));
 
-    _projectTree = new ProjectTreeWidget(this);
-    _projectDockWidget = new QDockWidget(tr("Project"), this);
-    _projectDockWidget->setObjectName("projectDockWidget");
-    _projectDockWidget->setWidget(_projectTree);
-    _projectDockWidget->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
-    addDockWidget(Qt::LeftDockWidgetArea, _projectDockWidget);
+    _projectTree = ui->projectTree;
 
     _project = new AppProject(ui->mdiArea, _mbMultiServer, _dataSimulator,
                                _projectTree, this, this);
@@ -264,18 +258,11 @@ MainWindow::MainWindow(const QString& profile, bool useSession, const QString& s
     auto dispatcher = QAbstractEventDispatcher::instance();
     connect(dispatcher, &QAbstractEventDispatcher::awake, this, &MainWindow::on_awake);
 
-    _helpWidget = new HelpWidget(this);
+    _helpWidget = ui->helpWidget;
     const auto helpfile = findHelpFile();
     _helpWidget->setHelp(helpfile);
 
-    _helpDockWidget = new QDockWidget(tr("Script Help"), this);
-    _helpDockWidget->setObjectName("helpDockWidget");
-    _helpDockWidget->setWidget(_helpWidget);
-    _helpDockWidget->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea | Qt::BottomDockWidgetArea);
-    addDockWidget(Qt::RightDockWidgetArea, _helpDockWidget);
-    _helpDockWidget->setVisible(false);
-
-    connect(_helpDockWidget, &QDockWidget::visibilityChanged, this, &MainWindow::on_helpDockVisibilityChanged);
+    connect(ui->helpDockWidget, &QDockWidget::visibilityChanged, this, &MainWindow::on_helpDockVisibilityChanged);
 
     connect(_projectTree, &ProjectTreeWidget::formActivated, this, &MainWindow::on_projectTreeFormActivated);
     connect(_projectTree, &ProjectTreeWidget::formDeleteRequested, this, &MainWindow::on_projectTreeFormDeleteRequested);
@@ -287,18 +274,12 @@ MainWindow::MainWindow(const QString& profile, bool useSession, const QString& s
     connect(_projectTree, &ProjectTreeWidget::deleteAllFormsRequested, this, &MainWindow::deleteAllForms);
     connect(_projectTree, &ProjectTreeWidget::formCreateRequested, this, &MainWindow::on_projectTreeFormCreateRequested);
 
-    _outputPanel = new OutputPanel(this);
+    _outputPanel = ui->outputPanel;
     _outputPanel->jsConsole()->setMaxLines(AppPreferences::instance().consoleMaxLines());
-    _consoleDockWidget = new QDockWidget(tr("Output"), this);
-    _consoleDockWidget->setObjectName("consoleDockWidget");
-    _consoleDockWidget->setWidget(_outputPanel);
-    _consoleDockWidget->setAllowedAreas(Qt::BottomDockWidgetArea | Qt::TopDockWidgetArea);
-    addDockWidget(Qt::BottomDockWidgetArea, _consoleDockWidget);
-    _consoleDockWidget->setVisible(false);
 
     connect(_outputPanel, &OutputPanel::collapse, this, &MainWindow::on_outputPanelCollapse);
     connect(_outputPanel->appLog(), &AppLogOutput::openRequested, this, &MainWindow::on_outputPanelAppLogOpenRequested);
-    connect(_consoleDockWidget, &QDockWidget::visibilityChanged, this, &MainWindow::on_outputDockVisibilityChanged);
+    connect(ui->consoleDockWidget, &QDockWidget::visibilityChanged, this, &MainWindow::on_outputDockVisibilityChanged);
 
     ui->mdiArea->setActivationOrder(QMdiArea::ActivationHistoryOrder);
     connect(ui->mdiArea, &MdiAreaEx::subWindowActivated, this, &MainWindow::updateMenuWindow);
@@ -321,9 +302,9 @@ MainWindow::MainWindow(const QString& profile, bool useSession, const QString& s
     connect(ui->actionSplitView,      &QAction::triggered, this, [this]{ ui->mdiArea->toggleVerticalSplit(); });
     connect(ui->actionToolbar,        &QAction::triggered, this, [this]{ ui->toolBarMain->setVisible(!ui->toolBarMain->isVisible()); });
     connect(ui->actionStatusBar,      &QAction::triggered, this, [this]{ statusBar()->setVisible(!statusBar()->isVisible()); });
-    connect(ui->actionProjectTree,    &QAction::triggered, this, [this]{ _projectDockWidget->setVisible(!_projectDockWidget->isVisible()); });
-    connect(ui->actionScriptHelp,     &QAction::triggered, this, [this]{ _helpDockWidget->setVisible(!_helpDockWidget->isVisible()); });
-    connect(ui->actionOutputWindow,   &QAction::triggered, this, [this]{ _consoleDockWidget->setVisible(!_consoleDockWidget->isVisible()); });
+    connect(ui->actionProjectTree,    &QAction::triggered, this, [this]{ ui->projectDockWidget->setVisible(!ui->projectDockWidget->isVisible()); });
+    connect(ui->actionScriptHelp,     &QAction::triggered, this, [this]{ ui->helpDockWidget->setVisible(!ui->helpDockWidget->isVisible()); });
+    connect(ui->actionOutputWindow,   &QAction::triggered, this, [this]{ ui->consoleDockWidget->setVisible(!ui->consoleDockWidget->isVisible()); });
 
     // Edit command wiring
     connect(ui->actionUndo,      &QAction::triggered, this, [this]{ if (auto* w = QApplication::focusWidget()) QMetaObject::invokeMethod(w, "undo"); });
@@ -363,7 +344,7 @@ MainWindow::MainWindow(const QString& profile, bool useSession, const QString& s
 void MainWindow::on_helpDockVisibilityChanged(bool visible)
 {
     if(visible)
-        _helpDockWidget->setProperty("WasShown", false);
+        ui->helpDockWidget->setProperty("WasShown", false);
 }
 
 ///
@@ -421,7 +402,7 @@ void MainWindow::on_projectTreeFormCreateRequested(ProjectFormType type)
 ///
 void MainWindow::on_outputPanelCollapse()
 {
-    _consoleDockWidget->setVisible(false);
+    ui->consoleDockWidget->setVisible(false);
 }
 
 ///
@@ -429,11 +410,11 @@ void MainWindow::on_outputPanelCollapse()
 ///
 void MainWindow::on_outputPanelAppLogOpenRequested()
 {
-    const bool wasHidden = !_consoleDockWidget->isVisible();
-    _consoleDockWidget->setVisible(true);
+    const bool wasHidden = !ui->consoleDockWidget->isVisible();
+    ui->consoleDockWidget->setVisible(true);
     _outputPanel->switchToAppLog();
     if (wasHidden)
-        _consoleDockWidget->raise();
+        ui->consoleDockWidget->raise();
 }
 
 ///
@@ -617,9 +598,6 @@ void MainWindow::changeEvent(QEvent* event)
     {
         ui->retranslateUi(this);
 
-        _projectDockWidget->setWindowTitle(tr("Project"));
-        _helpDockWidget->setWindowTitle(tr("Script Help"));
-        _consoleDockWidget->setWindowTitle(tr("Output"));
         _openRecentMenu->setTitle(tr("Open Recent"));
 
         if (_globalAddressBaseLabel)
@@ -739,10 +717,10 @@ void MainWindow::on_awake()
     ui->actionSplitView->setChecked(ui->mdiArea->isSplitView());
     ui->actionToolbar->setChecked(ui->toolBarMain->isVisible());
     ui->actionStatusBar->setChecked(statusBar()->isVisible());
-    ui->actionScriptHelp->setChecked(_helpDockWidget->isVisible());
+    ui->actionScriptHelp->setChecked(ui->helpDockWidget->isVisible());
     ui->actionScriptHelp->setVisible(isScript);
-    ui->actionOutputWindow->setChecked(_consoleDockWidget->isVisible());
-    ui->actionProjectTree->setChecked(_projectDockWidget->isVisible());
+    ui->actionOutputWindow->setChecked(ui->consoleDockWidget->isVisible());
+    ui->actionProjectTree->setChecked(ui->projectDockWidget->isVisible());
 
     ui->actionTile->setEnabled(subWindowView);
     ui->actionCascade->setEnabled(subWindowView);
@@ -1172,19 +1150,19 @@ void MainWindow::updateHelpWidgetState()
     auto frm = _project->currentMdiChild();
     if(!frm) return;
     if (qobject_cast<FormScriptView*>(frm)) {
-        if(!_helpDockWidget->isVisible() &&
-            _helpDockWidget->property("WasShown").toBool())
+        if(!ui->helpDockWidget->isVisible() &&
+            ui->helpDockWidget->property("WasShown").toBool())
         {
-            _helpDockWidget->setVisible(true);
+            ui->helpDockWidget->setVisible(true);
         }
         return;
     }
 
-    if(_helpDockWidget->isVisible() &&
-        !_helpDockWidget->isFloating())
+    if(ui->helpDockWidget->isVisible() &&
+        !ui->helpDockWidget->isFloating())
     {
-        _helpDockWidget->setProperty("WasShown", true);
-        _helpDockWidget->setVisible(false);
+        ui->helpDockWidget->setProperty("WasShown", true);
+        ui->helpDockWidget->setVisible(false);
     }
 }
 
@@ -1538,7 +1516,7 @@ void MainWindow::appendConsoleMessage(const QString& source, const QString& text
 void MainWindow::showOutputConsole()
 {
     if (AppPreferences::instance().autoShowConsoleOutput()) {
-        _consoleDockWidget->setVisible(true);
+        ui->consoleDockWidget->setVisible(true);
         _outputPanel->switchToJsConsole();
     }
 }
@@ -1548,7 +1526,7 @@ void MainWindow::showOutputConsole()
 ///
 void MainWindow::showHelpContext(const QString& helpKey)
 {
-    _helpDockWidget->setVisible(true);
+    ui->helpDockWidget->setVisible(true);
     if (!helpKey.isEmpty())
         _helpWidget->showHelp(helpKey);
 }

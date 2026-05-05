@@ -49,6 +49,108 @@
     </item>
    </layout>
   </widget>
+  <widget class="QDockWidget" name="projectDockWidget">
+   <property name="allowedAreas">
+    <set>Qt::LeftDockWidgetArea|Qt::RightDockWidgetArea</set>
+   </property>
+   <property name="windowTitle">
+    <string>Project</string>
+   </property>
+   <attribute name="dockWidgetArea">
+    <number>1</number>
+   </attribute>
+   <widget class="QWidget" name="projectDockWidgetContents">
+    <layout class="QVBoxLayout" name="projectDockWidgetLayout">
+     <property name="leftMargin">
+      <number>0</number>
+     </property>
+     <property name="topMargin">
+      <number>0</number>
+     </property>
+     <property name="rightMargin">
+      <number>0</number>
+     </property>
+     <property name="bottomMargin">
+      <number>0</number>
+     </property>
+     <item>
+      <widget class="ProjectTreeWidget" name="projectTree"/>
+     </item>
+    </layout>
+   </widget>
+  </widget>
+  <widget class="QDockWidget" name="helpDockWidget">
+   <property name="visible">
+    <bool>false</bool>
+   </property>
+   <property name="minimumSize">
+    <size>
+     <width>512</width>
+     <height>0</height>
+    </size>
+   </property>
+   <property name="allowedAreas">
+    <set>Qt::LeftDockWidgetArea|Qt::RightDockWidgetArea|Qt::BottomDockWidgetArea</set>
+   </property>
+   <property name="windowTitle">
+    <string>Script Help</string>
+   </property>
+   <attribute name="dockWidgetArea">
+    <number>2</number>
+   </attribute>
+   <widget class="QWidget" name="helpDockWidgetContents">
+    <layout class="QVBoxLayout" name="helpDockWidgetLayout">
+     <property name="leftMargin">
+      <number>0</number>
+     </property>
+     <property name="topMargin">
+      <number>0</number>
+     </property>
+     <property name="rightMargin">
+      <number>0</number>
+     </property>
+     <property name="bottomMargin">
+      <number>0</number>
+     </property>
+     <item>
+      <widget class="HelpWidget" name="helpWidget" native="true"/>
+     </item>
+    </layout>
+   </widget>
+  </widget>
+  <widget class="QDockWidget" name="consoleDockWidget">
+   <property name="visible">
+    <bool>false</bool>
+   </property>
+   <property name="allowedAreas">
+    <set>Qt::TopDockWidgetArea|Qt::BottomDockWidgetArea</set>
+   </property>
+   <property name="windowTitle">
+    <string>Output</string>
+   </property>
+   <attribute name="dockWidgetArea">
+    <number>8</number>
+   </attribute>
+   <widget class="QWidget" name="consoleDockWidgetContents">
+    <layout class="QVBoxLayout" name="consoleDockWidgetLayout">
+     <property name="leftMargin">
+      <number>0</number>
+     </property>
+     <property name="topMargin">
+      <number>0</number>
+     </property>
+     <property name="rightMargin">
+      <number>0</number>
+     </property>
+     <property name="bottomMargin">
+      <number>0</number>
+     </property>
+     <item>
+      <widget class="OutputPanel" name="outputPanel" native="true"/>
+     </item>
+    </layout>
+   </widget>
+  </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
@@ -614,6 +716,23 @@
    <class>MdiAreaEx</class>
    <extends>QWidget</extends>
    <header>mdiareaex.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>ProjectTreeWidget</class>
+   <extends>QTreeWidget</extends>
+   <header>projecttreewidget.h</header>
+  </customwidget>
+  <customwidget>
+   <class>HelpWidget</class>
+   <extends>QWidget</extends>
+   <header>helpwidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>OutputPanel</class>
+   <extends>QWidget</extends>
+   <header>outputpanel.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
