@@ -178,6 +178,7 @@ set(SOURCES
     controls/searchlineedit.cpp
     controls/simulationmodecombobox.cpp
     controls/statisticwidget.cpp
+    controls/toolbar.cpp
     controls/transpscrollarea.cpp
     datadelegate.cpp
     datasimulator.cpp
@@ -281,6 +282,7 @@ set(HEADERS
     controls/searchlineedit.h
     controls/simulationmodecombobox.h
     controls/statisticwidget.h
+    controls/toolbar.h
     controls/transpscrollarea.h
     datadelegate.h
     datasimulator.h

@@ -263,7 +263,7 @@
    <addaction name="menuWindow"/>
    <addaction name="menuHelp"/>
   </widget>
-  <widget class="QToolBar" name="toolBarMain">
+  <widget class="ToolBar" name="toolBarMain">
    <property name="windowTitle">
     <string>Toolbar</string>
    </property>
@@ -734,6 +734,11 @@
    <extends>QWidget</extends>
    <header>outputpanel.h</header>
    <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>ToolBar</class>
+   <extends>QToolBar</extends>
+   <header>toolbar.h</header>
   </customwidget>
  </customwidgets>
  <resources>
