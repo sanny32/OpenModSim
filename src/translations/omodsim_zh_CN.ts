@@ -3826,7 +3826,7 @@ Open the download page?</source>
 <context>
     <name>QMdiArea</name>
     <message>
-        <location filename="../controls/mditabbar.cpp" line="159"/>
+        <location filename="../controls/mditabbar.cpp" line="109"/>
         <source>(Untitled)</source>
         <translation>（未命名）</translation>
     </message>
@@ -3944,7 +3944,7 @@ Open the download page?</source>
 <context>
     <name>QWidget</name>
     <message>
-        <location filename="../controls/mditabbar.cpp" line="132"/>
+        <location filename="../controls/mditabbar.cpp" line="82"/>
         <source>*</source>
         <translation>*</translation>
     </message>

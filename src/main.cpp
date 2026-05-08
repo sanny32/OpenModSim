@@ -1,6 +1,8 @@
 #include <QApplication>
 #include <QFontDatabase>
 #include <QMessageBox>
+#include "controls/appstyle.h"
+#include "controls/macappstyle.h"
 #include "mainwindow.h"
 #include "cmdlineparser.h"
 #include "fontutils.h"
@@ -97,11 +99,11 @@ int main(int argc, char *argv[])
 #endif
 
 #ifdef Q_OS_WIN
-    a.setStyle("windowsvista");
+    a.setStyle(new AppStyle("windowsvista"));
 #elif defined(Q_OS_MAC)
-    a.setStyle("macos");
+    a.setStyle(new MacAppStyle("macos"));
 #else
-    a.setStyle("Fusion");
+    a.setStyle(new AppStyle("Fusion"));
 #endif
 
 #if QT_VERSION >= QT_VERSION_CHECK(6, 8, 0)

@@ -64,5 +64,6 @@ void ToolBar::applyPlatformFont()
         widget->setAttribute(Qt::WA_MacMiniSize, false);
         widget->setAttribute(Qt::WA_MacNormalSize, true);
     }
+
 #endif
 }

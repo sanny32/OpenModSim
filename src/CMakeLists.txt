@@ -162,6 +162,8 @@ set(SOURCES
     controls/jscodeeditor.cpp
     controls/jscriptcontrol.cpp
     controls/mainstatusbar.cpp
+    controls/appstyle.cpp
+    controls/macappstyle.cpp
     controls/macsplittoolbutton.cpp
     controls/mdiarea.cpp
     controls/mdiareaex.cpp
@@ -266,6 +268,8 @@ set(HEADERS
     controls/jscodeeditor.h
     controls/jscriptcontrol.h
     controls/mainstatusbar.h
+    controls/appstyle.h
+    controls/macappstyle.h
     controls/macsplittoolbutton.h
     controls/mdiarea.h
     controls/mdiareaex.h
