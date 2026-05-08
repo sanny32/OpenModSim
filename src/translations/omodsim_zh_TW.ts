@@ -1048,32 +1048,32 @@ Open the download page?</source>
         <translation>Modbus報文解析</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmsgparser.ui" line="25"/>
+        <location filename="../dialogs/dialogmsgparser.ui" line="22"/>
         <source>RTU Message</source>
         <translation>RTU報文</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmsgparser.ui" line="64"/>
+        <location filename="../dialogs/dialogmsgparser.ui" line="58"/>
         <source>TCP Message</source>
         <translation>TCP報文</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmsgparser.ui" line="103"/>
+        <location filename="../dialogs/dialogmsgparser.ui" line="97"/>
         <source>Hex View</source>
         <translation>十六進位檢視</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmsgparser.ui" line="123"/>
+        <location filename="../dialogs/dialogmsgparser.ui" line="117"/>
         <source>Request</source>
         <translation>請求</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmsgparser.ui" line="142"/>
+        <location filename="../dialogs/dialogmsgparser.ui" line="136"/>
         <source>Enter bytes value  separated by spaces</source>
         <translation>輸入用空格分隔的位元組值</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmsgparser.ui" line="191"/>
+        <location filename="../dialogs/dialogmsgparser.ui" line="185"/>
         <source>Parse</source>
         <translation>解析</translation>
     </message>

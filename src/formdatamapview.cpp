@@ -93,7 +93,7 @@ protected:
 
         painter->save();
         painter->setFont(font());
-        painter->setPen(option.palette.color(QPalette::ButtonText));
+        painter->setPen(option.palette.color(QPalette::WindowText));
         painter->drawText(textRect, Qt::AlignCenter | Qt::TextWordWrap, text);
         painter->restore();
     }

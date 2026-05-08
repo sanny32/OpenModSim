@@ -105,7 +105,7 @@ int main(int argc, char *argv[])
 #  ifdef Q_OS_WIN
     a.setStyle(new AppStyle("windowsvista"));
 #  elif defined(Q_OS_MAC)
-    a.setStyle(new MacAppStyle(new oclero::qlementine::QlementineStyle()));
+    a.setStyle(new MacAppStyle());
 #  else
     a.setStyle(new AppStyle("fusion"));
 #  endif

@@ -1048,32 +1048,32 @@ Open the download page?</source>
         <translation>Анализатор сообщений Modbus</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmsgparser.ui" line="25"/>
+        <location filename="../dialogs/dialogmsgparser.ui" line="22"/>
         <source>RTU Message</source>
         <translation>RTU сообщение</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmsgparser.ui" line="64"/>
+        <location filename="../dialogs/dialogmsgparser.ui" line="58"/>
         <source>TCP Message</source>
         <translation>TCP сообщение</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmsgparser.ui" line="103"/>
+        <location filename="../dialogs/dialogmsgparser.ui" line="97"/>
         <source>Hex View</source>
         <translation>Шестнадцатиричный режим</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmsgparser.ui" line="123"/>
+        <location filename="../dialogs/dialogmsgparser.ui" line="117"/>
         <source>Request</source>
         <translation>Запрос</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmsgparser.ui" line="142"/>
+        <location filename="../dialogs/dialogmsgparser.ui" line="136"/>
         <source>Enter bytes value  separated by spaces</source>
         <translation>Введите значение в байтах, разделенное пробелами</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogmsgparser.ui" line="191"/>
+        <location filename="../dialogs/dialogmsgparser.ui" line="185"/>
         <source>Parse</source>
         <translation>Анализ</translation>
     </message>

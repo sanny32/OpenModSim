@@ -18,9 +18,6 @@
     <layout class="QHBoxLayout" name="horizontalLayout_2">
      <item>
       <widget class="QPushButton" name="buttonRtu">
-       <property name="styleSheet">
-        <string notr="true">padding: 4px;</string>
-       </property>
        <property name="text">
         <string>RTU Message</string>
        </property>
@@ -57,9 +54,6 @@
      </item>
      <item>
       <widget class="QPushButton" name="buttonTcp">
-       <property name="styleSheet">
-        <string notr="true">padding: 4px;</string>
-       </property>
        <property name="text">
         <string>TCP Message</string>
        </property>
@@ -279,4 +273,3 @@
   </connection>
  </connections>
 </ui>
-
