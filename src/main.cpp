@@ -102,16 +102,15 @@ int main(int argc, char *argv[])
     a.setDesktopFileName(QStringLiteral("omodsim%1").arg(APP_VERSION_MAJOR));
 #endif
 
-#if QT_VERSION >= QT_VERSION_CHECK(6, 8, 0)
-    //a.setStyle(new AppStyle(new oclero::qlementine::QlementineStyle()));
 #  ifdef Q_OS_WIN
     a.setStyle(new AppStyle("windowsvista"));
 #  elif defined(Q_OS_MAC)
-    //a.setStyle(new MacAppStyle("macos"));
-    a.setStyle(new AppStyle(new oclero::qlementine::QlementineStyle()));
+    a.setStyle(new MacAppStyle(new oclero::qlementine::QlementineStyle()));
 #  else
     a.setStyle(new AppStyle("fusion"));
 #  endif
+
+#if QT_VERSION >= QT_VERSION_CHECK(6, 8, 0)
     QGuiApplication::styleHints()->setColorScheme(Qt::ColorScheme::Light);
 #endif
 
