@@ -6,10 +6,31 @@
 #include <QLineEdit>
 #include <QLabel>
 #include <QPainter>
+#include <QPainterPath>
 #include <QPalette>
 #include <QStyleOptionTab>
 #include <QTabBar>
 #include <QWidget>
+
+namespace {
+
+QMargins tabShapePadding(const QStyleOptionTab& option, int spacing)
+{
+    const bool isFirst = option.position == QStyleOptionTab::OnlyOneTab
+        || option.position == QStyleOptionTab::Beginning;
+    const bool isLast = option.position == QStyleOptionTab::OnlyOneTab
+        || option.position == QStyleOptionTab::End;
+    const bool notBesideSelected = option.selectedPosition == QStyleOptionTab::NotAdjacent;
+    const bool onlyOneTab = option.position == QStyleOptionTab::OnlyOneTab;
+    const bool isMovedTab = notBesideSelected && onlyOneTab;
+
+    return QMargins(isMovedTab || isFirst ? spacing : 0,
+                    spacing / 2,
+                    isMovedTab || isLast ? spacing : 0,
+                    0);
+}
+
+} // namespace
 
 ///
 /// \brief MacAppStyle::MacAppStyle
@@ -46,9 +67,20 @@ void MacAppStyle::drawControl(ControlElement element, const QStyleOption* option
     if (!widget->property("mdiIndicatorActive").toBool())
         return;
 
-    const QRect r = tabOption->rect;
+    QRect r = tabBar->tabRect(tabBar->currentIndex());
+    if (!r.isValid())
+        r = tabOption->rect;
+
+    r = r.marginsRemoved(tabShapePadding(*tabOption, theme().spacing));
+    r = r.adjusted(1, 0, -1, -1);
     const QColor color = widget->palette().highlight().color();
     constexpr int thickness = 2;
+    const qreal radius = theme().borderRadius;
+
+    painter->save();
+    QPainterPath clipPath;
+    clipPath.addRoundedRect(QRectF(r), radius, radius);
+    painter->setClipPath(clipPath);
 
     switch (tabBar->shape()) {
         case QTabBar::RoundedSouth:
@@ -69,6 +101,8 @@ void MacAppStyle::drawControl(ControlElement element, const QStyleOption* option
             painter->fillRect(r.left(), r.top(), r.width(), thickness, color);
             break;
     }
+
+    painter->restore();
 }
 
 ///

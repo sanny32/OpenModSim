@@ -1439,7 +1439,7 @@ void FormDataMapView::setupToolBar()
     // Expanding spacer before filter area
     auto* spacerWidget = new QWidget(ui->toolBar);
     spacerWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
-    auto* spacerAction = ui->toolBar->insertWidget(ui->actionClear, spacerWidget);
+    ui->toolBar->insertWidget(ui->actionClear, spacerWidget);
 
     // Filter widgets
     _filterUnitSpin = new QSpinBox;
