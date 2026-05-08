@@ -103,7 +103,7 @@ int main(int argc, char *argv[])
 #elif defined(Q_OS_MAC)
     a.setStyle(new MacAppStyle("macos"));
 #else
-    a.setStyle(new AppStyle("Fusion"));
+    a.setStyle(new AppStyle("fusion"));
 #endif
 
 #if QT_VERSION >= QT_VERSION_CHECK(6, 8, 0)
