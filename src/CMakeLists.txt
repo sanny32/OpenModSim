@@ -59,15 +59,6 @@ if (NOT Qt6_FOUND AND NOT Qt5_FOUND)
 endif()
 
 if(Qt6_FOUND)
-    include(FetchContent)
-    FetchContent_Declare(qlementine
-        GIT_REPOSITORY "https://github.com/oclero/qlementine.git"
-        GIT_TAG        "v1.4.2"
-    )
-    FetchContent_MakeAvailable(qlementine)
-endif()
-
-if(Qt6_FOUND)
     get_target_property(QT_BINARY_DIR Qt6::qmake IMPORTED_LOCATION)
     get_filename_component(QT_BINARY_DIR "${QT_BINARY_DIR}" DIRECTORY)
     get_filename_component(QT_INSTALL_LIBEXECS "${QT6_INSTALL_LIBEXECS}" ABSOLUTE BASE_DIR "/usr")
@@ -88,6 +79,15 @@ if(WIN32)
 endif()
 
 if(APPLE)
+    if(Qt6_FOUND)
+        include(FetchContent)
+        FetchContent_Declare(qlementine
+            GIT_REPOSITORY "https://github.com/oclero/qlementine.git"
+            GIT_TAG        "v1.4.2"
+        )
+        FetchContent_MakeAvailable(qlementine)
+    endif()
+
     find_program(MACDEPLOYQT_EXECUTABLE macdeployqt HINTS "${QT_BINARY_DIR}" "${QT_LIBEXEC_DIR}" "${QT_INSTALL_LIBEXECS}")
     if(MACDEPLOYQT_EXECUTABLE)
         message(STATUS "macdeployqt found at: ${MACDEPLOYQT_EXECUTABLE}")
@@ -495,7 +495,7 @@ if(Qt6_FOUND)
         TS_FILES ${TS_FILES}
         OPTIONS -no-obsolete
     )
-    target_link_libraries(${PROJECT_NAME} PRIVATE Qt::Core5Compat qlementine)
+    target_link_libraries(${PROJECT_NAME} PRIVATE Qt::Core5Compat)
 else()
     add_custom_command(
         OUTPUT ${TS_FILES}
@@ -551,6 +551,7 @@ elseif(APPLE)
         MACOSX_BUNDLE_BUNDLE_VERSION "${PROJECT_VERSION}"
         MACOSX_BUNDLE_SHORT_VERSION_STRING "${PROJECT_VERSION}"
     )
+    target_link_libraries(${PROJECT_NAME} PRIVATE qlementine)
 elseif(LINUX)
     target_link_options(${PROJECT_NAME} PRIVATE -static-libgcc -static-libstdc++)
 endif()

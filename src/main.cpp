@@ -2,11 +2,12 @@
 #include <QFontDatabase>
 #include <QMessageBox>
 #include "controls/appstyle.h"
-#include "controls/macappstyle.h"
 #include "mainwindow.h"
 #include "cmdlineparser.h"
 #include "fontutils.h"
-#if QT_VERSION >= QT_VERSION_CHECK(6, 8, 0)
+
+#if defined(Q_OS_MACOS) && QT_VERSION >= QT_VERSION_CHECK(6, 8, 0)
+#include "controls/macappstyle.h"
 #include <oclero/qlementine.hpp>
 #endif
 
@@ -102,17 +103,18 @@ int main(int argc, char *argv[])
 #endif
 
 #if QT_VERSION >= QT_VERSION_CHECK(6, 8, 0)
-    a.setStyle(new AppStyle(new oclero::qlementine::QlementineStyle()));
-    QGuiApplication::styleHints()->setColorScheme(Qt::ColorScheme::Light);
-#else
+    //a.setStyle(new AppStyle(new oclero::qlementine::QlementineStyle()));
 #  ifdef Q_OS_WIN
     a.setStyle(new AppStyle("windowsvista"));
 #  elif defined(Q_OS_MAC)
-    a.setStyle(new MacAppStyle("macos"));
+    //a.setStyle(new MacAppStyle("macos"));
+    a.setStyle(new AppStyle(new oclero::qlementine::QlementineStyle()));
 #  else
     a.setStyle(new AppStyle("fusion"));
 #  endif
+    QGuiApplication::styleHints()->setColorScheme(Qt::ColorScheme::Light);
 #endif
+
     QFontDatabase::addApplicationFont(":/fonts/firacode.ttf");
 
     CmdLineParser parser;
