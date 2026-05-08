@@ -12,9 +12,6 @@ class MacAppStyle : public AppStyle
 {
 public:
     using AppStyle::AppStyle;
-
-    void drawPrimitive(PrimitiveElement element, const QStyleOption* option,
-                       QPainter* painter, const QWidget* widget) const override;
 };
 
 #endif // Q_OS_MAC

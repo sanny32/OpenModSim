@@ -3,6 +3,9 @@
 #include <QActionEvent>
 #include <QApplication>
 #include <QChildEvent>
+#include <QMainWindow>
+#include <QPainter>
+#include <QPaintEvent>
 #include <QShowEvent>
 #include <QWidget>
 
@@ -45,6 +48,26 @@ void ToolBar::showEvent(QShowEvent* event)
 {
     QToolBar::showEvent(event);
     applyPlatformFont();
+}
+
+///
+/// \brief ToolBar::paintEvent
+/// \param event
+///
+void ToolBar::paintEvent(QPaintEvent* event)
+{
+#ifdef Q_OS_MAC
+    // QMacStyle renders the toolbar gradient through native NSAppearance APIs that
+    // are applied after QPainter operations, so intercepting drawPrimitive(PE_PanelToolBar)
+    // in MacAppStyle is not sufficient. Replacing the paint event here is the only
+    // reliable way to suppress the gradient for toolbars outside QMainWindow.
+    if (!qobject_cast<QMainWindow*>(parentWidget())) {
+        QPainter painter(this);
+        painter.fillRect(rect(), palette().window());
+        return;
+    }
+#endif
+    QToolBar::paintEvent(event);
 }
 
 ///

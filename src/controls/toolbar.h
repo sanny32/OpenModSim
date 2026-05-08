@@ -5,6 +5,7 @@
 
 class QActionEvent;
 class QChildEvent;
+class QPaintEvent;
 class QShowEvent;
 
 class ToolBar : public QToolBar
@@ -16,6 +17,7 @@ public:
 protected:
     void actionEvent(QActionEvent* event) override;
     void childEvent(QChildEvent* event) override;
+    void paintEvent(QPaintEvent* event) override;
     void showEvent(QShowEvent* event) override;
 
 private:
