@@ -1,8 +1,8 @@
 #include <QApplication>
 #include <QScopedValueRollback>
 #include <QSignalBlocker>
-#include <QStyle>
 #include <QTimer>
+#include "macsplittoolbutton.h"
 #include "mdiareaex.h"
 #include "mditabbar.h"
 #include "../apptrace.h"
@@ -942,15 +942,21 @@ void MdiAreaEx::createSplitButton()
         return;
     }
 
+#ifdef Q_OS_MAC
+    _splitButton = new MacSplitToolButton(this);
+#else
     _splitButton = new QToolButton(this);
     _splitButton->setAutoRaise(true);
+#endif
     _splitButton->setIcon(QIcon(":/res/icon-split-view.png"));
     _splitButton->setToolTip(tr("Split view"));
     _splitButton->setCheckable(true);
 
+#ifndef Q_OS_MAC
     const QSize sh = _splitButton->sizeHint();
     const int btnSize = qMax(20, qMin(sh.width(), sh.height()));
     _splitButton->setFixedSize(btnSize, btnSize);
+#endif
 
     connect(_splitButton, &QToolButton::toggled, this, [this](bool checked) {
         if (_isSplitInProgress)
@@ -1049,7 +1055,13 @@ void MdiAreaEx::updateSplitButtonGeometry()
     if (styleGap <= 0)
         styleGap = 4;
 
+#ifdef Q_OS_MAC
+    const QSize macHint = _splitButton->sizeHint();
+    const int macBase = qMax(20, qMin(macHint.width(), macHint.height()));
+    const int splitWidth = macBase + styleGap;
+#else
     const int splitWidth = _splitButton->width() + styleGap;
+#endif
 
     MdiArea* insetOwner = placementTabBarVisible ? placementArea : nullptr;
     clearTabBarInsets();
@@ -1075,12 +1087,19 @@ void MdiAreaEx::updateSplitButtonGeometry()
     }
 
     if (reserveRect.isValid() && !reserveRect.isEmpty()) {
+#ifdef Q_OS_MAC
+        buttonRect = reserveRect;
+#else
         const int x = reserveRect.x() + qMax(0, (reserveRect.width() - _splitButton->width()) / 2);
         const int y = reserveRect.y() + (reserveRect.height() - _splitButton->height()) / 2;
         buttonRect = QRect(x, y, _splitButton->width(), _splitButton->height());
+#endif
     }
 
     if (buttonRect.isValid() && !buttonRect.isEmpty()) {
+#ifdef Q_OS_MAC
+        static_cast<MacSplitToolButton*>(_splitButton)->setReferenceTabBar(anchorTabBar);
+#endif
         _splitButton->setGeometry(buttonRect);
         _splitButton->show();
         _splitButton->raise();
@@ -1204,4 +1223,3 @@ void MdiAreaEx::equalizeSplitterSizes()
     setEqualSplitterSizes(_splitter);
     QTimer::singleShot(0, this, [this]() { setEqualSplitterSizes(_splitter); });
 }
-

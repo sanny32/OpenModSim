@@ -3180,7 +3180,7 @@ Open the download page?</source>
     <name>MdiAreaEx</name>
     <message>
         <location filename="../controls/mdiareaex.cpp" line="709"/>
-        <location filename="../controls/mdiareaex.cpp" line="948"/>
+        <location filename="../controls/mdiareaex.cpp" line="952"/>
         <source>Split view</source>
         <translation>分割视图</translation>
     </message>
