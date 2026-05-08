@@ -7,6 +7,7 @@
 #include <QPlainTextDocumentLayout>
 #include "jscompleter.h"
 #include "jscodeeditor.h"
+#include "../fontutils.h"
 
 ///
 /// \brief JSCodeEditor::JSCodeEditor
@@ -27,7 +28,7 @@ JSCodeEditor::JSCodeEditor(QWidget *parent)
     setBackgroundColor(Qt::white);
     setLineWrapMode(QPlainTextEdit::NoWrap);
 
-    setFont(QFont("Fira Code"));
+    setFont(defaultScriptFont());
     setTabStopDistance(fontMetrics().horizontalAdvance(' ') * 4);
 
     updateLineNumberAreaWidth(0);
