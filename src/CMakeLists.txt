@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.16)
+cmake_minimum_required(VERSION 3.21)
 
 project(omodsim
         VERSION 2.0.0
@@ -56,6 +56,15 @@ endif()
 
 if (NOT Qt6_FOUND AND NOT Qt5_FOUND)
     message(FATAL_ERROR "One or more Qt development packages not found. Please install Qt5 or Qt6 development packages.")
+endif()
+
+if(Qt6_FOUND)
+    include(FetchContent)
+    FetchContent_Declare(qlementine
+        GIT_REPOSITORY "https://github.com/oclero/qlementine.git"
+        GIT_TAG        "v1.4.2"
+    )
+    FetchContent_MakeAvailable(qlementine)
 endif()
 
 if(Qt6_FOUND)
@@ -486,7 +495,7 @@ if(Qt6_FOUND)
         TS_FILES ${TS_FILES}
         OPTIONS -no-obsolete
     )
-    target_link_libraries(${PROJECT_NAME} PRIVATE Qt::Core5Compat)
+    target_link_libraries(${PROJECT_NAME} PRIVATE Qt::Core5Compat qlementine)
 else()
     add_custom_command(
         OUTPUT ${TS_FILES}
