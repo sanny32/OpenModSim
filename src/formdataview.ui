@@ -27,7 +27,7 @@
     <number>0</number>
    </property>
    <item>
-    <widget class="QToolBar" name="toolBarDisplay">
+    <widget class="ToolBar" name="toolBarDisplay">
      <property name="iconSize">
       <size>
        <width>24</width>
@@ -880,6 +880,11 @@
    <extends>QFrame</extends>
    <header>outputdatawidget.h</header>
    <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>ToolBar</class>
+   <extends>QToolBar</extends>
+   <header>toolbar.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>

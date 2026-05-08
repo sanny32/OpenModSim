@@ -27,7 +27,7 @@
     <number>0</number>
    </property>
    <item>
-    <widget class="QToolBar" name="toolBar">
+    <widget class="ToolBar" name="toolBar">
      <property name="movable">
       <bool>false</bool>
      </property>
@@ -92,6 +92,13 @@
    </property>
   </action>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>ToolBar</class>
+   <extends>QToolBar</extends>
+   <header>toolbar.h</header>
+  </customwidget>
+ </customwidgets>
  <resources>
   <include location="resources.qrc"/>
  </resources>

@@ -27,7 +27,7 @@
     <number>0</number>
    </property>
    <item>
-   <widget class="QToolBar" name="toolBarTraffic">
+   <widget class="ToolBar" name="toolBarTraffic">
      <addaction name="actionPauseTraffic"/>
      <addaction name="actionClearTraffic"/>
      <addaction name="actionExportTrafficLog"/>
@@ -99,6 +99,11 @@
    <extends>QFrame</extends>
    <header>outputtrafficwidget.h</header>
    <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>ToolBar</class>
+   <extends>QToolBar</extends>
+   <header>toolbar.h</header>
   </customwidget>
  </customwidgets>
  <resources>
