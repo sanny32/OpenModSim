@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>735</width>
+    <width>737</width>
     <height>574</height>
    </rect>
   </property>
@@ -155,16 +155,74 @@
                <property name="title">
                 <string>User Interface</string>
                </property>
-               <layout class="QFormLayout" name="formInterface">
-                <property name="fieldGrowthPolicy">
-                 <enum>QFormLayout::FieldsStayAtSizeHint</enum>
-                </property>
-                <property name="horizontalSpacing">
-                 <number>12</number>
-                </property>
-                <property name="verticalSpacing">
-                 <number>8</number>
-                </property>
+               <layout class="QGridLayout" name="gridLayout">
+                <item row="0" column="1">
+                 <widget class="ColorSwatch" name="pushButtonBackgroundColor">
+                  <property name="minimumSize">
+                   <size>
+                    <width>60</width>
+                    <height>0</height>
+                   </size>
+                  </property>
+                  <property name="text">
+                   <string/>
+                  </property>
+                 </widget>
+                </item>
+                <item row="3" column="1">
+                 <widget class="ColorSwatch" name="pushButtonCommentColor">
+                  <property name="minimumSize">
+                   <size>
+                    <width>60</width>
+                    <height>0</height>
+                   </size>
+                  </property>
+                  <property name="text">
+                   <string/>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="2">
+                 <widget class="QPushButton" name="pushButtonResetAddressColor">
+                  <property name="minimumSize">
+                   <size>
+                    <width>60</width>
+                    <height>0</height>
+                   </size>
+                  </property>
+                  <property name="text">
+                   <string>Reset</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="4" column="0">
+                 <widget class="QLabel" name="labelLanguage">
+                  <property name="text">
+                   <string>Language:</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="2">
+                 <widget class="QPushButton" name="pushButtonResetForegroundColor">
+                  <property name="text">
+                   <string>Reset</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="2">
+                 <widget class="QPushButton" name="pushButtonResetBackgroundColor">
+                  <property name="text">
+                   <string>Reset</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="5" column="0" colspan="2">
+                 <widget class="QCheckBox" name="checkBoxCheckForUpdates">
+                  <property name="text">
+                   <string>Check for updates</string>
+                  </property>
+                 </widget>
+                </item>
                 <item row="0" column="0">
                  <widget class="QLabel" name="labelBackgroundColor">
                   <property name="text">
@@ -172,116 +230,12 @@
                   </property>
                  </widget>
                 </item>
-                <item row="0" column="1">
-                 <layout class="QHBoxLayout" name="hlBgColor">
-                  <property name="spacing">
-                   <number>6</number>
-                  </property>
-                  <item>
-                   <widget class="ColorSwatch" name="pushButtonBackgroundColor">
-                    <property name="minimumSize">
-                     <size>
-                      <width>60</width>
-                      <height>0</height>
-                     </size>
-                    </property>
-                    <property name="text">
-                     <string/>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QPushButton" name="pushButtonResetBackgroundColor">
-                    <property name="minimumSize">
-                     <size>
-                      <width>60</width>
-                      <height>0</height>
-                     </size>
-                    </property>
-                    <property name="maximumSize">
-                     <size>
-                      <width>60</width>
-                      <height>16777215</height>
-                     </size>
-                    </property>
-                    <property name="text">
-                     <string>Reset</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <spacer name="hsBg">
-                    <property name="orientation">
-                     <enum>Qt::Horizontal</enum>
-                    </property>
-                    <property name="sizeHint" stdset="0">
-                     <size>
-                      <width>40</width>
-                      <height>20</height>
-                     </size>
-                    </property>
-                   </spacer>
-                  </item>
-                 </layout>
-                </item>
-                <item row="1" column="0">
-                 <widget class="QLabel" name="labelForegroundColor">
+                <item row="6" column="0" colspan="3">
+                 <widget class="QCheckBox" name="checkBoxShowWelcomeDialog">
                   <property name="text">
-                   <string>Foreground Color:</string>
+                   <string>Show Welcome dialog on startup</string>
                   </property>
                  </widget>
-                </item>
-                <item row="1" column="1">
-                 <layout class="QHBoxLayout" name="hlFgColor">
-                  <property name="spacing">
-                   <number>6</number>
-                  </property>
-                  <item>
-                   <widget class="ColorSwatch" name="pushButtonForegroundColor">
-                    <property name="minimumSize">
-                     <size>
-                      <width>60</width>
-                      <height>0</height>
-                     </size>
-                    </property>
-                    <property name="text">
-                     <string/>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QPushButton" name="pushButtonResetForegroundColor">
-                    <property name="minimumSize">
-                     <size>
-                      <width>60</width>
-                      <height>0</height>
-                     </size>
-                    </property>
-                    <property name="maximumSize">
-                     <size>
-                      <width>60</width>
-                      <height>16777215</height>
-                     </size>
-                    </property>
-                    <property name="text">
-                     <string>Reset</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <spacer name="hsFg">
-                    <property name="orientation">
-                     <enum>Qt::Horizontal</enum>
-                    </property>
-                    <property name="sizeHint" stdset="0">
-                     <size>
-                      <width>40</width>
-                      <height>20</height>
-                     </size>
-                    </property>
-                   </spacer>
-                  </item>
-                 </layout>
                 </item>
                 <item row="2" column="0">
                  <widget class="QLabel" name="labelAddressColor">
@@ -290,58 +244,6 @@
                   </property>
                  </widget>
                 </item>
-                <item row="2" column="1">
-                 <layout class="QHBoxLayout" name="hlAddressColor">
-                  <property name="spacing">
-                   <number>6</number>
-                  </property>
-                  <item>
-                   <widget class="ColorSwatch" name="pushButtonAddressColor">
-                    <property name="minimumSize">
-                     <size>
-                      <width>60</width>
-                      <height>0</height>
-                     </size>
-                    </property>
-                    <property name="text">
-                     <string/>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QPushButton" name="pushButtonResetAddressColor">
-                    <property name="minimumSize">
-                     <size>
-                      <width>60</width>
-                      <height>0</height>
-                     </size>
-                    </property>
-                    <property name="maximumSize">
-                     <size>
-                      <width>60</width>
-                      <height>16777215</height>
-                     </size>
-                    </property>
-                    <property name="text">
-                     <string>Reset</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <spacer name="hsAddress">
-                    <property name="orientation">
-                     <enum>Qt::Horizontal</enum>
-                    </property>
-                    <property name="sizeHint" stdset="0">
-                     <size>
-                      <width>40</width>
-                      <height>20</height>
-                     </size>
-                    </property>
-                   </spacer>
-                  </item>
-                 </layout>
-                </item>
                 <item row="3" column="0">
                  <widget class="QLabel" name="labelCommentColor">
                   <property name="text">
@@ -349,81 +251,67 @@
                   </property>
                  </widget>
                 </item>
-                <item row="3" column="1">
-                 <layout class="QHBoxLayout" name="hlCommentColor">
-                  <property name="spacing">
-                   <number>6</number>
+                <item row="1" column="1">
+                 <widget class="ColorSwatch" name="pushButtonForegroundColor">
+                  <property name="minimumSize">
+                   <size>
+                    <width>60</width>
+                    <height>0</height>
+                   </size>
                   </property>
-                  <item>
-                   <widget class="ColorSwatch" name="pushButtonCommentColor">
-                    <property name="minimumSize">
-                     <size>
-                      <width>60</width>
-                      <height>0</height>
-                     </size>
-                    </property>
-                    <property name="text">
-                     <string/>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QPushButton" name="pushButtonResetCommentColor">
-                    <property name="minimumSize">
-                     <size>
-                      <width>60</width>
-                      <height>0</height>
-                     </size>
-                    </property>
-                    <property name="maximumSize">
-                     <size>
-                      <width>60</width>
-                      <height>16777215</height>
-                     </size>
-                    </property>
-                    <property name="text">
-                     <string>Reset</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <spacer name="hsComment">
-                    <property name="orientation">
-                     <enum>Qt::Horizontal</enum>
-                    </property>
-                    <property name="sizeHint" stdset="0">
-                     <size>
-                      <width>40</width>
-                      <height>20</height>
-                     </size>
-                    </property>
-                   </spacer>
-                  </item>
-                 </layout>
-                </item>
-                <item row="5" column="0">
-                 <widget class="QLabel" name="labelLanguage">
                   <property name="text">
-                   <string>Language:</string>
+                   <string/>
                   </property>
                  </widget>
                 </item>
-                <item row="5" column="1">
+                <item row="2" column="1">
+                 <widget class="ColorSwatch" name="pushButtonAddressColor">
+                  <property name="minimumSize">
+                   <size>
+                    <width>60</width>
+                    <height>0</height>
+                   </size>
+                  </property>
+                  <property name="text">
+                   <string/>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="0">
+                 <widget class="QLabel" name="labelForegroundColor">
+                  <property name="text">
+                   <string>Foreground Color:</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="3" column="2">
+                 <widget class="QPushButton" name="pushButtonResetCommentColor">
+                  <property name="minimumSize">
+                   <size>
+                    <width>60</width>
+                    <height>0</height>
+                   </size>
+                  </property>
+                  <property name="text">
+                   <string>Reset</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="4" column="1" colspan="2">
                  <widget class="QComboBox" name="comboBoxLanguage"/>
                 </item>
-                <item row="6" column="0" colspan="2">
-                 <widget class="QCheckBox" name="checkBoxCheckForUpdates">
-                  <property name="text">
-                   <string>Check for updates</string>
+                <item row="3" column="3">
+                 <spacer name="horizontalSpacer">
+                  <property name="orientation">
+                   <enum>Qt::Horizontal</enum>
                   </property>
-                 </widget>
-                </item>
-                <item row="7" column="0" colspan="2">
-                 <widget class="QCheckBox" name="checkBoxShowWelcomeDialog">
-                  <property name="text">
-                   <string>Show Welcome dialog on startup</string>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>40</width>
+                    <height>20</height>
+                   </size>
                   </property>
-                 </widget>
+                 </spacer>
                 </item>
                </layout>
               </widget>
@@ -435,7 +323,7 @@
                </property>
                <layout class="QFormLayout" name="formFont">
                 <property name="fieldGrowthPolicy">
-                 <enum>QFormLayout::ExpandingFieldsGrow</enum>
+                 <enum>QFormLayout::FieldGrowthPolicy::ExpandingFieldsGrow</enum>
                 </property>
                 <property name="horizontalSpacing">
                  <number>12</number>
@@ -775,7 +663,7 @@
                </property>
                <layout class="QFormLayout" name="formScriptFont">
                 <property name="fieldGrowthPolicy">
-                 <enum>QFormLayout::ExpandingFieldsGrow</enum>
+                 <enum>QFormLayout::FieldGrowthPolicy::ExpandingFieldsGrow</enum>
                 </property>
                 <property name="horizontalSpacing">
                  <number>12</number>
