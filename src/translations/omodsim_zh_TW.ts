@@ -1101,83 +1101,83 @@ Open the download page?</source>
         <translation>使用者介面</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="208"/>
-        <location filename="../dialogs/dialogpreferences.ui" line="267"/>
-        <location filename="../dialogs/dialogpreferences.ui" line="326"/>
-        <location filename="../dialogs/dialogpreferences.ui" line="385"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="193"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="221"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="249"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="277"/>
         <source>Reset</source>
         <translation>重設</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="171"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="174"/>
         <source>Background Color:</source>
         <translation>背景顏色：</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="230"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="202"/>
         <source>Foreground Color:</source>
         <translation>前景顏色：</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="289"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="230"/>
         <source>Address Color:</source>
         <translation>地址顏色：</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="348"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="258"/>
         <source>Comment Color:</source>
         <translation>注釋顏色：</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="407"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="286"/>
         <source>Language:</source>
         <translation>語言：</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="424"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="317"/>
         <source>Show Welcome dialog on startup</source>
         <translation>啟動時顯示歡迎對話框</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="434"/>
-        <location filename="../dialogs/dialogpreferences.ui" line="774"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="327"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="667"/>
         <source>Font</source>
         <translation>字型</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="471"/>
-        <location filename="../dialogs/dialogpreferences.ui" line="811"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="364"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="704"/>
         <source>Size:</source>
         <translation>大小：</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="503"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="396"/>
         <source>Zoom:</source>
         <translation>縮放：</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="600"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="493"/>
         <source>Leading Zeros for Unsigned</source>
         <translation>無符號數前導零</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="877"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="770"/>
         <source>Console</source>
         <translation>主控台</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="889"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="782"/>
         <source>Console Output Limit:</source>
         <translation>主控台輸出限制：</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="927"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="820"/>
         <source>Automatically show output console</source>
         <translation>自動顯示輸出主控台</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="449"/>
-        <location filename="../dialogs/dialogpreferences.ui" line="789"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="342"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="682"/>
         <source>Family:</source>
         <translation>字型族：</translation>
     </message>
@@ -1187,33 +1187,33 @@ Open the download page?</source>
         <translation>預設值</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="417"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="310"/>
         <source>Check for updates</source>
         <translation>檢查更新</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="525"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="418"/>
         <source>%</source>
         <translation>%</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="546"/>
-        <location filename="../dialogs/dialogpreferences.ui" line="845"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="439"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="738"/>
         <source>Antialias</source>
         <translation>反鋸齒</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="607"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="500"/>
         <source>Columns Distance:</source>
         <translation>欄間距：</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="657"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="550"/>
         <source>Autoscroll</source>
         <translation>自動捲動</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="664"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="557"/>
         <source>Log View Limit:</source>
         <translation>日誌限制：</translation>
     </message>
@@ -1223,27 +1223,27 @@ Open the download page?</source>
         <translation>腳本</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="588"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="481"/>
         <source>Data View</source>
         <translation>資料檢視</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="645"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="538"/>
         <source>Traffic View</source>
         <translation>流量檢視</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="742"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="635"/>
         <source>&lt;b&gt;Note:&lt;/b&gt; These settings apply to newly opened windows only.</source>
         <translation>&lt;b&gt;注意：&lt;/b&gt;這些設定僅適用於新開啟的視窗。</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="855"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="748"/>
         <source>Editor</source>
         <translation>編輯器</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="867"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="760"/>
         <source>Enable code auto-complete</source>
         <translation>啟用程式碼自動完成</translation>
     </message>

@@ -15,7 +15,7 @@ class ColorSwatch : public QPushButton
 public:
     explicit ColorSwatch(QWidget* parent = nullptr) : QPushButton(parent)
     {
-        setFixedSize(56, 22);
+        setFixedWidth(56);
         setCursor(Qt::PointingHandCursor);
     }
 

@@ -5,11 +5,7 @@
 #include "cmdlineparser.h"
 #include "fontutils.h"
 #include "styles/appstyle.h"
-
-#if defined(Q_OS_MACOS) && QT_VERSION >= QT_VERSION_CHECK(6, 8, 0)
 #include "styles/macappstyle.h"
-#include <oclero/qlementine.hpp>
-#endif
 
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 namespace {
