@@ -448,11 +448,11 @@
     </message>
     <message>
         <location filename="../dialogs/dialogabout.ui" line="217"/>
-        <location filename="../dialogs/dialogabout.cpp" line="452"/>
-        <location filename="../dialogs/dialogabout.cpp" line="453"/>
-        <location filename="../dialogs/dialogabout.cpp" line="463"/>
-        <location filename="../dialogs/dialogabout.cpp" line="465"/>
-        <location filename="../dialogs/dialogabout.cpp" line="477"/>
+        <location filename="../dialogs/dialogabout.cpp" line="460"/>
+        <location filename="../dialogs/dialogabout.cpp" line="461"/>
+        <location filename="../dialogs/dialogabout.cpp" line="471"/>
+        <location filename="../dialogs/dialogabout.cpp" line="473"/>
+        <location filename="../dialogs/dialogabout.cpp" line="485"/>
         <source>Check for updates</source>
         <translation>检查更新</translation>
     </message>
@@ -512,19 +512,19 @@
         <translation>作者和维护者</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="355"/>
+        <location filename="../dialogs/dialogabout.cpp" line="363"/>
         <source>Visit component&apos;s homepage
 %1</source>
         <translation>访问组件主页
 %1</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="376"/>
+        <location filename="../dialogs/dialogabout.cpp" line="384"/>
         <source>Email contributer: %1</source>
         <translation>电子邮件贡献者：%1</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="385"/>
+        <location filename="../dialogs/dialogabout.cpp" line="393"/>
         <source>Visit user&apos;s homepage
 %1</source>
         <translation>访问用户主页
@@ -534,6 +534,11 @@
         <location filename="../dialogs/dialogabout.cpp" line="178"/>
         <source>Free monospaced font with programming ligatures.</source>
         <translation>免费等宽字体，带有编程连字。</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogabout.cpp" line="200"/>
+        <source>Modern Qt Widgets style.</source>
+        <translation>现代 Qt Widgets 样式。</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogabout.cpp" line="51"/>
@@ -548,7 +553,7 @@
     <message>
         <location filename="../dialogs/dialogabout.cpp" line="185"/>
         <location filename="../dialogs/dialogabout.cpp" line="192"/>
-        <location filename="../dialogs/dialogabout.cpp" line="199"/>
+        <location filename="../dialogs/dialogabout.cpp" line="207"/>
         <source>Underlying platform.</source>
         <translation>底层平台。</translation>
     </message>
@@ -563,29 +568,29 @@
         <translation>俄语</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="381"/>
+        <location filename="../dialogs/dialogabout.cpp" line="389"/>
         <source>Visit github user&apos;s homepage
 %1</source>
         <translation>访问 GitHub 用户主页
 %1</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="409"/>
+        <location filename="../dialogs/dialogabout.cpp" line="417"/>
         <source>License Agreement - %1</source>
         <translation>许可协议 - %1</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="443"/>
+        <location filename="../dialogs/dialogabout.cpp" line="451"/>
         <source>Checking...</source>
         <translation>检查中...</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="453"/>
+        <location filename="../dialogs/dialogabout.cpp" line="461"/>
         <source>No updates available.</source>
         <translation>无可用更新。</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="466"/>
+        <location filename="../dialogs/dialogabout.cpp" line="474"/>
         <source>Failed to check for updates.
 
 %1</source>
@@ -594,12 +599,12 @@
 %1</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="480"/>
+        <location filename="../dialogs/dialogabout.cpp" line="488"/>
         <source>New version available</source>
         <translation>发现新版本</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="481"/>
+        <location filename="../dialogs/dialogabout.cpp" line="489"/>
         <source>A new version %1 is available.
 
 Open the download page?</source>

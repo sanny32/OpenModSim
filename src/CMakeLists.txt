@@ -81,9 +81,10 @@ endif()
 if(APPLE)
     if(Qt6_FOUND)
         include(FetchContent)
+        set(QLEMENTINE_VERSION "1.4.2")
         FetchContent_Declare(qlementine
             GIT_REPOSITORY "https://github.com/oclero/qlementine.git"
-            GIT_TAG        "v1.4.2"
+            GIT_TAG        "v${QLEMENTINE_VERSION}"
         )
         FetchContent_MakeAvailable(qlementine)
     endif()
@@ -132,6 +133,10 @@ add_compile_definitions(APP_VERSION_MINOR="${VERSION_MINOR}")
 add_compile_definitions(APP_VERSION_PATCH="${VERSION_PATCH}")
 add_compile_definitions(APP_VERSION="${PROJECT_VERSION}")
 add_compile_definitions(BUILD_YEAR="${CURRENT_YEAR}")
+
+if(APPLE AND Qt6_FOUND)
+    add_compile_definitions(QLEMENTINE_VERSION="${QLEMENTINE_VERSION}")
+endif()
 
 # Include directories
 target_include_directories(${PROJECT_NAME} PRIVATE
@@ -758,6 +763,5 @@ elseif(LINUX)
     install(CODE "execute_process(COMMAND update-desktop-database -q ${CMAKE_INSTALL_PREFIX}/share/applications)")
     install(CODE "execute_process(COMMAND gtk-update-icon-cache -q -t -f ${CMAKE_INSTALL_PREFIX}/share/icons/hicolor)")
 endif()
-
 
 

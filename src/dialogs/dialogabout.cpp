@@ -193,6 +193,14 @@ DialogAbout::DialogAbout(QWidget *parent) :
     #endif
 
     #ifdef Q_OS_MAC
+        #ifdef QLEMENTINE_VERSION
+            addComponent(vboxLayout,
+                         "Qlementine",
+                         QLEMENTINE_VERSION,
+                         tr("Modern Qt Widgets style."),
+                         "https://github.com/oclero/qlementine");
+
+        #endif
         addComponent(vboxLayout,
                      QSysInfo::prettyProductName(),
                      QSysInfo::currentCpuArchitecture(),
