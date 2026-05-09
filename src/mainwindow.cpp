@@ -1607,8 +1607,11 @@ static QString getSettingsFilePath()
 bool MainWindow::loadAppSettings(const QString& filename)
 {
     _profile = filename.isEmpty() ? getSettingsFilePath() : filename;
-    if(!QFile::exists(_profile))
+    if(!QFile::exists(_profile)) {
+        _newFormKind = ProjectFormKind::Data;
+        restoreNewFormKindIcon();
         return false;
+    }
 
     QSettings m(_profile, QSettings::IniFormat, this);
 
