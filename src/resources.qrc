@@ -76,6 +76,9 @@
         <file>res/pref-interface.png</file>
         <file>res/icon-bell.svg</file>
         <file>res/icon-bell-dot.svg</file>
+        <file>res/icon-log-info.svg</file>
+        <file>res/icon-log-warning.svg</file>
+        <file>res/icon-log-critical.svg</file>
         <file>res/icon-split-view.png</file>
         <file>res/icon-new-data.png</file>
         <file>res/icon-new-traffic.png</file>

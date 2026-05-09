@@ -137,38 +137,38 @@
         <translation>清除日志</translation>
     </message>
     <message>
-        <location filename="../controls/applogoutput.cpp" line="216"/>
-        <location filename="../controls/applogoutput.cpp" line="391"/>
+        <location filename="../controls/applogoutput.cpp" line="224"/>
+        <location filename="../controls/applogoutput.cpp" line="399"/>
         <source>Copy All</source>
         <translation>全部复制</translation>
     </message>
     <message>
-        <location filename="../controls/applogoutput.cpp" line="382"/>
+        <location filename="../controls/applogoutput.cpp" line="390"/>
         <source>Copy</source>
         <translation>复制</translation>
     </message>
     <message>
-        <location filename="../controls/applogoutput.cpp" line="398"/>
+        <location filename="../controls/applogoutput.cpp" line="406"/>
         <source>Export...</source>
         <translation>导出...</translation>
     </message>
     <message>
-        <location filename="../controls/applogoutput.cpp" line="404"/>
+        <location filename="../controls/applogoutput.cpp" line="412"/>
         <source>Clear</source>
         <translation>清除</translation>
     </message>
     <message>
-        <location filename="../controls/applogoutput.cpp" line="428"/>
+        <location filename="../controls/applogoutput.cpp" line="436"/>
         <source>Text files (*.txt)</source>
         <translation>文本文件 (*.txt)</translation>
     </message>
     <message>
-        <location filename="../controls/applogoutput.cpp" line="433"/>
+        <location filename="../controls/applogoutput.cpp" line="441"/>
         <source>Export</source>
         <translation>导出</translation>
     </message>
     <message>
-        <location filename="../controls/applogoutput.cpp" line="433"/>
+        <location filename="../controls/applogoutput.cpp" line="441"/>
         <source>Cannot open file for writing:
 %1</source>
         <translation>无法打开文件进行写入：
@@ -270,12 +270,12 @@
         <translation>清除控制台</translation>
     </message>
     <message>
-        <location filename="../controls/consoleoutput.cpp" line="315"/>
+        <location filename="../controls/consoleoutput.cpp" line="323"/>
         <source>Copy</source>
         <translation>复制</translation>
     </message>
     <message>
-        <location filename="../controls/consoleoutput.cpp" line="326"/>
+        <location filename="../controls/consoleoutput.cpp" line="334"/>
         <source>Clear</source>
         <translation>清除</translation>
     </message>

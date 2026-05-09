@@ -16,23 +16,32 @@ static const int MessageTypeRole = Qt::UserRole;
 struct MessageStyle {
     QColor bg;
     QColor border;
-    QColor iconColor;
     QColor textColor;
-    QString icon;
+    QString iconPath;
 };
 
 MessageStyle styleForType(ConsoleOutput::MessageType type)
 {
     switch (type) {
         case ConsoleOutput::MessageType::Warning:
-            return { QColor("#FFF8E1"), QColor("#F9A825"), QColor("#F9A825"), QColor("#4A3000"), QStringLiteral("\u26A0") };
+            return { QColor("#FFF8E1"), QColor("#F9A825"), QColor("#4A3000"), QStringLiteral(":/res/icon-log-warning.svg") };
         case ConsoleOutput::MessageType::Error:
-            return { QColor("#FFEBEE"), QColor("#E53935"), QColor("#E53935"), QColor("#7F0000"), QStringLiteral("\u2716") };
+            return { QColor("#FFEBEE"), QColor("#E53935"), QColor("#7F0000"), QStringLiteral(":/res/icon-log-critical.svg") };
         case ConsoleOutput::MessageType::Debug:
-            return { Qt::white, QColor(), QColor("#1565C0"), QColor("#37474F"), QStringLiteral("\u25CF") };
+            return { Qt::white, QColor(), QColor("#37474F"), QStringLiteral(":/res/icon-log-info.svg") };
         default:
-            return { Qt::white, QColor(), QColor("#1565C0"), Qt::black, QStringLiteral("\u2139") };
+            return { Qt::white, QColor(), Qt::black, QStringLiteral(":/res/icon-log-info.svg") };
     }
+}
+
+///
+/// \brief iconForType
+/// \param type
+/// \return
+///
+QIcon iconForType(ConsoleOutput::MessageType type)
+{
+    return QIcon(styleForType(type).iconPath);
 }
 
 class ConsoleItemDelegate final : public QStyledItemDelegate
@@ -66,17 +75,16 @@ public:
 
         constexpr int leftPad = 8;
         constexpr int iconW = 16;
-        const bool hasIcon = !style.icon.isEmpty();
+        const bool hasIcon = !style.iconPath.isEmpty();
         const int textLeft = leftPad + (hasIcon ? iconW + 4 : 0);
         const QRect textRect = option.rect.adjusted(textLeft, 2, -6, -2);
 
         if (hasIcon) {
-            painter->setPen(style.iconColor);
-            QFont iconFont = option.font;
-            iconFont.setPointSize(9);
-            painter->setFont(iconFont);
-            const QRect iconRect(option.rect.left() + leftPad, option.rect.top(), iconW, option.rect.height());
-            painter->drawText(iconRect, Qt::AlignVCenter | Qt::AlignHCenter, style.icon);
+            const QRect iconRect(option.rect.left() + leftPad,
+                                 option.rect.top() + (option.rect.height() - iconW) / 2,
+                                 iconW,
+                                 iconW);
+            QIcon(style.iconPath).paint(painter, iconRect, Qt::AlignCenter, QIcon::Normal, QIcon::On);
         }
 
         painter->setPen(style.textColor);
@@ -95,7 +103,7 @@ public:
         constexpr int leftPad = 8;
         constexpr int iconW = 16;
         constexpr int rightPad = 6;
-        const bool hasIcon = !style.icon.isEmpty();
+        const bool hasIcon = !style.iconPath.isEmpty();
         const int textLeft = leftPad + (hasIcon ? iconW + 4 : 0);
         const QString text = index.data(Qt::DisplayRole).toString();
         const int textWidth = option.fontMetrics.horizontalAdvance(text);
@@ -127,7 +135,7 @@ ConsoleOutput::ConsoleOutput(QWidget* parent)
     auto styleFilterBtn = [&](QAction* action, const QString& checkedQss) {
         auto* btn = qobject_cast<QToolButton*>(ui->toolBar->widgetForAction(action));
         if (!btn) return;
-        btn->setToolButtonStyle(Qt::ToolButtonTextOnly);
+        btn->setToolButtonStyle(Qt::ToolButtonIconOnly);
         btn->setStyleSheet(
             QString("QToolButton { %1 }"
                     "QToolButton:!checked { %2 }").arg(checkedQss, uncheckedQss));
@@ -292,13 +300,13 @@ void ConsoleOutput::applyFilters()
 ///
 void ConsoleOutput::updateFilterButtons()
 {
-    ui->actionFilterLog->setText(QStringLiteral("\u2139"));
-    ui->actionFilterWarn->setText(QStringLiteral("\u26A0"));
-    ui->actionFilterError->setText(QStringLiteral("\u2716"));
+    ui->actionFilterLog->setIcon(iconForType(MessageType::Log));
+    ui->actionFilterWarn->setIcon(iconForType(MessageType::Warning));
+    ui->actionFilterError->setIcon(iconForType(MessageType::Error));
 
-    ui->actionFilterLog->setToolTip(QStringLiteral("\u2139 %1").arg(_logCount));
-    ui->actionFilterWarn->setToolTip(QStringLiteral("\u26A0 %1").arg(_warnCount));
-    ui->actionFilterError->setToolTip(QStringLiteral("\u2716 %1").arg(_errorCount));
+    ui->actionFilterLog->setToolTip(QStringLiteral("Info: %1").arg(_logCount));
+    ui->actionFilterWarn->setToolTip(QStringLiteral("Warnings: %1").arg(_warnCount));
+    ui->actionFilterError->setToolTip(QStringLiteral("Errors: %1").arg(_errorCount));
 
     ui->actionFilterLog->setVisible(_logCount > 0);
     ui->actionFilterWarn->setVisible(_warnCount > 0);
@@ -328,4 +336,3 @@ void ConsoleOutput::on_customContextMenuRequested(const QPoint& pos)
 
     menu.exec(ui->listWidget->mapToGlobal(pos));
 }
-

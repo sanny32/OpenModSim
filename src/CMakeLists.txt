@@ -45,10 +45,10 @@ configure_file(
 if(USE_QT5)
     find_package(Qt5 COMPONENTS Core Gui Widgets Network Xml PrintSupport SerialBus SerialPort Qml Help LinguistTools REQUIRED)
 elseif(USE_QT6)
-    find_package(Qt6 COMPONENTS Core Gui Widgets Network Xml PrintSupport SerialBus SerialPort Core5Compat Qml Help LinguistTools REQUIRED)
+    find_package(Qt6 COMPONENTS Core Gui Widgets Network Xml PrintSupport SerialBus SerialPort Core5Compat Qml Help Svg LinguistTools REQUIRED)
 else()
     # fallback: Qt6 preferred
-    find_package(Qt6 COMPONENTS Core Gui Widgets Network Xml PrintSupport SerialBus SerialPort Core5Compat Qml Help LinguistTools QUIET)
+    find_package(Qt6 COMPONENTS Core Gui Widgets Network Xml PrintSupport SerialBus SerialPort Core5Compat Qml Help Svg LinguistTools QUIET)
     if (NOT Qt6_FOUND)
         find_package(Qt5 COMPONENTS Core Gui Widgets Network Xml PrintSupport SerialBus SerialPort Qml Help LinguistTools REQUIRED)
     endif()
@@ -494,7 +494,7 @@ endif()
 
 target_precompile_headers(${PROJECT_NAME} PRIVATE pch.h)
 target_sources(${PROJECT_NAME} PRIVATE resources.qrc ${HEADERS} ${SOURCES} ${UI_FILES} ${TS_FILES})
-target_link_libraries(${PROJECT_NAME} PRIVATE Qt::Widgets Qt::Network Qt::Xml Qt::PrintSupport Qt::SerialBus Qt::SerialPort Qt::Qml Qt::Help)
+target_link_libraries(${PROJECT_NAME} PRIVATE Qt::Widgets Qt::Network Qt::Xml Qt::PrintSupport Qt::SerialBus Qt::SerialPort Qt::Qml Qt::Help Qt::Svg)
 
 if(Qt6_FOUND)
     qt_add_lupdate(${PROJECT_NAME}
@@ -764,4 +764,3 @@ elseif(LINUX)
     install(CODE "execute_process(COMMAND update-desktop-database -q ${CMAKE_INSTALL_PREFIX}/share/applications)")
     install(CODE "execute_process(COMMAND gtk-update-icon-cache -q -t -f ${CMAKE_INSTALL_PREFIX}/share/icons/hicolor)")
 endif()
-
