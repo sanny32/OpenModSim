@@ -702,6 +702,7 @@ void FormTrafficView::setupFilterControls()
     _labelFuncCode->setText(tr("Function:"));
 
     _funcCodeFilter = new FuncCodeFilterComboBox(ui->toolBarTraffic);
+    _funcCodeFilter->setMaximumWidth(220);
     connect(_funcCodeFilter, &FuncCodeFilterComboBox::functionCodeChanged, this, [this](int value) {
         if (_funcCodeFilter)
             _displayDefinition.FunctionCodeFilter = static_cast<qint16>(value);
@@ -714,7 +715,7 @@ void FormTrafficView::setupFilterControls()
 
     _sourceFilter = new QComboBox(ui->toolBarTraffic);
     _sourceFilter->addItem(tr("All"), QVariant());
-    _sourceFilter->setMinimumWidth(220);
+    _sourceFilter->setMaximumWidth(220);
     _sourceFilter->setSizeAdjustPolicy(QComboBox::AdjustToContents);
     connect(_sourceFilter, qOverload<int>(&QComboBox::currentIndexChanged), this, [this](int) {
         rebuildVisibleTraffic();
