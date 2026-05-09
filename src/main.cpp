@@ -1,13 +1,13 @@
 #include <QApplication>
 #include <QFontDatabase>
 #include <QMessageBox>
-#include "controls/appstyle.h"
 #include "mainwindow.h"
 #include "cmdlineparser.h"
 #include "fontutils.h"
+#include "styles/appstyle.h"
 
 #if defined(Q_OS_MACOS) && QT_VERSION >= QT_VERSION_CHECK(6, 8, 0)
-#include "controls/macappstyle.h"
+#include "styles/macappstyle.h"
 #include <oclero/qlementine.hpp>
 #endif
 

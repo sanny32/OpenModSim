@@ -142,6 +142,7 @@ endif()
 target_include_directories(${PROJECT_NAME} PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${CMAKE_CURRENT_SOURCE_DIR}/controls
+    ${CMAKE_CURRENT_SOURCE_DIR}/styles
     ${CMAKE_CURRENT_SOURCE_DIR}/dialogs
     ${CMAKE_CURRENT_SOURCE_DIR}/jsobjects
     ${CMAKE_CURRENT_SOURCE_DIR}/modbusmessages
@@ -176,8 +177,8 @@ set(SOURCES
     controls/jscodeeditor.cpp
     controls/jscriptcontrol.cpp
     controls/mainstatusbar.cpp
-    controls/appstyle.cpp
-    controls/macappstyle.cpp
+    styles/appstyle.cpp
+    styles/macappstyle.cpp
     controls/macsplittoolbutton.cpp
     controls/mdiarea.cpp
     controls/mdiareaex.cpp
@@ -282,8 +283,8 @@ set(HEADERS
     controls/jscodeeditor.h
     controls/jscriptcontrol.h
     controls/mainstatusbar.h
-    controls/appstyle.h
-    controls/macappstyle.h
+    styles/appstyle.h
+    styles/macappstyle.h
     controls/macsplittoolbutton.h
     controls/mdiarea.h
     controls/mdiareaex.h
@@ -763,5 +764,4 @@ elseif(LINUX)
     install(CODE "execute_process(COMMAND update-desktop-database -q ${CMAKE_INSTALL_PREFIX}/share/applications)")
     install(CODE "execute_process(COMMAND gtk-update-icon-cache -q -t -f ${CMAKE_INSTALL_PREFIX}/share/icons/hicolor)")
 endif()
-
 
