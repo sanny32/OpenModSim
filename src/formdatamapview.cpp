@@ -21,6 +21,25 @@ constexpr int RoleType      = DataMapRole::Type;
 constexpr int RoleAddress   = DataMapRole::Address;
 constexpr int RoleTypeValue = DataMapRole::TypeValue;
 
+constexpr auto NumericEditorInitializedProperty = "_omodsim_numericEditorInitialized";
+
+///
+/// \brief Returns true when a numeric item editor has already received its initial model value.
+///
+bool isNumericEditorInitialized(const QWidget* editor)
+{
+    return editor && editor->property(NumericEditorInitializedProperty).toBool();
+}
+
+///
+/// \brief Marks a numeric item editor as initialized after the first model-to-editor transfer.
+///
+void markNumericEditorInitialized(QWidget* editor)
+{
+    if (editor)
+        editor->setProperty(NumericEditorInitializedProperty, true);
+}
+
 ///
 /// \brief WrappingHeaderView — table header with word-wrapped section labels
 ///
@@ -393,9 +412,13 @@ public:
 
     void setEditorData(QWidget* editor, const QModelIndex& index) const override
     {
+        if (isNumericEditorInitialized(editor))
+            return;
+
         auto* le = qobject_cast<NumericLineEdit*>(editor);
         if (!le) return;
         le->setValue<quint32>(index.data(RoleDeviceId).toUInt());
+        markNumericEditorInitialized(editor);
     }
 
     void setModelData(QWidget* editor, QAbstractItemModel* model, const QModelIndex& index) const override
@@ -459,12 +482,16 @@ public:
 
     void setEditorData(QWidget* editor, const QModelIndex& index) const override
     {
+        if (isNumericEditorInitialized(editor))
+            return;
+
         auto* le = qobject_cast<NumericLineEdit*>(editor);
         if (!le) return;
         const quint16 rawAddr = static_cast<quint16>(
             index.siblingAtColumn(ColUnit).data(RoleAddress).toUInt());
         const bool zeroBased = zeroBasedFromIndex(index);
         le->setValue<quint32>(zeroBased ? rawAddr : static_cast<quint32>(rawAddr) + 1);
+        markNumericEditorInitialized(editor);
     }
 
     void setModelData(QWidget* editor, QAbstractItemModel* model, const QModelIndex& index) const override
@@ -544,6 +571,9 @@ public:
 
     void setEditorData(QWidget* editor, const QModelIndex& index) const override
     {
+        if (isNumericEditorInitialized(editor))
+            return;
+
         auto* le = qobject_cast<NumericLineEdit*>(editor);
         if (!le) return;
 
@@ -586,6 +616,7 @@ public:
                 break;
             }
         }
+        markNumericEditorInitialized(editor);
     }
 
     void setModelData(QWidget* editor, QAbstractItemModel* model, const QModelIndex& index) const override
@@ -1537,4 +1568,3 @@ void FormDataMapView::setColumnWidths(const QList<int>& widths)
     for (int i = 0; i < widths.size() && i < hdr->count(); ++i)
         if (widths[i] > 0) hdr->resizeSection(i, widths[i]);
 }
-
