@@ -222,7 +222,7 @@ void applyThemeIcons(Ui::MainWindow* ui)
     ui->actionCut->setIcon(themedIcon(QStringLiteral("edit-cut"), QStringLiteral(":/res/icon-cut.png")));
     ui->actionCopy->setIcon(themedIcon(QStringLiteral("edit-copy"), QStringLiteral(":/res/icon-copy.png")));
     ui->actionPaste->setIcon(themedIcon(QStringLiteral("edit-paste"), QStringLiteral(":/res/icon-paste.png")));
-    ui->actionMsgParser->setIcon(themedIcon(QStringLiteral("file/preset"), QStringLiteral(":/res/icon-msg-parser.png")));
+    ui->actionMsgParser->setIcon(themedIcon(QStringLiteral("action/preview"), QStringLiteral(":/res/icon-msg-parser.png")));
     ui->actionMbDefinitions->setIcon(themedIcon(QStringLiteral("navigation/settings"), QStringLiteral(":/res/icon-mb-definitions.png")));
     ui->actionNewDataView->setIcon(themedIcon(QStringLiteral("misc/glasses"), QStringLiteral(":/res/icon-new-data.png")));
     ui->actionNewDataMapView->setIcon(themedIcon(QStringLiteral("navigation/map"), QStringLiteral(":/res/icon-new-data.png")));
