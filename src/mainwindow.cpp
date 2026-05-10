@@ -205,30 +205,57 @@ void printOnForm(QWidget* widget, QPrinter* printer)
 ///
 void applyThemeIcons(Ui::MainWindow* ui)
 {
-    ui->actionNew->setIcon(themedIcon(QStringLiteral("document-new"), QStringLiteral(":/res/icon-new-data.png")));
-    ui->actionOpenProject->setIcon(themedIcon(QStringLiteral("document-open"), QStringLiteral(":/res/icon-open.png")));
-    ui->actionSaveProject->setIcon(themedIcon(QStringLiteral("document-save"), QStringLiteral(":/res/icon-save.png")));
-    ui->actionPrint->setIcon(themedIcon(QStringLiteral("document-print"), QStringLiteral(":/res/icon-print.png")));
-    ui->actionConnect->setIcon(themedIcon(QStringLiteral("network-wired"), QStringLiteral(":/res/icon-connect.png")));
-    ui->actionDisconnect->setIcon(themedIcon(QStringLiteral("network-server"), QStringLiteral(":/res/icon-disconnect.png")));
+    ui->actionNew->setIcon(themedIcon(QStringLiteral("misc/glasses"), QStringLiteral(":/res/icon-new-data.png")));
+    ui->actionOpenProject->setIcon(themedIcon(QStringLiteral("file/folder-open"), QStringLiteral(":/res/icon-open.png")));
+    ui->actionSaveProject->setIcon(themedIcon(QStringLiteral("action/save"), QStringLiteral(":/res/icon-save.png")));
+    ui->actionPrint->setIcon(themedIcon(QStringLiteral("action/print"), QStringLiteral(":/res/icon-print.png")));
+    ui->actionConnect->setIcon(themedIcon(QStringLiteral("misc/link"), QStringLiteral(":/res/icon-connect.png")));
+    ui->actionDisconnect->setIcon(themedIcon(QStringLiteral("misc/link-break"), QStringLiteral(":/res/icon-disconnect.png")));
     ui->actionHexView->setIcon(themedIcon(QStringLiteral("software/command-line"), QStringLiteral(":/res/icon-hex-view.png")));
     ui->actionAbout->setIcon(themedIcon(QStringLiteral("help-about"), QStringLiteral(":/res/icon-about.png")));
-    ui->actionForceCoils->setIcon(themedIcon(QStringLiteral("action/force"), QStringLiteral(":/res/icon-force-coils.png")));
-    ui->actionForceDiscretes->setIcon(themedIcon(QStringLiteral("shape/check-tick"), QStringLiteral(":/res/icon-force-discretes.png")));
-    ui->actionPresetInputRegs->setIcon(themedIcon(QStringLiteral("hardware/database"), QStringLiteral(":/res/icon-preset-input-regs.png")));
-    ui->actionPresetHoldingRegs->setIcon(themedIcon(QStringLiteral("hardware/drive"), QStringLiteral(":/res/icon-preset-holding-regs.png")));
+    ui->actionForceCoils->setIcon(QIcon(QStringLiteral(":/res/icon-force-coils.svg")));
+    ui->actionForceDiscretes->setIcon(QIcon(QStringLiteral(":/res/icon-force-discretes.svg")));
+    ui->actionPresetInputRegs->setIcon(QIcon(QStringLiteral(":/res/icon-preset-input-regs.svg")));
+    ui->actionPresetHoldingRegs->setIcon(QIcon(QStringLiteral(":/res/icon-preset-holding-regs.svg")));
     ui->actionUndo->setIcon(themedIcon(QStringLiteral("edit-undo"), QStringLiteral(":/res/icon-undo.png")));
     ui->actionRedo->setIcon(themedIcon(QStringLiteral("edit-redo"), QStringLiteral(":/res/icon-redo.png")));
     ui->actionCut->setIcon(themedIcon(QStringLiteral("edit-cut"), QStringLiteral(":/res/icon-cut.png")));
     ui->actionCopy->setIcon(themedIcon(QStringLiteral("edit-copy"), QStringLiteral(":/res/icon-copy.png")));
     ui->actionPaste->setIcon(themedIcon(QStringLiteral("edit-paste"), QStringLiteral(":/res/icon-paste.png")));
-    ui->actionMsgParser->setIcon(themedIcon(QStringLiteral("software/command-line"), QStringLiteral(":/res/icon-msg-parser.png")));
+    ui->actionMsgParser->setIcon(themedIcon(QStringLiteral("file/preset"), QStringLiteral(":/res/icon-msg-parser.png")));
     ui->actionMbDefinitions->setIcon(themedIcon(QStringLiteral("navigation/settings"), QStringLiteral(":/res/icon-mb-definitions.png")));
-    ui->actionNewDataView->setIcon(themedIcon(QStringLiteral("hardware/database"), QStringLiteral(":/res/icon-new-data.png")));
+    ui->actionNewDataView->setIcon(themedIcon(QStringLiteral("misc/glasses"), QStringLiteral(":/res/icon-new-data.png")));
     ui->actionNewDataMapView->setIcon(themedIcon(QStringLiteral("navigation/map"), QStringLiteral(":/res/icon-new-data.png")));
-    ui->actionNewTrafficView->setIcon(themedIcon(QStringLiteral("hardware/network"), QStringLiteral(":/res/icon-new-traffic.png")));
+    ui->actionNewTrafficView->setIcon(themedIcon(QStringLiteral("misc/sms"), QStringLiteral(":/res/icon-new-traffic.png")));
     ui->actionNewScript->setIcon(themedIcon(QStringLiteral("text-x-script"), QStringLiteral(":/res/icon-new-script.png")));
     ui->actionSplitView->setIcon(themedIcon(QStringLiteral("ui-panels-right"), QStringLiteral(":/res/icon-split-view.png")));
+}
+
+///
+/// \brief configureMainToolbarText
+/// \param ui
+///
+void configureMainToolbarText(Ui::MainWindow* ui)
+{
+    ui->toolBarMain->setToolButtonStyle(Qt::ToolButtonIconOnly);
+
+    const QList<QAction*> labeledActions = {
+        ui->actionNew,
+        ui->actionOpenProject,
+        ui->actionSaveProject,
+        ui->actionConnect,
+        ui->actionDisconnect
+    };
+
+    for (QAction* action : ui->toolBarMain->actions()) {
+        if (auto* button = qobject_cast<QToolButton*>(ui->toolBarMain->widgetForAction(action)))
+            button->setToolButtonStyle(Qt::ToolButtonIconOnly);
+    }
+
+    for (QAction* action : labeledActions) {
+        if (auto* button = qobject_cast<QToolButton*>(ui->toolBarMain->widgetForAction(action)))
+            button->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+    }
 }
 
 }
@@ -279,6 +306,7 @@ MainWindow::MainWindow(const QString& profile, bool useSession, const QString& s
     qobject_cast<QToolButton*>(ui->toolBarMain->widgetForAction(ui->actionDisconnect))->setPopupMode(QToolButton::InstantPopup);
     qobject_cast<QToolButton*>(ui->toolBarMain->widgetForAction(ui->actionDisconnect))->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
     setupGlobalViewToolbar();
+    configureMainToolbarText(ui);
 
     const auto defaultPrinter = QPrinterInfo::defaultPrinter();
     if(!defaultPrinter.isNull())

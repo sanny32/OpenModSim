@@ -48,9 +48,13 @@
         <file>res/icon-mb-definitions.png</file>
         <file>res/icon-msg-parser.png</file>
         <file>res/icon-force-coils.png</file>
+        <file>res/icon-force-coils.svg</file>
         <file>res/icon-force-discretes.png</file>
+        <file>res/icon-force-discretes.svg</file>
         <file>res/icon-preset-input-regs.png</file>
+        <file>res/icon-preset-input-regs.svg</file>
         <file>res/icon-preset-holding-regs.png</file>
+        <file>res/icon-preset-holding-regs.svg</file>
         <file>translations/omodsim_zh_CN.qm</file>
         <file>translations/omodsim_zh_TW.qm</file>
         <file>res/emblem-github.svg</file>

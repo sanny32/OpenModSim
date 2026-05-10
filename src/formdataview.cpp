@@ -67,7 +67,7 @@ FormDataView::FormDataView(ModbusMultiServer& server, DataSimulator* simulator, 
     Q_ASSERT(_dataSimulator != nullptr);
 
     ui->setupUi(this);
-    setWindowIcon(themedIcon(QStringLiteral("hardware/database"), QStringLiteral(":/res/icon-show-data.png")));
+    setWindowIcon(themedIcon(QStringLiteral("misc/glasses"), QStringLiteral(":/res/icon-show-data.png")));
 
     ui->lineEditDeviceId->setInputRange(ModbusLimits::slaveRange());
     ui->lineEditDeviceId->setValue(1);

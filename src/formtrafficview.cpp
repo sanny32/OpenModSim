@@ -37,7 +37,7 @@ FormTrafficView::FormTrafficView(ModbusMultiServer& server, MainWindow* parent)
     Q_ASSERT(parent != nullptr);
 
     ui->setupUi(this);
-    setWindowIcon(themedIcon(QStringLiteral("hardware/network"), QStringLiteral(":/res/icon-show-traffic.png")));
+    setWindowIcon(themedIcon(QStringLiteral("misc/sms"), QStringLiteral(":/res/icon-show-traffic.png")));
     setupToolbarActions();
     setupFilterControls();
     setupToolbarLayout();

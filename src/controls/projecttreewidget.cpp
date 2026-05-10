@@ -36,8 +36,8 @@ QIcon dimmedIcon(const QIcon& icon)
 ///
 ProjectTreeWidget::ProjectTreeWidget(QWidget* parent)
     : QTreeWidget(parent)
-    , _iconData(themedIcon(QStringLiteral("hardware/database"), QStringLiteral(":/res/icon-show-data.png")))
-    , _iconTraffic(themedIcon(QStringLiteral("hardware/network"), QStringLiteral(":/res/icon-show-traffic.png")))
+    , _iconData(themedIcon(QStringLiteral("misc/glasses"), QStringLiteral(":/res/icon-show-data.png")))
+    , _iconTraffic(themedIcon(QStringLiteral("misc/sms"), QStringLiteral(":/res/icon-show-traffic.png")))
     , _iconScriptIdle(themedIcon(QStringLiteral("text-x-script"), QStringLiteral(":/res/icon-show-script.png")))
     , _iconScriptRunning(themedIcon(QStringLiteral("media-playback-start"), QStringLiteral(":/res/icon-run-script.png")))
     , _iconDataMapLocked(themedIcon(QStringLiteral("action/lock"), QStringLiteral(":/res/icon-data-locked.png")))
@@ -58,7 +58,7 @@ ProjectTreeWidget::ProjectTreeWidget(QWidget* parent)
     setContextMenuPolicy(Qt::CustomContextMenu);
     setEditTriggers(QAbstractItemView::EditKeyPressed | QAbstractItemView::SelectedClicked);
 
-    const QIcon iconDir = themedIcon(QStringLiteral("folder"), QStringLiteral(":/res/icon-directory.png"));
+    const QIcon iconDir = themedIcon(QStringLiteral("file/folder-filled"), QStringLiteral(":/res/icon-directory.png"));
 
     _dataRoot = new QTreeWidgetItem(this, QStringList{tr("Data")});
     _dataRoot->setIcon(0, iconDir);

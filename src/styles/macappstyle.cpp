@@ -490,7 +490,7 @@ void MacAppStyle::polish(QWidget* widget)
         toolBar->setIconSize(QSize(16, 16));
         toolBar->setContentsMargins(8, 0, 8, 0);
         if (toolBar->objectName() == QStringLiteral("toolBarMain"))
-            toolBar->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+            toolBar->setToolButtonStyle(Qt::ToolButtonIconOnly);
     }
 }
 
@@ -553,7 +553,7 @@ int MacAppStyle::styleHint(StyleHint hint, const QStyleOption* option,
         const auto* toolButton = qobject_cast<const QToolButton*>(widget);
         const auto* parent = toolButton ? toolButton->parentWidget() : nullptr;
         if (parent && parent->objectName() == QStringLiteral("toolBarMain"))
-            return Qt::ToolButtonTextBesideIcon;
+            return toolButton->toolButtonStyle();
     }
 
     return QlementineStyle::styleHint(hint, option, widget, returnData);
