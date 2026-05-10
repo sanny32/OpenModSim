@@ -893,22 +893,22 @@ Open the download page?</source>
         <translation>Случайное</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcestatusregisters.ui" line="163"/>
+        <location filename="../dialogs/dialogforcestatusregisters.ui" line="156"/>
         <source>Set</source>
         <translation>Установить</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcestatusregisters.ui" line="176"/>
+        <location filename="../dialogs/dialogforcestatusregisters.ui" line="169"/>
         <source>Reset</source>
         <translation>Сбросить</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcestatusregisters.ui" line="229"/>
+        <location filename="../dialogs/dialogforcestatusregisters.ui" line="222"/>
         <source>Import</source>
         <translation>Импорт</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcestatusregisters.ui" line="252"/>
+        <location filename="../dialogs/dialogforcestatusregisters.ui" line="245"/>
         <source>Export</source>
         <translation>Экспорт</translation>
     </message>

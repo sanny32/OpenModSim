@@ -29,15 +29,15 @@ public:
 protected:
     void changeEvent(QEvent* event) override;
 
-private slots:
-    void on_pushButton0_clicked();
-    void on_pushButtonRandom_clicked();
+private slots:   
     void on_pushButtonValue_clicked();
-    void on_pushButtonInc_clicked();
     void on_pushButtonImport_clicked();
     void on_pushButtonExport_clicked();
 
 private:
+    void setValueZero();
+    void setValueRandom();
+    void setValueInc();
     void setupAddressControls(int length);
     void setupDisplayControls();
     void setupPresetData();

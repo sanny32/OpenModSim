@@ -893,22 +893,22 @@ Open the download page?</source>
         <translation>隨機數</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcestatusregisters.ui" line="163"/>
+        <location filename="../dialogs/dialogforcestatusregisters.ui" line="156"/>
         <source>Set</source>
         <translation>設定</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcestatusregisters.ui" line="176"/>
+        <location filename="../dialogs/dialogforcestatusregisters.ui" line="169"/>
         <source>Reset</source>
         <translation>重設</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcestatusregisters.ui" line="229"/>
+        <location filename="../dialogs/dialogforcestatusregisters.ui" line="222"/>
         <source>Import</source>
         <translation>匯入</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcestatusregisters.ui" line="252"/>
+        <location filename="../dialogs/dialogforcestatusregisters.ui" line="245"/>
         <source>Export</source>
         <translation>匯出</translation>
     </message>

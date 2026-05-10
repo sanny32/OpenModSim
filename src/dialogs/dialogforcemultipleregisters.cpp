@@ -706,15 +706,15 @@ void DialogForceMultipleRegisters::accept()
 ///
 /// \brief DialogForceMultipleRegisters::on_pushButton0_clicked
 ///
-void DialogForceMultipleRegisters::on_pushButton0_clicked()
+void DialogForceMultipleRegisters::setValueZero()
 {
    applyToAll(ValueOperation::Set, 0);
 }
 
 ///
-/// \brief DialogForceMultipleRegisters::on_pushButtonRandom_clicked
+/// \brief DialogForceMultipleRegisters::setValueRandom
 ///
-void DialogForceMultipleRegisters::on_pushButtonRandom_clicked()
+void DialogForceMultipleRegisters::setValueRandom()
 {
     for(int i = 0; i < _data.size(); i++)
     {
@@ -777,23 +777,23 @@ void DialogForceMultipleRegisters::on_pushButtonValue_clicked()
         return;
 
     case PresetOperations::Random:
-        on_pushButtonRandom_clicked();
+        setValueRandom();
         return;
 
     case PresetOperations::Increment:
-        on_pushButtonInc_clicked();
+        setValueInc();
         return;
 
     case PresetOperations::Zero:
-        on_pushButton0_clicked();
+        setValueZero();
         return;
     }
 }
 
 ///
-/// \brief DialogForceMultipleRegisters::on_pushButtonInc_clicked
+/// \brief DialogForceMultipleRegisters::setValueInc
 ///
-void DialogForceMultipleRegisters::on_pushButtonInc_clicked()
+void DialogForceMultipleRegisters::setValueInc()
 {
     for(int i = 0; i < _data.size(); i++)
     {
