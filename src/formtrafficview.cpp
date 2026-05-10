@@ -16,6 +16,7 @@
 #include "modbusmessages.h"
 #include "serialportutils.h"
 #include "formtrafficview.h"
+#include "themedicons.h"
 #include "ui_formtrafficview.h"
 
 namespace {
@@ -36,7 +37,7 @@ FormTrafficView::FormTrafficView(ModbusMultiServer& server, MainWindow* parent)
     Q_ASSERT(parent != nullptr);
 
     ui->setupUi(this);
-    setWindowIcon(QIcon(":/res/icon-show-traffic.png"));
+    setWindowIcon(themedIcon(QStringLiteral("hardware/network"), QStringLiteral(":/res/icon-show-traffic.png")));
     setupToolbarActions();
     setupFilterControls();
     setupToolbarLayout();
@@ -1022,7 +1023,6 @@ void FormTrafficView::appendTrafficEntry(const ConnectionDetails& cd,
         updateExportActionState();
     }
 }
-
 
 
 

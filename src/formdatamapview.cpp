@@ -5,14 +5,16 @@
 #include "modbusmessages/modbusmessages.h"
 #include "controls/numericlineedit.h"
 #include "formatutils.h"
+#include "themedicons.h"
 #include "ui_formdatamapview.h"
 
 namespace {
 
-QString dataMapWindowIconPath(bool autoRequestMap)
+QIcon dataMapWindowIcon(bool autoRequestMap)
 {
-    return autoRequestMap ? QStringLiteral(":/res/icon-data-locked.png")
-                          : QStringLiteral(":/res/icon-show-data.png");
+    return autoRequestMap
+        ? themedIcon(QStringLiteral("action/lock"), QStringLiteral(":/res/icon-data-locked.png"))
+        : themedIcon(QStringLiteral("navigation/map"), QStringLiteral(":/res/icon-show-data.png"));
 }
 
 // Role aliases so delegates compile without change
@@ -1455,7 +1457,7 @@ void FormDataMapView::setAutoRequestMap(bool value)
 
 void FormDataMapView::updateWindowIcon()
 {
-    const QIcon icon(dataMapWindowIconPath(_autoRequestMap));
+    const QIcon icon = dataMapWindowIcon(_autoRequestMap);
     setWindowIcon(icon);
 
     if (auto* wnd = qobject_cast<QMdiSubWindow*>(parentWidget()))

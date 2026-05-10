@@ -8,6 +8,7 @@
 #include <QToolBar>
 #include <QToolButton>
 #include "consoleoutput.h"
+#include "themedicons.h"
 #include "ui_consoleoutput.h"
 
 namespace {
@@ -41,7 +42,16 @@ MessageStyle styleForType(ConsoleOutput::MessageType type)
 ///
 QIcon iconForType(ConsoleOutput::MessageType type)
 {
-    return QIcon(styleForType(type).iconPath);
+    switch (type) {
+        case ConsoleOutput::MessageType::Warning:
+            return themedIcon(QStringLiteral("dialog-warning"), styleForType(type).iconPath);
+        case ConsoleOutput::MessageType::Error:
+            return themedIcon(QStringLiteral("dialog-error"), styleForType(type).iconPath);
+        case ConsoleOutput::MessageType::Debug:
+        case ConsoleOutput::MessageType::Log:
+        default:
+            return themedIcon(QStringLiteral("dialog-information"), styleForType(type).iconPath);
+    }
 }
 
 class ConsoleItemDelegate final : public QStyledItemDelegate
@@ -122,46 +132,22 @@ ConsoleOutput::ConsoleOutput(QWidget* parent)
 {
     ui->setupUi(this);
 
-    ui->toolBar->setStyleSheet(
-        "QToolBar { border: none; background: transparent; spacing: 2px; padding: 1px 2px; }"
-        "QToolBar::separator { width: 1px; background: #BDBDBD; margin: 4px 2px; }");
-
-    const QString uncheckedQss =
-        "color:#9E9E9E; background:transparent;"
-        "border:1px solid #BDBDBD; border-radius:4px;"
-        "min-width:22px; max-width:22px; min-height:22px; max-height:22px;"
-        "padding:0px; font-size:11px;";
-
-    auto styleFilterBtn = [&](QAction* action, const QString& checkedQss) {
+    auto setupFilterBtn = [&](QAction* action) {
         auto* btn = qobject_cast<QToolButton*>(ui->toolBar->widgetForAction(action));
         if (!btn) return;
         btn->setToolButtonStyle(Qt::ToolButtonIconOnly);
-        btn->setStyleSheet(
-            QString("QToolButton { %1 }"
-                    "QToolButton:!checked { %2 }").arg(checkedQss, uncheckedQss));
+        btn->setFixedSize(24, 24);
     };
 
-    styleFilterBtn(ui->actionFilterLog,
-        "color:#1565C0; background:#E3F2FD;"
-        "border:1px solid #64B5F6; border-radius:4px;"
-        "min-width:22px; max-width:22px; min-height:22px; max-height:22px;"
-        "padding:0px; font-size:11px;");
-
-    styleFilterBtn(ui->actionFilterWarn,
-        "color:#E65100; background:#FFF8E1;"
-        "border:1px solid #FFA726; border-radius:4px;"
-        "min-width:22px; max-width:22px; min-height:22px; max-height:22px;"
-        "padding:0px; font-size:11px;");
-
-    styleFilterBtn(ui->actionFilterError,
-        "color:#C62828; background:#FFEBEE;"
-        "border:1px solid #E57373; border-radius:4px;"
-        "min-width:22px; max-width:22px; min-height:22px; max-height:22px;"
-        "padding:0px; font-size:11px;");
+    setupFilterBtn(ui->actionFilterLog);
+    setupFilterBtn(ui->actionFilterWarn);
+    setupFilterBtn(ui->actionFilterError);
 
     auto* filterSpacer = new QWidget(ui->toolBar);
     filterSpacer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
     ui->toolBar->insertWidget(ui->actionFilterLog, filterSpacer);
+
+    ui->actionClear->setIcon(themedIcon(QStringLiteral("edit-clear"), QStringLiteral(":/res/edit-delete.png")));
 
     ui->listWidget->setItemDelegate(new ConsoleItemDelegate(ui->listWidget));
     ui->listWidget->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
@@ -320,7 +306,7 @@ void ConsoleOutput::on_customContextMenuRequested(const QPoint& pos)
 {
     QMenu menu(ui->listWidget);
 
-    auto copyAction = menu.addAction(QIcon(":/res/icon-copy.png"), tr("Copy"), this, [this]() {
+    auto copyAction = menu.addAction(themedIcon(QStringLiteral("edit-copy"), QStringLiteral(":/res/icon-copy.png")), tr("Copy"), this, [this]() {
         QStringList lines;
         for (auto* item : ui->listWidget->selectedItems())
             lines << item->text();

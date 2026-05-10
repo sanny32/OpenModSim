@@ -16,6 +16,7 @@
 #include "dialogwritestatusregister.h"
 #include "dialogwriteregister.h"
 #include "formdataview.h"
+#include "themedicons.h"
 #include "ui_formdataview.h"
 
 namespace {
@@ -66,7 +67,7 @@ FormDataView::FormDataView(ModbusMultiServer& server, DataSimulator* simulator, 
     Q_ASSERT(_dataSimulator != nullptr);
 
     ui->setupUi(this);
-    setWindowIcon(QIcon(":/res/icon-show-data.png"));
+    setWindowIcon(themedIcon(QStringLiteral("hardware/database"), QStringLiteral(":/res/icon-show-data.png")));
 
     ui->lineEditDeviceId->setInputRange(ModbusLimits::slaveRange());
     ui->lineEditDeviceId->setValue(1);
@@ -1319,4 +1320,3 @@ void FormDataView::updateDisplayBar()
 
     updateSettingsControls();
 }
-

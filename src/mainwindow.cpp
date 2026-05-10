@@ -23,6 +23,7 @@
 #include "applogoutput.h"
 #include "applogger.h"
 #include "mainwindow.h"
+#include "themedicons.h"
 #include "ui_mainwindow.h"
 
 // Forward declaration (defined later in this file)
@@ -198,6 +199,38 @@ void printOnForm(QWidget* widget, QPrinter* printer)
     else if (auto* frm = qobject_cast<FormDataMapView*>(widget)) frm->print(printer);
 }
 
+///
+/// \brief applyThemeIcons
+/// \param ui
+///
+void applyThemeIcons(Ui::MainWindow* ui)
+{
+    ui->actionNew->setIcon(themedIcon(QStringLiteral("document-new"), QStringLiteral(":/res/icon-new-data.png")));
+    ui->actionOpenProject->setIcon(themedIcon(QStringLiteral("document-open"), QStringLiteral(":/res/icon-open.png")));
+    ui->actionSaveProject->setIcon(themedIcon(QStringLiteral("document-save"), QStringLiteral(":/res/icon-save.png")));
+    ui->actionPrint->setIcon(themedIcon(QStringLiteral("document-print"), QStringLiteral(":/res/icon-print.png")));
+    ui->actionConnect->setIcon(themedIcon(QStringLiteral("network-wired"), QStringLiteral(":/res/icon-connect.png")));
+    ui->actionDisconnect->setIcon(themedIcon(QStringLiteral("network-server"), QStringLiteral(":/res/icon-disconnect.png")));
+    ui->actionHexView->setIcon(themedIcon(QStringLiteral("software/command-line"), QStringLiteral(":/res/icon-hex-view.png")));
+    ui->actionAbout->setIcon(themedIcon(QStringLiteral("help-about"), QStringLiteral(":/res/icon-about.png")));
+    ui->actionForceCoils->setIcon(themedIcon(QStringLiteral("action/force"), QStringLiteral(":/res/icon-force-coils.png")));
+    ui->actionForceDiscretes->setIcon(themedIcon(QStringLiteral("shape/check-tick"), QStringLiteral(":/res/icon-force-discretes.png")));
+    ui->actionPresetInputRegs->setIcon(themedIcon(QStringLiteral("hardware/database"), QStringLiteral(":/res/icon-preset-input-regs.png")));
+    ui->actionPresetHoldingRegs->setIcon(themedIcon(QStringLiteral("hardware/drive"), QStringLiteral(":/res/icon-preset-holding-regs.png")));
+    ui->actionUndo->setIcon(themedIcon(QStringLiteral("edit-undo"), QStringLiteral(":/res/icon-undo.png")));
+    ui->actionRedo->setIcon(themedIcon(QStringLiteral("edit-redo"), QStringLiteral(":/res/icon-redo.png")));
+    ui->actionCut->setIcon(themedIcon(QStringLiteral("edit-cut"), QStringLiteral(":/res/icon-cut.png")));
+    ui->actionCopy->setIcon(themedIcon(QStringLiteral("edit-copy"), QStringLiteral(":/res/icon-copy.png")));
+    ui->actionPaste->setIcon(themedIcon(QStringLiteral("edit-paste"), QStringLiteral(":/res/icon-paste.png")));
+    ui->actionMsgParser->setIcon(themedIcon(QStringLiteral("software/command-line"), QStringLiteral(":/res/icon-msg-parser.png")));
+    ui->actionMbDefinitions->setIcon(themedIcon(QStringLiteral("navigation/settings"), QStringLiteral(":/res/icon-mb-definitions.png")));
+    ui->actionNewDataView->setIcon(themedIcon(QStringLiteral("hardware/database"), QStringLiteral(":/res/icon-new-data.png")));
+    ui->actionNewDataMapView->setIcon(themedIcon(QStringLiteral("navigation/map"), QStringLiteral(":/res/icon-new-data.png")));
+    ui->actionNewTrafficView->setIcon(themedIcon(QStringLiteral("hardware/network"), QStringLiteral(":/res/icon-new-traffic.png")));
+    ui->actionNewScript->setIcon(themedIcon(QStringLiteral("text-x-script"), QStringLiteral(":/res/icon-new-script.png")));
+    ui->actionSplitView->setIcon(themedIcon(QStringLiteral("ui-panels-right"), QStringLiteral(":/res/icon-split-view.png")));
+}
+
 }
 
 ///
@@ -215,6 +248,7 @@ MainWindow::MainWindow(const QString& profile, bool useSession, const QString& s
     ,_helpWidget(nullptr)
 {
     ui->setupUi(this);
+    applyThemeIcons(ui);
 
     setLanguage(_lang);
     setWindowTitle(APP_PRODUCT_NAME);
@@ -276,6 +310,7 @@ MainWindow::MainWindow(const QString& profile, bool useSession, const QString& s
 
     _outputPanel = ui->outputPanel;
     _outputPanel->jsConsole()->setMaxLines(AppPreferences::instance().consoleMaxLines());
+    ui->consoleDockWidget->setTitleBarWidget(new QWidget(ui->consoleDockWidget));
 
     connect(_outputPanel, &OutputPanel::collapse, this, &MainWindow::on_outputPanelCollapse);
     connect(_outputPanel->appLog(), &AppLogOutput::openRequested, this, &MainWindow::on_outputPanelAppLogOpenRequested);

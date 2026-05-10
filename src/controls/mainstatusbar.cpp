@@ -6,6 +6,7 @@
 #include "apppreferences.h"
 #include "mainstatusbar.h"
 #include "serialportutils.h"
+#include "themedicons.h"
 
 ///
 /// \brief MainStatusBar::MainStatusBar
@@ -44,7 +45,7 @@ MainStatusBar::MainStatusBar(const ModbusMultiServer& server, QWidget* parent)
     });
 
     _bellButton = new QToolButton(this);
-    _bellButton->setIcon(QIcon(":/res/icon-bell.svg"));
+    _bellButton->setIcon(themedIcon(QStringLiteral("misc/bell"), QStringLiteral(":/res/icon-bell.svg")));
     _bellButton->setAutoRaise(true);
     _bellButton->setToolTip(tr("No updates available"));
     _bellButton->setCursor(Qt::PointingHandCursor);
@@ -301,8 +302,7 @@ void MainStatusBar::promptDownloadNewVersion()
 void MainStatusBar::onNewVersionAvailable(const QString& version, const QString& url)
 {
     Q_UNUSED(url);
-    _bellButton->setIcon(QIcon(":/res/icon-bell-dot.svg"));
+    _bellButton->setIcon(themedIcon(QStringLiteral("misc/bell"), QStringLiteral(":/res/icon-bell-dot.svg")));
     _bellButton->setToolTip(tr("New version %1 is available. Click to download.").arg(version));
 }
-
 

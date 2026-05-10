@@ -10,6 +10,7 @@
 #include <QToolBar>
 #include <QToolButton>
 #include "applogoutput.h"
+#include "themedicons.h"
 #include "ui_applogoutput.h"
 
 Q_LOGGING_CATEGORY(lcApp, "omodsim")
@@ -51,7 +52,15 @@ EventStyle styleForType(AppLogOutput::EventType type)
 ///
 QIcon iconForType(AppLogOutput::EventType type)
 {
-    return QIcon(styleForType(type).iconPath);
+    switch (type) {
+        case AppLogOutput::EventType::Warning:
+            return themedIcon(QStringLiteral("dialog-warning"), styleForType(type).iconPath);
+        case AppLogOutput::EventType::Error:
+            return themedIcon(QStringLiteral("dialog-error"), styleForType(type).iconPath);
+        case AppLogOutput::EventType::Info:
+        default:
+            return themedIcon(QStringLiteral("dialog-information"), styleForType(type).iconPath);
+    }
 }
 
 ///
@@ -164,46 +173,23 @@ AppLogOutput::AppLogOutput(QWidget* parent)
 {
     ui->setupUi(this);
 
-    ui->toolBar->setStyleSheet(
-        "QToolBar { border: none; background: transparent; spacing: 2px; padding: 1px 2px; }"
-        "QToolBar::separator { width: 1px; background: #BDBDBD; margin: 4px 2px; }");
-
-    const QString uncheckedQss =
-        "color:#9E9E9E; background:transparent;"
-        "border:1px solid #BDBDBD; border-radius:4px;"
-        "min-width:22px; max-width:22px; min-height:22px; max-height:22px;"
-        "padding:0px; font-size:11px;";
-
-    auto styleFilterBtn = [&](QAction* action, const QString& checkedQss) {
+    auto setupFilterBtn = [&](QAction* action) {
         auto* btn = qobject_cast<QToolButton*>(ui->toolBar->widgetForAction(action));
         if (!btn) return;
         btn->setToolButtonStyle(Qt::ToolButtonIconOnly);
-        btn->setStyleSheet(
-            QString("QToolButton { %1 }"
-                    "QToolButton:!checked { %2 }").arg(checkedQss, uncheckedQss));
+        btn->setFixedSize(24, 24);
     };
 
-    styleFilterBtn(ui->actionFilterInfo,
-        "color:#1565C0; background:#E3F2FD;"
-        "border:1px solid #64B5F6; border-radius:4px;"
-        "min-width:22px; max-width:22px; min-height:22px; max-height:22px;"
-        "padding:0px; font-size:11px;");
-
-    styleFilterBtn(ui->actionFilterWarn,
-        "color:#E65100; background:#FFF8E1;"
-        "border:1px solid #FFA726; border-radius:4px;"
-        "min-width:22px; max-width:22px; min-height:22px; max-height:22px;"
-        "padding:0px; font-size:11px;");
-
-    styleFilterBtn(ui->actionFilterError,
-        "color:#C62828; background:#FFEBEE;"
-        "border:1px solid #E57373; border-radius:4px;"
-        "min-width:22px; max-width:22px; min-height:22px; max-height:22px;"
-        "padding:0px; font-size:11px;");
+    setupFilterBtn(ui->actionFilterInfo);
+    setupFilterBtn(ui->actionFilterWarn);
+    setupFilterBtn(ui->actionFilterError);
 
     auto* filterSpacer = new QWidget(ui->toolBar);
     filterSpacer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
     ui->toolBar->insertWidget(ui->actionFilterInfo, filterSpacer);
+
+    ui->actionClear->setIcon(themedIcon(QStringLiteral("edit-clear"), QStringLiteral(":/res/edit-delete.png")));
+    ui->actionExport->setIcon(themedIcon(QStringLiteral("document-send"), QStringLiteral(":/res/icon-export.png")));
 
     ui->listWidget->setItemDelegate(new AppLogItemDelegate(ui->listWidget));
     ui->listWidget->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
@@ -387,7 +373,7 @@ void AppLogOutput::on_customContextMenuRequested(const QPoint& pos)
 {
     QMenu menu(ui->listWidget);
 
-    auto copyAction = menu.addAction(QIcon(":/res/icon-copy.png"), tr("Copy"), this, [this]() {
+    auto copyAction = menu.addAction(themedIcon(QStringLiteral("edit-copy"), QStringLiteral(":/res/icon-copy.png")), tr("Copy"), this, [this]() {
         QStringList lines;
         for (auto* item : ui->listWidget->selectedItems())
             lines << item->text();
@@ -396,14 +382,14 @@ void AppLogOutput::on_customContextMenuRequested(const QPoint& pos)
     });
     copyAction->setEnabled(!ui->listWidget->selectedItems().isEmpty());
 
-    auto copyAllAction = menu.addAction(QIcon(":/res/icon-copy.png"), tr("Copy All"), this,
+    auto copyAllAction = menu.addAction(themedIcon(QStringLiteral("edit-copy"), QStringLiteral(":/res/icon-copy.png")), tr("Copy All"), this,
                                         &AppLogOutput::copyAllToClipboard);
     copyAllAction->setShortcut(_copyAllAction->shortcut());
     copyAllAction->setEnabled(!isEmpty());
 
     menu.addSeparator();
 
-    auto exportAction = menu.addAction(QIcon(":/res/icon-export.png"), tr("Export..."), this,
+    auto exportAction = menu.addAction(themedIcon(QStringLiteral("document-send"), QStringLiteral(":/res/icon-export.png")), tr("Export..."), this,
                                        &AppLogOutput::exportLog);
     exportAction->setEnabled(!isEmpty());
 

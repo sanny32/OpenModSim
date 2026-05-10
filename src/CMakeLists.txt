@@ -87,6 +87,13 @@ if(APPLE)
             GIT_TAG        "v${QLEMENTINE_VERSION}"
         )
         FetchContent_MakeAvailable(qlementine)
+
+        set(QLEMENTINE_ICONS_VERSION "1.15.0")
+        FetchContent_Declare(qlementine-icons
+            GIT_REPOSITORY "https://github.com/oclero/qlementine-icons.git"
+            GIT_TAG        "v${QLEMENTINE_ICONS_VERSION}"
+        )
+        FetchContent_MakeAvailable(qlementine-icons)
     endif()
 
     find_program(MACDEPLOYQT_EXECUTABLE macdeployqt HINTS "${QT_BINARY_DIR}" "${QT_LIBEXEC_DIR}" "${QT_INSTALL_LIBEXECS}")
@@ -136,6 +143,7 @@ add_compile_definitions(BUILD_YEAR="${CURRENT_YEAR}")
 
 if(APPLE AND Qt6_FOUND)
     add_compile_definitions(QLEMENTINE_VERSION="${QLEMENTINE_VERSION}")
+    add_compile_definitions(QLEMENTINE_ICONS_VERSION="${QLEMENTINE_ICONS_VERSION}")
 endif()
 
 # Include directories
@@ -557,7 +565,7 @@ elseif(APPLE)
         MACOSX_BUNDLE_BUNDLE_VERSION "${PROJECT_VERSION}"
         MACOSX_BUNDLE_SHORT_VERSION_STRING "${PROJECT_VERSION}"
     )
-    target_link_libraries(${PROJECT_NAME} PRIVATE qlementine)
+    target_link_libraries(${PROJECT_NAME} PRIVATE qlementine qlementine-icons)
 elseif(LINUX)
     target_link_options(${PROJECT_NAME} PRIVATE -static-libgcc -static-libstdc++)
 endif()

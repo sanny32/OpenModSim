@@ -137,38 +137,38 @@
         <translation>清除日志</translation>
     </message>
     <message>
-        <location filename="../controls/applogoutput.cpp" line="224"/>
-        <location filename="../controls/applogoutput.cpp" line="399"/>
+        <location filename="../controls/applogoutput.cpp" line="210"/>
+        <location filename="../controls/applogoutput.cpp" line="385"/>
         <source>Copy All</source>
         <translation>全部复制</translation>
     </message>
     <message>
-        <location filename="../controls/applogoutput.cpp" line="390"/>
+        <location filename="../controls/applogoutput.cpp" line="376"/>
         <source>Copy</source>
         <translation>复制</translation>
     </message>
     <message>
-        <location filename="../controls/applogoutput.cpp" line="406"/>
+        <location filename="../controls/applogoutput.cpp" line="392"/>
         <source>Export...</source>
         <translation>导出...</translation>
     </message>
     <message>
-        <location filename="../controls/applogoutput.cpp" line="412"/>
+        <location filename="../controls/applogoutput.cpp" line="398"/>
         <source>Clear</source>
         <translation>清除</translation>
     </message>
     <message>
-        <location filename="../controls/applogoutput.cpp" line="436"/>
+        <location filename="../controls/applogoutput.cpp" line="422"/>
         <source>Text files (*.txt)</source>
         <translation>文本文件 (*.txt)</translation>
     </message>
     <message>
-        <location filename="../controls/applogoutput.cpp" line="441"/>
+        <location filename="../controls/applogoutput.cpp" line="427"/>
         <source>Export</source>
         <translation>导出</translation>
     </message>
     <message>
-        <location filename="../controls/applogoutput.cpp" line="441"/>
+        <location filename="../controls/applogoutput.cpp" line="427"/>
         <source>Cannot open file for writing:
 %1</source>
         <translation>无法打开文件进行写入：
@@ -214,12 +214,12 @@
 <context>
     <name>ByteOrderItemDelegate</name>
     <message>
-        <location filename="../formdatamapview.cpp" line="326"/>
+        <location filename="../formdatamapview.cpp" line="328"/>
         <source>Use bytes in register order</source>
         <translation>按寄存器顺序使用字节</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="327"/>
+        <location filename="../formdatamapview.cpp" line="329"/>
         <source>Swap bytes inside each 16-bit register</source>
         <translation>交换每个 16 位寄存器内的字节</translation>
     </message>
@@ -270,12 +270,12 @@
         <translation>清除控制台</translation>
     </message>
     <message>
-        <location filename="../controls/consoleoutput.cpp" line="323"/>
+        <location filename="../controls/consoleoutput.cpp" line="309"/>
         <source>Copy</source>
         <translation>复制</translation>
     </message>
     <message>
-        <location filename="../controls/consoleoutput.cpp" line="334"/>
+        <location filename="../controls/consoleoutput.cpp" line="320"/>
         <source>Clear</source>
         <translation>清除</translation>
     </message>
@@ -354,62 +354,62 @@
 <context>
     <name>DataTypeItemDelegate</name>
     <message>
-        <location filename="../formdatamapview.cpp" line="182"/>
+        <location filename="../formdatamapview.cpp" line="184"/>
         <source>1-bit value (Coils / Discrete Inputs)</source>
         <translation>1位值（线圈/离散输入）</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="183"/>
+        <location filename="../formdatamapview.cpp" line="185"/>
         <source>16-bit register value shown as 16 binary digits</source>
         <translation>16位寄存器值，显示为16位二进制数字</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="184"/>
+        <location filename="../formdatamapview.cpp" line="186"/>
         <source>Unsigned 16-bit integer  (0 … 65535)</source>
         <translation>无符号16位整数（0 … 65535）</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="185"/>
+        <location filename="../formdatamapview.cpp" line="187"/>
         <source>Signed 16-bit integer  (−32768 … 32767)</source>
         <translation>有符号16位整数（−32768 … 32767）</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="186"/>
+        <location filename="../formdatamapview.cpp" line="188"/>
         <source>16-bit value displayed as hexadecimal</source>
         <translation>16位值，以十六进制显示</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="187"/>
+        <location filename="../formdatamapview.cpp" line="189"/>
         <source>16-bit value displayed as ANSI character</source>
         <translation>16位值，以ANSI字符显示</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="188"/>
+        <location filename="../formdatamapview.cpp" line="190"/>
         <source>IEEE 754 single-precision float  (2 registers)</source>
         <translation>IEEE 754单精度浮点数（2个寄存器）</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="189"/>
+        <location filename="../formdatamapview.cpp" line="191"/>
         <source>IEEE 754 double-precision float  (4 registers)</source>
         <translation>IEEE 754双精度浮点数（4个寄存器）</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="190"/>
+        <location filename="../formdatamapview.cpp" line="192"/>
         <source>Signed 32-bit integer  (2 registers)</source>
         <translation>有符号32位整数（2个寄存器）</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="191"/>
+        <location filename="../formdatamapview.cpp" line="193"/>
         <source>Unsigned 32-bit integer  (2 registers)</source>
         <translation>无符号32位整数（2个寄存器）</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="192"/>
+        <location filename="../formdatamapview.cpp" line="194"/>
         <source>Signed 64-bit integer  (4 registers)</source>
         <translation>有符号64位整数（4个寄存器）</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="193"/>
+        <location filename="../formdatamapview.cpp" line="195"/>
         <source>Unsigned 64-bit integer  (4 registers)</source>
         <translation>无符号64位整数（4个寄存器）</translation>
     </message>
@@ -1792,64 +1792,64 @@ Open the download page?</source>
         <translation>清除表格</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="925"/>
+        <location filename="../formdatamapview.cpp" line="927"/>
         <source>1-based</source>
         <translation>基地址为-1</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="925"/>
+        <location filename="../formdatamapview.cpp" line="927"/>
         <source>0-based</source>
         <translation>基地址为-0</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="788"/>
+        <location filename="../formdatamapview.cpp" line="790"/>
         <source>Remove Color</source>
         <translation>去除颜色</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="798"/>
+        <location filename="../formdatamapview.cpp" line="800"/>
         <source>Yellow</source>
         <translation>黄色</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="799"/>
+        <location filename="../formdatamapview.cpp" line="801"/>
         <source>Cyan</source>
         <translation>青色</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="800"/>
+        <location filename="../formdatamapview.cpp" line="802"/>
         <source>Magenta</source>
         <translation>品红色</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="801"/>
+        <location filename="../formdatamapview.cpp" line="803"/>
         <source>LightGreen</source>
         <translation>浅绿色</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="802"/>
+        <location filename="../formdatamapview.cpp" line="804"/>
         <source>Orange</source>
         <translation>橙色</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="803"/>
+        <location filename="../formdatamapview.cpp" line="805"/>
         <source>LightBlue</source>
         <translation>浅蓝色</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="804"/>
+        <location filename="../formdatamapview.cpp" line="806"/>
         <source>LightGray</source>
         <translation>浅灰色</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="938"/>
-        <location filename="../formdatamapview.cpp" line="1162"/>
-        <location filename="../formdatamapview.cpp" line="1482"/>
+        <location filename="../formdatamapview.cpp" line="940"/>
+        <location filename="../formdatamapview.cpp" line="1164"/>
+        <location filename="../formdatamapview.cpp" line="1484"/>
         <source>All Types</source>
         <translation>所有类型</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="940"/>
+        <location filename="../formdatamapview.cpp" line="942"/>
         <source>Address Base: %1
 Unit Filter: %2
 Type Filter: %3</source>
@@ -1858,45 +1858,45 @@ Type Filter: %3</source>
 类型过滤器：%3</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="1163"/>
-        <location filename="../formdatamapview.cpp" line="1483"/>
+        <location filename="../formdatamapview.cpp" line="1165"/>
+        <location filename="../formdatamapview.cpp" line="1485"/>
         <source>Coils</source>
         <translation>线圈</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="1164"/>
-        <location filename="../formdatamapview.cpp" line="1484"/>
+        <location filename="../formdatamapview.cpp" line="1166"/>
+        <location filename="../formdatamapview.cpp" line="1486"/>
         <source>Discrete Inputs</source>
         <translation>离散输入</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="1165"/>
-        <location filename="../formdatamapview.cpp" line="1485"/>
+        <location filename="../formdatamapview.cpp" line="1167"/>
+        <location filename="../formdatamapview.cpp" line="1487"/>
         <source>Input Registers</source>
         <translation>输入寄存器</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="1166"/>
-        <location filename="../formdatamapview.cpp" line="1486"/>
+        <location filename="../formdatamapview.cpp" line="1168"/>
+        <location filename="../formdatamapview.cpp" line="1488"/>
         <source>Holding Registers</source>
         <translation>保持寄存器</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="1154"/>
-        <location filename="../formdatamapview.cpp" line="1493"/>
+        <location filename="../formdatamapview.cpp" line="1156"/>
+        <location filename="../formdatamapview.cpp" line="1495"/>
         <source>Unit:</source>
         <translation>单元：</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="1155"/>
-        <location filename="../formdatamapview.cpp" line="1494"/>
+        <location filename="../formdatamapview.cpp" line="1157"/>
+        <location filename="../formdatamapview.cpp" line="1496"/>
         <source>Data Type:</source>
         <translation>数据类型：</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="927"/>
-        <location filename="../formdatamapview.cpp" line="1156"/>
-        <location filename="../formdatamapview.cpp" line="1478"/>
+        <location filename="../formdatamapview.cpp" line="929"/>
+        <location filename="../formdatamapview.cpp" line="1158"/>
+        <location filename="../formdatamapview.cpp" line="1480"/>
         <source>All</source>
         <translation>全部</translation>
     </message>
@@ -2094,17 +2094,17 @@ Type Filter: %3</source>
         <translation>交换字节（0xAB → 0xBA）</translation>
     </message>
     <message>
-        <location filename="../formdataview.cpp" line="602"/>
+        <location filename="../formdataview.cpp" line="603"/>
         <source>0-based</source>
         <translation>基地址为-0</translation>
     </message>
     <message>
-        <location filename="../formdataview.cpp" line="602"/>
+        <location filename="../formdataview.cpp" line="603"/>
         <source>1-based</source>
         <translation>基地址为-1</translation>
     </message>
     <message>
-        <location filename="../formdataview.cpp" line="603"/>
+        <location filename="../formdataview.cpp" line="604"/>
         <source>Address Base: %1
 Starting Address: %2
 Length: %3</source>
@@ -2113,7 +2113,7 @@ Length: %3</source>
 长度：%3</translation>
     </message>
     <message>
-        <location filename="../formdataview.cpp" line="605"/>
+        <location filename="../formdataview.cpp" line="606"/>
         <source>Unit Identifier: %1
 Data Type:
 %2</source>
@@ -2125,24 +2125,24 @@ Data Type:
 <context>
     <name>FormScriptView</name>
     <message>
-        <location filename="../formscriptview.cpp" line="128"/>
-        <location filename="../formscriptview.cpp" line="511"/>
+        <location filename="../formscriptview.cpp" line="129"/>
+        <location filename="../formscriptview.cpp" line="512"/>
         <source> ms</source>
         <translation> 毫秒</translation>
     </message>
     <message>
-        <location filename="../formscriptview.cpp" line="130"/>
-        <location filename="../formscriptview.cpp" line="520"/>
+        <location filename="../formscriptview.cpp" line="131"/>
+        <location filename="../formscriptview.cpp" line="521"/>
         <source>Run on startup</source>
         <translation>启动时运行</translation>
     </message>
     <message>
-        <location filename="../formscriptview.cpp" line="616"/>
+        <location filename="../formscriptview.cpp" line="619"/>
         <source>Script run mode</source>
         <translation>脚本运行模式</translation>
     </message>
     <message>
-        <location filename="../formscriptview.cpp" line="618"/>
+        <location filename="../formscriptview.cpp" line="621"/>
         <source>Script run interval</source>
         <translation>脚本运行间隔</translation>
     </message>
@@ -2160,7 +2160,7 @@ Data Type:
 <context>
     <name>FormTrafficView</name>
     <message>
-        <location filename="../formtrafficview.cpp" line="100"/>
+        <location filename="../formtrafficview.cpp" line="101"/>
         <source>Unit: %1
 Function: %2
 Source: %3</source>
@@ -2169,93 +2169,93 @@ Source: %3</source>
 来源：%3</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="103"/>
-        <location filename="../formtrafficview.cpp" line="724"/>
-        <location filename="../formtrafficview.cpp" line="875"/>
+        <location filename="../formtrafficview.cpp" line="104"/>
+        <location filename="../formtrafficview.cpp" line="725"/>
+        <location filename="../formtrafficview.cpp" line="876"/>
         <source>Exceptions Only</source>
         <translation>仅异常</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="513"/>
+        <location filename="../formtrafficview.cpp" line="514"/>
         <source>Modbus/TCP Srv %1:%2</source>
         <translation>Modbus/TCP服务器%1:%2</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="515"/>
+        <location filename="../formtrafficview.cpp" line="516"/>
         <source>Port %1:%2:%3:%4:%5</source>
         <translation>端口 %1:%2:%3:%4:%5</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="644"/>
+        <location filename="../formtrafficview.cpp" line="645"/>
         <source>Text files (*.txt)</source>
         <translation>文本文件 (*.txt)</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="651"/>
+        <location filename="../formtrafficview.cpp" line="652"/>
         <source>Log exported successfully to file %1</source>
         <translation>日志成功导出至 %1</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="653"/>
+        <location filename="../formtrafficview.cpp" line="654"/>
         <source>Export log error!</source>
         <translation>导出日志错误！</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="687"/>
-        <location filename="../formtrafficview.cpp" line="859"/>
+        <location filename="../formtrafficview.cpp" line="688"/>
+        <location filename="../formtrafficview.cpp" line="860"/>
         <source>Unit:</source>
         <translation>单元：</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="693"/>
-        <location filename="../formtrafficview.cpp" line="863"/>
+        <location filename="../formtrafficview.cpp" line="694"/>
+        <location filename="../formtrafficview.cpp" line="864"/>
         <source>-1 = all unit ids</source>
         <translation>-1 = 所有单元ID</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="714"/>
-        <location filename="../formtrafficview.cpp" line="870"/>
+        <location filename="../formtrafficview.cpp" line="715"/>
+        <location filename="../formtrafficview.cpp" line="871"/>
         <source>Source:</source>
         <translation>来源：</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="725"/>
-        <location filename="../formtrafficview.cpp" line="876"/>
+        <location filename="../formtrafficview.cpp" line="726"/>
+        <location filename="../formtrafficview.cpp" line="877"/>
         <source>Show only responses with Modbus exception</source>
         <translation>仅显示带有Modbus异常的响应</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="732"/>
-        <location filename="../formtrafficview.cpp" line="880"/>
+        <location filename="../formtrafficview.cpp" line="733"/>
+        <location filename="../formtrafficview.cpp" line="881"/>
         <source>Autoscroll</source>
         <translation>自动滚动</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="733"/>
-        <location filename="../formtrafficview.cpp" line="881"/>
+        <location filename="../formtrafficview.cpp" line="734"/>
+        <location filename="../formtrafficview.cpp" line="882"/>
         <source>Automatically scroll to the latest entry</source>
         <translation>自动滚动到最新条目</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="88"/>
-        <location filename="../formtrafficview.cpp" line="92"/>
-        <location filename="../formtrafficview.cpp" line="96"/>
-        <location filename="../formtrafficview.cpp" line="534"/>
-        <location filename="../formtrafficview.cpp" line="692"/>
-        <location filename="../formtrafficview.cpp" line="717"/>
-        <location filename="../formtrafficview.cpp" line="862"/>
+        <location filename="../formtrafficview.cpp" line="89"/>
+        <location filename="../formtrafficview.cpp" line="93"/>
+        <location filename="../formtrafficview.cpp" line="97"/>
+        <location filename="../formtrafficview.cpp" line="535"/>
+        <location filename="../formtrafficview.cpp" line="693"/>
+        <location filename="../formtrafficview.cpp" line="718"/>
+        <location filename="../formtrafficview.cpp" line="863"/>
         <source>All</source>
         <translation>全部</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="741"/>
-        <location filename="../formtrafficview.cpp" line="885"/>
+        <location filename="../formtrafficview.cpp" line="742"/>
+        <location filename="../formtrafficview.cpp" line="886"/>
         <source>Rows:</source>
         <translation>行数：</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="702"/>
-        <location filename="../formtrafficview.cpp" line="867"/>
+        <location filename="../formtrafficview.cpp" line="703"/>
+        <location filename="../formtrafficview.cpp" line="868"/>
         <source>Function:</source>
         <translation>功能：</translation>
     </message>
@@ -2422,88 +2422,88 @@ Script.onInit(()=&gt;{
 <context>
     <name>MainStatusBar</name>
     <message>
-        <location filename="../controls/mainstatusbar.cpp" line="49"/>
-        <location filename="../controls/mainstatusbar.cpp" line="163"/>
+        <location filename="../controls/mainstatusbar.cpp" line="50"/>
+        <location filename="../controls/mainstatusbar.cpp" line="164"/>
         <source>No updates available</source>
         <translation>无可用更新</translation>
     </message>
     <message>
-        <location filename="../controls/mainstatusbar.cpp" line="305"/>
+        <location filename="../controls/mainstatusbar.cpp" line="306"/>
         <source>New version %1 is available. Click to download.</source>
         <translation>新版本 %1 可用。点击下载。</translation>
     </message>
     <message>
-        <location filename="../controls/mainstatusbar.cpp" line="190"/>
+        <location filename="../controls/mainstatusbar.cpp" line="191"/>
         <source>Unit Identifiers: %1</source>
         <translation>单元标识符：%1</translation>
     </message>
     <message>
-        <location filename="../controls/mainstatusbar.cpp" line="246"/>
+        <location filename="../controls/mainstatusbar.cpp" line="247"/>
         <source>Modbus/TCP Srv %1:%2</source>
         <translation>Modbus/TCP服务器%1:%2</translation>
     </message>
     <message>
-        <location filename="../controls/mainstatusbar.cpp" line="250"/>
+        <location filename="../controls/mainstatusbar.cpp" line="251"/>
         <source>Port %1:%2:%3:%4:%5</source>
         <translation>端口 %1:%2:%3:%4:%5</translation>
     </message>
     <message>
-        <location filename="../controls/mainstatusbar.cpp" line="202"/>
+        <location filename="../controls/mainstatusbar.cpp" line="203"/>
         <source>No Resp</source>
         <translation>无响应</translation>
     </message>
     <message>
-        <location filename="../controls/mainstatusbar.cpp" line="161"/>
+        <location filename="../controls/mainstatusbar.cpp" line="162"/>
         <source>New version %1 is available.</source>
         <translation>新版本 %1 已发布。</translation>
     </message>
     <message>
-        <location filename="../controls/mainstatusbar.cpp" line="204"/>
+        <location filename="../controls/mainstatusbar.cpp" line="205"/>
         <source>Bad ID</source>
         <translation>错误ID</translation>
     </message>
     <message>
-        <location filename="../controls/mainstatusbar.cpp" line="206"/>
+        <location filename="../controls/mainstatusbar.cpp" line="207"/>
         <source>Ill Func</source>
         <translation>非法功能</translation>
     </message>
     <message>
-        <location filename="../controls/mainstatusbar.cpp" line="208"/>
+        <location filename="../controls/mainstatusbar.cpp" line="209"/>
         <source>Dev Busy</source>
         <translation>设备忙</translation>
     </message>
     <message>
-        <location filename="../controls/mainstatusbar.cpp" line="210"/>
+        <location filename="../controls/mainstatusbar.cpp" line="211"/>
         <source>Bad CRC</source>
         <translation>错误CRC</translation>
     </message>
     <message>
-        <location filename="../controls/mainstatusbar.cpp" line="212"/>
+        <location filename="../controls/mainstatusbar.cpp" line="213"/>
         <source>Delay %1ms</source>
         <translation>延迟 %1毫秒</translation>
     </message>
     <message>
-        <location filename="../controls/mainstatusbar.cpp" line="214"/>
+        <location filename="../controls/mainstatusbar.cpp" line="215"/>
         <source>Rnd Delay %1ms</source>
         <translation>随机延迟 %1毫秒</translation>
     </message>
     <message>
-        <location filename="../controls/mainstatusbar.cpp" line="232"/>
+        <location filename="../controls/mainstatusbar.cpp" line="233"/>
         <source>Clients: %1</source>
         <translation>客户端：%1</translation>
     </message>
     <message>
-        <location filename="../controls/mainstatusbar.cpp" line="274"/>
+        <location filename="../controls/mainstatusbar.cpp" line="275"/>
         <source>Req: %1  Resp: %2</source>
         <translation>请求：%1  响应：%2</translation>
     </message>
     <message>
-        <location filename="../controls/mainstatusbar.cpp" line="286"/>
+        <location filename="../controls/mainstatusbar.cpp" line="287"/>
         <source>New version available</source>
         <translation>发现新版本</translation>
     </message>
     <message>
-        <location filename="../controls/mainstatusbar.cpp" line="287"/>
+        <location filename="../controls/mainstatusbar.cpp" line="288"/>
         <source>A new version %1 is available.
 
 Open the download page?</source>
@@ -2603,7 +2603,7 @@ Open the download page?</source>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="342"/>
-        <location filename="../mainwindow.cpp" line="1832"/>
+        <location filename="../mainwindow.cpp" line="1867"/>
         <source>Save Project</source>
         <translation>保存项目</translation>
     </message>
@@ -2803,19 +2803,19 @@ Open the download page?</source>
         <translation>状态栏</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="855"/>
+        <location filename="../mainwindow.cpp" line="890"/>
         <source>All files (*)</source>
         <translation>所有文件 (*)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="228"/>
-        <location filename="../mainwindow.cpp" line="601"/>
+        <location filename="../mainwindow.cpp" line="262"/>
+        <location filename="../mainwindow.cpp" line="636"/>
         <source>Open Recent</source>
         <translation>最近打开</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="229"/>
-        <location filename="../mainwindow.cpp" line="1968"/>
+        <location filename="../mainwindow.cpp" line="263"/>
+        <location filename="../mainwindow.cpp" line="2003"/>
         <source>Clear List</source>
         <translation>清除列表</translation>
     </message>
@@ -2830,21 +2830,21 @@ Open the download page?</source>
         <translation>输出</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="854"/>
-        <location filename="../mainwindow.cpp" line="1862"/>
+        <location filename="../mainwindow.cpp" line="889"/>
+        <location filename="../mainwindow.cpp" line="1897"/>
         <source>Project files (*.omsim)</source>
         <translation>项目文件 (*.omsim)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1486"/>
-        <location filename="../mainwindow.cpp" line="1890"/>
+        <location filename="../mainwindow.cpp" line="1521"/>
+        <location filename="../mainwindow.cpp" line="1925"/>
         <source>Untitled</source>
         <translation>未命名</translation>
     </message>
     <message>
         <location filename="../applogger.cpp" line="119"/>
-        <location filename="../mainwindow.cpp" line="604"/>
-        <location filename="../mainwindow.cpp" line="1671"/>
+        <location filename="../mainwindow.cpp" line="639"/>
+        <location filename="../mainwindow.cpp" line="1706"/>
         <source>Address Base</source>
         <translation>地址基准</translation>
     </message>
@@ -3134,7 +3134,7 @@ Open the download page?</source>
         <translation>脚本已启动：%1（模式：%2）</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1225"/>
+        <location filename="../mainwindow.cpp" line="1260"/>
         <source>Move to Other Panel</source>
         <translation>移至其他面板</translation>
     </message>
@@ -3156,12 +3156,12 @@ Open the download page?</source>
         <translation>十六进制视图</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1833"/>
+        <location filename="../mainwindow.cpp" line="1868"/>
         <source>Save project before closing?</source>
         <translation>关闭前保存项目？</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1956"/>
+        <location filename="../mainwindow.cpp" line="1991"/>
         <source>No Recent Projects</source>
         <translation>没有最近项目</translation>
     </message>
@@ -3171,7 +3171,7 @@ Open the download page?</source>
         <translation>数据</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1183"/>
+        <location filename="../mainwindow.cpp" line="1218"/>
         <source>JavaScript files (*.js);;All files (*)</source>
         <translation>JavaScript文件 (*.js);;所有文件 (*)</translation>
     </message>
@@ -3588,12 +3588,12 @@ Open the download page?</source>
 <context>
     <name>OrderItemDelegate</name>
     <message>
-        <location filename="../formdatamapview.cpp" line="261"/>
+        <location filename="../formdatamapview.cpp" line="263"/>
         <source>Most Significant Register First — big-endian word order</source>
         <translation>最高有效寄存器优先——大端字序</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="262"/>
+        <location filename="../formdatamapview.cpp" line="264"/>
         <source>Least Significant Register First — little-endian word order</source>
         <translation>最低有效寄存器优先——小端字序</translation>
     </message>
@@ -3675,6 +3675,7 @@ Open the download page?</source>
     </message>
     <message>
         <location filename="../controls/outputpanel.ui" line="44"/>
+        <location filename="../controls/outputpanel.cpp" line="18"/>
         <source>Console</source>
         <translation>控制台</translation>
     </message>
@@ -3727,103 +3728,103 @@ Open the download page?</source>
 <context>
     <name>ProjectTreeWidget</name>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="62"/>
-        <location filename="../controls/projecttreewidget.cpp" line="321"/>
+        <location filename="../controls/projecttreewidget.cpp" line="63"/>
+        <location filename="../controls/projecttreewidget.cpp" line="322"/>
         <source>Data</source>
         <translation>数据</translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="70"/>
-        <location filename="../controls/projecttreewidget.cpp" line="322"/>
+        <location filename="../controls/projecttreewidget.cpp" line="71"/>
+        <location filename="../controls/projecttreewidget.cpp" line="323"/>
         <source>Traffic</source>
         <translation>流量</translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="66"/>
-        <location filename="../controls/projecttreewidget.cpp" line="324"/>
+        <location filename="../controls/projecttreewidget.cpp" line="67"/>
+        <location filename="../controls/projecttreewidget.cpp" line="325"/>
         <source>Maps</source>
         <translation>地图</translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="74"/>
-        <location filename="../controls/projecttreewidget.cpp" line="323"/>
+        <location filename="../controls/projecttreewidget.cpp" line="75"/>
+        <location filename="../controls/projecttreewidget.cpp" line="324"/>
         <source>Scripts</source>
         <translation>脚本</translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="363"/>
+        <location filename="../controls/projecttreewidget.cpp" line="364"/>
         <source>New Data View</source>
         <translation>新建数据视图</translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="364"/>
+        <location filename="../controls/projecttreewidget.cpp" line="365"/>
         <source>New Map View</source>
         <translation>新建映射视图</translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="365"/>
+        <location filename="../controls/projecttreewidget.cpp" line="366"/>
         <source>New Traffic View</source>
         <translation>新建流量视图</translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="366"/>
+        <location filename="../controls/projecttreewidget.cpp" line="367"/>
         <source>New Script</source>
         <translation>新建脚本</translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="388"/>
-        <location filename="../controls/projecttreewidget.cpp" line="473"/>
+        <location filename="../controls/projecttreewidget.cpp" line="389"/>
+        <location filename="../controls/projecttreewidget.cpp" line="474"/>
         <source>Delete All</source>
         <translation>删除全部</translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="409"/>
+        <location filename="../controls/projecttreewidget.cpp" line="410"/>
         <source>Run All Scripts</source>
         <translation>运行所有脚本</translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="410"/>
+        <location filename="../controls/projecttreewidget.cpp" line="411"/>
         <source>Stop All Scripts</source>
         <translation>停止所有脚本</translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="428"/>
+        <location filename="../controls/projecttreewidget.cpp" line="429"/>
         <source>Run Script</source>
         <translation>运行脚本</translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="429"/>
+        <location filename="../controls/projecttreewidget.cpp" line="430"/>
         <source>Stop Script</source>
         <translation>停止脚本</translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="435"/>
-        <location filename="../controls/projecttreewidget.cpp" line="500"/>
+        <location filename="../controls/projecttreewidget.cpp" line="436"/>
+        <location filename="../controls/projecttreewidget.cpp" line="501"/>
         <source>Rename</source>
         <translation>重命名</translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="438"/>
+        <location filename="../controls/projecttreewidget.cpp" line="439"/>
         <source>Delete</source>
         <translation>删除</translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="474"/>
+        <location filename="../controls/projecttreewidget.cpp" line="475"/>
         <source>Delete all in &quot;%1&quot;?</source>
         <translation>删除 &quot;%1&quot; 中的所有内容？</translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="500"/>
+        <location filename="../controls/projecttreewidget.cpp" line="501"/>
         <source>New name:</source>
         <translation>新名称：</translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="508"/>
+        <location filename="../controls/projecttreewidget.cpp" line="509"/>
         <source>Delete Form</source>
         <translation>删除窗体</translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="509"/>
+        <location filename="../controls/projecttreewidget.cpp" line="510"/>
         <source>Delete &quot;%1&quot; from the project?</source>
         <translation>从项目中删除 &quot;%1&quot;？</translation>
     </message>
@@ -4051,22 +4052,22 @@ Open the download page?</source>
 <context>
     <name>TypeItemDelegate</name>
     <message>
-        <location filename="../formdatamapview.cpp" line="133"/>
+        <location filename="../formdatamapview.cpp" line="135"/>
         <source>Coils</source>
         <translation>线圈</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="134"/>
+        <location filename="../formdatamapview.cpp" line="136"/>
         <source>Discrete Inputs</source>
         <translation>离散输入</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="135"/>
+        <location filename="../formdatamapview.cpp" line="137"/>
         <source>Input Registers</source>
         <translation>输入寄存器</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="136"/>
+        <location filename="../formdatamapview.cpp" line="138"/>
         <source>Holding Registers</source>
         <translation>保持寄存器</translation>
     </message>

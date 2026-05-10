@@ -1,11 +1,16 @@
 #include <QApplication>
 #include <QFontDatabase>
+#include <QIcon>
 #include <QMessageBox>
 #include "mainwindow.h"
 #include "cmdlineparser.h"
 #include "fontutils.h"
 #include "styles/appstyle.h"
 #include "styles/macappstyle.h"
+
+#if defined(Q_OS_MAC) && QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+#include <oclero/qlementine/icons/QlementineIcons.hpp>
+#endif
 
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 namespace {
@@ -102,6 +107,10 @@ int main(int argc, char *argv[])
     a.setStyle(new AppStyle("windowsvista"));
 #  elif defined(Q_OS_MAC)
     a.setStyle(new MacAppStyle());
+#    if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+    oclero::qlementine::icons::initializeIconTheme();
+    QIcon::setThemeName(QStringLiteral("qlementine"));
+#    endif
 #  else
     a.setStyle(new AppStyle("fusion"));
 #  endif
