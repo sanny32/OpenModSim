@@ -146,6 +146,7 @@ The following minimum operating system versions are supported for OpenModSim:
 - <img src="docs/icons/logo_alt.png" width="16" height="16" /> **Alt Linux 11**
 - <img src="docs/icons/logo_astra.png"  width="18" height="18" /> **Astra Linux 1.7**
 - <img src="docs/icons/logo_redos.png" width="16" height="16" /> **RedOS 8**
+- <img src="docs/icons/logo_arch.svg" width="16" height="16" /> **Arch** (manual building only)
 
 # Building
   Building is available via cmake (with installed Qt version 5.15 and above) or Qt Creator. Supports both OS Microsoft Windows and Linux.
