@@ -205,30 +205,30 @@ void printOnForm(QWidget* widget, QPrinter* printer)
 ///
 void applyThemeIcons(Ui::MainWindow* ui)
 {
-    ui->actionNew->setIcon(themedIcon(QStringLiteral("misc/glasses"), QStringLiteral(":/res/icon-new-data.png")));
-    ui->actionOpenProject->setIcon(themedIcon(QStringLiteral("file/folder-open"), QStringLiteral(":/res/icon-open.png")));
-    ui->actionSaveProject->setIcon(themedIcon(QStringLiteral("action/save"), QStringLiteral(":/res/icon-save.png")));
-    ui->actionPrint->setIcon(themedIcon(QStringLiteral("action/print"), QStringLiteral(":/res/icon-print.png")));
-    ui->actionConnect->setIcon(themedIcon(QStringLiteral("misc/link"), QStringLiteral(":/res/icon-connect.png")));
-    ui->actionDisconnect->setIcon(themedIcon(QStringLiteral("misc/link-break"), QStringLiteral(":/res/icon-disconnect.png")));
-    ui->actionHexView->setIcon(themedIcon(QStringLiteral("software/command-line"), QStringLiteral(":/res/icon-hex-view.png")));
-    ui->actionAbout->setIcon(themedIcon(QStringLiteral("help-about"), QStringLiteral(":/res/icon-about.png")));
-    ui->actionForceCoils->setIcon(QIcon(QStringLiteral(":/res/icon-force-coils.svg")));
-    ui->actionForceDiscretes->setIcon(QIcon(QStringLiteral(":/res/icon-force-discretes.svg")));
-    ui->actionPresetInputRegs->setIcon(QIcon(QStringLiteral(":/res/icon-preset-input-regs.svg")));
-    ui->actionPresetHoldingRegs->setIcon(QIcon(QStringLiteral(":/res/icon-preset-holding-regs.svg")));
-    ui->actionUndo->setIcon(themedIcon(QStringLiteral("edit-undo"), QStringLiteral(":/res/icon-undo.png")));
-    ui->actionRedo->setIcon(themedIcon(QStringLiteral("edit-redo"), QStringLiteral(":/res/icon-redo.png")));
-    ui->actionCut->setIcon(themedIcon(QStringLiteral("edit-cut"), QStringLiteral(":/res/icon-cut.png")));
-    ui->actionCopy->setIcon(themedIcon(QStringLiteral("edit-copy"), QStringLiteral(":/res/icon-copy.png")));
-    ui->actionPaste->setIcon(themedIcon(QStringLiteral("edit-paste"), QStringLiteral(":/res/icon-paste.png")));
-    ui->actionMsgParser->setIcon(themedIcon(QStringLiteral("action/preview"), QStringLiteral(":/res/icon-msg-parser.png")));
-    ui->actionMbDefinitions->setIcon(themedIcon(QStringLiteral("navigation/settings"), QStringLiteral(":/res/icon-mb-definitions.png")));
-    ui->actionNewDataView->setIcon(themedIcon(QStringLiteral("misc/glasses"), QStringLiteral(":/res/icon-new-data.png")));
-    ui->actionNewDataMapView->setIcon(themedIcon(QStringLiteral("navigation/map"), QStringLiteral(":/res/icon-new-data.png")));
-    ui->actionNewTrafficView->setIcon(themedIcon(QStringLiteral("misc/sms"), QStringLiteral(":/res/icon-new-traffic.png")));
-    ui->actionNewScript->setIcon(themedIcon(QStringLiteral("text-x-script"), QStringLiteral(":/res/icon-new-script.png")));
-    ui->actionSplitView->setIcon(themedIcon(QStringLiteral("ui-panels-right"), QStringLiteral(":/res/icon-split-view.png")));
+    ui->actionNew->setIcon(themedIcon(QStringLiteral("omodsim/new-data")));
+    ui->actionOpenProject->setIcon(themedIcon(QStringLiteral("omodsim/open-project")));
+    ui->actionSaveProject->setIcon(themedIcon(QStringLiteral("omodsim/save-project")));
+    ui->actionPrint->setIcon(themedIcon(QStringLiteral("omodsim/print")));
+    ui->actionConnect->setIcon(themedIcon(QStringLiteral("omodsim/connect")));
+    ui->actionDisconnect->setIcon(themedIcon(QStringLiteral("omodsim/disconnect")));
+    ui->actionHexView->setIcon(themedIcon(QStringLiteral("omodsim/hex-view")));
+    ui->actionAbout->setIcon(themedIcon(QStringLiteral("omodsim/about")));
+    ui->actionForceCoils->setIcon(themedIcon(QStringLiteral("omodsim/force-coils")));
+    ui->actionForceDiscretes->setIcon(themedIcon(QStringLiteral("omodsim/force-discretes")));
+    ui->actionPresetInputRegs->setIcon(themedIcon(QStringLiteral("omodsim/preset-input-registers")));
+    ui->actionPresetHoldingRegs->setIcon(themedIcon(QStringLiteral("omodsim/preset-holding-registers")));
+    ui->actionUndo->setIcon(themedIcon(QStringLiteral("omodsim/undo")));
+    ui->actionRedo->setIcon(themedIcon(QStringLiteral("omodsim/redo")));
+    ui->actionCut->setIcon(themedIcon(QStringLiteral("omodsim/cut")));
+    ui->actionCopy->setIcon(themedIcon(QStringLiteral("omodsim/copy")));
+    ui->actionPaste->setIcon(themedIcon(QStringLiteral("omodsim/paste")));
+    ui->actionMsgParser->setIcon(themedIcon(QStringLiteral("omodsim/message-parser")));
+    ui->actionMbDefinitions->setIcon(themedIcon(QStringLiteral("omodsim/modbus-definitions")));
+    ui->actionNewDataView->setIcon(themedIcon(QStringLiteral("omodsim/new-data")));
+    ui->actionNewDataMapView->setIcon(themedIcon(QStringLiteral("omodsim/new-data-map")));
+    ui->actionNewTrafficView->setIcon(themedIcon(QStringLiteral("omodsim/new-traffic")));
+    ui->actionNewScript->setIcon(themedIcon(QStringLiteral("omodsim/new-script")));
+    ui->actionSplitView->setIcon(themedIcon(QStringLiteral("omodsim/split-view")));
 }
 
 ///
@@ -239,13 +239,18 @@ void configureMainToolbarText(Ui::MainWindow* ui)
 {
     ui->toolBarMain->setToolButtonStyle(Qt::ToolButtonIconOnly);
 
-    const QList<QAction*> labeledActions = {
+    QList<QAction*> labeledActions = {
         ui->actionNew,
-        ui->actionOpenProject,
-        ui->actionSaveProject,
         ui->actionConnect,
         ui->actionDisconnect
     };
+
+#if defined(Q_OS_MAC)
+    if (qobject_cast<MacAppStyle*>(qApp ? qApp->style() : nullptr)) {
+        labeledActions.append(ui->actionOpenProject);
+        labeledActions.append(ui->actionSaveProject);
+    }
+#endif
 
     for (QAction* action : ui->toolBarMain->actions()) {
         if (auto* button = qobject_cast<QToolButton*>(ui->toolBarMain->widgetForAction(action)))

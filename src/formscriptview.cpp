@@ -28,7 +28,7 @@ FormScriptView::FormScriptView(ModbusMultiServer& server, DataSimulator* simulat
     Q_UNUSED(simulator);
 
     ui->setupUi(this);
-    setWindowIcon(themedIcon(QStringLiteral("text-x-script"), QStringLiteral(":/res/icon-show-script.png")));
+    setWindowIcon(themedIcon(QStringLiteral("omodsim/show-script")));
 
     _displayDefinition.FormName = windowTitle();
     _displayDefinition.ScriptCfg = _scriptSettings;
@@ -588,8 +588,8 @@ void FormScriptView::setupScriptBar()
         runButton->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
     if (auto* stopButton = qobject_cast<QToolButton*>(ui->toolBarScript->widgetForAction(ui->actionStopScript)))
         stopButton->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
-    ui->actionRunScript->setIcon(themedIcon(QStringLiteral("media-playback-start"), QStringLiteral(":/res/icon-run-script.png")));
-    ui->actionStopScript->setIcon(themedIcon(QStringLiteral("media-playback-stop"), QStringLiteral(":/res/icon-stop-script.png")));
+    ui->actionRunScript->setIcon(themedIcon(QStringLiteral("omodsim/run-script")));
+    ui->actionStopScript->setIcon(themedIcon(QStringLiteral("omodsim/stop-script")));
 
     updateScriptBarToolTips();
 

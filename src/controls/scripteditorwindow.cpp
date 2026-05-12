@@ -149,14 +149,14 @@ void ScriptEditorWindow::setupScriptBar()
 
     _scriptBar->addSeparator();
 
-    _actionRun = _scriptBar->addAction(themedIcon(QStringLiteral("media-playback-start"), QStringLiteral(":/res/icon-run-script.png")), tr("Run Script"));
+    _actionRun = _scriptBar->addAction(themedIcon(QStringLiteral("omodsim/run-script")), tr("Run Script"));
     qobject_cast<QToolButton*>(_scriptBar->widgetForAction(_actionRun))->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
     connect(_actionRun, &QAction::triggered, this, [this]() {
         const auto ss = _document->settings();
         runScript(ss.Mode, ss.Interval);
     });
 
-    _actionStop = _scriptBar->addAction(themedIcon(QStringLiteral("media-playback-stop"), QStringLiteral(":/res/icon-stop-script.png")), tr("Stop Script"));
+    _actionStop = _scriptBar->addAction(themedIcon(QStringLiteral("omodsim/stop-script")), tr("Stop Script"));
     qobject_cast<QToolButton*>(_scriptBar->widgetForAction(_actionStop))->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
     connect(_actionStop, &QAction::triggered, this, &ScriptEditorWindow::stopScript);
 

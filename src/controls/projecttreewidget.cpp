@@ -36,18 +36,18 @@ QIcon dimmedIcon(const QIcon& icon)
 ///
 ProjectTreeWidget::ProjectTreeWidget(QWidget* parent)
     : QTreeWidget(parent)
-    , _iconData(themedIcon(QStringLiteral("misc/glasses"), QStringLiteral(":/res/icon-show-data.png")))
-    , _iconTraffic(themedIcon(QStringLiteral("misc/sms"), QStringLiteral(":/res/icon-show-traffic.png")))
-    , _iconScriptIdle(themedIcon(QStringLiteral("text-x-script"), QStringLiteral(":/res/icon-show-script.png")))
-    , _iconScriptRunning(themedIcon(QStringLiteral("media-playback-start"), QStringLiteral(":/res/icon-run-script.png")))
-    , _iconDataMapLocked(themedIcon(QStringLiteral("action/lock"), QStringLiteral(":/res/icon-data-locked.png")))
+    , _iconData(themedIcon(QStringLiteral("omodsim/show-data")))
+    , _iconTraffic(themedIcon(QStringLiteral("omodsim/show-traffic")))
+    , _iconScriptIdle(themedIcon(QStringLiteral("omodsim/show-script")))
+    , _iconScriptRunning(themedIcon(QStringLiteral("omodsim/run-script")))
+    , _iconDataMapLocked(themedIcon(QStringLiteral("omodsim/data-locked")))
 {
     qRegisterMetaType<ProjectFormRef>("ProjectFormRef");
 
     _iconDataClosed = dimmedIcon(_iconData);
     _iconTrafficClosed = dimmedIcon(_iconTraffic);
     _iconScriptClosed = dimmedIcon(_iconScriptIdle);
-    _iconDataMap = themedIcon(QStringLiteral("navigation/map"), QStringLiteral(":/res/icon-show-data.png"));
+    _iconDataMap = themedIcon(QStringLiteral("omodsim/show-data-map"));
     _iconDataMapClosed = dimmedIcon(_iconDataMap);
     _iconDataMapLockedClosed = dimmedIcon(_iconDataMapLocked);
 
@@ -58,7 +58,7 @@ ProjectTreeWidget::ProjectTreeWidget(QWidget* parent)
     setContextMenuPolicy(Qt::CustomContextMenu);
     setEditTriggers(QAbstractItemView::EditKeyPressed | QAbstractItemView::SelectedClicked);
 
-    const QIcon iconDir = themedIcon(QStringLiteral("file/folder-filled"), QStringLiteral(":/res/icon-directory.png"));
+    const QIcon iconDir = themedIcon(QStringLiteral("omodsim/directory"));
 
     _dataRoot = new QTreeWidgetItem(this, QStringList{tr("Data")});
     _dataRoot->setIcon(0, iconDir);
@@ -407,8 +407,8 @@ void ProjectTreeWidget::on_contextMenu(const QPoint& pos)
         }
 
         menu.addSeparator();
-        runAllAction = menu.addAction(themedIcon(QStringLiteral("media-playback-start"), QStringLiteral(":/res/icon-run-script.png")), tr("Run All Scripts"));
-        stopAllAction = menu.addAction(themedIcon(QStringLiteral("media-playback-stop"), QStringLiteral(":/res/icon-stop-script.png")), tr("Stop All Scripts"));
+        runAllAction = menu.addAction(themedIcon(QStringLiteral("omodsim/run-script")), tr("Run All Scripts"));
+        stopAllAction = menu.addAction(themedIcon(QStringLiteral("omodsim/stop-script")), tr("Stop All Scripts"));
         runAllAction->setEnabled(canRunAny);
         stopAllAction->setEnabled(canStopAny);
     }
@@ -426,8 +426,8 @@ void ProjectTreeWidget::on_contextMenu(const QPoint& pos)
 
         if (formType == ProjectFormType::Script) {
             const bool running = item->data(0, ItemScriptRunning).toBool();
-            runAction = menu.addAction(themedIcon(QStringLiteral("media-playback-start"), QStringLiteral(":/res/icon-run-script.png")), tr("Run Script"));
-            stopAction = menu.addAction(themedIcon(QStringLiteral("media-playback-stop"), QStringLiteral(":/res/icon-stop-script.png")), tr("Stop Script"));
+            runAction = menu.addAction(themedIcon(QStringLiteral("omodsim/run-script")), tr("Run Script"));
+            stopAction = menu.addAction(themedIcon(QStringLiteral("omodsim/stop-script")), tr("Stop Script"));
             runAction->setEnabled(!running);
             stopAction->setEnabled(running);
             menu.addSeparator();

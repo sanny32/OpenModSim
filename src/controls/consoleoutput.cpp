@@ -44,13 +44,13 @@ QIcon iconForType(ConsoleOutput::MessageType type)
 {
     switch (type) {
         case ConsoleOutput::MessageType::Warning:
-            return themedIcon(QStringLiteral("dialog-warning"), styleForType(type).iconPath);
+            return themedIcon(QStringLiteral("omodsim/warning"));
         case ConsoleOutput::MessageType::Error:
-            return themedIcon(QStringLiteral("dialog-error"), styleForType(type).iconPath);
+            return themedIcon(QStringLiteral("omodsim/error"));
         case ConsoleOutput::MessageType::Debug:
         case ConsoleOutput::MessageType::Log:
         default:
-            return themedIcon(QStringLiteral("dialog-information"), styleForType(type).iconPath);
+            return themedIcon(QStringLiteral("omodsim/information"));
     }
 }
 
@@ -147,7 +147,7 @@ ConsoleOutput::ConsoleOutput(QWidget* parent)
     filterSpacer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
     ui->toolBar->insertWidget(ui->actionFilterLog, filterSpacer);
 
-    ui->actionClear->setIcon(themedIcon(QStringLiteral("edit-clear"), QStringLiteral(":/res/edit-delete.png")));
+    ui->actionClear->setIcon(themedIcon(QStringLiteral("omodsim/clear")));
 
     ui->listWidget->setItemDelegate(new ConsoleItemDelegate(ui->listWidget));
     ui->listWidget->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
@@ -306,7 +306,7 @@ void ConsoleOutput::on_customContextMenuRequested(const QPoint& pos)
 {
     QMenu menu(ui->listWidget);
 
-    auto copyAction = menu.addAction(themedIcon(QStringLiteral("edit-copy"), QStringLiteral(":/res/icon-copy.png")), tr("Copy"), this, [this]() {
+    auto copyAction = menu.addAction(themedIcon(QStringLiteral("omodsim/copy")), tr("Copy"), this, [this]() {
         QStringList lines;
         for (auto* item : ui->listWidget->selectedItems())
             lines << item->text();

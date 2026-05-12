@@ -12,11 +12,6 @@ OutputPanel::OutputPanel(QWidget* parent)
     , ui(new Ui::OutputPanel)
 {
     ui->setupUi(this);
-    ui->tabWidget->setDocumentMode(true);
-    ui->tabWidget->setTabPosition(QTabWidget::North);
-    ui->tabWidget->removeTab(ui->tabWidget->indexOf(ui->jsConsole));
-    ui->tabWidget->insertTab(0, ui->jsConsole, tr("Console"));
-    ui->tabWidget->setCurrentWidget(ui->jsConsole);
 
     connect(ui->appLog,    &AppLogOutput::collapse,  this, &OutputPanel::collapse);
     connect(ui->jsConsole, &ConsoleOutput::collapse, this, &OutputPanel::collapse);

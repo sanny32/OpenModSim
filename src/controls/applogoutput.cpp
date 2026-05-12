@@ -54,12 +54,12 @@ QIcon iconForType(AppLogOutput::EventType type)
 {
     switch (type) {
         case AppLogOutput::EventType::Warning:
-            return themedIcon(QStringLiteral("dialog-warning"), styleForType(type).iconPath);
+            return themedIcon(QStringLiteral("omodsim/warning"));
         case AppLogOutput::EventType::Error:
-            return themedIcon(QStringLiteral("dialog-error"), styleForType(type).iconPath);
+            return themedIcon(QStringLiteral("omodsim/error"));
         case AppLogOutput::EventType::Info:
         default:
-            return themedIcon(QStringLiteral("dialog-information"), styleForType(type).iconPath);
+            return themedIcon(QStringLiteral("omodsim/information"));
     }
 }
 
@@ -188,8 +188,8 @@ AppLogOutput::AppLogOutput(QWidget* parent)
     filterSpacer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
     ui->toolBar->insertWidget(ui->actionFilterInfo, filterSpacer);
 
-    ui->actionClear->setIcon(themedIcon(QStringLiteral("edit-clear"), QStringLiteral(":/res/edit-delete.png")));
-    ui->actionExport->setIcon(themedIcon(QStringLiteral("document-send"), QStringLiteral(":/res/icon-export.png")));
+    ui->actionClear->setIcon(themedIcon(QStringLiteral("omodsim/clear")));
+    ui->actionExport->setIcon(themedIcon(QStringLiteral("omodsim/export")));
 
     ui->listWidget->setItemDelegate(new AppLogItemDelegate(ui->listWidget));
     ui->listWidget->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
@@ -373,7 +373,7 @@ void AppLogOutput::on_customContextMenuRequested(const QPoint& pos)
 {
     QMenu menu(ui->listWidget);
 
-    auto copyAction = menu.addAction(themedIcon(QStringLiteral("edit-copy"), QStringLiteral(":/res/icon-copy.png")), tr("Copy"), this, [this]() {
+    auto copyAction = menu.addAction(themedIcon(QStringLiteral("omodsim/copy")), tr("Copy"), this, [this]() {
         QStringList lines;
         for (auto* item : ui->listWidget->selectedItems())
             lines << item->text();
@@ -382,14 +382,14 @@ void AppLogOutput::on_customContextMenuRequested(const QPoint& pos)
     });
     copyAction->setEnabled(!ui->listWidget->selectedItems().isEmpty());
 
-    auto copyAllAction = menu.addAction(themedIcon(QStringLiteral("edit-copy"), QStringLiteral(":/res/icon-copy.png")), tr("Copy All"), this,
+    auto copyAllAction = menu.addAction(themedIcon(QStringLiteral("omodsim/copy")), tr("Copy All"), this,
                                         &AppLogOutput::copyAllToClipboard);
     copyAllAction->setShortcut(_copyAllAction->shortcut());
     copyAllAction->setEnabled(!isEmpty());
 
     menu.addSeparator();
 
-    auto exportAction = menu.addAction(themedIcon(QStringLiteral("document-send"), QStringLiteral(":/res/icon-export.png")), tr("Export..."), this,
+    auto exportAction = menu.addAction(themedIcon(QStringLiteral("omodsim/export")), tr("Export..."), this,
                                        &AppLogOutput::exportLog);
     exportAction->setEnabled(!isEmpty());
 

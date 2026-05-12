@@ -7,6 +7,7 @@
 #include <QPlainTextDocumentLayout>
 #include "jscompleter.h"
 #include "jscodeeditor.h"
+#include "themedicons.h"
 #include "../fontutils.h"
 
 ///
@@ -593,11 +594,11 @@ void JSCodeEditor::contextMenuEvent(QContextMenuEvent *event)
     for(QAction* action : menu->actions())
     {
         const QString name = action->objectName();
-        if     (name == "edit-undo")  action->setIcon(QIcon(":/res/icon-undo.png"));
-        else if(name == "edit-redo")  action->setIcon(QIcon(":/res/icon-redo.png"));
-        else if(name == "edit-cut")   action->setIcon(QIcon(":/res/icon-cut.png"));
-        else if(name == "edit-copy")  action->setIcon(QIcon(":/res/icon-copy.png"));
-        else if(name == "edit-paste") action->setIcon(QIcon(":/res/icon-paste.png"));
+        if     (name == "edit-undo")  action->setIcon(themedIcon(QStringLiteral("omodsim/undo")));
+        else if(name == "edit-redo")  action->setIcon(themedIcon(QStringLiteral("omodsim/redo")));
+        else if(name == "edit-cut")   action->setIcon(themedIcon(QStringLiteral("omodsim/cut")));
+        else if(name == "edit-copy")  action->setIcon(themedIcon(QStringLiteral("omodsim/copy")));
+        else if(name == "edit-paste") action->setIcon(themedIcon(QStringLiteral("omodsim/paste")));
         else                          action->setIcon(QIcon());
     }
 

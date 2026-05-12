@@ -8,6 +8,7 @@
 #include "htmldelegate.h"
 #include "modbusmessages.h"
 #include "modbusmessagewidget.h"
+#include "themedicons.h"
 
 ///
 /// \brief ModbusMessageWidget::ModbusMessageWidget
@@ -30,7 +31,7 @@ ModbusMessageWidget::ModbusMessageWidget(QWidget *parent)
     setContextMenuPolicy(Qt::CustomContextMenu);
     setFont(defaultMonospaceFont());
 
-    _copyAct = new QAction(QIcon(":/res/icon-copy.png"), tr("Copy Text"), this);
+    _copyAct = new QAction(themedIcon(QStringLiteral("omodsim/copy")), tr("Copy Text"), this);
     addAction(_copyAct);
 
     connect(_copyAct, &QAction::triggered, this, [this]() {

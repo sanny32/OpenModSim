@@ -10,6 +10,7 @@
 #include "controls/mdiareaex.h"
 #include "controls/mditabbar.h"
 #include "controls/projecttreewidget.h"
+#include "themedicons.h"
 #include "formdataview.h"
 #include "formtrafficview.h"
 #include "formscriptview.h"
@@ -34,14 +35,14 @@ constexpr const char* kDeleteLockedProperty = "DeleteLocked";
 QUuid formIdOf(QWidget* widget);
 
 ///
-/// \brief dataMapIconPath
+/// \brief dataMapIcon
 /// \param deleteLocked
 /// \return
 ///
-QString dataMapIconPath(bool deleteLocked)
+QIcon dataMapIcon(bool deleteLocked)
 {
-    return deleteLocked ? QStringLiteral(":/res/icon-data-locked.png")
-                        : QStringLiteral(":/res/icon-show-data.png");
+    return deleteLocked ? themedIcon(QStringLiteral("omodsim/data-locked"))
+                        : themedIcon(QStringLiteral("omodsim/show-data-map"));
 }
 
 ///
@@ -471,7 +472,7 @@ void AppProject::syncAutoRequestMap(const ModbusDefinitions& defs)
         if (auto* map = ensureAutoRequestMap()) {
             map->setAutoAddOnRequest(true);
             map->setProperty(kDeleteLockedProperty, true);
-            map->setWindowIcon(QIcon(dataMapIconPath(true)));
+            map->setWindowIcon(dataMapIcon(true));
             _projectTree->updateFormTitle(map);
             if (shouldRevealMap) {
                 openFormOnActivePanel(map);
@@ -484,7 +485,7 @@ void AppProject::syncAutoRequestMap(const ModbusDefinitions& defs)
     if (auto* map = findAutoRequestMap()) {
         map->setAutoAddOnRequest(false);
         map->setProperty(kDeleteLockedProperty, false);
-        map->setWindowIcon(QIcon(dataMapIconPath(false)));
+        map->setWindowIcon(dataMapIcon(false));
         _projectTree->updateFormTitle(map);
     }
 }
@@ -1473,7 +1474,7 @@ void AppProject::updateSplitPairScriptIcons(QWidget* frm)
             return;
 
         if(running)
-            crossFadeWindowIcon(targetWnd, targetWnd->windowIcon(), QIcon(":/res/icon-run-script.png"));
+            crossFadeWindowIcon(targetWnd, targetWnd->windowIcon(), themedIcon(QStringLiteral("omodsim/run-script")));
         else
             crossFadeWindowIcon(targetWnd, targetWnd->windowIcon(), target->windowIcon());
     };

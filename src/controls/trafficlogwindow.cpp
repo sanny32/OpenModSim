@@ -3,6 +3,7 @@
 #include <QToolButton>
 #include "trafficlogwindow.h"
 #include "modbusfunction.h"
+#include "themedicons.h"
 
 ///
 /// \brief TrafficLogWindow::TrafficLogWindow
@@ -143,12 +144,12 @@ void TrafficLogWindow::setupToolbar()
     // Pause / Clear buttons
     _pauseButton = new QToolButton(toolbar);
     _pauseButton->setCheckable(true);
-    _pauseButton->setIcon(QIcon(":/res/icon-stop-script.png"));
+    _pauseButton->setIcon(themedIcon(QStringLiteral("omodsim/stop-script")));
     _pauseButton->setToolTip(tr("Pause"));
     _pauseButton->setAutoRaise(true);
 
     _clearButton = new QToolButton(toolbar);
-    _clearButton->setIcon(QIcon(":/res/edit-delete.svg"));
+    _clearButton->setIcon(themedIcon(QStringLiteral("omodsim/clear")));
     _clearButton->setToolTip(tr("Clear"));
     _clearButton->setAutoRaise(true);
 

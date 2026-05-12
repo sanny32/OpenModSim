@@ -187,6 +187,7 @@ set(SOURCES
     controls/mainstatusbar.cpp
     styles/appstyle.cpp
     styles/macappstyle.cpp
+    styles/themedicons.cpp
     controls/macsplittoolbutton.cpp
     controls/mdiarea.cpp
     controls/mdiareaex.cpp
@@ -293,6 +294,7 @@ set(HEADERS
     controls/mainstatusbar.h
     styles/appstyle.h
     styles/macappstyle.h
+    styles/themedicons.h
     controls/macsplittoolbutton.h
     controls/mdiarea.h
     controls/mdiareaex.h

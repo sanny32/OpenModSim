@@ -8,6 +8,7 @@
 #include <QPlainTextEdit>
 #include "aboutdatawidget.h"
 #include "dialogabout.h"
+#include "themedicons.h"
 #include "ui_dialogabout.h"
 
 #ifdef Q_OS_WIN
@@ -359,7 +360,7 @@ void DialogAbout::addComponent(QLayout* layout, const QString& title, const QStr
     w->setVersion(version);
     w->setDescription(description);
     w->setLinkUrl(QUrl(url));
-    w->setLinkIcon(QIcon::fromTheme("applications-internet", QIcon(":/res/applications-internet.svg")));
+    w->setLinkIcon(themedIcon(QStringLiteral("omodsim/internet")));
     w->setLinkToolTip(tr("Visit component's homepage\n%1").arg(w->linkUrl().toString()));
     layout->addWidget(w);
 }
@@ -380,12 +381,12 @@ void DialogAbout::addAuthor(QLayout* layout, const QString& name, const QString&
 
     if(url.contains("mailto:"))
     {
-        w->setLinkIcon(QIcon::fromTheme("emblem-mail", QIcon(":/res/emblem-mail.svg")));
+        w->setLinkIcon(themedIcon(QStringLiteral("omodsim/mail")));
         w->setLinkToolTip(tr("Email contributer: %1").arg(w->linkUrl().path()));
     }
     else if(url.contains("github"))
     {
-        w->setLinkIcon(QIcon(":/res/emblem-github.svg"));
+        w->setLinkIcon(themedIcon(QStringLiteral("omodsim/github")));
         w->setLinkToolTip(tr("Visit github user's homepage\n%1").arg(w->linkUrl().toString()));
     }
     else if(!url.isEmpty())

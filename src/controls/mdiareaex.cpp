@@ -5,6 +5,7 @@
 #include "macsplittoolbutton.h"
 #include "mdiareaex.h"
 #include "mditabbar.h"
+#include "themedicons.h"
 #include "../apptrace.h"
 
 ///
@@ -948,7 +949,7 @@ void MdiAreaEx::createSplitButton()
     _splitButton = new QToolButton(this);
     _splitButton->setAutoRaise(true);
 #endif
-    _splitButton->setIcon(QIcon(":/res/icon-split-view.png"));
+    _splitButton->setIcon(themedIcon(QStringLiteral("omodsim/split-view")));
     _splitButton->setToolTip(tr("Split view"));
     _splitButton->setCheckable(true);
 

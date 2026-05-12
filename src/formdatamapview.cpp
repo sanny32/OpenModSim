@@ -13,8 +13,8 @@ namespace {
 QIcon dataMapWindowIcon(bool autoRequestMap)
 {
     return autoRequestMap
-        ? themedIcon(QStringLiteral("action/lock"), QStringLiteral(":/res/icon-data-locked.png"))
-        : themedIcon(QStringLiteral("navigation/map"), QStringLiteral(":/res/icon-show-data.png"));
+        ? themedIcon(QStringLiteral("omodsim/data-locked"))
+        : themedIcon(QStringLiteral("omodsim/show-data-map"));
 }
 
 // Role aliases so delegates compile without change

@@ -448,11 +448,11 @@
     </message>
     <message>
         <location filename="../dialogs/dialogabout.ui" line="217"/>
-        <location filename="../dialogs/dialogabout.cpp" line="460"/>
         <location filename="../dialogs/dialogabout.cpp" line="461"/>
-        <location filename="../dialogs/dialogabout.cpp" line="471"/>
-        <location filename="../dialogs/dialogabout.cpp" line="473"/>
-        <location filename="../dialogs/dialogabout.cpp" line="485"/>
+        <location filename="../dialogs/dialogabout.cpp" line="462"/>
+        <location filename="../dialogs/dialogabout.cpp" line="472"/>
+        <location filename="../dialogs/dialogabout.cpp" line="474"/>
+        <location filename="../dialogs/dialogabout.cpp" line="486"/>
         <source>Check for updates</source>
         <translation>Проверить обновления</translation>
     </message>
@@ -472,125 +472,125 @@
         <translation>Перевод</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="70"/>
+        <location filename="../dialogs/dialogabout.cpp" line="71"/>
         <source>Unknown</source>
         <translation>Неизвестно</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="115"/>
+        <location filename="../dialogs/dialogabout.cpp" line="116"/>
         <source>Simplified Chinese</source>
         <translation>Упрощённый китайский</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="117"/>
+        <location filename="../dialogs/dialogabout.cpp" line="118"/>
         <source>Traditional Chinese</source>
         <translation>Традиционный китайский</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="137"/>
+        <location filename="../dialogs/dialogabout.cpp" line="138"/>
         <source>%1 and %2</source>
         <translation>%1 и %2</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="152"/>
+        <location filename="../dialogs/dialogabout.cpp" line="153"/>
         <source>About %1...</source>
         <translation>О программе %1...</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="171"/>
+        <location filename="../dialogs/dialogabout.cpp" line="172"/>
         <source>Using %1 and built against %2</source>
         <translation>%1 (собрано с версией %2)</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="172"/>
+        <location filename="../dialogs/dialogabout.cpp" line="173"/>
         <source>Cross-platform application development framework.</source>
         <translation>Среда для разработки кросс-платформенных приложений.</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="100"/>
+        <location filename="../dialogs/dialogabout.cpp" line="101"/>
         <source>Author and Maintainer</source>
         <translation>Автор</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="363"/>
+        <location filename="../dialogs/dialogabout.cpp" line="364"/>
         <source>Visit component&apos;s homepage
 %1</source>
         <translation>Посетить домашнюю страницу компонента
 %1</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="384"/>
+        <location filename="../dialogs/dialogabout.cpp" line="385"/>
         <source>Email contributer: %1</source>
         <translation>Написать участнику: %1</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="393"/>
+        <location filename="../dialogs/dialogabout.cpp" line="394"/>
         <source>Visit user&apos;s homepage
 %1</source>
         <translation>Посетить домашнюю страницу пользователя на github
 %1</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="178"/>
+        <location filename="../dialogs/dialogabout.cpp" line="179"/>
         <source>Free monospaced font with programming ligatures.</source>
         <translation>Свободный моноширинный шрифт с программными лигатурами.</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="200"/>
+        <location filename="../dialogs/dialogabout.cpp" line="201"/>
         <source>Modern Qt Widgets style.</source>
         <translation>Современный стиль Qt Widgets.</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="51"/>
+        <location filename="../dialogs/dialogabout.cpp" line="52"/>
         <source>%1 build %2</source>
         <translation>%1 сборка %2</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="155"/>
+        <location filename="../dialogs/dialogabout.cpp" line="156"/>
         <source>Version: &lt;b&gt;%1&lt;/b&gt; %2</source>
         <translation>Версия: &lt;b&gt;%1&lt;/b&gt; %2</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="185"/>
-        <location filename="../dialogs/dialogabout.cpp" line="192"/>
-        <location filename="../dialogs/dialogabout.cpp" line="207"/>
+        <location filename="../dialogs/dialogabout.cpp" line="186"/>
+        <location filename="../dialogs/dialogabout.cpp" line="193"/>
+        <location filename="../dialogs/dialogabout.cpp" line="208"/>
         <source>Underlying platform.</source>
         <translation>Базовая платформа.</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="102"/>
+        <location filename="../dialogs/dialogabout.cpp" line="103"/>
         <source>Contributor</source>
         <translation>Сопровождение</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="113"/>
+        <location filename="../dialogs/dialogabout.cpp" line="114"/>
         <source>Russian</source>
         <translation>Русский</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="389"/>
+        <location filename="../dialogs/dialogabout.cpp" line="390"/>
         <source>Visit github user&apos;s homepage
 %1</source>
         <translation>Посетить домашнюю страницу пользователя на github
 %1</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="417"/>
+        <location filename="../dialogs/dialogabout.cpp" line="418"/>
         <source>License Agreement - %1</source>
         <translation>Лицензионное соглашение - %1</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="451"/>
+        <location filename="../dialogs/dialogabout.cpp" line="452"/>
         <source>Checking...</source>
         <translation>Проверка...</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="461"/>
+        <location filename="../dialogs/dialogabout.cpp" line="462"/>
         <source>No updates available.</source>
         <translation>Обновлений нет.</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="474"/>
+        <location filename="../dialogs/dialogabout.cpp" line="475"/>
         <source>Failed to check for updates.
 
 %1</source>
@@ -599,12 +599,12 @@
 %1</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="488"/>
+        <location filename="../dialogs/dialogabout.cpp" line="489"/>
         <source>New version available</source>
         <translation>Доступна новая версия</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="489"/>
+        <location filename="../dialogs/dialogabout.cpp" line="490"/>
         <source>A new version %1 is available.
 
 Open the download page?</source>
@@ -2623,7 +2623,7 @@ Open the download page?</source>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="342"/>
-        <location filename="../mainwindow.cpp" line="1895"/>
+        <location filename="../mainwindow.cpp" line="1900"/>
         <source>Save Project</source>
         <translation>Сохранить проект</translation>
     </message>
@@ -2803,19 +2803,19 @@ Open the download page?</source>
         <translation>Строка состояния</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="918"/>
+        <location filename="../mainwindow.cpp" line="923"/>
         <source>All files (*)</source>
         <translation>Все файлы (*)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="289"/>
-        <location filename="../mainwindow.cpp" line="664"/>
+        <location filename="../mainwindow.cpp" line="294"/>
+        <location filename="../mainwindow.cpp" line="669"/>
         <source>Open Recent</source>
         <translation>Открыть недавние</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="290"/>
-        <location filename="../mainwindow.cpp" line="2031"/>
+        <location filename="../mainwindow.cpp" line="295"/>
+        <location filename="../mainwindow.cpp" line="2036"/>
         <source>Clear List</source>
         <translation>Очистить список</translation>
     </message>
@@ -2830,21 +2830,21 @@ Open the download page?</source>
         <translation>Вывод</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="917"/>
-        <location filename="../mainwindow.cpp" line="1925"/>
+        <location filename="../mainwindow.cpp" line="922"/>
+        <location filename="../mainwindow.cpp" line="1930"/>
         <source>Project files (*.omsim)</source>
         <translation>Файлы проекта (*.omsim)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1549"/>
-        <location filename="../mainwindow.cpp" line="1953"/>
+        <location filename="../mainwindow.cpp" line="1554"/>
+        <location filename="../mainwindow.cpp" line="1958"/>
         <source>Untitled</source>
         <translation>Без имени</translation>
     </message>
     <message>
         <location filename="../applogger.cpp" line="119"/>
-        <location filename="../mainwindow.cpp" line="667"/>
-        <location filename="../mainwindow.cpp" line="1734"/>
+        <location filename="../mainwindow.cpp" line="672"/>
+        <location filename="../mainwindow.cpp" line="1739"/>
         <source>Address Base</source>
         <translation>Адресация</translation>
     </message>
@@ -3134,7 +3134,7 @@ Open the download page?</source>
         <translation>Скрипт запущен: %1 (режим: %2)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1288"/>
+        <location filename="../mainwindow.cpp" line="1293"/>
         <source>Move to Other Panel</source>
         <translation>Переместить на другую панель</translation>
     </message>
@@ -3156,12 +3156,12 @@ Open the download page?</source>
         <translation>Шестнадцатиричный режим</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1896"/>
+        <location filename="../mainwindow.cpp" line="1901"/>
         <source>Save project before closing?</source>
         <translation>Сохранить проект перед закрытием?</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2019"/>
+        <location filename="../mainwindow.cpp" line="2024"/>
         <source>No Recent Projects</source>
         <translation>Нет недавних проектов</translation>
     </message>
@@ -3171,7 +3171,7 @@ Open the download page?</source>
         <translation>Данные</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1246"/>
+        <location filename="../mainwindow.cpp" line="1251"/>
         <source>JavaScript files (*.js);;All files (*)</source>
         <translation>Файлы JavaScript (*.js);;Все файлы (*)</translation>
     </message>
@@ -3184,8 +3184,8 @@ Open the download page?</source>
 <context>
     <name>MdiAreaEx</name>
     <message>
-        <location filename="../controls/mdiareaex.cpp" line="709"/>
-        <location filename="../controls/mdiareaex.cpp" line="952"/>
+        <location filename="../controls/mdiareaex.cpp" line="710"/>
+        <location filename="../controls/mdiareaex.cpp" line="953"/>
         <source>Split view</source>
         <translation>Резделить вид</translation>
     </message>
@@ -3221,14 +3221,14 @@ Open the download page?</source>
 <context>
     <name>ModbusLogWidget</name>
     <message>
-        <location filename="../controls/modbuslogwidget.cpp" line="327"/>
-        <location filename="../controls/modbuslogwidget.cpp" line="370"/>
+        <location filename="../controls/modbuslogwidget.cpp" line="328"/>
+        <location filename="../controls/modbuslogwidget.cpp" line="371"/>
         <source>Copy Text</source>
         <translation>Копировать текст</translation>
     </message>
     <message>
-        <location filename="../controls/modbuslogwidget.cpp" line="339"/>
-        <location filename="../controls/modbuslogwidget.cpp" line="371"/>
+        <location filename="../controls/modbuslogwidget.cpp" line="340"/>
+        <location filename="../controls/modbuslogwidget.cpp" line="372"/>
         <source>Copy Bytes</source>
         <translation>Копировать байты</translation>
     </message>
@@ -3236,307 +3236,307 @@ Open the download page?</source>
 <context>
     <name>ModbusMessageWidget</name>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="33"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="89"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="34"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="90"/>
         <source>Copy Text</source>
         <translation>Копировать текст</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="49"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="90"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="50"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="91"/>
         <source>Copy Values</source>
         <translation>Копировать значения</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="237"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="238"/>
         <source>&lt;span style=&apos;color:%1&apos;&gt;*** INVALID MODBUS REQUEST ***&lt;/span&gt;</source>
         <translation>&lt;span style=&apos;color:%1&apos;&gt;*** НЕКОРРЕКТНЫЙ MODBUS ЗАПРОС ***&lt;/span&gt;</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="239"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="240"/>
         <source>&lt;span style=&apos;color:%1&apos;&gt;*** INVALID MODBUS RESPONSE ***&lt;/span&gt;</source>
         <translation>&lt;span style=&apos;color:%1&apos;&gt;*** НЕКОРРЕКТНЫЙ MODBUS ОТВЕТ ***&lt;/span&gt;</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="254"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="259"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="255"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="260"/>
         <source>Checksum</source>
         <translation>Контрольная сумма</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="264"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="265"/>
         <source>Type</source>
         <translation>Тип</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="264"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="265"/>
         <source>Request (Rx)</source>
         <translation>Запрос (Rx)</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="264"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="265"/>
         <source>Response (Tx)</source>
         <translation>Ответ (Tx)</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="265"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="266"/>
         <source>Time</source>
         <translation>Время</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="273"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="274"/>
         <source>Transaction ID</source>
         <translation>Идентификатор транзакции</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="274"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="275"/>
         <source>Protocol ID</source>
         <translation>Идентификатор протокола</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="275"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="305"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="324"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="343"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="362"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="276"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="306"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="325"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="344"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="363"/>
         <source>Length</source>
         <translation>Количество</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="278"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="279"/>
         <source>Unit Identifier</source>
         <translation>Адрес устройства: </translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="283"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="284"/>
         <source>Error Code</source>
         <translation>Код ошибки</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="284"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="285"/>
         <source>Exception Code</source>
         <translation>Код исключения</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="293"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="294"/>
         <source>Function Code</source>
         <translation>Код функции</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="304"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="323"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="342"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="361"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="305"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="324"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="343"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="362"/>
         <source>Start Address</source>
         <translation>Начальный адрес</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="312"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="331"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="350"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="369"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="460"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="478"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="501"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="520"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="531"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="539"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="608"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="626"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="313"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="332"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="351"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="370"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="461"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="479"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="502"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="521"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="532"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="540"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="609"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="627"/>
         <source>Byte Count</source>
         <translation>Количество байт</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="313"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="314"/>
         <source>Coil Status</source>
         <translation>Статусы флагов</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="332"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="333"/>
         <source>Input Status</source>
         <translation>Статусы регистров</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="351"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="400"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="408"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="352"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="401"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="409"/>
         <source>Register Value</source>
         <translation>Значения регистров</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="370"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="371"/>
         <source>Input Registers</source>
         <translation>Регистры ввода</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="380"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="388"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="381"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="389"/>
         <source>Output Address</source>
         <translation>Адрес</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="381"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="389"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="382"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="390"/>
         <source>Output Value</source>
         <translation>Значение</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="399"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="407"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="400"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="408"/>
         <source>Register Address</source>
         <translation>Адрес</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="417"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="418"/>
         <source>Output Data</source>
         <translation>Данные</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="427"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="435"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="428"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="436"/>
         <source>Sub-function</source>
         <translation>Подфункция</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="428"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="436"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="521"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="532"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="540"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="551"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="559"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="636"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="429"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="437"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="522"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="533"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="541"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="552"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="560"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="637"/>
         <source>Data</source>
         <translation>Данные</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="446"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="461"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="447"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="462"/>
         <source>Status</source>
         <translation>Статус</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="447"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="462"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="448"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="463"/>
         <source>Event Count</source>
         <translation>Количество событий</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="463"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="464"/>
         <source>Message Count</source>
         <translation>Количество сообщений</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="464"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="465"/>
         <source>Events</source>
         <translation>События</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="476"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="486"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="499"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="509"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="477"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="487"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="500"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="510"/>
         <source>Starting Address</source>
         <translation>Начальный адрес</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="477"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="487"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="478"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="488"/>
         <source>Quantity of Outputs</source>
         <translation>Количество</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="479"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="480"/>
         <source>Outputs Value</source>
         <translation>Значения</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="500"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="510"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="501"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="511"/>
         <source>Quantity of Registers</source>
         <translation>Количество регистров</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="502"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="609"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="503"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="610"/>
         <source>Registers Value</source>
         <translation>Значения регистров</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="550"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="551"/>
         <source>Request Data Length</source>
         <translation>Длина данных запроса</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="558"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="559"/>
         <source>Response Data Length</source>
         <translation>Длина данных ответа</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="570"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="580"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="571"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="581"/>
         <source>Address</source>
         <translation>Адрес</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="571"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="581"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="572"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="582"/>
         <source>And Mask</source>
         <translation>Маска «И»</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="572"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="582"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="573"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="583"/>
         <source>Or Mask</source>
         <translation>Маска «ИЛИ»</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="596"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="597"/>
         <source>Read Starting Address</source>
         <translation>Адрес чтения регистров</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="597"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="598"/>
         <source>Quantity to Read</source>
         <translation>Количество регистров для чтения</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="598"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="599"/>
         <source>Write Starting Address</source>
         <translation>Адрес записи регистров</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="599"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="600"/>
         <source>Quantity to Write</source>
         <translation>Количество регистров для записи</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="600"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="601"/>
         <source>Write Byte Count</source>
         <translation>Количество байт записи</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="601"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="602"/>
         <source>Write Registers Value</source>
         <translation>Значения регистров записи</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="618"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="619"/>
         <source>FIFO Point Address</source>
         <translation>Адрес точки FIFO</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="627"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="628"/>
         <source>FIFO Count</source>
         <translation>Количество FIFO</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="628"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="629"/>
         <source>FIFO Value Register</source>
         <translation>Значения регистров FIFO</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="294"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="295"/>
         <source>(0-based)</source>
         <translation>(адресация с 0)</translation>
     </message>
@@ -3675,7 +3675,6 @@ Open the download page?</source>
     </message>
     <message>
         <location filename="../controls/outputpanel.ui" line="44"/>
-        <location filename="../controls/outputpanel.cpp" line="18"/>
         <source>Console</source>
         <translation>Консоль</translation>
     </message>
@@ -3914,7 +3913,7 @@ Open the download page?</source>
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../appproject.cpp" line="2189"/>
+        <location filename="../appproject.cpp" line="2190"/>
         <source>Failed to write project XML.</source>
         <translation>Не удалось записать XML-файл проекта.</translation>
     </message>
