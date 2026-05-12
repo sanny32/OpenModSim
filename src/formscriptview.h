@@ -1,6 +1,8 @@
 #ifndef FORMSCRIPTVIEW_H
 #define FORMSCRIPTVIEW_H
 
+#include <QGuiApplication>
+#include <QStyleHints>
 #include <QWidget>
 #include <QTimer>
 #include <QXmlStreamWriter>
@@ -191,8 +193,9 @@ inline QSettings& operator >>(QSettings& in, FormScriptView* frm)
 
     auto wnd = frm->parentWidget();
     frm->setFont(in.value("Font", defaultMonospaceFont()).value<QFont>());
-    frm->setForegroundColor(in.value("ForegroundColor", QColor(Qt::black)).value<QColor>());
-    frm->setBackgroundColor(in.value("BackgroundColor", QColor(Qt::white)).value<QColor>());
+    const bool dark = QGuiApplication::styleHints()->colorScheme() == Qt::ColorScheme::Dark;
+    frm->setForegroundColor(in.value("ForegroundColor", dark ? QColor(Qt::white) : QColor(Qt::black)).value<QColor>());
+    frm->setBackgroundColor(in.value("BackgroundColor", dark ? QColor(0x1c1c1e) : QColor(Qt::white)).value<QColor>());
     frm->setZoomPercent(in.value("ZoomPercent", 100).toInt());
     frm->setFont(AppPreferences::instance().scriptFont());
     if(wndRect.isValid())

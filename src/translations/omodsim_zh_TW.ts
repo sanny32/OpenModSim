@@ -137,38 +137,38 @@
         <translation>清除日誌</translation>
     </message>
     <message>
-        <location filename="../controls/applogoutput.cpp" line="213"/>
-        <location filename="../controls/applogoutput.cpp" line="388"/>
+        <location filename="../controls/applogoutput.cpp" line="222"/>
+        <location filename="../controls/applogoutput.cpp" line="397"/>
         <source>Copy All</source>
         <translation>全部複製</translation>
     </message>
     <message>
-        <location filename="../controls/applogoutput.cpp" line="379"/>
+        <location filename="../controls/applogoutput.cpp" line="388"/>
         <source>Copy</source>
         <translation>複製</translation>
     </message>
     <message>
-        <location filename="../controls/applogoutput.cpp" line="395"/>
+        <location filename="../controls/applogoutput.cpp" line="404"/>
         <source>Export...</source>
         <translation>匯出...</translation>
     </message>
     <message>
-        <location filename="../controls/applogoutput.cpp" line="401"/>
+        <location filename="../controls/applogoutput.cpp" line="410"/>
         <source>Clear</source>
         <translation>清除</translation>
     </message>
     <message>
-        <location filename="../controls/applogoutput.cpp" line="425"/>
+        <location filename="../controls/applogoutput.cpp" line="434"/>
         <source>Text files (*.txt)</source>
         <translation>文字檔案 (*.txt)</translation>
     </message>
     <message>
-        <location filename="../controls/applogoutput.cpp" line="430"/>
+        <location filename="../controls/applogoutput.cpp" line="439"/>
         <source>Export</source>
         <translation>匯出</translation>
     </message>
     <message>
-        <location filename="../controls/applogoutput.cpp" line="430"/>
+        <location filename="../controls/applogoutput.cpp" line="439"/>
         <source>Cannot open file for writing:
 %1</source>
         <translation>無法開啟檔案進行寫入：
@@ -270,12 +270,12 @@
         <translation>清除控制台</translation>
     </message>
     <message>
-        <location filename="../controls/consoleoutput.cpp" line="311"/>
+        <location filename="../controls/consoleoutput.cpp" line="323"/>
         <source>Copy</source>
         <translation>複製</translation>
     </message>
     <message>
-        <location filename="../controls/consoleoutput.cpp" line="322"/>
+        <location filename="../controls/consoleoutput.cpp" line="334"/>
         <source>Clear</source>
         <translation>清除</translation>
     </message>
@@ -3606,67 +3606,67 @@ Open the download page?</source>
 <context>
     <name>OutputDataWidget</name>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1304"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1319"/>
         <source>Set Value of %1</source>
         <translation>設定 %1 的值</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1313"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1328"/>
         <source>Add Description</source>
         <translation>新增描述</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1313"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1328"/>
         <source>Edit Description</source>
         <translation>編輯描述</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1316"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1331"/>
         <source>%1: Enter Description</source>
         <translation>%1：輸入描述</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1325"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1340"/>
         <source>Remove Color</source>
         <translation>移除顏色</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1336"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1351"/>
         <source>Yellow</source>
         <translation>黃色</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1337"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1352"/>
         <source>Cyan</source>
         <translation>青色</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1338"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1353"/>
         <source>Magenta</source>
         <translation>品紅色</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1339"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1354"/>
         <source>LightGreen</source>
         <translation>淺綠色</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1340"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1355"/>
         <source>Orange</source>
         <translation>橙色</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1341"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1356"/>
         <source>LightBlue</source>
         <translation>淺藍色</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1342"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1357"/>
         <source>LightGray</source>
         <translation>淺灰色</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1421"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1436"/>
         <source>Zoom: %1%</source>
         <translation>縮放：%1%</translation>
     </message>

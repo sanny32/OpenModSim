@@ -57,6 +57,7 @@ protected:
     void changeEvent(QEvent* event) override;
 
 private:
+    void updatePaletteFromTheme();
     void showModbusMessage(const QModelIndex& index);
     void hideModbusMessage();
     void updateLogView(QSharedPointer<const ModbusMessage> msg);

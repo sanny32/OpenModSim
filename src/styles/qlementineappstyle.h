@@ -16,6 +16,9 @@ class QlementineAppStyle : public oclero::qlementine::QlementineStyle
 public:
     explicit QlementineAppStyle(QObject* parent = nullptr);
 
+protected:
+    explicit QlementineAppStyle(bool skipTheme, QObject* parent = nullptr);
+
     QColor const& buttonBackgroundColor(oclero::qlementine::MouseState mouse,
                                         oclero::qlementine::ColorRole role,
                                         const QWidget* widget = nullptr) const override;

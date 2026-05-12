@@ -1,6 +1,8 @@
 #include <QDateTime>
+#include <QGuiApplication>
 #include <QPainter>
 #include <QInputDialog>
+#include <QStyleHints>
 #include <climits>
 #include "apppreferences.h"
 #include "fontutils.h"
@@ -449,8 +451,7 @@ OutputDataWidget::OutputDataWidget(QWidget *parent) :
     ui->listView->setItemDelegate(new DataDelegate( this ));
     setFont(defaultMonospaceFont());
     setAutoFillBackground(true);
-    setForegroundColor(Qt::black);
-    setBackgroundColor(Qt::white);
+    updatePaletteFromTheme();
 
     _baseFontSize = ui->listView->font().pointSizeF();
     if (_baseFontSize <= 0) _baseFontSize = 10.0;
@@ -489,9 +490,22 @@ OutputDataWidget::~OutputDataWidget()
 /// \brief OutputDataWidget::changeEvent
 /// \param event
 ///
+void OutputDataWidget::updatePaletteFromTheme()
+{
+    const bool dark = QGuiApplication::styleHints()->colorScheme() == Qt::ColorScheme::Dark;
+    setForegroundColor(dark ? Qt::white        : Qt::black);
+    setBackgroundColor(dark ? QColor(0x1c1c1e) : Qt::white);
+}
+
 void OutputDataWidget::changeEvent(QEvent* event)
 {
     QWidget::changeEvent(event);
+    if (event->type() == QEvent::ApplicationPaletteChange ||
+        event->type() == QEvent::StyleChange ||
+        event->type() == QEvent::ThemeChange)
+    {
+        updatePaletteFromTheme();
+    }
 }
 
 ///
@@ -601,10 +615,11 @@ QColor OutputDataWidget::backgroundColor() const
 ///
 void OutputDataWidget::setBackgroundColor(const QColor& clr)
 {
-    auto pal = palette();
+    auto pal = ui->listView->palette();
     pal.setColor(QPalette::Base, clr);
     pal.setColor(QPalette::Window, clr);
-    setPalette(pal);
+    ui->listView->setPalette(pal);
+    ui->listView->viewport()->setPalette(pal);
 }
 
 ///

@@ -1,4 +1,6 @@
 #include <QtWidgets>
+#include <QGuiApplication>
+#include <QStyleHints>
 #include "colorswatch.h"
 #include "dialogpreferences.h"
 #include "mainwindow.h"
@@ -37,7 +39,8 @@ DialogPreferences::DialogPreferences(MainWindow* mainWindow, QWidget* parent)
         }
     });
     connect(ui->pushButtonResetBackgroundColor, &QPushButton::clicked, this, [this]() {
-        _bgColor = Qt::white;
+        const bool dark = QGuiApplication::styleHints()->colorScheme() == Qt::ColorScheme::Dark;
+        _bgColor = dark ? QColor(0x1c1c1e) : Qt::white;
         ui->pushButtonBackgroundColor->setColor(_bgColor);
     });
 
@@ -49,7 +52,8 @@ DialogPreferences::DialogPreferences(MainWindow* mainWindow, QWidget* parent)
         }
     });
     connect(ui->pushButtonResetForegroundColor, &QPushButton::clicked, this, [this]() {
-        _fgColor = Qt::black;
+        const bool dark = QGuiApplication::styleHints()->colorScheme() == Qt::ColorScheme::Dark;
+        _fgColor = dark ? Qt::white : Qt::black;
         ui->pushButtonForegroundColor->setColor(_fgColor);
     });
 

@@ -1,5 +1,7 @@
 #include <QApplication>
 #include <QClipboard>
+#include <QGuiApplication>
+#include <QStyleHints>
 #include <QListWidget>
 #include <QMenu>
 #include <QPainter>
@@ -23,15 +25,24 @@ struct MessageStyle {
 
 MessageStyle styleForType(ConsoleOutput::MessageType type)
 {
+    const bool dark = QGuiApplication::styleHints()->colorScheme() == Qt::ColorScheme::Dark;
     switch (type) {
         case ConsoleOutput::MessageType::Warning:
-            return { QColor("#FFF8E1"), QColor("#F9A825"), QColor("#4A3000"), QStringLiteral(":/res/icon-log-warning.svg") };
+            return dark
+                ? MessageStyle{ QColor("#3a2e00"), QColor("#F9A825"), QColor("#FFD54F"), QStringLiteral(":/res/icon-log-warning.svg") }
+                : MessageStyle{ QColor("#FFF8E1"), QColor("#F9A825"), QColor("#4A3000"), QStringLiteral(":/res/icon-log-warning.svg") };
         case ConsoleOutput::MessageType::Error:
-            return { QColor("#FFEBEE"), QColor("#E53935"), QColor("#7F0000"), QStringLiteral(":/res/icon-log-critical.svg") };
+            return dark
+                ? MessageStyle{ QColor("#3b0000"), QColor("#E53935"), QColor("#FF8A80"), QStringLiteral(":/res/icon-log-critical.svg") }
+                : MessageStyle{ QColor("#FFEBEE"), QColor("#E53935"), QColor("#7F0000"), QStringLiteral(":/res/icon-log-critical.svg") };
         case ConsoleOutput::MessageType::Debug:
-            return { Qt::white, QColor(), QColor("#37474F"), QStringLiteral(":/res/icon-log-info.svg") };
+            return dark
+                ? MessageStyle{ QColor("#1c1c1e"), QColor(), QColor("#56B6C2"), QStringLiteral(":/res/icon-log-info.svg") }
+                : MessageStyle{ Qt::white,         QColor(), QColor("#37474F"), QStringLiteral(":/res/icon-log-info.svg") };
         default:
-            return { Qt::white, QColor(), Qt::black, QStringLiteral(":/res/icon-log-info.svg") };
+            return dark
+                ? MessageStyle{ QColor("#1c1c1e"), QColor(), QColor("#abb2bf"), QStringLiteral(":/res/icon-log-info.svg") }
+                : MessageStyle{ Qt::white,         QColor(), Qt::black,         QStringLiteral(":/res/icon-log-info.svg") };
     }
 }
 
@@ -66,9 +77,10 @@ public:
 
         painter->save();
 
+        const bool dark = QGuiApplication::styleHints()->colorScheme() == Qt::ColorScheme::Dark;
         QColor bg = style.bg;
         if (!style.border.isValid() && (option.features & QStyleOptionViewItem::Alternate))
-            bg = QColor("#F8F8F8");
+            bg = dark ? QColor("#2c2c2e") : QColor("#F8F8F8");
         painter->fillRect(option.rect, bg);
 
         if (style.border.isValid())
@@ -80,7 +92,7 @@ public:
             painter->fillRect(option.rect, sel);
         }
 
-        painter->setPen(QColor("#E0E0E0"));
+        painter->setPen(dark ? QColor("#38383a") : QColor("#E0E0E0"));
         painter->drawLine(option.rect.bottomLeft(), option.rect.bottomRight());
 
         constexpr int leftPad = 8;

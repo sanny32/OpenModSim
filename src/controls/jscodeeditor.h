@@ -49,6 +49,7 @@ signals:
     void helpContext(const QString& key);
 
 protected:
+    void changeEvent(QEvent* event) override;
     void resizeEvent(QResizeEvent *event) override;
     void keyPressEvent(QKeyEvent *e) override;
     void contextMenuEvent(QContextMenuEvent *event) override;
@@ -58,6 +59,8 @@ private slots:
     void highlightCurrentLine();
     void updateLineNumberArea(const QRect& rect, int dy);
     void insertCompletion(const QString& completion);
+
+    void applyThemeColors();
 
 private:
     QString textUnderCursor() const;

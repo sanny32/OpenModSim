@@ -102,8 +102,8 @@ private:
     QFont         _font;
     int           _fontZoom{ 100 };
     bool          _checkForUpdates{ true };
-    QColor        _backgroundColor{ Qt::white };
-    QColor        _foregroundColor{ Qt::black };
+    QColor        _backgroundColor;
+    QColor        _foregroundColor;
     QColor        _addressColor{ 128, 128, 128 };
     QColor        _commentColor{ 128, 128, 128 };
     QString       _language{ translationLang() };

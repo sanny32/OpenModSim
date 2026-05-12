@@ -29,6 +29,8 @@ public:
 
     explicit JSHighlighter(QTextDocument* parent = nullptr);
 
+    void setDarkMode(bool dark);
+
 protected:
     void highlightBlock(const QString &text) override;
 

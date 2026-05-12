@@ -110,10 +110,6 @@ int main(int argc, char *argv[])
     a.setStyle(new AppStyle("fusion"));
 #endif
 
-#if QT_VERSION >= QT_VERSION_CHECK(6, 8, 0)
-    QGuiApplication::styleHints()->setColorScheme(Qt::ColorScheme::Light);
-#endif
-
     QFontDatabase::addApplicationFont(":/fonts/firacode.ttf");
 
     CmdLineParser parser;

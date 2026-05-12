@@ -4,7 +4,9 @@
 #include <QScrollBar>
 #include <QAbstractItemView>
 #include <QContextMenuEvent>
+#include <QGuiApplication>
 #include <QPlainTextDocumentLayout>
+#include <QStyleHints>
 #include "jscompleter.h"
 #include "jscodeeditor.h"
 #include "themedicons.h"
@@ -26,8 +28,8 @@ JSCodeEditor::JSCodeEditor(QWidget *parent)
     connect(this, &JSCodeEditor::updateRequest, this, &JSCodeEditor::updateLineNumberArea);
     connect(this, &JSCodeEditor::cursorPositionChanged, this, &JSCodeEditor::highlightCurrentLine);
 
-    setBackgroundColor(Qt::white);
     setLineWrapMode(QPlainTextEdit::NoWrap);
+    applyThemeColors();
 
     setFont(defaultScriptFont());
     setTabStopDistance(fontMetrics().horizontalAdvance(' ') * 4);
@@ -414,6 +416,48 @@ void JSCodeEditor::insertCompletion(const QString& completion)
 }
 
 ///
+/// \brief JSCodeEditor::applyThemeColors
+///
+void JSCodeEditor::applyThemeColors()
+{
+    const bool dark = QGuiApplication::styleHints()->colorScheme() == Qt::ColorScheme::Dark;
+
+    auto pal = palette();
+    if (dark) {
+        pal.setColor(QPalette::Base, QColor(0x1c1c1e));
+        pal.setColor(QPalette::Window, QColor(0x1c1c1e));
+        pal.setColor(QPalette::Text, QColor(0xffffff));
+        _lineColor = QColor(0x2c2c2e);
+    } else {
+        pal.setColor(QPalette::Base, Qt::white);
+        pal.setColor(QPalette::Window, Qt::white);
+        pal.setColor(QPalette::Text, Qt::black);
+        _lineColor = QColor(200, 200, 200, 70);
+    }
+    setPalette(pal);
+    _highlighter->setDarkMode(dark);
+    _lineNumberArea->update();
+}
+
+///
+/// \brief JSCodeEditor::changeEvent
+/// \param event
+///
+void JSCodeEditor::changeEvent(QEvent* event)
+{
+    QPlainTextEdit::changeEvent(event);
+    if (event->type() == QEvent::ApplicationPaletteChange ||
+        event->type() == QEvent::StyleChange ||
+        event->type() == QEvent::ThemeChange)
+    {
+        if (backgroundColor() == Qt::white || backgroundColor() == QColor(0x1c1c1e)) {
+            applyThemeColors();
+            highlightCurrentLine();
+        }
+    }
+}
+
+///
 /// \brief JSCodeEditor::resizeEvent
 /// \param e
 ///
@@ -559,8 +603,12 @@ void JSCodeEditor::highlightCurrentLine()
 ///
 void JSCodeEditor::lineNumberAreaPaintEvent(QPaintEvent *event)
 {
+    const bool dark = QGuiApplication::styleHints()->colorScheme() == Qt::ColorScheme::Dark;
+    const QColor lineAreaBg = dark ? QColor(0x2c2c2e) : QColorConstants::Svg::whitesmoke;
+    const QColor lineNumberColor = dark ? QColor(0x636366) : QColor(0x9F9F9F);
+
     QPainter painter(_lineNumberArea);
-    painter.fillRect(event->rect(), QColorConstants::Svg::whitesmoke);
+    painter.fillRect(event->rect(), lineAreaBg);
 
     auto block = firstVisibleBlock();
     int blockNumber = block.blockNumber();
@@ -572,7 +620,7 @@ void JSCodeEditor::lineNumberAreaPaintEvent(QPaintEvent *event)
         if (block.isVisible() && bottom >= event->rect().top())
         {
             const auto number = QString::number(blockNumber + 1);
-            painter.setPen(QColor(0x9F9F9F));
+            painter.setPen(lineNumberColor);
             painter.drawText(0, top, _lineNumberArea->width(), fontMetrics().height(), Qt::AlignCenter, number);
         }
 

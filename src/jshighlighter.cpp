@@ -148,23 +148,23 @@ JSHighlighter::JSHighlighter(QTextDocument* parent)
 ///
 void JSHighlighter::initFormats()
 {
-    QTextCharFormat format = QTextCharFormat();
+    QTextCharFormat format;
 
     _formats[Token::CodeBlock] = format;
-    format = QTextCharFormat();
 
+    format = QTextCharFormat();
     format.setForeground(QColor(0xF92672));
     _formats[Token::CodeKeyWord] = format;
-    format = QTextCharFormat();
 
+    format = QTextCharFormat();
     format.setForeground(QColor(0xa39b4e));
     _formats[Token::CodeString] = format;
-    format = QTextCharFormat();
 
+    format = QTextCharFormat();
     format.setForeground(QColor(0x75715E));
     _formats[Token::CodeComment] = format;
-    format = QTextCharFormat();
 
+    format = QTextCharFormat();
     format.setForeground(QColor(0x54aebf));
     _formats[Token::CodeType] = format;
 
@@ -180,6 +180,47 @@ void JSHighlighter::initFormats()
     format = QTextCharFormat();
     format.setForeground(QColor(0x018a0f));
     _formats[Token::CodeBuiltIn] = format;
+}
+
+///
+/// \brief JSHighlighter::setDarkMode
+///
+void JSHighlighter::setDarkMode(bool dark)
+{
+    QTextCharFormat format;
+    format.setForeground(dark ? QColor(0xabb2bf) : QColor(0x1c1c1e));
+    _formats[Token::CodeBlock] = format;
+
+    format = QTextCharFormat();
+    format.setForeground(dark ? QColor(0xFF6B9D) : QColor(0xF92672));
+    _formats[Token::CodeKeyWord] = format;
+
+    format = QTextCharFormat();
+    format.setForeground(dark ? QColor(0xE5C07B) : QColor(0xa39b4e));
+    _formats[Token::CodeString] = format;
+
+    format = QTextCharFormat();
+    format.setForeground(dark ? QColor(0x676e95) : QColor(0x75715E));
+    _formats[Token::CodeComment] = format;
+
+    format = QTextCharFormat();
+    format.setForeground(dark ? QColor(0x56B6C2) : QColor(0x54aebf));
+    _formats[Token::CodeType] = format;
+
+    format = QTextCharFormat();
+    format.setForeground(dark ? QColor(0xe5a96b) : QColor(0xdb8744));
+    format.setFontWeight(QFont::ExtraBold);
+    _formats[Token::CodeOther] = format;
+
+    format = QTextCharFormat();
+    format.setForeground(dark ? QColor(0xC678DD) : QColor(0xAE81FF));
+    _formats[Token::CodeNumLiteral] = format;
+
+    format = QTextCharFormat();
+    format.setForeground(dark ? QColor(0x98C379) : QColor(0x018a0f));
+    _formats[Token::CodeBuiltIn] = format;
+
+    rehighlight();
 }
 
 ///

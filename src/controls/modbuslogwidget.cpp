@@ -562,6 +562,7 @@ void ModbusLogWidget::setBackGroundColor(const QColor& clr)
     pal.setColor(QPalette::Base, clr);
     pal.setColor(QPalette::Window, clr);
     setPalette(pal);
+    viewport()->setPalette(pal);
 }
 
 ///

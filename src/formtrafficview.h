@@ -1,6 +1,8 @@
 #ifndef FORMTRAFFICVIEW_H
 #define FORMTRAFFICVIEW_H
 
+#include <QGuiApplication>
+#include <QStyleHints>
 #include <QWidget>
 #include <QTimer>
 #include <QXmlStreamWriter>
@@ -211,8 +213,9 @@ inline QSettings& operator >>(QSettings& in, FormTrafficView* frm)
     wndRect = in.value("ViewRect").toRect();
 
     frm->setFont(in.value("Font", defaultMonospaceFont()).value<QFont>());
-    frm->setForegroundColor(in.value("ForegroundColor", QColor(Qt::black)).value<QColor>());
-    frm->setBackgroundColor(in.value("BackgroundColor", QColor(Qt::white)).value<QColor>());
+    const bool dark = QGuiApplication::styleHints()->colorScheme() == Qt::ColorScheme::Dark;
+    frm->setForegroundColor(in.value("ForegroundColor", dark ? QColor(Qt::white) : QColor(Qt::black)).value<QColor>());
+    frm->setBackgroundColor(in.value("BackgroundColor", dark ? QColor(0x1c1c1e) : QColor(Qt::white)).value<QColor>());
 
     frm->setProperty("ParentGeometry", wndRect);
     frm->setProperty("AutoCompleteEnabled", AppPreferences::instance().codeAutoComplete());

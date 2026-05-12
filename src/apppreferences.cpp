@@ -2,7 +2,15 @@
 #include "enums.h"
 #include "apppreferences.h"
 
+#include <QGuiApplication>
+#include <QStyleHints>
+
 namespace {
+
+bool isSystemDarkMode()
+{
+    return QGuiApplication::styleHints()->colorScheme() == Qt::ColorScheme::Dark;
+}
 
 ///
 /// \brief boolToText
@@ -33,6 +41,8 @@ QString fontToText(const QFont& font)
 AppPreferences::AppPreferences()
     : _font(defaultMonospaceFont())
     , _scriptFont(defaultScriptFont())
+    , _backgroundColor(isSystemDarkMode() ? QColor(0x1c1c1e) : Qt::white)
+    , _foregroundColor(isSystemDarkMode() ? Qt::white : Qt::black)
 {
 }
 

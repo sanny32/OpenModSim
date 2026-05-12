@@ -238,6 +238,15 @@ QlementineAppStyle::QlementineAppStyle(QObject* parent)
     QIcon::setThemeName(QStringLiteral("qlementine"));
 }
 
+QlementineAppStyle::QlementineAppStyle(bool /*skipTheme*/, QObject* parent)
+    : QlementineStyle(parent)
+{
+    setAutoIconColor(oclero::qlementine::AutoIconColor::ForegroundColor);
+
+    oclero::qlementine::icons::initializeIconTheme();
+    QIcon::setThemeName(QStringLiteral("qlementine"));
+}
+
 ///
 /// \brief QlementineAppStyle::buttonBackgroundColor
 /// \param mouse
