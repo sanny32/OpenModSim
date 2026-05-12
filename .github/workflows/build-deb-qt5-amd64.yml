@@ -157,7 +157,7 @@ jobs:
             -G "${{ env.CMAKE_GENERATOR }}" \
             -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} \
             -DCMAKE_PREFIX_PATH=${{ env.QT_INSTALL_DIR }}/${{ env.QT_VERSION }}/${{ env.CMAKE_COMPILER }} \
-            -DPROJECT_BETARELEASE=${{ env.PRERELEASE_SUFFIX }}
+            -DPRERELEASE_SUFFIX=${{ env.PRERELEASE_SUFFIX }}
 
       - name: Build
         run: cmake --build ${{ env.BUILD_DIR }} --config ${{ env.BUILD_TYPE }} --parallel

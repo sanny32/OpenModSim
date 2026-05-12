@@ -128,7 +128,7 @@ jobs:
             -DCMAKE_INSTALL_PREFIX=/Applications \
             -DCMAKE_OSX_ARCHITECTURES="${{ env.CMAKE_OSX_ARCHITECTURES }}" \
             -DUSE_QT6=ON \
-            -DPROJECT_BETARELEASE=${{ env.PRERELEASE_SUFFIX }}
+            -DPRERELEASE_SUFFIX=${{ env.PRERELEASE_SUFFIX }}
 
       - name: Build
         run: cmake --build ${{ env.BUILD_DIR }} --config ${{ env.BUILD_TYPE }} --parallel

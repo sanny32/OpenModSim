@@ -17,7 +17,7 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_INTERPROCEDURAL_OPTIMIZATION ON)
 set(PRODUCT_NAME "Open ModSim")
-set(PROJECT_BETARELEASE "" CACHE STRING "Beta release suffix, e.g. beta1")
+set(PRERELEASE_SUFFIX "" CACHE STRING "Pre-release suffix, e.g. beta1")
 
 # Split version to major, minor, patch
 string(REPLACE "." ";" VERSION_LIST ${PROJECT_VERSION})
@@ -120,8 +120,8 @@ endif()
 
 if(DEFINED GIT_BRANCH AND "${GIT_BRANCH}" MATCHES "^(dev|release/.*)$")
     set(PROJECT_VERSION ${VERSION_MAJOR}.${VERSION_MINOR}-dev)
-elseif(PROJECT_BETARELEASE)
-    set(PROJECT_VERSION ${PROJECT_VERSION}-${PROJECT_BETARELEASE})
+elseif(PRERELEASE_SUFFIX)
+    set(PROJECT_VERSION ${PROJECT_VERSION}-${PRERELEASE_SUFFIX})
 endif()
 
 # Define compile definitions

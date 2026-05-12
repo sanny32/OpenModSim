@@ -138,7 +138,7 @@ jobs:
 
       - name: Configure CMake
         run: |
-          cmake src -B ${{ env.BUILD_DIR }} -G "${{ env.CMAKE_GENERATOR }}" -A ${{ env.CMAKE_ARCH }} -DCMAKE_PREFIX_PATH="C:/Qt/${{ env.QT_VERSION }}/${{ env.CMAKE_COMPILER }}" -DPROJECT_BETARELEASE=${{ env.PRERELEASE_SUFFIX }}
+          cmake src -B ${{ env.BUILD_DIR }} -G "${{ env.CMAKE_GENERATOR }}" -A ${{ env.CMAKE_ARCH }} -DCMAKE_PREFIX_PATH="C:/Qt/${{ env.QT_VERSION }}/${{ env.CMAKE_COMPILER }}" -DPRERELEASE_SUFFIX=${{ env.PRERELEASE_SUFFIX }}
         shell: cmd
 
       - name: Build
