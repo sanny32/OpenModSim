@@ -193,11 +193,14 @@ Theme makeQlementineAppTheme()
     theme.palette.setColor(QPalette::ColorGroup::All, QPalette::Text, theme.secondaryColor);
     theme.palette.setColor(QPalette::ColorGroup::All, QPalette::WindowText, theme.secondaryColor);
     theme.palette.setColor(QPalette::ColorGroup::All, QPalette::ButtonText, theme.secondaryColor);
+    theme.palette.setColor(QPalette::ColorGroup::All, QPalette::ToolTipBase, theme.secondaryColor);
+    theme.palette.setColor(QPalette::ColorGroup::All, QPalette::ToolTipText, theme.primaryColorForeground);
     theme.palette.setColor(QPalette::ColorGroup::All, QPalette::Highlight, theme.primaryColor);
     theme.palette.setColor(QPalette::ColorGroup::All, QPalette::HighlightedText, theme.primaryColorForeground);
     theme.palette.setColor(QPalette::ColorGroup::Disabled, QPalette::Text, theme.secondaryColorDisabled);
     theme.palette.setColor(QPalette::ColorGroup::Disabled, QPalette::WindowText, theme.secondaryColorDisabled);
     theme.palette.setColor(QPalette::ColorGroup::Disabled, QPalette::ButtonText, theme.secondaryColorDisabled);
+    theme.palette.setColor(QPalette::ColorGroup::Disabled, QPalette::ToolTipText, theme.primaryColorForegroundDisabled);
 
     return theme;
 }
@@ -498,8 +501,12 @@ void QlementineAppStyle::polish(QWidget* widget)
 {
     QlementineStyle::polish(widget);
 
-    if (auto* label = qobject_cast<QLabel*>(widget))
-        label->setForegroundRole(QPalette::WindowText);
+    if (auto* label = qobject_cast<QLabel*>(widget)) {
+        if (label->inherits("QTipLabel"))
+            label->setForegroundRole(QPalette::ToolTipText);
+        else
+            label->setForegroundRole(QPalette::WindowText);
+    }
 
     if (auto* toolBar = qobject_cast<QToolBar*>(widget)) {
         toolBar->setIconSize(QSize(16, 16));
