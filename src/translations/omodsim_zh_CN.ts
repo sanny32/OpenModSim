@@ -294,24 +294,24 @@
         <translation>跨平台应用程序开发框架。</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="122"/>
+        <location filename="../dialogs/dialogabout.cpp" line="129"/>
         <source>Author and Maintainer</source>
         <translation>作者和维护者</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="232"/>
+        <location filename="../dialogs/dialogabout.cpp" line="243"/>
         <source>Visit component&apos;s homepage
 %1</source>
         <translation>访问组件主页
 %1</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="253"/>
+        <location filename="../dialogs/dialogabout.cpp" line="264"/>
         <source>Email contributer: %1</source>
         <translation>电子邮件贡献者：%1</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="262"/>
+        <location filename="../dialogs/dialogabout.cpp" line="273"/>
         <source>Visit user&apos;s homepage
 %1</source>
         <translation>访问用户主页
@@ -335,29 +335,33 @@
     <message>
         <location filename="../dialogs/dialogabout.cpp" line="102"/>
         <location filename="../dialogs/dialogabout.cpp" line="109"/>
+        <location filename="../dialogs/dialogabout.cpp" line="116"/>
         <location filename="../dialogs/dialogabout.cpp" line="109"/>
+        <location filename="../dialogs/dialogabout.cpp" line="116"/>
         <source>Underlying platform.</source>
         <translation>底层平台。</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="127"/>
-        <location filename="../dialogs/dialogabout.cpp" line="132"/>
-        <location filename="../dialogs/dialogabout.cpp" line="132"/>
+        <location filename="../dialogs/dialogabout.cpp" line="134"/>
+        <location filename="../dialogs/dialogabout.cpp" line="139"/>
+        <location filename="../dialogs/dialogabout.cpp" line="144"/>
+        <location filename="../dialogs/dialogabout.cpp" line="139"/>
+        <location filename="../dialogs/dialogabout.cpp" line="144"/>
         <source>Contributor</source>
         <translation>贡献者</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="145"/>
+        <location filename="../dialogs/dialogabout.cpp" line="157"/>
         <source>Russian</source>
         <translation>俄语</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="150"/>
+        <location filename="../dialogs/dialogabout.cpp" line="161"/>
         <source>Simplified Chinese and Traditional Chinese</source>
         <translation>简体中文和繁体中文</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="258"/>
+        <location filename="../dialogs/dialogabout.cpp" line="269"/>
         <source>Visit github user&apos;s homepage
 %1</source>
         <translation>访问 GitHub 用户主页
@@ -392,7 +396,7 @@
         <translation type="vanished">• Fira Code 6.2 字体</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="286"/>
+        <location filename="../dialogs/dialogabout.cpp" line="297"/>
         <source>License Agreement - %1</source>
         <translation>许可协议 - %1</translation>
     </message>
