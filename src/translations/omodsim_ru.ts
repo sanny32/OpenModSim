@@ -2175,8 +2175,8 @@ Source: %3</source>
     </message>
     <message>
         <location filename="../formtrafficview.cpp" line="104"/>
-        <location filename="../formtrafficview.cpp" line="726"/>
-        <location filename="../formtrafficview.cpp" line="877"/>
+        <location filename="../formtrafficview.cpp" line="728"/>
+        <location filename="../formtrafficview.cpp" line="879"/>
         <source>Exceptions Only</source>
         <translation>Только исключения</translation>
     </message>
@@ -2206,38 +2206,38 @@ Source: %3</source>
         <translation>Ошибка экспорта лога!</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="689"/>
-        <location filename="../formtrafficview.cpp" line="861"/>
+        <location filename="../formtrafficview.cpp" line="691"/>
+        <location filename="../formtrafficview.cpp" line="863"/>
         <source>Unit:</source>
         <translation>Устройство:</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="695"/>
-        <location filename="../formtrafficview.cpp" line="865"/>
+        <location filename="../formtrafficview.cpp" line="697"/>
+        <location filename="../formtrafficview.cpp" line="867"/>
         <source>-1 = all unit ids</source>
         <translation>-1 = все устройства</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="716"/>
-        <location filename="../formtrafficview.cpp" line="872"/>
+        <location filename="../formtrafficview.cpp" line="718"/>
+        <location filename="../formtrafficview.cpp" line="874"/>
         <source>Source:</source>
         <translation>Источник:</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="727"/>
-        <location filename="../formtrafficview.cpp" line="878"/>
+        <location filename="../formtrafficview.cpp" line="729"/>
+        <location filename="../formtrafficview.cpp" line="880"/>
         <source>Show only responses with Modbus exception</source>
         <translation>Показывать только ответы с исключением Modbus</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="734"/>
-        <location filename="../formtrafficview.cpp" line="882"/>
+        <location filename="../formtrafficview.cpp" line="736"/>
+        <location filename="../formtrafficview.cpp" line="884"/>
         <source>Autoscroll</source>
         <translation>Автопрокрутка</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="735"/>
-        <location filename="../formtrafficview.cpp" line="883"/>
+        <location filename="../formtrafficview.cpp" line="737"/>
+        <location filename="../formtrafficview.cpp" line="885"/>
         <source>Automatically scroll to the latest entry</source>
         <translation>Автоматически прокручивать к последней записи</translation>
     </message>
@@ -2246,41 +2246,41 @@ Source: %3</source>
         <location filename="../formtrafficview.cpp" line="93"/>
         <location filename="../formtrafficview.cpp" line="97"/>
         <location filename="../formtrafficview.cpp" line="535"/>
-        <location filename="../formtrafficview.cpp" line="694"/>
-        <location filename="../formtrafficview.cpp" line="719"/>
-        <location filename="../formtrafficview.cpp" line="864"/>
+        <location filename="../formtrafficview.cpp" line="696"/>
+        <location filename="../formtrafficview.cpp" line="721"/>
+        <location filename="../formtrafficview.cpp" line="866"/>
         <source>All</source>
         <translation>Все</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="743"/>
-        <location filename="../formtrafficview.cpp" line="887"/>
+        <location filename="../formtrafficview.cpp" line="745"/>
+        <location filename="../formtrafficview.cpp" line="889"/>
         <source>Rows:</source>
         <translation>Строк:</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="704"/>
-        <location filename="../formtrafficview.cpp" line="869"/>
+        <location filename="../formtrafficview.cpp" line="706"/>
+        <location filename="../formtrafficview.cpp" line="871"/>
         <source>Function:</source>
         <translation>Функция:</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.ui" line="68"/>
+        <location filename="../formtrafficview.ui" line="60"/>
         <source>Clear</source>
         <translation>Очистить</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.ui" line="77"/>
+        <location filename="../formtrafficview.ui" line="65"/>
         <source>Export</source>
         <translation>Экспорт</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.ui" line="92"/>
+        <location filename="../formtrafficview.ui" line="80"/>
         <source>Hex View</source>
         <translation>Шестнадцатиричный режим</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.ui" line="59"/>
+        <location filename="../formtrafficview.ui" line="55"/>
         <source>Pause</source>
         <translation>Пауза</translation>
     </message>

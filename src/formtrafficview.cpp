@@ -673,7 +673,9 @@ void FormTrafficView::setHexView(bool enabled)
 void FormTrafficView::setupToolbarActions()
 {
     ui->toolBarTraffic->setVisible(true);
+    ui->actionPauseTraffic->setIcon(themedIcon(QStringLiteral("omodsim/pause")));
     ui->actionClearTraffic->setIcon(themedIcon(QStringLiteral("omodsim/clear")));
+    ui->actionExportTrafficLog->setIcon(themedIcon(QStringLiteral("omodsim/export")));
 
     ui->toolBarTraffic->removeAction(ui->actionPauseTraffic);
     ui->toolBarTraffic->removeAction(ui->actionClearTraffic);
