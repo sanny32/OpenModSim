@@ -1849,7 +1849,7 @@ Open the download page?</source>
     <message>
         <location filename="../formdatamapview.cpp" line="940"/>
         <location filename="../formdatamapview.cpp" line="1164"/>
-        <location filename="../formdatamapview.cpp" line="1486"/>
+        <location filename="../formdatamapview.cpp" line="1488"/>
         <source>All Types</source>
         <translation>Все типы</translation>
     </message>
@@ -1864,44 +1864,44 @@ Type Filter: %3</source>
     </message>
     <message>
         <location filename="../formdatamapview.cpp" line="1165"/>
-        <location filename="../formdatamapview.cpp" line="1487"/>
+        <location filename="../formdatamapview.cpp" line="1489"/>
         <source>Coils</source>
         <translation>Регистры флагов</translation>
     </message>
     <message>
         <location filename="../formdatamapview.cpp" line="1166"/>
-        <location filename="../formdatamapview.cpp" line="1488"/>
+        <location filename="../formdatamapview.cpp" line="1490"/>
         <source>Discrete Inputs</source>
         <translation>Дискретные входы</translation>
     </message>
     <message>
         <location filename="../formdatamapview.cpp" line="1167"/>
-        <location filename="../formdatamapview.cpp" line="1489"/>
+        <location filename="../formdatamapview.cpp" line="1491"/>
         <source>Input Registers</source>
         <translation>Регистры ввода</translation>
     </message>
     <message>
         <location filename="../formdatamapview.cpp" line="1168"/>
-        <location filename="../formdatamapview.cpp" line="1490"/>
+        <location filename="../formdatamapview.cpp" line="1492"/>
         <source>Holding Registers</source>
         <translation>Регистры хранения</translation>
     </message>
     <message>
         <location filename="../formdatamapview.cpp" line="1156"/>
-        <location filename="../formdatamapview.cpp" line="1497"/>
+        <location filename="../formdatamapview.cpp" line="1499"/>
         <source>Unit:</source>
         <translation>Устройство:</translation>
     </message>
     <message>
         <location filename="../formdatamapview.cpp" line="1157"/>
-        <location filename="../formdatamapview.cpp" line="1498"/>
+        <location filename="../formdatamapview.cpp" line="1500"/>
         <source>Data Type:</source>
         <translation>Тип данных:</translation>
     </message>
     <message>
         <location filename="../formdatamapview.cpp" line="929"/>
         <location filename="../formdatamapview.cpp" line="1158"/>
-        <location filename="../formdatamapview.cpp" line="1482"/>
+        <location filename="../formdatamapview.cpp" line="1484"/>
         <source>All</source>
         <translation>Все</translation>
     </message>

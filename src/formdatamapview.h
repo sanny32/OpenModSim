@@ -12,6 +12,7 @@
 #include "connectiondetails.h"
 #include "outputtypes.h"
 #include "enums.h"
+#include "displaydefinition.h"
 #include "datamapdatamodel.h"
 
 class MainWindow;
