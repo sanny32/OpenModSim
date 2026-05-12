@@ -1,8 +1,10 @@
+#include <QGuiApplication>
 #include <QHeaderView>
 #include <QInputDialog>
 #include <QMenu>
 #include <QMessageBox>
 #include <QPainter>
+#include <QStyleHints>
 #include "formscriptview.h"
 #include "projecttreewidget.h"
 #include "themedicons.h"
@@ -82,6 +84,9 @@ ProjectTreeWidget::ProjectTreeWidget(QWidget* parent)
             this, &ProjectTreeWidget::on_itemChanged);
     connect(this, &QTreeWidget::customContextMenuRequested,
             this, &ProjectTreeWidget::on_contextMenu);
+
+    connect(QGuiApplication::styleHints(), &QStyleHints::colorSchemeChanged,
+            this, [this](Qt::ColorScheme) { refreshAllItemColors(); });
 }
 
 ///
@@ -243,6 +248,24 @@ void ProjectTreeWidget::refreshFormItem(QTreeWidgetItem* item, QWidget* frm)
     QColor textColor = palette().color(QPalette::Text);
     textColor.setAlpha(open ? 255 : 100);
     item->setForeground(0, textColor);
+}
+
+void ProjectTreeWidget::refreshAllItemColors()
+{
+    const bool dark = QGuiApplication::styleHints()->colorScheme() == Qt::ColorScheme::Dark;
+    const QColor baseColor = dark ? Qt::white : Qt::black;
+    const QList<QTreeWidgetItem*> roots = { _dataRoot, _trafficRoot, _scriptRoot, _dataMapRoot };
+    for (auto* root : roots) {
+        if (!root) continue;
+        for (int i = 0; i < root->childCount(); ++i) {
+            auto* item = root->child(i);
+            if (!item) continue;
+            const bool open = item->data(0, ItemOpenRole).toBool();
+            QColor textColor = baseColor;
+            textColor.setAlpha(open ? 255 : 100);
+            item->setForeground(0, textColor);
+        }
+    }
 }
 
 ///

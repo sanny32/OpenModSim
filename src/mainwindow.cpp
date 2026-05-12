@@ -1,8 +1,10 @@
 #include <QtWidgets>
 #include <QBuffer>
+#include <QGuiApplication>
 #include <QPrinterInfo>
 #include <QPrintDialog>
 #include <QPageSetupDialog>
+#include <QStyleHints>
 #include <limits>
 #include "apppreferences.h"
 #include "dialogabout.h"
@@ -249,13 +251,6 @@ void configureMainToolbarText(Ui::MainWindow* ui)
         ui->actionDisconnect
     };
 
-/*#if defined(HAVE_QLEMENTINE_APP_STYLE)
-    if (dynamic_cast<QlementineAppStyle*>(qApp ? qApp->style() : nullptr)) {
-        labeledActions.append(ui->actionOpenProject);
-        labeledActions.append(ui->actionSaveProject);
-    }
-#endif*/
-
     for (QAction* action : ui->toolBarMain->actions()) {
         if (auto* button = qobject_cast<QToolButton*>(ui->toolBarMain->widgetForAction(action)))
             button->setToolButtonStyle(Qt::ToolButtonIconOnly);
@@ -366,6 +361,9 @@ MainWindow::MainWindow(const QString& profile, bool useSession, const QString& s
     AppLogger::setupDataSimulatorLogging(*_dataSimulator, this);
     AppLogger::setupAppProjectLogging(*_project, this);
     AppLogger::setupAppPreferencesLogging(AppPreferences::instance(), this);
+
+    connect(QGuiApplication::styleHints(), &QStyleHints::colorSchemeChanged,
+            this, [this](Qt::ColorScheme) { applyThemeColors(); });
 
     // View / window trivial action wiring
     connect(ui->actionExit,           &QAction::triggered, this, [this]{ close(); });
@@ -678,7 +676,6 @@ void MainWindow::changeEvent(QEvent* event)
         rebuildRecentProjectsMenu();
         updateProjectWindowTitle();
     }
-
     QMainWindow::changeEvent(event);
 }
 
@@ -1077,6 +1074,20 @@ void MainWindow::applyColors(const QColor& bg, const QColor& fg, const QColor& a
             script->setForegroundColor(fg);
         }
     });
+}
+
+///
+/// \brief MainWindow::applyThemeColors
+///
+void MainWindow::applyThemeColors()
+{
+    const bool dark = QGuiApplication::styleHints()->colorScheme() == Qt::ColorScheme::Dark;
+    auto& prefs = AppPreferences::instance();
+    const QColor bg = dark ? QColor(0x1c1c1e) : Qt::white;
+    const QColor fg = dark ? Qt::white : Qt::black;
+    prefs.setBackgroundColor(bg);
+    prefs.setForegroundColor(fg);
+    applyColors(bg, fg, prefs.addressColor(), prefs.commentColor());
 }
 
 ///

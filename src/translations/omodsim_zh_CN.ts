@@ -2608,7 +2608,7 @@ Open the download page?</source>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="342"/>
-        <location filename="../mainwindow.cpp" line="1904"/>
+        <location filename="../mainwindow.cpp" line="1915"/>
         <source>Save Project</source>
         <translation>保存项目</translation>
     </message>
@@ -2808,19 +2808,19 @@ Open the download page?</source>
         <translation>状态栏</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="927"/>
+        <location filename="../mainwindow.cpp" line="924"/>
         <source>All files (*)</source>
         <translation>所有文件 (*)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="298"/>
-        <location filename="../mainwindow.cpp" line="673"/>
+        <location filename="../mainwindow.cpp" line="293"/>
+        <location filename="../mainwindow.cpp" line="671"/>
         <source>Open Recent</source>
         <translation>最近打开</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="299"/>
-        <location filename="../mainwindow.cpp" line="2040"/>
+        <location filename="../mainwindow.cpp" line="294"/>
+        <location filename="../mainwindow.cpp" line="2051"/>
         <source>Clear List</source>
         <translation>清除列表</translation>
     </message>
@@ -2835,21 +2835,21 @@ Open the download page?</source>
         <translation>输出</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="926"/>
-        <location filename="../mainwindow.cpp" line="1934"/>
+        <location filename="../mainwindow.cpp" line="923"/>
+        <location filename="../mainwindow.cpp" line="1945"/>
         <source>Project files (*.omsim)</source>
         <translation>项目文件 (*.omsim)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1558"/>
-        <location filename="../mainwindow.cpp" line="1962"/>
+        <location filename="../mainwindow.cpp" line="1569"/>
+        <location filename="../mainwindow.cpp" line="1973"/>
         <source>Untitled</source>
         <translation>未命名</translation>
     </message>
     <message>
         <location filename="../applogger.cpp" line="119"/>
-        <location filename="../mainwindow.cpp" line="676"/>
-        <location filename="../mainwindow.cpp" line="1743"/>
+        <location filename="../mainwindow.cpp" line="674"/>
+        <location filename="../mainwindow.cpp" line="1754"/>
         <source>Address Base</source>
         <translation>地址基准</translation>
     </message>
@@ -3139,7 +3139,7 @@ Open the download page?</source>
         <translation>脚本已启动：%1（模式：%2）</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1297"/>
+        <location filename="../mainwindow.cpp" line="1308"/>
         <source>Move to Other Panel</source>
         <translation>移至其他面板</translation>
     </message>
@@ -3161,12 +3161,12 @@ Open the download page?</source>
         <translation>十六进制视图</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1905"/>
+        <location filename="../mainwindow.cpp" line="1916"/>
         <source>Save project before closing?</source>
         <translation>关闭前保存项目？</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2028"/>
+        <location filename="../mainwindow.cpp" line="2039"/>
         <source>No Recent Projects</source>
         <translation>没有最近项目</translation>
     </message>
@@ -3176,7 +3176,7 @@ Open the download page?</source>
         <translation>数据</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1255"/>
+        <location filename="../mainwindow.cpp" line="1266"/>
         <source>JavaScript files (*.js);;All files (*)</source>
         <translation>JavaScript文件 (*.js);;所有文件 (*)</translation>
     </message>
@@ -3732,103 +3732,103 @@ Open the download page?</source>
 <context>
     <name>ProjectTreeWidget</name>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="63"/>
-        <location filename="../controls/projecttreewidget.cpp" line="322"/>
+        <location filename="../controls/projecttreewidget.cpp" line="65"/>
+        <location filename="../controls/projecttreewidget.cpp" line="345"/>
         <source>Data</source>
         <translation>数据</translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="71"/>
-        <location filename="../controls/projecttreewidget.cpp" line="323"/>
+        <location filename="../controls/projecttreewidget.cpp" line="73"/>
+        <location filename="../controls/projecttreewidget.cpp" line="346"/>
         <source>Traffic</source>
         <translation>流量</translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="67"/>
-        <location filename="../controls/projecttreewidget.cpp" line="325"/>
+        <location filename="../controls/projecttreewidget.cpp" line="69"/>
+        <location filename="../controls/projecttreewidget.cpp" line="348"/>
         <source>Maps</source>
         <translation>地图</translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="75"/>
-        <location filename="../controls/projecttreewidget.cpp" line="324"/>
+        <location filename="../controls/projecttreewidget.cpp" line="77"/>
+        <location filename="../controls/projecttreewidget.cpp" line="347"/>
         <source>Scripts</source>
         <translation>脚本</translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="364"/>
+        <location filename="../controls/projecttreewidget.cpp" line="387"/>
         <source>New Data View</source>
         <translation>新建数据视图</translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="365"/>
+        <location filename="../controls/projecttreewidget.cpp" line="388"/>
         <source>New Map View</source>
         <translation>新建映射视图</translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="366"/>
+        <location filename="../controls/projecttreewidget.cpp" line="389"/>
         <source>New Traffic View</source>
         <translation>新建流量视图</translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="367"/>
+        <location filename="../controls/projecttreewidget.cpp" line="390"/>
         <source>New Script</source>
         <translation>新建脚本</translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="389"/>
-        <location filename="../controls/projecttreewidget.cpp" line="474"/>
+        <location filename="../controls/projecttreewidget.cpp" line="412"/>
+        <location filename="../controls/projecttreewidget.cpp" line="497"/>
         <source>Delete All</source>
         <translation>删除全部</translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="410"/>
+        <location filename="../controls/projecttreewidget.cpp" line="433"/>
         <source>Run All Scripts</source>
         <translation>运行所有脚本</translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="411"/>
+        <location filename="../controls/projecttreewidget.cpp" line="434"/>
         <source>Stop All Scripts</source>
         <translation>停止所有脚本</translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="429"/>
+        <location filename="../controls/projecttreewidget.cpp" line="452"/>
         <source>Run Script</source>
         <translation>运行脚本</translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="430"/>
+        <location filename="../controls/projecttreewidget.cpp" line="453"/>
         <source>Stop Script</source>
         <translation>停止脚本</translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="436"/>
-        <location filename="../controls/projecttreewidget.cpp" line="501"/>
+        <location filename="../controls/projecttreewidget.cpp" line="459"/>
+        <location filename="../controls/projecttreewidget.cpp" line="524"/>
         <source>Rename</source>
         <translation>重命名</translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="439"/>
+        <location filename="../controls/projecttreewidget.cpp" line="462"/>
         <source>Delete</source>
         <translation>删除</translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="475"/>
+        <location filename="../controls/projecttreewidget.cpp" line="498"/>
         <source>Delete all in &quot;%1&quot;?</source>
         <translation>删除 &quot;%1&quot; 中的所有内容？</translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="501"/>
+        <location filename="../controls/projecttreewidget.cpp" line="524"/>
         <source>New name:</source>
         <translation>新名称：</translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="509"/>
+        <location filename="../controls/projecttreewidget.cpp" line="532"/>
         <source>Delete Form</source>
         <translation>删除窗体</translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="510"/>
+        <location filename="../controls/projecttreewidget.cpp" line="533"/>
         <source>Delete &quot;%1&quot; from the project?</source>
         <translation>从项目中删除 &quot;%1&quot;？</translation>
     </message>
