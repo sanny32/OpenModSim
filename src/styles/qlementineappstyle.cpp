@@ -34,18 +34,18 @@ using oclero::qlementine::Status;
 using oclero::qlementine::Theme;
 
 constexpr QRgb kCanvas = 0xffffff;
-constexpr QRgb kChrome = 0xf8f9fb;
-constexpr QRgb kChromeStrong = 0xf1f3f6;
-constexpr QRgb kChromePressed = 0xe8edf5;
-constexpr QRgb kBorder = 0xdfe3e8;
-constexpr QRgb kBorderActive = 0xcfd6df;
+constexpr QRgb kChrome = 0xf5f5f5;
+constexpr QRgb kChromeStrong = 0xececec;
+constexpr QRgb kChromePressed = 0xe0e0e0;
+constexpr QRgb kBorder = 0xe3e6ea;
+constexpr QRgb kBorderActive = 0xcdd1d6;
 constexpr QRgb kText = 0x1f2937;
-constexpr QRgb kMutedText = 0x626b79;
+constexpr QRgb kMutedText = 0x8e8e93;
 constexpr QRgb kDisabledText = 0xb2bac5;
-constexpr QRgb kBlue = 0x3a8dde;
-constexpr QRgb kBlueHover = 0x4a9bea;
-constexpr QRgb kBluePressed = 0x2f7fcc;
-constexpr QRgb kBlueDisabled = 0xb8d8f6;
+constexpr QRgb kBlue = 0x007aff;
+constexpr QRgb kBlueHover = 0x1a8aff;
+constexpr QRgb kBluePressed = 0x0062cc;
+constexpr QRgb kBlueDisabled = 0xb3d7ff;
 constexpr QRgb kGreen = 0x34c759;
 
 QColor transparent(QRgb rgb)
@@ -97,8 +97,8 @@ Theme makeQlementineAppTheme()
 
     theme.neutralColor = QColor(kChromeStrong);
     theme.neutralColorHovered = QColor(kChromePressed);
-    theme.neutralColorPressed = QColor(0xdce4ef);
-    theme.neutralColorDisabled = QColor(0xf4f6f8);
+    theme.neutralColorPressed = QColor(0xd5d5d5);
+    theme.neutralColorDisabled = QColor(0xf2f2f2);
     theme.neutralColorTransparent = transparent(kChromeStrong);
 
     theme.primaryColor = QColor(kBlue);
@@ -189,7 +189,7 @@ Theme makeQlementineAppTheme()
 
     theme.palette.setColor(QPalette::ColorGroup::All, QPalette::Window, theme.backgroundColorMain2);
     theme.palette.setColor(QPalette::ColorGroup::All, QPalette::Base, theme.backgroundColorMain1);
-    theme.palette.setColor(QPalette::ColorGroup::All, QPalette::AlternateBase, QColor(0xf6f8fb));
+    theme.palette.setColor(QPalette::ColorGroup::All, QPalette::AlternateBase, QColor(0xf5f5f5));
     theme.palette.setColor(QPalette::ColorGroup::All, QPalette::Button, theme.neutralColor);
     theme.palette.setColor(QPalette::ColorGroup::All, QPalette::Text, theme.secondaryColor);
     theme.palette.setColor(QPalette::ColorGroup::All, QPalette::WindowText, theme.secondaryColor);
@@ -264,7 +264,7 @@ QColor const& QlementineAppStyle::buttonBackgroundColor(MouseState mouse, ColorR
             return transparentRef(kChromeStrong);
         case MouseState::Normal:
         default:
-            return colorRef(0xfdfdfd);
+            return colorRef(0xfefefe);
     }
 }
 
@@ -421,13 +421,13 @@ QColor QlementineAppStyle::listItemBackgroundColor(MouseState mouse, SelectionSt
 
     const bool isSelected = selected == SelectionState::Selected;
     if (isSelected)
-        return mouse == MouseState::Disabled ? QColor(0xf0f3f7) : QColor(0xeaf2ff);
+        return mouse == MouseState::Disabled ? QColor(0xeaeaea) : QColor(0xd9eaff);
 
     switch (mouse) {
         case MouseState::Hovered:
-            return QColor(0xf3f7fc);
+            return QColor(0xf0f0f0);
         case MouseState::Pressed:
-            return QColor(0xe8eef7);
+            return QColor(0xe5e5e5);
         case MouseState::Disabled:
         case MouseState::Transparent:
         case MouseState::Normal:
@@ -644,7 +644,7 @@ QColor const& QlementineAppStyle::tableHeaderBgColor(MouseState mouse, CheckStat
         case MouseState::Hovered:
             return colorRef(kChromeStrong);
         case MouseState::Disabled:
-            return colorRef(0xf4f6f8);
+            return colorRef(0xf2f2f2);
         case MouseState::Transparent:
         case MouseState::Normal:
         default:
@@ -684,7 +684,7 @@ QColor const& QlementineAppStyle::textFieldBackgroundColor(MouseState mouse, Sta
 {
     Q_UNUSED(status)
 
-    return mouse == MouseState::Disabled ? colorRef(0xf4f6f8) : colorRef(kCanvas);
+    return mouse == MouseState::Disabled ? colorRef(0xf2f2f2) : colorRef(kCanvas);
 }
 
 ///
