@@ -311,8 +311,14 @@ void AppPreferences::load(QSettings& settings)
 
     _font.fromString(settings.value("Font", _font.toString()).toString());
     _fontZoom        = settings.value("FontZoom",        _fontZoom).toInt();
-    _backgroundColor = QColor(settings.value("BackgroundColor", _backgroundColor.name()).toString());
-    _foregroundColor = QColor(settings.value("ForegroundColor", _foregroundColor.name()).toString());
+    const bool dark = isSystemDarkMode();
+    const QColor defaultBg = dark ? QColor(0x1c1c1e) : Qt::white;
+    const QColor defaultFg = dark ? Qt::white : Qt::black;
+    const QColor savedBg = QColor(settings.value("BackgroundColor", defaultBg.name()).toString());
+    const QColor savedFg = QColor(settings.value("ForegroundColor", defaultFg.name()).toString());
+    // если сохранено старое значение противоположной темы — подставить дефолт текущей
+    _backgroundColor = (savedBg == Qt::white || savedBg == QColor(0x1c1c1e)) ? defaultBg : savedBg;
+    _foregroundColor = (savedFg == Qt::black || savedFg == Qt::white)         ? defaultFg : savedFg;
     _addressColor    = QColor(settings.value("AddressColor",    _addressColor.name()).toString());
     _commentColor    = QColor(settings.value("CommentColor",    _commentColor.name()).toString());
     _language        = settings.value("Language", _language).toString();

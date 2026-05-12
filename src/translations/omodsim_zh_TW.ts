@@ -3606,67 +3606,67 @@ Open the download page?</source>
 <context>
     <name>OutputDataWidget</name>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1319"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1320"/>
         <source>Set Value of %1</source>
         <translation>設定 %1 的值</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1328"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1329"/>
         <source>Add Description</source>
         <translation>新增描述</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1328"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1329"/>
         <source>Edit Description</source>
         <translation>編輯描述</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1331"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1332"/>
         <source>%1: Enter Description</source>
         <translation>%1：輸入描述</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1340"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1341"/>
         <source>Remove Color</source>
         <translation>移除顏色</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1351"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1352"/>
         <source>Yellow</source>
         <translation>黃色</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1352"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1353"/>
         <source>Cyan</source>
         <translation>青色</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1353"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1354"/>
         <source>Magenta</source>
         <translation>品紅色</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1354"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1355"/>
         <source>LightGreen</source>
         <translation>淺綠色</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1355"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1356"/>
         <source>Orange</source>
         <translation>橙色</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1356"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1357"/>
         <source>LightBlue</source>
         <translation>淺藍色</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1357"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1358"/>
         <source>LightGray</source>
         <translation>淺灰色</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1436"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1437"/>
         <source>Zoom: %1%</source>
         <translation>縮放：%1%</translation>
     </message>

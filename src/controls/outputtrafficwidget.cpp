@@ -75,6 +75,10 @@ QColor OutputTrafficWidget::backgroundColor() const
 ///
 void OutputTrafficWidget::setBackgroundColor(const QColor& clr)
 {
+    auto pal = palette();
+    pal.setColor(QPalette::Base, clr);
+    pal.setColor(QPalette::Window, clr);
+    setPalette(pal);
     ui->logView->setBackGroundColor(clr);
 }
 

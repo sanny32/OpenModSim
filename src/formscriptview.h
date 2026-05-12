@@ -328,15 +328,24 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, FormScriptView* frm)
             }
             else if (xml.name() == QLatin1String("Colors")) {
                 const QXmlStreamAttributes colorAttrs = xml.attributes();
+                const bool dark = QGuiApplication::styleHints()->colorScheme() == Qt::ColorScheme::Dark;
+                const QColor defaultBg = dark ? QColor(0x1c1c1e) : Qt::white;
+                const QColor defaultFg = dark ? Qt::white : Qt::black;
 
                 if (colorAttrs.hasAttribute("Background")) {
                     QColor color(colorAttrs.value("Background").toString());
-                    if (color.isValid()) frm->setBackgroundColor(color);
+                    if (color.isValid()) {
+                        if (color == Qt::white || color == QColor(0x1c1c1e)) color = defaultBg;
+                        frm->setBackgroundColor(color);
+                    }
                 }
 
                 if (colorAttrs.hasAttribute("Foreground")) {
                     QColor color(colorAttrs.value("Foreground").toString());
-                    if (color.isValid()) frm->setForegroundColor(color);
+                    if (color.isValid()) {
+                        if (color == Qt::black || color == Qt::white) color = defaultFg;
+                        frm->setForegroundColor(color);
+                    }
                 }
                 xml.skipCurrentElement();
             }

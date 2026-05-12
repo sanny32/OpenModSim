@@ -615,9 +615,10 @@ QColor OutputDataWidget::backgroundColor() const
 ///
 void OutputDataWidget::setBackgroundColor(const QColor& clr)
 {
-    auto pal = ui->listView->palette();
+    auto pal = palette();
     pal.setColor(QPalette::Base, clr);
     pal.setColor(QPalette::Window, clr);
+    setPalette(pal);
     ui->listView->setPalette(pal);
     ui->listView->viewport()->setPalette(pal);
 }
