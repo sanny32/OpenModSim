@@ -178,6 +178,7 @@ AppLogOutput::AppLogOutput(QWidget* parent)
         if (!btn) return;
         btn->setToolButtonStyle(Qt::ToolButtonIconOnly);
         btn->setFixedSize(24, 24);
+        btn->setProperty("preservePressedIconAlignment", true);
     };
 
     setupFilterBtn(ui->actionFilterInfo);

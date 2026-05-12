@@ -13,6 +13,8 @@ public:
 
     void drawControl(ControlElement element, const QStyleOption* option,
                      QPainter* painter, const QWidget* widget) const override;
+    int pixelMetric(PixelMetric metric, const QStyleOption* option = nullptr,
+                    const QWidget* widget = nullptr) const override;
 };
 
 #endif // APPSTYLE_H

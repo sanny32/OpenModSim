@@ -137,38 +137,38 @@
         <translation>Очистить журнал</translation>
     </message>
     <message>
-        <location filename="../controls/applogoutput.cpp" line="210"/>
-        <location filename="../controls/applogoutput.cpp" line="385"/>
+        <location filename="../controls/applogoutput.cpp" line="211"/>
+        <location filename="../controls/applogoutput.cpp" line="386"/>
         <source>Copy All</source>
         <translation>Копировать всё</translation>
     </message>
     <message>
-        <location filename="../controls/applogoutput.cpp" line="376"/>
+        <location filename="../controls/applogoutput.cpp" line="377"/>
         <source>Copy</source>
         <translation>Копировать</translation>
     </message>
     <message>
-        <location filename="../controls/applogoutput.cpp" line="392"/>
+        <location filename="../controls/applogoutput.cpp" line="393"/>
         <source>Export...</source>
         <translation>Экспорт...</translation>
     </message>
     <message>
-        <location filename="../controls/applogoutput.cpp" line="398"/>
+        <location filename="../controls/applogoutput.cpp" line="399"/>
         <source>Clear</source>
         <translation>Очистить</translation>
     </message>
     <message>
-        <location filename="../controls/applogoutput.cpp" line="422"/>
+        <location filename="../controls/applogoutput.cpp" line="423"/>
         <source>Text files (*.txt)</source>
         <translation>Текстовые файлы (*.txt)</translation>
     </message>
     <message>
-        <location filename="../controls/applogoutput.cpp" line="427"/>
+        <location filename="../controls/applogoutput.cpp" line="428"/>
         <source>Export</source>
         <translation>Экспорт</translation>
     </message>
     <message>
-        <location filename="../controls/applogoutput.cpp" line="427"/>
+        <location filename="../controls/applogoutput.cpp" line="428"/>
         <source>Cannot open file for writing:
 %1</source>
         <translation>Не удалось открыть файл для записи:
@@ -270,12 +270,12 @@
         <translation>Очистить консоль</translation>
     </message>
     <message>
-        <location filename="../controls/consoleoutput.cpp" line="309"/>
+        <location filename="../controls/consoleoutput.cpp" line="310"/>
         <source>Copy</source>
         <translation>Копировать</translation>
     </message>
     <message>
-        <location filename="../controls/consoleoutput.cpp" line="320"/>
+        <location filename="../controls/consoleoutput.cpp" line="321"/>
         <source>Clear</source>
         <translation>Очистить</translation>
     </message>

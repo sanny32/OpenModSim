@@ -14,6 +14,7 @@
 #include <QPalette>
 #include <QStyleOptionDockWidget>
 #include <QStyleOptionTab>
+#include <QStyleOptionToolButton>
 #include <QTabBar>
 #include <QToolBar>
 #include <QToolButton>
@@ -454,6 +455,16 @@ QColor const& MacAppStyle::listItemForegroundColor(MouseState mouse, SelectionSt
 ///
 int MacAppStyle::pixelMetric(PixelMetric metric, const QStyleOption* option, const QWidget* widget) const
 {
+    if (widget && widget->property("preservePressedIconAlignment").toBool()) {
+        switch (metric) {
+            case PM_ButtonShiftHorizontal:
+            case PM_ButtonShiftVertical:
+                return 0;
+            default:
+                break;
+        }
+    }
+
     switch (metric) {
         case PM_DockWidgetFrameWidth:
         case PM_DockWidgetSeparatorExtent:

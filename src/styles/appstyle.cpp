@@ -1,6 +1,7 @@
 #include "appstyle.h"
 
 #include <QPainter>
+#include <QStyleOptionToolButton>
 #include <QStyleOptionTab>
 #include <QTabBar>
 
@@ -53,4 +54,26 @@ void AppStyle::drawControl(ControlElement element, const QStyleOption* option,
             painter->fillRect(r.left(), r.top(), r.width(), thickness, color);
             break;
     }
+}
+
+///
+/// \brief AppStyle::pixelMetric
+/// \param metric
+/// \param option
+/// \param widget
+/// \return
+///
+int AppStyle::pixelMetric(PixelMetric metric, const QStyleOption* option, const QWidget* widget) const
+{
+    if (widget && widget->property("preservePressedIconAlignment").toBool()) {
+        switch (metric) {
+            case PM_ButtonShiftHorizontal:
+            case PM_ButtonShiftVertical:
+                return 0;
+            default:
+                break;
+        }
+    }
+
+    return QProxyStyle::pixelMetric(metric, option, widget);
 }
