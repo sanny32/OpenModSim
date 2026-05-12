@@ -78,24 +78,24 @@ if(WIN32)
     endif()
 endif()
 
+if(Qt6_FOUND)
+    include(FetchContent)
+    set(QLEMENTINE_VERSION "1.4.2")
+    FetchContent_Declare(qlementine
+        GIT_REPOSITORY "https://github.com/oclero/qlementine.git"
+        GIT_TAG        "v${QLEMENTINE_VERSION}"
+    )
+    FetchContent_MakeAvailable(qlementine)
+
+    set(QLEMENTINE_ICONS_VERSION "1.15.0")
+    FetchContent_Declare(qlementine-icons
+        GIT_REPOSITORY "https://github.com/oclero/qlementine-icons.git"
+        GIT_TAG        "v${QLEMENTINE_ICONS_VERSION}"
+    )
+    FetchContent_MakeAvailable(qlementine-icons)
+endif()
+
 if(APPLE)
-    if(Qt6_FOUND)
-        include(FetchContent)
-        set(QLEMENTINE_VERSION "1.4.2")
-        FetchContent_Declare(qlementine
-            GIT_REPOSITORY "https://github.com/oclero/qlementine.git"
-            GIT_TAG        "v${QLEMENTINE_VERSION}"
-        )
-        FetchContent_MakeAvailable(qlementine)
-
-        set(QLEMENTINE_ICONS_VERSION "1.15.0")
-        FetchContent_Declare(qlementine-icons
-            GIT_REPOSITORY "https://github.com/oclero/qlementine-icons.git"
-            GIT_TAG        "v${QLEMENTINE_ICONS_VERSION}"
-        )
-        FetchContent_MakeAvailable(qlementine-icons)
-    endif()
-
     find_program(MACDEPLOYQT_EXECUTABLE macdeployqt HINTS "${QT_BINARY_DIR}" "${QT_LIBEXEC_DIR}" "${QT_INSTALL_LIBEXECS}")
     if(MACDEPLOYQT_EXECUTABLE)
         message(STATUS "macdeployqt found at: ${MACDEPLOYQT_EXECUTABLE}")
@@ -141,7 +141,8 @@ add_compile_definitions(APP_VERSION_PATCH="${VERSION_PATCH}")
 add_compile_definitions(APP_VERSION="${PROJECT_VERSION}")
 add_compile_definitions(BUILD_YEAR="${CURRENT_YEAR}")
 
-if(APPLE AND Qt6_FOUND)
+if(Qt6_FOUND)
+    add_compile_definitions(HAVE_QLEMENTINE_APP_STYLE)
     add_compile_definitions(QLEMENTINE_VERSION="${QLEMENTINE_VERSION}")
     add_compile_definitions(QLEMENTINE_ICONS_VERSION="${QLEMENTINE_ICONS_VERSION}")
 endif()
@@ -187,6 +188,7 @@ set(SOURCES
     controls/mainstatusbar.cpp
     styles/appstyle.cpp
     styles/macappstyle.cpp
+    styles/qlementineappstyle.cpp
     styles/themedicons.cpp
     controls/macsplittoolbutton.cpp
     controls/mdiarea.cpp
@@ -294,6 +296,7 @@ set(HEADERS
     controls/mainstatusbar.h
     styles/appstyle.h
     styles/macappstyle.h
+    styles/qlementineappstyle.h
     styles/themedicons.h
     controls/macsplittoolbutton.h
     controls/mdiarea.h
@@ -511,7 +514,7 @@ if(Qt6_FOUND)
         TS_FILES ${TS_FILES}
         OPTIONS -no-obsolete
     )
-    target_link_libraries(${PROJECT_NAME} PRIVATE Qt::Core5Compat)
+    target_link_libraries(${PROJECT_NAME} PRIVATE Qt::Core5Compat qlementine qlementine-icons)
 else()
     add_custom_command(
         OUTPUT ${TS_FILES}
@@ -567,7 +570,6 @@ elseif(APPLE)
         MACOSX_BUNDLE_BUNDLE_VERSION "${PROJECT_VERSION}"
         MACOSX_BUNDLE_SHORT_VERSION_STRING "${PROJECT_VERSION}"
     )
-    target_link_libraries(${PROJECT_NAME} PRIVATE qlementine qlementine-icons)
 elseif(LINUX)
     target_link_options(${PROJECT_NAME} PRIVATE -static-libgcc -static-libstdc++)
 endif()

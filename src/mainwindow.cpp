@@ -26,6 +26,10 @@
 #include "themedicons.h"
 #include "ui_mainwindow.h"
 
+#if defined(HAVE_QLEMENTINE_APP_STYLE)
+#include "styles/qlementineappstyle.h"
+#endif
+
 // Forward declaration (defined later in this file)
 static QString getSettingsFilePath();
 namespace {
@@ -245,12 +249,12 @@ void configureMainToolbarText(Ui::MainWindow* ui)
         ui->actionDisconnect
     };
 
-#if defined(Q_OS_MAC)
-    if (qobject_cast<MacAppStyle*>(qApp ? qApp->style() : nullptr)) {
+/*#if defined(HAVE_QLEMENTINE_APP_STYLE)
+    if (dynamic_cast<QlementineAppStyle*>(qApp ? qApp->style() : nullptr)) {
         labeledActions.append(ui->actionOpenProject);
         labeledActions.append(ui->actionSaveProject);
     }
-#endif
+#endif*/
 
     for (QAction* action : ui->toolBarMain->actions()) {
         if (auto* button = qobject_cast<QToolButton*>(ui->toolBarMain->widgetForAction(action)))

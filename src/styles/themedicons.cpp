@@ -4,9 +4,9 @@
 #include <QFile>
 #include <QHash>
 
-#if defined(Q_OS_MAC) && QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+#if defined(HAVE_QLEMENTINE_APP_STYLE)
 #include <oclero/qlementine/icons/QlementineIcons.hpp>
-#include "styles/macappstyle.h"
+#include "styles/qlementineappstyle.h"
 #endif
 
 namespace {
@@ -68,7 +68,7 @@ QIcon iconFromThemeName(const QString& themeName)
 {
     QIcon icon = QIcon::fromTheme(themeName);
 
-#if defined(Q_OS_MAC) && QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+#if defined(HAVE_QLEMENTINE_APP_STYLE)
     if (icon.isNull() && themeName.contains(QLatin1Char('/'))) {
         const QString qlementineIconPath = QStringLiteral(":/qlementine/icons/16/%1.svg").arg(themeName);
         if (QFile::exists(qlementineIconPath))
@@ -93,8 +93,8 @@ QIcon ThemedIcons::icon(const QString& name, const QString& fallbackPath)
     const QString themeName = it == registry.cend() ? name : it->themeName;
     const QString resolvedFallbackPath = it == registry.cend() ? fallbackPath : it->resourcePath;
 
-#if defined(Q_OS_MAC) && QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
-    if (qobject_cast<MacAppStyle*>(qApp ? qApp->style() : nullptr)) {
+#if defined(HAVE_QLEMENTINE_APP_STYLE)
+    if (dynamic_cast<QlementineAppStyle*>(qApp ? qApp->style() : nullptr)) {
         QIcon icon = iconFromThemeName(themeName);
         if (!icon.isNull())
             return icon;

@@ -448,11 +448,11 @@
     </message>
     <message>
         <location filename="../dialogs/dialogabout.ui" line="217"/>
-        <location filename="../dialogs/dialogabout.cpp" line="461"/>
-        <location filename="../dialogs/dialogabout.cpp" line="462"/>
-        <location filename="../dialogs/dialogabout.cpp" line="472"/>
+        <location filename="../dialogs/dialogabout.cpp" line="473"/>
         <location filename="../dialogs/dialogabout.cpp" line="474"/>
+        <location filename="../dialogs/dialogabout.cpp" line="484"/>
         <location filename="../dialogs/dialogabout.cpp" line="486"/>
+        <location filename="../dialogs/dialogabout.cpp" line="498"/>
         <source>Check for updates</source>
         <translation>檢查更新</translation>
     </message>
@@ -472,125 +472,130 @@
         <translation>翻譯</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="71"/>
+        <location filename="../dialogs/dialogabout.cpp" line="75"/>
         <source>Unknown</source>
         <translation>未知</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="116"/>
+        <location filename="../dialogs/dialogabout.cpp" line="120"/>
         <source>Simplified Chinese</source>
         <translation>簡體中文</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="118"/>
+        <location filename="../dialogs/dialogabout.cpp" line="122"/>
         <source>Traditional Chinese</source>
         <translation>繁體中文</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="138"/>
+        <location filename="../dialogs/dialogabout.cpp" line="142"/>
         <source>%1 and %2</source>
         <translation>%1和%2</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="153"/>
+        <location filename="../dialogs/dialogabout.cpp" line="157"/>
         <source>About %1...</source>
         <translation>關於 %1...</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="172"/>
+        <location filename="../dialogs/dialogabout.cpp" line="176"/>
         <source>Using %1 and built against %2</source>
         <translation>使用 %1 並針對 %2 構建</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="173"/>
+        <location filename="../dialogs/dialogabout.cpp" line="177"/>
         <source>Cross-platform application development framework.</source>
         <translation>跨平台應用程式開發框架。</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="101"/>
+        <location filename="../dialogs/dialogabout.cpp" line="105"/>
         <source>Author and Maintainer</source>
         <translation>作者和維護者</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="364"/>
+        <location filename="../dialogs/dialogabout.cpp" line="376"/>
         <source>Visit component&apos;s homepage
 %1</source>
         <translation>存取元件主頁
 %1</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="385"/>
+        <location filename="../dialogs/dialogabout.cpp" line="397"/>
         <source>Email contributer: %1</source>
         <translation>電子郵件貢獻者：%1</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="394"/>
+        <location filename="../dialogs/dialogabout.cpp" line="406"/>
         <source>Visit user&apos;s homepage
 %1</source>
         <translation>訪問用戶主頁
 %1</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="179"/>
+        <location filename="../dialogs/dialogabout.cpp" line="183"/>
         <source>Free monospaced font with programming ligatures.</source>
         <translation>免費等寬字體，附有程式設計連字。</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="201"/>
+        <location filename="../dialogs/dialogabout.cpp" line="205"/>
         <source>Modern Qt Widgets style.</source>
         <translation>現代 Qt Widgets 樣式。</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="52"/>
+        <location filename="../dialogs/dialogabout.cpp" line="56"/>
         <source>%1 build %2</source>
         <translation>%1 構建 %2</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="156"/>
+        <location filename="../dialogs/dialogabout.cpp" line="160"/>
         <source>Version: &lt;b&gt;%1&lt;/b&gt; %2</source>
         <translation>版本：&lt;b&gt;%1&lt;/b&gt; %2</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="186"/>
-        <location filename="../dialogs/dialogabout.cpp" line="193"/>
-        <location filename="../dialogs/dialogabout.cpp" line="208"/>
+        <location filename="../dialogs/dialogabout.cpp" line="190"/>
+        <location filename="../dialogs/dialogabout.cpp" line="197"/>
+        <location filename="../dialogs/dialogabout.cpp" line="220"/>
         <source>Underlying platform.</source>
         <translation>底層平台。</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="103"/>
+        <location filename="../dialogs/dialogabout.cpp" line="107"/>
         <source>Contributor</source>
         <translation>貢獻者</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="114"/>
+        <location filename="../dialogs/dialogabout.cpp" line="118"/>
         <source>Russian</source>
         <translation>俄文</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="390"/>
+        <location filename="../dialogs/dialogabout.cpp" line="211"/>
+        <source>Modern Qt Widgets icon theme.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogabout.cpp" line="402"/>
         <source>Visit github user&apos;s homepage
 %1</source>
         <translation>造訪 GitHub 用戶首頁
 %1</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="418"/>
+        <location filename="../dialogs/dialogabout.cpp" line="430"/>
         <source>License Agreement - %1</source>
         <translation>許可協議 - %1</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="452"/>
+        <location filename="../dialogs/dialogabout.cpp" line="464"/>
         <source>Checking...</source>
         <translation>檢查中...</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="462"/>
+        <location filename="../dialogs/dialogabout.cpp" line="474"/>
         <source>No updates available.</source>
         <translation>沒有可用更新。</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="475"/>
+        <location filename="../dialogs/dialogabout.cpp" line="487"/>
         <source>Failed to check for updates.
 
 %1</source>
@@ -599,12 +604,12 @@
 %1</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="489"/>
+        <location filename="../dialogs/dialogabout.cpp" line="501"/>
         <source>New version available</source>
         <translation>發現新版本</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="490"/>
+        <location filename="../dialogs/dialogabout.cpp" line="502"/>
         <source>A new version %1 is available.
 
 Open the download page?</source>
@@ -2603,7 +2608,7 @@ Open the download page?</source>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="342"/>
-        <location filename="../mainwindow.cpp" line="1900"/>
+        <location filename="../mainwindow.cpp" line="1904"/>
         <source>Save Project</source>
         <translation>儲存專案</translation>
     </message>
@@ -2803,19 +2808,19 @@ Open the download page?</source>
         <translation>狀態列</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="923"/>
+        <location filename="../mainwindow.cpp" line="927"/>
         <source>All files (*)</source>
         <translation>所有檔案 (*)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="294"/>
-        <location filename="../mainwindow.cpp" line="669"/>
+        <location filename="../mainwindow.cpp" line="298"/>
+        <location filename="../mainwindow.cpp" line="673"/>
         <source>Open Recent</source>
         <translation>最近開啟</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="295"/>
-        <location filename="../mainwindow.cpp" line="2036"/>
+        <location filename="../mainwindow.cpp" line="299"/>
+        <location filename="../mainwindow.cpp" line="2040"/>
         <source>Clear List</source>
         <translation>清除清單</translation>
     </message>
@@ -2830,21 +2835,21 @@ Open the download page?</source>
         <translation>輸出</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="922"/>
-        <location filename="../mainwindow.cpp" line="1930"/>
+        <location filename="../mainwindow.cpp" line="926"/>
+        <location filename="../mainwindow.cpp" line="1934"/>
         <source>Project files (*.omsim)</source>
         <translation>專案檔案 (*.omsim)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1554"/>
-        <location filename="../mainwindow.cpp" line="1958"/>
+        <location filename="../mainwindow.cpp" line="1558"/>
+        <location filename="../mainwindow.cpp" line="1962"/>
         <source>Untitled</source>
         <translation>未命名</translation>
     </message>
     <message>
         <location filename="../applogger.cpp" line="119"/>
-        <location filename="../mainwindow.cpp" line="672"/>
-        <location filename="../mainwindow.cpp" line="1739"/>
+        <location filename="../mainwindow.cpp" line="676"/>
+        <location filename="../mainwindow.cpp" line="1743"/>
         <source>Address Base</source>
         <translation>地址基準</translation>
     </message>
@@ -3134,7 +3139,7 @@ Open the download page?</source>
         <translation>腳本已啟動：%1（模式：%2）</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1293"/>
+        <location filename="../mainwindow.cpp" line="1297"/>
         <source>Move to Other Panel</source>
         <translation>移至其他面板</translation>
     </message>
@@ -3156,12 +3161,12 @@ Open the download page?</source>
         <translation>十六進位檢視</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1901"/>
+        <location filename="../mainwindow.cpp" line="1905"/>
         <source>Save project before closing?</source>
         <translation>關閉前儲存專案？</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2024"/>
+        <location filename="../mainwindow.cpp" line="2028"/>
         <source>No Recent Projects</source>
         <translation>無最近專案</translation>
     </message>
@@ -3171,7 +3176,7 @@ Open the download page?</source>
         <translation>資料</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1251"/>
+        <location filename="../mainwindow.cpp" line="1255"/>
         <source>JavaScript files (*.js);;All files (*)</source>
         <translation>JavaScript檔案 (*.js);;所有檔案 (*)</translation>
     </message>

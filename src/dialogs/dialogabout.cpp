@@ -11,6 +11,10 @@
 #include "themedicons.h"
 #include "ui_dialogabout.h"
 
+#if defined(HAVE_QLEMENTINE_APP_STYLE)
+#include "styles/qlementineappstyle.h"
+#endif
+
 #ifdef Q_OS_WIN
 #include <windows.h>
 
@@ -193,15 +197,23 @@ DialogAbout::DialogAbout(QWidget *parent) :
                      tr("Underlying platform."));
     #endif
 
-    #ifdef Q_OS_MAC
-        #ifdef QLEMENTINE_VERSION
+#if defined(HAVE_QLEMENTINE_APP_STYLE)
+        if (dynamic_cast<QlementineAppStyle*>(qApp ? qApp->style() : nullptr)) {
             addComponent(vboxLayout,
                          "Qlementine",
                          QLEMENTINE_VERSION,
                          tr("Modern Qt Widgets style."),
                          "https://github.com/oclero/qlementine");
 
-        #endif
+            addComponent(vboxLayout,
+                         "Qlementine Icons",
+                         QLEMENTINE_ICONS_VERSION,
+                         tr("Modern Qt Widgets icon theme."),
+                         "https://github.com/oclero/qlementine-icons");
+        }
+#endif
+
+    #ifdef Q_OS_MAC
         addComponent(vboxLayout,
                      QSysInfo::prettyProductName(),
                      QSysInfo::currentCpuArchitecture(),
