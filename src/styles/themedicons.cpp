@@ -33,7 +33,7 @@ const QHash<QString, IconDescriptor>& iconRegistry()
         { QStringLiteral("omodsim/force-coils"),               { QStringLiteral(":/res/icon-force-coils.svg"),          QStringLiteral(":/res/icon-force-coils.png") } },
         { QStringLiteral("omodsim/force-discretes"),           { QStringLiteral(":/res/icon-force-discretes.svg"),      QStringLiteral(":/res/icon-force-discretes.png") } },
         { QStringLiteral("omodsim/github"),                    { QStringLiteral("brand/github-fill"),                   QStringLiteral(":/res/emblem-github.png") } },
-        { QStringLiteral("omodsim/hex-view"),                  { QStringLiteral(":/res/icon-hex.svg"),                  QStringLiteral(":/res/icon-hex-view.png") } },
+        { QStringLiteral("omodsim/hex-view"),                  { QStringLiteral(":/res/icon-hex-view.svg"),             QStringLiteral(":/res/icon-hex-view.png") } },
         { QStringLiteral("omodsim/information"),               { QStringLiteral("dialog-information"),                  QStringLiteral(":/res/icon-log-info.png") } },
         { QStringLiteral("omodsim/internet"),                  { QStringLiteral("applications-internet"),               QStringLiteral(":/res/applications-internet.png") } },
         { QStringLiteral("omodsim/import"),                    { QStringLiteral(":/res/action-import.svg"),             QStringLiteral(":/res/icon-import.svg") } },

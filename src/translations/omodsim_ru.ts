@@ -2275,11 +2275,6 @@ Source: %3</source>
         <translation>Экспорт</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.ui" line="80"/>
-        <source>Hex View</source>
-        <translation>Шестнадцатиричный режим</translation>
-    </message>
-    <message>
         <location filename="../formtrafficview.ui" line="55"/>
         <source>Pause</source>
         <translation>Пауза</translation>

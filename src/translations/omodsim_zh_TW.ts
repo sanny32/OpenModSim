@@ -2275,11 +2275,6 @@ Source: %3</source>
         <translation>匯出</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.ui" line="80"/>
-        <source>Hex View</source>
-        <translation>十六進位檢視</translation>
-    </message>
-    <message>
         <location filename="../formtrafficview.ui" line="55"/>
         <source>Pause</source>
         <translation>暫停</translation>
