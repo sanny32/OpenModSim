@@ -1,8 +1,8 @@
 #include <QtWidgets>
 #include "colorswatch.h"
-#include "controls/addressbasecombobox.h"
 #include "dialogpreferences.h"
 #include "mainwindow.h"
+#include "styles/themedicons.h"
 #include "ui_dialogpreferences.h"
 
 ///
@@ -17,6 +17,10 @@ DialogPreferences::DialogPreferences(MainWindow* mainWindow, QWidget* parent)
 
     for (int i = 0; i < ui->listWidget->count(); ++i)
         ui->listWidget->item(i)->setSizeHint(QSize(0, 28));
+
+    ui->listWidget->item(0)->setIcon(themedIcon(QStringLiteral("omodsim/preferences-interface")));
+    ui->listWidget->item(1)->setIcon(themedIcon(QStringLiteral("omodsim/preferences-defaults")));
+    ui->listWidget->item(2)->setIcon(themedIcon(QStringLiteral("omodsim/preferences-script")));
 
     ui->comboBoxLanguage->addItem("English", "en");
     ui->comboBoxLanguage->addItem("Русский", "ru");

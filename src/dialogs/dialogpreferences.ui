@@ -65,27 +65,15 @@
          <property name="text">
           <string>Interface</string>
          </property>
-         <property name="icon">
-          <iconset resource="../resources.qrc">
-           <normaloff>:/res/pref-interface.png</normaloff>:/res/pref-interface.png</iconset>
-         </property>
         </item>
         <item>
          <property name="text">
           <string>Defaults</string>
          </property>
-         <property name="icon">
-          <iconset resource="../resources.qrc">
-           <normaloff>:/res/icon-define-data.png</normaloff>:/res/icon-define-data.png</iconset>
-         </property>
         </item>
         <item>
          <property name="text">
           <string>Script</string>
-         </property>
-         <property name="icon">
-          <iconset resource="../resources.qrc">
-           <normaloff>:/res/icon-show-script.png</normaloff>:/res/icon-show-script.png</iconset>
          </property>
         </item>
        </widget>
@@ -868,9 +856,7 @@
    <header>colorswatch.h</header>
   </customwidget>
  </customwidgets>
- <resources>
-  <include location="../resources.qrc"/>
- </resources>
+ <resources/>
  <connections>
   <connection>
    <sender>buttonBox</sender>

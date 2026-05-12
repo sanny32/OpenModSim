@@ -264,6 +264,9 @@ void DialogAbout::adjustSize()
     const int sbWidth = s->pixelMetric(QStyle::PM_ScrollBarExtent);
     const int frameWidth = s->pixelMetric(QStyle::PM_DefaultFrameWidth) * 2;
 
+    const int maxDialogH = maximumHeight();
+    const int dialogFrameV = sizeHint().height() - ui->tabWidget->height();
+
     QSize maxContentSize(0, 0);
     for (int i = 0; i < ui->tabWidget->count(); ++i) {
         auto tab = ui->tabWidget->widget(i);
@@ -284,6 +287,11 @@ void DialogAbout::adjustSize()
             QSize contentSize = scroll->widget()->sizeHint();
             contentSize.rwidth() += marginH + sbWidth + frameWidth;
             contentSize.rheight() += marginV + ui->tabWidget->tabBar()->sizeHint().height() + frameWidth;
+
+            if (maxDialogH > 0 && maxDialogH < QWIDGETSIZE_MAX) {
+                const int maxTabH = maxDialogH - dialogFrameV;
+                contentSize.rheight() = qMin(contentSize.height(), maxTabH);
+            }
 
             maxContentSize = maxContentSize.expandedTo(contentSize);
         }

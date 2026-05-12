@@ -417,57 +417,57 @@
 <context>
     <name>DialogAbout</name>
     <message>
-        <location filename="../dialogs/dialogabout.ui" line="20"/>
+        <location filename="../dialogs/dialogabout.ui" line="26"/>
         <source>About...</source>
         <translation>О программе...</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.ui" line="74"/>
+        <location filename="../dialogs/dialogabout.ui" line="80"/>
         <source>Open Modsim</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.ui" line="81"/>
+        <location filename="../dialogs/dialogabout.ui" line="87"/>
         <source>Version: 1.0.0</source>
         <translation>Версия: 1.0.0</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.ui" line="112"/>
+        <location filename="../dialogs/dialogabout.ui" line="118"/>
         <source>About</source>
         <translation>О программе</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.ui" line="118"/>
+        <location filename="../dialogs/dialogabout.ui" line="124"/>
         <source>An Open Source Modbus Slave (Server) Utility</source>
         <translation>Утилита Modbus Slave (сервер) с открытым исходным кодом</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.ui" line="180"/>
+        <location filename="../dialogs/dialogabout.ui" line="186"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;a href=&quot;&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Lecense: The MIT License&lt;span&gt;&lt;/a&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;a href=&quot;&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Лицензия: MIT License&lt;span&gt;&lt;/a&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.ui" line="217"/>
-        <location filename="../dialogs/dialogabout.cpp" line="473"/>
-        <location filename="../dialogs/dialogabout.cpp" line="474"/>
-        <location filename="../dialogs/dialogabout.cpp" line="484"/>
-        <location filename="../dialogs/dialogabout.cpp" line="486"/>
-        <location filename="../dialogs/dialogabout.cpp" line="498"/>
+        <location filename="../dialogs/dialogabout.ui" line="223"/>
+        <location filename="../dialogs/dialogabout.cpp" line="481"/>
+        <location filename="../dialogs/dialogabout.cpp" line="482"/>
+        <location filename="../dialogs/dialogabout.cpp" line="492"/>
+        <location filename="../dialogs/dialogabout.cpp" line="494"/>
+        <location filename="../dialogs/dialogabout.cpp" line="506"/>
         <source>Check for updates</source>
         <translation>Проверить обновления</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.ui" line="253"/>
+        <location filename="../dialogs/dialogabout.ui" line="259"/>
         <source>Components</source>
         <translation>Компоненты</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.ui" line="295"/>
+        <location filename="../dialogs/dialogabout.ui" line="301"/>
         <source>Authors</source>
         <translation>Авторы</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.ui" line="337"/>
+        <location filename="../dialogs/dialogabout.ui" line="343"/>
         <source>Translation</source>
         <translation>Перевод</translation>
     </message>
@@ -512,19 +512,19 @@
         <translation>Автор</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="376"/>
+        <location filename="../dialogs/dialogabout.cpp" line="384"/>
         <source>Visit component&apos;s homepage
 %1</source>
         <translation>Посетить домашнюю страницу компонента
 %1</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="397"/>
+        <location filename="../dialogs/dialogabout.cpp" line="405"/>
         <source>Email contributer: %1</source>
         <translation>Написать участнику: %1</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="406"/>
+        <location filename="../dialogs/dialogabout.cpp" line="414"/>
         <source>Visit user&apos;s homepage
 %1</source>
         <translation>Посетить домашнюю страницу пользователя на github
@@ -573,29 +573,29 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="402"/>
+        <location filename="../dialogs/dialogabout.cpp" line="410"/>
         <source>Visit github user&apos;s homepage
 %1</source>
         <translation>Посетить домашнюю страницу пользователя на github
 %1</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="430"/>
+        <location filename="../dialogs/dialogabout.cpp" line="438"/>
         <source>License Agreement - %1</source>
         <translation>Лицензионное соглашение - %1</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="464"/>
+        <location filename="../dialogs/dialogabout.cpp" line="472"/>
         <source>Checking...</source>
         <translation>Проверка...</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="474"/>
+        <location filename="../dialogs/dialogabout.cpp" line="482"/>
         <source>No updates available.</source>
         <translation>Обновлений нет.</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="487"/>
+        <location filename="../dialogs/dialogabout.cpp" line="495"/>
         <source>Failed to check for updates.
 
 %1</source>
@@ -604,12 +604,12 @@
 %1</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="501"/>
+        <location filename="../dialogs/dialogabout.cpp" line="509"/>
         <source>New version available</source>
         <translation>Доступна новая версия</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogabout.cpp" line="502"/>
+        <location filename="../dialogs/dialogabout.cpp" line="510"/>
         <source>A new version %1 is available.
 
 Open the download page?</source>
@@ -1101,154 +1101,154 @@ Open the download page?</source>
         <translation>Интерфейс</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="156"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="144"/>
         <source>User Interface</source>
         <translation>Интерфейс пользователя</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="194"/>
-        <location filename="../dialogs/dialogpreferences.ui" line="208"/>
-        <location filename="../dialogs/dialogpreferences.ui" line="215"/>
-        <location filename="../dialogs/dialogpreferences.ui" line="296"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="182"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="196"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="203"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="284"/>
         <source>Reset</source>
         <translation>Сброс</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="229"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="217"/>
         <source>Background Color:</source>
         <translation>Цвет фона:</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="283"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="271"/>
         <source>Foreground Color:</source>
         <translation>Цвет текста:</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="243"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="231"/>
         <source>Address Color:</source>
         <translation>Цвет адреса:</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="250"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="238"/>
         <source>Comment Color:</source>
         <translation>Цвет комментария:</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="201"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="189"/>
         <source>Language:</source>
         <translation>Язык:</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="236"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="224"/>
         <source>Show Welcome dialog on startup</source>
         <translation>Показывать диалог приветствия при запуске</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="322"/>
-        <location filename="../dialogs/dialogpreferences.ui" line="662"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="310"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="650"/>
         <source>Font</source>
         <translation>Шрифт</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="359"/>
-        <location filename="../dialogs/dialogpreferences.ui" line="699"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="347"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="687"/>
         <source>Size:</source>
         <translation>Размер:</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="391"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="379"/>
         <source>Zoom:</source>
         <translation>Масштаб:</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="488"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="476"/>
         <source>Leading Zeros for Unsigned</source>
         <translation>Ведущие нули для беззнаковых</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="765"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="753"/>
         <source>Console</source>
         <translation>Консоль</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="777"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="765"/>
         <source>Console Output Limit:</source>
         <translation>Ограничение вывода консоли:</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="815"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="803"/>
         <source>Automatically show output console</source>
         <translation>Автоматически показывать консоль вывода</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="337"/>
-        <location filename="../dialogs/dialogpreferences.ui" line="677"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="325"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="665"/>
         <source>Family:</source>
         <translation>Семейство:</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="75"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="71"/>
         <source>Defaults</source>
         <translation>По умолчанию</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="222"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="210"/>
         <source>Check for updates</source>
         <translation>Проверять обновления</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="413"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="401"/>
         <source>%</source>
         <translation>%</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="434"/>
-        <location filename="../dialogs/dialogpreferences.ui" line="733"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="422"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="721"/>
         <source>Antialias</source>
         <translation>Сглаживание</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="495"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="483"/>
         <source>Columns Distance:</source>
         <translation>Расстояние между столбцами:</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="545"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="533"/>
         <source>Autoscroll</source>
         <translation>Автопрокрутка</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="552"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="540"/>
         <source>Log View Limit:</source>
         <translation>Лимит лога:</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="84"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="76"/>
         <source>Script</source>
         <translation>Скрипт</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="476"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="464"/>
         <source>Data View</source>
         <translation>Данные</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="533"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="521"/>
         <source>Traffic View</source>
         <translation>Просмотр трафика</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="630"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="618"/>
         <source>&lt;b&gt;Note:&lt;/b&gt; These settings apply to newly opened windows only.</source>
         <translation>&lt;b&gt;Примечание:&lt;/b&gt; Эти настройки применяются только к новым окнам.</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="743"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="731"/>
         <source>Editor</source>
         <translation>Редактор</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="755"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="743"/>
         <source>Enable code auto-complete</source>
         <translation>Включить автодополнение кода</translation>
     </message>
