@@ -173,7 +173,7 @@ AppLogOutput::AppLogOutput(QWidget* parent)
 {
     ui->setupUi(this);
 
-    auto setupFilterBtn = [&](QAction* action) {
+    auto setupToolbarBtn = [&](QAction* action) {
         auto* btn = qobject_cast<QToolButton*>(ui->toolBar->widgetForAction(action));
         if (!btn) return;
         btn->setToolButtonStyle(Qt::ToolButtonIconOnly);
@@ -181,9 +181,11 @@ AppLogOutput::AppLogOutput(QWidget* parent)
         btn->setProperty("preservePressedIconAlignment", true);
     };
 
-    setupFilterBtn(ui->actionFilterInfo);
-    setupFilterBtn(ui->actionFilterWarn);
-    setupFilterBtn(ui->actionFilterError);
+    setupToolbarBtn(ui->actionClear);
+    setupToolbarBtn(ui->actionExport);
+    setupToolbarBtn(ui->actionFilterInfo);
+    setupToolbarBtn(ui->actionFilterWarn);
+    setupToolbarBtn(ui->actionFilterError);
 
     auto* filterSpacer = new QWidget(ui->toolBar);
     filterSpacer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);

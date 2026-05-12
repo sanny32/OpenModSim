@@ -137,38 +137,38 @@
         <translation>Очистить журнал</translation>
     </message>
     <message>
-        <location filename="../controls/applogoutput.cpp" line="211"/>
-        <location filename="../controls/applogoutput.cpp" line="386"/>
+        <location filename="../controls/applogoutput.cpp" line="213"/>
+        <location filename="../controls/applogoutput.cpp" line="388"/>
         <source>Copy All</source>
         <translation>Копировать всё</translation>
     </message>
     <message>
-        <location filename="../controls/applogoutput.cpp" line="377"/>
+        <location filename="../controls/applogoutput.cpp" line="379"/>
         <source>Copy</source>
         <translation>Копировать</translation>
     </message>
     <message>
-        <location filename="../controls/applogoutput.cpp" line="393"/>
+        <location filename="../controls/applogoutput.cpp" line="395"/>
         <source>Export...</source>
         <translation>Экспорт...</translation>
     </message>
     <message>
-        <location filename="../controls/applogoutput.cpp" line="399"/>
+        <location filename="../controls/applogoutput.cpp" line="401"/>
         <source>Clear</source>
         <translation>Очистить</translation>
     </message>
     <message>
-        <location filename="../controls/applogoutput.cpp" line="423"/>
+        <location filename="../controls/applogoutput.cpp" line="425"/>
         <source>Text files (*.txt)</source>
         <translation>Текстовые файлы (*.txt)</translation>
     </message>
     <message>
-        <location filename="../controls/applogoutput.cpp" line="428"/>
+        <location filename="../controls/applogoutput.cpp" line="430"/>
         <source>Export</source>
         <translation>Экспорт</translation>
     </message>
     <message>
-        <location filename="../controls/applogoutput.cpp" line="428"/>
+        <location filename="../controls/applogoutput.cpp" line="430"/>
         <source>Cannot open file for writing:
 %1</source>
         <translation>Не удалось открыть файл для записи:

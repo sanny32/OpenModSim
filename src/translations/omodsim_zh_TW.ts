@@ -137,38 +137,38 @@
         <translation>清除日誌</translation>
     </message>
     <message>
-        <location filename="../controls/applogoutput.cpp" line="211"/>
-        <location filename="../controls/applogoutput.cpp" line="386"/>
+        <location filename="../controls/applogoutput.cpp" line="213"/>
+        <location filename="../controls/applogoutput.cpp" line="388"/>
         <source>Copy All</source>
         <translation>全部複製</translation>
     </message>
     <message>
-        <location filename="../controls/applogoutput.cpp" line="377"/>
+        <location filename="../controls/applogoutput.cpp" line="379"/>
         <source>Copy</source>
         <translation>複製</translation>
     </message>
     <message>
-        <location filename="../controls/applogoutput.cpp" line="393"/>
+        <location filename="../controls/applogoutput.cpp" line="395"/>
         <source>Export...</source>
         <translation>匯出...</translation>
     </message>
     <message>
-        <location filename="../controls/applogoutput.cpp" line="399"/>
+        <location filename="../controls/applogoutput.cpp" line="401"/>
         <source>Clear</source>
         <translation>清除</translation>
     </message>
     <message>
-        <location filename="../controls/applogoutput.cpp" line="423"/>
+        <location filename="../controls/applogoutput.cpp" line="425"/>
         <source>Text files (*.txt)</source>
         <translation>文字檔案 (*.txt)</translation>
     </message>
     <message>
-        <location filename="../controls/applogoutput.cpp" line="428"/>
+        <location filename="../controls/applogoutput.cpp" line="430"/>
         <source>Export</source>
         <translation>匯出</translation>
     </message>
     <message>
-        <location filename="../controls/applogoutput.cpp" line="428"/>
+        <location filename="../controls/applogoutput.cpp" line="430"/>
         <source>Cannot open file for writing:
 %1</source>
         <translation>無法開啟檔案進行寫入：
