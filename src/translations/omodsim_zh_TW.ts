@@ -270,12 +270,12 @@
         <translation>清除控制台</translation>
     </message>
     <message>
-        <location filename="../controls/consoleoutput.cpp" line="310"/>
+        <location filename="../controls/consoleoutput.cpp" line="311"/>
         <source>Copy</source>
         <translation>複製</translation>
     </message>
     <message>
-        <location filename="../controls/consoleoutput.cpp" line="321"/>
+        <location filename="../controls/consoleoutput.cpp" line="322"/>
         <source>Clear</source>
         <translation>清除</translation>
     </message>
@@ -1777,22 +1777,22 @@ Open the download page?</source>
 <context>
     <name>FormDataMapView</name>
     <message>
-        <location filename="../formdatamapview.ui" line="68"/>
+        <location filename="../formdatamapview.ui" line="62"/>
         <source>Add Row</source>
         <translation>新增行</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.ui" line="73"/>
+        <location filename="../formdatamapview.ui" line="67"/>
         <source>Insert Row</source>
         <translation>插入行</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.ui" line="82"/>
+        <location filename="../formdatamapview.ui" line="76"/>
         <source>Delete Row</source>
         <translation>刪除行</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.ui" line="91"/>
+        <location filename="../formdatamapview.ui" line="85"/>
         <source>Clear Table</source>
         <translation>清除表格</translation>
     </message>
@@ -1849,7 +1849,7 @@ Open the download page?</source>
     <message>
         <location filename="../formdatamapview.cpp" line="940"/>
         <location filename="../formdatamapview.cpp" line="1164"/>
-        <location filename="../formdatamapview.cpp" line="1484"/>
+        <location filename="../formdatamapview.cpp" line="1486"/>
         <source>All Types</source>
         <translation>所有類型</translation>
     </message>
@@ -1864,44 +1864,44 @@ Type Filter: %3</source>
     </message>
     <message>
         <location filename="../formdatamapview.cpp" line="1165"/>
-        <location filename="../formdatamapview.cpp" line="1485"/>
+        <location filename="../formdatamapview.cpp" line="1487"/>
         <source>Coils</source>
         <translation>線圈</translation>
     </message>
     <message>
         <location filename="../formdatamapview.cpp" line="1166"/>
-        <location filename="../formdatamapview.cpp" line="1486"/>
+        <location filename="../formdatamapview.cpp" line="1488"/>
         <source>Discrete Inputs</source>
         <translation>離散輸入</translation>
     </message>
     <message>
         <location filename="../formdatamapview.cpp" line="1167"/>
-        <location filename="../formdatamapview.cpp" line="1487"/>
+        <location filename="../formdatamapview.cpp" line="1489"/>
         <source>Input Registers</source>
         <translation>輸入暫存器</translation>
     </message>
     <message>
         <location filename="../formdatamapview.cpp" line="1168"/>
-        <location filename="../formdatamapview.cpp" line="1488"/>
+        <location filename="../formdatamapview.cpp" line="1490"/>
         <source>Holding Registers</source>
         <translation>保持暫存器</translation>
     </message>
     <message>
         <location filename="../formdatamapview.cpp" line="1156"/>
-        <location filename="../formdatamapview.cpp" line="1495"/>
+        <location filename="../formdatamapview.cpp" line="1497"/>
         <source>Unit:</source>
         <translation>單元：</translation>
     </message>
     <message>
         <location filename="../formdatamapview.cpp" line="1157"/>
-        <location filename="../formdatamapview.cpp" line="1496"/>
+        <location filename="../formdatamapview.cpp" line="1498"/>
         <source>Data Type:</source>
         <translation>資料類型：</translation>
     </message>
     <message>
         <location filename="../formdatamapview.cpp" line="929"/>
         <location filename="../formdatamapview.cpp" line="1158"/>
-        <location filename="../formdatamapview.cpp" line="1480"/>
+        <location filename="../formdatamapview.cpp" line="1482"/>
         <source>All</source>
         <translation>全部</translation>
     </message>
@@ -2152,12 +2152,12 @@ Data Type:
         <translation>腳本執行間隔</translation>
     </message>
     <message>
-        <location filename="../formscriptview.ui" line="58"/>
+        <location filename="../formscriptview.ui" line="52"/>
         <source>Run Script</source>
         <translation>執行腳本</translation>
     </message>
     <message>
-        <location filename="../formscriptview.ui" line="67"/>
+        <location filename="../formscriptview.ui" line="61"/>
         <source>Stop Script</source>
         <translation>停止腳本</translation>
     </message>
@@ -2175,8 +2175,8 @@ Source: %3</source>
     </message>
     <message>
         <location filename="../formtrafficview.cpp" line="104"/>
-        <location filename="../formtrafficview.cpp" line="725"/>
-        <location filename="../formtrafficview.cpp" line="876"/>
+        <location filename="../formtrafficview.cpp" line="726"/>
+        <location filename="../formtrafficview.cpp" line="877"/>
         <source>Exceptions Only</source>
         <translation>僅例外</translation>
     </message>
@@ -2206,38 +2206,38 @@ Source: %3</source>
         <translation>匯出日誌錯誤！</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="688"/>
-        <location filename="../formtrafficview.cpp" line="860"/>
+        <location filename="../formtrafficview.cpp" line="689"/>
+        <location filename="../formtrafficview.cpp" line="861"/>
         <source>Unit:</source>
         <translation>單元：</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="694"/>
-        <location filename="../formtrafficview.cpp" line="864"/>
+        <location filename="../formtrafficview.cpp" line="695"/>
+        <location filename="../formtrafficview.cpp" line="865"/>
         <source>-1 = all unit ids</source>
         <translation>-1 = 所有單元ID</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="715"/>
-        <location filename="../formtrafficview.cpp" line="871"/>
+        <location filename="../formtrafficview.cpp" line="716"/>
+        <location filename="../formtrafficview.cpp" line="872"/>
         <source>Source:</source>
         <translation>來源：</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="726"/>
-        <location filename="../formtrafficview.cpp" line="877"/>
+        <location filename="../formtrafficview.cpp" line="727"/>
+        <location filename="../formtrafficview.cpp" line="878"/>
         <source>Show only responses with Modbus exception</source>
         <translation>僅顯示含有Modbus例外的回應</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="733"/>
-        <location filename="../formtrafficview.cpp" line="881"/>
+        <location filename="../formtrafficview.cpp" line="734"/>
+        <location filename="../formtrafficview.cpp" line="882"/>
         <source>Autoscroll</source>
         <translation>自動捲動</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="734"/>
-        <location filename="../formtrafficview.cpp" line="882"/>
+        <location filename="../formtrafficview.cpp" line="735"/>
+        <location filename="../formtrafficview.cpp" line="883"/>
         <source>Automatically scroll to the latest entry</source>
         <translation>自動捲動至最新項目</translation>
     </message>
@@ -2246,21 +2246,21 @@ Source: %3</source>
         <location filename="../formtrafficview.cpp" line="93"/>
         <location filename="../formtrafficview.cpp" line="97"/>
         <location filename="../formtrafficview.cpp" line="535"/>
-        <location filename="../formtrafficview.cpp" line="693"/>
-        <location filename="../formtrafficview.cpp" line="718"/>
-        <location filename="../formtrafficview.cpp" line="863"/>
+        <location filename="../formtrafficview.cpp" line="694"/>
+        <location filename="../formtrafficview.cpp" line="719"/>
+        <location filename="../formtrafficview.cpp" line="864"/>
         <source>All</source>
         <translation>全部</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="742"/>
-        <location filename="../formtrafficview.cpp" line="886"/>
+        <location filename="../formtrafficview.cpp" line="743"/>
+        <location filename="../formtrafficview.cpp" line="887"/>
         <source>Rows:</source>
         <translation>行數：</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="703"/>
-        <location filename="../formtrafficview.cpp" line="868"/>
+        <location filename="../formtrafficview.cpp" line="704"/>
+        <location filename="../formtrafficview.cpp" line="869"/>
         <source>Function:</source>
         <translation>功能：</translation>
     </message>

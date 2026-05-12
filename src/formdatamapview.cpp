@@ -1469,6 +1469,8 @@ void FormDataMapView::updateWindowIcon()
 ///
 void FormDataMapView::setupToolBar()
 {
+    ui->actionClear->setIcon(themedIcon(QStringLiteral("omodsim/clear")));
+
     // Expanding spacer before filter area
     auto* spacerWidget = new QWidget(ui->toolBar);
     spacerWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);

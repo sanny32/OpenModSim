@@ -507,13 +507,6 @@ void QlementineAppStyle::polish(QWidget* widget)
         else
             label->setForegroundRole(QPalette::WindowText);
     }
-
-    if (auto* toolBar = qobject_cast<QToolBar*>(widget)) {
-        toolBar->setIconSize(QSize(16, 16));
-        toolBar->setContentsMargins(8, 0, 8, 0);
-        if (toolBar->objectName() == QStringLiteral("toolBarMain"))
-            toolBar->setToolButtonStyle(Qt::ToolButtonIconOnly);
-    }
 }
 
 ///

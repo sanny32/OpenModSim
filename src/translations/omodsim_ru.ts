@@ -270,12 +270,12 @@
         <translation>Очистить консоль</translation>
     </message>
     <message>
-        <location filename="../controls/consoleoutput.cpp" line="310"/>
+        <location filename="../controls/consoleoutput.cpp" line="311"/>
         <source>Copy</source>
         <translation>Копировать</translation>
     </message>
     <message>
-        <location filename="../controls/consoleoutput.cpp" line="321"/>
+        <location filename="../controls/consoleoutput.cpp" line="322"/>
         <source>Clear</source>
         <translation>Очистить</translation>
     </message>
@@ -1777,22 +1777,22 @@ Open the download page?</source>
 <context>
     <name>FormDataMapView</name>
     <message>
-        <location filename="../formdatamapview.ui" line="68"/>
+        <location filename="../formdatamapview.ui" line="62"/>
         <source>Add Row</source>
         <translation>Добавить строку</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.ui" line="73"/>
+        <location filename="../formdatamapview.ui" line="67"/>
         <source>Insert Row</source>
         <translation>Вставить строку</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.ui" line="82"/>
+        <location filename="../formdatamapview.ui" line="76"/>
         <source>Delete Row</source>
         <translation>Удалить строку</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.ui" line="91"/>
+        <location filename="../formdatamapview.ui" line="85"/>
         <source>Clear Table</source>
         <translation>Очистить таблицу</translation>
     </message>
@@ -1849,7 +1849,7 @@ Open the download page?</source>
     <message>
         <location filename="../formdatamapview.cpp" line="940"/>
         <location filename="../formdatamapview.cpp" line="1164"/>
-        <location filename="../formdatamapview.cpp" line="1484"/>
+        <location filename="../formdatamapview.cpp" line="1486"/>
         <source>All Types</source>
         <translation>Все типы</translation>
     </message>
@@ -1864,44 +1864,44 @@ Type Filter: %3</source>
     </message>
     <message>
         <location filename="../formdatamapview.cpp" line="1165"/>
-        <location filename="../formdatamapview.cpp" line="1485"/>
+        <location filename="../formdatamapview.cpp" line="1487"/>
         <source>Coils</source>
         <translation>Регистры флагов</translation>
     </message>
     <message>
         <location filename="../formdatamapview.cpp" line="1166"/>
-        <location filename="../formdatamapview.cpp" line="1486"/>
+        <location filename="../formdatamapview.cpp" line="1488"/>
         <source>Discrete Inputs</source>
         <translation>Дискретные входы</translation>
     </message>
     <message>
         <location filename="../formdatamapview.cpp" line="1167"/>
-        <location filename="../formdatamapview.cpp" line="1487"/>
+        <location filename="../formdatamapview.cpp" line="1489"/>
         <source>Input Registers</source>
         <translation>Регистры ввода</translation>
     </message>
     <message>
         <location filename="../formdatamapview.cpp" line="1168"/>
-        <location filename="../formdatamapview.cpp" line="1488"/>
+        <location filename="../formdatamapview.cpp" line="1490"/>
         <source>Holding Registers</source>
         <translation>Регистры хранения</translation>
     </message>
     <message>
         <location filename="../formdatamapview.cpp" line="1156"/>
-        <location filename="../formdatamapview.cpp" line="1495"/>
+        <location filename="../formdatamapview.cpp" line="1497"/>
         <source>Unit:</source>
         <translation>Устройство:</translation>
     </message>
     <message>
         <location filename="../formdatamapview.cpp" line="1157"/>
-        <location filename="../formdatamapview.cpp" line="1496"/>
+        <location filename="../formdatamapview.cpp" line="1498"/>
         <source>Data Type:</source>
         <translation>Тип данных:</translation>
     </message>
     <message>
         <location filename="../formdatamapview.cpp" line="929"/>
         <location filename="../formdatamapview.cpp" line="1158"/>
-        <location filename="../formdatamapview.cpp" line="1480"/>
+        <location filename="../formdatamapview.cpp" line="1482"/>
         <source>All</source>
         <translation>Все</translation>
     </message>
@@ -2152,12 +2152,12 @@ Data Type:
         <translation>Интервал запуска скрипта</translation>
     </message>
     <message>
-        <location filename="../formscriptview.ui" line="58"/>
+        <location filename="../formscriptview.ui" line="52"/>
         <source>Run Script</source>
         <translation>Запустить скрипт</translation>
     </message>
     <message>
-        <location filename="../formscriptview.ui" line="67"/>
+        <location filename="../formscriptview.ui" line="61"/>
         <source>Stop Script</source>
         <translation>Остановить скрипт</translation>
     </message>
@@ -2175,8 +2175,8 @@ Source: %3</source>
     </message>
     <message>
         <location filename="../formtrafficview.cpp" line="104"/>
-        <location filename="../formtrafficview.cpp" line="725"/>
-        <location filename="../formtrafficview.cpp" line="876"/>
+        <location filename="../formtrafficview.cpp" line="726"/>
+        <location filename="../formtrafficview.cpp" line="877"/>
         <source>Exceptions Only</source>
         <translation>Только исключения</translation>
     </message>
@@ -2206,38 +2206,38 @@ Source: %3</source>
         <translation>Ошибка экспорта лога!</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="688"/>
-        <location filename="../formtrafficview.cpp" line="860"/>
+        <location filename="../formtrafficview.cpp" line="689"/>
+        <location filename="../formtrafficview.cpp" line="861"/>
         <source>Unit:</source>
         <translation>Устройство:</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="694"/>
-        <location filename="../formtrafficview.cpp" line="864"/>
+        <location filename="../formtrafficview.cpp" line="695"/>
+        <location filename="../formtrafficview.cpp" line="865"/>
         <source>-1 = all unit ids</source>
         <translation>-1 = все устройства</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="715"/>
-        <location filename="../formtrafficview.cpp" line="871"/>
+        <location filename="../formtrafficview.cpp" line="716"/>
+        <location filename="../formtrafficview.cpp" line="872"/>
         <source>Source:</source>
         <translation>Источник:</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="726"/>
-        <location filename="../formtrafficview.cpp" line="877"/>
+        <location filename="../formtrafficview.cpp" line="727"/>
+        <location filename="../formtrafficview.cpp" line="878"/>
         <source>Show only responses with Modbus exception</source>
         <translation>Показывать только ответы с исключением Modbus</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="733"/>
-        <location filename="../formtrafficview.cpp" line="881"/>
+        <location filename="../formtrafficview.cpp" line="734"/>
+        <location filename="../formtrafficview.cpp" line="882"/>
         <source>Autoscroll</source>
         <translation>Автопрокрутка</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="734"/>
-        <location filename="../formtrafficview.cpp" line="882"/>
+        <location filename="../formtrafficview.cpp" line="735"/>
+        <location filename="../formtrafficview.cpp" line="883"/>
         <source>Automatically scroll to the latest entry</source>
         <translation>Автоматически прокручивать к последней записи</translation>
     </message>
@@ -2246,21 +2246,21 @@ Source: %3</source>
         <location filename="../formtrafficview.cpp" line="93"/>
         <location filename="../formtrafficview.cpp" line="97"/>
         <location filename="../formtrafficview.cpp" line="535"/>
-        <location filename="../formtrafficview.cpp" line="693"/>
-        <location filename="../formtrafficview.cpp" line="718"/>
-        <location filename="../formtrafficview.cpp" line="863"/>
+        <location filename="../formtrafficview.cpp" line="694"/>
+        <location filename="../formtrafficview.cpp" line="719"/>
+        <location filename="../formtrafficview.cpp" line="864"/>
         <source>All</source>
         <translation>Все</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="742"/>
-        <location filename="../formtrafficview.cpp" line="886"/>
+        <location filename="../formtrafficview.cpp" line="743"/>
+        <location filename="../formtrafficview.cpp" line="887"/>
         <source>Rows:</source>
         <translation>Строк:</translation>
     </message>
     <message>
-        <location filename="../formtrafficview.cpp" line="703"/>
-        <location filename="../formtrafficview.cpp" line="868"/>
+        <location filename="../formtrafficview.cpp" line="704"/>
+        <location filename="../formtrafficview.cpp" line="869"/>
         <source>Function:</source>
         <translation>Функция:</translation>
     </message>
