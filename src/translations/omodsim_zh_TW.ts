@@ -767,7 +767,7 @@ Open the download page?</source>
         <translation>匯入</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="474"/>
+        <location filename="../dialogs/dialogforcemultipleregisters.ui" line="470"/>
         <source>Export</source>
         <translation>匯出</translation>
     </message>
@@ -913,7 +913,7 @@ Open the download page?</source>
         <translation>匯入</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogforcestatusregisters.ui" line="245"/>
+        <location filename="../dialogs/dialogforcestatusregisters.ui" line="241"/>
         <source>Export</source>
         <translation>匯出</translation>
     </message>

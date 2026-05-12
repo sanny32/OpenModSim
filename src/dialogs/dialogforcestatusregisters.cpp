@@ -3,10 +3,10 @@
 #include <QSignalBlocker>
 #include "modbuslimits.h"
 #include "modbusmultiserver.h"
-#include "uiutils.h"
 #include "formatutils.h"
 #include "dialogforcestatusregisters.h"
 #include "ui_dialogforcestatusregisters.h"
+#include "styles/themedicons.h"
 
 namespace {
 AddressBase addressBase(const ModbusWriteParams& params)
@@ -55,8 +55,8 @@ DialogForceStatusRegisters::DialogForceStatusRegisters(ModbusWriteParams& params
             break;
     }
 
-    recolorPushButtonIcon(ui->pushButtonExport, Qt::red);
-    recolorPushButtonIcon(ui->pushButtonImport, Qt::darkGreen);
+    ui->pushButtonExport->setIcon(themedIcon(QStringLiteral("omodsim/export")));
+    ui->pushButtonImport->setIcon(themedIcon(QStringLiteral("omodsim/import")));
 
     _data = params.Value.value<QVector<quint16>>();
     if(_data.length() != length)

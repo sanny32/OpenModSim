@@ -4,12 +4,12 @@
 #include <QSignalBlocker>
 #include "modbuslimits.h"
 #include "modbusmultiserver.h"
-#include "uiutils.h"
 #include "formatutils.h"
 #include "numericutils.h"
 #include "numericlineedit.h"
 #include "dialogforcemultipleregisters.h"
 #include "ui_dialogforcemultipleregisters.h"
+#include "styles/themedicons.h"
 
 namespace {
 ///
@@ -67,8 +67,8 @@ DialogForceMultipleRegisters::DialogForceMultipleRegisters(ModbusWriteParams& pa
     retainSizeWhenHidden(ui->widgetPresetApplyBottom);
 
     ui->lineEditStep->setValue(1);
-    recolorPushButtonIcon(ui->pushButtonExport, Qt::red);
-    recolorPushButtonIcon(ui->pushButtonImport, Qt::darkGreen);
+    ui->pushButtonExport->setIcon(themedIcon(QStringLiteral("omodsim/export")));
+    ui->pushButtonImport->setIcon(themedIcon(QStringLiteral("omodsim/import")));
 
     switch(type)
     {

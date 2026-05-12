@@ -36,6 +36,7 @@ const QHash<QString, IconDescriptor>& iconRegistry()
         { QStringLiteral("omodsim/hex-view"),                  { QStringLiteral(":/res/icon-hex.svg"),                  QStringLiteral(":/res/icon-hex-view.png") } },
         { QStringLiteral("omodsim/information"),               { QStringLiteral("dialog-information"),                  QStringLiteral(":/res/icon-log-info.png") } },
         { QStringLiteral("omodsim/internet"),                  { QStringLiteral("applications-internet"),               QStringLiteral(":/res/applications-internet.png") } },
+        { QStringLiteral("omodsim/import"),                    { QStringLiteral(":/res/action-import.svg"),             QStringLiteral(":/res/icon-import.png") } },
         { QStringLiteral("omodsim/mail"),                      { QStringLiteral("emblem-mail"),                         QStringLiteral(":/res/emblem-mail.png") } },
         { QStringLiteral("omodsim/message-parser"),            { QStringLiteral("action/preview"),                      QStringLiteral(":/res/icon-msg-parser.png") } },
         { QStringLiteral("omodsim/modbus-definitions"),        { QStringLiteral("navigation/settings"),                 QStringLiteral(":/res/icon-mb-definitions.png") } },

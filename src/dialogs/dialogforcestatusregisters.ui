@@ -221,10 +221,6 @@
          <property name="text">
           <string>Import</string>
          </property>
-         <property name="icon">
-          <iconset resource="../resources.qrc">
-           <normaloff>:/res/icon-import.svg</normaloff>:/res/icon-import.svg</iconset>
-         </property>
         </widget>
        </item>
        <item>
@@ -243,10 +239,6 @@
          </property>
          <property name="text">
           <string>Export</string>
-         </property>
-         <property name="icon">
-          <iconset resource="../resources.qrc">
-           <normaloff>:/res/icon-export.svg</normaloff>:/res/icon-export.svg</iconset>
          </property>
         </widget>
        </item>
