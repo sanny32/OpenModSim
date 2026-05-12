@@ -5,6 +5,7 @@
 
 #include <QComboBox>
 #include <QDockWidget>
+#include <QPushButton>
 #include <QFontDatabase>
 #include <QHash>
 #include <QLineEdit>
@@ -506,6 +507,12 @@ void QlementineAppStyle::polish(QWidget* widget)
             label->setForegroundRole(QPalette::ToolTipText);
         else
             label->setForegroundRole(QPalette::WindowText);
+    }
+
+    if (qobject_cast<QPushButton*>(widget) || qobject_cast<QToolButton*>(widget)) {
+        auto font = widget->font();
+        font.setBold(false);
+        widget->setFont(font);
     }
 }
 
