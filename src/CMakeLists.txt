@@ -78,7 +78,7 @@ if(WIN32)
     endif()
 endif()
 
-if(Qt6_FOUND)
+if(Qt6_FOUND AND Qt6_VERSION VERSION_GREATER_EQUAL "6.8")
     include(FetchContent)
     set(QLEMENTINE_VERSION "1.4.2")
     FetchContent_Declare(qlementine
@@ -141,7 +141,7 @@ add_compile_definitions(APP_VERSION_PATCH="${VERSION_PATCH}")
 add_compile_definitions(APP_VERSION="${PROJECT_VERSION}")
 add_compile_definitions(BUILD_YEAR="${CURRENT_YEAR}")
 
-if(Qt6_FOUND)
+if(Qt6_FOUND AND Qt6_VERSION VERSION_GREATER_EQUAL "6.8")
     add_compile_definitions(HAVE_QLEMENTINE_APP_STYLE)
     add_compile_definitions(QLEMENTINE_VERSION="${QLEMENTINE_VERSION}")
     add_compile_definitions(QLEMENTINE_ICONS_VERSION="${QLEMENTINE_ICONS_VERSION}")
