@@ -10,6 +10,12 @@ include(GNUInstallDirs)
 option(USE_QT5 "Force Qt5 usage" OFF)
 option(USE_QT6 "Force Qt6 usage" OFF)
 
+if(APPLE)
+    option(USE_QLEMENTINE_APP_STYLE "Use Qlementine application style when available (requires Qt6 >= 6.8)" ON)
+else()
+    option(USE_QLEMENTINE_APP_STYLE "Use Qlementine application style when available (requires Qt6 >= 6.8)" OFF)
+endif()
+
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
@@ -78,7 +84,7 @@ if(WIN32)
     endif()
 endif()
 
-if(Qt6_FOUND AND Qt6_VERSION VERSION_GREATER_EQUAL "6.8")
+if(USE_QLEMENTINE_APP_STYLE AND Qt6_FOUND AND Qt6_VERSION VERSION_GREATER_EQUAL "6.8")
     include(FetchContent)
     set(QLEMENTINE_VERSION "1.4.2")
     FetchContent_Declare(qlementine
@@ -141,10 +147,19 @@ add_compile_definitions(APP_VERSION_PATCH="${VERSION_PATCH}")
 add_compile_definitions(APP_VERSION="${PROJECT_VERSION}")
 add_compile_definitions(BUILD_YEAR="${CURRENT_YEAR}")
 
-if(Qt6_FOUND AND Qt6_VERSION VERSION_GREATER_EQUAL "6.8")
+if(USE_QLEMENTINE_APP_STYLE AND
+   NOT (Qt6_FOUND AND Qt6_VERSION VERSION_GREATER_EQUAL "6.8" AND TARGET qlementine AND TARGET qlementine-icons))
+    set(USE_QLEMENTINE_APP_STYLE OFF CACHE BOOL
+        "Use Qlementine application style when available (requires Qt6 >= 6.8)" FORCE)
+endif()
+
+if(USE_QLEMENTINE_APP_STYLE)
     add_compile_definitions(HAVE_QLEMENTINE_APP_STYLE)
     add_compile_definitions(QLEMENTINE_VERSION="${QLEMENTINE_VERSION}")
     add_compile_definitions(QLEMENTINE_ICONS_VERSION="${QLEMENTINE_ICONS_VERSION}")
+else()
+    # Avoid AUTOGEN noise when Qlementine style is disabled by platform/dependencies.
+    set_source_files_properties(styles/macappstyle.h PROPERTIES SKIP_AUTOMOC ON)
 endif()
 
 # Include directories
@@ -519,7 +534,10 @@ if(Qt6_FOUND)
         TS_FILES ${TS_FILES}
         OPTIONS -no-obsolete
     )
-    target_link_libraries(${PROJECT_NAME} PRIVATE Qt::Core5Compat qlementine qlementine-icons)
+    target_link_libraries(${PROJECT_NAME} PRIVATE Qt::Core5Compat)
+    if(USE_QLEMENTINE_APP_STYLE)
+        target_link_libraries(${PROJECT_NAME} PRIVATE qlementine qlementine-icons)
+    endif()
 else()
     add_custom_command(
         OUTPUT ${TS_FILES}

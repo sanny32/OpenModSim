@@ -1817,64 +1817,64 @@ Open the download page?</source>
         <translation>清除表格</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="1010"/>
+        <location filename="../formdatamapview.cpp" line="1013"/>
         <source>1-based</source>
         <translation>基地址为-1</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="1010"/>
+        <location filename="../formdatamapview.cpp" line="1013"/>
         <source>0-based</source>
         <translation>基地址为-0</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="939"/>
+        <location filename="../formdatamapview.cpp" line="942"/>
         <source>Remove Color</source>
         <translation>去除颜色</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="949"/>
+        <location filename="../formdatamapview.cpp" line="952"/>
         <source>Yellow</source>
         <translation>黄色</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="950"/>
+        <location filename="../formdatamapview.cpp" line="953"/>
         <source>Cyan</source>
         <translation>青色</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="951"/>
+        <location filename="../formdatamapview.cpp" line="954"/>
         <source>Magenta</source>
         <translation>品红色</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="952"/>
+        <location filename="../formdatamapview.cpp" line="955"/>
         <source>LightGreen</source>
         <translation>浅绿色</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="953"/>
+        <location filename="../formdatamapview.cpp" line="956"/>
         <source>Orange</source>
         <translation>橙色</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="954"/>
+        <location filename="../formdatamapview.cpp" line="957"/>
         <source>LightBlue</source>
         <translation>浅蓝色</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="955"/>
+        <location filename="../formdatamapview.cpp" line="958"/>
         <source>LightGray</source>
         <translation>浅灰色</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="1023"/>
-        <location filename="../formdatamapview.cpp" line="1247"/>
-        <location filename="../formdatamapview.cpp" line="1571"/>
+        <location filename="../formdatamapview.cpp" line="1026"/>
+        <location filename="../formdatamapview.cpp" line="1250"/>
+        <location filename="../formdatamapview.cpp" line="1575"/>
         <source>All Types</source>
         <translation>所有类型</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="1025"/>
+        <location filename="../formdatamapview.cpp" line="1028"/>
         <source>Address Base: %1
 Unit Filter: %2
 Type Filter: %3</source>
@@ -1883,45 +1883,45 @@ Type Filter: %3</source>
 类型过滤器：%3</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="1248"/>
-        <location filename="../formdatamapview.cpp" line="1572"/>
+        <location filename="../formdatamapview.cpp" line="1251"/>
+        <location filename="../formdatamapview.cpp" line="1576"/>
         <source>Coils</source>
         <translation>线圈</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="1249"/>
-        <location filename="../formdatamapview.cpp" line="1573"/>
+        <location filename="../formdatamapview.cpp" line="1252"/>
+        <location filename="../formdatamapview.cpp" line="1577"/>
         <source>Discrete Inputs</source>
         <translation>离散输入</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="1250"/>
-        <location filename="../formdatamapview.cpp" line="1574"/>
+        <location filename="../formdatamapview.cpp" line="1253"/>
+        <location filename="../formdatamapview.cpp" line="1578"/>
         <source>Input Registers</source>
         <translation>输入寄存器</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="1251"/>
-        <location filename="../formdatamapview.cpp" line="1575"/>
+        <location filename="../formdatamapview.cpp" line="1254"/>
+        <location filename="../formdatamapview.cpp" line="1579"/>
         <source>Holding Registers</source>
         <translation>保持寄存器</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="1239"/>
-        <location filename="../formdatamapview.cpp" line="1582"/>
+        <location filename="../formdatamapview.cpp" line="1242"/>
+        <location filename="../formdatamapview.cpp" line="1586"/>
         <source>Unit:</source>
         <translation>单元：</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="1240"/>
-        <location filename="../formdatamapview.cpp" line="1583"/>
+        <location filename="../formdatamapview.cpp" line="1243"/>
+        <location filename="../formdatamapview.cpp" line="1587"/>
         <source>Data Type:</source>
         <translation>数据类型：</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="1012"/>
-        <location filename="../formdatamapview.cpp" line="1241"/>
-        <location filename="../formdatamapview.cpp" line="1567"/>
+        <location filename="../formdatamapview.cpp" line="1015"/>
+        <location filename="../formdatamapview.cpp" line="1244"/>
+        <location filename="../formdatamapview.cpp" line="1571"/>
         <source>All</source>
         <translation>全部</translation>
     </message>

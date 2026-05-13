@@ -1817,64 +1817,64 @@ Open the download page?</source>
         <translation>Очистить таблицу</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="1010"/>
+        <location filename="../formdatamapview.cpp" line="1013"/>
         <source>1-based</source>
         <translation>1-первый</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="1010"/>
+        <location filename="../formdatamapview.cpp" line="1013"/>
         <source>0-based</source>
         <translation>0-первый</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="939"/>
+        <location filename="../formdatamapview.cpp" line="942"/>
         <source>Remove Color</source>
         <translation>Удалить цвет</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="949"/>
+        <location filename="../formdatamapview.cpp" line="952"/>
         <source>Yellow</source>
         <translation>Желтый</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="950"/>
+        <location filename="../formdatamapview.cpp" line="953"/>
         <source>Cyan</source>
         <translation>Циан</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="951"/>
+        <location filename="../formdatamapview.cpp" line="954"/>
         <source>Magenta</source>
         <translation>Пурпурный</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="952"/>
+        <location filename="../formdatamapview.cpp" line="955"/>
         <source>LightGreen</source>
         <translation>Светло-зеленый</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="953"/>
+        <location filename="../formdatamapview.cpp" line="956"/>
         <source>Orange</source>
         <translation>Оранжевый</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="954"/>
+        <location filename="../formdatamapview.cpp" line="957"/>
         <source>LightBlue</source>
         <translation>Светло-синий</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="955"/>
+        <location filename="../formdatamapview.cpp" line="958"/>
         <source>LightGray</source>
         <translation>Светло-серый</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="1023"/>
-        <location filename="../formdatamapview.cpp" line="1247"/>
-        <location filename="../formdatamapview.cpp" line="1571"/>
+        <location filename="../formdatamapview.cpp" line="1026"/>
+        <location filename="../formdatamapview.cpp" line="1250"/>
+        <location filename="../formdatamapview.cpp" line="1575"/>
         <source>All Types</source>
         <translation>Все типы</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="1025"/>
+        <location filename="../formdatamapview.cpp" line="1028"/>
         <source>Address Base: %1
 Unit Filter: %2
 Type Filter: %3</source>
@@ -1883,45 +1883,45 @@ Type Filter: %3</source>
 Фильтр типов: %3</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="1248"/>
-        <location filename="../formdatamapview.cpp" line="1572"/>
+        <location filename="../formdatamapview.cpp" line="1251"/>
+        <location filename="../formdatamapview.cpp" line="1576"/>
         <source>Coils</source>
         <translation>Регистры флагов</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="1249"/>
-        <location filename="../formdatamapview.cpp" line="1573"/>
+        <location filename="../formdatamapview.cpp" line="1252"/>
+        <location filename="../formdatamapview.cpp" line="1577"/>
         <source>Discrete Inputs</source>
         <translation>Дискретные входы</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="1250"/>
-        <location filename="../formdatamapview.cpp" line="1574"/>
+        <location filename="../formdatamapview.cpp" line="1253"/>
+        <location filename="../formdatamapview.cpp" line="1578"/>
         <source>Input Registers</source>
         <translation>Регистры ввода</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="1251"/>
-        <location filename="../formdatamapview.cpp" line="1575"/>
+        <location filename="../formdatamapview.cpp" line="1254"/>
+        <location filename="../formdatamapview.cpp" line="1579"/>
         <source>Holding Registers</source>
         <translation>Регистры хранения</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="1239"/>
-        <location filename="../formdatamapview.cpp" line="1582"/>
+        <location filename="../formdatamapview.cpp" line="1242"/>
+        <location filename="../formdatamapview.cpp" line="1586"/>
         <source>Unit:</source>
         <translation>Устройство:</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="1240"/>
-        <location filename="../formdatamapview.cpp" line="1583"/>
+        <location filename="../formdatamapview.cpp" line="1243"/>
+        <location filename="../formdatamapview.cpp" line="1587"/>
         <source>Data Type:</source>
         <translation>Тип данных:</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="1012"/>
-        <location filename="../formdatamapview.cpp" line="1241"/>
-        <location filename="../formdatamapview.cpp" line="1567"/>
+        <location filename="../formdatamapview.cpp" line="1015"/>
+        <location filename="../formdatamapview.cpp" line="1244"/>
+        <location filename="../formdatamapview.cpp" line="1571"/>
         <source>All</source>
         <translation>Все</translation>
     </message>
