@@ -60,6 +60,7 @@ private slots:
 private:
     QTreeWidgetItem* itemForForm(QWidget* frm) const;
     void refreshFormItem(QTreeWidgetItem* item, QWidget* frm);
+    void refreshAllItemColors();
     static QIcon iconFor(ProjectFormType type, bool open, bool running, const QIcon& dataOpen,
                          const QIcon& dataClosed, const QIcon& trafficOpen, const QIcon& trafficClosed,
                          const QIcon& scriptIdle, const QIcon& scriptClosed, const QIcon& scriptRunning,

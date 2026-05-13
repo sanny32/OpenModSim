@@ -1,6 +1,7 @@
 #include <QApplication>
 #include <QPainter>
 #include <QStyleOptionViewItem>
+#include "styles/appcolors.h"
 #include "datadelegate.h"
 #include "outputdatawidget.h"
 
@@ -14,9 +15,9 @@ void DataDelegate::paint(QPainter* painter, const QStyleOptionViewItem& option, 
 {
     QColor color = index.data(ColorRole).value<QColor>();
     if (index.data(FindMatchRole).toBool())
-        color = QColor(255, 220, 0);
+        color = AppColors::searchMatchBackground();
     if (index.data(FindCurrentRole).toBool())
-        color = QColor(255, 170, 0);
+        color = AppColors::searchCurrentMatchBackground();
 
     QStyleOptionViewItem opt = option;
     initStyleOption(&opt, index);

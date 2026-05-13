@@ -15,6 +15,7 @@
 #include "dialogforcemultipleregisters.h"
 #include "dialogmodbusdefinitions.h"
 #include "dialogwelcome.h"
+#include "application.h"
 #include "mainstatusbar.h"
 #include "menuconnect.h"
 #include "mdiareaex.h"
@@ -23,7 +24,12 @@
 #include "applogoutput.h"
 #include "applogger.h"
 #include "mainwindow.h"
+#include "themedicons.h"
 #include "ui_mainwindow.h"
+
+#if defined(HAVE_QLEMENTINE_APP_STYLE)
+#include "styles/qlementineappstyle.h"
+#endif
 
 // Forward declaration (defined later in this file)
 static QString getSettingsFilePath();
@@ -198,6 +204,63 @@ void printOnForm(QWidget* widget, QPrinter* printer)
     else if (auto* frm = qobject_cast<FormDataMapView*>(widget)) frm->print(printer);
 }
 
+///
+/// \brief applyThemeIcons
+/// \param ui
+///
+void applyThemeIcons(Ui::MainWindow* ui)
+{
+    ui->actionNew->setIcon(themedIcon(QStringLiteral("omodsim/new-data")));
+    ui->actionOpenProject->setIcon(themedIcon(QStringLiteral("omodsim/open-project")));
+    ui->actionSaveProject->setIcon(themedIcon(QStringLiteral("omodsim/save-project")));
+    ui->actionPrint->setIcon(themedIcon(QStringLiteral("omodsim/print")));
+    ui->actionConnect->setIcon(themedIcon(QStringLiteral("omodsim/connect")));
+    ui->actionDisconnect->setIcon(themedIcon(QStringLiteral("omodsim/disconnect")));
+    ui->actionHexView->setIcon(themedIcon(QStringLiteral("omodsim/hex-view")));
+    ui->actionAbout->setIcon(themedIcon(QStringLiteral("omodsim/about")));
+    ui->actionForceCoils->setIcon(themedIcon(QStringLiteral("omodsim/force-coils")));
+    ui->actionForceDiscretes->setIcon(themedIcon(QStringLiteral("omodsim/force-discretes")));
+    ui->actionPresetInputRegs->setIcon(themedIcon(QStringLiteral("omodsim/preset-input-registers")));
+    ui->actionPresetHoldingRegs->setIcon(themedIcon(QStringLiteral("omodsim/preset-holding-registers")));
+    ui->actionUndo->setIcon(themedIcon(QStringLiteral("omodsim/undo")));
+    ui->actionRedo->setIcon(themedIcon(QStringLiteral("omodsim/redo")));
+    ui->actionCut->setIcon(themedIcon(QStringLiteral("omodsim/cut")));
+    ui->actionCopy->setIcon(themedIcon(QStringLiteral("omodsim/copy")));
+    ui->actionPaste->setIcon(themedIcon(QStringLiteral("omodsim/paste")));
+    ui->actionMsgParser->setIcon(themedIcon(QStringLiteral("omodsim/message-parser")));
+    ui->actionMbDefinitions->setIcon(themedIcon(QStringLiteral("omodsim/modbus-definitions")));
+    ui->actionNewDataView->setIcon(themedIcon(QStringLiteral("omodsim/new-data")));
+    ui->actionNewDataMapView->setIcon(themedIcon(QStringLiteral("omodsim/new-data-map")));
+    ui->actionNewTrafficView->setIcon(themedIcon(QStringLiteral("omodsim/new-traffic")));
+    ui->actionNewScript->setIcon(themedIcon(QStringLiteral("omodsim/new-script")));
+    ui->actionSplitView->setIcon(themedIcon(QStringLiteral("omodsim/split-view")));
+}
+
+///
+/// \brief configureMainToolbarText
+/// \param ui
+///
+void configureMainToolbarText(Ui::MainWindow* ui)
+{
+    ui->toolBarMain->setToolButtonStyle(Qt::ToolButtonIconOnly);
+
+    QList<QAction*> labeledActions = {
+        ui->actionNew,
+        ui->actionConnect,
+        ui->actionDisconnect
+    };
+
+    for (QAction* action : ui->toolBarMain->actions()) {
+        if (auto* button = qobject_cast<QToolButton*>(ui->toolBarMain->widgetForAction(action)))
+            button->setToolButtonStyle(Qt::ToolButtonIconOnly);
+    }
+
+    for (QAction* action : labeledActions) {
+        if (auto* button = qobject_cast<QToolButton*>(ui->toolBarMain->widgetForAction(action)))
+            button->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+    }
+}
+
 }
 
 ///
@@ -215,6 +278,7 @@ MainWindow::MainWindow(const QString& profile, bool useSession, const QString& s
     ,_helpWidget(nullptr)
 {
     ui->setupUi(this);
+    applyThemeIcons(ui);
 
     setLanguage(_lang);
     setWindowTitle(APP_PRODUCT_NAME);
@@ -245,6 +309,7 @@ MainWindow::MainWindow(const QString& profile, bool useSession, const QString& s
     qobject_cast<QToolButton*>(ui->toolBarMain->widgetForAction(ui->actionDisconnect))->setPopupMode(QToolButton::InstantPopup);
     qobject_cast<QToolButton*>(ui->toolBarMain->widgetForAction(ui->actionDisconnect))->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
     setupGlobalViewToolbar();
+    configureMainToolbarText(ui);
 
     const auto defaultPrinter = QPrinterInfo::defaultPrinter();
     if(!defaultPrinter.isNull())
@@ -276,6 +341,7 @@ MainWindow::MainWindow(const QString& profile, bool useSession, const QString& s
 
     _outputPanel = ui->outputPanel;
     _outputPanel->jsConsole()->setMaxLines(AppPreferences::instance().consoleMaxLines());
+    ui->consoleDockWidget->setTitleBarWidget(new QWidget(ui->consoleDockWidget));
 
     connect(_outputPanel, &OutputPanel::collapse, this, &MainWindow::on_outputPanelCollapse);
     connect(_outputPanel->appLog(), &AppLogOutput::openRequested, this, &MainWindow::on_outputPanelAppLogOpenRequested);
@@ -294,6 +360,9 @@ MainWindow::MainWindow(const QString& profile, bool useSession, const QString& s
     AppLogger::setupDataSimulatorLogging(*_dataSimulator, this);
     AppLogger::setupAppProjectLogging(*_project, this);
     AppLogger::setupAppPreferencesLogging(AppPreferences::instance(), this);
+
+    connect(&theApp()->theme(), &AppTheme::colorSchemeChanged,
+            this, [this]() { applyThemeColors(); });
 
     // View / window trivial action wiring
     connect(ui->actionExit,           &QAction::triggered, this, [this]{ close(); });
@@ -606,7 +675,6 @@ void MainWindow::changeEvent(QEvent* event)
         rebuildRecentProjectsMenu();
         updateProjectWindowTitle();
     }
-
     QMainWindow::changeEvent(event);
 }
 
@@ -1005,6 +1073,20 @@ void MainWindow::applyColors(const QColor& bg, const QColor& fg, const QColor& a
             script->setForegroundColor(fg);
         }
     });
+}
+
+///
+/// \brief MainWindow::applyThemeColors
+///
+void MainWindow::applyThemeColors()
+{
+    auto& prefs = AppPreferences::instance();
+    const QPalette palette = QApplication::palette();
+    const QColor bg = palette.color(QPalette::Base);
+    const QColor fg = palette.color(QPalette::Text);
+    prefs.setBackgroundColor(bg);
+    prefs.setForegroundColor(fg);
+    applyColors(bg, fg, prefs.addressColor(), prefs.commentColor());
 }
 
 ///

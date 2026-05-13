@@ -1,8 +1,10 @@
 #include <QDateTime>
 #include <QApplication>
+#include <QGuiApplication>
 #include <QItemSelectionModel>
 #include <QPalette>
 #include <QPainter>
+#include "../styles/appcolors.h"
 #include "fontutils.h"
 #include "modbuslogwidget.h"
 #include "outputtrafficwidget.h"
@@ -20,8 +22,7 @@ OutputTrafficWidget::OutputTrafficWidget(QWidget* parent)
 
     setFont(defaultMonospaceFont());
     setAutoFillBackground(true);
-    setForegroundColor(Qt::black);
-    setBackgroundColor(Qt::white);
+    updatePaletteFromTheme();
     hideModbusMessage();
 
     connect(ui->logView->selectionModel(),
@@ -78,6 +79,7 @@ void OutputTrafficWidget::setBackgroundColor(const QColor& clr)
     pal.setColor(QPalette::Base, clr);
     pal.setColor(QPalette::Window, clr);
     setPalette(pal);
+    ui->logView->setBackGroundColor(clr);
 }
 
 ///
@@ -197,9 +199,24 @@ void OutputTrafficWidget::setLogViewState(LogViewState state)
 /// \brief OutputTrafficWidget::changeEvent
 /// \param event
 ///
+/// \brief OutputTrafficWidget::updatePaletteFromTheme
+///
+void OutputTrafficWidget::updatePaletteFromTheme()
+{
+    setForegroundColor(AppColors::canvasForeground());
+    setBackgroundColor(AppColors::canvasBackground());
+}
+
+///
 void OutputTrafficWidget::changeEvent(QEvent* event)
 {
     QWidget::changeEvent(event);
+    if (event->type() == QEvent::ApplicationPaletteChange ||
+        event->type() == QEvent::StyleChange ||
+        event->type() == QEvent::ThemeChange)
+    {
+        updatePaletteFromTheme();
+    }
 }
 
 ///

@@ -1,8 +1,10 @@
 #include <QtWidgets>
+#include <QGuiApplication>
+#include "../styles/appcolors.h"
 #include "colorswatch.h"
-#include "controls/addressbasecombobox.h"
 #include "dialogpreferences.h"
 #include "mainwindow.h"
+#include "styles/themedicons.h"
 #include "ui_dialogpreferences.h"
 
 ///
@@ -18,10 +20,23 @@ DialogPreferences::DialogPreferences(MainWindow* mainWindow, QWidget* parent)
     for (int i = 0; i < ui->listWidget->count(); ++i)
         ui->listWidget->item(i)->setSizeHint(QSize(0, 28));
 
+    ui->listWidget->item(0)->setIcon(themedIcon(QStringLiteral("omodsim/preferences-interface")));
+    ui->listWidget->item(1)->setIcon(themedIcon(QStringLiteral("omodsim/preferences-defaults")));
+    ui->listWidget->item(2)->setIcon(themedIcon(QStringLiteral("omodsim/preferences-script")));
+
     ui->comboBoxLanguage->addItem("English", "en");
     ui->comboBoxLanguage->addItem("Русский", "ru");
     ui->comboBoxLanguage->addItem("简体中文", "zh_CN");
     ui->comboBoxLanguage->addItem("繁體中文", "zh_TW");
+
+#if defined(HAVE_QLEMENTINE_APP_STYLE)
+    ui->comboBoxThemeMode->addItem(tr("System"), static_cast<int>(AppThemeMode::System));
+    ui->comboBoxThemeMode->addItem(tr("Light"), static_cast<int>(AppThemeMode::Light));
+    ui->comboBoxThemeMode->addItem(tr("Dark"), static_cast<int>(AppThemeMode::Dark));
+#else
+    ui->labelTheme->hide();
+    ui->comboBoxThemeMode->hide();
+#endif
 
     ui->fontComboBoxFont->setFontFilters(QFontComboBox::MonospacedFonts);
 
@@ -33,7 +48,7 @@ DialogPreferences::DialogPreferences(MainWindow* mainWindow, QWidget* parent)
         }
     });
     connect(ui->pushButtonResetBackgroundColor, &QPushButton::clicked, this, [this]() {
-        _bgColor = Qt::white;
+        _bgColor = AppColors::canvasBackground();
         ui->pushButtonBackgroundColor->setColor(_bgColor);
     });
 
@@ -45,7 +60,7 @@ DialogPreferences::DialogPreferences(MainWindow* mainWindow, QWidget* parent)
         }
     });
     connect(ui->pushButtonResetForegroundColor, &QPushButton::clicked, this, [this]() {
-        _fgColor = Qt::black;
+        _fgColor = AppColors::canvasForeground();
         ui->pushButtonForegroundColor->setColor(_fgColor);
     });
 
@@ -57,7 +72,7 @@ DialogPreferences::DialogPreferences(MainWindow* mainWindow, QWidget* parent)
         }
     });
     connect(ui->pushButtonResetAddressColor, &QPushButton::clicked, this, [this]() {
-        _addrColor = QColor(128, 128, 128);
+        _addrColor = AppColors::defaultAddress();
         ui->pushButtonAddressColor->setColor(_addrColor);
     });
 
@@ -69,7 +84,7 @@ DialogPreferences::DialogPreferences(MainWindow* mainWindow, QWidget* parent)
         }
     });
     connect(ui->pushButtonResetCommentColor, &QPushButton::clicked, this, [this]() {
-        _commentColor = QColor(128, 128, 128);
+        _commentColor = AppColors::defaultAddress();
         ui->pushButtonCommentColor->setColor(_commentColor);
     });
 
@@ -152,6 +167,11 @@ void DialogPreferences::loadFromPreferences()
     const int langIdx = ui->comboBoxLanguage->findData(prefs.language());
     ui->comboBoxLanguage->setCurrentIndex(langIdx >= 0 ? langIdx : 0);
 
+#if defined(HAVE_QLEMENTINE_APP_STYLE)
+    const int themeIdx = ui->comboBoxThemeMode->findData(static_cast<int>(prefs.themeMode()));
+    ui->comboBoxThemeMode->setCurrentIndex(themeIdx >= 0 ? themeIdx : 0);
+#endif
+
     // Interface - updates
     ui->checkBoxCheckForUpdates->setChecked(prefs.checkForUpdates());
     ui->checkBoxShowWelcomeDialog->setChecked(prefs.showWelcomeDialog());
@@ -205,6 +225,12 @@ void DialogPreferences::apply()
     const QString lang = ui->comboBoxLanguage->currentData().toString();
     prefs.setLanguage(lang);
     if (_mainWindow) _mainWindow->setLanguage(lang);
+
+#if defined(HAVE_QLEMENTINE_APP_STYLE)
+    prefs.setThemeMode(static_cast<AppThemeMode>(ui->comboBoxThemeMode->currentData().toInt()));
+    if (_mainWindow)
+        _mainWindow->applyThemeColors();
+#endif
 
     // Interface - updates
     const bool checkUpdates = ui->checkBoxCheckForUpdates->isChecked();

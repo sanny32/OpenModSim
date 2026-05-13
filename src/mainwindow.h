@@ -45,6 +45,7 @@ public:
     void applyScriptFont(const QFont& font);
     void applyZoom(int zoomPercent);
     void applyColors(const QColor& bg, const QColor& fg, const QColor& addr, const QColor& comment);
+    void applyThemeColors();
     void applyCheckForUpdates(bool enabled);
     void applyGlobalAddressBase(AddressBase base, bool persist = true);
     void applyGlobalHexView(bool enabled, bool persist = true);

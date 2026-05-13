@@ -5,6 +5,7 @@
 #include "macsplittoolbutton.h"
 #include "mdiareaex.h"
 #include "mditabbar.h"
+#include "themedicons.h"
 #include "../apptrace.h"
 
 ///
@@ -948,7 +949,7 @@ void MdiAreaEx::createSplitButton()
     _splitButton = new QToolButton(this);
     _splitButton->setAutoRaise(true);
 #endif
-    _splitButton->setIcon(QIcon(":/res/icon-split-view.png"));
+    _splitButton->setIcon(themedIcon(QStringLiteral("omodsim/split-view")));
     _splitButton->setToolTip(tr("Split view"));
     _splitButton->setCheckable(true);
 
@@ -1072,12 +1073,12 @@ void MdiAreaEx::updateSplitButtonGeometry()
     QRect reserveRect;
     if (insetOwner) {
         auto* insetTabBar = insetOwner->tabBar();
-        if (insetTabBar && insetTabBar->isVisible()) {
+        if (insetTabBar && insetTabBar->isVisible() && splitButtonHost->isAncestorOf(insetTabBar)) {
             const QPoint topLeftOnHost = insetTabBar->mapTo(splitButtonHost, QPoint(0, 0));
             const QRect tabBarRectOnHost = QRect(topLeftOnHost, insetTabBar->size());
             reserveRect = QRect(tabBarRectOnHost.right() + 1, tabBarRectOnHost.y(), splitWidth, tabBarRectOnHost.height());
         }
-    } else if (placementArea) {
+    } else if (placementArea && splitButtonHost->isAncestorOf(placementArea) && splitButtonHost->isAncestorOf(anchorTabBar)) {
         const QPoint areaTopLeftOnHost = placementArea->mapTo(splitButtonHost, QPoint(0, 0));
         const QPoint anchorTopLeftOnHost = anchorTabBar->mapTo(splitButtonHost, QPoint(0, 0));
         reserveRect = QRect(areaTopLeftOnHost.x() + qMax(0, placementArea->width() - splitWidth),

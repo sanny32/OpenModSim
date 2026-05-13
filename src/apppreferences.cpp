@@ -1,8 +1,39 @@
 #include "fontutils.h"
 #include "enums.h"
 #include "apppreferences.h"
+#include "styles/appcolors.h"
 
 namespace {
+
+QString themeModeToText(AppThemeMode mode)
+{
+    switch (mode) {
+        case AppThemeMode::Light:
+            return QStringLiteral("light");
+        case AppThemeMode::Dark:
+            return QStringLiteral("dark");
+        case AppThemeMode::System:
+        default:
+            return QStringLiteral("system");
+    }
+}
+
+AppThemeMode themeModeFromVariant(const QVariant& value)
+{
+    bool ok = false;
+    const int intValue = value.toInt(&ok);
+    if (ok && intValue >= static_cast<int>(AppThemeMode::System)
+        && intValue <= static_cast<int>(AppThemeMode::Dark)) {
+        return static_cast<AppThemeMode>(intValue);
+    }
+
+    const QString text = value.toString().trimmed().toLower();
+    if (text == QLatin1String("light"))
+        return AppThemeMode::Light;
+    if (text == QLatin1String("dark"))
+        return AppThemeMode::Dark;
+    return AppThemeMode::System;
+}
 
 ///
 /// \brief boolToText
@@ -33,6 +64,8 @@ QString fontToText(const QFont& font)
 AppPreferences::AppPreferences()
     : _font(defaultMonospaceFont())
     , _scriptFont(defaultScriptFont())
+    , _backgroundColor(AppColors::canvasBackground())
+    , _foregroundColor(AppColors::canvasForeground())
 {
 }
 
@@ -279,6 +312,21 @@ void AppPreferences::setConsoleMaxLines(int n)
 }
 
 ///
+/// \brief AppPreferences::setThemeMode
+/// \param mode
+///
+void AppPreferences::setThemeMode(AppThemeMode mode)
+{
+    if (_themeMode == mode)
+        return;
+
+    const QString oldValue = themeModeToText(_themeMode);
+    const QString newValue = themeModeToText(mode);
+    _themeMode = mode;
+    emit settingChanged("ThemeMode", oldValue, newValue);
+}
+
+///
 /// \brief AppPreferences::setShowWelcomeDialog
 /// \param enable
 ///
@@ -301,8 +349,13 @@ void AppPreferences::load(QSettings& settings)
 
     _font.fromString(settings.value("Font", _font.toString()).toString());
     _fontZoom        = settings.value("FontZoom",        _fontZoom).toInt();
-    _backgroundColor = QColor(settings.value("BackgroundColor", _backgroundColor.name()).toString());
-    _foregroundColor = QColor(settings.value("ForegroundColor", _foregroundColor.name()).toString());
+    const QColor defaultBg = AppColors::canvasBackground();
+    const QColor defaultFg = AppColors::canvasForeground();
+    const QColor savedBg = QColor(settings.value("BackgroundColor", defaultBg.name()).toString());
+    const QColor savedFg = QColor(settings.value("ForegroundColor", defaultFg.name()).toString());
+    // if the saved value is a default from the opposite theme, replace with the current default
+    _backgroundColor = (savedBg == Qt::white || savedBg == QColor(0x1c1c1e)) ? defaultBg : savedBg;
+    _foregroundColor = (savedFg == Qt::black || savedFg == Qt::white)         ? defaultFg : savedFg;
     _addressColor    = QColor(settings.value("AddressColor",    _addressColor.name()).toString());
     _commentColor    = QColor(settings.value("CommentColor",    _commentColor.name()).toString());
     _language        = settings.value("Language", _language).toString();
@@ -312,6 +365,7 @@ void AppPreferences::load(QSettings& settings)
     _consoleMaxLines = settings.value("ConsoleMaxLines", _consoleMaxLines).toInt();
     _checkForUpdates  = settings.value("CheckForUpdates",  _checkForUpdates).toBool();
     _showWelcomeDialog = settings.value("ShowWelcomeDialog", _showWelcomeDialog).toBool();
+    setThemeMode(themeModeFromVariant(settings.value("ThemeMode", static_cast<int>(_themeMode))));
 
     settings >> _dataViewDefinitions;
     settings >> _trafficViewDefinitions;
@@ -343,6 +397,7 @@ void AppPreferences::save(QSettings& settings) const
     settings.setValue("ConsoleMaxLines", _consoleMaxLines);
     settings.setValue("CheckForUpdates", _checkForUpdates);
     settings.setValue("ShowWelcomeDialog", _showWelcomeDialog);
+    settings.setValue("ThemeMode", static_cast<int>(_themeMode));
 
     settings << _dataViewDefinitions;
     settings << _trafficViewDefinitions;
@@ -371,6 +426,7 @@ void AppPreferences::saveXml(QXmlStreamWriter& xml) const
     xml.writeAttribute("CodeAutoComplete", boolToString(_codeAutoComplete));
     xml.writeAttribute("AutoShowConsoleOutput", boolToString(_autoShowConsoleOutput));
     xml.writeAttribute("ConsoleMaxLines", QString::number(_consoleMaxLines));
+    xml.writeAttribute("ThemeMode", themeModeToText(_themeMode));
     xml.writeAttribute("GlobalZeroBasedAddress", boolToString(_globalAddressBase == AddressBase::Base0));
     xml.writeAttribute("GlobalHexView", boolToString(_globalHexView));
     xml << _dataViewDefinitions;
@@ -431,6 +487,10 @@ void AppPreferences::loadXml(QXmlStreamReader& xml)
     if (attributes.hasAttribute("ConsoleMaxLines")) {
         bool ok; const int n = attributes.value("ConsoleMaxLines").toInt(&ok);
         if (ok) _consoleMaxLines = n;
+    }
+
+    if (attributes.hasAttribute("ThemeMode")) {
+        _themeMode = themeModeFromVariant(attributes.value("ThemeMode").toString());
     }
 
     if (attributes.hasAttribute("GlobalZeroBasedAddress")) {

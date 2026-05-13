@@ -8,7 +8,12 @@
 #include <QPlainTextEdit>
 #include "aboutdatawidget.h"
 #include "dialogabout.h"
+#include "themedicons.h"
 #include "ui_dialogabout.h"
+
+#if defined(HAVE_QLEMENTINE_APP_STYLE)
+#include "styles/qlementineappstyle.h"
+#endif
 
 #ifdef Q_OS_WIN
 #include <windows.h>
@@ -192,15 +197,23 @@ DialogAbout::DialogAbout(QWidget *parent) :
                      tr("Underlying platform."));
     #endif
 
-    #ifdef Q_OS_MAC
-        #ifdef QLEMENTINE_VERSION
+#if defined(HAVE_QLEMENTINE_APP_STYLE)
+        if (dynamic_cast<QlementineAppStyle*>(qApp ? qApp->style() : nullptr)) {
             addComponent(vboxLayout,
                          "Qlementine",
                          QLEMENTINE_VERSION,
                          tr("Modern Qt Widgets style."),
                          "https://github.com/oclero/qlementine");
 
-        #endif
+            addComponent(vboxLayout,
+                         "Qlementine Icons",
+                         QLEMENTINE_ICONS_VERSION,
+                         tr("Modern Qt Widgets icon theme."),
+                         "https://github.com/oclero/qlementine-icons");
+        }
+#endif
+
+    #ifdef Q_OS_MAC
         addComponent(vboxLayout,
                      QSysInfo::prettyProductName(),
                      QSysInfo::currentCpuArchitecture(),
@@ -251,6 +264,9 @@ void DialogAbout::adjustSize()
     const int sbWidth = s->pixelMetric(QStyle::PM_ScrollBarExtent);
     const int frameWidth = s->pixelMetric(QStyle::PM_DefaultFrameWidth) * 2;
 
+    const int maxDialogH = maximumHeight();
+    const int dialogFrameV = sizeHint().height() - ui->tabWidget->height();
+
     QSize maxContentSize(0, 0);
     for (int i = 0; i < ui->tabWidget->count(); ++i) {
         auto tab = ui->tabWidget->widget(i);
@@ -271,6 +287,11 @@ void DialogAbout::adjustSize()
             QSize contentSize = scroll->widget()->sizeHint();
             contentSize.rwidth() += marginH + sbWidth + frameWidth;
             contentSize.rheight() += marginV + ui->tabWidget->tabBar()->sizeHint().height() + frameWidth;
+
+            if (maxDialogH > 0 && maxDialogH < QWIDGETSIZE_MAX) {
+                const int maxTabH = maxDialogH - dialogFrameV;
+                contentSize.rheight() = qMin(contentSize.height(), maxTabH);
+            }
 
             maxContentSize = maxContentSize.expandedTo(contentSize);
         }
@@ -359,7 +380,7 @@ void DialogAbout::addComponent(QLayout* layout, const QString& title, const QStr
     w->setVersion(version);
     w->setDescription(description);
     w->setLinkUrl(QUrl(url));
-    w->setLinkIcon(QIcon::fromTheme("applications-internet", QIcon(":/res/applications-internet.svg")));
+    w->setLinkIcon(themedIcon(QStringLiteral("omodsim/internet")));
     w->setLinkToolTip(tr("Visit component's homepage\n%1").arg(w->linkUrl().toString()));
     layout->addWidget(w);
 }
@@ -380,12 +401,12 @@ void DialogAbout::addAuthor(QLayout* layout, const QString& name, const QString&
 
     if(url.contains("mailto:"))
     {
-        w->setLinkIcon(QIcon::fromTheme("emblem-mail", QIcon(":/res/emblem-mail.svg")));
+        w->setLinkIcon(themedIcon(QStringLiteral("omodsim/mail")));
         w->setLinkToolTip(tr("Email contributer: %1").arg(w->linkUrl().path()));
     }
     else if(url.contains("github"))
     {
-        w->setLinkIcon(QIcon(":/res/emblem-github.svg"));
+        w->setLinkIcon(themedIcon(QStringLiteral("omodsim/github")));
         w->setLinkToolTip(tr("Visit github user's homepage\n%1").arg(w->linkUrl().toString()));
     }
     else if(!url.isEmpty())

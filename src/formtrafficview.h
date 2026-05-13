@@ -1,11 +1,13 @@
 #ifndef FORMTRAFFICVIEW_H
 #define FORMTRAFFICVIEW_H
 
+#include <QGuiApplication>
 #include <QWidget>
 #include <QTimer>
 #include <QXmlStreamWriter>
 #include <QQueue>
 #include <QPrinter>
+#include "styles/appcolors.h"
 #include "fontutils.h"
 #include "modbusmultiserver.h"
 #include "displaydefinition.h"
@@ -211,8 +213,8 @@ inline QSettings& operator >>(QSettings& in, FormTrafficView* frm)
     wndRect = in.value("ViewRect").toRect();
 
     frm->setFont(in.value("Font", defaultMonospaceFont()).value<QFont>());
-    frm->setForegroundColor(in.value("ForegroundColor", QColor(Qt::black)).value<QColor>());
-    frm->setBackgroundColor(in.value("BackgroundColor", QColor(Qt::white)).value<QColor>());
+    frm->setForegroundColor(in.value("ForegroundColor", AppColors::canvasForeground()).value<QColor>());
+    frm->setBackgroundColor(in.value("BackgroundColor", AppColors::canvasBackground()).value<QColor>());
 
     frm->setProperty("ParentGeometry", wndRect);
     frm->setProperty("AutoCompleteEnabled", AppPreferences::instance().codeAutoComplete());
@@ -347,15 +349,23 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, FormTrafficView* frm
             }
             else if (xml.name() == QLatin1String("Colors")) {
                 const QXmlStreamAttributes colorAttrs = xml.attributes();
+                const QColor defaultBg = AppColors::canvasBackground();
+                const QColor defaultFg = AppColors::canvasForeground();
 
                 if (colorAttrs.hasAttribute("Background")) {
                     QColor color(colorAttrs.value("Background").toString());
-                    if (color.isValid()) frm->setBackgroundColor(color);
+                    if (color.isValid()) {
+                        if (color == Qt::white || color == QColor(0x1c1c1e)) color = defaultBg;
+                        frm->setBackgroundColor(color);
+                    }
                 }
 
                 if (colorAttrs.hasAttribute("Foreground")) {
                     QColor color(colorAttrs.value("Foreground").toString());
-                    if (color.isValid()) frm->setForegroundColor(color);
+                    if (color.isValid()) {
+                        if (color == Qt::black || color == Qt::white) color = defaultFg;
+                        frm->setForegroundColor(color);
+                    }
                 }
 
                 xml.skipCurrentElement();

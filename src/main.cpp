@@ -1,11 +1,13 @@
-#include <QApplication>
 #include <QFontDatabase>
+#include <QIcon>
 #include <QMessageBox>
+#include "application.h"
 #include "mainwindow.h"
 #include "cmdlineparser.h"
 #include "fontutils.h"
 #include "styles/appstyle.h"
 #include "styles/macappstyle.h"
+#include "styles/qlementineappstyle.h"
 
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 namespace {
@@ -91,23 +93,21 @@ static void showErrorMessage(const QString &message)
 ///
 int main(int argc, char *argv[])
 {
-    QApplication a(argc, argv);
+    Application a(argc, argv);
     a.setApplicationName(APP_NAME);
     a.setApplicationVersion(APP_VERSION);
 #ifdef Q_OS_LINUX
     a.setDesktopFileName(QStringLiteral("omodsim%1").arg(APP_VERSION_MAJOR));
 #endif
 
-#  ifdef Q_OS_WIN
-    a.setStyle(new AppStyle("windowsvista"));
-#  elif defined(Q_OS_MAC)
+#if defined(HAVE_QLEMENTINE_APP_STYLE) && defined(Q_OS_MAC)
     a.setStyle(new MacAppStyle());
-#  else
+#elif defined(HAVE_QLEMENTINE_APP_STYLE)
+    a.setStyle(new QlementineAppStyle());
+#elif defined(Q_OS_WIN)
+    a.setStyle(new AppStyle("windowsvista"));
+#else
     a.setStyle(new AppStyle("fusion"));
-#  endif
-
-#if QT_VERSION >= QT_VERSION_CHECK(6, 8, 0)
-    QGuiApplication::styleHints()->setColorScheme(Qt::ColorScheme::Light);
 #endif
 
     QFontDatabase::addApplicationFont(":/fonts/firacode.ttf");

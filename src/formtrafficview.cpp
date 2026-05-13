@@ -16,6 +16,7 @@
 #include "modbusmessages.h"
 #include "serialportutils.h"
 #include "formtrafficview.h"
+#include "themedicons.h"
 #include "ui_formtrafficview.h"
 
 namespace {
@@ -36,7 +37,7 @@ FormTrafficView::FormTrafficView(ModbusMultiServer& server, MainWindow* parent)
     Q_ASSERT(parent != nullptr);
 
     ui->setupUi(this);
-    setWindowIcon(QIcon(":/res/icon-show-traffic.png"));
+    setWindowIcon(themedIcon(QStringLiteral("omodsim/show-traffic")));
     setupToolbarActions();
     setupFilterControls();
     setupToolbarLayout();
@@ -672,6 +673,9 @@ void FormTrafficView::setHexView(bool enabled)
 void FormTrafficView::setupToolbarActions()
 {
     ui->toolBarTraffic->setVisible(true);
+    ui->actionPauseTraffic->setIcon(themedIcon(QStringLiteral("omodsim/pause")));
+    ui->actionClearTraffic->setIcon(themedIcon(QStringLiteral("omodsim/clear")));
+    ui->actionExportTrafficLog->setIcon(themedIcon(QStringLiteral("omodsim/export")));
 
     ui->toolBarTraffic->removeAction(ui->actionPauseTraffic);
     ui->toolBarTraffic->removeAction(ui->actionClearTraffic);
@@ -1022,7 +1026,6 @@ void FormTrafficView::appendTrafficEntry(const ConnectionDetails& cd,
         updateExportActionState();
     }
 }
-
 
 
 

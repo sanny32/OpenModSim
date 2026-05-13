@@ -1,6 +1,7 @@
 #include <QApplication>
 #include <atomic>
 #include <QClipboard>
+#include <QGuiApplication>
 #include <QListWidget>
 #include <QMenu>
 #include <QPainter>
@@ -9,7 +10,9 @@
 #include <QStyledItemDelegate>
 #include <QToolBar>
 #include <QToolButton>
+#include "../styles/appcolors.h"
 #include "applogoutput.h"
+#include "themedicons.h"
 #include "ui_applogoutput.h"
 
 Q_LOGGING_CATEGORY(lcApp, "omodsim")
@@ -36,11 +39,11 @@ EventStyle styleForType(AppLogOutput::EventType type)
 {
     switch (type) {
         case AppLogOutput::EventType::Warning:
-            return { QColor("#FFF8E1"), QColor("#F9A825"), QColor("#4A3000"), QStringLiteral(":/res/icon-log-warning.svg") };
+            return EventStyle{ AppColors::warningBackground(), AppColors::warningBorder(), AppColors::warningForeground(), QStringLiteral(":/res/icon-log-warning.svg") };
         case AppLogOutput::EventType::Error:
-            return { QColor("#FFEBEE"), QColor("#E53935"), QColor("#7F0000"), QStringLiteral(":/res/icon-log-critical.svg") };
+            return EventStyle{ AppColors::errorBackground(), AppColors::errorBorder(), AppColors::errorForeground(), QStringLiteral(":/res/icon-log-critical.svg") };
         default:
-            return { Qt::white, QColor(), QColor("#202020"), QStringLiteral(":/res/icon-log-info.svg") };
+            return EventStyle{ AppColors::canvasBackground(), QColor(), AppColors::logForeground(), QStringLiteral(":/res/icon-log-info.svg") };
     }
 }
 
@@ -51,7 +54,15 @@ EventStyle styleForType(AppLogOutput::EventType type)
 ///
 QIcon iconForType(AppLogOutput::EventType type)
 {
-    return QIcon(styleForType(type).iconPath);
+    switch (type) {
+        case AppLogOutput::EventType::Warning:
+            return themedIcon(QStringLiteral("omodsim/warning"));
+        case AppLogOutput::EventType::Error:
+            return themedIcon(QStringLiteral("omodsim/error"));
+        case AppLogOutput::EventType::Info:
+        default:
+            return themedIcon(QStringLiteral("omodsim/information"));
+    }
 }
 
 ///
@@ -164,46 +175,26 @@ AppLogOutput::AppLogOutput(QWidget* parent)
 {
     ui->setupUi(this);
 
-    ui->toolBar->setStyleSheet(
-        "QToolBar { border: none; background: transparent; spacing: 2px; padding: 1px 2px; }"
-        "QToolBar::separator { width: 1px; background: #BDBDBD; margin: 4px 2px; }");
-
-    const QString uncheckedQss =
-        "color:#9E9E9E; background:transparent;"
-        "border:1px solid #BDBDBD; border-radius:4px;"
-        "min-width:22px; max-width:22px; min-height:22px; max-height:22px;"
-        "padding:0px; font-size:11px;";
-
-    auto styleFilterBtn = [&](QAction* action, const QString& checkedQss) {
+    auto setupToolbarBtn = [&](QAction* action) {
         auto* btn = qobject_cast<QToolButton*>(ui->toolBar->widgetForAction(action));
         if (!btn) return;
         btn->setToolButtonStyle(Qt::ToolButtonIconOnly);
-        btn->setStyleSheet(
-            QString("QToolButton { %1 }"
-                    "QToolButton:!checked { %2 }").arg(checkedQss, uncheckedQss));
+        btn->setFixedSize(24, 24);
+        btn->setProperty("preservePressedIconAlignment", true);
     };
 
-    styleFilterBtn(ui->actionFilterInfo,
-        "color:#1565C0; background:#E3F2FD;"
-        "border:1px solid #64B5F6; border-radius:4px;"
-        "min-width:22px; max-width:22px; min-height:22px; max-height:22px;"
-        "padding:0px; font-size:11px;");
-
-    styleFilterBtn(ui->actionFilterWarn,
-        "color:#E65100; background:#FFF8E1;"
-        "border:1px solid #FFA726; border-radius:4px;"
-        "min-width:22px; max-width:22px; min-height:22px; max-height:22px;"
-        "padding:0px; font-size:11px;");
-
-    styleFilterBtn(ui->actionFilterError,
-        "color:#C62828; background:#FFEBEE;"
-        "border:1px solid #E57373; border-radius:4px;"
-        "min-width:22px; max-width:22px; min-height:22px; max-height:22px;"
-        "padding:0px; font-size:11px;");
+    setupToolbarBtn(ui->actionClear);
+    setupToolbarBtn(ui->actionExport);
+    setupToolbarBtn(ui->actionFilterInfo);
+    setupToolbarBtn(ui->actionFilterWarn);
+    setupToolbarBtn(ui->actionFilterError);
 
     auto* filterSpacer = new QWidget(ui->toolBar);
     filterSpacer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
     ui->toolBar->insertWidget(ui->actionFilterInfo, filterSpacer);
+
+    ui->actionClear->setIcon(themedIcon(QStringLiteral("omodsim/clear")));
+    ui->actionExport->setIcon(themedIcon(QStringLiteral("omodsim/export")));
 
     ui->listWidget->setItemDelegate(new AppLogItemDelegate(ui->listWidget));
     ui->listWidget->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
@@ -387,7 +378,7 @@ void AppLogOutput::on_customContextMenuRequested(const QPoint& pos)
 {
     QMenu menu(ui->listWidget);
 
-    auto copyAction = menu.addAction(QIcon(":/res/icon-copy.png"), tr("Copy"), this, [this]() {
+    auto copyAction = menu.addAction(themedIcon(QStringLiteral("omodsim/copy")), tr("Copy"), this, [this]() {
         QStringList lines;
         for (auto* item : ui->listWidget->selectedItems())
             lines << item->text();
@@ -396,14 +387,14 @@ void AppLogOutput::on_customContextMenuRequested(const QPoint& pos)
     });
     copyAction->setEnabled(!ui->listWidget->selectedItems().isEmpty());
 
-    auto copyAllAction = menu.addAction(QIcon(":/res/icon-copy.png"), tr("Copy All"), this,
+    auto copyAllAction = menu.addAction(themedIcon(QStringLiteral("omodsim/copy")), tr("Copy All"), this,
                                         &AppLogOutput::copyAllToClipboard);
     copyAllAction->setShortcut(_copyAllAction->shortcut());
     copyAllAction->setEnabled(!isEmpty());
 
     menu.addSeparator();
 
-    auto exportAction = menu.addAction(QIcon(":/res/icon-export.png"), tr("Export..."), this,
+    auto exportAction = menu.addAction(themedIcon(QStringLiteral("omodsim/export")), tr("Export..."), this,
                                        &AppLogOutput::exportLog);
     exportAction->setEnabled(!isEmpty());
 

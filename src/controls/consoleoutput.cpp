@@ -1,5 +1,6 @@
 #include <QApplication>
 #include <QClipboard>
+#include <QGuiApplication>
 #include <QListWidget>
 #include <QMenu>
 #include <QPainter>
@@ -7,7 +8,9 @@
 #include <QStyledItemDelegate>
 #include <QToolBar>
 #include <QToolButton>
+#include "../styles/appcolors.h"
 #include "consoleoutput.h"
+#include "themedicons.h"
 #include "ui_consoleoutput.h"
 
 namespace {
@@ -24,13 +27,13 @@ MessageStyle styleForType(ConsoleOutput::MessageType type)
 {
     switch (type) {
         case ConsoleOutput::MessageType::Warning:
-            return { QColor("#FFF8E1"), QColor("#F9A825"), QColor("#4A3000"), QStringLiteral(":/res/icon-log-warning.svg") };
+            return MessageStyle{ AppColors::warningBackground(), AppColors::warningBorder(), AppColors::warningForeground(), QStringLiteral(":/res/icon-log-warning.svg") };
         case ConsoleOutput::MessageType::Error:
-            return { QColor("#FFEBEE"), QColor("#E53935"), QColor("#7F0000"), QStringLiteral(":/res/icon-log-critical.svg") };
+            return MessageStyle{ AppColors::errorBackground(), AppColors::errorBorder(), AppColors::errorForeground(), QStringLiteral(":/res/icon-log-critical.svg") };
         case ConsoleOutput::MessageType::Debug:
-            return { Qt::white, QColor(), QColor("#37474F"), QStringLiteral(":/res/icon-log-info.svg") };
+            return MessageStyle{ AppColors::canvasBackground(), QColor(), AppColors::debugForeground(), QStringLiteral(":/res/icon-log-info.svg") };
         default:
-            return { Qt::white, QColor(), Qt::black, QStringLiteral(":/res/icon-log-info.svg") };
+            return MessageStyle{ AppColors::canvasBackground(), QColor(), AppColors::logForeground(), QStringLiteral(":/res/icon-log-info.svg") };
     }
 }
 
@@ -41,7 +44,16 @@ MessageStyle styleForType(ConsoleOutput::MessageType type)
 ///
 QIcon iconForType(ConsoleOutput::MessageType type)
 {
-    return QIcon(styleForType(type).iconPath);
+    switch (type) {
+        case ConsoleOutput::MessageType::Warning:
+            return themedIcon(QStringLiteral("omodsim/warning"));
+        case ConsoleOutput::MessageType::Error:
+            return themedIcon(QStringLiteral("omodsim/error"));
+        case ConsoleOutput::MessageType::Debug:
+        case ConsoleOutput::MessageType::Log:
+        default:
+            return themedIcon(QStringLiteral("omodsim/information"));
+    }
 }
 
 class ConsoleItemDelegate final : public QStyledItemDelegate
@@ -58,7 +70,7 @@ public:
 
         QColor bg = style.bg;
         if (!style.border.isValid() && (option.features & QStyleOptionViewItem::Alternate))
-            bg = QColor("#F8F8F8");
+            bg = AppColors::alternateBackground();
         painter->fillRect(option.rect, bg);
 
         if (style.border.isValid())
@@ -70,7 +82,7 @@ public:
             painter->fillRect(option.rect, sel);
         }
 
-        painter->setPen(QColor("#E0E0E0"));
+        painter->setPen(AppColors::divider());
         painter->drawLine(option.rect.bottomLeft(), option.rect.bottomRight());
 
         constexpr int leftPad = 8;
@@ -122,46 +134,24 @@ ConsoleOutput::ConsoleOutput(QWidget* parent)
 {
     ui->setupUi(this);
 
-    ui->toolBar->setStyleSheet(
-        "QToolBar { border: none; background: transparent; spacing: 2px; padding: 1px 2px; }"
-        "QToolBar::separator { width: 1px; background: #BDBDBD; margin: 4px 2px; }");
-
-    const QString uncheckedQss =
-        "color:#9E9E9E; background:transparent;"
-        "border:1px solid #BDBDBD; border-radius:4px;"
-        "min-width:22px; max-width:22px; min-height:22px; max-height:22px;"
-        "padding:0px; font-size:11px;";
-
-    auto styleFilterBtn = [&](QAction* action, const QString& checkedQss) {
+    auto setupToolbarBtn = [&](QAction* action) {
         auto* btn = qobject_cast<QToolButton*>(ui->toolBar->widgetForAction(action));
         if (!btn) return;
         btn->setToolButtonStyle(Qt::ToolButtonIconOnly);
-        btn->setStyleSheet(
-            QString("QToolButton { %1 }"
-                    "QToolButton:!checked { %2 }").arg(checkedQss, uncheckedQss));
+        btn->setFixedSize(24, 24);
+        btn->setProperty("preservePressedIconAlignment", true);
     };
 
-    styleFilterBtn(ui->actionFilterLog,
-        "color:#1565C0; background:#E3F2FD;"
-        "border:1px solid #64B5F6; border-radius:4px;"
-        "min-width:22px; max-width:22px; min-height:22px; max-height:22px;"
-        "padding:0px; font-size:11px;");
-
-    styleFilterBtn(ui->actionFilterWarn,
-        "color:#E65100; background:#FFF8E1;"
-        "border:1px solid #FFA726; border-radius:4px;"
-        "min-width:22px; max-width:22px; min-height:22px; max-height:22px;"
-        "padding:0px; font-size:11px;");
-
-    styleFilterBtn(ui->actionFilterError,
-        "color:#C62828; background:#FFEBEE;"
-        "border:1px solid #E57373; border-radius:4px;"
-        "min-width:22px; max-width:22px; min-height:22px; max-height:22px;"
-        "padding:0px; font-size:11px;");
+    setupToolbarBtn(ui->actionFilterLog);
+    setupToolbarBtn(ui->actionFilterWarn);
+    setupToolbarBtn(ui->actionFilterError);
+    setupToolbarBtn(ui->actionClear);
 
     auto* filterSpacer = new QWidget(ui->toolBar);
     filterSpacer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
     ui->toolBar->insertWidget(ui->actionFilterLog, filterSpacer);
+
+    ui->actionClear->setIcon(themedIcon(QStringLiteral("omodsim/clear")));
 
     ui->listWidget->setItemDelegate(new ConsoleItemDelegate(ui->listWidget));
     ui->listWidget->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
@@ -320,7 +310,7 @@ void ConsoleOutput::on_customContextMenuRequested(const QPoint& pos)
 {
     QMenu menu(ui->listWidget);
 
-    auto copyAction = menu.addAction(QIcon(":/res/icon-copy.png"), tr("Copy"), this, [this]() {
+    auto copyAction = menu.addAction(themedIcon(QStringLiteral("omodsim/copy")), tr("Copy"), this, [this]() {
         QStringList lines;
         for (auto* item : ui->listWidget->selectedItems())
             lines << item->text();

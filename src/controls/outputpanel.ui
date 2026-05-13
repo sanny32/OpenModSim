@@ -28,6 +28,9 @@
    </property>
    <item>
     <widget class="QTabWidget" name="tabWidget">
+     <property name="autoFillBackground">
+      <bool>true</bool>
+     </property>
      <property name="tabPosition">
       <enum>QTabWidget::South</enum>
      </property>
@@ -63,4 +66,3 @@
  <resources/>
  <connections/>
 </ui>
-

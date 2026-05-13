@@ -1,3 +1,4 @@
+#include "../styles/appcolors.h"
 #include "aboutdatawidget.h"
 
 ///
@@ -35,7 +36,7 @@ void AboutDataWidget::setupUI()
     _titleLabel->setFont(titleFont);
 
     QPalette versionPalette = _versionLabel->palette();
-    versionPalette.setColor(QPalette::WindowText, Qt::darkGray);
+    versionPalette.setColor(QPalette::WindowText, AppColors::versionLabelColor());
     _versionLabel->setPalette(versionPalette);
 
     _linkButton->setCursor(Qt::PointingHandCursor);

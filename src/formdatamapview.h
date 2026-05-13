@@ -12,6 +12,7 @@
 #include "connectiondetails.h"
 #include "outputtypes.h"
 #include "enums.h"
+#include "displaydefinition.h"
 #include "datamapdatamodel.h"
 
 class MainWindow;
@@ -73,12 +74,14 @@ private slots:
     void on_actionInsert_triggered();
     void on_actionDelete_triggered();
     void on_actionClear_triggered();
+    void on_tableView_customContextMenuRequested(const QPoint& pos);
     void updateActionState();
 
 private:
     int addRowAndReturnSourceRow(int referenceSourceRow = -1);
     void editSourceRow(int sourceRow);
     void processRequest(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 startAddress, quint16 count);
+    void refreshThemeDependentRowColors();
     void setupToolBar();
     void setupServerConnections();
     void updateWindowIcon();

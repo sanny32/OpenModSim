@@ -3,9 +3,11 @@
 #include <QMessageBox>
 #include <QMdiSubWindow>
 #include <QUrl>
+#include "../styles/appcolors.h"
 #include "apppreferences.h"
 #include "mainstatusbar.h"
 #include "serialportutils.h"
+#include "themedicons.h"
 
 ///
 /// \brief MainStatusBar::MainStatusBar
@@ -44,7 +46,7 @@ MainStatusBar::MainStatusBar(const ModbusMultiServer& server, QWidget* parent)
     });
 
     _bellButton = new QToolButton(this);
-    _bellButton->setIcon(QIcon(":/res/icon-bell.svg"));
+    _bellButton->setIcon(themedIcon(QStringLiteral("omodsim/bell")));
     _bellButton->setAutoRaise(true);
     _bellButton->setToolTip(tr("No updates available"));
     _bellButton->setCursor(Qt::PointingHandCursor);
@@ -195,7 +197,7 @@ void MainStatusBar::updateDeviceIdsInfo()
 ///
 void MainStatusBar::updateErrorSimInfo()
 {
-    const QString warn = QStringLiteral("<span style='color:#f97316; font-size:10px;'>&#9679;</span>&nbsp;");
+    const QString warn = QStringLiteral("<span style='color:%1; font-size:10px;'>&#9679;</span>&nbsp;").arg(AppColors::statusWarningColor().name());
     QStringList flags;
 
     if(_errorSimulations.noResponse())
@@ -239,7 +241,7 @@ void MainStatusBar::updateClientCountInfo()
 ///
 void MainStatusBar::updateConnectionInfo(QLabel* label, const ConnectionDetails& cd)
 {
-    const QString dot = QStringLiteral("<span style='color:#22c55e; font-size:10px;'>&#9679;</span>&nbsp;");
+    const QString dot = QStringLiteral("<span style='color:%1; font-size:10px;'>&#9679;</span>&nbsp;").arg(AppColors::statusOkColor().name());
     switch(cd.Type)
     {
         case ConnectionType::Tcp:
@@ -301,8 +303,7 @@ void MainStatusBar::promptDownloadNewVersion()
 void MainStatusBar::onNewVersionAvailable(const QString& version, const QString& url)
 {
     Q_UNUSED(url);
-    _bellButton->setIcon(QIcon(":/res/icon-bell-dot.svg"));
+    _bellButton->setIcon(themedIcon(QStringLiteral("omodsim/bell-dot")));
     _bellButton->setToolTip(tr("New version %1 is available. Click to download.").arg(version));
 }
-
 

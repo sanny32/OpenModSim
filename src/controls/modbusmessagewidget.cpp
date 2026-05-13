@@ -3,11 +3,13 @@
 #include <QClipboard>
 #include <QApplication>
 #include <QTextDocument>
+#include "../styles/appcolors.h"
 #include "fontutils.h"
 #include "formatutils.h"
 #include "htmldelegate.h"
 #include "modbusmessages.h"
 #include "modbusmessagewidget.h"
+#include "themedicons.h"
 
 ///
 /// \brief ModbusMessageWidget::ModbusMessageWidget
@@ -15,7 +17,7 @@
 ///
 ModbusMessageWidget::ModbusMessageWidget(QWidget *parent)
     : QListWidget(parent)
-    ,_statusClr(Qt::red)
+    ,_statusClr(AppColors::modbusErrorColor())
     ,_byteOrder(ByteOrder::Direct)
     ,_dataType(DataType::Hex)
     ,_showLeadingZeros(true)
@@ -30,7 +32,7 @@ ModbusMessageWidget::ModbusMessageWidget(QWidget *parent)
     setContextMenuPolicy(Qt::CustomContextMenu);
     setFont(defaultMonospaceFont());
 
-    _copyAct = new QAction(QIcon(":/res/icon-copy.png"), tr("Copy Text"), this);
+    _copyAct = new QAction(themedIcon(QStringLiteral("omodsim/copy")), tr("Copy Text"), this);
     addAction(_copyAct);
 
     connect(_copyAct, &QAction::triggered, this, [this]() {
@@ -222,9 +224,9 @@ void ModbusMessageWidget::setModbusMessage(QSharedPointer<const ModbusMessage> m
 ///
 void ModbusMessageWidget::update()
 {
-    static const QString errColor = "#cc0000";
-    static const QString valueColor = "#663399";
-    static const QString dataColor = "#444444";
+    const QString errColor = AppColors::modbusErrorColor().name();
+    const QString valueColor = AppColors::modbusValueColor().name();
+    const QString dataColor = AppColors::modbusDataColor().name();
 
     QListWidget::clear();
 
@@ -239,9 +241,10 @@ void ModbusMessageWidget::update()
             addItem(tr("<span style='color:%1'>*** INVALID MODBUS RESPONSE ***</span>").arg(errColor));
     }
 
-    const QString dirColor = _mm->isRequest() ? "#009933" : "#0066cc";
+    const QString dirColor = _mm->isRequest() ? AppColors::modbusRequestColor().name() : AppColors::modbusResponseColor().name();
+    const QString labelColor = AppColors::modbusLabelColor().name();
     auto addField = [&](const QString &name, const QString &value, const QString &clr) {
-        addItem(QString("<b style='color:#000000'>%1:</b> <span style='color:%2'>%3</span>").arg(name, clr, value));
+        addItem(QString("<b style='color:%1'>%2:</b> <span style='color:%3'>%4</span>").arg(labelColor, name, clr, value));
     };
 
     auto addChecksum = [&]{
@@ -256,7 +259,7 @@ void ModbusMessageWidget::update()
             else
             {
                 const auto calcChecksum = formatUInt16Value(_dataType, _showLeadingZeros, adu->calcChecksum());
-                addField(tr("Checksum"), QString("%1 <span style='color:#000000'>(Expected: %2)</span>").arg(checksum, calcChecksum), errColor);
+                addField(tr("Checksum"), QString("%1 <span style='color:%2'>(Expected: %3)</span>").arg(checksum, labelColor, calcChecksum), errColor);
             }
         }
     };

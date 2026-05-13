@@ -1,13 +1,19 @@
 #include <QDateTime>
+#include <QGuiApplication>
 #include <QPainter>
 #include <QInputDialog>
 #include <climits>
+#include "../styles/appcolors.h"
 #include "apppreferences.h"
 #include "fontutils.h"
 #include "formatutils.h"
 #include "datadelegate.h"
 #include "outputdatawidget.h"
 #include "ui_outputdatawidget.h"
+
+#if defined(HAVE_QLEMENTINE_APP_STYLE)
+#include <oclero/qlementine/style/QlementineStyle.hpp>
+#endif
 
 ///
 /// \brief emptyPixmap
@@ -449,8 +455,7 @@ OutputDataWidget::OutputDataWidget(QWidget *parent) :
     ui->listView->setItemDelegate(new DataDelegate( this ));
     setFont(defaultMonospaceFont());
     setAutoFillBackground(true);
-    setForegroundColor(Qt::black);
-    setBackgroundColor(Qt::white);
+    updatePaletteFromTheme();
 
     _baseFontSize = ui->listView->font().pointSizeF();
     if (_baseFontSize <= 0) _baseFontSize = 10.0;
@@ -489,9 +494,21 @@ OutputDataWidget::~OutputDataWidget()
 /// \brief OutputDataWidget::changeEvent
 /// \param event
 ///
+void OutputDataWidget::updatePaletteFromTheme()
+{
+    setForegroundColor(AppColors::canvasForeground());
+    setBackgroundColor(AppColors::canvasBackground());
+}
+
 void OutputDataWidget::changeEvent(QEvent* event)
 {
     QWidget::changeEvent(event);
+    if (event->type() == QEvent::ApplicationPaletteChange ||
+        event->type() == QEvent::StyleChange ||
+        event->type() == QEvent::ThemeChange)
+    {
+        updatePaletteFromTheme();
+    }
 }
 
 ///
@@ -605,6 +622,8 @@ void OutputDataWidget::setBackgroundColor(const QColor& clr)
     pal.setColor(QPalette::Base, clr);
     pal.setColor(QPalette::Window, clr);
     setPalette(pal);
+    ui->listView->setPalette(pal);
+    ui->listView->viewport()->setPalette(pal);
 }
 
 ///
@@ -634,7 +653,7 @@ void OutputDataWidget::setForegroundColor(const QColor& clr)
 QColor OutputDataWidget::addressColor() const
 {
     auto* delegate = qobject_cast<DataDelegate*>(ui->listView->itemDelegate());
-    return delegate ? delegate->addressColor() : QColor(128, 128, 128);
+    return delegate ? delegate->addressColor() : AppColors::defaultAddress();
 }
 
 ///
@@ -657,7 +676,7 @@ void OutputDataWidget::setAddressColor(const QColor& clr)
 QColor OutputDataWidget::commentColor() const
 {
     auto* delegate = qobject_cast<DataDelegate*>(ui->listView->itemDelegate());
-    return delegate ? delegate->commentColor() : QColor(128, 128, 128);
+    return delegate ? delegate->commentColor() : AppColors::defaultAddress();
 }
 
 ///
@@ -1275,11 +1294,11 @@ static QIcon drawRemoveColorIcon(int size = 16)
     p.setRenderHint(QPainter::Antialiasing, true);
 
     QRect r(2, 2, size - 4, size - 4);
-    p.setBrush(Qt::white);
-    p.setPen(QPen(Qt::black, 0.1));
+    p.setBrush(AppColors::removeIconBackground());
+    p.setPen(QPen(AppColors::removeIconBorder(), 0.1));
     p.drawRect(r);
 
-    QPen pen(Qt::red, 1);
+    QPen pen(QColor(Qt::red), 1);
     p.setPen(pen);
     p.drawLine(0, size, size, 0);
 
@@ -1297,6 +1316,11 @@ void OutputDataWidget::on_listView_customContextMenuRequested(const QPoint &pos)
         return;
 
     QMenu menu(this);
+#if defined(HAVE_QLEMENTINE_APP_STYLE)
+    if (auto* qlementineStyle = dynamic_cast<oclero::qlementine::QlementineStyle*>(menu.style())) {
+        qlementineStyle->setAutoIconColor(&menu, oclero::qlementine::AutoIconColor::None);
+    }
+#endif
 
     const auto idx = getValueIndex(index);
     const auto address = _listModel->data(idx, AddressStringRole).toString();
@@ -1333,13 +1357,13 @@ void OutputDataWidget::on_listView_customContextMenuRequested(const QPoint &pos)
 
     struct ColorItem { QString name; QColor color; };
     QVector<ColorItem> safeColors = {
-        { tr("Yellow"), QColor(Qt::yellow) },
-        { tr("Cyan"), QColor(Qt::cyan) },
-        { tr("Magenta"), QColor(Qt::magenta) },
-        { tr("LightGreen"), QColor(144, 238, 144) },
-        { tr("Orange"), QColor(255, 165, 0) },
-        { tr("LightBlue"), QColor(173, 216, 230) },
-        { tr("LightGray"), QColor(Qt::lightGray) }
+        { tr("Yellow"),     AppColors::markerYellow() },
+        { tr("Cyan"),       AppColors::markerCyan() },
+        { tr("Magenta"),    AppColors::markerMagenta() },
+        { tr("LightGreen"), AppColors::markerLightGreen() },
+        { tr("Orange"),     AppColors::markerOrange() },
+        { tr("LightBlue"),  AppColors::markerLightBlue() },
+        { tr("LightGray"),  AppColors::markerLightGray() }
     };
 
     for (const auto &c : safeColors)

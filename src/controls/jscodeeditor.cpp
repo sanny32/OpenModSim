@@ -4,9 +4,12 @@
 #include <QScrollBar>
 #include <QAbstractItemView>
 #include <QContextMenuEvent>
+#include <QGuiApplication>
 #include <QPlainTextDocumentLayout>
 #include "jscompleter.h"
 #include "jscodeeditor.h"
+#include "themedicons.h"
+#include "../styles/appcolors.h"
 #include "../fontutils.h"
 
 ///
@@ -25,8 +28,8 @@ JSCodeEditor::JSCodeEditor(QWidget *parent)
     connect(this, &JSCodeEditor::updateRequest, this, &JSCodeEditor::updateLineNumberArea);
     connect(this, &JSCodeEditor::cursorPositionChanged, this, &JSCodeEditor::highlightCurrentLine);
 
-    setBackgroundColor(Qt::white);
     setLineWrapMode(QPlainTextEdit::NoWrap);
+    applyThemeColors();
 
     setFont(defaultScriptFont());
     setTabStopDistance(fontMetrics().horizontalAdvance(' ') * 4);
@@ -112,6 +115,10 @@ void JSCodeEditor::setForegroundColor(const QColor& clr)
     auto pal = palette();
     pal.setColor(QPalette::Text, clr);
     setPalette(pal);
+    if (_highlighter)
+        _highlighter->setDarkMode(AppColors::isDark());
+    highlightCurrentLine();
+    _lineNumberArea->update();
 }
 
 ///
@@ -133,6 +140,11 @@ void JSCodeEditor::setBackgroundColor(const QColor& clr)
     pal.setColor(QPalette::Base, clr);
     pal.setColor(QPalette::Window, clr);
     setPalette(pal);
+    _lineColor = AppColors::alternateBackground();
+    if (_highlighter)
+        _highlighter->setDarkMode(AppColors::isDark());
+    highlightCurrentLine();
+    _lineNumberArea->update();
 }
 
 ///
@@ -179,7 +191,7 @@ void JSCodeEditor::search(const QString& text)
     while(find(text))
     {
         QTextEdit::ExtraSelection extra;
-        extra.format.setBackground(Qt::yellow);
+        extra.format.setBackground(AppColors::searchMatchBackground());
 
         extra.cursor = textCursor();
         extraSelections.append(extra);
@@ -213,7 +225,7 @@ int JSCodeEditor::highlightAllMatches(const QString& text, QTextDocument::FindFl
     while(!(findCursor = document()->find(text, findCursor, flags)).isNull())
     {
         QTextEdit::ExtraSelection extra;
-        extra.format.setBackground(Qt::yellow);
+        extra.format.setBackground(AppColors::searchMatchBackground());
         extra.cursor = findCursor;
         _searchSelections.append(extra);
     }
@@ -233,7 +245,7 @@ int JSCodeEditor::highlightAllMatches(const QString& text, QTextDocument::FindFl
 
     // Highlight current match differently
     if(_currentMatchIndex >= 0 && _currentMatchIndex < _searchSelections.size())
-        _searchSelections[_currentMatchIndex].format.setBackground(QColor(255, 150, 50));
+        _searchSelections[_currentMatchIndex].format.setBackground(AppColors::searchCurrentMatchBackground());
 
     highlightCurrentLine();
     return _searchSelections.size();
@@ -413,6 +425,41 @@ void JSCodeEditor::insertCompletion(const QString& completion)
 }
 
 ///
+/// \brief JSCodeEditor::applyThemeColors
+///
+void JSCodeEditor::applyThemeColors()
+{
+    const bool dark = AppColors::isDark();
+
+    auto pal = palette();
+    pal.setColor(QPalette::Base, AppColors::canvasBackground());
+    pal.setColor(QPalette::Window, AppColors::canvasBackground());
+    pal.setColor(QPalette::Text, AppColors::canvasForeground());
+    _lineColor = AppColors::alternateBackground();
+    setPalette(pal);
+    _highlighter->setDarkMode(dark);
+    _lineNumberArea->update();
+}
+
+///
+/// \brief JSCodeEditor::changeEvent
+/// \param event
+///
+void JSCodeEditor::changeEvent(QEvent* event)
+{
+    QPlainTextEdit::changeEvent(event);
+    if (event->type() == QEvent::ApplicationPaletteChange ||
+        event->type() == QEvent::StyleChange ||
+        event->type() == QEvent::ThemeChange)
+    {
+        if (backgroundColor() == AppColors::canvasBackground()) {
+            applyThemeColors();
+            highlightCurrentLine();
+        }
+    }
+}
+
+///
 /// \brief JSCodeEditor::resizeEvent
 /// \param e
 ///
@@ -558,8 +605,11 @@ void JSCodeEditor::highlightCurrentLine()
 ///
 void JSCodeEditor::lineNumberAreaPaintEvent(QPaintEvent *event)
 {
+    const QColor lineAreaBg = AppColors::lineNumberAreaBackground();
+    const QColor lineNumberColor = AppColors::lineNumberColor();
+
     QPainter painter(_lineNumberArea);
-    painter.fillRect(event->rect(), QColorConstants::Svg::whitesmoke);
+    painter.fillRect(event->rect(), lineAreaBg);
 
     auto block = firstVisibleBlock();
     int blockNumber = block.blockNumber();
@@ -571,7 +621,7 @@ void JSCodeEditor::lineNumberAreaPaintEvent(QPaintEvent *event)
         if (block.isVisible() && bottom >= event->rect().top())
         {
             const auto number = QString::number(blockNumber + 1);
-            painter.setPen(QColor(0x9F9F9F));
+            painter.setPen(lineNumberColor);
             painter.drawText(0, top, _lineNumberArea->width(), fontMetrics().height(), Qt::AlignCenter, number);
         }
 
@@ -593,11 +643,11 @@ void JSCodeEditor::contextMenuEvent(QContextMenuEvent *event)
     for(QAction* action : menu->actions())
     {
         const QString name = action->objectName();
-        if     (name == "edit-undo")  action->setIcon(QIcon(":/res/icon-undo.png"));
-        else if(name == "edit-redo")  action->setIcon(QIcon(":/res/icon-redo.png"));
-        else if(name == "edit-cut")   action->setIcon(QIcon(":/res/icon-cut.png"));
-        else if(name == "edit-copy")  action->setIcon(QIcon(":/res/icon-copy.png"));
-        else if(name == "edit-paste") action->setIcon(QIcon(":/res/icon-paste.png"));
+        if     (name == "edit-undo")  action->setIcon(themedIcon(QStringLiteral("omodsim/undo")));
+        else if(name == "edit-redo")  action->setIcon(themedIcon(QStringLiteral("omodsim/redo")));
+        else if(name == "edit-cut")   action->setIcon(themedIcon(QStringLiteral("omodsim/cut")));
+        else if(name == "edit-copy")  action->setIcon(themedIcon(QStringLiteral("omodsim/copy")));
+        else if(name == "edit-paste") action->setIcon(themedIcon(QStringLiteral("omodsim/paste")));
         else                          action->setIcon(QIcon());
     }
 

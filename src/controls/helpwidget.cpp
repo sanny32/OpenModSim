@@ -4,6 +4,7 @@
 #include <QToolButton>
 #include <QPushButton>
 #include <QHelpContentWidget>
+#include "../styles/appcolors.h"
 #include "helpwidget.h"
 
 ///
@@ -15,15 +16,15 @@ HelpWidget::HelpWidget(QWidget *parent)
     ,_helpBrowser(new HelpBrowser(this))
 {
     auto pal = _helpBrowser->palette();
-    pal.setColor(QPalette::Base, Qt::white);
-    pal.setColor(QPalette::Window, Qt::white);
+    pal.setColor(QPalette::Base, AppColors::canvasBackground());
+    pal.setColor(QPalette::Window, AppColors::canvasBackground());
     _helpBrowser->setPalette(pal);
 
     // Find bar (bottom, styled like FindReplaceBar)
     _findBar = new QWidget(this);
     _findBar->setAutoFillBackground(true);
     auto findPal = _findBar->palette();
-    findPal.setColor(QPalette::Window, QColor(240, 240, 240));
+    findPal.setColor(QPalette::Window, AppColors::windowBackground());
     _findBar->setPalette(findPal);
     _findBar->setVisible(false);
 

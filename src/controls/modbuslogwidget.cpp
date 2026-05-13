@@ -8,6 +8,7 @@
 #include <QMap>
 #include "fontutils.h"
 #include "modbuslogwidget.h"
+#include "themedicons.h"
 
 namespace {
 
@@ -324,7 +325,7 @@ ModbusLogWidget::ModbusLogWidget(QWidget* parent)
     setItemDelegate(new ModbusLogDelegate(this));
     setModel(new ModbusLogModel(this));
 
-    _copyAct = new QAction(QIcon(":/res/icon-copy.png"), tr("Copy Text"), this);
+    _copyAct = new QAction(themedIcon(QStringLiteral("omodsim/copy")), tr("Copy Text"), this);
     _copyAct->setShortcut(QKeySequence::Copy);
     _copyAct->setShortcutContext(Qt::WidgetShortcut);
     _copyAct->setShortcutVisibleInContextMenu(true);
@@ -561,6 +562,7 @@ void ModbusLogWidget::setBackGroundColor(const QColor& clr)
     pal.setColor(QPalette::Base, clr);
     pal.setColor(QPalette::Window, clr);
     setPalette(pal);
+    viewport()->setPalette(pal);
 }
 
 ///

@@ -202,6 +202,7 @@ private slots:
     void on_listView_customContextMenuRequested(const QPoint& pos);
 
 private:
+    void updatePaletteFromTheme();
     void showZoomOverlay();
     QModelIndex getValueIndex(const QModelIndex& index) const;
     bool parseFindValue(const QString& text, quint16& value) const;

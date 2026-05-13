@@ -48,19 +48,27 @@
         <file>res/icon-mb-definitions.png</file>
         <file>res/icon-msg-parser.png</file>
         <file>res/icon-force-coils.png</file>
+        <file>res/icon-force-coils.svg</file>
         <file>res/icon-force-discretes.png</file>
+        <file>res/icon-force-discretes.svg</file>
         <file>res/icon-preset-input-regs.png</file>
+        <file>res/icon-preset-input-regs.svg</file>
         <file>res/icon-preset-holding-regs.png</file>
+        <file>res/icon-preset-holding-regs.svg</file>
         <file>translations/omodsim_zh_CN.qm</file>
         <file>translations/omodsim_zh_TW.qm</file>
         <file>res/emblem-github.svg</file>
+        <file>res/emblem-github.png</file>
         <file>res/emblem-mail.svg</file>
+        <file>res/emblem-mail.png</file>
         <file>res/applications-internet.svg</file>
+        <file>res/applications-internet.png</file>
         <file>res/edit-delete.svg</file>
         <file>res/icon-constant.svg</file>
         <file>res/icon-export.svg</file>
         <file>res/icon-export.png</file>
         <file>res/icon-import.svg</file>
+        <file>res/action-import.svg</file>
         <file>res/icon-random.svg</file>
         <file>res/icon-reset.svg</file>
         <file>res/icon-simulation-16bit.svg</file>
@@ -75,16 +83,22 @@
         <file>res/icon-arrow-left.svg</file>
         <file>res/pref-interface.png</file>
         <file>res/icon-bell.svg</file>
+        <file>res/icon-bell.png</file>
         <file>res/icon-bell-dot.svg</file>
+        <file>res/icon-bell-dot.png</file>
         <file>res/icon-log-info.svg</file>
+        <file>res/icon-log-info.png</file>
         <file>res/icon-log-warning.svg</file>
+        <file>res/icon-log-warning.png</file>
         <file>res/icon-log-critical.svg</file>
+        <file>res/icon-log-critical.png</file>
         <file>res/icon-split-view.png</file>
         <file>res/icon-new-data.png</file>
         <file>res/icon-new-traffic.png</file>
         <file>res/icon-new-script.png</file>
         <file>res/icon-hex.png</file>
         <file>res/icon-hex.svg</file>
+        <file>res/icon-hex-view.svg</file>
         <file>res/icon-directory.png</file>
         <file>res/icon-data-locked.png</file>
         <file>res/icon-hex-view.png</file>

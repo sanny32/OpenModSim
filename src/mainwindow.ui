@@ -403,7 +403,7 @@
    </property>
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/res/icon-hex-view.png</normaloff>:/res/icon-hex-view.png</iconset>
+     <normaloff>:/res/icon-hex-view.svg</normaloff>:/res/icon-hex-view.svg</iconset>
    </property>
    <property name="text">
     <string>Hex View</string>

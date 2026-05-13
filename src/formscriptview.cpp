@@ -9,6 +9,7 @@
 #include "mainwindow.h"
 #include "controls/runmodecombobox.h"
 #include "formscriptview.h"
+#include "themedicons.h"
 #include "ui_formscriptview.h"
 
 ///
@@ -27,7 +28,7 @@ FormScriptView::FormScriptView(ModbusMultiServer& server, DataSimulator* simulat
     Q_UNUSED(simulator);
 
     ui->setupUi(this);
-    setWindowIcon(QIcon(":/res/icon-show-script.png"));
+    setWindowIcon(themedIcon(QStringLiteral("omodsim/show-script")));
 
     _displayDefinition.FormName = windowTitle();
     _displayDefinition.ScriptCfg = _scriptSettings;
@@ -587,6 +588,8 @@ void FormScriptView::setupScriptBar()
         runButton->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
     if (auto* stopButton = qobject_cast<QToolButton*>(ui->toolBarScript->widgetForAction(ui->actionStopScript)))
         stopButton->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+    ui->actionRunScript->setIcon(themedIcon(QStringLiteral("omodsim/run-script")));
+    ui->actionStopScript->setIcon(themedIcon(QStringLiteral("omodsim/stop-script")));
 
     updateScriptBarToolTips();
 
