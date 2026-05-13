@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file qrange.h
+/// \brief Declares the qrange interfaces.
+///
+
 #ifndef QRANGE_H
 #define QRANGE_H
 

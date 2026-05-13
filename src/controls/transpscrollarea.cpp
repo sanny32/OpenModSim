@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file transpscrollarea.cpp
+/// \brief Implements the transpscrollarea functionality.
+///
+
 #include <QPalette>
 #include "transpscrollarea.h"
 

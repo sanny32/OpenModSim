@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file jscodeeditor.cpp
+/// \brief Implements the jscodeeditor functionality.
+///
+
 #include <QMenu>
 #include <QPainter>
 #include <QTextBlock>

@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file statisticwidget.cpp
+/// \brief Implements the statisticwidget functionality.
+///
+
 #include <QEvent>
 #include "statisticwidget.h"
 #include "ui_statisticwidget.h"

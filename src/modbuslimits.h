@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file modbuslimits.h
+/// \brief Declares the modbuslimits interfaces.
+///
+
 #ifndef MODBUSLIMITS_H
 #define MODBUSLIMITS_H
 

@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file enums.h
+/// \brief Declares the enums interfaces.
+///
+
 #ifndef ENUMS_H
 #define ENUMS_H
 

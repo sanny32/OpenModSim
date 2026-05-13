@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file checkablegroupbox.h
+/// \brief Declares the checkablegroupbox interfaces.
+///
+
 #ifndef CHECKABLEGROUPBOX_H
 #define CHECKABLEGROUPBOX_H
 

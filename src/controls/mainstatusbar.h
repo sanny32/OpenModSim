@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file mainstatusbar.h
+/// \brief Declares the mainstatusbar interfaces.
+///
+
 #ifndef MAINSTATUSBAR_H
 #define MAINSTATUSBAR_H
 

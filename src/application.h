@@ -3,7 +3,7 @@
 
 ///
 /// \file application.h
-/// \brief Declares the application wrapper that owns app-level services.
+/// \brief Declares the application interfaces.
 ///
 
 #ifndef APPLICATION_H

@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file getcommeventlog.h
+/// \brief Declares the getcommeventlog interfaces.
+///
+
 #ifndef GETCOMMEVENTLOG_H
 #define GETCOMMEVENTLOG_H
 

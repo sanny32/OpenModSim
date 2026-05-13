@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file readfifoqueue.h
+/// \brief Declares the readfifoqueue interfaces.
+///
+
 #ifndef READFIFOQUEUE_H
 #define READFIFOQUEUE_H
 

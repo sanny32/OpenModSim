@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file funccodefiltercombobox.cpp
+/// \brief Implements the funccodefiltercombobox functionality.
+///
+
 #include <QEvent>
 #include <QSignalBlocker>
 #include <QModbusPdu>

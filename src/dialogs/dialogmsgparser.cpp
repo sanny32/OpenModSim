@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file dialogmsgparser.cpp
+/// \brief Implements the dialogmsgparser functionality.
+///
+
 #include <QPushButton>
 #include <QAbstractEventDispatcher>
 #include "dialogmsgparser.h"

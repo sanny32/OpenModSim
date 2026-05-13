@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file datadelegate.h
+/// \brief Declares the datadelegate interfaces.
+///
+
 #ifndef DATADELEGATE_H
 #define DATADELEGATE_H
 

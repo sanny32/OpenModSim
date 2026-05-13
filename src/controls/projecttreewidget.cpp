@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file projecttreewidget.cpp
+/// \brief Implements the projecttreewidget functionality.
+///
+
 #include <QHeaderView>
 #include <QInputDialog>
 #include <QMenu>

@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file dialogsetupserialport.h
+/// \brief Declares the dialogsetupserialport interfaces.
+///
+
 #ifndef DIALOGSETUPSERIALPORT_H
 #define DIALOGSETUPSERIALPORT_H
 

@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file console.cpp
+/// \brief Implements the console functionality.
+///
+
 #include "console.h"
 
 ///

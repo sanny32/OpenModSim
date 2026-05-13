@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file dialogwindowsmanager.h
+/// \brief Declares the dialogwindowsmanager interfaces.
+///
+
 #ifndef DIALOGWINDOWSMANAGER_H
 #define DIALOGWINDOWSMANAGER_H
 

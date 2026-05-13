@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file formtrafficview.cpp
+/// \brief Implements the formtrafficview functionality.
+///
+
 #include <QPainter>
 #include <QPrinter>
 #include <QPalette>

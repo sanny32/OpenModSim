@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file colorswatch.h
+/// \brief Declares the colorswatch interfaces.
+///
+
 #ifndef COLORSWATCH_H
 #define COLORSWATCH_H
 
@@ -8,7 +16,7 @@
 /// \brief The ColorSwatch class
 ///
 /// A clickable flat colored rectangle button. Uses custom paintEvent
-/// to render a solid color fill with a border — no stylesheet needed.
+/// to render a solid color fill with a border вЂ” no stylesheet needed.
 ///
 class ColorSwatch : public QPushButton
 {

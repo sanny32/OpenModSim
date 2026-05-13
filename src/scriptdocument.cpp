@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file scriptdocument.cpp
+/// \brief Implements the scriptdocument functionality.
+///
+
 #include <QXmlStreamWriter>
 #include "scriptdocument.h"
 #include "enums.h"

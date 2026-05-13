@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file aboutdatawidget.cpp
+/// \brief Implements the aboutdatawidget functionality.
+///
+
 #include "../styles/appcolors.h"
 #include "aboutdatawidget.h"
 

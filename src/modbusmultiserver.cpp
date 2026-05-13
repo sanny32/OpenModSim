@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file modbusmultiserver.cpp
+/// \brief Implements the modbusmultiserver functionality.
+///
+
 #include <algorithm>
 #include "numericutils.h"
 #include "modbustcpserver.h"

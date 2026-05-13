@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file qmodbusadutcp.h
+/// \brief Declares the qmodbusadutcp interfaces.
+///
+
 #ifndef QMODBUSADUTCP_H
 #define QMODBUSADUTCP_H
 

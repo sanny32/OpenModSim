@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file findreplacebar.h
+/// \brief Declares the findreplacebar interfaces.
+///
+
 #ifndef FINDREPLACEBAR_H
 #define FINDREPLACEBAR_H
 

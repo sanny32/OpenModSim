@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file dialogautosimulation.h
+/// \brief Declares the dialogautosimulation interfaces.
+///
+
 #ifndef DIALOGAUTOSIMULATION_H
 #define DIALOGAUTOSIMULATION_H
 

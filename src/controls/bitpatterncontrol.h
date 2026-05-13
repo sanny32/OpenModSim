@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file bitpatterncontrol.h
+/// \brief Declares the bitpatterncontrol interfaces.
+///
+
 #ifndef BITPATTERNCONTROL_H
 #define BITPATTERNCONTROL_H
 

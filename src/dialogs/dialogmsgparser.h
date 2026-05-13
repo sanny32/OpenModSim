@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file dialogmsgparser.h
+/// \brief Declares the dialogmsgparser interfaces.
+///
+
 #ifndef DIALOGMSGPARSER_H
 #define DIALOGMSGPARSER_H
 

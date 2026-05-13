@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file bytelisttextedit.cpp
+/// \brief Implements the bytelisttextedit functionality.
+///
+
 #include <QRegularExpressionValidator>
 #include <QMimeData>
 #include "fontutils.h"

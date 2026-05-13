@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file server.cpp
+/// \brief Implements the server functionality.
+///
+
 #include <QCoreApplication>
 #include "server.h"
 #include "ansiutils.h"

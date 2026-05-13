@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file appproject.cpp
+/// \brief Implements the appproject functionality.
+///
+
 #include <QtWidgets>
 #include <QBuffer>
 #include <QUuid>

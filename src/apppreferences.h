@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file apppreferences.h
+/// \brief Declares the apppreferences interfaces.
+///
+
 #ifndef APPPREFERENCES_H
 #define APPPREFERENCES_H
 

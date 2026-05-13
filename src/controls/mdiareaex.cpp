@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file mdiareaex.cpp
+/// \brief Implements the mdiareaex functionality.
+///
+
 #include <QApplication>
 #include <QScopedValueRollback>
 #include <QSignalBlocker>

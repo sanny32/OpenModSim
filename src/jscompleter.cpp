@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file jscompleter.cpp
+/// \brief Implements the jscompleter functionality.
+///
+
 #include <QWidget>
 #include <QMetaProperty>
 #include <QStringListModel>

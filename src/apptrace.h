@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file apptrace.h
+/// \brief Declares the apptrace interfaces.
+///
+
 #ifndef APPTRACE_H
 #define APPTRACE_H
 

@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file outputtrafficwidget.h
+/// \brief Declares the outputtrafficwidget interfaces.
+///
+
 #ifndef OUTPUTTRAFFICWIDGET_H
 #define OUTPUTTRAFFICWIDGET_H
 

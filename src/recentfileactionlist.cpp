@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file recentfileactionlist.cpp
+/// \brief Implements the recentfileactionlist functionality.
+///
+
 #include <QFileInfo>
 #include <QSettings>
 #include "recentfileactionlist.h"

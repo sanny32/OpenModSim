@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file findreplacebar.cpp
+/// \brief Implements the findreplacebar functionality.
+///
+
 #include <QStyle>
 #include <QPainter>
 #include <QMouseEvent>
@@ -85,7 +93,7 @@ private:
 };
 
 ///
-/// \brief The TitleBar class — VS-style draggable title strip for windowed FindReplaceBar
+/// \brief The TitleBar class вЂ” VS-style draggable title strip for windowed FindReplaceBar
 ///
 class TitleBar : public QWidget
 {
@@ -103,7 +111,7 @@ public:
 
         _closeBtn = new QToolButton(this);
         _closeBtn->setFixedSize(18, 18);
-        _closeBtn->setText("✕");
+        _closeBtn->setText("вњ•");
         _closeBtn->setAutoRaise(true);
         _closeBtn->setCursor(Qt::ArrowCursor);
 

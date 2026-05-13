@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file numericlineedit.cpp
+/// \brief Implements the numericlineedit functionality.
+///
+
 #include <float.h>
 #include <QCoreApplication>
 #include <QIcon>

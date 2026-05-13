@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file server.h
+/// \brief Declares the server interfaces.
+///
+
 #ifndef SERVER_H
 #define SERVER_H
 

@@ -3,7 +3,7 @@
 
 ///
 /// \file apptheme.h
-/// \brief Declares theme state tracking and notifications.
+/// \brief Declares the apptheme interfaces.
 ///
 
 #ifndef APPTHEME_H

@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file datamapdatamodel.cpp
+/// \brief Implements the datamapdatamodel functionality.
+///
+
 #include <QtWidgets>
 #include <QMimeData>
 #include <QDataStream>
@@ -160,9 +168,9 @@ QString formatValue(QModbusDataUnit::RegisterType regType,
 
 } // anonymous namespace
 
-// ─────────────────────────────────────────────────────────────────────────────
+// в”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђ
 // DataMapDataModel
-// ─────────────────────────────────────────────────────────────────────────────
+// в”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђ
 
 ///
 /// \brief DataMapDataModel::DataMapDataModel
@@ -315,7 +323,7 @@ bool DataMapDataModel::setData(const QModelIndex& index, const QVariant& value, 
     DataMapEntry entry  = _data[oldKey];
     bool handled = false;
 
-    // ── Value column ──────────────────────────────────────────────────────────
+    // в”Ђв”Ђ Value column в”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђ
     if (col == ColValue && (role == Qt::EditRole || role == Qt::DisplayRole)) {
         const QString text = value.toString().trimmed();
         const int regCount = registersCount(entry.type);
@@ -406,7 +414,7 @@ bool DataMapDataModel::setData(const QModelIndex& index, const QVariant& value, 
         handled = true;
     }
 
-    // ── Comment column ────────────────────────────────────────────────────────
+    // в”Ђв”Ђ Comment column в”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђ
     else if (col == ColComment && (role == Qt::EditRole || role == Qt::DisplayRole)) {
         entry.comment  = value.toString();
         _data[oldKey]  = entry;
@@ -415,7 +423,7 @@ bool DataMapDataModel::setData(const QModelIndex& index, const QVariant& value, 
         handled = true;
     }
 
-    // ── DataType column ───────────────────────────────────────────────────────
+    // в”Ђв”Ђ DataType column в”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђ
     else if (col == ColDataType && (role == Qt::EditRole || role == Qt::DisplayRole)) {
         entry.type = enumFromString<DataType>(value.toString(), DataType::Int16);
         if (!isMultiRegisterType(entry.type))
@@ -426,7 +434,7 @@ bool DataMapDataModel::setData(const QModelIndex& index, const QVariant& value, 
         handled = true;
     }
 
-    // ── Order column ──────────────────────────────────────────────────────────
+    // в”Ђв”Ђ Order column в”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђ
     else if (col == ColRegistryOrder && (role == Qt::EditRole || role == Qt::DisplayRole)) {
         entry.order   = enumFromString<RegisterOrder>(value.toString(), RegisterOrder::MSRF);
         _data[oldKey] = entry;
@@ -444,7 +452,7 @@ bool DataMapDataModel::setData(const QModelIndex& index, const QVariant& value, 
         handled = true;
     }
 
-    // ── Key columns: Unit / Type / Address ────────────────────────────────────
+    // в”Ђв”Ђ Key columns: Unit / Type / Address в”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђ
     else if ((col == ColUnit || col == ColType || col == ColAddress) && (role == Qt::EditRole || role == Qt::DisplayRole)) {
         ItemMapKey newKey = oldKey;
 
@@ -462,7 +470,7 @@ bool DataMapDataModel::setData(const QModelIndex& index, const QVariant& value, 
         if (newKey.DeviceId == oldKey.DeviceId &&
             newKey.Type    == oldKey.Type    &&
             newKey.Address == oldKey.Address) {
-            // No actual change — still refresh display (in case role was redundant write)
+            // No actual change вЂ” still refresh display (in case role was redundant write)
             emit dataChanged(createIndex(row, ColUnit), createIndex(row, ColTimestamp));
             handled = true;
         } else {
@@ -501,7 +509,7 @@ bool DataMapDataModel::setData(const QModelIndex& index, const QVariant& value, 
         }
     }
 
-    // ── Row highlight color ───────────────────────────────────────────────────
+    // в”Ђв”Ђ Row highlight color в”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђ
     if (!handled && role == DataMapRole::RowColor) {
         entry.color  = value.value<QColor>();
         _data[oldKey] = entry;
@@ -921,9 +929,9 @@ void DataMapDataModel::unregisterEntry(const ItemMapKey& key)
     _server.removeDeviceId(key.DeviceId);
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
+// в”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђ
 // DataMapFilterProxy
-// ─────────────────────────────────────────────────────────────────────────────
+// в”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђ
 
 ///
 /// \brief DataMapFilterProxy::DataMapFilterProxy

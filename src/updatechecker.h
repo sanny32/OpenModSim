@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file updatechecker.h
+/// \brief Declares the updatechecker interfaces.
+///
+
 #ifndef UPDATECHECKER_H
 #define UPDATECHECKER_H
 

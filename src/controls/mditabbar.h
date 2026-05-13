@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file mditabbar.h
+/// \brief Declares the mditabbar interfaces.
+///
+
 #ifndef MDITABBAR_H
 #define MDITABBAR_H
 

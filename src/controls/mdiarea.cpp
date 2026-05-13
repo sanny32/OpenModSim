@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file mdiarea.cpp
+/// \brief Implements the mdiarea functionality.
+///
+
 #include "mdiarea.h"
 #include <QApplication>
 #include <QPainter>
@@ -115,8 +123,8 @@ MdiArea::MdiArea(QWidget* parent)
     setViewMode(QMdiArea::TabbedView);
     connect(this, &QMdiArea::subWindowActivated, this, &MdiArea::on_subWindowActivated);
 
-    // Track whether focus moved into MDI from outside. Connected here — before
-    // any QMdiSubWindow is created — so our slot fires first (Qt FIFO order),
+    // Track whether focus moved into MDI from outside. Connected here вЂ” before
+    // any QMdiSubWindow is created вЂ” so our slot fires first (Qt FIFO order),
     // ahead of QMdiSubWindowPrivate::_q_focusChanged. That guarantees the flag
     // is set by the time on_subWindowActivated() is called.
     connect(qApp, &QApplication::focusChanged, this, [this](QWidget* old, QWidget*) {
@@ -683,7 +691,7 @@ void MdiArea::on_subWindowActivated(QMdiSubWindow* wnd)
     if (!stable && focusOwner && windows.contains(focusOwner))
         stable = focusOwner;
 
-    // A window not yet registered in _tabBar is newly added — never treat it as
+    // A window not yet registered in _tabBar is newly added вЂ” never treat it as
     // transient even if focus arrived from outside MDI at the same moment.
     const bool isNewWindow = _tabBar && _tabBar->indexOfSubWindow(wnd) < 0;
 
@@ -1063,7 +1071,7 @@ void MdiArea::enforceTabbedSubWindowState(QMdiSubWindow* wnd)
         return;
 
     // DontMaximizeSubWindowOnActivation is always set, so we handle
-    // maximize/restore ourselves — do not guard on that option here.
+    // maximize/restore ourselves вЂ” do not guard on that option here.
     if (wnd->isMinimized())
         wnd->showNormal();
 

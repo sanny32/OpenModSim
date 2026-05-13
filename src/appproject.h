@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file appproject.h
+/// \brief Declares the appproject interfaces.
+///
+
 #ifndef APPPROJECT_H
 #define APPPROJECT_H
 

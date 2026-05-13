@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file outputdatawidget.h
+/// \brief Declares the outputdatawidget interfaces.
+///
+
 #ifndef OUTPUTDATAWIDGET_H
 #define OUTPUTDATAWIDGET_H
 

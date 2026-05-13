@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file mainwindow.h
+/// \brief Declares the mainwindow interfaces.
+///
+
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 

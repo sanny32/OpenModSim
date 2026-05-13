@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file htmldelegate.cpp
+/// \brief Implements the htmldelegate functionality.
+///
+
 #include <QPainter>
 #include <QDebug>
 #include <QApplication>

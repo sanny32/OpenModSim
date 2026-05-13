@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file formscriptview.cpp
+/// \brief Implements the formscriptview functionality.
+///
+
 #include <QCheckBox>
 #include <QHBoxLayout>
 #include <QSizePolicy>

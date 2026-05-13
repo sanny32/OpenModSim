@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file modbuserrorsimulations.h
+/// \brief Declares the modbuserrorsimulations interfaces.
+///
+
 #ifndef MODBUSERRORSIMULATIONS_H
 #define MODBUSERRORSIMULATIONS_H
 

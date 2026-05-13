@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file customlineedit.cpp
+/// \brief Implements the customlineedit functionality.
+///
+
 #include "customlineedit.h"
 
 ///

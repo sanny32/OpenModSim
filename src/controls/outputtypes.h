@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file outputtypes.h
+/// \brief Declares the outputtypes interfaces.
+///
+
 #ifndef OUTPUTTYPES_H
 #define OUTPUTTYPES_H
 

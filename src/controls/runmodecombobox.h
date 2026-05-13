@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file runmodecombobox.h
+/// \brief Declares the runmodecombobox interfaces.
+///
+
 #ifndef RUNMODECOMBOBOX_H
 #define RUNMODECOMBOBOX_H
 

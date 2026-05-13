@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file writesinglecoil.h
+/// \brief Declares the writesinglecoil interfaces.
+///
+
 #ifndef WRITESINGLECOIL_H
 #define WRITESINGLECOIL_H
 

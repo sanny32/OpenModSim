@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file themedicons.cpp
+/// \brief Implements the themedicons functionality.
+///
+
 #include "themedicons.h"
 
 #include <QApplication>
@@ -15,6 +23,10 @@ struct IconDescriptor {
     QString resourcePath;
 };
 
+///
+/// \brief Returns the built-in mapping of icon aliases to theme and fallback resources.
+/// \return Constant icon descriptor registry.
+///
 const QHash<QString, IconDescriptor>& iconRegistry()
 {
     static const QHash<QString, IconDescriptor> registry {
@@ -71,6 +83,11 @@ const QHash<QString, IconDescriptor>& iconRegistry()
     return registry;
 }
 
+///
+/// \brief Resolves an icon from the current desktop icon theme and optional Qlementine mapping.
+/// \param themeName Theme icon identifier to resolve.
+/// \return Resolved icon or a null icon when no themed match is found.
+///
 QIcon iconFromThemeName(const QString& themeName)
 {
     QIcon icon = QIcon::fromTheme(themeName);
@@ -93,6 +110,12 @@ QIcon iconFromThemeName(const QString& themeName)
 }
 }
 
+///
+/// \brief Returns an icon by OpenModSim name with theme-aware and resource fallback resolution.
+/// \param name Icon name or alias key.
+/// \param fallbackPath Optional direct fallback resource path.
+/// \return Resolved icon, or a null icon if no source can be resolved.
+///
 QIcon ThemedIcons::icon(const QString& name, const QString& fallbackPath)
 {
     const auto& registry = iconRegistry();

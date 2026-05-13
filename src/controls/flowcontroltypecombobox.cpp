@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file flowcontroltypecombobox.cpp
+/// \brief Implements the flowcontroltypecombobox functionality.
+///
+
 #include "flowcontroltypecombobox.h"
 
 ///

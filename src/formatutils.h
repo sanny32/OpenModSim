@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file formatutils.h
+/// \brief Declares the formatutils interfaces.
+///
+
 #ifndef FORMATUTILS_H
 #define FORMATUTILS_H
 

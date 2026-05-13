@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file modbustcpserver.h
+/// \brief Declares the modbustcpserver interfaces.
+///
+
 #ifndef MODBUSTCPSERVER_H
 #define MODBUSTCPSERVER_H
 

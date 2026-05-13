@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file modbusexception.h
+/// \brief Declares the modbusexception interfaces.
+///
+
 #ifndef MODBUSEXCEPTION_H
 #define MODBUSEXCEPTION_H
 

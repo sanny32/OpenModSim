@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file uiutils.h
+/// \brief Declares the uiutils interfaces.
+///
+
 #ifndef UIUTILS_H
 #define UIUTILS_H
 

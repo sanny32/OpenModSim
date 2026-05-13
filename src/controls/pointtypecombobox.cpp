@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file pointtypecombobox.cpp
+/// \brief Implements the pointtypecombobox functionality.
+///
+
 #include "pointtypecombobox.h"
 
 

@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file dialogforcemultipleregisters.h
+/// \brief Declares the dialogforcemultipleregisters interfaces.
+///
+
 #ifndef DIALOGFORCEMULTIPLEREGISTERS_H
 #define DIALOGFORCEMULTIPLEREGISTERS_H
 

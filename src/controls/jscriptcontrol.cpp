@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file jscriptcontrol.cpp
+/// \brief Implements the jscriptcontrol functionality.
+///
+
 #include <QMetaEnum>
 #include <QScrollBar>
 #include "modbusmultiserver.h"

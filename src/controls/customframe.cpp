@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file customframe.cpp
+/// \brief Implements the customframe functionality.
+///
+
 #include <QPainter>
 #include "customframe.h"
 

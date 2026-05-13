@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file qint64validator.h
+/// \brief Declares the qint64validator interfaces.
+///
+
 #ifndef QINT64VALIDATOR_H
 #define QINT64VALIDATOR_H
 

@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file toolbar.cpp
+/// \brief Implements the toolbar functionality.
+///
+
 #include "toolbar.h"
 
 #include <QActionEvent>

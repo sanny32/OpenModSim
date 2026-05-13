@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file customframe.h
+/// \brief Declares the customframe interfaces.
+///
+
 #ifndef CUSTOMFRAME_H
 #define CUSTOMFRAME_H
 

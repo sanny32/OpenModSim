@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file numericcombobox.cpp
+/// \brief Implements the numericcombobox functionality.
+///
+
 #include <QEvent>
 #include <QLineEdit>
 #include <QSignalBlocker>

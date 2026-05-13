@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file outputpanel.h
+/// \brief Declares the outputpanel interfaces.
+///
+
 #ifndef OUTPUTPANEL_H
 #define OUTPUTPANEL_H
 
@@ -11,7 +19,7 @@ class AppLogOutput;
 class ConsoleOutput;
 
 ///
-/// \brief The OutputPanel class — tabbed bottom panel (Log + JavaScript Console)
+/// \brief The OutputPanel class вЂ” tabbed bottom panel (Log + JavaScript Console)
 ///
 class OutputPanel : public QWidget
 {

@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file dialogmodbusdefinitions.cpp
+/// \brief Implements the dialogmodbusdefinitions functionality.
+///
+
 #include <QPushButton>
 #include "dialogmodbusdefinitions.h"
 #include "ui_dialogmodbusdefinitions.h"

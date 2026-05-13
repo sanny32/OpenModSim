@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file console.h
+/// \brief Declares the console interfaces.
+///
+
 #ifndef CONSOLE_H
 #define CONSOLE_H
 

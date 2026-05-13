@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file dialogabout.h
+/// \brief Declares the dialogabout interfaces.
+///
+
 #ifndef DIALOGABOUT_H
 #define DIALOGABOUT_H
 

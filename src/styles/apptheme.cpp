@@ -3,7 +3,7 @@
 
 ///
 /// \file apptheme.cpp
-/// \brief Implements theme detection and change notifications.
+/// \brief Implements the apptheme functionality.
 ///
 
 #include <QApplication>

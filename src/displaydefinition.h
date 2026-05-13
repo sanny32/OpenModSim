@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file displaydefinition.h
+/// \brief Declares the displaydefinition interfaces.
+///
+
 #ifndef DISPLAYDEFINITION_H
 #define DISPLAYDEFINITION_H
 

@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file dialogselectserviceport.cpp
+/// \brief Implements the dialogselectserviceport functionality.
+///
+
 #include <QNetworkInterface>
 #include "dialogselectserviceport.h"
 #include "ui_dialogselectserviceport.h"

@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file macappstyle.h
+/// \brief Declares the macappstyle interfaces.
+///
+
 #ifndef MACAPPSTYLE_H
 #define MACAPPSTYLE_H
 

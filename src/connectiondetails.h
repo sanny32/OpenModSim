@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file connectiondetails.h
+/// \brief Declares the connectiondetails interfaces.
+///
+
 #ifndef CONNECTIONDETAILS_H
 #define CONNECTIONDETAILS_H
 

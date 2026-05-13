@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file appcolors.h
+/// \brief Declares the appcolors interfaces.
+///
+
 #ifndef APPCOLORS_H
 #define APPCOLORS_H
 
@@ -86,7 +94,7 @@ inline QColor defaultAddress()
     return QApplication::palette().color(QPalette::PlaceholderText);
 }
 
-// Semantic log colors — warning
+// Semantic log colors вЂ” warning
 inline QColor warningBackground()
 {
     return isDark() ? QColor("#3a2e00") : QColor("#FFF8E1");
@@ -102,7 +110,7 @@ inline QColor warningForeground()
     return isDark() ? QColor("#FFD54F") : QColor("#4A3000");
 }
 
-// Semantic log colors — error
+// Semantic log colors вЂ” error
 inline QColor errorBackground()
 {
     return isDark() ? QColor("#3b0000") : QColor("#FFEBEE");
@@ -118,7 +126,7 @@ inline QColor errorForeground()
     return isDark() ? QColor("#FF8A80") : QColor("#7F0000");
 }
 
-// Semantic log colors — debug/info
+// Semantic log colors вЂ” debug/info
 inline QColor debugForeground()
 {
     return isDark() ? QColor("#56B6C2") : QColor("#37474F");

@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file modbusserver.h
+/// \brief Declares the modbusserver interfaces.
+///
+
 #ifndef IMODBUSSERVER_H
 #define IMODBUSSERVER_H
 

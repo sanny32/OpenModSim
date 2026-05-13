@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file outputtrafficwidget.cpp
+/// \brief Implements the outputtrafficwidget functionality.
+///
+
 #include <QDateTime>
 #include <QApplication>
 #include <QGuiApplication>

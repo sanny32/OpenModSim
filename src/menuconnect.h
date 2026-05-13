@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file menuconnect.h
+/// \brief Declares the menuconnect interfaces.
+///
+
 #ifndef MENUCONNECT_H
 #define MENUCONNECT_H
 

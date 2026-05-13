@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file formscriptview.h
+/// \brief Declares the formscriptview interfaces.
+///
+
 #ifndef FORMSCRIPTVIEW_H
 #define FORMSCRIPTVIEW_H
 

@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file qint64validator.cpp
+/// \brief Implements the qint64validator functionality.
+///
+
 #include "qint64validator.h"
 
 ///

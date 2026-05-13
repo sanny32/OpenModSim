@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file modbuswriteparams.h
+/// \brief Declares the modbuswriteparams interfaces.
+///
+
 #ifndef MODBUSWRITEPARAMS_H
 #define MODBUSWRITEPARAMS_H
 

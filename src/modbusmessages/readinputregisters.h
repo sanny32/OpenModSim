@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file readinputregisters.h
+/// \brief Declares the readinputregisters interfaces.
+///
+
 #ifndef READINPUTREGISTERS_H
 #define READINPUTREGISTERS_H
 

@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file modbusmessagewidget.cpp
+/// \brief Implements the modbusmessagewidget functionality.
+///
+
 #include <QMenu>
 #include <QEvent>
 #include <QClipboard>

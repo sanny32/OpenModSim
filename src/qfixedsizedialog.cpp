@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file qfixedsizedialog.cpp
+/// \brief Implements the qfixedsizedialog functionality.
+///
+
 #include "qfixedsizedialog.h"
 
 ///

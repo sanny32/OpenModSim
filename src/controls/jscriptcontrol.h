@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file jscriptcontrol.h
+/// \brief Declares the jscriptcontrol interfaces.
+///
+
 #ifndef JSCRIPTCONTROL_H
 #define JSCRIPTCONTROL_H
 

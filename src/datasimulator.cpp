@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file datasimulator.cpp
+/// \brief Implements the datasimulator functionality.
+///
+
 #include <QDateTime>
 #include <QRandomGenerator>
 #include "datasimulator.h"

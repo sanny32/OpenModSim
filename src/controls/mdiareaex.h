@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file mdiareaex.h
+/// \brief Declares the mdiareaex interfaces.
+///
+
 #ifndef MDIAREAEX_H
 #define MDIAREAEX_H
 

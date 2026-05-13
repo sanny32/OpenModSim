@@ -3,7 +3,7 @@
 
 ///
 /// \file application.cpp
-/// \brief Implements the application wrapper and theme accessors.
+/// \brief Implements the application functionality.
 ///
 
 #include "application.h"

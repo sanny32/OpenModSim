@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file jshighlighter.cpp
+/// \brief Implements the jshighlighter functionality.
+///
+
 #include "styles/appcolors.h"
 #include "jshighlighter.h"
 

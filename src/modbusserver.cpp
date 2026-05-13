@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file modbusserver.cpp
+/// \brief Implements the modbusserver functionality.
+///
+
 #include <QBitArray>
 #include <QModbusDeviceIdentification>
 #include <QLoggingCategory>

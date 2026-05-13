@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file dialogselectserviceport.h
+/// \brief Declares the dialogselectserviceport interfaces.
+///
+
 #ifndef DIALOGSELECTSERVICEPORT_H
 #define DIALOGSELECTSERVICEPORT_H
 

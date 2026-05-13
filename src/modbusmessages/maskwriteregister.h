@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file maskwriteregister.h
+/// \brief Declares the maskwriteregister interfaces.
+///
+
 #ifndef MASKWRITEREGISTER_H
 #define MASKWRITEREGISTER_H
 

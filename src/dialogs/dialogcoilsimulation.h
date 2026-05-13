@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file dialogcoilsimulation.h
+/// \brief Declares the dialogcoilsimulation interfaces.
+///
+
 #ifndef DIALOGCOILSIMULATION_H
 #define DIALOGCOILSIMULATION_H
 

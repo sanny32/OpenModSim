@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file dialogsetupserialport.cpp
+/// \brief Implements the dialogsetupserialport functionality.
+///
+
 #include "dialogsetupserialport.h"
 #include "ui_dialogsetupserialport.h"
 

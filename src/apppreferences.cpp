@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file apppreferences.cpp
+/// \brief Implements the apppreferences functionality.
+///
+
 #include "fontutils.h"
 #include "enums.h"
 #include "apppreferences.h"

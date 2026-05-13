@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file formdatamapview.h
+/// \brief Declares the formdatamapview interfaces.
+///
+
 #ifndef FORMDATAMAPVIEW_H
 #define FORMDATAMAPVIEW_H
 

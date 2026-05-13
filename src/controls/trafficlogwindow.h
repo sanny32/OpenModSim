@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file trafficlogwindow.h
+/// \brief Declares the trafficlogwindow interfaces.
+///
+
 #ifndef TRAFFICLOGWINDOW_H
 #define TRAFFICLOGWINDOW_H
 

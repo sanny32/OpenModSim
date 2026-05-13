@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file appstyle.h
+/// \brief Declares the appstyle interfaces.
+///
+
 #ifndef APPSTYLE_H
 #define APPSTYLE_H
 

@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file bufferinglistmodel.h
+/// \brief Declares the bufferinglistmodel interfaces.
+///
+
 #ifndef BUFFERINGLISTMODEL_H
 #define BUFFERINGLISTMODEL_H
 

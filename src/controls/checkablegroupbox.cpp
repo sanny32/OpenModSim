@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file checkablegroupbox.cpp
+/// \brief Implements the checkablegroupbox functionality.
+///
+
 #include "checkablegroupbox.h"
 #include <QStylePainter>
 #include <QStyleOptionGroupBox>
@@ -47,7 +55,7 @@ void CheckableGroupBox::onClicked()
     setChecked(true);
     blockSignals(false);
 
-    // Cycle: Checked → Unchecked, anything else (Partial/Unchecked) → Checked
+    // Cycle: Checked в†’ Unchecked, anything else (Partial/Unchecked) в†’ Checked
     const Qt::CheckState newState = (_checkState == Qt::Checked) ? Qt::Unchecked : Qt::Checked;
     _checkState = newState;
     update();

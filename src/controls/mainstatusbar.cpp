@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file mainstatusbar.cpp
+/// \brief Implements the mainstatusbar functionality.
+///
+
 #include <QEvent>
 #include <QDesktopServices>
 #include <QMessageBox>

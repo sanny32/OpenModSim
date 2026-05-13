@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file dialogpreferences.h
+/// \brief Declares the dialogpreferences interfaces.
+///
+
 #ifndef DIALOGPREFERENCES_H
 #define DIALOGPREFERENCES_H
 

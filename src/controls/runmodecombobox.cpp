@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file runmodecombobox.cpp
+/// \brief Implements the runmodecombobox functionality.
+///
+
 #include <QEvent>
 #include "runmodecombobox.h"
 

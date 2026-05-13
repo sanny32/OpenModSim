@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file applogoutput.cpp
+/// \brief Implements the applogoutput functionality.
+///
+
 #include <QApplication>
 #include <atomic>
 #include <QClipboard>

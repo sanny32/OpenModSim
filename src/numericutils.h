@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file numericutils.h
+/// \brief Declares the numericutils interfaces.
+///
+
 #ifndef NUMERICUTILS_H
 #define NUMERICUTILS_H
 

@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file cmdlineparser.h
+/// \brief Declares the cmdlineparser interfaces.
+///
+
 #ifndef CMDLINEPARSER_H
 #define CMDLINEPARSER_H
 

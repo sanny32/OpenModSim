@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file helpwidget.cpp
+/// \brief Implements the helpwidget functionality.
+///
+
 #include <QEvent>
 #include <QStyle>
 #include <QKeyEvent>

@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file htmldelegate.h
+/// \brief Declares the htmldelegate interfaces.
+///
+
 #ifndef HTMLDELEGATE_H
 #define HTMLDELEGATE_H
 

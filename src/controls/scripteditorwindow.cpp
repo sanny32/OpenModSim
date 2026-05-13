@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file scripteditorwindow.cpp
+/// \brief Implements the scripteditorwindow functionality.
+///
+
 #include <QVBoxLayout>
 #include <QWidgetAction>
 #include <QCloseEvent>
@@ -111,7 +119,7 @@ void ScriptEditorWindow::setupScriptBar()
     modeAction->setDefaultWidget(_runModeCombo);
     _scriptBar->addAction(modeAction);
 
-    // Interval spinbox (500 – 10000 ms)
+    // Interval spinbox (500 вЂ“ 10000 ms)
     _intervalSpin = new QSpinBox(_scriptBar);
     _intervalSpin->setRange(500, 10000);
     _intervalSpin->setSingleStep(100);

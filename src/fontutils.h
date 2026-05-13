@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file fontutils.h
+/// \brief Declares the fontutils interfaces.
+///
+
 #ifndef FONTUTILS_H
 #define FONTUTILS_H
 

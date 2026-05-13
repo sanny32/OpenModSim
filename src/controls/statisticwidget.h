@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file statisticwidget.h
+/// \brief Declares the statisticwidget interfaces.
+///
+
 #ifndef STATISTICWIDGET_H
 #define STATISTICWIDGET_H
 

@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file applogoutput.h
+/// \brief Declares the applogoutput interfaces.
+///
+
 #ifndef APPLOGOUTPUT_H
 #define APPLOGOUTPUT_H
 
@@ -11,7 +19,7 @@ class AppLogOutput;
 }
 
 ///
-/// \brief The AppLogOutput class — application event log tab
+/// \brief The AppLogOutput class вЂ” application event log tab
 ///
 class AppLogOutput : public QWidget
 {

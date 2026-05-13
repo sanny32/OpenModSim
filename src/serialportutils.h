@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file serialportutils.h
+/// \brief Declares the serialportutils interfaces.
+///
+
 #ifndef SERIALPORTUTILS_H
 #define SERIALPORTUTILS_H
 

@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file applogger.h
+/// \brief Declares the applogger interfaces.
+///
+
 #ifndef APPLOGGER_H
 #define APPLOGGER_H
 

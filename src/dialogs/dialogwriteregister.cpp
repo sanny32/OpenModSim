@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file dialogwriteregister.cpp
+/// \brief Implements the dialogwriteregister functionality.
+///
+
 #include <float.h>
 #include "modbuslimits.h"
 #include "numericutils.h"

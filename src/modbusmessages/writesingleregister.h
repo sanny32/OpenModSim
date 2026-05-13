@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file writesingleregister.h
+/// \brief Declares the writesingleregister interfaces.
+///
+
 #ifndef WRITESINGLEREGISTER_H
 #define WRITESINGLEREGISTER_H
 

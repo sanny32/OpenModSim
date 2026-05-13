@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file dialogabout.cpp
+/// \brief Implements the dialogabout functionality.
+///
+
 #include <QFile>
 #include <QApplication>
 #include <QDesktopServices>

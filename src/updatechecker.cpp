@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file updatechecker.cpp
+/// \brief Implements the updatechecker functionality.
+///
+
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QSslSocket>

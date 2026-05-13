@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file numericcombobox.h
+/// \brief Declares the numericcombobox interfaces.
+///
+
 #ifndef NUMERICCOMBOBOX_H
 #define NUMERICCOMBOBOX_H
 

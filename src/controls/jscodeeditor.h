@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file jscodeeditor.h
+/// \brief Declares the jscodeeditor interfaces.
+///
+
 #ifndef JSCODEEDITOR_H
 #define JSCODEEDITOR_H
 

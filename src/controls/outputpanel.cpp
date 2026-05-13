@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file outputpanel.cpp
+/// \brief Implements the outputpanel functionality.
+///
+
 #include <QTabBar>
 #include "outputpanel.h"
 #include "ui_outputpanel.h"

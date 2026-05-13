@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file scripteditorwindow.h
+/// \brief Declares the scripteditorwindow interfaces.
+///
+
 #ifndef SCRIPTEDITORWINDOW_H
 #define SCRIPTEDITORWINDOW_H
 

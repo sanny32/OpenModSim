@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file byteorderutils.h
+/// \brief Declares the byteorderutils interfaces.
+///
+
 #ifndef BYTEORDERUTILS_H
 #define BYTEORDERUTILS_H
 

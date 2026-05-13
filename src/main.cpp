@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file main.cpp
+/// \brief Defines the application entry point.
+///
+
 #include <QFontDatabase>
 #include <QIcon>
 #include <QMessageBox>
@@ -6,8 +14,14 @@
 #include "cmdlineparser.h"
 #include "fontutils.h"
 #include "styles/appstyle.h"
-#include "styles/macappstyle.h"
+
+#ifdef HAVE_QLEMENTINE_APP_STYLE
 #include "styles/qlementineappstyle.h"
+#endif
+
+#ifdef Q_OS_MAC
+#include "styles/macappstyle.h"
+#endif
 
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 namespace {

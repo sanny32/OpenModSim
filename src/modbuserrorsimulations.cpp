@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file modbuserrorsimulations.cpp
+/// \brief Implements the modbuserrorsimulations functionality.
+///
+
 #include <QtGlobal>
 #include "modbuserrorsimulations.h"
 

@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file jscompleter.h
+/// \brief Declares the jscompleter interfaces.
+///
+
 #ifndef JSCOMPLETER_H
 #define JSCOMPLETER_H
 

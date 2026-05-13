@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file datasimulator.h
+/// \brief Declares the datasimulator interfaces.
+///
+
 #ifndef DATASIMULATOR_H
 #define DATASIMULATOR_H
 

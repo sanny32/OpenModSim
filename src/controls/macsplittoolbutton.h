@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file macsplittoolbutton.h
+/// \brief Declares the macsplittoolbutton interfaces.
+///
+
 #ifndef MACSPLITTOOLBUTTON_H
 #define MACSPLITTOOLBUTTON_H
 

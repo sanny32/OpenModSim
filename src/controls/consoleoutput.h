@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file consoleoutput.h
+/// \brief Declares the consoleoutput interfaces.
+///
+
 #ifndef CONSOLEOUTPUT_H
 #define CONSOLEOUTPUT_H
 

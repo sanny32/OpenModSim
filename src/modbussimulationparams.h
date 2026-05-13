@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file modbussimulationparams.h
+/// \brief Declares the modbussimulationparams interfaces.
+///
+
 #ifndef MODBUSSIMULATIONPARAMS_H
 #define MODBUSSIMULATIONPARAMS_H
 

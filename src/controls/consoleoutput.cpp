@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file consoleoutput.cpp
+/// \brief Implements the consoleoutput functionality.
+///
+
 #include <QApplication>
 #include <QClipboard>
 #include <QGuiApplication>

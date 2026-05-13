@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file transpscrollarea.h
+/// \brief Declares the transpscrollarea interfaces.
+///
+
 #ifndef TRANSPSCROLLAREA_H
 #define TRANSPSCROLLAREA_H
 

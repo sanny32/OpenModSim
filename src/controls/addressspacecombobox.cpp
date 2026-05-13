@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file addressspacecombobox.cpp
+/// \brief Implements the addressspacecombobox functionality.
+///
+
 #include <QEvent>
 #include "addressspacecombobox.h"
 

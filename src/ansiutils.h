@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file ansiutils.h
+/// \brief Declares the ansiutils interfaces.
+///
+
 #ifndef ANSIUTILS_H
 #define ANSIUTILS_H
 

@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file readfilerecord.h
+/// \brief Declares the readfilerecord interfaces.
+///
+
 #ifndef READFILERECORD_H
 #define READFILERECORD_H
 

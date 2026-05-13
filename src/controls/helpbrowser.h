@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file helpbrowser.h
+/// \brief Declares the helpbrowser interfaces.
+///
+
 #ifndef HELPBROWSER_H
 #define HELPBROWSER_H
 

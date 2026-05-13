@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file qhexvalidator.h
+/// \brief Declares the qhexvalidator interfaces.
+///
+
 #ifndef QHEXVALIDATOR_H
 #define QHEXVALIDATOR_H
 

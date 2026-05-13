@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file coloredpushbutton.cpp
+/// \brief Implements the coloredpushbutton functionality.
+///
+
 #include "coloredpushbutton.h"
 
 #include <QApplication>

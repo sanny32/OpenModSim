@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file booleancombobox.cpp
+/// \brief Implements the booleancombobox functionality.
+///
+
 #include "booleancombobox.h"
 
 ///

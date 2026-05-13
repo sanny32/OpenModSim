@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file qadjustedsizedialog.cpp
+/// \brief Implements the qadjustedsizedialog functionality.
+///
+
 #include "qadjustedsizedialog.h"
 
 ///

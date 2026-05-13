@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file dialogmodbusdefinitions.h
+/// \brief Declares the dialogmodbusdefinitions interfaces.
+///
+
 #ifndef DIALOGMODBUSDEFINITIONS_H
 #define DIALOGMODBUSDEFINITIONS_H
 

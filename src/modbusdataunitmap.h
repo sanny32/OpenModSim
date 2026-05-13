@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file modbusdataunitmap.h
+/// \brief Declares the modbusdataunitmap interfaces.
+///
+
 #ifndef MODBUSDATAUNITMAP_H
 #define MODBUSDATAUNITMAP_H
 

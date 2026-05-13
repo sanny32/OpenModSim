@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file helpwidget.h
+/// \brief Declares the helpwidget interfaces.
+///
+
 #ifndef HELPWIDGET_H
 #define HELPWIDGET_H
 

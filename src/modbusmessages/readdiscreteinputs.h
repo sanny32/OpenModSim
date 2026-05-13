@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file readdiscreteinputs.h
+/// \brief Declares the readdiscreteinputs interfaces.
+///
+
 #ifndef READDISCRETEINPUTS_H
 #define READDISCRETEINPUTS_H
 

@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file menuconnect.cpp
+/// \brief Implements the menuconnect functionality.
+///
+
 #include <QEvent>
 #include "serialportutils.h"
 #include "menuconnect.h"

@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file coloredpushbutton.h
+/// \brief Declares the coloredpushbutton interfaces.
+///
+
 #ifndef COLOREDPUSHBUTTON_H
 #define COLOREDPUSHBUTTON_H
 

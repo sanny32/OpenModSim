@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file writemultiplecoils.h
+/// \brief Declares the writemultiplecoils interfaces.
+///
+
 #ifndef WRITEMULTIPLECOILS_H
 #define WRITEMULTIPLECOILS_H
 

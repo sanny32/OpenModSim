@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file dialogcoilsimulation.cpp
+/// \brief Implements the dialogcoilsimulation functionality.
+///
+
 #include <QPushButton>
 #include "dialogcoilsimulation.h"
 #include "ui_dialogcoilsimulation.h"

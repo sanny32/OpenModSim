@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file numericlineedit.h
+/// \brief Declares the numericlineedit interfaces.
+///
+
 #ifndef NUMERICLINEEDIT_H
 #define NUMERICLINEEDIT_H
 

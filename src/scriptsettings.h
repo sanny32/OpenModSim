@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file scriptsettings.h
+/// \brief Declares the scriptsettings interfaces.
+///
+
 #ifndef SCRIPTSETTINGS_H
 #define SCRIPTSETTINGS_H
 

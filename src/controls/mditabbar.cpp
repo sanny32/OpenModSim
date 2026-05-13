@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file mditabbar.cpp
+/// \brief Implements the mditabbar functionality.
+///
+
 #include "mditabbar.h"
 #include <QApplication>
 #include <QMdiArea>
@@ -277,7 +285,7 @@ void MdiTabBar::mouseMoveEvent(QMouseEvent* event)
                     _dragCursorSet = true;
                 }
             } else {
-                // Cursor returned inside the source panel — hide overlay.
+                // Cursor returned inside the source panel вЂ” hide overlay.
                 if (_dragOverlay)
                     _dragOverlay->hide();
                 if (_dragCursorSet) {

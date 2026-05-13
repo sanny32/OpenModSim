@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file applogger.cpp
+/// \brief Implements the applogger functionality.
+///
+
 #include "applogger.h"
 
 #include <QCoreApplication>

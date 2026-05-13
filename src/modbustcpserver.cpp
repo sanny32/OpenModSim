@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file modbustcpserver.cpp
+/// \brief Implements the modbustcpserver functionality.
+///
+
 #include <QUrl>
 #include <QTimer>
 #include <QPointer>

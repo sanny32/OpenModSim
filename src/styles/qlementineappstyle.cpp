@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file qlementineappstyle.cpp
+/// \brief Implements the qlementineappstyle functionality.
+///
+
 #if defined(HAVE_QLEMENTINE_APP_STYLE)
 
 #include "qlementineappstyle.h"

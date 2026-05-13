@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file dialogprintsettings.h
+/// \brief Declares the dialogprintsettings interfaces.
+///
+
 #ifndef DIALOGPRINTSETTINGS_H
 #define DIALOGPRINTSETTINGS_H
 

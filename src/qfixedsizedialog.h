@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file qfixedsizedialog.h
+/// \brief Declares the qfixedsizedialog interfaces.
+///
+
 #ifndef QFIXEDSIZEDIALOG_H
 #define QFIXEDSIZEDIALOG_H
 

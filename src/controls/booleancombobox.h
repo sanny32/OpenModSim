@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file booleancombobox.h
+/// \brief Declares the booleancombobox interfaces.
+///
+
 #ifndef BOOLEANCOMBOBOX_H
 #define BOOLEANCOMBOBOX_H
 

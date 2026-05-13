@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file dialogprintsettings.cpp
+/// \brief Implements the dialogprintsettings functionality.
+///
+
 #include <QPrinterInfo>
 #include <QPushButton>
 #include "dialogprintsettings.h"

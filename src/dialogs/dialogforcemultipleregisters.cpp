@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file dialogforcemultipleregisters.cpp
+/// \brief Implements the dialogforcemultipleregisters functionality.
+///
+
 #include <QtMath>
 #include <QRandomGenerator>
 #include <QComboBox>
@@ -278,7 +286,7 @@ void DialogForceMultipleRegisters::updateAddressSummary()
 {
     const int length = qMax(1, _data.size());
     ui->labelAddresses->setText(
-        QString("<html><head/><body><p>%3<span style=\" font-weight:700;\">%1 </span>→ %4<span style=\" font-weight:700;\">%2</span></p></body></html>").arg(
+        QString("<html><head/><body><p>%3<span style=\" font-weight:700;\">%1 </span>в†’ %4<span style=\" font-weight:700;\">%2</span></p></body></html>").arg(
         formatAddress(_type, _writeParams.Address, _writeParams.AddrSpace, _hexAddress, addressBase(_writeParams)),
         formatAddress(_type, _writeParams.Address + length - 1, _writeParams.AddrSpace, _hexAddress, addressBase(_writeParams)),
         tr("Starting Address: "), tr("Ending Address: ")));

@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file dialogforcestatusregisters.h
+/// \brief Declares the dialogforcestatusregisters interfaces.
+///
+
 #ifndef DIALOGFORCESTATUSREGISTERS_H
 #define DIALOGFORCESTATUSREGISTERS_H
 

@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file quintvalidator.h
+/// \brief Declares the quintvalidator interfaces.
+///
+
 #ifndef QUINTVALIDATOR_H
 #define QUINTVALIDATOR_H
 

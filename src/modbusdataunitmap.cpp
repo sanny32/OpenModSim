@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file modbusdataunitmap.cpp
+/// \brief Implements the modbusdataunitmap functionality.
+///
+
 #include "modbusdataunitmap.h"
 
 static bool unitMapsEqual(const QModbusDataUnitMap& a, const QModbusDataUnitMap& b)

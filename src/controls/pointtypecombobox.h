@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file pointtypecombobox.h
+/// \brief Declares the pointtypecombobox interfaces.
+///
+
 #ifndef POINTTYPECOMBOBOX_H
 #define POINTTYPECOMBOBOX_H
 

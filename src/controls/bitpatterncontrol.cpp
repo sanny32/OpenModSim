@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file bitpatterncontrol.cpp
+/// \brief Implements the bitpatterncontrol functionality.
+///
+
 #include "bitpatterncontrol.h"
 #include "ui_bitpatterncontrol.h"
 

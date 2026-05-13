@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file appstyle.cpp
+/// \brief Implements the appstyle functionality.
+///
+
 #include "appstyle.h"
 
 #include <QPainter>

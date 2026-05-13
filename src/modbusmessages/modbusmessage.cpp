@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file modbusmessage.cpp
+/// \brief Implements the modbusmessage functionality.
+///
+
 #include "modbusmessages.h"
 
 

@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file jshighlighter.h
+/// \brief Declares the jshighlighter interfaces.
+///
+
 #ifndef JSHIGHLIGHTER_H
 #define JSHIGHLIGHTER_H
 

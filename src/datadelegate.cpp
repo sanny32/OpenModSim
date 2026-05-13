@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file datadelegate.cpp
+/// \brief Implements the datadelegate functionality.
+///
+
 #include <QApplication>
 #include <QPainter>
 #include <QStyleOptionViewItem>

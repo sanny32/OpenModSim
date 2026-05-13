@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file formtrafficview.h
+/// \brief Declares the formtrafficview interfaces.
+///
+
 #ifndef FORMTRAFFICVIEW_H
 #define FORMTRAFFICVIEW_H
 

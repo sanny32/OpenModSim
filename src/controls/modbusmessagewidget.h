@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file modbusmessagewidget.h
+/// \brief Declares the modbusmessagewidget interfaces.
+///
+
 #ifndef MODBUSMESSAGEWIDGET_H
 #define MODBUSMESSAGEWIDGET_H
 

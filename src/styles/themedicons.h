@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file themedicons.h
+/// \brief Declares the themedicons interfaces.
+///
+
 #ifndef THEMEDICONS_H
 #define THEMEDICONS_H
 

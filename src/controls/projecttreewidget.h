@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file projecttreewidget.h
+/// \brief Declares the projecttreewidget interfaces.
+///
+
 #ifndef PROJECTTREEWIDGET_H
 #define PROJECTTREEWIDGET_H
 

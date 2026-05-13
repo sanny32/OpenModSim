@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file dialogwelcome.cpp
+/// \brief Implements the dialogwelcome functionality.
+///
+
 #include <QDir>
 #include <QFont>
 #include <QListWidgetItem>

@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file paritytypecombobox.cpp
+/// \brief Implements the paritytypecombobox functionality.
+///
+
 #include "paritytypecombobox.h"
 
 ///

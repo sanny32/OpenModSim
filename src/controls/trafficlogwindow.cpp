@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file trafficlogwindow.cpp
+/// \brief Implements the trafficlogwindow functionality.
+///
+
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QToolButton>
@@ -103,7 +111,7 @@ bool TrafficLogWindow::matchesFilter(QSharedPointer<const ModbusMessage> msg) co
 ///
 void TrafficLogWindow::setupToolbar()
 {
-    // ── Toolbar ──────────────────────────────────────────────────────────────
+    // в”Ђв”Ђ Toolbar в”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђ
     auto toolbar = new QWidget(this);
     auto tbLayout = new QHBoxLayout(toolbar);
     tbLayout->setContentsMargins(4, 2, 4, 2);
@@ -165,18 +173,18 @@ void TrafficLogWindow::setupToolbar()
     tbLayout->addWidget(_pauseButton);
     tbLayout->addWidget(_clearButton);
 
-    // ── Log widget ───────────────────────────────────────────────────────────
+    // в”Ђв”Ђ Log widget в”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђ
     _logWidget = new ModbusLogWidget(this);
     _logWidget->setRowLimit(_rowLimitCombo->currentData().toInt());
 
-    // ── Main layout ──────────────────────────────────────────────────────────
+    // в”Ђв”Ђ Main layout в”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђ
     auto mainLayout = new QVBoxLayout(this);
     mainLayout->setContentsMargins(0, 0, 0, 0);
     mainLayout->setSpacing(0);
     mainLayout->addWidget(toolbar);
     mainLayout->addWidget(_logWidget);
 
-    // ── Connections ──────────────────────────────────────────────────────────
+    // в”Ђв”Ђ Connections в”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђв”Ђ
     connect(_unitIdFilter,   QOverload<int>::of(&QSpinBox::valueChanged),
             this, &TrafficLogWindow::on_filterChanged);
     connect(_funcCodeFilter, QOverload<int>::of(&QComboBox::currentIndexChanged),

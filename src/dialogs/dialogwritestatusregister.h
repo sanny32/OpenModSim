@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file dialogwritestatusregister.h
+/// \brief Declares the dialogwritestatusregister interfaces.
+///
+
 #ifndef DIALOGWRITESTATUSREGISTER_H
 #define DIALOGWRITESTATUSREGISTER_H
 

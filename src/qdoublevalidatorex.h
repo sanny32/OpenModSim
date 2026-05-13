@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file qdoublevalidatorex.h
+/// \brief Declares the qdoublevalidatorex interfaces.
+///
+
 #ifndef QDOUBLEVALIDATOREX_H
 #define QDOUBLEVALIDATOREX_H
 

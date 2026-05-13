@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file formdataview.cpp
+/// \brief Implements the formdataview functionality.
+///
+
 #include <QPainter>
 #include <QPalette>
 #include <QDateTime>

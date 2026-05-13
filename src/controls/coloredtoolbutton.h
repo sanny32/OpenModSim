@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file coloredtoolbutton.h
+/// \brief Declares the coloredtoolbutton interfaces.
+///
+
 #ifndef COLOREDTOOLBUTTON_H
 #define COLOREDTOOLBUTTON_H
 

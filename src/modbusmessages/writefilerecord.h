@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file writefilerecord.h
+/// \brief Declares the writefilerecord interfaces.
+///
+
 #ifndef WRITEFILERECORD_H
 #define WRITEFILERECORD_H
 

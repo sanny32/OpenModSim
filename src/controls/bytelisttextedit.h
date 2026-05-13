@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file bytelisttextedit.h
+/// \brief Declares the bytelisttextedit interfaces.
+///
+
 #ifndef BYTELISTTEXTEDIT_H
 #define BYTELISTTEXTEDIT_H
 

@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file readexceptionstatus.h
+/// \brief Declares the readexceptionstatus interfaces.
+///
+
 #ifndef READEXCEPTIONSTATUS_H
 #define READEXCEPTIONSTATUS_H
 

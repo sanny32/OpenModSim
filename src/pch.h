@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file pch.h
+/// \brief Declares precompiled header includes.
+///
+
 #ifndef _PCH_H_
 #define _PCH_H_
 

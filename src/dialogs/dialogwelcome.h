@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file dialogwelcome.h
+/// \brief Declares the dialogwelcome interfaces.
+///
+
 #ifndef DIALOGWELCOME_H
 #define DIALOGWELCOME_H
 

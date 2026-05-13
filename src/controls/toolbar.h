@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file toolbar.h
+/// \brief Declares the toolbar interfaces.
+///
+
 #ifndef TOOLBAR_H
 #define TOOLBAR_H
 

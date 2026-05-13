@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file funccodefiltercombobox.h
+/// \brief Declares the funccodefiltercombobox interfaces.
+///
+
 #ifndef FUNCCODEFILTERCOMBOBOX_H
 #define FUNCCODEFILTERCOMBOBOX_H
 

@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file macsplittoolbutton.cpp
+/// \brief Implements the macsplittoolbutton functionality.
+///
+
 #ifdef Q_OS_MAC
 
 #include "macsplittoolbutton.h"

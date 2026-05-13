@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file dialogpreferences.cpp
+/// \brief Implements the dialogpreferences functionality.
+///
+
 #include <QtWidgets>
 #include <QGuiApplication>
 #include "../styles/appcolors.h"
@@ -25,9 +33,9 @@ DialogPreferences::DialogPreferences(MainWindow* mainWindow, QWidget* parent)
     ui->listWidget->item(2)->setIcon(themedIcon(QStringLiteral("omodsim/preferences-script")));
 
     ui->comboBoxLanguage->addItem("English", "en");
-    ui->comboBoxLanguage->addItem("Русский", "ru");
-    ui->comboBoxLanguage->addItem("简体中文", "zh_CN");
-    ui->comboBoxLanguage->addItem("繁體中文", "zh_TW");
+    ui->comboBoxLanguage->addItem("Р СѓСЃСЃРєРёР№", "ru");
+    ui->comboBoxLanguage->addItem("з®ЂдЅ“дё­ж–‡", "zh_CN");
+    ui->comboBoxLanguage->addItem("з№Ѓй«”дё­ж–‡", "zh_TW");
 
 #if defined(HAVE_QLEMENTINE_APP_STYLE)
     ui->comboBoxThemeMode->addItem(tr("System"), static_cast<int>(AppThemeMode::System));

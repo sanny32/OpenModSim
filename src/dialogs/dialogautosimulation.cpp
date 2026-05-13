@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file dialogautosimulation.cpp
+/// \brief Implements the dialogautosimulation functionality.
+///
+
 #include <float.h>
 #include <QPushButton>
 #include "dialogautosimulation.h"

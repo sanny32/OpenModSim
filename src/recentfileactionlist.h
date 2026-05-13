@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file recentfileactionlist.h
+/// \brief Declares the recentfileactionlist interfaces.
+///
+
 #ifndef RECENTFILEACTIONLIST_H
 #define RECENTFILEACTIONLIST_H
 

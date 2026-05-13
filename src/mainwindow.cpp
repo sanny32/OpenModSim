@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file mainwindow.cpp
+/// \brief Implements the mainwindow functionality.
+///
+
 #include <QtWidgets>
 #include <QBuffer>
 #include <QPrinterInfo>

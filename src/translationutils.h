@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file translationutils.h
+/// \brief Declares the translationutils interfaces.
+///
+
 #ifndef TRANSLATIONUTILS_H
 #define TRANSLATIONUTILS_H
 

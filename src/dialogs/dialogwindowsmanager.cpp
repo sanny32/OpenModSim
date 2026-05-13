@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file dialogwindowsmanager.cpp
+/// \brief Implements the dialogwindowsmanager functionality.
+///
+
 #include <QAction>
 #include <QAbstractEventDispatcher>
 #include "dialogwindowsmanager.h"
