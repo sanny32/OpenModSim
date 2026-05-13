@@ -69,6 +69,11 @@ namespace Dark {
     constexpr QRgb kIconActive     = 0x409cff;
 }
 
+///
+/// \brief transparent
+/// \param rgb
+/// \return
+///
 QColor transparent(QRgb rgb)
 {
     QColor color(rgb);
@@ -76,6 +81,12 @@ QColor transparent(QRgb rgb)
     return color;
 }
 
+///
+/// \brief alpha
+/// \param rgb
+/// \param value
+/// \return
+///
 QColor alpha(QRgb rgb, int value)
 {
     QColor color(rgb);
@@ -85,6 +96,11 @@ QColor alpha(QRgb rgb, int value)
 
 struct ColorKey { QRgb rgb; int alpha; };
 
+///
+/// \brief colorRef
+/// \param rgb
+/// \return
+///
 const QColor& colorRef(QRgb rgb)
 {
     static QHash<QRgb, QColor> colors;
@@ -94,6 +110,11 @@ const QColor& colorRef(QRgb rgb)
     return it.value();
 }
 
+///
+/// \brief transparentRef
+/// \param rgb
+/// \return
+///
 const QColor& transparentRef(QRgb rgb)
 {
     static QHash<QRgb, QColor> colors;
@@ -103,6 +124,11 @@ const QColor& transparentRef(QRgb rgb)
     return it.value();
 }
 
+///
+/// \brief modelBackgroundColor
+/// \param index
+/// \return
+///
 QColor modelBackgroundColor(const QModelIndex& index)
 {
     const QVariant background = index.data(Qt::BackgroundRole);
@@ -120,6 +146,10 @@ QColor modelBackgroundColor(const QModelIndex& index)
     return {};
 }
 
+///
+/// \brief makeMacLightTheme
+/// \return
+///
 Theme makeMacLightTheme()
 {
     using namespace Light;
@@ -249,6 +279,10 @@ Theme makeMacLightTheme()
     return theme;
 }
 
+///
+/// \brief makeMacDarkTheme
+/// \return
+///
 Theme makeMacDarkTheme()
 {
     using namespace Dark;
