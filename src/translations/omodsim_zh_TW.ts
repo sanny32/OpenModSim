@@ -306,47 +306,47 @@
         <translation>保持暫存器</translation>
     </message>
     <message>
-        <location filename="../datamapdatamodel.cpp" line="524"/>
+        <location filename="../datamapdatamodel.cpp" line="526"/>
         <source>Unit</source>
         <translation>單元</translation>
     </message>
     <message>
-        <location filename="../datamapdatamodel.cpp" line="525"/>
+        <location filename="../datamapdatamodel.cpp" line="527"/>
         <source>Type</source>
         <translation>類型</translation>
     </message>
     <message>
-        <location filename="../datamapdatamodel.cpp" line="526"/>
+        <location filename="../datamapdatamodel.cpp" line="528"/>
         <source>Address</source>
         <translation>地址</translation>
     </message>
     <message>
-        <location filename="../datamapdatamodel.cpp" line="527"/>
+        <location filename="../datamapdatamodel.cpp" line="529"/>
         <source>Data Type</source>
         <translation>資料類型</translation>
     </message>
     <message>
-        <location filename="../datamapdatamodel.cpp" line="528"/>
+        <location filename="../datamapdatamodel.cpp" line="530"/>
         <source>Register Order</source>
         <translation>暫存器順序</translation>
     </message>
     <message>
-        <location filename="../datamapdatamodel.cpp" line="529"/>
+        <location filename="../datamapdatamodel.cpp" line="531"/>
         <source>Byte Order</source>
         <translation>位元組順序</translation>
     </message>
     <message>
-        <location filename="../datamapdatamodel.cpp" line="530"/>
+        <location filename="../datamapdatamodel.cpp" line="532"/>
         <source>Comment</source>
         <translation>注釋</translation>
     </message>
     <message>
-        <location filename="../datamapdatamodel.cpp" line="531"/>
+        <location filename="../datamapdatamodel.cpp" line="533"/>
         <source>Value</source>
         <translation>值</translation>
     </message>
     <message>
-        <location filename="../datamapdatamodel.cpp" line="532"/>
+        <location filename="../datamapdatamodel.cpp" line="534"/>
         <source>Timestamp</source>
         <translation>時間戳記</translation>
     </message>

@@ -445,7 +445,7 @@ bool DataMapDataModel::setData(const QModelIndex& index, const QVariant& value, 
     }
 
     // ── Key columns: Unit / Type / Address ────────────────────────────────────
-    else if (col == ColUnit || col == ColType || col == ColAddress) {
+    else if ((col == ColUnit || col == ColType || col == ColAddress) && (role == Qt::EditRole || role == Qt::DisplayRole)) {
         ItemMapKey newKey = oldKey;
 
         if (col == ColUnit) {
