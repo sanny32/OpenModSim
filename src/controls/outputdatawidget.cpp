@@ -1349,13 +1349,13 @@ void OutputDataWidget::on_listView_customContextMenuRequested(const QPoint &pos)
 
     struct ColorItem { QString name; QColor color; };
     QVector<ColorItem> safeColors = {
-        { tr("Yellow"), QColor(Qt::yellow) },
-        { tr("Cyan"), QColor(Qt::cyan) },
-        { tr("Magenta"), QColor(Qt::magenta) },
-        { tr("LightGreen"), QColor(144, 238, 144) },
-        { tr("Orange"), QColor(255, 165, 0) },
-        { tr("LightBlue"), QColor(173, 216, 230) },
-        { tr("LightGray"), QColor(Qt::lightGray) }
+        { tr("Yellow"),     AppColors::markerYellow() },
+        { tr("Cyan"),       AppColors::markerCyan() },
+        { tr("Magenta"),    AppColors::markerMagenta() },
+        { tr("LightGreen"), AppColors::markerLightGreen() },
+        { tr("Orange"),     AppColors::markerOrange() },
+        { tr("LightBlue"),  AppColors::markerLightBlue() },
+        { tr("LightGray"),  AppColors::markerLightGray() }
     };
 
     for (const auto &c : safeColors)

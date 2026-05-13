@@ -180,6 +180,42 @@ inline QColor removeIconBorder()
     return QApplication::palette().color(QPalette::Mid);
 }
 
+// Marker colors for row/address highlighting
+inline QColor markerYellow()
+{
+    return isDark() ? QColor("#B08A2E") : QColor("#FFF59D");
+}
+
+inline QColor markerCyan()
+{
+    return isDark() ? QColor("#2C7E8F") : QColor("#B2EBF2");
+}
+
+inline QColor markerMagenta()
+{
+    return isDark() ? QColor("#8E4C8B") : QColor("#E1BEE7");
+}
+
+inline QColor markerLightGreen()
+{
+    return isDark() ? QColor("#4F8A57") : QColor("#C8E6C9");
+}
+
+inline QColor markerOrange()
+{
+    return isDark() ? QColor("#A56A2A") : QColor("#FFE0B2");
+}
+
+inline QColor markerLightBlue()
+{
+    return isDark() ? QColor("#4F78A8") : QColor("#BBDEFB");
+}
+
+inline QColor markerLightGray()
+{
+    return isDark() ? QColor("#6B7280") : QColor("#E5E7EB");
+}
+
 // Version label (about widget)
 inline QColor versionLabelColor()
 {
