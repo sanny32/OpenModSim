@@ -102,8 +102,8 @@ constexpr QRgb kSelection = 0x1d3c5c;
 constexpr QRgb kSelectionDisabled = 0x2b3139;
 constexpr QRgb kItemHover = 0x2e333b;
 constexpr QRgb kItemPressed = 0x373d46;
-constexpr QRgb kTooltipBase = 0xe7ecf3;
-constexpr QRgb kTooltipText = 0x111318;
+constexpr QRgb kTooltipBase = 0x111318;
+constexpr QRgb kTooltipText = 0xe7ecf3;
 }
 
 ///
@@ -986,6 +986,24 @@ QColor const& QlementineAppStyle::toolBarBackgroundColor() const
 QColor const& QlementineAppStyle::toolBarBorderColor() const
 {
     return colorRef(isDarkMode() ? Dark::kBorder : Light::kBorder);
+}
+
+///
+/// \brief QlementineAppStyle::toolTipBackgroundColor
+/// \return
+///
+QColor const& QlementineAppStyle::toolTipBackgroundColor() const
+{
+    return colorRef(isDarkMode() ? Dark::kTooltipBase : Light::kTooltipBase);
+}
+
+///
+/// \brief QlementineAppStyle::toolTipBorderColor
+/// \return
+///
+QColor const& QlementineAppStyle::toolTipBorderColor() const
+{
+    return colorRef(isDarkMode() ? Dark::kBorderActive : Light::kBorderActive);
 }
 
 ///

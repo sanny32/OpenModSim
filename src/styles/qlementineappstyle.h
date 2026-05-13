@@ -73,6 +73,8 @@ protected:
                                        oclero::qlementine::Status status) const override;
     QColor const& toolBarBackgroundColor() const override;
     QColor const& toolBarBorderColor() const override;
+    QColor const& toolTipBackgroundColor() const override;
+    QColor const& toolTipBorderColor() const override;
     QColor const& toolTipForegroundColor() const override;
     QColor const& toolButtonBackgroundColor(oclero::qlementine::MouseState mouse,
                                             oclero::qlementine::ColorRole role) const override;
