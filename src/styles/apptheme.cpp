@@ -26,13 +26,13 @@ AppTheme::AppTheme(QObject* parent)
         connect(hints, &QStyleHints::colorSchemeChanged,
                 this, [this]() { notifyColorSchemeChanged(); });
     }
-#endif
 
     connect(&AppPreferences::instance(), &AppPreferences::settingChanged,
             this, [this](const QString& name, const QString&, const QString&) {
                 if (name == QLatin1String("ThemeMode"))
                     notifyColorSchemeChanged();
             });
+#endif
 }
 
 ///
