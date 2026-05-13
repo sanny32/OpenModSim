@@ -92,6 +92,11 @@ constexpr QRgb kTooltipBase = 0xe7ecf3;
 constexpr QRgb kTooltipText = 0x111318;
 }
 
+///
+/// \brief transparent
+/// \param rgb
+/// \return
+///
 QColor transparent(QRgb rgb)
 {
     QColor color(rgb);
@@ -99,6 +104,12 @@ QColor transparent(QRgb rgb)
     return color;
 }
 
+///
+/// \brief alpha
+/// \param rgb
+/// \param value
+/// \return
+///
 QColor alpha(QRgb rgb, int value)
 {
     QColor color(rgb);
@@ -106,6 +117,11 @@ QColor alpha(QRgb rgb, int value)
     return color;
 }
 
+///
+/// \brief colorRef
+/// \param rgb
+/// \return
+///
 const QColor& colorRef(QRgb rgb)
 {
     static QHash<QRgb, QColor> colors;
@@ -115,6 +131,11 @@ const QColor& colorRef(QRgb rgb)
     return it.value();
 }
 
+///
+/// \brief transparentRef
+/// \param rgb
+/// \return
+///
 const QColor& transparentRef(QRgb rgb)
 {
     static QHash<QRgb, QColor> colors;
@@ -124,6 +145,11 @@ const QColor& transparentRef(QRgb rgb)
     return it.value();
 }
 
+///
+/// \brief modelBackgroundColor
+/// \param index
+/// \return
+///
 QColor modelBackgroundColor(const QModelIndex& index)
 {
     const QVariant background = index.data(Qt::BackgroundRole);
@@ -141,6 +167,12 @@ QColor modelBackgroundColor(const QModelIndex& index)
     return {};
 }
 
+///
+/// \brief makeQlementineAppTheme
+/// \param baseTheme
+/// \param darkMode
+/// \return
+///
 Theme makeQlementineAppTheme(const Theme& baseTheme, bool darkMode)
 {
     const auto rgb = [darkMode](QRgb light, QRgb dark) { return darkMode ? dark : light; };
@@ -237,6 +269,12 @@ Theme makeQlementineAppTheme(const Theme& baseTheme, bool darkMode)
     return theme;
 }
 
+///
+/// \brief tabShapePadding
+/// \param option
+/// \param spacing
+/// \return
+///
 QMargins tabShapePadding(const QStyleOptionTab& option, int spacing)
 {
     const bool isFirst = option.position == QStyleOptionTab::OnlyOneTab
