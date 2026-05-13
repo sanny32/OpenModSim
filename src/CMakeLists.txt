@@ -49,14 +49,14 @@ configure_file(
 )
 
 if(USE_QT5)
-    find_package(Qt5 COMPONENTS Core Gui Widgets Network Xml PrintSupport SerialBus SerialPort Qml Help LinguistTools REQUIRED)
+    find_package(Qt5 COMPONENTS Core Gui Widgets Network Xml PrintSupport SerialBus SerialPort Qml Help Svg LinguistTools REQUIRED)
 elseif(USE_QT6)
     find_package(Qt6 COMPONENTS Core Gui Widgets Network Xml PrintSupport SerialBus SerialPort Core5Compat Qml Help Svg LinguistTools REQUIRED)
 else()
     # fallback: Qt6 preferred
     find_package(Qt6 COMPONENTS Core Gui Widgets Network Xml PrintSupport SerialBus SerialPort Core5Compat Qml Help Svg LinguistTools QUIET)
     if (NOT Qt6_FOUND)
-        find_package(Qt5 COMPONENTS Core Gui Widgets Network Xml PrintSupport SerialBus SerialPort Qml Help LinguistTools REQUIRED)
+        find_package(Qt5 COMPONENTS Core Gui Widgets Network Xml PrintSupport SerialBus SerialPort Qml Help Svg LinguistTools REQUIRED)
     endif()
 endif()
 
