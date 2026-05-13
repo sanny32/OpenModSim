@@ -11,12 +11,20 @@
 #include "macsplittoolbutton.h"
 
 #include <QImage>
+#include <QPalette>
 #include <QPainter>
 #include <QPaintEvent>
+#include <QPixmap>
 #include <QStyle>
 #include <QStyleOptionTabBarBase>
 #include <QTabBar>
 
+///
+/// \brief tabBarBaseColor
+/// \param tabBar
+/// \param sampleSize
+/// \return
+///
 static QColor tabBarBaseColor(const QTabBar* tabBar, const QSize& sampleSize)
 {
     if (!tabBar || !sampleSize.isValid())
@@ -129,11 +137,20 @@ void MacSplitToolButton::paintEvent(QPaintEvent*)
     const QRect iconRect(QPoint(innerRect.x() + (innerRect.width() - glyphSize.width()) / 2,
                                 innerRect.y() + (innerRect.height() - glyphSize.height()) / 2),
                          glyphSize);
-    icon().paint(&painter,
-                 iconRect,
-                 Qt::AlignCenter,
-                 isEnabled() ? QIcon::Normal : QIcon::Disabled,
-                 active ? QIcon::On : QIcon::Off);
+    const auto iconMode = isEnabled() ? QIcon::Normal : QIcon::Disabled;
+    const auto iconState = active ? QIcon::On : QIcon::Off;
+    QPixmap pixmap = icon().pixmap(glyphSize, iconMode, iconState);
+    if (!pixmap.isNull()) {
+        const auto colorGroup = isEnabled() ? QPalette::Active : QPalette::Disabled;
+        QColor color = palette().color(colorGroup, QPalette::ButtonText);
+        if (!color.isValid() || color.alpha() == 0)
+            color = palette().color(colorGroup, QPalette::WindowText);
+
+        QPainter iconPainter(&pixmap);
+        iconPainter.setCompositionMode(QPainter::CompositionMode_SourceIn);
+        iconPainter.fillRect(pixmap.rect(), color);
+        painter.drawPixmap(iconRect, pixmap);
+    }
 }
 
 ///
