@@ -19,9 +19,6 @@
 #include "outputdatawidget.h"
 #include "ui_outputdatawidget.h"
 
-#if defined(HAVE_QLEMENTINE_APP_STYLE)
-#include <oclero/qlementine/style/QlementineStyle.hpp>
-#endif
 
 ///
 /// \brief emptyPixmap
@@ -1293,23 +1290,31 @@ void OutputDataWidget::setCodepage(const QString& name)
 /// \param size
 /// \return
 ///
+static QIcon makeColorSwatchIcon(const QColor& color, int size = 16)
+{
+    QPixmap pm(size, size);
+    pm.fill(Qt::transparent);
+    QPainter p(&pm);
+    p.setRenderHint(QPainter::Antialiasing, true);
+    QRect r(2, 2, size - 4, size - 4);
+    p.setBrush(color);
+    p.setPen(QPen(AppColors::removeIconBorder(), 0.1));
+    p.drawRect(r);
+    return QIcon(pm);
+}
+
 static QIcon drawRemoveColorIcon(int size = 16)
 {
     QPixmap pm(size, size);
     pm.fill(Qt::transparent);
-
     QPainter p(&pm);
     p.setRenderHint(QPainter::Antialiasing, true);
-
     QRect r(2, 2, size - 4, size - 4);
     p.setBrush(AppColors::removeIconBackground());
     p.setPen(QPen(AppColors::removeIconBorder(), 0.1));
     p.drawRect(r);
-
-    QPen pen(QColor(Qt::red), 1);
-    p.setPen(pen);
+    p.setPen(QPen(QColor(Qt::red), 1));
     p.drawLine(0, size, size, 0);
-
     return QIcon(pm);
 }
 
@@ -1324,11 +1329,6 @@ void OutputDataWidget::on_listView_customContextMenuRequested(const QPoint &pos)
         return;
 
     QMenu menu(this);
-#if defined(HAVE_QLEMENTINE_APP_STYLE)
-    if (auto* qlementineStyle = dynamic_cast<oclero::qlementine::QlementineStyle*>(menu.style())) {
-        qlementineStyle->setAutoIconColor(&menu, oclero::qlementine::AutoIconColor::None);
-    }
-#endif
 
     const auto idx = getValueIndex(index);
     const auto address = _listModel->data(idx, AddressStringRole).toString();
@@ -1355,6 +1355,7 @@ void OutputDataWidget::on_listView_customContextMenuRequested(const QPoint &pos)
     menu.addSeparator();
 
     QAction* removeColorAction = menu.addAction(drawRemoveColorIcon(), tr("Remove Color"));
+    removeColorAction->setProperty("qlementineNoRecolor", true);
     const auto clr = _listModel->data(index, ColorRole).value<QColor>();
     removeColorAction->setEnabled(clr.isValid());
     connect(removeColorAction, &QAction::triggered, this, [this, addrKey](){
@@ -1376,11 +1377,8 @@ void OutputDataWidget::on_listView_customContextMenuRequested(const QPoint &pos)
 
     for (const auto &c : safeColors)
     {
-        QPixmap pixmap(16,16);
-        pixmap.fill(c.color);
-        QIcon icon(pixmap);
-
-        QAction* colorAction = menu.addAction(icon, c.name);
+        QAction* colorAction = menu.addAction(makeColorSwatchIcon(c.color), c.name);
+        colorAction->setProperty("qlementineNoRecolor", true);
         connect(colorAction, &QAction::triggered, this, [this, addrKey, c](){
             setColor(_displayDefinition.DeviceId, _displayDefinition.PointType, addrKey, c.color);
         });

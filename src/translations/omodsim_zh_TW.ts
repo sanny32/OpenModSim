@@ -214,12 +214,12 @@
 <context>
     <name>ByteOrderItemDelegate</name>
     <message>
-        <location filename="../formdatamapview.cpp" line="369"/>
+        <location filename="../formdatamapview.cpp" line="343"/>
         <source>Use bytes in register order</source>
         <translation>依暫存器順序使用位元組</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="370"/>
+        <location filename="../formdatamapview.cpp" line="344"/>
         <source>Swap bytes inside each 16-bit register</source>
         <translation>交換每個 16 位元暫存器內的位元組</translation>
     </message>
@@ -354,62 +354,62 @@
 <context>
     <name>DataTypeItemDelegate</name>
     <message>
-        <location filename="../formdatamapview.cpp" line="225"/>
+        <location filename="../formdatamapview.cpp" line="199"/>
         <source>1-bit value (Coils / Discrete Inputs)</source>
         <translation>1位元值（線圈/離散輸入）</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="226"/>
+        <location filename="../formdatamapview.cpp" line="200"/>
         <source>16-bit register value shown as 16 binary digits</source>
         <translation>16位元暫存器值，以16位元二進位數字顯示</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="227"/>
+        <location filename="../formdatamapview.cpp" line="201"/>
         <source>Unsigned 16-bit integer  (0 вЂ¦ 65535)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="228"/>
+        <location filename="../formdatamapview.cpp" line="202"/>
         <source>Signed 16-bit integer  (в€’32768 вЂ¦ 32767)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="229"/>
+        <location filename="../formdatamapview.cpp" line="203"/>
         <source>16-bit value displayed as hexadecimal</source>
         <translation>16位元值，以十六進位顯示</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="230"/>
+        <location filename="../formdatamapview.cpp" line="204"/>
         <source>16-bit value displayed as ANSI character</source>
         <translation>16位元值，以ANSI字元顯示</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="231"/>
+        <location filename="../formdatamapview.cpp" line="205"/>
         <source>IEEE 754 single-precision float  (2 registers)</source>
         <translation>IEEE 754單精度浮點數（2個暫存器）</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="232"/>
+        <location filename="../formdatamapview.cpp" line="206"/>
         <source>IEEE 754 double-precision float  (4 registers)</source>
         <translation>IEEE 754雙精度浮點數（4個暫存器）</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="233"/>
+        <location filename="../formdatamapview.cpp" line="207"/>
         <source>Signed 32-bit integer  (2 registers)</source>
         <translation>有符號32位元整數（2個暫存器）</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="234"/>
+        <location filename="../formdatamapview.cpp" line="208"/>
         <source>Unsigned 32-bit integer  (2 registers)</source>
         <translation>無符號32位元整數（2個暫存器）</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="235"/>
+        <location filename="../formdatamapview.cpp" line="209"/>
         <source>Signed 64-bit integer  (4 registers)</source>
         <translation>有符號64位元整數（4個暫存器）</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="236"/>
+        <location filename="../formdatamapview.cpp" line="210"/>
         <source>Unsigned 64-bit integer  (4 registers)</source>
         <translation>無符號64位元整數（4個暫存器）</translation>
     </message>
@@ -1817,64 +1817,64 @@ Open the download page?</source>
         <translation>清除表格</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="1039"/>
+        <location filename="../formdatamapview.cpp" line="987"/>
         <source>1-based</source>
         <translation>基地址為-1</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="1039"/>
+        <location filename="../formdatamapview.cpp" line="987"/>
         <source>0-based</source>
         <translation>基地址為-0</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="968"/>
+        <location filename="../formdatamapview.cpp" line="916"/>
         <source>Remove Color</source>
         <translation>移除顏色</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="978"/>
+        <location filename="../formdatamapview.cpp" line="927"/>
         <source>Yellow</source>
         <translation>黃色</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="979"/>
+        <location filename="../formdatamapview.cpp" line="928"/>
         <source>Cyan</source>
         <translation>青色</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="980"/>
+        <location filename="../formdatamapview.cpp" line="929"/>
         <source>Magenta</source>
         <translation>品紅色</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="981"/>
+        <location filename="../formdatamapview.cpp" line="930"/>
         <source>LightGreen</source>
         <translation>淺綠色</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="982"/>
+        <location filename="../formdatamapview.cpp" line="931"/>
         <source>Orange</source>
         <translation>橙色</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="983"/>
+        <location filename="../formdatamapview.cpp" line="932"/>
         <source>LightBlue</source>
         <translation>淺藍色</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="984"/>
+        <location filename="../formdatamapview.cpp" line="933"/>
         <source>LightGray</source>
         <translation>淺灰色</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="1052"/>
-        <location filename="../formdatamapview.cpp" line="1276"/>
-        <location filename="../formdatamapview.cpp" line="1600"/>
+        <location filename="../formdatamapview.cpp" line="1000"/>
+        <location filename="../formdatamapview.cpp" line="1224"/>
+        <location filename="../formdatamapview.cpp" line="1548"/>
         <source>All Types</source>
         <translation>所有類型</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="1054"/>
+        <location filename="../formdatamapview.cpp" line="1002"/>
         <source>Address Base: %1
 Unit Filter: %2
 Type Filter: %3</source>
@@ -1883,45 +1883,45 @@ Type Filter: %3</source>
 類型過濾器：%3</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="1277"/>
-        <location filename="../formdatamapview.cpp" line="1601"/>
+        <location filename="../formdatamapview.cpp" line="1225"/>
+        <location filename="../formdatamapview.cpp" line="1549"/>
         <source>Coils</source>
         <translation>線圈</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="1278"/>
-        <location filename="../formdatamapview.cpp" line="1602"/>
+        <location filename="../formdatamapview.cpp" line="1226"/>
+        <location filename="../formdatamapview.cpp" line="1550"/>
         <source>Discrete Inputs</source>
         <translation>離散輸入</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="1279"/>
-        <location filename="../formdatamapview.cpp" line="1603"/>
+        <location filename="../formdatamapview.cpp" line="1227"/>
+        <location filename="../formdatamapview.cpp" line="1551"/>
         <source>Input Registers</source>
         <translation>輸入暫存器</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="1280"/>
-        <location filename="../formdatamapview.cpp" line="1604"/>
+        <location filename="../formdatamapview.cpp" line="1228"/>
+        <location filename="../formdatamapview.cpp" line="1552"/>
         <source>Holding Registers</source>
         <translation>保持暫存器</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="1268"/>
-        <location filename="../formdatamapview.cpp" line="1611"/>
+        <location filename="../formdatamapview.cpp" line="1216"/>
+        <location filename="../formdatamapview.cpp" line="1559"/>
         <source>Unit:</source>
         <translation>單元：</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="1269"/>
-        <location filename="../formdatamapview.cpp" line="1612"/>
+        <location filename="../formdatamapview.cpp" line="1217"/>
+        <location filename="../formdatamapview.cpp" line="1560"/>
         <source>Data Type:</source>
         <translation>資料類型：</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="1041"/>
-        <location filename="../formdatamapview.cpp" line="1270"/>
-        <location filename="../formdatamapview.cpp" line="1596"/>
+        <location filename="../formdatamapview.cpp" line="989"/>
+        <location filename="../formdatamapview.cpp" line="1218"/>
+        <location filename="../formdatamapview.cpp" line="1544"/>
         <source>All</source>
         <translation>全部</translation>
     </message>
@@ -3608,12 +3608,12 @@ Open the download page?</source>
 <context>
     <name>OrderItemDelegate</name>
     <message>
-        <location filename="../formdatamapview.cpp" line="304"/>
+        <location filename="../formdatamapview.cpp" line="278"/>
         <source>Most Significant Register First вЂ” big-endian word order</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="305"/>
+        <location filename="../formdatamapview.cpp" line="279"/>
         <source>Least Significant Register First вЂ” little-endian word order</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3646,42 +3646,42 @@ Open the download page?</source>
         <translation>移除顏色</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1368"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1369"/>
         <source>Yellow</source>
         <translation>黃色</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1369"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1370"/>
         <source>Cyan</source>
         <translation>青色</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1370"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1371"/>
         <source>Magenta</source>
         <translation>品紅色</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1371"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1372"/>
         <source>LightGreen</source>
         <translation>淺綠色</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1372"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1373"/>
         <source>Orange</source>
         <translation>橙色</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1373"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1374"/>
         <source>LightBlue</source>
         <translation>淺藍色</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1374"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1375"/>
         <source>LightGray</source>
         <translation>淺灰色</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1453"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1451"/>
         <source>Zoom: %1%</source>
         <translation>縮放：%1%</translation>
     </message>
@@ -4071,22 +4071,22 @@ Open the download page?</source>
 <context>
     <name>TypeItemDelegate</name>
     <message>
-        <location filename="../formdatamapview.cpp" line="176"/>
+        <location filename="../formdatamapview.cpp" line="150"/>
         <source>Coils</source>
         <translation>線圈</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="177"/>
+        <location filename="../formdatamapview.cpp" line="151"/>
         <source>Discrete Inputs</source>
         <translation>離散輸入</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="178"/>
+        <location filename="../formdatamapview.cpp" line="152"/>
         <source>Input Registers</source>
         <translation>輸入暫存器</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="179"/>
+        <location filename="../formdatamapview.cpp" line="153"/>
         <source>Holding Registers</source>
         <translation>保持暫存器</translation>
     </message>

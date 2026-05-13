@@ -25,12 +25,16 @@
 #include <QPainterPath>
 #include <QPalette>
 #include <QStyleOptionDockWidget>
+#include <QStyleOptionMenuItem>
 #include <QStyleOptionTab>
 #include <QStyleOptionToolButton>
 #include <QTabBar>
 #include <QToolBar>
+#include <QMenu>
 #include <QToolButton>
 #include <QWidget>
+
+#include <algorithm>
 
 namespace {
 
@@ -321,11 +325,18 @@ QlementineAppStyle::QlementineAppStyle(QObject* parent)
             this, [this]() { updateTheme(); });
 }
 
+///
+/// \brief QlementineAppStyle::updateTheme
+///
 void QlementineAppStyle::updateTheme()
 {
     setTheme(isDarkMode() ? _darkTheme : _lightTheme);
 }
 
+///
+/// \brief QlementineAppStyle::isDarkMode
+/// \return
+///
 bool QlementineAppStyle::isDarkMode() const
 {
     return AppColors::isDark();
@@ -393,6 +404,27 @@ QColor const& QlementineAppStyle::buttonForegroundColor(MouseState mouse, ColorR
 void QlementineAppStyle::drawControl(ControlElement element, const QStyleOption* option,
                               QPainter* painter, const QWidget* widget) const
 {
+    if (element == CE_MenuItem) {
+        if (const auto* opt = qstyleoption_cast<const QStyleOptionMenuItem*>(option)) {
+            if (!opt->icon.isNull()) {
+                const auto* menu = qobject_cast<const QMenu*>(widget);
+                if (menu) {
+                    const auto& actions = menu->actions();
+                    const auto it = std::find_if(actions.cbegin(), actions.cend(), [&](const QAction* a) {
+                        return a->text() == opt->text && !a->icon().isNull();
+                    });
+                    if (it != actions.cend() && (*it)->property("qlementineNoRecolor").toBool()) {
+                        const auto savedColor = autoIconColor(widget);
+                        setAutoIconColor(const_cast<QWidget*>(widget), oclero::qlementine::AutoIconColor::None);
+                        QlementineStyle::drawControl(element, option, painter, widget);
+                        setAutoIconColor(const_cast<QWidget*>(widget), savedColor);
+                        return;
+                    }
+                }
+            }
+        }
+    }
+
     if (element == CE_DockWidgetTitle) {
         const auto* dockOption = qstyleoption_cast<const QStyleOptionDockWidget*>(option);
         if (!dockOption) {
