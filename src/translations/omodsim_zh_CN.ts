@@ -3689,12 +3689,12 @@ Open the download page?</source>
 <context>
     <name>OutputPanel</name>
     <message>
-        <location filename="../controls/outputpanel.ui" line="39"/>
+        <location filename="../controls/outputpanel.ui" line="42"/>
         <source>Log</source>
         <translation>日志</translation>
     </message>
     <message>
-        <location filename="../controls/outputpanel.ui" line="44"/>
+        <location filename="../controls/outputpanel.ui" line="47"/>
         <source>Console</source>
         <translation>控制台</translation>
     </message>
