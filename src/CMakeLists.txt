@@ -157,9 +157,6 @@ if(USE_QLEMENTINE_APP_STYLE)
     add_compile_definitions(HAVE_QLEMENTINE_APP_STYLE)
     add_compile_definitions(QLEMENTINE_VERSION="${QLEMENTINE_VERSION}")
     add_compile_definitions(QLEMENTINE_ICONS_VERSION="${QLEMENTINE_ICONS_VERSION}")
-else()
-    # Avoid AUTOGEN noise when Qlementine style is disabled by platform/dependencies.
-    set_source_files_properties(styles/macappstyle.h PROPERTIES SKIP_AUTOMOC ON)
 endif()
 
 # Include directories
