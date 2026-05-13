@@ -227,7 +227,7 @@ Theme makeMacLightTheme()
 
     theme.palette.setColor(QPalette::ColorGroup::All, QPalette::Window, theme.backgroundColorMain2);
     theme.palette.setColor(QPalette::ColorGroup::All, QPalette::Base, theme.backgroundColorMain1);
-    theme.palette.setColor(QPalette::ColorGroup::All, QPalette::AlternateBase, QColor(kChrome));
+    theme.palette.setColor(QPalette::ColorGroup::All, QPalette::AlternateBase, QColor(kChromeStrong));
     theme.palette.setColor(QPalette::ColorGroup::All, QPalette::Button, theme.neutralColor);
     theme.palette.setColor(QPalette::ColorGroup::All, QPalette::Text, theme.secondaryColor);
     theme.palette.setColor(QPalette::ColorGroup::All, QPalette::WindowText, theme.secondaryColor);
@@ -236,6 +236,8 @@ Theme makeMacLightTheme()
     theme.palette.setColor(QPalette::ColorGroup::All, QPalette::ToolTipText, QColor(kCanvas));
     theme.palette.setColor(QPalette::ColorGroup::All, QPalette::Highlight, theme.primaryColor);
     theme.palette.setColor(QPalette::ColorGroup::All, QPalette::HighlightedText, theme.primaryColorForeground);
+    theme.palette.setColor(QPalette::ColorGroup::All, QPalette::PlaceholderText, theme.secondaryAlternativeColor);
+    theme.palette.setColor(QPalette::ColorGroup::All, QPalette::Mid, theme.borderColor);
     theme.palette.setColor(QPalette::ColorGroup::Disabled, QPalette::Text, theme.secondaryColorDisabled);
     theme.palette.setColor(QPalette::ColorGroup::Disabled, QPalette::WindowText, theme.secondaryColorDisabled);
     theme.palette.setColor(QPalette::ColorGroup::Disabled, QPalette::ButtonText, theme.secondaryColorDisabled);
@@ -354,7 +356,7 @@ Theme makeMacDarkTheme()
 
     theme.palette.setColor(QPalette::ColorGroup::All, QPalette::Window, theme.backgroundColorMain2);
     theme.palette.setColor(QPalette::ColorGroup::All, QPalette::Base, theme.backgroundColorMain1);
-    theme.palette.setColor(QPalette::ColorGroup::All, QPalette::AlternateBase, QColor(kChrome));
+    theme.palette.setColor(QPalette::ColorGroup::All, QPalette::AlternateBase, QColor(kChromeStrong));
     theme.palette.setColor(QPalette::ColorGroup::All, QPalette::Button, theme.neutralColor);
     theme.palette.setColor(QPalette::ColorGroup::All, QPalette::Text, theme.secondaryColor);
     theme.palette.setColor(QPalette::ColorGroup::All, QPalette::WindowText, theme.secondaryColor);
@@ -363,6 +365,8 @@ Theme makeMacDarkTheme()
     theme.palette.setColor(QPalette::ColorGroup::All, QPalette::ToolTipText, QColor(kText));
     theme.palette.setColor(QPalette::ColorGroup::All, QPalette::Highlight, theme.primaryColor);
     theme.palette.setColor(QPalette::ColorGroup::All, QPalette::HighlightedText, theme.primaryColorForeground);
+    theme.palette.setColor(QPalette::ColorGroup::All, QPalette::PlaceholderText, theme.secondaryAlternativeColor);
+    theme.palette.setColor(QPalette::ColorGroup::All, QPalette::Mid, theme.borderColor);
     theme.palette.setColor(QPalette::ColorGroup::Disabled, QPalette::Text, theme.secondaryColorDisabled);
     theme.palette.setColor(QPalette::ColorGroup::Disabled, QPalette::WindowText, theme.secondaryColorDisabled);
     theme.palette.setColor(QPalette::ColorGroup::Disabled, QPalette::ButtonText, theme.secondaryColorDisabled);
