@@ -12,6 +12,10 @@
 #include "outputdatawidget.h"
 #include "ui_outputdatawidget.h"
 
+#if defined(HAVE_QLEMENTINE_APP_STYLE)
+#include <oclero/qlementine/style/QlementineStyle.hpp>
+#endif
+
 ///
 /// \brief emptyPixmap
 /// \param physicalSize
@@ -1313,6 +1317,11 @@ void OutputDataWidget::on_listView_customContextMenuRequested(const QPoint &pos)
         return;
 
     QMenu menu(this);
+#if defined(HAVE_QLEMENTINE_APP_STYLE)
+    if (auto* qlementineStyle = dynamic_cast<oclero::qlementine::QlementineStyle*>(menu.style())) {
+        qlementineStyle->setAutoIconColor(&menu, oclero::qlementine::AutoIconColor::None);
+    }
+#endif
 
     const auto idx = getValueIndex(index);
     const auto address = _listModel->data(idx, AddressStringRole).toString();

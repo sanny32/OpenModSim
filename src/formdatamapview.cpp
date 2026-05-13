@@ -9,6 +9,10 @@
 #include "themedicons.h"
 #include "ui_formdatamapview.h"
 
+#if defined(HAVE_QLEMENTINE_APP_STYLE)
+#include <oclero/qlementine/style/QlementineStyle.hpp>
+#endif
+
 namespace {
 
 QIcon dataMapWindowIcon(bool autoRequestMap)
@@ -16,6 +20,21 @@ QIcon dataMapWindowIcon(bool autoRequestMap)
     return autoRequestMap
         ? themedIcon(QStringLiteral("omodsim/data-locked"))
         : themedIcon(QStringLiteral("omodsim/show-data-map"));
+}
+
+QIcon recoloredMenuIcon(const QIcon& source, const QColor& color, const QSize& size)
+{
+    if (source.isNull() || !size.isValid())
+        return source;
+
+    QPixmap pixmap = source.pixmap(size);
+    if (pixmap.isNull())
+        return source;
+
+    QPainter painter(&pixmap);
+    painter.setCompositionMode(QPainter::CompositionMode_SourceIn);
+    painter.fillRect(pixmap.rect(), color);
+    return QIcon(pixmap);
 }
 
 // Role aliases so delegates compile without change
@@ -752,74 +771,6 @@ FormDataMapView::FormDataMapView(ModbusMultiServer& server, MainWindow* parent)
 
     setupToolBar();
 
-    // Context menu on table
-    ui->tableView->setContextMenuPolicy(Qt::CustomContextMenu);
-    connect(ui->tableView, &QTableView::customContextMenuRequested, this, [this](const QPoint& pos) {
-        const QModelIndex clickedIndex = ui->tableView->indexAt(pos);
-        if (clickedIndex.isValid())
-            ui->tableView->setCurrentIndex(clickedIndex);
-        updateActionState();
-
-        QMenu menu(this);
-        menu.addAction(ui->actionAdd);
-        menu.addAction(ui->actionInsert);
-        menu.addAction(ui->actionDelete);
-        menu.addSeparator();
-        menu.addAction(ui->actionClear);
-
-        if (clickedIndex.isValid()) {
-            const QModelIndex sourceIndex = _proxy->mapToSource(clickedIndex);
-
-            menu.addSeparator();
-
-            // Build remove-color icon (white box with red diagonal)
-            auto makeRemoveColorIcon = [](int size = 16) {
-                QPixmap pm(size, size);
-                pm.fill(Qt::transparent);
-                QPainter p(&pm);
-                p.setRenderHint(QPainter::Antialiasing, true);
-                QRect r(2, 2, size - 4, size - 4);
-                p.setBrush(AppColors::removeIconBackground());
-                p.setPen(QPen(AppColors::removeIconBorder(), 0.1));
-                p.drawRect(r);
-                p.setPen(QPen(QColor(Qt::red), 1));
-                p.drawLine(0, size, size, 0);
-                return QIcon(pm);
-            };
-
-            const QColor currentColor = _model->data(sourceIndex, DataMapRole::RowColor).value<QColor>();
-            QAction* removeColorAction = menu.addAction(makeRemoveColorIcon(), tr("Remove Color"));
-            removeColorAction->setEnabled(currentColor.isValid());
-            connect(removeColorAction, &QAction::triggered, this, [this, sourceIndex]() {
-                _model->setData(sourceIndex, QColor(), DataMapRole::RowColor);
-            });
-
-            menu.addSeparator();
-
-            struct ColorItem { QString name; QColor color; };
-            const QVector<ColorItem> colors = {
-                { tr("Yellow"),     AppColors::markerYellow() },
-                { tr("Cyan"),       AppColors::markerCyan() },
-                { tr("Magenta"),    AppColors::markerMagenta() },
-                { tr("LightGreen"), AppColors::markerLightGreen() },
-                { tr("Orange"),     AppColors::markerOrange() },
-                { tr("LightBlue"),  AppColors::markerLightBlue() },
-                { tr("LightGray"),  AppColors::markerLightGray() }
-            };
-
-            for (const auto& c : colors) {
-                QPixmap px(16, 16);
-                px.fill(c.color);
-                QAction* act = menu.addAction(QIcon(px), c.name);
-                connect(act, &QAction::triggered, this, [this, sourceIndex, c]() {
-                    _model->setData(sourceIndex, c.color, DataMapRole::RowColor);
-                });
-            }
-        }
-
-        menu.exec(ui->tableView->viewport()->mapToGlobal(pos));
-    });
-
     // Selection and row count signals
     connect(ui->tableView->selectionModel(), &QItemSelectionModel::selectionChanged,
             this, &FormDataMapView::updateActionState);
@@ -868,6 +819,10 @@ void FormDataMapView::setDisplayDefinition(const DataMapViewDefinitions& dd)
     _model->setHexView(dd.HexView);
 }
 
+///
+/// \brief FormDataMapView::setAddressBase
+/// \param base
+///
 void FormDataMapView::setAddressBase(AddressBase base)
 {
     const bool zeroBased = (base == AddressBase::Base0);
@@ -878,6 +833,10 @@ void FormDataMapView::setAddressBase(AddressBase base)
     _model->setZeroBased(zeroBased);
 }
 
+///
+/// \brief FormDataMapView::setHexView
+/// \param enabled
+///
 void FormDataMapView::setHexView(bool enabled)
 {
     if (_model->hexView() == enabled)
@@ -885,6 +844,99 @@ void FormDataMapView::setHexView(bool enabled)
 
     _displayDefinition.HexView = enabled;
     _model->setHexView(enabled);
+}
+
+///
+/// \brief FormDataMapView::on_tableView_customContextMenuRequested
+/// \param pos
+///
+void FormDataMapView::on_tableView_customContextMenuRequested(const QPoint& pos)
+{
+    const QModelIndex clickedIndex = ui->tableView->indexAt(pos);
+    if (clickedIndex.isValid())
+        ui->tableView->setCurrentIndex(clickedIndex);
+    updateActionState();
+
+    QMenu menu(this);
+#if defined(HAVE_QLEMENTINE_APP_STYLE)
+    if (auto* qlementineStyle = dynamic_cast<oclero::qlementine::QlementineStyle*>(menu.style())) {
+        qlementineStyle->setAutoIconColor(&menu, oclero::qlementine::AutoIconColor::None);
+    }
+#endif
+    const int menuIconExtent = menu.style()
+        ? menu.style()->pixelMetric(QStyle::PM_SmallIconSize, nullptr, &menu)
+        : 16;
+    const QSize menuIconSize(menuIconExtent > 0 ? menuIconExtent : 16,
+                             menuIconExtent > 0 ? menuIconExtent : 16);
+    const QColor menuIconColor = menu.palette().color(QPalette::Text);
+    auto addMenuActionWithRecoloredIcon = [&](QAction* sourceAction) {
+        QAction* action = menu.addAction(sourceAction->text());
+        action->setEnabled(sourceAction->isEnabled());
+        action->setCheckable(sourceAction->isCheckable());
+        action->setChecked(sourceAction->isChecked());
+        if (!sourceAction->icon().isNull())
+            action->setIcon(recoloredMenuIcon(sourceAction->icon(), menuIconColor, menuIconSize));
+        connect(action, &QAction::triggered, sourceAction, &QAction::trigger);
+        return action;
+    };
+
+    addMenuActionWithRecoloredIcon(ui->actionAdd);
+    addMenuActionWithRecoloredIcon(ui->actionInsert);
+    addMenuActionWithRecoloredIcon(ui->actionDelete);
+    menu.addSeparator();
+    addMenuActionWithRecoloredIcon(ui->actionClear);
+
+    if (clickedIndex.isValid()) {
+        const QModelIndex sourceIndex = _proxy->mapToSource(clickedIndex);
+
+        menu.addSeparator();
+
+        // Build remove-color icon (white box with red diagonal)
+        auto makeRemoveColorIcon = [](int size = 16) {
+            QPixmap pm(size, size);
+            pm.fill(Qt::transparent);
+            QPainter p(&pm);
+            p.setRenderHint(QPainter::Antialiasing, true);
+            QRect r(2, 2, size - 4, size - 4);
+            p.setBrush(AppColors::removeIconBackground());
+            p.setPen(QPen(AppColors::removeIconBorder(), 0.1));
+            p.drawRect(r);
+            p.setPen(QPen(QColor(Qt::red), 1));
+            p.drawLine(0, size, size, 0);
+            return QIcon(pm);
+        };
+
+        const QColor currentColor = _model->data(sourceIndex, DataMapRole::RowColor).value<QColor>();
+        QAction* removeColorAction = menu.addAction(makeRemoveColorIcon(), tr("Remove Color"));
+        removeColorAction->setEnabled(currentColor.isValid());
+        connect(removeColorAction, &QAction::triggered, this, [this, sourceIndex]() {
+            _model->setData(sourceIndex, QColor(), DataMapRole::RowColor);
+        });
+
+        menu.addSeparator();
+
+        struct ColorItem { QString name; QColor color; };
+        const QVector<ColorItem> colors = {
+            { tr("Yellow"),     AppColors::markerYellow() },
+            { tr("Cyan"),       AppColors::markerCyan() },
+            { tr("Magenta"),    AppColors::markerMagenta() },
+            { tr("LightGreen"), AppColors::markerLightGreen() },
+            { tr("Orange"),     AppColors::markerOrange() },
+            { tr("LightBlue"),  AppColors::markerLightBlue() },
+            { tr("LightGray"),  AppColors::markerLightGray() }
+        };
+
+        for (const auto& c : colors) {
+            QPixmap px(16, 16);
+            px.fill(c.color);
+            QAction* act = menu.addAction(QIcon(px), c.name);
+            connect(act, &QAction::triggered, this, [this, sourceIndex, c]() {
+                _model->setData(sourceIndex, c.color, DataMapRole::RowColor);
+            });
+        }
+    }
+
+    menu.exec(ui->tableView->viewport()->mapToGlobal(pos));
 }
 
 ///

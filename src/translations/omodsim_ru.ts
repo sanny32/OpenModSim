@@ -214,12 +214,12 @@
 <context>
     <name>ByteOrderItemDelegate</name>
     <message>
-        <location filename="../formdatamapview.cpp" line="329"/>
+        <location filename="../formdatamapview.cpp" line="348"/>
         <source>Use bytes in register order</source>
         <translation>Использовать байты в порядке регистра</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="330"/>
+        <location filename="../formdatamapview.cpp" line="349"/>
         <source>Swap bytes inside each 16-bit register</source>
         <translation>Поменять байты местами внутри каждого 16-битного регистра</translation>
     </message>
@@ -354,62 +354,62 @@
 <context>
     <name>DataTypeItemDelegate</name>
     <message>
-        <location filename="../formdatamapview.cpp" line="185"/>
+        <location filename="../formdatamapview.cpp" line="204"/>
         <source>1-bit value (Coils / Discrete Inputs)</source>
         <translation>1-битное значение (Флаги / Дискретные входы)</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="186"/>
+        <location filename="../formdatamapview.cpp" line="205"/>
         <source>16-bit register value shown as 16 binary digits</source>
         <translation>16-битное значение регистра в виде 16 двоичных цифр</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="187"/>
+        <location filename="../formdatamapview.cpp" line="206"/>
         <source>Unsigned 16-bit integer  (0 … 65535)</source>
         <translation>Беззнаковое 16-битное целое  (0 … 65535)</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="188"/>
+        <location filename="../formdatamapview.cpp" line="207"/>
         <source>Signed 16-bit integer  (−32768 … 32767)</source>
         <translation>Знаковое 16-битное целое  (−32768 … 32767)</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="189"/>
+        <location filename="../formdatamapview.cpp" line="208"/>
         <source>16-bit value displayed as hexadecimal</source>
         <translation>16-битное значение в шестнадцатеричном формате</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="190"/>
+        <location filename="../formdatamapview.cpp" line="209"/>
         <source>16-bit value displayed as ANSI character</source>
         <translation>16-битное значение в виде символа ANSI</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="191"/>
+        <location filename="../formdatamapview.cpp" line="210"/>
         <source>IEEE 754 single-precision float  (2 registers)</source>
         <translation>Число с плавающей точкой одинарной точности IEEE 754  (2 регистра)</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="192"/>
+        <location filename="../formdatamapview.cpp" line="211"/>
         <source>IEEE 754 double-precision float  (4 registers)</source>
         <translation>Число с плавающей точкой двойной точности IEEE 754  (4 регистра)</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="193"/>
+        <location filename="../formdatamapview.cpp" line="212"/>
         <source>Signed 32-bit integer  (2 registers)</source>
         <translation>Знаковое 32-битное целое  (2 регистра)</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="194"/>
+        <location filename="../formdatamapview.cpp" line="213"/>
         <source>Unsigned 32-bit integer  (2 registers)</source>
         <translation>Беззнаковое 32-битное целое  (2 регистра)</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="195"/>
+        <location filename="../formdatamapview.cpp" line="214"/>
         <source>Signed 64-bit integer  (4 registers)</source>
         <translation>Знаковое 64-битное целое  (4 регистра)</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="196"/>
+        <location filename="../formdatamapview.cpp" line="215"/>
         <source>Unsigned 64-bit integer  (4 registers)</source>
         <translation>Беззнаковое 64-битное целое  (4 регистра)</translation>
     </message>
@@ -1797,84 +1797,84 @@ Open the download page?</source>
 <context>
     <name>FormDataMapView</name>
     <message>
-        <location filename="../formdatamapview.ui" line="62"/>
+        <location filename="../formdatamapview.ui" line="65"/>
         <source>Add Row</source>
         <translation>Добавить строку</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.ui" line="67"/>
+        <location filename="../formdatamapview.ui" line="70"/>
         <source>Insert Row</source>
         <translation>Вставить строку</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.ui" line="76"/>
+        <location filename="../formdatamapview.ui" line="79"/>
         <source>Delete Row</source>
         <translation>Удалить строку</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.ui" line="85"/>
+        <location filename="../formdatamapview.ui" line="88"/>
         <source>Clear Table</source>
         <translation>Очистить таблицу</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="928"/>
+        <location filename="../formdatamapview.cpp" line="980"/>
         <source>1-based</source>
         <translation>1-первый</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="928"/>
+        <location filename="../formdatamapview.cpp" line="980"/>
         <source>0-based</source>
         <translation>0-первый</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="791"/>
+        <location filename="../formdatamapview.cpp" line="910"/>
         <source>Remove Color</source>
         <translation>Удалить цвет</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="801"/>
+        <location filename="../formdatamapview.cpp" line="920"/>
         <source>Yellow</source>
         <translation>Желтый</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="802"/>
+        <location filename="../formdatamapview.cpp" line="921"/>
         <source>Cyan</source>
         <translation>Циан</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="803"/>
+        <location filename="../formdatamapview.cpp" line="922"/>
         <source>Magenta</source>
         <translation>Пурпурный</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="804"/>
+        <location filename="../formdatamapview.cpp" line="923"/>
         <source>LightGreen</source>
         <translation>Светло-зеленый</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="805"/>
+        <location filename="../formdatamapview.cpp" line="924"/>
         <source>Orange</source>
         <translation>Оранжевый</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="806"/>
+        <location filename="../formdatamapview.cpp" line="925"/>
         <source>LightBlue</source>
         <translation>Светло-синий</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="807"/>
+        <location filename="../formdatamapview.cpp" line="926"/>
         <source>LightGray</source>
         <translation>Светло-серый</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="941"/>
-        <location filename="../formdatamapview.cpp" line="1165"/>
-        <location filename="../formdatamapview.cpp" line="1489"/>
+        <location filename="../formdatamapview.cpp" line="993"/>
+        <location filename="../formdatamapview.cpp" line="1217"/>
+        <location filename="../formdatamapview.cpp" line="1541"/>
         <source>All Types</source>
         <translation>Все типы</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="943"/>
+        <location filename="../formdatamapview.cpp" line="995"/>
         <source>Address Base: %1
 Unit Filter: %2
 Type Filter: %3</source>
@@ -1883,45 +1883,45 @@ Type Filter: %3</source>
 Фильтр типов: %3</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="1166"/>
-        <location filename="../formdatamapview.cpp" line="1490"/>
+        <location filename="../formdatamapview.cpp" line="1218"/>
+        <location filename="../formdatamapview.cpp" line="1542"/>
         <source>Coils</source>
         <translation>Регистры флагов</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="1167"/>
-        <location filename="../formdatamapview.cpp" line="1491"/>
+        <location filename="../formdatamapview.cpp" line="1219"/>
+        <location filename="../formdatamapview.cpp" line="1543"/>
         <source>Discrete Inputs</source>
         <translation>Дискретные входы</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="1168"/>
-        <location filename="../formdatamapview.cpp" line="1492"/>
+        <location filename="../formdatamapview.cpp" line="1220"/>
+        <location filename="../formdatamapview.cpp" line="1544"/>
         <source>Input Registers</source>
         <translation>Регистры ввода</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="1169"/>
-        <location filename="../formdatamapview.cpp" line="1493"/>
+        <location filename="../formdatamapview.cpp" line="1221"/>
+        <location filename="../formdatamapview.cpp" line="1545"/>
         <source>Holding Registers</source>
         <translation>Регистры хранения</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="1157"/>
-        <location filename="../formdatamapview.cpp" line="1500"/>
+        <location filename="../formdatamapview.cpp" line="1209"/>
+        <location filename="../formdatamapview.cpp" line="1552"/>
         <source>Unit:</source>
         <translation>Устройство:</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="1158"/>
-        <location filename="../formdatamapview.cpp" line="1501"/>
+        <location filename="../formdatamapview.cpp" line="1210"/>
+        <location filename="../formdatamapview.cpp" line="1553"/>
         <source>Data Type:</source>
         <translation>Тип данных:</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="930"/>
-        <location filename="../formdatamapview.cpp" line="1159"/>
-        <location filename="../formdatamapview.cpp" line="1485"/>
+        <location filename="../formdatamapview.cpp" line="982"/>
+        <location filename="../formdatamapview.cpp" line="1211"/>
+        <location filename="../formdatamapview.cpp" line="1537"/>
         <source>All</source>
         <translation>Все</translation>
     </message>
@@ -3608,12 +3608,12 @@ Open the download page?</source>
 <context>
     <name>OrderItemDelegate</name>
     <message>
-        <location filename="../formdatamapview.cpp" line="264"/>
+        <location filename="../formdatamapview.cpp" line="283"/>
         <source>Most Significant Register First — big-endian word order</source>
         <translation>Старший регистр первым — порядок слов big-endian</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="265"/>
+        <location filename="../formdatamapview.cpp" line="284"/>
         <source>Least Significant Register First — little-endian word order</source>
         <translation>Младший регистр первым — порядок слов little-endian</translation>
     </message>
@@ -3621,67 +3621,67 @@ Open the download page?</source>
 <context>
     <name>OutputDataWidget</name>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1320"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1329"/>
         <source>Set Value of %1</source>
         <translation>Записать значение по адресу %1</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1329"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1338"/>
         <source>Add Description</source>
         <translation>Добавить описание</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1329"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1338"/>
         <source>Edit Description</source>
         <translation>Редактировать описание</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1332"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1341"/>
         <source>%1: Enter Description</source>
         <translation>%1: Введите описание</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1341"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1350"/>
         <source>Remove Color</source>
         <translation>Удалить цвет</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1352"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1361"/>
         <source>Yellow</source>
         <translation>Желтый</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1353"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1362"/>
         <source>Cyan</source>
         <translation>Циан</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1354"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1363"/>
         <source>Magenta</source>
         <translation>Пурпурный</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1355"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1364"/>
         <source>LightGreen</source>
         <translation>Светло-зеленый</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1356"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1365"/>
         <source>Orange</source>
         <translation>Оранжевый</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1357"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1366"/>
         <source>LightBlue</source>
         <translation>Светло-синий</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1358"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1367"/>
         <source>LightGray</source>
         <translation>Светло-серый</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1437"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1446"/>
         <source>Zoom: %1%</source>
         <translation>Масштаб: %1%</translation>
     </message>
@@ -4071,22 +4071,22 @@ Open the download page?</source>
 <context>
     <name>TypeItemDelegate</name>
     <message>
-        <location filename="../formdatamapview.cpp" line="136"/>
+        <location filename="../formdatamapview.cpp" line="155"/>
         <source>Coils</source>
         <translation>Регистры флагов</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="137"/>
+        <location filename="../formdatamapview.cpp" line="156"/>
         <source>Discrete Inputs</source>
         <translation>Дискретные входы</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="138"/>
+        <location filename="../formdatamapview.cpp" line="157"/>
         <source>Input Registers</source>
         <translation>Регистры ввода</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="139"/>
+        <location filename="../formdatamapview.cpp" line="158"/>
         <source>Holding Registers</source>
         <translation>Регистры хранения</translation>
     </message>

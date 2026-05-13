@@ -74,6 +74,7 @@ private slots:
     void on_actionInsert_triggered();
     void on_actionDelete_triggered();
     void on_actionClear_triggered();
+    void on_tableView_customContextMenuRequested(const QPoint& pos);
     void updateActionState();
 
 private:
