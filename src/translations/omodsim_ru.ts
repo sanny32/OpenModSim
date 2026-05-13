@@ -306,47 +306,47 @@
         <translation>Регистры хранения</translation>
     </message>
     <message>
-        <location filename="../datamapdatamodel.cpp" line="526"/>
+        <location filename="../datamapdatamodel.cpp" line="524"/>
         <source>Unit</source>
         <translation>Устройство</translation>
     </message>
     <message>
-        <location filename="../datamapdatamodel.cpp" line="527"/>
+        <location filename="../datamapdatamodel.cpp" line="525"/>
         <source>Type</source>
         <translation>Тип</translation>
     </message>
     <message>
-        <location filename="../datamapdatamodel.cpp" line="528"/>
+        <location filename="../datamapdatamodel.cpp" line="526"/>
         <source>Address</source>
         <translation>Адрес</translation>
     </message>
     <message>
-        <location filename="../datamapdatamodel.cpp" line="529"/>
+        <location filename="../datamapdatamodel.cpp" line="527"/>
         <source>Data Type</source>
         <translation>Тип данных</translation>
     </message>
     <message>
-        <location filename="../datamapdatamodel.cpp" line="530"/>
+        <location filename="../datamapdatamodel.cpp" line="528"/>
         <source>Register Order</source>
         <translation>Порядок регистров</translation>
     </message>
     <message>
-        <location filename="../datamapdatamodel.cpp" line="531"/>
+        <location filename="../datamapdatamodel.cpp" line="529"/>
         <source>Byte Order</source>
         <translation>Порядок байт</translation>
     </message>
     <message>
-        <location filename="../datamapdatamodel.cpp" line="532"/>
+        <location filename="../datamapdatamodel.cpp" line="530"/>
         <source>Comment</source>
         <translation>Комментарий</translation>
     </message>
     <message>
-        <location filename="../datamapdatamodel.cpp" line="533"/>
+        <location filename="../datamapdatamodel.cpp" line="531"/>
         <source>Value</source>
         <translation>Значение</translation>
     </message>
     <message>
-        <location filename="../datamapdatamodel.cpp" line="534"/>
+        <location filename="../datamapdatamodel.cpp" line="532"/>
         <source>Timestamp</source>
         <translation>Время</translation>
     </message>

@@ -3,6 +3,7 @@
 #include "macappstyle.h"
 #include "apppreferences.h"
 
+#include <QBrush>
 #include <QDockWidget>
 #include <QFontDatabase>
 #include <QGuiApplication>
@@ -97,6 +98,23 @@ const QColor& transparentRef(QRgb rgb)
     if (it == colors.end())
         it = colors.insert(rgb, transparent(rgb));
     return it.value();
+}
+
+QColor modelBackgroundColor(const QModelIndex& index)
+{
+    const QVariant background = index.data(Qt::BackgroundRole);
+    if (!background.isValid())
+        return {};
+
+    const QBrush brush = qvariant_cast<QBrush>(background);
+    if (brush.style() != Qt::NoBrush && brush.color().isValid())
+        return brush.color();
+
+    const QColor color = qvariant_cast<QColor>(background);
+    if (color.isValid())
+        return color;
+
+    return {};
 }
 
 Theme makeMacLightTheme()
@@ -540,10 +558,10 @@ QColor MacAppStyle::listItemBackgroundColor(MouseState mouse, SelectionState sel
 {
     Q_UNUSED(focus)
     Q_UNUSED(active)
-    Q_UNUSED(index)
     Q_UNUSED(widget)
 
     const bool isSelected = selected == SelectionState::Selected;
+    const QColor rowColor = modelBackgroundColor(index);
 
     if (isDarkMode()) {
         using namespace Dark;
@@ -558,6 +576,8 @@ QColor MacAppStyle::listItemBackgroundColor(MouseState mouse, SelectionState sel
             case MouseState::Transparent:
             case MouseState::Normal:
             default:
+                if (rowColor.isValid())
+                    return rowColor;
                 return transparent(kCanvas);
         }
     } else {
@@ -573,6 +593,8 @@ QColor MacAppStyle::listItemBackgroundColor(MouseState mouse, SelectionState sel
             case MouseState::Transparent:
             case MouseState::Normal:
             default:
+                if (rowColor.isValid())
+                    return rowColor;
                 return transparent(kCanvas);
         }
     }

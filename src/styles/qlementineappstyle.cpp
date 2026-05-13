@@ -8,6 +8,7 @@
 #include <QDockWidget>
 #include <QGuiApplication>
 #include <QPushButton>
+#include <QBrush>
 #include <QHash>
 #include <QLineEdit>
 #include <QLabel>
@@ -121,6 +122,23 @@ const QColor& transparentRef(QRgb rgb)
     if (it == colors.end())
         it = colors.insert(rgb, transparent(rgb));
     return it.value();
+}
+
+QColor modelBackgroundColor(const QModelIndex& index)
+{
+    const QVariant background = index.data(Qt::BackgroundRole);
+    if (!background.isValid())
+        return {};
+
+    const QBrush brush = qvariant_cast<QBrush>(background);
+    if (brush.style() != Qt::NoBrush && brush.color().isValid())
+        return brush.color();
+
+    const QColor color = qvariant_cast<QColor>(background);
+    if (color.isValid())
+        return color;
+
+    return {};
 }
 
 Theme makeQlementineAppTheme(const Theme& baseTheme, bool darkMode)
@@ -466,11 +484,11 @@ QColor QlementineAppStyle::listItemBackgroundColor(MouseState mouse, SelectionSt
 {
     Q_UNUSED(focus)
     Q_UNUSED(active)
-    Q_UNUSED(index)
     Q_UNUSED(widget)
 
     const bool darkMode = isDarkMode();
     const bool isSelected = selected == SelectionState::Selected;
+    const QColor rowColor = modelBackgroundColor(index);
     if (isSelected)
         return mouse == MouseState::Disabled
             ? QColor(darkMode ? Dark::kSelectionDisabled : Light::kSelectionDisabled)
@@ -485,6 +503,8 @@ QColor QlementineAppStyle::listItemBackgroundColor(MouseState mouse, SelectionSt
         case MouseState::Transparent:
         case MouseState::Normal:
         default:
+            if (rowColor.isValid())
+                return rowColor;
             return transparent(darkMode ? Dark::kCanvas : Light::kCanvas);
     }
 }
