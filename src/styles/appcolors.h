@@ -65,7 +65,9 @@ inline QColor mutedForeground()
 
 inline QColor divider()
 {
-    return QApplication::palette().color(QPalette::Mid);
+    QColor color = QApplication::palette().color(QPalette::Mid);
+    color.setAlpha(isDark() ? 125 : 150);
+    return color;
 }
 
 inline QColor searchMatchBackground()
