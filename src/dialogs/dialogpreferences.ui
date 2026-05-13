@@ -183,13 +183,23 @@
                   </property>
                  </widget>
                 </item>
-                <item row="4" column="0">
-                 <widget class="QLabel" name="labelLanguage">
-                  <property name="text">
-                   <string>Language:</string>
-                  </property>
-                 </widget>
-                </item>
+                 <item row="4" column="0">
+                  <widget class="QLabel" name="labelTheme">
+                   <property name="text">
+                    <string>Theme:</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="4" column="1" colspan="2">
+                  <widget class="QComboBox" name="comboBoxThemeMode"/>
+                 </item>
+                 <item row="5" column="0">
+                  <widget class="QLabel" name="labelLanguage">
+                   <property name="text">
+                    <string>Language:</string>
+                   </property>
+                  </widget>
+                 </item>
                 <item row="1" column="2">
                  <widget class="QPushButton" name="pushButtonResetForegroundColor">
                   <property name="text">
@@ -204,13 +214,13 @@
                   </property>
                  </widget>
                 </item>
-                <item row="5" column="0" colspan="2">
-                 <widget class="QCheckBox" name="checkBoxCheckForUpdates">
-                  <property name="text">
-                   <string>Check for updates</string>
-                  </property>
-                 </widget>
-                </item>
+                 <item row="6" column="0" colspan="2">
+                  <widget class="QCheckBox" name="checkBoxCheckForUpdates">
+                   <property name="text">
+                    <string>Check for updates</string>
+                   </property>
+                  </widget>
+                 </item>
                 <item row="0" column="0">
                  <widget class="QLabel" name="labelBackgroundColor">
                   <property name="text">
@@ -218,13 +228,13 @@
                   </property>
                  </widget>
                 </item>
-                <item row="6" column="0" colspan="3">
-                 <widget class="QCheckBox" name="checkBoxShowWelcomeDialog">
-                  <property name="text">
-                   <string>Show Welcome dialog on startup</string>
-                  </property>
-                 </widget>
-                </item>
+                 <item row="7" column="0" colspan="3">
+                  <widget class="QCheckBox" name="checkBoxShowWelcomeDialog">
+                   <property name="text">
+                    <string>Show Welcome dialog on startup</string>
+                   </property>
+                  </widget>
+                 </item>
                 <item row="2" column="0">
                  <widget class="QLabel" name="labelAddressColor">
                   <property name="text">
@@ -285,9 +295,9 @@
                   </property>
                  </widget>
                 </item>
-                <item row="4" column="1" colspan="2">
-                 <widget class="QComboBox" name="comboBoxLanguage"/>
-                </item>
+                 <item row="5" column="1" colspan="2">
+                  <widget class="QComboBox" name="comboBoxLanguage"/>
+                 </item>
                 <item row="3" column="3">
                  <spacer name="horizontalSpacer">
                   <property name="orientation">

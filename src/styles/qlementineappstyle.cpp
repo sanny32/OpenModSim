@@ -1,10 +1,12 @@
 #if defined(HAVE_QLEMENTINE_APP_STYLE)
 
 #include "qlementineappstyle.h"
+#include "apppreferences.h"
 #include <oclero/qlementine/icons/QlementineIcons.hpp>
 
 #include <QComboBox>
 #include <QDockWidget>
+#include <QGuiApplication>
 #include <QPushButton>
 #include <QHash>
 #include <QLineEdit>
@@ -16,6 +18,7 @@
 #include <QStyleOptionDockWidget>
 #include <QStyleOptionTab>
 #include <QStyleOptionToolButton>
+#include <QStyleHints>
 #include <QTabBar>
 #include <QToolBar>
 #include <QToolButton>
@@ -30,24 +33,75 @@ using oclero::qlementine::FocusState;
 using oclero::qlementine::MouseState;
 using oclero::qlementine::SelectionState;
 using oclero::qlementine::Status;
+using oclero::qlementine::Theme;
 
+namespace Light {
 constexpr QRgb kCanvas = 0xffffff;
 constexpr QRgb kChrome = 0xf5f5f5;
 constexpr QRgb kChromeStrong = 0xececec;
 constexpr QRgb kChromePressed = 0xe0e0e0;
+constexpr QRgb kChromeMuted = 0xfefefe;
+constexpr QRgb kChromeDisabled = 0xf4f6f8;
+constexpr QRgb kSurfaceDisabled = 0xf2f2f2;
 constexpr QRgb kBorder = 0xe3e6ea;
 constexpr QRgb kBorderActive = 0xcdd1d6;
+constexpr QRgb kBorderMuted = 0xe6e9ee;
+constexpr QRgb kBorderDisabled = 0xebeef2;
 constexpr QRgb kText = 0x1f2937;
+constexpr QRgb kTextMuted = 0x4f627a;
+constexpr QRgb kTextEmphasis = 0x24364d;
 constexpr QRgb kDisabledText = 0xb2bac5;
 constexpr QRgb kBlue = 0x007aff;
 constexpr QRgb kBlueHover = 0x1a8aff;
 constexpr QRgb kBluePressed = 0x0062cc;
 constexpr QRgb kBlueDisabled = 0xb3d7ff;
+constexpr QRgb kSelection = 0xd9eaff;
+constexpr QRgb kSelectionDisabled = 0xeaeaea;
+constexpr QRgb kItemHover = 0xf0f0f0;
+constexpr QRgb kItemPressed = 0xe5e5e5;
+constexpr QRgb kTooltipBase = 0x1f2937;
+constexpr QRgb kTooltipText = 0xffffff;
+}
+
+namespace Dark {
+constexpr QRgb kCanvas = 0x1e1f24;
+constexpr QRgb kChrome = 0x272a30;
+constexpr QRgb kChromeStrong = 0x333841;
+constexpr QRgb kChromePressed = 0x414854;
+constexpr QRgb kChromeMuted = 0x2d3138;
+constexpr QRgb kChromeDisabled = 0x24272d;
+constexpr QRgb kSurfaceDisabled = 0x21242a;
+constexpr QRgb kBorder = 0x3b414c;
+constexpr QRgb kBorderActive = 0x5b6575;
+constexpr QRgb kBorderMuted = 0x313740;
+constexpr QRgb kBorderDisabled = 0x2a2e36;
+constexpr QRgb kText = 0xe7ecf3;
+constexpr QRgb kTextMuted = 0xa0abbb;
+constexpr QRgb kTextEmphasis = 0xffffff;
+constexpr QRgb kDisabledText = 0x6c7582;
+constexpr QRgb kBlue = 0x409cff;
+constexpr QRgb kBlueHover = 0x66b2ff;
+constexpr QRgb kBluePressed = 0x1f8bff;
+constexpr QRgb kBlueDisabled = 0x27476a;
+constexpr QRgb kSelection = 0x1d3c5c;
+constexpr QRgb kSelectionDisabled = 0x2b3139;
+constexpr QRgb kItemHover = 0x2e333b;
+constexpr QRgb kItemPressed = 0x373d46;
+constexpr QRgb kTooltipBase = 0xe7ecf3;
+constexpr QRgb kTooltipText = 0x111318;
+}
 
 QColor transparent(QRgb rgb)
 {
     QColor color(rgb);
     color.setAlpha(0);
+    return color;
+}
+
+QColor alpha(QRgb rgb, int value)
+{
+    QColor color(rgb);
+    color.setAlpha(value);
     return color;
 }
 
@@ -67,6 +121,102 @@ const QColor& transparentRef(QRgb rgb)
     if (it == colors.end())
         it = colors.insert(rgb, transparent(rgb));
     return it.value();
+}
+
+Theme makeQlementineAppTheme(const Theme& baseTheme, bool darkMode)
+{
+    const auto rgb = [darkMode](QRgb light, QRgb dark) { return darkMode ? dark : light; };
+    const auto color = [&rgb](QRgb light, QRgb dark) { return QColor(rgb(light, dark)); };
+
+    Theme theme = baseTheme;
+    theme.meta.name = darkMode
+        ? QStringLiteral("Open ModSim Qlementine Dark")
+        : QStringLiteral("Open ModSim Qlementine Light");
+    theme.meta.version = QStringLiteral("1.0");
+    theme.meta.author = QStringLiteral("Open ModSim");
+
+    theme.backgroundColorMain1 = color(Light::kCanvas, Dark::kCanvas);
+    theme.backgroundColorMain2 = color(Light::kChrome, Dark::kChrome);
+    theme.backgroundColorMain3 = color(Light::kChromeStrong, Dark::kChromeStrong);
+    theme.backgroundColorMain4 = color(Light::kChromePressed, Dark::kChromePressed);
+    theme.backgroundColorMainTransparent = transparent(rgb(Light::kCanvas, Dark::kCanvas));
+    theme.backgroundColorWorkspace = color(Light::kCanvas, Dark::kCanvas);
+    theme.backgroundColorTabBar = color(Light::kChrome, Dark::kChrome);
+
+    theme.neutralColor = color(Light::kChromeStrong, Dark::kChromeStrong);
+    theme.neutralColorHovered = color(Light::kChromePressed, Dark::kChromePressed);
+    theme.neutralColorPressed = color(Light::kBorderActive, Dark::kBorderActive);
+    theme.neutralColorDisabled = color(Light::kChromeDisabled, Dark::kChromeDisabled);
+    theme.neutralColorTransparent = transparent(rgb(Light::kChromeStrong, Dark::kChromeStrong));
+
+    theme.primaryColor = color(Light::kBlue, Dark::kBlue);
+    theme.primaryColorHovered = color(Light::kBlueHover, Dark::kBlueHover);
+    theme.primaryColorPressed = color(Light::kBluePressed, Dark::kBluePressed);
+    theme.primaryColorDisabled = color(Light::kBlueDisabled, Dark::kBlueDisabled);
+    theme.primaryColorTransparent = transparent(rgb(Light::kBlue, Dark::kBlue));
+
+    theme.primaryColorForeground = color(Light::kTooltipText, Dark::kTextEmphasis);
+    theme.primaryColorForegroundHovered = color(Light::kTooltipText, Dark::kTextEmphasis);
+    theme.primaryColorForegroundPressed = color(Light::kTooltipText, Dark::kTextEmphasis);
+    theme.primaryColorForegroundDisabled = color(Light::kChromeMuted, Dark::kDisabledText);
+    theme.primaryColorForegroundTransparent = transparent(rgb(Light::kTooltipText, Dark::kTextEmphasis));
+
+    theme.secondaryColor = color(Light::kText, Dark::kText);
+    theme.secondaryColorHovered = color(Light::kTextEmphasis, Dark::kTextEmphasis);
+    theme.secondaryColorPressed = color(Light::kTextEmphasis, Dark::kTextEmphasis);
+    theme.secondaryColorDisabled = color(Light::kDisabledText, Dark::kDisabledText);
+    theme.secondaryColorTransparent = transparent(rgb(Light::kText, Dark::kText));
+
+    theme.secondaryColorForeground = color(Light::kTextMuted, Dark::kTextMuted);
+    theme.secondaryColorForegroundHovered = color(Light::kBluePressed, Dark::kBlueHover);
+    theme.secondaryColorForegroundPressed = color(Light::kBluePressed, Dark::kBluePressed);
+    theme.secondaryColorForegroundDisabled = color(Light::kDisabledText, Dark::kDisabledText);
+    theme.secondaryColorForegroundTransparent = transparent(rgb(Light::kTextMuted, Dark::kTextMuted));
+
+    theme.secondaryAlternativeColor = color(Light::kTextMuted, Dark::kTextMuted);
+    theme.secondaryAlternativeColorHovered = color(Light::kText, Dark::kText);
+    theme.secondaryAlternativeColorPressed = color(Light::kText, Dark::kTextEmphasis);
+    theme.secondaryAlternativeColorDisabled = color(Light::kDisabledText, Dark::kDisabledText);
+    theme.secondaryAlternativeColorTransparent = transparent(rgb(Light::kTextMuted, Dark::kTextMuted));
+
+    theme.borderColor = color(Light::kBorder, Dark::kBorder);
+    theme.borderColorHovered = color(Light::kBorderActive, Dark::kBorderActive);
+    theme.borderColorPressed = color(Light::kBorderActive, Dark::kBorderActive);
+    theme.borderColorDisabled = color(Light::kBorderDisabled, Dark::kBorderDisabled);
+    theme.borderColorTransparent = transparent(rgb(Light::kBorder, Dark::kBorder));
+
+    theme.semiTransparentColor1 = alpha(rgb(Light::kText, Dark::kText), 0);
+    theme.semiTransparentColor2 = alpha(rgb(Light::kText, Dark::kText), darkMode ? 28 : 18);
+    theme.semiTransparentColor3 = alpha(rgb(Light::kText, Dark::kText), darkMode ? 42 : 26);
+    theme.semiTransparentColor4 = alpha(rgb(Light::kText, Dark::kText), darkMode ? 58 : 36);
+    theme.semiTransparentColorTransparent = transparent(rgb(Light::kText, Dark::kText));
+
+    theme.shadowColor1 = alpha(0x000000, darkMode ? 32 : 14);
+    theme.shadowColor2 = alpha(0x000000, darkMode ? 44 : 20);
+    theme.shadowColor3 = alpha(0x000000, darkMode ? 64 : 32);
+    theme.shadowColorTransparent = alpha(0x000000, 0);
+
+    theme.palette.setColor(QPalette::ColorGroup::All, QPalette::Window, theme.backgroundColorMain2);
+    theme.palette.setColor(QPalette::ColorGroup::All, QPalette::Base, theme.backgroundColorMain1);
+    theme.palette.setColor(QPalette::ColorGroup::All, QPalette::AlternateBase, theme.backgroundColorMain3);
+    theme.palette.setColor(QPalette::ColorGroup::All, QPalette::Button, theme.neutralColor);
+    theme.palette.setColor(QPalette::ColorGroup::All, QPalette::Text, theme.secondaryColor);
+    theme.palette.setColor(QPalette::ColorGroup::All, QPalette::WindowText, theme.secondaryColor);
+    theme.palette.setColor(QPalette::ColorGroup::All, QPalette::ButtonText, theme.secondaryColor);
+    theme.palette.setColor(QPalette::ColorGroup::All, QPalette::ToolTipBase, color(Light::kTooltipBase, Dark::kTooltipBase));
+    theme.palette.setColor(QPalette::ColorGroup::All, QPalette::ToolTipText, color(Light::kTooltipText, Dark::kTooltipText));
+    theme.palette.setColor(QPalette::ColorGroup::All, QPalette::Highlight, theme.primaryColor);
+    theme.palette.setColor(QPalette::ColorGroup::All, QPalette::HighlightedText, theme.primaryColorForeground);
+    theme.palette.setColor(QPalette::ColorGroup::All, QPalette::PlaceholderText, theme.secondaryColorForeground);
+    theme.palette.setColor(QPalette::ColorGroup::All, QPalette::Mid, theme.borderColor);
+    theme.palette.setColor(QPalette::ColorGroup::Disabled, QPalette::Base, color(Light::kSurfaceDisabled, Dark::kSurfaceDisabled));
+    theme.palette.setColor(QPalette::ColorGroup::Disabled, QPalette::Button, color(Light::kChromeDisabled, Dark::kChromeDisabled));
+    theme.palette.setColor(QPalette::ColorGroup::Disabled, QPalette::Text, theme.secondaryColorDisabled);
+    theme.palette.setColor(QPalette::ColorGroup::Disabled, QPalette::WindowText, theme.secondaryColorDisabled);
+    theme.palette.setColor(QPalette::ColorGroup::Disabled, QPalette::ButtonText, theme.secondaryColorDisabled);
+    theme.palette.setColor(QPalette::ColorGroup::Disabled, QPalette::Highlight, theme.primaryColorDisabled);
+
+    return theme;
 }
 
 QMargins tabShapePadding(const QStyleOptionTab& option, int spacing)
@@ -98,15 +248,37 @@ QlementineAppStyle::QlementineAppStyle(QObject* parent)
 
     oclero::qlementine::icons::initializeIconTheme();
     QIcon::setThemeName(QStringLiteral("qlementine"));
+
+    const Theme baseTheme = theme();
+    _lightTheme = makeQlementineAppTheme(baseTheme, false);
+    _darkTheme = makeQlementineAppTheme(baseTheme, true);
+    updateTheme();
+
+    connect(QGuiApplication::styleHints(), &QStyleHints::colorSchemeChanged,
+            this, [this](Qt::ColorScheme) { updateTheme(); });
+    connect(&AppPreferences::instance(), &AppPreferences::settingChanged,
+            this, [this](const QString& name, const QString&, const QString&) {
+                if (name == QLatin1String("ThemeMode"))
+                    updateTheme();
+            });
 }
 
-QlementineAppStyle::QlementineAppStyle(bool /*skipTheme*/, QObject* parent)
-    : QlementineStyle(parent)
+void QlementineAppStyle::updateTheme()
 {
-    setAutoIconColor(oclero::qlementine::AutoIconColor::ForegroundColor);
+    setTheme(isDarkMode() ? _darkTheme : _lightTheme);
+}
 
-    oclero::qlementine::icons::initializeIconTheme();
-    QIcon::setThemeName(QStringLiteral("qlementine"));
+bool QlementineAppStyle::isDarkMode() const
+{
+    switch (AppPreferences::instance().themeMode()) {
+        case AppThemeMode::Light:
+            return false;
+        case AppThemeMode::Dark:
+            return true;
+        case AppThemeMode::System:
+        default:
+            return QGuiApplication::styleHints()->colorScheme() == Qt::ColorScheme::Dark;
+    }
 }
 
 ///
@@ -117,25 +289,27 @@ QlementineAppStyle::QlementineAppStyle(bool /*skipTheme*/, QObject* parent)
 /// \return
 ///
 QColor const& QlementineAppStyle::buttonBackgroundColor(MouseState mouse, ColorRole role,
-                                                 const QWidget* widget) const
+                                                  const QWidget* widget) const
 {
     Q_UNUSED(widget)
 
     if (role == ColorRole::Primary)
         return QlementineStyle::buttonBackgroundColor(mouse, role, widget);
 
+    const bool darkMode = isDarkMode();
+
     switch (mouse) {
         case MouseState::Pressed:
-            return colorRef(kChromePressed);
+            return colorRef(darkMode ? Dark::kChromePressed : Light::kChromePressed);
         case MouseState::Hovered:
-            return colorRef(kChromeStrong);
+            return colorRef(darkMode ? Dark::kChromeStrong : Light::kChromeStrong);
         case MouseState::Disabled:
-            return colorRef(0xf4f6f8);
+            return colorRef(darkMode ? Dark::kChromeDisabled : Light::kChromeDisabled);
         case MouseState::Transparent:
-            return transparentRef(kChromeStrong);
+            return transparentRef(darkMode ? Dark::kChromeStrong : Light::kChromeStrong);
         case MouseState::Normal:
         default:
-            return colorRef(0xfefefe);
+            return colorRef(darkMode ? Dark::kChromeMuted : Light::kChromeMuted);
     }
 }
 
@@ -154,7 +328,9 @@ QColor const& QlementineAppStyle::buttonForegroundColor(MouseState mouse, ColorR
     if (role == ColorRole::Primary)
         return QlementineStyle::buttonForegroundColor(mouse, role, widget);
 
-    return mouse == MouseState::Disabled ? colorRef(kDisabledText) : colorRef(kText);
+    return mouse == MouseState::Disabled
+        ? colorRef(isDarkMode() ? Dark::kDisabledText : Light::kDisabledText)
+        : colorRef(isDarkMode() ? Dark::kText : Light::kText);
 }
 
 ///
@@ -175,9 +351,10 @@ void QlementineAppStyle::drawControl(ControlElement element, const QStyleOption*
         }
 
         const QRect rect = dockOption->rect;
+        const bool darkMode = isDarkMode();
         painter->save();
-        painter->fillRect(rect, colorRef(kChrome));
-        painter->setPen(QPen(colorRef(kBorder), 1));
+        painter->fillRect(rect, colorRef(darkMode ? Dark::kChrome : Light::kChrome));
+        painter->setPen(QPen(colorRef(darkMode ? Dark::kBorder : Light::kBorder), 1));
         painter->drawLine(rect.left(), rect.bottom(), rect.right(), rect.bottom());
 
         QRect textRect = rect.adjusted(6, 0, -42, 0);
@@ -185,7 +362,7 @@ void QlementineAppStyle::drawControl(ControlElement element, const QStyleOption*
             QFont font = painter->font();
             font.setPointSize(qMax(11, font.pointSize()));
             painter->setFont(font);
-            painter->setPen(colorRef(kText));
+            painter->setPen(colorRef(darkMode ? Dark::kText : Light::kText));
             painter->drawText(textRect, Qt::AlignVCenter | Qt::AlignLeft | Qt::TextSingleLine,
                               painter->fontMetrics().elidedText(dockOption->title, Qt::ElideRight, textRect.width()));
         }
@@ -258,16 +435,18 @@ QColor const& QlementineAppStyle::iconForegroundColor(MouseState mouse, ColorRol
     if (role == ColorRole::Primary)
         return QlementineStyle::iconForegroundColor(mouse, role);
 
+    const bool darkMode = isDarkMode();
+
     switch (mouse) {
         case MouseState::Hovered:
         case MouseState::Pressed:
-            return colorRef(kBluePressed);
+            return colorRef(darkMode ? Dark::kBluePressed : Light::kBluePressed);
         case MouseState::Disabled:
-            return colorRef(kDisabledText);
+            return colorRef(darkMode ? Dark::kDisabledText : Light::kDisabledText);
         case MouseState::Transparent:
         case MouseState::Normal:
         default:
-            return colorRef(0x4f627a);
+            return colorRef(darkMode ? Dark::kTextMuted : Light::kTextMuted);
     }
 }
 
@@ -290,20 +469,23 @@ QColor QlementineAppStyle::listItemBackgroundColor(MouseState mouse, SelectionSt
     Q_UNUSED(index)
     Q_UNUSED(widget)
 
+    const bool darkMode = isDarkMode();
     const bool isSelected = selected == SelectionState::Selected;
     if (isSelected)
-        return mouse == MouseState::Disabled ? QColor(0xeaeaea) : QColor(0xd9eaff);
+        return mouse == MouseState::Disabled
+            ? QColor(darkMode ? Dark::kSelectionDisabled : Light::kSelectionDisabled)
+            : QColor(darkMode ? Dark::kSelection : Light::kSelection);
 
     switch (mouse) {
         case MouseState::Hovered:
-            return QColor(0xf0f0f0);
+            return QColor(darkMode ? Dark::kItemHover : Light::kItemHover);
         case MouseState::Pressed:
-            return QColor(0xe5e5e5);
+            return QColor(darkMode ? Dark::kItemPressed : Light::kItemPressed);
         case MouseState::Disabled:
         case MouseState::Transparent:
         case MouseState::Normal:
         default:
-            return transparent(kCanvas);
+            return transparent(darkMode ? Dark::kCanvas : Light::kCanvas);
     }
 }
 
@@ -322,7 +504,9 @@ QColor const& QlementineAppStyle::listItemForegroundColor(MouseState mouse, Sele
     Q_UNUSED(focus)
     Q_UNUSED(active)
 
-    return mouse == MouseState::Disabled ? colorRef(kDisabledText) : colorRef(kText);
+    return mouse == MouseState::Disabled
+        ? colorRef(isDarkMode() ? Dark::kDisabledText : Light::kDisabledText)
+        : colorRef(isDarkMode() ? Dark::kText : Light::kText);
 }
 
 ///
@@ -419,15 +603,17 @@ QSize QlementineAppStyle::sizeFromContents(ContentsType type, const QStyleOption
 ///
 QColor const& QlementineAppStyle::splitterColor(MouseState mouse) const
 {
+    const bool darkMode = isDarkMode();
+
     switch (mouse) {
         case MouseState::Hovered:
         case MouseState::Pressed:
-            return colorRef(kBorderActive);
+            return colorRef(darkMode ? Dark::kBorderActive : Light::kBorderActive);
         case MouseState::Disabled:
         case MouseState::Transparent:
         case MouseState::Normal:
         default:
-            return colorRef(kBorder);
+            return colorRef(darkMode ? Dark::kBorder : Light::kBorder);
     }
 }
 
@@ -460,19 +646,26 @@ int QlementineAppStyle::styleHint(StyleHint hint, const QStyleOption* option,
 ///
 QColor const& QlementineAppStyle::tabBackgroundColor(MouseState mouse, SelectionState selected) const
 {
+    const bool darkMode = isDarkMode();
     const bool isSelected = selected == SelectionState::Selected;
 
     switch (mouse) {
         case MouseState::Pressed:
-            return isSelected ? colorRef(kCanvas) : colorRef(kChromePressed);
+            return isSelected
+                ? colorRef(darkMode ? Dark::kCanvas : Light::kCanvas)
+                : colorRef(darkMode ? Dark::kChromePressed : Light::kChromePressed);
         case MouseState::Hovered:
-            return isSelected ? colorRef(kCanvas) : colorRef(kChromeStrong);
+            return isSelected
+                ? colorRef(darkMode ? Dark::kCanvas : Light::kCanvas)
+                : colorRef(darkMode ? Dark::kChromeStrong : Light::kChromeStrong);
         case MouseState::Disabled:
-            return transparentRef(kChrome);
+            return transparentRef(darkMode ? Dark::kChrome : Light::kChrome);
         case MouseState::Transparent:
         case MouseState::Normal:
         default:
-            return isSelected ? colorRef(kCanvas) : transparentRef(kChrome);
+            return isSelected
+                ? colorRef(darkMode ? Dark::kCanvas : Light::kCanvas)
+                : transparentRef(darkMode ? Dark::kChrome : Light::kChrome);
     }
 }
 
@@ -483,7 +676,9 @@ QColor const& QlementineAppStyle::tabBackgroundColor(MouseState mouse, Selection
 ///
 QColor const& QlementineAppStyle::tabBarBackgroundColor(MouseState mouse) const
 {
-    return mouse == MouseState::Disabled ? colorRef(kChromeStrong) : colorRef(kChrome);
+    return mouse == MouseState::Disabled
+        ? colorRef(isDarkMode() ? Dark::kChromeStrong : Light::kChromeStrong)
+        : colorRef(isDarkMode() ? Dark::kChrome : Light::kChrome);
 }
 
 ///
@@ -496,7 +691,9 @@ QColor const& QlementineAppStyle::tabForegroundColor(MouseState mouse, Selection
 {
     Q_UNUSED(selected)
 
-    return mouse == MouseState::Disabled ? colorRef(kDisabledText) : colorRef(kText);
+    return mouse == MouseState::Disabled
+        ? colorRef(isDarkMode() ? Dark::kDisabledText : Light::kDisabledText)
+        : colorRef(isDarkMode() ? Dark::kText : Light::kText);
 }
 
 ///
@@ -509,17 +706,19 @@ QColor const& QlementineAppStyle::tableHeaderBgColor(MouseState mouse, CheckStat
 {
     Q_UNUSED(checked)
 
+    const bool darkMode = isDarkMode();
+
     switch (mouse) {
         case MouseState::Pressed:
-            return colorRef(kChromePressed);
+            return colorRef(darkMode ? Dark::kChromePressed : Light::kChromePressed);
         case MouseState::Hovered:
-            return colorRef(kChromeStrong);
+            return colorRef(darkMode ? Dark::kChromeStrong : Light::kChromeStrong);
         case MouseState::Disabled:
-            return colorRef(0xf2f2f2);
+            return colorRef(darkMode ? Dark::kSurfaceDisabled : Light::kSurfaceDisabled);
         case MouseState::Transparent:
         case MouseState::Normal:
         default:
-            return colorRef(kCanvas);
+            return colorRef(darkMode ? Dark::kCanvas : Light::kCanvas);
     }
 }
 
@@ -533,7 +732,9 @@ QColor const& QlementineAppStyle::tableHeaderFgColor(MouseState mouse, CheckStat
 {
     Q_UNUSED(checked)
 
-    return mouse == MouseState::Disabled ? colorRef(kDisabledText) : colorRef(kText);
+    return mouse == MouseState::Disabled
+        ? colorRef(isDarkMode() ? Dark::kDisabledText : Light::kDisabledText)
+        : colorRef(isDarkMode() ? Dark::kText : Light::kText);
 }
 
 ///
@@ -542,7 +743,7 @@ QColor const& QlementineAppStyle::tableHeaderFgColor(MouseState mouse, CheckStat
 ///
 QColor const& QlementineAppStyle::tableLineColor() const
 {
-    return colorRef(0xe6e9ee);
+    return colorRef(isDarkMode() ? Dark::kBorderMuted : Light::kBorderMuted);
 }
 
 ///
@@ -555,7 +756,9 @@ QColor const& QlementineAppStyle::textFieldBackgroundColor(MouseState mouse, Sta
 {
     Q_UNUSED(status)
 
-    return mouse == MouseState::Disabled ? colorRef(0xf2f2f2) : colorRef(kCanvas);
+    return mouse == MouseState::Disabled
+        ? colorRef(isDarkMode() ? Dark::kSurfaceDisabled : Light::kSurfaceDisabled)
+        : colorRef(isDarkMode() ? Dark::kCanvas : Light::kCanvas);
 }
 
 ///
@@ -570,14 +773,16 @@ QColor const& QlementineAppStyle::textFieldBorderColor(MouseState mouse, FocusSt
     if (status != Status::Default)
         return QlementineStyle::textFieldBorderColor(mouse, focus, status);
 
-    if (mouse == MouseState::Disabled)
-        return colorRef(0xebeef2);
-    if (focus == FocusState::Focused)
-        return colorRef(kBlue);
-    if (mouse == MouseState::Hovered || mouse == MouseState::Pressed)
-        return colorRef(kBorderActive);
+    const bool darkMode = isDarkMode();
 
-    return colorRef(kBorder);
+    if (mouse == MouseState::Disabled)
+        return colorRef(darkMode ? Dark::kBorderDisabled : Light::kBorderDisabled);
+    if (focus == FocusState::Focused)
+        return colorRef(darkMode ? Dark::kBlue : Light::kBlue);
+    if (mouse == MouseState::Hovered || mouse == MouseState::Pressed)
+        return colorRef(darkMode ? Dark::kBorderActive : Light::kBorderActive);
+
+    return colorRef(darkMode ? Dark::kBorder : Light::kBorder);
 }
 
 ///
@@ -586,7 +791,7 @@ QColor const& QlementineAppStyle::textFieldBorderColor(MouseState mouse, FocusSt
 ///
 QColor const& QlementineAppStyle::toolBarBackgroundColor() const
 {
-    return colorRef(kChrome);
+    return colorRef(isDarkMode() ? Dark::kChrome : Light::kChrome);
 }
 
 ///
@@ -595,7 +800,7 @@ QColor const& QlementineAppStyle::toolBarBackgroundColor() const
 ///
 QColor const& QlementineAppStyle::toolBarBorderColor() const
 {
-    return colorRef(kBorder);
+    return colorRef(isDarkMode() ? Dark::kBorder : Light::kBorder);
 }
 
 ///
@@ -604,7 +809,7 @@ QColor const& QlementineAppStyle::toolBarBorderColor() const
 ///
 QColor const& QlementineAppStyle::toolTipForegroundColor() const
 {
-    return colorRef(kCanvas);
+    return colorRef(isDarkMode() ? Dark::kTooltipText : Light::kTooltipText);
 }
 
 ///
@@ -618,16 +823,18 @@ QColor const& QlementineAppStyle::toolButtonBackgroundColor(MouseState mouse, Co
     if (role == ColorRole::Primary)
         return QlementineStyle::toolButtonBackgroundColor(mouse, role);
 
+    const bool darkMode = isDarkMode();
+
     switch (mouse) {
         case MouseState::Pressed:
-            return colorRef(kChromePressed);
+            return colorRef(darkMode ? Dark::kChromePressed : Light::kChromePressed);
         case MouseState::Hovered:
-            return colorRef(kChromeStrong);
+            return colorRef(darkMode ? Dark::kChromeStrong : Light::kChromeStrong);
         case MouseState::Disabled:
         case MouseState::Transparent:
         case MouseState::Normal:
         default:
-            return transparentRef(kChrome);
+            return transparentRef(darkMode ? Dark::kChrome : Light::kChrome);
     }
 }
 
@@ -642,16 +849,18 @@ QColor const& QlementineAppStyle::toolButtonForegroundColor(MouseState mouse, Co
     if (role == ColorRole::Primary)
         return QlementineStyle::toolButtonForegroundColor(mouse, role);
 
+    const bool darkMode = isDarkMode();
+
     switch (mouse) {
         case MouseState::Hovered:
         case MouseState::Pressed:
-            return colorRef(0x24364d);
+            return colorRef(darkMode ? Dark::kTextEmphasis : Light::kTextEmphasis);
         case MouseState::Disabled:
-            return colorRef(kDisabledText);
+            return colorRef(darkMode ? Dark::kDisabledText : Light::kDisabledText);
         case MouseState::Transparent:
         case MouseState::Normal:
         default:
-            return colorRef(kText);
+            return colorRef(darkMode ? Dark::kText : Light::kText);
     }
 }
 

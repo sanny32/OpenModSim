@@ -116,6 +116,10 @@ void JSCodeEditor::setForegroundColor(const QColor& clr)
     auto pal = palette();
     pal.setColor(QPalette::Text, clr);
     setPalette(pal);
+    if (_highlighter)
+        _highlighter->setDarkMode(AppColors::isDark());
+    highlightCurrentLine();
+    _lineNumberArea->update();
 }
 
 ///
@@ -137,6 +141,11 @@ void JSCodeEditor::setBackgroundColor(const QColor& clr)
     pal.setColor(QPalette::Base, clr);
     pal.setColor(QPalette::Window, clr);
     setPalette(pal);
+    _lineColor = AppColors::alternateBackground();
+    if (_highlighter)
+        _highlighter->setDarkMode(AppColors::isDark());
+    highlightCurrentLine();
+    _lineNumberArea->update();
 }
 
 ///

@@ -364,6 +364,11 @@ MainWindow::MainWindow(const QString& profile, bool useSession, const QString& s
 
     connect(QGuiApplication::styleHints(), &QStyleHints::colorSchemeChanged,
             this, [this](Qt::ColorScheme) { applyThemeColors(); });
+    connect(&AppPreferences::instance(), &AppPreferences::settingChanged,
+            this, [this](const QString& name, const QString&, const QString&) {
+                if (name == QLatin1String("ThemeMode"))
+                    applyThemeColors();
+            });
 
     // View / window trivial action wiring
     connect(ui->actionExit,           &QAction::triggered, this, [this]{ close(); });
@@ -1081,10 +1086,10 @@ void MainWindow::applyColors(const QColor& bg, const QColor& fg, const QColor& a
 ///
 void MainWindow::applyThemeColors()
 {
-    const bool dark = QGuiApplication::styleHints()->colorScheme() == Qt::ColorScheme::Dark;
     auto& prefs = AppPreferences::instance();
-    const QColor bg = dark ? QColor(0x1c1c1e) : Qt::white;
-    const QColor fg = dark ? Qt::white : Qt::black;
+    const QPalette palette = QApplication::palette();
+    const QColor bg = palette.color(QPalette::Base);
+    const QColor fg = palette.color(QPalette::Text);
     prefs.setBackgroundColor(bg);
     prefs.setForegroundColor(fg);
     applyColors(bg, fg, prefs.addressColor(), prefs.commentColor());

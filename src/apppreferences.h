@@ -9,6 +9,13 @@
 #include "displaydefinition.h"
 #include "translationutils.h"
 
+enum class AppThemeMode
+{
+    System = 0,
+    Light,
+    Dark
+};
+
 ///
 /// \brief The AppPreferences class
 ///
@@ -83,6 +90,9 @@ public:
     int consoleMaxLines() const { return _consoleMaxLines; }
     void setConsoleMaxLines(int n);
 
+    AppThemeMode themeMode() const { return _themeMode; }
+    void setThemeMode(AppThemeMode mode);
+
     // ----- Persistence -----
     void load(QSettings& settings);
     void save(QSettings& settings) const;
@@ -117,6 +127,7 @@ private:
     bool          _autoShowConsoleOutput{ true };
     int           _consoleMaxLines{ 500 };
     bool          _showWelcomeDialog{ true };
+    AppThemeMode  _themeMode{ AppThemeMode::System };
 };
 
 #endif // APPPREFERENCES_H

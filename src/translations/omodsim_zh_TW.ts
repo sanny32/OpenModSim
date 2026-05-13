@@ -1107,82 +1107,87 @@ Open the download page?</source>
     </message>
     <message>
         <location filename="../dialogs/dialogpreferences.ui" line="182"/>
-        <location filename="../dialogs/dialogpreferences.ui" line="196"/>
-        <location filename="../dialogs/dialogpreferences.ui" line="203"/>
-        <location filename="../dialogs/dialogpreferences.ui" line="284"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="206"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="213"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="294"/>
         <source>Reset</source>
         <translation>重設</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="217"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="227"/>
         <source>Background Color:</source>
         <translation>背景顏色：</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="271"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="281"/>
         <source>Foreground Color:</source>
         <translation>前景顏色：</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="231"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="241"/>
         <source>Address Color:</source>
         <translation>地址顏色：</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="238"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="248"/>
         <source>Comment Color:</source>
         <translation>注釋顏色：</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="189"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="199"/>
         <source>Language:</source>
         <translation>語言：</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="224"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="189"/>
+        <source>Theme:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogpreferences.ui" line="234"/>
         <source>Show Welcome dialog on startup</source>
         <translation>啟動時顯示歡迎對話框</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="310"/>
-        <location filename="../dialogs/dialogpreferences.ui" line="650"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="320"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="660"/>
         <source>Font</source>
         <translation>字型</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="347"/>
-        <location filename="../dialogs/dialogpreferences.ui" line="687"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="357"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="697"/>
         <source>Size:</source>
         <translation>大小：</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="379"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="389"/>
         <source>Zoom:</source>
         <translation>縮放：</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="476"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="486"/>
         <source>Leading Zeros for Unsigned</source>
         <translation>無符號數前導零</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="753"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="763"/>
         <source>Console</source>
         <translation>主控台</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="765"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="775"/>
         <source>Console Output Limit:</source>
         <translation>主控台輸出限制：</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="803"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="813"/>
         <source>Automatically show output console</source>
         <translation>自動顯示輸出主控台</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="325"/>
-        <location filename="../dialogs/dialogpreferences.ui" line="665"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="335"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="675"/>
         <source>Family:</source>
         <translation>字型族：</translation>
     </message>
@@ -1192,33 +1197,33 @@ Open the download page?</source>
         <translation>預設值</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="210"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="220"/>
         <source>Check for updates</source>
         <translation>檢查更新</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="401"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="411"/>
         <source>%</source>
         <translation>%</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="422"/>
-        <location filename="../dialogs/dialogpreferences.ui" line="721"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="432"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="731"/>
         <source>Antialias</source>
         <translation>反鋸齒</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="483"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="493"/>
         <source>Columns Distance:</source>
         <translation>欄間距：</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="533"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="543"/>
         <source>Autoscroll</source>
         <translation>自動捲動</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="540"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="550"/>
         <source>Log View Limit:</source>
         <translation>日誌限制：</translation>
     </message>
@@ -1228,29 +1233,44 @@ Open the download page?</source>
         <translation>腳本</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="464"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="474"/>
         <source>Data View</source>
         <translation>資料檢視</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="521"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="531"/>
         <source>Traffic View</source>
         <translation>流量檢視</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="618"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="628"/>
         <source>&lt;b&gt;Note:&lt;/b&gt; These settings apply to newly opened windows only.</source>
         <translation>&lt;b&gt;注意：&lt;/b&gt;這些設定僅適用於新開啟的視窗。</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="731"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="741"/>
         <source>Editor</source>
         <translation>編輯器</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="743"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="753"/>
         <source>Enable code auto-complete</source>
         <translation>啟用程式碼自動完成</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogpreferences.cpp" line="34"/>
+        <source>System</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogpreferences.cpp" line="35"/>
+        <source>Light</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogpreferences.cpp" line="36"/>
+        <source>Dark</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2603,7 +2623,7 @@ Open the download page?</source>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="342"/>
-        <location filename="../mainwindow.cpp" line="1915"/>
+        <location filename="../mainwindow.cpp" line="1920"/>
         <source>Save Project</source>
         <translation>儲存專案</translation>
     </message>
@@ -2803,19 +2823,19 @@ Open the download page?</source>
         <translation>狀態列</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="924"/>
+        <location filename="../mainwindow.cpp" line="929"/>
         <source>All files (*)</source>
         <translation>所有檔案 (*)</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="293"/>
-        <location filename="../mainwindow.cpp" line="671"/>
+        <location filename="../mainwindow.cpp" line="676"/>
         <source>Open Recent</source>
         <translation>最近開啟</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="294"/>
-        <location filename="../mainwindow.cpp" line="2051"/>
+        <location filename="../mainwindow.cpp" line="2056"/>
         <source>Clear List</source>
         <translation>清除清單</translation>
     </message>
@@ -2830,21 +2850,21 @@ Open the download page?</source>
         <translation>輸出</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="923"/>
-        <location filename="../mainwindow.cpp" line="1945"/>
+        <location filename="../mainwindow.cpp" line="928"/>
+        <location filename="../mainwindow.cpp" line="1950"/>
         <source>Project files (*.omsim)</source>
         <translation>專案檔案 (*.omsim)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1569"/>
-        <location filename="../mainwindow.cpp" line="1973"/>
+        <location filename="../mainwindow.cpp" line="1574"/>
+        <location filename="../mainwindow.cpp" line="1978"/>
         <source>Untitled</source>
         <translation>未命名</translation>
     </message>
     <message>
         <location filename="../applogger.cpp" line="119"/>
-        <location filename="../mainwindow.cpp" line="674"/>
-        <location filename="../mainwindow.cpp" line="1754"/>
+        <location filename="../mainwindow.cpp" line="679"/>
+        <location filename="../mainwindow.cpp" line="1759"/>
         <source>Address Base</source>
         <translation>地址基準</translation>
     </message>
@@ -3134,7 +3154,7 @@ Open the download page?</source>
         <translation>腳本已啟動：%1（模式：%2）</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1308"/>
+        <location filename="../mainwindow.cpp" line="1313"/>
         <source>Move to Other Panel</source>
         <translation>移至其他面板</translation>
     </message>
@@ -3156,12 +3176,12 @@ Open the download page?</source>
         <translation>十六進位檢視</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1916"/>
+        <location filename="../mainwindow.cpp" line="1921"/>
         <source>Save project before closing?</source>
         <translation>關閉前儲存專案？</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2039"/>
+        <location filename="../mainwindow.cpp" line="2044"/>
         <source>No Recent Projects</source>
         <translation>無最近專案</translation>
     </message>
@@ -3171,7 +3191,7 @@ Open the download page?</source>
         <translation>資料</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1266"/>
+        <location filename="../mainwindow.cpp" line="1271"/>
         <source>JavaScript files (*.js);;All files (*)</source>
         <translation>JavaScript檔案 (*.js);;所有檔案 (*)</translation>
     </message>
@@ -3727,103 +3747,103 @@ Open the download page?</source>
 <context>
     <name>ProjectTreeWidget</name>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="66"/>
-        <location filename="../controls/projecttreewidget.cpp" line="345"/>
+        <location filename="../controls/projecttreewidget.cpp" line="67"/>
+        <location filename="../controls/projecttreewidget.cpp" line="355"/>
         <source>Data</source>
         <translation>資料</translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="74"/>
-        <location filename="../controls/projecttreewidget.cpp" line="346"/>
+        <location filename="../controls/projecttreewidget.cpp" line="75"/>
+        <location filename="../controls/projecttreewidget.cpp" line="356"/>
         <source>Traffic</source>
         <translation>流量</translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="70"/>
-        <location filename="../controls/projecttreewidget.cpp" line="348"/>
+        <location filename="../controls/projecttreewidget.cpp" line="71"/>
+        <location filename="../controls/projecttreewidget.cpp" line="358"/>
         <source>Maps</source>
         <translation>地圖</translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="78"/>
-        <location filename="../controls/projecttreewidget.cpp" line="347"/>
+        <location filename="../controls/projecttreewidget.cpp" line="79"/>
+        <location filename="../controls/projecttreewidget.cpp" line="357"/>
         <source>Scripts</source>
         <translation>腳本</translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="387"/>
+        <location filename="../controls/projecttreewidget.cpp" line="397"/>
         <source>New Data View</source>
         <translation>新增資料檢視</translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="388"/>
+        <location filename="../controls/projecttreewidget.cpp" line="398"/>
         <source>New Map View</source>
         <translation>新增映射檢視</translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="389"/>
+        <location filename="../controls/projecttreewidget.cpp" line="399"/>
         <source>New Traffic View</source>
         <translation>新增流量檢視</translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="390"/>
+        <location filename="../controls/projecttreewidget.cpp" line="400"/>
         <source>New Script</source>
         <translation>新增腳本</translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="412"/>
-        <location filename="../controls/projecttreewidget.cpp" line="497"/>
+        <location filename="../controls/projecttreewidget.cpp" line="422"/>
+        <location filename="../controls/projecttreewidget.cpp" line="507"/>
         <source>Delete All</source>
         <translation>刪除全部</translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="433"/>
+        <location filename="../controls/projecttreewidget.cpp" line="443"/>
         <source>Run All Scripts</source>
         <translation>執行所有腳本</translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="434"/>
+        <location filename="../controls/projecttreewidget.cpp" line="444"/>
         <source>Stop All Scripts</source>
         <translation>停止所有腳本</translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="452"/>
+        <location filename="../controls/projecttreewidget.cpp" line="462"/>
         <source>Run Script</source>
         <translation>執行腳本</translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="453"/>
+        <location filename="../controls/projecttreewidget.cpp" line="463"/>
         <source>Stop Script</source>
         <translation>停止腳本</translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="459"/>
-        <location filename="../controls/projecttreewidget.cpp" line="524"/>
+        <location filename="../controls/projecttreewidget.cpp" line="469"/>
+        <location filename="../controls/projecttreewidget.cpp" line="534"/>
         <source>Rename</source>
         <translation>重新命名</translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="462"/>
+        <location filename="../controls/projecttreewidget.cpp" line="472"/>
         <source>Delete</source>
         <translation>刪除</translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="498"/>
+        <location filename="../controls/projecttreewidget.cpp" line="508"/>
         <source>Delete all in &quot;%1&quot;?</source>
         <translation>刪除 &quot;%1&quot; 中的所有內容？</translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="524"/>
+        <location filename="../controls/projecttreewidget.cpp" line="534"/>
         <source>New name:</source>
         <translation>新名稱：</translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="532"/>
+        <location filename="../controls/projecttreewidget.cpp" line="542"/>
         <source>Delete Form</source>
         <translation>刪除表單</translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="533"/>
+        <location filename="../controls/projecttreewidget.cpp" line="543"/>
         <source>Delete &quot;%1&quot; from the project?</source>
         <translation>從專案中刪除 &quot;%1&quot;？</translation>
     </message>

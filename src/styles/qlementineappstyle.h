@@ -3,6 +3,7 @@
 
 #if defined(HAVE_QLEMENTINE_APP_STYLE)
 
+#include <oclero/qlementine/style/Theme.hpp>
 #include <oclero/qlementine/style/QlementineStyle.hpp>
 
 class QWidget;
@@ -17,8 +18,6 @@ public:
     explicit QlementineAppStyle(QObject* parent = nullptr);
 
 protected:
-    explicit QlementineAppStyle(bool skipTheme, QObject* parent = nullptr);
-
     QColor const& buttonBackgroundColor(oclero::qlementine::MouseState mouse,
                                         oclero::qlementine::ColorRole role,
                                         const QWidget* widget = nullptr) const override;
@@ -69,6 +68,13 @@ protected:
                                             oclero::qlementine::ColorRole role) const override;
     QColor const& toolButtonForegroundColor(oclero::qlementine::MouseState mouse,
                                             oclero::qlementine::ColorRole role) const override;
+
+private:
+    void updateTheme();
+    bool isDarkMode() const;
+
+    oclero::qlementine::Theme _lightTheme;
+    oclero::qlementine::Theme _darkTheme;
 };
 
 #endif // HAVE_QLEMENTINE_APP_STYLE

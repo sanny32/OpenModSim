@@ -1107,82 +1107,87 @@ Open the download page?</source>
     </message>
     <message>
         <location filename="../dialogs/dialogpreferences.ui" line="182"/>
-        <location filename="../dialogs/dialogpreferences.ui" line="196"/>
-        <location filename="../dialogs/dialogpreferences.ui" line="203"/>
-        <location filename="../dialogs/dialogpreferences.ui" line="284"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="206"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="213"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="294"/>
         <source>Reset</source>
         <translation>Сброс</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="217"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="227"/>
         <source>Background Color:</source>
         <translation>Цвет фона:</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="271"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="281"/>
         <source>Foreground Color:</source>
         <translation>Цвет текста:</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="231"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="241"/>
         <source>Address Color:</source>
         <translation>Цвет адреса:</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="238"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="248"/>
         <source>Comment Color:</source>
         <translation>Цвет комментария:</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="189"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="199"/>
         <source>Language:</source>
         <translation>Язык:</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="224"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="189"/>
+        <source>Theme:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogpreferences.ui" line="234"/>
         <source>Show Welcome dialog on startup</source>
         <translation>Показывать диалог приветствия при запуске</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="310"/>
-        <location filename="../dialogs/dialogpreferences.ui" line="650"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="320"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="660"/>
         <source>Font</source>
         <translation>Шрифт</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="347"/>
-        <location filename="../dialogs/dialogpreferences.ui" line="687"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="357"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="697"/>
         <source>Size:</source>
         <translation>Размер:</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="379"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="389"/>
         <source>Zoom:</source>
         <translation>Масштаб:</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="476"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="486"/>
         <source>Leading Zeros for Unsigned</source>
         <translation>Ведущие нули для беззнаковых</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="753"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="763"/>
         <source>Console</source>
         <translation>Консоль</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="765"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="775"/>
         <source>Console Output Limit:</source>
         <translation>Ограничение вывода консоли:</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="803"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="813"/>
         <source>Automatically show output console</source>
         <translation>Автоматически показывать консоль вывода</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="325"/>
-        <location filename="../dialogs/dialogpreferences.ui" line="665"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="335"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="675"/>
         <source>Family:</source>
         <translation>Семейство:</translation>
     </message>
@@ -1192,33 +1197,33 @@ Open the download page?</source>
         <translation>По умолчанию</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="210"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="220"/>
         <source>Check for updates</source>
         <translation>Проверять обновления</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="401"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="411"/>
         <source>%</source>
         <translation>%</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="422"/>
-        <location filename="../dialogs/dialogpreferences.ui" line="721"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="432"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="731"/>
         <source>Antialias</source>
         <translation>Сглаживание</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="483"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="493"/>
         <source>Columns Distance:</source>
         <translation>Расстояние между столбцами:</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="533"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="543"/>
         <source>Autoscroll</source>
         <translation>Автопрокрутка</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="540"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="550"/>
         <source>Log View Limit:</source>
         <translation>Лимит лога:</translation>
     </message>
@@ -1228,29 +1233,44 @@ Open the download page?</source>
         <translation>Скрипт</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="464"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="474"/>
         <source>Data View</source>
         <translation>Данные</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="521"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="531"/>
         <source>Traffic View</source>
         <translation>Просмотр трафика</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="618"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="628"/>
         <source>&lt;b&gt;Note:&lt;/b&gt; These settings apply to newly opened windows only.</source>
         <translation>&lt;b&gt;Примечание:&lt;/b&gt; Эти настройки применяются только к новым окнам.</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="731"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="741"/>
         <source>Editor</source>
         <translation>Редактор</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="743"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="753"/>
         <source>Enable code auto-complete</source>
         <translation>Включить автодополнение кода</translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogpreferences.cpp" line="34"/>
+        <source>System</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogpreferences.cpp" line="35"/>
+        <source>Light</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dialogs/dialogpreferences.cpp" line="36"/>
+        <source>Dark</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2623,7 +2643,7 @@ Open the download page?</source>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="342"/>
-        <location filename="../mainwindow.cpp" line="1915"/>
+        <location filename="../mainwindow.cpp" line="1920"/>
         <source>Save Project</source>
         <translation>Сохранить проект</translation>
     </message>
@@ -2803,19 +2823,19 @@ Open the download page?</source>
         <translation>Строка состояния</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="924"/>
+        <location filename="../mainwindow.cpp" line="929"/>
         <source>All files (*)</source>
         <translation>Все файлы (*)</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="293"/>
-        <location filename="../mainwindow.cpp" line="671"/>
+        <location filename="../mainwindow.cpp" line="676"/>
         <source>Open Recent</source>
         <translation>Открыть недавние</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="294"/>
-        <location filename="../mainwindow.cpp" line="2051"/>
+        <location filename="../mainwindow.cpp" line="2056"/>
         <source>Clear List</source>
         <translation>Очистить список</translation>
     </message>
@@ -2830,21 +2850,21 @@ Open the download page?</source>
         <translation>Вывод</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="923"/>
-        <location filename="../mainwindow.cpp" line="1945"/>
+        <location filename="../mainwindow.cpp" line="928"/>
+        <location filename="../mainwindow.cpp" line="1950"/>
         <source>Project files (*.omsim)</source>
         <translation>Файлы проекта (*.omsim)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1569"/>
-        <location filename="../mainwindow.cpp" line="1973"/>
+        <location filename="../mainwindow.cpp" line="1574"/>
+        <location filename="../mainwindow.cpp" line="1978"/>
         <source>Untitled</source>
         <translation>Без имени</translation>
     </message>
     <message>
         <location filename="../applogger.cpp" line="119"/>
-        <location filename="../mainwindow.cpp" line="674"/>
-        <location filename="../mainwindow.cpp" line="1754"/>
+        <location filename="../mainwindow.cpp" line="679"/>
+        <location filename="../mainwindow.cpp" line="1759"/>
         <source>Address Base</source>
         <translation>Адресация</translation>
     </message>
@@ -3134,7 +3154,7 @@ Open the download page?</source>
         <translation>Скрипт запущен: %1 (режим: %2)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1308"/>
+        <location filename="../mainwindow.cpp" line="1313"/>
         <source>Move to Other Panel</source>
         <translation>Переместить на другую панель</translation>
     </message>
@@ -3156,12 +3176,12 @@ Open the download page?</source>
         <translation>Шестнадцатиричный режим</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1916"/>
+        <location filename="../mainwindow.cpp" line="1921"/>
         <source>Save project before closing?</source>
         <translation>Сохранить проект перед закрытием?</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2039"/>
+        <location filename="../mainwindow.cpp" line="2044"/>
         <source>No Recent Projects</source>
         <translation>Нет недавних проектов</translation>
     </message>
@@ -3171,7 +3191,7 @@ Open the download page?</source>
         <translation>Данные</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1266"/>
+        <location filename="../mainwindow.cpp" line="1271"/>
         <source>JavaScript files (*.js);;All files (*)</source>
         <translation>Файлы JavaScript (*.js);;Все файлы (*)</translation>
     </message>
@@ -3727,103 +3747,103 @@ Open the download page?</source>
 <context>
     <name>ProjectTreeWidget</name>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="66"/>
-        <location filename="../controls/projecttreewidget.cpp" line="345"/>
+        <location filename="../controls/projecttreewidget.cpp" line="67"/>
+        <location filename="../controls/projecttreewidget.cpp" line="355"/>
         <source>Data</source>
         <translation>Данные</translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="74"/>
-        <location filename="../controls/projecttreewidget.cpp" line="346"/>
+        <location filename="../controls/projecttreewidget.cpp" line="75"/>
+        <location filename="../controls/projecttreewidget.cpp" line="356"/>
         <source>Traffic</source>
         <translation>Трафик</translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="70"/>
-        <location filename="../controls/projecttreewidget.cpp" line="348"/>
+        <location filename="../controls/projecttreewidget.cpp" line="71"/>
+        <location filename="../controls/projecttreewidget.cpp" line="358"/>
         <source>Maps</source>
         <translation>Карты</translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="78"/>
-        <location filename="../controls/projecttreewidget.cpp" line="347"/>
+        <location filename="../controls/projecttreewidget.cpp" line="79"/>
+        <location filename="../controls/projecttreewidget.cpp" line="357"/>
         <source>Scripts</source>
         <translation>Скрипты</translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="387"/>
+        <location filename="../controls/projecttreewidget.cpp" line="397"/>
         <source>New Data View</source>
         <translation>Новый просмотр данных</translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="388"/>
+        <location filename="../controls/projecttreewidget.cpp" line="398"/>
         <source>New Map View</source>
         <translation>Новый просмотр карты</translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="389"/>
+        <location filename="../controls/projecttreewidget.cpp" line="399"/>
         <source>New Traffic View</source>
         <translation>Новый просмотр трафика</translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="390"/>
+        <location filename="../controls/projecttreewidget.cpp" line="400"/>
         <source>New Script</source>
         <translation>Новый скрипт</translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="412"/>
-        <location filename="../controls/projecttreewidget.cpp" line="497"/>
+        <location filename="../controls/projecttreewidget.cpp" line="422"/>
+        <location filename="../controls/projecttreewidget.cpp" line="507"/>
         <source>Delete All</source>
         <translation>Удалить все</translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="433"/>
+        <location filename="../controls/projecttreewidget.cpp" line="443"/>
         <source>Run All Scripts</source>
         <translation>Запустить все скрипты</translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="434"/>
+        <location filename="../controls/projecttreewidget.cpp" line="444"/>
         <source>Stop All Scripts</source>
         <translation>Остановить все скрипты</translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="452"/>
+        <location filename="../controls/projecttreewidget.cpp" line="462"/>
         <source>Run Script</source>
         <translation>Запустить скрипт</translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="453"/>
+        <location filename="../controls/projecttreewidget.cpp" line="463"/>
         <source>Stop Script</source>
         <translation>Остановить скрипт</translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="459"/>
-        <location filename="../controls/projecttreewidget.cpp" line="524"/>
+        <location filename="../controls/projecttreewidget.cpp" line="469"/>
+        <location filename="../controls/projecttreewidget.cpp" line="534"/>
         <source>Rename</source>
         <translation>Переименовать</translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="462"/>
+        <location filename="../controls/projecttreewidget.cpp" line="472"/>
         <source>Delete</source>
         <translation>Удалить</translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="498"/>
+        <location filename="../controls/projecttreewidget.cpp" line="508"/>
         <source>Delete all in &quot;%1&quot;?</source>
         <translation>Удалить всё в &quot;%1&quot;?</translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="524"/>
+        <location filename="../controls/projecttreewidget.cpp" line="534"/>
         <source>New name:</source>
         <translation>Новое имя:</translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="532"/>
+        <location filename="../controls/projecttreewidget.cpp" line="542"/>
         <source>Delete Form</source>
         <translation>Удалить форму</translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="533"/>
+        <location filename="../controls/projecttreewidget.cpp" line="543"/>
         <source>Delete &quot;%1&quot; from the project?</source>
         <translation>Удалить &quot;%1&quot; из проекта?</translation>
     </message>

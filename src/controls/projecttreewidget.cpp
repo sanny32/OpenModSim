@@ -5,6 +5,7 @@
 #include <QMessageBox>
 #include <QPainter>
 #include <QStyleHints>
+#include "apppreferences.h"
 #include "../styles/appcolors.h"
 #include "formscriptview.h"
 #include "projecttreewidget.h"
@@ -88,6 +89,11 @@ ProjectTreeWidget::ProjectTreeWidget(QWidget* parent)
 
     connect(QGuiApplication::styleHints(), &QStyleHints::colorSchemeChanged,
             this, [this](Qt::ColorScheme) { refreshAllItemColors(); });
+    connect(&AppPreferences::instance(), &AppPreferences::settingChanged,
+            this, [this](const QString& name, const QString&, const QString&) {
+                if (name == QLatin1String("ThemeMode"))
+                    refreshAllItemColors();
+            });
 }
 
 ///
@@ -246,7 +252,7 @@ void ProjectTreeWidget::refreshFormItem(QTreeWidgetItem* item, QWidget* frm)
                               deleteLocked ? _iconDataMapLocked : _iconDataMap,
                               deleteLocked ? _iconDataMapLockedClosed : _iconDataMapClosed));
 
-    QColor textColor = palette().color(QPalette::Text);
+    QColor textColor = AppColors::windowForeground();
     textColor.setAlpha(open ? 255 : 100);
     item->setForeground(0, textColor);
 }
@@ -275,6 +281,10 @@ void ProjectTreeWidget::changeEvent(QEvent* event)
 {
     if (event->type() == QEvent::LanguageChange)
         retranslateUi();
+    else if (event->type() == QEvent::ApplicationPaletteChange
+             || event->type() == QEvent::StyleChange
+             || event->type() == QEvent::ThemeChange)
+        refreshAllItemColors();
     QTreeWidget::changeEvent(event);
 }
 

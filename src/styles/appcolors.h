@@ -6,12 +6,21 @@
 #include <QGuiApplication>
 #include <QPalette>
 #include <QStyleHints>
+#include "apppreferences.h"
 
 namespace AppColors {
 
 inline bool isDark()
 {
-    return QGuiApplication::styleHints()->colorScheme() == Qt::ColorScheme::Dark;
+    switch (AppPreferences::instance().themeMode()) {
+        case AppThemeMode::Light:
+            return false;
+        case AppThemeMode::Dark:
+            return true;
+        case AppThemeMode::System:
+        default:
+            return QGuiApplication::styleHints()->colorScheme() == Qt::ColorScheme::Dark;
+    }
 }
 
 inline QColor canvasBackground()
