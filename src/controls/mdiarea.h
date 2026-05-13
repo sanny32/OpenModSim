@@ -74,6 +74,7 @@ public:
     void setVisible(bool visible) override;
 
 protected:
+    void changeEvent(QEvent* event) override;
     bool eventFilter(QObject* obj, QEvent* event) override;
     void resizeEvent(QResizeEvent* event) override;
 
@@ -91,6 +92,7 @@ private:
     void refreshTabBar();
     void updateTabBarGeometry();
     void updateViewportBaseLine();
+    void updateBackgroundFromPalette();
     void syncNativeTabBarSelection(QMdiSubWindow* wnd);
     void updateTabbedEnabledState();
     void enforceTabbedSubWindowState(QMdiSubWindow* wnd);

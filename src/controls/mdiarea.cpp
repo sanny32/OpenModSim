@@ -8,6 +8,7 @@
 
 #include "mdiarea.h"
 #include <QApplication>
+#include <QEvent>
 #include <QPainter>
 #include <QScrollBar>
 #include <QScopedValueRollback>
@@ -130,6 +131,9 @@ MdiArea::MdiArea(QWidget* parent)
     connect(qApp, &QApplication::focusChanged, this, [this](QWidget* old, QWidget*) {
         _focusMovedFromOutsideMdi = old && old != this && !isAncestorOf(old);
     });
+
+    updateBackgroundFromPalette();
+
     AppTrace::log("MdiArea::MdiArea",
                   QStringLiteral("constructed %1").arg(areaTag(this)));
 }
@@ -319,6 +323,25 @@ void MdiArea::setViewMode(ViewMode mode)
 
     updateTabbedEnabledState();
     emit tabBarLayoutChanged();
+}
+
+///
+/// \brief MdiArea::changeEvent
+/// \param event
+///
+void MdiArea::changeEvent(QEvent* event)
+{
+    QMdiArea::changeEvent(event);
+
+    switch (event->type()) {
+        case QEvent::ApplicationPaletteChange:
+        case QEvent::PaletteChange:
+        case QEvent::StyleChange:
+            updateBackgroundFromPalette();
+            break;
+        default:
+            break;
+    }
 }
 
 ///
@@ -1059,6 +1082,18 @@ void MdiArea::updateViewportBaseLine()
 }
 
 ///
+/// \brief MdiArea::updateBackgroundFromPalette
+///
+void MdiArea::updateBackgroundFromPalette()
+{
+    const QBrush brush(palette().color(QPalette::Base));
+    if (background() == brush)
+        return;
+
+    setBackground(brush);
+}
+
+///
 /// \brief MdiArea::enforceTabbedSubWindowState
 /// \param wnd
 ///
@@ -1079,6 +1114,10 @@ void MdiArea::enforceTabbedSubWindowState(QMdiSubWindow* wnd)
         wnd->showMaximized();
 }
 
+///
+/// \brief MdiArea::rememberActivation
+/// \param wnd
+///
 void MdiArea::rememberActivation(QMdiSubWindow* wnd)
 {
     if (!wnd)
@@ -1088,6 +1127,10 @@ void MdiArea::rememberActivation(QMdiSubWindow* wnd)
     _activationHistory.append(QPointer<QMdiSubWindow>(wnd));
 }
 
+///
+/// \brief MdiArea::forgetActivation
+/// \param wnd
+///
 void MdiArea::forgetActivation(QMdiSubWindow* wnd)
 {
     for (int i = _activationHistory.size() - 1; i >= 0; --i) {
@@ -1100,6 +1143,11 @@ void MdiArea::forgetActivation(QMdiSubWindow* wnd)
         _lastActivatedSubWindow = previousActivatedSubWindow();
 }
 
+///
+/// \brief MdiArea::previousActivatedSubWindow
+/// \param excluding
+/// \return
+///
 QMdiSubWindow* MdiArea::previousActivatedSubWindow(QMdiSubWindow* excluding) const
 {
     const auto windows = QMdiArea::subWindowList();
