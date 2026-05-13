@@ -15,42 +15,30 @@
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="0">
-    <widget class="ClickableLabel" name="label15">
-     <property name="text">
-      <string notr="true">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:7pt; font-weight:700;&quot;&gt;15&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignCenter</set>
+    <widget class="BitNumberLabel" name="label15">
+     <property name="bitNumber">
+      <number>15</number>
      </property>
     </widget>
    </item>
    <item row="0" column="1">
-    <widget class="ClickableLabel" name="label14">
-     <property name="text">
-      <string notr="true">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:7pt; font-weight:700;&quot;&gt;14&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignCenter</set>
+    <widget class="BitNumberLabel" name="label14">
+     <property name="bitNumber">
+      <number>14</number>
      </property>
     </widget>
    </item>
    <item row="0" column="2">
-    <widget class="ClickableLabel" name="label13">
-     <property name="text">
-      <string notr="true">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:7pt; font-weight:700;&quot;&gt;13&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignCenter</set>
+    <widget class="BitNumberLabel" name="label13">
+     <property name="bitNumber">
+      <number>13</number>
      </property>
     </widget>
    </item>
    <item row="0" column="3">
-    <widget class="ClickableLabel" name="label12">
-     <property name="text">
-      <string notr="true">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:7pt; font-weight:700;&quot;&gt;12&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignCenter</set>
+    <widget class="BitNumberLabel" name="label12">
+     <property name="bitNumber">
+      <number>12</number>
      </property>
     </widget>
    </item>
@@ -71,42 +59,30 @@
     </spacer>
    </item>
    <item row="0" column="5">
-    <widget class="ClickableLabel" name="label11">
-     <property name="text">
-      <string notr="true">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:7pt; font-weight:700;&quot;&gt;11&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignCenter</set>
+    <widget class="BitNumberLabel" name="label11">
+     <property name="bitNumber">
+      <number>11</number>
      </property>
     </widget>
    </item>
    <item row="0" column="6">
-    <widget class="ClickableLabel" name="label10">
-     <property name="text">
-      <string notr="true">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:7pt; font-weight:700;&quot;&gt;10&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignCenter</set>
+    <widget class="BitNumberLabel" name="label10">
+     <property name="bitNumber">
+      <number>10</number>
      </property>
     </widget>
    </item>
    <item row="0" column="7">
-    <widget class="ClickableLabel" name="label9">
-     <property name="text">
-      <string notr="true">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:7pt; font-weight:700;&quot;&gt;9&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignCenter</set>
+    <widget class="BitNumberLabel" name="label9">
+     <property name="bitNumber">
+      <number>9</number>
      </property>
     </widget>
    </item>
    <item row="0" column="8">
-    <widget class="ClickableLabel" name="label8">
-     <property name="text">
-      <string notr="true">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:7pt; font-weight:700;&quot;&gt;8&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignCenter</set>
+    <widget class="BitNumberLabel" name="label8">
+     <property name="bitNumber">
+      <number>8</number>
      </property>
     </widget>
    </item>
@@ -127,42 +103,30 @@
     </spacer>
    </item>
    <item row="0" column="10">
-    <widget class="ClickableLabel" name="label7">
-     <property name="text">
-      <string notr="true">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:7pt; font-weight:700;&quot;&gt;7&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignCenter</set>
+    <widget class="BitNumberLabel" name="label7">
+     <property name="bitNumber">
+      <number>7</number>
      </property>
     </widget>
    </item>
    <item row="0" column="11">
-    <widget class="ClickableLabel" name="label6">
-     <property name="text">
-      <string notr="true">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:7pt; font-weight:700;&quot;&gt;6&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignCenter</set>
+    <widget class="BitNumberLabel" name="label6">
+     <property name="bitNumber">
+      <number>6</number>
      </property>
     </widget>
    </item>
    <item row="0" column="12">
-    <widget class="ClickableLabel" name="label5">
-     <property name="text">
-      <string notr="true">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:7pt; font-weight:700;&quot;&gt;5&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignCenter</set>
+    <widget class="BitNumberLabel" name="label5">
+     <property name="bitNumber">
+      <number>5</number>
      </property>
     </widget>
    </item>
    <item row="0" column="13">
-    <widget class="ClickableLabel" name="label4">
-     <property name="text">
-      <string notr="true">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:7pt; font-weight:700;&quot;&gt;4&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignCenter</set>
+    <widget class="BitNumberLabel" name="label4">
+     <property name="bitNumber">
+      <number>4</number>
      </property>
     </widget>
    </item>
@@ -183,42 +147,30 @@
     </spacer>
    </item>
    <item row="0" column="15">
-    <widget class="ClickableLabel" name="label3">
-     <property name="text">
-      <string notr="true">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:7pt; font-weight:700;&quot;&gt;3&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignCenter</set>
+    <widget class="BitNumberLabel" name="label3">
+     <property name="bitNumber">
+      <number>3</number>
      </property>
     </widget>
    </item>
    <item row="0" column="16">
-    <widget class="ClickableLabel" name="label2">
-     <property name="text">
-      <string notr="true">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:7pt; font-weight:700;&quot;&gt;2&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignCenter</set>
+    <widget class="BitNumberLabel" name="label2">
+     <property name="bitNumber">
+      <number>2</number>
      </property>
     </widget>
    </item>
    <item row="0" column="17">
-    <widget class="ClickableLabel" name="label1">
-     <property name="text">
-      <string notr="true">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:7pt; font-weight:700;&quot;&gt;1&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignCenter</set>
+    <widget class="BitNumberLabel" name="label1">
+     <property name="bitNumber">
+      <number>1</number>
      </property>
     </widget>
    </item>
    <item row="0" column="18">
-    <widget class="ClickableLabel" name="label0">
-     <property name="text">
-      <string notr="true">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:7pt; font-weight:700;&quot;&gt;0&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignCenter</set>
+    <widget class="BitNumberLabel" name="label0">
+     <property name="bitNumber">
+      <number>0</number>
      </property>
     </widget>
    </item>
@@ -338,12 +290,11 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>ClickableLabel</class>
+   <class>BitNumberLabel</class>
    <extends>QLabel</extends>
-   <header>clickablelabel.h</header>
+   <header>bitnumberlabel.h</header>
   </customwidget>
  </customwidgets>
  <resources/>
  <connections/>
 </ui>
-

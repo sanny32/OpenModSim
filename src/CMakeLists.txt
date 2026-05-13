@@ -180,6 +180,7 @@ set(SOURCES
     controls/aboutdatawidget.cpp
     controls/addressbasecombobox.cpp
     controls/addressspacecombobox.cpp
+    controls/bitnumberlabel.cpp
     controls/bitpatterncontrol.cpp
     controls/funccodefiltercombobox.cpp
     controls/booleancombobox.cpp
@@ -289,6 +290,7 @@ set(HEADERS
     controls/aboutdatawidget.h
     controls/addressbasecombobox.h
     controls/addressspacecombobox.h
+    controls/bitnumberlabel.h
     controls/bitpatterncontrol.h
     controls/funccodefiltercombobox.h
     controls/booleancombobox.h

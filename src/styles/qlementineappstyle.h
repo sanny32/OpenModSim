@@ -51,6 +51,8 @@ protected:
     void polish(QWidget* widget) override;
     QSize sizeFromContents(ContentsType type, const QStyleOption* option,
                            const QSize& contentsSize, const QWidget* widget = nullptr) const override;
+    QRect subElementRect(SubElement element, const QStyleOption* option,
+                         const QWidget* widget = nullptr) const override;
     QColor const& splitterColor(oclero::qlementine::MouseState mouse) const override;
     int styleHint(StyleHint hint, const QStyleOption* option = nullptr,
                   const QWidget* widget = nullptr, QStyleHintReturn* returnData = nullptr) const override;

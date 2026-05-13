@@ -25,6 +25,7 @@
 #include <QPainter>
 #include <QPainterPath>
 #include <QPalette>
+#include <QStyleOptionButton>
 #include <QStyleOptionDockWidget>
 #include <QStyleOptionMenuItem>
 #include <QStyleOptionTab>
@@ -178,6 +179,17 @@ QColor modelBackgroundColor(const QModelIndex& index)
         return color;
 
     return {};
+}
+
+///
+/// \brief Checks whether a button option represents an indicator without adjacent content.
+/// \param option
+/// \return
+///
+bool isStandaloneIndicatorButton(const QStyleOption* option)
+{
+    const auto* buttonOption = qstyleoption_cast<const QStyleOptionButton*>(option);
+    return buttonOption && buttonOption->text.isEmpty() && buttonOption->icon.isNull();
 }
 
 ///
@@ -727,6 +739,16 @@ QSize QlementineAppStyle::sizeFromContents(ContentsType type, const QStyleOption
     if (type == CT_LineEdit && qobject_cast<const QLineEdit*>(widget))
         size.setWidth(qMax(size.width(), contentsSize.width()));
 
+    if ((type == CT_CheckBox || type == CT_RadioButton) && isStandaloneIndicatorButton(option)) {
+        const bool isRadio = type == CT_RadioButton;
+        const int indicatorWidth = pixelMetric(isRadio ? PM_ExclusiveIndicatorWidth : PM_IndicatorWidth,
+                                               option, widget);
+        const int indicatorHeight = pixelMetric(isRadio ? PM_ExclusiveIndicatorHeight : PM_IndicatorHeight,
+                                                option, widget);
+        size.setWidth(indicatorWidth);
+        size.setHeight(qMax(size.height(), indicatorHeight));
+    }
+
     if (type == CT_ToolButton && widget && widget->parentWidget()
         && widget->parentWidget()->objectName() == QStringLiteral("toolBarMain")) {
         size.rheight() = qMax(size.height(), 36);
@@ -734,6 +756,29 @@ QSize QlementineAppStyle::sizeFromContents(ContentsType type, const QStyleOption
     }
 
     return size;
+}
+
+///
+/// \brief QlementineAppStyle::subElementRect
+/// \param element
+/// \param option
+/// \param widget
+/// \return
+///
+QRect QlementineAppStyle::subElementRect(SubElement element, const QStyleOption* option,
+                                         const QWidget* widget) const
+{
+    if ((element == SE_CheckBoxIndicator || element == SE_RadioButtonIndicator)
+        && option && isStandaloneIndicatorButton(option)) {
+        const bool isRadio = element == SE_RadioButtonIndicator;
+        const QSize indicatorSize(pixelMetric(isRadio ? PM_ExclusiveIndicatorWidth : PM_IndicatorWidth,
+                                              option, widget),
+                                  pixelMetric(isRadio ? PM_ExclusiveIndicatorHeight : PM_IndicatorHeight,
+                                              option, widget));
+        return QStyle::alignedRect(option->direction, Qt::AlignCenter, indicatorSize, option->rect);
+    }
+
+    return QlementineStyle::subElementRect(element, option, widget);
 }
 
 ///
