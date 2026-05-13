@@ -24,6 +24,11 @@
 
 namespace {
 
+///
+/// \brief dataMapWindowIcon
+/// \param autoRequestMap
+/// \return
+///
 QIcon dataMapWindowIcon(bool autoRequestMap)
 {
     return autoRequestMap
@@ -31,6 +36,13 @@ QIcon dataMapWindowIcon(bool autoRequestMap)
         : themedIcon(QStringLiteral("omodsim/show-data-map"));
 }
 
+///
+/// \brief recoloredMenuIcon
+/// \param source
+/// \param color
+/// \param size
+/// \return
+///
 QIcon recoloredMenuIcon(const QIcon& source, const QColor& color, const QSize& size)
 {
     if (source.isNull() || !size.isValid())
@@ -884,36 +896,53 @@ void FormDataMapView::on_tableView_customContextMenuRequested(const QPoint& pos)
     const QModelIndex clickedIndex = ui->tableView->indexAt(pos);
     if (clickedIndex.isValid())
         ui->tableView->setCurrentIndex(clickedIndex);
+
     updateActionState();
 
     QMenu menu(this);
+
 #if defined(HAVE_QLEMENTINE_APP_STYLE)
     if (auto* qlementineStyle = dynamic_cast<oclero::qlementine::QlementineStyle*>(menu.style())) {
         qlementineStyle->setAutoIconColor(&menu, oclero::qlementine::AutoIconColor::None);
-    }
-#endif
-    const int menuIconExtent = menu.style()
-        ? menu.style()->pixelMetric(QStyle::PM_SmallIconSize, nullptr, &menu)
-        : 16;
-    const QSize menuIconSize(menuIconExtent > 0 ? menuIconExtent : 16,
-                             menuIconExtent > 0 ? menuIconExtent : 16);
-    const QColor menuIconColor = menu.palette().color(QPalette::Text);
-    auto addMenuActionWithRecoloredIcon = [&](QAction* sourceAction) {
-        QAction* action = menu.addAction(sourceAction->text());
-        action->setEnabled(sourceAction->isEnabled());
-        action->setCheckable(sourceAction->isCheckable());
-        action->setChecked(sourceAction->isChecked());
-        if (!sourceAction->icon().isNull())
-            action->setIcon(recoloredMenuIcon(sourceAction->icon(), menuIconColor, menuIconSize));
-        connect(action, &QAction::triggered, sourceAction, &QAction::trigger);
-        return action;
-    };
 
-    addMenuActionWithRecoloredIcon(ui->actionAdd);
-    addMenuActionWithRecoloredIcon(ui->actionInsert);
-    addMenuActionWithRecoloredIcon(ui->actionDelete);
+        const int menuIconExtent = menu.style()
+            ? menu.style()->pixelMetric(QStyle::PM_SmallIconSize, nullptr, &menu)
+            : 16;
+        const QSize menuIconSize(menuIconExtent > 0 ? menuIconExtent : 16,
+                                 menuIconExtent > 0 ? menuIconExtent : 16);
+        const QColor menuIconColor = menu.palette().color(QPalette::Text);
+        auto addMenuActionWithRecoloredIcon = [&](QAction* sourceAction) {
+            QAction* action = menu.addAction(sourceAction->text());
+            action->setEnabled(sourceAction->isEnabled());
+            action->setCheckable(sourceAction->isCheckable());
+            action->setChecked(sourceAction->isChecked());
+            if (!sourceAction->icon().isNull())
+                action->setIcon(recoloredMenuIcon(sourceAction->icon(), menuIconColor, menuIconSize));
+            connect(action, &QAction::triggered, sourceAction, &QAction::trigger);
+            return action;
+        };
+
+        addMenuActionWithRecoloredIcon(ui->actionAdd);
+        addMenuActionWithRecoloredIcon(ui->actionInsert);
+        addMenuActionWithRecoloredIcon(ui->actionDelete);
+        menu.addSeparator();
+        addMenuActionWithRecoloredIcon(ui->actionClear);
+    }
+    else
+    {
+        menu.addAction(ui->actionAdd);
+        menu.addAction(ui->actionInsert);
+        menu.addAction(ui->actionDelete);
+        menu.addSeparator();
+        menu.addAction(ui->actionClear);
+    }
+#else
+    menu.addAction(ui->actionAdd);
+    menu.addAction(ui->actionInsert);
+    menu.addAction(ui->actionDelete);
     menu.addSeparator();
-    addMenuActionWithRecoloredIcon(ui->actionClear);
+    menu.addAction(ui->actionClear);
+#endif
 
     if (clickedIndex.isValid()) {
         const QModelIndex sourceIndex = _proxy->mapToSource(clickedIndex);
