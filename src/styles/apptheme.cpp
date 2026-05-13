@@ -26,11 +26,6 @@ AppTheme::AppTheme(QObject* parent)
         connect(hints, &QStyleHints::colorSchemeChanged,
                 this, [this]() { notifyColorSchemeChanged(); });
     }
-#else
-    if (qApp) {
-        connect(qApp, &QGuiApplication::paletteChanged,
-                this, [this]() { notifyColorSchemeChanged(); });
-    }
 #endif
 
     connect(&AppPreferences::instance(), &AppPreferences::settingChanged,
@@ -67,7 +62,7 @@ bool AppTheme::isSystemDark() const
     if (const auto* hints = QGuiApplication::styleHints())
         return hints->colorScheme() == Qt::ColorScheme::Dark;
 #endif
-    return QApplication::palette().color(QPalette::Window).lightness() < 128;
+    return false;
 }
 
 ///
