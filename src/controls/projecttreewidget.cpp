@@ -1,11 +1,9 @@
-#include <QGuiApplication>
 #include <QHeaderView>
 #include <QInputDialog>
 #include <QMenu>
 #include <QMessageBox>
 #include <QPainter>
-#include <QStyleHints>
-#include "apppreferences.h"
+#include "application.h"
 #include "../styles/appcolors.h"
 #include "formscriptview.h"
 #include "projecttreewidget.h"
@@ -87,13 +85,8 @@ ProjectTreeWidget::ProjectTreeWidget(QWidget* parent)
     connect(this, &QTreeWidget::customContextMenuRequested,
             this, &ProjectTreeWidget::on_contextMenu);
 
-    connect(QGuiApplication::styleHints(), &QStyleHints::colorSchemeChanged,
-            this, [this](Qt::ColorScheme) { refreshAllItemColors(); });
-    connect(&AppPreferences::instance(), &AppPreferences::settingChanged,
-            this, [this](const QString& name, const QString&, const QString&) {
-                if (name == QLatin1String("ThemeMode"))
-                    refreshAllItemColors();
-            });
+    connect(&theApp()->theme(), &AppTheme::colorSchemeChanged,
+            this, [this]() { refreshAllItemColors(); });
 }
 
 ///

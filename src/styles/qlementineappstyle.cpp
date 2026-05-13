@@ -1,12 +1,12 @@
 #if defined(HAVE_QLEMENTINE_APP_STYLE)
 
 #include "qlementineappstyle.h"
-#include "apppreferences.h"
+#include "appcolors.h"
+#include "application.h"
 #include <oclero/qlementine/icons/QlementineIcons.hpp>
 
 #include <QComboBox>
 #include <QDockWidget>
-#include <QGuiApplication>
 #include <QPushButton>
 #include <QBrush>
 #include <QHash>
@@ -19,7 +19,6 @@
 #include <QStyleOptionDockWidget>
 #include <QStyleOptionTab>
 #include <QStyleOptionToolButton>
-#include <QStyleHints>
 #include <QTabBar>
 #include <QToolBar>
 #include <QToolButton>
@@ -310,13 +309,8 @@ QlementineAppStyle::QlementineAppStyle(QObject* parent)
     _darkTheme = makeQlementineAppTheme(baseTheme, true);
     updateTheme();
 
-    connect(QGuiApplication::styleHints(), &QStyleHints::colorSchemeChanged,
-            this, [this](Qt::ColorScheme) { updateTheme(); });
-    connect(&AppPreferences::instance(), &AppPreferences::settingChanged,
-            this, [this](const QString& name, const QString&, const QString&) {
-                if (name == QLatin1String("ThemeMode"))
-                    updateTheme();
-            });
+    connect(&theApp()->theme(), &AppTheme::colorSchemeChanged,
+            this, [this]() { updateTheme(); });
 }
 
 void QlementineAppStyle::updateTheme()
@@ -326,15 +320,7 @@ void QlementineAppStyle::updateTheme()
 
 bool QlementineAppStyle::isDarkMode() const
 {
-    switch (AppPreferences::instance().themeMode()) {
-        case AppThemeMode::Light:
-            return false;
-        case AppThemeMode::Dark:
-            return true;
-        case AppThemeMode::System:
-        default:
-            return QGuiApplication::styleHints()->colorScheme() == Qt::ColorScheme::Dark;
-    }
+    return AppColors::isDark();
 }
 
 ///

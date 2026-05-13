@@ -4,7 +4,6 @@
 #include <QItemSelectionModel>
 #include <QPalette>
 #include <QPainter>
-#include <QStyleHints>
 #include "../styles/appcolors.h"
 #include "fontutils.h"
 #include "modbuslogwidget.h"

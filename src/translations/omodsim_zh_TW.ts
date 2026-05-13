@@ -137,38 +137,38 @@
         <translation>清除日誌</translation>
     </message>
     <message>
-        <location filename="../controls/applogoutput.cpp" line="216"/>
-        <location filename="../controls/applogoutput.cpp" line="391"/>
+        <location filename="../controls/applogoutput.cpp" line="215"/>
+        <location filename="../controls/applogoutput.cpp" line="390"/>
         <source>Copy All</source>
         <translation>全部複製</translation>
     </message>
     <message>
-        <location filename="../controls/applogoutput.cpp" line="382"/>
+        <location filename="../controls/applogoutput.cpp" line="381"/>
         <source>Copy</source>
         <translation>複製</translation>
     </message>
     <message>
-        <location filename="../controls/applogoutput.cpp" line="398"/>
+        <location filename="../controls/applogoutput.cpp" line="397"/>
         <source>Export...</source>
         <translation>匯出...</translation>
     </message>
     <message>
-        <location filename="../controls/applogoutput.cpp" line="404"/>
+        <location filename="../controls/applogoutput.cpp" line="403"/>
         <source>Clear</source>
         <translation>清除</translation>
     </message>
     <message>
-        <location filename="../controls/applogoutput.cpp" line="428"/>
+        <location filename="../controls/applogoutput.cpp" line="427"/>
         <source>Text files (*.txt)</source>
         <translation>文字檔案 (*.txt)</translation>
     </message>
     <message>
-        <location filename="../controls/applogoutput.cpp" line="433"/>
+        <location filename="../controls/applogoutput.cpp" line="432"/>
         <source>Export</source>
         <translation>匯出</translation>
     </message>
     <message>
-        <location filename="../controls/applogoutput.cpp" line="433"/>
+        <location filename="../controls/applogoutput.cpp" line="432"/>
         <source>Cannot open file for writing:
 %1</source>
         <translation>無法開啟檔案進行寫入：
@@ -214,12 +214,12 @@
 <context>
     <name>ByteOrderItemDelegate</name>
     <message>
-        <location filename="../formdatamapview.cpp" line="348"/>
+        <location filename="../formdatamapview.cpp" line="349"/>
         <source>Use bytes in register order</source>
         <translation>依暫存器順序使用位元組</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="349"/>
+        <location filename="../formdatamapview.cpp" line="350"/>
         <source>Swap bytes inside each 16-bit register</source>
         <translation>交換每個 16 位元暫存器內的位元組</translation>
     </message>
@@ -270,12 +270,12 @@
         <translation>清除控制台</translation>
     </message>
     <message>
-        <location filename="../controls/consoleoutput.cpp" line="314"/>
+        <location filename="../controls/consoleoutput.cpp" line="313"/>
         <source>Copy</source>
         <translation>複製</translation>
     </message>
     <message>
-        <location filename="../controls/consoleoutput.cpp" line="325"/>
+        <location filename="../controls/consoleoutput.cpp" line="324"/>
         <source>Clear</source>
         <translation>清除</translation>
     </message>
@@ -354,62 +354,62 @@
 <context>
     <name>DataTypeItemDelegate</name>
     <message>
-        <location filename="../formdatamapview.cpp" line="204"/>
+        <location filename="../formdatamapview.cpp" line="205"/>
         <source>1-bit value (Coils / Discrete Inputs)</source>
         <translation>1位元值（線圈/離散輸入）</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="205"/>
+        <location filename="../formdatamapview.cpp" line="206"/>
         <source>16-bit register value shown as 16 binary digits</source>
         <translation>16位元暫存器值，以16位元二進位數字顯示</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="206"/>
+        <location filename="../formdatamapview.cpp" line="207"/>
         <source>Unsigned 16-bit integer  (0 … 65535)</source>
         <translation>無符號16位元整數（0 … 65535）</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="207"/>
+        <location filename="../formdatamapview.cpp" line="208"/>
         <source>Signed 16-bit integer  (−32768 … 32767)</source>
         <translation>有符號16位元整數（−32768 … 32767）</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="208"/>
+        <location filename="../formdatamapview.cpp" line="209"/>
         <source>16-bit value displayed as hexadecimal</source>
         <translation>16位元值，以十六進位顯示</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="209"/>
+        <location filename="../formdatamapview.cpp" line="210"/>
         <source>16-bit value displayed as ANSI character</source>
         <translation>16位元值，以ANSI字元顯示</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="210"/>
+        <location filename="../formdatamapview.cpp" line="211"/>
         <source>IEEE 754 single-precision float  (2 registers)</source>
         <translation>IEEE 754單精度浮點數（2個暫存器）</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="211"/>
+        <location filename="../formdatamapview.cpp" line="212"/>
         <source>IEEE 754 double-precision float  (4 registers)</source>
         <translation>IEEE 754雙精度浮點數（4個暫存器）</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="212"/>
+        <location filename="../formdatamapview.cpp" line="213"/>
         <source>Signed 32-bit integer  (2 registers)</source>
         <translation>有符號32位元整數（2個暫存器）</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="213"/>
+        <location filename="../formdatamapview.cpp" line="214"/>
         <source>Unsigned 32-bit integer  (2 registers)</source>
         <translation>無符號32位元整數（2個暫存器）</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="214"/>
+        <location filename="../formdatamapview.cpp" line="215"/>
         <source>Signed 64-bit integer  (4 registers)</source>
         <translation>有符號64位元整數（4個暫存器）</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="215"/>
+        <location filename="../formdatamapview.cpp" line="216"/>
         <source>Unsigned 64-bit integer  (4 registers)</source>
         <translation>無符號64位元整數（4個暫存器）</translation>
     </message>
@@ -1258,17 +1258,17 @@ Open the download page?</source>
         <translation>啟用程式碼自動完成</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.cpp" line="34"/>
+        <location filename="../dialogs/dialogpreferences.cpp" line="33"/>
         <source>System</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.cpp" line="35"/>
+        <location filename="../dialogs/dialogpreferences.cpp" line="34"/>
         <source>Light</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.cpp" line="36"/>
+        <location filename="../dialogs/dialogpreferences.cpp" line="35"/>
         <source>Dark</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1817,64 +1817,64 @@ Open the download page?</source>
         <translation>清除表格</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="1006"/>
+        <location filename="../formdatamapview.cpp" line="1002"/>
         <source>1-based</source>
         <translation>基地址為-1</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="1006"/>
+        <location filename="../formdatamapview.cpp" line="1002"/>
         <source>0-based</source>
         <translation>基地址為-0</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="935"/>
+        <location filename="../formdatamapview.cpp" line="931"/>
         <source>Remove Color</source>
         <translation>移除顏色</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="945"/>
+        <location filename="../formdatamapview.cpp" line="941"/>
         <source>Yellow</source>
         <translation>黃色</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="946"/>
+        <location filename="../formdatamapview.cpp" line="942"/>
         <source>Cyan</source>
         <translation>青色</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="947"/>
+        <location filename="../formdatamapview.cpp" line="943"/>
         <source>Magenta</source>
         <translation>品紅色</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="948"/>
+        <location filename="../formdatamapview.cpp" line="944"/>
         <source>LightGreen</source>
         <translation>淺綠色</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="949"/>
+        <location filename="../formdatamapview.cpp" line="945"/>
         <source>Orange</source>
         <translation>橙色</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="950"/>
+        <location filename="../formdatamapview.cpp" line="946"/>
         <source>LightBlue</source>
         <translation>淺藍色</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="951"/>
+        <location filename="../formdatamapview.cpp" line="947"/>
         <source>LightGray</source>
         <translation>淺灰色</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="1019"/>
-        <location filename="../formdatamapview.cpp" line="1243"/>
-        <location filename="../formdatamapview.cpp" line="1567"/>
+        <location filename="../formdatamapview.cpp" line="1015"/>
+        <location filename="../formdatamapview.cpp" line="1239"/>
+        <location filename="../formdatamapview.cpp" line="1563"/>
         <source>All Types</source>
         <translation>所有類型</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="1021"/>
+        <location filename="../formdatamapview.cpp" line="1017"/>
         <source>Address Base: %1
 Unit Filter: %2
 Type Filter: %3</source>
@@ -1883,45 +1883,45 @@ Type Filter: %3</source>
 類型過濾器：%3</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="1244"/>
-        <location filename="../formdatamapview.cpp" line="1568"/>
+        <location filename="../formdatamapview.cpp" line="1240"/>
+        <location filename="../formdatamapview.cpp" line="1564"/>
         <source>Coils</source>
         <translation>線圈</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="1245"/>
-        <location filename="../formdatamapview.cpp" line="1569"/>
+        <location filename="../formdatamapview.cpp" line="1241"/>
+        <location filename="../formdatamapview.cpp" line="1565"/>
         <source>Discrete Inputs</source>
         <translation>離散輸入</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="1246"/>
-        <location filename="../formdatamapview.cpp" line="1570"/>
+        <location filename="../formdatamapview.cpp" line="1242"/>
+        <location filename="../formdatamapview.cpp" line="1566"/>
         <source>Input Registers</source>
         <translation>輸入暫存器</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="1247"/>
-        <location filename="../formdatamapview.cpp" line="1571"/>
+        <location filename="../formdatamapview.cpp" line="1243"/>
+        <location filename="../formdatamapview.cpp" line="1567"/>
         <source>Holding Registers</source>
         <translation>保持暫存器</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="1235"/>
-        <location filename="../formdatamapview.cpp" line="1578"/>
+        <location filename="../formdatamapview.cpp" line="1231"/>
+        <location filename="../formdatamapview.cpp" line="1574"/>
         <source>Unit:</source>
         <translation>單元：</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="1236"/>
-        <location filename="../formdatamapview.cpp" line="1579"/>
+        <location filename="../formdatamapview.cpp" line="1232"/>
+        <location filename="../formdatamapview.cpp" line="1575"/>
         <source>Data Type:</source>
         <translation>資料類型：</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="1008"/>
-        <location filename="../formdatamapview.cpp" line="1237"/>
-        <location filename="../formdatamapview.cpp" line="1563"/>
+        <location filename="../formdatamapview.cpp" line="1004"/>
+        <location filename="../formdatamapview.cpp" line="1233"/>
+        <location filename="../formdatamapview.cpp" line="1559"/>
         <source>All</source>
         <translation>全部</translation>
     </message>
@@ -2623,7 +2623,7 @@ Open the download page?</source>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="342"/>
-        <location filename="../mainwindow.cpp" line="1920"/>
+        <location filename="../mainwindow.cpp" line="1914"/>
         <source>Save Project</source>
         <translation>儲存專案</translation>
     </message>
@@ -2823,19 +2823,19 @@ Open the download page?</source>
         <translation>狀態列</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="929"/>
+        <location filename="../mainwindow.cpp" line="923"/>
         <source>All files (*)</source>
         <translation>所有檔案 (*)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="293"/>
-        <location filename="../mainwindow.cpp" line="676"/>
+        <location filename="../mainwindow.cpp" line="292"/>
+        <location filename="../mainwindow.cpp" line="670"/>
         <source>Open Recent</source>
         <translation>最近開啟</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="294"/>
-        <location filename="../mainwindow.cpp" line="2056"/>
+        <location filename="../mainwindow.cpp" line="293"/>
+        <location filename="../mainwindow.cpp" line="2050"/>
         <source>Clear List</source>
         <translation>清除清單</translation>
     </message>
@@ -2850,21 +2850,21 @@ Open the download page?</source>
         <translation>輸出</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="928"/>
-        <location filename="../mainwindow.cpp" line="1950"/>
+        <location filename="../mainwindow.cpp" line="922"/>
+        <location filename="../mainwindow.cpp" line="1944"/>
         <source>Project files (*.omsim)</source>
         <translation>專案檔案 (*.omsim)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1574"/>
-        <location filename="../mainwindow.cpp" line="1978"/>
+        <location filename="../mainwindow.cpp" line="1568"/>
+        <location filename="../mainwindow.cpp" line="1972"/>
         <source>Untitled</source>
         <translation>未命名</translation>
     </message>
     <message>
         <location filename="../applogger.cpp" line="119"/>
-        <location filename="../mainwindow.cpp" line="679"/>
-        <location filename="../mainwindow.cpp" line="1759"/>
+        <location filename="../mainwindow.cpp" line="673"/>
+        <location filename="../mainwindow.cpp" line="1753"/>
         <source>Address Base</source>
         <translation>地址基準</translation>
     </message>
@@ -3154,7 +3154,7 @@ Open the download page?</source>
         <translation>腳本已啟動：%1（模式：%2）</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1313"/>
+        <location filename="../mainwindow.cpp" line="1307"/>
         <source>Move to Other Panel</source>
         <translation>移至其他面板</translation>
     </message>
@@ -3176,12 +3176,12 @@ Open the download page?</source>
         <translation>十六進位檢視</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1921"/>
+        <location filename="../mainwindow.cpp" line="1915"/>
         <source>Save project before closing?</source>
         <translation>關閉前儲存專案？</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2044"/>
+        <location filename="../mainwindow.cpp" line="2038"/>
         <source>No Recent Projects</source>
         <translation>無最近專案</translation>
     </message>
@@ -3191,7 +3191,7 @@ Open the download page?</source>
         <translation>資料</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1271"/>
+        <location filename="../mainwindow.cpp" line="1265"/>
         <source>JavaScript files (*.js);;All files (*)</source>
         <translation>JavaScript檔案 (*.js);;所有檔案 (*)</translation>
     </message>
@@ -3608,12 +3608,12 @@ Open the download page?</source>
 <context>
     <name>OrderItemDelegate</name>
     <message>
-        <location filename="../formdatamapview.cpp" line="283"/>
+        <location filename="../formdatamapview.cpp" line="284"/>
         <source>Most Significant Register First — big-endian word order</source>
         <translation>最高有效暫存器優先——大端字序</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="284"/>
+        <location filename="../formdatamapview.cpp" line="285"/>
         <source>Least Significant Register First — little-endian word order</source>
         <translation>最低有效暫存器優先——小端字序</translation>
     </message>
@@ -3621,67 +3621,67 @@ Open the download page?</source>
 <context>
     <name>OutputDataWidget</name>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1329"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1328"/>
         <source>Set Value of %1</source>
         <translation>設定 %1 的值</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1338"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1337"/>
         <source>Add Description</source>
         <translation>新增描述</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1338"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1337"/>
         <source>Edit Description</source>
         <translation>編輯描述</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1341"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1340"/>
         <source>%1: Enter Description</source>
         <translation>%1：輸入描述</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1350"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1349"/>
         <source>Remove Color</source>
         <translation>移除顏色</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1361"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1360"/>
         <source>Yellow</source>
         <translation>黃色</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1362"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1361"/>
         <source>Cyan</source>
         <translation>青色</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1363"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1362"/>
         <source>Magenta</source>
         <translation>品紅色</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1364"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1363"/>
         <source>LightGreen</source>
         <translation>淺綠色</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1365"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1364"/>
         <source>Orange</source>
         <translation>橙色</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1366"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1365"/>
         <source>LightBlue</source>
         <translation>淺藍色</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1367"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1366"/>
         <source>LightGray</source>
         <translation>淺灰色</translation>
     </message>
     <message>
-        <location filename="../controls/outputdatawidget.cpp" line="1446"/>
+        <location filename="../controls/outputdatawidget.cpp" line="1445"/>
         <source>Zoom: %1%</source>
         <translation>縮放：%1%</translation>
     </message>
@@ -3747,103 +3747,103 @@ Open the download page?</source>
 <context>
     <name>ProjectTreeWidget</name>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="67"/>
-        <location filename="../controls/projecttreewidget.cpp" line="355"/>
+        <location filename="../controls/projecttreewidget.cpp" line="65"/>
+        <location filename="../controls/projecttreewidget.cpp" line="348"/>
         <source>Data</source>
         <translation>資料</translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="75"/>
-        <location filename="../controls/projecttreewidget.cpp" line="356"/>
+        <location filename="../controls/projecttreewidget.cpp" line="73"/>
+        <location filename="../controls/projecttreewidget.cpp" line="349"/>
         <source>Traffic</source>
         <translation>流量</translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="71"/>
-        <location filename="../controls/projecttreewidget.cpp" line="358"/>
+        <location filename="../controls/projecttreewidget.cpp" line="69"/>
+        <location filename="../controls/projecttreewidget.cpp" line="351"/>
         <source>Maps</source>
         <translation>地圖</translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="79"/>
-        <location filename="../controls/projecttreewidget.cpp" line="357"/>
+        <location filename="../controls/projecttreewidget.cpp" line="77"/>
+        <location filename="../controls/projecttreewidget.cpp" line="350"/>
         <source>Scripts</source>
         <translation>腳本</translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="397"/>
+        <location filename="../controls/projecttreewidget.cpp" line="390"/>
         <source>New Data View</source>
         <translation>新增資料檢視</translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="398"/>
+        <location filename="../controls/projecttreewidget.cpp" line="391"/>
         <source>New Map View</source>
         <translation>新增映射檢視</translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="399"/>
+        <location filename="../controls/projecttreewidget.cpp" line="392"/>
         <source>New Traffic View</source>
         <translation>新增流量檢視</translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="400"/>
+        <location filename="../controls/projecttreewidget.cpp" line="393"/>
         <source>New Script</source>
         <translation>新增腳本</translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="422"/>
-        <location filename="../controls/projecttreewidget.cpp" line="507"/>
+        <location filename="../controls/projecttreewidget.cpp" line="415"/>
+        <location filename="../controls/projecttreewidget.cpp" line="500"/>
         <source>Delete All</source>
         <translation>刪除全部</translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="443"/>
+        <location filename="../controls/projecttreewidget.cpp" line="436"/>
         <source>Run All Scripts</source>
         <translation>執行所有腳本</translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="444"/>
+        <location filename="../controls/projecttreewidget.cpp" line="437"/>
         <source>Stop All Scripts</source>
         <translation>停止所有腳本</translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="462"/>
+        <location filename="../controls/projecttreewidget.cpp" line="455"/>
         <source>Run Script</source>
         <translation>執行腳本</translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="463"/>
+        <location filename="../controls/projecttreewidget.cpp" line="456"/>
         <source>Stop Script</source>
         <translation>停止腳本</translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="469"/>
-        <location filename="../controls/projecttreewidget.cpp" line="534"/>
+        <location filename="../controls/projecttreewidget.cpp" line="462"/>
+        <location filename="../controls/projecttreewidget.cpp" line="527"/>
         <source>Rename</source>
         <translation>重新命名</translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="472"/>
+        <location filename="../controls/projecttreewidget.cpp" line="465"/>
         <source>Delete</source>
         <translation>刪除</translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="508"/>
+        <location filename="../controls/projecttreewidget.cpp" line="501"/>
         <source>Delete all in &quot;%1&quot;?</source>
         <translation>刪除 &quot;%1&quot; 中的所有內容？</translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="534"/>
+        <location filename="../controls/projecttreewidget.cpp" line="527"/>
         <source>New name:</source>
         <translation>新名稱：</translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="542"/>
+        <location filename="../controls/projecttreewidget.cpp" line="535"/>
         <source>Delete Form</source>
         <translation>刪除表單</translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="543"/>
+        <location filename="../controls/projecttreewidget.cpp" line="536"/>
         <source>Delete &quot;%1&quot; from the project?</source>
         <translation>從專案中刪除 &quot;%1&quot;？</translation>
     </message>
@@ -4071,22 +4071,22 @@ Open the download page?</source>
 <context>
     <name>TypeItemDelegate</name>
     <message>
-        <location filename="../formdatamapview.cpp" line="155"/>
+        <location filename="../formdatamapview.cpp" line="156"/>
         <source>Coils</source>
         <translation>線圈</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="156"/>
+        <location filename="../formdatamapview.cpp" line="157"/>
         <source>Discrete Inputs</source>
         <translation>離散輸入</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="157"/>
+        <location filename="../formdatamapview.cpp" line="158"/>
         <source>Input Registers</source>
         <translation>輸入暫存器</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="158"/>
+        <location filename="../formdatamapview.cpp" line="159"/>
         <source>Holding Registers</source>
         <translation>保持暫存器</translation>
     </message>

@@ -160,6 +160,7 @@ target_include_directories(${PROJECT_NAME} PRIVATE
 # Source files
 set(SOURCES
     ansimenu.cpp
+    application.cpp
     applogger.cpp
     apppreferences.cpp
     appproject.cpp
@@ -186,6 +187,7 @@ set(SOURCES
     controls/jscodeeditor.cpp
     controls/jscriptcontrol.cpp
     controls/mainstatusbar.cpp
+    styles/apptheme.cpp
     styles/appstyle.cpp
     styles/macappstyle.cpp
     styles/qlementineappstyle.cpp
@@ -263,6 +265,7 @@ set(SOURCES
 set(HEADERS
     ansimenu.h
     ansiutils.h
+    application.h
     applogger.h
     apppreferences.h
     appproject.h
@@ -295,6 +298,7 @@ set(HEADERS
     controls/jscriptcontrol.h
     controls/mainstatusbar.h
     styles/appcolors.h
+    styles/apptheme.h
     styles/appstyle.h
     styles/macappstyle.h
     styles/qlementineappstyle.h

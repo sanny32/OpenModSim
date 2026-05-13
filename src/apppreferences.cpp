@@ -3,15 +3,7 @@
 #include "apppreferences.h"
 #include "styles/appcolors.h"
 
-#include <QGuiApplication>
-#include <QStyleHints>
-
 namespace {
-
-bool isSystemDarkMode()
-{
-    return QGuiApplication::styleHints()->colorScheme() == Qt::ColorScheme::Dark;
-}
 
 QString themeModeToText(AppThemeMode mode)
 {

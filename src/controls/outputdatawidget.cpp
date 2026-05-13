@@ -2,7 +2,6 @@
 #include <QGuiApplication>
 #include <QPainter>
 #include <QInputDialog>
-#include <QStyleHints>
 #include <climits>
 #include "../styles/appcolors.h"
 #include "apppreferences.h"

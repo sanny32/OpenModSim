@@ -1,6 +1,5 @@
 #include <QtWidgets>
 #include <QGuiApplication>
-#include <QStyleHints>
 #include "../styles/appcolors.h"
 #include "colorswatch.h"
 #include "dialogpreferences.h"

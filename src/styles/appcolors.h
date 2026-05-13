@@ -4,10 +4,8 @@
 #include <QApplication>
 #include <array>
 #include <QColor>
-#include <QGuiApplication>
 #include <QPalette>
-#include <QStyleHints>
-#include "apppreferences.h"
+#include "application.h"
 
 namespace AppColors {
 
@@ -24,15 +22,7 @@ enum class MarkerColorId
 
 inline bool isDark()
 {
-    switch (AppPreferences::instance().themeMode()) {
-        case AppThemeMode::Light:
-            return false;
-        case AppThemeMode::Dark:
-            return true;
-        case AppThemeMode::System:
-        default:
-            return QGuiApplication::styleHints()->colorScheme() == Qt::ColorScheme::Dark;
-    }
+    return theApp() ? theApp()->theme().isDark() : false;
 }
 
 inline QColor canvasBackground()

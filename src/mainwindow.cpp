@@ -1,10 +1,8 @@
 #include <QtWidgets>
 #include <QBuffer>
-#include <QGuiApplication>
 #include <QPrinterInfo>
 #include <QPrintDialog>
 #include <QPageSetupDialog>
-#include <QStyleHints>
 #include <limits>
 #include "apppreferences.h"
 #include "dialogabout.h"
@@ -17,6 +15,7 @@
 #include "dialogforcemultipleregisters.h"
 #include "dialogmodbusdefinitions.h"
 #include "dialogwelcome.h"
+#include "application.h"
 #include "mainstatusbar.h"
 #include "menuconnect.h"
 #include "mdiareaex.h"
@@ -362,13 +361,8 @@ MainWindow::MainWindow(const QString& profile, bool useSession, const QString& s
     AppLogger::setupAppProjectLogging(*_project, this);
     AppLogger::setupAppPreferencesLogging(AppPreferences::instance(), this);
 
-    connect(QGuiApplication::styleHints(), &QStyleHints::colorSchemeChanged,
-            this, [this](Qt::ColorScheme) { applyThemeColors(); });
-    connect(&AppPreferences::instance(), &AppPreferences::settingChanged,
-            this, [this](const QString& name, const QString&, const QString&) {
-                if (name == QLatin1String("ThemeMode"))
-                    applyThemeColors();
-            });
+    connect(&theApp()->theme(), &AppTheme::colorSchemeChanged,
+            this, [this]() { applyThemeColors(); });
 
     // View / window trivial action wiring
     connect(ui->actionExit,           &QAction::triggered, this, [this]{ close(); });

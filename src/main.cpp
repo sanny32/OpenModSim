@@ -1,7 +1,7 @@
-#include <QApplication>
 #include <QFontDatabase>
 #include <QIcon>
 #include <QMessageBox>
+#include "application.h"
 #include "mainwindow.h"
 #include "cmdlineparser.h"
 #include "fontutils.h"
@@ -93,7 +93,7 @@ static void showErrorMessage(const QString &message)
 ///
 int main(int argc, char *argv[])
 {
-    QApplication a(argc, argv);
+    Application a(argc, argv);
     a.setApplicationName(APP_NAME);
     a.setApplicationVersion(APP_VERSION);
 #ifdef Q_OS_LINUX

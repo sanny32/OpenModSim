@@ -1,7 +1,6 @@
 #include <QApplication>
 #include <QClipboard>
 #include <QGuiApplication>
-#include <QStyleHints>
 #include <QListWidget>
 #include <QMenu>
 #include <QPainter>

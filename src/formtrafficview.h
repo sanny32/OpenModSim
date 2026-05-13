@@ -2,7 +2,6 @@
 #define FORMTRAFFICVIEW_H
 
 #include <QGuiApplication>
-#include <QStyleHints>
 #include <QWidget>
 #include <QTimer>
 #include <QXmlStreamWriter>

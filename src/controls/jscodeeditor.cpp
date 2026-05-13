@@ -6,7 +6,6 @@
 #include <QContextMenuEvent>
 #include <QGuiApplication>
 #include <QPlainTextDocumentLayout>
-#include <QStyleHints>
 #include "jscompleter.h"
 #include "jscodeeditor.h"
 #include "themedicons.h"

@@ -1,16 +1,15 @@
 #if defined(HAVE_QLEMENTINE_APP_STYLE)
 
 #include "macappstyle.h"
-#include "apppreferences.h"
+#include "appcolors.h"
+#include "application.h"
 
 #include <QBrush>
 #include <QDockWidget>
 #include <QFontDatabase>
-#include <QGuiApplication>
 #include <QHash>
 #include <QModelIndex>
 #include <QPainter>
-#include <QStyleHints>
 #include <QStyleOptionDockWidget>
 #include <QStyleOptionTab>
 #include <QTabBar>
@@ -425,13 +424,8 @@ MacAppStyle::MacAppStyle(QObject* parent)
 {
     updateTheme();
 
-    connect(QGuiApplication::styleHints(), &QStyleHints::colorSchemeChanged,
-            this, [this](Qt::ColorScheme) { updateTheme(); });
-    connect(&AppPreferences::instance(), &AppPreferences::settingChanged,
-            this, [this](const QString& name, const QString&, const QString&) {
-                if (name == QLatin1String("ThemeMode"))
-                    updateTheme();
-            });
+    connect(&theApp()->theme(), &AppTheme::colorSchemeChanged,
+            this, [this]() { updateTheme(); });
 }
 
 void MacAppStyle::updateTheme()
@@ -441,15 +435,7 @@ void MacAppStyle::updateTheme()
 
 bool MacAppStyle::isDarkMode() const
 {
-    switch (AppPreferences::instance().themeMode()) {
-        case AppThemeMode::Light:
-            return false;
-        case AppThemeMode::Dark:
-            return true;
-        case AppThemeMode::System:
-        default:
-            return QGuiApplication::styleHints()->colorScheme() == Qt::ColorScheme::Dark;
-    }
+    return AppColors::isDark();
 }
 
 ///

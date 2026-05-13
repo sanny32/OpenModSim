@@ -1,6 +1,7 @@
 #include <QtWidgets>
 #include "mainwindow.h"
 #include "apppreferences.h"
+#include "application.h"
 #include "styles/appcolors.h"
 #include "formdatamapview.h"
 #include "modbusmessages/modbusmessages.h"
@@ -780,13 +781,8 @@ FormDataMapView::FormDataMapView(ModbusMultiServer& server, MainWindow* parent)
             this, &FormDataMapView::updateActionState);
     connect(_proxy, &QAbstractItemModel::rowsRemoved,
             this, &FormDataMapView::updateActionState);
-    connect(QGuiApplication::styleHints(), &QStyleHints::colorSchemeChanged,
-            this, [this](Qt::ColorScheme) { refreshThemeDependentRowColors(); });
-    connect(&AppPreferences::instance(), &AppPreferences::settingChanged,
-            this, [this](const QString& name, const QString&, const QString&) {
-                if (name == QLatin1String("ThemeMode"))
-                    refreshThemeDependentRowColors();
-            });
+    connect(&theApp()->theme(), &AppTheme::colorSchemeChanged,
+            this, [this]() { refreshThemeDependentRowColors(); });
 
     updateActionState();
     setupServerConnections();
