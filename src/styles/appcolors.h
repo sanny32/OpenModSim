@@ -2,6 +2,7 @@
 #define APPCOLORS_H
 
 #include <QApplication>
+#include <array>
 #include <QColor>
 #include <QGuiApplication>
 #include <QPalette>
@@ -9,6 +10,17 @@
 #include "apppreferences.h"
 
 namespace AppColors {
+
+enum class MarkerColorId
+{
+    Yellow,
+    Cyan,
+    Magenta,
+    LightGreen,
+    Orange,
+    LightBlue,
+    LightGray
+};
 
 inline bool isDark()
 {
@@ -180,40 +192,89 @@ inline QColor removeIconBorder()
     return QApplication::palette().color(QPalette::Mid);
 }
 
+inline QColor markerColor(MarkerColorId id, bool darkMode)
+{
+    switch (id) {
+        case MarkerColorId::Yellow:
+            return darkMode ? QColor("#B08A2E") : QColor("#FFF59D");
+        case MarkerColorId::Cyan:
+            return darkMode ? QColor("#2C7E8F") : QColor("#B2EBF2");
+        case MarkerColorId::Magenta:
+            return darkMode ? QColor("#8E4C8B") : QColor("#E1BEE7");
+        case MarkerColorId::LightGreen:
+            return darkMode ? QColor("#4F8A57") : QColor("#C8E6C9");
+        case MarkerColorId::Orange:
+            return darkMode ? QColor("#A56A2A") : QColor("#FFE0B2");
+        case MarkerColorId::LightBlue:
+            return darkMode ? QColor("#4F78A8") : QColor("#BBDEFB");
+        case MarkerColorId::LightGray:
+            return darkMode ? QColor("#6B7280") : QColor("#E5E7EB");
+    }
+    return {};
+}
+
+inline QColor markerColor(MarkerColorId id)
+{
+    return markerColor(id, isDark());
+}
+
+inline QColor normalizeMarkerColor(const QColor& color)
+{
+    if (!color.isValid())
+        return color;
+
+    constexpr std::array<MarkerColorId, 7> ids = {
+        MarkerColorId::Yellow,
+        MarkerColorId::Cyan,
+        MarkerColorId::Magenta,
+        MarkerColorId::LightGreen,
+        MarkerColorId::Orange,
+        MarkerColorId::LightBlue,
+        MarkerColorId::LightGray
+    };
+
+    for (const MarkerColorId id : ids) {
+        if (color == markerColor(id, false) || color == markerColor(id, true))
+            return markerColor(id);
+    }
+
+    return color;
+}
+
 // Marker colors for row/address highlighting
 inline QColor markerYellow()
 {
-    return isDark() ? QColor("#B08A2E") : QColor("#FFF59D");
+    return markerColor(MarkerColorId::Yellow);
 }
 
 inline QColor markerCyan()
 {
-    return isDark() ? QColor("#2C7E8F") : QColor("#B2EBF2");
+    return markerColor(MarkerColorId::Cyan);
 }
 
 inline QColor markerMagenta()
 {
-    return isDark() ? QColor("#8E4C8B") : QColor("#E1BEE7");
+    return markerColor(MarkerColorId::Magenta);
 }
 
 inline QColor markerLightGreen()
 {
-    return isDark() ? QColor("#4F8A57") : QColor("#C8E6C9");
+    return markerColor(MarkerColorId::LightGreen);
 }
 
 inline QColor markerOrange()
 {
-    return isDark() ? QColor("#A56A2A") : QColor("#FFE0B2");
+    return markerColor(MarkerColorId::Orange);
 }
 
 inline QColor markerLightBlue()
 {
-    return isDark() ? QColor("#4F78A8") : QColor("#BBDEFB");
+    return markerColor(MarkerColorId::LightBlue);
 }
 
 inline QColor markerLightGray()
 {
-    return isDark() ? QColor("#6B7280") : QColor("#E5E7EB");
+    return markerColor(MarkerColorId::LightGray);
 }
 
 // Version label (about widget)

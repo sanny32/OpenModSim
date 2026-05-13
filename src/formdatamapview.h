@@ -81,6 +81,7 @@ private:
     int addRowAndReturnSourceRow(int referenceSourceRow = -1);
     void editSourceRow(int sourceRow);
     void processRequest(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 startAddress, quint16 count);
+    void refreshThemeDependentRowColors();
     void setupToolBar();
     void setupServerConnections();
     void updateWindowIcon();

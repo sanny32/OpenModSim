@@ -780,6 +780,13 @@ FormDataMapView::FormDataMapView(ModbusMultiServer& server, MainWindow* parent)
             this, &FormDataMapView::updateActionState);
     connect(_proxy, &QAbstractItemModel::rowsRemoved,
             this, &FormDataMapView::updateActionState);
+    connect(QGuiApplication::styleHints(), &QStyleHints::colorSchemeChanged,
+            this, [this](Qt::ColorScheme) { refreshThemeDependentRowColors(); });
+    connect(&AppPreferences::instance(), &AppPreferences::settingChanged,
+            this, [this](const QString& name, const QString&, const QString&) {
+                if (name == QLatin1String("ThemeMode"))
+                    refreshThemeDependentRowColors();
+            });
 
     updateActionState();
     setupServerConnections();
@@ -844,6 +851,24 @@ void FormDataMapView::setHexView(bool enabled)
 
     _displayDefinition.HexView = enabled;
     _model->setHexView(enabled);
+}
+
+void FormDataMapView::refreshThemeDependentRowColors()
+{
+    if (!_model)
+        return;
+
+    const int rows = _model->rowCount();
+    for (int row = 0; row < rows; ++row) {
+        const QModelIndex index = _model->index(row, 0);
+        const QColor currentColor = _model->data(index, DataMapRole::RowColor).value<QColor>();
+        if (!currentColor.isValid())
+            continue;
+
+        const QColor themedColor = AppColors::normalizeMarkerColor(currentColor);
+        if (themedColor != currentColor)
+            _model->setData(index, themedColor, DataMapRole::RowColor);
+    }
 }
 
 ///
@@ -953,6 +978,7 @@ void FormDataMapView::saveXml(QXmlStreamWriter& xml) const
 void FormDataMapView::loadXml(QXmlStreamReader& xml)
 {
     xml >> this;
+    refreshThemeDependentRowColors();
 }
 
 ///
