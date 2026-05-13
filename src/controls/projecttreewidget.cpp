@@ -5,6 +5,7 @@
 #include <QMessageBox>
 #include <QPainter>
 #include <QStyleHints>
+#include "../styles/appcolors.h"
 #include "formscriptview.h"
 #include "projecttreewidget.h"
 #include "themedicons.h"
@@ -252,8 +253,7 @@ void ProjectTreeWidget::refreshFormItem(QTreeWidgetItem* item, QWidget* frm)
 
 void ProjectTreeWidget::refreshAllItemColors()
 {
-    const bool dark = QGuiApplication::styleHints()->colorScheme() == Qt::ColorScheme::Dark;
-    const QColor baseColor = dark ? Qt::white : Qt::black;
+    const QColor baseColor = AppColors::windowForeground();
     const QList<QTreeWidgetItem*> roots = { _dataRoot, _trafficRoot, _scriptRoot, _dataMapRoot };
     for (auto* root : roots) {
         if (!root) continue;

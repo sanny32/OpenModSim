@@ -7,6 +7,7 @@
 #include <QTimer>
 #include <QXmlStreamWriter>
 #include <QPrinter>
+#include "styles/appcolors.h"
 #include "fontutils.h"
 #include "displaydefinition.h"
 #include "jscriptcontrol.h"
@@ -193,9 +194,8 @@ inline QSettings& operator >>(QSettings& in, FormScriptView* frm)
 
     auto wnd = frm->parentWidget();
     frm->setFont(in.value("Font", defaultMonospaceFont()).value<QFont>());
-    const bool dark = QGuiApplication::styleHints()->colorScheme() == Qt::ColorScheme::Dark;
-    frm->setForegroundColor(in.value("ForegroundColor", dark ? QColor(Qt::white) : QColor(Qt::black)).value<QColor>());
-    frm->setBackgroundColor(in.value("BackgroundColor", dark ? QColor(0x1c1c1e) : QColor(Qt::white)).value<QColor>());
+    frm->setForegroundColor(in.value("ForegroundColor", AppColors::canvasForeground()).value<QColor>());
+    frm->setBackgroundColor(in.value("BackgroundColor", AppColors::canvasBackground()).value<QColor>());
     frm->setZoomPercent(in.value("ZoomPercent", 100).toInt());
     frm->setFont(AppPreferences::instance().scriptFont());
     if(wndRect.isValid())
@@ -328,9 +328,8 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, FormScriptView* frm)
             }
             else if (xml.name() == QLatin1String("Colors")) {
                 const QXmlStreamAttributes colorAttrs = xml.attributes();
-                const bool dark = QGuiApplication::styleHints()->colorScheme() == Qt::ColorScheme::Dark;
-                const QColor defaultBg = dark ? QColor(0x1c1c1e) : Qt::white;
-                const QColor defaultFg = dark ? Qt::white : Qt::black;
+                const QColor defaultBg = AppColors::canvasBackground();
+                const QColor defaultFg = AppColors::canvasForeground();
 
                 if (colorAttrs.hasAttribute("Background")) {
                     QColor color(colorAttrs.value("Background").toString());

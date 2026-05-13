@@ -5,6 +5,7 @@
 #include <QPalette>
 #include <QPainter>
 #include <QStyleHints>
+#include "../styles/appcolors.h"
 #include "fontutils.h"
 #include "modbuslogwidget.h"
 #include "outputtrafficwidget.h"
@@ -203,9 +204,8 @@ void OutputTrafficWidget::setLogViewState(LogViewState state)
 ///
 void OutputTrafficWidget::updatePaletteFromTheme()
 {
-    const bool dark = QGuiApplication::styleHints()->colorScheme() == Qt::ColorScheme::Dark;
-    setForegroundColor(dark ? Qt::white        : Qt::black);
-    setBackgroundColor(dark ? QColor(0x1c1c1e) : Qt::white);
+    setForegroundColor(AppColors::canvasForeground());
+    setBackgroundColor(AppColors::canvasBackground());
 }
 
 ///

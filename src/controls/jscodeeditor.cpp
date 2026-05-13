@@ -10,6 +10,7 @@
 #include "jscompleter.h"
 #include "jscodeeditor.h"
 #include "themedicons.h"
+#include "../styles/appcolors.h"
 #include "../fontutils.h"
 
 ///
@@ -182,7 +183,7 @@ void JSCodeEditor::search(const QString& text)
     while(find(text))
     {
         QTextEdit::ExtraSelection extra;
-        extra.format.setBackground(Qt::yellow);
+        extra.format.setBackground(AppColors::searchMatchBackground());
 
         extra.cursor = textCursor();
         extraSelections.append(extra);
@@ -216,7 +217,7 @@ int JSCodeEditor::highlightAllMatches(const QString& text, QTextDocument::FindFl
     while(!(findCursor = document()->find(text, findCursor, flags)).isNull())
     {
         QTextEdit::ExtraSelection extra;
-        extra.format.setBackground(Qt::yellow);
+        extra.format.setBackground(AppColors::searchMatchBackground());
         extra.cursor = findCursor;
         _searchSelections.append(extra);
     }
@@ -236,7 +237,7 @@ int JSCodeEditor::highlightAllMatches(const QString& text, QTextDocument::FindFl
 
     // Highlight current match differently
     if(_currentMatchIndex >= 0 && _currentMatchIndex < _searchSelections.size())
-        _searchSelections[_currentMatchIndex].format.setBackground(QColor(255, 150, 50));
+        _searchSelections[_currentMatchIndex].format.setBackground(AppColors::searchCurrentMatchBackground());
 
     highlightCurrentLine();
     return _searchSelections.size();
@@ -420,20 +421,13 @@ void JSCodeEditor::insertCompletion(const QString& completion)
 ///
 void JSCodeEditor::applyThemeColors()
 {
-    const bool dark = QGuiApplication::styleHints()->colorScheme() == Qt::ColorScheme::Dark;
+    const bool dark = AppColors::isDark();
 
     auto pal = palette();
-    if (dark) {
-        pal.setColor(QPalette::Base, QColor(0x1c1c1e));
-        pal.setColor(QPalette::Window, QColor(0x1c1c1e));
-        pal.setColor(QPalette::Text, QColor(0xffffff));
-        _lineColor = QColor(0x2c2c2e);
-    } else {
-        pal.setColor(QPalette::Base, Qt::white);
-        pal.setColor(QPalette::Window, Qt::white);
-        pal.setColor(QPalette::Text, Qt::black);
-        _lineColor = QColor(200, 200, 200, 70);
-    }
+    pal.setColor(QPalette::Base, AppColors::canvasBackground());
+    pal.setColor(QPalette::Window, AppColors::canvasBackground());
+    pal.setColor(QPalette::Text, AppColors::canvasForeground());
+    _lineColor = AppColors::alternateBackground();
     setPalette(pal);
     _highlighter->setDarkMode(dark);
     _lineNumberArea->update();
@@ -450,7 +444,7 @@ void JSCodeEditor::changeEvent(QEvent* event)
         event->type() == QEvent::StyleChange ||
         event->type() == QEvent::ThemeChange)
     {
-        if (backgroundColor() == Qt::white || backgroundColor() == QColor(0x1c1c1e)) {
+        if (backgroundColor() == AppColors::canvasBackground()) {
             applyThemeColors();
             highlightCurrentLine();
         }
@@ -603,9 +597,8 @@ void JSCodeEditor::highlightCurrentLine()
 ///
 void JSCodeEditor::lineNumberAreaPaintEvent(QPaintEvent *event)
 {
-    const bool dark = QGuiApplication::styleHints()->colorScheme() == Qt::ColorScheme::Dark;
-    const QColor lineAreaBg = dark ? QColor(0x2c2c2e) : QColorConstants::Svg::whitesmoke;
-    const QColor lineNumberColor = dark ? QColor(0x636366) : QColor(0x9F9F9F);
+    const QColor lineAreaBg = AppColors::lineNumberAreaBackground();
+    const QColor lineNumberColor = AppColors::lineNumberColor();
 
     QPainter painter(_lineNumberArea);
     painter.fillRect(event->rect(), lineAreaBg);

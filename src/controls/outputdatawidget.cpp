@@ -4,6 +4,7 @@
 #include <QInputDialog>
 #include <QStyleHints>
 #include <climits>
+#include "../styles/appcolors.h"
 #include "apppreferences.h"
 #include "fontutils.h"
 #include "formatutils.h"
@@ -492,9 +493,8 @@ OutputDataWidget::~OutputDataWidget()
 ///
 void OutputDataWidget::updatePaletteFromTheme()
 {
-    const bool dark = QGuiApplication::styleHints()->colorScheme() == Qt::ColorScheme::Dark;
-    setForegroundColor(dark ? Qt::white        : Qt::black);
-    setBackgroundColor(dark ? QColor(0x1c1c1e) : Qt::white);
+    setForegroundColor(AppColors::canvasForeground());
+    setBackgroundColor(AppColors::canvasBackground());
 }
 
 void OutputDataWidget::changeEvent(QEvent* event)
@@ -650,7 +650,7 @@ void OutputDataWidget::setForegroundColor(const QColor& clr)
 QColor OutputDataWidget::addressColor() const
 {
     auto* delegate = qobject_cast<DataDelegate*>(ui->listView->itemDelegate());
-    return delegate ? delegate->addressColor() : QColor(128, 128, 128);
+    return delegate ? delegate->addressColor() : AppColors::defaultAddress();
 }
 
 ///
@@ -673,7 +673,7 @@ void OutputDataWidget::setAddressColor(const QColor& clr)
 QColor OutputDataWidget::commentColor() const
 {
     auto* delegate = qobject_cast<DataDelegate*>(ui->listView->itemDelegate());
-    return delegate ? delegate->commentColor() : QColor(128, 128, 128);
+    return delegate ? delegate->commentColor() : AppColors::defaultAddress();
 }
 
 ///
@@ -1291,11 +1291,11 @@ static QIcon drawRemoveColorIcon(int size = 16)
     p.setRenderHint(QPainter::Antialiasing, true);
 
     QRect r(2, 2, size - 4, size - 4);
-    p.setBrush(Qt::white);
-    p.setPen(QPen(Qt::black, 0.1));
+    p.setBrush(AppColors::removeIconBackground());
+    p.setPen(QPen(AppColors::removeIconBorder(), 0.1));
     p.drawRect(r);
 
-    QPen pen(Qt::red, 1);
+    QPen pen(QColor(Qt::red), 1);
     p.setPen(pen);
     p.drawLine(0, size, size, 0);
 

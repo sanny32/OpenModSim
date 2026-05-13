@@ -1,6 +1,7 @@
 #include <QtWidgets>
 #include <QGuiApplication>
 #include <QStyleHints>
+#include "../styles/appcolors.h"
 #include "colorswatch.h"
 #include "dialogpreferences.h"
 #include "mainwindow.h"
@@ -39,8 +40,7 @@ DialogPreferences::DialogPreferences(MainWindow* mainWindow, QWidget* parent)
         }
     });
     connect(ui->pushButtonResetBackgroundColor, &QPushButton::clicked, this, [this]() {
-        const bool dark = QGuiApplication::styleHints()->colorScheme() == Qt::ColorScheme::Dark;
-        _bgColor = dark ? QColor(0x1c1c1e) : Qt::white;
+        _bgColor = AppColors::canvasBackground();
         ui->pushButtonBackgroundColor->setColor(_bgColor);
     });
 
@@ -52,8 +52,7 @@ DialogPreferences::DialogPreferences(MainWindow* mainWindow, QWidget* parent)
         }
     });
     connect(ui->pushButtonResetForegroundColor, &QPushButton::clicked, this, [this]() {
-        const bool dark = QGuiApplication::styleHints()->colorScheme() == Qt::ColorScheme::Dark;
-        _fgColor = dark ? Qt::white : Qt::black;
+        _fgColor = AppColors::canvasForeground();
         ui->pushButtonForegroundColor->setColor(_fgColor);
     });
 
@@ -65,7 +64,7 @@ DialogPreferences::DialogPreferences(MainWindow* mainWindow, QWidget* parent)
         }
     });
     connect(ui->pushButtonResetAddressColor, &QPushButton::clicked, this, [this]() {
-        _addrColor = QColor(128, 128, 128);
+        _addrColor = AppColors::defaultAddress();
         ui->pushButtonAddressColor->setColor(_addrColor);
     });
 
@@ -77,7 +76,7 @@ DialogPreferences::DialogPreferences(MainWindow* mainWindow, QWidget* parent)
         }
     });
     connect(ui->pushButtonResetCommentColor, &QPushButton::clicked, this, [this]() {
-        _commentColor = QColor(128, 128, 128);
+        _commentColor = AppColors::defaultAddress();
         ui->pushButtonCommentColor->setColor(_commentColor);
     });
 

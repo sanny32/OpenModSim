@@ -1,6 +1,7 @@
 #include <QtWidgets>
 #include "mainwindow.h"
 #include "apppreferences.h"
+#include "styles/appcolors.h"
 #include "formdatamapview.h"
 #include "modbusmessages/modbusmessages.h"
 #include "controls/numericlineedit.h"
@@ -778,10 +779,10 @@ FormDataMapView::FormDataMapView(ModbusMultiServer& server, MainWindow* parent)
                 QPainter p(&pm);
                 p.setRenderHint(QPainter::Antialiasing, true);
                 QRect r(2, 2, size - 4, size - 4);
-                p.setBrush(Qt::white);
-                p.setPen(QPen(Qt::black, 0.1));
+                p.setBrush(AppColors::removeIconBackground());
+                p.setPen(QPen(AppColors::removeIconBorder(), 0.1));
                 p.drawRect(r);
-                p.setPen(QPen(Qt::red, 1));
+                p.setPen(QPen(QColor(Qt::red), 1));
                 p.drawLine(0, size, size, 0);
                 return QIcon(pm);
             };

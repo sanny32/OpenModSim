@@ -1,6 +1,7 @@
 #include "fontutils.h"
 #include "enums.h"
 #include "apppreferences.h"
+#include "styles/appcolors.h"
 
 #include <QGuiApplication>
 #include <QStyleHints>
@@ -41,8 +42,8 @@ QString fontToText(const QFont& font)
 AppPreferences::AppPreferences()
     : _font(defaultMonospaceFont())
     , _scriptFont(defaultScriptFont())
-    , _backgroundColor(isSystemDarkMode() ? QColor(0x1c1c1e) : Qt::white)
-    , _foregroundColor(isSystemDarkMode() ? Qt::white : Qt::black)
+    , _backgroundColor(AppColors::canvasBackground())
+    , _foregroundColor(AppColors::canvasForeground())
 {
 }
 
@@ -311,12 +312,11 @@ void AppPreferences::load(QSettings& settings)
 
     _font.fromString(settings.value("Font", _font.toString()).toString());
     _fontZoom        = settings.value("FontZoom",        _fontZoom).toInt();
-    const bool dark = isSystemDarkMode();
-    const QColor defaultBg = dark ? QColor(0x1c1c1e) : Qt::white;
-    const QColor defaultFg = dark ? Qt::white : Qt::black;
+    const QColor defaultBg = AppColors::canvasBackground();
+    const QColor defaultFg = AppColors::canvasForeground();
     const QColor savedBg = QColor(settings.value("BackgroundColor", defaultBg.name()).toString());
     const QColor savedFg = QColor(settings.value("ForegroundColor", defaultFg.name()).toString());
-    // если сохранено старое значение противоположной темы — подставить дефолт текущей
+    // if the saved value is a default from the opposite theme, replace with the current default
     _backgroundColor = (savedBg == Qt::white || savedBg == QColor(0x1c1c1e)) ? defaultBg : savedBg;
     _foregroundColor = (savedFg == Qt::black || savedFg == Qt::white)         ? defaultFg : savedFg;
     _addressColor    = QColor(settings.value("AddressColor",    _addressColor.name()).toString());

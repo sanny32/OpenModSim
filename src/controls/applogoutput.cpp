@@ -11,6 +11,7 @@
 #include <QStyledItemDelegate>
 #include <QToolBar>
 #include <QToolButton>
+#include "../styles/appcolors.h"
 #include "applogoutput.h"
 #include "themedicons.h"
 #include "ui_applogoutput.h"
@@ -37,20 +38,13 @@ struct EventStyle {
 ///
 EventStyle styleForType(AppLogOutput::EventType type)
 {
-    const bool dark = QGuiApplication::styleHints()->colorScheme() == Qt::ColorScheme::Dark;
     switch (type) {
         case AppLogOutput::EventType::Warning:
-            return dark
-                ? EventStyle{ QColor("#3a2e00"), QColor("#F9A825"), QColor("#FFD54F"), QStringLiteral(":/res/icon-log-warning.svg") }
-                : EventStyle{ QColor("#FFF8E1"), QColor("#F9A825"), QColor("#4A3000"), QStringLiteral(":/res/icon-log-warning.svg") };
+            return EventStyle{ AppColors::warningBackground(), AppColors::warningBorder(), AppColors::warningForeground(), QStringLiteral(":/res/icon-log-warning.svg") };
         case AppLogOutput::EventType::Error:
-            return dark
-                ? EventStyle{ QColor("#3b0000"), QColor("#E53935"), QColor("#FF8A80"), QStringLiteral(":/res/icon-log-critical.svg") }
-                : EventStyle{ QColor("#FFEBEE"), QColor("#E53935"), QColor("#7F0000"), QStringLiteral(":/res/icon-log-critical.svg") };
+            return EventStyle{ AppColors::errorBackground(), AppColors::errorBorder(), AppColors::errorForeground(), QStringLiteral(":/res/icon-log-critical.svg") };
         default:
-            return dark
-                ? EventStyle{ QColor("#1c1c1e"), QColor(), QColor("#abb2bf"), QStringLiteral(":/res/icon-log-info.svg") }
-                : EventStyle{ Qt::white,         QColor(), QColor("#202020"), QStringLiteral(":/res/icon-log-info.svg") };
+            return EventStyle{ AppColors::canvasBackground(), QColor(), AppColors::logForeground(), QStringLiteral(":/res/icon-log-info.svg") };
     }
 }
 

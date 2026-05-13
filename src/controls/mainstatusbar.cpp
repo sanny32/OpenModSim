@@ -3,6 +3,7 @@
 #include <QMessageBox>
 #include <QMdiSubWindow>
 #include <QUrl>
+#include "../styles/appcolors.h"
 #include "apppreferences.h"
 #include "mainstatusbar.h"
 #include "serialportutils.h"
@@ -196,7 +197,7 @@ void MainStatusBar::updateDeviceIdsInfo()
 ///
 void MainStatusBar::updateErrorSimInfo()
 {
-    const QString warn = QStringLiteral("<span style='color:#f97316; font-size:10px;'>&#9679;</span>&nbsp;");
+    const QString warn = QStringLiteral("<span style='color:%1; font-size:10px;'>&#9679;</span>&nbsp;").arg(AppColors::statusWarningColor().name());
     QStringList flags;
 
     if(_errorSimulations.noResponse())
@@ -240,7 +241,7 @@ void MainStatusBar::updateClientCountInfo()
 ///
 void MainStatusBar::updateConnectionInfo(QLabel* label, const ConnectionDetails& cd)
 {
-    const QString dot = QStringLiteral("<span style='color:#22c55e; font-size:10px;'>&#9679;</span>&nbsp;");
+    const QString dot = QStringLiteral("<span style='color:%1; font-size:10px;'>&#9679;</span>&nbsp;").arg(AppColors::statusOkColor().name());
     switch(cd.Type)
     {
         case ConnectionType::Tcp:

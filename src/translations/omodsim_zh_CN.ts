@@ -137,38 +137,38 @@
         <translation>清除日志</translation>
     </message>
     <message>
-        <location filename="../controls/applogoutput.cpp" line="222"/>
-        <location filename="../controls/applogoutput.cpp" line="397"/>
+        <location filename="../controls/applogoutput.cpp" line="216"/>
+        <location filename="../controls/applogoutput.cpp" line="391"/>
         <source>Copy All</source>
         <translation>全部复制</translation>
     </message>
     <message>
-        <location filename="../controls/applogoutput.cpp" line="388"/>
+        <location filename="../controls/applogoutput.cpp" line="382"/>
         <source>Copy</source>
         <translation>复制</translation>
     </message>
     <message>
-        <location filename="../controls/applogoutput.cpp" line="404"/>
+        <location filename="../controls/applogoutput.cpp" line="398"/>
         <source>Export...</source>
         <translation>导出...</translation>
     </message>
     <message>
-        <location filename="../controls/applogoutput.cpp" line="410"/>
+        <location filename="../controls/applogoutput.cpp" line="404"/>
         <source>Clear</source>
         <translation>清除</translation>
     </message>
     <message>
-        <location filename="../controls/applogoutput.cpp" line="434"/>
+        <location filename="../controls/applogoutput.cpp" line="428"/>
         <source>Text files (*.txt)</source>
         <translation>文本文件 (*.txt)</translation>
     </message>
     <message>
-        <location filename="../controls/applogoutput.cpp" line="439"/>
+        <location filename="../controls/applogoutput.cpp" line="433"/>
         <source>Export</source>
         <translation>导出</translation>
     </message>
     <message>
-        <location filename="../controls/applogoutput.cpp" line="439"/>
+        <location filename="../controls/applogoutput.cpp" line="433"/>
         <source>Cannot open file for writing:
 %1</source>
         <translation>无法打开文件进行写入：
@@ -214,12 +214,12 @@
 <context>
     <name>ByteOrderItemDelegate</name>
     <message>
-        <location filename="../formdatamapview.cpp" line="328"/>
+        <location filename="../formdatamapview.cpp" line="329"/>
         <source>Use bytes in register order</source>
         <translation>按寄存器顺序使用字节</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="329"/>
+        <location filename="../formdatamapview.cpp" line="330"/>
         <source>Swap bytes inside each 16-bit register</source>
         <translation>交换每个 16 位寄存器内的字节</translation>
     </message>
@@ -270,12 +270,12 @@
         <translation>清除控制台</translation>
     </message>
     <message>
-        <location filename="../controls/consoleoutput.cpp" line="323"/>
+        <location filename="../controls/consoleoutput.cpp" line="314"/>
         <source>Copy</source>
         <translation>复制</translation>
     </message>
     <message>
-        <location filename="../controls/consoleoutput.cpp" line="334"/>
+        <location filename="../controls/consoleoutput.cpp" line="325"/>
         <source>Clear</source>
         <translation>清除</translation>
     </message>
@@ -354,62 +354,62 @@
 <context>
     <name>DataTypeItemDelegate</name>
     <message>
-        <location filename="../formdatamapview.cpp" line="184"/>
+        <location filename="../formdatamapview.cpp" line="185"/>
         <source>1-bit value (Coils / Discrete Inputs)</source>
         <translation>1位值（线圈/离散输入）</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="185"/>
+        <location filename="../formdatamapview.cpp" line="186"/>
         <source>16-bit register value shown as 16 binary digits</source>
         <translation>16位寄存器值，显示为16位二进制数字</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="186"/>
+        <location filename="../formdatamapview.cpp" line="187"/>
         <source>Unsigned 16-bit integer  (0 … 65535)</source>
         <translation>无符号16位整数（0 … 65535）</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="187"/>
+        <location filename="../formdatamapview.cpp" line="188"/>
         <source>Signed 16-bit integer  (−32768 … 32767)</source>
         <translation>有符号16位整数（−32768 … 32767）</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="188"/>
+        <location filename="../formdatamapview.cpp" line="189"/>
         <source>16-bit value displayed as hexadecimal</source>
         <translation>16位值，以十六进制显示</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="189"/>
+        <location filename="../formdatamapview.cpp" line="190"/>
         <source>16-bit value displayed as ANSI character</source>
         <translation>16位值，以ANSI字符显示</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="190"/>
+        <location filename="../formdatamapview.cpp" line="191"/>
         <source>IEEE 754 single-precision float  (2 registers)</source>
         <translation>IEEE 754单精度浮点数（2个寄存器）</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="191"/>
+        <location filename="../formdatamapview.cpp" line="192"/>
         <source>IEEE 754 double-precision float  (4 registers)</source>
         <translation>IEEE 754双精度浮点数（4个寄存器）</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="192"/>
+        <location filename="../formdatamapview.cpp" line="193"/>
         <source>Signed 32-bit integer  (2 registers)</source>
         <translation>有符号32位整数（2个寄存器）</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="193"/>
+        <location filename="../formdatamapview.cpp" line="194"/>
         <source>Unsigned 32-bit integer  (2 registers)</source>
         <translation>无符号32位整数（2个寄存器）</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="194"/>
+        <location filename="../formdatamapview.cpp" line="195"/>
         <source>Signed 64-bit integer  (4 registers)</source>
         <translation>有符号64位整数（4个寄存器）</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="195"/>
+        <location filename="../formdatamapview.cpp" line="196"/>
         <source>Unsigned 64-bit integer  (4 registers)</source>
         <translation>无符号64位整数（4个寄存器）</translation>
     </message>
@@ -1797,64 +1797,64 @@ Open the download page?</source>
         <translation>清除表格</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="927"/>
+        <location filename="../formdatamapview.cpp" line="928"/>
         <source>1-based</source>
         <translation>基地址为-1</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="927"/>
+        <location filename="../formdatamapview.cpp" line="928"/>
         <source>0-based</source>
         <translation>基地址为-0</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="790"/>
+        <location filename="../formdatamapview.cpp" line="791"/>
         <source>Remove Color</source>
         <translation>去除颜色</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="800"/>
+        <location filename="../formdatamapview.cpp" line="801"/>
         <source>Yellow</source>
         <translation>黄色</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="801"/>
+        <location filename="../formdatamapview.cpp" line="802"/>
         <source>Cyan</source>
         <translation>青色</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="802"/>
+        <location filename="../formdatamapview.cpp" line="803"/>
         <source>Magenta</source>
         <translation>品红色</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="803"/>
+        <location filename="../formdatamapview.cpp" line="804"/>
         <source>LightGreen</source>
         <translation>浅绿色</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="804"/>
+        <location filename="../formdatamapview.cpp" line="805"/>
         <source>Orange</source>
         <translation>橙色</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="805"/>
+        <location filename="../formdatamapview.cpp" line="806"/>
         <source>LightBlue</source>
         <translation>浅蓝色</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="806"/>
+        <location filename="../formdatamapview.cpp" line="807"/>
         <source>LightGray</source>
         <translation>浅灰色</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="940"/>
-        <location filename="../formdatamapview.cpp" line="1164"/>
-        <location filename="../formdatamapview.cpp" line="1488"/>
+        <location filename="../formdatamapview.cpp" line="941"/>
+        <location filename="../formdatamapview.cpp" line="1165"/>
+        <location filename="../formdatamapview.cpp" line="1489"/>
         <source>All Types</source>
         <translation>所有类型</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="942"/>
+        <location filename="../formdatamapview.cpp" line="943"/>
         <source>Address Base: %1
 Unit Filter: %2
 Type Filter: %3</source>
@@ -1863,45 +1863,45 @@ Type Filter: %3</source>
 类型过滤器：%3</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="1165"/>
-        <location filename="../formdatamapview.cpp" line="1489"/>
+        <location filename="../formdatamapview.cpp" line="1166"/>
+        <location filename="../formdatamapview.cpp" line="1490"/>
         <source>Coils</source>
         <translation>线圈</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="1166"/>
-        <location filename="../formdatamapview.cpp" line="1490"/>
+        <location filename="../formdatamapview.cpp" line="1167"/>
+        <location filename="../formdatamapview.cpp" line="1491"/>
         <source>Discrete Inputs</source>
         <translation>离散输入</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="1167"/>
-        <location filename="../formdatamapview.cpp" line="1491"/>
+        <location filename="../formdatamapview.cpp" line="1168"/>
+        <location filename="../formdatamapview.cpp" line="1492"/>
         <source>Input Registers</source>
         <translation>输入寄存器</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="1168"/>
-        <location filename="../formdatamapview.cpp" line="1492"/>
+        <location filename="../formdatamapview.cpp" line="1169"/>
+        <location filename="../formdatamapview.cpp" line="1493"/>
         <source>Holding Registers</source>
         <translation>保持寄存器</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="1156"/>
-        <location filename="../formdatamapview.cpp" line="1499"/>
+        <location filename="../formdatamapview.cpp" line="1157"/>
+        <location filename="../formdatamapview.cpp" line="1500"/>
         <source>Unit:</source>
         <translation>单元：</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="1157"/>
-        <location filename="../formdatamapview.cpp" line="1500"/>
+        <location filename="../formdatamapview.cpp" line="1158"/>
+        <location filename="../formdatamapview.cpp" line="1501"/>
         <source>Data Type:</source>
         <translation>数据类型：</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="929"/>
-        <location filename="../formdatamapview.cpp" line="1158"/>
-        <location filename="../formdatamapview.cpp" line="1484"/>
+        <location filename="../formdatamapview.cpp" line="930"/>
+        <location filename="../formdatamapview.cpp" line="1159"/>
+        <location filename="../formdatamapview.cpp" line="1485"/>
         <source>All</source>
         <translation>全部</translation>
     </message>
@@ -2355,26 +2355,26 @@ Source: %3</source>
 <context>
     <name>HelpWidget</name>
     <message>
-        <location filename="../controls/helpwidget.cpp" line="35"/>
-        <location filename="../controls/helpwidget.cpp" line="89"/>
+        <location filename="../controls/helpwidget.cpp" line="36"/>
+        <location filename="../controls/helpwidget.cpp" line="90"/>
         <source>Find</source>
         <translation>查找</translation>
     </message>
     <message>
-        <location filename="../controls/helpwidget.cpp" line="41"/>
-        <location filename="../controls/helpwidget.cpp" line="90"/>
+        <location filename="../controls/helpwidget.cpp" line="42"/>
+        <location filename="../controls/helpwidget.cpp" line="91"/>
         <source>Previous (Shift+Enter)</source>
         <translation>上一页 (Shift+Enter)</translation>
     </message>
     <message>
-        <location filename="../controls/helpwidget.cpp" line="47"/>
-        <location filename="../controls/helpwidget.cpp" line="91"/>
+        <location filename="../controls/helpwidget.cpp" line="48"/>
+        <location filename="../controls/helpwidget.cpp" line="92"/>
         <source>Next (Enter)</source>
         <translation>下一个 (Enter)</translation>
     </message>
     <message>
-        <location filename="../controls/helpwidget.cpp" line="57"/>
-        <location filename="../controls/helpwidget.cpp" line="92"/>
+        <location filename="../controls/helpwidget.cpp" line="58"/>
+        <location filename="../controls/helpwidget.cpp" line="93"/>
         <source>Close (Escape)</source>
         <translation>关闭 (Escape)</translation>
     </message>
@@ -2422,88 +2422,88 @@ Script.onInit(()=&gt;{
 <context>
     <name>MainStatusBar</name>
     <message>
-        <location filename="../controls/mainstatusbar.cpp" line="50"/>
-        <location filename="../controls/mainstatusbar.cpp" line="164"/>
+        <location filename="../controls/mainstatusbar.cpp" line="51"/>
+        <location filename="../controls/mainstatusbar.cpp" line="165"/>
         <source>No updates available</source>
         <translation>无可用更新</translation>
     </message>
     <message>
-        <location filename="../controls/mainstatusbar.cpp" line="306"/>
+        <location filename="../controls/mainstatusbar.cpp" line="307"/>
         <source>New version %1 is available. Click to download.</source>
         <translation>新版本 %1 可用。点击下载。</translation>
     </message>
     <message>
-        <location filename="../controls/mainstatusbar.cpp" line="191"/>
+        <location filename="../controls/mainstatusbar.cpp" line="192"/>
         <source>Unit Identifiers: %1</source>
         <translation>单元标识符：%1</translation>
     </message>
     <message>
-        <location filename="../controls/mainstatusbar.cpp" line="247"/>
+        <location filename="../controls/mainstatusbar.cpp" line="248"/>
         <source>Modbus/TCP Srv %1:%2</source>
         <translation>Modbus/TCP服务器%1:%2</translation>
     </message>
     <message>
-        <location filename="../controls/mainstatusbar.cpp" line="251"/>
+        <location filename="../controls/mainstatusbar.cpp" line="252"/>
         <source>Port %1:%2:%3:%4:%5</source>
         <translation>端口 %1:%2:%3:%4:%5</translation>
     </message>
     <message>
-        <location filename="../controls/mainstatusbar.cpp" line="203"/>
+        <location filename="../controls/mainstatusbar.cpp" line="204"/>
         <source>No Resp</source>
         <translation>无响应</translation>
     </message>
     <message>
-        <location filename="../controls/mainstatusbar.cpp" line="162"/>
+        <location filename="../controls/mainstatusbar.cpp" line="163"/>
         <source>New version %1 is available.</source>
         <translation>新版本 %1 已发布。</translation>
     </message>
     <message>
-        <location filename="../controls/mainstatusbar.cpp" line="205"/>
+        <location filename="../controls/mainstatusbar.cpp" line="206"/>
         <source>Bad ID</source>
         <translation>错误ID</translation>
     </message>
     <message>
-        <location filename="../controls/mainstatusbar.cpp" line="207"/>
+        <location filename="../controls/mainstatusbar.cpp" line="208"/>
         <source>Ill Func</source>
         <translation>非法功能</translation>
     </message>
     <message>
-        <location filename="../controls/mainstatusbar.cpp" line="209"/>
+        <location filename="../controls/mainstatusbar.cpp" line="210"/>
         <source>Dev Busy</source>
         <translation>设备忙</translation>
     </message>
     <message>
-        <location filename="../controls/mainstatusbar.cpp" line="211"/>
+        <location filename="../controls/mainstatusbar.cpp" line="212"/>
         <source>Bad CRC</source>
         <translation>错误CRC</translation>
     </message>
     <message>
-        <location filename="../controls/mainstatusbar.cpp" line="213"/>
+        <location filename="../controls/mainstatusbar.cpp" line="214"/>
         <source>Delay %1ms</source>
         <translation>延迟 %1毫秒</translation>
     </message>
     <message>
-        <location filename="../controls/mainstatusbar.cpp" line="215"/>
+        <location filename="../controls/mainstatusbar.cpp" line="216"/>
         <source>Rnd Delay %1ms</source>
         <translation>随机延迟 %1毫秒</translation>
     </message>
     <message>
-        <location filename="../controls/mainstatusbar.cpp" line="233"/>
+        <location filename="../controls/mainstatusbar.cpp" line="234"/>
         <source>Clients: %1</source>
         <translation>客户端：%1</translation>
     </message>
     <message>
-        <location filename="../controls/mainstatusbar.cpp" line="275"/>
+        <location filename="../controls/mainstatusbar.cpp" line="276"/>
         <source>Req: %1  Resp: %2</source>
         <translation>请求：%1  响应：%2</translation>
     </message>
     <message>
-        <location filename="../controls/mainstatusbar.cpp" line="287"/>
+        <location filename="../controls/mainstatusbar.cpp" line="288"/>
         <source>New version available</source>
         <translation>发现新版本</translation>
     </message>
     <message>
-        <location filename="../controls/mainstatusbar.cpp" line="288"/>
+        <location filename="../controls/mainstatusbar.cpp" line="289"/>
         <source>A new version %1 is available.
 
 Open the download page?</source>
@@ -3236,307 +3236,307 @@ Open the download page?</source>
 <context>
     <name>ModbusMessageWidget</name>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="34"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="90"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="35"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="91"/>
         <source>Copy Text</source>
         <translation>复制文本</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="50"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="91"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="51"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="92"/>
         <source>Copy Values</source>
         <translation>复制数值</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="238"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="239"/>
         <source>&lt;span style=&apos;color:%1&apos;&gt;*** INVALID MODBUS REQUEST ***&lt;/span&gt;</source>
         <translation>&lt;span style=&apos;color:%1&apos;&gt;*** MODBUS请求无效 ***&lt;/span&gt;</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="240"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="241"/>
         <source>&lt;span style=&apos;color:%1&apos;&gt;*** INVALID MODBUS RESPONSE ***&lt;/span&gt;</source>
         <translation>&lt;span style=&apos;color:%1&apos;&gt;*** MODBUS响应无效 ***&lt;/span&gt;</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="255"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="260"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="257"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="262"/>
         <source>Checksum</source>
         <translation>校验和</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="265"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="267"/>
         <source>Type</source>
         <translation>类型</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="265"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="267"/>
         <source>Request (Rx)</source>
         <translation>请求(Rx)</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="265"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="267"/>
         <source>Response (Tx)</source>
         <translation>响应(Tx)</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="266"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="268"/>
         <source>Time</source>
         <translation>時間戳</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="274"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="276"/>
         <source>Transaction ID</source>
         <translation>交易 ID</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="275"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="277"/>
         <source>Protocol ID</source>
         <translation>协议 ID</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="276"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="306"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="325"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="344"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="363"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="278"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="308"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="327"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="346"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="365"/>
         <source>Length</source>
         <translation>长度</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="279"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="281"/>
         <source>Unit Identifier</source>
         <translation>设备地址</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="284"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="286"/>
         <source>Error Code</source>
         <translation>错误代码</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="285"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="287"/>
         <source>Exception Code</source>
         <translation>异常代码</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="294"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="296"/>
         <source>Function Code</source>
         <translation>功能码</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="305"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="324"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="343"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="362"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="307"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="326"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="345"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="364"/>
         <source>Start Address</source>
         <translation>起始地址</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="313"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="332"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="351"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="370"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="461"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="479"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="502"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="521"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="532"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="540"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="609"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="627"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="315"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="334"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="353"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="372"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="463"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="481"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="504"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="523"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="534"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="542"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="611"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="629"/>
         <source>Byte Count</source>
         <translation>字节计数</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="314"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="316"/>
         <source>Coil Status</source>
         <translation>线圈状态</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="333"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="335"/>
         <source>Input Status</source>
         <translation>输入状态</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="352"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="401"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="409"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="354"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="403"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="411"/>
         <source>Register Value</source>
         <translation>寄存器值</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="371"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="373"/>
         <source>Input Registers</source>
         <translation>输入寄存器</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="381"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="389"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="383"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="391"/>
         <source>Output Address</source>
         <translation>输出地址</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="382"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="390"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="384"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="392"/>
         <source>Output Value</source>
         <translation>输出值</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="400"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="408"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="402"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="410"/>
         <source>Register Address</source>
         <translation>寄存器地址</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="418"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="420"/>
         <source>Output Data</source>
         <translation>输出数据</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="428"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="436"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="430"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="438"/>
         <source>Sub-function</source>
         <translation>子功能</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="429"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="437"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="522"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="533"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="541"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="552"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="560"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="637"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="431"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="439"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="524"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="535"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="543"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="554"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="562"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="639"/>
         <source>Data</source>
         <translation>数据</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="447"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="462"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="449"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="464"/>
         <source>Status</source>
         <translation>状态</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="448"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="463"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="450"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="465"/>
         <source>Event Count</source>
         <translation>事件计数</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="464"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="466"/>
         <source>Message Count</source>
         <translation>消息计数</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="465"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="467"/>
         <source>Events</source>
         <translation>事件</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="477"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="487"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="500"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="510"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="479"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="489"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="502"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="512"/>
         <source>Starting Address</source>
         <translation>起始地址</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="478"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="488"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="480"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="490"/>
         <source>Quantity of Outputs</source>
         <translation>输出数量</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="480"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="482"/>
         <source>Outputs Value</source>
         <translation>输出值</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="501"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="511"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="503"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="513"/>
         <source>Quantity of Registers</source>
         <translation>寄存器数量</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="503"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="610"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="505"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="612"/>
         <source>Registers Value</source>
         <translation>寄存器值</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="551"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="553"/>
         <source>Request Data Length</source>
         <translation>请求数据长度</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="559"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="561"/>
         <source>Response Data Length</source>
         <translation>应答数据长度</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="571"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="581"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="573"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="583"/>
         <source>Address</source>
         <translation>地址</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="572"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="582"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="574"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="584"/>
         <source>And Mask</source>
         <translation>与运算</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="573"/>
-        <location filename="../controls/modbusmessagewidget.cpp" line="583"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="575"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="585"/>
         <source>Or Mask</source>
         <translation>或运算</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="597"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="599"/>
         <source>Read Starting Address</source>
         <translation>读取起始地址</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="598"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="600"/>
         <source>Quantity to Read</source>
         <translation>读取数量</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="599"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="601"/>
         <source>Write Starting Address</source>
         <translation>写入起始地址</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="600"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="602"/>
         <source>Quantity to Write</source>
         <translation>写入数量</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="601"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="603"/>
         <source>Write Byte Count</source>
         <translation>写入字节计数</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="602"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="604"/>
         <source>Write Registers Value</source>
         <translation>写入寄存器值</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="619"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="621"/>
         <source>FIFO Point Address</source>
         <translation>FIFO点位地址</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="628"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="630"/>
         <source>FIFO Count</source>
         <translation>FIFO计数</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="629"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="631"/>
         <source>FIFO Value Register</source>
         <translation>FIFO值寄存器</translation>
     </message>
     <message>
-        <location filename="../controls/modbusmessagewidget.cpp" line="295"/>
+        <location filename="../controls/modbusmessagewidget.cpp" line="297"/>
         <source>(0-based)</source>
         <translation>(基地址为-0)</translation>
     </message>
@@ -3588,12 +3588,12 @@ Open the download page?</source>
 <context>
     <name>OrderItemDelegate</name>
     <message>
-        <location filename="../formdatamapview.cpp" line="263"/>
+        <location filename="../formdatamapview.cpp" line="264"/>
         <source>Most Significant Register First — big-endian word order</source>
         <translation>最高有效寄存器优先——大端字序</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="264"/>
+        <location filename="../formdatamapview.cpp" line="265"/>
         <source>Least Significant Register First — little-endian word order</source>
         <translation>最低有效寄存器优先——小端字序</translation>
     </message>
@@ -3727,25 +3727,25 @@ Open the download page?</source>
 <context>
     <name>ProjectTreeWidget</name>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="65"/>
+        <location filename="../controls/projecttreewidget.cpp" line="66"/>
         <location filename="../controls/projecttreewidget.cpp" line="345"/>
         <source>Data</source>
         <translation>数据</translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="73"/>
+        <location filename="../controls/projecttreewidget.cpp" line="74"/>
         <location filename="../controls/projecttreewidget.cpp" line="346"/>
         <source>Traffic</source>
         <translation>流量</translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="69"/>
+        <location filename="../controls/projecttreewidget.cpp" line="70"/>
         <location filename="../controls/projecttreewidget.cpp" line="348"/>
         <source>Maps</source>
         <translation>地图</translation>
     </message>
     <message>
-        <location filename="../controls/projecttreewidget.cpp" line="77"/>
+        <location filename="../controls/projecttreewidget.cpp" line="78"/>
         <location filename="../controls/projecttreewidget.cpp" line="347"/>
         <source>Scripts</source>
         <translation>脚本</translation>
@@ -4051,22 +4051,22 @@ Open the download page?</source>
 <context>
     <name>TypeItemDelegate</name>
     <message>
-        <location filename="../formdatamapview.cpp" line="135"/>
+        <location filename="../formdatamapview.cpp" line="136"/>
         <source>Coils</source>
         <translation>线圈</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="136"/>
+        <location filename="../formdatamapview.cpp" line="137"/>
         <source>Discrete Inputs</source>
         <translation>离散输入</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="137"/>
+        <location filename="../formdatamapview.cpp" line="138"/>
         <source>Input Registers</source>
         <translation>输入寄存器</translation>
     </message>
     <message>
-        <location filename="../formdatamapview.cpp" line="138"/>
+        <location filename="../formdatamapview.cpp" line="139"/>
         <source>Holding Registers</source>
         <translation>保持寄存器</translation>
     </message>

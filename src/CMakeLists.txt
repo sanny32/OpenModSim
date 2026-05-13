@@ -294,6 +294,7 @@ set(HEADERS
     controls/jscodeeditor.h
     controls/jscriptcontrol.h
     controls/mainstatusbar.h
+    styles/appcolors.h
     styles/appstyle.h
     styles/macappstyle.h
     styles/qlementineappstyle.h
