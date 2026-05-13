@@ -436,11 +436,18 @@ MacAppStyle::MacAppStyle(QObject* parent)
             this, [this]() { updateTheme(); });
 }
 
+///
+/// \brief MacAppStyle::updateTheme
+///
 void MacAppStyle::updateTheme()
 {
     setTheme(isDarkMode() ? _darkTheme : _lightTheme);
 }
 
+///
+/// \brief MacAppStyle::isDarkMode
+/// \return
+///
 bool MacAppStyle::isDarkMode() const
 {
     return AppColors::isDark();
