@@ -20,6 +20,7 @@
 #include <QHash>
 #include <QLineEdit>
 #include <QLabel>
+#include <QListView>
 #include <QModelIndex>
 #include <QPainter>
 #include <QPainterPath>
@@ -28,6 +29,7 @@
 #include <QStyleOptionMenuItem>
 #include <QStyleOptionTab>
 #include <QStyleOptionToolButton>
+#include <QStyleOptionViewItem>
 #include <QTabBar>
 #include <QToolBar>
 #include <QMenu>
@@ -404,6 +406,60 @@ QColor const& QlementineAppStyle::buttonForegroundColor(MouseState mouse, ColorR
 void QlementineAppStyle::drawControl(ControlElement element, const QStyleOption* option,
                               QPainter* painter, const QWidget* widget) const
 {
+    if (element == CE_ItemViewItem) {
+        const auto* itemOption = qstyleoption_cast<const QStyleOptionViewItem*>(option);
+        const bool centeredText = itemOption
+                               && itemOption->displayAlignment.testFlag(Qt::AlignHCenter)
+                               && !itemOption->text.isEmpty();
+        if (centeredText) {
+            QStyleOptionViewItem noTextOption(*itemOption);
+            noTextOption.text.clear();
+            QlementineStyle::drawControl(element, &noTextOption, painter, widget);
+
+            const bool isList = qobject_cast<const QListView*>(widget) != nullptr;
+            const int spacing = theme().spacing;
+            const int hPadding = isList ? spacing : spacing / 2;
+            const bool hasCheck = itemOption->features.testFlag(QStyleOptionViewItem::HasCheckIndicator);
+            const int checkSpace = hasCheck ? theme().iconSize.width() + spacing : 0;
+            const bool hasIcon = itemOption->features.testFlag(QStyleOptionViewItem::HasDecoration)
+                              && !itemOption->icon.isNull();
+            const int iconWidth = hasIcon ? itemOption->decorationSize.width() : 0;
+            const int iconSpace = hasIcon ? iconWidth + (iconWidth > 0 ? spacing : 0) : 0;
+            QRect textRect = itemOption->rect.marginsRemoved(QMargins(hPadding, 0, hPadding, 0));
+            textRect.adjust(checkSpace + iconSpace, 0, 0, 0);
+
+            if (textRect.width() > 0) {
+                const MouseState mouse = !(itemOption->state & State_Enabled)
+                                       ? MouseState::Disabled
+                                       : (itemOption->state & State_Sunken)
+                                             ? MouseState::Pressed
+                                             : (itemOption->state & State_MouseOver)
+                                                   ? MouseState::Hovered
+                                                   : MouseState::Normal;
+                const SelectionState selected = (itemOption->state & State_Selected)
+                                             ? SelectionState::Selected
+                                             : SelectionState::NotSelected;
+                const FocusState focus = (widget && widget->hasFocus() && selected == SelectionState::Selected)
+                                      ? FocusState::Focused
+                                      : FocusState::NotFocused;
+                const ActiveState active = (itemOption->state & State_Active)
+                                        ? ActiveState::Active
+                                        : ActiveState::NotActive;
+                const QColor textColor = listItemForegroundColor(mouse, selected, focus, active);
+                const QString elidedText = itemOption->fontMetrics.elidedText(
+                    itemOption->text, Qt::ElideRight, textRect.width(), Qt::TextSingleLine);
+
+                painter->save();
+                painter->setFont(itemOption->font);
+                painter->setBrush(Qt::NoBrush);
+                painter->setPen(textColor);
+                painter->drawText(textRect, Qt::AlignVCenter | Qt::AlignHCenter | Qt::TextSingleLine, elidedText);
+                painter->restore();
+            }
+            return;
+        }
+    }
+
     if (element == CE_MenuItem) {
         if (const auto* opt = qstyleoption_cast<const QStyleOptionMenuItem*>(option)) {
             if (!opt->icon.isNull()) {
