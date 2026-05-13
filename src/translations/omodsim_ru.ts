@@ -1961,160 +1961,124 @@ Type Filter: %3</source>
     <message>
         <location filename="../formdataview.ui" line="401"/>
         <location filename="../formdataview.ui" line="404"/>
-        <location filename="../formdataview.ui" line="407"/>
-        <location filename="../formdataview.ui" line="410"/>
         <source>Binary</source>
         <translation>Двоичный</translation>
     </message>
     <message>
-        <location filename="../formdataview.ui" line="428"/>
-        <location filename="../formdataview.ui" line="431"/>
-        <location filename="../formdataview.ui" line="434"/>
-        <location filename="../formdataview.ui" line="437"/>
+        <location filename="../formdataview.ui" line="422"/>
+        <location filename="../formdataview.ui" line="425"/>
         <source>Hex</source>
         <translation>Шестандцатиричный</translation>
     </message>
     <message>
-        <location filename="../formdataview.ui" line="455"/>
-        <location filename="../formdataview.ui" line="458"/>
-        <location filename="../formdataview.ui" line="461"/>
-        <location filename="../formdataview.ui" line="464"/>
+        <location filename="../formdataview.ui" line="443"/>
+        <location filename="../formdataview.ui" line="446"/>
         <source>Ansi</source>
         <translation>ANSI</translation>
     </message>
     <message>
-        <location filename="../formdataview.ui" line="476"/>
-        <location filename="../formdataview.ui" line="479"/>
-        <location filename="../formdataview.ui" line="482"/>
-        <location filename="../formdataview.ui" line="485"/>
+        <location filename="../formdataview.ui" line="458"/>
+        <location filename="../formdataview.ui" line="461"/>
         <source>16-bit Integer</source>
         <translation>16-бит целое</translation>
     </message>
     <message>
-        <location filename="../formdataview.ui" line="503"/>
-        <location filename="../formdataview.ui" line="506"/>
-        <location filename="../formdataview.ui" line="509"/>
-        <location filename="../formdataview.ui" line="512"/>
+        <location filename="../formdataview.ui" line="479"/>
+        <location filename="../formdataview.ui" line="482"/>
         <source>Unsigned 16-bit Integer</source>
         <translation>Беззнаковое 16-бит целое</translation>
     </message>
     <message>
-        <location filename="../formdataview.ui" line="530"/>
-        <location filename="../formdataview.ui" line="533"/>
-        <location filename="../formdataview.ui" line="536"/>
-        <location filename="../formdataview.ui" line="539"/>
+        <location filename="../formdataview.ui" line="500"/>
+        <location filename="../formdataview.ui" line="503"/>
         <source>32-bit Integer (MSRF)</source>
         <translation>32-бит целое (MSRF)</translation>
     </message>
     <message>
-        <location filename="../formdataview.ui" line="557"/>
-        <location filename="../formdataview.ui" line="560"/>
-        <location filename="../formdataview.ui" line="563"/>
-        <location filename="../formdataview.ui" line="566"/>
+        <location filename="../formdataview.ui" line="521"/>
+        <location filename="../formdataview.ui" line="524"/>
         <source>32-bit Integer (LSRF)</source>
         <translation>32-бит целое (LSRF)</translation>
     </message>
     <message>
-        <location filename="../formdataview.ui" line="584"/>
-        <location filename="../formdataview.ui" line="587"/>
-        <location filename="../formdataview.ui" line="590"/>
-        <location filename="../formdataview.ui" line="593"/>
+        <location filename="../formdataview.ui" line="542"/>
+        <location filename="../formdataview.ui" line="545"/>
         <source>Unsigned 32-bit Integer (MSRF)</source>
         <translation>Беззнаковое 32-бит целое (MSRF)</translation>
     </message>
     <message>
-        <location filename="../formdataview.ui" line="611"/>
-        <location filename="../formdataview.ui" line="614"/>
-        <location filename="../formdataview.ui" line="617"/>
-        <location filename="../formdataview.ui" line="620"/>
+        <location filename="../formdataview.ui" line="563"/>
+        <location filename="../formdataview.ui" line="566"/>
         <source>Unsigned 32-bit Integer (LSRF)</source>
         <translation>Беззнаковое 32-бит целое (LSRF)</translation>
     </message>
     <message>
-        <location filename="../formdataview.ui" line="638"/>
-        <location filename="../formdataview.ui" line="641"/>
-        <location filename="../formdataview.ui" line="644"/>
-        <location filename="../formdataview.ui" line="647"/>
+        <location filename="../formdataview.ui" line="584"/>
+        <location filename="../formdataview.ui" line="587"/>
         <source>64-bit Integer (MSRF)</source>
         <translation>64-бит целое (MSRF)</translation>
     </message>
     <message>
-        <location filename="../formdataview.ui" line="665"/>
-        <location filename="../formdataview.ui" line="668"/>
-        <location filename="../formdataview.ui" line="671"/>
-        <location filename="../formdataview.ui" line="674"/>
+        <location filename="../formdataview.ui" line="605"/>
+        <location filename="../formdataview.ui" line="608"/>
         <source>64-bit Integer (LSRF)</source>
         <translation>64-бит целое (LSRF)</translation>
     </message>
     <message>
-        <location filename="../formdataview.ui" line="692"/>
-        <location filename="../formdataview.ui" line="695"/>
-        <location filename="../formdataview.ui" line="698"/>
-        <location filename="../formdataview.ui" line="701"/>
+        <location filename="../formdataview.ui" line="626"/>
+        <location filename="../formdataview.ui" line="629"/>
         <source>Unsigned 64-bit Integer (MSRF)</source>
         <translation>Беззнаковое 64-бит целое (MSRF)</translation>
     </message>
     <message>
-        <location filename="../formdataview.ui" line="719"/>
-        <location filename="../formdataview.ui" line="722"/>
-        <location filename="../formdataview.ui" line="725"/>
-        <location filename="../formdataview.ui" line="728"/>
+        <location filename="../formdataview.ui" line="647"/>
+        <location filename="../formdataview.ui" line="650"/>
         <source>Unsigned 64-bit Integer (LSRF)</source>
         <translation>Беззнаковое 64-бит целое (LSRF)</translation>
     </message>
     <message>
-        <location filename="../formdataview.ui" line="746"/>
+        <location filename="../formdataview.ui" line="668"/>
         <source>Float (MSRF)</source>
         <translation>С плавающей точкой (MSRF)</translation>
     </message>
     <message>
-        <location filename="../formdataview.ui" line="749"/>
-        <location filename="../formdataview.ui" line="752"/>
-        <location filename="../formdataview.ui" line="755"/>
+        <location filename="../formdataview.ui" line="671"/>
         <source>32-bit Float (MSRF)</source>
         <translation>32-бит с плав. точкой (MSRF)</translation>
     </message>
     <message>
-        <location filename="../formdataview.ui" line="773"/>
+        <location filename="../formdataview.ui" line="689"/>
         <source>Float (LSRF)</source>
         <translation>С плавающей точкой (LSRF)</translation>
     </message>
     <message>
-        <location filename="../formdataview.ui" line="776"/>
-        <location filename="../formdataview.ui" line="779"/>
-        <location filename="../formdataview.ui" line="782"/>
+        <location filename="../formdataview.ui" line="692"/>
         <source>32-bit Float (LSRF)</source>
         <translation>32-бит с плав. точкой (LSRF)</translation>
     </message>
     <message>
-        <location filename="../formdataview.ui" line="800"/>
+        <location filename="../formdataview.ui" line="710"/>
         <source>Double (MSRF)</source>
         <translation>Двойной точности (MSRF)</translation>
     </message>
     <message>
-        <location filename="../formdataview.ui" line="803"/>
-        <location filename="../formdataview.ui" line="806"/>
-        <location filename="../formdataview.ui" line="809"/>
+        <location filename="../formdataview.ui" line="713"/>
         <source>64-bit Float (MSRF)</source>
         <translation>64-бит с плав. точкой (MSRF)</translation>
     </message>
     <message>
-        <location filename="../formdataview.ui" line="827"/>
+        <location filename="../formdataview.ui" line="731"/>
         <source>Double (LSRF)</source>
         <translation>Двойной точности (LSRF)</translation>
     </message>
     <message>
-        <location filename="../formdataview.ui" line="830"/>
-        <location filename="../formdataview.ui" line="833"/>
-        <location filename="../formdataview.ui" line="836"/>
+        <location filename="../formdataview.ui" line="734"/>
         <source>64-bit Float (LSRF)</source>
         <translation>64-бит с плав. точкой (LSRF)</translation>
     </message>
     <message>
-        <location filename="../formdataview.ui" line="854"/>
-        <location filename="../formdataview.ui" line="857"/>
-        <location filename="../formdataview.ui" line="860"/>
-        <location filename="../formdataview.ui" line="863"/>
+        <location filename="../formdataview.ui" line="752"/>
+        <location filename="../formdataview.ui" line="755"/>
         <source>Swap Bytes (0xAB → 0xBA)</source>
         <translation>Перестановка байт (0xAB → 0xBA)</translation>
     </message>

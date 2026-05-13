@@ -88,7 +88,7 @@
         <x>0</x>
         <y>0</y>
         <width>862</width>
-        <height>78</height>
+        <height>88</height>
        </rect>
       </property>
       <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="0,0,0,0,0,0,0">
@@ -403,17 +403,11 @@
    <property name="toolTip">
     <string>Binary</string>
    </property>
-   <property name="statusTip">
-    <string>Binary</string>
-   </property>
-   <property name="whatsThis">
-    <string>Binary</string>
-   </property>
    <property name="shortcut">
     <string notr="true">Ctrl+1</string>
    </property>
    <property name="shortcutContext">
-    <enum>Qt::WidgetWithChildrenShortcut</enum>
+    <enum>Qt::ShortcutContext::WidgetWithChildrenShortcut</enum>
    </property>
   </action>
   <action name="actionDisplayHex">
@@ -430,17 +424,11 @@
    <property name="toolTip">
     <string>Hex</string>
    </property>
-   <property name="statusTip">
-    <string>Hex</string>
-   </property>
-   <property name="whatsThis">
-    <string>Hex</string>
-   </property>
    <property name="shortcut">
     <string notr="true">Ctrl+2</string>
    </property>
    <property name="shortcutContext">
-    <enum>Qt::WidgetWithChildrenShortcut</enum>
+    <enum>Qt::ShortcutContext::WidgetWithChildrenShortcut</enum>
    </property>
   </action>
   <action name="actionDisplayAnsi">
@@ -455,12 +443,6 @@
     <string>Ansi</string>
    </property>
    <property name="toolTip">
-    <string>Ansi</string>
-   </property>
-   <property name="statusTip">
-    <string>Ansi</string>
-   </property>
-   <property name="whatsThis">
     <string>Ansi</string>
    </property>
   </action>
@@ -478,17 +460,11 @@
    <property name="toolTip">
     <string>16-bit Integer</string>
    </property>
-   <property name="statusTip">
-    <string>16-bit Integer</string>
-   </property>
-   <property name="whatsThis">
-    <string>16-bit Integer</string>
-   </property>
    <property name="shortcut">
     <string notr="true">Ctrl+3</string>
    </property>
    <property name="shortcutContext">
-    <enum>Qt::WidgetWithChildrenShortcut</enum>
+    <enum>Qt::ShortcutContext::WidgetWithChildrenShortcut</enum>
    </property>
   </action>
   <action name="actionDisplayUInt16">
@@ -505,17 +481,11 @@
    <property name="toolTip">
     <string>Unsigned 16-bit Integer</string>
    </property>
-   <property name="statusTip">
-    <string>Unsigned 16-bit Integer</string>
-   </property>
-   <property name="whatsThis">
-    <string>Unsigned 16-bit Integer</string>
-   </property>
    <property name="shortcut">
     <string notr="true">Ctrl+4</string>
    </property>
    <property name="shortcutContext">
-    <enum>Qt::WidgetWithChildrenShortcut</enum>
+    <enum>Qt::ShortcutContext::WidgetWithChildrenShortcut</enum>
    </property>
   </action>
   <action name="actionDisplayInt32">
@@ -532,17 +502,11 @@
    <property name="toolTip">
     <string>32-bit Integer (MSRF)</string>
    </property>
-   <property name="statusTip">
-    <string>32-bit Integer (MSRF)</string>
-   </property>
-   <property name="whatsThis">
-    <string>32-bit Integer (MSRF)</string>
-   </property>
    <property name="shortcut">
     <string notr="true">Ctrl+5</string>
    </property>
    <property name="shortcutContext">
-    <enum>Qt::WidgetWithChildrenShortcut</enum>
+    <enum>Qt::ShortcutContext::WidgetWithChildrenShortcut</enum>
    </property>
   </action>
   <action name="actionDisplayInt32LSRF">
@@ -559,17 +523,11 @@
    <property name="toolTip">
     <string>32-bit Integer (LSRF)</string>
    </property>
-   <property name="statusTip">
-    <string>32-bit Integer (LSRF)</string>
-   </property>
-   <property name="whatsThis">
-    <string>32-bit Integer (LSRF)</string>
-   </property>
    <property name="shortcut">
     <string notr="true">Ctrl+Alt+5</string>
    </property>
    <property name="shortcutContext">
-    <enum>Qt::WidgetWithChildrenShortcut</enum>
+    <enum>Qt::ShortcutContext::WidgetWithChildrenShortcut</enum>
    </property>
   </action>
   <action name="actionDisplayUInt32">
@@ -586,17 +544,11 @@
    <property name="toolTip">
     <string>Unsigned 32-bit Integer (MSRF)</string>
    </property>
-   <property name="statusTip">
-    <string>Unsigned 32-bit Integer (MSRF)</string>
-   </property>
-   <property name="whatsThis">
-    <string>Unsigned 32-bit Integer (MSRF)</string>
-   </property>
    <property name="shortcut">
     <string notr="true">Ctrl+6</string>
    </property>
    <property name="shortcutContext">
-    <enum>Qt::WidgetWithChildrenShortcut</enum>
+    <enum>Qt::ShortcutContext::WidgetWithChildrenShortcut</enum>
    </property>
   </action>
   <action name="actionDisplayUInt32LSRF">
@@ -613,17 +565,11 @@
    <property name="toolTip">
     <string>Unsigned 32-bit Integer (LSRF)</string>
    </property>
-   <property name="statusTip">
-    <string>Unsigned 32-bit Integer (LSRF)</string>
-   </property>
-   <property name="whatsThis">
-    <string>Unsigned 32-bit Integer (LSRF)</string>
-   </property>
    <property name="shortcut">
     <string notr="true">Ctrl+Alt+6</string>
    </property>
    <property name="shortcutContext">
-    <enum>Qt::WidgetWithChildrenShortcut</enum>
+    <enum>Qt::ShortcutContext::WidgetWithChildrenShortcut</enum>
    </property>
   </action>
   <action name="actionDisplayInt64">
@@ -640,17 +586,11 @@
    <property name="toolTip">
     <string>64-bit Integer (MSRF)</string>
    </property>
-   <property name="statusTip">
-    <string>64-bit Integer (MSRF)</string>
-   </property>
-   <property name="whatsThis">
-    <string>64-bit Integer (MSRF)</string>
-   </property>
    <property name="shortcut">
     <string notr="true">Ctrl+7</string>
    </property>
    <property name="shortcutContext">
-    <enum>Qt::WidgetWithChildrenShortcut</enum>
+    <enum>Qt::ShortcutContext::WidgetWithChildrenShortcut</enum>
    </property>
   </action>
   <action name="actionDisplayInt64LSRF">
@@ -667,17 +607,11 @@
    <property name="toolTip">
     <string>64-bit Integer (LSRF)</string>
    </property>
-   <property name="statusTip">
-    <string>64-bit Integer (LSRF)</string>
-   </property>
-   <property name="whatsThis">
-    <string>64-bit Integer (LSRF)</string>
-   </property>
    <property name="shortcut">
     <string notr="true">Ctrl+Alt+7</string>
    </property>
    <property name="shortcutContext">
-    <enum>Qt::WidgetWithChildrenShortcut</enum>
+    <enum>Qt::ShortcutContext::WidgetWithChildrenShortcut</enum>
    </property>
   </action>
   <action name="actionDisplayUInt64">
@@ -694,17 +628,11 @@
    <property name="toolTip">
     <string>Unsigned 64-bit Integer (MSRF)</string>
    </property>
-   <property name="statusTip">
-    <string>Unsigned 64-bit Integer (MSRF)</string>
-   </property>
-   <property name="whatsThis">
-    <string>Unsigned 64-bit Integer (MSRF)</string>
-   </property>
    <property name="shortcut">
     <string notr="true">Ctrl+8</string>
    </property>
    <property name="shortcutContext">
-    <enum>Qt::WidgetWithChildrenShortcut</enum>
+    <enum>Qt::ShortcutContext::WidgetWithChildrenShortcut</enum>
    </property>
   </action>
   <action name="actionDisplayUInt64LSRF">
@@ -721,17 +649,11 @@
    <property name="toolTip">
     <string>Unsigned 64-bit Integer (LSRF)</string>
    </property>
-   <property name="statusTip">
-    <string>Unsigned 64-bit Integer (LSRF)</string>
-   </property>
-   <property name="whatsThis">
-    <string>Unsigned 64-bit Integer (LSRF)</string>
-   </property>
    <property name="shortcut">
     <string notr="true">Ctrl+Alt+8</string>
    </property>
    <property name="shortcutContext">
-    <enum>Qt::WidgetWithChildrenShortcut</enum>
+    <enum>Qt::ShortcutContext::WidgetWithChildrenShortcut</enum>
    </property>
   </action>
   <action name="actionDisplayFloat32">
@@ -748,17 +670,11 @@
    <property name="toolTip">
     <string>32-bit Float (MSRF)</string>
    </property>
-   <property name="statusTip">
-    <string>32-bit Float (MSRF)</string>
-   </property>
-   <property name="whatsThis">
-    <string>32-bit Float (MSRF)</string>
-   </property>
    <property name="shortcut">
     <string notr="true">Ctrl+9</string>
    </property>
    <property name="shortcutContext">
-    <enum>Qt::WidgetWithChildrenShortcut</enum>
+    <enum>Qt::ShortcutContext::WidgetWithChildrenShortcut</enum>
    </property>
   </action>
   <action name="actionDisplayFloat32LSRF">
@@ -775,17 +691,11 @@
    <property name="toolTip">
     <string>32-bit Float (LSRF)</string>
    </property>
-   <property name="statusTip">
-    <string>32-bit Float (LSRF)</string>
-   </property>
-   <property name="whatsThis">
-    <string>32-bit Float (LSRF)</string>
-   </property>
    <property name="shortcut">
     <string notr="true">Ctrl+Alt+9</string>
    </property>
    <property name="shortcutContext">
-    <enum>Qt::WidgetWithChildrenShortcut</enum>
+    <enum>Qt::ShortcutContext::WidgetWithChildrenShortcut</enum>
    </property>
   </action>
   <action name="actionDisplayFloat64">
@@ -802,17 +712,11 @@
    <property name="toolTip">
     <string>64-bit Float (MSRF)</string>
    </property>
-   <property name="statusTip">
-    <string>64-bit Float (MSRF)</string>
-   </property>
-   <property name="whatsThis">
-    <string>64-bit Float (MSRF)</string>
-   </property>
    <property name="shortcut">
     <string notr="true">Ctrl+0</string>
    </property>
    <property name="shortcutContext">
-    <enum>Qt::WidgetWithChildrenShortcut</enum>
+    <enum>Qt::ShortcutContext::WidgetWithChildrenShortcut</enum>
    </property>
   </action>
   <action name="actionDisplayFloat64LSRF">
@@ -829,17 +733,11 @@
    <property name="toolTip">
     <string>64-bit Float (LSRF)</string>
    </property>
-   <property name="statusTip">
-    <string>64-bit Float (LSRF)</string>
-   </property>
-   <property name="whatsThis">
-    <string>64-bit Float (LSRF)</string>
-   </property>
    <property name="shortcut">
     <string notr="true">Ctrl+Alt+0</string>
    </property>
    <property name="shortcutContext">
-    <enum>Qt::WidgetWithChildrenShortcut</enum>
+    <enum>Qt::ShortcutContext::WidgetWithChildrenShortcut</enum>
    </property>
   </action>
   <action name="actionDisplaySwapBytes">
@@ -856,15 +754,14 @@
    <property name="toolTip">
     <string>Swap Bytes (0xAB → 0xBA)</string>
    </property>
-   <property name="statusTip">
-    <string>Swap Bytes (0xAB → 0xBA)</string>
-   </property>
-   <property name="whatsThis">
-    <string>Swap Bytes (0xAB → 0xBA)</string>
-   </property>
   </action>
  </widget>
  <customwidgets>
+  <customwidget>
+   <class>ToolBar</class>
+   <extends>QToolBar</extends>
+   <header>toolbar.h</header>
+  </customwidget>
   <customwidget>
    <class>NumericLineEdit</class>
    <extends>QLineEdit</extends>
@@ -880,11 +777,6 @@
    <extends>QFrame</extends>
    <header>outputdatawidget.h</header>
    <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>ToolBar</class>
-   <extends>QToolBar</extends>
-   <header>toolbar.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>

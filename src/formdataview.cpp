@@ -1231,7 +1231,6 @@ void FormDataView::setupDisplayBar()
 
         const auto hint = modeHint(type, order);
         action->setToolTip(hint);
-        action->setStatusTip(hint);
         action->setWhatsThis(hint);
 
         connect(action, &QAction::triggered, this, [this, type, order](bool checked) {
