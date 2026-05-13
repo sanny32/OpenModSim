@@ -46,7 +46,7 @@ const QHash<QString, IconDescriptor>& iconRegistry()
         { QStringLiteral("omodsim/force-discretes"),           { QStringLiteral(":/res/icon-force-discretes.svg"),      QStringLiteral(":/res/icon-force-discretes.png") } },
         { QStringLiteral("omodsim/github"),                    { QStringLiteral("brand/github-fill"),                   QStringLiteral(":/res/emblem-github.png") } },
         { QStringLiteral("omodsim/hex-view"),                  { QStringLiteral(":/res/icon-hex-view.svg"),             QStringLiteral(":/res/icon-hex-view.png") } },
-        { QStringLiteral("omodsim/information"),               { QStringLiteral("dialog-information"),                  QStringLiteral(":/res/icon-log-info.png") } },
+        { QStringLiteral("omodsim/information"),               { QStringLiteral("misc/info"),                           QStringLiteral(":/res/icon-log-info.png") } },
         { QStringLiteral("omodsim/internet"),                  { QStringLiteral("applications-internet"),               QStringLiteral(":/res/applications-internet.png") } },
         { QStringLiteral("omodsim/import"),                    { QStringLiteral(":/res/action-import.svg"),             QStringLiteral(":/res/icon-import.svg") } },
         { QStringLiteral("omodsim/mail"),                      { QStringLiteral("emblem-mail"),                         QStringLiteral(":/res/emblem-mail.png") } },
@@ -76,8 +76,8 @@ const QHash<QString, IconDescriptor>& iconRegistry()
         { QStringLiteral("omodsim/split-view"),                { QStringLiteral("action/separate-horizontal"),          QStringLiteral(":/res/icon-split-view.png") } },
         { QStringLiteral("omodsim/stop-script"),               { QStringLiteral("media/stop-small"),                    QStringLiteral(":/res/icon-stop-script.png") } },
         { QStringLiteral("omodsim/undo"),                      { QStringLiteral("edit-undo"),                           QStringLiteral(":/res/icon-undo.png") } },
-        { QStringLiteral("omodsim/warning"),                   { QStringLiteral("dialog-warning"),                      QStringLiteral(":/res/icon-log-warning.png") } },
-        { QStringLiteral("omodsim/error"),                     { QStringLiteral("dialog-error"),                        QStringLiteral(":/res/icon-log-critical.png") } }
+        { QStringLiteral("omodsim/warning"),                   { QStringLiteral("misc/warning"),                        QStringLiteral(":/res/icon-log-warning.png") } },
+        { QStringLiteral("omodsim/error"),                     { QStringLiteral("action/clear"),                        QStringLiteral(":/res/icon-log-critical.png") } }
     };
 
     return registry;
