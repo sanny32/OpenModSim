@@ -90,22 +90,26 @@ const QHash<QString, IconDescriptor>& iconRegistry()
 ///
 QIcon iconFromThemeName(const QString& themeName)
 {
-    QIcon icon = QIcon::fromTheme(themeName);
-
 #if defined(HAVE_QLEMENTINE_APP_STYLE)
-    if (icon.isNull() && themeName.contains(QLatin1Char('/'))) {
-        const QString qlementineIconPath = QStringLiteral(":/qlementine/icons/16/%1.svg").arg(themeName);
-        if (QFile::exists(qlementineIconPath))
-            icon = QIcon(qlementineIconPath);
+    // Prefer qlementine's freedesktop mapping first so macOS native icon libraries
+    // do not override expected warning/info/error glyphs.
+    if (!themeName.contains(QLatin1Char('/'))) {
+        const QString mappedName = oclero::qlementine::icons::fromFreeDesktop(themeName);
+        if (!mappedName.isEmpty() && QFile::exists(mappedName)) {
+            const QIcon mappedIcon(mappedName);
+            if (!mappedIcon.isNull())
+                return mappedIcon;
+        }
     }
 
-    if (icon.isNull() && !themeName.contains(QLatin1Char('/'))) {
-        const QString mappedName = oclero::qlementine::icons::fromFreeDesktop(themeName);
-        if (!mappedName.isEmpty() && mappedName != themeName)
-            icon = QIcon(mappedName);
+    if (themeName.contains(QLatin1Char('/'))) {
+        const QString qlementineIconPath = QStringLiteral(":/qlementine/icons/16/%1.svg").arg(themeName);
+        if (QFile::exists(qlementineIconPath))
+            return QIcon(qlementineIconPath);
     }
 #endif
 
+    QIcon icon = QIcon::fromTheme(themeName);
     return icon;
 }
 }
