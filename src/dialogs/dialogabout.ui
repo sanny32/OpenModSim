@@ -19,7 +19,7 @@
   <property name="maximumSize">
    <size>
     <width>16777215</width>
-    <height>800</height>
+    <height>600</height>
    </size>
   </property>
   <property name="windowTitle">
