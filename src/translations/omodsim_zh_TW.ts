@@ -2325,13 +2325,13 @@ Source: %3</source>
 <context>
     <name>HelpBrowser</name>
     <message>
-        <location filename="../controls/helpbrowser.h" line="29"/>
-        <location filename="../controls/helpbrowser.h" line="47"/>
+        <location filename="../controls/helpbrowser.cpp" line="33"/>
+        <location filename="../controls/helpbrowser.cpp" line="80"/>
         <source>qthelp://omodsim/doc/index.html</source>
         <translation>qthelp://omodsim/doc/index.html</translation>
     </message>
     <message>
-        <location filename="../controls/helpbrowser.h" line="40"/>
+        <location filename="../controls/helpbrowser.cpp" line="60"/>
         <source>qthelp://omodsim/doc/index.html#%1</source>
         <translation>qthelp://omodsim/doc/index.html#%1</translation>
     </message>
@@ -2339,26 +2339,26 @@ Source: %3</source>
 <context>
     <name>HelpWidget</name>
     <message>
-        <location filename="../controls/helpwidget.cpp" line="44"/>
-        <location filename="../controls/helpwidget.cpp" line="98"/>
+        <location filename="../controls/helpwidget.cpp" line="39"/>
+        <location filename="../controls/helpwidget.cpp" line="93"/>
         <source>Find</source>
         <translation>尋找</translation>
     </message>
     <message>
-        <location filename="../controls/helpwidget.cpp" line="50"/>
-        <location filename="../controls/helpwidget.cpp" line="99"/>
+        <location filename="../controls/helpwidget.cpp" line="45"/>
+        <location filename="../controls/helpwidget.cpp" line="94"/>
         <source>Previous (Shift+Enter)</source>
         <translation>上一頁 (Shift+Enter)</translation>
     </message>
     <message>
-        <location filename="../controls/helpwidget.cpp" line="56"/>
-        <location filename="../controls/helpwidget.cpp" line="100"/>
+        <location filename="../controls/helpwidget.cpp" line="51"/>
+        <location filename="../controls/helpwidget.cpp" line="95"/>
         <source>Next (Enter)</source>
         <translation>下一個 (Enter)</translation>
     </message>
     <message>
-        <location filename="../controls/helpwidget.cpp" line="66"/>
-        <location filename="../controls/helpwidget.cpp" line="101"/>
+        <location filename="../controls/helpwidget.cpp" line="61"/>
+        <location filename="../controls/helpwidget.cpp" line="96"/>
         <source>Close (Escape)</source>
         <translation>關閉 (Escape)</translation>
     </message>

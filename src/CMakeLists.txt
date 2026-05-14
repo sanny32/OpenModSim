@@ -196,6 +196,7 @@ set(SOURCES
     controls/findreplacebar.cpp
     controls/customlineedit.cpp
     controls/flowcontroltypecombobox.cpp
+    controls/helpbrowser.cpp
     controls/helpwidget.cpp
     controls/jscodeeditor.cpp
     controls/jscriptcontrol.cpp

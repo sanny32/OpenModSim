@@ -23,11 +23,6 @@ HelpWidget::HelpWidget(QWidget *parent)
     : QWidget(parent)
     ,_helpBrowser(new HelpBrowser(this))
 {
-    auto pal = _helpBrowser->palette();
-    pal.setColor(QPalette::Base, AppColors::canvasBackground());
-    pal.setColor(QPalette::Window, AppColors::canvasBackground());
-    _helpBrowser->setPalette(pal);
-
     // Find bar (bottom, styled like FindReplaceBar)
     _findBar = new QWidget(this);
     _findBar->setAutoFillBackground(true);
@@ -100,6 +95,7 @@ void HelpWidget::changeEvent(QEvent* event)
         _nextButton->setToolTip(tr("Next (Enter)"));
         _closeButton->setToolTip(tr("Close (Escape)"));
     }
+    QWidget::changeEvent(event);
 }
 
 ///
