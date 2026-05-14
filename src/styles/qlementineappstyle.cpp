@@ -547,9 +547,6 @@ void QlementineAppStyle::drawControl(ControlElement element, const QStyleOption*
 
         QRect textRect = rect.adjusted(6, 0, -42, 0);
         if (textRect.isValid()) {
-            QFont font = painter->font();
-            font.setPointSize(qMax(11, font.pointSize()));
-            painter->setFont(font);
             painter->setPen(colorRef(darkMode ? Dark::kText : Light::kText));
             painter->drawText(textRect, Qt::AlignVCenter | Qt::AlignLeft | Qt::TextSingleLine,
                               painter->fontMetrics().elidedText(dockOption->title, Qt::ElideRight, textRect.width()));
