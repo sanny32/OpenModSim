@@ -110,9 +110,7 @@ int main(int argc, char *argv[])
     Application a(argc, argv);
     a.setApplicationName(APP_NAME);
     a.setApplicationVersion(APP_VERSION);
-#ifdef Q_OS_LINUX
     a.setDesktopFileName(QStringLiteral("omodsim%1").arg(APP_VERSION_MAJOR));
-#endif
 
 #if defined(HAVE_QLEMENTINE_APP_STYLE) && defined(Q_OS_MAC)
     a.setStyle(new MacAppStyle());

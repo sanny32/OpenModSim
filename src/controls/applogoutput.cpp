@@ -18,12 +18,12 @@
 #include <QStyledItemDelegate>
 #include <QToolBar>
 #include <QToolButton>
-#include "../styles/appcolors.h"
+#include "appcolors.h"
 #include "applogoutput.h"
 #include "themedicons.h"
 #include "ui_applogoutput.h"
 
-Q_LOGGING_CATEGORY(lcApp, "omodsim")
+Q_LOGGING_CATEGORY(lcApp, "omodsim" APP_VERSION_MAJOR)
 
 namespace {
 static const int EventTypeRole = Qt::UserRole;
@@ -152,7 +152,7 @@ static std::atomic<quint64> s_logEpoch { 0 };
 static void appMessageHandler(QtMsgType type, const QMessageLogContext& ctx, const QString& msg)
 {
     if (s_prevHandler) s_prevHandler(type, ctx, msg);
-    if (!s_instance || qstrcmp(ctx.category, "omodsim") != 0) return;
+    if (!s_instance || QString::compare(ctx.category, theApp()->desktopFileName()) != 0) return;
 
     AppLogOutput::EventType evType;
     switch (type) {
