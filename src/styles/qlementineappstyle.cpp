@@ -31,6 +31,8 @@
 #include <QStyleOptionTab>
 #include <QStyleOptionToolButton>
 #include <QStyleOptionViewItem>
+#include <QApplication>
+#include <QMdiArea>
 #include <QTabBar>
 #include <QToolBar>
 #include <QMenu>
@@ -337,6 +339,11 @@ QlementineAppStyle::QlementineAppStyle(QObject* parent)
 
     connect(&theApp()->theme(), &AppTheme::colorSchemeChanged,
             this, [this]() { updateTheme(); });
+
+    connect(this, &QlementineStyle::themeChanged, this, [this]() {
+        for (auto* widget : QApplication::allWidgets())
+            polish(widget);
+    });
 }
 
 ///
@@ -721,6 +728,9 @@ void QlementineAppStyle::polish(QWidget* widget)
         font.setBold(false);
         widget->setFont(font);
     }
+
+    if (auto* mdiArea = qobject_cast<QMdiArea*>(widget))
+        mdiArea->setBackground(QBrush(theme().backgroundColorMain1));
 }
 
 ///

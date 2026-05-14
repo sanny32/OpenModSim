@@ -132,8 +132,6 @@ MdiArea::MdiArea(QWidget* parent)
         _focusMovedFromOutsideMdi = old && old != this && !isAncestorOf(old);
     });
 
-    updateBackgroundFromPalette();
-
     AppTrace::log("MdiArea::MdiArea",
                   QStringLiteral("constructed %1").arg(areaTag(this)));
 }
@@ -323,25 +321,6 @@ void MdiArea::setViewMode(ViewMode mode)
 
     updateTabbedEnabledState();
     emit tabBarLayoutChanged();
-}
-
-///
-/// \brief MdiArea::changeEvent
-/// \param event
-///
-void MdiArea::changeEvent(QEvent* event)
-{
-    QMdiArea::changeEvent(event);
-
-    switch (event->type()) {
-        case QEvent::ApplicationPaletteChange:
-        case QEvent::PaletteChange:
-        case QEvent::StyleChange:
-            updateBackgroundFromPalette();
-            break;
-        default:
-            break;
-    }
 }
 
 ///
@@ -1079,18 +1058,6 @@ void MdiArea::updateViewportBaseLine()
 
     _tabBarBaseLine->show();
     _tabBarBaseLine->raise();
-}
-
-///
-/// \brief MdiArea::updateBackgroundFromPalette
-///
-void MdiArea::updateBackgroundFromPalette()
-{
-    const QBrush brush(palette().color(QPalette::Base));
-    if (background() == brush)
-        return;
-
-    setBackground(brush);
 }
 
 ///

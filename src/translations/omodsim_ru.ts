@@ -2607,7 +2607,7 @@ Open the download page?</source>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="342"/>
-        <location filename="../mainwindow.cpp" line="1922"/>
+        <location filename="../mainwindow.cpp" line="1923"/>
         <source>Save Project</source>
         <translation>Сохранить проект</translation>
     </message>
@@ -2799,7 +2799,7 @@ Open the download page?</source>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="301"/>
-        <location filename="../mainwindow.cpp" line="2058"/>
+        <location filename="../mainwindow.cpp" line="2059"/>
         <source>Clear List</source>
         <translation>Очистить список</translation>
     </message>
@@ -2815,20 +2815,20 @@ Open the download page?</source>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="930"/>
-        <location filename="../mainwindow.cpp" line="1952"/>
+        <location filename="../mainwindow.cpp" line="1953"/>
         <source>Project files (*.omsim)</source>
         <translation>Файлы проекта (*.omsim)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1576"/>
-        <location filename="../mainwindow.cpp" line="1980"/>
+        <location filename="../mainwindow.cpp" line="1577"/>
+        <location filename="../mainwindow.cpp" line="1981"/>
         <source>Untitled</source>
         <translation>Без имени</translation>
     </message>
     <message>
         <location filename="../applogger.cpp" line="127"/>
         <location filename="../mainwindow.cpp" line="681"/>
-        <location filename="../mainwindow.cpp" line="1761"/>
+        <location filename="../mainwindow.cpp" line="1762"/>
         <source>Address Base</source>
         <translation>Адресация</translation>
     </message>
@@ -3118,7 +3118,7 @@ Open the download page?</source>
         <translation>Скрипт запущен: %1 (режим: %2)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1315"/>
+        <location filename="../mainwindow.cpp" line="1316"/>
         <source>Move to Other Panel</source>
         <translation>Переместить на другую панель</translation>
     </message>
@@ -3140,12 +3140,12 @@ Open the download page?</source>
         <translation>Шестнадцатиричный режим</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1923"/>
+        <location filename="../mainwindow.cpp" line="1924"/>
         <source>Save project before closing?</source>
         <translation>Сохранить проект перед закрытием?</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2046"/>
+        <location filename="../mainwindow.cpp" line="2047"/>
         <source>No Recent Projects</source>
         <translation>Нет недавних проектов</translation>
     </message>
@@ -3155,7 +3155,7 @@ Open the download page?</source>
         <translation>Данные</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1273"/>
+        <location filename="../mainwindow.cpp" line="1274"/>
         <source>JavaScript files (*.js);;All files (*)</source>
         <translation>Файлы JavaScript (*.js);;Все файлы (*)</translation>
     </message>
