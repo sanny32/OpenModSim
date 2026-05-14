@@ -371,10 +371,11 @@ bool QlementineAppStyle::isDarkMode() const
 void QlementineAppStyle::polishWidget(QWidget* widget) const
 {
     if (auto* label = qobject_cast<QLabel*>(widget)) {
-        if (label->inherits("QTipLabel"))
+        if (label->inherits("QTipLabel")) {
             label->setForegroundRole(QPalette::ToolTipText);
-        else
+        } else {
             label->setForegroundRole(QPalette::WindowText);
+        }
     }
 
     if (qobject_cast<QPushButton*>(widget) || qobject_cast<QToolButton*>(widget)) {
