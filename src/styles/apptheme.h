@@ -20,6 +20,7 @@ class AppTheme final
 public:
     explicit AppTheme(QObject* parent = nullptr);
     bool isDark() const;
+    bool supportsTheme() const;
 
     AppTheme(const AppTheme&) = delete;
     AppTheme& operator=(const AppTheme&) = delete;

@@ -36,6 +36,19 @@ AppTheme::AppTheme(QObject* parent)
 }
 
 ///
+/// \brief AppTheme::supportsTheme
+/// \return True when the active application style supports theme switching.
+///
+bool AppTheme::supportsTheme() const
+{
+#if defined(HAVE_QLEMENTINE_APP_STYLE)
+    return true;
+#else
+    return false;
+#endif
+}
+
+///
 /// \brief AppTheme::isDark
 /// \return True when active theme should be treated as dark.
 ///

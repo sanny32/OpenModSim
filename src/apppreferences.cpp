@@ -373,7 +373,9 @@ void AppPreferences::load(QSettings& settings)
     _consoleMaxLines = settings.value("ConsoleMaxLines", _consoleMaxLines).toInt();
     _checkForUpdates  = settings.value("CheckForUpdates",  _checkForUpdates).toBool();
     _showWelcomeDialog = settings.value("ShowWelcomeDialog", _showWelcomeDialog).toBool();
-    setThemeMode(themeModeFromVariant(settings.value("ThemeMode", static_cast<int>(_themeMode))));
+
+    if(theApp()->theme().supportsTheme())
+        setThemeMode(themeModeFromVariant(settings.value("ThemeMode", static_cast<int>(_themeMode))));
 
     settings >> _dataViewDefinitions;
     settings >> _trafficViewDefinitions;
@@ -405,7 +407,9 @@ void AppPreferences::save(QSettings& settings) const
     settings.setValue("ConsoleMaxLines", _consoleMaxLines);
     settings.setValue("CheckForUpdates", _checkForUpdates);
     settings.setValue("ShowWelcomeDialog", _showWelcomeDialog);
-    settings.setValue("ThemeMode", static_cast<int>(_themeMode));
+
+    if(theApp()->theme().supportsTheme())
+        settings.setValue("ThemeMode", static_cast<int>(_themeMode));
 
     settings << _dataViewDefinitions;
     settings << _trafficViewDefinitions;

@@ -37,14 +37,14 @@ DialogPreferences::DialogPreferences(MainWindow* mainWindow, QWidget* parent)
     ui->comboBoxLanguage->addItem("简体中文", "zh_CN");
     ui->comboBoxLanguage->addItem("繁體中文", "zh_TW");
 
-#if defined(HAVE_QLEMENTINE_APP_STYLE)
-    ui->comboBoxThemeMode->addItem(tr("System"), static_cast<int>(AppThemeMode::System));
-    ui->comboBoxThemeMode->addItem(tr("Light"), static_cast<int>(AppThemeMode::Light));
-    ui->comboBoxThemeMode->addItem(tr("Dark"), static_cast<int>(AppThemeMode::Dark));
-#else
-    ui->labelTheme->hide();
-    ui->comboBoxThemeMode->hide();
-#endif
+    if (theApp()->theme().supportsTheme()) {
+        ui->comboBoxThemeMode->addItem(tr("System"), static_cast<int>(AppThemeMode::System));
+        ui->comboBoxThemeMode->addItem(tr("Light"), static_cast<int>(AppThemeMode::Light));
+        ui->comboBoxThemeMode->addItem(tr("Dark"), static_cast<int>(AppThemeMode::Dark));
+    } else {
+        ui->labelTheme->hide();
+        ui->comboBoxThemeMode->hide();
+    }
 
     ui->fontComboBoxFont->setFontFilters(QFontComboBox::MonospacedFonts);
 
@@ -175,10 +175,10 @@ void DialogPreferences::loadFromPreferences()
     const int langIdx = ui->comboBoxLanguage->findData(prefs.language());
     ui->comboBoxLanguage->setCurrentIndex(langIdx >= 0 ? langIdx : 0);
 
-#if defined(HAVE_QLEMENTINE_APP_STYLE)
-    const int themeIdx = ui->comboBoxThemeMode->findData(static_cast<int>(prefs.themeMode()));
-    ui->comboBoxThemeMode->setCurrentIndex(themeIdx >= 0 ? themeIdx : 0);
-#endif
+    if (theApp()->theme().supportsTheme()) {
+        const int themeIdx = ui->comboBoxThemeMode->findData(static_cast<int>(prefs.themeMode()));
+        ui->comboBoxThemeMode->setCurrentIndex(themeIdx >= 0 ? themeIdx : 0);
+    }
 
     // Interface - updates
     ui->checkBoxCheckForUpdates->setChecked(prefs.checkForUpdates());
@@ -234,11 +234,11 @@ void DialogPreferences::apply()
     prefs.setLanguage(lang);
     if (_mainWindow) _mainWindow->setLanguage(lang);
 
-#if defined(HAVE_QLEMENTINE_APP_STYLE)
-    prefs.setThemeMode(static_cast<AppThemeMode>(ui->comboBoxThemeMode->currentData().toInt()));
-    if (_mainWindow)
-        _mainWindow->applyThemeColors();
-#endif
+    if (theApp()->theme().supportsTheme()) {
+        prefs.setThemeMode(static_cast<AppThemeMode>(ui->comboBoxThemeMode->currentData().toInt()));
+        if (_mainWindow)
+            _mainWindow->applyThemeColors();
+    }
 
     // Interface - updates
     const bool checkUpdates = ui->checkBoxCheckForUpdates->isChecked();
