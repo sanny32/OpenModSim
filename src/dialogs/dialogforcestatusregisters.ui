@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>DialogForceStatusRegisters</class>
  <widget class="QDialog" name="DialogForceStatusRegisters">
@@ -140,7 +140,7 @@
           </property>
           <property name="icon">
            <iconset resource="../resources.qrc">
-            <normaloff>:/res/icon-random.svg</normaloff>:/res/icon-random.svg</iconset>
+            <normaloff>:/res/icons/fallback/random.svg</normaloff>:/res/icons/fallback/random.svg</iconset>
           </property>
          </widget>
         </item>

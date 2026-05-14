@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>FormDataMapView</class>
  <widget class="QWidget" name="FormDataMapView">
@@ -59,7 +59,7 @@
   <action name="actionAdd">
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/res/icon-add.png</normaloff>:/res/icon-add.png</iconset>
+     <normaloff>:/res/icons/fallback/add.png</normaloff>:/res/icons/fallback/add.png</iconset>
    </property>
    <property name="text">
     <string>Add Row</string>
@@ -73,7 +73,7 @@
   <action name="actionDelete">
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/res/icon-remove.png</normaloff>:/res/icon-remove.png</iconset>
+     <normaloff>:/res/icons/fallback/remove.png</normaloff>:/res/icons/fallback/remove.png</iconset>
    </property>
    <property name="text">
     <string>Delete Row</string>
@@ -82,7 +82,7 @@
   <action name="actionClear">
    <property name="icon">
     <iconset resource="resources.qrc">
-     <normaloff>:/res/edit-delete.png</normaloff>:/res/edit-delete.png</iconset>
+     <normaloff>:/res/icons/fallback/edit-delete.png</normaloff>:/res/icons/fallback/edit-delete.png</iconset>
    </property>
    <property name="text">
     <string>Clear Table</string>

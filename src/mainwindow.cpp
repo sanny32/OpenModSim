@@ -581,7 +581,7 @@ void MainWindow::setLanguage(const QString& lang)
         qApp->removeTranslator(&_appTranslator);
         qApp->removeTranslator(&_qtTranslator);
     }
-    else if(_appTranslator.load(QString(":/translations/omodsim_%1").arg(lang)))
+    else if(_appTranslator.load(QString(":/res/translations/omodsim_%1").arg(lang)))
     {
         _lang = lang;
         qApp->installTranslator(&_appTranslator);

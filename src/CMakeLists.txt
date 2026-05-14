@@ -523,9 +523,9 @@ add_dependencies(${PROJECT_NAME} normalize_ui_enums)
 set_property(TARGET ${PROJECT_NAME} APPEND PROPERTY AUTOGEN_TARGET_DEPENDS normalize_ui_enums)
 
 set(TS_FILES
-    translations/omodsim_ru.ts
-    translations/omodsim_zh_CN.ts
-    translations/omodsim_zh_TW.ts
+    res/translations/omodsim_ru.ts
+    res/translations/omodsim_zh_CN.ts
+    res/translations/omodsim_zh_TW.ts
 )
 
 set(JSHELP_INPUT "${PROJECT_SOURCE_DIR}/docs/jshelp.qhcp")
@@ -564,7 +564,7 @@ else()
 endif()
 
 target_precompile_headers(${PROJECT_NAME} PRIVATE pch.h)
-target_sources(${PROJECT_NAME} PRIVATE resources.qrc ${HEADERS} ${SOURCES} ${UI_FILES} ${TS_FILES})
+target_sources(${PROJECT_NAME} PRIVATE resources.qrc ${HEADERS} ${SOURCES} ${UI_FILES})
 target_link_libraries(${PROJECT_NAME} PRIVATE Qt::Widgets Qt::Network Qt::Xml Qt::PrintSupport Qt::SerialBus Qt::SerialPort Qt::Qml Qt::Help Qt::Svg)
 
 if(Qt6_FOUND)

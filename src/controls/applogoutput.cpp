@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+﻿// SPDX-FileCopyrightText: 2026 OpenModSim contributors
 // SPDX-License-Identifier: MIT
 
 ///
@@ -35,7 +35,7 @@ struct EventStyle {
     QColor bg;
     QColor border;
     QColor textColor;
-    QString iconPath;
+    QIcon icon;
 };
 
 ///
@@ -47,11 +47,11 @@ EventStyle styleForType(AppLogOutput::EventType type)
 {
     switch (type) {
         case AppLogOutput::EventType::Warning:
-            return EventStyle{ AppColors::warningBackground(), AppColors::warningBorder(), AppColors::warningForeground(), QStringLiteral(":/res/icon-log-warning.svg") };
+            return EventStyle{ AppColors::warningBackground(), AppColors::warningBorder(), AppColors::warningForeground(), themedIcon(QStringLiteral("omodsim/warning")) };
         case AppLogOutput::EventType::Error:
-            return EventStyle{ AppColors::errorBackground(), AppColors::errorBorder(), AppColors::errorForeground(), QStringLiteral(":/res/icon-log-critical.svg") };
+            return EventStyle{ AppColors::errorBackground(), AppColors::errorBorder(), AppColors::errorForeground(), themedIcon(QStringLiteral("omodsim/error")) };
         default:
-            return EventStyle{ AppColors::canvasBackground(), QColor(), AppColors::logForeground(), QStringLiteral(":/res/icon-log-info.svg") };
+            return EventStyle{ AppColors::canvasBackground(), QColor(), AppColors::logForeground(), themedIcon(QStringLiteral("omodsim/information")) };
     }
 }
 
@@ -101,7 +101,7 @@ public:
 
         constexpr int leftPad = 8;
         constexpr int iconW = 16;
-        const bool hasIcon = !style.iconPath.isEmpty();
+        const bool hasIcon = !style.icon.isNull();
         const int textLeft = leftPad + (hasIcon ? iconW + 4 : 0);
         const QRect textRect = option.rect.adjusted(textLeft, 2, -6, -2);
 
@@ -110,7 +110,7 @@ public:
                                  option.rect.top() + (option.rect.height() - iconW) / 2,
                                  iconW,
                                  iconW);
-            QIcon(style.iconPath).paint(painter, iconRect, Qt::AlignCenter, QIcon::Normal, QIcon::On);
+            style.icon.paint(painter, iconRect, Qt::AlignCenter, QIcon::Normal, QIcon::On);
         }
 
         painter->setPen(style.textColor);
@@ -129,7 +129,7 @@ public:
         constexpr int leftPad = 8;
         constexpr int iconW = 16;
         constexpr int rightPad = 6;
-        const bool hasIcon = !style.iconPath.isEmpty();
+        const bool hasIcon = !style.icon.isNull();
         const int textLeft = leftPad + (hasIcon ? iconW + 4 : 0);
         const QString text = index.data(Qt::DisplayRole).toString();
         const int textWidth = option.fontMetrics.horizontalAdvance(text);

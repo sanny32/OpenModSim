@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>AppLogOutput</class>
  <widget class="QWidget" name="AppLogOutput">
@@ -91,7 +91,7 @@
   <action name="actionExport">
    <property name="icon">
     <iconset resource="../resources.qrc">
-     <normaloff>:/res/icon-export.png</normaloff>:/res/icon-export.png</iconset>
+     <normaloff>:/res/icons/fallback/export.png</normaloff>:/res/icons/fallback/export.png</iconset>
    </property>
    <property name="toolTip">
     <string>Export log</string>
@@ -100,7 +100,7 @@
   <action name="actionClear">
    <property name="icon">
     <iconset resource="../resources.qrc">
-     <normaloff>:/res/edit-delete.png</normaloff>:/res/edit-delete.png</iconset>
+     <normaloff>:/res/icons/fallback/edit-delete.png</normaloff>:/res/icons/fallback/edit-delete.png</iconset>
    </property>
    <property name="toolTip">
     <string>Clear log</string>

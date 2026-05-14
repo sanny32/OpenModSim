@@ -15,12 +15,12 @@
 class ThemedIcons
 {
 public:
-    static QIcon icon(const QString& name, const QString& fallbackPath = {});
+    static QIcon icon(const QString& name);
 };
 
-inline QIcon themedIcon(const QString& name, const QString& fallbackPath = {})
+inline QIcon themedIcon(const QString& name)
 {
-    return ThemedIcons::icon(name, fallbackPath);
+    return ThemedIcons::icon(name);
 }
 
 #endif // THEMEDICONS_H

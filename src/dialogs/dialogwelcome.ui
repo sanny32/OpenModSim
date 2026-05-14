@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>DialogWelcome</class>
  <widget class="QDialog" name="DialogWelcome">
@@ -55,7 +55,7 @@
         </size>
        </property>
        <property name="pixmap">
-        <pixmap resource="../resources.qrc">:/res/icon-app.png</pixmap>
+        <pixmap resource="../resources.qrc">:/res/icons/fallback/app.png</pixmap>
        </property>
        <property name="scaledContents">
         <bool>false</bool>

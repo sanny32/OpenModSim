@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+﻿// SPDX-FileCopyrightText: 2026 OpenModSim contributors
 // SPDX-License-Identifier: MIT
 
 ///
@@ -18,6 +18,7 @@
 #include <QStyle>
 #include <QStyleOptionToolButton>
 #include <QToolButton>
+#include "themedicons.h"
 #include "ansiutils.h"
 #include "qhexvalidator.h"
 #include "quintvalidator.h"
@@ -33,7 +34,7 @@ class HexViewButton final : public QToolButton
 public:
     explicit HexViewButton(QWidget* parent = nullptr)
         : QToolButton(parent)
-        , _icon(":/res/icon-hex.svg")
+        , _icon(themedIcon(QStringLiteral("omodsim/hex")))
     {
         setCheckable(true);
         setAutoRaise(true);

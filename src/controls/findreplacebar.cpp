@@ -234,16 +234,15 @@ FindReplaceBar::FindReplaceBar(QWidget *parent)
     ui->searchEdit->installEventFilter(this);
     ui->replaceEdit->installEventFilter(this);
 
-    const int iconSize = 12;
-    const QIcon iconFindeNext = QIcon(":/res/icon-arrow-right.svg").pixmap(iconSize, iconSize);
-    const QIcon iconFindPrev = QIcon(":/res/icon-arrow-left.svg").pixmap(iconSize, iconSize);
-
-    auto actionFindNext = new QAction(iconFindeNext, tr("Find Next"), this);
-    auto actionFindPrev = new QAction(iconFindPrev, tr("Find Previous"), this);
+    auto actionFindNext = new QAction(themedIcon(QStringLiteral("omodsim/find-next")), tr("Find Next"), this);
+    auto actionFindPrev = new QAction(themedIcon(QStringLiteral("omodsim/find-previous")), tr("Find Previous"), this);
 
     ui->closeButton->setText(QString());
     ui->closeButton->setIcon(themedIcon(QStringLiteral("omodsim/close")));
-    ui->closeButton->setIconSize(QSize(12, 12));
+    ui->replaceButton->setIcon(themedIcon(QStringLiteral("omodsim/replace")));
+    ui->replaceAllButton->setIcon(themedIcon(QStringLiteral("omodsim/replace-all")));
+    ui->matchCaseButton->setIcon(themedIcon(QStringLiteral("omodsim/match-case")));
+    ui->matchWordButton->setIcon(themedIcon(QStringLiteral("omodsim/match-whole-word")));
 
     actionFindNext->setShortcut(Qt::Key_F3);
     actionFindPrev->setShortcut(Qt::SHIFT | Qt::Key_F3);

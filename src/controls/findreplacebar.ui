@@ -101,6 +101,12 @@
        <property name="toolTip">
         <string>Next (Enter)</string>
        </property>
+       <property name="iconSize">
+        <size>
+         <width>12</width>
+         <height>12</height>
+        </size>
+       </property>
        <property name="popupMode">
         <enum>QToolButton::MenuButtonPopup</enum>
        </property>
@@ -125,6 +131,12 @@
        </property>
        <property name="toolTip">
         <string>Close (Escape)</string>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>12</width>
+         <height>12</height>
+        </size>
        </property>
        <property name="text">
         <string notr="true">✕</string>
@@ -203,13 +215,9 @@
         <property name="toolTip">
          <string>Replace</string>
         </property>
-        <property name="icon">
-         <iconset resource="../resources.qrc">
-          <normaloff>:/res/icon-replace.svg</normaloff>:/res/icon-replace.svg</iconset>
-        </property>
         <property name="iconSize">
          <size>
-          <width>22</width>
+          <width>16</width>
           <height>16</height>
          </size>
         </property>
@@ -235,13 +243,9 @@
         <property name="toolTip">
          <string>Replace All</string>
         </property>
-        <property name="icon">
-         <iconset resource="../resources.qrc">
-          <normaloff>:/res/icon-replace-all.svg</normaloff>:/res/icon-replace-all.svg</iconset>
-        </property>
         <property name="iconSize">
          <size>
-          <width>22</width>
+          <width>16</width>
           <height>16</height>
          </size>
         </property>
@@ -291,9 +295,11 @@
        <property name="toolTip">
         <string>Match Case</string>
        </property>
-       <property name="icon">
-        <iconset resource="../resources.qrc">
-         <normaloff>:/res/icon-match-case.svg</normaloff>:/res/icon-match-case.svg</iconset>
+       <property name="iconSize">
+        <size>
+         <width>16</width>
+         <height>16</height>
+        </size>
        </property>
        <property name="checkable">
         <bool>true</bool>
@@ -320,9 +326,11 @@
        <property name="toolTip">
         <string>Match Whole Word</string>
        </property>
-       <property name="icon">
-        <iconset resource="../resources.qrc">
-         <normaloff>:/res/icon-whole-word.svg</normaloff>:/res/icon-whole-word.svg</iconset>
+       <property name="iconSize">
+        <size>
+         <width>16</width>
+         <height>16</height>
+        </size>
        </property>
        <property name="checkable">
         <bool>true</bool>
@@ -349,8 +357,6 @@
    </item>
   </layout>
  </widget>
- <resources>
-  <include location="../resources.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

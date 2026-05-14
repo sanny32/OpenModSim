@@ -122,7 +122,7 @@ int main(int argc, char *argv[])
     a.setStyle(new AppStyle("fusion"));
 #endif
 
-    QFontDatabase::addApplicationFont(":/fonts/firacode.ttf");
+    QFontDatabase::addApplicationFont(":/res/fonts/firacode.ttf");
 
     CmdLineParser parser;
     if(!parser.parse(a.arguments()))

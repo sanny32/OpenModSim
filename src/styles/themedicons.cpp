@@ -20,7 +20,7 @@
 namespace {
 struct IconDescriptor {
     QString themeName;
-    QString resourcePath;
+    QString resourceName; // base name without extension, e.g. "save", "bell" — SVG preferred over PNG
 };
 
 ///
@@ -30,55 +30,70 @@ struct IconDescriptor {
 const QHash<QString, IconDescriptor>& iconRegistry()
 {
     static const QHash<QString, IconDescriptor> registry {
-        { QStringLiteral("omodsim/about"),                     { QStringLiteral("help-about"),                          QStringLiteral(":/res/icon-about.png") } },
-        { QStringLiteral("omodsim/add"),                       { QStringLiteral("action/plus-circle"),                  QStringLiteral(":/res/icon-add.png") } },
-        { QStringLiteral("omodsim/bell"),                      { QStringLiteral("misc/bell"),                           QStringLiteral(":/res/icon-bell.png") } },
-        { QStringLiteral("omodsim/bell-dot"),                  { QStringLiteral("misc/bell"),                           QStringLiteral(":/res/icon-bell-dot.png") } },
-        { QStringLiteral("omodsim/clear"),                     { QStringLiteral("action/trash"),                        QStringLiteral(":/res/edit-delete.png") } },
-        { QStringLiteral("omodsim/close"),                     { QStringLiteral("action/close"),                        QStringLiteral(":/res/icon-close.png") } },
-        { QStringLiteral("omodsim/connect"),                   { QStringLiteral("misc/link"),                           QStringLiteral(":/res/icon-connect.png") } },
-        { QStringLiteral("omodsim/copy"),                      { QStringLiteral("edit-copy"),                           QStringLiteral(":/res/icon-copy.png") } },
-        { QStringLiteral("omodsim/cut"),                       { QStringLiteral("edit-cut"),                            QStringLiteral(":/res/icon-cut.png") } },
-        { QStringLiteral("omodsim/data-locked"),               { QStringLiteral("action/lock"),                         QStringLiteral(":/res/icon-data-locked.png") } },
-        { QStringLiteral("omodsim/directory"),                 { QStringLiteral("file/folder-filled"),                  QStringLiteral(":/res/icon-directory.png") } },
-        { QStringLiteral("omodsim/disconnect"),                { QStringLiteral("misc/link-break"),                     QStringLiteral(":/res/icon-disconnect.png") } },
-        { QStringLiteral("omodsim/export"),                    { QStringLiteral("action/export"),                       QStringLiteral(":/res/icon-export.svg") } },
-        { QStringLiteral("omodsim/force-coils"),               { QStringLiteral(":/res/icon-force-coils.svg"),          QStringLiteral(":/res/icon-force-coils.png") } },
-        { QStringLiteral("omodsim/force-discretes"),           { QStringLiteral(":/res/icon-force-discretes.svg"),      QStringLiteral(":/res/icon-force-discretes.png") } },
-        { QStringLiteral("omodsim/github"),                    { QStringLiteral("brand/github-fill"),                   QStringLiteral(":/res/emblem-github.png") } },
-        { QStringLiteral("omodsim/hex-view"),                  { QStringLiteral(":/res/icon-hex-view.svg"),             QStringLiteral(":/res/icon-hex-view.png") } },
-        { QStringLiteral("omodsim/information"),               { QStringLiteral("misc/info"),                           QStringLiteral(":/res/icon-log-info.png") } },
-        { QStringLiteral("omodsim/internet"),                  { QStringLiteral("applications-internet"),               QStringLiteral(":/res/applications-internet.png") } },
-        { QStringLiteral("omodsim/import"),                    { QStringLiteral(":/res/action-import.svg"),             QStringLiteral(":/res/icon-import.svg") } },
-        { QStringLiteral("omodsim/mail"),                      { QStringLiteral("emblem-mail"),                         QStringLiteral(":/res/emblem-mail.png") } },
-        { QStringLiteral("omodsim/message-parser"),            { QStringLiteral("action/preview"),                      QStringLiteral(":/res/icon-msg-parser.png") } },
-        { QStringLiteral("omodsim/modbus-definitions"),        { QStringLiteral("navigation/settings"),                 QStringLiteral(":/res/icon-mb-definitions.png") } },
-        { QStringLiteral("omodsim/new-data"),                  { QStringLiteral("misc/glasses"),                        QStringLiteral(":/res/icon-new-data.png") } },
-        { QStringLiteral("omodsim/new-data-map"),              { QStringLiteral("navigation/map"),                      QStringLiteral(":/res/icon-new-data.png") } },
-        { QStringLiteral("omodsim/new-script"),                { QStringLiteral("text-x-script"),                       QStringLiteral(":/res/icon-new-script.png") } },
-        { QStringLiteral("omodsim/new-traffic"),               { QStringLiteral("misc/sms"),                            QStringLiteral(":/res/icon-new-traffic.png") } },
-        { QStringLiteral("omodsim/open-project"),              { QStringLiteral("file/folder-open"),                    QStringLiteral(":/res/icon-open.png") } },
-        { QStringLiteral("omodsim/paste"),                     { QStringLiteral("edit-paste"),                          QStringLiteral(":/res/icon-paste.png") } },
-        { QStringLiteral("omodsim/pause"),                     { QStringLiteral("media/pause"),                         QStringLiteral(":/res/icon-pause.png") } },
-        { QStringLiteral("omodsim/preferences-defaults"),      { QStringLiteral("document/page-setup"),                 QStringLiteral(":/res/icon-define-data.png") } },
-        { QStringLiteral("omodsim/preferences-interface"),     { QStringLiteral("document/template"),                   QStringLiteral(":/res/pref-interface.png") } },
-        { QStringLiteral("omodsim/preferences-script"),        { QStringLiteral("file/markup"),                         QStringLiteral(":/res/icon-show-script.png") } },
-        { QStringLiteral("omodsim/preset-holding-registers"),  { QStringLiteral(":/res/icon-preset-holding-regs.svg"),  QStringLiteral(":/res/icon-preset-holding-regs.png") } },
-        { QStringLiteral("omodsim/preset-input-registers"),    { QStringLiteral(":/res/icon-preset-input-regs.svg"),    QStringLiteral(":/res/icon-preset-input-regs.png") } },
-        { QStringLiteral("omodsim/print"),                     { QStringLiteral("action/print"),                        QStringLiteral(":/res/icon-print.png") } },
-        { QStringLiteral("omodsim/redo"),                      { QStringLiteral("edit-redo"),                           QStringLiteral(":/res/icon-redo.png") } },
-        { QStringLiteral("omodsim/remove"),                    { QStringLiteral("action/erase"),                        QStringLiteral(":/res/icon-remove.png") } },
-        { QStringLiteral("omodsim/run-script"),                { QStringLiteral("media/play-small"),                    QStringLiteral(":/res/icon-run-script.png") } },
-        { QStringLiteral("omodsim/save-project"),              { QStringLiteral("action/save-to-disk"),                 QStringLiteral(":/res/icon-save.png") } },
-        { QStringLiteral("omodsim/show-data"),                 { QStringLiteral("misc/glasses"),                        QStringLiteral(":/res/icon-show-data.png") } },
-        { QStringLiteral("omodsim/show-data-map"),             { QStringLiteral("navigation/map"),                      QStringLiteral(":/res/icon-show-data.png") } },
-        { QStringLiteral("omodsim/show-script"),               { QStringLiteral("text-x-script"),                       QStringLiteral(":/res/icon-show-script.png") } },
-        { QStringLiteral("omodsim/show-traffic"),              { QStringLiteral("misc/sms"),                            QStringLiteral(":/res/icon-show-traffic.png") } },
-        { QStringLiteral("omodsim/split-view"),                { QStringLiteral("action/separate-horizontal"),          QStringLiteral(":/res/icon-split-view.png") } },
-        { QStringLiteral("omodsim/stop-script"),               { QStringLiteral("media/stop-small"),                    QStringLiteral(":/res/icon-stop-script.png") } },
-        { QStringLiteral("omodsim/undo"),                      { QStringLiteral("edit-undo"),                           QStringLiteral(":/res/icon-undo.png") } },
-        { QStringLiteral("omodsim/warning"),                   { QStringLiteral("misc/warning"),                        QStringLiteral(":/res/icon-log-warning.png") } },
-        { QStringLiteral("omodsim/error"),                     { QStringLiteral("action/clear"),                        QStringLiteral(":/res/icon-log-critical.png") } }
+        { QStringLiteral("omodsim/about"),                     { QStringLiteral("misc/question"),                       QStringLiteral("about") } },
+        { QStringLiteral("omodsim/add"),                       { QStringLiteral("action/plus-circle"),                  QStringLiteral("add") } },
+        { QStringLiteral("omodsim/bell"),                      { QStringLiteral("misc/bell"),                           QStringLiteral("bell") } },
+        { QStringLiteral("omodsim/bell-dot"),                  { QStringLiteral("misc/bell"),                           QStringLiteral("bell-dot") } },
+        { QStringLiteral("omodsim/clear"),                     { QStringLiteral("action/trash"),                        QStringLiteral("edit-delete") } },
+        { QStringLiteral("omodsim/close"),                     { QStringLiteral("action/close"),                        QStringLiteral("close") } },
+        { QStringLiteral("omodsim/connect"),                   { QStringLiteral("misc/link"),                           QStringLiteral("connect") } },
+        { QStringLiteral("omodsim/copy"),                      { QStringLiteral("action/copy"),                         QStringLiteral("copy") } },
+        { QStringLiteral("omodsim/cut"),                       { QStringLiteral("action/cut"),                          QStringLiteral("cut") } },
+        { QStringLiteral("omodsim/data-locked"),               { QStringLiteral("action/lock"),                         QStringLiteral("data-locked") } },
+        { QStringLiteral("omodsim/directory"),                 { QStringLiteral("file/folder-filled"),                  QStringLiteral("directory") } },
+        { QStringLiteral("omodsim/disconnect"),                { QStringLiteral("misc/link-break"),                     QStringLiteral("disconnect") } },
+        { QStringLiteral("omodsim/export"),                    { QStringLiteral("action/export"),                       QStringLiteral("export") } },
+        { QStringLiteral("omodsim/force-coils"),               { QStringLiteral("omodsim/force-coils"),                 QStringLiteral("force-coils") } },
+        { QStringLiteral("omodsim/force-discretes"),           { QStringLiteral("omodsim/force-discretes"),             QStringLiteral("force-discretes") } },
+        { QStringLiteral("omodsim/github"),                    { QStringLiteral("brand/github-fill"),                   QStringLiteral("emblem-github") } },
+        { QStringLiteral("omodsim/hex-view"),                  { QStringLiteral("omodsim/hex-view"),                    QStringLiteral("hex-view") } },
+        { QStringLiteral("omodsim/information"),               { QStringLiteral("misc/info"),                           QStringLiteral("log-info") } },
+        { QStringLiteral("omodsim/internet"),                  { QStringLiteral("misc/globe"),                          QStringLiteral("applications-internet") } },
+        { QStringLiteral("omodsim/import"),                    { QStringLiteral("omodsim/import"),                      QStringLiteral("import") } },
+        { QStringLiteral("omodsim/mail"),                      { QStringLiteral("misc/mail"),                           QStringLiteral("emblem-mail") } },
+        { QStringLiteral("omodsim/message-parser"),            { QStringLiteral("action/preview"),                      QStringLiteral("msg-parser") } },
+        { QStringLiteral("omodsim/modbus-definitions"),        { QStringLiteral("navigation/settings"),                 QStringLiteral("mb-definitions") } },
+        { QStringLiteral("omodsim/new-data"),                  { QStringLiteral("misc/glasses"),                        QStringLiteral("new-data") } },
+        { QStringLiteral("omodsim/new-data-map"),              { QStringLiteral("navigation/map"),                      QStringLiteral("new-data") } },
+        { QStringLiteral("omodsim/new-script"),                { QStringLiteral("file/file-script"),                    QStringLiteral("new-script") } },
+        { QStringLiteral("omodsim/new-traffic"),               { QStringLiteral("misc/sms"),                            QStringLiteral("new-traffic") } },
+        { QStringLiteral("omodsim/open-project"),              { QStringLiteral("file/folder-open"),                    QStringLiteral("open") } },
+        { QStringLiteral("omodsim/paste"),                     { QStringLiteral("action/paste"),                        QStringLiteral("paste") } },
+        { QStringLiteral("omodsim/pause"),                     { QStringLiteral("media/pause"),                         QStringLiteral("pause") } },
+        { QStringLiteral("omodsim/preferences-defaults"),      { QStringLiteral("document/page-setup"),                 QStringLiteral("define-data") } },
+        { QStringLiteral("omodsim/preferences-interface"),     { QStringLiteral("document/template"),                   QStringLiteral("pref-interface") } },
+        { QStringLiteral("omodsim/preferences-script"),        { QStringLiteral("file/markup"),                         QStringLiteral("show-script") } },
+        { QStringLiteral("omodsim/preset-holding-registers"),  { QStringLiteral("omodsim/preset-holding-registers"),    QStringLiteral("preset-holding-regs") } },
+        { QStringLiteral("omodsim/preset-input-registers"),    { QStringLiteral("omodsim/preset-input-registers"),      QStringLiteral("preset-input-regs") } },
+        { QStringLiteral("omodsim/print"),                     { QStringLiteral("action/print"),                        QStringLiteral("print") } },
+        { QStringLiteral("omodsim/redo"),                      { QStringLiteral("action/redo"),                         QStringLiteral("redo") } },
+        { QStringLiteral("omodsim/remove"),                    { QStringLiteral("action/erase"),                        QStringLiteral("remove") } },
+        { QStringLiteral("omodsim/run-script"),                { QStringLiteral("media/play-small"),                    QStringLiteral("run-script") } },
+        { QStringLiteral("omodsim/save-project"),              { QStringLiteral("action/save-to-disk"),                 QStringLiteral("save") } },
+        { QStringLiteral("omodsim/show-data"),                 { QStringLiteral("misc/glasses"),                        QStringLiteral("show-data") } },
+        { QStringLiteral("omodsim/show-data-map"),             { QStringLiteral("navigation/map"),                      QStringLiteral("show-data") } },
+        { QStringLiteral("omodsim/show-script"),               { QStringLiteral("file/file-script"),                    QStringLiteral("show-script") } },
+        { QStringLiteral("omodsim/show-traffic"),              { QStringLiteral("misc/sms"),                            QStringLiteral("show-traffic") } },
+        { QStringLiteral("omodsim/split-view"),                { QStringLiteral("action/separate-horizontal"),          QStringLiteral("split-view") } },
+        { QStringLiteral("omodsim/stop-script"),               { QStringLiteral("media/stop-small"),                    QStringLiteral("stop-script") } },
+        { QStringLiteral("omodsim/undo"),                      { QStringLiteral("action/undo"),                         QStringLiteral("undo") } },
+        { QStringLiteral("omodsim/warning"),                   { QStringLiteral("misc/warning"),                        QStringLiteral("log-warning") } },
+        { QStringLiteral("omodsim/find-next"),                 { QStringLiteral("navigation/arrow-right"),              QStringLiteral("arrow-right") } },
+        { QStringLiteral("omodsim/find-previous"),             { QStringLiteral("navigation/arrow-left"),               QStringLiteral("arrow-left") } },
+        { QStringLiteral("omodsim/match-case"),                { QStringLiteral("text/match-case"),                     QStringLiteral("match-case") } },
+        { QStringLiteral("omodsim/match-whole-word"),          { QStringLiteral("text/match-whole-word"),               QStringLiteral("whole-word") } },
+        { QStringLiteral("omodsim/replace"),                   { QStringLiteral("action/replace"),                      QStringLiteral("replace") } },
+        { QStringLiteral("omodsim/replace-all"),               { QStringLiteral("omodsim/replace-all"),                 QStringLiteral("replace-all") } },
+        { QStringLiteral("omodsim/error"),                     { QStringLiteral("action/clear"),                        QStringLiteral("log-critical") } },
+        { QStringLiteral("omodsim/hex"),                       { QStringLiteral(""),                                    QStringLiteral("hex") } },
+        { QStringLiteral("omodsim/js-prop"),                   { QStringLiteral(""),                                    QStringLiteral("prop") } },
+        { QStringLiteral("omodsim/js-func"),                   { QStringLiteral(""),                                    QStringLiteral("func") } },
+        { QStringLiteral("omodsim/js-enum"),                   { QStringLiteral(""),                                    QStringLiteral("enum") } },
+        { QStringLiteral("omodsim/landscape"),                 { QStringLiteral(""),                                    QStringLiteral("landscape") } },
+        { QStringLiteral("omodsim/portrait"),                  { QStringLiteral(""),                                    QStringLiteral("portrait") } },
+        { QStringLiteral("omodsim/simulation-16bit"),          { QStringLiteral(""),                                    QStringLiteral("simulation-16bit") } },
+        { QStringLiteral("omodsim/simulation-32bit"),          { QStringLiteral(""),                                    QStringLiteral("simulation-32bit") } },
+        { QStringLiteral("omodsim/simulation-64bit"),          { QStringLiteral(""),                                    QStringLiteral("simulation-64bit") } }
     };
 
     return registry;
@@ -107,6 +122,10 @@ QIcon iconFromThemeName(const QString& themeName)
         const QString qlementineIconPath = QStringLiteral(":/qlementine/icons/16/%1.svg").arg(themeName);
         if (QFile::exists(qlementineIconPath))
             return QIcon(qlementineIconPath);
+
+        const QString customIconPath = QStringLiteral(":/res/icons/16/%1.svg").arg(themeName);
+        if (QFile::exists(customIconPath))
+            return QIcon(customIconPath);
     }
 #endif
 
@@ -118,15 +137,16 @@ QIcon iconFromThemeName(const QString& themeName)
 ///
 /// \brief Returns an icon by OpenModSim name with theme-aware and resource fallback resolution.
 /// \param name Icon name or alias key.
-/// \param fallbackPath Optional direct fallback resource path.
 /// \return Resolved icon, or a null icon if no source can be resolved.
 ///
-QIcon ThemedIcons::icon(const QString& name, const QString& fallbackPath)
+QIcon ThemedIcons::icon(const QString& name)
 {
+    static constexpr QLatin1StringView kFallbackDir{":/res/icons/fallback/"};
+
     const auto& registry = iconRegistry();
     const auto it = registry.constFind(name);
     const QString themeName = it == registry.cend() ? name : it->themeName;
-    const QString resolvedFallbackPath = it == registry.cend() ? fallbackPath : it->resourcePath;
+    const QString resourceName = it == registry.cend() ? QString{} : it->resourceName;
 
 #if defined(HAVE_QLEMENTINE_APP_STYLE)
     if (dynamic_cast<QlementineAppStyle*>(qApp ? qApp->style() : nullptr)) {
@@ -136,5 +156,12 @@ QIcon ThemedIcons::icon(const QString& name, const QString& fallbackPath)
     }
 #endif
 
-    return !resolvedFallbackPath.isEmpty() ? QIcon(resolvedFallbackPath) : QIcon();
+    if (resourceName.isEmpty())
+        return {};
+
+    const QString svgPath = QString{kFallbackDir} + resourceName + QStringLiteral(".svg");
+    if (QFile::exists(svgPath))
+        return QIcon(svgPath);
+
+    return QIcon(QString{kFallbackDir} + resourceName + QStringLiteral(".png"));
 }

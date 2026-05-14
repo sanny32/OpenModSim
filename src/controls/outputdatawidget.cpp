@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+﻿// SPDX-FileCopyrightText: 2026 OpenModSim contributors
 // SPDX-License-Identifier: MIT
 
 ///
@@ -16,6 +16,7 @@
 #include "fontutils.h"
 #include "formatutils.h"
 #include "datadelegate.h"
+#include "themedicons.h"
 #include "outputdatawidget.h"
 #include "ui_outputdatawidget.h"
 
@@ -41,9 +42,9 @@ static QPixmap emptyPixmap(const QSize& physicalSize, qreal dpr = 1.0)
 OutputDataListModel::OutputDataListModel(OutputDataWidget* parent)
     : QAbstractListModel(parent)
     ,_parentWidget(parent)
-    ,_iconSimulation16Bit(QIcon(":/res/icon-simulation-16bit.svg").pixmap(10, 10))
-    ,_iconSimulation32Bit(QIcon(":/res/icon-simulation-32bit.svg").pixmap(10, 10))
-    ,_iconSimulation64Bit(QIcon(":/res/icon-simulation-64bit.svg").pixmap(10, 10))
+    ,_iconSimulation16Bit(themedIcon(QStringLiteral("omodsim/simulation-16bit")).pixmap(10, 10))
+    ,_iconSimulation32Bit(themedIcon(QStringLiteral("omodsim/simulation-32bit")).pixmap(10, 10))
+    ,_iconSimulation64Bit(themedIcon(QStringLiteral("omodsim/simulation-64bit")).pixmap(10, 10))
     ,_iconSimulationOff(emptyPixmap(_iconSimulation16Bit.size(), _iconSimulation16Bit.devicePixelRatio()))
 {
 }

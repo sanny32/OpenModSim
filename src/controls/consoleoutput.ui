@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>ConsoleOutput</class>
  <widget class="QWidget" name="ConsoleOutput">
@@ -90,7 +90,7 @@
   <action name="actionClear">
    <property name="icon">
     <iconset resource="../resources.qrc">
-     <normaloff>:/res/edit-delete.png</normaloff>:/res/edit-delete.png</iconset>
+     <normaloff>:/res/icons/fallback/edit-delete.png</normaloff>:/res/icons/fallback/edit-delete.png</iconset>
    </property>
    <property name="toolTip">
     <string>Clear console</string>
