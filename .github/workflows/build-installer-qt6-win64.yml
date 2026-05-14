@@ -28,7 +28,7 @@ env:
   CMAKE_GENERATOR: "Visual Studio 17 2022"
   CMAKE_ARCH: x64
   BUILD_TYPE: Release
-  EXE_PACKAGE_PREFIX: qt6-omodsim2
+  EXE_PACKAGE_PREFIX: qt6-omodsim
 
   # SingPath variables
   PROJECT_SLUG: OpenModSim
@@ -51,7 +51,10 @@ jobs:
           $versionMatch = Select-String -Path src\CMakeLists.txt -Pattern 'VERSION\s+([0-9]+\.[0-9]+\.[0-9]+)' | Select-Object -First 1
           if (-not $versionMatch) { exit 1 }
 
-          $APP_VERSION = $versionMatch.Matches[0].Groups[1].Value
+          $FULL_VERSION = $versionMatch.Matches[0].Groups[1].Value
+          $APP_VERSION = $FULL_VERSION
+          $APP_MAJOR_VERSION = ($FULL_VERSION -split '\.')[0]
+          $EXE_PACKAGE_NAME = "${{ env.EXE_PACKAGE_PREFIX }}$APP_MAJOR_VERSION"
           $PRERELEASE_ENABLED = 'false'
           $PRERELEASE_SUFFIX = ''
           $TAG_NAME = '${{ github.event.inputs.tag }}'
@@ -66,6 +69,8 @@ jobs:
           }
 
           "APP_VERSION=$APP_VERSION" >> $env:GITHUB_ENV
+          "APP_MAJOR_VERSION=$APP_MAJOR_VERSION" >> $env:GITHUB_ENV
+          "EXE_PACKAGE_NAME=$EXE_PACKAGE_NAME" >> $env:GITHUB_ENV
           "PRERELEASE_SUFFIX=$PRERELEASE_SUFFIX" >> $env:GITHUB_ENV
           "PRERELEASE_ENABLED=$PRERELEASE_ENABLED" >> $env:GITHUB_ENV
         shell: pwsh
@@ -226,7 +231,7 @@ jobs:
            /DICON_FILE="%CD%\src\res\omodsim.ico" ^
            /DWELCOMEFINISHPAGE_BITMAP="%CD%\.github\win32\nsis3-omodsim.bmp" ^
            /DLICENSE_FILE="%CD%\src\res\license.txt" ^
-           /DOUTPUT_FILE="%CD%\${{ env.EXE_PACKAGE_PREFIX }}-${{ env.APP_VERSION }}_${{ env.CMAKE_ARCH }}.exe" ^
+           /DOUTPUT_FILE="%CD%\${{ env.EXE_PACKAGE_NAME }}-${{ env.APP_VERSION }}_${{ env.CMAKE_ARCH }}.exe" ^
            %CD%\.github\win32\installer-win64.nsi
         shell: cmd
 
@@ -235,8 +240,8 @@ jobs:
         uses: actions/upload-artifact@v7
         if: success()
         with:
-          name: ${{ env.EXE_PACKAGE_PREFIX }}-${{ env.APP_VERSION }}_${{ env.CMAKE_ARCH }}
-          path: ${{ env.EXE_PACKAGE_PREFIX }}-${{ env.APP_VERSION }}_${{ env.CMAKE_ARCH }}.exe
+          name: ${{ env.EXE_PACKAGE_NAME }}-${{ env.APP_VERSION }}_${{ env.CMAKE_ARCH }}
+          path: ${{ env.EXE_PACKAGE_NAME }}-${{ env.APP_VERSION }}_${{ env.CMAKE_ARCH }}.exe
 
       - name: Signing Installer
         uses: signpath/github-action-submit-signing-request@v2
@@ -256,8 +261,8 @@ jobs:
         uses: actions/upload-artifact@v7
         if: success() && env.SIGNING_POLICY_SLUG != 'none'
         with:
-          name: ${{ env.EXE_PACKAGE_PREFIX }}-${{ env.APP_VERSION }}_${{ env.CMAKE_ARCH }}-signed
-          path: ${{ env.EXE_PACKAGE_PREFIX }}-${{ env.APP_VERSION }}_${{ env.CMAKE_ARCH }}.exe
+          name: ${{ env.EXE_PACKAGE_NAME }}-${{ env.APP_VERSION }}_${{ env.CMAKE_ARCH }}-signed
+          path: ${{ env.EXE_PACKAGE_NAME }}-${{ env.APP_VERSION }}_${{ env.CMAKE_ARCH }}.exe
 
       - name: Create or update GitHub Release and upload EXE
         if: success() && github.event_name == 'push' && github.ref_type == 'tag'
@@ -268,6 +273,6 @@ jobs:
           tag_name: ${{ github.ref_name }}
           name: Open ModSim ${{ env.APP_VERSION }}
           files: |
-            ${{ env.EXE_PACKAGE_PREFIX }}-${{ env.APP_VERSION }}_${{ env.CMAKE_ARCH }}.exe
+            ${{ env.EXE_PACKAGE_NAME }}-${{ env.APP_VERSION }}_${{ env.CMAKE_ARCH }}.exe
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

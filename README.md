@@ -232,71 +232,71 @@ Below are the methods for installing the OpenModSim for different OS
 ## <img src="docs/icons/logo_windows.svg" width="16" height="16"> Microsoft Windows
 Run the installer:
 
-- For 32-bit Windows: `qt5-omodsim_2.0.0_x86.exe`
-- For 64-bit Windows: `qt5-omodsim_2.0.0_x64.exe` or `qt6-omodsim_2.0.0_x64.exe`
+- For 32-bit Windows: `qt5-omodsim2-2.0.0_x86.exe`
+- For 64-bit Windows: `qt5-omodsim2-2.0.0_x64.exe` or `qt6-omodsim2-2.0.0_x64.exe`
 
 ## <img src="docs/icons/logo_debian.svg" width="20" height="20"> Debian • <img src="docs/icons/logo_ubuntu.svg" width="20" height="20"> Ubuntu • <img width="20" height="20" src="docs/icons/logo_mint.png" /> Mint • <img src="docs/icons/logo_zorin.png" width="20" height="20"> Zorin • <img width="22" height="22" src="docs/icons/logo_astra.png" /> Astra Linux
 ### Install
 Install the DEB package from the command line:
 ```bash
-sudo apt install ./qt6-omodsim_2.0.0-1_amd64.deb
+sudo apt install ./qt6-omodsim2_2.0.0-1_amd64.deb
 ```
 or if you want to use Qt5 libraries:
 ```bash
-sudo apt install ./qt5-omodsim_2.0.0-1_amd64.deb
+sudo apt install ./qt5-omodsim2_2.0.0-1_amd64.deb
 ```
 
 ### Remove
 To remove the DEB package run:
 ```bash
-sudo apt remove qt6-omodsim
+sudo apt remove qt6-omodsim2
 ```
 or for Qt5 package:
 ```bash
-sudo apt remove qt5-omodsim
+sudo apt remove qt5-omodsim2
 ```
 
 ## <img src="docs/icons/logo_redhat.svg" width="24" height="24"> RedHat • <img src="docs/icons/logo_fedora.svg" width="20" height="20"> Fedora • <img src="docs/icons/logo_rocky.png" width="20" height="20"> Rocky • <img width="20" height="20" src="docs/icons/logo_redos.png" /> RedOS Linux
 ### Install
 Install the RPM package from the command line:
 ```bash
-sudo dnf install ./qt6-omodsim-2.0.0-1.x86_64.rpm
+sudo dnf install ./qt6-omodsim2-2.0.0-1.x86_64.rpm
 ```
 
 ### Remove
 To remove the RPM package run:
 ```bash
-sudo dnf remove qt6-omodsim
+sudo dnf remove qt6-omodsim2
 ```
 
 ## <img src="docs/icons/logo_alt.png" width="24" height="24"> Alt Linux
 ### Install
 Install the RPM package from the command line as root user:
 ```bash
-apt-get install ./qt6-omodsim-2.0.0-1.x86_64.rpm
+apt-get install ./qt6-omodsim2-2.0.0-1.x86_64.rpm
 ```
 
 ### Remove
 To remove the RPM package run as root user:
 ```bash
-apt-get remove qt6-omodsim
+apt-get remove qt6-omodsim2
 ```
 
 ## <img width="20" height="20" src="docs/icons/logo_suse.png" /> SUSE • <img src="docs/icons/logo_opensuse.svg" width="24" height="24" /> OpenSUSE Linux
 ### Install
-Import qt6-omodsim.rpm.pubkey to rpm repository:
+Import qt6-omodsim2.rpm.pubkey to rpm repository:
 ```bash
-sudo rpm --import qt6-omodsim.rpm.pubkey
+sudo rpm --import qt6-omodsim2.rpm.pubkey
 ```
 Install the RPM package using Zypper:
 ```bash
-sudo zypper install ./qt6-omodsim-2.0.0-1.x86_64.rpm
+sudo zypper install ./qt6-omodsim2-2.0.0-1.x86_64.rpm
 ```
 
 ### Remove
 To remove the RPM package run:
 ```bash
-sudo zypper remove qt6-omodsim
+sudo zypper remove qt6-omodsim2
 ```
 
 # Code Signing Sponsor
