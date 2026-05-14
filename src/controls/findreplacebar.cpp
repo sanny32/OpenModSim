@@ -93,7 +93,7 @@ private:
 };
 
 ///
-/// \brief The TitleBar class вЂ” VS-style draggable title strip for windowed FindReplaceBar
+/// \brief The TitleBar class - VS-style draggable title strip for windowed FindReplaceBar
 ///
 class TitleBar : public QWidget
 {

@@ -285,7 +285,7 @@ void MdiTabBar::mouseMoveEvent(QMouseEvent* event)
                     _dragCursorSet = true;
                 }
             } else {
-                // Cursor returned inside the source panel вЂ” hide overlay.
+                // Cursor returned inside the source panel - hide overlay.
                 if (_dragOverlay)
                     _dragOverlay->hide();
                 if (_dragCursorSet) {

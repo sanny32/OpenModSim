@@ -470,7 +470,7 @@ bool DataMapDataModel::setData(const QModelIndex& index, const QVariant& value, 
         if (newKey.DeviceId == oldKey.DeviceId &&
             newKey.Type    == oldKey.Type    &&
             newKey.Address == oldKey.Address) {
-            // No actual change вЂ” still refresh display (in case role was redundant write)
+            // No actual change - still refresh display (in case role was redundant write)
             emit dataChanged(createIndex(row, ColUnit), createIndex(row, ColTimestamp));
             handled = true;
         } else {

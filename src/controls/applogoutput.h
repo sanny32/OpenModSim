@@ -19,7 +19,7 @@ class AppLogOutput;
 }
 
 ///
-/// \brief The AppLogOutput class вЂ” application event log tab
+/// \brief The AppLogOutput class - application event log tab
 ///
 class AppLogOutput : public QWidget
 {

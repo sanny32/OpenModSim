@@ -16,7 +16,7 @@
 /// \brief The ColorSwatch class
 ///
 /// A clickable flat colored rectangle button. Uses custom paintEvent
-/// to render a solid color fill with a border вЂ” no stylesheet needed.
+/// to render a solid color fill with a border - no stylesheet needed.
 ///
 class ColorSwatch : public QPushButton
 {

@@ -96,7 +96,7 @@ inline QColor defaultAddress()
     return QApplication::palette().color(QPalette::PlaceholderText);
 }
 
-// Semantic log colors вЂ” warning
+// Semantic log colors - warning
 inline QColor warningBackground()
 {
     return isDark() ? QColor("#3a2e00") : QColor("#FFF8E1");
@@ -112,7 +112,7 @@ inline QColor warningForeground()
     return isDark() ? QColor("#FFD54F") : QColor("#4A3000");
 }
 
-// Semantic log colors вЂ” error
+// Semantic log colors - error
 inline QColor errorBackground()
 {
     return isDark() ? QColor("#3b0000") : QColor("#FFEBEE");
@@ -128,7 +128,7 @@ inline QColor errorForeground()
     return isDark() ? QColor("#FF8A80") : QColor("#7F0000");
 }
 
-// Semantic log colors вЂ” debug/info
+// Semantic log colors - debug/info
 inline QColor debugForeground()
 {
     return isDark() ? QColor("#56B6C2") : QColor("#37474F");

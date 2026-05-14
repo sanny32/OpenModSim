@@ -65,7 +65,7 @@ struct DataMapEntry
 };
 
 ///
-/// \brief The DataMapDataModel class вЂ” QAbstractTableModel backing the DataMap view
+/// \brief The DataMapDataModel class - QAbstractTableModel backing the DataMap view
 ///
 class DataMapDataModel : public QAbstractTableModel
 {
@@ -132,7 +132,7 @@ private:
 };
 
 ///
-/// \brief The DataMapFilterProxy class вЂ” filters DataMap rows by Type and Unit
+/// \brief The DataMapFilterProxy class - filters DataMap rows by Type and Unit
 ///
 class DataMapFilterProxy : public QSortFilterProxyModel
 {

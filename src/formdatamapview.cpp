@@ -58,7 +58,7 @@ void markNumericEditorInitialized(QWidget* editor)
 }
 
 ///
-/// \brief WrappingHeaderView вЂ” table header with word-wrapped section labels
+/// \brief WrappingHeaderView - table header with word-wrapped section labels
 ///
 class WrappingHeaderView : public QHeaderView
 {
@@ -136,7 +136,7 @@ protected:
 };
 
 ///
-/// \brief TypeItemDelegate вЂ” inline combo box for register type column
+/// \brief TypeItemDelegate - inline combo box for register type column
 ///
 class TypeItemDelegate : public QStyledItemDelegate
 {
@@ -177,7 +177,7 @@ public:
 };
 
 ///
-/// \brief DataTypeItemDelegate вЂ” inline combo box for DataType column
+/// \brief DataTypeItemDelegate - inline combo box for DataType column
 ///
 class DataTypeItemDelegate : public QStyledItemDelegate
 {
@@ -198,8 +198,8 @@ public:
             case DataType::Binary:  return bitType
                                         ? tr("1-bit value (Coils / Discrete Inputs)")
                                         : tr("16-bit register value shown as 16 binary digits");
-            case DataType::UInt16:  return tr("Unsigned 16-bit integer  (0 вЂ¦ 65535)");
-            case DataType::Int16:   return tr("Signed 16-bit integer  (в€’32768 вЂ¦ 32767)");
+            case DataType::UInt16:  return tr("Unsigned 16-bit integer  (0 … 65535)");
+            case DataType::Int16:   return tr("Signed 16-bit integer  (−32768 … 32767)");
             case DataType::Hex:     return tr("16-bit value displayed as hexadecimal");
             case DataType::Ansi:    return tr("16-bit value displayed as ANSI character");
             case DataType::Float32: return tr("IEEE 754 single-precision float  (2 registers)");
@@ -264,19 +264,19 @@ public:
 };
 
 ///
-/// \brief RegistryOrderItemDelegate вЂ” inline combo box for RegisterOrder column
+/// \brief RegistryOrderItemDelegate - inline combo box for RegisterOrder column
 ///
 class RegistryOrderItemDelegate : public QStyledItemDelegate
 {
-    Q_DECLARE_TR_FUNCTIONS(OrderItemDelegate)
+    Q_DECLARE_TR_FUNCTIONS(RegistryOrderItemDelegate)
 public:
     using QStyledItemDelegate::QStyledItemDelegate;
 
     static QString tooltipFor(RegisterOrder order)
     {
         switch (order) {
-            case RegisterOrder::MSRF: return tr("Most Significant Register First вЂ” big-endian word order");
-            case RegisterOrder::LSRF: return tr("Least Significant Register First вЂ” little-endian word order");
+            case RegisterOrder::MSRF: return tr("Most Significant Register First - big-endian word order");
+            case RegisterOrder::LSRF: return tr("Least Significant Register First - little-endian word order");
         }
         return {};
     }
@@ -329,7 +329,7 @@ public:
 };
 
 ///
-/// \brief ByteOrderItemDelegate вЂ” inline combo box for ByteOrder column
+/// \brief ByteOrderItemDelegate - inline combo box for ByteOrder column
 ///
 class ByteOrderItemDelegate : public QStyledItemDelegate
 {
@@ -394,7 +394,7 @@ public:
 };
 
 ///
-/// \brief UnitItemDelegate вЂ” NumericLineEdit editor for the Unit (device ID) column
+/// \brief UnitItemDelegate - NumericLineEdit editor for the Unit (device ID) column
 ///
 class UnitItemDelegate : public QStyledItemDelegate
 {
@@ -452,7 +452,7 @@ public:
 };
 
 ///
-/// \brief AddressItemDelegate вЂ” NumericLineEdit editor for the Address column
+/// \brief AddressItemDelegate - NumericLineEdit editor for the Address column
 ///
 class AddressItemDelegate : public QStyledItemDelegate
 {
@@ -525,7 +525,7 @@ public:
 };
 
 ///
-/// \brief ValueItemDelegate вЂ” NumericLineEdit editor for the Value column
+/// \brief ValueItemDelegate - NumericLineEdit editor for the Value column
 ///
 class ValueItemDelegate : public QStyledItemDelegate
 {

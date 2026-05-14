@@ -19,7 +19,7 @@ class AppLogOutput;
 class ConsoleOutput;
 
 ///
-/// \brief The OutputPanel class вЂ” tabbed bottom panel (Log + JavaScript Console)
+/// \brief The OutputPanel class - tabbed bottom panel (Log + JavaScript Console)
 ///
 class OutputPanel : public QWidget
 {

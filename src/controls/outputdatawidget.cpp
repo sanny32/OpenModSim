@@ -812,14 +812,14 @@ int OutputDataWidget::paint(const QRect& rc, QPainter& painter, int startRow)
         }
         else
         {
-            // Current column is full вЂ” try the next column
+            // Current column is full - try the next column
             cy = dataTop;
             cx = rcItem.left() + maxWidth + 10;
 
             rcItem = painter.boundingRect(cx, cy, rc.right() - cx, rc.bottom() - cy, Qt::TextSingleLine, text);
             if (rcItem.right() > rc.right())
             {
-                // All columns on this page are exhausted вЂ” signal caller to start a new page
+                // All columns on this page are exhausted - signal caller to start a new page
                 painter.restore();
                 return i;
             }

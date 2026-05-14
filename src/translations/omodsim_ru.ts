@@ -365,13 +365,13 @@
     </message>
     <message>
         <location filename="../formdatamapview.cpp" line="201"/>
-        <source>Unsigned 16-bit integer  (0 вЂ¦ 65535)</source>
-        <translation type="unfinished"></translation>
+        <source>Unsigned 16-bit integer  (0 … 65535)</source>
+        <translation>16-битное целое без знака (0 … 65535)</translation>
     </message>
     <message>
         <location filename="../formdatamapview.cpp" line="202"/>
-        <source>Signed 16-bit integer  (в€’32768 вЂ¦ 32767)</source>
-        <translation type="unfinished"></translation>
+        <source>Signed 16-bit integer  (−32768 … 32767)</source>
+        <translation>16-битное целое со знаком (-32768 … 32767)</translation>
     </message>
     <message>
         <location filename="../formdatamapview.cpp" line="203"/>
@@ -3570,19 +3570,6 @@ Open the download page?</source>
     </message>
 </context>
 <context>
-    <name>OrderItemDelegate</name>
-    <message>
-        <location filename="../formdatamapview.cpp" line="278"/>
-        <source>Most Significant Register First вЂ” big-endian word order</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../formdatamapview.cpp" line="279"/>
-        <source>Least Significant Register First вЂ” little-endian word order</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>OutputDataWidget</name>
     <message>
         <location filename="../controls/outputdatawidget.cpp" line="1336"/>
@@ -3936,6 +3923,19 @@ Open the download page?</source>
         <location filename="../controls/mditabbar.cpp" line="90"/>
         <source>*</source>
         <translation>*</translation>
+    </message>
+</context>
+<context>
+    <name>RegistryOrderItemDelegate</name>
+    <message>
+        <location filename="../formdatamapview.cpp" line="278"/>
+        <source>Most Significant Register First - big-endian word order</source>
+        <translation>Старший регистр первый - порядок слов big-endian</translation>
+    </message>
+    <message>
+        <location filename="../formdatamapview.cpp" line="279"/>
+        <source>Least Significant Register First - little-endian word order</source>
+        <translation>Младший регистр первый - порядок слов little-endian</translation>
     </message>
 </context>
 <context>
