@@ -35,6 +35,7 @@ const QHash<QString, IconDescriptor>& iconRegistry()
         { QStringLiteral("omodsim/bell"),                      { QStringLiteral("misc/bell"),                           QStringLiteral(":/res/icon-bell.png") } },
         { QStringLiteral("omodsim/bell-dot"),                  { QStringLiteral("misc/bell"),                           QStringLiteral(":/res/icon-bell-dot.png") } },
         { QStringLiteral("omodsim/clear"),                     { QStringLiteral("action/trash"),                        QStringLiteral(":/res/edit-delete.png") } },
+        { QStringLiteral("omodsim/close"),                     { QStringLiteral("action/close"),                        QStringLiteral(":/res/icon-close.png") } },
         { QStringLiteral("omodsim/connect"),                   { QStringLiteral("misc/link"),                           QStringLiteral(":/res/icon-connect.png") } },
         { QStringLiteral("omodsim/copy"),                      { QStringLiteral("edit-copy"),                           QStringLiteral(":/res/icon-copy.png") } },
         { QStringLiteral("omodsim/cut"),                       { QStringLiteral("edit-cut"),                            QStringLiteral(":/res/icon-cut.png") } },

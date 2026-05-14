@@ -1150,13 +1150,13 @@ Open the download page?</source>
     </message>
     <message>
         <location filename="../dialogs/dialogpreferences.ui" line="320"/>
-        <location filename="../dialogs/dialogpreferences.ui" line="660"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="657"/>
         <source>Font</source>
         <translation>字体</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogpreferences.ui" line="357"/>
-        <location filename="../dialogs/dialogpreferences.ui" line="697"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="694"/>
         <source>Size:</source>
         <translation>大小：</translation>
     </message>
@@ -1171,23 +1171,23 @@ Open the download page?</source>
         <translation>无符号数前导零</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="763"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="760"/>
         <source>Console</source>
         <translation>控制台</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="775"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="772"/>
         <source>Console Output Limit:</source>
         <translation>控制台输出限制：</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="813"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="810"/>
         <source>Automatically show output console</source>
         <translation>自动显示输出控制台</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogpreferences.ui" line="335"/>
-        <location filename="../dialogs/dialogpreferences.ui" line="675"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="672"/>
         <source>Family:</source>
         <translation>字体族：</translation>
     </message>
@@ -1208,7 +1208,7 @@ Open the download page?</source>
     </message>
     <message>
         <location filename="../dialogs/dialogpreferences.ui" line="432"/>
-        <location filename="../dialogs/dialogpreferences.ui" line="731"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="728"/>
         <source>Antialias</source>
         <translation>抗锯齿</translation>
     </message>
@@ -1243,17 +1243,17 @@ Open the download page?</source>
         <translation>流量视图</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="628"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="625"/>
         <source>&lt;b&gt;Note:&lt;/b&gt; These settings apply to newly opened windows only.</source>
         <translation>&lt;b&gt;注意：&lt;/b&gt;这些设置仅适用于新打开的窗口。</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="741"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="738"/>
         <source>Editor</source>
         <translation>编辑器</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="753"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="750"/>
         <source>Enable code auto-complete</source>
         <translation>启用代码自动补全</translation>
     </message>
@@ -1761,17 +1761,17 @@ Open the download page?</source>
         <translation>全部替换</translation>
     </message>
     <message>
-        <location filename="../controls/findreplacebar.cpp" line="239"/>
+        <location filename="../controls/findreplacebar.cpp" line="241"/>
         <source>Find Next</source>
         <translation>查找下一个</translation>
     </message>
     <message>
-        <location filename="../controls/findreplacebar.cpp" line="240"/>
+        <location filename="../controls/findreplacebar.cpp" line="242"/>
         <source>Find Previous</source>
         <translation>查找上一个</translation>
     </message>
     <message>
-        <location filename="../controls/findreplacebar.cpp" line="567"/>
+        <location filename="../controls/findreplacebar.cpp" line="573"/>
         <source>Find</source>
         <translation>查找</translation>
     </message>

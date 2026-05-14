@@ -104,6 +104,7 @@
         <file>res/icon-hex-view.png</file>
         <file>res/edit-delete.png</file>
         <file>res/icon-add.png</file>
+        <file>res/icon-close.png</file>
         <file>res/icon-remove.png</file>
         <file>res/icon-pause.png</file>
     </qresource>

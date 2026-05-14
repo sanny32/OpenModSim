@@ -46,6 +46,7 @@ private slots:
 private:
     void loadFromPreferences();
     void apply();
+    void updateNoteFrameStyle();
 
     static QFont fontFromControls(QFontComboBox* familyCombo, QSpinBox* sizeBox, QCheckBox* antialiasCheck);
 

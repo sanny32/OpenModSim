@@ -1150,13 +1150,13 @@ Open the download page?</source>
     </message>
     <message>
         <location filename="../dialogs/dialogpreferences.ui" line="320"/>
-        <location filename="../dialogs/dialogpreferences.ui" line="660"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="657"/>
         <source>Font</source>
         <translation>Шрифт</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogpreferences.ui" line="357"/>
-        <location filename="../dialogs/dialogpreferences.ui" line="697"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="694"/>
         <source>Size:</source>
         <translation>Размер:</translation>
     </message>
@@ -1171,23 +1171,23 @@ Open the download page?</source>
         <translation>Ведущие нули для беззнаковых</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="763"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="760"/>
         <source>Console</source>
         <translation>Консоль</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="775"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="772"/>
         <source>Console Output Limit:</source>
         <translation>Ограничение вывода консоли:</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="813"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="810"/>
         <source>Automatically show output console</source>
         <translation>Автоматически показывать консоль вывода</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogpreferences.ui" line="335"/>
-        <location filename="../dialogs/dialogpreferences.ui" line="675"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="672"/>
         <source>Family:</source>
         <translation>Семейство:</translation>
     </message>
@@ -1208,7 +1208,7 @@ Open the download page?</source>
     </message>
     <message>
         <location filename="../dialogs/dialogpreferences.ui" line="432"/>
-        <location filename="../dialogs/dialogpreferences.ui" line="731"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="728"/>
         <source>Antialias</source>
         <translation>Сглаживание</translation>
     </message>
@@ -1243,17 +1243,17 @@ Open the download page?</source>
         <translation>Просмотр трафика</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="628"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="625"/>
         <source>&lt;b&gt;Note:&lt;/b&gt; These settings apply to newly opened windows only.</source>
         <translation>&lt;b&gt;Примечание:&lt;/b&gt; Эти настройки применяются только к новым окнам.</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="741"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="738"/>
         <source>Editor</source>
         <translation>Редактор</translation>
     </message>
     <message>
-        <location filename="../dialogs/dialogpreferences.ui" line="753"/>
+        <location filename="../dialogs/dialogpreferences.ui" line="750"/>
         <source>Enable code auto-complete</source>
         <translation>Включить автодополнение кода</translation>
     </message>
@@ -1761,17 +1761,17 @@ Open the download page?</source>
         <translation>Заменить все</translation>
     </message>
     <message>
-        <location filename="../controls/findreplacebar.cpp" line="239"/>
+        <location filename="../controls/findreplacebar.cpp" line="241"/>
         <source>Find Next</source>
         <translation>Далее</translation>
     </message>
     <message>
-        <location filename="../controls/findreplacebar.cpp" line="240"/>
+        <location filename="../controls/findreplacebar.cpp" line="242"/>
         <source>Find Previous</source>
         <translation>Назад</translation>
     </message>
     <message>
-        <location filename="../controls/findreplacebar.cpp" line="567"/>
+        <location filename="../controls/findreplacebar.cpp" line="573"/>
         <source>Find</source>
         <translation>Поиск</translation>
     </message>

@@ -100,8 +100,11 @@ DialogPreferences::DialogPreferences(MainWindow* mainWindow, QWidget* parent)
             this, &DialogPreferences::on_listWidget_currentRowChanged);
     connect(ui->buttonBox, &QDialogButtonBox::clicked,
             this, &DialogPreferences::on_buttonBox_clicked);
+    connect(&theApp()->theme(), &AppTheme::colorSchemeChanged,
+            this, &DialogPreferences::updateNoteFrameStyle);
 
     loadFromPreferences();
+    updateNoteFrameStyle();
 }
 
 ///
@@ -306,5 +309,22 @@ QFont DialogPreferences::fontFromControls(QFontComboBox* familyCombo, QSpinBox* 
     font.setPointSize(sizeBox->value());
     font.setStyleStrategy(antialiasCheck->isChecked() ? QFont::PreferAntialias : QFont::NoAntialias);
     return font;
+}
+
+///
+/// \brief DialogPreferences::updateNoteFrameStyle
+///
+void DialogPreferences::updateNoteFrameStyle()
+{
+    const bool dark = theApp()->theme().isDark();
+    if (dark) {
+        ui->frameDisplayNote->setStyleSheet(
+            QStringLiteral("background-color: #1A2E3B; border: 1px solid #2E5068; border-radius: 4px;"));
+        ui->labelDisplayNote->setStyleSheet(QStringLiteral("border: none;"));
+    } else {
+        ui->frameDisplayNote->setStyleSheet(
+            QStringLiteral("background-color: #E8F4FD; border: 1px solid #B8D9F0; border-radius: 4px;"));
+        ui->labelDisplayNote->setStyleSheet(QStringLiteral("border: none;"));
+    }
 }
 

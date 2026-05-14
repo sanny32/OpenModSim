@@ -13,6 +13,7 @@
 #include <QLabel>
 #include <QHBoxLayout>
 #include "findreplacebar.h"
+#include "styles/themedicons.h"
 #include "ui_findreplacebar.h"
 
 ///
@@ -111,7 +112,8 @@ public:
 
         _closeBtn = new QToolButton(this);
         _closeBtn->setFixedSize(18, 18);
-        _closeBtn->setText("вњ•");
+        _closeBtn->setIcon(themedIcon(QStringLiteral("omodsim/close")));
+        _closeBtn->setIconSize(QSize(12, 12));
         _closeBtn->setAutoRaise(true);
         _closeBtn->setCursor(Qt::ArrowCursor);
 
@@ -238,6 +240,10 @@ FindReplaceBar::FindReplaceBar(QWidget *parent)
 
     auto actionFindNext = new QAction(iconFindeNext, tr("Find Next"), this);
     auto actionFindPrev = new QAction(iconFindPrev, tr("Find Previous"), this);
+
+    ui->closeButton->setText(QString());
+    ui->closeButton->setIcon(themedIcon(QStringLiteral("omodsim/close")));
+    ui->closeButton->setIconSize(QSize(12, 12));
 
     actionFindNext->setShortcut(Qt::Key_F3);
     actionFindPrev->setShortcut(Qt::SHIFT | Qt::Key_F3);

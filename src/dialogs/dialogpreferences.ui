@@ -597,9 +597,6 @@
              </item>
              <item>
               <widget class="QFrame" name="frameDisplayNote">
-               <property name="styleSheet">
-                <string notr="true">background-color: #E8F4FD; border: 1px solid #B8D9F0; border-radius: 4px;</string>
-               </property>
                <property name="frameShape">
                 <enum>QFrame::StyledPanel</enum>
                </property>
