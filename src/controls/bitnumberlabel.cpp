@@ -54,7 +54,7 @@ void BitNumberLabel::updateLabel()
 #ifdef Q_OS_MAC
     font.setPointSize(10);
 #else
-    font.setPointSize(7));
+    font.setPointSize(7);
 #endif
     setFont(font);
     setText(QString::number(_bitNumber));
