@@ -399,7 +399,7 @@ MainWindow::MainWindow(const QString& profile, bool useSession, const QString& s
     connect(ui->actionNewDataMapView,     &QAction::triggered, this, [this]{ activateNewFormKind(ProjectFormKind::DataMap,     ui->actionNewDataMapView); });
     connect(ui->actionNewScript,          &QAction::triggered, this, [this]{ activateNewFormKind(ProjectFormKind::Script,      ui->actionNewScript); });
 
-    loadAppSettings(profile);
+    const bool hasProfile = loadAppSettings(profile);
     rebuildRecentProjectsMenu();
 
     const bool canRestoreLastProject = !_lastProjectPath.isEmpty() && QFile::exists(_lastProjectPath);
@@ -409,7 +409,7 @@ MainWindow::MainWindow(const QString& profile, bool useSession, const QString& s
         _pendingWelcomeDialog = true;  // shown in showEvent after the window is visible
     } else if(canRestoreLastProject) {
         loadProject(_lastProjectPath);
-    } else {
+    } else if(!hasProfile) {
         ui->actionNew->trigger();
     }
 }
