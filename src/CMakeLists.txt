@@ -43,8 +43,8 @@ configure_file(
 
 # Generate README.md
 configure_file(
-    ${CMAKE_SOURCE_DIR}/../README.md.in
-    ${CMAKE_SOURCE_DIR}/../README.md
+    ${PROJECT_SOURCE_DIR}/../README.md.in
+    ${PROJECT_SOURCE_DIR}/../README.md
     @ONLY
 )
 
@@ -122,7 +122,7 @@ else()
     find_package(Git QUIET)
     if(GIT_FOUND)
         execute_process(COMMAND ${GIT_EXECUTABLE} rev-parse --abbrev-ref HEAD
-            WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/../.git
+            WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/..
             OUTPUT_VARIABLE GIT_BRANCH
             OUTPUT_STRIP_TRAILING_WHITESPACE
             ERROR_QUIET)
@@ -137,26 +137,30 @@ elseif(PRERELEASE_SUFFIX)
     set(PROJECT_VERSION ${PROJECT_VERSION}-${PRERELEASE_SUFFIX})
 endif()
 
-# Define compile definitions
-add_compile_definitions(APP_NAME="${PRODUCT_NAME} ${VERSION_MAJOR}")
-add_compile_definitions(APP_PRODUCT_NAME="${PRODUCT_NAME}")
-add_compile_definitions(APP_DESCRIPTION="${PROJECT_DESCRIPTION}")
-add_compile_definitions(APP_VERSION_MAJOR="${VERSION_MAJOR}")
-add_compile_definitions(APP_VERSION_MINOR="${VERSION_MINOR}")
-add_compile_definitions(APP_VERSION_PATCH="${VERSION_PATCH}")
-add_compile_definitions(APP_VERSION="${PROJECT_VERSION}")
-add_compile_definitions(BUILD_YEAR="${CURRENT_YEAR}")
-
 if(USE_QLEMENTINE_APP_STYLE AND
    NOT (Qt6_FOUND AND Qt6_VERSION VERSION_GREATER_EQUAL "6.8" AND TARGET qlementine AND TARGET qlementine-icons))
     set(USE_QLEMENTINE_APP_STYLE OFF CACHE BOOL
         "Use Qlementine application style when available (requires Qt6 >= 6.8)" FORCE)
 endif()
 
+# Target compile definitions
+target_compile_definitions(${PROJECT_NAME} PRIVATE
+    APP_NAME="${PRODUCT_NAME} ${VERSION_MAJOR}"
+    APP_PRODUCT_NAME="${PRODUCT_NAME}"
+    APP_DESCRIPTION="${PROJECT_DESCRIPTION}"
+    APP_VERSION_MAJOR="${VERSION_MAJOR}"
+    APP_VERSION_MINOR="${VERSION_MINOR}"
+    APP_VERSION_PATCH="${VERSION_PATCH}"
+    APP_VERSION="${PROJECT_VERSION}"
+    BUILD_YEAR="${CURRENT_YEAR}"
+)
+
 if(USE_QLEMENTINE_APP_STYLE)
-    add_compile_definitions(HAVE_QLEMENTINE_APP_STYLE)
-    add_compile_definitions(QLEMENTINE_VERSION="${QLEMENTINE_VERSION}")
-    add_compile_definitions(QLEMENTINE_ICONS_VERSION="${QLEMENTINE_ICONS_VERSION}")
+    target_compile_definitions(${PROJECT_NAME} PRIVATE
+        HAVE_QLEMENTINE_APP_STYLE
+        QLEMENTINE_VERSION="${QLEMENTINE_VERSION}"
+        QLEMENTINE_ICONS_VERSION="${QLEMENTINE_ICONS_VERSION}"
+    )
 endif()
 
 # Include directories
@@ -177,101 +181,114 @@ set(SOURCES
     apppreferences.cpp
     appproject.cpp
     cmdlineparser.cpp
+
     controls/aboutdatawidget.cpp
     controls/addressbasecombobox.cpp
     controls/addressspacecombobox.cpp
+    controls/applogoutput.cpp
     controls/bitnumberlabel.cpp
     controls/bitpatterncontrol.cpp
-    controls/funccodefiltercombobox.cpp
     controls/booleancombobox.cpp
     controls/bytelisttextedit.cpp
     controls/checkablegroupbox.cpp
     controls/clickablelabel.cpp
     controls/coloredpushbutton.cpp
     controls/coloredtoolbutton.cpp
-    controls/applogoutput.cpp
     controls/consoleoutput.cpp
-    controls/outputpanel.cpp
     controls/customframe.cpp
-    controls/findreplacebar.cpp
     controls/customlineedit.cpp
+    controls/findreplacebar.cpp
     controls/flowcontroltypecombobox.cpp
+    controls/funccodefiltercombobox.cpp
     controls/helpbrowser.cpp
     controls/helpwidget.cpp
     controls/jscodeeditor.cpp
     controls/jscriptcontrol.cpp
-    controls/mainstatusbar.cpp
-    styles/apptheme.cpp
-    styles/appstyle.cpp
-    styles/macappstyle.cpp
-    styles/qlementineappstyle.cpp
-    styles/themedicons.cpp
     controls/macsplittoolbutton.cpp
+    controls/mainstatusbar.cpp
     controls/mdiarea.cpp
     controls/mdiareaex.cpp
     controls/mditabbar.cpp
     controls/modbuslogwidget.cpp
-    controls/projecttreewidget.cpp
     controls/modbusmessagewidget.cpp
     controls/numericcombobox.cpp
     controls/numericlineedit.cpp
     controls/outputdatawidget.cpp
+    controls/outputpanel.cpp
     controls/outputtrafficwidget.cpp
     controls/paritytypecombobox.cpp
     controls/pointtypecombobox.cpp
+    controls/projecttreewidget.cpp
     controls/runmodecombobox.cpp
+    controls/scripteditorwindow.cpp
     controls/searchlineedit.cpp
     controls/simulationmodecombobox.cpp
     controls/statisticwidget.cpp
     controls/toolbar.cpp
+    controls/trafficlogwindow.cpp
     controls/transpscrollarea.cpp
+
     datadelegate.cpp
+    datamapdatamodel.cpp
     datasimulator.cpp
+
+    dialogs/dialogabout.cpp
     dialogs/dialogautosimulation.cpp
     dialogs/dialogcoilsimulation.cpp
-    dialogs/dialogabout.cpp
-    dialogs/dialogwelcome.cpp
-    dialogs/dialogforcestatusregisters.cpp
     dialogs/dialogforcemultipleregisters.cpp
-    dialogs/dialogmsgparser.cpp
-    dialogs/dialogprintsettings.cpp
-    dialogs/dialogpreferences.cpp
-    dialogs/dialogselectserviceport.cpp
+    dialogs/dialogforcestatusregisters.cpp
     dialogs/dialogmodbusdefinitions.cpp
+    dialogs/dialogmsgparser.cpp
+    dialogs/dialogpreferences.cpp
+    dialogs/dialogprintsettings.cpp
+    dialogs/dialogselectserviceport.cpp
     dialogs/dialogsetupserialport.cpp
+    dialogs/dialogwelcome.cpp
     dialogs/dialogwindowsmanager.cpp
-    dialogs/dialogwritestatusregister.cpp
     dialogs/dialogwriteregister.cpp
+    dialogs/dialogwritestatusregister.cpp
+
+    formdatamapview.cpp
+    formdataview.cpp
+    formscriptview.cpp
+    formtrafficview.cpp
+
     htmldelegate.cpp
     jscompleter.cpp
-    jsobjects/console.cpp
-    jsobjects/script.cpp
-    jsobjects/server.cpp
-    jsobjects/storage.cpp
-    formdataview.cpp
-    formtrafficview.cpp
-    formscriptview.cpp
-    formdatamapview.cpp
-    datamapdatamodel.cpp
     jshighlighter.cpp
     main.cpp
     mainwindow.cpp
     menuconnect.cpp
+
+    jsobjects/console.cpp
+    jsobjects/script.cpp
+    jsobjects/server.cpp
+    jsobjects/storage.cpp
+
     modbusdataunitmap.cpp
     modbuserrorsimulations.cpp
     modbusmessages/modbusmessage.cpp
+    modbusmultiserver.cpp
     modbusrtuserialserver.cpp
     modbusserver.cpp
     modbustcpserver.cpp
-    modbusmultiserver.cpp
+
     qadjustedsizedialog.cpp
-    qfixedsizedialog.cpp
+    qdoublevalidatorex.cpp
     qhexvalidator.cpp
     qint64validator.cpp
-    qdoublevalidatorex.cpp
     qintvalidatorex.cpp
+    qfixedsizedialog.cpp
     quintvalidator.cpp
     recentfileactionlist.cpp
+    scriptdocument.cpp
+
+    styles/appstyle.cpp
+    styles/apptheme.cpp
+    styles/macappstyle.cpp
+    styles/qlementineappstyle.cpp
+    styles/themedicons.cpp
+
     updatechecker.cpp
 )
 
@@ -288,96 +305,102 @@ set(HEADERS
     byteorderutils.h
     cmdlineparser.h
     connectiondetails.h
+
     controls/aboutdatawidget.h
     controls/addressbasecombobox.h
     controls/addressspacecombobox.h
+    controls/applogoutput.h
     controls/bitnumberlabel.h
     controls/bitpatterncontrol.h
-    controls/funccodefiltercombobox.h
     controls/booleancombobox.h
     controls/bytelisttextedit.h
     controls/checkablegroupbox.h
     controls/clickablelabel.h
     controls/coloredpushbutton.h
     controls/coloredtoolbutton.h
-    controls/applogoutput.h
     controls/consoleoutput.h
-    controls/outputpanel.h
     controls/customframe.h
-    controls/findreplacebar.h
     controls/customlineedit.h
+    controls/findreplacebar.h
     controls/flowcontroltypecombobox.h
+    controls/funccodefiltercombobox.h
     controls/helpbrowser.h
     controls/helpwidget.h
     controls/jscodeeditor.h
     controls/jscriptcontrol.h
-    controls/mainstatusbar.h
-    styles/appcolors.h
-    styles/apptheme.h
-    styles/appstyle.h
-    styles/macappstyle.h
-    styles/qlementineappstyle.h
-    styles/themedicons.h
     controls/macsplittoolbutton.h
+    controls/mainstatusbar.h
     controls/mdiarea.h
     controls/mdiareaex.h
     controls/mditabbar.h
     controls/modbuslogwidget.h
-    controls/projecttreewidget.h
     controls/modbusmessagewidget.h
     controls/numericcombobox.h
     controls/numericlineedit.h
     controls/outputdatawidget.h
+    controls/outputpanel.h
     controls/outputtrafficwidget.h
     controls/outputtypes.h
     controls/paritytypecombobox.h
     controls/pointtypecombobox.h
+    controls/projecttreewidget.h
     controls/runmodecombobox.h
+    controls/scripteditorwindow.h
     controls/searchlineedit.h
     controls/simulationmodecombobox.h
     controls/statisticwidget.h
     controls/toolbar.h
+    controls/trafficlogwindow.h
     controls/transpscrollarea.h
+
     datadelegate.h
+    datamapdatamodel.h
     datasimulator.h
+
+    dialogs/dialogabout.h
     dialogs/dialogautosimulation.h
     dialogs/dialogcoilsimulation.h
-    dialogs/dialogabout.h
-    dialogs/dialogwelcome.h
-    dialogs/dialogforcestatusregisters.h
-    dialogs/dialogforcemultipleregisters.h
-    dialogs/dialogmsgparser.h
-    dialogs/dialogprintsettings.h
     dialogs/colorswatch.h
-    dialogs/dialogpreferences.h
+    dialogs/dialogforcemultipleregisters.h
+    dialogs/dialogforcestatusregisters.h
     dialogs/dialogmodbusdefinitions.h
+    dialogs/dialogmsgparser.h
+    dialogs/dialogpreferences.h
+    dialogs/dialogprintsettings.h
     dialogs/dialogselectserviceport.h
     dialogs/dialogsetupserialport.h
+    dialogs/dialogwelcome.h
     dialogs/dialogwindowsmanager.h
-    dialogs/dialogwritestatusregister.h
     dialogs/dialogwriteregister.h
+    dialogs/dialogwritestatusregister.h
+
+    displaydefinition.h
+    enums.h
     fontutils.h
     formatutils.h
+
+    formdatamapview.h
+    formdataview.h
+    formscriptview.h
+    formtrafficview.h
+
     htmldelegate.h
     jscompleter.h
+    jshighlighter.h
+
     jsobjects/console.h
     jsobjects/script.h
     jsobjects/server.h
     jsobjects/storage.h
-    displaydefinition.h
-    enums.h
-    modbusserver.h
-    formdataview.h
-    formtrafficview.h
-    formscriptview.h
-    formdatamapview.h
-    datamapdatamodel.h
-    jshighlighter.h
+
     mainwindow.h
     menuconnect.h
+
     modbusdataunitmap.h
     modbusdefinitions.h
+    modbusexception.h
     modbuserrorsimulations.h
+    modbusfunction.h
     modbuslimits.h
     modbusmessages/diagnostics.h
     modbusmessages/getcommeventcounter.h
@@ -401,62 +424,77 @@ set(HEADERS
     modbusmessages/writesingleregister.h
     modbusmultiserver.h
     modbusrtuserialserver.h
+    modbusserver.h
     modbustcpserver.h
     modbussimulationparams.h
     modbuswriteparams.h
+
     numericutils.h
     pch.h
     qadjustedsizedialog.h
+    qcountedset.h
+    qdoublevalidatorex.h
     qfixedsizedialog.h
     qhexvalidator.h
     qint64validator.h
+    qintvalidatorex.h
     qmodbusadu.h
     qmodbusadurtu.h
-    qcountedset.h
-    qmodbuscommevent.h
     qmodbusadutcp.h
+    qmodbuscommevent.h
     qrange.h
-    qdoublevalidatorex.h
-    qintvalidatorex.h
     quintvalidator.h
     recentfileactionlist.h
-    updatechecker.h
+    scriptdocument.h
     scriptsettings.h
     serialportutils.h
+    translationutils.h
     uiutils.h
+
+    styles/appcolors.h
+    styles/appstyle.h
+    styles/apptheme.h
+    styles/macappstyle.h
+    styles/qlementineappstyle.h
+    styles/themedicons.h
+
+    updatechecker.h
 )
 
 # UI Forms
 set(UI_FILES
-    controls/bitpatterncontrol.ui
     controls/applogoutput.ui
+    controls/bitpatterncontrol.ui
     controls/consoleoutput.ui
-    controls/mdiareaex.ui
-    controls/outputpanel.ui
     controls/findreplacebar.ui
     controls/jscriptcontrol.ui
+    controls/mdiareaex.ui
     controls/outputdatawidget.ui
+    controls/outputpanel.ui
     controls/outputtrafficwidget.ui
     controls/statisticwidget.ui
-    formdataview.ui
-    formtrafficview.ui
-    formscriptview.ui
-    formdatamapview.ui
+
+    dialogs/dialogabout.ui
     dialogs/dialogautosimulation.ui
     dialogs/dialogcoilsimulation.ui
-    dialogs/dialogabout.ui
-    dialogs/dialogwelcome.ui
-    dialogs/dialogforcestatusregisters.ui
     dialogs/dialogforcemultipleregisters.ui
-    dialogs/dialogmsgparser.ui
-    dialogs/dialogprintsettings.ui
-    dialogs/dialogpreferences.ui
-    dialogs/dialogselectserviceport.ui
+    dialogs/dialogforcestatusregisters.ui
     dialogs/dialogmodbusdefinitions.ui
+    dialogs/dialogmsgparser.ui
+    dialogs/dialogpreferences.ui
+    dialogs/dialogprintsettings.ui
+    dialogs/dialogselectserviceport.ui
     dialogs/dialogsetupserialport.ui
+    dialogs/dialogwelcome.ui
     dialogs/dialogwindowsmanager.ui
-    dialogs/dialogwritestatusregister.ui
     dialogs/dialogwriteregister.ui
+    dialogs/dialogwritestatusregister.ui
+
+    formdatamapview.ui
+    formdataview.ui
+    formscriptview.ui
+    formtrafficview.ui
+
     mainwindow.ui
 )
 
@@ -490,18 +528,18 @@ set(TS_FILES
     translations/omodsim_zh_TW.ts
 )
 
-set(JSHELP_INPUT "${CMAKE_SOURCE_DIR}/docs/jshelp.qhcp")
-set(JSHELP_QHCP "${CMAKE_BINARY_DIR}/docs/jshelp.qhcp")
-set(JSHELP_QHP "${CMAKE_SOURCE_DIR}/docs/jshelp.qhp")
-set(JSHELP_QCH "${CMAKE_BINARY_DIR}/docs/jshelp.qch")
-set(JSHELP_QHC "${CMAKE_BINARY_DIR}/docs/jshelp.qhc")
+set(JSHELP_INPUT "${PROJECT_SOURCE_DIR}/docs/jshelp.qhcp")
+set(JSHELP_QHCP "${PROJECT_BINARY_DIR}/docs/jshelp.qhcp")
+set(JSHELP_QHP "${PROJECT_SOURCE_DIR}/docs/jshelp.qhp")
+set(JSHELP_QCH "${PROJECT_BINARY_DIR}/docs/jshelp.qch")
+set(JSHELP_QHC "${PROJECT_BINARY_DIR}/docs/jshelp.qhc")
 
 file(GLOB JSHELP_CONTENT
-    "${CMAKE_SOURCE_DIR}/docs/*.html"
-    "${CMAKE_SOURCE_DIR}/docs/assets/css/*.css"
+    "${PROJECT_SOURCE_DIR}/docs/*.html"
+    "${PROJECT_SOURCE_DIR}/docs/assets/css/*.css"
 )
 
-file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/docs)
+file(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/docs)
 
 find_program(QHELP_GENERATOR_EXECUTABLE qhelpgenerator
              HINTS "${QT_BINARY_DIR}" "${QT_LIBEXEC_DIR}" "${QT_INSTALL_LIBEXECS}")
@@ -568,11 +606,11 @@ if(WIN32)
 
     configure_file(
             "${CMAKE_CURRENT_SOURCE_DIR}/omodsim.rc.in"
-            "${CMAKE_BINARY_DIR}/omodsim.rc"
+            "${PROJECT_BINARY_DIR}/omodsim.rc"
             @ONLY
         )
 
-    target_sources(${PROJECT_NAME} PRIVATE ${ICON_PATH} "${CMAKE_BINARY_DIR}/omodsim.rc")
+    target_sources(${PROJECT_NAME} PRIVATE "${PROJECT_BINARY_DIR}/omodsim.rc")
     set_target_properties(${PROJECT_NAME} PROPERTIES WIN32_EXECUTABLE ON)
 elseif(APPLE)
     set(MACOSX_ICON "${CMAKE_CURRENT_SOURCE_DIR}/res/omodsim.icns")
@@ -581,13 +619,13 @@ elseif(APPLE)
 
     configure_file(
         "${CMAKE_CURRENT_SOURCE_DIR}/omodsim.plist.in"
-        "${CMAKE_BINARY_DIR}/Info.plist"
+        "${PROJECT_BINARY_DIR}/Info.plist"
         @ONLY
     )
 
     set_target_properties(${PROJECT_NAME} PROPERTIES
         MACOSX_BUNDLE ON
-        MACOSX_BUNDLE_INFO_PLIST "${CMAKE_BINARY_DIR}/Info.plist"
+        MACOSX_BUNDLE_INFO_PLIST "${PROJECT_BINARY_DIR}/Info.plist"
         MACOSX_BUNDLE_ICON_FILE omodsim.icns
         MACOSX_BUNDLE_BUNDLE_NAME "${PRODUCT_NAME}"
         MACOSX_BUNDLE_BUNDLE_VERSION "${PROJECT_VERSION}"
@@ -604,7 +642,7 @@ add_custom_command(
     COMMAND ${QHELP_GENERATOR_EXECUTABLE} ${JSHELP_QHCP} -o ${JSHELP_QHC}
     COMMAND ${CMAKE_COMMAND} -E remove ${JSHELP_QHCP}
     DEPENDS ${JSHELP_QHP} ${JSHELP_INPUT} ${JSHELP_CONTENT}
-    WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/docs
+    WORKING_DIRECTORY ${PROJECT_BINARY_DIR}/docs
     COMMENT "Generating and moving help files..."
     VERBATIM
 )
@@ -632,7 +670,7 @@ if(WIN32)
 
     install(TARGETS ${PROJECT_NAME} RUNTIME DESTINATION .)
     install(DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/../demos" DESTINATION .)
-    install(DIRECTORY "${CMAKE_BINARY_DIR}/docs" DESTINATION .)
+    install(DIRECTORY "${PROJECT_BINARY_DIR}/docs" DESTINATION .)
 
     if(WINDEPLOYQT_EXECUTABLE)
         install(CODE "
@@ -701,7 +739,7 @@ elseif(APPLE)
     install(CODE "
         set(_installed_app \"\$ENV{DESTDIR}\${CMAKE_INSTALL_PREFIX}/${PROJECT_NAME}.app\")
         set(_resources_dir \"\${_installed_app}/Contents/Resources\")
-        set(_docs_source \"${CMAKE_BINARY_DIR}/docs\")
+        set(_docs_source \"${PROJECT_BINARY_DIR}/docs\")
         set(_demos_source \"${CMAKE_CURRENT_SOURCE_DIR}/../demos\")
 
         if(NOT EXISTS \"\${_installed_app}\")
@@ -749,7 +787,7 @@ elseif(APPLE)
 elseif(LINUX)
     set(APP_NAME "${PRODUCT_NAME} ${VERSION_MAJOR}")
     set(EXECUTABLE_PATH "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_BINDIR}/${PROJECT_NAME}${VERSION_MAJOR}")
-    set(APP_EXECUTABLE_NAME "${PROJECT_NAME}${PROJECT_VERSION_MAJOR}")
+    set(APP_EXECUTABLE_NAME "${PROJECT_NAME}${VERSION_MAJOR}")
     set(APP_ICON "${APP_EXECUTABLE_NAME}")
 
     configure_file(
@@ -759,7 +797,7 @@ elseif(LINUX)
     )
 
     install(DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/../demos/" DESTINATION "${CMAKE_INSTALL_DATADIR}/${PROJECT_NAME}/demos")
-    install(DIRECTORY "${CMAKE_BINARY_DIR}/docs/" DESTINATION "${CMAKE_INSTALL_DOCDIR}")
+    install(DIRECTORY "${PROJECT_BINARY_DIR}/docs/" DESTINATION "${CMAKE_INSTALL_DOCDIR}")
 
     install(PROGRAMS "$<TARGET_FILE:${PROJECT_NAME}>" DESTINATION bin RENAME "${APP_EXECUTABLE_NAME}")
     install(FILES res/omodsim16.png DESTINATION share/icons/hicolor/16x16/apps RENAME "${APP_ICON}.png")

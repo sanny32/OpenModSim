@@ -3961,6 +3961,29 @@ Open the download page?</source>
     </message>
 </context>
 <context>
+    <name>ScriptEditorWindow</name>
+    <message>
+        <location filename="../controls/scripteditorwindow.cpp" line="126"/>
+        <source> ms</source>
+        <translation type="unfinished"> 毫秒</translation>
+    </message>
+    <message>
+        <location filename="../controls/scripteditorwindow.cpp" line="139"/>
+        <source>Run on startup</source>
+        <translation type="unfinished">啟動時執行</translation>
+    </message>
+    <message>
+        <location filename="../controls/scripteditorwindow.cpp" line="160"/>
+        <source>Run Script</source>
+        <translation type="unfinished">執行腳本</translation>
+    </message>
+    <message>
+        <location filename="../controls/scripteditorwindow.cpp" line="167"/>
+        <source>Stop Script</source>
+        <translation type="unfinished">停止腳本</translation>
+    </message>
+</context>
+<context>
     <name>SearchLineEdit</name>
     <message>
         <location filename="../controls/searchlineedit.cpp" line="19"/>
@@ -4035,6 +4058,66 @@ Open the download page?</source>
         <location filename="../controls/statisticwidget.cpp" line="158"/>
         <source>Responses: %1</source>
         <translation>響應：%1</translation>
+    </message>
+</context>
+<context>
+    <name>TrafficLogWindow</name>
+    <message>
+        <location filename="../controls/trafficlogwindow.cpp" line="23"/>
+        <location filename="../controls/trafficlogwindow.cpp" line="208"/>
+        <source>Traffic</source>
+        <translation type="unfinished">流量</translation>
+    </message>
+    <message>
+        <location filename="../controls/trafficlogwindow.cpp" line="121"/>
+        <location filename="../controls/trafficlogwindow.cpp" line="209"/>
+        <source>Unit ID:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../controls/trafficlogwindow.cpp" line="125"/>
+        <location filename="../controls/trafficlogwindow.cpp" line="132"/>
+        <location filename="../controls/trafficlogwindow.cpp" line="210"/>
+        <location filename="../controls/trafficlogwindow.cpp" line="218"/>
+        <source>All</source>
+        <translation type="unfinished">全部</translation>
+    </message>
+    <message>
+        <location filename="../controls/trafficlogwindow.cpp" line="126"/>
+        <location filename="../controls/trafficlogwindow.cpp" line="211"/>
+        <source>Filter by Unit Identifier (0 = all)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../controls/trafficlogwindow.cpp" line="130"/>
+        <location filename="../controls/trafficlogwindow.cpp" line="212"/>
+        <source>Function:</source>
+        <translation type="unfinished">功能：</translation>
+    </message>
+    <message>
+        <location filename="../controls/trafficlogwindow.cpp" line="144"/>
+        <location filename="../controls/trafficlogwindow.cpp" line="213"/>
+        <source>Limit:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../controls/trafficlogwindow.cpp" line="156"/>
+        <location filename="../controls/trafficlogwindow.cpp" line="198"/>
+        <location filename="../controls/trafficlogwindow.cpp" line="214"/>
+        <source>Pause</source>
+        <translation type="unfinished">暫停</translation>
+    </message>
+    <message>
+        <location filename="../controls/trafficlogwindow.cpp" line="161"/>
+        <location filename="../controls/trafficlogwindow.cpp" line="215"/>
+        <source>Clear</source>
+        <translation type="unfinished">清除</translation>
+    </message>
+    <message>
+        <location filename="../controls/trafficlogwindow.cpp" line="198"/>
+        <location filename="../controls/trafficlogwindow.cpp" line="214"/>
+        <source>Resume</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
