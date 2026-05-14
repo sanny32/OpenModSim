@@ -33,6 +33,7 @@
 #include <QStyleOptionViewItem>
 #include <QApplication>
 #include <QMdiArea>
+#include <QTextBrowser>
 #include <QTabBar>
 #include <QToolBar>
 #include <QMenu>
@@ -384,6 +385,13 @@ void QlementineAppStyle::polishWidget(QWidget* widget) const
 
     if (auto* mdiArea = qobject_cast<QMdiArea*>(widget))
         mdiArea->setBackground(QBrush(theme().backgroundColorMain1));
+
+    if (qobject_cast<QTextBrowser*>(widget)) {
+        auto pal = widget->palette();
+        pal.setColor(QPalette::Base, AppColors::canvasBackground());
+        pal.setColor(QPalette::Window, AppColors::canvasBackground());
+        widget->setPalette(pal);
+    }
 }
 
 ///
