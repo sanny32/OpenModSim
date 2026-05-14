@@ -35,10 +35,6 @@
 #include "themedicons.h"
 #include "ui_mainwindow.h"
 
-#if defined(HAVE_QLEMENTINE_APP_STYLE)
-#include "styles/qlementineappstyle.h"
-#endif
-
 // Forward declaration (defined later in this file)
 static QString getSettingsFilePath();
 namespace {
