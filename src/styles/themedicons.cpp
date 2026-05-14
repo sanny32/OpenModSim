@@ -63,8 +63,8 @@ const QHash<QString, IconDescriptor>& iconRegistry()
         { QStringLiteral("omodsim/preferences-defaults"),      { QStringLiteral("document/page-setup"),                 QStringLiteral("define-data") } },
         { QStringLiteral("omodsim/preferences-interface"),     { QStringLiteral("document/template"),                   QStringLiteral("pref-interface") } },
         { QStringLiteral("omodsim/preferences-script"),        { QStringLiteral("file/markup"),                         QStringLiteral("show-script") } },
-        { QStringLiteral("omodsim/preset-holding-registers"),  { QStringLiteral("omodsim/preset-holding-registers"),    QStringLiteral("preset-holding-regs") } },
-        { QStringLiteral("omodsim/preset-input-registers"),    { QStringLiteral("omodsim/preset-input-registers"),      QStringLiteral("preset-input-regs") } },
+        { QStringLiteral("omodsim/preset-holding-registers"),  { QStringLiteral("omodsim/preset-holding-regs"),         QStringLiteral("preset-holding-regs") } },
+        { QStringLiteral("omodsim/preset-input-registers"),    { QStringLiteral("omodsim/preset-input-regs"),           QStringLiteral("preset-input-regs") } },
         { QStringLiteral("omodsim/print"),                     { QStringLiteral("action/print"),                        QStringLiteral("print") } },
         { QStringLiteral("omodsim/redo"),                      { QStringLiteral("action/redo"),                         QStringLiteral("redo") } },
         { QStringLiteral("omodsim/remove"),                    { QStringLiteral("action/erase"),                        QStringLiteral("remove") } },
@@ -139,7 +139,7 @@ QIcon iconFromThemeName(const QString& themeName)
 /// \param name Icon name or alias key.
 /// \return Resolved icon, or a null icon if no source can be resolved.
 ///
-QIcon ThemedIcons::icon(const QString& name)
+QIcon ThemedIcons::icon(const QString& name, IconMode mode)
 {
     static constexpr QLatin1StringView kFallbackDir{":/res/icons/fallback/"};
 
@@ -149,7 +149,7 @@ QIcon ThemedIcons::icon(const QString& name)
     const QString resourceName = it == registry.cend() ? QString{} : it->resourceName;
 
 #if defined(HAVE_QLEMENTINE_APP_STYLE)
-    if (dynamic_cast<QlementineAppStyle*>(qApp ? qApp->style() : nullptr)) {
+    if (mode == Auto && dynamic_cast<QlementineAppStyle*>(qApp ? qApp->style() : nullptr)) {
         QIcon icon = iconFromThemeName(themeName);
         if (!icon.isNull())
             return icon;

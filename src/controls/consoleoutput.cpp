@@ -35,13 +35,13 @@ MessageStyle styleForType(ConsoleOutput::MessageType type)
 {
     switch (type) {
         case ConsoleOutput::MessageType::Warning:
-            return MessageStyle{ AppColors::warningBackground(), AppColors::warningBorder(), AppColors::warningForeground(), themedIcon(QStringLiteral("omodsim/warning")) };
+            return MessageStyle{ AppColors::warningBackground(), AppColors::warningBorder(), AppColors::warningForeground(), themedIcon(QStringLiteral("omodsim/warning"), ThemedIcons::Fallback) };
         case ConsoleOutput::MessageType::Error:
-            return MessageStyle{ AppColors::errorBackground(), AppColors::errorBorder(), AppColors::errorForeground(), themedIcon(QStringLiteral("omodsim/error")) };
+            return MessageStyle{ AppColors::errorBackground(), AppColors::errorBorder(), AppColors::errorForeground(), themedIcon(QStringLiteral("omodsim/error"), ThemedIcons::Fallback) };
         case ConsoleOutput::MessageType::Debug:
-            return MessageStyle{ AppColors::canvasBackground(), QColor(), AppColors::debugForeground(), themedIcon(QStringLiteral("omodsim/information")) };
+            return MessageStyle{ AppColors::canvasBackground(), QColor(), AppColors::debugForeground(), themedIcon(QStringLiteral("omodsim/information"), ThemedIcons::Fallback) };
         default:
-            return MessageStyle{ AppColors::canvasBackground(), QColor(), AppColors::logForeground(), themedIcon(QStringLiteral("omodsim/information")) };
+            return MessageStyle{ AppColors::canvasBackground(), QColor(), AppColors::logForeground(), themedIcon(QStringLiteral("omodsim/information"), ThemedIcons::Fallback) };
     }
 }
 

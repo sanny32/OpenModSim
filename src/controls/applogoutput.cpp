@@ -47,11 +47,11 @@ EventStyle styleForType(AppLogOutput::EventType type)
 {
     switch (type) {
         case AppLogOutput::EventType::Warning:
-            return EventStyle{ AppColors::warningBackground(), AppColors::warningBorder(), AppColors::warningForeground(), themedIcon(QStringLiteral("omodsim/warning")) };
+            return EventStyle{ AppColors::warningBackground(), AppColors::warningBorder(), AppColors::warningForeground(), themedIcon(QStringLiteral("omodsim/warning"), ThemedIcons::Fallback) };
         case AppLogOutput::EventType::Error:
-            return EventStyle{ AppColors::errorBackground(), AppColors::errorBorder(), AppColors::errorForeground(), themedIcon(QStringLiteral("omodsim/error")) };
+            return EventStyle{ AppColors::errorBackground(), AppColors::errorBorder(), AppColors::errorForeground(), themedIcon(QStringLiteral("omodsim/error"), ThemedIcons::Fallback) };
         default:
-            return EventStyle{ AppColors::canvasBackground(), QColor(), AppColors::logForeground(), themedIcon(QStringLiteral("omodsim/information")) };
+            return EventStyle{ AppColors::canvasBackground(), QColor(), AppColors::logForeground(), themedIcon(QStringLiteral("omodsim/information"), ThemedIcons::Fallback) };
     }
 }
 

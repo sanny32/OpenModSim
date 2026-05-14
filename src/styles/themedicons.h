@@ -15,12 +15,17 @@
 class ThemedIcons
 {
 public:
-    static QIcon icon(const QString& name);
+    enum IconMode {
+        Auto,     ///< theme-aware: theme first, fallback resource if not found
+        Fallback  ///< fallback resource only, bypasses theme lookup
+    };
+
+    static QIcon icon(const QString& name, IconMode mode = Auto);
 };
 
-inline QIcon themedIcon(const QString& name)
+inline QIcon themedIcon(const QString& name, ThemedIcons::IconMode mode = ThemedIcons::Auto)
 {
-    return ThemedIcons::icon(name);
+    return ThemedIcons::icon(name, mode);
 }
 
 #endif // THEMEDICONS_H
