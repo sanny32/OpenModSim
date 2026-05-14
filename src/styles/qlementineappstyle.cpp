@@ -342,7 +342,7 @@ QlementineAppStyle::QlementineAppStyle(QObject* parent)
 
     connect(this, &QlementineStyle::themeChanged, this, [this]() {
         for (auto* widget : QApplication::allWidgets())
-            polish(widget);
+            onApplyTheme(widget);
     });
 }
 
@@ -361,6 +361,29 @@ void QlementineAppStyle::updateTheme()
 bool QlementineAppStyle::isDarkMode() const
 {
     return AppColors::isDark();
+}
+
+///
+/// \brief QlementineAppStyle::onApplyTheme
+/// \param widget
+///
+void QlementineAppStyle::onApplyTheme(QWidget* widget) const
+{
+    if (auto* label = qobject_cast<QLabel*>(widget)) {
+        if (label->inherits("QTipLabel"))
+            label->setForegroundRole(QPalette::ToolTipText);
+        else
+            label->setForegroundRole(QPalette::WindowText);
+    }
+
+    if (qobject_cast<QPushButton*>(widget) || qobject_cast<QToolButton*>(widget)) {
+        auto font = widget->font();
+        font.setBold(false);
+        widget->setFont(font);
+    }
+
+    if (auto* mdiArea = qobject_cast<QMdiArea*>(widget))
+        mdiArea->setBackground(QBrush(theme().backgroundColorMain1));
 }
 
 ///
@@ -715,22 +738,7 @@ int QlementineAppStyle::pixelMetric(PixelMetric metric, const QStyleOption* opti
 void QlementineAppStyle::polish(QWidget* widget)
 {
     QlementineStyle::polish(widget);
-
-    if (auto* label = qobject_cast<QLabel*>(widget)) {
-        if (label->inherits("QTipLabel"))
-            label->setForegroundRole(QPalette::ToolTipText);
-        else
-            label->setForegroundRole(QPalette::WindowText);
-    }
-
-    if (qobject_cast<QPushButton*>(widget) || qobject_cast<QToolButton*>(widget)) {
-        auto font = widget->font();
-        font.setBold(false);
-        widget->setFont(font);
-    }
-
-    if (auto* mdiArea = qobject_cast<QMdiArea*>(widget))
-        mdiArea->setBackground(QBrush(theme().backgroundColorMain1));
+    onApplyTheme(widget);
 }
 
 ///
