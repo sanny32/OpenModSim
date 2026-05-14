@@ -109,8 +109,8 @@ public:
     void saveXml(QXmlStreamWriter& xml) const;
 
 signals:
-    void preferenceChanged(const QString& name, const QString& oldValue, const QString& newValue);
     void settingChanged(const QString& name, const QString& oldValue, const QString& newValue);
+    void globalSettingChanged(const QString& name, const QString& oldValue, const QString& newValue);
 
 private:
     AppPreferences();

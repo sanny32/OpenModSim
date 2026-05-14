@@ -96,7 +96,7 @@ void AppPreferences::setFont(const QFont& f)
     if (_font == f)
         return;
 
-    emit preferenceChanged("Font", fontToText(_font), fontToText(f));
+    emit settingChanged("Font", fontToText(_font), fontToText(f));
     _font = f;
 }
 
@@ -109,7 +109,7 @@ void AppPreferences::setFontZoom(int zoom)
     if (_fontZoom == zoom)
         return;
 
-    emit preferenceChanged("FontZoom", QString::number(_fontZoom), QString::number(zoom));
+    emit settingChanged("FontZoom", QString::number(_fontZoom), QString::number(zoom));
     _fontZoom = zoom;
 }
 
@@ -122,7 +122,7 @@ void AppPreferences::setBackgroundColor(const QColor& c)
     if (_backgroundColor == c)
         return;
 
-    emit preferenceChanged("BackgroundColor", _backgroundColor.name(), c.name());
+    emit settingChanged("BackgroundColor", _backgroundColor.name(), c.name());
     _backgroundColor = c;
 }
 
@@ -135,7 +135,7 @@ void AppPreferences::setForegroundColor(const QColor& c)
     if (_foregroundColor == c)
         return;
 
-    emit preferenceChanged("ForegroundColor", _foregroundColor.name(), c.name());
+    emit settingChanged("ForegroundColor", _foregroundColor.name(), c.name());
     _foregroundColor = c;
 }
 
@@ -148,7 +148,7 @@ void AppPreferences::setAddressColor(const QColor& c)
     if (_addressColor == c)
         return;
 
-    emit preferenceChanged("AddressColor", _addressColor.name(), c.name());
+    emit settingChanged("AddressColor", _addressColor.name(), c.name());
     _addressColor = c;
 }
 
@@ -161,7 +161,7 @@ void AppPreferences::setCommentColor(const QColor& c)
     if (_commentColor == c)
         return;
 
-    emit preferenceChanged("CommentColor", _commentColor.name(), c.name());
+    emit settingChanged("CommentColor", _commentColor.name(), c.name());
     _commentColor = c;
 }
 
@@ -174,7 +174,7 @@ void AppPreferences::setCheckForUpdates(bool enable)
     if (_checkForUpdates == enable)
         return;
 
-    emit preferenceChanged("CheckForUpdates", boolToText(_checkForUpdates), boolToText(enable));
+    emit settingChanged("CheckForUpdates", boolToText(_checkForUpdates), boolToText(enable));
     _checkForUpdates = enable;
 }
 
@@ -187,7 +187,7 @@ void AppPreferences::setLanguage(const QString& lang)
     if (_language == lang)
         return;
 
-    emit preferenceChanged("Language", _language, lang);
+    emit settingChanged("Language", _language, lang);
     _language = lang;
 }
 
@@ -197,13 +197,13 @@ void AppPreferences::setLanguage(const QString& lang)
 ///
 void AppPreferences::setDataViewDefinitions(const DataViewDefinitions& def)
 {
-    emit preferenceChanged("DataView.FormName", _dataViewDefinitions.FormName, def.FormName);
-    emit preferenceChanged("DataView.DeviceId", QString::number(_dataViewDefinitions.DeviceId), QString::number(def.DeviceId));
-    emit preferenceChanged("DataView.PointAddress", QString::number(_dataViewDefinitions.PointAddress), QString::number(def.PointAddress));
-    emit preferenceChanged("DataView.PointType", enumToString<QModbusDataUnit::RegisterType>(_dataViewDefinitions.PointType), enumToString<QModbusDataUnit::RegisterType>(def.PointType));
-    emit preferenceChanged("DataView.Length", QString::number(_dataViewDefinitions.Length), QString::number(def.Length));
-    emit preferenceChanged("DataView.ColumnsDistance", QString::number(_dataViewDefinitions.DataViewColumnsDistance), QString::number(def.DataViewColumnsDistance));
-    emit preferenceChanged("DataView.LeadingZeros", boolToText(_dataViewDefinitions.LeadingZeros), boolToText(def.LeadingZeros));
+    emit settingChanged("DataView.FormName", _dataViewDefinitions.FormName, def.FormName);
+    emit settingChanged("DataView.DeviceId", QString::number(_dataViewDefinitions.DeviceId), QString::number(def.DeviceId));
+    emit settingChanged("DataView.PointAddress", QString::number(_dataViewDefinitions.PointAddress), QString::number(def.PointAddress));
+    emit settingChanged("DataView.PointType", enumToString<QModbusDataUnit::RegisterType>(_dataViewDefinitions.PointType), enumToString<QModbusDataUnit::RegisterType>(def.PointType));
+    emit settingChanged("DataView.Length", QString::number(_dataViewDefinitions.Length), QString::number(def.Length));
+    emit settingChanged("DataView.ColumnsDistance", QString::number(_dataViewDefinitions.DataViewColumnsDistance), QString::number(def.DataViewColumnsDistance));
+    emit settingChanged("DataView.LeadingZeros", boolToText(_dataViewDefinitions.LeadingZeros), boolToText(def.LeadingZeros));
 
     _dataViewDefinitions = def;
 }
@@ -214,13 +214,13 @@ void AppPreferences::setDataViewDefinitions(const DataViewDefinitions& def)
 ///
 void AppPreferences::setTrafficViewDefinitions(const TrafficViewDefinitions& def)
 {
-    emit preferenceChanged("TrafficView.FormName", _trafficViewDefinitions.FormName, def.FormName);
-    emit preferenceChanged("TrafficView.UnitFilter", QString::number(_trafficViewDefinitions.UnitFilter), QString::number(def.UnitFilter));
-    emit preferenceChanged("TrafficView.FunctionCodeFilter", QString::number(_trafficViewDefinitions.FunctionCodeFilter), QString::number(def.FunctionCodeFilter));
-    emit preferenceChanged("TrafficView.LogLimit", QString::number(_trafficViewDefinitions.LogViewLimit), QString::number(def.LogViewLimit));
-    emit preferenceChanged("TrafficView.ExceptionsOnly", boolToText(_trafficViewDefinitions.ExceptionsOnly), boolToText(def.ExceptionsOnly));
-    emit preferenceChanged("TrafficView.AutoScroll", boolToText(_trafficViewDefinitions.Autoscroll), boolToText(def.Autoscroll));
-    emit preferenceChanged("TrafficView.HexView", boolToText(_trafficViewDefinitions.HexView), boolToText(def.HexView));
+    emit settingChanged("TrafficView.FormName", _trafficViewDefinitions.FormName, def.FormName);
+    emit settingChanged("TrafficView.UnitFilter", QString::number(_trafficViewDefinitions.UnitFilter), QString::number(def.UnitFilter));
+    emit settingChanged("TrafficView.FunctionCodeFilter", QString::number(_trafficViewDefinitions.FunctionCodeFilter), QString::number(def.FunctionCodeFilter));
+    emit settingChanged("TrafficView.LogLimit", QString::number(_trafficViewDefinitions.LogViewLimit), QString::number(def.LogViewLimit));
+    emit settingChanged("TrafficView.ExceptionsOnly", boolToText(_trafficViewDefinitions.ExceptionsOnly), boolToText(def.ExceptionsOnly));
+    emit settingChanged("TrafficView.AutoScroll", boolToText(_trafficViewDefinitions.Autoscroll), boolToText(def.Autoscroll));
+    emit settingChanged("TrafficView.HexView", boolToText(_trafficViewDefinitions.HexView), boolToText(def.HexView));
 
     _trafficViewDefinitions = def;
 }
@@ -231,10 +231,10 @@ void AppPreferences::setTrafficViewDefinitions(const TrafficViewDefinitions& def
 ///
 void AppPreferences::setScriptViewDefinitions(const ScriptViewDefinitions& def)
 {
-    emit preferenceChanged("ScriptView.FormName", _scriptViewDefinitions.FormName, def.FormName);
-    emit preferenceChanged("ScriptView.RunMode", enumToString<RunMode>(_scriptViewDefinitions.ScriptCfg.Mode), enumToString<RunMode>(def.ScriptCfg.Mode));
-    emit preferenceChanged("ScriptView.Interval", QString::number(_scriptViewDefinitions.ScriptCfg.Interval), QString::number(def.ScriptCfg.Interval));
-    emit preferenceChanged("ScriptView.RunOnStartup", boolToText(_scriptViewDefinitions.ScriptCfg.RunOnStartup), boolToText(def.ScriptCfg.RunOnStartup));
+    emit settingChanged("ScriptView.FormName", _scriptViewDefinitions.FormName, def.FormName);
+    emit settingChanged("ScriptView.RunMode", enumToString<RunMode>(_scriptViewDefinitions.ScriptCfg.Mode), enumToString<RunMode>(def.ScriptCfg.Mode));
+    emit settingChanged("ScriptView.Interval", QString::number(_scriptViewDefinitions.ScriptCfg.Interval), QString::number(def.ScriptCfg.Interval));
+    emit settingChanged("ScriptView.RunOnStartup", boolToText(_scriptViewDefinitions.ScriptCfg.RunOnStartup), boolToText(def.ScriptCfg.RunOnStartup));
 
     _scriptViewDefinitions = def;
 }
@@ -248,7 +248,7 @@ void AppPreferences::setGlobalAddressBase(AddressBase base)
     if (_globalAddressBase == base)
         return;
 
-    emit settingChanged("GlobalAddressBase", boolToText(_globalAddressBase == AddressBase::Base0), boolToText(base == AddressBase::Base0));
+    emit globalSettingChanged("GlobalAddressBase", boolToText(_globalAddressBase == AddressBase::Base0), boolToText(base == AddressBase::Base0));
     _globalAddressBase = base;
 }
 
@@ -264,7 +264,7 @@ void AppPreferences::setGlobalHexView(bool value)
     const QString oldValue = boolToText(_globalHexView);
     const QString newValue = boolToText(value);
     _globalHexView = value;
-    emit settingChanged("GlobalHexView", oldValue, newValue);
+    emit globalSettingChanged("GlobalHexView", oldValue, newValue);
 }
 
 ///
@@ -276,7 +276,7 @@ void AppPreferences::setScriptFont(const QFont& f)
     if (_scriptFont == f)
         return;
 
-    emit preferenceChanged("ScriptFont", fontToText(_scriptFont), fontToText(f));
+    emit settingChanged("ScriptFont", fontToText(_scriptFont), fontToText(f));
     _scriptFont = f;
 }
 
@@ -289,7 +289,7 @@ void AppPreferences::setCodeAutoComplete(bool enable)
     if (_codeAutoComplete == enable)
         return;
 
-    emit preferenceChanged("CodeAutoComplete", boolToText(_codeAutoComplete), boolToText(enable));
+    emit settingChanged("CodeAutoComplete", boolToText(_codeAutoComplete), boolToText(enable));
     _codeAutoComplete = enable;
 }
 
@@ -302,7 +302,7 @@ void AppPreferences::setAutoShowConsoleOutput(bool enable)
     if (_autoShowConsoleOutput == enable)
         return;
 
-    emit preferenceChanged("AutoShowConsoleOutput", boolToText(_autoShowConsoleOutput), boolToText(enable));
+    emit settingChanged("AutoShowConsoleOutput", boolToText(_autoShowConsoleOutput), boolToText(enable));
     _autoShowConsoleOutput = enable;
 }
 
@@ -315,7 +315,7 @@ void AppPreferences::setConsoleMaxLines(int n)
     if (_consoleMaxLines == n)
         return;
 
-    emit preferenceChanged("ConsoleMaxLines", QString::number(_consoleMaxLines), QString::number(n));
+    emit settingChanged("ConsoleMaxLines", QString::number(_consoleMaxLines), QString::number(n));
     _consoleMaxLines = n;
 }
 
@@ -331,7 +331,7 @@ void AppPreferences::setThemeMode(AppThemeMode mode)
     const QString oldValue = themeModeToText(_themeMode);
     const QString newValue = themeModeToText(mode);
     _themeMode = mode;
-    emit settingChanged("ThemeMode", oldValue, newValue);
+    emit globalSettingChanged("ThemeMode", oldValue, newValue);
 }
 
 ///
@@ -343,7 +343,7 @@ void AppPreferences::setShowWelcomeDialog(bool enable)
     if (_showWelcomeDialog == enable)
         return;
 
-    emit preferenceChanged("ShowWelcomeDialog", boolToText(_showWelcomeDialog), boolToText(enable));
+    emit settingChanged("ShowWelcomeDialog", boolToText(_showWelcomeDialog), boolToText(enable));
     _showWelcomeDialog = enable;
 }
 

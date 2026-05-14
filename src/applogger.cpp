@@ -442,7 +442,7 @@ void AppLogger::setupAppPreferencesLogging(AppPreferences& preferences, QObject*
 {
     Q_ASSERT(context != nullptr);
 
-    QObject::connect(&preferences, &AppPreferences::preferenceChanged, context,
+    QObject::connect(&preferences, &AppPreferences::settingChanged, context,
                      [](const QString& name, const QString& oldValue, const QString& newValue) {
         if (oldValue == newValue)
             return;
@@ -451,7 +451,7 @@ void AppLogger::setupAppPreferencesLogging(AppPreferences& preferences, QObject*
                             .arg(preferenceLabel(name), normalizedBoolText(oldValue), normalizedBoolText(newValue));
     }, Qt::DirectConnection);
 
-    QObject::connect(&preferences, &AppPreferences::settingChanged, context,
+    QObject::connect(&preferences, &AppPreferences::globalSettingChanged, context,
                      [](const QString& name, const QString& oldValue, const QString& newValue) {
         if (oldValue == newValue)
             return;

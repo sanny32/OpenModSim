@@ -27,7 +27,7 @@ AppTheme::AppTheme(QObject* parent)
                 this, [this]() { notifyColorSchemeChanged(); });
     }
 
-    connect(&AppPreferences::instance(), &AppPreferences::settingChanged,
+    connect(&AppPreferences::instance(), &AppPreferences::globalSettingChanged,
             this, [this](const QString& name, const QString&, const QString&) {
                 if (name == QLatin1String("ThemeMode"))
                     notifyColorSchemeChanged();

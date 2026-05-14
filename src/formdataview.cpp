@@ -139,7 +139,7 @@ FormDataView::FormDataView(ModbusMultiServer& server, DataSimulator* simulator, 
 
     setupDisplayBar();
     applyGlobalHexView(AppPreferences::instance().globalHexView());
-    connect(&AppPreferences::instance(), &AppPreferences::settingChanged, this,
+    connect(&AppPreferences::instance(), &AppPreferences::globalSettingChanged, this,
             [this](const QString& name, const QString&, const QString& newValue) {
         if (name == QLatin1String("GlobalHexView"))
             applyGlobalHexView(stringToBool(newValue));
