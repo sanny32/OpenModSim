@@ -342,7 +342,7 @@ QlementineAppStyle::QlementineAppStyle(QObject* parent)
 
     connect(this, &QlementineStyle::themeChanged, this, [this]() {
         for (auto* widget : QApplication::allWidgets())
-            onApplyTheme(widget);
+            polishWidget(widget);
     });
 }
 
@@ -364,10 +364,10 @@ bool QlementineAppStyle::isDarkMode() const
 }
 
 ///
-/// \brief QlementineAppStyle::onApplyTheme
+/// \brief QlementineAppStyle::polishWidget
 /// \param widget
 ///
-void QlementineAppStyle::onApplyTheme(QWidget* widget) const
+void QlementineAppStyle::polishWidget(QWidget* widget) const
 {
     if (auto* label = qobject_cast<QLabel*>(widget)) {
         if (label->inherits("QTipLabel"))
@@ -738,7 +738,7 @@ int QlementineAppStyle::pixelMetric(PixelMetric metric, const QStyleOption* opti
 void QlementineAppStyle::polish(QWidget* widget)
 {
     QlementineStyle::polish(widget);
-    onApplyTheme(widget);
+    polishWidget(widget);
 }
 
 ///

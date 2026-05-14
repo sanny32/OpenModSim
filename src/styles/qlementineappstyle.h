@@ -84,7 +84,7 @@ protected:
 private:
     void updateTheme();
     bool isDarkMode() const;
-    void onApplyTheme(QWidget* widget) const;
+    void polishWidget(QWidget* widget) const;
 
     oclero::qlementine::Theme _lightTheme;
     oclero::qlementine::Theme _darkTheme;
