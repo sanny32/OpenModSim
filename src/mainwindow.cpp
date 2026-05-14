@@ -976,6 +976,7 @@ void MainWindow::on_actionCloseProject_triggered()
 
     _project->closeProject();
     _projectFilePath.clear();
+    _lastProjectPath.clear();
     _isModified = false;
     updateProjectWindowTitle();
     updateMainToolbarState();
