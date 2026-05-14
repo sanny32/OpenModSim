@@ -216,6 +216,10 @@ cd OpenModSim
 ./build-macos.sh
 ```
 
+On macOS, OpenModSim uses [**Qlementine**](https://github.com/oclero/qlementine) style and [**Qlementine Icons**](https://github.com/oclero/qlementine-icons) by default when building with **Qt6 >= 6.8**.
+These dependencies are fetched automatically during CMake configure and improve icon/theme consistency on macOS.
+If you build with Qt5 or Qt6 < 6.8, OpenModSim falls back to the standard built-in style.
+
 The build script generates a macOS application bundle (`omodsim.app`). To run the application:
 ```bash
 open build-omodsim-Qt_*/omodsim.app
