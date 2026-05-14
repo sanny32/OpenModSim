@@ -443,8 +443,8 @@
     </message>
     <message>
         <location filename="../dialogs/dialogabout.ui" line="186"/>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;a href=&quot;#&quot;&gt;Lecense: The MIT License&lt;/a&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;a href=&quot;#&quot;&gt;License: The MIT License&lt;/a&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;a href=&quot;#&quot;&gt;许可证：MIT 许可证&lt;/a&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../dialogs/dialogabout.ui" line="223"/>
@@ -2833,67 +2833,67 @@ Open the download page?</source>
         <translation>地址基准</translation>
     </message>
     <message>
-        <location filename="../applogger.cpp" line="219"/>
+        <location filename="../applogger.cpp" line="220"/>
         <source>Server connected: %1</source>
         <translation>服务器已连接：%1</translation>
     </message>
     <message>
-        <location filename="../applogger.cpp" line="225"/>
+        <location filename="../applogger.cpp" line="226"/>
         <source>Server disconnected: %1</source>
         <translation>服务器已断开：%1</translation>
     </message>
     <message>
-        <location filename="../applogger.cpp" line="236"/>
+        <location filename="../applogger.cpp" line="237"/>
         <source>Modbus client connected: %1 -&gt; %2</source>
         <translation>Modbus客户端已连接：%1 → %2</translation>
     </message>
     <message>
-        <location filename="../applogger.cpp" line="243"/>
+        <location filename="../applogger.cpp" line="244"/>
         <source>Modbus client disconnected: %1 -&gt; %2</source>
         <translation>Modbus客户端已断开：%1 → %2</translation>
     </message>
     <message>
-        <location filename="../applogger.cpp" line="250"/>
+        <location filename="../applogger.cpp" line="251"/>
         <source>[Unit %1] %2</source>
         <translation>[单元 %1] %2</translation>
     </message>
     <message>
-        <location filename="../applogger.cpp" line="269"/>
+        <location filename="../applogger.cpp" line="270"/>
         <source>Address space added: unit %1, %2, starting address %3, length %4</source>
         <translation>地址空间已添加：单元 %1, %2, 起始地址 %3, 长度 %4</translation>
     </message>
     <message>
-        <location filename="../applogger.cpp" line="291"/>
+        <location filename="../applogger.cpp" line="292"/>
         <source>&lt;empty&gt;</source>
         <translation>&lt;空&gt;</translation>
     </message>
     <message>
-        <location filename="../applogger.cpp" line="307"/>
+        <location filename="../applogger.cpp" line="308"/>
         <source>Manual write: unit %1, %2, starting address %3, value %4</source>
         <translation>手动写入：单元 %1, %2, 起始地址 %3, 值 %4</translation>
     </message>
     <message>
-        <location filename="../applogger.cpp" line="320"/>
+        <location filename="../applogger.cpp" line="321"/>
         <source>Client write: %1 -&gt; unit %2, %3, starting address %4, value %5</source>
         <translation>客户端写入：%1 → 单元 %2, %3, 起始地址 %4, 值 %5</translation>
     </message>
     <message>
-        <location filename="../applogger.cpp" line="317"/>
+        <location filename="../applogger.cpp" line="318"/>
         <source>unknown client</source>
         <translation>未知客户端</translation>
     </message>
     <message>
-        <location filename="../applogger.cpp" line="293"/>
+        <location filename="../applogger.cpp" line="294"/>
         <source>Address comment changed: unit %1, %2, address %3: &apos;%4&apos;</source>
         <translation>地址注释已更改：单元 %1, %2, 地址 %3: &apos;%4&apos;</translation>
     </message>
     <message>
-        <location filename="../applogger.cpp" line="351"/>
+        <location filename="../applogger.cpp" line="352"/>
         <source>Auto simulation enabled (%1): unit %2, %3, address %4</source>
         <translation>自动仿真已启用（%1）：单元 %2, %3, 地址 %4</translation>
     </message>
     <message>
-        <location filename="../applogger.cpp" line="365"/>
+        <location filename="../applogger.cpp" line="366"/>
         <source>Auto simulation disabled: unit %1, %2, address %3</source>
         <translation>自动仿真已禁用：单元 %1, %2, 地址 %3</translation>
     </message>
@@ -3018,102 +3018,107 @@ Open the download page?</source>
         <translation>流量视图.自动滚动</translation>
     </message>
     <message>
-        <location filename="../applogger.cpp" line="140"/>
+        <location filename="../applogger.cpp" line="129"/>
+        <source>ThemeMode</source>
+        <translation>主题模式</translation>
+    </message>
+    <message>
+        <location filename="../applogger.cpp" line="141"/>
         <source>true</source>
         <translation>是</translation>
     </message>
     <message>
-        <location filename="../applogger.cpp" line="142"/>
+        <location filename="../applogger.cpp" line="143"/>
         <source>false</source>
         <translation>否</translation>
     </message>
     <message>
-        <location filename="../applogger.cpp" line="168"/>
+        <location filename="../applogger.cpp" line="169"/>
         <source>enabled</source>
         <translation>已启用</translation>
     </message>
     <message>
-        <location filename="../applogger.cpp" line="170"/>
+        <location filename="../applogger.cpp" line="171"/>
         <source>disabled</source>
         <translation>已禁用</translation>
     </message>
     <message>
-        <location filename="../applogger.cpp" line="256"/>
+        <location filename="../applogger.cpp" line="257"/>
         <source>Unit ID added: %1</source>
         <translation>单元ID已添加：%1</translation>
     </message>
     <message>
-        <location filename="../applogger.cpp" line="262"/>
+        <location filename="../applogger.cpp" line="263"/>
         <source>Unit ID removed: %1</source>
         <translation>单元ID已删除：%1</translation>
     </message>
     <message>
-        <location filename="../applogger.cpp" line="278"/>
+        <location filename="../applogger.cpp" line="279"/>
         <source>Address space removed: unit %1, %2, starting address %3, length %4</source>
         <translation>地址空间已删除：单元 %1, %2, 起始地址 %3, 长度 %4</translation>
     </message>
     <message>
-        <location filename="../applogger.cpp" line="384"/>
+        <location filename="../applogger.cpp" line="385"/>
         <source>Project opened: %1</source>
         <translation>项目已打开：%1</translation>
     </message>
     <message>
-        <location filename="../applogger.cpp" line="391"/>
+        <location filename="../applogger.cpp" line="392"/>
         <source>&lt;unsaved&gt;</source>
         <translation>&lt;未保存&gt;</translation>
     </message>
     <message>
-        <location filename="../applogger.cpp" line="394"/>
+        <location filename="../applogger.cpp" line="395"/>
         <source>Project closed: %1</source>
         <translation>项目已关闭：%1</translation>
     </message>
     <message>
-        <location filename="../applogger.cpp" line="400"/>
+        <location filename="../applogger.cpp" line="401"/>
         <source>Project saved: %1</source>
         <translation>项目已保存：%1</translation>
     </message>
     <message>
-        <location filename="../applogger.cpp" line="406"/>
+        <location filename="../applogger.cpp" line="407"/>
         <source>Project save failed: %1 (%2)</source>
         <translation>项目保存失败：%1 (%2)</translation>
     </message>
     <message>
-        <location filename="../applogger.cpp" line="413"/>
+        <location filename="../applogger.cpp" line="414"/>
         <source>Form created: %1</source>
         <translation>窗体已创建：%1</translation>
     </message>
     <message>
-        <location filename="../applogger.cpp" line="419"/>
+        <location filename="../applogger.cpp" line="420"/>
         <source>Form opened: %1</source>
         <translation>窗体已打开：%1</translation>
     </message>
     <message>
-        <location filename="../applogger.cpp" line="425"/>
+        <location filename="../applogger.cpp" line="426"/>
         <source>Form closed: %1</source>
         <translation>窗体已关闭：%1</translation>
     </message>
     <message>
-        <location filename="../applogger.cpp" line="431"/>
+        <location filename="../applogger.cpp" line="432"/>
         <source>Form deleted: %1</source>
         <translation>窗体已删除：%1</translation>
     </message>
     <message>
-        <location filename="../applogger.cpp" line="450"/>
+        <location filename="../applogger.cpp" line="451"/>
         <source>Preference changed: %1: %2 -&gt; %3</source>
         <translation>首选项已更改：%1：%2 → %3</translation>
     </message>
     <message>
-        <location filename="../applogger.cpp" line="459"/>
+        <location filename="../applogger.cpp" line="460"/>
         <source>%1 changed: %2 -&gt; %3</source>
         <translation>%1 已更改：%2 → %3</translation>
     </message>
     <message>
-        <location filename="../applogger.cpp" line="477"/>
+        <location filename="../applogger.cpp" line="478"/>
         <source>Script started: %1 (mode: %2, interval: %3 ms)</source>
         <translation>脚本已启动：%1（模式：%2，间隔：%3 毫秒）</translation>
     </message>
     <message>
-        <location filename="../applogger.cpp" line="482"/>
+        <location filename="../applogger.cpp" line="483"/>
         <source>Script started: %1 (mode: %2)</source>
         <translation>脚本已启动：%1（模式：%2）</translation>
     </message>
@@ -3123,12 +3128,12 @@ Open the download page?</source>
         <translation>移至其他面板</translation>
     </message>
     <message>
-        <location filename="../applogger.cpp" line="156"/>
+        <location filename="../applogger.cpp" line="157"/>
         <source>1-based</source>
         <translation>基地址为-1</translation>
     </message>
     <message>
-        <location filename="../applogger.cpp" line="154"/>
+        <location filename="../applogger.cpp" line="155"/>
         <source>0-based</source>
         <translation>基地址为-0</translation>
     </message>
@@ -3160,7 +3165,7 @@ Open the download page?</source>
         <translation>JavaScript文件 (*.js);;所有文件 (*)</translation>
     </message>
     <message>
-        <location filename="../applogger.cpp" line="496"/>
+        <location filename="../applogger.cpp" line="497"/>
         <source>Script stopped: %1</source>
         <translation>脚本已停止：%1</translation>
     </message>
@@ -3941,14 +3946,14 @@ Open the download page?</source>
 <context>
     <name>RunModeComboBox</name>
     <message>
-        <location filename="../applogger.cpp" line="198"/>
+        <location filename="../applogger.cpp" line="199"/>
         <location filename="../controls/runmodecombobox.cpp" line="19"/>
         <location filename="../controls/runmodecombobox.cpp" line="39"/>
         <source>Once</source>
         <translation>一次</translation>
     </message>
     <message>
-        <location filename="../applogger.cpp" line="200"/>
+        <location filename="../applogger.cpp" line="201"/>
         <location filename="../controls/runmodecombobox.cpp" line="20"/>
         <location filename="../controls/runmodecombobox.cpp" line="43"/>
         <source>Periodically</source>

@@ -126,6 +126,7 @@ QString preferenceLabel(const QString& key)
     if (key == QLatin1String("TrafficView.AutoScroll")) return QCoreApplication::translate("MainWindow", "TrafficView.AutoScroll");
     if (key == QLatin1String("GlobalAddressBase")) return QCoreApplication::translate("MainWindow", "Address Base");
     if (key == QLatin1String("GlobalHexView")) return QCoreApplication::translate("MainWindow", "Hex View");
+    if (key == QLatin1String("ThemeMode")) return QCoreApplication::translate("MainWindow", "ThemeMode");
     return key;
 }
 
