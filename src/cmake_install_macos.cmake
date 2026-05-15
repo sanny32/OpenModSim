@@ -6,6 +6,13 @@ endif()
 install(TARGETS ${PROJECT_NAME} BUNDLE DESTINATION .)
 
 install(CODE "
+    find_program(_macdeployqt_executable macdeployqt
+        HINTS
+            \"${QT_BINARY_DIR}\"
+            \"${QT_LIBEXEC_DIR}\"
+            \"${QT_INSTALL_LIBEXECS}\"
+    )
+
     set(_installed_app \"\$ENV{DESTDIR}\${CMAKE_INSTALL_PREFIX}/${PROJECT_NAME}.app\")
     set(_resources_dir \"\${_installed_app}/Contents/Resources\")
     set(_docs_source \"${PROJECT_BINARY_DIR}/docs\")
@@ -41,9 +48,10 @@ install(CODE "
         endif()
     endif()
 
-    if(EXISTS \"${MACDEPLOYQT_EXECUTABLE}\")
+    if(_macdeployqt_executable)
+        message(STATUS \"macdeployqt found at: \${_macdeployqt_executable}\")
         execute_process(
-            COMMAND \"${MACDEPLOYQT_EXECUTABLE}\"
+            COMMAND \"\${_macdeployqt_executable}\"
                     \"\${_installed_app}\"
                     -always-overwrite
             RESULT_VARIABLE _macdeployqt_result
@@ -51,5 +59,7 @@ install(CODE "
         if(NOT _macdeployqt_result EQUAL 0)
             message(FATAL_ERROR \"macdeployqt failed with exit code \${_macdeployqt_result}\")
         endif()
+    else()
+        message(WARNING \"macdeployqt not found - macOS install will not deploy Qt runtime\")
     endif()
 ")

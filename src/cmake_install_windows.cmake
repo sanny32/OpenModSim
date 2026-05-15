@@ -7,8 +7,17 @@ install(TARGETS ${PROJECT_NAME} RUNTIME DESTINATION .)
 install(DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/../demos" DESTINATION .)
 install(DIRECTORY "${PROJECT_BINARY_DIR}/docs" DESTINATION .)
 
-if(WINDEPLOYQT_EXECUTABLE)
-    install(CODE "
+install(CODE "
+    find_program(_windeployqt_executable windeployqt
+        HINTS
+            \"${QT_BINARY_DIR}\"
+            \"${QT_LIBEXEC_DIR}\"
+            \"${QT_INSTALL_LIBEXECS}\"
+    )
+
+    if(_windeployqt_executable)
+        message(STATUS \"windeployqt found at: \${_windeployqt_executable}\")
+
         set(_installed_exe \"\$ENV{DESTDIR}\${CMAKE_INSTALL_PREFIX}/omodsim.exe\")
         get_filename_component(_installed_exe_dir \"\${_installed_exe}\" DIRECTORY)
         set(_plugin_dir \"\${_installed_exe_dir}/plugins\")
@@ -30,12 +39,12 @@ if(WINDEPLOYQT_EXECUTABLE)
             --no-system-d3d-compiler
         )
 
-        if(\"${Qt6_FOUND}\" STREQUAL \"TRUE\")
+        if(\"${Qt6_FOUND}\")
             list(APPEND _windeploy_args
                  --no-system-dxc-compiler
                  --skip-plugin-types help,generic,networkinformation,qmltooling,tls
                  --exclude-plugins qgif,qjpeg,qpdf,qsqlibase,qsqlmimer,qsqloci,qsqlodbc,qsqlpsql)
-        elseif(\"${Qt5_FOUND}\" STREQUAL \"TRUE\")
+        elseif(\"${Qt5_FOUND}\")
             list(APPEND _windeploy_args
                  --no-angle
                  --no-quick)
@@ -44,7 +53,7 @@ if(WINDEPLOYQT_EXECUTABLE)
         list(APPEND _windeploy_args \"\${_installed_exe}\")
 
         execute_process(
-            COMMAND \"${WINDEPLOYQT_EXECUTABLE}\" \${_windeploy_args}
+            COMMAND \"\${_windeployqt_executable}\" \${_windeploy_args}
             RESULT_VARIABLE _windeployqt_result
         )
 
@@ -62,5 +71,7 @@ if(WINDEPLOYQT_EXECUTABLE)
                 file(REMOVE_RECURSE \"\${_qml_dir}\")
             endif()
         endif()
-    ")
-endif()
+    else()
+        message(WARNING \"windeployqt not found - Windows install will not deploy Qt runtime\")
+    endif()
+")

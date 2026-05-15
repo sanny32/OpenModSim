@@ -75,15 +75,6 @@ else()
     set(QT_LIBEXEC_DIR "${QT_BINARY_DIR}")
 endif()
 
-if(WIN32)
-    find_program(WINDEPLOYQT_EXECUTABLE windeployqt HINTS "${QT_BINARY_DIR}" "${QT_LIBEXEC_DIR}" "${QT_INSTALL_LIBEXECS}")
-    if(WINDEPLOYQT_EXECUTABLE)
-        message(STATUS "windeployqt found at: ${WINDEPLOYQT_EXECUTABLE}")
-    else()
-        message(WARNING "windeployqt not found - Windows install will not deploy Qt runtime")
-    endif()
-endif()
-
 if(USE_QLEMENTINE_APP_STYLE AND Qt6_FOUND AND Qt6_VERSION VERSION_GREATER_EQUAL "6.8")
     include(FetchContent)
     set(QLEMENTINE_VERSION "1.4.2")
@@ -99,15 +90,6 @@ if(USE_QLEMENTINE_APP_STYLE AND Qt6_FOUND AND Qt6_VERSION VERSION_GREATER_EQUAL 
         GIT_TAG        "v${QLEMENTINE_ICONS_VERSION}"
     )
     FetchContent_MakeAvailable(qlementine-icons)
-endif()
-
-if(APPLE)
-    find_program(MACDEPLOYQT_EXECUTABLE macdeployqt HINTS "${QT_BINARY_DIR}" "${QT_LIBEXEC_DIR}" "${QT_INSTALL_LIBEXECS}")
-    if(MACDEPLOYQT_EXECUTABLE)
-        message(STATUS "macdeployqt found at: ${MACDEPLOYQT_EXECUTABLE}")
-    else()
-        message(WARNING "macdeployqt not found - macOS install will not deploy Qt runtime")
-    endif()
 endif()
 
 # Define target
