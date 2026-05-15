@@ -62,6 +62,7 @@ __pycache__
 
 .claude
 .directory
+.DS_Store
 *.cmd
 *.bat
 *.qmake.stash
