@@ -33,18 +33,18 @@
         fill="url(#bgGrad)"/>
 
   <!-- Top-left: Cyan card -->
-  <rect x="109" y="228" width="373" height="237" rx="38" ry="38"
+  <rect x="148" y="258" width="326" height="207" rx="33" ry="33"
         fill="url(#cyanGrad)"/>
 
   <!-- Top-right: Gray card -->
-  <rect x="543" y="228" width="373" height="237" rx="38" ry="38"
+  <rect x="552" y="258" width="326" height="207" rx="33" ry="33"
         fill="url(#grayGradTR)"/>
 
   <!-- Bottom-left: Gray card -->
-  <rect x="109" y="539" width="373" height="242" rx="38" ry="38"
+  <rect x="148" y="539" width="326" height="212" rx="33" ry="33"
         fill="url(#grayGradBL)"/>
 
   <!-- Bottom-right: Blue card -->
-  <rect x="543" y="539" width="373" height="242" rx="38" ry="38"
+  <rect x="552" y="539" width="326" height="212" rx="33" ry="33"
         fill="url(#blueGrad)"/>
 </svg>
