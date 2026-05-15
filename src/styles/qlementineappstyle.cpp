@@ -33,6 +33,7 @@
 #include <QStyleOptionViewItem>
 #include <QApplication>
 #include <QMdiArea>
+#include <QMdiSubWindow>
 #include <QTextBrowser>
 #include <QTabBar>
 #include <QToolBar>
@@ -842,6 +843,16 @@ int QlementineAppStyle::styleHint(StyleHint hint, const QStyleOption* option,
         const auto* parent = toolButton ? toolButton->parentWidget() : nullptr;
         if (parent && parent->objectName() == QStringLiteral("toolBarMain"))
             return toolButton->toolButtonStyle();
+    }
+
+    // QMdiSubWindow::isWindow()==false causes QFocusFrame to escape the subwindow hierarchy → mapTo warnings on close.
+    if (hint == SH_FocusFrame_AboveWidget && widget) {
+        const QWidget* w = widget->parentWidget();
+        while (w) {
+            if (qobject_cast<const QMdiSubWindow*>(w))
+                return 0;
+            w = w->parentWidget();
+        }
     }
 
     return QlementineStyle::styleHint(hint, option, widget, returnData);
