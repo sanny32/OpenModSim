@@ -1,4 +1,4 @@
-name: Build macOS DMG (Qt6, Universal)
+name: Build macOS DMG (Qt6, arm64)
 
 on:
   push:
@@ -26,7 +26,6 @@ jobs:
       QT_VERSION: "6.9.3"
       QT_INSTALL_DIR: "${{ github.workspace }}/Qt"
       CMAKE_GENERATOR: "Ninja"
-      CMAKE_OSX_ARCHITECTURES: "x86_64;arm64"
       BUILD_TYPE: "Release"
       DMG_PACKAGE_PREFIX: "qt6-omodsim"
       DMG_STAGING_DIR: "${{ github.workspace }}/dmg-root"
@@ -103,7 +102,7 @@ jobs:
           cache: true
 
       - name: Set BUILD_DIR
-        run: echo "BUILD_DIR=build-omodsim-Qt_${{ env.QT_VERSION }}_clang_universal-${{ env.BUILD_TYPE }}" >> $GITHUB_ENV
+        run: echo "BUILD_DIR=build-omodsim-Qt_${{ env.QT_VERSION }}_clang_arm64-${{ env.BUILD_TYPE }}" >> $GITHUB_ENV
 
       - name: Configure project
         run: |
@@ -112,7 +111,6 @@ jobs:
             -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} \
             -DCMAKE_PREFIX_PATH=${{ env.QT_ROOT_DIR }} \
             -DCMAKE_INSTALL_PREFIX=/Applications \
-            -DCMAKE_OSX_ARCHITECTURES="${{ env.CMAKE_OSX_ARCHITECTURES }}" \
             -DUSE_QT6=ON \
             -DPRERELEASE_SUFFIX=${{ env.PRERELEASE_SUFFIX }}
 
@@ -129,13 +127,13 @@ jobs:
         run: |
           ln -s /Applications "${{ env.DMG_STAGING_DIR }}/Applications"
 
-      - name: Verify universal binary
+      - name: Verify arm64 binary
         run: |
           lipo -info "${{ env.DMG_STAGING_DIR }}/omodsim.app/Contents/MacOS/omodsim"
 
       - name: Create DMG
         run: |
-          DMG_NAME="${{ env.DMG_PACKAGE_PREFIX }}${{ env.APP_MAJOR_VERSION }}_${{ env.APP_VERSION }}_universal.dmg"
+          DMG_NAME="${{ env.DMG_PACKAGE_PREFIX }}${{ env.APP_MAJOR_VERSION }}_${{ env.APP_VERSION }}_arm64.dmg"
           echo "DMG_NAME=$DMG_NAME" >> $GITHUB_ENV
 
           hdiutil create -volname "Open ModSim ${{ env.APP_VERSION }}" \
