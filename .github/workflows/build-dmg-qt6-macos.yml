@@ -20,7 +20,7 @@ permissions:
 jobs:
   build-omodsim:
     name: Build OpenModSim macOS DMG version '${{ github.event.inputs.tag || github.event.inputs.branch || github.ref_name }}' with Qt6 (arm64)
-    runs-on: macos-latest
+    runs-on: macos-26-arm64
 
     env:
       QT_VERSION: "6.9.3"
@@ -119,14 +119,11 @@ jobs:
 
       - name: Verify app icon in build bundle
         run: |
-          ICON_CAR="${{ env.BUILD_DIR }}/omodsim.app/Contents/Resources/Assets.car"
-          ICON_ICNS="${{ env.BUILD_DIR }}/omodsim.app/Contents/Resources/omodsim.icns"
-          if [ ! -f "$ICON_CAR" ] && [ ! -f "$ICON_ICNS" ]; then
+          RESOURCES="${{ env.BUILD_DIR }}/omodsim.app/Contents/Resources"
+          if [ ! -f "${RESOURCES}/Assets.car" ] && [ ! -f "${RESOURCES}/omodsim.icns" ]; then
             echo "Error: app icon not found in build bundle (actool may have failed)"
-            ls "${{ env.BUILD_DIR }}/omodsim.app/Contents/Resources/" || true
             exit 1
           fi
-          echo "App icon OK"
 
       - name: Install app bundle into DMG staging directory
         run: |
