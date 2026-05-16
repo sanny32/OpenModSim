@@ -11,31 +11,6 @@ function(omodsim_configure_target_macos target_name)
         )
 
         find_program(ACTOOL_EXECUTABLE actool REQUIRED)
-        set(MACOSX_ACTOOL_SCRIPT "${PROJECT_BINARY_DIR}/run_actool.cmake")
-
-        file(WRITE "${MACOSX_ACTOOL_SCRIPT}" [=[
-execute_process(
-    COMMAND "${ACTOOL_EXECUTABLE}"
-        "${MACOSX_COMPOSER_ICON}"
-        --app-icon "${MACOSX_COMPOSER_ICON_NAME}"
-        --compile "${MACOSX_ICON_OUTPUT_DIR}"
-        --output-partial-info-plist "${MACOSX_ICON_PARTIAL_INFO_PLIST}"
-        --minimum-deployment-target "11.0"
-        --platform macosx
-        --target-device mac
-        --include-all-app-icons
-    RESULT_VARIABLE ACTOOL_RESULT
-    OUTPUT_FILE "${MACOSX_ICON_ACTOOL_OUTPUT}"
-)
-
-if(NOT ACTOOL_RESULT EQUAL 0)
-    file(READ "${MACOSX_ICON_ACTOOL_OUTPUT}" ACTOOL_OUTPUT)
-    message(FATAL_ERROR
-        "actool failed with exit code ${ACTOOL_RESULT}\n"
-        "${ACTOOL_OUTPUT}"
-    )
-endif()
-]=])
 
         set(MACOSX_ASSET_ICON_PLIST_ENTRY
 "    <key>CFBundleIconName</key>
@@ -48,14 +23,15 @@ endif()
                 "${MACOSX_ICON_OUTPUT_DIR}"
             COMMAND "${CMAKE_COMMAND}" -E remove_directory
                 "${MACOSX_ICON_OUTPUT_DIR}/${MACOSX_COMPOSER_ICON_NAME}.icon"
-            COMMAND "${CMAKE_COMMAND}"
-                -DACTOOL_EXECUTABLE="${ACTOOL_EXECUTABLE}"
-                -DMACOSX_COMPOSER_ICON="${MACOSX_COMPOSER_ICON}"
-                -DMACOSX_COMPOSER_ICON_NAME="${MACOSX_COMPOSER_ICON_NAME}"
-                -DMACOSX_ICON_OUTPUT_DIR="${MACOSX_ICON_OUTPUT_DIR}"
-                -DMACOSX_ICON_PARTIAL_INFO_PLIST="${PROJECT_BINARY_DIR}/assetcatalog_generated_info.plist"
-                -DMACOSX_ICON_ACTOOL_OUTPUT="${PROJECT_BINARY_DIR}/actool_output.plist"
-                -P "${MACOSX_ACTOOL_SCRIPT}"
+            COMMAND "${ACTOOL_EXECUTABLE}"
+                "${MACOSX_COMPOSER_ICON}"
+                --app-icon "${MACOSX_COMPOSER_ICON_NAME}"
+                --compile "${MACOSX_ICON_OUTPUT_DIR}"
+                --output-partial-info-plist "${PROJECT_BINARY_DIR}/assetcatalog_generated_info.plist"
+                --minimum-deployment-target "11.0"
+                --platform macosx
+                --target-device mac
+                --include-all-app-icons
             DEPENDS ${MACOSX_COMPOSER_ICON_FILES}
             COMMENT "Synchronizing macOS Icon Composer app icon assets"
         )
