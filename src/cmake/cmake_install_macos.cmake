@@ -60,6 +60,6 @@ install(CODE "
             message(FATAL_ERROR \"macdeployqt failed with exit code \${_macdeployqt_result}\")
         endif()
     else()
-        message(WARNING \"macdeployqt not found - macOS install will not deploy Qt runtime\")
+        message(FATAL_ERROR \"macdeployqt not found - cannot deploy Qt runtime into app bundle\")
     endif()
 ")
