@@ -119,11 +119,16 @@ jobs:
 
       - name: Verify app icon in build bundle
         run: |
+          echo "=== Resources dir ==="
+          ls "${{ env.BUILD_DIR }}/omodsim.app/Contents/Resources/" || true
+          echo "=== actool output ==="
+          cat "${{ env.BUILD_DIR }}/actool_output.plist" || echo "(actool_output.plist not found)"
+          echo "=== run_actool.cmake ==="
+          cat "${{ env.BUILD_DIR }}/run_actool.cmake" || echo "(run_actool.cmake not found)"
           ICON_CAR="${{ env.BUILD_DIR }}/omodsim.app/Contents/Resources/Assets.car"
           ICON_ICNS="${{ env.BUILD_DIR }}/omodsim.app/Contents/Resources/omodsim.icns"
           if [ ! -f "$ICON_CAR" ] && [ ! -f "$ICON_ICNS" ]; then
             echo "Error: app icon not found in build bundle (actool may have failed)"
-            ls "${{ env.BUILD_DIR }}/omodsim.app/Contents/Resources/" || true
             exit 1
           fi
           echo "App icon OK"
