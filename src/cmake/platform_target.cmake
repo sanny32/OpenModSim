@@ -20,7 +20,6 @@ function(omodsim_configure_platform_target target_name)
     elseif(APPLE)
         set(MACOSX_COMPOSER_ICON_NAME "omodsim")
         set(MACOSX_COMPOSER_ICON "${CMAKE_CURRENT_SOURCE_DIR}/res/${MACOSX_COMPOSER_ICON_NAME}.icon")
-        set(MACOSX_LEGACY_ICON "${CMAKE_CURRENT_SOURCE_DIR}/res/${MACOSX_COMPOSER_ICON_NAME}.icns")
         set(MACOSX_BUNDLE_ICON_FILE "${MACOSX_COMPOSER_ICON_NAME}")
         set(MACOSX_ASSET_ICON_PLIST_ENTRY "")
 
@@ -31,7 +30,6 @@ function(omodsim_configure_platform_target target_name)
             )
 
             find_program(ACTOOL_EXECUTABLE actool REQUIRED)
-            set(MACOSX_BUNDLE_ICON_FILE "${MACOSX_COMPOSER_ICON_NAME}")
             set(MACOSX_ACTOOL_SCRIPT "${PROJECT_BINARY_DIR}/run_actool.cmake")
 
             file(WRITE "${MACOSX_ACTOOL_SCRIPT}" [=[
@@ -62,22 +60,6 @@ endif()
 "    <key>CFBundleIconName</key>
     <string>${MACOSX_COMPOSER_ICON_NAME}</string>")
 
-            add_custom_command(TARGET ${target_name} POST_BUILD
-                COMMAND "${CMAKE_COMMAND}" -E make_directory
-                    "$<TARGET_BUNDLE_CONTENT_DIR:${target_name}>/Resources"
-                COMMAND "${CMAKE_COMMAND}" -E remove_directory
-                    "$<TARGET_BUNDLE_CONTENT_DIR:${target_name}>/Resources/${MACOSX_COMPOSER_ICON_NAME}.icon"
-                COMMAND "${CMAKE_COMMAND}"
-                    -DACTOOL_EXECUTABLE="${ACTOOL_EXECUTABLE}"
-                    -DMACOSX_COMPOSER_ICON="${MACOSX_COMPOSER_ICON}"
-                    -DMACOSX_COMPOSER_ICON_NAME="${MACOSX_COMPOSER_ICON_NAME}"
-                    -DMACOSX_ICON_OUTPUT_DIR="$<TARGET_BUNDLE_CONTENT_DIR:${target_name}>/Resources"
-                    -DMACOSX_ICON_PARTIAL_INFO_PLIST="${PROJECT_BINARY_DIR}/assetcatalog_generated_info.plist"
-                    -DMACOSX_ICON_ACTOOL_OUTPUT="${PROJECT_BINARY_DIR}/actool_output.plist"
-                    -P "${MACOSX_ACTOOL_SCRIPT}"
-                COMMENT "Compiling macOS Icon Composer app icon"
-            )
-
             add_custom_target(${target_name}_macos_appicon ALL
                 COMMAND "${CMAKE_COMMAND}" -E make_directory
                     "$<TARGET_BUNDLE_CONTENT_DIR:${target_name}>/Resources"
@@ -95,14 +77,9 @@ endif()
                 COMMENT "Synchronizing macOS Icon Composer app icon assets"
             )
             add_dependencies(${target_name}_macos_appicon ${target_name})
-        elseif(EXISTS "${MACOSX_LEGACY_ICON}")
-            set(MACOSX_BUNDLE_ICON_FILE "${MACOSX_COMPOSER_ICON_NAME}.icns")
-            set_source_files_properties(${MACOSX_LEGACY_ICON} PROPERTIES MACOSX_PACKAGE_LOCATION "Resources")
-            target_sources(${target_name} PRIVATE ${MACOSX_LEGACY_ICON})
         else()
             message(FATAL_ERROR
-                "No macOS app icon found. Expected ${MACOSX_COMPOSER_ICON} "
-                "or fallback ${MACOSX_LEGACY_ICON}."
+                "No macOS app icon found. Expected ${MACOSX_COMPOSER_ICON}."
             )
         endif()
 
