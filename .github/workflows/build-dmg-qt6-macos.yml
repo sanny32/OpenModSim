@@ -131,6 +131,12 @@ jobs:
           mkdir -p "${{ env.DMG_STAGING_DIR }}"
           cmake --install "${{ env.BUILD_DIR }}" --config "${{ env.BUILD_TYPE }}" --prefix "${{ env.DMG_STAGING_DIR }}"
 
+      - name: Sign app bundle (ad-hoc)
+        run: |
+          codesign --deep --force --sign - \
+            --options runtime \
+            "${{ env.DMG_STAGING_DIR }}/omodsim.app"
+
       - name: Add Applications symlink to DMG staging directory
         run: |
           ln -s /Applications "${{ env.DMG_STAGING_DIR }}/Applications"
