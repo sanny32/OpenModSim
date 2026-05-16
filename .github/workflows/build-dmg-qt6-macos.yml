@@ -117,6 +117,17 @@ jobs:
       - name: Build
         run: cmake --build ${{ env.BUILD_DIR }} --config ${{ env.BUILD_TYPE }} --parallel
 
+      - name: Verify app icon in build bundle
+        run: |
+          ICON_CAR="${{ env.BUILD_DIR }}/omodsim.app/Contents/Resources/Assets.car"
+          ICON_ICNS="${{ env.BUILD_DIR }}/omodsim.app/Contents/Resources/omodsim.icns"
+          if [ ! -f "$ICON_CAR" ] && [ ! -f "$ICON_ICNS" ]; then
+            echo "Error: app icon not found in build bundle (actool may have failed)"
+            ls "${{ env.BUILD_DIR }}/omodsim.app/Contents/Resources/" || true
+            exit 1
+          fi
+          echo "App icon OK"
+
       - name: Install app bundle into DMG staging directory
         run: |
           rm -rf "${{ env.DMG_STAGING_DIR }}"
