@@ -123,8 +123,12 @@ jobs:
           ls "${{ env.BUILD_DIR }}/omodsim.app/Contents/Resources/" || true
           echo "=== actool output ==="
           cat "${{ env.BUILD_DIR }}/actool_output.plist" || echo "(actool_output.plist not found)"
-          echo "=== run_actool.cmake ==="
-          cat "${{ env.BUILD_DIR }}/run_actool.cmake" || echo "(run_actool.cmake not found)"
+          echo "=== assetcatalog_generated_info.plist ==="
+          cat "${{ env.BUILD_DIR }}/assetcatalog_generated_info.plist" || echo "(not found)"
+          echo "=== find Assets.car anywhere in build ==="
+          find "${{ env.BUILD_DIR }}" -name "Assets.car" 2>/dev/null || echo "(not found)"
+          echo "=== find omodsim.icns anywhere in build ==="
+          find "${{ env.BUILD_DIR }}" -name "omodsim.icns" 2>/dev/null || echo "(not found)"
           ICON_CAR="${{ env.BUILD_DIR }}/omodsim.app/Contents/Resources/Assets.car"
           ICON_ICNS="${{ env.BUILD_DIR }}/omodsim.app/Contents/Resources/omodsim.icns"
           if [ ! -f "$ICON_CAR" ] && [ ! -f "$ICON_ICNS" ]; then
