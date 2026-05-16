@@ -41,16 +41,18 @@ endif()
 "    <key>CFBundleIconName</key>
     <string>${MACOSX_COMPOSER_ICON_NAME}</string>")
 
+        set(MACOSX_ICON_OUTPUT_DIR "${PROJECT_BINARY_DIR}/${target_name}.app/Contents/Resources")
+
         add_custom_target(${target_name}_macos_appicon ALL
             COMMAND "${CMAKE_COMMAND}" -E make_directory
-                "$<TARGET_BUNDLE_CONTENT_DIR:${target_name}>/Resources"
+                "${MACOSX_ICON_OUTPUT_DIR}"
             COMMAND "${CMAKE_COMMAND}" -E remove_directory
-                "$<TARGET_BUNDLE_CONTENT_DIR:${target_name}>/Resources/${MACOSX_COMPOSER_ICON_NAME}.icon"
+                "${MACOSX_ICON_OUTPUT_DIR}/${MACOSX_COMPOSER_ICON_NAME}.icon"
             COMMAND "${CMAKE_COMMAND}"
                 -DACTOOL_EXECUTABLE="${ACTOOL_EXECUTABLE}"
                 -DMACOSX_COMPOSER_ICON="${MACOSX_COMPOSER_ICON}"
                 -DMACOSX_COMPOSER_ICON_NAME="${MACOSX_COMPOSER_ICON_NAME}"
-                -DMACOSX_ICON_OUTPUT_DIR="$<TARGET_BUNDLE_CONTENT_DIR:${target_name}>/Resources"
+                -DMACOSX_ICON_OUTPUT_DIR="${MACOSX_ICON_OUTPUT_DIR}"
                 -DMACOSX_ICON_PARTIAL_INFO_PLIST="${PROJECT_BINARY_DIR}/assetcatalog_generated_info.plist"
                 -DMACOSX_ICON_ACTOOL_OUTPUT="${PROJECT_BINARY_DIR}/actool_output.plist"
                 -P "${MACOSX_ACTOOL_SCRIPT}"

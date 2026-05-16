@@ -119,27 +119,11 @@ jobs:
 
       - name: Verify app icon in build bundle
         run: |
-          echo "=== Resources dir ==="
-          ls "${{ env.BUILD_DIR }}/omodsim.app/Contents/Resources/" || true
-          echo "=== run_actool.cmake ==="
-          cat "${{ env.BUILD_DIR }}/run_actool.cmake" || echo "(not found)"
-          echo "=== CMakeFiles custom targets ==="
-          find "${{ env.BUILD_DIR }}/CMakeFiles" -name "*appicon*" 2>/dev/null | head -10
-          echo "=== Run actool manually ==="
-          cmake \
-            -DACTOOL_EXECUTABLE="$(xcrun --find actool)" \
-            -DMACOSX_COMPOSER_ICON="$(pwd)/src/res/omodsim.icon" \
-            -DMACOSX_COMPOSER_ICON_NAME="omodsim" \
-            -DMACOSX_ICON_OUTPUT_DIR="$(pwd)/${{ env.BUILD_DIR }}/omodsim.app/Contents/Resources" \
-            -DMACOSX_ICON_PARTIAL_INFO_PLIST="$(pwd)/${{ env.BUILD_DIR }}/assetcatalog_generated_info.plist" \
-            -DMACOSX_ICON_ACTOOL_OUTPUT="$(pwd)/${{ env.BUILD_DIR }}/actool_output.plist" \
-            -P "${{ env.BUILD_DIR }}/run_actool.cmake" && echo "actool manual OK" || echo "actool manual FAILED"
-          echo "=== Resources dir after manual actool ==="
-          ls "${{ env.BUILD_DIR }}/omodsim.app/Contents/Resources/" || true
           ICON_CAR="${{ env.BUILD_DIR }}/omodsim.app/Contents/Resources/Assets.car"
           ICON_ICNS="${{ env.BUILD_DIR }}/omodsim.app/Contents/Resources/omodsim.icns"
           if [ ! -f "$ICON_CAR" ] && [ ! -f "$ICON_ICNS" ]; then
             echo "Error: app icon not found in build bundle"
+            ls "${{ env.BUILD_DIR }}/omodsim.app/Contents/Resources/" || true
             exit 1
           fi
           echo "App icon OK"
