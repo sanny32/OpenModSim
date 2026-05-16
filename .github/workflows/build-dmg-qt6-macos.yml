@@ -131,10 +131,21 @@ jobs:
           mkdir -p "${{ env.DMG_STAGING_DIR }}"
           cmake --install "${{ env.BUILD_DIR }}" --config "${{ env.BUILD_TYPE }}" --prefix "${{ env.DMG_STAGING_DIR }}"
 
+      - name: Verify Qt frameworks in installed bundle
+        run: |
+          FRAMEWORKS="${{ env.DMG_STAGING_DIR }}/omodsim.app/Contents/Frameworks"
+          if [ ! -d "$FRAMEWORKS" ]; then
+            echo "Error: Frameworks directory not found — macdeployqt may have failed"
+            echo "Contents of omodsim.app:"
+            find "${{ env.DMG_STAGING_DIR }}/omodsim.app" -maxdepth 3 -type d
+            exit 1
+          fi
+          echo "Frameworks directory found:"
+          ls "$FRAMEWORKS" | head -20
+
       - name: Sign app bundle (ad-hoc)
         run: |
           codesign --deep --force --sign - \
-            --options runtime \
             "${{ env.DMG_STAGING_DIR }}/omodsim.app"
 
       - name: Add Applications symlink to DMG staging directory

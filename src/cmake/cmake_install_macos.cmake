@@ -61,10 +61,14 @@ install(CODE "
 
     if(_macdeployqt_executable)
         message(STATUS \"macdeployqt found at: \${_macdeployqt_executable}\")
+        get_filename_component(_qt_bin_dir \"\${_macdeployqt_executable}\" DIRECTORY)
+        get_filename_component(_qt_lib_dir \"\${_qt_bin_dir}/../lib\" ABSOLUTE)
         execute_process(
             COMMAND \"\${_macdeployqt_executable}\"
                     \"\${_installed_app}\"
                     -always-overwrite
+                    -verbose=2
+                    \"-libpath=\${_qt_lib_dir}\"
             RESULT_VARIABLE _macdeployqt_result
         )
         if(NOT _macdeployqt_result EQUAL 0)
