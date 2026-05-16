@@ -19,7 +19,7 @@ permissions:
 
 jobs:
   build-omodsim:
-    name: Build OpenModSim macOS DMG version '${{ github.event.inputs.tag || github.event.inputs.branch || github.ref_name }}' with Qt6 (Universal)
+    name: Build OpenModSim macOS DMG version '${{ github.event.inputs.tag || github.event.inputs.branch || github.ref_name }}' with Qt6 (arm64)
     runs-on: macos-latest
 
     env:
