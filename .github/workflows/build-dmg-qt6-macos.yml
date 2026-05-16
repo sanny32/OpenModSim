@@ -1,4 +1,4 @@
-name: Build DMG (Qt6, Universal)
+name: Build macOS DMG (Qt6, Universal)
 
 on:
   push:
