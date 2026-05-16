@@ -1,4 +1,4 @@
-name: Build macOS DMG (Qt6, Universal)
+name: Build DMG (Qt6, Universal)
 
 on:
   push:
@@ -19,7 +19,7 @@ permissions:
 
 jobs:
   build-omodsim:
-    name: Build OpenModSim macOS DMG version '${{ github.event.inputs.tag || github.event.inputs.branch || github.ref_name }}' with Qt6
+    name: Build OpenModSim macOS DMG version '${{ github.event.inputs.tag || github.event.inputs.branch || github.ref_name }}' with Qt6 (Universal)
     runs-on: macos-latest
 
     env:
@@ -60,7 +60,7 @@ jobs:
         run: |
           FULL_VERSION=$(grep -oE 'VERSION\s+[0-9]+\.[0-9]+\.[0-9]+' src/CMakeLists.txt | grep -oE '[0-9]+\.[0-9]+\.[0-9]+')
           APP_MAJOR_VERSION=$(echo "$FULL_VERSION" | cut -d. -f1)
-          
+
           PRERELEASE_ENABLED=false
           PRERELEASE_SUFFIX=""
           TAG_NAME="${{ github.event.inputs.tag }}"
@@ -110,14 +110,14 @@ jobs:
             ${{ env.QT_TARGET }} \
             ${{ env.QT_VERSION }} \
             ${{ env.QT_ARCH }} \
-            -m qt5compat qtpdf qtserialport qtserialbus \
+            -m qt5compat qtserialport qtserialbus \
             -O ${{ env.QT_INSTALL_DIR }}
 
       - name: Add Qt to PATH
         run: echo "${{ env.QT_INSTALL_DIR }}/${{ env.QT_VERSION }}/macos/bin" >> $GITHUB_PATH
 
       - name: Set BUILD_DIR
-        run: echo "BUILD_DIR=build-omodsim-Qt_${{ env.QT_VERSION }}_clang_64-${{ env.BUILD_TYPE }}" >> $GITHUB_ENV
+        run: echo "BUILD_DIR=build-omodsim-Qt_${{ env.QT_VERSION }}_clang_universal-${{ env.BUILD_TYPE }}" >> $GITHUB_ENV
 
       - name: Configure project
         run: |
@@ -143,13 +143,13 @@ jobs:
         run: |
           ln -s /Applications "${{ env.DMG_STAGING_DIR }}/Applications"
 
-      - name: Verify universal app binary
+      - name: Verify universal binary
         run: |
           lipo -info "${{ env.DMG_STAGING_DIR }}/omodsim.app/Contents/MacOS/omodsim"
 
       - name: Create DMG
         run: |
-          DMG_NAME="${{ env.DMG_PACKAGE_PREFIX }}${{ env.APP_MAJOR_VERSION }}_${{ env.APP_VERSION }}.dmg"
+          DMG_NAME="${{ env.DMG_PACKAGE_PREFIX }}${{ env.APP_MAJOR_VERSION }}_${{ env.APP_VERSION }}_universal.dmg"
           echo "DMG_NAME=$DMG_NAME" >> $GITHUB_ENV
 
           hdiutil create -volname "Open ModSim ${{ env.APP_VERSION }}" \
