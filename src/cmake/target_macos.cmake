@@ -34,7 +34,6 @@ function(omodsim_configure_target_macos target_name)
                 --include-all-app-icons
                 --enable-on-demand-resources NO
                 --development-region en
-                --enable-icon-stack-fallback-generation=disabled
             DEPENDS ${MACOSX_COMPOSER_ICON_FILES}
             COMMENT "Synchronizing macOS Icon Composer app icon assets"
         )
