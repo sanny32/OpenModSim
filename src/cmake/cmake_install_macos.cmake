@@ -69,6 +69,7 @@ install(CODE "
                     -always-overwrite
                     -verbose=2
                     \"-libpath=\${_qt_lib_dir}\"
+                    \"-codesign=-\"
             RESULT_VARIABLE _macdeployqt_result
         )
         if(NOT _macdeployqt_result EQUAL 0)

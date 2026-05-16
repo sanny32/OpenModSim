@@ -57,5 +57,7 @@ function(omodsim_configure_target_macos target_name)
         MACOSX_BUNDLE_BUNDLE_NAME "${PRODUCT_NAME}"
         MACOSX_BUNDLE_BUNDLE_VERSION "${PROJECT_VERSION}"
         MACOSX_BUNDLE_SHORT_VERSION_STRING "${PROJECT_VERSION}"
+        INSTALL_RPATH "@executable_path/../Frameworks"
+        BUILD_WITH_INSTALL_RPATH ON
     )
 endfunction()
