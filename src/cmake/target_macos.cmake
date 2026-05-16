@@ -1,8 +1,4 @@
 function(omodsim_configure_target_macos target_name)
-    if(NOT APPLE)
-        return()
-    endif()
-
     set(MACOSX_COMPOSER_ICON_NAME "omodsim")
     set(MACOSX_COMPOSER_ICON "${CMAKE_CURRENT_SOURCE_DIR}/res/${MACOSX_COMPOSER_ICON_NAME}.icon")
     set(MACOSX_BUNDLE_ICON_FILE "${MACOSX_COMPOSER_ICON_NAME}")

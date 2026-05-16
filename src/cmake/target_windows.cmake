@@ -1,8 +1,4 @@
-function(omodsim_configure_target_windows target_name)
-    if(NOT WIN32)
-        return()
-    endif()
-
+function(omodsim_configure_target_windows target_name) 
     if(MSVC)
         target_compile_options(${target_name} PRIVATE /utf-8)
     endif()

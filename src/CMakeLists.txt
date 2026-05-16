@@ -64,9 +64,15 @@ omodsim_configure_qt_target(${PROJECT_NAME})
 omodsim_configure_qlementine_app_style(${PROJECT_NAME})
 
 include("${CMAKE_CURRENT_SOURCE_DIR}/cmake/translations.cmake")
-omodsim_configure_target_windows(${PROJECT_NAME})
-omodsim_configure_target_macos(${PROJECT_NAME})
-omodsim_configure_target_linux(${PROJECT_NAME})
+
+if(WIN32)
+    omodsim_configure_target_windows(${PROJECT_NAME})
+elseif(APPLE)
+    omodsim_configure_target_macos(${PROJECT_NAME})
+elseif(LINUX)
+    omodsim_configure_target_linux(${PROJECT_NAME})
+endif()
+
 omodsim_configure_help_generator(${PROJECT_NAME})
 omodsim_configure_uninstall_target()
 
