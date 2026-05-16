@@ -11,6 +11,7 @@ if(USE_QLEMENTINE_APP_STYLE AND Qt6_FOUND AND Qt6_VERSION VERSION_GREATER_EQUAL 
     FetchContent_Declare(qlementine
         GIT_REPOSITORY "https://github.com/oclero/qlementine.git"
         GIT_TAG        "v${QLEMENTINE_VERSION}"
+        EXCLUDE_FROM_ALL
     )
     FetchContent_MakeAvailable(qlementine)
 
@@ -18,6 +19,7 @@ if(USE_QLEMENTINE_APP_STYLE AND Qt6_FOUND AND Qt6_VERSION VERSION_GREATER_EQUAL 
     FetchContent_Declare(qlementine-icons
         GIT_REPOSITORY "https://github.com/oclero/qlementine-icons.git"
         GIT_TAG        "v${QLEMENTINE_ICONS_VERSION}"
+        EXCLUDE_FROM_ALL
     )
     FetchContent_MakeAvailable(qlementine-icons)
 endif()
