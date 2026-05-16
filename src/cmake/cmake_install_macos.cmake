@@ -24,6 +24,17 @@ install(CODE "
 
     file(MAKE_DIRECTORY \"\${_resources_dir}\")
 
+    set(_build_resources_dir \"${PROJECT_BINARY_DIR}/${PROJECT_NAME}.app/Contents/Resources\")
+    if(EXISTS \"\${_build_resources_dir}\")
+        file(GLOB _build_resource_files \"\${_build_resources_dir}/*\")
+        foreach(_res_file \${_build_resource_files})
+            get_filename_component(_res_name \"\${_res_file}\" NAME)
+            if(NOT EXISTS \"\${_resources_dir}/\${_res_name}\")
+                file(COPY \"\${_res_file}\" DESTINATION \"\${_resources_dir}\")
+            endif()
+        endforeach()
+    endif()
+
     if(EXISTS \"\${_docs_source}\")
         execute_process(
             COMMAND \"${CMAKE_COMMAND}\" -E copy_directory
