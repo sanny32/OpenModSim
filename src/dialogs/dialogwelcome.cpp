@@ -108,6 +108,7 @@ QString DialogWelcome::demosDir()
     QStringList candidates = {
         appDir + "/demos/projects",
         appDir + "/../demos/projects",
+        appDir + "/../Resources/demos/projects",
         appDir + "/../../../demos/projects"
     };
 
