@@ -143,13 +143,22 @@ jobs:
           echo "Frameworks directory found:"
           ls "$FRAMEWORKS" | head -20
 
+      - name: Rename app bundle for DMG
+        run: |
+          mv "${{ env.DMG_STAGING_DIR }}/omodsim.app" "${{ env.DMG_STAGING_DIR }}/Open ModSim.app"
+
+      - name: Sign app bundle (ad-hoc)
+        run: |
+          codesign --deep --force --sign - \
+            "${{ env.DMG_STAGING_DIR }}/Open ModSim.app"
+
       - name: Add Applications symlink to DMG staging directory
         run: |
           ln -s /Applications "${{ env.DMG_STAGING_DIR }}/Applications"
 
       - name: Verify arm64 binary
         run: |
-          lipo -info "${{ env.DMG_STAGING_DIR }}/omodsim.app/Contents/MacOS/omodsim"
+          lipo -info "${{ env.DMG_STAGING_DIR }}/Open ModSim.app/Contents/MacOS/omodsim"
 
       - name: Create DMG
         run: |
