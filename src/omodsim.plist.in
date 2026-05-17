@@ -27,5 +27,12 @@
     <string>Copyright 2023-@CURRENT_YEAR@ Alexandr Ananev. All rights reserved.</string>
     <key>LSMinimumSystemVersion</key>
     <string>11.0</string>
+    <key>CFBundleLocalizations</key>
+    <array>
+        <string>en</string>
+        <string>ru</string>
+        <string>zh_CN</string>
+        <string>zh_TW</string>
+    </array>
 </dict>
 </plist>

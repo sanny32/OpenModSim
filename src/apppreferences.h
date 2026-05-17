@@ -15,7 +15,6 @@
 #include <QSettings>
 #include <QXmlStreamWriter>
 #include "displaydefinition.h"
-#include "translationutils.h"
 
 enum class AppThemeMode
 {
@@ -124,7 +123,7 @@ private:
     QColor        _foregroundColor;
     QColor        _addressColor{ 128, 128, 128 };
     QColor        _commentColor{ 128, 128, 128 };
-    QString       _language{ translationLang() };
+    QString       _language{ "system" };
     DataViewDefinitions _dataViewDefinitions;
     TrafficViewDefinitions _trafficViewDefinitions;
     ScriptViewDefinitions _scriptViewDefinitions;

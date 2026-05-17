@@ -1258,17 +1258,24 @@ Open the download page?</source>
         <translation>Включить автодополнение кода</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogpreferences.cpp" line="41"/>
+        <location filename="../../dialogs/dialogpreferences.cpp" line="35"/>
         <source>System</source>
-        <translation>Системная</translation>
+        <comment>language</comment>
+        <translation>Системный</translation>
     </message>
     <message>
         <location filename="../../dialogs/dialogpreferences.cpp" line="42"/>
+        <source>System</source>
+        <comment>theme</comment>
+        <translation>Системная</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogpreferences.cpp" line="43"/>
         <source>Light</source>
         <translation>Светлая</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogpreferences.cpp" line="43"/>
+        <location filename="../../dialogs/dialogpreferences.cpp" line="44"/>
         <source>Dark</source>
         <translation>Тёмная</translation>
     </message>
@@ -2607,7 +2614,7 @@ Open the download page?</source>
     </message>
     <message>
         <location filename="../../mainwindow.ui" line="348"/>
-        <location filename="../../mainwindow.cpp" line="1919"/>
+        <location filename="../../mainwindow.cpp" line="1907"/>
         <source>Save Project</source>
         <translation>Сохранить проект</translation>
     </message>
@@ -2787,19 +2794,19 @@ Open the download page?</source>
         <translation>Строка состояния</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="927"/>
+        <location filename="../../mainwindow.cpp" line="915"/>
         <source>All files (*)</source>
         <translation>Все файлы (*)</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="296"/>
-        <location filename="../../mainwindow.cpp" line="674"/>
+        <location filename="../../mainwindow.cpp" line="297"/>
+        <location filename="../../mainwindow.cpp" line="662"/>
         <source>Open Recent</source>
         <translation>Открыть недавние</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="297"/>
-        <location filename="../../mainwindow.cpp" line="2055"/>
+        <location filename="../../mainwindow.cpp" line="298"/>
+        <location filename="../../mainwindow.cpp" line="2043"/>
         <source>Clear List</source>
         <translation>Очистить список</translation>
     </message>
@@ -2814,21 +2821,21 @@ Open the download page?</source>
         <translation>Вывод</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="926"/>
-        <location filename="../../mainwindow.cpp" line="1949"/>
+        <location filename="../../mainwindow.cpp" line="914"/>
+        <location filename="../../mainwindow.cpp" line="1937"/>
         <source>Project files (*.omsim)</source>
         <translation>Файлы проекта (*.omsim)</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="1573"/>
-        <location filename="../../mainwindow.cpp" line="1977"/>
+        <location filename="../../mainwindow.cpp" line="1561"/>
+        <location filename="../../mainwindow.cpp" line="1965"/>
         <source>Untitled</source>
         <translation>Без имени</translation>
     </message>
     <message>
         <location filename="../../applogger.cpp" line="127"/>
-        <location filename="../../mainwindow.cpp" line="677"/>
-        <location filename="../../mainwindow.cpp" line="1758"/>
+        <location filename="../../mainwindow.cpp" line="665"/>
+        <location filename="../../mainwindow.cpp" line="1746"/>
         <source>Address Base</source>
         <translation>Адресация</translation>
     </message>
@@ -3123,7 +3130,7 @@ Open the download page?</source>
         <translation>Скрипт запущен: %1 (режим: %2)</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="1312"/>
+        <location filename="../../mainwindow.cpp" line="1300"/>
         <source>Move to Other Panel</source>
         <translation>Переместить на другую панель</translation>
     </message>
@@ -3145,12 +3152,12 @@ Open the download page?</source>
         <translation>Шестнадцатиричный режим</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="1920"/>
+        <location filename="../../mainwindow.cpp" line="1908"/>
         <source>Save project before closing?</source>
         <translation>Сохранить проект перед закрытием?</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="2043"/>
+        <location filename="../../mainwindow.cpp" line="2031"/>
         <source>No Recent Projects</source>
         <translation>Нет недавних проектов</translation>
     </message>
@@ -3160,7 +3167,7 @@ Open the download page?</source>
         <translation>Данные</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="1270"/>
+        <location filename="../../mainwindow.cpp" line="1258"/>
         <source>JavaScript files (*.js);;All files (*)</source>
         <translation>Файлы JavaScript (*.js);;Все файлы (*)</translation>
     </message>
@@ -4086,7 +4093,7 @@ Open the download page?</source>
         <location filename="../../controls/trafficlogwindow.cpp" line="126"/>
         <location filename="../../controls/trafficlogwindow.cpp" line="211"/>
         <source>Filter by Unit Identifier (0 = all)</source>
-        <translation type="unfinished"></translation>
+        <translation>Фильтр по идентификатору устройства (0 = все)</translation>
     </message>
     <message>
         <location filename="../../controls/trafficlogwindow.cpp" line="130"/>
@@ -4098,7 +4105,7 @@ Open the download page?</source>
         <location filename="../../controls/trafficlogwindow.cpp" line="144"/>
         <location filename="../../controls/trafficlogwindow.cpp" line="213"/>
         <source>Limit:</source>
-        <translation type="unfinished"></translation>
+        <translation>Лимит:</translation>
     </message>
     <message>
         <location filename="../../controls/trafficlogwindow.cpp" line="156"/>
@@ -4117,7 +4124,7 @@ Open the download page?</source>
         <location filename="../../controls/trafficlogwindow.cpp" line="198"/>
         <location filename="../../controls/trafficlogwindow.cpp" line="214"/>
         <source>Resume</source>
-        <translation type="unfinished"></translation>
+        <translation>Возобновить</translation>
     </message>
 </context>
 <context>

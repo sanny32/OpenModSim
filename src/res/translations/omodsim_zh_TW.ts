@@ -1258,17 +1258,24 @@ Open the download page?</source>
         <translation>啟用程式碼自動完成</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogpreferences.cpp" line="41"/>
+        <location filename="../../dialogs/dialogpreferences.cpp" line="35"/>
         <source>System</source>
+        <comment>language</comment>
         <translation>系統</translation>
     </message>
     <message>
         <location filename="../../dialogs/dialogpreferences.cpp" line="42"/>
+        <source>System</source>
+        <comment>theme</comment>
+        <translation>系統</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogpreferences.cpp" line="43"/>
         <source>Light</source>
         <translation>淺色</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogpreferences.cpp" line="43"/>
+        <location filename="../../dialogs/dialogpreferences.cpp" line="44"/>
         <source>Dark</source>
         <translation>深色</translation>
     </message>
@@ -2587,7 +2594,7 @@ Open the download page?</source>
     </message>
     <message>
         <location filename="../../mainwindow.ui" line="348"/>
-        <location filename="../../mainwindow.cpp" line="1919"/>
+        <location filename="../../mainwindow.cpp" line="1907"/>
         <source>Save Project</source>
         <translation>儲存專案</translation>
     </message>
@@ -2787,19 +2794,19 @@ Open the download page?</source>
         <translation>狀態列</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="927"/>
+        <location filename="../../mainwindow.cpp" line="915"/>
         <source>All files (*)</source>
         <translation>所有檔案 (*)</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="296"/>
-        <location filename="../../mainwindow.cpp" line="674"/>
+        <location filename="../../mainwindow.cpp" line="297"/>
+        <location filename="../../mainwindow.cpp" line="662"/>
         <source>Open Recent</source>
         <translation>最近開啟</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="297"/>
-        <location filename="../../mainwindow.cpp" line="2055"/>
+        <location filename="../../mainwindow.cpp" line="298"/>
+        <location filename="../../mainwindow.cpp" line="2043"/>
         <source>Clear List</source>
         <translation>清除清單</translation>
     </message>
@@ -2814,21 +2821,21 @@ Open the download page?</source>
         <translation>輸出</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="926"/>
-        <location filename="../../mainwindow.cpp" line="1949"/>
+        <location filename="../../mainwindow.cpp" line="914"/>
+        <location filename="../../mainwindow.cpp" line="1937"/>
         <source>Project files (*.omsim)</source>
         <translation>專案檔案 (*.omsim)</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="1573"/>
-        <location filename="../../mainwindow.cpp" line="1977"/>
+        <location filename="../../mainwindow.cpp" line="1561"/>
+        <location filename="../../mainwindow.cpp" line="1965"/>
         <source>Untitled</source>
         <translation>未命名</translation>
     </message>
     <message>
         <location filename="../../applogger.cpp" line="127"/>
-        <location filename="../../mainwindow.cpp" line="677"/>
-        <location filename="../../mainwindow.cpp" line="1758"/>
+        <location filename="../../mainwindow.cpp" line="665"/>
+        <location filename="../../mainwindow.cpp" line="1746"/>
         <source>Address Base</source>
         <translation>地址基準</translation>
     </message>
@@ -3123,7 +3130,7 @@ Open the download page?</source>
         <translation>腳本已啟動：%1（模式：%2）</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="1312"/>
+        <location filename="../../mainwindow.cpp" line="1300"/>
         <source>Move to Other Panel</source>
         <translation>移至其他面板</translation>
     </message>
@@ -3145,12 +3152,12 @@ Open the download page?</source>
         <translation>十六進位檢視</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="1920"/>
+        <location filename="../../mainwindow.cpp" line="1908"/>
         <source>Save project before closing?</source>
         <translation>關閉前儲存專案？</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="2043"/>
+        <location filename="../../mainwindow.cpp" line="2031"/>
         <source>No Recent Projects</source>
         <translation>無最近專案</translation>
     </message>
@@ -3160,7 +3167,7 @@ Open the download page?</source>
         <translation>資料</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="1270"/>
+        <location filename="../../mainwindow.cpp" line="1258"/>
         <source>JavaScript files (*.js);;All files (*)</source>
         <translation>JavaScript檔案 (*.js);;所有檔案 (*)</translation>
     </message>
@@ -3965,22 +3972,22 @@ Open the download page?</source>
     <message>
         <location filename="../../controls/scripteditorwindow.cpp" line="126"/>
         <source> ms</source>
-        <translation type="unfinished"> 毫秒</translation>
+        <translation> 毫秒</translation>
     </message>
     <message>
         <location filename="../../controls/scripteditorwindow.cpp" line="139"/>
         <source>Run on startup</source>
-        <translation type="unfinished">啟動時執行</translation>
+        <translation>啟動時執行</translation>
     </message>
     <message>
         <location filename="../../controls/scripteditorwindow.cpp" line="160"/>
         <source>Run Script</source>
-        <translation type="unfinished">執行腳本</translation>
+        <translation>執行腳本</translation>
     </message>
     <message>
         <location filename="../../controls/scripteditorwindow.cpp" line="167"/>
         <source>Stop Script</source>
-        <translation type="unfinished">停止腳本</translation>
+        <translation>停止腳本</translation>
     </message>
 </context>
 <context>
@@ -4066,13 +4073,13 @@ Open the download page?</source>
         <location filename="../../controls/trafficlogwindow.cpp" line="23"/>
         <location filename="../../controls/trafficlogwindow.cpp" line="208"/>
         <source>Traffic</source>
-        <translation type="unfinished">流量</translation>
+        <translation>流量</translation>
     </message>
     <message>
         <location filename="../../controls/trafficlogwindow.cpp" line="121"/>
         <location filename="../../controls/trafficlogwindow.cpp" line="209"/>
         <source>Unit ID:</source>
-        <translation type="unfinished"></translation>
+        <translation>單元 ID：</translation>
     </message>
     <message>
         <location filename="../../controls/trafficlogwindow.cpp" line="125"/>
@@ -4080,44 +4087,44 @@ Open the download page?</source>
         <location filename="../../controls/trafficlogwindow.cpp" line="210"/>
         <location filename="../../controls/trafficlogwindow.cpp" line="218"/>
         <source>All</source>
-        <translation type="unfinished">全部</translation>
+        <translation>全部</translation>
     </message>
     <message>
         <location filename="../../controls/trafficlogwindow.cpp" line="126"/>
         <location filename="../../controls/trafficlogwindow.cpp" line="211"/>
         <source>Filter by Unit Identifier (0 = all)</source>
-        <translation type="unfinished"></translation>
+        <translation>按單元識別碼篩選（0 = 全部）</translation>
     </message>
     <message>
         <location filename="../../controls/trafficlogwindow.cpp" line="130"/>
         <location filename="../../controls/trafficlogwindow.cpp" line="212"/>
         <source>Function:</source>
-        <translation type="unfinished">功能：</translation>
+        <translation>功能：</translation>
     </message>
     <message>
         <location filename="../../controls/trafficlogwindow.cpp" line="144"/>
         <location filename="../../controls/trafficlogwindow.cpp" line="213"/>
         <source>Limit:</source>
-        <translation type="unfinished"></translation>
+        <translation>限制：</translation>
     </message>
     <message>
         <location filename="../../controls/trafficlogwindow.cpp" line="156"/>
         <location filename="../../controls/trafficlogwindow.cpp" line="198"/>
         <location filename="../../controls/trafficlogwindow.cpp" line="214"/>
         <source>Pause</source>
-        <translation type="unfinished">暫停</translation>
+        <translation>暫停</translation>
     </message>
     <message>
         <location filename="../../controls/trafficlogwindow.cpp" line="161"/>
         <location filename="../../controls/trafficlogwindow.cpp" line="215"/>
         <source>Clear</source>
-        <translation type="unfinished">清除</translation>
+        <translation>清除</translation>
     </message>
     <message>
         <location filename="../../controls/trafficlogwindow.cpp" line="198"/>
         <location filename="../../controls/trafficlogwindow.cpp" line="214"/>
         <source>Resume</source>
-        <translation type="unfinished"></translation>
+        <translation>繼續</translation>
     </message>
 </context>
 <context>

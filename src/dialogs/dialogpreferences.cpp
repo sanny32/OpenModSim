@@ -32,13 +32,14 @@ DialogPreferences::DialogPreferences(MainWindow* mainWindow, QWidget* parent)
     ui->listWidget->item(1)->setIcon(themedIcon(QStringLiteral("omodsim/preferences-defaults")));
     ui->listWidget->item(2)->setIcon(themedIcon(QStringLiteral("omodsim/preferences-script")));
 
+    ui->comboBoxLanguage->addItem(tr("System", "language"), "system");
     ui->comboBoxLanguage->addItem("English", "en");
     ui->comboBoxLanguage->addItem("Русский", "ru");
     ui->comboBoxLanguage->addItem("简体中文", "zh_CN");
     ui->comboBoxLanguage->addItem("繁體中文", "zh_TW");
 
     if (theApp()->theme().supportsTheme()) {
-        ui->comboBoxThemeMode->addItem(tr("System"), static_cast<int>(AppThemeMode::System));
+        ui->comboBoxThemeMode->addItem(tr("System", "theme"), static_cast<int>(AppThemeMode::System));
         ui->comboBoxThemeMode->addItem(tr("Light"), static_cast<int>(AppThemeMode::Light));
         ui->comboBoxThemeMode->addItem(tr("Dark"), static_cast<int>(AppThemeMode::Dark));
     } else {

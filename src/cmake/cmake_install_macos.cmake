@@ -63,6 +63,14 @@ install(CODE "
         message(STATUS \"macdeployqt found at: \${_macdeployqt_executable}\")
         get_filename_component(_qt_bin_dir \"\${_macdeployqt_executable}\" DIRECTORY)
         get_filename_component(_qt_lib_dir \"\${_qt_bin_dir}/../lib\" ABSOLUTE)
+        get_filename_component(_qt_translations_dir \"\${_qt_bin_dir}/../translations\" ABSOLUTE)
+        if(EXISTS \"\${_qt_translations_dir}\")
+            file(MAKE_DIRECTORY \"\${_installed_app}/Contents/translations\")
+            file(GLOB _qt_translation_files \"\${_qt_translations_dir}/qt_*.qm\")
+            foreach(_qm \${_qt_translation_files})
+                file(COPY \"\${_qm}\" DESTINATION \"\${_installed_app}/Contents/translations\")
+            endforeach()
+        endif()
         execute_process(
             COMMAND \"\${_macdeployqt_executable}\"
                     \"\${_installed_app}\"

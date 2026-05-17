@@ -13,6 +13,7 @@
 #include <QPageSetupDialog>
 #include <limits>
 #include "apppreferences.h"
+#include "translationutils.h"
 #include "dialogabout.h"
 #include "dialogmsgparser.h"
 #include "dialogpreferences.h"
@@ -276,7 +277,7 @@ void configureMainToolbarText(Ui::MainWindow* ui)
 MainWindow::MainWindow(const QString& profile, bool useSession, const QString& startupProjectFile, QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
-    ,_lang(translationLang())
+    ,_lang("system")
     ,_useSession(useSession)
     ,_dataSimulator(new DataSimulator(this))
     ,_helpWidget(nullptr)
@@ -575,21 +576,8 @@ MainWindow::~MainWindow()
 ///
 void MainWindow::setLanguage(const QString& lang)
 {
-    if(lang == "en")
-    {
-        _lang = lang;
-        qApp->removeTranslator(&_appTranslator);
-        qApp->removeTranslator(&_qtTranslator);
-    }
-    else if(_appTranslator.load(QString(":/res/translations/omodsim_%1").arg(lang)))
-    {
-        _lang = lang;
-        qApp->installTranslator(&_appTranslator);
-
-        if(_qtTranslator.load(QString("%1/translations/qt_%2").arg(qApp->applicationDirPath(), lang))) {
-            qApp->installTranslator(&_qtTranslator);
-        }
-    }
+    _lang = lang;
+    applyTranslation(lang, _appTranslator, _qtTranslator);
 }
 
 ///
@@ -1712,7 +1700,7 @@ bool MainWindow::loadAppSettings(const QString& filename)
     restoreState(m.value("WindowState").toByteArray());
 
     statusBar()->setVisible(m.value("StatusBar", true).toBool());
-    _lang = m.value("Language", translationLang()).toString();
+    _lang = m.value("Language", "system").toString();
     setLanguage(_lang);
 
     _project->setSavePath(m.value("SavePath").toString());
