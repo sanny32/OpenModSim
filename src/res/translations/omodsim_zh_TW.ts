@@ -2557,23 +2557,23 @@ Open the download page?</source>
         <translation>新建</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="600"/>
-        <location filename="../../mainwindow.ui" line="603"/>
+        <location filename="../../mainwindow.ui" line="606"/>
+        <location filename="../../mainwindow.ui" line="609"/>
         <source>Modbus Definitions</source>
         <translation>Modbus定義</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="611"/>
+        <location filename="../../mainwindow.ui" line="617"/>
         <source>Tabbed View</source>
         <translation>標籤頁檢視</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="619"/>
+        <location filename="../../mainwindow.ui" line="625"/>
         <source>Close All Windows</source>
         <translation>關閉所有視窗</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="582"/>
+        <location filename="../../mainwindow.ui" line="588"/>
         <source>Msg Parser</source>
         <translation>報文解析</translation>
     </message>
@@ -2629,167 +2629,167 @@ Open the download page?</source>
         <translation>退出</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="394"/>
+        <location filename="../../mainwindow.ui" line="397"/>
         <source>Connect</source>
         <translation>連線</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="403"/>
+        <location filename="../../mainwindow.ui" line="406"/>
         <source>Disconnect</source>
         <translation>斷開連線</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="616"/>
+        <location filename="../../mainwindow.ui" line="622"/>
         <source>Close All</source>
         <translation>全部複製</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="644"/>
-        <location filename="../../mainwindow.ui" line="647"/>
+        <location filename="../../mainwindow.ui" line="650"/>
+        <location filename="../../mainwindow.ui" line="653"/>
         <source>Output Window</source>
         <translation>輸出視窗</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="655"/>
+        <location filename="../../mainwindow.ui" line="661"/>
         <source>Project Tree</source>
         <translation>專案樹</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="660"/>
+        <location filename="../../mainwindow.ui" line="666"/>
         <source>Preferences</source>
         <translation>偏好設定</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="672"/>
+        <location filename="../../mainwindow.ui" line="681"/>
         <source>New Data View</source>
         <translation>新增資料檢視</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="681"/>
+        <location filename="../../mainwindow.ui" line="690"/>
         <source>New Traffic View</source>
         <translation>新增流量檢視</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="690"/>
+        <location filename="../../mainwindow.ui" line="699"/>
         <source>New Script</source>
         <translation>新增腳本</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="699"/>
-        <location filename="../../mainwindow.ui" line="702"/>
+        <location filename="../../mainwindow.ui" line="708"/>
+        <location filename="../../mainwindow.ui" line="711"/>
         <source>New Map View</source>
         <translation>新增映射檢視</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="707"/>
+        <location filename="../../mainwindow.ui" line="716"/>
         <source>Import Script...</source>
         <translation>匯入腳本...</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="719"/>
+        <location filename="../../mainwindow.ui" line="728"/>
         <source>Split View</source>
         <translation>分割檢視</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="423"/>
+        <location filename="../../mainwindow.ui" line="426"/>
         <source>Cascade</source>
         <translation>層疊</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="428"/>
+        <location filename="../../mainwindow.ui" line="431"/>
         <source>Tile</source>
         <translation>平鋪</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="437"/>
+        <location filename="../../mainwindow.ui" line="440"/>
         <source>About Open ModSim...</source>
         <translation>關於Open ModSim...</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="462"/>
+        <location filename="../../mainwindow.ui" line="468"/>
         <source>Force Coils</source>
         <translation>強制線圈</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="471"/>
+        <location filename="../../mainwindow.ui" line="477"/>
         <source>Preset Holding Regs</source>
         <translation>預設保持暫存器</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="480"/>
+        <location filename="../../mainwindow.ui" line="486"/>
         <source>Preset Input Regs</source>
         <translation>預設輸入暫存器</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="489"/>
+        <location filename="../../mainwindow.ui" line="495"/>
         <source>Force Discretes</source>
         <translation>強制離散值</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="498"/>
+        <location filename="../../mainwindow.ui" line="504"/>
         <source>Undo</source>
         <translation>取消</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="510"/>
+        <location filename="../../mainwindow.ui" line="516"/>
         <source>Redo</source>
         <translation>恢復</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="522"/>
+        <location filename="../../mainwindow.ui" line="528"/>
         <source>Cut</source>
         <translation>剪下</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="534"/>
+        <location filename="../../mainwindow.ui" line="540"/>
         <source>Copy</source>
         <translation>複製</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="546"/>
+        <location filename="../../mainwindow.ui" line="552"/>
         <source>Paste</source>
         <translation>貼上</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="554"/>
+        <location filename="../../mainwindow.ui" line="560"/>
         <source>Select All</source>
         <translation>選擇所有</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="562"/>
+        <location filename="../../mainwindow.ui" line="568"/>
         <source>Find...</source>
         <translation>尋找...</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="570"/>
+        <location filename="../../mainwindow.ui" line="576"/>
         <source>Replace...</source>
         <translation>取代...</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="573"/>
+        <location filename="../../mainwindow.ui" line="579"/>
         <source>Ctrl+H</source>
         <translation>Ctrl+H</translation>
     </message>
     <message>
         <location filename="../../mainwindow.ui" line="102"/>
-        <location filename="../../mainwindow.ui" line="630"/>
-        <location filename="../../mainwindow.ui" line="633"/>
+        <location filename="../../mainwindow.ui" line="636"/>
+        <location filename="../../mainwindow.ui" line="639"/>
         <source>Script Help</source>
         <translation>指令稿說明</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="636"/>
+        <location filename="../../mainwindow.ui" line="642"/>
         <source>F1</source>
         <translation>F1</translation>
     </message>
     <message>
         <location filename="../../mainwindow.ui" line="274"/>
-        <location filename="../../mainwindow.ui" line="445"/>
+        <location filename="../../mainwindow.ui" line="451"/>
         <source>Toolbar</source>
         <translation>工具欄</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="453"/>
+        <location filename="../../mainwindow.ui" line="459"/>
         <source>Status Bar</source>
         <translation>狀態列</translation>
     </message>
@@ -3145,8 +3145,8 @@ Open the download page?</source>
         <translation>基地址為-0</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.ui" line="415"/>
         <location filename="../../mainwindow.ui" line="418"/>
+        <location filename="../../mainwindow.ui" line="421"/>
         <location filename="../../applogger.cpp" line="128"/>
         <source>Hex View</source>
         <translation>十六進位檢視</translation>

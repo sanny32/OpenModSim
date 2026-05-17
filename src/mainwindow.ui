@@ -384,6 +384,9 @@
    <property name="text">
     <string>Exit</string>
    </property>
+   <property name="menuRole">
+    <enum>QAction::QuitRole</enum>
+   </property>
   </action>
   <action name="actionConnect">
    <property name="icon">
@@ -435,6 +438,9 @@
    </property>
    <property name="text">
     <string>About Open ModSim...</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::AboutRole</enum>
    </property>
   </action>
   <action name="actionToolbar">
@@ -658,6 +664,9 @@
   <action name="actionPreferences">
    <property name="text">
     <string>Preferences</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::PreferencesRole</enum>
    </property>
    <property name="shortcut">
     <string notr="true">Ctrl+,</string>
