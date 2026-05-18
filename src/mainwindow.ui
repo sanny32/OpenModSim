@@ -89,11 +89,11 @@
    <property name="minimumSize">
     <size>
      <width>512</width>
-     <height>34</height>
+     <height>38</height>
     </size>
    </property>
    <property name="visible">
-    <bool>false</bool>
+    <bool>true</bool>
    </property>
    <property name="allowedAreas">
     <set>Qt::DockWidgetArea::BottomDockWidgetArea|Qt::DockWidgetArea::LeftDockWidgetArea|Qt::DockWidgetArea::RightDockWidgetArea</set>
@@ -163,7 +163,7 @@
      <x>0</x>
      <y>0</y>
      <width>1280</width>
-     <height>21</height>
+     <height>30</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -385,7 +385,7 @@
     <string>Exit</string>
    </property>
    <property name="menuRole">
-    <enum>QAction::QuitRole</enum>
+    <enum>QAction::MenuRole::QuitRole</enum>
    </property>
   </action>
   <action name="actionConnect">
@@ -440,7 +440,7 @@
     <string>About Open ModSim...</string>
    </property>
    <property name="menuRole">
-    <enum>QAction::AboutRole</enum>
+    <enum>QAction::MenuRole::AboutRole</enum>
    </property>
   </action>
   <action name="actionToolbar">
@@ -605,8 +605,8 @@
    <property name="text">
     <string>Modbus Definitions</string>
    </property>
-   <property name="toolTip">
-    <string>Modbus Definitions</string>
+   <property name="menuRole">
+    <enum>QAction::MenuRole::NoRole</enum>
    </property>
   </action>
   <action name="actionTabbedView">
@@ -665,11 +665,11 @@
    <property name="text">
     <string>Preferences</string>
    </property>
-   <property name="menuRole">
-    <enum>QAction::PreferencesRole</enum>
-   </property>
    <property name="shortcut">
     <string notr="true">Ctrl+,</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::MenuRole::PreferencesRole</enum>
    </property>
   </action>
   <action name="actionNewDataView">

@@ -2558,7 +2558,6 @@ Open the download page?</source>
     </message>
     <message>
         <location filename="../../mainwindow.ui" line="606"/>
-        <location filename="../../mainwindow.ui" line="609"/>
         <source>Modbus Definitions</source>
         <translation>Modbus定義</translation>
     </message>
