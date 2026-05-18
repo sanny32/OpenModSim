@@ -486,9 +486,19 @@ $cmakeArgs = @(
     "-DUSE_QLEMENTINE_APP_STYLE=$(if ($qlementine) { 'ON' } else { 'OFF' })"
 )
 
+$vswhere = "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe"
+if (Test-Path $vswhere) {
+    $vsInstallPath = & $vswhere -latest -products * `
+        -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 `
+        -property installationPath 2>$null
+    if ($vsInstallPath) {
+        $cmakeArgs += "-DCMAKE_GENERATOR_INSTANCE=$vsInstallPath"
+    }
+}
+
 if ($QtMajorVersion -eq "5") {
     $cmakeArgs += "-DCMAKE_DISABLE_FIND_PACKAGE_Qt6=TRUE"
-} 
+}
 
 & $cmakePath @cmakeArgs
 
