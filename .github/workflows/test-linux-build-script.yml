@@ -3,6 +3,11 @@ name: Test Linux build script
 on:
   workflow_dispatch:
     inputs:
+      branch:
+        description: "Branch, tag, or commit to test"
+        required: false
+        default: dev
+        type: string
       qt:
         description: "Qt version argument passed to build.sh"
         required: true
@@ -172,13 +177,15 @@ jobs:
           esac
 
       - name: Checkout repository
+        env:
+          CHECKOUT_REF: ${{ inputs.branch || github.ref_name }}
         run: |
           git config --global --add safe.directory "$GITHUB_WORKSPACE"
           git init -b checkout "$GITHUB_WORKSPACE"
           cd "$GITHUB_WORKSPACE"
           git remote add origin "https://github.com/${GITHUB_REPOSITORY}.git"
-          git fetch --depth=1 origin "${GITHUB_SHA}"
-          git checkout --detach "${GITHUB_SHA}"
+          git fetch --depth=1 origin "$CHECKOUT_REF"
+          git checkout --detach FETCH_HEAD
 
       - name: Show OS release
         run: |
