@@ -73,6 +73,10 @@ QString findHelpFile()
         appDir + "/../../../docs/jshelp.qhc"
     };
 
+#ifdef Q_OS_MACOS
+    candidates.prepend(appDir + "/../Resources/docs/jshelp.qhc");
+#endif
+
 #ifdef Q_OS_LINUX
     candidates.append(appDir + "/../share/doc/omodsim/jshelp.qhc");
 
