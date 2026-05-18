@@ -31,6 +31,7 @@ jobs:
       QT_ARCH: "linux_gcc_64"
       QT_INSTALL_DIR: "/opt/Qt"
       QT_QPA_PLATFORM: "xcb"
+      CMAKE_VERSION: "3.28.4"
       CMAKE_COMPILER: "gcc_64"
       CMAKE_GENERATOR: "Ninja"
       BUILD_TYPE: "Release"
@@ -108,7 +109,7 @@ jobs:
           export DEBIAN_FRONTEND=noninteractive
           apt-get update
           apt-get install -y \
-            git build-essential ninja-build cmake patchelf rsync \
+            git build-essential ninja-build patchelf rsync \
             rpm gnupg2 \
             libglu1-mesa libgl1-mesa-dev libxkbcommon0 libxkbcommon-x11-0 \
             libxcb1 libxcb-xinerama0 libxcb-cursor0 libxcb-keysyms1 libxcb-xfixes0 \
@@ -164,11 +165,11 @@ jobs:
       - name: Add Qt to PATH
         run: echo "${{ env.QT_INSTALL_DIR }}/${{ env.QT_VERSION }}/${{ env.CMAKE_COMPILER }}/bin" >> $GITHUB_PATH
 
-      - name: Install cmake 3.26
+      - name: Install CMake 3.28
         run: |
           apt-get remove -y cmake
-          wget https://github.com/Kitware/CMake/releases/download/v3.26.5/cmake-3.26.5-linux-x86_64.sh
-          sh cmake-3.26.5-linux-x86_64.sh --skip-license --prefix=/usr/local
+          wget https://github.com/Kitware/CMake/releases/download/v${{ env.CMAKE_VERSION }}/cmake-${{ env.CMAKE_VERSION }}-linux-x86_64.sh
+          sh cmake-${{ env.CMAKE_VERSION }}-linux-x86_64.sh --skip-license --prefix=/usr/local
           cmake --version
 
       - name: Set BUILD_DIR

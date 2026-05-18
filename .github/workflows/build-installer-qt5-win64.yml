@@ -24,6 +24,7 @@ permissions:
 env:
   QT_VERSION: 5.15.2
   QT_ARCH: win64_msvc2019_64
+  CMAKE_VERSION: "3.28.4"
   CMAKE_COMPILER: msvc2019_64
   CMAKE_GENERATOR: "Visual Studio 17 2022"
   CMAKE_ARCH: x64
@@ -118,6 +119,12 @@ jobs:
         uses: actions/setup-python@v6
         with:
           python-version: "3.11"
+
+      - name: Install CMake 3.28
+        run: |
+          python -m pip install cmake==${{ env.CMAKE_VERSION }}
+          cmake --version
+        shell: cmd
 
       - name: Install aqtinstall
         run: |
