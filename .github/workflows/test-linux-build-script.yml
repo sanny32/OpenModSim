@@ -71,6 +71,12 @@ jobs:
                   "qt_modes": ["qt5", "qt6", "auto"],
               },
               {
+                  "name": "Ubuntu 26.04",
+                  "image": "ubuntu:26.04",
+                  "family": "apt",
+                  "qt_modes": ["qt5", "qt6", "auto"],
+              },
+              {
                   "name": "Fedora 41",
                   "image": "fedora:41",
                   "family": "dnf",
@@ -83,8 +89,26 @@ jobs:
                   "qt_modes": ["qt5", "qt6", "auto"],
               },
               {
+                  "name": "Fedora 43",
+                  "image": "fedora:43",
+                  "family": "dnf",
+                  "qt_modes": ["qt5", "qt6", "auto"],
+              },
+              {
+                  "name": "Fedora 44",
+                  "image": "fedora:44",
+                  "family": "dnf",
+                  "qt_modes": ["qt5", "qt6", "auto"],
+              },
+              {
                   "name": "Rocky Linux 9.7",
                   "image": "rockylinux/rockylinux:9.7",
+                  "family": "rocky",
+                  "qt_modes": ["qt5", "qt6", "auto"],
+              },
+              {
+                  "name": "Rocky Linux 10.1",
+                  "image": "rockylinux/rockylinux:10.1",
                   "family": "rocky",
                   "qt_modes": ["qt5", "qt6", "auto"],
               },
