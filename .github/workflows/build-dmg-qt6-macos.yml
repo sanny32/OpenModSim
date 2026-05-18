@@ -173,8 +173,7 @@ jobs:
           path: ${{ env.DMG_NAME }}
 
       - name: Create or update GitHub Release and upload DMG
-        if: false # Temporarily disable release creation until we have a stable release process in place
-        # if: success() && github.event_name == 'push' && github.ref_type == 'tag'
+        if: success() && github.event_name == 'push' && github.ref_type == 'tag'
         uses: softprops/action-gh-release@v3
         with:
           draft: true
