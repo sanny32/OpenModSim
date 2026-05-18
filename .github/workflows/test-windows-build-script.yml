@@ -44,19 +44,14 @@ jobs:
           qt_mode = os.environ["QT_MODE"]
           entries = [
               {
-                  "name": "Windows 2019",
-                  "runner": "windows-2019",
-                  "qt_modes": ["qt5", "qt6"],
-              },
-              {
                   "name": "Windows 2022",
                   "runner": "windows-2022",
-                  "qt_modes": ["qt6"],
+                  "qt_modes": ["qt5", "qt6"],
               },
               {
                   "name": "Windows 2025",
                   "runner": "windows-2025",
-                  "qt_modes": ["qt6"],
+                  "qt_modes": ["qt5", "qt6"],
               },
           ]
 
