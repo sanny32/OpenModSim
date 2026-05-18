@@ -92,13 +92,13 @@ jobs:
         run: |
           Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
 
-          $script = "${{ github.workspace }}\build.ps1"
           switch ($env:QT_MODE) {
-            "qt5" { & $script -qt5 }
-            "qt6" { & $script -qt6 }
+            "qt5" { $buildArgs = @{ qt5 = $true } }
+            "qt6" { $buildArgs = @{ qt6 = $true } }
             default {
               Write-Error "Unsupported Qt input: $env:QT_MODE"
               exit 1
             }
           }
+          & "${{ github.workspace }}\build.ps1" @buildArgs
         shell: pwsh

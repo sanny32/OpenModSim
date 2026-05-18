@@ -203,38 +203,43 @@ function Get-CMakeVersion {
 
 # Test MSVC is installed
 function Test-MsvcCompiler {
-    if ($QtMajorVersion -eq "5") {
-        $msvcPaths = @(
-            "${env:ProgramFiles}\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC",
-            "${env:ProgramFiles}\Microsoft Visual Studio\2019\Professional\VC\Tools\MSVC",
-            "${env:ProgramFiles}\Microsoft Visual Studio\2019\Enterprise\VC\Tools\MSVC",
-            "${env:ProgramFiles}\Microsoft Visual Studio\2019\BuildTools\VC\Tools\MSVC",
-            "${env:ProgramFiles(x86)}\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC",
-            "${env:ProgramFiles(x86)}\Microsoft Visual Studio\2019\Professional\VC\Tools\MSVC",
-            "${env:ProgramFiles(x86)}\Microsoft Visual Studio\2019\Enterprise\VC\Tools\MSVC",
-            "${env:ProgramFiles(x86)}\Microsoft Visual Studio\2019\BuildTools\VC\Tools\MSVC"
-        )
-    }
-    else {
-        $msvcPaths = @(
-            "${env:ProgramFiles}\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC",
-            "${env:ProgramFiles}\Microsoft Visual Studio\2022\Professional\VC\Tools\MSVC", 
-            "${env:ProgramFiles}\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC",
-            "${env:ProgramFiles}\Microsoft Visual Studio\2022\BuildTools\VC\Tools\MSVC",
-            "${env:ProgramFiles(x86)}\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC",
-            "${env:ProgramFiles(x86)}\Microsoft Visual Studio\2022\Professional\VC\Tools\MSVC",
-            "${env:ProgramFiles(x86)}\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC",
-            "${env:ProgramFiles(x86)}\Microsoft Visual Studio\2022\BuildTools\VC\Tools\MSVC"
-        )
+    $vsYear = if ($QtMajorVersion -eq "5") { "2019" } else { "2022" }
+
+    $vswhere = "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe"
+    if (Test-Path $vswhere) {
+        $vsPath = & $vswhere -latest -products * `
+            -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 `
+            -property installationPath 2>$null
+        if ($vsPath) {
+            $msvcBase = Join-Path $vsPath "VC\Tools\MSVC"
+            if (Test-Path $msvcBase) {
+                $versions = Get-ChildItem $msvcBase -Directory | Sort-Object Name -Descending
+                if ($versions) {
+                    $compilerPath = Join-Path $msvcBase "$($versions[0].Name)\bin\Hostx64\x64\cl.exe"
+                    if (Test-Path $compilerPath) {
+                        return $compilerPath
+                    }
+                }
+            }
+        }
     }
 
-    
+    $msvcPaths = @(
+        "${env:ProgramFiles}\Microsoft Visual Studio\$vsYear\Community\VC\Tools\MSVC",
+        "${env:ProgramFiles}\Microsoft Visual Studio\$vsYear\Professional\VC\Tools\MSVC",
+        "${env:ProgramFiles}\Microsoft Visual Studio\$vsYear\Enterprise\VC\Tools\MSVC",
+        "${env:ProgramFiles}\Microsoft Visual Studio\$vsYear\BuildTools\VC\Tools\MSVC",
+        "${env:ProgramFiles(x86)}\Microsoft Visual Studio\$vsYear\Community\VC\Tools\MSVC",
+        "${env:ProgramFiles(x86)}\Microsoft Visual Studio\$vsYear\Professional\VC\Tools\MSVC",
+        "${env:ProgramFiles(x86)}\Microsoft Visual Studio\$vsYear\Enterprise\VC\Tools\MSVC",
+        "${env:ProgramFiles(x86)}\Microsoft Visual Studio\$vsYear\BuildTools\VC\Tools\MSVC"
+    )
+
     foreach ($path in $msvcPaths) {
         if (Test-Path $path) {
             $versions = Get-ChildItem $path -Directory | Sort-Object Name -Descending
             if ($versions) {
-                $latestVersion = $versions[0].Name
-                $compilerPath = Join-Path $path "$latestVersion\bin\Hostx64\x64\cl.exe"
+                $compilerPath = Join-Path $path "$($versions[0].Name)\bin\Hostx64\x64\cl.exe"
                 if (Test-Path $compilerPath) {
                     return $compilerPath
                 }
