@@ -273,19 +273,19 @@ fi
 get_qt5_packages() {
     case "$DISTRO" in
         debian-based)
-            echo "qtbase5-dev qtbase5-dev-tools qttools5-dev qttools5-dev-tools qtdeclarative5-dev libqt5serialport5-dev libqt5serialbus5-dev"
+            echo "qtbase5-dev qtbase5-dev-tools qttools5-dev qttools5-dev-tools qtdeclarative5-dev libqt5serialport5-dev libqt5serialbus5-dev libqt5svg5-dev"
             ;;
         rhel-based)
-            echo "qt5-qtbase-devel qt5-qttools-devel qt5-qtdeclarative-devel qt5-qtserialport-devel qt5-qtserialbus-devel"
+            echo "qt5-qtbase-devel qt5-qttools-devel qt5-qtdeclarative-devel qt5-qtserialport-devel qt5-qtserialbus-devel qt5-qtsvg-devel"
             ;;
         altlinux)
-            echo "qt5-base-devel qt5-tools-devel qt5-declarative-devel qt5-serialport-devel qt5-serialbus-devel"
+            echo "qt5-base-devel qt5-tools-devel qt5-declarative-devel qt5-serialport-devel qt5-serialbus-devel qt5-svg-devel"
             ;;
         suse-based)
-            echo "libqt5-qtbase-devel libqt5-qttools-devel libqt5-qttools-qhelpgenerator libqt5-qtdeclarative-devel libqt5-qtserialport-devel libqt5-qtserialbus libqt5-qtserialbus-devel"
+            echo "libqt5-qtbase-devel libqt5-qttools-devel libqt5-qttools-qhelpgenerator libqt5-qtdeclarative-devel libqt5-qtserialport-devel libqt5-qtserialbus libqt5-qtserialbus-devel libqt5-qtsvg-devel"
             ;;
         arch-based)
-            echo "qt5-base qt5-tools qt5-declarative qt5-serialport qt5-serialbus"
+            echo "qt5-base qt5-tools qt5-declarative qt5-serialport qt5-serialbus qt5-svg"
             ;;
     esac
 }
@@ -299,22 +299,22 @@ get_qt6_packages() {
             case "$ID-${VERSION_ID%%.*}" in
                 ubuntu-22)
                     echo "qt6-base-dev qt6-base-dev-tools qt6-declarative-dev qt6-tools-dev qt6-tools-dev-tools qt6-l10n-tools libqt6serialport6-dev \
-                            libqt6serialbus6-bin libqt6serialbus6-dev libqt6core5compat6-dev qt6-documentation-tools libqt6svg6"
+                            libqt6serialbus6-bin libqt6serialbus6-dev libqt6core5compat6-dev qt6-documentation-tools libqt6svg6-dev"
                 ;;
                 *)
                     echo "qt6-base-dev qt6-base-dev-tools qt6-declarative-dev qt6-tools-dev qt6-tools-dev-tools qt6-serialport-dev qt6-serialbus-dev \
-                            qt6-5compat-dev qt6-documentation-tools"
+                            qt6-5compat-dev qt6-documentation-tools libqt6svg6-dev"
                 ;;
             esac
             ;;
         rhel-based)
-            echo "qt6-qtbase-devel qt6-qttools-devel qt6-qtdeclarative-devel qt6-qtserialport-devel qt6-qtserialbus-devel qt6-qt5compat-devel"
+            echo "qt6-qtbase-devel qt6-qttools-devel qt6-qtdeclarative-devel qt6-qtserialport-devel qt6-qtserialbus-devel qt6-qt5compat-devel qt6-qtsvg-devel"
             ;;
         altlinux)
-            echo "qt6-base-devel qt6-tools-devel qt6-declarative-devel qt6-serialport-devel qt6-serialbus-devel qt6-5compat-devel qt6-sql"
+            echo "qt6-base-devel qt6-tools-devel qt6-declarative-devel qt6-serialport-devel qt6-serialbus-devel qt6-5compat-devel qt6-svg-devel qt6-sql"
             ;;
         suse-based)
-            echo "qt6-base-devel qt6-tools-devel qt6-declarative-devel qt6-serialport-devel qt6-serialbus-devel qt6-qt5compat-devel qt6-help-devel qt6-linguist-devel"
+            echo "qt6-base-devel qt6-tools-devel qt6-declarative-devel qt6-serialport-devel qt6-serialbus-devel qt6-qt5compat-devel qt6-svg-devel qt6-help-devel qt6-linguist-devel"
             ;;
         arch-based)
             echo "qt6-base qt6-declarative qt6-tools qt6-serialport qt6-serialbus qt6-5compat qt6-svg"
