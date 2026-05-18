@@ -46,7 +46,7 @@ jobs:
               {
                   "name": "Windows 2019",
                   "runner": "windows-2019",
-                  "qt_modes": ["qt5"],
+                  "qt_modes": ["qt5", "qt6"],
               },
               {
                   "name": "Windows 2022",
@@ -95,6 +95,8 @@ jobs:
         env:
           QT_MODE: ${{ inputs.qt || 'qt6' }}
         run: |
+          Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+
           $buildArgs = @()
           switch ($env:QT_MODE) {
             "qt5" { $buildArgs += "-qt5" }
