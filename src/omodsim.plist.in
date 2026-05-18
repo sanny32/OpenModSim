@@ -8,7 +8,7 @@
     <string>@MACOSX_BUNDLE_ICON_FILE@</string>
 @MACOSX_ASSET_ICON_PLIST_ENTRY@
     <key>CFBundleIdentifier</key>
-    <string>org.ananev.omodsim</string>
+    <string>io.github.sanny32.omodsim@VERSION_MAJOR@</string>
     <key>CFBundleInfoDictionaryVersion</key>
     <string>6.0</string>
     <key>CFBundleName</key>

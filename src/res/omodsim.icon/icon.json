@@ -1,6 +1,6 @@
 {
   "fill" : {
-    "solid" : "extended-srgb:0.00000,0.53333,1.00000,1.00000"
+    "solid" : "display-p3:0.99805,0.99805,0.99805,1.00000"
   },
   "groups" : [
     {
@@ -24,9 +24,8 @@
     }
   ],
   "supported-platforms" : {
-    "circles" : [
-      "watchOS"
-    ],
-    "squares" : "shared"
+    "squares" : [
+      "macOS"
+    ]
   }
 }
