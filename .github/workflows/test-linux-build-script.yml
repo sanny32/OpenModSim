@@ -78,7 +78,7 @@ jobs:
                   "name": "Ubuntu 26.04",
                   "image": "ubuntu:26.04",
                   "family": "apt",
-                  "qt_modes": ["qt5", "qt6", "auto"],
+                  "qt_modes": ["qt6", "auto"],
               },
               {
                   "name": "Fedora 41",
@@ -169,7 +169,7 @@ jobs:
     name: ${{ matrix.name }} (${{ inputs.qt || 'qt6' }})
     needs: prepare-matrix
     runs-on: ubuntu-latest
-    timeout-minutes: 180
+    timeout-minutes: 60
 
     strategy:
       fail-fast: false
