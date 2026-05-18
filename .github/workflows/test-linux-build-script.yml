@@ -142,7 +142,9 @@ jobs:
 
       - name: Checkout repository
         run: |
-          git init .
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          git init -b checkout "$GITHUB_WORKSPACE"
+          cd "$GITHUB_WORKSPACE"
           git remote add origin "https://github.com/${GITHUB_REPOSITORY}.git"
           git fetch --depth=1 origin "${GITHUB_SHA}"
           git checkout --detach "${GITHUB_SHA}"
