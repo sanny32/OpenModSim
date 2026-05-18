@@ -135,7 +135,7 @@ Script.onInit(init);
 The following minimum operating system versions are supported for OpenModSim:
 
 - <img src="docs/icons/logo_windows7.svg" width="16" height="16" /> **Microsoft Windows 7**
-- <img src="docs/icons/logo_apple.svg" width="16" height="16" /> **macOS 11 (Big Sur)** (experimental support)
+- <img src="docs/icons/logo_apple.svg" width="16" height="16" /> **macOS 15 (Sequoia)**
 - <img src="docs/icons/logo_debian.svg" width="16" height="16" /> **Debian Linux 11**
 - <img src="docs/icons/logo_ubuntu.svg" width="16" height="16" /> **Ubuntu Linux 22.04**
 - <img src="docs/icons/logo_mint.png"  width="16" height="16" /> **Mint Linux 22**
