@@ -38,6 +38,7 @@
 #include <QTabBar>
 #include <QToolBar>
 #include <QMenu>
+#include <QFocusFrame>
 #include <QToolButton>
 #include <QWidget>
 
@@ -847,10 +848,25 @@ int QlementineAppStyle::styleHint(StyleHint hint, const QStyleOption* option,
 
     // QMdiSubWindow::isWindow()==false causes QFocusFrame to escape the subwindow hierarchy → mapTo warnings on close.
     if (hint == SH_FocusFrame_AboveWidget && widget) {
-        const QWidget* w = widget->parentWidget();
+        if (qobject_cast<const QToolButton*>(widget))
+            return 0;
+
+        const auto* focusFrame = qobject_cast<const QFocusFrame*>(widget);
+        // styleHint(SH_FocusFrame_AboveWidget) is called from QFocusFrame::setWidget() BEFORE
+        // d->widget is assigned, so focusFrame->widget() is null at that point.
+        // Fall back to the focus frame's own parent chain: Qt constructs QFocusFrame(focusedWidget)
+        // so at construction/initial-setWidget time the frame's parent IS the widget being focused.
+        const QWidget* w = (focusFrame && focusFrame->widget()) ? focusFrame->widget() : widget;
         while (w) {
             if (qobject_cast<const QMdiSubWindow*>(w))
                 return 0;
+            // Return 1 for toolbar-embedded widgets (showFrameAboveWidget=true).
+            // When QWidgetAction::releaseWidget calls setParent(null) during destruction,
+            // QEvent::ParentChange triggers setWidget(null)/setWidget(w) where w->isWindow()==true
+            // (Qt adds Qt::Window flag when parent is null), so setWidget takes the else-branch
+            // and safely clears the frame — before updateSize can dereference null parentWidget().
+            if (qobject_cast<const QToolBar*>(w))
+                return 1;
             w = w->parentWidget();
         }
     }

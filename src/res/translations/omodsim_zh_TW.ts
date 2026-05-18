@@ -2166,8 +2166,8 @@ Source: %3</source>
     </message>
     <message>
         <location filename="../../formtrafficview.cpp" line="112"/>
-        <location filename="../../formtrafficview.cpp" line="736"/>
-        <location filename="../../formtrafficview.cpp" line="887"/>
+        <location filename="../../formtrafficview.cpp" line="732"/>
+        <location filename="../../formtrafficview.cpp" line="884"/>
         <source>Exceptions Only</source>
         <translation>僅例外</translation>
     </message>
@@ -2197,38 +2197,38 @@ Source: %3</source>
         <translation>匯出日誌錯誤！</translation>
     </message>
     <message>
-        <location filename="../../formtrafficview.cpp" line="699"/>
-        <location filename="../../formtrafficview.cpp" line="871"/>
+        <location filename="../../formtrafficview.cpp" line="695"/>
+        <location filename="../../formtrafficview.cpp" line="868"/>
         <source>Unit:</source>
         <translation>單元：</translation>
     </message>
     <message>
-        <location filename="../../formtrafficview.cpp" line="705"/>
-        <location filename="../../formtrafficview.cpp" line="875"/>
+        <location filename="../../formtrafficview.cpp" line="701"/>
+        <location filename="../../formtrafficview.cpp" line="872"/>
         <source>-1 = all unit ids</source>
         <translation>-1 = 所有單元ID</translation>
     </message>
     <message>
-        <location filename="../../formtrafficview.cpp" line="726"/>
-        <location filename="../../formtrafficview.cpp" line="882"/>
+        <location filename="../../formtrafficview.cpp" line="722"/>
+        <location filename="../../formtrafficview.cpp" line="879"/>
         <source>Source:</source>
         <translation>來源：</translation>
     </message>
     <message>
-        <location filename="../../formtrafficview.cpp" line="737"/>
-        <location filename="../../formtrafficview.cpp" line="888"/>
+        <location filename="../../formtrafficview.cpp" line="733"/>
+        <location filename="../../formtrafficview.cpp" line="885"/>
         <source>Show only responses with Modbus exception</source>
         <translation>僅顯示含有Modbus例外的回應</translation>
     </message>
     <message>
-        <location filename="../../formtrafficview.cpp" line="744"/>
-        <location filename="../../formtrafficview.cpp" line="892"/>
+        <location filename="../../formtrafficview.cpp" line="740"/>
+        <location filename="../../formtrafficview.cpp" line="889"/>
         <source>Autoscroll</source>
         <translation>自動捲動</translation>
     </message>
     <message>
-        <location filename="../../formtrafficview.cpp" line="745"/>
-        <location filename="../../formtrafficview.cpp" line="893"/>
+        <location filename="../../formtrafficview.cpp" line="741"/>
+        <location filename="../../formtrafficview.cpp" line="890"/>
         <source>Automatically scroll to the latest entry</source>
         <translation>自動捲動至最新項目</translation>
     </message>
@@ -2237,21 +2237,21 @@ Source: %3</source>
         <location filename="../../formtrafficview.cpp" line="101"/>
         <location filename="../../formtrafficview.cpp" line="105"/>
         <location filename="../../formtrafficview.cpp" line="543"/>
-        <location filename="../../formtrafficview.cpp" line="704"/>
-        <location filename="../../formtrafficview.cpp" line="729"/>
-        <location filename="../../formtrafficview.cpp" line="874"/>
+        <location filename="../../formtrafficview.cpp" line="700"/>
+        <location filename="../../formtrafficview.cpp" line="725"/>
+        <location filename="../../formtrafficview.cpp" line="871"/>
         <source>All</source>
         <translation>全部</translation>
     </message>
     <message>
-        <location filename="../../formtrafficview.cpp" line="753"/>
-        <location filename="../../formtrafficview.cpp" line="897"/>
+        <location filename="../../formtrafficview.cpp" line="749"/>
+        <location filename="../../formtrafficview.cpp" line="894"/>
         <source>Rows:</source>
         <translation>行數：</translation>
     </message>
     <message>
-        <location filename="../../formtrafficview.cpp" line="714"/>
-        <location filename="../../formtrafficview.cpp" line="879"/>
+        <location filename="../../formtrafficview.cpp" line="710"/>
+        <location filename="../../formtrafficview.cpp" line="876"/>
         <source>Function:</source>
         <translation>功能：</translation>
     </message>
