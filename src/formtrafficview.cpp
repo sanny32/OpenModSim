@@ -684,10 +684,6 @@ void FormTrafficView::setupToolbarActions()
     ui->actionPauseTraffic->setIcon(themedIcon(QStringLiteral("omodsim/pause")));
     ui->actionClearTraffic->setIcon(themedIcon(QStringLiteral("omodsim/clear")));
     ui->actionExportTrafficLog->setIcon(themedIcon(QStringLiteral("omodsim/export")));
-
-    ui->toolBarTraffic->removeAction(ui->actionPauseTraffic);
-    ui->toolBarTraffic->removeAction(ui->actionClearTraffic);
-    ui->toolBarTraffic->removeAction(ui->actionExportTrafficLog);
 }
 
 ///
@@ -774,6 +770,7 @@ void FormTrafficView::setupFilterControls()
 ///
 void FormTrafficView::setupToolbarLayout()
 {
+    ui->toolBarTraffic->clear();
     ui->toolBarTraffic->addWidget(_labelUnitId);
     addToolbarSpacer(3);
     ui->toolBarTraffic->addWidget(_unitIdFilter);
