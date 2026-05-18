@@ -34,7 +34,7 @@ const QHash<QString, IconDescriptor>& iconRegistry()
         { QStringLiteral("omodsim/add"),                       { QStringLiteral("action/plus-circle"),                  QStringLiteral("add") } },
         { QStringLiteral("omodsim/bell"),                      { QStringLiteral("misc/bell"),                           QStringLiteral("bell") } },
         { QStringLiteral("omodsim/bell-dot"),                  { QStringLiteral("misc/bell"),                           QStringLiteral("bell-dot") } },
-        { QStringLiteral("omodsim/clear"),                     { QStringLiteral("action/trash"),                        QStringLiteral("edit-delete") } },
+        { QStringLiteral("omodsim/clear"),                     { QStringLiteral("action/trash"),                        QStringLiteral("edit-delete.png") } },
         { QStringLiteral("omodsim/close"),                     { QStringLiteral("action/close"),                        QStringLiteral("close") } },
         { QStringLiteral("omodsim/connect"),                   { QStringLiteral("misc/link"),                           QStringLiteral("connect") } },
         { QStringLiteral("omodsim/copy"),                      { QStringLiteral("action/copy"),                         QStringLiteral("copy") } },
@@ -159,9 +159,13 @@ QIcon ThemedIcons::icon(const QString& name, IconMode mode)
     if (resourceName.isEmpty())
         return {};
 
-    const QString svgPath = QString{kFallbackDir} + resourceName + QStringLiteral(".svg");
+    const auto iconPath = QString{kFallbackDir} + resourceName;
+    if (QFile::exists(iconPath))
+        return QIcon(iconPath);
+
+    const QString svgPath = iconPath + QStringLiteral(".svg");
     if (QFile::exists(svgPath))
         return QIcon(svgPath);
 
-    return QIcon(QString{kFallbackDir} + resourceName + QStringLiteral(".png"));
+    return QIcon(iconPath + QStringLiteral(".png"));
 }

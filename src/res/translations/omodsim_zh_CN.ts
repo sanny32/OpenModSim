@@ -2594,7 +2594,7 @@ Open the download page?</source>
     </message>
     <message>
         <location filename="../../mainwindow.ui" line="348"/>
-        <location filename="../../mainwindow.cpp" line="1907"/>
+        <location filename="../../mainwindow.cpp" line="1911"/>
         <source>Save Project</source>
         <translation>保存项目</translation>
     </message>
@@ -2794,19 +2794,19 @@ Open the download page?</source>
         <translation>状态栏</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="915"/>
+        <location filename="../../mainwindow.cpp" line="919"/>
         <source>All files (*)</source>
         <translation>所有文件 (*)</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="297"/>
-        <location filename="../../mainwindow.cpp" line="662"/>
+        <location filename="../../mainwindow.cpp" line="301"/>
+        <location filename="../../mainwindow.cpp" line="666"/>
         <source>Open Recent</source>
         <translation>最近打开</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="298"/>
-        <location filename="../../mainwindow.cpp" line="2043"/>
+        <location filename="../../mainwindow.cpp" line="302"/>
+        <location filename="../../mainwindow.cpp" line="2047"/>
         <source>Clear List</source>
         <translation>清除列表</translation>
     </message>
@@ -2821,21 +2821,21 @@ Open the download page?</source>
         <translation>输出</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="914"/>
-        <location filename="../../mainwindow.cpp" line="1937"/>
+        <location filename="../../mainwindow.cpp" line="918"/>
+        <location filename="../../mainwindow.cpp" line="1941"/>
         <source>Project files (*.omsim)</source>
         <translation>项目文件 (*.omsim)</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="1561"/>
-        <location filename="../../mainwindow.cpp" line="1965"/>
+        <location filename="../../mainwindow.cpp" line="1565"/>
+        <location filename="../../mainwindow.cpp" line="1969"/>
         <source>Untitled</source>
         <translation>未命名</translation>
     </message>
     <message>
         <location filename="../../applogger.cpp" line="127"/>
-        <location filename="../../mainwindow.cpp" line="665"/>
-        <location filename="../../mainwindow.cpp" line="1746"/>
+        <location filename="../../mainwindow.cpp" line="669"/>
+        <location filename="../../mainwindow.cpp" line="1750"/>
         <source>Address Base</source>
         <translation>地址基准</translation>
     </message>
@@ -3130,7 +3130,7 @@ Open the download page?</source>
         <translation>脚本已启动：%1（模式：%2）</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="1300"/>
+        <location filename="../../mainwindow.cpp" line="1304"/>
         <source>Move to Other Panel</source>
         <translation>移至其他面板</translation>
     </message>
@@ -3152,12 +3152,12 @@ Open the download page?</source>
         <translation>十六进制视图</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="1908"/>
+        <location filename="../../mainwindow.cpp" line="1912"/>
         <source>Save project before closing?</source>
         <translation>关闭前保存项目？</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="2031"/>
+        <location filename="../../mainwindow.cpp" line="2035"/>
         <source>No Recent Projects</source>
         <translation>没有最近项目</translation>
     </message>
@@ -3167,7 +3167,7 @@ Open the download page?</source>
         <translation>数据</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="1258"/>
+        <location filename="../../mainwindow.cpp" line="1262"/>
         <source>JavaScript files (*.js);;All files (*)</source>
         <translation>JavaScript文件 (*.js);;所有文件 (*)</translation>
     </message>
