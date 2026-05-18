@@ -108,7 +108,7 @@ jobs:
                   "name": "RedOS 8",
                   "image": "registry.red-soft.ru/redos8c/ubi:latest",
                   "family": "dnf",
-                  "qt_modes": ["qt5"],
+                  "qt_modes": ["qt5", "qt6"],
               },
               {
                   "name": "openSUSE Leap 15.6",
