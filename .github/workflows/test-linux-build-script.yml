@@ -12,15 +12,6 @@ on:
         required: true
         default: dev
         type: string
-      qt:
-        description: "Qt version argument passed to build.sh"
-        required: true
-        default: "qt5"
-        type: choice
-        options:
-          - qt5
-          - qt6
-          - auto
 
 permissions:
   contents: read
@@ -35,14 +26,11 @@ jobs:
     steps:
       - name: Build matrix
         id: matrix
-        env:
-          QT_MODE: ${{ inputs.qt || 'qt6' }}
         run: |
           python3 - <<'PY'
           import json
           import os
 
-          qt_mode = os.environ["QT_MODE"]
           entries = [
               {
                   "name": "Debian 11",
@@ -155,9 +143,9 @@ jobs:
           ]
 
           include = [
-              {key: value for key, value in entry.items() if key != "qt_modes"}
+              {key: value for key, value in entry.items() if key != "qt_modes"} | {"qt_mode": qt_mode}
               for entry in entries
-              if qt_mode in entry["qt_modes"]
+              for qt_mode in entry["qt_modes"]
           ]
           matrix = {"include": include}
           print(json.dumps(matrix, indent=2))
@@ -166,7 +154,7 @@ jobs:
           PY
 
   test-build-sh:
-    name: ${{ matrix.name }} (${{ inputs.qt || 'qt6' }})
+    name: ${{ matrix.name }} (${{ matrix.qt_mode }})
     needs: prepare-matrix
     runs-on: ubuntu-latest
     timeout-minutes: 60
@@ -232,10 +220,8 @@ jobs:
           cat /etc/os-release
 
       - name: Run build.sh
-        env:
-          QT_MODE: ${{ inputs.qt || 'qt6' }}
         run: |
-          case "$QT_MODE" in
+          case "${{ matrix.qt_mode }}" in
             qt5)
               BUILD_ARGS="-qt5"
               ;;
@@ -246,7 +232,7 @@ jobs:
               BUILD_ARGS=""
               ;;
             *)
-              echo "Unsupported Qt input: $QT_MODE"
+              echo "Unsupported Qt mode: ${{ matrix.qt_mode }}"
               exit 1
               ;;
           esac
