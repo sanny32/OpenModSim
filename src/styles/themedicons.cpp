@@ -100,6 +100,17 @@ const QHash<QString, IconDescriptor>& iconRegistry()
 }
 
 ///
+/// \brief Marks a monochrome icon as a mask so native macOS menus can tint it.
+/// \param icon Icon loaded from a monochrome theme resource.
+/// \return The same icon with mask metadata enabled.
+///
+QIcon makeMaskIcon(QIcon icon)
+{
+    icon.setIsMask(true);
+    return icon;
+}
+
+///
 /// \brief Resolves an icon from the current desktop icon theme and optional Qlementine mapping.
 /// \param themeName Theme icon identifier to resolve.
 /// \return Resolved icon or a null icon when no themed match is found.
@@ -114,18 +125,18 @@ QIcon iconFromThemeName(const QString& themeName)
         if (!mappedName.isEmpty() && QFile::exists(mappedName)) {
             const QIcon mappedIcon(mappedName);
             if (!mappedIcon.isNull())
-                return mappedIcon;
+                return makeMaskIcon(mappedIcon);
         }
     }
 
     if (themeName.contains(QLatin1Char('/'))) {
         const QString qlementineIconPath = QStringLiteral(":/qlementine/icons/16/%1.svg").arg(themeName);
         if (QFile::exists(qlementineIconPath))
-            return QIcon(qlementineIconPath);
+            return makeMaskIcon(QIcon(qlementineIconPath));
 
         const QString customIconPath = QStringLiteral(":/res/icons/16/%1.svg").arg(themeName);
         if (QFile::exists(customIconPath))
-            return QIcon(customIconPath);
+            return makeMaskIcon(QIcon(customIconPath));
     }
 #endif
 
