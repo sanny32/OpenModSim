@@ -12,27 +12,27 @@ if ($qt5 -and $qt6) {
 }
 
 if ($qt5) {
-    $QtVersion      = "5.15.2"
-    $Arch           = "win64"
-    $Compiler       = "msvc2019_64"
-    $CMakeGenerator = "Visual Studio 16 2019"
+    $QtVersion = "5.15.2"
+    $Arch      = "win64"
+    $Compiler  = "msvc2019_64"
 }
 else {
-    $QtVersion   = "6.9.3"
-    $Arch        = "win64"
-    $Compiler    = "msvc2022_64"
+    $QtVersion = "6.9.3"
+    $Arch      = "win64"
+    $Compiler  = "msvc2022_64"
+}
 
-    $vswhere = "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe"
-    $CMakeGenerator = "Visual Studio 17 2022"
-    if (Test-Path $vswhere) {
-        $vsVersion = & $vswhere -latest -products * `
-            -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 `
-            -property installationVersion 2>$null
-        if ($vsVersion -match '^(\d+)\.') {
-            switch ([int]$Matches[1]) {
-                17 { $CMakeGenerator = "Visual Studio 17 2022" }
-                18 { $CMakeGenerator = "Visual Studio 18 2025" }
-            }
+$vswhere = "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe"
+$CMakeGenerator = if ($qt5) { "Visual Studio 16 2019" } else { "Visual Studio 17 2022" }
+if (Test-Path $vswhere) {
+    $vsVersion = & $vswhere -latest -products * `
+        -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 `
+        -property installationVersion 2>$null
+    if ($vsVersion -match '^(\d+)\.') {
+        switch ([int]$Matches[1]) {
+            16 { $CMakeGenerator = "Visual Studio 16 2019" }
+            17 { $CMakeGenerator = "Visual Studio 17 2022" }
+            18 { $CMakeGenerator = "Visual Studio 18 2026" }
         }
     }
 }
