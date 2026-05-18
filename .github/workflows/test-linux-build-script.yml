@@ -1,6 +1,10 @@
 name: Test Linux build script
 
 on:
+  push:
+    branches:
+      - main
+
   workflow_dispatch:
     inputs:
       branch:
@@ -32,7 +36,7 @@ jobs:
       - name: Build matrix
         id: matrix
         env:
-          QT_MODE: ${{ inputs.qt }}
+          QT_MODE: ${{ inputs.qt || 'qt6' }}
         run: |
           python3 - <<'PY'
           import json
@@ -144,7 +148,7 @@ jobs:
           PY
 
   test-build-sh:
-    name: ${{ matrix.name }} (${{ inputs.qt }})
+    name: ${{ matrix.name }} (${{ inputs.qt || 'qt6' }})
     needs: prepare-matrix
     runs-on: ubuntu-latest
     timeout-minutes: 180
@@ -196,7 +200,7 @@ jobs:
 
       - name: Checkout repository
         env:
-          CHECKOUT_REF: ${{ inputs.branch || github.ref_name }}
+          CHECKOUT_REF: ${{ inputs.branch || github.sha }}
         run: |
           git config --global --add safe.directory "$GITHUB_WORKSPACE"
           git init -b checkout "$GITHUB_WORKSPACE"
@@ -210,8 +214,10 @@ jobs:
           cat /etc/os-release
 
       - name: Run build.sh
+        env:
+          QT_MODE: ${{ inputs.qt || 'qt6' }}
         run: |
-          case "${{ inputs.qt }}" in
+          case "$QT_MODE" in
             qt5)
               BUILD_ARGS="-qt5"
               ;;
@@ -222,7 +228,7 @@ jobs:
               BUILD_ARGS=""
               ;;
             *)
-              echo "Unsupported Qt input: ${{ inputs.qt }}"
+              echo "Unsupported Qt input: $QT_MODE"
               exit 1
               ;;
           esac
