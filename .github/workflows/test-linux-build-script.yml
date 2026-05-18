@@ -65,13 +65,7 @@ jobs:
                   "qt_modes": ["qt5", "qt6", "auto"],
               },
               {
-                  "name": "Mint 22",
-                  "image": "linuxmintd/mint22-amd64:latest",
-                  "family": "apt",
-                  "qt_modes": ["qt5", "qt6", "auto"],
-              },
-              {
-                  "name": "Zorin OS 18 (Ubuntu 24.04 base)",
+                  "name": "Ubuntu 24.04",
                   "image": "ubuntu:24.04",
                   "family": "apt",
                   "qt_modes": ["qt5", "qt6", "auto"],
