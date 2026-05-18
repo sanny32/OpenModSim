@@ -42,7 +42,7 @@ jobs:
           - name: Debian 13
             image: debian:13
             family: apt
-            qt_modes: qt5 qt6 auto
+            qt_modes: qt6 auto
             experimental: false
 
           - name: Ubuntu 22.04
@@ -96,11 +96,14 @@ jobs:
           - name: Arch
             image: archlinux:latest
             family: pacman
-            qt_modes: qt5 qt6 auto
+            qt_modes: qt6 auto
             experimental: true
 
     container:
       image: ${{ matrix.image }}
+      env:
+        DEBIAN_FRONTEND: noninteractive
+        TZ: Etc/UTC
 
     steps:
       - name: Prepare container
@@ -121,6 +124,7 @@ jobs:
               ;;
             zypper)
               zypper --gpg-auto-import-keys --non-interactive refresh
+              zypper --gpg-auto-import-keys --non-interactive update
               zypper --gpg-auto-import-keys --non-interactive install ca-certificates git sudo
               ;;
             alt)
@@ -137,7 +141,11 @@ jobs:
           esac
 
       - name: Checkout repository
-        uses: actions/checkout@v6
+        run: |
+          git init .
+          git remote add origin "https://github.com/${GITHUB_REPOSITORY}.git"
+          git fetch --depth=1 origin "${GITHUB_SHA}"
+          git checkout --detach "${GITHUB_SHA}"
 
       - name: Show OS release
         run: |

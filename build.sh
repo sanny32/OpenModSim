@@ -196,7 +196,7 @@ case "$ID" in
         check_min_os_version "11"
         ;;
     fedora)
-        check_min_os_version "42"
+        check_min_os_version "41"
         ;;
     rhel)
         check_min_os_version "8"
@@ -335,7 +335,7 @@ get_packages() {
             general_packages="build-essential cmake ninja-build curl tar gzip libxcb-cursor-dev libgl1-mesa-dev pkg-config libcups2-dev"
             ;;
         rhel-based)
-            general_packages="gcc gcc-c++ libstdc++-static cmake ninja-build curl tar gzip pkgconf-pkg-config xcb-util-cursor-devel"
+            general_packages="gcc gcc-c++ libstdc++-static cmake ninja-build tar gzip pkgconf-pkg-config xcb-util-cursor-devel"
             ;;
         altlinux)
             general_packages="gcc gcc-c++ libstdc++-devel-static cmake ninja-build curl tar gzip pkg-config libxcbutil-cursor libcups-devel"
