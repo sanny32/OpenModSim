@@ -19,8 +19,8 @@
 
 namespace {
 struct IconDescriptor {
-    QString themeName;
-    QString resourceName; // base name without extension, e.g. "save", "bell" — SVG preferred over PNG
+    QString iconThemeName;
+    QString iconFallback;
 };
 
 ///
@@ -156,8 +156,8 @@ QIcon ThemedIcons::icon(const QString& name, IconMode mode)
 
     const auto& registry = iconRegistry();
     const auto it = registry.constFind(name);
-    const QString themeName = it == registry.cend() ? name : it->themeName;
-    const QString resourceName = it == registry.cend() ? QString{} : it->resourceName;
+    const QString themeName = it == registry.cend() ? name : it->iconThemeName;
+    const QString resourceName = it == registry.cend() ? QString{} : it->iconFallback;
 
 #if defined(HAVE_QLEMENTINE_APP_STYLE)
     if (mode == Auto && dynamic_cast<QlementineAppStyle*>(qApp ? qApp->style() : nullptr)) {
