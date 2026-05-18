@@ -64,6 +64,7 @@ function updateDownloadLinks(release) {
         winx64Qt6: assets.find(a => a.name.match(/qt6-omodsim-.*_x64\.exe$/i)),
         winx64Qt5: assets.find(a => a.name.match(/qt5-omodsim-.*_x64\.exe$/i)),
         winx86: assets.find(a => a.name.match(/qt5-omodsim-.*_x86\.exe$/i)),
+        macosQt6: assets.find(a => a.name.match(/qt6-omodsim\d+[-_].*_arm64\.dmg$/i)),
         debQt6: assets.find(a => a.name.match(/qt6-omodsim_.*_amd64\.deb$/i)),
         debQt5: assets.find(a => a.name.match(/qt5-omodsim_.*_amd64\.deb$/i)),
         rpmQt6: assets.find(a => a.name.match(/qt6-omodsim-.*\.x86_64\.rpm$/i)),
@@ -85,6 +86,7 @@ function updateDownloadLinks(release) {
     updateLink('win-x64-qt6-link', files.winx64Qt6, 'Windows x64 Qt6');
     updateLink('win-x64-qt5-link', files.winx64Qt5, 'Windows x64 Qt5');
     updateLink('win-x86-qt5-link', files.winx86, 'Windows x86 Qt5');
+    updateLink('macos-qt6-link', files.macosQt6, 'macOS arm64 Qt6');
     updateLink('deb-qt6-link', files.debQt6, 'DEB Qt6');
     updateLink('deb-qt5-link', files.debQt5, 'DEB Qt5');
     updateLink('rpm-qt6-link', files.rpmQt6, 'RPM Qt6');
@@ -120,6 +122,13 @@ function updateInstallCommands(files) {
         const debName = files.debQt6.name;
         document.querySelectorAll('.qt6-deb-package-name').forEach(el => {
             el.textContent = debName;
+        });
+    }
+
+    if (files.macosQt6) {
+        const dmgName = files.macosQt6.name;
+        document.querySelectorAll('.qt6-macos-package-name').forEach(el => {
+            el.textContent = dmgName;
         });
     }
 
