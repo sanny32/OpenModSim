@@ -17,87 +17,118 @@ permissions:
   contents: read
 
 jobs:
+  prepare-matrix:
+    name: Prepare matrix
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.matrix.outputs.matrix }}
+
+    steps:
+      - name: Build matrix
+        id: matrix
+        env:
+          QT_MODE: ${{ inputs.qt }}
+        run: |
+          python3 - <<'PY'
+          import json
+          import os
+
+          qt_mode = os.environ["QT_MODE"]
+          entries = [
+              {
+                  "name": "Debian 11",
+                  "image": "debian:11",
+                  "family": "apt",
+                  "qt_modes": ["qt5"],
+              },
+              {
+                  "name": "Debian 12",
+                  "image": "debian:12",
+                  "family": "apt",
+                  "qt_modes": ["qt5", "qt6", "auto"],
+              },
+              {
+                  "name": "Debian 13",
+                  "image": "debian:13",
+                  "family": "apt",
+                  "qt_modes": ["qt6", "auto"],
+              },
+              {
+                  "name": "Ubuntu 22.04",
+                  "image": "ubuntu:22.04",
+                  "family": "apt",
+                  "qt_modes": ["qt5", "qt6", "auto"],
+              },
+              {
+                  "name": "Mint 22",
+                  "image": "linuxmintd/mint22-amd64:latest",
+                  "family": "apt",
+                  "qt_modes": ["qt5", "qt6", "auto"],
+              },
+              {
+                  "name": "Zorin OS 18 (Ubuntu 24.04 base)",
+                  "image": "ubuntu:24.04",
+                  "family": "apt",
+                  "qt_modes": ["qt5", "qt6", "auto"],
+              },
+              {
+                  "name": "Fedora 41",
+                  "image": "fedora:41",
+                  "family": "dnf",
+                  "qt_modes": ["qt5", "qt6", "auto"],
+              },
+              {
+                  "name": "Fedora 42",
+                  "image": "fedora:42",
+                  "family": "dnf",
+                  "qt_modes": ["qt5", "qt6", "auto"],
+              },
+              {
+                  "name": "Rocky Linux 9.7",
+                  "image": "rockylinux/rockylinux:9.7",
+                  "family": "rocky",
+                  "qt_modes": ["qt5", "qt6", "auto"],
+              },
+              {
+                  "name": "openSUSE Leap 15.6",
+                  "image": "opensuse/leap:15.6",
+                  "family": "zypper",
+                  "qt_modes": ["qt5", "qt6", "auto"],
+              },
+              {
+                  "name": "ALT Linux 11",
+                  "image": "alt:p11",
+                  "family": "alt",
+                  "qt_modes": ["qt5", "qt6", "auto"],
+              },
+              {
+                  "name": "Arch",
+                  "image": "archlinux:latest",
+                  "family": "pacman",
+                  "qt_modes": ["qt6", "auto"],
+              },
+          ]
+
+          include = [
+              {key: value for key, value in entry.items() if key != "qt_modes"}
+              for entry in entries
+              if qt_mode in entry["qt_modes"]
+          ]
+          matrix = {"include": include}
+          print(json.dumps(matrix, indent=2))
+          with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as output:
+              output.write(f"matrix={json.dumps(matrix)}\n")
+          PY
+
   test-build-sh:
     name: ${{ matrix.name }} (${{ inputs.qt }})
+    needs: prepare-matrix
     runs-on: ubuntu-latest
     timeout-minutes: 180
-    continue-on-error: ${{ matrix.experimental }}
 
     strategy:
       fail-fast: false
-      matrix:
-        include:
-          - name: Debian 11
-            image: debian:11
-            family: apt
-            qt_modes: qt5
-            experimental: false
-
-          - name: Debian 12
-            image: debian:12
-            family: apt
-            qt_modes: qt5 qt6 auto
-            experimental: false
-
-          - name: Debian 13
-            image: debian:13
-            family: apt
-            qt_modes: qt6 auto
-            experimental: false
-
-          - name: Ubuntu 22.04
-            image: ubuntu:22.04
-            family: apt
-            qt_modes: qt5 qt6 auto
-            experimental: false
-
-          - name: Mint 22
-            image: linuxmintd/mint22-amd64:latest
-            family: apt
-            qt_modes: qt5 qt6 auto
-            experimental: true
-
-          - name: Zorin OS 18 (Ubuntu 24.04 base)
-            image: ubuntu:24.04
-            family: apt
-            qt_modes: qt5 qt6 auto
-            experimental: true
-
-          - name: Fedora 41
-            image: fedora:41
-            family: dnf
-            qt_modes: qt5 qt6 auto
-            experimental: false
-
-          - name: Fedora 42
-            image: fedora:42
-            family: dnf
-            qt_modes: qt5 qt6 auto
-            experimental: false
-
-          - name: Rocky Linux 9.7
-            image: rockylinux/rockylinux:9.7
-            family: rocky
-            qt_modes: qt5 qt6 auto
-            experimental: false
-
-          - name: openSUSE Leap 15.6
-            image: opensuse/leap:15.6
-            family: zypper
-            qt_modes: qt5 qt6 auto
-            experimental: false
-
-          - name: ALT Linux 11
-            image: alt:p11
-            family: alt
-            qt_modes: qt5 qt6 auto
-            experimental: false
-
-          - name: Arch
-            image: archlinux:latest
-            family: pacman
-            qt_modes: qt6 auto
-            experimental: true
+      matrix: ${{ fromJson(needs.prepare-matrix.outputs.matrix) }}
 
     container:
       image: ${{ matrix.image }}
@@ -124,7 +155,7 @@ jobs:
               ;;
             zypper)
               zypper --gpg-auto-import-keys --non-interactive refresh
-              zypper --gpg-auto-import-keys --non-interactive update
+              zypper --gpg-auto-import-keys --non-interactive dup --allow-vendor-change
               zypper --gpg-auto-import-keys --non-interactive install ca-certificates git sudo
               ;;
             alt)
@@ -155,11 +186,6 @@ jobs:
 
       - name: Run build.sh
         run: |
-          if ! printf '%s\n' "${{ matrix.qt_modes }}" | grep -qw "${{ inputs.qt }}"; then
-            echo "Skipping ${{ matrix.name }} for Qt mode '${{ inputs.qt }}'. Supported modes: ${{ matrix.qt_modes }}"
-            exit 0
-          fi
-
           case "${{ inputs.qt }}" in
             qt5)
               BUILD_ARGS="-qt5"

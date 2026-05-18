@@ -211,7 +211,7 @@ case "$ID" in
         check_min_os_version "1.7.3"
         ;;
     altlinux)
-        check_min_os_version "11.0"
+        check_min_os_version "11"
         ;;
     suse|opensuse*)
         check_min_os_version "15.5"
