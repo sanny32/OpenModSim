@@ -1,6 +1,7 @@
 param(
     [switch]$qt5,
     [switch]$qt6,
+    [switch]$qlementine,
     [string]$BuildType = "Release",
     [string]$PythonVersion = "3.14.4"
 )
@@ -47,6 +48,7 @@ Write-Host "Generator:  $CMakeGenerator"
 Write-Host "BuildType:  $BuildType"
 Write-Host "Python:     $PythonVersion"
 Write-Host "InstallDir: $InstallPrefix"
+Write-Host "qlementine: $(if ($qlementine) { 'ON' } else { 'OFF' })"
 Write-Host "================================"
 
 # Check Windows version and architecture
@@ -432,7 +434,8 @@ $cmakeArgs = @(
     "../src",
     "-G", $CMakeGenerator,
     "-DCMAKE_PREFIX_PATH=`"$QtDir`"",
-    "-DCMAKE_INSTALL_PREFIX=`"$InstallPrefix`""
+    "-DCMAKE_INSTALL_PREFIX=`"$InstallPrefix`"",
+    "-DUSE_QLEMENTINE_APP_STYLE=$(if ($qlementine) { 'ON' } else { 'OFF' })"
 )
 
 if ($QtMajorVersion -eq "5") {

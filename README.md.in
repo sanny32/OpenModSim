@@ -176,6 +176,9 @@ Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
 If you need to specify Qt framework major version (5 or 6), you can do it in the parameters
   - `.\build.ps1 -qt5` or  `.\build.ps1 -qt6`
 
+To enable the experimental [Qlementine](https://github.com/oclero/qlementine) application style (requires Qt6 >= 6.8):
+  - `.\build.ps1 -qlementine`
+
 The build script supports building the application only for 64-bit architecture.
 
 ## Linux Building
@@ -193,6 +196,9 @@ cd OpenModSim
 
 If you need to specify Qt framework major version (5 or 6), you can do it in the parameters
   - `./build.sh -qt5` or  `./build.sh -qt6`
+
+To enable the experimental [Qlementine](https://github.com/oclero/qlementine) application style (requires Qt6 >= 6.8):
+  - `./build.sh -qlementine`
 
 ## macOS Building
 
@@ -216,9 +222,10 @@ cd OpenModSim
 ./build-macos.sh
 ```
 
-On macOS, OpenModSim uses [**Qlementine**](https://github.com/oclero/qlementine) style and [**Qlementine Icons**](https://github.com/oclero/qlementine-icons) by default when building with **Qt6 >= 6.8**.
-These dependencies are fetched automatically during CMake configure and improve icon/theme consistency on macOS.
-If you build with Qt5 or Qt6 < 6.8, OpenModSim falls back to the standard built-in style.
+> [!NOTE]
+> On macOS, OpenModSim uses [**Qlementine**](https://github.com/oclero/qlementine) style and [**Qlementine Icons**](https://github.com/oclero/qlementine-icons) by default when building with **Qt6 >= 6.8**.
+> These dependencies are fetched automatically during CMake configure and improve icon/theme consistency on macOS.
+> If you build with Qt5 or Qt6 < 6.8, OpenModSim falls back to the standard built-in style.
 
 The build script generates a macOS application bundle (`omodsim.app`). To run the application:
 ```bash

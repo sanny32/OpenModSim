@@ -137,6 +137,7 @@ esac
 # Parse script arguments
 # ==========================
 QT_CHOICE=""
+USE_QLEMENTINE_APP_STYLE=OFF
 for arg in "$@"; do
     case "$arg" in
         -qt5|qt5)
@@ -145,6 +146,10 @@ for arg in "$@"; do
             ;;
         -qt6|qt6)
             QT_CHOICE="qt6"
+            shift
+            ;;
+        --qlementine|-qlementine)
+            USE_QLEMENTINE_APP_STYLE=ON
             shift
             ;;
         *)
@@ -529,6 +534,7 @@ cd "$BUILD_DIR"
 cmake ../src -GNinja -DCMAKE_PREFIX_PATH="${CMAKE_PREFIX}" \
       -DCMAKE_CXX_COMPILER=${CXX_COMPILER} \
       -DCMAKE_BUILD_TYPE=${BUILD_TYPE} \
+      -DUSE_QLEMENTINE_APP_STYLE=${USE_QLEMENTINE_APP_STYLE} \
       ${CMAKE_QT_OPTION}
 ninja
 echo "Build finished successfully in $BUILD_DIR."
