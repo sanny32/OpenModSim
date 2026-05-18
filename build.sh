@@ -332,19 +332,19 @@ get_packages() {
 
     case "$DISTRO" in
         debian-based)
-            general_packages="build-essential cmake ninja-build curl libxcb-cursor-dev libgl1-mesa-dev pkg-config libcups2-dev"
+            general_packages="build-essential cmake ninja-build curl tar gzip libxcb-cursor-dev libgl1-mesa-dev pkg-config libcups2-dev"
             ;;
         rhel-based)
-            general_packages="gcc gcc-c++ libstdc++-static cmake ninja-build curl pkgconf-pkg-config xcb-util-cursor-devel"
+            general_packages="gcc gcc-c++ libstdc++-static cmake ninja-build curl tar gzip pkgconf-pkg-config xcb-util-cursor-devel"
             ;;
         altlinux)
-            general_packages="gcc gcc-c++ libstdc++-devel-static cmake ninja-build curl pkg-config libxcbutil-cursor libcups-devel"
+            general_packages="gcc gcc-c++ libstdc++-devel-static cmake ninja-build curl tar gzip pkg-config libxcbutil-cursor libcups-devel"
             ;;
         suse-based)
-            general_packages="gcc gcc-c++ cmake ninja curl pkg-config libxcb-cursor0"
+            general_packages="gcc gcc-c++ cmake ninja curl tar gzip pkg-config libxcb-cursor0"
             ;;
         arch-based)
-            general_packages="base-devel cmake ninja curl pkgconf libxcb libcups"
+            general_packages="base-devel cmake ninja curl tar gzip pkgconf libxcb libcups"
             ;;
     esac
 

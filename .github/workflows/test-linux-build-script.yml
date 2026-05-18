@@ -30,56 +30,73 @@ jobs:
           - name: Debian 11
             image: debian:11
             family: apt
+            qt_modes: qt5
+            experimental: false
+
+          - name: Debian 12
+            image: debian:12
+            family: apt
+            qt_modes: qt5 qt6 auto
+            experimental: false
+
+          - name: Debian 13
+            image: debian:13
+            family: apt
+            qt_modes: qt5 qt6 auto
             experimental: false
 
           - name: Ubuntu 22.04
             image: ubuntu:22.04
             family: apt
+            qt_modes: qt5 qt6 auto
             experimental: false
 
           - name: Mint 22
             image: linuxmintd/mint22-amd64:latest
             family: apt
+            qt_modes: qt5 qt6 auto
             experimental: true
 
           - name: Zorin OS 18 (Ubuntu 24.04 base)
             image: ubuntu:24.04
             family: apt
+            qt_modes: qt5 qt6 auto
             experimental: true
 
           - name: Fedora 41
             image: fedora:41
             family: dnf
+            qt_modes: qt5 qt6 auto
+            experimental: false
+
+          - name: Fedora 42
+            image: fedora:42
+            family: dnf
+            qt_modes: qt5 qt6 auto
             experimental: false
 
           - name: Rocky Linux 9.7
             image: rockylinux/rockylinux:9.7
             family: rocky
+            qt_modes: qt5 qt6 auto
             experimental: false
 
           - name: openSUSE Leap 15.6
             image: opensuse/leap:15.6
             family: zypper
+            qt_modes: qt5 qt6 auto
             experimental: false
 
           - name: ALT Linux 11
             image: alt:p11
             family: alt
+            qt_modes: qt5 qt6 auto
             experimental: false
-
-          - name: Astra Linux 1.7 (Debian 11 base)
-            image: debian:11
-            family: apt
-            experimental: true
-
-          - name: RedOS 8 (Fedora base)
-            image: fedora:41
-            family: dnf
-            experimental: true
 
           - name: Arch
             image: archlinux:latest
             family: pacman
+            qt_modes: qt5 qt6 auto
             experimental: true
 
     container:
@@ -100,6 +117,7 @@ jobs:
             rocky)
               dnf install -y ca-certificates git sudo dnf-plugins-core
               dnf config-manager --set-enabled crb
+              dnf install -y epel-release
               ;;
             zypper)
               zypper --gpg-auto-import-keys --non-interactive refresh
@@ -127,6 +145,11 @@ jobs:
 
       - name: Run build.sh
         run: |
+          if ! printf '%s\n' "${{ matrix.qt_modes }}" | grep -qw "${{ inputs.qt }}"; then
+            echo "Skipping ${{ matrix.name }} for Qt mode '${{ inputs.qt }}'. Supported modes: ${{ matrix.qt_modes }}"
+            exit 0
+          fi
+
           case "${{ inputs.qt }}" in
             qt5)
               BUILD_ARGS="-qt5"
