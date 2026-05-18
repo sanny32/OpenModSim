@@ -5,7 +5,7 @@ on:
     inputs:
       branch:
         description: "Branch, tag, or commit to test"
-        required: false
+        required: true
         default: dev
         type: string
       qt:
