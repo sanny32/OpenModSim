@@ -26,13 +26,20 @@ else {
 
 $QtMajorVersion = ($QtVersion -replace '^(\d+)\..*$', '$1')
 $SourceCMakeLists = Join-Path $PSScriptRoot "src\CMakeLists.txt"
+$MinimumCMakeMatch = Select-String -Path $SourceCMakeLists -Pattern '^\s*cmake_minimum_required\s*\(\s*VERSION\s+([0-9]+(\.[0-9]+){1,3})' | Select-Object -First 1
 $AppVersionMatch = Select-String -Path $SourceCMakeLists -Pattern '^\s*VERSION\s+(\d+)\.(\d+)\.(\d+)' | Select-Object -First 1
+
+if (-not $MinimumCMakeMatch) {
+    Write-Error "Can't detect minimum CMake version from $SourceCMakeLists"
+    exit 1
+}
 
 if (-not $AppVersionMatch) {
     Write-Error "Can't detect application version from $SourceCMakeLists"
     exit 1
 }
 
+$MinimumCMakeVersion = [version]$MinimumCMakeMatch.Matches[0].Groups[1].Value
 $AppMajorVersion = $AppVersionMatch.Matches[0].Groups[1].Value
 $InstallPrefix = "C:/Program Files/Open ModSim $AppMajorVersion"
 
@@ -172,6 +179,26 @@ function Install-CMakeSystem {
     
     Write-Host "CMake installation completed with exit code: $($process.ExitCode)"
     return $false
+}
+
+# Function to get CMake version
+function Get-CMakeVersion {
+    param(
+        [string]$CMakePath
+    )
+
+    try {
+        $versionOutput = & $CMakePath --version 2>&1
+        $versionLine = $versionOutput | Select-Object -First 1
+        if ($versionLine -match 'cmake version\s+([0-9]+(\.[0-9]+){1,3})') {
+            return [version]$Matches[1]
+        }
+    }
+    catch {
+        return $null
+    }
+
+    return $null
 }
 
 # Test MSVC is installed
@@ -371,23 +398,47 @@ python -m aqt version
 Write-Host ""
 Write-Host "Checking for CMake..."
 $cmakePath = $null
-if (Get-Command cmake -ErrorAction SilentlyContinue) {
-    $cmakePath = (Get-Command cmake).Source
+$cmakeNeedsInstall = $false
+$cmakeCommand = Get-Command cmake -ErrorAction SilentlyContinue
+if ($cmakeCommand) {
+    $cmakePath = $cmakeCommand.Source
     Write-Host "Found system CMake: $cmakePath"
+
+    $cmakeVersion = Get-CMakeVersion -CMakePath $cmakePath
+    if (-not $cmakeVersion) {
+        Write-Host "Failed to detect CMake version."
+        $cmakeNeedsInstall = $true
+    }
+    elseif ($cmakeVersion -lt $MinimumCMakeVersion) {
+        Write-Host "Found CMake version $cmakeVersion, but version $MinimumCMakeVersion or newer is required."
+        $cmakeNeedsInstall = $true
+    }
+    else {
+        Write-Host "CMake version $cmakeVersion is supported."
+    }
 } else {
     Write-Host "CMake not found in PATH."
-    $choice = Read-Host "Do you want to install CMake system-wide? (y/n)"
+    $cmakeNeedsInstall = $true
+}
+
+if ($cmakeNeedsInstall) {
+    $choice = Read-Host "Do you want to install/update CMake system-wide? (y/n)"
     if ($choice -eq 'y' -or $choice -eq 'Y') {
         $success = Install-CMakeSystem
         if ($success) {
             $cmakePath = (Get-Command cmake).Source
+            $cmakeVersion = Get-CMakeVersion -CMakePath $cmakePath
+            if (-not $cmakeVersion -or $cmakeVersion -lt $MinimumCMakeVersion) {
+                Write-Error "Installed CMake version is lower than required $MinimumCMakeVersion."
+                exit 1
+            }
             Write-Host "CMake installed: $cmakePath"
         } else {
             Write-Error "CMake installation failed. Please install manually from: https://cmake.org/download/"
             exit 1
         }
     } else {
-        Write-Host "Please install CMake manually from: https://cmake.org/download/"
+        Write-Host "Please install CMake $MinimumCMakeVersion or newer manually from: https://cmake.org/download/"
         Write-Host "Make sure to add it to PATH during installation."
         exit 1
     }

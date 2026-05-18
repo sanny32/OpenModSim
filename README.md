@@ -151,6 +151,9 @@ The following minimum operating system versions are supported for OpenModSim:
 # Building
   Building is available via cmake (with installed Qt version 5.15 and above) or Qt Creator. Supports both OS Microsoft Windows and Linux.
 
+> [!NOTE]
+> Building from source requires CMake version 3.28.4 or newer.
+
 ## Microsoft Windows Building
 
 The minimum supported version of Microsoft Windows for building OpenModSim from sources is Windows 10.
@@ -182,6 +185,7 @@ To enable the experimental [Qlementine](https://github.com/oclero/qlementine) ap
 The build script supports building the application only for 64-bit architecture.
 
 ## Linux Building
+
 1. Install [git](https://git-scm.com/downloads/linux) for your Linux distribution
 2. Run the following commands from the console:
 ```bash

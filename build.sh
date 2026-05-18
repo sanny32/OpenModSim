@@ -6,6 +6,10 @@ echo " OpenModSim build script (Linux) "
 echo "=================================="
 echo ""
 
+PROJECT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+SOURCE_DIR="$PROJECT_DIR/src"
+TOOLS_DIR="$PROJECT_DIR/.build-tools"
+
 # ==========================
 # Detect package manager and distro
 # ==========================
@@ -68,6 +72,102 @@ verlte() {
 verlt() {
     # $1 < $2 ?
     [ "$1" != "$2" ] && verlte "$1" "$2"
+}
+
+get_required_cmake_version() {
+    local version
+    version=$(grep -oP 'cmake_minimum_required\s*\(\s*VERSION\s+\K[0-9]+(\.[0-9]+){1,3}' "$SOURCE_DIR/CMakeLists.txt" | head -n1)
+    if [ -z "$version" ]; then
+        echo "Error: Can't detect minimum CMake version from $SOURCE_DIR/CMakeLists.txt" >&2
+        exit 1
+    fi
+
+    echo "$version"
+}
+
+get_cmake_version() {
+    local cmake_bin="$1"
+    "$cmake_bin" --version 2>/dev/null | head -n1 | grep -oE '[0-9]+(\.[0-9]+){1,3}' || true
+}
+
+download_file() {
+    local url="$1"
+    local output="$2"
+
+    if command -v curl >/dev/null 2>&1; then
+        curl -L --fail "$url" -o "$output"
+    elif command -v wget >/dev/null 2>&1; then
+        wget -O "$output" "$url"
+    else
+        echo "Error: curl or wget is required to download CMake." >&2
+        exit 1
+    fi
+}
+
+ensure_cmake_version() {
+    local required_version="$1"
+    local cmake_bin=""
+    local cmake_version=""
+
+    if command -v cmake >/dev/null 2>&1; then
+        cmake_bin=$(command -v cmake)
+        cmake_version=$(get_cmake_version "$cmake_bin")
+        if [ -n "$cmake_version" ] && ! verlt "$cmake_version" "$required_version"; then
+            echo "Using CMake $cmake_version from: $cmake_bin"
+            CMAKE_BIN="$cmake_bin"
+            return 0
+        fi
+
+        echo "Found CMake ${cmake_version:-unknown} at $cmake_bin, but version $required_version or newer is required."
+    else
+        echo "CMake not found in PATH."
+    fi
+
+    local machine
+    local cmake_arch
+    machine=$(uname -m)
+    case "$machine" in
+        x86_64|amd64)
+            cmake_arch="x86_64"
+            ;;
+        aarch64|arm64)
+            cmake_arch="aarch64"
+            ;;
+        *)
+            echo "Error: unsupported architecture for Kitware CMake binary: $machine" >&2
+            exit 1
+            ;;
+    esac
+
+    local install_dir="$TOOLS_DIR/cmake-$required_version-linux-$cmake_arch"
+    local local_cmake="$install_dir/bin/cmake"
+    if [ -x "$local_cmake" ]; then
+        cmake_version=$(get_cmake_version "$local_cmake")
+        if [ -n "$cmake_version" ] && ! verlt "$cmake_version" "$required_version"; then
+            echo "Using local CMake $cmake_version from: $local_cmake"
+            CMAKE_BIN="$local_cmake"
+            return 0
+        fi
+    fi
+
+    mkdir -p "$TOOLS_DIR" "$install_dir"
+    local installer="$TOOLS_DIR/cmake-$required_version-linux-$cmake_arch.sh"
+    local url="https://github.com/Kitware/CMake/releases/download/v$required_version/cmake-$required_version-linux-$cmake_arch.sh"
+
+    echo "Downloading CMake $required_version from Kitware..."
+    download_file "$url" "$installer"
+
+    echo "Installing CMake $required_version into $install_dir..."
+    sh "$installer" --skip-license --prefix="$install_dir"
+
+    cmake_version=$(get_cmake_version "$local_cmake")
+    if [ -z "$cmake_version" ] || verlt "$cmake_version" "$required_version"; then
+        echo "Error: downloaded CMake version check failed." >&2
+        exit 1
+    fi
+
+    echo "Using local CMake $cmake_version from: $local_cmake"
+    CMAKE_BIN="$local_cmake"
 }
 
 check_min_os_version() {
@@ -232,19 +332,19 @@ get_packages() {
 
     case "$DISTRO" in
         debian-based)
-            general_packages="build-essential cmake ninja-build libxcb-cursor-dev libgl1-mesa-dev pkg-config libcups2-dev"
+            general_packages="build-essential cmake ninja-build curl libxcb-cursor-dev libgl1-mesa-dev pkg-config libcups2-dev"
             ;;
         rhel-based)
-            general_packages="gcc gcc-c++ libstdc++-static cmake ninja-build pkgconf-pkg-config xcb-util-cursor-devel"
+            general_packages="gcc gcc-c++ libstdc++-static cmake ninja-build curl pkgconf-pkg-config xcb-util-cursor-devel"
             ;;
         altlinux)
-            general_packages="gcc gcc-c++ libstdc++-devel-static cmake ninja-build pkg-config libxcbutil-cursor libcups-devel"
+            general_packages="gcc gcc-c++ libstdc++-devel-static cmake ninja-build curl pkg-config libxcbutil-cursor libcups-devel"
             ;;
         suse-based)
-            general_packages="gcc gcc-c++ cmake ninja pkg-config libxcb-cursor0"
+            general_packages="gcc gcc-c++ cmake ninja curl pkg-config libxcb-cursor0"
             ;;
         arch-based)
-            general_packages="base-devel cmake ninja pkgconf libxcb libcups"
+            general_packages="base-devel cmake ninja curl pkgconf libxcb libcups"
             ;;
     esac
 
@@ -337,6 +437,13 @@ if [ -z "$QT_CHOICE" ]; then
     fi
 fi
 install_prereqs
+echo ""
+
+# ==========================
+# Check CMake version
+# ==========================
+MIN_CMAKE_VERSION=$(get_required_cmake_version)
+ensure_cmake_version "$MIN_CMAKE_VERSION"
 echo ""
 
 # ==========================
@@ -531,7 +638,7 @@ BUILD_DIR="build-omodsim-Qt_${SANITIZED_QT_VERSION}_g++_${ARCH}-${BUILD_TYPE}"
 echo "Starting build in: $BUILD_DIR"
 mkdir -p "$BUILD_DIR"
 cd "$BUILD_DIR"
-cmake ../src -GNinja -DCMAKE_PREFIX_PATH="${CMAKE_PREFIX}" \
+"$CMAKE_BIN" "$SOURCE_DIR" -GNinja -DCMAKE_PREFIX_PATH="${CMAKE_PREFIX}" \
       -DCMAKE_CXX_COMPILER=${CXX_COMPILER} \
       -DCMAKE_BUILD_TYPE=${BUILD_TYPE} \
       -DUSE_QLEMENTINE_APP_STYLE=${USE_QLEMENTINE_APP_STYLE} \
