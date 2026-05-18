@@ -304,8 +304,8 @@ try {
         $major = [int]$matches[1]
         $minor = [int]$matches[2]
         
-        if ($major -lt 3 -or ($major -eq 3 -and $minor -lt 6)) {
-            Write-Host "Python version $major.$minor is too old. aqtinstall requires Python 3.6+."
+        if ($major -lt 3 -or ($major -eq 3 -and $minor -lt 12)) {
+            Write-Host "Python version $major.$minor is too old. aqtinstall requires Python 3.12+."
             $choice = Read-Host "Do you want to install a newer Python version? (y/n)"
             if ($choice -eq 'y' -or $choice -eq 'Y') {
                 $success = Install-Python
@@ -314,7 +314,7 @@ try {
                     exit 1
                 }
             } else {
-                Write-Error "Please install Python 3.6 or newer manually."
+                Write-Error "Please install Python 3.12 or newer manually."
                 exit 1
             }
         }
@@ -368,28 +368,20 @@ else{
 # Check if aqtinstall is available by trying to import it
 Write-Host ""
 Write-Host "Checking for aqtinstall..."
-try {
-    $null = python -c "import aqt; print('aqtinstall found')" 2>$null
-    $aqtInstalled = $true
-}
-catch {
-    $aqtInstalled = $false
-}
+python -c "import aqt" 2>$null
+$aqtInstalled = ($LASTEXITCODE -eq 0)
 
 if (-not $aqtInstalled) {
     Write-Host "Installing aqtinstall..."
     python -m pip install --upgrade pip
     python -m pip install aqtinstall
-    
-    # Verify installation
-    try {
-        $null = python -c "import aqt; print('aqtinstall installed successfully')" 2>$null
-        Write-Host "aqtinstall installed successfully."
-    }
-    catch {
+
+    python -c "import aqt" 2>$null
+    if ($LASTEXITCODE -ne 0) {
         Write-Error "Failed to install aqtinstall. Please install manually: pip install aqtinstall"
         exit 1
     }
+    Write-Host "aqtinstall installed successfully."
 }
 
 python -m aqt version
