@@ -1,0 +1,115 @@
+name: Test macOS build script
+
+on:
+  push:
+    branches:
+      - main
+
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: "Branch, tag, or commit to test"
+        required: true
+        default: dev
+        type: string
+      qt:
+        description: "Qt version argument passed to build-macos.sh"
+        required: true
+        default: "qt6"
+        type: choice
+        options:
+          - qt5
+          - qt6
+          - auto
+
+permissions:
+  contents: read
+
+jobs:
+  prepare-matrix:
+    name: Prepare matrix
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.matrix.outputs.matrix }}
+
+    steps:
+      - name: Build matrix
+        id: matrix
+        env:
+          QT_MODE: ${{ inputs.qt || 'qt6' }}
+        run: |
+          python3 - <<'PY'
+          import json
+          import os
+
+          qt_mode = os.environ["QT_MODE"]
+          entries = [
+              {
+                  "name": "macOS 14",
+                  "runner": "macos-14",
+                  "qt_modes": ["qt5", "qt6", "auto"],
+              },
+              {
+                  "name": "macOS 15",
+                  "runner": "macos-15",
+                  "qt_modes": ["qt5", "qt6", "auto"],
+              },
+              {
+                  "name": "macOS 26",
+                  "runner": "macos-26",
+                  "qt_modes": ["qt6", "auto"],
+              },
+          ]
+
+          include = [
+              {key: value for key, value in entry.items() if key != "qt_modes"}
+              for entry in entries
+              if qt_mode in entry["qt_modes"]
+          ]
+          matrix = {"include": include}
+          print(json.dumps(matrix, indent=2))
+          with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as output:
+              output.write(f"matrix={json.dumps(matrix)}\n")
+          PY
+
+  test-build-macos-sh:
+    name: ${{ matrix.name }} (${{ inputs.qt || 'qt6' }})
+    needs: prepare-matrix
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 90
+
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJson(needs.prepare-matrix.outputs.matrix) }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ inputs.branch || github.sha }}
+
+      - name: Show macOS version
+        run: sw_vers
+
+      - name: Run build-macos.sh
+        env:
+          QT_MODE: ${{ inputs.qt || 'qt6' }}
+        run: |
+          case "$QT_MODE" in
+            qt5)
+              BUILD_ARGS="-qt5"
+              ;;
+            qt6)
+              BUILD_ARGS="-qt6"
+              ;;
+            auto)
+              BUILD_ARGS=""
+              ;;
+            *)
+              echo "Unsupported Qt input: $QT_MODE"
+              exit 1
+              ;;
+          esac
+
+          chmod +x ./build-macos.sh
+          ./build-macos.sh $BUILD_ARGS

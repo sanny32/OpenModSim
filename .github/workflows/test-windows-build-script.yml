@@ -1,0 +1,108 @@
+name: Test Windows build script
+
+on:
+  push:
+    branches:
+      - main
+
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: "Branch, tag, or commit to test"
+        required: true
+        default: dev
+        type: string
+      qt:
+        description: "Qt version argument passed to build.ps1"
+        required: true
+        default: "qt6"
+        type: choice
+        options:
+          - qt5
+          - qt6
+
+permissions:
+  contents: read
+
+jobs:
+  prepare-matrix:
+    name: Prepare matrix
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.matrix.outputs.matrix }}
+
+    steps:
+      - name: Build matrix
+        id: matrix
+        env:
+          QT_MODE: ${{ inputs.qt || 'qt6' }}
+        run: |
+          python3 - <<'PY'
+          import json
+          import os
+
+          qt_mode = os.environ["QT_MODE"]
+          entries = [
+              {
+                  "name": "Windows 2019",
+                  "runner": "windows-2019",
+                  "qt_modes": ["qt5"],
+              },
+              {
+                  "name": "Windows 2022",
+                  "runner": "windows-2022",
+                  "qt_modes": ["qt6"],
+              },
+              {
+                  "name": "Windows 2025",
+                  "runner": "windows-2025",
+                  "qt_modes": ["qt6"],
+              },
+          ]
+
+          include = [
+              {key: value for key, value in entry.items() if key != "qt_modes"}
+              for entry in entries
+              if qt_mode in entry["qt_modes"]
+          ]
+          matrix = {"include": include}
+          print(json.dumps(matrix, indent=2))
+          with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as output:
+              output.write(f"matrix={json.dumps(matrix)}\n")
+          PY
+
+  test-build-ps1:
+    name: ${{ matrix.name }} (${{ inputs.qt || 'qt6' }})
+    needs: prepare-matrix
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 90
+
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJson(needs.prepare-matrix.outputs.matrix) }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ inputs.branch || github.sha }}
+
+      - name: Show Windows version
+        run: (Get-CimInstance Win32_OperatingSystem).Caption
+        shell: pwsh
+
+      - name: Run build.ps1
+        env:
+          QT_MODE: ${{ inputs.qt || 'qt6' }}
+        run: |
+          $buildArgs = @()
+          switch ($env:QT_MODE) {
+            "qt5" { $buildArgs += "-qt5" }
+            "qt6" { $buildArgs += "-qt6" }
+            default {
+              Write-Error "Unsupported Qt input: $env:QT_MODE"
+              exit 1
+            }
+          }
+          & "${{ github.workspace }}\build.ps1" @buildArgs
+        shell: pwsh
