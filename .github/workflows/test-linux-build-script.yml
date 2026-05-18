@@ -1,0 +1,147 @@
+name: Test Linux build script
+
+on:
+  workflow_dispatch:
+    inputs:
+      qt:
+        description: "Qt version argument passed to build.sh"
+        required: true
+        default: "qt5"
+        type: choice
+        options:
+          - qt5
+          - qt6
+          - auto
+
+permissions:
+  contents: read
+
+jobs:
+  test-build-sh:
+    name: ${{ matrix.name }} (${{ inputs.qt }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    continue-on-error: ${{ matrix.experimental }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: Debian 11
+            image: debian:11
+            family: apt
+            experimental: false
+
+          - name: Ubuntu 22.04
+            image: ubuntu:22.04
+            family: apt
+            experimental: false
+
+          - name: Mint 22
+            image: linuxmintd/mint22-amd64:latest
+            family: apt
+            experimental: true
+
+          - name: Zorin OS 18 (Ubuntu 24.04 base)
+            image: ubuntu:24.04
+            family: apt
+            experimental: true
+
+          - name: Fedora 41
+            image: fedora:41
+            family: dnf
+            experimental: false
+
+          - name: Rocky Linux 9.7
+            image: rockylinux/rockylinux:9.7
+            family: rocky
+            experimental: false
+
+          - name: openSUSE Leap 15.6
+            image: opensuse/leap:15.6
+            family: zypper
+            experimental: false
+
+          - name: ALT Linux 11
+            image: alt:p11
+            family: alt
+            experimental: false
+
+          - name: Astra Linux 1.7 (Debian 11 base)
+            image: debian:11
+            family: apt
+            experimental: true
+
+          - name: RedOS 8 (Fedora base)
+            image: fedora:41
+            family: dnf
+            experimental: true
+
+          - name: Arch
+            image: archlinux:latest
+            family: pacman
+            experimental: true
+
+    container:
+      image: ${{ matrix.image }}
+
+    steps:
+      - name: Prepare container
+        run: |
+          case "${{ matrix.family }}" in
+            apt)
+              export DEBIAN_FRONTEND=noninteractive
+              apt-get update
+              apt-get install -y ca-certificates git sudo
+              ;;
+            dnf)
+              dnf install -y ca-certificates git sudo
+              ;;
+            rocky)
+              dnf install -y ca-certificates git sudo dnf-plugins-core
+              dnf config-manager --set-enabled crb
+              ;;
+            zypper)
+              zypper --gpg-auto-import-keys --non-interactive refresh
+              zypper --gpg-auto-import-keys --non-interactive install ca-certificates git sudo
+              ;;
+            alt)
+              apt-get update
+              apt-get install -y ca-certificates git sudo
+              ;;
+            pacman)
+              pacman -Sy --noconfirm ca-certificates git sudo
+              ;;
+            *)
+              echo "Unsupported package family: ${{ matrix.family }}"
+              exit 1
+              ;;
+          esac
+
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Show OS release
+        run: |
+          cat /etc/os-release
+
+      - name: Run build.sh
+        run: |
+          case "${{ inputs.qt }}" in
+            qt5)
+              BUILD_ARGS="-qt5"
+              ;;
+            qt6)
+              BUILD_ARGS="-qt6"
+              ;;
+            auto)
+              BUILD_ARGS=""
+              ;;
+            *)
+              echo "Unsupported Qt input: ${{ inputs.qt }}"
+              exit 1
+              ;;
+          esac
+
+          chmod +x ./build.sh
+          ./build.sh $BUILD_ARGS
