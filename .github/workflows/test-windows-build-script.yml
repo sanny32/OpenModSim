@@ -12,14 +12,6 @@ on:
         required: true
         default: dev
         type: string
-      qt:
-        description: "Qt version argument passed to build.ps1"
-        required: true
-        default: "qt6"
-        type: choice
-        options:
-          - qt5
-          - qt6
 
 permissions:
   contents: read
@@ -34,14 +26,11 @@ jobs:
     steps:
       - name: Build matrix
         id: matrix
-        env:
-          QT_MODE: ${{ inputs.qt || 'qt6' }}
         run: |
           python3 - <<'PY'
           import json
           import os
 
-          qt_mode = os.environ["QT_MODE"]
           entries = [
               {
                   "name": "Windows 2022",
@@ -56,9 +45,9 @@ jobs:
           ]
 
           include = [
-              {key: value for key, value in entry.items() if key != "qt_modes"}
+              {key: value for key, value in entry.items() if key != "qt_modes"} | {"qt_mode": qt_mode}
               for entry in entries
-              if qt_mode in entry["qt_modes"]
+              for qt_mode in entry["qt_modes"]
           ]
           matrix = {"include": include}
           print(json.dumps(matrix, indent=2))
@@ -67,7 +56,7 @@ jobs:
           PY
 
   test-build-ps1:
-    name: ${{ matrix.name }} (${{ inputs.qt || 'qt6' }})
+    name: ${{ matrix.name }} (${{ matrix.qt_mode }})
     needs: prepare-matrix
     runs-on: ${{ matrix.runner }}
     timeout-minutes: 90
@@ -87,16 +76,14 @@ jobs:
         shell: pwsh
 
       - name: Run build.ps1
-        env:
-          QT_MODE: ${{ inputs.qt || 'qt6' }}
         run: |
           Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
 
-          switch ($env:QT_MODE) {
+          switch ("${{ matrix.qt_mode }}") {
             "qt5" { $buildArgs = @{ qt5 = $true } }
             "qt6" { $buildArgs = @{ qt6 = $true } }
             default {
-              Write-Error "Unsupported Qt input: $env:QT_MODE"
+              Write-Error "Unsupported Qt mode: ${{ matrix.qt_mode }}"
               exit 1
             }
           }

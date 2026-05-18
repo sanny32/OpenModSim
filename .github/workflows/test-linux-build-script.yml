@@ -42,67 +42,67 @@ jobs:
                   "name": "Debian 12",
                   "image": "debian:12",
                   "family": "apt",
-                  "qt_modes": ["qt5", "qt6", "auto"],
+                  "qt_modes": ["qt5", "qt6"],
               },
               {
                   "name": "Debian 13",
                   "image": "debian:13",
                   "family": "apt",
-                  "qt_modes": ["qt6", "auto"],
+                  "qt_modes": ["qt6"],
               },
               {
                   "name": "Ubuntu 22.04",
                   "image": "ubuntu:22.04",
                   "family": "apt",
-                  "qt_modes": ["qt5", "qt6", "auto"],
+                  "qt_modes": ["qt5", "qt6"],
               },
               {
                   "name": "Ubuntu 24.04",
                   "image": "ubuntu:24.04",
                   "family": "apt",
-                  "qt_modes": ["qt5", "qt6", "auto"],
+                  "qt_modes": ["qt5", "qt6"],
               },
               {
                   "name": "Ubuntu 26.04",
                   "image": "ubuntu:26.04",
                   "family": "apt",
-                  "qt_modes": ["qt6", "auto"],
+                  "qt_modes": ["qt6"],
               },
               {
                   "name": "Fedora 41",
                   "image": "fedora:41",
                   "family": "dnf",
-                  "qt_modes": ["qt5", "qt6", "auto"],
+                  "qt_modes": ["qt5", "qt6"],
               },
               {
                   "name": "Fedora 42",
                   "image": "fedora:42",
                   "family": "dnf",
-                  "qt_modes": ["qt5", "qt6", "auto"],
+                  "qt_modes": ["qt5", "qt6"],
               },
               {
                   "name": "Fedora 43",
                   "image": "fedora:43",
                   "family": "dnf",
-                  "qt_modes": ["qt5", "qt6", "auto"],
+                  "qt_modes": ["qt5", "qt6"],
               },
               {
                   "name": "Fedora 44",
                   "image": "fedora:44",
                   "family": "dnf",
-                  "qt_modes": ["qt5", "qt6", "auto"],
+                  "qt_modes": ["qt5", "qt6"],
               },
               {
                   "name": "Rocky Linux 9.7",
                   "image": "rockylinux/rockylinux:9.7",
                   "family": "rocky",
-                  "qt_modes": ["qt5", "qt6", "auto"],
+                  "qt_modes": ["qt5", "qt6"],
               },
               {
                   "name": "Rocky Linux 10.1",
                   "image": "rockylinux/rockylinux:10.1",
                   "family": "rocky",
-                  "qt_modes": ["qt5", "qt6", "auto"],
+                  "qt_modes": ["qt5", "qt6"],
               },
               {
                   "name": "RedOS 8",
@@ -114,7 +114,7 @@ jobs:
                   "name": "openSUSE Leap 15.6",
                   "image": "opensuse/leap:15.6",
                   "family": "zypper",
-                  "qt_modes": ["qt5", "qt6", "auto"],
+                  "qt_modes": ["qt5", "qt6"],
               },
               {
                   "name": "AstraLinux 1.7",
@@ -132,13 +132,13 @@ jobs:
                   "name": "ALT Linux 11",
                   "image": "alt:p11",
                   "family": "alt",
-                  "qt_modes": ["qt5", "qt6", "auto"],
+                  "qt_modes": ["qt5", "qt6"],
               },
               {
                   "name": "Arch",
                   "image": "archlinux:latest",
                   "family": "pacman",
-                  "qt_modes": ["qt6", "auto"],
+                  "qt_modes": ["qt6"],
               },
           ]
 
@@ -222,15 +222,8 @@ jobs:
       - name: Run build.sh
         run: |
           case "${{ matrix.qt_mode }}" in
-            qt5)
-              BUILD_ARGS="-qt5"
-              ;;
-            qt6)
-              BUILD_ARGS="-qt6"
-              ;;
-            auto)
-              BUILD_ARGS=""
-              ;;
+            qt5) BUILD_ARGS="-qt5" ;;
+            qt6) BUILD_ARGS="-qt6" ;;
             *)
               echo "Unsupported Qt mode: ${{ matrix.qt_mode }}"
               exit 1
