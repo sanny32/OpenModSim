@@ -17,6 +17,10 @@
 #include <QStringList>
 #include <QTranslator>
 
+///
+/// \brief availableTranslations
+/// \return
+///
 inline QStringList availableTranslations()
 {
     QStringList locales;
@@ -29,6 +33,10 @@ inline QStringList availableTranslations()
     return locales;
 }
 
+///
+/// \brief translationLang
+/// \return
+///
 inline QString translationLang()
 {
     const QStringList locales = availableTranslations();
@@ -46,6 +54,12 @@ inline QString translationLang()
     return "en";
 }
 
+///
+/// \brief applyTranslation
+/// \param lang
+/// \param appTranslator
+/// \param qtTranslator
+///
 inline void applyTranslation(const QString& lang, QTranslator& appTranslator, QTranslator& qtTranslator)
 {
     qApp->removeTranslator(&appTranslator);
@@ -60,10 +74,16 @@ inline void applyTranslation(const QString& lang, QTranslator& appTranslator, QT
 
     qApp->installTranslator(&appTranslator);
 
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+    const QString qtTranslationsPath = QLibraryInfo::path(QLibraryInfo::TranslationsPath);
+#else
+    const QString qtTranslationsPath = QLibraryInfo::location(QLibraryInfo::TranslationsPath);
+#endif
+
     const QStringList qtTranslationPaths = {
         qApp->applicationDirPath() + "/translations",
         qApp->applicationDirPath() + "/../translations",
-        QLibraryInfo::path(QLibraryInfo::TranslationsPath)
+        qtTranslationsPath
     };
     for (const QString& path : qtTranslationPaths) {
         if (qtTranslator.load(QString("qt_%1").arg(resolved), path)) {

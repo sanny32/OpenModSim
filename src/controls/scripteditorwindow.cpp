@@ -126,7 +126,7 @@ void ScriptEditorWindow::setupScriptBar()
     _intervalSpin->setSuffix(tr(" ms"));
     _intervalSpin->setValue(static_cast<int>(_document->settings().Interval));
     _intervalSpin->setFixedWidth(90);
-    connect(_intervalSpin, &QSpinBox::valueChanged, this, [this](int value) {
+    connect(_intervalSpin, QOverload<int>::of(&QSpinBox::valueChanged), this, [this](int value) {
         auto ss = _document->settings();
         ss.Interval = static_cast<uint>(value);
         _document->setSettings(ss);

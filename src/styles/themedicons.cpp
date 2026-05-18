@@ -141,7 +141,7 @@ QIcon iconFromThemeName(const QString& themeName)
 ///
 QIcon ThemedIcons::icon(const QString& name, IconMode mode)
 {
-    static constexpr QLatin1StringView kFallbackDir{":/res/icons/fallback/"};
+    static const QString kFallbackDir = QStringLiteral(":/res/icons/fallback/");
 
     const auto& registry = iconRegistry();
     const auto it = registry.constFind(name);
@@ -159,7 +159,7 @@ QIcon ThemedIcons::icon(const QString& name, IconMode mode)
     if (resourceName.isEmpty())
         return {};
 
-    const auto iconPath = QString{kFallbackDir} + resourceName;
+    const auto iconPath = kFallbackDir + resourceName;
     if (QFile::exists(iconPath))
         return QIcon(iconPath);
 
