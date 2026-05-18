@@ -117,10 +117,28 @@ jobs:
                   "qt_modes": ["qt5", "qt6", "auto"],
               },
               {
+                  "name": "RedOS 8",
+                  "image": "registry.red-soft.ru/redos8c/ubi:latest",
+                  "family": "dnf",
+                  "qt_modes": ["qt5"],
+              },
+              {
                   "name": "openSUSE Leap 15.6",
                   "image": "opensuse/leap:15.6",
                   "family": "zypper",
                   "qt_modes": ["qt5", "qt6", "auto"],
+              },
+              {
+                  "name": "AstraLinux 1.7",
+                  "image": "registry.astralinux.ru/astra/ubi17:latest",
+                  "family": "apt",
+                  "qt_modes": ["qt5"],
+              },
+              {
+                  "name": "AstraLinux 1.8",
+                  "image": "registry.astralinux.ru/astra/ubi18:latest",
+                  "family": "apt",
+                  "qt_modes": ["qt5"],
               },
               {
                   "name": "ALT Linux 11",
