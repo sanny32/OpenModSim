@@ -335,6 +335,7 @@ MainWindow::MainWindow(const QString& profile, bool useSession, const QString& s
     _helpWidget = ui->helpWidget;
     const auto helpfile = findHelpFile();
     _helpWidget->setHelp(helpfile);
+    ui->helpDockWidget->setVisible(false);
 
     connect(ui->helpDockWidget, &QDockWidget::visibilityChanged, this, &MainWindow::on_helpDockVisibilityChanged);
 
