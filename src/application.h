@@ -15,6 +15,8 @@
 class Application final
     : public QApplication
 {
+    Q_OBJECT
+
 public:
     explicit Application(int& argc, char** argv);
 
@@ -23,8 +25,17 @@ public:
 
     static Application* instance();
 
+    QString takePendingFile();
+
+signals:
+    void fileOpenRequested(const QString& filePath);
+
+protected:
+    bool event(QEvent* event) override;
+
 private:
     AppTheme _theme;
+    QString _pendingFile;
 };
 
 inline Application* theApp()

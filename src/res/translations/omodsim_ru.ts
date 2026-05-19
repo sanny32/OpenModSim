@@ -2613,7 +2613,7 @@ Open the download page?</source>
     </message>
     <message>
         <location filename="../../mainwindow.ui" line="348"/>
-        <location filename="../../mainwindow.cpp" line="1912"/>
+        <location filename="../../mainwindow.cpp" line="1919"/>
         <source>Save Project</source>
         <translation>Сохранить проект</translation>
     </message>
@@ -2793,19 +2793,19 @@ Open the download page?</source>
         <translation>Строка состояния</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="920"/>
+        <location filename="../../mainwindow.cpp" line="927"/>
         <source>All files (*)</source>
         <translation>Все файлы (*)</translation>
     </message>
     <message>
         <location filename="../../mainwindow.cpp" line="301"/>
-        <location filename="../../mainwindow.cpp" line="667"/>
+        <location filename="../../mainwindow.cpp" line="674"/>
         <source>Open Recent</source>
         <translation>Открыть недавние</translation>
     </message>
     <message>
         <location filename="../../mainwindow.cpp" line="302"/>
-        <location filename="../../mainwindow.cpp" line="2048"/>
+        <location filename="../../mainwindow.cpp" line="2055"/>
         <source>Clear List</source>
         <translation>Очистить список</translation>
     </message>
@@ -2820,21 +2820,21 @@ Open the download page?</source>
         <translation>Вывод</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="919"/>
-        <location filename="../../mainwindow.cpp" line="1942"/>
+        <location filename="../../mainwindow.cpp" line="926"/>
+        <location filename="../../mainwindow.cpp" line="1949"/>
         <source>Project files (*.omsim)</source>
         <translation>Файлы проекта (*.omsim)</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="1566"/>
-        <location filename="../../mainwindow.cpp" line="1970"/>
+        <location filename="../../mainwindow.cpp" line="1573"/>
+        <location filename="../../mainwindow.cpp" line="1977"/>
         <source>Untitled</source>
         <translation>Без имени</translation>
     </message>
     <message>
         <location filename="../../applogger.cpp" line="127"/>
-        <location filename="../../mainwindow.cpp" line="670"/>
-        <location filename="../../mainwindow.cpp" line="1751"/>
+        <location filename="../../mainwindow.cpp" line="677"/>
+        <location filename="../../mainwindow.cpp" line="1758"/>
         <source>Address Base</source>
         <translation>Адресация</translation>
     </message>
@@ -3129,7 +3129,7 @@ Open the download page?</source>
         <translation>Скрипт запущен: %1 (режим: %2)</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="1305"/>
+        <location filename="../../mainwindow.cpp" line="1312"/>
         <source>Move to Other Panel</source>
         <translation>Переместить на другую панель</translation>
     </message>
@@ -3151,12 +3151,12 @@ Open the download page?</source>
         <translation>Шестнадцатиричный режим</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="1913"/>
+        <location filename="../../mainwindow.cpp" line="1920"/>
         <source>Save project before closing?</source>
         <translation>Сохранить проект перед закрытием?</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="2036"/>
+        <location filename="../../mainwindow.cpp" line="2043"/>
         <source>No Recent Projects</source>
         <translation>Нет недавних проектов</translation>
     </message>
@@ -3166,7 +3166,7 @@ Open the download page?</source>
         <translation>Данные</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="1263"/>
+        <location filename="../../mainwindow.cpp" line="1270"/>
         <source>JavaScript files (*.js);;All files (*)</source>
         <translation>Файлы JavaScript (*.js);;Все файлы (*)</translation>
     </message>

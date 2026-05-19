@@ -6,6 +6,7 @@
 /// \brief Implements the application functionality.
 ///
 
+#include <QFileOpenEvent>
 #include "application.h"
 
 ///
@@ -44,4 +45,30 @@ const AppTheme& Application::theme() const
 Application* Application::instance()
 {
     return static_cast<Application*>(QApplication::instance());
+}
+
+///
+/// \brief Application::takePendingFile
+/// \return File path received via QFileOpenEvent before any receiver connected,
+///         or an empty string if none is pending.
+///
+QString Application::takePendingFile()
+{
+    return std::exchange(_pendingFile, {});
+}
+
+///
+/// \brief Application::event
+/// \param event
+/// \return
+///
+bool Application::event(QEvent* event)
+{
+    if (event->type() == QEvent::FileOpen) {
+        const QString filePath = static_cast<QFileOpenEvent*>(event)->file();
+        _pendingFile = filePath;
+        emit fileOpenRequested(filePath);
+        return true;
+    }
+    return QApplication::event(event);
 }
