@@ -252,16 +252,16 @@ Open the DMG package:
 ```bash
 open qt6-omodsim2-2.0.0_arm64.dmg
 ```
-Then drag `Open ModSim.app` to the `Applications` folder.
+Then drag `Open ModSim 2.app` to the `Applications` folder.
 
 Before the first launch, allow the application to run in `System Settings` > `Privacy & Security`, or remove the quarantine attribute from the command line:
 ```bash
-xattr -dr com.apple.quarantine "/Applications/Open ModSim.app"
+xattr -dr com.apple.quarantine "/Applications/Open ModSim 2.app"
 ```
 
 Run the application:
 ```bash
-open "/Applications/Open ModSim.app"
+open "/Applications/Open ModSim 2.app"
 ```
 
 ### Remove
