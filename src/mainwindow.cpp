@@ -401,12 +401,22 @@ MainWindow::MainWindow(const QString& profile, bool useSession, const QString& s
     connect(ui->actionNewDataMapView,     &QAction::triggered, this, [this]{ activateNewFormKind(ProjectFormKind::DataMap,     ui->actionNewDataMapView); });
     connect(ui->actionNewScript,          &QAction::triggered, this, [this]{ activateNewFormKind(ProjectFormKind::Script,      ui->actionNewScript); });
 
+    connect(Application::instance(), &Application::fileOpenRequested, this, [this](const QString& filePath) {
+        _pendingWelcomeDialog = false;
+        loadProject(filePath);
+    });
+
     const bool hasProfile = loadAppSettings(profile);
     rebuildRecentProjectsMenu();
 
+    // On macOS, Finder delivers files via QFileOpenEvent (not argv); pick up any
+    // file that arrived before this constructor ran.
+    const QString pendingFile = Application::instance()->takePendingFile();
+    const QString effectiveStartup = !startupProjectFile.isEmpty() ? startupProjectFile : pendingFile;
+
     const bool canRestoreLastProject = !_lastProjectPath.isEmpty() && QFile::exists(_lastProjectPath);
-    if(!startupProjectFile.isEmpty()) {
-        loadProject(startupProjectFile);
+    if(!effectiveStartup.isEmpty()) {
+        loadProject(effectiveStartup);
     } else if(AppPreferences::instance().showWelcomeDialog()) {
         _pendingWelcomeDialog = true;  // shown in showEvent after the window is visible
     } else if(canRestoreLastProject) {
@@ -594,8 +604,9 @@ void MainWindow::showEvent(QShowEvent* event)
     QMainWindow::showEvent(event);
 
     if(_pendingWelcomeDialog) {
-        _pendingWelcomeDialog = false;
-        QTimer::singleShot(0, this, [this] {
+        QTimer::singleShot(100, this, [this] {
+            if(!_pendingWelcomeDialog) return;
+            _pendingWelcomeDialog = false;
             DialogWelcome dlg(_recentProjects, this);
             if(dlg.exec() == QDialog::Accepted) {
                 switch(dlg.action()) {
