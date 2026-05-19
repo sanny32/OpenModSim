@@ -604,7 +604,7 @@ void MainWindow::showEvent(QShowEvent* event)
     QMainWindow::showEvent(event);
 
     if(_pendingWelcomeDialog) {
-        QTimer::singleShot(0, this, [this] {
+        QTimer::singleShot(100, this, [this] {
             if(!_pendingWelcomeDialog) return;
             _pendingWelcomeDialog = false;
             DialogWelcome dlg(_recentProjects, this);
