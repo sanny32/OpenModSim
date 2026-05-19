@@ -31,6 +31,7 @@ include("${CMAKE_CURRENT_SOURCE_DIR}/cmake/uninstall.cmake")
 add_executable(${PROJECT_NAME})
 
 omodsim_apply_project_version_suffix()
+omodsim_generate_files()
 
 # Target compile definitions
 target_compile_definitions(${PROJECT_NAME} PRIVATE
