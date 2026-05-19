@@ -267,7 +267,7 @@ open "/Applications/Open ModSim @VERSION_MAJOR@.app"
 ### Remove
 To remove the application, move it to Trash or run:
 ```bash
-rm -rf "/Applications/Open ModSim.app"
+rm -rf "/Applications/Open ModSim @VERSION_MAJOR@.app"
 ```
 
 ## <img src="docs/icons/logo_debian.svg" width="20" height="20"> Debian • <img src="docs/icons/logo_ubuntu.svg" width="20" height="20"> Ubuntu • <img width="20" height="20" src="docs/icons/logo_mint.png" /> Mint • <img src="docs/icons/logo_zorin.png" width="20" height="20"> Zorin • <img width="22" height="22" src="docs/icons/logo_astra.png" /> Astra Linux
