@@ -401,7 +401,10 @@ MainWindow::MainWindow(const QString& profile, bool useSession, const QString& s
     connect(ui->actionNewDataMapView,     &QAction::triggered, this, [this]{ activateNewFormKind(ProjectFormKind::DataMap,     ui->actionNewDataMapView); });
     connect(ui->actionNewScript,          &QAction::triggered, this, [this]{ activateNewFormKind(ProjectFormKind::Script,      ui->actionNewScript); });
 
-    connect(Application::instance(), &Application::fileOpenRequested, this, &MainWindow::loadProject);
+    connect(Application::instance(), &Application::fileOpenRequested, this, [this](const QString& filePath) {
+        _pendingWelcomeDialog = false;
+        loadProject(filePath);
+    });
 
     const bool hasProfile = loadAppSettings(profile);
     rebuildRecentProjectsMenu();
@@ -601,8 +604,9 @@ void MainWindow::showEvent(QShowEvent* event)
     QMainWindow::showEvent(event);
 
     if(_pendingWelcomeDialog) {
-        _pendingWelcomeDialog = false;
         QTimer::singleShot(0, this, [this] {
+            if(!_pendingWelcomeDialog) return;
+            _pendingWelcomeDialog = false;
             DialogWelcome dlg(_recentProjects, this);
             if(dlg.exec() == QDialog::Accepted) {
                 switch(dlg.action()) {
