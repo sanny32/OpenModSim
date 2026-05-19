@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file simulationmodecombobox.h
+/// \brief Declares the simulationmodecombobox interfaces.
+///
+
 #ifndef SIMULATIONMODECOMBOBOX_H
 #define SIMULATIONMODECOMBOBOX_H
 
@@ -24,3 +32,4 @@ private slots:
 };
 
 #endif // SIMULATIONMODECOMBOBOX_H
+

@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file flowcontroltypecombobox.h
+/// \brief Declares the flowcontroltypecombobox interfaces.
+///
+
 #ifndef FLOWCONTROLTYPECOMBOBOX_H
 #define FLOWCONTROLTYPECOMBOBOX_H
 
@@ -19,3 +27,4 @@ public:
 };
 
 #endif // FLOWCONTROLTYPECOMBOBOX_H
+

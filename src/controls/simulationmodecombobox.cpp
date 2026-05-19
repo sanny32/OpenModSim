@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file simulationmodecombobox.cpp
+/// \brief Implements the simulationmodecombobox functionality.
+///
+
 #include "simulationmodecombobox.h"
 
 ///
@@ -63,3 +71,4 @@ void SimulationModeComboBox::on_currentIndexChanged(int index)
 {
     emit simulationModeChanged(itemData(index).value<SimulationMode>());
 }
+

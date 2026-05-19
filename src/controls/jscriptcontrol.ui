@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>JScriptControl</class>
- <widget class="QWidget" name="JScriptControl">
+ <widget class="QFrame" name="JScriptControl">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -24,35 +24,24 @@
     <number>0</number>
    </property>
    <item>
-    <widget class="QSplitter" name="verticalSplitter">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
+    <widget class="JSCodeEditor" name="codeEditor">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
      </property>
-     <widget class="QSplitter" name="horizontalSplitter">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
-        <horstretch>5</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="orientation">
-       <enum>Qt::Vertical</enum>
-      </property>
-      <widget class="JSCodeEditor" name="codeEditor">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-         <horstretch>2</horstretch>
-         <verstretch>4</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="minimumSize">
-        <size>
-         <width>320</width>
-         <height>240</height>
-        </size>
-       </property>
-       <property name="plainText">
-        <string>Server.addressBase = AddressBase.Base1;
+     <property name="minimumSize">
+      <size>
+       <width>320</width>
+       <height>240</height>
+      </size>
+     </property>
+     <property name="verticalScrollBarPolicy">
+      <enum>Qt::ScrollBarAlwaysOn</enum>
+     </property>
+     <property name="plainText">
+      <string>Server.addressBase = AddressBase.Base1;
 
 let deviceId = 1;
 let address = 1;
@@ -65,31 +54,13 @@ Script.onInit(()=&gt;{
 
 	/* write your init code here */
 });</string>
-       </property>
-       <property name="tabStopDistance">
-        <double>20.000000000000000</double>
-       </property>
-       <property name="placeholderText">
-        <string/>
-       </property>
-      </widget>
-      <widget class="ConsoleOutput" name="console" native="true">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-         <horstretch>0</horstretch>
-         <verstretch>1</verstretch>
-        </sizepolicy>
-       </property>
-      </widget>
-     </widget>
-     <widget class="HelpWidget" name="helpWidget" native="true">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-        <horstretch>1</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-     </widget>
+     </property>
+     <property name="tabStopDistance">
+      <double>20.000000000000000</double>
+     </property>
+     <property name="placeholderText">
+      <string/>
+     </property>
     </widget>
    </item>
   </layout>
@@ -100,17 +71,8 @@ Script.onInit(()=&gt;{
    <extends>QPlainTextEdit</extends>
    <header>jscodeeditor.h</header>
   </customwidget>
-  <customwidget>
-   <class>ConsoleOutput</class>
-   <extends>QWidget</extends>
-   <header>consoleoutput.h</header>
-  </customwidget>
-  <customwidget>
-   <class>HelpWidget</class>
-   <extends>QWidget</extends>
-   <header>helpwidget.h</header>
-  </customwidget>
  </customwidgets>
  <resources/>
  <connections/>
 </ui>
+

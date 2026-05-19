@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file dialogautosimulation.cpp
+/// \brief Implements the dialogautosimulation functionality.
+///
+
 #include <float.h>
 #include <QPushButton>
 #include "dialogautosimulation.h"
@@ -8,11 +16,11 @@
 /// \param params
 /// \param parent
 ///
-DialogAutoSimulation::DialogAutoSimulation(DataDisplayMode mode, ModbusSimulationParams& params, QWidget *parent)
+DialogAutoSimulation::DialogAutoSimulation(DataType type, ModbusSimulationParams& params, QWidget *parent)
     : QFixedSizeDialog(parent)
     , ui(new Ui::DialogAutoSimulation)
     ,_params(params)
-    ,_displayMode(mode)
+    ,_dataMode(type)
 {
     ui->setupUi(this);
     ui->checkBoxEnabled->setChecked(_params.Mode != SimulationMode::Off);
@@ -26,32 +34,30 @@ DialogAutoSimulation::DialogAutoSimulation(DataDisplayMode mode, ModbusSimulatio
     ui->lineEditInterval->setInputRange(100, 6000000);
     ui->lineEditInterval->setValue(_params.Interval);
 
-    switch(_displayMode)
+    switch(_dataMode)
     {
-        case DataDisplayMode::Binary:
+        case DataType::Binary:
         break;
 
-        case DataDisplayMode::UInt16:
+        case DataType::UInt16:
             ui->lineEditStepValue->setInputRange(1, USHRT_MAX - 1);
             ui->lineEditLowLimit->setInputRange(0, USHRT_MAX);
             ui->lineEditHighLimit->setInputRange(0, USHRT_MAX);
         break;
 
-        case DataDisplayMode::Int16:
+        case DataType::Int16:
             ui->lineEditStepValue->setInputRange(1, SHRT_MAX - 1);
             ui->lineEditLowLimit->setInputRange(SHRT_MIN, SHRT_MAX);
             ui->lineEditHighLimit->setInputRange(SHRT_MIN, SHRT_MAX);
         break;
-            
-        case DataDisplayMode::Int32:
-        case DataDisplayMode::SwappedInt32:
+
+        case DataType::Int32:
             ui->lineEditStepValue->setInputRange(1, INT_MAX - 1);
             ui->lineEditLowLimit->setInputRange(INT_MIN, INT_MAX);
             ui->lineEditHighLimit->setInputRange(INT_MIN, INT_MAX);
         break;
 
-        case DataDisplayMode::UInt32:
-        case DataDisplayMode::SwappedUInt32:
+        case DataType::UInt32:
             ui->lineEditStepValue->setInputRange(1U, UINT_MAX - 1);
             ui->lineEditStepValue->setInputMode(NumericLineEdit::UInt32Mode);
             ui->lineEditLowLimit->setInputRange(0U, UINT_MAX);
@@ -60,20 +66,19 @@ DialogAutoSimulation::DialogAutoSimulation(DataDisplayMode mode, ModbusSimulatio
             ui->lineEditHighLimit->setInputMode(NumericLineEdit::UInt32Mode);
         break;
 
-        case DataDisplayMode::Hex:
+        case DataType::Hex:
             ui->lineEditStepValue->setInputRange(1, USHRT_MAX - 1);
             ui->lineEditLowLimit->setInputRange(0, USHRT_MAX);
             ui->lineEditHighLimit->setInputRange(0, USHRT_MAX);
         break;
 
-        case DataDisplayMode::Ansi:
+        case DataType::Ansi:
             ui->lineEditStepValue->setInputRange(1, USHRT_MAX - 1);
             ui->lineEditLowLimit->setInputRange(0, USHRT_MAX);
             ui->lineEditHighLimit->setInputRange(0, USHRT_MAX);
         break;
 
-        case DataDisplayMode::FloatingPt:
-        case DataDisplayMode::SwappedFP:
+        case DataType::Float32:
             ui->lineEditStepValue->setInputRange((float)1, FLT_MAX - 1);
             ui->lineEditStepValue->setInputMode(NumericLineEdit::FloatMode);
             ui->lineEditLowLimit->setInputRange(-FLT_MAX, FLT_MAX);
@@ -82,8 +87,7 @@ DialogAutoSimulation::DialogAutoSimulation(DataDisplayMode mode, ModbusSimulatio
             ui->lineEditHighLimit->setInputMode(NumericLineEdit::FloatMode);
         break;
 
-        case DataDisplayMode::DblFloat:
-        case DataDisplayMode::SwappedDbl:
+        case DataType::Float64:
             ui->lineEditStepValue->setInputRange(1.0, DBL_MAX - 1);
             ui->lineEditStepValue->setInputMode(NumericLineEdit::DoubleMode);
             ui->lineEditLowLimit->setInputRange(-DBL_MAX, DBL_MAX);
@@ -92,18 +96,16 @@ DialogAutoSimulation::DialogAutoSimulation(DataDisplayMode mode, ModbusSimulatio
             ui->lineEditHighLimit->setInputMode(NumericLineEdit::DoubleMode);
         break;
 
-        case DataDisplayMode::Int64:
-        case DataDisplayMode::SwappedInt64:
+        case DataType::Int64:
             ui->lineEditStepValue->setInputRange<qint64>(1, INT64_MAX - 1);
             ui->lineEditStepValue->setInputMode(NumericLineEdit::Int64Mode);
             ui->lineEditLowLimit->setInputRange(INT64_MIN, INT64_MAX);
             ui->lineEditHighLimit->setInputRange(INT64_MIN, INT64_MAX);
             ui->lineEditLowLimit->setInputMode(NumericLineEdit::Int64Mode);
             ui->lineEditHighLimit->setInputMode(NumericLineEdit::Int64Mode);
-            break;
+        break;
 
-        case DataDisplayMode::UInt64:
-        case DataDisplayMode::SwappedUInt64:
+        case DataType::UInt64:
             ui->lineEditStepValue->setInputRange<quint64>(1, UINT64_MAX - 1);
             ui->lineEditStepValue->setInputMode(NumericLineEdit::UInt64Mode);
             ui->lineEditLowLimit->setInputRange<quint64>(0, UINT64_MAX);
@@ -126,6 +128,20 @@ DialogAutoSimulation::~DialogAutoSimulation()
 }
 
 ///
+/// rief DialogAutoSimulation::changeEvent
+///
+///
+/// \brief DialogAutoSimulation::changeEvent
+///
+void DialogAutoSimulation::changeEvent(QEvent* event)
+{
+    if (event->type() == QEvent::LanguageChange)
+        ui->retranslateUi(this);
+
+    QDialog::changeEvent(event);
+}
+
+///
 /// \brief DialogAutoSimulation::accept
 ///
 void DialogAutoSimulation::accept()
@@ -134,7 +150,7 @@ void DialogAutoSimulation::accept()
     {
         _params.Mode = ui->comboBoxSimulationType->currentSimulationMode();
         _params.Interval = ui->lineEditInterval->value<int>();
-        _params.DataMode = _displayMode;
+        _params.DataMode = _dataMode;
 
         switch(_params.Mode)
         {
@@ -248,3 +264,4 @@ void DialogAutoSimulation::updateLimits()
         break;
     }
 }
+

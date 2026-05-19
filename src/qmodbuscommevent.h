@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file qmodbuscommevent.h
+/// \brief Declares the qmodbuscommevent interfaces.
+///
+
 #ifndef QMODBUSCOMMEVENT_H
 #define QMODBUSCOMMEVENT_H
 
@@ -70,3 +78,4 @@ inline QModbusCommEvent::EventByte operator|(QModbusCommEvent::ReceiveFlag rf,
                                              QModbusCommEvent::EventByte b) { return operator|(b, rf); }
 
 #endif // QMODBUSCOMMEVENT_H
+

@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file scriptsettings.h
+/// \brief Declares the scriptsettings interfaces.
+///
+
 #ifndef SCRIPTSETTINGS_H
 #define SCRIPTSETTINGS_H
 
@@ -12,7 +20,6 @@ struct ScriptSettings
 {
     RunMode Mode = RunMode::Periodically;
     uint Interval = 1000;
-    bool UseAutoComplete = true;
     bool RunOnStartup = false;
 
     void normalize()
@@ -20,6 +27,12 @@ struct ScriptSettings
         Mode = qBound(RunMode::Once, Mode, RunMode::Periodically);
         Interval = qBound(500U, Interval, 10000U);
     }
+
+    bool operator==(const ScriptSettings& o) const
+    {
+        return Mode == o.Mode && Interval == o.Interval && RunOnStartup == o.RunOnStartup;
+    }
+    bool operator!=(const ScriptSettings& o) const { return !(*this == o); }
 };
 Q_DECLARE_METATYPE(ScriptSettings)
 
@@ -33,7 +46,6 @@ inline QSettings& operator <<(QSettings& out, const ScriptSettings& ss)
 {
     out.setValue("ScriptSettings/RunMode",          (int)ss.Mode);
     out.setValue("ScriptSettings/Interval",         ss.Interval);
-    out.setValue("ScriptSettings/UseAutoComplete",  ss.UseAutoComplete);
     out.setValue("ScriptSettings/RunOnStartup",     ss.RunOnStartup);
 
     return out;
@@ -49,43 +61,9 @@ inline QSettings& operator >>(QSettings& in, ScriptSettings& ss)
 {
     ss.Mode = (RunMode)in.value("ScriptSettings/RunMode").toInt();
     ss.Interval = in.value("ScriptSettings/Interval", 1000).toUInt();
-    ss.UseAutoComplete = in.value("ScriptSettings/UseAutoComplete", true).toBool();
     ss.RunOnStartup = in.value("ScriptSettings/RunOnStartup", false).toBool();
 
     ss.normalize();
-    return in;
-}
-
-///
-/// \brief operator <<
-/// \param out
-/// \param ss
-/// \return
-///
-inline QDataStream& operator <<(QDataStream& out, const ScriptSettings& ss)
-{
-    out << ss.Mode;
-    out << ss.Interval;
-    out << ss.UseAutoComplete;
-    out << ss.RunOnStartup;
-
-    return out;
-}
-
-///
-/// \brief operator >>
-/// \param in
-/// \param ss
-/// \return
-///
-inline QDataStream& operator >>(QDataStream& in, ScriptSettings& ss)
-{
-    in >> ss.Mode;
-    in >> ss.Interval;
-    in >> ss.UseAutoComplete;
-    in >> ss.RunOnStartup;
-
-
     return in;
 }
 
@@ -100,7 +78,6 @@ inline QXmlStreamWriter& operator <<(QXmlStreamWriter& xml, const ScriptSettings
     xml.writeStartElement("ScriptSettings");
     xml.writeAttribute("Mode", enumToString<RunMode>(settings.Mode));
     xml.writeAttribute("Interval", QString::number(settings.Interval));
-    xml.writeAttribute("UseAutoComplete", boolToString(settings.UseAutoComplete));
     xml.writeAttribute("RunOnStartup", boolToString(settings.RunOnStartup));
     xml.writeEndElement();
     return xml;
@@ -114,7 +91,7 @@ inline QXmlStreamWriter& operator <<(QXmlStreamWriter& xml, const ScriptSettings
 ///
 inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, ScriptSettings& settings)
 {
-    if (xml.readNextStartElement() && xml.name() == QLatin1String("ScriptSettings")) {
+    if (xml.isStartElement() && xml.name() == QLatin1String("ScriptSettings")) {
         const QXmlStreamAttributes attributes = xml.attributes();
 
         if (attributes.hasAttribute("Mode")) {
@@ -124,10 +101,6 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, ScriptSettings& sett
         if (attributes.hasAttribute("Interval")) {
             bool ok; const uint interval = attributes.value("Interval").toUInt(&ok);
             if (ok) settings.Interval = interval;
-        }
-
-        if (attributes.hasAttribute("UseAutoComplete")) {
-            settings.UseAutoComplete = stringToBool(attributes.value("UseAutoComplete").toString());
         }
 
         if (attributes.hasAttribute("RunOnStartup")) {
@@ -143,3 +116,4 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, ScriptSettings& sett
 }
 
 #endif // SCRIPTSETTINGS_H
+

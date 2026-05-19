@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file modbuslimits.h
+/// \brief Declares the modbuslimits interfaces.
+///
+
 #ifndef MODBUSLIMITS_H
 #define MODBUSLIMITS_H
 
@@ -25,7 +33,8 @@ public:
         const int maxLen = qMin(lengthRange().to(), addressSpaceSize(space) - offset);
         return { 1, qMax(1, maxLen) };
     }
-    static QRange<int> slaveRange()    { return { 1, 255 }; }
+    static QRange<int> slaveRange()    { return { 0, 255 }; }
 };
 
 #endif // MODBUSLIMITS_H
+

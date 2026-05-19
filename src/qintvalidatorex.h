@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file qintvalidatorex.h
+/// \brief Declares the qintvalidatorex interfaces.
+///
+
 #ifndef QINTVALIDATOREX_H
 #define QINTVALIDATOREX_H
 
@@ -19,3 +27,4 @@ private:
 };
 
 #endif // QINTVALIDATOREX_H
+

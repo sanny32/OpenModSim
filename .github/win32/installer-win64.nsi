@@ -9,20 +9,31 @@
 
 #--------------------------------
 # Custom defines
+  !searchparse /noerrors ${VERSION} "" VERSIONMAJOR "." VERSIONMINOR "." VERSIONPATCH "." VERSIONBUILD
+  !ifndef VERSIONBUILD
+    !define VERSIONBUILD "0"
+  !endif
+  !ifndef VERSIONPATCH
+    !define VERSIONPATCH "0"
+    !searchparse ${VERSION} "" VERSIONMAJOR "." VERSIONMINOR "-"
+  !endif
+  !searchparse /file ${LICENSE_FILE} "Copyright " COPYRIGHT
+
   !define MUI_ICON ${ICON_FILE}
-  !define NAME "Open ModSim"
+  !define PROJECTNAME "Open ModSim"
+  !define NAME "${PROJECTNAME} ${VERSIONMAJOR}"
   !define PUBLISHER "Alexandr Ananev"
   !define APPFILE "omodsim.exe"
   !define ICOFILE "omodsim.exe"
   !define PACKAGENAME "omodsim_${VERSION}_x64"
-  !define SLUG "${NAME} v${VERSION}"
+  !define SLUG "${PROJECTNAME} v${VERSION}"
   !define UPDATEURL "https://github.com/sanny32/OpenModSim/releases"
 
   !define MUI_WELCOMEFINISHPAGE_BITMAP "${WELCOMEFINISHPAGE_BITMAP}"
-  !define MUI_FINISHPAGE_TEXT "${NAME} v${VERSION} has been installed on your computer."
+  !define MUI_FINISHPAGE_TEXT "${PROJECTNAME} v${VERSION} has been installed on your computer."
   !define MUI_FINISHPAGE_RUN
   !define MUI_FINISHPAGE_RUN_FUNCTION LaunchWithProfile
-  !define MUI_FINISHPAGE_RUN_TEXT "Launch ${NAME}"
+  !define MUI_FINISHPAGE_RUN_TEXT "Launch ${PROJECTNAME}"
   !define MUI_FINISHPAGE_RUN_CHECKED
 
 Function LaunchWithProfile
@@ -36,16 +47,6 @@ Function LaunchWithProfile
   Sleep 300
 FunctionEnd
 
-  !searchparse /noerrors ${VERSION} "" VERSIONMAJOR "." VERSIONMINOR "." VERSIONPATCH "." VERSIONBUILD
-  !ifndef VERSIONBUILD
-    !define VERSIONBUILD "0"
-  !endif
-  !ifndef VERSIONPATCH
-    !define VERSIONPATCH "0"
-    !searchparse ${VERSION} "" VERSIONMAJOR "." VERSIONMINOR "-"
-  !endif
-  !searchparse /file ${LICENSE_FILE} "Copyright " COPYRIGHT
-
 #--------------------------------
 # Variables
 
@@ -54,7 +55,7 @@ FunctionEnd
 #--------------------------------
 # General
 
-  Name "${NAME} v${VERSION}"
+  Name "${PROJECTNAME} v${VERSION}"
   OutFile "${OUTPUT_FILE}"
   InstallDir "$PROGRAMFILES64\${NAME}"
   RequestExecutionLevel admin
@@ -66,8 +67,8 @@ FunctionEnd
   VIFileVersion    "${VERSIONMAJOR}.${VERSIONMINOR}.${VERSIONPATCH}.${VERSIONBUILD}"
   VIAddVersionKey /LANG=0 "ProductVersion"   "${VERSION}"
   VIAddVersionKey /LANG=0 "FileVersion"      "${VERSION}"
-  VIAddVersionKey /LANG=0 "ProductName"      "${NAME}"
-  VIAddVersionKey /LANG=0 "FileDescription"  "${NAME}"
+  VIAddVersionKey /LANG=0 "ProductName"      "${PROJECTNAME}"
+  VIAddVersionKey /LANG=0 "FileDescription"  "${PROJECTNAME}"
   VIAddVersionKey /LANG=0 "LegalCopyright"   "Copyright (c) ${COPYRIGHT}"
 
 #--------------------------------
@@ -174,6 +175,14 @@ FunctionEnd
     ${GetSize} "$INSTDIR" "/S=0K" $0 $1 $2
     IntFmt $0 "0x%08X" $0
 	  WriteRegDWORD HKLM64 "Software\Microsoft\Windows\CurrentVersion\Uninstall\${NAME}" "EstimatedSize" "$0"
+
+    # File association for .omsim project files
+    WriteRegStr HKLM64 "Software\Classes\.omsim" "" "OpenModSim.Project"
+    WriteRegStr HKLM64 "Software\Classes\OpenModSim.Project" "" "Open ModSim Project"
+    WriteRegStr HKLM64 "Software\Classes\OpenModSim.Project\DefaultIcon" "" "$INSTDIR\${APPFILE},1"
+    WriteRegStr HKLM64 "Software\Classes\OpenModSim.Project\shell" "" "open"
+    WriteRegStr HKLM64 "Software\Classes\OpenModSim.Project\shell\open\command" "" '$\"$INSTDIR\${APPFILE}$\" $\"%1$\"'
+    System::Call 'shell32::SHChangeNotify(i 0x08000000, i 0, p 0, p 0)'
   SectionEnd
 
  Section "Visual Studio Runtime"
@@ -258,6 +267,10 @@ ProcessStillRunning:
   Quit 
 
 ProcessNotFound:
+  DeleteRegKey HKLM64 "Software\Classes\OpenModSim.Project"
+  DeleteRegValue HKLM64 "Software\Classes\.omsim" ""
+  System::Call 'shell32::SHChangeNotify(i 0x08000000, i 0, p 0, p 0)'
+
   # Delete Shortcut
   Delete "$DESKTOP\${NAME}.lnk"
 

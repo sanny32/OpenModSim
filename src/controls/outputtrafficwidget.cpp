@@ -1,0 +1,327 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file outputtrafficwidget.cpp
+/// \brief Implements the outputtrafficwidget functionality.
+///
+
+#include <QDateTime>
+#include <QApplication>
+#include <QGuiApplication>
+#include <QItemSelectionModel>
+#include <QPalette>
+#include <QPainter>
+#include "../styles/appcolors.h"
+#include "fontutils.h"
+#include "modbuslogwidget.h"
+#include "outputtrafficwidget.h"
+#include "ui_outputtrafficwidget.h"
+
+///
+/// \brief OutputTrafficWidget::OutputTrafficWidget
+/// \param parent
+///
+OutputTrafficWidget::OutputTrafficWidget(QWidget* parent)
+    : QFrame(parent)
+    , ui(new Ui::OutputTrafficWidget)
+{
+    ui->setupUi(this);
+
+    setFont(defaultMonospaceFont());
+    setAutoFillBackground(true);
+    updatePaletteFromTheme();
+    hideModbusMessage();
+
+    connect(ui->logView->selectionModel(),
+            &QItemSelectionModel::selectionChanged,
+            this, [&](const QItemSelection& sel) {
+                if (!sel.indexes().isEmpty())
+                    showModbusMessage(sel.indexes().first());
+            });
+}
+
+///
+/// \brief OutputTrafficWidget::~OutputTrafficWidget
+///
+OutputTrafficWidget::~OutputTrafficWidget()
+{
+    delete ui;
+}
+
+///
+/// \brief OutputTrafficWidget::dataType
+/// \return
+///
+DataType OutputTrafficWidget::dataType() const
+{
+    return ui->logView->dataType();
+}
+
+///
+/// \brief OutputTrafficWidget::setDataType
+/// \param type
+///
+void OutputTrafficWidget::setDataType(DataType type)
+{
+    ui->logView->setDataType(type);
+    ui->modbusMsg->setDataType(type);
+}
+
+///
+/// \brief OutputTrafficWidget::backgroundColor
+/// \return
+///
+QColor OutputTrafficWidget::backgroundColor() const
+{
+    return ui->logView->palette().color(QPalette::Base);
+}
+
+///
+/// \brief OutputTrafficWidget::setBackgroundColor
+/// \param clr
+///
+void OutputTrafficWidget::setBackgroundColor(const QColor& clr)
+{
+    auto pal = palette();
+    pal.setColor(QPalette::Base, clr);
+    pal.setColor(QPalette::Window, clr);
+    setPalette(pal);
+    ui->logView->setBackGroundColor(clr);
+}
+
+///
+/// \brief OutputTrafficWidget::foregroundColor
+/// \return
+///
+QColor OutputTrafficWidget::foregroundColor() const
+{
+    return ui->logView->palette().color(QPalette::Text);
+}
+
+///
+/// \brief OutputTrafficWidget::setForegroundColor
+/// \param clr
+///
+void OutputTrafficWidget::setForegroundColor(const QColor& clr)
+{
+    auto pal = ui->logView->palette();
+    pal.setColor(QPalette::Text, clr);
+    ui->logView->setPalette(pal);
+}
+
+///
+/// \brief OutputTrafficWidget::font
+/// \return
+///
+QFont OutputTrafficWidget::font() const
+{
+    return ui->logView->font();
+}
+
+///
+/// \brief OutputTrafficWidget::setFont
+/// \param font
+///
+void OutputTrafficWidget::setFont(const QFont& font)
+{
+    ui->logView->setFont(font);
+    ui->modbusMsg->setFont(font);
+}
+
+///
+/// \brief OutputTrafficWidget::logViewLimit
+/// \return
+///
+int OutputTrafficWidget::logViewLimit() const
+{
+    return ui->logView->rowLimit();
+}
+
+///
+/// \brief OutputTrafficWidget::setLogViewLimit
+/// \param l
+///
+void OutputTrafficWidget::setLogViewLimit(int l)
+{
+    ui->logView->setRowLimit(l);
+}
+
+///
+/// \brief OutputTrafficWidget::isLogEmpty
+/// \return
+///
+bool OutputTrafficWidget::isLogEmpty() const
+{
+    return ui->logView->rowCount() == 0;
+}
+
+///
+/// \brief OutputTrafficWidget::autoscrollLogView
+/// \return
+///
+bool OutputTrafficWidget::autoscrollLogView() const
+{
+    return ui->logView->autoscroll();
+}
+
+///
+/// \brief OutputTrafficWidget::setAutosctollLogView
+/// \param on
+///
+void OutputTrafficWidget::setAutosctollLogView(bool on)
+{
+    ui->logView->setAutoscroll(on);
+}
+
+///
+/// \brief OutputTrafficWidget::exportLogToTextFile
+/// \param filePath
+/// \return
+///
+bool OutputTrafficWidget::exportLogToTextFile(const QString& filePath)
+{
+    return ui->logView->exportToTextFile(filePath);
+}
+
+///
+/// \brief OutputTrafficWidget::clearLogView
+///
+void OutputTrafficWidget::clearLogView()
+{
+    ui->logView->clear();
+    ui->modbusMsg->clear();
+    hideModbusMessage();
+}
+
+///
+/// \brief OutputTrafficWidget::setLogViewState
+/// \param state
+///
+void OutputTrafficWidget::setLogViewState(LogViewState state)
+{
+    ui->logView->setState(state);
+}
+
+///
+/// \brief OutputTrafficWidget::changeEvent
+/// \param event
+///
+/// \brief OutputTrafficWidget::updatePaletteFromTheme
+///
+void OutputTrafficWidget::updatePaletteFromTheme()
+{
+    setForegroundColor(AppColors::canvasForeground());
+    setBackgroundColor(AppColors::canvasBackground());
+}
+
+///
+void OutputTrafficWidget::changeEvent(QEvent* event)
+{
+    QWidget::changeEvent(event);
+    if (event->type() == QEvent::ApplicationPaletteChange ||
+        event->type() == QEvent::StyleChange ||
+        event->type() == QEvent::ThemeChange)
+    {
+        updatePaletteFromTheme();
+    }
+}
+
+///
+/// \brief OutputTrafficWidget::updateTraffic
+/// \param msg
+///
+void OutputTrafficWidget::updateTraffic(QSharedPointer<const ModbusMessage> msg)
+{
+    updateLogView(msg);
+}
+
+///
+/// \brief OutputTrafficWidget::updateTrafficBatch
+/// \param messages
+///
+void OutputTrafficWidget::updateTrafficBatch(const QVector<QSharedPointer<const ModbusMessage>>& messages)
+{
+    updateLogViewBatch(messages);
+}
+
+///
+/// \brief OutputTrafficWidget::showModbusMessage
+///
+void OutputTrafficWidget::showModbusMessage(const QModelIndex& index)
+{
+    const auto msg = ui->logView->itemAt(index);
+    if (msg) {
+        if (ui->splitter->widget(1)->isHidden()) {
+            ui->splitter->setSizes({1, 1});
+            ui->splitter->widget(1)->show();
+        }
+        ui->modbusMsg->setModbusMessage(msg);
+    }
+}
+
+///
+/// \brief OutputTrafficWidget::hideModbusMessage
+///
+void OutputTrafficWidget::hideModbusMessage()
+{
+    ui->splitter->setSizes({1, 0});
+    ui->splitter->widget(1)->hide();
+}
+
+///
+/// \brief OutputTrafficWidget::updateLogView
+///
+void OutputTrafficWidget::updateLogView(QSharedPointer<const ModbusMessage> msg)
+{
+    ui->logView->addItem(msg);
+}
+
+///
+/// \brief OutputTrafficWidget::updateLogViewBatch
+/// \param messages
+///
+void OutputTrafficWidget::updateLogViewBatch(const QVector<QSharedPointer<const ModbusMessage>>& messages)
+{
+    ui->logView->addItems(messages);
+}
+
+///
+/// \brief OutputTrafficWidget::rowCount
+/// \return
+///
+int OutputTrafficWidget::rowCount() const
+{
+    return ui->logView->rowCount();
+}
+
+///
+/// \brief OutputTrafficWidget::paint
+/// \param rc
+/// \param painter
+/// \param startRow
+/// \return next row index to print (== rowCount() if all rows fit)
+///
+int OutputTrafficWidget::paint(const QRect& rc, QPainter& painter, int startRow)
+{
+    painter.save();
+    painter.setFont(ui->logView->font());
+    int cy = rc.top();
+    const auto* model = ui->logView->model();
+    const int total = ui->logView->rowCount();
+    for (int i = startRow; i < total; ++i)
+    {
+        const auto text = model->data(model->index(i, 0), Qt::DisplayRole).toString();
+        auto rcItem = painter.boundingRect(rc.left(), cy, rc.right() - rc.left(), rc.bottom() - cy, Qt::TextWordWrap, text);
+        if (rcItem.bottom() > rc.bottom())
+        {
+            painter.restore();
+            return i;
+        }
+        painter.drawText(rcItem, Qt::TextWordWrap, text);
+        cy = rcItem.bottom() + 2;
+    }
+    painter.restore();
+    return total;
+}
+

@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file modbusrtuserialserver.h
+/// \brief Declares the modbusrtuserialserver interfaces.
+///
+
 #ifndef MODBUSRTUSERIALSERVER_H
 #define MODBUSRTUSERIALSERVER_H
 
@@ -57,3 +65,4 @@ private:
 };
 
 #endif // MODBUSRTUSERIALSERVER_H
+

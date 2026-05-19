@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file modbusmessages.h
+/// \brief Declares the modbusmessages interfaces.
+///
+
 #include "modbusmessage.h"
 #include "readcoils.h"
 #include "readdiscreteinputs.h"
@@ -17,3 +25,4 @@
 #include "maskwriteregister.h"
 #include "readwritemultipleregisters.h"
 #include "readfifoqueue.h"
+

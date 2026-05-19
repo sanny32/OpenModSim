@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file modbusmessage.h
+/// \brief Declares the modbusmessage interfaces.
+///
+
 #ifndef MODBUSMESSAGE_H
 #define MODBUSMESSAGE_H
 
@@ -207,8 +215,8 @@ public:
     /// \param leadingZeros
     /// \return
     ///
-    QString toString(DataDisplayMode mode, bool leadingZeros = true) const {
-        return formatUInt8Array(mode, leadingZeros, *this);
+    QString toString(DataType type, bool leadingZeros = true) const {
+        return formatUInt8Array(type, leadingZeros, *this);
     }
 
     ///
@@ -251,3 +259,4 @@ Q_DECLARE_METATYPE(ModbusMessage::ProtocolType)
 Q_DECLARE_METATYPE(QSharedPointer<const ModbusMessage>)
 
 #endif // MODBUSMESSAGE_H
+

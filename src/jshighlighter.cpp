@@ -1,3 +1,12 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file jshighlighter.cpp
+/// \brief Implements the jshighlighter functionality.
+///
+
+#include "styles/appcolors.h"
 #include "jshighlighter.h"
 
 LanguageData JSHighlighter::keywords = {
@@ -148,38 +157,48 @@ JSHighlighter::JSHighlighter(QTextDocument* parent)
 ///
 void JSHighlighter::initFormats()
 {
-    QTextCharFormat format = QTextCharFormat();
+    setDarkMode(AppColors::isDark());
+}
 
+///
+/// \brief JSHighlighter::setDarkMode
+///
+void JSHighlighter::setDarkMode(bool /*dark*/)
+{
+    QTextCharFormat format;
+    format.setForeground(AppColors::syntaxDefaultColor());
     _formats[Token::CodeBlock] = format;
-    format = QTextCharFormat();
 
-    format.setForeground(QColor(0xF92672));
+    format = QTextCharFormat();
+    format.setForeground(AppColors::syntaxKeywordColor());
     _formats[Token::CodeKeyWord] = format;
-    format = QTextCharFormat();
 
-    format.setForeground(QColor(0xa39b4e));
+    format = QTextCharFormat();
+    format.setForeground(AppColors::syntaxStringColor());
     _formats[Token::CodeString] = format;
-    format = QTextCharFormat();
 
-    format.setForeground(QColor(0x75715E));
+    format = QTextCharFormat();
+    format.setForeground(AppColors::syntaxCommentColor());
     _formats[Token::CodeComment] = format;
-    format = QTextCharFormat();
 
-    format.setForeground(QColor(0x54aebf));
+    format = QTextCharFormat();
+    format.setForeground(AppColors::syntaxTypeColor());
     _formats[Token::CodeType] = format;
 
     format = QTextCharFormat();
-    format.setForeground(QColor(0xdb8744));
+    format.setForeground(AppColors::syntaxFunctionColor());
     format.setFontWeight(QFont::ExtraBold);
     _formats[Token::CodeOther] = format;
 
     format = QTextCharFormat();
-    format.setForeground(QColor(0xAE81FF));
+    format.setForeground(AppColors::syntaxNumLiteralColor());
     _formats[Token::CodeNumLiteral] = format;
 
     format = QTextCharFormat();
-    format.setForeground(QColor(0x018a0f));
+    format.setForeground(AppColors::syntaxBuiltInColor());
     _formats[Token::CodeBuiltIn] = format;
+
+    rehighlight();
 }
 
 ///
@@ -367,6 +386,9 @@ void JSHighlighter::highlightSyntax(const QString &text)
     }
 }
 
+///
+/// \brief JSHighlighter::highlightStringLiterals
+///
 int JSHighlighter::highlightStringLiterals(const QChar strType, const QString &text, int i) {
     setFormat(i, 1,  _formats[CodeString]);
     ++i;
@@ -560,3 +582,4 @@ int JSHighlighter::highlightNumericLiterals(const QString &text, int i)
     //decrement so that the index is at the last number, not after it
     return --i;
 }
+

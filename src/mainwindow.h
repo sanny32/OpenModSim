@@ -1,18 +1,39 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file mainwindow.h
+/// \brief Declares the mainwindow interfaces.
+///
+
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QLabel>
 #include <QTranslator>
-#include <QWidgetAction>
-#include "formmodsim.h"
-#include "ansimenu.h"
+#include <QHash>
+#include "helpwidget.h"
 #include "modbusmultiserver.h"
-#include "windowactionlist.h"
-#include "recentfileactionlist.h"
+#include "controls/consoleoutput.h"
+#include "controls/outputpanel.h"
+#include "controls/projecttreewidget.h"
+#include "appproject.h"
+#include "controls/addressbasecombobox.h"
 
 namespace Ui {
 class MainWindow;
 }
+
+class MdiAreaEx;
+class MdiArea;
+class FormDataView;
+class FormTrafficView;
+class FormScriptView;
+class FormDataMapView;
+class QMenu;
+class QAction;
+class QComboBox;
 
 ///
 /// \brief The MainWindow class
@@ -22,51 +43,63 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit MainWindow(const QString& profile, bool useSession, QWidget *parent = nullptr);
+    explicit MainWindow(const QString& profile, bool useSession, const QString& startupProjectFile = QString(), QWidget *parent = nullptr);
     ~MainWindow();
 
     void setLanguage(const QString& lang);
+    void applyAutoComplete(bool enable);
+    void applyConsoleMaxLines(int n);
+    void applyFont(const QFont& font);
+    void applyScriptFont(const QFont& font);
+    void applyZoom(int zoomPercent);
+    void applyColors(const QColor& bg, const QColor& fg, const QColor& addr, const QColor& comment);
+    void applyThemeColors();
+    void applyCheckForUpdates(bool enabled);
+    void applyGlobalAddressBase(AddressBase base, bool persist = true);
+    void applyGlobalHexView(bool enabled, bool persist = true);
 
-    void loadConfig(const QString& filename, bool startup = false);
-    void saveConfig(const QString& filename, SerializationFormat format);
+    void loadProject(const QString& filename);
+    bool saveProject(const QString& filename);
+
+    void appendConsoleMessage(const QString& source, const QString& text, ConsoleOutput::MessageType type);
+    void showOutputConsole();
+    void showHelpContext(const QString& helpKey);
+    void applyConnections(const ModbusDefinitions& defs, const QList<ConnectionDetails>& conns);
+    ModbusMultiServer& mbMultiServer() { return _mbMultiServer; }
+    const ModbusMultiServer& mbMultiServer() const { return _mbMultiServer; }
+
+    void setViewMode(QMdiArea::ViewMode mode);
 
 signals:
-    void undo();
-    void redo();
-    void cut();
-    void copy();
-    void paste();
     void selectAll();
     void search(const QString& text);
 
 protected:
+    void showEvent(QShowEvent* event) override;
     void changeEvent(QEvent* event) override;
     void closeEvent(QCloseEvent *event) override;
     bool eventFilter(QObject * obj, QEvent * e) override;
 
+public slots:
+    void windowActivate(QMdiSubWindow* wnd);
+    void updateHelpWidgetState();
+    void markModified();
+    
 private slots:
     void on_awake();
 
     /* File menu slots */
     void on_actionNew_triggered();
-    void on_actionOpen_triggered();
     void on_actionClose_triggered();
     void on_actionCloseAll_triggered();
-    void on_actionSave_triggered();
-    void on_actionSaveAs_triggered();
-    void on_actionSaveTestConfig_triggered();
-    void on_actionRestoreTestConfig_triggered();
+    void on_actionOpenProject_triggered();
+    void on_actionSaveProject_triggered();
+    void on_actionSaveProjectAs_triggered();
+    void on_actionCloseProject_triggered();
     void on_actionPrint_triggered();
     void on_actionPrintSetup_triggered();
-    void on_actionExit_triggered();
 
-    /* Edit menu slots */
-    void on_actionUndo_triggered();
-    void on_actionRedo_triggered();
-    void on_actionCut_triggered();
-    void on_actionCopy_triggered();
-    void on_actionPaste_triggered();
-    void on_actionSelectAll_triggered();
+    void on_actionPreferences_triggered();
 
     /* Connection menu slots */
     void on_connectAction(ConnectionDetails& cd);
@@ -74,123 +107,120 @@ private slots:
     void on_actionMbDefinitions_triggered();
 
     /* Setup menu slots*/
-    void on_actionDataDefinition_triggered();
-    void on_actionShowData_triggered();
-    void on_actionShowTraffic_triggered();
-    void on_actionShowScript_triggered();
-    void on_actionBinary_triggered();
-    void on_actionUInt16_triggered();
-    void on_actionInt16_triggered();
-    void on_actionInt32_triggered();
-    void on_actionSwappedInt32_triggered();
-    void on_actionUInt32_triggered();
-    void on_actionSwappedUInt32_triggered();
-    void on_actionInt64_triggered();
-    void on_actionSwappedInt64_triggered();
-    void on_actionUInt64_triggered();
-    void on_actionSwappedUInt64_triggered();
-    void on_actionHex_triggered();
-    void on_actionAnsi_triggered();
-    void on_actionFloatingPt_triggered();
-    void on_actionSwappedFP_triggered();
-    void on_actionDblFloat_triggered();
-    void on_actionSwappedDbl_triggered();
-    void on_actionSwapBytes_triggered();
-    void on_actionHexAddresses_triggered();
     void on_actionForceCoils_triggered();
     void on_actionForceDiscretes_triggered();
     void on_actionPresetInputRegs_triggered();
     void on_actionPresetHoldingRegs_triggered();
     void on_actionMsgParser_triggered();
-    void on_actionRawDataLog_triggered();
-    void on_actionTextCapture_triggered();
-    void on_actionCaptureOff_triggered();
-    void on_actionResetCtrs_triggered();
 
     /* View menu slots */
     void on_actionTabbedView_triggered();
-    void on_actionToolbar_triggered();
-    void on_actionStatusBar_triggered();
-    void on_actionDisplayBar_triggered();
-    void on_actionScriptBar_triggered();
-    void on_actionEditBar_triggered();
-    void on_actionBackground_triggered();
-    void on_actionForeground_triggered();
-    void on_actionStatus_triggered();
-    void on_actionFont_triggered();
-
-    /* Language menu slots */
-    void on_actionEnglish_triggered();
-    void on_actionRussian_triggered();
-    void on_actionChineseCN_triggered();
-    void on_actionChineseTW_triggered();
-
-    /* Window menu slots */
-    void on_actionCascade_triggered();
-    void on_actionTile_triggered();
-    void on_actionWindows_triggered();
 
     /* Help menu slots */
     void on_actionAbout_triggered();
 
-    /* Script menu slots */
-    void on_actionRunScript_triggered();
-    void on_actionStopScript_triggered();
-    void on_actionScriptSettings_triggered();
+    /* Script slots */
+    void on_actionImportScript_triggered();
 
-    void on_runModeChanged(RunMode mode);
-    void on_searchText(const QString& text);
-
-    void on_connectionError(const QString& error);
+    void on_helpDockVisibilityChanged(bool visible);
+    void on_projectTreeFormActivated(ProjectFormRef ref);
+    void on_projectTreeFormDeleteRequested(ProjectFormRef ref);
+    void on_projectTreeFormRunScriptRequested(ProjectFormRef ref);
+    void on_projectTreeFormStopScriptRequested(ProjectFormRef ref);
+    void on_projectTreeFormCreateRequested(ProjectFormType type);
+    void on_outputPanelCollapse();
+    void on_outputPanelAppLogOpenRequested();
+    void on_outputDockVisibilityChanged(bool visible);
+    void on_mdiSubWindowActivated(QMdiSubWindow* wnd);
+    void on_splitViewAboutToDisable();
+    void on_splitViewToggled(bool enabled);
+    void on_findActionTriggered();
+    void on_replaceActionTriggered();
 
     void updateMenuWindow();
-    void openFile(const QString& filename);
-    void windowActivate(QMdiSubWindow* wnd);
-    void setCodepage(const QString& name);
+    void on_tabContextMenuRequested(QMdiSubWindow* subWnd, MdiArea* sourcePanel, QPoint globalPos);
+    void on_moveTabToOtherPanelRequested(QMdiSubWindow* subWnd, QPoint globalDropPos);
 
 private:
-    void addRecentFile(const QString& filename);
-    void updateDataDisplayMode(DataDisplayMode mode);
-
+    QWidget* createNewForm(ProjectFormKind kind);
+    void activateNewFormKind(ProjectFormKind kind, QAction* sourceAction);
+    void restoreNewFormKindIcon();
+    void runAllScripts();
+    void stopAllScripts();
+    void deleteAllForms(ProjectFormType type);
+    QWidget* currentForm() const;
+    FormDataView* currentDataForm() const;
+    FormTrafficView* currentTrafficForm() const;
+    FormScriptView* currentScriptForm() const;
+    FormDataMapView* currentDataMapForm() const;
+    QWidget* currentDataOrTrafficForm() const;
     void forceCoils(QModbusDataUnit::RegisterType type);
     void presetRegs(QModbusDataUnit::RegisterType type);
+    struct ForceRangeParams
+    {
+        quint32 DeviceId = 1;
+        quint16 Address = 1;
+        quint16 Length = 100;
+        bool ZeroBasedAddress = false;
+        AddressSpace AddrSpace = AddressSpace::Addr6Digits;
+        bool LeadingZeros = true;
+    };
+    bool prepareWriteParams(QModbusDataUnit::RegisterType type,
+                            FormDataView*& outFrm,
+                            DataViewDefinitions& outDd,
+                            int& outLength,
+                            ModbusWriteParams& outParams);
+    void rememberForceRangeParams(QModbusDataUnit::RegisterType type, const ModbusWriteParams& params);
 
-    FormModSim* createMdiChild(int id);
-    FormModSim* currentMdiChild() const;
-    FormModSim* findMdiChild(int id) const;
-    FormModSim* firstMdiChild() const;
-
-    FormModSim* loadMdiChild(const QString& filename);
-    void saveMdiChild(FormModSim* frm, SerializationFormat format);
-    void closeMdiChild(FormModSim* frm);
-
-    bool loadProfile(const QString& filename);
-    void saveProfile();
-
-    void saveAs(FormModSim* frm, SerializationFormat format);
+    bool loadAppSettings(const QString& filename);
+    void saveAppSettings();
+    bool promptSaveProjectAs(const QString& initialPath = QString());
+    QString projectSavePathInProfileDir() const;
+    bool confirmSaveOnClose();
+    bool hasProjectContext() const;
+    void addRecentProject(const QString& filePath);
+    void rebuildRecentProjectsMenu();
+    void clearRecentProjects();
+    void openRecentProject(const QString& filePath);
+    QString projectName() const;
+    void updateProjectWindowTitle();
+    void setupGlobalViewToolbar();
+    void syncGlobalViewControls();
+    void applyGlobalViewStateToForm(QWidget* frm);
+    void updateMainToolbarState();
 
 private:
     Ui::MainWindow *ui;
-    QWidgetAction* _actionRunMode;
-    QWidgetAction* _actionSearch;
-
+    HelpWidget* _helpWidget;
+    OutputPanel* _outputPanel = nullptr;
+    ProjectTreeWidget* _projectTree = nullptr;
     QString _lang;
     QTranslator _qtTranslator;
     QTranslator _appTranslator;
 
 private:
-    int _windowCounter;
     bool _useSession;
 
     ModbusMultiServer _mbMultiServer;
 
-    AnsiMenu* _ansiMenu;
-    WindowActionList* _windowActionList;
-    RecentFileActionList* _recentFileActionList;
     QSharedPointer<QPrinter> _selectedPrinter;
-    QSharedPointer<DataSimulator> _dataSimulator;
-    QString _savePath;
+    DataSimulator* _dataSimulator = nullptr;
     QString _profile;
+    QString _projectFilePath;
+    ProjectFormKind _newFormKind = ProjectFormKind::Data;
+    QStringList _recentProjects;
+    QString _lastProjectPath;
+    bool _isModified = false;
+    bool _pendingWelcomeDialog = false;
+    QMenu* _openRecentMenu = nullptr;
+    QAction* _clearRecentAction = nullptr;
+    AddressBaseComboBox* _globalAddressBaseCombo = nullptr;
+    QWidget*             _globalAddressBaseWidget = nullptr;
+    QLabel*              _globalAddressBaseLabel = nullptr;
+    QHash<QModbusDataUnit::RegisterType, ForceRangeParams> _forceRangeParams;
+
+    AppProject* _project = nullptr;
 };
 
 #endif // MAINWINDOW_H
+

@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file customlineedit.h
+/// \brief Declares the customlineedit interfaces.
+///
+
 #ifndef CUSTOMLINEEDIT_H
 #define CUSTOMLINEEDIT_H
 
@@ -16,3 +24,4 @@ public:
 };
 
 #endif // CUSTOMLINEEDIT_H
+

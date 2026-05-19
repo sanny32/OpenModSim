@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file addressspacecombobox.cpp
+/// \brief Implements the addressspacecombobox functionality.
+///
+
 #include <QEvent>
 #include "addressspacecombobox.h"
 
@@ -8,6 +16,8 @@
 AddressSpaceComboBox::AddressSpaceComboBox(QWidget* parent)
     : QComboBox(parent)
 {
+    setSizeAdjustPolicy(QComboBox::AdjustToContents);
+
     addItem(tr("5-digits"), QVariant::fromValue(AddressSpace::Addr5Digits));
     addItem(tr("6-digits"), QVariant::fromValue(AddressSpace::Addr6Digits));
 
@@ -77,3 +87,4 @@ void AddressSpaceComboBox::on_currentIndexChanged(int index)
         emit addressSpaceChanged(_currentValue);
     }
 }
+

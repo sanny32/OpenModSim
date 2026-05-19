@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file qcountedset.h
+/// \brief Declares the qcountedset interfaces.
+///
+
 #ifndef QCOUNTEDSET_H
 #define QCOUNTEDSET_H
 
@@ -55,3 +63,4 @@ private:
 };
 
 #endif // QCOUNTEDSET_H
+

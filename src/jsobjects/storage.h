@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file storage.h
+/// \brief Declares the storage interfaces.
+///
+
 #ifndef STORAGE_H
 #define STORAGE_H
 
@@ -29,3 +37,4 @@ private:
 };
 
 #endif // STORAGE_H
+

@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file modbustcpserver.h
+/// \brief Declares the modbustcpserver interfaces.
+///
+
 #ifndef MODBUSTCPSERVER_H
 #define MODBUSTCPSERVER_H
 
@@ -23,11 +31,13 @@ public:
 
     QVariant connectionParameter(QModbusDevice::ConnectionParameter parameter) const override;
     void setConnectionParameter(QModbusDevice::ConnectionParameter parameter, const QVariant &value) override;
+    int connectedClientCount() const { return _connections.size(); }
 
     QIODevice *device() const override {return nullptr; }
 
 signals:
-    void modbusClientDisconnected(QTcpSocket* modbusClient);
+    void modbusClientConnected(const QString& clientAddress, quint16 clientPort);
+    void modbusClientDisconnected(const QString& clientAddress, quint16 clientPort);
 
 private slots:
     void on_newConnection();
@@ -74,3 +84,4 @@ private:
 
 
 #endif // MODBUSTCPSERVER_H
+

@@ -1,7 +1,16 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file modbuslogwidget.h
+/// \brief Declares the modbuslogwidget interfaces.
+///
+
 #ifndef MODBUSLOGWIDGET_H
 #define MODBUSLOGWIDGET_H
 
 #include <QQueue>
+#include <QVector>
 #include <QListView>
 #include "bufferinglistmodel.h"
 #include "modbusmessage.h"
@@ -38,10 +47,12 @@ public:
     QModelIndex index(int row);
 
     void addItem(QSharedPointer<const ModbusMessage> msg);
+    void addItems(const QVector<QSharedPointer<const ModbusMessage>>& messages);
     QSharedPointer<const ModbusMessage> itemAt(const QModelIndex& index);
+    bool exportToTextFile(const QString& filePath);
 
-    DataDisplayMode dataDisplayMode() const;
-    void setDataDisplayMode(DataDisplayMode mode);
+    DataType dataType() const;
+    void setDataType(DataType type);
 
     bool showLeadingZeros() const;
     void setShowLeadingZeros(bool value);
@@ -69,8 +80,9 @@ private:
     QAction* _copyAct;
     QAction* _copyBytesAct;
     LogViewState _state = LogViewState::Running;
-    DataDisplayMode _dataDisplayMode;
+    DataType _dataType;
     bool _showLeadingZeros = true;
 };
 
 #endif // MODBUSLOGWIDGET_H
+

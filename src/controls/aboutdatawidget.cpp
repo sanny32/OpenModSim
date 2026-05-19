@@ -1,3 +1,12 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file aboutdatawidget.cpp
+/// \brief Implements the aboutdatawidget functionality.
+///
+
+#include "../styles/appcolors.h"
 #include "aboutdatawidget.h"
 
 ///
@@ -35,7 +44,7 @@ void AboutDataWidget::setupUI()
     _titleLabel->setFont(titleFont);
 
     QPalette versionPalette = _versionLabel->palette();
-    versionPalette.setColor(QPalette::WindowText, Qt::darkGray);
+    versionPalette.setColor(QPalette::WindowText, AppColors::versionLabelColor());
     _versionLabel->setPalette(versionPalette);
 
     _linkButton->setCursor(Qt::PointingHandCursor);
@@ -191,3 +200,4 @@ void AboutDataWidget::updateLinkButton()
     _linkButton->setVisible(shouldBeVisible);
     _linkButton->setToolTip(_linkUrl.toString());
 }
+

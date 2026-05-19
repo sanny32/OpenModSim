@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file qfixedsizedialog.cpp
+/// \brief Implements the qfixedsizedialog functionality.
+///
+
 #include "qfixedsizedialog.h"
 
 ///
@@ -12,6 +20,16 @@ QFixedSizeDialog::QFixedSizeDialog(QWidget *parent, Qt::WindowFlags f)
 }
 
 ///
+/// \brief QFixedSizeDialog::sizeHint
+/// \return
+///
+QSize QFixedSizeDialog::sizeHint() const
+{
+    const QSize natural = QDialog::sizeHint();
+    return natural.expandedTo(minimumSize()).boundedTo(maximumSize());
+}
+
+///
 /// \brief QFixedSizeDialog::showEvent
 /// \param e
 ///
@@ -23,10 +41,11 @@ void QFixedSizeDialog::showEvent(QShowEvent* e)
         _shown = true;
         setFixedSize(sizeHint());
 
-        if(parentWidget() != nullptr)
+        if(auto pw = parentWidget() ? parentWidget()->window() : nullptr)
         {
-            const auto rc = parentWidget()->frameGeometry();
-            move(rc.center() - rect().center());
+            const auto center = pw->mapToGlobal(pw->rect().center());
+            setGeometry(center.x() - width() / 2, center.y() - height() / 2, width(), height());
         }
     }
 }
+

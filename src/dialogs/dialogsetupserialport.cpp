@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file dialogsetupserialport.cpp
+/// \brief Implements the dialogsetupserialport functionality.
+///
+
 #include "dialogsetupserialport.h"
 #include "ui_dialogsetupserialport.h"
 
@@ -32,6 +40,20 @@ DialogSetupSerialPort::~DialogSetupSerialPort()
 }
 
 ///
+/// rief DialogSetupSerialPort::changeEvent
+///
+///
+/// \brief DialogSetupSerialPort::changeEvent
+///
+void DialogSetupSerialPort::changeEvent(QEvent* event)
+{
+    if (event->type() == QEvent::LanguageChange)
+        ui->retranslateUi(this);
+
+    QDialog::changeEvent(event);
+}
+
+///
 /// \brief DialogSetupSerialPort::accept
 ///
 void DialogSetupSerialPort::accept()
@@ -54,3 +76,4 @@ void DialogSetupSerialPort::on_comboBoxFlowControl_currentIndexChanged(int)
     const auto fc = ui->comboBoxFlowControl->currentFlowControl();
     ui->comboBoxRTSControl->setEnabled(fc != QSerialPort::HardwareControl);
 }
+

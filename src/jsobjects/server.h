@@ -1,8 +1,19 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file server.h
+/// \brief Declares the server interfaces.
+///
+
 #ifndef SERVER_H
 #define SERVER_H
 
 #include <QObject>
+#include <QJSEngine>
 #include <QJSValue>
+#include <QSemaphore>
+#include <QSharedPointer>
 #include "modbusmultiserver.h"
 
 namespace Register
@@ -44,7 +55,7 @@ class Server : public QObject
     Q_OBJECT
 
 public:
-    explicit Server(ModbusMultiServer* server, const ByteOrder* order, AddressBase base);
+    explicit Server(ModbusMultiServer* server, const ByteOrder* order, AddressBase base, QJSEngine* engine);
     ~Server() override;
 
     Q_PROPERTY(Address::Base addressBase READ addressBase WRITE setAddressBase);
@@ -110,6 +121,7 @@ public:
 
     Q_INVOKABLE void onChange(quint8 deviceId, Register::Type reg, quint16 address, const QJSValue& func);
     Q_INVOKABLE void onError(quint8 deviceId, const QJSValue& func);
+    Q_INVOKABLE void onRequest(const QJSValue& func);
 
 signals:
     void errorOccured(quint8 deviceId, const QString& error);
@@ -142,10 +154,21 @@ private:
         }
     };
 
+    struct JsCallState {
+        bool active = true;
+        QJSEngine* engine = nullptr;
+        QJSValue callback;
+    };
+    using JsCallStatePtr = QSharedPointer<JsCallState>;
+
+    static bool runJsHandler(const JsCallStatePtr& state, const QModbusPdu& pdu, int deviceId, QModbusResponse& response);
+
     Address::Base _addressBase;
     const ByteOrder* _byteOrder;
     ModbusMultiServer* _mbMultiServer;
+    QJSEngine* _jsEngine;
 
+    JsCallStatePtr _callState;
     QHash<int, QJSValue> _mapOnError;
     QHash<KeyOnChange, QJSValue> _mapOnChange;
 
@@ -153,3 +176,4 @@ private:
 };
 
 #endif // SERVER_H
+

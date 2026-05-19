@@ -41,13 +41,20 @@
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
-         </property>
+         </property><property name="minimumSize"><size><width>0</width><height>26</height></size></property>
         </widget>
        </item>
        <item row="1" column="0" colspan="2">
         <widget class="QCheckBox" name="checkBoxGlobalMap">
          <property name="text">
           <string>Use Global Address Map (Unallocated registers will be zero)</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0" colspan="2">
+        <widget class="QCheckBox" name="checkBoxAutoAddRegistersOnRequest">
+         <property name="text">
+          <string>Automatically add registers on request</string>
          </property>
         </widget>
        </item>
@@ -275,7 +282,7 @@
    <header>addressspacecombobox.h</header>
   </customwidget>
  </customwidgets>
- <resources/>
+ <resources />
  <connections>
   <connection>
    <sender>buttonBox</sender>
@@ -311,3 +318,4 @@
   </connection>
  </connections>
 </ui>
+

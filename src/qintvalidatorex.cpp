@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file qintvalidatorex.cpp
+/// \brief Implements the qintvalidatorex functionality.
+///
+
 #include "qintvalidatorex.h"
 
 ///
@@ -34,3 +42,4 @@ void QIntValidatorEx::fixup(QString& input) const
     if(_allowEmpty && input.isEmpty()) return;
     QIntValidator::fixup(input);
 }
+

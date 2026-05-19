@@ -1,15 +1,37 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file dialogabout.cpp
+/// \brief Implements the dialogabout functionality.
+///
+
 #include <QFile>
 #include <QApplication>
+#include <QDesktopServices>
+#include <QJsonArray>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QMessageBox>
 #include <QPlainTextEdit>
 #include "aboutdatawidget.h"
 #include "dialogabout.h"
+#include "themedicons.h"
 #include "ui_dialogabout.h"
+
+#if defined(HAVE_QLEMENTINE_APP_STYLE)
+#include "styles/qlementineappstyle.h"
+#endif
 
 #ifdef Q_OS_WIN
 #include <windows.h>
 
 typedef LONG (WINAPI *RtlGetVersionPtr)(PRTL_OSVERSIONINFOW);
 
+///
+/// \brief windowsPrettyName
+/// \return
+///
 QString windowsPrettyName()
 {
     HMODULE hMod = ::GetModuleHandleW(L"ntdll.dll");
@@ -63,21 +85,95 @@ QString arch()
 }
 
 ///
+/// \brief aboutData
+/// \return
+///
+QJsonObject aboutData()
+{
+    QFile f(":/res/about.json");
+    if (!f.open(QFile::ReadOnly))
+        return {};
+
+    QJsonParseError error;
+    const auto doc = QJsonDocument::fromJson(f.readAll(), &error);
+    if (error.error != QJsonParseError::NoError || !doc.isObject())
+        return {};
+
+    return doc.object();
+}
+
+///
+/// \brief roleDescription
+/// \param role
+/// \return
+///
+QString roleDescription(const QString& role)
+{
+    if (role == "author_maintainer")
+        return DialogAbout::tr("Author and Maintainer");
+
+    return DialogAbout::tr("Contributor");
+}
+
+///
+/// \brief languageName
+/// \param language
+/// \return
+///
+QString languageName(const QString& language)
+{
+    if (language == "russian")
+        return DialogAbout::tr("Russian");
+    if (language == "simplified_chinese")
+        return DialogAbout::tr("Simplified Chinese");
+    if (language == "traditional_chinese")
+        return DialogAbout::tr("Traditional Chinese");
+
+    return language;
+}
+
+///
+/// \brief languagesDescription
+/// \param languages
+/// \return
+///
+QString languagesDescription(const QJsonArray& languages)
+{
+    QStringList names;
+    for (const auto& value : languages) {
+        const auto language = value.toString();
+        if (!language.isEmpty())
+            names.append(languageName(language));
+    }
+
+    if (names.size() == 2)
+        return DialogAbout::tr("%1 and %2").arg(names.at(0), names.at(1));
+
+    return names.join(", ");
+}
+
+///
 /// \brief DialogAbout::DialogAbout
 /// \param parent
 ///
 DialogAbout::DialogAbout(QWidget *parent) :
     QFixedSizeDialog(parent),
-    ui(new Ui::DialogAbout)
+    ui(new Ui::DialogAbout),
+    _updateChecker(new UpdateChecker(this))
 {
     ui->setupUi(this);
-    setWindowTitle(tr("About %1...").arg(APP_NAME));
+    setWindowTitle(tr("About %1...").arg(APP_PRODUCT_NAME));
 
-    ui->labelName->setText(APP_NAME);
+    ui->labelName->setText(APP_PRODUCT_NAME);
     ui->labelVersion->setText(tr("Version: <b>%1</b> %2").arg(APP_VERSION, arch()));
 
     const auto copyright = QString(ui->labelCopyright->text()).arg(BUILD_YEAR);
     ui->labelCopyright->setText(copyright);
+
+    connect(_updateChecker, &UpdateChecker::checkStarted, this, &DialogAbout::onUpdateCheckStarted);
+    connect(_updateChecker, &UpdateChecker::noUpdatesAvailable, this, &DialogAbout::onNoUpdatesAvailable);
+    connect(_updateChecker, &UpdateChecker::checkFailed, this, &DialogAbout::onUpdateCheckFailed);
+    connect(_updateChecker, &UpdateChecker::newVersionAvailable, this, &DialogAbout::onNewVersionAvailable);
 
     {
         auto vboxLayout = new QVBoxLayout();
@@ -109,6 +205,22 @@ DialogAbout::DialogAbout(QWidget *parent) :
                      tr("Underlying platform."));
     #endif
 
+#if defined(HAVE_QLEMENTINE_APP_STYLE)
+        if (dynamic_cast<QlementineAppStyle*>(qApp ? qApp->style() : nullptr)) {
+            addComponent(vboxLayout,
+                         "Qlementine",
+                         QLEMENTINE_VERSION,
+                         tr("Modern Qt Widgets style."),
+                         "https://github.com/oclero/qlementine");
+
+            addComponent(vboxLayout,
+                         "Qlementine Icons",
+                         QLEMENTINE_ICONS_VERSION,
+                         tr("Modern Qt Widgets icon theme."),
+                         "https://github.com/oclero/qlementine-icons");
+        }
+#endif
+
     #ifdef Q_OS_MAC
         addComponent(vboxLayout,
                      QSysInfo::prettyProductName(),
@@ -120,50 +232,8 @@ DialogAbout::DialogAbout(QWidget *parent) :
         ui->scrollAreaComponentsWidget->setLayout(vboxLayout);
     }
 
-    {
-        auto vboxLayout = new QVBoxLayout();
-        vboxLayout->setContentsMargins(0, 0, 0, 0);
-
-        addAuthor(vboxLayout,
-                  "Alexandr Ananev",
-                  tr("Author and Maintainer"),
-                  "mailto: mail@ananev.org");
-
-        addAuthor(vboxLayout,
-                  "Nikolay Raspopov",
-                  tr("Contributor"),
-                  "mailto: raspopov@cherubicsoft.com");
-
-        addAuthor(vboxLayout,
-                  "Pedro Cobucci",
-                  tr("Contributor"),
-                  "https://github.com/PedroCobucci");
-
-        addAuthor(vboxLayout,
-                  "nash_su",
-                  tr("Contributor"),
-                  "mailto: nash.yong@gmail.com");
-
-        vboxLayout->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Minimum, QSizePolicy::Expanding));
-        ui->scrollAreaAuthorsWidget->setLayout(vboxLayout);
-    }
-
-    {
-        auto vboxLayout = new QVBoxLayout();
-        vboxLayout->setContentsMargins(0, 0, 0, 0);
-
-        addAuthor(vboxLayout,
-                  "Alexandr Ananev",
-                  tr("Russian"));
-
-        addAuthor(vboxLayout,
-                  "CWZ7605",
-                  tr("Simplified Chinese and Traditional Chinese"),
-                  "https://github.com/CWZ7605");
-
-        vboxLayout->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Minimum, QSizePolicy::Expanding));
-        ui->scrollAreaTranslationWidget->setLayout(vboxLayout);
-    }
+    loadAuthors();
+    loadTranslators();
 
     adjustSize();
     ui->tabWidget->setCurrentIndex(0);
@@ -178,6 +248,20 @@ DialogAbout::~DialogAbout()
 }
 
 ///
+/// rief DialogAbout::changeEvent
+///
+///
+/// \brief DialogAbout::changeEvent
+///
+void DialogAbout::changeEvent(QEvent* event)
+{
+    if (event->type() == QEvent::LanguageChange)
+        ui->retranslateUi(this);
+
+    QDialog::changeEvent(event);
+}
+
+///
 /// \brief DialogAbout::adjustSize
 ///
 void DialogAbout::adjustSize()
@@ -187,6 +271,9 @@ void DialogAbout::adjustSize()
     auto s = style();
     const int sbWidth = s->pixelMetric(QStyle::PM_ScrollBarExtent);
     const int frameWidth = s->pixelMetric(QStyle::PM_DefaultFrameWidth) * 2;
+
+    const int maxDialogH = maximumHeight();
+    const int dialogFrameV = sizeHint().height() - ui->tabWidget->height();
 
     QSize maxContentSize(0, 0);
     for (int i = 0; i < ui->tabWidget->count(); ++i) {
@@ -209,6 +296,11 @@ void DialogAbout::adjustSize()
             contentSize.rwidth() += marginH + sbWidth + frameWidth;
             contentSize.rheight() += marginV + ui->tabWidget->tabBar()->sizeHint().height() + frameWidth;
 
+            if (maxDialogH > 0 && maxDialogH < QWIDGETSIZE_MAX) {
+                const int maxTabH = maxDialogH - dialogFrameV;
+                contentSize.rheight() = qMin(contentSize.height(), maxTabH);
+            }
+
             maxContentSize = maxContentSize.expandedTo(contentSize);
         }
     }
@@ -225,12 +317,69 @@ void DialogAbout::adjustSize()
 }
 
 ///
+/// \brief DialogAbout::loadAuthors
+///
+void DialogAbout::loadAuthors()
+{
+    auto vboxLayout = new QVBoxLayout();
+    vboxLayout->setContentsMargins(0, 0, 0, 0);
+
+    const auto data = aboutData();
+    const QStringList sections = { "authors", "contributors" };
+    for (const auto& sectionName : sections) {
+        const auto people = data.value(sectionName).toArray();
+        for (const auto& value : people) {
+            const auto person = value.toObject();
+            const auto name = person.value("name").toString();
+            if (name.isEmpty())
+                continue;
+
+            const auto role = person.value("role").toString();
+            const auto description = roleDescription(role);
+            const auto url = person.value("url").toString();
+            addAuthor(vboxLayout, name, description, url);
+        }
+    }
+
+    vboxLayout->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Minimum, QSizePolicy::Expanding));
+    ui->scrollAreaAuthorsWidget->setLayout(vboxLayout);
+}
+
+///
+/// \brief DialogAbout::loadTranslators
+///
+void DialogAbout::loadTranslators()
+{
+    auto vboxLayout = new QVBoxLayout();
+    vboxLayout->setContentsMargins(0, 0, 0, 0);
+
+    const auto data = aboutData();
+    const auto translators = data.value("translators").toArray();
+    for (const auto& value : translators) {
+        const auto person = value.toObject();
+        const auto name = person.value("name").toString();
+        if (name.isEmpty())
+            continue;
+
+        const auto description = languagesDescription(person.value("languages").toArray());
+        const auto url = person.value("url").toString();
+        addAuthor(vboxLayout, name, description, url);
+    }
+
+    vboxLayout->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Minimum, QSizePolicy::Expanding));
+    ui->scrollAreaTranslationWidget->setLayout(vboxLayout);
+}
+
+///
 /// \brief DialogAbout::addComponent
 /// \param layout
 /// \param title
 /// \param version
 /// \param description
 /// \param url
+///
+///
+/// \brief DialogAbout::addComponent
 ///
 void DialogAbout::addComponent(QLayout* layout, const QString& title, const QString& version, const QString& description, const QString& url)
 {
@@ -239,7 +388,7 @@ void DialogAbout::addComponent(QLayout* layout, const QString& title, const QStr
     w->setVersion(version);
     w->setDescription(description);
     w->setLinkUrl(QUrl(url));
-    w->setLinkIcon(QIcon::fromTheme("applications-internet", QIcon(":/res/applications-internet.svg")));
+    w->setLinkIcon(themedIcon(QStringLiteral("omodsim/internet")));
     w->setLinkToolTip(tr("Visit component's homepage\n%1").arg(w->linkUrl().toString()));
     layout->addWidget(w);
 }
@@ -260,12 +409,12 @@ void DialogAbout::addAuthor(QLayout* layout, const QString& name, const QString&
 
     if(url.contains("mailto:"))
     {
-        w->setLinkIcon(QIcon::fromTheme("emblem-mail", QIcon(":/res/emblem-mail.svg")));
+        w->setLinkIcon(themedIcon(QStringLiteral("omodsim/mail")));
         w->setLinkToolTip(tr("Email contributer: %1").arg(w->linkUrl().path()));
     }
     else if(url.contains("github"))
     {
-        w->setLinkIcon(QIcon(":/res/emblem-github.svg"));
+        w->setLinkIcon(themedIcon(QStringLiteral("omodsim/github")));
         w->setLinkToolTip(tr("Visit github user's homepage\n%1").arg(w->linkUrl().toString()));
     }
     else if(!url.isEmpty())
@@ -294,7 +443,7 @@ void DialogAbout::on_labelLicense_clicked()
     auto dlg = new QDialog(this);
     dlg->setAttribute(Qt::WA_DeleteOnClose, true);
     dlg->setWindowFlags(Qt::Dialog | Qt::CustomizeWindowHint | Qt::WindowTitleHint);
-    dlg->setWindowTitle(QString(tr("License Agreement - %1")).arg(APP_NAME));
+    dlg->setWindowTitle(QString(tr("License Agreement - %1")).arg(APP_PRODUCT_NAME));
     dlg->resize({ 530, 415});
 
     auto buttonBox = new QDialogButtonBox(dlg);
@@ -312,4 +461,65 @@ void DialogAbout::on_labelLicense_clicked()
 
     dlg->setLayout(layout);
     dlg->show();
+}
+
+///
+/// \brief DialogAbout::on_buttonCheckForUpdates_clicked
+///
+void DialogAbout::on_buttonCheckForUpdates_clicked()
+{
+    _updateChecker->checkForUpdates();
+}
+
+///
+/// \brief DialogAbout::onUpdateCheckStarted
+///
+void DialogAbout::onUpdateCheckStarted()
+{
+    ui->buttonCheckForUpdates->setEnabled(false);
+    ui->buttonCheckForUpdates->setText(tr("Checking..."));
+}
+
+///
+/// \brief DialogAbout::onNoUpdatesAvailable
+///
+void DialogAbout::onNoUpdatesAvailable()
+{
+    ui->buttonCheckForUpdates->setEnabled(true);
+    ui->buttonCheckForUpdates->setText(tr("Check for updates"));
+    QMessageBox::information(this, tr("Check for updates"), tr("No updates available."));
+}
+
+///
+/// \brief DialogAbout::onUpdateCheckFailed
+/// \param errorString
+///
+void DialogAbout::onUpdateCheckFailed(const QString& errorString)
+{
+    ui->buttonCheckForUpdates->setEnabled(true);
+    ui->buttonCheckForUpdates->setText(tr("Check for updates"));
+    QMessageBox::warning(this,
+                         tr("Check for updates"),
+                         tr("Failed to check for updates.\n\n%1").arg(errorString));
+}
+
+///
+/// \brief DialogAbout::onNewVersionAvailable
+/// \param version
+/// \param url
+///
+void DialogAbout::onNewVersionAvailable(const QString& version, const QString& url)
+{
+    ui->buttonCheckForUpdates->setEnabled(true);
+    ui->buttonCheckForUpdates->setText(tr("Check for updates"));
+
+    const auto answer = QMessageBox::question(this,
+                                              tr("New version available"),
+                                              tr("A new version %1 is available.\n\nOpen the download page?")
+                                                  .arg(version),
+                                              QMessageBox::Yes | QMessageBox::No,
+                                              QMessageBox::Yes);
+
+    if(answer == QMessageBox::Yes)
+        QDesktopServices::openUrl(QUrl(url));
 }

@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file qdoublevalidatorex.cpp
+/// \brief Implements the qdoublevalidatorex functionality.
+///
+
 #include "qdoublevalidatorex.h"
 
 ///
@@ -35,3 +43,4 @@ void QDoubleValidatorEx::fixup(QString& input) const
     if(_allowEmpty && input.isEmpty()) return;
     QDoubleValidator::fixup(input);
 }
+

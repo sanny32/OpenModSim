@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<OpenModSim Version="2.0-dev">
+    <ModbusDefinitions AddrSpace="6-Digits" UseGlobalUnitMap="false" AutoAddRegistersOnRequest="false">
+        <ModbusErrorSimulations NoResponse="false" ResponseIncorrectId="false" ResponseIllegalFunction="false" ResponseDeviceBusy="false" ResponseIncorrectCrc="false" ResponseDelay="false" ResponseRandomDelay="false" ResponseDelayTime="0" ResponseRandomDelayUpToTime="1000"/>
+    </ModbusDefinitions>
+    <Connections>
+        <ConnectionDetails ConnectionType="Tcp">
+            <TcpConnectionParams IPAddress="0.0.0.0" ServicePort="502"/>
+        </ConnectionDetails>
+    </Connections>
+    <AddressSpace>
+        <AddressDescriptionMap>
+            <Description DeviceId="1" Type="4" Address="0"><![CDATA[Sine]]></Description>
+            <Description DeviceId="1" Type="4" Address="1"><![CDATA[Cosine]]></Description>
+            <Description DeviceId="1" Type="4" Address="2"><![CDATA[Sawtooth]]></Description>
+            <Description DeviceId="1" Type="4" Address="3"><![CDATA[Square]]></Description>
+            <Description DeviceId="1" Type="4" Address="4"><![CDATA[Triangle]]></Description>
+            <Description DeviceId="1" Type="4" Address="5"><![CDATA[Noise]]></Description>
+            <Description DeviceId="1" Type="4" Address="6"><![CDATA[Phase Step (deg/tick)]]></Description>
+            <Description DeviceId="1" Type="4" Address="7"><![CDATA[Amplitude (%)]]></Description>
+        </AddressDescriptionMap>
+        <AddressTimestampMap>
+            <Timestamp DeviceId="1" Type="4" Address="6" Value="2026-04-10T18:06:58.831"/>
+            <Timestamp DeviceId="1" Type="4" Address="7" Value="2026-04-10T18:06:58.831"/>
+        </AddressTimestampMap>
+        <ModbusSimulationMap/>
+        <ModbusDataValues>
+            <Value DeviceId="1" Type="4" Address="6">2</Value>
+            <Value DeviceId="1" Type="4" Address="7">100</Value>
+        </ModbusDataValues>
+    </AddressSpace>
+    <ViewSettings ViewMode="1" SplitView="0" GlobalZeroBasedAddress="0" GlobalHexView="0" ActivePanel="L" ActivePrimaryWindow="WaveValues"/>
+    <Forms>
+        <FormDataView Panel="L" Title="WaveValues" DataType="UInt16" RegisterOrder="MSRF" Codepage="" ByteOrder="Direct">
+            <Window Maximized="true" Minimized="false" Left="0" Top="0" Width="610" Height="331"/>
+            <DataViewDefinitions FormName="WaveValues" DeviceId="1" PointType="HoldingRegisters" PointAddress="1" Length="8" DataViewColumnsDistance="25" LeadingZeros="true"/>
+            <AddressColorMap/>
+        </FormDataView>
+        <FormScriptView Panel="L" Title="WaveGenerator">
+            <Window Maximized="true" Minimized="false" Left="0" Top="0" Width="523" Height="278"/>
+            <Colors Background="#ffffff" Foreground="#000000"/>
+            <Font Family="Segoe UI" Size="9" Bold="false" Italic="false"/>
+            <Zoom Value="100%"/>
+            <ScriptViewDefinitions FormName="WaveGenerator">
+                <ScriptSettings Mode="Periodically" Interval="500" RunOnStartup="false"/>
+            </ScriptViewDefinitions>
+            <JScriptControl>
+                <Script CursorPosition="0" ScrollPosition="0"><![CDATA[/**************************************************************************/
+/*
+/* Wave Generator Demo
+/* Generates sine, cosine, sawtooth and square waves in Holding Registers
+/*
+/* Register map (Base1):
+/*   HR[1]  - Sine wave       (0..65535, centered at 32767)
+/*   HR[2]  - Cosine wave     (0..65535, centered at 32767)
+/*   HR[3]  - Sawtooth wave   (0..65535)
+/*   HR[4]  - Square wave     (0 or 65535)
+/*   HR[5]  - Triangle wave   (0..65535)
+/*   HR[6]  - Noise           (random, 0..65535)
+/*   HR[7]  - Phase step (deg, writable - controls wave speed, default=2)
+/*   HR[8]  - Amplitude %     (writable - controls amplitude 0..100, default=100)
+/*
+/* Run mode: periodic (e.g. 100 ms)
+/*
+***************************************************************************/
+
+Server.addressBase = AddressBase.Base1;
+
+var deviceId = 1;
+var phase = 0;
+
+function tick()
+{
+    var phaseStep = Server.readHolding(7, deviceId);
+    if(phaseStep <= 0 || phaseStep > 360) phaseStep = 2;
+
+    var amplitudePct = Server.readHolding(8, deviceId);
+    if(amplitudePct <= 0 || amplitudePct > 100) amplitudePct = 100;
+
+    var amp = Math.round(32767 * amplitudePct / 100);
+    var rad = phase * Math.PI / 180;
+
+    var sineVal     = Math.round(32767 + amp * Math.sin(rad));
+    var cosineVal   = Math.round(32767 + amp * Math.cos(rad));
+    var sawVal      = Math.round((phase / 360) * 65535);
+    var squareVal   = (phase < 180) ? 65535 : 0;
+    var triVal      = (phase < 180)
+        ? Math.round((phase / 180) * 65535)
+        : Math.round(((360 - phase) / 180) * 65535);
+    var noiseVal    = Math.round(Math.random() * 65535);
+
+    Server.writeHolding(1, sineVal,   deviceId);
+    Server.writeHolding(2, cosineVal, deviceId);
+    Server.writeHolding(3, sawVal,    deviceId);
+    Server.writeHolding(4, squareVal, deviceId);
+    Server.writeHolding(5, triVal,    deviceId);
+    Server.writeHolding(6, noiseVal,  deviceId);
+
+    phase = (phase + phaseStep) % 360;
+}
+
+function init()
+{
+    /* Write defaults for control registers */
+    Server.writeHolding(7, 2,   deviceId);  /* phase step = 2 deg */
+    Server.writeHolding(8, 100, deviceId);  /* amplitude  = 100%  */
+
+    console.log("=== Wave Generator started ===");
+    console.log("HR[1] Sine | HR[2] Cosine | HR[3] Sawtooth | HR[4] Square | HR[5] Triangle | HR[6] Noise");
+    console.log("HR[7] Phase step (deg/tick, 1..360) | HR[8] Amplitude (%, 1..100)");
+
+    /* Watch for external changes to control registers */
+    Server.onChange(deviceId, Register.Holding, 7, function(val) {
+        console.log("Phase step changed to " + val + " deg/tick");
+    });
+    Server.onChange(deviceId, Register.Holding, 8, function(val) {
+        console.log("Amplitude changed to " + val + "%");
+    });
+}
+
+Script.onInit(init);
+tick();
+]]></Script>
+                <AutoComplete Enabled="true"/>
+            </JScriptControl>
+        </FormScriptView>
+        <FormDataMapView Panel="L" Title="DataMap">
+            <Window Maximized="true" Minimized="false" Left="0" Top="0" Width="409" Height="226"/>
+            <DataMapViewDefinitions FormName="DataMap" ZeroBasedAddress="false" HexView="false" AutoAddOnRequest="false" AutoRequestMap="false"/>
+            <ColumnWidths Unit="40" Type="120" Address="70" DataType="70" Order="65" Comment="200" Value="160" Timestamp="160"/>
+            <DataMap>
+                <Entry DeviceId="1" Type="4" Address="0" DataType="UInt16" Value="0"/>
+                <Entry DeviceId="1" Type="4" Address="1" DataType="UInt16" Value="0"/>
+                <Entry DeviceId="1" Type="4" Address="2" DataType="UInt16" Value="0"/>
+                <Entry DeviceId="1" Type="4" Address="3" DataType="UInt16" Value="0"/>
+                <Entry DeviceId="1" Type="4" Address="4" DataType="UInt16" Value="0"/>
+                <Entry DeviceId="1" Type="4" Address="5" DataType="UInt16" Value="0"/>
+                <Entry DeviceId="1" Type="4" Address="6" DataType="UInt16" Value="2"/>
+                <Entry DeviceId="1" Type="4" Address="7" DataType="UInt16" Value="100"/>
+            </DataMap>
+        </FormDataMapView>
+    </Forms>
+    <TabOrder Panel="L">
+        <TabRef title="WaveValues"/>
+        <TabRef title="WaveGenerator"/>
+        <TabRef title="DataMap"/>
+    </TabOrder>
+</OpenModSim>

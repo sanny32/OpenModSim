@@ -1,4 +1,12 @@
-﻿#include <QUrl>
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file modbustcpserver.cpp
+/// \brief Implements the modbustcpserver functionality.
+///
+
+#include <QUrl>
 #include <QTimer>
 #include <QPointer>
 #include <QSharedPointer>
@@ -89,27 +97,28 @@ void ModbusTcpServer::on_newConnection()
     }
 
     _connections.append(socket);
+    emit modbusClientConnected(socket->peerAddress().toString(), socket->peerPort());
 
     auto buffer = new QByteArray();
 
-    ///
-    /// \brief QObject::connect
-    ///
+///
+/// \brief QObject::connect
+///
     QObject::connect(socket, &QObject::destroyed, socket, [buffer]() {
         // cleanup buffer
         delete buffer;
     });
-    ///
-    /// \brief QObject::connect
-    ///
+///
+/// \brief QObject::connect
+///
     QObject::connect(socket, &QTcpSocket::disconnected, this, [socket, this]() {
         _connections.removeAll(socket);
-        emit modbusClientDisconnected(socket);
+        emit modbusClientDisconnected(socket->peerAddress().toString(), socket->peerPort());
         socket->deleteLater();
     });
-    ///
-    /// \brief QObject::connect
-    ///
+///
+/// \brief QObject::connect
+///
     QObject::connect(socket, &QTcpSocket::readyRead, this, [buffer, socket, this]() {
         if (!socket)
             return;
@@ -162,7 +171,9 @@ void ModbusTcpServer::on_newConnection()
             if(mbDef.ErrorSimulations.noResponse())
                 return;
 
+            setCurrentRequestClient(socket->peerAddress().toString(), socket->peerPort());
             const QModbusResponse response = forwardProcessRequest(request, unitId);
+            clearCurrentRequestClient();
 
             if(mbDef.ErrorSimulations.responseIncorrectId())
                 unitId++;
@@ -380,3 +391,4 @@ void ModbusTcpServer::close()
 
     setState(QModbusDevice::UnconnectedState);
 }
+

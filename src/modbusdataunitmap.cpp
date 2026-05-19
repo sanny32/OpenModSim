@@ -1,4 +1,40 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file modbusdataunitmap.cpp
+/// \brief Implements the modbusdataunitmap functionality.
+///
+
 #include "modbusdataunitmap.h"
+
+static bool unitMapsEqual(const QModbusDataUnitMap& a, const QModbusDataUnitMap& b)
+{
+    if (a.keys() != b.keys())
+        return false;
+    for (auto it = a.constBegin(); it != a.constEnd(); ++it) {
+        const auto& u = it.value();
+        const auto& v = b[it.key()];
+        if (u.startAddress() != v.startAddress() || u.valueCount() != v.valueCount())
+            return false;
+    }
+    return true;
+}
+
+static const QDateTime kApplicationStartTimestamp = QDateTime::currentDateTime();
+
+static bool unitMapContainsAddress(const QModbusDataUnitMap& map, QModbusDataUnit::RegisterType type, quint16 address)
+{
+    const auto it = map.constFind(type);
+    if (it == map.constEnd())
+        return false;
+
+    const auto& unit = it.value();
+    const quint32 start = unit.startAddress();
+    const quint32 end = start + unit.valueCount();
+    const quint32 point = address;
+    return point >= start && point < end;
+}
 
 ///
 /// \brief getDataValue
@@ -9,12 +45,16 @@
 ///
 quint16 getDataValue(const QModbusDataUnitMap& modbusMap, QModbusDataUnit::RegisterType pointType, quint16 pointAddress)
 {
-    const auto length = modbusMap[pointType].valueCount();
-    const auto startAddress = modbusMap[pointType].startAddress();
-    if(pointAddress < startAddress || pointAddress > startAddress + length)
+    const auto it = modbusMap.constFind(pointType);
+    if(it == modbusMap.constEnd())
         return 0;
-    else
-        return modbusMap[pointType].value(pointAddress - startAddress);
+
+    const auto& dataUnit = it.value();
+    const int idx = pointAddress - dataUnit.startAddress();
+    if(idx < 0 || idx >= dataUnit.valueCount())
+        return 0;
+
+    return dataUnit.value(idx);
 }
 
 ///
@@ -26,9 +66,19 @@ quint16 getDataValue(const QModbusDataUnitMap& modbusMap, QModbusDataUnit::Regis
 ///
 void setDataValue(QModbusDataUnitMap& modbusMap, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, quint16 value)
 {
-    const auto startAddress = modbusMap[pointType].startAddress();
-    const auto idx = pointAddress - startAddress;
-    if(idx >= 0) modbusMap[pointType].setValue(idx, value);
+    auto it = modbusMap.find(pointType);
+    if(it == modbusMap.end())
+        return;
+
+    auto& dataUnit = it.value();
+    const int idx = pointAddress - dataUnit.startAddress();
+    if(idx >= 0 && idx < dataUnit.valueCount())
+        dataUnit.setValue(idx, value);
+}
+
+ItemMapKey makeLocalKey(QModbusDataUnit::RegisterType type, quint16 address)
+{
+    return {0, type, address};
 }
 
 ///
@@ -51,21 +101,67 @@ ModbusDataUnitMap::ModbusDataUnitMap()
 /// \param pointAddress
 /// \param length
 ///
-void ModbusDataUnitMap::addUnitMap(int id, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, quint16 length)
+bool ModbusDataUnitMap::addUnitMap(QUuid id, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, quint16 length)
 {
+    const auto before = _modbusDataUnitMap;
     _dataUnits.insert(id, {pointType, pointAddress, length});
     updateDataUnitMap();
+    return !unitMapsEqual(_modbusDataUnitMap, before);
 }
 
 ///
 /// \brief ModbusDataUnitMap::removeUnitMap
 /// \param pointType
 ///
-void ModbusDataUnitMap::removeUnitMap(int id)
+bool ModbusDataUnitMap::removeUnitMap(QUuid id)
 {
+    const auto before = _modbusDataUnitMap;
     _dataUnits.remove(id);
     updateDataUnitMap();
+    return !unitMapsEqual(_modbusDataUnitMap, before);
 }
+
+bool ModbusDataUnitMap::unitMap(QUuid id, QModbusDataUnit& unit) const
+{
+    const auto it = _dataUnits.constFind(id);
+    if (it == _dataUnits.constEnd())
+        return false;
+
+    unit = it.value();
+    return true;
+}
+
+///
+/// \brief ModbusDataUnitMap::ensureRange
+///
+bool ModbusDataUnitMap::ensureRange(QModbusDataUnit::RegisterType pointType, quint16 pointAddress, quint16 length)
+{
+    if (_isGlobal || length == 0)
+        return false;
+
+    if (containsRange(pointType, pointAddress, length))
+        return false;
+
+    const auto it = _modbusDataUnitMap.constFind(pointType);
+    quint32 startAddress = pointAddress;
+    quint32 endAddress = static_cast<quint32>(pointAddress) + length;
+
+    if (it != _modbusDataUnitMap.constEnd()) {
+        startAddress = qMin<quint32>(startAddress, it.value().startAddress());
+        endAddress = qMax<quint32>(endAddress, static_cast<quint32>(it.value().startAddress()) + it.value().valueCount());
+    }
+
+    QModbusDataUnit expanded(pointType, static_cast<quint16>(startAddress),
+                             static_cast<quint16>(endAddress - startAddress));
+    for (quint32 address = startAddress; address < endAddress; ++address) {
+        expanded.setValue(static_cast<int>(address - startAddress),
+                          getDataValue(_modbusDataUnitGlobalMap, pointType, static_cast<quint16>(address)));
+    }
+
+    _modbusDataUnitMap.insert(pointType, expanded);
+    return true;
+}
+
 
 ///
 /// \brief ModbusDataUnitMap::addressSpace
@@ -102,6 +198,26 @@ void ModbusDataUnitMap::setAddressSpace(AddressSpace space)
 bool ModbusDataUnitMap::contains(QModbusDataUnit::RegisterType pointType) const
 {
     return _isGlobal ? true : _modbusDataUnitMap.contains(pointType);
+}
+
+///
+/// \brief ModbusDataUnitMap::containsRange
+///
+bool ModbusDataUnitMap::containsRange(QModbusDataUnit::RegisterType pointType, quint16 pointAddress, quint16 length) const
+{
+    if (length == 0)
+        return false;
+
+    const auto map = _isGlobal ? _modbusDataUnitGlobalMap : _modbusDataUnitMap;
+    const auto it = map.constFind(pointType);
+    if (it == map.constEnd())
+        return false;
+
+    const quint32 startAddress = pointAddress;
+    const quint32 endAddress = startAddress + length;
+    const quint32 currentStart = it.value().startAddress();
+    const quint32 currentEnd = currentStart + it.value().valueCount();
+    return startAddress >= currentStart && endAddress <= currentEnd;
 }
 
 ///
@@ -159,11 +275,17 @@ void ModbusDataUnitMap::setData(const QModbusDataUnit& data)
     const auto addr = data.startAddress();
     const auto length = data.valueCount();
     const auto type = data.registerType();
+    const QDateTime now = QDateTime::currentDateTime();
 
     for(uint i = 0; i < length; i++)
     {
-        setDataValue(_modbusDataUnitMap, type, addr + i, data.value(i));
-        setDataValue(_modbusDataUnitGlobalMap, type, addr + i, data.value(i));
+        const quint16 newValue = data.value(i);
+        const quint16 oldValue = getDataValue(_modbusDataUnitGlobalMap, type, addr + i);
+        if(newValue != oldValue)
+            setTimestamp(type, static_cast<quint16>(addr + i), now);
+
+        setDataValue(_modbusDataUnitMap, type, addr + i, newValue);
+        setDataValue(_modbusDataUnitGlobalMap, type, addr + i, newValue);
     }
 }
 
@@ -184,6 +306,157 @@ QModbusDataUnit ModbusDataUnitMap::getData(QModbusDataUnit::RegisterType pointTy
     }
 
     return data;
+}
+
+///
+/// \brief ModbusDataUnitMap::timestamp
+/// \param type
+/// \param address
+/// \return
+///
+QDateTime ModbusDataUnitMap::timestamp(QModbusDataUnit::RegisterType type, quint16 address) const
+{
+    const auto key = makeLocalKey(type, address);
+    const auto it = _timestamps.constFind(key);
+    if (it != _timestamps.constEnd())
+        return it.value();
+
+    return unitMapContainsAddress(_modbusDataUnitMap, type, address)
+        ? kApplicationStartTimestamp
+        : QDateTime();
+}
+
+///
+/// \brief ModbusDataUnitMap::setTimestamp
+/// \param type
+/// \param address
+/// \param timestamp
+///
+void ModbusDataUnitMap::setTimestamp(QModbusDataUnit::RegisterType type, quint16 address, const QDateTime& timestamp)
+{
+    const auto key = makeLocalKey(type, address);
+    if (timestamp.isValid())
+        _timestamps.insert(key, timestamp);
+    else
+        _timestamps.remove(key);
+}
+
+///
+/// \brief ModbusDataUnitMap::timestampMap
+/// \return
+///
+AddressTimestampMap ModbusDataUnitMap::timestampMap() const
+{
+    return _timestamps;
+}
+
+///
+/// \brief ModbusDataUnitMap::timestampMap
+/// \param type
+/// \param startAddress
+/// \param length
+/// \return
+///
+AddressTimestampMap ModbusDataUnitMap::timestampMap(QModbusDataUnit::RegisterType type, quint16 startAddress, quint16 length) const
+{
+    AddressTimestampMap result;
+    if(length == 0)
+        return result;
+
+    const quint32 endAddress = static_cast<quint32>(startAddress) + length;
+    for (auto it = _timestamps.constBegin(); it != _timestamps.constEnd(); ++it) {
+        if (it.key().Type != type)
+            continue;
+
+        const auto address = it.key().Address;
+        if (address < startAddress || static_cast<quint32>(address) >= endAddress)
+            continue;
+
+        if (it.value().isValid())
+            result.insert(it.key(), it.value());
+    }
+
+    return result;
+}
+
+///
+/// \brief ModbusDataUnitMap::description
+/// \param type
+/// \param address
+/// \return
+///
+QString ModbusDataUnitMap::description(QModbusDataUnit::RegisterType type, quint16 address) const
+{
+    return _descriptions.value(makeLocalKey(type, address));
+}
+
+///
+/// \brief ModbusDataUnitMap::setDescription
+/// \param type
+/// \param address
+/// \param description
+///
+void ModbusDataUnitMap::setDescription(QModbusDataUnit::RegisterType type, quint16 address, const QString& description)
+{
+    const auto key = makeLocalKey(type, address);
+    if(description.isEmpty())
+        _descriptions.remove(key);
+    else
+        _descriptions.insert(key, description);
+}
+
+///
+/// \brief ModbusDataUnitMap::descriptionMap
+/// \return
+///
+AddressDescriptionMap ModbusDataUnitMap::descriptionMap() const
+{
+    return _descriptions;
+}
+
+///
+/// \brief ModbusDataUnitMap::descriptionMap
+/// \param type
+/// \param startAddress
+/// \param length
+/// \return
+///
+AddressDescriptionMap ModbusDataUnitMap::descriptionMap(QModbusDataUnit::RegisterType type, quint16 startAddress, quint16 length) const
+{
+    AddressDescriptionMap result;
+    if(length == 0)
+        return result;
+
+    const quint32 endAddress = static_cast<quint32>(startAddress) + length;
+    for(auto it = _descriptions.constBegin(); it != _descriptions.constEnd(); ++it)
+    {
+        if(it.key().Type != type)
+            continue;
+
+        const auto addr = it.key().Address;
+        if(addr < startAddress || static_cast<quint32>(addr) >= endAddress)
+            continue;
+
+        result.insert(it.key(), it.value());
+    }
+
+    return result;
+}
+
+///
+/// \brief ModbusDataUnitMap::clearDescriptions
+///
+void ModbusDataUnitMap::clearDescriptions()
+{
+    _descriptions.clear();
+}
+
+///
+/// \brief ModbusDataUnitMap::clearTimestamps
+///
+void ModbusDataUnitMap::clearTimestamps()
+{
+    _timestamps.clear();
 }
 
 ///
@@ -220,3 +493,4 @@ void ModbusDataUnitMap::updateDataUnitMap()
     }
     _modbusDataUnitMap = modbusMap;
 }
+

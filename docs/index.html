@@ -92,7 +92,7 @@
                 </div>
                 <div class="hero-image-wrapper">
                     <div class="hero-image">
-                        <img src="screenshot-main.en.png" alt="OpenModSim Screenshot" data-screenshot="main">
+                        <img src="assets/screenshots/en/main.png" alt="OpenModSim Screenshot" data-screenshot="main">
                     </div>
                 </div>
             </div>
@@ -136,17 +136,35 @@
 
                 <div id="screenshots" class="screenshots">
                     <h3 data-i18n="screenshots.title">Screenshots</h3>
-                    <div class="screenshot-grid">
-                        <div class="screenshot-item">
-                            <img src="screenshot-main.en.png" alt="Main Interface" data-screenshot="main">
+                    <div class="screenshot-carousel">
+                        <button class="screenshot-carousel-btn screenshot-carousel-prev" id="screenshotPrev" type="button" aria-label="Previous screenshots">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M15 18l-6-6 6-6"/>
+                            </svg>
+                        </button>
+                        <div class="screenshot-viewport" id="screenshotViewport">
+                            <div class="screenshot-track" id="screenshotTrack">
+                                <div class="screenshot-item">
+                                    <img src="assets/screenshots/en/dataview.png" alt="Data View" data-screenshot="dataview">
+                                </div>
+                                <div class="screenshot-item">
+                                    <img src="assets/screenshots/en/mapview.png" alt="Map View" data-screenshot="mapview">
+                                </div>
+                                <div class="screenshot-item">
+                                    <img src="assets/screenshots/en/trafficview.png" alt="Traffic View" data-screenshot="trafficview">
+                                </div>
+                                <div class="screenshot-item">
+                                    <img src="assets/screenshots/en/script.png" alt="Scripting" data-screenshot="script">
+                                </div>
+                            </div>
                         </div>
-                        <div class="screenshot-item">
-                            <img src="screenshot-log.en.png" alt="Message Logging" data-screenshot="log">
-                        </div>
-                        <div class="screenshot-item">
-                            <img src="screenshot-script.en.png" alt="Scripting" data-screenshot="script">
-                        </div>
+                        <button class="screenshot-carousel-btn screenshot-carousel-next" id="screenshotNext" type="button" aria-label="Next screenshots">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M9 18l6-6-6-6"/>
+                            </svg>
+                        </button>
                     </div>
+                    <div class="screenshot-dots" id="screenshotDots" aria-label="Screenshot navigation"></div>
                 </div>
             </div>
         </section>
@@ -162,6 +180,12 @@
                             <path d="M0 3.449L9.75 2.1v9.451H0m10.949-9.602L24 0v11.4H10.949M0 12.6h9.75v9.451L0 20.699M10.949 12.6H24V24l-12.9-1.801"/>
                         </svg>
                         <span data-i18n="tab.windows">Windows</span>
+                    </button>
+                    <button class="tab-btn" data-tab="macos">
+                        <svg class="tab-icon" viewBox="0 0 384 512" fill="currentColor">
+                            <path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184 4 273.5c0 26.2 4.8 53.3 14.4 81.2 12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z"/>
+                        </svg>
+                        <span data-i18n="tab.macos">macOS</span>
                     </button>
                     <button class="tab-btn" data-tab="deb">
                         <svg class="tab-icon" viewBox="-60 -75 210 260" fill="currentColor">
@@ -248,6 +272,97 @@
                     </div>
                 </div>
 
+                <!-- macOS Tab -->
+                <div class="tab-panel" id="tab-macos">
+                    <div class="tab-columns">
+                        <div class="card">
+                            <div class="card-header">
+                                <svg class="card-header-icon" viewBox="0 0 384 512" fill="currentColor">
+                                    <path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184 4 273.5c0 26.2 4.8 53.3 14.4 81.2 12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z"/>
+                                </svg>
+                                <h3 data-i18n="card.macos.title">macOS DMG Package</h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="download-item">
+                                    <a href="https://github.com/sanny32/OpenModSim/releases/latest" class="btn btn-download" id="macos-qt6-link">
+                                        <svg class="download-item-icon" viewBox="0 0 24 24">
+                                            <path d="M12 15V3" />
+                                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                                            <path d="m7 10 5 5 5-5" />
+                                        </svg>
+                                        <span data-i18n="btn.download.macos">Download macOS DMG</span>
+                                        <span class="arch-tag">arm64</span><span class="btn-badge">Qt6</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header card-header-tabs">
+                                <button class="card-subtab active" data-subtab="install" data-i18n="subtab.install">Install</button>
+                                <button class="card-subtab" data-subtab="remove" data-i18n="subtab.remove">Remove</button>
+                            </div>
+                            <div class="card-body">
+                                <div class="install-instructions">
+                                    <div class="subtab-panel active" data-subtab="install">
+                                        <p data-i18n="macos.open.dmg">Open the DMG package</p>
+                                        <div class="code-block">
+                                            <pre><code>open ./<span class="qt6-macos-package-name">qt6-omodsim2-2.0.0_arm64.dmg</span></code></pre>
+                                            <button class="copy-btn">
+                                                <svg viewBox="0 0 16 16">
+                                                    <path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z" />
+                                                    <path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z" />
+                                                </svg>
+                                            </button>
+                                        </div>
+                                        <p data-i18n="macos.drag">Drag Open ModSim.app to the Applications folder</p>
+                                        <div class="tip-box">
+                                            <svg class="tip-box-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                <circle cx="12" cy="12" r="10"/>
+                                                <path d="M12 16v-4"/>
+                                                <path d="M12 8h.01"/>
+                                            </svg>
+                                            <div class="tip-box-content">
+                                                <p data-i18n-html="macos.quarantine.tip">Before the first launch, allow the application to run in <code>System Settings</code> &gt; <code>Privacy &amp; Security</code>, or remove the quarantine attribute</p>
+                                                <div class="code-block">
+                                                    <pre><code>xattr -dr com.apple.quarantine "/Applications/Open ModSim.app"</code></pre>
+                                                    <button class="copy-btn">
+                                                        <svg viewBox="0 0 16 16">
+                                                            <path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z" />
+                                                            <path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z" />
+                                                        </svg>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <p data-i18n="macos.run">Run the application</p>
+                                        <div class="code-block">
+                                            <pre><code>open "/Applications/Open ModSim.app"</code></pre>
+                                            <button class="copy-btn">
+                                                <svg viewBox="0 0 16 16">
+                                                    <path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z" />
+                                                    <path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z" />
+                                                </svg>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="subtab-panel" data-subtab="remove">
+                                        <p data-i18n="macos.remove">Move Open ModSim.app to Trash or run</p>
+                                        <div class="code-block">
+                                            <pre><code>rm -rf "/Applications/Open ModSim.app"</code></pre>
+                                            <button class="copy-btn">
+                                                <svg viewBox="0 0 16 16">
+                                                    <path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z" />
+                                                    <path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z" />
+                                                </svg>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Linux DEB Tab -->
                 <div class="tab-panel" id="tab-deb">
                     <div class="tab-columns">
@@ -296,7 +411,7 @@
                                     <div class="subtab-panel active" data-subtab="install">
                                         <p data-i18n="install.qt6">Qt6 package</p>
                                         <div class="code-block">
-                                            <pre><code>sudo apt install ./<span class="qt6-deb-package-name">qt6-omodsim_1.13.1-1_amd64.deb</span></code></pre>
+                                            <pre><code>sudo apt install ./<span class="qt6-deb-package-name">qt6-omodsim2_2.0.0-1_amd64.deb</span></code></pre>
                                             <button class="copy-btn">
                                                 <svg viewBox="0 0 16 16">
                                                     <path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z" />
@@ -306,7 +421,7 @@
                                         </div>
                                         <p data-i18n="install.qt5">Qt5 package</p>
                                         <div class="code-block">
-                                            <pre><code>sudo apt install ./<span class="qt5-deb-package-name">qt5-omodsim_1.13.1-1_amd64.deb</span></code></pre>
+                                            <pre><code>sudo apt install ./<span class="qt5-deb-package-name">qt5-omodsim2_2.0.0-1_amd64.deb</span></code></pre>
                                             <button class="copy-btn">
                                                 <svg viewBox="0 0 16 16">
                                                     <path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z" />
@@ -318,7 +433,7 @@
                                     <div class="subtab-panel" data-subtab="remove">
                                         <p data-i18n="install.qt6">Qt6 package</p>
                                         <div class="code-block">
-                                            <pre><code>sudo apt remove qt6-omodsim</code></pre>
+                                            <pre><code>sudo apt remove qt6-omodsim2</code></pre>
                                             <button class="copy-btn">
                                                 <svg viewBox="0 0 16 16">
                                                     <path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z" />
@@ -328,7 +443,7 @@
                                         </div>
                                         <p data-i18n="install.qt5">Qt5 package</p>
                                         <div class="code-block">
-                                            <pre><code>sudo apt remove qt5-omodsim</code></pre>
+                                            <pre><code>sudo apt remove qt5-omodsim2</code></pre>
                                             <button class="copy-btn">
                                                 <svg viewBox="0 0 16 16">
                                                     <path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z" />
@@ -396,7 +511,7 @@
                                                 <img src="icons/logo_redos.png" width="20" height="20" alt="RedOS"> RedOS
                                             </h4>
                                             <div class="code-block">
-                                                <pre><code>sudo dnf install ./<span class="qt6-rpm-package-name">qt6-omodsim_1.13.1-1.x86_64.rpm</span></code></pre>
+                                                <pre><code>sudo dnf install ./<span class="qt6-rpm-package-name">qt6-omodsim2_2.0.0-1.x86_64.rpm</span></code></pre>
                                                 <button class="copy-btn">
                                                     <svg viewBox="0 0 16 16">
                                                         <path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z" />
@@ -413,7 +528,7 @@
                                             </h4>
                                             <p data-i18n="suse.import">Import public key and install</p>
                                             <div class="code-block">
-                                                <pre><code>sudo rpm --import qt6-omodsim.rpm.pubkey</code></pre>
+                                                <pre><code>sudo rpm --import qt6-omodsim2.rpm.pubkey</code></pre>
                                                 <button class="copy-btn">
                                                     <svg viewBox="0 0 16 16">
                                                         <path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z" />
@@ -422,7 +537,7 @@
                                                 </button>
                                             </div>
                                             <div class="code-block">
-                                                <pre><code>sudo zypper install ./<span class="qt6-rpm-package-name">qt6-omodsim_1.13.1-1.x86_64.rpm</span></code></pre>
+                                                <pre><code>sudo zypper install ./<span class="qt6-rpm-package-name">qt6-omodsim2_2.0.0-1.x86_64.rpm</span></code></pre>
                                                 <button class="copy-btn">
                                                     <svg viewBox="0 0 16 16">
                                                         <path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z" />
@@ -438,7 +553,7 @@
                                             </h4>
                                             <p data-i18n="altlinux.root">Run as root user</p>
                                             <div class="code-block">
-                                                <pre><code>apt-get install ./<span class="qt6-rpm-package-name">qt6-omodsim_1.13.1-1.x86_64.rpm</span></code></pre>
+                                                <pre><code>apt-get install ./<span class="qt6-rpm-package-name">qt6-omodsim2_2.0.0-1.x86_64.rpm</span></code></pre>
                                                 <button class="copy-btn">
                                                     <svg viewBox="0 0 16 16">
                                                         <path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z" />
@@ -458,7 +573,7 @@
                                                 <img src="icons/logo_redos.png" width="20" height="20" alt="RedOS"> RedOS
                                             </h4>
                                             <div class="code-block">
-                                                <pre><code>sudo dnf remove qt6-omodsim</code></pre>
+                                                <pre><code>sudo dnf remove qt6-omodsim2</code></pre>
                                                 <button class="copy-btn">
                                                     <svg viewBox="0 0 16 16">
                                                         <path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z" />
@@ -474,7 +589,7 @@
                                                 <img src="icons/logo_opensuse.svg" width="20" height="20" alt="OpenSUSE"> OpenSUSE
                                             </h4>
                                             <div class="code-block">
-                                                <pre><code>sudo zypper remove qt6-omodsim</code></pre>
+                                                <pre><code>sudo zypper remove qt6-omodsim2</code></pre>
                                                 <button class="copy-btn">
                                                     <svg viewBox="0 0 16 16">
                                                         <path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z" />
@@ -490,7 +605,7 @@
                                             </h4>
                                             <p data-i18n="altlinux.root">Run as root user</p>
                                             <div class="code-block">
-                                                <pre><code>apt-get remove qt6-omodsim</code></pre>
+                                                <pre><code>apt-get remove qt6-omodsim2</code></pre>
                                                 <button class="copy-btn">
                                                     <svg viewBox="0 0 16 16">
                                                         <path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z" />
@@ -548,7 +663,7 @@
                                             </button>
                                         </div>
                                         <div class="code-block">
-                                            <pre><code>flatpak install --user io.github.sanny32.omodsim.flatpak</code></pre>
+                                            <pre><code>flatpak install --user io.github.sanny32.omodsim2.flatpak</code></pre>
                                             <button class="copy-btn">
                                                 <svg viewBox="0 0 16 16">
                                                     <path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z" />
@@ -578,7 +693,7 @@
                                     </div>
                                     <div class="subtab-panel" data-subtab="remove">
                                         <div class="code-block">
-                                            <pre><code>flatpak uninstall --user io.github.sanny32.omodsim</code></pre>
+                                            <pre><code>flatpak uninstall --user io.github.sanny32.omodsim2</code></pre>
                                             <button class="copy-btn">
                                                 <svg viewBox="0 0 16 16">
                                                     <path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z" />
@@ -623,9 +738,9 @@
                     <p data-i18n="footer.license.free">Free to use, modify and distribute</p>
                 </div>
                 <div class="footer-section">
-                    <h4>Code Signing</h4>
-                    <p>Windows binaries signed by</p>
-                    <a href="https://signpath.org">SignPath Foundation</a>
+                    <h4 data-i18n="footer.signing">Code Signing</h4>
+                    <p data-i18n="footer.signing.desc">Windows binaries signed by</p>
+                    <a href="https://signpath.org" data-i18n="footer.signing.provider">SignPath Foundation</a>
                 </div>
             </div>
         </div>

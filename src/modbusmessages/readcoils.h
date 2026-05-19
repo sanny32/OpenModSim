@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file readcoils.h
+/// \brief Declares the readcoils interfaces.
+///
+
 #ifndef READCOILS_H
 #define READCOILS_H
 
@@ -122,3 +130,4 @@ public:
 };
 
 #endif // READCOILS_H
+

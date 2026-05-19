@@ -1,6 +1,15 @@
-#include <QFile>
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file jscriptcontrol.cpp
+/// \brief Implements the jscriptcontrol functionality.
+///
+
 #include <QMetaEnum>
+#include <QScrollBar>
 #include "modbusmultiserver.h"
+#include "findreplacebar.h"
 #include "jscriptcontrol.h"
 #include "ui_jscriptcontrol.h"
 
@@ -9,7 +18,7 @@
 /// \param parent
 ///
 JScriptControl::JScriptControl(QWidget *parent)
-    : QWidget(parent)
+    : QFrame(parent)
     , ui(new Ui::JScriptControl)
     ,_script(nullptr)
     ,_storage(nullptr)
@@ -19,16 +28,32 @@ JScriptControl::JScriptControl(QWidget *parent)
     ui->setupUi(this);
     ui->codeEditor->moveCursor(QTextCursor::End);
 
-    auto helpfile = QApplication::applicationDirPath() + "/docs/jshelp.qhc";
-    if(!QFile::exists(helpfile)){
-        helpfile = QApplication::applicationDirPath() + "/../docs/jshelp.qhc";
-    }
-    ui->helpWidget->setHelp(helpfile);
+    _findReplaceBar = new FindReplaceBar(this);
+    ui->codeEditor->installEventFilter(this);
+
+    connect(_findReplaceBar, &FindReplaceBar::searchTextChanged, this, [this](const QString& text) {
+        ui->codeEditor->highlightAllMatches(text, _findReplaceBar->findFlags());
+    });
+    connect(_findReplaceBar, &FindReplaceBar::findNext, this, [this](const QString& text) {
+        ui->codeEditor->findNext(text);
+    });
+    connect(_findReplaceBar, &FindReplaceBar::findPrevious, this, [this](const QString& text) {
+        ui->codeEditor->findPrevious(text);
+    });
+    connect(_findReplaceBar, &FindReplaceBar::replaceRequested, this, [this](const QString& text, const QString& replacement) {
+        ui->codeEditor->replaceCurrent(text, replacement, _findReplaceBar->findFlags());
+    });
+    connect(_findReplaceBar, &FindReplaceBar::replaceAllRequested, this, [this](const QString& text, const QString& replacement) {
+        ui->codeEditor->replaceAll(text, replacement, _findReplaceBar->findFlags());
+    });
+    connect(_findReplaceBar, &FindReplaceBar::closed, this, [this]() {
+        ui->codeEditor->clearSearchHighlights();
+        ui->codeEditor->setFocus();
+    });
 
     connect(&_timer, &QTimer::timeout, this, &JScriptControl::executeScript);
-    connect(ui->codeEditor, &JSCodeEditor::helpContext, this, &JScriptControl::showHelp);
-    connect(ui->console, &ConsoleOutput::collapse, this, &JScriptControl::hideConsole);
-    connect(ui->helpWidget, &HelpWidget::collapse, this, &JScriptControl::hideHelp);
+    connect(ui->codeEditor, &JSCodeEditor::helpContext, this, &JScriptControl::helpContext);
+
 }
 
 ///
@@ -37,6 +62,34 @@ JScriptControl::JScriptControl(QWidget *parent)
 JScriptControl::~JScriptControl()
 {
     delete ui;
+}
+
+///
+/// \brief JScriptControl::eventFilter
+/// \param obj
+/// \param event
+/// \return
+///
+bool JScriptControl::eventFilter(QObject* obj, QEvent* event)
+{
+    if (event->type() == QEvent::Resize)
+    {
+        if (obj == ui->codeEditor)
+        {
+            _findReplaceBar->updatePosition();
+        }
+    }
+
+    return QFrame::eventFilter(obj, event);
+}
+
+///
+/// \brief JScriptControl::setScriptSource
+/// \param source
+///
+void JScriptControl::setScriptSource(const QString& source)
+{
+    _scriptSource = source;
 }
 
 ///
@@ -85,6 +138,51 @@ void JScriptControl::enableAutoComplete(bool enable)
 }
 
 ///
+/// \brief JScriptControl::setFont
+/// \param font
+///
+void JScriptControl::setFont(const QFont& font)
+{
+    ui->codeEditor->setFont(font);
+}
+
+///
+/// \brief JScriptControl::backgroundColor
+/// \return
+///
+QColor JScriptControl::backgroundColor() const
+{
+    return ui->codeEditor->backgroundColor();
+}
+
+///
+/// \brief JScriptControl::setBackgroundColor
+/// \param clr
+///
+void JScriptControl::setBackgroundColor(const QColor& clr)
+{
+    ui->codeEditor->setBackgroundColor(clr);
+}
+
+///
+/// \brief JScriptControl::foregroundColor
+/// \return
+///
+QColor JScriptControl::foregroundColor() const
+{
+    return ui->codeEditor->foregroundColor();
+}
+
+///
+/// \brief JScriptControl::setForegroundColor
+/// \param clr
+///
+void JScriptControl::setForegroundColor(const QColor& clr)
+{
+    ui->codeEditor->setForegroundColor(clr);
+}
+
+///
 /// \brief JScriptControl::script
 /// \return
 ///
@@ -101,6 +199,33 @@ void JScriptControl::setScript(const QString& text)
 {
     ui->codeEditor->setPlainText(text);
     ui->codeEditor->moveCursor(QTextCursor::End);
+}
+
+///
+/// \brief JScriptControl::scriptDocument
+/// \return
+///
+QTextDocument* JScriptControl::scriptDocument() const
+{
+    return ui->codeEditor->codeDocument();
+}
+
+///
+/// \brief JScriptControl::setScriptDocument
+/// \param document
+///
+void JScriptControl::setScriptDocument(QTextDocument* document)
+{
+    ui->codeEditor->setCodeDocument(document);
+}
+
+///
+/// \brief JScriptControl::scriptSource
+/// \return
+///
+QString JScriptControl::scriptSource() const
+{
+    return _scriptSource;
 }
 
 ///
@@ -168,6 +293,24 @@ void JScriptControl::search(const QString& text)
 {
     _searchText = text;
     ui->codeEditor->search(text);
+}
+
+///
+/// \brief JScriptControl::showFind
+///
+void JScriptControl::showFind()
+{
+    auto cursor = ui->codeEditor->textCursor();
+    _findReplaceBar->showFind(cursor.selectedText());
+}
+
+///
+/// \brief JScriptControl::showReplace
+///
+void JScriptControl::showReplace()
+{
+    auto cursor = ui->codeEditor->textCursor();
+    _findReplaceBar->showReplace(cursor.selectedText());
 }
 
 ///
@@ -240,10 +383,13 @@ void JScriptControl::runScript(RunMode mode, int interval)
     _scriptCode = script();
 
     _storage = QSharedPointer<Storage>(new Storage);
-    _server = QSharedPointer<Server>(new Server(_mbMultiServer, _byteOrder, _addressBase));
+    _server = QSharedPointer<Server>(new Server(_mbMultiServer, _byteOrder, _addressBase, &_jsEngine));
     _script = QSharedPointer<Script>(new Script(interval));
-    _console = QSharedPointer<console>(new console(ui->console));
+    _console = QSharedPointer<console>(new console());
     connect(_script.get(), &Script::stopped, this, &JScriptControl::stopScript, Qt::QueuedConnection);
+    connect(_console.get(), &console::messageAdded, this, [this](const QString& text, ConsoleOutput::MessageType type) {
+        emit consoleMessage(_scriptSource, text, type);
+    });
 
     _jsEngine.globalObject().setProperty("Storage", _jsEngine.newQObject(_storage.get()));
     _jsEngine.globalObject().setProperty("Script",  _jsEngine.newQObject(_script.get()));
@@ -254,10 +400,9 @@ void JScriptControl::runScript(RunMode mode, int interval)
     _jsEngine.globalObject().setProperty("AddressSpace", newEnumObject(Address::staticMetaObject, "Space"));
     _jsEngine.setInterrupted(false);
 
-    _console->clear();
-
     if(!executeScript())
         return;
+    emit scriptStarted(mode, interval);
 
     switch(mode)
     {
@@ -294,48 +439,8 @@ void JScriptControl::stopScript()
     _server = nullptr;
     _script = nullptr;
     _console = nullptr;
-}
 
-///
-/// \brief JScriptControl::showHelp
-/// \param helpKey
-///
-void JScriptControl::showHelp(const QString& helpKey)
-{
-    if(ui->verticalSplitter->sizes().at(1) == 0)
-    {
-        const int w = size().width();
-        ui->verticalSplitter->setSizes(QList<int>() << w * 5 / 7 << w * 2 / 7);
-    }
-    ui->helpWidget->showHelp(helpKey);
-}
-
-///
-/// \brief JScriptControl::hideHelp
-///
-void JScriptControl::hideHelp()
-{
-     ui->verticalSplitter->setSizes(QList<int>() << 1 << 0);
-}
-
-///
-/// \brief JScriptControl::showConsole
-///
-void JScriptControl::showConsole()
-{
-    if(ui->horizontalSplitter->sizes().at(1) == 0)
-    {
-        const int h = size().height();
-        ui->horizontalSplitter->setSizes(QList<int>() << h * 6 / 7 << h * 1 / 7);
-    }
-}
-
-///
-/// \brief JScriptControl::hideConsole
-///
-void JScriptControl::hideConsole()
-{
-    ui->horizontalSplitter->setSizes(QList<int>() << 1 << 0);
+    emit scriptStopped();
 }
 
 ///
@@ -346,13 +451,47 @@ bool JScriptControl::executeScript()
     const auto res = _script->run(_jsEngine, _scriptCode);
     if(res.isError() && !_jsEngine.isInterrupted())
     {
-        showConsole();
-        _console->error(QString("%1 (line %2)").arg(res.toString(), res.property("lineNumber").toString()));
+        const QString errMsg = QString("%1 (line %2)").arg(res.toString(), res.property("lineNumber").toString());
+        emit consoleMessage(_scriptSource, errMsg, ConsoleOutput::MessageType::Error);
 
         _script->stop();
         return false;
     }
     return true;
+}
+
+///
+/// \brief JScriptControl::cursorPosition
+///
+int JScriptControl::cursorPosition() const
+{
+    return ui->codeEditor->textCursor().position();
+}
+
+///
+/// \brief JScriptControl::setCursorPosition
+///
+void JScriptControl::setCursorPosition(int pos)
+{
+    auto cursor = ui->codeEditor->textCursor();
+    cursor.setPosition(qMin(pos, ui->codeEditor->document()->characterCount() - 1));
+    ui->codeEditor->setTextCursor(cursor);
+}
+
+///
+/// \brief JScriptControl::scrollPosition
+///
+int JScriptControl::scrollPosition() const
+{
+    return ui->codeEditor->verticalScrollBar()->value();
+}
+
+///
+/// \brief JScriptControl::setScrollPosition
+///
+void JScriptControl::setScrollPosition(int pos)
+{
+    ui->codeEditor->verticalScrollBar()->setValue(pos);
 }
 
 ///
@@ -363,9 +502,12 @@ bool JScriptControl::executeScript()
 ///
 QSettings& operator <<(QSettings& out, const JScriptControl* ctrl)
 {
+    if (!ctrl)
+        return out;
+
     out.setValue("ScriptControl/Script", ctrl->script().toUtf8().toBase64());
-    out.setValue("ScriptControl/VSplitter", ctrl->ui->verticalSplitter->saveState());
-    out.setValue("ScriptControl/HSplitter", ctrl->ui->horizontalSplitter->saveState());
+    out.setValue("ScriptControl/CursorPosition", ctrl->cursorPosition());
+    out.setValue("ScriptControl/ScrollPosition", ctrl->scrollPosition());
     return out;
 }
 
@@ -377,53 +519,19 @@ QSettings& operator <<(QSettings& out, const JScriptControl* ctrl)
 ///
 QSettings& operator >>(QSettings& in, JScriptControl* ctrl)
 {
+    if (!ctrl)
+        return in;
+
     const auto script = QByteArray::fromBase64(in.value("ScriptControl/Script").toString().toUtf8());
     ctrl->setScript(script);
 
-    const auto vstate = in.value("ScriptControl/VSplitter").toByteArray();
-    if(!vstate.isEmpty()) ctrl->ui->verticalSplitter->restoreState(vstate);
+    const int cursorPos = in.value("ScriptControl/CursorPosition", -1).toInt();
+    if(cursorPos >= 0)
+        ctrl->setCursorPosition(cursorPos);
 
-    const auto hstate = in.value("ScriptControl/HSplitter").toByteArray();
-    if(!hstate.isEmpty()) ctrl->ui->horizontalSplitter->restoreState(hstate);
-
-    return in;
-}
-
-///
-/// \brief operator <<
-/// \param out
-/// \param ctrl
-/// \return
-///
-QDataStream& operator <<(QDataStream& out, const JScriptControl* ctrl)
-{
-    QMap<QString, QVariant> m;
-    m["script"] = ctrl->script();
-    m["vsplitter"] = ctrl->ui->verticalSplitter->saveState();
-    m["hsplitter"] = ctrl->ui->horizontalSplitter->saveState();
-
-    out << m;
-    return out;
-}
-
-///
-/// \brief operator >>
-/// \param in
-/// \param ctrl
-/// \return
-///
-QDataStream& operator >>(QDataStream& in, JScriptControl* ctrl)
-{
-    QMap<QString, QVariant> m;
-    in >> m;
-
-    ctrl->setScript(m["script"].toString());
-
-    const auto vstate = m["vsplitter"].toByteArray();
-    if(!vstate.isEmpty()) ctrl->ui->verticalSplitter->restoreState(vstate);
-
-    const auto hstate = m["hsplitter"].toByteArray();
-    if(!hstate.isEmpty()) ctrl->ui->horizontalSplitter->restoreState(hstate);
+    const int scrollPos = in.value("ScriptControl/ScrollPosition", -1).toInt();
+    if(scrollPos >= 0)
+        ctrl->setScrollPosition(scrollPos);
 
     return in;
 }
@@ -441,15 +549,9 @@ QXmlStreamWriter& operator <<(QXmlStreamWriter& xml, const JScriptControl* ctrl)
     xml.writeStartElement("JScriptControl");
 
     xml.writeStartElement("Script");
+    xml.writeAttribute("CursorPosition", QString::number(ctrl->cursorPosition()));
+    xml.writeAttribute("ScrollPosition", QString::number(ctrl->scrollPosition()));
     xml.writeCDATA(ctrl->script());
-    xml.writeEndElement();
-
-    xml.writeStartElement("VerticalSplitter");
-    xml.writeCharacters(ctrl->ui->verticalSplitter->saveState().toBase64());
-    xml.writeEndElement();
-
-    xml.writeStartElement("HorizontalSplitter");
-    xml.writeCharacters(ctrl->ui->horizontalSplitter->saveState().toBase64());
     xml.writeEndElement();
 
     xml.writeStartElement("AutoComplete");
@@ -473,20 +575,23 @@ QXmlStreamReader& operator>>(QXmlStreamReader& xml, JScriptControl* ctrl)
         return xml;
 
     if (xml.isStartElement() && xml.name() == QLatin1String("JScriptControl")) {
+        int cursorPos = -1;
+        int scrollPos = -1;
         while (xml.readNextStartElement()) {
             if (xml.name() == QLatin1String("Script")) {
+                const QXmlStreamAttributes attrs = xml.attributes();
+                if(attrs.hasAttribute("CursorPosition"))
+                    cursorPos = attrs.value("CursorPosition").toInt();
+                if(attrs.hasAttribute("ScrollPosition"))
+                    scrollPos = attrs.value("ScrollPosition").toInt();
                 const QString scriptText = xml.readElementText(QXmlStreamReader::IncludeChildElements);
                 ctrl->setScript(scriptText);
             }
             else if (xml.name() == QLatin1String("VerticalSplitter")) {
-                const QByteArray state = QByteArray::fromBase64(xml.readElementText().toLatin1());
-                if (!state.isEmpty())
-                    ctrl->ui->verticalSplitter->restoreState(state);
+                xml.skipCurrentElement();
             }
             else if (xml.name() == QLatin1String("HorizontalSplitter")) {
-                const QByteArray state = QByteArray::fromBase64(xml.readElementText().toLatin1());
-                if (!state.isEmpty())
-                    ctrl->ui->horizontalSplitter->restoreState(state);
+                xml.skipCurrentElement(); // obsolete, console is now global
             }
             else if (xml.name() == QLatin1String("AutoComplete")) {
                 const QXmlStreamAttributes attrs = xml.attributes();
@@ -500,8 +605,15 @@ QXmlStreamReader& operator>>(QXmlStreamReader& xml, JScriptControl* ctrl)
                 xml.skipCurrentElement();
             }
         }
+
+        if(cursorPos >= 0)
+            ctrl->setCursorPosition(cursorPos);
+
+        if(scrollPos >= 0)
+            ctrl->setScrollPosition(scrollPos);
     }
 
     return xml;
 }
+
 

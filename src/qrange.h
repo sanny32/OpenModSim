@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file qrange.h
+/// \brief Declares the qrange interfaces.
+///
+
 #ifndef QRANGE_H
 #define QRANGE_H
 
@@ -11,10 +19,6 @@
 template<class T>
 class QRange
 {
-
-    friend QDataStream& operator <<(QDataStream& out, const QRange<double>& range);
-    friend QDataStream& operator >>(QDataStream& in, QRange<double>& range);
-
 public:
     ///
     /// \brief QRange
@@ -65,32 +69,6 @@ private:
 
 ///
 /// \brief operator <<
-/// \param out
-/// \param range
-/// \return
-///
-inline QDataStream& operator <<(QDataStream& out, const QRange<double>& range)
-{
-    out << range.from();
-    out << range.to();
-    return out;
-}
-
-///
-/// \brief operator >>
-/// \param in
-/// \param range
-/// \return
-///
-inline QDataStream& operator >>(QDataStream& in, QRange<double>& range)
-{
-    in >> range._from;
-    in >> range._to;
-    return in;
-}
-
-///
-/// \brief operator <<
 /// \param xml
 /// \param range
 /// \return
@@ -133,3 +111,4 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, QRange<double>& rang
 }
 
 #endif // QRANGE_H
+

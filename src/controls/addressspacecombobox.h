@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file addressspacecombobox.h
+/// \brief Declares the addressspacecombobox interfaces.
+///
+
 #ifndef ADDRESSSPACECOMBOBOX_H
 #define ADDRESSSPACECOMBOBOX_H
 
@@ -27,3 +35,4 @@ private:
 };
 
 #endif // ADDRESSSPACECOMBOBOX_H
+

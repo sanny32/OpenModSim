@@ -27,7 +27,7 @@
      </property>
      <layout class="QFormLayout" name="formLayout">
       <property name="labelAlignment">
-       <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
       </property>
       <item row="0" column="0">
        <widget class="QLabel" name="labelBaudRate">
@@ -47,7 +47,7 @@
         <property name="minimumSize">
          <size>
           <width>90</width>
-          <height>25</height>
+          <height>26</height>
          </size>
         </property>
         <property name="editable">
@@ -116,7 +116,7 @@
         <property name="minimumSize">
          <size>
           <width>90</width>
-          <height>25</height>
+          <height>26</height>
          </size>
         </property>
         <property name="currentIndex">
@@ -152,7 +152,7 @@
         <property name="minimumSize">
          <size>
           <width>90</width>
-          <height>25</height>
+          <height>26</height>
          </size>
         </property>
         <property name="currentIndex">
@@ -178,7 +178,7 @@
         <property name="minimumSize">
          <size>
           <width>90</width>
-          <height>25</height>
+          <height>26</height>
          </size>
         </property>
         <item>
@@ -209,7 +209,7 @@
      </property>
      <layout class="QFormLayout" name="formLayout_3">
       <property name="labelAlignment">
-       <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
       </property>
       <item row="0" column="0">
        <widget class="QLabel" name="labelFlowControl">
@@ -223,7 +223,7 @@
         <property name="minimumSize">
          <size>
           <width>0</width>
-          <height>25</height>
+          <height>26</height>
          </size>
         </property>
         <property name="currentIndex">
@@ -249,7 +249,7 @@
         <property name="minimumSize">
          <size>
           <width>90</width>
-          <height>25</height>
+          <height>26</height>
          </size>
         </property>
        </widget>
@@ -272,7 +272,7 @@
         <property name="minimumSize">
          <size>
           <width>90</width>
-          <height>25</height>
+          <height>26</height>
          </size>
         </property>
        </widget>
@@ -283,10 +283,10 @@
    <item>
     <widget class="QDialogButtonBox" name="buttonBox">
      <property name="orientation">
-      <enum>Qt::Orientation::Horizontal</enum>
+      <enum>Qt::Horizontal</enum>
      </property>
      <property name="standardButtons">
-      <set>QDialogButtonBox::StandardButton::Cancel|QDialogButtonBox::StandardButton::Ok</set>
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
      </property>
      <property name="centerButtons">
       <bool>true</bool>
@@ -317,7 +317,7 @@
    <header>booleancombobox.h</header>
   </customwidget>
  </customwidgets>
- <resources/>
+ <resources />
  <connections>
   <connection>
    <sender>buttonBox</sender>
@@ -353,3 +353,4 @@
   </connection>
  </connections>
 </ui>
+

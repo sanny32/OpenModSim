@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file searchlineedit.cpp
+/// \brief Implements the searchlineedit functionality.
+///
+
 #include <QEvent>
 #include "searchlineedit.h"
 
@@ -46,3 +54,4 @@ void SearchLineEdit::on_textEdited(const QString& text)
 {
     emit searchText(text);
 }
+

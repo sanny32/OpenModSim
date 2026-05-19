@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file statisticwidget.h
+/// \brief Declares the statisticwidget interfaces.
+///
+
 #ifndef STATISTICWIDGET_H
 #define STATISTICWIDGET_H
 
@@ -19,12 +27,10 @@ public:
     explicit StatisticWidget(QWidget *parent = nullptr);
     ~StatisticWidget();
 
-    uint numberRequets() const { return _requests; }
-    uint numberResposes() const { return _responses; }
-
     void increaseRequests();
     void increaseResponses();
     void resetCtrs();
+    void setCounters(uint requests, uint responses);
 
     LogViewState logState() const;
     void setLogState(LogViewState state);
@@ -55,3 +61,4 @@ private:
 };
 
 #endif // STATISTICWIDGET_H
+

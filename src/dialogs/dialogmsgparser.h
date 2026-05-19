@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file dialogmsgparser.h
+/// \brief Declares the dialogmsgparser interfaces.
+///
+
 #ifndef DIALOGMSGPARSER_H
 #define DIALOGMSGPARSER_H
 
@@ -17,7 +25,7 @@ class DialogMsgParser : public QDialog
     Q_OBJECT
 
 public:
-    explicit DialogMsgParser(DataDisplayMode mode, ModbusMessage::ProtocolType protocol, QWidget *parent = nullptr);
+    explicit DialogMsgParser(DataType type, ModbusMessage::ProtocolType protocol, QWidget *parent = nullptr);
     ~DialogMsgParser();
 
 protected:
@@ -35,3 +43,4 @@ private:
 };
 
 #endif // DIALOGMSGPARSER_H
+

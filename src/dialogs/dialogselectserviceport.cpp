@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file dialogselectserviceport.cpp
+/// \brief Implements the dialogselectserviceport functionality.
+///
+
 #include <QNetworkInterface>
 #include "dialogselectserviceport.h"
 #include "ui_dialogselectserviceport.h"
@@ -49,6 +57,20 @@ DialogSelectServicePort::~DialogSelectServicePort()
 }
 
 ///
+/// rief DialogSelectServicePort::changeEvent
+///
+///
+/// \brief DialogSelectServicePort::changeEvent
+///
+void DialogSelectServicePort::changeEvent(QEvent* event)
+{
+    if (event->type() == QEvent::LanguageChange)
+        ui->retranslateUi(this);
+
+    QDialog::changeEvent(event);
+}
+
+///
 /// \brief DialogSelectServicePort::accept
 ///
 void DialogSelectServicePort::accept()
@@ -57,3 +79,4 @@ void DialogSelectServicePort::accept()
     _params.IPAddress = ui->comboBoxIp->currentText();
     QFixedSizeDialog::accept();
 }
+

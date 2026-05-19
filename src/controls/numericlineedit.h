@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file numericlineedit.h
+/// \brief Declares the numericlineedit interfaces.
+///
+
 #ifndef NUMERICLINEEDIT_H
 #define NUMERICLINEEDIT_H
 
@@ -21,6 +29,7 @@ public:
         Int32Mode = 0,
         UInt32Mode,
         HexMode,
+        BinaryMode,
         FloatMode,
         DoubleMode,
         Int64Mode,
@@ -116,3 +125,4 @@ private:
 };
 
 #endif // NUMERICLINEEDIT_H
+

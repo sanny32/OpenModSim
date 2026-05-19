@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file jshighlighter.h
+/// \brief Declares the jshighlighter interfaces.
+///
+
 #ifndef JSHIGHLIGHTER_H
 #define JSHIGHLIGHTER_H
 
@@ -28,6 +36,8 @@ public:
     Q_ENUM(Token)
 
     explicit JSHighlighter(QTextDocument* parent = nullptr);
+
+    void setDarkMode(bool dark);
 
 protected:
     void highlightBlock(const QString &text) override;
@@ -85,3 +95,4 @@ private:
 };
 
 #endif // JSHIGHLIGHTER_H
+

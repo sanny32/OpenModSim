@@ -33,8 +33,11 @@ if [ ! -f /etc/udev/rules.d/99-omodscan.rules ]; then
 fi
 udevadm trigger
 
-ln -sf /opt/OpenModSim/omodsim.sh /usr/bin/omodsim
+ln -sf @APP_INSTALL_PREFIX@@VERSION_MAJOR@/omodsim.sh /usr/bin/omodsim@VERSION_MAJOR@
+update-mime-database /usr/share/mime || true
 xdg-desktop-menu forceupdate || true
+update-desktop-database -q /usr/share/applications || true
+gtk-update-icon-cache -q -t -f /usr/share/icons/hicolor || true
 
 %postun
 if [ -f /etc/udev/rules.d/99-omodsim.rules ]; then
@@ -42,16 +45,21 @@ if [ -f /etc/udev/rules.d/99-omodsim.rules ]; then
     udevadm trigger
 fi
 
+update-mime-database /usr/share/mime || true
 xdg-desktop-menu forceupdate || true
-rm -f /usr/bin/omodsim
+update-desktop-database -q /usr/share/applications || true
+gtk-update-icon-cache -q -t -f /usr/share/icons/hicolor || true
+rm -f /usr/bin/omodsim@VERSION_MAJOR@
 
 %files
-/opt/OpenModSim
+@APP_INSTALL_PREFIX@@VERSION_MAJOR@
 /usr/share/applications
 /usr/share/applications/*
+/usr/share/mime
+/usr/share/mime/*
 /usr/share/icons
 /usr/share/icons/*
 /usr/share/metainfo
 /usr/share/metainfo/*
 
-%caps(cap_net_bind_service=+ep) /opt/OpenModSim/bin/omodsim
+%caps(cap_net_bind_service=+ep) @APP_INSTALL_PREFIX@@VERSION_MAJOR@/bin/omodsim

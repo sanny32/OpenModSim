@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file dialogprintsettings.h
+/// \brief Declares the dialogprintsettings interfaces.
+///
+
 #ifndef DIALOGPRINTSETTINGS_H
 #define DIALOGPRINTSETTINGS_H
 
@@ -28,6 +36,9 @@ public:
 
     void accept() override;
 
+protected:
+    void changeEvent(QEvent* event) override;
+
 private slots:
     void on_comboBoxPrinters_currentIndexChanged(int index);
     void orientationChanged();
@@ -41,3 +52,4 @@ private:
 };
 
 #endif // DIALOGPRINTSETTINGS_H
+

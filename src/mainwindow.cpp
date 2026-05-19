@@ -1,62 +1,275 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file mainwindow.cpp
+/// \brief Implements the mainwindow functionality.
+///
+
 #include <QtWidgets>
+#include <QBuffer>
 #include <QPrinterInfo>
 #include <QPrintDialog>
 #include <QPageSetupDialog>
+#include <limits>
+#include "apppreferences.h"
+#include "translationutils.h"
 #include "dialogabout.h"
 #include "dialogmsgparser.h"
-#include "dialogwindowsmanager.h"
+#include "dialogpreferences.h"
 #include "dialogprintsettings.h"
-#include "dialogdisplaydefinition.h"
 #include "dialogselectserviceport.h"
 #include "dialogsetupserialport.h"
-#include "dialogsetuppresetdata.h"
-#include "dialogscriptsettings.h"
-#include "dialogforcemultiplecoils.h"
+#include "dialogforcestatusregisters.h"
 #include "dialogforcemultipleregisters.h"
 #include "dialogmodbusdefinitions.h"
-#include "dialograwdatalog.h"
-#include "runmodecombobox.h"
-#include "searchlineedit.h"
+#include "dialogwelcome.h"
+#include "application.h"
 #include "mainstatusbar.h"
 #include "menuconnect.h"
+#include "mdiareaex.h"
+#include "formscriptview.h"
+#include "formdatamapview.h"
+#include "applogoutput.h"
+#include "applogger.h"
 #include "mainwindow.h"
+#include "themedicons.h"
 #include "ui_mainwindow.h"
 
+// Forward declaration (defined later in this file)
+static QString getSettingsFilePath();
+namespace {
+constexpr const char* kSplitAutoCloneProperty = "SplitAutoClone";
+constexpr const char* kNewFormKindKey = "NewFormKind";
+constexpr const char* kRecentProjectsKey = "RecentProjects";
+constexpr const char* kLastProjectPathKey = "LastProjectPath";
+constexpr int kMaxRecentProjects = 10;
+
 ///
-/// \brief availableTranslations
+/// \brief findExistingFile
+/// \param candidates
 /// \return
 ///
-static QStringList availableTranslations()
+QString findExistingFile(const QStringList& candidates)
 {
-    QStringList locales;
-    const QStringList files = QDir(":/translations").entryList(QStringList() << "*.qm", QDir::Files);
-
-    for (auto file : files) {
-        locales << file.remove("omodsim_").remove(".qm");
+    for (const QString& candidate : candidates) {
+        if (QFile::exists(candidate))
+            return QDir::cleanPath(candidate);
     }
 
-    return locales;
+    return {};
 }
 
 ///
-/// \brief translationLang
+/// \brief findHelpFile
 /// \return
 ///
-static QString translationLang()
+QString findHelpFile()
 {
-    const QStringList locales = availableTranslations();
-    const QString sysLocale = QLocale::system().name();
+    const QString appDir = QApplication::applicationDirPath();
+    QStringList candidates = {
+        appDir + "/docs/jshelp.qhc",
+        appDir + "/../docs/jshelp.qhc",
+        appDir + "/../../../docs/jshelp.qhc"
+    };
 
-    for (const QString &pattern : locales) {
-        const QString regexPattern = QString("%1.*").arg(pattern);
-        QRegularExpression re("^" + regexPattern + "$", QRegularExpression::CaseInsensitiveOption);
+#ifdef Q_OS_MACOS
+    candidates.prepend(appDir + "/../Resources/docs/jshelp.qhc");
+#endif
 
-        if(re.match(sysLocale).hasMatch()) {
-            return pattern;
+#ifdef Q_OS_LINUX
+    candidates.append(appDir + "/../share/doc/omodsim/jshelp.qhc");
+
+    const QString installedFile = QStandardPaths::locate(
+        QStandardPaths::GenericDataLocation,
+        QStringLiteral("doc/omodsim/jshelp.qhc")
+    );
+    if (!installedFile.isEmpty())
+        candidates.append(installedFile);
+#endif
+
+    return findExistingFile(candidates);
+}
+
+///
+/// \brief newFormKindFromSetting
+/// \param value
+/// \return
+///
+ProjectFormKind newFormKindFromSetting(int value)
+{
+    switch (static_cast<ProjectFormKind>(value)) {
+        case ProjectFormKind::Data:
+        case ProjectFormKind::Traffic:
+        case ProjectFormKind::Script:
+        case ProjectFormKind::DataMap:
+            return static_cast<ProjectFormKind>(value);
+        default:
+            return ProjectFormKind::Data;
+    }
+}
+
+///
+/// \brief newFormKindToSetting
+/// \param kind
+/// \return
+///
+int newFormKindToSetting(ProjectFormKind kind)
+{
+    return static_cast<int>(kind);
+}
+
+///
+/// \brief forEachTypedForm
+/// \param mdiArea
+/// \param fn
+///
+template<typename MdiAreaT, typename Fn>
+void forEachTypedForm(MdiAreaT* mdiArea, Fn&& fn)
+{
+    if(!mdiArea)
+        return;
+
+    for (auto* wnd : mdiArea->subWindowList()) {
+        if(!wnd)
+            continue;
+
+        if (auto* frm = qobject_cast<FormDataView*>(wnd->widget())) {
+            fn(frm);
+            continue;
+        }
+        if (auto* frm = qobject_cast<FormTrafficView*>(wnd->widget())) {
+            fn(frm);
+            continue;
+        }
+        if (auto* frm = qobject_cast<FormScriptView*>(wnd->widget())) {
+            fn(frm);
+            continue;
+        }
+        if (auto* frm = qobject_cast<FormDataMapView*>(wnd->widget())) {
+            fn(frm);
+            continue;
         }
     }
+}
 
-    return "en";
+///
+/// \brief applySharedDisplayDefaults
+/// \param target
+/// \param defaults
+///
+template<typename TDefinitions>
+void applySharedDisplayDefaults(TDefinitions& target, const TDefinitions& defaults)
+{
+    target.LeadingZeros = defaults.LeadingZeros;
+    target.DataViewColumnsDistance = defaults.DataViewColumnsDistance;
+}
+
+///
+/// \brief applySharedDisplayDefaults
+/// \param target
+/// \param defaults
+///
+void applySharedDisplayDefaults(TrafficViewDefinitions& target, const TrafficViewDefinitions& defaults)
+{
+    target.LogViewLimit = defaults.LogViewLimit;
+    target.UnitFilter = defaults.UnitFilter;
+    target.FunctionCodeFilter = defaults.FunctionCodeFilter;
+    target.ExceptionsOnly = defaults.ExceptionsOnly;
+    target.Autoscroll = defaults.Autoscroll;
+}
+
+///
+/// \brief applySharedDisplayDefaults
+/// \param target
+/// \param defaults
+///
+void applySharedDisplayDefaults(ScriptViewDefinitions& target, const ScriptViewDefinitions& defaults)
+{
+    target.ScriptCfg = defaults.ScriptCfg;
+}
+
+///
+/// \brief dataTypeOfForm
+/// \param widget
+/// \return
+///
+DataType dataTypeOfForm(QWidget* widget)
+{
+    if (auto* frm = qobject_cast<FormDataView*>(widget)) return frm->dataType();
+    return DataType::Hex;
+}
+
+///
+/// \brief printOnForm
+/// \param widget
+/// \param printer
+///
+void printOnForm(QWidget* widget, QPrinter* printer)
+{
+    if (auto* frm = qobject_cast<FormDataView*>(widget)) frm->print(printer);
+    else if (auto* frm = qobject_cast<FormTrafficView*>(widget)) frm->print(printer);
+    else if (auto* frm = qobject_cast<FormScriptView*>(widget)) frm->print(printer);
+    else if (auto* frm = qobject_cast<FormDataMapView*>(widget)) frm->print(printer);
+}
+
+///
+/// \brief applyThemeIcons
+/// \param ui
+///
+void applyThemeIcons(Ui::MainWindow* ui)
+{
+    ui->actionNew->setIcon(themedIcon(QStringLiteral("omodsim/new-data")));
+    ui->actionOpenProject->setIcon(themedIcon(QStringLiteral("omodsim/open-project")));
+    ui->actionSaveProject->setIcon(themedIcon(QStringLiteral("omodsim/save-project")));
+    ui->actionPrint->setIcon(themedIcon(QStringLiteral("omodsim/print")));
+    ui->actionConnect->setIcon(themedIcon(QStringLiteral("omodsim/connect")));
+    ui->actionDisconnect->setIcon(themedIcon(QStringLiteral("omodsim/disconnect")));
+    ui->actionHexView->setIcon(themedIcon(QStringLiteral("omodsim/hex-view")));
+    ui->actionAbout->setIcon(themedIcon(QStringLiteral("omodsim/about")));
+    ui->actionForceCoils->setIcon(themedIcon(QStringLiteral("omodsim/force-coils")));
+    ui->actionForceDiscretes->setIcon(themedIcon(QStringLiteral("omodsim/force-discretes")));
+    ui->actionPresetInputRegs->setIcon(themedIcon(QStringLiteral("omodsim/preset-input-registers")));
+    ui->actionPresetHoldingRegs->setIcon(themedIcon(QStringLiteral("omodsim/preset-holding-registers")));
+    ui->actionUndo->setIcon(themedIcon(QStringLiteral("omodsim/undo")));
+    ui->actionRedo->setIcon(themedIcon(QStringLiteral("omodsim/redo")));
+    ui->actionCut->setIcon(themedIcon(QStringLiteral("omodsim/cut")));
+    ui->actionCopy->setIcon(themedIcon(QStringLiteral("omodsim/copy")));
+    ui->actionPaste->setIcon(themedIcon(QStringLiteral("omodsim/paste")));
+    ui->actionMsgParser->setIcon(themedIcon(QStringLiteral("omodsim/message-parser")));
+    ui->actionMbDefinitions->setIcon(themedIcon(QStringLiteral("omodsim/modbus-definitions")));
+    ui->actionNewDataView->setIcon(themedIcon(QStringLiteral("omodsim/new-data")));
+    ui->actionNewDataMapView->setIcon(themedIcon(QStringLiteral("omodsim/new-data-map")));
+    ui->actionNewTrafficView->setIcon(themedIcon(QStringLiteral("omodsim/new-traffic")));
+    ui->actionNewScript->setIcon(themedIcon(QStringLiteral("omodsim/new-script")));
+    ui->actionSplitView->setIcon(themedIcon(QStringLiteral("omodsim/split-view")));
+}
+
+///
+/// \brief configureMainToolbarText
+/// \param ui
+///
+void configureMainToolbarText(Ui::MainWindow* ui)
+{
+    ui->toolBarMain->setToolButtonStyle(Qt::ToolButtonIconOnly);
+
+    QList<QAction*> labeledActions = {
+        ui->actionNew,
+        ui->actionConnect,
+        ui->actionDisconnect
+    };
+
+    for (QAction* action : ui->toolBarMain->actions()) {
+        if (auto* button = qobject_cast<QToolButton*>(ui->toolBarMain->widgetForAction(action)))
+            button->setToolButtonStyle(Qt::ToolButtonIconOnly);
+    }
+
+    for (QAction* action : labeledActions) {
+        if (auto* button = qobject_cast<QToolButton*>(ui->toolBarMain->widgetForAction(action)))
+            button->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+    }
+}
+
 }
 
 ///
@@ -65,25 +278,31 @@ static QString translationLang()
 /// \param useSession
 /// \param parent
 ///
-MainWindow::MainWindow(const QString& profile, bool useSession, QWidget *parent)
+MainWindow::MainWindow(const QString& profile, bool useSession, const QString& startupProjectFile, QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
-    ,_lang(translationLang())
-    ,_windowCounter(0)
+    ,_lang("system")
     ,_useSession(useSession)
     ,_dataSimulator(new DataSimulator(this))
+    ,_helpWidget(nullptr)
 {
     ui->setupUi(this);
+    applyThemeIcons(ui);
 
     setLanguage(_lang);
-    setWindowTitle(APP_NAME);
+    setWindowTitle(APP_PRODUCT_NAME);
     setUnifiedTitleAndToolBarOnMac(true);
     setStatusBar(new MainStatusBar(_mbMultiServer, this));
 
-    _ansiMenu = new AnsiMenu(this);
-    connect(_ansiMenu, &AnsiMenu::codepageSelected, this, &MainWindow::setCodepage);
-    ui->actionAnsi->setMenu(_ansiMenu);
-    qobject_cast<QToolButton*>(ui->toolBarDisplay->widgetForAction(ui->actionAnsi))->setPopupMode(QToolButton::DelayedPopup);
+    if (auto* newButton = qobject_cast<QToolButton*>(ui->toolBarMain->widgetForAction(ui->actionNew))) {
+        newButton->setMenu(ui->menuNew);
+        newButton->setPopupMode(QToolButton::MenuButtonPopup);
+    }
+    _openRecentMenu = new QMenu(tr("Open Recent"), this);
+    _clearRecentAction = _openRecentMenu->addAction(tr("Clear List"));
+    connect(_clearRecentAction, &QAction::triggered, this, &MainWindow::clearRecentProjects);
+    ui->menuFile->insertMenu(ui->actionSaveProject, _openRecentMenu);
+    ui->menuFile->insertSeparator(ui->actionSaveProject);
 
     auto menuConnect = new MenuConnect(MenuConnect::ConnectMenu, _mbMultiServer, this);
     connect(menuConnect, &MenuConnect::connectAction, this, &MainWindow::on_connectAction);
@@ -98,44 +317,249 @@ MainWindow::MainWindow(const QString& profile, bool useSession, QWidget *parent)
     ui->actionDisconnect->setMenu(menuDisconnect);
     qobject_cast<QToolButton*>(ui->toolBarMain->widgetForAction(ui->actionDisconnect))->setPopupMode(QToolButton::InstantPopup);
     qobject_cast<QToolButton*>(ui->toolBarMain->widgetForAction(ui->actionDisconnect))->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
-
-    auto comboBoxRunMode = new RunModeComboBox(this);
-    connect(comboBoxRunMode, &RunModeComboBox::runModeChanged, this, &MainWindow::on_runModeChanged);
-
-    _actionRunMode = new QWidgetAction(this);
-    _actionRunMode->setDefaultWidget(comboBoxRunMode);
-    ui->toolBarScript->insertAction(ui->actionRunScript, _actionRunMode);
-    qobject_cast<QToolButton*>(ui->toolBarScript->widgetForAction(ui->actionRunScript))->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
-    qobject_cast<QToolButton*>(ui->toolBarScript->widgetForAction(ui->actionStopScript))->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
-
-    auto serachEdit = new SearchLineEdit(this);
-    connect(serachEdit, &SearchLineEdit::searchText, this, &MainWindow::on_searchText);
-
-    _actionSearch = new QWidgetAction(this);
-    _actionSearch->setDefaultWidget(serachEdit);
-    ui->toolBarEdit->addAction(_actionSearch);
+    setupGlobalViewToolbar();
+    configureMainToolbarText(ui);
 
     const auto defaultPrinter = QPrinterInfo::defaultPrinter();
     if(!defaultPrinter.isNull())
         _selectedPrinter = QSharedPointer<QPrinter>(new QPrinter(defaultPrinter));
 
-    _recentFileActionList = new RecentFileActionList(ui->menuFile, ui->actionRecentFile);
-    connect(_recentFileActionList, &RecentFileActionList::triggered, this, &MainWindow::openFile);
+    _projectTree = ui->projectTree;
 
-    _windowActionList = new WindowActionList(ui->menuWindow, ui->actionWindows);
-    connect(_windowActionList, &WindowActionList::triggered, this, &MainWindow::windowActivate);
+    _project = new AppProject(ui->mdiArea, _mbMultiServer, _dataSimulator,
+                               _projectTree, this, this);
 
     auto dispatcher = QAbstractEventDispatcher::instance();
     connect(dispatcher, &QAbstractEventDispatcher::awake, this, &MainWindow::on_awake);
 
-    connect(ui->mdiArea, &QMdiArea::subWindowActivated, this, &MainWindow::updateMenuWindow);
-    connect(&_mbMultiServer, &ModbusMultiServer::connectionError, this, &MainWindow::on_connectionError);
+    _helpWidget = ui->helpWidget;
+    const auto helpfile = findHelpFile();
+    _helpWidget->setHelp(helpfile);
+    ui->helpDockWidget->setVisible(false);
 
-    if(_useSession) {
-        if(!loadProfile(profile)) {
-            ui->actionNew->trigger();
-        }
+    connect(ui->helpDockWidget, &QDockWidget::visibilityChanged, this, &MainWindow::on_helpDockVisibilityChanged);
+
+    connect(_projectTree, &ProjectTreeWidget::formActivated, this, &MainWindow::on_projectTreeFormActivated);
+    connect(_projectTree, &ProjectTreeWidget::formDeleteRequested, this, &MainWindow::on_projectTreeFormDeleteRequested);
+    connect(_projectTree, &ProjectTreeWidget::formRenamed, this, [this](ProjectFormRef) { markModified(); });
+    connect(_projectTree, &ProjectTreeWidget::formRunScriptRequested, this, &MainWindow::on_projectTreeFormRunScriptRequested);
+    connect(_projectTree, &ProjectTreeWidget::formStopScriptRequested, this, &MainWindow::on_projectTreeFormStopScriptRequested);
+    connect(_projectTree, &ProjectTreeWidget::runAllScriptsRequested, this, &MainWindow::runAllScripts);
+    connect(_projectTree, &ProjectTreeWidget::stopAllScriptsRequested, this, &MainWindow::stopAllScripts);
+    connect(_projectTree, &ProjectTreeWidget::deleteAllFormsRequested, this, &MainWindow::deleteAllForms);
+    connect(_projectTree, &ProjectTreeWidget::formCreateRequested, this, &MainWindow::on_projectTreeFormCreateRequested);
+
+    _outputPanel = ui->outputPanel;
+    _outputPanel->jsConsole()->setMaxLines(AppPreferences::instance().consoleMaxLines());
+    ui->consoleDockWidget->setTitleBarWidget(new QWidget(ui->consoleDockWidget));
+
+    connect(_outputPanel, &OutputPanel::collapse, this, &MainWindow::on_outputPanelCollapse);
+    connect(_outputPanel->appLog(), &AppLogOutput::openRequested, this, &MainWindow::on_outputPanelAppLogOpenRequested);
+    connect(ui->consoleDockWidget, &QDockWidget::visibilityChanged, this, &MainWindow::on_outputDockVisibilityChanged);
+
+    ui->mdiArea->setActivationOrder(QMdiArea::ActivationHistoryOrder);
+    connect(ui->mdiArea, &MdiAreaEx::subWindowActivated, this, &MainWindow::updateMenuWindow);
+    connect(ui->mdiArea, &MdiAreaEx::subWindowActivated, this, &MainWindow::on_mdiSubWindowActivated);
+    connect(ui->mdiArea, &MdiAreaEx::tabsReordered, this, &MainWindow::markModified);
+    connect(ui->mdiArea, &MdiAreaEx::tabContextMenuRequested, this, &MainWindow::on_tabContextMenuRequested);
+    connect(ui->mdiArea, &MdiAreaEx::moveTabToOtherPanelRequested, this, &MainWindow::on_moveTabToOtherPanelRequested);
+    connect(ui->mdiArea, &MdiAreaEx::splitViewAboutToDisable, this, &MainWindow::on_splitViewAboutToDisable);
+    connect(ui->mdiArea, &MdiAreaEx::splitViewToggled, this, &MainWindow::on_splitViewToggled);
+
+    AppLogger::setupModbusMultiServerLogging(_mbMultiServer, this);
+    AppLogger::setupDataSimulatorLogging(*_dataSimulator, this);
+    AppLogger::setupAppProjectLogging(*_project, this);
+    AppLogger::setupAppPreferencesLogging(AppPreferences::instance(), this);
+
+    connect(&theApp()->theme(), &AppTheme::colorSchemeChanged,
+            this, [this]() { applyThemeColors(); });
+
+    // View / window trivial action wiring
+    connect(ui->actionExit,           &QAction::triggered, this, [this]{ close(); });
+    connect(ui->actionCascade,        &QAction::triggered, this, [this]{ ui->mdiArea->cascadeSubWindows(); });
+    connect(ui->actionTile,           &QAction::triggered, this, [this]{ ui->mdiArea->tileSubWindows(); });
+    connect(ui->actionSplitView,      &QAction::triggered, this, [this]{ ui->mdiArea->toggleVerticalSplit(); });
+    connect(ui->actionToolbar,        &QAction::triggered, this, [this]{ ui->toolBarMain->setVisible(!ui->toolBarMain->isVisible()); });
+    connect(ui->actionStatusBar,      &QAction::triggered, this, [this]{ statusBar()->setVisible(!statusBar()->isVisible()); });
+    connect(ui->actionProjectTree,    &QAction::triggered, this, [this]{ ui->projectDockWidget->setVisible(!ui->projectDockWidget->isVisible()); });
+    connect(ui->actionScriptHelp,     &QAction::triggered, this, [this]{ ui->helpDockWidget->setVisible(!ui->helpDockWidget->isVisible()); });
+    connect(ui->actionOutputWindow,   &QAction::triggered, this, [this]{ ui->consoleDockWidget->setVisible(!ui->consoleDockWidget->isVisible()); });
+
+    // Edit command wiring
+    connect(ui->actionUndo,      &QAction::triggered, this, [this]{ if (auto* w = QApplication::focusWidget()) QMetaObject::invokeMethod(w, "undo"); });
+    connect(ui->actionRedo,      &QAction::triggered, this, [this]{ if (auto* w = QApplication::focusWidget()) QMetaObject::invokeMethod(w, "redo"); });
+    connect(ui->actionCut,       &QAction::triggered, this, [this]{ if (auto* w = QApplication::focusWidget()) QMetaObject::invokeMethod(w, "cut"); });
+    connect(ui->actionCopy,      &QAction::triggered, this, [this]{ if (auto* w = QApplication::focusWidget()) QMetaObject::invokeMethod(w, "copy"); });
+    connect(ui->actionPaste,     &QAction::triggered, this, [this]{ if (auto* w = QApplication::focusWidget()) QMetaObject::invokeMethod(w, "paste"); });
+    connect(ui->actionSelectAll, &QAction::triggered, this, [this]{ emit selectAll(); });
+    connect(ui->actionFind,      &QAction::triggered, this, &MainWindow::on_findActionTriggered);
+    connect(ui->actionReplace,   &QAction::triggered, this, &MainWindow::on_replaceActionTriggered);
+
+    // New form kind wiring
+    connect(ui->actionNewDataView,        &QAction::triggered, this, [this]{ activateNewFormKind(ProjectFormKind::Data,        ui->actionNewDataView); });
+    connect(ui->actionNewTrafficView,     &QAction::triggered, this, [this]{ activateNewFormKind(ProjectFormKind::Traffic,     ui->actionNewTrafficView); });
+    connect(ui->actionNewDataMapView,     &QAction::triggered, this, [this]{ activateNewFormKind(ProjectFormKind::DataMap,     ui->actionNewDataMapView); });
+    connect(ui->actionNewScript,          &QAction::triggered, this, [this]{ activateNewFormKind(ProjectFormKind::Script,      ui->actionNewScript); });
+
+    const bool hasProfile = loadAppSettings(profile);
+    rebuildRecentProjectsMenu();
+
+    const bool canRestoreLastProject = !_lastProjectPath.isEmpty() && QFile::exists(_lastProjectPath);
+    if(!startupProjectFile.isEmpty()) {
+        loadProject(startupProjectFile);
+    } else if(AppPreferences::instance().showWelcomeDialog()) {
+        _pendingWelcomeDialog = true;  // shown in showEvent after the window is visible
+    } else if(canRestoreLastProject) {
+        loadProject(_lastProjectPath);
+    } else if(!hasProfile) {
+        ui->actionNew->trigger();
     }
+}
+
+///
+/// \brief MainWindow::on_helpDockVisibilityChanged
+/// \param visible
+///
+void MainWindow::on_helpDockVisibilityChanged(bool visible)
+{
+    if(visible)
+        ui->helpDockWidget->setProperty("WasShown", false);
+}
+
+///
+/// \brief MainWindow::on_projectTreeFormActivated
+/// \param ref
+///
+void MainWindow::on_projectTreeFormActivated(ProjectFormRef ref)
+{
+    if(ref.widget)
+        _project->openFormOnActivePanel(ref.widget);
+}
+
+///
+/// \brief MainWindow::on_projectTreeFormDeleteRequested
+/// \param ref
+///
+void MainWindow::on_projectTreeFormDeleteRequested(ProjectFormRef ref)
+{
+    if(!ref.widget)
+        return;
+    _project->deleteForm(ref.widget);
+}
+
+///
+/// \brief MainWindow::on_projectTreeFormRunScriptRequested
+/// \param ref
+///
+void MainWindow::on_projectTreeFormRunScriptRequested(ProjectFormRef ref)
+{
+    if (auto* script = qobject_cast<FormScriptView*>(ref.widget))
+        script->runScript();
+}
+
+///
+/// \brief MainWindow::on_projectTreeFormStopScriptRequested
+/// \param ref
+///
+void MainWindow::on_projectTreeFormStopScriptRequested(ProjectFormRef ref)
+{
+    if (auto* script = qobject_cast<FormScriptView*>(ref.widget))
+        script->stopScript();
+}
+
+///
+/// \brief MainWindow::on_projectTreeFormCreateRequested
+/// \param type
+///
+void MainWindow::on_projectTreeFormCreateRequested(ProjectFormType type)
+{
+    createNewForm(static_cast<ProjectFormKind>(type));
+}
+
+///
+/// \brief MainWindow::on_outputPanelCollapse
+///
+void MainWindow::on_outputPanelCollapse()
+{
+    ui->consoleDockWidget->setVisible(false);
+}
+
+///
+/// \brief MainWindow::on_outputPanelAppLogOpenRequested
+///
+void MainWindow::on_outputPanelAppLogOpenRequested()
+{
+    const bool wasHidden = !ui->consoleDockWidget->isVisible();
+    ui->consoleDockWidget->setVisible(true);
+    _outputPanel->switchToAppLog();
+    if (wasHidden)
+        ui->consoleDockWidget->raise();
+}
+
+///
+/// \brief MainWindow::on_outputDockVisibilityChanged
+/// \param visible
+///
+void MainWindow::on_outputDockVisibilityChanged(bool visible)
+{
+    ui->actionOutputWindow->setChecked(visible);
+}
+
+///
+/// \brief MainWindow::on_mdiSubWindowActivated
+/// \param wnd
+///
+void MainWindow::on_mdiSubWindowActivated(QMdiSubWindow* wnd)
+{
+    if(wnd)
+        markModified();
+
+    QMdiSubWindow* stableWnd = ui->mdiArea->activeSubWindow();
+    if(!stableWnd)
+        stableWnd = ui->mdiArea->currentSubWindow();
+    if(stableWnd)
+        _projectTree->activateForm(stableWnd->widget());
+    syncGlobalViewControls();
+}
+
+///
+/// \brief MainWindow::on_splitViewAboutToDisable
+///
+void MainWindow::on_splitViewAboutToDisable()
+{
+    _project->removeSplitAutoClonesFromSecondary();
+}
+
+///
+/// \brief MainWindow::on_splitViewToggled
+/// \param enabled
+///
+void MainWindow::on_splitViewToggled(bool enabled)
+{
+    if(enabled)
+        _project->duplicatePrimaryTabsToSecondary();
+}
+
+///
+/// \brief MainWindow::on_findActionTriggered
+///
+void MainWindow::on_findActionTriggered()
+{
+    if (auto* data = currentDataForm()) {
+        data->showFind();
+    }
+    else if (auto* script = currentScriptForm()) {
+        script->showFind();
+    }
+}
+
+///
+/// \brief MainWindow::on_replaceActionTriggered
+///
+void MainWindow::on_replaceActionTriggered()
+{
+    if (auto* script = currentScriptForm())
+        script->showReplace();
 }
 
 ///
@@ -143,6 +567,11 @@ MainWindow::MainWindow(const QString& profile, bool useSession, QWidget *parent)
 ///
 MainWindow::~MainWindow()
 {
+    // Important: destroy forms while _mbMultiServer is still alive.
+    // FormDataView::~FormDataView() calls removeDeviceId/removeUnitMap.
+    if(_project)
+        _project->destroyContentForShutdown();
+
     delete ui;
 }
 
@@ -152,20 +581,76 @@ MainWindow::~MainWindow()
 ///
 void MainWindow::setLanguage(const QString& lang)
 {
-    if(lang == "en")
-    {
-        _lang = lang;
-        qApp->removeTranslator(&_appTranslator);
-        qApp->removeTranslator(&_qtTranslator);
-    }
-    else if(_appTranslator.load(QString(":/translations/omodsim_%1").arg(lang)))
-    {
-        _lang = lang;
-        qApp->installTranslator(&_appTranslator);
+    _lang = lang;
+    applyTranslation(lang, _appTranslator, _qtTranslator);
+}
 
-        if(_qtTranslator.load(QString("%1/translations/qt_%2").arg(qApp->applicationDirPath(), lang))) {
-            qApp->installTranslator(&_qtTranslator);
-        }
+///
+/// \brief MainWindow::showEvent
+/// \param event
+///
+void MainWindow::showEvent(QShowEvent* event)
+{
+    QMainWindow::showEvent(event);
+
+    if(_pendingWelcomeDialog) {
+        _pendingWelcomeDialog = false;
+        QTimer::singleShot(0, this, [this] {
+            DialogWelcome dlg(_recentProjects, this);
+            if(dlg.exec() == QDialog::Accepted) {
+                switch(dlg.action()) {
+                case DialogWelcome::Action::OpenProject:
+                    ui->actionOpenProject->trigger();
+                    break;
+                case DialogWelcome::Action::OpenFile:
+                    loadProject(dlg.filePath());
+                    break;
+                default: // NewProject
+                    ui->actionNew->trigger();
+                    break;
+                }
+            }
+            if(dlg.dontShowAgain())
+                AppPreferences::instance().setShowWelcomeDialog(false);
+        });
+    }
+    else {
+        _project->restoreActiveWindows();
+    }
+}
+
+///
+/// \brief MainWindow::runAllScripts
+///
+void MainWindow::runAllScripts()
+{
+    for (auto* script : _project->scriptForms()) {
+        if (script && script->canRunScript())
+            script->runScript();
+    }
+}
+
+///
+/// \brief MainWindow::stopAllScripts
+///
+void MainWindow::stopAllScripts()
+{
+    for (auto* script : _project->scriptForms()) {
+        if (script && script->canStopScript())
+            script->stopScript();
+    }
+}
+
+///
+/// \brief MainWindow::deleteAllForms
+/// \param type
+///
+void MainWindow::deleteAllForms(ProjectFormType type)
+{
+    const auto forms = _project->forms(static_cast<ProjectFormKind>(type));
+    for (auto* form : forms) {
+        if (form && !form->property("DeleteLocked").toBool())
+            _project->deleteForm(form);
     }
 }
 
@@ -178,8 +663,15 @@ void MainWindow::changeEvent(QEvent* event)
     if (event->type() == QEvent::LanguageChange)
     {
         ui->retranslateUi(this);
-    }
 
+        _openRecentMenu->setTitle(tr("Open Recent"));
+
+        if (_globalAddressBaseLabel)
+            _globalAddressBaseLabel->setText(tr("Address Base"));
+
+        rebuildRecentProjectsMenu();
+        updateProjectWindowTitle();
+    }
     QMainWindow::changeEvent(event);
 }
 
@@ -189,9 +681,15 @@ void MainWindow::changeEvent(QEvent* event)
 ///
 void MainWindow::closeEvent(QCloseEvent *event)
 {
-    if(_useSession) {
-        saveProfile();
+    const bool shouldAskToSave = hasProjectContext() && (_isModified || _projectFilePath.isEmpty());
+    if(shouldAskToSave) {
+        if(!confirmSaveOnClose()) {
+            event->ignore();
+            return;
+        }
     }
+
+    saveAppSettings();
 
     ui->mdiArea->closeAllSubWindows();
     if (ui->mdiArea->currentSubWindow())
@@ -211,18 +709,25 @@ bool MainWindow::eventFilter(QObject* obj, QEvent* e)
     switch (e->type())
     {
         case QEvent::Close:
-            _windowActionList->removeWindow(qobject_cast<QMdiSubWindow*>(obj));
+            if(auto wnd = qobject_cast<QMdiSubWindow*>(obj))
+            {
+                auto* frm = wnd->widget();
+                if (frm && !frm->property(kSplitAutoCloneProperty).toBool()) {
+                    // Primary form: reparent before subwindow is destroyed so frm survives
+                    _project->markFormClosed(frm);
+                    markModified();
+                }
+            }
         break;
         case QEvent::Move:
             if(auto wnd = qobject_cast<const QMdiSubWindow*>(obj))
             {
-                if(auto frm = qobject_cast<FormModSim*>(wnd->widget()))
-                {
-                    if (!wnd->isMinimized() && !wnd->isMaximized())
-                    {
-                        frm->setParentGeometry(wnd->geometry());
-                    }
-                }
+                auto* widget = wnd->widget();
+                if(!widget || wnd->isMinimized() || wnd->isMaximized())
+                    break;
+
+                if (auto* frm = qobject_cast<FormTrafficView*>(widget))
+                    frm->setProperty("ParentGeometry", wnd->geometry());
             }
         break;
         default:
@@ -236,131 +741,55 @@ bool MainWindow::eventFilter(QObject* obj, QEvent* e)
 ///
 void MainWindow::on_awake()
 {
-    auto frm = currentMdiChild();
+    auto* frm = currentForm();
+    const bool hasProject = hasProjectContext();
 
-    ui->menuSetup->setEnabled(frm != nullptr);
+    const bool tabbedView    = ui->mdiArea->viewMode() == QMdiArea::TabbedView;
+    const bool subWindowView = ui->mdiArea->viewMode() == QMdiArea::SubWindowView;
+
+    bool isData = false, isScript = false, canPrint = false;
+    if (frm) {
+        if (auto* f = qobject_cast<FormDataView*>(frm)) {
+            isData   = true;
+            canPrint = _selectedPrinter != nullptr;
+        } else if (auto* f = qobject_cast<FormTrafficView*>(frm)) {
+            canPrint = _selectedPrinter != nullptr && !f->isLogEmpty();
+        } else if (auto* f = qobject_cast<FormScriptView*>(frm)) {
+            isScript = true;
+            canPrint = _selectedPrinter != nullptr && !f->script().isEmpty();
+        } else if (auto* f = qobject_cast<FormDataMapView*>(frm)) {
+            canPrint = _selectedPrinter != nullptr && !f->isEmpty();
+        }
+    }
+
+    ui->menuSetup->setEnabled(hasProject);
     ui->menuWindow->setEnabled(frm != nullptr);
-    ui->menuConfig->setEnabled(frm != nullptr);
+    ui->actionPrintSetup->setEnabled(hasProject && _selectedPrinter != nullptr && frm != nullptr);
+    ui->actionPrint->setEnabled(canPrint);
 
-    ui->actionSave->setEnabled(frm != nullptr);
-    ui->actionSaveAs->setEnabled(frm != nullptr);
-    ui->actionPrintSetup->setEnabled(_selectedPrinter != nullptr);
-    ui->actionPrint->setEnabled(_selectedPrinter != nullptr && frm && frm->displayMode() == DisplayMode::Data);
-    ui->actionRecentFile->setEnabled(!_recentFileActionList->isEmpty());
+    ui->actionUndo->setEnabled(isScript);
+    ui->actionRedo->setEnabled(isScript);
+    ui->actionCut->setEnabled(isScript);
+    ui->actionCopy->setEnabled(isScript);
+    ui->actionPaste->setEnabled(isScript);
+    ui->actionSelectAll->setEnabled(isScript);
+    ui->actionFind->setEnabled(isScript || isData);
+    ui->actionReplace->setEnabled(isScript);
 
-    ui->actionDataDefinition->setEnabled(frm != nullptr);
-    ui->actionShowData->setEnabled(frm != nullptr);
-    ui->actionShowTraffic->setEnabled(frm != nullptr);
-    ui->actionShowScript->setEnabled(frm != nullptr);
-    ui->actionBinary->setEnabled(frm != nullptr);
-    ui->actionUInt16->setEnabled(frm != nullptr);
-    ui->actionInt16->setEnabled(frm != nullptr);
-    ui->actionInt32->setEnabled(frm != nullptr);
-    ui->actionSwappedInt32->setEnabled(frm != nullptr);
-    ui->actionUInt32->setEnabled(frm != nullptr);
-    ui->actionSwappedUInt32->setEnabled(frm != nullptr);
-    ui->actionInt64->setEnabled(frm != nullptr);
-    ui->actionSwappedInt64->setEnabled(frm != nullptr);
-    ui->actionUInt64->setEnabled(frm != nullptr);
-    ui->actionSwappedUInt64->setEnabled(frm != nullptr);
-    ui->actionHex->setEnabled(frm != nullptr);
-    ui->actionAnsi->setEnabled(frm != nullptr);
-    ui->actionHex->setEnabled(frm != nullptr);
-    ui->actionFloatingPt->setEnabled(frm != nullptr);
-    ui->actionSwappedFP->setEnabled(frm != nullptr);
-    ui->actionDblFloat->setEnabled(frm != nullptr);
-    ui->actionSwappedDbl->setEnabled(frm != nullptr);
-    ui->actionSwapBytes->setEnabled(frm != nullptr);
-
-    ui->actionRawDataLog->setEnabled(_mbMultiServer.isConnected());
-    ui->actionRawDataLog->setChecked(ui->actionRawDataLog->data().isValid());
-
-    ui->actionTextCapture->setEnabled(frm && frm->captureMode() == CaptureMode::Off);
-    ui->actionCaptureOff->setEnabled(frm && frm->captureMode() == CaptureMode::TextCapture);
-
-    ui->actionRunScript->setEnabled(frm && frm->canRunScript());
-    ui->actionStopScript->setEnabled(frm && frm->canStopScript());
-    ui->actionScriptSettings->setEnabled(frm && !frm->canStopScript());
-    _actionRunMode->setEnabled(frm && !frm->canStopScript());
-
-    ui->actionTabbedView->setChecked(ui->mdiArea->viewMode() == QMdiArea::TabbedView);
+    ui->actionTabbedView->setChecked(tabbedView);
+    ui->actionSplitView->setVisible(tabbedView);
+    ui->actionSplitView->setEnabled(hasProject);
+    ui->actionSplitView->setChecked(ui->mdiArea->isSplitView());
     ui->actionToolbar->setChecked(ui->toolBarMain->isVisible());
     ui->actionStatusBar->setChecked(statusBar()->isVisible());
-    ui->actionDisplayBar->setChecked(ui->toolBarDisplay->isVisible());
-    ui->actionScriptBar->setChecked(ui->toolBarScript->isVisible());
-    ui->actionEditBar->setChecked(ui->toolBarEdit->isVisible());
-    ui->actionEnglish->setChecked(_lang == "en");
-    ui->actionRussian->setChecked(_lang == "ru");
-    ui->actionChineseCN->setChecked(_lang == "zh_CN");
-    ui->actionChineseTW->setChecked(_lang == "zh_TW");
+    ui->actionScriptHelp->setChecked(ui->helpDockWidget->isVisible());
+    ui->actionScriptHelp->setVisible(isScript);
+    ui->actionOutputWindow->setChecked(ui->consoleDockWidget->isVisible());
+    ui->actionProjectTree->setChecked(ui->projectDockWidget->isVisible());
 
-    ui->actionTile->setEnabled(ui->mdiArea->viewMode() == QMdiArea::SubWindowView);
-    ui->actionCascade->setEnabled(ui->mdiArea->viewMode() == QMdiArea::SubWindowView);
-
-    if(ui->mdiArea->subWindowList().empty())
-    {
-        ui->toolBarEdit->setVisible(false);
-        ui->menuEdit->menuAction()->setVisible(false);
-    }
-
-    if(frm != nullptr)
-    {
-        const auto dd = frm->displayDefinition();
-        ui->actionUInt16->setEnabled(dd.PointType > QModbusDataUnit::Coils);
-        ui->actionInt16->setEnabled(dd.PointType > QModbusDataUnit::Coils);
-        ui->actionHex->setEnabled(dd.PointType > QModbusDataUnit::Coils);
-        ui->actionInt32->setEnabled(dd.PointType > QModbusDataUnit::Coils);
-        ui->actionSwappedInt32->setEnabled(dd.PointType > QModbusDataUnit::Coils);
-        ui->actionUInt32->setEnabled(dd.PointType > QModbusDataUnit::Coils);
-        ui->actionSwappedUInt32->setEnabled(dd.PointType > QModbusDataUnit::Coils);
-        ui->actionInt64->setEnabled(dd.PointType > QModbusDataUnit::Coils);
-        ui->actionSwappedInt64->setEnabled(dd.PointType > QModbusDataUnit::Coils);
-        ui->actionUInt64->setEnabled(dd.PointType > QModbusDataUnit::Coils);
-        ui->actionSwappedUInt64->setEnabled(dd.PointType > QModbusDataUnit::Coils);
-        ui->actionAnsi->setEnabled(dd.PointType > QModbusDataUnit::Coils);
-        ui->actionFloatingPt->setEnabled(dd.PointType > QModbusDataUnit::Coils);
-        ui->actionSwappedFP->setEnabled(dd.PointType > QModbusDataUnit::Coils);
-        ui->actionDblFloat->setEnabled(dd.PointType > QModbusDataUnit::Coils);
-        ui->actionSwappedDbl->setEnabled(dd.PointType > QModbusDataUnit::Coils);
-        ui->actionSwapBytes->setEnabled(dd.PointType > QModbusDataUnit::Coils);
-
-        const auto ddm = frm->dataDisplayMode();
-        ui->actionBinary->setChecked(ddm == DataDisplayMode::Binary);
-        ui->actionUInt16->setChecked(ddm == DataDisplayMode::UInt16);
-        ui->actionInt16->setChecked(ddm == DataDisplayMode::Int16);
-        ui->actionInt32->setChecked(ddm == DataDisplayMode::Int32);
-        ui->actionSwappedInt32->setChecked(ddm == DataDisplayMode::SwappedInt32);
-        ui->actionUInt32->setChecked(ddm == DataDisplayMode::UInt32);
-        ui->actionSwappedUInt32->setChecked(ddm == DataDisplayMode::SwappedUInt32);
-        ui->actionInt64->setChecked(ddm == DataDisplayMode::Int64);
-        ui->actionSwappedInt64->setChecked(ddm == DataDisplayMode::SwappedInt64);
-        ui->actionUInt64->setChecked(ddm == DataDisplayMode::UInt64);
-        ui->actionSwappedUInt64->setChecked(ddm == DataDisplayMode::SwappedUInt64);
-        ui->actionHex->setChecked(ddm == DataDisplayMode::Hex);
-        ui->actionAnsi->setChecked(ddm == DataDisplayMode::Ansi);
-        ui->actionFloatingPt->setChecked(ddm == DataDisplayMode::FloatingPt);
-        ui->actionSwappedFP->setChecked(ddm == DataDisplayMode::SwappedFP);
-        ui->actionDblFloat->setChecked(ddm == DataDisplayMode::DblFloat);
-        ui->actionSwappedDbl->setChecked(ddm == DataDisplayMode::SwappedDbl);
-
-        const auto byteOrder = frm->byteOrder();
-        ui->actionSwapBytes->setChecked(byteOrder == ByteOrder::Swapped);
-
-        ui->actionHexAddresses->setChecked(frm->displayHexAddresses());
-
-        const auto dm = frm->displayMode();
-        ui->actionShowData->setChecked(dm == DisplayMode::Data);
-        ui->actionShowTraffic->setChecked(dm == DisplayMode::Traffic);
-        ui->actionShowScript->setChecked(dm == DisplayMode::Script);
-
-        ui->actionUndo->setEnabled(dm == DisplayMode::Script && frm->canUndo());
-        ui->actionRedo->setEnabled(dm == DisplayMode::Script && frm->canRedo());
-        ui->actionCut->setEnabled(dm == DisplayMode::Script);
-        ui->actionCopy->setEnabled(dm == DisplayMode::Script);
-        ui->actionPaste->setEnabled(dm == DisplayMode::Script && frm->canPaste());
-        ui->actionSelectAll->setEnabled(dm == DisplayMode::Script);
-        _actionSearch->setEnabled(dm == DisplayMode::Script);
-    }
+    ui->actionTile->setEnabled(subWindowView);
+    ui->actionCascade->setEnabled(subWindowView);
+    updateMainToolbarState();
 }
 
 ///
@@ -368,40 +797,98 @@ void MainWindow::on_awake()
 ///
 void MainWindow::on_actionNew_triggered()
 {
-    const auto cur = currentMdiChild();
-    auto frm = createMdiChild(++_windowCounter);
-
-    if(cur) {
-        frm->setByteOrder(cur->byteOrder());
-        frm->setDataDisplayMode(cur->dataDisplayMode());
-
-        auto dd = cur->displayDefinition();
-        dd.FormName = frm->displayDefinition().FormName;
-        frm->setDisplayDefinition(dd);
-
-        frm->setFont(cur->font());
-        frm->setStatusColor(cur->statusColor());
-        frm->setBackgroundColor(cur->backgroundColor());
-        frm->setForegroundColor(cur->foregroundColor());
-    }
-
-    frm->show();
+    createNewForm(_newFormKind);
 }
 
 ///
-/// \brief MainWindow::on_actionOpen_triggered
+/// \brief MainWindow::createNewForm
+/// \param kind
 ///
-void MainWindow::on_actionOpen_triggered()
+QWidget* MainWindow::createNewForm(ProjectFormKind kind)
 {
-    QStringList filters;
-    filters << tr("XML files (*.xml)");
-    filters << tr("All files (*)");
+    auto* frm = _project->createMdiChild(kind);
+    if(!frm)
+        return nullptr;
 
-    const auto filename = QFileDialog::getOpenFileName(this, QString(), _savePath, filters.join(";;"));
-    if(filename.isEmpty()) return;
+    markModified();
 
-    _savePath = QFileInfo(filename).absoluteDir().absolutePath();
-    openFile(filename);
+    const auto& prefs = AppPreferences::instance();
+
+    switch(kind)
+    {
+        case ProjectFormKind::Data: {
+            if (auto* dataFrm = qobject_cast<FormDataView*>(frm)) {
+                dataFrm->setFont(prefs.font());
+                dataFrm->setBackgroundColor(prefs.backgroundColor());
+                dataFrm->setForegroundColor(prefs.foregroundColor());
+                dataFrm->setAddressColor(prefs.addressColor());
+                dataFrm->setCommentColor(prefs.commentColor());
+                dataFrm->setZoomPercent(prefs.fontZoom());
+
+                auto dd = dataFrm->displayDefinition();
+                applySharedDisplayDefaults(dd, prefs.dataViewDefinitions());
+                dataFrm->setDisplayDefinition(dd);
+            }
+            break;
+        }
+        case ProjectFormKind::Traffic: {
+            if (auto* trafficFrm = qobject_cast<FormTrafficView*>(frm)) {
+                trafficFrm->setFont(prefs.font());
+                trafficFrm->setBackgroundColor(prefs.backgroundColor());
+                trafficFrm->setForegroundColor(prefs.foregroundColor());
+
+                auto dd = trafficFrm->displayDefinition();
+                applySharedDisplayDefaults(dd, prefs.trafficViewDefinitions());
+                trafficFrm->setDisplayDefinition(dd);
+            }
+            break;
+        }
+        case ProjectFormKind::Script: {
+            if (auto* scriptFrm = qobject_cast<FormScriptView*>(frm)) {
+                scriptFrm->setBackgroundColor(prefs.backgroundColor());
+                scriptFrm->setForegroundColor(prefs.foregroundColor());
+                scriptFrm->setFont(prefs.scriptFont());
+                scriptFrm->setZoomPercent(prefs.fontZoom());
+
+                auto dd = scriptFrm->definitions();
+                applySharedDisplayDefaults(dd, prefs.scriptViewDefinitions());
+                scriptFrm->setDefinitions(dd);
+            }
+            break;
+        }
+        case ProjectFormKind::DataMap:
+            break;
+    }
+
+    applyGlobalViewStateToForm(frm);
+    frm->show();
+    updateMainToolbarState();
+    return frm;
+}
+
+///
+/// \brief MainWindow::activateNewFormKind
+/// \param kind
+/// \param sourceAction
+///
+void MainWindow::activateNewFormKind(ProjectFormKind kind, QAction* sourceAction)
+{
+    _newFormKind = kind;
+    ui->actionNew->setIcon(sourceAction->icon());
+    createNewForm(_newFormKind);
+}
+
+///
+/// \brief MainWindow::restoreNewFormKindIcon
+///
+void MainWindow::restoreNewFormKindIcon()
+{
+    switch(_newFormKind) {
+        case ProjectFormKind::Traffic:     ui->actionNew->setIcon(ui->actionNewTrafficView->icon());     break;
+        case ProjectFormKind::Script:      ui->actionNew->setIcon(ui->actionNewScript->icon());          break;
+        case ProjectFormKind::DataMap:     ui->actionNew->setIcon(ui->actionNewDataMapView->icon()); break;
+        default:                           ui->actionNew->setIcon(ui->actionNewDataView->icon());        break;
+    }
 }
 
 ///
@@ -424,122 +911,64 @@ void MainWindow::on_actionCloseAll_triggered()
 }
 
 ///
-/// \brief MainWindow::on_actionSave_triggered
+/// \brief MainWindow::on_actionOpenProject_triggered
 ///
-void MainWindow::on_actionSave_triggered()
-{
-    auto frm = currentMdiChild();
-    if(!frm) return;
-
-    const auto filename = frm->filename();
-    if(filename.isEmpty()) {
-        ui->actionSaveAs->trigger();
-    }
-    else {
-        saveMdiChild(frm,  SerializationFormat::Xml);
-    }
-}
-
-///
-/// \brief MainWindow::on_actionSaveAs_triggered
-///
-void MainWindow::on_actionSaveAs_triggered()
-{
-    auto frm = currentMdiChild();
-    if(!frm) return;
-
-    saveAs(frm, SerializationFormat::Xml);
-}
-
-///
-/// \brief MainWindow::saveAs
-/// \param frm
-/// \param format
-///
-void MainWindow::saveAs(FormModSim* frm, SerializationFormat format)
-{
-    if(!frm) return;
-
-    const auto dir = QString("%1%2%3").arg(_savePath, QDir::separator(), frm->windowTitle());
-
-    QString filename;
-    QStringList filters;
-    switch (format) {
-        case SerializationFormat::Binary:
-            filters << tr("All files (*)");
-            filename = QFileDialog::getSaveFileName(this, QString(), dir, filters.join(";;"));
-            break;
-        case SerializationFormat::Xml:
-            filters << tr("XML files (*.xml)");
-            filename = QFileDialog::getSaveFileName(this, QString(), dir, filters.join(";;"));
-            break;
-        default:
-        {
-            filters << tr("XML files (*.xml)");
-            filters << tr("All files (*)");
-
-            QString selectedFilter;
-            filename = QFileDialog::getSaveFileName(this, QString(), dir, filters.join(";;"), &selectedFilter);
-
-            format = SerializationFormat::Binary;
-            if(selectedFilter == filters[0]) {
-                format = SerializationFormat::Xml;
-                if(!filename.endsWith(".xml", Qt::CaseInsensitive)) {
-                    filename.append(".xml");
-                }
-            }
-        }
-        break;
-    }
-
-    if(filename.isEmpty()) return;
-
-    _savePath = QFileInfo(filename).absoluteDir().absolutePath();
-    frm->setFilename(filename);
-
-    saveMdiChild(frm, format);
-}
-
-///
-/// \brief MainWindow::on_actionSaveTestConfig_triggered
-///
-void MainWindow::on_actionSaveTestConfig_triggered()
+void MainWindow::on_actionOpenProject_triggered()
 {
     QStringList filters;
-    filters << tr("XML files (*.xml)");
+    filters << tr("Project files (*.omsim)");
     filters << tr("All files (*)");
 
-    QString selectedFilter;
-    auto filename = QFileDialog::getSaveFileName(this, QString(), _savePath, filters.join(";;"), &selectedFilter);
-
+    const auto filename = QFileDialog::getOpenFileName(this, QString(), _project->savePath(), filters.join(";;"));
     if(filename.isEmpty()) return;
 
-    auto format = SerializationFormat::Binary;
-    if(selectedFilter == filters[0]) {
-        format = SerializationFormat::Xml;
-        if(!filename.endsWith(".xml", Qt::CaseInsensitive)) {
-            filename.append(".xml");
-        }
-    }
-
-    _savePath = QFileInfo(filename).absoluteDir().absolutePath();
-    saveConfig(filename, format);
+    _project->setSavePath(QFileInfo(filename).absoluteDir().absolutePath());
+    loadProject(filename);
 }
 
 ///
-/// \brief MainWindow::on_actionRestoreTestConfig_triggered
+/// \brief MainWindow::on_actionSaveProject_triggered
 ///
-void MainWindow::on_actionRestoreTestConfig_triggered()
+void MainWindow::on_actionSaveProject_triggered()
 {
-    QStringList filters;
-    filters << tr("XML files (*.xml)");
-    filters << tr("All files (*)");
+    if(_projectFilePath.isEmpty()) {
+        on_actionSaveProjectAs_triggered();
+        return;
+    }
 
-    const auto filename = QFileDialog::getOpenFileName(this, QString(), _savePath, filters.join(";;"));
-    if(filename.isEmpty()) return;
+    if(saveProject(_projectFilePath)) {
+        addRecentProject(_projectFilePath);
+        return;
+    }
 
-    _savePath = QFileInfo(filename).absoluteDir().absolutePath();
-    loadConfig(filename);
+    promptSaveProjectAs(projectSavePathInProfileDir());
+}
+
+///
+/// \brief MainWindow::on_actionSaveProjectAs_triggered
+///
+void MainWindow::on_actionSaveProjectAs_triggered()
+{
+    promptSaveProjectAs();
+}
+
+///
+/// \brief MainWindow::on_actionCloseProject_triggered
+///
+void MainWindow::on_actionCloseProject_triggered()
+{
+    const bool shouldAskToSave = hasProjectContext() && (_isModified || _projectFilePath.isEmpty());
+    if(shouldAskToSave) {
+        if(!confirmSaveOnClose())
+            return;
+    }
+
+    _project->closeProject();
+    _projectFilePath.clear();
+    _lastProjectPath.clear();
+    _isModified = false;
+    updateProjectWindowTitle();
+    updateMainToolbarState();
 }
 
 ///
@@ -547,13 +976,13 @@ void MainWindow::on_actionRestoreTestConfig_triggered()
 ///
 void MainWindow::on_actionPrint_triggered()
 {
-    auto frm = currentMdiChild();
+    auto* frm = currentForm();
     if(!frm) return;
 
     QPrintDialog dlg(_selectedPrinter.get(), this);
     if(dlg.exec() == QDialog::Accepted)
     {
-        frm->print(_selectedPrinter.get());
+        printOnForm(frm, _selectedPrinter.get());
     }
 }
 
@@ -567,59 +996,119 @@ void MainWindow::on_actionPrintSetup_triggered()
 }
 
 ///
-/// \brief MainWindow::on_actionExit_triggered
+/// \brief MainWindow::on_actionPreferences_triggered
 ///
-void MainWindow::on_actionExit_triggered()
+void MainWindow::on_actionPreferences_triggered()
 {
-    close();
+    DialogPreferences dlg(this, this);
+    dlg.exec();
 }
 
 ///
-/// \brief MainWindow::on_actionUndo_triggered
+/// \brief MainWindow::applyAutoComplete
+/// \param enable
 ///
-void MainWindow::on_actionUndo_triggered()
+void MainWindow::applyAutoComplete(bool enable)
 {
-    emit undo();
+    forEachTypedForm(ui->mdiArea, [enable](auto* frm) {
+        if (auto* script = qobject_cast<FormScriptView*>(frm))
+            script->enableAutoComplete(enable);
+    });
 }
 
 ///
-/// \brief MainWindow::on_actionRedo_triggered
+/// \brief MainWindow::applyConsoleMaxLines
+/// \param n
 ///
-void MainWindow::on_actionRedo_triggered()
+void MainWindow::applyConsoleMaxLines(int n)
 {
-    emit redo();
+    _outputPanel->jsConsole()->setMaxLines(n);
 }
 
 ///
-/// \brief MainWindow::on_actionCut_triggered
+/// \brief MainWindow::applyScriptFont
+/// \param font
 ///
-void MainWindow::on_actionCut_triggered()
+void MainWindow::applyFont(const QFont& font)
 {
-    emit cut();
+    forEachTypedForm(ui->mdiArea, [&font](auto* frm) {
+        if (!qobject_cast<FormDataMapView*>(frm))
+            frm->setFont(font);
+    });
 }
 
 ///
-/// \brief MainWindow::on_actionCopy_triggered
+/// \brief MainWindow::applyScriptFont
+/// \param font
 ///
-void MainWindow::on_actionCopy_triggered()
+void MainWindow::applyScriptFont(const QFont& font)
 {
-    emit copy();
+    forEachTypedForm(ui->mdiArea, [&font](auto* frm) {
+        if (auto* script = qobject_cast<FormScriptView*>(frm))
+            script->setFont(font);
+    });
 }
 
 ///
-/// \brief MainWindow::on_actionPaste_triggered
+/// \brief MainWindow::applyColors
+/// \param bg
+/// \param fg
+/// \param status
 ///
-void MainWindow::on_actionPaste_triggered()
+void MainWindow::applyColors(const QColor& bg, const QColor& fg, const QColor& addr, const QColor& comment)
 {
-    emit paste();
+    forEachTypedForm(ui->mdiArea, [&bg, &fg, &addr, &comment](auto* frm) {
+        if (auto* data = qobject_cast<FormDataView*>(frm)) {
+            data->setBackgroundColor(bg);
+            data->setForegroundColor(fg);
+            data->setAddressColor(addr);
+            data->setCommentColor(comment);
+        } else if (auto* traffic = qobject_cast<FormTrafficView*>(frm)) {
+            traffic->setBackgroundColor(bg);
+            traffic->setForegroundColor(fg);
+        } else if (auto* script = qobject_cast<FormScriptView*>(frm)) {
+            script->setBackgroundColor(bg);
+            script->setForegroundColor(fg);
+        }
+    });
 }
 
 ///
-/// \brief MainWindow::on_actionSelectAll_triggered
+/// \brief MainWindow::applyThemeColors
 ///
-void MainWindow::on_actionSelectAll_triggered()
+void MainWindow::applyThemeColors()
 {
-    emit selectAll();
+    auto& prefs = AppPreferences::instance();
+    const QPalette palette = QApplication::palette();
+    const QColor bg = palette.color(QPalette::Base);
+    const QColor fg = palette.color(QPalette::Text);
+    prefs.setBackgroundColor(bg);
+    prefs.setForegroundColor(fg);
+    applyColors(bg, fg, prefs.addressColor(), prefs.commentColor());
+}
+
+///
+/// \brief MainWindow::applyCheckForUpdates
+/// \param enabled
+///
+void MainWindow::applyCheckForUpdates(bool enabled)
+{
+    auto sb = qobject_cast<MainStatusBar*>(statusBar());
+    if(sb) sb->setCheckForUpdates(enabled);
+}
+
+///
+/// \brief MainWindow::applyZoom
+/// \param zoomPercent
+///
+void MainWindow::applyZoom(int zoomPercent)
+{
+    forEachTypedForm(ui->mdiArea, [zoomPercent](auto* frm) {
+        if (auto* data = qobject_cast<FormDataView*>(frm))
+            data->setZoomPercent(zoomPercent);
+        else if (auto* script = qobject_cast<FormScriptView*>(frm))
+            script->setZoomPercent(zoomPercent);
+    });
 }
 
 ///
@@ -667,207 +1156,6 @@ void MainWindow::on_actionMbDefinitions_triggered()
 }
 
 ///
-/// \brief MainWindow::on_actionDataDefinition_triggered
-///
-void MainWindow::on_actionDataDefinition_triggered()
-{
-    auto frm = currentMdiChild();
-    if(!frm) return;
-
-    DialogDisplayDefinition dlg(frm->displayDefinition(), this);
-    if(dlg.exec() == QDialog::Accepted) {
-            frm->setDisplayDefinition(dlg.displayDefinition());
-    }
-}
-
-///
-/// \brief MainWindow::on_actionShowData_triggered
-///
-void MainWindow::on_actionShowData_triggered()
-{
-    auto frm = currentMdiChild();
-    if(frm) frm->setDisplayMode(DisplayMode::Data);
-}
-
-///
-/// \brief MainWindow::on_actionShowTraffic_triggered
-///
-void MainWindow::on_actionShowTraffic_triggered()
-{
-    auto frm = currentMdiChild();
-    if(frm) frm->setDisplayMode(DisplayMode::Traffic);
-}
-
-///
-/// \brief MainWindow::on_actionShowScript_triggered
-///
-void MainWindow::on_actionShowScript_triggered()
-{
-    auto frm = currentMdiChild();
-    if(frm) frm->setDisplayMode(DisplayMode::Script);
-}
-
-///
-/// \brief MainWindow::on_actionBinary_triggered
-///
-void MainWindow::on_actionBinary_triggered()
-{
-    updateDataDisplayMode(DataDisplayMode::Binary);
-}
-
-///
-/// \brief MainWindow::on_actionUInt16_triggered
-///
-void MainWindow::on_actionUInt16_triggered()
-{
-    updateDataDisplayMode(DataDisplayMode::UInt16);
-}
-
-///
-/// \brief MainWindow::on_actionInt16_triggered
-///
-void MainWindow::on_actionInt16_triggered()
-{
-    updateDataDisplayMode(DataDisplayMode::Int16);
-}
-
-///
-/// \brief MainWindow::on_actionInt32_triggered
-///
-void MainWindow::on_actionInt32_triggered()
-{
-    updateDataDisplayMode(DataDisplayMode::Int32);
-}
-
-///
-/// \brief MainWindow::on_actionSwappedInt32_triggered
-///
-void MainWindow::on_actionSwappedInt32_triggered()
-{
-    updateDataDisplayMode(DataDisplayMode::SwappedInt32);
-}
-
-///
-/// \brief MainWindow::on_actionUInt32_triggered
-///
-void MainWindow::on_actionUInt32_triggered()
-{
-    updateDataDisplayMode(DataDisplayMode::UInt32);
-}
-
-void MainWindow::on_actionSwappedUInt32_triggered()
-{
-    updateDataDisplayMode(DataDisplayMode::SwappedUInt32);
-}
-
-///
-/// \brief MainWindow::on_actionInt64_triggered
-///
-void MainWindow::on_actionInt64_triggered()
-{
-    updateDataDisplayMode(DataDisplayMode::Int64);
-}
-
-///
-/// \brief MainWindow::on_actionSwappedInt64_triggered
-///
-void MainWindow::on_actionSwappedInt64_triggered()
-{
-    updateDataDisplayMode(DataDisplayMode::SwappedInt64);
-}
-
-///
-/// \brief MainWindow::on_actionUInt64_triggered
-///
-void MainWindow::on_actionUInt64_triggered()
-{
-    updateDataDisplayMode(DataDisplayMode::UInt64);
-}
-
-///
-/// \brief MainWindow::on_actionSwappedUInt64_triggered
-///
-void MainWindow::on_actionSwappedUInt64_triggered()
-{
-    updateDataDisplayMode(DataDisplayMode::SwappedUInt64);
-}
-
-///
-/// \brief MainWindow::on_actionHex_triggered
-///
-void MainWindow::on_actionHex_triggered()
-{
-    updateDataDisplayMode(DataDisplayMode::Hex);
-}
-
-///
-/// \brief MainWindow::on_actionAnsi_triggered
-///
-void MainWindow::on_actionAnsi_triggered()
-{
-    updateDataDisplayMode(DataDisplayMode::Ansi);
-}
-
-///
-/// \brief MainWindow::on_actionFloatingPt_triggered
-///
-void MainWindow::on_actionFloatingPt_triggered()
-{
-    updateDataDisplayMode(DataDisplayMode::FloatingPt);
-}
-
-///
-/// \brief MainWindow::on_actionSwappedFP_triggered
-///
-void MainWindow::on_actionSwappedFP_triggered()
-{
-    updateDataDisplayMode(DataDisplayMode::SwappedFP);
-}
-
-///
-/// \brief MainWindow::on_actionSwapBytes_triggered
-///
-void MainWindow::on_actionSwapBytes_triggered()
-{
-    auto frm = currentMdiChild();
-    if(!frm) return;
-
-    switch (frm->byteOrder()) {
-    case ByteOrder::Swapped:
-        frm->setByteOrder(ByteOrder::Direct);
-        break;
-    case ByteOrder::Direct:
-        frm->setByteOrder(ByteOrder::Swapped);
-        break;
-    }
-}
-
-///
-/// \brief MainWindow::on_actionDblFloat_triggered
-///
-void MainWindow::on_actionDblFloat_triggered()
-{
-    updateDataDisplayMode(DataDisplayMode::DblFloat);
-}
-
-///
-/// \brief MainWindow::on_actionSwappedDbl_triggered
-///
-void MainWindow::on_actionSwappedDbl_triggered()
-{
-    updateDataDisplayMode(DataDisplayMode::SwappedDbl);
-}
-
-///
-/// \brief MainWindow::on_actionHexAddresses_triggered
-///
-void MainWindow::on_actionHexAddresses_triggered()
-{
-    auto frm = currentMdiChild();
-    if(frm) frm->setDisplayHexAddresses(!frm->displayHexAddresses());
-}
-
-///
 /// \brief MainWindow::on_actionForceCoils_triggered
 ///
 void MainWindow::on_actionForceCoils_triggered()
@@ -904,72 +1192,12 @@ void MainWindow::on_actionPresetHoldingRegs_triggered()
 ///
 void MainWindow::on_actionMsgParser_triggered()
 {
-    auto frm = currentMdiChild();
-    const auto mode = frm ? frm->dataDisplayMode() : DataDisplayMode::Hex;
+    auto* frm = currentDataOrTrafficForm();
+    const auto type = frm ? dataTypeOfForm(frm) : DataType::Hex;
 
-    auto dlg = new DialogMsgParser(mode, ModbusMessage::Rtu);
+    auto dlg = new DialogMsgParser(type, ModbusMessage::Rtu);
     dlg->setAttribute(Qt::WA_DeleteOnClose, true);
     dlg->show();
-}
-
-///
-/// \brief MainWindow::on_actionRawDataLog_triggered
-///
-void MainWindow::on_actionRawDataLog_triggered()
-{
-    auto dlg = ui->actionRawDataLog->data().value<DialogRawDataLog*>();
-    if(dlg != nullptr) {
-        dlg->close();
-        return;
-    }
-    else
-    {
-        dlg = new DialogRawDataLog(_mbMultiServer);
-        dlg->setAttribute(Qt::WA_DeleteOnClose, true);
-        ui->actionRawDataLog->setData(QVariant::fromValue(dlg));
-
-        connect(dlg, &DialogRawDataLog::destroyed, this, [this](){
-            ui->actionRawDataLog->setData(QVariant());
-        });
-
-        dlg->show();
-    }
-}
-
-///
-/// \brief MainWindow::on_actionTextCapture_triggered
-///
-void MainWindow::on_actionTextCapture_triggered()
-{
-    auto frm = currentMdiChild();
-    if(!frm) return;
-
-    auto filename = QFileDialog::getSaveFileName(this, QString(), QString(), "Text files (*.txt)");
-    if(!filename.isEmpty())
-    {
-        if(!filename.endsWith(".txt", Qt::CaseInsensitive)) filename += ".txt";
-        frm->startTextCapture(filename);
-    }
-}
-
-///
-/// \brief MainWindow::on_actionCaptureOff_triggered
-///
-void MainWindow::on_actionCaptureOff_triggered()
-{
-    auto frm = currentMdiChild();
-    if(!frm) return;
-
-    frm->stopTextCapture();
-}
-
-///
-/// \brief MainWindow::on_actionResetCtrs_triggered
-///
-void MainWindow::on_actionResetCtrs_triggered()
-{
-    auto frm = currentMdiChild();
-    if(frm) frm->resetCtrs();
 }
 
 ///
@@ -978,170 +1206,44 @@ void MainWindow::on_actionResetCtrs_triggered()
 void MainWindow::on_actionTabbedView_triggered()
 {
     if(ui->mdiArea->viewMode() == QMdiArea::SubWindowView) {
-        ui->mdiArea->setViewMode(QMdiArea::TabbedView);
+        setViewMode(QMdiArea::TabbedView);
     }
     else {
-        ui->mdiArea->setViewMode(QMdiArea::SubWindowView);
+        setViewMode(QMdiArea::SubWindowView);
     }
 }
 
 ///
-/// \brief MainWindow::on_actionToolbar_triggered
+/// \brief MainWindow::setViewMode
+/// \param mode
 ///
-void MainWindow::on_actionToolbar_triggered()
+void MainWindow::setViewMode(QMdiArea::ViewMode mode)
 {
-    ui->toolBarMain->setVisible(!ui->toolBarMain->isVisible());
+    ui->mdiArea->setViewMode(mode);
 }
 
 ///
-/// \brief MainWindow::on_actionStatusBar_triggered
+/// \brief MainWindow::updateHelpWidgetState
 ///
-void MainWindow::on_actionStatusBar_triggered()
+void MainWindow::updateHelpWidgetState()
 {
-    statusBar()->setVisible(!statusBar()->isVisible());
-}
-
-///
-/// \brief MainWindow::on_actionDisplayBar_triggered
-///
-void MainWindow::on_actionDisplayBar_triggered()
-{
-    ui->toolBarDisplay->setVisible(!ui->toolBarDisplay->isVisible());
-}
-
-///
-/// \brief MainWindow::on_actionScriptBar_triggered
-///
-void MainWindow::on_actionScriptBar_triggered()
-{
-    ui->toolBarScript->setVisible(!ui->toolBarScript->isVisible());
-}
-
-///
-/// \brief MainWindow::on_actionEditBar_triggered
-///
-void MainWindow::on_actionEditBar_triggered()
-{
-    const bool isVisible = ui->toolBarEdit->isVisible();
-    ui->toolBarEdit->setVisible(!isVisible);
-    ui->toolBarEdit->setProperty("Hidden", isVisible);
-}
-
-///
-/// \brief MainWindow::on_actionBackground_triggered
-///
-void MainWindow::on_actionBackground_triggered()
-{
-    auto frm = currentMdiChild();
+    auto frm = _project->currentMdiChild();
     if(!frm) return;
-
-    QColorDialog dlg(frm->backgroundColor(), this);
-    if(dlg.exec() == QDialog::Accepted)
-    {
-        frm->setBackgroundColor(dlg.currentColor());
+    if (qobject_cast<FormScriptView*>(frm)) {
+        if(!ui->helpDockWidget->isVisible() &&
+            ui->helpDockWidget->property("WasShown").toBool())
+        {
+            ui->helpDockWidget->setVisible(true);
+        }
+        return;
     }
-}
 
-///
-/// \brief MainWindow::on_actionForeground_triggered
-///
-void MainWindow::on_actionForeground_triggered()
-{
-    auto frm = currentMdiChild();
-    if(!frm) return;
-
-    QColorDialog dlg(frm->foregroundColor(), this);
-    if(dlg.exec() == QDialog::Accepted)
+    if(ui->helpDockWidget->isVisible() &&
+        !ui->helpDockWidget->isFloating())
     {
-        frm->setForegroundColor(dlg.currentColor());
+        ui->helpDockWidget->setProperty("WasShown", true);
+        ui->helpDockWidget->setVisible(false);
     }
-}
-
-///
-/// \brief MainWindow::on_actionStatus_triggered
-///
-void MainWindow::on_actionStatus_triggered()
-{
-    auto frm = currentMdiChild();
-    if(!frm) return;
-
-    QColorDialog dlg(frm->statusColor(), this);
-    if(dlg.exec() == QDialog::Accepted)
-    {
-        frm->setStatusColor(dlg.currentColor());
-    }
-}
-
-///
-/// \brief MainWindow::on_actionFont_triggered
-///
-void MainWindow::on_actionFont_triggered()
-{
-    auto frm = currentMdiChild();
-    if(!frm) return;
-
-    QFontDialog dlg(frm->font(), this);
-    if(dlg.exec() == QDialog::Accepted)
-    {
-        frm->setFont(dlg.currentFont());
-    }
-}
-
-///
-/// \brief MainWindow::on_actionEnglish_triggered
-///
-void MainWindow::on_actionEnglish_triggered()
-{
-    setLanguage("en");
-}
-
-///
-/// \brief MainWindow::on_actionRussian_triggered
-///
-void MainWindow::on_actionRussian_triggered()
-{
-   setLanguage("ru");
-}
-
-///
-/// \brief MainWindow::on_actionChineseCN_triggered
-///
-void MainWindow::on_actionChineseCN_triggered()
-{
-    setLanguage("zh_CN");
-}
-
-///
-/// \brief MainWindow::on_actionChineseTW_triggered
-///
-void MainWindow::on_actionChineseTW_triggered()
-{
-    setLanguage("zh_TW");
-}
-
-///
-/// \brief MainWindow::on_actionCascade_triggered
-///
-void MainWindow::on_actionCascade_triggered()
-{
-    ui->mdiArea->cascadeSubWindows();
-}
-
-///
-/// \brief MainWindow::on_actionTile_triggered
-///
-void MainWindow::on_actionTile_triggered()
-{
-    ui->mdiArea->tileSubWindows();
-}
-
-///
-/// \brief MainWindow::on_actionWindows_triggered
-///
-void MainWindow::on_actionWindows_triggered()
-{
-    DialogWindowsManager dlg(_windowActionList->actionList(), ui->actionSave, this);
-    dlg.exec();
 }
 
 ///
@@ -1154,73 +1256,23 @@ void MainWindow::on_actionAbout_triggered()
 }
 
 ///
-/// \brief MainWindow::on_actionRunScript_triggered
+/// \brief MainWindow::on_actionImportScript_triggered
 ///
-void MainWindow::on_actionRunScript_triggered()
+void MainWindow::on_actionImportScript_triggered()
 {
-    auto frm = currentMdiChild();
-    if(!frm) return;
+    const auto filename = QFileDialog::getOpenFileName(this, QString(), QString(), tr("JavaScript files (*.js);;All files (*)"));
+    if(filename.isEmpty()) return;
 
-    frm->runScript();
-}
+    QFile file(filename);
+    if(!file.open(QFile::ReadOnly | QFile::Text)) return;
 
-///
-/// \brief MainWindow::on_actionStopScript_triggered
-///
-void MainWindow::on_actionStopScript_triggered()
-{
-    auto frm = currentMdiChild();
-    if(!frm) return;
+    const auto script = QTextStream(&file).readAll();
 
-    frm->stopScript();
-}
-
-///
-/// \brief MainWindow::on_actionScriptSettings_triggered
-///
-void MainWindow::on_actionScriptSettings_triggered()
-{
-    auto frm = currentMdiChild();
-    if(!frm) return;
-
-    auto ss = frm->scriptSettings();
-    DialogScriptSettings dlg(ss, this);
-
-    if(dlg.exec() == QDialog::Accepted)
-        frm->setScriptSettings(ss);
-}
-
-///
-/// \brief MainWindow::on_runModeChanged
-/// \param mode
-///
-void MainWindow::on_runModeChanged(RunMode mode)
-{
-    auto frm = currentMdiChild();
-    if(!frm) return;
-
-    auto ss = frm->scriptSettings();
-
-    ss.Mode = mode;
-    frm->setScriptSettings(ss);
-}
-
-///
-/// \brief MainWindow::on_searchText
-/// \param text
-///
-void MainWindow::on_searchText(const QString& text)
-{
-   emit search(text);
-}
-
-///
-/// \brief MainWindow::on_connectionError
-/// \param error
-///
-void MainWindow::on_connectionError(const QString& error)
-{
-    QMessageBox::warning(this, windowTitle(), error);
+    if(auto* frm = qobject_cast<FormScriptView*>(createNewForm(ProjectFormKind::Script))) {
+        frm->setScript(script);
+        frm->setFormName(QFileInfo(filename).completeBaseName());
+        _projectTree->updateFormTitle(frm);
+    }
 }
 
 ///
@@ -1233,7 +1285,45 @@ void MainWindow::updateMenuWindow()
     {
         wnd->setProperty("isActive", wnd == activeWnd);
     }
-    _windowActionList->update();
+}
+
+///
+/// \brief MainWindow::on_tabContextMenuRequested
+/// \param subWnd
+/// \param sourcePanel
+/// \param globalPos
+///
+void MainWindow::on_tabContextMenuRequested(QMdiSubWindow* subWnd, MdiArea* /*sourcePanel*/, QPoint globalPos)
+{
+    auto* frm = subWnd ? subWnd->widget() : nullptr;
+    if(!frm || !_project)
+        return;
+
+    QMenu menu(this);
+    if(_project->canMoveFormToOtherPanel(frm))
+    {
+        auto* act = menu.addAction(tr("Move to Other Panel"));
+        connect(act, &QAction::triggered, this, [this, frm]() {
+            _project->moveFormToOtherPanel(frm);
+            markModified();
+        });
+    }
+    if(!menu.isEmpty())
+        menu.exec(globalPos);
+}
+
+///
+/// \brief MainWindow::on_moveTabToOtherPanelRequested
+/// \param subWnd
+///
+void MainWindow::on_moveTabToOtherPanelRequested(QMdiSubWindow* subWnd, QPoint globalDropPos)
+{
+    auto* frm = subWnd ? subWnd->widget() : nullptr;
+    if(!frm || !_project)
+        return;
+
+    _project->moveFormToOtherPanel(frm, globalDropPos);
+    markModified();
 }
 
 ///
@@ -1246,56 +1336,136 @@ void MainWindow::windowActivate(QMdiSubWindow* wnd)
 }
 
 ///
-/// \brief MainWindow::setCodepage
-/// \param name
+/// \brief MainWindow::markModified
 ///
-void MainWindow::setCodepage(const QString& name)
+void MainWindow::markModified()
 {
-    auto frm = currentMdiChild();
-    if(!frm) return;
-
-    frm->setCodepage(name);
+    _isModified = true;
+    updateProjectWindowTitle();
 }
 
 ///
-/// \brief MainWindow::openFile
-/// \param filename
+/// \brief MainWindow::currentForm
 ///
-void MainWindow::openFile(const QString& filename)
+QWidget* MainWindow::currentForm() const
 {
-    auto frm = loadMdiChild(filename);
-    if(frm)
-    {
-        frm->show();
+    return _project->currentMdiChild();
+}
+
+///
+/// \brief MainWindow::currentDataForm
+///
+FormDataView* MainWindow::currentDataForm() const
+{
+    return _project->currentDataMdiChild();
+}
+
+///
+/// \brief MainWindow::currentTrafficForm
+///
+FormTrafficView* MainWindow::currentTrafficForm() const
+{
+    return _project->currentTrafficMdiChild();
+}
+
+///
+/// \brief MainWindow::currentScriptForm
+///
+FormScriptView* MainWindow::currentScriptForm() const
+{
+    return _project->currentScriptMdiChild();
+}
+
+FormDataMapView* MainWindow::currentDataMapForm() const
+{
+    return _project->currentDataMapMdiChild();
+}
+
+///
+/// \brief MainWindow::currentDataOrTrafficForm
+///
+QWidget* MainWindow::currentDataOrTrafficForm() const
+{
+    if (auto* data = currentDataForm())
+        return data;
+    return currentTrafficForm();
+}
+
+///
+/// \brief MainWindow::prepareWriteParams
+/// \param type
+/// \param outFrm
+/// \param outDd
+/// \param outLength
+/// \param outParams
+/// \return
+///
+bool MainWindow::prepareWriteParams(QModbusDataUnit::RegisterType type,
+                                    FormDataView*& outFrm,
+                                    DataViewDefinitions& outDd,
+                                    int& outLength,
+                                    ModbusWriteParams& outParams)
+{
+    outFrm = currentDataForm();
+    outDd = outFrm ? outFrm->displayDefinition() : AppPreferences::instance().dataViewDefinitions();
+    const auto& prefs = AppPreferences::instance();
+    const bool zeroBasedAddress = outFrm ? outFrm->zeroBasedAddress() : (prefs.globalAddressBase() == AddressBase::Base0);
+    const auto addrSpace = _mbMultiServer.getModbusDefinitions().AddrSpace;
+
+    ForceRangeParams range{
+        outDd.DeviceId,
+        outDd.PointAddress,
+        outFrm && outDd.PointType == type ? outDd.Length : ForceRangeParams{}.Length,
+        zeroBasedAddress,
+        addrSpace,
+        outDd.LeadingZeros
+    };
+    if(!outFrm && _forceRangeParams.contains(type)) {
+        range = _forceRangeParams.value(type);
+        if (range.ZeroBasedAddress != zeroBasedAddress) {
+            int adjustedAddress = static_cast<int>(range.Address);
+            if (zeroBasedAddress) {
+                adjustedAddress = qMax(0, adjustedAddress - 1);
+            } else if (adjustedAddress < std::numeric_limits<quint16>::max()) {
+                adjustedAddress += 1;
+            }
+            range.Address = static_cast<quint16>(adjustedAddress);
+            range.ZeroBasedAddress = zeroBasedAddress;
+        }
+        range.AddrSpace = addrSpace;
     }
-    else
-    {
-        QString message = !QFileInfo::exists(filename) ?
-                    QString("%1 was not found").arg(filename) :
-                    QString("Failed to open %1").arg(filename);
 
-        _recentFileActionList->removeRecentFile(filename);
-        QMessageBox::warning(this, windowTitle(), message);
-    }
+    outLength                  = range.Length;
+    outParams.DeviceId         = range.DeviceId;
+    outParams.Address          = range.Address;
+    outParams.ZeroBasedAddress = range.ZeroBasedAddress;
+    outParams.AddrSpace        = range.AddrSpace;
+    outParams.LeadingZeros     = range.LeadingZeros;
+    outParams.Server           = &_mbMultiServer;
+
+    const auto data = _mbMultiServer.data(static_cast<quint8>(range.DeviceId), type,
+        range.Address - (range.ZeroBasedAddress ? 0 : 1),
+        range.Length);
+    outParams.Value = QVariant::fromValue(data.values());
+
+    return true;
 }
 
 ///
-/// \brief MainWindow::addRecentFile
-/// \param filename
+/// \brief MainWindow::rememberForceRangeParams
+/// \param type
+/// \param params
 ///
-void MainWindow::addRecentFile(const QString& filename)
+void MainWindow::rememberForceRangeParams(QModbusDataUnit::RegisterType type, const ModbusWriteParams& params)
 {
-    _recentFileActionList->addRecentFile(filename);
-}
-
-///
-/// \brief MainWindow::updateDisplayMode
-/// \param mode
-///
-void MainWindow::updateDataDisplayMode(DataDisplayMode mode)
-{
-    auto frm = currentMdiChild();
-    if(frm) frm->setDataDisplayMode(mode);
+    _forceRangeParams[type] = ForceRangeParams{
+        params.DeviceId,
+        params.Address,
+        static_cast<quint16>(params.Value.value<QVector<quint16>>().size()),
+        params.ZeroBasedAddress,
+        params.AddrSpace,
+        params.LeadingZeros
+    };
 }
 
 ///
@@ -1304,32 +1474,14 @@ void MainWindow::updateDataDisplayMode(DataDisplayMode mode)
 ///
 void MainWindow::forceCoils(QModbusDataUnit::RegisterType type)
 {
-    auto frm = currentMdiChild();
-    if(!frm) return;
+    FormDataView* frm; DataViewDefinitions dd; int length = 0; ModbusWriteParams params;
+    if(!prepareWriteParams(type, frm, dd, length, params)) return;
 
-    const auto dd = frm->displayDefinition();
-    SetupPresetParams presetParams = { dd.PointAddress, dd.Length, dd.ZeroBasedAddress, dd.AddrSpace };
-
-    {
-        DialogSetupPresetData dlg(presetParams, type, dd.HexAddress, this);
-        if(dlg.exec() != QDialog::Accepted) return;
-    }
-
-    ModbusWriteParams params;
-    params.Address = presetParams.PointAddress;
-    params.ZeroBasedAddress = dd.ZeroBasedAddress;
-    params.AddrSpace = dd.AddrSpace;
-
-    if(dd.PointType == type)
-    {
-        const auto data = _mbMultiServer.data(dd.DeviceId, type, presetParams.PointAddress - (dd.ZeroBasedAddress ? 0 : 1), presetParams.Length);
-        params.Value = QVariant::fromValue(data.values());
-    }
-
-    DialogForceMultipleCoils dlg(params, type, presetParams.Length, dd.HexAddress, this);
-    if(dlg.exec() == QDialog::Accepted)
-    {
-        _mbMultiServer.writeRegister(dd.DeviceId, type, params);
+    const bool displayHexAddresses = AppPreferences::instance().globalHexView();
+    DialogForceStatusRegisters dlg(params, type, length, displayHexAddresses, this);
+    if(dlg.exec() == QDialog::Accepted) {
+        rememberForceRangeParams(type, params);
+        _mbMultiServer.writeRegister(type, params);
     }
 }
 
@@ -1339,556 +1491,140 @@ void MainWindow::forceCoils(QModbusDataUnit::RegisterType type)
 ///
 void MainWindow::presetRegs(QModbusDataUnit::RegisterType type)
 {
-    auto frm = currentMdiChild();
-    if(!frm) return;
+    FormDataView* frm; DataViewDefinitions dd; int length = 0; ModbusWriteParams params;
+    if(!prepareWriteParams(type, frm, dd, length, params)) return;
 
-    const auto dd = frm->displayDefinition();
-    SetupPresetParams presetParams = { dd.PointAddress, dd.Length, dd.ZeroBasedAddress, dd.AddrSpace };
+    const bool useFormDisplay = frm && dd.PointType == type;
+    params.DataMode = useFormDisplay ? frm->dataType()      : DataType::Hex;
+    params.RegOrder = useFormDisplay ? frm->registerOrder() : RegisterOrder::MSRF;
+    params.Order    = useFormDisplay ? frm->byteOrder()     : ByteOrder::Direct;
+    params.Codepage = useFormDisplay ? frm->codepage()      : QString();
 
-    {
-        DialogSetupPresetData dlg(presetParams, type, dd.HexAddress, this);
-        if(dlg.exec() != QDialog::Accepted) return;
-    }
-
-    ModbusWriteParams params;
-    params.Address = presetParams.PointAddress;
-    params.DisplayMode = frm->dataDisplayMode();
-    params.Order = frm->byteOrder();
-    params.Codepage = frm->codepage();
-    params.ZeroBasedAddress = dd.ZeroBasedAddress;
-    params.AddrSpace = dd.AddrSpace;
-
-    if(dd.PointType == type)
-    {
-        const auto data = _mbMultiServer.data(dd.DeviceId, type, presetParams.PointAddress - (dd.ZeroBasedAddress ? 0 : 1), presetParams.Length);
-        params.Value = QVariant::fromValue(data.values());
-    }
-
-    DialogForceMultipleRegisters dlg(params, type, presetParams.Length, dd.HexAddress, this);
-    if(dlg.exec() == QDialog::Accepted)
-    {
-        _mbMultiServer.writeRegister(dd.DeviceId, type, params);
+    const bool displayHexAddresses = AppPreferences::instance().globalHexView();
+    DialogForceMultipleRegisters dlg(params, type, length, displayHexAddresses, this);
+    if(dlg.exec() == QDialog::Accepted) {
+        rememberForceRangeParams(type, params);
+        _mbMultiServer.writeRegister(type, params);
     }
 }
 
 ///
-/// \brief MainWindow::createMdiChild
-/// \param id
-/// \return
-///
-FormModSim* MainWindow::createMdiChild(int id)
-{
-    for(auto&& wnd : ui->mdiArea->subWindowList()) {
-        const auto frm = qobject_cast<FormModSim*>(wnd->widget());
-        if(frm->formId() == id) id++;
-    }
-
-    auto frm = new FormModSim(id, _mbMultiServer, _dataSimulator, this);
-    auto wnd = ui->mdiArea->addSubWindow(frm);
-    wnd->installEventFilter(this);
-    wnd->setAttribute(Qt::WA_DeleteOnClose, true);
-
-    auto updateCodepage = [this](const QString& name)
-    {
-        _ansiMenu->selectCodepage(name);
-    };
-
-    auto updateRunMode = [this](RunMode mode)
-    {
-        auto comboBox = qobject_cast<RunModeComboBox*>(ui->toolBarScript->widgetForAction(_actionRunMode));
-        comboBox->setCurrentRunMode(mode);
-    };
-
-    auto updateEditTools = [this](DisplayMode mode)
-    {
-        if(!ui->toolBarEdit->property("Hidden").toBool())
-            ui->toolBarEdit->setVisible(mode == DisplayMode::Script);
-        ui->menuEdit->menuAction()->setVisible(mode == DisplayMode::Script);
-    };
-
-    auto updateSearch = [this](const QString& text)
-    {
-        auto edit = qobject_cast<SearchLineEdit*>(_actionSearch->defaultWidget());
-        edit->setText(text);
-    };
-
-    connect(frm, &FormModSim::codepageChanged, this, [updateCodepage](const QString& name)
-    {
-        updateCodepage(name);
-    });
-
-    connect(wnd, &QMdiSubWindow::windowStateChanged, this,
-            [frm, updateCodepage, updateRunMode, updateEditTools, updateSearch](Qt::WindowStates, Qt::WindowStates newState)
-    {
-        switch(newState & ~Qt::WindowMaximized & ~Qt::WindowMinimized)
-        {
-            case Qt::WindowActive:
-                updateCodepage(frm->codepage());
-                updateSearch(frm->searchText());
-                updateEditTools(frm->displayMode());
-                updateRunMode(frm->scriptSettings().Mode);
-                frm->connectEditSlots();
-            break;
-
-            case Qt::WindowNoState:
-                frm->disconnectEditSlots();
-            break;
-        }
-    });
-
-    connect(frm, &FormModSim::pointTypeChanged, this, [frm](QModbusDataUnit::RegisterType type)
-    {
-        switch(type)
-        {
-            case QModbusDataUnit::Coils:
-            case QModbusDataUnit::DiscreteInputs:
-                frm->setProperty("PrevDataDisplayMode", QVariant::fromValue(frm->dataDisplayMode()));
-                frm->setDataDisplayMode(DataDisplayMode::Binary);
-                break;
-
-            case QModbusDataUnit::HoldingRegisters:
-            case QModbusDataUnit::InputRegisters:
-            {
-                const auto mode = frm->property("PrevDataDisplayMode");
-                if(mode.isValid())
-                    frm->setDataDisplayMode(mode.value<DataDisplayMode>());
-            }
-            break;
-
-            default:
-                break;
-        }
-    });
-
-    connect(frm, &FormModSim::scriptSettingsChanged, this, [updateRunMode](const ScriptSettings& ss)
-    {
-        updateRunMode(ss.Mode);
-    });
-
-    connect(frm, &FormModSim::displayModeChanged, this, [updateEditTools](DisplayMode mode)
-    {
-        updateEditTools(mode);
-    });
-
-    connect(frm, &FormModSim::showed, this, [this, frm, wnd, updateRunMode, updateEditTools]
-    {
-        windowActivate(wnd);
-        updateEditTools(frm->displayMode());
-        updateRunMode(frm->scriptSettings().Mode);
-    });
-
-    connect(frm, &FormModSim::captureError, this, [this](const QString& error)
-    {
-        QMessageBox::critical(this, windowTitle(), tr("Capture Error:\r\n%1").arg(error));
-    });
-
-    connect(frm, &FormModSim::doubleClicked, this, [this]()
-    {
-        ui->actionDataDefinition->trigger();
-    });
-
-    _windowActionList->addWindow(wnd);
-
-    return frm;
-}
-
-///
-/// \brief MainWindow::currentMdiChild
-/// \return
-///
-FormModSim* MainWindow::currentMdiChild() const
-{
-    const auto wnd = ui->mdiArea->currentSubWindow();
-    return wnd ? qobject_cast<FormModSim*>(wnd->widget()) : nullptr;
-}
-
-///
-/// \brief MainWindow::findMdiChild
-/// \param num
-/// \return
-///
-FormModSim* MainWindow::findMdiChild(int id) const
-{
-    for(auto&& wnd : ui->mdiArea->subWindowList())
-    {
-        const auto frm = qobject_cast<FormModSim*>(wnd->widget());
-        if(frm && frm->formId() == id) return frm;
-    }
-    return nullptr;
-}
-
-///
-/// \brief MainWindow::firstMdiChild
-/// \return
-///
-FormModSim* MainWindow::firstMdiChild() const
-{
-    for(auto&& wnd : ui->mdiArea->subWindowList())
-        return qobject_cast<FormModSim*>(wnd->widget());
-
-    return nullptr;
-}
-
-///
-/// \brief MainWindow::loadConfig
+/// \brief MainWindow::loadProject
 /// \param filename
 ///
-void MainWindow::loadConfig(const QString& filename, bool startup)
+void MainWindow::loadProject(const QString& filename)
 {
-    const auto format = filename.endsWith(".xml", Qt::CaseInsensitive) ?
-                            SerializationFormat::Xml :
-                            SerializationFormat::Binary;
-
-    QFile file(filename);
-    if(!file.open(QFile::ReadOnly))
-        return;
-
-    ModbusDefinitions defs;
-    QList<ConnectionDetails> conns;
-    switch(format)
-    {
-        case SerializationFormat::Binary:
-        {
-            QDataStream s(&file);
-            s.setByteOrder(QDataStream::BigEndian);
-            s.setVersion(QDataStream::Version::Qt_5_0);
-
-            quint8 magic = 0;
-            s >> magic;
-
-            if(magic != 0x35)
-                return;
-
-            QVersionNumber ver;
-            s >> ver;
-
-            if(ver < QVersionNumber(1, 0))
-                return;
-
-            QStringList listFilename;
-            s >> listFilename;
-
-            ui->mdiArea->closeAllSubWindows();
-            for(auto&& filename: listFilename)
-            {
-                if(!filename.isEmpty())
-                    openFile(filename);
-            }
-
-            s >> conns;
-
-            if(ver >= QVersionNumber(1, 1)) {
-                s >> defs.AddrSpace;
-                s >> defs.UseGlobalUnitMap;
-                s >> defs.ErrorSimulations;
-            }
-
-            if(s.status() != QDataStream::Ok)
-                return;
-        }
-        break;
-
-        case SerializationFormat::Xml:
-        {
-            QXmlStreamReader xml(&file);
-            while (xml.readNextStartElement()) {
-                if (xml.name() == QLatin1String("OpenModSim")) {
-                    while (xml.readNextStartElement()) {
-                        if (xml.name() == QLatin1String("ModbusDefinitions")) {
-                            xml >> defs;
-                        }
-                        else if (xml.name() == QLatin1String("Connections")) {
-                            while (xml.readNextStartElement()) {
-                                if (xml.name() == QLatin1String("ConnectionDetails")) {
-                                    ConnectionDetails cd;
-                                    xml >> cd;
-                                    conns.append(cd);
-                                } else {
-                                    xml.skipCurrentElement();
-                                }
-                            }
-                        }
-                        else if (xml.name() == QLatin1String("Forms")) {
-                            ui->mdiArea->closeAllSubWindows();
-                            while (xml.readNextStartElement()) {
-                                if (xml.name() == QLatin1String("FormModSim")) {
-                                    auto frm = createMdiChild(++_windowCounter);
-                                    if (frm) {
-                                        xml >> frm;
-                                        frm->show();
-                                    }
-                                } else {
-                                    xml.skipCurrentElement();
-                                }
-                            }
-                        }
-                        else {
-                            xml.skipCurrentElement();
-                        }
-                    }
-                }
-                else {
-                    xml.skipCurrentElement();
-                }
-            }
-
-        }
-        break;
+    if (hasProjectContext()) {
+        _project->closeProject();
+        _projectFilePath.clear();
+        _isModified = false;
+        updateProjectWindowTitle();
     }
 
+    AppLogger::clear();
+
+    _project->loadProject(filename);
+    applyGlobalAddressBase(AppPreferences::instance().globalAddressBase(), false);
+    applyGlobalHexView(AppPreferences::instance().globalHexView(), false);
+    syncGlobalViewControls();
+    _projectFilePath = QFileInfo(filename).absoluteFilePath();
+    _lastProjectPath = _projectFilePath;
+    _project->setSavePath(QFileInfo(filename).absoluteDir().absolutePath());
+    _isModified = false;
+    updateProjectWindowTitle();
+    updateMainToolbarState();
+    addRecentProject(_projectFilePath);
+}
+
+///
+/// \brief MainWindow::saveProject
+/// \param filename
+///
+bool MainWindow::saveProject(const QString& filename)
+{
+    if (!_project->saveProject(filename))
+        return false;
+
+    _projectFilePath = QFileInfo(filename).absoluteFilePath();
+    _lastProjectPath = _projectFilePath;
+    _project->setSavePath(QFileInfo(filename).absoluteDir().absolutePath());
+    _isModified = false;
+    updateProjectWindowTitle();
+    return true;
+}
+
+///
+/// \brief MainWindow::projectName
+/// \return current project name: base filename if saved, "Untitled" if unsaved with context, empty otherwise
+///
+QString MainWindow::projectName() const
+{
+    if(!_projectFilePath.isEmpty())
+        return QFileInfo(_projectFilePath).completeBaseName();
+
+    if(hasProjectContext())
+        return tr("Untitled");
+
+    return QString();
+}
+
+///
+/// \brief MainWindow::updateProjectWindowTitle
+///
+void MainWindow::updateProjectWindowTitle()
+{
+    const QString modifiedMark = _isModified ? "*" : "";
+    const QString name = projectName();
+
+    if(name.isEmpty())
+        setWindowTitle(modifiedMark + APP_PRODUCT_NAME);
+    else
+        setWindowTitle(QString("%1%2 - %3").arg(modifiedMark, APP_PRODUCT_NAME, name));
+}
+
+///
+/// \brief MainWindow::appendConsoleMessage
+///
+void MainWindow::appendConsoleMessage(const QString& source, const QString& text, ConsoleOutput::MessageType type)
+{
+    _outputPanel->jsConsole()->addMessage(text, type, source);
+}
+
+///
+/// \brief MainWindow::showOutputConsole
+///
+void MainWindow::showOutputConsole()
+{
+    if (AppPreferences::instance().autoShowConsoleOutput()) {
+        ui->consoleDockWidget->setVisible(true);
+        _outputPanel->switchToJsConsole();
+    }
+}
+
+///
+/// \brief MainWindow::showHelpContext
+///
+void MainWindow::showHelpContext(const QString& helpKey)
+{
+    ui->helpDockWidget->setVisible(true);
+    if (!helpKey.isEmpty())
+        _helpWidget->showHelp(helpKey);
+}
+
+///
+/// \brief MainWindow::applyConnections
+///
+void MainWindow::applyConnections(const ModbusDefinitions& defs, const QList<ConnectionDetails>& conns)
+{
+    _mbMultiServer.setModbusDefinitions(defs);
     auto menu = qobject_cast<MenuConnect*>(ui->actionConnect->menu());
     menu->updateConnectionDetails(conns);
-
-    // setup definitions
-    _mbMultiServer.setModbusDefinitions(defs);
-
-    for(auto&& cd : conns)
-    {
-        if(menu->canConnect(cd))
+    for (auto&& cd : conns) {
+        if (menu->canConnect(cd))
             _mbMultiServer.connectDevice(cd);
     }
-
-    if(startup) {
-        for(auto&& wnd : ui->mdiArea->subWindowList()) {
-            const auto frm = qobject_cast<FormModSim*>(wnd->widget());
-            if(frm->scriptSettings().RunOnStartup) {
-                frm->runScript();
-            }
-        }
-    }
 }
 
-///
-/// \brief MainWindow::saveConfig
-/// \param filename
-/// \param format
-///
-void MainWindow::saveConfig(const QString& filename, SerializationFormat format)
-{
-    QFile file(filename);
-    if(!file.open(QFile::WriteOnly))
-        return;
-
-    switch(format)
-    {
-        case SerializationFormat::Binary:
-        {
-            QStringList listFilename;
-            const auto activeWnd = ui->mdiArea->currentSubWindow();
-            for(auto&& wnd : ui->mdiArea->subWindowList())
-            {
-                const auto frm = qobject_cast<FormModSim*>(wnd->widget());
-
-                windowActivate(wnd);
-                saveAs(frm, format);
-
-                const auto filename = frm->filename();
-                if(!filename.isEmpty()) listFilename.push_back(filename);
-            }
-            windowActivate(activeWnd);
-
-            QDataStream s(&file);
-            s.setByteOrder(QDataStream::BigEndian);
-            s.setVersion(QDataStream::Version::Qt_5_0);
-
-            // magic number
-            s << (quint8)0x35;
-
-            // version number
-            s << QVersionNumber(1, 1);
-
-            // list of files
-            s << listFilename;
-
-            // connections
-            s << _mbMultiServer.connections();
-
-            // modbus definitions
-            ModbusDefinitions defs = _mbMultiServer.getModbusDefinitions();
-            s << defs.AddrSpace;
-            s << defs.UseGlobalUnitMap;
-            s << defs.ErrorSimulations;
-        }
-        break;
-
-        case SerializationFormat::Xml:
-        {
-            QXmlStreamWriter w(&file);
-            w.setAutoFormatting(true);
-
-            w.writeStartDocument();
-            w.writeStartElement("OpenModSim");
-            w.writeAttribute("Version", qApp->applicationVersion());
-
-            w << _mbMultiServer.getModbusDefinitions();
-
-            w.writeStartElement("Connections");
-            for(auto&& cd : _mbMultiServer.connections()) {
-                w << cd;
-            }
-            w.writeEndElement(); // Connections
-
-            w.writeStartElement("Forms");
-            for(auto&& wnd : ui->mdiArea->subWindowList()) {
-                w << qobject_cast<FormModSim*>(wnd->widget());
-            }
-            w.writeEndElement(); // Forms
-
-            w.writeEndElement(); // OpenModSim
-            w.writeEndDocument();
-        }
-        break;
-    }
-}
-
-///
-/// \brief MainWindow::loadMdiChild
-/// \param filename
-/// \return
-///
-FormModSim* MainWindow::loadMdiChild(const QString& filename)
-{
-    const auto format = filename.endsWith(".xml", Qt::CaseInsensitive) ?
-                            SerializationFormat::Xml :
-                            SerializationFormat::Binary;
-
-    QFile file(filename);
-    if(!file.open(QFile::ReadOnly))
-        return nullptr;
-
-    FormModSim* frm = nullptr;
-    switch(format)
-    {
-        case SerializationFormat::Binary:
-        {
-            QDataStream s(&file);
-            s.setByteOrder(QDataStream::BigEndian);
-            s.setVersion(QDataStream::Version::Qt_5_0);
-
-            quint8 magic = 0;
-            s >> magic;
-
-            if(magic != 0x34)
-                return nullptr;
-
-            QVersionNumber ver;
-            s >> ver;
-
-            if(ver > FormModSim::VERSION)
-                return nullptr;
-
-            int formId;
-            s >> formId;
-
-            if(s.status() != QDataStream::Ok)
-                return nullptr;
-
-            bool created = false;
-            frm = findMdiChild(formId);
-            if(!frm) {
-                frm = createMdiChild(formId);
-                created = true;
-            }
-
-            if(frm) {
-                frm->setProperty("Version", QVariant::fromValue(ver));
-                s >> frm;
-
-                if(s.status() != QDataStream::Ok && created) {
-                    closeMdiChild(frm);
-                }
-            }
-        }
-        break;
-
-        case SerializationFormat::Xml:
-        {
-            QXmlStreamReader xml(&file);
-            if(xml.readNextStartElement() && xml.name() == QLatin1String("FormModSim")) {
-                frm = createMdiChild(++_windowCounter);
-                if(frm) {
-                    xml >> frm;
-
-                    // close windows with the same title
-                    for(auto&& wnd : ui->mdiArea->subWindowList()) {
-                        const auto f = qobject_cast<FormModSim*>(wnd->widget());
-                        if(f != nullptr && f != frm && f->windowTitle() == frm->windowTitle()) {
-                            wnd->close();
-                        }
-                    }
-                }
-            }
-        }
-        break;
-    }
-
-    if(frm) {
-        frm->setFilename(filename);
-
-        addRecentFile(filename);
-        _windowCounter = qMax(frm->formId(), _windowCounter);
-    }
-
-    return frm;
-}
-
-///
-/// \brief MainWindow::saveMdiChild
-/// \param frm
-/// \param format
-///
-void MainWindow::saveMdiChild(FormModSim* frm, SerializationFormat format)
-{
-    if(!frm) return;
-
-    QFile file(frm->filename());
-    if(!file.open(QFile::WriteOnly))
-        return;
-
-    switch(format)
-    {
-        case SerializationFormat::Binary:
-        {
-            QDataStream s(&file);
-            s.setByteOrder(QDataStream::BigEndian);
-            s.setVersion(QDataStream::Version::Qt_5_0);
-
-            // magic number
-            s << (quint8)0x34;
-
-            // version number
-            s << FormModSim::VERSION;
-
-            // form
-            s << frm;
-        }
-        break;
-
-        case SerializationFormat::Xml:
-        {
-            QXmlStreamWriter w(&file);
-            w.setAutoFormatting(true);
-            w.writeStartDocument();
-            w << frm;
-            w.writeEndDocument();
-        }
-        break;
-    }
-
-    addRecentFile(frm->filename());
-}
-
-///
-/// \brief MainWindow::closeMdiChild
-/// \param frm
-///
-void MainWindow::closeMdiChild(FormModSim* frm)
-{
-    for(auto&& wnd : ui->mdiArea->subWindowList()) {
-        const auto f = qobject_cast<FormModSim*>(wnd->widget());
-        if(f == frm) wnd->close();
-    }
-}
 
 ///
 /// \brief checkPathIsWritable
@@ -1933,89 +1669,59 @@ static QString getSettingsFilePath()
     if (canWriteFile(appFilePath))
         return appFilePath;
 
-    return QDir(QStandardPaths::writableLocation(QStandardPaths::ConfigLocation)).filePath(filename);
+    const QString relativePath =
+#ifdef Q_OS_WIN
+        filename;
+#else
+        QDir(APP_NAME).filePath(filename);
+#endif
+
+    return QDir(QStandardPaths::writableLocation(QStandardPaths::ConfigLocation)).filePath(relativePath);
 }
 
-
 ///
-/// \brief MainWindow::loadProfile
+/// \brief MainWindow::loadAppSettings
 /// \param filename
 /// \return
 ///
-bool MainWindow::loadProfile(const QString& filename)
+bool MainWindow::loadAppSettings(const QString& filename)
 {
     _profile = filename.isEmpty() ? getSettingsFilePath() : filename;
-    if(!QFile::exists(_profile)) return false;
+    if(!QFile::exists(_profile)) {
+        _newFormKind = ProjectFormKind::Data;
+        restoreNewFormKindIcon();
+        return false;
+    }
 
     QSettings m(_profile, QSettings::IniFormat, this);
 
-    restoreGeometry(m.value("WindowGeometry").toByteArray());
+    AppPreferences::instance().load(m);
+    _newFormKind = newFormKindFromSetting(
+        m.value(kNewFormKindKey, newFormKindToSetting(ProjectFormKind::Data)).toInt());
+    restoreNewFormKindIcon();
 
-    const auto viewMode = (QMdiArea::ViewMode)qBound(0, m.value("ViewMode", QMdiArea::SubWindowView).toInt(), 1);
-    ui->mdiArea->setViewMode(viewMode);
+    const QByteArray geometry = m.value("WindowGeometry").toByteArray();
+    restoreGeometry(geometry);
+    restoreState(m.value("WindowState").toByteArray());
 
     statusBar()->setVisible(m.value("StatusBar", true).toBool());
-
-    const auto displaybarArea = (Qt::ToolBarArea)qBound(0, m.value("DisplayBarArea", Qt::TopToolBarArea).toInt(), 0xf);
-    const auto displaybarBreak = m.value("DisplayBarBreak").toBool();
-    if(displaybarBreak) addToolBarBreak(displaybarArea);
-    addToolBar(displaybarArea, ui->toolBarDisplay);
-
-    const auto scriptbarArea = (Qt::ToolBarArea)qBound(0, m.value("ScriptBarArea", Qt::TopToolBarArea).toInt(), 0xf);
-    const auto scriptbarBreak = m.value("ScriptBarBreak").toBool();
-    if(scriptbarBreak) addToolBarBreak(scriptbarArea);
-    addToolBar(scriptbarArea, ui->toolBarScript);
-
-    const auto editbarArea = (Qt::ToolBarArea)qBound(0, m.value("EditBarArea", Qt::TopToolBarArea).toInt(), 0xf);
-    const auto editbarBreak = m.value("EditBarBreak").toBool();
-    if(editbarBreak) addToolBarBreak(editbarArea);
-    addToolBar(editbarArea, ui->toolBarEdit);
-
-    _lang = m.value("Language", translationLang()).toString();
+    _lang = m.value("Language", "system").toString();
     setLanguage(_lang);
 
-    _savePath = m.value("SavePath").toString();
-
-    ModbusDefinitions defs;
-    m >> defs;
-    _mbMultiServer.setModbusDefinitions(defs);
-
-    m >> qobject_cast<MenuConnect*>(ui->actionConnect->menu());
-
-    const QStringList groups = m.childGroups();
-    for (const QString& g : groups) {
-        if (g.startsWith("Form_")) {
-            m.beginGroup(g);
-            const auto id = m.value("FromId", ++_windowCounter).toInt();
-            auto frm = createMdiChild(id);
-            m >> frm;
-            frm->show();
-            m.endGroup();
-        }
-    }
-
-    // activate window
-    const auto activeWindowTitle = m.value("ActiveWindow").toString();
-    if(!activeWindowTitle.isEmpty()) {
-        for(auto&& wnd : ui->mdiArea->subWindowList())
-        {
-            const auto frm = qobject_cast<FormModSim*>(wnd->widget());
-            if(frm && frm->windowTitle() == activeWindowTitle) {
-                ui->mdiArea->setActiveSubWindow(wnd);
-                break;
-            }
-        }
-    }
-
-    restoreState(m.value("WindowState").toByteArray());
+    _project->setSavePath(m.value("SavePath").toString());
+    _recentProjects = m.value(kRecentProjectsKey).toStringList();
+    _recentProjects.removeAll(QString());
+    _recentProjects.removeDuplicates();
+    _lastProjectPath = m.value(kLastProjectPathKey).toString();
+    syncGlobalViewControls();
 
     return true;
 }
 
 ///
-/// \brief MainWindow::saveProfile
+/// \brief MainWindow::saveAppSettings
 ///
-void MainWindow::saveProfile()
+void MainWindow::saveAppSettings()
 {
     const QString filepath = _profile.isEmpty() ? getSettingsFilePath() : _profile;
     QSettings m(filepath, QSettings::IniFormat, this);
@@ -2023,35 +1729,346 @@ void MainWindow::saveProfile()
     m.clear();
     m.sync();
 
+    AppPreferences::instance().save(m);
     m.setValue("WindowGeometry", saveGeometry());
     m.setValue("WindowState", saveState());
-
-    const auto frm = currentMdiChild();
-    if(frm) m.setValue("ActiveWindow", frm->windowTitle());
-
-    m.setValue("ViewMode", ui->mdiArea->viewMode());
     m.setValue("StatusBar", statusBar()->isVisible());
-    m.setValue("DisplayBarArea", toolBarArea(ui->toolBarDisplay));
-    m.setValue("DisplayBarBreak", toolBarBreak(ui->toolBarDisplay));
-    m.setValue("ScriptBarArea", toolBarArea(ui->toolBarScript));
-    m.setValue("ScriptBarBreak", toolBarBreak(ui->toolBarScript));
-    m.setValue("EditBarArea", toolBarArea(ui->toolBarEdit));
-    m.setValue("EditBarBreak", toolBarBreak(ui->toolBarEdit));
     m.setValue("Language", _lang);
-    m.setValue("SavePath", _savePath);
+    m.setValue("SavePath", _project->savePath());
+    m.setValue(kNewFormKindKey, newFormKindToSetting(_newFormKind));
+    m.setValue(kRecentProjectsKey, _recentProjects);
+    m.setValue(kLastProjectPathKey, _lastProjectPath);
+}
 
-    m << _mbMultiServer.getModbusDefinitions();
+///
+/// \brief MainWindow::setupGlobalViewToolbar
+///
+void MainWindow::setupGlobalViewToolbar()
+{
+    _globalAddressBaseCombo = new AddressBaseComboBox(ui->toolBarMain);
+    _globalAddressBaseCombo->setMinimumWidth(84);
 
-    m << qobject_cast<MenuConnect*>(ui->actionConnect->menu());
+    _globalAddressBaseLabel = new QLabel(tr("Address Base"), ui->toolBarMain);
+    _globalAddressBaseWidget = new QWidget(ui->toolBarMain);
+    auto* layout = new QHBoxLayout(_globalAddressBaseWidget);
+    layout->setContentsMargins(9, 0, 9, 0);
+    layout->setSpacing(6);
+    layout->addWidget(_globalAddressBaseLabel);
+    layout->addWidget(_globalAddressBaseCombo);
 
-    const auto subWindowList = ui->mdiArea->subWindowList();
-    for(int i = 0; i < subWindowList.size(); ++i) {
-        const auto frm = qobject_cast<FormModSim*>(subWindowList[i]->widget());
-        if(frm) {
-            m.beginGroup("Form_" + QString::number(i + 1));
-            m.setValue("FromId", frm->formId());
-            m << frm;
-            m.endGroup();
+    QAction* insertBefore = ui->actionMbDefinitions;
+    const auto actions = ui->toolBarMain->actions();
+    const int defsIndex = actions.indexOf(ui->actionMbDefinitions);
+    if (defsIndex > 0 && actions.at(defsIndex - 1)->isSeparator())
+        insertBefore = actions.at(defsIndex - 1);
+
+    ui->toolBarMain->insertSeparator(insertBefore);
+    ui->toolBarMain->insertWidget(insertBefore, _globalAddressBaseWidget);
+    ui->toolBarMain->insertAction(insertBefore, ui->actionHexView);
+
+    connect(_globalAddressBaseCombo, &AddressBaseComboBox::addressBaseChanged, this, [this](AddressBase base) {
+        applyGlobalAddressBase(base);
+    });
+    connect(ui->actionHexView, &QAction::toggled, this, [this](bool checked) {
+        applyGlobalHexView(checked);
+    });
+}
+
+///
+/// \brief MainWindow::syncGlobalViewControls
+///
+void MainWindow::syncGlobalViewControls()
+{
+    const auto& prefs = AppPreferences::instance();
+
+    if (_globalAddressBaseCombo) {
+        const QSignalBlocker blocker(_globalAddressBaseCombo);
+        _globalAddressBaseCombo->setCurrentAddressBase(prefs.globalAddressBase());
+    }
+
+    const QSignalBlocker blocker(ui->actionHexView);
+    ui->actionHexView->setChecked(prefs.globalHexView());
+}
+
+///
+/// \brief MainWindow::applyGlobalViewStateToForm
+/// \param frm
+///
+void MainWindow::applyGlobalViewStateToForm(QWidget* frm)
+{
+    if (!frm)
+        return;
+
+    const auto& prefs = AppPreferences::instance();
+    if (auto* data = qobject_cast<FormDataView*>(frm)) {
+        data->setAddressBase(prefs.globalAddressBase());
+    } else if (auto* traffic = qobject_cast<FormTrafficView*>(frm)) {
+        traffic->setHexView(prefs.globalHexView());
+    } else if (auto* map = qobject_cast<FormDataMapView*>(frm)) {
+        map->setAddressBase(prefs.globalAddressBase());
+        map->setHexView(prefs.globalHexView());
+    }
+}
+
+///
+/// \brief MainWindow::updateMainToolbarState
+///
+void MainWindow::updateMainToolbarState()
+{
+    const bool hasProject = hasProjectContext();
+
+    ui->actionNew->setEnabled(true);
+    ui->actionOpenProject->setEnabled(true);
+    ui->actionSaveProject->setEnabled(hasProject);
+    ui->actionPrint->setEnabled(hasProject && ui->actionPrint->isEnabled());
+    ui->actionPrintSetup->setEnabled(hasProject && ui->actionPrintSetup->isEnabled());
+    ui->actionUndo->setEnabled(hasProject && ui->actionUndo->isEnabled());
+    ui->actionRedo->setEnabled(hasProject && ui->actionRedo->isEnabled());
+    ui->actionConnect->setEnabled(hasProject);
+    ui->actionDisconnect->setEnabled(hasProject);
+    ui->actionHexView->setEnabled(hasProject);
+    ui->actionMbDefinitions->setEnabled(hasProject);
+    ui->actionForceCoils->setEnabled(hasProject);
+    ui->actionForceDiscretes->setEnabled(hasProject);
+    ui->actionPresetInputRegs->setEnabled(hasProject);
+    ui->actionPresetHoldingRegs->setEnabled(hasProject);
+    ui->actionCloseProject->setEnabled(hasProject);
+
+    if (_globalAddressBaseWidget)
+        _globalAddressBaseWidget->setEnabled(hasProject);
+}
+
+///
+/// \brief MainWindow::applyGlobalAddressBase
+/// \param zeroBased
+/// \param persist
+///
+void MainWindow::applyGlobalAddressBase(AddressBase base, bool persist)
+{
+    auto& prefs = AppPreferences::instance();
+    if (persist)
+        prefs.setGlobalAddressBase(base);
+
+    for (auto* frm : _project->forms(ProjectFormKind::Data))
+        if (auto* data = qobject_cast<FormDataView*>(frm))
+            data->setAddressBase(base);
+
+    for (auto* frm : _project->forms(ProjectFormKind::DataMap))
+        if (auto* map = qobject_cast<FormDataMapView*>(frm))
+            map->setAddressBase(base);
+
+    forEachTypedForm(ui->mdiArea, [base](auto* frm) {
+        if (!frm || !frm->property(kSplitAutoCloneProperty).toBool())
+            return;
+
+        if (auto* data = qobject_cast<FormDataView*>(frm))
+            data->setAddressBase(base);
+        else if (auto* map = qobject_cast<FormDataMapView*>(frm))
+            map->setAddressBase(base);
+    });
+
+    syncGlobalViewControls();
+}
+
+///
+/// \brief MainWindow::applyGlobalHexView
+/// \param enabled
+/// \param persist
+///
+void MainWindow::applyGlobalHexView(bool enabled, bool persist)
+{
+    auto& prefs = AppPreferences::instance();
+    if (persist)
+        prefs.setGlobalHexView(enabled);
+
+    for (auto* frm : _project->forms(ProjectFormKind::Traffic))
+        if (auto* traffic = qobject_cast<FormTrafficView*>(frm))
+            traffic->setHexView(enabled);
+
+    for (auto* frm : _project->forms(ProjectFormKind::DataMap))
+        if (auto* map = qobject_cast<FormDataMapView*>(frm))
+            map->setHexView(enabled);
+
+    forEachTypedForm(ui->mdiArea, [enabled](auto* frm) {
+        if (!frm || !frm->property(kSplitAutoCloneProperty).toBool())
+            return;
+
+        if (auto* traffic = qobject_cast<FormTrafficView*>(frm))
+            traffic->setHexView(enabled);
+        else if (auto* map = qobject_cast<FormDataMapView*>(frm))
+            map->setHexView(enabled);
+    });
+
+    syncGlobalViewControls();
+}
+
+
+///
+/// \brief MainWindow::confirmSaveOnClose
+///
+bool MainWindow::confirmSaveOnClose()
+{
+    const auto button = QMessageBox::question(this,
+                                              tr("Save Project"),
+                                              tr("Save project before closing?"),
+                                              QMessageBox::Save | QMessageBox::No | QMessageBox::Cancel,
+                                              QMessageBox::Save);
+    if(button == QMessageBox::Cancel)
+        return false;
+
+    if(button != QMessageBox::Save)
+        return true;
+
+    if(!_projectFilePath.isEmpty()) {
+        if(saveProject(_projectFilePath)) {
+            addRecentProject(_projectFilePath);
+            return true;
+        }
+
+        return promptSaveProjectAs(projectSavePathInProfileDir());
+    }
+
+    return promptSaveProjectAs();
+}
+
+///
+/// \brief MainWindow::promptSaveProjectAs
+/// \param initialPath
+/// \return
+///
+bool MainWindow::promptSaveProjectAs(const QString& initialPath)
+{
+    QStringList filters;
+    filters << tr("Project files (*.omsim)");
+
+    const QString defaultPath = _projectFilePath.isEmpty()
+        ? _project->savePath() + "/" + projectName() + ".omsim"
+        : _projectFilePath;
+    const QString dialogPath = initialPath.isEmpty() ? defaultPath : initialPath;
+    auto filename = QFileDialog::getSaveFileName(this, QString(), dialogPath, filters.join(";;"));
+
+    if(filename.isEmpty())
+        return false;
+
+    if(!filename.endsWith(".omsim", Qt::CaseInsensitive))
+        filename.append(".omsim");
+
+    _project->setSavePath(QFileInfo(filename).absoluteDir().absolutePath());
+    if(!saveProject(filename))
+        return false;
+
+    addRecentProject(QFileInfo(filename).absoluteFilePath());
+    return true;
+}
+
+///
+/// \brief MainWindow::projectSavePathInProfileDir
+/// \return
+///
+QString MainWindow::projectSavePathInProfileDir() const
+{
+    const QString baseName = projectName().isEmpty() ? tr("Untitled") : projectName();
+    const QString documentsDir = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
+    if (!documentsDir.isEmpty())
+        return QDir(documentsDir).filePath(baseName + ".omsim");
+
+    const QString homeDir = QStandardPaths::writableLocation(QStandardPaths::HomeLocation);
+    if (!homeDir.isEmpty())
+        return QDir(homeDir).filePath(baseName + ".omsim");
+
+    return baseName + ".omsim";
+}
+
+///
+/// \brief MainWindow::hasProjectContext
+///
+bool MainWindow::hasProjectContext() const
+{
+    return !_projectFilePath.isEmpty()
+        || _project->firstMdiChild() != nullptr
+        || !_project->closedForms().isEmpty();
+}
+
+///
+/// \brief MainWindow::addRecentProject
+///
+void MainWindow::addRecentProject(const QString& filePath)
+{
+    if(filePath.isEmpty())
+        return;
+
+    const QString absolutePath = QFileInfo(filePath).absoluteFilePath();
+    if(absolutePath.isEmpty())
+        return;
+
+    for (int i = _recentProjects.size() - 1; i >= 0; --i) {
+        if (_recentProjects[i].compare(absolutePath, Qt::CaseInsensitive) == 0)
+            _recentProjects.removeAt(i);
+    }
+    _recentProjects.prepend(absolutePath);
+    while (_recentProjects.size() > kMaxRecentProjects)
+        _recentProjects.removeLast();
+
+    rebuildRecentProjectsMenu();
+}
+
+///
+/// \brief MainWindow::rebuildRecentProjectsMenu
+///
+void MainWindow::rebuildRecentProjectsMenu()
+{
+    if(!_openRecentMenu)
+        return;
+
+    _openRecentMenu->clear();
+    QStringList existing;
+    existing.reserve(_recentProjects.size());
+    for (const auto& path : _recentProjects) {
+        if(path.isEmpty())
+            continue;
+        if(!QFile::exists(path))
+            continue;
+        existing.append(path);
+    }
+    _recentProjects = existing;
+
+    if(_recentProjects.isEmpty()) {
+        auto* empty = _openRecentMenu->addAction(tr("No Recent Projects"));
+        empty->setEnabled(false);
+    } else {
+        for(const auto& path : _recentProjects) {
+            auto* action = _openRecentMenu->addAction(path);
+            connect(action, &QAction::triggered, this, [this, path]() {
+                openRecentProject(path);
+            });
         }
     }
+
+    _openRecentMenu->addSeparator();
+    _clearRecentAction = _openRecentMenu->addAction(tr("Clear List"));
+    _clearRecentAction->setEnabled(!_recentProjects.isEmpty());
+    connect(_clearRecentAction, &QAction::triggered, this, &MainWindow::clearRecentProjects);
+}
+
+///
+/// \brief MainWindow::clearRecentProjects
+///
+void MainWindow::clearRecentProjects()
+{
+    _recentProjects.clear();
+    rebuildRecentProjectsMenu();
+}
+
+///
+/// \brief MainWindow::openRecentProject
+///
+void MainWindow::openRecentProject(const QString& filePath)
+{
+    if(!QFile::exists(filePath)) {
+        _recentProjects.removeAll(filePath);
+        rebuildRecentProjectsMenu();
+        return;
+    }
+
+    loadProject(filePath);
 }

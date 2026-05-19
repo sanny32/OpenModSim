@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file script.h
+/// \brief Declares the script interfaces.
+///
+
 #ifndef SCRIPT_H
 #define SCRIPT_H
 
@@ -33,3 +41,4 @@ private:
 };
 
 #endif // SCRIPT_H
+

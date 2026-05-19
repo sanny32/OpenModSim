@@ -1,3 +1,11 @@
+﻿// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file jscompleter.cpp
+/// \brief Implements the jscompleter functionality.
+///
+
 #include <QWidget>
 #include <QMetaProperty>
 #include <QStringListModel>
@@ -6,6 +14,7 @@
 #include "storage.h"
 #include "server.h"
 #include "jscompleter.h"
+#include "themedicons.h"
 
 ///
 /// \brief The MethodMetaType enum
@@ -117,9 +126,9 @@ void addMetaEnum(const QMetaObject& metaObject, const char* enumName)
 ///
 JSCompleterModel::JSCompleterModel(QObject *parent)
     : QAbstractListModel(parent)
-    ,_iconProp(":/res/iconProp.png")
-    ,_iconFunc(":/res/iconFunc.png")
-    ,_iconEnum(":/res/iconEnum.png")
+    ,_iconProp(themedIcon(QStringLiteral("omodsim/js-prop")))
+    ,_iconFunc(themedIcon(QStringLiteral("omodsim/js-func")))
+    ,_iconEnum(themedIcon(QStringLiteral("omodsim/js-enum")))
 {
     if(!_completerMap.contains(console::staticMetaObject.className()))
     {
@@ -240,4 +249,5 @@ void JSCompleter::setCompletionKey(const QString& key)
 {
     ((JSCompleterModel*)model())->setCompletionKey(key);
 }
+
 

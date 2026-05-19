@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file dialogsetupserialport.h
+/// \brief Declares the dialogsetupserialport interfaces.
+///
+
 #ifndef DIALOGSETUPSERIALPORT_H
 #define DIALOGSETUPSERIALPORT_H
 
@@ -18,6 +26,9 @@ public:
 
     void accept() override;
 
+protected:
+    void changeEvent(QEvent* event) override;
+
 private slots:
     void on_comboBoxFlowControl_currentIndexChanged(int);
 
@@ -29,3 +40,4 @@ private:
 };
 
 #endif // DIALOGSETUPSERIALPORT_H
+

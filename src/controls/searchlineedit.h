@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file searchlineedit.h
+/// \brief Declares the searchlineedit interfaces.
+///
+
 #ifndef SEARCHLINEEDIT_H
 #define SEARCHLINEEDIT_H
 
@@ -24,3 +32,4 @@ private slots:
 };
 
 #endif // SEARCHLINEEDIT_H
+

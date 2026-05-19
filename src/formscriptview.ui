@@ -1,0 +1,82 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>FormScriptView</class>
+ <widget class="QWidget" name="FormScriptView">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>866</width>
+    <height>410</height>
+   </rect>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <property name="spacing">
+    <number>0</number>
+   </property>
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
+   <item>
+    <widget class="ToolBar" name="toolBarScript">
+     <addaction name="actionRunScript"/>
+     <addaction name="actionStopScript"/>
+    </widget>
+   </item>
+   <item>
+    <widget class="JScriptControl" name="scriptControl">
+     <property name="frameShape">
+      <enum>QFrame::WinPanel</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Sunken</enum>
+     </property>
+    </widget>
+   </item>
+  </layout>
+  <action name="actionRunScript">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/res/icons/fallback/run-script.png</normaloff>:/res/icons/fallback/run-script.png</iconset>
+   </property>
+   <property name="text">
+    <string>Run Script</string>
+   </property>
+  </action>
+  <action name="actionStopScript">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/res/icons/fallback/stop-script.png</normaloff>:/res/icons/fallback/stop-script.png</iconset>
+   </property>
+   <property name="text">
+    <string>Stop Script</string>
+   </property>
+  </action>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>ToolBar</class>
+   <extends>QToolBar</extends>
+   <header>toolbar.h</header>
+  </customwidget>
+  <customwidget>
+   <class>JScriptControl</class>
+   <extends>QFrame</extends>
+   <header>jscriptcontrol.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <resources>
+  <include location="resources.qrc"/>
+ </resources>
+ <connections/>
+</ui>

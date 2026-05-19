@@ -1,3 +1,11 @@
+﻿// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file numericlineedit.cpp
+/// \brief Implements the numericlineedit functionality.
+///
+
 #include <float.h>
 #include <QCoreApplication>
 #include <QIcon>
@@ -5,9 +13,12 @@
 #include <QKeyEvent>
 #include <QResizeEvent>
 #include <QIntValidator>
+#include <QRegularExpression>
+#include <QRegularExpressionValidator>
 #include <QStyle>
 #include <QStyleOptionToolButton>
 #include <QToolButton>
+#include "themedicons.h"
 #include "ansiutils.h"
 #include "qhexvalidator.h"
 #include "quintvalidator.h"
@@ -23,7 +34,7 @@ class HexViewButton final : public QToolButton
 public:
     explicit HexViewButton(QWidget* parent = nullptr)
         : QToolButton(parent)
-        , _icon(":/res/icon-hex.svg")
+        , _icon(themedIcon(QStringLiteral("omodsim/hex")))
     {
         setCheckable(true);
         setAutoRaise(true);
@@ -144,6 +155,7 @@ void NumericLineEdit::setInputMode(InputMode mode)
         switch(mode)
         {
             case HexMode:
+            case BinaryMode:
             case AnsiMode:
                 _minValue = (ushort)0;
                 _maxValue = USHRT_MAX;
@@ -411,6 +423,24 @@ void NumericLineEdit::internalSetValue(QVariant value)
         }
         break;
 
+        case BinaryMode:
+        {
+            value = qBound(_minValue.toInt() > 0 ? _minValue.toUInt() : 0, value.toUInt(), _maxValue.toUInt());
+            if(_leadingZeroes)
+            {
+                const auto text = QStringLiteral("%1").arg(value.toUInt(), _leadingZeroWidth, 2, QLatin1Char('0'));
+                if(text != QLineEdit::text())
+                    QLineEdit::setText(text);
+            }
+            else
+            {
+                const auto text = QString::number(value.toUInt(), 2);
+                if(text != QLineEdit::text())
+                    QLineEdit::setText(text);
+            }
+        }
+        break;
+
         case AnsiMode:
         {
             value = qBound(_minValue.toInt() > 0 ? _minValue.toUInt() : 0, value.toUInt(), _maxValue.toUInt());
@@ -423,7 +453,7 @@ void NumericLineEdit::internalSetValue(QVariant value)
         case FloatMode:
         {
             value = qBound(_minValue.toFloat(), value.toFloat(), _maxValue.toFloat());
-            const auto text = QLocale().toString(value.toFloat());
+            const auto text = QLocale().toString(value.toFloat(), 'g');
             if(text != QLineEdit::text())
                 QLineEdit::setText(text);
         }
@@ -432,7 +462,7 @@ void NumericLineEdit::internalSetValue(QVariant value)
         case DoubleMode:
         {
             value = qBound(_minValue.toDouble(), value.toDouble(), _maxValue.toDouble());
-            const auto text = QLocale().toString(value.toFloat());
+            const auto text = QLocale().toString(value.toDouble(), 'g', QLocale::FloatingPointShortest);
             if(text != QLineEdit::text())
                 QLineEdit::setText(text);
         }
@@ -543,6 +573,15 @@ void NumericLineEdit::updateValue()
         {
             bool ok;
             const auto value = text().toUInt(&ok, 16);
+            if(ok) internalSetValue(value);
+            else internalSetValue(_value);
+        }
+        break;
+
+        case BinaryMode:
+        {
+            bool ok;
+            const auto value = text().toUInt(&ok, 2);
             if(ok) internalSetValue(value);
             else internalSetValue(_value);
         }
@@ -743,6 +782,14 @@ void NumericLineEdit::on_textChanged(const QString& text)
         }
         break;
 
+        case BinaryMode:
+        {
+            bool ok;
+            const auto valueUInt = text.toUInt(&ok, 2);
+            if(ok) value = qBound(_minValue.toUInt(), valueUInt, _maxValue.toUInt());
+        }
+        break;
+
         case AnsiMode:
         {
             const uint valueUInt = uint16FromAnsi(text.toLocal8Bit());
@@ -872,14 +919,30 @@ void NumericLineEdit::on_rangeChanged(const QVariant& bottom, const QVariant& to
         }
         break;
 
+        case BinaryMode:
+        {
+            const int nums = qMax(1, QString::number(top.toUInt(), 2).length());
+            _leadingZeroWidth = nums;
+            setMaxLength(nums);
+            const QRegularExpression re(_allowEmptyValue
+                ? QStringLiteral("^$|^[01]{1,%1}$").arg(nums)
+                : QStringLiteral("^[01]{1,%1}$").arg(nums));
+            setValidator(new QRegularExpressionValidator(re, this));
+        }
+        break;
+
         case AnsiMode:
             setMaxLength(2);
         break;
 
         case FloatMode:
+            setMaxLength(INT16_MAX);
+            setValidator(new QDoubleValidatorEx(bottom.toDouble(), top.toDouble(), 9, _allowEmptyValue, this));
+        break;
+
         case DoubleMode:
             setMaxLength(INT16_MAX);
-            setValidator(new QDoubleValidatorEx(bottom.toDouble(), top.toDouble(), 6, _allowEmptyValue, this));
+            setValidator(new QDoubleValidatorEx(bottom.toDouble(), top.toDouble(), 17, _allowEmptyValue, this));
         break;
 
         case Int64Mode:
@@ -929,3 +992,4 @@ void NumericLineEdit::on_hexViewToggled(bool on)
     on_rangeChanged(_minValue, _maxValue);
     emit hexViewChanged(on);
 }
+

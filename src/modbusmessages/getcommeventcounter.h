@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file getcommeventcounter.h
+/// \brief Declares the getcommeventcounter interfaces.
+///
+
 #ifndef GETCOMMEVENTCOUNTER_H
 #define GETCOMMEVENTCOUNTER_H
 
@@ -94,3 +102,4 @@ public:
 };
 
 #endif // GETCOMMEVENTCOUNTER_H
+

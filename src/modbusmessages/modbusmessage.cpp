@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file modbusmessage.cpp
+/// \brief Implements the modbusmessage functionality.
+///
+
 #include "modbusmessages.h"
 
 
@@ -10,6 +18,9 @@
 /// \param timestamp
 /// \param request
 /// \return
+///
+///
+/// \brief ModbusMessage::create
 ///
 QSharedPointer<const ModbusMessage> ModbusMessage::create(const QModbusPdu& pdu, ProtocolType protocol, int deviceId, int transactionId, const QDateTime& timestamp, bool request)
 {
@@ -99,6 +110,9 @@ QSharedPointer<const ModbusMessage> ModbusMessage::create(const QModbusPdu& pdu,
 /// \param timestamp
 /// \param request
 /// \return
+///
+///
+/// \brief ModbusMessage::create
 ///
 QSharedPointer<const ModbusMessage> ModbusMessage::create(const QByteArray& data, ProtocolType protocol,  const QDateTime& timestamp, bool request)
 {
@@ -192,3 +206,4 @@ QSharedPointer<const ModbusMessage> ModbusMessage::create(const QByteArray& data
             return QSharedPointer<const ModbusMessage>(new ModbusMessage(data, protocol, timestamp, request));
     }
 }
+

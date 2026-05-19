@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file aboutdatawidget.h
+/// \brief Declares the aboutdatawidget interfaces.
+///
+
 #ifndef ABOUTDATAWIDGET_H
 #define ABOUTDATAWIDGET_H
 
@@ -43,3 +51,4 @@ private:
 };
 
 #endif // ABOUTDATAWIDGET_H
+

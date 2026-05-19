@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file qmodbusadu.h
+/// \brief Declares the qmodbusadu interfaces.
+///
+
 #ifndef QMODBUSADU_H
 #define QMODBUSADU_H
 
@@ -80,3 +88,4 @@ protected:
 };
 
 #endif // QMODBUSADU_H
+

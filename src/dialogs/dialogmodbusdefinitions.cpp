@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file dialogmodbusdefinitions.cpp
+/// \brief Implements the dialogmodbusdefinitions functionality.
+///
+
 #include <QPushButton>
 #include "dialogmodbusdefinitions.h"
 #include "ui_dialogmodbusdefinitions.h"
@@ -16,7 +24,7 @@ DialogModbusDefinitions::DialogModbusDefinitions(ModbusMultiServer& srv, QWidget
 
     const QList<QCheckBox*> allCheckBoxes = findChildren<QCheckBox*>();
     for (QCheckBox* checkBox : allCheckBoxes) {
-        #if QT_VERSION >= QT_VERSION_CHECK(6, 9, 0)
+        #if QT_VERSION >= QT_VERSION_CHECK(6, 7, 0)
             connect(checkBox, &QCheckBox::checkStateChanged, this, [this] {
                 ui->buttonBox->button(QDialogButtonBox::Apply)->setEnabled(true);
                 ui->spinBoxDelay->setEnabled(ui->checkBoxDelay->isChecked());
@@ -30,6 +38,35 @@ DialogModbusDefinitions::DialogModbusDefinitions(ModbusMultiServer& srv, QWidget
             });
         #endif
     }
+
+    auto syncExclusiveModes = [this](QCheckBox* changed) {
+        QSignalBlocker globalBlocker(ui->checkBoxGlobalMap);
+        QSignalBlocker autoAddBlocker(ui->checkBoxAutoAddRegistersOnRequest);
+        if (changed == ui->checkBoxAutoAddRegistersOnRequest && ui->checkBoxAutoAddRegistersOnRequest->isChecked())
+            ui->checkBoxGlobalMap->setChecked(false);
+        else if (changed == ui->checkBoxGlobalMap && ui->checkBoxGlobalMap->isChecked())
+            ui->checkBoxAutoAddRegistersOnRequest->setChecked(false);
+    };
+
+    #if QT_VERSION >= QT_VERSION_CHECK(6, 7, 0)
+        connect(ui->checkBoxAutoAddRegistersOnRequest, &QCheckBox::checkStateChanged, this,
+                [syncExclusiveModes, this](Qt::CheckState) {
+                    syncExclusiveModes(ui->checkBoxAutoAddRegistersOnRequest);
+                });
+        connect(ui->checkBoxGlobalMap, &QCheckBox::checkStateChanged, this,
+                [syncExclusiveModes, this](Qt::CheckState) {
+                    syncExclusiveModes(ui->checkBoxGlobalMap);
+                });
+    #else
+        connect(ui->checkBoxAutoAddRegistersOnRequest, &QCheckBox::stateChanged, this,
+                [syncExclusiveModes, this](int) {
+                    syncExclusiveModes(ui->checkBoxAutoAddRegistersOnRequest);
+                });
+        connect(ui->checkBoxGlobalMap, &QCheckBox::stateChanged, this,
+                [syncExclusiveModes, this](int) {
+                    syncExclusiveModes(ui->checkBoxGlobalMap);
+                });
+    #endif
 
     const QList<QSpinBox*> allSpinBoxes = findChildren<QSpinBox*>();
     for (QSpinBox* spinBox : allSpinBoxes) {
@@ -56,6 +93,20 @@ DialogModbusDefinitions::DialogModbusDefinitions(ModbusMultiServer& srv, QWidget
 DialogModbusDefinitions::~DialogModbusDefinitions()
 {
     delete ui;
+}
+
+///
+/// rief DialogModbusDefinitions::changeEvent
+///
+///
+/// \brief DialogModbusDefinitions::changeEvent
+///
+void DialogModbusDefinitions::changeEvent(QEvent* event)
+{
+    if (event->type() == QEvent::LanguageChange)
+        ui->retranslateUi(this);
+
+    QDialog::changeEvent(event);
 }
 
 ///
@@ -86,6 +137,7 @@ void DialogModbusDefinitions::apply()
     ModbusDefinitions defs;
     defs.AddrSpace = ui->comboBoxAddrSpace->currentAddressSpace();
     defs.UseGlobalUnitMap = ui->checkBoxGlobalMap->isChecked();
+    defs.AutoAddRegistersOnRequest = ui->checkBoxAutoAddRegistersOnRequest->isChecked();
     defs.ErrorSimulations.setResponseIncorrectId(ui->checkBoxErrIncorrentId->isChecked());
     defs.ErrorSimulations.setResponseIllegalFunction(ui->checkBoxIllegalFunc->isChecked());
     defs.ErrorSimulations.setResponseDeviceBusy(ui->checkBoxBusy->isChecked());
@@ -108,6 +160,7 @@ void DialogModbusDefinitions::apply()
 void DialogModbusDefinitions::updateModbusDefinitions(const ModbusDefinitions& defs)
 {
     ui->checkBoxGlobalMap->setChecked(defs.UseGlobalUnitMap);
+    ui->checkBoxAutoAddRegistersOnRequest->setChecked(defs.AutoAddRegistersOnRequest);
     ui->comboBoxAddrSpace->setCurrentAddressSpace(defs.AddrSpace);
 
     ui->checkBoxErrIncorrentId->setChecked(defs.ErrorSimulations.responseIncorrectId());
@@ -125,3 +178,4 @@ void DialogModbusDefinitions::updateModbusDefinitions(const ModbusDefinitions& d
 
     ui->buttonBox->button(QDialogButtonBox::Apply)->setEnabled(false);
 }
+

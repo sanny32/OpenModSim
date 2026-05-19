@@ -1,10 +1,20 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file modbusserver.h
+/// \brief Declares the modbusserver interfaces.
+///
+
 #ifndef IMODBUSSERVER_H
 #define IMODBUSSERVER_H
 
 #include <deque>
 #include <array>
+#include <functional>
 #include <QLoggingCategory>
 #include <QModbusServer>
+#include <QSharedPointer>
 #include "qcountedset.h"
 #include "modbusdataunitmap.h"
 #include "qmodbuscommevent.h"
@@ -43,6 +53,9 @@ enum SubFunctionCode {
 };
 }
 
+using RequestHandlerFunc = std::function<bool(const QModbusPdu&, int, QModbusResponse&)>;
+using RequestHandlerPtr  = QSharedPointer<RequestHandlerFunc>;
+
 ///
 /// \brief The ModbusServer class
 ///
@@ -74,6 +87,8 @@ public:
 
     virtual bool setMap(const ModbusDataUnitMap &map, int serverAddress);
     virtual bool processesBroadcast() const { return false; }
+
+    void setRequestHandler(const RequestHandlerPtr& handler) { _requestHandler = handler; }
 
     ModbusDefinitions getDefinitions() const { return _definitions; }
     void setDefinitions(const ModbusDefinitions& defs) {
@@ -111,7 +126,8 @@ signals:
 
     void stateChanged(QModbusDevice::State state);
     void errorOccurred(QModbusDevice::Error error, int serverAddress);
-    void dataWritten(int serverAddress, QModbusDataUnit::RegisterType table, int address, int size);
+    void dataWritten(int serverAddress, QModbusDataUnit::RegisterType table, int address, int size,
+                     const QString& clientAddress, quint16 clientPort);
 
 protected:
     enum Counter {
@@ -134,12 +150,15 @@ protected:
 
     void setState(QModbusDevice::State newState);
     void setError(const QString &errorText, QModbusDevice::Error error, int serverAddress = 0);
+    void setCurrentRequestClient(const QString& clientAddress, quint16 clientPort);
+    void clearCurrentRequestClient();
 
     virtual bool open() = 0;
     virtual void close() = 0;
 
     virtual bool writeData(const QModbusDataUnit &unit, int serverAddress);
     virtual bool readData(QModbusDataUnit *newData, int serverAddress) const;
+    bool ensureAutoAddRange(QModbusDataUnit::RegisterType table, quint16 address, quint16 count, int serverAddress) const;
 
     virtual bool matchingServerAddress(quint8 unitId) const;
 
@@ -178,16 +197,19 @@ protected:
     void storeModbusCommEvent(const QModbusCommEvent &eventByte);
 
 private:
+    RequestHandlerPtr _requestHandler;
     ModbusDefinitions _definitions;
     QCountedSet<int> _serverAddresses;
     QHash<int, std::array<quint16, 20>> _counters;
     QHash<int, QHash<int, QVariant>> _serversOptions;
-    QHash<int, ModbusDataUnitMap> _modbusDataUnitMaps;
+    mutable QHash<int, ModbusDataUnitMap> _modbusDataUnitMaps;
     std::deque<quint8> _commEventLog;
 
     QModbusDevice::State _state = QModbusDevice::UnconnectedState;
     QHash<int, QModbusDevice::Error> _errors;
     QHash<int, QString> _errorsString;
+    QString _currentRequestClientAddress;
+    quint16 _currentRequestClientPort = 0;
 };
 
 Q_DECLARE_METATYPE(QModbusRequest)

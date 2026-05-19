@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file paritytypecombobox.cpp
+/// \brief Implements the paritytypecombobox functionality.
+///
+
 #include "paritytypecombobox.h"
 
 ///
@@ -7,9 +15,20 @@
 ParityTypeComboBox::ParityTypeComboBox(QWidget* parent)
     :QComboBox(parent)
 {
-    addItem(tr("ODD"), QSerialPort::OddParity);
-    addItem(tr("EVEN"), QSerialPort::EvenParity);
-    addItem(tr("NONE"), QSerialPort::NoParity);
+    setSizeAdjustPolicy(QComboBox::AdjustToContents);
+    retranslateUi();
+}
+
+///
+/// \brief ParityTypeComboBox::changeEvent
+/// \param event
+///
+void ParityTypeComboBox::changeEvent(QEvent* event)
+{
+    if(event->type() == QEvent::LanguageChange) {
+        retranslateUi();
+    }
+    QComboBox::changeEvent(event);
 }
 
 ///
@@ -30,3 +49,20 @@ void ParityTypeComboBox::setCurrentParity(QSerialPort::Parity parity)
     const auto idx = findData(parity);
     setCurrentIndex(idx);
 }
+
+///
+/// \brief ParityTypeComboBox::retranslateUi
+///
+void ParityTypeComboBox::retranslateUi()
+{
+    const auto current = currentParity();
+    const QSignalBlocker blocker(this);
+
+    clear();
+    addItem(tr("ODD"), QSerialPort::OddParity);
+    addItem(tr("EVEN"), QSerialPort::EvenParity);
+    addItem(tr("NONE"), QSerialPort::NoParity);
+
+    setCurrentParity(current);
+}
+

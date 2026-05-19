@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file quintvalidator.cpp
+/// \brief Implements the quintvalidator functionality.
+///
+
 #include "quintvalidator.h"
 
 ///
@@ -73,3 +81,4 @@ void QUIntValidator::fixup(QString& input) const
     if(input.isEmpty())
         input = QString::number(_bottom);
 }
+

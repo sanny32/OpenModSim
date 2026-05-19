@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file readholdingregisters.h
+/// \brief Declares the readholdingregisters interfaces.
+///
+
 #ifndef READHOLDINGREGISTERS_H
 #define READHOLDINGREGISTERS_H
 
@@ -120,3 +128,4 @@ public:
 };
 
 #endif // READHOLDINGREGISTERS_H
+

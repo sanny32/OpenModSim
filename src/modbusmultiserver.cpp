@@ -1,7 +1,47 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file modbusmultiserver.cpp
+/// \brief Implements the modbusmultiserver functionality.
+///
+
+#include <algorithm>
 #include "numericutils.h"
 #include "modbustcpserver.h"
 #include "modbusrtuserialserver.h"
 #include "modbusmultiserver.h"
+
+namespace {
+///
+/// \brief normalizedDeviceIds
+/// \param deviceIds
+/// \return
+///
+QList<int> normalizedDeviceIds(const QCountedSet<int>& deviceIds)
+{
+    auto ids = deviceIds.values();
+    std::sort(ids.begin(), ids.end());
+    return ids;
+}
+
+///
+/// \brief makeClientInfo
+/// \param connection
+/// \param address
+/// \param port
+/// \return
+///
+ModbusClientInfo makeClientInfo(const ConnectionDetails& connection, const QString& address, quint16 port)
+{
+    ModbusClientInfo info;
+    info.Connection = connection;
+    info.Address = address;
+    info.Port = port;
+    return info;
+}
+
+}
 
 ///
 /// \brief ModbusServer::ModbusServer
@@ -11,6 +51,9 @@ ModbusMultiServer::ModbusMultiServer(QObject *parent)
     : QObject{parent}
     ,_workerThread(new QThread(this))
 {
+    qRegisterMetaType<WriteSource>("WriteSource");
+    qRegisterMetaType<ModbusClientInfo>("ModbusClientInfo");
+
     moveToThread(_workerThread);
     _workerThread->start();
 
@@ -44,9 +87,14 @@ void ModbusMultiServer::addDeviceId(quint8 deviceId)
         return;
     }
 
-    _deviceIds.append(deviceId);
-    for(auto&& s : _modbusServerList)
-        s->addServerAddress(deviceId);
+    const bool isNew = !_deviceIds.contains(deviceId);
+    _deviceIds.insert(deviceId);
+    if (isNew) {
+        for(auto&& s : _modbusServerList)
+            s->addServerAddress(deviceId);
+        emit deviceIdsChanged(normalizedDeviceIds(_deviceIds));
+        emit deviceIdAdded(deviceId);
+    }
 }
 
 ///
@@ -63,9 +111,14 @@ void ModbusMultiServer::removeDeviceId(quint8 deviceId)
         return;
     }
 
-    _deviceIds.removeOne(deviceId);
-    for(auto&& s : _modbusServerList) {
-        s->removeServerAddress(deviceId);
+    if (_deviceIds.contains(deviceId)) {
+        _deviceIds.remove(deviceId);
+        if (!_deviceIds.contains(deviceId)) {
+            for(auto&& s : _modbusServerList)
+                s->removeServerAddress(deviceId);
+            emit deviceIdsChanged(normalizedDeviceIds(_deviceIds));
+            emit deviceIdRemoved(deviceId);
+        }
     }
 }
 
@@ -110,7 +163,7 @@ void ModbusMultiServer::setUseGlobalUnitMap(bool use)
 /// \param pointAddress
 /// \param length
 ///
-void ModbusMultiServer::addUnitMap(int id, quint8 deviceId, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, quint16 length)
+void ModbusMultiServer::addUnitMap(QUuid id, quint8 deviceId, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, quint16 length)
 {
     if(QThread::currentThread() != _workerThread)
     {
@@ -125,15 +178,17 @@ void ModbusMultiServer::addUnitMap(int id, quint8 deviceId, QModbusDataUnit::Reg
         _modbusDataUnitMaps[deviceId].setAddressSpace(_definitions.AddrSpace);
     }
 
-    _modbusDataUnitMaps[deviceId].addUnitMap(id, pointType, pointAddress, length);
+    const bool changed = _modbusDataUnitMaps[deviceId].addUnitMap(id, pointType, pointAddress, length);
     reconfigureServers();
+    if (changed)
+        emit unitMapAdded(id, deviceId, pointType, pointAddress, length);
 }
 
 ///
 /// \brief ModbusMultiServer::removeUnitMap
 /// \param id
 ///
-void ModbusMultiServer::removeUnitMap(int id, quint8 deviceId)
+void ModbusMultiServer::removeUnitMap(QUuid id, quint8 deviceId)
 {
     if(QThread::currentThread() != _workerThread)
     {
@@ -143,8 +198,32 @@ void ModbusMultiServer::removeUnitMap(int id, quint8 deviceId)
         return;
     }
 
-    _modbusDataUnitMaps[deviceId].removeUnitMap(id);
+    QModbusDataUnit removedUnit;
+    const bool hasRemovedUnit = _modbusDataUnitMaps[deviceId].unitMap(id, removedUnit);
+    const bool changed = _modbusDataUnitMaps[deviceId].removeUnitMap(id);
     reconfigureServers();
+    if (changed && hasRemovedUnit) {
+        emit unitMapRemoved(id, deviceId, removedUnit.registerType(),
+                            static_cast<quint16>(removedUnit.startAddress()),
+                            static_cast<quint16>(removedUnit.valueCount()));
+    }
+}
+
+///
+/// \brief ModbusMultiServer::registeredDeviceIds
+/// \return
+///
+QList<int> ModbusMultiServer::registeredDeviceIds() const
+{
+    if(QThread::currentThread() != _workerThread)
+    {
+        QList<int> result;
+        QMetaObject::invokeMethod(const_cast<ModbusMultiServer*>(this), [this, &result]() {
+            result = registeredDeviceIds();
+        }, Qt::BlockingQueuedConnection);
+        return result;
+    }
+    return _modbusDataUnitMaps.keys();
 }
 
 ///
@@ -233,13 +312,28 @@ QSharedPointer<ModbusServer> ModbusMultiServer::createModbusServer(const Connect
 
     if(modbusServer)
     {
-        connect(modbusServer.get(), &ModbusServer::modbusRequest, this, &ModbusMultiServer::request);
-        connect(modbusServer.get(), &ModbusServer::modbusResponse, this, &ModbusMultiServer::response);
+        connect(modbusServer.get(), &ModbusServer::modbusRequest, this, [this, modbusServer](QSharedPointer<const ModbusMessage> msg) {
+            const auto cd = modbusServer->property("ConnectionDetails").value<ConnectionDetails>();
+            emit request(msg);
+            emit requestOnConnection(cd, msg);
+        });
+        connect(modbusServer.get(), &ModbusServer::modbusResponse, this, [this, modbusServer](QSharedPointer<const ModbusMessage> msgReq, QSharedPointer<const ModbusMessage> msgResp) {
+            const auto cd = modbusServer->property("ConnectionDetails").value<ConnectionDetails>();
+            emit response(msgReq, msgResp);
+            emit responseOnConnection(cd, msgReq, msgResp);
+        });
         connect(modbusServer.get(), &ModbusServer::dataWritten, this, &ModbusMultiServer::on_dataWritten);
         connect(modbusServer.get(), &ModbusServer::stateChanged, this, &ModbusMultiServer::on_stateChanged);
         connect(modbusServer.get(), &ModbusServer::errorOccurred, this, &ModbusMultiServer::on_errorOccurred);
         connect(modbusServer.get(), &ModbusServer::rawDataReceived, this, &ModbusMultiServer::on_rawDataReceived);
         connect(modbusServer.get(), &ModbusServer::rawDataSended, this, &ModbusMultiServer::on_rawDataSended);
+
+        if (auto tcpServer = qobject_cast<ModbusTcpServer*>(modbusServer.get())) {
+            connect(tcpServer, &ModbusTcpServer::modbusClientConnected,
+                    this, &ModbusMultiServer::on_clientConnected);
+            connect(tcpServer, &ModbusTcpServer::modbusClientDisconnected,
+                    this, &ModbusMultiServer::on_clientDisconnected);
+        }
     }
 
     return modbusServer;
@@ -267,7 +361,7 @@ void ModbusMultiServer::connectDevice(const ConnectionDetails& cd)
     }
 
     modbusServer->removeAllServerAddresses();
-    for(auto&& deviceId: _deviceIds) {
+    for(auto&& deviceId: _deviceIds.values()) {
         modbusServer->addServerAddress(deviceId);
         modbusServer->setMap(_modbusDataUnitMaps[deviceId], deviceId);
 
@@ -336,6 +430,27 @@ QList<ConnectionDetails> ModbusMultiServer::connections() const
     return conns;
 }
 
+int ModbusMultiServer::connectedClientCount() const
+{
+    if(QThread::currentThread() != _workerThread)
+    {
+        int result = 0;
+        QMetaObject::invokeMethod(const_cast<ModbusMultiServer*>(this), [this, &result]() {
+            result = connectedClientCount();
+        }, Qt::BlockingQueuedConnection);
+        return result;
+    }
+
+    int count = 0;
+    for (auto&& s : _modbusServerList)
+    {
+        if (auto tcpServer = qobject_cast<ModbusTcpServer*>(s.get()))
+            count += tcpServer->connectedClientCount();
+    }
+
+    return count;
+}
+
 ///
 /// \brief ModbusMultiServer::getModbusDefinitions
 /// \return
@@ -360,16 +475,37 @@ void ModbusMultiServer::setModbusDefinitions(const ModbusDefinitions& defs)
     }
 
     _definitions = defs;
+    _definitions.normalize();
 
     for(auto& map : _modbusDataUnitMaps) {
-        map.setGlobalMap(defs.UseGlobalUnitMap);
+        map.setGlobalMap(_definitions.UseGlobalUnitMap);
+        map.setAddressSpace(_definitions.AddrSpace);
     }
 
     for(auto&& s : _modbusServerList) {
-        s->setDefinitions(defs);
+        s->setDefinitions(_definitions);
     }
 
     emit definitionsChanged(_definitions);
+}
+
+///
+/// \brief ModbusMultiServer::setRequestHandler
+/// \param handler
+///
+void ModbusMultiServer::setRequestHandler(const RequestHandlerPtr& handler)
+{
+    if(QThread::currentThread() != _workerThread)
+    {
+        QMetaObject::invokeMethod(this, [this, handler]() {
+            setRequestHandler(handler);
+        }, Qt::BlockingQueuedConnection);
+        return;
+    }
+
+    _requestHandler = handler;
+    for(auto&& s : _modbusServerList)
+        s->setRequestHandler(handler);
 }
 
 ///
@@ -379,6 +515,7 @@ void ModbusMultiServer::setModbusDefinitions(const ModbusDefinitions& defs)
 void ModbusMultiServer::addModbusServer(QSharedPointer<ModbusServer> server)
 {
     if(server && !_modbusServerList.contains(server)) {
+        server->setRequestHandler(_requestHandler);
         _modbusServerList.push_back(server);
     }
 }
@@ -458,27 +595,398 @@ QModbusDevice::State ModbusMultiServer::state(ConnectionType type, const QString
 ///
 QModbusDataUnit ModbusMultiServer::data(quint8 deviceId, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, quint16 length) const
 {
-    return _modbusDataUnitMaps[deviceId].getData(pointType, pointAddress, length);
+    if(QThread::currentThread() != _workerThread)
+    {
+        QModbusDataUnit result;
+        QMetaObject::invokeMethod(const_cast<ModbusMultiServer*>(this), [this, &result, deviceId, pointType, pointAddress, length]() {
+            result = data(deviceId, pointType, pointAddress, length);
+        }, Qt::BlockingQueuedConnection);
+        return result;
+    }
+
+    const auto item = _modbusDataUnitMaps.find(deviceId);
+    return (item != _modbusDataUnitMaps.end())
+        ? item->getData(pointType, pointAddress, length)
+        : QModbusDataUnit();
+}
+
+///
+/// \brief ModbusMultiServer::timestamp
+/// \param deviceId
+/// \param type
+/// \param address
+/// \return
+///
+QDateTime ModbusMultiServer::timestamp(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 address) const
+{
+    if(QThread::currentThread() != _workerThread)
+    {
+        QDateTime result;
+        QMetaObject::invokeMethod(const_cast<ModbusMultiServer*>(this), [this, &result, deviceId, type, address]() {
+            result = timestamp(deviceId, type, address);
+        }, Qt::BlockingQueuedConnection);
+        return result;
+    }
+
+    const auto it = _modbusDataUnitMaps.constFind(deviceId);
+    return (it != _modbusDataUnitMaps.constEnd())
+        ? it->timestamp(type, address)
+        : QDateTime();
+}
+
+///
+/// \brief ModbusMultiServer::timestampMap
+/// \param deviceId
+/// \param pointType
+/// \param pointAddress
+/// \param length
+/// \return
+///
+AddressTimestampMap ModbusMultiServer::timestampMap(quint8 deviceId, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, quint16 length) const
+{
+    if(QThread::currentThread() != _workerThread)
+    {
+        AddressTimestampMap result;
+        QMetaObject::invokeMethod(const_cast<ModbusMultiServer*>(this), [this, &result, deviceId, pointType, pointAddress, length]() {
+            result = timestampMap(deviceId, pointType, pointAddress, length);
+        }, Qt::BlockingQueuedConnection);
+        return result;
+    }
+
+    AddressTimestampMap result;
+    const auto it = _modbusDataUnitMaps.constFind(deviceId);
+    if (it == _modbusDataUnitMaps.constEnd())
+        return result;
+
+    const auto map = it->timestampMap(pointType, pointAddress, length);
+    for (auto jt = map.constBegin(); jt != map.constEnd(); ++jt) {
+        auto key = jt.key();
+        key.DeviceId = deviceId;
+        result.insert(key, jt.value());
+    }
+
+    return result;
+}
+
+///
+/// \brief ModbusMultiServer::timestampMap
+/// \return
+///
+AddressTimestampMap ModbusMultiServer::timestampMap() const
+{
+    if(QThread::currentThread() != _workerThread)
+    {
+        AddressTimestampMap result;
+        QMetaObject::invokeMethod(const_cast<ModbusMultiServer*>(this), [this, &result]() {
+            result = timestampMap();
+        }, Qt::BlockingQueuedConnection);
+        return result;
+    }
+
+    AddressTimestampMap result;
+    for(auto it = _modbusDataUnitMaps.constBegin(); it != _modbusDataUnitMaps.constEnd(); ++it)
+    {
+        const auto deviceId = static_cast<quint8>(it.key());
+        const auto map = it->timestampMap();
+        for (auto jt = map.constBegin(); jt != map.constEnd(); ++jt) {
+            auto key = jt.key();
+            key.DeviceId = deviceId;
+            result.insert(key, jt.value());
+        }
+    }
+
+    return result;
+}
+
+///
+/// \brief ModbusMultiServer::setTimestamp
+/// \param deviceId
+/// \param pointType
+/// \param pointAddress
+/// \param timestamp
+///
+void ModbusMultiServer::setTimestamp(quint8 deviceId, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, const QDateTime& timestamp)
+{
+    if(QThread::currentThread() != _workerThread)
+    {
+        QMetaObject::invokeMethod(this, [this, deviceId, pointType, pointAddress, timestamp]() {
+            setTimestamp(deviceId, pointType, pointAddress, timestamp);
+        }, Qt::BlockingQueuedConnection);
+        return;
+    }
+
+    if(!_modbusDataUnitMaps.contains(deviceId)) {
+        _modbusDataUnitMaps[deviceId].setGlobalMap(_definitions.UseGlobalUnitMap);
+        _modbusDataUnitMaps[deviceId].setAddressSpace(_definitions.AddrSpace);
+    }
+
+    const auto oldTimestamp = _modbusDataUnitMaps[deviceId].timestamp(pointType, pointAddress);
+    if (oldTimestamp == timestamp)
+        return;
+
+    _modbusDataUnitMaps[deviceId].setTimestamp(pointType, pointAddress, timestamp);
+    emit timestampChanged(deviceId, pointType, pointAddress, timestamp);
+}
+
+///
+/// \brief ModbusMultiServer::setTimestampMap
+/// \param timestamps
+///
+void ModbusMultiServer::setTimestampMap(const AddressTimestampMap& timestamps)
+{
+    if(QThread::currentThread() != _workerThread)
+    {
+        QMetaObject::invokeMethod(this, [this, timestamps]() {
+            setTimestampMap(timestamps);
+        }, Qt::BlockingQueuedConnection);
+        return;
+    }
+
+    clearTimestamps();
+
+    for(auto it = timestamps.constBegin(); it != timestamps.constEnd(); ++it)
+    {
+        if(!it.value().isValid())
+            continue;
+
+        const auto key = it.key();
+        if(!_modbusDataUnitMaps.contains(key.DeviceId)) {
+            _modbusDataUnitMaps[key.DeviceId].setGlobalMap(_definitions.UseGlobalUnitMap);
+            _modbusDataUnitMaps[key.DeviceId].setAddressSpace(_definitions.AddrSpace);
+        }
+
+        _modbusDataUnitMaps[key.DeviceId].setTimestamp(key.Type, key.Address, it.value());
+        emit timestampChanged(key.DeviceId, key.Type, key.Address, it.value());
+    }
+}
+
+///
+/// \brief ModbusMultiServer::clearTimestamps
+///
+void ModbusMultiServer::clearTimestamps()
+{
+    if(QThread::currentThread() != _workerThread)
+    {
+        QMetaObject::invokeMethod(this, [this]() {
+            clearTimestamps();
+        }, Qt::BlockingQueuedConnection);
+        return;
+    }
+
+    for(auto it = _modbusDataUnitMaps.begin(); it != _modbusDataUnitMaps.end(); ++it) {
+        const auto deviceId = static_cast<quint8>(it.key());
+        const auto map = it->timestampMap();
+        it->clearTimestamps();
+        for(auto jt = map.constBegin(); jt != map.constEnd(); ++jt)
+            emit timestampChanged(deviceId, jt.key().Type, jt.key().Address, QDateTime());
+    }
+}
+
+///
+/// \brief ModbusMultiServer::description
+/// \param deviceId
+/// \param type
+/// \param address
+/// \return
+///
+QString ModbusMultiServer::description(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 address) const
+{
+    if(QThread::currentThread() != _workerThread)
+    {
+        QString result;
+        QMetaObject::invokeMethod(const_cast<ModbusMultiServer*>(this), [this, &result, deviceId, type, address]() {
+            result = description(deviceId, type, address);
+        }, Qt::BlockingQueuedConnection);
+        return result;
+    }
+
+    const auto it = _modbusDataUnitMaps.constFind(deviceId);
+    return (it != _modbusDataUnitMaps.constEnd())
+        ? it->description(type, address)
+        : QString();
+}
+
+///
+/// \brief ModbusMultiServer::descriptionMap
+/// \param deviceId
+/// \param pointType
+/// \param pointAddress
+/// \param length
+/// \return
+///
+AddressDescriptionMap ModbusMultiServer::descriptionMap(quint8 deviceId, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, quint16 length) const
+{
+    if(QThread::currentThread() != _workerThread)
+    {
+        AddressDescriptionMap result;
+        QMetaObject::invokeMethod(const_cast<ModbusMultiServer*>(this), [this, &result, deviceId, pointType, pointAddress, length]() {
+            result = descriptionMap(deviceId, pointType, pointAddress, length);
+        }, Qt::BlockingQueuedConnection);
+        return result;
+    }
+
+    AddressDescriptionMap result;
+    const auto it = _modbusDataUnitMaps.constFind(deviceId);
+    if (it == _modbusDataUnitMaps.constEnd())
+        return result;
+
+    const auto map = it->descriptionMap(pointType, pointAddress, length);
+    for (auto jt = map.constBegin(); jt != map.constEnd(); ++jt) {
+        auto key = jt.key();
+        key.DeviceId = deviceId;
+        result.insert(key, jt.value());
+    }
+
+    return result;
+}
+
+///
+/// \brief ModbusMultiServer::descriptionMap
+/// \return
+///
+AddressDescriptionMap ModbusMultiServer::descriptionMap() const
+{
+    if(QThread::currentThread() != _workerThread)
+    {
+        AddressDescriptionMap result;
+        QMetaObject::invokeMethod(const_cast<ModbusMultiServer*>(this), [this, &result]() {
+            result = descriptionMap();
+        }, Qt::BlockingQueuedConnection);
+        return result;
+    }
+
+    AddressDescriptionMap result;
+    for(auto it = _modbusDataUnitMaps.constBegin(); it != _modbusDataUnitMaps.constEnd(); ++it)
+    {
+        const auto deviceId = static_cast<quint8>(it.key());
+        const auto map = it->descriptionMap();
+        for (auto jt = map.constBegin(); jt != map.constEnd(); ++jt) {
+            auto key = jt.key();
+            key.DeviceId = deviceId;
+            result.insert(key, jt.value());
+        }
+    }
+
+    return result;
+}
+
+///
+/// \brief ModbusMultiServer::setDescription
+/// \param deviceId
+/// \param pointType
+/// \param pointAddress
+/// \param description
+///
+void ModbusMultiServer::setDescription(quint8 deviceId, QModbusDataUnit::RegisterType pointType, quint16 pointAddress,
+                                       const QString& description, WriteSource source)
+{
+    if(QThread::currentThread() != _workerThread)
+    {
+        QMetaObject::invokeMethod(this, [this, deviceId, pointType, pointAddress, description, source]() {
+            setDescription(deviceId, pointType, pointAddress, description, source);
+        }, Qt::BlockingQueuedConnection);
+        return;
+    }
+
+    if(!_modbusDataUnitMaps.contains(deviceId)) {
+        _modbusDataUnitMaps[deviceId].setGlobalMap(_definitions.UseGlobalUnitMap);
+        _modbusDataUnitMaps[deviceId].setAddressSpace(_definitions.AddrSpace);
+    }
+
+    const auto oldDescription = _modbusDataUnitMaps[deviceId].description(pointType, pointAddress);
+    if(oldDescription == description)
+        return;
+
+    _modbusDataUnitMaps[deviceId].setDescription(pointType, pointAddress, description);
+    emit descriptionChanged(deviceId, pointType, pointAddress, description, source);
+}
+
+///
+/// \brief ModbusMultiServer::setDescriptionMap
+/// \param descriptions
+///
+void ModbusMultiServer::setDescriptionMap(const AddressDescriptionMap& descriptions, WriteSource source)
+{
+    if(QThread::currentThread() != _workerThread)
+    {
+        QMetaObject::invokeMethod(this, [this, descriptions, source]() {
+            setDescriptionMap(descriptions, source);
+        }, Qt::BlockingQueuedConnection);
+        return;
+    }
+
+    clearDescriptions();
+
+    for(auto it = descriptions.constBegin(); it != descriptions.constEnd(); ++it)
+    {
+        if(it.value().isEmpty())
+            continue;
+
+        const auto key = it.key();
+        if(!_modbusDataUnitMaps.contains(key.DeviceId)) {
+            _modbusDataUnitMaps[key.DeviceId].setGlobalMap(_definitions.UseGlobalUnitMap);
+            _modbusDataUnitMaps[key.DeviceId].setAddressSpace(_definitions.AddrSpace);
+        }
+
+        _modbusDataUnitMaps[key.DeviceId].setDescription(key.Type, key.Address, it.value());
+        emit descriptionChanged(key.DeviceId, key.Type, key.Address, it.value(), source);
+    }
+}
+
+///
+/// \brief ModbusMultiServer::clearDescriptions
+///
+void ModbusMultiServer::clearDescriptions()
+{
+    if(QThread::currentThread() != _workerThread)
+    {
+        QMetaObject::invokeMethod(this, [this]() {
+            clearDescriptions();
+        }, Qt::BlockingQueuedConnection);
+        return;
+    }
+
+    for(auto& map : _modbusDataUnitMaps)
+        map.clearDescriptions();
 }
 
 ///
 /// \brief ModbusMultiServer::setData
 /// \param data
 ///
-void ModbusMultiServer::setData(quint8 deviceId, const QModbusDataUnit& data)
+void ModbusMultiServer::setData(quint8 deviceId, const QModbusDataUnit& data,
+                                WriteSource source, const ModbusClientInfo& client)
 {
     if(QThread::currentThread() != _workerThread)
     {
-        QMetaObject::invokeMethod(this, [this, deviceId, data]() {
-            setData(deviceId, data);
+        QMetaObject::invokeMethod(this, [this, deviceId, data, source, client]() {
+            setData(deviceId, data, source, client);
         }, Qt::BlockingQueuedConnection);
         return;
     }
 
     if(!_modbusDataUnitMaps.contains(deviceId)) {
-        emit errorOccured(deviceId, tr("An incorrect device id was specified (%1)").arg(deviceId));
+        emit errorOccured(deviceId, tr("An incorrect device ID was specified (%1)").arg(deviceId));
         return;
     }
+
+    bool changed = true;
+    const auto currentData = _modbusDataUnitMaps[deviceId].getData(
+        data.registerType(),
+        static_cast<quint16>(data.startAddress()),
+        static_cast<quint16>(data.valueCount()));
+    if(currentData.isValid() && currentData.valueCount() == data.valueCount()) {
+        changed = false;
+        for(int i = 0; i < data.valueCount(); ++i) {
+            if(currentData.value(i) != data.value(i)) {
+                changed = true;
+                break;
+            }
+        }
+    }
+
+    if(!changed)
+        return;
 
     _modbusDataUnitMaps[deviceId].setData(data);
 
@@ -493,10 +1001,27 @@ void ModbusMultiServer::setData(quint8 deviceId, const QModbusDataUnit& data)
         s->blockSignals(false);
     }
 
-    if(error.isEmpty())
-        emit dataChanged(deviceId, data);
-    else
+    if(error.isEmpty()) {
+        emit dataChanged(deviceId, data, source, client);
+    } else {
         emit errorOccured(deviceId, error);
+    }
+}
+
+///
+/// \brief ModbusMultiServer::clearAddressSpace
+///
+void ModbusMultiServer::clearAddressSpace()
+{
+    if(QThread::currentThread() != _workerThread)
+    {
+        QMetaObject::invokeMethod(this, [this]() {
+            clearAddressSpace();
+        }, Qt::BlockingQueuedConnection);
+        return;
+    }
+
+    _modbusDataUnitMaps.clear();
 }
 
 ///
@@ -672,6 +1197,9 @@ void ModbusMultiServer::writeValue(quint8 deviceId, QModbusDataUnit::RegisterTyp
 /// \param swapped
 /// \return
 ///
+///
+/// \brief ModbusMultiServer::readInt32
+///
 qint32 ModbusMultiServer::readInt32(quint8 deviceId, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, ByteOrder order, bool swapped)
 {
     const auto data = this->data(deviceId, pointType, pointAddress, 2);
@@ -686,6 +1214,9 @@ qint32 ModbusMultiServer::readInt32(quint8 deviceId, QModbusDataUnit::RegisterTy
 /// \param order
 /// \param swapped
 ///
+///
+/// \brief ModbusMultiServer::writeInt32
+///
 void ModbusMultiServer::writeInt32(quint8 deviceId, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, qint32 value, ByteOrder order, bool swapped)
 {
     setData(deviceId, createInt32DataUnit(pointType, pointAddress, value, order, swapped));
@@ -698,6 +1229,9 @@ void ModbusMultiServer::writeInt32(quint8 deviceId, QModbusDataUnit::RegisterTyp
 /// \param order
 /// \param swapped
 /// \return
+///
+///
+/// \brief ModbusMultiServer::readUInt32
 ///
 quint32 ModbusMultiServer::readUInt32(quint8 deviceId, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, ByteOrder order, bool swapped)
 {
@@ -712,6 +1246,9 @@ quint32 ModbusMultiServer::readUInt32(quint8 deviceId, QModbusDataUnit::Register
 /// \param order
 /// \param swapped
 ///
+///
+/// \brief ModbusMultiServer::writeUInt32
+///
 void ModbusMultiServer::writeUInt32(quint8 deviceId, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, quint32 value, ByteOrder order, bool swapped)
 {
     writeInt32(deviceId, pointType, pointAddress, value, order, swapped);
@@ -724,6 +1261,9 @@ void ModbusMultiServer::writeUInt32(quint8 deviceId, QModbusDataUnit::RegisterTy
 /// \param order
 /// \param swapped
 /// \return
+///
+///
+/// \brief ModbusMultiServer::readInt64
 ///
 qint64 ModbusMultiServer::readInt64(quint8 deviceId, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, ByteOrder order, bool swapped)
 {
@@ -740,6 +1280,9 @@ qint64 ModbusMultiServer::readInt64(quint8 deviceId, QModbusDataUnit::RegisterTy
 /// \param order
 /// \param swapped
 ///
+///
+/// \brief ModbusMultiServer::writeInt64
+///
 void ModbusMultiServer::writeInt64(quint8 deviceId, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, qint64 value, ByteOrder order, bool swapped)
 {
     setData(deviceId, createInt64DataUnit(pointType, pointAddress, value, order, swapped));
@@ -752,6 +1295,9 @@ void ModbusMultiServer::writeInt64(quint8 deviceId, QModbusDataUnit::RegisterTyp
 /// \param order
 /// \param swapped
 /// \return
+///
+///
+/// \brief ModbusMultiServer::readUInt64
 ///
 quint64 ModbusMultiServer::readUInt64(quint8 deviceId, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, ByteOrder order, bool swapped)
 {
@@ -766,6 +1312,9 @@ quint64 ModbusMultiServer::readUInt64(quint8 deviceId, QModbusDataUnit::Register
 /// \param order
 /// \param swapped
 ///
+///
+/// \brief ModbusMultiServer::writeUInt64
+///
 void ModbusMultiServer::writeUInt64(quint8 deviceId, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, quint64 value, ByteOrder order, bool swapped)
 {
     writeInt64(deviceId, pointType, pointAddress, value, order, swapped);
@@ -778,6 +1327,9 @@ void ModbusMultiServer::writeUInt64(quint8 deviceId, QModbusDataUnit::RegisterTy
 /// \param order
 /// \param swapped
 /// \return
+///
+///
+/// \brief ModbusMultiServer::readFloat
 ///
 float ModbusMultiServer::readFloat(quint8 deviceId, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, ByteOrder order, bool swapped)
 {
@@ -828,7 +1380,7 @@ void ModbusMultiServer::writeDouble(quint8 deviceId, QModbusDataUnit::RegisterTy
 /// \param pointType
 /// \param params
 ///
-void ModbusMultiServer::writeRegister(quint8 deviceId, QModbusDataUnit::RegisterType pointType, const ModbusWriteParams& params)
+void ModbusMultiServer::writeRegister(QModbusDataUnit::RegisterType pointType, const ModbusWriteParams& params, WriteSource source)
 {
     QModbusDataUnit data;
     const auto addr = params.Address - (params.ZeroBasedAddress ? 0 : 1);
@@ -861,48 +1413,37 @@ void ModbusMultiServer::writeRegister(quint8 deviceId, QModbusDataUnit::Register
 
             case QModbusDataUnit::InputRegisters:
             case QModbusDataUnit::HoldingRegisters:
-                switch(params.DisplayMode)
+            {
+                const bool lsrf = params.RegOrder == RegisterOrder::LSRF;
+                switch(params.DataMode)
                 {
-                    case DataDisplayMode::Binary:
-                    case DataDisplayMode::UInt16:
-                    case DataDisplayMode::Int16:
-                    case DataDisplayMode::Hex:
-                    case DataDisplayMode::Ansi:
+                    case DataType::Binary:
+                    case DataType::UInt16:
+                    case DataType::Int16:
+                    case DataType::Hex:
+                    case DataType::Ansi:
                         data = createDataUnit(pointType, addr, params.Value.toUInt(), params.Order);
                     break;
-                    case DataDisplayMode::FloatingPt:
-                        data = createFloatDataUnit(pointType, addr, params.Value.toFloat(), params.Order, false);
-                    break;
-                    case DataDisplayMode::SwappedFP:
-                        data = createFloatDataUnit(pointType, addr, params.Value.toFloat(), params.Order, true);
-                    break;
-                    case DataDisplayMode::DblFloat:
-                        data = createDoubleDataUnit(pointType, addr, params.Value.toDouble(), params.Order, false);
-                    break;
-                    case DataDisplayMode::SwappedDbl:
-                        data = createDoubleDataUnit(pointType, addr, params.Value.toDouble(), params.Order, true);
-                    break;
-                        
-                    case DataDisplayMode::Int32:
-                    case DataDisplayMode::UInt32:
-                        data = createInt32DataUnit(pointType, addr, params.Value.toInt(), params.Order, false);
+
+                    case DataType::Float32:
+                        data = createFloatDataUnit(pointType, addr, params.Value.toFloat(), params.Order, lsrf);
                     break;
 
-                    case DataDisplayMode::SwappedInt32:
-                    case DataDisplayMode::SwappedUInt32:
-                        data = createInt32DataUnit(pointType, addr, params.Value.toInt(), params.Order, true);
+                    case DataType::Float64:
+                        data = createDoubleDataUnit(pointType, addr, params.Value.toDouble(), params.Order, lsrf);
                     break;
 
-                    case DataDisplayMode::Int64:
-                    case DataDisplayMode::UInt64:
-                        data = createInt64DataUnit(pointType, addr, params.Value.toLongLong(), params.Order, false);
-                        break;
+                    case DataType::Int32:
+                    case DataType::UInt32:
+                        data = createInt32DataUnit(pointType, addr, params.Value.toInt(), params.Order, lsrf);
+                    break;
 
-                    case DataDisplayMode::SwappedInt64:
-                    case DataDisplayMode::SwappedUInt64:
-                        data = createInt64DataUnit(pointType, addr, params.Value.toLongLong(), params.Order, true);
+                    case DataType::Int64:
+                    case DataType::UInt64:
+                        data = createInt64DataUnit(pointType, addr, params.Value.toLongLong(), params.Order, lsrf);
                     break;
                 }
+            }
             break;
 
             default:
@@ -911,7 +1452,7 @@ void ModbusMultiServer::writeRegister(quint8 deviceId, QModbusDataUnit::Register
     }
 
     if(data.isValid())
-        setData(deviceId, data);
+        setData(params.DeviceId, data, source);
 }
 
 ///
@@ -925,6 +1466,26 @@ void ModbusMultiServer::on_rawDataReceived(const QDateTime& time, const QByteArr
     const auto cd = server->property("ConnectionDetails").value<ConnectionDetails>();
 
     emit rawDataReceived(cd, time, data);
+}
+
+void ModbusMultiServer::on_clientConnected(const QString& clientAddress, quint16 clientPort)
+{
+    auto server = qobject_cast<ModbusServer*>(sender());
+    if (!server)
+        return;
+
+    const auto cd = server->property("ConnectionDetails").value<ConnectionDetails>();
+    emit clientConnected(makeClientInfo(cd, clientAddress, clientPort));
+}
+
+void ModbusMultiServer::on_clientDisconnected(const QString& clientAddress, quint16 clientPort)
+{
+    auto server = qobject_cast<ModbusServer*>(sender());
+    if (!server)
+        return;
+
+    const auto cd = server->property("ConnectionDetails").value<ConnectionDetails>();
+    emit clientDisconnected(makeClientInfo(cd, clientAddress, clientPort));
 }
 
 ///
@@ -1003,7 +1564,8 @@ void ModbusMultiServer::on_errorOccurred(QModbusDevice::Error error, int deviceI
 /// \param address
 /// \param size
 ///
-void ModbusMultiServer::on_dataWritten(int deviceId, QModbusDataUnit::RegisterType table, int address, int size)
+void ModbusMultiServer::on_dataWritten(int deviceId, QModbusDataUnit::RegisterType table, int address, int size,
+                                       const QString& clientAddress, quint16 clientPort)
 {
     auto server = qobject_cast<ModbusServer*>(sender());
 
@@ -1021,5 +1583,6 @@ void ModbusMultiServer::on_dataWritten(int deviceId, QModbusDataUnit::RegisterTy
         data.setValues(values);
     }
 
-    setData(deviceId, data);
+    const auto cd = server->property("ConnectionDetails").value<ConnectionDetails>();
+    setData(deviceId, data, WriteSource::ModbusClient, makeClientInfo(cd, clientAddress, clientPort));
 }

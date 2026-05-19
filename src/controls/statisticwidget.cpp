@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file statisticwidget.cpp
+/// \brief Implements the statisticwidget functionality.
+///
+
 #include <QEvent>
 #include "statisticwidget.h"
 #include "ui_statisticwidget.h"
@@ -66,8 +74,18 @@ void StatisticWidget::increaseResponses()
 ///
 void StatisticWidget::resetCtrs()
 {
-    _requests = 0;
-    _responses = 0;
+    setCounters(0, 0);
+}
+
+///
+/// \brief StatisticWidget::setCounters
+/// \param requests
+/// \param responses
+///
+void StatisticWidget::setCounters(uint requests, uint responses)
+{
+    _requests = requests;
+    _responses = responses;
 
     updateStatistic();
 
@@ -139,3 +157,4 @@ void StatisticWidget::updateStatistic()
     ui->labelNumberRequests->setText(QString(tr("Requests: %1")).arg(_requests));
     ui->labelNumberResponses->setText(QString(tr("Responses: %1")).arg(_responses));
 }
+

@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file bitpatterncontrol.cpp
+/// \brief Implements the bitpatterncontrol functionality.
+///
+
 #include "bitpatterncontrol.h"
 #include "ui_bitpatterncontrol.h"
 
@@ -13,7 +21,17 @@ BitPatternControl::BitPatternControl(QWidget *parent)
     for (int i = 0; i < 16; i++)
     {
         auto chb = findChild<QCheckBox*>(QString("checkBox%1").arg(i));
-        if(chb) connect(chb, &QCheckBox::stateChanged, this, &BitPatternControl::on_checkStateChanged);
+        if(chb)
+        {
+#if QT_VERSION >= QT_VERSION_CHECK(6, 7, 0)
+            connect(chb, &QCheckBox::checkStateChanged, this, &BitPatternControl::on_checkStateChanged);
+#else
+            connect(chb, &QCheckBox::stateChanged, this, [this](int state)
+                    {
+                        on_checkStateChanged(static_cast<Qt::CheckState>(state));
+                    });
+#endif
+        }
 
         auto lbl = findChild<ClickableLabel*>(QString("label%1").arg(i));
         if(chb && lbl) connect(lbl, &ClickableLabel::clicked, chb, &QCheckBox::toggle);
@@ -60,7 +78,7 @@ void BitPatternControl::setValue(quint16 value)
 ///
 /// \brief BitPatternControl::on_checkStateChanged
 ///
-void BitPatternControl::on_checkStateChanged(int)
+void BitPatternControl::on_checkStateChanged(Qt::CheckState)
 {
     emit valueChanged(value());
 }

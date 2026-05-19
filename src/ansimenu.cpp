@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file ansimenu.cpp
+/// \brief Implements the ansimenu functionality.
+///
+
 #include <QTimer>
 #include <QApplication>
 #include <QMouseEvent>
@@ -159,3 +167,4 @@ void AnsiMenu::resetState()
             ma->setChecked(false);
     }
 }
+

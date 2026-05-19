@@ -1,8 +1,17 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file jscodeeditor.h
+/// \brief Declares the jscodeeditor interfaces.
+///
+
 #ifndef JSCODEEDITOR_H
 #define JSCODEEDITOR_H
 
 #include <QCompleter>
 #include <QPlainTextEdit>
+#include <QTextDocument>
 #include "jscompleter.h"
 #include "jshighlighter.h"
 
@@ -17,10 +26,16 @@ public:
     explicit JSCodeEditor(QWidget *parent = nullptr);
     ~JSCodeEditor() override;
 
+    QTextDocument* codeDocument() const;
+    void setCodeDocument(QTextDocument* doc);
+
     void lineNumberAreaPaintEvent(QPaintEvent *event);
     int lineNumberAreaWidth();
 
+    QColor foregroundColor() const;
     void setForegroundColor(const QColor& clr);
+
+    QColor backgroundColor() const;
     void setBackgroundColor(const QColor& clr);
 
     bool isAutoCompleteEnabled() const;
@@ -28,18 +43,32 @@ public:
 
     void search(const QString& text);
 
+    int highlightAllMatches(const QString& text, QTextDocument::FindFlags flags = {});
+    void clearSearchHighlights();
+    bool findNext(const QString& text);
+    bool findPrevious(const QString& text);
+    void replaceCurrent(const QString& text, const QString& replacement, QTextDocument::FindFlags flags = {});
+    int replaceAll(const QString& text, const QString& replacement, QTextDocument::FindFlags flags = {});
+
+    int currentMatchIndex() const;
+    int totalMatchCount() const;
+
 signals:
     void helpContext(const QString& key);
 
 protected:
+    void changeEvent(QEvent* event) override;
     void resizeEvent(QResizeEvent *event) override;
     void keyPressEvent(QKeyEvent *e) override;
+    void contextMenuEvent(QContextMenuEvent *event) override;
 
 private slots:
     void updateLineNumberAreaWidth(int newBlockCount);
     void highlightCurrentLine();
     void updateLineNumberArea(const QRect& rect, int dy);
     void insertCompletion(const QString& completion);
+
+    void applyThemeColors();
 
 private:
     QString textUnderCursor() const;
@@ -49,6 +78,9 @@ private:
     QWidget* _lineNumberArea;
     JSHighlighter* _highlighter;
     JSCompleter* _compliter;
+
+    QList<QTextEdit::ExtraSelection> _searchSelections;
+    int _currentMatchIndex = -1;
 };
 
 ///
@@ -79,3 +111,4 @@ private:
 };
 
 #endif // JSCODEEDITOR_H
+

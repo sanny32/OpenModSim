@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file qfixedsizedialog.h
+/// \brief Declares the qfixedsizedialog interfaces.
+///
+
 #ifndef QFIXEDSIZEDIALOG_H
 #define QFIXEDSIZEDIALOG_H
 
@@ -17,6 +25,8 @@ public:
                      Qt::WindowCloseButtonHint |
                      Qt::WindowTitleHint);
 
+    QSize sizeHint() const override;
+
 protected:
     void showEvent(QShowEvent* e) override;
 
@@ -25,3 +35,4 @@ private:
 };
 
 #endif // QFIXEDSIZEDIALOG_H
+

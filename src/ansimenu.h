@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file ansimenu.h
+/// \brief Declares the ansimenu interfaces.
+///
+
 #ifndef ANSIMENU_H
 #define ANSIMENU_H
 
@@ -46,3 +54,4 @@ private:
 };
 
 #endif // ANSIMENU_H
+

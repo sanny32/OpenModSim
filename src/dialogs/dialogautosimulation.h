@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file dialogautosimulation.h
+/// \brief Declares the dialogautosimulation interfaces.
+///
+
 #ifndef DIALOGAUTOSIMULATION_H
 #define DIALOGAUTOSIMULATION_H
 
@@ -13,10 +21,13 @@ class DialogAutoSimulation : public QFixedSizeDialog
     Q_OBJECT
 
 public:
-    explicit DialogAutoSimulation(DataDisplayMode mode, ModbusSimulationParams& params, QWidget *parent = nullptr);
+    explicit DialogAutoSimulation(DataType type, ModbusSimulationParams& params, QWidget *parent = nullptr);
     ~DialogAutoSimulation();
 
     void accept() override;
+
+protected:
+    void changeEvent(QEvent* event) override;
 
 private slots:
     void on_checkBoxEnabled_toggled();
@@ -32,7 +43,8 @@ private:
 
 private:
     ModbusSimulationParams& _params;
-    DataDisplayMode _displayMode;
+    DataType _dataMode;
 };
 
 #endif // DIALOGAUTOSIMULATION_H
+

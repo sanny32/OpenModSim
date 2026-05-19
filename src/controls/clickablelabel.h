@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file clickablelabel.h
+/// \brief Declares the clickablelabel interfaces.
+///
+
 #ifndef CLICKABLELABEL_H
 #define CLICKABLELABEL_H
 
@@ -22,3 +30,4 @@ protected:
 };
 
 #endif // CLICKABLELABEL_H
+

@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file modbussimulationparams.h
+/// \brief Declares the modbussimulationparams interfaces.
+///
+
 #ifndef MODBUSSIMULATIONPARAMS_H
 #define MODBUSSIMULATIONPARAMS_H
 
@@ -14,30 +22,6 @@ struct RandomSimulationParams
     QRange<double> Range = QRange<double>(0., 65535.);
 };
 Q_DECLARE_METATYPE(RandomSimulationParams)
-
-///
-/// \brief operator <<
-/// \param out
-/// \param params
-/// \return
-///
-inline QDataStream& operator <<(QDataStream& out, const RandomSimulationParams& params)
-{
-    out << params.Range;
-    return out;
-}
-
-///
-/// \brief operator >>
-/// \param in
-/// \param params
-/// \return
-///
-inline QDataStream& operator >>(QDataStream& in, RandomSimulationParams& params)
-{
-    in >> params.Range;
-    return in;
-}
 
 ///
 /// \brief operator <<
@@ -80,32 +64,6 @@ struct IncrementSimulationParams
     QRange<double> Range = QRange<double>(0., 65535.);
 };
 Q_DECLARE_METATYPE(IncrementSimulationParams)
-
-///
-/// \brief operator <<
-/// \param out
-/// \param params
-/// \return
-///
-inline QDataStream& operator <<(QDataStream& out, const IncrementSimulationParams& params)
-{
-    out << params.Step;
-    out << params.Range;
-    return out;
-}
-
-///
-/// \brief operator >>
-/// \param in
-/// \param params
-/// \return
-///
-inline QDataStream& operator >>(QDataStream& in, IncrementSimulationParams& params)
-{
-    in >> params.Step;
-    in >> params.Range;
-    return in;
-}
 
 ///
 /// \brief operator <<
@@ -161,32 +119,6 @@ Q_DECLARE_METATYPE(DecrementSimulationParams)
 
 ///
 /// \brief operator <<
-/// \param out
-/// \param params
-/// \return
-///
-inline QDataStream& operator <<(QDataStream& out, const DecrementSimulationParams& params)
-{
-    out << params.Step;
-    out << params.Range;
-    return out;
-}
-
-///
-/// \brief operator >>
-/// \param in
-/// \param params
-/// \return
-///
-inline QDataStream& operator >>(QDataStream& in, DecrementSimulationParams& params)
-{
-    in >> params.Step;
-    in >> params.Range;
-    return in;
-}
-
-///
-/// \brief operator <<
 /// \param xml
 /// \param params
 /// \return
@@ -237,50 +169,10 @@ struct ModbusSimulationParams
     IncrementSimulationParams IncrementParams;
     DecrementSimulationParams DecrementParams;
     quint32 Interval = 1000;
-    DataDisplayMode DataMode = DataDisplayMode::Hex;
+    DataType        DataMode  = DataType::Hex;
+    RegisterOrder   RegOrder  = RegisterOrder::MSRF;
 };
 Q_DECLARE_METATYPE(ModbusSimulationParams)
-
-///
-/// \brief operator <<
-/// \param out
-/// \param params
-/// \return
-///
-inline QDataStream& operator <<(QDataStream& out, const ModbusSimulationParams& params)
-{
-    out << params.Mode;
-    out << params.RandomParams;
-    out << params.IncrementParams;
-    out << params.DecrementParams;
-    out << params.Interval;
-    out << params.DataMode;
-
-    return out;
-}
-
-///
-/// \brief operator >>
-/// \param in
-/// \param params
-/// \return
-///
-inline QDataStream& operator >>(QDataStream& in, ModbusSimulationParams& params)
-{
-    in >> params.Mode;
-    in >> params.RandomParams;
-    in >> params.IncrementParams;
-    in >> params.DecrementParams;
-    in >> params.Interval;
-
-    if (in.device()->property("Form_Version").isValid() &&
-        in.device()->property("Form_Version").value<QVersionNumber>() >= QVersionNumber(1, 14))
-    {
-        in >> params.DataMode;
-    }
-
-    return in;
-}
 
 ///
 /// \brief operator <<
@@ -293,7 +185,9 @@ inline QXmlStreamWriter& operator <<(QXmlStreamWriter& xml, const ModbusSimulati
     xml.writeStartElement("ModbusSimulationParams");
     xml.writeAttribute("Mode", enumToString<SimulationMode>(params.Mode));
     xml.writeAttribute("Interval", QString::number(params.Interval));
-    xml.writeAttribute("DataDisplayMode", enumToString<DataDisplayMode>(params.DataMode));
+    xml.writeAttribute("DataType", enumToString<DataType>(params.DataMode));
+    if(isMultiRegisterType(params.DataMode))
+        xml.writeAttribute("RegisterOrder", enumToString<RegisterOrder>(params.RegOrder));
 
     switch(params.Mode) {
     case SimulationMode::Random:
@@ -332,8 +226,12 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, ModbusSimulationPara
             }
         }
 
-        if (attributes.hasAttribute("DataDisplayMode")) {
-            params.DataMode = enumFromString<DataDisplayMode>(attributes.value("DataDisplayMode").toString(), DataDisplayMode::Hex);
+        if (attributes.hasAttribute("DataType")) {
+            params.DataMode = enumFromString<DataType>(attributes.value("DataType").toString(), DataType::Hex);
+        }
+
+        if (attributes.hasAttribute("RegisterOrder")) {
+            params.RegOrder = enumFromString<RegisterOrder>(attributes.value("RegisterOrder").toString(), RegisterOrder::MSRF);
         }
 
         while (xml.readNextStartElement()) {
@@ -356,3 +254,4 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, ModbusSimulationPara
 }
 
 #endif // MODBUSSIMULATIONPARAMS_H
+

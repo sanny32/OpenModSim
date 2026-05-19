@@ -1,0 +1,37 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file checkablegroupbox.h
+/// \brief Declares the checkablegroupbox interfaces.
+///
+
+#ifndef CHECKABLEGROUPBOX_H
+#define CHECKABLEGROUPBOX_H
+
+#include <QGroupBox>
+
+class CheckableGroupBox : public QGroupBox
+{
+    Q_OBJECT
+
+public:
+    explicit CheckableGroupBox(QWidget* parent = nullptr);
+
+    void setCheckState(Qt::CheckState state);
+
+signals:
+    void checkStateChanged(Qt::CheckState state);
+
+protected:
+    void paintEvent(QPaintEvent* event) override;
+
+private slots:
+    void onClicked();
+
+private:
+    Qt::CheckState _checkState = Qt::Checked;
+};
+
+#endif // CHECKABLEGROUPBOX_H
+

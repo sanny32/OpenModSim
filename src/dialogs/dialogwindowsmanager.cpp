@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file dialogwindowsmanager.cpp
+/// \brief Implements the dialogwindowsmanager functionality.
+///
+
 #include <QAction>
 #include <QAbstractEventDispatcher>
 #include "dialogwindowsmanager.h"
@@ -50,6 +58,20 @@ DialogWindowsManager::DialogWindowsManager(const QList<QAction*>& actions, QActi
 DialogWindowsManager::~DialogWindowsManager()
 {
     delete ui;
+}
+
+///
+/// rief DialogWindowsManager::changeEvent
+///
+///
+/// \brief DialogWindowsManager::changeEvent
+///
+void DialogWindowsManager::changeEvent(QEvent* event)
+{
+    if (event->type() == QEvent::LanguageChange)
+        ui->retranslateUi(this);
+
+    QDialog::changeEvent(event);
 }
 
 ///
@@ -110,3 +132,4 @@ void DialogWindowsManager::on_pushButtonClose_clicked()
     wnd->close();
     delete item;
 }
+

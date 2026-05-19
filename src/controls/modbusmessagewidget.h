@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file modbusmessagewidget.h
+/// \brief Declares the modbusmessagewidget interfaces.
+///
+
 #ifndef MODBUSMESSAGEWIDGET_H
 #define MODBUSMESSAGEWIDGET_H
 
@@ -15,8 +23,8 @@ public:
 
     void clear();
 
-    DataDisplayMode dataDisplayMode() const;
-    void setDataDisplayMode(DataDisplayMode mode);
+    DataType dataType() const;
+    void setDataType(DataType type);
 
     ByteOrder byteOrder() const;
     void setByteOrder(ByteOrder order);
@@ -29,8 +37,6 @@ public:
 
     bool showLeadingZeros() const;
     void setShowLeadingZeros(bool value);
-
-    void setStatusColor(const QColor& clr);
 
     QColor backgroundColor() const;
     void setBackGroundColor(const QColor& clr);
@@ -47,7 +53,7 @@ private:
 private:
     QColor _statusClr;
     ByteOrder _byteOrder;
-    DataDisplayMode _dataDisplayMode;
+    DataType _dataType;
     bool _showLeadingZeros;
     bool _showTimestamp;
     QAction* _copyAct;
@@ -56,3 +62,4 @@ private:
 };
 
 #endif // MODBUSMESSAGEWIDGET_H
+

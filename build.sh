@@ -6,6 +6,10 @@ echo " OpenModSim build script (Linux) "
 echo "=================================="
 echo ""
 
+PROJECT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+SOURCE_DIR="$PROJECT_DIR/src"
+TOOLS_DIR="$PROJECT_DIR/.build-tools"
+
 # ==========================
 # Detect package manager and distro
 # ==========================
@@ -46,6 +50,12 @@ case "$ID" in
         INSTALL_CMD="zypper install -y"
         SEARCH_CMD="zypper search"
         ;;
+    arch|endeavouros|manjaro)
+        DISTRO="arch-based"
+        CHECK_CMD="pacman -Qq"
+        INSTALL_CMD="pacman -S --needed --noconfirm"
+        SEARCH_CMD="pacman -Ss"
+        ;;
     *)
         echo "Unsupported Linux distribution: $ID"
         exit 1
@@ -62,6 +72,102 @@ verlte() {
 verlt() {
     # $1 < $2 ?
     [ "$1" != "$2" ] && verlte "$1" "$2"
+}
+
+get_required_cmake_version() {
+    local version
+    version=$(grep -oP 'cmake_minimum_required\s*\(\s*VERSION\s+\K[0-9]+(\.[0-9]+){1,3}' "$SOURCE_DIR/CMakeLists.txt" | head -n1)
+    if [ -z "$version" ]; then
+        echo "Error: Can't detect minimum CMake version from $SOURCE_DIR/CMakeLists.txt" >&2
+        exit 1
+    fi
+
+    echo "$version"
+}
+
+get_cmake_version() {
+    local cmake_bin="$1"
+    "$cmake_bin" --version 2>/dev/null | head -n1 | grep -oE '[0-9]+(\.[0-9]+){1,3}' || true
+}
+
+download_file() {
+    local url="$1"
+    local output="$2"
+
+    if command -v curl >/dev/null 2>&1; then
+        curl -L --fail "$url" -o "$output"
+    elif command -v wget >/dev/null 2>&1; then
+        wget -O "$output" "$url"
+    else
+        echo "Error: curl or wget is required to download CMake." >&2
+        exit 1
+    fi
+}
+
+ensure_cmake_version() {
+    local required_version="$1"
+    local cmake_bin=""
+    local cmake_version=""
+
+    if command -v cmake >/dev/null 2>&1; then
+        cmake_bin=$(command -v cmake)
+        cmake_version=$(get_cmake_version "$cmake_bin")
+        if [ -n "$cmake_version" ] && ! verlt "$cmake_version" "$required_version"; then
+            echo "Using CMake $cmake_version from: $cmake_bin"
+            CMAKE_BIN="$cmake_bin"
+            return 0
+        fi
+
+        echo "Found CMake ${cmake_version:-unknown} at $cmake_bin, but version $required_version or newer is required."
+    else
+        echo "CMake not found in PATH."
+    fi
+
+    local machine
+    local cmake_arch
+    machine=$(uname -m)
+    case "$machine" in
+        x86_64|amd64)
+            cmake_arch="x86_64"
+            ;;
+        aarch64|arm64)
+            cmake_arch="aarch64"
+            ;;
+        *)
+            echo "Error: unsupported architecture for Kitware CMake binary: $machine" >&2
+            exit 1
+            ;;
+    esac
+
+    local install_dir="$TOOLS_DIR/cmake-$required_version-linux-$cmake_arch"
+    local local_cmake="$install_dir/bin/cmake"
+    if [ -x "$local_cmake" ]; then
+        cmake_version=$(get_cmake_version "$local_cmake")
+        if [ -n "$cmake_version" ] && ! verlt "$cmake_version" "$required_version"; then
+            echo "Using local CMake $cmake_version from: $local_cmake"
+            CMAKE_BIN="$local_cmake"
+            return 0
+        fi
+    fi
+
+    mkdir -p "$TOOLS_DIR" "$install_dir"
+    local installer="$TOOLS_DIR/cmake-$required_version-linux-$cmake_arch.sh"
+    local url="https://github.com/Kitware/CMake/releases/download/v$required_version/cmake-$required_version-linux-$cmake_arch.sh"
+
+    echo "Downloading CMake $required_version from Kitware..."
+    download_file "$url" "$installer"
+
+    echo "Installing CMake $required_version into $install_dir..."
+    sh "$installer" --skip-license --prefix="$install_dir"
+
+    cmake_version=$(get_cmake_version "$local_cmake")
+    if [ -z "$cmake_version" ] || verlt "$cmake_version" "$required_version"; then
+        echo "Error: downloaded CMake version check failed." >&2
+        exit 1
+    fi
+
+    echo "Using local CMake $cmake_version from: $local_cmake"
+    CMAKE_BIN="$local_cmake"
 }
 
 check_min_os_version() {
@@ -90,7 +196,7 @@ case "$ID" in
         check_min_os_version "11"
         ;;
     fedora)
-        check_min_os_version "42"
+        check_min_os_version "41"
         ;;
     rhel)
         check_min_os_version "8"
@@ -105,7 +211,7 @@ case "$ID" in
         check_min_os_version "1.7.3"
         ;;
     altlinux)
-        check_min_os_version "11.0"
+        check_min_os_version "11"
         ;;
     suse|opensuse*)
         check_min_os_version "15.5"
@@ -131,6 +237,7 @@ esac
 # Parse script arguments
 # ==========================
 QT_CHOICE=""
+USE_QLEMENTINE_APP_STYLE=OFF
 for arg in "$@"; do
     case "$arg" in
         -qt5|qt5)
@@ -139,6 +246,10 @@ for arg in "$@"; do
             ;;
         -qt6|qt6)
             QT_CHOICE="qt6"
+            shift
+            ;;
+        --qlementine|-qlementine)
+            USE_QLEMENTINE_APP_STYLE=ON
             shift
             ;;
         *)
@@ -162,16 +273,19 @@ fi
 get_qt5_packages() {
     case "$DISTRO" in
         debian-based)
-            echo "qtbase5-dev qtbase5-dev-tools qttools5-dev qttools5-dev-tools qtdeclarative5-dev libqt5serialport5-dev libqt5serialbus5-dev"
+            echo "qtbase5-dev qtbase5-dev-tools qttools5-dev qttools5-dev-tools qtdeclarative5-dev libqt5serialport5-dev libqt5serialbus5-dev libqt5svg5-dev"
             ;;
         rhel-based)
-            echo "qt5-qtbase-devel qt5-qttools-devel qt5-qtdeclarative-devel qt5-qtserialport-devel qt5-qtserialbus-devel"
+            echo "qt5-qtbase-devel qt5-qttools-devel qt5-qtdeclarative-devel qt5-qtserialport-devel qt5-qtserialbus-devel qt5-qtsvg-devel"
             ;;
         altlinux)
-            echo "qt5-base-devel qt5-tools-devel qt5-declarative-devel qt5-serialport-devel qt5-serialbus-devel"
+            echo "qt5-base-devel qt5-tools-devel qt5-declarative-devel qt5-serialport-devel qt5-serialbus-devel qt5-svg-devel"
             ;;
         suse-based)
-            echo "libqt5-qtbase-devel libqt5-qttools-devel libqt5-qttools-qhelpgenerator libqt5-qtdeclarative-devel libqt5-qtserialport-devel libqt5-qtserialbus libqt5-qtserialbus-devel"
+            echo "libqt5-qtbase-devel libqt5-qttools-devel libqt5-qttools-qhelpgenerator libqt5-qtdeclarative-devel libqt5-qtserialport-devel libqt5-qtserialbus libqt5-qtserialbus-devel libqt5-qtsvg-devel"
+            ;;
+        arch-based)
+            echo "qt5-base qt5-tools qt5-declarative qt5-serialport qt5-serialbus qt5-svg"
             ;;
     esac
 }
@@ -185,22 +299,25 @@ get_qt6_packages() {
             case "$ID-${VERSION_ID%%.*}" in
                 ubuntu-22)
                     echo "qt6-base-dev qt6-base-dev-tools qt6-declarative-dev qt6-tools-dev qt6-tools-dev-tools qt6-l10n-tools libqt6serialport6-dev \
-                            libqt6serialbus6-bin libqt6serialbus6-dev libqt6core5compat6-dev qt6-documentation-tools libqt6svg6"
+                            libqt6serialbus6-bin libqt6serialbus6-dev libqt6core5compat6-dev qt6-documentation-tools libqt6svg6-dev"
                 ;;
                 *)
                     echo "qt6-base-dev qt6-base-dev-tools qt6-declarative-dev qt6-tools-dev qt6-tools-dev-tools qt6-serialport-dev qt6-serialbus-dev \
-                            qt6-5compat-dev qt6-documentation-tools"
+                            qt6-5compat-dev qt6-documentation-tools libqt6svg6-dev"
                 ;;
             esac
             ;;
         rhel-based)
-            echo "qt6-qtbase-devel qt6-qttools-devel qt6-qtdeclarative-devel qt6-qtserialport-devel qt6-qtserialbus-devel qt6-qt5compat-devel"
+            echo "qt6-qtbase-devel qt6-qttools-devel qt6-qtdeclarative-devel qt6-qtserialport-devel qt6-qtserialbus-devel qt6-qt5compat-devel qt6-qtsvg-devel"
             ;;
         altlinux)
-            echo "qt6-base-devel qt6-tools-devel qt6-declarative-devel qt6-serialport-devel qt6-serialbus-devel qt6-5compat-devel qt6-sql"
+            echo "qt6-base-devel qt6-tools-devel qt6-declarative-devel qt6-serialport-devel qt6-serialbus-devel qt6-5compat-devel qt6-svg-devel qt6-sql"
             ;;
         suse-based)
-            echo "qt6-base-devel qt6-tools-devel qt6-declarative-devel qt6-serialport-devel qt6-serialbus-devel qt6-qt5compat-devel qt6-help-devel qt6-linguist-devel"
+            echo "qt6-base-devel qt6-tools-devel qt6-declarative-devel qt6-serialport-devel qt6-serialbus-devel qt6-qt5compat-devel qt6-svg-devel qt6-help-devel qt6-linguist-devel"
+            ;;
+        arch-based)
+            echo "qt6-base qt6-declarative qt6-tools qt6-serialport qt6-serialbus qt6-5compat qt6-svg"
             ;;
     esac
 }
@@ -215,16 +332,19 @@ get_packages() {
 
     case "$DISTRO" in
         debian-based)
-            general_packages="build-essential cmake ninja-build libxcb-cursor-dev libgl1-mesa-dev pkg-config libcups2-dev"
+            general_packages="build-essential cmake ninja-build curl tar gzip libxcb-cursor-dev libgl1-mesa-dev pkg-config libcups2-dev"
             ;;
         rhel-based)
-            general_packages="gcc gcc-c++ libstdc++-static cmake ninja-build pkgconf-pkg-config xcb-util-cursor-devel"
+            general_packages="gcc gcc-c++ libstdc++-static cmake ninja-build tar gzip pkgconf-pkg-config xcb-util-cursor-devel"
             ;;
         altlinux)
-            general_packages="gcc gcc-c++ libstdc++-devel-static cmake ninja-build pkg-config libxcbutil-cursor libcups-devel"
+            general_packages="gcc gcc-c++ libstdc++-devel-static cmake ninja-build curl tar gzip pkg-config libxcbutil-cursor libcups-devel"
             ;;
         suse-based)
-            general_packages="gcc gcc-c++ cmake ninja pkg-config libxcb-cursor0"
+            general_packages="gcc gcc-c++ cmake ninja curl tar gzip pkg-config libxcb-cursor0"
+            ;;
+        arch-based)
+            general_packages="base-devel cmake ninja curl tar gzip pkgconf libxcb libcups"
             ;;
     esac
 
@@ -317,6 +437,13 @@ if [ -z "$QT_CHOICE" ]; then
     fi
 fi
 install_prereqs
+echo ""
+
+# ==========================
+# Check CMake version
+# ==========================
+MIN_CMAKE_VERSION=$(get_required_cmake_version)
+ensure_cmake_version "$MIN_CMAKE_VERSION"
 echo ""
 
 # ==========================
@@ -452,7 +579,7 @@ if verlt "$QT_VERSION" "$MIN_QT_VERSION"; then
     echo "Error: Qt >= $MIN_QT_VERSION is required, but found $QT_VERSION" >&2
     exit 1
 else
-    echo "Using Qt $QT_VERSION (Qt5) from: $CMAKE_PREFIX"
+    echo "Using Qt $QT_VERSION from: $CMAKE_PREFIX"
 fi
 
 # ==========================
@@ -511,9 +638,10 @@ BUILD_DIR="build-omodsim-Qt_${SANITIZED_QT_VERSION}_g++_${ARCH}-${BUILD_TYPE}"
 echo "Starting build in: $BUILD_DIR"
 mkdir -p "$BUILD_DIR"
 cd "$BUILD_DIR"
-cmake ../src -GNinja -DCMAKE_PREFIX_PATH="${CMAKE_PREFIX}" \
+"$CMAKE_BIN" "$SOURCE_DIR" -GNinja -DCMAKE_PREFIX_PATH="${CMAKE_PREFIX}" \
       -DCMAKE_CXX_COMPILER=${CXX_COMPILER} \
       -DCMAKE_BUILD_TYPE=${BUILD_TYPE} \
+      -DUSE_QLEMENTINE_APP_STYLE=${USE_QLEMENTINE_APP_STYLE} \
       ${CMAKE_QT_OPTION}
 ninja
 echo "Build finished successfully in $BUILD_DIR."
@@ -521,15 +649,20 @@ echo ""
 
 NINJA_VER=$(ninja --version)
 if verlt "1.11.0" "$NINJA_VER"; then
-    echo "To install Open ModSim, run:"
+    echo "To install or uninstall Open ModSim, run:"
+    echo ""
+    echo -e "    cd $BUILD_DIR"
     echo ""
     if [ "$EUID" -eq 0 ]; then
-        echo -e "    cd $BUILD_DIR && ninja install"
+        echo -e "    ninja install"
+        echo -e "    ninja uninstall"
     else
         if [ "$CAN_SUDO" -eq 1 ]; then
-            echo -e "    cd $BUILD_DIR && sudo ninja install"
+            echo -e "    sudo ninja install"
+            echo -e "    sudo ninja uninstall"
         else
-            echo -e "    cd $BUILD_DIR && su -c 'ninja install'"
+            echo -e "    su -c 'ninja install'"
+            echo -e "    su -c 'ninja uninstall'"
         fi
     fi
     echo ""

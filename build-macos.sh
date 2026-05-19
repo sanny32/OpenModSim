@@ -46,6 +46,14 @@ if ! xcode-select -p >/dev/null 2>&1; then
 fi
 echo "  Found: $(xcode-select -p)"
 
+echo "Checking for actool..."
+if ! command -v actool >/dev/null 2>&1; then
+    echo "Error: actool not found."
+    echo "Install Xcode from the App Store: https://apps.apple.com/app/xcode/id497799835"
+    exit 1
+fi
+echo "  Found: $(command -v actool)"
+
 # ==========================
 # Check Homebrew
 # ==========================
@@ -106,6 +114,41 @@ if [ -z "$QT_VERSION" ]; then
 fi
 
 echo "  Found: Qt ${QT_VERSION} at ${QT_PREFIX}"
+
+# ==========================
+# Check qhelpgenerator
+# ==========================
+echo "Checking for qhelpgenerator..."
+QHELPGENERATOR=""
+for _hint in \
+    "${QT_PREFIX}/bin/qhelpgenerator" \
+    "${QT_PREFIX}/libexec/qhelpgenerator" \
+    "${QT_PREFIX}/share/qt/libexec/qhelpgenerator"; do
+    if [ -x "$_hint" ]; then
+        QHELPGENERATOR="$_hint"
+        break
+    fi
+done
+if [ -z "$QHELPGENERATOR" ] && command -v qhelpgenerator >/dev/null 2>&1; then
+    QHELPGENERATOR="$(command -v qhelpgenerator)"
+fi
+if [ -z "$QHELPGENERATOR" ]; then
+    echo "qhelpgenerator not found. Installing qttools..."
+    brew install qttools
+    for _hint in \
+        "$(brew --prefix qttools 2>/dev/null)/share/qt/libexec/qhelpgenerator" \
+        "$(brew --prefix qttools 2>/dev/null)/bin/qhelpgenerator"; do
+        if [ -x "$_hint" ]; then
+            QHELPGENERATOR="$_hint"
+            break
+        fi
+    done
+fi
+if [ -z "$QHELPGENERATOR" ]; then
+    echo "Error: qhelpgenerator not found even after installing qttools."
+    exit 1
+fi
+echo "  Found: ${QHELPGENERATOR}"
 
 # ==========================
 # Check minimum Qt version

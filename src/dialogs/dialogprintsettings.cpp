@@ -1,5 +1,14 @@
+﻿// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file dialogprintsettings.cpp
+/// \brief Implements the dialogprintsettings functionality.
+///
+
 #include <QPrinterInfo>
 #include <QPushButton>
+#include "styles/themedicons.h"
 #include "dialogprintsettings.h"
 #include "ui_dialogprintsettings.h"
 
@@ -36,6 +45,20 @@ DialogPrintSettings::DialogPrintSettings(QPrinter* printer, QWidget *parent) :
 DialogPrintSettings::~DialogPrintSettings()
 {
     delete ui;
+}
+
+///
+/// rief DialogPrintSettings::changeEvent
+///
+///
+/// \brief DialogPrintSettings::changeEvent
+///
+void DialogPrintSettings::changeEvent(QEvent* event)
+{
+    if (event->type() == QEvent::LanguageChange)
+        ui->retranslateUi(this);
+
+    QDialog::changeEvent(event);
 }
 
 ///
@@ -126,9 +149,9 @@ void DialogPrintSettings::on_comboBoxPrinters_currentIndexChanged(int index)
 ///
 void DialogPrintSettings::orientationChanged()
 {
-    ui->labelOrientation->setPixmap(QIcon(ui->radioButtonLandscape->isChecked() ?
-                                              ":/res/iconLandscape.png" :
-                                              ":/res/iconPortrait.png").pixmap({32, 32}));
+    ui->labelOrientation->setPixmap(themedIcon(ui->radioButtonLandscape->isChecked() ?
+                                              QStringLiteral("omodsim/landscape") :
+                                              QStringLiteral("omodsim/portrait")).pixmap({32, 32}));
 }
 
 ///
@@ -211,3 +234,4 @@ QList<PapeSource> DialogPrintSettings::supportedPaperSources(const QPrinter* pri
 
     return listPaperSource;
 }
+

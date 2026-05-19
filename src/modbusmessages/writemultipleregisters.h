@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file writemultipleregisters.h
+/// \brief Declares the writemultipleregisters interfaces.
+///
+
 #ifndef WRITEMULTIPLEREGISTERS_H
 #define WRITEMULTIPLEREGISTERS_H
 
@@ -135,3 +143,4 @@ public:
 };
 
 #endif // WRITEMULTIPLEREGISTERS_H
+

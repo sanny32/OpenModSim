@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file qmodbusadurtu.h
+/// \brief Declares the qmodbusadurtu interfaces.
+///
+
 #ifndef QMODBUSADURTU_H
 #define QMODBUSADURTU_H
 
@@ -120,3 +128,4 @@ private:
 };
 
 #endif // QMODBUSADURTU_H
+

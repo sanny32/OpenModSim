@@ -1,0 +1,186 @@
+name: Build macOS DMG (Qt6, arm64)
+
+on:
+  push:
+    tags:
+      - "*"
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: 'Checkout branch'
+        required: false
+        default: dev
+      tag:
+        description: 'Checkout tag'
+        required: false
+
+permissions:
+  contents: write
+
+jobs:
+  build-omodsim:
+    name: Build OpenModSim macOS DMG version '${{ github.event.inputs.tag || github.event.inputs.branch || github.ref_name }}' with Qt6 (arm64)
+    runs-on: macos-26
+
+    env:
+      QT_VERSION: "6.9.3"
+      QT_INSTALL_DIR: "${{ github.workspace }}/Qt"
+      CMAKE_GENERATOR: "Ninja"
+      BUILD_TYPE: "Release"
+      DMG_PACKAGE_PREFIX: "qt6-omodsim"
+      DMG_STAGING_DIR: "${{ github.workspace }}/dmg-root"
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event.inputs.tag || github.event.inputs.branch || github.ref_name }}
+
+      - name: Determine ref_type and ref_name
+        run: |
+          if [ "${{ github.ref_type }}" = "tag" ] || [ -n "${{ github.event.inputs.tag }}" ]; then
+            REF_TYPE="tags"
+            if [ -n "${{ github.event.inputs.tag }}" ]; then
+              REF_NAME="${{ github.event.inputs.tag }}"
+            else
+              REF_NAME="${{ github.ref_name }}"
+            fi
+          else
+            REF_TYPE="heads"
+            REF_NAME="${{ github.ref_name }}"
+          fi
+          echo "REF_TYPE=$REF_TYPE" >> $GITHUB_ENV
+          echo "REF_NAME=$REF_NAME" >> $GITHUB_ENV
+
+      - name: Extract version from CMakeLists.txt
+        run: |
+          FULL_VERSION=$(grep -oE '^\s*VERSION\s+[0-9]+\.[0-9]+\.[0-9]+' src/CMakeLists.txt | grep -oE '[0-9]+\.[0-9]+\.[0-9]+')
+          APP_MAJOR_VERSION=$(echo "$FULL_VERSION" | cut -d. -f1)
+
+          PRERELEASE_ENABLED=false
+          PRERELEASE_SUFFIX=""
+          TAG_NAME="${{ github.event.inputs.tag }}"
+          if [ -z "$TAG_NAME" ] && [ "${{ github.ref_type }}" = "tag" ]; then
+            TAG_NAME="${{ github.ref_name }}"
+          fi
+          PRERELEASE_SUFFIX=$(printf '%s\n' "$TAG_NAME" | grep -Eo '(beta[0-9]+|b[0-9]+|rc[0-9]+)$' || true)
+          if [ -n "$PRERELEASE_SUFFIX" ]; then
+            PRERELEASE_ENABLED=true
+          fi
+
+          if [ "${GITHUB_REF_NAME}" = "dev" ] || [ "${{ github.event.inputs.branch }}" = "dev" ]; then
+            MAJOR_MINOR=$(echo "$FULL_VERSION" | cut -d. -f1,2)
+            APP_VERSION="${MAJOR_MINOR}~dev"
+          else
+            APP_VERSION="$FULL_VERSION"
+            if [ "$PRERELEASE_ENABLED" = "true" ]; then
+              APP_VERSION="${APP_VERSION}-${PRERELEASE_SUFFIX}"
+            fi
+          fi
+
+          echo "APP_VERSION=$APP_VERSION" >> $GITHUB_ENV
+          echo "PRERELEASE_SUFFIX=$PRERELEASE_SUFFIX" >> $GITHUB_ENV
+          echo "APP_MAJOR_VERSION=$APP_MAJOR_VERSION" >> $GITHUB_ENV
+          echo "PRERELEASE_ENABLED=$PRERELEASE_ENABLED" >> $GITHUB_ENV
+
+          echo "Extracted version: $APP_VERSION"
+
+      - name: Install dependencies
+        run: |
+          brew list --versions ninja >/dev/null || brew install ninja
+          brew list --versions cmake >/dev/null || brew install cmake
+
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: ${{ env.QT_VERSION }}
+          host: mac
+          target: desktop
+          arch: clang_64
+          modules: qt5compat qtserialport qtserialbus
+          dir: ${{ env.QT_INSTALL_DIR }}
+          cache: true
+
+      - name: Set BUILD_DIR
+        run: echo "BUILD_DIR=build-omodsim-Qt_${{ env.QT_VERSION }}_clang_arm64-${{ env.BUILD_TYPE }}" >> $GITHUB_ENV
+
+      - name: Configure project
+        run: |
+          cmake src -B ${{ env.BUILD_DIR }} \
+            -G "${{ env.CMAKE_GENERATOR }}" \
+            -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} \
+            -DCMAKE_PREFIX_PATH=${{ env.QT_ROOT_DIR }} \
+            -DCMAKE_INSTALL_PREFIX=/Applications \
+            -DUSE_QT6=ON \
+            -DPRERELEASE_SUFFIX=${{ env.PRERELEASE_SUFFIX }}
+
+      - name: Build
+        run: cmake --build ${{ env.BUILD_DIR }} --config ${{ env.BUILD_TYPE }} --parallel
+
+      - name: Verify app icon in build bundle
+        run: |
+          RESOURCES="${{ env.BUILD_DIR }}/omodsim.app/Contents/Resources"
+          if [ ! -f "${RESOURCES}/Assets.car" ] && [ ! -f "${RESOURCES}/omodsim.icns" ]; then
+            echo "Error: app icon not found in build bundle (actool may have failed)"
+            exit 1
+          fi
+
+      - name: Install app bundle into DMG staging directory
+        run: |
+          rm -rf "${{ env.DMG_STAGING_DIR }}"
+          mkdir -p "${{ env.DMG_STAGING_DIR }}"
+          cmake --install "${{ env.BUILD_DIR }}" --config "${{ env.BUILD_TYPE }}" --prefix "${{ env.DMG_STAGING_DIR }}"
+
+      - name: Verify Qt frameworks in installed bundle
+        run: |
+          FRAMEWORKS="${{ env.DMG_STAGING_DIR }}/omodsim.app/Contents/Frameworks"
+          if [ ! -d "$FRAMEWORKS" ]; then
+            echo "Error: Frameworks directory not found — macdeployqt may have failed"
+            echo "Contents of omodsim.app:"
+            find "${{ env.DMG_STAGING_DIR }}/omodsim.app" -maxdepth 3 -type d
+            exit 1
+          fi
+          echo "Frameworks directory found:"
+          ls "$FRAMEWORKS" | head -20
+
+      - name: Rename app bundle for DMG
+        run: |
+          mv "${{ env.DMG_STAGING_DIR }}/omodsim.app" "${{ env.DMG_STAGING_DIR }}/Open ModSim ${{ env.APP_MAJOR_VERSION }}.app"
+
+      - name: Add Applications symlink to DMG staging directory
+        run: |
+          ln -s /Applications "${{ env.DMG_STAGING_DIR }}/Applications"
+
+      - name: Verify arm64 binary
+        run: |
+          lipo -info "${{ env.DMG_STAGING_DIR }}/Open ModSim ${{ env.APP_MAJOR_VERSION }}.app/Contents/MacOS/omodsim"
+
+      - name: Create DMG
+        run: |
+          DMG_NAME="${{ env.DMG_PACKAGE_PREFIX }}${{ env.APP_MAJOR_VERSION }}_${{ env.APP_VERSION }}_arm64.dmg"
+          echo "DMG_NAME=$DMG_NAME" >> $GITHUB_ENV
+
+          hdiutil create -volname "Open ModSim ${{ env.APP_VERSION }}" \
+            -srcfolder "${{ env.DMG_STAGING_DIR }}" \
+            -ov -format UDZO \
+            "$DMG_NAME"
+
+      - name: Upload DMG
+        uses: actions/upload-artifact@v7
+        if: success()
+        with:
+          name: ${{ env.DMG_NAME }}
+          path: ${{ env.DMG_NAME }}
+
+      - name: Create or update GitHub Release and upload DMG
+        if: success() && github.event_name == 'push' && github.ref_type == 'tag'
+        uses: softprops/action-gh-release@v3
+        with:
+          draft: true
+          prerelease: ${{ env.PRERELEASE_ENABLED }}
+          tag_name: ${{ github.ref_name }}
+          name: Open ModSim ${{ env.APP_VERSION }}
+          files: |
+            ${{ env.DMG_NAME }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

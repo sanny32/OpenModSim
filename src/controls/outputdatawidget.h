@@ -1,0 +1,248 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file outputdatawidget.h
+/// \brief Declares the outputdatawidget interfaces.
+///
+
+#ifndef OUTPUTDATAWIDGET_H
+#define OUTPUTDATAWIDGET_H
+
+#include <QAbstractListModel>
+#include <QPixmap>
+#include <QSharedPointer>
+#include <QFrame>
+#include "datasimulator.h"
+#include "displaydefinition.h"
+#include "enums.h"
+#include "modbusmessage.h"
+#include "outputtypes.h"
+
+class QLabel;
+class QPainter;
+class QTimer;
+
+namespace Ui {
+class OutputDataWidget;
+}
+
+enum OutputDataRole
+{
+    SimulationRole = Qt::UserRole + 1,
+    CaptureRole = Qt::UserRole + 2,
+    DescriptionRole = Qt::UserRole + 3,
+    AddressStringRole = Qt::UserRole + 4,
+    AddressRole = Qt::UserRole + 5,
+    ValueRole = Qt::UserRole + 6,
+    ColorRole = Qt::UserRole + 7,
+    FindMatchRole = Qt::UserRole + 8,
+    FindCurrentRole = Qt::UserRole + 9
+};
+
+class OutputDataWidget;
+
+class OutputDataListModel : public QAbstractListModel
+{
+    Q_OBJECT
+
+    friend class OutputDataWidget;
+
+public:
+    enum SimulationIconType
+    {
+        SimulationIconNone,
+        SimulationIcon16Bit,
+        SimulationIcon32Bit,
+        SimulationIcon64Bit
+    };
+    Q_ENUM(SimulationIconType)
+
+    explicit OutputDataListModel(OutputDataWidget* parent);
+
+    int rowCount(const QModelIndex& parent = QModelIndex()) const override;
+    QVariant data(const QModelIndex& index, int role) const override;
+    bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::EditRole) override;
+
+    bool isValid() const;
+    QVector<quint16> values() const;
+
+    void clear();
+    void update();
+    void updateData(const QModbusDataUnit& data);
+
+    int columnsDistance() const
+    {
+        return _columnsDistance;
+    }
+    void setColumnsDistance(int value)
+    {
+        const int distance = qMax(1, value);
+        if (_columnsDistance == distance)
+            return;
+
+        _columnsDistance = distance;
+        if (rowCount() > 0)
+            emit dataChanged(index(0), index(rowCount() - 1), QVector<int>() << Qt::DisplayRole);
+    }
+
+    QModelIndex find(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr) const;
+
+private:
+    SimulationIconType simulationIcon(int row) const;
+
+private:
+    struct ItemData
+    {
+        quint32 Address = 0;
+        QVariant Value;
+        QString ValueStr;
+        QString Description;
+        bool Simulated = false;
+        SimulationIconType SimulationIcon = SimulationIconNone;
+        QColor BgColor;
+        QColor FgColor;
+        bool FindMatch = false;
+        bool FindCurrent = false;
+    };
+
+    OutputDataWidget* _parentWidget;
+    QModbusDataUnit _lastData;
+    DataType      _lastType  = DataType::Binary;
+    RegisterOrder _lastOrder = RegisterOrder::MSRF;
+    bool _lastLeadingZeros = false;
+    QModbusDataUnit::RegisterType _lastPointType = QModbusDataUnit::RegisterType::Invalid;
+    ByteOrder _lastByteOrder = ByteOrder::Direct;
+    QString _lastCodepage;
+    const QPixmap _iconSimulation16Bit;
+    const QPixmap _iconSimulation32Bit;
+    const QPixmap _iconSimulation64Bit;
+    const QPixmap _iconSimulationOff;
+    int _columnsDistance = 16;
+    QMap<int, ItemData> _mapItems;
+};
+
+class OutputDataWidget : public QFrame
+{
+    Q_OBJECT
+
+    friend class OutputDataListModel;
+
+public:
+    explicit OutputDataWidget(QWidget* parent = nullptr);
+    ~OutputDataWidget() override;
+
+    QVector<quint16> data() const;
+
+    void setup(const DataViewDefinitions& dd,
+               bool zeroBasedAddress,
+               AddressSpace addrSpace,
+               const ModbusSimulationMap2& simulations,
+               const QModbusDataUnit& data);
+
+    DataType dataType() const;
+    void setDataType(DataType type);
+
+    RegisterOrder registerOrder() const;
+    void setRegisterOrder(RegisterOrder order);
+
+    const ByteOrder* byteOrder() const;
+    void setByteOrder(ByteOrder order);
+
+    QString codepage() const;
+    void setCodepage(const QString& name);
+
+    void refreshDisplay();
+
+    QColor backgroundColor() const;
+    void setBackgroundColor(const QColor& clr);
+
+    QColor foregroundColor() const;
+    void setForegroundColor(const QColor& clr);
+
+    QColor addressColor() const;
+    void setAddressColor(const QColor& clr);
+
+    QColor commentColor() const;
+    void setCommentColor(const QColor& clr);
+
+    QFont font() const;
+    void setFont(const QFont& font);
+
+    int zoomPercent() const;
+    void setZoomPercent(int zoomPercent);
+
+    int dataViewColumnsDistance() const;
+    void setDataViewColumnsDistance(int value);
+
+
+    int rowCount() const;
+    int paint(const QRect& rc, QPainter& painter, int startRow = 0);
+    void updateData(const QModbusDataUnit& data);
+
+    AddressColorMap colorMap() const;
+    void setColor(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr, const QColor& clr);
+
+    void highlightByValue(quint16 value, const QColor& color);
+    void highlightBits(int bitValue, const QColor& color);
+    void clearHighlights();
+    void applyFindByValue(const QString& text);
+    bool findNextByValue(const QString& text);
+    bool findPreviousByValue(const QString& text);
+    void clearFindByValue();
+
+    AddressDescriptionMap descriptionMap() const;
+    void setDescription(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr, const QString& desc);
+
+    void setSimulated(DataType type, RegisterOrder order, quint8 deviceId, QModbusDataUnit::RegisterType regType, quint16 addr, bool on);
+
+signals:
+    void itemDoubleClicked(quint16 address, const QVariant& value);
+    void colorChanged(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr, const QColor& clr);
+    void descriptionChanged(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 addr, const QString& desc);
+
+protected:
+    void changeEvent(QEvent* event) override;
+    bool eventFilter(QObject* obj, QEvent* event) override;
+
+private slots:
+    void on_listView_doubleClicked(const QModelIndex& index);
+    void on_listView_customContextMenuRequested(const QPoint& pos);
+
+private:
+    void updatePaletteFromTheme();
+    void showZoomOverlay();
+    QModelIndex getValueIndex(const QModelIndex& index) const;
+    bool parseFindValue(const QString& text, quint16& value) const;
+    void rebuildFindMatches(const QString& text);
+    void updateFindHighlights();
+    void focusCurrentFindMatch();
+    void clearFindMatchState();
+
+private:
+    Ui::OutputDataWidget* ui;
+    QLabel* _zoomLabel = nullptr;
+    QTimer* _zoomHideTimer = nullptr;
+
+private:
+    qreal _baseFontSize = 0.0;
+    int _zoomPercent = 100;
+
+    DataType      _dataType  = DataType::Binary;
+    RegisterOrder _regOrder  = RegisterOrder::MSRF;
+    ByteOrder _byteOrder;
+    QString _codepage;
+    DataViewDefinitions _displayDefinition;
+    bool _zeroBasedAddress = false;
+    AddressSpace _addrSpace = AddressSpace::Addr6Digits;
+    AddressColorMap _colorMap;
+    QSharedPointer<OutputDataListModel> _listModel;
+    QString _findText;
+    QVector<int> _findRows;
+    int _currentFindIndex = -1;
+};
+
+#endif // OUTPUTDATAWIDGET_H
+
+
+

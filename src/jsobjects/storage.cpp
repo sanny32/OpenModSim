@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file storage.cpp
+/// \brief Implements the storage functionality.
+///
+
 #include "storage.h"
 
 ///
@@ -67,3 +75,4 @@ void Storage::clear()
 {
     _storage.clear();
 }
+

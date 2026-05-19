@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file diagnostics.h
+/// \brief Declares the diagnostics interfaces.
+///
+
 #ifndef DIAGNOSTICS_H
 #define DIAGNOSTICS_H
 
@@ -119,3 +127,4 @@ public:
 };
 
 #endif // DIAGNOSTICS_H
+

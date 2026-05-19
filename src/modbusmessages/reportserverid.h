@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file reportserverid.h
+/// \brief Declares the reportserverid interfaces.
+///
+
 #ifndef REPORTSERVERID_H
 #define REPORTSERVERID_H
 
@@ -93,3 +101,4 @@ public:
 };
 
 #endif // REPORTSERVERID_H
+

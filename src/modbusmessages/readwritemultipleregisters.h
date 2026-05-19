@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file readwritemultipleregisters.h
+/// \brief Declares the readwritemultipleregisters interfaces.
+///
+
 #ifndef READWRITEMULTIPLEREGISTERS_H
 #define READWRITEMULTIPLEREGISTERS_H
 
@@ -155,3 +163,4 @@ public:
 };
 
 #endif // READWRITEMULTIPLEREGISTERS_H
+

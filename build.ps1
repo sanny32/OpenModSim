@@ -1,7 +1,9 @@
 param(
     [switch]$qt5,
     [switch]$qt6,
-    [string]$BuildType = "Release"
+    [switch]$qlementine,
+    [string]$BuildType = "Release",
+    [string]$PythonVersion = "3.14.4"
 )
 
 if ($qt5 -and $qt6) {
@@ -10,22 +12,53 @@ if ($qt5 -and $qt6) {
 }
 
 if ($qt5) {
-    $QtVersion   = "5.15.2"
-    $Arch        = "win64"
-    $Compiler    = "msvc2019_64"
-    $CMakeGenerator = "Visual Studio 16 2019"
+    $QtVersion = "5.15.2"
+    $Arch      = "win64"
+    $Compiler  = "msvc2019_64"
 }
 else {
-    $QtVersion   = "6.10.1"
-    $Arch        = "win64"
-    $Compiler    = "msvc2022_64"
-    $CMakeGenerator = "Visual Studio 17 2022"
+    $QtVersion = "6.9.3"
+    $Arch      = "win64"
+    $Compiler  = "msvc2022_64"
+}
+
+$vswhere = "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe"
+$CMakeGenerator = if ($qt5) { "Visual Studio 16 2019" } else { "Visual Studio 17 2022" }
+if (Test-Path $vswhere) {
+    $vsVersion = & $vswhere -latest -products * `
+        -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 `
+        -property installationVersion 2>$null
+    if ($vsVersion -match '^(\d+)\.') {
+        switch ([int]$Matches[1]) {
+            16 { $CMakeGenerator = "Visual Studio 16 2019" }
+            17 { $CMakeGenerator = "Visual Studio 17 2022" }
+            18 { $CMakeGenerator = "Visual Studio 18 2026" }
+        }
+    }
 }
 
 $QtMajorVersion = ($QtVersion -replace '^(\d+)\..*$', '$1')
+$SourceCMakeLists = Join-Path $PSScriptRoot "src\CMakeLists.txt"
+$MinimumCMakeMatch = Select-String -Path $SourceCMakeLists -Pattern '^\s*cmake_minimum_required\s*\(\s*VERSION\s+([0-9]+(\.[0-9]+){1,3})' | Select-Object -First 1
+$AppVersionMatch = Select-String -Path $SourceCMakeLists -Pattern '^\s*VERSION\s+(\d+)\.(\d+)\.(\d+)' | Select-Object -First 1
+
+if (-not $MinimumCMakeMatch) {
+    Write-Error "Can't detect minimum CMake version from $SourceCMakeLists"
+    exit 1
+}
+
+if (-not $AppVersionMatch) {
+    Write-Error "Can't detect application version from $SourceCMakeLists"
+    exit 1
+}
+
+$MinimumCMakeVersion = [version]$MinimumCMakeMatch.Matches[0].Groups[1].Value
+$AppMajorVersion = $AppVersionMatch.Matches[0].Groups[1].Value
+$InstallPrefix = "C:/Program Files/Open ModSim $AppMajorVersion"
 
 $ErrorActionPreference = "Stop"
 
+Write-Host ""
 Write-Host "================================"
 Write-Host "=== OpenModSim Build Script ==="
 Write-Host "================================"
@@ -33,6 +66,9 @@ Write-Host "Qt Version: $QtVersion"
 Write-Host "Compiler:   $Compiler"
 Write-Host "Generator:  $CMakeGenerator"
 Write-Host "BuildType:  $BuildType"
+Write-Host "Python:     $PythonVersion"
+Write-Host "InstallDir: $InstallPrefix"
+Write-Host "qlementine: $(if ($qlementine) { 'ON' } else { 'OFF' })"
 Write-Host "================================"
 
 # Check Windows version and architecture
@@ -60,11 +96,11 @@ if ($Arch -eq "win64" -and $architecture -ne "AMD64") {
 
 # Function to install Python
 function Install-Python {
-    $pythonUrl = "https://www.python.org/ftp/python/3.11.9/python-3.11.9-amd64.exe"
+    $pythonUrl = "https://www.python.org/ftp/python/$PythonVersion/python-$PythonVersion-amd64.exe"
     $installerPath = "$env:TEMP\python-installer.exe"
     
     try {
-        Write-Host "Downloading Python 3.11.9..."
+        Write-Host "Downloading Python $PythonVersion..."
         Invoke-WebRequest -Uri $pythonUrl -OutFile $installerPath
         Write-Host "Download completed."
     }
@@ -158,40 +194,65 @@ function Install-CMakeSystem {
     return $false
 }
 
-# Test MSVC is installed
-function Test-MsvcCompiler {
-    if ($QtMajorVersion -eq "5") {
-        $msvcPaths = @(
-            "${env:ProgramFiles}\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC",
-            "${env:ProgramFiles}\Microsoft Visual Studio\2019\Professional\VC\Tools\MSVC",
-            "${env:ProgramFiles}\Microsoft Visual Studio\2019\Enterprise\VC\Tools\MSVC",
-            "${env:ProgramFiles}\Microsoft Visual Studio\2019\BuildTools\VC\Tools\MSVC",
-            "${env:ProgramFiles(x86)}\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC",
-            "${env:ProgramFiles(x86)}\Microsoft Visual Studio\2019\Professional\VC\Tools\MSVC",
-            "${env:ProgramFiles(x86)}\Microsoft Visual Studio\2019\Enterprise\VC\Tools\MSVC",
-            "${env:ProgramFiles(x86)}\Microsoft Visual Studio\2019\BuildTools\VC\Tools\MSVC"
-        )
+# Function to get CMake version
+function Get-CMakeVersion {
+    param(
+        [string]$CMakePath
+    )
+
+    try {
+        $versionOutput = & $CMakePath --version 2>&1
+        $versionLine = $versionOutput | Select-Object -First 1
+        if ($versionLine -match 'cmake version\s+([0-9]+(\.[0-9]+){1,3})') {
+            return [version]$Matches[1]
+        }
     }
-    else {
-        $msvcPaths = @(
-            "${env:ProgramFiles}\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC",
-            "${env:ProgramFiles}\Microsoft Visual Studio\2022\Professional\VC\Tools\MSVC", 
-            "${env:ProgramFiles}\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC",
-            "${env:ProgramFiles}\Microsoft Visual Studio\2022\BuildTools\VC\Tools\MSVC",
-            "${env:ProgramFiles(x86)}\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC",
-            "${env:ProgramFiles(x86)}\Microsoft Visual Studio\2022\Professional\VC\Tools\MSVC",
-            "${env:ProgramFiles(x86)}\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC",
-            "${env:ProgramFiles(x86)}\Microsoft Visual Studio\2022\BuildTools\VC\Tools\MSVC"
-        )
+    catch {
+        return $null
     }
 
-    
+    return $null
+}
+
+# Test MSVC is installed
+function Test-MsvcCompiler {
+    $vsYear = if ($QtMajorVersion -eq "5") { "2019" } else { "2022" }
+
+    $vswhere = "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe"
+    if (Test-Path $vswhere) {
+        $vsPath = & $vswhere -latest -products * `
+            -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 `
+            -property installationPath 2>$null
+        if ($vsPath) {
+            $msvcBase = Join-Path $vsPath "VC\Tools\MSVC"
+            if (Test-Path $msvcBase) {
+                $versions = Get-ChildItem $msvcBase -Directory | Sort-Object Name -Descending
+                if ($versions) {
+                    $compilerPath = Join-Path $msvcBase "$($versions[0].Name)\bin\Hostx64\x64\cl.exe"
+                    if (Test-Path $compilerPath) {
+                        return $compilerPath
+                    }
+                }
+            }
+        }
+    }
+
+    $msvcPaths = @(
+        "${env:ProgramFiles}\Microsoft Visual Studio\$vsYear\Community\VC\Tools\MSVC",
+        "${env:ProgramFiles}\Microsoft Visual Studio\$vsYear\Professional\VC\Tools\MSVC",
+        "${env:ProgramFiles}\Microsoft Visual Studio\$vsYear\Enterprise\VC\Tools\MSVC",
+        "${env:ProgramFiles}\Microsoft Visual Studio\$vsYear\BuildTools\VC\Tools\MSVC",
+        "${env:ProgramFiles(x86)}\Microsoft Visual Studio\$vsYear\Community\VC\Tools\MSVC",
+        "${env:ProgramFiles(x86)}\Microsoft Visual Studio\$vsYear\Professional\VC\Tools\MSVC",
+        "${env:ProgramFiles(x86)}\Microsoft Visual Studio\$vsYear\Enterprise\VC\Tools\MSVC",
+        "${env:ProgramFiles(x86)}\Microsoft Visual Studio\$vsYear\BuildTools\VC\Tools\MSVC"
+    )
+
     foreach ($path in $msvcPaths) {
         if (Test-Path $path) {
             $versions = Get-ChildItem $path -Directory | Sort-Object Name -Descending
             if ($versions) {
-                $latestVersion = $versions[0].Name
-                $compilerPath = Join-Path $path "$latestVersion\bin\Hostx64\x64\cl.exe"
+                $compilerPath = Join-Path $path "$($versions[0].Name)\bin\Hostx64\x64\cl.exe"
                 if (Test-Path $compilerPath) {
                     return $compilerPath
                 }
@@ -261,8 +322,8 @@ try {
         $major = [int]$matches[1]
         $minor = [int]$matches[2]
         
-        if ($major -lt 3 -or ($major -eq 3 -and $minor -lt 6)) {
-            Write-Host "Python version $major.$minor is too old. aqtinstall requires Python 3.6+."
+        if ($major -lt 3 -or ($major -eq 3 -and $minor -lt 12)) {
+            Write-Host "Python version $major.$minor is too old. aqtinstall requires Python 3.12+."
             $choice = Read-Host "Do you want to install a newer Python version? (y/n)"
             if ($choice -eq 'y' -or $choice -eq 'Y') {
                 $success = Install-Python
@@ -271,7 +332,7 @@ try {
                     exit 1
                 }
             } else {
-                Write-Error "Please install Python 3.6 or newer manually."
+                Write-Error "Please install Python 3.12 or newer manually."
                 exit 1
             }
         }
@@ -279,7 +340,7 @@ try {
 }
 catch {
     Write-Host "Python not found."
-    $choice = Read-Host "Do you want to download and install Python 3.11? (y/n)"
+    $choice = Read-Host "Do you want to download and install Python $($PythonVersion)? (y/n)"
     if ($choice -eq 'y' -or $choice -eq 'Y') {
         $success = Install-Python
         if (-not $success) {
@@ -325,28 +386,20 @@ else{
 # Check if aqtinstall is available by trying to import it
 Write-Host ""
 Write-Host "Checking for aqtinstall..."
-try {
-    $null = python -c "import aqt; print('aqtinstall found')" 2>$null
-    $aqtInstalled = $true
-}
-catch {
-    $aqtInstalled = $false
-}
+python -c "import aqt" 2>$null
+$aqtInstalled = ($LASTEXITCODE -eq 0)
 
 if (-not $aqtInstalled) {
     Write-Host "Installing aqtinstall..."
     python -m pip install --upgrade pip
     python -m pip install aqtinstall
-    
-    # Verify installation
-    try {
-        $null = python -c "import aqt; print('aqtinstall installed successfully')" 2>$null
-        Write-Host "aqtinstall installed successfully."
-    }
-    catch {
+
+    python -c "import aqt" 2>$null
+    if ($LASTEXITCODE -ne 0) {
         Write-Error "Failed to install aqtinstall. Please install manually: pip install aqtinstall"
         exit 1
     }
+    Write-Host "aqtinstall installed successfully."
 }
 
 python -m aqt version
@@ -355,23 +408,47 @@ python -m aqt version
 Write-Host ""
 Write-Host "Checking for CMake..."
 $cmakePath = $null
-if (Get-Command cmake -ErrorAction SilentlyContinue) {
-    $cmakePath = (Get-Command cmake).Source
+$cmakeNeedsInstall = $false
+$cmakeCommand = Get-Command cmake -ErrorAction SilentlyContinue
+if ($cmakeCommand) {
+    $cmakePath = $cmakeCommand.Source
     Write-Host "Found system CMake: $cmakePath"
+
+    $cmakeVersion = Get-CMakeVersion -CMakePath $cmakePath
+    if (-not $cmakeVersion) {
+        Write-Host "Failed to detect CMake version."
+        $cmakeNeedsInstall = $true
+    }
+    elseif ($cmakeVersion -lt $MinimumCMakeVersion) {
+        Write-Host "Found CMake version $cmakeVersion, but version $MinimumCMakeVersion or newer is required."
+        $cmakeNeedsInstall = $true
+    }
+    else {
+        Write-Host "CMake version $cmakeVersion is supported."
+    }
 } else {
     Write-Host "CMake not found in PATH."
-    $choice = Read-Host "Do you want to install CMake system-wide? (y/n)"
+    $cmakeNeedsInstall = $true
+}
+
+if ($cmakeNeedsInstall) {
+    $choice = Read-Host "Do you want to install/update CMake system-wide? (y/n)"
     if ($choice -eq 'y' -or $choice -eq 'Y') {
         $success = Install-CMakeSystem
         if ($success) {
             $cmakePath = (Get-Command cmake).Source
+            $cmakeVersion = Get-CMakeVersion -CMakePath $cmakePath
+            if (-not $cmakeVersion -or $cmakeVersion -lt $MinimumCMakeVersion) {
+                Write-Error "Installed CMake version is lower than required $MinimumCMakeVersion."
+                exit 1
+            }
             Write-Host "CMake installed: $cmakePath"
         } else {
             Write-Error "CMake installation failed. Please install manually from: https://cmake.org/download/"
             exit 1
         }
     } else {
-        Write-Host "Please install CMake manually from: https://cmake.org/download/"
+        Write-Host "Please install CMake $MinimumCMakeVersion or newer manually from: https://cmake.org/download/"
         Write-Host "Make sure to add it to PATH during installation."
         exit 1
     }
@@ -417,12 +494,24 @@ Write-Host "Configuring project with CMake..."
 $cmakeArgs = @(
     "../src",
     "-G", $CMakeGenerator,
-    "-DCMAKE_PREFIX_PATH=`"$QtDir`""
+    "-DCMAKE_PREFIX_PATH=`"$QtDir`"",
+    "-DCMAKE_INSTALL_PREFIX=`"$InstallPrefix`"",
+    "-DUSE_QLEMENTINE_APP_STYLE=$(if ($qlementine) { 'ON' } else { 'OFF' })"
 )
+
+$vswhere = "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe"
+if (Test-Path $vswhere) {
+    $vsInstallPath = & $vswhere -latest -products * `
+        -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 `
+        -property installationPath 2>$null
+    if ($vsInstallPath) {
+        $cmakeArgs += "-DCMAKE_GENERATOR_INSTANCE=$vsInstallPath"
+    }
+}
 
 if ($QtMajorVersion -eq "5") {
     $cmakeArgs += "-DCMAKE_DISABLE_FIND_PACKAGE_Qt6=TRUE"
-} 
+}
 
 & $cmakePath @cmakeArgs
 
@@ -463,24 +552,28 @@ if (Test-Path $exePath) {
         $currentDir = Get-Location
         Set-Location $exeDir
         
-        # Common windeployqt arguments
+        # Keep deployment flags aligned with the Windows installer workflows.
         $windeployArgs = @(
             "--release"
             "--plugindir", ".\plugins"
-            "--no-compiler-runtime"
             "--no-opengl-sw"
+            "--no-system-d3d-compiler"
         )
 
         if ($QtMajorVersion -eq "6") {
-            # Qt 6 specific options
+            # Qt 6 installer workflow options
             $windeployArgs += @(
+                "--no-system-dxc-compiler"
                 "--skip-plugin-types", "help,generic,networkinformation,qmltooling,tls"
-                "--exclude-plugins", "qsqlibase,qsqlmimer,qsqloci,qsqlodbc,qsqlpsql"
+                "--exclude-plugins", "qgif,qjpeg,qpdf,qsqlibase,qsqlmimer,qsqloci,qsqlodbc,qsqlpsql"
             )
         }
         elseif ($QtMajorVersion -eq "5") {
-            # Qt 5 specific options
-            $windeployArgs += "--no-system-d3d-compiler"
+            # Qt 5 installer workflow options
+            $windeployArgs += @(
+                "--no-angle"
+                "--no-quick"
+            )
         }
 
         # Executable
@@ -507,3 +600,13 @@ if (Test-Path $exePath) {
 Set-Location ..
 Write-Host ""
 Write-Host "=== Build finished successfully ==="
+Write-Host ""
+Write-Host "To install or uninstall Open ModSim, run:"
+Write-Host ""
+Write-Host "    cd $BuildDir"
+Write-Host ""
+Write-Host "Install target directory: $InstallPrefix"
+Write-Host ""
+Write-Host "    cmake --install . --config $BuildType"
+Write-Host "    cmake --build . --target uninstall --config $BuildType"
+Write-Host ""

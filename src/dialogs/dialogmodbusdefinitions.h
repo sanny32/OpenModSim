@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file dialogmodbusdefinitions.h
+/// \brief Declares the dialogmodbusdefinitions interfaces.
+///
+
 #ifndef DIALOGMODBUSDEFINITIONS_H
 #define DIALOGMODBUSDEFINITIONS_H
 
@@ -22,6 +30,9 @@ public:
 
     void accept() override;
 
+protected:
+    void changeEvent(QEvent* event) override;
+
 private slots:
     void on_buttonBox_clicked(QAbstractButton* btn);
 
@@ -35,3 +46,4 @@ private:
 };
 
 #endif // DIALOGMODBUSDEFINITIONS_H
+

@@ -1,12 +1,27 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file jscodeeditor.cpp
+/// \brief Implements the jscodeeditor functionality.
+///
+
+#include <QMenu>
 #include <QPainter>
 #include <QTextBlock>
 #include <QScrollBar>
 #include <QAbstractItemView>
+#include <QContextMenuEvent>
+#include <QGuiApplication>
+#include <QPlainTextDocumentLayout>
 #include "jscompleter.h"
 #include "jscodeeditor.h"
+#include "themedicons.h"
+#include "../styles/appcolors.h"
+#include "../fontutils.h"
 
 ///
-/// \brief console::console
+/// \brief JSCodeEditor::JSCodeEditor
 /// \param parent
 ///
 JSCodeEditor::JSCodeEditor(QWidget *parent)
@@ -21,9 +36,10 @@ JSCodeEditor::JSCodeEditor(QWidget *parent)
     connect(this, &JSCodeEditor::updateRequest, this, &JSCodeEditor::updateLineNumberArea);
     connect(this, &JSCodeEditor::cursorPositionChanged, this, &JSCodeEditor::highlightCurrentLine);
 
-    setBackgroundColor(Qt::white);
+    setLineWrapMode(QPlainTextEdit::NoWrap);
+    applyThemeColors();
 
-    setFont(QFont("Fira Code"));
+    setFont(defaultScriptFont());
     setTabStopDistance(fontMetrics().horizontalAdvance(' ') * 4);
 
     updateLineNumberAreaWidth(0);
@@ -37,15 +53,44 @@ JSCodeEditor::JSCodeEditor(QWidget *parent)
 ///
 JSCodeEditor::~JSCodeEditor()
 {
-    if(_compliter)
-        delete _compliter;
-
-    delete _highlighter;
-    delete _lineNumberArea;
 }
 
 ///
-/// \brief console::lineNumberAreaWidth
+/// \brief JSCodeEditor::codeDocument
+/// \return
+///
+QTextDocument* JSCodeEditor::codeDocument() const
+{
+    return document();
+}
+
+///
+/// \brief JSCodeEditor::setCodeDocument
+/// \param doc
+///
+void JSCodeEditor::setCodeDocument(QTextDocument* doc)
+{
+    if(!doc || doc == document())
+        return;
+
+    if(_highlighter) {
+        delete _highlighter;
+        _highlighter = nullptr;
+    }
+
+    if(!qobject_cast<QPlainTextDocumentLayout*>(doc->documentLayout()))
+        doc->setDocumentLayout(new QPlainTextDocumentLayout(doc));
+
+    QPlainTextEdit::setDocument(doc);
+    _highlighter = new JSHighlighter(document());
+
+    clearSearchHighlights();
+    updateLineNumberAreaWidth(0);
+    highlightCurrentLine();
+}
+
+///
+/// \brief JSCodeEditor::lineNumberAreaWidth
 /// \return
 ///
 int JSCodeEditor::lineNumberAreaWidth()
@@ -61,7 +106,16 @@ int JSCodeEditor::lineNumberAreaWidth()
 }
 
 ///
-/// \brief console::setForegroundColor
+/// \brief JSCodeEditor::foregroundColor
+/// \return
+///
+QColor JSCodeEditor::foregroundColor() const
+{
+    return palette().color(QPalette::Text);
+}
+
+///
+/// \brief JSCodeEditor::setForegroundColor
 /// \param clr
 ///
 void JSCodeEditor::setForegroundColor(const QColor& clr)
@@ -69,10 +123,23 @@ void JSCodeEditor::setForegroundColor(const QColor& clr)
     auto pal = palette();
     pal.setColor(QPalette::Text, clr);
     setPalette(pal);
+    if (_highlighter)
+        _highlighter->setDarkMode(AppColors::isDark());
+    highlightCurrentLine();
+    _lineNumberArea->update();
 }
 
 ///
-/// \brief console::setBackgroundColor
+/// \brief JSCodeEditor::backgroundColor
+/// \return
+///
+QColor JSCodeEditor::backgroundColor() const
+{
+    return palette().color(QPalette::Base);
+}
+
+///
+/// \brief JSCodeEditor::setBackgroundColor
 /// \param clr
 ///
 void JSCodeEditor::setBackgroundColor(const QColor& clr)
@@ -81,6 +148,11 @@ void JSCodeEditor::setBackgroundColor(const QColor& clr)
     pal.setColor(QPalette::Base, clr);
     pal.setColor(QPalette::Window, clr);
     setPalette(pal);
+    _lineColor = AppColors::alternateBackground();
+    if (_highlighter)
+        _highlighter->setDarkMode(AppColors::isDark());
+    highlightCurrentLine();
+    _lineNumberArea->update();
 }
 
 ///
@@ -127,7 +199,7 @@ void JSCodeEditor::search(const QString& text)
     while(find(text))
     {
         QTextEdit::ExtraSelection extra;
-        extra.format.setBackground(Qt::yellow);
+        extra.format.setBackground(AppColors::searchMatchBackground());
 
         extra.cursor = textCursor();
         extraSelections.append(extra);
@@ -139,7 +211,193 @@ void JSCodeEditor::search(const QString& text)
 }
 
 ///
-/// \brief console::updateLineNumberAreaWidth
+/// \brief JSCodeEditor::highlightAllMatches
+/// \param text
+/// \param flags
+/// \return
+///
+int JSCodeEditor::highlightAllMatches(const QString& text, QTextDocument::FindFlags flags)
+{
+    _searchSelections.clear();
+    _currentMatchIndex = -1;
+
+    if(text.isEmpty())
+    {
+        highlightCurrentLine();
+        return 0;
+    }
+
+    const auto cur = textCursor();
+    QTextCursor findCursor(document());
+
+    while(!(findCursor = document()->find(text, findCursor, flags)).isNull())
+    {
+        QTextEdit::ExtraSelection extra;
+        extra.format.setBackground(AppColors::searchMatchBackground());
+        extra.cursor = findCursor;
+        _searchSelections.append(extra);
+    }
+
+    // Determine current match based on cursor position
+    for(int i = 0; i < _searchSelections.size(); ++i)
+    {
+        if(_searchSelections[i].cursor.selectionStart() >= cur.position())
+        {
+            _currentMatchIndex = i;
+            break;
+        }
+    }
+
+    if(_currentMatchIndex == -1 && !_searchSelections.isEmpty())
+        _currentMatchIndex = 0;
+
+    // Highlight current match differently
+    if(_currentMatchIndex >= 0 && _currentMatchIndex < _searchSelections.size())
+        _searchSelections[_currentMatchIndex].format.setBackground(AppColors::searchCurrentMatchBackground());
+
+    highlightCurrentLine();
+    return _searchSelections.size();
+}
+
+///
+/// \brief JSCodeEditor::clearSearchHighlights
+///
+void JSCodeEditor::clearSearchHighlights()
+{
+    _searchSelections.clear();
+    _currentMatchIndex = -1;
+    highlightCurrentLine();
+}
+
+///
+/// \brief JSCodeEditor::findNext
+/// \param text
+/// \return
+///
+bool JSCodeEditor::findNext(const QString& text)
+{
+    if(_searchSelections.isEmpty() || text.isEmpty())
+        return false;
+
+    _currentMatchIndex++;
+    if(_currentMatchIndex >= _searchSelections.size())
+        _currentMatchIndex = 0;
+
+    // Reset all to yellow
+    for(auto& sel : _searchSelections)
+        sel.format.setBackground(Qt::yellow);
+
+    // Highlight current match
+    _searchSelections[_currentMatchIndex].format.setBackground(QColor(255, 150, 50));
+
+    // Move cursor to current match
+    auto cursor = _searchSelections[_currentMatchIndex].cursor;
+    setTextCursor(cursor);
+
+    highlightCurrentLine();
+    return true;
+}
+
+///
+/// \brief JSCodeEditor::findPrevious
+/// \param text
+/// \return
+///
+bool JSCodeEditor::findPrevious(const QString& text)
+{
+    if(_searchSelections.isEmpty() || text.isEmpty())
+        return false;
+
+    _currentMatchIndex--;
+    if(_currentMatchIndex < 0)
+        _currentMatchIndex = _searchSelections.size() - 1;
+
+    // Reset all to yellow
+    for(auto& sel : _searchSelections)
+        sel.format.setBackground(Qt::yellow);
+
+    // Highlight current match
+    _searchSelections[_currentMatchIndex].format.setBackground(QColor(255, 150, 50));
+
+    // Move cursor to current match
+    auto cursor = _searchSelections[_currentMatchIndex].cursor;
+    setTextCursor(cursor);
+
+    highlightCurrentLine();
+    return true;
+}
+
+///
+/// \brief JSCodeEditor::replaceCurrent
+/// \param text
+/// \param replacement
+/// \param flags
+///
+void JSCodeEditor::replaceCurrent(const QString& text, const QString& replacement, QTextDocument::FindFlags flags)
+{
+    auto cursor = textCursor();
+    const Qt::CaseSensitivity cs = (flags & QTextDocument::FindCaseSensitively)
+                                       ? Qt::CaseSensitive : Qt::CaseInsensitive;
+    if(cursor.hasSelection() && cursor.selectedText().compare(text, cs) == 0)
+    {
+        cursor.insertText(replacement);
+        setTextCursor(cursor);
+    }
+
+    highlightAllMatches(text, flags);
+    if(!_searchSelections.isEmpty())
+        findNext(text);
+}
+
+///
+/// \brief JSCodeEditor::replaceAll
+/// \param text
+/// \param replacement
+/// \param flags
+/// \return
+///
+int JSCodeEditor::replaceAll(const QString& text, const QString& replacement, QTextDocument::FindFlags flags)
+{
+    if(text.isEmpty())
+        return 0;
+
+    int count = 0;
+    auto cursor = textCursor();
+    cursor.beginEditBlock();
+
+    QTextCursor findCursor(document());
+    while(!(findCursor = document()->find(text, findCursor, flags)).isNull())
+    {
+        findCursor.insertText(replacement);
+        count++;
+    }
+
+    cursor.endEditBlock();
+
+    clearSearchHighlights();
+    return count;
+}
+
+///
+/// \brief JSCodeEditor::currentMatchIndex
+/// \return
+///
+int JSCodeEditor::currentMatchIndex() const
+{
+    return _currentMatchIndex;
+}
+
+///
+/// \brief JSCodeEditor::totalMatchCount
+/// \return
+///
+int JSCodeEditor::totalMatchCount() const
+{
+    return _searchSelections.size();
+}
+
+///
+/// \brief JSCodeEditor::updateLineNumberAreaWidth
 ///
 void JSCodeEditor::updateLineNumberAreaWidth(int)
 {
@@ -147,7 +405,7 @@ void JSCodeEditor::updateLineNumberAreaWidth(int)
 }
 
 ///
-/// \brief console::updateLineNumberArea
+/// \brief JSCodeEditor::updateLineNumberArea
 /// \param rect
 /// \param dy
 ///
@@ -163,7 +421,7 @@ void JSCodeEditor::updateLineNumberArea(const QRect &rect, int dy)
 }
 
 ///
-/// \brief console::insertCompletion
+/// \brief JSCodeEditor::insertCompletion
 /// \param completion
 ///
 void JSCodeEditor::insertCompletion(const QString& completion)
@@ -175,7 +433,42 @@ void JSCodeEditor::insertCompletion(const QString& completion)
 }
 
 ///
-/// \brief console::resizeEvent
+/// \brief JSCodeEditor::applyThemeColors
+///
+void JSCodeEditor::applyThemeColors()
+{
+    const bool dark = AppColors::isDark();
+
+    auto pal = palette();
+    pal.setColor(QPalette::Base, AppColors::canvasBackground());
+    pal.setColor(QPalette::Window, AppColors::canvasBackground());
+    pal.setColor(QPalette::Text, AppColors::canvasForeground());
+    _lineColor = AppColors::alternateBackground();
+    setPalette(pal);
+    _highlighter->setDarkMode(dark);
+    _lineNumberArea->update();
+}
+
+///
+/// \brief JSCodeEditor::changeEvent
+/// \param event
+///
+void JSCodeEditor::changeEvent(QEvent* event)
+{
+    QPlainTextEdit::changeEvent(event);
+    if (event->type() == QEvent::ApplicationPaletteChange ||
+        event->type() == QEvent::StyleChange ||
+        event->type() == QEvent::ThemeChange)
+    {
+        if (backgroundColor() == AppColors::canvasBackground()) {
+            applyThemeColors();
+            highlightCurrentLine();
+        }
+    }
+}
+
+///
+/// \brief JSCodeEditor::resizeEvent
 /// \param e
 ///
 void JSCodeEditor::resizeEvent(QResizeEvent *e)
@@ -187,7 +480,7 @@ void JSCodeEditor::resizeEvent(QResizeEvent *e)
 }
 
 ///
-/// \brief console::keyPressEvent
+/// \brief JSCodeEditor::keyPressEvent
 /// \param e
 ///
 void JSCodeEditor::keyPressEvent(QKeyEvent *e)
@@ -286,19 +579,24 @@ void JSCodeEditor::keyPressEvent(QKeyEvent *e)
 }
 
 ///
-/// \brief console::highlightCurrentLine
+/// \brief JSCodeEditor::highlightCurrentLine
 ///
 void JSCodeEditor::highlightCurrentLine()
 {
     if (isReadOnly())
         return;
 
-    auto extraSelections = this->extraSelections();
-    QMutableListIterator<QTextEdit::ExtraSelection> i(extraSelections);
-    while (i.hasNext())
-        if(i.next().format.background().color() == _lineColor)
-            i.remove();
+    // A shared QTextDocument can be viewed by multiple editors.
+    // Re-attach this editor highlighter when needed.
+    if(_highlighter && _highlighter->document() != document())
+        _highlighter->setDocument(document());
 
+    QList<QTextEdit::ExtraSelection> extraSelections;
+
+    // Add search highlights
+    extraSelections.append(_searchSelections);
+
+    // Add current line highlight
     QTextEdit::ExtraSelection selection;
     selection.format.setBackground(_lineColor);
     selection.format.setProperty(QTextFormat::FullWidthSelection, true);
@@ -310,13 +608,16 @@ void JSCodeEditor::highlightCurrentLine()
 }
 
 ///
-/// \brief console::lineNumberAreaPaintEvent
+/// \brief JSCodeEditor::lineNumberAreaPaintEvent
 /// \param event
 ///
 void JSCodeEditor::lineNumberAreaPaintEvent(QPaintEvent *event)
 {
+    const QColor lineAreaBg = AppColors::lineNumberAreaBackground();
+    const QColor lineNumberColor = AppColors::lineNumberColor();
+
     QPainter painter(_lineNumberArea);
-    painter.fillRect(event->rect(), QColorConstants::Svg::whitesmoke);
+    painter.fillRect(event->rect(), lineAreaBg);
 
     auto block = firstVisibleBlock();
     int blockNumber = block.blockNumber();
@@ -328,7 +629,7 @@ void JSCodeEditor::lineNumberAreaPaintEvent(QPaintEvent *event)
         if (block.isVisible() && bottom >= event->rect().top())
         {
             const auto number = QString::number(blockNumber + 1);
-            painter.setPen(QColor(0x9F9F9F));
+            painter.setPen(lineNumberColor);
             painter.drawText(0, top, _lineNumberArea->width(), fontMetrics().height(), Qt::AlignCenter, number);
         }
 
@@ -340,7 +641,30 @@ void JSCodeEditor::lineNumberAreaPaintEvent(QPaintEvent *event)
 }
 
 ///
-/// \brief console::textUnderCursor
+/// \brief JSCodeEditor::contextMenuEvent
+/// \param event
+///
+void JSCodeEditor::contextMenuEvent(QContextMenuEvent *event)
+{
+    QMenu* menu = createStandardContextMenu();
+
+    for(QAction* action : menu->actions())
+    {
+        const QString name = action->objectName();
+        if     (name == "edit-undo")  action->setIcon(themedIcon(QStringLiteral("omodsim/undo")));
+        else if(name == "edit-redo")  action->setIcon(themedIcon(QStringLiteral("omodsim/redo")));
+        else if(name == "edit-cut")   action->setIcon(themedIcon(QStringLiteral("omodsim/cut")));
+        else if(name == "edit-copy")  action->setIcon(themedIcon(QStringLiteral("omodsim/copy")));
+        else if(name == "edit-paste") action->setIcon(themedIcon(QStringLiteral("omodsim/paste")));
+        else                          action->setIcon(QIcon());
+    }
+
+    menu->exec(event->globalPos());
+    delete menu;
+}
+
+///
+/// \brief JSCodeEditor::textUnderCursor
 /// \return
 ///
 QString JSCodeEditor::textUnderCursor() const
@@ -349,3 +673,4 @@ QString JSCodeEditor::textUnderCursor() const
     tc.select(QTextCursor::WordUnderCursor);
     return tc.selectedText();
 }
+

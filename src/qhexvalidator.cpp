@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file qhexvalidator.cpp
+/// \brief Implements the qhexvalidator functionality.
+///
+
 #include "qhexvalidator.h"
 
 ///
@@ -38,3 +46,4 @@ QHexValidator::State QHexValidator::validate(QString& input, int&) const
 
     return QValidator::Invalid;
 }
+

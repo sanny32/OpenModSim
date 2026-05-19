@@ -1,0 +1,325 @@
+# Source files
+set(SOURCES
+    ansimenu.cpp
+    application.cpp
+    applogger.cpp
+    apppreferences.cpp
+    appproject.cpp
+    cmdlineparser.cpp
+
+    controls/aboutdatawidget.cpp
+    controls/addressbasecombobox.cpp
+    controls/addressspacecombobox.cpp
+    controls/applogoutput.cpp
+    controls/bitnumberlabel.cpp
+    controls/bitpatterncontrol.cpp
+    controls/booleancombobox.cpp
+    controls/bytelisttextedit.cpp
+    controls/checkablegroupbox.cpp
+    controls/clickablelabel.cpp
+    controls/coloredpushbutton.cpp
+    controls/coloredtoolbutton.cpp
+    controls/consoleoutput.cpp
+    controls/customframe.cpp
+    controls/customlineedit.cpp
+    controls/findreplacebar.cpp
+    controls/flowcontroltypecombobox.cpp
+    controls/funccodefiltercombobox.cpp
+    controls/helpbrowser.cpp
+    controls/helpwidget.cpp
+    controls/jscodeeditor.cpp
+    controls/jscriptcontrol.cpp
+    controls/macsplittoolbutton.cpp
+    controls/mainstatusbar.cpp
+    controls/mdiarea.cpp
+    controls/mdiareaex.cpp
+    controls/mditabbar.cpp
+    controls/modbuslogwidget.cpp
+    controls/modbusmessagewidget.cpp
+    controls/numericcombobox.cpp
+    controls/numericlineedit.cpp
+    controls/outputdatawidget.cpp
+    controls/outputpanel.cpp
+    controls/outputtrafficwidget.cpp
+    controls/paritytypecombobox.cpp
+    controls/pointtypecombobox.cpp
+    controls/projecttreewidget.cpp
+    controls/runmodecombobox.cpp
+    controls/scripteditorwindow.cpp
+    controls/searchlineedit.cpp
+    controls/simulationmodecombobox.cpp
+    controls/statisticwidget.cpp
+    controls/toolbar.cpp
+    controls/trafficlogwindow.cpp
+    controls/transpscrollarea.cpp
+
+    datadelegate.cpp
+    datamapdatamodel.cpp
+    datasimulator.cpp
+
+    dialogs/dialogabout.cpp
+    dialogs/dialogautosimulation.cpp
+    dialogs/dialogcoilsimulation.cpp
+    dialogs/dialogforcemultipleregisters.cpp
+    dialogs/dialogforcestatusregisters.cpp
+    dialogs/dialogmodbusdefinitions.cpp
+    dialogs/dialogmsgparser.cpp
+    dialogs/dialogpreferences.cpp
+    dialogs/dialogprintsettings.cpp
+    dialogs/dialogselectserviceport.cpp
+    dialogs/dialogsetupserialport.cpp
+    dialogs/dialogwelcome.cpp
+    dialogs/dialogwindowsmanager.cpp
+    dialogs/dialogwriteregister.cpp
+    dialogs/dialogwritestatusregister.cpp
+
+    formdatamapview.cpp
+    formdataview.cpp
+    formscriptview.cpp
+    formtrafficview.cpp
+
+    htmldelegate.cpp
+    jscompleter.cpp
+    jshighlighter.cpp
+    main.cpp
+    mainwindow.cpp
+    menuconnect.cpp
+
+    jsobjects/console.cpp
+    jsobjects/script.cpp
+    jsobjects/server.cpp
+    jsobjects/storage.cpp
+
+    modbusdataunitmap.cpp
+    modbuserrorsimulations.cpp
+    modbusmessages/modbusmessage.cpp
+    modbusmultiserver.cpp
+    modbusrtuserialserver.cpp
+    modbusserver.cpp
+    modbustcpserver.cpp
+
+    qadjustedsizedialog.cpp
+    qdoublevalidatorex.cpp
+    qhexvalidator.cpp
+    qint64validator.cpp
+    qintvalidatorex.cpp
+    qfixedsizedialog.cpp
+    quintvalidator.cpp
+    recentfileactionlist.cpp
+    scriptdocument.cpp
+
+    styles/appstyle.cpp
+    styles/apptheme.cpp
+    styles/macappstyle.cpp
+    styles/qlementineappstyle.cpp
+    styles/themedicons.cpp
+
+    updatechecker.cpp
+)
+
+# Header files
+set(HEADERS
+    ansimenu.h
+    ansiutils.h
+    application.h
+    applogger.h
+    apppreferences.h
+    appproject.h
+    apptrace.h
+    bufferinglistmodel.h
+    byteorderutils.h
+    cmdlineparser.h
+    connectiondetails.h
+
+    controls/aboutdatawidget.h
+    controls/addressbasecombobox.h
+    controls/addressspacecombobox.h
+    controls/applogoutput.h
+    controls/bitnumberlabel.h
+    controls/bitpatterncontrol.h
+    controls/booleancombobox.h
+    controls/bytelisttextedit.h
+    controls/checkablegroupbox.h
+    controls/clickablelabel.h
+    controls/coloredpushbutton.h
+    controls/coloredtoolbutton.h
+    controls/consoleoutput.h
+    controls/customframe.h
+    controls/customlineedit.h
+    controls/findreplacebar.h
+    controls/flowcontroltypecombobox.h
+    controls/funccodefiltercombobox.h
+    controls/helpbrowser.h
+    controls/helpwidget.h
+    controls/jscodeeditor.h
+    controls/jscriptcontrol.h
+    controls/macsplittoolbutton.h
+    controls/mainstatusbar.h
+    controls/mdiarea.h
+    controls/mdiareaex.h
+    controls/mditabbar.h
+    controls/modbuslogwidget.h
+    controls/modbusmessagewidget.h
+    controls/numericcombobox.h
+    controls/numericlineedit.h
+    controls/outputdatawidget.h
+    controls/outputpanel.h
+    controls/outputtrafficwidget.h
+    controls/outputtypes.h
+    controls/paritytypecombobox.h
+    controls/pointtypecombobox.h
+    controls/projecttreewidget.h
+    controls/runmodecombobox.h
+    controls/scripteditorwindow.h
+    controls/searchlineedit.h
+    controls/simulationmodecombobox.h
+    controls/statisticwidget.h
+    controls/toolbar.h
+    controls/trafficlogwindow.h
+    controls/transpscrollarea.h
+
+    datadelegate.h
+    datamapdatamodel.h
+    datasimulator.h
+
+    dialogs/dialogabout.h
+    dialogs/dialogautosimulation.h
+    dialogs/dialogcoilsimulation.h
+    dialogs/colorswatch.h
+    dialogs/dialogforcemultipleregisters.h
+    dialogs/dialogforcestatusregisters.h
+    dialogs/dialogmodbusdefinitions.h
+    dialogs/dialogmsgparser.h
+    dialogs/dialogpreferences.h
+    dialogs/dialogprintsettings.h
+    dialogs/dialogselectserviceport.h
+    dialogs/dialogsetupserialport.h
+    dialogs/dialogwelcome.h
+    dialogs/dialogwindowsmanager.h
+    dialogs/dialogwriteregister.h
+    dialogs/dialogwritestatusregister.h
+
+    displaydefinition.h
+    enums.h
+    fontutils.h
+    formatutils.h
+
+    formdatamapview.h
+    formdataview.h
+    formscriptview.h
+    formtrafficview.h
+
+    htmldelegate.h
+    jscompleter.h
+    jshighlighter.h
+
+    jsobjects/console.h
+    jsobjects/script.h
+    jsobjects/server.h
+    jsobjects/storage.h
+
+    mainwindow.h
+    menuconnect.h
+
+    modbusdataunitmap.h
+    modbusdefinitions.h
+    modbusexception.h
+    modbuserrorsimulations.h
+    modbusfunction.h
+    modbuslimits.h
+    modbusmessages/diagnostics.h
+    modbusmessages/getcommeventcounter.h
+    modbusmessages/getcommeventlog.h
+    modbusmessages/maskwriteregister.h
+    modbusmessages/modbusmessage.h
+    modbusmessages/modbusmessages.h
+    modbusmessages/readcoils.h
+    modbusmessages/readdiscreteinputs.h
+    modbusmessages/readexceptionstatus.h
+    modbusmessages/readfifoqueue.h
+    modbusmessages/readfilerecord.h
+    modbusmessages/readholdingregisters.h
+    modbusmessages/readinputregisters.h
+    modbusmessages/readwritemultipleregisters.h
+    modbusmessages/reportserverid.h
+    modbusmessages/writefilerecord.h
+    modbusmessages/writemultiplecoils.h
+    modbusmessages/writemultipleregisters.h
+    modbusmessages/writesinglecoil.h
+    modbusmessages/writesingleregister.h
+    modbusmultiserver.h
+    modbusrtuserialserver.h
+    modbusserver.h
+    modbustcpserver.h
+    modbussimulationparams.h
+    modbuswriteparams.h
+
+    numericutils.h
+    pch.h
+    qadjustedsizedialog.h
+    qcountedset.h
+    qdoublevalidatorex.h
+    qfixedsizedialog.h
+    qhexvalidator.h
+    qint64validator.h
+    qintvalidatorex.h
+    qmodbusadu.h
+    qmodbusadurtu.h
+    qmodbusadutcp.h
+    qmodbuscommevent.h
+    qrange.h
+    quintvalidator.h
+    recentfileactionlist.h
+    scriptdocument.h
+    scriptsettings.h
+    serialportutils.h
+    translationutils.h
+    uiutils.h
+
+    styles/appcolors.h
+    styles/appstyle.h
+    styles/apptheme.h
+    styles/macappstyle.h
+    styles/qlementineappstyle.h
+    styles/themedicons.h
+
+    updatechecker.h
+)
+
+# UI Forms
+set(UI_FILES
+    controls/applogoutput.ui
+    controls/bitpatterncontrol.ui
+    controls/consoleoutput.ui
+    controls/findreplacebar.ui
+    controls/jscriptcontrol.ui
+    controls/mdiareaex.ui
+    controls/outputdatawidget.ui
+    controls/outputpanel.ui
+    controls/outputtrafficwidget.ui
+    controls/statisticwidget.ui
+
+    dialogs/dialogabout.ui
+    dialogs/dialogautosimulation.ui
+    dialogs/dialogcoilsimulation.ui
+    dialogs/dialogforcemultipleregisters.ui
+    dialogs/dialogforcestatusregisters.ui
+    dialogs/dialogmodbusdefinitions.ui
+    dialogs/dialogmsgparser.ui
+    dialogs/dialogpreferences.ui
+    dialogs/dialogprintsettings.ui
+    dialogs/dialogselectserviceport.ui
+    dialogs/dialogsetupserialport.ui
+    dialogs/dialogwelcome.ui
+    dialogs/dialogwindowsmanager.ui
+    dialogs/dialogwriteregister.ui
+    dialogs/dialogwritestatusregister.ui
+
+    formdatamapview.ui
+    formdataview.ui
+    formscriptview.ui
+    formtrafficview.ui
+
+    mainwindow.ui
+)
+

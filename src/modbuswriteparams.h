@@ -1,21 +1,35 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file modbuswriteparams.h
+/// \brief Declares the modbuswriteparams interfaces.
+///
+
 #ifndef MODBUSWRITEPARAMS_H
 #define MODBUSWRITEPARAMS_H
 
 #include <QVariant>
 #include "enums.h"
 
+class ModbusMultiServer;
+
 ///
 /// \brief The ModbusWriteParams class
 ///
 struct ModbusWriteParams
 {
+    quint32 DeviceId;
     quint16 Address;
     QVariant Value;
-    DataDisplayMode DisplayMode;
+    DataType        DataMode;
+    RegisterOrder   RegOrder = RegisterOrder::MSRF;
+    AddressSpace AddrSpace = AddressSpace::Addr6Digits;
     ByteOrder Order;
     QString Codepage;
     bool ZeroBasedAddress;
-    AddressSpace AddrSpace;
+    bool LeadingZeros = false;
+    ModbusMultiServer* Server = nullptr;
 };
 Q_DECLARE_METATYPE(ModbusWriteParams)
 
@@ -29,7 +43,9 @@ struct ModbusMaskWriteParams
     quint16 OrMask;
     bool ZeroBasedAddress;
     AddressSpace AddrSpace;
+    bool LeadingZeros = false;
 };
 Q_DECLARE_METATYPE(ModbusMaskWriteParams)
 
 #endif // MODBUSWRITEPARAMS_H
+

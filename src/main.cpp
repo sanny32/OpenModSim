@@ -1,9 +1,27 @@
-#include <QApplication>
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file main.cpp
+/// \brief Defines the application entry point.
+///
+
 #include <QFontDatabase>
+#include <QIcon>
 #include <QMessageBox>
+#include "application.h"
 #include "mainwindow.h"
 #include "cmdlineparser.h"
 #include "fontutils.h"
+#include "styles/appstyle.h"
+
+#ifdef HAVE_QLEMENTINE_APP_STYLE
+#include "styles/qlementineappstyle.h"
+#endif
+
+#ifdef Q_OS_MAC
+#include "styles/macappstyle.h"
+#endif
 
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 namespace {
@@ -13,56 +31,9 @@ namespace {
     static const int reg4 = qRegisterMetaType<ModbusMessage::ProtocolType>();
     static const int reg5 = qRegisterMetaType<QSharedPointer<const ModbusMessage>>();
     static const int reg6 = qRegisterMetaType<ModbusDefinitions>();
+    static const int reg7 = qRegisterMetaType<QList<int>>();
 }
 #endif
-
-///
-/// \brief The PaletteGuard class
-///
-class PaletteGuard : public QObject {
-public:
-    PaletteGuard(QObject* parent) : QObject(parent) { }
-    bool eventFilter(QObject *obj, QEvent *ev) override {
-        if (ev->type() == QEvent::ApplicationPaletteChange) {
-            QTimer::singleShot(0, [this](){
-                QApplication::setPalette(lightPalette());
-            });
-        }
-        return QObject::eventFilter(obj, ev);
-    }
-
-    static QPalette lightPalette() {
-        const QColor backGround(239, 239, 239);
-        const QColor light = backGround.lighter(150);
-        const QColor mid(backGround.darker(130));
-        const QColor midLight = mid.lighter(110);
-        const QColor base = Qt::white;
-        const QColor disabledBase(backGround);
-        const QColor dark = backGround.darker(150);
-        const QColor darkDisabled = QColor(209, 209, 209).darker(110);
-        const QColor text = Qt::black;
-        const QColor hightlightedText = Qt::white;
-        const QColor disabledText = QColor(190, 190, 190);
-        const QColor button = backGround;
-        const QColor shadow = dark.darker(135);
-        const QColor disabledShadow = shadow.lighter(150);
-        QPalette pal(Qt::black, backGround, light, dark, mid, text, base);
-        pal.setBrush(QPalette::Midlight, midLight);
-        pal.setBrush(QPalette::Button, button);
-        pal.setBrush(QPalette::Shadow, shadow);
-        pal.setBrush(QPalette::HighlightedText, hightlightedText);
-        pal.setBrush(QPalette::Disabled, QPalette::Text, disabledText);
-        pal.setBrush(QPalette::Disabled, QPalette::WindowText, disabledText);
-        pal.setBrush(QPalette::Disabled, QPalette::ButtonText, disabledText);
-        pal.setBrush(QPalette::Disabled, QPalette::Base, disabledBase);
-        pal.setBrush(QPalette::Disabled, QPalette::Dark, darkDisabled);
-        pal.setBrush(QPalette::Disabled, QPalette::Shadow, disabledShadow);
-        pal.setBrush(QPalette::Active, QPalette::Highlight, QColor(48, 140, 198));
-        pal.setBrush(QPalette::Inactive, QPalette::Highlight, QColor(48, 140, 198));
-        pal.setBrush(QPalette::Disabled, QPalette::Highlight, QColor(145, 145, 145));
-        return pal;
-    }
-};
 
 ///
 /// \brief isConsoleOutputAvailable
@@ -84,7 +55,7 @@ static inline void showVersion()
 {
     const auto version = QString("%1\n").arg(APP_VERSION);
     if(!isConsoleOutputAvailable()){
-        QMessageBox msg(QMessageBox::Information, APP_NAME, qPrintable(version));
+        QMessageBox msg(QMessageBox::Information, APP_PRODUCT_NAME, qPrintable(version));
         msg.setFont(defaultMonospaceFont());
         msg.exec();
     }
@@ -101,7 +72,7 @@ static inline void showVersion()
 static inline void showHelp(const QString& helpText)
 {
     if(!isConsoleOutputAvailable()){
-        QMessageBox msg(QMessageBox::Information, APP_NAME, qPrintable(helpText));
+        QMessageBox msg(QMessageBox::Information, APP_PRODUCT_NAME, qPrintable(helpText));
         msg.setFont(defaultMonospaceFont());
         msg.exec();
     }
@@ -118,7 +89,7 @@ static inline void showHelp(const QString& helpText)
 static void showErrorMessage(const QString &message)
 {
     if(!isConsoleOutputAvailable()){
-        QMessageBox msg(QMessageBox::Critical, APP_NAME, qPrintable(message));
+        QMessageBox msg(QMessageBox::Critical, APP_PRODUCT_NAME, qPrintable(message));
         msg.setFont(defaultMonospaceFont());
         msg.exec();
     }
@@ -136,19 +107,22 @@ static void showErrorMessage(const QString &message)
 ///
 int main(int argc, char *argv[])
 {
-    QApplication a(argc, argv);
+    Application a(argc, argv);
     a.setApplicationName(APP_NAME);
     a.setApplicationVersion(APP_VERSION);
+    a.setDesktopFileName(QStringLiteral("omodsim%1").arg(APP_VERSION_MAJOR));
 
-#ifdef Q_OS_WIN
-    a.setStyle("windowsvista");
+#if defined(HAVE_QLEMENTINE_APP_STYLE) && defined(Q_OS_MAC)
+    a.setStyle(new MacAppStyle());
+#elif defined(HAVE_QLEMENTINE_APP_STYLE)
+    a.setStyle(new QlementineAppStyle());
+#elif defined(Q_OS_WIN)
+    a.setStyle(new AppStyle("windowsvista"));
 #else
-    a.setStyle("Fusion");
-    a.setPalette(PaletteGuard::lightPalette());
-    a.installEventFilter(new PaletteGuard(&a));
+    a.setStyle(new AppStyle("fusion"));
 #endif
 
-    QFontDatabase::addApplicationFont(":/fonts/firacode.ttf");
+    QFontDatabase::addApplicationFont(":/res/fonts/firacode.ttf");
 
     CmdLineParser parser;
     if(!parser.parse(a.arguments()))
@@ -174,18 +148,10 @@ int main(int argc, char *argv[])
         profile = parser.value(CmdLineParser::_profile);
     }
 
-    QString cfg;
-    if(parser.isSet(CmdLineParser::_config))
-    {
-        cfg = parser.value(CmdLineParser::_config);
-    }
-
+    const QString cfg = parser.projectFile();
     const bool noSession = parser.isSet(CmdLineParser::_no_session);
 
-    MainWindow w(profile, !noSession);
-    if(!cfg.isEmpty()) {
-        w.loadConfig(cfg, true);
-    }
+    MainWindow w(profile, !noSession, cfg);
     w.show();
 
     return a.exec();

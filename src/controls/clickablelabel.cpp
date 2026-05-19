@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file clickablelabel.cpp
+/// \brief Implements the clickablelabel functionality.
+///
+
 #include "clickablelabel.h"
 
 ///
@@ -19,3 +27,4 @@ void ClickableLabel::mouseReleaseEvent(QMouseEvent* event)
     emit clicked();
     QLabel::mouseReleaseEvent(event);
 }
+

@@ -1,7 +1,19 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file consoleoutput.h
+/// \brief Declares the consoleoutput interfaces.
+///
+
 #ifndef CONSOLEOUTPUT_H
 #define CONSOLEOUTPUT_H
 
-#include <QPlainTextEdit>
+#include <QWidget>
+
+namespace Ui {
+class ConsoleOutput;
+}
 
 ///
 /// \brief The ConsoleOutput class
@@ -10,10 +22,14 @@ class ConsoleOutput : public QWidget
 {
     Q_OBJECT
 public:
-    explicit ConsoleOutput(QWidget* parent = nullptr);
+    enum class MessageType { Log, Debug, Warning, Error };
 
-    void addText(const QString& text, const QColor& clr);
+    explicit ConsoleOutput(QWidget* parent = nullptr);
+    ~ConsoleOutput();
+
+    void addMessage(const QString& text, MessageType type, const QString& source = {});
     bool isEmpty() const;
+    void setMaxLines(int n);
 
 public slots:
     void clear();
@@ -25,18 +41,19 @@ protected:
     void changeEvent(QEvent* event) override;
 
 private slots:
-    void on_customContextMenuRequested(const QPoint &pos);
+    void on_customContextMenuRequested(const QPoint& pos);
+    void applyFilters();
 
 private:
-    QToolButton* createToolButton(QWidget* parent,
-                                  const QString& text,
-                                  const QIcon& icon = QIcon(),
-                                  const QString& toolTip = QString(),
-                                  const QSize& size = {24, 24},
-                                  const QSize& iconSize = {12, 12});
+    void updateFilterButtons();
 
 private:
-    QPlainTextEdit* _textEdit;
-    QToolButton*    _clearButton;
+    Ui::ConsoleOutput* ui;
+    int _logCount   = 0;
+    int _warnCount  = 0;
+    int _errorCount = 0;
+    int _maxLines   = 500;
 };
+
 #endif // CONSOLEOUTPUT_H
+

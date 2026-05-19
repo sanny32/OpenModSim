@@ -6,9 +6,9 @@
 
 Open ModSim is a free implimentation of modbus slave (server) utility for modbus-tcp and modbus-rtu protocols.
 
-<img width="1292" height="759" alt="image" src="https://github.com/user-attachments/assets/5e3bb093-1d12-48e6-89fa-e688d08fa0be" />
+<img width="1292" height="759" alt="image" src=".github/assets/omodsim-dataview.png" />
 
-<img width="1292" height="759" alt="image" src="https://github.com/user-attachments/assets/2e5ca631-b219-44a6-9983-9a3367d71d51" />
+<img width="1292" height="759" alt="image" src=".github/assets/omodsim-mapview.png" />
 
 
 # Features
@@ -49,28 +49,28 @@ The following simulations are available:
 
 # Modbus Logging
 
-<img width="1292" height="759" alt="image" src="https://github.com/user-attachments/assets/4bfad217-2d0c-4d14-a8c2-f434d7ac93e4" />
+<img width="1292" height="759" alt="image" src=".github/assets/omodsim-trafficview.png" />
 
 
 # Extended Featues
 
 - Modbus Message Parser
 
-<img width="674" height="463" alt="image" src="https://github.com/user-attachments/assets/774e3ff1-1bf2-46a6-a685-e6702e2e7fe5" />
+<img width="674" height="463" alt="image" src=".github/assets/omodsim-msg-parser.png" />
 
 - Modbus Definitions
   
-<img width="416" height="346" alt="image" src="https://github.com/user-attachments/assets/2dc6c13e-e4be-434b-9266-1de4f3ccda4a" />
+<img width="416" height="346" alt="image" src=".github/assets/omodsim-modbus-defs.png" />
 
 - Error Simualtions
 
-<img width="416" height="346" alt="image" src="https://github.com/user-attachments/assets/af1701d9-d576-4f1f-9bf9-7e70e85cd9da" />
+<img width="416" height="346" alt="image" src=".github/assets/omodsim-modbus-errsim.png" />
 
   
 # Scripting
   From version 1.2.0 Open ModSim supports scripting. Qt runtime implements the [ECMAScript Language Specification](http://www.ecma-international.org/publications/standards/Ecma-262.htm) standard, so Javascript is used to write code.
   
-<img width="1288" height="749" alt="image" src="https://github.com/user-attachments/assets/6f37b58a-798c-4b45-ad88-165ad5a373c2" />
+<img width="1288" height="749" alt="image" src=".github/assets/omodsim-script.png" />
 
   Scripts can be launched in two modes: Once or Periodically. If you run script in Once mode the script will stop after it finishes executing. In Periodically mode, the script will start after a certain period of time until the user stops it or the method is called
   ```javascript
@@ -130,8 +130,29 @@ function init()
 Script.onInit(init);
 ```
 
+# About supported operating systems
+
+The following minimum operating system versions are supported for OpenModSim:
+
+- <img src="docs/icons/logo_windows7.svg" width="16" height="16" /> **Microsoft Windows 7**
+- <img src="docs/icons/logo_apple.svg" width="16" height="16" /> **macOS 15 (Sequoia)**
+- <img src="docs/icons/logo_debian.svg" width="16" height="16" /> **Debian Linux 11**
+- <img src="docs/icons/logo_ubuntu.svg" width="16" height="16" /> **Ubuntu Linux 22.04**
+- <img src="docs/icons/logo_mint.png"  width="16" height="16" /> **Mint Linux 22**
+- <img src="docs/icons/logo_zorin.png" width="16" height="16" /> **Zorin OS 18**
+- <img src="docs/icons/logo_fedora.svg" width="16" height="16" /> **Fedora Linux 41**
+- <img src="docs/icons/logo_rocky.png" width="16" height="16" /> **Rocky Linux 9.7**
+- <img src="docs/icons/logo_opensuse.svg" width="16" height="16" /> **OpenSuse Linux 15.6**
+- <img src="docs/icons/logo_alt.png" width="16" height="16" /> **Alt Linux 11**
+- <img src="docs/icons/logo_astra.png"  width="18" height="18" /> **Astra Linux 1.7**
+- <img src="docs/icons/logo_redos.png" width="16" height="16" /> **RedOS 8**
+- <img src="docs/icons/logo_arch.svg" width="16" height="16" /> **Arch** (manual building only)
+
 # Building
-  Building is available via cmake (with installed Qt version 5.15 and above) or Qt Creator. Supports Microsoft Windows, Linux and macOS.
+  Building is available via cmake (with installed Qt version 5.15 and above) or Qt Creator. Supports both OS Microsoft Windows and Linux.
+
+> [!NOTE]
+> Building from source requires CMake version 3.28.4 or newer.
 
 ## Microsoft Windows Building
 
@@ -158,9 +179,13 @@ Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
 If you need to specify Qt framework major version (5 or 6), you can do it in the parameters
   - `.\build.ps1 -qt5` or  `.\build.ps1 -qt6`
 
+To enable the experimental [Qlementine](https://github.com/oclero/qlementine) application style (requires Qt6 >= 6.8):
+  - `.\build.ps1 -qlementine`
+
 The build script supports building the application only for 64-bit architecture.
 
 ## Linux Building
+
 1. Install [git](https://git-scm.com/downloads/linux) for your Linux distribution
 2. Run the following commands from the console:
 ```bash
@@ -175,6 +200,9 @@ cd OpenModSim
 
 If you need to specify Qt framework major version (5 or 6), you can do it in the parameters
   - `./build.sh -qt5` or  `./build.sh -qt6`
+
+To enable the experimental [Qlementine](https://github.com/oclero/qlementine) application style (requires Qt6 >= 6.8):
+  - `./build.sh -qlementine`
 
 ## macOS Building
 
@@ -198,28 +226,15 @@ cd OpenModSim
 ./build-macos.sh
 ```
 
+> [!NOTE]
+> On macOS, OpenModSim uses [**Qlementine**](https://github.com/oclero/qlementine) style and [**Qlementine Icons**](https://github.com/oclero/qlementine-icons) by default when building with **Qt6 >= 6.8**.
+> These dependencies are fetched automatically during CMake configure and improve icon/theme consistency on macOS.
+> If you build with Qt5 or Qt6 < 6.8, OpenModSim falls back to the standard built-in style.
+
 The build script generates a macOS application bundle (`omodsim.app`). To run the application:
 ```bash
 open build-omodsim-Qt_*/omodsim.app
 ```
-
-# About supported operating systems
-
-The following minimum operating system versions are supported for OpenModSim:
-
-- <img src="docs/icons/logo_windows7.svg" width="16" height="16" /> **Microsoft Windows 7**
-- <img src="docs/icons/logo_apple.svg" width="16" height="16" /> **macOS 11 (Big Sur)** (experimental support)
-- <img src="docs/icons/logo_debian.svg" width="16" height="16" /> **Debian Linux 11**
-- <img src="docs/icons/logo_ubuntu.svg" width="16" height="16" /> **Ubuntu Linux 22.04**
-- <img src="docs/icons/logo_mint.png"  width="16" height="16" /> **Mint Linux 22**
-- <img src="docs/icons/logo_zorin.png" width="16" height="16" /> **Zorin OS 18**
-- <img src="docs/icons/logo_fedora.svg" width="16" height="16" /> **Fedora Linux 41**
-- <img src="docs/icons/logo_rocky.png" width="16" height="16" /> **Rocky Linux 9.7**
-- <img src="docs/icons/logo_opensuse.svg" width="16" height="16" /> **OpenSuse Linux 15.6**
-- <img src="docs/icons/logo_alt.png" width="16" height="16" /> **Alt Linux 11**
-- <img src="docs/icons/logo_astra.png"  width="18" height="18" /> **Astra Linux 1.7**
-- <img src="docs/icons/logo_redos.png" width="16" height="16" /> **RedOS 8**
-
   
 # Install from [binary distributions](https://github.com/sanny32/OpenModSim/releases/latest)
 
@@ -228,77 +243,102 @@ Below are the methods for installing the OpenModSim for different OS
 ## <img src="docs/icons/logo_windows.svg" width="16" height="16"> Microsoft Windows
 Run the installer:
 
-- For 32-bit Windows: `qt5-omodsim_1.12.2_x86.exe`
-- For 64-bit Windows: `qt5-omodsim_1.12.2_x64.exe` or `qt6-omodsim_1.12.2_x64.exe`
+- For 32-bit Windows: `qt5-omodsim2-2.0.0_x86.exe`
+- For 64-bit Windows: `qt5-omodsim2-2.0.0_x64.exe` or `qt6-omodsim2-2.0.0_x64.exe`
 
-## <img src="docs/icons/logo_debian.svg" width="20" height="20"> Debian / <img src="docs/icons/logo_ubuntu.svg" width="20" height="20"> Ubuntu / <img width="20" height="20" src="docs/icons/logo_mint.png" /> Mint / <img src="docs/icons/logo_zorin.png" width="20" height="20"> Zorin / <img width="22" height="22" src="docs/icons/logo_astra.png" /> Astra Linux
+## <img src="docs/icons/logo_apple.svg" width="16" height="16"> macOS
+### Install
+Open the DMG package:
+```bash
+open qt6-omodsim2-2.0.0_arm64.dmg
+```
+Then drag `Open ModSim.app` to the `Applications` folder.
+
+Before the first launch, allow the application to run in `System Settings` > `Privacy & Security`, or remove the quarantine attribute from the command line:
+```bash
+xattr -dr com.apple.quarantine "/Applications/Open ModSim.app"
+```
+
+Run the application:
+```bash
+open "/Applications/Open ModSim.app"
+```
+
+### Remove
+To remove the application, move it to Trash or run:
+```bash
+rm -rf "/Applications/Open ModSim.app"
+```
+
+## <img src="docs/icons/logo_debian.svg" width="20" height="20"> Debian • <img src="docs/icons/logo_ubuntu.svg" width="20" height="20"> Ubuntu • <img width="20" height="20" src="docs/icons/logo_mint.png" /> Mint • <img src="docs/icons/logo_zorin.png" width="20" height="20"> Zorin • <img width="22" height="22" src="docs/icons/logo_astra.png" /> Astra Linux
 ### Install
 Install the DEB package from the command line:
 ```bash
-sudo apt install ./qt6-omodsim_1.12.2-1_amd64.deb
+sudo apt install ./qt6-omodsim2_2.0.0-1_amd64.deb
 ```
 or if you want to use Qt5 libraries:
 ```bash
-sudo apt install ./qt5-omodsim_1.12.2-1_amd64.deb
+sudo apt install ./qt5-omodsim2_2.0.0-1_amd64.deb
 ```
 
 ### Remove
 To remove the DEB package run:
 ```bash
-sudo apt remove qt6-omodsim
+sudo apt remove qt6-omodsim2
 ```
 or for Qt5 package:
 ```bash
-sudo apt remove qt5-omodsim
+sudo apt remove qt5-omodsim2
 ```
 
-## <img src="docs/icons/logo_redhat.svg" width="24" height="24"> RedHat / <img src="docs/icons/logo_fedora.svg" width="20" height="20"> Fedora / <img src="docs/icons/logo_rocky.png" width="20" height="20"> Rocky / <img width="20" height="20" src="docs/icons/logo_redos.png" /> RedOS Linux
+## <img src="docs/icons/logo_redhat.svg" width="24" height="24"> RedHat • <img src="docs/icons/logo_fedora.svg" width="20" height="20"> Fedora • <img src="docs/icons/logo_rocky.png" width="20" height="20"> Rocky • <img width="20" height="20" src="docs/icons/logo_redos.png" /> RedOS Linux
 ### Install
 Install the RPM package from the command line:
 ```bash
-sudo dnf install ./qt6-omodsim-1.12.2-1.x86_64.rpm
+sudo dnf install ./qt6-omodsim2-2.0.0-1.x86_64.rpm
 ```
 
 ### Remove
 To remove the RPM package run:
 ```bash
-sudo dnf remove qt6-omodsim
+sudo dnf remove qt6-omodsim2
 ```
 
 ## <img src="docs/icons/logo_alt.png" width="24" height="24"> Alt Linux
 ### Install
 Install the RPM package from the command line as root user:
 ```bash
-apt-get install ./qt6-omodsim-1.12.2-1.x86_64.rpm
+apt-get install ./qt6-omodsim2-2.0.0-1.x86_64.rpm
 ```
 
 ### Remove
 To remove the RPM package run as root user:
 ```bash
-apt-get remove qt6-omodsim
+apt-get remove qt6-omodsim2
 ```
 
-## <img width="20" height="20" src="docs/icons/logo_suse.png" /> SUSE / <img src="docs/icons/logo_opensuse.svg" width="24" height="24" /> OpenSUSE Linux
+## <img width="20" height="20" src="docs/icons/logo_suse.png" /> SUSE • <img src="docs/icons/logo_opensuse.svg" width="24" height="24" /> OpenSUSE Linux
 ### Install
-Import qt6-omodsim.rpm.pubkey to rpm repository:
+Import qt6-omodsim2.rpm.pubkey to rpm repository:
 ```bash
-sudo rpm --import qt6-omodsim.rpm.pubkey
+sudo rpm --import qt6-omodsim2.rpm.pubkey
 ```
 Install the RPM package using Zypper:
 ```bash
-sudo zypper install ./qt6-omodsim-1.12.2-1.x86_64.rpm
+sudo zypper install ./qt6-omodsim2-2.0.0-1.x86_64.rpm
 ```
 
 ### Remove
 To remove the RPM package run:
 ```bash
-sudo zypper remove qt6-omodsim
+sudo zypper remove qt6-omodsim2
 ```
 
 # Code Signing Sponsor
 Windows binaries for this project are signed thanks to **SignPath Foundation**.
 *   🔐 **Free code signing service:** [SignPath.io](https://signpath.io)
 *   📜 **Certificate provider:** [SignPath Foundation](https://signpath.org)
+
 
 # MIT License
 Copyright 2023-2026 Alexandr Ananev [mail@ananev.org]

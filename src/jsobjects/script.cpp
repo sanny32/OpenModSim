@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file script.cpp
+/// \brief Implements the script functionality.
+///
+
 #include <QTimer>
 #include <QJSValue>
 #include <QJSEngine>
@@ -80,3 +88,4 @@ int Script::period() const
 {
     return _period;
 }
+

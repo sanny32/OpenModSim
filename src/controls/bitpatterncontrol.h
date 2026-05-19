@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file bitpatterncontrol.h
+/// \brief Declares the bitpatterncontrol interfaces.
+///
+
 #ifndef BITPATTERNCONTROL_H
 #define BITPATTERNCONTROL_H
 
@@ -22,10 +30,11 @@ signals:
     void valueChanged(quint16 value);
 
 private slots:
-    void on_checkStateChanged(int);
+    void on_checkStateChanged(Qt::CheckState);
 
 private:
     Ui::BitPatternControl *ui;
 };
 
 #endif // BITPATTERNCONTROL_H
+

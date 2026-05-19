@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file dialogforcemultipleregisters.h
+/// \brief Declares the dialogforcemultipleregisters interfaces.
+///
+
 #ifndef DIALOGFORCEMULTIPLEREGISTERS_H
 #define DIALOGFORCEMULTIPLEREGISTERS_H
 
@@ -5,36 +13,81 @@
 #include <QVariant>
 #include <QTableWidgetItem>
 #include <QModbusDataUnit>
+#include "qadjustedsizedialog.h"
 #include "numericlineedit.h"
 #include "modbuswriteparams.h"
+#include "displaydefinition.h"
 
 namespace Ui {
 class DialogForceMultipleRegisters;
 }
-
 ///
 /// \brief The DialogForceMultipleRegisters class
 ///
-class DialogForceMultipleRegisters : public QDialog
+class DialogForceMultipleRegisters : public QAdjustedSizeDialog
 {
     Q_OBJECT
 
 public:
-    explicit DialogForceMultipleRegisters(ModbusWriteParams& params, QModbusDataUnit::RegisterType type, int length, bool hexAddress, QWidget *parent = nullptr);
+    explicit DialogForceMultipleRegisters(ModbusWriteParams& params, QModbusDataUnit::RegisterType type, int length, bool displayHexAddresses, QWidget *parent = nullptr);
     ~DialogForceMultipleRegisters();
 
     void accept() override;
 
-private slots:
-    void on_pushButton0_clicked();
-    void on_pushButtonRandom_clicked();
+protected:
+    void changeEvent(QEvent* event) override;
+
+private slots:   
     void on_pushButtonValue_clicked();
-    void on_pushButtonInc_clicked();
+    void on_pushButtonImport_clicked();
+    void on_pushButtonExport_clicked();
 
 private:
+    void setValueZero();
+    void setValueRandom();
+    void setValueInc();
+    void setupAddressControls(int length);
+    void setupDisplayControls();
+    void setupPresetData();
+    void setupEditorInputs();
+
+    void updateDisplayBar();
+    void updateAddressSummary();
+    void updatePresetControls();
+    void reloadDataFromServer();
+
+    enum class PresetOperations {
+        Constant,
+        Random,
+        Increment,
+        Zero
+    };
+
+    enum class ValueOperation {
+        Set,
+        Add,
+        Subtract,
+        Multiply,
+        Divide
+    };
+
     void updateTableWidget();
     QLineEdit* createLineEdit();
-    NumericLineEdit* createNumEdit(int idx);
+    QLineEdit* createNumEdit(int idx);
+
+    template<typename T>
+    void applyValue(T value, int index, ValueOperation op)
+    {
+        switch(op)
+        {
+        case ValueOperation::Set:       _data[index] = value; break;
+        case ValueOperation::Add:       _data[index] += value; break;
+        case ValueOperation::Subtract:  _data[index] -= value; break;
+        case ValueOperation::Multiply:  _data[index] *= value; break;
+        case ValueOperation::Divide:    _data[index] /= value; break;
+        }
+    }
+    void applyToAll(ValueOperation op, double value);
 
     template<typename T>
     void setupLineEdit(NumericLineEdit* edit, NumericLineEdit::InputMode mode,

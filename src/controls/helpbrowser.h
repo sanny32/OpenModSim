@@ -1,7 +1,17 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file helpbrowser.h
+/// \brief Declares the HelpBrowser class.
+///
+
 #ifndef HELPBROWSER_H
 #define HELPBROWSER_H
 
+#include <QSharedPointer>
 #include <QTextBrowser>
+#include <QHelpEngine>
 
 ///
 /// \brief The HelpBrowser class
@@ -11,35 +21,21 @@ class HelpBrowser : public QTextBrowser
     Q_OBJECT
 
 public:
-    explicit HelpBrowser(QWidget* parent = nullptr)
-        : QTextBrowser(parent) {
-    }
+    explicit HelpBrowser(QWidget* parent = nullptr);
 
-    void setHelp(const QString& helpFile) {
-        _helpEngine = QSharedPointer<QHelpEngine>(new QHelpEngine(helpFile, this));
-        _helpEngine->setupData();
-        setSource(QUrl(tr("qthelp://omodsim/doc/index.html")));
-    }
+    void setHelp(const QString& helpFile);
+    void showHelp(const QString& helpKey);
 
-    QVariant loadResource (int type, const QUrl& name) override {
-        if (name.scheme() == "qthelp" && _helpEngine)
-            return QVariant(_helpEngine->fileData(name));
-        else
-            return loadResource(type, name);
-    }
+    QVariant loadResource(int type, const QUrl& name) override;
 
-    void showHelp(const QString& helpKey){
-        const auto url = QString(tr("qthelp://omodsim/doc/index.html#%1")).arg(helpKey.toLower());
-        setSource(QUrl(url));
-    }
+public slots:
+    void reload() override;
 
 protected:
-    void changeEvent(QEvent* event) override {
-        if (event->type() == QEvent::LanguageChange) {
-            setSource(QUrl(tr("qthelp://omodsim/doc/index.html")));
-        }
-        QTextBrowser::changeEvent(event);
-    }
+    void changeEvent(QEvent* event) override;
+
+private:
+    void applyStylesheet();
 
 private:
     QSharedPointer<QHelpEngine> _helpEngine;

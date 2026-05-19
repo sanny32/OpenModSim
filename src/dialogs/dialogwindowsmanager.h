@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file dialogwindowsmanager.h
+/// \brief Declares the dialogwindowsmanager interfaces.
+///
+
 #ifndef DIALOGWINDOWSMANAGER_H
 #define DIALOGWINDOWSMANAGER_H
 
@@ -20,6 +28,9 @@ public:
     explicit DialogWindowsManager(const QList<QAction*>& actions, QAction* saveAction, QWidget *parent = nullptr);
     ~DialogWindowsManager();
 
+protected:
+    void changeEvent(QEvent* event) override;
+
 private slots:
     void on_pushButtonActivate_clicked();
     void on_pushButtonSave_clicked();
@@ -38,3 +49,4 @@ private:
 };
 
 #endif // DIALOGWINDOWSMANAGER_H
+

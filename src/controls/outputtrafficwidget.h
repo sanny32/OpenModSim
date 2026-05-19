@@ -1,0 +1,79 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file outputtrafficwidget.h
+/// \brief Declares the outputtrafficwidget interfaces.
+///
+
+#ifndef OUTPUTTRAFFICWIDGET_H
+#define OUTPUTTRAFFICWIDGET_H
+
+#include <QSharedPointer>
+#include <QVector>
+#include <QFrame>
+#include <QPrinter>
+#include "displaydefinition.h"
+#include "modbusmessage.h"
+
+namespace Ui {
+class OutputTrafficWidget;
+}
+
+class QModelIndex;
+
+class OutputTrafficWidget : public QFrame
+{
+    Q_OBJECT
+    Q_PROPERTY(DataType dataType READ dataType WRITE setDataType)
+
+public:
+    explicit OutputTrafficWidget(QWidget* parent = nullptr);
+    ~OutputTrafficWidget() override;
+
+    DataType dataType() const;
+    void setDataType(DataType type);
+
+    QColor backgroundColor() const;
+    void setBackgroundColor(const QColor& clr);
+
+    QColor foregroundColor() const;
+    void setForegroundColor(const QColor& clr);
+
+    QFont font() const;
+    void setFont(const QFont& font);
+
+    int logViewLimit() const;
+    void setLogViewLimit(int l);
+    bool isLogEmpty() const;
+
+    bool autoscrollLogView() const;
+    void setAutosctollLogView(bool on);
+    bool exportLogToTextFile(const QString& filePath);
+
+    int rowCount() const;
+    int paint(const QRect& rc, QPainter& painter, int startRow = 0);
+
+    void updateTraffic(QSharedPointer<const ModbusMessage> msg);
+    void updateTrafficBatch(const QVector<QSharedPointer<const ModbusMessage>>& messages);
+
+public slots:
+    void clearLogView();
+    void setLogViewState(LogViewState state);
+
+protected:
+    void changeEvent(QEvent* event) override;
+
+private:
+    void updatePaletteFromTheme();
+    void showModbusMessage(const QModelIndex& index);
+    void hideModbusMessage();
+    void updateLogView(QSharedPointer<const ModbusMessage> msg);
+    void updateLogViewBatch(const QVector<QSharedPointer<const ModbusMessage>>& messages);
+
+private:
+    Ui::OutputTrafficWidget* ui;
+};
+
+#endif // OUTPUTTRAFFICWIDGET_H
+

@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file dialogcoilsimulation.h
+/// \brief Declares the dialogcoilsimulation interfaces.
+///
+
 #ifndef DIALOGCOILSIMULATION_H
 #define DIALOGCOILSIMULATION_H
 
@@ -18,6 +26,9 @@ public:
 
     void accept() override;
 
+protected:
+    void changeEvent(QEvent* event) override;
+
 private slots:
     void on_checkBoxEnabled_toggled();
     void on_comboBoxSimulationType_currentIndexChanged(int);
@@ -30,3 +41,4 @@ private:
 };
 
 #endif // DIALOGCOILSIMULATION_H
+

@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file modbusserver.cpp
+/// \brief Implements the modbusserver functionality.
+///
+
 #include <QBitArray>
 #include <QModbusDeviceIdentification>
 #include <QLoggingCategory>
@@ -247,6 +255,9 @@ bool ModbusServer::setValue(int option, const QVariant &newValue, int serverAddr
 /// \param serverAddress
 /// \return
 ///
+///
+/// \brief ModbusServer::data
+///
 bool ModbusServer::data(QModbusDataUnit::RegisterType table, quint16 address, quint16 *data, int serverAddress) const
 {
     QModbusDataUnit unit(table, address, 1u);
@@ -326,6 +337,18 @@ void ModbusServer::setError(const QString &errorText, QModbusDevice::Error error
     emit errorOccurred(error, serverAddress);
 }
 
+void ModbusServer::setCurrentRequestClient(const QString& clientAddress, quint16 clientPort)
+{
+    _currentRequestClientAddress = clientAddress;
+    _currentRequestClientPort = clientPort;
+}
+
+void ModbusServer::clearCurrentRequestClient()
+{
+    _currentRequestClientAddress.clear();
+    _currentRequestClientPort = 0;
+}
+
 ///
 /// \brief ModbusServer::error
 /// \param serverAddress
@@ -365,6 +388,9 @@ bool ModbusServer::data(QModbusDataUnit *newData, int serverAddress) const
 /// \param serverAddress
 /// \return
 ///
+///
+/// \brief ModbusServer::setData
+///
 bool ModbusServer::setData(QModbusDataUnit::RegisterType table, quint16 address, quint16 data, int serverAddress)
 {
     return writeData(QModbusDataUnit(table, address, QVector<quint16>() << data), serverAddress);
@@ -389,6 +415,9 @@ bool ModbusServer::setData(const QModbusDataUnit &newData, int serverAddress)
 ///
 bool ModbusServer::writeData(const QModbusDataUnit &newData, int serverAddress)
 {
+    ensureAutoAddRange(newData.registerType(), newData.startAddress(),
+                       static_cast<quint16>(newData.valueCount()), serverAddress);
+
     if (!_modbusDataUnitMaps[serverAddress].contains(newData.registerType()))
         return false;
 
@@ -416,8 +445,10 @@ bool ModbusServer::writeData(const QModbusDataUnit &newData, int serverAddress)
         current.setValue(translatedIndex, newValue);
     }
 
-    if (changeRequired)
-        emit dataWritten(serverAddress, newData.registerType(), newData.startAddress(), newData.valueCount());
+    if (changeRequired) {
+        emit dataWritten(serverAddress, newData.registerType(), newData.startAddress(), newData.valueCount(),
+                         _currentRequestClientAddress, _currentRequestClientPort);
+    }
     return true;
 }
 
@@ -429,6 +460,10 @@ bool ModbusServer::writeData(const QModbusDataUnit &newData, int serverAddress)
 ///
 bool ModbusServer::readData(QModbusDataUnit *newData, int serverAddress) const
 {
+    if (newData)
+        ensureAutoAddRange(newData->registerType(), newData->startAddress(),
+                           static_cast<quint16>(newData->valueCount()), serverAddress);
+
     if ((!newData) || (!_modbusDataUnitMaps[serverAddress].contains(newData->registerType())))
         return false;
 
@@ -459,6 +494,27 @@ bool ModbusServer::readData(QModbusDataUnit *newData, int serverAddress) const
 }
 
 ///
+/// \brief ModbusServer::ensureAutoAddRange
+///
+bool ModbusServer::ensureAutoAddRange(QModbusDataUnit::RegisterType table, quint16 address, quint16 count, int serverAddress) const
+{
+    if (!_definitions.AutoAddRegistersOnRequest || count == 0)
+        return false;
+
+    auto it = _modbusDataUnitMaps.find(serverAddress);
+    if (it == _modbusDataUnitMaps.end()) {
+        ModbusDataUnitMap map;
+        map.setAddressSpace(_definitions.AddrSpace);
+        map.setGlobalMap(_definitions.UseGlobalUnitMap);
+        it = _modbusDataUnitMaps.insert(serverAddress, map);
+    }
+
+    it->setAddressSpace(_definitions.AddrSpace);
+    it->setGlobalMap(_definitions.UseGlobalUnitMap);
+    return it->ensureRange(table, address, count);
+}
+
+///
 /// \brief ModbusServer::matchingServerAddress
 /// \param unitId
 /// \return
@@ -466,6 +522,9 @@ bool ModbusServer::readData(QModbusDataUnit *newData, int serverAddress) const
 bool ModbusServer::matchingServerAddress(quint8 unitId) const
 {
     if(_serverAddresses.contains(unitId))
+        return true;
+
+    if (_definitions.AutoAddRegistersOnRequest)
         return true;
 
     qCDebug(QT_MODBUS) << "(server) Wrong server unit identifier address, expected one of"
@@ -492,6 +551,13 @@ void ModbusServer::processDefinitionsChanges()
 ///
 QModbusResponse ModbusServer::processRequest(const QModbusPdu &request, int serverAddress)
 {
+    if (_requestHandler)
+    {
+        QModbusResponse jsResponse;
+        if ((*_requestHandler)(request, serverAddress, jsResponse))
+            return jsResponse;
+    }
+
     switch (request.functionCode()) {
     case QModbusRequest::ReadCoils:
         return processReadCoilsRequest(request, serverAddress);
@@ -1305,3 +1371,4 @@ void ModbusServer::storeModbusCommEvent(const QModbusCommEvent &eventByte)
 
 #undef CHECK_SIZE_EQUALS
 #undef CHECK_SIZE_LESS_THAN
+

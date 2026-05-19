@@ -1,8 +1,10 @@
 [Desktop Entry]
 Type=Application
-Name=@PRODUCT_NAME@
+Name=@APP_NAME@
 Comment=@PROJECT_DESCRIPTION@
-Exec=@EXECUTABLE_PATH@
-Icon=@PROJECT_NAME@
+Exec=@EXECUTABLE_PATH@ %f
+Icon=@APP_ICON@
 Terminal=false
 Categories=Utility;
+StartupNotify=true
+MimeType=application/x-openmodsim-project;

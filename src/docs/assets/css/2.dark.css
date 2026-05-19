@@ -1,0 +1,22 @@
+/* Dark mode color overrides — appended after style.css */
+
+body                                        { color: #d4d4d4; }
+p                                           { color: #d4d4d4; }
+h1.title                                    { color: #d4d4d4; border-bottom-color: #555555; }
+h2, p.h2                                    { color: #d4d4d4; border-bottom-color: #3a3a3a; }
+h3                                          { color: #d4d4d4; }
+a:link, a:visited                           { color: #5ba3f5; }
+a:hover                                     { color: #5ba3f5; }
+ul.level1                                   { border-left-color: #4a4a4a; }
+ul.level1 > li.object > a > strong          { color: #d4d4d4; } 
+.object strong                              { color: #d4d4d4; }
+code                                        { color: #d4d4d4; background: #2a2a2a; }
+pre                                         { background: #2a2a2a; }
+pre code                                    { color: #d4d4d4; }
+.article-header h1                          { color: #d4d4d4; border-bottom-color: #555555; }
+dt code                                     { color: #5ba3f5; }
+table.reference-table th,
+table.reference-table td                    { border-color: #4a4a4a; }
+table.reference-table th                    { background: #2a2a2a; color: #d4d4d4; }
+table.reference-table tr:nth-child(even)    { background: #1c1c1c; }
+.notecard.note                              { background: #2a2a2a; }

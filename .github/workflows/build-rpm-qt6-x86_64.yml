@@ -9,7 +9,7 @@ on:
       branch:
         description: 'Checkout branch'
         required: false
-        default: 'release/1.x'
+        default: dev
       tag:
         description: 'Checkout tag'
         required: false
@@ -36,7 +36,8 @@ jobs:
       BUILD_TYPE: "Release"
       RPM_REVISION: "1"
       RPM_ARCH: "x86_64"
-      RPM_PACKAGE_NAME: "qt6-omodsim"
+      RPM_PACKAGE_PREFIX: "qt6-omodsim"
+      APP_INSTALL_PREFIX: "/opt/OpenModSim"
 
     steps:
       - name: Checkout repository
@@ -62,27 +63,59 @@ jobs:
           echo "Ref name is: $REF_NAME"
           echo "Ref type is: $REF_TYPE"
 
-      - name: Extract version from CMakeLists.txt
-        id: extract_version
+      - name: Extract info from CMakeLists.txt
+        id: extract_info
         run: |
-          FULL_VERSION=$(grep -oP 'VERSION\s+\K[0-9]+\.[0-9]+\.[0-9]+' src/CMakeLists.txt)
+          FULL_VERSION=$(grep -oP '^\s*VERSION\s+\K[0-9]+\.[0-9]+\.[0-9]+' src/CMakeLists.txt)
+          CMAKE_VERSION=$(grep -oP 'cmake_minimum_required\s*\(\s*VERSION\s+\K[0-9]+(\.[0-9]+){1,3}' src/CMakeLists.txt)
+          PRODUCT_NAME=$(grep -oP 'set\(PRODUCT_NAME\s+"\K[^"]+' src/CMakeLists.txt)
+          if [ -z "$CMAKE_VERSION" ]; then
+            echo "Failed to detect minimum CMake version"
+            exit 1
+          fi
+          VERSION_MAJOR=$(echo "$FULL_VERSION" | cut -d. -f1)
+          RPM_PACKAGE_NAME="${{ env.RPM_PACKAGE_PREFIX }}${VERSION_MAJOR}"
+          
+          PRERELEASE_ENABLED=false
+          PRERELEASE_SUFFIX=""
+          TAG_NAME="${{ github.event.inputs.tag }}"
+          if [ -z "$TAG_NAME" ] && [ "${{ github.ref_type }}" = "tag" ]; then
+            TAG_NAME="${{ github.ref_name }}"
+          fi
+          PRERELEASE_SUFFIX=$(printf '%s\n' "$TAG_NAME" | grep -Eo '(beta[0-9]+|b[0-9]+|rc[0-9]+)$' || true)
+          if [ -n "$PRERELEASE_SUFFIX" ]; then
+            PRERELEASE_ENABLED=true
+          fi
 
-          if [ "${GITHUB_REF_NAME}" = "dev" ] || [ "${{ github.event.inputs.branch }}" = "dev" ] || [[ "${GITHUB_REF_NAME}" == release/* ]] || [[ "${{ github.event.inputs.branch }}" == release/* ]]; then
+          if [ "${GITHUB_REF_NAME}" = "dev" ] || [ "${{ github.event.inputs.branch }}" = "dev" ] || [ "${GITHUB_REF_NAME}" = release/* ] || [ "${{ github.event.inputs.branch }}" = release/* ]; then
             MAJOR_MINOR=$(echo "$FULL_VERSION" | cut -d. -f1,2)
             APP_VERSION="${MAJOR_MINOR}~dev"
           else
             APP_VERSION="$FULL_VERSION"
+            if [ "$PRERELEASE_ENABLED" = "true" ]; then
+              APP_VERSION="${APP_VERSION}~${PRERELEASE_SUFFIX}"
+            fi
           fi
 
           echo "APP_VERSION=$APP_VERSION" >> $GITHUB_ENV
+          echo "CMAKE_VERSION=$CMAKE_VERSION" >> $GITHUB_ENV
+          echo "PRERELEASE_SUFFIX=$PRERELEASE_SUFFIX" >> $GITHUB_ENV
+          echo "PRODUCT_NAME=$PRODUCT_NAME" >> $GITHUB_ENV
+          echo "VERSION_MAJOR=$VERSION_MAJOR" >> $GITHUB_ENV
+          echo "RPM_PACKAGE_NAME=$RPM_PACKAGE_NAME" >> $GITHUB_ENV
+          echo "PRERELEASE_ENABLED=$PRERELEASE_ENABLED" >> $GITHUB_ENV
+
           echo "Extracted version: $APP_VERSION"
+          echo "Required CMake version: $CMAKE_VERSION"
+          echo "Extracted product name: $PRODUCT_NAME"
+          echo "RPM package name: $RPM_PACKAGE_NAME"
 
       - name: Install dependencies
         run: |
           export DEBIAN_FRONTEND=noninteractive
           apt-get update
           apt-get install -y \
-            git build-essential ninja-build cmake patchelf rsync \
+            git build-essential ninja-build patchelf rsync \
             rpm gnupg2 \
             libglu1-mesa libgl1-mesa-dev libxkbcommon0 libxkbcommon-x11-0 \
             libxcb1 libxcb-xinerama0 libxcb-cursor0 libxcb-keysyms1 libxcb-xfixes0 \
@@ -138,11 +171,11 @@ jobs:
       - name: Add Qt to PATH
         run: echo "${{ env.QT_INSTALL_DIR }}/${{ env.QT_VERSION }}/${{ env.CMAKE_COMPILER }}/bin" >> $GITHUB_PATH
 
-      - name: Install cmake 3.26
+      - name: Install CMake
         run: |
           apt-get remove -y cmake
-          wget https://github.com/Kitware/CMake/releases/download/v3.26.5/cmake-3.26.5-linux-x86_64.sh
-          sh cmake-3.26.5-linux-x86_64.sh --skip-license --prefix=/usr/local
+          wget "https://github.com/Kitware/CMake/releases/download/v${CMAKE_VERSION}/cmake-${CMAKE_VERSION}-linux-x86_64.sh"
+          sh "cmake-${CMAKE_VERSION}-linux-x86_64.sh" --skip-license --prefix=/usr/local
           cmake --version
 
       - name: Set BUILD_DIR
@@ -153,7 +186,8 @@ jobs:
             cmake src -B ${{ env.BUILD_DIR }} \
             -G "${{ env.CMAKE_GENERATOR }}" \
             -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} \
-            -DCMAKE_PREFIX_PATH=${{ env.QT_INSTALL_DIR }}/${{ env.QT_VERSION }}/${{ env.CMAKE_COMPILER }}
+            -DCMAKE_PREFIX_PATH=${{ env.QT_INSTALL_DIR }}/${{ env.QT_VERSION }}/${{ env.CMAKE_COMPILER }} \
+            -DPRERELEASE_SUFFIX=${{ env.PRERELEASE_SUFFIX }}
 
       - name: Build
         run: cmake --build ${{ env.BUILD_DIR }} --config ${{ env.BUILD_TYPE }} --parallel
@@ -191,22 +225,84 @@ jobs:
           cmake --build build --parallel
           cmake --install build
 
+      - name: Resolve latest OpenSSL 3.5 LTS version
+        run: |
+          OPENSSL_VERSION=$(python3 - <<'PY'
+          import json
+          import re
+          import urllib.request
+
+          req = urllib.request.Request(
+              "https://api.github.com/repos/openssl/openssl/releases?per_page=100",
+              headers={"User-Agent": "omodsim-ci"},
+          )
+          with urllib.request.urlopen(req) as response:
+              releases = json.load(response)
+
+          versions = []
+          for release in releases:
+              if release.get("draft") or release.get("prerelease"):
+                  continue
+              tag = release.get("tag_name", "")
+              match = re.fullmatch(r"openssl-(3\.5\.\d+)", tag)
+              if match:
+                  versions.append(tuple(int(part) for part in match.group(1).split(".")))
+
+          if not versions:
+              raise SystemExit("No OpenSSL 3.5.x releases found")
+
+          latest = max(versions)
+          print(f"{latest[0]}.{latest[1]}.{latest[2]}")
+          PY
+          )
+
+          echo "OPENSSL_VERSION=$OPENSSL_VERSION" >> $GITHUB_ENV
+          echo "Resolved OpenSSL version: $OPENSSL_VERSION"
+
+      - name: Build and install OpenSSL 3 runtime libraries
+        run: |
+          wget https://github.com/openssl/openssl/releases/download/openssl-${OPENSSL_VERSION}/openssl-${OPENSSL_VERSION}.tar.gz
+          tar xvf openssl-${OPENSSL_VERSION}.tar.gz
+          cd openssl-${OPENSSL_VERSION}
+          ./config \
+            shared zlib no-apps no-docs no-tests
+          make -j$(nproc) build_libs
+          make install_runtime_libs
+
       - name: Bundle Qt libraries and plugins throught cqtdeployer
         run: |
           CQtDeployer -bin ${{ env.BUILD_DIR }}/omodsim \
-            -targetDir ${{ env.BUILD_RPM_DIR }}/SOURCES/omodsim/opt/OpenModSim \
+            -targetDir ${{ env.BUILD_RPM_DIR }}/SOURCES/omodsim${{ env.APP_INSTALL_PREFIX }}${{ env.VERSION_MAJOR }} \
             -libDir ${{ env.QT_INSTALL_DIR }}/${{ env.QT_VERSION }}/${{ env.CMAKE_COMPILER }}/lib \
             -ignore libcrypto.so.3,libmysqlclient.so.21,libpq.so.5,libssl.so.3,libqsqlmimer.so,libqsqlmysql.so,libqsqlodbc.so,libqsqlpsql.so,libqsqlibase.so,libqsqloci.so \
-            -extraLibs icudata,icui18n,icuuc \
+            -extraLibs icudata,icui18n,icuuc,libxcb-util,libxcb-cursor \
             -customScript 'export QT_QPA_PLATFORM=${{ env.QT_QPA_PLATFORM }}'
 
+      - name: Copy OpenSSL 3 libraries
+        run: |
+          cp /usr/local/lib64/libssl.so.3 \
+             /usr/local/lib64/libcrypto.so.3 \
+             "${{ env.BUILD_RPM_DIR }}/SOURCES/omodsim${{ env.APP_INSTALL_PREFIX }}${{ env.VERSION_MAJOR }}/lib/"
+
       - name: Copy OpenModsim docs
-        run: rsync -a "${{ env.BUILD_DIR }}/docs/" "${{ env.BUILD_RPM_DIR }}/SOURCES/omodsim/opt/OpenModSim/docs/"
+        run: rsync -a "${{ env.BUILD_DIR }}/docs/" "${{ env.BUILD_RPM_DIR }}/SOURCES/omodsim${{ env.APP_INSTALL_PREFIX }}${{ env.VERSION_MAJOR }}/docs/"
+
+      - name: Copy demos
+        run: rsync -a "demos/" "${{ env.BUILD_RPM_DIR }}/SOURCES/omodsim${{ env.APP_INSTALL_PREFIX }}${{ env.VERSION_MAJOR }}/demos/"
+
+      - name: Rename app icon files
+        run: |
+          for size in 16x16 32x32 64x64 128x128; do
+            mv "${{ env.BUILD_RPM_DIR }}/SOURCES/omodsim/usr/share/icons/hicolor/${size}/apps/omodsim.png" \
+               "${{ env.BUILD_RPM_DIR }}/SOURCES/omodsim/usr/share/icons/hicolor/${size}/apps/omodsim${{ env.VERSION_MAJOR }}.png"
+          done
 
       - name: Create RPM spec file
         run: |
           sed -e "s|@PACKAGE_NAME@|${{ env.RPM_PACKAGE_NAME }}|g" \
               -e "s|@APP_VERSION@|${{ env.APP_VERSION }}|g" \
+              -e "s|@APP_INSTALL_PREFIX@|${{ env.APP_INSTALL_PREFIX }}|g" \
+              -e "s|@VERSION_MAJOR@|${{ env.VERSION_MAJOR }}|g" \
               ${{ env.BUILD_RPM_DIR }}/SPECS/omodsim.spec.in > ${{ env.BUILD_RPM_DIR }}/SPECS/omodsim.spec
           rm ${{ env.BUILD_RPM_DIR }}/SPECS/omodsim.spec.in
           cat -n ${{ env.BUILD_RPM_DIR }}/SPECS/omodsim.spec
@@ -215,23 +311,26 @@ jobs:
         run: |
           sed -e "s|@REF_NAME@|${{ env.REF_NAME }}|g" \
               -e "s|@REF_TYPE@|${{ env.REF_TYPE }}|g" \
-              -e "s|@COMPONENT_ID@|omodsim.desktop|g" \
+              -e "s|@COMPONENT_ID@|omodsim${{ env.VERSION_MAJOR }}.desktop|g" \
+              -e "s|@APP_NAME@|${{ env.PRODUCT_NAME }} ${{ env.VERSION_MAJOR }}|g" \
+              -e "s|@APP_EXEC@|omodsim${{ env.VERSION_MAJOR }}|g" \
               -e "s|@APP_VERSION@|${{ env.APP_VERSION }}|g" \
               -e "s|@BUILD_DATE@|$(date +%Y-%m-%d)|g" \
-              ${{ env.BUILD_RPM_DIR }}/SOURCES/omodsim/usr/share/metainfo/omodsim.metainfo.xml.in > ${{ env.BUILD_RPM_DIR }}/SOURCES/omodsim/usr/share/metainfo/omodsim.metainfo.xml
+              ${{ env.BUILD_RPM_DIR }}/SOURCES/omodsim/usr/share/metainfo/omodsim.metainfo.xml.in > ${{ env.BUILD_RPM_DIR }}/SOURCES/omodsim/usr/share/metainfo/omodsim${{ env.VERSION_MAJOR }}.metainfo.xml
           rm ${{ env.BUILD_RPM_DIR }}/SOURCES/omodsim/usr/share/metainfo/omodsim.metainfo.xml.in
-          cat -n ${{ env.BUILD_RPM_DIR }}/SOURCES/omodsim/usr/share/metainfo/omodsim.metainfo.xml
+          cat -n ${{ env.BUILD_RPM_DIR }}/SOURCES/omodsim/usr/share/metainfo/omodsim${{ env.VERSION_MAJOR }}.metainfo.xml
 
       - name: Create desktop file
         run: |
-          sed -e "s|@APP_EXEC@|omodsim|g" \
-              -e "s|@APP_ICON@|omodsim|g" \
-              ${{ env.BUILD_RPM_DIR }}/SOURCES/omodsim/usr/share/applications/omodsim.desktop.in > ${{ env.BUILD_RPM_DIR }}/SOURCES/omodsim/usr/share/applications/omodsim.desktop
+          sed -e "s|@APP_NAME@|${{ env.PRODUCT_NAME }} ${{ env.VERSION_MAJOR }}|g" \
+              -e "s|@APP_EXEC@|omodsim${{ env.VERSION_MAJOR }}|g" \
+              -e "s|@APP_ICON@|omodsim${{ env.VERSION_MAJOR }}|g" \
+              ${{ env.BUILD_RPM_DIR }}/SOURCES/omodsim/usr/share/applications/omodsim.desktop.in > ${{ env.BUILD_RPM_DIR }}/SOURCES/omodsim/usr/share/applications/omodsim${{ env.VERSION_MAJOR }}.desktop
           rm ${{ env.BUILD_RPM_DIR }}/SOURCES/omodsim/usr/share/applications/omodsim.desktop.in
-          cat -n ${{ env.BUILD_RPM_DIR }}/SOURCES/omodsim/usr/share/applications/omodsim.desktop
+          cat -n ${{ env.BUILD_RPM_DIR }}/SOURCES/omodsim/usr/share/applications/omodsim${{ env.VERSION_MAJOR }}.desktop
 
       - name: Patch binary file
-        run: patchelf --set-rpath /opt/OpenModSim/lib "${{ env.BUILD_RPM_DIR }}/SOURCES/omodsim/opt/OpenModSim/bin/omodsim"
+        run: patchelf --set-rpath "${{ env.APP_INSTALL_PREFIX }}${{ env.VERSION_MAJOR }}/lib" "${{ env.BUILD_RPM_DIR }}/SOURCES/omodsim${{ env.APP_INSTALL_PREFIX }}${{ env.VERSION_MAJOR }}/bin/omodsim"
 
       - name: Import GPG keys
         env:
@@ -278,9 +377,10 @@ jobs:
 
       - name: Create or update GitHub Release and upload RPM
         if: success() && github.event_name == 'push' && github.ref_type == 'tag'
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         with:
           draft: true
+          prerelease: ${{ env.PRERELEASE_ENABLED }}
           tag_name: ${{ github.ref_name }}
           name: Open ModSim ${{ env.APP_VERSION }}
           files: |

@@ -1,89 +1,173 @@
 name: Test Linux build script
 
 on:
+  push:
+    branches:
+      - main
+
   workflow_dispatch:
     inputs:
-      qt:
-        description: "Qt version argument passed to build.sh"
+      branch:
+        description: "Branch, tag, or commit to test"
         required: true
-        default: "qt5"
-        type: choice
-        options:
-          - qt5
-          - qt6
-          - auto
+        default: dev
+        type: string
 
 permissions:
   contents: read
 
 jobs:
-  test-build-sh:
-    name: ${{ matrix.name }} (${{ inputs.qt }})
+  prepare-matrix:
+    name: Prepare matrix
     runs-on: ubuntu-latest
-    timeout-minutes: 180
-    continue-on-error: ${{ matrix.experimental }}
+    outputs:
+      matrix: ${{ steps.matrix.outputs.matrix }}
+
+    steps:
+      - name: Build matrix
+        id: matrix
+        run: |
+          python3 - <<'PY'
+          import json
+          import os
+
+          entries = [
+              {
+                  "name": "Debian 11",
+                  "image": "debian:11",
+                  "family": "apt",
+                  "qt_modes": ["qt5"],
+              },
+              {
+                  "name": "Debian 12",
+                  "image": "debian:12",
+                  "family": "apt",
+                  "qt_modes": ["qt5", "qt6"],
+              },
+              {
+                  "name": "Debian 13",
+                  "image": "debian:13",
+                  "family": "apt",
+                  "qt_modes": ["qt6"],
+              },
+              {
+                  "name": "Ubuntu 22.04",
+                  "image": "ubuntu:22.04",
+                  "family": "apt",
+                  "qt_modes": ["qt5", "qt6"],
+              },
+              {
+                  "name": "Ubuntu 24.04",
+                  "image": "ubuntu:24.04",
+                  "family": "apt",
+                  "qt_modes": ["qt5", "qt6"],
+              },
+              {
+                  "name": "Ubuntu 26.04",
+                  "image": "ubuntu:26.04",
+                  "family": "apt",
+                  "qt_modes": ["qt6"],
+              },
+              {
+                  "name": "Fedora 41",
+                  "image": "fedora:41",
+                  "family": "dnf",
+                  "qt_modes": ["qt5", "qt6"],
+              },
+              {
+                  "name": "Fedora 42",
+                  "image": "fedora:42",
+                  "family": "dnf",
+                  "qt_modes": ["qt5", "qt6"],
+              },
+              {
+                  "name": "Fedora 43",
+                  "image": "fedora:43",
+                  "family": "dnf",
+                  "qt_modes": ["qt5", "qt6"],
+              },
+              {
+                  "name": "Fedora 44",
+                  "image": "fedora:44",
+                  "family": "dnf",
+                  "qt_modes": ["qt5", "qt6"],
+              },
+              {
+                  "name": "Rocky Linux 9.7",
+                  "image": "rockylinux/rockylinux:9.7",
+                  "family": "rocky",
+                  "qt_modes": ["qt5", "qt6"],
+              },
+              {
+                  "name": "Rocky Linux 10.1",
+                  "image": "rockylinux/rockylinux:10.1",
+                  "family": "rocky",
+                  "qt_modes": ["qt5", "qt6"],
+              },
+              {
+                  "name": "RedOS 8",
+                  "image": "registry.red-soft.ru/redos8c/ubi:latest",
+                  "family": "dnf",
+                  "qt_modes": ["qt5", "qt6"],
+              },
+              {
+                  "name": "openSUSE Leap 15.6",
+                  "image": "opensuse/leap:15.6",
+                  "family": "zypper",
+                  "qt_modes": ["qt5", "qt6"],
+              },
+              {
+                  "name": "AstraLinux 1.7",
+                  "image": "registry.astralinux.ru/astra/ubi17:latest",
+                  "family": "apt",
+                  "qt_modes": ["qt5"],
+              },
+              {
+                  "name": "AstraLinux 1.8",
+                  "image": "registry.astralinux.ru/astra/ubi18:latest",
+                  "family": "apt",
+                  "qt_modes": ["qt5"],
+              },
+              {
+                  "name": "ALT Linux 11",
+                  "image": "alt:p11",
+                  "family": "alt",
+                  "qt_modes": ["qt5", "qt6"],
+              },
+              {
+                  "name": "Arch",
+                  "image": "archlinux:latest",
+                  "family": "pacman",
+                  "qt_modes": ["qt6"],
+              },
+          ]
+
+          include = [
+              {key: value for key, value in entry.items() if key != "qt_modes"} | {"qt_mode": qt_mode}
+              for entry in entries
+              for qt_mode in entry["qt_modes"]
+          ]
+          matrix = {"include": include}
+          print(json.dumps(matrix, indent=2))
+          with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as output:
+              output.write(f"matrix={json.dumps(matrix)}\n")
+          PY
+
+  test-build-sh:
+    name: ${{ matrix.name }} (${{ matrix.qt_mode }})
+    needs: prepare-matrix
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
 
     strategy:
       fail-fast: false
-      matrix:
-        include:
-          - name: Debian 11
-            image: debian:11
-            family: apt
-            experimental: false
-
-          - name: Ubuntu 22.04
-            image: ubuntu:22.04
-            family: apt
-            experimental: false
-
-          - name: Mint 22
-            image: linuxmintd/mint22-amd64:latest
-            family: apt
-            experimental: true
-
-          - name: Zorin OS 18 (Ubuntu 24.04 base)
-            image: ubuntu:24.04
-            family: apt
-            experimental: true
-
-          - name: Fedora 41
-            image: fedora:41
-            family: dnf
-            experimental: false
-
-          - name: Rocky Linux 9.7
-            image: rockylinux/rockylinux:9.7
-            family: rocky
-            experimental: false
-
-          - name: openSUSE Leap 15.6
-            image: opensuse/leap:15.6
-            family: zypper
-            experimental: false
-
-          - name: ALT Linux 11
-            image: alt:p11
-            family: alt
-            experimental: false
-
-          - name: Astra Linux 1.7 (Debian 11 base)
-            image: debian:11
-            family: apt
-            experimental: true
-
-          - name: RedOS 8 (Fedora base)
-            image: fedora:41
-            family: dnf
-            experimental: true
-
-          - name: Arch
-            image: archlinux:latest
-            family: pacman
-            experimental: true
+      matrix: ${{ fromJson(needs.prepare-matrix.outputs.matrix) }}
 
     container:
       image: ${{ matrix.image }}
+      env:
+        DEBIAN_FRONTEND: noninteractive
+        TZ: Etc/UTC
 
     steps:
       - name: Prepare container
@@ -100,9 +184,11 @@ jobs:
             rocky)
               dnf install -y ca-certificates git sudo dnf-plugins-core
               dnf config-manager --set-enabled crb
+              dnf install -y epel-release
               ;;
             zypper)
               zypper --gpg-auto-import-keys --non-interactive refresh
+              zypper --gpg-auto-import-keys --non-interactive dup --allow-vendor-change
               zypper --gpg-auto-import-keys --non-interactive install ca-certificates git sudo
               ;;
             alt)
@@ -119,7 +205,15 @@ jobs:
           esac
 
       - name: Checkout repository
-        uses: actions/checkout@v6
+        env:
+          CHECKOUT_REF: ${{ inputs.branch || github.sha }}
+        run: |
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          git init -b checkout "$GITHUB_WORKSPACE"
+          cd "$GITHUB_WORKSPACE"
+          git remote add origin "https://github.com/${GITHUB_REPOSITORY}.git"
+          git fetch --depth=1 origin "$CHECKOUT_REF"
+          git checkout --detach FETCH_HEAD
 
       - name: Show OS release
         run: |
@@ -127,18 +221,11 @@ jobs:
 
       - name: Run build.sh
         run: |
-          case "${{ inputs.qt }}" in
-            qt5)
-              BUILD_ARGS="-qt5"
-              ;;
-            qt6)
-              BUILD_ARGS="-qt6"
-              ;;
-            auto)
-              BUILD_ARGS=""
-              ;;
+          case "${{ matrix.qt_mode }}" in
+            qt5) BUILD_ARGS="-qt5" ;;
+            qt6) BUILD_ARGS="-qt6" ;;
             *)
-              echo "Unsupported Qt input: ${{ inputs.qt }}"
+              echo "Unsupported Qt mode: ${{ matrix.qt_mode }}"
               exit 1
               ;;
           esac

@@ -1,8 +1,17 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file bufferinglistmodel.h
+/// \brief Declares the bufferinglistmodel interfaces.
+///
+
 #ifndef BUFFERINGLISTMODEL_H
 #define BUFFERINGLISTMODEL_H
 
 #include <QFile>
 #include <QQueue>
+#include <QVector>
 #include <QAbstractListModel>
 
 ///
@@ -68,6 +77,46 @@ public:
             _items.push_back(data);
             endInsertRows();
         }
+    }
+
+    ///
+    /// \brief appendBatch
+    /// \param batch
+    ///
+    void appendBatch(const QVector<T>& batch) {
+        if (batch.isEmpty())
+            return;
+
+        if (_bufferingMode) {
+            for (const auto& data : batch)
+                _bufferingItems.push_back(data);
+            return;
+        }
+
+        int startIndex = 0;
+        if (batch.size() > _rowLimit)
+            startIndex = batch.size() - _rowLimit;
+
+        const int insertCount = batch.size() - startIndex;
+        if (insertCount <= 0)
+            return;
+
+        const int currentCount = rowCount();
+        int removeCount = qMax(0, currentCount + insertCount - _rowLimit);
+        removeCount = qMin(removeCount, currentCount);
+        if (removeCount > 0) {
+            beginRemoveRows(QModelIndex(), 0, removeCount - 1);
+            for (int i = 0; i < removeCount; ++i)
+                _items.removeFirst();
+            endRemoveRows();
+        }
+
+        const int firstRow = rowCount();
+        const int lastRow = firstRow + insertCount - 1;
+        beginInsertRows(QModelIndex(), firstRow, lastRow);
+        for (int i = startIndex; i < batch.size(); ++i)
+            _items.push_back(batch.at(i));
+        endInsertRows();
     }
 
     ///
@@ -156,3 +205,4 @@ private:
 };
 
 #endif // BUFFERINGLISTMODEL_H
+

@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file dialogcoilsimulation.cpp
+/// \brief Implements the dialogcoilsimulation functionality.
+///
+
 #include <QPushButton>
 #include "dialogcoilsimulation.h"
 #include "ui_dialogcoilsimulation.h"
@@ -32,6 +40,20 @@ DialogCoilSimulation::DialogCoilSimulation(ModbusSimulationParams& params, QWidg
 DialogCoilSimulation::~DialogCoilSimulation()
 {
     delete ui;
+}
+
+///
+/// rief DialogCoilSimulation::changeEvent
+///
+///
+/// \brief DialogCoilSimulation::changeEvent
+///
+void DialogCoilSimulation::changeEvent(QEvent* event)
+{
+    if (event->type() == QEvent::LanguageChange)
+        ui->retranslateUi(this);
+
+    QDialog::changeEvent(event);
 }
 
 ///
@@ -74,3 +96,4 @@ void DialogCoilSimulation::on_comboBoxSimulationType_currentIndexChanged(int idx
 {
     ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(idx != -1);
 }
+

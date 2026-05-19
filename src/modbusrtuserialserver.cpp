@@ -1,3 +1,11 @@
+// SPDX-FileCopyrightText: 2026 OpenModSim contributors
+// SPDX-License-Identifier: MIT
+
+///
+/// \file modbusrtuserialserver.cpp
+/// \brief Implements the modbusrtuserialserver functionality.
+///
+
 #include <QTimer>
 #include <QSerialPort>
 #include <QRandomGenerator>
@@ -668,3 +676,4 @@ QModbusResponse ModbusRtuSerialServer::forwardProcessRequest(const QModbusPdu &r
 
     return resp;
 }
+
