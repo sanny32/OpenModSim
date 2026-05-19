@@ -145,7 +145,7 @@ jobs:
 
       - name: Rename app bundle for DMG
         run: |
-          mv "${{ env.DMG_STAGING_DIR }}/omodsim.app" "${{ env.DMG_STAGING_DIR }}/Open ModSim.app"
+          mv "${{ env.DMG_STAGING_DIR }}/omodsim.app" "${{ env.DMG_STAGING_DIR }}/Open ModSim ${{ env.APP_MAJOR_VERSION }}.app"
 
       - name: Add Applications symlink to DMG staging directory
         run: |
@@ -153,7 +153,7 @@ jobs:
 
       - name: Verify arm64 binary
         run: |
-          lipo -info "${{ env.DMG_STAGING_DIR }}/Open ModSim.app/Contents/MacOS/omodsim"
+          lipo -info "${{ env.DMG_STAGING_DIR }}/Open ModSim ${{ env.APP_MAJOR_VERSION }}.app/Contents/MacOS/omodsim"
 
       - name: Create DMG
         run: |
