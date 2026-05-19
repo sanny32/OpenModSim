@@ -17,6 +17,12 @@
     !define VERSIONPATCH "0"
     !searchparse ${VERSION} "" VERSIONMAJOR "." VERSIONMINOR "-"
   !endif
+  # Strip pre-release suffix from VERSIONPATCH (e.g. "0-beta1" → "0") for VIFileVersion X.X.X.X
+  !searchparse /noerrors ${VERSIONPATCH} "" VERSIONPATCH_NUMERIC "-"
+  !ifdef VERSIONPATCH_NUMERIC
+    !undef VERSIONPATCH
+    !define VERSIONPATCH "${VERSIONPATCH_NUMERIC}"
+  !endif
   !searchparse /file ${LICENSE_FILE} "Copyright " COPYRIGHT
 
   !define MUI_ICON ${ICON_FILE}
