@@ -344,7 +344,7 @@ void ProjectTreeWidget::on_itemChanged(QTreeWidgetItem* item, int column)
         ProjectFormRef ref;
         ref.type = static_cast<ProjectFormType>(item->data(0, ItemTypeRole + 1).toInt());
         ref.widget = frm;
-        emit formRenamed(ref);
+        emit formRenamed(ref, current, newName);
     }
 }
 
