@@ -6,7 +6,7 @@ on:
       - main
     paths:
       - 'src/**'
-      - 'build.sh'
+      - 'build.ps1'
       - 'CMakeLists.txt'
       - '**/CMakeLists.txt'
       - '**/*.cmake'
