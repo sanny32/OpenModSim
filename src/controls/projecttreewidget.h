@@ -48,7 +48,7 @@ public:
 signals:
     void formActivated(ProjectFormRef ref);
     void formDeleteRequested(ProjectFormRef ref);
-    void formRenamed(ProjectFormRef ref);
+    void formRenamed(ProjectFormRef ref, const QString& oldName, const QString& newName);
     void formRunScriptRequested(ProjectFormRef ref);
     void formStopScriptRequested(ProjectFormRef ref);
     void runAllScriptsRequested();

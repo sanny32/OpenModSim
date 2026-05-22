@@ -341,7 +341,7 @@ MainWindow::MainWindow(const QString& profile, bool useSession, const QString& s
 
     connect(_projectTree, &ProjectTreeWidget::formActivated, this, &MainWindow::on_projectTreeFormActivated);
     connect(_projectTree, &ProjectTreeWidget::formDeleteRequested, this, &MainWindow::on_projectTreeFormDeleteRequested);
-    connect(_projectTree, &ProjectTreeWidget::formRenamed, this, [this](ProjectFormRef) { markModified(); });
+    connect(_projectTree, &ProjectTreeWidget::formRenamed, this, [this](ProjectFormRef, const QString&, const QString&) { markModified(); });
     connect(_projectTree, &ProjectTreeWidget::formRunScriptRequested, this, &MainWindow::on_projectTreeFormRunScriptRequested);
     connect(_projectTree, &ProjectTreeWidget::formStopScriptRequested, this, &MainWindow::on_projectTreeFormStopScriptRequested);
     connect(_projectTree, &ProjectTreeWidget::runAllScriptsRequested, this, &MainWindow::runAllScripts);
@@ -370,6 +370,7 @@ MainWindow::MainWindow(const QString& profile, bool useSession, const QString& s
     AppLogger::setupDataSimulatorLogging(*_dataSimulator, this);
     AppLogger::setupAppProjectLogging(*_project, this);
     AppLogger::setupAppPreferencesLogging(AppPreferences::instance(), this);
+    AppLogger::setupProjectTreeLogging(*_projectTree, this);
 
     connect(&theApp()->theme(), &AppTheme::colorSchemeChanged,
             this, [this]() { applyThemeColors(); });

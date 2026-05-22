@@ -61,15 +61,15 @@ function updateDownloadLinks(release) {
 
     // Find specific file patterns
     const files = {
-        winx64Qt6: assets.find(a => a.name.match(/qt6-omodsim-.*_x64\.exe$/i)),
-        winx64Qt5: assets.find(a => a.name.match(/qt5-omodsim-.*_x64\.exe$/i)),
-        winx86: assets.find(a => a.name.match(/qt5-omodsim-.*_x86\.exe$/i)),
+        winx64Qt6: assets.find(a => a.name.match(/qt6-omodsim\d*-.*_x64\.exe$/i)),
+        winx64Qt5: assets.find(a => a.name.match(/qt5-omodsim\d*-.*_x64\.exe$/i)),
+        winx86: assets.find(a => a.name.match(/qt5-omodsim\d*-.*_x86\.exe$/i)),
         macosQt6: assets.find(a => a.name.match(/qt6-omodsim\d+[-_].*_arm64\.dmg$/i)),
-        debQt6: assets.find(a => a.name.match(/qt6-omodsim_.*_amd64\.deb$/i)),
-        debQt5: assets.find(a => a.name.match(/qt5-omodsim_.*_amd64\.deb$/i)),
-        rpmQt6: assets.find(a => a.name.match(/qt6-omodsim-.*\.x86_64\.rpm$/i)),
-        rpmPubkey: assets.find(a => a.name.match(/qt6-omodsim\.rpm\.pubkey$/i)),
-        flatpak: assets.find(a => a.name.match(/io\.github\.sanny32\.omodsim.*\.flatpak$/i))
+        debQt6: assets.find(a => a.name.match(/qt6-omodsim\d+_.*_amd64\.deb$/i)),
+        debQt5: assets.find(a => a.name.match(/qt5-omodsim\d+_.*_amd64\.deb$/i)),
+        rpmQt6: assets.find(a => a.name.match(/qt6-omodsim\d+-.*\.x86_64\.rpm$/i)),
+        rpmPubkey: assets.find(a => a.name.match(/qt6-omodsim\d+\.rpm\.pubkey$/i)),
+        flatpak: assets.find(a => a.name.match(/io\.github\.sanny32\.omodsim\d+.*\.flatpak$/i))
     };
 
     // Helper function to update link
