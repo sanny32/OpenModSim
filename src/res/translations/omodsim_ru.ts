@@ -4157,17 +4157,17 @@ Open the download page?</source>
 <context>
     <name>UpdateChecker</name>
     <message>
-        <location filename="../../updatechecker.cpp" line="70"/>
+        <location filename="../../updatechecker.cpp" line="115"/>
         <source>SSL is not supported in this build.</source>
         <translation>В этой сборке SSL не поддерживается.</translation>
     </message>
     <message>
-        <location filename="../../updatechecker.cpp" line="102"/>
+        <location filename="../../updatechecker.cpp" line="147"/>
         <source>Failed to parse update information.</source>
         <translation>Не удалось обработать информацию об обновлении.</translation>
     </message>
     <message>
-        <location filename="../../updatechecker.cpp" line="112"/>
+        <location filename="../../updatechecker.cpp" line="157"/>
         <source>Update information is incomplete.</source>
         <translation>Информация об обновлении неполная.</translation>
     </message>

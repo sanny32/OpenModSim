@@ -4157,17 +4157,17 @@ Open the download page?</source>
 <context>
     <name>UpdateChecker</name>
     <message>
-        <location filename="../../updatechecker.cpp" line="70"/>
+        <location filename="../../updatechecker.cpp" line="115"/>
         <source>SSL is not supported in this build.</source>
         <translation>此构建版本不支持 SSL。</translation>
     </message>
     <message>
-        <location filename="../../updatechecker.cpp" line="102"/>
+        <location filename="../../updatechecker.cpp" line="147"/>
         <source>Failed to parse update information.</source>
         <translation>解析更新信息失败。</translation>
     </message>
     <message>
-        <location filename="../../updatechecker.cpp" line="112"/>
+        <location filename="../../updatechecker.cpp" line="157"/>
         <source>Update information is incomplete.</source>
         <translation>更新信息不完整。</translation>
     </message>

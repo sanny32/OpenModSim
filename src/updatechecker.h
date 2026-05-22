@@ -13,7 +13,6 @@
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 #include <QTimer>
-#include <QVersionNumber>
 
 ///
 /// \brief The UpdateChecker class
