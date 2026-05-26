@@ -17,6 +17,7 @@ class QWidget;
 class AppProject;
 class AppPreferences;
 class JScriptControl;
+class ProjectTreeWidget;
 
 ///
 /// \brief The AppLogger class
@@ -29,6 +30,7 @@ public:
     static void setupAppProjectLogging(AppProject& project, QObject* context);
     static void setupAppPreferencesLogging(AppPreferences& preferences, QObject* context);
     static void setupScriptControlLogging(JScriptControl& control, QObject* context);
+    static void setupProjectTreeLogging(ProjectTreeWidget& tree, QObject* context);
     static void clear();
 };
 

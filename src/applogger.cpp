@@ -18,6 +18,7 @@
 #include "formscriptview.h"
 #include "formtrafficview.h"
 #include "jscriptcontrol.h"
+#include "projecttreewidget.h"
 
 namespace {
 
@@ -496,6 +497,22 @@ void AppLogger::setupScriptControlLogging(JScriptControl& control, QObject* cont
 
         qInfo(lcApp) << QCoreApplication::translate("MainWindow", "Script stopped: %1")
                             .arg(control.scriptSource());
+    }, Qt::DirectConnection);
+}
+
+///
+/// \brief AppLogger::setupProjectTreeLogging
+/// \param tree
+/// \param context
+///
+void AppLogger::setupProjectTreeLogging(ProjectTreeWidget& tree, QObject* context)
+{
+    Q_ASSERT(context != nullptr);
+
+    QObject::connect(&tree, &ProjectTreeWidget::formRenamed, context,
+                     [](ProjectFormRef, const QString& oldName, const QString& newName) {
+        qInfo(lcApp) << QCoreApplication::translate("MainWindow", "Form renamed: '%1' -> '%2'")
+                            .arg(oldName, newName);
     }, Qt::DirectConnection);
 }
 

@@ -2531,7 +2531,7 @@ Open the download page?</source>
         <translation>Настройка</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="79"/>
+        <location filename="../../applogger.cpp" line="80"/>
         <source>Script</source>
         <translation>Скрипт</translation>
     </message>
@@ -2613,7 +2613,7 @@ Open the download page?</source>
     </message>
     <message>
         <location filename="../../mainwindow.ui" line="348"/>
-        <location filename="../../mainwindow.cpp" line="1923"/>
+        <location filename="../../mainwindow.cpp" line="1924"/>
         <source>Save Project</source>
         <translation>Сохранить проект</translation>
     </message>
@@ -2793,19 +2793,19 @@ Open the download page?</source>
         <translation>Строка состояния</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="931"/>
+        <location filename="../../mainwindow.cpp" line="932"/>
         <source>All files (*)</source>
         <translation>Все файлы (*)</translation>
     </message>
     <message>
         <location filename="../../mainwindow.cpp" line="301"/>
-        <location filename="../../mainwindow.cpp" line="678"/>
+        <location filename="../../mainwindow.cpp" line="679"/>
         <source>Open Recent</source>
         <translation>Открыть недавние</translation>
     </message>
     <message>
         <location filename="../../mainwindow.cpp" line="302"/>
-        <location filename="../../mainwindow.cpp" line="2059"/>
+        <location filename="../../mainwindow.cpp" line="2060"/>
         <source>Clear List</source>
         <translation>Очистить список</translation>
     </message>
@@ -2820,358 +2820,363 @@ Open the download page?</source>
         <translation>Вывод</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="930"/>
-        <location filename="../../mainwindow.cpp" line="1953"/>
+        <location filename="../../mainwindow.cpp" line="931"/>
+        <location filename="../../mainwindow.cpp" line="1954"/>
         <source>Project files (*.omsim)</source>
         <translation>Файлы проекта (*.omsim)</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="1577"/>
-        <location filename="../../mainwindow.cpp" line="1981"/>
+        <location filename="../../mainwindow.cpp" line="1578"/>
+        <location filename="../../mainwindow.cpp" line="1982"/>
         <source>Untitled</source>
         <translation>Без имени</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="127"/>
-        <location filename="../../mainwindow.cpp" line="681"/>
-        <location filename="../../mainwindow.cpp" line="1762"/>
+        <location filename="../../applogger.cpp" line="128"/>
+        <location filename="../../mainwindow.cpp" line="682"/>
+        <location filename="../../mainwindow.cpp" line="1763"/>
         <source>Address Base</source>
         <translation>Адресация</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="220"/>
+        <location filename="../../applogger.cpp" line="221"/>
         <source>Server connected: %1</source>
         <translation>Сервер подключён: %1</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="226"/>
+        <location filename="../../applogger.cpp" line="227"/>
         <source>Server disconnected: %1</source>
         <translation>Сервер отключён: %1</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="237"/>
+        <location filename="../../applogger.cpp" line="238"/>
         <source>Modbus client connected: %1 -&gt; %2</source>
         <translation>Клиент Modbus подключён: %1 -&gt; %2</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="244"/>
+        <location filename="../../applogger.cpp" line="245"/>
         <source>Modbus client disconnected: %1 -&gt; %2</source>
         <translation>Клиент Modbus отключён: %1 -&gt; %2</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="251"/>
+        <location filename="../../applogger.cpp" line="252"/>
         <source>[Unit %1] %2</source>
         <translation>[Устройство %1] %2</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="270"/>
+        <location filename="../../applogger.cpp" line="271"/>
         <source>Address space added: unit %1, %2, starting address %3, length %4</source>
         <translation>Добавлено адресное пространство: устройство %1, %2, начальный адрес %3, длина %4</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="292"/>
+        <location filename="../../applogger.cpp" line="293"/>
         <source>&lt;empty&gt;</source>
         <translation>&lt;пусто&gt;</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="308"/>
+        <location filename="../../applogger.cpp" line="309"/>
         <source>Manual write: unit %1, %2, starting address %3, value %4</source>
         <translation>Ручная запись: устройство %1, %2, начальный адрес %3, значение %4</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="321"/>
+        <location filename="../../applogger.cpp" line="322"/>
         <source>Client write: %1 -&gt; unit %2, %3, starting address %4, value %5</source>
         <translation>Запись клиентом: %1 -&gt; устройство %2, %3, начальный адрес %4, значение %5</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="318"/>
+        <location filename="../../applogger.cpp" line="319"/>
         <source>unknown client</source>
         <translation>неизвестный клиент</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="294"/>
+        <location filename="../../applogger.cpp" line="295"/>
         <source>Address comment changed: unit %1, %2, address %3: &apos;%4&apos;</source>
         <translation>Изменён комментарий адреса: устройство %1, %2, адрес %3: &apos;%4&apos;</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="352"/>
+        <location filename="../../applogger.cpp" line="353"/>
         <source>Auto simulation enabled (%1): unit %2, %3, address %4</source>
         <translation>Автосимуляция включена (%1): устройство %2, %3, адрес %4</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="366"/>
+        <location filename="../../applogger.cpp" line="367"/>
         <source>Auto simulation disabled: unit %1, %2, address %3</source>
         <translation>Автосимуляция отключена: устройство %1, %2, адрес %3</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="61"/>
+        <location filename="../../applogger.cpp" line="62"/>
         <source>[%1 values: %2%3]</source>
         <translation>[%1 значений: %2%3]</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="77"/>
+        <location filename="../../applogger.cpp" line="78"/>
         <source>Traffic</source>
         <translation>Трафик</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="81"/>
+        <location filename="../../applogger.cpp" line="82"/>
         <source>Map</source>
         <translation>Карта</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="82"/>
+        <location filename="../../applogger.cpp" line="83"/>
         <source>Form</source>
         <translation>Форма</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="93"/>
+        <location filename="../../applogger.cpp" line="94"/>
         <source>&lt;null&gt;</source>
         <translation>&lt;null&gt;</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="96"/>
+        <location filename="../../applogger.cpp" line="97"/>
         <source>&lt;untitled&gt;</source>
         <translation>&lt;без имени&gt;</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="99"/>
+        <location filename="../../applogger.cpp" line="100"/>
         <source>%1 &apos;%2&apos;</source>
         <translation>%1 &apos;%2&apos;</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="110"/>
+        <location filename="../../applogger.cpp" line="111"/>
         <source>Font</source>
         <translation>Шрифт</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="111"/>
+        <location filename="../../applogger.cpp" line="112"/>
         <source>FontZoom</source>
         <translation>Масштаб шрифта</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="112"/>
+        <location filename="../../applogger.cpp" line="113"/>
         <source>BackgroundColor</source>
         <translation>Цвет фона</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="113"/>
+        <location filename="../../applogger.cpp" line="114"/>
         <source>ForegroundColor</source>
         <translation>Цвет текста</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="114"/>
+        <location filename="../../applogger.cpp" line="115"/>
         <source>AddressColor</source>
         <translation>Цвет адреса</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="115"/>
+        <location filename="../../applogger.cpp" line="116"/>
         <source>CommentColor</source>
         <translation>Цвет комментария</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="116"/>
+        <location filename="../../applogger.cpp" line="117"/>
         <source>CheckForUpdates</source>
         <translation>Проверять обновления</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="117"/>
+        <location filename="../../applogger.cpp" line="118"/>
         <source>ShowWelcomeDialog</source>
         <translation>Показывать диалог приветствия</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="118"/>
+        <location filename="../../applogger.cpp" line="119"/>
         <source>Language</source>
         <translation>Язык</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="119"/>
+        <location filename="../../applogger.cpp" line="120"/>
         <source>ScriptFont</source>
         <translation>Шрифт скрипта</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="120"/>
+        <location filename="../../applogger.cpp" line="121"/>
         <source>CodeAutoComplete</source>
         <translation>Автодополнение кода</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="121"/>
+        <location filename="../../applogger.cpp" line="122"/>
         <source>AutoShowConsoleOutput</source>
         <translation>Автоматически показывать консоль вывода</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="122"/>
+        <location filename="../../applogger.cpp" line="123"/>
         <source>ConsoleMaxLines</source>
         <translation>Ограничение вывода консоли</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="123"/>
+        <location filename="../../applogger.cpp" line="124"/>
         <source>DataView.ColumnsDistance</source>
         <translation>Данные.Расстояние между столбцами</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="124"/>
+        <location filename="../../applogger.cpp" line="125"/>
         <source>DataView.LeadingZeros</source>
         <translation>Данные.Ведущие нули для беззнаковых</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="125"/>
+        <location filename="../../applogger.cpp" line="126"/>
         <source>TrafficView.LogLimit</source>
         <translation>Просмотр трафика.Лимит лога</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="126"/>
+        <location filename="../../applogger.cpp" line="127"/>
         <source>TrafficView.AutoScroll</source>
         <translation>Просмотр трафика.Автопрокрутка</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="129"/>
+        <location filename="../../applogger.cpp" line="130"/>
         <source>ThemeMode</source>
         <translation>Тема оформления</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="141"/>
+        <location filename="../../applogger.cpp" line="142"/>
         <source>true</source>
         <translation>истина</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="143"/>
+        <location filename="../../applogger.cpp" line="144"/>
         <source>false</source>
         <translation>ложь</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="169"/>
+        <location filename="../../applogger.cpp" line="170"/>
         <source>enabled</source>
         <translation>вкл.</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="171"/>
+        <location filename="../../applogger.cpp" line="172"/>
         <source>disabled</source>
         <translation>выкл.</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="257"/>
+        <location filename="../../applogger.cpp" line="258"/>
         <source>Unit ID added: %1</source>
         <translation>Устройство добавлено: %1</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="263"/>
+        <location filename="../../applogger.cpp" line="264"/>
         <source>Unit ID removed: %1</source>
         <translation>Устройство удалено: %1</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="279"/>
+        <location filename="../../applogger.cpp" line="280"/>
         <source>Address space removed: unit %1, %2, starting address %3, length %4</source>
         <translation>Удалено адресное пространство: устройство %1, %2, начальный адрес %3, длина %4</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="385"/>
+        <location filename="../../applogger.cpp" line="386"/>
         <source>Project opened: %1</source>
         <translation>Проект открыт: %1</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="392"/>
+        <location filename="../../applogger.cpp" line="393"/>
         <source>&lt;unsaved&gt;</source>
         <translation>&lt;несохранённый&gt;</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="395"/>
+        <location filename="../../applogger.cpp" line="396"/>
         <source>Project closed: %1</source>
         <translation>Проект закрыт: %1</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="401"/>
+        <location filename="../../applogger.cpp" line="402"/>
         <source>Project saved: %1</source>
         <translation>Проект сохранен: %1</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="407"/>
+        <location filename="../../applogger.cpp" line="408"/>
         <source>Project save failed: %1 (%2)</source>
         <translation>Ошибка сохранения проекта: %1 (%2)</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="414"/>
+        <location filename="../../applogger.cpp" line="415"/>
         <source>Form created: %1</source>
         <translation>Форма создана: %1</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="420"/>
+        <location filename="../../applogger.cpp" line="421"/>
         <source>Form opened: %1</source>
         <translation>Форма открыта: %1</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="426"/>
+        <location filename="../../applogger.cpp" line="427"/>
         <source>Form closed: %1</source>
         <translation>Форма закрыта: %1</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="432"/>
+        <location filename="../../applogger.cpp" line="433"/>
         <source>Form deleted: %1</source>
         <translation>Форма удалена: %1</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="451"/>
+        <location filename="../../applogger.cpp" line="452"/>
         <source>Preference changed: %1: %2 -&gt; %3</source>
         <translation>Настройки изменены: %1: %2 -&gt; %3</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="460"/>
+        <location filename="../../applogger.cpp" line="461"/>
         <source>%1 changed: %2 -&gt; %3</source>
         <translation>%1 изменено: %2 -&gt; %3</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="478"/>
+        <location filename="../../applogger.cpp" line="479"/>
         <source>Script started: %1 (mode: %2, interval: %3 ms)</source>
         <translation>Скрипт запущен: %1 (режим: %2, интервал: %3 мс)</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="483"/>
+        <location filename="../../applogger.cpp" line="484"/>
         <source>Script started: %1 (mode: %2)</source>
         <translation>Скрипт запущен: %1 (режим: %2)</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="1316"/>
+        <location filename="../../applogger.cpp" line="514"/>
+        <source>Form renamed: &apos;%1&apos; -&gt; &apos;%2&apos;</source>
+        <translation>Форма переименована: &apos;%1&apos; -&gt; &apos;%2&apos;</translation>
+    </message>
+    <message>
+        <location filename="../../mainwindow.cpp" line="1317"/>
         <source>Move to Other Panel</source>
         <translation>Переместить на другую панель</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="157"/>
+        <location filename="../../applogger.cpp" line="158"/>
         <source>1-based</source>
         <translation>1-первый</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="155"/>
+        <location filename="../../applogger.cpp" line="156"/>
         <source>0-based</source>
         <translation>0-первый</translation>
     </message>
     <message>
         <location filename="../../mainwindow.ui" line="418"/>
         <location filename="../../mainwindow.ui" line="421"/>
-        <location filename="../../applogger.cpp" line="128"/>
+        <location filename="../../applogger.cpp" line="129"/>
         <source>Hex View</source>
         <translation>Шестнадцатиричный режим</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="1924"/>
+        <location filename="../../mainwindow.cpp" line="1925"/>
         <source>Save project before closing?</source>
         <translation>Сохранить проект перед закрытием?</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="2047"/>
+        <location filename="../../mainwindow.cpp" line="2048"/>
         <source>No Recent Projects</source>
         <translation>Нет недавних проектов</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="75"/>
+        <location filename="../../applogger.cpp" line="76"/>
         <source>Data</source>
         <translation>Данные</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="1274"/>
+        <location filename="../../mainwindow.cpp" line="1275"/>
         <source>JavaScript files (*.js);;All files (*)</source>
         <translation>Файлы JavaScript (*.js);;Все файлы (*)</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="497"/>
+        <location filename="../../applogger.cpp" line="498"/>
         <source>Script stopped: %1</source>
         <translation>Скрипт остановлен: %1</translation>
     </message>
@@ -3952,14 +3957,14 @@ Open the download page?</source>
 <context>
     <name>RunModeComboBox</name>
     <message>
-        <location filename="../../applogger.cpp" line="199"/>
+        <location filename="../../applogger.cpp" line="200"/>
         <location filename="../../controls/runmodecombobox.cpp" line="19"/>
         <location filename="../../controls/runmodecombobox.cpp" line="39"/>
         <source>Once</source>
         <translation>Однократно</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="201"/>
+        <location filename="../../applogger.cpp" line="202"/>
         <location filename="../../controls/runmodecombobox.cpp" line="20"/>
         <location filename="../../controls/runmodecombobox.cpp" line="43"/>
         <source>Periodically</source>
@@ -4152,17 +4157,17 @@ Open the download page?</source>
 <context>
     <name>UpdateChecker</name>
     <message>
-        <location filename="../../updatechecker.cpp" line="70"/>
+        <location filename="../../updatechecker.cpp" line="115"/>
         <source>SSL is not supported in this build.</source>
         <translation>В этой сборке SSL не поддерживается.</translation>
     </message>
     <message>
-        <location filename="../../updatechecker.cpp" line="102"/>
+        <location filename="../../updatechecker.cpp" line="147"/>
         <source>Failed to parse update information.</source>
         <translation>Не удалось обработать информацию об обновлении.</translation>
     </message>
     <message>
-        <location filename="../../updatechecker.cpp" line="112"/>
+        <location filename="../../updatechecker.cpp" line="157"/>
         <source>Update information is incomplete.</source>
         <translation>Информация об обновлении неполная.</translation>
     </message>
