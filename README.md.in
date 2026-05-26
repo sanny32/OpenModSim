@@ -206,7 +206,7 @@ To enable the experimental [Qlementine](https://github.com/oclero/qlementine) ap
 
 ## macOS Building
 
-The minimum supported version of macOS for building OpenModSim from sources is macOS 11 (Big Sur).
+The minimum supported version of macOS for building OpenModSim from sources is macOS 15 (Sequoia).
 
 1. Install [Homebrew](https://brew.sh) if not already installed
 2. Install required dependencies:
