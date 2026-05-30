@@ -140,7 +140,7 @@ The following minimum operating system versions are supported for OpenModSim:
 - <img src="docs/icons/logo_ubuntu.svg" width="16" height="16" /> **Ubuntu Linux 22.04**
 - <img src="docs/icons/logo_mint.png"  width="16" height="16" /> **Mint Linux 22**
 - <img src="docs/icons/logo_zorin.png" width="16" height="16" /> **Zorin OS 18**
-- <img src="docs/icons/logo_fedora.svg" width="16" height="16" /> **Fedora Linux 41**
+- <img src="docs/icons/logo_fedora.svg" width="16" height="16" /> **Fedora Linux 43**
 - <img src="docs/icons/logo_rocky.png" width="16" height="16" /> **Rocky Linux 9.7**
 - <img src="docs/icons/logo_opensuse.svg" width="16" height="16" /> **OpenSuse Linux 15.6**
 - <img src="docs/icons/logo_alt.png" width="16" height="16" /> **Alt Linux 11**
