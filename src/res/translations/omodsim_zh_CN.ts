@@ -3221,14 +3221,14 @@ Open the download page?</source>
 <context>
     <name>ModbusLogWidget</name>
     <message>
-        <location filename="../../controls/modbuslogwidget.cpp" line="336"/>
-        <location filename="../../controls/modbuslogwidget.cpp" line="379"/>
+        <location filename="../../controls/modbuslogwidget.cpp" line="337"/>
+        <location filename="../../controls/modbuslogwidget.cpp" line="380"/>
         <source>Copy Text</source>
         <translation>复制文本</translation>
     </message>
     <message>
-        <location filename="../../controls/modbuslogwidget.cpp" line="348"/>
-        <location filename="../../controls/modbuslogwidget.cpp" line="380"/>
+        <location filename="../../controls/modbuslogwidget.cpp" line="349"/>
+        <location filename="../../controls/modbuslogwidget.cpp" line="381"/>
         <source>Copy Bytes</source>
         <translation>复制字节</translation>
     </message>
