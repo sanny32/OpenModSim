@@ -9,6 +9,7 @@
 #include <QBitArray>
 #include <QModbusDeviceIdentification>
 #include <QLoggingCategory>
+#include <QScopedValueRollback>
 #include "modbusserver.h"
 
 Q_LOGGING_CATEGORY(QT_MODBUS, "qt.modbus")
@@ -445,7 +446,7 @@ bool ModbusServer::writeData(const QModbusDataUnit &newData, int serverAddress)
         current.setValue(translatedIndex, newValue);
     }
 
-    if (changeRequired) {
+    if (changeRequired || _processingRequest) {
         emit dataWritten(serverAddress, newData.registerType(), newData.startAddress(), newData.valueCount(),
                          _currentRequestClientAddress, _currentRequestClientPort);
     }
@@ -551,6 +552,8 @@ void ModbusServer::processDefinitionsChanges()
 ///
 QModbusResponse ModbusServer::processRequest(const QModbusPdu &request, int serverAddress)
 {
+    QScopedValueRollback<bool> processingRequest(_processingRequest, true);
+
     if (_requestHandler)
     {
         QModbusResponse jsResponse;
@@ -1371,4 +1374,3 @@ void ModbusServer::storeModbusCommEvent(const QModbusCommEvent &eventByte)
 
 #undef CHECK_SIZE_EQUALS
 #undef CHECK_SIZE_LESS_THAN
-

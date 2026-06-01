@@ -199,14 +199,14 @@
 <context>
     <name>ByteOrder</name>
     <message>
-        <location filename="../../datamapdatamodel.cpp" line="111"/>
-        <location filename="../../datamapdatamodel.cpp" line="123"/>
+        <location filename="../../datamapdatamodel.cpp" line="139"/>
+        <location filename="../../datamapdatamodel.cpp" line="151"/>
         <source>Direct</source>
         <translation>Прямой</translation>
     </message>
     <message>
-        <location filename="../../datamapdatamodel.cpp" line="113"/>
-        <location filename="../../datamapdatamodel.cpp" line="125"/>
+        <location filename="../../datamapdatamodel.cpp" line="141"/>
+        <location filename="../../datamapdatamodel.cpp" line="153"/>
         <source>Swapped</source>
         <translation>Обратный</translation>
     </message>
@@ -306,47 +306,47 @@
         <translation>Регистры хранения</translation>
     </message>
     <message>
-        <location filename="../../datamapdatamodel.cpp" line="532"/>
+        <location filename="../../datamapdatamodel.cpp" line="560"/>
         <source>Unit</source>
         <translation>Устройство</translation>
     </message>
     <message>
-        <location filename="../../datamapdatamodel.cpp" line="533"/>
+        <location filename="../../datamapdatamodel.cpp" line="561"/>
         <source>Type</source>
         <translation>Тип</translation>
     </message>
     <message>
-        <location filename="../../datamapdatamodel.cpp" line="534"/>
+        <location filename="../../datamapdatamodel.cpp" line="562"/>
         <source>Address</source>
         <translation>Адрес</translation>
     </message>
     <message>
-        <location filename="../../datamapdatamodel.cpp" line="535"/>
+        <location filename="../../datamapdatamodel.cpp" line="563"/>
         <source>Data Type</source>
         <translation>Тип данных</translation>
     </message>
     <message>
-        <location filename="../../datamapdatamodel.cpp" line="536"/>
+        <location filename="../../datamapdatamodel.cpp" line="564"/>
         <source>Register Order</source>
         <translation>Порядок регистров</translation>
     </message>
     <message>
-        <location filename="../../datamapdatamodel.cpp" line="537"/>
+        <location filename="../../datamapdatamodel.cpp" line="565"/>
         <source>Byte Order</source>
         <translation>Порядок байт</translation>
     </message>
     <message>
-        <location filename="../../datamapdatamodel.cpp" line="538"/>
+        <location filename="../../datamapdatamodel.cpp" line="566"/>
         <source>Comment</source>
         <translation>Комментарий</translation>
     </message>
     <message>
-        <location filename="../../datamapdatamodel.cpp" line="539"/>
+        <location filename="../../datamapdatamodel.cpp" line="567"/>
         <source>Value</source>
         <translation>Значение</translation>
     </message>
     <message>
-        <location filename="../../datamapdatamodel.cpp" line="540"/>
+        <location filename="../../datamapdatamodel.cpp" line="568"/>
         <source>Timestamp</source>
         <translation>Время</translation>
     </message>
@@ -3549,7 +3549,7 @@ Open the download page?</source>
         <translation>Некорректное значение номера устройства (%1)</translation>
     </message>
     <message>
-        <location filename="../../modbusmultiserver.cpp" line="1553"/>
+        <location filename="../../modbusmultiserver.cpp" line="1569"/>
         <source>Connection error. %1</source>
         <translation>Ошибка подключения. %1</translation>
     </message>

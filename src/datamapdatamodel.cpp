@@ -78,6 +78,34 @@ QVector<quint16> regsForKey(ModbusMultiServer& server, const ItemMapKey& key, Da
 }
 
 ///
+/// \brief rangesOverlap
+///
+bool rangesOverlap(quint16 firstStart, int firstLength, quint16 secondStart, int secondLength)
+{
+    if (firstLength <= 0 || secondLength <= 0)
+        return false;
+
+    const quint32 firstEnd = static_cast<quint32>(firstStart) + static_cast<quint32>(firstLength);
+    const quint32 secondEnd = static_cast<quint32>(secondStart) + static_cast<quint32>(secondLength);
+    return static_cast<quint32>(firstStart) < secondEnd && static_cast<quint32>(secondStart) < firstEnd;
+}
+
+///
+/// \brief timestampForKey
+///
+QDateTime timestampForKey(ModbusMultiServer& server, const ItemMapKey& key, DataType type)
+{
+    QDateTime result;
+    const int count = registersCount(type);
+    for (int i = 0; i < count; ++i) {
+        const auto timestamp = server.timestamp(key.DeviceId, key.Type, static_cast<quint16>(key.Address + i));
+        if (timestamp.isValid() && (!result.isValid() || timestamp > result))
+            result = timestamp;
+    }
+    return result;
+}
+
+///
 /// \brief parseLocalizedFloat
 ///
 bool parseLocalizedFloat(const QString& text, float& value)
@@ -406,7 +434,7 @@ bool DataMapDataModel::setData(const QModelIndex& index, const QVariant& value, 
             _server.setData(oldKey.DeviceId, unit, WriteSource::User);
 
             entry.value     = regs[0];
-            entry.timestamp = _server.timestamp(oldKey.DeviceId, oldKey.Type, oldKey.Address);
+            entry.timestamp = timestampForKey(_server, oldKey, entry.type);
             _data[oldKey]   = entry;
         }
         // Always refresh the cell (restores previous value if parse failed)
@@ -489,7 +517,7 @@ bool DataMapDataModel::setData(const QModelIndex& index, const QVariant& value, 
 
             const auto unit   = _server.data(newKey.DeviceId, newKey.Type, newKey.Address, 1);
             entry.value       = unit.isValid() ? static_cast<quint16>(unit.value(0)) : 0;
-            entry.timestamp   = _server.timestamp(newKey.DeviceId, newKey.Type, newKey.Address);
+            entry.timestamp   = timestampForKey(_server, newKey, entry.type);
             entry.comment     = _server.description(newKey.DeviceId, newKey.Type, newKey.Address);
 
             _keys[row] = newKey;
@@ -499,7 +527,7 @@ bool DataMapDataModel::setData(const QModelIndex& index, const QVariant& value, 
             // Timestamp for a new key/type can become available only after
             // registerEntry() has updated backend unit maps.
             if (!_data[newKey].timestamp.isValid()) {
-                const auto backendTsAfterRegister = _server.timestamp(newKey.DeviceId, newKey.Type, newKey.Address);
+                const auto backendTsAfterRegister = timestampForKey(_server, newKey, _data[newKey].type);
                 if (backendTsAfterRegister.isValid())
                     _data[newKey].timestamp = backendTsAfterRegister;
             }
@@ -716,7 +744,7 @@ ItemMapKey DataMapDataModel::lastKey() const
 void DataMapDataModel::addEntry(const ItemMapKey& key, const DataMapEntry& entry)
 {
     DataMapEntry normalizedEntry = entry;
-    const auto backendTs = _server.timestamp(key.DeviceId, key.Type, key.Address);
+    const auto backendTs = timestampForKey(_server, key, normalizedEntry.type);
     if (backendTs.isValid()) {
         normalizedEntry.timestamp = backendTs;
     } else if (normalizedEntry.timestamp.isValid()) {
@@ -750,7 +778,7 @@ void DataMapDataModel::addEntry(const ItemMapKey& key, const DataMapEntry& entry
     // For freshly added keys, backend timestamp can become available only after
     // the unit map is registered in registerEntry().
     if (!normalizedEntry.timestamp.isValid()) {
-        const auto backendTsAfterRegister = _server.timestamp(key.DeviceId, key.Type, key.Address);
+        const auto backendTsAfterRegister = timestampForKey(_server, key, normalizedEntry.type);
         if (backendTsAfterRegister.isValid()) {
             _data[key].timestamp = backendTsAfterRegister;
             const int insertedRow = rowForKey(key);
@@ -788,21 +816,25 @@ void DataMapDataModel::applyMbDataChange(quint8 deviceId, const QModbusDataUnit&
 {
     if (!data.isValid() || _inSetData) return;
 
-    for (quint32 i = 0; i < data.valueCount(); ++i) {
-        const ItemMapKey key{ deviceId, data.registerType(),
-                              static_cast<quint16>(data.startAddress() + i) };
-        const quint16 value = static_cast<quint16>(data.value(i));
+    for (int row = 0; row < _keys.size(); ++row) {
+        const ItemMapKey key = _keys[row];
+        if (key.DeviceId != deviceId || key.Type != data.registerType())
+            continue;
 
         auto it = _data.find(key);
-        if (it == _data.end()) continue;
-        if (it->value == value) continue;
+        if (it == _data.end())
+            continue;
 
-        it->value     = value;
-        it->timestamp = _server.timestamp(deviceId, key.Type, key.Address);
+        if (!rangesOverlap(key.Address, registersCount(it->type),
+                           static_cast<quint16>(data.startAddress()), data.valueCount()))
+            continue;
 
-        const int row = rowForKey(key);
-        if (row >= 0)
-            emit dataChanged(createIndex(row, ColValue), createIndex(row, ColTimestamp));
+        const auto regs = regsForKey(_server, key, it->type);
+        if (!regs.isEmpty())
+            it->value = regs[0];
+        it->timestamp = timestampForKey(_server, key, it->type);
+
+        emit dataChanged(createIndex(row, ColValue), createIndex(row, ColTimestamp));
     }
 }
 
@@ -812,18 +844,27 @@ void DataMapDataModel::applyMbDataChange(quint8 deviceId, const QModbusDataUnit&
 ///
 void DataMapDataModel::applyTimestampChange(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 address, const QDateTime& timestamp)
 {
-    const ItemMapKey key{deviceId, type, address};
-    auto it = _data.find(key);
-    if (it == _data.end())
-        return;
+    Q_UNUSED(timestamp)
 
-    if (it->timestamp == timestamp)
-        return;
+    for (int row = 0; row < _keys.size(); ++row) {
+        const ItemMapKey key = _keys[row];
+        if (key.DeviceId != deviceId || key.Type != type)
+            continue;
 
-    it->timestamp = timestamp;
-    const int row = rowForKey(key);
-    if (row >= 0)
+        auto it = _data.find(key);
+        if (it == _data.end())
+            continue;
+
+        if (!rangesOverlap(key.Address, registersCount(it->type), address, 1))
+            continue;
+
+        const auto rowTimestamp = timestampForKey(_server, key, it->type);
+        if (it->timestamp == rowTimestamp)
+            continue;
+
+        it->timestamp = rowTimestamp;
         emit dataChanged(createIndex(row, ColTimestamp), createIndex(row, ColTimestamp));
+    }
 }
 
 ///
@@ -987,5 +1028,3 @@ bool DataMapFilterProxy::filterAcceptsRow(int sourceRow, const QModelIndex& /*so
 
     return true;
 }
-
-
