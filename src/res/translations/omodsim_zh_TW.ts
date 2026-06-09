@@ -199,14 +199,14 @@
 <context>
     <name>ByteOrder</name>
     <message>
-        <location filename="../../datamapdatamodel.cpp" line="111"/>
-        <location filename="../../datamapdatamodel.cpp" line="123"/>
+        <location filename="../../datamapdatamodel.cpp" line="139"/>
+        <location filename="../../datamapdatamodel.cpp" line="151"/>
         <source>Direct</source>
         <translation>直接</translation>
     </message>
     <message>
-        <location filename="../../datamapdatamodel.cpp" line="113"/>
-        <location filename="../../datamapdatamodel.cpp" line="125"/>
+        <location filename="../../datamapdatamodel.cpp" line="141"/>
+        <location filename="../../datamapdatamodel.cpp" line="153"/>
         <source>Swapped</source>
         <translation>交換</translation>
     </message>
@@ -306,47 +306,47 @@
         <translation>保持暫存器</translation>
     </message>
     <message>
-        <location filename="../../datamapdatamodel.cpp" line="532"/>
+        <location filename="../../datamapdatamodel.cpp" line="560"/>
         <source>Unit</source>
         <translation>單元</translation>
     </message>
     <message>
-        <location filename="../../datamapdatamodel.cpp" line="533"/>
+        <location filename="../../datamapdatamodel.cpp" line="561"/>
         <source>Type</source>
         <translation>類型</translation>
     </message>
     <message>
-        <location filename="../../datamapdatamodel.cpp" line="534"/>
+        <location filename="../../datamapdatamodel.cpp" line="562"/>
         <source>Address</source>
         <translation>地址</translation>
     </message>
     <message>
-        <location filename="../../datamapdatamodel.cpp" line="535"/>
+        <location filename="../../datamapdatamodel.cpp" line="563"/>
         <source>Data Type</source>
         <translation>資料類型</translation>
     </message>
     <message>
-        <location filename="../../datamapdatamodel.cpp" line="536"/>
+        <location filename="../../datamapdatamodel.cpp" line="564"/>
         <source>Register Order</source>
         <translation>暫存器順序</translation>
     </message>
     <message>
-        <location filename="../../datamapdatamodel.cpp" line="537"/>
+        <location filename="../../datamapdatamodel.cpp" line="565"/>
         <source>Byte Order</source>
         <translation>位元組順序</translation>
     </message>
     <message>
-        <location filename="../../datamapdatamodel.cpp" line="538"/>
+        <location filename="../../datamapdatamodel.cpp" line="566"/>
         <source>Comment</source>
         <translation>注釋</translation>
     </message>
     <message>
-        <location filename="../../datamapdatamodel.cpp" line="539"/>
+        <location filename="../../datamapdatamodel.cpp" line="567"/>
         <source>Value</source>
         <translation>值</translation>
     </message>
     <message>
-        <location filename="../../datamapdatamodel.cpp" line="540"/>
+        <location filename="../../datamapdatamodel.cpp" line="568"/>
         <source>Timestamp</source>
         <translation>時間戳記</translation>
     </message>
@@ -3248,14 +3248,14 @@ Open the download page?</source>
 <context>
     <name>ModbusLogWidget</name>
     <message>
-        <location filename="../../controls/modbuslogwidget.cpp" line="336"/>
-        <location filename="../../controls/modbuslogwidget.cpp" line="379"/>
+        <location filename="../../controls/modbuslogwidget.cpp" line="337"/>
+        <location filename="../../controls/modbuslogwidget.cpp" line="380"/>
         <source>Copy Text</source>
         <translation>複製文字</translation>
     </message>
     <message>
-        <location filename="../../controls/modbuslogwidget.cpp" line="348"/>
-        <location filename="../../controls/modbuslogwidget.cpp" line="380"/>
+        <location filename="../../controls/modbuslogwidget.cpp" line="349"/>
+        <location filename="../../controls/modbuslogwidget.cpp" line="381"/>
         <source>Copy Bytes</source>
         <translation>複製位元組</translation>
     </message>
@@ -3576,7 +3576,7 @@ Open the download page?</source>
         <translation>指定了錯誤的裝置地址（%1）</translation>
     </message>
     <message>
-        <location filename="../../modbusmultiserver.cpp" line="1576"/>
+        <location filename="../../modbusmultiserver.cpp" line="1592"/>
         <source>Connection error. %1</source>
         <translation>連線錯誤 %1</translation>
     </message>
