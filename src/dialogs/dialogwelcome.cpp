@@ -44,6 +44,7 @@ DialogWelcome::DialogWelcome(const QStringList& recentProjects, QWidget *parent)
     ui->setupUi(this);
 
 #ifdef Q_OS_MAC
+    ui->labelIcon->setFixedSize(64, 64);
     const qreal iconDpr = ui->labelIcon->devicePixelRatioF();
     QPixmap appIcon(QStringLiteral(":/res/omodsim-mac.png"));
     appIcon = appIcon.scaled(ui->labelIcon->maximumSize() * iconDpr,

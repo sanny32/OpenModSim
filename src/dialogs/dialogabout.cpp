@@ -166,6 +166,7 @@ DialogAbout::DialogAbout(QWidget *parent) :
     setWindowTitle(tr("About %1...").arg(APP_PRODUCT_NAME));
 
 #ifdef Q_OS_MAC
+    ui->labelIcon->setFixedSize(64, 64);
     const qreal iconDpr = ui->labelIcon->devicePixelRatioF();
     QPixmap appIcon(QStringLiteral(":/res/omodsim-mac.png"));
     appIcon = appIcon.scaled(ui->labelIcon->maximumSize() * iconDpr,
