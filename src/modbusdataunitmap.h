@@ -38,7 +38,7 @@ public:
     bool isGlobalMap() const;
     void setGlobalMap(bool set);
 
-    void setData(const QModbusDataUnit& data);
+    void setData(const QModbusDataUnit& data, bool updateUnchangedTimestamps = false);
     QModbusDataUnit getData(QModbusDataUnit::RegisterType pointType, quint16 pointAddress, quint16 length) const;
     QDateTime timestamp(QModbusDataUnit::RegisterType type, quint16 address) const;
     void setTimestamp(QModbusDataUnit::RegisterType type, quint16 address, const QDateTime& timestamp);
@@ -78,4 +78,3 @@ private:
 
 
 #endif // MODBUSDATAUNITMAP_H
-

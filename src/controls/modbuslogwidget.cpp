@@ -14,6 +14,7 @@
 #include <QApplication>
 #include <QStyledItemDelegate>
 #include <QMap>
+#include "appcolors.h"
 #include "fontutils.h"
 #include "modbuslogwidget.h"
 #include "themedicons.h"
@@ -133,11 +134,11 @@ static QVector<QTextLayout::FormatRange> buildLogFormats(const ModbusMessage& ms
                                                        const QStyleOptionViewItem& opt,
                                                        const LogTextData& textData)
 {
-    static const QColor TsColor(0x44, 0x44, 0x44);
-    static const QColor RxColor(0x00, 0x99, 0x33);
-    static const QColor TxColor(0x00, 0x66, 0xcc);
-    static const QColor ErrorColor(0xcc, 0x00, 0x00);
-    static const QColor NormalDataColor(0x00, 0x00, 0x00);
+    const QColor TsColor = AppColors::mutedForeground();
+    const QColor RxColor = AppColors::modbusRequestColor();
+    const QColor TxColor = AppColors::modbusResponseColor();
+    const QColor ErrorColor = AppColors::modbusErrorColor();
+    const QColor NormalDataColor = AppColors::canvasForeground();
 
     const bool selected = opt.state & QStyle::State_Selected;
     const int textLen = textData.text.length();

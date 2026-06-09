@@ -210,6 +210,7 @@ private:
     QHash<int, QString> _errorsString;
     QString _currentRequestClientAddress;
     quint16 _currentRequestClientPort = 0;
+    bool _processingRequest = false;
 };
 
 Q_DECLARE_METATYPE(QModbusRequest)

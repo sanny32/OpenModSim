@@ -269,8 +269,9 @@ QModbusDataUnitMap::Iterator ModbusDataUnitMap::end()
 ///
 /// \brief ModbusDataUnitMap::setData
 /// \param data
+/// \param updateUnchangedTimestamps
 ///
-void ModbusDataUnitMap::setData(const QModbusDataUnit& data)
+void ModbusDataUnitMap::setData(const QModbusDataUnit& data, bool updateUnchangedTimestamps)
 {
     const auto addr = data.startAddress();
     const auto length = data.valueCount();
@@ -281,7 +282,7 @@ void ModbusDataUnitMap::setData(const QModbusDataUnit& data)
     {
         const quint16 newValue = data.value(i);
         const quint16 oldValue = getDataValue(_modbusDataUnitGlobalMap, type, addr + i);
-        if(newValue != oldValue)
+        if(updateUnchangedTimestamps || newValue != oldValue)
             setTimestamp(type, static_cast<quint16>(addr + i), now);
 
         setDataValue(_modbusDataUnitMap, type, addr + i, newValue);
@@ -493,4 +494,3 @@ void ModbusDataUnitMap::updateDataUnitMap()
     }
     _modbusDataUnitMap = modbusMap;
 }
-
