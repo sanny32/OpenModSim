@@ -14,6 +14,7 @@
 #include <QJsonObject>
 #include <QMessageBox>
 #include <QPlainTextEdit>
+#include <QPixmap>
 #include "aboutdatawidget.h"
 #include "dialogabout.h"
 #include "themedicons.h"
@@ -163,6 +164,16 @@ DialogAbout::DialogAbout(QWidget *parent) :
 {
     ui->setupUi(this);
     setWindowTitle(tr("About %1...").arg(APP_PRODUCT_NAME));
+
+#ifdef Q_OS_MAC
+    const qreal iconDpr = ui->labelIcon->devicePixelRatioF();
+    QPixmap appIcon(QStringLiteral(":/res/omodsim-mac.png"));
+    appIcon = appIcon.scaled(ui->labelIcon->maximumSize() * iconDpr,
+                             Qt::KeepAspectRatio,
+                             Qt::SmoothTransformation);
+    appIcon.setDevicePixelRatio(iconDpr);
+    ui->labelIcon->setPixmap(appIcon);
+#endif
 
     ui->labelName->setText(APP_PRODUCT_NAME);
     ui->labelVersion->setText(tr("Version: <b>%1</b> %2").arg(APP_VERSION, arch()));
