@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<OpenModSim Version="2.0-dev">
+    <ModbusDefinitions AddrSpace="6-Digits" UseGlobalUnitMap="false" AutoAddRegistersOnRequest="false">
+        <ModbusErrorSimulations NoResponse="false" ResponseIncorrectId="false" ResponseIllegalFunction="false" ResponseDeviceBusy="false" ResponseIncorrectCrc="false" ResponseDelay="false" ResponseRandomDelay="false" ResponseDelayTime="0" ResponseRandomDelayUpToTime="1000"/>
+    </ModbusDefinitions>
+    <Connections>
+        <ConnectionDetails ConnectionType="RtuTcp">
+            <TcpConnectionParams IPAddress="0.0.0.0" ServicePort="502"/>
+        </ConnectionDetails>
+    </Connections>
+    <AddressSpace>
+        <AddressDescriptionMap/>
+        <AddressTimestampMap/>
+        <ModbusSimulationMap/>
+        <ModbusDataValues/>
+    </AddressSpace>
+    <ViewSettings ViewMode="1" SplitView="0" GlobalZeroBasedAddress="0" GlobalHexView="0" ActivePanel="L" ActivePrimaryWindow="HoldingRegs"/>
+    <Forms>
+        <FormDataView Panel="L" Title="HoldingRegs" DataType="UInt16" RegisterOrder="MSRF" Codepage="" ByteOrder="Direct">
+            <Window Maximized="true" Minimized="false" Left="0" Top="0" Width="610" Height="331"/>
+            <DataViewDefinitions FormName="HoldingRegs" DeviceId="1" PointType="HoldingRegisters" PointAddress="1" Length="200" DataViewColumnsDistance="2" LeadingZeros="true"/>
+            <AddressColorMap/>
+        </FormDataView>
+        <FormDataView Panel="L" Title="InputRegs" DataType="UInt16" RegisterOrder="MSRF" Codepage="" ByteOrder="Direct">
+            <Window Maximized="true" Minimized="false" Left="0" Top="0" Width="610" Height="331"/>
+            <DataViewDefinitions FormName="InputRegs" DeviceId="1" PointType="InputRegisters" PointAddress="1" Length="100" DataViewColumnsDistance="2" LeadingZeros="true"/>
+            <AddressColorMap/>
+        </FormDataView>
+        <FormDataView Panel="L" Title="Coils" DataType="Binary" RegisterOrder="MSRF" Codepage="" ByteOrder="Direct">
+            <Window Maximized="true" Minimized="false" Left="0" Top="0" Width="610" Height="331"/>
+            <DataViewDefinitions FormName="Coils" DeviceId="1" PointType="Coils" PointAddress="1" Length="2000" DataViewColumnsDistance="1" LeadingZeros="true"/>
+            <AddressColorMap/>
+        </FormDataView>
+        <FormDataView Panel="L" Title="DiscreteInputs" DataType="Binary" RegisterOrder="MSRF" Codepage="" ByteOrder="Direct">
+            <Window Maximized="true" Minimized="false" Left="0" Top="0" Width="610" Height="331"/>
+            <DataViewDefinitions FormName="DiscreteInputs" DeviceId="1" PointType="DiscreteInputs" PointAddress="1" Length="100" DataViewColumnsDistance="1" LeadingZeros="true"/>
+            <AddressColorMap/>
+        </FormDataView>
+        <FormTrafficView Panel="L" Title="Traffic">
+            <Window Maximized="true" Minimized="false" Left="0" Top="0" Width="1011" Height="230"/>
+            <Colors Background="#ffffff" Foreground="#000000"/>
+            <Font Family="Consolas" Size="10" Bold="false" Italic="false"/>
+            <TrafficViewDefinitions FormName="Traffic" UnitFilter="0" FunctionCodeFilter="-1" LogViewLimit="300" ExceptionsOnly="false" Autoscroll="false" HexView="false"/>
+        </FormTrafficView>
+    </Forms>
+    <TabOrder Panel="L">
+        <TabRef title="HoldingRegs"/>
+        <TabRef title="InputRegs"/>
+        <TabRef title="Coils"/>
+        <TabRef title="DiscreteInputs"/>
+        <TabRef title="Traffic"/>
+    </TabOrder>
+</OpenModSim>

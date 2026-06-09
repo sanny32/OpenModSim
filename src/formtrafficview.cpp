@@ -520,6 +520,9 @@ QString FormTrafficView::sourceFilterText(const ConnectionDetails& cd) const
 {
     if (cd.Type == ConnectionType::Tcp)
         return tr("Modbus/TCP Srv %1:%2").arg(cd.TcpParams.IPAddress, QString::number(cd.TcpParams.ServicePort));
+    if (cd.Type == ConnectionType::RtuTcp)
+        return tr("Modbus RTU over TCP/IP Srv %1:%2")
+            .arg(cd.TcpParams.IPAddress, QString::number(cd.TcpParams.ServicePort));
 
     return tr("Port %1:%2:%3:%4:%5").arg(cd.SerialParams.PortName,
                                           QString::number(cd.SerialParams.BaudRate),

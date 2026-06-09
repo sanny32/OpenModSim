@@ -392,6 +392,9 @@ struct ConnectionDetails
             case ConnectionType::Tcp:
             return cd2.Type == ConnectionType::Tcp && cd1.TcpParams == cd2.TcpParams;
 
+            case ConnectionType::RtuTcp:
+            return cd2.Type == ConnectionType::RtuTcp && cd1.TcpParams == cd2.TcpParams;
+
             case ConnectionType::Serial:
             return cd2.Type == ConnectionType::Serial && cd1.SerialParams == cd2.SerialParams;
         }
@@ -495,6 +498,7 @@ inline QXmlStreamWriter& operator <<(QXmlStreamWriter& xml, const ConnectionDeta
 
     switch(cd.Type) {
         case ConnectionType::Tcp:
+        case ConnectionType::RtuTcp:
             xml << cd.TcpParams;
             break;
         case ConnectionType::Serial:
@@ -523,6 +527,7 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, ConnectionDetails& c
 
         switch(cd.Type) {
             case ConnectionType::Tcp:
+            case ConnectionType::RtuTcp:
                 if(xml.readNextStartElement() && xml.name() == QLatin1String("TcpConnectionParams")) {
                     xml >> cd.TcpParams;
                 }

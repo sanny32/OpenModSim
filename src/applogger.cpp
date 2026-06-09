@@ -29,7 +29,7 @@ namespace {
 ///
 QString connectionAddress(const ConnectionDetails& cd)
 {
-    return (cd.Type == ConnectionType::Tcp)
+    return (cd.Type == ConnectionType::Tcp || cd.Type == ConnectionType::RtuTcp)
         ? QString("%1:%2").arg(cd.TcpParams.IPAddress).arg(cd.TcpParams.ServicePort)
         : cd.SerialParams.PortName;
 }

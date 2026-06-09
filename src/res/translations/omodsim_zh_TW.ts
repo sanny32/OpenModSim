@@ -1437,8 +1437,8 @@ Open the download page?</source>
     </message>
     <message>
         <location filename="../../dialogs/dialogselectserviceport.ui" line="44"/>
-        <source>Modbus/TCP Service Port</source>
-        <translation>Modbus/TCP伺服器埠</translation>
+        <source>Service Port</source>
+        <translation>服務連接埠</translation>
     </message>
     <message>
         <location filename="../../dialogs/dialogselectserviceport.ui" line="57"/>
@@ -2166,8 +2166,8 @@ Source: %3</source>
     </message>
     <message>
         <location filename="../../formtrafficview.cpp" line="112"/>
-        <location filename="../../formtrafficview.cpp" line="732"/>
-        <location filename="../../formtrafficview.cpp" line="884"/>
+        <location filename="../../formtrafficview.cpp" line="735"/>
+        <location filename="../../formtrafficview.cpp" line="887"/>
         <source>Exceptions Only</source>
         <translation>僅例外</translation>
     </message>
@@ -2178,57 +2178,62 @@ Source: %3</source>
     </message>
     <message>
         <location filename="../../formtrafficview.cpp" line="524"/>
+        <source>Modbus RTU over TCP/IP Srv %1:%2</source>
+        <translation>Modbus RTU over TCP/IP 伺服器 %1:%2</translation>
+    </message>
+    <message>
+        <location filename="../../formtrafficview.cpp" line="527"/>
         <source>Port %1:%2:%3:%4:%5</source>
         <translation>連接埠 %1:%2:%3:%4:%5</translation>
     </message>
     <message>
-        <location filename="../../formtrafficview.cpp" line="653"/>
+        <location filename="../../formtrafficview.cpp" line="656"/>
         <source>Text files (*.txt)</source>
         <translation>文字檔案 (*.txt)</translation>
     </message>
     <message>
-        <location filename="../../formtrafficview.cpp" line="660"/>
+        <location filename="../../formtrafficview.cpp" line="663"/>
         <source>Log exported successfully to file %1</source>
         <translation>日誌已成功匯出至 %1</translation>
     </message>
     <message>
-        <location filename="../../formtrafficview.cpp" line="662"/>
+        <location filename="../../formtrafficview.cpp" line="665"/>
         <source>Export log error!</source>
         <translation>匯出日誌錯誤！</translation>
     </message>
     <message>
-        <location filename="../../formtrafficview.cpp" line="695"/>
-        <location filename="../../formtrafficview.cpp" line="868"/>
+        <location filename="../../formtrafficview.cpp" line="698"/>
+        <location filename="../../formtrafficview.cpp" line="871"/>
         <source>Unit:</source>
         <translation>單元：</translation>
     </message>
     <message>
-        <location filename="../../formtrafficview.cpp" line="701"/>
-        <location filename="../../formtrafficview.cpp" line="872"/>
+        <location filename="../../formtrafficview.cpp" line="704"/>
+        <location filename="../../formtrafficview.cpp" line="875"/>
         <source>-1 = all unit ids</source>
         <translation>-1 = 所有單元ID</translation>
     </message>
     <message>
-        <location filename="../../formtrafficview.cpp" line="722"/>
-        <location filename="../../formtrafficview.cpp" line="879"/>
+        <location filename="../../formtrafficview.cpp" line="725"/>
+        <location filename="../../formtrafficview.cpp" line="882"/>
         <source>Source:</source>
         <translation>來源：</translation>
     </message>
     <message>
-        <location filename="../../formtrafficview.cpp" line="733"/>
-        <location filename="../../formtrafficview.cpp" line="885"/>
+        <location filename="../../formtrafficview.cpp" line="736"/>
+        <location filename="../../formtrafficview.cpp" line="888"/>
         <source>Show only responses with Modbus exception</source>
         <translation>僅顯示含有Modbus例外的回應</translation>
     </message>
     <message>
-        <location filename="../../formtrafficview.cpp" line="740"/>
-        <location filename="../../formtrafficview.cpp" line="889"/>
+        <location filename="../../formtrafficview.cpp" line="743"/>
+        <location filename="../../formtrafficview.cpp" line="892"/>
         <source>Autoscroll</source>
         <translation>自動捲動</translation>
     </message>
     <message>
-        <location filename="../../formtrafficview.cpp" line="741"/>
-        <location filename="../../formtrafficview.cpp" line="890"/>
+        <location filename="../../formtrafficview.cpp" line="744"/>
+        <location filename="../../formtrafficview.cpp" line="893"/>
         <source>Automatically scroll to the latest entry</source>
         <translation>自動捲動至最新項目</translation>
     </message>
@@ -2236,22 +2241,22 @@ Source: %3</source>
         <location filename="../../formtrafficview.cpp" line="97"/>
         <location filename="../../formtrafficview.cpp" line="101"/>
         <location filename="../../formtrafficview.cpp" line="105"/>
-        <location filename="../../formtrafficview.cpp" line="543"/>
-        <location filename="../../formtrafficview.cpp" line="700"/>
-        <location filename="../../formtrafficview.cpp" line="725"/>
-        <location filename="../../formtrafficview.cpp" line="871"/>
+        <location filename="../../formtrafficview.cpp" line="546"/>
+        <location filename="../../formtrafficview.cpp" line="703"/>
+        <location filename="../../formtrafficview.cpp" line="728"/>
+        <location filename="../../formtrafficview.cpp" line="874"/>
         <source>All</source>
         <translation>全部</translation>
     </message>
     <message>
-        <location filename="../../formtrafficview.cpp" line="749"/>
-        <location filename="../../formtrafficview.cpp" line="894"/>
+        <location filename="../../formtrafficview.cpp" line="752"/>
+        <location filename="../../formtrafficview.cpp" line="897"/>
         <source>Rows:</source>
         <translation>行數：</translation>
     </message>
     <message>
-        <location filename="../../formtrafficview.cpp" line="710"/>
-        <location filename="../../formtrafficview.cpp" line="876"/>
+        <location filename="../../formtrafficview.cpp" line="713"/>
+        <location filename="../../formtrafficview.cpp" line="879"/>
         <source>Function:</source>
         <translation>功能：</translation>
     </message>
@@ -2419,7 +2424,7 @@ Script.onInit(()=&gt;{
         <translation>無可用更新</translation>
     </message>
     <message>
-        <location filename="../../controls/mainstatusbar.cpp" line="315"/>
+        <location filename="../../controls/mainstatusbar.cpp" line="321"/>
         <source>New version %1 is available. Click to download.</source>
         <translation>新版本 %1 可用。點擊下載。</translation>
     </message>
@@ -2434,7 +2439,7 @@ Script.onInit(()=&gt;{
         <translation>Modbus/TCP伺服器%1:%2</translation>
     </message>
     <message>
-        <location filename="../../controls/mainstatusbar.cpp" line="260"/>
+        <location filename="../../controls/mainstatusbar.cpp" line="266"/>
         <source>Port %1:%2:%3:%4:%5</source>
         <translation>連接埠 %1:%2:%3:%4:%5</translation>
     </message>
@@ -2484,17 +2489,22 @@ Script.onInit(()=&gt;{
         <translation>用戶端：%1</translation>
     </message>
     <message>
-        <location filename="../../controls/mainstatusbar.cpp" line="284"/>
+        <location filename="../../controls/mainstatusbar.cpp" line="260"/>
+        <source>Modbus RTU over TCP/IP Srv %1:%2</source>
+        <translation>Modbus RTU over TCP/IP 伺服器 %1:%2</translation>
+    </message>
+    <message>
+        <location filename="../../controls/mainstatusbar.cpp" line="290"/>
         <source>Req: %1  Resp: %2</source>
         <translation>請求：%1  回應：%2</translation>
     </message>
     <message>
-        <location filename="../../controls/mainstatusbar.cpp" line="296"/>
+        <location filename="../../controls/mainstatusbar.cpp" line="302"/>
         <source>New version available</source>
         <translation>發現新版本</translation>
     </message>
     <message>
-        <location filename="../../controls/mainstatusbar.cpp" line="297"/>
+        <location filename="../../controls/mainstatusbar.cpp" line="303"/>
         <source>A new version %1 is available.
 
 Open the download page?</source>
@@ -2593,7 +2603,7 @@ Open the download page?</source>
     </message>
     <message>
         <location filename="../../mainwindow.ui" line="348"/>
-        <location filename="../../mainwindow.cpp" line="1924"/>
+        <location filename="../../mainwindow.cpp" line="1925"/>
         <source>Save Project</source>
         <translation>儲存專案</translation>
     </message>
@@ -2805,7 +2815,7 @@ Open the download page?</source>
     </message>
     <message>
         <location filename="../../mainwindow.cpp" line="302"/>
-        <location filename="../../mainwindow.cpp" line="2060"/>
+        <location filename="../../mainwindow.cpp" line="2061"/>
         <source>Clear List</source>
         <translation>清除清單</translation>
     </message>
@@ -2821,20 +2831,20 @@ Open the download page?</source>
     </message>
     <message>
         <location filename="../../mainwindow.cpp" line="931"/>
-        <location filename="../../mainwindow.cpp" line="1954"/>
+        <location filename="../../mainwindow.cpp" line="1955"/>
         <source>Project files (*.omsim)</source>
         <translation>專案檔案 (*.omsim)</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="1578"/>
-        <location filename="../../mainwindow.cpp" line="1982"/>
+        <location filename="../../mainwindow.cpp" line="1579"/>
+        <location filename="../../mainwindow.cpp" line="1983"/>
         <source>Untitled</source>
         <translation>未命名</translation>
     </message>
     <message>
         <location filename="../../applogger.cpp" line="128"/>
         <location filename="../../mainwindow.cpp" line="682"/>
-        <location filename="../../mainwindow.cpp" line="1763"/>
+        <location filename="../../mainwindow.cpp" line="1764"/>
         <source>Address Base</source>
         <translation>地址基準</translation>
     </message>
@@ -3134,7 +3144,7 @@ Open the download page?</source>
         <translation>表單已重命名：&apos;%1&apos; -&gt; &apos;%2&apos;</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="1317"/>
+        <location filename="../../mainwindow.cpp" line="1318"/>
         <source>Move to Other Panel</source>
         <translation>移至其他面板</translation>
     </message>
@@ -3156,12 +3166,12 @@ Open the download page?</source>
         <translation>十六進位檢視</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="1925"/>
+        <location filename="../../mainwindow.cpp" line="1926"/>
         <source>Save project before closing?</source>
         <translation>關閉前儲存專案？</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="2048"/>
+        <location filename="../../mainwindow.cpp" line="2049"/>
         <source>No Recent Projects</source>
         <translation>無最近專案</translation>
     </message>
@@ -3171,7 +3181,7 @@ Open the download page?</source>
         <translation>資料</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="1275"/>
+        <location filename="../../mainwindow.cpp" line="1276"/>
         <source>JavaScript files (*.js);;All files (*)</source>
         <translation>JavaScript檔案 (*.js);;所有檔案 (*)</translation>
     </message>
@@ -3194,26 +3204,38 @@ Open the download page?</source>
     <name>MenuConnect</name>
     <message>
         <location filename="../../menuconnect.cpp" line="26"/>
-        <location filename="../../menuconnect.cpp" line="112"/>
+        <location filename="../../menuconnect.cpp" line="123"/>
         <source>Modbus/TCP Srv</source>
         <translation>Modbus/TCP伺服器</translation>
     </message>
     <message>
-        <location filename="../../menuconnect.cpp" line="30"/>
-        <location filename="../../menuconnect.cpp" line="102"/>
+        <location filename="../../menuconnect.cpp" line="27"/>
+        <location filename="../../menuconnect.cpp" line="129"/>
+        <source>Modbus RTU over TCP/IP Srv</source>
+        <translation>Modbus RTU over TCP/IP 伺服器</translation>
+    </message>
+    <message>
+        <location filename="../../menuconnect.cpp" line="32"/>
+        <location filename="../../menuconnect.cpp" line="113"/>
         <source>Modbus/RTU Srv</source>
         <translation>Modbus/RTU伺服器</translation>
     </message>
     <message>
-        <location filename="../../menuconnect.cpp" line="32"/>
-        <location filename="../../menuconnect.cpp" line="53"/>
-        <location filename="../../menuconnect.cpp" line="117"/>
+        <location filename="../../menuconnect.cpp" line="34"/>
+        <location filename="../../menuconnect.cpp" line="63"/>
+        <location filename="../../menuconnect.cpp" line="134"/>
         <source>Port %1</source>
         <translation>埠 %1</translation>
     </message>
     <message>
-        <location filename="../../menuconnect.cpp" line="48"/>
-        <location filename="../../menuconnect.cpp" line="114"/>
+        <location filename="../../menuconnect.cpp" line="53"/>
+        <location filename="../../menuconnect.cpp" line="131"/>
+        <source>Modbus RTU over TCP/IP Srv %1</source>
+        <translation>Modbus RTU over TCP/IP 伺服器 %1</translation>
+    </message>
+    <message>
+        <location filename="../../menuconnect.cpp" line="54"/>
+        <location filename="../../menuconnect.cpp" line="125"/>
         <source>Modbus/TCP Srv %1</source>
         <translation>Modbus/TCP伺服器 %1</translation>
     </message>
@@ -3544,12 +3566,12 @@ Open the download page?</source>
 <context>
     <name>ModbusMultiServer</name>
     <message>
-        <location filename="../../modbusmultiserver.cpp" line="969"/>
+        <location filename="../../modbusmultiserver.cpp" line="992"/>
         <source>An incorrect device ID was specified (%1)</source>
         <translation>指定了錯誤的裝置地址（%1）</translation>
     </message>
     <message>
-        <location filename="../../modbusmultiserver.cpp" line="1553"/>
+        <location filename="../../modbusmultiserver.cpp" line="1576"/>
         <source>Connection error. %1</source>
         <translation>連線錯誤 %1</translation>
     </message>
@@ -3557,24 +3579,37 @@ Open the download page?</source>
 <context>
     <name>ModbusRegisterType</name>
     <message>
-        <location filename="../../enums.h" line="426"/>
+        <location filename="../../enums.h" line="428"/>
         <source>Coils</source>
         <translation>線圈</translation>
     </message>
     <message>
-        <location filename="../../enums.h" line="427"/>
+        <location filename="../../enums.h" line="429"/>
         <source>Discrete Inputs</source>
         <translation>離散輸入</translation>
     </message>
     <message>
-        <location filename="../../enums.h" line="428"/>
+        <location filename="../../enums.h" line="430"/>
         <source>Input Registers</source>
         <translation>輸入暫存器</translation>
     </message>
     <message>
-        <location filename="../../enums.h" line="429"/>
+        <location filename="../../enums.h" line="431"/>
         <source>Holding Registers</source>
         <translation>保持暫存器</translation>
+    </message>
+</context>
+<context>
+    <name>ModbusRtuTcpServer</name>
+    <message>
+        <location filename="../../modbusrtutcpserver.cpp" line="503"/>
+        <source>Could not write response to client</source>
+        <translation>無法寫入對客戶端的響應</translation>
+    </message>
+    <message>
+        <location filename="../../modbusrtutcpserver.cpp" line="573"/>
+        <source>Invalid connection settings for RTU over TCP/IP communication specified.</source>
+        <translation>指定的 RTU over TCP/IP 通訊連線設定無效。</translation>
     </message>
 </context>
 <context>

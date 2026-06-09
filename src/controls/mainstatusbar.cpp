@@ -256,6 +256,12 @@ void MainStatusBar::updateConnectionInfo(QLabel* label, const ConnectionDetails&
             label->setText(dot + tr("Modbus/TCP Srv %1:%2").arg(cd.TcpParams.IPAddress, QString::number(cd.TcpParams.ServicePort)));
         break;
 
+        case ConnectionType::RtuTcp:
+            label->setText(dot + tr("Modbus RTU over TCP/IP Srv %1:%2")
+                                      .arg(cd.TcpParams.IPAddress,
+                                           QString::number(cd.TcpParams.ServicePort)));
+        break;
+
         case ConnectionType::Serial:
             label->setText(dot + tr("Port %1:%2:%3:%4:%5").arg(cd.SerialParams.PortName,
                                                                 QString::number(cd.SerialParams.BaudRate),

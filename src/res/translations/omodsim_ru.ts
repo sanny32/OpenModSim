@@ -1437,8 +1437,8 @@ Open the download page?</source>
     </message>
     <message>
         <location filename="../../dialogs/dialogselectserviceport.ui" line="44"/>
-        <source>Modbus/TCP Service Port</source>
-        <translation>Modbus/TCP порт</translation>
+        <source>Service Port</source>
+        <translation>Сервисный порт</translation>
     </message>
     <message>
         <location filename="../../dialogs/dialogselectserviceport.ui" line="57"/>
@@ -2166,8 +2166,8 @@ Source: %3</source>
     </message>
     <message>
         <location filename="../../formtrafficview.cpp" line="112"/>
-        <location filename="../../formtrafficview.cpp" line="732"/>
-        <location filename="../../formtrafficview.cpp" line="884"/>
+        <location filename="../../formtrafficview.cpp" line="735"/>
+        <location filename="../../formtrafficview.cpp" line="887"/>
         <source>Exceptions Only</source>
         <translation>Только исключения</translation>
     </message>
@@ -2178,57 +2178,62 @@ Source: %3</source>
     </message>
     <message>
         <location filename="../../formtrafficview.cpp" line="524"/>
+        <source>Modbus RTU over TCP/IP Srv %1:%2</source>
+        <translation>Сервер Modbus RTU через TCP/IP %1:%2</translation>
+    </message>
+    <message>
+        <location filename="../../formtrafficview.cpp" line="527"/>
         <source>Port %1:%2:%3:%4:%5</source>
         <translation>Порт %1:%2:%3:%4:%5</translation>
     </message>
     <message>
-        <location filename="../../formtrafficview.cpp" line="653"/>
+        <location filename="../../formtrafficview.cpp" line="656"/>
         <source>Text files (*.txt)</source>
         <translation>Текстовые файлы (*.txt)</translation>
     </message>
     <message>
-        <location filename="../../formtrafficview.cpp" line="660"/>
+        <location filename="../../formtrafficview.cpp" line="663"/>
         <source>Log exported successfully to file %1</source>
         <translation>Лог успешно экспортирован в файл %1</translation>
     </message>
     <message>
-        <location filename="../../formtrafficview.cpp" line="662"/>
+        <location filename="../../formtrafficview.cpp" line="665"/>
         <source>Export log error!</source>
         <translation>Ошибка экспорта лога!</translation>
     </message>
     <message>
-        <location filename="../../formtrafficview.cpp" line="695"/>
-        <location filename="../../formtrafficview.cpp" line="868"/>
+        <location filename="../../formtrafficview.cpp" line="698"/>
+        <location filename="../../formtrafficview.cpp" line="871"/>
         <source>Unit:</source>
         <translation>Устройство:</translation>
     </message>
     <message>
-        <location filename="../../formtrafficview.cpp" line="701"/>
-        <location filename="../../formtrafficview.cpp" line="872"/>
+        <location filename="../../formtrafficview.cpp" line="704"/>
+        <location filename="../../formtrafficview.cpp" line="875"/>
         <source>-1 = all unit ids</source>
         <translation>-1 = все устройства</translation>
     </message>
     <message>
-        <location filename="../../formtrafficview.cpp" line="722"/>
-        <location filename="../../formtrafficview.cpp" line="879"/>
+        <location filename="../../formtrafficview.cpp" line="725"/>
+        <location filename="../../formtrafficview.cpp" line="882"/>
         <source>Source:</source>
         <translation>Источник:</translation>
     </message>
     <message>
-        <location filename="../../formtrafficview.cpp" line="733"/>
-        <location filename="../../formtrafficview.cpp" line="885"/>
+        <location filename="../../formtrafficview.cpp" line="736"/>
+        <location filename="../../formtrafficview.cpp" line="888"/>
         <source>Show only responses with Modbus exception</source>
         <translation>Показывать только ответы с исключением Modbus</translation>
     </message>
     <message>
-        <location filename="../../formtrafficview.cpp" line="740"/>
-        <location filename="../../formtrafficview.cpp" line="889"/>
+        <location filename="../../formtrafficview.cpp" line="743"/>
+        <location filename="../../formtrafficview.cpp" line="892"/>
         <source>Autoscroll</source>
         <translation>Автопрокрутка</translation>
     </message>
     <message>
-        <location filename="../../formtrafficview.cpp" line="741"/>
-        <location filename="../../formtrafficview.cpp" line="890"/>
+        <location filename="../../formtrafficview.cpp" line="744"/>
+        <location filename="../../formtrafficview.cpp" line="893"/>
         <source>Automatically scroll to the latest entry</source>
         <translation>Автоматически прокручивать к последней записи</translation>
     </message>
@@ -2236,22 +2241,22 @@ Source: %3</source>
         <location filename="../../formtrafficview.cpp" line="97"/>
         <location filename="../../formtrafficview.cpp" line="101"/>
         <location filename="../../formtrafficview.cpp" line="105"/>
-        <location filename="../../formtrafficview.cpp" line="543"/>
-        <location filename="../../formtrafficview.cpp" line="700"/>
-        <location filename="../../formtrafficview.cpp" line="725"/>
-        <location filename="../../formtrafficview.cpp" line="871"/>
+        <location filename="../../formtrafficview.cpp" line="546"/>
+        <location filename="../../formtrafficview.cpp" line="703"/>
+        <location filename="../../formtrafficview.cpp" line="728"/>
+        <location filename="../../formtrafficview.cpp" line="874"/>
         <source>All</source>
         <translation>Все</translation>
     </message>
     <message>
-        <location filename="../../formtrafficview.cpp" line="749"/>
-        <location filename="../../formtrafficview.cpp" line="894"/>
+        <location filename="../../formtrafficview.cpp" line="752"/>
+        <location filename="../../formtrafficview.cpp" line="897"/>
         <source>Rows:</source>
         <translation>Строк:</translation>
     </message>
     <message>
-        <location filename="../../formtrafficview.cpp" line="710"/>
-        <location filename="../../formtrafficview.cpp" line="876"/>
+        <location filename="../../formtrafficview.cpp" line="713"/>
+        <location filename="../../formtrafficview.cpp" line="879"/>
         <source>Function:</source>
         <translation>Функция:</translation>
     </message>
@@ -2419,7 +2424,7 @@ Script.onInit(()=&gt;{
         <translation>Обновлений нет</translation>
     </message>
     <message>
-        <location filename="../../controls/mainstatusbar.cpp" line="315"/>
+        <location filename="../../controls/mainstatusbar.cpp" line="321"/>
         <source>New version %1 is available. Click to download.</source>
         <translation>Доступна новая версия %1. Нажмите для загрузки.</translation>
     </message>
@@ -2434,7 +2439,7 @@ Script.onInit(()=&gt;{
         <translation>Modbus/TCP сервер %1:%2</translation>
     </message>
     <message>
-        <location filename="../../controls/mainstatusbar.cpp" line="260"/>
+        <location filename="../../controls/mainstatusbar.cpp" line="266"/>
         <source>Port %1:%2:%3:%4:%5</source>
         <translation>Порт %1:%2:%3:%4:%5</translation>
     </message>
@@ -2484,17 +2489,22 @@ Script.onInit(()=&gt;{
         <translation>Клиенты: %1</translation>
     </message>
     <message>
-        <location filename="../../controls/mainstatusbar.cpp" line="284"/>
+        <location filename="../../controls/mainstatusbar.cpp" line="260"/>
+        <source>Modbus RTU over TCP/IP Srv %1:%2</source>
+        <translation>Сервер Modbus RTU через TCP/IP %1:%2</translation>
+    </message>
+    <message>
+        <location filename="../../controls/mainstatusbar.cpp" line="290"/>
         <source>Req: %1  Resp: %2</source>
         <translation>Запр: %1  Отв: %2</translation>
     </message>
     <message>
-        <location filename="../../controls/mainstatusbar.cpp" line="296"/>
+        <location filename="../../controls/mainstatusbar.cpp" line="302"/>
         <source>New version available</source>
         <translation>Доступна новая версия</translation>
     </message>
     <message>
-        <location filename="../../controls/mainstatusbar.cpp" line="297"/>
+        <location filename="../../controls/mainstatusbar.cpp" line="303"/>
         <source>A new version %1 is available.
 
 Open the download page?</source>
@@ -2613,7 +2623,7 @@ Open the download page?</source>
     </message>
     <message>
         <location filename="../../mainwindow.ui" line="348"/>
-        <location filename="../../mainwindow.cpp" line="1924"/>
+        <location filename="../../mainwindow.cpp" line="1925"/>
         <source>Save Project</source>
         <translation>Сохранить проект</translation>
     </message>
@@ -2805,7 +2815,7 @@ Open the download page?</source>
     </message>
     <message>
         <location filename="../../mainwindow.cpp" line="302"/>
-        <location filename="../../mainwindow.cpp" line="2060"/>
+        <location filename="../../mainwindow.cpp" line="2061"/>
         <source>Clear List</source>
         <translation>Очистить список</translation>
     </message>
@@ -2821,20 +2831,20 @@ Open the download page?</source>
     </message>
     <message>
         <location filename="../../mainwindow.cpp" line="931"/>
-        <location filename="../../mainwindow.cpp" line="1954"/>
+        <location filename="../../mainwindow.cpp" line="1955"/>
         <source>Project files (*.omsim)</source>
         <translation>Файлы проекта (*.omsim)</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="1578"/>
-        <location filename="../../mainwindow.cpp" line="1982"/>
+        <location filename="../../mainwindow.cpp" line="1579"/>
+        <location filename="../../mainwindow.cpp" line="1983"/>
         <source>Untitled</source>
         <translation>Без имени</translation>
     </message>
     <message>
         <location filename="../../applogger.cpp" line="128"/>
         <location filename="../../mainwindow.cpp" line="682"/>
-        <location filename="../../mainwindow.cpp" line="1763"/>
+        <location filename="../../mainwindow.cpp" line="1764"/>
         <source>Address Base</source>
         <translation>Адресация</translation>
     </message>
@@ -3134,7 +3144,7 @@ Open the download page?</source>
         <translation>Форма переименована: &apos;%1&apos; -&gt; &apos;%2&apos;</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="1317"/>
+        <location filename="../../mainwindow.cpp" line="1318"/>
         <source>Move to Other Panel</source>
         <translation>Переместить на другую панель</translation>
     </message>
@@ -3156,12 +3166,12 @@ Open the download page?</source>
         <translation>Шестнадцатиричный режим</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="1925"/>
+        <location filename="../../mainwindow.cpp" line="1926"/>
         <source>Save project before closing?</source>
         <translation>Сохранить проект перед закрытием?</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="2048"/>
+        <location filename="../../mainwindow.cpp" line="2049"/>
         <source>No Recent Projects</source>
         <translation>Нет недавних проектов</translation>
     </message>
@@ -3171,7 +3181,7 @@ Open the download page?</source>
         <translation>Данные</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="1275"/>
+        <location filename="../../mainwindow.cpp" line="1276"/>
         <source>JavaScript files (*.js);;All files (*)</source>
         <translation>Файлы JavaScript (*.js);;Все файлы (*)</translation>
     </message>
@@ -3194,26 +3204,38 @@ Open the download page?</source>
     <name>MenuConnect</name>
     <message>
         <location filename="../../menuconnect.cpp" line="26"/>
-        <location filename="../../menuconnect.cpp" line="112"/>
+        <location filename="../../menuconnect.cpp" line="123"/>
         <source>Modbus/TCP Srv</source>
         <translation>Modbus/TCP сервер</translation>
     </message>
     <message>
-        <location filename="../../menuconnect.cpp" line="30"/>
-        <location filename="../../menuconnect.cpp" line="102"/>
+        <location filename="../../menuconnect.cpp" line="27"/>
+        <location filename="../../menuconnect.cpp" line="129"/>
+        <source>Modbus RTU over TCP/IP Srv</source>
+        <translation>Modbus RTU по TCP/IP сервер</translation>
+    </message>
+    <message>
+        <location filename="../../menuconnect.cpp" line="32"/>
+        <location filename="../../menuconnect.cpp" line="113"/>
         <source>Modbus/RTU Srv</source>
         <translation>Modbus/RTU сервер</translation>
     </message>
     <message>
-        <location filename="../../menuconnect.cpp" line="32"/>
-        <location filename="../../menuconnect.cpp" line="53"/>
-        <location filename="../../menuconnect.cpp" line="117"/>
+        <location filename="../../menuconnect.cpp" line="34"/>
+        <location filename="../../menuconnect.cpp" line="63"/>
+        <location filename="../../menuconnect.cpp" line="134"/>
         <source>Port %1</source>
         <translation>Порт %1</translation>
     </message>
     <message>
-        <location filename="../../menuconnect.cpp" line="48"/>
-        <location filename="../../menuconnect.cpp" line="114"/>
+        <location filename="../../menuconnect.cpp" line="53"/>
+        <location filename="../../menuconnect.cpp" line="131"/>
+        <source>Modbus RTU over TCP/IP Srv %1</source>
+        <translation>Modbus RTU по TCP/IP сервер %1</translation>
+    </message>
+    <message>
+        <location filename="../../menuconnect.cpp" line="54"/>
+        <location filename="../../menuconnect.cpp" line="125"/>
         <source>Modbus/TCP Srv %1</source>
         <translation>Modbus/TCP сервер %1</translation>
     </message>
@@ -3544,12 +3566,12 @@ Open the download page?</source>
 <context>
     <name>ModbusMultiServer</name>
     <message>
-        <location filename="../../modbusmultiserver.cpp" line="969"/>
+        <location filename="../../modbusmultiserver.cpp" line="992"/>
         <source>An incorrect device ID was specified (%1)</source>
         <translation>Некорректное значение номера устройства (%1)</translation>
     </message>
     <message>
-        <location filename="../../modbusmultiserver.cpp" line="1553"/>
+        <location filename="../../modbusmultiserver.cpp" line="1576"/>
         <source>Connection error. %1</source>
         <translation>Ошибка подключения. %1</translation>
     </message>
@@ -3557,24 +3579,37 @@ Open the download page?</source>
 <context>
     <name>ModbusRegisterType</name>
     <message>
-        <location filename="../../enums.h" line="426"/>
+        <location filename="../../enums.h" line="428"/>
         <source>Coils</source>
         <translation>Регистры флагов</translation>
     </message>
     <message>
-        <location filename="../../enums.h" line="427"/>
+        <location filename="../../enums.h" line="429"/>
         <source>Discrete Inputs</source>
         <translation>Дискретные входы</translation>
     </message>
     <message>
-        <location filename="../../enums.h" line="428"/>
+        <location filename="../../enums.h" line="430"/>
         <source>Input Registers</source>
         <translation>Регистры ввода</translation>
     </message>
     <message>
-        <location filename="../../enums.h" line="429"/>
+        <location filename="../../enums.h" line="431"/>
         <source>Holding Registers</source>
         <translation>Регистры хранения</translation>
+    </message>
+</context>
+<context>
+    <name>ModbusRtuTcpServer</name>
+    <message>
+        <location filename="../../modbusrtutcpserver.cpp" line="503"/>
+        <source>Could not write response to client</source>
+        <translation>Не удалось создать ответ клиенту</translation>
+    </message>
+    <message>
+        <location filename="../../modbusrtutcpserver.cpp" line="573"/>
+        <source>Invalid connection settings for RTU over TCP/IP communication specified.</source>
+        <translation>Указаны неверные параметры подключения RTU через TCP/IP.</translation>
     </message>
 </context>
 <context>
