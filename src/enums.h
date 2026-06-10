@@ -321,12 +321,14 @@ inline QSettings& operator >>(QSettings& in, ByteOrder& order)
 enum class ConnectionType
 {
     Tcp = 0,
-    Serial
+    Serial,
+    RtuTcp
 };
 Q_DECLARE_METATYPE(ConnectionType)
 DECLARE_ENUM_STRINGS(ConnectionType,
-                {   ConnectionType::Tcp,      "Tcp"    },
-                {   ConnectionType::Serial,   "Serial" }
+                {   ConnectionType::Tcp,      "Tcp"      },
+                {   ConnectionType::Serial,   "Serial"   },
+                {   ConnectionType::RtuTcp,   "RtuTcp"   }
 )
 
 ///

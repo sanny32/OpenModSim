@@ -8,6 +8,7 @@
 
 #include <algorithm>
 #include "numericutils.h"
+#include "modbusrtutcpserver.h"
 #include "modbustcpserver.h"
 #include "modbusrtuserialserver.h"
 #include "modbusmultiserver.h"
@@ -251,7 +252,10 @@ QSharedPointer<ModbusServer> ModbusMultiServer::findModbusServer(ConnectionType 
     for(auto&& s : _modbusServerList)
     {
         const auto cd = s->property("ConnectionDetails").value<ConnectionDetails>();
-        if((cd.Type == ConnectionType::Tcp && type == ConnectionType::Tcp && port == QString("%1:%2").arg(cd.TcpParams.IPAddress, QString::number(cd.TcpParams.ServicePort))) ||
+        if(((cd.Type == ConnectionType::Tcp || cd.Type == ConnectionType::RtuTcp)
+            && cd.Type == type
+            && port == QString("%1:%2").arg(cd.TcpParams.IPAddress,
+                                             QString::number(cd.TcpParams.ServicePort))) ||
            (cd.Type == ConnectionType::Serial && type == ConnectionType::Serial && port == cd.SerialParams.PortName))
         {
             return s;
@@ -289,6 +293,17 @@ QSharedPointer<ModbusServer> ModbusMultiServer::createModbusServer(const Connect
                 modbusServer->setProperty("ConnectionDetails", QVariant::fromValue(cd));
                 modbusServer->setConnectionParameter(QModbusDevice::NetworkPortParameter, cd.TcpParams.ServicePort);
                 modbusServer->setConnectionParameter(QModbusDevice::NetworkAddressParameter, cd.TcpParams.IPAddress);
+            }
+            break;
+
+            case ConnectionType::RtuTcp:
+            {
+                modbusServer = QSharedPointer<ModbusServer>(new ModbusRtuTcpServer());
+                modbusServer->setProperty("ConnectionDetails", QVariant::fromValue(cd));
+                modbusServer->setConnectionParameter(
+                    QModbusDevice::NetworkPortParameter, cd.TcpParams.ServicePort);
+                modbusServer->setConnectionParameter(
+                    QModbusDevice::NetworkAddressParameter, cd.TcpParams.IPAddress);
             }
             break;
 
@@ -332,6 +347,12 @@ QSharedPointer<ModbusServer> ModbusMultiServer::createModbusServer(const Connect
             connect(tcpServer, &ModbusTcpServer::modbusClientConnected,
                     this, &ModbusMultiServer::on_clientConnected);
             connect(tcpServer, &ModbusTcpServer::modbusClientDisconnected,
+                    this, &ModbusMultiServer::on_clientDisconnected);
+        }
+        if (auto rtuTcpServer = qobject_cast<ModbusRtuTcpServer*>(modbusServer.get())) {
+            connect(rtuTcpServer, &ModbusRtuTcpServer::modbusClientConnected,
+                    this, &ModbusMultiServer::on_clientConnected);
+            connect(rtuTcpServer, &ModbusRtuTcpServer::modbusClientDisconnected,
                     this, &ModbusMultiServer::on_clientDisconnected);
         }
     }
@@ -446,6 +467,8 @@ int ModbusMultiServer::connectedClientCount() const
     {
         if (auto tcpServer = qobject_cast<ModbusTcpServer*>(s.get()))
             count += tcpServer->connectedClientCount();
+        else if (auto rtuTcpServer = qobject_cast<ModbusRtuTcpServer*>(s.get()))
+            count += rtuTcpServer->connectedClientCount();
     }
 
     return count;
@@ -970,6 +993,14 @@ void ModbusMultiServer::setData(quint8 deviceId, const QModbusDataUnit& data,
         return;
     }
 
+    QVector<QDateTime> previousTimestamps;
+    previousTimestamps.reserve(data.valueCount());
+    for(int i = 0; i < data.valueCount(); ++i) {
+        previousTimestamps.append(_modbusDataUnitMaps[deviceId].timestamp(
+            data.registerType(),
+            static_cast<quint16>(data.startAddress() + i)));
+    }
+
     bool changed = true;
     const auto currentData = _modbusDataUnitMaps[deviceId].getData(
         data.registerType(),
@@ -985,10 +1016,11 @@ void ModbusMultiServer::setData(quint8 deviceId, const QModbusDataUnit& data,
         }
     }
 
-    if(!changed)
+    const bool updateWrittenTimestamps = source == WriteSource::ModbusClient;
+    if(!changed && !updateWrittenTimestamps)
         return;
 
-    _modbusDataUnitMaps[deviceId].setData(data);
+    _modbusDataUnitMaps[deviceId].setData(data, updateWrittenTimestamps);
 
     QString error;
     for(auto&& s : _modbusServerList)
@@ -999,6 +1031,13 @@ void ModbusMultiServer::setData(quint8 deviceId, const QModbusDataUnit& data,
             error = s->errorString(deviceId);
 
         s->blockSignals(false);
+    }
+
+    for(int i = 0; i < data.valueCount(); ++i) {
+        const quint16 address = static_cast<quint16>(data.startAddress() + i);
+        const auto timestamp = _modbusDataUnitMaps[deviceId].timestamp(data.registerType(), address);
+        if(timestamp != previousTimestamps[i])
+            emit timestampChanged(deviceId, data.registerType(), address, timestamp);
     }
 
     if(error.isEmpty()) {

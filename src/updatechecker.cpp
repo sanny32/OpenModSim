@@ -13,6 +13,51 @@
 #include "updatechecker.h"
 #include "apppreferences.h"
 
+namespace {
+
+// Parsed version with pre-release suffix support.
+// Suffix rank: 4=stable, 3=rc, 2=beta, 1=alpha, 0=dev/unknown
+struct ParsedVersion {
+    QVersionNumber numeric;
+    int suffixRank = 4;
+    int suffixNum = 0;
+
+    bool isNull() const { return numeric.isNull(); }
+
+    bool operator>(const ParsedVersion& other) const {
+        if(numeric != other.numeric) return numeric > other.numeric;
+        if(suffixRank != other.suffixRank) return suffixRank > other.suffixRank;
+        return suffixNum > other.suffixNum;
+    }
+};
+
+ParsedVersion parseVersion(const QString& str)
+{
+    ParsedVersion v;
+    const int dash = str.indexOf('-');
+    const QString numPart = dash >= 0 ? str.left(dash) : str;
+    const QString suffix = dash >= 0 ? str.mid(dash + 1).toLower() : QString();
+
+    v.numeric = QVersionNumber::fromString(numPart);
+    if(suffix.isEmpty()) {
+        v.suffixRank = 4;
+    } else if(suffix.startsWith("rc")) {
+        v.suffixRank = 3;
+        v.suffixNum = suffix.mid(2).toInt();
+    } else if(suffix.startsWith("beta")) {
+        v.suffixRank = 2;
+        v.suffixNum = suffix.mid(4).toInt();
+    } else if(suffix.startsWith("alpha")) {
+        v.suffixRank = 1;
+        v.suffixNum = suffix.mid(5).toInt();
+    } else {
+        v.suffixRank = 0;
+    }
+    return v;
+}
+
+} // namespace
+
 ///
 /// \brief UpdateChecker::UpdateChecker
 /// \param parent
@@ -118,8 +163,8 @@ void UpdateChecker::onReplyFinished(QNetworkReply* reply)
     if(versionStr.startsWith('v', Qt::CaseInsensitive))
         versionStr = versionStr.mid(1);
 
-    const auto remoteVersion = QVersionNumber::fromString(versionStr);
-    const auto currentVersion = QVersionNumber::fromString(APP_VERSION);
+    const auto remoteVersion = parseVersion(versionStr);
+    const auto currentVersion = parseVersion(APP_VERSION);
 
     if(!remoteVersion.isNull() && remoteVersion > currentVersion) {
         _hasNewVersion = true;

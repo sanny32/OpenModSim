@@ -24,6 +24,8 @@ MenuConnect::MenuConnect(MenuType type, ModbusMultiServer& server, QWidget *pare
     if(_menuType == MenuType::ConnectMenu)
     {
         addAction(this, tr("Modbus/TCP Srv"), ConnectionType::Tcp, QString(), "Modbus/TCP Srv");
+        addAction(this, tr("Modbus RTU over TCP/IP Srv"), ConnectionType::RtuTcp, QString(),
+                  "Modbus RTU over TCP/IP Srv");
 
         const auto availablePorts = getAvailableSerialPorts();
         if(!availablePorts.isEmpty()) {
@@ -43,9 +45,17 @@ MenuConnect::MenuConnect(MenuType type, ModbusMultiServer& server, QWidget *pare
             switch(cd.Type)
             {
                 case ConnectionType::Tcp:
+                case ConnectionType::RtuTcp:
                 {
                     const auto port = QString("%1:%2").arg(cd.TcpParams.IPAddress, QString::number(cd.TcpParams.ServicePort));
-                    addAction(this, tr("Modbus/TCP Srv %1").arg(port), ConnectionType::Tcp, port, QString("Modbus/TCP Srv %1").arg(port));
+                    const bool rtuTcp = cd.Type == ConnectionType::RtuTcp;
+                    const auto text = rtuTcp
+                        ? tr("Modbus RTU over TCP/IP Srv %1").arg(port)
+                        : tr("Modbus/TCP Srv %1").arg(port);
+                    const auto id = rtuTcp
+                        ? QString("Modbus RTU over TCP/IP Srv %1").arg(port)
+                        : QString("Modbus/TCP Srv %1").arg(port);
+                    addAction(this, text, cd.Type, port, id);
                 }
                 break;
 
@@ -72,7 +82,8 @@ MenuConnect::MenuConnect(MenuType type, ModbusMultiServer& server, QWidget *pare
             const auto data = a->data().value<QPair<ConnectionType, QString>>();
             if(_menuType == MenuType::DisconnectMenu)
             {
-                const auto port = (data.first == ConnectionType::Tcp) ?
+                const auto port = (data.first == ConnectionType::Tcp
+                                   || data.first == ConnectionType::RtuTcp) ?
                     QString("%1:%2").arg(cd.TcpParams.IPAddress, QString::number(cd.TcpParams.ServicePort)) :
                     cd.SerialParams.PortName;
 
@@ -113,6 +124,12 @@ void MenuConnect::changeEvent(QEvent* event)
                     else
                         a->setText(QString(tr("Modbus/TCP Srv %1").arg(data.second)));
                 break;
+                case ConnectionType::RtuTcp:
+                    if(data.second.isEmpty())
+                        a->setText(tr("Modbus RTU over TCP/IP Srv"));
+                    else
+                        a->setText(tr("Modbus RTU over TCP/IP Srv %1").arg(data.second));
+                break;
                 case ConnectionType::Serial:
                     a->setText(QString(tr("Port %1")).arg(data.second));
                 break;
@@ -134,6 +151,7 @@ bool MenuConnect::canConnect(const ConnectionDetails& cd)
     {
         if(c.Type != cd.Type) continue;
         if(c.Type == ConnectionType::Tcp ||
+           c.Type == ConnectionType::RtuTcp ||
            (c.Type == ConnectionType::Serial && c.SerialParams.PortName == cd.SerialParams.PortName))
         {
             return true;
@@ -158,6 +176,7 @@ void MenuConnect::updateConnectionDetails(const QList<ConnectionDetails>& conns)
         {
             if(cd.Type != c.Type) continue;
             if(c.Type == ConnectionType::Tcp ||
+              c.Type == ConnectionType::RtuTcp ||
               (c.Type == ConnectionType::Serial && c.SerialParams.PortName == cd.SerialParams.PortName))
             {
                 c = cd;

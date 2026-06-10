@@ -29,9 +29,38 @@ namespace {
 ///
 QString connectionAddress(const ConnectionDetails& cd)
 {
-    return (cd.Type == ConnectionType::Tcp)
+    return (cd.Type == ConnectionType::Tcp || cd.Type == ConnectionType::RtuTcp)
         ? QString("%1:%2").arg(cd.TcpParams.IPAddress).arg(cd.TcpParams.ServicePort)
         : cd.SerialParams.PortName;
+}
+
+///
+/// \brief connectionTypeName
+/// \param cd
+/// \return
+///
+QString connectionTypeName(const ConnectionDetails& cd)
+{
+    switch (cd.Type) {
+        case ConnectionType::Tcp:
+            return QStringLiteral("Modbus/TCP");
+        case ConnectionType::Serial:
+            return QStringLiteral("Modbus/RTU");
+        case ConnectionType::RtuTcp:
+            return QCoreApplication::translate("MainWindow", "Modbus RTU over TCP/IP");
+    }
+
+    return QString();
+}
+
+///
+/// \brief connectionDisplayName
+/// \param cd
+/// \return
+///
+QString connectionDisplayName(const ConnectionDetails& cd)
+{
+    return QStringLiteral("%1 %2").arg(connectionTypeName(cd), connectionAddress(cd));
 }
 
 ///
@@ -219,13 +248,13 @@ void AppLogger::setupModbusMultiServerLogging(ModbusMultiServer& server, QObject
     QObject::connect(&server, &ModbusMultiServer::connected, context,
                      [](const ConnectionDetails& cd) {
         qInfo(lcApp) << QCoreApplication::translate("MainWindow", "Server connected: %1")
-                            .arg(connectionAddress(cd));
+                            .arg(connectionDisplayName(cd));
     }, Qt::DirectConnection);
 
     QObject::connect(&server, &ModbusMultiServer::disconnected, context,
                      [](const ConnectionDetails& cd) {
         qWarning(lcApp) << QCoreApplication::translate("MainWindow", "Server disconnected: %1")
-                               .arg(connectionAddress(cd));
+                               .arg(connectionDisplayName(cd));
     }, Qt::DirectConnection);
 
     QObject::connect(&server, &ModbusMultiServer::connectionError, context,
@@ -237,14 +266,14 @@ void AppLogger::setupModbusMultiServerLogging(ModbusMultiServer& server, QObject
                      [](const ModbusClientInfo& client) {
         qInfo(lcApp) << QCoreApplication::translate("MainWindow", "Modbus client connected: %1 -> %2")
                             .arg(QString("%1:%2").arg(client.Address).arg(client.Port))
-                            .arg(connectionAddress(client.Connection));
+                            .arg(connectionDisplayName(client.Connection));
     }, Qt::DirectConnection);
 
     QObject::connect(&server, &ModbusMultiServer::clientDisconnected, context,
                      [](const ModbusClientInfo& client) {
         qInfo(lcApp) << QCoreApplication::translate("MainWindow", "Modbus client disconnected: %1 -> %2")
                             .arg(QString("%1:%2").arg(client.Address).arg(client.Port))
-                            .arg(connectionAddress(client.Connection));
+                            .arg(connectionDisplayName(client.Connection));
     }, Qt::DirectConnection);
 
     QObject::connect(&server, &ModbusMultiServer::errorOccured, context,

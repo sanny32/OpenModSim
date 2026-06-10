@@ -75,18 +75,6 @@ jobs:
                   "qt_modes": ["qt6"],
               },
               {
-                  "name": "Fedora 41",
-                  "image": "fedora:41",
-                  "family": "dnf",
-                  "qt_modes": ["qt5", "qt6"],
-              },
-              {
-                  "name": "Fedora 42",
-                  "image": "fedora:42",
-                  "family": "dnf",
-                  "qt_modes": ["qt5", "qt6"],
-              },
-              {
                   "name": "Fedora 43",
                   "image": "fedora:43",
                   "family": "dnf",

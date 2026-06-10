@@ -2,6 +2,7 @@
     <qresource prefix="/">
         <file>res/license.txt</file>
         <file>res/about.json</file>
+        <file>res/omodsim-mac.png</file>
         <file>res/omodsim.png</file>
         <file>res/fonts/firacode.ttf</file>
         <file>res/translations/omodsim_ru.qm</file>

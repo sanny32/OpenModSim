@@ -199,14 +199,14 @@
 <context>
     <name>ByteOrder</name>
     <message>
-        <location filename="../../datamapdatamodel.cpp" line="111"/>
-        <location filename="../../datamapdatamodel.cpp" line="123"/>
+        <location filename="../../datamapdatamodel.cpp" line="139"/>
+        <location filename="../../datamapdatamodel.cpp" line="151"/>
         <source>Direct</source>
         <translation>直接</translation>
     </message>
     <message>
-        <location filename="../../datamapdatamodel.cpp" line="113"/>
-        <location filename="../../datamapdatamodel.cpp" line="125"/>
+        <location filename="../../datamapdatamodel.cpp" line="141"/>
+        <location filename="../../datamapdatamodel.cpp" line="153"/>
         <source>Swapped</source>
         <translation>交换</translation>
     </message>
@@ -306,47 +306,47 @@
         <translation>保持寄存器</translation>
     </message>
     <message>
-        <location filename="../../datamapdatamodel.cpp" line="532"/>
+        <location filename="../../datamapdatamodel.cpp" line="560"/>
         <source>Unit</source>
         <translation>单元</translation>
     </message>
     <message>
-        <location filename="../../datamapdatamodel.cpp" line="533"/>
+        <location filename="../../datamapdatamodel.cpp" line="561"/>
         <source>Type</source>
         <translation>类型</translation>
     </message>
     <message>
-        <location filename="../../datamapdatamodel.cpp" line="534"/>
+        <location filename="../../datamapdatamodel.cpp" line="562"/>
         <source>Address</source>
         <translation>地址</translation>
     </message>
     <message>
-        <location filename="../../datamapdatamodel.cpp" line="535"/>
+        <location filename="../../datamapdatamodel.cpp" line="563"/>
         <source>Data Type</source>
         <translation>数据类型</translation>
     </message>
     <message>
-        <location filename="../../datamapdatamodel.cpp" line="536"/>
+        <location filename="../../datamapdatamodel.cpp" line="564"/>
         <source>Register Order</source>
         <translation>寄存器顺序</translation>
     </message>
     <message>
-        <location filename="../../datamapdatamodel.cpp" line="537"/>
+        <location filename="../../datamapdatamodel.cpp" line="565"/>
         <source>Byte Order</source>
         <translation>字节顺序</translation>
     </message>
     <message>
-        <location filename="../../datamapdatamodel.cpp" line="538"/>
+        <location filename="../../datamapdatamodel.cpp" line="566"/>
         <source>Comment</source>
         <translation>注释</translation>
     </message>
     <message>
-        <location filename="../../datamapdatamodel.cpp" line="539"/>
+        <location filename="../../datamapdatamodel.cpp" line="567"/>
         <source>Value</source>
         <translation>值</translation>
     </message>
     <message>
-        <location filename="../../datamapdatamodel.cpp" line="540"/>
+        <location filename="../../datamapdatamodel.cpp" line="568"/>
         <source>Timestamp</source>
         <translation>时间戳</translation>
     </message>
@@ -422,180 +422,180 @@
         <translation>关于...</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogabout.ui" line="80"/>
+        <location filename="../../dialogs/dialogabout.ui" line="95"/>
         <source>Open Modsim</source>
         <translation>Open Modsim</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogabout.ui" line="87"/>
+        <location filename="../../dialogs/dialogabout.ui" line="102"/>
         <source>Version: 1.0.0</source>
         <translation>版本:1.0.0</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogabout.ui" line="118"/>
+        <location filename="../../dialogs/dialogabout.ui" line="133"/>
         <source>About</source>
         <translation>关于</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogabout.ui" line="124"/>
+        <location filename="../../dialogs/dialogabout.ui" line="139"/>
         <source>An Open Source Modbus Slave (Server) Utility</source>
         <translation>一个开源的 Modbus 从站（服务器）工具</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogabout.ui" line="186"/>
+        <location filename="../../dialogs/dialogabout.ui" line="201"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;a href=&quot;#&quot;&gt;License: The MIT License&lt;/a&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;a href=&quot;#&quot;&gt;许可证：MIT 许可证&lt;/a&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogabout.ui" line="223"/>
-        <location filename="../../dialogs/dialogabout.cpp" line="489"/>
-        <location filename="../../dialogs/dialogabout.cpp" line="490"/>
-        <location filename="../../dialogs/dialogabout.cpp" line="500"/>
+        <location filename="../../dialogs/dialogabout.ui" line="238"/>
+        <location filename="../../dialogs/dialogabout.cpp" line="501"/>
         <location filename="../../dialogs/dialogabout.cpp" line="502"/>
+        <location filename="../../dialogs/dialogabout.cpp" line="512"/>
         <location filename="../../dialogs/dialogabout.cpp" line="514"/>
+        <location filename="../../dialogs/dialogabout.cpp" line="526"/>
         <source>Check for updates</source>
         <translation>检查更新</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogabout.ui" line="259"/>
+        <location filename="../../dialogs/dialogabout.ui" line="274"/>
         <source>Components</source>
         <translation>成分</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogabout.ui" line="301"/>
+        <location filename="../../dialogs/dialogabout.ui" line="316"/>
         <source>Authors</source>
         <translation>作者</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogabout.ui" line="343"/>
+        <location filename="../../dialogs/dialogabout.ui" line="358"/>
         <source>Translation</source>
         <translation>翻译</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogabout.cpp" line="83"/>
+        <location filename="../../dialogs/dialogabout.cpp" line="84"/>
         <source>Unknown</source>
         <translation>未知</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogabout.cpp" line="128"/>
+        <location filename="../../dialogs/dialogabout.cpp" line="129"/>
         <source>Simplified Chinese</source>
         <translation>简体中文</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogabout.cpp" line="130"/>
+        <location filename="../../dialogs/dialogabout.cpp" line="131"/>
         <source>Traditional Chinese</source>
         <translation>繁体中文</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogabout.cpp" line="150"/>
+        <location filename="../../dialogs/dialogabout.cpp" line="151"/>
         <source>%1 and %2</source>
         <translation>%1和%2</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogabout.cpp" line="165"/>
+        <location filename="../../dialogs/dialogabout.cpp" line="166"/>
         <source>About %1...</source>
         <translation>关于 %1...</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogabout.cpp" line="184"/>
+        <location filename="../../dialogs/dialogabout.cpp" line="196"/>
         <source>Using %1 and built against %2</source>
         <translation>使用 %1 并针对 %2 构建</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogabout.cpp" line="185"/>
+        <location filename="../../dialogs/dialogabout.cpp" line="197"/>
         <source>Cross-platform application development framework.</source>
         <translation>跨平台应用程序开发框架。</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogabout.cpp" line="113"/>
+        <location filename="../../dialogs/dialogabout.cpp" line="114"/>
         <source>Author and Maintainer</source>
         <translation>作者和维护者</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogabout.cpp" line="392"/>
+        <location filename="../../dialogs/dialogabout.cpp" line="404"/>
         <source>Visit component&apos;s homepage
 %1</source>
         <translation>访问组件主页
 %1</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogabout.cpp" line="413"/>
+        <location filename="../../dialogs/dialogabout.cpp" line="425"/>
         <source>Email contributer: %1</source>
         <translation>电子邮件贡献者：%1</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogabout.cpp" line="422"/>
+        <location filename="../../dialogs/dialogabout.cpp" line="434"/>
         <source>Visit user&apos;s homepage
 %1</source>
         <translation>访问用户主页
 %1</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogabout.cpp" line="191"/>
+        <location filename="../../dialogs/dialogabout.cpp" line="203"/>
         <source>Free monospaced font with programming ligatures.</source>
         <translation>免费等宽字体，带有编程连字。</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogabout.cpp" line="213"/>
+        <location filename="../../dialogs/dialogabout.cpp" line="225"/>
         <source>Modern Qt Widgets style.</source>
         <translation>现代 Qt Widgets 样式。</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogabout.cpp" line="64"/>
+        <location filename="../../dialogs/dialogabout.cpp" line="65"/>
         <source>%1 build %2</source>
         <translation>%1 构建 %2</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogabout.cpp" line="168"/>
+        <location filename="../../dialogs/dialogabout.cpp" line="180"/>
         <source>Version: &lt;b&gt;%1&lt;/b&gt; %2</source>
         <translation>版本：&lt;b&gt;%1&lt;/b&gt; %2</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogabout.cpp" line="198"/>
-        <location filename="../../dialogs/dialogabout.cpp" line="205"/>
-        <location filename="../../dialogs/dialogabout.cpp" line="228"/>
+        <location filename="../../dialogs/dialogabout.cpp" line="210"/>
+        <location filename="../../dialogs/dialogabout.cpp" line="217"/>
+        <location filename="../../dialogs/dialogabout.cpp" line="240"/>
         <source>Underlying platform.</source>
         <translation>底层平台。</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogabout.cpp" line="115"/>
+        <location filename="../../dialogs/dialogabout.cpp" line="116"/>
         <source>Contributor</source>
         <translation>贡献者</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogabout.cpp" line="126"/>
+        <location filename="../../dialogs/dialogabout.cpp" line="127"/>
         <source>Russian</source>
         <translation>俄语</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogabout.cpp" line="219"/>
+        <location filename="../../dialogs/dialogabout.cpp" line="231"/>
         <source>Modern Qt Widgets icon theme.</source>
         <translation>现代Qt小部件图标主题。</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogabout.cpp" line="418"/>
+        <location filename="../../dialogs/dialogabout.cpp" line="430"/>
         <source>Visit github user&apos;s homepage
 %1</source>
         <translation>访问 GitHub 用户主页
 %1</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogabout.cpp" line="446"/>
+        <location filename="../../dialogs/dialogabout.cpp" line="458"/>
         <source>License Agreement - %1</source>
         <translation>许可协议 - %1</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogabout.cpp" line="480"/>
+        <location filename="../../dialogs/dialogabout.cpp" line="492"/>
         <source>Checking...</source>
         <translation>检查中...</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogabout.cpp" line="490"/>
+        <location filename="../../dialogs/dialogabout.cpp" line="502"/>
         <source>No updates available.</source>
         <translation>无可用更新。</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogabout.cpp" line="503"/>
+        <location filename="../../dialogs/dialogabout.cpp" line="515"/>
         <source>Failed to check for updates.
 
 %1</source>
@@ -604,12 +604,12 @@
 %1</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogabout.cpp" line="517"/>
+        <location filename="../../dialogs/dialogabout.cpp" line="529"/>
         <source>New version available</source>
         <translation>发现新版本</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogabout.cpp" line="518"/>
+        <location filename="../../dialogs/dialogabout.cpp" line="530"/>
         <source>A new version %1 is available.
 
 Open the download page?</source>
@@ -1437,8 +1437,8 @@ Open the download page?</source>
     </message>
     <message>
         <location filename="../../dialogs/dialogselectserviceport.ui" line="44"/>
-        <source>Modbus/TCP Service Port</source>
-        <translation>Modbus/TCP服务器端口</translation>
+        <source>Service Port</source>
+        <translation>服务端口</translation>
     </message>
     <message>
         <location filename="../../dialogs/dialogselectserviceport.ui" line="57"/>
@@ -1592,7 +1592,7 @@ Open the download page?</source>
         <translation>不再显示此对话框</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogwelcome.cpp" line="45"/>
+        <location filename="../../dialogs/dialogwelcome.cpp" line="58"/>
         <source>Welcome to %1</source>
         <translation>欢迎使用%1</translation>
     </message>
@@ -2166,8 +2166,8 @@ Source: %3</source>
     </message>
     <message>
         <location filename="../../formtrafficview.cpp" line="112"/>
-        <location filename="../../formtrafficview.cpp" line="732"/>
-        <location filename="../../formtrafficview.cpp" line="884"/>
+        <location filename="../../formtrafficview.cpp" line="735"/>
+        <location filename="../../formtrafficview.cpp" line="887"/>
         <source>Exceptions Only</source>
         <translation>仅异常</translation>
     </message>
@@ -2178,57 +2178,62 @@ Source: %3</source>
     </message>
     <message>
         <location filename="../../formtrafficview.cpp" line="524"/>
+        <source>Modbus RTU over TCP/IP Srv %1:%2</source>
+        <translation>Modbus RTU over TCP/IP 服务器 %1:%2</translation>
+    </message>
+    <message>
+        <location filename="../../formtrafficview.cpp" line="527"/>
         <source>Port %1:%2:%3:%4:%5</source>
         <translation>端口 %1:%2:%3:%4:%5</translation>
     </message>
     <message>
-        <location filename="../../formtrafficview.cpp" line="653"/>
+        <location filename="../../formtrafficview.cpp" line="656"/>
         <source>Text files (*.txt)</source>
         <translation>文本文件 (*.txt)</translation>
     </message>
     <message>
-        <location filename="../../formtrafficview.cpp" line="660"/>
+        <location filename="../../formtrafficview.cpp" line="663"/>
         <source>Log exported successfully to file %1</source>
         <translation>日志成功导出至 %1</translation>
     </message>
     <message>
-        <location filename="../../formtrafficview.cpp" line="662"/>
+        <location filename="../../formtrafficview.cpp" line="665"/>
         <source>Export log error!</source>
         <translation>导出日志错误！</translation>
     </message>
     <message>
-        <location filename="../../formtrafficview.cpp" line="695"/>
-        <location filename="../../formtrafficview.cpp" line="868"/>
+        <location filename="../../formtrafficview.cpp" line="698"/>
+        <location filename="../../formtrafficview.cpp" line="871"/>
         <source>Unit:</source>
         <translation>单元：</translation>
     </message>
     <message>
-        <location filename="../../formtrafficview.cpp" line="701"/>
-        <location filename="../../formtrafficview.cpp" line="872"/>
+        <location filename="../../formtrafficview.cpp" line="704"/>
+        <location filename="../../formtrafficview.cpp" line="875"/>
         <source>-1 = all unit ids</source>
         <translation>-1 = 所有单元ID</translation>
     </message>
     <message>
-        <location filename="../../formtrafficview.cpp" line="722"/>
-        <location filename="../../formtrafficview.cpp" line="879"/>
+        <location filename="../../formtrafficview.cpp" line="725"/>
+        <location filename="../../formtrafficview.cpp" line="882"/>
         <source>Source:</source>
         <translation>来源：</translation>
     </message>
     <message>
-        <location filename="../../formtrafficview.cpp" line="733"/>
-        <location filename="../../formtrafficview.cpp" line="885"/>
+        <location filename="../../formtrafficview.cpp" line="736"/>
+        <location filename="../../formtrafficview.cpp" line="888"/>
         <source>Show only responses with Modbus exception</source>
         <translation>仅显示带有Modbus异常的响应</translation>
     </message>
     <message>
-        <location filename="../../formtrafficview.cpp" line="740"/>
-        <location filename="../../formtrafficview.cpp" line="889"/>
+        <location filename="../../formtrafficview.cpp" line="743"/>
+        <location filename="../../formtrafficview.cpp" line="892"/>
         <source>Autoscroll</source>
         <translation>自动滚动</translation>
     </message>
     <message>
-        <location filename="../../formtrafficview.cpp" line="741"/>
-        <location filename="../../formtrafficview.cpp" line="890"/>
+        <location filename="../../formtrafficview.cpp" line="744"/>
+        <location filename="../../formtrafficview.cpp" line="893"/>
         <source>Automatically scroll to the latest entry</source>
         <translation>自动滚动到最新条目</translation>
     </message>
@@ -2236,22 +2241,22 @@ Source: %3</source>
         <location filename="../../formtrafficview.cpp" line="97"/>
         <location filename="../../formtrafficview.cpp" line="101"/>
         <location filename="../../formtrafficview.cpp" line="105"/>
-        <location filename="../../formtrafficview.cpp" line="543"/>
-        <location filename="../../formtrafficview.cpp" line="700"/>
-        <location filename="../../formtrafficview.cpp" line="725"/>
-        <location filename="../../formtrafficview.cpp" line="871"/>
+        <location filename="../../formtrafficview.cpp" line="546"/>
+        <location filename="../../formtrafficview.cpp" line="703"/>
+        <location filename="../../formtrafficview.cpp" line="728"/>
+        <location filename="../../formtrafficview.cpp" line="874"/>
         <source>All</source>
         <translation>全部</translation>
     </message>
     <message>
-        <location filename="../../formtrafficview.cpp" line="749"/>
-        <location filename="../../formtrafficview.cpp" line="894"/>
+        <location filename="../../formtrafficview.cpp" line="752"/>
+        <location filename="../../formtrafficview.cpp" line="897"/>
         <source>Rows:</source>
         <translation>行数：</translation>
     </message>
     <message>
-        <location filename="../../formtrafficview.cpp" line="710"/>
-        <location filename="../../formtrafficview.cpp" line="876"/>
+        <location filename="../../formtrafficview.cpp" line="713"/>
+        <location filename="../../formtrafficview.cpp" line="879"/>
         <source>Function:</source>
         <translation>功能：</translation>
     </message>
@@ -2419,7 +2424,7 @@ Script.onInit(()=&gt;{
         <translation>无可用更新</translation>
     </message>
     <message>
-        <location filename="../../controls/mainstatusbar.cpp" line="315"/>
+        <location filename="../../controls/mainstatusbar.cpp" line="321"/>
         <source>New version %1 is available. Click to download.</source>
         <translation>新版本 %1 可用。点击下载。</translation>
     </message>
@@ -2434,7 +2439,7 @@ Script.onInit(()=&gt;{
         <translation>Modbus/TCP服务器%1:%2</translation>
     </message>
     <message>
-        <location filename="../../controls/mainstatusbar.cpp" line="260"/>
+        <location filename="../../controls/mainstatusbar.cpp" line="266"/>
         <source>Port %1:%2:%3:%4:%5</source>
         <translation>端口 %1:%2:%3:%4:%5</translation>
     </message>
@@ -2484,17 +2489,22 @@ Script.onInit(()=&gt;{
         <translation>客户端：%1</translation>
     </message>
     <message>
-        <location filename="../../controls/mainstatusbar.cpp" line="284"/>
+        <location filename="../../controls/mainstatusbar.cpp" line="260"/>
+        <source>Modbus RTU over TCP/IP Srv %1:%2</source>
+        <translation>Modbus RTU over TCP/IP 服务器 %1:%2</translation>
+    </message>
+    <message>
+        <location filename="../../controls/mainstatusbar.cpp" line="290"/>
         <source>Req: %1  Resp: %2</source>
         <translation>请求：%1  响应：%2</translation>
     </message>
     <message>
-        <location filename="../../controls/mainstatusbar.cpp" line="296"/>
+        <location filename="../../controls/mainstatusbar.cpp" line="302"/>
         <source>New version available</source>
         <translation>发现新版本</translation>
     </message>
     <message>
-        <location filename="../../controls/mainstatusbar.cpp" line="297"/>
+        <location filename="../../controls/mainstatusbar.cpp" line="303"/>
         <source>A new version %1 is available.
 
 Open the download page?</source>
@@ -2531,7 +2541,7 @@ Open the download page?</source>
         <translation>设置</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="80"/>
+        <location filename="../../applogger.cpp" line="109"/>
         <source>Script</source>
         <translation>脚本</translation>
     </message>
@@ -2593,7 +2603,7 @@ Open the download page?</source>
     </message>
     <message>
         <location filename="../../mainwindow.ui" line="348"/>
-        <location filename="../../mainwindow.cpp" line="1924"/>
+        <location filename="../../mainwindow.cpp" line="1925"/>
         <source>Save Project</source>
         <translation>保存项目</translation>
     </message>
@@ -2805,7 +2815,7 @@ Open the download page?</source>
     </message>
     <message>
         <location filename="../../mainwindow.cpp" line="302"/>
-        <location filename="../../mainwindow.cpp" line="2060"/>
+        <location filename="../../mainwindow.cpp" line="2061"/>
         <source>Clear List</source>
         <translation>清除列表</translation>
     </message>
@@ -2821,362 +2831,367 @@ Open the download page?</source>
     </message>
     <message>
         <location filename="../../mainwindow.cpp" line="931"/>
-        <location filename="../../mainwindow.cpp" line="1954"/>
+        <location filename="../../mainwindow.cpp" line="1955"/>
         <source>Project files (*.omsim)</source>
         <translation>项目文件 (*.omsim)</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="1578"/>
-        <location filename="../../mainwindow.cpp" line="1982"/>
+        <location filename="../../mainwindow.cpp" line="1579"/>
+        <location filename="../../mainwindow.cpp" line="1983"/>
         <source>Untitled</source>
         <translation>未命名</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="128"/>
+        <location filename="../../applogger.cpp" line="157"/>
         <location filename="../../mainwindow.cpp" line="682"/>
-        <location filename="../../mainwindow.cpp" line="1763"/>
+        <location filename="../../mainwindow.cpp" line="1764"/>
         <source>Address Base</source>
         <translation>地址基准</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="221"/>
+        <location filename="../../applogger.cpp" line="250"/>
         <source>Server connected: %1</source>
         <translation>服务器已连接：%1</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="227"/>
+        <location filename="../../applogger.cpp" line="256"/>
         <source>Server disconnected: %1</source>
         <translation>服务器已断开：%1</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="238"/>
+        <location filename="../../applogger.cpp" line="267"/>
         <source>Modbus client connected: %1 -&gt; %2</source>
         <translation>Modbus客户端已连接：%1 → %2</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="245"/>
+        <location filename="../../applogger.cpp" line="274"/>
         <source>Modbus client disconnected: %1 -&gt; %2</source>
         <translation>Modbus客户端已断开：%1 → %2</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="252"/>
+        <location filename="../../applogger.cpp" line="281"/>
         <source>[Unit %1] %2</source>
         <translation>[单元 %1] %2</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="271"/>
+        <location filename="../../applogger.cpp" line="300"/>
         <source>Address space added: unit %1, %2, starting address %3, length %4</source>
         <translation>地址空间已添加：单元 %1, %2, 起始地址 %3, 长度 %4</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="293"/>
+        <location filename="../../applogger.cpp" line="322"/>
         <source>&lt;empty&gt;</source>
         <translation>&lt;空&gt;</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="309"/>
+        <location filename="../../applogger.cpp" line="338"/>
         <source>Manual write: unit %1, %2, starting address %3, value %4</source>
         <translation>手动写入：单元 %1, %2, 起始地址 %3, 值 %4</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="322"/>
+        <location filename="../../applogger.cpp" line="351"/>
         <source>Client write: %1 -&gt; unit %2, %3, starting address %4, value %5</source>
         <translation>客户端写入：%1 → 单元 %2, %3, 起始地址 %4, 值 %5</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="319"/>
+        <location filename="../../applogger.cpp" line="348"/>
         <source>unknown client</source>
         <translation>未知客户端</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="295"/>
+        <location filename="../../applogger.cpp" line="324"/>
         <source>Address comment changed: unit %1, %2, address %3: &apos;%4&apos;</source>
         <translation>地址注释已更改：单元 %1, %2, 地址 %3: &apos;%4&apos;</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="353"/>
+        <location filename="../../applogger.cpp" line="382"/>
         <source>Auto simulation enabled (%1): unit %2, %3, address %4</source>
         <translation>自动仿真已启用（%1）：单元 %2, %3, 地址 %4</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="367"/>
+        <location filename="../../applogger.cpp" line="396"/>
         <source>Auto simulation disabled: unit %1, %2, address %3</source>
         <translation>自动仿真已禁用：单元 %1, %2, 地址 %3</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="62"/>
+        <location filename="../../applogger.cpp" line="91"/>
         <source>[%1 values: %2%3]</source>
         <translation>[%1 values: %2%3]</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="78"/>
+        <location filename="../../applogger.cpp" line="50"/>
+        <source>Modbus RTU over TCP/IP</source>
+        <translation>通过 TCP/IP 的 Modbus RTU</translation>
+    </message>
+    <message>
+        <location filename="../../applogger.cpp" line="107"/>
         <source>Traffic</source>
         <translation>流量</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="82"/>
+        <location filename="../../applogger.cpp" line="111"/>
         <source>Map</source>
         <translation>映射</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="83"/>
+        <location filename="../../applogger.cpp" line="112"/>
         <source>Form</source>
         <translation>窗体</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="94"/>
+        <location filename="../../applogger.cpp" line="123"/>
         <source>&lt;null&gt;</source>
         <translation>&lt;null&gt;</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="97"/>
+        <location filename="../../applogger.cpp" line="126"/>
         <source>&lt;untitled&gt;</source>
         <translation>&lt;未命名&gt;</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="100"/>
+        <location filename="../../applogger.cpp" line="129"/>
         <source>%1 &apos;%2&apos;</source>
         <translation>%1 &apos;%2&apos;</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="111"/>
+        <location filename="../../applogger.cpp" line="140"/>
         <source>Font</source>
         <translation>字体</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="112"/>
+        <location filename="../../applogger.cpp" line="141"/>
         <source>FontZoom</source>
         <translation>字体缩放</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="113"/>
+        <location filename="../../applogger.cpp" line="142"/>
         <source>BackgroundColor</source>
         <translation>背景颜色</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="114"/>
+        <location filename="../../applogger.cpp" line="143"/>
         <source>ForegroundColor</source>
         <translation>前景颜色</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="115"/>
+        <location filename="../../applogger.cpp" line="144"/>
         <source>AddressColor</source>
         <translation>地址颜色</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="116"/>
+        <location filename="../../applogger.cpp" line="145"/>
         <source>CommentColor</source>
         <translation>注释颜色</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="117"/>
+        <location filename="../../applogger.cpp" line="146"/>
         <source>CheckForUpdates</source>
         <translation>检查更新</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="118"/>
+        <location filename="../../applogger.cpp" line="147"/>
         <source>ShowWelcomeDialog</source>
         <translation>显示欢迎对话框</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="119"/>
+        <location filename="../../applogger.cpp" line="148"/>
         <source>Language</source>
         <translation>语言</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="120"/>
+        <location filename="../../applogger.cpp" line="149"/>
         <source>ScriptFont</source>
         <translation>脚本字体</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="121"/>
+        <location filename="../../applogger.cpp" line="150"/>
         <source>CodeAutoComplete</source>
         <translation>代码自动补全</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="122"/>
+        <location filename="../../applogger.cpp" line="151"/>
         <source>AutoShowConsoleOutput</source>
         <translation>自动显示控制台输出</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="123"/>
+        <location filename="../../applogger.cpp" line="152"/>
         <source>ConsoleMaxLines</source>
         <translation>控制台最大行数</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="124"/>
+        <location filename="../../applogger.cpp" line="153"/>
         <source>DataView.ColumnsDistance</source>
         <translation>数据视图.列距</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="125"/>
+        <location filename="../../applogger.cpp" line="154"/>
         <source>DataView.LeadingZeros</source>
         <translation>数据视图.前导零</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="126"/>
+        <location filename="../../applogger.cpp" line="155"/>
         <source>TrafficView.LogLimit</source>
         <translation>流量视图.日志限制</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="127"/>
+        <location filename="../../applogger.cpp" line="156"/>
         <source>TrafficView.AutoScroll</source>
         <translation>流量视图.自动滚动</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="130"/>
+        <location filename="../../applogger.cpp" line="159"/>
         <source>ThemeMode</source>
         <translation>主题模式</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="142"/>
+        <location filename="../../applogger.cpp" line="171"/>
         <source>true</source>
         <translation>是</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="144"/>
+        <location filename="../../applogger.cpp" line="173"/>
         <source>false</source>
         <translation>否</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="170"/>
+        <location filename="../../applogger.cpp" line="199"/>
         <source>enabled</source>
         <translation>已启用</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="172"/>
+        <location filename="../../applogger.cpp" line="201"/>
         <source>disabled</source>
         <translation>已禁用</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="258"/>
+        <location filename="../../applogger.cpp" line="287"/>
         <source>Unit ID added: %1</source>
         <translation>单元ID已添加：%1</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="264"/>
+        <location filename="../../applogger.cpp" line="293"/>
         <source>Unit ID removed: %1</source>
         <translation>单元ID已删除：%1</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="280"/>
+        <location filename="../../applogger.cpp" line="309"/>
         <source>Address space removed: unit %1, %2, starting address %3, length %4</source>
         <translation>地址空间已删除：单元 %1, %2, 起始地址 %3, 长度 %4</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="386"/>
+        <location filename="../../applogger.cpp" line="415"/>
         <source>Project opened: %1</source>
         <translation>项目已打开：%1</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="393"/>
+        <location filename="../../applogger.cpp" line="422"/>
         <source>&lt;unsaved&gt;</source>
         <translation>&lt;未保存&gt;</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="396"/>
+        <location filename="../../applogger.cpp" line="425"/>
         <source>Project closed: %1</source>
         <translation>项目已关闭：%1</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="402"/>
+        <location filename="../../applogger.cpp" line="431"/>
         <source>Project saved: %1</source>
         <translation>项目已保存：%1</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="408"/>
+        <location filename="../../applogger.cpp" line="437"/>
         <source>Project save failed: %1 (%2)</source>
         <translation>项目保存失败：%1 (%2)</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="415"/>
+        <location filename="../../applogger.cpp" line="444"/>
         <source>Form created: %1</source>
         <translation>窗体已创建：%1</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="421"/>
+        <location filename="../../applogger.cpp" line="450"/>
         <source>Form opened: %1</source>
         <translation>窗体已打开：%1</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="427"/>
+        <location filename="../../applogger.cpp" line="456"/>
         <source>Form closed: %1</source>
         <translation>窗体已关闭：%1</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="433"/>
+        <location filename="../../applogger.cpp" line="462"/>
         <source>Form deleted: %1</source>
         <translation>窗体已删除：%1</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="452"/>
+        <location filename="../../applogger.cpp" line="481"/>
         <source>Preference changed: %1: %2 -&gt; %3</source>
         <translation>首选项已更改：%1：%2 → %3</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="461"/>
+        <location filename="../../applogger.cpp" line="490"/>
         <source>%1 changed: %2 -&gt; %3</source>
         <translation>%1 已更改：%2 → %3</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="479"/>
+        <location filename="../../applogger.cpp" line="508"/>
         <source>Script started: %1 (mode: %2, interval: %3 ms)</source>
         <translation>脚本已启动：%1（模式：%2，间隔：%3 毫秒）</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="484"/>
+        <location filename="../../applogger.cpp" line="513"/>
         <source>Script started: %1 (mode: %2)</source>
         <translation>脚本已启动：%1（模式：%2）</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="514"/>
+        <location filename="../../applogger.cpp" line="543"/>
         <source>Form renamed: &apos;%1&apos; -&gt; &apos;%2&apos;</source>
         <translation>窗体已重命名：&apos;%1&apos; -&gt; &apos;%2&apos;</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="1317"/>
+        <location filename="../../mainwindow.cpp" line="1318"/>
         <source>Move to Other Panel</source>
         <translation>移至其他面板</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="158"/>
+        <location filename="../../applogger.cpp" line="187"/>
         <source>1-based</source>
         <translation>基地址为-1</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="156"/>
+        <location filename="../../applogger.cpp" line="185"/>
         <source>0-based</source>
         <translation>基地址为-0</translation>
     </message>
     <message>
         <location filename="../../mainwindow.ui" line="418"/>
         <location filename="../../mainwindow.ui" line="421"/>
-        <location filename="../../applogger.cpp" line="129"/>
+        <location filename="../../applogger.cpp" line="158"/>
         <source>Hex View</source>
         <translation>十六进制视图</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="1925"/>
+        <location filename="../../mainwindow.cpp" line="1926"/>
         <source>Save project before closing?</source>
         <translation>关闭前保存项目？</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="2048"/>
+        <location filename="../../mainwindow.cpp" line="2049"/>
         <source>No Recent Projects</source>
         <translation>没有最近项目</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="76"/>
+        <location filename="../../applogger.cpp" line="105"/>
         <source>Data</source>
         <translation>数据</translation>
     </message>
     <message>
-        <location filename="../../mainwindow.cpp" line="1275"/>
+        <location filename="../../mainwindow.cpp" line="1276"/>
         <source>JavaScript files (*.js);;All files (*)</source>
         <translation>JavaScript文件 (*.js);;所有文件 (*)</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="498"/>
+        <location filename="../../applogger.cpp" line="527"/>
         <source>Script stopped: %1</source>
         <translation>脚本已停止：%1</translation>
     </message>
@@ -3194,26 +3209,38 @@ Open the download page?</source>
     <name>MenuConnect</name>
     <message>
         <location filename="../../menuconnect.cpp" line="26"/>
-        <location filename="../../menuconnect.cpp" line="112"/>
+        <location filename="../../menuconnect.cpp" line="123"/>
         <source>Modbus/TCP Srv</source>
         <translation>Modbus/TCP服务器</translation>
     </message>
     <message>
-        <location filename="../../menuconnect.cpp" line="30"/>
-        <location filename="../../menuconnect.cpp" line="102"/>
+        <location filename="../../menuconnect.cpp" line="27"/>
+        <location filename="../../menuconnect.cpp" line="129"/>
+        <source>Modbus RTU over TCP/IP Srv</source>
+        <translation>Modbus RTU over TCP/IP 服务器</translation>
+    </message>
+    <message>
+        <location filename="../../menuconnect.cpp" line="32"/>
+        <location filename="../../menuconnect.cpp" line="113"/>
         <source>Modbus/RTU Srv</source>
         <translation>Modbus/RTU服务器</translation>
     </message>
     <message>
-        <location filename="../../menuconnect.cpp" line="32"/>
-        <location filename="../../menuconnect.cpp" line="53"/>
-        <location filename="../../menuconnect.cpp" line="117"/>
+        <location filename="../../menuconnect.cpp" line="34"/>
+        <location filename="../../menuconnect.cpp" line="63"/>
+        <location filename="../../menuconnect.cpp" line="134"/>
         <source>Port %1</source>
         <translation>端口 %1</translation>
     </message>
     <message>
-        <location filename="../../menuconnect.cpp" line="48"/>
-        <location filename="../../menuconnect.cpp" line="114"/>
+        <location filename="../../menuconnect.cpp" line="53"/>
+        <location filename="../../menuconnect.cpp" line="131"/>
+        <source>Modbus RTU over TCP/IP Srv %1</source>
+        <translation>Modbus RTU over TCP/IP 服务器 %1</translation>
+    </message>
+    <message>
+        <location filename="../../menuconnect.cpp" line="54"/>
+        <location filename="../../menuconnect.cpp" line="125"/>
         <source>Modbus/TCP Srv %1</source>
         <translation>Modbus/TCP服务器 %1</translation>
     </message>
@@ -3221,14 +3248,14 @@ Open the download page?</source>
 <context>
     <name>ModbusLogWidget</name>
     <message>
-        <location filename="../../controls/modbuslogwidget.cpp" line="336"/>
-        <location filename="../../controls/modbuslogwidget.cpp" line="379"/>
+        <location filename="../../controls/modbuslogwidget.cpp" line="337"/>
+        <location filename="../../controls/modbuslogwidget.cpp" line="380"/>
         <source>Copy Text</source>
         <translation>复制文本</translation>
     </message>
     <message>
-        <location filename="../../controls/modbuslogwidget.cpp" line="348"/>
-        <location filename="../../controls/modbuslogwidget.cpp" line="380"/>
+        <location filename="../../controls/modbuslogwidget.cpp" line="349"/>
+        <location filename="../../controls/modbuslogwidget.cpp" line="381"/>
         <source>Copy Bytes</source>
         <translation>复制字节</translation>
     </message>
@@ -3544,12 +3571,12 @@ Open the download page?</source>
 <context>
     <name>ModbusMultiServer</name>
     <message>
-        <location filename="../../modbusmultiserver.cpp" line="969"/>
+        <location filename="../../modbusmultiserver.cpp" line="992"/>
         <source>An incorrect device ID was specified (%1)</source>
         <translation>指定了错误的设备地址（%1）</translation>
     </message>
     <message>
-        <location filename="../../modbusmultiserver.cpp" line="1553"/>
+        <location filename="../../modbusmultiserver.cpp" line="1592"/>
         <source>Connection error. %1</source>
         <translation>连接错误 %1</translation>
     </message>
@@ -3557,24 +3584,37 @@ Open the download page?</source>
 <context>
     <name>ModbusRegisterType</name>
     <message>
-        <location filename="../../enums.h" line="426"/>
+        <location filename="../../enums.h" line="428"/>
         <source>Coils</source>
         <translation>线圈</translation>
     </message>
     <message>
-        <location filename="../../enums.h" line="427"/>
+        <location filename="../../enums.h" line="429"/>
         <source>Discrete Inputs</source>
         <translation>离散输入</translation>
     </message>
     <message>
-        <location filename="../../enums.h" line="428"/>
+        <location filename="../../enums.h" line="430"/>
         <source>Input Registers</source>
         <translation>输入寄存器</translation>
     </message>
     <message>
-        <location filename="../../enums.h" line="429"/>
+        <location filename="../../enums.h" line="431"/>
         <source>Holding Registers</source>
         <translation>保持寄存器</translation>
+    </message>
+</context>
+<context>
+    <name>ModbusRtuTcpServer</name>
+    <message>
+        <location filename="../../modbusrtutcpserver.cpp" line="503"/>
+        <source>Could not write response to client</source>
+        <translation>无法写入对客户端的响应</translation>
+    </message>
+    <message>
+        <location filename="../../modbusrtutcpserver.cpp" line="573"/>
+        <source>Invalid connection settings for RTU over TCP/IP communication specified.</source>
+        <translation>指定的 RTU over TCP/IP 通信连接设置无效。</translation>
     </message>
 </context>
 <context>
@@ -3957,14 +3997,14 @@ Open the download page?</source>
 <context>
     <name>RunModeComboBox</name>
     <message>
-        <location filename="../../applogger.cpp" line="200"/>
+        <location filename="../../applogger.cpp" line="229"/>
         <location filename="../../controls/runmodecombobox.cpp" line="19"/>
         <location filename="../../controls/runmodecombobox.cpp" line="39"/>
         <source>Once</source>
         <translation>一次</translation>
     </message>
     <message>
-        <location filename="../../applogger.cpp" line="202"/>
+        <location filename="../../applogger.cpp" line="231"/>
         <location filename="../../controls/runmodecombobox.cpp" line="20"/>
         <location filename="../../controls/runmodecombobox.cpp" line="43"/>
         <source>Periodically</source>
@@ -4157,17 +4197,17 @@ Open the download page?</source>
 <context>
     <name>UpdateChecker</name>
     <message>
-        <location filename="../../updatechecker.cpp" line="70"/>
+        <location filename="../../updatechecker.cpp" line="115"/>
         <source>SSL is not supported in this build.</source>
         <translation>此构建版本不支持 SSL。</translation>
     </message>
     <message>
-        <location filename="../../updatechecker.cpp" line="102"/>
+        <location filename="../../updatechecker.cpp" line="147"/>
         <source>Failed to parse update information.</source>
         <translation>解析更新信息失败。</translation>
     </message>
     <message>
-        <location filename="../../updatechecker.cpp" line="112"/>
+        <location filename="../../updatechecker.cpp" line="157"/>
         <source>Update information is incomplete.</source>
         <translation>更新信息不完整。</translation>
     </message>

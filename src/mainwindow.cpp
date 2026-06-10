@@ -1133,6 +1133,7 @@ void MainWindow::on_connectAction(ConnectionDetails& cd)
     switch(cd.Type)
     {
         case ConnectionType::Tcp:
+        case ConnectionType::RtuTcp:
         {
             DialogSelectServicePort dlg(cd.TcpParams, this);
             if(dlg.exec() == QDialog::Accepted) _mbMultiServer.connectDevice(cd);

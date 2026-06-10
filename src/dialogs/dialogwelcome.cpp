@@ -10,6 +10,7 @@
 #include <QFont>
 #include <QListWidgetItem>
 #include <QCoreApplication>
+#include <QPixmap>
 #include <QStandardPaths>
 #include "dialogwelcome.h"
 #include "ui_dialogwelcome.h"
@@ -41,6 +42,18 @@ DialogWelcome::DialogWelcome(const QStringList& recentProjects, QWidget *parent)
     ui(new Ui::DialogWelcome)
 {
     ui->setupUi(this);
+
+#ifdef Q_OS_MAC
+    ui->labelIcon->setFixedSize(64, 64);
+    const qreal iconDpr = ui->labelIcon->devicePixelRatioF();
+    QPixmap appIcon(QStringLiteral(":/res/omodsim-mac.png"));
+    appIcon = appIcon.scaled(ui->labelIcon->maximumSize() * iconDpr,
+                             Qt::KeepAspectRatio,
+                             Qt::SmoothTransformation);
+    appIcon.setDevicePixelRatio(iconDpr);
+    ui->labelIcon->setPixmap(appIcon);
+#endif
+
     ui->labelAppName->setText(APP_PRODUCT_NAME);
     setWindowTitle(tr("Welcome to %1").arg(APP_PRODUCT_NAME));
 

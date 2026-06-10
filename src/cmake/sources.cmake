@@ -95,6 +95,7 @@ set(SOURCES
     modbusmessages/modbusmessage.cpp
     modbusmultiserver.cpp
     modbusrtuserialserver.cpp
+    modbusrtutcpserver.cpp
     modbusserver.cpp
     modbustcpserver.cpp
 
@@ -249,6 +250,7 @@ set(HEADERS
     modbusmessages/writesingleregister.h
     modbusmultiserver.h
     modbusrtuserialserver.h
+    modbusrtutcpserver.h
     modbusserver.h
     modbustcpserver.h
     modbussimulationparams.h
