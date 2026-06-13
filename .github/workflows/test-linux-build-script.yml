@@ -87,8 +87,8 @@ jobs:
                   "qt_modes": ["qt5", "qt6"],
               },
               {
-                  "name": "Rocky Linux 9.7",
-                  "image": "rockylinux/rockylinux:9.7",
+                  "name": "Rocky Linux 9.8",
+                  "image": "rockylinux/rockylinux:9.8",
                   "family": "rocky",
                   "qt_modes": ["qt5", "qt6"],
               },

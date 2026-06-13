@@ -1,0 +1,116 @@
+name: Test
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+# Cancel superseded runs on the same ref to save CI minutes.
+concurrency:
+  group: test-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  QT_VERSION: '6.9.3'
+  QT_MODULES: 'qtserialbus qtserialport qt5compat'
+  TEST_TARGETS: >-
+    omodsim_tests_numericutils
+    omodsim_tests_byteorderutils
+    omodsim_tests_enums
+    omodsim_tests_modbusfunction
+    omodsim_tests_formatutils
+    omodsim_tests_errorsimulations
+    omodsim_tests_validators
+    omodsim_tests_dataunitmap
+    omodsim_tests_datasimulator
+    omodsim_tests_modbusmessage
+
+jobs:
+  tests:
+    name: Tests (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+
+    env:
+      # Run Qt GUI/Test binaries without a real display.
+      QT_QPA_PLATFORM: offscreen
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Linux build dependencies
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            ninja-build \
+            libgl1-mesa-dev \
+            libxkbcommon-x11-0
+
+      - name: Install Ninja (Windows)
+        if: runner.os == 'Windows'
+        uses: seanmiddleditch/gha-setup-ninja@v5
+
+      - name: Set up MSVC environment (Windows)
+        if: runner.os == 'Windows'
+        uses: ilammy/msvc-dev-cmd@v1
+
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: ${{ env.QT_VERSION }}
+          modules: ${{ env.QT_MODULES }}
+          cache: true
+
+      - name: Configure
+        run: >
+          cmake -S src -B build -G Ninja
+          -DCMAKE_BUILD_TYPE=Release
+          -DCMAKE_INTERPROCEDURAL_OPTIMIZATION=OFF
+
+      - name: Build tests
+        run: cmake --build build --config Release --parallel --target ${{ env.TEST_TARGETS }}
+
+      - name: Run tests
+        run: ctest --test-dir build --output-on-failure -R "^omodsim_tests"
+
+  coverage:
+    name: Coverage (Linux)
+    runs-on: ubuntu-latest
+
+    env:
+      QT_QPA_PLATFORM: offscreen
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            ninja-build \
+            libgl1-mesa-dev \
+            libxkbcommon-x11-0
+          python3 -m pip install --upgrade gcovr
+
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: ${{ env.QT_VERSION }}
+          modules: ${{ env.QT_MODULES }}
+          cache: true
+
+      - name: Run coverage
+        run: python3 tools/coverage.py --strict -- -G Ninja
+
+      - name: Upload coverage report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: build-coverage/coverage
