@@ -46,7 +46,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Install Linux build dependencies
         if: runner.os == 'Linux'
@@ -57,9 +57,13 @@ jobs:
             libgl1-mesa-dev \
             libxkbcommon-x11-0
 
-      - name: Install Ninja (Windows/macOS)
-        if: runner.os != 'Linux'
-        uses: seanmiddleditch/gha-setup-ninja@v5
+      - name: Install Ninja (macOS)
+        if: runner.os == 'macOS'
+        run: brew install ninja
+
+      - name: Install Ninja (Windows)
+        if: runner.os == 'Windows'
+        run: choco install ninja -y
 
       - name: Set up MSVC environment (Windows)
         if: runner.os == 'Windows'
@@ -93,7 +97,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Install build dependencies
         run: |
