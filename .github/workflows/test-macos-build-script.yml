@@ -1,15 +1,12 @@
 name: Test macOS build script
 
 on:
-  push:
+  workflow_run:
+    workflows: ["Test"]
+    types:
+      - completed
     branches:
       - main
-    paths:
-      - 'src/**'
-      - 'build-macos.sh'
-      - 'CMakeLists.txt'
-      - '**/CMakeLists.txt'
-      - '**/*.cmake'
 
   workflow_dispatch:
     inputs:
@@ -25,6 +22,7 @@ permissions:
 jobs:
   test-build-macos-sh:
     name: ${{ matrix.name }}
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
     runs-on: ${{ matrix.runner }}
     timeout-minutes: 90
 
@@ -43,7 +41,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v6
         with:
-          ref: ${{ inputs.branch || github.sha }}
+          ref: ${{ inputs.branch || github.event.workflow_run.head_sha || github.sha }}
 
       - name: Show macOS version
         run: sw_vers

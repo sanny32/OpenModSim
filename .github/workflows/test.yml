@@ -4,6 +4,7 @@ on:
   push:
     branches: [main]
   pull_request:
+  workflow_dispatch:
 
 # Cancel superseded runs on the same ref to save CI minutes.
 concurrency:
@@ -24,6 +25,11 @@ env:
     omodsim_tests_dataunitmap
     omodsim_tests_datasimulator
     omodsim_tests_modbusmessage
+    omodsim_tests_modbusmessages
+    omodsim_tests_ansiutils
+    omodsim_tests_serialportutils
+    omodsim_tests_simulationparams
+    omodsim_tests_storage
 
 jobs:
   tests:
@@ -32,7 +38,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, windows-latest]
+        os: [ubuntu-latest, windows-latest, macos-26]
 
     env:
       # Run Qt GUI/Test binaries without a real display.
@@ -51,8 +57,8 @@ jobs:
             libgl1-mesa-dev \
             libxkbcommon-x11-0
 
-      - name: Install Ninja (Windows)
-        if: runner.os == 'Windows'
+      - name: Install Ninja (Windows/macOS)
+        if: runner.os != 'Linux'
         uses: seanmiddleditch/gha-setup-ninja@v5
 
       - name: Set up MSVC environment (Windows)
