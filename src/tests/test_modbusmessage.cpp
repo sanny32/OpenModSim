@@ -22,6 +22,9 @@ private slots:
     void functionCodeStripsExceptionBit();
     void exceptionResponseIsFlagged();
     void toStringProducesHex();
+    void createDispatchesFunctionCodes_data();
+    void createDispatchesFunctionCodes();
+    void createFallsBackForUnknownFunctionCode();
 };
 
 void TestModbusMessage::tcpRequestRoundTrip()
@@ -83,6 +86,51 @@ void TestModbusMessage::toStringProducesHex()
     const QString text = message->toString(DataType::Hex);
     QVERIFY(!text.isEmpty());
     QVERIFY(text.contains(' '));
+}
+
+void TestModbusMessage::createDispatchesFunctionCodes_data()
+{
+    QTest::addColumn<int>("code");
+    QTest::addColumn<int>("protocol");
+
+    const QVector<QModbusPdu::FunctionCode> codes = {
+        QModbusPdu::ReadCoils, QModbusPdu::ReadDiscreteInputs, QModbusPdu::ReadHoldingRegisters,
+        QModbusPdu::ReadInputRegisters, QModbusPdu::WriteSingleCoil, QModbusPdu::WriteSingleRegister,
+        QModbusPdu::ReadExceptionStatus, QModbusPdu::Diagnostics, QModbusPdu::GetCommEventCounter,
+        QModbusPdu::GetCommEventLog, QModbusPdu::WriteMultipleCoils, QModbusPdu::WriteMultipleRegisters,
+        QModbusPdu::ReportServerId, QModbusPdu::ReadFileRecord, QModbusPdu::WriteFileRecord,
+        QModbusPdu::MaskWriteRegister, QModbusPdu::ReadWriteMultipleRegisters, QModbusPdu::ReadFifoQueue
+    };
+
+    for (const auto code : codes)
+        for (const auto protocol : {ModbusMessage::Rtu, ModbusMessage::Tcp})
+            QTest::addRow("fc%02X-%s", int(code), protocol == ModbusMessage::Rtu ? "rtu" : "tcp")
+                << int(code) << int(protocol);
+}
+
+void TestModbusMessage::createDispatchesFunctionCodes()
+{
+    QFETCH(int, code);
+    QFETCH(int, protocol);
+    const auto fc = static_cast<QModbusPdu::FunctionCode>(code);
+    const auto proto = static_cast<ModbusMessage::ProtocolType>(protocol);
+
+    const QModbusRequest request(fc, QByteArray::fromHex("00000001"));
+    const auto message = ModbusMessage::create(request, proto, 1, 0, QDateTime::currentDateTime(), true);
+    QCOMPARE(message->functionCode(), fc);
+    QCOMPARE(message->protocolType(), proto);
+    QVERIFY(message->isRequest());
+
+    const auto parsed = ModbusMessage::create(message->rawData(), proto, QDateTime::currentDateTime(), true);
+    QCOMPARE(parsed->functionCode(), fc);
+}
+
+void TestModbusMessage::createFallsBackForUnknownFunctionCode()
+{
+    const QModbusRequest request(static_cast<QModbusPdu::FunctionCode>(0x65), QByteArray::fromHex("0102"));
+    const auto message = ModbusMessage::create(request, ModbusMessage::Tcp, 1, 0, QDateTime::currentDateTime(), true);
+    QCOMPARE(int(message->functionCode()), 0x65);
+    QVERIFY(message->isRequest());
 }
 
 QTEST_GUILESS_MAIN(TestModbusMessage)

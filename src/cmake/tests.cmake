@@ -17,6 +17,7 @@ function(omodsim_configure_tests)
         quintvalidator.cpp
         qdoublevalidatorex.cpp
         modbusmessages/modbusmessage.cpp
+        jsobjects/storage.cpp
     )
 
     target_include_directories(omodsim_testable PUBLIC
@@ -30,6 +31,8 @@ function(omodsim_configure_tests)
         Qt::Gui
         Qt::Widgets
         Qt::SerialBus
+        Qt::SerialPort
+        Qt::Qml
     )
 
     if(Qt6_FOUND)
@@ -64,4 +67,9 @@ function(omodsim_configure_tests)
     omodsim_add_test(omodsim_tests_dataunitmap          test_modbusdataunitmap.cpp)
     omodsim_add_test(omodsim_tests_datasimulator        test_datasimulator.cpp)
     omodsim_add_test(omodsim_tests_modbusmessage        test_modbusmessage.cpp)
+    omodsim_add_test(omodsim_tests_modbusmessages       test_modbusmessages.cpp)
+    omodsim_add_test(omodsim_tests_ansiutils            test_ansiutils.cpp)
+    omodsim_add_test(omodsim_tests_serialportutils      test_serialportutils.cpp)
+    omodsim_add_test(omodsim_tests_simulationparams     test_simulationparams.cpp)
+    omodsim_add_test(omodsim_tests_storage              test_storage.cpp)
 endfunction()

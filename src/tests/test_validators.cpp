@@ -36,6 +36,10 @@ private slots:
     void uintValidatorRejectsNegativeAndOverflow();
     void intValidatorExAllowsEmpty();
     void doubleValidatorExAllowsEmpty();
+    void uintValidatorFixupFillsBottom();
+    void int64ValidatorFixupKeepsEmptyWhenAllowed();
+    void intValidatorExFixupKeepsEmptyWhenAllowed();
+    void doubleValidatorExFixupKeepsEmptyWhenAllowed();
 };
 
 void TestValidators::hexValidatorAcceptsHexRejectsGarbage()
@@ -99,6 +103,43 @@ void TestValidators::doubleValidatorExAllowsEmpty()
     QCOMPARE(validateState(lenient, QString()), QValidator::Acceptable);
     QCOMPARE(validateState(lenient, QStringLiteral("3.14")), QValidator::Acceptable);
     QCOMPARE(validateState(lenient, QStringLiteral("abc")), QValidator::Invalid);
+}
+
+void TestValidators::uintValidatorFixupFillsBottom()
+{
+    QUIntValidator strict(5, 100);
+    QString empty;
+    strict.fixup(empty);
+    QCOMPARE(empty, QStringLiteral("5"));
+
+    QUIntValidator lenient(5, 100, true, nullptr);
+    QString stillEmpty;
+    lenient.fixup(stillEmpty);
+    QVERIFY(stillEmpty.isEmpty());
+}
+
+void TestValidators::int64ValidatorFixupKeepsEmptyWhenAllowed()
+{
+    QInt64Validator lenient(0, 100, true, nullptr);
+    QString empty;
+    lenient.fixup(empty);
+    QVERIFY(empty.isEmpty());
+}
+
+void TestValidators::intValidatorExFixupKeepsEmptyWhenAllowed()
+{
+    QIntValidatorEx lenient(0, 100, true);
+    QString empty;
+    lenient.fixup(empty);
+    QVERIFY(empty.isEmpty());
+}
+
+void TestValidators::doubleValidatorExFixupKeepsEmptyWhenAllowed()
+{
+    QDoubleValidatorEx lenient(0.0, 100.0, 2, true);
+    QString empty;
+    lenient.fixup(empty);
+    QVERIFY(empty.isEmpty());
 }
 
 QTEST_GUILESS_MAIN(TestValidators)

@@ -24,6 +24,11 @@ private slots:
     void canStartSimulationBlocksOverlap();
     void incrementEmitsInitialValue();
     void toggleAlternatesOnTimer();
+    void incrementProgressesUpward();
+    void decrementProgressesDownward();
+    void randomStaysInRange();
+    void restartReemitsStarted();
+    void pauseStopsEmissions();
 };
 
 void TestDataSimulator::initTestCase()
@@ -136,6 +141,93 @@ void TestDataSimulator::toggleAlternatesOnTimer()
     QTRY_VERIFY_WITH_TIMEOUT(simulated.count() >= 2, 2000);
     QCOMPARE(simulated.at(0).at(5).toBool(), true);
     QCOMPARE(simulated.at(1).at(5).toBool(), false);
+}
+
+void TestDataSimulator::incrementProgressesUpward()
+{
+    DataSimulator simulator;
+    QSignalSpy simulated(&simulator, &DataSimulator::dataSimulated);
+
+    ModbusSimulationParams params;
+    params.Mode = SimulationMode::Increment;
+    params.DataMode = DataType::UInt16;
+    params.Interval = 20;
+    params.IncrementParams.Step = 1.;
+    params.IncrementParams.Range = QRange<double>(0., 1000.);
+    simulator.startSimulation(1, QModbusDataUnit::HoldingRegisters, 0, params);
+
+    QTRY_VERIFY_WITH_TIMEOUT(simulated.count() >= 3, 2000);
+    QVERIFY(simulated.at(2).at(5).toUInt() > simulated.at(0).at(5).toUInt());
+}
+
+void TestDataSimulator::decrementProgressesDownward()
+{
+    DataSimulator simulator;
+    QSignalSpy simulated(&simulator, &DataSimulator::dataSimulated);
+
+    ModbusSimulationParams params;
+    params.Mode = SimulationMode::Decrement;
+    params.DataMode = DataType::Float32;
+    params.Interval = 20;
+    params.DecrementParams.Step = 1.;
+    params.DecrementParams.Range = QRange<double>(0., 1000.);
+    simulator.startSimulation(1, QModbusDataUnit::HoldingRegisters, 0, params);
+
+    QTRY_VERIFY_WITH_TIMEOUT(simulated.count() >= 3, 2000);
+    QVERIFY(simulated.at(2).at(5).toDouble() < simulated.at(0).at(5).toDouble());
+}
+
+void TestDataSimulator::randomStaysInRange()
+{
+    DataSimulator simulator;
+    QSignalSpy simulated(&simulator, &DataSimulator::dataSimulated);
+
+    ModbusSimulationParams params;
+    params.Mode = SimulationMode::Random;
+    params.DataMode = DataType::UInt16;
+    params.Interval = 20;
+    params.RandomParams.Range = QRange<double>(10., 20.);
+    simulator.startSimulation(1, QModbusDataUnit::HoldingRegisters, 0, params);
+
+    QTRY_VERIFY_WITH_TIMEOUT(simulated.count() >= 1, 2000);
+    const uint value = simulated.at(0).at(5).toUInt();
+    QVERIFY(value >= 10 && value <= 20);
+}
+
+void TestDataSimulator::restartReemitsStarted()
+{
+    DataSimulator simulator;
+
+    ModbusSimulationParams params;
+    params.Mode = SimulationMode::Random;
+    params.DataMode = DataType::UInt16;
+    params.Interval = 60000;
+    simulator.startSimulation(1, QModbusDataUnit::Coils, 0, params);
+
+    QSignalSpy started(&simulator, &DataSimulator::simulationStarted);
+    simulator.restartSimulations();
+
+    QCOMPARE(started.count(), 1);
+    QVERIFY(simulator.hasSimulation(1, QModbusDataUnit::Coils, 0));
+}
+
+void TestDataSimulator::pauseStopsEmissions()
+{
+    DataSimulator simulator;
+
+    ModbusSimulationParams params;
+    params.Mode = SimulationMode::Toggle;
+    params.DataMode = DataType::Binary;
+    params.Interval = 20;
+    simulator.startSimulation(1, QModbusDataUnit::Coils, 0, params);
+
+    simulator.pauseSimulations();
+    QSignalSpy simulated(&simulator, &DataSimulator::dataSimulated);
+    QTest::qWait(120);
+    QCOMPARE(simulated.count(), 0);
+
+    simulator.resumeSimulations();
+    QTRY_VERIFY_WITH_TIMEOUT(simulated.count() >= 1, 2000);
 }
 
 QTEST_GUILESS_MAIN(TestDataSimulator)
