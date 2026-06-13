@@ -1,15 +1,12 @@
 name: Test Windows build script
 
 on:
-  push:
+  workflow_run:
+    workflows: ["Test"]
+    types:
+      - completed
     branches:
       - main
-    paths:
-      - 'src/**'
-      - 'build.ps1'
-      - 'CMakeLists.txt'
-      - '**/CMakeLists.txt'
-      - '**/*.cmake'
 
   workflow_dispatch:
     inputs:
@@ -25,6 +22,7 @@ permissions:
 jobs:
   prepare-matrix:
     name: Prepare matrix
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     outputs:
       matrix: ${{ steps.matrix.outputs.matrix }}
@@ -75,7 +73,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v6
         with:
-          ref: ${{ inputs.branch || github.sha }}
+          ref: ${{ inputs.branch || github.event.workflow_run.head_sha || github.sha }}
 
       - name: Show Windows version
         run: (Get-CimInstance Win32_OperatingSystem).Caption

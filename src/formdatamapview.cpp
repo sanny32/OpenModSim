@@ -1450,6 +1450,14 @@ void FormDataMapView::on_actionDelete_triggered()
 ///
 void FormDataMapView::on_actionClear_triggered()
 {
+    const auto answer = QMessageBox::question(this,
+                                              tr("Clear Table"),
+                                              tr("Clear all visible rows from the table?"),
+                                              QMessageBox::Yes | QMessageBox::No,
+                                              QMessageBox::No);
+    if (answer != QMessageBox::Yes)
+        return;
+
     // Collect source rows of all currently visible (proxy) rows
     QList<int> sourceRows;
     for (int pr = 0; pr < _proxy->rowCount(); ++pr)
@@ -1457,6 +1465,7 @@ void FormDataMapView::on_actionClear_triggered()
 
     _model->removeEntries(sourceRows);
     updateActionState();
+    emit definitionChanged();
 }
 
 ///

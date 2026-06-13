@@ -64,7 +64,13 @@ class RtuTcpClient:
     """Small buffered raw-socket client for RTU over TCP/IP."""
 
     def __init__(self, timeout: float = TIMEOUT):
-        self.socket = socket.create_connection((HOST, PORT), timeout=timeout)
+        try:
+            self.socket = socket.create_connection((HOST, PORT), timeout=timeout)
+        except OSError:
+            pytest.skip(
+                f"omodsim RTU-over-TCP server not reachable at {HOST}:{PORT}; "
+                "load test-modbusrtutcp.omsim in omodsim to run this test."
+            )
         self.socket.settimeout(timeout)
         self.buffer = bytearray()
 

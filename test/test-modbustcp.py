@@ -40,7 +40,8 @@ import threading
 import time
 
 import pytest
-from pymodbus.client import ModbusTcpClient
+
+ModbusTcpClient = pytest.importorskip("pymodbus.client").ModbusTcpClient
 
 # -- Configuration ------------------------------------------------------------
 
@@ -57,12 +58,12 @@ STRESS_REQ_EACH    = 50   # requests per thread
 # -- Helpers ------------------------------------------------------------------
 
 def make_client() -> ModbusTcpClient:
-    """Create and connect a client; calls pytest.fail if connection is refused."""
+    """Connect a client, skipping the test when no omodsim server is reachable."""
     c = ModbusTcpClient(host=HOST, port=PORT, timeout=TIMEOUT)
     if not c.connect():
-        pytest.fail(
-            f"Cannot connect to {HOST}:{PORT}. "
-            "Make sure omodsim is running with a TCP server."
+        pytest.skip(
+            f"omodsim TCP server not reachable at {HOST}:{PORT}; "
+            "load test-modbustcp.omsim in omodsim to run this test."
         )
     return c
 

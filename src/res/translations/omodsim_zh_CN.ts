@@ -1820,8 +1820,14 @@ Open the download page?</source>
     </message>
     <message>
         <location filename="../../formdatamapview.ui" line="88"/>
+        <location filename="../../formdatamapview.cpp" line="1454"/>
         <source>Clear Table</source>
         <translation>清除表格</translation>
+    </message>
+    <message>
+        <location filename="../../formdatamapview.cpp" line="1455"/>
+        <source>Clear all visible rows from the table?</source>
+        <translation>是否清除表格中所有可见行？</translation>
     </message>
     <message>
         <location filename="../../formdatamapview.cpp" line="987"/>
@@ -1876,7 +1882,7 @@ Open the download page?</source>
     <message>
         <location filename="../../formdatamapview.cpp" line="1000"/>
         <location filename="../../formdatamapview.cpp" line="1224"/>
-        <location filename="../../formdatamapview.cpp" line="1548"/>
+        <location filename="../../formdatamapview.cpp" line="1557"/>
         <source>All Types</source>
         <translation>所有类型</translation>
     </message>
@@ -1891,44 +1897,44 @@ Type Filter: %3</source>
     </message>
     <message>
         <location filename="../../formdatamapview.cpp" line="1225"/>
-        <location filename="../../formdatamapview.cpp" line="1549"/>
+        <location filename="../../formdatamapview.cpp" line="1558"/>
         <source>Coils</source>
         <translation>线圈</translation>
     </message>
     <message>
         <location filename="../../formdatamapview.cpp" line="1226"/>
-        <location filename="../../formdatamapview.cpp" line="1550"/>
+        <location filename="../../formdatamapview.cpp" line="1559"/>
         <source>Discrete Inputs</source>
         <translation>离散输入</translation>
     </message>
     <message>
         <location filename="../../formdatamapview.cpp" line="1227"/>
-        <location filename="../../formdatamapview.cpp" line="1551"/>
+        <location filename="../../formdatamapview.cpp" line="1560"/>
         <source>Input Registers</source>
         <translation>输入寄存器</translation>
     </message>
     <message>
         <location filename="../../formdatamapview.cpp" line="1228"/>
-        <location filename="../../formdatamapview.cpp" line="1552"/>
+        <location filename="../../formdatamapview.cpp" line="1561"/>
         <source>Holding Registers</source>
         <translation>保持寄存器</translation>
     </message>
     <message>
         <location filename="../../formdatamapview.cpp" line="1216"/>
-        <location filename="../../formdatamapview.cpp" line="1559"/>
+        <location filename="../../formdatamapview.cpp" line="1568"/>
         <source>Unit:</source>
         <translation>单元：</translation>
     </message>
     <message>
         <location filename="../../formdatamapview.cpp" line="1217"/>
-        <location filename="../../formdatamapview.cpp" line="1560"/>
+        <location filename="../../formdatamapview.cpp" line="1569"/>
         <source>Data Type:</source>
         <translation>数据类型：</translation>
     </message>
     <message>
         <location filename="../../formdatamapview.cpp" line="989"/>
         <location filename="../../formdatamapview.cpp" line="1218"/>
-        <location filename="../../formdatamapview.cpp" line="1544"/>
+        <location filename="../../formdatamapview.cpp" line="1553"/>
         <source>All</source>
         <translation>全部</translation>
     </message>

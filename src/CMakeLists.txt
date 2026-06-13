@@ -26,6 +26,10 @@ include("${CMAKE_CURRENT_SOURCE_DIR}/cmake/target_linux.cmake")
 include("${CMAKE_CURRENT_SOURCE_DIR}/cmake/generated_files.cmake")
 include("${CMAKE_CURRENT_SOURCE_DIR}/cmake/qlementine.cmake")
 include("${CMAKE_CURRENT_SOURCE_DIR}/cmake/uninstall.cmake")
+include("${CMAKE_CURRENT_SOURCE_DIR}/cmake/coverage.cmake")
+include("${CMAKE_CURRENT_SOURCE_DIR}/cmake/tests.cmake")
+
+option(OMODSIM_BUILD_TESTS "Build the unit tests" ON)
 
 # Define target
 add_executable(${PROJECT_NAME})
@@ -85,4 +89,9 @@ elseif(APPLE)
     include("${CMAKE_CURRENT_SOURCE_DIR}/cmake/cmake_install_macos.cmake")
 elseif(LINUX)
     include("${CMAKE_CURRENT_SOURCE_DIR}/cmake/cmake_install_linux.cmake")
+endif()
+
+if(OMODSIM_BUILD_TESTS)
+    enable_testing()
+    omodsim_configure_tests()
 endif()

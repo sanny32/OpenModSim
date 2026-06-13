@@ -32,9 +32,10 @@ int Storage::length() const
 ///
 QJSValue Storage::key(int index) const
 {
-    const auto it = std::next(_storage.constBegin(), index);
-    if(it != _storage.end()) return *it;
-    else return QJSValue(QJSValue::NullValue);
+    if(index < 0 || index >= _storage.size())
+        return QJSValue(QJSValue::NullValue);
+
+    return *std::next(_storage.constBegin(), index);
 }
 
 ///
