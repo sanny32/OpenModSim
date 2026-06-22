@@ -76,6 +76,9 @@ The following simulations are available:
   ```javascript
   Script.stop();
   ```
+
+  > **Note:** In Periodically mode the whole script is re-executed on every period, so top-level variables are reset on each run. Only the code passed to `Script.onInit()` runs once, and only values kept in `Storage` persist between runs. Use `Storage.setItem()` / `Storage.getItem()` to keep state (counters, flags, etc.) across periods.
+
 Here is an example of using the script in the Periodically mode
 ```javascript
 /**************************************************************************/

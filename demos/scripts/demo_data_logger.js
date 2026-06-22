@@ -13,7 +13,10 @@
 /*   HR[101] - Low  threshold for range check (default 100)
 /*   HR[102] - High threshold for range check (default 900)
 /*
-/* Run mode: one-shot (no periodic interval needed)
+/* Run mode: periodic (e.g. 1000 ms). The script is event-driven (it only
+/* registers onChange/setTimeout handlers), but it must run periodically so the
+/* engine keeps the handlers alive - in Once mode the engine tears them down
+/* right after the first run.
 /*
 ***************************************************************************/
 
@@ -21,8 +24,15 @@ Server.addressBase = AddressBase.Base1;
 
 var deviceId = 1;
 
-/* Statistics per register */
-var stats = {};
+/* Statistics per register. The whole script is re-run every period, so the
+   stats object is kept in Storage to survive re-execution (only Script.onInit()
+   and Storage persist). */
+var stats = Storage.getItem("stats");
+if(stats === null)
+{
+    stats = {};
+    Storage.setItem("stats", stats);
+}
 
 function initStat(name)
 {
@@ -57,10 +67,25 @@ function getLogLevel()
 
 function getThresholds()
 {
-    return {
-        lo: Server.readHolding(101, deviceId),
-        hi: Server.readHolding(102, deviceId)
-    };
+    var lo = Server.readHolding(101, deviceId);
+    var hi = Server.readHolding(102, deviceId);
+    if(lo > hi) { lo = 100; hi = 900; }   /* defensive fallback; HR is normalized in the onChange handlers */
+    return { lo: lo, hi: hi };
+}
+
+///
+/// Corrects HR[101]/HR[102] in place when the client writes a misordered pair,
+/// so the registers immediately reflect valid setpoints.
+///
+function normalizeThresholds()
+{
+    var lo = Server.readHolding(101, deviceId);
+    var hi = Server.readHolding(102, deviceId);
+    if(lo > hi)
+    {
+        Server.writeHolding(101, 100, deviceId);
+        Server.writeHolding(102, 900, deviceId);
+    }
 }
 
 function makeHoldingHandler(addr)
@@ -90,7 +115,8 @@ function makeCoilHandler(addr)
     return function(value) {
         updateStat(name, value ? 1 : 0);
         var lvl = getLogLevel();
-        if(lvl === 2) return;
+        /* lvl 1 = out-of-range only (not applicable to coils), lvl 2 = stats only */
+        if(lvl >= 1) return;
         console.log(timestamp() + "  " + name + " = " + (value ? "ON" : "OFF"));
     };
 }
@@ -133,9 +159,11 @@ function init()
     });
     Server.onChange(deviceId, Register.Holding, 101, function(val) {
         console.log("Low threshold set to "  + val);
+        normalizeThresholds();
     });
     Server.onChange(deviceId, Register.Holding, 102, function(val) {
         console.log("High threshold set to " + val);
+        normalizeThresholds();
     });
 
     /* Print statistics every 30 seconds */

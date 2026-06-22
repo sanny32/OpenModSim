@@ -4,10 +4,10 @@
 /* Simulates a simple PLC with digital/analog inputs and outputs
 /*
 /* Coils (outputs, writable by client):
-/*   Coil[1]  - Motor Start command
-/*   Coil[2]  - Motor Stop command
-/*   Coil[3]  - Pump Enable
-/*   Coil[4]  - Alarm Reset
+/*   Coil[1]  - Motor Start command (momentary, auto-cleared)
+/*   Coil[2]  - Motor Stop command  (momentary, auto-cleared; priority over Start)
+/*   Coil[3]  - Pump Enable         (level signal)
+/*   Coil[4]  - Alarm Reset         (momentary, auto-cleared)
 /*
 /* Discrete Inputs (read-only status):
 /*   DI[1]  - Motor Running (set automatically from coils)
@@ -35,62 +35,73 @@ Server.addressBase = AddressBase.Base1;
 
 var deviceId = 1;
 
-var motorRunning  = false;
-var motorFault    = false;
-var motorRunTicks = 0;
-var actualRpm     = 0;
-var tankLevel     = 500;
-var pumpRunning   = false;
-
-var FAULT_TICKS   = 60;   /* fault after 60 ticks without stop */
+var FAULT_SECONDS = 30;   /* motor faults after running this long without a stop command */
 
 function tick()
 {
+    /* The whole script is re-run every period, so top-level variables would
+       reset on each tick. Values exposed as registers are read back from there;
+       only the internal fault timer has no register and is kept in Storage. */
+    var motorRunning  = Server.readDiscrete(1, deviceId);
+    var motorFault    = Server.readDiscrete(2, deviceId);
+    var tankLevel     = Server.readInput(1, deviceId);
+    var actualRpm     = Server.readInput(2, deviceId);
+    var motorStartMs  = Storage.getItem("motorStartMs");  /* wall-clock time the motor started, 0 if stopped */
+
     /* --- Read coil commands --- */
     var cmdStart  = Server.readCoil(1, deviceId);
     var cmdStop   = Server.readCoil(2, deviceId);
-    var cmdPump   = Server.readCoil(3, deviceId);
+    var cmdPump   = Server.readCoil(3, deviceId);  /* level signal */
     var cmdReset  = Server.readCoil(4, deviceId);
 
-    /* --- Alarm reset --- */
+    /* Start/Stop/Reset are momentary: consume them so they act as one-shot
+       pulses (a held coil must not retrigger every tick). */
+    if(cmdStart) Server.writeCoil(1, false, deviceId);
+    if(cmdStop)  Server.writeCoil(2, false, deviceId);
+    if(cmdReset) Server.writeCoil(4, false, deviceId);
+
+    /* --- Alarm reset (only meaningful while a fault is latched) --- */
+    var justReset = false;
     if(cmdReset && motorFault)
     {
         motorFault    = false;
-        motorRunning  = false;
-        motorRunTicks = 0;
+        motorStartMs  = 0;
         actualRpm     = 0;
-        Server.writeCoil(4, false, deviceId);
+        justReset     = true;
         console.log("Alarm reset");
     }
 
-    /* --- Motor logic --- */
-    if(!motorFault)
+    /* --- Motor logic: Stop has priority over Start; ignore commands on the
+           same tick as a reset so that a fresh Start is required to restart. --- */
+    if(!motorFault && !justReset)
     {
-        if(cmdStart && !motorRunning)
+        if(cmdStop)
+        {
+            if(motorRunning)
+            {
+                motorRunning = false;
+                actualRpm    = 0;
+                console.log("Motor stopped");
+            }
+            motorStartMs = 0;
+        }
+        else if(cmdStart && !motorRunning)
         {
             motorRunning = true;
-            motorRunTicks = 0;
+            motorStartMs = Date.now();
             console.log("Motor started");
-        }
-        if(cmdStop && motorRunning)
-        {
-            motorRunning  = false;
-            motorRunTicks = 0;
-            actualRpm     = 0;
-            console.log("Motor stopped");
         }
     }
 
-    if(motorRunning)
+    /* --- Fault on overrun, measured by actual elapsed time (period-independent) --- */
+    if(motorRunning && motorStartMs > 0
+        && (Date.now() - motorStartMs) >= FAULT_SECONDS * 1000)
     {
-        motorRunTicks++;
-        if(motorRunTicks >= FAULT_TICKS)
-        {
-            motorFault   = true;
-            motorRunning = false;
-            actualRpm    = 0;
-            console.warning("Motor FAULT: timeout without stop command!");
-        }
+        motorFault   = true;
+        motorRunning = false;
+        actualRpm    = 0;
+        motorStartMs = 0;
+        console.warning("Motor FAULT: timeout without stop command!");
     }
 
     /* --- Speed ramp --- */
@@ -105,12 +116,20 @@ function tick()
     else if(actualRpm > targetRpm)
         actualRpm = Math.max(actualRpm - ramp, targetRpm);
 
-    /* --- Pump logic --- */
-    pumpRunning = cmdPump && !motorFault;
+    /* --- Pump logic (derived each tick, no need to persist) --- */
+    var pumpRunning = cmdPump && !motorFault;
 
     /* --- Tank level simulation --- */
     var hiLevel = Server.readHolding(1, deviceId);
     var loLevel = Server.readHolding(2, deviceId);
+    if(loLevel >= hiLevel)   /* keep thresholds ordered, otherwise both alarms could latch */
+    {
+        hiLevel = 800;
+        loLevel = 200;
+        /* Correct the registers too, so the client sees the valid setpoints */
+        Server.writeHolding(1, hiLevel, deviceId);
+        Server.writeHolding(2, loLevel, deviceId);
+    }
 
     /* Pump drains tank, time fills it slowly */
     if(pumpRunning)
@@ -145,10 +164,21 @@ function tick()
     Server.writeInput(2, actualRpm,     deviceId);
     Server.writeInput(3, motorCurrent,  deviceId);
     Server.writeInput(4, pumpFlow,      deviceId);
+
+    /* --- Persist the internal fault timer (everything else lives in registers) --- */
+    Storage.setItem("motorStartMs", motorStartMs);
 }
 
 function init()
 {
+    /* Seed initial state: registers are the source of truth, the internal
+       fault timer lives in Storage */
+    Server.writeDiscrete(1, false, deviceId);  /* motor running */
+    Server.writeDiscrete(2, false, deviceId);  /* motor fault   */
+    Server.writeInput(1, 500, deviceId);        /* tank level    */
+    Server.writeInput(2, 0,   deviceId);        /* actual rpm    */
+    Storage.setItem("motorStartMs", 0);
+
     /* Default setpoints */
     Server.writeHolding(1, 800, deviceId);  /* high level */
     Server.writeHolding(2, 200, deviceId);  /* low level  */

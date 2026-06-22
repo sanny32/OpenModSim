@@ -4,18 +4,18 @@
 /* Demonstrates various counter types in Holding Registers
 /*
 /* Register map (Base1):
-/*   HR[1]  - Up counter        (counts up from 0, wraps at HR[5])
-/*   HR[2]  - Down counter      (counts down from HR[6] to 0, reloads)
+/*   HR[1]  - Up counter        (counts up from 0, wraps modulo HR[5], keeps remainder)
+/*   HR[2]  - Down counter      (counts down from HR[6], reloads to HR[6] when it reaches or passes 0)
 /*   HR[3]  - Up/Down counter   (direction from Coil[1]: ON=up, OFF=down)
 /*   HR[4]  - Free-running      (always 0..65535, wraps)
 /*   HR[5]  - Up counter limit  (writable, default=100)
 /*   HR[6]  - Down counter preset (writable, default=50)
 /*   HR[7]  - Step size         (writable, default=1)
-/*   HR[8]  - Tick count        (total ticks since start)
+/*   HR[8]  - Tick count        (total ticks since start, keeps running on pause)
 /*
 /* Coils:
 /*   Coil[1] - Up/Down counter direction (ON=up, OFF=down)
-/*   Coil[2] - Pause all counters
+/*   Coil[2] - Pause value counters HR[1..4] (tick count HR[8] keeps running)
 /*   Coil[3] - Reset all counters to initial values
 /*
 /* Discrete Inputs (status flags):
@@ -31,51 +31,67 @@ Server.addressBase = AddressBase.Base1;
 
 var deviceId = 1;
 
-var upVal    = 0;
-var downVal  = 0;
-var udVal    = 0;
-var freeVal  = 0;
-var tickCount = 0;
-
-var upOverflow  = false;
-var downUnder   = false;
-
 function reset()
 {
     var preset = Server.readHolding(6, deviceId);
     if(preset <= 0 || preset > 65535) preset = 50;
 
-    upVal    = 0;
-    downVal  = preset;
-    udVal    = 0;
-    freeVal  = 0;
-    tickCount = 0;
-
-    upOverflow = false;
-    downUnder  = false;
+    /* The counters live in their Holding registers, so reset writes them there.
+       The whole script is re-run every period, so plain top-level variables
+       would not persist - the registers are the source of truth. */
+    Server.writeHolding(1, 0,      deviceId);
+    Server.writeHolding(2, preset, deviceId);
+    Server.writeHolding(3, 0,      deviceId);
+    Server.writeHolding(4, 0,      deviceId);
+    Server.writeHolding(8, 0,      deviceId);
 
     console.log("Counters reset. Down counter preset=" + preset);
+}
+
+///
+/// Writes the status flags. The overflow/underflow flags are one-tick pulses,
+/// so they must be refreshed (and cleared) on every tick, including the early
+/// return paths, otherwise a pulse could stay latched.
+///
+function writeStatusFlags(upOverflow, downUnder, dirUp)
+{
+    Server.writeDiscrete(1, upOverflow, deviceId);
+    Server.writeDiscrete(2, downUnder,  deviceId);
+    Server.writeDiscrete(3, dirUp,      deviceId);
 }
 
 function tick()
 {
     var pause  = Server.readCoil(2, deviceId);
     var doReset = Server.readCoil(3, deviceId);
+    var dirUp  = Server.readCoil(1, deviceId);  /* true=up, false=down */
 
     if(doReset)
     {
         reset();
         Server.writeCoil(3, false, deviceId);
+        writeStatusFlags(false, false, dirUp);
         return;
     }
 
-    tickCount++;
+    /* --- Load counters from the registers they live in --- */
+    var upVal   = Server.readHolding(1, deviceId);
+    var downVal = Server.readHolding(2, deviceId);
+    var udVal   = Server.readHolding(3, deviceId);
+    var freeVal = Server.readHolding(4, deviceId);
+
+    var tickCount = (Server.readHolding(8, deviceId) + 1) & 0xFFFF;
+    Server.writeHolding(8, tickCount, deviceId);
 
     if(pause)
     {
         console.debug("Paused (Coil[2]=ON). Tick " + tickCount + " skipped.");
+        writeStatusFlags(false, false, dirUp);
         return;
     }
+
+    var upOverflow = false;
+    var downUnder  = false;
 
     var limit  = Server.readHolding(5, deviceId);
     if(limit <= 0 || limit > 65535) limit = 100;
@@ -86,20 +102,16 @@ function tick()
     var step   = Server.readHolding(7, deviceId);
     if(step <= 0 || step > 1000) step = 1;
 
-    var dirUp  = Server.readCoil(1, deviceId);  /* true=up, false=down */
-
-    /* --- Up counter --- */
-    upOverflow = false;
+    /* --- Up counter (wraps modulo limit, keeping the remainder) --- */
     upVal += step;
     if(upVal >= limit)
     {
-        upVal = 0;
+        upVal %= limit;
         upOverflow = true;
         console.log("Up counter overflow (limit=" + limit + ")");
     }
 
     /* --- Down counter --- */
-    downUnder = false;
     downVal -= step;
     if(downVal <= 0)
     {
@@ -117,17 +129,14 @@ function tick()
     /* --- Free-running 16-bit counter --- */
     freeVal = (freeVal + step) & 0xFFFF;
 
-    /* --- Write registers --- */
+    /* --- Write registers (the counters' source of truth) --- */
     Server.writeHolding(1, upVal,    deviceId);
     Server.writeHolding(2, downVal,  deviceId);
     Server.writeHolding(3, udVal,    deviceId);
     Server.writeHolding(4, freeVal,  deviceId);
-    Server.writeHolding(8, tickCount & 0xFFFF, deviceId);
 
     /* --- Write status flags --- */
-    Server.writeDiscrete(1, upOverflow, deviceId);
-    Server.writeDiscrete(2, downUnder,  deviceId);
-    Server.writeDiscrete(3, dirUp,      deviceId);
+    writeStatusFlags(upOverflow, downUnder, dirUp);
 }
 
 function init()
