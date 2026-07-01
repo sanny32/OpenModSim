@@ -1150,13 +1150,13 @@ Open the download page?</source>
     </message>
     <message>
         <location filename="../../dialogs/dialogpreferences.ui" line="320"/>
-        <location filename="../../dialogs/dialogpreferences.ui" line="657"/>
+        <location filename="../../dialogs/dialogpreferences.ui" line="673"/>
         <source>Font</source>
         <translation>Шрифт</translation>
     </message>
     <message>
         <location filename="../../dialogs/dialogpreferences.ui" line="357"/>
-        <location filename="../../dialogs/dialogpreferences.ui" line="694"/>
+        <location filename="../../dialogs/dialogpreferences.ui" line="710"/>
         <source>Size:</source>
         <translation>Размер:</translation>
     </message>
@@ -1171,23 +1171,33 @@ Open the download page?</source>
         <translation>Ведущие нули для беззнаковых</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogpreferences.ui" line="760"/>
+        <location filename="../../dialogs/dialogpreferences.ui" line="531"/>
+        <source>Project File</source>
+        <translation>Файл проекта</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogpreferences.ui" line="537"/>
+        <source>Save all modified registers</source>
+        <translation>Сохранять все измененные регистры</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogpreferences.ui" line="776"/>
         <source>Console</source>
         <translation>Консоль</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogpreferences.ui" line="772"/>
+        <location filename="../../dialogs/dialogpreferences.ui" line="788"/>
         <source>Console Output Limit:</source>
         <translation>Ограничение вывода консоли:</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogpreferences.ui" line="810"/>
+        <location filename="../../dialogs/dialogpreferences.ui" line="826"/>
         <source>Automatically show output console</source>
         <translation>Автоматически показывать консоль вывода</translation>
     </message>
     <message>
         <location filename="../../dialogs/dialogpreferences.ui" line="335"/>
-        <location filename="../../dialogs/dialogpreferences.ui" line="672"/>
+        <location filename="../../dialogs/dialogpreferences.ui" line="688"/>
         <source>Family:</source>
         <translation>Семейство:</translation>
     </message>
@@ -1208,7 +1218,7 @@ Open the download page?</source>
     </message>
     <message>
         <location filename="../../dialogs/dialogpreferences.ui" line="432"/>
-        <location filename="../../dialogs/dialogpreferences.ui" line="728"/>
+        <location filename="../../dialogs/dialogpreferences.ui" line="744"/>
         <source>Antialias</source>
         <translation>Сглаживание</translation>
     </message>
@@ -1218,12 +1228,12 @@ Open the download page?</source>
         <translation>Расстояние между столбцами:</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogpreferences.ui" line="543"/>
+        <location filename="../../dialogs/dialogpreferences.ui" line="559"/>
         <source>Autoscroll</source>
         <translation>Автопрокрутка</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogpreferences.ui" line="550"/>
+        <location filename="../../dialogs/dialogpreferences.ui" line="566"/>
         <source>Log View Limit:</source>
         <translation>Лимит лога:</translation>
     </message>
@@ -1238,22 +1248,22 @@ Open the download page?</source>
         <translation>Данные</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogpreferences.ui" line="531"/>
+        <location filename="../../dialogs/dialogpreferences.ui" line="547"/>
         <source>Traffic View</source>
         <translation>Просмотр трафика</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogpreferences.ui" line="625"/>
+        <location filename="../../dialogs/dialogpreferences.ui" line="641"/>
         <source>&lt;b&gt;Note:&lt;/b&gt; These settings apply to newly opened windows only.</source>
         <translation>&lt;b&gt;Примечание:&lt;/b&gt; Эти настройки применяются только к новым окнам.</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogpreferences.ui" line="738"/>
+        <location filename="../../dialogs/dialogpreferences.ui" line="754"/>
         <source>Editor</source>
         <translation>Редактор</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogpreferences.ui" line="750"/>
+        <location filename="../../dialogs/dialogpreferences.ui" line="766"/>
         <source>Enable code auto-complete</source>
         <translation>Включить автодополнение кода</translation>
     </message>
@@ -1820,74 +1830,74 @@ Open the download page?</source>
     </message>
     <message>
         <location filename="../../formdatamapview.ui" line="88"/>
-        <location filename="../../formdatamapview.cpp" line="1454"/>
+        <location filename="../../formdatamapview.cpp" line="1483"/>
         <source>Clear Table</source>
         <translation>Очистить таблицу</translation>
     </message>
     <message>
-        <location filename="../../formdatamapview.cpp" line="1455"/>
+        <location filename="../../formdatamapview.cpp" line="1484"/>
         <source>Clear all visible rows from the table?</source>
         <translation>Удалить все видимые строки из таблицы?</translation>
     </message>
     <message>
-        <location filename="../../formdatamapview.cpp" line="987"/>
+        <location filename="../../formdatamapview.cpp" line="1016"/>
         <source>1-based</source>
         <translation>1-первый</translation>
     </message>
     <message>
-        <location filename="../../formdatamapview.cpp" line="987"/>
+        <location filename="../../formdatamapview.cpp" line="1016"/>
         <source>0-based</source>
         <translation>0-первый</translation>
     </message>
     <message>
-        <location filename="../../formdatamapview.cpp" line="916"/>
+        <location filename="../../formdatamapview.cpp" line="945"/>
         <source>Remove Color</source>
         <translation>Удалить цвет</translation>
     </message>
     <message>
-        <location filename="../../formdatamapview.cpp" line="927"/>
+        <location filename="../../formdatamapview.cpp" line="956"/>
         <source>Yellow</source>
         <translation>Желтый</translation>
     </message>
     <message>
-        <location filename="../../formdatamapview.cpp" line="928"/>
+        <location filename="../../formdatamapview.cpp" line="957"/>
         <source>Cyan</source>
         <translation>Циан</translation>
     </message>
     <message>
-        <location filename="../../formdatamapview.cpp" line="929"/>
+        <location filename="../../formdatamapview.cpp" line="958"/>
         <source>Magenta</source>
         <translation>Пурпурный</translation>
     </message>
     <message>
-        <location filename="../../formdatamapview.cpp" line="930"/>
+        <location filename="../../formdatamapview.cpp" line="959"/>
         <source>LightGreen</source>
         <translation>Светло-зеленый</translation>
     </message>
     <message>
-        <location filename="../../formdatamapview.cpp" line="931"/>
+        <location filename="../../formdatamapview.cpp" line="960"/>
         <source>Orange</source>
         <translation>Оранжевый</translation>
     </message>
     <message>
-        <location filename="../../formdatamapview.cpp" line="932"/>
+        <location filename="../../formdatamapview.cpp" line="961"/>
         <source>LightBlue</source>
         <translation>Светло-синий</translation>
     </message>
     <message>
-        <location filename="../../formdatamapview.cpp" line="933"/>
+        <location filename="../../formdatamapview.cpp" line="962"/>
         <source>LightGray</source>
         <translation>Светло-серый</translation>
     </message>
     <message>
-        <location filename="../../formdatamapview.cpp" line="1000"/>
-        <location filename="../../formdatamapview.cpp" line="1224"/>
-        <location filename="../../formdatamapview.cpp" line="1557"/>
+        <location filename="../../formdatamapview.cpp" line="1029"/>
+        <location filename="../../formdatamapview.cpp" line="1253"/>
+        <location filename="../../formdatamapview.cpp" line="1586"/>
         <source>All Types</source>
         <translation>Все типы</translation>
     </message>
     <message>
-        <location filename="../../formdatamapview.cpp" line="1002"/>
+        <location filename="../../formdatamapview.cpp" line="1031"/>
         <source>Address Base: %1
 Unit Filter: %2
 Type Filter: %3</source>
@@ -1896,45 +1906,45 @@ Type Filter: %3</source>
 Фильтр типов: %3</translation>
     </message>
     <message>
-        <location filename="../../formdatamapview.cpp" line="1225"/>
-        <location filename="../../formdatamapview.cpp" line="1558"/>
+        <location filename="../../formdatamapview.cpp" line="1254"/>
+        <location filename="../../formdatamapview.cpp" line="1587"/>
         <source>Coils</source>
         <translation>Регистры флагов</translation>
     </message>
     <message>
-        <location filename="../../formdatamapview.cpp" line="1226"/>
-        <location filename="../../formdatamapview.cpp" line="1559"/>
+        <location filename="../../formdatamapview.cpp" line="1255"/>
+        <location filename="../../formdatamapview.cpp" line="1588"/>
         <source>Discrete Inputs</source>
         <translation>Дискретные входы</translation>
     </message>
     <message>
-        <location filename="../../formdatamapview.cpp" line="1227"/>
-        <location filename="../../formdatamapview.cpp" line="1560"/>
+        <location filename="../../formdatamapview.cpp" line="1256"/>
+        <location filename="../../formdatamapview.cpp" line="1589"/>
         <source>Input Registers</source>
         <translation>Регистры ввода</translation>
     </message>
     <message>
-        <location filename="../../formdatamapview.cpp" line="1228"/>
-        <location filename="../../formdatamapview.cpp" line="1561"/>
+        <location filename="../../formdatamapview.cpp" line="1257"/>
+        <location filename="../../formdatamapview.cpp" line="1590"/>
         <source>Holding Registers</source>
         <translation>Регистры хранения</translation>
     </message>
     <message>
-        <location filename="../../formdatamapview.cpp" line="1216"/>
-        <location filename="../../formdatamapview.cpp" line="1568"/>
+        <location filename="../../formdatamapview.cpp" line="1245"/>
+        <location filename="../../formdatamapview.cpp" line="1597"/>
         <source>Unit:</source>
         <translation>Устройство:</translation>
     </message>
     <message>
-        <location filename="../../formdatamapview.cpp" line="1217"/>
-        <location filename="../../formdatamapview.cpp" line="1569"/>
+        <location filename="../../formdatamapview.cpp" line="1246"/>
+        <location filename="../../formdatamapview.cpp" line="1598"/>
         <source>Data Type:</source>
         <translation>Тип данных:</translation>
     </message>
     <message>
-        <location filename="../../formdatamapview.cpp" line="989"/>
-        <location filename="../../formdatamapview.cpp" line="1218"/>
-        <location filename="../../formdatamapview.cpp" line="1553"/>
+        <location filename="../../formdatamapview.cpp" line="1018"/>
+        <location filename="../../formdatamapview.cpp" line="1247"/>
+        <location filename="../../formdatamapview.cpp" line="1582"/>
         <source>All</source>
         <translation>Все</translation>
     </message>
@@ -3946,7 +3956,7 @@ Open the download page?</source>
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../../appproject.cpp" line="2198"/>
+        <location filename="../../appproject.cpp" line="2283"/>
         <source>Failed to write project XML.</source>
         <translation>Не удалось записать XML-файл проекта.</translation>
     </message>

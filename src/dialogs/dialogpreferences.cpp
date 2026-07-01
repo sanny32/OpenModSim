@@ -204,6 +204,7 @@ void DialogPreferences::loadFromPreferences()
     ui->spinBoxColumnsDistance->setValue(dataDd.DataViewColumnsDistance);
     ui->spinBoxLogLimit->setValue(trafficDd.LogViewLimit);
     ui->checkBoxAutoscrollLog->setChecked(trafficDd.Autoscroll);
+    ui->checkBoxSaveAllModifiedRegisters->setChecked(prefs.saveAllModifiedRegisters());
 
     // Script - font
     const QFont& sf = prefs.scriptFont();
@@ -282,6 +283,7 @@ void DialogPreferences::apply()
     prefs.setDataViewDefinitions(dataDd);
     prefs.setTrafficViewDefinitions(trafficDd);
     prefs.setScriptViewDefinitions(scriptDd);
+    prefs.setSaveAllModifiedRegisters(ui->checkBoxSaveAllModifiedRegisters->isChecked());
 
     // Script - font
     const QFont scriptFont = fontFromControls(ui->fontComboBoxScriptFont, ui->spinBoxScriptFontSize, ui->checkBoxScriptFontAntialias);

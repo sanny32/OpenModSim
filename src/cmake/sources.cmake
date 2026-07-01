@@ -99,6 +99,8 @@ set(SOURCES
     modbusserver.cpp
     modbustcpserver.cpp
 
+    projectaddressspacefilter.cpp
+
     qadjustedsizedialog.cpp
     qdoublevalidatorex.cpp
     qhexvalidator.cpp
@@ -258,6 +260,7 @@ set(HEADERS
 
     numericutils.h
     pch.h
+    projectaddressspacefilter.h
     qadjustedsizedialog.h
     qcountedset.h
     qdoublevalidatorex.h

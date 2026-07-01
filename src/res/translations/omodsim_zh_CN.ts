@@ -1150,13 +1150,13 @@ Open the download page?</source>
     </message>
     <message>
         <location filename="../../dialogs/dialogpreferences.ui" line="320"/>
-        <location filename="../../dialogs/dialogpreferences.ui" line="657"/>
+        <location filename="../../dialogs/dialogpreferences.ui" line="673"/>
         <source>Font</source>
         <translation>字体</translation>
     </message>
     <message>
         <location filename="../../dialogs/dialogpreferences.ui" line="357"/>
-        <location filename="../../dialogs/dialogpreferences.ui" line="694"/>
+        <location filename="../../dialogs/dialogpreferences.ui" line="710"/>
         <source>Size:</source>
         <translation>大小：</translation>
     </message>
@@ -1171,23 +1171,33 @@ Open the download page?</source>
         <translation>无符号数前导零</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogpreferences.ui" line="760"/>
+        <location filename="../../dialogs/dialogpreferences.ui" line="531"/>
+        <source>Project File</source>
+        <translation>项目文件</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogpreferences.ui" line="537"/>
+        <source>Save all modified registers</source>
+        <translation>保存所有已修改的寄存器</translation>
+    </message>
+    <message>
+        <location filename="../../dialogs/dialogpreferences.ui" line="776"/>
         <source>Console</source>
         <translation>控制台</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogpreferences.ui" line="772"/>
+        <location filename="../../dialogs/dialogpreferences.ui" line="788"/>
         <source>Console Output Limit:</source>
         <translation>控制台输出限制：</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogpreferences.ui" line="810"/>
+        <location filename="../../dialogs/dialogpreferences.ui" line="826"/>
         <source>Automatically show output console</source>
         <translation>自动显示输出控制台</translation>
     </message>
     <message>
         <location filename="../../dialogs/dialogpreferences.ui" line="335"/>
-        <location filename="../../dialogs/dialogpreferences.ui" line="672"/>
+        <location filename="../../dialogs/dialogpreferences.ui" line="688"/>
         <source>Family:</source>
         <translation>字体族：</translation>
     </message>
@@ -1208,7 +1218,7 @@ Open the download page?</source>
     </message>
     <message>
         <location filename="../../dialogs/dialogpreferences.ui" line="432"/>
-        <location filename="../../dialogs/dialogpreferences.ui" line="728"/>
+        <location filename="../../dialogs/dialogpreferences.ui" line="744"/>
         <source>Antialias</source>
         <translation>抗锯齿</translation>
     </message>
@@ -1218,12 +1228,12 @@ Open the download page?</source>
         <translation>列间距：</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogpreferences.ui" line="543"/>
+        <location filename="../../dialogs/dialogpreferences.ui" line="559"/>
         <source>Autoscroll</source>
         <translation>自动滚动</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogpreferences.ui" line="550"/>
+        <location filename="../../dialogs/dialogpreferences.ui" line="566"/>
         <source>Log View Limit:</source>
         <translation>日志限制：</translation>
     </message>
@@ -1238,22 +1248,22 @@ Open the download page?</source>
         <translation>数据视图</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogpreferences.ui" line="531"/>
+        <location filename="../../dialogs/dialogpreferences.ui" line="547"/>
         <source>Traffic View</source>
         <translation>流量视图</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogpreferences.ui" line="625"/>
+        <location filename="../../dialogs/dialogpreferences.ui" line="641"/>
         <source>&lt;b&gt;Note:&lt;/b&gt; These settings apply to newly opened windows only.</source>
         <translation>&lt;b&gt;注意：&lt;/b&gt;这些设置仅适用于新打开的窗口。</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogpreferences.ui" line="738"/>
+        <location filename="../../dialogs/dialogpreferences.ui" line="754"/>
         <source>Editor</source>
         <translation>编辑器</translation>
     </message>
     <message>
-        <location filename="../../dialogs/dialogpreferences.ui" line="750"/>
+        <location filename="../../dialogs/dialogpreferences.ui" line="766"/>
         <source>Enable code auto-complete</source>
         <translation>启用代码自动补全</translation>
     </message>
@@ -1820,74 +1830,74 @@ Open the download page?</source>
     </message>
     <message>
         <location filename="../../formdatamapview.ui" line="88"/>
-        <location filename="../../formdatamapview.cpp" line="1454"/>
+        <location filename="../../formdatamapview.cpp" line="1483"/>
         <source>Clear Table</source>
         <translation>清除表格</translation>
     </message>
     <message>
-        <location filename="../../formdatamapview.cpp" line="1455"/>
+        <location filename="../../formdatamapview.cpp" line="1484"/>
         <source>Clear all visible rows from the table?</source>
         <translation>是否清除表格中所有可见行？</translation>
     </message>
     <message>
-        <location filename="../../formdatamapview.cpp" line="987"/>
+        <location filename="../../formdatamapview.cpp" line="1016"/>
         <source>1-based</source>
         <translation>基地址为-1</translation>
     </message>
     <message>
-        <location filename="../../formdatamapview.cpp" line="987"/>
+        <location filename="../../formdatamapview.cpp" line="1016"/>
         <source>0-based</source>
         <translation>基地址为-0</translation>
     </message>
     <message>
-        <location filename="../../formdatamapview.cpp" line="916"/>
+        <location filename="../../formdatamapview.cpp" line="945"/>
         <source>Remove Color</source>
         <translation>去除颜色</translation>
     </message>
     <message>
-        <location filename="../../formdatamapview.cpp" line="927"/>
+        <location filename="../../formdatamapview.cpp" line="956"/>
         <source>Yellow</source>
         <translation>黄色</translation>
     </message>
     <message>
-        <location filename="../../formdatamapview.cpp" line="928"/>
+        <location filename="../../formdatamapview.cpp" line="957"/>
         <source>Cyan</source>
         <translation>青色</translation>
     </message>
     <message>
-        <location filename="../../formdatamapview.cpp" line="929"/>
+        <location filename="../../formdatamapview.cpp" line="958"/>
         <source>Magenta</source>
         <translation>品红色</translation>
     </message>
     <message>
-        <location filename="../../formdatamapview.cpp" line="930"/>
+        <location filename="../../formdatamapview.cpp" line="959"/>
         <source>LightGreen</source>
         <translation>浅绿色</translation>
     </message>
     <message>
-        <location filename="../../formdatamapview.cpp" line="931"/>
+        <location filename="../../formdatamapview.cpp" line="960"/>
         <source>Orange</source>
         <translation>橙色</translation>
     </message>
     <message>
-        <location filename="../../formdatamapview.cpp" line="932"/>
+        <location filename="../../formdatamapview.cpp" line="961"/>
         <source>LightBlue</source>
         <translation>浅蓝色</translation>
     </message>
     <message>
-        <location filename="../../formdatamapview.cpp" line="933"/>
+        <location filename="../../formdatamapview.cpp" line="962"/>
         <source>LightGray</source>
         <translation>浅灰色</translation>
     </message>
     <message>
-        <location filename="../../formdatamapview.cpp" line="1000"/>
-        <location filename="../../formdatamapview.cpp" line="1224"/>
-        <location filename="../../formdatamapview.cpp" line="1557"/>
+        <location filename="../../formdatamapview.cpp" line="1029"/>
+        <location filename="../../formdatamapview.cpp" line="1253"/>
+        <location filename="../../formdatamapview.cpp" line="1586"/>
         <source>All Types</source>
         <translation>所有类型</translation>
     </message>
     <message>
-        <location filename="../../formdatamapview.cpp" line="1002"/>
+        <location filename="../../formdatamapview.cpp" line="1031"/>
         <source>Address Base: %1
 Unit Filter: %2
 Type Filter: %3</source>
@@ -1896,45 +1906,45 @@ Type Filter: %3</source>
 类型过滤器：%3</translation>
     </message>
     <message>
-        <location filename="../../formdatamapview.cpp" line="1225"/>
-        <location filename="../../formdatamapview.cpp" line="1558"/>
+        <location filename="../../formdatamapview.cpp" line="1254"/>
+        <location filename="../../formdatamapview.cpp" line="1587"/>
         <source>Coils</source>
         <translation>线圈</translation>
     </message>
     <message>
-        <location filename="../../formdatamapview.cpp" line="1226"/>
-        <location filename="../../formdatamapview.cpp" line="1559"/>
+        <location filename="../../formdatamapview.cpp" line="1255"/>
+        <location filename="../../formdatamapview.cpp" line="1588"/>
         <source>Discrete Inputs</source>
         <translation>离散输入</translation>
     </message>
     <message>
-        <location filename="../../formdatamapview.cpp" line="1227"/>
-        <location filename="../../formdatamapview.cpp" line="1560"/>
+        <location filename="../../formdatamapview.cpp" line="1256"/>
+        <location filename="../../formdatamapview.cpp" line="1589"/>
         <source>Input Registers</source>
         <translation>输入寄存器</translation>
     </message>
     <message>
-        <location filename="../../formdatamapview.cpp" line="1228"/>
-        <location filename="../../formdatamapview.cpp" line="1561"/>
+        <location filename="../../formdatamapview.cpp" line="1257"/>
+        <location filename="../../formdatamapview.cpp" line="1590"/>
         <source>Holding Registers</source>
         <translation>保持寄存器</translation>
     </message>
     <message>
-        <location filename="../../formdatamapview.cpp" line="1216"/>
-        <location filename="../../formdatamapview.cpp" line="1568"/>
+        <location filename="../../formdatamapview.cpp" line="1245"/>
+        <location filename="../../formdatamapview.cpp" line="1597"/>
         <source>Unit:</source>
         <translation>单元：</translation>
     </message>
     <message>
-        <location filename="../../formdatamapview.cpp" line="1217"/>
-        <location filename="../../formdatamapview.cpp" line="1569"/>
+        <location filename="../../formdatamapview.cpp" line="1246"/>
+        <location filename="../../formdatamapview.cpp" line="1598"/>
         <source>Data Type:</source>
         <translation>数据类型：</translation>
     </message>
     <message>
-        <location filename="../../formdatamapview.cpp" line="989"/>
-        <location filename="../../formdatamapview.cpp" line="1218"/>
-        <location filename="../../formdatamapview.cpp" line="1553"/>
+        <location filename="../../formdatamapview.cpp" line="1018"/>
+        <location filename="../../formdatamapview.cpp" line="1247"/>
+        <location filename="../../formdatamapview.cpp" line="1582"/>
         <source>All</source>
         <translation>全部</translation>
     </message>
@@ -3946,7 +3956,7 @@ Open the download page?</source>
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../../appproject.cpp" line="2198"/>
+        <location filename="../../appproject.cpp" line="2283"/>
         <source>Failed to write project XML.</source>
         <translation>项目 XML 写入失败。</translation>
     </message>

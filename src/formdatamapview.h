@@ -22,6 +22,7 @@
 #include "enums.h"
 #include "displaydefinition.h"
 #include "datamapdatamodel.h"
+#include "projectaddressspacefilter.h"
 
 class MainWindow;
 
@@ -56,6 +57,7 @@ public:
     bool isAutoRequestMap() const { return _autoRequestMap; }
     void setAutoRequestMap(bool value);
     bool isEmpty() const { return !_proxy || _proxy->rowCount() <= 0; }
+    ProjectAddressSpaceRanges addressSpaceRanges() const;
     void print(QPrinter* printer);
 
     void saveXml(QXmlStreamWriter& xml) const;

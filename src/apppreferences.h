@@ -81,6 +81,9 @@ public:
     bool globalHexView() const { return _globalHexView; }
     void setGlobalHexView(bool value);
 
+    bool saveAllModifiedRegisters() const { return _saveAllModifiedRegisters; }
+    void setSaveAllModifiedRegisters(bool value);
+
     // ----- Script Editor -----
     QFont scriptFont() const { return _scriptFont; }
     void setScriptFont(const QFont& f);
@@ -129,6 +132,7 @@ private:
     ScriptViewDefinitions _scriptViewDefinitions;
     AddressBase   _globalAddressBase{ AddressBase::Base1 };
     bool          _globalHexView{ false };
+    bool          _saveAllModifiedRegisters{ false };
     QFont         _scriptFont;
     bool          _codeAutoComplete{ true };
     bool          _autoShowConsoleOutput{ true };

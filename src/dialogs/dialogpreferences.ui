@@ -526,6 +526,22 @@
               </widget>
              </item>
              <item>
+              <widget class="QGroupBox" name="groupBoxProjectFile">
+               <property name="title">
+                <string>Project File</string>
+               </property>
+               <layout class="QVBoxLayout" name="verticalLayoutProjectFile">
+                <item>
+                 <widget class="QCheckBox" name="checkBoxSaveAllModifiedRegisters">
+                  <property name="text">
+                   <string>Save all modified registers</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </widget>
+             </item>
+             <item>
               <widget class="QGroupBox" name="groupBoxLogView">
                <property name="title">
                 <string>Traffic View</string>

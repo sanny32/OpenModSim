@@ -6,12 +6,15 @@
 /// \brief Implements the appproject functionality.
 ///
 
-#include <QtWidgets>
+#include <algorithm>
+#include <utility>
+
 #include <QBuffer>
-#include <QUuid>
 #include <QSet>
 #include <QTextDocument>
-#include <algorithm>
+#include <QUuid>
+#include <QtWidgets>
+
 #include "apppreferences.h"
 #include "appproject.h"
 #include "mainwindow.h"
@@ -22,6 +25,7 @@
 #include "formdataview.h"
 #include "formtrafficview.h"
 #include "formscriptview.h"
+#include "projectaddressspacefilter.h"
 #include "uiutils.h"
 #include "apptrace.h"
 
@@ -86,6 +90,65 @@ QString mdiExState(const MdiAreaEx* mdi)
         .arg(panelName(mdi, mdi->activePanel()))
         .arg(AppTrace::mdiAreaState(mdi->primaryArea()))
         .arg(AppTrace::mdiAreaState(mdi->secondaryArea()));
+}
+
+///
+/// \brief containsProjectAddressSpaceValue
+/// \param values
+/// \param key
+/// \return
+///
+bool containsProjectAddressSpaceValue(const ProjectAddressSpaceValues& values, const ItemMapKey& key)
+{
+    return std::any_of(values.constBegin(), values.constEnd(), [&key](const ProjectAddressSpaceValue& value) {
+        return value.Key.DeviceId == key.DeviceId &&
+               value.Key.Type == key.Type &&
+               value.Key.Address == key.Address;
+    });
+}
+
+///
+/// \brief appendProjectAddressSpaceValues
+/// \param values
+/// \param mbServer
+/// \param range
+///
+void appendProjectAddressSpaceValues(ProjectAddressSpaceValues& values,
+                                     ModbusMultiServer& mbServer,
+                                     const ProjectAddressSpaceRange& range)
+{
+    if (range.Length == 0)
+        return;
+
+    const auto unit = mbServer.data(range.DeviceId, range.Type, range.StartAddress, range.Length);
+    quint16 address = range.StartAddress;
+    for (const auto value : unit.values()) {
+        const ItemMapKey key = { range.DeviceId, range.Type, address };
+        if (value != 0 && !containsProjectAddressSpaceValue(values, key))
+            values.append({ key, value });
+        address++;
+    }
+}
+
+///
+/// \brief appendProjectAddressSpaceMetadata
+/// \param descriptions
+/// \param timestamps
+/// \param mbServer
+/// \param range
+///
+void appendProjectAddressSpaceMetadata(AddressDescriptionMap& descriptions,
+                                       AddressTimestampMap& timestamps,
+                                       ModbusMultiServer& mbServer,
+                                       const ProjectAddressSpaceRange& range)
+{
+    const auto rangeDescriptions = mbServer.descriptionMap(range.DeviceId, range.Type, range.StartAddress, range.Length);
+    for (auto it = rangeDescriptions.constBegin(); it != rangeDescriptions.constEnd(); ++it)
+        descriptions.insert(it.key(), it.value());
+
+    const auto rangeTimestamps = mbServer.timestampMap(range.DeviceId, range.Type, range.StartAddress, range.Length);
+    for (auto it = rangeTimestamps.constBegin(); it != rangeTimestamps.constEnd(); ++it)
+        timestamps.insert(it.key(), it.value());
 }
 
 ///
@@ -2058,18 +2121,54 @@ bool AppProject::saveProject(const QString& filename)
     w.writeEndElement(); // Connections
 
     {
-        const auto globalDescriptionMap = _mbServer.descriptionMap();
-        const auto globalTimestampMap = _mbServer.timestampMap();
+        ProjectAddressSpaceRanges projectRanges;
+        for (auto* widget : allProjectForms()) {
+            if (!widget || widget->property(kSplitAutoCloneProperty).toBool())
+                continue;
+
+            if (auto* dataView = qobject_cast<FormDataView*>(widget)) {
+                const auto dd = dataView->displayDefinition();
+                const auto startAddress = static_cast<quint16>(dd.PointAddress - (dataView->zeroBasedAddress() ? 0 : 1));
+                projectRanges.append({
+                    dd.DeviceId,
+                    dd.PointType,
+                    startAddress,
+                    dd.Length
+                });
+            } else if (auto* dataMap = qobject_cast<FormDataMapView*>(widget)) {
+                const auto dataMapRanges = dataMap->addressSpaceRanges();
+                for (const auto& range : dataMapRanges)
+                    projectRanges.append(range);
+            }
+        }
+
+        const auto allDescriptionMap = _mbServer.descriptionMap();
+        const auto allTimestampMap = _mbServer.timestampMap();
+        const auto allSimulationMap = _dataSimulator->simulationMap();
+        if (AppPreferences::instance().saveAllModifiedRegisters()) {
+            const auto modifiedRanges = projectAddressSpaceModifiedRanges(allDescriptionMap, allTimestampMap, allSimulationMap);
+            for (const auto& range : modifiedRanges)
+                projectRanges.append(range);
+        }
+
+        AddressDescriptionMap projectDescriptionMap;
+        AddressTimestampMap projectTimestampMap;
+        ProjectAddressSpaceValues projectValues;
+        for (const auto& range : std::as_const(projectRanges)) {
+            appendProjectAddressSpaceMetadata(projectDescriptionMap, projectTimestampMap, _mbServer, range);
+            appendProjectAddressSpaceValues(projectValues, _mbServer, range);
+        }
+
+        const auto projectSimulationMap = filterProjectAddressSimulations(allSimulationMap, projectRanges);
 
         w.writeStartElement("AddressSpace");
 
-        w << globalDescriptionMap;
-        w << globalTimestampMap;
+        w << filterProjectAddressDescriptions(projectDescriptionMap, projectRanges);
+        w << filterProjectAddressTimestamps(projectTimestampMap, projectRanges);
 
         {
-            const auto simMap = _dataSimulator->simulationMap();
             w.writeStartElement("ModbusSimulationMap");
-            for (auto it = simMap.constBegin(); it != simMap.constEnd(); ++it) {
+            for (auto it = projectSimulationMap.constBegin(); it != projectSimulationMap.constEnd(); ++it) {
                 const auto& key = it.key();
                 const auto& params = it.value();
                 if (params.Mode != SimulationMode::Off && params.Mode != SimulationMode::Disabled) {
@@ -2085,29 +2184,15 @@ bool AppProject::saveProject(const QString& filename)
         }
 
         {
-            const auto maxLen = (_mbServer.getModbusDefinitions().AddrSpace == AddressSpace::Addr6Digits)
-                                ? quint16(65535) : quint16(9999);
-            const QList<QModbusDataUnit::RegisterType> regTypes = {
-                QModbusDataUnit::Coils, QModbusDataUnit::DiscreteInputs,
-                QModbusDataUnit::InputRegisters, QModbusDataUnit::HoldingRegisters
-            };
+            const auto values = filterProjectAddressValues(projectValues, projectRanges);
             w.writeStartElement("ModbusDataValues");
-            for (const int deviceId : _mbServer.registeredDeviceIds()) {
-                for (auto regType : regTypes) {
-                    const auto unit = _mbServer.data(static_cast<quint8>(deviceId), regType, 0, maxLen);
-                    quint16 address = 0;
-                    for (const auto value : unit.values()) {
-                        if (value != 0) {
-                            w.writeStartElement("Value");
-                            w.writeAttribute("DeviceId", QString::number(deviceId));
-                            w.writeAttribute("Type", QString::number(regType));
-                            w.writeAttribute("Address", QString::number(address));
-                            w.writeCharacters(QString::number(value));
-                            w.writeEndElement(); // Value
-                        }
-                        address++;
-                    }
-                }
+            for (const auto& value : values) {
+                w.writeStartElement("Value");
+                w.writeAttribute("DeviceId", QString::number(value.Key.DeviceId));
+                w.writeAttribute("Type", QString::number(value.Key.Type));
+                w.writeAttribute("Address", QString::number(value.Key.Address));
+                w.writeCharacters(QString::number(value.Value));
+                w.writeEndElement(); // Value
             }
             w.writeEndElement(); // ModbusDataValues
         }

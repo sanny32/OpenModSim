@@ -843,6 +843,35 @@ void FormDataMapView::setHexView(bool enabled)
     _model->setHexView(enabled);
 }
 
+///
+/// \brief FormDataMapView::addressSpaceRanges
+/// \return
+///
+ProjectAddressSpaceRanges FormDataMapView::addressSpaceRanges() const
+{
+    ProjectAddressSpaceRanges result;
+    if (!_model)
+        return result;
+
+    const auto& entries = _model->entries();
+    result.reserve(entries.size());
+    for (auto it = entries.constBegin(); it != entries.constEnd(); ++it) {
+        const auto& key = it.key();
+        const auto& entry = it.value();
+        result.append({
+            key.DeviceId,
+            key.Type,
+            key.Address,
+            static_cast<quint16>(registersCount(entry.type))
+        });
+    }
+
+    return result;
+}
+
+///
+/// \brief FormDataMapView::refreshThemeDependentRowColors
+///
 void FormDataMapView::refreshThemeDependentRowColors()
 {
     if (!_model)
