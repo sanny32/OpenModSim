@@ -33,7 +33,7 @@
     <Forms>
         <FormDataView Panel="L" Title="WaveValues" DataType="UInt16" RegisterOrder="MSRF" Codepage="" ByteOrder="Direct">
             <Window Maximized="true" Minimized="false" Left="0" Top="0" Width="610" Height="331"/>
-            <DataViewDefinitions FormName="WaveValues" DeviceId="1" PointType="HoldingRegisters" PointAddress="1" Length="8" DataViewColumnsDistance="25" LeadingZeros="true"/>
+            <DataViewDefinitions DeviceId="1" PointType="HoldingRegisters" PointAddress="1" Length="8" DataViewColumnsDistance="25" LeadingZeros="true"/>
             <AddressColorMap/>
         </FormDataView>
         <FormScriptView Panel="L" Title="WaveGenerator">
@@ -41,7 +41,7 @@
             <Colors Background="#ffffff" Foreground="#000000"/>
             <Font Family="Segoe UI" Size="9" Bold="false" Italic="false"/>
             <Zoom Value="100%"/>
-            <ScriptViewDefinitions FormName="WaveGenerator">
+            <ScriptViewDefinitions>
                 <ScriptSettings Mode="Periodically" Interval="100" RunOnStartup="true"/>
             </ScriptViewDefinitions>
             <JScriptControl>
@@ -144,7 +144,7 @@ tick();
         </FormScriptView>
         <FormDataMapView Panel="L" Title="DataMap">
             <Window Maximized="true" Minimized="false" Left="0" Top="0" Width="409" Height="226"/>
-            <DataMapViewDefinitions FormName="DataMap" ZeroBasedAddress="false" HexView="false" AutoAddOnRequest="false" AutoRequestMap="false"/>
+            <DataMapViewDefinitions ZeroBasedAddress="false" HexView="false" AutoAddOnRequest="false" AutoRequestMap="false"/>
             <ColumnWidths Unit="40" Type="120" Address="70" DataType="70" Order="65" Comment="200" Value="160" Timestamp="160"/>
             <DataMap>
                 <Entry DeviceId="1" Type="4" Address="0" DataType="UInt16" Value="0"/>

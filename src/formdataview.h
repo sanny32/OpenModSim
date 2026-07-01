@@ -301,7 +301,14 @@ inline QXmlStreamWriter& operator <<(QXmlStreamWriter& xml, FormDataView* frm)
     xml.writeEndElement();
 
     const auto dd = frm->displayDefinition();
-    xml << dd;
+    xml.writeStartElement("DataViewDefinitions");
+    xml.writeAttribute("DeviceId", QString::number(dd.DeviceId));
+    xml.writeAttribute("PointType", enumToString<QModbusDataUnit::RegisterType>(dd.PointType));
+    xml.writeAttribute("PointAddress", QString::number(dd.PointAddress));
+    xml.writeAttribute("Length", QString::number(dd.Length));
+    xml.writeAttribute("DataViewColumnsDistance", QString::number(dd.DataViewColumnsDistance));
+    xml.writeAttribute("LeadingZeros", boolToString(dd.LeadingZeros));
+    xml.writeEndElement();
 
     xml << frm->colorMap();
 
@@ -328,6 +335,7 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, FormDataView* frm)
         QHash<quint16, ModbusSimulationParams> simulations;
 
         const QXmlStreamAttributes attributes = xml.attributes();
+        const QString formTitle = attributes.value("Title").toString();
 
         if (attributes.hasAttribute("DataType")) {
             dataType = enumFromString<DataType>(attributes.value("DataType").toString(), DataType::UInt16);
@@ -388,6 +396,8 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, FormDataView* frm)
             else if (xml.name() == QLatin1String("DataViewDefinitions")) {
                 xml >> dd;
                 xml.skipCurrentElement();
+                if (dd.FormName.isEmpty() && !formTitle.isEmpty())
+                    dd.FormName = formTitle;
                 frm->setDisplayDefinition(dd);
             }
             else if (xml.name() == QLatin1String("ModbusSimulationMap")) {

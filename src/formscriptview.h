@@ -272,7 +272,9 @@ inline QXmlStreamWriter& operator <<(QXmlStreamWriter& xml, FormScriptView* frm)
     xml.writeEndElement();
 
     const auto dd = frm->definitions();
-    xml << dd;
+    xml.writeStartElement("ScriptViewDefinitions");
+    xml << dd.ScriptCfg;
+    xml.writeEndElement();
 
     xml << frm->scriptControl();
 
@@ -293,6 +295,8 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, FormScriptView* frm)
 
     if (xml.isStartElement() && xml.name() == QLatin1String("FormScriptView")) {
         ScriptViewDefinitions dd;
+        const QXmlStreamAttributes attributes = xml.attributes();
+        const QString formTitle = attributes.value("Title").toString();
 
         while (xml.readNextStartElement()) {
             if (xml.name() == QLatin1String("Window")) {
@@ -390,6 +394,8 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, FormScriptView* frm)
             }
             else if (xml.name() == QLatin1String("ScriptViewDefinitions")) {
                 xml >> dd;
+                if (dd.FormName.isEmpty() && !formTitle.isEmpty())
+                    dd.FormName = formTitle;
                 frm->setDefinitions(dd);
             }
             else if (xml.name() == QLatin1String("JScriptControl")) {

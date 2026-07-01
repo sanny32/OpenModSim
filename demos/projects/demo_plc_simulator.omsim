@@ -49,22 +49,22 @@
     <Forms>
         <FormDataView Panel="L" Title="Setpoints" DataType="UInt16" RegisterOrder="MSRF" Codepage="" ByteOrder="Direct">
             <Window Maximized="true" Minimized="false" Left="0" Top="0" Width="610" Height="314"/>
-            <DataViewDefinitions FormName="Setpoints" DeviceId="1" PointType="HoldingRegisters" PointAddress="1" Length="3" DataViewColumnsDistance="1" LeadingZeros="true"/>
+            <DataViewDefinitions DeviceId="1" PointType="HoldingRegisters" PointAddress="1" Length="3" DataViewColumnsDistance="1" LeadingZeros="true"/>
             <AddressColorMap/>
         </FormDataView>
         <FormDataView Panel="L" Title="ProcessValues" DataType="UInt16" RegisterOrder="MSRF" Codepage="" ByteOrder="Direct">
             <Window Maximized="true" Minimized="false" Left="0" Top="0" Width="610" Height="314"/>
-            <DataViewDefinitions FormName="ProcessValues" DeviceId="1" PointType="InputRegisters" PointAddress="1" Length="4" DataViewColumnsDistance="1" LeadingZeros="true"/>
+            <DataViewDefinitions DeviceId="1" PointType="InputRegisters" PointAddress="1" Length="4" DataViewColumnsDistance="1" LeadingZeros="true"/>
             <AddressColorMap/>
         </FormDataView>
         <FormDataView Panel="L" Title="Commands" DataType="Binary" RegisterOrder="MSRF" Codepage="" ByteOrder="Direct">
             <Window Maximized="true" Minimized="false" Left="0" Top="0" Width="610" Height="314"/>
-            <DataViewDefinitions FormName="Commands" DeviceId="1" PointType="Coils" PointAddress="1" Length="4" DataViewColumnsDistance="1" LeadingZeros="true"/>
+            <DataViewDefinitions DeviceId="1" PointType="Coils" PointAddress="1" Length="4" DataViewColumnsDistance="1" LeadingZeros="true"/>
             <AddressColorMap/>
         </FormDataView>
         <FormDataView Panel="L" Title="Status" DataType="Binary" RegisterOrder="MSRF" Codepage="" ByteOrder="Direct">
             <Window Maximized="true" Minimized="false" Left="0" Top="0" Width="610" Height="314"/>
-            <DataViewDefinitions FormName="Status" DeviceId="1" PointType="DiscreteInputs" PointAddress="1" Length="5" DataViewColumnsDistance="1" LeadingZeros="true"/>
+            <DataViewDefinitions DeviceId="1" PointType="DiscreteInputs" PointAddress="1" Length="5" DataViewColumnsDistance="1" LeadingZeros="true"/>
             <AddressColorMap/>
         </FormDataView>
         <FormScriptView Panel="L" Title="PLCSimulator">
@@ -72,7 +72,7 @@
             <Colors Background="#ffffff" Foreground="#000000"/>
             <Font Family="Segoe UI" Size="9" Bold="false" Italic="false"/>
             <Zoom Value="100%"/>
-            <ScriptViewDefinitions FormName="PLCSimulator">
+            <ScriptViewDefinitions>
                 <ScriptSettings Mode="Periodically" Interval="500" RunOnStartup="true"/>
             </ScriptViewDefinitions>
             <JScriptControl>
@@ -287,7 +287,7 @@ tick();
         </FormScriptView>
         <FormDataMapView Panel="L" Title="DataMap">
             <Window Maximized="true" Minimized="false" Left="0" Top="0" Width="461" Height="226"/>
-            <DataMapViewDefinitions FormName="DataMap" ZeroBasedAddress="false" HexView="false" AutoAddOnRequest="false" AutoRequestMap="false"/>
+            <DataMapViewDefinitions ZeroBasedAddress="false" HexView="false" AutoAddOnRequest="false" AutoRequestMap="false"/>
             <ColumnWidths Unit="40" Type="120" Address="70" DataType="70" Order="65" Comment="200" Value="160" Timestamp="160"/>
             <DataMap>
                 <Entry DeviceId="1" Type="4" Address="0" DataType="UInt16" Value="800"><![CDATA[Tank High Level setpoint (0..1000)]]></Entry>

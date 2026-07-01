@@ -146,7 +146,6 @@ inline QXmlStreamWriter& operator <<(QXmlStreamWriter& xml, FormDataMapView* frm
 
     xml.writeStartElement("DataMapViewDefinitions");
     const auto dd = frm->displayDefinition();
-    xml.writeAttribute("FormName",         dd.FormName);
     xml.writeAttribute("ZeroBasedAddress", boolToString(dd.ZeroBasedAddress));
     xml.writeAttribute("HexView",          boolToString(dd.HexView));
     xml.writeAttribute("AutoAddOnRequest", boolToString(frm->autoAddOnRequest()));
@@ -208,6 +207,8 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, FormDataMapView* frm
         return xml;
     }
 
+    const QString formTitle = xml.attributes().value("Title").toString();
+
     while (xml.readNextStartElement()) {
         if (xml.name() == QLatin1String("Window")) {
             const auto attrs = xml.attributes();
@@ -237,6 +238,8 @@ inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, FormDataMapView* frm
             dd.FormName         = attrs.value("FormName").toString();
             dd.ZeroBasedAddress = stringToBool(attrs.value("ZeroBasedAddress").toString());
             dd.HexView          = stringToBool(attrs.value("HexView").toString());
+            if (dd.FormName.isEmpty() && !formTitle.isEmpty())
+                dd.FormName = formTitle;
             frm->setDisplayDefinition(dd);
             frm->setAutoAddOnRequest(stringToBool(attrs.value("AutoAddOnRequest").toString()));
             frm->setAutoRequestMap(stringToBool(attrs.value("AutoRequestMap").toString()));
