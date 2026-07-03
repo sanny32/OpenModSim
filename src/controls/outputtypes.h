@@ -229,17 +229,17 @@ inline QXmlStreamReader& operator>>(QXmlStreamReader& in, AddressColorMap& map)
         if (in.name() == QLatin1String("Color")) {
             const auto attributes = in.attributes();
             bool ok;
-            const auto device_id = static_cast<quint8>(attributes.value("DeviceId").toUShort(&ok));
+            auto device_id = static_cast<quint8>(attributes.value("DeviceId").toUShort(&ok));
+            if (!ok)
+                device_id = 0; // use current view device id
+            auto type = static_cast<QModbusDataUnit::RegisterType>(attributes.value("Type").toInt(&ok));
+            if (!ok)
+                type = QModbusDataUnit::RegisterType::Invalid; // use current view type
+            const auto address = attributes.value("Address").toUShort(&ok);
             if (ok) {
-                const auto type = static_cast<QModbusDataUnit::RegisterType>(attributes.value("Type").toInt(&ok));
-                if (ok) {
-                    const auto address = attributes.value("Address").toUShort(&ok);
-                    if (ok) {
-                        const auto value = attributes.value("Value").toString();
-                        if (!value.isEmpty())
-                            map.insert({ device_id, type, address }, value);
-                    }
-                }
+                const auto value = attributes.value("Value").toString();
+                if (!value.isEmpty())
+                    map.insert({ device_id, type, address }, value);
             }
         }
         in.skipCurrentElement();

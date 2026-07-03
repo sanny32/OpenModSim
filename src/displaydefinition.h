@@ -290,7 +290,9 @@ inline QXmlStreamWriter& operator <<(QXmlStreamWriter& xml, const ScriptViewDefi
 ///
 inline QXmlStreamReader& operator >>(QXmlStreamReader& xml, DataViewDefinitions& dd)
 {
-    if (xml.isStartElement() && xml.name() == QLatin1String("DataViewDefinitions")) {
+    if (xml.isStartElement() && (xml.name() == QLatin1String("DataViewDefinitions") ||
+        // Version 1.x definitions
+        xml.name() == QLatin1String("DisplayDefinition"))) {
         const QXmlStreamAttributes attributes = xml.attributes();
 
         if (attributes.hasAttribute("FormName")) {

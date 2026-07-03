@@ -60,6 +60,7 @@ public:
 
     void loadProject(const QString& filename);
     bool saveProject(const QString& filename);
+    inline AppProject* project() const noexcept { return _project; }
 
     void appendConsoleMessage(const QString& source, const QString& text, ConsoleOutput::MessageType type);
     void showOutputConsole();
@@ -84,7 +85,7 @@ public slots:
     void windowActivate(QMdiSubWindow* wnd);
     void updateHelpWidgetState();
     void markModified();
-    
+
 private slots:
     void on_awake();
 
