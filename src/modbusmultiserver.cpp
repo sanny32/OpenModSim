@@ -754,18 +754,21 @@ void ModbusMultiServer::setTimestamp(quint8 deviceId, QModbusDataUnit::RegisterT
 ///
 /// \brief ModbusMultiServer::setTimestampMap
 /// \param timestamps
+/// \param replace
 ///
-void ModbusMultiServer::setTimestampMap(const AddressTimestampMap& timestamps)
+void ModbusMultiServer::setTimestampMap(const AddressTimestampMap& timestamps, bool replace)
 {
     if(QThread::currentThread() != _workerThread)
     {
-        QMetaObject::invokeMethod(this, [this, timestamps]() {
-            setTimestampMap(timestamps);
+        QMetaObject::invokeMethod(this, [this, timestamps, replace]() {
+            setTimestampMap(timestamps, replace);
         }, Qt::BlockingQueuedConnection);
         return;
     }
 
-    clearTimestamps();
+    if (replace) {
+        clearTimestamps();
+    }
 
     for(auto it = timestamps.constBegin(); it != timestamps.constEnd(); ++it)
     {
@@ -927,18 +930,22 @@ void ModbusMultiServer::setDescription(quint8 deviceId, QModbusDataUnit::Registe
 ///
 /// \brief ModbusMultiServer::setDescriptionMap
 /// \param descriptions
+/// \param source
+/// \param replace
 ///
-void ModbusMultiServer::setDescriptionMap(const AddressDescriptionMap& descriptions, WriteSource source)
+void ModbusMultiServer::setDescriptionMap(const AddressDescriptionMap& descriptions, WriteSource source, bool replace)
 {
     if(QThread::currentThread() != _workerThread)
     {
-        QMetaObject::invokeMethod(this, [this, descriptions, source]() {
-            setDescriptionMap(descriptions, source);
+        QMetaObject::invokeMethod(this, [this, descriptions, source, replace]() {
+            setDescriptionMap(descriptions, source, replace);
         }, Qt::BlockingQueuedConnection);
         return;
     }
 
-    clearDescriptions();
+    if (replace) {
+        clearDescriptions();
+    }
 
     for(auto it = descriptions.constBegin(); it != descriptions.constEnd(); ++it)
     {

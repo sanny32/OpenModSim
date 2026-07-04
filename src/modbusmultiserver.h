@@ -73,7 +73,7 @@ public:
     AddressTimestampMap timestampMap(quint8 deviceId, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, quint16 length) const;
     AddressTimestampMap timestampMap() const;
     void setTimestamp(quint8 deviceId, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, const QDateTime& timestamp);
-    void setTimestampMap(const AddressTimestampMap& timestamps);
+    void setTimestampMap(const AddressTimestampMap& timestamps, bool replace = true);
     void clearTimestamps();
 
     QString description(quint8 deviceId, QModbusDataUnit::RegisterType type, quint16 address) const;
@@ -81,7 +81,7 @@ public:
     AddressDescriptionMap descriptionMap() const;
     void setDescription(quint8 deviceId, QModbusDataUnit::RegisterType pointType, quint16 pointAddress,
                         const QString& description, WriteSource source = WriteSource::User);
-    void setDescriptionMap(const AddressDescriptionMap& descriptions, WriteSource source = WriteSource::Internal);
+    void setDescriptionMap(const AddressDescriptionMap& descriptions, WriteSource source, bool replace = true);
     void clearDescriptions();
 
     void writeValue(quint8 deviceId, QModbusDataUnit::RegisterType pointType, quint16 pointAddress, quint16 value, ByteOrder order);

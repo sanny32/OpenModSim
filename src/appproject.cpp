@@ -640,6 +640,12 @@ void AppProject::closeProject()
     // Close any remaining windows (for example split auto-clones).
     _mdiArea->closeAllSubWindows();
 
+    // Force immediate destruction of MDI subwindows (WA_DeleteOnClose uses
+    // deleteLater, so without this their destructors run after new forms are
+    // already created, causing deviceIdAdded/unitMapAdded signals to be
+    // suppressed for the newly opened project).
+    QCoreApplication::sendPostedEvents(nullptr, QEvent::DeferredDelete);
+
     const auto deleteClosedForms = [this](auto&& shouldDelete) {
         const auto snapshot = _closedForms;
         for (auto* frm : snapshot) {
@@ -662,6 +668,8 @@ void AppProject::closeProject()
 
     _closedForms.clear();
     _mbServer.clearAddressSpace();
+    _mbServer.clearDescriptions();
+    _mbServer.clearTimestamps();
     _dataCounter        = 0;
     _trafficCounter     = 0;
     _scriptCounter      = 0;
@@ -1721,11 +1729,12 @@ void AppProject::loadProject(const QString& filename)
     if(!file.open(QFile::ReadOnly))
         return;
 
-    _projectFilename = QFileInfo(filename).absoluteFilePath();
-    emit projectOpened(_projectFilename);
-
-    _mbServer.clearDescriptions();
-    _mbServer.clearTimestamps();
+    const auto replace = _projectFilename.isEmpty();
+    if (replace) {
+        setSavePath(QFileInfo(filename).absoluteDir().absolutePath());
+        _projectFilename = QFileInfo(filename).absoluteFilePath();
+        emit projectOpened(_projectFilename);
+    }
 
     ModbusDefinitions defs;
     QList<ConnectionDetails> conns;
@@ -1738,7 +1747,7 @@ void AppProject::loadProject(const QString& filename)
     bool projectGlobalZeroBasedAddress = false;
     bool hasProjectGlobalHexView = false;
     bool projectGlobalHexView = false;
-    bool viewPreparedForForms = false;
+    bool viewPreparedForForms = !replace;
     QStringList primaryTabOrder;
     QStringList secondaryTabOrder;
 
@@ -1807,20 +1816,6 @@ void AppProject::loadProject(const QString& filename)
                             _mdiArea->setSplitViewEnabled(splitView);
                         viewPreparedForForms = true;
                     }
-
-                    _mdiArea->closeAllSubWindows();
-                    // Force immediate destruction of MDI subwindows (WA_DeleteOnClose uses
-                    // deleteLater, so without this their destructors run after new forms are
-                    // already created, causing deviceIdAdded/unitMapAdded signals to be
-                    // suppressed for the newly opened project).
-                    QCoreApplication::sendPostedEvents(nullptr, QEvent::DeferredDelete);
-                    // Clean up forms that were already closed (hidden)
-                    const auto closed = _closedForms;
-                    for (auto&& frm : closed) {
-                        _projectTree->removeForm(frm);
-                        delete frm;
-                    }
-                    _closedForms.clear();
                     while (xml.readNextStartElement()) {
                         ProjectFormKind kind;
                         bool isForm = true;
@@ -2011,9 +2006,14 @@ void AppProject::loadProject(const QString& filename)
 
     // Prefer global AddressSpace metadata when present; otherwise keep legacy per-form values.
     if (hasGlobalDescriptionMap)
-        _mbServer.setDescriptionMap(globalDescriptionMap, WriteSource::ProjectLoad);
+        _mbServer.setDescriptionMap(globalDescriptionMap, WriteSource::ProjectLoad, replace);
     if (hasGlobalTimestampMap)
-        _mbServer.setTimestampMap(globalTimestampMap);
+        _mbServer.setTimestampMap(globalTimestampMap, replace);
+
+    if (!replace) {
+        // Ignore global settings part of merging project
+        return;
+    }
 
     _mainWindow->applyConnections(defs, conns);
     syncAutoRequestMap(_mbServer.getModbusDefinitions());
@@ -2136,6 +2136,7 @@ void AppProject::restoreActiveWindows()
 ///
 /// \brief AppProject::saveProject
 /// \param filename
+/// \return
 ///
 bool AppProject::saveProject(const QString& filename)
 {
@@ -2147,6 +2148,7 @@ bool AppProject::saveProject(const QString& filename)
         return false;
     }
 
+    setSavePath(QFileInfo(filename).absoluteDir().absolutePath());
     _projectFilename = absoluteFilename;
 
     QXmlStreamWriter w(&file);

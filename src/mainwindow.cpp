@@ -293,6 +293,7 @@ MainWindow::MainWindow(const QString& profile, bool useSession, const QString& s
     setWindowTitle(APP_PRODUCT_NAME);
     setUnifiedTitleAndToolBarOnMac(true);
     setStatusBar(new MainStatusBar(_mbMultiServer, this));
+    setAcceptDrops(true);
 
     if (auto* newButton = qobject_cast<QToolButton*>(ui->toolBarMain->widgetForAction(ui->actionNew))) {
         newButton->setMenu(ui->menuNew);
@@ -522,9 +523,6 @@ void MainWindow::on_outputDockVisibilityChanged(bool visible)
 ///
 void MainWindow::on_mdiSubWindowActivated(QMdiSubWindow* wnd)
 {
-    if(wnd)
-        markModified();
-
     QMdiSubWindow* stableWnd = ui->mdiArea->activeSubWindow();
     if(!stableWnd)
         stableWnd = ui->mdiArea->currentSubWindow();
@@ -693,12 +691,10 @@ void MainWindow::changeEvent(QEvent* event)
 ///
 void MainWindow::closeEvent(QCloseEvent *event)
 {
-    const bool shouldAskToSave = hasProjectContext() && (_isModified || _projectFilePath.isEmpty());
-    if(shouldAskToSave) {
-        if(!confirmSaveOnClose()) {
-            event->ignore();
-            return;
-        }
+    if (!confirmSaveOnClose()) {
+        // User canceled
+        event->ignore();
+        return;
     }
 
     saveAppSettings();
@@ -746,6 +742,89 @@ bool MainWindow::eventFilter(QObject* obj, QEvent* e)
             qt_noop();
     }
     return QObject::eventFilter(obj, e);
+}
+
+///
+/// \brief MainWindow::acceptedProjects
+/// Looks through the list of files and directories dropped onto the window to identify suitable projects.
+/// \param event The QDropEvent or QDragEnterEvent window event.
+/// \return The list of accepted project files.
+///
+QStringList MainWindow::acceptedProjects(QDropEvent* event)
+{
+    QStringList projects;
+    static const QStringList filters {"*.omsim", "*.xml"};
+
+    for (const auto& url : event->mimeData()->urls()) {
+        const auto info = QFileInfo(url.toLocalFile());
+        if (info.isFile()) {
+            for (const auto& filter : filters) {
+                if (!info.suffix().compare(filter.mid(2), Qt::CaseInsensitive)) {
+                    projects.append(info.absoluteFilePath());
+                }
+            }
+        }
+        else if (info.isDir()) {
+            QDirIterator it(info.absoluteFilePath(), filters, QDir::Files, QDirIterator::Subdirectories);
+            while (it.hasNext() && projects.size() < 100) {
+                it.next();
+                projects.append(it.fileInfo().absoluteFilePath());
+            }
+        }
+    }
+
+    return projects;
+}
+
+///
+/// \brief MainWindow::dragEnterEvent
+/// Allows to start a dragging the project list into the application window.
+/// \param event The drag enter event.
+///
+void MainWindow::dragEnterEvent(QDragEnterEvent* event)
+{
+    if (!acceptedProjects(event).empty()) {
+        event->acceptProposedAction();
+    }
+}
+
+///
+/// \brief MainWindow::dropEvent
+/// Accepts the list of projects dragged into the application window and offers to merge them with the existing one.
+/// \param event The drop event.
+///
+void MainWindow::dropEvent(QDropEvent* event)
+{
+    const auto projects = acceptedProjects(event);
+    if (!projects.empty()) {
+        auto replace = true;
+        if (hasProjectContext()) {
+            switch (QMessageBox::question(this, APP_PRODUCT_NAME,
+                tr("Would you like to combine the file(s) with the project?\n"
+                   "\n"
+                   "The global settings part of the merging file(s) will be ignored.\n"
+                   "Please verify the merge result carefully."),
+                QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel, QMessageBox::No)) {
+            case QMessageBox::Yes:
+                replace = false;
+                break;
+            case QMessageBox::No:
+                replace = true;
+                break;
+            default:
+                // User canceled
+                return;
+            }
+        }
+        for (const auto& project : projects) {
+            if (!loadProject(project, replace)) {
+                // User canceled
+                return;
+            }
+            replace = false;
+        }
+        event->acceptProposedAction();
+    }
 }
 
 ///
@@ -932,11 +1011,14 @@ void MainWindow::on_actionOpenProject_triggered()
     filters << tr("Project 1.x files (*.xml)");
     filters << tr("All files (*)");
 
-    const auto filename = QFileDialog::getOpenFileName(this, QString(), _project->savePath(), filters.join(";;"));
-    if(filename.isEmpty()) return;
-
-    _project->setSavePath(QFileInfo(filename).absoluteDir().absolutePath());
-    loadProject(filename);
+    const auto filenames = QFileDialog::getOpenFileNames(this, QString(), _project->savePath(), filters.join(";;"));
+    auto replace = true;
+    for (const auto& filename : filenames) {
+        if (!loadProject(filename, replace)) {
+            return;
+        }
+        replace = false;
+    }
 }
 
 ///
@@ -944,13 +1026,12 @@ void MainWindow::on_actionOpenProject_triggered()
 ///
 void MainWindow::on_actionSaveProject_triggered()
 {
-    if(_projectFilePath.isEmpty()) {
+    if (_project->filePath().isEmpty()) {
         on_actionSaveProjectAs_triggered();
         return;
     }
 
-    if(saveProject(_projectFilePath)) {
-        addRecentProject(_projectFilePath);
+    if (saveProject(_project->filePath())) {
         return;
     }
 
@@ -970,18 +1051,7 @@ void MainWindow::on_actionSaveProjectAs_triggered()
 ///
 void MainWindow::on_actionCloseProject_triggered()
 {
-    const bool shouldAskToSave = hasProjectContext() && (_isModified || _projectFilePath.isEmpty());
-    if(shouldAskToSave) {
-        if(!confirmSaveOnClose())
-            return;
-    }
-
-    _project->closeProject();
-    _projectFilePath.clear();
-    _lastProjectPath.clear();
-    _isModified = false;
-    updateProjectWindowTitle();
-    updateMainToolbarState();
+    closeProject();
 }
 
 ///
@@ -1525,29 +1595,29 @@ void MainWindow::presetRegs(QModbusDataUnit::RegisterType type)
 ///
 /// \brief MainWindow::loadProject
 /// \param filename
+/// \param replace
+/// \return
 ///
-void MainWindow::loadProject(const QString& filename)
+bool MainWindow::loadProject(const QString& filename, bool replace)
 {
-    if (hasProjectContext()) {
-        _project->closeProject();
-        _projectFilePath.clear();
-        _isModified = false;
-        updateProjectWindowTitle();
+    if (replace) {
+        if (!closeProject()) {
+            // User canceled
+            return false;
+        }
+        AppLogger::clear();
     }
-
-    AppLogger::clear();
 
     _project->loadProject(filename);
     applyGlobalAddressBase(AppPreferences::instance().globalAddressBase(), false);
     applyGlobalHexView(AppPreferences::instance().globalHexView(), false);
     syncGlobalViewControls();
-    _projectFilePath = QFileInfo(filename).absoluteFilePath();
-    _lastProjectPath = _projectFilePath;
-    _project->setSavePath(QFileInfo(filename).absoluteDir().absolutePath());
-    _isModified = false;
+    _isModified = !replace;
     updateProjectWindowTitle();
     updateMainToolbarState();
-    addRecentProject(_projectFilePath);
+    addRecentProject(_project->filePath());
+
+    return true;
 }
 
 ///
@@ -1559,11 +1629,28 @@ bool MainWindow::saveProject(const QString& filename)
     if (!_project->saveProject(filename))
         return false;
 
-    _projectFilePath = QFileInfo(filename).absoluteFilePath();
-    _lastProjectPath = _projectFilePath;
-    _project->setSavePath(QFileInfo(filename).absoluteDir().absolutePath());
     _isModified = false;
     updateProjectWindowTitle();
+    addRecentProject(_project->filePath());
+    return true;
+}
+
+///
+/// \brief MainWindow::closeProject
+/// \return
+///
+bool MainWindow::closeProject()
+{
+    if (!confirmSaveOnClose()) {
+        // User canceled
+        return false;
+    }
+
+    _project->closeProject();
+    _isModified = false;
+    updateProjectWindowTitle();
+    updateMainToolbarState();
+
     return true;
 }
 
@@ -1573,8 +1660,8 @@ bool MainWindow::saveProject(const QString& filename)
 ///
 QString MainWindow::projectName() const
 {
-    if(!_projectFilePath.isEmpty())
-        return QFileInfo(_projectFilePath).completeBaseName();
+    if (!_project->filePath().isEmpty())
+        return QFileInfo(_project->filePath()).completeBaseName();
 
     if(hasProjectContext())
         return tr("Untitled");
@@ -1593,7 +1680,7 @@ void MainWindow::updateProjectWindowTitle()
     if(name.isEmpty())
         setWindowTitle(modifiedMark + APP_PRODUCT_NAME);
     else
-        setWindowTitle(QString("%1%2 - %3").arg(modifiedMark, APP_PRODUCT_NAME, name));
+        setWindowTitle(QString("%1%2 - %3").arg(modifiedMark, name, APP_PRODUCT_NAME));
 }
 
 ///
@@ -1751,7 +1838,7 @@ void MainWindow::saveAppSettings()
     m.setValue("SavePath", _project->savePath());
     m.setValue(kNewFormKindKey, newFormKindToSetting(_newFormKind));
     m.setValue(kRecentProjectsKey, _recentProjects);
-    m.setValue(kLastProjectPathKey, _lastProjectPath);
+    m.setValue(kLastProjectPathKey, _project->filePath());
 }
 
 ///
@@ -1919,9 +2006,15 @@ void MainWindow::applyGlobalHexView(bool enabled, bool persist)
 
 ///
 /// \brief MainWindow::confirmSaveOnClose
+/// \return
 ///
 bool MainWindow::confirmSaveOnClose()
 {
+    const auto shouldAskToSave = hasProjectContext() && (_isModified || _project->filePath().isEmpty());
+    if (!shouldAskToSave) {
+        return true;
+    }
+
     const auto button = QMessageBox::question(this,
                                               tr("Save Project"),
                                               tr("Save project before closing?"),
@@ -1933,9 +2026,8 @@ bool MainWindow::confirmSaveOnClose()
     if(button != QMessageBox::Save)
         return true;
 
-    if(!_projectFilePath.isEmpty()) {
-        if(saveProject(_projectFilePath)) {
-            addRecentProject(_projectFilePath);
+    if (!_project->filePath().isEmpty()) {
+        if (saveProject(_project->filePath())) {
             return true;
         }
 
@@ -1955,9 +2047,9 @@ bool MainWindow::promptSaveProjectAs(const QString& initialPath)
     QStringList filters;
     filters << tr("Project files (*.omsim)");
 
-    const QString defaultPath = _projectFilePath.isEmpty()
+    const QString defaultPath = _project->filePath().isEmpty()
         ? _project->savePath() + "/" + projectName() + ".omsim"
-        : _projectFilePath;
+        : _project->filePath();
     const QString dialogPath = initialPath.isEmpty() ? defaultPath : initialPath;
     auto filename = QFileDialog::getSaveFileName(this, QString(), dialogPath, filters.join(";;"));
 
@@ -1967,11 +2059,9 @@ bool MainWindow::promptSaveProjectAs(const QString& initialPath)
     if(!filename.endsWith(".omsim", Qt::CaseInsensitive))
         filename.append(".omsim");
 
-    _project->setSavePath(QFileInfo(filename).absoluteDir().absolutePath());
     if(!saveProject(filename))
         return false;
 
-    addRecentProject(QFileInfo(filename).absoluteFilePath());
     return true;
 }
 
@@ -1995,10 +2085,11 @@ QString MainWindow::projectSavePathInProfileDir() const
 
 ///
 /// \brief MainWindow::hasProjectContext
+/// \return
 ///
 bool MainWindow::hasProjectContext() const
 {
-    return !_projectFilePath.isEmpty()
+    return !_project->filePath().isEmpty()
         || _project->firstMdiChild() != nullptr
         || !_project->closedForms().isEmpty();
 }
