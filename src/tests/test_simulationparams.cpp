@@ -44,7 +44,10 @@ private slots:
     void rangeRoundTrip();
     void defaultsSurviveWrongXmlElements();
     void invalidAttributesKeepDefaults();
+    void missingAttributesKeepExistingValues();
     void mismatchedChildParamsAreSkipped();
+    void matchingChildParamsForEveryMode();
+    void writerSkipsUnsupportedChildParams();
     void invalidRangeFallsBackToDefaultRange();
     void rangeContainsBoundaries();
     void rangeIgnoresWrongReaderState();
@@ -165,6 +168,24 @@ void TestSimulationParams::invalidAttributesKeepDefaults()
     QCOMPARE(decrement.Step, 6.);
 }
 
+void TestSimulationParams::missingAttributesKeepExistingValues()
+{
+    ModbusSimulationParams params;
+    params.Mode = SimulationMode::Toggle;
+    params.Interval = 321;
+    params.DataMode = DataType::Float64;
+    params.RegOrder = RegisterOrder::LSRF;
+
+    QXmlStreamReader reader(QByteArrayLiteral("<ModbusSimulationParams Interval=\"654\"/>"));
+    reader.readNextStartElement();
+    reader >> params;
+
+    QCOMPARE(params.Mode, SimulationMode::Toggle);
+    QCOMPARE(params.Interval, 654u);
+    QCOMPARE(params.DataMode, DataType::Float64);
+    QCOMPARE(params.RegOrder, RegisterOrder::LSRF);
+}
+
 void TestSimulationParams::mismatchedChildParamsAreSkipped()
 {
     QXmlStreamReader reader(QByteArrayLiteral(
@@ -181,6 +202,66 @@ void TestSimulationParams::mismatchedChildParamsAreSkipped()
     QCOMPARE(params.IncrementParams.Step, 1.);
     QCOMPARE(params.RandomParams.Range.from(), 0.);
     QCOMPARE(params.RandomParams.Range.to(), 65535.);
+}
+
+void TestSimulationParams::matchingChildParamsForEveryMode()
+{
+    QXmlStreamReader randomReader(QByteArrayLiteral(
+        "<ModbusSimulationParams Mode=\"Random\"><RandomSimulationParams><Range From=\"11\" To=\"22\"/></RandomSimulationParams></ModbusSimulationParams>"));
+    randomReader.readNextStartElement();
+    ModbusSimulationParams randomParams;
+    randomReader >> randomParams;
+    QCOMPARE(randomParams.RandomParams.Range.from(), 11.);
+    QCOMPARE(randomParams.RandomParams.Range.to(), 22.);
+
+    QXmlStreamReader incrementReader(QByteArrayLiteral(
+        "<ModbusSimulationParams Mode=\"Increment\"><IncrementSimulationParams Step=\"3\"><Range From=\"4\" To=\"5\"/></IncrementSimulationParams></ModbusSimulationParams>"));
+    incrementReader.readNextStartElement();
+    ModbusSimulationParams incrementParams;
+    incrementReader >> incrementParams;
+    QCOMPARE(incrementParams.IncrementParams.Step, 3.);
+    QCOMPARE(incrementParams.IncrementParams.Range.from(), 4.);
+    QCOMPARE(incrementParams.IncrementParams.Range.to(), 5.);
+
+    QXmlStreamReader decrementReader(QByteArrayLiteral(
+        "<ModbusSimulationParams Mode=\"Decrement\"><DecrementSimulationParams Step=\"6\"><Range From=\"7\" To=\"8\"/></DecrementSimulationParams></ModbusSimulationParams>"));
+    decrementReader.readNextStartElement();
+    ModbusSimulationParams decrementParams;
+    decrementReader >> decrementParams;
+    QCOMPARE(decrementParams.DecrementParams.Step, 6.);
+    QCOMPARE(decrementParams.DecrementParams.Range.from(), 7.);
+    QCOMPARE(decrementParams.DecrementParams.Range.to(), 8.);
+}
+
+void TestSimulationParams::writerSkipsUnsupportedChildParams()
+{
+    ModbusSimulationParams offParams;
+    offParams.Mode = SimulationMode::Off;
+    offParams.DataMode = DataType::UInt16;
+
+    QByteArray offXml;
+    {
+        QXmlStreamWriter writer(&offXml);
+        writer << offParams;
+    }
+
+    QVERIFY(!offXml.contains("RandomSimulationParams"));
+    QVERIFY(!offXml.contains("IncrementSimulationParams"));
+    QVERIFY(!offXml.contains("DecrementSimulationParams"));
+    QVERIFY(!offXml.contains("RegisterOrder"));
+
+    ModbusSimulationParams toggleParams;
+    toggleParams.Mode = SimulationMode::Toggle;
+    toggleParams.DataMode = DataType::Int32;
+
+    QByteArray toggleXml;
+    {
+        QXmlStreamWriter writer(&toggleXml);
+        writer << toggleParams;
+    }
+
+    QVERIFY(toggleXml.contains("RegisterOrder"));
+    QVERIFY(!toggleXml.contains("RandomSimulationParams"));
 }
 
 void TestSimulationParams::invalidRangeFallsBackToDefaultRange()

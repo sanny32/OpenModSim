@@ -25,8 +25,11 @@ private slots:
     void xmlRoundTrip();
     void xmlRejectsNegativeDelays();
     void xmlReadsEveryBooleanAttribute();
+    void xmlMissingAttributesKeepExistingValues();
     void xmlIgnoresWrongRootElement();
+    void xmlIgnoresWrongReaderState();
     void xmlRejectsNonNumericDelays();
+    void settingsDefaultsWhenGroupIsMissing();
 };
 
 void TestModbusErrorSimulations::defaultsAreInactive()
@@ -163,6 +166,34 @@ void TestModbusErrorSimulations::xmlReadsEveryBooleanAttribute()
     QCOMPARE(restored.responseRandomDelayUpToTime(), 34);
 }
 
+void TestModbusErrorSimulations::xmlMissingAttributesKeepExistingValues()
+{
+    ModbusErrorSimulations restored;
+    restored.setNoResponse(true);
+    restored.setResponseIncorrectId(true);
+    restored.setResponseIllegalFunction(true);
+    restored.setResponseDeviceBusy(true);
+    restored.setResponseIncorrectCrc(true);
+    restored.setResponseDelay(true);
+    restored.setResponseDelayTime(55);
+    restored.setResponseRandomDelay(true);
+    restored.setResponseRandomDelayUpToTime(66);
+
+    QXmlStreamReader reader(QByteArrayLiteral("<ModbusErrorSimulations ResponseDelayTime=\"77\"/>"));
+    reader.readNextStartElement();
+    reader >> restored;
+
+    QVERIFY(restored.noResponse());
+    QVERIFY(restored.responseIncorrectId());
+    QVERIFY(restored.responseIllegalFunction());
+    QVERIFY(restored.responseDeviceBusy());
+    QVERIFY(restored.responseIncorrectCrc());
+    QVERIFY(restored.responseDelay());
+    QVERIFY(restored.responseRandomDelay());
+    QCOMPARE(restored.responseDelayTime(), 77);
+    QCOMPARE(restored.responseRandomDelayUpToTime(), 66);
+}
+
 void TestModbusErrorSimulations::xmlIgnoresWrongRootElement()
 {
     ModbusErrorSimulations restored;
@@ -175,6 +206,18 @@ void TestModbusErrorSimulations::xmlIgnoresWrongRootElement()
 
     QVERIFY(restored.noResponse());
     QCOMPARE(restored.responseDelayTime(), 55);
+}
+
+void TestModbusErrorSimulations::xmlIgnoresWrongReaderState()
+{
+    ModbusErrorSimulations restored;
+    restored.setNoResponse(true);
+
+    QXmlStreamReader reader(QByteArrayLiteral("<ModbusErrorSimulations NoResponse=\"false\"/>"));
+    reader.readNext();
+    reader >> restored;
+
+    QVERIFY(restored.noResponse());
 }
 
 void TestModbusErrorSimulations::xmlRejectsNonNumericDelays()
@@ -191,6 +234,28 @@ void TestModbusErrorSimulations::xmlRejectsNonNumericDelays()
 
     QCOMPARE(restored.responseDelayTime(), 10);
     QCOMPARE(restored.responseRandomDelayUpToTime(), 20);
+}
+
+void TestModbusErrorSimulations::settingsDefaultsWhenGroupIsMissing()
+{
+    QTemporaryDir dir;
+    QVERIFY(dir.isValid());
+
+    QSettings settings(dir.filePath(QStringLiteral("empty.ini")), QSettings::IniFormat);
+    ModbusErrorSimulations restored;
+    restored.setResponseRandomDelayUpToTime(42);
+
+    settings >> restored;
+
+    QVERIFY(!restored.noResponse());
+    QVERIFY(!restored.responseIncorrectId());
+    QVERIFY(!restored.responseIllegalFunction());
+    QVERIFY(!restored.responseDeviceBusy());
+    QVERIFY(!restored.responseIncorrectCrc());
+    QVERIFY(!restored.responseDelay());
+    QCOMPARE(restored.responseDelayTime(), 0);
+    QVERIFY(!restored.responseRandomDelay());
+    QCOMPARE(restored.responseRandomDelayUpToTime(), 1000);
 }
 
 QTEST_GUILESS_MAIN(TestModbusErrorSimulations)

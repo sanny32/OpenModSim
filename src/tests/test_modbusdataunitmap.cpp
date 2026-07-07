@@ -18,18 +18,22 @@ class TestModbusDataUnitMap : public QObject
 private slots:
     void addUnitMapBuildsLocalRange();
     void addUnitMapReportsChange();
+    void addUnitMapDetectsRangeShapeChanges();
     void removeUnitMap();
     void containsRangeBounds();
     void globalContainsRangeAndAddressSpaceNoop();
     void setAndGetDataRoundTrip();
+    void setDataUpdatesGlobalEvenOutsideLocalMap();
     void timestampStorage();
     void descriptionStorage();
     void ensureRangeExpandsLocalMap();
     void addressSpaceResizesGlobalMap();
+    void addressSpaceCanResizeBackToSixDigits();
     void missingUnitAndOutOfRangeData();
     void filteredTimestampMap();
     void filteredDescriptionMap();
     void updateDataUnitMapMergesRangesAndKeepsValues();
+    void zeroLengthUnitMapDoesNotCreateLocalRange();
     void globalMapIterationAndAccess();
     void localMapIterationAndAccess();
     void emptyLocalMapAccessors();
@@ -60,6 +64,20 @@ void TestModbusDataUnitMap::addUnitMapReportsChange()
     const QUuid id = QUuid::createUuid();
     QVERIFY(map.addUnitMap(id, QModbusDataUnit::HoldingRegisters, 0, 4));
     QVERIFY(!map.addUnitMap(id, QModbusDataUnit::HoldingRegisters, 0, 4));
+}
+
+void TestModbusDataUnitMap::addUnitMapDetectsRangeShapeChanges()
+{
+    ModbusDataUnitMap map;
+    const QUuid id = QUuid::createUuid();
+
+    QVERIFY(map.addUnitMap(id, QModbusDataUnit::HoldingRegisters, 10, 2));
+    QVERIFY(map.addUnitMap(id, QModbusDataUnit::HoldingRegisters, 10, 3));
+    QVERIFY(map.addUnitMap(id, QModbusDataUnit::HoldingRegisters, 9, 3));
+
+    const auto unit = map.value(QModbusDataUnit::HoldingRegisters);
+    QCOMPARE(unit.startAddress(), 9);
+    QCOMPARE(int(unit.valueCount()), 3);
 }
 
 void TestModbusDataUnitMap::removeUnitMap()
@@ -112,6 +130,17 @@ void TestModbusDataUnitMap::setAndGetDataRoundTrip()
     QCOMPARE(read.value(2), quint16(30));
 }
 
+void TestModbusDataUnitMap::setDataUpdatesGlobalEvenOutsideLocalMap()
+{
+    ModbusDataUnitMap map;
+    map.addUnitMap(QUuid::createUuid(), QModbusDataUnit::HoldingRegisters, 10, 1);
+
+    map.setData(QModbusDataUnit(QModbusDataUnit::HoldingRegisters, 20, QVector<quint16>({77})));
+
+    QCOMPARE(map.getData(QModbusDataUnit::HoldingRegisters, 20, 1).value(0), quint16(77));
+    QCOMPARE(map.value(QModbusDataUnit::HoldingRegisters).value(0), quint16(0));
+}
+
 void TestModbusDataUnitMap::timestampStorage()
 {
     ModbusDataUnitMap map;
@@ -160,6 +189,21 @@ void TestModbusDataUnitMap::addressSpaceResizesGlobalMap()
     map.setAddressSpace(AddressSpace::Addr5Digits);
     QCOMPARE(map.addressSpace(), AddressSpace::Addr5Digits);
     QCOMPARE(int(map.value(QModbusDataUnit::Coils).valueCount()), 9999);
+}
+
+void TestModbusDataUnitMap::addressSpaceCanResizeBackToSixDigits()
+{
+    ModbusDataUnitMap map;
+    map.setGlobalMap(true);
+
+    map.setAddressSpace(AddressSpace::Addr5Digits);
+    map.setAddressSpace(AddressSpace::Addr6Digits);
+
+    QCOMPARE(map.addressSpace(), AddressSpace::Addr6Digits);
+    QCOMPARE(int(map.value(QModbusDataUnit::Coils).valueCount()), 65535);
+    QCOMPARE(int(map.value(QModbusDataUnit::DiscreteInputs).valueCount()), 65535);
+    QCOMPARE(int(map.value(QModbusDataUnit::InputRegisters).valueCount()), 65535);
+    QCOMPARE(int(map.value(QModbusDataUnit::HoldingRegisters).valueCount()), 65535);
 }
 
 void TestModbusDataUnitMap::missingUnitAndOutOfRangeData()
@@ -236,6 +280,20 @@ void TestModbusDataUnitMap::updateDataUnitMapMergesRangesAndKeepsValues()
     QCOMPARE(shrunk.startAddress(), 10);
     QCOMPARE(int(shrunk.valueCount()), 1);
     QCOMPARE(shrunk.value(0), quint16(100));
+}
+
+void TestModbusDataUnitMap::zeroLengthUnitMapDoesNotCreateLocalRange()
+{
+    ModbusDataUnitMap map;
+    const QUuid id = QUuid::createUuid();
+
+    QVERIFY(!map.addUnitMap(id, QModbusDataUnit::Coils, 5, 0));
+    QVERIFY(!map.contains(QModbusDataUnit::Coils));
+
+    QModbusDataUnit stored;
+    QVERIFY(map.unitMap(id, stored));
+    QCOMPARE(stored.startAddress(), 5);
+    QCOMPARE(int(stored.valueCount()), 0);
 }
 
 void TestModbusDataUnitMap::globalMapIterationAndAccess()

@@ -20,6 +20,7 @@ private slots:
     void startRegistersSimulation();
     void multiRegisterReservesFollowingAddresses();
     void stopSimulationRemovesEntry();
+    void stopMultiRegisterSimulationRemovesAllAddresses();
     void stopMissingSimulationDoesNotEmit();
     void stopSimulationsClearsEverything();
     void canStartSimulationBlocksOverlap();
@@ -39,6 +40,9 @@ private slots:
     void decrementWrapsToRangeEnd();
     void randomCoversBinaryRegisterTypes_data();
     void randomCoversBinaryRegisterTypes();
+    void zeroIntervalDoesNotEmitOnTimer();
+    void offAndDisabledModesDoNotEmitOnTimer();
+    void restartEmptySimulatorDoesNothing();
     void restartReemitsStarted();
     void pauseStopsEmissions();
 };
@@ -93,6 +97,25 @@ void TestDataSimulator::stopSimulationRemovesEntry()
 
     QCOMPARE(stopped.count(), 1);
     QVERIFY(!simulator.hasSimulation(2, QModbusDataUnit::InputRegisters, 10));
+    QVERIFY(simulator.simulationMap().isEmpty());
+}
+
+void TestDataSimulator::stopMultiRegisterSimulationRemovesAllAddresses()
+{
+    DataSimulator simulator;
+    QSignalSpy stopped(&simulator, &DataSimulator::simulationStopped);
+
+    ModbusSimulationParams params;
+    params.Mode = SimulationMode::Increment;
+    params.DataMode = DataType::Float64;
+    simulator.startSimulation(3, QModbusDataUnit::HoldingRegisters, 20, params);
+
+    QCOMPARE(simulator.simulationMap().size(), 4);
+    simulator.stopSimulation(3, QModbusDataUnit::HoldingRegisters, 20);
+
+    QCOMPARE(stopped.count(), 1);
+    const auto addresses = stopped.takeFirst().at(4).value<QVector<quint16>>();
+    QCOMPARE(addresses, QVector<quint16>({20, 21, 22, 23}));
     QVERIFY(simulator.simulationMap().isEmpty());
 }
 
@@ -381,6 +404,57 @@ void TestDataSimulator::randomCoversBinaryRegisterTypes()
 
     QTRY_VERIFY_WITH_TIMEOUT(simulated.count() >= 1, 2000);
     QVERIFY(simulated.last().at(5).toUInt() <= 1u);
+}
+
+void TestDataSimulator::zeroIntervalDoesNotEmitOnTimer()
+{
+    DataSimulator simulator;
+
+    ModbusSimulationParams params;
+    params.Mode = SimulationMode::Random;
+    params.DataMode = DataType::UInt16;
+    params.Interval = 0;
+    simulator.startSimulation(1, QModbusDataUnit::HoldingRegisters, 0, params);
+
+    QSignalSpy simulated(&simulator, &DataSimulator::dataSimulated);
+    QTest::qWait(80);
+    QCOMPARE(simulated.count(), 0);
+}
+
+void TestDataSimulator::offAndDisabledModesDoNotEmitOnTimer()
+{
+    DataSimulator simulator;
+
+    ModbusSimulationParams offParams;
+    offParams.Mode = SimulationMode::Off;
+    offParams.DataMode = DataType::UInt16;
+    offParams.Interval = 20;
+    simulator.startSimulation(1, QModbusDataUnit::HoldingRegisters, 0, offParams);
+
+    ModbusSimulationParams multiParams;
+    multiParams.Mode = SimulationMode::Increment;
+    multiParams.DataMode = DataType::Int32;
+    multiParams.Interval = 20;
+    simulator.startSimulation(1, QModbusDataUnit::HoldingRegisters, 10, multiParams);
+
+    QSignalSpy simulated(&simulator, &DataSimulator::dataSimulated);
+    QTRY_VERIFY_WITH_TIMEOUT(simulated.count() >= 1, 2000);
+
+    for (const auto& args : simulated) {
+        QVERIFY(args.at(4).toUInt() != 0u);
+        QVERIFY(args.at(4).toUInt() != 11u);
+    }
+}
+
+void TestDataSimulator::restartEmptySimulatorDoesNothing()
+{
+    DataSimulator simulator;
+    QSignalSpy started(&simulator, &DataSimulator::simulationStarted);
+
+    simulator.restartSimulations();
+
+    QCOMPARE(started.count(), 0);
+    QVERIFY(simulator.simulationMap().isEmpty());
 }
 
 void TestDataSimulator::restartReemitsStarted()
