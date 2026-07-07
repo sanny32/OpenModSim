@@ -23,6 +23,8 @@ private slots:
     void buildsRangesForModifiedRuntimeData();
     void emptyProjectRangesDropRuntimeState();
     void zeroLengthAndMismatchedRangesDoNotMatch();
+    void rangeBoundaryOverlapCases();
+    void filtersMixedMapsWithOnlyOutsideItems();
     void modifiedRangesIgnoreInactiveSimulations();
 };
 
@@ -194,6 +196,65 @@ void TestProjectAddressSpaceFilter::zeroLengthAndMismatchedRangesDoNotMatch()
     QVERIFY(!projectAddressSpaceOverlaps(ranges, { 1, QModbusDataUnit::Coils, 10, 0 }));
     QVERIFY(!projectAddressSpaceOverlaps(ranges, { 1, QModbusDataUnit::Coils, 20, 1 }));
     QVERIFY(!projectAddressSpaceOverlaps(ranges, { 2, QModbusDataUnit::HoldingRegisters, 20, 1 }));
+}
+
+///
+/// \brief TestProjectAddressSpaceFilter::rangeBoundaryOverlapCases
+///
+void TestProjectAddressSpaceFilter::rangeBoundaryOverlapCases()
+{
+    const ProjectAddressSpaceRanges ranges = {
+        { 1, QModbusDataUnit::HoldingRegisters, 10, 5 },
+        { 1, QModbusDataUnit::HoldingRegisters, 30, 5 }
+    };
+
+    QVERIFY(projectAddressSpaceContains(ranges, { 1, QModbusDataUnit::HoldingRegisters, 10 }));
+    QVERIFY(projectAddressSpaceContains(ranges, { 1, QModbusDataUnit::HoldingRegisters, 14 }));
+    QVERIFY(!projectAddressSpaceContains(ranges, { 1, QModbusDataUnit::HoldingRegisters, 15 }));
+
+    QVERIFY(projectAddressSpaceOverlaps(ranges, { 1, QModbusDataUnit::HoldingRegisters, 5, 6 }));
+    QVERIFY(projectAddressSpaceOverlaps(ranges, { 1, QModbusDataUnit::HoldingRegisters, 14, 1 }));
+    QVERIFY(projectAddressSpaceOverlaps(ranges, { 1, QModbusDataUnit::HoldingRegisters, 12, 10 }));
+    QVERIFY(!projectAddressSpaceOverlaps(ranges, { 1, QModbusDataUnit::HoldingRegisters, 5, 4 }));
+    QVERIFY(!projectAddressSpaceOverlaps(ranges, { 1, QModbusDataUnit::HoldingRegisters, 15, 15 }));
+}
+
+///
+/// \brief TestProjectAddressSpaceFilter::filtersMixedMapsWithOnlyOutsideItems
+///
+void TestProjectAddressSpaceFilter::filtersMixedMapsWithOnlyOutsideItems()
+{
+    const ProjectAddressSpaceRanges ranges = {
+        { 7, QModbusDataUnit::Coils, 100, 2 }
+    };
+
+    ProjectAddressSpaceValues values = {
+        { { 7, QModbusDataUnit::Coils, 99 }, 1 },
+        { { 7, QModbusDataUnit::Coils, 102 }, 2 },
+        { { 8, QModbusDataUnit::Coils, 100 }, 3 },
+        { { 7, QModbusDataUnit::DiscreteInputs, 100 }, 4 }
+    };
+    QVERIFY(filterProjectAddressValues(values, ranges).isEmpty());
+
+    AddressDescriptionMap descriptions;
+    descriptions.insert({ 7, QModbusDataUnit::Coils, 99 }, QStringLiteral("before"));
+    descriptions.insert({ 8, QModbusDataUnit::Coils, 100 }, QStringLiteral("device"));
+    QVERIFY(filterProjectAddressDescriptions(descriptions, ranges).isEmpty());
+
+    AddressTimestampMap timestamps;
+    timestamps.insert({ 7, QModbusDataUnit::Coils, 102 }, QDateTime::currentDateTime());
+    timestamps.insert({ 7, QModbusDataUnit::DiscreteInputs, 100 }, QDateTime::currentDateTime());
+    QVERIFY(filterProjectAddressTimestamps(timestamps, ranges).isEmpty());
+
+    ModbusSimulationParams params;
+    params.Mode = SimulationMode::Increment;
+    params.DataMode = DataType::UInt16;
+    ModbusSimulationMap2 simulations;
+    simulations.insert({ 7, QModbusDataUnit::Coils, 99 }, params);
+    simulations.insert({ 7, QModbusDataUnit::Coils, 102 }, params);
+    simulations.insert({ 8, QModbusDataUnit::Coils, 100 }, params);
+    simulations.insert({ 7, QModbusDataUnit::DiscreteInputs, 100 }, params);
+    QVERIFY(filterProjectAddressSimulations(simulations, ranges).isEmpty());
 }
 
 ///

@@ -22,6 +22,7 @@ private slots:
     void functionCodeStripsExceptionBit();
     void exceptionResponseIsFlagged();
     void toStringProducesHex();
+    void accessorsExposeRawAduAndException();
     void rtuAduRejectsShortAndBadChecksum();
     void tcpAduRejectsShortAndLengthMismatch();
     void createDispatchesFunctionCodes_data();
@@ -88,6 +89,21 @@ void TestModbusMessage::toStringProducesHex()
     const QString text = message->toString(DataType::Hex);
     QVERIFY(!text.isEmpty());
     QVERIFY(text.contains(' '));
+}
+
+void TestModbusMessage::accessorsExposeRawAduAndException()
+{
+    const QDateTime timestamp = QDateTime::fromString(QStringLiteral("2026-07-07T10:00:00.000"), Qt::ISODateWithMs);
+    const QModbusExceptionResponse exception(QModbusPdu::WriteSingleCoil,
+                                             QModbusExceptionResponse::IllegalDataValue);
+    const auto message = ModbusMessage::create(exception, ModbusMessage::Rtu, 9, 3, timestamp, false);
+
+    QVERIFY(message->isValid());
+    QCOMPARE(message->timestamp(), timestamp);
+    QCOMPARE(message->exception(), ModbusException(QModbusExceptionResponse::IllegalDataValue));
+    QVERIFY(message->adu() != nullptr);
+    QCOMPARE(QByteArray(*message), message->rawData());
+    QCOMPARE(message->toString(DataType::UInt16, false), formatUInt8Array(DataType::UInt16, false, message->rawData()));
 }
 
 void TestModbusMessage::rtuAduRejectsShortAndBadChecksum()
