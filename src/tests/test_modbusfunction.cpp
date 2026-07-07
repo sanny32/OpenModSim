@@ -17,6 +17,7 @@ class TestModbusFunction : public QObject
 
 private slots:
     void validCodesAreRecognised();
+    void validCodesListIsComplete();
     void invalidCodeIsRejected();
     void exceptionBitDetected();
     void nameMatchesFunction();
@@ -28,6 +29,7 @@ private slots:
     void limitsAddressRanges_data();
     void limitsAddressRanges();
     void limitsLengthRangeAtAddressSpaceEdges();
+    void limitsFallbackForUnknownAddressSpace();
 };
 
 void TestModbusFunction::validCodesAreRecognised()
@@ -37,10 +39,23 @@ void TestModbusFunction::validCodesAreRecognised()
     QVERIFY(ModbusFunction(QModbusPdu::MaskWriteRegister).isValid());
 }
 
+void TestModbusFunction::validCodesListIsComplete()
+{
+    const auto codes = ModbusFunction::validCodes();
+
+    QCOMPARE(codes.size(), 19);
+    QVERIFY(codes.contains(QModbusPdu::ReadCoils));
+    QVERIFY(codes.contains(QModbusPdu::EncapsulatedInterfaceTransport));
+
+    for(const auto code : codes)
+        QVERIFY(ModbusFunction(code).isValid());
+}
+
 void TestModbusFunction::invalidCodeIsRejected()
 {
     QVERIFY(!ModbusFunction(static_cast<QModbusPdu::FunctionCode>(0x00)).isValid());
     QVERIFY(!ModbusFunction(static_cast<QModbusPdu::FunctionCode>(0x42)).isValid());
+    QVERIFY(!ModbusFunction(static_cast<QModbusPdu::FunctionCode>(QModbusPdu::ReadCoils | QModbusPdu::ExceptionByte)).isValid());
 }
 
 void TestModbusFunction::exceptionBitDetected()
@@ -61,6 +76,9 @@ void TestModbusFunction::exceptionNameStripsExceptionBit()
 {
     const auto raised = static_cast<QModbusPdu::FunctionCode>(QModbusPdu::ReadHoldingRegisters | QModbusPdu::ExceptionByte);
     QCOMPARE(QString(ModbusFunction(raised)), QStringLiteral("READ HOLDING REGS"));
+
+    const auto unknown = static_cast<QModbusPdu::FunctionCode>(0x65 | QModbusPdu::ExceptionByte);
+    QCOMPARE(QString(ModbusFunction(unknown)), QString());
 }
 
 void TestModbusFunction::intConversion()
@@ -149,6 +167,18 @@ void TestModbusFunction::limitsLengthRangeAtAddressSpaceEdges()
     QCOMPARE(ModbusLimits::lengthRange(9999, false, AddressSpace::Addr5Digits).to(), 1);
     QCOMPARE(ModbusLimits::lengthRange(9999, true, AddressSpace::Addr5Digits).to(), 1);
     QCOMPARE(ModbusLimits::lengthRange(65536, false, AddressSpace::Addr6Digits).to(), 1);
+}
+
+void TestModbusFunction::limitsFallbackForUnknownAddressSpace()
+{
+    const auto unknown = static_cast<AddressSpace>(99);
+
+    QCOMPARE(ModbusLimits::addressSpaceSize(unknown), 65536);
+    QCOMPARE(ModbusLimits::addressRange(unknown, false).from(), 1);
+    QCOMPARE(ModbusLimits::addressRange(unknown, false).to(), 65536);
+    QCOMPARE(ModbusLimits::addressRange(unknown, true).from(), 0);
+    QCOMPARE(ModbusLimits::addressRange(unknown, true).to(), 65535);
+    QCOMPARE(ModbusLimits::lengthRange(65530, false, unknown).to(), 7);
 }
 
 QTEST_GUILESS_MAIN(TestModbusFunction)

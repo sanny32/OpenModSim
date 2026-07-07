@@ -16,6 +16,7 @@ class TestNumericUtils : public QObject
 
 private slots:
     void uint16ByteLayout();
+    void multiByteLayoutUsesByteOrder();
     void uint16RoundTrip_data();
     void uint16RoundTrip();
     void int32RoundTrip();
@@ -26,6 +27,7 @@ private slots:
     void makeValueScalars();
     void makeValueMultiRegister();
     void makeValueRejectsShortInput();
+    void makeValueRejectsUnknownType();
     void makeValueRegisterOrder();
     void makeValueCoversAllMultiRegisterTypes_data();
     void makeValueCoversAllMultiRegisterTypes();
@@ -35,6 +37,30 @@ void TestNumericUtils::uint16ByteLayout()
 {
     QCOMPARE(makeUInt16(0x34, 0x12, ByteOrder::Direct), quint16(0x1234));
     QCOMPARE(makeUInt16(0x34, 0x12, ByteOrder::Swapped), quint16(0x3412));
+}
+
+void TestNumericUtils::multiByteLayoutUsesByteOrder()
+{
+    quint16 lo = 0, hi = 0;
+    breakInt32(0x11223344, lo, hi, ByteOrder::Direct);
+    QCOMPARE(lo, quint16(0x3344));
+    QCOMPARE(hi, quint16(0x1122));
+
+    breakInt32(0x11223344, lo, hi, ByteOrder::Swapped);
+    QCOMPARE(lo, quint16(0x4433));
+    QCOMPARE(hi, quint16(0x2211));
+
+    QCOMPARE(makeInt32(0x3344, 0x1122, ByteOrder::Direct), qint32(0x11223344));
+    QCOMPARE(makeInt32(0x4433, 0x2211, ByteOrder::Swapped), qint32(0x11223344));
+
+    quint16 regs[4] = {0, 0, 0, 0};
+    breakUInt64(Q_UINT64_C(0x0102030405060708), regs[0], regs[1], regs[2], regs[3], ByteOrder::Swapped);
+    QCOMPARE(regs[0], quint16(0x0807));
+    QCOMPARE(regs[1], quint16(0x0605));
+    QCOMPARE(regs[2], quint16(0x0403));
+    QCOMPARE(regs[3], quint16(0x0201));
+    QCOMPARE(makeUInt64(regs[0], regs[1], regs[2], regs[3], ByteOrder::Swapped),
+             Q_UINT64_C(0x0102030405060708));
 }
 
 void TestNumericUtils::uint16RoundTrip_data()
@@ -128,6 +154,11 @@ void TestNumericUtils::makeValueRejectsShortInput()
     const QVector<quint16> tooShort{0x0001};
     QVERIFY(!makeValue(tooShort, DataType::Int32, RegisterOrder::MSRF, ByteOrder::Direct).isValid());
     QVERIFY(!makeValue({}, DataType::UInt16, RegisterOrder::MSRF, ByteOrder::Direct).isValid());
+}
+
+void TestNumericUtils::makeValueRejectsUnknownType()
+{
+    QVERIFY(!makeValue({0x1234}, static_cast<DataType>(99), RegisterOrder::MSRF, ByteOrder::Direct).isValid());
 }
 
 void TestNumericUtils::makeValueRegisterOrder()

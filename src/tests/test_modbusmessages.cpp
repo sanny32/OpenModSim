@@ -274,9 +274,20 @@ void TestModbusMessages::diagnostics()
     QCOMPARE(req.subfunc(), quint16(0));
     QCOMPARE(req.data(), QByteArray::fromHex("A537"));
 
+    DiagnosticsRequest badReq(request(QModbusPdu::Diagnostics, be16(0)), kProto, 1, 0, kTs);
+    QVERIFY(!badReq.isValid());
+
     DiagnosticsResponse resp(response(QModbusPdu::Diagnostics, be16(0) + QByteArray::fromHex("A537")), kProto, 1, 0, kTs);
     QVERIFY(resp.isValid());
     QCOMPARE(resp.subfunc(), quint16(0));
+
+    DiagnosticsResponse badResp(response(QModbusPdu::Diagnostics, be16(0)), kProto, 1, 0, kTs);
+    QVERIFY(!badResp.isValid());
+
+    QModbusExceptionResponse exception(QModbusPdu::Diagnostics,
+                                       QModbusExceptionResponse::IllegalDataValue);
+    DiagnosticsResponse exceptionResp(exception, kProto, 1, 0, kTs);
+    QVERIFY(exceptionResp.isValid());
 }
 
 void TestModbusMessages::getCommEventCounter()
@@ -288,6 +299,11 @@ void TestModbusMessages::getCommEventCounter()
 
     GetCommEventCounterResponse bad(response(QModbusPdu::GetCommEventCounter, be16(0)), kProto, 1, 0, kTs);
     QVERIFY(!bad.isValid());
+
+    QModbusExceptionResponse exception(QModbusPdu::GetCommEventCounter,
+                                       QModbusExceptionResponse::ServerDeviceFailure);
+    GetCommEventCounterResponse exceptionResp(exception, kProto, 1, 0, kTs);
+    QVERIFY(exceptionResp.isValid());
 }
 
 void TestModbusMessages::getCommEventLog()
@@ -330,8 +346,27 @@ void TestModbusMessages::readFileRecord()
     ReadFileRecordRequest bad(request(QModbusPdu::ReadFileRecord, QByteArray::fromHex("06") + QByteArray(6, '\0')), kProto, 1, 0, kTs);
     QVERIFY(!bad.isValid());
 
+    ReadFileRecordRequest tooLong(request(QModbusPdu::ReadFileRecord, QByteArray::fromHex("F6") + QByteArray(0xF6, '\0')),
+                                  kProto, 1, 0, kTs);
+    QVERIFY(!tooLong.isValid());
+
     ReadFileRecordResponse resp(response(QModbusPdu::ReadFileRecord, QByteArray::fromHex("07") + QByteArray(7, '\1')), kProto, 1, 0, kTs);
     QVERIFY(resp.isValid());
+    QCOMPARE(resp.byteCount(), quint8(0x07));
+    QCOMPARE(resp.data(), QByteArray(7, '\1'));
+
+    ReadFileRecordResponse badResp(response(QModbusPdu::ReadFileRecord, QByteArray::fromHex("06") + QByteArray(6, '\1')),
+                                   kProto, 1, 0, kTs);
+    QVERIFY(!badResp.isValid());
+
+    ReadFileRecordResponse tooLongResp(response(QModbusPdu::ReadFileRecord, QByteArray::fromHex("F6") + QByteArray(0xF6, '\1')),
+                                       kProto, 1, 0, kTs);
+    QVERIFY(!tooLongResp.isValid());
+
+    QModbusExceptionResponse exception(QModbusPdu::ReadFileRecord,
+                                       QModbusExceptionResponse::IllegalDataAddress);
+    ReadFileRecordResponse exceptionResp(exception, kProto, 1, 0, kTs);
+    QVERIFY(exceptionResp.isValid());
 }
 
 void TestModbusMessages::writeFileRecord()
@@ -343,8 +378,27 @@ void TestModbusMessages::writeFileRecord()
     WriteFileRecordRequest bad(request(QModbusPdu::WriteFileRecord, QByteArray::fromHex("08") + QByteArray(8, '\0')), kProto, 1, 0, kTs);
     QVERIFY(!bad.isValid());
 
+    WriteFileRecordRequest tooLong(request(QModbusPdu::WriteFileRecord, QByteArray::fromHex("FC") + QByteArray(0xFC, '\0')),
+                                   kProto, 1, 0, kTs);
+    QVERIFY(!tooLong.isValid());
+
     WriteFileRecordResponse resp(response(QModbusPdu::WriteFileRecord, QByteArray::fromHex("09") + QByteArray(9, '\1')), kProto, 1, 0, kTs);
     QVERIFY(resp.isValid());
+    QCOMPARE(resp.length(), quint8(0x09));
+    QCOMPARE(resp.data(), QByteArray(9, '\1'));
+
+    WriteFileRecordResponse badResp(response(QModbusPdu::WriteFileRecord, QByteArray::fromHex("08") + QByteArray(8, '\1')),
+                                    kProto, 1, 0, kTs);
+    QVERIFY(!badResp.isValid());
+
+    WriteFileRecordResponse tooLongResp(response(QModbusPdu::WriteFileRecord, QByteArray::fromHex("FC") + QByteArray(0xFC, '\1')),
+                                        kProto, 1, 0, kTs);
+    QVERIFY(!tooLongResp.isValid());
+
+    QModbusExceptionResponse exception(QModbusPdu::WriteFileRecord,
+                                       QModbusExceptionResponse::IllegalDataValue);
+    WriteFileRecordResponse exceptionResp(exception, kProto, 1, 0, kTs);
+    QVERIFY(exceptionResp.isValid());
 }
 
 void TestModbusMessages::maskWriteRegister()

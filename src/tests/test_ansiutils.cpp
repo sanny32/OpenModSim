@@ -20,6 +20,8 @@ private slots:
     void fromAnsiRejectsWrongSize();
     void printableReplacesControlBytes();
     void printableInsertsSeparator();
+    void printableSkipsNonPrintableSeparator();
+    void printableHandlesEmptyInput();
     void printableFallsBackOnUnknownCodepage();
 };
 
@@ -41,6 +43,7 @@ void TestAnsiUtils::roundTrip()
 
 void TestAnsiUtils::fromAnsiRejectsWrongSize()
 {
+    QCOMPARE(uint16FromAnsi(QByteArray(), ByteOrder::Direct), quint16(0));
     QCOMPARE(uint16FromAnsi(QByteArray("A"), ByteOrder::Direct), quint16(0));
     QCOMPARE(uint16FromAnsi(QByteArray("ABC"), ByteOrder::Direct), quint16(0));
 }
@@ -55,6 +58,18 @@ void TestAnsiUtils::printableInsertsSeparator()
 {
     const QString text = printableAnsi(QByteArray("AB"), QStringLiteral("UTF-8"), QChar(' '));
     QCOMPARE(text, QStringLiteral("A B "));
+}
+
+void TestAnsiUtils::printableSkipsNonPrintableSeparator()
+{
+    const QString text = printableAnsi(QByteArray("AB"), QStringLiteral("UTF-8"), QChar('\n'));
+    QCOMPARE(text, QStringLiteral("AB"));
+}
+
+void TestAnsiUtils::printableHandlesEmptyInput()
+{
+    const QString text = printableAnsi(QByteArray(), QStringLiteral("UTF-8"), QChar(' '));
+    QVERIFY(text.isEmpty());
 }
 
 void TestAnsiUtils::printableFallsBackOnUnknownCodepage()
