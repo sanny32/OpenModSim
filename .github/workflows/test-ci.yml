@@ -1,9 +1,18 @@
-name: Test
+name: Test CI
 
 on:
   push:
-    branches: [main]
+    branches: [main, dev]
+    paths:
+      - '.github/workflows/test-ci.yml'
+      - 'src/**'
+      - 'tools/coverage.py'
   pull_request:
+    branches: [main, dev]
+    paths:
+      - '.github/workflows/test-ci.yml'
+      - 'src/**'
+      - 'tools/coverage.py'
   workflow_dispatch:
 
 # Cancel superseded runs on the same ref to save CI minutes.
