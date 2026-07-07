@@ -196,6 +196,15 @@ void TestModbusMessage::createFallsBackForUnknownFunctionCode()
     const auto message = ModbusMessage::create(request, ModbusMessage::Tcp, 1, 0, QDateTime::currentDateTime(), true);
     QCOMPARE(int(message->functionCode()), 0x65);
     QVERIFY(message->isRequest());
+
+    const auto parsedTcp = ModbusMessage::create(message->rawData(), ModbusMessage::Tcp, QDateTime::currentDateTime(), true);
+    QCOMPARE(int(parsedTcp->functionCode()), 0x65);
+    QVERIFY(parsedTcp->isRequest());
+
+    const auto rtuMessage = ModbusMessage::create(request, ModbusMessage::Rtu, 1, 0, QDateTime::currentDateTime(), false);
+    const auto parsedRtu = ModbusMessage::create(rtuMessage->rawData(), ModbusMessage::Rtu, QDateTime::currentDateTime(), false);
+    QCOMPARE(int(parsedRtu->functionCode()), 0x65);
+    QVERIFY(!parsedRtu->isRequest());
 }
 
 QTEST_GUILESS_MAIN(TestModbusMessage)

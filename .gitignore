@@ -60,7 +60,13 @@ CMakeUserPresets.json
 .pytest_cache
 __pycache__
 
+# AI agents
+.skills
 .claude
+.codex_tmp
+.vscode
+AGENTS.md
+
 .directory
 .DS_Store
 *.cmd
@@ -76,5 +82,3 @@ src/res/license.txt
 /docs/README.md
 /docs/SITE_STRUCTURE.md
 /docs/DEPLOYMENT.md
-/AGENTS.md
-/CHANGELOG.md

@@ -28,6 +28,8 @@ private slots:
     void formatterDefaultRegisterTypeBranches();
     void scalarAndArrayFormatterBranches();
     void addressFormatterCoversAllRegisterTypes();
+    void inputRegisterFormatterBranches();
+    void unsignedFormatterLeadingZeroBranches();
     void ansiFormatter();
     void coilPassthrough();
 };
@@ -245,6 +247,54 @@ void TestFormatUtils::addressFormatterCoversAllRegisterTypes()
              QStringLiteral(" 0005"));
     QCOMPARE(formatAddress(QModbusDataUnit::Coils, 5, AddressSpace::Addr5Digits, true, AddressBase::Base1),
              QStringLiteral("0x0005"));
+}
+
+void TestFormatUtils::inputRegisterFormatterBranches()
+{
+    QVariant out;
+
+    QCOMPARE(formatBinaryValue(QModbusDataUnit::InputRegisters, 0x00F0, ByteOrder::Swapped, out, false),
+             QStringLiteral("1111 0000 0000 0000"));
+    QCOMPARE(out.toUInt(), 0xF000u);
+
+    QCOMPARE(formatUInt16Value(QModbusDataUnit::InputRegisters, 0x0100, ByteOrder::Swapped, false, out, false),
+             QStringLiteral("    1"));
+    QCOMPARE(out.toUInt(), 0x0001u);
+
+    const QString signedText = formatInt16Value(QModbusDataUnit::InputRegisters, qint16(0x00FF), ByteOrder::Swapped,
+                                                out, false);
+    QVERIFY(signedText.trimmed() == QStringLiteral("-256"));
+    QCOMPARE(out.toInt(), -256);
+
+    QCOMPARE(formatHexValue(QModbusDataUnit::InputRegisters, 0x00AB, ByteOrder::Swapped, out, false),
+             QStringLiteral("0xAB00"));
+    QCOMPARE(out.toUInt(), 0xAB00u);
+
+    const QString ansi = formatAnsiValue(QModbusDataUnit::InputRegisters, 0x4142, ByteOrder::Swapped,
+                                         QStringLiteral("UTF-8"), out, false);
+    QVERIFY(!ansi.isEmpty());
+    QCOMPARE(out.toUInt(), 0x4241u);
+}
+
+void TestFormatUtils::unsignedFormatterLeadingZeroBranches()
+{
+    QVariant out;
+
+    QCOMPARE(formatUInt32Value(QModbusDataUnit::HoldingRegisters, 7, 0, ByteOrder::Direct, true, false, out, false),
+             QStringLiteral("0000000007"));
+    QCOMPARE(out.toUInt(), 7u);
+
+    QCOMPARE(formatUInt32Value(QModbusDataUnit::DiscreteInputs, 8, 0, ByteOrder::Direct, false, false, out, false),
+             QStringLiteral("8"));
+    QCOMPARE(out.toUInt(), 8u);
+
+    QCOMPARE(formatUInt64Value(QModbusDataUnit::HoldingRegisters, 9, 0, 0, 0, ByteOrder::Direct, true, false, out, false),
+             QStringLiteral("00000000000000000009"));
+    QCOMPARE(out.toULongLong(), Q_UINT64_C(9));
+
+    QCOMPARE(formatUInt64Value(QModbusDataUnit::Coils, 10, 0, 0, 0, ByteOrder::Direct, false, false, out, false),
+             QStringLiteral("10"));
+    QCOMPARE(out.toUInt(), 10u);
 }
 
 void TestFormatUtils::ansiFormatter()
