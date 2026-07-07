@@ -47,6 +47,9 @@ function(omodsim_configure_tests)
     omodsim_apply_coverage(omodsim_testable)
     set_target_properties(omodsim_testable PROPERTIES FOLDER "Tests")
 
+    add_custom_target(omodsim_tests)
+    set_target_properties(omodsim_tests PROPERTIES FOLDER "Tests")
+
     function(omodsim_add_test test_name source_file)
         add_executable(${test_name} tests/${source_file})
         target_link_libraries(${test_name} PRIVATE
@@ -55,6 +58,7 @@ function(omodsim_configure_tests)
         )
         omodsim_apply_coverage(${test_name})
         set_target_properties(${test_name} PROPERTIES FOLDER "Tests")
+        add_dependencies(omodsim_tests ${test_name})
         add_test(NAME ${test_name} COMMAND ${test_name})
     endfunction()
 

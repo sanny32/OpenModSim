@@ -14,22 +14,6 @@ concurrency:
 env:
   QT_VERSION: '6.9.3'
   QT_MODULES: 'qtserialbus qtserialport qt5compat'
-  TEST_TARGETS: >-
-    omodsim_tests_numericutils
-    omodsim_tests_byteorderutils
-    omodsim_tests_enums
-    omodsim_tests_modbusfunction
-    omodsim_tests_formatutils
-    omodsim_tests_errorsimulations
-    omodsim_tests_validators
-    omodsim_tests_dataunitmap
-    omodsim_tests_datasimulator
-    omodsim_tests_modbusmessage
-    omodsim_tests_modbusmessages
-    omodsim_tests_ansiutils
-    omodsim_tests_serialportutils
-    omodsim_tests_simulationparams
-    omodsim_tests_storage
 
 jobs:
   tests:
@@ -83,7 +67,7 @@ jobs:
           -DCMAKE_INTERPROCEDURAL_OPTIMIZATION=OFF
 
       - name: Build tests
-        run: cmake --build build --config Release --parallel --target ${{ env.TEST_TARGETS }}
+        run: cmake --build build --config Release --parallel --target omodsim_tests
 
       - name: Run tests
         run: ctest --test-dir build --output-on-failure -R "^omodsim_tests"
