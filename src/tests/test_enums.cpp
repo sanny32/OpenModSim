@@ -27,6 +27,8 @@ private slots:
     void allEnumNumericFallbacks();
     void allEnumDefaultFallbacks();
     void settingsOperatorsRoundTrip();
+    void settingsOperatorsUseDefaultsForMissingKeys();
+    void settingsOperatorsReadNumericEnumStrings();
     void registersCountPerType();
     void multiRegisterClassification();
     void boolConversions();
@@ -172,6 +174,63 @@ void TestEnums::settingsOperatorsRoundTrip()
     QCOMPARE(base, AddressBase::Base1);
     QCOMPARE(space, AddressSpace::Addr5Digits);
     QCOMPARE(type, DataType::Float64);
+    QCOMPARE(registerOrder, RegisterOrder::LSRF);
+    QCOMPARE(byteOrder, ByteOrder::Swapped);
+}
+
+void TestEnums::settingsOperatorsUseDefaultsForMissingKeys()
+{
+    QTemporaryDir dir;
+    QVERIFY(dir.isValid());
+
+    QSettings settings(dir.filePath(QStringLiteral("empty-settings.ini")), QSettings::IniFormat);
+
+    AddressBase base = AddressBase::Base1;
+    AddressSpace space = AddressSpace::Addr5Digits;
+    DataType type = DataType::Ansi;
+    RegisterOrder registerOrder = RegisterOrder::LSRF;
+    ByteOrder byteOrder = ByteOrder::Swapped;
+
+    settings >> base;
+    settings >> space;
+    settings >> type;
+    settings >> registerOrder;
+    settings >> byteOrder;
+
+    QCOMPARE(base, AddressBase::Base0);
+    QCOMPARE(space, AddressSpace::Addr6Digits);
+    QCOMPARE(type, DataType::UInt16);
+    QCOMPARE(registerOrder, RegisterOrder::MSRF);
+    QCOMPARE(byteOrder, ByteOrder::Direct);
+}
+
+void TestEnums::settingsOperatorsReadNumericEnumStrings()
+{
+    QTemporaryDir dir;
+    QVERIFY(dir.isValid());
+
+    QSettings settings(dir.filePath(QStringLiteral("numeric-settings.ini")), QSettings::IniFormat);
+    settings.setValue(QStringLiteral("AddressBase"), QStringLiteral("1"));
+    settings.setValue(QStringLiteral("AddressSpace"), QStringLiteral("1"));
+    settings.setValue(QStringLiteral("DataType"), QStringLiteral("8"));
+    settings.setValue(QStringLiteral("RegisterOrder"), QStringLiteral("1"));
+    settings.setValue(QStringLiteral("ByteOrder"), QStringLiteral("1"));
+
+    AddressBase base = AddressBase::Base0;
+    AddressSpace space = AddressSpace::Addr6Digits;
+    DataType type = DataType::Binary;
+    RegisterOrder registerOrder = RegisterOrder::MSRF;
+    ByteOrder byteOrder = ByteOrder::Direct;
+
+    settings >> base;
+    settings >> space;
+    settings >> type;
+    settings >> registerOrder;
+    settings >> byteOrder;
+
+    QCOMPARE(base, AddressBase::Base1);
+    QCOMPARE(space, AddressSpace::Addr5Digits);
+    QCOMPARE(type, DataType::Int64);
     QCOMPARE(registerOrder, RegisterOrder::LSRF);
     QCOMPARE(byteOrder, ByteOrder::Swapped);
 }

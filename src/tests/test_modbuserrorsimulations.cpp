@@ -30,6 +30,9 @@ private slots:
     void xmlIgnoresWrongReaderState();
     void xmlRejectsNonNumericDelays();
     void settingsDefaultsWhenGroupIsMissing();
+    void settersClampNegativeDelayValues();
+    void settingsReadStringBooleansAndClampNegativeDelays();
+    void xmlWriterSerializesEveryAttribute();
 };
 
 void TestModbusErrorSimulations::defaultsAreInactive()
@@ -256,6 +259,76 @@ void TestModbusErrorSimulations::settingsDefaultsWhenGroupIsMissing()
     QCOMPARE(restored.responseDelayTime(), 0);
     QVERIFY(!restored.responseRandomDelay());
     QCOMPARE(restored.responseRandomDelayUpToTime(), 1000);
+}
+
+void TestModbusErrorSimulations::settersClampNegativeDelayValues()
+{
+    ModbusErrorSimulations errsim;
+    errsim.setResponseDelayTime(-1);
+    errsim.setResponseRandomDelayUpToTime(-2);
+
+    QCOMPARE(errsim.responseDelayTime(), 0);
+    QCOMPARE(errsim.responseRandomDelayUpToTime(), 0);
+}
+
+void TestModbusErrorSimulations::settingsReadStringBooleansAndClampNegativeDelays()
+{
+    QTemporaryDir dir;
+    QVERIFY(dir.isValid());
+
+    QSettings settings(dir.filePath(QStringLiteral("string-values.ini")), QSettings::IniFormat);
+    settings.beginGroup(QStringLiteral("ModbusErrorSimulations"));
+    settings.setValue(QStringLiteral("NoResponse"), QStringLiteral("true"));
+    settings.setValue(QStringLiteral("ResponseIncorrectId"), QStringLiteral("1"));
+    settings.setValue(QStringLiteral("ResponseIllegalFunction"), QStringLiteral("false"));
+    settings.setValue(QStringLiteral("ResponseDeviceBusy"), QStringLiteral("0"));
+    settings.setValue(QStringLiteral("ResponseIncorrectCrc"), QStringLiteral("true"));
+    settings.setValue(QStringLiteral("ResponseDelay"), QStringLiteral("1"));
+    settings.setValue(QStringLiteral("ResponseDelayTime"), QStringLiteral("-5"));
+    settings.setValue(QStringLiteral("ResponseRandomDelay"), QStringLiteral("false"));
+    settings.setValue(QStringLiteral("ResponseRandomDelayUpToTime"), QStringLiteral("-10"));
+    settings.endGroup();
+
+    ModbusErrorSimulations restored;
+    settings >> restored;
+
+    QVERIFY(restored.noResponse());
+    QVERIFY(restored.responseIncorrectId());
+    QVERIFY(!restored.responseIllegalFunction());
+    QVERIFY(!restored.responseDeviceBusy());
+    QVERIFY(restored.responseIncorrectCrc());
+    QVERIFY(restored.responseDelay());
+    QCOMPARE(restored.responseDelayTime(), 0);
+    QVERIFY(!restored.responseRandomDelay());
+    QCOMPARE(restored.responseRandomDelayUpToTime(), 0);
+}
+
+void TestModbusErrorSimulations::xmlWriterSerializesEveryAttribute()
+{
+    ModbusErrorSimulations errsim;
+    errsim.setNoResponse(true);
+    errsim.setResponseIncorrectId(true);
+    errsim.setResponseIllegalFunction(true);
+    errsim.setResponseDeviceBusy(true);
+    errsim.setResponseIncorrectCrc(true);
+    errsim.setResponseDelay(true);
+    errsim.setResponseDelayTime(15);
+    errsim.setResponseRandomDelay(true);
+    errsim.setResponseRandomDelayUpToTime(25);
+
+    QByteArray buffer;
+    QXmlStreamWriter writer(&buffer);
+    writer << errsim;
+
+    QVERIFY(buffer.contains("NoResponse=\"true\""));
+    QVERIFY(buffer.contains("ResponseIncorrectId=\"true\""));
+    QVERIFY(buffer.contains("ResponseIllegalFunction=\"true\""));
+    QVERIFY(buffer.contains("ResponseDeviceBusy=\"true\""));
+    QVERIFY(buffer.contains("ResponseIncorrectCrc=\"true\""));
+    QVERIFY(buffer.contains("ResponseDelay=\"true\""));
+    QVERIFY(buffer.contains("ResponseRandomDelay=\"true\""));
+    QVERIFY(buffer.contains("ResponseDelayTime=\"15\""));
+    QVERIFY(buffer.contains("ResponseRandomDelayUpToTime=\"25\""));
 }
 
 QTEST_GUILESS_MAIN(TestModbusErrorSimulations)

@@ -51,6 +51,10 @@ private slots:
     void invalidRangeFallsBackToDefaultRange();
     void rangeContainsBoundaries();
     void rangeIgnoresWrongReaderState();
+    void childParamsIgnoreWrongReaderStateAndRoot();
+    void childParamsKeepExistingValuesWhenChildRangeIsMissing();
+    void numericAttributesAreAccepted();
+    void negativeIntervalIsIgnored();
 };
 
 void TestSimulationParams::randomRoundTrip()
@@ -300,6 +304,93 @@ void TestSimulationParams::rangeIgnoresWrongReaderState()
     wrongElementReader >> range;
     QCOMPARE(range.from(), 1.);
     QCOMPARE(range.to(), 2.);
+}
+
+void TestSimulationParams::childParamsIgnoreWrongReaderStateAndRoot()
+{
+    RandomSimulationParams random;
+    random.Range = QRange<double>(1., 2.);
+    QXmlStreamReader randomTextReader(QByteArrayLiteral("<RandomSimulationParams><Range From=\"3\" To=\"4\"/></RandomSimulationParams>"));
+    randomTextReader.readNext();
+    randomTextReader >> random;
+    QCOMPARE(random.Range.from(), 1.);
+    QCOMPARE(random.Range.to(), 2.);
+
+    IncrementSimulationParams increment;
+    increment.Step = 5.;
+    QXmlStreamReader incrementWrongRoot(QByteArrayLiteral("<NotIncrementSimulationParams Step=\"7\"><Range From=\"8\" To=\"9\"/></NotIncrementSimulationParams>"));
+    incrementWrongRoot.readNextStartElement();
+    incrementWrongRoot >> increment;
+    QCOMPARE(increment.Step, 5.);
+
+    DecrementSimulationParams decrement;
+    decrement.Step = 6.;
+    QXmlStreamReader decrementTextReader(QByteArrayLiteral("<DecrementSimulationParams Step=\"7\"><Range From=\"8\" To=\"9\"/></DecrementSimulationParams>"));
+    decrementTextReader.readNext();
+    decrementTextReader >> decrement;
+    QCOMPARE(decrement.Step, 6.);
+}
+
+void TestSimulationParams::childParamsKeepExistingValuesWhenChildRangeIsMissing()
+{
+    RandomSimulationParams random;
+    random.Range = QRange<double>(1., 2.);
+    QXmlStreamReader randomReader(QByteArrayLiteral("<RandomSimulationParams/>"));
+    randomReader.readNextStartElement();
+    randomReader >> random;
+    QCOMPARE(random.Range.from(), 1.);
+    QCOMPARE(random.Range.to(), 2.);
+
+    IncrementSimulationParams increment;
+    increment.Step = 3.;
+    increment.Range = QRange<double>(4., 5.);
+    QXmlStreamReader incrementReader(QByteArrayLiteral("<IncrementSimulationParams Step=\"7\"/>"));
+    incrementReader.readNextStartElement();
+    incrementReader >> increment;
+    QCOMPARE(increment.Step, 7.);
+    QCOMPARE(increment.Range.from(), 4.);
+    QCOMPARE(increment.Range.to(), 5.);
+
+    DecrementSimulationParams decrement;
+    decrement.Step = 8.;
+    decrement.Range = QRange<double>(9., 10.);
+    QXmlStreamReader decrementReader(QByteArrayLiteral("<DecrementSimulationParams Step=\"11\"/>"));
+    decrementReader.readNextStartElement();
+    decrementReader >> decrement;
+    QCOMPARE(decrement.Step, 11.);
+    QCOMPARE(decrement.Range.from(), 9.);
+    QCOMPARE(decrement.Range.to(), 10.);
+}
+
+void TestSimulationParams::numericAttributesAreAccepted()
+{
+    QXmlStreamReader reader(QByteArrayLiteral(
+        "<ModbusSimulationParams Mode=\"3\" Interval=\"25\" DataType=\"8\" RegisterOrder=\"1\">"
+        "<IncrementSimulationParams Step=\"4\"><Range From=\"5\" To=\"6\"/></IncrementSimulationParams>"
+        "</ModbusSimulationParams>"));
+    reader.readNextStartElement();
+
+    ModbusSimulationParams params;
+    reader >> params;
+
+    QCOMPARE(params.Mode, SimulationMode::Increment);
+    QCOMPARE(params.Interval, 25u);
+    QCOMPARE(params.DataMode, DataType::Int64);
+    QCOMPARE(params.RegOrder, RegisterOrder::LSRF);
+    QCOMPARE(params.IncrementParams.Step, 4.);
+    QCOMPARE(params.IncrementParams.Range.from(), 5.);
+}
+
+void TestSimulationParams::negativeIntervalIsIgnored()
+{
+    QXmlStreamReader reader(QByteArrayLiteral("<ModbusSimulationParams Interval=\"-1\"/>"));
+    reader.readNextStartElement();
+
+    ModbusSimulationParams params;
+    params.Interval = 44;
+    reader >> params;
+
+    QCOMPARE(params.Interval, 44u);
 }
 
 QTEST_GUILESS_MAIN(TestSimulationParams)
