@@ -23,6 +23,8 @@ private slots:
     void addressFormatting();
     void int16AndBinaryFormatters();
     void multiRegisterFormatters();
+    void formatterCoilAndDiscreteInputBranches();
+    void formatterDeferredRegisterBranches();
     void ansiFormatter();
     void coilPassthrough();
 };
@@ -117,6 +119,62 @@ void TestFormatUtils::multiRegisterFormatters()
     breakUInt64(Q_UINT64_C(0x8000000000000001), u[0], u[1], u[2], u[3], ByteOrder::Direct);
     formatUInt64Value(QModbusDataUnit::HoldingRegisters, u[0], u[1], u[2], u[3], ByteOrder::Direct, false, false, out, false);
     QCOMPARE(out.toULongLong(), Q_UINT64_C(0x8000000000000001));
+}
+
+void TestFormatUtils::formatterCoilAndDiscreteInputBranches()
+{
+    QVariant out;
+
+    QCOMPARE(formatBinaryValue(QModbusDataUnit::DiscreteInputs, 1, ByteOrder::Direct, out), QStringLiteral("<1>"));
+    QCOMPARE(out.toUInt(), 1u);
+
+    QCOMPARE(formatUInt16Value(QModbusDataUnit::DiscreteInputs, 2, ByteOrder::Direct, true, out), QStringLiteral("<2>"));
+    QCOMPARE(out.toUInt(), 2u);
+
+    QCOMPARE(formatInt16Value(QModbusDataUnit::DiscreteInputs, -3, ByteOrder::Direct, out), QStringLiteral("<-3>"));
+    QCOMPARE(out.toInt(), -3);
+
+    QCOMPARE(formatHexValue(QModbusDataUnit::DiscreteInputs, 4, ByteOrder::Direct, out), QStringLiteral("<4>"));
+    QCOMPARE(out.toUInt(), 4u);
+
+    QCOMPARE(formatAnsiValue(QModbusDataUnit::DiscreteInputs, 5, ByteOrder::Direct, QStringLiteral("UTF-8"), out),
+             QStringLiteral("<5>"));
+    QCOMPARE(out.toUInt(), 5u);
+
+    QCOMPARE(formatDoubleValue(QModbusDataUnit::DiscreteInputs, 6, 0, 0, 0, ByteOrder::Direct, false, out),
+             QStringLiteral("<6>"));
+    QCOMPARE(out.toUInt(), 6u);
+
+    QCOMPARE(formatInt64Value(QModbusDataUnit::DiscreteInputs, 7, 0, 0, 0, ByteOrder::Direct, false, out),
+             QStringLiteral("<7>"));
+    QCOMPARE(out.toUInt(), 7u);
+
+    QCOMPARE(formatUInt64Value(QModbusDataUnit::DiscreteInputs, 8, 0, 0, 0, ByteOrder::Direct, true, false, out),
+             QStringLiteral("<8>"));
+    QCOMPARE(out.toUInt(), 8u);
+}
+
+void TestFormatUtils::formatterDeferredRegisterBranches()
+{
+    QVariant out = 42;
+
+    QVERIFY(formatFloatValue(QModbusDataUnit::InputRegisters, 1, 2, ByteOrder::Direct, true, out).isEmpty());
+    QCOMPARE(out.toInt(), 42);
+
+    QVERIFY(formatInt32Value(QModbusDataUnit::InputRegisters, 1, 2, ByteOrder::Direct, true, out).isEmpty());
+    QCOMPARE(out.toInt(), 42);
+
+    QVERIFY(formatUInt32Value(QModbusDataUnit::InputRegisters, 1, 2, ByteOrder::Direct, true, true, out).isEmpty());
+    QCOMPARE(out.toInt(), 42);
+
+    QVERIFY(formatDoubleValue(QModbusDataUnit::InputRegisters, 1, 2, 3, 4, ByteOrder::Direct, true, out).isEmpty());
+    QCOMPARE(out.toInt(), 42);
+
+    QVERIFY(formatInt64Value(QModbusDataUnit::InputRegisters, 1, 2, 3, 4, ByteOrder::Direct, true, out).isEmpty());
+    QCOMPARE(out.toInt(), 42);
+
+    QVERIFY(formatUInt64Value(QModbusDataUnit::InputRegisters, 1, 2, 3, 4, ByteOrder::Direct, true, true, out).isEmpty());
+    QCOMPARE(out.toInt(), 42);
 }
 
 void TestFormatUtils::ansiFormatter()
