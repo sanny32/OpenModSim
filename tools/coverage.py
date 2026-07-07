@@ -60,6 +60,9 @@ def read_cache(build_dir: Path, key: str) -> str | None:
 
 def detect_compiler(build_dir: Path) -> str:
     """Return 'msvc', 'clang' or 'gcc' based on the configured compiler."""
+    generator = (read_cache(build_dir, "CMAKE_GENERATOR") or "").lower()
+    if "visual studio" in generator:
+        return "msvc"
     compiler = (read_cache(build_dir, "CMAKE_CXX_COMPILER") or "").lower()
     base = Path(compiler).name
     if base in ("cl.exe", "cl") or "clang-cl" in base:
@@ -146,8 +149,11 @@ def print_summary(xml: Path) -> None:
             line += f"  ({covered}/{valid} lines)"
         print(line)
     branch = root.get("branch-rate")
+    branches_valid = root.get("branches-valid")
     if branch is not None and branch != "0":
         print(f"Branch coverage: {float(branch) * 100:.1f}%")
+    elif branches_valid == "0":
+        print("Branch coverage: not reported by this coverage backend")
     print(f"Report: {xml.parent / 'index.html'}")
     print("=" * 48)
 
