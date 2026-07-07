@@ -42,16 +42,20 @@ private slots:
     void incrementRoundTripWithRegisterOrder();
     void decrementRoundTrip();
     void rangeRoundTrip();
+    void rangeDefaultConstructorAndWriterOutput();
     void defaultsSurviveWrongXmlElements();
     void invalidAttributesKeepDefaults();
     void missingAttributesKeepExistingValues();
     void mismatchedChildParamsAreSkipped();
     void matchingChildParamsForEveryMode();
     void writerSkipsUnsupportedChildParams();
+    void writerEmitsSupportedChildParams();
     void invalidRangeFallsBackToDefaultRange();
+    void invalidRangeToFallsBackToDefaultRange();
     void rangeContainsBoundaries();
     void rangeIgnoresWrongReaderState();
     void childParamsIgnoreWrongReaderStateAndRoot();
+    void childParamsSkipUnexpectedRangeElement();
     void childParamsKeepExistingValuesWhenChildRangeIsMissing();
     void numericAttributesAreAccepted();
     void negativeIntervalIsIgnored();
@@ -118,6 +122,25 @@ void TestSimulationParams::rangeRoundTrip()
     reader >> restored;
     QCOMPARE(restored.from(), 1.5);
     QCOMPARE(restored.to(), 9.5);
+}
+
+void TestSimulationParams::rangeDefaultConstructorAndWriterOutput()
+{
+    const QRange<double> defaultRange;
+    QCOMPARE(defaultRange.from(), std::numeric_limits<double>::min());
+    QCOMPARE(defaultRange.to(), std::numeric_limits<double>::max());
+    QVERIFY(defaultRange.contains(std::numeric_limits<double>::min()));
+    QVERIFY(defaultRange.contains(std::numeric_limits<double>::max()));
+
+    QByteArray buffer;
+    {
+        QXmlStreamWriter writer(&buffer);
+        writer << QRange<double>(-1.5, 2.5);
+    }
+
+    QVERIFY(buffer.contains("Range"));
+    QVERIFY(buffer.contains("From=\"-1.5\""));
+    QVERIFY(buffer.contains("To=\"2.5\""));
 }
 
 void TestSimulationParams::defaultsSurviveWrongXmlElements()
@@ -268,10 +291,71 @@ void TestSimulationParams::writerSkipsUnsupportedChildParams()
     QVERIFY(!toggleXml.contains("RandomSimulationParams"));
 }
 
+void TestSimulationParams::writerEmitsSupportedChildParams()
+{
+    ModbusSimulationParams randomParams;
+    randomParams.Mode = SimulationMode::Random;
+    randomParams.DataMode = DataType::UInt16;
+    randomParams.RandomParams.Range = QRange<double>(7., 8.);
+
+    QByteArray randomXml;
+    {
+        QXmlStreamWriter writer(&randomXml);
+        writer << randomParams;
+    }
+
+    QVERIFY(randomXml.contains("RandomSimulationParams"));
+    QVERIFY(randomXml.contains("From=\"7\""));
+    QVERIFY(!randomXml.contains("RegisterOrder"));
+
+    ModbusSimulationParams incrementParams;
+    incrementParams.Mode = SimulationMode::Increment;
+    incrementParams.DataMode = DataType::Float32;
+    incrementParams.RegOrder = RegisterOrder::LSRF;
+    incrementParams.IncrementParams.Step = 3.5;
+    incrementParams.IncrementParams.Range = QRange<double>(1., 9.);
+
+    QByteArray incrementXml;
+    {
+        QXmlStreamWriter writer(&incrementXml);
+        writer << incrementParams;
+    }
+
+    QVERIFY(incrementXml.contains("IncrementSimulationParams"));
+    QVERIFY(incrementXml.contains("Step=\"3.5\""));
+    QVERIFY(incrementXml.contains("RegisterOrder=\"LSRF\""));
+
+    ModbusSimulationParams decrementParams;
+    decrementParams.Mode = SimulationMode::Decrement;
+    decrementParams.DataMode = DataType::UInt16;
+    decrementParams.DecrementParams.Step = 4.5;
+
+    QByteArray decrementXml;
+    {
+        QXmlStreamWriter writer(&decrementXml);
+        writer << decrementParams;
+    }
+
+    QVERIFY(decrementXml.contains("DecrementSimulationParams"));
+    QVERIFY(decrementXml.contains("Step=\"4.5\""));
+    QVERIFY(!decrementXml.contains("RegisterOrder"));
+}
+
 void TestSimulationParams::invalidRangeFallsBackToDefaultRange()
 {
     QRange<double> range(1., 2.);
     QXmlStreamReader reader(QByteArrayLiteral("<Range From=\"bad\" To=\"9\"/>"));
+    reader.readNextStartElement();
+    reader >> range;
+
+    QCOMPARE(range.from(), std::numeric_limits<double>::min());
+    QCOMPARE(range.to(), std::numeric_limits<double>::max());
+}
+
+void TestSimulationParams::invalidRangeToFallsBackToDefaultRange()
+{
+    QRange<double> range(1., 2.);
+    QXmlStreamReader reader(QByteArrayLiteral("<Range From=\"3\" To=\"bad\"/>"));
     reader.readNextStartElement();
     reader >> range;
 
@@ -329,6 +413,40 @@ void TestSimulationParams::childParamsIgnoreWrongReaderStateAndRoot()
     decrementTextReader.readNext();
     decrementTextReader >> decrement;
     QCOMPARE(decrement.Step, 6.);
+}
+
+void TestSimulationParams::childParamsSkipUnexpectedRangeElement()
+{
+    RandomSimulationParams random;
+    random.Range = QRange<double>(1., 2.);
+    QXmlStreamReader randomReader(QByteArrayLiteral(
+        "<RandomSimulationParams><Unexpected/><Range From=\"3\" To=\"4\"/></RandomSimulationParams>"));
+    randomReader.readNextStartElement();
+    randomReader >> random;
+    QCOMPARE(random.Range.from(), 1.);
+    QCOMPARE(random.Range.to(), 2.);
+
+    IncrementSimulationParams increment;
+    increment.Step = 5.;
+    increment.Range = QRange<double>(6., 7.);
+    QXmlStreamReader incrementReader(QByteArrayLiteral(
+        "<IncrementSimulationParams Step=\"8\"><Unexpected/><Range From=\"9\" To=\"10\"/></IncrementSimulationParams>"));
+    incrementReader.readNextStartElement();
+    incrementReader >> increment;
+    QCOMPARE(increment.Step, 8.);
+    QCOMPARE(increment.Range.from(), 6.);
+    QCOMPARE(increment.Range.to(), 7.);
+
+    DecrementSimulationParams decrement;
+    decrement.Step = 11.;
+    decrement.Range = QRange<double>(12., 13.);
+    QXmlStreamReader decrementReader(QByteArrayLiteral(
+        "<DecrementSimulationParams Step=\"14\"><Unexpected/><Range From=\"15\" To=\"16\"/></DecrementSimulationParams>"));
+    decrementReader.readNextStartElement();
+    decrementReader >> decrement;
+    QCOMPARE(decrement.Step, 14.);
+    QCOMPARE(decrement.Range.from(), 12.);
+    QCOMPARE(decrement.Range.to(), 13.);
 }
 
 void TestSimulationParams::childParamsKeepExistingValuesWhenChildRangeIsMissing()
